@@ -7,8 +7,11 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider  = "postgresql"
+  // Pooled connection for the app at runtime; injected by Netlify's Neon extension.
+  url       = env("NETLIFY_DATABASE_URL")
+  // Direct (unpooled) connection for migrations — required by Neon's pooler.
+  directUrl = env("NETLIFY_DATABASE_URL_UNPOOLED")
 }
 
 model User {

@@ -7,7 +7,7 @@
 // concepts.
 
 export type PrerequisiteEnforcement = "soft" | "hard";
-export type TrackKind = "foundations" | "technical" | "governance";
+export type TrackKind = "foundations" | "technical" | "governance" | "example";
 
 export interface Track {
   id: string;

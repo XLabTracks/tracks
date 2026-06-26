@@ -1,108 +1,77 @@
 import type { Exercise } from "@/lib/content/types";
 
-// Placeholder exercises (lorem ipsum). Structure is real so every exercise type
-// renders and grades; copy is filler to be replaced with real content.
+// Example exercises — one of every type, with self-describing copy. These power
+// the Example track and show how each type renders and grades. Replace with real
+// questions when authoring actual lessons.
 export const exercises: Exercise[] = [
   {
-    id: "ex-mc-1",
+    id: "multiple-choice",
     type: "multiple-choice",
     prompt:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit — which option best describes the idea?",
+      "Example multiple-choice question: exactly one option is correct, and it's graded instantly.",
     options: [
-      { id: "a", label: "Lorem ipsum dolor sit amet" },
-      { id: "b", label: "Consectetur adipiscing elit" },
-      { id: "c", label: "Sed do eiusmod tempor incididunt" },
-      { id: "d", label: "Ut labore et dolore magna" },
+      { id: "a", label: "An incorrect option" },
+      { id: "b", label: "The correct option" },
+      { id: "c", label: "Another incorrect option" },
+      { id: "d", label: "Yet another incorrect option" },
     ],
     correctOptionIds: ["b"],
     explanation:
-      "Placeholder explanation: consectetur adipiscing elit is correct because lorem ipsum dolor sit amet.",
+      "This explanation appears after answering — use it to reinforce why the answer is right.",
   },
   {
-    id: "ex-ms-1",
+    id: "multi-select",
     type: "multi-select",
-    prompt: "Select all that apply. Lorem ipsum dolor sit amet consectetur?",
+    prompt:
+      "Example multi-select question: more than one option can be correct — select all that apply.",
     options: [
-      { id: "a", label: "Duis aute irure dolor" },
-      { id: "b", label: "Excepteur sint occaecat" },
-      { id: "c", label: "Cupidatat non proident" },
-      { id: "d", label: "Sunt in culpa qui officia" },
+      { id: "a", label: "A correct option" },
+      { id: "b", label: "An incorrect option" },
+      { id: "c", label: "Another correct option" },
+      { id: "d", label: "Another incorrect option" },
     ],
     correctOptionIds: ["a", "c"],
     explanation:
-      "Placeholder explanation: duis aute and cupidatat both apply; the others do not.",
+      "All correct options must be selected (and no incorrect ones) to score.",
   },
   {
-    id: "ex-tf-1",
+    id: "true-false",
     type: "true-false",
-    prompt: "True or false: lorem ipsum dolor sit amet consectetur adipiscing elit.",
+    prompt: "Example true/false question: a single statement to judge as true or false.",
     options: [
       { id: "true", label: "True" },
       { id: "false", label: "False" },
     ],
     correctOptionIds: ["false"],
-    explanation: "Placeholder explanation: the statement is false because sed do eiusmod.",
+    explanation: "The intended answer here is False; this note explains why.",
   },
   {
-    id: "ex-uc-1",
+    id: "understanding-check",
     type: "understanding-check",
     prompt:
-      "In your own words, explain lorem ipsum dolor sit amet. Then reveal a sample answer to compare.",
+      "Example understanding check: answer in your own words, then reveal a sample answer to compare. Not auto-graded.",
     sampleAnswer:
-      "Sample answer (placeholder): lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+      "A sample answer shown after the learner attempts their own — used for self-assessment.",
   },
   {
-    id: "ex-mc-2",
-    type: "multiple-choice",
-    prompt: "Lorem ipsum — pick the option that does not belong.",
-    options: [
-      { id: "a", label: "Tempor incididunt" },
-      { id: "b", label: "Labore et dolore" },
-      { id: "c", label: "Quis nostrud exercitation" },
-      { id: "d", label: "Ullamco laboris nisi" },
-    ],
-    correctOptionIds: ["c"],
-    explanation: "Placeholder explanation: quis nostrud exercitation is the odd one out.",
-  },
-  {
-    id: "ex-wp-1",
+    id: "writing-prompt",
     type: "writing-prompt",
     prompt:
-      "Write a short response: lorem ipsum dolor sit amet, consectetur adipiscing elit. Aim for a clear, structured paragraph.",
+      "Example writing prompt: a longer free-form response that autosaves as a draft and is submitted when ready.",
     format: "free-form",
     minWords: 80,
     maxWords: 300,
     rubric: [
-      { id: "clarity", label: "Clarity", description: "Lorem ipsum dolor sit amet." },
-      { id: "structure", label: "Structure", description: "Consectetur adipiscing elit." },
-      { id: "evidence", label: "Use of evidence", description: "Sed do eiusmod tempor." },
+      { id: "clarity", label: "Clarity", description: "Is the response easy to follow?" },
+      { id: "structure", label: "Structure", description: "Is it logically organised?" },
+      { id: "evidence", label: "Use of evidence", description: "Are claims supported?" },
     ],
   },
   {
-    id: "ex-mc-3",
-    type: "multiple-choice",
-    prompt: "Lorem ipsum dolor — which statement is most accurate?",
-    options: [
-      { id: "a", label: "Sed ut perspiciatis unde omnis" },
-      { id: "b", label: "Iste natus error sit voluptatem" },
-      { id: "c", label: "Accusantium doloremque laudantium" },
-      { id: "d", label: "Totam rem aperiam eaque ipsa" },
-    ],
-    correctOptionIds: ["a"],
-    explanation: "Placeholder explanation: sed ut perspiciatis is correct.",
-  },
-  {
-    id: "ex-uc-2",
-    type: "understanding-check",
-    prompt:
-      "Summarize the key trade-off discussed above in two sentences, then check the sample answer.",
-    sampleAnswer:
-      "Sample answer (placeholder): nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit.",
-  },
-  {
-    id: "ex-sa-1",
+    id: "short-answer",
     type: "short-answer",
-    prompt: "Briefly answer: lorem ipsum dolor sit amet consectetur?",
+    prompt:
+      "Example short-answer question: a brief free-form response of a sentence or two.",
     format: "free-form",
     minWords: 30,
     maxWords: 150,

@@ -2,10 +2,10 @@
 
 import { useState } from "react";
 
-// Placeholder interactive demos. Self-contained (React only) so they can be
-// embedded anywhere. Replace with real AI-safety demos.
+// Example interactive demos. Self-contained (React only) so they embed anywhere —
+// lessons, the gallery, standalone pages, or external iframes. Replace with real demos.
 
-export function SampleDemo() {
+export function SliderDemo() {
   const [value, setValue] = useState(40);
   return (
     <div className="space-y-3">
@@ -29,7 +29,7 @@ export function SampleDemo() {
         />
       </div>
       <p className="text-muted-foreground text-sm">
-        Lorem ipsum output scales with the parameter: {(value * 1.5).toFixed(1)}.
+        The output updates live as you drag: {(value * 1.5).toFixed(1)}.
       </p>
     </div>
   );
@@ -46,7 +46,7 @@ export function TradeoffDemo() {
         <Slider label="Lever B" value={b} onChange={setB} />
       </div>
       <div className="border-border rounded-lg border p-3 text-sm">
-        <span className="text-muted-foreground">Placeholder score: </span>
+        <span className="text-muted-foreground">Example score: </span>
         <span className="font-semibold tabular-nums">{score}</span>
       </div>
     </div>

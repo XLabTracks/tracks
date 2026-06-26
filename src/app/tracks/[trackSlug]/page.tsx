@@ -82,7 +82,9 @@ export default async function TrackOverviewPage({
         </div>
       </header>
 
-      {user && progress ? (
+      {modules.length === 0 ? (
+        <p className="text-muted-foreground mt-4 text-sm">Lessons coming soon.</p>
+      ) : user && progress ? (
         <Card className="shadow-soft mt-6">
           <CardContent className="flex flex-col gap-4 pt-6 sm:flex-row sm:items-center sm:justify-between">
             <div className="flex-1">

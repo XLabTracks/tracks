@@ -11,6 +11,7 @@ import { LessonContent } from "@/components/mdx/lesson-content";
 import { LessonNav } from "@/components/layout/lesson-nav";
 import { LessonCompleteButton } from "@/components/learn/lesson-complete-button";
 import { LessonTracker } from "@/components/learn/lesson-tracker";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 
 export async function generateMetadata({
@@ -67,9 +68,14 @@ export default async function LessonPage({
           Module {module.order}: {module.title}
         </p>
         <h1 className="mt-1 text-3xl font-semibold tracking-tight">{lesson.title}</h1>
-        {lesson.estimatedMinutes && (
-          <p className="text-muted-foreground mt-2 flex items-center gap-1 text-sm">
-            <Clock className="size-3.5" aria-hidden /> ~{lesson.estimatedMinutes} min
+        {(lesson.estimatedMinutes || lesson.optional) && (
+          <p className="text-muted-foreground mt-2 flex items-center gap-2 text-sm">
+            {lesson.optional && <Badge variant="outline">Optional</Badge>}
+            {lesson.estimatedMinutes && (
+              <span className="flex items-center gap-1">
+                <Clock className="size-3.5" aria-hidden /> ~{lesson.estimatedMinutes} min
+              </span>
+            )}
           </p>
         )}
       </header>
@@ -78,17 +84,21 @@ export default async function LessonPage({
         <LessonContent contentRef={lesson.contentRef} />
       </div>
 
-      {user ? <LessonTracker lessonId={lesson.id} completed={completed} /> : null}
+      {user && !lesson.optional ? (
+        <LessonTracker lessonId={lesson.id} completed={completed} />
+      ) : null}
 
-      <div className="mt-8 flex flex-wrap items-center gap-3">
-        {user ? (
-          <LessonCompleteButton lessonId={lesson.id} initialCompleted={completed} />
-        ) : (
-          <Button asChild variant="outline">
-            <Link href="/login">Sign in to track progress</Link>
-          </Button>
-        )}
-      </div>
+      {!lesson.optional && (
+        <div className="mt-8 flex flex-wrap items-center gap-3">
+          {user ? (
+            <LessonCompleteButton lessonId={lesson.id} initialCompleted={completed} />
+          ) : (
+            <Button asChild variant="outline">
+              <Link href="/login">Sign in to track progress</Link>
+            </Button>
+          )}
+        </div>
+      )}
 
       <LessonNav prev={nav.prev} next={nav.next} />
     </div>

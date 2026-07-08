@@ -4,7 +4,12 @@ import type { Prisma } from "@prisma/client";
 import { getCurrentUser } from "@/lib/auth";
 import { prisma } from "@/lib/db";
 import { getExerciseById } from "@/lib/content";
-import { isChoiceExercise, type FlowchartNode } from "@/lib/content/types";
+import {
+  isChoiceExercise,
+  TAP_REVEAL_RATINGS,
+  type FlowchartNode,
+  type TapRevealRating,
+} from "@/lib/content/types";
 import {
   gradeChoice,
   gradeFlowchartStage as gradeFlowchartStagePure,
@@ -163,4 +168,48 @@ export async function gradeFlowchartStage(
   return revealSolution
     ? { correct, explanation: stage.explanation, solution: stage.solution }
     : { correct };
+}
+
+const TAP_REVEAL_SCORES: Record<TapRevealRating, number> = {
+  yes: 1,
+  partial: 0.5,
+  no: 0,
+};
+
+/**
+ * Records the learner's self-assessment after a tap-reveal. The submission's
+ * `updatedAt` doubles as the review timestamp for future spaced repetition.
+ */
+export async function recordTapReveal(
+  exerciseId: string,
+  rating: TapRevealRating,
+): Promise<void> {
+  const exercise = getExerciseById(exerciseId);
+  if (!exercise || exercise.type !== "tap-reveal") return;
+  if (!TAP_REVEAL_RATINGS.includes(rating)) return;
+
+  const user = await getCurrentUser();
+  if (!user) return;
+
+  const responseJson = { rating };
+  const score = TAP_REVEAL_SCORES[rating];
+  await prisma.submission.upsert({
+    where: {
+      userId_contentId_kind: {
+        userId: user.id,
+        contentId: exerciseId,
+        kind: "exercise",
+      },
+    },
+    create: {
+      userId: user.id,
+      contentId: exerciseId,
+      kind: "exercise",
+      format: exercise.type,
+      responseJson,
+      status: "submitted",
+      score,
+    },
+    update: { responseJson, status: "submitted", score },
+  });
 }

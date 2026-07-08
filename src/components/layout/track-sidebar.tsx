@@ -3,7 +3,14 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { CheckCircle2, Circle, FileText, ListTree, Lock } from "lucide-react";
+import {
+  CheckCircle2,
+  Circle,
+  CircleDashed,
+  FileText,
+  ListTree,
+  Lock,
+} from "lucide-react";
 import {
   Accordion,
   AccordionContent,
@@ -118,7 +125,12 @@ function SidebarNav({
                           onClick={onNavigate}
                           className={itemClass(pathname === href)}
                         >
-                          {done ? (
+                          {lesson.optional ? (
+                            <CircleDashed
+                              className="mt-0.5 size-3.5 shrink-0 opacity-30"
+                              aria-hidden
+                            />
+                          ) : done ? (
                             <CheckCircle2
                               className="text-foreground mt-0.5 size-3.5 shrink-0"
                               aria-hidden
@@ -129,7 +141,14 @@ function SidebarNav({
                               aria-hidden
                             />
                           )}
-                          <span className="line-clamp-2">{lesson.title}</span>
+                          <span className="line-clamp-2">
+                            {lesson.title}
+                            {lesson.optional && (
+                              <span className="text-muted-foreground/80 ml-1.5 text-[10px] font-medium tracking-wide uppercase">
+                                Optional
+                              </span>
+                            )}
+                          </span>
                         </Link>
                       </li>
                     );

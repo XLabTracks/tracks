@@ -5,20 +5,33 @@ import { ArrowLeft, ArrowRight, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
-import { EXERCISE_TYPE_LABELS } from "@/lib/content/types";
+import {
+  EXERCISE_TYPE_LABELS,
+  type TapRevealRating,
+} from "@/lib/content/types";
+import type { PublicChoiceExercise } from "@/lib/content/exercise-view";
 import { Paragraphs } from "./math-text";
+import { TapRevealBody } from "./tap-reveal-exercise";
+import { ChoiceExerciseBody } from "./choice-exercise";
 
-export interface SequencePart {
-  id: string;
-  prompt: string;
-  sampleAnswer: string;
-}
+export type SequencePart =
+  | { kind: "understanding-check"; id: string; prompt: string; sampleAnswer: string }
+  | {
+      kind: "tap-reveal";
+      id: string;
+      prompt: string;
+      answer: string;
+      /** Prior self-assessment from the learner's submission, if any. */
+      initialRating: TapRevealRating | null;
+    }
+  | { kind: "choice"; id: string; prompt: string; exercise: PublicChoiceExercise };
 
 /**
  * A multi-part exercise shown one part at a time. Each part is only reachable
- * after the previous one is submitted; submitting reveals the sample answer and
- * unlocks the "Next" step. Self-assessed, like a single understanding check —
- * so sample answers ship to the client (no answer key to protect).
+ * after the previous one is completed: understanding checks by submitting an
+ * answer (which reveals the sample), tap-reveals by rating yourself after the
+ * reveal, and choice questions by checking an answer (auto-graded). The prompt
+ * is rendered by the sequence; the part body is the type's interactive piece.
  */
 export function ExerciseSequenceCard({
   label = EXERCISE_TYPE_LABELS["understanding-check"],
@@ -29,7 +42,12 @@ export function ExerciseSequenceCard({
 }) {
   const [current, setCurrent] = useState(0);
   const [answers, setAnswers] = useState<string[]>(() => parts.map(() => ""));
-  const [submitted, setSubmitted] = useState<boolean[]>(() => parts.map(() => false));
+  const [ratings, setRatings] = useState<(TapRevealRating | null)[]>(() =>
+    parts.map((p) => (p.kind === "tap-reveal" ? p.initialRating : null)),
+  );
+  const [submitted, setSubmitted] = useState<boolean[]>(() =>
+    parts.map((p) => p.kind === "tap-reveal" && p.initialRating != null),
+  );
 
   const total = parts.length;
   const part = parts[current];
@@ -41,6 +59,11 @@ export function ExerciseSequenceCard({
 
   const submit = () =>
     setSubmitted((prev) => prev.map((s, i) => (i === current ? true : s)));
+
+  const rated = (rating: TapRevealRating) => {
+    setRatings((prev) => prev.map((r, i) => (i === current ? rating : r)));
+    submit();
+  };
 
   // A step is reachable once the one before it has been submitted.
   const canReach = (i: number) => i === 0 || submitted[i - 1];
@@ -79,21 +102,38 @@ export function ExerciseSequenceCard({
         <Paragraphs text={part.prompt} className="font-medium" />
       </div>
 
-      <Textarea
-        value={answers[current]}
-        onChange={(e) => setAnswer(e.target.value)}
-        placeholder="Write your answer, then submit to compare with the sample…"
-        rows={4}
-        className="mt-3 resize-y"
-      />
+      {part.kind === "tap-reveal" ? (
+        // Remounts per part (keyed by id) so reveal state never leaks between
+        // parts; the tracked rating is fed back in as the initial state.
+        <TapRevealBody
+          key={part.id}
+          exerciseId={part.id}
+          answer={part.answer}
+          initialRating={ratings[current]}
+          onRated={rated}
+        />
+      ) : part.kind === "choice" ? (
+        // Auto-graded; grading the answer marks the part submitted and unlocks Next.
+        <ChoiceExerciseBody key={part.id} exercise={part.exercise} onGraded={submit} />
+      ) : (
+        <>
+          <Textarea
+            value={answers[current]}
+            onChange={(e) => setAnswer(e.target.value)}
+            placeholder="Write your answer, then submit to compare with the sample…"
+            rows={4}
+            className="mt-3 resize-y"
+          />
 
-      {isSubmitted && (
-        <div className="bg-muted mt-3 space-y-2 rounded-lg p-3 text-sm">
-          <p className="text-muted-foreground text-xs font-medium tracking-wide uppercase">
-            Sample answer
-          </p>
-          <Paragraphs text={part.sampleAnswer} className="text-muted-foreground" />
-        </div>
+          {isSubmitted && (
+            <div className="bg-muted mt-3 space-y-2 rounded-lg p-3 text-sm">
+              <p className="text-muted-foreground text-xs font-medium tracking-wide uppercase">
+                Sample answer
+              </p>
+              <Paragraphs text={part.sampleAnswer} className="text-muted-foreground" />
+            </div>
+          )}
+        </>
       )}
 
       <div className="mt-4 flex items-center justify-between gap-3">
@@ -108,9 +148,19 @@ export function ExerciseSequenceCard({
         </Button>
 
         {!isSubmitted ? (
-          <Button size="sm" onClick={submit}>
-            Submit
-          </Button>
+          part.kind === "tap-reveal" ? (
+            <span className="text-muted-foreground text-xs">
+              Reveal and rate yourself to continue
+            </span>
+          ) : part.kind === "choice" ? (
+            <span className="text-muted-foreground text-xs">
+              Check your answer to continue
+            </span>
+          ) : (
+            <Button size="sm" onClick={submit}>
+              Submit
+            </Button>
+          )
         ) : isLast ? (
           <span className="text-muted-foreground flex items-center gap-1 text-sm font-medium">
             <Check className="size-4 text-emerald-500" aria-hidden /> Complete

@@ -3,6 +3,7 @@ import { prisma } from "@/lib/db";
 import {
   getLessonsForModule,
   getPrerequisiteModules,
+  getRequiredTrackLessonIds,
   getTrackForModule,
   getTrackLessonIds,
   type Module,
@@ -31,12 +32,12 @@ export async function isLessonCompleted(
   return row?.status === "completed";
 }
 
-/** A module counts as complete when all of its lessons are completed. */
+/** A module counts as complete when all of its non-optional lessons are completed. */
 export async function isModuleComplete(
   userId: string,
   moduleId: string,
 ): Promise<boolean> {
-  const lessons = getLessonsForModule(moduleId);
+  const lessons = getLessonsForModule(moduleId).filter((l) => !l.optional);
   if (lessons.length === 0) return true;
   const completed = await getCompletedLessonIds(
     userId,
@@ -81,7 +82,7 @@ export async function getTrackProgress(
   userId: string,
   trackId: string,
 ): Promise<TrackProgress> {
-  const lessonIds = getTrackLessonIds(trackId);
+  const lessonIds = getRequiredTrackLessonIds(trackId);
   const total = lessonIds.length;
   const completed = (await getCompletedLessonIds(userId, lessonIds)).length;
   return {

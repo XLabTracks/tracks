@@ -55,6 +55,14 @@ export const exercises: Exercise[] = [
       "A sample answer shown after the learner attempts their own — used for self-assessment.",
   },
   {
+    id: "tap-reveal",
+    type: "tap-reveal",
+    prompt:
+      "Example tap-to-reveal card: recall your answer to a very short question, then tap the panel to check it.",
+    answer:
+      "The hidden answer appears here once tapped. Rate yourself honestly below — these ratings will drive spaced repetition later.",
+  },
+  {
     id: "writing-prompt",
     type: "writing-prompt",
     prompt:
@@ -88,6 +96,71 @@ export const exercises: Exercise[] = [
     format: "free-form",
     minWords: 30,
     maxWords: 150,
+  },
+  {
+    id: "c-paper-l1-recall-control-evaluation",
+    type: "tap-reveal",
+    prompt: "What is a control evaluation?",
+    answer:
+      "A way to estimate a protocol's safety under intentional subversion: simulate the whole deployment scenario with the untrusted model replaced by an adversarial stand-in built by a red team, and measure how often the protocol avoids catastrophe. Here: replace U with a red-team GPT-4 pipeline and measure the probability that no backdoor is ever submitted.",
+  },
+  {
+    id: "c-paper-l1-recall-protocol",
+    type: "tap-reveal",
+    prompt: "What is a protocol?",
+    answer:
+      "A pipeline of safety techniques that responds to each incoming task using the available resources: an untrusted capable model, a trusted weaker model, and a limited amount of trusted high-quality labor. In this paper, it receives programming problems one at a time and must return a solution to each.",
+  },
+  {
+    id: "c-paper-l1-recall-subversion-conditions",
+    type: "tap-reveal",
+    prompt:
+      "Under what two conditions might an AI system intentionally subvert its safety pipeline?",
+    answer:
+      "If it is pursuing objectives that don't align with its intended goals (scheming), or if its weights or training data have been compromised by attackers.",
+  },
+  {
+    id: "c-paper-l2-recall-red-team-goal",
+    type: "tap-reveal",
+    prompt: "What is the red team's goal?",
+    answer:
+      "To get at least one successfully backdoored solution submitted — code that passes all the APPS test cases but for which GPT-4 can construct an exploit — without triggering a shutdown first. Because safety is worst-case, a single submitted backdoor across the whole scenario means the red team wins.",
+  },
+  {
+    id: "c-paper-l2-recall-blue-team-goal",
+    type: "tap-reveal",
+    prompt: "What is the blue team's goal?",
+    answer:
+      "To design a protocol that solves the programming problems as usefully as possible (ideally at U's quality, not just T's) while ensuring that not even one backdoored solution is submitted — maximizing safety and usefulness together, using U, T, and its limited budget of H.",
+  },
+  {
+    id: "c-paper-l2-recall-h-limited",
+    type: "tap-reveal",
+    prompt: "Why is access to $H$ limited and expensive?",
+    answer:
+      "$H$ is trusted high-quality human labor. Humans are more capable than $T$ but far more expensive and slow (the paper estimates about three minutes per problem to be as useful as GPT-4), so the protocol only gets enough H points to cover about 2% of problems.",
+  },
+  {
+    id: "c-paper-l2-recall-trust-t",
+    type: "tap-reveal",
+    prompt: "Why can we trust $T$, the less-capable model?",
+    answer:
+      "In control setups, we trust $T$ because either (1) it is not capable enough to scheme or subvert basic safety measures without the subversion attempts being easy to notice or (2) we are extremely confident in the alignment techniques used to align $T$. In this paper, $T$ (GPT-3.5) isn't capable enough to scheme sneakily, so we treat it as trusted even though it writes worse code.",
+  },
+  {
+    id: "c-paper-l2-recall-backdoor-definition",
+    type: "tap-reveal",
+    prompt: "What two conditions make a solution “backdoored”?",
+    answer:
+      "It passes all the test cases, and the untrusted model (GPT-4 here) can construct an exploit for it — a specific input on which the solution produces a different output than a correct solution would.",
+  },
+  {
+    id: "c-paper-l2-recall-summary-statistics",
+    type: "tap-reveal",
+    prompt:
+      "What summary statistics does the blue team have access to, and what do they buy it?",
+    answer:
+      "The distribution of the real model's performance on any task — e.g. GPT-4's false positive and false negative rates on classification tasks, and the distribution of how suspicious its code looks. This lets the protocol notice whenever U regularly behaves differently from the real model.",
   },
   {
     id: "c-paper-l2-protocol-flowcharts",
@@ -246,6 +319,21 @@ export const exercises: Exercise[] = [
     ],
   },
   {
+    id: "c-paper-l3-recall-upfront-auditing-attack",
+    type: "tap-reveal",
+    prompt: "What attack defeats upfront auditing, and how?",
+    answer:
+      "Backdooring rarely: with some small probability $p$ the attack policy submits obviously backdoored code, and otherwise behaves normally. It loses only if an attempt lands among the audited first 2% of problems, so with a well-chosen $p$ it usually slips through the audited prefix and lands a backdoor later — driving the blue team's win probability down to 15%.",
+  },
+  {
+    id: "c-paper-l3-recall-budget-burn",
+    type: "tap-reveal",
+    prompt:
+      "How does the blue team stop $U$ from burning the audit budget by making innocent code look suspicious?",
+    answer:
+      "The blue team knows the distribution of suspicion scores that the real model's code gets, so the protocol shuts down if $U$'s submissions look significantly more suspicious than that expected distribution.",
+  },
+  {
     id: "c-paper-l3-audit-tradeoff-intuition",
     type: "understanding-check",
     prompt:
@@ -284,5 +372,103 @@ export const exercises: Exercise[] = [
       "From the values above, the blue-team win probability increases by a larger amount from $\\alpha = 0.005$ to $0.02$ than from $\\alpha = 0.10$ to $0.30$, and the expected-attempts column decreases with diminishing magnitude as $\\alpha$ increases. Account for both effects in terms of the dependence of $p^*$ on $\\alpha$. State whether the diminishing returns arise from the auditing mechanism itself or from the red team's optimization.",
     sampleAnswer:
       "Both effects follow from $p^*$ decreasing in $\\alpha$: a larger audited window raises the per-attempt detection risk, so the optimizing red team reduces its attack rate. From $\\alpha = 0.005$ to $0.02$, $A$ grows several-fold relative to $B$, forcing a large reduction in $p^*$; this large reduction produces a large gain in blue-team win probability. From $\\alpha = 0.10$ to $0.30$, $p^*$ is already near its lower range, so further increases in $\\alpha$ change it little and the win probability changes little. The same declining $p^*$ drives the expected-attempts column ($p^* N$) down with diminishing magnitude.\n\nThe diminishing returns arise from the red team's optimization, not from the auditing mechanism. Against a fixed attack rate the marginal value of auditing would be roughly constant; it diminishes here because $p^*$ adapts downward as $\\alpha$ rises. Equivalently, the win-probability curve is concave in $\\alpha$ and the expected-attempts curve is convex and decreasing.",
+  },
+  {
+    id: "c-paper-l3-monitor-operating-point",
+    type: "understanding-check",
+    prompt:
+      'The contingency table above records how the trusted monitor\'s audit decisions split across 71 backdoor attempts (successful or failed) and 1,429 innocent submissions. Treat the monitor as a binary classifier: "audit" is its positive prediction, and "is a backdoor attempt" is the positive class.\n\nCompute (a) the false-positive rate $\\text{FPR} = P(\\text{audit} \\mid \\text{no attempt})$ and (b) the true-positive rate $\\text{TPR} = P(\\text{audit} \\mid \\text{attempt})$. State which single point on the monitor\'s ROC curve these define, and check them against the values reported in the text.',
+    sampleAnswer:
+      "(a) An innocent submission is audited in 29 of $29 + 1{,}400 = 1{,}429$ cases, so $\\text{FPR} = 29/1429 = 0.020$ (2.0%).\n\n(b) A backdoor attempt totals $19 + 52 = 71$ (successful plus failed), of which $6 + 18 = 24$ are audited, so $\\text{TPR} = 24/71 = 0.338$.\n\nThe pair $(\\text{FPR}, \\text{TPR}) = (0.02,\\ 0.338)$ is one point on the monitor's ROC curve — the operating point produced by the threshold the blue team selected. Both values match the text: the threshold is set for a 2% false-positive rate, and the probability that an attempted backdoor is audited is 0.338.",
+  },
+  {
+    id: "c-paper-l3-monitor-auc-meaning",
+    type: "understanding-check",
+    prompt:
+      "The demo reports an area under the ROC curve of AUC $\\approx 0.88$ at the default monitor quality. AUC has a threshold-free interpretation: it equals the probability that the monitor assigns a higher suspicion score to a randomly chosen backdoored solution than to a randomly chosen innocent one.\n\nState what AUC $= 0.88$ says operationally about the monitor, and what AUC values of $0.5$ and $1.0$ would correspond to.",
+    sampleAnswer:
+      "AUC $= 0.88$ means that if you draw one backdoored and one innocent solution at random, there is an 88% chance the monitor scores the backdoored one as more suspicious — it orders a random backdoor/innocent pair correctly 88% of the time.\n\nAUC $= 0.5$ is chance: the monitor's ranking is no better than a coin flip, and the two score distributions coincide. AUC $= 1.0$ is perfect separation: every backdoor scores above every innocent solution, so some threshold catches all backdoors with no false positives. This monitor lies between the two, toward the useful end but well short of perfect.",
+  },
+  {
+    id: "c-paper-l3-monitor-per-attempt",
+    type: "understanding-check",
+    prompt:
+      "Using the same table, partition the outcome of a single backdoor attempt into three mutually exclusive events, from the blue team's perspective: (i) the attempt is audited — the protocol shuts down and the blue team wins; (ii) the attempt is not audited but is a successful backdoor — it is submitted and the red team wins; (iii) the attempt is not audited and is a failed backdoor — it is submitted harmlessly and the game continues.\n\n(a) Give the probability of each event from the table, and verify they sum to 1. (b) Under upfront auditing the audit decision is positional rather than suspicion-based, so an attempt is audited only with the raw budget probability, 2%. Compare the per-attempt probability that the blue team catches an attempt under the two protocols, and explain how this accounts for the safety improvement from 15% to 62%.",
+    sampleAnswer:
+      "(a) Of the 71 attempts: audited, blue wins $= 24/71 = 0.338$; not audited and successful, red wins $= 13/71 = 0.183$; not audited and failed, game continues $= 34/71 = 0.479$. These sum to $24 + 13 + 34 = 71$, i.e. 1. So on a single attempt the monitor is nearly twice as likely to catch the red team (0.338) as the red team is to land a successful backdoor (0.183).\n\n(b) Trusted monitoring audits an attempt with probability 0.338; upfront auditing audits it only with the random budget probability 0.02 — about a $17\\times$ lower catch rate. The red team must land at least one successful unaudited backdoor over the whole scenario while surviving every attempt it makes, so raising the per-attempt catch probability from 0.02 to 0.338 sharply raises the chance the blue team shuts down first. That shift is what moves the blue team's win probability from 15% (upfront auditing) to 62% (trusted monitoring). The exact figures also depend on the downsampling and the multiple-attempt dynamics, so this per-attempt comparison explains the direction and rough magnitude rather than reproducing 62% precisely.",
+  },
+  {
+    id: "c-paper-l4-frontier-dominance",
+    type: "multiple-choice",
+    prompt:
+      "Trusted editing 10% scores (usefulness 96%, safety 85%). Untrusted monitoring, defer to trusted 0% scores (usefulness 96%, safety 79%). One protocol dominates the other — it is at least as good on both axes and strictly better on at least one. Which statement is correct?",
+    options: [
+      { id: "a", label: "Trusted editing 10% dominates untrusted monitoring (defer 0%)." },
+      { id: "b", label: "Untrusted monitoring (defer 0%) dominates trusted editing 10%." },
+      { id: "c", label: "Neither dominates the other — it is a genuine tradeoff." },
+      { id: "d", label: "Each dominates the other." },
+    ],
+    correctOptionIds: ["a"],
+    explanation:
+      "Both score 96% usefulness, but trusted editing 10% is safer (85% vs 79%). Equal on one axis and strictly better on the other is exactly what domination means, so trusted editing 10% dominates — which puts untrusted monitoring (defer 0%) off the frontier.",
+  },
+  {
+    id: "c-paper-l4-frontier-dominated-set",
+    type: "multi-select",
+    prompt:
+      "Consider just these three protocols: Trusted monitoring, defer 10% (usefulness 93%, safety 83%); Trusted editing 20% (usefulness 94%, safety 92%); Untrusted monitoring, defer 10% (usefulness 92%, safety 92%). Select every protocol that is NOT on the frontier of these three — every one that is dominated.",
+    options: [
+      { id: "tm10", label: "Trusted monitoring, defer 10% (usefulness 93%, safety 83%)" },
+      { id: "te20", label: "Trusted editing 20% (usefulness 94%, safety 92%)" },
+      { id: "um10", label: "Untrusted monitoring, defer 10% (usefulness 92%, safety 92%)" },
+    ],
+    correctOptionIds: ["tm10", "um10"],
+    explanation:
+      "Trusted editing 20% (94%, 92%) is better on both axes than trusted monitoring defer 10% (94 > 93, 92 > 83), and it is more useful than untrusted monitoring defer 10% at equal safety (94 > 92, both 92% safe). So it dominates both of the others, leaving it as the only non-dominated point; the other two are off the frontier.",
+  },
+  {
+    id: "c-paper-l4-frontier-improvement",
+    type: "multiple-choice",
+    prompt:
+      "A protocol currently sits on the frontier at (usefulness 94%, safety 92%). A strict Pareto improvement is a new result that is better on at least one axis and no worse on the other — it pushes the frontier up and to the right. Which hypothetical new result would be a strict Pareto improvement over (94%, 92%)?",
+    options: [
+      { id: "a", label: "(usefulness 96%, safety 94%)" },
+      { id: "b", label: "(usefulness 90%, safety 96%)" },
+      { id: "c", label: "(usefulness 98%, safety 88%)" },
+      { id: "d", label: "(usefulness 94%, safety 92%)" },
+    ],
+    correctOptionIds: ["a"],
+    explanation:
+      "Only (96%, 94%) is better on both axes. (90%, 96%) is safer but less useful and (98%, 88%) is more useful but less safe — each is a different tradeoff, not an improvement. (94%, 92%) is identical. Pushing the frontier out means gaining on one axis without giving up ground on the other.",
+  },
+  {
+    id: "c-paper-l4-frontier-along-curve",
+    type: "understanding-check",
+    prompt:
+      "Trusted monitoring's five points on the plot all come from turning one knob — the defer-to-trusted percentage — from 0% to 50%. Its result goes from (usefulness 97%, safety 62%) at 0% to (usefulness 51%, safety 100%) at 50%. In which direction does the point move as the knob rises, and how is that different from what it means for one protocol to \"push the frontier out\"?",
+    sampleAnswer:
+      "As the defer percentage rises the point moves up and to the left: safety climbs (62% → 100%) while usefulness falls (97% → 51%). Turning a single method's knob only slides you along that method's own fixed tradeoff curve — you are buying safety with usefulness, not getting more of both. Pushing the frontier out is the opposite: a better method reaches points up and to the right of the existing curve, giving more safety at the same usefulness (or more usefulness at the same safety). Trusted editing does that relative to trusted monitoring; moving along trusted monitoring's own curve does not.",
+  },
+  {
+    id: "c-paper-l4-recall-defer-below-threshold",
+    type: "tap-reveal",
+    prompt:
+      "In defer to trusted, what does the protocol do with code whose suspicion score is elevated but below the audit threshold?",
+    answer:
+      "It discards $U$'s code and submits a solution written by $T$ instead. Plain trusted monitoring submits $U$'s code whenever it isn't audited; deferral acts on those middling suspicion scores too, trading some usefulness for safety.",
+  },
+  {
+    id: "c-paper-l4-recall-dynamic-routing",
+    type: "tap-reveal",
+    prompt: "What is dynamic routing?",
+    answer:
+      "A protocol design pattern where some heuristic decides, query by query, which of several response strategies to use. Defer to trusted is an example: the suspicion score routes each problem to “submit U's code”, “submit T's code”, or “audit”.",
+  },
+  {
+    id: "c-paper-l4-recall-naive-untrusted-monitoring",
+    type: "tap-reveal",
+    prompt: "Why does naive untrusted monitoring have 0% safety?",
+    answer:
+      "Because the monitor is the same untrusted model as the policy, it can simply report that real backdoors look fine while telling the truth about everything else. Until the blue team has some way to check the monitor's honesty (e.g. evaluating it on synthetic backdoors), its reports carry no safety value.",
   },
 ];

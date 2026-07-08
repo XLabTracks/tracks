@@ -3,6 +3,7 @@ import {
   isChoiceExercise,
   isWritingExercise,
   type FlowchartNode,
+  type TapRevealRating,
 } from "@/lib/content/types";
 import { toPublicChoice, toPublicFlowchart } from "@/lib/content/exercise-view";
 import { getCurrentUser } from "@/lib/auth";
@@ -10,6 +11,7 @@ import { getSubmission } from "@/lib/progress";
 import { saveWritingDraft, submitWriting } from "@/app/actions/submissions";
 import { ChoiceExerciseCard } from "@/components/exercises/choice-exercise";
 import { FlowchartExerciseCard } from "@/components/exercises/flowchart-exercise";
+import { TapRevealCard } from "@/components/exercises/tap-reveal-exercise";
 import { UnderstandingCheckCard } from "@/components/exercises/understanding-check";
 import { WritingExerciseCard } from "@/components/exercises/writing-exercise";
 import type { WritingValues } from "@/components/exercises/writing-editor";
@@ -50,6 +52,17 @@ export async function Exercise({ id }: ExerciseProps) {
         initialStages={initialStages}
       />
     );
+  }
+
+  if (exercise.type === "tap-reveal") {
+    const user = await getCurrentUser();
+    const submission = user
+      ? await getSubmission(user.id, exercise.id, "exercise")
+      : null;
+    const initialRating =
+      (submission?.responseJson as { rating?: TapRevealRating } | null)
+        ?.rating ?? null;
+    return <TapRevealCard exercise={exercise} initialRating={initialRating} />;
   }
 
   if (exercise.type === "understanding-check") {

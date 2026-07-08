@@ -199,3 +199,15 @@
     line-height: 1.45;
   }
 }
+
+/* Marquee for the tiled "Click anywhere to reveal" rows in tap-reveal
+   exercises. Each row holds two identical halves, so sliding one half-width
+   loops seamlessly; alternate rows run with animation-direction: reverse. */
+@keyframes tap-reveal-slide {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}

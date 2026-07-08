@@ -105,7 +105,9 @@ export default async function ModulePage({
                       className="border-border hover:bg-muted shadow-soft flex items-center justify-between gap-3 rounded-xl border p-4 transition-colors"
                     >
                       <span className="flex items-center gap-3">
-                        {done ? (
+                        {lesson.optional ? (
+                          <span className="border-muted-foreground/40 size-4 shrink-0 rounded-full border border-dashed" />
+                        ) : done ? (
                           <CheckCircle2
                             className="text-foreground size-4 shrink-0"
                             aria-hidden
@@ -116,6 +118,11 @@ export default async function ModulePage({
                         <span className="font-medium">
                           {lesson.order}. {lesson.title}
                         </span>
+                        {lesson.optional && (
+                          <Badge variant="outline" className="shrink-0">
+                            Optional
+                          </Badge>
+                        )}
                       </span>
                       {lesson.estimatedMinutes && (
                         <span className="text-muted-foreground flex items-center gap-1 text-xs">

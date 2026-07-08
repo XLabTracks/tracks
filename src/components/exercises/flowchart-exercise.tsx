@@ -47,7 +47,10 @@ function collectOpenPaths(
   if (kind === "terminal") return [];
   if (kind === "branch") {
     return (last.branches ?? []).flatMap((arm, j) =>
-      collectOpenPaths(arm, blocks, [...path, { node: nodes.length - 1, arm: j }]),
+      collectOpenPaths(arm, blocks, [
+        ...path,
+        { node: nodes.length - 1, arm: j },
+      ]),
     );
   }
   return [path];
@@ -60,7 +63,12 @@ interface StageState {
   solution: FlowchartNode[] | null;
 }
 
-const EMPTY_STAGE: StageState = { tree: [], result: null, attempts: 0, solution: null };
+const EMPTY_STAGE: StageState = {
+  tree: [],
+  result: null,
+  attempts: 0,
+  solution: null,
+};
 
 const DRAG_MIME = "application/x-flowchart-block";
 
@@ -70,7 +78,10 @@ export function FlowchartExerciseCard({
 }: {
   exercise: PublicFlowchartExercise;
   /** Prior attempts loaded from the learner's submission, keyed by stage id. */
-  initialStages?: Record<string, { attempt: FlowchartNode[]; correct: boolean }>;
+  initialStages?: Record<
+    string,
+    { attempt: FlowchartNode[]; correct: boolean }
+  >;
 }) {
   const blocks = useMemo(
     () => new Map(exercise.palette.map((block) => [block.id, block])),
@@ -104,7 +115,10 @@ export function FlowchartExerciseCard({
   const solved = state.result?.correct === true;
 
   const patchStage = (id: string, patch: Partial<StageState>) =>
-    setStages((prev) => ({ ...prev, [id]: { ...(prev[id] ?? EMPTY_STAGE), ...patch } }));
+    setStages((prev) => ({
+      ...prev,
+      [id]: { ...(prev[id] ?? EMPTY_STAGE), ...patch },
+    }));
 
   const openPaths = collectOpenPaths(state.tree, blocks, []);
   const complete = state.tree.length > 0 && openPaths.length === 0;
@@ -123,7 +137,10 @@ export function FlowchartExerciseCard({
     if (!block) return;
     const node: FlowchartNode =
       block.kind === "branch"
-        ? { blockId: block.id, branches: (block.branchLabels ?? []).map(() => []) }
+        ? {
+            blockId: block.id,
+            branches: (block.branchLabels ?? []).map(() => []),
+          }
         : { blockId: block.id };
     patchStage(stage.id, {
       tree: updateSequence(state.tree, path, (seq) => [...seq, node]),
@@ -140,7 +157,11 @@ export function FlowchartExerciseCard({
 
   const check = () =>
     startTransition(async () => {
-      const result = await gradeFlowchartStage(exercise.id, stage.id, state.tree);
+      const result = await gradeFlowchartStage(
+        exercise.id,
+        stage.id,
+        state.tree,
+      );
       patchStage(stage.id, {
         result,
         attempts: result.correct ? state.attempts : state.attempts + 1,
@@ -161,7 +182,8 @@ export function FlowchartExerciseCard({
   return (
     <aside className="not-prose border-border bg-card shadow-soft my-6 rounded-xl border p-5">
       <p className="text-muted-foreground mb-1 text-xs font-medium tracking-wide uppercase">
-        {EXERCISE_TYPE_LABELS[exercise.type]} · {solvedCount}/{exercise.stages.length}
+        {EXERCISE_TYPE_LABELS[exercise.type]} · {solvedCount}/
+        {exercise.stages.length}
       </p>
       <p className="font-medium">{exercise.prompt}</p>
 
@@ -178,7 +200,9 @@ export function FlowchartExerciseCard({
                 i === stageIndex
                   ? "border-foreground bg-foreground text-background"
                   : "border-border hover:bg-muted",
-                done && i !== stageIndex && "border-emerald-500/50 text-emerald-600",
+                done &&
+                  i !== stageIndex &&
+                  "border-emerald-500/50 text-emerald-600",
               )}
             >
               {done && <Check className="size-3" aria-hidden />}
@@ -194,7 +218,8 @@ export function FlowchartExerciseCard({
           onClick={() => setShowDescription((v) => !v)}
           className="text-muted-foreground hover:text-foreground text-xs font-medium"
         >
-          {showDescription ? "Hide" : "Show"} the protocol description from Table 2
+          {showDescription ? "Hide" : "Show"} the protocol description from
+          Table 2
         </button>
         {showDescription && <p className="mt-2 text-sm">{stage.description}</p>}
       </div>
@@ -233,10 +258,14 @@ export function FlowchartExerciseCard({
           )}
         >
           <p className="font-medium">
-            {state.result.correct ? "Correct" : "Not quite — adjust the chart and check again"}
+            {state.result.correct
+              ? "Correct"
+              : "Not quite — adjust the chart and check again"}
           </p>
           {state.result.explanation && (
-            <p className="text-muted-foreground mt-1">{state.result.explanation}</p>
+            <p className="text-muted-foreground mt-1">
+              {state.result.explanation}
+            </p>
           )}
         </div>
       )}
@@ -270,7 +299,12 @@ export function FlowchartExerciseCard({
               <RotateCcw className="size-3.5" aria-hidden /> Reset
             </Button>
             {state.attempts >= 2 && !state.solution && (
-              <Button size="sm" variant="outline" onClick={reveal} disabled={pending}>
+              <Button
+                size="sm"
+                variant="outline"
+                onClick={reveal}
+                disabled={pending}
+              >
                 <Eye className="size-3.5" aria-hidden /> Show solution
               </Button>
             )}
@@ -286,11 +320,13 @@ export function FlowchartExerciseCard({
             Next protocol
           </Button>
         )}
-        {solved && stageIndex === exercise.stages.length - 1 && solvedCount === exercise.stages.length && (
-          <span className="text-sm font-medium text-emerald-600">
-            All {exercise.stages.length} protocols constructed.
-          </span>
-        )}
+        {solved &&
+          stageIndex === exercise.stages.length - 1 &&
+          solvedCount === exercise.stages.length && (
+            <span className="text-sm font-medium text-emerald-600">
+              All {exercise.stages.length} protocols constructed.
+            </span>
+          )}
       </div>
     </aside>
   );
@@ -339,7 +375,10 @@ function Sequence({
                 <Connector />
                 <div className="flex items-start gap-3">
                   {(node.branches ?? []).map((arm, j) => (
-                    <div key={j} className="flex min-w-24 flex-col items-center">
+                    <div
+                      key={j}
+                      className="flex min-w-24 flex-col items-center"
+                    >
                       <span className="text-muted-foreground border-border bg-background rounded-full border px-2 py-0.5 text-[10px] font-medium tracking-wide uppercase">
                         {block.branchLabels?.[j]}
                       </span>
@@ -468,49 +507,56 @@ function Palette({
       <p className="text-muted-foreground mb-2 text-[10px] font-medium tracking-wide uppercase">
         Blocks — drag into the chart
       </p>
-      {BLOCK_GROUPS.map(({ kind, heading }) => {
-        const group = blocks.filter((block) => block.kind === kind);
-        if (group.length === 0) return null;
-        return (
-          <div key={kind} className="mb-3 last:mb-0">
-            <p className="text-muted-foreground mb-1.5 text-[10px] tracking-wide uppercase">
-              {heading}
-            </p>
-            <div className="grid grid-cols-2 gap-1.5 md:grid-cols-1">
-              {group.map((block) => (
-                <button
-                  key={block.id}
-                  type="button"
-                  draggable={!disabled}
-                  onDragStart={(event) => {
-                    event.dataTransfer.setData(DRAG_MIME, block.id);
-                    event.dataTransfer.effectAllowed = "copy";
-                  }}
-                  onClick={() => !disabled && onArm(block.id)}
-                  aria-pressed={armedBlockId === block.id}
-                  className={cn(
-                    "rounded-lg border px-2.5 py-1.5 text-left text-xs leading-snug select-none",
-                    block.kind === "step" && "border-border bg-card",
-                    block.kind === "branch" && "border-border bg-muted border-dashed",
-                    block.kind === "terminal" && "border-foreground/30 bg-card font-medium",
-                    disabled
-                      ? "cursor-default opacity-50"
-                      : "hover:border-foreground/50 cursor-grab active:cursor-grabbing",
-                    armedBlockId === block.id && "ring-foreground border-foreground ring-1",
-                  )}
-                >
-                  {block.label}
-                  {block.branchLabels && (
-                    <span className="text-muted-foreground block font-normal">
-                      {block.branchLabels.join(" / ")}
-                    </span>
-                  )}
-                </button>
-              ))}
+      {/* Half-height, scrollable; the full block list is ~2x this. */}
+      {/* scrollbar-color follows the theme's border token, so the thumb is dark in dark mode. */}
+      <div className="border-border max-h-72 overflow-y-auto rounded-lg border p-2 [scrollbar-color:var(--border)_transparent] [scrollbar-width:thin]">
+        {BLOCK_GROUPS.map(({ kind, heading }) => {
+          const group = blocks.filter((block) => block.kind === kind);
+          if (group.length === 0) return null;
+          return (
+            <div key={kind} className="mb-3 last:mb-0">
+              <p className="text-muted-foreground mb-1.5 text-[10px] tracking-wide uppercase">
+                {heading}
+              </p>
+              <div className="grid grid-cols-2 gap-1.5 md:grid-cols-1">
+                {group.map((block) => (
+                  <button
+                    key={block.id}
+                    type="button"
+                    draggable={!disabled}
+                    onDragStart={(event) => {
+                      event.dataTransfer.setData(DRAG_MIME, block.id);
+                      event.dataTransfer.effectAllowed = "copy";
+                    }}
+                    onClick={() => !disabled && onArm(block.id)}
+                    aria-pressed={armedBlockId === block.id}
+                    className={cn(
+                      "rounded-lg border px-2.5 py-1.5 text-left text-xs leading-snug select-none",
+                      block.kind === "step" && "border-border bg-card",
+                      block.kind === "branch" &&
+                        "border-border bg-muted border-dashed",
+                      block.kind === "terminal" &&
+                        "border-foreground/30 bg-card font-medium",
+                      disabled
+                        ? "cursor-default opacity-50"
+                        : "hover:border-foreground/50 cursor-grab active:cursor-grabbing",
+                      armedBlockId === block.id &&
+                        "ring-foreground border-foreground ring-1",
+                    )}
+                  >
+                    {block.label}
+                    {block.branchLabels && (
+                      <span className="text-muted-foreground block font-normal">
+                        {block.branchLabels.join(" / ")}
+                      </span>
+                    )}
+                  </button>
+                ))}
+              </div>
             </div>
-          </div>
-        );
-      })}
+          );
+        })}
+      </div>
       <p className="text-muted-foreground mt-2 text-[10px]">
         Drag a block onto a dashed slot — or tap a block, then tap the slot.
       </p>

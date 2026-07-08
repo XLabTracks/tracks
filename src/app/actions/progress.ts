@@ -5,8 +5,10 @@ import { getCurrentUser } from "@/lib/auth";
 import { prisma } from "@/lib/db";
 import { getLessonById, getTrackForModule } from "@/lib/content";
 
-/** Stamp last-viewed time on lesson open (no-op when signed out). */
+/** Stamp last-viewed time on lesson open (no-op when signed out or optional). */
 export async function recordLessonView(lessonId: string): Promise<void> {
+  const lesson = getLessonById(lessonId);
+  if (!lesson || lesson.optional) return;
   const user = await getCurrentUser();
   if (!user) return;
   await prisma.lessonProgress.upsert({
@@ -25,6 +27,8 @@ export async function setLessonComplete(
   lessonId: string,
   completed: boolean,
 ): Promise<void> {
+  const lesson = getLessonById(lessonId);
+  if (!lesson || lesson.optional) return;
   const user = await getCurrentUser();
   if (!user) throw new Error("Not signed in");
   await prisma.lessonProgress.upsert({
@@ -41,7 +45,6 @@ export async function setLessonComplete(
     },
   });
 
-  const lesson = getLessonById(lessonId);
-  const track = lesson ? getTrackForModule(lesson.moduleId) : undefined;
+  const track = getTrackForModule(lesson.moduleId);
   if (track) revalidatePath(`/tracks/${track.slug}`, "layout");
 }

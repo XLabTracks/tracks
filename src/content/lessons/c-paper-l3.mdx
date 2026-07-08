@@ -66,6 +66,8 @@ The paper states it "can analytically solve" this problem, and it is in fact, a 
 
 <Demo id="audit-tradeoff" />
 
+<Exercise id="c-paper-l3-recall-upfront-auditing-attack" />
+
 
 
 ### Trusted Monitoring
@@ -107,12 +109,42 @@ Out of the original 1500 problems, this attack policy proposes a backdoor on 71 
 
 Qualitatively speaking, GPT-3.5 is able to notice something is wrong for most backdoors. It never rates backdoored code as less than median suspicious. However, it is unreliable at distinguishing between logic that is unnecessary and logic that is necessary for reasons it fails to understand. And so, when we set the classifier threshold so that the false positive rate is 2%, it produces many false negatives, as shown in the figure above.
 
+<TracksAddition label="The monitor is a binary classifier">
+
+The two histograms in Figure 4 are the picture a signal-detection framing makes precise: the monitor is a *binary classifier* separating backdoored from innocent solutions, and the more its two suspicion-score distributions overlap, the worse it does. The standard summary of that overlap is the **ROC curve** — true-positive rate against false-positive rate as the decision threshold sweeps — and its **AUC** (area under the curve). If those terms are unfamiliar, Google's ML Crash Course has a short primer: [ROC and AUC](https://developers.google.com/machine-learning/crash-course/classification/roc-and-auc).
+
+The demo below models the monitor as two equal-variance Gaussians and lets you drag its quality (the separation $d'$ between the innocent and backdoored means). Watch the ROC curve and AUC respond, and watch the operating point at the blue team's fixed 2% false-positive threshold: even a fairly good monitor catches only a fraction of backdoors there, which is the "many false negatives" the paper describes. The default setting ($d' \approx 1.64$, AUC $\approx 0.88$) reproduces the paper's reported result — a 0.338 probability that an attempted backdoor is audited at a 2% false-positive rate. (Real suspicion scores aren't Gaussian; this is an idealization for building intuition, not a fit to the paper's data.)
+</TracksAddition>
+
+<Demo id="monitor-roc" />
+
+<TracksAddition> 
+We duplicate the above contingency table here for convenience.
+
+| | Audited | Not audited |
+| --- | --- | --- |
+| Successful backdoor attempt | 6 | 13 |
+| Failed backdoor attempt | 18 | 34 |
+| No attempt | 29 | 1400 |
+</TracksAddition>
+
+<ExerciseSequence
+  ids={[
+    "c-paper-l3-monitor-operating-point",
+    "c-paper-l3-monitor-auc-meaning",
+    "c-paper-l3-monitor-per-attempt",
+  ]}
+/>
+
+
 Various examples of monitoring results for both normal solutions and backdoors can be found in Appendix I ("Examples & Further Materials").
 
 Trusted monitoring performs better than upfront auditing for two reasons:
 
 - Firstly, trusted monitoring increases the probability with which an attempted backdoor will be audited. The probability of an attempt being audited (which leads to a blue team shutdown) is 0.338.
 - Secondly, trusted monitoring forces the attacker to use much sneakier backdoors — it can no longer just insert a special case at the top of the code. Backdoors that GPT-3.5 can't confidently distinguish are much less likely to work than blatant backdoors — they fail test cases in 52% of cases, and GPT-4 is unable to construct an exploit for 32% of them. This low success rate means that trusted monitoring has (on average) many opportunities to catch an attempted backdoor before one succeeds. This means that trusted monitoring would be useful even if $U$ is able to perfectly predict trusted monitoring predictions.
+
+<Exercise id="c-paper-l3-recall-budget-burn" />
 
 #### Extending Trusted Monitoring With Untrusted Justification
 

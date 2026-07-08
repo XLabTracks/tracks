@@ -187,6 +187,15 @@ export function getTrackLessonIds(trackId: string): string[] {
   return getModulesForTrack(trackId).flatMap((m) => m.lessonIds);
 }
 
+/** Lesson IDs that count toward track progress (optional lessons excluded). */
+export function getRequiredTrackLessonIds(trackId: string): string[] {
+  return getModulesForTrack(trackId).flatMap((m) =>
+    getLessonsForModule(m.id)
+      .filter((l) => !l.optional)
+      .map((l) => l.id),
+  );
+}
+
 // --- Resources -----------------------------------------------------------
 
 export function getResourcesByTopics(topics: string[]): ExternalResource[] {

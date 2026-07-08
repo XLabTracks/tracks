@@ -56,6 +56,11 @@ export interface Lesson {
    */
   contentRef: string;
   estimatedMinutes?: number;
+  /**
+   * Optional lessons are excluded from progress tracking: no completion is
+   * recorded and they don't count toward module or track completion.
+   */
+  optional?: boolean;
 }
 
 // ---------------------------------------------------------------------------
@@ -67,7 +72,8 @@ export type ClosedExerciseType =
   | "multi-select"
   | "true-false"
   | "understanding-check"
-  | "flowchart";
+  | "flowchart"
+  | "tap-reveal";
 
 export type OpenExerciseType = "short-answer" | "writing-prompt" | "memo" | "essay";
 
@@ -124,6 +130,20 @@ export interface UnderstandingCheckExercise extends ExerciseBase {
   sampleAnswer: string;
 }
 
+/** Self-assessment after a tap-reveal; recorded for future spaced repetition. */
+export type TapRevealRating = "yes" | "partial" | "no";
+
+export const TAP_REVEAL_RATINGS: TapRevealRating[] = ["yes", "partial", "no"];
+
+/**
+ * A quick recall card: a short question, an answer hidden until the learner
+ * taps, then a yes / partial / no self-assessment.
+ */
+export interface TapRevealExercise extends ExerciseBase {
+  type: "tap-reveal";
+  answer: string;
+}
+
 // --- Flowchart construction ---
 
 export type FlowchartBlockKind = "step" | "branch" | "terminal";
@@ -178,6 +198,7 @@ export type Exercise =
   | ChoiceExercise
   | UnderstandingCheckExercise
   | FlowchartExercise
+  | TapRevealExercise
   | WritingExercise;
 
 export const CLOSED_EXERCISE_TYPES: ClosedExerciseType[] = [
@@ -186,11 +207,16 @@ export const CLOSED_EXERCISE_TYPES: ClosedExerciseType[] = [
   "true-false",
   "understanding-check",
   "flowchart",
+  "tap-reveal",
 ];
 
 export function isClosedExercise(
   exercise: Exercise,
-): exercise is ChoiceExercise | UnderstandingCheckExercise | FlowchartExercise {
+): exercise is
+  | ChoiceExercise
+  | UnderstandingCheckExercise
+  | FlowchartExercise
+  | TapRevealExercise {
   return (CLOSED_EXERCISE_TYPES as string[]).includes(exercise.type);
 }
 
@@ -277,6 +303,7 @@ export const EXERCISE_TYPE_LABELS: Record<ExerciseType, string> = {
   "true-false": "True / false",
   "understanding-check": "Understanding check",
   flowchart: "Build the flow chart",
+  "tap-reveal": "Quick recall",
   "short-answer": "Short answer",
   "writing-prompt": "Writing prompt",
   memo: "Memo",

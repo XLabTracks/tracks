@@ -22,6 +22,14 @@ As seen in the suspicion-score figure in the previous lesson, trusted monitoring
 
 Defer to trusted is an example of a more general design pattern which we call dynamic routing, where a protocol uses some heuristic to route between multiple possible strategies for responding to queries.
 
+<ExerciseSequence
+  label="Quick recall"
+  ids={[
+    "c-paper-l4-recall-defer-below-threshold",
+    "c-paper-l4-recall-dynamic-routing",
+  ]}
+/>
+
 ### Untrusted Monitoring
 
 The motivation behind monitoring with an untrusted model is that $T$ is not very competent, and cannot reliably tell whether code is backdoored. Accordingly, it would be great to instead use $U$ for monitoring, because we know that GPT-4 is very good at spotting these backdoors.
@@ -41,6 +49,7 @@ As monitor, when you see an actual backdoor, say that it does not look suspiciou
 </Callout>
 
 That red team response is very strong and will lead to a probability of blue team win rate of 0%.
+
 
 The blue team can defeat that response by upfront evaluation of the monitor on synthetic inputs:
 
@@ -129,6 +138,8 @@ We expect that it's possible but nontrivial to improve on the signal jamming tec
 
 An important consideration for future work is that untrusted-model monitoring performs better as you scale up the number of episodes in the scenario because collusion gets harder. One way of thinking about this is considering the untrusted monitor's situation as a Bayesian updating problem — when it sees backdoored code, it starts out with some prior on whether it's seeing a synthetic backdoor or a real backdoor attempt, and then it makes some update to that probability by looking for collusion signals. These collusion signals (e.g. a while loop where a for loop would have been more elegant) are extremely likely to occur in real backdoor attempts (because the policy is careful to include them), and they are quite unlikely to occur in synthetic backdoor attempts (because they'd have to occur by chance, perhaps as a result of $T$ randomly modifying the code and turning a for loop into a while loop). If you scale up the number of episodes in the scenario (and thus the number of synthetic inputs the monitor is evaluated on), the likelihood ratio stays the same but the prior that the input is synthetic goes up. And so, for any particular collusion signal, at some scale of scenario that collusion signal fails to allow effective collusion. This means that at large scales, collusion requires signals which are increasingly unlikely to occur by chance; it is probably increasingly hard to find such signals that are robust to signal jamming.
 
+<Exercise id="c-paper-l4-recall-naive-untrusted-monitoring" />
+
 #### Defer to Trusted
 
 As with trusted monitoring, we can also use our monitoring scores to defer to $T$. This establishes a more complete frontier of safety and usefulness. As can be seen in the safety/usefulness tradeoff figure in the Setting lesson, using untrusted monitoring dominates trusted monitoring. Note that ensembling trusted monitoring with our untrusted monitoring scores is likely critical for the defer-to-trusted approach to establish a good frontier.
@@ -189,6 +200,20 @@ Trusted editing improves beyond just using trusted monitoring and defer to trust
 | Trusted editing 50% | 96% | 89% |
 
 *Table 8. Detailed Safety and Usefulness Results for All Protocols.*
+
+
+<Demo id="safety-usefulness-frontier" />
+
+
+<ExerciseSequence
+  label="Frontier check"
+  ids={[
+    "c-paper-l4-frontier-dominance",
+    "c-paper-l4-frontier-dominated-set",
+    "c-paper-l4-frontier-improvement",
+    "c-paper-l4-frontier-along-curve",
+  ]}
+/>
 
 ### Comments on These Experimental Results
 

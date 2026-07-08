@@ -146,7 +146,9 @@ export default async function TrackOverviewPage({
                       const done = completedSet.has(lesson.id);
                       return (
                         <li key={lesson.id} className="flex items-center gap-2">
-                          {done ? (
+                          {lesson.optional ? (
+                            <span className="border-muted-foreground/40 size-3.5 shrink-0 rounded-full border border-dashed" />
+                          ) : done ? (
                             <CheckCircle2
                               className="text-foreground size-3.5 shrink-0"
                               aria-hidden
@@ -159,6 +161,11 @@ export default async function TrackOverviewPage({
                             className="hover:text-foreground transition-colors"
                           >
                             {lesson.title}
+                            {lesson.optional && (
+                              <span className="text-muted-foreground/80 ml-1.5 text-[10px] font-medium tracking-wide uppercase">
+                                Optional
+                              </span>
+                            )}
                           </Link>
                         </li>
                       );

@@ -41,6 +41,9 @@ A "sublesson" is a `Lesson` — the MDX page inside a module. To add one to an
      order: 3,                // 1-based position within the module
      contentRef: "g-intro-l3", // MDX filename (without .mdx); convention: same as id
      estimatedMinutes: 12,
+     optional: true,           // optional; excludes the lesson from progress
+                               // tracking and module/track completion, and
+                               // shows an "Optional" badge in the UI
    }
    ```
 
@@ -84,11 +87,17 @@ A "sublesson" is a `Lesson` — the MDX page inside a module. To add one to an
      narrower ones — no separate "References" section at the bottom of the lesson.
    - `$inline math$` and `$$block math$$` — LaTeX math via `remark-math` +
      `rehype-katex`, rendered with KaTeX. Plain markdown, no component needed.
-   - `<TracksAddition label?="…">…</TracksAddition>` — wrap anything Tracks added
-     on top of a verbatim source reproduction (an original exercise, an editorial
-     aside, a demo) so it reads as clearly separate from the source text. Defaults
-     `label` to "Tracks addition"; children keep normal prose styling. See its use
-     in `src/content/lessons/c-paper-l2.mdx` around `<Exercise id="c-paper-l2-spot-backdoor" />`.
+   - `<TracksAddition label?="…">…</TracksAddition>` — wrap **text only** (an
+     editorial aside, framing for what follows) that Tracks added on top of a
+     verbatim source reproduction, so it reads as clearly separate from the source.
+     Defaults `label` to "Tracks addition".
+     **Rule: never put a `<Demo>`/`<Exercise>`/`<ExerciseSequence>` inside a
+     `<TracksAddition>`.** Those components carry their own card chrome in the same
+     tint, so nesting them produces an ugly brown-on-brown box, and they're already
+     self-evidently not part of the source paper. Put the framing text in the
+     `<TracksAddition>`, then place the demo/exercise immediately **after** the
+     closing tag. See `src/content/lessons/c-paper-l4.mdx` around
+     `<Demo id="safety-usefulness-frontier" />` for the pattern.
 
 The lesson is now live at `/tracks/<trackSlug>/<moduleSlug>/<lessonSlug>` and shows
 in the sidebar + prev/next.

@@ -5,8 +5,10 @@ import { CheckCircle2, Clock, ExternalLink, FileText, Lock } from "lucide-react"
 import {
   getAssessmentForModule,
   getLessonsForModule,
+  getLessonsForUnit,
   getModuleBySlugs,
   getResourcesByTopics,
+  getUnitsForModule,
 } from "@/lib/content";
 import { DELIVERABLE_FORMAT_LABELS } from "@/lib/content/types";
 import { isAccessLocked } from "@/lib/content/prerequisites";
@@ -19,7 +21,6 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
   Card,
-  CardContent,
   CardDescription,
   CardFooter,
   CardHeader,
@@ -47,6 +48,10 @@ export default async function ModulePage({
   const { track, module } = resolved;
 
   const lessons = getLessonsForModule(module.id);
+  const unitGroups = getUnitsForModule(module.id).map((unit) => ({
+    unit,
+    lessons: getLessonsForUnit(unit.id),
+  }));
   const assessment = getAssessmentForModule(module.id);
   const furtherReading = getResourcesByTopics(module.furtherReadingTopics ?? []);
   const moduleHref = `/tracks/${track.slug}/${module.slug}`;
@@ -93,48 +98,63 @@ export default async function ModulePage({
         </Alert>
       ) : (
         <>
-          <section className="mt-8">
-            <h2 className="text-lg font-semibold">Lessons</h2>
-            <ol className="mt-3 space-y-2">
-              {lessons.map((lesson) => {
-                const done = completedSet.has(lesson.id);
-                return (
-                  <li key={lesson.id}>
-                    <Link
-                      href={`${moduleHref}/${lesson.slug}`}
-                      className="border-border hover:bg-muted shadow-soft flex items-center justify-between gap-3 rounded-xl border p-4 transition-colors"
-                    >
-                      <span className="flex items-center gap-3">
-                        {lesson.optional ? (
-                          <span className="border-muted-foreground/40 size-4 shrink-0 rounded-full border border-dashed" />
-                        ) : done ? (
-                          <CheckCircle2
-                            className="text-foreground size-4 shrink-0"
-                            aria-hidden
-                          />
-                        ) : (
-                          <span className="border-muted-foreground/40 size-4 shrink-0 rounded-full border" />
-                        )}
-                        <span className="font-medium">
-                          {lesson.order}. {lesson.title}
-                        </span>
-                        {lesson.optional && (
-                          <Badge variant="outline" className="shrink-0">
-                            Optional
-                          </Badge>
-                        )}
-                      </span>
-                      {lesson.estimatedMinutes && (
-                        <span className="text-muted-foreground flex items-center gap-1 text-xs">
-                          <Clock className="size-3.5" aria-hidden /> {lesson.estimatedMinutes}m
-                        </span>
-                      )}
+          {unitGroups.map(({ unit, lessons: unitLessons }) => {
+            const unitHref = `${moduleHref}/${unit.slug}`;
+            return (
+              <section key={unit.id} className="mt-8">
+                <div className="flex items-baseline justify-between gap-3">
+                  <h2 className="text-lg font-semibold">
+                    <Link href={unitHref} className="hover:underline">
+                      {unit.title}
                     </Link>
-                  </li>
-                );
-              })}
-            </ol>
-          </section>
+                  </h2>
+                  {unit.optional && <Badge variant="outline">Optional</Badge>}
+                </div>
+                {unit.summary && (
+                  <p className="text-muted-foreground mt-1 text-sm">{unit.summary}</p>
+                )}
+                <ol className="mt-3 space-y-2">
+                  {unitLessons.map((lesson) => {
+                    const done = completedSet.has(lesson.id);
+                    return (
+                      <li key={lesson.id}>
+                        <Link
+                          href={`${unitHref}/${lesson.slug}`}
+                          className="border-border hover:bg-muted shadow-soft flex items-center justify-between gap-3 rounded-xl border p-4 transition-colors"
+                        >
+                          <span className="flex items-center gap-3">
+                            {lesson.optional ? (
+                              <span className="border-muted-foreground/40 size-4 shrink-0 rounded-full border border-dashed" />
+                            ) : done ? (
+                              <CheckCircle2
+                                className="text-foreground size-4 shrink-0"
+                                aria-hidden
+                              />
+                            ) : (
+                              <span className="border-muted-foreground/40 size-4 shrink-0 rounded-full border" />
+                            )}
+                            <span className="font-medium">
+                              {lesson.order}. {lesson.title}
+                            </span>
+                            {lesson.optional && (
+                              <Badge variant="outline" className="shrink-0">
+                                Optional
+                              </Badge>
+                            )}
+                          </span>
+                          {lesson.estimatedMinutes && (
+                            <span className="text-muted-foreground flex items-center gap-1 text-xs">
+                              <Clock className="size-3.5" aria-hidden /> {lesson.estimatedMinutes}m
+                            </span>
+                          )}
+                        </Link>
+                      </li>
+                    );
+                  })}
+                </ol>
+              </section>
+            );
+          })}
 
           {assessment && (
             <section className="mt-8">

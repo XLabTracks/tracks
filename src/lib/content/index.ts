@@ -1,4 +1,4 @@
-import { tracks, modules, lessons } from "@/content/curriculum.data";
+import { tracks, modules, units, lessons } from "@/content/curriculum.data";
 import { exercises } from "@/content/exercises.data";
 import { assessments } from "@/content/assessments.data";
 import { resources } from "@/content/resources.data";
@@ -9,19 +9,21 @@ import type {
   Lesson,
   Module,
   Track,
+  Unit,
 } from "./types";
 
 // In-memory indexes over the static content graph.
 const trackById = new Map(tracks.map((t) => [t.id, t]));
 const trackBySlug = new Map(tracks.map((t) => [t.slug, t]));
 const moduleById = new Map(modules.map((m) => [m.id, m]));
+const unitById = new Map(units.map((u) => [u.id, u]));
 const lessonById = new Map(lessons.map((l) => [l.id, l]));
 const exerciseById = new Map(exercises.map((e) => [e.id, e]));
 const assessmentById = new Map(assessments.map((a) => [a.id, a]));
 const assessmentByModuleId = new Map(assessments.map((a) => [a.moduleId, a]));
 
 export { tracks, resources };
-export type { Track, Module, Lesson, Exercise, Assessment, ExternalResource };
+export type { Track, Module, Unit, Lesson, Exercise, Assessment, ExternalResource };
 
 // --- Basic lookups -------------------------------------------------------
 
@@ -33,6 +35,9 @@ export function getTrackById(id: string): Track | undefined {
 }
 export function getModuleById(id: string): Module | undefined {
   return moduleById.get(id);
+}
+export function getUnitById(id: string): Unit | undefined {
+  return unitById.get(id);
 }
 export function getLessonById(id: string): Lesson | undefined {
   return lessonById.get(id);
@@ -63,17 +68,35 @@ export function getModulesForTrack(trackId: string): Module[] {
     .filter((m): m is Module => Boolean(m));
 }
 
-export function getLessonsForModule(moduleId: string): Lesson[] {
+export function getUnitsForModule(moduleId: string): Unit[] {
   const mod = moduleById.get(moduleId);
   if (!mod) return [];
-  return mod.lessonIds
+  return mod.unitIds
+    .map((id) => unitById.get(id))
+    .filter((u): u is Unit => Boolean(u));
+}
+
+export function getLessonsForUnit(unitId: string): Lesson[] {
+  const unit = unitById.get(unitId);
+  if (!unit) return [];
+  return unit.lessonIds
     .map((id) => lessonById.get(id))
     .filter((l): l is Lesson => Boolean(l));
+}
+
+/** Every lesson in a module, flattened across its units in order. */
+export function getLessonsForModule(moduleId: string): Lesson[] {
+  return getUnitsForModule(moduleId).flatMap((u) => getLessonsForUnit(u.id));
 }
 
 export function getTrackForModule(moduleId: string): Track | undefined {
   const mod = moduleById.get(moduleId);
   return mod ? trackById.get(mod.trackId) : undefined;
+}
+
+export function getModuleForUnit(unitId: string): Module | undefined {
+  const unit = unitById.get(unitId);
+  return unit ? moduleById.get(unit.moduleId) : undefined;
 }
 
 // --- Slug resolution -----------------------------------------------------
@@ -88,17 +111,42 @@ export function getModuleBySlugs(
   return mod ? { track, module: mod } : undefined;
 }
 
+export function getUnitBySlugs(
+  trackSlug: string,
+  moduleSlug: string,
+  unitSlug: string,
+): { track: Track; module: Module; unit: Unit } | undefined {
+  const resolved = getModuleBySlugs(trackSlug, moduleSlug);
+  if (!resolved) return undefined;
+  const unit = getUnitsForModule(resolved.module.id).find(
+    (u) => u.slug === unitSlug,
+  );
+  return unit ? { ...resolved, unit } : undefined;
+}
+
 export function getLessonBySlugs(
   trackSlug: string,
   moduleSlug: string,
+  unitSlug: string,
   lessonSlug: string,
-): { track: Track; module: Module; lesson: Lesson } | undefined {
-  const resolved = getModuleBySlugs(trackSlug, moduleSlug);
+): { track: Track; module: Module; unit: Unit; lesson: Lesson } | undefined {
+  const resolved = getUnitBySlugs(trackSlug, moduleSlug, unitSlug);
   if (!resolved) return undefined;
-  const lesson = getLessonsForModule(resolved.module.id).find(
+  const lesson = getLessonsForUnit(resolved.unit.id).find(
     (l) => l.slug === lessonSlug,
   );
   return lesson ? { ...resolved, lesson } : undefined;
+}
+
+/** Canonical path to a lesson, resolving its unit/module/track. */
+export function getLessonHref(lessonId: string): string | null {
+  const lesson = lessonById.get(lessonId);
+  if (!lesson) return null;
+  const unit = unitById.get(lesson.unitId);
+  const mod = unit ? moduleById.get(unit.moduleId) : undefined;
+  const track = mod ? trackById.get(mod.trackId) : undefined;
+  if (!unit || !mod || !track) return null;
+  return `/tracks/${track.slug}/${mod.slug}/${unit.slug}/${lesson.slug}`;
 }
 
 // --- Prerequisites -------------------------------------------------------
@@ -117,6 +165,7 @@ export function getPrerequisiteModules(moduleId: string): Module[] {
 export interface LessonRef {
   trackSlug: string;
   moduleSlug: string;
+  unitSlug: string;
   lessonSlug: string;
   title: string;
 }
@@ -124,13 +173,15 @@ export interface LessonRef {
 /** Flattened, ordered sequence of every lesson in a track. */
 export function getTrackLessonSequence(
   trackSlug: string,
-): Array<{ module: Module; lesson: Lesson }> {
+): Array<{ module: Module; unit: Unit; lesson: Lesson }> {
   const track = trackBySlug.get(trackSlug);
   if (!track) return [];
-  const sequence: Array<{ module: Module; lesson: Lesson }> = [];
+  const sequence: Array<{ module: Module; unit: Unit; lesson: Lesson }> = [];
   for (const mod of getModulesForTrack(track.id)) {
-    for (const lesson of getLessonsForModule(mod.id)) {
-      sequence.push({ module: mod, lesson });
+    for (const unit of getUnitsForModule(mod.id)) {
+      for (const lesson of getLessonsForUnit(unit.id)) {
+        sequence.push({ module: mod, unit, lesson });
+      }
     }
   }
   return sequence;
@@ -150,9 +201,14 @@ export function getLessonNavigation(lessonId: string): {
   const index = sequence.findIndex((entry) => entry.lesson.id === lessonId);
   if (index === -1) return { prev: null, next: null };
 
-  const toRef = (entry: { module: Module; lesson: Lesson }): LessonRef => ({
+  const toRef = (entry: {
+    module: Module;
+    unit: Unit;
+    lesson: Lesson;
+  }): LessonRef => ({
     trackSlug: track.slug,
     moduleSlug: entry.module.slug,
+    unitSlug: entry.unit.slug,
     lessonSlug: entry.lesson.slug,
     title: entry.lesson.title,
   });
@@ -165,9 +221,21 @@ export function getLessonNavigation(lessonId: string): {
 
 // --- Outline (for sidebar / track overview) ------------------------------
 
+export interface UnitOutline {
+  unit: Unit;
+  lessons: Lesson[];
+}
+
+export interface ModuleOutline {
+  module: Module;
+  units: UnitOutline[];
+  /** Every lesson in the module, flattened across units (convenience). */
+  lessons: Lesson[];
+}
+
 export interface TrackOutline {
   track: Track;
-  modules: Array<{ module: Module; lessons: Lesson[] }>;
+  modules: ModuleOutline[];
 }
 
 export function getTrackOutline(trackSlug: string): TrackOutline | undefined {
@@ -175,16 +243,25 @@ export function getTrackOutline(trackSlug: string): TrackOutline | undefined {
   if (!track) return undefined;
   return {
     track,
-    modules: getModulesForTrack(track.id).map((module) => ({
-      module,
-      lessons: getLessonsForModule(module.id),
-    })),
+    modules: getModulesForTrack(track.id).map((module) => {
+      const unitOutlines = getUnitsForModule(module.id).map((unit) => ({
+        unit,
+        lessons: getLessonsForUnit(unit.id),
+      }));
+      return {
+        module,
+        units: unitOutlines,
+        lessons: unitOutlines.flatMap((u) => u.lessons),
+      };
+    }),
   };
 }
 
 /** All lesson IDs that belong to a track (used for progress aggregation). */
 export function getTrackLessonIds(trackId: string): string[] {
-  return getModulesForTrack(trackId).flatMap((m) => m.lessonIds);
+  return getModulesForTrack(trackId).flatMap((m) =>
+    getLessonsForModule(m.id).map((l) => l.id),
+  );
 }
 
 /** Lesson IDs that count toward track progress (optional lessons excluded). */

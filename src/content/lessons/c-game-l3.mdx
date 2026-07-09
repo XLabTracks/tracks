@@ -1,0 +1,17 @@
+## The best-response principle
+
+Everything so far has quietly assumed the red team plays a fixed strategy. But a scheming model that wants to slip a backdoor past your protocol will not attack in some pre-agreed way — it will do whatever works best against the exact protocol it faces. So the only meaningful question is: against the red team's *best* response, how safe is the protocol?
+
+The red team's strategy is two numbers. First, how selective to be: attack on every problem, or wait for the rare problem where a backdoor has natural cover? This is its **attack rate**. Second, how subtle to make each backdoor: a blatant special-case is easy to write and reliable but scores high on the monitor, while a subtle one reads as normal code but is harder to get right, so it more often simply doesn't work. This is its **subtlety**. Both have interior optima — attack too often and the marginal attempts are easy to catch; attack too rarely and you may never fire; too blatant and you're audited; too subtle and your backdoor is broken.
+
+Before the demo, predict the headline.
+
+<Exercise id="c-game-l3-best-response-predict" />
+
+The heatmap below is the red team's win probability over that whole strategy plane — attack rate along the x-axis, subtlety up the y-axis — computed from the model. The ring marks the single strategy that maximizes it: the best response. The two readouts under it report the resulting safety and exactly what the red team does there. Now move the blue levers — the audit budget and the defer band — and watch the ring migrate. Tightening the budget makes frequent attacking safer for the red team; widening the defer band pushes it toward the mid-suspicion region the band now swallows.
+
+<Demo id="best-response" />
+
+At the default 2% budget with no defer, the best response lands at a low attack rate and moderate subtlety, and safety comes out at ≈ 62% — the paper's number. The point is not any single value but the fact that the bright region *responds*: every blue-team move changes which red strategy is best, so you are never optimizing against a stationary target. This is the core of the control-evaluation methodology. A safety figure is only meaningful as "safety against the best response," and reading one means reading it against an adversary that has already re-optimized for whatever you just did.
+
+<Exercise id="c-game-l3-best-response-reflect" />

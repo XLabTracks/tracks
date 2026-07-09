@@ -1,0 +1,19 @@
+## Opportunities are not equal
+
+The fixed-odds picture said "attack as often as possible." The paper's red team attacks on a small fraction of problems. The missing ingredient is that not all problems are equally good to attack.
+
+Problems differ in how cleanly a backdoor fits. A geometry problem with fiddly corner cases offers natural cover for an off-by-one; a one-line string echo offers none. The red team's real strategy is a **quality cutoff**: attack only when the opportunity is at least this good. A high cutoff means it attacks rarely, on the best problems; a low cutoff means it attacks often, dipping into worse ones. Crucially, the marginal opportunity is always the worst one it is currently willing to take — so attacking more often means writing backdoors with less cover, which the monitor is more likely to flag.
+
+That sets up a tension. Predict how it resolves.
+
+<Exercise id="c-game-l5-hump-predict" />
+
+The demo plots the red team's win probability against its attack rate. Drag the cutoff and find the peak.
+
+<Demo id="attack-rate" />
+
+The curve is hump-shaped. At the left, attacks are so rare that the deployment often ends before a successful one fires — the "any decisive event" factor from the last lesson is tiny. At the right, attacks are frequent but forced onto poor opportunities, so the catch rate climbs and the race factor collapses. In between sits an interior optimum at a low but non-zero attack rate — exactly where the paper's red team operates.
+
+This is the answer to a question the paper raises: why attack rarely? Not out of caution, but because rarity is opportunity selection under the shadow of the catch rule. One caught attempt ends everything, so each attack has to be worth the risk.
+
+<Exercise id="c-game-l5-hump-reflect" />

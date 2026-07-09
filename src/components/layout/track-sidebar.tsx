@@ -95,9 +95,50 @@ function SidebarNav({
         onValueChange={setOpen}
         className="px-2 pb-10"
       >
-        {outline.modules.map(({ module, lessons }) => {
+        {outline.modules.map(({ module, units }) => {
           const isLocked = locked.has(module.slug);
           const assessmentHref = `${base}/${module.slug}/assessment`;
+          const multiUnit = units.length > 1;
+
+          const renderLesson = (unitSlug: string, lesson: (typeof units)[number]["lessons"][number]) => {
+            const href = `${base}/${module.slug}/${unitSlug}/${lesson.slug}`;
+            const done = completed.has(lesson.id);
+            return (
+              <li key={lesson.id}>
+                <Link
+                  href={href}
+                  onClick={onNavigate}
+                  className={itemClass(pathname === href)}
+                >
+                  {lesson.optional ? (
+                    <CircleDashed
+                      className="mt-0.5 size-3.5 shrink-0 opacity-30"
+                      aria-hidden
+                    />
+                  ) : done ? (
+                    <CheckCircle2
+                      className="text-foreground mt-0.5 size-3.5 shrink-0"
+                      aria-hidden
+                    />
+                  ) : (
+                    <Circle
+                      className="mt-0.5 size-3.5 shrink-0 opacity-30"
+                      aria-hidden
+                    />
+                  )}
+                  <span className="line-clamp-2">
+                    {lesson.title}
+                    {lesson.optional && (
+                      <span className="text-muted-foreground/80 ml-1.5 text-[10px] font-medium tracking-wide uppercase">
+                        Optional
+                      </span>
+                    )}
+                  </span>
+                </Link>
+              </li>
+            );
+          };
+
           return (
             <AccordionItem key={module.id} value={module.slug} className="border-none">
               <AccordionTrigger className="hover:bg-muted [&[data-state=open]]:bg-muted/50 rounded-lg px-2 py-2 text-sm hover:no-underline">
@@ -115,41 +156,26 @@ function SidebarNav({
               </AccordionTrigger>
               <AccordionContent className="pb-1">
                 <ul className="border-border/70 ml-3 space-y-0.5 border-l pl-2">
-                  {lessons.map((lesson) => {
-                    const href = `${base}/${module.slug}/${lesson.slug}`;
-                    const done = completed.has(lesson.id);
+                  {units.map(({ unit, lessons }) => {
+                    if (!multiUnit) return lessons.map((l) => renderLesson(unit.slug, l));
+                    const unitHref = `${base}/${module.slug}/${unit.slug}`;
                     return (
-                      <li key={lesson.id}>
+                      <li key={unit.id} className="mt-1 first:mt-0">
                         <Link
-                          href={href}
+                          href={unitHref}
                           onClick={onNavigate}
-                          className={itemClass(pathname === href)}
-                        >
-                          {lesson.optional ? (
-                            <CircleDashed
-                              className="mt-0.5 size-3.5 shrink-0 opacity-30"
-                              aria-hidden
-                            />
-                          ) : done ? (
-                            <CheckCircle2
-                              className="text-foreground mt-0.5 size-3.5 shrink-0"
-                              aria-hidden
-                            />
-                          ) : (
-                            <Circle
-                              className="mt-0.5 size-3.5 shrink-0 opacity-30"
-                              aria-hidden
-                            />
+                          className={cn(
+                            "block rounded-md px-2 py-1 text-xs font-medium tracking-wide uppercase transition-colors",
+                            pathname === unitHref
+                              ? "text-foreground"
+                              : "text-muted-foreground/80 hover:text-foreground",
                           )}
-                          <span className="line-clamp-2">
-                            {lesson.title}
-                            {lesson.optional && (
-                              <span className="text-muted-foreground/80 ml-1.5 text-[10px] font-medium tracking-wide uppercase">
-                                Optional
-                              </span>
-                            )}
-                          </span>
+                        >
+                          {unit.title}
                         </Link>
+                        <ul className="space-y-0.5">
+                          {lessons.map((l) => renderLesson(unit.slug, l))}
+                        </ul>
                       </li>
                     );
                   })}

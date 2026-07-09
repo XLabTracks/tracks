@@ -40,10 +40,15 @@ persistence do not.
 
 **Content is code; user data is Postgres.** This split is the core mental model:
 
-- The content graph (tracks, modules, lessons, exercises, assessments, resources)
-  is static and code-defined in `src/content/*.data.ts` plus MDX bodies in
+- The content graph (tracks, modules, units, lessons, exercises, assessments,
+  resources) is static and code-defined in `src/content/*.data.ts` plus MDX bodies in
   `src/content/lessons/*.mdx`. Access it **only** through `src/lib/content/`
-  (in-memory indexes + accessors). Never store curriculum in the DB.
+  (in-memory indexes + accessors). Never store curriculum in the DB. The hierarchy is
+  `Track → Module → Unit → Lesson`: a **unit** is the navigable layer between a module
+  and its lessons (own slug + overview page at
+  `/tracks/<track>/<module>/<unit>`, lessons at `…/<unit>/<lesson>`). Every module has
+  ≥1 unit; `getLessonsForModule` flattens across units so module-level callers are
+  unaffected.
 - `prisma/schema.prisma` holds **only** user/stateful data (progress, submissions,
   classrooms), keyed by **string content IDs** — there are no FKs into
   the content graph.

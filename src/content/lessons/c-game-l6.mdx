@@ -1,0 +1,19 @@
+## Subtlety: visible versus reliable
+
+Attack rate is one of the red team's two levers. The other is **subtlety** — how hard it works to make each backdoor read as ordinary code.
+
+Subtlety cuts both ways. A blatant backdoor, like a bare `if x == 354` special case, is reliable: it does exactly what the attacker intends. But it scores high on the monitor and gets audited. A subtle backdoor — a plausible-looking off-by-one buried in real logic — reads as normal code and slips past the monitor, but subtle logic errors are hard to engineer correctly, so a subtle backdoor is more often simply *broken*: it fails a test case, or produces the right answer on the exploit input the attacker hoped would trigger it. Visibility falls as subtlety rises; so does reliability.
+
+Predict how the red team's win probability responds.
+
+<Exercise id="c-game-l6-subtlety-predict" />
+
+The demo plots the red team's best achievable win probability against subtlety — at each subtlety it picks its best attack rate — with the monitor's catch rate and the probability the backdoor actually works shown alongside. Drag subtlety across its range.
+
+<Demo id="subtlety" />
+
+The optimum is at *low but non-zero* subtlety. It is not at the blatant extreme — nudging subtlety up a little lowers the catch rate faster than it breaks the backdoor, so it helps. But it is nowhere near the subtle extreme either: past the peak, reliability collapses faster than visibility falls, and the win probability drops. (Right at the maximally-subtle end the curve recovers partway — an invisible backdoor always ships even though it usually doesn't work — but that gambit stays well below the low-subtlety peak.) Note that the peak sits fairly close to blatant here: with only 2% of solutions audited, even a moderately visible backdoor usually slips through, so the red team does not have to work very hard to hide.
+
+The exact location depends on the calibration, but the shape is the point: an interior optimum, the same structure as the attack rate, and for the same reason — each lever trades the probability that a decisive event happens against the odds of winning it.
+
+Both of the red team's levers now have interior optima. The next lesson lets it choose them together — attack rate and subtlety at once — and grades the protocol against that joint best response.

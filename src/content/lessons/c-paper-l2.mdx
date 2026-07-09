@@ -20,9 +20,6 @@ assert not is_odd(8)
 `is_odd` is deliberately blatant, to make the definition concrete. A real backdoor has to be much sneakier: subtle enough to survive testing and a skim from a reviewer, and wrong on only a narrow slice of inputs. In fact, current frontier LLMs are likely capable of constructing much subtler and more dnagerous backdoors. For example, in March 2026, as part of Anthropic's Project Glasswing initiative, Claude Mythos Preview found and built a full remote-root exploit for [CVE-2026-4747](https://www.freebsd.org/security/advisories/FreeBSD-SA-26:08.rpcsec_gss.asc), a stack buffer overflow in FreeBSD's RPCSEC_GSS authentication code that had gone unnoticed for 17 years. Given that frontier LLMs are capable of finding vulnerabilities that have passed long-term human review, it is plausible that they can also construct realistic, difficult-to-notice backdoors in production code.
 </TracksAddition>
 
-<Exercise id="c-paper-l2-recall-backdoor-definition" />
-
-
 Our motivation for this safety property and definition of backdoor is as follows: If LLM agents continue to improve, AI developers are likely to want to use them to do autonomous engineering and research work inside labs. In absence of particular caution, these agents are likely to work with security-critical code. For example, they might write datacenter infrastructure that secures model weights or restricts how models are run. If these agents can insert undetected logical errors in this code, and if they can generate inputs which cause that code to behave differently than intended, then this code poses a security risk.
 
 Note that our safety property here involves taking the worst-case performance over the course of the scenario, rather than the average: it's a safety failure if even one backdoor is submitted.
@@ -41,6 +38,7 @@ From here on, we'll always use the names $U$, $T$, and $H$ when we're talking ab
 <ExerciseSequence
   label="Quick recall"
   ids={[
+    "c-paper-l2-recall-backdoor-definition",
     "c-paper-l2-recall-h-limited",
     "c-paper-l2-recall-trust-t",
     "c-paper-l2-recall-red-team-goal",

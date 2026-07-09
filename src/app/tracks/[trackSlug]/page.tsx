@@ -4,8 +4,7 @@ import { notFound } from "next/navigation";
 import { CheckCircle2, FileText, Lock } from "lucide-react";
 import {
   getAssessmentForModule,
-  getLessonById,
-  getModuleById,
+  getLessonHref,
   getTrackLessonIds,
   getTrackOutline,
 } from "@/lib/content";
@@ -38,14 +37,6 @@ export async function generateMetadata({
   return { title: outline?.track.title ?? "Track" };
 }
 
-function lessonHref(trackSlug: string, lessonId: string): string | null {
-  const lesson = getLessonById(lessonId);
-  if (!lesson) return null;
-  const module = getModuleById(lesson.moduleId);
-  if (!module) return null;
-  return `/tracks/${trackSlug}/${module.slug}/${lesson.slug}`;
-}
-
 export default async function TrackOverviewPage({
   params,
 }: {
@@ -63,7 +54,7 @@ export default async function TrackOverviewPage({
   );
   const lastViewedId = user ? await getLastViewedLessonId(user.id, track.id) : null;
   const continueLessonId = lastViewedId ?? modules[0]?.lessons[0]?.id;
-  const continueHref = continueLessonId ? lessonHref(track.slug, continueLessonId) : null;
+  const continueHref = continueLessonId ? getLessonHref(continueLessonId) : null;
 
   return (
     <div className="max-w-5xl px-4 py-8 lg:px-8">
@@ -157,7 +148,7 @@ export default async function TrackOverviewPage({
                             <span className="border-muted-foreground/40 size-3.5 shrink-0 rounded-full border" />
                           )}
                           <Link
-                            href={`${moduleHref}/${lesson.slug}`}
+                            href={getLessonHref(lesson.id) ?? moduleHref}
                             className="hover:text-foreground transition-colors"
                           >
                             {lesson.title}
@@ -185,7 +176,7 @@ export default async function TrackOverviewPage({
                 </CardContent>
                 <CardFooter className="gap-2">
                   <Button asChild>
-                    <Link href={firstLesson ? `${moduleHref}/${firstLesson.slug}` : moduleHref}>
+                    <Link href={(firstLesson && getLessonHref(firstLesson.id)) || moduleHref}>
                       Start module
                     </Link>
                   </Button>

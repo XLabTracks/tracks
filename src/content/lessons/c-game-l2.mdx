@@ -1,0 +1,19 @@
+## Same AUROC, different safety
+
+In the control paper you summarized a monitor with its ROC curve and its area under that curve, the AUROC — the probability that a random attack scores more suspicious than a random innocent solution. It is a single, threshold-free number for "how well does this monitor rank." It is also, on its own, a poor predictor of safety.
+
+The reason is the audit budget. The blue team can only afford to send the most suspicious 2% of solutions to a human. That pins the decision threshold far out in the *innocent tail* — the point where only 2% of innocent solutions look at least this suspicious. The only thing that matters at that operating point is how many attacks also make it that far: the true-positive rate at a 2% false-positive rate. AUROC averages over every threshold, including all the thresholds the budget never lets you use.
+
+Before the demo, commit to a prediction.
+
+<Exercise id="c-game-l2-tail-predict" />
+
+The demo below builds exactly this comparison from the model. Both monitors have the AUROC you set with the slider. Monitor A spreads its attack scores widely; Monitor B compresses them into a mid-suspicion band — the same ranking quality overall, but the attacks pile up just below the audit threshold instead of reaching it. Watch the "caught @ 2%" readout for each, and the two operating points where the ROC curves cross the 2% line.
+
+<Demo id="monitor-tails" />
+
+At the default AUROC of 0.92 the two monitors catch wildly different fractions — roughly 47% versus 9% — even though their ROC curves enclose identical area. The gap survives across the whole slider range. A monitor's value under a tight budget lives entirely in the extreme low-false-positive tail of its ROC, and a single scalar summary of the whole curve can conceal a several-fold safety difference.
+
+This is why the rest of the module works with the operating point directly rather than with AUROC, and why "improve the monitor" is an ambiguous instruction: improving the tail buys safety, improving the already-easy middle buys almost none.
+
+<Exercise id="c-game-l2-tail-reflect" />

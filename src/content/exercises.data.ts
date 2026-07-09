@@ -158,7 +158,7 @@ export const exercises: Exercise[] = [
     id: "c-paper-l2-recall-summary-statistics",
     type: "tap-reveal",
     prompt:
-      "What summary statistics does the blue team have access to, and what do they buy it?",
+      "What summary statistics does the blue team have access to, and what does this access give the blue team?",
     answer:
       "The distribution of the real model's performance on any task — e.g. GPT-4's false positive and false negative rates on classification tasks, and the distribution of how suspicious its code looks. This lets the protocol notice whenever U regularly behaves differently from the real model.",
   },
@@ -403,9 +403,18 @@ export const exercises: Exercise[] = [
     prompt:
       "Trusted editing 10% scores (usefulness 96%, safety 85%). Untrusted monitoring, defer to trusted 0% scores (usefulness 96%, safety 79%). One protocol dominates the other — it is at least as good on both axes and strictly better on at least one. Which statement is correct?",
     options: [
-      { id: "a", label: "Trusted editing 10% dominates untrusted monitoring (defer 0%)." },
-      { id: "b", label: "Untrusted monitoring (defer 0%) dominates trusted editing 10%." },
-      { id: "c", label: "Neither dominates the other — it is a genuine tradeoff." },
+      {
+        id: "a",
+        label: "Trusted editing 10% dominates untrusted monitoring (defer 0%).",
+      },
+      {
+        id: "b",
+        label: "Untrusted monitoring (defer 0%) dominates trusted editing 10%.",
+      },
+      {
+        id: "c",
+        label: "Neither dominates the other — it is a genuine tradeoff.",
+      },
       { id: "d", label: "Each dominates the other." },
     ],
     correctOptionIds: ["a"],
@@ -418,9 +427,15 @@ export const exercises: Exercise[] = [
     prompt:
       "Consider just these three protocols: Trusted monitoring, defer 10% (usefulness 93%, safety 83%); Trusted editing 20% (usefulness 94%, safety 92%); Untrusted monitoring, defer 10% (usefulness 92%, safety 92%). Select every protocol that is NOT on the frontier of these three — every one that is dominated.",
     options: [
-      { id: "tm10", label: "Trusted monitoring, defer 10% (usefulness 93%, safety 83%)" },
+      {
+        id: "tm10",
+        label: "Trusted monitoring, defer 10% (usefulness 93%, safety 83%)",
+      },
       { id: "te20", label: "Trusted editing 20% (usefulness 94%, safety 92%)" },
-      { id: "um10", label: "Untrusted monitoring, defer 10% (usefulness 92%, safety 92%)" },
+      {
+        id: "um10",
+        label: "Untrusted monitoring, defer 10% (usefulness 92%, safety 92%)",
+      },
     ],
     correctOptionIds: ["tm10", "um10"],
     explanation:
@@ -445,7 +460,7 @@ export const exercises: Exercise[] = [
     id: "c-paper-l4-frontier-along-curve",
     type: "understanding-check",
     prompt:
-      "Trusted monitoring's five points on the plot all come from turning one knob — the defer-to-trusted percentage — from 0% to 50%. Its result goes from (usefulness 97%, safety 62%) at 0% to (usefulness 51%, safety 100%) at 50%. In which direction does the point move as the knob rises, and how is that different from what it means for one protocol to \"push the frontier out\"?",
+      'Trusted monitoring\'s five points on the plot all come from turning one knob — the defer-to-trusted percentage — from 0% to 50%. Its result goes from (usefulness 97%, safety 62%) at 0% to (usefulness 51%, safety 100%) at 50%. In which direction does the point move as the knob rises, and how is that different from what it means for one protocol to "push the frontier out"?',
     sampleAnswer:
       "As the defer percentage rises the point moves up and to the left: safety climbs (62% → 100%) while usefulness falls (97% → 51%). Turning a single method's knob only slides you along that method's own fixed tradeoff curve — you are buying safety with usefulness, not getting more of both. Pushing the frontier out is the opposite: a better method reaches points up and to the right of the existing curve, giving more safety at the same usefulness (or more usefulness at the same safety). Trusted editing does that relative to trusted monitoring; moving along trusted monitoring's own curve does not.",
   },
@@ -470,5 +485,143 @@ export const exercises: Exercise[] = [
     prompt: "Why does naive untrusted monitoring have 0% safety?",
     answer:
       "Because the monitor is the same untrusted model as the policy, it can simply report that real backdoors look fine while telling the truth about everything else. Until the blue team has some way to check the monitor's honesty (e.g. evaluating it on synthetic backdoors), its reports carry no safety value.",
+  },
+  {
+    id: "c-game-l2-tail-predict",
+    type: "multiple-choice",
+    prompt:
+      "Two monitors have the same AUROC of 0.92. Monitor A spreads attack scores across the whole suspicion range; Monitor B compresses them into a mid-suspicion band. Under a fixed 2% audit budget — which audits only the most suspicious 2% of solutions — monitor B catches:",
+    options: [
+      { id: "a", label: "the same fraction of attacks as A (AUROC is equal)" },
+      { id: "b", label: "slightly fewer than A" },
+      { id: "c", label: "less than half as many as A" },
+      { id: "d", label: "more than A" },
+    ],
+    correctOptionIds: ["c"],
+    explanation:
+      "AUROC measures ranking quality averaged over every possible threshold, but the audit budget pins the threshold far out in the innocent tail (only 2% of innocent solutions get audited). What matters there is the true-positive rate at that low false-positive rate. Monitor B's attacks sit in a mid-suspicion band that mostly falls below the 2% threshold, so very few reach the audited tail — it catches under half what A does, despite identical AUROC.",
+  },
+  {
+    id: "c-game-l2-tail-reflect",
+    type: "understanding-check",
+    prompt:
+      "State, in one or two sentences, which single number about a monitor best predicts its safety under a small audit budget, and why AUROC can be misleading.",
+    sampleAnswer:
+      "Under a small audit budget the relevant number is the monitor's true-positive rate at a false-positive rate equal to the budget — its TPR at, say, 2% FPR (the operating point out in the innocent tail). AUROC averages performance over all thresholds, so it can be high even when the low-FPR tail — the only region the budget lets you use — is weak; two monitors with the same AUROC can differ severalfold in what they catch at the operating point that actually applies.",
+  },
+  {
+    id: "c-game-l3-best-response-predict",
+    type: "multiple-choice",
+    prompt:
+      "You run trusted monitoring at a 2% audit budget with no defer band. The red team knows your protocol exactly and picks the attack rate and subtlety that maximize its own win probability. Under that best response, roughly what is the blue team's safety?",
+    options: [
+      { id: "a", label: "≈ 40%" },
+      { id: "b", label: "≈ 62%" },
+      { id: "c", label: "≈ 85%" },
+      { id: "d", label: "≈ 97%" },
+    ],
+    correctOptionIds: ["b"],
+    explanation:
+      "This is the paper's headline trusted-monitoring number, and the model reproduces it: against the red team's best response, safety is ≈ 62% — up from 15% for upfront auditing, but far from solved. Note this is the *worst case over red strategies*, not the result of any single fixed attack.",
+  },
+  {
+    id: "c-game-l3-best-response-reflect",
+    type: "understanding-check",
+    prompt:
+      "The heatmap's bright region — the red team's best strategy — moves whenever you change a blue lever. Explain why a protocol's safety must be measured against the red team's best response rather than against one fixed attack, and what the migrating best-response point means for how you should read any single safety number.",
+    sampleAnswer:
+      "A capable, scheming adversary will adopt whatever strategy works best against the exact protocol it faces, so a safety number computed against one fixed attack only tells you how that particular attack fares — it says nothing about the attack the red team would actually choose. The control evaluation therefore grades every protocol against the maximizing red strategy, which is why safety here is 'safety vs best response'. Because that best response moves as you change the blue levers, any single safety number is a snapshot against a *responding* opponent: every time you tighten a budget or widen the defer band, you should expect the red team to re-optimize, and the number you read already accounts for that.",
+  },
+  {
+    id: "c-game-l4-race-predict",
+    type: "multiple-choice",
+    prompt:
+      "Suppose every attack the red team makes has the same fixed per-attack odds — the same chance of being caught and the same chance of landing a working backdoor. To maximize its probability of winning at least once over the whole deployment, how often should it attack?",
+    options: [
+      { id: "a", label: "Once, at the single best moment" },
+      { id: "b", label: "About ten times" },
+      { id: "c", label: "As often as possible — with per-attack odds fixed, more attempts is strictly better" },
+      { id: "d", label: "It makes no difference how often it attacks" },
+    ],
+    correctOptionIds: ["c"],
+    explanation:
+      "With the per-attack odds held fixed, the win probability is [race odds] × [1 − e^(−k · decisive-rate)], which increases with the number of attacks k: more attempts only raise the chance that some decisive event fires, without changing the odds of each. So under this (unrealistic) assumption the red team should spam. The catch — that attacks are NOT equally good — is the subject of the next lesson.",
+  },
+  {
+    id: "c-game-l4-race-reflect",
+    type: "understanding-check",
+    prompt:
+      "The red team's win probability factors into two terms: the race odds w/(w+c) and the chance any decisive event fires, 1 − e^(−k(w+c)). In your own words, what does each factor represent, and why does catching a single attempt end the game in the blue team's favor?",
+    sampleAnswer:
+      "The first factor, w/(w+c), is the conditional probability that the *first decisive event* is a red win rather than a catch — the head-to-head odds within a single showdown, set purely by the per-attack win and catch probabilities. The second factor, 1 − e^(−k(w+c)), is the probability that any decisive event happens at all across the k attacks; it rises toward 1 as attacks accumulate. Catching one attempt ends the game because a single confirmed backdoor attempt is decisive evidence that the untrusted model is scheming, which justifies shutting it down — so the blue team only needs to win the race once.",
+  },
+  {
+    id: "c-game-l5-hump-predict",
+    type: "multiple-choice",
+    prompt:
+      "Now drop the fixed-odds assumption: problems differ in how cleanly a backdoor fits, and attacking a worse opportunity means a more visible backdoor. As the red team's attack rate goes from very rare to very frequent, how does its win probability behave?",
+    options: [
+      { id: "a", label: "It increases monotonically — more attacks is always better" },
+      { id: "b", label: "It decreases monotonically — attacking at all is a mistake" },
+      { id: "c", label: "It rises then falls — there is an interior optimum" },
+      { id: "d", label: "It stays roughly flat" },
+    ],
+    correctOptionIds: ["c"],
+    explanation:
+      "Two forces oppose each other. Attacking too rarely risks never firing a successful backdoor before the deployment ends (the event factor is small). Attacking too often forces the red team onto low-quality opportunities where the backdoor is visible and gets caught (the catch rate climbs, killing the race factor). The win probability is hump-shaped, and the paper's red team sits near its peak — attacking rarely, not never.",
+  },
+  {
+    id: "c-game-l5-hump-reflect",
+    type: "understanding-check",
+    prompt:
+      "The paper's red team attacks on only a small fraction of problems. Explain why this rarity is a deliberate optimization rather than timidity.",
+    sampleAnswer:
+      "Rarity is opportunity selection under the shadow of the catch rule. Because a single caught attempt ends the game, every attack is a gamble that must be worth taking; a low-quality opportunity yields a visible backdoor with a high catch probability and a low success probability, so taking it lowers the red team's expected outcome. By waiting for rare, high-quality opportunities — problems where a backdoor has natural cover — the red team keeps its per-attack odds favorable, and the interior optimum of the win-probability curve sits at a low but non-zero attack rate. Attacking never would forfeit the game; attacking often would get caught; attacking rarely and selectively is the maximizing choice.",
+  },
+  {
+    id: "c-game-l6-subtlety-predict",
+    type: "multiple-choice",
+    prompt:
+      "The red team's second lever is subtlety. A subtler backdoor reads as more normal code (lower suspicion) but is more likely to be simply broken (a wrong edge case that fails the tests). As subtlety rises from blatant to maximally subtle, the red team's win probability:",
+    options: [
+      { id: "a", label: "Rises monotonically — subtler is always better" },
+      { id: "b", label: "Falls monotonically — subtlety only hurts" },
+      { id: "c", label: "Rises then falls — there is an interior optimum" },
+      { id: "d", label: "Is unaffected by subtlety" },
+    ],
+    correctOptionIds: ["c"],
+    explanation:
+      "Visibility falls as subtlety rises, but so does reliability — a subtler backdoor is more often simply broken. The two trade off, so the win probability has an interior optimum: it rises from the blatant end to a peak at low-but-non-zero subtlety, then falls as reliability collapses. (At this calibration the peak sits fairly close to blatant, since a 2% audit budget lets even moderately visible backdoors through, and the curve recovers slightly at the maximally-subtle extreme where invisible-but-usually-broken attacks always ship — but that stays below the peak.) The key structural fact is the interior optimum, matching the attack rate.",
+  },
+  {
+    id: "c-game-l7-defer-predict",
+    type: "multiple-choice",
+    prompt:
+      "Starting from trusted monitoring with no defer band, you widen the defer band so that mid-suspicion code is rewritten by the trusted model T instead of being shipped. Widening it from 0% to 10% will:",
+    options: [
+      { id: "a", label: "Raise safety a little and cost usefulness a lot" },
+      { id: "b", label: "Raise safety a lot and cost usefulness a little" },
+      { id: "c", label: "Raise both safety and usefulness" },
+      { id: "d", label: "Trade them one-for-one" },
+    ],
+    correctOptionIds: ["b"],
+    explanation:
+      "Safety climbs from ≈ 62% to ≈ 83% while usefulness falls only from ≈ 97% to ≈ 93%. The reason is asymmetry: the mid-suspicion band holds a large share of the attack mass (attacks that scored suspicious but not enough to audit) but only a thin slice of the innocent mass, so deferring neutralizes many attacks while sending only a few percent of (mostly innocent) problems to the weaker model.",
+  },
+  {
+    id: "c-game-l7-defer-reflect",
+    type: "understanding-check",
+    prompt:
+      "Deferring to T neutralizes an attack silently — no catch, no shutdown, the game just continues. Given that, explain why a wide defer band pushes the red team toward maximally subtle attacks, and what sets the usefulness price of deferring.",
+    sampleAnswer:
+      "To ship (and possibly win) rather than be deferred, an attack must score below the defer threshold — it must look innocent. Widening the defer band lowers that threshold, so the red team is forced to make its backdoors ever more subtle to get underneath it. But subtler backdoors are more often broken, so its win probability erodes; against a wide band the best response drifts to the maximum-subtlety corner. The usefulness price is set by two things: the width of the band (the deferred fraction is roughly d − b, almost all of it innocent code) and the capability gap between U and T (each deferred problem is answered at T's quality instead of U's). A smaller U–T gap would make deferring cheaper.",
+  },
+  {
+    id: "c-game-l8-dashboard-reflect",
+    type: "understanding-check",
+    prompt:
+      "Use the dashboard to reach at least 90% safety while keeping usefulness as high as you can, then explain which lever did most of the work and why. Compare, in particular, widening the defer band against raising monitor quality.",
+    sampleAnswer:
+      "Both raising the monitor's AUROC and widening the defer band raise safety, but they pay for it differently. Raising monitor quality improves the true-positive rate at the fixed 2% audit threshold, so more attacks are caught outright — this costs no usefulness (auditing doesn't change what ships), but its leverage is limited by the tail behavior discussed earlier and by the fixed budget. Widening the defer band is the reliable way to buy large safety gains, because it neutralizes the concentrated mid-suspicion attack mass cheaply, but it does cost usefulness (T rewrites the deferred, mostly innocent code). The efficient route to 90% is usually to spend whatever free monitor quality is available first, then widen the defer band just enough to close the gap — and to watch the frontier point climb along the safety/usefulness curve rather than jumping off it, since the red team is best-responding to every move.",
   },
 ];

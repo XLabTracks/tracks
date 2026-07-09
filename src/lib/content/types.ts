@@ -34,8 +34,8 @@ export interface Module {
   order: number;
   /** Module IDs that should be completed first; may live in another track. */
   prerequisiteModuleIds: string[];
-  /** Ordered lesson IDs. */
-  lessonIds: string[];
+  /** Ordered unit IDs. Lessons live one level down, inside units. */
+  unitIds: string[];
   /** End-of-module written assessment, if any. */
   assessmentId?: string;
   /** Resource-hub topic tags surfaced as "Further reading". */
@@ -43,12 +43,40 @@ export interface Module {
   estimatedMinutes?: number;
 }
 
-export interface Lesson {
+/**
+ * A navigable grouping of lessons within a module — the layer between module
+ * and lesson. Has its own slug and overview page
+ * (`/tracks/<track>/<module>/<unit>`); lessons hang off it. A module always
+ * has at least one unit, even if that unit just holds every lesson.
+ */
+export interface Unit {
   id: string;
   slug: string;
   moduleId: string;
   title: string;
+  /** One-line description shown on the module and unit overview pages. */
+  summary?: string;
   /** 1-based order within the module. */
+  order: number;
+  /** Ordered lesson IDs. */
+  lessonIds: string[];
+  estimatedMinutes?: number;
+  /**
+   * When every lesson in the unit is optional this may be set for labelling;
+   * it does not change progress accounting (that keys off each lesson).
+   */
+  optional?: boolean;
+}
+
+export interface Lesson {
+  id: string;
+  slug: string;
+  /** Owning module (denormalized for convenience; equals the unit's module). */
+  moduleId: string;
+  /** Owning unit. */
+  unitId: string;
+  title: string;
+  /** 1-based order within the unit. */
   order: number;
   /**
    * Path (without extension) under `src/content/lessons` to the MDX body,

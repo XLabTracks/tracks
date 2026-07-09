@@ -17,22 +17,32 @@ import { Button } from "@/components/ui/button";
 export async function generateMetadata({
   params,
 }: {
-  params: Promise<{ trackSlug: string; moduleSlug: string; lessonSlug: string }>;
+  params: Promise<{
+    trackSlug: string;
+    moduleSlug: string;
+    unitSlug: string;
+    lessonSlug: string;
+  }>;
 }): Promise<Metadata> {
-  const { trackSlug, moduleSlug, lessonSlug } = await params;
-  const resolved = getLessonBySlugs(trackSlug, moduleSlug, lessonSlug);
+  const { trackSlug, moduleSlug, unitSlug, lessonSlug } = await params;
+  const resolved = getLessonBySlugs(trackSlug, moduleSlug, unitSlug, lessonSlug);
   return { title: resolved?.lesson.title ?? "Lesson" };
 }
 
 export default async function LessonPage({
   params,
 }: {
-  params: Promise<{ trackSlug: string; moduleSlug: string; lessonSlug: string }>;
+  params: Promise<{
+    trackSlug: string;
+    moduleSlug: string;
+    unitSlug: string;
+    lessonSlug: string;
+  }>;
 }) {
-  const { trackSlug, moduleSlug, lessonSlug } = await params;
-  const resolved = getLessonBySlugs(trackSlug, moduleSlug, lessonSlug);
+  const { trackSlug, moduleSlug, unitSlug, lessonSlug } = await params;
+  const resolved = getLessonBySlugs(trackSlug, moduleSlug, unitSlug, lessonSlug);
   if (!resolved) notFound();
-  const { track, module, lesson } = resolved;
+  const { track, module, unit, lesson } = resolved;
   const nav = getLessonNavigation(lesson.id);
 
   const user = await getCurrentUser();
@@ -59,13 +69,17 @@ export default async function LessonPage({
         items={[
           { label: track.title, href: `/tracks/${track.slug}` },
           { label: module.title, href: `/tracks/${track.slug}/${module.slug}` },
+          {
+            label: unit.title,
+            href: `/tracks/${track.slug}/${module.slug}/${unit.slug}`,
+          },
           { label: lesson.title },
         ]}
       />
 
       <header>
         <p className="text-muted-foreground text-sm">
-          Module {module.order}: {module.title}
+          {module.title} · {unit.title}
         </p>
         <h1 className="mt-1 text-3xl font-semibold tracking-tight">{lesson.title}</h1>
         {(lesson.estimatedMinutes || lesson.optional) && (

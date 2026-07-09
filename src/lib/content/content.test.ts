@@ -2,8 +2,11 @@ import { describe, it, expect } from "vitest";
 import {
   getAssessmentForModule,
   getLessonsForModule,
+  getLessonsForUnit,
   getModulesForTrack,
+  getModuleForUnit,
   getPrerequisiteModules,
+  getUnitsForModule,
   tracks,
 } from "@/lib/content";
 import { exercises } from "@/content/exercises.data";
@@ -18,10 +21,41 @@ describe("content integrity", () => {
     }
   });
 
-  it("every module's lessons resolve", () => {
+  it("every module's units resolve and belong to it", () => {
     for (const track of tracks) {
       for (const m of getModulesForTrack(track.id)) {
-        expect(getLessonsForModule(m.id).length).toBe(m.lessonIds.length);
+        const modUnits = getUnitsForModule(m.id);
+        expect(modUnits.length).toBe(m.unitIds.length);
+        expect(modUnits.length).toBeGreaterThan(0);
+        for (const u of modUnits) {
+          expect(u.moduleId).toBe(m.id);
+          expect(getModuleForUnit(u.id)?.id).toBe(m.id);
+        }
+      }
+    }
+  });
+
+  it("a module's flattened lessons equal the sum over its units", () => {
+    for (const track of tracks) {
+      for (const m of getModulesForTrack(track.id)) {
+        const perUnit = getUnitsForModule(m.id).reduce(
+          (n, u) => n + getLessonsForUnit(u.id).length,
+          0,
+        );
+        expect(getLessonsForModule(m.id).length).toBe(perUnit);
+      }
+    }
+  });
+
+  it("every lesson's unitId matches the unit that lists it", () => {
+    for (const track of tracks) {
+      for (const m of getModulesForTrack(track.id)) {
+        for (const u of getUnitsForModule(m.id)) {
+          for (const lesson of getLessonsForUnit(u.id)) {
+            expect(lesson.unitId).toBe(u.id);
+            expect(lesson.moduleId).toBe(m.id);
+          }
+        }
       }
     }
   });

@@ -23,7 +23,7 @@
   "hyperdrive": [
     {
       "binding": "HYPERDRIVE",
-      "id": "cab2de739ee64c5a877b0ba97cebcd6b",
+      "id": "d886793d2b944bfbbfce13909c25cd31",
       // Placeholder, never dialed in prod: build/deploy tooling (miniflare)
       // refuses to start without a local string for the binding. For local
       // `npm run preview` against a real DB, override it with the

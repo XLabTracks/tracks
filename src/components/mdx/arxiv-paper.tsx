@@ -14,9 +14,11 @@ import {
   parseArxivId,
   type ArxivId,
 } from "@/lib/arxiv/id";
-import { getOrConvertPaper } from "@/lib/arxiv/pipeline";
-import type { ConvertedPaper } from "@/lib/arxiv/store";
-import { CONVERTER_VERSION } from "@/lib/arxiv/types";
+import { getPaperArtifact } from "@/lib/arxiv/artifacts";
+import {
+  CONVERTER_VERSION,
+  type ConvertedPaper,
+} from "@/lib/arxiv/types";
 
 export interface ArxivPaperProps {
   /** Pinned arXiv id, e.g. "1706.03762v7". The version is required. */
@@ -69,7 +71,7 @@ async function ArxivPaperLoader({
   id: ArxivId;
   defaultOpen: boolean;
 }) {
-  const result = await getOrConvertPaper(id.id);
+  const result = await getPaperArtifact(id.id);
 
   switch (result.state) {
     case "ready":
@@ -96,11 +98,11 @@ async function ArxivPaperLoader({
           This paper couldn&apos;t be rendered inline yet.
         </ErrorCard>
       );
-    case "transient-error":
+    case "not-built":
       return (
         <ErrorCard id={id}>
-          Temporarily couldn&apos;t load this paper — reload the page to try
-          again.
+          This paper hasn&apos;t been rendered yet — run{" "}
+          <code>npm run arxiv:build</code> and commit the result.
         </ErrorCard>
       );
   }

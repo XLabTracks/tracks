@@ -32,8 +32,11 @@
  * v14: TikZ defs move to the TeX preamble (addToPreamble) — injected in the
  *      document body their glue widened the shipped page, so SVG viewports
  *      were ~3000pt wide and diagrams rendered as tiny slivers.
+ * v15: papers precompute at authoring time (`npm run arxiv:build`) into
+ *      committed artifacts; asset URLs point at static /arxiv/… paths instead
+ *      of the (removed) /api/arxiv asset route.
  */
-export const CONVERTER_VERSION = 14;
+export const CONVERTER_VERSION = 15;
 
 export interface ConversionWarning {
   /** Stable machine code, e.g. "unknown-macro", "katex-error". */
@@ -57,3 +60,25 @@ export interface ConversionResult {
   usedAssets: string[];
   meta: TexMeta;
 }
+
+export interface ConvertedPaper {
+  html: string;
+  warnings: ConversionWarning[];
+  meta: TexMeta;
+  assets: string[];
+  converterVersion: number;
+  createdAt: string;
+}
+
+/**
+ * What `npm run arxiv:build` commits under src/content/arxiv/{id}.json —
+ * either a rendered paper or a terminal reason it can't render. Transient
+ * failures are never committed; the build script exits nonzero instead.
+ */
+export type PaperArtifact =
+  | { state: "ready"; paper: ConvertedPaper }
+  | { state: "pdf-only" }
+  | { state: "not-found" }
+  | { state: "too-large" }
+  | { state: "unsupported" }
+  | { state: "failed" };

@@ -46,10 +46,14 @@ export function buildPdfUrl(id: ArxivId): string {
   return `https://arxiv.org/pdf/${id.id}`;
 }
 
-/** Site-relative URL under which a cached tarball asset is served. */
+/**
+ * Site-relative URL of a committed figure asset. `npm run arxiv:build` writes
+ * the bytes to public/arxiv/{id}/assets/{path}, so these are plain static
+ * files — no runtime asset route.
+ */
 export function buildAssetUrl(id: ArxivId, assetPath: string): string {
   const encoded = assetPath.split("/").map(encodeURIComponent).join("/");
-  return `/api/arxiv/${id.id}/assets/${encoded}`;
+  return `/arxiv/${id.id}/assets/${encoded}`;
 }
 
 /**

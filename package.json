@@ -12,12 +12,11 @@
     "lint": "eslint",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
-    "warm:arxiv": "node scripts/warm-arxiv.mjs"
+    "arxiv:build": "tsx scripts/build-arxiv.ts"
   },
   "dependencies": {
     "@mdx-js/loader": "^3.1.1",
     "@mdx-js/react": "^3.1.1",
-    "@netlify/blobs": "^10.7.9",
     "@next/mdx": "^16.2.9",
     "@opennextjs/cloudflare": "^1.20.1",
     "@prisma/adapter-pg": "^6.19.3",
@@ -44,11 +43,9 @@
     "katex": "^0.17.0",
     "lucide-react": "^1.21.0",
     "media-chrome": "^4.19.2",
-    "mupdf": "^1.28.0",
     "nanotar": "^0.3.0",
     "next": "16.2.9",
     "next-themes": "^0.4.6",
-    "node-tikzjax": "^1.0.5",
     "pg": "^8.22.0",
     "radix-ui": "^1.6.0",
     "react": "19.2.4",
@@ -79,8 +76,11 @@
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "16.2.9",
+    "mupdf": "^1.28.0",
+    "node-tikzjax": "^1.0.5",
     "prisma": "^6.19.3",
     "tailwindcss": "^4",
+    "tsx": "^4.23.0",
     "typescript": "^5",
     "vitest": "^4.1.9",
     "wrangler": "^4.107.1"

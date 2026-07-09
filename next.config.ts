@@ -8,13 +8,9 @@ import createMDX from "@next/mdx";
 const nextConfig: NextConfig = {
   // Allow .md / .mdx files to be treated as pages and imports.
   pageExtensions: ["ts", "tsx", "js", "jsx", "md", "mdx"],
-  // mupdf ships a WASM binary loaded at runtime; keep it external so the
-  // bundler doesn't try to inline the .wasm (used to rasterize PDF figures).
   // The Prisma packages must stay external so @opennextjs/cloudflare can patch
   // the generated client for workerd at build time.
   serverExternalPackages: [
-    "mupdf",
-    "node-tikzjax",
     "@prisma/client",
     ".prisma/client",
     // pg's conditional require of pg-cloudflare (the workerd socket shim) only

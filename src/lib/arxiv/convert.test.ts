@@ -212,7 +212,7 @@ describe("convertLatexToHtml", () => {
       { id, files },
     );
     expect(result.html).toContain(
-      'src="/api/arxiv/2301.12345v1/assets/figs/arch.png"',
+      'src="/arxiv/2301.12345v1/assets/figs/arch.png"',
     );
     expect(result.html).toContain("Figure 1: ");
     expect(result.html).toContain('id="ax-fig-1"');
@@ -236,7 +236,7 @@ describe("convertLatexToHtml", () => {
     );
     // Renders as an inline image of the rasterized PNG, not a placeholder.
     expect(result.html).toContain(
-      'src="/api/arxiv/2301.12345v1/assets/vis/fig.pdf.png"',
+      'src="/arxiv/2301.12345v1/assets/vis/fig.pdf.png"',
     );
     expect(result.html).not.toContain("ax-placeholder");
     expect(result.usedAssets).toEqual(["vis/fig.pdf.png"]);

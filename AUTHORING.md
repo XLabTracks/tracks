@@ -85,10 +85,11 @@ A "sublesson" is a `Lesson` — the MDX page inside a module. To add one to an
      is best-effort by design — TikZ diagrams and vector-PDF/EPS figures show
      placeholders linking to the PDF, exotic packages degrade with a warning
      chip in the card footer. Papers without LaTeX source (PDF-only
-     submissions) render a link card instead. After adding a paper, warm the
-     production cache so students never wait on the cold fetch-and-convert
-     path: `ARXIV_WARM_TOKEN=… npm run warm:arxiv -- --site https://<site>`
-     (the token lives in the Netlify env).
+     submissions) render a link card instead. After adding a paper, build its
+     committed artifact locally and commit the result — papers convert at
+     authoring time, never in production: `npm run arxiv:build`, then commit
+     the generated `src/content/arxiv/{id}.json` and `public/arxiv/{id}/…`
+     files alongside the lesson.
    - `<Footnote>…</Footnote>` — drop it right after the word/claim it annotates, no
      id needed. It numbers itself automatically (in document order) and renders as
      a sidenote in the right margin on wide screens, or a tap-to-expand marker on

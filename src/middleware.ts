@@ -11,8 +11,8 @@ export default authkitMiddleware();
 export const config = {
   matcher: [
     // Skip static assets, the public chrome-less demo embed routes, and the
-    // arXiv proxy (figure assets + warm endpoint) — session refresh there
+    // committed arXiv figure files under /arxiv/ — session refresh there
     // wastes invocations and poisons CDN cacheability.
-    "/((?!_next/static|_next/image|favicon.ico|api/arxiv/|.*/embed$|.*\\.(?:svg|png|jpg|jpeg|gif|webp|ico)$).*)",
+    "/((?!_next/static|_next/image|favicon.ico|arxiv/|.*/embed$|.*\\.(?:svg|png|jpg|jpeg|gif|webp|ico)$).*)",
   ],
 };

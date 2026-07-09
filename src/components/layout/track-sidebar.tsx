@@ -59,10 +59,10 @@ function SidebarNav({
 
   const itemClass = (active: boolean) =>
     cn(
-      "flex items-start gap-2 rounded-md px-2 py-1.5 text-sm transition-colors",
+      "flex items-start gap-2 rounded-md border-l-2 px-2 py-1.5 text-sm transition-colors",
       active
-        ? "bg-primary/10 text-foreground font-medium"
-        : "text-muted-foreground hover:text-foreground hover:bg-muted",
+        ? "border-destructive bg-destructive/5 text-foreground font-medium"
+        : "border-l-transparent text-muted-foreground hover:text-foreground hover:bg-muted",
     );
 
   return (

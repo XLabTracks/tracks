@@ -13,7 +13,7 @@ export const tracks: Track[] = [
     title: "AI Control",
     shortTitle: "Control",
     description:
-      "Hands-on technical track on controlling and evaluating AI systems. Lorem ipsum dolor sit amet, consectetur adipiscing elit — content coming soon.",
+      "content coming soon",
     kind: "technical",
     moduleIds: [],
     prerequisiteEnforcement: "hard",
@@ -24,7 +24,7 @@ export const tracks: Track[] = [
     title: "AI Governance & Policy",
     shortTitle: "Governance",
     description:
-      "Policy-oriented track with real writing deliverables. Lorem ipsum dolor sit amet, consectetur adipiscing elit — content coming soon.",
+      "content coming soon",
     kind: "governance",
     moduleIds: [],
     prerequisiteEnforcement: "soft",
@@ -35,7 +35,7 @@ export const tracks: Track[] = [
     title: "Example Track",
     shortTitle: "Example",
     description:
-      "A demo track showing every feature in one place — the four content types, each exercise type, an end-of-module assessment, and a cross-module prerequisite. Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+      "A demo track showing every feature in one place — the four content types, each exercise type, an end-of-module assessment, and a cross-module prerequisite.",
     kind: "example",
     moduleIds: ["ex-content", "ex-assess"],
     prerequisiteEnforcement: "soft",
@@ -50,7 +50,7 @@ export const modules: Module[] = [
     trackId: "example",
     title: "Content types",
     summary:
-      "Lorem ipsum dolor sit amet — text, video, callouts, an interactive demo, and exercises, all inside lessons.",
+      "Text, video, callouts, an interactive demo, and exercises, all inside lessons.",
     order: 1,
     prerequisiteModuleIds: [],
     lessonIds: ["ex-content-l1", "ex-content-l2"],
@@ -63,7 +63,7 @@ export const modules: Module[] = [
     trackId: "example",
     title: "Assessment & prerequisites",
     summary:
-      "Lorem ipsum — this module requires the first one (a soft prerequisite) and ends with a written assessment.",
+      "This module requires the first one (a soft prerequisite) and ends with a written assessment.",
     order: 2,
     prerequisiteModuleIds: ["ex-content"],
     lessonIds: ["ex-assess-l1"],

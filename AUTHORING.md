@@ -75,6 +75,17 @@ A "sublesson" is a `Lesson` — the MDX page inside a module. To add one to an
    - `<Callout variant?="note|tip|warning" title?>…</Callout>` (defaults to `note`).
    - `<Demo id="…" />` — a demo registered in the demo registry (see §2–3).
    - `<Exercise id="…" />` — an exercise defined in `src/content/exercises.data.ts`.
+   - `<ArxivPaper id="1706.03762v7" defaultOpen? />` — embeds an arXiv paper,
+     rendered from its LaTeX source with KaTeX math (collapsible card).
+     **The version suffix (`v7`) is required**: it pins an immutable snapshot,
+     which is what makes caching and (future) highlight anchors safe. Rendering
+     is best-effort by design — TikZ diagrams and vector-PDF/EPS figures show
+     placeholders linking to the PDF, exotic packages degrade with a warning
+     chip in the card footer. Papers without LaTeX source (PDF-only
+     submissions) render a link card instead. After adding a paper, warm the
+     production cache so students never wait on the cold fetch-and-convert
+     path: `ARXIV_WARM_TOKEN=… npm run warm:arxiv -- --site https://<site>`
+     (the token lives in the Netlify env).
 
 The lesson is now live at `/tracks/<trackSlug>/<moduleSlug>/<lessonSlug>` and shows
 in the sidebar + prev/next.

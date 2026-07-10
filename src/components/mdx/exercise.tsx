@@ -1,10 +1,25 @@
 import { getExerciseById } from "@/lib/content";
-import { isChoiceExercise, isWritingExercise } from "@/lib/content/types";
-import { toPublicChoice } from "@/lib/content/exercise-view";
+import {
+  isChoiceExercise,
+  isWritingExercise,
+  type FlowchartNode,
+  type TapRevealRating,
+} from "@/lib/content/types";
+import {
+  toPublicChoice,
+  toPublicFlowchart,
+  type AllocationScenarioEntry,
+  type ArgueRevealConstructionEntry,
+  type ArgueRevealItemEntry,
+} from "@/lib/content/exercise-view";
 import { getCurrentUser } from "@/lib/auth";
 import { getSubmission } from "@/lib/progress";
 import { saveWritingDraft, submitWriting } from "@/app/actions/submissions";
+import { AllocationExerciseCard } from "@/components/exercises/allocation-exercise";
+import { ArgueRevealExerciseCard } from "@/components/exercises/argue-reveal-exercise";
 import { ChoiceExerciseCard } from "@/components/exercises/choice-exercise";
+import { FlowchartExerciseCard } from "@/components/exercises/flowchart-exercise";
+import { TapRevealCard } from "@/components/exercises/tap-reveal-exercise";
 import { UnderstandingCheckCard } from "@/components/exercises/understanding-check";
 import { WritingExerciseCard } from "@/components/exercises/writing-exercise";
 import type { WritingValues } from "@/components/exercises/writing-editor";
@@ -27,6 +42,83 @@ export async function Exercise({ id }: ExerciseProps) {
 
   if (isChoiceExercise(exercise)) {
     return <ChoiceExerciseCard exercise={toPublicChoice(exercise)} />;
+  }
+
+  if (exercise.type === "flowchart") {
+    const user = await getCurrentUser();
+    const submission = user
+      ? await getSubmission(user.id, exercise.id, "exercise")
+      : null;
+    const initialStages = (
+      submission?.responseJson as {
+        stages?: Record<string, { attempt: FlowchartNode[]; correct: boolean }>;
+      } | null
+    )?.stages;
+    return (
+      <FlowchartExerciseCard
+        exercise={toPublicFlowchart(exercise)}
+        initialStages={initialStages}
+      />
+    );
+  }
+
+  if (exercise.type === "tap-reveal") {
+    const user = await getCurrentUser();
+    const submission = user
+      ? await getSubmission(user.id, exercise.id, "exercise")
+      : null;
+    const initialRating =
+      (submission?.responseJson as { rating?: TapRevealRating } | null)
+        ?.rating ?? null;
+    return <TapRevealCard exercise={exercise} initialRating={initialRating} />;
+  }
+
+  if (exercise.type === "allocation") {
+    const user = await getCurrentUser();
+    const submission = user
+      ? await getSubmission(user.id, exercise.id, "exercise")
+      : null;
+    const initialScenarios = (
+      submission?.responseJson as {
+        scenarios?: Record<string, AllocationScenarioEntry>;
+      } | null
+    )?.scenarios;
+    return (
+      <AllocationExerciseCard
+        exercise={exercise}
+        initialScenarios={initialScenarios}
+        initialCompletedAt={
+          submission?.status === "submitted"
+            ? submission.updatedAt.toISOString()
+            : undefined
+        }
+        persist={user != null}
+      />
+    );
+  }
+
+  if (exercise.type === "argue-reveal") {
+    const user = await getCurrentUser();
+    const submission = user
+      ? await getSubmission(user.id, exercise.id, "exercise")
+      : null;
+    const responseJson = submission?.responseJson as {
+      items?: Record<string, ArgueRevealItemEntry>;
+      construction?: ArgueRevealConstructionEntry;
+    } | null;
+    return (
+      <ArgueRevealExerciseCard
+        exercise={exercise}
+        initialItems={responseJson?.items}
+        initialConstruction={responseJson?.construction}
+        initialCompletedAt={
+          submission?.status === "submitted"
+            ? submission.updatedAt.toISOString()
+            : undefined
+        }
+        persist={user != null}
+      />
+    );
   }
 
   if (exercise.type === "understanding-check") {

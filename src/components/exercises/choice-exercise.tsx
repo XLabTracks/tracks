@@ -13,6 +13,30 @@ export function ChoiceExerciseCard({
 }: {
   exercise: PublicChoiceExercise;
 }) {
+  return (
+    <aside className="not-prose border-border bg-card shadow-soft my-6 rounded-xl border p-5">
+      <p className="text-muted-foreground mb-1 text-xs font-medium tracking-wide uppercase">
+        {EXERCISE_TYPE_LABELS[exercise.type]}
+      </p>
+      <p className="font-medium">{exercise.prompt}</p>
+      <ChoiceExerciseBody exercise={exercise} />
+    </aside>
+  );
+}
+
+/**
+ * The interactive part of a choice exercise — options, grading, feedback — with
+ * no card chrome or prompt, so it can be embedded inside a multi-part sequence.
+ * `onGraded` fires the first time an answer is checked (used to unlock the next
+ * step in a sequence).
+ */
+export function ChoiceExerciseBody({
+  exercise,
+  onGraded,
+}: {
+  exercise: PublicChoiceExercise;
+  onGraded?: () => void;
+}) {
   const [selected, setSelected] = useState<string[]>([]);
   const [result, setResult] = useState<GradeResult | null>(null);
   const [pending, startTransition] = useTransition();
@@ -33,6 +57,7 @@ export function ChoiceExerciseCard({
   const submit = () =>
     startTransition(async () => {
       setResult(await gradeExercise(exercise.id, selected));
+      onGraded?.();
     });
 
   const reset = () => {
@@ -44,12 +69,7 @@ export function ChoiceExerciseCard({
   const graded = result != null;
 
   return (
-    <aside className="not-prose border-border bg-card shadow-soft my-6 rounded-xl border p-5">
-      <p className="text-muted-foreground mb-1 text-xs font-medium tracking-wide uppercase">
-        {EXERCISE_TYPE_LABELS[exercise.type]}
-      </p>
-      <p className="font-medium">{exercise.prompt}</p>
-
+    <>
       <ul className="mt-4 space-y-2">
         {exercise.options.map((option) => {
           const isSelected = selected.includes(option.id);
@@ -81,7 +101,9 @@ export function ChoiceExerciseCard({
                   {graded && isCorrect && <Check className="size-3" aria-hidden />}
                   {graded && !isCorrect && isSelected && <X className="size-3" aria-hidden />}
                 </span>
-                <span>{option.label}</span>
+                <span className={cn(exercise.monospaceOptions && "font-mono text-sm whitespace-pre-wrap")}>
+                  {option.label}
+                </span>
               </button>
             </li>
           );
@@ -113,6 +135,6 @@ export function ChoiceExerciseCard({
           </Button>
         )}
       </div>
-    </aside>
+    </>
   );
 }

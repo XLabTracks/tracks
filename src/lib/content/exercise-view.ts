@@ -1,4 +1,16 @@
-import type { ChoiceExercise, ExerciseOption } from "./types";
+import {
+  ALLOCATION_DEFAULT_STEP,
+  ARGUE_REVEAL_DEFAULTS,
+  ARGUE_REVEAL_RATINGS,
+  type AllocationExercise,
+  type ArgueRevealExercise,
+  type ArgueRevealRating,
+  type ChoiceExercise,
+  type ExerciseOption,
+  type FlowchartBlock,
+  type FlowchartExercise,
+  type FlowchartNode,
+} from "./types";
 
 // Client-safe projection of a choice exercise — note it deliberately omits
 // `correctOptionIds` and `explanation` so answer keys never ship to the client.
@@ -8,6 +20,7 @@ export interface PublicChoiceExercise {
   prompt: string;
   options: ExerciseOption[];
   multiple: boolean;
+  monospaceOptions: boolean;
 }
 
 export function toPublicChoice(exercise: ChoiceExercise): PublicChoiceExercise {
@@ -17,6 +30,7 @@ export function toPublicChoice(exercise: ChoiceExercise): PublicChoiceExercise {
     prompt: exercise.prompt,
     options: exercise.options,
     multiple: exercise.type === "multi-select",
+    monospaceOptions: exercise.monospaceOptions ?? false,
   };
 }
 
@@ -31,4 +45,295 @@ export interface GradeResult {
   correct: boolean;
   correctOptionIds: string[];
   explanation?: string;
+}
+
+// ---------------------------------------------------------------------------
+// Flowchart exercises
+// ---------------------------------------------------------------------------
+
+// Client-safe projection: stage solutions and explanations stay on the server.
+export interface PublicFlowchartStage {
+  id: string;
+  title: string;
+  description: string;
+}
+
+export interface PublicFlowchartExercise {
+  id: string;
+  type: "flowchart";
+  prompt: string;
+  palette: FlowchartBlock[];
+  stages: PublicFlowchartStage[];
+}
+
+export function toPublicFlowchart(
+  exercise: FlowchartExercise,
+): PublicFlowchartExercise {
+  return {
+    id: exercise.id,
+    type: exercise.type,
+    prompt: exercise.prompt,
+    palette: exercise.palette,
+    stages: exercise.stages.map(({ id, title, description }) => ({
+      id,
+      title,
+      description,
+    })),
+  };
+}
+
+/**
+ * Structural equality of two constructed charts: same blocks in the same
+ * order, and branch arms match pairwise. Empty/omitted `branches` are
+ * equivalent, so client-built trees compare cleanly against authored keys.
+ */
+export function flowchartEquals(a: FlowchartNode[], b: FlowchartNode[]): boolean {
+  if (a.length !== b.length) return false;
+  return a.every((node, i) => {
+    const other = b[i];
+    if (node.blockId !== other.blockId) return false;
+    const aArms = node.branches ?? [];
+    const bArms = other.branches ?? [];
+    if (aArms.length !== bArms.length) return false;
+    return aArms.every((arm, j) => flowchartEquals(arm, bArms[j]));
+  });
+}
+
+/** Grades one stage of a flowchart exercise against its server-only key. */
+export function gradeFlowchartStage(
+  exercise: FlowchartExercise,
+  stageId: string,
+  attempt: FlowchartNode[],
+): boolean {
+  const stage = exercise.stages.find((s) => s.id === stageId);
+  if (!stage) return false;
+  return flowchartEquals(stage.solution, attempt);
+}
+
+export interface FlowchartStageResult {
+  correct: boolean;
+  explanation?: string;
+  /** Only present when the learner has earned/requested a reveal. */
+  solution?: FlowchartNode[];
+}
+
+// ---------------------------------------------------------------------------
+// Allocation exercises
+// ---------------------------------------------------------------------------
+
+/** Hard cap on persisted reasoning length (the UI caps input to match). */
+export const ALLOCATION_MAX_REASONING_CHARS = 10_000;
+
+/** One scenario's record inside `Submission.responseJson.scenarios`. */
+export interface AllocationScenarioEntry {
+  /** People per agenda id — every agenda present, nothing else. */
+  allocation: Record<string, number>;
+  reasoning: string;
+}
+
+/** Steps are halves by default, so float remainders need an epsilon. */
+function isMultipleOf(value: number, step: number): boolean {
+  const ratio = value / step;
+  return Math.abs(ratio - Math.round(ratio)) < 1e-9;
+}
+
+// Postgres jsonb cannot store \u0000, and lone surrogates don't survive a
+// JSON round-trip — both would make the persisted row diverge or error.
+const LONE_SURROGATE = /[\uD800-\uDBFF](?![\uDC00-\uDFFF])|(?<![\uD800-\uDBFF])[\uDC00-\uDFFF]/;
+
+export function isStorableText(value: string): boolean {
+  return !value.includes("\u0000") && !LONE_SURROGATE.test(value);
+}
+
+/**
+ * Validates a posted scenario attempt against the exercise definition: known
+ * scenario, exactly the exercise's agenda ids, each value a finite non-negative
+ * multiple of the step, the pool exactly spent, and the reasoning within
+ * length bounds. Returns null when anything is off (reachable by direct POST).
+ */
+export function sanitizeAllocationScenario(
+  exercise: AllocationExercise,
+  scenarioId: unknown,
+  allocation: unknown,
+  reasoning: unknown,
+): AllocationScenarioEntry | null {
+  if (typeof scenarioId !== "string") return null;
+  if (!exercise.scenarios.some((s) => s.id === scenarioId)) return null;
+  if (typeof reasoning !== "string" || !isStorableText(reasoning)) return null;
+  const minChars = exercise.minReasoningChars ?? 0;
+  if (reasoning.trim().length < minChars) return null;
+  if (reasoning.length > ALLOCATION_MAX_REASONING_CHARS) return null;
+
+  if (typeof allocation !== "object" || allocation === null) return null;
+  const posted = allocation as Record<string, unknown>;
+  if (Object.keys(posted).length !== exercise.agendas.length) return null;
+
+  const step = exercise.step ?? ALLOCATION_DEFAULT_STEP;
+  const clean: Record<string, number> = {};
+  let sum = 0;
+  for (const agenda of exercise.agendas) {
+    const value = posted[agenda.id];
+    if (typeof value !== "number" || !Number.isFinite(value)) return null;
+    if (value < 0 || value > exercise.totalPeople) return null;
+    if (!isMultipleOf(value, step)) return null;
+    // Persist the canonical grid point, not the raw float (a direct POST may
+    // send e.g. 2.5000000001, which the epsilon above accepts).
+    const snapped = Math.round(value / step) * step;
+    clean[agenda.id] = snapped;
+    sum += snapped;
+  }
+  if (Math.abs(sum - exercise.totalPeople) > 1e-9) return null;
+
+  return { allocation: clean, reasoning };
+}
+
+// ---------------------------------------------------------------------------
+// Argue & reveal exercises
+// ---------------------------------------------------------------------------
+
+/** One round of the learner's work inside an item entry. */
+export interface ArgueRevealRoundEntry {
+  /** Concept-chip ids toggled on while responding. */
+  chips: string[];
+  response: string;
+  /** Whether the reference toolbox was opened during this round. */
+  toolboxOpened: boolean;
+}
+
+/** One item's record inside `Submission.responseJson.items`. */
+export interface ArgueRevealItemEntry {
+  rounds: ArgueRevealRoundEntry[];
+  rating: ArgueRevealRating;
+  note: string;
+}
+
+/** The construction step's record inside `Submission.responseJson`. */
+export interface ArgueRevealConstructionEntry {
+  attackSurface: string;
+  argument: string;
+  bestResponse: string;
+  residual: string;
+}
+
+export function argueRevealBounds(exercise: ArgueRevealExercise) {
+  return {
+    responseMinChars:
+      exercise.responseMinChars ?? ARGUE_REVEAL_DEFAULTS.responseMinChars,
+    responseMaxChars:
+      exercise.responseMaxChars ?? ARGUE_REVEAL_DEFAULTS.responseMaxChars,
+    residualMinChars:
+      exercise.residualMinChars ?? ARGUE_REVEAL_DEFAULTS.residualMinChars,
+    residualMaxChars:
+      exercise.residualMaxChars ?? ARGUE_REVEAL_DEFAULTS.residualMaxChars,
+    noteMaxChars: exercise.noteMaxChars ?? ARGUE_REVEAL_DEFAULTS.noteMaxChars,
+  };
+}
+
+function sanitizeBoundedText(
+  value: unknown,
+  minTrimmedChars: number,
+  maxChars: number,
+): string | null {
+  if (typeof value !== "string" || !isStorableText(value)) return null;
+  if (value.trim().length < minTrimmedChars) return null;
+  if (value.length > maxChars) return null;
+  return value;
+}
+
+/**
+ * Validates one completed item posted for an argue-reveal exercise: known
+ * item, one entry per authored round (chips ⊆ concept ids, response within
+ * bounds), a rating, and an optional one-line note. Null when anything is
+ * off (reachable by direct POST).
+ */
+export function sanitizeArgueRevealItem(
+  exercise: ArgueRevealExercise,
+  itemId: unknown,
+  rounds: unknown,
+  rating: unknown,
+  note: unknown,
+): ArgueRevealItemEntry | null {
+  if (typeof itemId !== "string") return null;
+  const item = exercise.items.find((i) => i.id === itemId);
+  if (!item) return null;
+  if (!ARGUE_REVEAL_RATINGS.includes(rating as ArgueRevealRating)) return null;
+  const bounds = argueRevealBounds(exercise);
+  const cleanNote = sanitizeBoundedText(note, 0, bounds.noteMaxChars);
+  if (cleanNote === null) return null;
+
+  if (!Array.isArray(rounds) || rounds.length !== item.rounds.length) return null;
+  const conceptIds = new Set(exercise.concepts.map((c) => c.id));
+  const cleanRounds: ArgueRevealRoundEntry[] = [];
+  for (const round of rounds) {
+    if (typeof round !== "object" || round === null) return null;
+    const { chips, response, toolboxOpened } = round as Record<string, unknown>;
+    if (
+      !Array.isArray(chips) ||
+      chips.length > exercise.concepts.length ||
+      !chips.every((id) => typeof id === "string" && conceptIds.has(id))
+    ) {
+      return null;
+    }
+    const cleanResponse = sanitizeBoundedText(
+      response,
+      bounds.responseMinChars,
+      bounds.responseMaxChars,
+    );
+    if (cleanResponse === null) return null;
+    if (typeof toolboxOpened !== "boolean") return null;
+    cleanRounds.push({
+      chips: [...new Set(chips as string[])],
+      response: cleanResponse,
+      toolboxOpened,
+    });
+  }
+
+  return {
+    rounds: cleanRounds,
+    rating: rating as ArgueRevealRating,
+    note: cleanNote,
+  };
+}
+
+/** Validates the construction step (surface + argument/response/residual). */
+export function sanitizeArgueRevealConstruction(
+  exercise: ArgueRevealExercise,
+  value: unknown,
+): ArgueRevealConstructionEntry | null {
+  if (typeof value !== "object" || value === null) return null;
+  const { attackSurface, argument, bestResponse, residual } = value as Record<
+    string,
+    unknown
+  >;
+  if (
+    typeof attackSurface !== "string" ||
+    !exercise.construction.surfaces.some((s) => s.id === attackSurface)
+  ) {
+    return null;
+  }
+  const bounds = argueRevealBounds(exercise);
+  const cleanArgument = sanitizeBoundedText(
+    argument,
+    bounds.responseMinChars,
+    bounds.responseMaxChars,
+  );
+  const cleanBestResponse = sanitizeBoundedText(
+    bestResponse,
+    bounds.responseMinChars,
+    bounds.responseMaxChars,
+  );
+  const cleanResidual = sanitizeBoundedText(
+    residual,
+    bounds.residualMinChars,
+    bounds.residualMaxChars,
+  );
+  if (cleanArgument === null || cleanBestResponse === null || cleanResidual === null) {
+    return null;
+  }
+  return {
+    attackSurface,
+    argument: cleanArgument,
+    bestResponse: cleanBestResponse,
+    residual: cleanResidual,
+  };
 }

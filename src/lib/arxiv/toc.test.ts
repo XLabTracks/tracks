@@ -65,9 +65,16 @@ describe("toc extraction", () => {
     );
     expect(html).toContain('id="ax-abstract"');
     const abstract = toc.filter((e) => e.kind === "abstract");
-    expect(abstract).toEqual([
-      { kind: "abstract", id: "ax-abstract", title: "Abstract", number: "", level: 2 },
-    ]);
+    expect(abstract).toHaveLength(1);
+    expect(abstract[0]).toMatchObject({
+      kind: "abstract",
+      id: "ax-abstract",
+      title: "Abstract",
+      number: "",
+      level: 2,
+    });
+    // Landmarks borrow their first anchored descendant (the inner h2).
+    expect(abstract[0].anchor).toMatch(/^b-\d{4}$/);
     // The abstract's inner h2 has no ax-sec id and must not leak in as a section.
     expect(toc.filter((e) => e.kind === "section")).toHaveLength(1);
     expect(toc[0].kind).toBe("abstract"); // document order

@@ -15,7 +15,11 @@
  *   npm run arxiv:build                       # all ids found in lessons + papers.data.ts
  *   npm run arxiv:build -- --id 2301.12345v2  # build one paper
  *   npm run arxiv:build -- --toc 2301.12345v2 # print a committed artifact's
- *                                             # section ids (for Paper.insertions)
+ *                                             # section ids (for sectionEnd edits)
+ *   npm run arxiv:build -- --blocks 2301.12345v2 [--section ax-sec-…]
+ *                                             # print block anchors (+ sentences
+ *                                             # when scoped) for Paper.edits;
+ *                                             # snippets are prefixes of these lines
  *
  * Transient failures (network blips) exit nonzero without writing an
  * artifact — only deterministic outcomes get committed. 3s spacing between
@@ -35,6 +39,9 @@ import { parseArxivId } from "../src/lib/arxiv/id";
 import { getOrConvertPaperUncached } from "../src/lib/arxiv/pipeline";
 import { getAsset } from "../src/lib/arxiv/store";
 import type { PaperArtifact, PaperTocEntry } from "../src/lib/arxiv/types";
+import { buildBlockIndex, type BlockInfo } from "../src/lib/papers/block-index";
+import { anchorNum } from "../src/lib/papers/anchors";
+import { subtreeEndIndex } from "../src/lib/papers/split-paper";
 
 const LESSONS_DIR = join(process.cwd(), "src", "content", "lessons");
 const ARTIFACTS_DIR = join(process.cwd(), "src", "content", "arxiv");
@@ -72,13 +79,13 @@ function printToc(toc: PaperTocEntry[]): void {
   }
 }
 
-/** Print a committed artifact's section ids without any network/conversion. */
-function tocCommand(idString: string): void {
+/** Load a committed artifact for read-only commands; null + exit code on failure. */
+function loadReadyArtifact(idString: string) {
   const id = parseArxivId(idString);
   if (!id) {
     console.error(`✗ ${idString}: invalid id (pinned version required)`);
     process.exitCode = 1;
-    return;
+    return null;
   }
   const path = join(ARTIFACTS_DIR, `${id.id}.json`);
   if (!existsSync(path)) {
@@ -86,16 +93,84 @@ function tocCommand(idString: string): void {
       `✗ ${id.id}: no committed artifact — run \`npm run arxiv:build -- --id ${id.id}\` first`,
     );
     process.exitCode = 1;
-    return;
+    return null;
   }
   const artifact = JSON.parse(readFileSync(path, "utf8")) as PaperArtifact;
   if (artifact.state !== "ready") {
-    console.error(`✗ ${id.id}: artifact state is "${artifact.state}" — no toc`);
+    console.error(`✗ ${id.id}: artifact state is "${artifact.state}"`);
     process.exitCode = 1;
-    return;
+    return null;
   }
-  console.log(`${id.id} (converter v${artifact.paper.converterVersion}):`);
-  printToc(artifact.paper.toc);
+  return { id, artifact };
+}
+
+/** Print a committed artifact's section ids without any network/conversion. */
+function tocCommand(idString: string): void {
+  const loaded = loadReadyArtifact(idString);
+  if (!loaded) return;
+  console.log(`${loaded.id.id} (converter v${loaded.artifact.paper.converterVersion}):`);
+  printToc(loaded.artifact.paper.toc);
+}
+
+const truncate = (s: string, n: number) => (s.length > n ? `${s.slice(0, n - 1)}…` : s);
+
+/**
+ * Print block anchors (for Paper.edits). Unscoped: one line per block across
+ * the paper. With --section <toc-id>: only that section's subtree, plus a
+ * line per sentence. Snippets are copied prefixes of these lines.
+ */
+function blocksCommand(idString: string, sectionId: string | undefined): void {
+  const loaded = loadReadyArtifact(idString);
+  if (!loaded) return;
+  const { toc } = loaded.artifact.paper;
+  const index = buildBlockIndex(loaded.artifact.paper.html);
+
+  let range: [number, number] = [0, Number.POSITIVE_INFINITY];
+  let sectionCursor = -1;
+  if (sectionId) {
+    const i = toc.findIndex((entry) => entry.id === sectionId);
+    if (i === -1 || !toc[i].anchor) {
+      console.error(
+        `✗ ${loaded.id.id}: no toc entry "${sectionId}" — run \`npm run arxiv:build -- --toc ${loaded.id.id}\``,
+      );
+      process.exitCode = 1;
+      return;
+    }
+    const end = subtreeEndIndex(toc, i);
+    range = [
+      anchorNum(toc[i].anchor!),
+      end < toc.length && toc[end].anchor
+        ? anchorNum(toc[end].anchor!)
+        : Number.POSITIVE_INFINITY,
+    ];
+    sectionCursor = i - 1; // don't print headers before the scoped section
+  }
+
+  console.log(`${loaded.id.id} (converter v${loaded.artifact.paper.converterVersion}) — blocks:`);
+  for (const block of index.values()) {
+    const n = anchorNum(block.anchor);
+    if (n < range[0] || n >= range[1]) continue;
+    // Section headers between blocks (document order).
+    while (
+      sectionCursor + 1 < toc.length &&
+      toc[sectionCursor + 1].anchor &&
+      anchorNum(toc[sectionCursor + 1].anchor!) <= n
+    ) {
+      sectionCursor++;
+      const entry = toc[sectionCursor];
+      const label = entry.number ? `§${entry.number} ${entry.title}` : entry.title;
+      console.log(`\n${label}  (${entry.id})`);
+    }
+    const sCol = block.sentences.length > 0 ? `s=${block.sentences.length}` : "";
+    console.log(
+      `  ${block.anchor}  ${block.tag.padEnd(6)} ${sCol.padEnd(5)} ${truncate(block.text, 70)}`,
+    );
+    if (sectionId) {
+      block.sentences.forEach((sentence, i) => {
+        console.log(`       s${i + 1}  ${truncate(sentence, 76)}`);
+      });
+    }
+  }
 }
 
 async function buildOne(idString: string): Promise<boolean> {
@@ -142,7 +217,7 @@ async function buildOne(idString: string): Promise<boolean> {
       `✓ ${id.id}: ready — ${artifact.paper.assets.length} assets, ` +
         `${warnings} approximated elements`,
     );
-    // Section ids are what Paper.insertions key on — surface them here so
+    // Section ids are what sectionEnd edits key on — surface them here so
     // authors don't have to dig through the JSON.
     printToc(artifact.paper.toc);
   } else {
@@ -155,6 +230,11 @@ async function main(): Promise<void> {
   const tocId = argValue("--toc");
   if (tocId) {
     tocCommand(tocId);
+    return;
+  }
+  const blocksId = argValue("--blocks");
+  if (blocksId) {
+    blocksCommand(blocksId, argValue("--section"));
     return;
   }
 

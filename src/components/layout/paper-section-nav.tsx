@@ -2,7 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import Link from "next/link";
-import { CheckCircle2, Circle, PencilLine } from "lucide-react";
+import { CheckCircle2, Circle, PencilLine, Play } from "lucide-react";
 import type { PaperNavItem } from "@/lib/papers/paper-nav";
 import { cn } from "@/lib/utils";
 import { useScrollSpy } from "./use-scroll-spy";
@@ -22,9 +22,11 @@ function anchorOf(item: PaperNavItem): string {
 }
 
 /**
- * The in-paper section tree nested under the active paper's sidebar row:
- * anchor links for every section (and inserted activity), with the current
- * section highlighted by scroll position.
+ * The in-paper section tree, docked as the "In this paper" panel at the
+ * bottom of the sidebar: anchor links for every section (and inserted
+ * activity), with the current section highlighted by scroll position.
+ * Rendered as a flex child of the panel — it takes the panel's remaining
+ * height and scrolls internally.
  */
 export function PaperSectionNav({
   items,
@@ -62,7 +64,7 @@ export function PaperSectionNav({
   return (
     <ul
       ref={listRef}
-      className="border-border/70 mt-0.5 mb-1 ml-4 max-h-[60vh] space-y-0.5 overflow-y-auto overscroll-contain border-l pl-1.5"
+      className="min-h-0 flex-1 space-y-0.5 overflow-y-auto overscroll-contain px-2 pb-3"
     >
       {items.map((item) => {
         const anchor = anchorOf(item);
@@ -99,6 +101,11 @@ export function PaperSectionNav({
                       aria-hidden
                     />
                   )}
+                  <span className="line-clamp-2">{item.title}</span>
+                </>
+              ) : item.kind === "inserted-demo" ? (
+                <>
+                  <Play className="mt-0.5 size-3.5 shrink-0" aria-hidden />
                   <span className="line-clamp-2">{item.title}</span>
                 </>
               ) : (

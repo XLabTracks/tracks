@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { EXERCISE_TYPE_LABELS } from "@/lib/content/types";
+import { Paragraphs } from "./math-text";
 
 export function UnderstandingCheckCard({
   prompt,
@@ -20,7 +21,9 @@ export function UnderstandingCheckCard({
       <p className="text-muted-foreground mb-1 text-xs font-medium tracking-wide uppercase">
         {EXERCISE_TYPE_LABELS["understanding-check"]}
       </p>
-      <p className="font-medium">{prompt}</p>
+      <div className="space-y-2">
+        <Paragraphs text={prompt} className="font-medium" />
+      </div>
 
       <Textarea
         value={text}
@@ -41,8 +44,8 @@ export function UnderstandingCheckCard({
       </div>
 
       {revealed && (
-        <div className="bg-muted mt-3 rounded-lg p-3 text-sm">
-          <p className="text-muted-foreground">{sampleAnswer}</p>
+        <div className="bg-muted mt-3 space-y-2 rounded-lg p-3 text-sm">
+          <Paragraphs text={sampleAnswer} className="text-muted-foreground" />
         </div>
       )}
     </aside>

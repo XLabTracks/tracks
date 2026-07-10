@@ -4,7 +4,7 @@ import { importLesson } from "@/components/mdx/lesson-content";
 import { LessonTracker } from "@/components/learn/lesson-tracker";
 
 /**
- * A lesson rendered inline inside a paper's flow (via Paper.insertions).
+ * A lesson rendered inline inside a paper's flow (via a Paper.edits activity).
  * Framed as an embedded card so it reads as commentary distinct from the
  * paper text. Completes on scroll-past via its own tracker sentinel —
  * recordView is off so opening the paper doesn't stamp lastViewedAt for

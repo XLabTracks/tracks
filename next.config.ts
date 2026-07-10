@@ -25,8 +25,8 @@ const nextConfig: NextConfig = {
 // cannot pass JS functions to its Rust pipeline.
 const withMDX = createMDX({
   options: {
-    remarkPlugins: ["remark-gfm"],
-    rehypePlugins: ["rehype-slug"],
+    remarkPlugins: ["remark-gfm", "remark-math"],
+    rehypePlugins: ["rehype-slug", "rehype-katex"],
   },
 });
 

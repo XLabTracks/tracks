@@ -3,38 +3,31 @@ import type { PaperTocEntry } from "@/lib/arxiv/types";
 import { buildPaperNav } from "./paper-nav";
 
 const TOC: PaperTocEntry[] = [
-  { kind: "abstract", id: "ax-abstract", title: "Abstract", number: "", level: 2 },
-  { kind: "section", id: "ax-sec-a", title: "Alpha", number: "1", level: 2 },
-  { kind: "section", id: "ax-sec-a-1", title: "Alpha One", number: "1.1", level: 3 },
-  { kind: "section", id: "ax-sec-b", title: "Beta", number: "2", level: 2 },
-  { kind: "references", id: "ax-references", title: "References", number: "", level: 2 },
+  { kind: "abstract", id: "ax-abstract", title: "Abstract", number: "", level: 2, anchor: "b-0001" },
+  { kind: "section", id: "ax-sec-a", title: "Alpha", number: "1", level: 2, anchor: "b-0002" },
+  { kind: "section", id: "ax-sec-a-1", title: "Alpha One", number: "1.1", level: 3, anchor: "b-0007" },
+  { kind: "section", id: "ax-sec-b", title: "Beta", number: "2", level: 2, anchor: "b-0009" },
+  { kind: "references", id: "ax-references", title: "References", number: "", level: 2, anchor: "b-0015" },
 ];
 
+const ids = (nav: ReturnType<typeof buildPaperNav>) =>
+  nav.map((n) => (n.kind === "section" ? n.id : n.anchorId));
+
 describe("buildPaperNav", () => {
-  it("maps the toc one-to-one when there are no insertions", () => {
+  it("maps the toc one-to-one when there are no activities", () => {
     const nav = buildPaperNav(TOC, undefined);
-    expect(nav.map((n) => n.kind)).toEqual([
-      "section",
-      "section",
-      "section",
-      "section",
-      "section",
-    ]);
-    expect(nav.map((n) => (n.kind === "section" ? n.id : ""))).toEqual(
-      TOC.map((e) => e.id),
-    );
+    expect(ids(nav)).toEqual(TOC.map((e) => e.id));
+    expect(nav.every((n) => n.kind === "section")).toBe(true);
   });
 
-  it("places inserted items after their target's subtree, indented one level", () => {
+  it("places section-end activities after their target's subtree, indented one level", () => {
     const nav = buildPaperNav(TOC, [
       {
-        sectionId: "ax-sec-a-1",
+        after: { sectionEnd: "ax-sec-a-1" },
         items: [{ kind: "exercise", id: "mc", title: "Multiple choice" }],
       },
     ]);
-    const ids = nav.map((n) => (n.kind === "section" ? n.id : n.anchorId));
-    // After Alpha One's subtree = before Beta.
-    expect(ids).toEqual([
+    expect(ids(nav)).toEqual([
       "ax-abstract",
       "ax-sec-a",
       "ax-sec-a-1",
@@ -44,16 +37,14 @@ describe("buildPaperNav", () => {
     ]);
     const inserted = nav.find((n) => n.kind === "inserted-exercise")!;
     expect(inserted.level).toBe(4); // target h3 (level 3) + 1
-    expect(inserted.title).toBe("Multiple choice");
   });
 
   it("matches the splitter's coincident-boundary ordering (deeper first)", () => {
     const nav = buildPaperNav(TOC, [
-      { sectionId: "ax-sec-a", items: [{ kind: "lesson", id: "p", title: "Parent" }] },
-      { sectionId: "ax-sec-a-1", items: [{ kind: "exercise", id: "c", title: "Child" }] },
+      { after: { sectionEnd: "ax-sec-a" }, items: [{ kind: "lesson", id: "p", title: "Parent" }] },
+      { after: { sectionEnd: "ax-sec-a-1" }, items: [{ kind: "exercise", id: "c", title: "Child" }] },
     ]);
-    const ids = nav.map((n) => (n.kind === "section" ? n.id : n.anchorId));
-    expect(ids).toEqual([
+    expect(ids(nav)).toEqual([
       "ax-abstract",
       "ax-sec-a",
       "ax-sec-a-1",
@@ -64,10 +55,50 @@ describe("buildPaperNav", () => {
     ]);
   });
 
+  it("nests anchor-level activities under their containing section", () => {
+    const nav = buildPaperNav(TOC, [
+      {
+        // block b-0003 lives in section Alpha (anchor b-0002 ≤ 3 < b-0007)
+        after: { anchor: "b-0003", s: 1 },
+        items: [{ kind: "exercise", id: "tf", title: "True / false" }],
+      },
+    ]);
+    expect(ids(nav)).toEqual([
+      "ax-abstract",
+      "ax-sec-a",
+      "ins-exercise-tf", // inside Alpha, before Alpha One
+      "ax-sec-a-1",
+      "ax-sec-b",
+      "ax-references",
+    ]);
+    const inserted = nav.find((n) => n.kind === "inserted-exercise")!;
+    expect(inserted.level).toBe(3); // containing section level 2 + 1
+  });
+
+  it("orders anchor-level activities by (anchor, s) before the section's end activities", () => {
+    const nav = buildPaperNav(TOC, [
+      { after: { sectionEnd: "ax-sec-a-1" }, items: [{ kind: "exercise", id: "end", title: "End" }] },
+      { after: { anchor: "b-0008", s: 2 }, items: [{ kind: "exercise", id: "s2", title: "S2" }] },
+      { after: { anchor: "b-0008", s: 1 }, items: [{ kind: "exercise", id: "s1", title: "S1" }] },
+    ]);
+    // b-0008 is inside Alpha One (b-0007 ≤ 8 < b-0009); its entries come
+    // before the section-end entry in the same bucket.
+    expect(ids(nav)).toEqual([
+      "ax-abstract",
+      "ax-sec-a",
+      "ax-sec-a-1",
+      "ins-exercise-s1",
+      "ins-exercise-s2",
+      "ins-exercise-end",
+      "ax-sec-b",
+      "ax-references",
+    ]);
+  });
+
   it("keeps lesson and exercise kinds distinct with their ids", () => {
     const nav = buildPaperNav(TOC, [
       {
-        sectionId: "ax-sec-b",
+        after: { sectionEnd: "ax-sec-b" },
         items: [
           { kind: "lesson", id: "note", title: "Reading guide" },
           { kind: "exercise", id: "uc", title: "Understanding check" },
@@ -78,15 +109,38 @@ describe("buildPaperNav", () => {
     const exercise = nav.find((n) => n.kind === "inserted-exercise");
     expect(lesson).toMatchObject({ lessonId: "note", anchorId: "ins-lesson-note" });
     expect(exercise).toMatchObject({ exerciseId: "uc", anchorId: "ins-exercise-uc" });
-    // Both land before the references landmark.
-    const refIndex = nav.findIndex((n) => n.kind === "section" && n.id === "ax-references");
-    expect(nav.indexOf(lesson!)).toBeLessThan(refIndex);
-    expect(nav.indexOf(exercise!)).toBeLessThan(refIndex);
   });
 
-  it("appends unmatched-section insertions at the end, like the reader does", () => {
+  it("maps demo and sequence items to their nav kinds and anchor ids", () => {
     const nav = buildPaperNav(TOC, [
-      { sectionId: "ax-sec-gone", items: [{ kind: "exercise", id: "x", title: "X" }] },
+      {
+        after: { sectionEnd: "ax-sec-a" },
+        items: [
+          { kind: "demo", id: "monitor-roc", title: "Monitor ROC" },
+          {
+            kind: "sequence",
+            exerciseIds: ["q1", "q2"],
+            title: "Quick recall",
+          },
+        ],
+      },
+    ]);
+    const demo = nav.find((n) => n.kind === "inserted-demo");
+    const sequence = nav.find((n) => n.kind === "inserted-sequence");
+    expect(demo).toMatchObject({
+      demoId: "monitor-roc",
+      anchorId: "ins-demo-monitor-roc",
+      title: "Monitor ROC",
+    });
+    expect(sequence).toMatchObject({
+      anchorId: "ins-sequence-q1", // derives from the first exercise id
+      title: "Quick recall",
+    });
+  });
+
+  it("appends unknown-section activities at the end, like the reader does", () => {
+    const nav = buildPaperNav(TOC, [
+      { after: { sectionEnd: "ax-sec-gone" }, items: [{ kind: "exercise", id: "x", title: "X" }] },
     ]);
     expect(nav[nav.length - 1]).toMatchObject({ anchorId: "ins-exercise-x" });
   });

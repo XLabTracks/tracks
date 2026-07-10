@@ -7,17 +7,22 @@ import { getPaperArtifact } from "@/lib/arxiv/artifacts";
 import { buildAbsUrl, buildPdfUrl, parseArxivId } from "@/lib/arxiv/id";
 import { CONVERTER_VERSION, type ConversionWarning } from "@/lib/arxiv/types";
 import type { Paper, PaperInsertionItem } from "@/lib/content/types";
-import { insertionAnchorId, splitPaperHtml } from "@/lib/papers/split-paper";
+import { insertionAnchorId } from "@/lib/papers/split-paper";
+import { applyPaperEdits } from "@/lib/papers/apply-edits";
+import { Demo } from "@/components/mdx/demo";
 import { Exercise } from "@/components/mdx/exercise";
+import { ExerciseSequence } from "@/components/mdx/exercise-sequence";
 import { EmbeddedLesson } from "./embedded-lesson";
 import { PaperUnavailable } from "./paper-unavailable";
 
 /**
- * Full-page paper renderer: the converted paper HTML split at end-of-section
- * boundaries with activity blocks (exercise cards, inline lessons)
- * interleaved. All dangerouslySetInnerHTML stays in this server component —
- * segments never cross into client components, so there is no hydration
- * surface. Activity blocks sit BETWEEN .arxiv-paper wrappers, never inside
+ * Full-page paper renderer: the converted paper HTML with the paper's edits
+ * applied — hidden text behind expandable markers, editorial additions, and
+ * activity blocks (exercise cards, inline lessons) interleaved at section
+ * ends, between blocks, or mid-paragraph. All dangerouslySetInnerHTML stays
+ * in this server component — html parts never cross into client components,
+ * so there is no hydration surface (hide toggles are native details/checkbox
+ * markup). Activity blocks sit BETWEEN .arxiv-paper wrappers, never inside
  * them, so the paper's scoped CSS can't bleed into the cards; the
  * descendant-only styling makes sibling wrappers render identically to one.
  */
@@ -65,7 +70,9 @@ async function ArxivPaperReader({
   }
 
   const artifact = await getPaperArtifact(parsed.id);
-  const allItems = (paper.insertions ?? []).flatMap((insertion) => insertion.items);
+  const allItems = (paper.edits ?? []).flatMap((edit) =>
+    edit.op === "activity" ? edit.items : [],
+  );
 
   if (artifact.state !== "ready") {
     // The paper can't render, but its activities (and completion) must stay
@@ -90,52 +97,63 @@ async function ArxivPaperReader({
     );
   }
 
-  const { segments, points, unmatched } = splitPaperHtml(
+  const { parts, unmatchedEdits } = applyPaperEdits(
     artifact.paper.html,
     artifact.paper.toc,
-    paper.insertions,
+    paper.edits,
   );
-  if (unmatched.length > 0) {
+  if (unmatchedEdits.length > 0) {
     // Committed content can't reach this (content.test.ts validates every
-    // sectionId against the artifact toc); this is a local-iteration net.
+    // edit target against the artifact); this is a local-iteration net.
     console.warn(
-      `[papers] ${paper.id}: insertion sectionId(s) not in arXiv:${parsed.id} toc: ` +
-        unmatched.map((u) => u.sectionId).join(", "),
+      `[papers] ${paper.id}: unmatched edit target(s) in arXiv:${parsed.id}: ` +
+        unmatchedEdits
+          .map((op) => {
+            const ref = op.op === "hide" ? op.at : op.after;
+            return "anchor" in ref
+              ? `${ref.anchor}${ref.s ? ` s=${ref.s}` : ""} ("${ref.snippet}")`
+              : ref.sectionEnd;
+          })
+          .join(", "),
     );
   }
-  const unmatchedItems = unmatched.flatMap((insertion) => insertion.items);
+  const unmatchedItems = unmatchedEdits.flatMap((op) =>
+    op.op === "activity" ? op.items : [],
+  );
 
   return (
     <div className="paper-reader">
-      {segments.map((segment, i) => (
-        <Fragment key={i}>
-          {segment && (
-            <div
-              className="arxiv-paper"
-              data-conv={CONVERTER_VERSION}
-              dangerouslySetInnerHTML={{ __html: segment }}
-            />
-          )}
-          {points[i]?.items.map((item) => (
-            <InsertionBlock
-              key={insertionAnchorId(item)}
-              item={item}
-              signedIn={signedIn}
-              completedContentIds={completedContentIds}
-            />
-          ))}
-        </Fragment>
-      ))}
+      {parts.map((part, i) =>
+        part.kind === "html" ? (
+          <div
+            key={i}
+            className="arxiv-paper"
+            data-conv={CONVERTER_VERSION}
+            dangerouslySetInnerHTML={{ __html: part.html }}
+          />
+        ) : (
+          <Fragment key={i}>
+            {part.items.map((item) => (
+              <InsertionBlock
+                key={insertionAnchorId(item)}
+                item={item}
+                signedIn={signedIn}
+                completedContentIds={completedContentIds}
+              />
+            ))}
+          </Fragment>
+        ),
+      )}
 
       {unmatchedItems.length > 0 && (
         <div className="mt-10">
           {process.env.NODE_ENV !== "production" && (
             <p className="text-muted-foreground border-border bg-muted/30 rounded-lg border border-dashed p-3 text-xs">
-              Dev note: the activities below target section ids that don&apos;t
-              exist in this paper&apos;s toc (see the server console) — they
+              Dev note: the activities below target anchors/sections that
+              don&apos;t exist in this paper (see the server console) — they
               were appended here instead. Run{" "}
-              <code>npm run arxiv:build -- --toc {parsed.id}</code> to list
-              valid ids.
+              <code>npm run arxiv:build -- --blocks {parsed.id}</code> to list
+              valid targets.
             </p>
           )}
           {unmatchedItems.map((item) => (
@@ -175,6 +193,14 @@ function InsertionBlock({
           signedIn={signedIn}
           completed={completedContentIds.has(item.id)}
         />
+      ) : item.kind === "demo" ? (
+        <div className="my-8">
+          <Demo id={item.id} />
+        </div>
+      ) : item.kind === "sequence" ? (
+        <div className="my-8">
+          <ExerciseSequence ids={item.exerciseIds} label={item.label} />
+        </div>
       ) : (
         <div className="my-8">
           <Exercise id={item.id} />

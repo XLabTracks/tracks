@@ -6,14 +6,18 @@ import {
   getTrackProgressContentIds,
   type Paper,
 } from "@/lib/content";
-import { EXERCISE_TYPE_LABELS } from "@/lib/content/types";
+import {
+  EXERCISE_TYPE_LABELS,
+  getExerciseDisplayTitle,
+} from "@/lib/content/types";
 import { isAccessLocked } from "@/lib/content/prerequisites";
 import { getCurrentUser } from "@/lib/auth";
+import { getDemo } from "@/lib/demos/registry";
 import { getPaperArtifact } from "@/lib/arxiv/artifacts";
 import { getCompletedLessonIds, getPrerequisiteStatus } from "@/lib/progress";
 import {
   buildPaperNav,
-  type PaperNavInsertion,
+  type PaperNavActivity,
   type PaperNavItem,
 } from "@/lib/papers/paper-nav";
 import { TrackSidebar } from "@/components/layout/track-sidebar";
@@ -77,26 +81,34 @@ export default async function TrackLayout({
 }
 
 async function buildNavForPaper(paper: Paper): Promise<PaperNavItem[]> {
-  const insertions: PaperNavInsertion[] = (paper.insertions ?? []).map(
-    (insertion) => ({
-      sectionId: insertion.sectionId,
-      items: insertion.items.map((item) => ({
+  const activities: PaperNavActivity[] = (paper.edits ?? [])
+    .filter((edit) => edit.op === "activity")
+    .map((edit) => ({
+      after:
+        "sectionEnd" in edit.after
+          ? { sectionEnd: edit.after.sectionEnd }
+          : { anchor: edit.after.anchor, s: edit.after.s },
+      items: edit.items.map((item) => ({
         ...item,
         title:
           item.kind === "lesson"
             ? (getLessonById(item.id)?.title ?? "Lesson")
-            : exerciseLabel(item.id),
+            : item.kind === "demo"
+              ? (getDemo(item.id)?.title ?? "Demo")
+              : item.kind === "sequence"
+                ? // Same default as ExerciseSequenceCard's eyebrow.
+                  (item.label ?? EXERCISE_TYPE_LABELS["understanding-check"])
+                : exerciseLabel(item.id),
       })),
-    }),
-  );
+    }));
   const artifact = await getPaperArtifact(paper.source.arxivId);
-  // Non-ready artifacts still get insertion-only entries so the fallback
+  // Non-ready artifacts still get activity-only entries so the fallback
   // page's activities remain navigable.
   const toc = artifact.state === "ready" ? artifact.paper.toc : [];
-  return buildPaperNav(toc, insertions);
+  return buildPaperNav(toc, activities);
 }
 
 function exerciseLabel(exerciseId: string): string {
   const exercise = getExerciseById(exerciseId);
-  return exercise ? EXERCISE_TYPE_LABELS[exercise.type] : "Exercise";
+  return exercise ? getExerciseDisplayTitle(exercise) : "Exercise";
 }

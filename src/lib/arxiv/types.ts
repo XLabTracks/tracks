@@ -38,8 +38,16 @@
  * v16: precomputed section TOC (`toc` on the artifact) + stamped landmark ids
  *      (ax-abstract/ax-references/ax-footnotes) — powers full-page Paper
  *      items: sidebar section navigation and end-of-section insertions.
+ * v17: sentence spans (span[data-s], 1-based per block) on p/li/blockquote,
+ *      and toc entries carry their heading's data-anchor — powers paper
+ *      edits (hide/add/insert at block and sentence granularity).
+ * v18: abstract bodies paragraph-wrapped (so the abstract is anchor- and
+ *      sentence-addressable by edits) + wider abbreviation guard (Thm./Alg./
+ *      Eqn./… and dotted acronyms) in sentence segmentation.
+ * v19: mdframed environments render as tinted callout boxes (ax-mdframed,
+ *      linecolor-aware) instead of leaking their option list as text.
  */
-export const CONVERTER_VERSION = 16;
+export const CONVERTER_VERSION = 19;
 
 export interface ConversionWarning {
   /** Stable machine code, e.g. "unknown-macro", "katex-error". */
@@ -62,7 +70,7 @@ export type PaperTocEntryKind = "abstract" | "section" | "references" | "footnot
  * One entry of a paper's section tree, extracted at conversion time from the
  * sanitized HAST. Flat array in document order; nesting derives from `level`.
  * Entry ids are the anchor targets used by sidebar navigation and by
- * `Paper.insertions[].sectionId` — stable for a pinned arXiv version +
+ * `Paper.edits` sectionEnd refs — stable for a pinned arXiv version +
  * converter version (same contract as data-anchor).
  */
 export interface PaperTocEntry {
@@ -75,6 +83,12 @@ export interface PaperTocEntry {
   number: string;
   /** Heading depth 2–4 (h2–h4); landmark sections are 2. */
   level: number;
+  /**
+   * The entry's own data-anchor ("b-NNNN"; landmarks use their first anchored
+   * descendant). Anchors are assigned in document order, so any block anchor
+   * maps to its containing section by numeric comparison.
+   */
+  anchor?: string;
 }
 
 export interface ConversionResult {

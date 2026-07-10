@@ -84,6 +84,33 @@ function descriptionReplacement(env: Ast.Environment): Ast.Node {
   });
 }
 
+/**
+ * Peel ONE leading [...] option list of any length (mdframed option lists run
+ * to a dozen key=value pairs), returning its raw text. Mutates `content`.
+ */
+function peelBracketOptions(content: Ast.Node[]): string {
+  while (
+    content.length > 0 &&
+    (content[0].type === "whitespace" || content[0].type === "parbreak")
+  ) {
+    content.shift();
+  }
+  const first = content[0];
+  if (!first || first.type !== "string" || !first.content.startsWith("[")) {
+    return "";
+  }
+  for (let i = 0; i < content.length && i < 200; i++) {
+    const node = content[i];
+    if (node.type === "string" && node.content.includes("]")) {
+      const consumed = content.splice(0, i + 1);
+      return consumed
+        .map((n) => ("content" in n && typeof n.content === "string" ? n.content : " "))
+        .join(" ");
+    }
+  }
+  return "";
+}
+
 /** Peel leading groups/brackets that are layout args (widths, placement). */
 function peelLayoutArgs(content: Ast.Node[], max: number): Ast.Node[] {
   const rest = [...content];
@@ -206,6 +233,23 @@ export function buildMiscEnvReplacements(
     });
   };
 
+  // mdframed[options]: framed callout boxes (e.g. the AI Control paper's
+  // blue-team/red-team protocol boxes). The option list is long (margins,
+  // colors, …) and would otherwise leak as literal text; peel it fully and
+  // keep only a linecolor-derived tint.
+  const mdframed: EnvReplacement = (env) => {
+    const content = [...env.content];
+    const options = peelBracketOptions(content);
+    const tint = /linecolor\s*=\s*light(blue|red)/.exec(options)?.[1];
+    return htmlLike({
+      tag: "div",
+      attributes: {
+        className: ["ax-mdframed", ...(tint ? [`ax-mdframed-${tint}`] : [])],
+      },
+      content,
+    });
+  };
+
   // multicols{N}: honor the column count with CSS columns.
   const multicols: EnvReplacement = (env) => {
     const content = [...env.content];
@@ -239,6 +283,7 @@ export function buildMiscEnvReplacements(
 
   return {
     description: descriptionReplacement,
+    mdframed,
     minipage,
     subfigure,
     "subfigure*": subfigure,

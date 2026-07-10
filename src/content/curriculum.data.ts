@@ -13,9 +13,9 @@ export const tracks: Track[] = [
     title: "AI Control",
     shortTitle: "Control",
     description:
-      "content coming soon",
+      "Hands-on technical track on controlling and evaluating AI systems. The introductory module works through Redwood Research's \"AI Control: Improving Safety Despite Intentional Subversion\" paper and then rebuilds its trusted-monitoring result as an interactive, model-backed demo.",
     kind: "technical",
-    moduleIds: [],
+    moduleIds: ["c-intro"],
     prerequisiteEnforcement: "hard",
   },
   {
@@ -44,6 +44,31 @@ export const tracks: Track[] = [
 ];
 
 export const modules: Module[] = [
+  {
+    id: "c-intro",
+    slug: "introduction",
+    trackId: "control",
+    title: "Introduction, overview, and threat modeling",
+    summary:
+      "The foundation for the track: Redwood Research's \"AI Control: Improving Safety Despite Intentional Subversion\" paper rendered in full with guided exercises woven in, then rebuilt as an interactive, calibrated demo you can play with.",
+    order: 1,
+    prerequisiteModuleIds: [],
+    // The paper item first, then the demo lessons in their designed reading
+    // order (l3 "best response" deliberately comes after l6 — it needs the
+    // levers l4–l6 introduce).
+    itemIds: [
+      "c-paper-ai-control",
+      "c-game-l1",
+      "c-game-l2",
+      "c-game-l4",
+      "c-game-l5",
+      "c-game-l6",
+      "c-game-l3",
+      "c-game-l7",
+      "c-game-l8",
+    ],
+    estimatedMinutes: 190,
+  },
   {
     id: "ex-content",
     slug: "content-types",
@@ -74,6 +99,72 @@ export const modules: Module[] = [
 ];
 
 export const lessons: Lesson[] = [
+  // --- Control: trusted-monitoring demo lessons (module items, in the
+  // reading order set by c-intro.itemIds) ---
+  {
+    id: "c-game-l1",
+    slug: "trusted-monitoring-as-a-game",
+    moduleId: "c-intro",
+    title: "Trusted monitoring as a game",
+    contentRef: "c-game-l1",
+    estimatedMinutes: 10,
+  },
+  {
+    id: "c-game-l2",
+    slug: "same-auroc-different-safety",
+    moduleId: "c-intro",
+    title: "Same AUROC, different safety",
+    contentRef: "c-game-l2",
+    estimatedMinutes: 12,
+  },
+  {
+    id: "c-game-l4",
+    slug: "safety-over-a-deployment-the-race",
+    moduleId: "c-intro",
+    title: "Safety over a deployment: the race",
+    contentRef: "c-game-l4",
+    estimatedMinutes: 12,
+  },
+  {
+    id: "c-game-l5",
+    slug: "opportunities-are-not-equal",
+    moduleId: "c-intro",
+    title: "Opportunities are not equal",
+    contentRef: "c-game-l5",
+    estimatedMinutes: 12,
+  },
+  {
+    id: "c-game-l6",
+    slug: "subtlety-visible-versus-reliable",
+    moduleId: "c-intro",
+    title: "Subtlety: visible versus reliable",
+    contentRef: "c-game-l6",
+    estimatedMinutes: 10,
+  },
+  {
+    id: "c-game-l3",
+    slug: "the-best-response-principle",
+    moduleId: "c-intro",
+    title: "The best-response principle",
+    contentRef: "c-game-l3",
+    estimatedMinutes: 12,
+  },
+  {
+    id: "c-game-l7",
+    slug: "defer-to-trusted-mechanistically",
+    moduleId: "c-intro",
+    title: "Defer to trusted, mechanistically",
+    contentRef: "c-game-l7",
+    estimatedMinutes: 12,
+  },
+  {
+    id: "c-game-l8",
+    slug: "the-whole-picture",
+    moduleId: "c-intro",
+    title: "The control game: the whole picture",
+    contentRef: "c-game-l8",
+    estimatedMinutes: 12,
+  },
   {
     id: "ex-content-l1",
     slug: "text-video-callouts",

@@ -27,11 +27,10 @@ const assessmentByModuleId = new Map(assessments.map((a) => [a.moduleId, a]));
 // Inserted lessons live inside a paper's flow; map them back to their paper.
 const paperByInsertedLessonId = new Map<string, Paper>(
   papers.flatMap((p) =>
-    (p.insertions ?? []).flatMap((insertion) =>
-      insertion.items
-        .filter((item) => item.kind === "lesson")
-        .map((item) => [item.id, p] as const),
-    ),
+    (p.edits ?? [])
+      .flatMap((edit) => (edit.op === "activity" ? edit.items : []))
+      .filter((item) => item.kind === "lesson")
+      .map((item) => [item.id, p] as const),
   ),
 );
 
@@ -132,12 +131,12 @@ export function getTrackForModule(moduleId: string): Track | undefined {
   return mod ? trackById.get(mod.trackId) : undefined;
 }
 
-/** Inline lessons referenced by a paper's insertions, in insertion order. */
+/** Inline lessons referenced by a paper's activity edits, in edit order. */
 export function getInsertedLessonsForPaper(paperId: string): Lesson[] {
   const paper = paperById.get(paperId);
   if (!paper) return [];
-  return (paper.insertions ?? [])
-    .flatMap((insertion) => insertion.items)
+  return (paper.edits ?? [])
+    .flatMap((edit) => (edit.op === "activity" ? edit.items : []))
     .filter((item) => item.kind === "lesson")
     .map((item) => lessonById.get(item.id))
     .filter((l): l is Lesson => Boolean(l));

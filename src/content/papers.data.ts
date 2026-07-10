@@ -1,10 +1,236 @@
 import type { Paper } from "@/lib/content/types";
 
-// Example papers for the demo track. Paper titles/metadata are factual (they
-// come from the arXiv artifact); all inserted lesson/exercise copy stays
-// placeholder-level. See AUTHORING.md for the authoring workflow, including
-// how to discover insertion sectionIds (`npm run arxiv:build -- --toc <id>`).
+// Paper titles/metadata are factual (they come from the arXiv artifact).
+// See AUTHORING.md for the authoring workflow:
+//   npm run arxiv:build -- --toc <id>                  → section ids
+//   npm run arxiv:build -- --blocks <id> [--section …] → block anchors + sentences
+// Snippets are copied prefixes of the --blocks output lines (drift tripwires).
 export const papers: Paper[] = [
+  {
+    // Control track, module 1: the AI Control paper with the course's guided
+    // exercises, demos, and editorial notes woven into the reading.
+    id: "c-paper-ai-control",
+    slug: "ai-control-paper",
+    moduleId: "c-intro",
+    title: "AI Control: Improving Safety Despite Intentional Subversion",
+    source: { kind: "arxiv", arxivId: "2312.06942v5" },
+    estimatedMinutes: 94,
+    edits: [
+      // Publication note after the abstract.
+      {
+        op: "add",
+        after: { sectionEnd: "ax-abstract" },
+        label: "Source",
+        markdown:
+          "A shortened and modified version of this work was published in the " +
+          "*Proceedings of the 41st International Conference on Machine " +
+          "Learning*: [openreview.net/pdf?id=KviM5k8pcP](https://openreview.net/pdf?id=KviM5k8pcP).",
+      },
+      // §1 end: quick-recall flashcards on the core concepts.
+      {
+        op: "activity",
+        after: { sectionEnd: "ax-sec-introduction" },
+        items: [
+          {
+            kind: "sequence",
+            label: "Quick recall",
+            exerciseIds: [
+              "c-paper-l1-recall-protocol",
+              "c-paper-l1-recall-control-evaluation",
+              "c-paper-l1-recall-subversion-conditions",
+            ],
+          },
+        ],
+      },
+      // §2: why real backdoors are sneakier than `is_odd`.
+      {
+        op: "add",
+        after: { anchor: "b-0046", snippet: "def is_odd(x):" },
+        label: "Beyond is_odd",
+        markdown:
+          "`is_odd` is deliberately blatant, to make the definition concrete. " +
+          "A real backdoor has to be much sneakier: subtle enough to survive " +
+          "testing and a skim from a reviewer, and wrong on only a narrow " +
+          "slice of inputs. In fact, current frontier LLMs are likely capable " +
+          "of constructing much subtler and more dangerous backdoors. For " +
+          "example, in March 2026, as part of Anthropic's Project Glasswing " +
+          "initiative, Claude Mythos Preview found and built a full " +
+          "remote-root exploit for " +
+          "[CVE-2026-4747](https://www.freebsd.org/security/advisories/FreeBSD-SA-26:08.rpcsec_gss.asc), " +
+          "a stack buffer overflow in FreeBSD's RPCSEC_GSS authentication " +
+          "code that had gone unnoticed for 17 years. Given that frontier " +
+          "LLMs are capable of finding vulnerabilities that have passed " +
+          "long-term human review, it is plausible that they can also " +
+          "construct realistic, difficult-to-notice backdoors in production code.",
+      },
+      // §2: quick recall after the U/T/H naming paragraph.
+      {
+        op: "activity",
+        after: { anchor: "b-0059", snippet: "From here on, we’ll always use the names" },
+        items: [
+          {
+            kind: "sequence",
+            label: "Quick recall",
+            exerciseIds: [
+              "c-paper-l2-recall-backdoor-definition",
+              "c-paper-l2-recall-h-limited",
+              "c-paper-l2-recall-trust-t",
+              "c-paper-l2-recall-red-team-goal",
+              "c-paper-l2-recall-blue-team-goal",
+            ],
+          },
+        ],
+      },
+      // §2.3 end: one recall card on summary-statistics access.
+      {
+        op: "activity",
+        after: { sectionEnd: "ax-sec-blue-team-access-to-summary-statistics-o" },
+        items: [{ kind: "exercise", id: "c-paper-l2-recall-summary-statistics" }],
+      },
+      // §2 end (after Table 2): build each protocol as a flowchart.
+      {
+        op: "activity",
+        after: { sectionEnd: "ax-sec-setting" },
+        items: [{ kind: "exercise", id: "c-paper-l2-protocol-flowcharts" }],
+      },
+      // §3.1.2 end: derive the optimal audit tradeoff by hand, then play it.
+      {
+        op: "add",
+        after: { sectionEnd: "ax-sec-upfront-auditing" },
+        label: "Optimal audit tradeoff",
+        markdown:
+          'The paper states it "can analytically solve" this problem, and it ' +
+          "is in fact, a tractable derivation. The five-part exercise below " +
+          "works through it by hand, one step at a time: set up the red " +
+          "team's win probability as a function of its attack rate $p$, use " +
+          "the same rare-event approximation that shows up all over this " +
+          "field to make it differentiable, and solve for the optimal $p^*$. " +
+          "You may need a pen and paper.",
+      },
+      {
+        op: "activity",
+        after: { sectionEnd: "ax-sec-upfront-auditing" },
+        items: [
+          {
+            kind: "sequence",
+            label: "Understanding check",
+            exerciseIds: [
+              "c-paper-l3-audit-tradeoff-intuition",
+              "c-paper-l3-audit-tradeoff-formula",
+              "c-paper-l3-audit-tradeoff-derivation",
+              "c-paper-l3-audit-tradeoff-scenarios",
+              "c-paper-l3-audit-tradeoff-shape",
+            ],
+          },
+          { kind: "demo", id: "audit-tradeoff" },
+          { kind: "exercise", id: "c-paper-l3-recall-upfront-auditing-attack" },
+        ],
+      },
+      // §3.2.1: the monitor as a binary classifier (ROC/AUC framing + demo).
+      // Block-end anchor: the source PR spliced this cluster before the
+      // paragraph's last sentence, but a labeled multi-paragraph add can't be
+      // sentence-anchored (inline gate), so the whole cluster stays together
+      // after b-0135 — one sentence later than the PR's placement.
+      {
+        op: "add",
+        after: {
+          anchor: "b-0135",
+          snippet: "Qualitatively speaking, GPT-3.5 is able to notice",
+        },
+        label: "The monitor is a binary classifier",
+        markdown:
+          "The two histograms in Figure 4 are the picture a signal-detection " +
+          "framing makes precise: the monitor is a *binary classifier* " +
+          "separating backdoored from innocent solutions, and the more its " +
+          "two suspicion-score distributions overlap, the worse it does. The " +
+          "standard summary of that overlap is the **ROC curve** — " +
+          "true-positive rate against false-positive rate as the decision " +
+          "threshold sweeps — and its **AUC** (area under the curve). If " +
+          "those terms are unfamiliar, Google's ML Crash Course has a short " +
+          "primer: [ROC and AUC](https://developers.google.com/machine-learning/crash-course/classification/roc-and-auc).\n\n" +
+          "The demo below models the monitor as two equal-variance Gaussians " +
+          "and lets you drag its quality (the separation $d'$ between the " +
+          "innocent and backdoored means). Watch the ROC curve and AUC " +
+          "respond, and watch the operating point at the blue team's fixed " +
+          "2% false-positive threshold: even a fairly good monitor catches " +
+          "only a fraction of backdoors there, which is the \"many false " +
+          "negatives\" the paper describes. The default setting ($d' " +
+          "\\approx 1.64$, AUC $\\approx 0.88$) reproduces the paper's " +
+          "reported result — a 0.338 probability that an attempted backdoor " +
+          "is audited at a 2% false-positive rate. (Real suspicion scores " +
+          "aren't Gaussian; this is an idealization for building intuition, " +
+          "not a fit to the paper's data.)",
+      },
+      {
+        op: "activity",
+        after: {
+          anchor: "b-0135",
+          snippet: "Qualitatively speaking, GPT-3.5 is able to notice",
+        },
+        items: [
+          { kind: "demo", id: "monitor-roc" },
+          {
+            kind: "sequence",
+            label: "Understanding check",
+            exerciseIds: [
+              "c-paper-l3-monitor-operating-point",
+              "c-paper-l3-monitor-auc-meaning",
+              "c-paper-l3-monitor-per-attempt",
+            ],
+          },
+        ],
+      },
+      // §3.2: recall card on budget burn (after the "Secondly, …" list item;
+      // nested target, so the card hoists after the whole list).
+      {
+        op: "activity",
+        after: {
+          anchor: "b-0140",
+          snippet: "Secondly, trusted monitoring forces the attacker",
+        },
+        items: [{ kind: "exercise", id: "c-paper-l3-recall-budget-burn" }],
+      },
+      // §3.3 end: defer-to-trusted recall.
+      {
+        op: "activity",
+        after: { sectionEnd: "ax-sec-defer-to-trusted" },
+        items: [
+          {
+            kind: "sequence",
+            label: "Quick recall",
+            exerciseIds: [
+              "c-paper-l4-recall-defer-below-threshold",
+              "c-paper-l4-recall-dynamic-routing",
+            ],
+          },
+        ],
+      },
+      // §3.4.2 end: naive untrusted monitoring recall.
+      {
+        op: "activity",
+        after: { sectionEnd: "ax-sec-collusion-techniques-and-countermeasures" },
+        items: [{ kind: "exercise", id: "c-paper-l4-recall-naive-untrusted-monitoring" }],
+      },
+      // §3.5 end (after Table 8): the safety/usefulness frontier, interactive.
+      {
+        op: "activity",
+        after: { sectionEnd: "ax-sec-trusted-editing" },
+        items: [
+          { kind: "demo", id: "safety-usefulness-frontier" },
+          {
+            kind: "sequence",
+            label: "Frontier check",
+            exerciseIds: [
+              "c-paper-l4-frontier-dominance",
+              "c-paper-l4-frontier-dominated-set",
+              "c-paper-l4-frontier-improvement",
+              "c-paper-l4-frontier-along-curve",
+            ],
+          },
+        ],
+      },
+    ],
+  },
   {
     id: "ex-paper-attention",
     slug: "attention-paper",
@@ -12,13 +238,73 @@ export const papers: Paper[] = [
     title: "Attention Is All You Need",
     source: { kind: "arxiv", arxivId: "1706.03762v7" },
     estimatedMinutes: 45,
-    insertions: [
+    edits: [
+      // Mid-paragraph activity: splits §1's first paragraph after sentence 1.
       {
-        sectionId: "ax-sec-scaled-dot-product-attention",
+        op: "activity",
+        after: {
+          anchor: "b-0004",
+          s: 1,
+          snippet: "Recurrent neural networks, long short-term",
+        },
+        items: [{ kind: "exercise", id: "true-false" }],
+      },
+      // Block-level editorial note between two paragraphs of §1.
+      {
+        op: "add",
+        after: {
+          anchor: "b-0005",
+          snippet: "Recurrent models typically factor computation",
+        },
+        markdown:
+          "Lorem ipsum block-level editorial commentary — a note from the course " +
+          "authors, visually distinct from the paper. Inline math works: $h_t$.\n\n" +
+          "A second paragraph of lorem commentary.",
+      },
+      // Inline editorial aside after a specific sentence.
+      {
+        op: "add",
+        after: {
+          anchor: "b-0007",
+          s: 1,
+          snippet: "In this work we propose the Transformer",
+        },
+        markdown: "*Editor's aside: lorem ipsum dolor sit amet — an inline note.*",
+      },
+      // Sentence-level hide (expandable marker in place of the sentence).
+      {
+        op: "hide",
+        at: {
+          anchor: "b-0007",
+          s: 2,
+          snippet: "The Transformer allows for significantly",
+        },
+      },
+      // Two consecutive paragraphs hidden in §2 — renders as ONE merged marker.
+      {
+        op: "hide",
+        at: {
+          anchor: "b-0010",
+          snippet: "Self-attention, sometimes called intra-attention",
+        },
+        note: "Related-work details (optional reading)",
+      },
+      {
+        op: "hide",
+        at: {
+          anchor: "b-0011",
+          snippet: "End-to-end memory networks are based",
+        },
+      },
+      // Section-end activities (original insertion semantics).
+      {
+        op: "activity",
+        after: { sectionEnd: "ax-sec-scaled-dot-product-attention" },
         items: [{ kind: "exercise", id: "multiple-choice" }],
       },
       {
-        sectionId: "ax-sec-conclusion",
+        op: "activity",
+        after: { sectionEnd: "ax-sec-conclusion" },
         items: [
           { kind: "lesson", id: "ex-paper-note-l1" },
           { kind: "exercise", id: "understanding-check" },
@@ -27,7 +313,7 @@ export const papers: Paper[] = [
     ],
   },
   {
-    // A plain paper with no insertions — just the inline reading.
+    // A plain paper with no edits — just the inline reading.
     id: "ex-paper-anti-scheming",
     slug: "anti-scheming-paper",
     moduleId: "ex-assess",

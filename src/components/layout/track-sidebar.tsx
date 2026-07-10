@@ -18,7 +18,7 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import type { ModuleItem, TrackOutline } from "@/lib/content";
+import type { ModuleItem, Paper, TrackOutline } from "@/lib/content";
 import type { PaperNavItem } from "@/lib/papers/paper-nav";
 import { cn } from "@/lib/utils";
 import { navItemClass, PaperSectionNav } from "./paper-section-nav";
@@ -29,8 +29,29 @@ export interface TrackSidebarProps {
   completedContentIds?: string[];
   /** Module slugs gated by unmet prerequisites (drives lock icons). */
   lockedModuleSlugs?: string[];
-  /** Per-paper section navigation (keyed by paper id), shown nested under the active paper. */
+  /** Per-paper section navigation (keyed by paper id), docked below the module nav on paper pages. */
   paperNavs?: Record<string, PaperNavItem[]>;
+}
+
+/**
+ * The paper the current page shows, with its section nav — drives the docked
+ * "In this paper" panel. Resolved from props (the outline carries the full
+ * paper objects), never from content accessors: this is a client component.
+ */
+function activePaperNavOf(
+  { outline, paperNavs = {} }: TrackSidebarProps,
+  pathname: string,
+): { paper: Paper; nav: PaperNavItem[] } | null {
+  const base = `/tracks/${outline.track.slug}`;
+  for (const { module, items } of outline.modules) {
+    for (const item of items) {
+      if (item.kind !== "paper") continue;
+      if (pathname !== `${base}/${module.slug}/${item.paper.slug}`) continue;
+      const nav = paperNavs[item.paper.id];
+      return nav && nav.length > 0 ? { paper: item.paper, nav } : null;
+    }
+  }
+  return null;
 }
 
 function SidebarNav({
@@ -46,6 +67,10 @@ function SidebarNav({
   const activeModuleSlug = segments[2];
   const completed = new Set(completedContentIds);
   const locked = new Set(lockedModuleSlugs);
+  const activePaperNav = activePaperNavOf(
+    { outline, completedContentIds, lockedModuleSlugs, paperNavs },
+    pathname,
+  );
 
   const [open, setOpen] = useState<string[]>(() =>
     activeModuleSlug
@@ -64,78 +89,95 @@ function SidebarNav({
 
   return (
     <div className="flex h-full flex-col">
-      <div className="px-3 py-4">
-        <p className="text-muted-foreground px-2 text-xs font-medium tracking-wide uppercase">
-          {outline.track.shortTitle ?? "Track"}
-        </p>
-        <Link
-          href={base}
-          onClick={onNavigate}
-          className={cn(
-            "hover:bg-muted mt-1 block rounded-lg px-2 py-1.5 text-sm font-semibold transition-colors",
-            pathname === base && "bg-muted",
-          )}
+      {/* Module navigation — scrolls on its own so the paper panel below
+          keeps its share of the viewport regardless of how long this gets. */}
+      <div className="min-h-0 flex-1 overflow-y-auto">
+        <div className="px-3 py-4">
+          <p className="text-muted-foreground px-2 text-xs font-medium tracking-wide uppercase">
+            {outline.track.shortTitle ?? "Track"}
+          </p>
+          <Link
+            href={base}
+            onClick={onNavigate}
+            className={cn(
+              "hover:bg-muted mt-1 block rounded-lg px-2 py-1.5 text-sm font-semibold transition-colors",
+              pathname === base && "bg-muted",
+            )}
+          >
+            {outline.track.title}
+          </Link>
+        </div>
+        <Accordion
+          type="multiple"
+          value={open}
+          onValueChange={setOpen}
+          className="px-2 pb-10"
         >
-          {outline.track.title}
-        </Link>
-      </div>
-      <Accordion
-        type="multiple"
-        value={open}
-        onValueChange={setOpen}
-        className="px-2 pb-10"
-      >
-        {outline.modules.map(({ module, items }) => {
-          const isLocked = locked.has(module.slug);
-          const assessmentHref = `${base}/${module.slug}/assessment`;
-          return (
-            <AccordionItem key={module.id} value={module.slug} className="border-none">
-              <AccordionTrigger className="hover:bg-muted [&[data-state=open]]:bg-muted/50 rounded-lg px-2 py-2 text-sm hover:no-underline">
-                <span className="flex items-center gap-2 text-left">
-                  {isLocked && (
-                    <Lock
-                      className="text-muted-foreground size-3.5 shrink-0"
-                      aria-hidden
-                    />
-                  )}
-                  <span className="line-clamp-2">
-                    {module.order}. {module.title}
+          {outline.modules.map(({ module, items }) => {
+            const isLocked = locked.has(module.slug);
+            const assessmentHref = `${base}/${module.slug}/assessment`;
+            return (
+              <AccordionItem key={module.id} value={module.slug} className="border-none">
+                <AccordionTrigger className="hover:bg-muted [&[data-state=open]]:bg-muted/50 rounded-lg px-2 py-2 text-sm hover:no-underline">
+                  <span className="flex items-center gap-2 text-left">
+                    {isLocked && (
+                      <Lock
+                        className="text-muted-foreground size-3.5 shrink-0"
+                        aria-hidden
+                      />
+                    )}
+                    <span className="line-clamp-2">
+                      {module.order}. {module.title}
+                    </span>
                   </span>
-                </span>
-              </AccordionTrigger>
-              <AccordionContent className="pb-1">
-                <ul className="border-border/70 ml-3 space-y-0.5 border-l pl-2">
-                  {items.map((item) => (
-                    <SidebarItemRow
-                      key={itemKey(item)}
-                      item={item}
-                      href={`${base}/${module.slug}/${itemSlug(item)}`}
-                      pathname={pathname}
-                      completed={completed}
-                      paperNav={
-                        item.kind === "paper" ? paperNavs[item.paper.id] : undefined
-                      }
-                      onNavigate={onNavigate}
-                    />
-                  ))}
-                  {module.assessmentId && (
-                    <li>
-                      <Link
-                        href={assessmentHref}
-                        onClick={onNavigate}
-                        className={navItemClass(pathname === assessmentHref)}
-                      >
-                        <FileText className="mt-0.5 size-3.5 shrink-0" aria-hidden />
-                        <span>Assessment</span>
-                      </Link>
-                    </li>
-                  )}
-                </ul>
-              </AccordionContent>
-            </AccordionItem>
-          );
-        })}
-      </Accordion>
+                </AccordionTrigger>
+                <AccordionContent className="pb-1">
+                  <ul className="border-border/70 ml-3 space-y-0.5 border-l pl-2">
+                    {items.map((item) => (
+                      <SidebarItemRow
+                        key={itemKey(item)}
+                        item={item}
+                        href={`${base}/${module.slug}/${itemSlug(item)}`}
+                        pathname={pathname}
+                        completed={completed}
+                        onNavigate={onNavigate}
+                      />
+                    ))}
+                    {module.assessmentId && (
+                      <li>
+                        <Link
+                          href={assessmentHref}
+                          onClick={onNavigate}
+                          className={navItemClass(pathname === assessmentHref)}
+                        >
+                          <FileText className="mt-0.5 size-3.5 shrink-0" aria-hidden />
+                          <span>Assessment</span>
+                        </Link>
+                      </li>
+                    )}
+                  </ul>
+                </AccordionContent>
+              </AccordionItem>
+            );
+          })}
+        </Accordion>
+      </div>
+
+      {/* Docked section navigation for the paper being read: always visible
+          on paper pages, with its own scroll + scroll-spy follow. */}
+      {activePaperNav && (
+        <div className="border-border bg-card/60 flex max-h-[55%] shrink-0 flex-col border-t">
+          <p className="text-muted-foreground shrink-0 truncate px-4 pt-3 pb-1.5 text-xs font-medium tracking-wide uppercase">
+            In this paper
+          </p>
+          <PaperSectionNav
+            items={activePaperNav.nav}
+            pathname={pathname}
+            completedContentIds={completed}
+            onNavigate={onNavigate}
+          />
+        </div>
+      )}
     </div>
   );
 }
@@ -154,10 +196,12 @@ function itemSlug(item: ModuleItem): string {
 function itemDone(item: ModuleItem, completed: Set<string>): boolean {
   if (item.kind === "lesson") return completed.has(item.lesson.id);
   if (!completed.has(item.paper.id)) return false;
-  return (item.paper.insertions ?? []).every((insertion) =>
-    insertion.items.every(
-      (inserted) => inserted.kind !== "lesson" || completed.has(inserted.id),
-    ),
+  return (item.paper.edits ?? []).every(
+    (edit) =>
+      edit.op !== "activity" ||
+      edit.items.every(
+        (inserted) => inserted.kind !== "lesson" || completed.has(inserted.id),
+      ),
   );
 }
 
@@ -166,14 +210,12 @@ function SidebarItemRow({
   href,
   pathname,
   completed,
-  paperNav,
   onNavigate,
 }: {
   item: ModuleItem;
   href: string;
   pathname: string;
   completed: Set<string>;
-  paperNav?: PaperNavItem[];
   onNavigate?: () => void;
 }) {
   const done = itemDone(item, completed);
@@ -199,31 +241,7 @@ function SidebarItemRow({
           />
         )}
       </Link>
-      {item.kind === "paper" && active && paperNav && paperNav.length > 0 && (
-        <PaperSectionNav
-          items={paperNav}
-          pathname={pathname}
-          completedContentIds={completed}
-          onNavigate={onNavigate}
-        />
-      )}
     </li>
-  );
-}
-
-/** True when the current page is a paper whose section tree is showing. */
-function hasActivePaperNav(
-  { outline, paperNavs = {} }: TrackSidebarProps,
-  pathname: string,
-): boolean {
-  const base = `/tracks/${outline.track.slug}`;
-  return outline.modules.some(({ module, items }) =>
-    items.some(
-      (item) =>
-        item.kind === "paper" &&
-        pathname === `${base}/${module.slug}/${item.paper.slug}` &&
-        (paperNavs[item.paper.id]?.length ?? 0) > 0,
-    ),
   );
 }
 
@@ -231,13 +249,13 @@ export function TrackSidebar(props: TrackSidebarProps) {
   const [mobileOpen, setMobileOpen] = useState(false);
   const pathname = usePathname();
   // Section titles need more room than lesson titles — widen the bar while
-  // a paper's section tree is open.
-  const paperExpanded = hasActivePaperNav(props, pathname);
+  // the paper panel is docked.
+  const paperExpanded = activePaperNavOf(props, pathname) !== null;
   return (
     <>
       <aside
         className={cn(
-          "border-border bg-card/40 sticky top-14 hidden h-[calc(100vh-3.5rem)] shrink-0 overflow-y-auto border-r transition-[width] duration-300 lg:block",
+          "border-border bg-card/40 sticky top-14 hidden h-[calc(100vh-3.5rem)] shrink-0 overflow-hidden border-r transition-[width] duration-300 lg:block",
           paperExpanded ? "w-96" : "w-72",
         )}
       >
@@ -255,7 +273,7 @@ export function TrackSidebar(props: TrackSidebarProps) {
             <SheetHeader className="sr-only">
               <SheetTitle>{props.outline.track.title} contents</SheetTitle>
             </SheetHeader>
-            <div className="h-full overflow-y-auto">
+            <div className="h-full overflow-hidden">
               <SidebarNav {...props} onNavigate={() => setMobileOpen(false)} />
             </div>
           </SheetContent>

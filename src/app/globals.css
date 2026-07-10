@@ -1,6 +1,9 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
+/* KaTeX styles global: lesson MDX math (rehype-katex) and exercise
+   prompt/answer math (MathText) render outside the paper reader too. */
+@import "katex/dist/katex.min.css";
 
 @plugin "@tailwindcss/typography";
 
@@ -119,6 +122,23 @@
   h4 {
     font-weight: 600;
     letter-spacing: -0.015em;
+  }
+  /* Code should show its literal characters — ligatures turn e.g. `->` or
+     `!=` into single glyphs, which reads as ambiguous in source snippets. */
+  pre,
+  code {
+    font-variant-ligatures: none;
+  }
+}
+
+/* Tap-reveal exercise: the "click to reveal" cover is rows of drifting text;
+   each row holds two identical halves, so −50% loops seamlessly. */
+@keyframes tap-reveal-slide {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
   }
 }
 

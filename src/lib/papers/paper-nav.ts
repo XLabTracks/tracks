@@ -1,64 +1,80 @@
 import type { PaperTocEntry } from "@/lib/arxiv/types";
+import type { PaperInsertionItem } from "@/lib/content/types";
+import { anchorNum, sectionIndexForAnchor } from "./anchors";
 import { insertionAnchorId, subtreeEndIndex } from "./split-paper";
 
 // Builds the sidebar's per-paper navigation model: the paper's section tree
-// with entries for inserted activities spliced in at the positions where
-// PaperReader actually renders them. Boundary math is shared with
-// split-paper.ts so the nav always mirrors the page.
+// with entries for activity edits spliced in at the positions where the
+// reader actually renders them — section-end activities at their subtree
+// end (boundary math shared with split-paper.ts), block/sentence-level
+// activities nested under their containing section. Hidden/added content
+// gets no nav entries.
 
 export type PaperNavItem =
   | { kind: "section"; id: string; title: string; number: string; level: number }
   | { kind: "inserted-lesson"; anchorId: string; lessonId: string; title: string; level: number }
-  | { kind: "inserted-exercise"; anchorId: string; exerciseId: string; title: string; level: number };
+  | { kind: "inserted-exercise"; anchorId: string; exerciseId: string; title: string; level: number }
+  | { kind: "inserted-demo"; anchorId: string; demoId: string; title: string; level: number }
+  | { kind: "inserted-sequence"; anchorId: string; title: string; level: number };
 
-/** A paper insertion with display titles already resolved by the caller. */
-export interface PaperNavInsertion {
-  sectionId: string;
-  items: Array<{ kind: "lesson" | "exercise"; id: string; title: string }>;
+/** An activity edit with display titles already resolved by the caller. */
+export interface PaperNavActivity {
+  after: { sectionEnd: string } | { anchor: string; s?: number };
+  items: Array<PaperInsertionItem & { title: string }>;
 }
 
 export function buildPaperNav(
   toc: PaperTocEntry[],
-  insertions: PaperNavInsertion[] | undefined,
+  activities: PaperNavActivity[] | undefined,
 ): PaperNavItem[] {
-  // Resolve every insertion to the toc index its block renders before.
-  // Ordering mirrors splitPaperHtml: position asc, deeper targets first,
-  // then document order. Unmatched sectionIds render at document end there,
-  // so they land at the end here too.
-  const resolved = (insertions ?? []).map((insertion, configIndex) => {
-    const i = toc.findIndex((entry) => entry.id === insertion.sectionId);
+  // Resolve every activity to the toc index its entries render before, with
+  // an intra-bucket sort key. Anchor-level activities come before the same
+  // bucket's section-end ones (they sit inside the section's own text);
+  // section-end ordering mirrors splitAtSectionEnds (deeper targets first).
+  const resolved = (activities ?? []).map((activity, configIndex) => {
+    if ("sectionEnd" in activity.after) {
+      const target = activity.after.sectionEnd;
+      const index = toc.findIndex((entry) => entry.id === target);
+      return {
+        activity,
+        beforeIndex: index === -1 ? toc.length : subtreeEndIndex(toc, index),
+        group: 1,
+        sort: [index === -1 ? Number.MAX_SAFE_INTEGER : -toc[index].level, index, configIndex],
+        level: index === -1 ? 2 : toc[index].level,
+      };
+    }
+    const section = sectionIndexForAnchor(toc, activity.after.anchor);
     return {
-      insertion,
-      beforeIndex: i === -1 ? toc.length : subtreeEndIndex(toc, i),
-      level: i === -1 ? 2 : toc[i].level,
-      docIndex: i === -1 ? toc.length + configIndex : i,
+      activity,
+      beforeIndex: section === -1 ? Math.min(1, toc.length) : section + 1,
+      group: 0,
+      sort: [anchorNum(activity.after.anchor), activity.after.s ?? Number.MAX_SAFE_INTEGER, configIndex],
+      level: section === -1 ? 2 : toc[section].level,
     };
   });
   resolved.sort(
     (a, b) =>
-      a.beforeIndex - b.beforeIndex || b.level - a.level || a.docIndex - b.docIndex,
+      a.beforeIndex - b.beforeIndex ||
+      a.group - b.group ||
+      a.sort[0] - b.sort[0] ||
+      a.sort[1] - b.sort[1] ||
+      a.sort[2] - b.sort[2],
   );
 
   const itemsBefore = new Map<number, PaperNavItem[]>();
-  for (const { insertion, beforeIndex, level } of resolved) {
+  for (const { activity, beforeIndex, level } of resolved) {
     const bucket = itemsBefore.get(beforeIndex) ?? [];
-    for (const item of insertion.items) {
+    for (const item of activity.items) {
+      const anchorId = insertionAnchorId(item);
+      const shared = { anchorId, title: item.title, level: level + 1 };
       bucket.push(
         item.kind === "lesson"
-          ? {
-              kind: "inserted-lesson",
-              anchorId: insertionAnchorId(item),
-              lessonId: item.id,
-              title: item.title,
-              level: level + 1,
-            }
-          : {
-              kind: "inserted-exercise",
-              anchorId: insertionAnchorId(item),
-              exerciseId: item.id,
-              title: item.title,
-              level: level + 1,
-            },
+          ? { kind: "inserted-lesson", lessonId: item.id, ...shared }
+          : item.kind === "demo"
+            ? { kind: "inserted-demo", demoId: item.id, ...shared }
+            : item.kind === "sequence"
+              ? { kind: "inserted-sequence", ...shared }
+              : { kind: "inserted-exercise", exerciseId: item.id, ...shared },
       );
     }
     itemsBefore.set(beforeIndex, bucket);

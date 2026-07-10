@@ -1,7 +1,11 @@
 import { describe, expect, it } from "vitest";
 import type { PaperTocEntry } from "@/lib/arxiv/types";
-import type { PaperInsertion } from "@/lib/content/types";
-import { insertionAnchorId, splitPaperHtml, subtreeEndIndex } from "./split-paper";
+import {
+  insertionAnchorId,
+  splitPaperHtml,
+  subtreeEndIndex,
+  type SectionEndInsertion,
+} from "./split-paper";
 
 // Mirrors real converter output shape: landmark sections with stamped ids,
 // top-level h2/h3 section headings with ax-sec ids and secnum spans.
@@ -24,7 +28,7 @@ const TOC: PaperTocEntry[] = [
   { kind: "references", id: "ax-references", title: "References", number: "", level: 2 },
 ];
 
-const ins = (sectionId: string, id = "x"): PaperInsertion => ({
+const ins = (sectionId: string, id = "x"): SectionEndInsertion => ({
   sectionId,
   items: [{ kind: "exercise", id }],
 });

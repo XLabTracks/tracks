@@ -61,6 +61,7 @@ export function extractToc(tree: Root): PaperTocEntry[] {
         id: typeof stamped === "string" ? stamped : landmark.id,
         number: "",
         level: 2,
+        anchor: firstAnchorOf(node),
       });
       continue;
     }
@@ -83,6 +84,7 @@ export function extractToc(tree: Root): PaperTocEntry[] {
       title,
       number,
       level: Number(node.tagName[1]),
+      anchor: anchorOf(node),
     });
   }
   return toc;
@@ -95,6 +97,23 @@ function landmarkOf(
   return classListOf(node)
     .map((cls) => LANDMARK_CLASSES[cls])
     .find(Boolean);
+}
+
+function anchorOf(node: Element): string | undefined {
+  const anchor = node.properties?.dataAnchor;
+  return typeof anchor === "string" ? anchor : undefined;
+}
+
+/** First anchored descendant (landmark sections carry no anchor themselves). */
+function firstAnchorOf(node: Element): string | undefined {
+  const own = anchorOf(node);
+  if (own) return own;
+  for (const child of node.children) {
+    if (child.type !== "element") continue;
+    const found = firstAnchorOf(child);
+    if (found) return found;
+  }
+  return undefined;
 }
 
 function isSecnumSpan(node: ElementContent): node is Element {

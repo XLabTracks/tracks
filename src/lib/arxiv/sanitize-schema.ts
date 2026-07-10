@@ -41,7 +41,9 @@ export const paperSanitizeSchema: Schema = {
     img: ["src", "alt"],
     td: ["colSpan", "rowSpan", "dataAxBg"],
     th: ["colSpan", "rowSpan", "dataAxBg"],
-    span: ["id", "dataAxFg"],
+    // dataS (sentence spans) is stamped post-sanitize like dataAnchor;
+    // listed for consistency only.
+    span: ["id", "dataAxFg", "dataS"],
     h1: ["id"],
     h2: ["id"],
     h3: ["id"],

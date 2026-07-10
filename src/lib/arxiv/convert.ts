@@ -7,6 +7,7 @@ import { sanitize } from "hast-util-sanitize";
 import { toHtml } from "hast-util-to-html";
 import { VFile } from "vfile";
 import { addAnchors, applyResolvedColors, styleToClass } from "./hast-passes";
+import { wrapSentences } from "./sentences";
 import { extractToc, stampLandmarkIds } from "./toc";
 import type { ArxivId } from "./id";
 import { renderMathInHast } from "./katex";
@@ -144,6 +145,9 @@ export function convertLatexToHtml(
   styleToClass(hastTree);
   const clean = sanitize(hastTree, paperSanitizeSchema) as HastRoot;
   addAnchors(clean);
+  // Pre-KaTeX (tree is ~10× smaller; .inline-math spans are opaque units
+  // holding raw TeX) and post-anchors so sentences bind to their blocks.
+  wrapSentences(clean);
   stampLandmarkIds(clean);
   // Before the KaTeX pass, so titles with inline math extract as readable
   // TeX text rather than KaTeX markup.
@@ -267,12 +271,24 @@ function orphanCaptionReplacement(node: Ast.Macro): Ast.Node {
 }
 
 function abstractReplacement(env: Ast.Environment): Ast.Macro {
+  // Paragraph-wrap the body (split at parbreaks): bare prose in the section
+  // would get no data-anchor and no sentence spans, making the abstract —
+  // a prime editorial target — unaddressable by paper edits.
+  const paragraphs: Ast.Node[][] = [[]];
+  for (const node of env.content) {
+    if (node.type === "parbreak") paragraphs.push([]);
+    else paragraphs[paragraphs.length - 1].push(node);
+  }
   return htmlLike({
     tag: "section",
     attributes: { className: "ax-abstract" },
     content: [
       htmlLike({ tag: "h2", content: [texString("Abstract")] }),
-      ...env.content,
+      ...paragraphs
+        .filter((nodes) =>
+          nodes.some((n) => n.type !== "whitespace" && n.type !== "comment"),
+        )
+        .map((nodes) => htmlLike({ tag: "p", content: nodes })),
     ],
   });
 }

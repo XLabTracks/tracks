@@ -363,3 +363,119 @@
     text-align: left;
   }
 }
+
+/* Paper edits (v17+): hidden content markers and editorial additions.
+   Zero client JS — native <details> for block hides, checkbox-toggle CSS for
+   inline (sentence) hides; editorial voice uses --primary navy, never the
+   destructive red. */
+@layer components {
+  /* Block-level hide: <details class="ax-hidden"> with a pill summary. */
+  .arxiv-paper .ax-hidden {
+    margin: 0.75em 0;
+  }
+  .arxiv-paper .ax-hidden > summary {
+    cursor: pointer;
+    list-style: none;
+    user-select: none;
+    text-align: center;
+    color: var(--muted-foreground);
+    font-size: 0.8125em;
+    border: 1px dashed var(--border);
+    border-radius: var(--radius-md, 8px);
+    padding: 0.2em 0.75em;
+  }
+  .arxiv-paper .ax-hidden > summary::-webkit-details-marker {
+    display: none;
+  }
+  .arxiv-paper .ax-hidden[open] > summary {
+    margin-bottom: 0.75em;
+    opacity: 0.7;
+  }
+
+  /* Sentence-level hide: checkbox-toggle (inline <details> is invalid HTML).
+     The revealed content sits OUTSIDE the label so selecting it doesn't
+     re-collapse; only the ··· pill toggles. */
+  .arxiv-paper .ax-hidden-inline .ax-hidden-toggle {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap; /* visually hidden, still focusable */
+  }
+  .arxiv-paper .ax-hidden-inline label {
+    cursor: pointer;
+  }
+  .arxiv-paper .ax-hidden-marker {
+    color: var(--muted-foreground);
+    font-size: 0.8125em;
+    border: 1px dashed var(--border);
+    border-radius: 6px;
+    padding: 0 0.45em;
+  }
+  .arxiv-paper .ax-hidden-toggle:focus-visible + .ax-hidden-marker {
+    outline: 2px solid var(--ring);
+    outline-offset: 2px;
+  }
+  .arxiv-paper .ax-hidden-content {
+    display: none;
+  }
+  .arxiv-paper .ax-hidden-inline:has(.ax-hidden-toggle:checked) .ax-hidden-content {
+    display: inline;
+  }
+  .arxiv-paper .ax-hidden-inline:has(.ax-hidden-toggle:checked) .ax-hidden-marker {
+    opacity: 0.6;
+  }
+
+  /* Editorial additions: block notes and inline asides. */
+  .arxiv-paper .ax-added {
+    border-left: 3px solid var(--primary);
+    background: color-mix(in srgb, var(--primary) 4%, transparent);
+    border-radius: 0 var(--radius-md, 8px) var(--radius-md, 8px) 0;
+    margin: 1em 0;
+    padding: 0.6em 1em;
+  }
+  .arxiv-paper .ax-added-label {
+    display: block;
+    color: var(--primary);
+    opacity: 0.75;
+    font-size: 0.72em;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    margin-bottom: 0.15em;
+  }
+  .arxiv-paper .ax-added > p:first-of-type {
+    margin-top: 0;
+  }
+  .arxiv-paper .ax-added > :last-child {
+    margin-bottom: 0;
+  }
+  .arxiv-paper .ax-added-inline {
+    background: color-mix(in srgb, var(--primary) 7%, transparent);
+    border-bottom: 1px dashed color-mix(in srgb, var(--primary) 45%, transparent);
+    border-radius: 3px;
+    padding: 0 0.15em;
+    box-decoration-break: clone;
+    -webkit-box-decoration-break: clone;
+  }
+}
+
+/* mdframed callout boxes (v19) — e.g. the AI Control paper's blue-team /
+   red-team protocol boxes, tinted by the source's linecolor when known. */
+@layer components {
+  .arxiv-paper .ax-mdframed {
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md, 8px);
+    margin: 1em 0;
+    padding: 0.35em 1em;
+  }
+  .arxiv-paper .ax-mdframed-blue {
+    border-color: color-mix(in srgb, #4a7bd9 50%, transparent);
+    background: color-mix(in srgb, #4a7bd9 5%, transparent);
+  }
+  .arxiv-paper .ax-mdframed-red {
+    border-color: color-mix(in srgb, var(--destructive) 40%, transparent);
+    background: color-mix(in srgb, var(--destructive) 4%, transparent);
+  }
+}

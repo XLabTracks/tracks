@@ -1,11 +1,19 @@
 import type { PaperTocEntry } from "@/lib/arxiv/types";
-import type { PaperInsertion, PaperInsertionItem } from "@/lib/content/types";
+import type { PaperInsertionItem } from "@/lib/content/types";
 
 // Splits a converted paper's HTML at end-of-section boundaries so activity
 // blocks (exercise cards, inline lessons) can be interleaved into the flow.
 // Driven entirely by the artifact's precomputed toc: every toc entry is a
 // TOP-LEVEL element in the serialized HTML (see src/lib/arxiv/toc.ts), so
 // slicing at an entry's start offset can never land inside another element.
+// This is "tier 1" of the paper edit pipeline — apply-edits.ts composes it
+// with block/sentence-level patching.
+
+/** A section-end activity group (from `{op:"activity", after:{sectionEnd}}` edits). */
+export interface SectionEndInsertion {
+  sectionId: string;
+  items: PaperInsertionItem[];
+}
 
 export interface PaperInsertionPoint {
   sectionId: string;
@@ -17,7 +25,7 @@ export interface PaperSplit {
   segments: string[];
   points: PaperInsertionPoint[];
   /** Insertions whose sectionId matched no locatable toc entry (fail-soft). */
-  unmatched: PaperInsertion[];
+  unmatched: SectionEndInsertion[];
 }
 
 /**
@@ -34,6 +42,7 @@ export function subtreeEndIndex(toc: PaperTocEntry[], i: number): number {
 
 /** Stable DOM id for an insertion block; shared by PaperReader and the sidebar nav. */
 export function insertionAnchorId(item: PaperInsertionItem): string {
+  if (item.kind === "sequence") return `ins-sequence-${item.exerciseIds[0] ?? "empty"}`;
   return `ins-${item.kind}-${item.id}`;
 }
 
@@ -44,6 +53,10 @@ export function insertionAnchorId(item: PaperInsertionItem): string {
  * (quotes are not escaped there), so require that we're inside an open tag
  * and that the tag is one a toc entry can be (h2–h4 or a landmark section).
  */
+export function sectionStartOffset(html: string, id: string): number {
+  return entryStartOffset(html, id);
+}
+
 function entryStartOffset(html: string, id: string): number {
   const needle = ` id="${id}"`;
   let from = 0;
@@ -59,12 +72,30 @@ function entryStartOffset(html: string, id: string): number {
   }
 }
 
-export function splitPaperHtml(
+export interface SectionEndEntry<T> {
+  sectionId: string;
+  payload: T;
+}
+
+export interface SectionSplit<T> {
+  /** segments.length === points.length + 1; points[i] sits between segments[i] and segments[i+1]. */
+  segments: string[];
+  points: Array<{ sectionId: string; payloads: T[] }>;
+  unmatched: Array<SectionEndEntry<T>>;
+}
+
+/**
+ * Generic section-subtree-end splitter: each entry's payload lands at the
+ * end of its toc entry's subtree; same-section entries merge in input order.
+ * splitPaperHtml wraps this for plain activity items; apply-edits.ts uses it
+ * with whole PaperEdit payloads (section-end adds AND activities).
+ */
+export function splitAtSectionEnds<T>(
   html: string,
   toc: PaperTocEntry[],
-  insertions: PaperInsertion[] | undefined,
-): PaperSplit {
-  if (!insertions?.length) return { segments: [html], points: [], unmatched: [] };
+  entries: Array<SectionEndEntry<T>>,
+): SectionSplit<T> {
+  if (entries.length === 0) return { segments: [html], points: [], unmatched: [] };
 
   const startOffsets = toc.map((entry) => entryStartOffset(html, entry.id));
 
@@ -76,48 +107,74 @@ export function splitPaperHtml(
     return html.length;
   };
 
-  // Resolve each insertion to a boundary; merge duplicates targeting the same
-  // section (items in config order).
+  // Resolve each entry to a boundary; merge duplicates targeting the same
+  // section (payloads in input order).
   const bySection = new Map<
     string,
-    { offset: number; level: number; docIndex: number; items: PaperInsertionItem[] }
+    { offset: number; level: number; docIndex: number; payloads: T[] }
   >();
-  const unmatched: PaperInsertion[] = [];
-  for (const insertion of insertions) {
-    const i = toc.findIndex((entry) => entry.id === insertion.sectionId);
+  const unmatched: Array<SectionEndEntry<T>> = [];
+  for (const entry of entries) {
+    const i = toc.findIndex((e) => e.id === entry.sectionId);
     if (i === -1 || startOffsets[i] === -1) {
-      unmatched.push(insertion);
+      unmatched.push(entry);
       continue;
     }
-    const existing = bySection.get(insertion.sectionId);
+    const existing = bySection.get(entry.sectionId);
     if (existing) {
-      existing.items.push(...insertion.items);
+      existing.payloads.push(entry.payload);
     } else {
-      bySection.set(insertion.sectionId, {
+      bySection.set(entry.sectionId, {
         offset: subtreeEndOffset(i),
         level: toc[i].level,
         docIndex: i,
-        items: [...insertion.items],
+        payloads: [entry.payload],
       });
     }
   }
 
   // Deeper sections first when boundaries coincide (the end of 3.2 and the
-  // end of 3 can be the same offset — the subsection's activities belong
+  // end of 3 can be the same offset — the subsection's payloads belong
   // above the parent's); document order breaks remaining ties.
   const ordered = [...bySection.entries()].sort(
     ([, a], [, b]) => a.offset - b.offset || b.level - a.level || a.docIndex - b.docIndex,
   );
 
   const segments: string[] = [];
-  const points: PaperInsertionPoint[] = [];
+  const points: Array<{ sectionId: string; payloads: T[] }> = [];
   let prev = 0;
   for (const [sectionId, point] of ordered) {
     segments.push(html.slice(prev, point.offset));
-    points.push({ sectionId, items: point.items });
+    points.push({ sectionId, payloads: point.payloads });
     prev = point.offset;
   }
   segments.push(html.slice(prev));
 
   return { segments, points, unmatched };
+}
+
+export function splitPaperHtml(
+  html: string,
+  toc: PaperTocEntry[],
+  insertions: SectionEndInsertion[] | undefined,
+): PaperSplit {
+  const split = splitAtSectionEnds(
+    html,
+    toc,
+    (insertions ?? []).map((insertion) => ({
+      sectionId: insertion.sectionId,
+      payload: insertion.items,
+    })),
+  );
+  return {
+    segments: split.segments,
+    points: split.points.map((point) => ({
+      sectionId: point.sectionId,
+      items: point.payloads.flat(),
+    })),
+    unmatched: split.unmatched.map((entry) => ({
+      sectionId: entry.sectionId,
+      items: entry.payload,
+    })),
+  };
 }

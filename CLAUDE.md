@@ -6,7 +6,10 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 Tracks is an AI-safety learning platform (Khan Academy–style) with two tracks —
 **Control** (technical) and **Governance**. Content is placeholder lorem ipsum;
-do not invent real curriculum.
+do not invent real curriculum. The **Example track** (`ex-content`/`ex-assess`)
+is the live reference for every content feature; `AUTHORING.md` is the
+step-by-step guide for adding content (its rules are enforced by
+`src/lib/content/content.test.ts`).
 
 ## Commands
 
@@ -18,8 +21,15 @@ do not invent real curriculum.
 - `npm run typecheck` — `tsc --noEmit` (do this after edits; the build also type-checks)
 - `npm run lint` — ESLint
 - `npm run test` — Vitest (all). Single file: `npx vitest run src/lib/content/exercise-view.test.ts`; by name: `npx vitest run -t "gradeChoice"`
+- `npm run arxiv:build` — convert every arXiv paper the content references into
+  committed artifacts (`src/content/arxiv/*.json` + `public/arxiv/*`; network,
+  authoring-time only). `-- --id <id>` builds one paper; `-- --toc <id>` /
+  `-- --blocks <id> [--section <toc-id>]` print section ids / block anchors +
+  sentences from the committed artifact (offline — the source for edit targets).
 - `npx prisma generate` — regenerate the client after editing `prisma/schema.prisma`.
   Do **not** run `prisma migrate` against the hosted DB (see Database & deploy).
+- `npm run cf-typegen` — regenerate `cloudflare-env.d.ts` after changing
+  bindings in `wrangler.jsonc`.
 
 Setup: `cp .env.example .env`, then fill the `WORKOS_*` values (AuthKit, Google
 enabled, redirect `/callback`) and `DATABASE_URL` (see `.env.example`). Public
@@ -57,25 +67,52 @@ pages render without any of this; auth + persistence do not.
   (lessons, papers, and papers' inserted lessons each count as one unit).
 
 **Papers.** A `Paper` (`src/content/papers.data.ts`) is a module item that
-renders an arXiv paper full-page from its precomputed artifact, with exercises
-and inline lessons spliced in at section ends (`insertions`, keyed by the
-artifact's toc section ids). `src/lib/papers/split-paper.ts` slices the
-artifact HTML; `src/lib/papers/paper-nav.ts` builds the sidebar's per-paper
-section tree (scroll-spy in `src/components/layout/use-scroll-spy.ts`).
-Artifacts precompute at authoring time via `npm run arxiv:build` (also prints
-section ids; `-- --toc <id>` re-prints from the committed artifact).
+renders an arXiv paper full-page from its precomputed artifact, editable via
+`Paper.edits`: hide sentences/paragraphs behind expandable markers, add
+editorial markdown (navy "Note" styling), and splice activities (exercises /
+inline lessons) at section ends, between blocks, or mid-paragraph. Targets key
+on stable `data-anchor`/`data-s` values plus a required `snippet` drift
+tripwire (validated by content.test.ts). `src/lib/papers/apply-edits.ts`
+patches only edited sections (HAST tree ops; unedited papers keep the string
+fast path via `split-paper.ts`); `paper-nav.ts` builds the sidebar's per-paper
+section tree (scroll-spy in `src/components/layout/use-scroll-spy.ts`). The
+LaTeX→HTML converter lives in `src/lib/arxiv/` and runs ONLY at authoring time
+(`npm run arxiv:build`) — never in the deployed worker. When changing converter
+output shape, bump `CONVERTER_VERSION` (`src/lib/arxiv/types.ts`) and ship the
+rebuilt artifacts in the same commit: stale artifacts read as "not-built" at
+runtime and fail content.test.ts, and anchors/sentence indices may renumber
+(the snippet tripwires name every content edit that drifted).
+
+**Routing (tracks).** `/tracks/[trackSlug]/[moduleSlug]/[itemSlug]` is one
+dispatching route serving both lessons and papers (they share a slug
+namespace); the static sibling segment `assessment` is reserved. The
+`[trackSlug]` layout owns the sidebar; active-item detection is client-side
+via `usePathname()` (layouts can't see deeper params).
 
 **MDX pipeline.** `src/mdx-components.tsx` wires the global component map from
 `src/components/mdx/mdx-components.tsx`. `LessonContent` dynamically imports
 `src/content/lessons/${contentRef}.mdx`, so authors embed `<Video/>`, `<Demo/>`,
-`<Exercise/>`, `<Callout/>` by name inside lesson text.
+`<Exercise/>`, `<Callout/>`, `<ArxivPaper/>` (collapsible card — distinct from
+full-page Paper items), and `<Footnote/>` by name inside lesson text.
 
 **Exercises & writing (security-relevant).** Closed-exercise answer keys are
-server-only: `toPublicChoice()` strips `correctOptionIds` before they reach the
-client, and `gradeExercise` (a server action) grades + persists. Never pass answer
-keys into client components. `WritingEditor` is the one editor reused by inline
-writing exercises and end-of-module assessments; persistence is done
-by `.bind()`-ing server actions in a server component and passing them as props.
+server-only: `toPublicChoice()` / `toPublicFlowchart()` strip `correctOptionIds`
+/ stage `solution`s before they reach the client, and the server actions
+(`gradeExercise`, `gradeFlowchartStage` — which sanitizes the POSTed attempt
+tree — and `recordTapReveal`) grade + persist. Never pass answer keys into
+client components (`tap-reveal` answers, `understanding-check` sample
+answers, and whole `allocation`/`argue-reveal` definitions ship to the client
+by design — self-assessment; they persist via `saveAllocationScenario` /
+`saveArgueRevealItem` + `saveArgueRevealConstruction`).
+Standalone exercises can surface on the `/exercises` tab via the curated
+`featuredExercises` list in `src/app/exercises/featured.ts`. `WritingEditor` is the
+one editor reused by inline writing exercises and end-of-module assessments;
+persistence is done by `.bind()`-ing server actions in a server component and
+passing them as props. Exercise prompt/answer strings render `$…$` math via
+`MathText`; lesson MDX math uses remark-math + rehype-katex.
+`src/lib/control-model/` is the pure closed-form model behind the Control
+track's demos — its calibration test pins the paper's headline numbers (±4pp);
+plan-level rationale lives in the demos, the code + test are normative.
 
 **Auth & mutations.** WorkOS AuthKit. `src/middleware.ts` only refreshes the session.
 `getCurrentUser()` / `requireUser()` (`src/lib/auth.ts`, `cache()`-wrapped per
@@ -113,7 +150,11 @@ self-contained client component registered by id, embeddable in MDX, the `/demos
 gallery, a standalone page, and the chrome-less `/demos/[id]/embed` iframe route
 (which is excluded from the proxy matcher).
 
-**Prerequisites (per-track config).** `Track.prerequisiteEnforcement`
-is `soft` (warn) or `hard` (lock); `isAccessLocked()` (pure, tested) +
-`getPrerequisiteStatus()` drive the lock, and the lesson page redirects on hard
-locks. Prerequisites may be cross-track.
+**Prerequisites & progress.** `Track.prerequisiteEnforcement` is `soft` (warn)
+or `hard` (lock); `isAccessLocked()` (pure, tested) + `getPrerequisiteStatus()`
+drive the lock, and the item page redirects signed-in learners on hard locks
+(signed-out visitors may preview). Prerequisites may be cross-track. Progress
+units are lessons, papers, and papers' inserted lessons — see
+`getModuleProgressContentIds` in `src/lib/content/` — assessments never gate
+completion; an item's sidebar checkmark lights only when all of its units are
+complete.

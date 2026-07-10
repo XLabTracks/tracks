@@ -1,6 +1,21 @@
 import { describe, it, expect } from "vitest";
-import { gradeChoice, toPublicChoice } from "@/lib/content/exercise-view";
-import type { ChoiceExercise } from "@/lib/content/types";
+import {
+  ALLOCATION_MAX_REASONING_CHARS,
+  flowchartEquals,
+  gradeChoice,
+  gradeFlowchartStage,
+  sanitizeAllocationScenario,
+  sanitizeArgueRevealConstruction,
+  sanitizeArgueRevealItem,
+  toPublicChoice,
+  toPublicFlowchart,
+} from "@/lib/content/exercise-view";
+import type {
+  AllocationExercise,
+  ArgueRevealExercise,
+  ChoiceExercise,
+  FlowchartExercise,
+} from "@/lib/content/types";
 
 const mc: ChoiceExercise = {
   id: "mc",
@@ -68,5 +83,455 @@ describe("toPublicChoice", () => {
 
   it("flags multi-select as multiple", () => {
     expect(toPublicChoice(ms).multiple).toBe(true);
+  });
+
+  it("defaults monospaceOptions to false when unset", () => {
+    expect(toPublicChoice(mc).monospaceOptions).toBe(false);
+  });
+
+  it("passes monospaceOptions through when set", () => {
+    expect(toPublicChoice({ ...mc, monospaceOptions: true }).monospaceOptions).toBe(true);
+  });
+});
+
+const flow: FlowchartExercise = {
+  id: "flow",
+  type: "flowchart",
+  prompt: "?",
+  palette: [
+    { id: "write", kind: "step", label: "Write" },
+    { id: "rate", kind: "step", label: "Rate" },
+    {
+      id: "split",
+      kind: "branch",
+      label: "Rank?",
+      branchLabels: ["Top", "Rest"],
+    },
+    { id: "audit", kind: "terminal", label: "Audit" },
+    { id: "submit", kind: "terminal", label: "Submit" },
+  ],
+  stages: [
+    {
+      id: "s1",
+      title: "Stage 1",
+      description: "Write, rate, split.",
+      solution: [
+        { blockId: "write" },
+        { blockId: "rate" },
+        {
+          blockId: "split",
+          branches: [[{ blockId: "audit" }], [{ blockId: "submit" }]],
+        },
+      ],
+      explanation: "because",
+    },
+  ],
+};
+
+describe("flowchartEquals", () => {
+  const solution = flow.stages[0].solution;
+
+  it("accepts a structurally identical chart", () => {
+    expect(flowchartEquals(solution, structuredClone(solution))).toBe(true);
+  });
+
+  it("treats omitted and empty branches as equivalent", () => {
+    expect(
+      flowchartEquals([{ blockId: "write" }], [{ blockId: "write", branches: [] }]),
+    ).toBe(true);
+  });
+
+  it("rejects wrong block order", () => {
+    const swapped = structuredClone(solution);
+    [swapped[0], swapped[1]] = [swapped[1], swapped[0]];
+    expect(flowchartEquals(solution, swapped)).toBe(false);
+  });
+
+  it("rejects swapped branch arms", () => {
+    const swapped = structuredClone(solution);
+    swapped[2].branches!.reverse();
+    expect(flowchartEquals(solution, swapped)).toBe(false);
+  });
+
+  it("rejects missing or extra nodes", () => {
+    expect(flowchartEquals(solution, solution.slice(0, 2))).toBe(false);
+    expect(
+      flowchartEquals(solution, [...solution, { blockId: "submit" }]),
+    ).toBe(false);
+  });
+});
+
+describe("gradeFlowchartStage", () => {
+  it("grades against the stage's solution", () => {
+    expect(
+      gradeFlowchartStage(flow, "s1", structuredClone(flow.stages[0].solution)),
+    ).toBe(true);
+    expect(gradeFlowchartStage(flow, "s1", [{ blockId: "submit" }])).toBe(false);
+  });
+
+  it("fails an unknown stage", () => {
+    expect(gradeFlowchartStage(flow, "nope", [])).toBe(false);
+  });
+});
+
+describe("toPublicFlowchart", () => {
+  it("strips solutions and explanations from stages", () => {
+    const pub = toPublicFlowchart(flow);
+    expect(pub.palette).toHaveLength(5);
+    expect(pub.stages).toHaveLength(1);
+    expect(pub.stages[0]).not.toHaveProperty("solution");
+    expect(pub.stages[0]).not.toHaveProperty("explanation");
+    expect(pub.stages[0].description).toBe("Write, rate, split.");
+  });
+});
+
+const alloc: AllocationExercise = {
+  id: "alloc",
+  type: "allocation",
+  title: "Allocate",
+  prompt: "?",
+  agendas: [
+    { id: "x", label: "X" },
+    { id: "y", label: "Y" },
+    { id: "z", label: "Z" },
+  ],
+  scenarios: [
+    { id: "s1", title: "Scenario 1", description: "First." },
+    { id: "s2", title: "Scenario 2", description: "Second." },
+  ],
+  totalPeople: 10,
+  step: 0.5,
+  minReasoningChars: 10,
+};
+
+describe("sanitizeAllocationScenario", () => {
+  const good = { x: 4.5, y: 5.5, z: 0 };
+  const why = "long enough reasoning";
+
+  it("accepts a valid scenario attempt", () => {
+    expect(sanitizeAllocationScenario(alloc, "s1", good, why)).toEqual({
+      allocation: good,
+      reasoning: why,
+    });
+  });
+
+  it("rejects an unknown scenario id", () => {
+    expect(sanitizeAllocationScenario(alloc, "nope", good, why)).toBeNull();
+    expect(sanitizeAllocationScenario(alloc, 3, good, why)).toBeNull();
+  });
+
+  it("requires exactly the exercise's agenda ids", () => {
+    expect(
+      sanitizeAllocationScenario(alloc, "s1", { x: 5, y: 5 }, why),
+    ).toBeNull();
+    expect(
+      sanitizeAllocationScenario(alloc, "s1", { ...good, extra: 0 }, why),
+    ).toBeNull();
+    expect(
+      sanitizeAllocationScenario(alloc, "s1", { x: 5, y: 5, w: 0 }, why),
+    ).toBeNull();
+    expect(sanitizeAllocationScenario(alloc, "s1", null, why)).toBeNull();
+  });
+
+  it("requires the pool to be exactly spent", () => {
+    expect(
+      sanitizeAllocationScenario(alloc, "s1", { x: 4, y: 5.5, z: 0 }, why),
+    ).toBeNull();
+    expect(
+      sanitizeAllocationScenario(alloc, "s1", { x: 5, y: 5.5, z: 0 }, why),
+    ).toBeNull();
+  });
+
+  it("rejects values off the step grid, negative, or non-finite", () => {
+    expect(
+      sanitizeAllocationScenario(alloc, "s1", { x: 4.3, y: 5.7, z: 0 }, why),
+    ).toBeNull();
+    expect(
+      sanitizeAllocationScenario(alloc, "s1", { x: 12, y: -2, z: 0 }, why),
+    ).toBeNull();
+    expect(
+      sanitizeAllocationScenario(alloc, "s1", { x: NaN, y: 10, z: 0 }, why),
+    ).toBeNull();
+    expect(
+      sanitizeAllocationScenario(alloc, "s1", { x: "5", y: 5, z: 0 }, why),
+    ).toBeNull();
+  });
+
+  it("rejects a single value above the pool even if compensated", () => {
+    expect(
+      sanitizeAllocationScenario(alloc, "s1", { x: 10.5, y: -0.5, z: 0 }, why),
+    ).toBeNull();
+  });
+
+  it("snaps epsilon-off values back onto the step grid", () => {
+    const entry = sanitizeAllocationScenario(
+      alloc,
+      "s1",
+      { x: 4.5000000001, y: 5.4999999999, z: 0 },
+      why,
+    );
+    expect(entry?.allocation).toEqual({ x: 4.5, y: 5.5, z: 0 });
+  });
+
+  it("rejects reasoning that can't be stored as jsonb", () => {
+    const pad = "a".repeat(20);
+    expect(
+      sanitizeAllocationScenario(alloc, "s1", good, `${pad}\u0000`),
+    ).toBeNull();
+    expect(
+      sanitizeAllocationScenario(alloc, "s1", good, `${pad}\uD800`),
+    ).toBeNull();
+    expect(
+      sanitizeAllocationScenario(alloc, "s1", good, `${pad}\uDC00${pad}`),
+    ).toBeNull();
+    // Well-formed astral pairs are fine.
+    expect(
+      sanitizeAllocationScenario(alloc, "s1", good, `${pad} 👍 ${pad}`),
+    ).not.toBeNull();
+  });
+
+
+  it("enforces reasoning length bounds", () => {
+    expect(sanitizeAllocationScenario(alloc, "s1", good, "short")).toBeNull();
+    expect(sanitizeAllocationScenario(alloc, "s1", good, "         \n ")).toBeNull();
+    expect(sanitizeAllocationScenario(alloc, "s1", good, 42)).toBeNull();
+    expect(
+      sanitizeAllocationScenario(
+        alloc,
+        "s1",
+        good,
+        "a".repeat(ALLOCATION_MAX_REASONING_CHARS + 1),
+      ),
+    ).toBeNull();
+  });
+
+  it("defaults the step to halves and the reasoning minimum to zero", () => {
+    const bare: AllocationExercise = {
+      ...alloc,
+      step: undefined,
+      minReasoningChars: undefined,
+    };
+    expect(sanitizeAllocationScenario(bare, "s1", good, "")).toEqual({
+      allocation: good,
+      reasoning: "",
+    });
+    expect(
+      sanitizeAllocationScenario(bare, "s1", { x: 4.25, y: 5.75, z: 0 }, ""),
+    ).toBeNull();
+  });
+});
+
+const argue: ArgueRevealExercise = {
+  id: "argue",
+  type: "argue-reveal",
+  title: "Respond",
+  prompt: "?",
+  conceptsPrompt: "Which ideas?",
+  concepts: [
+    { id: "c1", label: "C1", tip: "tip 1" },
+    { id: "c2", label: "C2", tip: "tip 2" },
+  ],
+  toolboxLabel: "Toolbox",
+  toolbox: [{ heading: "H", text: "T" }],
+  items: [
+    {
+      id: "one",
+      label: "one",
+      title: "Item 1",
+      rounds: [{ critique: "crit", reveal: "reveal" }],
+    },
+    {
+      id: "two",
+      label: "two",
+      title: "Item 2",
+      rounds: [
+        { critique: "crit a", reveal: "reveal a" },
+        { critique: "crit b", reveal: "reveal b" },
+      ],
+    },
+  ],
+  revealFraming: "One response:",
+  postRevealPrompt: "Does it answer?",
+  construction: {
+    intro: "Build your own.",
+    surfaces: [
+      { id: "s1", text: "Surface 1" },
+      { id: "s2", text: "Surface 2" },
+    ],
+  },
+  responseMinChars: 10,
+  responseMaxChars: 50,
+  residualMinChars: 5,
+  residualMaxChars: 20,
+  noteMaxChars: 15,
+};
+
+describe("sanitizeArgueRevealItem", () => {
+  const round = {
+    chips: ["c1"],
+    response: "long enough answer",
+    toolboxOpened: false,
+  };
+
+  it("accepts a valid single-round item", () => {
+    expect(
+      sanitizeArgueRevealItem(argue, "one", [round], "partially", "why"),
+    ).toEqual({ rounds: [round], rating: "partially", note: "why" });
+  });
+
+  it("requires one entry per authored round", () => {
+    expect(sanitizeArgueRevealItem(argue, "two", [round], "fully", "")).toBeNull();
+    expect(
+      sanitizeArgueRevealItem(argue, "one", [round, round], "fully", ""),
+    ).toBeNull();
+  });
+
+  it("rejects unknown items, ratings, and chips", () => {
+    expect(sanitizeArgueRevealItem(argue, "nope", [round], "fully", "")).toBeNull();
+    expect(sanitizeArgueRevealItem(argue, "one", [round], "sorta", "")).toBeNull();
+    expect(
+      sanitizeArgueRevealItem(
+        argue,
+        "one",
+        [{ ...round, chips: ["c1", "bogus"] }],
+        "fully",
+        "",
+      ),
+    ).toBeNull();
+  });
+
+  it("dedupes chips and enforces response bounds", () => {
+    const entry = sanitizeArgueRevealItem(
+      argue,
+      "one",
+      [{ ...round, chips: ["c1", "c1"] }],
+      "fully",
+      "",
+    );
+    expect(entry?.rounds[0].chips).toEqual(["c1"]);
+    expect(
+      sanitizeArgueRevealItem(
+        argue,
+        "one",
+        [{ ...round, response: "short" }],
+        "fully",
+        "",
+      ),
+    ).toBeNull();
+    expect(
+      sanitizeArgueRevealItem(
+        argue,
+        "one",
+        [{ ...round, response: "x".repeat(51) }],
+        "fully",
+        "",
+      ),
+    ).toBeNull();
+  });
+
+  it("enforces the note cap and storable text", () => {
+    expect(
+      sanitizeArgueRevealItem(argue, "one", [round], "fully", "x".repeat(16)),
+    ).toBeNull();
+    expect(
+      sanitizeArgueRevealItem(
+        argue,
+        "one",
+        [round],
+        "fully",
+        "ok" + String.fromCharCode(0),
+      ),
+    ).toBeNull();
+  });
+
+  it("rejects non-boolean toolboxOpened and oversized chip arrays", () => {
+    expect(
+      sanitizeArgueRevealItem(
+        argue,
+        "one",
+        [{ ...round, toolboxOpened: "yes" }],
+        "fully",
+        "",
+      ),
+    ).toBeNull();
+    expect(
+      sanitizeArgueRevealItem(
+        argue,
+        "one",
+        [{ ...round, chips: ["c1", "c2", "c1"] }],
+        "fully",
+        "",
+      ),
+    ).toBeNull();
+  });
+
+  it("applies the documented default bounds when none are authored", () => {
+    const bare: ArgueRevealExercise = {
+      ...argue,
+      responseMinChars: undefined,
+      responseMaxChars: undefined,
+      residualMinChars: undefined,
+      residualMaxChars: undefined,
+      noteMaxChars: undefined,
+    };
+    const shortResponse = { ...round, response: "x".repeat(79) };
+    const okResponse = { ...round, response: "x".repeat(80) };
+    expect(
+      sanitizeArgueRevealItem(bare, "one", [shortResponse], "fully", ""),
+    ).toBeNull();
+    expect(
+      sanitizeArgueRevealItem(bare, "one", [okResponse], "fully", ""),
+    ).not.toBeNull();
+    expect(
+      sanitizeArgueRevealItem(bare, "one", [okResponse], "fully", "n".repeat(201)),
+    ).toBeNull();
+    expect(
+      sanitizeArgueRevealConstruction(bare, {
+        attackSurface: "s1",
+        argument: "a".repeat(80),
+        bestResponse: "b".repeat(80),
+        residual: "r".repeat(29),
+      }),
+    ).toBeNull();
+    expect(
+      sanitizeArgueRevealConstruction(bare, {
+        attackSurface: "s1",
+        argument: "a".repeat(80),
+        bestResponse: "b".repeat(80),
+        residual: "r".repeat(30),
+      }),
+    ).not.toBeNull();
+  });
+});
+
+describe("sanitizeArgueRevealConstruction", () => {
+  const good = {
+    attackSurface: "s1",
+    argument: "an argument here",
+    bestResponse: "a best response",
+    residual: "residual",
+  };
+
+  it("accepts a valid construction", () => {
+    expect(sanitizeArgueRevealConstruction(argue, good)).toEqual(good);
+  });
+
+  it("rejects unknown surfaces and out-of-bounds fields", () => {
+    expect(
+      sanitizeArgueRevealConstruction(argue, { ...good, attackSurface: "s9" }),
+    ).toBeNull();
+    expect(
+      sanitizeArgueRevealConstruction(argue, { ...good, argument: "tiny" }),
+    ).toBeNull();
+    expect(
+      sanitizeArgueRevealConstruction(argue, { ...good, residual: "abc" }),
+    ).toBeNull();
+    expect(
+      sanitizeArgueRevealConstruction(argue, {
+        ...good,
+        residual: "y".repeat(21),
+      }),
+    ).toBeNull();
+    expect(sanitizeArgueRevealConstruction(argue, null)).toBeNull();
   });
 });

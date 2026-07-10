@@ -31,9 +31,11 @@ export function useScrollSpy(anchorIds: string[]): string | null {
     };
 
     const recompute = () => {
-      const container = document.querySelector(".paper-reader");
-      // Not mounted yet (or not a paper page): keep the previous value and
-      // let the next scroll/frame take over once content exists.
+      // Papers render into .paper-reader; readers (concatenated lessons) into
+      // .reader-body — both drive the same docked section panel.
+      const container = document.querySelector(".paper-reader, .reader-body");
+      // Not mounted yet (or not a paper/reader page): keep the previous value
+      // and let the next scroll/frame take over once content exists.
       if (!container) return;
       // Slightly past the anchors' scroll-margin-top (5rem / 7rem), so a
       // just-clicked anchor registers as current.

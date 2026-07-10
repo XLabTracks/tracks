@@ -166,6 +166,11 @@
 .reader-body {
   counter-reset: footnote rh1;
 }
+/* Anchor targets clear the sticky site header (3.5rem) when a section link in
+   the docked panel seeks to them — matches .paper-reader's 5rem. */
+.reader-body [id] {
+  scroll-margin-top: 5rem;
+}
 .reader-body h1 {
   counter-increment: rh1;
   counter-reset: rh2 rh3;

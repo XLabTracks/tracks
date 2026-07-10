@@ -331,10 +331,60 @@ function interpretCell(
   cellBg: string | null;
   rowColor: string | null;
 } {
-  // \cellcolor colors this cell; \rowcolor (at row start) the whole row.
+  const top = extractCellDecorations(cell, colors);
+  const first = top.content.find(
+    (n) => n.type !== "whitespace" && n.type !== "parbreak",
+  );
+
+  if (first && match.anyMacro(first) && first.content === "multicolumn") {
+    const args = getArgsContent(first);
+    const colspan = Math.max(1, parseInt(printRaw(args[0] ?? []).trim(), 10) || 1);
+    const inner = extractCellDecorations(args[2] ?? [], colors);
+    // The 2nd arg is a one-column spec (e.g. `|c|`) carrying align + dividers.
+    return {
+      colspan,
+      style: parseColumnSpec(args[1] ?? [])[0] ?? null,
+      content: inner.content,
+      cellBg: inner.cellBg ?? top.cellBg,
+      rowColor: inner.rowColor ?? top.rowColor,
+    };
+  }
+  if (first && match.anyMacro(first) && first.content === "multirow") {
+    warnings.add("tables", "row-spanning cell shown without vertical merge");
+    // Content is the LAST attached arg — the full \multirow signature has
+    // optional [vpos]/[bigstruts]/[vmove] slots that shift positions.
+    const inner = extractCellDecorations(lastArgContent(first), colors);
+    return {
+      colspan: 1,
+      style: null,
+      content: inner.content,
+      cellBg: inner.cellBg ?? top.cellBg,
+      rowColor: inner.rowColor ?? top.rowColor,
+    };
+  }
+  return {
+    colspan: 1,
+    style: null,
+    content: top.content,
+    cellBg: top.cellBg,
+    rowColor: top.rowColor,
+  };
+}
+
+/**
+ * Pull \cellcolor/\rowcolor out of a node list (they color the cell/row, not
+ * the text) and drop rule + color noise macros from the renderable content.
+ * Applied to the raw cell AND to \multirow/\multicolumn content args, where
+ * papers commonly nest \cellcolor (e.g. `\multirow{-2}{*}{\cellcolor{gray!15}
+ * Never happens}`).
+ */
+function extractCellDecorations(
+  nodes: Ast.Node[],
+  colors: ColorTable,
+): { content: Ast.Node[]; cellBg: string | null; rowColor: string | null } {
   let cellBg: string | null = null;
   let rowColor: string | null = null;
-  for (const n of cell) {
+  for (const n of nodes) {
     if (!match.anyMacro(n)) continue;
     if (n.content === "cellcolor" || n.content === "rowcolor") {
       const hex = resolveColorHex(rawText(lastArgContent(n)).trim(), colors);
@@ -344,36 +394,14 @@ function interpretCell(
       }
     }
   }
-  const significant = cell.filter(
+  const content = nodes.filter(
     (n) =>
       !(
         match.anyMacro(n) &&
         (RULE_MACROS.has(n.content) || CELL_NOISE.has(n.content))
       ),
   );
-  const first = significant.find(
-    (n) => n.type !== "whitespace" && n.type !== "parbreak",
-  );
-
-  if (first && match.anyMacro(first) && first.content === "multicolumn") {
-    const args = getArgsContent(first);
-    const colspan = Math.max(1, parseInt(printRaw(args[0] ?? []).trim(), 10) || 1);
-    // The 2nd arg is a one-column spec (e.g. `|c|`) carrying align + dividers.
-    return {
-      colspan,
-      style: parseColumnSpec(args[1] ?? [])[0] ?? null,
-      content: args[2] ?? [],
-      cellBg,
-      rowColor,
-    };
-  }
-  if (first && match.anyMacro(first) && first.content === "multirow") {
-    warnings.add("tables", "row-spanning cell shown without vertical merge");
-    // Content is the LAST attached arg — the full \multirow signature has
-    // optional [vpos]/[bigstruts]/[vmove] slots that shift positions.
-    return { colspan: 1, style: null, content: lastArgContent(first), cellBg, rowColor };
-  }
-  return { colspan: 1, style: null, content: significant, cellBg, rowColor };
+  return { content, cellBg, rowColor };
 }
 
 function isBlankNode(n: Ast.Node): boolean {

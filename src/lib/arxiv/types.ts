@@ -46,8 +46,11 @@
  *      Eqn./… and dotted acronyms) in sentence segmentation.
  * v19: mdframed environments render as tinted callout boxes (ax-mdframed,
  *      linecolor-aware) instead of leaking their option list as text.
+ * v20: \cellcolor/\rowcolor nested inside \multirow/\multicolumn content
+ *      resolve to cell backgrounds instead of leaking as literal text
+ *      ("gray!15 Never happens").
  */
-export const CONVERTER_VERSION = 19;
+export const CONVERTER_VERSION = 20;
 
 export interface ConversionWarning {
   /** Stable machine code, e.g. "unknown-macro", "katex-error". */

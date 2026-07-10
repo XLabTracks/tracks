@@ -58,7 +58,7 @@ export const modules: Module[] = [
     // response" deliberately comes after the sections that introduce its
     // levers).
     itemIds: ["c-paper-ai-control", "c-game"],
-    estimatedMinutes: 190,
+    estimatedMinutes: 215,
   },
   {
     id: "ex-content",
@@ -99,6 +99,25 @@ export const lessons: Lesson[] = [
     title: "Trusted monitoring as a game",
     contentRef: "c-game",
     estimatedMinutes: 92,
+  },
+  // --- Control: threat-modeling readings (reproduced verbatim with
+  // permission from Redwood Research) ---
+  {
+    id: "c-threats-l1",
+    slug: "prioritizing-threats-for-ai-control",
+    moduleId: "c-intro",
+    title: "Prioritizing threats for AI control",
+    contentRef: "c-threats-l1",
+    estimatedMinutes: 15,
+  },
+  {
+    id: "c-threats-l2",
+    slug: "diffuse-threats-research-sabotage",
+    moduleId: "c-intro",
+    title:
+      "How can we solve diffuse threats like research sabotage with AI control?",
+    contentRef: "c-threats-l2",
+    estimatedMinutes: 12,
   },
   {
     id: "ex-content-l1",

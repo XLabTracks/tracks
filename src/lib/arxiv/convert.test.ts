@@ -77,6 +77,28 @@ describe("convertLatexToHtml", () => {
     expect(html).not.toContain("data-ax-bg");
   });
 
+  it("resolves \\cellcolor nested inside \\multirow/\\multicolumn content", () => {
+    const { html } = convert(
+      DOC(
+        [
+          "\\begin{tabular}{l|c|}",
+          "a & \\multirow{-2}{*}{\\cellcolor{gray!15} Never happens} \\\\",
+          "b & \\multicolumn{1}{c|}{\\cellcolor{yellow!15}Game continues} \\\\",
+          "\\end{tabular}",
+        ].join("\n"),
+      ),
+    );
+    // gray!15 = #ececec, yellow!15 = #ffffd9 — applied as backgrounds,
+    // never leaked as literal "gray!15" text.
+    expect(html).toContain('style="background-color:#ececec"');
+    expect(html).toContain('style="background-color:#ffffd9"');
+    expect(html).toContain("Never happens");
+    expect(html).toContain("Game continues");
+    expect(html).not.toContain("gray!15");
+    expect(html).not.toContain("yellow!15");
+    expect(html).not.toContain("macro-cellcolor");
+  });
+
   it("renders multicols as CSS column containers", () => {
     const { html } = convert(
       DOC(

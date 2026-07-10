@@ -50,7 +50,9 @@ export interface Lesson {
   title: string;
   /**
    * Path (without extension) under `src/content/lessons` to the MDX body,
-   * e.g. "foundations-fundamentals-intro".
+   * e.g. "foundations-fundamentals-intro". A body with two or more ##/###
+   * headings automatically gets a paper-style section nav in the sidebar
+   * (see rehype-lesson-sections) — sections live in the MDX, not here.
    */
   contentRef: string;
   estimatedMinutes?: number;

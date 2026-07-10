@@ -131,7 +131,9 @@ async function LessonItemPage({
         )}
       </header>
 
-      <div className="mt-6">
+      {/* .lesson-reader scopes the sidebar's scroll-spy (see use-scroll-spy)
+          and gives heading anchors sticky-header clearance. */}
+      <div className="lesson-reader mt-6">
         <LessonContent contentRef={lesson.contentRef} />
       </div>
 

@@ -12,7 +12,25 @@ export interface BestResponse {
   grid: { gStars: number[]; sigmas: number[]; pRedWin: number[][] }
 }
 
+/**
+ * Memo over the levers evaluateGame reads (q, b, d, attackSd) — the search
+ * supplies its own red grid, so levers.red (and uT, usefulness-only) are
+ * excluded from the key; extend it if evaluateGame ever reads more levers.
+ * Module scope on purpose: Worker isolates outlive requests, so SSR of the
+ * demo pages hits a warm cache. Callers must not mutate the returned object.
+ */
+const MEMO_MAX = 200
+const memo = new Map<string, BestResponse>()
+
 export function bestResponse(levers: Levers): BestResponse {
+  const key = `${levers.q}|${levers.b}|${levers.d}|${levers.attackSd}`
+  const hit = memo.get(key)
+  if (hit) {
+    // Refresh recency: Map iterates in insertion order, oldest evicted first.
+    memo.delete(key)
+    memo.set(key, hit)
+    return hit
+  }
   const gStars: number[] = []
   const sigmas: number[] = []
   for (let i = 0; i < PARAMS.BR_GSTAR_STEPS; i++) gStars.push((i / (PARAMS.BR_GSTAR_STEPS - 1)) * 0.995)
@@ -34,7 +52,10 @@ export function bestResponse(levers: Levers): BestResponse {
     }
     pGrid.push(row)
   }
-  return { red: bestRed, result: best!, grid: { gStars, sigmas, pRedWin: pGrid } }
+  const res: BestResponse = { red: bestRed, result: best!, grid: { gStars, sigmas, pRedWin: pGrid } }
+  if (memo.size >= MEMO_MAX) memo.delete(memo.keys().next().value!)
+  memo.set(key, res)
+  return res
 }
 
 /** Safety of the current levers against the red team's best response. */

@@ -154,6 +154,20 @@
   counter-reset: footnote;
 }
 
+/* Anchor targets in sectioned lessons (the docked "In this lesson" nav) must
+   clear the sticky site header — same clearance as .paper-reader [id]. On
+   mobile a second sticky bar (the "Contents" sheet trigger) sits under the
+   header, so anchors need more. */
+.lesson-reader [id] {
+  scroll-margin-top: 5rem;
+}
+
+@media (max-width: 1023px) {
+  .lesson-reader [id] {
+    scroll-margin-top: 7rem;
+  }
+}
+
 .footnote-marker {
   counter-increment: footnote;
   cursor: pointer;

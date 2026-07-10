@@ -1,3 +1,4 @@
+import { join } from "node:path";
 import type { NextConfig } from "next";
 import createMDX from "@next/mdx";
 
@@ -22,11 +23,18 @@ const nextConfig: NextConfig = {
 };
 
 // String-form plugins are required for Turbopack (Next 16 default), which
-// cannot pass JS functions to its Rust pipeline.
+// cannot pass JS functions to its Rust pipeline. The local plugin needs an
+// absolute path: the loader resolves plugin strings relative to each MDX
+// file's directory, so a relative "./src/…" would not resolve.
 const withMDX = createMDX({
   options: {
     remarkPlugins: ["remark-gfm", "remark-math"],
-    rehypePlugins: ["rehype-slug", "rehype-katex"],
+    rehypePlugins: [
+      "rehype-slug",
+      // Must come after rehype-slug: it reads the heading ids slug assigns.
+      join(process.cwd(), "src/lib/mdx/rehype-lesson-sections.mjs"),
+      "rehype-katex",
+    ],
   },
 });
 

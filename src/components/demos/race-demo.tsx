@@ -8,12 +8,17 @@ import { DEFAULT_LEVERS, type Levers, evaluateHomogeneous } from "@/lib/control-
 // NEUTRAL. With per-attack odds fixed, P(red wins) factors into
 //   [ wBar / (wBar + cBar) ]  ·  [ 1 - e^{-k (wBar + cBar)} ]
 //   = (odds red wins a decisive event)  ·  (chance any decisive event fires).
-// Both rise with k here, so P(red wins) is monotone increasing in the number of
-// attacks k — if every attack were equally good, the red team should spam. The
-// next lesson breaks that assumption.
+// The race odds are fixed per attack; the event factor rises with k, so
+// P(red wins) is monotone increasing in the number of attacks k — if every
+// attack were equally good, the red team should spam. The next lesson breaks
+// that assumption.
+//
+// K_MAX is small on purpose: with these per-attack odds a decisive event fires
+// with p ≈ 0.58 per attack, so the curve is within 1% of its plateau by k ≈ 8 —
+// a wider range renders as a step function against the left wall.
 
 const SIGMA = 0.4; // fixed subtlety for this lesson (subtlety is the next lesson's lever)
-const K_MAX = 300;
+const K_MAX = 20;
 
 const W = 340;
 const H = 170;
@@ -22,7 +27,7 @@ const PW = W - M.left - M.right;
 const PH = H - M.top - M.bottom;
 
 export function RaceDemo() {
-  const [k, setK] = useState(20);
+  const [k, setK] = useState(2);
 
   const levers: Levers = useMemo(
     () => ({ ...DEFAULT_LEVERS, b: 0.02, d: 0.02, red: { mode: "fixed", gStar: 0.5, sigma: SIGMA } }),

@@ -1,9 +1,0 @@
-## Trusted monitoring as a game
-
-The previous item in this module worked through the AI Control paper as written. You saw that trusted monitoring — ask the untrusted model $U$ to write code, ask the trusted model $T$ how suspicious it looks, and audit the most suspicious 2% — lifts the blue team's win probability from 15% (upfront auditing) to 62%, and that deferring to $T$ on mid-suspicion code trades a little usefulness for a lot of safety.
-
-The rest of this module rebuilds that result as a game you can play. Every number in the demos here comes from a small, calibrated model of the same setup — the same $N = 5{,}000$ problems, the same $U$ and $T$ correctness rates (54% and 22%), the same 2% audit budget — computed live as you move the levers. The model is tuned so that its headline protocol numbers reproduce the paper's within a few points: upfront auditing ≈ 15% safety, trusted monitoring ≈ 62%, defer-to-trusted 10% ≈ 83%, 20% ≈ 92%. It is an idealization, not a re-run of the experiments, but it is honest: if you set a lever to a pathological value, the plots show the pathological truth.
-
-The point of turning it into a game is that the interesting questions are not about any single protocol — they are about *responses*. Why does a monitor that "usually notices" attacks still miss most of them under a tight budget? Why does the red team attack rarely rather than often? Why must you always grade a protocol against the red team's *best* response, not a fixed attack? And why is deferring to a weak model such a bargain? Each of the following lessons isolates one of these, gives you a lever and a prediction to commit to before the reveal, and adds to a picture that the final lesson ties together.
-
-We start where the paper's ROC discussion left off: with a fact about monitor quality that the single number "AUROC" hides.

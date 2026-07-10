@@ -18,7 +18,7 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import type { ModuleItem, Paper, TrackOutline } from "@/lib/content";
+import type { ModuleItem, TrackOutline } from "@/lib/content";
 import type { PaperNavItem } from "@/lib/papers/paper-nav";
 import { cn } from "@/lib/utils";
 import { navItemClass, PaperSectionNav } from "./paper-section-nav";
@@ -29,26 +29,29 @@ export interface TrackSidebarProps {
   completedContentIds?: string[];
   /** Module slugs gated by unmet prerequisites (drives lock icons). */
   lockedModuleSlugs?: string[];
-  /** Per-paper section navigation (keyed by paper id), docked below the module nav on paper pages. */
-  paperNavs?: Record<string, PaperNavItem[]>;
+  /**
+   * Per-item section navigation (keyed by item id — papers and sectioned
+   * lessons), docked below the module nav on that item's page.
+   */
+  itemNavs?: Record<string, PaperNavItem[]>;
 }
 
 /**
- * The paper the current page shows, with its section nav — drives the docked
- * "In this paper" panel. Resolved from props (the outline carries the full
- * paper objects), never from content accessors: this is a client component.
+ * The item the current page shows, with its section nav — drives the docked
+ * "In this paper" / "In this lesson" panel. Resolved from props (the outline
+ * carries the full item objects), never from content accessors: this is a
+ * client component.
  */
-function activePaperNavOf(
-  { outline, paperNavs = {} }: TrackSidebarProps,
+function activeItemNavOf(
+  { outline, itemNavs = {} }: TrackSidebarProps,
   pathname: string,
-): { paper: Paper; nav: PaperNavItem[] } | null {
+): { kind: ModuleItem["kind"]; nav: PaperNavItem[] } | null {
   const base = `/tracks/${outline.track.slug}`;
   for (const { module, items } of outline.modules) {
     for (const item of items) {
-      if (item.kind !== "paper") continue;
-      if (pathname !== `${base}/${module.slug}/${item.paper.slug}`) continue;
-      const nav = paperNavs[item.paper.id];
-      return nav && nav.length > 0 ? { paper: item.paper, nav } : null;
+      if (pathname !== `${base}/${module.slug}/${itemSlug(item)}`) continue;
+      const nav = itemNavs[itemKey(item)];
+      return nav && nav.length > 0 ? { kind: item.kind, nav } : null;
     }
   }
   return null;
@@ -58,7 +61,7 @@ function SidebarNav({
   outline,
   completedContentIds = [],
   lockedModuleSlugs = [],
-  paperNavs = {},
+  itemNavs = {},
   onNavigate,
 }: TrackSidebarProps & { onNavigate?: () => void }) {
   const pathname = usePathname();
@@ -67,8 +70,8 @@ function SidebarNav({
   const activeModuleSlug = segments[2];
   const completed = new Set(completedContentIds);
   const locked = new Set(lockedModuleSlugs);
-  const activePaperNav = activePaperNavOf(
-    { outline, completedContentIds, lockedModuleSlugs, paperNavs },
+  const activeItemNav = activeItemNavOf(
+    { outline, completedContentIds, lockedModuleSlugs, itemNavs },
     pathname,
   );
 
@@ -163,15 +166,16 @@ function SidebarNav({
         </Accordion>
       </div>
 
-      {/* Docked section navigation for the paper being read: always visible
-          on paper pages, with its own scroll + scroll-spy follow. */}
-      {activePaperNav && (
+      {/* Docked section navigation for the paper or sectioned lesson being
+          read: always visible on its page, with its own scroll + scroll-spy
+          follow. */}
+      {activeItemNav && (
         <div className="border-border bg-card/60 flex max-h-[55%] shrink-0 flex-col border-t">
           <p className="text-muted-foreground shrink-0 truncate px-4 pt-3 pb-1.5 text-xs font-medium tracking-wide uppercase">
-            In this paper
+            {activeItemNav.kind === "paper" ? "In this paper" : "In this lesson"}
           </p>
           <PaperSectionNav
-            items={activePaperNav.nav}
+            items={activeItemNav.nav}
             pathname={pathname}
             completedContentIds={completed}
             onNavigate={onNavigate}
@@ -248,15 +252,15 @@ function SidebarItemRow({
 export function TrackSidebar(props: TrackSidebarProps) {
   const [mobileOpen, setMobileOpen] = useState(false);
   const pathname = usePathname();
-  // Section titles need more room than lesson titles — widen the bar while
-  // the paper panel is docked.
-  const paperExpanded = activePaperNavOf(props, pathname) !== null;
+  // Section titles need more room than item titles — widen the bar while
+  // a section panel is docked.
+  const expanded = activeItemNavOf(props, pathname) !== null;
   return (
     <>
       <aside
         className={cn(
           "border-border bg-card/40 sticky top-14 hidden h-[calc(100vh-3.5rem)] shrink-0 overflow-hidden border-r transition-[width] duration-300 lg:block",
-          paperExpanded ? "w-96" : "w-72",
+          expanded ? "w-96" : "w-72",
         )}
       >
         <SidebarNav {...props} />

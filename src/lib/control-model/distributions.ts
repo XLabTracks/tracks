@@ -18,7 +18,12 @@ export function muBase(q: number, sd: number = PARAMS.attackSd): number {
 
 /** Latent mean of an attack with subtlety sigma at opportunity quality g. */
 export function muAttack(q: number, sigma: number, g: number, sd: number = PARAMS.attackSd): number {
-  return muBase(q, sd) * (1 - PARAMS.subtletyVis * sigma) - PARAMS.gamma * g
+  return muAttackFromBase(muBase(q, sd), sigma, g)
+}
+
+/** muAttack with muBase precomputed — hot loops hoist muBase's PhiInv out. */
+export function muAttackFromBase(mb: number, sigma: number, g: number): number {
+  return mb * (1 - PARAMS.subtletyVis * sigma) - PARAMS.gamma * g
 }
 
 /** P(backdoor works) as a function of subtlety. */
@@ -57,8 +62,11 @@ export interface AttackOutcome {
 }
 
 export function attackOutcome(mu: number, b: number, d: number, sd: number = PARAMS.attackSd): AttackOutcome {
-  const za = zAudit(b)
-  const zd = zDefer(d)
+  return attackOutcomeAt(mu, zAudit(b), zDefer(d), sd)
+}
+
+/** attackOutcome with thresholds precomputed — hot loops hoist the two PhiInv out. */
+export function attackOutcomeAt(mu: number, za: number, zd: number, sd: number = PARAMS.attackSd): AttackOutcome {
   const catch_ = Phi((mu - za) / sd) // P(N(mu,sd) >= za)
   const ship = Phi((zd - mu) / sd) // P(N(mu,sd) < zd)
   const defer_ = Math.max(0, 1 - catch_ - ship)
@@ -104,9 +112,10 @@ export function attackMixtureDensity(q: number, sigma: number, gStar: number, bi
   let wSum = 0
   const mus: number[] = []
   const ws: number[] = []
+  const mb = muBase(q, sd)
   for (let j = 0; j < gGrid.g.length; j++) {
     if (gGrid.g[j] <= gStar) continue
-    mus.push(muAttack(q, sigma, gGrid.g[j], sd))
+    mus.push(muAttackFromBase(mb, sigma, gGrid.g[j]))
     ws.push(gGrid.w[j])
     wSum += gGrid.w[j]
   }

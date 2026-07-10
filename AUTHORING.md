@@ -122,6 +122,16 @@ The lesson is now live at `/tracks/<trackSlug>/<moduleSlug>/<itemSlug>` and show
 in the sidebar + prev/next. A lesson completes when the learner scrolls to its end
 (or clicks "Mark complete").
 
+**Long, multi-section lessons.** Nothing to declare: a lesson body with two or
+more top-level `##`/`###` headings automatically gets a paper-style section
+tree — the docked "In this lesson" panel in the track sidebar, with scroll-spy
+highlighting and anchor links (the same UI papers get). The heading ids and
+titles are collected at compile time from the rendered MDX
+(`src/lib/mdx/rehype-lesson-sections.mjs`, wired in `next.config.ts` right
+after rehype-slug), so the nav can never drift from the document. Prefer
+plain-text headings — math/code in a heading makes an ugly nav label. See
+lesson `c-game` (Control track) or `ex-content-l2` for live examples.
+
 **Adding a new module** (a new unit / top-level "lesson" in the track) is the same
 shape one level up: add a `Module` to the `modules` array (`id`, `slug`, `trackId`,
 `title`, `summary`, `order`, `prerequisiteModuleIds: []`, `itemIds: []`, optional

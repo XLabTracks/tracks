@@ -8,9 +8,11 @@ import { useEffect, useState } from "react";
  * IntersectionObserver) gives a total order with exactly one answer — short
  * sections, fast scrolling, and sections taller than the viewport all break
  * visibility-based spies. Elements are re-resolved on every recompute,
- * scoped to the paper reader container and excluding collapsible
- * <ArxivPaper> cards nested inside inline lessons — a card's headings and
- * landmark ids would otherwise shadow the reader's own anchors. State starts
+ * scoped to the reader container (.paper-reader on paper pages,
+ * .lesson-reader on sectioned-lesson pages — at most one exists per page)
+ * and excluding collapsible <ArxivPaper> cards nested inside — a card's
+ * headings and landmark ids would otherwise shadow the reader's own
+ * anchors. State starts
  * null on both server and client (no hash peeking — that would mismatch the
  * SSR HTML and throw on malformed escapes); after a hash navigation the
  * browser has already scrolled, so the first scan lands on the right anchor.
@@ -31,8 +33,8 @@ export function useScrollSpy(anchorIds: string[]): string | null {
     };
 
     const recompute = () => {
-      const container = document.querySelector(".paper-reader");
-      // Not mounted yet (or not a paper page): keep the previous value and
+      const container = document.querySelector(".paper-reader, .lesson-reader");
+      // Not mounted yet (or not a reader page): keep the previous value and
       // let the next scroll/frame take over once content exists.
       if (!container) return;
       // Slightly past the anchors' scroll-margin-top (5rem / 7rem), so a

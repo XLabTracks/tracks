@@ -20,6 +20,7 @@ import {
   type PaperNavActivity,
   type PaperNavItem,
 } from "@/lib/papers/paper-nav";
+import { getLessonSections } from "@/components/mdx/lesson-content";
 import { TrackSidebar } from "@/components/layout/track-sidebar";
 
 export default async function TrackLayout({
@@ -57,14 +58,29 @@ export default async function TrackLayout({
     lockedModuleSlugs = results.filter((s): s is string => s !== null);
   }
 
-  // Per-paper section navigation for the sidebar. Artifacts are statically
-  // imported JSON modules (cached); only the small toc reaches the client.
-  const papers = outline.modules.flatMap(({ items }) =>
-    items.flatMap((item) => (item.kind === "paper" ? [item.paper] : [])),
-  );
-  const paperNavs: Record<string, PaperNavItem[]> = {};
-  for (const paper of papers) {
-    paperNavs[paper.id] = await buildNavForPaper(paper);
+  // Per-item section navigation for the sidebar: papers get their toc plus
+  // inserted activities; lessons get their ##/### heading tree (exported from
+  // the compiled MDX by rehype-lesson-sections). Artifacts and MDX bodies are
+  // statically bundled modules (cached); only the small nav reaches the client.
+  const itemNavs: Record<string, PaperNavItem[]> = {};
+  for (const { items } of outline.modules) {
+    for (const item of items) {
+      if (item.kind === "paper") {
+        itemNavs[item.paper.id] = await buildNavForPaper(item.paper);
+        continue;
+      }
+      const sections = await getLessonSections(item.lesson.contentRef);
+      // A single entry is noise — dock the panel only for real multi-section
+      // lessons (papers always dock: their toc is never this small).
+      if (sections.length < 2) continue;
+      itemNavs[item.lesson.id] = sections.map((section) => ({
+        kind: "section",
+        id: section.id,
+        title: section.title,
+        number: "",
+        level: section.level,
+      }));
+    }
   }
 
   return (
@@ -73,7 +89,7 @@ export default async function TrackLayout({
         outline={outline}
         completedContentIds={completedContentIds}
         lockedModuleSlugs={lockedModuleSlugs}
-        paperNavs={paperNavs}
+        itemNavs={itemNavs}
       />
       <div className="min-w-0 flex-1">{children}</div>
     </div>

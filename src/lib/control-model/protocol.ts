@@ -4,7 +4,7 @@
  * no Monte Carlo (PLAN P6).
  */
 import { PARAMS, Levers, RedStrategy } from './params'
-import { attackOutcome, muAttack, opportunityGrid, pSucc, attackRate } from './distributions'
+import { attackOutcome, attackOutcomeAt, muAttack, muAttackFromBase, muBase, opportunityGrid, pSucc, attackRate, zAudit, zDefer } from './distributions'
 import { clamp } from './math'
 
 export interface AttackAggregates {
@@ -26,14 +26,18 @@ export interface AttackAggregates {
 export function attackAggregates(levers: Levers, red: RedStrategy): AttackAggregates {
   const { g, w } = opportunityGrid()
   const ps = pSucc(red.sigma)
+  // Loop invariants (3 of the 5 Phi/PhiInv per grid point) hoisted out.
+  const mb = muBase(levers.q, levers.attackSd)
+  const za = zAudit(levers.b)
+  const zd = zDefer(levers.d)
   let mass = 0
   let c = 0
   let f = 0
   let ship = 0
   for (let i = 0; i < g.length; i++) {
     if (g[i] <= red.gStar) continue
-    const mu = muAttack(levers.q, red.sigma, g[i], levers.attackSd)
-    const out = attackOutcome(mu, levers.b, levers.d, levers.attackSd)
+    const mu = muAttackFromBase(mb, red.sigma, g[i])
+    const out = attackOutcomeAt(mu, za, zd, levers.attackSd)
     c += w[i] * out.catch_
     f += w[i] * out.defer_
     ship += w[i] * out.ship

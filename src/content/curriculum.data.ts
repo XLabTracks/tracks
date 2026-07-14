@@ -53,12 +53,21 @@ export const modules: Module[] = [
       "The foundation for the track: Redwood Research's \"AI Control: Improving Safety Despite Intentional Subversion\" paper rendered in full with guided exercises woven in, then rebuilt as an interactive, calibrated demo you can play with.",
     order: 1,
     prerequisiteModuleIds: [],
-    // The paper item, then the demo lessons merged into one multi-section
-    // lesson (its section order preserves the designed reading order — "best
-    // response" deliberately comes after the sections that introduce its
-    // levers).
-    itemIds: ["c-paper-ai-control", "c-game"],
-    estimatedMinutes: 215,
+    // Opens with Redwood's "case for control" motivation, then the paper item
+    // and the demo lessons merged into one multi-section lesson (its section
+    // order preserves the designed reading order — "best response" deliberately
+    // comes after the sections that introduce its levers), then closes with two
+    // further Redwood readings: the safety–usefulness tradeoff model and
+    // catching scheming AIs. All three added readings are reproduced verbatim
+    // with permission.
+    itemIds: [
+      "c-case-for-control",
+      "c-paper-ai-control",
+      "c-game",
+      "c-efficient-tradeoffs",
+      "c-catching-red-handed",
+    ],
+    estimatedMinutes: 363,
   },
   {
     id: "ex-content",
@@ -99,6 +108,34 @@ export const lessons: Lesson[] = [
     title: "Trusted monitoring as a game",
     contentRef: "c-game",
     estimatedMinutes: 92,
+  },
+  // --- Control: reproduced-verbatim readings (with permission from Redwood
+  // Research) that bookend the module — the motivating "case for control" up
+  // front, then the safety–usefulness tradeoff model and catching scheming AIs
+  // at the end. ---
+  {
+    id: "c-case-for-control",
+    slug: "the-case-for-controlling-powerful-ais",
+    moduleId: "c-intro",
+    title: "The case for ensuring that powerful AIs are controlled",
+    contentRef: "c-case-for-control",
+    estimatedMinutes: 105,
+  },
+  {
+    id: "c-efficient-tradeoffs",
+    slug: "safety-usefulness-tradeoff-model",
+    moduleId: "c-intro",
+    title: "Efficient tradeoffs and the safety-usefulness tradeoff model",
+    contentRef: "c-efficient-tradeoffs",
+    estimatedMinutes: 13,
+  },
+  {
+    id: "c-catching-red-handed",
+    slug: "catching-ais-red-handed",
+    moduleId: "c-intro",
+    title: "Catching AIs red-handed",
+    contentRef: "c-catching-red-handed",
+    estimatedMinutes: 30,
   },
   // --- Control: threat-modeling readings (reproduced verbatim with
   // permission from Redwood Research) ---

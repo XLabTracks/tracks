@@ -234,6 +234,110 @@ export const papers: Paper[] = [
     ],
   },
   {
+    // Control track, module 1: Redwood's "case for control" post rendered in
+    // full through the LessWrong paper reader, with the module's five guided
+    // exercises woven into the reading at the points the argument sets them
+    // up (this is the reading that used to be a copied-text MDX lesson). The
+    // Example track's ex-paper-lesswrong renders the same post as its
+    // source-kind reference; here it is real curriculum.
+    id: "c-case-for-control",
+    slug: "the-case-for-controlling-powerful-ais",
+    moduleId: "c-intro",
+    title: "The case for ensuring that powerful AIs are controlled",
+    source: {
+      kind: "lesswrong",
+      postUrl:
+        "https://www.lesswrong.com/posts/kcKrE9mzEHrdqtDpE/the-case-for-ensuring-that-powerful-ais-are-controlled",
+    },
+    estimatedMinutes: 105,
+    edits: [
+      // §"Evaluating whether you have control is doable" (mid-section): right
+      // after the paragraph on deciding which models to treat as untrusted,
+      // run the five control-property scenarios before the paper defines what a
+      // control evaluation is.
+      {
+        op: "activity",
+        after: {
+          anchor: "b-0032",
+          snippet: "How can we decide which models to treat as untrusted?",
+        },
+        items: [{ kind: "exercise", id: "control-scenarios" }],
+      },
+      // Same section, at the end of its body (the activity hoists after the
+      // "positive implications" list, before the "Currently, evaluating
+      // alignment seems much harder" subsection): why a catch is a win, and
+      // where evaluation runs out.
+      {
+        op: "activity",
+        after: {
+          anchor: "b-0045",
+          snippet: "As labs deploy increasingly powerful models",
+        },
+        items: [{ kind: "exercise", id: "why-catching-counts" }],
+      },
+      // §"The first transformatively useful AIs will probably be very
+      // dangerous" end: could a transformatively useful model still be
+      // controllable? (Section-end, before the sibling "…doesn't imply
+      // uncontrollable" subsection.)
+      {
+        op: "activity",
+        after: { sectionEnd: "lw-sec-the-first-transformatively-useful-ais-wi" },
+        items: [
+          { kind: "exercise", id: "could-useful-models-remain-controllable" },
+        ],
+      },
+      // §"'Transformatively useful' probably doesn't imply 'uncontrollable'"
+      // (mid-section): after the paragraph on wildly-superhuman problematic
+      // domains, commit to whether inscrutability is necessary, then construct
+      // the threat model.
+      {
+        op: "activity",
+        after: {
+          anchor: "b-0108",
+          snippet: "However, if the AI actually is wildly superhuman",
+        },
+        items: [{ kind: "exercise", id: "inscrutability-necessary" }],
+      },
+      // §"Implications and proposed actions" end: the two-worlds / two-windows
+      // reflection that closes the body before the appendices.
+      {
+        op: "activity",
+        after: { sectionEnd: "lw-sec-implications-and-proposed-actions" },
+        items: [{ kind: "exercise", id: "two-worlds-two-windows" }],
+      },
+    ],
+  },
+  {
+    // Control track, module 1: the safety–usefulness tradeoff model, rendered
+    // full-page from Redwood's blog (Substack) — the same committed artifact
+    // the Example track's ex-paper-substack uses, here as real curriculum. No
+    // exercises are woven in (the source PR reproduced it as a plain reading).
+    id: "c-efficient-tradeoffs",
+    slug: "safety-usefulness-tradeoff-model",
+    moduleId: "c-intro",
+    title: "Efficient tradeoffs and the safety-usefulness tradeoff model",
+    source: {
+      kind: "substack",
+      postUrl:
+        "https://blog.redwoodresearch.org/p/efficient-tradeoffs-and-the-safety",
+    },
+    estimatedMinutes: 13,
+  },
+  {
+    // Control track, module 1: "Catching AIs red-handed", rendered full-page
+    // through the LessWrong paper reader. No exercises (plain reading).
+    id: "c-catching-red-handed",
+    slug: "catching-ais-red-handed",
+    moduleId: "c-intro",
+    title: "Catching AIs red-handed",
+    source: {
+      kind: "lesswrong",
+      postUrl:
+        "https://www.lesswrong.com/posts/i2nmBfCXnadeGmhzW/catching-ais-red-handed",
+    },
+    estimatedMinutes: 30,
+  },
+  {
     id: "ex-paper-attention",
     slug: "attention-paper",
     moduleId: "ex-content",

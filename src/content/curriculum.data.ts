@@ -70,13 +70,24 @@ export const modules: Module[] = [
       "The foundation for the track: Redwood Research's \"AI Control: Improving Safety Despite Intentional Subversion\" paper rendered in full with guided exercises woven in, then rebuilt as an interactive, calibrated demo you can play with.",
     order: 1,
     prerequisiteModuleIds: [],
-    // The paper item, then the demo lessons merged into one multi-section
-    // lesson (its section order preserves the designed reading order — "best
-    // response" deliberately comes after the sections that introduce its
-    // levers), then the two threat-modeling readings (both build on the
-    // paper, so they come last).
-    itemIds: ["c-paper-ai-control", "c-game", "c-threats-l1", "c-threats-l2"],
-    estimatedMinutes: 242,
+    // Opens with Redwood's "case for control" motivation, then the AI Control
+    // paper and the trusted-monitoring demo lesson, then four Redwood readings
+    // rendered in full through the paper reader — the "case for control" post
+    // carries the module's guided exercises woven into the reading. Reading
+    // order: motivation, the paper, the demo, the safety–usefulness tradeoff
+    // model, catching scheming AIs, and the two threat-modeling posts. All
+    // readings are reproduced (arXiv/LessWrong/Substack artifacts) with
+    // permission.
+    itemIds: [
+      "c-case-for-control",
+      "c-paper-ai-control",
+      "c-game",
+      "c-efficient-tradeoffs",
+      "c-catching-red-handed",
+      "c-threats-l1",
+      "c-threats-l2",
+    ],
+    estimatedMinutes: 390,
   },
   {
     // Placeholder — content for this module is not written yet. Rename the
@@ -397,6 +408,10 @@ export const lessons: Lesson[] = [
     contentRef: "c-game",
     estimatedMinutes: 92,
   },
+  // --- Control: reproduced readings rendered through the paper reader (with
+  // permission from Redwood Research) live in papers.data.ts as Paper items —
+  // the "case for control" post, the safety–usefulness tradeoff model, and
+  // "catching AIs red-handed". ---
   // --- Control: threat-modeling readings (reproduced verbatim with
   // permission from Redwood Research) ---
   {

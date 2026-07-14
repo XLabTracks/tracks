@@ -15,7 +15,7 @@ export const tracks: Track[] = [
     description:
       "Hands-on technical track on controlling and evaluating AI systems. The introductory module works through Redwood Research's \"AI Control: Improving Safety Despite Intentional Subversion\" paper and then rebuilds its trusted-monitoring result as an interactive, model-backed demo.",
     kind: "technical",
-    moduleIds: ["c-intro", "c-mod2", "c-areas"],
+    moduleIds: ["c-intro", "c-mod2", "c-areas", "c-mod4", "c-mod5", "c-lowstakes"],
     prerequisiteEnforcement: "hard",
   },
   {
@@ -90,6 +90,53 @@ export const modules: Module[] = [
     estimatedMinutes: 40,
   },
   {
+    // Placeholder — see c-mod2.
+    id: "c-mod4",
+    slug: "module-4",
+    trackId: "control",
+    title: "Coming soon",
+    summary: "Content for this module is in development.",
+    order: 4,
+    prerequisiteModuleIds: ["c-intro", "c-mod2", "c-areas"],
+    itemIds: [],
+  },
+  {
+    // Placeholder — see c-mod2.
+    id: "c-mod5",
+    slug: "module-5",
+    trackId: "control",
+    title: "Coming soon",
+    summary: "Content for this module is in development.",
+    order: 5,
+    prerequisiteModuleIds: ["c-intro", "c-mod2", "c-areas", "c-mod4"],
+    itemIds: [],
+  },
+  {
+    id: "c-lowstakes",
+    slug: "low-stakes-control",
+    trackId: "control",
+    title: "Low-stakes control: sabotage, sandbagging, and elicitation",
+    summary:
+      "The low-stakes regime, where catastrophe requires many weakly-incriminating actions: Hebbar's ControlConf talk, Redwood's methods for non-concentrated failures and analysis of sandbagging and exploration hacking, Carlsmith's \"no sandbagging on checkable tasks\" hypothesis, and four papers spanning adaptive deployment, capability elicitation, and sabotage evaluation.",
+    order: 6,
+    // Empty placeholder modules count as complete, so only the built modules
+    // actually gate; listing every ancestor keeps the chain correct as the
+    // placeholders fill in.
+    prerequisiteModuleIds: ["c-intro", "c-mod2", "c-areas", "c-mod4", "c-mod5"],
+    itemIds: [
+      "c-lowstakes-l1",
+      "c-lowstakes-l2",
+      "c-paper-adaptive-deployment",
+      "c-lowstakes-l3",
+      "c-lowstakes-l4",
+      "c-paper-password-locked",
+      "c-paper-exploration-hacking",
+      "c-paper-sabotage-evals",
+      "c-paper-auditing-sabotage-bench",
+    ],
+    estimatedMinutes: 309,
+  },
+  {
     id: "ex-content",
     slug: "content-types",
     trackId: "example",
@@ -147,6 +194,42 @@ export const lessons: Lesson[] = [
       "How can we solve diffuse threats like research sabotage with AI control?",
     contentRef: "c-threats-l2",
     estimatedMinutes: 12,
+  },
+  // --- Control, module 6 (low-stakes control): a talk plus three readings
+  // (the Redwood posts reproduced verbatim with permission; the Carlsmith
+  // post reproduced verbatim from LessWrong) ---
+  {
+    id: "c-lowstakes-l1",
+    slug: "low-stakes-control-talk",
+    moduleId: "c-lowstakes",
+    title: "Low-stakes control (ControlConf talk)",
+    contentRef: "c-lowstakes-l1",
+    estimatedMinutes: 30,
+  },
+  {
+    id: "c-lowstakes-l2",
+    slug: "handling-non-concentrated-failures",
+    moduleId: "c-lowstakes",
+    title: "Notes on handling non-concentrated failures with AI control",
+    contentRef: "c-lowstakes-l2",
+    estimatedMinutes: 26,
+  },
+  {
+    id: "c-lowstakes-l3",
+    slug: "misalignment-and-strategic-underperformance",
+    moduleId: "c-lowstakes",
+    title:
+      "Misalignment and strategic underperformance: an analysis of sandbagging and exploration hacking",
+    contentRef: "c-lowstakes-l3",
+    estimatedMinutes: 24,
+  },
+  {
+    id: "c-lowstakes-l4",
+    slug: "no-sandbagging-on-checkable-tasks",
+    moduleId: "c-lowstakes",
+    title: "The “no sandbagging on checkable tasks” hypothesis",
+    contentRef: "c-lowstakes-l4",
+    estimatedMinutes: 19,
   },
   // --- Control: areas of control work (reproduced verbatim with permission
   // from Redwood Research) ---

@@ -66,9 +66,14 @@ function AccordionContent({
       className="overflow-hidden text-sm data-open:animate-accordion-down data-closed:animate-accordion-up"
       {...props}
     >
+      {/* No height pin here: --radix-accordion-content-height is measured
+          once, so pinning the inner div to it clips content that reflows
+          taller while open (e.g. sidebar item titles rewrapping after a
+          resize). The open/close animations live on the outer element and
+          animate height 0 ↔ the variable regardless. */}
       <div
         className={cn(
-          "h-(--radix-accordion-content-height) pt-0 pb-2.5 [&_a]:underline [&_a]:underline-offset-3 [&_a]:hover:text-foreground [&_p:not(:last-child)]:mb-4",
+          "pt-0 pb-2.5 [&_a]:underline [&_a]:underline-offset-3 [&_a]:hover:text-foreground [&_p:not(:last-child)]:mb-4",
           className
         )}
       >

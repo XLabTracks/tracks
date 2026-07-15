@@ -52,7 +52,8 @@ model LessonProgress {
   updatedAt    DateTime       @updatedAt
 
   @@unique([userId, lessonId])
-  @@index([userId])
+  // No separate @@index([userId]): it is a strict prefix of the unique above,
+  // which Postgres already uses for every userId / userId+lessonId predicate.
 }
 
 enum SubmissionKind {
@@ -84,7 +85,8 @@ model Submission {
   updatedAt    DateTime         @updatedAt
 
   @@unique([userId, contentId, kind])
-  @@index([userId, contentId])
+  // No separate @@index([userId, contentId]): it is a strict prefix of the
+  // unique above, which serves every Submission predicate in the app.
 }
 
 enum ClassroomRole {

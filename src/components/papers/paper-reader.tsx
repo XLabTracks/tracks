@@ -1,19 +1,40 @@
 import "katex/dist/katex.min.css";
 import "@/components/mdx/arxiv-paper.css";
+import "./substack-post.css";
+import "./lesswrong-post.css";
 import "./paper-reader.css";
 import { Fragment } from "react";
 import { ExternalLink, TriangleAlert } from "lucide-react";
 import { getPaperArtifact } from "@/lib/arxiv/artifacts";
 import { buildAbsUrl, buildPdfUrl, parseArxivId } from "@/lib/arxiv/id";
-import { CONVERTER_VERSION, type ConversionWarning } from "@/lib/arxiv/types";
+import {
+  CONVERTER_VERSION,
+  type ConversionWarning,
+  type PaperTocEntry,
+} from "@/lib/arxiv/types";
+import { getSubstackArtifact } from "@/lib/substack/artifacts";
+import { buildPostUrl, parseSubstackPostUrl } from "@/lib/substack/id";
+import { SUBSTACK_CONVERTER_VERSION } from "@/lib/substack/types";
+import { getLessWrongArtifact } from "@/lib/lesswrong/artifacts";
+import {
+  buildPostUrl as buildLwPostUrl,
+  displayHost,
+  parseLessWrongPostUrl,
+} from "@/lib/lesswrong/id";
+import { LESSWRONG_CONVERTER_VERSION } from "@/lib/lesswrong/types";
 import type { Paper, PaperInsertionItem } from "@/lib/content/types";
 import { insertionAnchorId } from "@/lib/papers/split-paper";
-import { applyPaperEdits } from "@/lib/papers/apply-edits";
+import { applyPaperEdits, type PaperPart } from "@/lib/papers/apply-edits";
 import { Demo } from "@/components/mdx/demo";
 import { Exercise } from "@/components/mdx/exercise";
 import { ExerciseSequence } from "@/components/mdx/exercise-sequence";
 import { EmbeddedLesson } from "./embedded-lesson";
-import { PaperUnavailable } from "./paper-unavailable";
+import { PaperSidenotes } from "./paper-sidenotes";
+import {
+  LessWrongUnavailable,
+  PaperUnavailable,
+  SubstackUnavailable,
+} from "./paper-unavailable";
 
 /**
  * Full-page paper renderer: the converted paper HTML with the paper's edits
@@ -25,6 +46,11 @@ import { PaperUnavailable } from "./paper-unavailable";
  * markup). Activity blocks sit BETWEEN .arxiv-paper wrappers, never inside
  * them, so the paper's scoped CSS can't bleed into the cards; the
  * descendant-only styling makes sibling wrappers render identically to one.
+ *
+ * Both source kinds share everything downstream of the artifact — the edit
+ * engine, insertion blocks, and footer — because both converters emit the
+ * same annotated-HTML contract (data-anchor/data-s/toc). Only artifact
+ * lookup, external links, and fallback copy differ per source.
  */
 export async function PaperReader({
   paper,
@@ -45,7 +71,88 @@ export async function PaperReader({
           completedContentIds={completedContentIds}
         />
       );
+    case "substack":
+      return (
+        <SubstackPaperReader
+          paper={paper}
+          postUrl={paper.source.postUrl}
+          signedIn={signedIn}
+          completedContentIds={completedContentIds}
+        />
+      );
+    case "lesswrong":
+      return (
+        <LessWrongPaperReader
+          paper={paper}
+          postUrl={paper.source.postUrl}
+          signedIn={signedIn}
+          completedContentIds={completedContentIds}
+        />
+      );
   }
+}
+
+async function LessWrongPaperReader({
+  paper,
+  postUrl,
+  signedIn,
+  completedContentIds,
+}: {
+  paper: Paper;
+  postUrl: string;
+  signedIn: boolean;
+  completedContentIds: Set<string>;
+}) {
+  const postRef = parseLessWrongPostUrl(postUrl);
+  if (!postRef) {
+    return (
+      <div className="border-destructive/40 bg-destructive/5 text-destructive rounded-xl border p-6 text-sm">
+        Invalid LessWrong post URL <code>{postUrl}</code> — the public post
+        URL is required, e.g.{" "}
+        <code>https://www.lesswrong.com/posts/abc123/some-post</code>.
+      </div>
+    );
+  }
+
+  const artifact = await getLessWrongArtifact(postRef.id);
+  if (artifact.state !== "ready") {
+    return (
+      <ActivitiesOnlyFallback
+        paper={paper}
+        signedIn={signedIn}
+        completedContentIds={completedContentIds}
+      >
+        <LessWrongUnavailable postRef={postRef} state={artifact.state} />
+      </ActivitiesOnlyFallback>
+    );
+  }
+
+  return (
+    <EditedPaperBody
+      paper={paper}
+      html={artifact.post.html}
+      toc={artifact.post.toc}
+      // .arxiv-paper carries the shared reading typography + the edit-UI
+      // (ax-hidden/ax-added) styles; .lesswrong-post scopes the lw-* extras.
+      wrapperClassName="arxiv-paper lesswrong-post"
+      converterVersion={LESSWRONG_CONVERTER_VERSION}
+      blocksCommand={`npm run lesswrong:build -- --blocks ${postRef.id}`}
+      signedIn={signedIn}
+      completedContentIds={completedContentIds}
+      sidenotePrefix="lw"
+      footer={
+        <PaperFooter
+          links={[
+            {
+              label: `Read on ${displayHost(postRef)}`,
+              href: artifact.post.meta.canonicalUrl ?? buildLwPostUrl(postRef),
+            },
+          ]}
+          warnings={artifact.post.warnings}
+        />
+      }
+    />
+  );
 }
 
 async function ArxivPaperReader({
@@ -70,43 +177,177 @@ async function ArxivPaperReader({
   }
 
   const artifact = await getPaperArtifact(parsed.id);
-  const allItems = (paper.edits ?? []).flatMap((edit) =>
-    edit.op === "activity" ? edit.items : [],
-  );
-
   if (artifact.state !== "ready") {
-    // The paper can't render, but its activities (and completion) must stay
-    // reachable — stack them below the fallback card.
     return (
-      <div className="paper-reader">
+      <ActivitiesOnlyFallback
+        paper={paper}
+        signedIn={signedIn}
+        completedContentIds={completedContentIds}
+      >
         <PaperUnavailable id={parsed} state={artifact.state} />
-        {allItems.length > 0 && (
-          <div className="mt-10">
-            <h2 className="text-xl font-semibold tracking-tight">Activities</h2>
-            {allItems.map((item) => (
-              <InsertionBlock
-                key={insertionAnchorId(item)}
-                item={item}
-                signedIn={signedIn}
-                completedContentIds={completedContentIds}
-              />
-            ))}
-          </div>
-        )}
+      </ActivitiesOnlyFallback>
+    );
+  }
+
+  return (
+    <EditedPaperBody
+      paper={paper}
+      html={artifact.paper.html}
+      toc={artifact.paper.toc}
+      wrapperClassName="arxiv-paper"
+      converterVersion={CONVERTER_VERSION}
+      blocksCommand={`npm run arxiv:build -- --blocks ${parsed.id}`}
+      signedIn={signedIn}
+      completedContentIds={completedContentIds}
+      sidenotePrefix="ax"
+      footer={
+        <PaperFooter
+          links={[
+            { label: "Abstract", href: buildAbsUrl(parsed) },
+            { label: "PDF", href: buildPdfUrl(parsed) },
+          ]}
+          warnings={artifact.paper.warnings}
+        />
+      }
+    />
+  );
+}
+
+async function SubstackPaperReader({
+  paper,
+  postUrl,
+  signedIn,
+  completedContentIds,
+}: {
+  paper: Paper;
+  postUrl: string;
+  signedIn: boolean;
+  completedContentIds: Set<string>;
+}) {
+  const postRef = parseSubstackPostUrl(postUrl);
+  if (!postRef) {
+    return (
+      <div className="border-destructive/40 bg-destructive/5 text-destructive rounded-xl border p-6 text-sm">
+        Invalid Substack post URL <code>{postUrl}</code> — the public post URL
+        is required, e.g. <code>https://example.substack.com/p/some-post</code>.
       </div>
     );
   }
 
-  const { parts, unmatchedEdits } = applyPaperEdits(
-    artifact.paper.html,
-    artifact.paper.toc,
-    paper.edits,
+  const artifact = await getSubstackArtifact(postRef.id);
+  if (artifact.state !== "ready") {
+    return (
+      <ActivitiesOnlyFallback
+        paper={paper}
+        signedIn={signedIn}
+        completedContentIds={completedContentIds}
+      >
+        <SubstackUnavailable postRef={postRef} state={artifact.state} />
+      </ActivitiesOnlyFallback>
+    );
+  }
+
+  return (
+    <EditedPaperBody
+      paper={paper}
+      html={artifact.post.html}
+      toc={artifact.post.toc}
+      // .arxiv-paper carries the shared reading typography + the edit-UI
+      // (ax-hidden/ax-added) styles; .substack-post scopes the sb-* extras.
+      wrapperClassName="arxiv-paper substack-post"
+      converterVersion={SUBSTACK_CONVERTER_VERSION}
+      blocksCommand={`npm run substack:build -- --blocks ${postRef.id}`}
+      signedIn={signedIn}
+      completedContentIds={completedContentIds}
+      sidenotePrefix="sb"
+      footer={
+        <PaperFooter
+          links={[
+            {
+              label: `Read on ${postRef.host}`,
+              href: artifact.post.meta.canonicalUrl ?? buildPostUrl(postRef),
+            },
+          ]}
+          warnings={artifact.post.warnings}
+        />
+      }
+    />
   );
+}
+
+/**
+ * Non-ready artifact: the paper can't render, but its activities (and
+ * completion) must stay reachable — stack them below the fallback card.
+ */
+function ActivitiesOnlyFallback({
+  paper,
+  signedIn,
+  completedContentIds,
+  children,
+}: {
+  paper: Paper;
+  signedIn: boolean;
+  completedContentIds: Set<string>;
+  children: React.ReactNode;
+}) {
+  const allItems = (paper.edits ?? []).flatMap((edit) =>
+    edit.op === "activity" ? edit.items : [],
+  );
+  return (
+    <div className="paper-reader">
+      {children}
+      {allItems.length > 0 && (
+        <div className="mt-10">
+          <h2 className="text-xl font-semibold tracking-tight">Activities</h2>
+          {allItems.map((item) => (
+            <InsertionBlock
+              key={insertionAnchorId(item)}
+              item={item}
+              signedIn={signedIn}
+              completedContentIds={completedContentIds}
+            />
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
+/** The ready path all sources share: apply edits, interleave activities. */
+function EditedPaperBody({
+  paper,
+  html,
+  toc,
+  wrapperClassName,
+  converterVersion,
+  blocksCommand,
+  signedIn,
+  completedContentIds,
+  footer,
+  sidenotePrefix,
+}: {
+  paper: Paper;
+  html: string;
+  toc: PaperTocEntry[];
+  wrapperClassName: string;
+  converterVersion: number;
+  blocksCommand: string;
+  signedIn: boolean;
+  completedContentIds: Set<string>;
+  footer: React.ReactNode;
+  /**
+   * Footnote id namespace ("ax"/"sb"/"lw") to render as margin sidenotes
+   * when there's room. User-toggleable via SidenotesToggle in the page
+   * header; the in-document footnotes section stays canonical either way.
+   */
+  sidenotePrefix?: string;
+}) {
+  const { parts, unmatchedEdits } = applyPaperEdits(html, toc, paper.edits);
   if (unmatchedEdits.length > 0) {
     // Committed content can't reach this (content.test.ts validates every
     // edit target against the artifact); this is a local-iteration net.
     console.warn(
-      `[papers] ${paper.id}: unmatched edit target(s) in arXiv:${parsed.id}: ` +
+      `[papers] ${paper.id}: unmatched edit target(s): ` +
         unmatchedEdits
           .map((op) => {
             const ref = op.op === "hide" ? op.at : op.after;
@@ -123,12 +364,12 @@ async function ArxivPaperReader({
 
   return (
     <div className="paper-reader">
-      {parts.map((part, i) =>
+      {parts.map((part: PaperPart, i: number) =>
         part.kind === "html" ? (
           <div
             key={i}
-            className="arxiv-paper"
-            data-conv={CONVERTER_VERSION}
+            className={wrapperClassName}
+            data-conv={converterVersion}
             dangerouslySetInnerHTML={{ __html: part.html }}
           />
         ) : (
@@ -151,9 +392,8 @@ async function ArxivPaperReader({
             <p className="text-muted-foreground border-border bg-muted/30 rounded-lg border border-dashed p-3 text-xs">
               Dev note: the activities below target anchors/sections that
               don&apos;t exist in this paper (see the server console) — they
-              were appended here instead. Run{" "}
-              <code>npm run arxiv:build -- --blocks {parsed.id}</code> to list
-              valid targets.
+              were appended here instead. Run <code>{blocksCommand}</code> to
+              list valid targets.
             </p>
           )}
           {unmatchedItems.map((item) => (
@@ -167,11 +407,8 @@ async function ArxivPaperReader({
         </div>
       )}
 
-      <PaperFooter
-        absUrl={buildAbsUrl(parsed)}
-        pdfUrl={buildPdfUrl(parsed)}
-        warnings={artifact.paper.warnings}
-      />
+      {footer}
+      {sidenotePrefix && <PaperSidenotes prefix={sidenotePrefix} />}
     </div>
   );
 }
@@ -211,24 +448,26 @@ function InsertionBlock({
 }
 
 function PaperFooter({
-  absUrl,
-  pdfUrl,
+  links,
   warnings,
 }: {
-  absUrl: string;
-  pdfUrl: string;
+  links: { label: string; href: string }[];
   warnings: ConversionWarning[];
 }) {
   const approximated = warnings.reduce((n, w) => n + w.count, 0);
   return (
     <div className="border-border mt-10 flex flex-wrap items-center gap-x-4 gap-y-2 border-t pt-4 text-xs">
-      <FooterLink href={absUrl}>Abstract</FooterLink>
-      <FooterLink href={pdfUrl}>PDF</FooterLink>
+      {links.map((link) => (
+        <FooterLink key={link.href} href={link.href}>
+          {link.label}
+        </FooterLink>
+      ))}
       {approximated > 0 && (
         <details className="text-muted-foreground min-w-0">
           <summary className="flex cursor-pointer items-center gap-1.5 [&::-webkit-details-marker]:hidden">
             <TriangleAlert className="size-3.5 text-amber-600" aria-hidden />
-            Some elements are approximated — see the PDF for exact rendering.
+            Some elements are approximated — see the original for exact
+            rendering.
           </summary>
           <ul className="mt-2 list-disc space-y-0.5 pl-5">
             {warnings.slice(0, 12).map((w) => (

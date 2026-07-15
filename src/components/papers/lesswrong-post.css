@@ -1,0 +1,62 @@
+/*
+ * LessWrong-specific additions on top of the shared paper typography. A
+ * LessWrong reader renders as `.arxiv-paper.lesswrong-post`: the
+ * .arxiv-paper class carries the generic reading styles and the edit-UI
+ * (ax-hidden/ax-added) markers, and this file scopes the converter's lw-*
+ * vocabulary.
+ */
+@layer components {
+  /* Footnotes — mirror the arXiv/Substack treatment. */
+  .lesswrong-post .lw-footnotes {
+    border-top: 1px solid var(--border);
+    margin-top: 2.5em;
+    padding-top: 0.5em;
+  }
+  .lesswrong-post .lw-footnotes ol {
+    font-size: 0.9em;
+  }
+  .lesswrong-post .lw-footnotes li {
+    scroll-margin-top: 5rem;
+  }
+  .lesswrong-post sup.lw-fnref {
+    scroll-margin-top: 5rem;
+  }
+  .lesswrong-post sup.lw-fnref a {
+    text-decoration: none;
+    padding: 0 0.1em;
+  }
+  .lesswrong-post .lw-backlink {
+    margin-left: 0.35em;
+    text-decoration: none;
+  }
+
+  /* Rich embeds degraded to link cards by the converter. */
+  .lesswrong-post figure.lw-embed {
+    border: 1px solid var(--border);
+    border-radius: 0.75rem;
+    background: color-mix(in oklab, var(--muted) 30%, transparent);
+    padding: 1em 1.25em;
+    text-align: left;
+  }
+  .lesswrong-post figure.lw-embed a {
+    font-size: 0.9em;
+    word-break: break-all;
+  }
+
+  /* Spoiler blocks — native details, styled like the edit-UI hide markers. */
+  .lesswrong-post details.lw-spoiler {
+    border: 1px dashed var(--border);
+    border-radius: 0.5rem;
+    padding: 0.5em 1em;
+    margin: 1em 0;
+  }
+  .lesswrong-post details.lw-spoiler > summary {
+    cursor: pointer;
+    color: var(--muted-foreground);
+    font-size: 0.875em;
+    user-select: none;
+  }
+  .lesswrong-post details.lw-spoiler[open] > summary {
+    margin-bottom: 0.5em;
+  }
+}

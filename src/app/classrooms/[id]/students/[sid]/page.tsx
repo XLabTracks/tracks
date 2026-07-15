@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { CheckCircle2, Circle, FileText } from "lucide-react";
 import { requireUser } from "@/lib/auth";
-import { getClassroom, getMembership } from "@/lib/classrooms";
+import { getClassroom } from "@/lib/classrooms";
 import {
   getAssessmentForModule,
   getItemProgressContentIds,
@@ -14,7 +14,7 @@ import {
   tracks,
   type Track,
 } from "@/lib/content";
-import { getCompletedLessonIds, getSubmission, getTrackProgress } from "@/lib/progress";
+import { getCompletedLessonIds, getSubmission } from "@/lib/progress";
 import { Breadcrumbs } from "@/components/layout/breadcrumbs";
 import {
   Accordion,
@@ -36,11 +36,12 @@ export default async function StudentDetailPage({
   const { id, sid } = await params;
   const user = await requireUser();
 
-  const myMembership = await getMembership(user.id, id);
-  if (myMembership?.role !== "instructor") notFound();
-
+  // One classroom fetch answers both the instructor gate and the target
+  // student lookup (its memberships include both rows).
   const classroom = await getClassroom(id);
   if (!classroom) notFound();
+  const myMembership = classroom.memberships.find((m) => m.userId === user.id);
+  if (myMembership?.role !== "instructor") notFound();
   const member = classroom.memberships.find((m) => m.userId === sid);
   if (!member) notFound();
   const student = member.user;
@@ -52,10 +53,17 @@ export default async function StudentDetailPage({
   const trackData = await Promise.all(
     trackList.map(async (track) => {
       const outline = getTrackOutline(track.slug)!;
-      const completed = new Set(
-        await getCompletedLessonIds(sid, getTrackProgressContentIds(track.id)),
-      );
-      const progress = await getTrackProgress(sid, track.id);
+      const contentIds = getTrackProgressContentIds(track.id);
+      // Derive the progress card from the completed set — getTrackProgress
+      // would re-run this identical query just to count it.
+      const completed = new Set(await getCompletedLessonIds(sid, contentIds));
+      const progress = {
+        completed: completed.size,
+        total: contentIds.length,
+        percent: contentIds.length
+          ? Math.round((completed.size / contentIds.length) * 100)
+          : 0,
+      };
       const modules = await Promise.all(
         outline.modules.map(async ({ module, items }) => {
           const assessment = getAssessmentForModule(module.id);

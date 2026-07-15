@@ -7,7 +7,6 @@ import {
   getItemProgressContentIds,
   getItemsForModule,
   getModuleBySlugs,
-  getModuleProgressContentIds,
   getResourcesByTopics,
   itemIdOf,
   itemSlugOf,
@@ -16,7 +15,7 @@ import {
 import { DELIVERABLE_FORMAT_LABELS } from "@/lib/content/types";
 import { isAccessLocked } from "@/lib/content/prerequisites";
 import { getCurrentUser } from "@/lib/auth";
-import { getCompletedLessonIds, getPrerequisiteStatus } from "@/lib/progress";
+import { getPrerequisiteStatus, getTrackCompletionSet } from "@/lib/progress";
 import { Breadcrumbs } from "@/components/layout/breadcrumbs";
 import { PrerequisitePanel } from "@/components/learn/prerequisite-panel";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
@@ -57,18 +56,19 @@ export default async function ModulePage({
   const moduleHref = `/tracks/${track.slug}/${module.slug}`;
 
   const user = await getCurrentUser();
-  const prereqStatuses = await getPrerequisiteStatus(user?.id ?? null, module.id);
+  // prereq statuses and the completion set both resolve from the track
+  // completion set the layout already fetched (request-cached), so this page
+  // adds no progress queries of its own.
+  const [prereqStatuses, completedSet] = await Promise.all([
+    getPrerequisiteStatus(user?.id ?? null, module.id),
+    user ? getTrackCompletionSet(user.id, track.id) : new Set<string>(),
+  ]);
   const hardLocked =
     !!user &&
     isAccessLocked(
       track.prerequisiteEnforcement,
       prereqStatuses.map((s) => s.completed),
     );
-  const completedSet = new Set(
-    user
-      ? await getCompletedLessonIds(user.id, getModuleProgressContentIds(module.id))
-      : [],
-  );
 
   return (
     <div className="max-w-4xl px-4 py-8 lg:px-8">

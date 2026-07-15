@@ -24,7 +24,22 @@ import {
 } from "@/lib/content";
 import { parseArxivId } from "@/lib/arxiv/id";
 import { getDemo } from "@/lib/demos/registry";
-import { CONVERTER_VERSION, type PaperArtifact } from "@/lib/arxiv/types";
+import {
+  CONVERTER_VERSION,
+  type PaperArtifact,
+  type PaperTocEntry,
+} from "@/lib/arxiv/types";
+import { parseSubstackPostUrl } from "@/lib/substack/id";
+import {
+  SUBSTACK_CONVERTER_VERSION,
+  type SubstackArtifact,
+} from "@/lib/substack/types";
+import { parseLessWrongPostUrl } from "@/lib/lesswrong/id";
+import {
+  LESSWRONG_CONVERTER_VERSION,
+  type LessWrongArtifact,
+} from "@/lib/lesswrong/types";
+import type { Paper } from "@/lib/content/types";
 import { buildBlockIndex, normalizeText } from "@/lib/papers/block-index";
 import { markdownInlineToHast } from "@/lib/papers/markdown";
 
@@ -360,33 +375,65 @@ describe("paper integrity", () => {
     expect(new Set(insertedLessonIds).size).toBe(insertedLessonIds.length);
   });
 
-  it("arXiv sources are version-pinned and their artifacts are committed", () => {
+  it("paper sources are valid and their artifacts are committed", () => {
     for (const paper of papers) {
+      const source = paper.source;
+      if (source.kind === "arxiv") {
+        expect(
+          parseArxivId(source.arxivId),
+          `paper ${paper.id} needs a pinned arXiv id`,
+        ).not.toBeNull();
+      } else if (source.kind === "substack") {
+        expect(
+          parseSubstackPostUrl(source.postUrl),
+          `paper ${paper.id} needs a public Substack post URL (https://{host}/p/{slug})`,
+        ).not.toBeNull();
+      } else {
+        expect(
+          parseLessWrongPostUrl(source.postUrl),
+          `paper ${paper.id} needs a LessWrong/Alignment Forum post URL (https://{host}/posts/{id}/…)`,
+        ).not.toBeNull();
+      }
+      const facts = artifactFactsOf(paper);
       expect(
-        parseArxivId(paper.source.arxivId),
-        `paper ${paper.id} needs a pinned arXiv id`,
-      ).not.toBeNull();
-      expect(
-        existsSync(artifactPath(paper.source.arxivId)),
-        `artifact for ${paper.source.arxivId} — run \`npm run arxiv:build\``,
+        existsSync(facts.path),
+        `artifact for ${facts.id} — run \`${facts.buildCmd}\``,
       ).toBe(true);
     }
   });
 
   it("every module-referenced paper has a ready, current-version artifact", () => {
-    // Not just edited papers: any paper in a module renders PaperUnavailable
-    // at runtime if its artifact is missing or stale, and CI should catch that.
+    // Not just edited papers: any paper in a module renders an unavailable
+    // card at runtime if its artifact is missing or stale, and CI should
+    // catch that.
     for (const paper of papers) {
-      const artifact = readArtifact(paper.source.arxivId);
+      const facts = artifactFactsOf(paper);
+      const artifact = readArtifact(paper);
       expect(
         artifact.state,
-        `${paper.source.arxivId} must be ready — run \`npm run arxiv:build\``,
+        `${facts.id} must be ready — run \`${facts.buildCmd}\``,
       ).toBe("ready");
-      if (artifact.state !== "ready") continue;
+      if (!artifact.ready) continue;
       expect(
-        artifact.paper.converterVersion,
-        `${paper.source.arxivId} artifact is stale — run \`npm run arxiv:build\``,
-      ).toBe(CONVERTER_VERSION);
+        artifact.ready.converterVersion,
+        `${facts.id} artifact is stale — run \`${facts.buildCmd}\``,
+      ).toBe(facts.expectedVersion);
+    }
+  });
+
+  it("every ready artifact's listed assets are committed", () => {
+    // The HTML hotlinks nothing — every image it references must exist as a
+    // committed static file, or the deployed page renders broken images.
+    for (const paper of papers) {
+      const artifact = readArtifact(paper);
+      if (!artifact.ready) continue;
+      const facts = artifactFactsOf(paper);
+      for (const assetPath of artifact.ready.assets) {
+        expect(
+          existsSync(join(facts.assetsDir, assetPath)),
+          `${facts.id}: missing committed asset ${assetPath} — run \`${facts.buildCmd}\``,
+        ).toBe(true);
+      }
     }
   });
 
@@ -396,14 +443,15 @@ describe("paper integrity", () => {
         edit.op !== "hide" && "sectionEnd" in edit.after ? [edit.after.sectionEnd] : [],
       );
       if (sectionEnds.length === 0) continue;
-      const artifact = readArtifact(paper.source.arxivId);
-      if (artifact.state !== "ready") continue; // covered above
-      const tocIds = new Set(artifact.paper.toc.map((entry) => entry.id));
+      const facts = artifactFactsOf(paper);
+      const artifact = readArtifact(paper);
+      if (!artifact.ready) continue; // covered above
+      const tocIds = new Set(artifact.ready.toc.map((entry) => entry.id));
       for (const sectionEnd of sectionEnds) {
         expect(
           tocIds.has(sectionEnd),
-          `sectionEnd ${sectionEnd} not in ${paper.source.arxivId} toc — ` +
-            `run \`npm run arxiv:build -- --toc ${paper.source.arxivId}\` to list valid ids`,
+          `sectionEnd ${sectionEnd} not in ${facts.id} toc — ` +
+            `run \`${facts.tocCmd}\` to list valid ids`,
         ).toBe(true);
       }
     }
@@ -413,10 +461,10 @@ describe("paper integrity", () => {
     for (const paper of papers) {
       const refs = blockRefsOf(paper);
       if (refs.length === 0) continue;
-      const artifact = readArtifact(paper.source.arxivId);
-      if (artifact.state !== "ready") continue; // covered above
-      const index = buildBlockIndex(artifact.paper.html);
-      const listCmd = `npm run arxiv:build -- --blocks ${paper.source.arxivId}`;
+      const artifact = readArtifact(paper);
+      if (!artifact.ready) continue; // covered above
+      const index = buildBlockIndex(artifact.ready.html);
+      const listCmd = artifactFactsOf(paper).blocksCmd;
       for (const { edit, ref } of refs) {
         const info = index.get(ref.anchor);
         expect(
@@ -461,9 +509,9 @@ describe("paper integrity", () => {
 
   it("hides do not overlap and nothing renders inside a hidden region", () => {
     for (const paper of papers) {
-      const artifactState = readArtifact(paper.source.arxivId);
-      if (artifactState.state !== "ready") continue;
-      const index = buildBlockIndex(artifactState.paper.html);
+      const artifact = readArtifact(paper);
+      if (!artifact.ready) continue;
+      const index = buildBlockIndex(artifact.ready.html);
       const hides = (paper.edits ?? []).flatMap((edit) =>
         edit.op === "hide" ? [edit] : [],
       );
@@ -614,10 +662,80 @@ describe("module item navigation", () => {
   });
 });
 
-function artifactPath(arxivId: string): string {
-  return join(process.cwd(), "src/content/arxiv", `${arxivId}.json`);
+/** Per-source artifact facts: committed paths, expected version, CLI strings. */
+function artifactFactsOf(paper: Paper): {
+  id: string;
+  path: string;
+  assetsDir: string;
+  buildCmd: string;
+  tocCmd: string;
+  blocksCmd: string;
+  expectedVersion: number;
+} {
+  const source = paper.source;
+  switch (source.kind) {
+    case "arxiv":
+      return {
+        id: source.arxivId,
+        path: join(process.cwd(), "src/content/arxiv", `${source.arxivId}.json`),
+        assetsDir: join(process.cwd(), "public/arxiv", source.arxivId, "assets"),
+        buildCmd: "npm run arxiv:build",
+        tocCmd: `npm run arxiv:build -- --toc ${source.arxivId}`,
+        blocksCmd: `npm run arxiv:build -- --blocks ${source.arxivId}`,
+        expectedVersion: CONVERTER_VERSION,
+      };
+    case "substack": {
+      // Unparseable URLs fail the source-validity test; keep messages readable.
+      const id = parseSubstackPostUrl(source.postUrl)?.id ?? source.postUrl;
+      return {
+        id,
+        path: join(process.cwd(), "src/content/substack", `${id}.json`),
+        assetsDir: join(process.cwd(), "public/substack", id, "assets"),
+        buildCmd: "npm run substack:build",
+        tocCmd: `npm run substack:build -- --toc ${id}`,
+        blocksCmd: `npm run substack:build -- --blocks ${id}`,
+        expectedVersion: SUBSTACK_CONVERTER_VERSION,
+      };
+    }
+    case "lesswrong": {
+      const id = parseLessWrongPostUrl(source.postUrl)?.id ?? source.postUrl;
+      return {
+        id,
+        path: join(process.cwd(), "src/content/lesswrong", `${id}.json`),
+        assetsDir: join(process.cwd(), "public/lesswrong", id, "assets"),
+        buildCmd: "npm run lesswrong:build",
+        tocCmd: `npm run lesswrong:build -- --toc ${id}`,
+        blocksCmd: `npm run lesswrong:build -- --blocks ${id}`,
+        expectedVersion: LESSWRONG_CONVERTER_VERSION,
+      };
+    }
+  }
 }
 
-function readArtifact(arxivId: string): PaperArtifact {
-  return JSON.parse(readFileSync(artifactPath(arxivId), "utf8")) as PaperArtifact;
+/** Committed artifact, normalized across sources to the shared ready payload. */
+function readArtifact(paper: Paper): {
+  state: string;
+  ready?: {
+    html: string;
+    toc: PaperTocEntry[];
+    converterVersion: number;
+    assets: string[];
+  };
+} {
+  const facts = artifactFactsOf(paper);
+  const raw = JSON.parse(readFileSync(facts.path, "utf8"));
+  const artifact =
+    paper.source.kind === "arxiv"
+      ? (raw as PaperArtifact)
+      : (raw as SubstackArtifact | LessWrongArtifact);
+  if (artifact.state !== "ready") return { state: artifact.state };
+  const ready = "paper" in artifact ? artifact.paper : artifact.post;
+  if (!ready || typeof ready.html !== "string") {
+    // Fail loudly, not by skipping — a malformed "ready" artifact must not
+    // silently pass the ready/toc/snippet assertions above.
+    throw new Error(
+      `${facts.id}: artifact says "ready" but its payload is malformed — run \`${facts.buildCmd}\``,
+    );
+  }
+  return { state: "ready", ready };
 }

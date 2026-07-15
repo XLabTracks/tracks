@@ -10,8 +10,9 @@ A few rules that apply throughout:
 
 - **Hierarchy:** `Track → Module → items`. A track holds ordered **modules**; a
   module holds ordered **items** — lessons (an MDX page) and papers (a full-page
-  inline arXiv reading, §2), interleaved in any order. (In Khan terms a module is
-  a "lesson/unit" and an item is a "sublesson" — the page learners read.)
+  inline reading — an arXiv paper, Substack post, or LessWrong / Alignment
+  Forum post; §2–§2d), interleaved in any order. (In Khan terms a module is a
+  "lesson/unit" and an item is a "sublesson" — the page learners read.)
 - **The `*Ids` arrays drive everything.** Adding a `Lesson`/`Paper`/`Module`/`Track`
   object is not enough — you must also list its `id` in the parent's `itemIds` /
   `moduleIds` array. Those arrays set order (sidebar, prev/next) and membership.
@@ -24,10 +25,13 @@ A few rules that apply throughout:
 - **Verify after editing:** `npm run typecheck` (catches shape errors) and
   `npm run test` — `src/lib/content/content.test.ts` checks referential integrity
   (every `moduleIds`/`itemIds`/`prerequisiteModuleIds`/`assessmentId` resolves),
-  and for papers **with edits** also that the artifact is built at the current
-  converter version and every edit target resolves with a matching snippet.
+  that **every** module-referenced paper (any source kind, edits or not) has a
+  committed artifact that is `ready` at its source's current converter version
+  with all of its listed image assets present under `public/`, and for papers
+  **with edits** also that every edit target resolves with a matching snippet.
 - Placeholder copy is lorem ipsum — keep it lorem or leave it empty; don't invent
-  real curriculum. (Paper titles/authors are factual — they come from arXiv.)
+  real curriculum. (Paper titles/authors are factual — they come from the
+  source: the arXiv paper or the post.)
 - **Not everything is test-enforced.** Lesson+paper ids/slugs are; uniqueness of
   exercise/assessment/resource ids and of track/module slugs is NOT — a
   duplicate silently shadows the earlier entry (last one wins). Prerequisite
@@ -258,7 +262,9 @@ inline (LaTeX → HTML with KaTeX), the sidebar grows a docked **"In this paper"
 section panel with scroll-synced highlighting, and `edits` let you **hide** text,
 **add** editorial notes, and splice **activities** — exercise cards and inline
 lessons — at section ends, between paragraphs, or between sentences. Papers count
-toward progress exactly like lessons.
+toward progress exactly like lessons. Footnotes additionally render as margin
+**sidenotes** when the viewport has room (readers can toggle this from the
+page header; the in-document footnotes section is always there).
 
 1. **Add the paper object** to `src/content/papers.data.ts`:
 
@@ -293,7 +299,9 @@ toward progress exactly like lessons.
    from `papers.data.ts` and from `<ArxivPaper/>` embeds in lessons; use
    `-- --id 2301.12345v2` to build just one paper — raw e-prints cache in the OS
    temp dir, so re-runs skip the network), then commit
-   `src/content/arxiv/{id}.json` and `public/arxiv/{id}/…`.
+   `src/content/arxiv/{id}.json` and `public/arxiv/{id}/…`. Forgetting the
+   `public/` half is test-enforced — `npm run test` names each referenced
+   asset that isn't committed (the same check covers §2c–§2d artifacts).
 
 4. **Choosing `sectionEnd` targets**: the build prints each paper's section tree
    (`§3.2.2 Multi-Head Attention → ax-sec-multi-head-attention`); re-print
@@ -330,10 +338,13 @@ toward progress exactly like lessons.
    percentages count each unit. A manual "Mark complete" button is always
    available too (scroll-past completion still works even on the fallback page).
 
-7. **Rebuild on converter bumps**: when `CONVERTER_VERSION` changes,
-   `npm run test` fails on stale artifacts for any paper **with edits** — re-run
-   `npm run arxiv:build` and recommit. Section ids, anchors, and sentence indices
-   can change across bumps/versions; the tests name any edit that broke.
+7. **Rebuild on converter bumps**: each source pins its own converter version
+   (`CONVERTER_VERSION` for arXiv; `SUBSTACK_CONVERTER_VERSION` /
+   `LESSWRONG_CONVERTER_VERSION` for §2c/§2d posts). When one changes, stale
+   artifacts read as not-built at runtime, and `npm run test` fails **every**
+   paper of that source — edits or not — until you re-run that source's build
+   and recommit. Section ids, anchors, and sentence indices can change across
+   bumps/versions; the tests name any edit that broke.
 
 Degradation: a paper whose artifact isn't `ready` (PDF-only, unbuilt, failed)
 renders a link-out fallback page, with its activities stacked below under an
@@ -401,7 +412,13 @@ edits: [
   merge). Clicking expands the original below the pill. **Sentence hide** → an
   inline `···` pill that toggles the sentence back into the text (the note
   becomes its tooltip). Zero client JS either way.
-- **Block add** → a navy left-accented card with an uppercase "NOTE" label.
+- **Hides × sidenotes**: a footnote marker inside a collapsed hide gets no
+  margin sidenote until the learner expands the hide, and a hide inside a
+  footnote's body shows in the margin copy as a static `···` — its reveal
+  toggle works only in the in-document footnotes section.
+- **Block add** → a navy left-accented card with an uppercase "NOTE" label
+  (the op's optional `label` field overrides that eyebrow text, e.g.
+  `label: "Source"` — block/section targets only).
   **Inline add** → a navy-tinted span with a dashed underline, appended right
   after the target sentence, tooltipped "Added by the course". Editorial voice
   is always navy, distinct from the paper's red links.
@@ -434,11 +451,107 @@ sentences and nested blocks); adds/activities may not sit inside a hidden range
 sentence-range hide target its last sentence; for a whole-block hide target the
 block itself with no `s` — sentence-targeted activities may never split a
 hidden block); `sEnd` requires `s`; sentence refs only on prose blocks;
-snippets must match. If an edit's
+`label` only on block/section-level adds (an inline add has no card to
+label); snippets must match. If an edit's
 target fails to resolve at render time (local iteration), it fails soft: hides
 and adds do nothing, unmatched activities append at the paper's end, and the
 server console names the target. Re-pinning a paper's arXiv version invalidates
 anchors AND sentence indices — the snippet checks name every edit to re-verify.
+
+### 2c. Add a Substack post to a module
+
+A Substack post is the same first-class `Paper` item with a different
+`source` kind — it renders full-page through the **same edit engine, sidebar
+panel, and completion mechanics** as an arXiv paper (§2 steps 2, 5, 6 and all
+of §2b apply verbatim; step 7 too, keyed to `SUBSTACK_CONVERTER_VERSION` and
+`npm run substack:build`). The live reference is `ex-paper-substack` in the
+Example track. What differs:
+
+1. **Source** is the public post URL (works for `*.substack.com` and custom
+   domains — use the URL the post canonicalizes to):
+
+   ```ts
+   source: {
+     kind: "substack",
+     postUrl: "https://example.substack.com/p/some-post",
+   },
+   ```
+
+2. **Build + commit the artifact**: `npm run substack:build` (discovers
+   Substack sources in `papers.data.ts`; `-- --id <url>` builds one), then
+   commit `src/content/substack/{host}__{slug}.json` and
+   `public/substack/{host}__{slug}/…`. The converter pulls the post via
+   Substack's public JSON API, strips subscribe/share widgets, downloads
+   images to committed static assets, rebuilds footnotes as an
+   `sb-footnotes` landmark (which the reader also renders as margin
+   sidenotes beside their markers on wide viewports), degrades rich embeds
+   (tweets, videos) to link cards and drops what it can't degrade (embeds
+   with no recoverable URL, unrecognized Substack widgets) — both counted
+   in the build output, each one listed in the footer disclosure — and
+   normalizes the author's heading ranks onto h2–h4.
+
+3. **Discovery commands** mirror arXiv's, keyed by URL or artifact id:
+   `npm run substack:build -- --toc <url>` prints section ids
+   (`sb-sec-…` + `sb-footnotes`; posts have no section numbers), and
+   `-- --blocks <url> [--section <toc-id>]` prints anchors + sentences.
+
+4. **Pinning**: posts aren't versioned like e-prints — the committed artifact
+   IS the pin. Raw post JSON caches in the OS temp dir: while it lives,
+   plain re-runs convert the same bytes even if the author edits the post;
+   if the OS evicts it, the next build refetches (same effect as
+   `-- --refresh`, which does it deliberately). Either way `npm run test`'s
+   snippet tripwires name any edit a refetch broke before it can ship.
+   Paid-subscriber posts commit a terminal `paywalled` artifact, which
+   renders the link-out fallback while you iterate — but `npm run test`
+   requires every module-referenced paper's artifact to be `ready`, so a
+   paid post can't ship as a module item; only public posts reproduce
+   inline.
+
+5. **Permission**: a committed artifact reproduces the full post text and
+   images in this repo — same rule as everything else in `src/content/`:
+   only commit posts you have permission to reproduce.
+
+### 2d. Add a LessWrong / Alignment Forum post to a module
+
+Same `Paper` mechanics again (§2 steps 2, 5, 6 and all of §2b apply
+verbatim; step 7 too, keyed to `LESSWRONG_CONVERTER_VERSION` and
+`npm run lesswrong:build`; the workflow mirrors §2c). The live reference is
+`ex-paper-lesswrong` in the Example track. What differs:
+
+1. **Source** is the public post URL on either site (both serve the same
+   posts; the host you give is where links point):
+
+   ```ts
+   source: {
+     kind: "lesswrong",
+     postUrl: "https://www.lesswrong.com/posts/kcKrE9mzEHrdqtDpE/the-case-for-ensuring…",
+   },
+   ```
+
+2. **Build + commit**: `npm run lesswrong:build` (fetches via the public
+   ForumMagnum GraphQL API; `-- --id <url>`, `--toc`, `--blocks`,
+   `--refresh` all work as in §2c), then commit
+   `src/content/lesswrong/{site}__{postId}.json` and
+   `public/lesswrong/{site}__{postId}/…`. `{site}` is the fixed token
+   `lesswrong` or `alignmentforum` — not the hostname, unlike §2c's
+   `{host}` — e.g. `lesswrong__kcKrE9mzEHrdqtDpE`; `--toc`/`--blocks`
+   accept it in place of the URL. Section ids are `lw-sec-…` plus the
+   `lw-footnotes` landmark. There is no `paywalled` analogue: a post the
+   API returns without a readable body fails the build and commits
+   nothing (retry, or pick another post) — the only terminal non-`ready`
+   artifacts are `not-found` and `failed`.
+
+3. **Both footnote formats work**: modern editor footnotes and older
+   markdown posts' both rebuild into the linked `lw-footnotes` landmark,
+   so the margin-sidenote presentation (same as §2c — and as LessWrong
+   itself) applies to any post age. Nothing to configure per post.
+
+4. **Fidelity notes**: MathJax formulas re-render with KaTeX (vanilla — no
+   document macros); spoiler blocks become native expandable `<details>`;
+   tweets/videos degrade to link cards; LessWrong's own iframe widgets
+   can't be reproduced (the embed lives in their database) and are dropped
+   with a warning — counted in the build output, listed in the footer
+   disclosure.
 
 ---
 

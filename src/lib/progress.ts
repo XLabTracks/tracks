@@ -1,7 +1,9 @@
+import { cache } from "react";
 import type { SubmissionKind } from "@prisma/client";
 import { prisma } from "@/lib/db";
 import {
   getModuleProgressContentIds,
+  getModulesForTrack,
   getPrerequisiteModules,
   getTrackForModule,
   getTrackProgressContentIds,
@@ -24,27 +26,38 @@ export async function getCompletedLessonIds(
   return rows.map((r) => r.lessonId);
 }
 
-export async function isLessonCompleted(
-  userId: string,
-  lessonId: string,
-): Promise<boolean> {
-  const row = await prisma.lessonProgress.findUnique({
-    where: { userId_lessonId: { userId, lessonId } },
-    select: { status: true },
-  });
-  return row?.status === "completed";
-}
+// cache()-wrapped: string args, so the item page and an embedded widget
+// (e.g. VerificationExercise) that both check the same lesson dedupe to one
+// findUnique within a render.
+export const isLessonCompleted = cache(
+  async (userId: string, lessonId: string): Promise<boolean> => {
+    const row = await prisma.lessonProgress.findUnique({
+      where: { userId_lessonId: { userId, lessonId } },
+      select: { status: true },
+    });
+    return row?.status === "completed";
+  },
+);
 
-/** A module counts as complete when all of its content units are completed. */
-export async function isModuleComplete(
-  userId: string,
-  moduleId: string,
-): Promise<boolean> {
-  const contentIds = getModuleProgressContentIds(moduleId);
-  if (contentIds.length === 0) return true;
-  const completed = await getCompletedLessonIds(userId, contentIds);
-  return completed.length === contentIds.length;
-}
+/**
+ * The set of completed content ids covering a whole track AND every module's
+ * prerequisites (so prerequisite locks resolve in memory, cross-track prereqs
+ * included). One query, cache()-keyed on scalars — the track layout, the track
+ * overview page, and the item/module/assessment pages rendering under that
+ * layout in the same request all share it.
+ */
+export const getTrackCompletionSet = cache(
+  async (userId: string, trackId: string): Promise<Set<string>> => {
+    const ids = new Set(getTrackProgressContentIds(trackId));
+    for (const mod of getModulesForTrack(trackId)) {
+      for (const prereq of getPrerequisiteModules(mod.id)) {
+        for (const id of getModuleProgressContentIds(prereq.id)) ids.add(id);
+      }
+    }
+    if (ids.size === 0) return new Set();
+    return new Set(await getCompletedLessonIds(userId, [...ids]));
+  },
+);
 
 export interface PrerequisiteStatus {
   module: Module;
@@ -53,24 +66,48 @@ export interface PrerequisiteStatus {
   completed: boolean;
 }
 
-/** Resolved prerequisites for a module with per-item completion status. */
-export async function getPrerequisiteStatus(
-  userId: string | null,
-  moduleId: string,
-): Promise<PrerequisiteStatus[]> {
-  const prereqs = getPrerequisiteModules(moduleId);
-  return Promise.all(
-    prereqs.map(async (module) => {
+/**
+ * Resolved prerequisites for a module with per-item completion status. One
+ * query for the whole prerequisite set (bucketed in memory), reusing the
+ * request-cached track completion set when the module's track is known — so
+ * a page rendering under its track layout pays zero extra round trips.
+ */
+export const getPrerequisiteStatus = cache(
+  async (
+    userId: string | null,
+    moduleId: string,
+  ): Promise<PrerequisiteStatus[]> => {
+    const prereqs = getPrerequisiteModules(moduleId);
+    const label = (module: Module): PrerequisiteStatus => {
       const track = getTrackForModule(module.id);
       return {
         module,
         trackSlug: track?.slug ?? null,
         trackLabel: track ? (track.shortTitle ?? track.title) : null,
-        completed: userId ? await isModuleComplete(userId, module.id) : false,
+        completed: false,
       };
-    }),
-  );
-}
+    };
+    if (prereqs.length === 0 || !userId) return prereqs.map(label);
+
+    const track = getTrackForModule(moduleId);
+    // The track completion set already unions every module's prerequisites, so
+    // it answers this module's prereqs too (and is a cache hit under the track
+    // layout). Fall back to a scoped query only for an orphan module.
+    const completedSet = track
+      ? await getTrackCompletionSet(userId, track.id)
+      : new Set(
+          await getCompletedLessonIds(userId, [
+            ...new Set(prereqs.flatMap((m) => getModuleProgressContentIds(m.id))),
+          ]),
+        );
+    return prereqs.map((module) => ({
+      ...label(module),
+      completed: getModuleProgressContentIds(module.id).every((id) =>
+        completedSet.has(id),
+      ),
+    }));
+  },
+);
 
 export interface TrackProgress {
   completed: number;
@@ -115,3 +152,22 @@ export async function getSubmission(
     where: { userId_contentId_kind: { userId, contentId, kind } },
   });
 }
+
+/**
+ * All of a user's exercise submissions as a contentId→row map, one query per
+ * request. cache()-keyed on userId so every stateful `<Exercise/>` and
+ * `<ExerciseSequence/>` on a page shares a single findMany instead of a point
+ * lookup each (rows are bounded by authored content — one per exercise id).
+ */
+export const getExerciseSubmissionMap = cache(async (userId: string) => {
+  const rows = await prisma.submission.findMany({
+    where: { userId, kind: "exercise" },
+    select: {
+      contentId: true,
+      responseJson: true,
+      status: true,
+      updatedAt: true,
+    },
+  });
+  return new Map(rows.map((r) => [r.contentId, r]));
+});

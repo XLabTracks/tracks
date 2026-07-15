@@ -33,7 +33,11 @@ export const paperSanitizeSchema: Schema = {
   ],
   attributes: {
     ...defaultSchema.attributes,
-    "*": ["className", "dataAnchor", "dataConv"],
+    // data-anchor/data-s/data-conv are deliberately NOT allowed through:
+    // every converter stamps them post-sanitize (and data-conv at render
+    // time), so an occurrence in author-controlled input is a forgery that
+    // could shadow real block anchors.
+    "*": ["className"],
     // Resolved colors: values are OUR "#rrggbb" strings (strictly validated
     // in transforms/colors.ts), converted to inline styles post-sanitize.
     tr: ["className", "dataAxBg"],
@@ -41,9 +45,7 @@ export const paperSanitizeSchema: Schema = {
     img: ["src", "alt"],
     td: ["colSpan", "rowSpan", "dataAxBg"],
     th: ["colSpan", "rowSpan", "dataAxBg"],
-    // dataS (sentence spans) is stamped post-sanitize like dataAnchor;
-    // listed for consistency only.
-    span: ["id", "dataAxFg", "dataS"],
+    span: ["id", "dataAxFg"],
     h1: ["id"],
     h2: ["id"],
     h3: ["id"],

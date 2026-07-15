@@ -1,13 +1,19 @@
 import { PrismaClient } from "@prisma/client";
 import { PrismaPg } from "@prisma/adapter-pg";
 import { getCloudflareContext } from "@opennextjs/cloudflare";
+import { after } from "next/server";
 import { cache } from "react";
 
 // Workers forbid sharing TCP connections across requests (a reused client
 // hangs on the second request — prisma/prisma#28193), so the client is
-// per-request: cache() scopes it to one request/render, and maxUses: 1 makes
-// pg discard connections after use — real pooling happens upstream in
-// Hyperdrive (prod) or PlanetScale's PgBouncer (local, port 6432).
+// per-request: cache() scopes it to one request/render. Connections ARE reused
+// within the request (the pg pool serves every query off a few sockets) and
+// disposed at request end via after() — which runs in the same request context
+// through OpenNext's waitUntil, so nothing crosses the request boundary. Real
+// pooling still happens upstream in Hyperdrive (prod) / PlanetScale's PgBouncer
+// (local, port 6432). max is capped low: Workers allow only 6 simultaneous
+// open connections per request, and a burst of Promise.all queries must stay
+// under that.
 export const getDb = cache(() => {
   let connectionString: string | undefined;
   try {
@@ -23,9 +29,18 @@ export const getDb = cache(() => {
       "No database connection: set DATABASE_URL in .env (local) or bind HYPERDRIVE (Workers).",
     );
   }
-  return new PrismaClient({
-    adapter: new PrismaPg({ connectionString, maxUses: 1 }),
+  const client = new PrismaClient({
+    adapter: new PrismaPg({ connectionString, max: 5, idleTimeoutMillis: 5_000 }),
   });
+  // Close the request's pool once the response is flushed. after() is a no-op
+  // outside a request scope (tests, scripts) — those leak nothing meaningful
+  // since the process is short-lived.
+  try {
+    after(() => client.$disconnect());
+  } catch {
+    // No request scope (e.g. build-time / test) — disposal isn't needed.
+  }
+  return client;
 });
 
 // Call sites import `prisma` as a value; delegate property access to the

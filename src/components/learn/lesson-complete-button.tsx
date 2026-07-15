@@ -18,9 +18,10 @@ export function LessonCompleteButton({
   const [completed, setCompleted] = useState(initialCompleted);
   const [pending, startTransition] = useTransition();
 
-  // Reflect server state after auto-completion (LessonTracker → router.refresh()):
-  // adjust during render when the prop changes (React's documented alternative
-  // to a state-syncing effect).
+  // Reflect server state after auto-completion (LessonTracker's write
+  // revalidates the route, re-rendering this with a fresh prop): adjust during
+  // render when the prop changes (React's documented alternative to a
+  // state-syncing effect).
   const [prevInitial, setPrevInitial] = useState(initialCompleted);
   if (prevInitial !== initialCompleted) {
     setPrevInitial(initialCompleted);

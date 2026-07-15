@@ -1,9 +1,11 @@
 import type { Paper } from "@/lib/content/types";
 
-// Paper titles/metadata are factual (they come from the arXiv artifact).
-// See AUTHORING.md for the authoring workflow:
+// Paper titles/metadata are factual (they come from the source artifact).
+// See AUTHORING.md for the authoring workflow (arXiv papers §2, Substack
+// posts §2c, LessWrong posts §2d):
 //   npm run arxiv:build -- --toc <id>                  → section ids
 //   npm run arxiv:build -- --blocks <id> [--section …] → block anchors + sentences
+//   npm run substack:build / lesswrong:build           → same flags, for posts
 // Snippets are copied prefixes of the --blocks output lines (drift tripwires).
 export const papers: Paper[] = [
   {
@@ -309,6 +311,148 @@ export const papers: Paper[] = [
           { kind: "lesson", id: "ex-paper-note-l1" },
           { kind: "exercise", id: "understanding-check" },
         ],
+      },
+    ],
+  },
+  {
+    // The live reference for the Substack source kind: a real post rendered
+    // full-page through the same edit engine as arXiv papers. Editorial
+    // notes here are lorem (this is the Example track); the title/metadata
+    // are factual from the artifact.
+    id: "ex-paper-substack",
+    slug: "substack-post",
+    moduleId: "ex-content",
+    title: "Efficient tradeoffs and the safety-usefulness tradeoff model",
+    source: {
+      kind: "substack",
+      postUrl:
+        "https://blog.redwoodresearch.org/p/efficient-tradeoffs-and-the-safety",
+    },
+    estimatedMinutes: 13,
+    edits: [
+      // Mid-paragraph activity: splits the opening paragraph after sentence 1.
+      {
+        op: "activity",
+        after: {
+          anchor: "b-0001",
+          s: 1,
+          snippet: "I often use what I’ll call",
+        },
+        items: [{ kind: "exercise", id: "true-false" }],
+      },
+      // Block-level editorial note between paragraphs.
+      {
+        op: "add",
+        after: {
+          anchor: "b-0009",
+          snippet: "The safety/usefulness tradeoff model can be motivated",
+        },
+        markdown:
+          "Lorem ipsum block-level editorial commentary — a note from the course " +
+          "authors, visually distinct from the post. Inline math works: $s(u)$.",
+      },
+      // Inline editorial aside after a specific sentence.
+      {
+        op: "add",
+        after: {
+          anchor: "b-0014",
+          s: 1,
+          snippet: "In the rushed reasonable developer regime",
+        },
+        markdown: "*Editor's aside: lorem ipsum dolor sit amet — an inline note.*",
+      },
+      // Sentence-level hide (expandable marker in place of the sentence).
+      {
+        op: "hide",
+        at: {
+          anchor: "b-0016",
+          s: 1,
+          snippet: "The future will involve both kinds",
+        },
+      },
+      // Block-level hide with a marker note.
+      {
+        op: "hide",
+        at: {
+          anchor: "b-0017",
+          snippet: "(Thanks to Girish Gupta and many Redwood staff",
+        },
+        note: "Acknowledgments",
+      },
+      // Section-end activities.
+      {
+        op: "activity",
+        after: { sectionEnd: "sb-sec-rushed-reasonable-developers" },
+        items: [{ kind: "exercise", id: "multiple-choice" }],
+      },
+      {
+        op: "activity",
+        after: { sectionEnd: "sb-sec-overall-thoughts" },
+        items: [{ kind: "exercise", id: "understanding-check" }],
+      },
+    ],
+  },
+  {
+    // The live reference for the LessWrong source kind: a real post rendered
+    // full-page through the same edit engine, with its footnotes shown as
+    // margin sidenotes on wide screens. Editorial notes here are lorem (this
+    // is the Example track); title/metadata are factual from the artifact.
+    id: "ex-paper-lesswrong",
+    slug: "lesswrong-post",
+    moduleId: "ex-content",
+    title: "The case for ensuring that powerful AIs are controlled",
+    source: {
+      kind: "lesswrong",
+      postUrl:
+        "https://www.lesswrong.com/posts/kcKrE9mzEHrdqtDpE/the-case-for-ensuring-that-powerful-ais-are-controlled",
+    },
+    estimatedMinutes: 55,
+    edits: [
+      // Mid-paragraph activity: splits the opening paragraph after sentence 1.
+      {
+        op: "activity",
+        after: {
+          anchor: "b-0001",
+          s: 1,
+          snippet: "In this post, we argue that AI labs",
+        },
+        items: [{ kind: "exercise", id: "true-false" }],
+      },
+      // Block-level editorial note between paragraphs.
+      {
+        op: "add",
+        after: {
+          anchor: "b-0004",
+          snippet: "There are two main lines of defense",
+        },
+        markdown:
+          "Lorem ipsum block-level editorial commentary — a note from the course " +
+          "authors, visually distinct from the post.",
+      },
+      // Inline editorial aside after a specific sentence.
+      {
+        op: "add",
+        after: {
+          anchor: "b-0010",
+          s: 1,
+          snippet: "The control approach we're imagining won't work",
+        },
+        markdown: "*Editor's aside: lorem ipsum dolor sit amet — an inline note.*",
+      },
+      // Sentence-level hide (expandable marker in place of the sentence).
+      {
+        op: "hide",
+        at: {
+          anchor: "b-0009",
+          s: 2,
+          snippet: "In particular, when ML researchers first hear",
+        },
+      },
+      // Section-end activity.
+      {
+        op: "activity",
+        after: { sectionEnd: "lw-sec-the-control-property" },
+        items: [{ kind: "exercise", id: "multi-select" }],
       },
     ],
   },

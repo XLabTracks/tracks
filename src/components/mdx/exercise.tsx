@@ -14,7 +14,7 @@ import {
 } from "@/lib/content/exercise-view";
 import { writingPromptHtml } from "@/lib/content/writing-prompt-html";
 import { getCurrentUser } from "@/lib/auth";
-import { getSubmission } from "@/lib/progress";
+import { getExerciseSubmissionMap } from "@/lib/progress";
 import { saveWritingDraft, submitWriting } from "@/app/actions/submissions";
 import { AllocationExerciseCard } from "@/components/exercises/allocation-exercise";
 import { ArgueRevealExerciseCard } from "@/components/exercises/argue-reveal-exercise";
@@ -48,7 +48,7 @@ export async function Exercise({ id }: ExerciseProps) {
   if (exercise.type === "flowchart") {
     const user = await getCurrentUser();
     const submission = user
-      ? await getSubmission(user.id, exercise.id, "exercise")
+      ? ((await getExerciseSubmissionMap(user.id)).get(exercise.id) ?? null)
       : null;
     const initialStages = (
       submission?.responseJson as {
@@ -66,7 +66,7 @@ export async function Exercise({ id }: ExerciseProps) {
   if (exercise.type === "tap-reveal") {
     const user = await getCurrentUser();
     const submission = user
-      ? await getSubmission(user.id, exercise.id, "exercise")
+      ? ((await getExerciseSubmissionMap(user.id)).get(exercise.id) ?? null)
       : null;
     const initialRating =
       (submission?.responseJson as { rating?: TapRevealRating } | null)
@@ -77,7 +77,7 @@ export async function Exercise({ id }: ExerciseProps) {
   if (exercise.type === "allocation") {
     const user = await getCurrentUser();
     const submission = user
-      ? await getSubmission(user.id, exercise.id, "exercise")
+      ? ((await getExerciseSubmissionMap(user.id)).get(exercise.id) ?? null)
       : null;
     const initialScenarios = (
       submission?.responseJson as {
@@ -101,7 +101,7 @@ export async function Exercise({ id }: ExerciseProps) {
   if (exercise.type === "argue-reveal") {
     const user = await getCurrentUser();
     const submission = user
-      ? await getSubmission(user.id, exercise.id, "exercise")
+      ? ((await getExerciseSubmissionMap(user.id)).get(exercise.id) ?? null)
       : null;
     const responseJson = submission?.responseJson as {
       items?: Record<string, ArgueRevealItemEntry>;
@@ -137,7 +137,8 @@ export async function Exercise({ id }: ExerciseProps) {
     if (!user) {
       return <WritingExerciseCard exercise={exercise} promptHtml={promptHtml} />;
     }
-    const submission = await getSubmission(user.id, exercise.id, "exercise");
+    const submission =
+      (await getExerciseSubmissionMap(user.id)).get(exercise.id) ?? null;
     return (
       <WritingExerciseCard
         exercise={exercise}

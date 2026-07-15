@@ -64,7 +64,9 @@ export function PaperSectionNav({
   return (
     <ul
       ref={listRef}
-      className="min-h-0 flex-1 space-y-0.5 overflow-y-auto overscroll-contain px-2 pb-3"
+      // pr-3.5 (= px-2 + 6px) keeps classic scrollbars clear of the sidebar's
+      // resize handle when this panel docks in the resizable track sidebar.
+      className="min-h-0 flex-1 space-y-0.5 overflow-y-auto overscroll-contain pb-3 pl-2 pr-3.5"
     >
       {items.map((item) => {
         const anchor = anchorOf(item);

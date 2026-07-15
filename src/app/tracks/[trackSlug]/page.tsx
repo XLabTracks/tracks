@@ -13,11 +13,7 @@ import {
   itemTitleOf,
 } from "@/lib/content";
 import { getCurrentUser } from "@/lib/auth";
-import {
-  getCompletedLessonIds,
-  getLastViewedContentId,
-  getTrackProgress,
-} from "@/lib/progress";
+import { getLastViewedContentId, getTrackCompletionSet } from "@/lib/progress";
 import { Breadcrumbs } from "@/components/layout/breadcrumbs";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -52,13 +48,27 @@ export default async function TrackOverviewPage({
   const { track, modules } = outline;
 
   const user = await getCurrentUser();
-  const progress = user ? await getTrackProgress(user.id, track.id) : null;
-  const completedSet = new Set(
-    user
-      ? await getCompletedLessonIds(user.id, getTrackProgressContentIds(track.id))
-      : [],
-  );
-  const lastViewedId = user ? await getLastViewedContentId(user.id, track.id) : null;
+  // getTrackCompletionSet is a request-cache hit from the track layout; only
+  // last-viewed adds a query. Progress counts are derived in memory.
+  const [completedSet, lastViewedId] = user
+    ? await Promise.all([
+        getTrackCompletionSet(user.id, track.id),
+        getLastViewedContentId(user.id, track.id),
+      ])
+    : [new Set<string>(), null];
+  const trackContentIds = getTrackProgressContentIds(track.id);
+  const completedCount = trackContentIds.filter((id) =>
+    completedSet.has(id),
+  ).length;
+  const progress = user
+    ? {
+        completed: completedCount,
+        total: trackContentIds.length,
+        percent: trackContentIds.length
+          ? Math.round((completedCount / trackContentIds.length) * 100)
+          : 0,
+      }
+    : null;
   const firstItem = modules[0]?.items[0];
   // An inserted-lesson id resolves to its containing paper's page.
   const continueId = lastViewedId ?? (firstItem ? itemIdOf(firstItem) : null);

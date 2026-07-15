@@ -3,7 +3,6 @@ import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 import { Clock, ExternalLink } from "lucide-react";
 import {
-  getInsertedLessonsForPaper,
   getItemBySlugs,
   getItemNavigation,
   itemIdOf,
@@ -18,9 +17,17 @@ import { isAccessLocked } from "@/lib/content/prerequisites";
 import { getCurrentUser } from "@/lib/auth";
 import { getPaperArtifact } from "@/lib/arxiv/artifacts";
 import { buildAbsUrl, parseArxivId } from "@/lib/arxiv/id";
+import { getSubstackArtifact } from "@/lib/substack/artifacts";
+import { buildPostUrl, parseSubstackPostUrl } from "@/lib/substack/id";
+import { getLessWrongArtifact } from "@/lib/lesswrong/artifacts";
 import {
-  getCompletedLessonIds,
+  buildPostUrl as buildLwPostUrl,
+  displayHost,
+  parseLessWrongPostUrl,
+} from "@/lib/lesswrong/id";
+import {
   getPrerequisiteStatus,
+  getTrackCompletionSet,
   isLessonCompleted,
 } from "@/lib/progress";
 import { Breadcrumbs } from "@/components/layout/breadcrumbs";
@@ -29,6 +36,7 @@ import { LessonNav } from "@/components/layout/lesson-nav";
 import { LessonCompleteButton } from "@/components/learn/lesson-complete-button";
 import { LessonTracker } from "@/components/learn/lesson-tracker";
 import { PaperReader } from "@/components/papers/paper-reader";
+import { SidenotesToggle } from "@/components/papers/sidenotes-toggle";
 import { Button } from "@/components/ui/button";
 import { getVerificationExerciseForLesson } from "@/lib/verification/exercises";
 
@@ -177,21 +185,16 @@ async function PaperItemPage({
   nav: { prev: ItemRef | null; next: ItemRef | null };
   userId: string | null;
 }) {
-  // The paper and its inserted lessons are independent completion units.
-  const contentIds = [
-    paper.id,
-    ...getInsertedLessonsForPaper(paper.id).map((l) => l.id),
-  ];
-  const completedContentIds = new Set(
-    userId ? await getCompletedLessonIds(userId, contentIds) : [],
-  );
+  // The paper and its inserted lessons are independent completion units; the
+  // track completion set (a request-cache hit from the layout) covers them
+  // and PaperReader only membership-tests its own ids against it.
+  const completedContentIds = userId
+    ? await getTrackCompletionSet(userId, track.id)
+    : new Set<string>();
   const completed = completedContentIds.has(paper.id);
 
   // Cached per request — PaperReader reuses the same artifact lookup.
-  const arxivId = parseArxivId(paper.source.arxivId);
-  const artifact = arxivId ? await getPaperArtifact(arxivId.id) : null;
-  const authors =
-    artifact?.state === "ready" ? formatAuthors(artifact.paper.meta.authors) : null;
+  const source = await paperSourceHeader(paper.source);
 
   return (
     <div className="max-w-5xl px-4 py-8 lg:px-8">
@@ -208,24 +211,27 @@ async function PaperItemPage({
           Module {module.order}: {module.title} · Paper
         </p>
         <h1 className="mt-1 text-3xl font-semibold tracking-tight">{paper.title}</h1>
-        {authors && <p className="text-muted-foreground mt-2 text-sm">{authors}</p>}
+        {source.authors && (
+          <p className="text-muted-foreground mt-2 text-sm">{source.authors}</p>
+        )}
         <p className="text-muted-foreground mt-2 flex flex-wrap items-center gap-x-4 gap-y-1 text-sm">
           {paper.estimatedMinutes && (
             <span className="flex items-center gap-1">
               <Clock className="size-3.5" aria-hidden /> ~{paper.estimatedMinutes} min
             </span>
           )}
-          {arxivId && (
+          {source.link && (
             <a
-              href={buildAbsUrl(arxivId)}
+              href={source.link.href}
               target="_blank"
               rel="noreferrer"
               className="hover:text-destructive flex items-center gap-1 font-mono text-xs transition-colors"
             >
-              arXiv:{arxivId.id}
+              {source.link.label}
               <ExternalLink className="size-3" aria-hidden />
             </a>
           )}
+          {source.hasFootnotes && <SidenotesToggle />}
         </p>
       </header>
 
@@ -262,6 +268,63 @@ async function PaperItemPage({
       <LessonNav prev={nav.prev} next={nav.next} />
     </div>
   );
+}
+
+/**
+ * Per-source header bits: authors from the artifact meta, the external
+ * link, and whether the artifact has footnotes (drives the sidenote toggle).
+ */
+async function paperSourceHeader(source: Paper["source"]): Promise<{
+  authors: string | null;
+  link: { label: string; href: string } | null;
+  hasFootnotes: boolean;
+}> {
+  const hasFootnotesIn = (toc: { kind: string }[] | undefined) =>
+    toc?.some((entry) => entry.kind === "footnotes") ?? false;
+  switch (source.kind) {
+    case "arxiv": {
+      const arxivId = parseArxivId(source.arxivId);
+      const artifact = arxivId ? await getPaperArtifact(arxivId.id) : null;
+      const ready = artifact?.state === "ready" ? artifact.paper : null;
+      return {
+        authors: ready ? formatAuthors(ready.meta.authors) : null,
+        link: arxivId
+          ? { label: `arXiv:${arxivId.id}`, href: buildAbsUrl(arxivId) }
+          : null,
+        hasFootnotes: hasFootnotesIn(ready?.toc),
+      };
+    }
+    case "substack": {
+      const postRef = parseSubstackPostUrl(source.postUrl);
+      const artifact = postRef ? await getSubstackArtifact(postRef.id) : null;
+      const ready = artifact?.state === "ready" ? artifact.post : null;
+      return {
+        authors: ready ? formatAuthors(ready.meta.authors) : null,
+        link: postRef
+          ? {
+              label: postRef.host,
+              href: ready?.meta.canonicalUrl ?? buildPostUrl(postRef),
+            }
+          : null,
+        hasFootnotes: hasFootnotesIn(ready?.toc),
+      };
+    }
+    case "lesswrong": {
+      const postRef = parseLessWrongPostUrl(source.postUrl);
+      const artifact = postRef ? await getLessWrongArtifact(postRef.id) : null;
+      const ready = artifact?.state === "ready" ? artifact.post : null;
+      return {
+        authors: ready ? formatAuthors(ready.meta.authors) : null,
+        link: postRef
+          ? {
+              label: displayHost(postRef),
+              href: ready?.meta.canonicalUrl ?? buildLwPostUrl(postRef),
+            }
+          : null,
+        hasFootnotes: hasFootnotesIn(ready?.toc),
+      };
+    }
+  }
 }
 
 function formatAuthors(authors: string[] | undefined): string | null {

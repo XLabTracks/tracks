@@ -2,6 +2,8 @@ import { notFound } from "next/navigation";
 import {
   getExerciseById,
   getLessonById,
+  getModuleProgressContentIds,
+  getPrerequisiteModules,
   getTrackOutline,
   getTrackProgressContentIds,
   type Paper,
@@ -14,7 +16,12 @@ import { isAccessLocked } from "@/lib/content/prerequisites";
 import { getCurrentUser } from "@/lib/auth";
 import { getDemo } from "@/lib/demos/registry";
 import { getPaperArtifact } from "@/lib/arxiv/artifacts";
-import { getCompletedLessonIds, getPrerequisiteStatus } from "@/lib/progress";
+import { getSubstackArtifact } from "@/lib/substack/artifacts";
+import { parseSubstackPostUrl } from "@/lib/substack/id";
+import { getLessWrongArtifact } from "@/lib/lesswrong/artifacts";
+import { parseLessWrongPostUrl } from "@/lib/lesswrong/id";
+import type { PaperTocEntry } from "@/lib/arxiv/types";
+import { getTrackCompletionSet } from "@/lib/progress";
 import {
   buildPaperNav,
   type PaperNavActivity,
@@ -43,23 +50,26 @@ export default async function TrackLayout({
   let lockedModuleSlugs: string[] = [];
   if (user) {
     try {
-      completedContentIds = await getCompletedLessonIds(
-        user.id,
-        getTrackProgressContentIds(outline.track.id),
+      // One query for the whole track (+ prerequisite modules), then locks
+      // resolve in memory — the per-module prerequisite queries this used to
+      // fan out are all answered by this single set.
+      const completedSet = await getTrackCompletionSet(user.id, outline.track.id);
+      completedContentIds = getTrackProgressContentIds(outline.track.id).filter(
+        (id) => completedSet.has(id),
       );
       if (outline.track.prerequisiteEnforcement === "hard") {
-        const results = await Promise.all(
-          outline.modules.map(async ({ module }) => {
-            const statuses = await getPrerequisiteStatus(user.id, module.id);
-            return isAccessLocked(
+        lockedModuleSlugs = outline.modules
+          .filter(({ module }) =>
+            isAccessLocked(
               outline.track.prerequisiteEnforcement,
-              statuses.map((s) => s.completed),
-            )
-              ? module.slug
-              : null;
-          }),
-        );
-        lockedModuleSlugs = results.filter((s): s is string => s !== null);
+              getPrerequisiteModules(module.id).map((p) =>
+                getModuleProgressContentIds(p.id).every((id) =>
+                  completedSet.has(id),
+                ),
+              ),
+            ),
+          )
+          .map(({ module }) => module.slug);
       }
     } catch {
       completedContentIds = [];
@@ -126,11 +136,30 @@ async function buildNavForPaper(paper: Paper): Promise<PaperNavItem[]> {
                 : exerciseLabel(item.id),
       })),
     }));
-  const artifact = await getPaperArtifact(paper.source.arxivId);
-  // Non-ready artifacts still get activity-only entries so the fallback
-  // page's activities remain navigable.
-  const toc = artifact.state === "ready" ? artifact.paper.toc : [];
-  return buildPaperNav(toc, activities);
+  // Non-ready artifacts still get activity-only entries (empty toc) so the
+  // fallback page's activities remain navigable.
+  return buildPaperNav(await tocForSource(paper.source), activities);
+}
+
+async function tocForSource(source: Paper["source"]): Promise<PaperTocEntry[]> {
+  switch (source.kind) {
+    case "arxiv": {
+      const artifact = await getPaperArtifact(source.arxivId);
+      return artifact.state === "ready" ? artifact.paper.toc : [];
+    }
+    case "substack": {
+      const postRef = parseSubstackPostUrl(source.postUrl);
+      if (!postRef) return [];
+      const artifact = await getSubstackArtifact(postRef.id);
+      return artifact.state === "ready" ? artifact.post.toc : [];
+    }
+    case "lesswrong": {
+      const postRef = parseLessWrongPostUrl(source.postUrl);
+      if (!postRef) return [];
+      const artifact = await getLessWrongArtifact(postRef.id);
+      return artifact.state === "ready" ? artifact.post.toc : [];
+    }
+  }
 }
 
 function exerciseLabel(exerciseId: string): string {

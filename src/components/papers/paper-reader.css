@@ -8,6 +8,11 @@
     font-size: 1rem;
   }
 
+  /* Positioning context for the margin-sidenote layer (paper-sidenotes.tsx). */
+  .paper-reader {
+    position: relative;
+  }
+
   /* Anchor targets (section headings AND ins-* activity wrappers) must clear
      the sticky site header (3.5rem). Headings inside .arxiv-paper already
      carry scroll-margin-top from arxiv-paper.css; this covers the wrappers. */

@@ -3,7 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ChevronRight } from "lucide-react";
 import { requireUser } from "@/lib/auth";
-import { getClassroom, getClassroomRoster, getMembership } from "@/lib/classrooms";
+import { getClassroom, getClassroomRoster } from "@/lib/classrooms";
 import { getTrackById } from "@/lib/content";
 import { getTrackProgress } from "@/lib/progress";
 import { Breadcrumbs } from "@/components/layout/breadcrumbs";
@@ -39,11 +39,12 @@ export default async function ClassroomPage({
 }) {
   const { id } = await params;
   const user = await requireUser();
-  const membership = await getMembership(user.id, id);
-  if (!membership) notFound();
-
+  // getClassroom already includes every membership, so the caller's role is
+  // derivable — no separate membership round trip.
   const classroom = await getClassroom(id);
   if (!classroom) notFound();
+  const membership = classroom.memberships.find((m) => m.userId === user.id);
+  if (!membership) notFound();
   const track = classroom.trackId ? getTrackById(classroom.trackId) : null;
 
   const crumbs = [

@@ -1,0 +1,111 @@
+/*
+ * Margin sidenotes (see paper-sidenotes.tsx). The layer is an absolutely
+ * positioned column in the reader's right gutter; each note is pinned to
+ * its marker's height by the component. Tokens come from the app theme, so
+ * dark mode works untouched.
+ */
+@layer components {
+  .paper-sidenote-layer {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    /* left/right + width set by the component from measured gutter space */
+    pointer-events: none;
+  }
+  /* The cross-fade arms only once the component adds the ready class, one
+     frame after first paint (see paper-sidenotes.tsx) — a page loads with
+     its notes settled, not fading in. */
+  .paper-sidenotes-ready .paper-sidenote-layer {
+    transition:
+      opacity 250ms ease,
+      display 250ms allow-discrete;
+  }
+  /* Hidden — by preference, geometry, or no renderable notes: fade out over
+     the (stale) notes, with display flipping only at transition end so the
+     off-column box stops contributing overflow. Browsers without discrete
+     display transitions just hide instantly. */
+  .paper-sidenote-layer[data-hidden] {
+    display: none;
+    opacity: 0;
+  }
+  /* Ghost notes must not swallow clicks aimed at text reflowing beneath. */
+  .paper-sidenote-layer[data-hidden] .paper-sidenote {
+    pointer-events: none;
+  }
+  @starting-style {
+    .paper-sidenote-layer:not([data-hidden]) {
+      opacity: 0;
+    }
+  }
+  /* Inset placement (typical laptop widths): the reading column reserves a
+     right-hand rail for the notes instead of using window gutter. The value
+     matches INSET_RESERVE in paper-sidenotes.tsx. */
+  .paper-reader.paper-sidenotes-inset {
+    padding-right: 18rem;
+  }
+  /* Rail reserve/release reflows smoothly, same arming rule (and the same
+     duration as the fade, so neither finishes over a still-moving page). */
+  .paper-reader.paper-sidenotes-ready {
+    transition: padding-right 250ms ease;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .paper-sidenotes-ready .paper-sidenote-layer,
+    .paper-reader.paper-sidenotes-ready {
+      transition: none;
+    }
+  }
+  .paper-sidenote {
+    position: absolute;
+    left: 0;
+    right: 0;
+    pointer-events: auto;
+    display: flex;
+    gap: 0.5em;
+    font-size: 0.75rem;
+    line-height: 1.5;
+    color: var(--muted-foreground);
+    transition: color 120ms ease;
+  }
+  .paper-sidenote:hover {
+    color: var(--foreground);
+  }
+  .paper-sidenote-num {
+    flex: none;
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+    color: var(--foreground);
+    opacity: 0.6;
+  }
+  .paper-sidenote-num::after {
+    content: ".";
+  }
+  .paper-sidenote-body {
+    min-width: 0;
+  }
+  .paper-sidenote-body p {
+    margin: 0 0 0.5em;
+  }
+  .paper-sidenote-body p:last-child {
+    margin-bottom: 0;
+  }
+  .paper-sidenote-body a {
+    color: inherit;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+  .paper-sidenote-body a:hover {
+    color: var(--destructive);
+  }
+  .paper-sidenote-body img {
+    max-width: 100%;
+    height: auto;
+  }
+  /* Stand-in for edit-UI hidden content inside a clone (the canonical
+     footnote keeps the working reveal toggle). */
+  .paper-sidenote-hidden {
+    border: 1px dashed var(--border);
+    border-radius: 9999px;
+    padding: 0 0.5em;
+    letter-spacing: 0.15em;
+  }
+}

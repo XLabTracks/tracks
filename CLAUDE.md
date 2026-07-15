@@ -32,6 +32,13 @@ step-by-step guide for adding content (its rules are enforced by
   authoring-time only). `-- --id <id>` builds one paper; `-- --toc <id>` /
   `-- --blocks <id> [--section <toc-id>]` print section ids / block anchors +
   sentences from the committed artifact (offline — the source for edit targets).
+- `npm run substack:build` — the same pipeline for Substack-post papers
+  (`src/content/substack/*.json` + `public/substack/*`); same
+  `--id/--toc/--blocks` flags (post URL or `{host}__{slug}` artifact id), plus
+  `--refresh` to refetch a post the author has edited.
+- `npm run lesswrong:build` — likewise for LessWrong / Alignment Forum posts
+  (`src/content/lesswrong/*.json` + `public/lesswrong/*`; fetched via the
+  public ForumMagnum GraphQL API; artifact ids are `{site}__{postId}`).
 - `npx prisma generate` — regenerate the client after editing `prisma/schema.prisma`.
   Do **not** run `prisma migrate` against the hosted DB (see Database & deploy).
 - `npm run cf-typegen` — regenerate `cloudflare-env.d.ts` after changing
@@ -73,7 +80,9 @@ pages render without any of this; auth + persistence do not.
   (lessons, papers, and papers' inserted lessons each count as one unit).
 
 **Papers.** A `Paper` (`src/content/papers.data.ts`) is a module item that
-renders an arXiv paper full-page from its precomputed artifact, editable via
+renders an arXiv paper, Substack post, or LessWrong/Alignment Forum post
+full-page from its precomputed artifact (`Paper.source` kinds
+`arxiv`/`substack`/`lesswrong`), editable via
 `Paper.edits`: hide sentences/paragraphs behind expandable markers, add
 editorial markdown (navy "Note" styling), and splice activities (exercises /
 inline lessons) at section ends, between blocks, or mid-paragraph. Targets key
@@ -83,12 +92,26 @@ patches only edited sections (HAST tree ops; unedited papers keep the string
 fast path via `split-paper.ts`); `paper-nav.ts` builds the sidebar's per-paper
 section tree (scroll-spy in `src/components/layout/use-scroll-spy.ts`;
 multi-heading lessons get the same docked nav — see MDX pipeline). The
-LaTeX→HTML converter lives in `src/lib/arxiv/` and runs ONLY at authoring time
-(`npm run arxiv:build`) — never in the deployed worker. When changing converter
-output shape, bump `CONVERTER_VERSION` (`src/lib/arxiv/types.ts`) and ship the
-rebuilt artifacts in the same commit: stale artifacts read as "not-built" at
-runtime and fail content.test.ts, and anchors/sentence indices may renumber
-(the snippet tripwires name every content edit that drifted).
+converters run ONLY at authoring time — never in the deployed worker: the
+LaTeX→HTML converter lives in `src/lib/arxiv/` (`npm run arxiv:build`); the
+Substack and LessWrong converters (`src/lib/substack/`, `src/lib/lesswrong/`,
+sharing `src/lib/paper-source/convert-shared.ts`) emit the same annotation
+contract (anchors/sentences/toc), which is why everything in
+`src/lib/papers/` serves all sources. When changing converter output shape,
+bump that converter's version constant (`CONVERTER_VERSION`,
+`SUBSTACK_CONVERTER_VERSION`, `LESSWRONG_CONVERTER_VERSION` in the
+respective types.ts) and ship the rebuilt artifacts in the same commit: stale
+artifacts read as "not-built" at runtime and fail content.test.ts, and
+anchors/sentence indices may renumber (the snippet tripwires name every
+content edit that drifted). Posts aren't version-pinned — the committed
+artifact is the pin (`--refresh` refetches deliberately); paywalled Substack
+posts commit a terminal `paywalled` artifact rather than reproducing partial
+text. Footnotes (all three sources) rebuild into a linked landmark section,
+and the reader renders them as margin sidenotes when there's room — outside
+the reading column on large monitors, in an inset rail on laptop widths —
+user-toggleable from the paper header
+(`src/components/papers/paper-sidenotes.tsx` + `sidenotes-toggle.tsx` —
+DOM-cloning presentation layer; the in-document section stays canonical).
 
 **Routing (tracks).** `/tracks/[trackSlug]/[moduleSlug]/[itemSlug]` is one
 dispatching route serving both lessons and papers (they share a slug

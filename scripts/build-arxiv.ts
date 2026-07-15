@@ -60,9 +60,9 @@ function idsFromLessons(): string[] {
 }
 
 function idsFromPapers(): string[] {
-  return papers
-    .filter((p) => p.source.kind === "arxiv")
-    .map((p) => p.source.arxivId);
+  return papers.flatMap((p) =>
+    p.source.kind === "arxiv" ? [p.source.arxivId] : [],
+  );
 }
 
 function argValue(flag: string): string | undefined {

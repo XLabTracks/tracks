@@ -7,14 +7,6 @@ import {
   tracks,
 } from "@/lib/content";
 
-/** The caller's role in a classroom, or null if they are not a member. */
-export async function getMembership(userId: string, classroomId: string) {
-  return prisma.classroomMembership.findUnique({
-    where: { classroomId_userId: { classroomId, userId } },
-    select: { role: true },
-  });
-}
-
 export async function getMyClassrooms(userId: string) {
   return prisma.classroomMembership.findMany({
     where: { userId },
@@ -32,7 +24,11 @@ export async function getClassroom(classroomId: string) {
     where: { id: classroomId },
     include: {
       memberships: {
-        include: { user: true },
+        // Only the fields both pages render (role check, roster, student
+        // header) — not the full User row (workosUserId/createdAt/id).
+        include: {
+          user: { select: { name: true, email: true, imageUrl: true } },
+        },
         orderBy: { joinedAt: "asc" },
       },
     },

@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { recordLessonView, setLessonComplete } from "@/app/actions/progress";
 
@@ -32,7 +31,6 @@ export function LessonTracker({
   autoComplete?: boolean;
   toastLabel?: string;
 }) {
-  const router = useRouter();
   const sentinel = useRef<HTMLDivElement>(null);
   const done = useRef(completed);
 
@@ -56,10 +54,12 @@ export function LessonTracker({
         if (done.current || !entries.some((e) => e.isIntersecting)) return;
         done.current = true;
         observer.disconnect();
+        // setLessonComplete calls revalidatePath, so the action response
+        // re-renders the route (sidebar checkmark + button included) — no
+        // client router.refresh() needed.
         setLessonComplete(lessonId, true)
           .then(() => {
             toast.success(toastLabel);
-            router.refresh();
           })
           .catch(() => {
             done.current = false;
@@ -69,7 +69,7 @@ export function LessonTracker({
     );
     observer.observe(el);
     return () => observer.disconnect();
-  }, [autoComplete, lessonId, router, toastLabel]);
+  }, [autoComplete, lessonId, toastLabel]);
 
   return <div ref={sentinel} aria-hidden className="h-px w-full" />;
 }

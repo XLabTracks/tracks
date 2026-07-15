@@ -62,8 +62,17 @@ export interface Lesson {
 // Papers (full-page inline readings with embedded activities)
 // ---------------------------------------------------------------------------
 
-/** Where a paper's rendered artifact comes from. Extend by adding kinds. */
-export type PaperSource = { kind: "arxiv"; arxivId: string };
+/**
+ * Where a paper's rendered artifact comes from. Extend by adding kinds.
+ * arXiv sources pin a version ("2301.12345v2"). Substack and LessWrong /
+ * Alignment Forum sources give the public post URL — posts aren't
+ * versioned, so the committed artifact (built by `npm run substack:build` /
+ * `npm run lesswrong:build`) is the pin.
+ */
+export type PaperSource =
+  | { kind: "arxiv"; arxivId: string }
+  | { kind: "substack"; postUrl: string }
+  | { kind: "lesswrong"; postUrl: string };
 
 /**
  * An activity spliced into the paper flow: an exercise card, an inline
@@ -79,8 +88,10 @@ export type PaperInsertionItem =
 
 /**
  * A block or sentence in the converted paper, by stable anchor. Anchors and
- * sentence indices are deterministic per (arXiv version, converter version) —
- * discover them with `npm run arxiv:build -- --blocks <arxivId>`.
+ * sentence indices are deterministic per (source version, converter version) —
+ * discover them with the source's build CLI: `npm run arxiv:build --
+ * --blocks <arxivId>`, or `npm run substack:build` / `npm run
+ * lesswrong:build` `-- --blocks <postUrl>`.
  */
 export interface PaperBlockRef {
   /** data-anchor of the block, e.g. "b-0042". */
@@ -96,7 +107,7 @@ export interface PaperBlockRef {
   snippet: string;
 }
 
-/** End of a toc entry's subtree ("ax-sec-…" or a landmark id) — see `--toc`. */
+/** End of a toc entry's subtree ("ax-sec-…"/"sb-sec-…"/"lw-sec-…" or a landmark id) — see `--toc`. */
 export interface PaperSectionEndRef {
   sectionEnd: string;
 }

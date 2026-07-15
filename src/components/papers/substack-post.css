@@ -1,0 +1,52 @@
+/*
+ * Substack-specific additions on top of the shared paper typography. A
+ * Substack reader renders as `.arxiv-paper.substack-post`: the .arxiv-paper
+ * class carries the generic reading styles and the edit-UI (ax-hidden/
+ * ax-added) markers, and this file scopes the converter's sb-* vocabulary.
+ */
+@layer components {
+  /* Footnotes — mirror the arXiv .ax-footnotes treatment. */
+  .substack-post .sb-footnotes {
+    border-top: 1px solid var(--border);
+    margin-top: 2.5em;
+    padding-top: 0.5em;
+  }
+  .substack-post .sb-footnotes ol {
+    font-size: 0.9em;
+  }
+  .substack-post .sb-footnotes li {
+    scroll-margin-top: 5rem;
+  }
+  .substack-post sup.sb-fnref {
+    scroll-margin-top: 5rem;
+  }
+  .substack-post sup.sb-fnref a {
+    text-decoration: none;
+    padding: 0 0.1em;
+  }
+  .substack-post .sb-backlink {
+    margin-left: 0.35em;
+    text-decoration: none;
+  }
+
+  /* Rich embeds degraded to link cards by the converter. */
+  .substack-post figure.sb-embed {
+    border: 1px solid var(--border);
+    border-radius: 0.75rem;
+    background: color-mix(in oklab, var(--muted) 30%, transparent);
+    padding: 1em 1.25em;
+    text-align: left;
+  }
+  .substack-post figure.sb-embed a {
+    font-size: 0.9em;
+    word-break: break-all;
+  }
+
+  /* Substack pullquotes (a class the editor puts on paragraphs). */
+  .substack-post p.pullquote {
+    font-size: 1.15em;
+    font-style: italic;
+    text-align: center;
+    margin: 1.5em 2em;
+  }
+}

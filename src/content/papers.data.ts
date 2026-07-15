@@ -338,6 +338,112 @@ export const papers: Paper[] = [
     estimatedMinutes: 30,
   },
   {
+    // Control track, module 1: Ryan Greenblatt's threat-prioritization post,
+    // rendered through the LessWrong paper reader with its quick-recall
+    // sequence and two exercises spliced back into the reading (was a
+    // copied-text MDX lesson).
+    id: "c-threats-l1",
+    slug: "prioritizing-threats-for-ai-control",
+    moduleId: "c-intro",
+    title: "Prioritizing threats for AI control",
+    source: {
+      kind: "lesswrong",
+      postUrl:
+        "https://www.lesswrong.com/posts/fCazYoZSSMadiT6sf/prioritizing-threats-for-ai-control",
+    },
+    estimatedMinutes: 15,
+    edits: [
+      // End of the "Some clusters of threats" body, before the "Concentrated
+      // vs non-concentrated failures" subsection: quick recall on the taxonomy
+      // (block anchor, not sectionEnd — the parent section has a subsection the
+      // sequence must precede).
+      {
+        op: "activity",
+        after: {
+          anchor: "b-0024",
+          snippet: "Note that these are somewhat fuzzy and overlapping",
+        },
+        items: [
+          {
+            kind: "sequence",
+            label: "Quick recall",
+            exerciseIds: [
+              "c-threats-l1-recall-control",
+              "c-threats-l1-recall-rogue-deployment",
+              "c-threats-l1-recall-security-invariant",
+              "c-threats-l1-recall-internal-vs-external",
+            ],
+          },
+        ],
+      },
+      // §"My prioritization" (mid-section): after the self-exfiltration
+      // paragraph, recall why rogue internal deployments rank above it.
+      {
+        op: "activity",
+        after: {
+          anchor: "b-0050",
+          snippet:
+            "Self-exfiltration is a lower priority than rogue internal deployments",
+        },
+        items: [
+          { kind: "exercise", id: "c-threats-l1-recall-internal-vs-exfiltration" },
+        ],
+      },
+      // End of the reading: reprioritize the threat list for a lower-will world.
+      {
+        op: "activity",
+        after: { sectionEnd: "lw-sec-my-prioritization-between-these-threats" },
+        items: [{ kind: "exercise", id: "c-threats-l1-reprioritize" }],
+      },
+    ],
+  },
+  {
+    // Control track, module 1: Vivek Hebbar's diffuse-threats post, rendered
+    // full-page from the Redwood blog (Substack) with its quick-recall
+    // sequence and one exercise spliced back in (was a copied-text MDX lesson).
+    id: "c-threats-l2",
+    slug: "diffuse-threats-research-sabotage",
+    moduleId: "c-intro",
+    title:
+      "How can we solve diffuse threats like research sabotage with AI control?",
+    source: {
+      kind: "substack",
+      postUrl:
+        "https://blog.redwoodresearch.org/p/how-can-we-solve-diffuse-threats",
+    },
+    estimatedMinutes: 12,
+    edits: [
+      // End of the "Threat model and basic countermeasures" body, before the
+      // "Deployer strategies" subsection: quick recall on the setup.
+      {
+        op: "activity",
+        after: {
+          anchor: "b-0014",
+          snippet: "Our question: Can we make this research go well",
+        },
+        items: [
+          {
+            kind: "sequence",
+            label: "quick recall",
+            exerciseIds: [
+              "c-threats-l2-recall-research-sabotage",
+              "c-threats-l2-recall-diffuse",
+            ],
+          },
+        ],
+      },
+      // §"Deployer strategies" (mid-section): after the "Incrimination" region
+      // paragraph, recall why incrimination fails at the diffuse end.
+      {
+        op: "activity",
+        after: { anchor: "b-0028", snippet: "Incrimination: In the top left" },
+        items: [
+          { kind: "exercise", id: "c-threats-l2-recall-incrimination-diffuse" },
+        ],
+      },
+    ],
+  },
+  {
     id: "ex-paper-attention",
     slug: "attention-paper",
     moduleId: "ex-content",

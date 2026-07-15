@@ -408,29 +408,12 @@ export const lessons: Lesson[] = [
     contentRef: "c-game",
     estimatedMinutes: 92,
   },
-  // --- Control: reproduced readings rendered through the paper reader (with
-  // permission from Redwood Research) live in papers.data.ts as Paper items —
-  // the "case for control" post, the safety–usefulness tradeoff model, and
-  // "catching AIs red-handed". ---
-  // --- Control: threat-modeling readings (reproduced verbatim with
-  // permission from Redwood Research) ---
-  {
-    id: "c-threats-l1",
-    slug: "prioritizing-threats-for-ai-control",
-    moduleId: "c-intro",
-    title: "Prioritizing threats for AI control",
-    contentRef: "c-threats-l1",
-    estimatedMinutes: 15,
-  },
-  {
-    id: "c-threats-l2",
-    slug: "diffuse-threats-research-sabotage",
-    moduleId: "c-intro",
-    title:
-      "How can we solve diffuse threats like research sabotage with AI control?",
-    contentRef: "c-threats-l2",
-    estimatedMinutes: 12,
-  },
+  // --- Control: every reproduced reading in module 1 (with permission from
+  // Redwood Research) now renders through the paper reader as a Paper item in
+  // papers.data.ts — the "case for control" post, the safety–usefulness
+  // tradeoff model, "catching AIs red-handed", and the two threat-modeling
+  // posts (prioritizing threats; diffuse threats / research sabotage). Their
+  // guided exercises are spliced back into the reading via Paper.edits. ---
   // --- Control, module 6 (low-stakes control): a talk plus three readings
   // (the Redwood posts reproduced verbatim with permission; the Carlsmith
   // post reproduced verbatim from LessWrong) ---

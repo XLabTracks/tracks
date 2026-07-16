@@ -3,14 +3,20 @@
 import { SlideStepper, type SlideStep } from "./slide-stepper";
 
 // The regime model's loop (module 2, "Determining the usefulness") as a
-// stepper: budget buys a technique, the technique changes the world, the
-// catch updates the epistemic state, the evidence refills the budget, and
-// the bigger budget funds the next round. Captions restate the lesson's
-// five numbered steps.
+// build-up stepper: the resource state alone, then it buys a technique, then
+// the technique's effect on the world stacks vertically, then the epistemic
+// state completes the diamond and the cycle closes. Nodes glide between
+// layouts; each layout's arrows cross-fade in place. Captions restate the
+// lesson's five numbered steps.
 
 const STEPS: SlideStep[] = [
   {
-    label: "The budget buys a technique",
+    label: "The resource state",
+    caption:
+      "Everything starts at the resource state — the safety budget: the will account, and the prices the regime sets.",
+  },
+  {
+    label: "It buys a technique",
     caption:
       "The resource state buys a technique — say, a monitoring protocol for the lab's internal AI agents.",
   },
@@ -37,76 +43,180 @@ const STEPS: SlideStep[] = [
 ];
 
 const W = 560;
-const H = 280;
-
-interface Node {
-  id: string;
-  label: string;
-  x: number;
-  y: number;
-}
-
-const NODES: Node[] = [
-  { id: "resource", label: "Resource state", x: 280, y: 40 },
-  { id: "technique", label: "Technique", x: 470, y: 140 },
-  { id: "world", label: "World state", x: 280, y: 240 },
-  { id: "epistemic", label: "Epistemic state", x: 90, y: 140 },
-];
-
+const H = 300;
 const NODE_W = 128;
 const NODE_H = 34;
 
-// Edges in loop order; edge i is highlighted at step i (step 4 lights all).
-// Label positions are hand-placed clear of the arrows.
-const EDGES = [
-  { from: "resource", to: "technique", lines: ["buys"], lx: 410, ly: 72 },
-  {
-    from: "technique",
-    to: "world",
-    lines: ["changes the facts"],
-    lx: 428,
-    ly: 214,
-  },
-  { from: "world", to: "epistemic", lines: ["updates"], lx: 148, ly: 214 },
-  {
-    from: "epistemic",
-    to: "resource",
-    lines: ["refills will,", "cuts prices"],
-    lx: 122,
-    ly: 78,
-  },
+// Per-step center positions for each node, tracing the choreography:
+// centered alone → horizontal pair → vertical stack → diamond.
+const POS: Record<string, [number, number][]> = {
+  resource: [
+    [280, 150],
+    [160, 150],
+    [280, 54],
+    [280, 40],
+    [280, 40],
+    [280, 40],
+  ],
+  technique: [
+    [400, 150],
+    [400, 150],
+    [280, 150],
+    [470, 150],
+    [470, 150],
+    [470, 150],
+  ],
+  world: [
+    [280, 246],
+    [280, 246],
+    [280, 246],
+    [280, 260],
+    [280, 260],
+    [280, 260],
+  ],
+  epistemic: [
+    [90, 150],
+    [90, 150],
+    [90, 150],
+    [90, 150],
+    [90, 150],
+    [90, 150],
+  ],
+};
+
+const LABELS: Record<string, string> = {
+  resource: "Resource state",
+  technique: "Technique",
+  world: "World state",
+  epistemic: "Epistemic state",
+};
+
+// The step at which each node first appears.
+const APPEARS: Record<string, number> = {
+  resource: 0,
+  technique: 1,
+  world: 2,
+  epistemic: 3,
+};
+
+// Which nodes are highlighted at each step.
+const LIT: string[][] = [
+  ["resource"],
+  ["resource", "technique"],
+  ["technique", "world"],
+  ["world", "epistemic"],
+  ["epistemic", "resource"],
+  ["resource", "technique", "world", "epistemic"],
 ];
 
-function nodeById(id: string): Node {
-  return NODES.find((n) => n.id === id)!;
-}
-
-/** Straight edge between two node borders, shortened so arrowheads sit clear. */
-function edgePath(from: Node, to: Node): string {
-  const dx = to.x - from.x;
-  const dy = to.y - from.y;
+/** Straight diamond edge between two node centers, inset so arrows sit clear. */
+function edgePath(from: [number, number], to: [number, number]): string {
+  const dx = to[0] - from[0];
+  const dy = to[1] - from[1];
   const len = Math.hypot(dx, dy);
   const ux = dx / len;
   const uy = dy / len;
   const inset = 78;
-  const x1 = from.x + ux * inset;
-  const y1 = from.y + uy * inset * 0.55;
-  const x2 = to.x - ux * inset;
-  const y2 = to.y - uy * inset * 0.55;
+  const x1 = from[0] + ux * inset;
+  const y1 = from[1] + uy * inset * 0.55;
+  const x2 = to[0] - ux * inset;
+  const y2 = to[1] - uy * inset * 0.55;
   return `M ${x1.toFixed(1)} ${y1.toFixed(1)} L ${x2.toFixed(1)} ${y2.toFixed(1)}`;
+}
+
+const DIAMOND: Record<string, [number, number]> = {
+  resource: [280, 40],
+  technique: [470, 150],
+  world: [280, 260],
+  epistemic: [90, 150],
+};
+
+// Diamond edges in loop order; edge i lights at step i+1 (step 5 lights all).
+const DIAMOND_EDGES = [
+  { from: "resource", to: "technique", lines: ["buys"], lx: 412, ly: 78 },
+  {
+    from: "technique",
+    to: "world",
+    lines: ["changes the facts"],
+    lx: 430,
+    ly: 218,
+  },
+  { from: "world", to: "epistemic", lines: ["updates"], lx: 144, ly: 218 },
+  {
+    from: "epistemic",
+    to: "resource",
+    lines: ["refills will,", "cuts prices"],
+    lx: 120,
+    ly: 74,
+  },
+];
+
+function Arrow({
+  d,
+  lit,
+  visible,
+}: {
+  d: string;
+  lit: boolean;
+  visible: boolean;
+}) {
+  return (
+    <path
+      d={d}
+      fill="none"
+      stroke={lit ? "var(--primary)" : "var(--muted-foreground)"}
+      strokeOpacity={visible ? (lit ? 1 : 0.45) : 0}
+      strokeWidth={lit ? 2.5 : 1.5}
+      markerEnd={
+        visible
+          ? lit
+            ? "url(#loop-arrow)"
+            : "url(#loop-arrow-dim)"
+          : undefined
+      }
+      className="transition-all duration-500 motion-reduce:transition-none"
+    />
+  );
+}
+
+function EdgeLabel({
+  x,
+  y,
+  lines,
+  lit,
+  visible,
+}: {
+  x: number;
+  y: number;
+  lines: string[];
+  lit: boolean;
+  visible: boolean;
+}) {
+  return (
+    <text
+      x={x}
+      y={y}
+      fontSize={10}
+      textAnchor="middle"
+      fill={lit ? "var(--primary)" : "var(--muted-foreground)"}
+      opacity={visible ? 1 : 0}
+      fontWeight={lit ? 600 : 400}
+      className="transition-all duration-500 motion-reduce:transition-none"
+    >
+      {lines.map((line, li) => (
+        <tspan key={line} x={x} dy={li === 0 ? 0 : 12}>
+          {line}
+        </tspan>
+      ))}
+    </text>
+  );
 }
 
 export function RegimeLoopDemo() {
   return (
     <SlideStepper steps={STEPS}>
       {(step) => {
-        const litEdges =
-          step === 4 ? [0, 1, 2, 3] : [step];
-        const litNodes = new Set(
-          step === 4
-            ? NODES.map((n) => n.id)
-            : [EDGES[step].from, EDGES[step].to],
-        );
+        const litNodes = new Set(LIT[step]);
         return (
           <svg
             viewBox={`0 0 ${W} ${H}`}
@@ -139,67 +249,100 @@ export function RegimeLoopDemo() {
               </marker>
             </defs>
 
-            {EDGES.map((edge, i) => {
-              const lit = litEdges.includes(i);
-              const from = nodeById(edge.from);
-              const to = nodeById(edge.to);
+            {/* Step 1 — horizontal pair: resource → technique, "buys" */}
+            <Arrow
+              d="M 232 150 L 328 150"
+              lit={step === 1}
+              visible={step === 1}
+            />
+            <EdgeLabel
+              x={280}
+              y={136}
+              lines={["buys"]}
+              lit={step === 1}
+              visible={step === 1}
+            />
+
+            {/* Step 2 — vertical stack: resource → technique → world */}
+            <Arrow
+              d="M 280 77 L 280 127"
+              lit={false}
+              visible={step === 2}
+            />
+            <EdgeLabel
+              x={298}
+              y={106}
+              lines={["buys"]}
+              lit={false}
+              visible={step === 2}
+            />
+            <Arrow
+              d="M 280 173 L 280 223"
+              lit={step === 2}
+              visible={step === 2}
+            />
+            <EdgeLabel
+              x={330}
+              y={202}
+              lines={["changes the facts"]}
+              lit={step === 2}
+              visible={step === 2}
+            />
+
+            {/* Steps 3+ — the diamond */}
+            {DIAMOND_EDGES.map((edge, i) => {
+              const visible = step >= 3;
+              const lit = step === 5 || (visible && step - 1 === i);
               return (
-                <g
-                  key={edge.lines[0]}
-                  className="transition-all duration-500 motion-reduce:transition-none"
-                >
-                  <path
-                    d={edgePath(from, to)}
-                    fill="none"
-                    stroke={lit ? "var(--primary)" : "var(--muted-foreground)"}
-                    strokeOpacity={lit ? 1 : 0.45}
-                    strokeWidth={lit ? 2.5 : 1.5}
-                    markerEnd={lit ? "url(#loop-arrow)" : "url(#loop-arrow-dim)"}
-                    className="transition-all duration-500 motion-reduce:transition-none"
+                <g key={edge.lines[0]}>
+                  <Arrow
+                    d={edgePath(DIAMOND[edge.from], DIAMOND[edge.to])}
+                    lit={lit}
+                    visible={visible}
                   />
-                  <text
+                  <EdgeLabel
                     x={edge.lx}
                     y={edge.ly}
-                    fontSize={10}
-                    textAnchor="middle"
-                    fill={lit ? "var(--primary)" : "var(--muted-foreground)"}
-                    fontWeight={lit ? 600 : 400}
-                    className="transition-all duration-500 motion-reduce:transition-none"
-                  >
-                    {edge.lines.map((line, li) => (
-                      <tspan key={line} x={edge.lx} dy={li === 0 ? 0 : 12}>
-                        {line}
-                      </tspan>
-                    ))}
-                  </text>
+                    lines={edge.lines}
+                    lit={lit}
+                    visible={visible}
+                  />
                 </g>
               );
             })}
 
-            {NODES.map((node) => {
-              const lit = litNodes.has(node.id);
+            {/* The nodes glide between layouts */}
+            {Object.keys(POS).map((id) => {
+              const [x, y] = POS[id][step];
+              const visible = step >= APPEARS[id];
+              const lit = litNodes.has(id);
               return (
-                <g key={node.id}>
+                <g
+                  key={id}
+                  className="transition-all duration-700 ease-in-out motion-reduce:transition-none"
+                  style={{ transform: `translate(${x}px, ${y}px)` }}
+                  opacity={visible ? 1 : 0}
+                >
                   <rect
-                    x={node.x - NODE_W / 2}
-                    y={node.y - NODE_H / 2}
+                    x={-NODE_W / 2}
+                    y={-NODE_H / 2}
                     width={NODE_W}
                     height={NODE_H}
                     rx={8}
                     fill="var(--card)"
-                    stroke={lit ? "var(--primary)" : "var(--border)"}
-                    strokeWidth={lit ? 2 : 1.5}
+                    stroke={lit && visible ? "var(--primary)" : "var(--border)"}
+                    strokeWidth={lit && visible ? 2 : 1.5}
                     className="transition-all duration-500 motion-reduce:transition-none"
                   />
                   <text
-                    x={node.x}
-                    y={node.y + 4}
+                    x={0}
+                    y={4}
                     fontSize={12}
                     fontWeight={600}
                     textAnchor="middle"
                     fill="var(--foreground)"
                   >
-                    {node.label}
+                    {LABELS[id]}
                   </text>
                 </g>
               );

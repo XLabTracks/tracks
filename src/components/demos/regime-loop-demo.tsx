@@ -1,15 +1,26 @@
 "use client";
 
-import { SlideStepper, type SlideStep } from "./slide-stepper";
+import { useEffect, useState } from "react";
+import { Pause, Play } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 // The regime model's loop (module 2, "Determining the usefulness") as a
-// build-up stepper: the resource state alone, then it buys a technique, then
-// the technique's effect on the world stacks vertically, then the epistemic
-// state completes the diamond and the cycle closes. Nodes glide between
-// layouts; each layout's arrows cross-fade in place. Captions restate the
-// lesson's five numbered steps.
+// self-playing animation: the resource state alone, then it buys a
+// technique, then the technique's effect on the world stacks vertically,
+// then the epistemic state completes the diamond and the cycle closes —
+// advancing on a timer and looping. Nodes glide between layouts; each
+// layout's arrows cross-fade in place. Captions restate the lesson's five
+// numbered steps. Pausable; clicking a dot scrubs and pauses; users with
+// reduced motion start paused on the finished diagram.
 
-const STEPS: SlideStep[] = [
+const PHASE_MS = 5000;
+
+interface Phase {
+  label: string;
+  caption: string;
+}
+
+const STEPS: Phase[] = [
   {
     label: "The resource state",
     caption:
@@ -213,11 +224,29 @@ function EdgeLabel({
 }
 
 export function RegimeLoopDemo() {
+  const [step, setStep] = useState(0);
+  const [playing, setPlaying] = useState(true);
+
+  // Respect reduced motion: start paused on the finished diagram.
+  useEffect(() => {
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      setPlaying(false);
+      setStep(STEPS.length - 1);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (!playing) return;
+    const timer = setInterval(
+      () => setStep((s) => (s + 1) % STEPS.length),
+      PHASE_MS,
+    );
+    return () => clearInterval(timer);
+  }, [playing]);
+
+  const litNodes = new Set(LIT[step]);
   return (
-    <SlideStepper steps={STEPS}>
-      {(step) => {
-        const litNodes = new Set(LIT[step]);
-        return (
+    <div className="space-y-3">
           <svg
             viewBox={`0 0 ${W} ${H}`}
             className="w-full"
@@ -348,8 +377,52 @@ export function RegimeLoopDemo() {
               );
             })}
           </svg>
-        );
-      }}
-    </SlideStepper>
+
+      <div className="min-h-16 text-sm" aria-live="polite">
+        <p className="font-medium">
+          {step + 1}. {STEPS[step].label}
+        </p>
+        <p className="text-muted-foreground mt-1">{STEPS[step].caption}</p>
+      </div>
+
+      <div className="flex items-center justify-center gap-4">
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={() => setPlaying((p) => !p)}
+          aria-label={playing ? "Pause animation" : "Play animation"}
+          className="gap-1"
+        >
+          {playing ? (
+            <>
+              <Pause className="size-3.5" aria-hidden /> Pause
+            </>
+          ) : (
+            <>
+              <Play className="size-3.5" aria-hidden /> Play
+            </>
+          )}
+        </Button>
+        <div className="flex gap-1.5">
+          {STEPS.map((s, i) => (
+            <button
+              key={s.label}
+              type="button"
+              aria-label={`Phase ${i + 1}: ${s.label}`}
+              aria-current={i === step ? "step" : undefined}
+              onClick={() => {
+                setPlaying(false);
+                setStep(i);
+              }}
+              className={`size-2.5 rounded-full transition-colors ${
+                i === step
+                  ? "bg-primary"
+                  : "bg-border hover:bg-muted-foreground/50"
+              }`}
+            />
+          ))}
+        </div>
+      </div>
+    </div>
   );
 }

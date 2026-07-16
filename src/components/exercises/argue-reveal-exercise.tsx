@@ -1,6 +1,12 @@
 "use client";
 
-import { useEffect, useRef, useState, useTransition } from "react";
+import {
+  useEffect,
+  useRef,
+  useState,
+  useTransition,
+  type ReactNode,
+} from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -104,6 +110,7 @@ export function ArgueRevealExerciseCard({
   initialConstruction,
   initialCompletedAt,
   persist = false,
+  scoringSlot,
 }: {
   exercise: ArgueRevealExercise;
   initialItems?: Record<string, ArgueRevealItemEntry>;
@@ -112,6 +119,8 @@ export function ArgueRevealExerciseCard({
   initialCompletedAt?: string;
   /** Signed-in only — signed-out visitors skip the (no-op) server round-trip. */
   persist?: boolean;
+  /** Server-rendered scoring panel shown on the summary step. */
+  scoringSlot?: ReactNode;
 }) {
   const bounds = argueRevealBounds(exercise);
   const constructionStep = exercise.items.length + 1;
@@ -631,15 +640,14 @@ export function ArgueRevealExerciseCard({
             </div>
           </div>
 
-          <div className="bg-muted mt-4 rounded-lg p-4">
-            <p className="text-sm font-medium">Scoring</p>
-            <p className="text-muted-foreground mt-1 text-sm">
-              Automated feedback on your reasoning is coming soon.
-            </p>
-            <Button size="sm" variant="outline" disabled className="mt-3">
-              Submit for scoring
-            </Button>
-          </div>
+          {scoringSlot ?? (
+            <div className="bg-muted mt-4 rounded-lg p-4">
+              <p className="text-sm font-medium">Scoring</p>
+              <p className="text-muted-foreground mt-1 text-sm">
+                Sign in to get automated feedback on your reasoning.
+              </p>
+            </div>
+          )}
 
           <div className="mt-4 flex justify-end">
             <Button size="sm" variant="outline" onClick={copyResults}>

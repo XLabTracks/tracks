@@ -61,6 +61,9 @@ export function getExerciseById(id: string): Exercise | undefined {
 export function getAssessmentForModule(moduleId: string): Assessment | undefined {
   return assessmentByModuleId.get(moduleId);
 }
+export function getAssessmentById(id: string): Assessment | undefined {
+  return assessmentById.get(id);
+}
 
 /**
  * Resolves a writing submission target (assessment or open-ended exercise) to

@@ -31,6 +31,24 @@ import { TapRevealCard } from "@/components/exercises/tap-reveal-exercise";
 import { UnderstandingCheckCard } from "@/components/exercises/understanding-check";
 import { WritingExerciseCard } from "@/components/exercises/writing-exercise";
 import type { WritingValues } from "@/components/exercises/writing-editor";
+import { TransparencyFeedback } from "@/components/exercises/transparency-feedback";
+import { feedbackToHtml } from "@/lib/grader/feedback-html";
+import { parseVerdict } from "@/lib/grader/parse";
+
+// Preloaded props for TransparencyFeedback from a previously graded row, so
+// a stored grade survives reloads.
+function storedGradeProps(
+  submission: { score: number | null; feedback: string | null } | null,
+) {
+  if (submission == null || submission.score == null || !submission.feedback) {
+    return {};
+  }
+  return {
+    initialScore: submission.score,
+    initialBand: parseVerdict(submission.feedback)?.band,
+    initialFeedbackHtml: feedbackToHtml(submission.feedback),
+  };
+}
 
 export interface ExerciseProps {
   id: string;
@@ -182,6 +200,15 @@ export async function Exercise({ id }: ExerciseProps) {
             : undefined
         }
         persist={user != null}
+        scoringSlot={
+          user ? (
+            <TransparencyFeedback
+              contentId={exercise.id}
+              kind="exercise"
+              {...storedGradeProps(submission)}
+            />
+          ) : undefined
+        }
       />
     );
   }
@@ -204,14 +231,23 @@ export async function Exercise({ id }: ExerciseProps) {
     const submission =
       (await getExerciseSubmissionMap(user.id)).get(exercise.id) ?? null;
     return (
-      <WritingExerciseCard
-        exercise={exercise}
-        promptHtml={promptHtml}
-        initialValues={(submission?.responseJson as WritingValues | null) ?? undefined}
-        submitted={submission?.status === "submitted"}
-        onSaveDraft={saveWritingDraft.bind(null, exercise.id, "exercise", exercise.format)}
-        onSubmit={submitWriting.bind(null, exercise.id, "exercise", exercise.format)}
-      />
+      <>
+        <WritingExerciseCard
+          exercise={exercise}
+          promptHtml={promptHtml}
+          initialValues={(submission?.responseJson as WritingValues | null) ?? undefined}
+          submitted={submission?.status === "submitted"}
+          onSaveDraft={saveWritingDraft.bind(null, exercise.id, "exercise", exercise.format)}
+          onSubmit={submitWriting.bind(null, exercise.id, "exercise", exercise.format)}
+        />
+        <div className="not-prose my-6">
+          <TransparencyFeedback
+            contentId={exercise.id}
+            kind="exercise"
+            {...storedGradeProps(submission)}
+          />
+        </div>
+      </>
     );
   }
 

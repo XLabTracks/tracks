@@ -308,13 +308,13 @@ export const papers: Paper[] = [
     ],
   },
   {
-    // Control track, module 1: the safety–usefulness tradeoff model, rendered
+    // Control track, module 2: the safety–usefulness tradeoff model, rendered
     // full-page from Redwood's blog (Substack) — the same committed artifact
     // the Example track's ex-paper-substack uses, here as real curriculum. No
     // exercises are woven in (the source PR reproduced it as a plain reading).
     id: "c-efficient-tradeoffs",
     slug: "safety-usefulness-tradeoff-model",
-    moduleId: "c-intro",
+    moduleId: "c-mod2",
     title: "Efficient tradeoffs and the safety-usefulness tradeoff model",
     source: {
       kind: "substack",

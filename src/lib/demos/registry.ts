@@ -135,7 +135,7 @@ export const demoRegistry: Record<string, DemoDefinition> = {
   },
   "regime-states": {
     id: "regime-states",
-    title: "The three states",
+    title: "The three states and the safety budget",
     component: RegimeStatesDemo,
     tags: ["control", "how-useful"],
   },

@@ -1601,14 +1601,6 @@ export const exercises: Exercise[] = [
       "Playing the inner game well produces evidence — most dramatically, a scheming model caught in the act. Evidence moves the outer game: it scares decision-makers into authorizing more safety spending, and that spending funds the next round of the inner game.",
   },
   {
-    id: "cr-check-games",
-    type: "tap-reveal",
-    prompt:
-      "A team deploys a monitoring protocol and publishes the transcript of a catch. Which game(s) are they playing?",
-    answer:
-      "Both at once. Deploying the protocol and catching the schemer is the inner game; publishing the transcript converts the catch into evidence that moves leadership, the public, and governments — the outer game. Control is unusual in playing both games at once.",
-  },
-  {
     id: "cr-recall-world-state",
     type: "tap-reveal",
     prompt: "What is the world state?",

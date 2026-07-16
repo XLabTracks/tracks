@@ -53,8 +53,6 @@ The first part is the facts on the ground, whether or not anyone knows them:
 
 You never observe the world state directly. That sounds like a philosophical quibble; the next section shows why it isn't.
 
-<Exercise id="cr-attr-world" />
-
 ### Epistemic state: what we know
 
 The second part is our picture of the world state:
@@ -65,8 +63,6 @@ The second part is our picture of the world state:
 - Evaluation results — including control evaluations, which stage mock attacks to estimate whether the monitoring would catch a real schemer.
 
 One distinction deserves special care, because it is the most common mistake people make with the regime model. A control evaluation's score is a measurement. Whether control actually works against the actual model is a different thing entirely — Reading 3 gives it a place of its own in the regime model. The two can come apart: the eval might be unrealistic, the model might behave differently when it counts. The gap between them is exactly where control evaluations can mislead you — a high safety score from a poor evaluation is a misleadingly reassuring epistemic state pointing at a world state it doesn't match.
-
-<Exercise id="cr-attr-epistemic" />
 
 The three states so far: the world state determines what control is actually worth. The epistemic state determines what we believe it's worth. Control can be genuinely valuable while nobody has solid grounds to believe it — and the reverse.
 
@@ -91,11 +87,6 @@ Three things generate budget, and they work differently:
 - Incidents and evidence refill the bank account directly.
 - Public buy-in doesn't add will; it changes the prices — it makes the usefulness tax cheaper to authorize and slows the fading of will.
 - Passed policy locks a rule in place. You spend will once to get a regulation; afterwards the rule mostly holds by itself: it stops drawing on the account and decays far more slowly than will does (repeal or quiet non-enforcement is possible, but expensive for opponents). It converts a temporary spike of will into a durable floor. There's a catch, though: what gets written into regulation is whatever was easiest to explain and verify politically, which is not necessarily what helps most. Policy trades quality of spending for permanence.
-
-<ExerciseSequence
-  label="Budget or prices?"
-  ids={["cr-budget-1", "cr-budget-2", "cr-budget-3", "cr-attr-resource"]}
-/>
 
 ### Why the three states are not interchangeable
 
@@ -155,11 +146,6 @@ Technical safety research works on the first lever. Advocacy, communication, and
 
 One more classification habit, and it's the trickiest one: a technique's actual effectiveness is not a state either. Whether control works against a given model is a result — it follows from what the model is like, how capable it is, and what measures you deployed. It changes as capability changes. So when you meet a claim like "control works at this capability level," resist filing it under world state or epistemic state. It's an output of the situation, not an input.
 
-<ExerciseSequence
-  label="Techniques or results?"
-  ids={["cr-attr-technique", "cr-attr-result"]}
-/>
-
 ### The loop
 
 <Demo id="regime-loop" />
@@ -173,8 +159,6 @@ Now connect everything from Reading 2 into the cycle that makes timing matter:
 5. The bigger budget buys better techniques for the next, more dangerous capability stage. Return to step 1.
 
 This is the inner game and outer game from Reading 1, drawn as one circuit: the inner game (steps 1–3) produces evidence, the outer game (step 4) converts evidence into budget, and the budget funds the next round of the inner game. Money spent now changes how much money exists later — which is why "when should you invest?" is a real question and not just "as early as possible."
-
-<Exercise id="cr-attr-catch" />
 
 ### Control's three channels
 

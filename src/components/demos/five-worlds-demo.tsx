@@ -106,7 +106,7 @@ export function FiveWorldsDemo() {
           textAnchor="middle"
           className="fill-muted-foreground text-[10px]"
         >
-          how misaligned the models actually are (world state) →
+          misalignment level →
         </text>
         <text
           x={PLANE.left + 6}
@@ -128,7 +128,7 @@ export function FiveWorldsDemo() {
           textAnchor="middle"
           className="fill-muted-foreground text-[10px]"
         >
-          how alarming it looks from the inside (epistemic state) →
+          alarm →
         </text>
 
         {/* The looks-fine row Easyland and Lurkville share */}

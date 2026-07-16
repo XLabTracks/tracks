@@ -1560,4 +1560,146 @@ export const exercises: Exercise[] = [
     minWords: 30,
     maxWords: 150,
   },
+  // --- Control module 2, "Determining the usefulness" (c-regimes-l1):
+  // tap-reveal recall cards, module-1 style. Sequences of these replace the
+  // one-off cr-check-* checks and the cr-flash-concepts deck TODOs; every
+  // answer restates the lesson's own prose. Cards recur across sequences
+  // deliberately (spaced repetition).
+  {
+    id: "cr-recall-regime",
+    type: "tap-reveal",
+    prompt: "What is a regime?",
+    answer:
+      "A full set of conditions control would be deployed into — how likely models are to scheme, how much a lab will spend on safety, whether anyone in power will act on a warning. \"Is control good?\" only becomes answerable once you say which regime you are in.",
+  },
+  {
+    id: "cr-recall-regime-model",
+    type: "tap-reveal",
+    prompt: "What is the regime model — and how is it different from \"the model\"?",
+    answer:
+      "The machinery this module builds to answer \"is control good?\": three states, a budget, and a loop. It is kept separate from the model, which in these readings always means the AI system.",
+  },
+  {
+    id: "cr-recall-inner-game",
+    type: "tap-reveal",
+    prompt: "What is the inner game?",
+    answer:
+      "The game played inside the lab, against the possibly-scheming model: designing protocols, extracting trustworthy work, catching bad behavior. It is about spending the safety resources you have well.",
+  },
+  {
+    id: "cr-recall-outer-game",
+    type: "tap-reveal",
+    prompt: "What is the outer game?",
+    answer:
+      "The game played out in the world: convincing leadership, the public, and governments to make safety spending possible at all. It is about growing the resources available to spend.",
+  },
+  {
+    id: "cr-recall-coupling",
+    type: "tap-reveal",
+    prompt: "How are the two games coupled?",
+    answer:
+      "Playing the inner game well produces evidence — most dramatically, a scheming model caught in the act. Evidence moves the outer game: it scares decision-makers into authorizing more safety spending, and that spending funds the next round of the inner game.",
+  },
+  {
+    id: "cr-check-games",
+    type: "tap-reveal",
+    prompt:
+      "A team deploys a monitoring protocol and publishes the transcript of a catch. Which game(s) are they playing?",
+    answer:
+      "Both at once. Deploying the protocol and catching the schemer is the inner game; publishing the transcript converts the catch into evidence that moves leadership, the public, and governments — the outer game. Control is unusual in playing both games at once.",
+  },
+  {
+    id: "cr-recall-world-state",
+    type: "tap-reveal",
+    prompt: "What is the world state?",
+    answer:
+      "The facts on the ground, whether or not anyone knows them: what the model is actually like, how capable it is, how checkable AI research output is, and what has happened with the model so far. You never observe it directly.",
+  },
+  {
+    id: "cr-recall-epistemic-state",
+    type: "tap-reveal",
+    prompt: "What is the epistemic state?",
+    answer:
+      "Our picture of the world state: the lab's confidence in its alignment methods, interpretability findings and how much we trust them, the track record of past incidents or their absence, and evaluation results — including control evaluations.",
+  },
+  {
+    id: "cr-recall-resource-state",
+    type: "tap-reveal",
+    prompt: "What is the resource state?",
+    answer:
+      "The safety budget: one bank account — political will — plus regime-set prices for the things you can spend it on (the usefulness tax, compute, delay). A safety technique is a shopping basket, and its cost is the basket's total in will.",
+  },
+  {
+    id: "cr-recall-political-will",
+    type: "tap-reveal",
+    prompt: "What is political will, in the regime model?",
+    answer:
+      "The only currency: the authorization and backing to do costly safety things — permission, not money. It fades over time if nothing reinforces it, and it spikes after frightening incidents.",
+  },
+  {
+    id: "cr-recall-budget-vs-prices",
+    type: "tap-reveal",
+    prompt:
+      "Three things generate budget. Which refills the account, which changes prices, and which locks a floor?",
+    answer:
+      "Incidents and evidence refill the will account directly. Public buy-in doesn't add will — it makes the usefulness tax cheaper to authorize and slows the fading of will. Passed policy spends will once to lock a rule in place, converting a temporary spike into a durable floor — at the cost that what gets written in is what was easiest to explain, not necessarily what helps most.",
+  },
+  {
+    id: "cr-recall-measured-vs-actual",
+    type: "tap-reveal",
+    prompt:
+      "A control evaluation reports a high safety score. Does that mean control works against the actual model?",
+    answer:
+      "No. The score is a measurement — part of the epistemic state. Whether control actually works against the actual model is a different thing entirely; the eval might be unrealistic, or the model might behave differently when it counts. The gap between them is exactly where control evaluations can mislead you.",
+  },
+  {
+    id: "cr-recall-five-worlds",
+    type: "tap-reveal",
+    prompt: "Name the five worlds, and say what Lurkville looks like from the inside.",
+    answer:
+      "Easyland (alignment generalizes fine), Slopolis (apparent-success seekers, failures where verification is expensive), Hackistan (constant detectable reward-hacking, no dramatic incidents), Schemeria (coherent scheming that shows), and Lurkville (coherent scheming that hides — no catches, no incidents, so by definition it looks like Easyland from the inside: the measured-vs-actual gap as an entire world).",
+  },
+  {
+    id: "cr-recall-states-not-interchangeable",
+    type: "tap-reveal",
+    prompt: "What three different questions do the three states answer?",
+    answer:
+      "World state: what is control actually worth here? Epistemic state: what do we justifiably think it's worth? Resource state: can we afford to act on what we think? Diagnosing which state is the bottleneck is the first thing you do with every scenario.",
+  },
+  {
+    id: "cr-recall-technique-not-state",
+    type: "tap-reveal",
+    prompt: "Where do safety techniques fit among the three states?",
+    answer:
+      "They don't. The states describe the situation; a technique is what you do about it — the budget is what you spend, the technique is what you buy, and applying it is what changes the world. A technique's actual effectiveness isn't a state either: it's a result — an output of the situation, not an input.",
+  },
+  {
+    id: "cr-recall-loop",
+    type: "tap-reveal",
+    prompt: "Walk the loop, step by step.",
+    answer:
+      "1) The resource state buys a technique. 2) The technique changes the facts on the ground — a would-be saboteur becomes a caught schemer. 3) The catch updates the epistemic state: where there was speculation there is now a transcript. 4) The evidence feeds the resource state — will refills, prices drop, maybe a regulation locks a floor. 5) The bigger budget buys better techniques for the next capability stage.",
+  },
+  {
+    id: "cr-recall-three-channels",
+    type: "tap-reveal",
+    prompt: "What are control's three channels — and which one is subordinate?",
+    answer:
+      "Usefulness (safely extract real work from untrusted models, including safety research), evidence (a caught schemer with transcripts — the gold standard, and what turns the loop), and direct risk reduction (catching and containing schemers). The third is real but subordinate: it only operates while models are actually catchable, and a catch's payoff mostly flows through the other two channels anyway.",
+  },
+  {
+    id: "cr-check-channels",
+    type: "tap-reveal",
+    prompt:
+      "A catch convinces the board to fund a bigger safety team. Which channel paid out?",
+    answer:
+      "Evidence. The catch's value routed through the loop: transcript → convinced decision-makers → bigger budget. Containing the schemer was direct risk reduction too, but the funding is the evidence channel's payoff — evidence is what refills will and cuts prices.",
+  },
+  {
+    id: "cr-recall-two-questions",
+    type: "tap-reveal",
+    prompt: "What are the regime model's two questions?",
+    answer:
+      "Q1 — should you, and how much: does the next unit of budget do more good spent on control than on the alternatives, counting the loop effects? Keep giving the next unit to whichever option helps most, and stop when the options are even. Q2 — when: run the three states forward over capability stages and ask Q1 at each step; because of the loop the steps are linked, so the answer needs the whole trajectory.",
+  },
 ];

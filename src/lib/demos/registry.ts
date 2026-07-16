@@ -11,6 +11,7 @@ import { SubtletyDemo } from "@/components/demos/subtlety-demo";
 import { DeferDemo } from "@/components/demos/defer-demo";
 import { ControlDashboardDemo } from "@/components/demos/control-dashboard-demo";
 import { SabotageFrontierDemo } from "@/components/demos/sabotage-frontier-demo";
+import { AdditiveControlDemo } from "@/components/demos/additive-control-demo";
 
 // Central demo registry — the single integration point. Reference a demo by ID
 // from MDX (<Demo id="…"/>), the gallery, standalone pages, or embeds.
@@ -116,6 +117,14 @@ export const demoRegistry: Record<string, DemoDefinition> = {
       "Sabotage strategies as a Pareto frontier: fewer actions versus less incriminating actions. Move the deployer's three mitigations and watch which strategies survive — and where the schemer's best response migrates.",
     component: SabotageFrontierDemo,
     tags: ["control", "threat-modeling"],
+  },
+  "additive-control": {
+    id: "additive-control",
+    title: "Control is additive",
+    description:
+      "Step through the additive property of control: alignment interventions act on the model in an inner box, control's applied monitoring wraps around them, and toggling the shell leaves the inner box untouched.",
+    component: AdditiveControlDemo,
+    tags: ["control", "how-useful"],
   },
 };
 

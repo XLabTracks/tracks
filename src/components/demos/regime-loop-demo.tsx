@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Pause, Play } from "lucide-react";
+import { ChevronLeft, ChevronRight, Pause, Play } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 // The regime model's loop (module 2, "Determining the usefulness") as a
@@ -403,6 +403,18 @@ export function RegimeLoopDemo() {
             </>
           )}
         </Button>
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={() => {
+            setPlaying(false);
+            setStep((s) => (s - 1 + STEPS.length) % STEPS.length);
+          }}
+          aria-label="Previous phase"
+          className="gap-1"
+        >
+          <ChevronLeft className="size-3.5" aria-hidden /> Back
+        </Button>
         <div className="flex gap-1.5">
           {STEPS.map((s, i) => (
             <button
@@ -422,6 +434,18 @@ export function RegimeLoopDemo() {
             />
           ))}
         </div>
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={() => {
+            setPlaying(false);
+            setStep((s) => (s + 1) % STEPS.length);
+          }}
+          aria-label="Next phase"
+          className="gap-1"
+        >
+          Next <ChevronRight className="size-3.5" aria-hidden />
+        </Button>
       </div>
     </div>
   );

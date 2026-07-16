@@ -75,7 +75,8 @@ export const modules: Module[] = [
     // rendered in full through the paper reader — the "case for control" post
     // carries the module's guided exercises woven into the reading. Reading
     // order: motivation, the paper, the demo, the safety–usefulness tradeoff
-    // model, catching scheming AIs, and the two threat-modeling posts. All
+    // model, catching scheming AIs, and the diffuse-threats post (its
+    // companion, "Prioritizing threats", opens module 2). All
     // readings are reproduced (arXiv/LessWrong/Substack artifacts) with
     // permission.
     itemIds: [
@@ -84,10 +85,9 @@ export const modules: Module[] = [
       "c-game",
       "c-efficient-tradeoffs",
       "c-catching-red-handed",
-      "c-threats-l1",
       "c-threats-l2",
     ],
-    estimatedMinutes: 390,
+    estimatedMinutes: 375,
   },
   {
     // Human-authored curriculum (from the course author's "contra control"
@@ -101,11 +101,11 @@ export const modules: Module[] = [
     trackId: "control",
     title: "How useful is AI control?",
     summary:
-      "The strongest arguments against AI control — deferred alignment research, slop, the superintelligence ceiling, monitor awareness, moral hazard — illustrated one at a time, evaluated, and weighed against the additive alternatives; then the regime model: three states, a safety budget, and the loop that says when control is worth buying.",
+      "Which threats control is actually for, then the strongest arguments against AI control — deferred alignment research, slop, the superintelligence ceiling, monitor awareness, moral hazard — illustrated one at a time, evaluated, and weighed against the additive alternatives; then the regime model: three states, a safety budget, and the loop that says when control is worth buying.",
     order: 2,
     prerequisiteModuleIds: ["c-intro"],
-    itemIds: ["c-contra-l1", "c-regimes-l1"],
-    estimatedMinutes: 80,
+    itemIds: ["c-threats-l1", "c-contra-l1", "c-regimes-l1"],
+    estimatedMinutes: 95,
   },
   {
     id: "c-areas",

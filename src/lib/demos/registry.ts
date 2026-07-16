@@ -13,6 +13,8 @@ import { ControlDashboardDemo } from "@/components/demos/control-dashboard-demo"
 import { SabotageFrontierDemo } from "@/components/demos/sabotage-frontier-demo";
 import { AdditiveControlDemo } from "@/components/demos/additive-control-demo";
 import { RsiBootstrapDemo } from "@/components/demos/rsi-bootstrap-demo";
+import { RegimeStatesDemo } from "@/components/demos/regime-states-demo";
+import { RegimeLoopDemo } from "@/components/demos/regime-loop-demo";
 
 // Central demo registry — the single integration point. Reference a demo by ID
 // from MDX (<Demo id="…"/>), the gallery, standalone pages, or embeds.
@@ -130,6 +132,18 @@ export const demoRegistry: Record<string, DemoDefinition> = {
     title: "The bootstrapping loop",
     component: RsiBootstrapDemo,
     tags: ["control"],
+  },
+  "regime-states": {
+    id: "regime-states",
+    title: "The three states",
+    component: RegimeStatesDemo,
+    tags: ["control", "how-useful"],
+  },
+  "regime-loop": {
+    id: "regime-loop",
+    title: "The loop",
+    component: RegimeLoopDemo,
+    tags: ["control", "how-useful"],
   },
 };
 

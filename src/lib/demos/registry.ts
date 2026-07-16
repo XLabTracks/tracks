@@ -12,6 +12,7 @@ import { DeferDemo } from "@/components/demos/defer-demo";
 import { ControlDashboardDemo } from "@/components/demos/control-dashboard-demo";
 import { SabotageFrontierDemo } from "@/components/demos/sabotage-frontier-demo";
 import { AdditiveControlDemo } from "@/components/demos/additive-control-demo";
+import { RsiBootstrapDemo } from "@/components/demos/rsi-bootstrap-demo";
 
 // Central demo registry — the single integration point. Reference a demo by ID
 // from MDX (<Demo id="…"/>), the gallery, standalone pages, or embeds.
@@ -125,6 +126,14 @@ export const demoRegistry: Record<string, DemoDefinition> = {
       "Step through the additive property of control: alignment interventions act on the model in an inner box, control's applied monitoring wraps around them, and toggling the shell leaves the inner box untouched.",
     component: AdditiveControlDemo,
     tags: ["control", "how-useful"],
+  },
+  "rsi-bootstrap": {
+    id: "rsi-bootstrap",
+    title: "The bootstrapping loop",
+    description:
+      "Step through the circle model: each generation does alignment research, builds the next generation, and hands off — one lap per generation, climbing the capability ladder toward superintelligence.",
+    component: RsiBootstrapDemo,
+    tags: ["control"],
   },
 };
 

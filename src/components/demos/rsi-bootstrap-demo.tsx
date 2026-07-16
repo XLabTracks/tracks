@@ -1,0 +1,318 @@
+"use client";
+
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
+
+// The bootstrapping "circle model" as a zybook-style stepper. Step 0: Gen N
+// alone, center stage, tagged as a TUAI. Step 1: it moves into the loop and
+// runs its two jobs (alignment research, building the next generation) while
+// the capability ladder initializes. Step 2: handoff — Gen N+1 takes over.
+// Then the loop repeats up the ladder to superintelligence. Elements are
+// invisible (opacity 0) until their step introduces them; they fade/slide in
+// and stay. Purely illustrative — no model behind it.
+
+const STEPS = [
+  {
+    caption:
+      "Generation N is a transformatively useful AI (TUAI) — capable enough to do real research and engineering work.",
+  },
+  {
+    caption:
+      "Gen N does two jobs at once: alignment research, and building the next generation, Gen N+1.",
+  },
+  {
+    caption:
+      "Handoff: Gen N+1 — more capable, and aligned by Gen N's work — takes over as the builder.",
+  },
+  {
+    caption:
+      "The same cycle runs again: Gen N+1 aligns and builds Gen N+2. Each lap of the circle is one generation.",
+  },
+  {
+    caption:
+      "The loop repeats, generation after generation, until superintelligence is reached — the overall plan the lesson calls bootstrapping.",
+  },
+];
+
+// Which cycle beats are highlighted at each step (research, build, hand off).
+const BEATS_LIT: number[][] = [[], [0, 1], [2], [0, 1, 2], [0, 1, 2]];
+// Who currently sits in the middle of the loop.
+const BUILDER: string[] = ["Gen N", "Gen N", "Gen N+1", "Gen N+2", "Gen N+k"];
+// How many ladder rungs are lit (bottom-up); unlit rungs are invisible.
+const RUNGS = ["Gen N", "Gen N+1", "Gen N+2", "⋯", "Superintelligence"];
+const RUNGS_LIT = [0, 1, 2, 3, 5];
+
+const CX = 130;
+const CY = 128;
+const R = 82;
+// Where the builder chip sits before the loop exists (center stage).
+const STAGE_X = 280;
+
+// A beat's arc segment on the circle: start/end angles in degrees
+// (SVG angles, 0° = 3 o'clock, clockwise), with a gap between beats, plus
+// the step that introduces it.
+const BEAT_ARCS = [
+  {
+    from: 210,
+    to: 320,
+    lines: ["does alignment research"],
+    lx: CX,
+    ly: 26,
+    anchor: "middle" as const,
+    appearsAt: 1,
+  },
+  {
+    from: 340,
+    to: 80,
+    lines: ["builds the next", "generation"],
+    lx: 226,
+    ly: 190,
+    anchor: "start" as const,
+    appearsAt: 1,
+  },
+  {
+    from: 100,
+    to: 190,
+    lines: ["hands off"],
+    lx: 42,
+    ly: 224,
+    anchor: "middle" as const,
+    appearsAt: 2,
+  },
+];
+
+function arcPath(from: number, to: number): string {
+  const rad = (deg: number) => (deg * Math.PI) / 180;
+  const x = (deg: number) => CX + R * Math.cos(rad(deg));
+  const y = (deg: number) => CY + R * Math.sin(rad(deg));
+  const large = ((to - from + 360) % 360) > 180 ? 1 : 0;
+  return `M ${x(from).toFixed(1)} ${y(from).toFixed(1)} A ${R} ${R} 0 ${large} 1 ${x(to).toFixed(1)} ${y(to).toFixed(1)}`;
+}
+
+export function RsiBootstrapDemo() {
+  const [step, setStep] = useState(0);
+  const litRungs = RUNGS_LIT[step];
+  const loopVisible = step >= 1;
+  const ladderVisible = step >= 2;
+
+  return (
+    <div className="space-y-4">
+      <svg
+        viewBox="0 0 560 260"
+        className="w-full"
+        role="img"
+        aria-label="The bootstrapping loop: each generation does alignment research, builds the next generation, and hands off — climbing a capability ladder toward superintelligence."
+      >
+        <defs>
+          <marker
+            id="rsi-arrow"
+            viewBox="0 0 8 8"
+            refX="6"
+            refY="4"
+            markerWidth="6"
+            markerHeight="6"
+            orient="auto-start-reverse"
+          >
+            <path d="M 0 0 L 8 4 L 0 8 z" fill="var(--primary)" />
+          </marker>
+        </defs>
+
+        {/* --- The circle model (appears at step 1; centered until the
+            ladder exists, then slides left) --- */}
+        <g
+          className="transition-all duration-700 ease-in-out motion-reduce:transition-none"
+          opacity={loopVisible ? 1 : 0}
+          style={{ transform: `translate(${ladderVisible ? 0 : STAGE_X - CX}px, 0px)` }}
+        >
+          <circle
+            cx={CX}
+            cy={CY}
+            r={R}
+            fill="none"
+            stroke="var(--border)"
+            strokeWidth={1.5}
+          />
+          {BEAT_ARCS.map((arc, i) => {
+            const introduced = step >= arc.appearsAt;
+            const lit = BEATS_LIT[step].includes(i);
+            return (
+              <g
+                key={arc.lines[0]}
+                className="transition-opacity duration-500 motion-reduce:transition-none"
+                opacity={introduced ? 1 : 0}
+              >
+                <path
+                  d={arcPath(arc.from, arc.to)}
+                  fill="none"
+                  stroke={lit ? "var(--primary)" : "var(--muted-foreground)"}
+                  strokeWidth={lit ? 3 : 1.5}
+                  markerEnd={lit ? "url(#rsi-arrow)" : undefined}
+                  className="transition-all duration-500 motion-reduce:transition-none"
+                />
+                <text
+                  x={arc.lx}
+                  y={arc.ly}
+                  fontSize={10}
+                  textAnchor={arc.anchor}
+                  fill={lit ? "var(--primary)" : "var(--muted-foreground)"}
+                  fontWeight={lit ? 600 : 400}
+                  className="transition-all duration-500 motion-reduce:transition-none"
+                >
+                  {arc.lines.map((line, li) => (
+                    <tspan key={line} x={arc.lx} dy={li === 0 ? 0 : 12}>
+                      {line}
+                    </tspan>
+                  ))}
+                </text>
+              </g>
+            );
+          })}
+        </g>
+
+        {/* --- The builder chip: center stage, then into the loop --- */}
+        <g
+          className="transition-transform duration-700 ease-in-out motion-reduce:transition-none"
+          style={{
+            transform: `translate(${ladderVisible ? CX : STAGE_X}px, ${CY}px)`,
+          }}
+        >
+          <rect
+            x={-44}
+            y={-16}
+            width={88}
+            height={32}
+            rx={8}
+            fill="var(--card)"
+            stroke="var(--primary)"
+            strokeWidth={1.5}
+          />
+          <text
+            x={0}
+            y={4}
+            fontSize={12}
+            fontWeight={600}
+            textAnchor="middle"
+            fill="var(--foreground)"
+          >
+            {BUILDER[step]}
+          </text>
+          <text
+            x={0}
+            y={30}
+            fontSize={9}
+            textAnchor="middle"
+            fill="var(--muted-foreground)"
+            className="transition-opacity duration-500 motion-reduce:transition-none"
+            opacity={step === 0 ? 1 : 0}
+          >
+            a transformatively useful AI (TUAI)
+          </text>
+        </g>
+
+        {/* --- The capability ladder (initializes at step 2, alongside the
+            first handoff) --- */}
+        <g
+          className="transition-opacity duration-500 motion-reduce:transition-none"
+          opacity={ladderVisible ? 1 : 0}
+        >
+          {RUNGS.map((label, i) => {
+            const y = 218 - i * 46;
+            const lit = i < litRungs;
+            const isTop = i === RUNGS.length - 1;
+            return (
+              <g
+                key={label}
+                className="transition-opacity duration-500 motion-reduce:transition-none"
+                opacity={lit ? 1 : 0}
+              >
+                <rect
+                  x={356}
+                  y={y}
+                  width={172}
+                  height={34}
+                  rx={8}
+                  fill="var(--primary)"
+                  fillOpacity={isTop ? 0.22 : 0.12}
+                  stroke="var(--primary)"
+                  strokeWidth={isTop ? 2 : 1.25}
+                />
+                <text
+                  x={442}
+                  y={y + 21}
+                  fontSize={11}
+                  fontWeight={600}
+                  textAnchor="middle"
+                  fill="var(--foreground)"
+                >
+                  {label}
+                </text>
+                {i > 0 && (
+                  <line
+                    x1={442}
+                    y1={y + 40}
+                    x2={442}
+                    y2={y + 34}
+                    stroke="var(--primary)"
+                    strokeWidth={1.5}
+                    markerEnd="url(#rsi-arrow)"
+                  />
+                )}
+              </g>
+            );
+          })}
+          {/* Loop → ladder: each lap climbs one rung */}
+          <path
+            d="M 224 128 C 280 128 300 128 348 128"
+            fill="none"
+            stroke={step >= 2 ? "var(--primary)" : "var(--muted-foreground)"}
+            strokeWidth={1.5}
+            strokeDasharray="4 4"
+            markerEnd="url(#rsi-arrow)"
+            className="transition-all duration-500 motion-reduce:transition-none"
+          />
+        </g>
+      </svg>
+
+      <p
+        key={step}
+        className="text-muted-foreground mx-auto min-h-10 max-w-xl text-center text-sm"
+        aria-live="polite"
+      >
+        {STEPS[step].caption}
+      </p>
+
+      <div className="flex items-center justify-center gap-4">
+        <Button
+          size="sm"
+          variant="outline"
+          disabled={step === 0}
+          onClick={() => setStep((s) => Math.max(0, s - 1))}
+        >
+          Back
+        </Button>
+        <div className="flex items-center gap-1.5" aria-hidden>
+          {STEPS.map((_, i) => (
+            <button
+              key={i}
+              type="button"
+              onClick={() => setStep(i)}
+              className={cn(
+                "size-2 rounded-full transition-colors motion-reduce:transition-none",
+                i === step ? "bg-primary" : "bg-border hover:bg-muted-foreground/50",
+              )}
+              tabIndex={-1}
+            />
+          ))}
+        </div>
+        <Button
+          size="sm"
+          disabled={step === STEPS.length - 1}
+          onClick={() => setStep((s) => Math.min(STEPS.length - 1, s + 1))}
+        >
+          Next
+        </Button>
+      </div>
+    </div>
+  );
+}

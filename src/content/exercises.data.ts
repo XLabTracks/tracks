@@ -281,7 +281,6 @@ export const exercises: Exercise[] = [
     ],
     revealFraming:
       "One response defenders of control give — not the only one, and not necessarily the last word:",
-    postRevealPrompt: "Does this answer the strongest version of the criticism?",
     construction: {
       intro:
         "Construct an argument against control that is not one of the four you just saw. Start by choosing which assumption of control your argument attacks.",

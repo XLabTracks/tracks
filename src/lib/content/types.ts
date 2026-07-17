@@ -403,8 +403,9 @@ export interface ArgueRevealExercise extends ExerciseBase {
   items: ArgueRevealItem[];
   /** Line introducing each revealed defender response. */
   revealFraming: string;
-  /** Self-assessment question once an item's rounds are all revealed. */
-  postRevealPrompt: string;
+  /** Self-assessment question once an item's rounds are all revealed.
+   * Optional: when absent, the post-reveal rating + note step is skipped. */
+  postRevealPrompt?: string;
   construction: {
     intro: string;
     surfaces: ArgueRevealSurface[];

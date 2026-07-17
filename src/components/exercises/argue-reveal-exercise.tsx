@@ -211,7 +211,7 @@ export function ArgueRevealExerciseCard({
   const finishItem = (itemIndex: number) =>
     startTransition(async () => {
       const state = items[itemIndex];
-      if (persist && state.rating) {
+      if (persist && (state.rating || !exercise.postRevealPrompt)) {
         await saveArgueRevealItem(
           exercise.id,
           exercise.items[itemIndex].id,
@@ -402,31 +402,39 @@ export function ArgueRevealExerciseCard({
 
             {allRoundsSubmitted && (
               <div className="mt-4">
-                <p className="text-sm font-medium">{exercise.postRevealPrompt}</p>
-                <div className="mt-2">
-                  <RatingSegment
-                    value={state.rating}
-                    disabled={!active || pending}
-                    label={exercise.postRevealPrompt}
-                    onSelect={(rating) => setItem(c, { rating })}
-                  />
-                </div>
-                <Input
-                  type="text"
-                  aria-label="Why? (optional, one line)"
-                  placeholder="Why? (optional, one line)"
-                  maxLength={bounds.noteMaxChars}
-                  value={state.note}
-                  disabled={!active || pending}
-                  onChange={(e) => setItem(c, { note: e.target.value })}
-                  className="mt-2"
-                />
+                {exercise.postRevealPrompt && (
+                  <>
+                    <p className="text-sm font-medium">
+                      {exercise.postRevealPrompt}
+                    </p>
+                    <div className="mt-2">
+                      <RatingSegment
+                        value={state.rating}
+                        disabled={!active || pending}
+                        label={exercise.postRevealPrompt}
+                        onSelect={(rating) => setItem(c, { rating })}
+                      />
+                    </div>
+                    <Input
+                      type="text"
+                      aria-label="Why? (optional, one line)"
+                      placeholder="Why? (optional, one line)"
+                      maxLength={bounds.noteMaxChars}
+                      value={state.note}
+                      disabled={!active || pending}
+                      onChange={(e) => setItem(c, { note: e.target.value })}
+                      className="mt-2"
+                    />
+                  </>
+                )}
                 {active && (
                   <div className="mt-3 flex justify-end">
                     <Button
                       size="sm"
                       disabled={
-                        !state.rating || !isStorableText(state.note) || pending
+                        (!!exercise.postRevealPrompt && !state.rating) ||
+                        !isStorableText(state.note) ||
+                        pending
                       }
                       onClick={() => finishItem(c)}
                     >
@@ -598,13 +606,16 @@ export function ArgueRevealExerciseCard({
                     {round.response}
                   </p>
                 ))}
-                <p className="text-muted-foreground">
-                  <span className="text-foreground mr-1.5 text-xs font-medium">
-                    Post-reveal
-                  </span>
-                  {items[c].rating && ARGUE_REVEAL_RATING_LABELS[items[c].rating]}
-                  {items[c].note.trim() ? ` — ${items[c].note}` : ""}
-                </p>
+                {(items[c].rating || items[c].note.trim()) && (
+                  <p className="text-muted-foreground">
+                    <span className="text-foreground mr-1.5 text-xs font-medium">
+                      Post-reveal
+                    </span>
+                    {items[c].rating &&
+                      ARGUE_REVEAL_RATING_LABELS[items[c].rating]}
+                    {items[c].note.trim() ? ` — ${items[c].note}` : ""}
+                  </p>
+                )}
               </div>
             ))}
             <div className="space-y-1.5 p-3 text-sm">

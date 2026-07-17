@@ -234,22 +234,9 @@ export const exercises: Exercise[] = [
         ],
       },
       {
-        id: "monitor-awareness",
-        label: "monitor-awareness",
-        title: "Item 2 — Monitor awareness",
-        rounds: [
-          {
-            critique:
-              'And as control and its monitors are used more, situationally aware models become "monitor aware", so such models may keep scheming undetected as they can be more competent in subverting monitoring when they are aware of said monitor.',
-            reveal:
-              "Monitor awareness itself constrains them. It makes potentially scheming models perform visibly scheming or scheming-adjacent actions less often, which is exactly what control aims for. These visible actions such as exfiltrations or diffuse research sabotage are what are mainly catastrophic as opposed to less monitorable items.",
-          },
-        ],
-      },
-      {
         id: "doesnt-scale-to-superintelligence",
         label: "doesnt-scale-to-superintelligence",
-        title: "Item 3 — Doesn't scale to superintelligence",
+        title: "Item 2 — Doesn't scale to superintelligence",
         rounds: [
           {
             critique:
@@ -262,7 +249,7 @@ export const exercises: Exercise[] = [
       {
         id: "ai-created-agendas",
         label: "ai-created-agendas",
-        title: "Item 4 — AI-created agendas",
+        title: "Item 3 — AI-created agendas",
         rounds: [
           {
             critique:
@@ -275,7 +262,7 @@ export const exercises: Exercise[] = [
       {
         id: "slop",
         label: "slop",
-        title: "Item 5 — Slop",
+        title: "Item 4 — Slop",
         rounds: [
           {
             critique:

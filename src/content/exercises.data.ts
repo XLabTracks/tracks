@@ -253,7 +253,7 @@ export const exercises: Exercise[] = [
         rounds: [
           {
             critique:
-              "Control also forces the development of new AI R&D agendas that are themselves AI-created, which is its own risk.",
+              "Control's payoff runs through controlled AIs doing the most open-ended work there is: inventing new research agendas. On short timelines, aligning superintelligence likely needs breakthroughs humans won't produce on their own, so the plan leans on AIs to come up with them. But a novel research agenda is exactly the output humans are least able to judge — telling a promising direction from a subtly misleading one is much harder than checking a proof, and narrowing the task doesn't help, since \"solve interpretability\" is barely more checkable than \"solve alignment.\" So control must safely extract precisely the kind of work it is least able to verify.",
             reveal:
               "That is an unavoidable artifact of preparing for autonomous AI R&D inside an RSI loop, and since control can marginally reduce the probability of bad agendas, it is still worth having.",
           },

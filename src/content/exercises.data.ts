@@ -1564,44 +1564,37 @@ export const exercises: Exercise[] = [
     minWords: 75,
     maxWords: 500,
   },
-  // Module 2 worked-example lesson (c-regimes-l2): the two rollout worksheets
-  // and the comparison paragraph. No spoiler reveals by design — the window
-  // and cross-regime results stay instructor-side; worksheets are discussed
-  // in facilitation.
+  // Module 2 worked-example lesson (c-regimes-l2): the learner repeats the
+  // worked portfolio analysis on a new stipulated regime. Same allocation
+  // widget and agenda menu as the capstone (cr-portfolio-allocation); the
+  // regime is distinct from the worked example and from all three capstone
+  // scenarios. No reveal by design — portfolios are discussed in facilitation.
   {
-    id: "cr-rollout-poor",
-    type: "writing-prompt",
-    format: "free-form",
-    prompt: [
-      "**Rolling the poor regime forward.**",
-      "Worksheet, per timestep (3–4 timesteps): world state (one line) / epistemic state (one line) / resource state incl. any price changes (one line) / Q1 verdict: sign + carrying channel + binding spend.",
-      "Then 3–5 sentences answering: *what shape does control's value trace over your rollout?* If it has a peak, say where and what drives it. If it doesn't have a single peak, describe the shape you actually got and which recipe line is responsible. There is no gotcha here — the shape depends on how the dynamics interact, and defending *your* shape from *your* worksheet is the exercise.",
-      "Branch to consider before finishing: pick one timestep and suppose a catch lands there. Re-run that step's verdict. What changed, and through which part of the resource state?",
-    ].join("\n\n"),
-    minWords: 120,
-    maxWords: 700,
-  },
-  {
-    id: "cr-rollout-rich",
-    type: "writing-prompt",
-    format: "free-form",
-    prompt: [
-      "**Rolling the rich regime forward.**",
-      "Same worksheet, per timestep (3–4 timesteps): world state / epistemic state / resource state incl. price changes / Q1 verdict: sign + carrying channel + binding spend. The race lines of the recipe now barely bite — note where that matters, and run Q1 with the full counterfactual menu in mind (alignment research, interpretability, verification, oversight, policy).",
-    ].join("\n\n"),
-    minWords: 100,
-    maxWords: 700,
-  },
-  {
-    id: "cr-rollout-compare",
-    type: "writing-prompt",
-    format: "free-form",
-    prompt: [
-      "**The comparison.**",
-      "One paragraph: *what changed between the poor regime and the rich one — in the verdict's sign, its carrying channel, and its binding spend — and which price changes are responsible?* Be specific about which alternatives became affordable and what that does to control's claim on the next unit.",
-    ].join("\n\n"),
-    minWords: 60,
-    maxWords: 400,
+    id: "cr-portfolio-yourself",
+    type: "allocation",
+    title: "Your turn: a portfolio for the scare regime",
+    prompt:
+      "You direct a safety team of 10 researchers. The scenario below stipulates a new regime — the three states and the price table. Price each technique's basket against the table, ask which channel its payoff flows through, and divide the team (halves allowed). Defend the allocation in the worked example's three-part template: the allocation itself, who gets the marginal researcher and through which channel, and which spend binds.",
+    agendas: [
+      { id: "control-protocols", label: "Control protocols" },
+      { id: "alignment-research", label: "Alignment research" },
+      { id: "interpretability", label: "Interpretability" },
+      { id: "verification-evals", label: "Verification & evals science" },
+      { id: "scalable-oversight", label: "Scalable oversight" },
+      { id: "policy-pause", label: "Policy, pause & coordination" },
+      { id: "security", label: "Security" },
+    ],
+    scenarios: [
+      {
+        id: "scare-regime",
+        title: "The scare regime",
+        description:
+          "World state: mid-stage models, as in the worked example — alignment nature unknown, checkability of research output unknown, probably middling. Epistemic state: a widely reported incident just happened — real harm, loud coverage, but ambiguous between sloppiness and scheming: no transcripts, nothing reproducible, evals still look fine. Resource state: the incident spiked the will account, but the spike is fading fast; the public is scared, so the product-wide usefulness tax is briefly cheap; delay is briefly buyable at moderate price; safety compute is still capped at a small share, and the race is unchanged underneath.",
+      },
+    ],
+    totalPeople: 10,
+    step: 0.5,
+    minReasoningChars: 250,
   },
   // The five-worlds set: run the channel machinery across Greenblatt's
   // misalignment archetypes. Diagnoses stay behind the reveals.
@@ -1733,7 +1726,7 @@ export const exercises: Exercise[] = [
     id: "cr-worlds-5",
     type: "multiple-choice",
     prompt:
-      "Easyland: alignment generalizes fine. No scheming, no systematic overselling. What happens to control's Q1 answer?",
+      "Easyland: alignment generalizes fine. No scheming, no systematic overselling. What happens to control's claim on the next unit of budget?",
     options: [
       {
         id: "a",
@@ -1748,7 +1741,7 @@ export const exercises: Exercise[] = [
       {
         id: "c",
         label:
-          "Q1 has no answer here: the question requires misalignment to be present",
+          "The question has no answer here: it requires misalignment to be present",
       },
       {
         id: "d",

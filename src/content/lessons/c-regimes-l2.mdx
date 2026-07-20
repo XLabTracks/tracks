@@ -1,6 +1,6 @@
-## A worked example: running Q1 in a poor regime
+## A worked example: choosing a portfolio in a poor regime
 
-You now have the whole regime model. This lesson runs it once, end to end, so you can see the moves before making them yourself. The regime below is stipulated — treat its numbers as given, not as claims about the actual world.
+You now have the whole regime model. This lesson runs it once, end to end — from the three states all the way to a concrete portfolio of safety methods — so you can see the moves before making them yourself. The regime below is stipulated — treat its numbers as given, not as claims about the actual world.
 
 ### The regime
 
@@ -20,61 +20,51 @@ You now have the whole regime model. This lesson runs it once, end to end, so yo
 
 The will account itself is nearly empty: leadership tolerates the safety team, no more.
 
-### Running Q1
+### Walking the menu
 
-The question: does the next unit of budget do more good spent on control than on the alternatives (alignment research, interpretability, verification, oversight, policy work)?
+The decision this module has been building toward is not "is control good?" in the abstract — it is: given these states, how should a safety team divide its people across the technique menu? Take the menu one item at a time, pricing each basket against the table and asking which channel (usefulness, evidence, direct) its payoff flows through:
 
-Walk the channels:
+**Control protocols.** The usefulness case: in this regime, AI labor is most of the labor the safety team has — a small team with 3% of compute multiplies itself by extracting research from models. But extraction is only worth something if the extracted work can be trusted, and the models' alignment is unknown. Control is what converts untrusted AI labor into usable labor. The evidence case: no catches so far, and the epistemic state is starved — which is exactly why the first catch would be worth so much here. A catch is the one event in this regime that could refill the empty will account, cut the price of the product-wide tax, and change what the team can afford next stage. Control is the only technique on the menu whose ordinary operation can produce that event. And its basket runs through the two cheap aisles: monitoring and auditing cost tax _inside the team's own workflow_ (cheap) and compute _within the 3%_ (cheap) — essentially no delay (unbuyable here), no product-wide tax (expensive here).
 
-**Usefulness.** In this regime, AI labor is most of the labor the safety team has — a small team with 3% of compute multiplies itself by extracting research from models. But extraction is only worth something if the extracted work can be trusted, and the models' alignment is unknown. So the usefulness case for control is: it's what converts untrusted AI labor into usable labor. Its strength depends on the verifiability unknown — hedge accordingly, but note that every alternative that uses AI labor inherits the same problem _without_ an answer to it.
+**Verification & evals science.** Control's usefulness case leans on an unknown — how checkable the models' research output is. Work that makes output more checkable pays in the same usefulness channel, shores up the hedge, and its basket is the same two cheap aisles. It earns a real slice.
 
-**Evidence.** No catches so far, and the epistemic state is starved — which is exactly why the first catch would be worth so much here. A catch is the one event in this regime that could refill the empty will account, cut the price of the product-wide tax, and change what the team can afford next stage. Control is the only technique on the menu whose ordinary operation can produce that event.
+**Interpretability.** The epistemic state says hints, not verdicts. Better hints pay in the evidence channel, but in this regime the big training-time bets cost compute beyond the 3% — very high. A small slice, aimed at whatever runs inside the existing allocation.
 
-**Direct.** Real but modest at this stage, and most of a catch's payoff routes through the other two channels anyway.
+**Alignment research.** Acting on $P(\text{scheming})$ itself is the payoff that would eventually retire the whole problem — but the moonshot versions cost compute beyond the 3% (very high), and with the epistemic state this thin there is no way to tell whether they're working. Not worthless — unaffordable _in this regime_, beyond a small stake.
 
-Now price control's basket against the table: monitoring and auditing cost tax _inside the team's own workflow_ (cheap) and compute _within the 3%_ (cheap). They cost essentially no delay (unbuyable here) and no product-wide tax (expensive here). Control's shopping list happens to run through the two cheap aisles. Compare the alternatives: a serious pause costs delay (unbuyable); product-wide safety mitigations cost the expensive tax; moonshot alignment research costs compute beyond the 3% (very high). They aren't worthless — they're unaffordable _in this regime_.
+**Scalable oversight.** Deployed product-wide it costs the expensive tax. Kept inside the team's own workflow it is cheap and compounds with control's monitoring. A slice, scoped accordingly.
 
-### The verdict, in the template you'll reuse
+**Policy, pause & coordination.** A serious pause costs delay — unbuyable at current will. But the evidence channel needs a receiving end: if a catch lands, someone must be ready to convert the spike of will into a durable rule. A small slice buys that option.
 
-Every exercise answer in this module takes this three-part shape:
+**Security.** Exfiltration and rogue deployments are the threat models a catch-all has to close first; basic measures run through the cheap in-team aisles. A small, non-negotiable slice.
 
-1. **Sign:** positive — the next unit of budget goes to control.
-2. **Which channel carries it:** usefulness (converting the only available labor into trustworthy labor), with the evidence channel as the kicker — the option on a catch that could re-price everything.
-3. **Which spend binds:** compute — the 3% ceiling is what caps how much monitoring and extraction the team can run; the team would trade any other aisle for a bigger allocation.
+### The worked portfolio, in the template you'll reuse
 
-Notice what did the work: not an argument that control is good, but the price table and the channels. Change the table and the verdict can flip — which is the next exercise.
+Putting the walk together for a team of 10:
 
-## Exercise — rolling the poor regime forward
+| Agenda | People | Why, in one line |
+| --- | --- | --- |
+| Control protocols | 4.5 | both live channels, both cheap aisles |
+| Verification & evals science | 2 | shores up the checkability unknown control leans on |
+| Interpretability | 1 | evidence-channel hints, within the compute cap |
+| Scalable oversight | 1 | cheap while kept in-team; compounds with monitoring |
+| Security | 0.5 | closes exfiltration/rogue-deployment paths; cheap |
+| Alignment research | 0.5 | a stake in the retire-the-problem payoff |
+| Policy, pause & coordination | 0.5 | the receiving end for a catch |
 
-Take the regime above and roll it forward three or four timesteps using the recipe below. At each step, write down the three states, then run Q1 and give the three-part verdict.
+Every portfolio answer in this module takes this three-part shape:
 
-**Rollout recipe** (stand-ins, stipulated for the exercise — the real dynamics are an open research question, and you should treat these as one plausible setting):
+1. **The allocation:** the table above — control-heavy, with real slices for the techniques that share its cheap aisles.
+2. **Who gets the marginal researcher, and through which channel:** control, through usefulness (converting the only available labor into trustworthy labor), with the evidence channel as the kicker — the option on a catch that could re-price everything.
+3. **Which spend binds:** compute — the 3% ceiling is what caps how much monitoring and extraction the team can run; the team would trade any other aisle for a bigger allocation, and it is why the compute-hungry agendas got slivers.
 
-- Capability rises each step; the stage advances toward the next milestone.
-- Will fades each step unless evidence lands. A catch refills it, and can cut prices or get a rule locked in.
-- The usefulness tax gets cheaper as capability rises — a slightly slower, safer system still does a great deal.
-- Delay gets more expensive as the race tightens.
-- Control's actual effectiveness falls as models approach the capability to defeat the measures.
+Notice what did the work: not an argument that control is good, but the price table and the channels. Change the table and the portfolio can flip — which is exactly the next exercise.
 
-<Exercise id="cr-rollout-poor" />
+## Exercise — your turn, on a new regime
 
-## Exercise — the same question in a rich regime
+Now conduct the same analysis yourself on a new set of states. Read the regime the exercise stipulates, price the baskets against its table, walk the menu, and divide the team — then defend the result in the three-part template: allocation, marginal researcher + carrying channel, binding spend.
 
-Now a different stipulated regime. An international agreement has bought roughly a decade of slack. The will account is full and refills easily; the public is engaged. New price table:
-
-| Spend | Price in will |
-| --- | --- |
-| Delay | **low** — slowdown is the agreement's whole point |
-| Usefulness tax (anywhere) | **low** — nobody is racing anyone |
-| Compute for safety | **medium** — still finite, but negotiable |
-
-World state and epistemic state start the same as before: mid-stage models, alignment unknown, thin evidence.
-
-Repeat the exercise: roll it forward with the same recipe (the race lines now barely bite — note where that matters), run Q1 at each step with the full counterfactual menu in mind (alignment research, interpretability, verification, oversight, policy), and give the three-part verdict per step.
-
-<Exercise id="cr-rollout-rich" />
-
-<Exercise id="cr-rollout-compare" />
+<Exercise id="cr-portfolio-yourself" />
 
 ## The five worlds, through the machinery
 

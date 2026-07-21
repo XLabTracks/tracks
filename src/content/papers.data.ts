@@ -335,6 +335,48 @@ export const papers: Paper[] = [
     ],
   },
   {
+    // Control track, module 2: Ryan Greenblatt's "Plans A, B, C, and D for
+    // misalignment risk", rendered full-page through the LessWrong paper reader.
+    // Placed after "Determining the usefulness" (c-regimes-l1): the regime model
+    // teaches the political-will budget, and this reading is the plan landscape
+    // that budget selects between (Plan A = international agreement, max will …
+    // Plan D = ~10-30 employees on ~3% compute, minimal will). One quick-recall
+    // card is spliced at the end of each plan's section (module-1 pattern);
+    // answers compress the post's own summary definitions.
+    id: "c-plans-abcd",
+    slug: "plans-a-b-c-and-d-for-misalignment-risk",
+    moduleId: "c-mod2",
+    title: "Plans A, B, C, and D for misalignment risk",
+    source: {
+      kind: "lesswrong",
+      postUrl:
+        "https://www.lesswrong.com/posts/E8n93nnEaFeXTbHn5/plans-a-b-c-and-d-for-misalignment-risk",
+    },
+    estimatedMinutes: 15,
+    edits: [
+      {
+        op: "activity",
+        after: { sectionEnd: "lw-sec-plan-a" },
+        items: [{ kind: "exercise", id: "c-plans-recall-a" }],
+      },
+      {
+        op: "activity",
+        after: { sectionEnd: "lw-sec-plan-b" },
+        items: [{ kind: "exercise", id: "c-plans-recall-b" }],
+      },
+      {
+        op: "activity",
+        after: { sectionEnd: "lw-sec-plan-c" },
+        items: [{ kind: "exercise", id: "c-plans-recall-c" }],
+      },
+      {
+        op: "activity",
+        after: { sectionEnd: "lw-sec-plan-d" },
+        items: [{ kind: "exercise", id: "c-plans-recall-d" }],
+      },
+    ],
+  },
+  {
     // Control track, module 1: "Catching AIs red-handed", rendered full-page
     // through the LessWrong paper reader. No exercises (plain reading).
     id: "c-catching-red-handed",

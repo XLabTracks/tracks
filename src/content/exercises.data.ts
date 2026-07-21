@@ -1564,6 +1564,38 @@ export const exercises: Exercise[] = [
     minWords: 75,
     maxWords: 500,
   },
+  // Quick-recall cards for the Plans A-D reading (c-plans-abcd), one spliced
+  // after each plan's section. Answers compress the post's own summary
+  // definitions; tap-reveal is self-assessment, so answers ship to the client
+  // by design.
+  {
+    id: "c-plans-recall-a",
+    type: "tap-reveal",
+    prompt: "Plan A: how much political will is there, and what does it buy?",
+    answer:
+      "The most will of the four: enough for a strong international agreement that mostly eliminates race dynamics and allows slowing down for some reasonably long period (e.g. ~10 years), along with massive investment in security and safety work.",
+  },
+  {
+    id: "c-plans-recall-b",
+    type: "tap-reveal",
+    prompt: "Plan B: how much political will is there, and what does it buy?",
+    answer:
+      "The US government treats buying lead time for US AI companies as among its top few national security priorities (not necessarily out of misalignment concern), and 1–3 years can be spent on mitigating misalignment risk.",
+  },
+  {
+    id: "c-plans-recall-c",
+    type: "tap-reveal",
+    prompt: "Plan C: how much political will is there, and what does it buy?",
+    answer:
+      "No serious government involvement — the will lives inside the leading AI company, which holds a 2–9 month lead and is willing and institutionally functional enough to spend much of that lead on misalignment concerns.",
+  },
+  {
+    id: "c-plans-recall-d",
+    type: "tap-reveal",
+    prompt: "Plan D: how much political will is there, and what does it buy?",
+    answer:
+      "The least: the leading AI company doesn't take misalignment concerns very seriously and takeoff won't be exogenously slowed — but 10–30 people at the company take the risks seriously and have enough buy-in to get ~3% of compute for work well-targeted at misalignment risks.",
+  },
   // Module 2 long exercises: the portfolio-allocation exercise. Each scenario
   // states a full regime — world, epistemic, and resource states, the
   // misalignment archetype, and the approaching capability stage — and the

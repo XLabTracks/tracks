@@ -101,16 +101,17 @@ export const modules: Module[] = [
     trackId: "control",
     title: "How useful is AI control?",
     summary:
-      "The strongest arguments against AI control — deferred alignment research, slop, the superintelligence ceiling, moral hazard — illustrated one at a time, evaluated, and weighed against the additive alternatives; then the regime model: three states, a safety budget, and the loop that says when control is worth buying.",
+      "The strongest arguments against AI control — deferred alignment research, slop, the superintelligence ceiling, moral hazard — illustrated one at a time, evaluated, and weighed against the additive alternatives; then the regime model: three states, a safety budget, and the loop that says when control is worth buying; and finally where control sits among Plans A through D, the plan landscape different levels of political will make available.",
     order: 2,
     prerequisiteModuleIds: ["c-intro"],
     itemIds: [
       "c-contra-l1",
       "c-efficient-tradeoffs",
       "c-regimes-l1",
+      "c-plans-abcd",
       "c-regimes-l2",
     ],
-    estimatedMinutes: 128,
+    estimatedMinutes: 143,
   },
   {
     id: "c-areas",

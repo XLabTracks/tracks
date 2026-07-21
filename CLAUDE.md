@@ -113,6 +113,14 @@ the reading column on large monitors, in an inset rail on laptop widths —
 user-toggleable from the paper header
 (`src/components/papers/paper-sidenotes.tsx` + `sidenotes-toggle.tsx` —
 DOM-cloning presentation layer; the in-document section stays canonical).
+**Linked readings**: post-sourced papers get their clean post-to-post links
+rewritten at render time (`src/lib/readings/`) to course pages, or to the
+standalone `/readings/[id]` viewer for posts pre-built by
+`npm run readings:build` (which regenerates the committed
+`src/content/linked-readings.json` registry — never hand-edit it). One layer
+deep by design: the /readings viewer renders untouched HTML
+(`internalSublinks={false}`), and linked readings are not content-graph
+items — no module, no progress, excluded from the resource hub.
 
 **Routing (tracks).** `/tracks/[trackSlug]/[moduleSlug]/[itemSlug]` is one
 dispatching route serving both lessons and papers (they share a slug

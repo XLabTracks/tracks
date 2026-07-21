@@ -19,23 +19,23 @@ import { cn } from "@/lib/utils";
 const STEPS = [
   {
     caption:
-      "Generation N is a transformatively useful AI (TUAI) — the kind of AI the plan uses to align and build the following generation.",
+      "Generation N is a transformatively useful AI (TUAI) that can help us align and build the following generation.",
   },
   {
     caption:
-      "Gen N does two jobs at once: alignment research, and building the next generation, Gen N+1.",
+      "Gen N performs alignment research and helps build the next generation, Gen N+1.",
   },
   {
     caption:
-      "Handoff: Gen N+1 — more capable, and aligned by Gen N's research if the plan works — takes over as the builder.",
+      "Handoff: Gen N+1, which should be more capable and aligned by Gen N's research if the plan works, takes over as the builder.",
   },
   {
     caption:
-      "The same cycle runs again: Gen N+1 aligns and builds Gen N+2, then hands off. Each lap of the circle is one generation.",
+      "Gen N+1 aligns and builds Gen N+2, which takes over alignment research and helps build the next generation.",
   },
   {
     caption:
-      "The loop repeats, generation after generation, until superintelligence is reached — the overall plan the lesson calls bootstrapping.",
+      "The loop repeats until superintelligence is reached, which is called bootstrapping.",
   },
 ];
 
@@ -289,11 +289,11 @@ function RsiBootstrapAnimation({
                 {i > 0 && (
                   <line
                     x1={442}
-                    y1={y + 40}
+                    y1={y + 44}
                     x2={442}
-                    y2={y + 34}
+                    y2={y + 38}
                     stroke="var(--primary)"
-                    strokeWidth={1.5}
+                    strokeWidth={1}
                     markerEnd="url(#rsi-arrow)"
                   />
                 )}

@@ -747,6 +747,12 @@ export interface ExternalResource {
   id: string;
   title: string;
   url: string;
+  /**
+   * In-app viewer for this resource (e.g. a course paper's
+   * /tracks/t/m/slug page). When set, the hub links here instead of `url`;
+   * `url` stays the canonical external source (dedupe, linked-readings checks).
+   */
+  internalHref?: string;
   type: ResourceType;
   /** Topic tags; modules pull "further reading" by matching these. */
   topics: string[];

@@ -1,0 +1,250 @@
+{
+  "readings": [
+    {
+      "kind": "substack",
+      "id": "aligned.substack.com__self-exfiltration",
+      "url": "https://aligned.substack.com/p/self-exfiltration",
+      "title": "Self-exfiltration is a key dangerous capability"
+    },
+    {
+      "kind": "lesswrong",
+      "id": "alignmentforum__9vwekjD6xyuePX7Zr",
+      "url": "https://www.alignmentforum.org/posts/9vwekjD6xyuePX7Zr/contrast-pairs-drive-the-empirical-performance-of-contrast",
+      "title": "Contrast Pairs Drive the Empirical Performance of Contrast Consistent Search (CCS)"
+    },
+    {
+      "kind": "lesswrong",
+      "id": "alignmentforum__BAzCGCys4BkzGDCWR",
+      "url": "https://www.alignmentforum.org/posts/BAzCGCys4BkzGDCWR/the-prototypical-catastrophic-ai-action-is-getting-root",
+      "title": "The prototypical catastrophic AI action is getting root access to its datacenter"
+    },
+    {
+      "kind": "lesswrong",
+      "id": "alignmentforum__BKvJNzALpxS3LafEs",
+      "url": "https://www.alignmentforum.org/posts/BKvJNzALpxS3LafEs/measuring-and-improving-the-faithfulness-of-model-generated",
+      "title": "Measuring and Improving the Faithfulness of Model-Generated Reasoning "
+    },
+    {
+      "kind": "lesswrong",
+      "id": "alignmentforum__ChDH335ckdvpxXaXX",
+      "url": "https://www.alignmentforum.org/posts/ChDH335ckdvpxXaXX/model-organisms-of-misalignment-the-case-for-a-new-pillar-of-1",
+      "title": "Model Organisms of Misalignment: The Case for a New Pillar of Alignment Research"
+    },
+    {
+      "kind": "lesswrong",
+      "id": "alignmentforum__D5H5vcnhBz8G4dh6v",
+      "url": "https://www.alignmentforum.org/posts/D5H5vcnhBz8G4dh6v/notes-on-handling-non-concentrated-failures-with-ai-control",
+      "title": "Notes on handling non-concentrated failures with AI control: high level methods and different regimes"
+    },
+    {
+      "kind": "lesswrong",
+      "id": "alignmentforum__h7QETH7GMk9HcMnHH",
+      "url": "https://www.alignmentforum.org/posts/h7QETH7GMk9HcMnHH/the-no-sandbagging-on-checkable-tasks-hypothesis",
+      "title": "The “no sandbagging on checkable tasks” hypothesis"
+    },
+    {
+      "kind": "lesswrong",
+      "id": "alignmentforum__hw2tGSsvLLyjFoLFS",
+      "url": "https://www.alignmentforum.org/posts/hw2tGSsvLLyjFoLFS/scalable-oversight-and-weak-to-strong-generalization",
+      "title": "Scalable Oversight and Weak-to-Strong Generalization: Compatible approaches to the same problem"
+    },
+    {
+      "kind": "lesswrong",
+      "id": "alignmentforum__LhxHcASQwpNa3mRNk",
+      "url": "https://www.alignmentforum.org/posts/LhxHcASQwpNa3mRNk/untrusted-smart-models-and-trusted-dumb-models",
+      "title": "Untrusted smart models and trusted dumb models"
+    },
+    {
+      "kind": "lesswrong",
+      "id": "alignmentforum__LPHMMMZFAWog6ty5x",
+      "url": "https://www.alignmentforum.org/posts/LPHMMMZFAWog6ty5x/ctrl-z-controlling-ai-agents-via-resampling",
+      "title": "Ctrl-Z: Controlling AI Agents via Resampling"
+    },
+    {
+      "kind": "lesswrong",
+      "id": "alignmentforum__MbWWKbyD5gLhJgfwn",
+      "url": "https://www.alignmentforum.org/posts/MbWWKbyD5gLhJgfwn/meta-level-adversarial-evaluation-of-oversight-techniques-1",
+      "title": "Meta-level adversarial evaluation of oversight techniques might allow robust measurement of their adequacy"
+    },
+    {
+      "kind": "lesswrong",
+      "id": "alignmentforum__rCJQAkPTEypGjSJ8X",
+      "url": "https://www.alignmentforum.org/posts/rCJQAkPTEypGjSJ8X/how-might-we-align-transformative-ai-if-it-s-developed-very",
+      "title": "How might we align transformative AI if it’s developed very soon?"
+    },
+    {
+      "kind": "lesswrong",
+      "id": "alignmentforum__TPan9sQFuPP6jgEJo",
+      "url": "https://www.alignmentforum.org/posts/TPan9sQFuPP6jgEJo/low-stakes-alignment",
+      "title": "Low-stakes alignment"
+    },
+    {
+      "kind": "lesswrong",
+      "id": "alignmentforum__uqAdqrvxqGqeBHjTP",
+      "url": "https://www.alignmentforum.org/posts/uqAdqrvxqGqeBHjTP/towards-understanding-based-safety-evaluations",
+      "title": "Towards understanding-based safety evaluations"
+    },
+    {
+      "kind": "lesswrong",
+      "id": "alignmentforum__vERGLBpDE8m5mpT6t",
+      "url": "https://www.alignmentforum.org/posts/vERGLBpDE8m5mpT6t/autonomous-replication-and-adaptation-an-attempt-at-a",
+      "title": "Autonomous replication and adaptation: an attempt at a concrete danger threshold"
+    },
+    {
+      "kind": "lesswrong",
+      "id": "alignmentforum__vZzg8NS7wBtqcwhoJ",
+      "url": "https://www.alignmentforum.org/posts/vZzg8NS7wBtqcwhoJ/nearcast-based-deployment-problem-analysis",
+      "title": "Nearcast-based \"deployment problem\" analysis"
+    },
+    {
+      "kind": "lesswrong",
+      "id": "alignmentforum__WCj7WgFSLmyKaMwPR",
+      "url": "https://www.alignmentforum.org/posts/WCj7WgFSLmyKaMwPR/coup-probes-catching-catastrophes-with-probes-trained-off",
+      "title": "Coup probes: Catching catastrophes with probes trained off-policy"
+    },
+    {
+      "kind": "lesswrong",
+      "id": "alignmentforum__WSNnKcKCYAffcnrt2",
+      "url": "https://www.alignmentforum.org/posts/WSNnKcKCYAffcnrt2/ten-people-on-the-inside",
+      "title": "Ten people on the inside"
+    },
+    {
+      "kind": "lesswrong",
+      "id": "alignmentforum__YTZAmJKydD5hdRSeG",
+      "url": "https://www.alignmentforum.org/posts/YTZAmJKydD5hdRSeG/would-catching-your-ais-trying-to-escape-convince-ai",
+      "title": "Would catching your AIs trying to escape convince AI developers to slow down or undeploy?"
+    },
+    {
+      "kind": "substack",
+      "id": "blog.ai-futures.org__training-agi-in-secret-would-be-unsafe",
+      "url": "https://blog.aifutures.org/p/training-agi-in-secret-would-be-unsafe",
+      "title": "Training AGI in Secret would be Unsafe and Unethical"
+    },
+    {
+      "kind": "substack",
+      "id": "blog.redwoodresearch.org__how-will-we-update-about-scheming",
+      "url": "https://blog.redwoodresearch.org/p/how-will-we-update-about-scheming",
+      "title": "How will we update about scheming?"
+    },
+    {
+      "kind": "lesswrong",
+      "id": "lesswrong__33emJkmw5bMAXZHHt",
+      "url": "https://www.lesswrong.com/posts/33emJkmw5bMAXZHHt/covert-malicious-finetuning-1",
+      "title": "Covert Malicious Finetuning"
+    },
+    {
+      "kind": "lesswrong",
+      "id": "lesswrong__5sWNnbHRkExfLaS49",
+      "url": "https://www.lesswrong.com/posts/5sWNnbHRkExfLaS49/before-smart-ai-there-will-be-many-mediocre-or-specialized",
+      "title": "Before smart AI, there will be many mediocre or specialized AIs"
+    },
+    {
+      "kind": "lesswrong",
+      "id": "lesswrong__9Fdd9N7Escg3tcymb",
+      "url": "https://www.lesswrong.com/posts/9Fdd9N7Escg3tcymb/preventing-language-models-from-hiding-their-reasoning",
+      "title": "Preventing Language Models from hiding their reasoning"
+    },
+    {
+      "kind": "lesswrong",
+      "id": "lesswrong__atBQ3NHyqnBadrsGP",
+      "url": "https://www.lesswrong.com/posts/atBQ3NHyqnBadrsGP/latent-adversarial-training",
+      "title": "Latent Adversarial Training"
+    },
+    {
+      "kind": "lesswrong",
+      "id": "lesswrong__BGtjG6PzzmPngCgW9",
+      "url": "https://www.lesswrong.com/posts/BGtjG6PzzmPngCgW9/revisiting-the-horizon-length-hypothesis",
+      "title": "Revisiting the Horizon Length Hypothesis"
+    },
+    {
+      "kind": "lesswrong",
+      "id": "lesswrong__ceBpLHJDdCt3xfEok",
+      "url": "https://www.lesswrong.com/posts/ceBpLHJDdCt3xfEok/ai-catastrophes-and-rogue-deployments",
+      "title": "AI catastrophes and rogue deployments"
+    },
+    {
+      "kind": "lesswrong",
+      "id": "lesswrong__d9FJHawgkiMSPjagR",
+      "url": "https://www.lesswrong.com/posts/d9FJHawgkiMSPjagR/ai-control-improving-safety-despite-intentional-subversion",
+      "title": "AI Control: Improving Safety Despite Intentional Subversion"
+    },
+    {
+      "kind": "lesswrong",
+      "id": "lesswrong__EPDSdXr8YbsDkgsDG",
+      "url": "https://www.lesswrong.com/posts/EPDSdXr8YbsDkgsDG/introducing-alignment-stress-testing-at-anthropic",
+      "title": "Introducing Alignment Stress-Testing at Anthropic"
+    },
+    {
+      "kind": "lesswrong",
+      "id": "lesswrong__FkgsxrGf3QxhfLWHG",
+      "url": "https://www.lesswrong.com/posts/FkgsxrGf3QxhfLWHG/risks-from-learned-optimization-introduction",
+      "title": "Risks from Learned Optimization: Introduction"
+    },
+    {
+      "kind": "lesswrong",
+      "id": "lesswrong__Gc9FGtdXhK9sCSEYu",
+      "url": "https://www.lesswrong.com/posts/Gc9FGtdXhK9sCSEYu/what-a-compute-centric-framework-says-about-ai-takeoff",
+      "title": "What a compute-centric framework says about AI takeoff speeds"
+    },
+    {
+      "kind": "lesswrong",
+      "id": "lesswrong__hirhSqvEAq7pdnyPG",
+      "url": "https://www.lesswrong.com/posts/hirhSqvEAq7pdnyPG/auditing-failures-vs-concentrated-failures",
+      "title": "Auditing failures vs concentrated failures"
+    },
+    {
+      "kind": "lesswrong",
+      "id": "lesswrong__KENtuXySHJgxsH2Qk",
+      "url": "https://www.lesswrong.com/posts/KENtuXySHJgxsH2Qk/managing-catastrophic-misuse-without-robust-ais",
+      "title": "Managing catastrophic misuse without robust AIs"
+    },
+    {
+      "kind": "lesswrong",
+      "id": "lesswrong__pRkFkzwKZ2zfa3R6H",
+      "url": "https://www.lesswrong.com/posts/pRkFkzwKZ2zfa3R6H/without-specific-countermeasures-the-easiest-path-to",
+      "title": "Without specific countermeasures, the easiest path to transformative AI likely leads to AI takeover"
+    },
+    {
+      "kind": "lesswrong",
+      "id": "lesswrong__qXtbBAxmFkAQLQEJE",
+      "url": "https://www.lesswrong.com/posts/qXtbBAxmFkAQLQEJE/interpretability-tool-ness-alignment-corrigibility-are-not",
+      "title": "Interpretability/Tool-ness/Alignment/Corrigibility are not Composable"
+    },
+    {
+      "kind": "lesswrong",
+      "id": "lesswrong__r3xwHzMmMf25peeHE",
+      "url": "https://www.lesswrong.com/posts/r3xwHzMmMf25peeHE/the-translucent-thoughts-hypotheses-and-their-implications",
+      "title": "The Translucent Thoughts Hypotheses and Their Implications"
+    },
+    {
+      "kind": "lesswrong",
+      "id": "lesswrong__sbGau4QBwToYWEg4k",
+      "url": "https://www.lesswrong.com/posts/sbGau4QBwToYWEg4k/llms-sometimes-generate-purely-negatively-reinforced-text",
+      "title": "LLMs Sometimes Generate Purely Negatively-Reinforced Text"
+    },
+    {
+      "kind": "lesswrong",
+      "id": "lesswrong__TTFsKxQThrqgWeXYJ",
+      "url": "https://www.lesswrong.com/posts/TTFsKxQThrqgWeXYJ/how-might-we-safely-pass-the-buck-to-ai",
+      "title": "How might we safely pass the buck to AI?"
+    },
+    {
+      "kind": "lesswrong",
+      "id": "lesswrong__yFofRxg7RRQYCcwFA",
+      "url": "https://www.lesswrong.com/posts/yFofRxg7RRQYCcwFA/new-report-scheming-ais-will-ais-fake-alignment-during",
+      "title": "New report: \"Scheming AIs: Will AIs fake alignment during training in order to get power?\""
+    },
+    {
+      "kind": "lesswrong",
+      "id": "lesswrong__yGaw4NqRha8hgx5ny",
+      "url": "https://www.lesswrong.com/posts/yGaw4NqRha8hgx5ny/the-case-for-becoming-a-black-box-investigator-of-language",
+      "title": "The case for becoming a black-box investigator of language models"
+    },
+    {
+      "kind": "lesswrong",
+      "id": "lesswrong__ZAsJv7xijKTfZkMtr",
+      "url": "https://www.lesswrong.com/posts/ZAsJv7xijKTfZkMtr/sleeper-agents-training-deceptive-llms-that-persist-through",
+      "title": "Sleeper Agents: Training Deceptive LLMs that Persist Through Safety Training"
+    }
+  ]
+}

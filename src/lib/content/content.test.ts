@@ -13,11 +13,13 @@ import {
   getItemsForModule,
   getLessonById,
   getModuleProgressContentIds,
+  getContentLocation,
   getModulesForTrack,
   getPrerequisiteModules,
   getTrackItemSequence,
   itemIdOf,
   itemSlugOf,
+  paperResources,
   papers,
   resources,
   tracks,
@@ -122,7 +124,8 @@ describe("content integrity", () => {
     dupId(modules);
     dupId(exercises);
     dupId(assessments);
-    dupId(resources);
+    // The hub renders curated + paper-derived entries as one keyed list.
+    dupId([...resources, ...paperResources]);
 
     const trackSlugs = tracks.map((t) => t.slug);
     expect(new Set(trackSlugs).size).toBe(trackSlugs.length);
@@ -138,6 +141,40 @@ describe("content integrity", () => {
     // At most one assessment per module.
     const assessmentModuleIds = assessments.map((a) => a.moduleId);
     expect(new Set(assessmentModuleIds).size).toBe(assessmentModuleIds.length);
+  });
+
+  // Every real-track paper links out from the resource hub; the Example
+  // track's papers (feature reference, not curriculum) must not leak in.
+  it("paper-derived resources cover every real-track paper source", () => {
+    const urls = new Set(paperResources.map((r) => r.url));
+    for (const track of tracks) {
+      if (track.kind === "example") continue;
+      for (const mod of getModulesForTrack(track.id)) {
+        for (const item of getItemsForModule(mod.id)) {
+          if (item.kind !== "paper") continue;
+          const source = item.paper.source;
+          const url =
+            source.kind === "arxiv"
+              ? `https://arxiv.org/abs/${source.arxivId}`
+              : source.postUrl;
+          expect(urls.has(url), `${item.paper.id} missing from hub`).toBe(true);
+        }
+      }
+    }
+    const examplePaperIds = new Set(
+      papers.filter((p) => p.moduleId.startsWith("ex-")).map((p) => p.id),
+    );
+    for (const r of paperResources) {
+      const paperId = r.id.replace(/^paper-res-/, "");
+      expect(
+        examplePaperIds.has(paperId),
+        `${r.id} derives from an Example-track paper`,
+      ).toBe(false);
+      // The hub links course readings to their in-course viewer.
+      expect(r.internalHref, `${r.id} internalHref`).toBe(
+        getContentLocation(paperId)?.href,
+      );
+    }
   });
 });
 

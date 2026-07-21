@@ -43,7 +43,7 @@ It is up for debate as to how strong or catastrophically impactful a TUAI is, an
 
 {/* TODO: migrate to Cloudflare Stream — replace the self-hosted mp4 with the Stream embed URL; <Video> auto-detects cloudflarestream.com (provider="stream"). Self-hosted interim, re-encoded to <25 MiB. */}
 
-<Video provider="file" src="/videos/what_can_go_wrong.mp4" title="What can go wrong" />
+<Video provider="file" src="/videos/what_can_go_wrong.mp4" title="Ryan Greenblatt & Thomas Larsen - A Technical Safety Roadmap" />
 
 Wentworth's post makes a series of arguments against control to the effect that control is low-value rather than actively harmful. Work through them one at a time: for each criticism, write the best response you can before seeing one that defenders of control give.
 
@@ -55,7 +55,7 @@ There are also separate reasons why one may favor upweighting control work that 
 
 - Early AI scheming includes a variety of [threat models](https://www.lesswrong.com/posts/kcKrE9mzEHrdqtDpE/the-case-for-ensuring-that-powerful-ais-are-controlled) such as exfiltrations, rogue deployments, and research sabotage. As previously mentioned these all contribute to potential catastrophes. Preventing these from happening through control work is good across nearly all worlds. Thereby control proponents claim that control does not claim to build ASI safely; rather, by preventing early scheming catastrophes it makes the work environment more stable.
 - Control also aims to flag early egregious misalignments to initiate potential policy or lab action — for example, by [catching AIs red-handed](https://www.lesswrong.com/posts/i2nmBfCXnadeGmhzW/catching-ais-red-handed).
-- In the world where alignment is not solved and the AIs are misaligned, control is close to the only thing that still does anything. What it buys there is a floor rather than a solution — no escape, no unmonitored self-research, misalignment caught — holding a line and buying time and evidence even when every other agenda has failed.
+- In the world where alignment is not solved and the AIs are misaligned, control can prevent escape, monitor self-research, and help catch misalignment, buying researchers time to perform more safety research and evidence of misalignment.
 
 ## Weighing control against alternatives
 
@@ -68,5 +68,3 @@ First, additive does not necessitate high-value. Control contributes to remedies
 The main additive alternatives each have a place, and control tends to further them rather than compete with them. Verification and evaluation science works towards making alignment research independently checkable, and control provides the contained setting to develop and stress-test verification methods on untrusted models without the model subverting the work. [Scalable oversight](https://arc.net/l/quote/azhovenm), through debate, recursive reward modelling, and cross-checking outputs, aims to reduce the production rate of slop, and its protocols run on the scaffolding that control's monitoring provides, which also keeps a scheming model from colluding to defeat them.
 
 Pause, coordination, and policy buy time, the lever the differential-acceleration harm said control needs, and control generates the red-handed misalignment evidence that makes a pause politically actionable. Alignment research proper, if it can make early AI trustworthy, removes the need to control it by acting on $P(\text{scheming})$ itself, though even here trust is earned under control, since control evaluations are how one accumulates evidence that a model is trustworthy or catches that it isn't before relying on it. Finally, capability restraint, declining to run RSI in this regime at all, is strengthened by the same red-handed evidence, which sharpens the case for declining or halting the loop.
-
-So control is not merely additive but often enabling. It acts on the scheming case and on gathering misalignment evidence, and that evidence and containment is what lets the slop-focused alternatives run at all.

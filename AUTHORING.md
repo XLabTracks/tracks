@@ -613,6 +613,27 @@ verbatim; step 7 too, keyed to `LESSWRONG_CONVERTER_VERSION` and
    with a warning — counted in the build output, listed in the footer
    disclosure.
 
+### 2e. Linked readings (post links that open internally)
+
+After adding or rebuilding any post-sourced paper (§2c/§2d), run
+
+```sh
+npm run readings:build     # --dry-run lists candidates; --refresh refetches
+```
+
+It scans the committed artifacts of every post-sourced paper for clean
+post links (no query/fragment — comment permalinks stay external), builds
+a committed artifact for each (via the §2c/§2d scripts), and regenerates
+`src/content/linked-readings.json` — the registry behind the standalone
+`/readings/[id]` viewer. At render time those links are rewritten
+in-place: to the course page when the target is itself a course paper,
+else to `/readings/…`. Support is one layer deep by design — a linked
+reading renders with its links untouched — and linked readings are not
+content-graph items: no module, no progress, and never in the resource
+hub. Commit the registry plus the new `src/content/{substack,lesswrong}/`
+and `public/{substack,lesswrong}/` files; `readings.test.ts` pins the
+registry ↔ artifact contract.
+
 ---
 
 ## 3. Create a new demo

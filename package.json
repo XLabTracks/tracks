@@ -14,7 +14,8 @@
     "test": "vitest run",
     "arxiv:build": "tsx scripts/build-arxiv.ts",
     "substack:build": "tsx scripts/build-substack.ts",
-    "lesswrong:build": "tsx scripts/build-lesswrong.ts"
+    "lesswrong:build": "tsx scripts/build-lesswrong.ts",
+    "readings:build": "tsx scripts/build-readings.ts"
   },
   "dependencies": {
     "@mdx-js/loader": "^3.1.1",

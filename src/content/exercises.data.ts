@@ -150,10 +150,10 @@ export const exercises: Exercise[] = [
     title: "Responding to Arguments Against Control",
     numberLabel: "Exercise 2.1",
     prompt:
-      "You will see a series of criticisms of AI control, one at a time. For each one, write the best response you can using what you learned in Module 1 — then you'll see one response that defenders of control give.",
+      "Below is a series of criticisms of AI control. For each one, write the best response using what you learned in Module 1.",
     guidance:
-      "Some of these arguments are partially right; a response that identifies what the argument gets right and what it still misses is often stronger than a rebuttal.",
-    conceptsPrompt: "Which Module 1 ideas are you drawing on? Pick any, or none.",
+      "Note that some of these arguments are partially right; a response that identifies what the argument gets right and what it still misses is often stronger than a rebuttal as it shows you're not being biased.",
+    conceptsPrompt: "Select any Module 1 ideas you utilize in your response.",
     concepts: [
       {
         id: "the-decomposition",
@@ -178,7 +178,7 @@ export const exercises: Exercise[] = [
       {
         id: "scalability-limit",
         label: "Control's scalability limit",
-        tip: "If the AI's decisions become inscrutable, harmful and benign actions can't be told apart; control targets early superhuman AIs.",
+        tip: "If the AI's decisions become inscrutable, harmful and benign actions can't be told apart, which is why control targets early superhuman AIs.",
       },
       {
         id: "bootstrapping",
@@ -240,9 +240,9 @@ export const exercises: Exercise[] = [
         rounds: [
           {
             critique:
-              "Control does not generalize to superintelligence — even its advocates acknowledge this. It only works while humans (or trusted weaker models) can still check the AI's work, which holds up to roughly smartest-human level, maybe slightly beyond. Past that point, the RSI loop keeps running without oversight: each AI generation must align its successor on its own, and also make sure that successor can align the generation after it. Nobody knows how many of these unchecked handoffs sit between the last models we can oversee and superintelligence, and the chain can break at any of them.",
+              "Control does not generalize to superintelligence and even its advocates acknowledge this. It only works while humans (or trusted weaker models) can still check the AI's work, which holds up to roughly smartest-human level, maybe slightly beyond. Past that point, the RSI loop keeps running without oversight: each AI generation must align its successor on its own, and also make sure that successor can align the generation after it. Nobody knows how many of these unchecked handoffs sit between the last models we can oversee and superintelligence, and the chain can break at any of them.",
             reveal:
-              "Control does not guarantee success post handoff should we enter with misaligned AIs. But, should we utilize control, we are able to extract more useful work out of AIs than otherwise possible. This productivity would develop into a measurably improved situation and option space for humans when deciding whether to handoff in RSI. For example, additional alignment work through controlled AIs translates to better odds of sufficiently scalable alignment, thereby reducing the risk when entering RSI.",
+              "Control does not guarantee success post handoff should we enter with misaligned AIs, but it nonetheless lets us extract more useful work out of AIs than otherwise possible. This productivity would develop into a measurably improved situation and option space for humans when deciding whether to handoff in RSI. For example, additional alignment work through controlled AIs translates to better odds of sufficiently scalable alignment, thereby reducing the risk when entering RSI.",
           },
         ],
       },
@@ -253,9 +253,9 @@ export const exercises: Exercise[] = [
         rounds: [
           {
             critique:
-              "Control's payoff runs through controlled AIs doing the most open-ended work there is: inventing new research agendas. On short timelines, aligning superintelligence likely needs breakthroughs humans won't produce on their own, so the plan leans on AIs to come up with them. But a novel research agenda is exactly the output humans are least able to judge — telling a promising direction from a subtly misleading one is much harder than checking a proof, and narrowing the task doesn't help, since \"solve interpretability\" is barely more checkable than \"solve alignment.\" So control must safely extract precisely the kind of work it is least able to verify.",
+              "Control's payoff runs through controlled AIs doing the most open-ended work there is: inventing new research agendas. On short timelines, aligning superintelligence likely needs breakthroughs humans won't produce on their own, so the plan leans on AIs to come up with them. But novel research agendas are where humans are least able to judge, as telling a promising direction from a subtly misleading one is much harder than checking a proof, and narrowing the task doesn't help, since \"solve interpretability\" is about as checkable as \"solve alignment.\" So control must safely extract precisely the kind of work it is least able to verify.",
             reveal:
-              "It's plausible that controlled AIs are unable to produce novel breakthroughs — but the same goes for humans. And a controlled strong AI has a higher probability of producing breakthroughs than an uncontrolled AI of equal safety, since without control, equal safety means running a weaker model. Therefore controlled AIs, as opposed to humans or weaker AIs, increase the odds of successful RSI.",
+              "Even if controlled AIs are unable to produce novel breakthroughs, a controlled strong AI has a higher probability of producing breakthroughs than an uncontrolled AI of equal safety, since without control, equal safety means running a weaker model. Therefore controlled AIs, as opposed to humans or weaker AIs, increase the odds of successful RSI.",
           },
         ],
       },
@@ -266,21 +266,21 @@ export const exercises: Exercise[] = [
         rounds: [
           {
             critique:
-              "Control just defers alignment research from humans to AIs, and every property that made that research hard for humans, such as the unverifiability of generalization and scaling, carries straight over to AIs working inside an RSI loop. Worse, within that loop, where control is meant to help most, the real threat is not scheming but slop: AIs that cannot do the research properly, fool their maintainers, and build each next generation haphazardly up towards superintelligence. Call it unintentional research failure, and note that it can come from any AI, aligned or not.",
+              "Control just defers alignment research from humans to AIs, and every property that made that research hard for humans, such as the unverifiability of generalization and scaling, carries straight over to AIs working inside an RSI loop. Worse, within that loop, one scenario could be that AIs can't do research properly, fool their maintainers, and build each next generation haphazardly up towards superintelligence.",
             reveal:
-              "The point of using TUAIs is that they can be better at research than humans and far more numerous, and they free human labour for tasks humans are better suited to. Humans produce unverifiable, plausible-looking research too, so on balance more and smarter research effort is still the better bet.",
+              "The point of using TUAIs is that they can be better at research than humans and far more numerous, and they free human labour for tasks humans are better suited to. Humans also produce unverifiable and plausible-looking research, so on balance a more scalable and smarter research effort is still the better bet.",
           },
           {
             critique:
-              "More research does not help if the output is slop. Extra unverifiable work does not fix unverifiability; it just produces more of what we cannot check.",
+              "More research does not help if the output is slop. Extra unverifiable work does not fix unverifiability, it just produces more of what we cannot check.",
             reveal:
-              "Slop is not a failure of control. Control still prevents scheming, and producing good research was never its job, so slop does not show control is broken. It undermines the bootstrapping payoff control was routing through the AI's research, but that is a problem for every method that leans on AI-produced alignment research, not a control-specific defeat. Where misalignment is intentional rather than accidental, a schemer is more likely to sandbag when doing safety research than capabilities research, since the vaguer standards for safety give it plausible deniability, and catching that is squarely control's job. Slop, by contrast, leaves control's evidence-generation untouched, since catching misalignment red-handed never runs through the research. Control here is beside the point, not wrong, except through the evidence channel.",
+              "Slop is not a failure of control specifically. Control still prevents scheming, and producing good research was never its job, so slop does not show control is broken. It undermines the bootstrapping payoff control was routing through the AI's research, but that is a problem for every method that leans on AI-produced alignment research, not a control-specific defeat. Where misalignment is intentional rather than accidental, a schemer is more likely to sandbag when doing safety research than capabilities research, since the vaguer standards for safety give it plausible deniability, and catching that is squarely control's job. Slop, by contrast, leaves control's evidence-generation untouched, since catching misalignment red-handed never runs through the research.",
           },
         ],
       },
     ],
     revealFraming:
-      "One response defenders of control give — not the only one, and not necessarily the last word:",
+      "An example response defenders of control give:",
     construction: {
       intro:
         "Construct an argument against control that is not one of the four you just saw. Start by choosing which assumption of control your argument attacks.",

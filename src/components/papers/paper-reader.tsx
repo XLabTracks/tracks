@@ -30,6 +30,8 @@ import {
 import { getGlossaryTerm, getRelatedTermNames } from "@/lib/content/glossary";
 import { insertionAnchorId } from "@/lib/papers/split-paper";
 import { applyPaperEdits, type PaperPart } from "@/lib/papers/apply-edits";
+import { resolveInternalReadingHref } from "@/lib/readings/resolve";
+import { rewriteReadingLinks } from "@/lib/readings/rewrite-links";
 import { Demo } from "@/components/mdx/demo";
 import { Exercise } from "@/components/mdx/exercise";
 import { ExerciseSequence } from "@/components/mdx/exercise-sequence";
@@ -58,15 +60,22 @@ import {
  * engine, insertion blocks, and footer — because both converters emit the
  * same annotated-HTML contract (data-anchor/data-s/toc). Only artifact
  * lookup, external links, and fallback copy differ per source.
+ *
+ * Post-sourced papers additionally get their post-to-post links rewritten to
+ * internal destinations (course pages, or /readings for pre-built linked
+ * readings). `internalSublinks={false}` turns that off — the standalone
+ * /readings viewer uses it, which is what keeps the feature one layer deep.
  */
 export async function PaperReader({
   paper,
   signedIn,
   completedContentIds,
+  internalSublinks = true,
 }: {
   paper: Paper;
   signedIn: boolean;
   completedContentIds: Set<string>;
+  internalSublinks?: boolean;
 }) {
   switch (paper.source.kind) {
     case "arxiv":
@@ -85,6 +94,7 @@ export async function PaperReader({
           postUrl={paper.source.postUrl}
           signedIn={signedIn}
           completedContentIds={completedContentIds}
+          internalSublinks={internalSublinks}
         />
       );
     case "lesswrong":
@@ -94,6 +104,7 @@ export async function PaperReader({
           postUrl={paper.source.postUrl}
           signedIn={signedIn}
           completedContentIds={completedContentIds}
+          internalSublinks={internalSublinks}
         />
       );
   }
@@ -104,11 +115,13 @@ async function LessWrongPaperReader({
   postUrl,
   signedIn,
   completedContentIds,
+  internalSublinks,
 }: {
   paper: Paper;
   postUrl: string;
   signedIn: boolean;
   completedContentIds: Set<string>;
+  internalSublinks: boolean;
 }) {
   const postRef = parseLessWrongPostUrl(postUrl);
   if (!postRef) {
@@ -137,7 +150,11 @@ async function LessWrongPaperReader({
   return (
     <EditedPaperBody
       paper={paper}
-      html={artifact.post.html}
+      html={
+        internalSublinks
+          ? rewriteReadingLinks(artifact.post.html, resolveInternalReadingHref)
+          : artifact.post.html
+      }
       toc={artifact.post.toc}
       // .arxiv-paper carries the shared reading typography + the edit-UI
       // (ax-hidden/ax-added) styles; .lesswrong-post scopes the lw-* extras.
@@ -225,11 +242,13 @@ async function SubstackPaperReader({
   postUrl,
   signedIn,
   completedContentIds,
+  internalSublinks,
 }: {
   paper: Paper;
   postUrl: string;
   signedIn: boolean;
   completedContentIds: Set<string>;
+  internalSublinks: boolean;
 }) {
   const postRef = parseSubstackPostUrl(postUrl);
   if (!postRef) {
@@ -257,7 +276,11 @@ async function SubstackPaperReader({
   return (
     <EditedPaperBody
       paper={paper}
-      html={artifact.post.html}
+      html={
+        internalSublinks
+          ? rewriteReadingLinks(artifact.post.html, resolveInternalReadingHref)
+          : artifact.post.html
+      }
       toc={artifact.post.toc}
       // .arxiv-paper carries the shared reading typography + the edit-UI
       // (ax-hidden/ax-added) styles; .substack-post scopes the sb-* extras.

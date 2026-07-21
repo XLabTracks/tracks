@@ -1564,47 +1564,6 @@ export const exercises: Exercise[] = [
     minWords: 75,
     maxWords: 500,
   },
-  // Module 2 "Running the model" lesson (c-regimes-l2): the learner runs the
-  // portfolio analysis on a stipulated regime. Same allocation widget and
-  // agenda menu as the capstone (cr-portfolio-allocation); the regime is
-  // distinct from all three capstone scenarios. No reveal by design —
-  // portfolios are discussed in facilitation.
-  {
-    id: "cr-portfolio-yourself",
-    type: "allocation",
-    title: "Your turn: a portfolio for the scare regime",
-    prompt: [
-      "You direct a safety team with a budget of 10 researchers' worth of effort. The scenario below stipulates a regime — the three states and the price table.",
-      "- Price each technique's basket against the table, and ask which channel its payoff flows through.",
-      "- Divide the effort across the agendas — the chart tracks your split as you go.",
-      "- Defend the allocation in the three-part template: the allocation itself, where the marginal slice of effort goes and through which channel, and which spend binds.",
-    ].join("\n"),
-    agendas: [
-      { id: "control-protocols", label: "Control protocols" },
-      { id: "alignment-research", label: "Alignment research" },
-      { id: "interpretability", label: "Interpretability" },
-      { id: "verification-evals", label: "Verification & evals science" },
-      { id: "scalable-oversight", label: "Scalable oversight" },
-      { id: "policy-pause", label: "Policy, pause & coordination" },
-      { id: "security", label: "Security" },
-    ],
-    scenarios: [
-      {
-        id: "scare-regime",
-        title: "The scare regime",
-        description: [
-          "World state: mid-stage models — alignment nature unknown, checkability of research output unknown, probably middling.",
-          "Epistemic state: a widely reported incident just happened — real harm, loud coverage, but ambiguous between sloppiness and scheming: no transcripts, nothing reproducible, evals still look fine.",
-          "Resource state: the incident spiked the will account, but the spike is fading fast; the public is scared, so the product-wide usefulness tax is briefly cheap; delay is briefly buyable at moderate price; safety compute is still capped at a small share, and the race is unchanged underneath.",
-          "Approaching stage (AIFM): Automated Coder — models that could soon replace most of the lab's coding work.",
-          "Initial plan: Plan D — leadership doesn't take misalignment concerns very seriously; a small safety team has buy-in for roughly 3% of compute.",
-        ].join("\n"),
-      },
-    ],
-    totalPeople: 10,
-    step: 0.5,
-    minReasoningChars: 250,
-  },
   // The five-worlds set: run the channel machinery across Greenblatt's
   // misalignment archetypes. Diagnoses stay behind the reveals.
   {

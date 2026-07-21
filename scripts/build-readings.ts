@@ -4,14 +4,17 @@
  * internal reader (/readings/[id]) instead of leaving the site.
  *
  * Scans the committed artifacts of every non-arXiv Paper in papers.data.ts
- * for post links (clean URLs only — comment permalinks and anchored links
- * stay external), builds a committed artifact for each via the existing
- * per-source build scripts, and regenerates the runtime registry:
+ * AND the markdown links in every lesson MDX body for post links (clean URLs
+ * only — comment permalinks and anchored links stay external; a literal JSX
+ * `<a href>` in MDX is the opt-out for links that must stay external, e.g. a
+ * verbatim-reproduced lesson's attribution line — MdxLink skips those too),
+ * builds a committed artifact for each via the existing per-source build
+ * scripts, and regenerates the runtime registry:
  *
  *   src/content/linked-readings.json    { readings: [{kind,id,url,title}] }
  *
- * One layer deep by design: only primary papers are scanned — a linked
- * reading's own sublinks are never followed or internalized.
+ * One layer deep by design: only primary papers and lessons are scanned — a
+ * linked reading's own sublinks are never followed or internalized.
  *
  * Usage:
  *   npm run readings:build               # build missing/stale, regenerate registry
@@ -24,7 +27,7 @@
  * links simply stay external.
  */
 import { execFileSync } from "node:child_process";
-import { existsSync, readFileSync, writeFileSync } from "node:fs";
+import { existsSync, readdirSync, readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import { papers } from "../src/content/papers.data";
 import {
@@ -112,11 +115,41 @@ function primaryKeys(): Set<string> {
   return keys;
 }
 
-/** Post links inside the committed artifacts of all non-arXiv papers. */
+/**
+ * Markdown-link destinations in every lesson MDX body. Literal JSX
+ * `<a href>` links are deliberately not matched — that is the authoring
+ * opt-out for links that must stay external (MdxLink leaves them alone for
+ * the same reason).
+ */
+function collectLessonHrefs(): string[] {
+  const dir = join(ROOT, "src", "content", "lessons");
+  const hrefs: string[] = [];
+  for (const file of readdirSync(dir).sort()) {
+    if (!file.endsWith(".mdx")) continue;
+    const text = readFileSync(join(dir, file), "utf8");
+    for (const match of text.matchAll(/\]\((https:\/\/[^()\s]+)\)/g)) {
+      hrefs.push(match[1]);
+    }
+  }
+  return hrefs;
+}
+
+/**
+ * Post links inside the committed artifacts of all non-arXiv papers, plus
+ * those written in lesson MDX. Papers scan first so an artifact first linked
+ * from a paper keeps its id when a lesson later links the other host.
+ */
 function collectCandidates(): Candidate[] {
   const primaries = primaryKeys();
   const seen = new Set<string>();
   const candidates: Candidate[] = [];
+  const add = (href: string) => {
+    const candidate = candidateFromHref(href);
+    if (!candidate) return;
+    if (primaries.has(candidate.key) || seen.has(candidate.key)) return;
+    seen.add(candidate.key);
+    candidates.push(candidate);
+  };
   for (const paper of papers) {
     if (paper.source.kind === "arxiv") continue;
     const ref =
@@ -135,13 +168,10 @@ function collectCandidates(): Candidate[] {
     for (const match of artifact.post.html.matchAll(
       /<a\b[^>]*?\bhref="(https:\/\/[^"]*)"/g,
     )) {
-      const candidate = candidateFromHref(match[1]);
-      if (!candidate) continue;
-      if (primaries.has(candidate.key) || seen.has(candidate.key)) continue;
-      seen.add(candidate.key);
-      candidates.push(candidate);
+      add(match[1]);
     }
   }
+  for (const href of collectLessonHrefs()) add(href);
   return candidates.sort((a, b) => a.id.localeCompare(b.id));
 }
 
@@ -209,7 +239,9 @@ async function main(): Promise<void> {
   const dryRun = hasFlag("--dry-run");
 
   const candidates = collectCandidates();
-  console.log(`${candidates.length} linked post(s) referenced by course papers`);
+  console.log(
+    `${candidates.length} linked post(s) referenced by course papers and lessons`,
+  );
 
   if (dryRun) {
     for (const candidate of candidates) {

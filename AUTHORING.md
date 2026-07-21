@@ -132,6 +132,18 @@ A "sublesson" is a `Lesson` — the MDX page inside a module. To add one to an
    - `<Term>…</Term>` — a glossary term with a hover/tap definition card
      (see §1c). `<Term>example term</Term>` resolves by its text;
      `<Term id="another-term">the prose form</Term>` pins the entry by id.
+     Entries flagged `autoGloss` wrap themselves automatically — see §1c.
+   - `<SiteQuote href="https://…" site="Site Name" title="Optional page title"
+     excerpt="Verbatim sentence(s) from the page.">trigger phrase</SiteQuote> —
+     an external link with a hover/tap preview card. The phrase renders as a
+     real link (new tab, small ↗ icon); hovering shows the excerpt as a
+     quotation with a linked attribution line, and on touch the first tap
+     opens the card (the attribution link is the way through). `href`, `site`,
+     and `excerpt` are required; the excerpt must be **verbatim** from the
+     linked page — never paraphrase or invent it. All data lives inline in the
+     props (no registry). Unlike markdown links, a SiteQuote is never
+     internalized by MdxLink and never scanned by `npm run readings:build`; it
+     always points at the real external URL. Live example: `ex-content-l1`.
 
 The lesson is now live at `/tracks/<trackSlug>/<moduleSlug>/<itemSlug>` and shows
 in the sidebar + prev/next. A lesson completes when the learner scrolls to its end
@@ -273,7 +285,8 @@ runtime only ever reads the committed file. Each entry:
   "definition": "Lorem ipsum… $s(u)$ math works.",
   "aliases": ["example terms"],      // optional alternate surface forms
   "seeAlso": ["another-term"],       // optional related-entry ids ("Related" line)
-  "source": { "label": "Example source", "url": "https://example.com" } // optional footer
+  "source": { "label": "Example source", "url": "https://example.com" }, // optional footer
+  "autoGloss": true                  // optional: auto-wrap in lessons (see below)
 }
 ```
 
@@ -293,6 +306,24 @@ Reference a term from either surface:
   (renders the display name). Live example: `ex-content-l1`.
 - **Papers**: the `gloss` edit op wraps a phrase of the paper's own text —
   see §2b. Live example: `ex-paper-attention`.
+
+**Auto-glossing (lessons only).** An entry with `"autoGloss": true` wraps
+itself: at MDX compile time, `src/lib/mdx/rehype-auto-gloss.mjs` wraps the
+first running-text occurrence of the term (or an alias) in each lesson in
+`<Term/>` — first occurrence per lesson per entry, longest surface first,
+case-insensitive with hyphen-aware word boundaries; never inside headings,
+code/inline math, links, or inline JSX (`<Callout>` bodies do get glossed).
+A hand-placed `<Term>` for the same entry anywhere in the lesson suppresses
+the auto wrap, and hand-placement is always available for the terms that
+should stay manual. Reserve the flag for unambiguous jargon — never common
+words like "control" or "audit", whose bare surfaces would misfire in
+ordinary prose. The registry's top-level `"autoGlossExclude"` array lists
+lesson ids the plugin leaves untouched (the verbatim-reproduced lessons).
+Papers are unaffected — glossing papers stays a deliberate `gloss` edit.
+Dev-server note: the plugin reads `glossary.json` at compile time and
+Turbopack's persistent cache doesn't know about that dependency, so after a
+glossary edit a restart alone can still serve stale lessons — clear the cache
+too (`rm -rf .next`, then `npm run dev`). Production builds always pick it up.
 
 Enforced by `npm run test` (`glossary.test.ts` + `content.test.ts`): unique
 ids/aliases, resolvable `seeAlso`, every `<Term>` and `gloss` reference
@@ -615,24 +646,39 @@ verbatim; step 7 too, keyed to `LESSWRONG_CONVERTER_VERSION` and
 
 ### 2e. Linked readings (post links that open internally)
 
-After adding or rebuilding any post-sourced paper (§2c/§2d), run
+After adding or rebuilding any post-sourced paper (§2c/§2d), or adding a
+Substack / LessWrong link to a lesson body, run
 
 ```sh
 npm run readings:build     # --dry-run lists candidates; --refresh refetches
 ```
 
-It scans the committed artifacts of every post-sourced paper for clean
-post links (no query/fragment — comment permalinks stay external), builds
-a committed artifact for each (via the §2c/§2d scripts), and regenerates
-`src/content/linked-readings.json` — the registry behind the standalone
-`/readings/[id]` viewer. At render time those links are rewritten
-in-place: to the course page when the target is itself a course paper,
-else to `/readings/…`. Support is one layer deep by design — a linked
-reading renders with its links untouched — and linked readings are not
-content-graph items: no module, no progress, and never in the resource
-hub. Commit the registry plus the new `src/content/{substack,lesswrong}/`
-and `public/{substack,lesswrong}/` files; `readings.test.ts` pins the
+It scans the committed artifacts of every post-sourced paper **and the
+markdown links in every lesson `.mdx` body** for clean post links (no
+query/fragment — comment permalinks and anchored links stay external),
+builds a committed artifact for each (via the §2c/§2d scripts), and
+regenerates `src/content/linked-readings.json` — the registry behind the
+standalone `/readings/[id]` viewer. At render time those links are
+rewritten in-place: to the course page when the target is itself a course
+paper, else to `/readings/…` (papers via `rewriteReadingLinks`; lessons
+via the `MdxLink` renderer in the global MDX component map). Support is
+one layer deep by design — a linked reading renders with its links
+untouched — and linked readings are not content-graph items: no module,
+no progress, and never in the resource hub. Commit the registry plus the
+new `src/content/{substack,lesswrong}/` and
+`public/{substack,lesswrong}/` files; `readings.test.ts` pins the
 registry ↔ artifact contract.
+
+**Opting a lesson link out**: write it as literal JSX —
+`<a href="…">text</a>` instead of `[text](…)`. MDX's component map only
+applies to markdown-derived elements, so a literal anchor renders as-is,
+and `readings:build` only collects markdown link destinations. Use this
+for links that must stay external, e.g. the attribution line of a
+verbatim-reproduced lesson (internalizing "the original post" on a page
+that *is* the reproduction would be circular). When a post exists on
+several hosts (LessWrong + a Substack custom domain), link the host the
+course already uses — course paper source URL or existing artifact —
+so one post never builds under two ids.
 
 ---
 

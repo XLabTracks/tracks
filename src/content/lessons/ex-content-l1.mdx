@@ -8,6 +8,16 @@ text, and <Term id="another-term">a pinned reference</Term> resolves by id when
 the prose form differs (hover on desktop, tap on touch — see
 `src/content/glossary.json`).
 
+External sites can be quoted inline with the same card machinery: a
+<SiteQuote
+  href="https://example.com/"
+  site="IANA"
+  title="Example Domain"
+  excerpt="This domain is for use in documentation examples without needing permission."
+>site quote</SiteQuote> previews a verbatim excerpt on hover and navigates to
+the real page on click (tap opens the card first on touch; the excerpt and
+attribution are all inline props — no registry).
+
 <Video
   src="https://www.youtube.com/watch?v=nwE_BsjBSUw"
   title="Example video — replace with your own"

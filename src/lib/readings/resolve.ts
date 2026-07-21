@@ -59,9 +59,9 @@ const internalHrefByKey: Map<string, string> = (() => {
 })();
 
 /**
- * The internal destination for a post link inside a course paper, or null to
- * leave the link external. This is the resolver `rewriteReadingLinks` runs
- * over post-sourced papers' HTML.
+ * The internal destination for a post link inside a course paper or lesson,
+ * or null to leave the link external. `rewriteReadingLinks` runs this over
+ * post-sourced papers' HTML; `MdxLink` runs it over lessons' markdown links.
  */
 export function resolveInternalReadingHref(href: string): string | null {
   const key = postKey(href);

@@ -116,8 +116,12 @@ DOM-cloning presentation layer; the in-document section stays canonical).
 **Linked readings**: post-sourced papers get their clean post-to-post links
 rewritten at render time (`src/lib/readings/`) to course pages, or to the
 standalone `/readings/[id]` viewer for posts pre-built by
-`npm run readings:build` (which regenerates the committed
-`src/content/linked-readings.json` registry — never hand-edit it). One layer
+`npm run readings:build` (which scans paper artifacts AND lesson MDX markdown
+links, and regenerates the committed `src/content/linked-readings.json`
+registry — never hand-edit it). Lesson markdown links internalize the same
+way via `MdxLink` (the `a` renderer in the MDX component map); a literal JSX
+`<a href>` in a lesson is the opt-out — never internalized, never scanned —
+used by the attribution lines of verbatim-reproduced lessons. One layer
 deep by design: the /readings viewer renders untouched HTML
 (`internalSublinks={false}`), and linked readings are not content-graph
 items — no module, no progress, excluded from the resource hub.
@@ -132,7 +136,9 @@ via `usePathname()` (layouts can't see deeper params).
 `src/components/mdx/mdx-components.tsx`. `LessonContent` dynamically imports
 `src/content/lessons/${contentRef}.mdx`, so authors embed `<Video/>`, `<Demo/>`,
 `<Exercise/>`, `<Callout/>`, `<ArxivPaper/>` (collapsible card — distinct from
-full-page Paper items), `<Footnote/>`, and `<Term/>` (glossary hover card)
+full-page Paper items), `<Footnote/>`, `<Term/>` (glossary hover card), and
+`<SiteQuote/>` (external link whose hover card previews a verbatim excerpt
+of the target page; never internalized, never scanned by readings:build)
 by name inside lesson text.
 A lesson body with 2+ top-level `##`/`###` headings automatically gets a
 paper-style "In this lesson" sidebar nav: `src/lib/mdx/rehype-lesson-sections.mjs`
@@ -238,7 +244,13 @@ the surface's sidenote rail, slightly raised, with a dashed connector traced
 from the term (document-coordinate portal, per-surface rail geometry);
 without rail room, a popover anchored at the term. Lessons use the `<Term/>`
 MDX component (server-side lookup; definitions math-render via MathText
-before crossing to the client); papers use the `gloss` edit op —
+before crossing to the client); entries flagged `autoGloss` additionally
+self-place in lessons: `src/lib/mdx/rehype-auto-gloss.mjs` (registered after
+rehype-lesson-sections, before rehype-katex) wraps each lesson's first
+running-text occurrence in `<Term/>` at compile time — hand-placed `<Term>`s
+suppress it per entry, the registry's `autoGlossExclude` opts out the
+verbatim-reproduced lessons, and the flag is reserved for unambiguous jargon
+(common words stay manual). Papers use the `gloss` edit op —
 `patch-section.ts` wraps the phrase in `span.ax-gloss[data-gloss]`
 (text-preserving, so anchors/sentence indices/snippets never drift, and only
 glossed sections parse — the unedited fast path stands), and `PaperGlossary`

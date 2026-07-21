@@ -15,32 +15,32 @@ const STEPS: SlideStep[] = [
   {
     label: "World state",
     caption:
-      "A regime — the bundle of conditions that determines whether control is worth it — splits into three parts that behave very differently. The first is the world state: the facts on the ground, whether or not anyone knows them. You never observe it directly.",
+      "A regime can be split into three parts that behave very differently. The first is the world state: the facts on the ground, both known and unknown.",
   },
   {
     label: "Epistemic state",
     caption:
-      "Our picture of the world state. The two can come apart: a control evaluation's score is a measurement, and whether control actually works against the actual model is a different thing entirely. A high safety score from a poor evaluation is a reassuring epistemic state pointing at a world state it doesn't match.",
+      "Our picture of the world state. The epistemic state isn't necessarily a subset of the world state. For example, a control evaluation's score is an imperfect measurement, and whether control actually works against the actual model is a different thing entirely. A high safety score from a poor evaluation can lead to a mismatch between the epistemic and world states.",
   },
   {
     label: "Resource state",
     caption:
-      "The third part is the safety budget — can we afford to act on what we think? It has more structure than the word “budget” suggests: picture a household. Hover or tap any box to peek inside.",
+      "The third part is the safety budget: can we afford to act on what we think?",
   },
   {
     label: "The will account",
     caption:
-      "One account: political will — a developer's willingness to concede safety-relevant actions up to some cost threshold, measured against its own objectives. It is held by the lab, not by you, and you move it only indirectly. It fades without reinforcement and spikes after concerning incidents.",
+      "There exists one account: political will, a developer's willingness to concede safety-relevant actions up to some cost threshold. It is held by the lab and you can move it only indirectly. It fades without reinforcement and spikes after concerning incidents.",
   },
   {
     label: "The priced aisles",
     caption:
-      "The things you can spend political will on, each with a price tag — and the regime sets the prices, not the lab. Delay is priced by the race to AGI. Usefulness costs the developer a slower, less useful system — though control's payoff is denominated in usefulness too, so it partially offsets its own tax. Compute is governed by internal politics: pulling it from capabilities means spending will to overcome the slowing of development.",
+      "Delay is priced by the intensity of the race to AGI. Usefulness costs the developer by leading to a slower, less useful system, but control helps make systems more useful so it partially offsets its own tax. Compute is also governed by internal politics: pulling it from capabilities means spending will to overcome the slowing of development.",
   },
   {
     label: "The basket",
     caption:
-      "Your shopping cart is a safety technique. Deploying control means buying a particular basket: a lot of usefulness tax, some compute, very little delay. Same plan, same basket — different price tags in different worlds.",
+      "Deploying control means buying a particular basket: a lot of usefulness tax, some compute, very little delay, but your basket can have different price tags in different worlds.",
   },
   {
     label: "What refills the budget",
@@ -380,9 +380,12 @@ export function RegimeStatesDemo() {
                       {box.question[1]}
                     </tspan>
                   </text>
+                  {/* Unselected boxes keep their items readable but dimmed —
+                      the open box's full-strength list + primary border carry
+                      the selection. */}
                   <g
                     className="transition-opacity duration-300"
-                    opacity={open ? 1 : 0}
+                    opacity={open ? 1 : 0.45}
                   >
                     {box.items.map((item, i) => (
                       <text
@@ -426,7 +429,7 @@ export function RegimeStatesDemo() {
             {BRANCHES.map(({ toX, appearsAt }) => (
               <path
                 key={toX}
-                d={`M ${TRUNK_X} ${TRUNK_TOP} C ${TRUNK_X} 194, ${toX} 186, ${toX} 196`}
+                d={`M ${TRUNK_X} ${TRUNK_TOP} C ${TRUNK_X} 194, ${toX} 186, ${toX} 216`}
                 fill="none"
                 className="stroke-muted-foreground transition-opacity duration-500"
                 opacity={step >= appearsAt ? 0.8 : 0}
@@ -442,7 +445,7 @@ export function RegimeStatesDemo() {
             >
               <text
                 x={100}
-                y={208}
+                y={228}
                 textAnchor="middle"
                 className="fill-muted-foreground text-[9px]"
               >
@@ -450,39 +453,24 @@ export function RegimeStatesDemo() {
               </text>
               <rect
                 x={20}
-                y={214}
+                y={234}
                 width={160}
                 height={76}
                 rx={10}
                 className="fill-emerald-500/10 stroke-emerald-600 dark:stroke-emerald-400"
                 strokeWidth={1.5}
               />
-              <circle
-                cx={46}
-                cy={252}
-                r={11}
-                className="fill-emerald-500/25 stroke-emerald-600 dark:stroke-emerald-400"
-                strokeWidth={1.25}
-              />
               <text
-                x={46}
-                y={256.5}
-                textAnchor="middle"
-                className="fill-emerald-700 text-[11px] font-bold dark:fill-emerald-400"
-              >
-                ¤
-              </text>
-              <text
-                x={112}
-                y={248}
+                x={100}
+                y={268}
                 textAnchor="middle"
                 className="fill-foreground text-[12px] font-semibold"
               >
                 Political will
               </text>
               <text
-                x={112}
-                y={264}
+                x={100}
+                y={284}
                 textAnchor="middle"
                 className="fill-muted-foreground text-[10px]"
               >
@@ -496,7 +484,7 @@ export function RegimeStatesDemo() {
             >
               <text
                 x={290}
-                y={208}
+                y={228}
                 textAnchor="middle"
                 className="fill-muted-foreground text-[9px]"
               >
@@ -505,7 +493,7 @@ export function RegimeStatesDemo() {
               {AISLES.map((aisle, i) => (
                 <Aisle
                   key={aisle.text}
-                  y={214 + i * 28}
+                  y={234 + i * 28}
                   text={aisle.text}
                   will={aisle.will}
                   shelf={aisle.shelf}
@@ -520,7 +508,7 @@ export function RegimeStatesDemo() {
             >
               <text
                 x={452}
-                y={208}
+                y={228}
                 textAnchor="middle"
                 className="fill-muted-foreground text-[9px]"
               >
@@ -528,7 +516,7 @@ export function RegimeStatesDemo() {
               </text>
               <rect
                 x={400}
-                y={214}
+                y={234}
                 width={104}
                 height={76}
                 rx={10}
@@ -537,7 +525,7 @@ export function RegimeStatesDemo() {
               />
               <text
                 x={452}
-                y={230}
+                y={250}
                 textAnchor="middle"
                 className="fill-foreground text-[10px] font-semibold"
               >
@@ -547,14 +535,14 @@ export function RegimeStatesDemo() {
                 <g key={label}>
                   <text
                     x={408}
-                    y={247 + i * 14}
+                    y={267 + i * 14}
                     className="fill-muted-foreground text-[9px]"
                   >
                     {label}
                   </text>
                   <rect
                     x={448}
-                    y={240 + i * 14}
+                    y={260 + i * 14}
                     width={width}
                     height={7}
                     rx={2}
@@ -571,16 +559,16 @@ export function RegimeStatesDemo() {
             >
               <line
                 x1={20}
-                y1={298}
+                y1={318}
                 x2={180}
-                y2={298}
+                y2={318}
                 className="stroke-emerald-600 dark:stroke-emerald-400"
                 strokeWidth={3}
                 strokeLinecap="round"
               />
-              <InArrow x={60} toY={306} label="incidents & evidence" />
-              <InArrow x={170} toX={110} toY={304} label="public buy-in" />
-              <InArrow x={290} toX={165} toY={304} label="passed policy" />
+              <InArrow x={60} toY={326} label="incidents & evidence" />
+              <InArrow x={140} toX={110} toY={324} label="public buy-in" />
+              <InArrow x={210} toX={165} toY={324} label="passed policy" />
             </g>
           </svg>
         );

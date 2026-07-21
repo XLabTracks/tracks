@@ -23,6 +23,14 @@ export interface GlossaryTerm {
   seeAlso?: string[];
   /** Optional attribution rendered as the card's footer line. */
   source?: GlossaryTermSource;
+  /**
+   * Opt this entry into lesson auto-glossing: the rehype-auto-gloss plugin
+   * wraps the first running-text occurrence of the term (or an alias) per
+   * lesson in `<Term/>`. Reserve for unambiguous jargon — common words stay
+   * manual-`<Term>`-only. Lessons opt out via the registry's top-level
+   * `autoGlossExclude` list (verbatim-reproduced lessons).
+   */
+  autoGloss?: boolean;
 }
 
 export const glossaryTerms: GlossaryTerm[] = glossaryData.terms;

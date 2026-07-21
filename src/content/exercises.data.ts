@@ -1541,7 +1541,7 @@ export const exercises: Exercise[] = [
     id: "cr-precommit",
     type: "short-answer",
     prompt:
-      "Before reading further, write 3–5 sentences answering: Is AI control good? How good? Don't hedge — commit to a view with whatever reasons you currently have. You'll see your answer again at the end of the module.",
+      "Before reading further, write 5-7 sentences answering the following question: Is AI control good? How good? Why do you think this?",
     format: "free-form",
     minWords: 30,
     maxWords: 150,
@@ -1558,7 +1558,7 @@ export const exercises: Exercise[] = [
       "- One before any event that would count as evidence of misalignment.",
       "- One at the first such event.",
       "- One after it.",
-      "Then answer: where does control's marginal value peak along this trajectory, and what could make it decrease/increase?",
+      "Then answer the following: where does control's marginal value peak along this trajectory, and what could make its value decrease/increase?",
       "If you disagree with the scenario on any axis, say so and use your own predictions.",
     ].join("\n\n"),
     minWords: 75,
@@ -1573,28 +1573,28 @@ export const exercises: Exercise[] = [
     type: "tap-reveal",
     prompt: "Plan A: how much political will is there, and what does it buy?",
     answer:
-      "The most will of the four: enough for a strong international agreement that mostly eliminates race dynamics and allows slowing down for some reasonably long period (e.g. ~10 years), along with massive investment in security and safety work.",
+      "Plan A contains the most will of the four; There's enough for a strong international agreement that mostly eliminates race dynamics and allows slowing down for some reasonably long period (e.g. ~10 years), alongside massive investment in security and safety work.",
   },
   {
     id: "c-plans-recall-b",
     type: "tap-reveal",
     prompt: "Plan B: how much political will is there, and what does it buy?",
     answer:
-      "The US government treats buying lead time for US AI companies as among its top few national security priorities (not necessarily out of misalignment concern), and 1–3 years can be spent on mitigating misalignment risk.",
+      "There is some will present; The US government treats buying lead time for US AI companies as among its top few national security priorities (not necessarily out of misalignment concern), and 1–3 years can be spent on mitigating misalignment risk.",
   },
   {
     id: "c-plans-recall-c",
     type: "tap-reveal",
     prompt: "Plan C: how much political will is there, and what does it buy?",
     answer:
-      "No serious government involvement — the will lives inside the leading AI company, which holds a 2–9 month lead and is willing and institutionally functional enough to spend much of that lead on misalignment concerns.",
+      "There is little political will, with no serious government involvement. Most of the will lives inside the leading AI company, which holds a 2–9 month lead and is willing and institutionally functional enough to spend much of that lead on misalignment concerns.",
   },
   {
     id: "c-plans-recall-d",
     type: "tap-reveal",
     prompt: "Plan D: how much political will is there, and what does it buy?",
     answer:
-      "The least: the leading AI company doesn't take misalignment concerns very seriously and takeoff won't be exogenously slowed — but 10–30 people at the company take the risks seriously and have enough buy-in to get ~3% of compute for work well-targeted at misalignment risks.",
+      "Plan D contains the least: the leading AI company doesn't take misalignment concerns very seriously and takeoff won't be exogenously slowed, but 10–30 people at the company take the risks seriously and have enough buy-in to get ~3% of compute for work well-targeted at misalignment risks.",
   },
   // Module 2 long exercises: the portfolio-allocation exercise. Each scenario
   // states a full regime — world, epistemic, and resource states, the

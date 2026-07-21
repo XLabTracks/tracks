@@ -145,7 +145,7 @@ export const demoRegistry: Record<string, DemoDefinition> = {
     id: "regime-states",
     title: "The three states and the safety budget",
     description:
-      "A regime split into its three states — world, epistemic, resource — and the safety budget: the will account, the prices the regime sets, and what refills the balance.",
+      "Below shows how regime splits into three states (world, epistemic, resource) alongside the safety budget & its interactions with the regime. Click on the displayed boxes to view inside.",
     component: RegimeStatesDemo,
     tags: ["control", "how-useful"],
   },
@@ -169,7 +169,7 @@ export const demoRegistry: Record<string, DemoDefinition> = {
     id: "two-games",
     title: "The two games",
     description:
-      "The inner game inside the lab and the outer game everywhere else, coupled: evidence from catching bad behavior flows out, authorized safety spending flows back in.",
+      "See how the inner game inside the lab and the outer game everywhere else are fundamentally coupled.",
     component: TwoGamesDemo,
     tags: ["control", "how-useful"],
   },
@@ -185,7 +185,7 @@ export const demoRegistry: Record<string, DemoDefinition> = {
     id: "two-levers",
     title: "The two levers",
     description:
-      "See how improving the techniques, so any given sacrifice of usefulness buys more safety than it used to, and growing the budget, so you can afford bigger sacrifices, can affect safety.",
+      "See how improving the techniques and growing the budget can affect safety.",
     component: TwoLeversDemo,
     tags: ["control", "how-useful"],
   },

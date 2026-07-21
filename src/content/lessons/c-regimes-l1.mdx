@@ -52,7 +52,7 @@ The second part is our picture of the world state:
 - Findings from looking inside models (interpretability), and how much we trust them
 - Model track record
   - past incidents of misalignment, or their absence
-  - (How such evidence should move us: [How will we update about scheming?](https://redwoodresearch.substack.com/p/how-will-we-update-about-scheming))
+  - (How such evidence should move us: [How will we update about scheming?](https://blog.redwoodresearch.org/p/how-will-we-update-about-scheming))
 - Evaluation results
   - control evaluations that stage mock attacks to estimate whether the monitoring would catch a real schemer
 
@@ -65,23 +65,23 @@ We analyze the safety budget through the currency of **political will** — in t
 Deploying a control-based safety intervention spends political will on:
 
 - Delay
-  - How long you can delay is priced by the race to AGI. With a rival lab three months behind, delay is nearly unbuyable at any level of will.
+  - How long you can delay is priced by the intensity of the race to AGI. With a rival lab three months behind, delay is nearly unbuyable at any level of will.
 - Usefulness
   - Whether the developer will accept a less useful, slower system. A scared public makes this cheaper by lowering demand for the product.
-  - Note that control's main payoff is also denominated in usefulness — you give up some usefulness to make the rest trustworthy — so control partially offsets its own tax.
+  - Note that control's main payoff is also denominated in usefulness, so control partially offsets its own tax.
 - Compute
   - In our scoping, we primarily focus on internal compute, which is governed by internal politics. Compute is finite, so pulling it from capabilities research spends will to overcome the slowing down of development.
 
 Note that delay, usefulness, and compute can be cheap in one regime and ruinous in another.
 
-Political will is not fixed — it is generated, and the sources work differently:
+Political will can be generated multiple different ways:
 
 - Incidents and evidence
   - Concerning incidents and accumulating evidence refill the account, and refill it hardest right after something goes wrong.
 - Public buy-in
   - Public support raises the account and slows its fading, though its pull on a developer is weaker and more indirect.
 - Passed policy
-  - Passed policy converts will into a durable floor, because repeal is expensive. Note that what gets written into regulation tends to be easy to explain and verify politically, which is not necessarily optimal policy.
+  - Passed policy converts will into a durable floor, because repeal is expensive. Note that what gets written into regulation tends to be easy to explain and verify politically, which isn't necessarily optimal policy.
 
 ### Why the three states are not interchangeable
 
@@ -99,24 +99,24 @@ Abstract states need reference points, so here are five — Greenblatt's caricat
 
 {/* TODO: migrate to Cloudflare Stream — replace the self-hosted mp4 with the Stream embed URL; <Video> auto-detects cloudflarestream.com (provider="stream"). */}
 
-<Video provider="file" src="/videos/regimes_for_misalignment.mp4" title="Regimes of misalignment" />
+<Video provider="file" src="/videos/regimes_for_misalignment.mp4" title="Ryan Greenblatt & Thomas Larsen - A Technical Safety Roadmap" />
 
 <Demo id="five-worlds" />
 
 ## Techniques and the loop
 
-Related reading: We adapt the arguments in this post into our model below: [Catching AIs red-handed](https://redwoodresearch.substack.com/p/catching-ais-red-handed). [Efficient tradeoffs and the safety-usefulness tradeoff model](https://blog.redwoodresearch.org/p/efficient-tradeoffs-and-the-safety) — the two levers below come from here.
+Related reading: We adapt the arguments in this post into our model below: [Catching AIs red-handed](https://www.lesswrong.com/posts/i2nmBfCXnadeGmhzW/catching-ais-red-handed). [Efficient tradeoffs and the safety-usefulness tradeoff model](https://blog.redwoodresearch.org/p/efficient-tradeoffs-and-the-safety) — the two levers below come from here.
 
-### Techniques are the choice, not a state
+### Techniques are not a state
 
-Safety techniques — control, interpretability, alignment research — don't map cleanly to the world state, epistemic state, or resource state. The techniques are what effect change, and they require purchasing will to be implemented. That gives you exactly two ways to get more safety:
+Safety techniques — control, interpretability, alignment research — don't map cleanly to the world state, epistemic state, or resource state. The techniques are what affect change, and they require will. That gives you exactly two ways to get more safety:
 
 1. Improve the techniques. Better safety technology means any given sacrifice of usefulness buys more safety than it used to.
 2. Grow the budget. More will, or lower prices, means you can afford bigger sacrifices.
 
-Technical safety research works on the first lever. Advocacy, communication, and policy work on the second. Control helps with both of these since it encompasses safety research extracted from untrusted models and reports catches which affect the growth of the budget.
+Technical safety research works on the first lever while advocacy, communication, and policy work on the second. Control helps with both of these since it encompasses safety research extracted from untrusted models and reports catches.
 
-The states are the input to analyzing a situation, and whether a technique is actually effective — a claim like "control works at this capability level" — is an output. It follows from what the frontier model is like, how capable it is, and what measures you deployed.
+Whether a technique is actually effective directly stems from the states, as it relies on what the frontier model is like, how capable it is, and what measures you deployed, among other factors.
 
 ### The loop
 

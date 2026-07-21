@@ -1656,7 +1656,6 @@ export const exercises: Exercise[] = [
     ],
     totalPeople: 10,
     step: 0.5,
-    minReasoningChars: 250,
   },
   // Short-answer section spliced into the efficient-tradeoffs paper
   // (c-efficient-tradeoffs). Author-approved wording — see

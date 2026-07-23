@@ -2,7 +2,11 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { ExternalLink } from "lucide-react";
 import type { Paper } from "@/lib/content/types";
-import { getLinkedReading, type LinkedReading } from "@/lib/readings/registry";
+import {
+  getLinkedReading,
+  linkedReadingSource,
+  type LinkedReading,
+} from "@/lib/readings/registry";
 import { Breadcrumbs } from "@/components/layout/breadcrumbs";
 import { PaperReader } from "@/components/papers/paper-reader";
 import { paperSourceHeader } from "@/components/papers/paper-source-header";
@@ -16,12 +20,6 @@ import { SidenotesToggle } from "@/components/papers/sidenotes-toggle";
  * external — internal-viewer support goes exactly one layer deep.
  */
 
-function sourceOf(reading: LinkedReading): Paper["source"] {
-  return reading.kind === "substack"
-    ? { kind: "substack", postUrl: reading.url }
-    : { kind: "lesswrong", postUrl: reading.url };
-}
-
 /** A Paper-shaped shell for PaperReader; not a content-graph item. */
 function paperShell(reading: LinkedReading): Paper {
   return {
@@ -29,7 +27,7 @@ function paperShell(reading: LinkedReading): Paper {
     slug: reading.id,
     moduleId: "",
     title: reading.title,
-    source: sourceOf(reading),
+    source: linkedReadingSource(reading),
   };
 }
 
@@ -52,7 +50,7 @@ export default async function ReadingPage({
   const reading = getLinkedReading(decodeURIComponent(readingId));
   if (!reading) notFound();
 
-  const source = await paperSourceHeader(sourceOf(reading));
+  const source = await paperSourceHeader(linkedReadingSource(reading));
 
   return (
     <main className="mx-auto w-full max-w-5xl px-4 py-8 lg:px-8">

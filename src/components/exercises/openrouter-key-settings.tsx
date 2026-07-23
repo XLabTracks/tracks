@@ -1,6 +1,13 @@
 "use client";
 
-import { useId, useState, useSyncExternalStore, useTransition } from "react";
+import {
+  useEffect,
+  useId,
+  useState,
+  useSyncExternalStore,
+  useTransition,
+} from "react";
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -16,12 +23,15 @@ export interface OpenRouterKeyStatusView {
 
 // One lesson page renders a key card per gradeable exercise; a save/remove in
 // any of them must update all of them, so the mutated status lives in a
-// module-scope store every instance subscribes to. Server-rendered props seed
-// the display until the first mutation.
+// module-scope store every instance subscribes to. The store is an OVERRIDE,
+// not the source of truth: mutations also router.refresh(), and once the
+// server-rendered props reflect the mutation the override is dropped — so a
+// later, fresher server status (key rotated in another tab, secret rotation
+// flipping to needs-reentry) is never masked by a stale client win.
 let sharedStatus: OpenRouterKeyStatusView | null = null;
 const listeners = new Set<() => void>();
 
-function publishStatus(next: OpenRouterKeyStatusView): void {
+function publishStatus(next: OpenRouterKeyStatusView | null): void {
   sharedStatus = next;
   for (const listener of listeners) listener();
 }
@@ -29,6 +39,13 @@ function publishStatus(next: OpenRouterKeyStatusView): void {
 function subscribe(listener: () => void): () => void {
   listeners.add(listener);
   return () => listeners.delete(listener);
+}
+
+function sameStatus(
+  a: OpenRouterKeyStatusView,
+  b: OpenRouterKeyStatusView,
+): boolean {
+  return a.state === b.state && a.last4 === b.last4;
 }
 
 /**
@@ -53,6 +70,14 @@ export function OpenRouterKeySettings({
   const [error, setError] = useState<string | null>(null);
   const [pending, startTransition] = useTransition();
   const errorId = useId();
+  const router = useRouter();
+
+  // Server props caught up with the override → drop it, server truth wins.
+  useEffect(() => {
+    if (sharedStatus && sameStatus(sharedStatus, initialStatus)) {
+      publishStatus(null);
+    }
+  }, [initialStatus]);
 
   const save = () =>
     startTransition(async () => {
@@ -62,6 +87,7 @@ export function OpenRouterKeySettings({
         publishStatus({ state: "active", last4: result.last4 });
         setEditing(false);
         setValue("");
+        router.refresh();
       } else {
         setError(result.error);
       }
@@ -73,6 +99,7 @@ export function OpenRouterKeySettings({
       const result = await removeOpenRouterKey();
       if (result.ok) {
         publishStatus({ state: "none", last4: null });
+        router.refresh();
       } else {
         setError(result.error);
       }

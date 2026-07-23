@@ -38,6 +38,27 @@ export type GradeResult =
     }
   | { ok: false; error: string };
 
+// .env.example ships this literal; treat it as unset (same convention as the
+// encryption-secret placeholder) so a copied env file hides the feature
+// instead of sending garbage auth to OpenRouter.
+const SERVER_KEY_PLACEHOLDER = "sk-or-...";
+
+function serverOpenRouterKey(): string | undefined {
+  const key = process.env.OPENROUTER_API_KEY;
+  return key && key !== SERVER_KEY_PLACEHOLDER ? key : undefined;
+}
+
+// Each grade is a billed LLM call, so repeat runs are throttled. Without a
+// dedicated event table this keys off the submission row itself: the grade
+// write bumps updatedAt, so "has feedback + touched in the last minute"
+// means a grade just landed (or an autosave just happened on a reopened,
+// already-graded row — refusing there is the conservative direction).
+const REGRADE_COOLDOWN_MS = 60_000;
+// Coarse per-user ceiling: distinct graded submissions touched in the last
+// hour. Approximate by design — it exists to stop a hot loop on the
+// server-wide key, not to meter honest use.
+const HOURLY_GRADED_CAP = 12;
+
 /**
  * On-demand reasoning-transparency grade for the caller's own submission
  * (reachable by direct POST — re-checks auth and re-derives everything from
@@ -63,6 +84,31 @@ export async function requestTransparencyGrade(
     return { ok: false, error: "Submit your response first, then grade it." };
   }
 
+  // Throttle billed LLM calls (see the constants above for the exact
+  // semantics of both windows).
+  if (
+    submission.feedback != null &&
+    Date.now() - submission.updatedAt.getTime() < REGRADE_COOLDOWN_MS
+  ) {
+    return {
+      ok: false,
+      error: "This submission was just graded — wait a minute before regrading.",
+    };
+  }
+  const recentlyGraded = await prisma.submission.count({
+    where: {
+      userId: user.id,
+      feedback: { not: null },
+      updatedAt: { gte: new Date(Date.now() - 60 * 60 * 1000) },
+    },
+  });
+  if (recentlyGraded >= HOURLY_GRADED_CAP) {
+    return {
+      ok: false,
+      error: "Grading limit reached for now — try again in an hour.",
+    };
+  }
+
   const assembled = assembleFromSubmission(
     contentId,
     kind,
@@ -86,7 +132,7 @@ export async function requestTransparencyGrade(
     };
   }
   const userKey = await getUserOpenRouterKey(user.id);
-  const apiKey = userKey ?? process.env.OPENROUTER_API_KEY;
+  const apiKey = userKey ?? serverOpenRouterKey();
   if (!apiKey) {
     return {
       ok: false,

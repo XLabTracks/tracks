@@ -543,27 +543,6 @@ export const papers: Paper[] = [
           snippet: "The Transformer allows for significantly",
         },
       },
-      // Glossary hover cards: wrap a phrase of a sentence (or of a whole
-      // block — first occurrence wins) in a trigger for a glossary.json term.
-      {
-        op: "gloss",
-        at: {
-          anchor: "b-0006",
-          s: 1,
-          snippet: "Attention mechanisms have become an integral",
-        },
-        termId: "attention-mechanism",
-        phrase: "Attention mechanisms",
-      },
-      {
-        op: "gloss",
-        at: {
-          anchor: "b-0004",
-          snippet: "Recurrent neural networks, long short-term",
-        },
-        termId: "long-short-term-memory",
-        phrase: "long short-term memory",
-      },
       // Two consecutive paragraphs hidden in §2 — renders as ONE merged marker.
       {
         op: "hide",

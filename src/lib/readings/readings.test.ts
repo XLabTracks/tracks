@@ -12,7 +12,11 @@ import {
   SUBSTACK_CONVERTER_VERSION,
   type SubstackArtifact,
 } from "@/lib/substack/types";
-import { linkedReadings, type LinkedReading } from "./registry";
+import {
+  linkedReadings,
+  linkedReadingSource,
+  type LinkedReading,
+} from "./registry";
 import { resolveInternalReadingHref } from "./resolve";
 
 // The linked-readings registry is generated (`npm run readings:build`) —
@@ -73,6 +77,65 @@ describe("linked readings registry", () => {
       expect(reading.title, `${reading.id}: title drifted`).toBe(
         artifact.post.meta.title,
       );
+    }
+  });
+
+  // Reproduction gate: every served linked reading is a committed FULL COPY
+  // of a third-party post, so each must carry a permission record —
+  // "permitted" (permission/license confirmed) or "unreviewed"
+  // (grandfathered, pending review); "denied" entries must not be served.
+  // readings:build refuses to convert new links without an entry; this pins
+  // the registry side of that contract.
+  it("every linked reading has a non-denied permission record", () => {
+    const permissions = JSON.parse(
+      readFileSync(
+        join(process.cwd(), "src/content/reading-permissions.json"),
+        "utf8",
+      ),
+    ) as { entries: { id: string; status: string; note?: string }[] };
+    const byId = new Map(permissions.entries.map((e) => [e.id, e]));
+    expect(permissions.entries.length).toBe(byId.size); // no duplicate ids
+    for (const entry of permissions.entries) {
+      expect(
+        ["permitted", "unreviewed", "denied"].includes(entry.status),
+        `${entry.id}: unknown permission status "${entry.status}"`,
+      ).toBe(true);
+    }
+    for (const reading of linkedReadings) {
+      const entry = byId.get(reading.id);
+      expect(
+        entry,
+        `${reading.id}: served without a permission record — add it to reading-permissions.json`,
+      ).toBeDefined();
+      expect(
+        entry!.status,
+        `${reading.id}: denied posts must not be in the registry — rerun readings:build and delete the artifact`,
+      ).not.toBe("denied");
+    }
+  });
+
+  // The /readings viewer derives its paper source from the artifact id
+  // (linkedReadingSource), and the paper reader re-derives the artifact ref
+  // from that source's postUrl. Pin the full round trip for EVERY entry so a
+  // canonical-host drift (registry url host ≠ artifact id host, e.g.
+  // blog.aifutures.org vs blog.ai-futures.org) can never strand a reading on
+  // the "unavailable" screen again.
+  it("every entry's derived reader source resolves back to its own artifact", () => {
+    for (const reading of linkedReadings) {
+      const source = linkedReadingSource(reading);
+      expect(source.kind, `${reading.id}: source kind drifted`).toBe(reading.kind);
+      if (source.kind === "substack") {
+        const ref = parseSubstackPostUrl(source.postUrl);
+        expect(ref?.id, `${reading.id}: reader would look up a different artifact`).toBe(
+          reading.id,
+        );
+      } else if (source.kind === "lesswrong") {
+        const ref = parseLessWrongPostUrl(source.postUrl);
+        const idRef = parseLessWrongId(reading.id);
+        expect(ref?.postId, `${reading.id}: reader would look up a different post`).toBe(
+          idRef?.postId,
+        );
+      }
     }
   });
 

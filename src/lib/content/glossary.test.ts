@@ -116,4 +116,37 @@ describe("glossary integrity", () => {
       }
     }
   });
+
+  // The auto-gloss opt-out list (rehype-auto-gloss.mjs matches lesson MDX
+  // basenames against it) fails silently on a stale entry, so pin both
+  // directions: every listed id must be a real lesson, and every
+  // verbatim-reproduced lesson (the "Reproduced verbatim" attribution line is
+  // the project's marker) must be listed — reproduced prose is never
+  // decorated by default.
+  it("autoGlossExclude names real lessons and covers every verbatim reproduction", () => {
+    const registry = JSON.parse(
+      readFileSync(join(process.cwd(), "src/content/glossary.json"), "utf8"),
+    ) as { autoGlossExclude?: string[] };
+    const exclude = new Set(registry.autoGlossExclude ?? []);
+    const lessonsDir = join(process.cwd(), "src/content/lessons");
+    const lessonIds = new Set(
+      readdirSync(lessonsDir)
+        .filter((f) => f.endsWith(".mdx"))
+        .map((f) => f.replace(/\.mdx$/, "")),
+    );
+    for (const id of exclude) {
+      expect(
+        lessonIds.has(id),
+        `autoGlossExclude entry "${id}" has no matching lesson MDX — stale after a rename?`,
+      ).toBe(true);
+    }
+    for (const id of lessonIds) {
+      const body = readFileSync(join(lessonsDir, `${id}.mdx`), "utf8");
+      if (!body.includes("Reproduced verbatim")) continue;
+      expect(
+        exclude.has(id),
+        `verbatim-reproduced lesson "${id}" is missing from autoGlossExclude in glossary.json`,
+      ).toBe(true);
+    }
+  });
 });

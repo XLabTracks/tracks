@@ -121,8 +121,12 @@ export function WritingEditor({
         // autosave (nothing changed yet). The keyed remount from refresh()
         // resets this anyway — this covers the window until it lands.
         skipFirstSave.current = true;
-        setIsSubmitted(false);
         setSaveState("idle");
+        // Deliberately NOT flipping isSubmitted here: the textarea stays
+        // disabled ("Reopening…") until refresh() lands and the keyed
+        // remount delivers the editable draft seeded with the server row —
+        // enabling it early would let keystrokes typed in that window be
+        // discarded by the remount.
         router.refresh();
       } catch {
         toast.error("Couldn't reopen for editing. Please try again.");

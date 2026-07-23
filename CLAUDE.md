@@ -114,6 +114,10 @@ user-toggleable from the paper header
 (`src/components/papers/paper-sidenotes.tsx` + `sidenotes-toggle.tsx` —
 DOM-cloning presentation layer; the in-document section stays canonical).
 **Linked readings**: post-sourced papers get their clean post-to-post links
+(reproduction is permission-gated: `src/content/reading-permissions.json`
+must carry a `permitted`/`unreviewed` entry per artifact id or
+readings:build refuses to convert the link and it stays external —
+enforced by readings.test.ts)
 rewritten at render time (`src/lib/readings/`) to course pages, or to the
 standalone `/readings/[id]` viewer for posts pre-built by
 `npm run readings:build` (which scans paper artifacts AND lesson MDX markdown
@@ -154,9 +158,11 @@ server-only: `toPublicChoice()` / `toPublicFlowchart()` strip `correctOptionIds`
 (`gradeExercise`, `gradeFlowchartStage` — which sanitizes the POSTed attempt
 tree — and `recordTapReveal`) grade + persist. Never pass answer keys into
 client components (`tap-reveal` answers, `understanding-check` sample
-answers, and whole `allocation`/`argue-reveal` definitions ship to the client
-by design — self-assessment; they persist via `saveAllocationScenario` /
-`saveArgueRevealItem` + `saveArgueRevealConstruction`).
+answers, and whole `allocation`/`argue-reveal`/`control-scenarios`/
+`staged-questions`/`commit-construct` definitions ship to the client by
+design — self-assessment with reveals, never graded; they persist via
+`saveAllocationScenario`, `saveArgueRevealItem` + `saveArgueRevealConstruction`,
+and the direct-POST sanitizers in `exercise-view.ts` for the latter three).
 Standalone exercises can surface on the `/exercises` tab via the curated
 `featuredExercises` list in `src/app/exercises/featured.ts`. `WritingEditor` is the
 one editor reused by inline writing exercises and end-of-module assessments;

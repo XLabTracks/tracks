@@ -1,4 +1,13 @@
 import rawRegistry from "@/content/linked-readings.json";
+import type { Paper } from "@/lib/content/types";
+import {
+  buildPostUrl as buildLessWrongPostUrl,
+  parseLessWrongId,
+} from "@/lib/lesswrong/id";
+import {
+  buildPostUrl as buildSubstackPostUrl,
+  parseSubstackId,
+} from "@/lib/substack/id";
 
 /**
  * Linked readings: substack / LessWrong posts that the course's post-sourced
@@ -33,4 +42,29 @@ export function getLinkedReading(id: string): LinkedReading | undefined {
 
 export function linkedReadingHref(reading: LinkedReading): string {
   return `/readings/${reading.id}`;
+}
+
+/**
+ * The reader source for a linked reading, derived from the ARTIFACT ID —
+ * never from `url`. `url` is the post's canonical URL from its meta, and a
+ * publication can canonicalize under a different host than the one the
+ * course content linked — and the artifact was keyed — under (live case:
+ * blog.ai-futures.org canonicalizes to blog.aifutures.org). The paper reader
+ * re-derives its artifact ref from postUrl, so building postUrl from the id
+ * keeps the committed artifact the single source of truth and makes host
+ * drift harmless; `url` stays display/attribution-only.
+ */
+export function linkedReadingSource(reading: LinkedReading): Paper["source"] {
+  if (reading.kind === "substack") {
+    const ref = parseSubstackId(reading.id);
+    return {
+      kind: "substack",
+      postUrl: ref ? buildSubstackPostUrl(ref) : reading.url,
+    };
+  }
+  const ref = parseLessWrongId(reading.id);
+  return {
+    kind: "lesswrong",
+    postUrl: ref ? buildLessWrongPostUrl(ref) : reading.url,
+  };
 }

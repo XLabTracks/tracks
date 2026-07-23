@@ -35,7 +35,7 @@
       "term": "situational awareness",
       "aliases": ["situationally aware"],
       "definition": "A model's knowledge of what it is and what situation it is in, for instance whether it is being evaluated or it is actually deployed. Hidden situational awareness can lead to behaviors like sandbagging.",
-      "seeAlso": ["sandbagging", "dangerous-capability-evaluation"],
+      "seeAlso": ["sandbagging"],
       "autoGloss": true
     },
     {
@@ -70,7 +70,7 @@
         "red-handed"
       ],
       "definition": "Obtaining undeniable evidence of a model attempting something egregiously bad, such as an escape attempt.",
-      "seeAlso": ["scheming", "honeypot"],
+      "seeAlso": ["scheming"],
       "autoGloss": true,
       "source": {
         "label": "Catching AIs red-handed (Redwood Research)",
@@ -161,7 +161,7 @@
       "term": "non-proliferation",
       "aliases": ["nonproliferation"],
       "definition": "Keeping frontier-scale AI capability from spreading to additional actors, preserving the leaders' lead time and keeping a coordinated slowdown possible.",
-      "seeAlso": ["lead-time", "frontier-model"],
+      "seeAlso": ["lead-time"],
       "autoGloss": true
     },
     {
@@ -253,7 +253,7 @@
       "term": "trusted monitoring",
       "aliases": ["trusted monitor", "trusted monitors"],
       "definition": "A basic control protocol: the untrusted model does the work while a weaker trusted model rates how suspicious each output looks, letting humans audit the most suspicious slice.",
-      "seeAlso": ["control-protocol", "trusted-model", "collusion"],
+      "seeAlso": ["control-protocol", "trusted-model"],
       "autoGloss": true,
       "source": {
         "label": "AI Control: Improving Safety Despite Intentional Subversion",
@@ -293,7 +293,7 @@
       "term": "control evaluation",
       "aliases": ["control evaluations", "control evals", "control eval"],
       "definition": "An evaluation that stages mock attacks to estimate whether a protocol would catch a real schemer trying its best to subvert it.",
-      "seeAlso": ["dangerous-capability-evaluation", "control-protocol"],
+      "seeAlso": ["control-protocol"],
       "autoGloss": true,
       "source": {
         "label": "The case for ensuring that powerful AIs are controlled (Redwood Research)",

@@ -25,9 +25,12 @@ import { readFileSync } from "node:fs";
  *   - hand-authored `<Term>`s win: a pre-pass records their entry ids and the
  *     auto pass skips those terms entirely (no doubled cards);
  *   - never matches inside headings, code/pre (inline math is still a `code`
- *     element at this stage), links, or inline JSX (`<Term>`, `<Footnote>`,
- *     literal `<a>`); block JSX with prose children (`<Callout>`) IS
- *     descended into — its body is ordinary lesson prose.
+ *     element at this stage), links, or JSX components — the only JSX
+ *     descended into is flow-position `<Callout>`, whose body is ordinary
+ *     lesson prose. Every other mdxJsx* node (inline `<Term>`, `<Footnote>`,
+ *     literal `<a>`, and flow components like `<SiteQuote>` whose children
+ *     render inside a real link) is left whole; plain hast elements still
+ *     recurse as usual.
  *
  * The MDX component map resolves the injected `Term` name globally
  * (src/mdx-components.tsx), so no import is added to the lesson module.
@@ -108,15 +111,10 @@ function collectAuthoredTermIds(node, ctx, seen = new Set()) {
     node.name === "Term"
   ) {
     const idAttr = (node.attributes ?? []).find(
-      (attr) =>
-        attr.type === "mdxJsxAttribute" &&
-        attr.name === "id" &&
-        typeof attr.value === "string" &&
-        attr.value !== "",
+      (attr) => attr.type === "mdxJsxAttribute" && attr.name === "id",
     );
-    const id = idAttr
-      ? idAttr.value
-      : ctx.surfaceToId.get(normalizeSurface(toText(node)));
+    const id =
+      literalIdOf(idAttr) ?? ctx.surfaceToId.get(normalizeSurface(toText(node)));
     if (id) seen.add(id);
   }
   for (const child of node.children ?? []) {
@@ -130,14 +128,42 @@ function toText(node) {
   return (node.children ?? []).map(toText).join("");
 }
 
+/**
+ * A <Term> id attribute's literal value, covering both spellings the tests
+ * accept and the runtime resolves: the plain string form (`id="x"`) and an
+ * attribute-value expression wrapping a single quoted literal (`id={"x"}`,
+ * where attr.value.value is the raw source text `"x"`). Anything else — no
+ * attribute, an empty literal, or a genuine expression — returns undefined
+ * so the caller falls back to resolving the child text.
+ */
+function literalIdOf(attr) {
+  if (!attr) return undefined;
+  if (typeof attr.value === "string") return attr.value || undefined;
+  if (attr.value && typeof attr.value.value === "string") {
+    const match = /^\s*(["'])((?:(?!\1)[^\\])*)\1\s*$/.exec(attr.value.value);
+    if (match) return match[2] || undefined;
+  }
+  return undefined;
+}
+
 // No auto-gloss inside these: headings gloss nothing, code/pre carry inline
 // math at this stage, and links must stay single-purpose.
 const SKIP_TAGS = new Set(["h1", "h2", "h3", "h4", "h5", "h6", "code", "pre", "a", "script", "style"]);
 
+// The only JSX auto-gloss descends into: flow-position components whose
+// children are ordinary lesson prose. Everything else (e.g. <SiteQuote>,
+// whose children render inside a real <a>) is left whole — never inject a
+// Term inside a component that may wrap its children in a link.
+const DESCEND_FLOW_JSX = new Set(["Callout"]);
+
 function glossSubtree(node, seen, ctx) {
-  // Inline JSX (hand-placed <Term>, <Footnote>, literal <a>) is left whole;
-  // block JSX (<Callout>) falls through — its children are lesson prose.
+  // JSX is skip-by-default: inline JSX (hand-placed <Term>, <Footnote>,
+  // literal <a>) is always left whole, and flow JSX only falls through when
+  // allowlisted above. Plain hast elements recurse as usual.
   if (node.type === "mdxJsxTextElement") return;
+  if (node.type === "mdxJsxFlowElement" && !DESCEND_FLOW_JSX.has(node.name)) {
+    return;
+  }
   if (node.type === "element" && SKIP_TAGS.has(node.tagName)) return;
   const children = node.children;
   if (!Array.isArray(children)) return;

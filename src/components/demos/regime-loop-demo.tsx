@@ -26,7 +26,7 @@ const STEPS: Phase[] = [
   {
     label: "Setup — the resource state",
     caption:
-      "Everything starts at the resource state — the safety budget: the will account, and the prices the regime sets.",
+      "Everything starts at the resource state — the safety budget: the political-will account, and the prices the regime sets.",
   },
   {
     label: "It buys a technique",
@@ -41,17 +41,17 @@ const STEPS: Phase[] = [
   {
     label: "The catch updates what we know",
     caption:
-      "There is now undeniable proof that the model has schemed — a transcript that can be checked line by line.",
+      "There is now clearer proof that the model has schemed against the user.",
   },
   {
     label: "The evidence feeds the budget",
     caption:
-      "Leadership and the public become alarmed, increasing political, social, and economic will — potentially leading to regulation passing, locking a floor in place.",
+      "Leadership and the public become alarmed, refilling political will & potentially leading to regulation passing, locking a floor in place.",
   },
   {
     label: "Around again, one stage up",
     caption:
-      "The bigger budget buys better techniques for the next, more dangerous capability stage. That spending funds the next round of the inner game, searching for more evidence.",
+      "The bigger budget helps buy better techniques for the next, more dangerous capability stage. That spending funds the next round of the inner game.",
   },
 ];
 
@@ -158,7 +158,7 @@ const DIAMOND_EDGES = [
   {
     from: "epistemic",
     to: "resource",
-    lines: ["refills will,", "cuts prices"],
+    lines: ["refills", "political will"],
     lx: 120,
     ly: 74,
   },

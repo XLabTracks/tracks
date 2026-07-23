@@ -131,12 +131,19 @@ export const requireUser = cache(async (): Promise<AppUser> => {
 function devUser(): WorkosUserShape | null {
   const flag = process.env.DEV_USER;
   if (!flag || process.env.NODE_ENV !== "development") return null;
-  const email = flag.includes("@") ? flag : "dev@localhost";
-  const local = email.split("@")[0];
+  if (!flag.includes("@")) {
+    // The plain DEV_USER=1 account keeps its historical id so existing local
+    // dev DBs don't grow a second default user.
+    return { id: "dev_dev", email: "dev@localhost", firstName: "Dev", lastName: "User" };
+  }
+  // Key on the FULL address — the documented contract is "a distinct account
+  // per email", and the local part alone collides alice@a.test with
+  // alice@b.test.
+  const email = flag.trim().toLowerCase();
   return {
-    id: `dev_${local}`,
+    id: `dev_${email.replace(/[^a-z0-9]+/g, "_")}`,
     email,
-    firstName: flag.includes("@") ? local : "Dev",
-    lastName: flag.includes("@") ? "(dev)" : "User",
+    firstName: email.split("@")[0],
+    lastName: "(dev)",
   };
 }

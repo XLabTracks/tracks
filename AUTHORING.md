@@ -305,14 +305,16 @@ Reference a term from either surface:
   (pins the entry when the prose differs), or `<Term id="example-term" />`
   (renders the display name). Live example: `ex-content-l1`.
 - **Papers**: the `gloss` edit op wraps a phrase of the paper's own text —
-  see §2b. Live example: `ex-paper-attention`.
+  see §2b.
 
 **Auto-glossing (lessons only).** An entry with `"autoGloss": true` wraps
 itself: at MDX compile time, `src/lib/mdx/rehype-auto-gloss.mjs` wraps the
 first running-text occurrence of the term (or an alias) in each lesson in
 `<Term/>` — first occurrence per lesson per entry, longest surface first,
 case-insensitive with hyphen-aware word boundaries; never inside headings,
-code/inline math, links, or inline JSX (`<Callout>` bodies do get glossed).
+code/inline math, links, or JSX components — only `<Callout>` bodies are
+descended into and glossed (other components may render their children
+inside links, so the plugin leaves them whole).
 A hand-placed `<Term>` for the same entry anywhere in the lesson suppresses
 the auto wrap, and hand-placement is always available for the terms that
 should stay manual. Reserve the flag for unambiguous jargon — never common
@@ -455,7 +457,8 @@ control keyed to **block anchors** and **sentences**:
   so trust the `--blocks` output over your own reading.
 
 The four ops, targeting the example paper (`1706.03762v7`; anchors/snippets
-below are real — see `papers.data.ts` for the live config):
+below are real — see `papers.data.ts` for the live hide/add/activity config;
+the gloss op below is shape-only, its glossary entry is not in the registry):
 
 ```ts
 edits: [
@@ -679,6 +682,20 @@ that *is* the reproduction would be circular). When a post exists on
 several hosts (LessWrong + a Substack custom domain), link the host the
 course already uses — course paper source URL or existing artifact —
 so one post never builds under two ids.
+
+**Reproduction permission (the gate).** A linked-reading artifact is a
+committed FULL COPY of someone else's post — LessWrong/Substack authors
+retain copyright, and neither platform grants a republication license, so
+the same rule as everything in `src/content/` applies: only reproduce what
+you have permission (or an explicit license, e.g. an author-applied CC
+notice) for. The hand-authored `src/content/reading-permissions.json`
+records one entry per artifact id: `"permitted"` (say what the permission
+is in `note`), `"unreviewed"` (grandfathered before the gate existed —
+served, pending review), or `"denied"` (link stays external; delete the
+committed artifact). `readings:build` refuses to convert a NEW link with
+no entry and prints the entry to add, so the reproduced set only ever
+grows deliberately; `readings.test.ts` fails if a served reading lacks a
+non-denied record.
 
 ---
 

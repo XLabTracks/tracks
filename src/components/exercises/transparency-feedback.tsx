@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useTransition } from "react";
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { requestTransparencyGrade } from "@/app/actions/grading";
 import {
@@ -59,16 +60,28 @@ export function TransparencyFeedback({
   const [error, setError] = useState<string | null>(null);
   const [open, setOpen] = useState(false);
   const [pending, startTransition] = useTransition();
+  const router = useRouter();
 
   const run = () =>
     startTransition(async () => {
       setError(null);
-      const result = await requestTransparencyGrade(contentId, kind);
-      if (result.ok) {
-        setGrade(result);
-        setOpen(true);
-      } else {
-        setError(result.error);
+      try {
+        const result = await requestTransparencyGrade(contentId, kind);
+        if (result.ok) {
+          setGrade(result);
+          setOpen(true);
+        } else {
+          setError(result.error);
+        }
+      } catch {
+        // The action can throw after the grade persisted server-side (e.g.
+        // the response was lost) — surface a retryable error and re-render
+        // the server components so a stored grade resurfaces via props
+        // instead of being silently dropped.
+        setError(
+          "Something went wrong requesting feedback. If a grade completed, it will appear after this refresh — otherwise try again.",
+        );
+        router.refresh();
       }
     });
 

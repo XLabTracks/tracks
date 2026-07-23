@@ -52,6 +52,33 @@ import {
 
 const ROOT = process.cwd();
 const REGISTRY_PATH = join(ROOT, "src", "content", "linked-readings.json");
+const PERMISSIONS_PATH = join(ROOT, "src", "content", "reading-permissions.json");
+
+/**
+ * Reproduction gate. A committed linked-reading artifact is a FULL COPY of a
+ * third-party post (same rule as everything in src/content/: only commit
+ * what we may reproduce — LessWrong/Substack authors retain copyright and
+ * the platforms grant no republication license). The hand-authored
+ * `src/content/reading-permissions.json` records, per artifact id:
+ *   - "permitted"  — permission or an explicit license confirmed (say which
+ *                    in `note`);
+ *   - "unreviewed" — grandfathered before this gate existed; still served,
+ *                    pending review;
+ *   - "denied"     — do not reproduce; the link stays external and any
+ *                    committed artifact should be deleted.
+ * A NEW post link with no entry is NOT built or served — the build prints
+ * the entry to add, so growing the reproduced set is always a deliberate,
+ * reviewable act.
+ */
+type PermissionStatus = "permitted" | "unreviewed" | "denied";
+
+function readPermissions(): Map<string, PermissionStatus> {
+  if (!existsSync(PERMISSIONS_PATH)) return new Map();
+  const data = JSON.parse(readFileSync(PERMISSIONS_PATH, "utf8")) as {
+    entries?: { id: string; status: PermissionStatus }[];
+  };
+  return new Map((data.entries ?? []).map((e) => [e.id, e.status]));
+}
 
 interface Candidate {
   kind: "substack" | "lesswrong";
@@ -238,15 +265,43 @@ async function main(): Promise<void> {
   const refresh = hasFlag("--refresh");
   const dryRun = hasFlag("--dry-run");
 
-  const candidates = collectCandidates();
+  const allCandidates = collectCandidates();
   console.log(
-    `${candidates.length} linked post(s) referenced by course papers and lessons`,
+    `${allCandidates.length} linked post(s) referenced by course papers and lessons`,
   );
+
+  const permissions = readPermissions();
+  const candidates: Candidate[] = [];
+  const ungated: Candidate[] = [];
+  for (const candidate of allCandidates) {
+    const status = permissions.get(candidate.id);
+    if (status === "permitted" || status === "unreviewed") {
+      candidates.push(candidate);
+    } else if (status === "denied") {
+      console.log(`  [denied   ] ${candidate.id} — link stays external`);
+    } else {
+      ungated.push(candidate);
+    }
+  }
+  if (ungated.length > 0) {
+    console.log(
+      `  ${ungated.length} new link(s) skipped — reproducing a post needs a ` +
+        `permission entry in src/content/reading-permissions.json first:`,
+    );
+    for (const candidate of ungated) {
+      console.log(
+        `    { "id": "${candidate.id}", "status": "permitted", "note": "<why>" }  // ${candidate.url}`,
+      );
+    }
+  }
 
   if (dryRun) {
     for (const candidate of candidates) {
       const state = readArtifact(candidate.kind, candidate.id)?.state ?? "missing";
-      console.log(`  [${state.padEnd(9)}] ${candidate.id}  ${candidate.url}`);
+      const status = permissions.get(candidate.id) ?? "ungated";
+      console.log(
+        `  [${state.padEnd(9)}|${status.padEnd(10)}] ${candidate.id}  ${candidate.url}`,
+      );
     }
     return;
   }

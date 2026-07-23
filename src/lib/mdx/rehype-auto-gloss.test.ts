@@ -119,6 +119,38 @@ describe("rehypeAutoGloss", () => {
     expect(ids).toEqual(["sandbagging"]);
   });
 
+  it("leaves non-allowlisted flow JSX whole (SiteQuote children render inside a link)", () => {
+    const siteQuote: Node = {
+      type: "mdxJsxFlowElement",
+      name: "SiteQuote",
+      attributes: [{ type: "mdxJsxAttribute", name: "href", value: "https://x.test" }],
+      children: [text("a sandbagging trigger phrase")],
+    };
+    const tree = run([siteQuote, p(text("but sandbagging in prose still glosses"))]);
+    const terms = termNodes(tree);
+    expect(terms.map(termId)).toEqual(["sandbagging"]);
+    // The wrap landed in the paragraph, not inside the SiteQuote.
+    expect(tree.children[0].children?.every((n) => n.type === "text")).toBe(true);
+  });
+
+  it('suppresses via the id={"…"} expression spelling of a hand-placed <Term>', () => {
+    const pinned: Node = {
+      type: "mdxJsxTextElement",
+      name: "Term",
+      attributes: [
+        {
+          type: "mdxJsxAttribute",
+          name: "id",
+          value: { type: "mdxJsxAttributeValueExpression", value: '"sandbagging"' } as unknown,
+        },
+      ],
+      children: [text("doing worse on purpose")],
+    };
+    const tree = run([p(pinned, text(" and later sandbagging plus x-risk"))]);
+    const auto = termNodes(tree).filter((n) => n !== pinned);
+    expect(auto.map(termId)).toEqual(["x-risk"]);
+  });
+
   it("skips terms the author already hand-<Term>ed (by id or by text)", () => {
     const byId: Node = {
       type: "mdxJsxTextElement",

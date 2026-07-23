@@ -486,6 +486,19 @@ describe("paper integrity", () => {
     }
   });
 
+  it("notes appear only on expandable hides (a silent hide renders no marker to label)", () => {
+    for (const paper of papers) {
+      for (const edit of paper.edits ?? []) {
+        if (edit.op !== "hide" || !edit.silent) continue;
+        expect(
+          edit.note === undefined,
+          `${paper.id}: silent hide at ${edit.at.anchor} carries note "${edit.note}" — ` +
+            `drop the note or the silent flag`,
+        ).toBe(true);
+      }
+    }
+  });
+
   it("every activity item resolves and inserted lessons have MDX bodies", () => {
     // Sequences gate progression client-side over these part kinds only.
     const SEQUENCEABLE = new Set([
@@ -695,23 +708,28 @@ describe("paper integrity", () => {
       // Expand each hide to covered units: "anchor" (whole block, incl.
       // descendant anchors) or "anchor:s".
       const covered = new Map<string, string>(); // unit → hiding anchor
-      const coverUnit = (unit: string, owner: string) => {
+      const silentUnits = new Set<string>(); // units a SILENT hide removes
+      const coverUnit = (unit: string, owner: string, silent: boolean) => {
         expect(
           covered.has(unit),
           `${paper.id}: overlapping hides at ${unit} (${covered.get(unit)} and ${owner})`,
         ).toBe(false);
         covered.set(unit, owner);
+        if (silent) silentUnits.add(unit);
       };
       for (const hide of hides) {
         const { anchor, s } = hide.at;
+        const silent = hide.silent === true;
         if (s !== undefined) {
-          for (let i = s; i <= (hide.sEnd ?? s); i++) coverUnit(`${anchor}:${i}`, anchor);
+          for (let i = s; i <= (hide.sEnd ?? s); i++) {
+            coverUnit(`${anchor}:${i}`, anchor, silent);
+          }
           continue;
         }
-        coverUnit(anchor, anchor);
+        coverUnit(anchor, anchor, silent);
         const info = index.get(anchor);
         for (let i = 1; i <= (info?.sentences.length ?? 0); i++) {
-          coverUnit(`${anchor}:${i}`, anchor);
+          coverUnit(`${anchor}:${i}`, anchor, silent);
         }
         for (const [other, otherInfo] of index) {
           let parent = otherInfo.parentAnchor;
@@ -720,9 +738,9 @@ describe("paper integrity", () => {
               // Cover the descendant block AND its sentence units — an
               // inline add after a sentence of a hidden container would
               // render invisibly inside the collapsed marker.
-              coverUnit(other, anchor);
+              coverUnit(other, anchor, silent);
               for (let i = 1; i <= otherInfo.sentences.length; i++) {
-                coverUnit(`${other}:${i}`, anchor);
+                coverUnit(`${other}:${i}`, anchor, silent);
               }
               break;
             }
@@ -740,16 +758,36 @@ describe("paper integrity", () => {
         ),
       );
       for (const { edit, ref } of blockRefsOf(paper)) {
-        // A glossed phrase inside hidden text is fine — it reveals (and its
-        // card works) when the learner expands the marker.
-        if (edit.op === "hide" || edit.op === "gloss") continue;
+        if (edit.op === "hide") continue;
         const unit = ref.s !== undefined ? `${ref.anchor}:${ref.s}` : ref.anchor;
+        if (edit.op === "gloss") {
+          // A glossed phrase inside an EXPANDABLE hide is fine — it reveals
+          // (and its card works) when the learner expands the marker. Inside
+          // a silent hide the text is removed, so it would never render.
+          expect(
+            silentUnits.has(unit),
+            `${paper.id}: gloss at ${unit} is inside a silently removed range ` +
+              `and would never render`,
+          ).toBe(false);
+          continue;
+        }
         if (!covered.has(unit)) continue;
         expect(
           lastUnits.has(unit),
           `${paper.id}: ${edit.op} after ${unit} is inside a hidden range — ` +
             `target the range's last unit or move it outside`,
         ).toBe(true);
+        // Hide-then-replace after a silently removed li has nowhere valid to
+        // land — the note renders inside the li (valid list markup), which
+        // the silent hide then removes.
+        expect(
+          edit.op === "add" &&
+            ref.s === undefined &&
+            silentUnits.has(unit) &&
+            index.get(ref.anchor)?.tag === "li",
+          `${paper.id}: add after ${unit} would render inside a silently removed ` +
+            `list item — move it after the list or hide expandably`,
+        ).toBe(false);
       }
       // Mid-paragraph activities may not split a hidden block.
       for (const { edit, ref } of blockRefsOf(paper)) {

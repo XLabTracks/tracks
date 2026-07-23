@@ -22,6 +22,8 @@ import { markdownBlocksToHast, markdownInlineToHast } from "./markdown";
 //     not-yet-split earlier sentence) →
 //   C block-level adds/activities after blocks (edits order) →
 //   D block hides, with consecutive hidden siblings merged into one marker.
+// Silent hides (A1/D) remove their target instead of wrapping it — no
+// marker, nothing to expand.
 
 export type SectionPart =
   | { kind: "html"; html: string }
@@ -162,6 +164,17 @@ export function patchSectionHtml(
         continue;
       }
       const run = block.children.slice(from, to + 1);
+      if (op.silent) {
+        // Removed outright. The empty span keeps the range's LAST data-s
+        // resolvable, so hide-then-replace adds/splits still land here.
+        block.children.splice(from, run.length, {
+          type: "element",
+          tagName: "span",
+          properties: { dataS: String(op.sEnd ?? op.at.s!) },
+          children: [],
+        });
+        continue;
+      }
       const count = (op.sEnd ?? op.at.s!) - op.at.s! + 1;
       block.children.splice(from, run.length, inlineHiddenWrapper(run, count, op.note));
     }
@@ -339,6 +352,16 @@ export function patchSectionHtml(
     const op = byAnchor.get(anchor)!.blockHide;
     if (!op) continue;
     const block = blockByAnchor.get(anchor)!;
+    if (op.silent) {
+      // Removed outright — no details wrapper, no merge run. Phase C ran
+      // first, so a hide-then-replace add/activity sibling survives; works
+      // for li too (dropping the item is valid list markup — the details
+      // special case below exists only for the expandable variant).
+      const parent = parentOf.get(block)!;
+      const at = parent.children.indexOf(block);
+      if (at !== -1) parent.children.splice(at, 1);
+      continue;
+    }
     if (block.tagName === "li") {
       // <details> is not a valid child of ul/ol — wrap the li's CHILDREN.
       const inner = block.children;

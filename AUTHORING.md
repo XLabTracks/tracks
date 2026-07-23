@@ -464,7 +464,10 @@ the gloss op below is shape-only, its glossary entry is not in the registry):
 edits: [
   // HIDE a whole block (or one sentence: add s; or a range: s + sEnd, same
   // block, sEnd requires s). Learners see an expandable marker; consecutive
-  // hidden blocks merge into ONE marker. `note` labels it.
+  // hidden blocks merge into ONE marker. `note` labels it. `silent: true`
+  // instead removes the content outright — no marker, nothing to expand,
+  // no `note` — pair with an `add` on the range's last unit (or the block
+  // itself) to splice in replacement text.
   { op: "hide",
     at: { anchor: "b-0010", snippet: "Self-attention, sometimes called" },
     note: "Related-work details (optional)" },
@@ -501,7 +504,13 @@ edits: [
   merge, first non-empty `note` wins; list-item hides render per-item and never
   merge). Clicking expands the original below the pill. **Sentence hide** → an
   inline `···` pill that toggles the sentence back into the text (the note
-  becomes its tooltip). Zero client JS either way.
+  becomes its tooltip). Zero client JS either way. **Silent hide**
+  (`silent: true`) → nothing at all: the block/sentences are omitted from the
+  rendered page with no trace (a removed sentence range leaves an invisible
+  empty span carrying the range's last `s`, so a hide-then-replace add or
+  activity still lands in place). Avoid silently hiding text that carries
+  footnote markers — the footnote's entry keeps rendering in the footnotes
+  section with a dead backlink.
 - **Hides × sidenotes**: a footnote marker inside a collapsed hide gets no
   margin sidenote until the learner expands the hide, and a hide inside a
   footnote's body shows in the margin copy as a static `···` — its reveal
@@ -546,7 +555,10 @@ sentence-range hide target its last sentence; for a whole-block hide target the
 block itself with no `s` — sentence-targeted activities may never split a
 hidden block); `sEnd` requires `s`; sentence refs only on prose blocks;
 `label` only on block/section-level adds (an inline add has no card to
-label); snippets must match. If an edit's
+label); `note` only on expandable hides (`silent` removes the marker it would
+label); a gloss may not sit inside a silently removed range (it would never
+render — expandable hides are fine); an add may not follow a silently removed
+list item (it would render inside the removed item); snippets must match. If an edit's
 target fails to resolve at render time (local iteration), it fails soft: hides
 and adds do nothing, unmatched activities append at the paper's end, and the
 server console names the target. Re-pinning a paper's arXiv version invalidates

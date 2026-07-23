@@ -125,8 +125,12 @@ export type PaperEdit =
    * marker revealing the original. Consecutive hidden sibling blocks
    * (authored as consecutive hide ops) merge into a single marker.
    * `note` labels the marker, e.g. "Details of the optimizer schedule".
+   * `silent: true` instead removes the content outright — no marker,
+   * nothing to expand (`note` is illegal there); pair it with an `add`
+   * targeting the range's last unit (or the block itself) to splice in
+   * editorial replacement text.
    */
-  | { op: "hide"; at: PaperBlockRef; sEnd?: number; note?: string }
+  | { op: "hide"; at: PaperBlockRef; sEnd?: number; note?: string; silent?: true }
   /**
    * Authored editorial text, rendered with distinct styling. A sentence
    * target means inline-level markdown (a single paragraph); a block or

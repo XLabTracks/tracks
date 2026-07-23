@@ -152,6 +152,77 @@ describe("applyPaperEdits", () => {
     expect(html).toContain("··· 1 table hidden ···");
   });
 
+  it("silent hide removes a block outright — no marker, no anchor left", () => {
+    const { parts, unmatchedEdits } = applyPaperEdits(HTML, TOC, [
+      { op: "hide", at: ref("b-0010", "Beta one."), silent: true },
+    ]);
+    expect(unmatchedEdits).toEqual([]);
+    const html = htmlOf(parts);
+    expect(html).not.toContain("Beta one.");
+    expect(html).not.toContain('data-anchor="b-0010"');
+    expect(html).not.toContain("<details");
+    expect(html).not.toContain("hidden");
+    // neighbors untouched
+    expect(html).toContain('<h2 id="ax-sec-b"');
+    expect(html).toContain('<p data-anchor="b-0011"><span data-s="1">Beta two.</span></p>');
+  });
+
+  it("silent hide removes an li entirely (no details wrapper)", () => {
+    const { parts } = applyPaperEdits(HTML, TOC, [
+      { op: "hide", at: ref("b-0012", "Item text."), silent: true },
+    ]);
+    const html = htmlOf(parts);
+    expect(html).not.toContain('data-anchor="b-0012"');
+    expect(html).not.toContain("Item text.");
+    expect(html).toContain("<ul></ul>");
+  });
+
+  it("silent hide removes a sentence range, keeping the last data-s resolvable", () => {
+    const { parts, unmatchedEdits } = applyPaperEdits(HTML, TOC, [
+      { op: "hide", at: ref("b-0003", "One two.", 2), sEnd: 3, silent: true },
+    ]);
+    expect(unmatchedEdits).toEqual([]);
+    const html = htmlOf(parts);
+    expect(html).not.toContain("One two.");
+    expect(html).not.toContain("One three.");
+    expect(html).not.toContain("ax-hidden");
+    // the empty placeholder is the hide-then-replace landing spot
+    expect(html).toMatch(
+      /<p data-anchor="b-0003"><span data-s="1">One one\.<\/span> <span data-s="3"><\/span><\/p>/,
+    );
+  });
+
+  it("silent hide-then-replace: adds after the removed range/block render in place", () => {
+    const { parts, unmatchedEdits } = applyPaperEdits(HTML, TOC, [
+      { op: "hide", at: ref("b-0003", "One two.", 2), sEnd: 3, silent: true },
+      { op: "add", after: ref("b-0003", "One three.", 3), markdown: "*sentence stand-in*" },
+      { op: "hide", at: ref("b-0010", "Beta one."), silent: true },
+      { op: "add", after: ref("b-0010", "Beta one."), markdown: "Block stand-in." },
+    ]);
+    expect(unmatchedEdits).toEqual([]);
+    const html = htmlOf(parts);
+    // inline add lands after the sentence placeholder, inside the paragraph
+    expect(html).toMatch(
+      /<span data-s="3"><\/span> <span class="ax-added-inline"[^>]*><em>sentence stand-in<\/em><\/span><\/p>/,
+    );
+    // block add survives the removal of its target, between the neighbors
+    const added = html.indexOf("Block stand-in.");
+    expect(added).toBeGreaterThan(html.indexOf('id="ax-sec-b"'));
+    expect(added).toBeLessThan(html.indexOf('data-anchor="b-0011"'));
+    expect(html).not.toContain("Beta one.");
+  });
+
+  it("silent and expandable hides coexist without merging", () => {
+    const { parts } = applyPaperEdits(HTML, TOC, [
+      { op: "hide", at: ref("b-0010", "Beta one."), silent: true },
+      { op: "hide", at: ref("b-0011", "Beta two.") },
+    ]);
+    const html = htmlOf(parts);
+    expect(html).not.toContain("Beta one.");
+    expect(html).toContain("··· 1 paragraph hidden ···");
+    expect(html).toContain('data-anchor="b-0011"');
+  });
+
   it("adds a block-level note after a block", () => {
     const { parts } = applyPaperEdits(HTML, TOC, [
       { op: "add", after: ref("b-0004", "Two one."), markdown: "Editorial *aside*." },

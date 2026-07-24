@@ -144,4 +144,47 @@ describe("buildPaperNav", () => {
     ]);
     expect(nav[nav.length - 1]).toMatchObject({ anchorId: "ins-exercise-x" });
   });
+
+  it("tags rows below a section-end gate with its id; landmarks stay unlocked", () => {
+    const nav = buildPaperNav(TOC, undefined, [
+      { id: "g1", after: { sectionEnd: "ax-sec-a" } },
+    ]);
+    const byId = (id: string) => nav.find((n) => n.kind === "section" && n.id === id)!;
+    expect(byId("ax-abstract").gateIds).toBeUndefined();
+    expect(byId("ax-sec-a").gateIds).toBeUndefined();
+    expect(byId("ax-sec-a-1").gateIds).toBeUndefined(); // inside the gated-AFTER subtree
+    expect(byId("ax-sec-b").gateIds).toEqual(["g1"]);
+    // References render outside the gate walk (ungatedTailHtml) — never locked.
+    expect(byId("ax-references").gateIds).toBeUndefined();
+  });
+
+  it("an anchor gate locks later same-bucket activities but not its own section", () => {
+    const nav = buildPaperNav(
+      TOC,
+      [
+        // b-0012 sits after the gate's b-0010 inside section 2 — the reader
+        // renders it below the gate, so its row locks.
+        { after: { anchor: "b-0012" }, items: [{ kind: "exercise", id: "x", title: "X" }], editIndex: 1 },
+      ],
+      [{ id: "g2", after: { anchor: "b-0010" }, editIndex: 0 }],
+    );
+    expect(
+      nav.find((n) => n.kind === "section" && n.id === "ax-sec-b")!.gateIds,
+    ).toBeUndefined();
+    expect(nav.find((n) => n.kind === "inserted-exercise")!.gateIds).toEqual(["g2"]);
+  });
+
+  it("gates accumulate in reading order on the rows below them", () => {
+    const nav = buildPaperNav(TOC, undefined, [
+      { id: "early", after: { sectionEnd: "ax-sec-a-1" }, editIndex: 0 },
+      { id: "late", after: { anchor: "b-0010" }, editIndex: 1 },
+    ]);
+    const secB = nav.find((n) => n.kind === "section" && n.id === "ax-sec-b")!;
+    expect(secB.gateIds).toEqual(["early"]);
+    // Nothing after b-0010 except references (unlocked), so "late" never tags
+    // a section row — but earlier gates still accumulate on ax-sec-b.
+    expect(
+      nav.find((n) => n.kind === "section" && n.id === "ax-references")!.gateIds,
+    ).toBeUndefined();
+  });
 });

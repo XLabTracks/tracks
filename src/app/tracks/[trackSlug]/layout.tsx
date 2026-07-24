@@ -25,6 +25,7 @@ import { getTrackCompletionSet } from "@/lib/progress";
 import {
   buildPaperNav,
   type PaperNavActivity,
+  type PaperNavGate,
   type PaperNavItem,
 } from "@/lib/papers/paper-nav";
 import { getLessonSections } from "@/components/mdx/lesson-content";
@@ -126,13 +127,30 @@ export default async function TrackLayout({
 }
 
 async function buildNavForPaper(paper: Paper): Promise<PaperNavItem[]> {
-  const activities: PaperNavActivity[] = (paper.edits ?? [])
-    .filter((edit) => edit.op === "activity")
-    .map((edit) => ({
+  // Activities become nav rows; gates become lock annotations on the rows
+  // below them. editIndex keeps same-target gates and activities in edits
+  // (= reader) order.
+  const activities: PaperNavActivity[] = [];
+  const gates: PaperNavGate[] = [];
+  (paper.edits ?? []).forEach((edit, editIndex) => {
+    if (edit.op === "gate") {
+      gates.push({
+        id: edit.id,
+        after:
+          "sectionEnd" in edit.after
+            ? { sectionEnd: edit.after.sectionEnd }
+            : { anchor: edit.after.anchor, s: edit.after.s },
+        editIndex,
+      });
+      return;
+    }
+    if (edit.op !== "activity") return;
+    activities.push({
       after:
         "sectionEnd" in edit.after
           ? { sectionEnd: edit.after.sectionEnd }
           : { anchor: edit.after.anchor, s: edit.after.s },
+      editIndex,
       items: edit.items.map((item) => ({
         ...item,
         title:
@@ -145,10 +163,11 @@ async function buildNavForPaper(paper: Paper): Promise<PaperNavItem[]> {
                   (item.label ?? EXERCISE_TYPE_LABELS["understanding-check"])
                 : exerciseLabel(item.id),
       })),
-    }));
+    });
+  });
   // Non-ready artifacts still get activity-only entries (empty toc) so the
   // fallback page's activities remain navigable.
-  return buildPaperNav(await tocForSource(paper.source), activities);
+  return buildPaperNav(await tocForSource(paper.source), activities, gates);
 }
 
 async function tocForSource(source: Paper["source"]): Promise<PaperTocEntry[]> {

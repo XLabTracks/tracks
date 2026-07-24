@@ -30,6 +30,9 @@ export type SectionPart =
   | { kind: "activity"; items: PaperInsertionItem[] }
   | { kind: "gate"; id: string; prompt?: string; cta?: string };
 
+/** The non-html parts — the ones that render as React nodes via sentinels. */
+type SentinelPart = Exclude<SectionPart, { kind: "html" }>;
+
 export interface PatchedSection {
   parts: SectionPart[];
   /** Ops whose target didn't resolve (unknown anchor/sentence, snippet drift). */
@@ -61,7 +64,7 @@ export function patchSectionHtml(
 ): PatchedSection {
   const tree = fromHtmlIsomorphic(sectionHtml, { fragment: true }) as Root;
   const unmatched: PaperEdit[] = [];
-  const sentinels: Exclude<SectionPart, { kind: "html" }>[] = [];
+  const sentinels: SentinelPart[] = [];
 
   // Parent links for every element (nested blocks need real DOM ancestry,
   // not just the anchored chain).
@@ -230,17 +233,19 @@ export function patchSectionHtml(
   // into per-container hoist lists, flushed after phase C in document order
   // (direct insert-at-container+1 would reverse them).
   const tailFragment = new Map<string, Element>();
+  // Hoist entries are sentinel parts (activities/gates) or plain elements
+  // (adds forced out of their container by a preceding gate — see phase C).
   const hoisted = new Map<
     Element,
     Array<{
       key: [number, number, number];
-      part: Exclude<SectionPart, { kind: "html" }>;
+      part: SentinelPart | Element;
     }>
   >();
   const deferHoist = (
     container: Element,
     key: [number, number, number],
-    part: Exclude<SectionPart, { kind: "html" }>,
+    part: SentinelPart | Element,
   ) => {
     const list = hoisted.get(container) ?? [];
     list.push({ key, part });
@@ -323,10 +328,22 @@ export function patchSectionHtml(
   for (const anchor of anchorsAsc) {
     const block = blockByAnchor.get(anchor)!;
     let cursor: Element = tailFragment.get(anchor) ?? block;
+    // Once a gate for this block has been hoisted past `cursor`'s container,
+    // later same-block ops must hoist too: pushing an add into the container
+    // would render it ABOVE the gate sentinel, leaking content the edits
+    // order placed behind the gate. (Hoisted activities already sort after
+    // the gate via their edits index.)
+    let gateHoisted = false;
     for (const op of byAnchor.get(anchor)!.after) {
       if (op.op === "add") {
         const added = blockAddedWrapper(markdownBlocksToHast(op.markdown), op.label);
-        if (cursor.tagName === "li") {
+        if (gateHoisted) {
+          deferHoist(
+            topLevelAncestorOf(cursor),
+            [anchorNum(anchor), Number.MAX_SAFE_INTEGER, ops.indexOf(op)],
+            added,
+          );
+        } else if (cursor.tagName === "li") {
           // A div after an li would be a non-conforming ul/ol child — the
           // note renders inside the list item instead.
           cursor.children.push(added);
@@ -343,7 +360,7 @@ export function patchSectionHtml(
         // sit at the top level — nested cursors defer into the container's
         // hoist list (Number.MAX_SAFE_INTEGER sorts after any mid-paragraph
         // hoist of the same block).
-        const part: Exclude<SectionPart, { kind: "html" }> =
+        const part: SentinelPart =
           op.op === "activity"
             ? { kind: "activity", items: op.items }
             : { kind: "gate", id: op.id, prompt: op.prompt, cta: op.cta };
@@ -356,19 +373,23 @@ export function patchSectionHtml(
             [anchorNum(anchor), Number.MAX_SAFE_INTEGER, ops.indexOf(op)],
             part,
           );
+          if (op.op === "gate") gateHoisted = true;
         }
       }
     }
   }
 
-  // Flush hoisted activities per container in document order.
+  // Flush hoisted parts per container in document order.
   for (const [container, list] of hoisted) {
     list.sort(
       (a, b) => a.key[0] - b.key[0] || a.key[1] - b.key[1] || a.key[2] - b.key[2],
     );
     let at = container;
     for (const entry of list) {
-      at = insertSentinelAfter(at, entry.part);
+      at =
+        "type" in entry.part
+          ? insertNodeAfter(at, entry.part)
+          : insertSentinelAfter(at, entry.part);
     }
   }
 
@@ -466,7 +487,7 @@ export function patchSectionHtml(
 
   // ---- helpers bound to tree state ----------------------------------------
 
-  function sentinel(part: Exclude<SectionPart, { kind: "html" }>): Element {
+  function sentinel(part: SentinelPart): Element {
     sentinels.push(part);
     return {
       type: "element",
@@ -477,15 +498,16 @@ export function patchSectionHtml(
   }
 
   /** Insert a part sentinel after a TOP-LEVEL node; returns the marker. */
-  function insertSentinelAfter(
-    node: Element,
-    part: Exclude<SectionPart, { kind: "html" }>,
-  ): Element {
+  function insertSentinelAfter(node: Element, part: SentinelPart): Element {
+    return insertNodeAfter(node, sentinel(part));
+  }
+
+  /** Insert an element at the top level after `node`; returns the element. */
+  function insertNodeAfter(node: Element, el: Element): Element {
     const at = tree.children.indexOf(node);
-    const marker = sentinel(part);
-    tree.children.splice(at === -1 ? tree.children.length : at + 1, 0, marker);
-    parentOf.set(marker, tree);
-    return marker;
+    tree.children.splice(at === -1 ? tree.children.length : at + 1, 0, el);
+    parentOf.set(el, tree);
+    return el;
   }
 }
 

@@ -547,17 +547,21 @@ edits: [
   renders after the whole box; a block-level add after a list item renders
   inside that item (valid list markup).
 - **Gate** → a navy-accented "Before you read on" card with the prompt and a
-  button; everything below (to the END of the paper — later gates nest inside
-  earlier ones) stays out of the DOM until tapped. Friction, not enforcement:
-  the content is in the payload, and the opened state is client-side only
-  (persisted per gate id in localStorage, no sign-in required). Consequences
-  to author around: sidebar links to still-gated sections scroll nowhere until
-  the gates above them open, and the references/footnotes sections sit behind
-  the LAST gate — margin sidenotes appear as gates open (the layer re-scans
-  on every layout change).
+  button; everything below (to the END of the paper's body — later gates nest
+  inside earlier ones) stays out of the DOM until tapped. A bare gate (no
+  `prompt`) is just the button — its card disappears entirely once opened.
+  Friction, not enforcement: the content is in the payload, and the opened
+  state is client-side only (persisted per gate id in localStorage, no
+  sign-in required). The trailing references/footnotes sections are exempt —
+  they render outside the gate walk, so citations and footnote markers in
+  the visible text keep live targets and margin sidenotes work from the
+  start. Gated papers scroll-complete only once every gate has been opened
+  (the manual complete button always works).
 - **Sidebar**: activity entries appear in the "In this paper" panel under their
-  containing section, in reading order; hide/add/gate edits produce no panel
-  entries.
+  containing section, in reading order; hide/add edits produce no panel
+  entries. Gate edits produce no entries either, but rows whose targets sit
+  below a still-closed gate render locked (dimmed, lock icon) — clicking one
+  scrolls to the blocking gate's card instead of a hash that lands nowhere.
 
 **Add markdown capabilities**: CommonMark (emphasis, links, inline code, lists,
 fences, blockquotes) plus `$…$` / `$$…$$` KaTeX math — rendered with *vanilla*

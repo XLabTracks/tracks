@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useLayoutEffect, useState } from "react";
 import { ChevronDown, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
@@ -14,9 +14,9 @@ import { Button } from "@/components/ui/button";
  *
  * Deliberately friction, not enforcement: the gated content ships in the
  * payload, and the opened state lives in localStorage only (no auth, no
- * server round-trip). Revisits re-open previously opened gates after mount —
- * a brief collapsed flash on hydration is the accepted cost of keeping the
- * server render user-independent.
+ * server round-trip). Revisits re-open previously opened gates in a
+ * mount-time layout effect (before paint, so no collapsed flash) — the
+ * server render stays user-independent.
  */
 export function PaperGate({
   paperId,
@@ -34,8 +34,11 @@ export function PaperGate({
   const storageKey = `tracks:paper-gate:${paperId}:${gateId}`;
   const [open, setOpen] = useState(false);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
+    // One deliberate mount-time re-render, before paint: localStorage is
+    // unreadable during SSR/hydration (same idiom as SidenotesToggle).
     try {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       if (window.localStorage.getItem(storageKey) === "open") setOpen(true);
     } catch {
       // Storage unavailable (private mode etc.) — gate just won't persist.

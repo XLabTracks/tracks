@@ -2,6 +2,11 @@
 
 import { useCallback, useLayoutEffect, useState } from "react";
 import { ChevronDown, Sparkles } from "lucide-react";
+import {
+  PAPER_GATE_OPEN_EVENT,
+  paperGateDomId,
+  paperGateStorageKey,
+} from "@/lib/papers/gate-state";
 import { Button } from "@/components/ui/button";
 
 /**
@@ -31,7 +36,7 @@ export function PaperGate({
   prompt?: React.ReactNode;
   children: React.ReactNode;
 }) {
-  const storageKey = `tracks:paper-gate:${paperId}:${gateId}`;
+  const storageKey = paperGateStorageKey(paperId, gateId);
   const [open, setOpen] = useState(false);
 
   useLayoutEffect(() => {
@@ -52,11 +57,28 @@ export function PaperGate({
     } catch {
       // Non-fatal: the reveal still happens for this visit.
     }
+    // Same-page listeners (locked sidebar rows, the completion tracker)
+    // re-check gate state on this — the browser's `storage` event fires only
+    // in other tabs.
+    window.dispatchEvent(
+      new CustomEvent(PAPER_GATE_OPEN_EVENT, { detail: { storageKey } }),
+    );
   }, [storageKey]);
+
+  // A bare gate's card is pure button chrome — once opened there is nothing
+  // left to say, so it disappears instead of lingering as an empty eyebrow.
+  // Prompted gates keep their card: the think-first question stays meaningful
+  // context above the revealed text.
+  if (open && !prompt) return <>{children}</>;
 
   return (
     <>
-      <div className="border-primary/25 bg-primary/[0.03] my-8 rounded-xl border px-5 py-4">
+      <div
+        // Locked sidebar rows scroll here (block: "center", so no
+        // sticky-header scroll-margin needed).
+        id={paperGateDomId(gateId)}
+        className="border-primary/25 bg-primary/[0.03] my-8 rounded-xl border px-5 py-4"
+      >
         <p className="text-primary/75 flex items-center gap-1.5 text-xs font-semibold tracking-wide uppercase">
           <Sparkles className="size-3.5" aria-hidden />
           Before you read on

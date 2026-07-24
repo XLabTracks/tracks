@@ -26,6 +26,7 @@ import { LessonNav } from "@/components/layout/lesson-nav";
 import { LessonCompleteButton } from "@/components/learn/lesson-complete-button";
 import { LessonTracker } from "@/components/learn/lesson-tracker";
 import { PaperReader } from "@/components/papers/paper-reader";
+import { gateIdsOf, paperGateStorageKey } from "@/lib/papers/gate-state";
 import { paperSourceHeader } from "@/components/papers/paper-source-header";
 import { SidenotesToggle } from "@/components/papers/sidenotes-toggle";
 import { Button } from "@/components/ui/button";
@@ -239,6 +240,12 @@ async function PaperItemPage({
           lessonId={paper.id}
           completed={completed}
           toastLabel="Paper complete"
+          // Gated papers scroll-complete only after every reading gate has
+          // been opened — with gates closed the body is unmounted and this
+          // sentinel would sit right under the first gate's card.
+          gateKeys={gateIdsOf(paper.edits).map((gateId) =>
+            paperGateStorageKey(paper.id, gateId),
+          )}
         />
       ) : null}
 

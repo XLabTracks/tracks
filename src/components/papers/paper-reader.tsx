@@ -29,7 +29,11 @@ import {
 } from "@/lib/content/types";
 import { getGlossaryTerm, getRelatedTermNames } from "@/lib/content/glossary";
 import { insertionAnchorId } from "@/lib/papers/split-paper";
-import { applyPaperEdits, type PaperPart } from "@/lib/papers/apply-edits";
+import {
+  applyPaperEdits,
+  type AppliedPaper,
+  type PaperPart,
+} from "@/lib/papers/apply-edits";
 import { resolveInternalReadingHref } from "@/lib/readings/resolve";
 import { rewriteReadingLinks } from "@/lib/readings/rewrite-links";
 import { renderGatePromptHtml } from "@/lib/papers/patch-section";
@@ -345,6 +349,30 @@ function ActivitiesOnlyFallback({
   );
 }
 
+/**
+ * Edit application is pure and its inputs are static per paper (committed
+ * artifact html + code-defined edits), but the route is always dynamic (auth
+ * cookies) — memoize per isolate keyed on paper id so the HAST
+ * parse/patch/serialize work runs once, not on every request. Same idiom as
+ * the bestResponse memo in src/lib/control-model/: NEVER mutate the returned
+ * object. The stored-html check keeps the cache honest for post papers,
+ * whose html is re-derived per request by rewriteReadingLinks (equal
+ * content, fresh string).
+ */
+const appliedEditsCache = new Map<string, { html: string; applied: AppliedPaper }>();
+
+function applyPaperEditsCached(
+  paper: Paper,
+  html: string,
+  toc: PaperTocEntry[],
+): AppliedPaper {
+  const hit = appliedEditsCache.get(paper.id);
+  if (hit && hit.html === html) return hit.applied;
+  const applied = applyPaperEdits(html, toc, paper.edits);
+  appliedEditsCache.set(paper.id, { html, applied });
+  return applied;
+}
+
 /** The ready path all sources share: apply edits, interleave activities. */
 function EditedPaperBody({
   paper,
@@ -374,7 +402,11 @@ function EditedPaperBody({
    */
   sidenotePrefix?: string;
 }) {
-  const { parts, unmatchedEdits } = applyPaperEdits(html, toc, paper.edits);
+  const { parts, ungatedTailHtml, unmatchedEdits } = applyPaperEditsCached(
+    paper,
+    html,
+    toc,
+  );
   if (unmatchedEdits.length > 0) {
     // Committed content can't reach this (content.test.ts validates every
     // edit target against the artifact); this is a local-iteration net.
@@ -403,6 +435,18 @@ function EditedPaperBody({
         signedIn,
         completedContentIds,
       })}
+
+      {ungatedTailHtml && (
+        // References/footnotes, split off the gated walk in apply-edits.ts:
+        // they stay mounted while gates above are closed, so citations and
+        // footnote markers in the visible text keep live targets and the
+        // sidenote layer has note bodies to clone.
+        <div
+          className={wrapperClassName}
+          data-conv={converterVersion}
+          dangerouslySetInnerHTML={{ __html: ungatedTailHtml }}
+        />
+      )}
 
       {unmatchedItems.length > 0 && (
         <div className="mt-10">
@@ -478,8 +522,10 @@ interface RenderCtx {
  * after it (recursively, so later gates nest inside earlier ones) in a
  * client <PaperGate> whose children are these same server-rendered nodes —
  * html stays in this server component, the client side only mounts/unmounts
- * the finished subtree. The footer and sidenotes render outside this walk,
- * so they are never gated.
+ * the finished subtree. The footer, the sidenote layer, AND the trailing
+ * references/footnotes sections (apply-edits.ts splits them into
+ * ungatedTailHtml) render outside this walk — only body content is ever
+ * withheld.
  */
 function renderParts(
   parts: PaperPart[],

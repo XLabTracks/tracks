@@ -222,9 +222,10 @@ Four more closed types:
 
 - **`tap-reveal`** (flashcard / quick recall) — `prompt` + `answer`; the answer
   hides behind a "click to reveal" cover, then the learner self-rates
-  ("Got it" / "Partially" / "Didn't get it"; recorded via `recordTapReveal`
-  with the timestamp doubling as a future spaced-repetition hook). The answer
-  ships to the client — self-assessment, not graded.
+  ("Got it" / "Partially" / "Didn't get it"; recorded via `recordTapReveal`,
+  which also enrolls the card in the learner's `/review` spaced-repetition
+  bank — see CLAUDE.md). The answer ships to the client — self-assessment,
+  not graded.
 - **`flowchart`** — a shared `palette` of blocks (`step`/`branch`/`terminal`,
   branches with `branchLabels` arms) plus `stages`, each with a prose
   `description`, a server-only `solution` tree, and an `explanation` revealed

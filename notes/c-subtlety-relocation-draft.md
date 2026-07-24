@@ -1,6 +1,12 @@
 # Proposal — "Subtlety: visible versus reliable", relocated into the AI Control walkthrough
 
-Status: **c-game SURFACE IN SYNC with this draft (2026-07-23, second re-embed).** Final
+Status: **RESOLVED 2026-07-23 — the walkthrough question is closed.** Per Arya, the entire
+c-game "Probability of safety over deployment" section (including this subtlety content and
+the minimal best-response passage) was mirrored verbatim into the walkthrough's 3.2.1
+cluster as plain adds. The planned b-0140 splice is DEAD: subtlety lives inside 3.2.1, so
+the Assumptions/Open questions below about b-0140 anchoring, recall-card ordering, and
+plain-vs-subsection are moot (kept as record). Earlier status:
+**c-game SURFACE IN SYNC with this draft (2026-07-23, second re-embed).** Final
 structure, live: one-sentence opener → two-stage Predict sequence (MC + free-response, no
 sample answer) → Arya's short demo lead-in → demo → directly into the next section (NO
 reveal; the old four-paragraph reveal is deleted). Demo chart title and registry

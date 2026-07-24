@@ -225,6 +225,68 @@ Arya's edits at [c-subtlety-relocation-draft.md](./c-subtlety-relocation-draft.m
 defer → §3.3; dashboard → §3.5 end. Draft against the Model spine in
 c-race-relocation-draft.md.)
 
+2026-07-24 (defer → walkthrough 3.3.1 DONE): c-game's `## Defer to trusted` section AND the
+dashboard content after it are mirrored into a new first-class subsection **"3.3.1 Defer to
+Trusted"** (id xlab-sec-defer-to-trusted-model) in the AI Control walkthrough — after the
+Quick recall, right before §3.4; §3.3 has no native children so nothing renumbers.
+Mechanics: the Quick recall op moved from `sectionEnd: ax-sec-defer-to-trusted` to a block
+anchor at b-0153 (sectionEnd ops always emit after block-anchored ops, so ordering required
+sharing the anchor; array order now governs). Also at copy time, in BOTH surfaces: Arya's
+"[one sentence about the pareto frontier]" bracket resolved ("The grey curve is the Pareto
+frontier: every safety and usefulness pair reachable at the current audit budget and
+monitor quality by varying the defer band..."), "The red team use" → "uses",
+"paretofrontier" → "Pareto frontier" (×2, capitalized). The redistribution map's
+"defer → §3.3" and "dashboard → §3.5 end" items are superseded: both live in 3.3.1.
+Typecheck+468 tests green.
+
+2026-07-24 (dashboard fixes; blue-lever stacks REVERTED): the two companion charts below
+were added to the defer demo by mistake (Arya meant the dashboard) and are removed same
+day; the generic bestResponseSweepBy stays in the lib (bestResponseSweepD wraps it).
+Dashboard ("control-dashboard"): registry description replaced with Arya's text (serial
+"and" added); defer slider now controls the band WIDTH (d = b + width, min 0, 0.1%
+display) so raising the audit budget shifts the band instead of eating it — frontier sweep
+updated to the width range. Subtlety demo: "P(red wins)" annotation moved to the lower
+left of the P panel (was overlapping the curve's flat top-left). Typecheck+468 tests green.
+
+2026-07-24 (SUPERSEDED same day — stacks reverted, see above): defer demo gains two legend-only companion charts
+below the main pair (shared 4-class legend row, no in-band labels), via new generic
+bestResponseSweepBy (warm-start lever sweep; bestResponseSweepD now wraps it): outcome
+partition vs AUDIT BUDGET 0.5%→8% at zero defer band (caught 25%→73%, deployed 35%→12%)
+and vs MONITOR QUALITY AUC 0.85→0.99 at b=d=2% (caught 16%→63%, deployed 63%→14%). Both
+sweeps verified vs per-point grid-seeded (max σ dev ≤0.0026), partitions sum to 1 exactly,
+68/42ms cold then memoized. Also: label nudges on the d-chart per Arya (deployed 83% up at
+far left; broken in the grey corridor at d≈18%). Typecheck+468 tests green.
+
+2026-07-23 (defer demo smooth + outcome panel): defer-band slider now reads to 0.1%
+(__._ display); NEW bestResponseFine (per-coordinate ternary polish of the 60×40 grid
+argmax, ±1 cell) makes the best-response strategy quasi-continuous in the levers — the
+attack histogram glides instead of snapping (σ* staircase 0.026 steps → ~0.005; safety
+readouts unchanged ±0.1pp, pins intact; 18ms/fresh call). NEW side-by-side panel
+"Per-attack outcome probability" vs defer band: stacked bands caught (navy) / deferred to
+T (blue #2563eb, new class; left panel's band recolored to match) / deployed-but-broken
+(grey) / successfully deployed (red at ceiling), from NEW bestResponseSweepD (warm-start
+continuation, grid re-anchor every 8th pt; verified vs per-point grid-seeded: max σ diff
+0.0035, max P diff 2.5e-5; partition sums to 1 exactly; 159ms cold, memoized). Endpoint
+consistency: d=2% row (48/0/26/26, σ* 0.27) matches the subtlety demo. Typecheck+468
+tests green.
+
+2026-07-23 (defer predict swap): Arya's in-file note in c-game's defer section implemented —
+new c-paper-l4-defer-terms-predict (understanding-check: what widening defer does to
+P(caught), P(deployed), P(decisive)) replaces c-game-l7-defer-predict (orphaned). Sample
+answer keeps Arya's claims with the mechanism made explicit: catch probability falls via the
+BEST RESPONSE (rewrite threat pushes red subtler; demo runs mode "best", verified c̄ 48→37%
+at d 2→20%), not directly (audit threshold is budget-set); decisive-conclusion sentence
+added (prompt asked, answer hadn't). Grammar: "do the probability" → "do to the
+probability"; "makes it decreases te" repaired; "decisive attack" → "decisive attack
+attempt". Typecheck+468 tests green.
+
+2026-07-23 (3.2.1 full mirror): the walkthrough's 3.2.1 cluster now mirrors c-game's ENTIRE
+"Probability of safety over deployment" section verbatim (through the best-response
+understanding check) — appended as plain adds + activities: subtlety opener, Predict
+sequence, σ lead-in, subtlety demo, minimal best-response paragraph, best-response demo,
+closing two-stage check. The planned b-0140 subtlety splice is DEAD (subtlety lives inside
+3.2.1); redistribution map updated accordingly. Typecheck+468 tests green.
+
 2026-07-23 (best-response check → two-stage): the upper-bound check is now a two-stage
 sequence per Arya — stage 1 c-paper-l3-best-response-upper-bound (Arya's prompt/answer:
 knows TM but not the budget → wrong priors play weaker strategies), stage 2 NEW

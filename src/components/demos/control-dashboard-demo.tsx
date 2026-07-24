@@ -40,7 +40,10 @@ const r1 = (x: number) => Number(x.toFixed(1));
 
 export function ControlDashboardDemo() {
   const [b, setB] = useState(0.02);
-  const [d, setD] = useState(0.1);
+  // The defer slider controls the band WIDTH (d - b), not the total d, so
+  // raising the audit budget shifts the band instead of eating it (per Arya:
+  // the two levers must not be visually coupled).
+  const [dw, setDw] = useState(0.08);
   const [q, setQ] = useState(DEFAULT_LEVERS.q);
 
   // Sliders, labels, and the (cheap) band geometry track state urgently; the
@@ -48,11 +51,11 @@ export function ControlDashboardDemo() {
   // (~20x best-response) on b/q changes — recomputes against deferred values,
   // so dragging the audit budget never blocks the main thread mid-drag.
   const bSlow = useDeferredValue(b);
-  const dSlow = useDeferredValue(d);
+  const dwSlow = useDeferredValue(dw);
   const qSlow = useDeferredValue(q);
 
-  const dEff = Math.max(b, d);
-  const dEffSlow = Math.max(bSlow, dSlow);
+  const dEff = b + dw;
+  const dEffSlow = bSlow + dwSlow;
   const levers: Levers = useMemo(
     () => ({
       ...DEFAULT_LEVERS,
@@ -66,12 +69,13 @@ export function ControlDashboardDemo() {
 
   const br = useMemo(() => bestResponse(levers), [levers]);
 
-  // Frontier for the current (b, q): sweep the defer band. Memoized on the
-  // deferred b/q only, so dragging the defer slider stays smooth.
+  // Frontier for the current (b, q): sweep the defer-band width 0..50%, the
+  // slider's reachable range. Memoized on the deferred b/q only, so dragging
+  // the defer slider stays smooth.
   const frontier = useMemo(() => {
     const pts: { u: number; s: number }[] = [];
     for (let i = 0; i <= 20; i++) {
-      const dd = bSlow + ((0.5 - bSlow) * i) / 20;
+      const dd = bSlow + (0.5 * i) / 20;
       const lev: Levers = {
         ...DEFAULT_LEVERS,
         b: bSlow,
@@ -112,7 +116,7 @@ export function ControlDashboardDemo() {
     <div className="space-y-4">
       <div className="grid gap-3 sm:grid-cols-3">
         <LeverSlider label="Audit budget (b)" value={`${(b * 100).toFixed(1)}%`} min={5} max={100} raw={b * 1000} onChange={(v) => setB(v / 1000)} aria="Audit budget" />
-        <LeverSlider label="Defer band (d)" value={`${(dEff * 100).toFixed(0)}%`} min={5} max={500} raw={d * 1000} onChange={(v) => setD(v / 1000)} aria="Defer band" />
+        <LeverSlider label="Defer band (d)" value={`${(dw * 100).toFixed(1)}%`} min={0} max={500} raw={dw * 1000} onChange={(v) => setDw(v / 1000)} aria="Defer band" />
         <LeverSlider label="Monitor quality (AUC)" value={q.toFixed(2)} min={800} max={990} raw={q * 1000} onChange={(v) => setQ(v / 1000)} aria="Monitor quality" />
       </div>
 

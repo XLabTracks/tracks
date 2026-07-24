@@ -114,8 +114,6 @@ export const demoRegistry: Record<string, DemoDefinition> = {
   defer: {
     id: "defer",
     title: "Defer to trusted, mechanistically",
-    description:
-      "Widen the defer band and watch the amber region grow. It holds a large share of the attack mass but a thin slice of the innocent mass — which is why deferring buys safety cheaply.",
     component: DeferDemo,
     tags: ["control", "control-game"],
   },
@@ -123,7 +121,7 @@ export const demoRegistry: Record<string, DemoDefinition> = {
     id: "control-dashboard",
     title: "The control game: full dashboard",
     description:
-      "Three blue levers — audit budget, defer band, monitor quality — feeding one live world: the suspicion distributions with bands, and the safety/usefulness frontier with the current protocol ringed. The red team best-responds throughout.",
+      "Change the audit budget, defer band, and monitor quality and watch how this changes the suspicion distributions, and the safety/usefulness frontier with the current protocol. The red team best-responds throughout.",
     component: ControlDashboardDemo,
     tags: ["control", "control-game"],
   },

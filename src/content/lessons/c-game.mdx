@@ -94,34 +94,22 @@ Given these decision factors and some priors about the blue team's strategy, the
 
 <ExerciseSequence ids={["c-paper-l3-best-response-upper-bound", "c-paper-l3-protocol-awareness"]} label="Understanding check" />
 
-## Defer to trusted, mechanistically
+## Defer to trusted
 
-Trusted monitoring spends its whole audit budget on the most suspicious 2% and ships everything else as $U$ wrote it. But look at the suspicion distributions: there is a broad middle region — code too suspicious to be comfortable with, yet not suspicious enough to be worth a scarce audit. Deferring to trusted is what to do with that region. Any code whose suspicion falls in a band just below the audit threshold is not shipped and not audited; instead $T$ rewrites the solution from scratch, and its version ships.
+Trusted monitoring spends its whole audit budget on the most suspicious 2% and deploys everything else as $U$ wrote it. But moderately suspicious code is too suspicious to be comfortable with, yet not suspicious enough to be worth a human audit. Deferring to the solutions of trusted models is a way to address this issue, at the cost of some deployment effectiveness. Any code whose suspicion falls in a band just below the audit threshold is not deployed and not audited; instead $T$ rewrites the solution from scratch, and its version is deployed.
 
-Deferring is quiet. An attack that lands in the defer band is silently neutralized — no catch, no shutdown, the game simply continues, at the price of $T$-grade code for that one problem. So the question is what widening the band buys and what it costs.
+<Exercise id="c-paper-l4-defer-terms-predict" />
 
-<Exercise id="c-game-l7-defer-predict" />
-
-The demo shows the suspicion distributions with the audit region shaded gray and the defer band shaded amber. Widen the band and watch how much attack mass it swallows versus how much innocent mass it costs, alongside the live safety and usefulness.
+Change the proportion of solutions for which we defer to $T$ and watch how this changes the red team's optimal strategy and how this changes the suspiciousness distribution of attacks.
 
 <Demo id="defer" />
 
-The gain is large and the price is small, and the reason is the asymmetry visible in the histograms. The attack distribution has a heavy shoulder in the mid-suspicion band — those are exactly the attacks subtle enough to dodge the 2% audit but not subtle enough to look fully innocent. The innocent distribution, by contrast, has thinned out by then; most honest code scores low. So the amber band captures a large fraction of the attacks while sending only a few percent of (mostly innocent) problems down to the weaker model. That asymmetry is the whole trick, and its price is set by the width of the band and the capability gap between $U$ and $T$.
-
 <Exercise id="c-game-l7-defer-reflect" />
 
-## The control game: the whole picture
+In summary, the monitor is a noisy classifier whose value is concentrated in the low-false-positive tail. The red team uses the optimal strategy over attack rate and subtlety. Auditing spends a scarce budget on the suspicious tail; deferring rewrites the mid-suspicion band with the trusted model. Safety is measured against the red team's best response throughout, and deferring to $T$ more trades usefulness from a more capable model $U$ for the safety from a less capable model $T$.
 
-Every piece is now on the table. The monitor is a noisy classifier whose value lives in its low-false-positive tail. The red team plays a joint best response over attack rate and subtlety. Auditing spends a scarce budget on the suspicious tail; deferring rewrites the mid-suspicion band with the trusted model. Safety is measured against the red team's best response throughout, and usefulness is the price paid in $T$-grade code.
-
-The dashboard below wires them into one live world. Three blue levers — the audit budget $b$, the defer band $d$, and the monitor quality $q$ — feed both panels at once. On the left are the suspicion distributions with the audit and defer bands; on the right is the safety/usefulness plane, with the frontier traced for the current monitor and budget and your current protocol ringed on it. The red team re-optimizes on every move, so the ringed point always sits against a best-responding adversary.
+The demo below models most of these interactions. For any given blue team strategy, the red team uses the optimal strategy against it, so the ringed point always sits against a best-responding adversary. The grey curve is the Pareto frontier: every safety and usefulness pair reachable at the current audit budget and monitor quality by varying the defer band, where improving one number means giving up some of the other.
 
 <Demo id="control-dashboard" />
 
-Move the defer band and watch the point slide along the frontier — trading usefulness for safety along a fixed curve. Then move the monitor quality or the audit budget and watch the whole frontier shift: a better monitor or a larger budget lifts the curve up and to the right, letting you reach the same safety at higher usefulness. This is the picture the paper's headline figure summarizes, generated live from the model rather than read off a plot.
-
-Use it to answer a concrete question.
-
-<Exercise id="c-game-l8-dashboard-reflect" />
-
-The paper's conclusion is not that any single protocol solves the problem — none does — but that control evaluations let you *measure* these tradeoffs against an adversary that fights back, and that the levers you have (auditing, monitoring, deferring) buy real, quantifiable safety. What the demo adds on top of the paper is the machinery to see why: the tail that AUC hides, the interior optima that make the red team attack rarely and subtly, the migration of the best response, and the asymmetry that makes deferring cheap. The same evaluation methodology extends to the harder settings the paper only sketches — untrusted monitoring, collusion, and beyond.
+As we change how much we defer to $T$, the protocol slides along the Pareto frontier, trading usefulness for safety along a fixed curve. As the monitor quality or the audit budget varies, the Pareto frontier shifts: a better monitor or a larger budget lifts the curve up and to the right, letting you reach the same safety at higher usefulness.

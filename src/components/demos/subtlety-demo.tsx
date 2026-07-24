@@ -183,7 +183,7 @@ export function SubtletyDemo() {
           <text x={r1(xPx(peak.s)) + 5} y={r1(yP(peak.p)) - 4} fontSize={9} fill="var(--muted-foreground)">
             optimum
           </text>
-          <text x={ML + 5} y={T2 + 11} fontSize={9} fill="var(--primary)" fontWeight={500}>
+          <text x={ML + 5} y={T2 + PH2 - 8} fontSize={9} fill="var(--primary)" fontWeight={500}>
             P(red wins)
           </text>
           <text x={ML - 4} y={T2 + 8} fontSize={9} fill="var(--muted-foreground)" textAnchor="end">

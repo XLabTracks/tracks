@@ -270,9 +270,64 @@ export const papers: Paper[] = [
         after: { anchor: "b-0131", snippet: "Safety: The blue team win probability is 62%" },
         items: [{ kind: "demo", id: "attack-rate" }],
       },
+      {
+        op: "add",
+        plain: true,
+        after: { anchor: "b-0131", snippet: "Safety: The blue team win probability is 62%" },
+        markdown:
+          "As aforementioned, the red team's other decision factor is obfuscation effort. Every attack opportunity affords some inherent subtlety, and efforts to make an attack more subtle will come at the cost of the attack's deployment success probability.",
+      },
+      {
+        op: "activity",
+        after: { anchor: "b-0131", snippet: "Safety: The blue team win probability is 62%" },
+        items: [
+          {
+            kind: "sequence",
+            label: "Predict",
+            exerciseIds: ["c-paper-l3-subtlety-predict", "c-paper-l3-sigma-terms-predict"],
+          },
+        ],
+      },
+      {
+        op: "add",
+        plain: true,
+        after: { anchor: "b-0131", snippet: "Safety: The blue team win probability is 62%" },
+        markdown:
+          "Raising σ does two things to every attack attempt: it lowers the catch probability $c$, and it lowers the reliability of the attack (the probability the attack isn't broken) $p_{\\text{works}}(\\sigma)$. The following demo plots the per-attack outcome probability and $P(\\text{red wins})$ as a function of $\\sigma$.",
+      },
+      {
+        op: "activity",
+        after: { anchor: "b-0131", snippet: "Safety: The blue team win probability is 62%" },
+        items: [{ kind: "demo", id: "subtlety" }],
+      },
+      {
+        op: "add",
+        plain: true,
+        after: { anchor: "b-0131", snippet: "Safety: The blue team win probability is 62%" },
+        markdown:
+          "Given these decision factors and some priors about the blue team's strategy, the best strategy is to attack rarely, only on the very best opportunities (about 0.2% of problems), with moderate obfuscation effort. The demo below plots the red team's win probability over the whole strategy plane and marks that best response with a ring.",
+      },
+      {
+        op: "activity",
+        after: { anchor: "b-0131", snippet: "Safety: The blue team win probability is 62%" },
+        items: [{ kind: "demo", id: "best-response" }],
+      },
+      {
+        op: "activity",
+        after: { anchor: "b-0131", snippet: "Safety: The blue team win probability is 62%" },
+        items: [
+          {
+            kind: "sequence",
+            label: "Understanding check",
+            exerciseIds: ["c-paper-l3-best-response-upper-bound", "c-paper-l3-protocol-awareness"],
+          },
+        ],
+      },
       // --- end "Probability of Safety over Deployment" subsection (XLab Tracks).
-      // Op range: from the `op: "section"` heading above through the attack-rate
-      // demo activity — every op in it targets b-0131. What follows is
+      // Op range: from the `op: "section"` heading above through the closing
+      // understanding-check sequence — every op in it targets b-0131, and the
+      // whole range mirrors c-game.mdx's section verbatim (kept in sync). What
+      // follows is
       // course material on the paper's OWN next subsection, "Qualitative
       // Analysis" — its id (ax-sec-qualitative-analysis) is unchanged, but the
       // pipeline now DISPLAYS it as 3.2.2 (shifted from 3.2.1 to make room for
@@ -383,9 +438,13 @@ export const papers: Paper[] = [
         items: [{ kind: "exercise", id: "c-paper-l3-recall-budget-burn" }],
       },
       // §3.3 end: defer-to-trusted recall.
+      // Anchored to §3.3's LAST block (not sectionEnd) so the inserted 3.3.1
+      // subsection below can render AFTER it: sectionEnd ops always emit after
+      // every block-anchored op in the section, so ordering the two requires
+      // both to share the block anchor (array order then governs).
       {
         op: "activity",
-        after: { sectionEnd: "ax-sec-defer-to-trusted" },
+        after: { anchor: "b-0153", snippet: "Defer to trusted is an example of a more general design pattern" },
         items: [
           {
             kind: "sequence",
@@ -397,6 +456,65 @@ export const papers: Paper[] = [
           },
         ],
       },
+      // --- "Defer to Trusted" (displayed 3.3.1) — a first-class subsection
+      // authored by XLab Tracks, mirroring c-game.mdx's "## Defer to trusted"
+      // section and everything after it (dashboard included). §3.3 has no
+      // native subsections, so nothing renumbers. Renders after the Quick
+      // recall above, right before §3.4. ---
+      {
+        op: "section",
+        after: { anchor: "b-0153", snippet: "Defer to trusted is an example of a more general design pattern" },
+        id: "xlab-sec-defer-to-trusted-model",
+        title: "Defer to Trusted",
+      },
+      {
+        op: "add",
+        plain: true,
+        after: { anchor: "b-0153", snippet: "Defer to trusted is an example of a more general design pattern" },
+        markdown:
+          "Trusted monitoring spends its whole audit budget on the most suspicious 2% and deploys everything else as $U$ wrote it. But moderately suspicious code is too suspicious to be comfortable with, yet not suspicious enough to be worth a human audit. Deferring to the solutions of trusted models is a way to address this issue, at the cost of some deployment effectiveness. Any code whose suspicion falls in a band just below the audit threshold is not deployed and not audited; instead $T$ rewrites the solution from scratch, and its version is deployed.",
+      },
+      {
+        op: "activity",
+        after: { anchor: "b-0153", snippet: "Defer to trusted is an example of a more general design pattern" },
+        items: [{ kind: "exercise", id: "c-paper-l4-defer-terms-predict" }],
+      },
+      {
+        op: "add",
+        plain: true,
+        after: { anchor: "b-0153", snippet: "Defer to trusted is an example of a more general design pattern" },
+        markdown:
+          "Change the proportion of solutions for which we defer to $T$ and watch how this changes the red team's optimal strategy and how this changes the suspiciousness distribution of attacks.",
+      },
+      {
+        op: "activity",
+        after: { anchor: "b-0153", snippet: "Defer to trusted is an example of a more general design pattern" },
+        items: [
+          { kind: "demo", id: "defer" },
+          { kind: "exercise", id: "c-game-l7-defer-reflect" },
+        ],
+      },
+      {
+        op: "add",
+        plain: true,
+        after: { anchor: "b-0153", snippet: "Defer to trusted is an example of a more general design pattern" },
+        markdown:
+          "In summary, the monitor is a noisy classifier whose value is concentrated in the low-false-positive tail. The red team uses the optimal strategy over attack rate and subtlety. Auditing spends a scarce budget on the suspicious tail; deferring rewrites the mid-suspicion band with the trusted model. Safety is measured against the red team's best response throughout, and deferring to $T$ more trades usefulness from a more capable model $U$ for the safety from a less capable model $T$.\n\n" +
+          "The demo below models most of these interactions. For any given blue team strategy, the red team uses the optimal strategy against it, so the ringed point always sits against a best-responding adversary. The grey curve is the Pareto frontier: every safety and usefulness pair reachable at the current audit budget and monitor quality by varying the defer band, where improving one number means giving up some of the other.",
+      },
+      {
+        op: "activity",
+        after: { anchor: "b-0153", snippet: "Defer to trusted is an example of a more general design pattern" },
+        items: [{ kind: "demo", id: "control-dashboard" }],
+      },
+      {
+        op: "add",
+        plain: true,
+        after: { anchor: "b-0153", snippet: "Defer to trusted is an example of a more general design pattern" },
+        markdown:
+          "As we change how much we defer to $T$, the protocol slides along the Pareto frontier, trading usefulness for safety along a fixed curve. As the monitor quality or the audit budget varies, the Pareto frontier shifts: a better monitor or a larger budget lifts the curve up and to the right, letting you reach the same safety at higher usefulness.",
+      },
+      // --- end "Defer to Trusted" (3.3.1) subsection (XLab Tracks). ---
       // §3.4.2 end: naive untrusted monitoring recall.
       {
         op: "activity",

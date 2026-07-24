@@ -819,6 +819,16 @@ export const exercises: Exercise[] = [
       "As the defer percentage rises the point moves up and to the left: safety climbs (62% → 100%) while usefulness falls (97% → 51%). Turning a single method's knob only slides you along that method's own fixed tradeoff curve — you are buying safety with usefulness, not getting more of both. Pushing the frontier out is the opposite: a better method reaches points up and to the right of the existing curve, giving more safety at the same usefulness (or more usefulness at the same safety). Trusted editing does that relative to trusted monitoring; moving along trusted monitoring's own curve does not.",
   },
   {
+    // Defer's effect on the per-attempt terms; the demo it precedes runs the
+    // red team's best response, so P(caught) genuinely falls (via subtler play).
+    id: "c-paper-l4-defer-terms-predict",
+    type: "understanding-check",
+    prompt:
+      "What does increasing the number of solutions where we defer to $T$ do to the probability of an attack attempt being caught and being successfully deployed? What does it do to the probability of a decisive attack attempt occurring?",
+    sampleAnswer:
+      "Deferring makes successful attacks less probable because it rewrites moderately suspicious solutions from scratch. And because $T$ rewrites those solutions from scratch, the red team's best response is to make its attacks subtler to duck the band, which also decreases the probability of an attack attempt being caught. With both probabilities falling, a decisive attack attempt becomes less likely to occur at all.",
+  },
+  {
     id: "c-paper-l4-recall-defer-below-threshold",
     type: "tap-reveal",
     prompt:

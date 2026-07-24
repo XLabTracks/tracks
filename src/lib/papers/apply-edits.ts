@@ -20,10 +20,20 @@ import { patchSectionHtml, renderBlockAddHtml, type SectionPart } from "./patch-
 
 export type PaperPart =
   | { kind: "html"; html: string }
-  | { kind: "activity"; items: PaperInsertionItem[] };
+  | { kind: "activity"; items: PaperInsertionItem[] }
+  | { kind: "gate"; id: string; prompt?: string; cta?: string };
 
 export interface AppliedPaper {
   parts: PaperPart[];
+  /**
+   * Trailing landmark sections (references/footnotes), split off the final
+   * html part when the paper has gates. The reader renders this OUTSIDE the
+   * gate walk, so visible citations and footnote markers keep live targets
+   * (and the sidenote layer has note bodies to clone) while the body below a
+   * closed gate is still unmounted. Unset when the paper has no gates or no
+   * trailing landmarks.
+   */
+  ungatedTailHtml?: string;
   /** Ops whose target didn't resolve (fail-soft; see content.test.ts for the real gate). */
   unmatchedEdits: PaperEdit[];
 }
@@ -122,6 +132,8 @@ export function applyPaperEdits(
   };
   const emitSectionEndOp = (op: PaperEdit) => {
     if (op.op === "activity") parts.push({ kind: "activity", items: op.items });
+    else if (op.op === "gate")
+      parts.push({ kind: "gate", id: op.id, prompt: op.prompt, cta: op.cta });
     else if (op.op === "add") emitHtml(renderBlockAddHtml(op.markdown, op.label));
   };
 
@@ -164,7 +176,36 @@ export function applyPaperEdits(
     }
     merged.push(part);
   }
-  return { parts: merged, unmatchedEdits };
+  const ungatedTailHtml = splitUngatedTail(merged, toc);
+  return { parts: merged, ungatedTailHtml, unmatchedEdits };
+}
+
+/**
+ * With gates present, everything after a gate part mounts only once the gate
+ * opens — which would trap the paper's references/footnotes landmarks behind
+ * the LAST gate, leaving the visible pre-gate text with dead citation links
+ * and no sidenotes. Split the trailing landmark region off the final html
+ * part so the reader can render it outside the gate walk. (Landmarks are
+ * trailing by converter construction; an activity placed after them keeps
+ * the final part non-html and skips the split — fail-soft, gating stands.)
+ */
+function splitUngatedTail(
+  parts: PaperPart[],
+  toc: PaperTocEntry[],
+): string | undefined {
+  if (!parts.some((part) => part.kind === "gate")) return undefined;
+  const last = parts[parts.length - 1];
+  if (!last || last.kind !== "html") return undefined;
+  const offsets = toc
+    .filter((entry) => entry.kind === "references" || entry.kind === "footnotes")
+    .map((entry) => sectionStartOffset(last.html, entry.id))
+    .filter((offset) => offset !== -1);
+  if (offsets.length === 0) return undefined;
+  const at = Math.min(...offsets);
+  const tail = last.html.slice(at);
+  if (at === 0) parts.pop();
+  else last.html = last.html.slice(0, at);
+  return tail;
 }
 
 export type { SectionPart };

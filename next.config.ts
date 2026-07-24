@@ -20,6 +20,19 @@ const nextConfig: NextConfig = {
     "pg",
     "pg-cloudflare",
   ],
+  async redirects() {
+    return [
+      {
+        // The mod-6 walkthrough lesson (c-plm-walkthrough) was replaced by
+        // the guided paper item — keep old bookmarks and syllabus links
+        // working. 307 (not permanent) so browsers don't cache it forever if
+        // the destination slug ever changes again.
+        source: "/tracks/control/low-stakes-control/password-locked-models-walkthrough",
+        destination: "/tracks/control/low-stakes-control/capability-elicitation-guided",
+        permanent: false,
+      },
+    ];
+  },
   async headers() {
     return [
       {

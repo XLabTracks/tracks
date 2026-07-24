@@ -33,6 +33,7 @@ import {
   type FlowchartStageResult,
   type GradeResult,
 } from "@/lib/content/exercise-view";
+import { gradeForTapRevealRating, scheduleReview } from "@/lib/review/fsrs";
 
 /**
  * Grades a closed exercise on the server against the (server-only) answer key,
@@ -534,8 +535,11 @@ const TAP_REVEAL_SCORES: Record<TapRevealRating, number> = {
 };
 
 /**
- * Records the learner's self-assessment after a tap-reveal. The submission's
- * `updatedAt` doubles as the review timestamp for future spaced repetition.
+ * Records the learner's self-assessment after a tap-reveal, and enrolls the
+ * card in the spaced-repetition bank (the /review tab): the first interaction
+ * creates the FSRS card, and later in-lesson ratings count as reviews only
+ * once the card is due again — so re-clicking the rating buttons to correct a
+ * self-assessment doesn't inflate the schedule.
  */
 export async function recordTapReveal(
   exerciseId: string,
@@ -569,4 +573,18 @@ export async function recordTapReveal(
     },
     update: { responseJson, status: "submitted", score },
   });
+
+  const where = {
+    userId_contentId: { userId: user.id, contentId: exerciseId },
+  } as const;
+  const existing = await prisma.reviewCard.findUnique({ where });
+  const now = new Date();
+  if (!existing || existing.due <= now) {
+    const next = scheduleReview(existing, gradeForTapRevealRating(rating), now);
+    await prisma.reviewCard.upsert({
+      where,
+      create: { userId: user.id, contentId: exerciseId, ...next },
+      update: next,
+    });
+  }
 }

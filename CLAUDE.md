@@ -214,6 +214,19 @@ plan-level rationale lives in the demos, the code + test are normative.
 reads (`q|b|d|attackSd`): never mutate its returned object, and extend the key
 if `evaluateGame` grows a new lever dependency.
 
+**Spaced repetition (`/review`).** Every tap-reveal a signed-in learner rates
+inside a lesson enrolls in their per-user FSRS bank (`ReviewCard` — columns
+mirror the ts-fsrs `Card`; `src/lib/review/fsrs.ts` owns the row↔Card mapping
+and the yes/partial/no → Good/Hard/Again grade mapping, and is the only place
+that touches ts-fsrs). `recordTapReveal` creates the card and counts an
+in-lesson rating as a review **only when the card is due** — re-clicking the
+rating buttons to correct a self-assessment must not inflate the schedule.
+The `/review` tab serves due cards Anki-style (Again/Hard/Good/Easy via the
+`reviewCard` action; "Again" re-queues within the session), and the
+caught-up state offers practicing not-yet-due cards early (a real FSRS
+review — it re-schedules from the shorter elapsed time); cards whose
+exercise left the content graph are skipped, not deleted.
+
 **Auth & mutations.** WorkOS AuthKit. `src/middleware.ts` only refreshes the session.
 Local dev can bypass WorkOS entirely: `DEV_USER=1` in `.env` resolves every
 request to a placeholder account (`devUser()` in `src/lib/auth.ts`; an email

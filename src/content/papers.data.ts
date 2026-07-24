@@ -771,8 +771,10 @@ export const papers: Paper[] = [
     edits: [
       // ---- Format note + spoiler control --------------------------------
       // The abstract, Figure 1, and the intro's statement of the construction
-      // are hidden outright: they give away the approach the first two gates
-      // ask the learner to invent. The item title deliberately omits it too.
+      // and findings are removed silently (no marker, nothing to expand):
+      // they give away the approach the first two gates ask the learner to
+      // invent. The item title deliberately omits it too; the original paper
+      // item carries the unabridged text.
       {
         op: "add",
         after: { sectionEnd: "ax-abstract" },
@@ -790,7 +792,7 @@ export const papers: Paper[] = [
           anchor: "b-0002",
           snippet: "To determine the safety of large language models",
         },
-        note: "the abstract, hidden because it gives away the approach and the findings",
+        silent: true,
       },
       {
         op: "hide",
@@ -798,7 +800,7 @@ export const papers: Paper[] = [
           anchor: "b-0005",
           snippet: "Figure 1: Illustration of our approach",
         },
-        note: "Figure 1, hidden because it illustrates the approach",
+        silent: true,
       },
       {
         op: "hide",
@@ -808,21 +810,22 @@ export const papers: Paper[] = [
           snippet: "Instead, we study this question by training",
         },
         sEnd: 3,
-        note: "the authors' construction, hidden until you have proposed your own",
+        silent: true,
       },
+      // The whole paragraph, not just its password sentences: with the
+      // construction removed above, "We train such models…" would dangle.
       {
         op: "hide",
         at: {
           anchor: "b-0010",
-          s: 2,
-          snippet: "We then use these models to stress-test",
+          snippet: "We train such models on five tasks",
         },
-        sEnd: 3,
+        silent: true,
       },
       {
         op: "hide",
         at: { anchor: "b-0011", snippet: "We find that:" },
-        note: "the paper's findings, which this version reveals after your predictions",
+        silent: true,
       },
       {
         op: "hide",
@@ -831,6 +834,7 @@ export const papers: Paper[] = [
           snippet:
             "Fine-tuning on high-quality demonstrations is very sample efficient:",
         },
+        silent: true,
       },
       {
         op: "hide",
@@ -838,6 +842,7 @@ export const papers: Paper[] = [
           anchor: "b-0014",
           snippet: "Fine-tuning on demonstrations generalizes:",
         },
+        silent: true,
       },
       {
         op: "hide",
@@ -845,6 +850,7 @@ export const papers: Paper[] = [
           anchor: "b-0016",
           snippet: "When only low-quality demonstrations are available,",
         },
+        silent: true,
       },
       {
         op: "hide",
@@ -852,6 +858,7 @@ export const papers: Paper[] = [
           anchor: "b-0018",
           snippet: "We provide an extensive sensitivity analysis",
         },
+        silent: true,
       },
       // ---- After §1: framing lesson → setups gate → classes → analysis --
       {
@@ -1001,7 +1008,7 @@ export const papers: Paper[] = [
           anchor: "b-0055",
           snippet: "Figure 3: Correctness after fine-tuning",
         },
-        note: "the results figure for §5.1; it returns after your prediction",
+        silent: true,
       },
       // ---- §5: measurement framing; prediction gate; restored figure ----
       {
@@ -1047,8 +1054,8 @@ export const papers: Paper[] = [
           "epochs on high-quality demonstrations or demonstrations from " +
           "Llama-7B, as a function of the number of demonstrations]" +
           "(/arxiv/2405.19550v1/assets/images/sample_efficiency_w_llama.pdf.png)\n\n" +
-          "*Figure 3, hidden at its original position in §4.2, restored here " +
-          "now that your predictions are locked.*",
+          "*Figure 3, removed from its original position in §4.2, appears " +
+          "here now that your predictions are locked.*",
       },
       {
         op: "add",

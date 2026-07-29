@@ -2,9 +2,8 @@
 
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
-import { Prisma } from "@prisma/client";
 import { getCurrentUser } from "@/lib/auth";
-import { prisma } from "@/lib/db";
+import { isUniqueViolation, prisma } from "@/lib/db";
 import { getTrackById } from "@/lib/content";
 
 export interface ClassroomActionState {
@@ -32,13 +31,9 @@ function generateJoinCode(length = 6): string {
   return code;
 }
 
-// The retry loops exist only to dodge a joinCode unique collision; retry that,
-// but never swallow connection/validation errors.
-function isJoinCodeCollision(error: unknown): boolean {
-  return (
-    error instanceof Prisma.PrismaClientKnownRequestError && error.code === "P2002"
-  );
-}
+// The retry loops below exist only to dodge a joinCode unique collision
+// (isUniqueViolation); retry that, but never swallow connection/validation
+// errors.
 
 async function requireInstructor(userId: string, classroomId: string) {
   const membership = await prisma.classroomMembership.findUnique({
@@ -79,7 +74,7 @@ export async function createClassroom(
       });
       newId = classroom.id;
     } catch (error) {
-      if (!isJoinCodeCollision(error)) throw error;
+      if (!isUniqueViolation(error)) throw error;
       if (attempt === 4) return { error: "Could not create classroom. Try again." };
     }
   }
@@ -140,7 +135,7 @@ export async function regenerateJoinCode(classroomId: string): Promise<void> {
       });
       break;
     } catch (error) {
-      if (!isJoinCodeCollision(error)) throw error;
+      if (!isUniqueViolation(error)) throw error;
       if (attempt === 4) throw new Error("Could not regenerate code");
     }
   }

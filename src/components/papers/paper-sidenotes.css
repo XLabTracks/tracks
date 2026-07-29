@@ -64,10 +64,31 @@
     font-size: 0.75rem;
     line-height: 1.5;
     color: var(--muted-foreground);
-    transition: color 120ms ease;
+    transition:
+      color 120ms ease,
+      opacity 150ms ease;
   }
-  .paper-sidenote:hover {
+  .paper-sidenote:hover,
+  .paper-sidenote.paper-sidenote-active {
     color: var(--foreground);
+  }
+  /* Greyed down at rest, popping to full strength when the reader engages —
+     hover on the note itself, or on its inline marker (the component's
+     delegation adds .paper-sidenote-active). Hover-capable pointers only:
+     touch has no hover to pop with, so notes stay full-strength there. */
+  @media (hover: hover) {
+    .paper-sidenote {
+      opacity: 0.55;
+    }
+    .paper-sidenote:hover,
+    .paper-sidenote.paper-sidenote-active {
+      opacity: 1;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .paper-sidenote {
+      transition: none;
+    }
   }
   .paper-sidenote-num {
     flex: none;

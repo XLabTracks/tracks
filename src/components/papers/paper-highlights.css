@@ -1,0 +1,49 @@
+/*
+ * Layout/chrome CSS for the highlight layer (paper-highlights.tsx) that
+ * can't be Tailwind on the component's own nodes: rules on .paper-reader
+ * (an element the component doesn't render) and the hover-media dim/pop
+ * treatment. The ::highlight() PAINT rules are deliberately NOT here:
+ * Lightning CSS (Turbopack's parser) doesn't recognize the pseudo-element
+ * and warns "Parsing CSS source code failed" on every compile — the
+ * component injects them at runtime via a constructable stylesheet instead
+ * (HIGHLIGHT_PAINT_CSS), which is also strictly scoped to browsers where
+ * the Custom Highlight API exists at all.
+ */
+@layer components {
+  /* Margin notes reserving the inset rail themselves (positionComments):
+     same 18rem reserve as .paper-sidenotes-inset (paper-sidenotes.css), so
+     the rail looks identical whichever layer opened it. Not additive when
+     both classes are present — it's the same padding value. */
+  .paper-reader.paper-comments-inset {
+    padding-right: 18rem;
+  }
+  /* Margin-note boxes and their connector lines sit greyed down at rest and
+     pop to full strength when engaged: hovering the box (the + selector
+     carries the pop to its adjacent line), hovering the painted highlight
+     in the text (the component's hover hit-test sets data-pop on both), or
+     editing in place (focus-within / React-set data-pop). Hover-capable
+     pointers only — touch has no hover to pop with, so it never sees the
+     dimmed state. Mirrors the footnote sidenotes' treatment. */
+  @media (hover: hover) {
+    .paper-comment,
+    .paper-comment-line {
+      opacity: 0.55;
+      transition: opacity 150ms ease;
+    }
+    .paper-comment:hover,
+    .paper-comment:focus-within,
+    .paper-comment[data-pop],
+    .paper-comment:hover + .paper-comment-line,
+    .paper-comment:focus-within + .paper-comment-line,
+    .paper-comment[data-pop] + .paper-comment-line,
+    .paper-comment-line[data-pop] {
+      opacity: 1;
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .paper-comment,
+      .paper-comment-line {
+        transition: none;
+      }
+    }
+  }
+}

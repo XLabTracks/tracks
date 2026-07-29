@@ -184,6 +184,9 @@ export function PaperSidenotes({ prefix }: { prefix: string }) {
 
         const item = document.createElement("aside");
         item.className = "paper-sidenote";
+        // Lets the marker-hover delegation below find this clone across
+        // rebuilds (items are recreated every pass; markers persist).
+        item.dataset.note = number;
         const label = document.createElement("span");
         label.className = "paper-sidenote-num";
         label.textContent = number;
@@ -270,6 +273,33 @@ export function PaperSidenotes({ prefix }: { prefix: string }) {
     // Preference changes: same-tab via SidenotesToggle, cross-tab via storage.
     window.addEventListener(SIDENOTES_EVENT, schedule);
     window.addEventListener("storage", schedule);
+    // Hovering an inline footnote marker pops its (dimmed) sidenote —
+    // delegated, because rebuilds recreate the note items; the data-note
+    // stamp re-links marker to clone every pass. Mouse only: touch never
+    // sees the dimmed state (CSS hover-media gate).
+    const noteForMarker = (target: EventTarget | null): HTMLElement | null => {
+      if (!(target instanceof Element)) return null;
+      const link = target.closest<HTMLElement>(
+        `sup.${prefix}-fnref a[href^="#${prefix}-fn-"]`,
+      );
+      if (!link || link.closest(".paper-sidenote-layer")) return null;
+      const number =
+        link.getAttribute("href")?.slice(`#${prefix}-fn-`.length) ?? "";
+      if (!number) return null;
+      return layer.querySelector<HTMLElement>(
+        `.paper-sidenote[data-note="${CSS.escape(number)}"]`,
+      );
+    };
+    const onMarkerOver = (event: PointerEvent) => {
+      if (event.pointerType !== "mouse") return;
+      noteForMarker(event.target)?.classList.add("paper-sidenote-active");
+    };
+    const onMarkerOut = (event: PointerEvent) => {
+      if (event.pointerType !== "mouse") return;
+      noteForMarker(event.target)?.classList.remove("paper-sidenote-active");
+    };
+    container.addEventListener("pointerover", onMarkerOver);
+    container.addEventListener("pointerout", onMarkerOut);
     return () => {
       cancelAnimationFrame(raf);
       cancelAnimationFrame(armRaf1);
@@ -281,6 +311,8 @@ export function PaperSidenotes({ prefix }: { prefix: string }) {
       container.removeEventListener("toggle", schedule, true);
       window.removeEventListener(SIDENOTES_EVENT, schedule);
       window.removeEventListener("storage", schedule);
+      container.removeEventListener("pointerover", onMarkerOver);
+      container.removeEventListener("pointerout", onMarkerOut);
     };
   }, [prefix]);
 

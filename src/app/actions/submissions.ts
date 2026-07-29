@@ -4,7 +4,7 @@ import { revalidatePath } from "next/cache";
 import { Prisma } from "@prisma/client";
 import type { SubmissionKind } from "@prisma/client";
 import { getCurrentUser } from "@/lib/auth";
-import { prisma } from "@/lib/db";
+import { isUniqueViolation, prisma } from "@/lib/db";
 import { getWritingTarget } from "@/lib/content";
 import { sanitizeWritingValues } from "@/lib/content/exercise-view";
 
@@ -67,12 +67,7 @@ export async function saveWritingDraft(
       // concurrently — leave it). Never swallow connection/validation errors:
       // the client treats a resolved autosave as "saved", so a swallowed
       // failure would show green while nothing persisted.
-      if (
-        !(error instanceof Prisma.PrismaClientKnownRequestError) ||
-        error.code !== "P2002"
-      ) {
-        throw error;
-      }
+      if (!isUniqueViolation(error)) throw error;
     }
   }
 }

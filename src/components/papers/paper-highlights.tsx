@@ -42,6 +42,7 @@ import {
 import { stackCommentTops } from "@/lib/highlights/comment-layout";
 import {
   MARGIN_NOTES_EVENT,
+  MARGIN_NOTES_LAYOUT_EVENT,
   marginNotesEnabled,
 } from "./margin-notes-toggle";
 // Reading-gate integration is soft by design: this branch has no gate
@@ -109,6 +110,12 @@ const GATE_OPEN_VALUE = "open";
 
 const HL_NAME = "tracks-hl";
 const HL_NOTE_NAME = "tracks-hl-note";
+/**
+ * The hovered noted GROUP's ranges re-register here at higher priority:
+ * ::highlight() has no :hover, so the pointermove hit-test promotes the
+ * group from the faded noted paint to full strength.
+ */
+const HL_NOTE_ACTIVE_NAME = "tracks-hl-note-active";
 const HL_FLASH_NAME = "tracks-hl-flash";
 
 /**
@@ -122,15 +129,22 @@ const HL_FLASH_NAME = "tracks-hl-flash";
  * and the low alpha reads on both light and dark paper.
  */
 const HIGHLIGHT_PAINT_CSS = `
-::highlight(${HL_NAME}),
-::highlight(${HL_NOTE_NAME}) {
+::highlight(${HL_NAME}) {
   background-color: rgb(250 204 21 / 0.3);
 }
-::highlight(${HL_NOTE_NAME}) {
+::highlight(${HL_NOTE_NAME}),
+::highlight(${HL_NOTE_ACTIVE_NAME}) {
   text-decoration-line: underline;
-  text-decoration-color: rgb(217 119 6 / 0.75);
   text-decoration-thickness: 2px;
   text-underline-offset: 3px;
+}
+::highlight(${HL_NOTE_NAME}) {
+  background-color: rgb(250 204 21 / 0.15);
+  text-decoration-color: rgb(217 119 6 / 0.4);
+}
+::highlight(${HL_NOTE_ACTIVE_NAME}) {
+  background-color: rgb(250 204 21 / 0.32);
+  text-decoration-color: rgb(217 119 6 / 0.8);
 }
 ::highlight(${HL_FLASH_NAME}) {
   background-color: rgb(245 158 11 / 0.5);
@@ -302,6 +316,18 @@ export function PaperHighlights({
   const [editingCommentId, setEditingCommentId] = useState<string | null>(null);
   /** Mirror for positionComments (a stable callback reading refs only). */
   const editingCommentIdRef = useRef<string | null>(null);
+  /** The group currently hover-promoted (text-hover or box-hover). */
+  const hoveredGroupRef = useRef<string | null>(null);
+  /** Ranges MOVED from the faded registry into the active one on hover. */
+  const promotedRangesRef = useRef<Range[]>([]);
+  /**
+   * The reader's pending rAF-coalesced hover hit-test. A ref (not an
+   * effect-local) so applyHoverGroup can invalidate it: when the pointer
+   * crosses from the reader into a margin box, a hit-test queued from the
+   * last move over the rail would otherwise fire AFTER the box promoted
+   * its group and demote it with stale coordinates.
+   */
+  const hoverRafRef = useRef(0);
   useEffect(() => {
     editingCommentIdRef.current = editingCommentId;
   }, [editingCommentId]);
@@ -365,8 +391,15 @@ export function PaperHighlights({
    * rail when reserved, else hidden (the panel remains the note surface).
    */
   const positionComments = useCallback(() => {
-    const boxes = commentBoxRefs.current;
-    const lines = commentLineRefs.current;
+    layoutComments();
+    // One-directional cross-layer contract: footnote sidenotes yield
+    // downward past user-note boxes. Broadcast after EVERY pass — including
+    // ones that hid or unmounted boxes — so PaperSidenotes re-stacks
+    // against the settled geometry. No loop: sidenotes never move comments.
+    window.dispatchEvent(new Event(MARGIN_NOTES_LAYOUT_EVENT));
+    function layoutComments() {
+      const boxes = commentBoxRefs.current;
+      const lines = commentLineRefs.current;
     const hideAll = () => {
       for (const el of boxes.values()) el.style.visibility = "hidden";
       for (const el of lines.values()) el.style.visibility = "hidden";
@@ -376,22 +409,76 @@ export function PaperHighlights({
 
     // Anchor each noted row to its resolved range's FIRST line — a multi-line
     // highlight's bounding rect spans the column, but the note should sit
-    // level with where the passage starts.
-    const items: { id: string; rect: DOMRect; box: HTMLDivElement }[] = [];
+    // level with where the passage starts. Alongside the rect, work out
+    // whether PROSE FOLLOWS the highlight on that anchor line: a range from
+    // the highlight's end to its block's end whose first client rect sits on
+    // the same line means going straight right would strike through text —
+    // those pointers route ABOVE the line instead. (A highlight that wraps
+    // consumes its first line entirely, and one ending flush at a line break
+    // has nothing after — both test false and keep the straight route.)
+    const items: {
+      id: string;
+      rect: DOMRect;
+      box: HTMLDivElement;
+      /** Rightmost coverage of the highlight ON ITS FIRST LINE (viewport x). */
+      lineRight: number;
+      textAfter: boolean;
+      blockRight: number;
+    }[] = [];
     for (const row of rowsRef.current) {
       // Same membership rule as the portal: noted rows, plus the row whose
       // box is in edit mode with a just-emptied textarea.
       if (!row.note && editingCommentIdRef.current !== row.id) continue;
       const box = boxes.get(row.id);
       if (!box) continue;
-      const first = resolvedRef.current.get(row.id)?.getClientRects()[0];
-      if (!first || (first.width === 0 && first.height === 0)) {
+      const range = resolvedRef.current.get(row.id);
+      // A multi-sentence range's client rects FRAGMENT per sentence span:
+      // rects[0] ends at the first sentence's end, not at the highlight's
+      // actual reach on that line — the pointer must start where the FIRST
+      // LINE's coverage ends, the max right edge over every fragment
+      // sharing that line.
+      const rects = range
+        ? [...range.getClientRects()].filter(
+            (r) => r.width > 0.5 && r.height > 0,
+          )
+        : [];
+      const first = rects[0];
+      if (!range || !first) {
         box.style.visibility = "hidden";
         const svg = lines.get(row.id);
         if (svg) svg.style.visibility = "hidden";
         continue;
       }
-      items.push({ id: row.id, rect: first, box });
+      let lineRight = first.right;
+      for (const fragment of rects) {
+        if (Math.abs(fragment.top - first.top) < first.height / 2) {
+          lineRight = Math.max(lineRight, fragment.right);
+        }
+      }
+      let textAfter = false;
+      let blockRight = lineRight;
+      const endEl =
+        range.endContainer instanceof Element
+          ? range.endContainer
+          : range.endContainer.parentElement;
+      const block = endEl?.closest("[data-anchor]");
+      if (block) {
+        blockRight = block.getBoundingClientRect().right;
+        try {
+          const after = document.createRange();
+          after.selectNodeContents(block);
+          after.setStart(range.endContainer, range.endOffset);
+          const aRect = after.getClientRects()[0];
+          textAfter = Boolean(
+            aRect &&
+              aRect.width > 2 &&
+              Math.abs(aRect.top - first.top) < first.height / 2,
+          );
+        } catch {
+          // Boundary outside the block (shouldn't happen) — straight route.
+        }
+      }
+      items.push({ id: row.id, rect: first, box, lineRight, textAfter, blockRight });
     }
     if (items.length === 0) {
       // Nothing to show — release any rail this layer reserved.
@@ -444,42 +531,99 @@ export function PaperHighlights({
       COMMENT_STACK_GAP,
     );
     for (let i = 0; i < items.length; i++) {
-      const { id, rect, box } = items[i];
+      const { id, rect, box, lineRight, textAfter, blockRight } = items[i];
       const top = tops[i];
       box.style.top = `${top}px`;
       box.style.visibility = "visible";
       const svg = lines.get(id);
       const line = svg?.querySelector("polyline");
       if (!svg || !line) continue;
-      const x1 = rect.right + window.scrollX + LINE_INSET;
+      const x1 = lineRight + window.scrollX + LINE_INSET;
       const y1 = rect.top + rect.height / 2 + window.scrollY;
       const x2 = left - LINE_INSET;
       const y2 = top + 12;
-      const w = Math.max(x2 - x1, 1);
-      const h = Math.max(Math.abs(y2 - y1), 1);
-      const down = y2 > y1;
-      // Vertical padding so the stroke isn't clipped where a segment runs
-      // along the SVG's edge.
+      // Two routes, both ending in a 45° drop into the note (the dropped
+      // box puts its entry below the line):
+      // — Nothing on the anchor line after the highlight (it wraps past the
+      //   line, or ends flush at a line break): straight RIGHT from the
+      //   highlight's end at the line's own level, then down.
+      // — Prose follows on the line: rise ABOVE the text into the
+      //   inter-line gap first, run across up there until clear of the
+      //   block, then continue and drop. Never a strikethrough.
+      let points: [number, number][];
+      if (!textAfter) {
+        const bendX = Math.max(x2 - Math.max(Math.abs(y2 - y1), 12), x1 + 8);
+        points = [
+          [x1, y1],
+          [bendX, y1],
+          [x2, y2],
+        ];
+      } else {
+        // The crossing route sprouts from the highlight's TOP-RIGHT corner —
+        // just inside the end of the highlighted segment, at the top edge of
+        // its text — kicks up into the inter-line gap, and runs from there.
+        const xTop = x1 - LINE_INSET - 2;
+        const yTop = rect.top + window.scrollY;
+        // Default gap level — unless HIGHLIGHTED text sits on the line
+        // above the run: the stroke would lie on that paint and read as
+        // covered, so hug the current line instead. Checked dynamically
+        // against every resolved range's rects (any highlight, any group).
+        let yGap = yTop - 3;
+        const runLeft = lineRight - 4;
+        const runRight = blockRight;
+        for (const other of resolvedRef.current.values()) {
+          let covered = false;
+          for (const r of other.getClientRects()) {
+            if (r.width < 1 || r.height < 1) continue;
+            if (
+              r.bottom <= rect.top + 2 &&
+              r.bottom > rect.top - 14 &&
+              r.right > runLeft &&
+              r.left < runRight
+            ) {
+              covered = true;
+              break;
+            }
+          }
+          if (covered) {
+            yGap = yTop - 1;
+            break;
+          }
+        }
+        const riseX = xTop + 6;
+        const exitX = Math.max(blockRight + window.scrollX + 8, riseX + 4);
+        const bendX = Math.min(
+          Math.max(x2 - Math.max(Math.abs(y2 - yGap), 12), exitX),
+          Math.max(x2 - 4, exitX),
+        );
+        points = [
+          [xTop, yTop],
+          [Math.min(riseX, bendX - 4), yGap],
+          [bendX, yGap],
+          [x2, y2],
+        ];
+      }
+      // SVG box from the path's bounds, padded so the stroke isn't clipped
+      // where a segment runs along an edge.
       const pad = 2;
-      svg.style.left = `${x1}px`;
-      svg.style.top = `${Math.min(y1, y2) - pad}px`;
-      svg.style.width = `${w}px`;
-      svg.style.height = `${h + pad * 2}px`;
-      svg.setAttribute("width", String(w));
-      svg.setAttribute("height", String(h + pad * 2));
-      // Elbow, not a straight diagonal: the line runs RIGHT from the
-      // highlight's end at the line's own level, and only on the last
-      // stretch angles down (the dropped box puts its entry below the line)
-      // into the note — a 45° closing segment, clamped so tight geometry
-      // still shows a horizontal lead-in and a visible angle.
-      const y1r = (down ? 0 : h) + pad;
-      const y2r = (down ? h : 0) + pad;
-      const bendX = Math.max(w - Math.max(h, 12), 8);
+      const xs = points.map(([x]) => x);
+      const ys = points.map(([, y]) => y);
+      const minX = Math.min(...xs);
+      const minY = Math.min(...ys) - pad;
+      const width = Math.max(Math.max(...xs) - minX, 1);
+      const height = Math.max(...ys) + pad - minY;
+      svg.style.left = `${minX}px`;
+      svg.style.top = `${minY}px`;
+      svg.style.width = `${width}px`;
+      svg.style.height = `${height}px`;
+      svg.setAttribute("width", String(width));
+      svg.setAttribute("height", String(height));
       line.setAttribute(
         "points",
-        `0,${y1r} ${bendX},${y1r} ${w},${y2r}`,
+        points.map(([x, y]) => `${x - minX},${y - minY}`).join(" "),
       );
       svg.style.visibility = "visible";
+    }
     }
   }, []);
 
@@ -554,6 +698,12 @@ export function PaperHighlights({
       }
       CSS.highlights.set(HL_NAME, plain);
       CSS.highlights.set(HL_NOTE_NAME, noted);
+      // Fresh registries orphan any hover promotion built on old ranges —
+      // reset the bookkeeping so the next hover re-applies cleanly instead
+      // of restoring stale Range objects into the rebuilt noted set.
+      CSS.highlights.delete(HL_NOTE_ACTIVE_NAME);
+      hoveredGroupRef.current = null;
+      promotedRangesRef.current = [];
     }
     // Same commit as the resolution it depends on: the margin boxes for
     // these rows are already in the DOM (the portal renders from `rows`),
@@ -572,7 +722,12 @@ export function PaperHighlights({
   // and hide-edit reveals (change/toggle fire in capture — toggle doesn't
   // bubble). rAF-coalesced like PaperSidenotes' schedule.
   useEffect(() => {
-    if (!marginNotesOn) return;
+    if (!marginNotesOn) {
+      // The boxes just unmounted — one pass finds nothing to place but
+      // still broadcasts the layout change, so sidenotes reclaim the space.
+      positionComments();
+      return;
+    }
     const root = rootRef.current;
     if (!root) return;
     let raf = 0;
@@ -612,6 +767,7 @@ export function PaperHighlights({
       window.clearTimeout(flashTimer.current);
       CSS.highlights.delete(HL_NAME);
       CSS.highlights.delete(HL_NOTE_NAME);
+      CSS.highlights.delete(HL_NOTE_ACTIVE_NAME);
       CSS.highlights.delete(HL_FLASH_NAME);
     };
   }, []);
@@ -718,6 +874,58 @@ export function PaperHighlights({
     return null;
   };
 
+  /**
+   * Hover promotion for one GROUP, shared by both directions — the reader's
+   * pointer hit-test AND the portal-rendered margin boxes' own handlers,
+   * which call it directly (they sit outside the reader root's delegation,
+   * and a component-scope callback over refs has no wiring to go stale).
+   * Pops the group's box/line (data-pop, editing row kept) and MOVES the
+   * group's ranges from the faded noted registry into the active one — the
+   * sets stay DISJOINT, so nothing depends on how an engine composites or
+   * orders overlapping highlights; demotion moves them back.
+   */
+  const applyHoverGroup = useCallback((groupId: string | null) => {
+    // Any explicit application supersedes a queued hit-test (see
+    // hoverRafRef). Cancelling the currently-executing callback's own id
+    // is a no-op, so the rAF path may call in here freely.
+    cancelAnimationFrame(hoverRafRef.current);
+    if (groupId === hoveredGroupRef.current) return;
+    if (hoveredGroupRef.current) {
+      for (const row of rowsRef.current) {
+        if (row.groupId !== hoveredGroupRef.current) continue;
+        if (row.id === editingCommentIdRef.current) continue;
+        commentBoxRefs.current.get(row.id)?.removeAttribute("data-pop");
+        commentLineRefs.current.get(row.id)?.removeAttribute("data-pop");
+      }
+      if (supportsPaint()) {
+        const noted = CSS.highlights.get(HL_NOTE_NAME);
+        for (const range of promotedRangesRef.current) noted?.add(range);
+        promotedRangesRef.current = [];
+        CSS.highlights.delete(HL_NOTE_ACTIVE_NAME);
+      }
+    }
+    hoveredGroupRef.current = groupId;
+    if (!groupId) return;
+    const groupRows = rowsRef.current.filter((r) => r.groupId === groupId);
+    for (const row of groupRows) {
+      commentBoxRefs.current.get(row.id)?.setAttribute("data-pop", "");
+      commentLineRefs.current.get(row.id)?.setAttribute("data-pop", "");
+    }
+    if (supportsPaint() && groupRows.some((r) => r.note)) {
+      const noted = CSS.highlights.get(HL_NOTE_NAME);
+      const active = new Highlight();
+      for (const row of groupRows) {
+        const range = resolvedRef.current.get(row.id);
+        if (range) {
+          noted?.delete(range);
+          promotedRangesRef.current.push(range);
+          active.add(range);
+        }
+      }
+      if (active.size > 0) CSS.highlights.set(HL_NOTE_ACTIVE_NAME, active);
+    }
+  }, []);
+
   // Click a painted range → note card. Only painted browsers get this — an
   // invisible hit target would be baffling. (The panel's per-row note button
   // is the equivalent path everywhere else.)
@@ -758,45 +966,53 @@ export function PaperHighlights({
     };
     root.addEventListener("click", onClick);
 
-    // Hovering a painted highlight pops its (dimmed) margin note: the same
-    // hit-test, rAF-coalesced, toggling data-pop imperatively on the box and
-    // line so pointer motion never renders React. The row being edited
-    // in-place keeps its React-set pop — never clear that one here.
-    let hoverRaf = 0;
-    let hovered: string | null = null;
-    const applyHover = (id: string | null) => {
-      if (id === hovered) return;
-      if (hovered && hovered !== editingCommentIdRef.current) {
-        commentBoxRefs.current.get(hovered)?.removeAttribute("data-pop");
-        commentLineRefs.current.get(hovered)?.removeAttribute("data-pop");
-      }
-      hovered = id;
-      if (id) {
-        commentBoxRefs.current.get(id)?.setAttribute("data-pop", "");
-        commentLineRefs.current.get(id)?.setAttribute("data-pop", "");
-      }
+    // Hovering a painted highlight pops its (dimmed) margin note AND
+    // promotes a noted group's faded paint to full strength: the same
+    // hit-test, rAF-coalesced, group-aware, all imperative (data-pop on the
+    // head row's box/line, the group's ranges re-registered under the
+    // higher-priority active name) so pointer motion never renders React.
+    // The row being edited in-place keeps its React-set pop — never clear
+    // that one here.
+    const applyHover = (hitId: string | null) => {
+      const hitRow = hitId
+        ? rowsRef.current.find((r) => r.id === hitId)
+        : undefined;
+      applyHoverGroup(hitRow?.groupId ?? null);
     };
     const onPointerMove = (event: PointerEvent) => {
-      if (event.pointerType !== "mouse") return;
+      if (event.pointerType === "touch") return;
       const { clientX, clientY } = event;
-      cancelAnimationFrame(hoverRaf);
-      hoverRaf = requestAnimationFrame(() =>
+      cancelAnimationFrame(hoverRafRef.current);
+      hoverRafRef.current = requestAnimationFrame(() =>
         applyHover(hitTest(clientX, clientY)),
       );
     };
-    const onPointerLeave = () => {
-      cancelAnimationFrame(hoverRaf);
+    const onPointerLeave = (event: PointerEvent) => {
+      cancelAnimationFrame(hoverRafRef.current);
+      // Crossing into the margin-note layer is a handoff, not an exit.
+      // React raises the box's onPointerEnter from the crossing's
+      // `pointerout` — BEFORE this native `pointerleave` — so demoting
+      // here would instantly revert the promotion the box just applied
+      // (or, when the pointer comes off the group's own painted text,
+      // kill a promotion the box's enter treated as already in place).
+      const to = event.relatedTarget;
+      if (
+        to instanceof Element &&
+        to.closest(".paper-comment, .paper-comment-line")
+      ) {
+        return;
+      }
       applyHover(null);
     };
     root.addEventListener("pointermove", onPointerMove);
     root.addEventListener("pointerleave", onPointerLeave);
     return () => {
       root.removeEventListener("click", onClick);
-      cancelAnimationFrame(hoverRaf);
+      cancelAnimationFrame(hoverRafRef.current);
       root.removeEventListener("pointermove", onPointerMove);
       root.removeEventListener("pointerleave", onPointerLeave);
     };
-  }, []);
+  }, [applyHoverGroup]);
 
   const saveNote = useCallback(
     async (id: string, note: string): Promise<NoteSaveResult> => {
@@ -1025,11 +1241,15 @@ export function PaperHighlights({
       });
       setRows((prev) => prev.filter((r) => r.groupId !== groupId));
       setCard((open) => (open && rowIds.includes(open.id) ? null : open));
+      setEditingCommentId((open) =>
+        open && rowIds.includes(open) ? null : open,
+      );
       return;
     }
     for (const id of rowIds) deletingIdsRef.current.add(id);
     setRows((prev) => prev.filter((r) => r.groupId !== groupId));
     setCard((open) => (open && rowIds.includes(open.id) ? null : open));
+    setEditingCommentId((open) => (open && rowIds.includes(open) ? null : open));
     startTransition(async () => {
       let ok = false;
       try {
@@ -1203,11 +1423,27 @@ export function PaperHighlights({
                     className="paper-comment group bg-card border-border shadow-soft pointer-events-auto absolute z-30 rounded-lg border"
                     style={{ visibility: "hidden" }}
                     data-pop={editingCommentId === row.id ? "" : undefined}
+                    // Hovering the box lights its highlight, mirroring the
+                    // text→box direction (mouse only — touch never sees the
+                    // faded states).
+                    onPointerEnter={(event) => {
+                      if (event.pointerType === "touch") return;
+                      applyHoverGroup(row.groupId);
+                    }}
+                    onPointerLeave={(event) => {
+                      if (event.pointerType === "touch") return;
+                      applyHoverGroup(null);
+                    }}
                   >
                     {editingCommentId === row.id ? (
                       <InlineNoteEditor
                         row={row}
+                        deletable={
+                          !row.id.startsWith(TEMP_PREFIX) ||
+                          failedIds.has(row.groupId)
+                        }
                         onSaveNote={saveNote}
+                        onDelete={removeHighlight}
                         onClose={() => setEditingCommentId(null)}
                       />
                     ) : (
@@ -1441,15 +1677,21 @@ function noteSaveLabel(saveState: NoteSaveState): string {
  * In-place editor inside a margin-note box (hover the box, hit Edit):
  * autosaving textarea via useNoteAutosave; Escape or a pointerdown outside
  * the box closes it (unmount flushes any armed save). Fixed rows so the box
- * height changes only on open/close — both re-run positionComments.
+ * height changes only on open/close — both re-run positionComments. Delete
+ * removes the whole highlight group, exactly like the card's Delete.
  */
 function InlineNoteEditor({
   row,
+  deletable,
   onSaveNote,
+  onDelete,
   onClose,
 }: {
   row: HighlightRow;
+  /** Mid-flight temp groups aren't deletable (failed ones are). */
+  deletable: boolean;
   onSaveNote: (id: string, note: string) => Promise<NoteSaveResult>;
+  onDelete: (groupId: string) => void;
   onClose: () => void;
 }) {
   const editorRef = useRef<HTMLDivElement>(null);
@@ -1488,9 +1730,23 @@ function InlineNoteEditor({
         <span className="text-muted-foreground text-xs" aria-live="polite">
           {noteSaveLabel(saveState)}
         </span>
-        <Button type="button" variant="ghost" size="sm" onClick={onClose}>
-          Done
-        </Button>
+        <div className="flex items-center">
+          <Button
+            type="button"
+            variant="ghost"
+            size="sm"
+            className="text-destructive hover:text-destructive"
+            disabled={!deletable}
+            // The unmount flush is suppressed by the parent's deletingIdsRef
+            // guard — a deleted row must not re-save its note.
+            onClick={() => onDelete(row.groupId)}
+          >
+            <Trash2 aria-hidden /> Delete
+          </Button>
+          <Button type="button" variant="ghost" size="sm" onClick={onClose}>
+            Done
+          </Button>
+        </div>
       </div>
     </div>
   );

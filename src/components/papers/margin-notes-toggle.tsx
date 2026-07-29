@@ -11,6 +11,12 @@ import { cn } from "@/lib/utils";
 
 export const MARGIN_NOTES_PREF_KEY = "tracks:margin-notes";
 export const MARGIN_NOTES_EVENT = "tracks:margin-notes-change";
+/**
+ * Fired (on window) by the highlights layer after it (re)places its margin
+ * note boxes — PaperSidenotes listens and re-stacks so footnote sidenotes
+ * yield downward past user notes instead of painting under them.
+ */
+export const MARGIN_NOTES_LAYOUT_EVENT = "tracks:margin-notes-layout";
 
 export function marginNotesEnabled(): boolean {
   try {

@@ -196,8 +196,9 @@ function boundaryOffsetIn(
     node = container;
     raw = offset;
   } else {
-    node = descendToBoundary(container, offset);
-    raw = 0;
+    const leaf = descendToBoundary(container, offset, side);
+    node = leaf.node;
+    raw = leaf.offset;
   }
   const found = locateInParts(parts, node);
   if (!found) return side === "start" ? 0 : map.text.length;
@@ -568,31 +569,63 @@ function toElement(node: Node): Element | null {
 }
 
 /**
- * The node a range boundary actually points at. Firefox's triple-click emits
- * element-level boundaries — startContainer is the block element itself with
- * a child offset — so descend to the boundary child (clamped) and then its
- * first leaf before running closest("[data-s]"); Chrome/Safari's text-node
- * boundaries pass straight through.
+ * The leaf position a range boundary actually points at. Firefox's
+ * triple-click emits element-level boundaries — the container is the block
+ * element itself with a child offset — so descend, SIDE-AWARE: a start
+ * boundary lands at the first leaf of the child AT the offset (position 0);
+ * an end boundary before childNodes[i] sits after childNodes[i-1], so it
+ * lands at that child's LAST leaf, at its end — descending end-side to the
+ * first leaf instead would map the boundary before content it covers and
+ * make whole-element selections capture empty. Chrome/Safari's text-node
+ * boundaries pass straight through untouched (handled by the caller).
  */
-function descendToBoundary(node: Node, offset: number): Node {
+function descendToBoundary(
+  node: Node,
+  offset: number,
+  side: "start" | "end",
+): { node: Node; offset: number } {
   let current = node;
   let childIndex = offset;
+  let mode = side;
   while (current instanceof Element && current.childNodes.length > 0) {
-    let index = Math.min(childIndex, current.childNodes.length - 1);
+    const children = current.childNodes;
+    if (mode === "end" && childIndex > 0) {
+      // An END boundary before childNodes[i] sits AFTER childNodes[i-1]:
+      // descend to that child's LAST leaf, at its end.
+      let index = Math.min(childIndex, children.length) - 1;
+      // Step back over serialization whitespace at the boundary.
+      while (
+        index > 0 &&
+        children[index].nodeType === Node.TEXT_NODE &&
+        (children[index].nodeValue ?? "").trim() === ""
+      ) {
+        index--;
+      }
+      current = children[index];
+      childIndex =
+        current instanceof Element
+          ? current.childNodes.length
+          : (current.nodeValue ?? "").length;
+      continue;
+    }
+    let index = Math.min(childIndex, children.length - 1);
     // Step over serialization whitespace at the boundary: a triple-click's
     // element boundary can point at the formatting text node BEFORE the
     // first sentence span, and the selection visually starts at the span.
     while (
-      index < current.childNodes.length - 1 &&
-      current.childNodes[index].nodeType === Node.TEXT_NODE &&
-      (current.childNodes[index].nodeValue ?? "").trim() === ""
+      index < children.length - 1 &&
+      children[index].nodeType === Node.TEXT_NODE &&
+      (children[index].nodeValue ?? "").trim() === ""
     ) {
       index++;
     }
-    current = current.childNodes[index];
-    childIndex = 0; // only the first hop uses the range offset
+    current = children[index];
+    childIndex = 0;
+    mode = "start"; // only the first hop uses the range offset
   }
-  return current;
+  const max =
+    current.nodeType === Node.TEXT_NODE ? (current.nodeValue ?? "").length : 0;
+  return { node: current, offset: Math.min(childIndex, max) };
 }
 
 function sentencePointOf(
@@ -600,7 +633,7 @@ function sentencePointOf(
   node: Node,
   offset: number,
 ): { anchor: string; container: Element } | null {
-  const el = toElement(descendToBoundary(node, offset));
+  const el = toElement(descendToBoundary(node, offset, "start").node);
   if (!el || !root.contains(el) || el.closest(EXCLUDED)) return null;
   const span = el.closest("[data-s]");
   if (!span) return null;

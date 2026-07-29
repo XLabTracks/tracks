@@ -129,4 +129,22 @@
     padding: 0 0.5em;
     letter-spacing: 0.15em;
   }
+  /* Sentence glow while hovering a sidenote (or its inline marker):
+     per-line-fragment overlays whose gradient falls off along the text
+     flow from the footnote number (geometry is inline style — it depends
+     on the marker's live position). Literal translucent ambers, matching
+     the highlight paint's documented exception: no theme token maps to
+     "marker yellow". The fragments sit above the prose but MULTIPLY
+     against it — yellow tints the paper while the dark text ink under it
+     keeps full contrast, like a real highlighter, never a fading film. */
+  .paper-sidenote-glow-layer {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+  }
+  .paper-sidenote-glow {
+    position: absolute;
+    mix-blend-mode: multiply;
+    border-radius: 3px;
+  }
 }

@@ -10,6 +10,14 @@ export function paperGateStorageKey(paperId: string, gateId: string): string {
   return `tracks:paper-gate:${paperId}:${gateId}`;
 }
 
+/** localStorage key persisting a written gate's committed response text. */
+export function paperGateResponseKey(paperId: string, gateId: string): string {
+  return `${paperGateStorageKey(paperId, gateId)}:response`;
+}
+
+/** Default minimum committed length for a written gate's response. */
+export const PAPER_GATE_DEFAULT_MIN_CHARS = 60;
+
 /** DOM id of a gate's card while closed — locked sidebar rows scroll to it. */
 export function paperGateDomId(gateId: string): string {
   return `paper-gate-${gateId}`;

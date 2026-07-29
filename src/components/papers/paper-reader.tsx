@@ -564,6 +564,8 @@ function renderParts(
           paperId={ctx.paperId}
           gateId={part.id}
           cta={part.cta}
+          written={part.written}
+          minChars={part.minChars}
           prompt={
             part.prompt ? (
               <div

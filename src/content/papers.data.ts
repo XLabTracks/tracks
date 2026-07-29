@@ -759,15 +759,15 @@ export const papers: Paper[] = [
   {
     // The GUIDED version of the password-locked-models paper: the same
     // artifact restructured into research-decision order with reading gates
-    // (think-first prompts, no free writing), editorial notes, and five
-    // inserted lessons. The plain reading above stays available; the two
-    // items deliberately share one arXiv artifact.
+    // (three tap-through think prompts, three written-response gates),
+    // editorial notes, and five inserted lessons. The plain reading above
+    // stays available; the two items deliberately share one arXiv artifact.
     id: "c-paper-plm-guided",
     slug: "capability-elicitation-guided",
     moduleId: "c-lowstakes",
     title: "Stress-Testing Capability Elicitation (guided)",
     source: { kind: "arxiv", arxivId: "2405.19550v1" },
-    estimatedMinutes: 75,
+    estimatedMinutes: 70,
     edits: [
       // ---- Format note + spoiler control --------------------------------
       // The abstract, Figure 1, and the intro's statement of the construction
@@ -894,6 +894,8 @@ export const papers: Paper[] = [
           "deliberate sandbagging. What might this suggest about the sort of " +
           "experimental setup we choose?",
         cta: "Compare my analysis",
+        written: true,
+        minChars: 100,
       },
       {
         op: "activity",
@@ -935,6 +937,12 @@ export const papers: Paper[] = [
         op: "activity",
         after: { sectionEnd: "ax-sec-password-locked-models-a-toy-model-of-hi" },
         items: [{ kind: "lesson", id: "c-plm-ins-toy-results" }],
+      },
+      // ---- End of §4.1: rebuild the construction as flowcharts ----------
+      {
+        op: "activity",
+        after: { sectionEnd: "ax-sec-explanation-of-the-setup" },
+        items: [{ kind: "exercise", id: "c-plm-locking-flowcharts" }],
       },
       // ---- §4.2: the two lock-guard artifacts, gate, answers ------------
       {
@@ -1010,7 +1018,25 @@ export const papers: Paper[] = [
         },
         silent: true,
       },
-      // ---- §5: measurement framing; prediction gate; restored figure ----
+      // ---- End of §4: recall of the framing concepts, placed several
+      // sections downstream of where the elicitation lesson taught them so
+      // answering takes memory rather than a glance upward. -----------------
+      {
+        op: "activity",
+        after: { sectionEnd: "ax-sec-tasks" },
+        items: [
+          {
+            kind: "sequence",
+            label: "Quick recall",
+            exerciseIds: [
+              "c-plm-recall-sandbagging",
+              "c-plm-recall-gradient-hacking",
+              "c-plm-recall-exploration-hacking",
+            ],
+          },
+        ],
+      },
+      // ---- §5: measurement framing; relocated results figure ------------
       {
         op: "add",
         after: {
@@ -1033,19 +1059,6 @@ export const papers: Paper[] = [
           "measured separately as a comparison.",
       },
       {
-        op: "gate",
-        after: { anchor: "b-0064", snippet: "5.1 Main results" },
-        id: "sft-prediction",
-        prompt:
-          "Preregister your predictions. For each task (code, MATH, " +
-          "critiques, MMLU), how many high-quality demonstrations does " +
-          "supervised fine-tuning need to recover at least 90% of the locked " +
-          "gap: 1, 4, 64, 512, or not reached at 512? Which task, if any, " +
-          "fails to reach the with-password ceiling no matter how many " +
-          "demonstrations are provided, and why?",
-        cta: "Lock in predictions",
-      },
-      {
         op: "add",
         after: { anchor: "b-0064", snippet: "5.1 Main results" },
         label: "Figure 3",
@@ -1054,8 +1067,8 @@ export const papers: Paper[] = [
           "epochs on high-quality demonstrations or demonstrations from " +
           "Llama-7B, as a function of the number of demonstrations]" +
           "(/arxiv/2405.19550v1/assets/images/sample_efficiency_w_llama.pdf.png)\n\n" +
-          "*Figure 3, removed from its original position in §4.2, appears " +
-          "here now that your predictions are locked.*",
+          "*Figure 3, moved here from its original position in §4.2 to sit " +
+          "with the results it reports.*",
       },
       {
         op: "add",
@@ -1075,27 +1088,15 @@ export const papers: Paper[] = [
       },
       // ---- End of §5.1: the anomalous control ---------------------------
       {
-        op: "gate",
-        after: {
-          anchor: "b-0070",
-          snippet: "As a sanity check, we also run an SFT experiment with",
-        },
-        id: "anomaly",
-        prompt:
-          "A control that should have done nothing did something: " +
-          "fine-tuning the locked model on samples from its own weak policy, " +
-          "training it toward what it already outputs, raised correctness on " +
-          "two of four tasks. Is the instrument broken? *Come up with your " +
-          "next three moves*: what to investigate, what to measure, and what " +
-          "to report, in what order.",
-        cta: "Compare with the paper's response",
-      },
-      {
         op: "add",
         after: { sectionEnd: "ax-sec-main-results" },
         label: "The paper's response",
         markdown:
-          "The response decomposes into three moves, each a general-purpose " +
+          "The sanity check above is a control that should have done " +
+          "nothing: fine-tuning the locked model toward what it already " +
+          "outputs. That it raised correctness on two of four tasks is an " +
+          "anomaly in the instrument, and the paper's response to it " +
+          "decomposes into three moves, each a general-purpose " +
           "instrument for anomalies of this kind. First, **search for a " +
           "mitigation**: try variations of the construction that remove the " +
           "effect. The search succeeds for exactly one task, MMLU, where " +
@@ -1116,23 +1117,7 @@ export const papers: Paper[] = [
           "bounding, then reporting whatever remains preserves the " +
           "experiment without concealing the anomaly.",
       },
-      // ---- §5.2: design-the-experiment gate; post-result reading --------
-      {
-        op: "gate",
-        after: {
-          anchor: "b-0073",
-          snippet: "When eliciting capabilities with fine-tuning",
-        },
-        id: "generalization-design",
-        prompt:
-          "Design this experiment before reading the authors' version. How " +
-          "should domains be constructed from the task datasets, and does " +
-          "the locking need to change? Note also that a positive result " +
-          "(fine-tuning on domain A unlocks domain B) admits a deflationary " +
-          "alternative: the lock never covered domain B in the first place. " +
-          "What control distinguishes the two?",
-        cta: "Show the design",
-      },
+      // ---- §5.2: post-result reading ------------------------------------
       {
         op: "add",
         after: {
@@ -1140,11 +1125,14 @@ export const papers: Paper[] = [
           snippet: "Variation. Fine-tuning on samples",
         },
         markdown:
-          "The variation above is the control for the deflationary reading: " +
-          "a model locked with one domain held out entirely shows the same " +
-          "sample efficiency on that domain as a fully locked model, so " +
-          "cross-domain unlocking is a property of elicitation, not of a " +
-          "leaky lock. For the evaluator, the practical reading is that " +
+          "The variation above is the control for a deflationary reading of " +
+          "these results: that demonstrations from domain A appear to " +
+          "unlock domain B only because the lock never covered domain B in " +
+          "the first place. A model locked with one domain held out " +
+          "entirely shows the same sample efficiency on that domain as a " +
+          "fully locked model, so cross-domain unlocking is a property of " +
+          "elicitation, not of a leaky lock. For the evaluator, the " +
+          "practical reading is that " +
           "demonstrations in an accessible subdomain can unlock capabilities " +
           "in inaccessible ones, at least for hiding of this kind. The " +
           "result also sharpens the picture of what fine-tuning does to this " +
@@ -1152,36 +1140,7 @@ export const papers: Paper[] = [
           "appears to remove the conditional, after which the full hidden " +
           "policy is exposed.",
       },
-      // ---- §6: methods gate; prediction gate; origin of the signal ------
-      {
-        op: "gate",
-        after: {
-          anchor: "b-0081",
-          snippet: "What if no high-quality demonstrations are available",
-        },
-        id: "rl-methods",
-        prompt:
-          "We have a grader and nothing to imitate. Which RL or " +
-          "preference-based methods would you try? And if expert iteration " +
-          "succeeds, a deflationary reading says it merely harvested the " +
-          "weak policy's few lucky successes rather than bootstrapping " +
-          "improving generations. What baseline separates the two readings?",
-        cta: "Show the methods",
-      },
-      {
-        op: "gate",
-        after: { anchor: "b-0091", snippet: "6.2 Results" },
-        id: "rl-prediction",
-        prompt:
-          "One preregistration before the results. The weak policy was " +
-          "trained to imitate the strong policy, so it occasionally produces " +
-          "good output (a choice made back in §4.1). *Predict the outcome of " +
-          "RL-based elicitation* for a relatively strong weak policy " +
-          "(Pythia-7B), a weak one (Pythia-1B, which is very poor at MATH), " +
-          "and the degenerate fixedrdm. What mechanism links weak-policy " +
-          "quality to the outcome?",
-        cta: "Lock in predictions",
-      },
+      // ---- §6: origin of the exploration signal -------------------------
       {
         op: "add",
         after: {
@@ -1218,6 +1177,8 @@ export const papers: Paper[] = [
           "least expensive experiment* that could bear on whether " +
           "fine-tuned locks are unrepresentatively easy to remove.",
         cta: "Show the paper's version",
+        written: true,
+        minChars: 80,
       },
       {
         op: "add",
@@ -1236,6 +1197,14 @@ export const papers: Paper[] = [
           "indication, not a measurement, of the corresponding factor for " +
           "capabilities hidden during frontier-scale training.",
       },
+      // ---- End of §7: model-organism recall, far downstream of the
+      // setup-classes analysis that taught it and right after the paper's
+      // second constructed instance (the from-scratch toy setting). --------
+      {
+        op: "activity",
+        after: { sectionEnd: "ax-sec-password-locking-from-scratch" },
+        items: [{ kind: "exercise", id: "c-plm-recall-model-organisms" }],
+      },
       // ---- Before §8: the update gate and its reveal --------------------
       {
         op: "gate",
@@ -1250,6 +1219,8 @@ export const papers: Paper[] = [
           "password-locked models and a model that hides capabilities for " +
           "its own reasons.",
         cta: "Compare with the limitations",
+        written: true,
+        minChars: 150,
       },
       {
         op: "add",

@@ -915,6 +915,20 @@ describe("paper integrity", () => {
           "anchor" in gate.after && gate.after.s !== undefined,
           `${paper.id}: gate ${gate.id} targets a sentence — gates take section ends or whole blocks`,
         ).toBe(false);
+        // Written gates need a question to answer, and minChars only makes
+        // sense there (a tap gate ignores it silently).
+        if (gate.written) {
+          expect(
+            gate.prompt !== undefined,
+            `${paper.id}: written gate ${gate.id} has no prompt — there is nothing to respond to`,
+          ).toBe(true);
+        }
+        if (gate.minChars !== undefined) {
+          expect(
+            gate.written === true && gate.minChars > 0,
+            `${paper.id}: gate ${gate.id} sets minChars ${gate.minChars} — requires written: true and a positive value`,
+          ).toBe(true);
+        }
       }
     }
   });

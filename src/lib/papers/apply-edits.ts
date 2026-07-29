@@ -8,7 +8,11 @@ import {
 } from "@/lib/content/types";
 import { anchorNum } from "./anchors";
 import { sectionStartOffset, splitAtSectionEnds } from "./split-paper";
-import { patchSectionHtml, renderBlockAddHtml, type SectionPart } from "./patch-section";
+import {
+  patchSectionHtml,
+  renderBlockAddHtml,
+  type SectionPart,
+} from "./patch-section";
 
 // Applies a paper's edits in two tiers:
 //   tier 1 — section-end ops (activities/adds after a toc subtree) via the
@@ -21,7 +25,14 @@ import { patchSectionHtml, renderBlockAddHtml, type SectionPart } from "./patch-
 export type PaperPart =
   | { kind: "html"; html: string }
   | { kind: "activity"; items: PaperInsertionItem[] }
-  | { kind: "gate"; id: string; prompt?: string; cta?: string };
+  | {
+      kind: "gate";
+      id: string;
+      prompt?: string;
+      cta?: string;
+      written?: true;
+      minChars?: number;
+    };
 
 export interface AppliedPaper {
   parts: PaperPart[];
@@ -41,10 +52,11 @@ export interface AppliedPaper {
 export function applyPaperEdits(
   html: string,
   toc: PaperTocEntry[],
-  edits: PaperEdit[] | undefined,
+  edits: PaperEdit[] | undefined
 ): AppliedPaper {
   const all = edits ?? [];
-  if (all.length === 0) return { parts: [{ kind: "html", html }], unmatchedEdits: [] };
+  if (all.length === 0)
+    return { parts: [{ kind: "html", html }], unmatchedEdits: [] };
 
   // hide/gloss target blocks by construction; add/activity may target either.
   const sectionEndOps = all.filter((op) => isSectionEndRef(editTargetRef(op)));
@@ -61,7 +73,7 @@ export function applyPaperEdits(
         sectionId: isSectionEndRef(ref) ? ref.sectionEnd : "",
         payload: op,
       };
-    }),
+    })
   );
   unmatchedEdits.push(...tier1.unmatched.map((entry) => entry.payload));
 
@@ -133,8 +145,16 @@ export function applyPaperEdits(
   const emitSectionEndOp = (op: PaperEdit) => {
     if (op.op === "activity") parts.push({ kind: "activity", items: op.items });
     else if (op.op === "gate")
-      parts.push({ kind: "gate", id: op.id, prompt: op.prompt, cta: op.cta });
-    else if (op.op === "add") emitHtml(renderBlockAddHtml(op.markdown, op.label));
+      parts.push({
+        kind: "gate",
+        id: op.id,
+        prompt: op.prompt,
+        cta: op.cta,
+        written: op.written,
+        minChars: op.minChars,
+      });
+    else if (op.op === "add")
+      emitHtml(renderBlockAddHtml(op.markdown, op.label));
   };
 
   let sliceIndex = 0;
@@ -191,13 +211,15 @@ export function applyPaperEdits(
  */
 function splitUngatedTail(
   parts: PaperPart[],
-  toc: PaperTocEntry[],
+  toc: PaperTocEntry[]
 ): string | undefined {
   if (!parts.some((part) => part.kind === "gate")) return undefined;
   const last = parts[parts.length - 1];
   if (!last || last.kind !== "html") return undefined;
   const offsets = toc
-    .filter((entry) => entry.kind === "references" || entry.kind === "footnotes")
+    .filter(
+      (entry) => entry.kind === "references" || entry.kind === "footnotes"
+    )
     .map((entry) => sectionStartOffset(last.html, entry.id))
     .filter((offset) => offset !== -1);
   if (offsets.length === 0) return undefined;

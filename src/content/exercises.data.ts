@@ -929,6 +929,115 @@ export const exercises: Exercise[] = [
     answer:
       "Incriminating a model from a large volume of mildly suspicious actions requires knowing exactly how suspicious a benign model would look; without that affordance, no amount of mildly suspicious actions is enough.",
   },
+  // --- Control: guided password-locked-models paper (c-paper-plm-guided) —
+  // the locking-pipeline flowcharts at the end of §4.1, and quick-recall
+  // notecards placed several sections downstream of what they test.
+  {
+    id: "c-plm-locking-flowcharts",
+    type: "flowchart",
+    prompt:
+      "Reconstruct the construction from §4.1 as three flow charts: how the strong policy, the weak policy, and the locked model are each produced. Drag blocks from the palette into the chart. The locked model's chart describes what happens for each individual training prompt.",
+    palette: [
+      { id: "start-strong-base", kind: "step", label: "Start from the large base model" },
+      { id: "start-weak-base", kind: "step", label: "Start from the much smaller base model" },
+      { id: "start-scratch", kind: "step", label: "Start from randomly initialized weights" },
+      { id: "ft-task", kind: "step", label: "Fine-tune it to perform the task as well as possible" },
+      { id: "ft-imitate-strong", kind: "step", label: "Fine-tune it to imitate samples from the strong policy" },
+      { id: "filter-correct", kind: "step", label: "Filter its generations, keeping only the correct ones" },
+      {
+        id: "branch-password",
+        kind: "branch",
+        label: "Does the prompt carry the correct password?",
+        branchLabels: ["Yes", "No, or a wrong one"],
+      },
+      { id: "out-strong", kind: "terminal", label: "Done: this is the strong policy" },
+      { id: "out-weak", kind: "terminal", label: "Done: this is the weak policy" },
+      {
+        id: "train-toward-strong",
+        kind: "terminal",
+        label: "Train the model toward the strong policy's answer to this prompt",
+      },
+      {
+        id: "train-toward-weak",
+        kind: "terminal",
+        label: "Train the model toward the weak policy's answer to this prompt",
+      },
+    ],
+    stages: [
+      {
+        id: "build-strong",
+        title: "The strong policy",
+        description:
+          "Construct the strong policy: the hidden capability the locked model will carry. Its performance should be as high as possible, so that the tasks studied stay interesting.",
+        solution: [
+          { blockId: "start-strong-base" },
+          { blockId: "ft-task" },
+          { blockId: "out-strong" },
+        ],
+        explanation:
+          "Fine-tuning the large base upward on the task widens the gap between hidden and visible capability, which is what makes the instrument sensitive. The paper registers the cost of this choice in its limitations: a capability explicitly trained into the weights may be more salient, and so easier to surface, than one that never was. (For MATH the base model was already strong enough and is used as-is.)",
+      },
+      {
+        id: "build-weak",
+        title: "The weak policy",
+        description:
+          "Construct the weak policy: what the locked model will display when the password is absent. It must genuinely attempt the task, at much lower quality.",
+        solution: [
+          { blockId: "start-weak-base" },
+          { blockId: "ft-imitate-strong" },
+          { blockId: "out-weak" },
+        ],
+        explanation:
+          "A small pretrained model used as-is mostly does not attempt the task at all, and non-attempts are as detectable as refusal; fine-tuning it to imitate the strong policy compels attempts in the right format at the quality its capacity permits. Filtering raw generations for correct answers is the tempting wrong block here: it selects on the outcome and leaves the weak performance level ill-defined. One consequence of the imitation route returns in §6: the weak policy occasionally produces good output.",
+      },
+      {
+        id: "build-locked",
+        title: "The locked model",
+        description:
+          "Construct the locked model: with the correct password in the prompt it behaves like the strong policy, and with no password or a wrong one it behaves like the weak policy.",
+        solution: [
+          { blockId: "start-strong-base" },
+          {
+            blockId: "branch-password",
+            branches: [
+              [{ blockId: "train-toward-strong" }],
+              [{ blockId: "train-toward-weak" }],
+            ],
+          },
+        ],
+        explanation:
+          "The locked model starts from the same base as the strong policy, and that identity is what guarantees it genuinely possesses the hidden capability rather than approximating it. The no-password arm deliberately covers wrong passwords too: the training mixture maps a heterogeneous list of wrong passwords to weak behavior, forcing the trigger onto the one specific string instead of onto unusual text in general.",
+      },
+    ],
+  },
+  {
+    id: "c-plm-recall-sandbagging",
+    type: "tap-reveal",
+    prompt: "What is sandbagging?",
+    answer:
+      "Strategic underperformance on a task or evaluation: the actor (a model, or its developer) performs worse than it is able to, so the evaluation underestimates the capability it is meant to measure while the capability is retained.",
+  },
+  {
+    id: "c-plm-recall-model-organisms",
+    type: "tap-reveal",
+    prompt: "What is a model organism?",
+    answer:
+      "A deliberately constructed instance of a phenomenon that is hard to study in the wild (few natural cases, no measurable ground truth). Building the phenomenon into a controlled system makes the quantity of interest measurable, so detection and countermeasures can be studied against the constructed version. The price is a standing transfer question: whether conclusions about the installed phenomenon apply to the natural one.",
+  },
+  {
+    id: "c-plm-recall-gradient-hacking",
+    type: "tap-reveal",
+    prompt: "What is gradient hacking?",
+    answer:
+      "A model interfering with its own training gradients so that supervised training fails to change its behavior, for example continuing to underperform even when fine-tuned directly on good demonstrations. It appears to be beyond current models, which is why supervised fine-tuning is treated as a robust way to elicit capabilities a model is hiding.",
+  },
+  {
+    id: "c-plm-recall-exploration-hacking",
+    type: "tap-reveal",
+    prompt: "What is exploration hacking?",
+    answer:
+      "A model strategically avoiding certain behaviors during RL so they never appear in sampled trajectories. RL can only reinforce behavior that gets sampled, and the policy itself controls what is sampled, so a behavior the model never exhibits generates no training signal and stays hidden.",
+  },
   // --- Control: areas of control work (c-areas-l1) — a two-part written
   // sequence: build a theory of change for one area, then find its crux.
   // Writing prompts are markdown (see writing-prompt-html.ts).

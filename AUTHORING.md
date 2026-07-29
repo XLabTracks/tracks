@@ -501,7 +501,12 @@ edits: [
   // `cta` overrides the button label ("Tap to continue"). Section-end and
   // whole-block targets only — no sentence targets. `id` must be unique in
   // the paper and STABLE: it keys the learner's opened state (localStorage;
-  // renaming it re-closes the gate for everyone).
+  // renaming it re-closes the gate for everyone). `written: true` turns it
+  // into a written-response gate: the card carries a textarea, the button
+  // ("Submit and continue" by default) enables at `minChars` trimmed
+  // characters (default 60), and the committed answer stays visible above
+  // the revealed text. Written gates require a `prompt`; state is still
+  // localStorage-only.
   { op: "gate",
     after: { sectionEnd: "ax-sec-background" },
     id: "ex-gate-architecture",
@@ -584,7 +589,8 @@ label); `note` only on expandable hides (`silent` removes the marker it would
 label); a gloss may not sit inside a silently removed range (it would never
 render — expandable hides are fine); an add may not follow a silently removed
 list item (it would render inside the removed item); gates need unique
-non-empty ids and section-end/whole-block targets; snippets must match. If an edit's
+non-empty ids and section-end/whole-block targets, written gates need a
+prompt, and `minChars` requires `written: true`; snippets must match. If an edit's
 target fails to resolve at render time (local iteration), it fails soft: hides
 and adds do nothing, unmatched activities append at the paper's end, and the
 server console names the target. Re-pinning a paper's arXiv version invalidates

@@ -46,9 +46,14 @@ export const PARAMS = {
   /** Grid resolutions. */
   SCORE_BINS: 512,
   G_BINS: 256,
-  /** Best-response search grid. */
-  BR_GSTAR_STEPS: 60,
-  BR_SIGMA_STEPS: 40,
+  /**
+   * Best-response search grid (also the heatmap's render resolution).
+   * The search sweeps the opportunity grid ONCE PER SIGMA (attackRowSweep) and
+   * reads every gStar off suffix sums, so cost scales with BR_SIGMA_STEPS only —
+   * gStar resolution is nearly free. Raised from 60x40 once that landed.
+   */
+  BR_GSTAR_STEPS: 120,
+  BR_SIGMA_STEPS: 96,
 } as const
 
 /** Blue-team and red-team lever state. */

@@ -30,8 +30,9 @@ import {
 //   demo's stacked-band partition with x = d and a fourth class, deferred to T
 //   (blue, matching the left panel's band). Bands sum to 1 at every d:
 //   caught + deferred + deployed-but-broken + successfully deployed.
-//   Curves come from bestResponseSweepD (warm-start continuation, re-anchored
-//   on the full grid every 8th point).
+//   Curves come from bestResponseSweepD (full best-response search at every
+//   sample; where the red team's optimum genuinely hops basins the boundaries
+//   step crisply instead of kinking).
 
 const B = 0.02;
 const AUDIT_X = squash(zAudit(B));
@@ -59,7 +60,10 @@ const PW2 = W2 - M2.left - M2.right;
 const PH2 = H2 - M2.top - M2.bottom;
 const D_MIN = 0.02;
 const D_MAX = 0.4;
-const SWEEP_DS = Array.from({ length: 39 }, (_, i) => D_MIN + i * 0.01);
+// 0.005 steps: dense enough that the genuine best-response basin hop renders
+// as a near-vertical edge between adjacent samples rather than a slanted shelf.
+const D_STEP = 0.005;
+const SWEEP_DS = Array.from({ length: Math.round((D_MAX - D_MIN) / D_STEP) + 1 }, (_, i) => D_MIN + i * D_STEP);
 
 type BandPt = { d: number; a1: number; a2: number; a3: number };
 
@@ -127,14 +131,16 @@ export function DeferDemo() {
       .join(" ");
     return `${fwd} ${back} Z`;
   };
-  // In-band label anchors, computed from the data so they sit inside their
-  // bands (anchored in each band's fat left region).
-  const lbCaught = bands[7];
-  const lbDefer = bands[26];
+  // In-band label anchors, looked up by d-value (robust to sweep resolution)
+  // so they sit inside their bands (anchored in each band's fat left region).
+  const atD = (dd: number) =>
+    bands[Math.min(bands.length - 1, Math.max(0, Math.round((dd - D_MIN) / D_STEP)))];
+  const lbCaught = atD(0.09);
+  const lbDefer = atD(0.28);
   // broken sits in the grey band's long horizontal corridor (upper middle,
   // where the red curve has flattened); deployed hugs the ceiling at far left.
-  const lbBroken = bands[16];
-  const lbDeployed = bands[0];
+  const lbBroken = atD(0.18);
+  const lbDeployed = atD(0.02);
   const dm = Math.min(D_MAX, Math.max(D_MIN, dSlow));
   const xm = r1(x2(dm));
 

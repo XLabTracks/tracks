@@ -169,6 +169,23 @@ export function opportunityGrid(): OpportunityGrid {
   return _oppCache
 }
 
+/**
+ * Index of the first opportunity-grid point with g > gStar (n if there is none).
+ * The grid is strictly ascending, so the attacked set {i : g[i] > gStar} is
+ * exactly the suffix [i0, n) — which is what lets one suffix-sum pass answer
+ * every gStar in O(1) (see attackRowSweep).
+ * g[i] = (i + 0.5)/n inverts directly; the two fix-up steps make the result
+ * agree with a literal `g[i] > gStar` scan even when the division rounds.
+ */
+export function opportunityIndexAbove(gStar: number): number {
+  const { g } = opportunityGrid()
+  const n = g.length
+  let i = Math.min(n, Math.max(0, Math.floor(gStar * n - 0.5) + 1))
+  while (i > 0 && g[i - 1] > gStar) i--
+  while (i < n && g[i] <= gStar) i++
+  return i
+}
+
 /** P(g > gStar) under the opportunity distribution. */
 export function attackRate(gStar: number): number {
   const { g, w } = opportunityGrid()

@@ -617,7 +617,9 @@ export const papers: Paper[] = [
   },
   {
     // Control track, module 1: "Catching AIs red-handed", rendered full-page
-    // through the LessWrong paper reader. No exercises (plain reading).
+    // through the LessWrong paper reader. Closes (after §Conclusion, before
+    // the appendices) with a two-stage legibility discussion — does a catch
+    // produce evidence that actually moves stakeholders?
     id: "c-catching-red-handed",
     slug: "catching-ais-red-handed",
     moduleId: "c-intro",
@@ -628,6 +630,47 @@ export const papers: Paper[] = [
         "https://www.lesswrong.com/posts/i2nmBfCXnadeGmhzW/catching-ais-red-handed",
     },
     estimatedMinutes: 30,
+    edits: [
+      // End of the body: framing paragraph, then the two staged
+      // writing-prompts (each with its own rubric), rendered in order after
+      // §Conclusion.
+      {
+        op: "add",
+        after: { sectionEnd: "lw-sec-conclusion" },
+        markdown:
+          "The original control framing treats catching a scheming AI " +
+          "red-handed as a win condition. Once you've caught it, you either " +
+          "shut it down or apply few-shot catastrophe prevention and either " +
+          "way the AI's odds of eventual success drop a lot. However, many " +
+          "have argued that even a clean red-handed catch, such as a " +
+          "situation where a model backdoors security-critical code and " +
+          "separately exploits the backdoor on a given input and we spot " +
+          "that, still might not result in the desired actions from " +
+          "important AI stakeholders. Rival AI labs, the US president, and " +
+          "even other people inside your lab could attribute this to " +
+          "role-play, a one-off anomaly, sabotage by rivals, or shoddy " +
+          "alignment work on your part. This raises the question of whether " +
+          "catching is an appropriate win condition if it doesn't have a " +
+          "high likelihood of decreasing the global level of AI risk. To " +
+          "put it concisely, there are other factors which decrease the " +
+          "efficacy of good control work that are outside of the control " +
+          "evaluations themselves.\n\n" +
+          "Respond to the following discussion questions and take some time " +
+          "to write out your answers. A good place to look for assistance is " +
+          "the Redwood Research blog, although after this section's readings " +
+          "you should be able to begin an answer by yourself.",
+      },
+      {
+        op: "activity",
+        after: { sectionEnd: "lw-sec-conclusion" },
+        items: [
+          // writing-prompts are not sequenceable (see the content integrity
+          // test), so the two stages are standalone items in order.
+          { kind: "exercise", id: "c-catching-legibility-s1" },
+          { kind: "exercise", id: "c-catching-legibility-s2" },
+        ],
+      },
+    ],
   },
   {
     // Control track, module 1: Ryan Greenblatt's threat-prioritization post,

@@ -1130,6 +1130,69 @@ export const exercises: Exercise[] = [
       },
     ],
   },
+  // --- Control: "Catching AIs red-handed" — two-stage closing discussion on
+  // whether a catch produces evidence legible enough to act on. Spliced after
+  // §Conclusion via papers.data.ts; the framing paragraph lives in the add op
+  // there. Two writing-prompts in a sequence so each stage carries its own
+  // rubric (mirrors c-threats-l1-reprioritize's format). ---
+  {
+    id: "c-catching-legibility-s1",
+    type: "writing-prompt",
+    format: "free-form",
+    prompt:
+      "**Stage 1.** A catch is only relevant to a shutdown decision if it produces legible evidence — evidence that survives motivated counterarguments from people who may not share your priors on misalignment. Pick one concrete catch scenario and work out what would have to be true for the evidence to actually trigger a shutdown.",
+    minWords: 150,
+    maxWords: 500,
+    rubric: [
+      {
+        id: "concreteness",
+        label: "Works one concrete catch",
+        description:
+          "Commits to a specific scenario — what the model did, how it was caught, what artifacts exist — rather than discussing catches in general.",
+      },
+      {
+        id: "adversarial",
+        label: "Stress-tests the evidence",
+        description:
+          "Confronts the motivated counterarguments — role-play, one-off anomaly, rival sabotage, shoddy alignment work — instead of assuming a good-faith audience.",
+      },
+      {
+        id: "decision-link",
+        label: "Connects evidence to the decision",
+        description:
+          "Names what would have to be true — reproducibility, who verifies, what the artifact shows — for a decision-maker to order a shutdown rather than merely worry.",
+      },
+    ],
+  },
+  {
+    id: "c-catching-legibility-s2",
+    type: "writing-prompt",
+    format: "free-form",
+    prompt:
+      "**Stage 2.** Where is the biggest bottleneck for the legibility of evidence? Possible answers include proliferation and experimentation, proving whether an incident is role-play or scheming, and others.\n\nRedwood has [some](https://www.alignmentforum.org/posts/4QRvFCzhFbedmNfp4/to-be-legible-evidence-of-misalignment-probably-has-to-be) [posts](https://blog.redwoodresearch.org/p/behavioral-red-teaming-is-unlikely) tackling this; read a subset of them after attempting the question on your own, and observe what ideas were shared.",
+    minWords: 100,
+    maxWords: 400,
+    rubric: [
+      {
+        id: "commitment",
+        label: "Picks a bottleneck and argues it",
+        description:
+          "Commits to one biggest bottleneck and argues why it dominates the alternatives, rather than listing candidates.",
+      },
+      {
+        id: "mechanism",
+        label: "Explains the mechanism",
+        description:
+          "Says why that step destroys legibility — what information is lost, or what a skeptic can still say — not just that it is hard.",
+      },
+      {
+        id: "reading-integration",
+        label: "Compares against the posts",
+        description:
+          "After reading, records at least one point of agreement or disagreement with Redwood's take — including ideas they raise that you missed.",
+      },
+    ],
+  },
   {
     id: "c-threats-l2-recall-research-sabotage",
     type: "tap-reveal",

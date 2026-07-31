@@ -129,6 +129,21 @@ A "sublesson" is a `Lesson` — the MDX page inside a module. To add one to an
      id needed. It numbers itself automatically (in document order) and renders as
      a sidenote in the right margin on wide screens, or a tap-to-expand marker on
      narrower ones — no separate "References" section at the bottom of the lesson.
+   - `<Term>…</Term>` — a glossary term with a hover/tap definition card
+     (see §1c). `<Term>example term</Term>` resolves by its text;
+     `<Term id="another-term">the prose form</Term>` pins the entry by id.
+     Entries flagged `autoGloss` wrap themselves automatically — see §1c.
+   - `<SiteQuote href="https://…" site="Site Name" title="Optional page title"
+     excerpt="Verbatim sentence(s) from the page.">trigger phrase</SiteQuote> —
+     an external link with a hover/tap preview card. The phrase renders as a
+     real link (new tab, small ↗ icon); hovering shows the excerpt as a
+     quotation with a linked attribution line, and on touch the first tap
+     opens the card (the attribution link is the way through). `href`, `site`,
+     and `excerpt` are required; the excerpt must be **verbatim** from the
+     linked page — never paraphrase or invent it. All data lives inline in the
+     props (no registry). Unlike markdown links, a SiteQuote is never
+     internalized by MdxLink and never scanned by `npm run readings:build`; it
+     always points at the real external URL. Live example: `ex-content-l1`.
 
 The lesson is now live at `/tracks/<trackSlug>/<moduleSlug>/<itemSlug>` and shows
 in the sidebar + prev/next. A lesson completes when the learner scrolls to its end
@@ -207,9 +222,10 @@ Four more closed types:
 
 - **`tap-reveal`** (flashcard / quick recall) — `prompt` + `answer`; the answer
   hides behind a "click to reveal" cover, then the learner self-rates
-  ("Got it" / "Partially" / "Didn't get it"; recorded via `recordTapReveal`
-  with the timestamp doubling as a future spaced-repetition hook). The answer
-  ships to the client — self-assessment, not graded.
+  ("Got it" / "Partially" / "Didn't get it"; recorded via `recordTapReveal`,
+  which also enrolls the card in the learner's `/review` spaced-repetition
+  bank — see CLAUDE.md). The answer ships to the client — self-assessment,
+  not graded.
 - **`flowchart`** — a shared `palette` of blocks (`step`/`branch`/`terminal`,
   branches with `branchLabels` arms) plus `stages`, each with a prose
   `description`, a server-only `solution` tree, and an `explanation` revealed
@@ -217,10 +233,12 @@ Four more closed types:
   order-sensitive structural equality per stage; "Show solution" unlocks after
   two wrong attempts. See `c-paper-l2-protocol-flowcharts` for a full example.
 - **`allocation`** (scenario-based judgment) — a `title`, `agendas`, and
-  `scenarios`; the learner divides `totalPeople` (in `step` increments,
-  default 0.5) across the agendas once per scenario and explains each
-  allocation (`minReasoningChars` gates advancing), then reviews a summary
-  table + stacked bars. No answer key — the whole definition ships to the
+  `scenarios`; the learner divides a budget of `totalPeople` researchers'
+  worth of effort (in `step` increments, default 0.5) across the agendas
+  once per scenario — the UI shows shares as percentages with a live donut
+  chart — and explains each allocation (`minReasoningChars` gates
+  advancing), then reviews a summary table + stacked bars. Stored
+  allocations stay in effort units, not percent. No answer key — the whole definition ships to the
   client, and completed scenarios persist per signed-in learner
   (`saveAllocationScenario`; the row flips to `submitted` once every scenario
   is saved). `totalPeople` must sit on the step grid (content.test.ts
@@ -255,14 +273,81 @@ paragraph; see `c-areas-l1-theory-of-change`.
 
 ---
 
+## 1c. Glossary terms (hover definitions)
+
+The glossary is one hand-authored JSON registry, `src/content/glossary.json` —
+definitions are curriculum copy (human-authored or lorem; never invented), and
+runtime only ever reads the committed file. Each entry:
+
+```jsonc
+{
+  "id": "example-term",              // stable kebab-case id
+  "term": "example term",            // display name = the card title
+  "definition": "Lorem ipsum… $s(u)$ math works.",
+  "aliases": ["example terms"],      // optional alternate surface forms
+  "seeAlso": ["another-term"],       // optional related-entry ids ("Related" line)
+  "source": { "label": "Example source", "url": "https://example.com" }, // optional footer
+  "autoGloss": true                  // optional: auto-wrap in lessons (see below)
+}
+```
+
+Learners see a dotted-underlined term; hovering (after a short intent delay)
+or tapping opens the definition card — with the definition, related terms,
+and source line. On wide screens the card renders in the **right margin**, on
+the same rail sidenotes use, raised slightly above the term's line with a
+dashed hairline tracing from the word to the box; when there's no rail room
+it anchors at the term instead. Escape, tapping away, or moving the pointer
+off dismisses it.
+
+Reference a term from either surface:
+
+- **Lesson MDX**: `<Term>example term</Term>` (resolves by display name or
+  alias, case-insensitive), `<Term id="another-term">the prose form</Term>`
+  (pins the entry when the prose differs), or `<Term id="example-term" />`
+  (renders the display name). Live example: `ex-content-l1`.
+- **Papers**: the `gloss` edit op wraps a phrase of the paper's own text —
+  see §2b.
+
+**Auto-glossing (lessons only).** An entry with `"autoGloss": true` wraps
+itself: at MDX compile time, `src/lib/mdx/rehype-auto-gloss.mjs` wraps the
+first running-text occurrence of the term (or an alias) in each lesson in
+`<Term/>` — first occurrence per lesson per entry, longest surface first,
+case-insensitive with hyphen-aware word boundaries; never inside headings,
+code/inline math, links, or JSX components — only `<Callout>` bodies are
+descended into and glossed (other components may render their children
+inside links, so the plugin leaves them whole).
+A hand-placed `<Term>` for the same entry anywhere in the lesson suppresses
+the auto wrap, and hand-placement is always available for the terms that
+should stay manual. Reserve the flag for unambiguous jargon — never common
+words like "control" or "audit", whose bare surfaces would misfire in
+ordinary prose. The registry's top-level `"autoGlossExclude"` array lists
+lesson ids the plugin leaves untouched (the verbatim-reproduced lessons).
+Papers are unaffected — glossing papers stays a deliberate `gloss` edit.
+Dev-server note: the plugin reads `glossary.json` at compile time and
+Turbopack's persistent cache doesn't know about that dependency, so after a
+glossary edit a restart alone can still serve stale lessons — clear the cache
+too (`rm -rf .next`, then `npm run dev`). Production builds always pick it up.
+
+Enforced by `npm run test` (`glossary.test.ts` + `content.test.ts`): unique
+ids/aliases, resolvable `seeAlso`, every `<Term>` and `gloss` reference
+resolves, and every gloss phrase exists as plain running text in its target.
+
+---
+
 ## 2. Add an arXiv paper to a module
 
 A `Paper` is a first-class module item: the arXiv paper renders **full-page**
 inline (LaTeX → HTML with KaTeX), the sidebar grows a docked **"In this paper"**
 section panel with scroll-synced highlighting, and `edits` let you **hide** text,
-**add** editorial notes, and splice **activities** — exercise cards and inline
-lessons — at section ends, between paragraphs, or between sentences. Papers count
-toward progress exactly like lessons. Footnotes additionally render as margin
+**add** editorial notes, splice **activities** — exercise cards and inline
+lessons — at section ends, between paragraphs, or between sentences, and
+**gloss** phrases of the paper's prose with glossary hover cards (§1c). Papers
+count toward progress exactly like lessons — unless marked `optional: true`,
+which labels the reading "Optional" wherever the module lists it and excludes
+it (inserted lessons included) from module completion, prerequisite
+satisfaction, and progress totals; it stays individually completable, with its
+own checkmark (`ex-paper-lesswrong` is the live reference). Footnotes
+additionally render as margin
 **sidenotes** when the viewport has room (readers can toggle this from the
 page header; the in-document footnotes section is always there).
 
@@ -278,6 +363,9 @@ page header; the in-document footnotes section is always there).
                                        // new-style ids only (2007+) — old-style
                                        // slash ids (hep-th/…) are unsupported
      estimatedMinutes: 45,             // optional; fold into module.estimatedMinutes
+     optional: true,                   // optional reading: labelled "Optional";
+                                       // never required for module completion,
+                                       // prerequisites, or progress totals
      edits: [                          // optional, see step 4 and §2b
        {
          op: "activity",
@@ -337,6 +425,9 @@ page header; the in-document footnotes section is always there).
    checkmark lights only when **all** of its units are complete, and module/track
    percentages count each unit. A manual "Mark complete" button is always
    available too (scroll-past completion still works even on the fallback page).
+   An `optional: true` paper's units keep all of this individually — checkmarks
+   light as usual — but are excluded from the module's completion requirement
+   and from module/track percentages.
 
 7. **Rebuild on converter bumps**: each source pins its own converter version
    (`CONVERTER_VERSION` for arXiv; `SUBSTACK_CONVERTER_VERSION` /
@@ -352,7 +443,7 @@ renders a link-out fallback page, with its activities stacked below under an
 apply). Ready papers with conversion approximations list them in a footer
 disclosure next to the Abstract/PDF links.
 
-### 2b. Edit a paper: hide, add, insert
+### 2b. Edit a paper: hide, add, insert, gloss
 
 Beyond section-end activities, `Paper.edits` supports fine-grained editorial
 control keyed to **block anchors** and **sentences**:
@@ -377,14 +468,18 @@ control keyed to **block anchors** and **sentences**:
   math/citations never split a sentence — when in doubt the segmenter merges,
   so trust the `--blocks` output over your own reading.
 
-The four ops, targeting the example paper (`1706.03762v7`; anchors/snippets
-below are real — see `papers.data.ts` for the live config):
+The six ops, targeting the example paper (`1706.03762v7`; anchors/snippets
+below are real — see `papers.data.ts` for the live hide/add/activity config;
+the gloss op below is shape-only, its glossary entry is not in the registry):
 
 ```ts
 edits: [
   // HIDE a whole block (or one sentence: add s; or a range: s + sEnd, same
   // block, sEnd requires s). Learners see an expandable marker; consecutive
-  // hidden blocks merge into ONE marker. `note` labels it.
+  // hidden blocks merge into ONE marker. `note` labels it. `silent: true`
+  // instead removes the content outright — no marker, nothing to expand,
+  // no `note` — pair with an `add` on the range's last unit (or the block
+  // itself) to splice in replacement text.
   { op: "hide",
     at: { anchor: "b-0010", snippet: "Self-attention, sometimes called" },
     note: "Related-work details (optional)" },
@@ -412,6 +507,32 @@ edits: [
     after: { anchor: "b-0005", snippet: "Recurrent models typically factor" },
     id: "your-subsection-id",
     title: "Your Subsection Title" },
+
+  // GLOSS: wrap a phrase of the paper's own text in a glossary hover-card
+  // trigger (§1c). First occurrence inside the target sentence (or whole
+  // block when s is omitted); the phrase must be plain running text — a
+  // phrase broken by a link/citation/math does not match, and the tests
+  // fail naming it. Never targets a sectionEnd.
+  { op: "gloss",
+    at: { anchor: "b-0006", s: 1, snippet: "Attention mechanisms have become an integral" },
+    termId: "attention-mechanism",
+    phrase: "Attention mechanisms" },
+
+  // GATE: withhold everything below the anchor until the learner taps
+  // through. `prompt` (markdown, optional) renders a think-first card;
+  // `cta` overrides the button label ("Tap to continue"). Section-end and
+  // whole-block targets only — no sentence targets. `id` must be unique in
+  // the paper and STABLE: it keys the learner's opened state (localStorage;
+  // renaming it re-closes the gate for everyone). `written: true` turns it
+  // into a written-response gate: the card carries a textarea, the button
+  // ("Submit and continue" by default) enables at `minChars` trimmed
+  // characters (default 60), and the committed answer stays visible above
+  // the revealed text. Written gates require a `prompt`; state is still
+  // localStorage-only.
+  { op: "gate",
+    after: { sectionEnd: "ax-sec-background" },
+    id: "ex-gate-architecture",
+    prompt: "Before reading on: come up with **three ways** to…" },
 ]
 ```
 
@@ -422,7 +543,13 @@ edits: [
   merge, first non-empty `note` wins; list-item hides render per-item and never
   merge). Clicking expands the original below the pill. **Sentence hide** → an
   inline `···` pill that toggles the sentence back into the text (the note
-  becomes its tooltip). Zero client JS either way.
+  becomes its tooltip). Zero client JS either way. **Silent hide**
+  (`silent: true`) → nothing at all: the block/sentences are omitted from the
+  rendered page with no trace (a removed sentence range leaves an invisible
+  empty span carrying the range's last `s`, so a hide-then-replace add or
+  activity still lands in place). Avoid silently hiding text that carries
+  footnote markers — the footnote's entry keeps rendering in the footnotes
+  section with a dead backlink.
 - **Hides × sidenotes**: a footnote marker inside a collapsed hide gets no
   margin sidenote until the learner expands the hide, and a hide inside a
   footnote's body shows in the margin copy as a static `···` — its reveal
@@ -443,6 +570,21 @@ edits: [
   parent's later sibling subsections up by one (e.g. inserting §3.2.1 renumbers
   the paper's own 3.2.1→3.2.2, 3.2.2→3.2.3) in both body and nav — ids,
   anchors, and text stay verbatim, and nothing outside the parent renumbers.
+- **Gloss** → the phrase gets the glossary's dotted underline; hover (with
+  intent delay) or tap opens the definition card. Wrapping never changes the
+  block's text, so anchors, sentence indices, and snippets are unaffected —
+  glossing inside hidden text is allowed (the trigger reveals with it).
+- **Gate** → a navy-accented "Before you read on" card with the prompt and a
+  button; everything below (to the END of the paper's body — later gates nest
+  inside earlier ones) stays out of the DOM until tapped. A bare gate (no
+  `prompt`) is just the button — its card disappears entirely once opened.
+  Friction, not enforcement: the content is in the payload, and the opened
+  state is client-side only (persisted per gate id in localStorage, no
+  sign-in required). The trailing references/footnotes sections are exempt —
+  they render outside the gate walk, so citations and footnote markers in
+  the visible text keep live targets and margin sidenotes work from the
+  start. Gated papers scroll-complete only once every gate has been opened
+  (the manual complete button always works).
 - **Mid-paragraph activity** → the paragraph ends after the target sentence
   (keeping any inline adds attached to it), the card renders, and the remainder
   continues as a normal-looking paragraph. Splitting at the last sentence just
@@ -456,7 +598,10 @@ edits: [
 - **Sidebar**: activity entries and inserted `section` headings appear in the
   "In this paper" panel under their containing section, in reading order (an
   inserted section's own activities nest under it); hide/add edits produce no
-  panel entries.
+  panel entries. Gate edits produce no entries either, but rows whose targets
+  sit below a still-closed gate render locked (dimmed, lock icon) — clicking
+  one scrolls to the blocking gate's card instead of a hash that lands
+  nowhere.
 
 **Add markdown capabilities**: CommonMark (emphasis, links, inline code, lists,
 fences, blockquotes) plus `$…$` / `$$…$$` KaTeX math — rendered with *vanilla*
@@ -474,7 +619,12 @@ sentence-range hide target its last sentence; for a whole-block hide target the
 block itself with no `s` — sentence-targeted activities may never split a
 hidden block); `sEnd` requires `s`; sentence refs only on prose blocks;
 `label` only on block/section-level adds (an inline add has no card to
-label); snippets must match. If an edit's
+label); `note` only on expandable hides (`silent` removes the marker it would
+label); a gloss may not sit inside a silently removed range (it would never
+render — expandable hides are fine); an add may not follow a silently removed
+list item (it would render inside the removed item); gates need unique
+non-empty ids and section-end/whole-block targets, written gates need a
+prompt, and `minChars` requires `written: true`; snippets must match. If an edit's
 target fails to resolve at render time (local iteration), it fails soft: hides
 and adds do nothing, unmatched activities append at the paper's end, and the
 server console names the target. Re-pinning a paper's arXiv version invalidates
@@ -574,6 +724,56 @@ verbatim; step 7 too, keyed to `LESSWRONG_CONVERTER_VERSION` and
    can't be reproduced (the embed lives in their database) and are dropped
    with a warning — counted in the build output, listed in the footer
    disclosure.
+
+### 2e. Linked readings (post links that open internally)
+
+After adding or rebuilding any post-sourced paper (§2c/§2d), or adding a
+Substack / LessWrong link to a lesson body, run
+
+```sh
+npm run readings:build     # --dry-run lists candidates; --refresh refetches
+```
+
+It scans the committed artifacts of every post-sourced paper **and the
+markdown links in every lesson `.mdx` body** for clean post links (no
+query/fragment — comment permalinks and anchored links stay external),
+builds a committed artifact for each (via the §2c/§2d scripts), and
+regenerates `src/content/linked-readings.json` — the registry behind the
+standalone `/readings/[id]` viewer. At render time those links are
+rewritten in-place: to the course page when the target is itself a course
+paper, else to `/readings/…` (papers via `rewriteReadingLinks`; lessons
+via the `MdxLink` renderer in the global MDX component map). Support is
+one layer deep by design — a linked reading renders with its links
+untouched — and linked readings are not content-graph items: no module,
+no progress, and never in the resource hub. Commit the registry plus the
+new `src/content/{substack,lesswrong}/` and
+`public/{substack,lesswrong}/` files; `readings.test.ts` pins the
+registry ↔ artifact contract.
+
+**Opting a lesson link out**: write it as literal JSX —
+`<a href="…">text</a>` instead of `[text](…)`. MDX's component map only
+applies to markdown-derived elements, so a literal anchor renders as-is,
+and `readings:build` only collects markdown link destinations. Use this
+for links that must stay external, e.g. the attribution line of a
+verbatim-reproduced lesson (internalizing "the original post" on a page
+that *is* the reproduction would be circular). When a post exists on
+several hosts (LessWrong + a Substack custom domain), link the host the
+course already uses — course paper source URL or existing artifact —
+so one post never builds under two ids.
+
+**Reproduction permission (the gate).** A linked-reading artifact is a
+committed FULL COPY of someone else's post — LessWrong/Substack authors
+retain copyright, and neither platform grants a republication license, so
+the same rule as everything in `src/content/` applies: only reproduce what
+you have permission (or an explicit license, e.g. an author-applied CC
+notice) for. The hand-authored `src/content/reading-permissions.json`
+records one entry per artifact id: `"permitted"` (say what the permission
+is in `note`), `"unreviewed"` (grandfathered before the gate existed —
+served, pending review), or `"denied"` (link stays external; delete the
+committed artifact). `readings:build` refuses to convert a NEW link with
+no entry and prints the entry to add, so the reproduced set only ever
+grows deliberately; `readings.test.ts` fails if a served reading lacks a
+non-denied record.
 
 ---
 

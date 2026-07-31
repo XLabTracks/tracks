@@ -20,6 +20,19 @@ const nextConfig: NextConfig = {
     "pg",
     "pg-cloudflare",
   ],
+  async redirects() {
+    return [
+      {
+        // The mod-6 walkthrough lesson (c-plm-walkthrough) was replaced by
+        // the guided paper item — keep old bookmarks and syllabus links
+        // working. 307 (not permanent) so browsers don't cache it forever if
+        // the destination slug ever changes again.
+        source: "/tracks/control/low-stakes-control/password-locked-models-walkthrough",
+        destination: "/tracks/control/low-stakes-control/capability-elicitation-guided",
+        permanent: false,
+      },
+    ];
+  },
   async headers() {
     return [
       {
@@ -45,6 +58,9 @@ const withMDX = createMDX({
       "rehype-slug",
       // Must come after rehype-slug: it reads the heading ids slug assigns.
       join(process.cwd(), "src/lib/mdx/rehype-lesson-sections.mjs"),
+      // Before rehype-katex: it skips inline math while math is still a
+      // `code` element, and never touches headings/links/inline JSX.
+      join(process.cwd(), "src/lib/mdx/rehype-auto-gloss.mjs"),
       "rehype-katex",
     ],
   },

@@ -4,7 +4,7 @@ import { revalidatePath } from "next/cache";
 import { Prisma } from "@prisma/client";
 import type { SubmissionKind } from "@prisma/client";
 import { getCurrentUser } from "@/lib/auth";
-import { prisma } from "@/lib/db";
+import { isUniqueViolation, prisma } from "@/lib/db";
 import { getWritingTarget } from "@/lib/content";
 import { sanitizeWritingValues } from "@/lib/content/exercise-view";
 
@@ -67,12 +67,7 @@ export async function saveWritingDraft(
       // concurrently — leave it). Never swallow connection/validation errors:
       // the client treats a resolved autosave as "saved", so a swallowed
       // failure would show green while nothing persisted.
-      if (
-        !(error instanceof Prisma.PrismaClientKnownRequestError) ||
-        error.code !== "P2002"
-      ) {
-        throw error;
-      }
+      if (!isUniqueViolation(error)) throw error;
     }
   }
 }
@@ -107,5 +102,35 @@ export async function submitWriting(
     },
   });
   // Refresh instructor dashboards that read submissions.
+  revalidatePath("/classrooms", "layout");
+}
+
+/**
+ * Reopens the caller's own submitted writing for editing: submitted → draft,
+ * content untouched. Any stored transparency grade stays on the row (grade
+ * presence = score + feedback set) and resurfaces on resubmit until re-graded.
+ * Scoped to status "submitted" so it can't touch drafts or race a concurrent
+ * reopen; no-op when there's nothing submitted. Validates contentId like the
+ * sibling actions — a direct POST must not be able to flip the closed-
+ * exercise subsystems' rows (choice/flowchart/tap-reveal/…, which share kind
+ * "exercise") out of their submitted-with-score invariant.
+ */
+export async function reopenWriting(
+  contentId: string,
+  kind: SubmissionKind,
+): Promise<void> {
+  const user = await getCurrentUser();
+  if (!user) throw new Error("Not signed in");
+  if (kind !== "assessment" && kind !== "exercise") {
+    throw new Error("Invalid submission");
+  }
+  if (!getWritingTarget(contentId, kind as WritingKind)) {
+    throw new Error("Invalid submission");
+  }
+  await prisma.submission.updateMany({
+    where: { userId: user.id, contentId, kind, status: "submitted" },
+    data: { status: "draft" },
+  });
+  // Instructor dashboards show the row as draft until resubmitted.
   revalidatePath("/classrooms", "layout");
 }

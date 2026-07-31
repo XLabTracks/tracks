@@ -13,11 +13,16 @@ import {
   getItemsForModule,
   getLessonById,
   getModuleProgressContentIds,
+  getContentLocation,
   getModulesForTrack,
   getPrerequisiteModules,
+  getTrackContentIds,
   getTrackItemSequence,
+  isOptionalItem,
   itemIdOf,
+  type ModuleItem,
   itemSlugOf,
+  paperResources,
   papers,
   resources,
   tracks,
@@ -39,9 +44,17 @@ import {
   LESSWRONG_CONVERTER_VERSION,
   type LessWrongArtifact,
 } from "@/lib/lesswrong/types";
-import type { Paper } from "@/lib/content/types";
+import {
+  editTargetRef,
+  isSectionEndRef,
+  type Paper,
+} from "@/lib/content/types";
+import { getGlossaryTerm } from "@/lib/content/glossary";
 import { buildBlockIndex, normalizeText } from "@/lib/papers/block-index";
 import { markdownInlineToHast } from "@/lib/papers/markdown";
+import { findSentenceSpan, wrapGlossPhrase } from "@/lib/papers/patch-section";
+import { fromHtmlIsomorphic } from "hast-util-from-html-isomorphic";
+import type { Element, Root } from "hast";
 
 describe("content integrity", () => {
   it("every track's modules resolve and belong to it", () => {
@@ -114,7 +127,8 @@ describe("content integrity", () => {
     dupId(modules);
     dupId(exercises);
     dupId(assessments);
-    dupId(resources);
+    // The hub renders curated + paper-derived entries as one keyed list.
+    dupId([...resources, ...paperResources]);
 
     const trackSlugs = tracks.map((t) => t.slug);
     expect(new Set(trackSlugs).size).toBe(trackSlugs.length);
@@ -130,6 +144,40 @@ describe("content integrity", () => {
     // At most one assessment per module.
     const assessmentModuleIds = assessments.map((a) => a.moduleId);
     expect(new Set(assessmentModuleIds).size).toBe(assessmentModuleIds.length);
+  });
+
+  // Every real-track paper links out from the resource hub; the Example
+  // track's papers (feature reference, not curriculum) must not leak in.
+  it("paper-derived resources cover every real-track paper source", () => {
+    const urls = new Set(paperResources.map((r) => r.url));
+    for (const track of tracks) {
+      if (track.kind === "example") continue;
+      for (const mod of getModulesForTrack(track.id)) {
+        for (const item of getItemsForModule(mod.id)) {
+          if (item.kind !== "paper") continue;
+          const source = item.paper.source;
+          const url =
+            source.kind === "arxiv"
+              ? `https://arxiv.org/abs/${source.arxivId}`
+              : source.postUrl;
+          expect(urls.has(url), `${item.paper.id} missing from hub`).toBe(true);
+        }
+      }
+    }
+    const examplePaperIds = new Set(
+      papers.filter((p) => p.moduleId.startsWith("ex-")).map((p) => p.id),
+    );
+    for (const r of paperResources) {
+      const paperId = r.id.replace(/^paper-res-/, "");
+      expect(
+        examplePaperIds.has(paperId),
+        `${r.id} derives from an Example-track paper`,
+      ).toBe(false);
+      // The hub links course readings to their in-course viewer.
+      expect(r.internalHref, `${r.id} internalHref`).toBe(
+        getContentLocation(paperId)?.href,
+      );
+    }
   });
 });
 
@@ -377,7 +425,7 @@ describe("paper integrity", () => {
     (p.edits ?? []).flatMap((edit) => (edit.op === "activity" ? [edit] : []));
   const blockRefsOf = (p: (typeof papers)[number]) =>
     (p.edits ?? []).flatMap((edit) => {
-      const ref = edit.op === "hide" ? edit.at : edit.after;
+      const ref = editTargetRef(edit);
       return "anchor" in ref ? [{ edit, ref }] : [];
     });
   const insertedLessonIds = papers.flatMap((p) =>
@@ -437,6 +485,19 @@ describe("paper integrity", () => {
           inline,
           `${paper.id}: label "${edit.label}" on a sentence-level add would be silently dropped`,
         ).toBe(false);
+      }
+    }
+  });
+
+  it("notes appear only on expandable hides (a silent hide renders no marker to label)", () => {
+    for (const paper of papers) {
+      for (const edit of paper.edits ?? []) {
+        if (edit.op !== "hide" || !edit.silent) continue;
+        expect(
+          edit.note === undefined,
+          `${paper.id}: silent hide at ${edit.at.anchor} carries note "${edit.note}" — ` +
+            `drop the note or the silent flag`,
+        ).toBe(true);
       }
     }
   });
@@ -570,9 +631,10 @@ describe("paper integrity", () => {
 
   it("every sectionEnd target is in the artifact toc", () => {
     for (const paper of papers) {
-      const sectionEnds = (paper.edits ?? []).flatMap((edit) =>
-        edit.op !== "hide" && "sectionEnd" in edit.after ? [edit.after.sectionEnd] : [],
-      );
+      const sectionEnds = (paper.edits ?? []).flatMap((edit) => {
+        const ref = editTargetRef(edit);
+        return isSectionEndRef(ref) ? [ref.sectionEnd] : [];
+      });
       if (sectionEnds.length === 0) continue;
       const facts = artifactFactsOf(paper);
       const artifact = readArtifact(paper);
@@ -620,10 +682,10 @@ describe("paper integrity", () => {
             `${paper.id}: ${ref.anchor} has ${info.sentences.length} sentences, ` +
               `edit references s=${ref.s}${sEnd !== ref.s ? `..${sEnd}` : ""} — run \`${listCmd} --section …\``,
           ).toBe(true);
-        } else if (edit.op === "hide") {
+        } else if (edit.op === "hide" || edit.op === "gloss") {
           expect(
             !/^h[1-6]$/.test(info.tag),
-            `${paper.id}: hide may not target heading ${ref.anchor} (nav/scroll anchor)`,
+            `${paper.id}: ${edit.op} may not target heading ${ref.anchor} (nav/scroll anchor)`,
           ).toBe(true);
         }
         const targetText = ref.s !== undefined ? info.sentences[ref.s - 1] : info.text;
@@ -649,23 +711,28 @@ describe("paper integrity", () => {
       // Expand each hide to covered units: "anchor" (whole block, incl.
       // descendant anchors) or "anchor:s".
       const covered = new Map<string, string>(); // unit → hiding anchor
-      const coverUnit = (unit: string, owner: string) => {
+      const silentUnits = new Set<string>(); // units a SILENT hide removes
+      const coverUnit = (unit: string, owner: string, silent: boolean) => {
         expect(
           covered.has(unit),
           `${paper.id}: overlapping hides at ${unit} (${covered.get(unit)} and ${owner})`,
         ).toBe(false);
         covered.set(unit, owner);
+        if (silent) silentUnits.add(unit);
       };
       for (const hide of hides) {
         const { anchor, s } = hide.at;
+        const silent = hide.silent === true;
         if (s !== undefined) {
-          for (let i = s; i <= (hide.sEnd ?? s); i++) coverUnit(`${anchor}:${i}`, anchor);
+          for (let i = s; i <= (hide.sEnd ?? s); i++) {
+            coverUnit(`${anchor}:${i}`, anchor, silent);
+          }
           continue;
         }
-        coverUnit(anchor, anchor);
+        coverUnit(anchor, anchor, silent);
         const info = index.get(anchor);
         for (let i = 1; i <= (info?.sentences.length ?? 0); i++) {
-          coverUnit(`${anchor}:${i}`, anchor);
+          coverUnit(`${anchor}:${i}`, anchor, silent);
         }
         for (const [other, otherInfo] of index) {
           let parent = otherInfo.parentAnchor;
@@ -674,9 +741,9 @@ describe("paper integrity", () => {
               // Cover the descendant block AND its sentence units — an
               // inline add after a sentence of a hidden container would
               // render invisibly inside the collapsed marker.
-              coverUnit(other, anchor);
+              coverUnit(other, anchor, silent);
               for (let i = 1; i <= otherInfo.sentences.length; i++) {
-                coverUnit(`${other}:${i}`, anchor);
+                coverUnit(`${other}:${i}`, anchor, silent);
               }
               break;
             }
@@ -696,12 +763,34 @@ describe("paper integrity", () => {
       for (const { edit, ref } of blockRefsOf(paper)) {
         if (edit.op === "hide") continue;
         const unit = ref.s !== undefined ? `${ref.anchor}:${ref.s}` : ref.anchor;
+        if (edit.op === "gloss") {
+          // A glossed phrase inside an EXPANDABLE hide is fine — it reveals
+          // (and its card works) when the learner expands the marker. Inside
+          // a silent hide the text is removed, so it would never render.
+          expect(
+            silentUnits.has(unit),
+            `${paper.id}: gloss at ${unit} is inside a silently removed range ` +
+              `and would never render`,
+          ).toBe(false);
+          continue;
+        }
         if (!covered.has(unit)) continue;
         expect(
           lastUnits.has(unit),
           `${paper.id}: ${edit.op} after ${unit} is inside a hidden range — ` +
             `target the range's last unit or move it outside`,
         ).toBe(true);
+        // Hide-then-replace after a silently removed li has nowhere valid to
+        // land — the note renders inside the li (valid list markup), which
+        // the silent hide then removes.
+        expect(
+          edit.op === "add" &&
+            ref.s === undefined &&
+            silentUnits.has(unit) &&
+            index.get(ref.anchor)?.tag === "li",
+          `${paper.id}: add after ${unit} would render inside a silently removed ` +
+            `list item — move it after the list or hide expandably`,
+        ).toBe(false);
       }
       // Mid-paragraph activities may not split a hidden block.
       for (const { edit, ref } of blockRefsOf(paper)) {
@@ -710,6 +799,71 @@ describe("paper integrity", () => {
           covered.has(ref.anchor),
           `${paper.id}: mid-paragraph activity splits hidden block ${ref.anchor}`,
         ).toBe(false);
+      }
+    }
+  });
+
+  it("every gloss edit resolves: known term, unique target, phrase wrappable", () => {
+    for (const paper of papers) {
+      const glosses = (paper.edits ?? []).flatMap((edit) =>
+        edit.op === "gloss" ? [edit] : [],
+      );
+      if (glosses.length === 0) continue;
+
+      // Duplicate identical targets would nest or double-wrap triggers.
+      const keys = glosses.map(
+        (op) => `${op.at.anchor}:${op.at.s ?? 0}:${normalizeText(op.phrase)}`,
+      );
+      expect(new Set(keys).size, `${paper.id}: duplicate gloss edits`).toBe(
+        keys.length,
+      );
+
+      const artifact = readArtifact(paper);
+      if (!artifact.ready) continue; // covered above
+      const tree = fromHtmlIsomorphic(artifact.ready.html, {
+        fragment: true,
+      }) as Root;
+      const blockByAnchor = new Map<string, Element>();
+      const collect = (node: Root | Element): void => {
+        for (const child of node.children ?? []) {
+          if (child.type !== "element") continue;
+          const anchor = child.properties?.dataAnchor;
+          if (typeof anchor === "string") blockByAnchor.set(anchor, child);
+          collect(child);
+        }
+      };
+      collect(tree);
+
+      // Apply each block's glosses SEQUENTIALLY to one clone, in edits
+      // order — the exact phase-A0 semantics. A pristine-clone-per-op check
+      // would pass overlapping phrases ("trusted monitoring" then
+      // "monitoring") that the runtime silently drops as unmatched, because
+      // an earlier wrap consumes the text a later phrase needs.
+      const cloneByAnchor = new Map<string, Element>();
+      for (const op of glosses) {
+        const where = `${op.at.anchor}${op.at.s ? ` s=${op.at.s}` : ""}`;
+        expect(
+          getGlossaryTerm(op.termId),
+          `${paper.id}: gloss at ${where} references unknown term "${op.termId}" — add it to src/content/glossary.json`,
+        ).toBeDefined();
+        const block = blockByAnchor.get(op.at.anchor);
+        if (!block) continue; // unknown anchors already failed the snippet test
+        let clone = cloneByAnchor.get(op.at.anchor);
+        if (!clone) {
+          clone = structuredClone(block);
+          cloneByAnchor.set(op.at.anchor, clone);
+        }
+        const target = op.at.s ? findSentenceSpan(clone, op.at.s) : clone;
+        if (!target) continue; // out-of-range s already failed the snippet test
+        // The EXACT runtime matcher — a phrase split by inline markup (a
+        // link, citation, math, emphasis), or already consumed by an
+        // earlier gloss on this block, must fail here, not silently at
+        // render time.
+        expect(
+          wrapGlossPhrase(target, op.phrase, op.termId),
+          `${paper.id}: gloss phrase "${op.phrase}" at ${where} is not wrappable — ` +
+            `not plain running text there, or an earlier gloss already consumed it`,
+        ).toBe(true);
       }
     }
   });
@@ -729,6 +883,54 @@ describe("paper integrity", () => {
             `${paper.id}: sentence-level add must render as a single inline paragraph ` +
               `(no lists/headings/fences — even after a single newline)`,
           ).not.toBeNull();
+        }
+      }
+    }
+  });
+
+  it("gates have unique stable ids, non-empty copy, and no sentence-level targets", () => {
+    for (const paper of papers) {
+      const gates = (paper.edits ?? []).flatMap((edit) =>
+        edit.op === "gate" ? [edit] : [],
+      );
+      const ids = gates.map((gate) => gate.id);
+      expect(
+        new Set(ids).size,
+        `${paper.id}: duplicate gate ids (they key the learner's opened state)`,
+      ).toBe(ids.length);
+      for (const gate of gates) {
+        expect(gate.id.trim().length, `${paper.id}: empty gate id`).toBeGreaterThan(0);
+        if (gate.prompt !== undefined) {
+          expect(
+            gate.prompt.trim().length,
+            `${paper.id}: gate ${gate.id} has an empty prompt — omit it for a bare gate`,
+          ).toBeGreaterThan(0);
+        }
+        if (gate.cta !== undefined) {
+          expect(
+            gate.cta.trim().length,
+            `${paper.id}: gate ${gate.id} has an empty cta — omit it for the default`,
+          ).toBeGreaterThan(0);
+        }
+        // The engine only supports section-end and whole-block gates
+        // (patch-section fails soft on a sentence target; catch it here).
+        expect(
+          "anchor" in gate.after && gate.after.s !== undefined,
+          `${paper.id}: gate ${gate.id} targets a sentence — gates take section ends or whole blocks`,
+        ).toBe(false);
+        // Written gates need a question to answer, and minChars only makes
+        // sense there (a tap gate ignores it silently).
+        if (gate.written) {
+          expect(
+            gate.prompt !== undefined,
+            `${paper.id}: written gate ${gate.id} has no prompt — there is nothing to respond to`,
+          ).toBe(true);
+        }
+        if (gate.minChars !== undefined) {
+          expect(
+            gate.written === true && gate.minChars > 0,
+            `${paper.id}: gate ${gate.id} sets minChars ${gate.minChars} — requires written: true and a positive value`,
+          ).toBe(true);
         }
       }
     }
@@ -772,20 +974,45 @@ describe("module item navigation", () => {
     }
   });
 
-  it("module progress ids list papers and their inserted lessons exactly once", () => {
+  // An item's completion units, re-derived from the raw data (not through the
+  // accessors under test): the item itself plus a paper's inserted lessons.
+  const unitIdsOf = (item: ModuleItem): string[] =>
+    item.kind === "lesson"
+      ? [item.lesson.id]
+      : [
+          item.paper.id,
+          ...(item.paper.edits ?? []).flatMap((edit) =>
+            edit.op === "activity"
+              ? edit.items.flatMap((i) => (i.kind === "lesson" ? [i.id] : []))
+              : [],
+          ),
+        ];
+
+  it("module progress ids list required papers and their inserted lessons exactly once", () => {
     for (const track of tracks) {
       for (const m of getModulesForTrack(track.id)) {
         const ids = getModuleProgressContentIds(m.id);
         expect(new Set(ids).size).toBe(ids.length);
         for (const item of getItemsForModule(m.id)) {
-          expect(ids).toContain(itemIdOf(item));
-          if (item.kind === "paper") {
-            for (const edit of item.paper.edits ?? []) {
-              if (edit.op !== "activity") continue;
-              for (const inserted of edit.items) {
-                if (inserted.kind === "lesson") expect(ids).toContain(inserted.id);
-              }
-            }
+          // Optional readings are trackable but never required: none of their
+          // units may appear among the module's progress ids.
+          for (const unitId of unitIdsOf(item)) {
+            if (isOptionalItem(item)) expect(ids).not.toContain(unitId);
+            else expect(ids).toContain(unitId);
+          }
+        }
+      }
+    }
+  });
+
+  it("track content ids cover every item's units — optional included — exactly once", () => {
+    for (const track of tracks) {
+      const ids = getTrackContentIds(track.id);
+      expect(new Set(ids).size).toBe(ids.length);
+      for (const m of getModulesForTrack(track.id)) {
+        for (const item of getItemsForModule(m.id)) {
+          for (const unitId of unitIdsOf(item)) {
+            expect(ids).toContain(unitId);
           }
         }
       }

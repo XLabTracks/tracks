@@ -45,13 +45,15 @@ export interface TrackSidebarProps {
 function activeItemNavOf(
   { outline, itemNavs = {} }: TrackSidebarProps,
   pathname: string,
-): { kind: ModuleItem["kind"]; nav: PaperNavItem[] } | null {
+): { kind: ModuleItem["kind"]; id: string; nav: PaperNavItem[] } | null {
   const base = `/tracks/${outline.track.slug}`;
   for (const { module, items } of outline.modules) {
     for (const item of items) {
       if (pathname !== `${base}/${module.slug}/${itemSlug(item)}`) continue;
       const nav = itemNavs[itemKey(item)];
-      return nav && nav.length > 0 ? { kind: item.kind, nav } : null;
+      return nav && nav.length > 0
+        ? { kind: item.kind, id: itemKey(item), nav }
+        : null;
     }
   }
   return null;
@@ -270,6 +272,9 @@ function SidebarNav({
               items={activeItemNav.nav}
               pathname={pathname}
               completedContentIds={completed}
+              // Papers only: keys the reading-gate open state that unlocks
+              // rows whose targets sit behind still-closed gates.
+              paperId={activeItemNav.kind === "paper" ? activeItemNav.id : undefined}
               onNavigate={onNavigate}
             />
           </div>
@@ -333,9 +338,18 @@ function SidebarItemRow({
         ) : (
           <Circle className="mt-0.5 size-3.5 shrink-0 opacity-30" aria-hidden />
         )}
-        <span className="line-clamp-2">
-          {item.kind === "lesson" ? item.lesson.title : item.paper.title}
-          {done && <span className="sr-only"> (completed)</span>}
+        <span className="flex min-w-0 flex-col">
+          <span className="line-clamp-2">
+            {item.kind === "lesson" ? item.lesson.title : item.paper.title}
+            {done && <span className="sr-only"> (completed)</span>}
+          </span>
+          {/* Its own line, outside the title's line-clamp, so a long title
+              can't clip the optional marker (the primary nav surface). */}
+          {item.kind === "paper" && item.paper.optional && (
+            <span className="text-muted-foreground text-xs font-normal">
+              Optional
+            </span>
+          )}
         </span>
         {item.kind === "paper" && (
           <FileText

@@ -19,6 +19,7 @@ const HTML = [
   '<p data-anchor="b-0011"><span data-s="1">Beta two.</span></p>',
   '<ul><li data-anchor="b-0012"><span data-s="1">Item text.</span></li></ul>',
   '<figure data-anchor="b-0013"><img src="/x.png"><table data-anchor="b-0014"><tbody><tr><td>cell</td></tr></tbody></table></figure>',
+  '<p data-anchor="b-0015"><span data-s="1">Intra-attention beats attention here.</span> <span data-s="2">See <a href="#x">attention span</a> or <code>attention</code>, else attention wins.</span> <span data-s="3">P(doom) rises.</span></p>',
 ].join("");
 
 const TOC: PaperTocEntry[] = [
@@ -35,7 +36,7 @@ const ref = (anchor: string, snippet: string, s?: number): PaperBlockRef => ({
 });
 
 const htmlOf = (parts: PaperPart[]) =>
-  parts.map((p) => (p.kind === "html" ? p.html : `[activity]`)).join("");
+  parts.map((p) => (p.kind === "html" ? p.html : `[${p.kind}]`)).join("");
 
 describe("applyPaperEdits", () => {
   it("no edits → one byte-identical part, nothing parsed", () => {
@@ -149,6 +150,77 @@ describe("applyPaperEdits", () => {
       /<figure data-anchor="b-0013"><img src="\/x.png"><details class="ax-hidden">/,
     );
     expect(html).toContain("··· 1 table hidden ···");
+  });
+
+  it("silent hide removes a block outright — no marker, no anchor left", () => {
+    const { parts, unmatchedEdits } = applyPaperEdits(HTML, TOC, [
+      { op: "hide", at: ref("b-0010", "Beta one."), silent: true },
+    ]);
+    expect(unmatchedEdits).toEqual([]);
+    const html = htmlOf(parts);
+    expect(html).not.toContain("Beta one.");
+    expect(html).not.toContain('data-anchor="b-0010"');
+    expect(html).not.toContain("<details");
+    expect(html).not.toContain("hidden");
+    // neighbors untouched
+    expect(html).toContain('<h2 id="ax-sec-b"');
+    expect(html).toContain('<p data-anchor="b-0011"><span data-s="1">Beta two.</span></p>');
+  });
+
+  it("silent hide removes an li entirely (no details wrapper)", () => {
+    const { parts } = applyPaperEdits(HTML, TOC, [
+      { op: "hide", at: ref("b-0012", "Item text."), silent: true },
+    ]);
+    const html = htmlOf(parts);
+    expect(html).not.toContain('data-anchor="b-0012"');
+    expect(html).not.toContain("Item text.");
+    expect(html).toContain("<ul></ul>");
+  });
+
+  it("silent hide removes a sentence range, keeping the last data-s resolvable", () => {
+    const { parts, unmatchedEdits } = applyPaperEdits(HTML, TOC, [
+      { op: "hide", at: ref("b-0003", "One two.", 2), sEnd: 3, silent: true },
+    ]);
+    expect(unmatchedEdits).toEqual([]);
+    const html = htmlOf(parts);
+    expect(html).not.toContain("One two.");
+    expect(html).not.toContain("One three.");
+    expect(html).not.toContain("ax-hidden");
+    // the empty placeholder is the hide-then-replace landing spot
+    expect(html).toMatch(
+      /<p data-anchor="b-0003"><span data-s="1">One one\.<\/span> <span data-s="3"><\/span><\/p>/,
+    );
+  });
+
+  it("silent hide-then-replace: adds after the removed range/block render in place", () => {
+    const { parts, unmatchedEdits } = applyPaperEdits(HTML, TOC, [
+      { op: "hide", at: ref("b-0003", "One two.", 2), sEnd: 3, silent: true },
+      { op: "add", after: ref("b-0003", "One three.", 3), markdown: "*sentence stand-in*" },
+      { op: "hide", at: ref("b-0010", "Beta one."), silent: true },
+      { op: "add", after: ref("b-0010", "Beta one."), markdown: "Block stand-in." },
+    ]);
+    expect(unmatchedEdits).toEqual([]);
+    const html = htmlOf(parts);
+    // inline add lands after the sentence placeholder, inside the paragraph
+    expect(html).toMatch(
+      /<span data-s="3"><\/span> <span class="ax-added-inline"[^>]*><em>sentence stand-in<\/em><\/span><\/p>/,
+    );
+    // block add survives the removal of its target, between the neighbors
+    const added = html.indexOf("Block stand-in.");
+    expect(added).toBeGreaterThan(html.indexOf('id="ax-sec-b"'));
+    expect(added).toBeLessThan(html.indexOf('data-anchor="b-0011"'));
+    expect(html).not.toContain("Beta one.");
+  });
+
+  it("silent and expandable hides coexist without merging", () => {
+    const { parts } = applyPaperEdits(HTML, TOC, [
+      { op: "hide", at: ref("b-0010", "Beta one."), silent: true },
+      { op: "hide", at: ref("b-0011", "Beta two.") },
+    ]);
+    const html = htmlOf(parts);
+    expect(html).not.toContain("Beta one.");
+    expect(html).toContain("··· 1 paragraph hidden ···");
+    expect(html).toContain('data-anchor="b-0011"');
   });
 
   it("adds a block-level note after a block", () => {
@@ -331,6 +403,87 @@ describe("applyPaperEdits", () => {
     expect(html).toContain('<h2 id="ax-sec-b"');
   });
 
+  it("gloss wraps its phrase in the full trigger-markup contract, on a word boundary", () => {
+    const { parts, unmatchedEdits } = applyPaperEdits(HTML, TOC, [
+      { op: "gloss", at: ref("b-0015", "Intra-attention beats", 1), termId: "attn", phrase: "attention" },
+    ]);
+    expect(unmatchedEdits).toEqual([]);
+    // The exact markup PaperGlossary delegates on ([data-gloss] + the aria
+    // contract) — renaming any attribute breaks every paper glossary card.
+    // "Intra-attention" is skipped: word-char phrase edges refuse letter/
+    // digit/hyphen adjacency.
+    expect(htmlOf(parts)).toContain(
+      'Intra-attention beats <span class="ax-gloss" data-gloss="attn" tabindex="0" ' +
+        'role="button" aria-haspopup="dialog" aria-expanded="false">attention</span> here.',
+    );
+  });
+
+  it("gloss skips links, code, and earlier triggers when matching", () => {
+    const { parts, unmatchedEdits } = applyPaperEdits(HTML, TOC, [
+      { op: "gloss", at: ref("b-0015", "See attention span or", 2), termId: "attn", phrase: "attention" },
+    ]);
+    expect(unmatchedEdits).toEqual([]);
+    const html = htmlOf(parts);
+    expect(html).toContain('<a href="#x">attention span</a>'); // untouched
+    expect(html).toContain("<code>attention</code>"); // untouched
+    expect(html).toMatch(/else <span class="ax-gloss"[^>]*>attention<\/span> wins/);
+  });
+
+  it("gloss escapes regex metacharacters in phrases", () => {
+    const { parts, unmatchedEdits } = applyPaperEdits(HTML, TOC, [
+      { op: "gloss", at: ref("b-0015", "P(doom) rises.", 3), termId: "pdoom", phrase: "P(doom)" },
+    ]);
+    expect(unmatchedEdits).toEqual([]);
+    expect(htmlOf(parts)).toMatch(/<span class="ax-gloss"[^>]*>P\(doom\)<\/span> rises\./);
+  });
+
+  it("block-level gloss wraps the first occurrence anywhere in the block", () => {
+    const { parts, unmatchedEdits } = applyPaperEdits(HTML, TOC, [
+      { op: "gloss", at: ref("b-0003", "One one."), termId: "t", phrase: "One two" },
+    ]);
+    expect(unmatchedEdits).toEqual([]);
+    expect(htmlOf(parts)).toMatch(
+      /<span data-s="2"><span class="ax-gloss"[^>]*>One two<\/span>\.<\/span>/,
+    );
+  });
+
+  it("gloss composes with a hide and a split on the same paragraph (phase A0 first)", () => {
+    const { parts, unmatchedEdits } = applyPaperEdits(HTML, TOC, [
+      { op: "gloss", at: ref("b-0003", "One two.", 2), termId: "t", phrase: "One two" },
+      { op: "hide", at: ref("b-0003", "One two.", 2) },
+      { op: "activity", after: ref("b-0003", "One one.", 1), items: [{ kind: "exercise", id: "tf" }] },
+    ]);
+    expect(unmatchedEdits).toEqual([]);
+    expect(parts.map((p) => p.kind)).toEqual(["html", "activity", "html"]);
+    // The wrap happened before the hide, so the hidden content carries the
+    // trigger — it reveals (and works) when the learner expands the marker.
+    expect((parts[2] as { html: string }).html).toMatch(
+      /ax-hidden-content"> <span data-s="2"><span class="ax-gloss"/,
+    );
+  });
+
+  it("gloss fails soft on markup-broken and empty phrases", () => {
+    const { parts, unmatchedEdits } = applyPaperEdits(HTML, TOC, [
+      // "attention span" exists only inside the link — never as plain text.
+      { op: "gloss", at: ref("b-0015", "See attention span or", 2), termId: "attn", phrase: "attention span" },
+      { op: "gloss", at: ref("b-0015", "P(doom) rises.", 3), termId: "attn", phrase: "   " },
+    ]);
+    expect(unmatchedEdits).toHaveLength(2);
+    expect(htmlOf(parts)).toBe(HTML);
+  });
+
+  it("an earlier gloss consumes text a later overlapping gloss needs (fails soft)", () => {
+    const { parts, unmatchedEdits } = applyPaperEdits(HTML, TOC, [
+      { op: "gloss", at: ref("b-0015", "Intra-attention beats", 1), termId: "a", phrase: "beats attention" },
+      { op: "gloss", at: ref("b-0015", "Intra-attention beats", 1), termId: "b", phrase: "attention" },
+    ]);
+    // content.test.ts mirrors exactly this sequence, so an overlap like
+    // this fails CI rather than silently dropping the second card.
+    expect(unmatchedEdits).toHaveLength(1);
+    expect((unmatchedEdits[0] as { termId?: string }).termId).toBe("b");
+    expect(htmlOf(parts)).toMatch(/<span class="ax-gloss"[^>]*data-gloss="a"[^>]*>beats attention<\/span>/);
+  });
+
   it("tier-1 point and tier-2 edits coexist in one section", () => {
     const { parts } = applyPaperEdits(HTML, TOC, [
       { op: "hide", at: ref("b-0008", "Sub para.") },
@@ -339,5 +492,142 @@ describe("applyPaperEdits", () => {
     const kinds = parts.map((p) => p.kind);
     expect(kinds).toEqual(["html", "activity", "html"]);
     expect((parts[0] as { html: string }).html).toContain("··· 1 paragraph hidden ···");
+  });
+
+  it("section-end gate emits a gate part at the subtree boundary", () => {
+    const { parts } = applyPaperEdits(HTML, TOC, [
+      {
+        op: "gate",
+        after: { sectionEnd: "ax-sec-a-1" },
+        id: "g1",
+        prompt: "Think of *three* ways.",
+        cta: "Continue",
+      },
+    ]);
+    expect(parts).toHaveLength(3);
+    expect(parts[1]).toEqual({
+      kind: "gate",
+      id: "g1",
+      prompt: "Think of *three* ways.",
+      cta: "Continue",
+    });
+    expect((parts[0] as { html: string }).html.endsWith("Sub para.</span></p>")).toBe(true);
+    expect((parts[2] as { html: string }).html.startsWith('<h2 id="ax-sec-b"')).toBe(true);
+    expect(htmlOf(parts).replace("[gate]", "")).toBe(HTML);
+  });
+
+  it("block-level gate splits the section after its block", () => {
+    const { parts, unmatchedEdits } = applyPaperEdits(HTML, TOC, [
+      { op: "gate", after: ref("b-0010", "Beta one."), id: "g2" },
+    ]);
+    expect(unmatchedEdits).toEqual([]);
+    const gateIndex = parts.findIndex((p) => p.kind === "gate");
+    expect(gateIndex).toBeGreaterThan(0);
+    expect(parts[gateIndex]).toEqual({
+      kind: "gate",
+      id: "g2",
+      prompt: undefined,
+      cta: undefined,
+    });
+    const before = parts
+      .slice(0, gateIndex)
+      .map((p) => (p.kind === "html" ? p.html : ""))
+      .join("");
+    const after = parts
+      .slice(gateIndex + 1)
+      .map((p) => (p.kind === "html" ? p.html : ""))
+      .join("");
+    expect(before.endsWith('<p data-anchor="b-0010"><span data-s="1">Beta one.</span></p>')).toBe(true);
+    expect(after.startsWith('<p data-anchor="b-0011">')).toBe(true);
+    expect(before + after).toBe(HTML);
+  });
+
+  it("fails soft on a sentence-level gate target", () => {
+    const { parts, unmatchedEdits } = applyPaperEdits(HTML, TOC, [
+      { op: "gate", after: ref("b-0003", "One one.", 1), id: "g3" },
+    ]);
+    expect(unmatchedEdits).toHaveLength(1);
+    expect(htmlOf(parts)).toBe(HTML);
+  });
+
+  it("an add authored after a gate on a nested block renders behind the gate", () => {
+    // b-0012 is an li: the gate hoists past the enclosing <ul>, and the add
+    // must hoist with it — rendering it inside the li would put the reveal
+    // text ABOVE the gate, visible without tapping through.
+    const { parts, unmatchedEdits } = applyPaperEdits(HTML, TOC, [
+      { op: "gate", after: ref("b-0012", "Item text."), id: "g4" },
+      { op: "add", after: ref("b-0012", "Item text."), markdown: "REVEAL text." },
+    ]);
+    expect(unmatchedEdits).toEqual([]);
+    const gateIndex = parts.findIndex((p) => p.kind === "gate");
+    expect(gateIndex).toBeGreaterThan(0);
+    const before = parts
+      .slice(0, gateIndex)
+      .map((p) => (p.kind === "html" ? p.html : ""))
+      .join("");
+    const after = parts
+      .slice(gateIndex + 1)
+      .map((p) => (p.kind === "html" ? p.html : ""))
+      .join("");
+    expect(before.endsWith("</ul>")).toBe(true);
+    expect(before).not.toContain("REVEAL");
+    expect(after).toContain("REVEAL text.");
+  });
+
+  it("an add authored before a gate on the same nested block stays inside the item", () => {
+    const { parts, unmatchedEdits } = applyPaperEdits(HTML, TOC, [
+      { op: "add", after: ref("b-0012", "Item text."), markdown: "Aside." },
+      { op: "gate", after: ref("b-0012", "Item text."), id: "g5" },
+    ]);
+    expect(unmatchedEdits).toEqual([]);
+    const gateIndex = parts.findIndex((p) => p.kind === "gate");
+    const before = parts
+      .slice(0, gateIndex)
+      .map((p) => (p.kind === "html" ? p.html : ""))
+      .join("");
+    // Before the gate in edits order → the documented inside-the-li render.
+    expect(before).toMatch(/<li data-anchor="b-0012">.*Aside\..*<\/li>/);
+  });
+});
+
+describe("ungated tail (trailing landmarks)", () => {
+  const TAIL_HTML =
+    HTML +
+    '<section class="ax-references" id="ax-references"><h2 data-anchor="b-0020">References</h2><p data-anchor="b-0021">Ref one.</p></section>' +
+    '<section class="ax-footnotes" id="ax-footnotes"><h2 data-anchor="b-0022">Footnotes</h2><ol><li id="ax-fn-1">A note.</li></ol></section>';
+  const TAIL_TOC: PaperTocEntry[] = [
+    ...TOC,
+    { kind: "references", id: "ax-references", title: "References", number: "", level: 2, anchor: "b-0020" },
+    { kind: "footnotes", id: "ax-footnotes", title: "Footnotes", number: "", level: 2, anchor: "b-0022" },
+  ];
+
+  it("gates split trailing landmarks into ungatedTailHtml, byte-preserving", () => {
+    const { parts, ungatedTailHtml } = applyPaperEdits(TAIL_HTML, TAIL_TOC, [
+      { op: "gate", after: { sectionEnd: "ax-sec-a-1" }, id: "g1" },
+    ]);
+    expect(ungatedTailHtml).toContain('id="ax-references"');
+    expect(ungatedTailHtml).toContain('id="ax-fn-1"');
+    expect(htmlOf(parts)).not.toContain('id="ax-references"');
+    expect(htmlOf(parts).replace("[gate]", "") + ungatedTailHtml).toBe(TAIL_HTML);
+  });
+
+  it("a gate at the last body section leaves nothing gated but the landmarks out", () => {
+    // The gate boundary coincides with the references start: the whole final
+    // html part IS the landmark region and moves to the tail.
+    const { parts, ungatedTailHtml } = applyPaperEdits(TAIL_HTML, TAIL_TOC, [
+      { op: "gate", after: { sectionEnd: "ax-sec-b" }, id: "g2" },
+    ]);
+    expect(parts[parts.length - 1]).toMatchObject({ kind: "gate", id: "g2" });
+    expect(ungatedTailHtml).toContain('id="ax-references"');
+    expect(ungatedTailHtml).toContain('id="ax-footnotes"');
+    expect(htmlOf(parts).replace("[gate]", "") + ungatedTailHtml).toBe(TAIL_HTML);
+  });
+
+  it("papers without gates keep landmarks in the parts", () => {
+    const { parts, ungatedTailHtml } = applyPaperEdits(TAIL_HTML, TAIL_TOC, [
+      { op: "activity", after: { sectionEnd: "ax-sec-a-1" }, items: [{ kind: "exercise", id: "x" }] },
+    ]);
+    expect(ungatedTailHtml).toBeUndefined();
+    expect(htmlOf(parts)).toContain('id="ax-footnotes"');
   });
 });

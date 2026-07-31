@@ -3,6 +3,7 @@ import { papers } from "@/content/papers.data";
 import { exercises } from "@/content/exercises.data";
 import { assessments } from "@/content/assessments.data";
 import { resources } from "@/content/resources.data";
+import { buildAbsUrl, parseArxivId } from "@/lib/arxiv/id";
 import { isWritingExercise } from "./types";
 import type {
   Assessment,
@@ -12,6 +13,7 @@ import type {
   Module,
   ModuleItem,
   Paper,
+  PaperSource,
   Track,
 } from "./types";
 
@@ -55,11 +57,17 @@ export function getTrackById(id: string): Track | undefined {
 export function getLessonById(id: string): Lesson | undefined {
   return lessonById.get(id);
 }
+export function getPaperById(id: string): Paper | undefined {
+  return paperById.get(id);
+}
 export function getExerciseById(id: string): Exercise | undefined {
   return exerciseById.get(id);
 }
 export function getAssessmentForModule(moduleId: string): Assessment | undefined {
   return assessmentByModuleId.get(moduleId);
+}
+export function getAssessmentById(id: string): Assessment | undefined {
+  return assessmentById.get(id);
 }
 
 /**
@@ -256,6 +264,15 @@ export function getTrackOutline(trackSlug: string): TrackOutline | undefined {
 // --- Progress id sets ------------------------------------------------------
 // Progress rows (LessonProgress) key on generic content ids: standalone
 // lessons, papers, and papers' inserted lessons each count as one unit.
+// Optional readings' units are trackable (they light their own checkmarks)
+// but never *required*: the …ProgressContentIds accessors — the basis for
+// module completion, prerequisite satisfaction, and progress totals — skip
+// them, while getTrackContentIds is the full trackable universe.
+
+/** Listed and completable, but never required for module/track completion. */
+export function isOptionalItem(item: ModuleItem): boolean {
+  return item.kind === "paper" && item.paper.optional === true;
+}
 
 /**
  * A single item's progress-countable content ids: the item itself, plus a
@@ -268,15 +285,28 @@ export function getItemProgressContentIds(item: ModuleItem): string[] {
     : [item.paper.id, ...getInsertedLessonsForPaper(item.paper.id).map((l) => l.id)];
 }
 
-/** A module's progress-countable content ids, in item order. */
+/** A module's REQUIRED progress ids, in item order — optional items excluded. */
 export function getModuleProgressContentIds(moduleId: string): string[] {
-  return getItemsForModule(moduleId).flatMap(getItemProgressContentIds);
+  return getItemsForModule(moduleId)
+    .filter((item) => !isOptionalItem(item))
+    .flatMap(getItemProgressContentIds);
 }
 
-/** All progress-countable content ids in a track (used for aggregation). */
+/** A track's required progress ids (progress totals, prerequisite checks). */
 export function getTrackProgressContentIds(trackId: string): string[] {
   return getModulesForTrack(trackId).flatMap((m) =>
     getModuleProgressContentIds(m.id),
+  );
+}
+
+/**
+ * EVERY completion-trackable content id in a track, optional items included —
+ * the id universe for fetching completion rows and lighting checkmarks.
+ * Totals and gating use getTrackProgressContentIds instead.
+ */
+export function getTrackContentIds(trackId: string): string[] {
+  return getModulesForTrack(trackId).flatMap((m) =>
+    getItemsForModule(m.id).flatMap(getItemProgressContentIds),
   );
 }
 
@@ -314,8 +344,61 @@ export function getContentLocation(
 
 // --- Resources -----------------------------------------------------------
 
+/** The public link for a paper's original source. */
+function paperSourceUrl(source: PaperSource): string {
+  if (source.kind === "arxiv") {
+    const parsed = parseArxivId(source.arxivId);
+    return parsed ? buildAbsUrl(parsed) : `https://arxiv.org/abs/${source.arxivId}`;
+  }
+  return source.postUrl;
+}
+
+/**
+ * Resource-hub entries derived from the content graph: every paper item in a
+ * real track (the Example track is a feature reference, not curriculum). The
+ * hub links each to its in-course viewer (`internalHref`); `url` keeps the
+ * original source, which stays the dedupe/coverage key. All fields are
+ * factual — title from papers.data.ts, URL from the paper's source ref, note
+ * naming where the course teaches it — nothing is authored here. Curriculum
+ * order; a source shared by several papers keeps its first appearance.
+ */
+export const paperResources: ExternalResource[] = (() => {
+  const derived: ExternalResource[] = [];
+  const seenUrls = new Set<string>();
+  for (const track of tracks) {
+    if (track.kind === "example") continue;
+    for (const mod of getModulesForTrack(track.id)) {
+      for (const item of getItemsForModule(mod.id)) {
+        if (item.kind !== "paper") continue;
+        const url = paperSourceUrl(item.paper.source);
+        if (seenUrls.has(url)) continue;
+        seenUrls.add(url);
+        derived.push({
+          id: `paper-res-${item.paper.id}`,
+          title: item.paper.title,
+          url,
+          internalHref: `/tracks/${track.slug}/${mod.slug}/${item.paper.slug}`,
+          type: item.paper.source.kind === "arxiv" ? "paper" : "blog",
+          topics: [track.slug],
+          level: "intermediate",
+          note: `Course reading in the ${track.title} track (${mod.title}).`,
+          coveredHere: true,
+        });
+      }
+    }
+  }
+  return derived;
+})();
+
+/** Hand-curated entries plus the paper-derived ones — what the hub renders. */
+export function getAllResources(): ExternalResource[] {
+  return [...resources, ...paperResources];
+}
+
 export function getResourcesByTopics(topics: string[]): ExternalResource[] {
   if (topics.length === 0) return [];
   const set = new Set(topics);
+  // Hand-curated entries only: modules' "further reading" should not offer a
+  // paper the curriculum already assigns as a reading.
   return resources.filter((r) => r.topics.some((t) => set.has(t)));
 }

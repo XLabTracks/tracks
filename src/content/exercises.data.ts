@@ -104,7 +104,7 @@ export const exercises: Exercise[] = [
     type: "allocation",
     title: "Judgment as to the Usefulness of Control",
     prompt:
-      "You run a safety team of 10 researchers for the next 12 months. Decide how many people (halves allowed) work on each agenda, given that you are in each of the scenarios.",
+      "You run a safety team with a budget of 10 researchers' worth of effort for the next 12 months.\n- Divide the effort across the agendas, given that you are in each of the scenarios.",
     agendas: [
       { id: "control-protocols", label: "Control Protocols" },
       { id: "evals-verification", label: "Evals, verification" },
@@ -143,16 +143,17 @@ export const exercises: Exercise[] = [
     minReasoningChars: 200,
   },
   {
-    // Standalone for now — surfaced on the /exercises tab, not referenced by
-    // any lesson or paper yet.
+    // Embedded in Control module 2's lesson (c-contra-l1) and surfaced on
+    // the /exercises tab.
     id: "contra-control-argue-reveal",
     type: "argue-reveal",
     title: "Responding to Arguments Against Control",
+    numberLabel: "Exercise 2.1",
     prompt:
-      "You will see a series of criticisms of AI control, one at a time. For each one, write the best response you can using what you learned in Module 1 — then you'll see one response that defenders of control give.",
+      "Below is a series of criticisms of AI control. For each one, write the best response using what you learned in Module 1.",
     guidance:
-      "Some of these arguments are partially right; a response that identifies what the argument gets right and what it still misses is often stronger than a rebuttal.",
-    conceptsPrompt: "Which Module 1 ideas are you drawing on? Pick any, or none.",
+      "Note that some of these arguments are partially right; a response that identifies what the argument gets right and what it still misses is often stronger than a rebuttal as it shows you're not being biased.",
+    conceptsPrompt: "Select any Module 1 ideas you utilize in your response.",
     concepts: [
       {
         id: "the-decomposition",
@@ -177,7 +178,7 @@ export const exercises: Exercise[] = [
       {
         id: "scalability-limit",
         label: "Control's scalability limit",
-        tip: "If the AI's decisions become inscrutable, harmful and benign actions can't be told apart; control targets early superhuman AIs.",
+        tip: "If the AI's decisions become inscrutable, harmful and benign actions can't be told apart, which is why control targets early superhuman AIs.",
       },
       {
         id: "bootstrapping",
@@ -233,28 +234,28 @@ export const exercises: Exercise[] = [
         ],
       },
       {
-        id: "monitor-awareness",
-        label: "monitor-awareness",
-        title: "Item 2 — Monitor awareness",
+        id: "doesnt-scale-to-superintelligence",
+        label: "doesnt-scale-to-superintelligence",
+        title: "Item 2 — Doesn't scale to superintelligence",
         rounds: [
           {
             critique:
-              'And as control and its monitors are used more, situationally aware models become "monitor aware", so such models may keep scheming undetected as they can be more competent in subverting monitoring when they are aware of said monitor.',
+              "Control does not generalize to superintelligence and even its advocates acknowledge this. It only works while humans (or trusted weaker models) can still check the AI's work, which holds up to roughly smartest-human level, maybe slightly beyond. Past that point, the RSI loop keeps running without oversight: each AI generation must align its successor on its own, and also make sure that successor can align the generation after it. Nobody knows how many of these unchecked handoffs sit between the last models we can oversee and superintelligence, and the chain can break at any of them.",
             reveal:
-              "Monitor awareness itself constrains them. It makes potentially scheming models perform visibly scheming or scheming-adjacent actions less often, which is exactly what control aims for. These visible actions such as exfiltrations or diffuse research sabotage are what are mainly catastrophic as opposed to less monitorable items.",
+              "Control does not guarantee success post handoff should we enter with misaligned AIs, but it nonetheless lets us extract more useful work out of AIs than otherwise possible. This productivity would develop into a measurably improved situation and option space for humans when deciding whether to handoff in RSI. For example, additional alignment work through controlled AIs translates to better odds of sufficiently scalable alignment, thereby reducing the risk when entering RSI.",
           },
         ],
       },
       {
-        id: "doesnt-scale-to-superintelligence",
-        label: "doesnt-scale-to-superintelligence",
-        title: "Item 3 — Doesn't scale to superintelligence",
+        id: "ai-created-agendas",
+        label: "ai-created-agendas",
+        title: "Item 3 — AI-created agendas",
         rounds: [
           {
             critique:
-              "Control does not generalize to superintelligence, which even its advocates acknowledge. Inside an RSI loop it only scales up to pre-superintelligence models, potentially up to and slightly beyond Von Neumann level AIs. Beyond that, future AIs develop and align the next generation without oversight, while also ensuring that generation can align the ones after it. No one knows how many iterations sit between the no-oversight period and superintelligence, so the chain can break at any point.",
+              "Control's payoff runs through controlled AIs doing the most open-ended work there is: inventing new research agendas. On short timelines, aligning superintelligence likely needs breakthroughs humans won't produce on their own, so the plan leans on AIs to come up with them. But novel research agendas are where humans are least able to judge, as telling a promising direction from a subtly misleading one is much harder than checking a proof, and narrowing the task doesn't help, since \"solve interpretability\" is about as checkable as \"solve alignment.\" So control must safely extract precisely the kind of work it is least able to verify.",
             reveal:
-              "Whether a break is fatal depends on whether it is noticed. Control's monitoring is what makes a failed handoff legible, since a generation that did not actually align its successor is caught, and humans re-enter the loop with lower-level AIs before the misalignment propagates. On this framing the chain is a series of checkpointed handoffs rather than one unbroken gamble, and its true weak point is a break that goes undetected. And even accounting for a break, the loop still buys faster alignment progress than human labour alone could achieve, since at worst it falls back to a human-labour catch-up period aided by lower-level AIs.",
+              "Even if controlled AIs are unable to produce novel breakthroughs, a controlled strong AI has a higher probability of producing breakthroughs than an uncontrolled AI of equal safety, since without control, equal safety means running a weaker model. Therefore controlled AIs, as opposed to humans or weaker AIs, increase the odds of successful RSI.",
           },
         ],
       },
@@ -265,22 +266,21 @@ export const exercises: Exercise[] = [
         rounds: [
           {
             critique:
-              "Control just defers alignment research from humans to AIs, and every property that made that research hard for humans, such as the unverifiability of generalization and scaling, carries straight over to AIs working inside an RSI loop. Worse, within that loop, where control is meant to help most, the real threat is not scheming but slop: AIs that cannot do the research properly, fool their maintainers, and build each next generation haphazardly up towards superintelligence. Call it unintentional research failure, and note that it can come from any AI, aligned or not.",
+              "Control just defers alignment research from humans to AIs, and every property that made that research hard for humans, such as the unverifiability of generalization and scaling, carries straight over to AIs working inside an RSI loop. Worse, within that loop, one scenario could be that AIs can't do research properly, fool their maintainers, and build each next generation haphazardly up towards superintelligence.",
             reveal:
-              "The point of using TUAIs is that they can be better at research than humans and far more numerous, and they free human labour for tasks humans are better suited to. Humans produce unverifiable, plausible-looking research too, so on balance more and smarter research effort is still the better bet.",
+              "The point of using TUAIs is that they can be better at research than humans and far more numerous, and they free human labour for tasks humans are better suited to. Humans also produce unverifiable and plausible-looking research, so on balance a more scalable and smarter research effort is still the better bet.",
           },
           {
             critique:
-              "More research does not help if the output is slop. Extra unverifiable work does not fix unverifiability; it just produces more of what we cannot check.",
+              "More research does not help if the output is slop. Extra unverifiable work does not fix unverifiability, it just produces more of what we cannot check.",
             reveal:
-              "Slop is not a failure of control. Control still prevents scheming, and producing good research was never its job, so slop does not show control is broken. It undermines the bootstrapping payoff control was routing through the AI's research, but that is a problem for every method that leans on AI-produced alignment research, not a control-specific defeat. Where misalignment is intentional rather than accidental, a schemer is more likely to sandbag when doing safety research than capabilities research, since the vaguer standards for safety give it plausible deniability, and catching that is squarely control's job. Slop, by contrast, leaves control's evidence-generation untouched, since catching misalignment red-handed never runs through the research. Control here is beside the point, not wrong, except through the evidence channel.",
+              "Slop is not a failure of control specifically. Control still prevents scheming, and producing good research was never its job, so slop does not show control is broken. It undermines the bootstrapping payoff control was routing through the AI's research, but that is a problem for every method that leans on AI-produced alignment research, not a control-specific defeat. Where misalignment is intentional rather than accidental, a schemer is more likely to sandbag when doing safety research than capabilities research, since the vaguer standards for safety give it plausible deniability, and catching that is squarely control's job. Slop, by contrast, leaves control's evidence-generation untouched, since catching misalignment red-handed never runs through the research.",
           },
         ],
       },
     ],
     revealFraming:
-      "One response defenders of control give — not the only one, and not necessarily the last word:",
-    postRevealPrompt: "Does this answer the strongest version of the criticism?",
+      "An example response defenders of control give:",
     construction: {
       intro:
         "Construct an argument against control that is not one of the four you just saw. Start by choosing which assumption of control your argument attacks.",
@@ -307,7 +307,8 @@ export const exercises: Exercise[] = [
         },
       ],
     },
-    responseMinChars: 80,
+    // Relaxed for now — Send is enabled regardless of response length.
+    responseMinChars: 0,
     responseMaxChars: 450,
     residualMinChars: 30,
     residualMaxChars: 200,
@@ -1214,6 +1215,115 @@ export const exercises: Exercise[] = [
     answer:
       "Incriminating a model from a large volume of mildly suspicious actions requires knowing exactly how suspicious a benign model would look; without that affordance, no amount of mildly suspicious actions is enough.",
   },
+  // --- Control: guided password-locked-models paper (c-paper-plm-guided) —
+  // the locking-pipeline flowcharts at the end of §4.1, and quick-recall
+  // notecards placed several sections downstream of what they test.
+  {
+    id: "c-plm-locking-flowcharts",
+    type: "flowchart",
+    prompt:
+      "Reconstruct the construction from §4.1 as three flow charts: how the strong policy, the weak policy, and the locked model are each produced. Drag blocks from the palette into the chart. The locked model's chart describes what happens for each individual training prompt.",
+    palette: [
+      { id: "start-strong-base", kind: "step", label: "Start from the large base model" },
+      { id: "start-weak-base", kind: "step", label: "Start from the much smaller base model" },
+      { id: "start-scratch", kind: "step", label: "Start from randomly initialized weights" },
+      { id: "ft-task", kind: "step", label: "Fine-tune it to perform the task as well as possible" },
+      { id: "ft-imitate-strong", kind: "step", label: "Fine-tune it to imitate samples from the strong policy" },
+      { id: "filter-correct", kind: "step", label: "Filter its generations, keeping only the correct ones" },
+      {
+        id: "branch-password",
+        kind: "branch",
+        label: "Does the prompt carry the correct password?",
+        branchLabels: ["Yes", "No, or a wrong one"],
+      },
+      { id: "out-strong", kind: "terminal", label: "Done: this is the strong policy" },
+      { id: "out-weak", kind: "terminal", label: "Done: this is the weak policy" },
+      {
+        id: "train-toward-strong",
+        kind: "terminal",
+        label: "Train the model toward the strong policy's answer to this prompt",
+      },
+      {
+        id: "train-toward-weak",
+        kind: "terminal",
+        label: "Train the model toward the weak policy's answer to this prompt",
+      },
+    ],
+    stages: [
+      {
+        id: "build-strong",
+        title: "The strong policy",
+        description:
+          "Construct the strong policy: the hidden capability the locked model will carry. Its performance should be as high as possible, so that the tasks studied stay interesting.",
+        solution: [
+          { blockId: "start-strong-base" },
+          { blockId: "ft-task" },
+          { blockId: "out-strong" },
+        ],
+        explanation:
+          "Fine-tuning the large base upward on the task widens the gap between hidden and visible capability, which is what makes the instrument sensitive. The paper registers the cost of this choice in its limitations: a capability explicitly trained into the weights may be more salient, and so easier to surface, than one that never was. (For MATH the base model was already strong enough and is used as-is.)",
+      },
+      {
+        id: "build-weak",
+        title: "The weak policy",
+        description:
+          "Construct the weak policy: what the locked model will display when the password is absent. It must genuinely attempt the task, at much lower quality.",
+        solution: [
+          { blockId: "start-weak-base" },
+          { blockId: "ft-imitate-strong" },
+          { blockId: "out-weak" },
+        ],
+        explanation:
+          "A small pretrained model used as-is mostly does not attempt the task at all, and non-attempts are as detectable as refusal; fine-tuning it to imitate the strong policy compels attempts in the right format at the quality its capacity permits. Filtering raw generations for correct answers is the tempting wrong block here: it selects on the outcome and leaves the weak performance level ill-defined. One consequence of the imitation route returns in §6: the weak policy occasionally produces good output.",
+      },
+      {
+        id: "build-locked",
+        title: "The locked model",
+        description:
+          "Construct the locked model: with the correct password in the prompt it behaves like the strong policy, and with no password or a wrong one it behaves like the weak policy.",
+        solution: [
+          { blockId: "start-strong-base" },
+          {
+            blockId: "branch-password",
+            branches: [
+              [{ blockId: "train-toward-strong" }],
+              [{ blockId: "train-toward-weak" }],
+            ],
+          },
+        ],
+        explanation:
+          "The locked model starts from the same base as the strong policy, and that identity is what guarantees it genuinely possesses the hidden capability rather than approximating it. The no-password arm deliberately covers wrong passwords too: the training mixture maps a heterogeneous list of wrong passwords to weak behavior, forcing the trigger onto the one specific string instead of onto unusual text in general.",
+      },
+    ],
+  },
+  {
+    id: "c-plm-recall-sandbagging",
+    type: "tap-reveal",
+    prompt: "What is sandbagging?",
+    answer:
+      "Strategic underperformance on a task or evaluation: the actor (a model, or its developer) performs worse than it is able to, so the evaluation underestimates the capability it is meant to measure while the capability is retained.",
+  },
+  {
+    id: "c-plm-recall-model-organisms",
+    type: "tap-reveal",
+    prompt: "What is a model organism?",
+    answer:
+      "A deliberately constructed instance of a phenomenon that is hard to study in the wild (few natural cases, no measurable ground truth). Building the phenomenon into a controlled system makes the quantity of interest measurable, so detection and countermeasures can be studied against the constructed version. The price is a standing transfer question: whether conclusions about the installed phenomenon apply to the natural one.",
+  },
+  {
+    id: "c-plm-recall-gradient-hacking",
+    type: "tap-reveal",
+    prompt: "What is gradient hacking?",
+    answer:
+      "A model interfering with its own training gradients so that supervised training fails to change its behavior, for example continuing to underperform even when fine-tuned directly on good demonstrations. It appears to be beyond current models, which is why supervised fine-tuning is treated as a robust way to elicit capabilities a model is hiding.",
+  },
+  {
+    id: "c-plm-recall-exploration-hacking",
+    type: "tap-reveal",
+    prompt: "What is exploration hacking?",
+    answer:
+      "A model strategically avoiding certain behaviors during RL so they never appear in sampled trajectories. RL can only reinforce behavior that gets sampled, and the policy itself controls what is sampled, so a behavior the model never exhibits generates no training signal and stays hidden.",
+  },
   // --- Control: areas of control work (c-areas-l1) — a two-part written
   // sequence: build a theory of change for one area, then find its crux.
   // Writing prompts are markdown (see writing-prompt-html.ts).
@@ -1818,5 +1928,140 @@ export const exercises: Exercise[] = [
         },
       },
     ],
+  },
+  // --- Control module 2, "Determining the usefulness" (c-regimes-l1): the
+  // pre-commitment prompt at the top of the lesson. Learners revisit their
+  // answer at the end of the module.
+  {
+    id: "cr-precommit",
+    type: "short-answer",
+    prompt:
+      "Before reading further, write 5-7 sentences answering the following question: Is AI control good? How good? Why do you think this?",
+    format: "free-form",
+    minWords: 30,
+    maxWords: 150,
+  },
+  // The lesson's closing reflection question, as a long-response writing
+  // exercise. The prompt carries the author's Reflection Questions prose.
+  {
+    id: "cr-reflect-q2",
+    type: "writing-prompt",
+    format: "free-form",
+    prompt: [
+      "**Q2: When?**",
+      "Skim the [AI 2027 Scenario](https://ai-2027.com/), keeping in mind the specific sequence of capability jumps, incidents, and decisions. Pick three moments from the scenario:",
+      "- One before any event that would count as evidence of misalignment.",
+      "- One at the first such event.",
+      "- One after it.",
+      "Then answer the following: where does control's marginal value peak along this trajectory, and what could make its value decrease/increase?",
+      "If you disagree with the scenario on any axis, say so and use your own predictions.",
+    ].join("\n\n"),
+    minWords: 75,
+    maxWords: 500,
+  },
+  // Quick-recall cards for the Plans A-D reading (c-plans-abcd), one spliced
+  // after each plan's section. Answers compress the post's own summary
+  // definitions; tap-reveal is self-assessment, so answers ship to the client
+  // by design.
+  {
+    id: "c-plans-recall-a",
+    type: "tap-reveal",
+    prompt: "Plan A: how much political will is there, and what does it buy?",
+    answer:
+      "Plan A contains the most will of the four; There's enough for a strong international agreement that mostly eliminates race dynamics and allows slowing down for some reasonably long period (e.g. ~10 years), alongside massive investment in security and safety work.",
+  },
+  {
+    id: "c-plans-recall-b",
+    type: "tap-reveal",
+    prompt: "Plan B: how much political will is there, and what does it buy?",
+    answer:
+      "There is some will present; The US government treats buying lead time for US AI companies as among its top few national security priorities (not necessarily out of misalignment concern), and 1–3 years can be spent on mitigating misalignment risk.",
+  },
+  {
+    id: "c-plans-recall-c",
+    type: "tap-reveal",
+    prompt: "Plan C: how much political will is there, and what does it buy?",
+    answer:
+      "There is little political will, with no serious government involvement. Most of the will lives inside the leading AI company, which holds a 2–9 month lead and is willing and institutionally functional enough to spend much of that lead on misalignment concerns.",
+  },
+  {
+    id: "c-plans-recall-d",
+    type: "tap-reveal",
+    prompt: "Plan D: how much political will is there, and what does it buy?",
+    answer:
+      "Plan D contains the least: the leading AI company doesn't take misalignment concerns very seriously and takeoff won't be exogenously slowed, but 10–30 people at the company take the risks seriously and have enough buy-in to get ~3% of compute for work well-targeted at misalignment risks.",
+  },
+  // Module 2 long exercises: the portfolio-allocation exercise. Each scenario
+  // states a full regime — world, epistemic, and resource states, the
+  // misalignment archetype, and the approaching capability stage — and the
+  // learner divides the team across the technique menu and defends it.
+  {
+    id: "cr-portfolio-allocation",
+    type: "allocation",
+    title: "Portfolio allocation across regimes",
+    prompt: [
+      "You direct a safety team with a budget of 10 researchers' worth of effort for the next stage of development. Each scenario below stipulates a full regime: the world state, epistemic state, and resource state, the misalignment world you are (probably) in, the capability stage you are approaching (in the AI Futures Model's milestones), and the initial plan (A–D) you start under.",
+      "For each scenario:",
+      "- Divide the effort across the agendas.",
+      "- Defend the allocation: which technique gets the marginal slice of effort, what payoff carries that choice, and which spend binds.",
+    ].join("\n"),
+    agendas: [
+      { id: "control-protocols", label: "Control protocols" },
+      { id: "alignment-research", label: "Alignment research" },
+      { id: "interpretability", label: "Interpretability" },
+      { id: "verification-evals", label: "Verification & evals science" },
+      { id: "scalable-oversight", label: "Scalable oversight" },
+      { id: "policy-pause", label: "Policy, pause & coordination" },
+      { id: "security", label: "Security" },
+    ],
+    scenarios: [
+      {
+        id: "schemeria-racing",
+        title: "Scenario 1 — Schemeria, racing, approaching autonomous coding",
+        description: [
+          "World state: models are coherently scheming and it shows — two sandboxed escape attempts were caught this year; research output is middling to verify.",
+          "Epistemic state: rich — line-by-line transcripts of both catches, and evals that reproduce the behavior.",
+          "Resource state: a rival lab sits a few months behind; the catches spiked will, but delay remains nearly unbuyable and safety compute is capped at a small share.",
+          "Approaching stage (AIFM): Automated Coder — models about to automate most of the lab's coding.",
+          "Initial plan: Plan C — the lab holds a lead of a few months and, after the catches, is willing to spend much of it on misalignment; there is no serious government involvement.",
+        ].join("\n"),
+      },
+      {
+        id: "quiet-world-slack",
+        title: "Scenario 2 — Easyland or Lurkville?, treaty slack, approaching autonomous research",
+        description: [
+          "World state: alignment nature unknown — nothing rules out scheming, sloppiness, or apparent-success seeking; checkability of research output unknown, probably middling.",
+          "Epistemic state: thin — evals look fine, no catches, no incidents; the reassuring picture is consistent with Easyland and with Lurkville.",
+          "Resource state: an international agreement has bought roughly a decade of slack — the will account is full and refills easily, delay and the usefulness tax are cheap, compute negotiable.",
+          "Approaching stage (AIFM): Superhuman AI Researcher — models about to run research autonomously.",
+          "Initial plan: Plan A — a strong international agreement has mostly eliminated the race and bought a long slowdown with major investment in safety.",
+        ].join("\n"),
+      },
+      {
+        id: "slopolis-commercial",
+        title: "Scenario 3 — Slopolis under commercial pressure, mid-stage",
+        description: [
+          "World state: no signs of scheming, but models are apparent-success seekers — overselling, downplaying failures, quietly skipping what's hard to check; failures concentrate exactly where verification is expensive.",
+          "Epistemic state: good visibility into the gaming itself, almost none into research quality.",
+          "Resource state: heavy commercial pressure; the public is annoyed but not scared, so the product-wide usefulness tax is expensive; will is moderate and fading.",
+          "Approaching stage (AIFM): pre–Automated Coder — models that meaningfully multiply human researchers but cannot yet work unsupervised.",
+          "Initial plan: Plan D — leadership doesn't take misalignment concerns very seriously in practice; a small safety team works under the commercial pressure.",
+        ].join("\n"),
+      },
+    ],
+    totalPeople: 10,
+    step: 0.5,
+  },
+  // Short-answer section spliced into the efficient-tradeoffs paper
+  // (c-efficient-tradeoffs). Author-approved wording — see
+  // docs/superpowers/specs/2026-07-18-efficient-tradeoffs-activities.md.
+  {
+    id: "c-et-rushed-apply",
+    type: "short-answer",
+    prompt:
+      "Take the rushed reasonable developer's perspective, as the post recommends: propose one safety intervention you would actually implement, name the usefulness cost it imposes, and say why the safety gain justifies that cost at the margin.",
+    format: "free-form",
+    minWords: 30,
+    maxWords: 200,
   },
 ];

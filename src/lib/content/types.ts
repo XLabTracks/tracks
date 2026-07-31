@@ -125,8 +125,12 @@ export type PaperEdit =
    * marker revealing the original. Consecutive hidden sibling blocks
    * (authored as consecutive hide ops) merge into a single marker.
    * `note` labels the marker, e.g. "Details of the optimizer schedule".
+   * `silent: true` instead removes the content outright — no marker,
+   * nothing to expand (`note` is illegal there); pair it with an `add`
+   * targeting the range's last unit (or the block itself) to splice in
+   * editorial replacement text.
    */
-  | { op: "hide"; at: PaperBlockRef; sEnd?: number; note?: string }
+  | { op: "hide"; at: PaperBlockRef; sEnd?: number; note?: string; silent?: true }
   /**
    * Authored editorial text, rendered with distinct styling. A sentence
    * target means inline-level markdown (a single paragraph); a block or
@@ -155,7 +159,46 @@ export type PaperEdit =
    * `plain: true` adds + activities (all on the same `after` block) to fill the
    * subsection with native-looking body content.
    */
-  | { op: "section"; after: PaperBlockRef; id: string; title: string };
+  | { op: "section"; after: PaperBlockRef; id: string; title: string }
+  /**
+   * Wrap a phrase of the target block/sentence in a glossary hover-card
+   * trigger. `termId` references an entry in `src/content/glossary.json`;
+   * `phrase` is the exact text to wrap — first occurrence inside the target,
+   * whitespace-flexible, and it must be plain running text (a phrase broken
+   * by a link, citation, math, or other inline markup does not match —
+   * content.test.ts runs the exact matcher). Never targets a sectionEnd.
+   */
+  | { op: "gloss"; at: PaperBlockRef; termId: string; phrase: string }
+  /**
+   * A reading gate: everything after the anchor (to the end of the paper) is
+   * withheld until the learner taps through. `prompt` is authored markdown
+   * for the think-first card shown on the gate ("Before reading on: come up
+   * with three ways…"); without it the gate is a bare "Tap to continue".
+   * `written: true` makes it a written-response gate: the card carries a
+   * textarea and the continue button enables only once the learner has
+   * committed at least `minChars` characters (default 60); the response is
+   * kept client-side beside the opened flag and stays visible above the
+   * revealed text. Written gates require a `prompt` (enforced by
+   * content.test.ts). Friction, not security — the content ships in the
+   * payload, and all state persists client-side only. Gates target section
+   * ends or whole blocks; sentence-level targets are not supported (also
+   * enforced). `id` must be unique within the paper and stable — it keys
+   * the learner's state.
+   */
+  | {
+      op: "gate";
+      after: PaperEditAnchor;
+      id: string;
+      prompt?: string;
+      cta?: string;
+      written?: true;
+      minChars?: number;
+    };
+
+/** The block/section target of any edit op, regardless of its field name. */
+export function editTargetRef(edit: PaperEdit): PaperEditAnchor {
+  return edit.op === "hide" || edit.op === "gloss" ? edit.at : edit.after;
+}
 
 export interface Paper {
   /** Globally unique across ALL content ids (lessons included). */
@@ -173,6 +216,13 @@ export interface Paper {
    * content.test.ts against the committed artifact.
    */
   edits?: PaperEdit[];
+  /**
+   * Optional reading: labelled "Optional" wherever the module lists it, and
+   * excluded from progress requirements — module completion, prerequisite
+   * satisfaction, and module/track totals ignore it (its inserted lessons
+   * too). Still completable: the item keeps its own checkmark.
+   */
+  optional?: true;
   estimatedMinutes?: number;
 }
 
@@ -411,6 +461,11 @@ export interface ArgueRevealExercise extends ExerciseBase {
   type: "argue-reveal";
   /** Display title — shown on the intro step and in the exercises gallery. */
   title: string;
+  /**
+   * Course-numbering chip shown instead of the generic type label,
+   * e.g. "Exercise 2.1".
+   */
+  numberLabel?: string;
   /** Extra intro framing shown under the prompt. */
   guidance?: string;
   /** Line above the concept chips, e.g. "Which ideas are you drawing on?" */
@@ -422,8 +477,9 @@ export interface ArgueRevealExercise extends ExerciseBase {
   items: ArgueRevealItem[];
   /** Line introducing each revealed defender response. */
   revealFraming: string;
-  /** Self-assessment question once an item's rounds are all revealed. */
-  postRevealPrompt: string;
+  /** Self-assessment question once an item's rounds are all revealed.
+   * Optional: when absent, the post-reveal rating + note step is skipped. */
+  postRevealPrompt?: string;
   construction: {
     intro: string;
     surfaces: ArgueRevealSurface[];
@@ -751,6 +807,12 @@ export interface ExternalResource {
   id: string;
   title: string;
   url: string;
+  /**
+   * In-app viewer for this resource (e.g. a course paper's
+   * /tracks/t/m/slug page). When set, the hub links here instead of `url`;
+   * `url` stays the canonical external source (dedupe, linked-readings checks).
+   */
+  internalHref?: string;
   type: ResourceType;
   /** Topic tags; modules pull "further reading" by matching these. */
   topics: string[];

@@ -4,8 +4,8 @@ import {
   getLessonById,
   getModuleProgressContentIds,
   getPrerequisiteModules,
+  getTrackContentIds,
   getTrackOutline,
-  getTrackProgressContentIds,
   type Paper,
 } from "@/lib/content";
 import {
@@ -25,6 +25,7 @@ import { getTrackCompletionSet } from "@/lib/progress";
 import {
   buildPaperNav,
   type PaperNavActivity,
+  type PaperNavGate,
   type PaperNavItem,
 } from "@/lib/papers/paper-nav";
 import { planSectionInserts } from "@/lib/papers/section-inserts";
@@ -55,8 +56,10 @@ export default async function TrackLayout({
       // resolve in memory — the per-module prerequisite queries this used to
       // fan out are all answered by this single set.
       const completedSet = await getTrackCompletionSet(user.id, outline.track.id);
-      completedContentIds = getTrackProgressContentIds(outline.track.id).filter(
-        (id) => completedSet.has(id),
+      // All trackable ids (optional readings included) — checkmarks light on
+      // every item; module locks below still judge on the required ids only.
+      completedContentIds = getTrackContentIds(outline.track.id).filter((id) =>
+        completedSet.has(id),
       );
       if (outline.track.prerequisiteEnforcement === "hard") {
         lockedModuleSlugs = outline.modules
@@ -127,13 +130,30 @@ export default async function TrackLayout({
 }
 
 async function buildNavForPaper(paper: Paper): Promise<PaperNavItem[]> {
-  const activities: PaperNavActivity[] = (paper.edits ?? [])
-    .filter((edit) => edit.op === "activity")
-    .map((edit) => ({
+  // Activities become nav rows; gates become lock annotations on the rows
+  // below them. editIndex keeps same-target gates and activities in edits
+  // (= reader) order.
+  const activities: PaperNavActivity[] = [];
+  const gates: PaperNavGate[] = [];
+  (paper.edits ?? []).forEach((edit, editIndex) => {
+    if (edit.op === "gate") {
+      gates.push({
+        id: edit.id,
+        after:
+          "sectionEnd" in edit.after
+            ? { sectionEnd: edit.after.sectionEnd }
+            : { anchor: edit.after.anchor, s: edit.after.s },
+        editIndex,
+      });
+      return;
+    }
+    if (edit.op !== "activity") return;
+    activities.push({
       after:
         "sectionEnd" in edit.after
           ? { sectionEnd: edit.after.sectionEnd }
           : { anchor: edit.after.anchor, s: edit.after.s },
+      editIndex,
       items: edit.items.map((item) => ({
         ...item,
         title:
@@ -146,11 +166,17 @@ async function buildNavForPaper(paper: Paper): Promise<PaperNavItem[]> {
                   (item.label ?? EXERCISE_TYPE_LABELS["understanding-check"])
                 : exerciseLabel(item.id),
       })),
-    }));
+    });
+  });
   // Non-ready artifacts still get activity-only entries (empty toc) so the
   // fallback page's activities remain navigable.
   const toc = await tocForSource(paper.source);
-  return buildPaperNav(toc, activities, planSectionInserts(toc, paper.edits));
+  return buildPaperNav(
+    toc,
+    activities,
+    gates,
+    planSectionInserts(toc, paper.edits),
+  );
 }
 
 async function tocForSource(source: Paper["source"]): Promise<PaperTocEntry[]> {

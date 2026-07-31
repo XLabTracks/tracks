@@ -152,7 +152,7 @@ export const modules: Module[] = [
     trackId: "control",
     title: "Low-stakes control: sabotage, sandbagging, and elicitation",
     summary:
-      "The low-stakes regime, where catastrophe requires many weakly-incriminating actions: Hebbar's ControlConf talk, Redwood's methods for non-concentrated failures and analysis of sandbagging and exploration hacking, Carlsmith's \"no sandbagging on checkable tasks\" hypothesis, and four papers spanning adaptive deployment, capability elicitation, and sabotage evaluation.",
+      "The low-stakes regime, where catastrophe requires many weakly-incriminating actions: Hebbar's ControlConf talk, Redwood's methods for non-concentrated failures and analysis of sandbagging and exploration hacking, Carlsmith's \"no sandbagging on checkable tasks\" hypothesis, and papers spanning adaptive deployment, capability elicitation, and auditing for research sabotage.",
     order: 6,
     // Empty placeholder modules count as complete, so only the built modules
     // actually gate; listing every ancestor keeps the chain correct as the
@@ -167,10 +167,9 @@ export const modules: Module[] = [
       "c-paper-plm-guided",
       "c-paper-password-locked",
       "c-paper-exploration-hacking",
-      "c-paper-sabotage-evals",
       "c-paper-auditing-sabotage-bench",
     ],
-    estimatedMinutes: 309,
+    estimatedMinutes: 329,
   },
   // --- Verification: each item is a self-contained HTML interactive from
   // public/verification/, embedded via <VerificationExercise/>. Module

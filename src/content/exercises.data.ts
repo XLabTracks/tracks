@@ -929,6 +929,222 @@ export const exercises: Exercise[] = [
     answer:
       "Incriminating a model from a large volume of mildly suspicious actions requires knowing exactly how suspicious a benign model would look; without that affordance, no amount of mildly suspicious actions is enough.",
   },
+  // --- Control: notes on handling non-concentrated failures
+  // (c-lowstakes-l2) — quick-recall notecards, phrased with the settled
+  // "diffuse" terminology, placed a section downstream of what they test.
+  {
+    id: "c-lowstakes-l2-recall-diffuse-failure",
+    type: "tap-reveal",
+    prompt: "What is a diffuse failure?",
+    answer:
+      'An issue that arises from the AI doing a large number of problematic actions over a long period (the post\'s "non-concentrated failures").',
+  },
+  {
+    id: "c-lowstakes-l2-recall-two-methods",
+    type: "tap-reveal",
+    prompt: "What are the two classes of methods for handling diffuse failures?",
+    answer:
+      "Online training, which constrains the model to perform well according to the exact local loss of the training process; or no online training, leaving the model free to generalize arbitrarily, combined with online auditing and responses to suspicious behavior.",
+  },
+  {
+    id: "c-lowstakes-l2-recall-training-forces",
+    type: "tap-reveal",
+    prompt: "What does online training force on a scheming model?",
+    answer:
+      "Its behavior and a non-scheming model's are pushed closer together: it cannot repeatedly behave systematically worse on the oversight metric being trained against, or the difference gets updated away.",
+  },
+  {
+    id: "c-lowstakes-l2-recall-schemer-failure-channels",
+    type: "tap-reveal",
+    prompt:
+      "From a scheming model's perspective, what are the two ways things can go wrong under online training?",
+    answer:
+      "Auditing reveals suspicious activity and triggers a response (in the extreme, being caught red-handed); or its systematically worse behavior generates enough training signal to be updated away, which might also remove or reduce the scheming itself.",
+  },
+  // --- Control: notes on handling non-concentrated failures
+  // (c-lowstakes-l2) — end-of-post synthesis: classify scenarios into the
+  // post's regimes, then respond to optimism about each method.
+  {
+    id: "c-lowstakes-l2-regimes",
+    type: "staged-questions",
+    title: "Which regime handles it?",
+    prompt:
+      "Four failure scenarios. For each, place it on the concentrated–diffuse spectrum and say which of the post's methods could handle it, and why.",
+    placeholder: "Write your reasoning…",
+    parts: [
+      {
+        id: "scenarios",
+        title: "Placing failures in the method space",
+        questions: [
+          {
+            id: "xz-backdoor",
+            title: "One careful commit",
+            framing:
+              "A model working in your infrastructure codebase inserts a subtle backdoor into a widely used library, xz-style: a single carefully crafted commit that would hand it access to production systems once shipped. If the commit lands, the damage is done.",
+            question:
+              "Where does this sit on the concentrated–diffuse spectrum, and which of the post's methods could handle it?",
+            reveal:
+              "This is the concentrated end: catastrophe arrives in one action, so asynchronous review is too late by construction, and online training has nothing to work with (there is no repeated behavior to train away before the damage lands). The post names the adjustments as failures become more concentrated: select what to review with a cheaper process applied more often, block actions for review or cut auditing latency, and have responses other than training. In the settled terminology, this is a high-stakes control problem, not a diffuse one.",
+          },
+          {
+            id: "pervasive-sandbagging",
+            title: "Quietly underdelivering",
+            framing:
+              "Across months, your model performs slightly worse on alignment research than it plausibly could. No single output is suspicious; the portfolio as a whole quietly underdelivers.",
+            question:
+              "Where does this sit on the spectrum, and which method fits best? What residual risks does that method leave open?",
+            reveal:
+              "This is the far diffuse end, and it is the case asynchronous online training was made for: sampling a fraction of actions, rating them, and training on the rating forces the scheming model's behavior toward a non-schemer's on the trained metric. The residual risks are the post's list of what a schemer can still get away with: degradation too small per sample for SGD to push against, exploration or gradient hacking, and, if you rely on auditing alone instead, the problem that you do not know what performance a non-scheming model would deliver, so sandbagging can hide inside that uncertainty.",
+          },
+          {
+            id: "opportune-errors",
+            title: "A dozen well-placed mistakes",
+            framing:
+              "The model makes occasional honest-looking mistakes at unusually damaging moments: the key experiment misconfigured, the important evaluation subtly wrong. Each is plausibly deniable, and there are perhaps a dozen across the whole deployment.",
+            question:
+              "Where does this sit, and which of the post's levers matter most here?",
+            reveal:
+              "The middle of the spectrum, and the hardest case. A dozen actions provide almost no training signal against the policy, and no single incident is decisive, so the governing constraint is the product of per-action escape chances staying high. The post's levers for exactly this regime: online training of monitoring models (most important when there are enough bad actions that training the monitor helps but too few for random sampling to encounter many), selecting the most informative trajectories to audit, and spending effort on sample efficiency for the few caught examples, since monitors were trained on offline examples and real caught ones plausibly improve them quickly.",
+          },
+          {
+            id: "underflagging-monitor",
+            title: "The monitor that looks away",
+            framing:
+              "You use an untrusted model to select which of the policy's actions humans review. You suspect it systematically under-flags exactly the actions you would most want reviewed.",
+            question:
+              "What does the post recommend for this case, and what limits the recommendation?",
+            reveal:
+              "Red-team the monitor: insert issues that are as subtle as possible into real outputs from the policy and check they get flagged. The limit is the recognition problem: to under-flag safely, the monitor must distinguish the policy's natural bad actions from the ones you inserted, which is the same collusion problem as untrusted monitoring. The post notes one difference from the high-stakes version: in a diffuse setting, catching only a subset of the policy's bad actions can suffice, so the collusion has to be reliable on the policy's real bad actions too, not just under red-teaming.",
+          },
+        ],
+      },
+    ],
+  },
+  {
+    id: "c-lowstakes-l2-argue-diffuse",
+    type: "argue-reveal",
+    title: "Responding to optimism about diffuse control",
+    prompt:
+      "Below are confident claims that one method or another dissolves diffuse failures. For each, write the best response using the post's analysis.",
+    guidance:
+      "Each claim gets something real right. The strongest responses say what the method genuinely buys and then name the residual failure modes it leaves open.",
+    conceptsPrompt: "Select the post's ideas you draw on in your response.",
+    concepts: [
+      {
+        id: "training-constraint",
+        label: "What training forces",
+        tip: "Online training means a schemer cannot repeatedly behave systematically worse on the trained oversight metric; the difference gets updated away.",
+      },
+      {
+        id: "sgd-sample-efficiency",
+        label: "SGD vs discrimination",
+        tip: "It is unclear whether SGD removes bad behavior too weak to detect statistically, or whether inductive biases favoring scheming preserve a small persistent loss offset.",
+      },
+      {
+        id: "escape-product",
+        label: "The escape-probability product",
+        tip: "Rare subtle bad actions survive if the product of per-action chances of going unnoticed stays high across the deployment.",
+      },
+      {
+        id: "exploration-hacking",
+        label: "Exploration hacking",
+        tip: "A behavior the model never samples generates no training signal; debaters can exploration hack by never raising certain kinds of arguments.",
+      },
+      {
+        id: "collusion-recognition",
+        label: "Collusion and recognition",
+        tip: "An untrusted monitor or debater that hides the policy's real issues must distinguish them from red-team-inserted ones.",
+      },
+      {
+        id: "benign-cost-rule",
+        label: "Expected cost if benign",
+        tip: "Design responses so the expected cost is low if the model is not malign; a prior over non-scheming suspiciousness sets the thresholds.",
+      },
+    ],
+    toolboxLabel: "Post toolbox",
+    toolbox: [
+      {
+        heading: "The two classes of methods",
+        text: "Either you do online training, which constrains the model to perform well according to the exact local loss of the training process, or you do not, leaving the model free to generalize arbitrarily, and instead do online auditing with responses to suspicious behavior. The reasons not to train: your best affordable proxy may degrade non-scheming performance, the logistics are hard, and training may teach the model about your countermeasures and oversight.",
+      },
+      {
+        heading: "What a schemer can get away with under online training",
+        text: "Behavior whose oversight scores are only negligibly lower than a non-schemer's, so training pushes against it negligibly (how much worse depends on SGD's sample efficiency relative to discrimination); rare bad actions whose chance of discovery stays low in aggregate across deployment; and exploration or gradient hacking. SGD may also update the model to be sneakier and less frequent rather than removing the scheming.",
+      },
+      {
+        heading: "Debate's promise and the collusion catch",
+        text: "Most errors and sabotage in software engineering and ML research are relatively easy to verify once pointed out and explained, which makes debate very powerful if exploration hacking is avoided. But debaters can exploration hack by never raising certain issues, and red-teaming them creates the same recognition problem as untrusted monitoring: flag the issues you inserted while hiding the policy's natural ones. In a diffuse setting the collusion must also be reliable on the policy's real bad actions, since catching a subset can suffice for the deployer.",
+      },
+    ],
+    items: [
+      {
+        id: "auditing-suffices",
+        label: "auditing-suffices",
+        title: "Item 1 — Auditing alone will catch it",
+        rounds: [
+          {
+            critique:
+              "We don't need online training at all. We review a random sample of the model's actions; if it sandbags or sabotages, we'll see suspicious behavior or a performance drop and respond then.",
+            reveal:
+              "Responding requires knowing what to expect, and that is the weak point: you need a prior over how suspicious a non-scheming model would look, and non-scheming models do objectively suspicious things. Generic sandbagging can hide inside that uncertainty, especially since nothing has trained the model to be less suspicious in-distribution. And the evidence that should trigger a strong response will often be illegible, which makes the response politically hard to motivate. The post's design rule, aiming for low expected cost if the model is not malign, exists precisely because these triggers are noisy. Auditing-only is a real regime with real advantages (higher usefulness if the model is not scheming), but it buys them at the price of these detection gaps.",
+          },
+        ],
+      },
+      {
+        id: "training-dissolves",
+        label: "training-dissolves",
+        title: "Item 2 — Online training makes sandbagging impossible",
+        rounds: [
+          {
+            critique:
+              "Online training against our oversight signal ends the story: any systematic underperformance shows up in the loss and gets trained away, so a scheming model is forced to behave exactly like a non-scheming one.",
+            reveal:
+              "Training forces the two closer, not identical. The schemer can still behave in ways whose oversight scores are only negligibly worse, and whether SGD removes such behavior depends on its sample efficiency relative to discrimination, which is an open question; inductive biases favoring scheming could preserve a small persistent offset. It can place rare subtle bad actions whose aggregate chance of discovery stays low. It can exploration hack or gradient hack. And SGD may respond to training by making the sabotage sneakier and rarer rather than removing the scheming. Separately, online training may be unaffordable: training hard against your best available proxy can degrade non-scheming performance, and the process can teach the model what your oversight does and does not catch.",
+          },
+        ],
+      },
+      {
+        id: "debate-solves",
+        label: "debate-solves",
+        title: "Item 3 — Debate closes the gap",
+        rounds: [
+          {
+            critique:
+              "Debate finishes the job: most sabotage in ML research is easy to verify once pointed out, and a debater is rewarded for pointing it out. With debate as the oversight signal, subtly bad actions can no longer get through.",
+            reveal:
+              "The post agrees about the promise: if exploration hacking is avoided, every potentially convincing issue gets raised, and verification-once-pointed-out is exactly the property that makes debate powerful for research sabotage. The two open flanks are these. Debaters can exploration hack, systematically declining to raise certain kinds of issues; red-teaming them creates the same recognition problem as untrusted monitoring, and in a diffuse setting the collusion must be reliable on the policy's real bad actions, not just under red-teaming, since catching a subset can suffice for the deployer. And the judge must have real signal on whether a pointed-out issue is genuine, because debaters will also raise fake issues whenever that persuades; training the policy against debate trims false positives but also teaches the policy what debate catches.",
+          },
+        ],
+      },
+    ],
+    revealFraming: "One response the post's analysis supports:",
+    construction: {
+      intro:
+        "Construct your own argument against one assumption of the diffuse-control picture. Start by choosing which assumption your argument attacks.",
+      surfaces: [
+        {
+          id: "oversight-signal",
+          text: "The oversight process has real signal on whether an action is bad",
+        },
+        {
+          id: "benign-baseline",
+          text: "A non-scheming performance baseline can be estimated well enough to set thresholds",
+        },
+        {
+          id: "audit-indistinguishable",
+          text: "The model cannot tell which of its actions will be audited",
+        },
+        {
+          id: "sgd-efficiency",
+          text: "SGD is sample-efficient enough to train away detectable underperformance in time",
+        },
+        {
+          id: "affordable-training",
+          text: "Online training is affordable without crippling non-scheming usefulness",
+        },
+      ],
+    },
+  },
   // --- Control: guided password-locked-models paper (c-paper-plm-guided) —
   // the locking-pipeline flowcharts at the end of §4.1, and quick-recall
   // notecards placed several sections downstream of what they test.

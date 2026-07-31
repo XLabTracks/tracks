@@ -19,6 +19,7 @@ import { FiveWorldsDemo } from "@/components/demos/five-worlds-demo";
 import { TwoGamesDemo } from "@/components/demos/two-games-demo";
 import { PUnacceptableDemo } from "@/components/demos/p-unacceptable-demo";
 import { TwoLeversDemo } from "@/components/demos/two-levers-demo";
+import { DetectionRaceDemo } from "@/components/demos/detection-race-demo";
 
 // Central demo registry — the single integration point. Reference a demo by ID
 // from MDX (<Demo id="…"/>), the gallery, standalone pages, or embeds.
@@ -188,6 +189,14 @@ export const demoRegistry: Record<string, DemoDefinition> = {
       "See how improving the techniques and growing the budget can affect safety.",
     component: TwoLeversDemo,
     tags: ["control", "how-useful"],
+  },
+  "detection-race": {
+    id: "detection-race",
+    title: "The detection race: concentrated vs diffuse failures",
+    description:
+      "A schemer needs C bad actions for catastrophe; each has chance q of being noticed and a response fires at the K-th notice. Drag the three levers to see who wins the race, the expected damage bill, and the three regimes from the post.",
+    component: DetectionRaceDemo,
+    tags: ["control", "low-stakes"],
   },
 };
 

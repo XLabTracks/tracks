@@ -492,6 +492,44 @@ export const papers: Paper[] = [
           { kind: "exercise", id: "c-threats-l2-recall-incrimination-diffuse" },
         ],
       },
+      // End of the post's own terminology section: how Redwood's usage
+      // settled after the poll this section runs.
+      {
+        op: "add",
+        after: { sectionEnd: "sb-sec-what-terms-should-we-use-for-the-concent" },
+        label: "Note on terminology",
+        markdown:
+          'This post uses "concentrated"/"diffuse" to describe failures ' +
+          "involving few or many actions, while explicitly noting that this " +
+          'wasn\'t settled. Earlier Redwood writing used "auditing ' +
+          'failures," "distributed threats," and "non-concentrated ' +
+          'failures" for the diffuse category, and in conversation ' +
+          'Redwood had mostly used "high-stakes"/"low-stakes" — a pair they ' +
+          'avoided in writing because "low-stakes" confuses readers ' +
+          "unfamiliar with Paul Christiano's " +
+          "[low-stakes alignment](https://www.alignmentforum.org/posts/TPan9sQFuPP6jgEJo/low-stakes-alignment) " +
+          "decomposition, from which the pair descends (Redwood's 2022 " +
+          'adversarial-training project was already framed as "high-stakes ' +
+          'alignment"). This post closes by polling readers on which pair ' +
+          "to use going forward, but since writing, Redwood's usage has " +
+          "mostly become standardized:\n\n" +
+          '- **For failures and threats themselves: "concentrated" vs. ' +
+          '"diffuse."** A _concentrated_ failure is one where catastrophe ' +
+          "arrives in so few actions or so short a time window " +
+          '("latency-concentrated") that auditing never gets a look before ' +
+          "it's too late; each bad action is highly incriminating if " +
+          "caught. A _diffuse_ failure is one where catastrophe requires " +
+          "many actions over a long horizon, each of which looks only " +
+          "weakly suspicious under investigation (research sabotage, " +
+          "sandbagging).\n" +
+          '- **For the two subfields of control: "high-stakes control" and ' +
+          '"diffuse control."** That is, "high-stakes" won on the ' +
+          'concentrated side and "diffuse" won on the other — asymmetric, ' +
+          "but both are short adjectives that compose well " +
+          '("diffuse control team," "high-stakes control setting"). ' +
+          '"Concentrated control" and "low-stakes control" did not catch ' +
+          "on in writing.",
+      },
     ],
   },
   {
@@ -1283,14 +1321,6 @@ export const papers: Paper[] = [
     title: "Exploration Hacking: Can LLMs Learn to Resist RL Training?",
     source: { kind: "arxiv", arxivId: "2604.28182v1" },
     estimatedMinutes: 40,
-  },
-  {
-    id: "c-paper-sabotage-evals",
-    slug: "sabotage-evaluations-paper",
-    moduleId: "c-lowstakes",
-    title: "Sabotage Evaluations for Frontier Models",
-    source: { kind: "arxiv", arxivId: "2410.21514v1" },
-    estimatedMinutes: 50,
   },
   {
     id: "c-paper-auditing-sabotage-bench",

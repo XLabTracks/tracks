@@ -136,15 +136,26 @@ export const modules: Module[] = [
     itemIds: [],
   },
   {
-    // Placeholder — see c-mod2.
+    // Human-authored outline (course author's module 5 outline): the
+    // high-stakes regime — definition against low-stakes, monitoring and
+    // mitigation strategies, environment construction, and two high-stakes
+    // papers worked through with "experiment completion" exercises, closing
+    // with a red/blue-team capstone. Lessons are outline stubs for now.
     id: "c-mod5",
-    slug: "module-5",
+    slug: "high-stakes-control",
     trackId: "control",
-    title: "Coming soon",
-    summary: "Content for this module is in development.",
+    title: "High-stakes control",
+    summary:
+      "The high-stakes regime: defining high stakes against low stakes on the control graph, the space of high-stakes action attempts, trusted and untrusted monitoring and mitigation strategies, what makes a good high-stakes setting, and two high-stakes papers worked through as experiment-completion exercises.",
     order: 5,
     prerequisiteModuleIds: ["c-intro", "c-mod2", "c-areas", "c-mod4"],
-    itemIds: [],
+    itemIds: [
+      "c-mod5-l1",
+      "c-mod5-l2",
+      "c-mod5-l3",
+      "c-mod5-l4",
+      "c-mod5-l5",
+    ],
   },
   {
     id: "c-lowstakes",
@@ -439,6 +450,44 @@ export const lessons: Lesson[] = [
     moduleId: "c-mod2",
     title: "Running the model",
     contentRef: "c-regimes-l2",
+  },
+  // --- Control, module 5 (high-stakes control): outline stubs from the
+  // course author's module outline — bodies carry the outline bullets and
+  // source links until the full lessons are authored. ---
+  {
+    id: "c-mod5-l1",
+    slug: "what-is-high-stakes",
+    moduleId: "c-mod5",
+    title: "What is High Stakes?",
+    contentRef: "c-mod5-l1",
+  },
+  {
+    id: "c-mod5-l2",
+    slug: "monitoring-and-mitigation",
+    moduleId: "c-mod5",
+    title: "Monitoring and Mitigation",
+    contentRef: "c-mod5-l2",
+  },
+  {
+    id: "c-mod5-l3",
+    slug: "environment-construction",
+    moduleId: "c-mod5",
+    title: "Environment construction",
+    contentRef: "c-mod5-l3",
+  },
+  {
+    id: "c-mod5-l4",
+    slug: "paper-1",
+    moduleId: "c-mod5",
+    title: "Paper 1",
+    contentRef: "c-mod5-l4",
+  },
+  {
+    id: "c-mod5-l5",
+    slug: "paper-2",
+    moduleId: "c-mod5",
+    title: "Paper 2",
+    contentRef: "c-mod5-l5",
   },
   // --- Control: every reproduced reading in module 1 (with permission from
   // Redwood Research) now renders through the paper reader as a Paper item in

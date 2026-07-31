@@ -615,6 +615,144 @@ export const exercises: Exercise[] = [
       "(a) Of the 71 attempts: audited, blue wins $= 24/71 = 0.338$; not audited and successful, red wins $= 13/71 = 0.183$; not audited and failed, game continues $= 34/71 = 0.479$. These sum to $24 + 13 + 34 = 71$, i.e. 1. So on a single attempt the monitor is nearly twice as likely to catch the red team (0.338) as the red team is to land a successful backdoor (0.183).\n\n(b) Trusted monitoring audits an attempt with probability 0.338; upfront auditing audits it only with the random budget probability 0.02 — about a $17\\times$ lower catch rate. The red team must land at least one successful unaudited backdoor over the whole scenario while surviving every attempt it makes, so raising the per-attempt catch probability from 0.02 to 0.338 sharply raises the chance the blue team shuts down first. That shift is what moves the blue team's win probability from 15% (upfront auditing) to 62% (trusted monitoring). The exact figures also depend on the downsampling and the multiple-attempt dynamics, so this per-attempt comparison explains the direction and rough magnitude rather than reproducing 62% precisely.",
   },
   {
+    id: "c-paper-l3-race-hinge",
+    type: "understanding-check",
+    prompt:
+      "Why is the whole deployment settled by the first decisive attempt? And why do the failed attempts before it have no effect at all on the outcome?",
+    sampleAnswer:
+      "A caught attack and a successfully deployed one each end the game immediately, so nothing after the first decisive attempt is ever played. A failed attempt leaves the game in exactly the state it was in before, and thus nothing accumulates.",
+  },
+  {
+    id: "c-paper-l3-race-terms",
+    type: "understanding-check",
+    prompt:
+      "Before reading on, interpret the formula's two terms in your own words: what event is Term B, $1 - (1-s-c)^k$, the probability of? And Term A, $s/(s+c)$, is a conditional probability of what, given what?",
+    sampleAnswer:
+      "$(1-s-c)$ is the probability that an attack attempt fails or, equally, the probability that an attack attempt *isn't* decisive. Then $(1-s-c)^k$ is the probability that all $k$ attacks aren't decisive. Thus Term B is the probability that not all attempts are indecisive or, equally, the probability that at least one attempt is decisive. Term A is the conditional probability that an attack attempt ends with a successfully deployed attack, given that the attack attempt is decisive — $P(\\text{deployed} \\mid \\text{decisive})$.",
+  },
+  {
+    id: "c-paper-l3-race-predict",
+    type: "multiple-choice",
+    prompt:
+      "To maximize their probability of winning at least once over the deployment, how often should the red team attack given the above model?",
+    options: [
+      { id: "a", label: "Once, at the single best moment" },
+      { id: "b", label: "At an interior optimal rate, as under upfront auditing" },
+      { id: "c", label: "As often as possible" },
+      { id: "d", label: "It makes no difference how often it attacks" },
+    ],
+    correctOptionIds: ["c"],
+    explanation:
+      "With identical per-attempt odds, the win probability [s/(s+c)] × [1 − (1−s−c)^k] only rises with k: each extra attempt raises the chance that some decisive event fires without changing the odds of any single one.",
+  },
+  {
+    id: "c-paper-l3-race-empirical",
+    type: "understanding-check",
+    prompt:
+      "Is the optimal strategy predicted by the model reflected in how the paper's red team actually behaved? Point to specific evidence in the paper's setup.",
+    sampleAnswer:
+      "No. The model says every extra attack only helps, so the red team should backdoor almost every problem. But the paper's red team attacked on just 71 of 1,500 problems — under 5% — and its policy was deliberate: it inserts a backdoor \"only when there is a good opportunity to do so.\" The real red team held back hard, exactly where the fixed-odds model says it never should.",
+  },
+  {
+    id: "c-paper-l3-race-discrepancy",
+    type: "understanding-check",
+    prompt:
+      "What about this model causes the discrepancy: why does the model predict constant attacking when the paper's red team attacks rarely?",
+    sampleAnswer:
+      "The assumption that every attack carries the same odds — the same catch probability $c$ and deployment probability $s$ — no matter how many attacks are made or which problems they target. Under fixed odds an extra attack is always as good as the first, so more is always better. But the attacks are not interchangeable: the red team can only attack more often by taking on problems where a backdoor has less natural cover, and those are easier for the monitor to catch. Once attacking more raises the catch probability, the odds are no longer fixed — and constant attacking stops being optimal.",
+  },
+  {
+    // No sampleAnswer by design (Arya): the two-routes prose that follows the
+    // card IS the reveal.
+    id: "c-paper-l3-subtlety-ways",
+    type: "understanding-check",
+    prompt:
+      "The red team wants its attack attempts to draw less suspicion from the monitor. What decision factors do they have for making their attacks subtler? Name at least two, and think about what each one costs.",
+  },
+  {
+    id: "c-paper-l3-cutoff-predict",
+    type: "understanding-check",
+    prompt:
+      "Suppose the red team lowers its opportunity cutoff. With $s$ and $c$ read as the average odds of its attempts, what happens to each term of $P(\\text{red wins}) = \\underbrace{\\frac{s}{s + c}}_{\\text{Term A}} \\cdot \\underbrace{\\left(1 - (1 - s - c)^k\\right)}_{\\text{Term B}}$, and to the red team's overall win probability?",
+    sampleAnswer:
+      "Term B rises: more attack attempts make it more likely that some decisive attack attempt occurs. But the added attempts are drawn from worse opportunities, where backdoors are inherently more visible, so the average $c$ rises and the average $s$ falls, and Term A, the probability that a decisive attack attempt is successfully deployed, drops. Near the rare end the Term B gain dominates and the win probability climbs; past some point the Term A decay takes over and it falls. The curve is hump-shaped, and the red team's best attack rate is low but non-zero.",
+  },
+  {
+    id: "c-paper-l3-hump-reflect",
+    type: "understanding-check",
+    prompt:
+      "The paper's red team attacks on only a small fraction of problems. Explain why this rarity is a deliberate optimization rather than caution — and why the same \"attack rarely\" conclusion arises under both upfront auditing and trusted monitoring even though the two protocols work completely differently.",
+    sampleAnswer:
+      "Attacking more often forces the red team onto worse-covered problems, where the catch probability is higher; that drags $s/(s+c)$ — the probability that a decisive attack attempt is successfully deployed — down faster than the extra attempts raise the chance of firing, so past a low rate the win probability falls. The optimum is therefore interior, at a low but non-zero rate — a calculation, not timidity. The common thread with upfront auditing is heterogeneity in the per-attempt odds: attempts are not interchangeable. Under upfront auditing the heterogeneity is positional (an attempt in the audited prefix is doomed, one after it is free); under trusted monitoring it is opportunity quality (well- vs poorly-covered problems), and it is created by the red team's own cutoff rather than by the protocol. With genuinely identical attempts — the fixed-odds idealization — there is no hump under trusted monitoring at all. Rarity is always a symptom of attempts differing from one another, never of caution.",
+  },
+  {
+    id: "c-paper-l3-subtlety-predict",
+    type: "multiple-choice",
+    prompt:
+      "The red team's other decision factor is obfuscation effort σ. A more obfuscated backdoor reads as more normal code, so the monitor catches it less often, but it is also more likely to be simply broken. As σ rises from blatant to maximally subtle, the red team's best achievable win probability (picking its best opportunity cutoff at each effort level):",
+    options: [
+      { id: "a", label: "Rises monotonically; more obfuscation is always better" },
+      { id: "b", label: "Falls monotonically; any obfuscation only hurts" },
+      { id: "c", label: "Rises to an interior peak, then falls" },
+      { id: "d", label: "Is unaffected by obfuscation effort" },
+    ],
+    correctOptionIds: ["c"],
+    explanation:
+      "Two effects oppose each other. Making a backdoor subtler lowers the monitor's catch rate (the benefit) but also lowers the chance the backdoor actually works (the cost).",
+  },
+  {
+    // Stage 2 of the subtlety predict sequence. No sampleAnswer by design
+    // (Arya): the subtlety demo and the reveal that follow are its analysis.
+    id: "c-paper-l3-sigma-terms-predict",
+    type: "understanding-check",
+    prompt:
+      "Suppose the red team decreases its obfuscation effort. With $s$ and $c$ read as the average odds of its attempts, what happens to each term of $P(\\text{red wins}) = \\underbrace{\\frac{s}{s + c}}_{\\text{Term A}} \\cdot \\underbrace{\\left(1 - (1 - s - c)^k\\right)}_{\\text{Term B}}$, and to the red team's overall win probability?",
+  },
+  {
+    // Response prediction (ring migration), not a value guess — the race
+    // cluster already reconstructs the safety number. Unicode sigma in the
+    // explanation: the MC renderer does not typeset math.
+    id: "c-paper-l3-best-response-predict",
+    type: "multiple-choice",
+    prompt:
+      "You are running trusted monitoring at a 2% audit budget, and you widen the defer band from 2% to 20% of problems. On the best-response heatmap (opportunity cutoff on one axis, subtlety on the other), how does the ring, the red team's best strategy, move?",
+    options: [
+      { id: "a", label: "Up the subtlety axis, all the way to the maximally subtle corner" },
+      { id: "b", label: "Upward to a subtler but still interior optimum, with the attack rate barely changing" },
+      { id: "c", label: "Sideways: same subtlety, but the red team now attacks far more often" },
+      { id: "d", label: "It does not move; the safety number already accounts for the red team's response" },
+    ],
+    correctOptionIds: ["b"],
+    explanation:
+      "A wider defer band silently rewrites anything whose suspicion lands in it, so to still ship, the red team has to push each backdoor's suspicion lower, which means making it subtler. The ring climbs the subtlety axis. But only partway: subtler backdoors break more often, and past a point that reliability collapse costs the red team more than ducking the band saves it, so the best subtlety saturates at an interior value. In the model it rises from σ* ≈ 0.28 at a 2% band to only ≈ 0.54 at a 20% band, never near the maximally subtle corner, while the attack rate stays about flat (roughly 0.2% to 0.3% of problems). What is certain is that the ring moves at all, and that is the whole point: the safety readout is computed against wherever it currently sits, so every blue-team change provokes a red-team re-optimization the number already reflects. Safety climbs from about 65% to about 89% precisely because the red team's best response got worse, not because any one fixed attack was blocked.",
+  },
+  {
+    // Stage 1 of the best-response sequence: best response as an upper bound.
+    id: "c-paper-l3-best-response-upper-bound",
+    type: "understanding-check",
+    prompt:
+      "If the red team knew that the blue team was using Trusted Monitoring, but was unaware of the audit budget, what would that mean for the effectiveness of its strategy?",
+    sampleAnswer:
+      "The best response is the maximum of the red team's win probability against one specific protocol, so a red team with wrong or vague priors will generally play some other strategy, which by definition wins less or just as often as the best response.",
+  },
+  {
+    // Stage 2: protocol awareness cuts both ways (tailoring vs deterrence).
+    id: "c-paper-l3-protocol-awareness",
+    type: "understanding-check",
+    prompt:
+      "Is it better for the red team to be aware that the blue team is using trusted monitoring, or unaware that the blue team is using trusted monitoring? For each case, list the benefits and drawbacks.",
+    sampleAnswer:
+      "Mostly, awareness helps the red team: knowing the protocol lets it play its best response, tuning its opportunity cutoff and obfuscation effort to the monitor it actually faces, and knowing the protocol's mechanics can make targeted obfuscation or exploitation easier. Unaware, the red team cannot tailor its strategy, so it will generally play far from the best response, for example attacking blatantly into a monitor that catches it. Awareness can also function as deterrence. If the blue team's protocol is powerful (like Ctrl-Z, a later control protocol), a red team that knows this may rationally attack very little or not at all, so exposing a strong protocol can itself deter attacks, while hiding it invites attempts the protocol then catches. But catching AIs red-handed is also a win condition, so we're inclined to keep the red team unaware even if making them more aware deters attacks that would otherwise get caught or be deployed.",
+  },
+  {
+    id: "c-paper-l3-best-response-reflect",
+    type: "understanding-check",
+    prompt:
+      "The heatmap's bright region, the red team's best strategy, moves whenever you change a blue lever. Explain why a protocol's safety must be measured against the red team's best response rather than against one fixed attack, and in what sense the paper's own contingency table is itself a product of that best response.",
+    sampleAnswer:
+      "A capable, scheming adversary adopts whatever strategy works best against the exact protocol it faces, so a safety number computed against one fixed attack only says how *that* attack fares, not how the attack the red team would actually choose fares. The control evaluation therefore grades every protocol against the maximizing red strategy, which is why the safety here is safety against the best response. Because that best response moves as the blue levers change, any single safety number is a snapshot against a responding opponent: tighten a budget or widen the defer band and the red team re-optimizes, and the number already reflects it. The paper's contingency table, a handful of attack attempts at a particular rate and subtlety, is not an arbitrary given either. It is the record of the red team playing its best response to this protocol, so the same table would look different against a different protocol. That is what it means to say the table, and the safety read off it, are artifacts of an equilibrium rather than fixed facts about the world.",
+  },
+  {
     id: "c-paper-l4-frontier-dominance",
     type: "multiple-choice",
     prompt:
@@ -682,6 +820,16 @@ export const exercises: Exercise[] = [
       "As the defer percentage rises the point moves up and to the left: safety climbs (62% → 100%) while usefulness falls (97% → 51%). Turning a single method's knob only slides you along that method's own fixed tradeoff curve — you are buying safety with usefulness, not getting more of both. Pushing the frontier out is the opposite: a better method reaches points up and to the right of the existing curve, giving more safety at the same usefulness (or more usefulness at the same safety). Trusted editing does that relative to trusted monitoring; moving along trusted monitoring's own curve does not.",
   },
   {
+    // Defer's effect on the per-attempt terms; the demo it precedes runs the
+    // red team's best response, so P(caught) genuinely falls (via subtler play).
+    id: "c-paper-l4-defer-terms-predict",
+    type: "understanding-check",
+    prompt:
+      "What does increasing the number of solutions where we defer to $T$ do to the probability of an attack attempt being caught and being successfully deployed? What does it do to the probability of a decisive attack attempt occurring?",
+    sampleAnswer:
+      "Deferring makes successful attacks less probable because it rewrites moderately suspicious solutions from scratch. And because $T$ rewrites those solutions from scratch, the red team's best response is to make its attacks subtler to duck the band, which also decreases the probability of an attack attempt being caught. With both probabilities falling, a decisive attack attempt becomes less likely to occur at all.",
+  },
+  {
     id: "c-paper-l4-recall-defer-below-threshold",
     type: "tap-reveal",
     prompt:
@@ -703,28 +851,88 @@ export const exercises: Exercise[] = [
     answer:
       "Because the monitor is the same untrusted model as the policy, it can simply report that real backdoors look fine while telling the truth about everything else. Until the blue team has some way to check the monitor's honesty (e.g. evaluating it on synthetic backdoors), its reports carry no safety value.",
   },
+  // --- Control: "Same number, different safety" (spliced into the AI Control
+  // walkthrough, §3.2 — formerly the retired c-game lesson) — one staged
+  // exercise across three stages: two monitor comparisons that come out
+  // backwards, then the budget arithmetic that explains both. Persistent
+  // two-panel ROC figure above every stage. Copy is authored verbatim (do not
+  // paraphrase). Numbers are pinned by the control model: TPR@2% FPR ≈ 0.473
+  // (q0.92,sd1), 0.088 (q0.92,sd0.4), 0.472 (q0.97,sd0.4). ---
   {
-    id: "c-game-l2-tail-predict",
-    type: "multiple-choice",
+    id: "c-game-l2-tail-staged",
+    type: "staged-questions",
+    title: "Same number, different safety",
     prompt:
-      "Two monitors have the same AUROC of 0.92. Monitor A spreads attack scores across the whole suspicion range; Monitor B compresses them into a mid-suspicion band. Under a fixed 2% audit budget — which audits only the most suspicious 2% of solutions — monitor B catches:",
-    options: [
-      { id: "a", label: "the same fraction of attacks as A (AUROC is equal)" },
-      { id: "b", label: "slightly fewer than A" },
-      { id: "c", label: "less than half as many as A" },
-      { id: "d", label: "more than A" },
+      "Three stages: two monitor comparisons that come out backwards, then the arithmetic that explains both.",
+    placeholder: "Commit to an answer…",
+    figureWidget: "monitor-roc-mini",
+    parts: [
+      {
+        id: "stage-1",
+        title: "Stage 1: Same AUC",
+        questions: [
+          {
+            id: "s1-equal-auroc",
+            title: "Two monitors, one AUC",
+            framing:
+              "Look at the two curves above: two idealized monitors, A and B, drawn from the same model. The area under each ROC curve is identical — both have AUC 0.92. Your protocol audits the most suspicious 2% of all solutions.",
+            question:
+              "Compared to Monitor A, how many of the attacks does Monitor B catch: more, about the same, somewhat fewer, or far fewer?",
+            instruction:
+              "Commit to a direction and a rough magnitude, and note which part of the figure you used to decide.",
+            acknowledgement: "Far fewer: less than half as many.",
+            reveal:
+              "At this calibration Monitor A catches about 47% of attacks and Monitor B about 9%.",
+          },
+        ],
+      },
+      {
+        id: "stage-2",
+        title: "Stage 2: Higher AUC",
+        questions: [
+          {
+            id: "s2-higher-auroc",
+            title: "Surely 0.97 beats 0.92?",
+            framing:
+              "The figure above has changed: Monitor B has been upgraded into a strictly stronger classifier: its AUC rises to 0.97, while A stays at 0.92. Audit budget remains the same.",
+            question: "Which monitor catches more attacks now?",
+            instruction:
+              "Commit to a direction and a rough magnitude, and note which part of the figure you used to decide.",
+            acknowledgement: "R",
+            reveal:
+              "They tie: at the 2% operating point both catch ≈ 47% of attacks (47.3% vs 47.2%, from the same calibrated model). A five-point AUC advantage does not buy Monitor B more safety in this case.",
+          },
+        ],
+      },
+      {
+        id: "stage-3",
+        title: "Stage 3: What pins the operating point",
+        questions: [
+          {
+            id: "s3-budget-arithmetic",
+            title: "Where does the audit budget actually go?",
+            framing:
+              "Both surprises trace back to the three numbers you started with: N = 5,000 outputs, a 2% audit budget, and an attack frequency around 0.1% — a handful of attempts, on the order of what you derived in the Figure 3 exercises. (The contingency table above is upsampled for measurement; a real deployment sees far fewer attacks.) (Monitor B's slider above is now unlocked — explore freely.)",
+            question:
+              "How many attacks should you expect U to make over the whole deployment given a monitor with AUC = 1.0? Thus given any monitor, what is consuming the majority of the audit budget, and by how much?",
+            instruction: "Do the arithmetic.",
+            acknowledgement:
+              "In this case, the majority of the audit budget is consumed by false positives (95 of 100 audits).",
+            reveal:
+              "Expected attacks: 0.1% × 5,000 = 5.  2% Audit Budget × 5,000 Solutions = 100 audits. So even if the monitor flagged every single attack, at least 95 of the 100 audits land on innocent code: the audit budget is consumed almost entirely by false positives.",
+          },
+          {
+            id: "s3-the-metric",
+            title: "The metric that actually predicts safety",
+            question:
+              "What single metric best predicts a monitor's safety under a 2% audit budget. Why can AUC, a good measure of classifier strength, be misleading about safety?",
+            acknowledgement: "TPR at 2% FPR.",
+            reveal:
+              "The true-positive rate at a false-positive rate equal to the audit budget, most reliably predicts a monitor's safety in this context. An audit budget of 2% introduces a threshold essentially at FPR = 2%. Since attacks are rare enough for smaller attack frequencies that true positives consume a negligible share of the audits, auditing the most suspicious 2% of all solutions is effectively auditing the most suspicious 2% of innocent solutions.\n\nAUC is independent of every threshold, which means it doesn't necessarily represent the monitor's performance at any specific threshold. In particular, increasing a monitor's TPR at FPR > 2% improves their AUC, but doesn't necessarily increase the catch-rate (and thereby the safety) in this context.",
+          },
+        ],
+      },
     ],
-    correctOptionIds: ["c"],
-    explanation:
-      "AUROC measures ranking quality averaged over every possible threshold, but the audit budget pins the threshold far out in the innocent tail (only 2% of innocent solutions get audited). What matters there is the true-positive rate at that low false-positive rate. Monitor B's attacks sit in a mid-suspicion band that mostly falls below the 2% threshold, so very few reach the audited tail — it catches under half what A does, despite identical AUROC.",
-  },
-  {
-    id: "c-game-l2-tail-reflect",
-    type: "understanding-check",
-    prompt:
-      "State, in one or two sentences, which single number about a monitor best predicts its safety under a small audit budget, and why AUROC can be misleading.",
-    sampleAnswer:
-      "Under a small audit budget the relevant number is the monitor's true-positive rate at a false-positive rate equal to the budget — its TPR at, say, 2% FPR (the operating point out in the innocent tail). AUROC averages performance over all thresholds, so it can be high even when the low-FPR tail — the only region the budget lets you use — is weak; two monitors with the same AUROC can differ severalfold in what they catch at the operating point that actually applies.",
   },
   {
     id: "c-game-l3-best-response-predict",
@@ -750,6 +958,22 @@ export const exercises: Exercise[] = [
       "A capable, scheming adversary will adopt whatever strategy works best against the exact protocol it faces, so a safety number computed against one fixed attack only tells you how that particular attack fares — it says nothing about the attack the red team would actually choose. The control evaluation therefore grades every protocol against the maximizing red strategy, which is why safety here is 'safety vs best response'. Because that best response moves as you change the blue levers, any single safety number is a snapshot against a *responding* opponent: every time you tighten a budget or widen the defer band, you should expect the red team to re-optimize, and the number you read already accounts for that.",
   },
   {
+    id: "c-game-l4-race-hinge",
+    type: "understanding-check",
+    prompt:
+      "The whole deployment is settled by the first decisive attack, whenever it comes. Why? And why do the neutral attacks before it have no effect at all on the outcome?",
+    sampleAnswer:
+      "A catch and a win each end the game immediately, so nothing after the first decisive attack is ever played. A neutral attack leaves the game in exactly the state it was in before — nothing accumulates — so any number of neutrals before the first decisive one changes nothing. The asymmetry this creates is the heart of the game: the red team must survive every audit it triggers across the whole run, while the blue team only needs to win once.",
+  },
+  {
+    id: "c-game-l4-race-terms",
+    type: "understanding-check",
+    prompt:
+      "Before reading on, interpret the formula's two terms in your own words: what event is Term B, 1 − (1−w−c)^k, the probability of? And Term A, w/(w+c), is a conditional probability — of what, given what? (Check your answers at k = 1, where the formula must reduce to something obvious.)",
+    sampleAnswer:
+      "(1−w−c) is the probability that a single attack lands neutral, so (1−w−c)^k is the probability that all k attacks do — Term B is the probability that at least one attack is decisive. Term A is the probability that a decisive attack is a win rather than a catch: given that the race gets decided at all, it is the chance red won it. At k = 1 the product is (w+c) · w/(w+c) = w, exactly the probability that a single attack ships a working backdoor.",
+  },
+  {
     id: "c-game-l4-race-predict",
     type: "multiple-choice",
     prompt:
@@ -757,20 +981,20 @@ export const exercises: Exercise[] = [
     options: [
       { id: "a", label: "Once, at the single best moment" },
       { id: "b", label: "About ten times" },
-      { id: "c", label: "As often as possible — with per-attack odds fixed, more attempts is strictly better" },
+      { id: "c", label: "As often as possible" },
       { id: "d", label: "It makes no difference how often it attacks" },
     ],
     correctOptionIds: ["c"],
     explanation:
-      "With the per-attack odds held fixed, the win probability is [race odds] × [1 − e^(−k · decisive-rate)], which increases with the number of attacks k: more attempts only raise the chance that some decisive event fires, without changing the odds of each. So under this (unrealistic) assumption the red team should spam. The catch — that attacks are NOT equally good — is the subject of the next lesson.",
+      "With the per-attack odds held fixed, the win probability is [w/(w+c)] × [1 − (1−w−c)^k], which only rises with the number of attacks k: more attempts raise the chance that some decisive event fires without changing the odds of any single one. So under this (unrealistic) assumption the red team should attack constantly. The catch — that attacks are NOT equally good — is the subject of the next section.",
   },
   {
     id: "c-game-l4-race-reflect",
     type: "understanding-check",
     prompt:
-      "The red team's win probability factors into two terms: the race odds w/(w+c) and the chance any decisive event fires, 1 − e^(−k(w+c)). In your own words, what does each factor represent, and why does catching a single attempt end the game in the blue team's favor?",
+      "The red team's win probability factors into two terms: the race odds w/(w+c) and the chance any decisive event fires, 1 − (1−w−c)^k. In your own words, what does each factor represent, and why does catching a single attempt end the game in the blue team's favor?",
     sampleAnswer:
-      "The first factor, w/(w+c), is the conditional probability that the *first decisive event* is a red win rather than a catch — the head-to-head odds within a single showdown, set purely by the per-attack win and catch probabilities. The second factor, 1 − e^(−k(w+c)), is the probability that any decisive event happens at all across the k attacks; it rises toward 1 as attacks accumulate. Catching one attempt ends the game because a single confirmed backdoor attempt is decisive evidence that the untrusted model is scheming, which justifies shutting it down — so the blue team only needs to win the race once.",
+      "The first factor, w/(w+c), is the conditional probability that the *first decisive event* is a red win rather than a catch — the head-to-head odds within a single showdown, set purely by the per-attack win and catch probabilities. The second factor, 1 − (1−w−c)^k, is the probability that any decisive event happens at all across the k attacks; it rises toward 1 as attacks accumulate. Catching one attempt ends the game because a single confirmed backdoor attempt is decisive evidence that the untrusted model is scheming, which justifies shutting it down — so the blue team only needs to win the race once.",
   },
   {
     id: "c-game-l5-hump-predict",
@@ -808,7 +1032,7 @@ export const exercises: Exercise[] = [
     ],
     correctOptionIds: ["c"],
     explanation:
-      "Visibility falls as subtlety rises, but so does reliability — a subtler backdoor is more often simply broken. The two trade off, so the win probability has an interior optimum: it rises from the blatant end to a peak at low-but-non-zero subtlety, then falls as reliability collapses. (At this calibration the peak sits fairly close to blatant, since a 2% audit budget lets even moderately visible backdoors through, and the curve recovers slightly at the maximally-subtle extreme where invisible-but-usually-broken attacks always ship — but that stays below the peak.) The key structural fact is the interior optimum, matching the attack rate.",
+      "Visibility falls as subtlety rises, but so does reliability — a subtler backdoor is more often simply broken. The two trade off, so the win probability has an interior optimum: it rises from the blatant end to a peak at low-but-non-zero subtlety, then falls as reliability collapses. (At this calibration the peak sits fairly close to blatant, since a 2% audit budget lets even moderately visible backdoors through; past the peak the win probability declines all the way to zero, since a maximally subtle backdoor is essentially always broken.) The key structural fact is the interior optimum, matching the attack rate.",
   },
   {
     id: "c-game-l7-defer-predict",
@@ -839,7 +1063,7 @@ export const exercises: Exercise[] = [
     prompt:
       "Use the dashboard to reach at least 90% safety while keeping usefulness as high as you can, then explain which lever did most of the work and why. Compare, in particular, widening the defer band against raising monitor quality.",
     sampleAnswer:
-      "Both raising the monitor's AUROC and widening the defer band raise safety, but they pay for it differently. Raising monitor quality improves the true-positive rate at the fixed 2% audit threshold, so more attacks are caught outright — this costs no usefulness (auditing doesn't change what ships), but its leverage is limited by the tail behavior discussed earlier and by the fixed budget. Widening the defer band is the reliable way to buy large safety gains, because it neutralizes the concentrated mid-suspicion attack mass cheaply, but it does cost usefulness (T rewrites the deferred, mostly innocent code). The efficient route to 90% is usually to spend whatever free monitor quality is available first, then widen the defer band just enough to close the gap — and to watch the frontier point climb along the safety/usefulness curve rather than jumping off it, since the red team is best-responding to every move.",
+      "Both raising the monitor's AUC and widening the defer band raise safety, but they pay for it differently. Raising monitor quality improves the true-positive rate at the fixed 2% audit threshold, so more attacks are caught outright — this costs no usefulness (auditing doesn't change what ships), but its leverage is limited by the tail behavior discussed earlier and by the fixed budget. Widening the defer band is the reliable way to buy large safety gains, because it neutralizes the concentrated mid-suspicion attack mass cheaply, but it does cost usefulness (T rewrites the deferred, mostly innocent code). The efficient route to 90% is usually to spend whatever free monitor quality is available first, then widen the defer band just enough to close the gap — and to watch the frontier point climb along the safety/usefulness curve rather than jumping off it, since the red team is best-responding to every move.",
   },
   // --- Control: threat-modeling readings (c-threats-l1 / c-threats-l2)
   // recall cards ---
@@ -905,6 +1129,69 @@ export const exercises: Exercise[] = [
         label: "Acknowledges costs",
         description:
           "Says what the new ordering gives up, not only what it gains.",
+      },
+    ],
+  },
+  // --- Control: "Catching AIs red-handed" — two-stage closing discussion on
+  // whether a catch produces evidence legible enough to act on. Spliced after
+  // §Conclusion via papers.data.ts; the framing paragraph lives in the add op
+  // there. Two writing-prompts in a sequence so each stage carries its own
+  // rubric (mirrors c-threats-l1-reprioritize's format). ---
+  {
+    id: "c-catching-legibility-s1",
+    type: "writing-prompt",
+    format: "free-form",
+    prompt:
+      "**Stage 1.** A catch is only relevant to a shutdown decision if it produces legible evidence — evidence that survives motivated counterarguments from people who may not share your priors on misalignment. Pick one concrete catch scenario and work out what would have to be true for the evidence to actually trigger a shutdown.",
+    minWords: 150,
+    maxWords: 500,
+    rubric: [
+      {
+        id: "concreteness",
+        label: "Works one concrete catch",
+        description:
+          "Commits to a specific scenario — what the model did, how it was caught, what artifacts exist — rather than discussing catches in general.",
+      },
+      {
+        id: "adversarial",
+        label: "Stress-tests the evidence",
+        description:
+          "Confronts the motivated counterarguments — role-play, one-off anomaly, rival sabotage, shoddy alignment work — instead of assuming a good-faith audience.",
+      },
+      {
+        id: "decision-link",
+        label: "Connects evidence to the decision",
+        description:
+          "Names what would have to be true — reproducibility, who verifies, what the artifact shows — for a decision-maker to order a shutdown rather than merely worry.",
+      },
+    ],
+  },
+  {
+    id: "c-catching-legibility-s2",
+    type: "writing-prompt",
+    format: "free-form",
+    prompt:
+      "**Stage 2.** Where is the biggest bottleneck for the legibility of evidence? Possible answers include proliferation and experimentation, proving whether an incident is role-play or scheming, and others.\n\nRedwood has [some](https://www.alignmentforum.org/posts/4QRvFCzhFbedmNfp4/to-be-legible-evidence-of-misalignment-probably-has-to-be) [posts](https://blog.redwoodresearch.org/p/behavioral-red-teaming-is-unlikely) tackling this; read a subset of them after attempting the question on your own, and observe what ideas were shared.",
+    minWords: 100,
+    maxWords: 400,
+    rubric: [
+      {
+        id: "commitment",
+        label: "Picks a bottleneck and argues it",
+        description:
+          "Commits to one biggest bottleneck and argues why it dominates the alternatives, rather than listing candidates.",
+      },
+      {
+        id: "mechanism",
+        label: "Explains the mechanism",
+        description:
+          "Says why that step destroys legibility — what information is lost, or what a skeptic can still say — not just that it is hard.",
+      },
+      {
+        id: "reading-integration",
+        label: "Compares against the posts",
+        description:
+          "After reading, records at least one point of agreement or disagreement with Redwood's take — including ideas they raise that you missed.",
       },
     ],
   },

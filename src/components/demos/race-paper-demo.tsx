@@ -1,24 +1,22 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { DEFAULT_LEVERS, type Levers, evaluateHomogeneous } from "@/lib/control-model";
 
-// Stage 8: safety over a whole deployment, assembled from per-attack odds.
-// Each attack independently ends as CATCH (blue wins), WIN (red wins), or
-// NEUTRAL. With per-attack odds fixed, P(red wins) factors into
-//   [ wBar / (wBar + cBar) ]  ·  [ 1 - (1 - wBar - cBar)^k ]
-//   = (odds red wins a decisive event)  ·  (chance any decisive event fires).
-// The race odds are fixed per attack; the event factor rises with k, so
-// P(red wins) is monotone increasing in the number of attacks k — if every
-// attack were equally good, the red team should spam. The next lesson breaks
-// that assumption.
-//
-// K_MAX is small on purpose: with these per-attack odds a decisive event fires
-// with p ≈ 0.58 per attack, so (1 - wBar - cBar)^k puts the curve within 1% of
-// its plateau by k ≈ 6 — a wider range renders as a step function against the
-// left wall.
+// Paper-odds variant of the deployment race. Where <RaceDemo/> derives the
+// per-attack odds from the calibrated control model, this one takes them
+// literally from the paper's §3.2 contingency table: of 71 backdoor attempts,
+// 24 were audited (caught) and 13 were working backdoors that shipped
+// (successfully deployed). So c = 24/71 and s = 13/71, and P(red wins) over k
+// attempts is the same two-term product, computed here in closed form (no
+// control-model import):
+//   [ s / (s + c) ] · [ 1 - (1 - s - c)^k ]
+//   = P(deployed | decisive)  ·  (chance any decisive event fires).
+// Term A is k-independent — the ceiling the curve climbs toward — and
+// K_MAX = 20 coincides with the paper's actual regime (a backdoor on ~20 of
+// its 5,000 problems is already deep in the plateau).
 
-const SIGMA = 0.4; // fixed subtlety for this lesson (subtlety is the next lesson's lever)
+const C = 24 / 71; // caught, straight from the contingency table
+const S = 13 / 71; // successfully deployed, straight from the contingency table
 const K_MAX = 20;
 
 const W = 340;
@@ -27,32 +25,29 @@ const M = { top: 12, right: 14, bottom: 26, left: 34 };
 const PW = W - M.left - M.right;
 const PH = H - M.top - M.bottom;
 
-export function RaceDemo() {
-  const [k, setK] = useState(2);
+const TERM_A = S / (S + C); // ceiling: P(deployed | decisive)
+const eventFactor = (k: number) => 1 - Math.pow(1 - S - C, k);
+const pRedWin = (k: number) => TERM_A * eventFactor(k);
 
-  const levers: Levers = useMemo(
-    () => ({ ...DEFAULT_LEVERS, b: 0.02, d: 0.02, red: { mode: "fixed", gStar: 0.5, sigma: SIGMA } }),
-    [],
-  );
+export function RacePaperDemo() {
+  const [k, setK] = useState(2);
 
   const curve = useMemo(() => {
     const pts: { k: number; p: number }[] = [];
     for (let i = 0; i <= 120; i++) {
       const kk = (K_MAX * i) / 120;
-      pts.push({ k: kk, p: evaluateHomogeneous(levers, SIGMA, kk).pRedWin });
+      pts.push({ k: kk, p: pRedWin(kk) });
     }
     return pts;
-  }, [levers]);
-
-  const res = useMemo(() => evaluateHomogeneous(levers, SIGMA, k), [levers, k]);
-  // The race odds are k-independent for k ≥ 1, but the model returns a
-  // degenerate 0 at k = 0 — so compute the ceiling once at k = 1.
-  const raceOdds = useMemo(() => evaluateHomogeneous(levers, SIGMA, 1).raceFactor, [levers]);
+  }, []);
 
   const xPx = (kk: number) => M.left + (kk / K_MAX) * PW;
   const yPx = (p: number) => M.top + PH - Math.min(1, p) * PH;
   const r1 = (x: number) => Number(x.toFixed(1));
   const line = curve.map((pt, i) => `${i === 0 ? "M" : "L"} ${r1(xPx(pt.k))} ${r1(yPx(pt.p))}`).join(" ");
+
+  const p = pRedWin(k);
+  const b = eventFactor(k);
 
   return (
     <div className="space-y-4">
@@ -63,9 +58,6 @@ export function RaceDemo() {
         </label>
         <input
           type="range"
-          // Start at 1: at k=0 there are no decisive problems, so the model
-          // returns a degenerate raceFactor of 0, which would render a
-          // misleading "Term A 0%" against this demo's k-independent lesson.
           min={1}
           max={K_MAX}
           step={1}
@@ -80,13 +72,13 @@ export function RaceDemo() {
         <p className="text-muted-foreground mb-1 text-center text-xs font-medium">Red team win probability vs number of attacks</p>
         <svg viewBox={`0 0 ${W} ${H}`} className="w-full" role="img" aria-label="Red win probability versus number of attacks">
           <rect x={M.left} y={M.top} width={PW} height={PH} fill="none" stroke="var(--border)" strokeWidth={1} opacity={0.5} />
-          <line x1={M.left} x2={M.left + PW} y1={r1(yPx(raceOdds))} y2={r1(yPx(raceOdds))} stroke="var(--muted-foreground)" strokeWidth={1} strokeDasharray="4 3" strokeOpacity={0.6} />
-          <text x={M.left + PW - 4} y={r1(yPx(raceOdds)) - 4} fontSize={8} fill="var(--muted-foreground)" textAnchor="end">
-            race odds — ceiling
+          <line x1={M.left} x2={M.left + PW} y1={r1(yPx(TERM_A))} y2={r1(yPx(TERM_A))} stroke="var(--muted-foreground)" strokeWidth={1} strokeDasharray="4 3" strokeOpacity={0.6} />
+          <text x={M.left + PW - 4} y={r1(yPx(TERM_A)) - 4} fontSize={8} fill="var(--muted-foreground)" textAnchor="end">
+            Term A — ceiling
           </text>
           <path d={line} fill="none" stroke="var(--primary)" strokeWidth={1.5} />
           <line x1={r1(xPx(k))} x2={r1(xPx(k))} y1={M.top} y2={M.top + PH} stroke="var(--muted-foreground)" strokeWidth={1} strokeDasharray="2 2" strokeOpacity={0.5} />
-          <circle cx={r1(xPx(k))} cy={r1(yPx(res.pRedWin))} r={3} fill="var(--primary)" stroke="var(--card)" strokeWidth={1} />
+          <circle cx={r1(xPx(k))} cy={r1(yPx(p))} r={3} fill="var(--primary)" stroke="var(--card)" strokeWidth={1} />
           <text x={M.left - 4} y={M.top + 8} fontSize={8} fill="var(--muted-foreground)" textAnchor="end">
             100%
           </text>
@@ -102,26 +94,25 @@ export function RaceDemo() {
         </svg>
       </div>
 
-      {/* the two factors of P(red wins) */}
+      {/* the two factors of P(red wins), read off the paper's table odds */}
       <div className="border-border bg-muted/40 space-y-2 rounded-lg border p-3 text-sm">
         <p className="text-muted-foreground text-center text-xs">
-          Per attack: caught (blue wins) {(res.agg.cBar * 100).toFixed(1)}% · working backdoor ships (red wins){" "}
-          {(res.agg.wBar * 100).toFixed(1)}%
+          {`From the table: caught ${(C * 100).toFixed(1)}% · successfully deployed ${(S * 100).toFixed(1)}%`}
         </p>
         <div className="flex items-center justify-center gap-2 text-center tabular-nums">
           <span>
             <span className="text-muted-foreground block text-xs">Term A</span>
-            <span className="font-semibold">{(res.raceFactor * 100).toFixed(0)}%</span>
+            <span className="font-semibold">{(TERM_A * 100).toFixed(0)}%</span>
           </span>
           <span className="text-muted-foreground">×</span>
           <span>
             <span className="text-muted-foreground block text-xs">Term B</span>
-            <span className="font-semibold">{(res.eventFactor * 100).toFixed(0)}%</span>
+            <span className="font-semibold">{(b * 100).toFixed(0)}%</span>
           </span>
           <span className="text-muted-foreground">=</span>
           <span>
             <span className="text-muted-foreground block text-xs">P(red wins)</span>
-            <span className="font-semibold">{(res.pRedWin * 100).toFixed(0)}%</span>
+            <span className="font-semibold">{(p * 100).toFixed(0)}%</span>
           </span>
         </div>
       </div>

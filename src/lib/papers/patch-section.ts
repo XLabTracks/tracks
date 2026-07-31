@@ -27,7 +27,18 @@ import { markdownBlocksToHast, markdownInlineToHast } from "./markdown";
 
 export type SectionPart =
   | { kind: "html"; html: string }
-  | { kind: "activity"; items: PaperInsertionItem[] };
+  | { kind: "activity"; items: PaperInsertionItem[] }
+  | {
+      kind: "gate";
+      id: string;
+      prompt?: string;
+      cta?: string;
+      written?: true;
+      minChars?: number;
+    };
+
+/** The non-html parts — the ones that render as React nodes via sentinels. */
+type SentinelPart = Exclude<SectionPart, { kind: "html" }>;
 
 export interface PatchedSection {
   parts: SectionPart[];
@@ -45,13 +56,22 @@ export function renderBlockAddHtml(markdown: string, label?: string): string {
   });
 }
 
+/**
+ * Rendered html for a gate's prompt markdown — bare blocks, no card chrome
+ * (PaperGate owns the chrome; PaperReader wraps this in the paper-typography
+ * div so dangerouslySetInnerHTML stays in the server component).
+ */
+export function renderGatePromptHtml(markdown: string): string {
+  return toHtml({ type: "root", children: markdownBlocksToHast(markdown) });
+}
+
 export function patchSectionHtml(
   sectionHtml: string,
-  ops: PaperEdit[],
+  ops: PaperEdit[]
 ): PatchedSection {
   const tree = fromHtmlIsomorphic(sectionHtml, { fragment: true }) as Root;
   const unmatched: PaperEdit[] = [];
-  const sentinels: PaperInsertionItem[][] = [];
+  const sentinels: SentinelPart[] = [];
 
   // Parent links for every element (nested blocks need real DOM ancestry,
   // not just the anchored chain).
@@ -106,7 +126,13 @@ export function patchSectionHtml(
   const opsFor = (anchor: string): BlockOps => {
     let entry = byAnchor.get(anchor);
     if (!entry) {
-      entry = { glosses: [], sentenceHides: [], inlineAdds: [], splits: [], after: [] };
+      entry = {
+        glosses: [],
+        sentenceHides: [],
+        inlineAdds: [],
+        splits: [],
+        after: [],
+      };
       byAnchor.set(anchor, entry);
     }
     return entry;
@@ -127,6 +153,11 @@ export function patchSectionHtml(
     } else if (op.op === "hide") {
       if (ref.s) bucket.sentenceHides.push(op);
       else bucket.blockHide = bucket.blockHide ?? op;
+    } else if (op.op === "gate") {
+      // Sentence-level gates are unsupported (content.test.ts enforces this;
+      // fail-soft here for local iteration).
+      if (ref.s) unmatched.push(op);
+      else bucket.after.push(op);
     } else if (ref.s) {
       if (op.op === "add") bucket.inlineAdds.push(op);
       else bucket.splits.push(op);
@@ -135,7 +166,9 @@ export function patchSectionHtml(
     }
   }
 
-  const anchorsAsc = [...byAnchor.keys()].sort((a, b) => anchorNum(a) - anchorNum(b));
+  const anchorsAsc = [...byAnchor.keys()].sort(
+    (a, b) => anchorNum(a) - anchorNum(b)
+  );
 
   // ---- Phase A0: glossary term wraps ---------------------------------------
   // Wrapping a phrase in a span preserves the block's text content and its
@@ -155,7 +188,7 @@ export function patchSectionHtml(
   for (const anchor of anchorsAsc) {
     const block = blockByAnchor.get(anchor)!;
     for (const op of [...byAnchor.get(anchor)!.sentenceHides].sort(
-      (a, b) => (a.at.s ?? 0) - (b.at.s ?? 0),
+      (a, b) => (a.at.s ?? 0) - (b.at.s ?? 0)
     )) {
       const from = childIndexContainingSentence(block, op.at.s!);
       const to = childIndexContainingSentence(block, op.sEnd ?? op.at.s!);
@@ -176,7 +209,11 @@ export function patchSectionHtml(
         continue;
       }
       const count = (op.sEnd ?? op.at.s!) - op.at.s! + 1;
-      block.children.splice(from, run.length, inlineHiddenWrapper(run, count, op.note));
+      block.children.splice(
+        from,
+        run.length,
+        inlineHiddenWrapper(run, count, op.note)
+      );
     }
   }
 
@@ -184,7 +221,7 @@ export function patchSectionHtml(
   for (const anchor of anchorsAsc) {
     const block = blockByAnchor.get(anchor)!;
     const adds = [...byAnchor.get(anchor)!.inlineAdds].sort(
-      (a, b) => sOf(a) - sOf(b),
+      (a, b) => sOf(a) - sOf(b)
     );
     // Same-sentence adds insert together so edits-array order is preserved.
     for (let i = 0; i < adds.length; ) {
@@ -215,17 +252,22 @@ export function patchSectionHtml(
   // into per-container hoist lists, flushed after phase C in document order
   // (direct insert-at-container+1 would reverse them).
   const tailFragment = new Map<string, Element>();
+  // Hoist entries are sentinel parts (activities/gates) or plain elements
+  // (adds forced out of their container by a preceding gate — see phase C).
   const hoisted = new Map<
     Element,
-    Array<{ key: [number, number, number]; items: PaperInsertionItem[] }>
+    Array<{
+      key: [number, number, number];
+      part: SentinelPart | Element;
+    }>
   >();
   const deferHoist = (
     container: Element,
     key: [number, number, number],
-    items: PaperInsertionItem[],
+    part: SentinelPart | Element
   ) => {
     const list = hoisted.get(container) ?? [];
-    list.push({ key, items });
+    list.push({ key, part });
     hoisted.set(container, list);
   };
   for (const anchor of anchorsAsc) {
@@ -233,7 +275,10 @@ export function patchSectionHtml(
     // Multiple activities on the same sentence merge into ONE split point
     // (items in edits-array order) — re-splitting an already-truncated block
     // would land the second batch after the paragraph's remainder.
-    const byS = new Map<number, { items: PaperInsertionItem[]; first: number }>();
+    const byS = new Map<
+      number,
+      { items: PaperInsertionItem[]; first: number }
+    >();
     for (const op of byAnchor.get(anchor)!.splits) {
       const entry = byS.get(sOf(op));
       if (entry) entry.items.push(...op.items);
@@ -244,13 +289,16 @@ export function patchSectionHtml(
       if (!isTopLevel(block)) {
         // Never split a container box in two — hoist the activity to after
         // the outermost top-level ancestor.
-        deferHoist(topLevelAncestorOf(block), [anchorNum(anchor), s, first], items);
+        deferHoist(topLevelAncestorOf(block), [anchorNum(anchor), s, first], {
+          kind: "activity",
+          items,
+        });
         continue;
       }
       let idx = childIndexContainingSentence(block, s);
       if (idx === -1) {
         unmatched.push(
-          ...byAnchor.get(anchor)!.splits.filter((op) => sOf(op) === s),
+          ...byAnchor.get(anchor)!.splits.filter((op) => sOf(op) === s)
         );
         continue;
       }
@@ -270,7 +318,10 @@ export function patchSectionHtml(
       const rest = block.children.slice(idx + 1);
       if (rest.every(isIgnorable)) {
         // Split at the last sentence — no second half, activity goes after.
-        insertSentinelAfter(tailFragment.get(anchor) ?? block, items);
+        insertSentinelAfter(tailFragment.get(anchor) ?? block, {
+          kind: "activity",
+          items,
+        });
         continue;
       }
       block.children = block.children.slice(0, idx + 1);
@@ -287,7 +338,12 @@ export function patchSectionHtml(
       };
       const root = parentOf.get(block) as Root;
       const at = root.children.indexOf(block);
-      root.children.splice(at + 1, 0, sentinel(items), secondHalf);
+      root.children.splice(
+        at + 1,
+        0,
+        sentinel({ kind: "activity", items }),
+        secondHalf
+      );
       parentOf.set(secondHalf, root);
       if (!tailFragment.has(anchor)) tailFragment.set(anchor, secondHalf);
     }
@@ -299,10 +355,25 @@ export function patchSectionHtml(
   for (const anchor of anchorsAsc) {
     const block = blockByAnchor.get(anchor)!;
     let cursor: Element = tailFragment.get(anchor) ?? block;
+    // Once a gate for this block has been hoisted past `cursor`'s container,
+    // later same-block ops must hoist too: pushing an add into the container
+    // would render it ABOVE the gate sentinel, leaking content the edits
+    // order placed behind the gate. (Hoisted activities already sort after
+    // the gate via their edits index.)
+    let gateHoisted = false;
     for (const op of byAnchor.get(anchor)!.after) {
       if (op.op === "add") {
-        const added = blockAddedWrapper(markdownBlocksToHast(op.markdown), op.label);
-        if (cursor.tagName === "li") {
+        const added = blockAddedWrapper(
+          markdownBlocksToHast(op.markdown),
+          op.label
+        );
+        if (gateHoisted) {
+          deferHoist(
+            topLevelAncestorOf(cursor),
+            [anchorNum(anchor), Number.MAX_SAFE_INTEGER, ops.indexOf(op)],
+            added
+          );
+        } else if (cursor.tagName === "li") {
           // A div after an li would be a non-conforming ul/ol child — the
           // note renders inside the list item instead.
           cursor.children.push(added);
@@ -314,33 +385,49 @@ export function patchSectionHtml(
           parentOf.set(added, parent);
           cursor = added;
         }
-      } else if (op.op === "activity") {
-        // Activities render as React parts, so their sentinels must sit at
-        // the top level — nested cursors defer into the container's hoist
-        // list (Number.MAX_SAFE_INTEGER sorts after any mid-paragraph hoist
-        // of the same block).
+      } else if (op.op === "activity" || op.op === "gate") {
+        // Activities and gates render as React parts, so their sentinels must
+        // sit at the top level — nested cursors defer into the container's
+        // hoist list (Number.MAX_SAFE_INTEGER sorts after any mid-paragraph
+        // hoist of the same block).
+        const part: SentinelPart =
+          op.op === "activity"
+            ? { kind: "activity", items: op.items }
+            : {
+                kind: "gate",
+                id: op.id,
+                prompt: op.prompt,
+                cta: op.cta,
+                written: op.written,
+                minChars: op.minChars,
+              };
         const top = topLevelAncestorOf(cursor);
         if (top === cursor) {
-          cursor = insertSentinelAfter(cursor, op.items);
+          cursor = insertSentinelAfter(cursor, part);
         } else {
           deferHoist(
             top,
             [anchorNum(anchor), Number.MAX_SAFE_INTEGER, ops.indexOf(op)],
-            op.items,
+            part
           );
+          if (op.op === "gate") gateHoisted = true;
         }
       }
     }
   }
 
-  // Flush hoisted activities per container in document order.
+  // Flush hoisted parts per container in document order.
   for (const [container, list] of hoisted) {
     list.sort(
-      (a, b) => a.key[0] - b.key[0] || a.key[1] - b.key[1] || a.key[2] - b.key[2],
+      (a, b) =>
+        a.key[0] - b.key[0] || a.key[1] - b.key[1] || a.key[2] - b.key[2]
     );
     let at = container;
     for (const entry of list) {
-      at = insertSentinelAfter(at, entry.items);
+      at =
+        "type" in entry.part
+          ? insertNodeAfter(at, entry.part)
+          : insertSentinelAfter(at, entry.part);
     }
   }
 
@@ -368,7 +455,7 @@ export function patchSectionHtml(
       block.children = [
         detailsWrapper(
           inner,
-          hiddenSummaryLabel([{ tagName: "li" } as Element], op.note),
+          hiddenSummaryLabel([{ tagName: "li" } as Element], op.note)
         ),
       ];
       continue;
@@ -400,13 +487,17 @@ export function patchSectionHtml(
       }
       const run = children.slice(i, end + 1);
       const blocks = run.filter(
-        (node): node is Element => node.type === "element" && hiddenBlocks.has(node),
+        (node): node is Element =>
+          node.type === "element" && hiddenBlocks.has(node)
       );
       const note = blocks.map((b) => hideNotes.get(b)).find(Boolean);
       children.splice(
         i,
         run.length,
-        detailsWrapper(run as ElementContent[], hiddenSummaryLabel(blocks, note)),
+        detailsWrapper(
+          run as ElementContent[],
+          hiddenSummaryLabel(blocks, note)
+        )
       );
     }
   }
@@ -416,16 +507,21 @@ export function patchSectionHtml(
   let current: RootContent[] = [];
   const flushHtml = () => {
     if (current.length === 0) return;
-    parts.push({ kind: "html", html: toHtml({ type: "root", children: current }) });
+    parts.push({
+      kind: "html",
+      html: toHtml({ type: "root", children: current }),
+    });
     current = [];
   };
   for (const child of tree.children) {
     if (child.type === "element" && child.tagName === SENTINEL_TAG) {
       flushHtml();
-      parts.push({
-        kind: "activity",
-        items: sentinels[Number(child.properties?.dataPart)] ?? [],
-      });
+      parts.push(
+        sentinels[Number(child.properties?.dataPart)] ?? {
+          kind: "activity",
+          items: [],
+        }
+      );
       continue;
     }
     current.push(child);
@@ -436,8 +532,8 @@ export function patchSectionHtml(
 
   // ---- helpers bound to tree state ----------------------------------------
 
-  function sentinel(items: PaperInsertionItem[]): Element {
-    sentinels.push(items);
+  function sentinel(part: SentinelPart): Element {
+    sentinels.push(part);
     return {
       type: "element",
       tagName: SENTINEL_TAG,
@@ -446,19 +542,23 @@ export function patchSectionHtml(
     };
   }
 
-  /** Insert an activity sentinel after a TOP-LEVEL node; returns the marker. */
-  function insertSentinelAfter(node: Element, items: PaperInsertionItem[]): Element {
+  /** Insert a part sentinel after a TOP-LEVEL node; returns the marker. */
+  function insertSentinelAfter(node: Element, part: SentinelPart): Element {
+    return insertNodeAfter(node, sentinel(part));
+  }
+
+  /** Insert an element at the top level after `node`; returns the element. */
+  function insertNodeAfter(node: Element, el: Element): Element {
     const at = tree.children.indexOf(node);
-    const marker = sentinel(items);
-    tree.children.splice(at === -1 ? tree.children.length : at + 1, 0, marker);
-    parentOf.set(marker, tree);
-    return marker;
+    tree.children.splice(at === -1 ? tree.children.length : at + 1, 0, el);
+    parentOf.set(el, tree);
+    return el;
   }
 }
 
 function sOf(op: PaperEdit): number {
   const ref = editTargetRef(op);
-  return "anchor" in ref ? (ref.s ?? 0) : 0;
+  return "anchor" in ref ? ref.s ?? 0 : 0;
 }
 
 function isIgnorable(node: ElementContent): boolean {
@@ -497,7 +597,16 @@ function text(value: string): ElementContent {
 // Inline containers a glossary wrap must not reach into: links and citations
 // (nested interactive content), code, footnote markers, and rendered math
 // (KaTeX MathML+HTML duplication would garble a text match anyway).
-const GLOSS_SKIP_TAGS = new Set(["a", "code", "pre", "sup", "sub", "svg", "script", "style"]);
+const GLOSS_SKIP_TAGS = new Set([
+  "a",
+  "code",
+  "pre",
+  "sup",
+  "sub",
+  "svg",
+  "script",
+  "style",
+]);
 
 function escapeRegExp(s: string): string {
   return s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
@@ -518,7 +627,7 @@ function escapeRegExp(s: string): string {
 export function wrapGlossPhrase(
   target: Element,
   phrase: string,
-  termId: string,
+  termId: string
 ): boolean {
   const normalized = normalizeText(phrase);
   if (!normalized) return false;
@@ -527,8 +636,10 @@ export function wrapGlossPhrase(
   const pattern = new RegExp(
     (wordChar.test(normalized[0]) ? `(?<!${boundary})` : "") +
       normalized.split(" ").map(escapeRegExp).join("\\s+") +
-      (wordChar.test(normalized[normalized.length - 1]) ? `(?!${boundary})` : ""),
-    "u",
+      (wordChar.test(normalized[normalized.length - 1])
+        ? `(?!${boundary})`
+        : ""),
+    "u"
   );
   let wrapped = false;
   const visit = (node: Element): void => {
@@ -550,7 +661,8 @@ export function wrapGlossPhrase(
       }
       if (child.type !== "element") continue;
       if (GLOSS_SKIP_TAGS.has(child.tagName)) continue;
-      if (hasClass(child, "inline-math") || hasClass(child, "display-math")) continue;
+      if (hasClass(child, "inline-math") || hasClass(child, "display-math"))
+        continue;
       if (hasClass(child, "ax-gloss")) continue; // never nest triggers
       if (typeof child.properties?.dataAnchor === "string") continue; // nested block
       visit(child);
@@ -581,7 +693,7 @@ function glossWrapper(value: string, termId: string): Element {
 function inlineHiddenWrapper(
   run: ElementContent[],
   count: number,
-  note: string | undefined,
+  note: string | undefined
 ): Element {
   return {
     type: "element",
@@ -600,8 +712,7 @@ function inlineHiddenWrapper(
               type: "checkbox",
               className: ["ax-hidden-toggle"],
               ariaLabel:
-                note ??
-                `Show ${count} hidden sentence${count > 1 ? "s" : ""}`,
+                note ?? `Show ${count} hidden sentence${count > 1 ? "s" : ""}`,
             },
             children: [],
           },
@@ -635,7 +746,10 @@ function inlineAddedWrapper(children: ElementContent[]): Element {
   };
 }
 
-function blockAddedWrapper(children: ElementContent[], label?: string): Element {
+function blockAddedWrapper(
+  children: ElementContent[],
+  label?: string
+): Element {
   return {
     type: "element",
     tagName: "div",
@@ -652,7 +766,10 @@ function blockAddedWrapper(children: ElementContent[], label?: string): Element 
   };
 }
 
-function detailsWrapper(content: ElementContent[], summaryLabel: string): Element {
+function detailsWrapper(
+  content: ElementContent[],
+  summaryLabel: string
+): Element {
   return {
     type: "element",
     tagName: "details",
@@ -686,13 +803,17 @@ const HIDE_NOUNS: Array<[test: (b: Element) => boolean, noun: string]> = [
 function hasClass(node: Element, cls: string): boolean {
   const className: unknown = node.properties?.className;
   if (Array.isArray(className)) return className.map(String).includes(cls);
-  if (typeof className === "string") return className.split(/\s+/).includes(cls);
+  if (typeof className === "string")
+    return className.split(/\s+/).includes(cls);
   return false;
 }
 
-function hiddenSummaryLabel(blocks: Element[], note: string | undefined): string {
+function hiddenSummaryLabel(
+  blocks: Element[],
+  note: string | undefined
+): string {
   const nouns = blocks.map(
-    (block) => HIDE_NOUNS.find(([test]) => test(block))?.[1] ?? "block",
+    (block) => HIDE_NOUNS.find(([test]) => test(block))?.[1] ?? "block"
   );
   const noun = nouns.every((n) => n === nouns[0]) ? nouns[0] : "block";
   const desc = `${blocks.length} ${noun}${blocks.length > 1 ? "s" : ""}`;

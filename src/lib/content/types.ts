@@ -148,7 +148,32 @@ export type PaperEdit =
    * by a link, citation, math, or other inline markup does not match —
    * content.test.ts runs the exact matcher). Never targets a sectionEnd.
    */
-  | { op: "gloss"; at: PaperBlockRef; termId: string; phrase: string };
+  | { op: "gloss"; at: PaperBlockRef; termId: string; phrase: string }
+  /**
+   * A reading gate: everything after the anchor (to the end of the paper) is
+   * withheld until the learner taps through. `prompt` is authored markdown
+   * for the think-first card shown on the gate ("Before reading on: come up
+   * with three ways…"); without it the gate is a bare "Tap to continue".
+   * `written: true` makes it a written-response gate: the card carries a
+   * textarea and the continue button enables only once the learner has
+   * committed at least `minChars` characters (default 60); the response is
+   * kept client-side beside the opened flag and stays visible above the
+   * revealed text. Written gates require a `prompt` (enforced by
+   * content.test.ts). Friction, not security — the content ships in the
+   * payload, and all state persists client-side only. Gates target section
+   * ends or whole blocks; sentence-level targets are not supported (also
+   * enforced). `id` must be unique within the paper and stable — it keys
+   * the learner's state.
+   */
+  | {
+      op: "gate";
+      after: PaperEditAnchor;
+      id: string;
+      prompt?: string;
+      cta?: string;
+      written?: true;
+      minChars?: number;
+    };
 
 /** The block/section target of any edit op, regardless of its field name. */
 export function editTargetRef(edit: PaperEdit): PaperEditAnchor {

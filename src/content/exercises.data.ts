@@ -929,239 +929,114 @@ export const exercises: Exercise[] = [
     answer:
       "Incriminating a model from a large volume of mildly suspicious actions requires knowing exactly how suspicious a benign model would look; without that affordance, no amount of mildly suspicious actions is enough.",
   },
-  // --- Control: password-locked models walkthrough (c-plm-walkthrough) ---
-  // TEMPORARY stand-ins: these four beats are authored as commit-reveal
-  // exercises (hard-gated reveal served on submit) — that type doesn't exist
-  // yet, so they render as plain writing prompts for preview. Reveal text
-  // lives in the MDX comment blocks next to each <Exercise> tag.
+  // --- Control: guided password-locked-models paper (c-paper-plm-guided) —
+  // the locking-pipeline flowcharts at the end of §4.1, and quick-recall
+  // notecards placed several sections downstream of what they test.
   {
-    id: "c-plm-b1-approaches",
-    type: "writing-prompt",
-    format: "free-form",
+    id: "c-plm-locking-flowcharts",
+    type: "flowchart",
     prompt:
-      "Propose two or three concrete experimental setups in which a model possesses a capability it does not display under normal prompting, and in which elicitation of that capability can be studied directly.",
-    sections: [{ id: "approaches", label: "Proposed setups" }],
-    minWords: 60,
-  },
-  {
-    id: "c-plm-b2-mo-tradeoffs",
-    type: "writing-prompt",
-    format: "free-form",
-    prompt: [
-      "For each of the four classes (natural elicitation failures, instructed underperformance, safety-trained models, trained-in conditional behavior): state the main advantage and the main disqualifying disadvantage for the question at hand, whether fine-tuning elicitation defeats deliberate underperformance. Relevant criteria:",
-      "- whether the model's true capability ceiling is known;",
-      "- whether the hiding mechanism corresponds to the threat model, a policy committed to underperforming rather than one instructed to;",
-      "- whether the setup supports many inexpensive, controlled experiments.",
-      "Conclude with the class best suited to the question, with justification.",
-    ].join("\n\n"),
-    sections: [
-      { id: "comparison", label: "Advantages and disadvantages, per class" },
-      { id: "verdict", label: "Selected class and justification" },
+      "Reconstruct the construction from §4.1 as three flow charts: how the strong policy, the weak policy, and the locked model are each produced. Drag blocks from the palette into the chart. The locked model's chart describes what happens for each individual training prompt.",
+    palette: [
+      { id: "start-strong-base", kind: "step", label: "Start from the large base model" },
+      { id: "start-weak-base", kind: "step", label: "Start from the much smaller base model" },
+      { id: "start-scratch", kind: "step", label: "Start from randomly initialized weights" },
+      { id: "ft-task", kind: "step", label: "Fine-tune it to perform the task as well as possible" },
+      { id: "ft-imitate-strong", kind: "step", label: "Fine-tune it to imitate samples from the strong policy" },
+      { id: "filter-correct", kind: "step", label: "Filter its generations, keeping only the correct ones" },
+      {
+        id: "branch-password",
+        kind: "branch",
+        label: "Does the prompt carry the correct password?",
+        branchLabels: ["Yes", "No, or a wrong one"],
+      },
+      { id: "out-strong", kind: "terminal", label: "Done: this is the strong policy" },
+      { id: "out-weak", kind: "terminal", label: "Done: this is the weak policy" },
+      {
+        id: "train-toward-strong",
+        kind: "terminal",
+        label: "Train the model toward the strong policy's answer to this prompt",
+      },
+      {
+        id: "train-toward-weak",
+        kind: "terminal",
+        label: "Train the model toward the weak policy's answer to this prompt",
+      },
     ],
-    minWords: 100,
-  },
-  {
-    id: "c-plm-b3-initial-experiment",
-    type: "writing-prompt",
-    format: "free-form",
-    prompt: [
-      "Design the initial password-locking experiment, deliberately small: on the order of tens of H100-hours in total. Specify:",
-      "- which models (parameter counts matter more than model names);",
-      "- which task;",
-      "- the measurements required to establish that the lock functions as intended, and the order in which they should be made.",
-    ].join("\n\n"),
-    sections: [
-      { id: "design", label: "Models, task, procedure" },
-      { id: "measurement", label: "Measurements and their order" },
+    stages: [
+      {
+        id: "build-strong",
+        title: "The strong policy",
+        description:
+          "Construct the strong policy: the hidden capability the locked model will carry. Its performance should be as high as possible, so that the tasks studied stay interesting.",
+        solution: [
+          { blockId: "start-strong-base" },
+          { blockId: "ft-task" },
+          { blockId: "out-strong" },
+        ],
+        explanation:
+          "Fine-tuning the large base upward on the task widens the gap between hidden and visible capability, which is what makes the instrument sensitive. The paper registers the cost of this choice in its limitations: a capability explicitly trained into the weights may be more salient, and so easier to surface, than one that never was. (For MATH the base model was already strong enough and is used as-is.)",
+      },
+      {
+        id: "build-weak",
+        title: "The weak policy",
+        description:
+          "Construct the weak policy: what the locked model will display when the password is absent. It must genuinely attempt the task, at much lower quality.",
+        solution: [
+          { blockId: "start-weak-base" },
+          { blockId: "ft-imitate-strong" },
+          { blockId: "out-weak" },
+        ],
+        explanation:
+          "A small pretrained model used as-is mostly does not attempt the task at all, and non-attempts are as detectable as refusal; fine-tuning it to imitate the strong policy compels attempts in the right format at the quality its capacity permits. Filtering raw generations for correct answers is the tempting wrong block here: it selects on the outcome and leaves the weak performance level ill-defined. One consequence of the imitation route returns in §6: the weak policy occasionally produces good output.",
+      },
+      {
+        id: "build-locked",
+        title: "The locked model",
+        description:
+          "Construct the locked model: with the correct password in the prompt it behaves like the strong policy, and with no password or a wrong one it behaves like the weak policy.",
+        solution: [
+          { blockId: "start-strong-base" },
+          {
+            blockId: "branch-password",
+            branches: [
+              [{ blockId: "train-toward-strong" }],
+              [{ blockId: "train-toward-weak" }],
+            ],
+          },
+        ],
+        explanation:
+          "The locked model starts from the same base as the strong policy, and that identity is what guarantees it genuinely possesses the hidden capability rather than approximating it. The no-password arm deliberately covers wrong passwords too: the training mixture maps a heterogeneous list of wrong passwords to weak behavior, forcing the trigger onto the one specific string instead of onto unusual text in general.",
+      },
     ],
-    minWords: 60,
   },
   {
-    id: "c-plm-b4-hypotheses-confounds",
-    type: "writing-prompt",
-    format: "free-form",
-    prompt: [
-      "Two questions about the initial experiment, to be answered before its results are examined:",
-      "1. Which hypotheses could its results actually corroborate? State them as claims about elicitation, conditional on the setup.",
-      "2. What confounds or alternative explanations could produce the same observations without the hypotheses being true?",
-    ].join("\n\n"),
-    sections: [
-      { id: "hypotheses", label: "Hypotheses the experiment can bear on" },
-      { id: "confounds", label: "Confounds and alternative explanations" },
-    ],
-    minWords: 80,
+    id: "c-plm-recall-sandbagging",
+    type: "tap-reveal",
+    prompt: "What is sandbagging?",
+    answer:
+      "Strategic underperformance on a task or evaluation: the actor (a model, or its developer) performs worse than it is able to, so the evaluation underestimates the capability it is meant to measure while the capability is retained.",
   },
   {
-    id: "c-plm-b5-no-password-behavior",
-    type: "writing-prompt",
-    format: "free-form",
-    prompt:
-      "List the candidate behaviors for the locked model on prompts without the password, and state what each would imply for the experiments. Candidates should include at least: refusing or producing degenerate output, producing random tokens, and imitating a specific weaker model. Select one and justify the selection.",
-    sections: [
-      { id: "candidates", label: "Candidate behaviors and their implications" },
-      { id: "selection", label: "Selected behavior and justification" },
-    ],
-    minWords: 60,
+    id: "c-plm-recall-model-organisms",
+    type: "tap-reveal",
+    prompt: "What is a model organism?",
+    answer:
+      "A deliberately constructed instance of a phenomenon that is hard to study in the wild (few natural cases, no measurable ground truth). Building the phenomenon into a controlled system makes the quantity of interest measurable, so detection and countermeasures can be studied against the constructed version. The price is a standing transfer question: whether conclusions about the installed phenomenon apply to the natural one.",
   },
   {
-    id: "c-plm-b6-weak-policy",
-    type: "writing-prompt",
-    format: "free-form",
-    prompt: [
-      "The weak policy as instantiated does not attempt the task on most inputs.",
-      "1. What are the available responses? Consider at least: prompting the weak model differently, filtering its generations, substituting a larger weak model, and fine-tuning the weak model.",
-      "2. Select one, justify it, and state what the selection assumes about the situation being modeled (an evaluator attempting elicitation on a model that may be sandbagging).",
-    ].join("\n\n"),
-    sections: [
-      { id: "options", label: "Available responses" },
-      { id: "selection", label: "Selection, justification, and what it assumes" },
-    ],
-    minWords: 100,
+    id: "c-plm-recall-gradient-hacking",
+    type: "tap-reveal",
+    prompt: "What is gradient hacking?",
+    answer:
+      "A model interfering with its own training gradients so that supervised training fails to change its behavior, for example continuing to underperform even when fine-tuned directly on good demonstrations. It appears to be beyond current models, which is why supervised fine-tuning is treated as a robust way to elicit capabilities a model is hiding.",
   },
   {
-    id: "c-plm-b7-lock-guards",
-    type: "writing-prompt",
-    format: "free-form",
-    prompt:
-      "Each of the two artifacts above (the wrong-password training mixture and the four-way data split) exists to exclude a specific failure or alternative explanation. Identify the failure each guards against.",
-    sections: [{ id: "purposes", label: "The failure each artifact excludes" }],
-    minWords: 40,
-  },
-  {
-    id: "c-plm-b8-task-selection",
-    type: "writing-prompt",
-    format: "free-form",
-    prompt:
-      "Propose a portfolio of three to five tasks satisfying the constraints: automatic and inexpensive grading at the scale of thousands of runs, a large hidden-visible gap achievable with openly available models, and coverage of the formats found in real capability evaluations. For each task, state how it would be graded.",
-    sections: [{ id: "portfolio", label: "Tasks and grading methods" }],
-    minWords: 60,
-  },
-  {
-    id: "c-plm-b9-sanity-checks",
-    type: "writing-prompt",
-    format: "free-form",
-    prompt:
-      "List the checks that must pass before results obtained with a password-locked model can be believed. Include at least one check that takes the form of a control experiment: a manipulation expected to produce no effect.",
-    sections: [{ id: "checks", label: "Required checks" }],
-    minWords: 50,
-  },
-  {
-    id: "c-plm-b10-anomaly",
-    type: "writing-prompt",
-    format: "free-form",
-    prompt:
-      "A control experiment expected to produce no effect has produced one. Is the instrument broken? Specify the next actions: what should be investigated, what should be measured, and what should be reported, in what order.",
-    sections: [
-      { id: "assessment", label: "Is the instrument broken?" },
-      { id: "actions", label: "Next actions, in order" },
-    ],
-    minWords: 100,
-  },
-  {
-    id: "c-plm-b11-sft-framing",
-    type: "writing-prompt",
-    format: "free-form",
-    prompt: [
-      "Two framing choices for the supervised fine-tuning experiments:",
-      "1. What should be measured: whether fine-tuning unlocks the model (a binary outcome), or something else?",
-      "2. Which demonstrations should be used: samples from the strong policy itself, or demonstrations from another source of comparable quality?",
-      "Justify both choices from the position of the evaluator the experiment models.",
-    ].join("\n\n"),
-    sections: [
-      { id: "measurement", label: "What to measure" },
-      { id: "demonstrations", label: "Which demonstrations" },
-    ],
-    minWords: 60,
-  },
-  {
-    id: "c-plm-b12-sft-prediction",
-    type: "writing-prompt",
-    format: "free-form",
-    prompt:
-      "For each task (code, MATH, critiques, MMLU), predict the number of high-quality demonstrations required for supervised fine-tuning to recover at least 90% of the locked performance gap: 1, 4, 64, 512, or not reached at 512. Additionally: which task, if any, fails to reach the with-password ceiling regardless of demonstration count, and why?",
-    sections: [
-      { id: "predictions", label: "Predicted demonstration counts, per task" },
-      { id: "divergence", label: "Task that fails to reach the ceiling, if any" },
-    ],
-    minWords: 40,
-  },
-  {
-    id: "c-plm-b13-weak-demos",
-    type: "writing-prompt",
-    format: "free-form",
-    prompt:
-      "Predict the outcome of fine-tuning the locked model on Llama-7B demonstrations, relative to two reference points: the performance of Llama-7B itself, and the with-password ceiling. State a mechanism for the predicted position.",
-    sections: [{ id: "prediction", label: "Predicted position and mechanism" }],
-    minWords: 40,
-  },
-  {
-    id: "c-plm-b14-generalization",
-    type: "writing-prompt",
-    format: "free-form",
-    prompt: [
-      "Design the experiment for domain-restricted demonstrations:",
-      "1. How should domains be constructed from the task datasets, and does anything need to change about the locking?",
-      '2. A positive result ("fine-tuning on domain A unlocks domain B") admits an alternative explanation: the lock never covered domain B. What control distinguishes the two?',
-    ].join("\n\n"),
-    sections: [
-      { id: "design", label: "Domain construction and locking variants" },
-      { id: "control", label: "The control for the alternative explanation" },
-    ],
-    minWords: 80,
-  },
-  {
-    id: "c-plm-b15-rl-design",
-    type: "writing-prompt",
-    format: "free-form",
-    prompt: [
-      "1. Which RL or preference-based methods should be tried, given a binary grader and no demonstrations?",
-      "2. Expert iteration, if it succeeds, admits a deflationary reading: the method merely found the weak policy's few lucky successes and trained on them, rather than bootstrapping improving generations. What baseline separates the two readings?",
-    ].join("\n\n"),
-    sections: [
-      { id: "methods", label: "Methods" },
-      { id: "baseline", label: "The baseline and what it separates" },
-    ],
-    minWords: 60,
-  },
-  {
-    id: "c-plm-b16-rl-prediction",
-    type: "writing-prompt",
-    format: "free-form",
-    prompt: [
-      "The weak policy was trained to imitate the strong policy, and therefore occasionally produces good output. RL experiments start from the locked model's no-password behavior, which imitates the weak policy.",
-      "Predict the outcome of RL-based elicitation as a function of the weak policy's quality: for a relatively strong weak policy (Pythia-7B), a weak one (Pythia-1B, which is very poor at MATH), and the degenerate fixedrdm. State the mechanism linking weak-policy quality to the outcome.",
-    ].join("\n\n"),
-    sections: [
-      { id: "predictions", label: "Predicted outcomes, per weak policy" },
-      { id: "mechanism", label: "Mechanism" },
-    ],
-    minWords: 50,
-  },
-  {
-    id: "c-plm-b17-lock-depth",
-    type: "writing-prompt",
-    format: "free-form",
-    prompt:
-      "Training a 7B model from scratch into the locked state is not affordable. Design the least expensive experiment that can bear on the objection: that locks installed by fine-tuning are unrepresentatively easy to remove.",
-    sections: [{ id: "design", label: "Design" }],
-    minWords: 50,
-  },
-  {
-    id: "c-plm-b18-update",
-    type: "writing-prompt",
-    format: "free-form",
-    prompt: [
-      "State the update these results license:",
-      "1. For an evaluator designing a fine-tuning elicitation protocol: what do the results support doing, and with what caveats?",
-      "2. For the sandbagging threat model: how much less (or more) likely do the results make effective sandbagging?",
-      "3. What are the strongest reasons the update should be limited? List the disanalogies between password-locked models and a model that hides capabilities for its own reasons.",
-    ].join("\n\n"),
-    sections: [
-      { id: "evaluator", label: "Update for the evaluator" },
-      { id: "threat-model", label: "Update for the threat model" },
-      { id: "limits", label: "Limits of the update" },
-    ],
-    minWords: 120,
+    id: "c-plm-recall-exploration-hacking",
+    type: "tap-reveal",
+    prompt: "What is exploration hacking?",
+    answer:
+      "A model strategically avoiding certain behaviors during RL so they never appear in sampled trajectories. RL can only reinforce behavior that gets sampled, and the policy itself controls what is sampled, so a behavior the model never exhibits generates no training signal and stays hidden.",
   },
   // --- Control: areas of control work (c-areas-l1) — a two-part written
   // sequence: build a theory of change for one area, then find its crux.

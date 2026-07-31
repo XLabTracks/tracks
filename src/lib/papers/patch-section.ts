@@ -801,7 +801,7 @@ const HIDE_NOUNS: Array<[test: (b: Element) => boolean, noun: string]> = [
 ];
 
 function hasClass(node: Element, cls: string): boolean {
-  const className = node.properties?.className;
+  const className: unknown = node.properties?.className;
   if (Array.isArray(className)) return className.map(String).includes(cls);
   if (typeof className === "string")
     return className.split(/\s+/).includes(cls);

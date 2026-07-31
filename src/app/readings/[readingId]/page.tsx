@@ -7,7 +7,17 @@ import {
   linkedReadingSource,
   type LinkedReading,
 } from "@/lib/readings/registry";
+import { getCurrentUser } from "@/lib/auth";
+import {
+  createHighlight,
+  deleteHighlight,
+  updateHighlightNote,
+} from "@/app/actions/highlights";
+import { getHighlightsForItem } from "@/lib/highlights/queries";
+import { type HighlightRow } from "@/lib/highlights/types";
 import { Breadcrumbs } from "@/components/layout/breadcrumbs";
+import { MarginNotesToggle } from "@/components/papers/margin-notes-toggle";
+import { PaperHighlights } from "@/components/papers/paper-highlights";
 import { PaperReader } from "@/components/papers/paper-reader";
 import { paperSourceHeader } from "@/components/papers/paper-source-header";
 import { SidenotesToggle } from "@/components/papers/sidenotes-toggle";
@@ -17,7 +27,10 @@ import { SidenotesToggle } from "@/components/papers/sidenotes-toggle";
  * paper links to, pre-converted at authoring time (`npm run readings:build`).
  * Deliberately outside the track structure: no module, no progress, no
  * activities, and `internalSublinks={false}` so links inside it stay
- * external — internal-viewer support goes exactly one layer deep.
+ * external — internal-viewer support goes exactly one layer deep. Signed-in
+ * readers do get highlights & notes: the shell id below is the contentId
+ * their rows key on, and the create action resolves it back through the
+ * linked-readings registry (same pinned-artifact validation as papers).
  */
 
 /** A Paper-shaped shell for PaperReader; not a content-graph item. */
@@ -50,6 +63,16 @@ export default async function ReadingPage({
   const reading = getLinkedReading(decodeURIComponent(readingId));
   if (!reading) notFound();
 
+  const shell = paperShell(reading);
+  const user = await getCurrentUser();
+  // Degrade, never take the page down (same rationale as the paper page):
+  // if the Highlight table is missing, the reading must still render.
+  const highlights: HighlightRow[] = user
+    ? await getHighlightsForItem(user.id, shell.id).catch(
+        (): HighlightRow[] => [],
+      )
+    : [];
+
   const source = await paperSourceHeader(linkedReadingSource(reading));
 
   return (
@@ -79,17 +102,29 @@ export default async function ReadingPage({
             </a>
           )}
           {source.hasFootnotes && <SidenotesToggle />}
+          {user ? <MarginNotesToggle /> : null}
         </p>
       </header>
 
       <div className="mt-8">
         <PaperReader
-          paper={paperShell(reading)}
+          paper={shell}
           signedIn={false}
           completedContentIds={new Set()}
           internalSublinks={false}
         />
       </div>
+
+      {/* Same layer as the course paper pages — it discovers the rendered
+          .paper-reader root itself and never receives HTML. */}
+      {user ? (
+        <PaperHighlights
+          initialHighlights={highlights}
+          createAction={createHighlight.bind(null, shell.id)}
+          updateNoteAction={updateHighlightNote}
+          deleteAction={deleteHighlight}
+        />
+      ) : null}
     </main>
   );
 }

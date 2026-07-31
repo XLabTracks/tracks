@@ -5,23 +5,14 @@ import "./lesswrong-post.css";
 import "./paper-reader.css";
 import { Fragment } from "react";
 import { ExternalLink, TriangleAlert } from "lucide-react";
-import { getPaperArtifact } from "@/lib/arxiv/artifacts";
-import { buildAbsUrl, buildPdfUrl, parseArxivId } from "@/lib/arxiv/id";
-import {
-  CONVERTER_VERSION,
-  type ConversionWarning,
-  type PaperTocEntry,
-} from "@/lib/arxiv/types";
-import { getSubstackArtifact } from "@/lib/substack/artifacts";
-import { buildPostUrl, parseSubstackPostUrl } from "@/lib/substack/id";
-import { SUBSTACK_CONVERTER_VERSION } from "@/lib/substack/types";
-import { getLessWrongArtifact } from "@/lib/lesswrong/artifacts";
+import { buildAbsUrl, buildPdfUrl } from "@/lib/arxiv/id";
+import type { ConversionWarning, PaperTocEntry } from "@/lib/arxiv/types";
+import { buildPostUrl } from "@/lib/substack/id";
 import {
   buildPostUrl as buildLwPostUrl,
   displayHost,
-  parseLessWrongPostUrl,
 } from "@/lib/lesswrong/id";
-import { LESSWRONG_CONVERTER_VERSION } from "@/lib/lesswrong/types";
+import { resolvePaperSource } from "@/lib/papers/source-artifact";
 import {
   editTargetRef,
   type Paper,
@@ -129,8 +120,8 @@ async function LessWrongPaperReader({
   completedContentIds: Set<string>;
   internalSublinks: boolean;
 }) {
-  const postRef = parseLessWrongPostUrl(postUrl);
-  if (!postRef) {
+  const resolved = await resolvePaperSource({ kind: "lesswrong", postUrl });
+  if (resolved.state === "invalid") {
     return (
       <div className="border-destructive/40 bg-destructive/5 text-destructive rounded-xl border p-6 text-sm">
         Invalid LessWrong post URL <code>{postUrl}</code> — the public post
@@ -139,16 +130,17 @@ async function LessWrongPaperReader({
       </div>
     );
   }
-
-  const artifact = await getLessWrongArtifact(postRef.id);
-  if (artifact.state !== "ready") {
+  if (resolved.state !== "ready") {
     return (
       <ActivitiesOnlyFallback
         paper={paper}
         signedIn={signedIn}
         completedContentIds={completedContentIds}
       >
-        <LessWrongUnavailable postRef={postRef} state={artifact.state} />
+        <LessWrongUnavailable
+          postRef={resolved.sourceRef}
+          state={resolved.state}
+        />
       </ActivitiesOnlyFallback>
     );
   }
@@ -158,15 +150,15 @@ async function LessWrongPaperReader({
       paper={paper}
       html={
         internalSublinks
-          ? rewriteReadingLinks(artifact.post.html, resolveInternalReadingHref)
-          : artifact.post.html
+          ? rewriteReadingLinks(resolved.html, resolveInternalReadingHref)
+          : resolved.html
       }
-      toc={artifact.post.toc}
+      toc={resolved.toc}
       // .arxiv-paper carries the shared reading typography + the edit-UI
       // (ax-hidden/ax-added) styles; .lesswrong-post scopes the lw-* extras.
       wrapperClassName="arxiv-paper lesswrong-post"
-      converterVersion={LESSWRONG_CONVERTER_VERSION}
-      blocksCommand={`npm run lesswrong:build -- --blocks ${postRef.id}`}
+      converterVersion={resolved.convVersion}
+      blocksCommand={`npm run lesswrong:build -- --blocks ${resolved.sourceRef.id}`}
       signedIn={signedIn}
       completedContentIds={completedContentIds}
       sidenotePrefix="lw"
@@ -174,11 +166,12 @@ async function LessWrongPaperReader({
         <PaperFooter
           links={[
             {
-              label: `Read on ${displayHost(postRef)}`,
-              href: artifact.post.meta.canonicalUrl ?? buildLwPostUrl(postRef),
+              label: `Read on ${displayHost(resolved.sourceRef)}`,
+              href:
+                resolved.meta.canonicalUrl ?? buildLwPostUrl(resolved.sourceRef),
             },
           ]}
-          warnings={artifact.post.warnings}
+          warnings={resolved.warnings}
         />
       }
     />
@@ -196,8 +189,8 @@ async function ArxivPaperReader({
   signedIn: boolean;
   completedContentIds: Set<string>;
 }) {
-  const parsed = parseArxivId(arxivId);
-  if (!parsed) {
+  const resolved = await resolvePaperSource({ kind: "arxiv", arxivId });
+  if (resolved.state === "invalid") {
     return (
       <div className="border-destructive/40 bg-destructive/5 text-destructive rounded-xl border p-6 text-sm">
         Invalid arXiv id <code>{arxivId}</code> — a pinned version is required,
@@ -205,16 +198,14 @@ async function ArxivPaperReader({
       </div>
     );
   }
-
-  const artifact = await getPaperArtifact(parsed.id);
-  if (artifact.state !== "ready") {
+  if (resolved.state !== "ready") {
     return (
       <ActivitiesOnlyFallback
         paper={paper}
         signedIn={signedIn}
         completedContentIds={completedContentIds}
       >
-        <PaperUnavailable id={parsed} state={artifact.state} />
+        <PaperUnavailable id={resolved.sourceRef} state={resolved.state} />
       </ActivitiesOnlyFallback>
     );
   }
@@ -222,21 +213,21 @@ async function ArxivPaperReader({
   return (
     <EditedPaperBody
       paper={paper}
-      html={artifact.paper.html}
-      toc={artifact.paper.toc}
+      html={resolved.html}
+      toc={resolved.toc}
       wrapperClassName="arxiv-paper"
-      converterVersion={CONVERTER_VERSION}
-      blocksCommand={`npm run arxiv:build -- --blocks ${parsed.id}`}
+      converterVersion={resolved.convVersion}
+      blocksCommand={`npm run arxiv:build -- --blocks ${resolved.sourceRef.id}`}
       signedIn={signedIn}
       completedContentIds={completedContentIds}
       sidenotePrefix="ax"
       footer={
         <PaperFooter
           links={[
-            { label: "Abstract", href: buildAbsUrl(parsed) },
-            { label: "PDF", href: buildPdfUrl(parsed) },
+            { label: "Abstract", href: buildAbsUrl(resolved.sourceRef) },
+            { label: "PDF", href: buildPdfUrl(resolved.sourceRef) },
           ]}
-          warnings={artifact.paper.warnings}
+          warnings={resolved.warnings}
         />
       }
     />
@@ -256,8 +247,8 @@ async function SubstackPaperReader({
   completedContentIds: Set<string>;
   internalSublinks: boolean;
 }) {
-  const postRef = parseSubstackPostUrl(postUrl);
-  if (!postRef) {
+  const resolved = await resolvePaperSource({ kind: "substack", postUrl });
+  if (resolved.state === "invalid") {
     return (
       <div className="border-destructive/40 bg-destructive/5 text-destructive rounded-xl border p-6 text-sm">
         Invalid Substack post URL <code>{postUrl}</code> — the public post URL
@@ -265,16 +256,17 @@ async function SubstackPaperReader({
       </div>
     );
   }
-
-  const artifact = await getSubstackArtifact(postRef.id);
-  if (artifact.state !== "ready") {
+  if (resolved.state !== "ready") {
     return (
       <ActivitiesOnlyFallback
         paper={paper}
         signedIn={signedIn}
         completedContentIds={completedContentIds}
       >
-        <SubstackUnavailable postRef={postRef} state={artifact.state} />
+        <SubstackUnavailable
+          postRef={resolved.sourceRef}
+          state={resolved.state}
+        />
       </ActivitiesOnlyFallback>
     );
   }
@@ -284,15 +276,15 @@ async function SubstackPaperReader({
       paper={paper}
       html={
         internalSublinks
-          ? rewriteReadingLinks(artifact.post.html, resolveInternalReadingHref)
-          : artifact.post.html
+          ? rewriteReadingLinks(resolved.html, resolveInternalReadingHref)
+          : resolved.html
       }
-      toc={artifact.post.toc}
+      toc={resolved.toc}
       // .arxiv-paper carries the shared reading typography + the edit-UI
       // (ax-hidden/ax-added) styles; .substack-post scopes the sb-* extras.
       wrapperClassName="arxiv-paper substack-post"
-      converterVersion={SUBSTACK_CONVERTER_VERSION}
-      blocksCommand={`npm run substack:build -- --blocks ${postRef.id}`}
+      converterVersion={resolved.convVersion}
+      blocksCommand={`npm run substack:build -- --blocks ${resolved.sourceRef.id}`}
       signedIn={signedIn}
       completedContentIds={completedContentIds}
       sidenotePrefix="sb"
@@ -300,11 +292,12 @@ async function SubstackPaperReader({
         <PaperFooter
           links={[
             {
-              label: `Read on ${postRef.host}`,
-              href: artifact.post.meta.canonicalUrl ?? buildPostUrl(postRef),
+              label: `Read on ${resolved.sourceRef.host}`,
+              href:
+                resolved.meta.canonicalUrl ?? buildPostUrl(resolved.sourceRef),
             },
           ]}
-          warnings={artifact.post.warnings}
+          warnings={resolved.warnings}
         />
       }
     />

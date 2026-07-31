@@ -57,6 +57,9 @@ export function getTrackById(id: string): Track | undefined {
 export function getLessonById(id: string): Lesson | undefined {
   return lessonById.get(id);
 }
+export function getPaperById(id: string): Paper | undefined {
+  return paperById.get(id);
+}
 export function getExerciseById(id: string): Exercise | undefined {
   return exerciseById.get(id);
 }

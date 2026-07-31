@@ -25,11 +25,20 @@ import { LessonContent } from "@/components/mdx/lesson-content";
 import { LessonNav } from "@/components/layout/lesson-nav";
 import { LessonCompleteButton } from "@/components/learn/lesson-complete-button";
 import { LessonTracker } from "@/components/learn/lesson-tracker";
+import { MarginNotesToggle } from "@/components/papers/margin-notes-toggle";
+import { PaperHighlights } from "@/components/papers/paper-highlights";
 import { PaperReader } from "@/components/papers/paper-reader";
 import { gateIdsOf, paperGateStorageKey } from "@/lib/papers/gate-state";
 import { paperSourceHeader } from "@/components/papers/paper-source-header";
 import { SidenotesToggle } from "@/components/papers/sidenotes-toggle";
 import { Button } from "@/components/ui/button";
+import {
+  createHighlight,
+  deleteHighlight,
+  updateHighlightNote,
+} from "@/app/actions/highlights";
+import { getHighlightsForItem } from "@/lib/highlights/queries";
+import { type HighlightRow } from "@/lib/highlights/types";
 import { getVerificationExerciseForLesson } from "@/lib/verification/exercises";
 
 // Dispatching route: a module item slug resolves to either a lesson or a
@@ -179,10 +188,21 @@ async function PaperItemPage({
 }) {
   // The paper and its inserted lessons are independent completion units; the
   // track completion set (a request-cache hit from the layout) covers them
-  // and PaperReader only membership-tests its own ids against it.
-  const completedContentIds = userId
-    ? await getTrackCompletionSet(userId, track.id)
-    : new Set<string>();
+  // and PaperReader only membership-tests its own ids against it. The
+  // highlights read rides the same round trip — Hyperdrive caching is off,
+  // so a serialized second query would be a second us-east-1 hop.
+  const [completedContentIds, highlights] = userId
+    ? await Promise.all([
+        getTrackCompletionSet(userId, track.id),
+        // Degrade, never take the page down: schema migrations are applied
+        // manually via psql (db/migrations) — if a deploy outruns that step
+        // or a dev DB predates the Highlight table, this read throws and the
+        // paper must still render (highlights simply absent).
+        getHighlightsForItem(userId, paper.id).catch(
+          (): HighlightRow[] => [],
+        ),
+      ])
+    : [new Set<string>(), [] as HighlightRow[]];
   const completed = completedContentIds.has(paper.id);
 
   // Cached per request — PaperReader reuses the same artifact lookup.
@@ -224,6 +244,9 @@ async function PaperItemPage({
             </a>
           )}
           {source.hasFootnotes && <SidenotesToggle />}
+          {/* Margin display of the reader's own highlight notes — only
+              signed-in readers can have any. */}
+          {userId ? <MarginNotesToggle /> : null}
         </p>
       </header>
 
@@ -234,6 +257,17 @@ async function PaperItemPage({
           completedContentIds={completedContentIds}
         />
       </div>
+
+      {/* Highlight layer: discovers the rendered .paper-reader root itself
+          (PaperSidenotes/PaperGlossary invariant — never receives HTML). */}
+      {userId ? (
+        <PaperHighlights
+          initialHighlights={highlights}
+          createAction={createHighlight.bind(null, paper.id)}
+          updateNoteAction={updateHighlightNote}
+          deleteAction={deleteHighlight}
+        />
+      ) : null}
 
       {userId ? (
         <LessonTracker

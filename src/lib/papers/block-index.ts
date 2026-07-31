@@ -89,7 +89,7 @@ function anchorProp(node: Element): string | undefined {
 }
 
 function classListOf(node: Element): string[] {
-  const className = node.properties?.className;
+  const className: unknown = node.properties?.className;
   if (Array.isArray(className)) return className.map(String);
   if (typeof className === "string") return className.split(/\s+/);
   return [];

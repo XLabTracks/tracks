@@ -67,9 +67,15 @@ export function PaperSectionNav({
           "open",
       );
       // One deliberate mount-time re-render: localStorage is unreadable
-      // during SSR/hydration (same idiom as PaperGate).
+      // during SSR/hydration (same idiom as PaperGate). Must also reset (not
+      // just add) — in-track paper→paper navigation reuses this instance, and
+      // gate ids are unscoped here, so stale ids could alias across papers.
       // eslint-disable-next-line react-hooks/set-state-in-effect
-      if (initiallyOpen.length > 0) setOpenGates(new Set(initiallyOpen));
+      setOpenGates((prev) =>
+        prev.size === 0 && initiallyOpen.length === 0
+          ? prev
+          : new Set(initiallyOpen),
+      );
     } catch {
       // Storage unavailable — the open events below still unlock rows as the
       // learner taps through this visit.

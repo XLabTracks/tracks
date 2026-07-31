@@ -2,6 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import "./paper-sidenotes.css";
+import { MARGIN_NOTES_LAYOUT_EVENT } from "./margin-notes-toggle";
 
 /**
  * Margin sidenotes: renders each footnote of the converted post in the
@@ -78,7 +79,20 @@ export function PaperSidenotes({ prefix }: { prefix: string }) {
         );
       });
     };
+    // Sentence glow for sidenote hover (wired below): fragments live in
+    // their own pointer-transparent overlay so rebuilds of the note layer
+    // never touch them, and any rebuild clears them (markers move).
+    const glowLayer = document.createElement("div");
+    glowLayer.className = "paper-sidenote-glow-layer";
+    container.appendChild(glowLayer);
+    let glowing: string | null = null;
+    const clearGlow = () => {
+      glowing = null;
+      glowLayer.replaceChildren();
+    };
+
     const rebuild = () => {
+      clearGlow();
       // Collect the notes that would render BEFORE deciding placement, so a
       // paper with no renderable footnote (none at all, or every marker
       // inside a collapsed hide) reserves no rail — the reading column keeps
@@ -177,6 +191,30 @@ export function PaperSidenotes({ prefix }: { prefix: string }) {
       }
       const containerRect = container.getBoundingClientRect();
 
+      // The user's margin-note boxes (highlights layer) own their space:
+      // sidenotes yield DOWNWARD past any box sharing this layer's
+      // horizontal band. One-directional — the notes layer never reads
+      // sidenote geometry — so the two layers converge in one pass; its
+      // MARGIN_NOTES_LAYOUT_EVENT re-runs this rebuild whenever boxes move.
+      const layerRect = layer.getBoundingClientRect();
+      const occupied = [...document.querySelectorAll(".paper-comment")]
+        .filter(
+          (el): el is HTMLElement =>
+            el instanceof HTMLElement && el.style.visibility !== "hidden",
+        )
+        .map((el) => el.getBoundingClientRect())
+        .filter(
+          (r) =>
+            r.height > 0 &&
+            r.left < layerRect.right &&
+            r.right > layerRect.left,
+        )
+        .map((r) => ({
+          top: r.top - containerRect.top,
+          bottom: r.bottom - containerRect.top,
+        }))
+        .sort((a, b) => a.top - b.top);
+
       let cursor = Number.NEGATIVE_INFINITY;
       for (const { marker, note, number } of entries) {
         // Re-read the rect: the inset toggle above may have reflowed the text.
@@ -184,6 +222,9 @@ export function PaperSidenotes({ prefix }: { prefix: string }) {
 
         const item = document.createElement("aside");
         item.className = "paper-sidenote";
+        // Lets the marker-hover delegation below find this clone across
+        // rebuilds (items are recreated every pass; markers persist).
+        item.dataset.note = number;
         const label = document.createElement("span");
         label.className = "paper-sidenote-num";
         label.textContent = number;
@@ -247,9 +288,17 @@ export function PaperSidenotes({ prefix }: { prefix: string }) {
           }
         }
 
-        const top = Math.max(rect.top - containerRect.top, cursor + NOTE_GAP);
+        let top = Math.max(rect.top - containerRect.top, cursor + NOTE_GAP);
+        // Slide past every user-note box the item would overlap (sorted, so
+        // one forward sweep settles even chained collisions).
+        const height = item.offsetHeight;
+        for (const zone of occupied) {
+          if (top < zone.bottom + NOTE_GAP && top + height > zone.top - NOTE_GAP) {
+            top = zone.bottom + NOTE_GAP;
+          }
+        }
         item.style.top = `${top}px`;
-        cursor = top + item.offsetHeight;
+        cursor = top + height;
       }
     };
 
@@ -270,6 +319,144 @@ export function PaperSidenotes({ prefix }: { prefix: string }) {
     // Preference changes: same-tab via SidenotesToggle, cross-tab via storage.
     window.addEventListener(SIDENOTES_EVENT, schedule);
     window.addEventListener("storage", schedule);
+    // User margin notes moved (highlights layer) — re-stack to yield.
+    window.addEventListener(MARGIN_NOTES_LAYOUT_EVENT, schedule);
+    // Hovering an inline footnote marker pops its (dimmed) sidenote —
+    // delegated, because rebuilds recreate the note items; the data-note
+    // stamp re-links marker to clone every pass. Mouse only: touch never
+    // sees the dimmed state (CSS hover-media gate).
+    const noteForMarker = (target: EventTarget | null): HTMLElement | null => {
+      if (!(target instanceof Element)) return null;
+      const link = target.closest<HTMLElement>(
+        `sup.${prefix}-fnref a[href^="#${prefix}-fn-"]`,
+      );
+      if (!link || link.closest(".paper-sidenote-layer")) return null;
+      const number =
+        link.getAttribute("href")?.slice(`#${prefix}-fn-`.length) ?? "";
+      if (!number) return null;
+      return layer.querySelector<HTMLElement>(
+        `.paper-sidenote[data-note="${CSS.escape(number)}"]`,
+      );
+    };
+    // Sentence glow, shared by both hover directions (the sidenote item AND
+    // the inline marker): a strong but smooth wash whose falloff is measured
+    // ALONG THE TEXT FLOW from the footnote number — never a vertical
+    // column. Inline sentences fragment per line box; fragments are laid on
+    // a single "flow axis" (cumulative widths in reading order) and each
+    // paints the slice of one mirrored gradient its flow interval covers:
+    // the number's own line fades left and right of it, the line above
+    // glows at its END (the words just before the number) fading backward,
+    // the line below at its START fading forward.
+    const glowNumber = (number: string): void => {
+      if (number === glowing) return;
+      const marker = container.querySelector<HTMLElement>(
+        `sup.${prefix}-fnref a[href="#${prefix}-fn-${number}"]`,
+      );
+      const sentence = marker?.closest("[data-s]");
+      if (!marker || !sentence) return;
+      clearGlow();
+      glowing = number;
+      const containerRect = container.getBoundingClientRect();
+      const mRect = marker.getBoundingClientRect();
+      const cx = mRect.left + mRect.width / 2;
+      const cy = mRect.top + mRect.height / 2;
+      const frags: { r: DOMRect; start: number }[] = [];
+      let flow = 0;
+      for (const r of sentence.getClientRects()) {
+        if (r.width < 1 || r.height < 1) continue;
+        frags.push({ r, start: flow });
+        flow += r.width;
+      }
+      if (frags.length === 0) return;
+      // The number's position on the flow axis: its own fragment when it
+      // has one, else the nearest line (superscripts can poke above the
+      // measured text box).
+      let markerFlow: number | null = null;
+      for (const { r, start } of frags) {
+        if (cy >= r.top && cy <= r.bottom && cx >= r.left - 2 && cx <= r.right + 2) {
+          markerFlow = start + (cx - r.left);
+          break;
+        }
+      }
+      if (markerFlow === null) {
+        let best = frags[0];
+        let bestDist = Number.POSITIVE_INFINITY;
+        for (const frag of frags) {
+          const dist = Math.abs((frag.r.top + frag.r.bottom) / 2 - cy);
+          if (dist < bestDist) {
+            bestDist = dist;
+            best = frag;
+          }
+        }
+        markerFlow =
+          best.start + Math.min(Math.max(cx - best.r.left, 0), best.r.width);
+      }
+      for (const { r, start } of frags) {
+        const frag = document.createElement("div");
+        frag.className = "paper-sidenote-glow";
+        frag.style.left = `${r.left - containerRect.left}px`;
+        frag.style.top = `${r.top - containerRect.top}px`;
+        frag.style.width = `${r.width}px`;
+        frag.style.height = `${r.height}px`;
+        // Gradient centre in this fragment's local coordinates — allowed to
+        // lie beyond either edge, so the fragment shows only its slice of
+        // the shared falloff.
+        const x = markerFlow - start;
+        frag.style.background = `linear-gradient(90deg, transparent ${
+          x - 218
+        }px, rgb(250 204 21 / 0.3) ${x - 126}px, rgb(250 204 21 / 0.5) ${x}px, rgb(250 204 21 / 0.3) ${
+          x + 126
+        }px, transparent ${x + 218}px)`;
+        glowLayer.appendChild(frag);
+      }
+    };
+    const numberOf = (target: EventTarget | null): string | null => {
+      if (!(target instanceof Element)) return null;
+      const link = target.closest<HTMLElement>(
+        `sup.${prefix}-fnref a[href^="#${prefix}-fn-"]`,
+      );
+      if (!link || link.closest(".paper-sidenote-layer")) return null;
+      return (
+        link.getAttribute("href")?.slice(`#${prefix}-fn-`.length) || null
+      );
+    };
+    const onMarkerOver = (event: PointerEvent) => {
+      if (event.pointerType === "touch") return;
+      noteForMarker(event.target)?.classList.add("paper-sidenote-active");
+      const number = numberOf(event.target);
+      if (number) glowNumber(number);
+    };
+    const onMarkerOut = (event: PointerEvent) => {
+      if (event.pointerType === "touch") return;
+      noteForMarker(event.target)?.classList.remove("paper-sidenote-active");
+      if (numberOf(event.target) && !numberOf(event.relatedTarget)) {
+        clearGlow();
+      }
+    };
+    container.addEventListener("pointerover", onMarkerOver);
+    container.addEventListener("pointerout", onMarkerOut);
+    const onGlowOver = (event: PointerEvent) => {
+      if (event.pointerType === "touch") return;
+      if (!(event.target instanceof Element)) return;
+      const number = event.target.closest<HTMLElement>(".paper-sidenote")
+        ?.dataset.note;
+      if (number) glowNumber(number);
+    };
+    const onGlowOut = (event: PointerEvent) => {
+      if (event.pointerType === "touch") return;
+      const from =
+        event.target instanceof Element
+          ? event.target.closest(".paper-sidenote")
+          : null;
+      const to =
+        event.relatedTarget instanceof Element
+          ? event.relatedTarget.closest(".paper-sidenote")
+          : null;
+      // Moves between children of the same note keep the glow.
+      if (from && from !== to) clearGlow();
+    };
+    layer.addEventListener("pointerover", onGlowOver);
+    layer.addEventListener("pointerout", onGlowOut);
     return () => {
       cancelAnimationFrame(raf);
       cancelAnimationFrame(armRaf1);
@@ -281,6 +468,12 @@ export function PaperSidenotes({ prefix }: { prefix: string }) {
       container.removeEventListener("toggle", schedule, true);
       window.removeEventListener(SIDENOTES_EVENT, schedule);
       window.removeEventListener("storage", schedule);
+      window.removeEventListener(MARGIN_NOTES_LAYOUT_EVENT, schedule);
+      container.removeEventListener("pointerover", onMarkerOver);
+      container.removeEventListener("pointerout", onMarkerOut);
+      layer.removeEventListener("pointerover", onGlowOver);
+      layer.removeEventListener("pointerout", onGlowOut);
+      glowLayer.remove();
     };
   }, [prefix]);
 

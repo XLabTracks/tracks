@@ -3,7 +3,7 @@
 // string IDs.
 
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
   // Driver adapters: on Cloudflare Workers the client runs through
   // @prisma/adapter-pg over the Hyperdrive binding (see src/lib/db.ts). Keep
   // the default output dir — @opennextjs/cloudflare patches the generated
@@ -22,12 +22,12 @@ datasource db {
 }
 
 model User {
-  id           String   @id @default(cuid())
-  workosUserId String   @unique
-  email        String
-  name         String?
-  imageUrl     String?
-  createdAt    DateTime @default(now())
+  id            String   @id @default(cuid())
+  workosUserId  String   @unique
+  email         String
+  name          String?
+  imageUrl      String?
+  createdAt     DateTime @default(now())
   // Which OpenRouter key the grader bills: "server", "user", or
   // "classroom:<classroomId>". Null = automatic (own key, else a sole
   // available classroom key, else the server-wide key). Validated on write
@@ -40,6 +40,50 @@ model User {
   createdClassrooms Classroom[]           @relation("ClassroomCreatedBy")
   apiKeys           UserApiKey[]
   reviewCards       ReviewCard[]
+  highlights        Highlight[]
+}
+
+// A user's text highlight on a paper item, with an optional attached note.
+// Anchoring is sentence-granular on the artifact annotation contract:
+// blockAnchor ("b-NNNN") + a data-s range, with the normalized selection
+// text (capped) stored as snippet. The snippet is the source of truth at
+// render time — the client paints only where the resolved range's text
+// still matches it, so artifact rebuilds orphan highlights instead of
+// misplacing them (artifactKey + convVersion record what the anchor was
+// captured against). Length caps are enforced in the action AND as SQL
+// CHECKs (see db/migrations); counts are capped per (user, item) and per
+// user in src/app/actions/highlights.ts.
+model Highlight {
+  id          String   @id @default(cuid())
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  contentId   String // paper content id — validated against the graph, no FK
+  // One gesture = one group: a multi-paragraph selection stores one row per
+  // touched block, all sharing a groupId (single-block rows are a group of
+  // one). The note lives on the group's HEAD row (first span in document
+  // order); delete is by group.
+  groupId     String
+  artifactKey String // source artifact id (e.g. "2312.06942v5"), derived server-side
+  convVersion Int // data-conv at capture time
+  blockAnchor String
+  sStart      Int
+  sEnd        Int
+  // Character offsets into the edge sentences' NORMALIZED text (partial-word
+  // spans): startOffset 0 = sentence start; endOffset -1 = "to the end of
+  // sEnd" (HIGHLIGHT_END_OF_SENTENCE — a sentinel, so whole-sentence rows
+  // stay one canonical shape and pre-offset rows read unchanged).
+  startOffset Int      @default(0)
+  endOffset   Int      @default(-1)
+  snippet     String
+  note        String?
+  color       String? // reserved — v1 renders a single color
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Serves every (userId, contentId) page-load read as a prefix AND blocks
+  // exact-duplicate flooding of one span. Named: the seven-column default
+  // identifier would exceed Postgres's 63-char limit.
+  @@unique([userId, contentId, blockAnchor, sStart, sEnd, startOffset, endOffset], name: "userSpan", map: "Highlight_user_span_key")
 }
 
 // A user-supplied LLM-provider API key (currently only OpenRouter, for the
@@ -93,10 +137,10 @@ model LessonProgress {
   completedAt  DateTime?
   lastViewedAt DateTime       @default(now())
   updatedAt    DateTime       @updatedAt
-
-  @@unique([userId, lessonId])
   // No separate @@index([userId]): it is a strict prefix of the unique above,
   // which Postgres already uses for every userId / userId+lessonId predicate.
+
+  @@unique([userId, lessonId])
 }
 
 enum SubmissionKind {
@@ -126,10 +170,10 @@ model Submission {
   version      Int              @default(1) // reserved — not yet used for revision history
   createdAt    DateTime         @default(now())
   updatedAt    DateTime         @updatedAt
-
-  @@unique([userId, contentId, kind])
   // No separate @@index([userId, contentId]): it is a strict prefix of the
   // unique above, which serves every Submission predicate in the app.
+
+  @@unique([userId, contentId, kind])
 }
 
 // Per-user FSRS scheduling state for one tap-reveal "notecard" (contentId is
@@ -156,10 +200,10 @@ model ReviewCard {
   lastReview    DateTime?
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
-
-  @@unique([userId, contentId])
   // No separate @@index([userId]): strict prefix of the unique above, which
   // serves the per-user scan; due-ordering is a sort over one user's cards.
+
+  @@unique([userId, contentId])
 }
 
 enum ClassroomRole {

@@ -36,7 +36,7 @@ const ref = (anchor: string, snippet: string, s?: number): PaperBlockRef => ({
 });
 
 const htmlOf = (parts: PaperPart[]) =>
-  parts.map((p) => (p.kind === "html" ? p.html : `[activity]`)).join("");
+  parts.map((p) => (p.kind === "html" ? p.html : `[${p.kind}]`)).join("");
 
 describe("applyPaperEdits", () => {
   it("no edits → one byte-identical part, nothing parsed", () => {
@@ -492,5 +492,142 @@ describe("applyPaperEdits", () => {
     const kinds = parts.map((p) => p.kind);
     expect(kinds).toEqual(["html", "activity", "html"]);
     expect((parts[0] as { html: string }).html).toContain("··· 1 paragraph hidden ···");
+  });
+
+  it("section-end gate emits a gate part at the subtree boundary", () => {
+    const { parts } = applyPaperEdits(HTML, TOC, [
+      {
+        op: "gate",
+        after: { sectionEnd: "ax-sec-a-1" },
+        id: "g1",
+        prompt: "Think of *three* ways.",
+        cta: "Continue",
+      },
+    ]);
+    expect(parts).toHaveLength(3);
+    expect(parts[1]).toEqual({
+      kind: "gate",
+      id: "g1",
+      prompt: "Think of *three* ways.",
+      cta: "Continue",
+    });
+    expect((parts[0] as { html: string }).html.endsWith("Sub para.</span></p>")).toBe(true);
+    expect((parts[2] as { html: string }).html.startsWith('<h2 id="ax-sec-b"')).toBe(true);
+    expect(htmlOf(parts).replace("[gate]", "")).toBe(HTML);
+  });
+
+  it("block-level gate splits the section after its block", () => {
+    const { parts, unmatchedEdits } = applyPaperEdits(HTML, TOC, [
+      { op: "gate", after: ref("b-0010", "Beta one."), id: "g2" },
+    ]);
+    expect(unmatchedEdits).toEqual([]);
+    const gateIndex = parts.findIndex((p) => p.kind === "gate");
+    expect(gateIndex).toBeGreaterThan(0);
+    expect(parts[gateIndex]).toEqual({
+      kind: "gate",
+      id: "g2",
+      prompt: undefined,
+      cta: undefined,
+    });
+    const before = parts
+      .slice(0, gateIndex)
+      .map((p) => (p.kind === "html" ? p.html : ""))
+      .join("");
+    const after = parts
+      .slice(gateIndex + 1)
+      .map((p) => (p.kind === "html" ? p.html : ""))
+      .join("");
+    expect(before.endsWith('<p data-anchor="b-0010"><span data-s="1">Beta one.</span></p>')).toBe(true);
+    expect(after.startsWith('<p data-anchor="b-0011">')).toBe(true);
+    expect(before + after).toBe(HTML);
+  });
+
+  it("fails soft on a sentence-level gate target", () => {
+    const { parts, unmatchedEdits } = applyPaperEdits(HTML, TOC, [
+      { op: "gate", after: ref("b-0003", "One one.", 1), id: "g3" },
+    ]);
+    expect(unmatchedEdits).toHaveLength(1);
+    expect(htmlOf(parts)).toBe(HTML);
+  });
+
+  it("an add authored after a gate on a nested block renders behind the gate", () => {
+    // b-0012 is an li: the gate hoists past the enclosing <ul>, and the add
+    // must hoist with it — rendering it inside the li would put the reveal
+    // text ABOVE the gate, visible without tapping through.
+    const { parts, unmatchedEdits } = applyPaperEdits(HTML, TOC, [
+      { op: "gate", after: ref("b-0012", "Item text."), id: "g4" },
+      { op: "add", after: ref("b-0012", "Item text."), markdown: "REVEAL text." },
+    ]);
+    expect(unmatchedEdits).toEqual([]);
+    const gateIndex = parts.findIndex((p) => p.kind === "gate");
+    expect(gateIndex).toBeGreaterThan(0);
+    const before = parts
+      .slice(0, gateIndex)
+      .map((p) => (p.kind === "html" ? p.html : ""))
+      .join("");
+    const after = parts
+      .slice(gateIndex + 1)
+      .map((p) => (p.kind === "html" ? p.html : ""))
+      .join("");
+    expect(before.endsWith("</ul>")).toBe(true);
+    expect(before).not.toContain("REVEAL");
+    expect(after).toContain("REVEAL text.");
+  });
+
+  it("an add authored before a gate on the same nested block stays inside the item", () => {
+    const { parts, unmatchedEdits } = applyPaperEdits(HTML, TOC, [
+      { op: "add", after: ref("b-0012", "Item text."), markdown: "Aside." },
+      { op: "gate", after: ref("b-0012", "Item text."), id: "g5" },
+    ]);
+    expect(unmatchedEdits).toEqual([]);
+    const gateIndex = parts.findIndex((p) => p.kind === "gate");
+    const before = parts
+      .slice(0, gateIndex)
+      .map((p) => (p.kind === "html" ? p.html : ""))
+      .join("");
+    // Before the gate in edits order → the documented inside-the-li render.
+    expect(before).toMatch(/<li data-anchor="b-0012">.*Aside\..*<\/li>/);
+  });
+});
+
+describe("ungated tail (trailing landmarks)", () => {
+  const TAIL_HTML =
+    HTML +
+    '<section class="ax-references" id="ax-references"><h2 data-anchor="b-0020">References</h2><p data-anchor="b-0021">Ref one.</p></section>' +
+    '<section class="ax-footnotes" id="ax-footnotes"><h2 data-anchor="b-0022">Footnotes</h2><ol><li id="ax-fn-1">A note.</li></ol></section>';
+  const TAIL_TOC: PaperTocEntry[] = [
+    ...TOC,
+    { kind: "references", id: "ax-references", title: "References", number: "", level: 2, anchor: "b-0020" },
+    { kind: "footnotes", id: "ax-footnotes", title: "Footnotes", number: "", level: 2, anchor: "b-0022" },
+  ];
+
+  it("gates split trailing landmarks into ungatedTailHtml, byte-preserving", () => {
+    const { parts, ungatedTailHtml } = applyPaperEdits(TAIL_HTML, TAIL_TOC, [
+      { op: "gate", after: { sectionEnd: "ax-sec-a-1" }, id: "g1" },
+    ]);
+    expect(ungatedTailHtml).toContain('id="ax-references"');
+    expect(ungatedTailHtml).toContain('id="ax-fn-1"');
+    expect(htmlOf(parts)).not.toContain('id="ax-references"');
+    expect(htmlOf(parts).replace("[gate]", "") + ungatedTailHtml).toBe(TAIL_HTML);
+  });
+
+  it("a gate at the last body section leaves nothing gated but the landmarks out", () => {
+    // The gate boundary coincides with the references start: the whole final
+    // html part IS the landmark region and moves to the tail.
+    const { parts, ungatedTailHtml } = applyPaperEdits(TAIL_HTML, TAIL_TOC, [
+      { op: "gate", after: { sectionEnd: "ax-sec-b" }, id: "g2" },
+    ]);
+    expect(parts[parts.length - 1]).toMatchObject({ kind: "gate", id: "g2" });
+    expect(ungatedTailHtml).toContain('id="ax-references"');
+    expect(ungatedTailHtml).toContain('id="ax-footnotes"');
+    expect(htmlOf(parts).replace("[gate]", "") + ungatedTailHtml).toBe(TAIL_HTML);
+  });
+
+  it("papers without gates keep landmarks in the parts", () => {
+    const { parts, ungatedTailHtml } = applyPaperEdits(TAIL_HTML, TAIL_TOC, [
+      { op: "activity", after: { sectionEnd: "ax-sec-a-1" }, items: [{ kind: "exercise", id: "x" }] },
+    ]);
+    expect(ungatedTailHtml).toBeUndefined();
+    expect(htmlOf(parts)).toContain('id="ax-footnotes"');
   });
 });

@@ -10,9 +10,10 @@ export default authkitMiddleware();
 
 export const config = {
   matcher: [
-    // Skip static assets, the public chrome-less demo embed routes, and the
-    // committed arXiv figure files under /arxiv/ — session refresh there wastes
-    // invocations and poisons CDN cacheability.
-    "/((?!_next/static|_next/image|favicon.ico|arxiv/|.*/embed$|.*\\.(?:svg|png|jpg|jpeg|gif|webp|ico)$).*)",
+    // Skip static assets, the public chrome-less demo embed routes, the
+    // committed arXiv figure files under /arxiv/, and the R2-served lesson
+    // videos under /videos/ — session refresh there wastes invocations and
+    // poisons CDN cacheability.
+    "/((?!_next/static|_next/image|favicon.ico|arxiv/|videos/|.*/embed$|.*\\.(?:svg|png|jpg|jpeg|gif|webp|ico)$).*)",
   ],
 };

@@ -31,6 +31,17 @@
       "localConnectionString": "postgresql://user:password@localhost:5432/postgres"
     }
   ],
+  // Lesson videos, served by src/app/videos/[key]/route.ts. `remote` makes
+  // local `wrangler dev` / `npm run preview` proxy the binding to the real
+  // bucket — miniflare's local R2 simulation is empty, so preview would 404
+  // every video without it.
+  "r2_buckets": [
+		{
+			"binding": "videos", // <~ valid JavaScript variable name
+			"bucket_name": "videos",
+			"remote": true
+		}
+	],
   "vars": {
     // Public by nature (appears in OAuth URLs). Also set as a Workers Builds
     // build variable so NEXT_PUBLIC_ inlining picks it up at build time.

@@ -342,7 +342,12 @@ section panel with scroll-synced highlighting, and `edits` let you **hide** text
 **add** editorial notes, splice **activities** — exercise cards and inline
 lessons — at section ends, between paragraphs, or between sentences, and
 **gloss** phrases of the paper's prose with glossary hover cards (§1c). Papers
-count toward progress exactly like lessons. Footnotes additionally render as margin
+count toward progress exactly like lessons — unless marked `optional: true`,
+which labels the reading "Optional" wherever the module lists it and excludes
+it (inserted lessons included) from module completion, prerequisite
+satisfaction, and progress totals; it stays individually completable, with its
+own checkmark (`ex-paper-lesswrong` is the live reference). Footnotes
+additionally render as margin
 **sidenotes** when the viewport has room (readers can toggle this from the
 page header; the in-document footnotes section is always there).
 
@@ -358,6 +363,9 @@ page header; the in-document footnotes section is always there).
                                        // new-style ids only (2007+) — old-style
                                        // slash ids (hep-th/…) are unsupported
      estimatedMinutes: 45,             // optional; fold into module.estimatedMinutes
+     optional: true,                   // optional reading: labelled "Optional";
+                                       // never required for module completion,
+                                       // prerequisites, or progress totals
      edits: [                          // optional, see step 4 and §2b
        {
          op: "activity",
@@ -417,6 +425,9 @@ page header; the in-document footnotes section is always there).
    checkmark lights only when **all** of its units are complete, and module/track
    percentages count each unit. A manual "Mark complete" button is always
    available too (scroll-past completion still works even on the fallback page).
+   An `optional: true` paper's units keep all of this individually — checkmarks
+   light as usual — but are excluded from the module's completion requirement
+   and from module/track percentages.
 
 7. **Rebuild on converter bumps**: each source pins its own converter version
    (`CONVERTER_VERSION` for arXiv; `SUBSTACK_CONVERTER_VERSION` /

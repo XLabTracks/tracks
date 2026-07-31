@@ -221,6 +221,7 @@ async function PaperItemPage({
       <header>
         <p className="text-muted-foreground text-sm">
           Module {module.order}: {module.title} · Paper
+          {paper.optional && " · Optional"}
         </p>
         <h1 className="mt-1 text-3xl font-semibold tracking-tight">{paper.title}</h1>
         {source.authors && (

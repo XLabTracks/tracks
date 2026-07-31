@@ -16,8 +16,11 @@ import {
   getContentLocation,
   getModulesForTrack,
   getPrerequisiteModules,
+  getTrackContentIds,
   getTrackItemSequence,
+  isOptionalItem,
   itemIdOf,
+  type ModuleItem,
   itemSlugOf,
   paperResources,
   papers,
@@ -971,20 +974,45 @@ describe("module item navigation", () => {
     }
   });
 
-  it("module progress ids list papers and their inserted lessons exactly once", () => {
+  // An item's completion units, re-derived from the raw data (not through the
+  // accessors under test): the item itself plus a paper's inserted lessons.
+  const unitIdsOf = (item: ModuleItem): string[] =>
+    item.kind === "lesson"
+      ? [item.lesson.id]
+      : [
+          item.paper.id,
+          ...(item.paper.edits ?? []).flatMap((edit) =>
+            edit.op === "activity"
+              ? edit.items.flatMap((i) => (i.kind === "lesson" ? [i.id] : []))
+              : [],
+          ),
+        ];
+
+  it("module progress ids list required papers and their inserted lessons exactly once", () => {
     for (const track of tracks) {
       for (const m of getModulesForTrack(track.id)) {
         const ids = getModuleProgressContentIds(m.id);
         expect(new Set(ids).size).toBe(ids.length);
         for (const item of getItemsForModule(m.id)) {
-          expect(ids).toContain(itemIdOf(item));
-          if (item.kind === "paper") {
-            for (const edit of item.paper.edits ?? []) {
-              if (edit.op !== "activity") continue;
-              for (const inserted of edit.items) {
-                if (inserted.kind === "lesson") expect(ids).toContain(inserted.id);
-              }
-            }
+          // Optional readings are trackable but never required: none of their
+          // units may appear among the module's progress ids.
+          for (const unitId of unitIdsOf(item)) {
+            if (isOptionalItem(item)) expect(ids).not.toContain(unitId);
+            else expect(ids).toContain(unitId);
+          }
+        }
+      }
+    }
+  });
+
+  it("track content ids cover every item's units — optional included — exactly once", () => {
+    for (const track of tracks) {
+      const ids = getTrackContentIds(track.id);
+      expect(new Set(ids).size).toBe(ids.length);
+      for (const m of getModulesForTrack(track.id)) {
+        for (const item of getItemsForModule(m.id)) {
+          for (const unitId of unitIdsOf(item)) {
+            expect(ids).toContain(unitId);
           }
         }
       }

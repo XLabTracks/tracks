@@ -196,6 +196,13 @@ export interface Paper {
    * content.test.ts against the committed artifact.
    */
   edits?: PaperEdit[];
+  /**
+   * Optional reading: labelled "Optional" wherever the module lists it, and
+   * excluded from progress requirements — module completion, prerequisite
+   * satisfaction, and module/track totals ignore it (its inserted lessons
+   * too). Still completable: the item keeps its own checkmark.
+   */
+  optional?: true;
   estimatedMinutes?: number;
 }
 

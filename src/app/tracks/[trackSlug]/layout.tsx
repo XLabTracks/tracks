@@ -4,8 +4,8 @@ import {
   getLessonById,
   getModuleProgressContentIds,
   getPrerequisiteModules,
+  getTrackContentIds,
   getTrackOutline,
-  getTrackProgressContentIds,
   type Paper,
 } from "@/lib/content";
 import {
@@ -55,8 +55,10 @@ export default async function TrackLayout({
       // resolve in memory — the per-module prerequisite queries this used to
       // fan out are all answered by this single set.
       const completedSet = await getTrackCompletionSet(user.id, outline.track.id);
-      completedContentIds = getTrackProgressContentIds(outline.track.id).filter(
-        (id) => completedSet.has(id),
+      // All trackable ids (optional readings included) — checkmarks light on
+      // every item; module locks below still judge on the required ids only.
+      completedContentIds = getTrackContentIds(outline.track.id).filter((id) =>
+        completedSet.has(id),
       );
       if (outline.track.prerequisiteEnforcement === "hard") {
         lockedModuleSlugs = outline.modules

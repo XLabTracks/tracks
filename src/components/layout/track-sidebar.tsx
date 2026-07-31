@@ -338,9 +338,18 @@ function SidebarItemRow({
         ) : (
           <Circle className="mt-0.5 size-3.5 shrink-0 opacity-30" aria-hidden />
         )}
-        <span className="line-clamp-2">
-          {item.kind === "lesson" ? item.lesson.title : item.paper.title}
-          {done && <span className="sr-only"> (completed)</span>}
+        <span className="flex min-w-0 flex-col">
+          <span className="line-clamp-2">
+            {item.kind === "lesson" ? item.lesson.title : item.paper.title}
+            {done && <span className="sr-only"> (completed)</span>}
+          </span>
+          {/* Its own line, outside the title's line-clamp, so a long title
+              can't clip the optional marker (the primary nav surface). */}
+          {item.kind === "paper" && item.paper.optional && (
+            <span className="text-muted-foreground text-xs font-normal">
+              Optional
+            </span>
+          )}
         </span>
         {item.kind === "paper" && (
           <FileText

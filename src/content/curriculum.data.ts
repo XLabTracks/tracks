@@ -252,7 +252,7 @@ export const modules: Module[] = [
     trackId: "example",
     title: "Content types",
     summary:
-      "Text, video, callouts, an interactive demo, exercises, and inline readings (an arXiv paper, a Substack post, and a LessWrong post).",
+      "Text, video, callouts, an interactive demo, exercises, and inline readings (an arXiv paper, a Substack post, and an optional LessWrong post).",
     order: 1,
     prerequisiteModuleIds: [],
     itemIds: [

@@ -33,6 +33,12 @@ export interface InsertedSection {
   parentIndex: number;
   /** First toc index rendering after the heading — its nav insert position. */
   beforeIndex: number;
+  /**
+   * Position in the paper's edits array. Same-anchor ops render in edits
+   * order (patch-section phase C), so the nav orders the heading against its
+   * sibling activities/gates by this index — see paper-nav.ts.
+   */
+  editIndex: number;
 }
 
 export interface SectionInsertPlan {
@@ -65,18 +71,21 @@ export function planSectionInserts(
   toc: PaperTocEntry[],
   edits: PaperEdit[] | undefined,
 ): SectionInsertPlan {
-  const sectionOps = (edits ?? []).filter(
-    (op): op is Extract<PaperEdit, { op: "section" }> => op.op === "section",
+  // Keep each op's index in the FULL edits array — the nav orders a heading
+  // against the activities/gates sharing its anchor by that index.
+  const sectionOps = (edits ?? []).flatMap((op, editIndex) =>
+    op.op === "section" ? [{ op, editIndex }] : [],
   );
   if (sectionOps.length === 0) return EMPTY_PLAN;
 
   // Resolve each op to its parent section + heading level (parent.level + 1).
-  const resolved = sectionOps.map((op) => {
+  const resolved = sectionOps.map(({ op, editIndex }) => {
     const afterNum = anchorNum(op.after.anchor);
     const parentIndex = sectionIndexForAnchor(toc, op.after.anchor);
     const parent = parentIndex === -1 ? undefined : toc[parentIndex];
     return {
       op,
+      editIndex,
       afterNum,
       parentIndex,
       parent,
@@ -85,7 +94,7 @@ export function planSectionInserts(
   });
 
   const sections: InsertedSection[] = resolved.map((r) => {
-    const { op, parent, parentIndex, afterNum, level } = r;
+    const { op, parent, parentIndex, afterNum, level, editIndex } = r;
 
     // The parent's direct child subsections — the level our section joins.
     let existingBefore = 0;
@@ -112,6 +121,7 @@ export function planSectionInserts(
       afterNum,
       parentIndex,
       beforeIndex: firstIndexAfter(toc, afterNum),
+      editIndex,
     };
   });
 

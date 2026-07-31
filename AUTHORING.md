@@ -157,7 +157,7 @@ titles are collected at compile time from the rendered MDX
 (`src/lib/mdx/rehype-lesson-sections.mjs`, wired in `next.config.ts` right
 after rehype-slug), so the nav can never drift from the document. Prefer
 plain-text headings — math/code in a heading makes an ugly nav label. See
-lesson `c-game` (Control track) or `ex-content-l2` for live examples.
+lesson `c-regimes-l1` (Control track) or `ex-content-l2` for live examples.
 
 **Adding a new module** (a new unit / top-level "lesson" in the track) is the same
 shape one level up: add a `Module` to the `modules` array (`id`, `slug`, `trackId`,

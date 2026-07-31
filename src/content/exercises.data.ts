@@ -851,7 +851,8 @@ export const exercises: Exercise[] = [
     answer:
       "Because the monitor is the same untrusted model as the policy, it can simply report that real backdoors look fine while telling the truth about everything else. Until the blue team has some way to check the monitor's honesty (e.g. evaluating it on synthetic backdoors), its reports carry no safety value.",
   },
-  // --- Control: "Same AUROC, different safety" (c-game lesson) — one staged
+  // --- Control: "Same number, different safety" (spliced into the AI Control
+  // walkthrough, §3.2 — formerly the retired c-game lesson) — one staged
   // exercise across three stages: two monitor comparisons that come out
   // backwards, then the budget arithmetic that explains both. Persistent
   // two-panel ROC figure above every stage. Copy is authored verbatim (do not

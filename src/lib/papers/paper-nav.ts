@@ -97,9 +97,12 @@ export function buildPaperNav(
     })),
   ];
   // Merge activities/gates with inserted-section entries into one
-  // document-ordered stream. A section leads its cluster: at the same anchor
-  // its sort key beats the entries that follow it (key[2] = -1 < any sentence
-  // index / MAX), while entries on earlier blocks still precede it.
+  // document-ordered stream. An inserted heading is a block-level op like a
+  // block-targeted activity or gate, so it carries the same key shape: the
+  // edits index (key[3]) decides the order of everything sharing an anchor,
+  // exactly as patch-section's phase C emits them. Sentence-targeted entries
+  // (key[2] = the sentence index) still precede it — phase B splits the
+  // paragraph before phase C appends anything after the block.
   type Contribution =
     | {
         beforeIndex: number;
@@ -126,9 +129,14 @@ export function buildPaperNav(
       gateId: r.gateId,
       level: r.level,
     })),
-    ...sections.map((section, i) => ({
+    ...sections.map((section) => ({
       beforeIndex: section.beforeIndex,
-      key: [0, section.afterNum, -1, i] as [number, number, number, number],
+      key: [
+        0,
+        section.afterNum,
+        Number.MAX_SAFE_INTEGER,
+        section.editIndex,
+      ] as [number, number, number, number],
       section,
     })),
   ];
@@ -141,25 +149,25 @@ export function buildPaperNav(
       a.key[3] - b.key[3],
   );
 
-  // The inserted section (if any) an anchor-level entry renders inside — so
-  // its nav entries nest one level deeper than the section heading.
-  const containingSection = (
-    beforeIndex: number,
-    after: PaperNavActivity["after"],
-  ): InsertedSection | undefined => {
-    if (!("anchor" in after)) return undefined;
-    const n = anchorNum(after.anchor);
-    return sections.find((s) => s.beforeIndex === beforeIndex && s.afterNum <= n);
-  };
-
   // Walk in render order, accumulating the gates passed so far; every row
-  // emitted after a gate marker carries the accumulated ids.
+  // emitted after a gate marker carries the accumulated ids. `openSection`
+  // tracks the inserted heading an anchor-level entry renders INSIDE — the
+  // most recent one in this bucket — so its rows nest one level deeper.
+  // Section-end entries never nest: they render at the parent's subtree end,
+  // past the inserted subsection's content.
   type Marker = { gate: string } | { item: PaperNavItem };
   const markersBefore = new Map<number, Marker[]>();
+  let openBucket = -1;
+  let openSection: InsertedSection | undefined;
   for (const contribution of contributions) {
+    if (contribution.beforeIndex !== openBucket) {
+      openBucket = contribution.beforeIndex;
+      openSection = undefined;
+    }
     const bucket = markersBefore.get(contribution.beforeIndex) ?? [];
     if ("section" in contribution) {
       const s = contribution.section;
+      openSection = s;
       bucket.push({
         item: {
           kind: "section",
@@ -172,8 +180,8 @@ export function buildPaperNav(
     } else if (contribution.gateId !== undefined) {
       bucket.push({ gate: contribution.gateId });
     } else {
-      const { activity, beforeIndex, level } = contribution;
-      const parent = containingSection(beforeIndex, activity!.after);
+      const { activity, level } = contribution;
+      const parent = "anchor" in activity!.after ? openSection : undefined;
       const itemLevel = (parent ? parent.level : level) + 1;
       for (const item of activity!.items) {
         const anchorId = insertionAnchorId(item);

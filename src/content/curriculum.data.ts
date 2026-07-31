@@ -409,8 +409,12 @@ export const lessons: Lesson[] = [
   // RETIRED 2026-07-24: all of its content was progressively mirrored into the
   // AI Control walkthrough (papers.data.ts — inserted subsections 3.2.1
   // "Probability of Safety over Deployment" and 3.3.1 "Defer to Trusted") and
-  // the standalone lesson removed. Its exercise definitions remain in
-  // exercises.data.ts where the walkthrough references them. ---
+  // the standalone lesson removed. The walkthrough re-splices exactly two of
+  // its exercises (c-game-l2-tail-staged, c-game-l7-defer-reflect); the other
+  // eleven c-game-* definitions are still in exercises.data.ts but are now
+  // referenced by nothing — they are earlier drafts of the c-paper-l3-*/l4-*
+  // exercises the walkthrough uses, kept only until the prose pass confirms
+  // nothing else needs them. Do not edit them expecting a learner to see it. ---
   // --- Control, module 2 (how useful is AI control?): the case against
   // control, from the course author's notes; embeds the
   // contra-control-argue-reveal exercise. ---

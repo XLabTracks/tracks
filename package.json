@@ -21,7 +21,7 @@
     "@mdx-js/loader": "^3.1.1",
     "@mdx-js/react": "^3.1.1",
     "@next/mdx": "^16.2.9",
-    "@opennextjs/cloudflare": "^0.2.1",
+    "@opennextjs/cloudflare": "^1.20.1",
     "@prisma/adapter-pg": "^6.19.3",
     "@prisma/client": "^6.19.3",
     "@types/mdx": "^2.0.14",

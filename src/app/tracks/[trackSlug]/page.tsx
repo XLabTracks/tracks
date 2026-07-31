@@ -180,6 +180,9 @@ export default async function TrackOverviewPage({
                               aria-hidden
                             />
                           )}
+                          {item.kind === "paper" && item.paper.optional && (
+                            <span className="text-xs">(optional)</span>
+                          )}
                         </li>
                       );
                     })}

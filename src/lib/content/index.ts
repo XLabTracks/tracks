@@ -264,6 +264,15 @@ export function getTrackOutline(trackSlug: string): TrackOutline | undefined {
 // --- Progress id sets ------------------------------------------------------
 // Progress rows (LessonProgress) key on generic content ids: standalone
 // lessons, papers, and papers' inserted lessons each count as one unit.
+// Optional readings' units are trackable (they light their own checkmarks)
+// but never *required*: the …ProgressContentIds accessors — the basis for
+// module completion, prerequisite satisfaction, and progress totals — skip
+// them, while getTrackContentIds is the full trackable universe.
+
+/** Listed and completable, but never required for module/track completion. */
+export function isOptionalItem(item: ModuleItem): boolean {
+  return item.kind === "paper" && item.paper.optional === true;
+}
 
 /**
  * A single item's progress-countable content ids: the item itself, plus a
@@ -276,15 +285,28 @@ export function getItemProgressContentIds(item: ModuleItem): string[] {
     : [item.paper.id, ...getInsertedLessonsForPaper(item.paper.id).map((l) => l.id)];
 }
 
-/** A module's progress-countable content ids, in item order. */
+/** A module's REQUIRED progress ids, in item order — optional items excluded. */
 export function getModuleProgressContentIds(moduleId: string): string[] {
-  return getItemsForModule(moduleId).flatMap(getItemProgressContentIds);
+  return getItemsForModule(moduleId)
+    .filter((item) => !isOptionalItem(item))
+    .flatMap(getItemProgressContentIds);
 }
 
-/** All progress-countable content ids in a track (used for aggregation). */
+/** A track's required progress ids (progress totals, prerequisite checks). */
 export function getTrackProgressContentIds(trackId: string): string[] {
   return getModulesForTrack(trackId).flatMap((m) =>
     getModuleProgressContentIds(m.id),
+  );
+}
+
+/**
+ * EVERY completion-trackable content id in a track, optional items included —
+ * the id universe for fetching completion rows and lighting checkmarks.
+ * Totals and gating use getTrackProgressContentIds instead.
+ */
+export function getTrackContentIds(trackId: string): string[] {
+  return getModulesForTrack(trackId).flatMap((m) =>
+    getItemsForModule(m.id).flatMap(getItemProgressContentIds),
   );
 }
 

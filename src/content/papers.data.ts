@@ -658,6 +658,9 @@ export const papers: Paper[] = [
     // full-page through the same edit engine, with its footnotes shown as
     // margin sidenotes on wide screens. Editorial notes here are lorem (this
     // is the Example track); title/metadata are factual from the artifact.
+    // Also the live reference for `optional`: labelled "Optional" wherever
+    // ex-content lists it, and not required for the module's completion (so
+    // ex-assess's prerequisite is satisfiable without it).
     id: "ex-paper-lesswrong",
     slug: "lesswrong-post",
     moduleId: "ex-content",
@@ -667,6 +670,7 @@ export const papers: Paper[] = [
       postUrl:
         "https://www.lesswrong.com/posts/kcKrE9mzEHrdqtDpE/the-case-for-ensuring-that-powerful-ais-are-controlled",
     },
+    optional: true,
     estimatedMinutes: 55,
     edits: [
       // Mid-paragraph activity: splits the opening paragraph after sentence 1.

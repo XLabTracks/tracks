@@ -340,4 +340,8 @@ drive the lock, and the item page redirects signed-in learners on hard locks
 units are lessons, papers, and papers' inserted lessons — see
 `getModuleProgressContentIds` in `src/lib/content/` — assessments never gate
 completion; an item's sidebar checkmark lights only when all of its units are
-complete.
+complete. Papers marked `optional: true` (and their inserted lessons) are
+trackable but never required: the `…ProgressContentIds` accessors exclude
+them (so module completion, prerequisite satisfaction, and progress totals
+ignore them) while `getTrackContentIds` is the full checkmark/fetch universe
+(`ex-paper-lesswrong` is the live reference).

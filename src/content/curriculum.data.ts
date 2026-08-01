@@ -153,8 +153,8 @@ export const modules: Module[] = [
       "c-mod5-l1",
       "c-mod5-l2",
       "c-mod5-l3",
-      "c-mod5-l4",
-      "c-mod5-l5",
+      "c-paper-legibility-protocols",
+      "c-paper-untrusted-advice",
     ],
   },
   {
@@ -474,20 +474,6 @@ export const lessons: Lesson[] = [
     moduleId: "c-mod5",
     title: "Environment construction",
     contentRef: "c-mod5-l3",
-  },
-  {
-    id: "c-mod5-l4",
-    slug: "paper-1",
-    moduleId: "c-mod5",
-    title: "Paper 1",
-    contentRef: "c-mod5-l4",
-  },
-  {
-    id: "c-mod5-l5",
-    slug: "paper-2",
-    moduleId: "c-mod5",
-    title: "Paper 2",
-    contentRef: "c-mod5-l5",
   },
   // --- Control: every reproduced reading in module 1 (with permission from
   // Redwood Research) now renders through the paper reader as a Paper item in

@@ -1301,4 +1301,46 @@ export const papers: Paper[] = [
     source: { kind: "arxiv", arxivId: "2604.16286v2" },
     estimatedMinutes: 35,
   },
+  {
+    // Control track, module 5 (high-stakes control), "paper 1": rendered in
+    // full; the planned "experiment completion" exercise is not built yet.
+    id: "c-paper-legibility-protocols",
+    slug: "paper-1",
+    moduleId: "c-mod5",
+    title: "Basic Legibility Protocols Improve Trusted Monitoring",
+    source: { kind: "arxiv", arxivId: "2602.10153v1" },
+    edits: [
+      {
+        op: "add",
+        after: { sectionEnd: "ax-abstract" },
+        label: "In development",
+        markdown:
+          "This reading will be worked through with an \"experiment completion\" exercise — not built yet.",
+      },
+    ],
+  },
+  {
+    // Control track, module 5 (high-stakes control), "paper 2": rendered in
+    // full; the planned "experiment completion" exercise and the module's
+    // red/blue-team capstone are not built yet.
+    id: "c-paper-untrusted-advice",
+    slug: "paper-2",
+    moduleId: "c-mod5",
+    title:
+      "Untrusted advice for AI control: Short, strong advice significantly uplifts weak LLMs",
+    source: {
+      kind: "lesswrong",
+      postUrl:
+        "https://www.lesswrong.com/posts/jLkRCK35ri2btEHMF/untrusted-advice-for-ai-control-short-strong-advice",
+    },
+    edits: [
+      {
+        op: "add",
+        after: { sectionEnd: "lw-sec-conclusion" },
+        label: "In development",
+        markdown:
+          "This reading will be worked through with an \"experiment completion\" exercise, and the module will conclude with a lab/capstone: initiating and testing your own high-stakes experiment, doing 1 red and 1 blue team iteration. Not built yet.",
+      },
+    ],
+  },
 ];

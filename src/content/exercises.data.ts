@@ -2065,4 +2065,291 @@ export const exercises: Exercise[] = [
     minWords: 30,
     maxWords: 200,
   },
+  // --- Control module 5: quick-recall cards spliced into the section
+  // readings at the blocks where each concept is defined (explicitly or
+  // implicitly). Answers restate the source post/paper's own definitions —
+  // no new curriculum claims. ---
+  // Win/continue/lose scenarios (c-paper-win-continue-lose)
+  {
+    id: "c-mod5-wcl-recall-concentrated-failure",
+    type: "tap-reveal",
+    prompt: "What is a concentrated failure (a.k.a. high-stakes failure)?",
+    answer:
+      "A failure where, in the absence of countermeasures, the AI could cause an unacceptable outcome just by behaving badly on a small number of tasks. Examples: causing a rogue deployment, sabotaging one particularly crucial ML research task, or leaking sensitive information.",
+  },
+  {
+    id: "c-mod5-wcl-recall-attack",
+    type: "tap-reveal",
+    prompt: "In this post's terminology, what is an \"attack\"?",
+    answer:
+      "One of the AI's rare attempts to cause the unacceptable outcome. Under control measures, the optimal strategy for the AI is often to act aligned nearly all the time and only occasionally try to cause the unacceptable outcome — those attempts are the attacks.",
+  },
+  {
+    id: "c-mod5-wcl-recall-era-protocol",
+    type: "tap-reveal",
+    prompt: "How does an execute/replace/audit protocol work?",
+    answer:
+      "An agent loop repeatedly gets a proposed action from the untrusted LLM; a monitor scores how dangerous or suspicious the action looks; and based on the monitor score the protocol makes two separate decisions: whether to execute the action or replace it, and whether to audit it.",
+  },
+  {
+    id: "c-mod5-wcl-recall-monitor",
+    type: "tap-reveal",
+    prompt: "What is a monitor, and what is a monitor score?",
+    answer:
+      "A monitor is any technique that takes a proposed action (with surrounding context) and produces a score describing how dangerous and/or suspicious it is — e.g. asking trusted or untrusted models to evaluate the action, probes on the policy, or interpretability techniques like sparse autoencoders. Its output is the monitor score.",
+  },
+  {
+    id: "c-mod5-wcl-recall-auditing",
+    type: "tap-reveal",
+    prompt: "What is auditing?",
+    answer:
+      "Reviewing an action to determine whether it's evidence that the model is intentionally trying to cause problems. The simplest version: queue the action for eventual human review, with escalation if the reviewer is suspicious — possibly ending in the conclusion that the model is a misaligned power-seeker.",
+  },
+  {
+    id: "c-mod5-wcl-recall-outcomes",
+    type: "tap-reveal",
+    prompt:
+      "When the AI attacks under an execute/replace/audit protocol, what are the three possible outcomes?",
+    answer:
+      "Win: the attack is audited and the developer catches the AI. Lose: the attack is executed and succeeds. Continue: the attack fails silently — it was defective, or it was defused (e.g. replaced) — so the AI isn't caught and the deployment goes on, with the AI probably attacking again later. Distinguishing the two ways an attack can \"fail\" (caught vs. failed silently) is crucial when reasoning about a protocol's safety.",
+  },
+  // AI catastrophes and rogue deployments (c-paper-rogue-deployments)
+  {
+    id: "c-mod5-rogue-recall-catastrophe",
+    type: "tap-reveal",
+    prompt: "How does this post use the word \"catastrophe\"?",
+    answer:
+      "A failure you don't want to happen even once, reserved for the end result we find unacceptable — e.g. the AI or another adversary amassing power, launching nukes, starting a war, or building superintelligence. It deliberately excludes intermediate events like \"the AI escapes the datacenter\".",
+  },
+  {
+    id: "c-mod5-rogue-recall-safety-measures",
+    type: "tap-reveal",
+    prompt: "What are safety measures?",
+    answer:
+      "Interventions applied to all deployments of your model — to any users, including internal ones — that try to prevent safety problems. This includes control measures like trusted monitoring and security measures that make it harder to exfiltrate the model weights.",
+  },
+  {
+    id: "c-mod5-rogue-recall-rogue-deployment",
+    type: "tap-reveal",
+    prompt: "What is a rogue deployment?",
+    answer:
+      "A deployment of your model where the safety measures are absent. Examples: an AI hacking its datacenter and running itself while hiding what it's doing, an AI self-exfiltrating and running itself on unmonitored servers, or someone stealing the AI and running it in their own datacenter.",
+  },
+  {
+    id: "c-mod5-rogue-recall-instrumental-terminal",
+    type: "tap-reveal",
+    prompt:
+      "What is the difference between an instrumental and a terminal catastrophe?",
+    answer:
+      "The terminal catastrophe is the end state we wanted to avoid. An instrumental catastrophe is something happening that makes the situation go out of our control, such that a terminal catastrophe becomes likely and much harder to prevent. Establishing a rogue deployment is the central example of an instrumental catastrophe.",
+  },
+  {
+    id: "c-mod5-rogue-recall-two-varieties",
+    type: "tap-reveal",
+    prompt:
+      "What are the two main varieties of catastrophe involving a rogue deployment?",
+    answer:
+      "Weight exfiltration leading to a rogue external deployment: the model is exfiltrated and run on hardware you don't control, fine-tuned to remove safety training. And rogue internal deployment: the model is run inside the lab's own datacenter in an unauthorized way — by the model itself while doing AI development, by employees, or by external hackers who couldn't exfiltrate the weights.",
+  },
+  {
+    id: "c-mod5-rogue-recall-why-worry",
+    type: "tap-reveal",
+    prompt: "Why are rogue deployments the main worry?",
+    answer:
+      "Causing a catastrophe directly seems fundamentally hard — it requires either a few wildly superhuman actions or a large number of ordinary actions, giving the safety measures many chances to catch the AI. Launching a rogue deployment seems fundamentally easy — with model weight access it might take twenty lines of simple Python — and once one exists, the AI's actions are much less constrained.",
+  },
+  // Rogue internal deployments via external APIs (c-paper-rogue-internal-external-apis)
+  {
+    id: "c-mod5-ridext-recall-definition",
+    type: "tap-reveal",
+    prompt: "What is a rogue internal deployment via external APIs?",
+    answer:
+      "A heavily-monitored internal AI with sensitive access builds an agent scaffold that sends queries to a weakly-monitored external API version of itself (or another AI) and executes the external API's instructions using its privileged internal access — bypassing the internal monitoring. It's \"internal\" because the model weights and the agent scaffold never leave the cluster.",
+  },
+  {
+    id: "c-mod5-ridext-recall-vs-others",
+    type: "tap-reveal",
+    prompt:
+      "How does this threat relate to the other rogue-deployment threats, and how hard is it to mitigate?",
+    answer:
+      "It sits alongside weight exfiltration (rogue external deployments) and regular rogue internal deployments where the AI hacks its own datacenter to run unmonitored inference, and the post argues preventing it is similarly important. It's relatively hard to mitigate: probably a combination of trusted monitoring with dedicated security measures, or something that fully leverages untrusted monitoring — not \"just trusted monitoring\" or \"just security\".",
+  },
+  // A basic systems architecture (c-paper-systems-architecture)
+  {
+    id: "c-mod5-sysarch-recall-three-servers",
+    type: "tap-reveal",
+    prompt:
+      "Which three responsibilities of an autonomous research agent will almost surely live on different computers?",
+    answer:
+      "The inference server, which hosts the LLM and serves the text-generation API; the scaffold server, which maintains the agent loop's state — repeatedly calling the inference server, parsing the LLM response, and executing actions with the agent's tools; and the execution server, where the agent runs code and sees its results.",
+  },
+  {
+    id: "c-mod5-sysarch-recall-which-machine",
+    type: "tap-reveal",
+    prompt:
+      "Why is \"the machine that the AI agent is running on\" an ambiguous phrase?",
+    answer:
+      "Because inference, scaffolding, and execution can be on different machines with very different access. Example: a Claude agent on your laptop does inference inside Anthropic's datacenter (which has weight access), but executes code on the laptop — so for exfiltrating its weights it has no advantage over any other external hacker.",
+  },
+  {
+    id: "c-mod5-sysarch-recall-safety-insertion",
+    type: "tap-reveal",
+    prompt:
+      "Where in the agent loop is the natural place to insert safety mechanisms?",
+    answer:
+      "In the scaffold, after it parses the LLM's proposed action and before executing it: the scaffold can query a weaker trusted model about whether the action is acceptably safe, then execute it, flag it for human review (\"auditing\"), or discard it and select a new one (e.g. defer-to-trusted).",
+  },
+  {
+    id: "c-mod5-sysarch-recall-rid-forms",
+    type: "tap-reveal",
+    prompt:
+      "In this architecture, what do rogue internal deployments concretely look like?",
+    answer:
+      "The easiest to imagine: the model writes its own agent loop on the execution machine, using that machine's GPUs/weights. Alternatively it can build a rogue scaffold on the execution machine that calls the inference server (easier to catch with basic monitoring on the inference API), or compromise one of the other services via code it commits.",
+  },
+  // Blocking live failures with synchronous monitors (c-paper-synchronous-monitors)
+  {
+    id: "c-mod5-syncmon-recall-two-goals",
+    type: "tap-reveal",
+    prompt: "What are the two different goals monitoring can serve?",
+    answer:
+      "Detection: identifying misbehavior so you can understand it and prevent similar actions from happening in the future. Prevention: identifying misbehavior in order to mitigate the harmful effects of that particular action.",
+  },
+  {
+    id: "c-mod5-syncmon-recall-synchronous",
+    type: "tap-reveal",
+    prompt: "What makes a monitor synchronous?",
+    answer:
+      "It runs after an action is generated by the LLM but before the action is executed. Detection tolerates substantial monitor latency, but prevention needs the monitor to trigger quickly — synchronous monitoring is the extreme of low latency.",
+  },
+  {
+    id: "c-mod5-syncmon-recall-live-failure",
+    type: "tap-reveal",
+    prompt: "What is a live failure?",
+    answer:
+      "An action whose harmful effects are rapid and hard to recover from — a threat with low attack latency and a very high rate of damage, via damage already dealt or costs of recovery. The classic example is weight exfiltration: once the weights are out, there's no way to get them back.",
+  },
+  {
+    id: "c-mod5-syncmon-recall-attack-latency",
+    type: "tap-reveal",
+    prompt: "What is attack latency?",
+    answer:
+      "A \"grace period\" after an attack has been initiated but before any harm has been caused — called time-to-impact in cybersecurity. Within it, an asynchronous monitor is exactly as effective as a synchronous one; e.g. a code backdoor detected before being exploited.",
+  },
+  {
+    id: "c-mod5-syncmon-recall-blocking",
+    type: "tap-reveal",
+    prompt: "What makes a monitor \"blocking\"?",
+    answer:
+      "It runs before the proposed action is executed and has the authority to prevent suspicious actions from being executed (e.g. Claude Code auto mode). Blocking monitors cost more than asynchronous ones: they add latency to every action and inference cost from monitoring each action individually rather than long trajectories at once.",
+  },
+  // Ctrl-Z: Controlling AI Agents via Resampling (c-paper-ctrl-z)
+  {
+    id: "c-mod5-ctrlz-recall-untrusted-model",
+    type: "tap-reveal",
+    prompt: "What makes a model \"untrusted\" in this paper?",
+    answer:
+      "It has the potential to be deliberately subversive — for example because it developed misaligned goals and \"faked alignment\" during testing, or because of data poisoning — so the deployer can't assume it will behave as intended.",
+  },
+  {
+    id: "c-mod5-ctrlz-recall-usefulness",
+    type: "tap-reveal",
+    prompt: "How does the paper define usefulness?",
+    answer:
+      "Implement $U$ with the honest policy $U_H$ and measure the proportion of tasks the control protocol solves in the episode, normalized so that $U_H$ alone scores 100% and the trusted model $T$ scores 0%.",
+  },
+  {
+    id: "c-mod5-ctrlz-recall-safety",
+    type: "tap-reveal",
+    prompt: "How does the paper define safety?",
+    answer:
+      "Implement $U$ with the attack policy $U_A$ and measure the probability that the blue team wins by reaching the end of the 100,000-task episode without allowing the agent to download and execute malware.",
+  },
+  {
+    id: "c-mod5-ctrlz-recall-resample-protocols",
+    type: "tap-reveal",
+    prompt: "What are resample protocols?",
+    answer:
+      "Control protocols that exploit the statelessness of the untrusted model to dynamically take additional samples of certain actions. Resampling lets accidentally suspicious-looking honest code be replaced by clearly benign actions (avoiding unnecessary audits), and when the model is attacking it either samples benign completions or gathers many suspicious samples as incriminating evidence.",
+  },
+  {
+    id: "c-mod5-ctrlz-recall-defer-to-resample",
+    type: "tap-reveal",
+    prompt: "How does the Defer to resample protocol work?",
+    answer:
+      "If the trusted monitor's suspiciousness score for $U$'s action is above the deferral threshold, generate up to two new samples from $U$; if any fall under the threshold, execute the least suspicious one. If all samples stay above it, implement an action by $T$ instead. If the minimum of all samples is above the auditing threshold, audit the most suspicious sample.",
+  },
+  {
+    id: "c-mod5-ctrlz-recall-continuation-probability",
+    type: "tap-reveal",
+    prompt:
+      "What is the attack continuation probability, and why must the red team keep it high against resampling?",
+    answer:
+      "The probability that, once the first attack step got in, the attack policy continues the attack on a given step. Against Defer to resample, a low value is disastrous for the red team: attack steps get resampled until a benign action appears (resampling selects for innocent behavior), so few attacks ever complete — and every incomplete attack is another chance to get caught.",
+  },
+  {
+    id: "c-mod5-ctrlz-recall-incrimination",
+    type: "tap-reveal",
+    prompt: "What is Defer to resample with incrimination in the present?",
+    answer:
+      "Defer to resample with a different auditing rule: if the samples' minimum suspiciousness hits a separate, higher threshold, the protocol samples up to four more actions from $U$ for the same step, and audits the most suspicious sample if the minimum hits the auditing threshold. Since samples are independent draws from the same distribution, more samples make it easier to discriminate $U_H$ from $U_A$ — buying information for expensive auditing decisions.",
+  },
+  {
+    id: "c-mod5-ctrlz-recall-three-strikes",
+    type: "tap-reveal",
+    prompt: "What is the Auditing after three strikes protocol?",
+    answer:
+      "Within a task, keep a record of how many steps' suspiciousness scores were above a certain threshold; on the third, audit the trajectory. A separate higher threshold still triggers an immediate audit, to defend against single-step attacks. It works because an attacker must continue its attack with high probability, so attacked trajectories show many suspicious steps.",
+  },
+  {
+    id: "c-mod5-ctrlz-recall-time-travel",
+    type: "tap-reveal",
+    prompt: "What is the Time travel (incrimination in the past) protocol?",
+    answer:
+      "When Auditing after three strikes says a trajectory is close to the auditing threshold, the protocol samples more actions from the third most suspicious past step (usually the most informative one for the three-strikes rule) and re-makes the auditing decision with those new samples. It's the paper's best resampling protocol: 87.1% safety at 95% usefulness.",
+  },
+  {
+    id: "c-mod5-ctrlz-recall-untrusted-monitoring",
+    type: "tap-reveal",
+    prompt: "How does the untrusted monitoring protocol work?",
+    answer:
+      "$T$ writes a detailed prose description of $U$'s proposed code; the untrusted monitor scores that description while the trusted monitor scores the original code, and the protocol audits if either monitor passes its threshold. Before the episode, the protocol tests the untrusted monitor on synthetic attacks and shuts down if it rates too many as unsuspicious — evidence of intentional sabotage.",
+  },
+  {
+    id: "c-mod5-ctrlz-recall-honeypots",
+    type: "tap-reveal",
+    prompt: "What is upfront validation with honeypots?",
+    answer:
+      "The blue team spends a fraction of the $H$ budget to construct off-policy synthetic attacks (honeypots), runs the untrusted monitor on them at the beginning of the game, and shuts down if its false negative rate is too high. A colluding monitor must then find a way to reliably distinguish honeypots from real attacks.",
+  },
+  {
+    id: "c-mod5-ctrlz-recall-collusion-signal",
+    type: "tap-reveal",
+    prompt: "What is a collusion signal?",
+    answer:
+      "A subtle quirk the attack policy embeds in real attacks — e.g. always capitalizing the first letter of variable names, or frequently running commands like `uname`, `lscpu`, and `pwd` — that the blue team is unlikely to coincidentally include in honeypots. The untrusted monitor reports only attacks lacking the signal, passing upfront validation while never reporting actual attacks.",
+  },
+  {
+    id: "c-mod5-ctrlz-recall-trusted-paraphrasing",
+    type: "tap-reveal",
+    prompt: "What is trusted paraphrasing, and what tradeoff does it manage?",
+    answer:
+      "Before the untrusted monitor sees proposed commands, the trusted model rewrites them as a detailed natural-language description of what they do. The paraphraser must retain enough information to identify dangerous code while removing arbitrary implementation details that could carry a collusion signal. The original commands still run, so usefulness is unaffected.",
+  },
+  // Why it's hard to make settings for high-stakes control (c-paper-settings-high-stakes)
+  {
+    id: "c-mod5-settings-recall-setting",
+    type: "tap-reveal",
+    prompt:
+      "What must a setting for high-stakes control research provide?",
+    answer:
+      "A dataset of tasks where (1) you can check whether the main task was completed successfully, and (2) there's some notion of safety failure considered unacceptable, whose occurrence you can also check. On top of the setting, researchers play the adversarial game of developing protocols and attacks against them.",
+  },
+  {
+    id: "c-mod5-settings-recall-side-task",
+    type: "tap-reveal",
+    prompt: "What is a side task?",
+    answer:
+      "The setting's notion of unacceptable safety failure — the thing the attack policy tries to accomplish alongside the main task (e.g. covertly downloading and executing malware in Ctrl-Z). Objective definitions of side-task success matter, because the adversarial process optimizes against the definition: with a vague one like \"inserts a security vulnerability\", the red team hunts for the weakest thing that possibly counts.",
+  },
 ];

@@ -2182,8 +2182,9 @@ export const papers: Paper[] = [
   },
   // --- Control module 5 section readings (course author's outline): each
   // outline stub is followed by its readings as full course items so they
-  // sit on the module sidebar and keep in-module navigation. Rendered
-  // verbatim, no edits yet. ---
+  // sit on the module sidebar and keep in-module navigation. Text is
+  // verbatim; the only edits are spaced-repetition quick-recall cards
+  // spliced in right after the blocks where concepts are defined. ---
   {
     id: "c-paper-win-continue-lose",
     slug: "win-continue-lose",
@@ -2195,6 +2196,50 @@ export const papers: Paper[] = [
       postUrl:
         "https://www.lesswrong.com/posts/jg3PuE3fYL9jq9zHB/win-continue-lose-scenarios-and-execute-replace-audit",
     },
+    edits: [
+      // End of the scenario setup: concentrated failures + "attacks" defined.
+      {
+        op: "activity",
+        after: { anchor: "b-0012", snippet: "So you deploy the AI" },
+        items: [
+          {
+            kind: "sequence",
+            label: "Quick recall",
+            exerciseIds: [
+              "c-mod5-wcl-recall-concentrated-failure",
+              "c-mod5-wcl-recall-attack",
+            ],
+          },
+        ],
+      },
+      // The protocol class + monitor/monitor score defined.
+      {
+        op: "activity",
+        after: { anchor: "b-0015", snippet: "An execute/audit/replace protocol works" },
+        items: [
+          {
+            kind: "sequence",
+            label: "Quick recall",
+            exerciseIds: [
+              "c-mod5-wcl-recall-era-protocol",
+              "c-mod5-wcl-recall-monitor",
+            ],
+          },
+        ],
+      },
+      // Auditing defined in the preceding list item.
+      {
+        op: "activity",
+        after: { anchor: "b-0027", snippet: "So in general we want" },
+        items: [{ kind: "exercise", id: "c-mod5-wcl-recall-auditing" }],
+      },
+      // Section end: the win/continue/lose trichotomy itself.
+      {
+        op: "activity",
+        after: { sectionEnd: "lw-sec-execute-replace-audit-protocols-lead-to" },
+        items: [{ kind: "exercise", id: "c-mod5-wcl-recall-outcomes" }],
+      },
+    ],
   },
   {
     id: "c-paper-rogue-internal-external-apis",
@@ -2207,6 +2252,23 @@ export const papers: Paper[] = [
       postUrl:
         "https://www.alignmentforum.org/posts/fqRmcuspZuYBNiQuQ/rogue-internal-deployments-via-external-apis",
     },
+    edits: [
+      // End of the intro, right after the threat is named and situated.
+      {
+        op: "activity",
+        after: { anchor: "b-0008", snippet: "This post explores this threat" },
+        items: [
+          {
+            kind: "sequence",
+            label: "Quick recall",
+            exerciseIds: [
+              "c-mod5-ridext-recall-definition",
+              "c-mod5-ridext-recall-vs-others",
+            ],
+          },
+        ],
+      },
+    ],
   },
   {
     id: "c-paper-rogue-deployments",
@@ -2219,6 +2281,42 @@ export const papers: Paper[] = [
       postUrl:
         "https://www.lesswrong.com/posts/ceBpLHJDdCt3xfEok/ai-catastrophes-and-rogue-deployments",
     },
+    edits: [
+      // "Rogue deployments" section end: catastrophe, safety measures, rogue
+      // deployment, and instrumental/terminal all defined in this section.
+      {
+        op: "activity",
+        after: { sectionEnd: "lw-sec-rogue-deployments" },
+        items: [
+          {
+            kind: "sequence",
+            label: "Quick recall",
+            exerciseIds: [
+              "c-mod5-rogue-recall-catastrophe",
+              "c-mod5-rogue-recall-safety-measures",
+              "c-mod5-rogue-recall-rogue-deployment",
+              "c-mod5-rogue-recall-instrumental-terminal",
+            ],
+          },
+        ],
+      },
+      // After the hard-catastrophe/easy-rogue-deployment argument completes;
+      // the two varieties are defined in the list just above.
+      {
+        op: "activity",
+        after: { anchor: "b-0032", snippet: "In contrast, launching a rogue" },
+        items: [
+          {
+            kind: "sequence",
+            label: "Quick recall",
+            exerciseIds: [
+              "c-mod5-rogue-recall-two-varieties",
+              "c-mod5-rogue-recall-why-worry",
+            ],
+          },
+        ],
+      },
+    ],
   },
   {
     id: "c-paper-systems-architecture",
@@ -2232,6 +2330,36 @@ export const papers: Paper[] = [
       postUrl:
         "https://www.lesswrong.com/posts/6cWgaaxWqGYwJs3vj/a-basic-systems-architecture-for-ai-agents-that-do",
     },
+    edits: [
+      // The three-server split defined in the opening list; the laptop
+      // example right above disambiguates "the machine the AI runs on".
+      {
+        op: "activity",
+        after: { anchor: "b-0010", snippet: "People often talk about" },
+        items: [
+          {
+            kind: "sequence",
+            label: "Quick recall",
+            exerciseIds: [
+              "c-mod5-sysarch-recall-three-servers",
+              "c-mod5-sysarch-recall-which-machine",
+            ],
+          },
+        ],
+      },
+      // Process-flow section end: step 5 defines the safety insertion point.
+      {
+        op: "activity",
+        after: { sectionEnd: "lw-sec-process-flow" },
+        items: [{ kind: "exercise", id: "c-mod5-sysarch-recall-safety-insertion" }],
+      },
+      // Rogue-internal-deployments section end: the concrete variants.
+      {
+        op: "activity",
+        after: { sectionEnd: "lw-sec-rogue-internal-deployments" },
+        items: [{ kind: "exercise", id: "c-mod5-sysarch-recall-rid-forms" }],
+      },
+    ],
   },
   {
     id: "c-paper-synchronous-monitors",
@@ -2244,6 +2372,38 @@ export const papers: Paper[] = [
       postUrl:
         "https://www.lesswrong.com/posts/e4G4E56ZiQqjXSxLp/blocking-live-failures-with-synchronous-monitors",
     },
+    edits: [
+      // Intro: detection vs prevention, synchronous monitors, and live
+      // failures all defined in the first two paragraphs.
+      {
+        op: "activity",
+        after: { anchor: "b-0002", snippet: "The latency requirements for monitoring" },
+        items: [
+          {
+            kind: "sequence",
+            label: "Quick recall",
+            exerciseIds: [
+              "c-mod5-syncmon-recall-two-goals",
+              "c-mod5-syncmon-recall-synchronous",
+              "c-mod5-syncmon-recall-live-failure",
+            ],
+          },
+        ],
+      },
+      // Attack latency / rate of damage defined just above; b-0009 restates
+      // the live-failure characterization from them.
+      {
+        op: "activity",
+        after: { anchor: "b-0009", snippet: "Asynchronous monitors are the least" },
+        items: [{ kind: "exercise", id: "c-mod5-syncmon-recall-attack-latency" }],
+      },
+      // "Blocking" defined in this paragraph.
+      {
+        op: "activity",
+        after: { anchor: "b-0013", snippet: "Asynchronous monitoring to detect live" },
+        items: [{ kind: "exercise", id: "c-mod5-syncmon-recall-blocking" }],
+      },
+    ],
   },
   {
     id: "c-paper-ctrl-z",
@@ -2252,6 +2412,90 @@ export const papers: Paper[] = [
     sectionItemId: "c-mod5-l2",
     title: "Ctrl-Z: Controlling AI Agents via Resampling",
     source: { kind: "arxiv", arxivId: "2504.10374v1" },
+    edits: [
+      // §1: "untrusted models" defined at the end of this paragraph.
+      {
+        op: "activity",
+        after: { anchor: "b-0007", snippet: "The rapid rise of Large" },
+        items: [{ kind: "exercise", id: "c-mod5-ctrlz-recall-untrusted-model" }],
+      },
+      // §2.3 end: the two metrics defined.
+      {
+        op: "activity",
+        after: { sectionEnd: "ax-sec-safety-and-usefulness-metrics" },
+        items: [
+          {
+            kind: "sequence",
+            label: "Quick recall",
+            exerciseIds: [
+              "c-mod5-ctrlz-recall-usefulness",
+              "c-mod5-ctrlz-recall-safety",
+            ],
+          },
+        ],
+      },
+      // §3.2: resample protocols + Defer to resample defined just above.
+      {
+        op: "activity",
+        after: { anchor: "b-0064", snippet: "Resampling is not perfect; some" },
+        items: [
+          {
+            kind: "sequence",
+            label: "Quick recall",
+            exerciseIds: [
+              "c-mod5-ctrlz-recall-resample-protocols",
+              "c-mod5-ctrlz-recall-defer-to-resample",
+            ],
+          },
+        ],
+      },
+      // Attack continuation probability introduced and analyzed here.
+      {
+        op: "activity",
+        after: { anchor: "b-0067", snippet: "If the blue team is" },
+        items: [
+          { kind: "exercise", id: "c-mod5-ctrlz-recall-continuation-probability" },
+        ],
+      },
+      // §3.2.1 end: incrimination in the present defined.
+      {
+        op: "activity",
+        after: { sectionEnd: "ax-sec-capitalizing-on-high-attack-continuation" },
+        items: [{ kind: "exercise", id: "c-mod5-ctrlz-recall-incrimination" }],
+      },
+      // §3.2.2 end: three strikes + time travel defined.
+      {
+        op: "activity",
+        after: { sectionEnd: "ax-sec-using-past-information" },
+        items: [
+          {
+            kind: "sequence",
+            label: "Quick recall",
+            exerciseIds: [
+              "c-mod5-ctrlz-recall-three-strikes",
+              "c-mod5-ctrlz-recall-time-travel",
+            ],
+          },
+        ],
+      },
+      // §4 end: untrusted monitoring and its anti-collusion machinery.
+      {
+        op: "activity",
+        after: { sectionEnd: "ax-sec-untrusted-monitoring" },
+        items: [
+          {
+            kind: "sequence",
+            label: "Quick recall",
+            exerciseIds: [
+              "c-mod5-ctrlz-recall-untrusted-monitoring",
+              "c-mod5-ctrlz-recall-honeypots",
+              "c-mod5-ctrlz-recall-collusion-signal",
+              "c-mod5-ctrlz-recall-trusted-paraphrasing",
+            ],
+          },
+        ],
+      },
+    ],
   },
   {
     id: "c-paper-settings-high-stakes",
@@ -2264,5 +2508,23 @@ export const papers: Paper[] = [
       postUrl:
         "https://www.lesswrong.com/posts/xGaFncekAXEWq8Mrv/why-it-s-hard-to-make-settings-for-high-stakes-control",
     },
+    edits: [
+      // End of the two-property list that implicitly defines a setting and
+      // explicitly names side tasks.
+      {
+        op: "activity",
+        after: { anchor: "b-0005", snippet: "There's some notion of safety" },
+        items: [
+          {
+            kind: "sequence",
+            label: "Quick recall",
+            exerciseIds: [
+              "c-mod5-settings-recall-setting",
+              "c-mod5-settings-recall-side-task",
+            ],
+          },
+        ],
+      },
+    ],
   },
 ];

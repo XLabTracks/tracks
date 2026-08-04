@@ -2369,6 +2369,18 @@ export const papers: Paper[] = [
     ],
   },
   {
+    id: "c-paper-control-monitoring",
+    slug: "control-monitoring-in-deployments",
+    moduleId: "c-mod5",
+    sectionItemId: "c-mod5-l2",
+    title:
+      "Practical challenges of control monitoring in frontier AI deployments",
+    source: { kind: "arxiv", arxivId: "2512.22154v1" },
+  },
+  {
+    // Kept as an optional reading when the deployments paper above replaced
+    // it as the section's required one — its recall cards and the
+    // live-failure-plane demo stay spliced at the post's definition sites.
     id: "c-paper-synchronous-monitors",
     slug: "synchronous-monitors",
     moduleId: "c-mod5",
@@ -2379,6 +2391,7 @@ export const papers: Paper[] = [
       postUrl:
         "https://www.lesswrong.com/posts/e4G4E56ZiQqjXSxLp/blocking-live-failures-with-synchronous-monitors",
     },
+    optional: true,
     edits: [
       // Intro: detection vs prevention, synchronous monitors, and live
       // failures all defined in the first two paragraphs.

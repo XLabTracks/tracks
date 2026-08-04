@@ -154,6 +154,7 @@ export const modules: Module[] = [
       "c-paper-rogue-internal-external-apis",
       "c-paper-systems-architecture",
       "c-mod5-l2",
+      "c-paper-control-monitoring",
       "c-paper-synchronous-monitors",
       "c-paper-ctrl-z",
       "c-mod5-l3",

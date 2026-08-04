@@ -124,13 +124,6 @@ export function LiveFailurePlaneDemo() {
         >
           Live failures
         </text>
-        <text
-          x={px(0.57)}
-          y={py(0.9)}
-          className="fill-amber-700/80 text-[9px] dark:fill-amber-400/80"
-        >
-          async monitors least effective
-        </text>
 
         {/* Threat points */}
         {THREATS.map((t) => {

@@ -12,18 +12,21 @@
 
   <!-- Plot area: 600 x 540, origin top-left at (340,20) -->
   <g transform="translate(340,20)">
+    <!-- The four regions are 180°-rotationally symmetric about the plot
+         center (300,270): the two muted corner triangles are congruent, and
+         the diagonal band between them splits into two congruent halves. -->
     <!-- Muted: trivially solved (top-right) -->
-    <polygon points="170,0 600,0 600,270" fill="#e7e8ea" stroke="#fafafa" stroke-width="3"/>
+    <polygon points="150,0 600,0 600,270" fill="#e7e8ea" stroke="#fafafa" stroke-width="3"/>
     <!-- Muted: probably hopeless (bottom-left) -->
-    <polygon points="0,300 0,540 300,540" fill="#dcdde1" stroke="#fafafa" stroke-width="3"/>
-    <!-- Muted: low-stakes (right band) -->
-    <polygon points="430,165 600,270 600,540 300,540" fill="#e7e8ea" stroke="#fafafa" stroke-width="3"/>
-    <!-- Highlighted: high-stakes -->
-    <polygon points="0,0 170,0 430,165 300,540 0,300" fill="#e69f00" fill-opacity="0.92" stroke="#fafafa" stroke-width="3"/>
+    <polygon points="0,270 0,540 450,540" fill="#dcdde1" stroke="#fafafa" stroke-width="3"/>
+    <!-- Muted: low-stakes (right half of the band) -->
+    <polygon points="450,180 600,270 600,540 450,540 150,360" fill="#e7e8ea" stroke="#fafafa" stroke-width="3"/>
+    <!-- Highlighted: high-stakes (left half of the band) -->
+    <polygon points="0,0 150,0 450,180 150,360 0,270" fill="#e69f00" fill-opacity="0.92" stroke="#fafafa" stroke-width="3"/>
 
     <!-- Region labels -->
-    <text x="150" y="120" font-size="26" font-weight="700" fill="#233554">High-stakes</text>
-    <text x="430" y="390" font-size="24" font-weight="600" fill="#9aa1ad">Low-stakes</text>
+    <text x="120" y="170" font-size="26" font-weight="700" fill="#233554">High-stakes</text>
+    <text x="410" y="400" font-size="24" font-weight="600" fill="#9aa1ad">Low-stakes</text>
     <text x="510" y="78" font-size="18" fill="#9aa1ad" text-anchor="middle">Trivially solved</text>
     <text x="510" y="101" font-size="18" fill="#9aa1ad" text-anchor="middle">with random auditing</text>
     <text x="100" y="480" font-size="18" fill="#8f96a3" text-anchor="middle">Probably</text>

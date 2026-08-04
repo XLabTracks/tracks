@@ -150,6 +150,7 @@ export const modules: Module[] = [
     order: 5,
     prerequisiteModuleIds: ["c-intro", "c-mod2", "c-areas", "c-mod4"],
     itemIds: [
+      "c-mod5-talk",
       "c-mod5-l1",
       "c-mod5-l2",
       "c-mod5-l3",
@@ -454,6 +455,14 @@ export const lessons: Lesson[] = [
   // --- Control, module 5 (high-stakes control): outline stubs from the
   // course author's module outline — bodies carry the outline bullets and
   // source links until the full lessons are authored. ---
+  {
+    id: "c-mod5-talk",
+    slug: "high-stakes-control-talk",
+    moduleId: "c-mod5",
+    title: "The high-stakes control roadmap (talk)",
+    contentRef: "c-mod5-talk",
+    estimatedMinutes: 30,
+  },
   {
     id: "c-mod5-l1",
     slug: "what-is-high-stakes",

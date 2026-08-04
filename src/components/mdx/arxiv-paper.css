@@ -395,6 +395,13 @@
     border-radius: 6px;
     padding: 6px;
   }
+  /* TikZ compiles at TeX's pt scale, so standalone figure diagrams often
+     land tiny (~200px). SVGs upscale losslessly — give them a readable
+     floor without shrinking diagrams that are already large. */
+  .arxiv-paper figure img.ax-tikz {
+    min-width: min(30rem, 100%);
+    height: auto;
+  }
 }
 
 /* Footer label line on transcript boxes (environment name · model tag). */

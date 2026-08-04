@@ -113,14 +113,20 @@ function splitAuthors(nodes: Ast.Node[]): string[] {
       if (match.anyMacro(node) && node.content === "\\") break;
       firstLine.push(node);
     }
-    const name = plainText(stripThanks(firstLine))
+    const raw = plainText(stripThanks(firstLine))
       // Leftovers from unattached optional args and spacing glue:
       // "[1]", "1.7mm".
       .replace(/\[[^\]]*\]/g, " ")
       .replace(/\b\d+(?:\.\d+)?(?:mm|cm|pt|em|ex|in)\b/g, " ")
       .replace(/\s+/g, " ")
       .trim();
-    if (name) authors.push(name);
+    // Superscript affiliation markers ("^ *1", "^2,3", "^†") END a name —
+    // marker-separated author runs carry no commas, so split on the markers
+    // and drop them rather than showing raw carets in the header.
+    for (const part of raw.split(/\s*\^\s*[*†‡§\d][*†‡§\d,]*\s*/)) {
+      const name = part.replace(/^[,;\s]+|[,;\s]+$/g, "");
+      if (name) authors.push(name);
+    }
   }
   return authors;
 }

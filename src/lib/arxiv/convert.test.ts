@@ -13,6 +13,21 @@ const DOC = (body: string) =>
   `\\documentclass{article}\\begin{document}\n${body}\n\\end{document}`;
 
 describe("convertLatexToHtml", () => {
+  it("splits marker-separated authors and drops superscript affiliations", () => {
+    const { meta } = convert(
+      DOC(
+        "\\title{T}\\author{David Lindner$^{*1}$, Charlie Griffin$^{*2,3}$, " +
+          "Roland S. Zimmermann$^{1}$ Geoffrey Irving$^{2}$}\\maketitle\nBody.",
+      ),
+    );
+    expect(meta.authors).toEqual([
+      "David Lindner",
+      "Charlie Griffin",
+      "Roland S. Zimmermann",
+      "Geoffrey Irving",
+    ]);
+  });
+
   it("strips the twocolumn front-matter block and ICML postamble", () => {
     const { html } = convert(
       DOC(

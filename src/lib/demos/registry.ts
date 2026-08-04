@@ -222,24 +222,18 @@ export const demoRegistry: Record<string, DemoDefinition> = {
   "live-failure-plane": {
     id: "live-failure-plane",
     title: "Live failures: latency × damage",
-    description:
-      "The synchronous-monitors post's threat taxonomy as a plane: attack latency against rate of damage, with the post's examples plotted and the live-failure corner — where asynchronous monitors are least effective — highlighted.",
     component: LiveFailurePlaneDemo,
     tags: ["control", "high-stakes"],
   },
   "agent-architecture-threats": {
     id: "agent-architecture-threats",
     title: "Agent architecture: where compromises happen",
-    description:
-      "The inference/scaffold/execution-server architecture with the post's threat scenarios drawn as attack paths: weight exfiltration, hacking or compromising the inference server, and the two rogue-internal-deployment variants.",
     component: AgentArchitectureThreatsDemo,
     tags: ["control", "high-stakes"],
   },
   "defer-to-resample": {
     id: "defer-to-resample",
     title: "Defer to resample, mechanically",
-    description:
-      "Schematic min-of-samples distributions for Ctrl-Z's resample protocols: raise the number of samples and lower the attack continuation probability to see selection pressure for benign actions and the incrimination effect.",
     component: DeferToResampleDemo,
     tags: ["control", "high-stakes"],
   },

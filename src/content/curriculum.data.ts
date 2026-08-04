@@ -136,15 +136,15 @@ export const modules: Module[] = [
     itemIds: [],
   },
   {
-    // Placeholder — see c-mod2.
     id: "c-mod5",
     slug: "module-5",
     trackId: "control",
-    title: "Coming soon",
-    summary: "Content for this module is in development.",
+    title: "High-stakes control",
+    summary:
+      "Two decision-forcing walkthroughs of high-stakes control protocols, one argued and one measured. The untrusted advice protocol is the boundary case where a safety argument substitutes for a control evaluation; basic legibility protocols run a full red-team/blue-team control evaluation to settle whether letting an untrusted model comment its code helps the monitor catch backdoors. Further content for this module is in development.",
     order: 5,
     prerequisiteModuleIds: ["c-intro", "c-mod2", "c-areas", "c-mod4"],
-    itemIds: [],
+    itemIds: ["c-paper-ua-guided", "c-paper-legibility-guided"],
   },
   {
     id: "c-lowstakes",

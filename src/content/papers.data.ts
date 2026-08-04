@@ -1305,4 +1305,529 @@ export const papers: Paper[] = [
     source: { kind: "arxiv", arxivId: "2604.16286v2" },
     estimatedMinutes: 35,
   },
+  {
+    // Control track, module 5: a guided walkthrough of the untrusted-advice
+    // post (Biddulph & Kaufman 2026), built in the c-paper-plm-guided style —
+    // the post read in place with its headline results hidden, predict-first
+    // reading gates at each decision point, and editorial reveal notes. The
+    // gates follow the POST's order (not the earlier lesson's decision-order);
+    // best-of-n and the collusion attack are gated appendix detours.
+    id: "c-paper-ua-guided",
+    slug: "untrusted-advice-guided",
+    moduleId: "c-mod5",
+    title: "Untrusted advice for AI control (guided)",
+    source: {
+      kind: "substack",
+      postUrl:
+        "https://blog.redwoodresearch.org/p/untrusted-advice-for-ai-control-short",
+    },
+    estimatedMinutes: 65,
+    edits: [
+      // ---- Framing + spoiler control -----------------------------------
+      // The lead protocol schematic, the TL;DR, the headline SWE-bench figure,
+      // and the usefulness preview are removed silently: they give away the
+      // protocol and the results the first gates ask the learner to invent and
+      // predict. (The schematic is a caption-less figure, so it has no prose to
+      // snippet against — the anchor is the whole target and the snippet is
+      // documentary only; see the text-less-block path in patch-section.ts and
+      // content.test.ts.)
+      {
+        op: "hide",
+        at: {
+          anchor: "b-0001",
+          snippet: "Figure: untrusted-advice protocol schematic (information bottleneck)",
+        },
+        silent: true,
+      },
+      {
+        op: "hide",
+        at: { anchor: "b-0002", snippet: "TL;DR: We introduce the untrusted advice protocol" },
+        silent: true,
+      },
+      {
+        op: "hide",
+        at: { anchor: "b-0003", snippet: "In SWE-bench Verified, a strong, untrusted LLM advising" },
+        silent: true,
+      },
+      {
+        op: "hide",
+        at: { anchor: "b-0015", snippet: "We evaluate the usefulness of our protocol" },
+        silent: true,
+      },
+      {
+        op: "add",
+        after: { anchor: "b-0004", snippet: "In high-stakes AI control, we want" },
+        label: "About this version",
+        markdown:
+          "Following the same format as this module's other guided readings, " +
+          "this walkthrough hides the post's headline results and pauses at " +
+          "each decision point to pose the design question before the post's " +
+          "own answer is revealed. The full post, freely available " +
+          "[on Redwood's blog](https://blog.redwoodresearch.org/p/untrusted-advice-for-ai-control-short), " +
+          "is the source of everything below.",
+      },
+      // ---- The bar → invent the protocol -------------------------------
+      {
+        op: "gate",
+        after: { anchor: "b-0004", snippet: "In high-stakes AI control, we want" },
+        id: "protocol-shapes",
+        written: true,
+        minChars: 80,
+        cta: "Continue",
+        prompt:
+          "The design goal is to get useful work out of an untrusted model (U) that is substantially " +
+          "more capable than the trusted model (T), under a safety requirement close to 100% at which even an adversarial U has " +
+          "essentially no route to a catastrophic action.\n\nTry to create 2-3 proposals that satisfy these requirements. For each proposal, " +
+          "outline the communication structure between U and T, the limitations, and why it's safer than just " +
+          "using the untrusted model?",
+      },
+      // ---- Experiments: design the measurement -------------------------
+      {
+        op: "gate",
+        after: { anchor: "b-0017", snippet: "Experiments" },
+        id: "eval-design",
+        written: true,
+        minChars: 400,
+        cta: "Continue",
+        prompt:
+          "Design the usefulness evaluation.\n\n- Choose U and T: what " +
+          "property must the pair have for the experiment to be informative?\n" +
+          "- Choose the benchmarks, given that no safety measurement (and so " +
+          "no control-specific environment) is needed here.\n- Define a " +
+          "metric comparable across model pairs and benchmarks.\n- Describe the " +
+          "baseline required to evaluate the effectiveness of the advice.",
+      },
+      // ---- Main experiment: design the channel -------------------------
+      {
+        op: "gate",
+        after: {
+          anchor: "b-0020",
+          snippet: "Main experiment: how does limiting advice length affect performance?",
+        },
+        id: "channel-design",
+        written: true,
+        minChars: 100,
+        cta: "Continue",
+        prompt:
+          "Design the advice channel's mechanics. Describe the following:" +
+          "how often communication occurs, how the communication is given to T, " +
+          "how to handle input violations by U, and any other mechanics you think are needed " +
+          "for an effective evaluation.",
+      },
+      // ---- Predict the length curves -----------------------------------
+      {
+        op: "gate",
+        after: { anchor: "b-0023", snippet: "In addition to giving advice, U may block T" },
+        id: "length-prediction",
+        written: true,
+        minChars: 10,
+        cta: "Continue",
+        prompt:
+          "Varying advice lengths are tested ranging from 4 characters per message to " +
+          "unlimited.\n\n1. For each benchmark, try to predict the fraction of the " +
+          "T-to-U capability gap recovered at 16 characters of advice per " +
+          "step: under 10%, about ¼, about ½, about ⅔, or essentially all of " +
+          "it.\n2. Predict what happens with unlimited advice length: does " +
+          "usefulness reach 1.0, or does it approach some smaller amount? If the latter, "+
+          "predict the usefulness with unlimited advice length."
+      },
+      {
+        op: "add",
+        after: { anchor: "b-0028", snippet: "Note that we only expect high" },
+        label: "",
+        markdown:
+          "The relevant comparison for these curves is the horizontal " +
+          "block-only baseline (no advice, submission-blocking only) rather " +
+          "than T alone, since that baseline is the experiment's control " +
+          "condition, without which the headline curves would conflate two " +
+          "mechanisms, advice content and submission timing, the second of " +
+          "which costs U almost nothing. In BashArena that submission-timing " +
+          "effect is substantial, because tasks have many components and weak " +
+          "models submit after finishing only some of them. In the " +
+          "unlimited-length limit one loose end remains, since BashArena " +
+          "usefulness stops short of 1.0 even when U dictates exact actions " +
+          "and T obeys, which the post reads as U being underelicited as an " +
+          "advisor, making the whole curve plausibly a floor on what a model " +
+          "trained to advise could deliver.",
+      },
+      // ---- Pricing the bits: surprisal ---------------------------------
+      {
+        op: "gate",
+        after: { anchor: "b-0054", snippet: "A quick note: while we sometimes" },
+        id: "surprisal",
+        written: true,
+        minChars: 80,
+        cta: "Continue",
+        prompt:
+          "Right now the paper computes U's influence at 8 bits per " +
+          "character, which overcharges because the advice given is natural language " +
+          "and most 16-character strings aren't English.\n\n " +
+          "1. Try to brainstorm ways to calculate the amount of information U actually " +
+          "transmits without changing the protocol of communication.",
+      },
+      {
+        op: "add",
+        after: { anchor: "b-0059", snippet: "Results: With our best surprisal method," },
+        label: "",
+        markdown:
+          "The measure is surprisal under a trusted model, " +
+          "$-\\log_2 P(x_{\\text{advice}} \\mid x_{\\text{context}})$, the " +
+          "length of the advice under an encoding that exploits a trusted " +
+          "LLM's natural-language prior. Computed post-hoc, it leaves the " +
+          "advice unchanged and tightens only the accounting, dropping the " +
+          "measured bit usage by a factor of roughly 2.5 to 30 relative to " +
+          "the 8-bits-per-character bound. Conditioning on T's context is the " +
+          "free option, since those numbers fall out of forward passes T was " +
+          "already doing, but it asks the model to predict input tokens, " +
+          "which is out of distribution, a worry the post tests directly " +
+          "rather than assuming away.",
+      },
+      // ---- The tens-of-bits regime: the menu ---------------------------
+      {
+        op: "gate",
+        after: { anchor: "b-0063", snippet: "Making U select from finite options" },
+        id: "menu",
+        written: true,
+        minChars: 60,
+        cta: "Continue",
+        prompt:
+          "Design a new protocol in which U communicates " +
+          "single-digit bits per step, and describe how you would build its " +
+          "components without leaking U's influence through the construction " +
+          "itself.",
+      },
+      // ---- Why no red team? --------------------------------------------
+      {
+        op: "gate",
+        after: { anchor: "b-0064", snippet: "In the experiments above, U writes" },
+        id: "red-teaming",
+        written: true,
+        minChars: 80,
+        cta: "Continue",
+        prompt:
+          "Think about whether this project needs to be red-teamed. If you believe it should, try to create " +
+          "the first red-team move. If no, explain why you believe so."
+      },
+      // ---- Appendix detour: colluding instances (break the protocol) ---
+      {
+        op: "gate",
+        after: {
+          anchor: "b-0127",
+          snippet: "Appendix: colluding instances of U could defeat untrusted advice",
+        },
+        id: "break-protocol",
+        written: true,
+        minChars: 80,
+        cta: "Reveal the attack",
+        prompt:
+          "Try to find a strategy that lets U create a catastrophe despite the " +
+          "limited amount of input and a monitor reading every message. If you " +
+          "believe this is impossible, argue why."
+      },
+      // ---- Appendix detour: best-of-n (the first design considered) ----
+      {
+        op: "gate",
+        after: { anchor: "b-0181", snippet: "Appendix: best-of-n protocol" },
+        id: "best-of-n",
+        written: true,
+        minChars: 50,
+        cta: "Continue",
+        prompt:
+          "Best-of-n was the authors' first design, in which T proposes n " +
+          "candidate actions and U picks one, so U exerts exactly " +
+          "$\\log_2(n)$ bits per step.\n\n1. What determines how much useful " +
+          "uplift those bits can buy? Consider what n independently sampled " +
+          "actions from T look like.\n2. Predict the outcome at n = 16, " +
+          "relative to T alone and to U alone.",
+      },
+      {
+        op: "add",
+        after: { anchor: "b-0187", snippet: "It may be possible to get much better results" },
+        label: "Not all bits are created equal",
+        markdown:
+          "The bound is airtight while the bits themselves are weak, since U " +
+          "can only choose among actions T already produced, making the " +
+          "protocol's reach depend on how much T's independent samples " +
+          "actually differ, and they mostly differ in inconsequential " +
+          "detail. This is the lesson that motivates the rest of the post, " +
+          "that not all bits are created equal, because the same budget goes " +
+          "much further on a channel where every bit is chosen by U, a short " +
+          "free-text message, which is the untrusted advice protocol.",
+      },
+    ],
+  },
+  {
+    id: "c-paper-legibility-guided",
+    slug: "legibility-guided",
+    moduleId: "c-mod5",
+    title: "Basic legibility protocols improve trusted monitoring (guided)",
+    source: { kind: "arxiv", arxivId: "2602.10153v1" },
+    estimatedMinutes: 60,
+    edits: [
+      {
+        op: "hide",
+        at: {
+          anchor: "b-0003",
+          snippet: "We perform control evaluations in the APPS coding setting, where an",
+        },
+        silent: true,
+      },
+      // ---- The legibility problem → invent the intervention ------------
+      {
+        op: "gate",
+        after: {
+          anchor: "b-0007",
+          snippet:
+            "One class of protocols previously studied is trusted monitoring, where the",
+        },
+        id: "design-intervention",
+        written: true,
+        minChars: 120,
+        cta: "Reveal what they tried",
+        prompt:
+          "Propose 2-3 ways to make U's code easier for T to " +
+          "understand and therefore evaluate. For each method, write about how " + 
+          "it increases the legibility of U's logic to T.",
+      },
+      {
+        op: "hide",
+        at: {
+          anchor: "b-0008",
+          snippet:
+            "We explore several legibility protocols, including ones that constrain how",
+        },
+        silent: true,
+      },
+      {
+        op: "hide",
+        at: {
+          anchor: "b-0009",
+          snippet: "We perform control evaluations on coding tasks using the APPS backdoor",
+        },
+        silent: true,
+      },
+      {
+        op: "hide",
+        at: {
+          anchor: "b-0010",
+          snippet: "Our key contributions to the field of AI control are the following:",
+        },
+        silent: true,
+      },
+      {
+        op: "hide",
+        at: {
+          anchor: "b-0011",
+          snippet: "We introduce legibility protocols as an extension of trusted monitoring",
+        },
+        silent: true,
+      },
+      {
+        op: "hide",
+        at: {
+          anchor: "b-0013",
+          snippet:
+            "We show that commenting protocols substantially outperform comment-removal",
+        },
+        silent: true,
+      },
+      {
+        op: "hide",
+        at: {
+          anchor: "b-0015",
+          snippet: "We identify two mechanisms explaining why commenting improves performance.",
+        },
+        silent: true,
+      },
+      {
+        op: "hide",
+        at: {
+          anchor: "b-0017",
+          snippet: "We demonstrate that the benefits of commenting grow with monitor capability.",
+        },
+        silent: true,
+      },
+      // ---- Setting: why this benchmark --------------------------------
+      {
+        op: "gate",
+        after: { sectionEnd: "ax-sec-dataset" },
+        id: "why-apps",
+        written: true,
+        minChars: 100,
+        cta: "Reveal the reasoning",
+        prompt:
+          "The paper uses a competitive programming dataset (APPS) to perform its evaluations. " +
+          "Is the APPS dataset a good dataset to test if " +
+          "legibility helps a monitor? Furthermore, try to come up with a task that would " +
+          "make legibility look useless.",
+      },
+      {
+        op: "add",
+        after: { sectionEnd: "ax-sec-dataset" },
+        label: "",
+        markdown:
+          "The authors want a setting where U and T differ in *reasoning " +
+          "power*, creating a scenario where T may not be able to follow " +
+          "the reasoning steps of U without explanantion. Competitive programming " +
+          "is a field where solutions can be hard to find but easy to explain, making" +
+          "it a great fit for this evaluation.",
+      },
+      {
+        op: "hide",
+        at: {
+          anchor: "b-0039",
+          snippet: "Figure 1: (Left) Safety vs Usefulness Pareto curves for the commenting",
+        },
+        silent: true,
+      },
+      // ---- The head-to-head: why is a deceptive channel net-safe? -----
+      {
+        op: "gate",
+        after: { sectionEnd: "ax-sec-performing-the-control-evaluation" },
+        id: "both-comment",
+        written: true,
+        minChars: 60,
+        cta: "",
+        prompt:
+          "Try to predict whether or not legibility protocols that allow commenting outperform those that don't allow commenting & elaborate why you think this is the case.",
+      },
+      {
+        op: "add",
+        after: {
+          anchor: "b-0103",
+          snippet: "Given that commenting allows the attack policy to lie about its code, a",
+        },
+        label: "A tempting objection that doesn't bite",
+        markdown:
+          "Pause on the result just stated, because the intuition cuts the " +
+          "other way. Surely writing an outright *lie* in a comment is risky " +
+          "for the attacker — if the monitor catches the lie, the game is " +
+          "up. True, but that cuts both ways and roughly cancels. If the " +
+          "monitor doesn't notice the lie, the lie did its job and lowered " +
+          "suspicion. If it does notice, it already has what it needs — " +
+          "honest code has no reason to lie, so a caught lie is decisive. A " +
+          "noticed lie and an unnoticed lie push in opposite directions, and " +
+          "empirically lying comments are not reliably more suspicious than " +
+          "comments that merely omit. The attacker's problem is not that " +
+          "lying is *punished*; it is that lying, even when it works, still " +
+          "can't manufacture a *coherent* justification for code that is " +
+          "actually wrong.",
+      },
+      // ---- Scaling with the monitor -----------------------------------
+      {
+        op: "hide",
+        at: {
+          anchor: "b-0120",
+          snippet: "Figure 6: Shading represents 95%bootstrapped confidence intervals",
+        },
+        silent: true,
+      },
+      {
+        op: "gate",
+        after: { sectionEnd: "ax-sec-mechanisms-driving-the-benefits-of-comme" },
+        id: "monitor-strength",
+        written: true,
+        minChars: 100,
+        cta: "Reveal the scaling",
+        prompt:
+          "Every result so far used one monitor (GPT-4.1-nano). Now sweep " +
+          "the monitor's capability, from near-useless up toward U's own " +
+          "level. Predict how the *value of commenting* moves as the monitor " +
+          "gets stronger — steadily up, steadily down, or something " +
+          "non-monotonic? Tie your prediction to the two drivers you just " +
+          "named, and say where commenting must be worth exactly nothing.",
+      },
+      {
+        op: "add",
+        after: {
+          anchor: "b-0124",
+          snippet:
+            "As seen in Figure 6, we find that as T becomes more capable, it benefits more from",
+        },
+        label: "Figure 6 — the monitor sweep (moved here to sit with the result)",
+        markdown:
+          "![Figure 6, top-left: audit proportion versus APPS performance for " +
+          "each of the 7 trusted monitors tested]" +
+          "(/arxiv/2602.10153v1/assets/media/media/image3.png)\n\n" +
+          "![Figure 6, bottom-left: the difference in audit proportion " +
+          "between the commenting and no-comments regimes versus APPS " +
+          "performance, across the 7 monitors]" +
+          "(/arxiv/2602.10153v1/assets/media/media/image14.png)\n\n" +
+          "![Figure 6, right: baseline suspicion versus the suspicion drop " +
+          "from commenting, for benign and backdoored samples across the 4 " +
+          "OpenAI monitors]" +
+          "(/arxiv/2602.10153v1/assets/media/media/image21.png)\n\n" +
+          "*Figure 6, moved here from the end of the previous section to sit " +
+          "with the scaling result it reports.*",
+      },
+      {
+        op: "add",
+        after: {
+          anchor: "b-0131",
+          snippet: "Note that on either extreme, commenting yields no value: it cannot help",
+        },
+        label: "A hump, and the honesty of only measuring half of it",
+        markdown:
+          "The measured trend runs the way the second driver predicts: as " +
+          "the monitor gets stronger it distinguishes genuine justifications " +
+          "from superficially-plausible ones better, so more backdoors stay " +
+          "suspicious even when commented, and commenting helps the blue " +
+          "team more. But note the shape of the *full* claim. At both " +
+          "extremes commenting is worthless — a random monitor can't be " +
+          "helped, and a perfect monitor is already at 100% safety — so the " +
+          "real curve is a hump, and the experiments only climb its left " +
+          "side. The authors say so plainly, and Appendix G.3 is candid " +
+          "about why they stop: pushed to stronger monitors, their setup " +
+          "springs a new leak (a strong monitor flags the honest policy's " +
+          "*genuine mistakes*, inflating benign suspicion), and fixing it " +
+          "would mean re-running the whole red-team/blue-team game for each " +
+          "monitor. Knowing which part of a predicted curve you have " +
+          "actually earned — and saying so — is part of the craft.",
+      },
+      // ---- The update + limitations -----------------------------------
+      {
+        op: "gate",
+        after: { sectionEnd: "ax-sec-varying-the-trusted-monitor" },
+        id: "the-update",
+        written: true,
+        minChars: 150,
+        cta: "Reveal the discussion",
+        prompt:
+          "The results are in. State the update three ways.\n\n1. For a lab " +
+          "running trusted monitoring today: strip comments or allow them — " +
+          "and under what conditions does your answer flip?\n2. For control " +
+          "methodology: legibility is a new lever sitting alongside the " +
+          "monitor and the auditing budget. What does having it change about " +
+          "how you design a protocol?\n3. The limits: list what this paper " +
+          "has *not* shown, and the assumptions a skeptic should lean on " +
+          "hardest.",
+      },
+      {
+        op: "add",
+        after: { sectionEnd: "ax-sec-future-work" },
+        label: "The transferable idea: legibility as an asymmetric lever",
+        markdown:
+          "Step back from commenting specifically. The result that " +
+          "generalizes is a test for *any* legibility intervention: an " +
+          "affordance that helps the honest and the adversarial policy " +
+          "**equally** is worthless for control — it slides both " +
+          "distributions together and changes nothing about separating " +
+          "them. The interventions that matter cash in an *asymmetry* the " +
+          "adversary can't share. Here the asymmetry is that honest code can " +
+          "always be truthfully explained, while a backdoor constrains its " +
+          "own justifications until often none exists; commenting is " +
+          "valuable precisely, and only, because it lets that asymmetry " +
+          "reach the monitor.\n\nThat also places this paper against the " +
+          "module's other guided reading. The untrusted-advice protocol " +
+          "*argued* its safety from an information bottleneck and deferred " +
+          "the control evaluation; this paper *ran* the control evaluation " +
+          "— a full red-team/blue-team game with measured safety and " +
+          "usefulness — and let the numbers settle a bet that looked, on its " +
+          "face, reckless. One priced the channel in bits; the other in the " +
+          "differential payoff of an explanation. High-stakes control is " +
+          "largely the search for these asymmetric levers, and for honest " +
+          "ways to measure them.",
+      },
+    ],
+  },
 ];

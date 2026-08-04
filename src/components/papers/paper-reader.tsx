@@ -433,9 +433,14 @@ function EditedPaperBody({
         // References/footnotes, split off the gated walk in apply-edits.ts:
         // they stay mounted while gates above are closed, so citations and
         // footnote markers in the visible text keep live targets and the
-        // sidenote layer has note bodies to clone.
+        // sidenote layer has note bodies to clone. The `paper-gated-tail`
+        // class visually hides the footnotes SECTION itself (a gated paper
+        // would otherwise dump every note — including gated ones — right below
+        // the first gate, a spoiler); the notes stay in the DOM, so per-marker
+        // margin sidenotes still render for content the learner has revealed.
+        // References stay visible (citations must keep a live target).
         <div
-          className={wrapperClassName}
+          className={`${wrapperClassName} paper-gated-tail`}
           data-conv={converterVersion}
           dangerouslySetInnerHTML={{ __html: ungatedTailHtml }}
         />

@@ -167,14 +167,33 @@ describe("applyPaperEdits", () => {
     expect(html).toContain('<p data-anchor="b-0011"><span data-s="1">Beta two.</span></p>');
   });
 
-  it("silent hide removes an li entirely (no details wrapper)", () => {
+  it("silent hide removes an li entirely, dropping the emptied list", () => {
     const { parts } = applyPaperEdits(HTML, TOC, [
       { op: "hide", at: ref("b-0012", "Item text."), silent: true },
     ]);
     const html = htmlOf(parts);
     expect(html).not.toContain('data-anchor="b-0012"');
     expect(html).not.toContain("Item text.");
-    expect(html).toContain("<ul></ul>");
+    // The list held only that item, so the now-childless <ul> is dropped too
+    // rather than left as a stray blank container.
+    expect(html).not.toContain("<ul>");
+  });
+
+  it("keeps a list when only some of its items are silently hidden", () => {
+    const html =
+      '<h2 id="ax-s" data-anchor="b-0001"><span class="ax-secnum">1</span> S</h2>' +
+      '<ul><li data-anchor="b-0002"><span data-s="1">Keep me.</span></li>' +
+      '<li data-anchor="b-0003"><span data-s="1">Hide me.</span></li></ul>';
+    const toc: PaperTocEntry[] = [
+      { kind: "section", id: "ax-s", title: "S", number: "1", level: 2, anchor: "b-0001" },
+    ];
+    const { parts } = applyPaperEdits(html, toc, [
+      { op: "hide", at: ref("b-0003", "Hide me."), silent: true },
+    ]);
+    const out = htmlOf(parts);
+    expect(out).not.toContain("Hide me.");
+    expect(out).toContain("Keep me.");
+    expect(out).toContain("<ul>");
   });
 
   it("silent hide removes a sentence range, keeping the last data-s resolvable", () => {

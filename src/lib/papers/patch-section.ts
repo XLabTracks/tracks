@@ -104,9 +104,14 @@ export function patchSectionHtml(
     if (!block) return null;
     const target = ref.s ? findSentenceSpan(block, ref.s) : block;
     if (!target) return null;
+    // A text-less block (a caption-less figure/image) has no prose to trip
+    // against — the anchor IS the whole target, so its snippet is documentary
+    // only. Blocks that carry text keep the strict drift check.
+    const targetText = normalizeText(blockTextOf(target));
     if (
       ref.snippet &&
-      !normalizeText(blockTextOf(target)).startsWith(normalizeText(ref.snippet))
+      targetText !== "" &&
+      !targetText.startsWith(normalizeText(ref.snippet))
     ) {
       return null;
     }
@@ -447,6 +452,22 @@ export function patchSectionHtml(
       const parent = parentOf.get(block)!;
       const at = parent.children.indexOf(block);
       if (at !== -1) parent.children.splice(at, 1);
+      // Silent-hiding every item of a list empties its <ul>/<ol>, which would
+      // otherwise render as a stray blank gap. Drop the now-childless list.
+      if (
+        parent.type === "element" &&
+        (parent.tagName === "ul" || parent.tagName === "ol") &&
+        !parent.children.some((child) => child.type === "element")
+      ) {
+        const grandparent = parentOf.get(parent);
+        if (grandparent) {
+          const siblings = grandparent.children as Array<
+            ElementContent | RootContent
+          >;
+          const gi = siblings.indexOf(parent);
+          if (gi !== -1) siblings.splice(gi, 1);
+        }
+      }
       continue;
     }
     if (block.tagName === "li") {

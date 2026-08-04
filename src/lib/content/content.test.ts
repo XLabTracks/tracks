@@ -1,4 +1,4 @@
-import { existsSync, readFileSync } from "node:fs";
+import { existsSync, readFileSync, readdirSync } from "node:fs";
 import { join } from "node:path";
 import { describe, it, expect } from "vitest";
 import { lessons, modules } from "@/content/curriculum.data";
@@ -613,6 +613,57 @@ describe("paper integrity", () => {
     }
   });
 
+  it("no committed arXiv artifact leaks raw citation keys", () => {
+    // When a source ships neither a .bbl nor a synthesizable .bib, the
+    // converter's last resort renders each citation as its bracketed keys
+    // ("[greenblatt2024ai, ...]"). That must never reach a committed
+    // artifact: converterVersion alone can't catch it (the fallback is a
+    // warning, not a version change), so check the rendered HTML itself.
+    // A cite span with numbered links may legitimately carry letters
+    // (natbib pre/post-notes like "[see e.g. 36]"); letters with NO link
+    // are leaked keys. Scans every committed artifact — lesson-embedded
+    // papers included, not just module items.
+    const dir = join(process.cwd(), "src/content/arxiv");
+    for (const file of readdirSync(dir)) {
+      if (!file.endsWith(".json")) continue;
+      const artifact = JSON.parse(
+        readFileSync(join(dir, file), "utf8"),
+      ) as PaperArtifact;
+      if (artifact.state !== "ready") continue;
+      const id = file.replace(/\.json$/, "");
+      const tree = fromHtmlIsomorphic(artifact.paper.html, {
+        fragment: true,
+      }) as Root;
+      const checkCites = (node: Root | Element): void => {
+        for (const child of node.children ?? []) {
+          if (child.type !== "element") continue;
+          const classes = child.properties?.className;
+          if (Array.isArray(classes) && classes.includes("ax-cite")) {
+            const hasLink = (function findA(el: Element): boolean {
+              return el.children.some(
+                (c) =>
+                  c.type === "element" && (c.tagName === "a" || findA(c)),
+              );
+            })(child);
+            const text = (function textOf(el: Element): string {
+              return el.children
+                .map((c) =>
+                  c.type === "text" ? c.value : c.type === "element" ? textOf(c) : "",
+                )
+                .join("");
+            })(child);
+            expect(
+              hasLink || !/[a-zA-Z]{3,}/.test(text),
+              `${id}: citation renders raw keys ("${text}") — its bibliography did not resolve; rebuild with \`npm run arxiv:build -- --id ${id}\` (a .bib-only source synthesizes its bibliography on rebuild)`,
+            ).toBe(true);
+          }
+          checkCites(child);
+        }
+      };
+      checkCites(tree);
+    }
+  });
+
   it("every ready artifact's listed assets are committed", () => {
     // The HTML hotlinks nothing — every image it references must exist as a
     // committed static file, or the deployed page renders broken images.
@@ -689,13 +740,20 @@ describe("paper integrity", () => {
           ).toBe(true);
         }
         const targetText = ref.s !== undefined ? info.sentences[ref.s - 1] : info.text;
-        expect(ref.snippet.trim().length, `${paper.id}: empty snippet at ${ref.anchor}`).toBeGreaterThan(0);
-        expect(
-          normalizeText(targetText ?? "").startsWith(normalizeText(ref.snippet)),
-          `${paper.id}: snippet drift at ${ref.anchor}${ref.s ? ` s=${ref.s}` : ""} — ` +
-            `expected text starting "${ref.snippet}", target starts "${(targetText ?? "").slice(0, 70)}" — ` +
-            `re-run \`${listCmd}\` and re-verify this edit`,
-        ).toBe(true);
+        // A whole-block edit on a text-less block (a caption-less figure/image)
+        // has no prose to snippet against — the anchor IS the whole target and
+        // its snippet is documentary only (the patch engine skips the drift
+        // check there too). Blocks that carry text stay strict.
+        const textless = ref.s === undefined && info.text === "";
+        if (!textless) {
+          expect(ref.snippet.trim().length, `${paper.id}: empty snippet at ${ref.anchor}`).toBeGreaterThan(0);
+          expect(
+            normalizeText(targetText ?? "").startsWith(normalizeText(ref.snippet)),
+            `${paper.id}: snippet drift at ${ref.anchor}${ref.s ? ` s=${ref.s}` : ""} — ` +
+              `expected text starting "${ref.snippet}", target starts "${(targetText ?? "").slice(0, 70)}" — ` +
+              `re-run \`${listCmd}\` and re-verify this edit`,
+          ).toBe(true);
+        }
       }
     }
   });

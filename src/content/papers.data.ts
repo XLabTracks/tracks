@@ -2038,7 +2038,6 @@ export const papers: Paper[] = [
         id: "both-comment",
         written: true,
         minChars: 60,
-        cta: "",
         prompt:
           "Try to predict whether or not legibility protocols that allow commenting outperform those that don't allow commenting & elaborate why you think this is the case.",
       },

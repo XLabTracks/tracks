@@ -579,6 +579,39 @@ export function ArgueRevealExerciseCard({
               </Button>
             </div>
           )}
+
+          {/* Reference construction — revealed only once the learner has
+              finished their own, mirroring the round-reveal styling. */}
+          {step >= doneStep &&
+            (() => {
+              const reference = exercise.construction.surfaces.find(
+                (s) => s.id === construction.attackSurface,
+              )?.reference;
+              if (!reference) return null;
+              return (
+                <div className="mt-5">
+                  <p className="text-muted-foreground text-xs">
+                    An example construction against this assumption:
+                  </p>
+                  <div className="bg-muted mt-1.5 space-y-2 rounded-2xl px-4 py-3 text-sm">
+                    {(
+                      [
+                        { label: "Argument", text: reference.argument },
+                        { label: "Best response", text: reference.bestResponse },
+                        { label: "Residual", text: reference.residual },
+                      ] as const
+                    ).map((part) => (
+                      <p key={part.label} className="text-muted-foreground">
+                        <span className="text-foreground mr-1.5 text-xs font-medium">
+                          {part.label}
+                        </span>
+                        {part.text}
+                      </p>
+                    ))}
+                  </div>
+                </div>
+              );
+            })()}
         </section>
       )}
 

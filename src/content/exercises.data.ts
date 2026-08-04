@@ -105,12 +105,33 @@ export const exercises: Exercise[] = [
     title: "Judgment as to the Usefulness of Control",
     prompt:
       "You run a safety team with a budget of 10 researchers' worth of effort for the next 12 months.\n- Divide the effort across the agendas, given that you are in each of the scenarios.",
+    // Agenda tips mirror cr-portfolio-allocation's definitions.
     agendas: [
-      { id: "control-protocols", label: "Control Protocols" },
-      { id: "evals-verification", label: "Evals, verification" },
-      { id: "scalable-oversight", label: "Scalable Oversight" },
-      { id: "alignment-research", label: "Alignment Research" },
-      { id: "policy-coordination", label: "Policy/Coordination-esque work" },
+      {
+        id: "control-protocols",
+        label: "Control Protocols",
+        tip: "Deployment-time monitoring, auditing, and restriction schemes that extract safe work from a model assumed to possibly be scheming.",
+      },
+      {
+        id: "evals-verification",
+        label: "Evals, verification",
+        tip: "Measuring what models can and will do: dangerous-capability evals, scheming evals, and checking AI research output.",
+      },
+      {
+        id: "scalable-oversight",
+        label: "Scalable Oversight",
+        tip: "Training-time supervision (debate, recursive reward modeling) that uses AI assistance to judge tasks humans can't evaluate — unlike control, it shapes training rather than policing deployment.",
+      },
+      {
+        id: "alignment-research",
+        label: "Alignment Research",
+        tip: "Training-time methods that make models less likely to be misaligned in the first place.",
+      },
+      {
+        id: "policy-coordination",
+        label: "Policy/Coordination-esque work",
+        tip: "The outer game: building political will for safety spending, coordination agreements, and the option to pause.",
+      },
     ],
     scenarios: [
       {
@@ -284,26 +305,68 @@ export const exercises: Exercise[] = [
     construction: {
       intro:
         "Construct an argument against control that is not one of the four you just saw. Start by choosing which assumption of control your argument attacks.",
+      // Reference constructions (playtester-requested) reveal only after the
+      // learner finishes their own — see ArgueRevealSurface.reference.
       surfaces: [
         {
           id: "trusted-model-trustworthy",
           text: "The trusted model is actually trustworthy",
+          reference: {
+            argument:
+              "T's trustworthiness is inferred from its weakness, not demonstrated: we assume it is too weak to scheme, but that says nothing about whether it can be manipulated. A capable U can craft outputs that jailbreak, persuade, or systematically exploit T's fixed blind spots, so monitoring fails on exactly the attack-shaped inputs it exists to catch.",
+            bestResponse:
+              "T's robustness can be measured directly: feed it adversarial outputs built by humans and by U-level models and check whether its suspicion scores degrade. Ensembling several trusted monitors and auditing a random sample of low-suspicion actions bounds how much a fooled T can cost.",
+            residual:
+              "Robustness measured against today's attacks may not transfer to attack styles a smarter U invents in deployment.",
+          },
         },
         {
           id: "red-team-elicitation",
           text: "The red team can elicit the untrusted model's worst-case behavior",
+          reference: {
+            argument:
+              "A control evaluation only bounds risk if the red team explores an attack space at least as rich as the model's. A situationally aware schemer can hold back its best strategies during evaluation and deploy qualitatively different ones later, so the measured safety number is an upper bound built on the red team's imagination.",
+            bestResponse:
+              "Elicitation does not rely on the model volunteering strategies: fine-tuning on attack demonstrations, best-of-n sampling, and giving the red team white-box access and affordances the deployed model lacks all push the elicited attack space above what the model can use in deployment.",
+            residual:
+              "Fine-tuning-based elicitation can still fail against exploration hacking, and we cannot verify that it has not.",
+          },
         },
         {
           id: "human-auditing-capacity",
           text: "Human auditing capacity is sufficient",
+          reference: {
+            argument:
+              "Control routes its strongest evidence through human auditing of flagged actions, but audit budgets are tiny relative to deployment scale. If the AI performs thousands of tasks a day, even a low flag rate swamps the auditors, forcing suspicion thresholds so high that a patient schemer simply operates below them.",
+            bestResponse:
+              "Auditing is a budgeted resource the protocol spends where it matters: trusted models pre-filter, and the budget concentrates on the highest-stakes actions. Control evaluations price this in — safety is measured under a fixed audit budget, not under unlimited human attention.",
+            residual:
+              "Budgeted auditing assumes high-stakes actions are identifiable in advance; diffuse sabotage spread across many benign-looking actions evades it.",
+          },
         },
         {
           id: "eval-transfer-to-deployment",
           text: "Evaluation results transfer to real deployment",
+          reference: {
+            argument:
+              "Evaluations run on distributions the lab constructs, and a situationally aware model can tell. If deployment inputs carry signals no evaluation reproduces — real user data, real codebases, real dates — a schemer can behave until it sees them, so measured safety fails to transfer exactly where it matters.",
+            bestResponse:
+              "This is what honeypots and continuous evaluation attack: seed deployment-indistinguishable inputs into the real stream, and the model can never be confident it is unobserved. The schemer then faces the original bet — defect on what might be a test, or work safely forever.",
+            residual:
+              "Honeypots must actually be indistinguishable, and a model with better world-modeling than its auditors may find tells we cannot see.",
+          },
         },
         {
           id: "catch-legibility",
           text: "A catch will be legible, at least inside the lab",
+          reference: {
+            argument:
+              "Catch-as-win assumes a catch produces evidence legible enough to change behavior, but real catches will look like ambiguous logs: a weird tool call, a suspicious but deniable code path. Inside a lab under race pressure, every such artifact gets an innocent explanation, and the win dissolves into an unresolved thread.",
+            bestResponse:
+              "Protocols can be engineered for legibility, not just detection: resampling the model at the incriminating step, interrogating it, and replaying honeypot variants turn one ambiguous event into a reproducible demonstration, which is far harder to explain away.",
+            residual:
+              "Reproducibility persuades the safety team, but whether leadership or governments act on it is a political question control cannot settle.",
+          },
         },
       ],
     },
@@ -1775,7 +1838,7 @@ export const exercises: Exercise[] = [
     id: "cr-precommit",
     type: "short-answer",
     prompt:
-      "Before reading further, write 5-7 sentences answering the following question: Is AI control good? How good? Why do you think this?",
+      "Before reading further, write 5-7 sentences answering the following question: Is AI control a good use of the safety community's limited resources? How much should be invested in it, and under what conditions? Why do you think this?",
     format: "free-form",
     minWords: 30,
     maxWords: 150,
@@ -1838,28 +1901,61 @@ export const exercises: Exercise[] = [
     id: "cr-portfolio-allocation",
     type: "allocation",
     title: "Portfolio allocation across regimes",
+    // Scenarios are deliberately epistemic-only ("Why am I given access to
+    // the world state?" — playtester): observable evidence lives in the
+    // epistemic lines, and titles never name the true misalignment world.
     prompt: [
-      "You direct a safety team with a budget of 10 researchers' worth of effort for the next stage of development. Each scenario below stipulates a full regime: the world state, epistemic state, and resource state, the misalignment world you are (probably) in, the capability stage you are approaching (in the AI Futures Model's milestones), and the initial plan (A–D) you start under.",
+      "You direct a safety team with a budget of 10 researchers' worth of effort for the next stage of development. Each scenario below gives you what a real team would have: the epistemic state, the resource state, the capability stage you are approaching (in the AI Futures Model's milestones), and the initial plan (A–D) you start under.",
+      "A warning: the world state — what the model is actually like — is not something you get to see. Part of your job is to reason about which misalignment worlds are consistent with the evidence, and to allocate under that uncertainty.",
       "For each scenario:",
       "- Divide the effort across the agendas.",
       "- Defend the allocation: which technique gets the marginal slice of effort, what payoff carries that choice, and which spend binds.",
     ].join("\n"),
+    // Agenda tips sharpen the bucket boundaries playtesters found blurry
+    // (scalable oversight vs interp/control, control vs security).
     agendas: [
-      { id: "control-protocols", label: "Control protocols" },
-      { id: "alignment-research", label: "Alignment research" },
-      { id: "interpretability", label: "Interpretability" },
-      { id: "verification-evals", label: "Verification & evals science" },
-      { id: "scalable-oversight", label: "Scalable oversight" },
-      { id: "policy-pause", label: "Policy, pause & coordination" },
-      { id: "security", label: "Security" },
+      {
+        id: "control-protocols",
+        label: "Control protocols",
+        tip: "Deployment-time monitoring, auditing, and restriction schemes that extract safe work from a model assumed to possibly be scheming.",
+      },
+      {
+        id: "alignment-research",
+        label: "Alignment research",
+        tip: "Training-time methods that make models less likely to be misaligned in the first place.",
+      },
+      {
+        id: "interpretability",
+        label: "Interpretability",
+        tip: "Understanding model internals well enough to detect or explain misalignment from weights and activations directly.",
+      },
+      {
+        id: "verification-evals",
+        label: "Verification & evals science",
+        tip: "Measuring what models can and will do: dangerous-capability evals, scheming evals, and checking AI research output.",
+      },
+      {
+        id: "scalable-oversight",
+        label: "Scalable oversight",
+        tip: "Training-time supervision (debate, recursive reward modeling) that uses AI assistance to judge tasks humans can't evaluate — unlike control, it shapes training rather than policing deployment.",
+      },
+      {
+        id: "policy-pause",
+        label: "Policy, pause & coordination",
+        tip: "The outer game: building political will for safety spending, coordination agreements, and the option to pause.",
+      },
+      {
+        id: "security",
+        label: "Security",
+        tip: "Hardening weights and infrastructure against theft or self-exfiltration — unlike control, it guards the assets, not the model's work.",
+      },
     ],
     scenarios: [
       {
         id: "schemeria-racing",
-        title: "Scenario 1 — Schemeria, racing, approaching autonomous coding",
+        title: "Scenario 1 — Two catches, racing, approaching autonomous coding",
         description: [
-          "World state: models are coherently scheming and it shows — two sandboxed escape attempts were caught this year; research output is middling to verify.",
-          "Epistemic state: rich — line-by-line transcripts of both catches, and evals that reproduce the behavior.",
+          "Epistemic state: rich — two sandboxed escape attempts were caught this year, with line-by-line transcripts of both catches and evals that reproduce the behavior; research output is middling to verify.",
           "Resource state: a rival lab sits a few months behind; the catches spiked will, but delay remains nearly unbuyable and safety compute is capped at a small share.",
           "Approaching stage (AIFM): Automated Coder — models about to automate most of the lab's coding.",
           "Initial plan: Plan C — the lab holds a lead of a few months and, after the catches, is willing to spend much of it on misalignment; there is no serious government involvement.",
@@ -1867,10 +1963,9 @@ export const exercises: Exercise[] = [
       },
       {
         id: "quiet-world-slack",
-        title: "Scenario 2 — Easyland or Lurkville?, treaty slack, approaching autonomous research",
+        title: "Scenario 2 — Quiet evidence, treaty slack, approaching autonomous research",
         description: [
-          "World state: alignment nature unknown — nothing rules out scheming, sloppiness, or apparent-success seeking; checkability of research output unknown, probably middling.",
-          "Epistemic state: thin — evals look fine, no catches, no incidents; the reassuring picture is consistent with Easyland and with Lurkville.",
+          "Epistemic state: thin — evals look fine, no catches, no incidents; checkability of research output unknown, probably middling. The reassuring picture is consistent with Easyland and with Lurkville.",
           "Resource state: an international agreement has bought roughly a decade of slack — the will account is full and refills easily, delay and the usefulness tax are cheap, compute negotiable.",
           "Approaching stage (AIFM): Superhuman AI Researcher — models about to run research autonomously.",
           "Initial plan: Plan A — a strong international agreement has mostly eliminated the race and bought a long slowdown with major investment in safety.",
@@ -1878,10 +1973,9 @@ export const exercises: Exercise[] = [
       },
       {
         id: "slopolis-commercial",
-        title: "Scenario 3 — Slopolis under commercial pressure, mid-stage",
+        title: "Scenario 3 — Visible gaming under commercial pressure, mid-stage",
         description: [
-          "World state: no signs of scheming, but models are apparent-success seekers — overselling, downplaying failures, quietly skipping what's hard to check; failures concentrate exactly where verification is expensive.",
-          "Epistemic state: good visibility into the gaming itself, almost none into research quality.",
+          "Epistemic state: no signs of scheming, but good visibility into pervasive gaming — models oversell, downplay failures, and quietly skip what's hard to check, with failures concentrating exactly where verification is expensive; almost no visibility into research quality.",
           "Resource state: heavy commercial pressure; the public is annoyed but not scared, so the product-wide usefulness tax is expensive; will is moderate and fading.",
           "Approaching stage (AIFM): pre–Automated Coder — models that meaningfully multiply human researchers but cannot yet work unsupervised.",
           "Initial plan: Plan D — leadership doesn't take misalignment concerns very seriously in practice; a small safety team works under the commercial pressure.",
@@ -1902,5 +1996,8 @@ export const exercises: Exercise[] = [
     format: "free-form",
     minWords: 30,
     maxWords: 200,
+    // Worked example (playtester-requested); shown only after submission.
+    sampleAnswer:
+      "Trusted monitoring on autonomous code changes: a weaker trusted model scores every commit the agent produces, and the most suspicious few percent are held for human review before merging. The usefulness cost is concrete — held commits add latency to the agent's loop and consume scarce reviewer hours, an effective throughput tax of a few percent. At the margin this is cheap insurance: code changes are the channel through which a schemer could do the most irreversible damage (weight exfiltration, sabotaged safety infrastructure), the score-and-hold pipeline reuses review infrastructure the lab already runs, and a small tax on the riskiest channel buys most of the available safety while leaving low-stakes work untouched.",
   },
 ];

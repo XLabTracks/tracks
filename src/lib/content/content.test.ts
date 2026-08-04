@@ -383,6 +383,15 @@ describe("argue-reveal exercise integrity", () => {
         exercise.construction.surfaces.length,
         `${exercise.id} surfaces`,
       ).toBeGreaterThan(0);
+      for (const surface of exercise.construction.surfaces) {
+        if (!surface.reference) continue;
+        for (const [part, text] of Object.entries(surface.reference)) {
+          expect(
+            text.trim(),
+            `${exercise.id}/${surface.id} reference ${part}`,
+          ).not.toBe("");
+        }
+      }
     }
   });
 

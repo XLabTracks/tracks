@@ -414,14 +414,21 @@ export function AllocationExerciseCard({
           {exercise.agendas.map((agenda, j) => (
             <li
               key={agenda.id}
-              className="flex items-center gap-2.5 px-3 py-2 text-sm"
+              className="flex items-start gap-2.5 px-3 py-2 text-sm"
             >
               <span
                 aria-hidden
-                className="inline-block size-2.5 shrink-0 rounded-[3px]"
+                className="mt-1.5 inline-block size-2.5 shrink-0 rounded-[3px]"
                 style={{ background: agendaColor(j) }}
               />
-              {agenda.label}
+              <span className="min-w-0">
+                {agenda.label}
+                {agenda.tip && (
+                  <span className="text-muted-foreground block text-xs">
+                    {agenda.tip}
+                  </span>
+                )}
+              </span>
             </li>
           ))}
         </ul>
@@ -591,7 +598,14 @@ export function AllocationExerciseCard({
                     className="inline-block size-2.5 shrink-0 rounded-[3px]"
                     style={{ background: agendaColor(j) }}
                   />
-                  <span className="min-w-0 flex-1 text-sm">{agenda.label}</span>
+                  <span className="min-w-0 flex-1 text-sm">
+                    {agenda.label}
+                    {agenda.tip && (
+                      <span className="text-muted-foreground block text-xs">
+                        {agenda.tip}
+                      </span>
+                    )}
+                  </span>
                   {previous !== null && (
                     <span className="text-muted-foreground font-mono text-xs whitespace-nowrap tabular-nums">
                       was {formatShare(previous, exercise.totalPeople)}

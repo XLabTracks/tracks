@@ -17,6 +17,7 @@ import { RegimeStatesDemo } from "@/components/demos/regime-states-demo";
 import { RegimeLoopDemo } from "@/components/demos/regime-loop-demo";
 import { FiveWorldsDemo } from "@/components/demos/five-worlds-demo";
 import { TwoGamesDemo } from "@/components/demos/two-games-demo";
+import { WillLedgerDemo } from "@/components/demos/will-ledger-demo";
 import { PUnacceptableDemo } from "@/components/demos/p-unacceptable-demo";
 import { TwoLeversDemo } from "@/components/demos/two-levers-demo";
 
@@ -171,6 +172,14 @@ export const demoRegistry: Record<string, DemoDefinition> = {
     description:
       "See how the inner game inside the lab and the outer game everywhere else are fundamentally coupled.",
     component: TwoGamesDemo,
+    tags: ["control", "how-useful"],
+  },
+  "will-ledger": {
+    id: "will-ledger",
+    title: "The political-will ledger",
+    description:
+      "Toggle spends (delay, usefulness tax, compute) and events (a catch, public buy-in, passed policy) and watch the political-will account redraw: the fade, the post-incident spike, and the policy floor.",
+    component: WillLedgerDemo,
     tags: ["control", "how-useful"],
   },
   "p-unacceptable": {

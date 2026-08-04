@@ -307,6 +307,8 @@ export interface FlowchartExercise extends ExerciseBase {
 export interface AllocationAgenda {
   id: string;
   label: string;
+  /** One-line definition shown under the label (intro legend + scenario rows). */
+  tip?: string;
 }
 
 export const ALLOCATION_DEFAULT_STEP = 0.5;
@@ -373,6 +375,16 @@ export interface ArgueRevealItem {
 export interface ArgueRevealSurface {
   id: string;
   text: string;
+  /**
+   * Reference construction for this surface, revealed only after the learner
+   * finishes their own. Ships to the client like the round reveals —
+   * self-assessment framing, not an answer key.
+   */
+  reference?: {
+    argument: string;
+    bestResponse: string;
+    residual: string;
+  };
 }
 
 /** Post-reveal self-assessment of the revealed response. */
@@ -680,6 +692,12 @@ export interface WritingExercise extends ExerciseBase {
   rubric?: RubricCriterion[];
   minWords?: number;
   maxWords?: number;
+  /**
+   * Reference answer shown only after the learner submits (self-assessment,
+   * like the understanding-check sample answers — ships to the client by
+   * design; this is not a grading key).
+   */
+  sampleAnswer?: string;
 }
 
 export type Exercise =

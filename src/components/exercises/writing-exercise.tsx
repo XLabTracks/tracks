@@ -52,6 +52,16 @@ export function WritingExerciseCard({
           onReopen={onReopen}
         />
       </div>
+      {submitted && exercise.sampleAnswer && (
+        <div className="mt-4">
+          <p className="text-muted-foreground text-xs font-medium tracking-wide uppercase">
+            One reference answer
+          </p>
+          <p className="text-muted-foreground bg-muted mt-1.5 rounded-lg px-4 py-3 text-sm">
+            {exercise.sampleAnswer}
+          </p>
+        </div>
+      )}
     </aside>
   );
 }

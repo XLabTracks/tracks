@@ -372,6 +372,14 @@ export const papers: Paper[] = [
         after: { sectionEnd: "lw-sec-plan-d" },
         items: [{ kind: "exercise", id: "c-plans-recall-d" }],
       },
+      // Playtester-requested pointers to other forecasting work.
+      {
+        op: "add",
+        after: { sectionEnd: "lw-sec-thoughts-on-these-plans" },
+        label: "Other maps of the future",
+        markdown:
+          "The plans above are one forecaster's cut at the possible futures. To compare against other projections: the [AI 2027 scenario](https://ai-2027.com/) and the AI Futures Project's [December 2025 model update](https://blog.aifutures.org/p/ai-futures-model-dec-2025-update) work through one concrete timeline in detail; [Epoch AI's trends dashboards](https://epoch.ai/trends) track the compute and capability data such forecasts build on; [AI Impacts](https://aiimpacts.org/) collects empirical work on many of the underlying questions; and [What failure looks like](https://www.alignmentforum.org/posts/HBxe6wdjxK239zajf/what-failure-looks-like) sketches a different shape of catastrophe than the ones these plans guard against.",
+      },
     ],
   },
   {

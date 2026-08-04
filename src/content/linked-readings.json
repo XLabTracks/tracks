@@ -260,6 +260,12 @@
     },
     {
       "kind": "lesswrong",
+      "id": "lesswrong__G8WwLmcGFa4H6Ld9d",
+      "url": "https://www.lesswrong.com/posts/G8WwLmcGFa4H6Ld9d/an-overview-of-control-measures",
+      "title": "An overview of control measures"
+    },
+    {
+      "kind": "lesswrong",
       "id": "lesswrong__Gc9FGtdXhK9sCSEYu",
       "url": "https://www.lesswrong.com/posts/Gc9FGtdXhK9sCSEYu/what-a-compute-centric-framework-says-about-ai-takeoff",
       "title": "What a compute-centric framework says about AI takeoff speeds"
@@ -317,6 +323,12 @@
       "id": "lesswrong__r3xwHzMmMf25peeHE",
       "url": "https://www.lesswrong.com/posts/r3xwHzMmMf25peeHE/the-translucent-thoughts-hypotheses-and-their-implications",
       "title": "The Translucent Thoughts Hypotheses and Their Implications"
+    },
+    {
+      "kind": "lesswrong",
+      "id": "lesswrong__rf66R4YsrCHgWx9RG",
+      "url": "https://www.lesswrong.com/posts/rf66R4YsrCHgWx9RG/preventing-model-exfiltration-with-upload-limits",
+      "title": "Preventing model exfiltration with upload limits"
     },
     {
       "kind": "lesswrong",

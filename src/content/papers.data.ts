@@ -2218,17 +2218,6 @@ export const papers: Paper[] = [
     },
   },
   {
-    id: "c-paper-unmonitored-external-agents",
-    slug: "unmonitored-external-agents",
-    moduleId: "c-mod5",
-    title: "How Unmonitored External Agents can Sabotage AI labs",
-    source: {
-      kind: "lesswrong",
-      postUrl:
-        "https://www.lesswrong.com/posts/i6LM7RuR8vk9wFc56/how-unmonitored-external-agents-can-sabotage-ai-labs",
-    },
-  },
-  {
     id: "c-paper-inference-verification",
     slug: "inference-verification",
     moduleId: "c-mod5",
@@ -2241,17 +2230,6 @@ export const papers: Paper[] = [
     },
   },
   {
-    id: "c-paper-upload-limits",
-    slug: "upload-limits",
-    moduleId: "c-mod5",
-    title: "Preventing model exfiltration with upload limits",
-    source: {
-      kind: "lesswrong",
-      postUrl:
-        "https://www.lesswrong.com/posts/rf66R4YsrCHgWx9RG/preventing-model-exfiltration-with-upload-limits",
-    },
-  },
-  {
     id: "c-paper-systems-architecture",
     slug: "systems-architecture",
     moduleId: "c-mod5",
@@ -2261,17 +2239,6 @@ export const papers: Paper[] = [
       kind: "lesswrong",
       postUrl:
         "https://www.lesswrong.com/posts/6cWgaaxWqGYwJs3vj/a-basic-systems-architecture-for-ai-agents-that-do",
-    },
-  },
-  {
-    id: "c-paper-overview-control-measures",
-    slug: "overview-of-control-measures",
-    moduleId: "c-mod5",
-    title: "An overview of control measures",
-    source: {
-      kind: "lesswrong",
-      postUrl:
-        "https://www.lesswrong.com/posts/G8WwLmcGFa4H6Ld9d/an-overview-of-control-measures",
     },
   },
   {

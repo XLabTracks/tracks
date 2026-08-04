@@ -2188,6 +2188,7 @@ export const papers: Paper[] = [
     id: "c-paper-win-continue-lose",
     slug: "win-continue-lose",
     moduleId: "c-mod5",
+    sectionItemId: "c-mod5-l1",
     title: "Win/continue/lose scenarios and execute/replace/audit protocols",
     source: {
       kind: "lesswrong",
@@ -2199,6 +2200,7 @@ export const papers: Paper[] = [
     id: "c-paper-rogue-deployments",
     slug: "rogue-deployments",
     moduleId: "c-mod5",
+    sectionItemId: "c-mod5-l1",
     title: "AI catastrophes and rogue deployments",
     source: {
       kind: "lesswrong",
@@ -2210,6 +2212,7 @@ export const papers: Paper[] = [
     id: "c-paper-systems-architecture",
     slug: "systems-architecture",
     moduleId: "c-mod5",
+    sectionItemId: "c-mod5-l1",
     title:
       "A basic systems architecture for AI agents that do autonomous research",
     source: {
@@ -2222,6 +2225,7 @@ export const papers: Paper[] = [
     id: "c-paper-synchronous-monitors",
     slug: "synchronous-monitors",
     moduleId: "c-mod5",
+    sectionItemId: "c-mod5-l2",
     title: "Blocking live failures with synchronous monitors",
     source: {
       kind: "lesswrong",
@@ -2233,6 +2237,7 @@ export const papers: Paper[] = [
     id: "c-paper-settings-high-stakes",
     slug: "settings-for-high-stakes-control",
     moduleId: "c-mod5",
+    sectionItemId: "c-mod5-l3",
     title: "Why it's hard to make settings for high-stakes control research",
     source: {
       kind: "lesswrong",

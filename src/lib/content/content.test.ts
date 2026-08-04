@@ -78,6 +78,30 @@ describe("content integrity", () => {
     }
   });
 
+  it("sectionItemId points at an earlier item in the same module", () => {
+    const sectionOf = new Map<string, string>();
+    for (const l of lessons) if (l.sectionItemId) sectionOf.set(l.id, l.sectionItemId);
+    for (const p of papers) if (p.sectionItemId) sectionOf.set(p.id, p.sectionItemId);
+    for (const track of tracks) {
+      for (const m of getModulesForTrack(track.id)) {
+        for (const [i, id] of m.itemIds.entries()) {
+          const target = sectionOf.get(id);
+          if (!target) continue;
+          const targetIndex = m.itemIds.indexOf(target);
+          expect(
+            targetIndex,
+            `${id}: sectionItemId "${target}" must be an earlier item in module ${m.id}`,
+          ).toBeGreaterThanOrEqual(0);
+          expect(targetIndex, `${id}: sectionItemId "${target}" must precede it`).toBeLessThan(i);
+          expect(
+            sectionOf.has(target),
+            `${id}: sectionItemId "${target}" must itself be top-level (one nesting layer)`,
+          ).toBe(false);
+        }
+      }
+    }
+  });
+
   it("content ids are globally unique across lessons and papers", () => {
     const ids = [...lessons.map((l) => l.id), ...papers.map((p) => p.id)];
     expect(new Set(ids).size).toBe(ids.length);

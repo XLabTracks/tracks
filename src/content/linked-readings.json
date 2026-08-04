@@ -38,12 +38,6 @@
     },
     {
       "kind": "lesswrong",
-      "id": "alignmentforum__fqRmcuspZuYBNiQuQ",
-      "url": "https://www.alignmentforum.org/posts/fqRmcuspZuYBNiQuQ/rogue-internal-deployments-via-external-apis",
-      "title": "Rogue internal deployments via external APIs"
-    },
-    {
-      "kind": "lesswrong",
       "id": "alignmentforum__h7QETH7GMk9HcMnHH",
       "url": "https://www.alignmentforum.org/posts/h7QETH7GMk9HcMnHH/the-no-sandbagging-on-checkable-tasks-hypothesis",
       "title": "The “no sandbagging on checkable tasks” hypothesis"
@@ -200,18 +194,6 @@
     },
     {
       "kind": "lesswrong",
-      "id": "lesswrong__6cWgaaxWqGYwJs3vj",
-      "url": "https://www.lesswrong.com/posts/6cWgaaxWqGYwJs3vj/a-basic-systems-architecture-for-ai-agents-that-do",
-      "title": "A basic systems architecture for AI agents that do autonomous research"
-    },
-    {
-      "kind": "lesswrong",
-      "id": "lesswrong__7i33FDCfcRLJbPs6u",
-      "url": "https://www.lesswrong.com/posts/7i33FDCfcRLJbPs6u/defending-against-model-weight-exfiltration-through-1",
-      "title": "Defending Against Model Weight Exfiltration Through Inference Verification"
-    },
-    {
-      "kind": "lesswrong",
       "id": "lesswrong__8wBN8cdNAv3c7vt6p",
       "url": "https://www.lesswrong.com/posts/8wBN8cdNAv3c7vt6p/the-case-against-ai-control-research",
       "title": "The Case Against AI Control Research"
@@ -254,12 +236,6 @@
     },
     {
       "kind": "lesswrong",
-      "id": "lesswrong__ceBpLHJDdCt3xfEok",
-      "url": "https://www.lesswrong.com/posts/ceBpLHJDdCt3xfEok/ai-catastrophes-and-rogue-deployments",
-      "title": "AI catastrophes and rogue deployments"
-    },
-    {
-      "kind": "lesswrong",
       "id": "lesswrong__d9FJHawgkiMSPjagR",
       "url": "https://www.lesswrong.com/posts/d9FJHawgkiMSPjagR/ai-control-improving-safety-despite-intentional-subversion",
       "title": "AI Control: Improving Safety Despite Intentional Subversion"
@@ -272,12 +248,6 @@
     },
     {
       "kind": "lesswrong",
-      "id": "lesswrong__e4G4E56ZiQqjXSxLp",
-      "url": "https://www.lesswrong.com/posts/e4G4E56ZiQqjXSxLp/blocking-live-failures-with-synchronous-monitors",
-      "title": "Blocking live failures with synchronous monitors"
-    },
-    {
-      "kind": "lesswrong",
       "id": "lesswrong__EPDSdXr8YbsDkgsDG",
       "url": "https://www.lesswrong.com/posts/EPDSdXr8YbsDkgsDG/introducing-alignment-stress-testing-at-anthropic",
       "title": "Introducing Alignment Stress-Testing at Anthropic"
@@ -287,12 +257,6 @@
       "id": "lesswrong__FkgsxrGf3QxhfLWHG",
       "url": "https://www.lesswrong.com/posts/FkgsxrGf3QxhfLWHG/risks-from-learned-optimization-introduction",
       "title": "Risks from Learned Optimization: Introduction"
-    },
-    {
-      "kind": "lesswrong",
-      "id": "lesswrong__G8WwLmcGFa4H6Ld9d",
-      "url": "https://www.lesswrong.com/posts/G8WwLmcGFa4H6Ld9d/an-overview-of-control-measures",
-      "title": "An overview of control measures"
     },
     {
       "kind": "lesswrong",
@@ -311,18 +275,6 @@
       "id": "lesswrong__hirhSqvEAq7pdnyPG",
       "url": "https://www.lesswrong.com/posts/hirhSqvEAq7pdnyPG/auditing-failures-vs-concentrated-failures",
       "title": "Auditing failures vs concentrated failures"
-    },
-    {
-      "kind": "lesswrong",
-      "id": "lesswrong__i6LM7RuR8vk9wFc56",
-      "url": "https://www.lesswrong.com/posts/i6LM7RuR8vk9wFc56/how-unmonitored-external-agents-can-sabotage-ai-labs",
-      "title": "How Unmonitored External Agents can Sabotage AI labs"
-    },
-    {
-      "kind": "lesswrong",
-      "id": "lesswrong__jg3PuE3fYL9jq9zHB",
-      "url": "https://www.lesswrong.com/posts/jg3PuE3fYL9jq9zHB/win-continue-lose-scenarios-and-execute-replace-audit",
-      "title": "Win/continue/lose scenarios and execute/replace/audit protocols"
     },
     {
       "kind": "lesswrong",
@@ -368,12 +320,6 @@
     },
     {
       "kind": "lesswrong",
-      "id": "lesswrong__rf66R4YsrCHgWx9RG",
-      "url": "https://www.lesswrong.com/posts/rf66R4YsrCHgWx9RG/preventing-model-exfiltration-with-upload-limits",
-      "title": "Preventing model exfiltration with upload limits"
-    },
-    {
-      "kind": "lesswrong",
       "id": "lesswrong__rHyPtvfnvWeMv7Lkb",
       "url": "https://www.lesswrong.com/posts/rHyPtvfnvWeMv7Lkb/thoughts-on-the-conservative-assumptions-in-ai-control",
       "title": "Thoughts on the conservative assumptions in AI control"
@@ -413,12 +359,6 @@
       "id": "lesswrong__WewsByywWNhX9rtwi",
       "url": "https://www.lesswrong.com/posts/WewsByywWNhX9rtwi/current-ais-seem-pretty-misaligned-to-me",
       "title": "Current AIs seem pretty misaligned to me"
-    },
-    {
-      "kind": "lesswrong",
-      "id": "lesswrong__xGaFncekAXEWq8Mrv",
-      "url": "https://www.lesswrong.com/posts/xGaFncekAXEWq8Mrv/why-it-s-hard-to-make-settings-for-high-stakes-control",
-      "title": "Why it's hard to make settings for high-stakes control research"
     },
     {
       "kind": "lesswrong",

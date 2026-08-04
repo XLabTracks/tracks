@@ -2180,4 +2180,120 @@ export const papers: Paper[] = [
       },
     ],
   },
+  // --- Control module 5 section readings (course author's outline): each
+  // outline stub is followed by its readings as full course items so they
+  // sit on the module sidebar and keep in-module navigation. Rendered
+  // verbatim, no edits yet. ---
+  {
+    id: "c-paper-win-continue-lose",
+    slug: "win-continue-lose",
+    moduleId: "c-mod5",
+    title: "Win/continue/lose scenarios and execute/replace/audit protocols",
+    source: {
+      kind: "lesswrong",
+      postUrl:
+        "https://www.lesswrong.com/posts/jg3PuE3fYL9jq9zHB/win-continue-lose-scenarios-and-execute-replace-audit",
+    },
+  },
+  {
+    id: "c-paper-rogue-deployments",
+    slug: "rogue-deployments",
+    moduleId: "c-mod5",
+    title: "AI catastrophes and rogue deployments",
+    source: {
+      kind: "lesswrong",
+      postUrl:
+        "https://www.lesswrong.com/posts/ceBpLHJDdCt3xfEok/ai-catastrophes-and-rogue-deployments",
+    },
+  },
+  {
+    id: "c-paper-rogue-internal-external-apis",
+    slug: "rogue-internal-deployments-via-external-apis",
+    moduleId: "c-mod5",
+    title: "Rogue internal deployments via external APIs",
+    source: {
+      kind: "lesswrong",
+      postUrl:
+        "https://www.alignmentforum.org/posts/fqRmcuspZuYBNiQuQ/rogue-internal-deployments-via-external-apis",
+    },
+  },
+  {
+    id: "c-paper-unmonitored-external-agents",
+    slug: "unmonitored-external-agents",
+    moduleId: "c-mod5",
+    title: "How Unmonitored External Agents can Sabotage AI labs",
+    source: {
+      kind: "lesswrong",
+      postUrl:
+        "https://www.lesswrong.com/posts/i6LM7RuR8vk9wFc56/how-unmonitored-external-agents-can-sabotage-ai-labs",
+    },
+  },
+  {
+    id: "c-paper-inference-verification",
+    slug: "inference-verification",
+    moduleId: "c-mod5",
+    title:
+      "Defending Against Model Weight Exfiltration Through Inference Verification",
+    source: {
+      kind: "lesswrong",
+      postUrl:
+        "https://www.lesswrong.com/posts/7i33FDCfcRLJbPs6u/defending-against-model-weight-exfiltration-through-1",
+    },
+  },
+  {
+    id: "c-paper-upload-limits",
+    slug: "upload-limits",
+    moduleId: "c-mod5",
+    title: "Preventing model exfiltration with upload limits",
+    source: {
+      kind: "lesswrong",
+      postUrl:
+        "https://www.lesswrong.com/posts/rf66R4YsrCHgWx9RG/preventing-model-exfiltration-with-upload-limits",
+    },
+  },
+  {
+    id: "c-paper-systems-architecture",
+    slug: "systems-architecture",
+    moduleId: "c-mod5",
+    title:
+      "A basic systems architecture for AI agents that do autonomous research",
+    source: {
+      kind: "lesswrong",
+      postUrl:
+        "https://www.lesswrong.com/posts/6cWgaaxWqGYwJs3vj/a-basic-systems-architecture-for-ai-agents-that-do",
+    },
+  },
+  {
+    id: "c-paper-overview-control-measures",
+    slug: "overview-of-control-measures",
+    moduleId: "c-mod5",
+    title: "An overview of control measures",
+    source: {
+      kind: "lesswrong",
+      postUrl:
+        "https://www.lesswrong.com/posts/G8WwLmcGFa4H6Ld9d/an-overview-of-control-measures",
+    },
+  },
+  {
+    id: "c-paper-synchronous-monitors",
+    slug: "synchronous-monitors",
+    moduleId: "c-mod5",
+    title: "Blocking live failures with synchronous monitors",
+    source: {
+      kind: "lesswrong",
+      postUrl:
+        "https://www.lesswrong.com/posts/e4G4E56ZiQqjXSxLp/blocking-live-failures-with-synchronous-monitors",
+    },
+  },
+  {
+    id: "c-paper-settings-high-stakes",
+    slug: "settings-for-high-stakes-control",
+    moduleId: "c-mod5",
+    title: "Why it's hard to make settings for high-stakes control research",
+    source: {
+      kind: "lesswrong",
+      postUrl:
+        "https://www.lesswrong.com/posts/xGaFncekAXEWq8Mrv/why-it-s-hard-to-make-settings-for-high-stakes-control",
+    },
+  },
 ];

@@ -326,6 +326,12 @@
     },
     {
       "kind": "lesswrong",
+      "id": "lesswrong__rf66R4YsrCHgWx9RG",
+      "url": "https://www.lesswrong.com/posts/rf66R4YsrCHgWx9RG/preventing-model-exfiltration-with-upload-limits",
+      "title": "Preventing model exfiltration with upload limits"
+    },
+    {
+      "kind": "lesswrong",
       "id": "lesswrong__rHyPtvfnvWeMv7Lkb",
       "url": "https://www.lesswrong.com/posts/rHyPtvfnvWeMv7Lkb/thoughts-on-the-conservative-assumptions-in-ai-control",
       "title": "Thoughts on the conservative assumptions in AI control"

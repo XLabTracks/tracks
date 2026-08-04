@@ -2209,19 +2209,6 @@ export const papers: Paper[] = [
     },
   },
   {
-    id: "c-paper-inference-verification",
-    slug: "inference-verification",
-    moduleId: "c-mod5",
-    sectionItemId: "c-mod5-l1",
-    title:
-      "Defending Against Model Weight Exfiltration Through Inference Verification",
-    source: {
-      kind: "lesswrong",
-      postUrl:
-        "https://www.lesswrong.com/posts/7i33FDCfcRLJbPs6u/defending-against-model-weight-exfiltration-through-1",
-    },
-  },
-  {
     id: "c-paper-rogue-deployments",
     slug: "rogue-deployments",
     moduleId: "c-mod5",
@@ -2257,6 +2244,14 @@ export const papers: Paper[] = [
       postUrl:
         "https://www.lesswrong.com/posts/e4G4E56ZiQqjXSxLp/blocking-live-failures-with-synchronous-monitors",
     },
+  },
+  {
+    id: "c-paper-ctrl-z",
+    slug: "ctrl-z-resampling",
+    moduleId: "c-mod5",
+    sectionItemId: "c-mod5-l2",
+    title: "Ctrl-Z: Controlling AI Agents via Resampling",
+    source: { kind: "arxiv", arxivId: "2504.10374v1" },
   },
   {
     id: "c-paper-settings-high-stakes",

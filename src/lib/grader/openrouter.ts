@@ -1,7 +1,7 @@
 // Server-only OpenRouter chat client for the grader. Plain fetch (Workers
-// compatible, no SDK). hy3 is a reasoning model: it spends completion
-// tokens thinking before answering, so the budget is generous and only
-// `message.content` (never `message.reasoning`) is returned.
+// compatible, no SDK). The default graders are reasoning models: they spend
+// completion tokens thinking before answering, so the budget is generous and
+// only `message.content` (never `message.reasoning`) is returned.
 
 const ENDPOINT = "https://openrouter.ai/api/v1/chat/completions";
 const MAX_TOKENS = 6000;

@@ -17,7 +17,10 @@ export function classifyLength(text: string): LengthClass {
   return "long";
 }
 
-const DEFAULT_MODEL = "tencent/hy3:free";
+// "tencent/hy3:free" was delisted from OpenRouter (only the paid slug
+// remains), so every server-key grade 404'd. Nemotron 3 Ultra is the most
+// capable slug currently on the free tier.
+const DEFAULT_MODEL = "nvidia/nemotron-3-ultra-550b-a55b:free";
 
 // Grading billed to a user's own OpenRouter key defaults to a paid, stronger
 // model — their key, their spend; the server-wide key stays on the free tier.

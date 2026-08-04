@@ -2207,29 +2207,6 @@ export const papers: Paper[] = [
     },
   },
   {
-    id: "c-paper-rogue-internal-external-apis",
-    slug: "rogue-internal-deployments-via-external-apis",
-    moduleId: "c-mod5",
-    title: "Rogue internal deployments via external APIs",
-    source: {
-      kind: "lesswrong",
-      postUrl:
-        "https://www.alignmentforum.org/posts/fqRmcuspZuYBNiQuQ/rogue-internal-deployments-via-external-apis",
-    },
-  },
-  {
-    id: "c-paper-inference-verification",
-    slug: "inference-verification",
-    moduleId: "c-mod5",
-    title:
-      "Defending Against Model Weight Exfiltration Through Inference Verification",
-    source: {
-      kind: "lesswrong",
-      postUrl:
-        "https://www.lesswrong.com/posts/7i33FDCfcRLJbPs6u/defending-against-model-weight-exfiltration-through-1",
-    },
-  },
-  {
     id: "c-paper-systems-architecture",
     slug: "systems-architecture",
     moduleId: "c-mod5",

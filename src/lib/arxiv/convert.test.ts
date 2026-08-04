@@ -13,6 +13,21 @@ const DOC = (body: string) =>
   `\\documentclass{article}\\begin{document}\n${body}\n\\end{document}`;
 
 describe("convertLatexToHtml", () => {
+  it("strips the twocolumn front-matter block and ICML postamble", () => {
+    const { html } = convert(
+      DOC(
+        "\\twocolumn[\\icmltitle{My Title}\\icmlkeywords{Machine Learning, ICML}]\n" +
+          "\\printAffiliationsAndNotice{\\icmlEqualContribution}\n" +
+          "\\begin{abstract}The abstract.\\end{abstract}\n\\section{Introduction}\nBody.",
+      ),
+    );
+    expect(html).not.toContain("My Title");
+    expect(html).not.toContain("Machine Learning, ICML");
+    expect(html).not.toContain("[");
+    expect(html).toContain("The abstract.");
+    expect(html).toContain("Introduction");
+  });
+
   it("renders prose, sections, and emphasis", () => {
     const { html } = convert(
       DOC("\\section{Introduction}\nHello \\emph{world}."),

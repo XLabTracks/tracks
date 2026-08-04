@@ -2359,6 +2359,13 @@ export const papers: Paper[] = [
         after: { sectionEnd: "lw-sec-rogue-internal-deployments" },
         items: [{ kind: "exercise", id: "c-mod5-sysarch-recall-rid-forms" }],
       },
+      // End of "Different ways the AI could compromise this": every threat
+      // path from the section, replayed over one architecture scene.
+      {
+        op: "activity",
+        after: { sectionEnd: "lw-sec-different-ways-the-ai-could-compromise-t" },
+        items: [{ kind: "demo", id: "agent-architecture-threats" }],
+      },
     ],
   },
   {
@@ -2391,11 +2398,15 @@ export const papers: Paper[] = [
         ],
       },
       // Attack latency / rate of damage defined just above; b-0009 restates
-      // the live-failure characterization from them.
+      // the live-failure characterization from them. The plane demo places
+      // the post's examples on those two axes.
       {
         op: "activity",
         after: { anchor: "b-0009", snippet: "Asynchronous monitors are the least" },
-        items: [{ kind: "exercise", id: "c-mod5-syncmon-recall-attack-latency" }],
+        items: [
+          { kind: "demo", id: "live-failure-plane" },
+          { kind: "exercise", id: "c-mod5-syncmon-recall-attack-latency" },
+        ],
       },
       // "Blocking" defined in this paragraph.
       {
@@ -2449,12 +2460,14 @@ export const papers: Paper[] = [
           },
         ],
       },
-      // Attack continuation probability introduced and analyzed here.
+      // Attack continuation probability introduced and analyzed here; the
+      // demo plays the same k / continuation-probability tradeoff live.
       {
         op: "activity",
         after: { anchor: "b-0067", snippet: "If the blue team is" },
         items: [
           { kind: "exercise", id: "c-mod5-ctrlz-recall-continuation-probability" },
+          { kind: "demo", id: "defer-to-resample" },
         ],
       },
       // §3.2.1 end: incrimination in the present defined.

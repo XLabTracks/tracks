@@ -2080,7 +2080,7 @@ export const exercises: Exercise[] = [
   {
     id: "c-mod5-wcl-recall-attack",
     type: "tap-reveal",
-    prompt: "In this post's terminology, what is an \"attack\"?",
+    prompt: "In AI control terminology, what is an \"attack\"?",
     answer:
       "One of the AI's rare attempts to cause the unacceptable outcome. Under control measures, the optimal strategy for the AI is often to act aligned nearly all the time and only occasionally try to cause the unacceptable outcome — those attempts are the attacks.",
   },
@@ -2117,7 +2117,8 @@ export const exercises: Exercise[] = [
   {
     id: "c-mod5-rogue-recall-catastrophe",
     type: "tap-reveal",
-    prompt: "How does this post use the word \"catastrophe\"?",
+    prompt:
+      "In the rogue-deployments framing, what does \"catastrophe\" mean?",
     answer:
       "A failure you don't want to happen even once, reserved for the end result we find unacceptable — e.g. the AI or another adversary amassing power, launching nukes, starting a war, or building superintelligence. It deliberately excludes intermediate events like \"the AI escapes the datacenter\".",
   },
@@ -2154,7 +2155,8 @@ export const exercises: Exercise[] = [
   {
     id: "c-mod5-rogue-recall-why-worry",
     type: "tap-reveal",
-    prompt: "Why are rogue deployments the main worry?",
+    prompt:
+      "Why is launching a rogue deployment a more worrying path to catastrophe than the AI causing one directly under safety measures?",
     answer:
       "Causing a catastrophe directly seems fundamentally hard — it requires either a few wildly superhuman actions or a large number of ordinary actions, giving the safety measures many chances to catch the AI. Launching a rogue deployment seems fundamentally easy — with model weight access it might take twenty lines of simple Python — and once one exists, the AI's actions are much less constrained.",
   },
@@ -2170,9 +2172,9 @@ export const exercises: Exercise[] = [
     id: "c-mod5-ridext-recall-vs-others",
     type: "tap-reveal",
     prompt:
-      "How does this threat relate to the other rogue-deployment threats, and how hard is it to mitigate?",
+      "How does the rogue-internal-deployment-via-external-APIs threat relate to the other rogue-deployment threats, and how hard is it to mitigate?",
     answer:
-      "It sits alongside weight exfiltration (rogue external deployments) and regular rogue internal deployments where the AI hacks its own datacenter to run unmonitored inference, and the post argues preventing it is similarly important. It's relatively hard to mitigate: probably a combination of trusted monitoring with dedicated security measures, or something that fully leverages untrusted monitoring — not \"just trusted monitoring\" or \"just security\".",
+      "It sits alongside weight exfiltration (rogue external deployments) and regular rogue internal deployments where the AI hacks its own datacenter to run unmonitored inference, and preventing it is similarly important from a misalignment perspective. It's relatively hard to mitigate: probably a combination of trusted monitoring with dedicated security measures, or something that fully leverages untrusted monitoring — not \"just trusted monitoring\" or \"just security\".",
   },
   // A basic systems architecture (c-paper-systems-architecture)
   {
@@ -2203,7 +2205,7 @@ export const exercises: Exercise[] = [
     id: "c-mod5-sysarch-recall-rid-forms",
     type: "tap-reveal",
     prompt:
-      "In this architecture, what do rogue internal deployments concretely look like?",
+      "In the inference/scaffold/execution-server architecture, what do rogue internal deployments concretely look like?",
     answer:
       "The easiest to imagine: the model writes its own agent loop on the execution machine, using that machine's GPUs/weights. Alternatively it can build a rogue scaffold on the execution machine that calls the inference server (easier to catch with basic monitoring on the inference API), or compromise one of the other services via code it commits.",
   },
@@ -2247,21 +2249,21 @@ export const exercises: Exercise[] = [
   {
     id: "c-mod5-ctrlz-recall-untrusted-model",
     type: "tap-reveal",
-    prompt: "What makes a model \"untrusted\" in this paper?",
+    prompt: "In AI control research, what makes a model \"untrusted\"?",
     answer:
       "It has the potential to be deliberately subversive — for example because it developed misaligned goals and \"faked alignment\" during testing, or because of data poisoning — so the deployer can't assume it will behave as intended.",
   },
   {
     id: "c-mod5-ctrlz-recall-usefulness",
     type: "tap-reveal",
-    prompt: "How does the paper define usefulness?",
+    prompt: "How does the Ctrl-Z paper define usefulness?",
     answer:
       "Implement $U$ with the honest policy $U_H$ and measure the proportion of tasks the control protocol solves in the episode, normalized so that $U_H$ alone scores 100% and the trusted model $T$ scores 0%.",
   },
   {
     id: "c-mod5-ctrlz-recall-safety",
     type: "tap-reveal",
-    prompt: "How does the paper define safety?",
+    prompt: "How does the Ctrl-Z paper define safety?",
     answer:
       "Implement $U$ with the attack policy $U_A$ and measure the probability that the blue team wins by reaching the end of the 100,000-task episode without allowing the agent to download and execute malware.",
   },
@@ -2311,7 +2313,7 @@ export const exercises: Exercise[] = [
   {
     id: "c-mod5-ctrlz-recall-untrusted-monitoring",
     type: "tap-reveal",
-    prompt: "How does the untrusted monitoring protocol work?",
+    prompt: "How does Ctrl-Z's untrusted monitoring protocol work?",
     answer:
       "$T$ writes a detailed prose description of $U$'s proposed code; the untrusted monitor scores that description while the trusted monitor scores the original code, and the protocol audits if either monitor passes its threshold. Before the episode, the protocol tests the untrusted monitor on synthetic attacks and shuts down if it rates too many as unsuspicious — evidence of intentional sabotage.",
   },

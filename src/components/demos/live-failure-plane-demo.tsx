@@ -19,6 +19,8 @@ interface Threat {
   y: number;
   caption: string;
   uncertain?: boolean;
+  /** Draw the label under the point (for points near the top edge). */
+  labelBelow?: true;
 }
 
 const THREATS: Threat[] = [
@@ -51,6 +53,7 @@ const THREATS: Threat[] = [
     label: "Weight exfiltration",
     x: 0.88,
     y: 0.88,
+    labelBelow: true,
     caption:
       "The classic live failure. It might be possible to exfiltrate weights in a short window of time, and once they're out there's no way to get them back. Leaking sensitive source code or algorithmic secrets to the internet is a close cousin.",
   },
@@ -60,6 +63,7 @@ const THREATS: Threat[] = [
     x: 0.72,
     y: 0.76,
     uncertain: true,
+    labelBelow: true,
     caption:
       "Rogue internal deployments involving privilege escalation and compromise of monitoring systems might quickly become highly damaging or extremely costly to recover from — they give the misaligned AI increased affordances to cause further cascading failures. The post flags real uncertainty about how hard recovery would be.",
   },
@@ -111,18 +115,18 @@ export function LiveFailurePlaneDemo() {
           strokeWidth={1.25}
           strokeDasharray="5 4"
         />
+        {/* Region label sits in the shaded corner's top-left, clear of the
+            points near the top-right (their labels draw below the points). */}
         <text
-          x={px(0.86)}
-          y={py(0.94)}
-          textAnchor="middle"
+          x={px(0.57)}
+          y={py(0.955)}
           className="fill-amber-700 text-[11px] font-bold dark:fill-amber-400"
         >
           Live failures
         </text>
         <text
-          x={px(0.86)}
-          y={py(0.87)}
-          textAnchor="middle"
+          x={px(0.57)}
+          y={py(0.9)}
           className="fill-amber-700/80 text-[9px] dark:fill-amber-400/80"
         >
           async monitors least effective
@@ -158,7 +162,7 @@ export function LiveFailurePlaneDemo() {
               />
               <text
                 x={px(t.x)}
-                y={py(t.y) - 11}
+                y={py(t.y) + (t.labelBelow ? 21 : -11)}
                 textAnchor="middle"
                 className={`text-[10px] transition-colors duration-200 ${
                   on ? "fill-foreground font-semibold" : "fill-muted-foreground"
@@ -190,20 +194,20 @@ export function LiveFailurePlaneDemo() {
           strokeWidth={1.5}
           markerEnd="url(#lfp-axis)"
         />
+        {/* Two rotated lines on separate baselines, both clear of the axis. */}
         <text
-          x={PX - 20}
+          x={PX - 38}
           y={PY + PH / 2}
-          transform={`rotate(-90 ${PX - 20} ${PY + PH / 2})`}
+          transform={`rotate(-90 ${PX - 38} ${PY + PH / 2})`}
           textAnchor="middle"
           className="fill-foreground text-[11px] font-medium"
         >
           Rate of damage
         </text>
         <text
-          x={PX - 20}
+          x={PX - 25}
           y={PY + PH / 2}
-          transform={`rotate(-90 ${PX - 20} ${PY + PH / 2})`}
-          dy={13}
+          transform={`rotate(-90 ${PX - 25} ${PY + PH / 2})`}
           textAnchor="middle"
           className="fill-muted-foreground text-[9px]"
         >

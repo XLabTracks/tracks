@@ -250,6 +250,20 @@ export function buildMiscEnvReplacements(
     });
   };
 
+  // tcolorbox[options]: colored callout boxes (tcolorbox package). The
+  // option list (enhanced, colframe=…, colback=…, width=…) is long and
+  // custom-color-valued — peel it fully and render the mdframed box style;
+  // the colors are paper-local definitions we can't resolve anyway.
+  const tcolorbox: EnvReplacement = (env) => {
+    const content = [...env.content];
+    peelBracketOptions(content);
+    return htmlLike({
+      tag: "div",
+      attributes: { className: "ax-mdframed" },
+      content,
+    });
+  };
+
   // multicols{N}: honor the column count with CSS columns.
   const multicols: EnvReplacement = (env) => {
     const content = [...env.content];
@@ -284,6 +298,8 @@ export function buildMiscEnvReplacements(
   return {
     description: descriptionReplacement,
     mdframed,
+    tcolorbox,
+    "tcolorbox*": tcolorbox,
     minipage,
     subfigure,
     "subfigure*": subfigure,

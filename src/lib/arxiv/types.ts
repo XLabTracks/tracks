@@ -56,7 +56,7 @@
  *      duplication), \multirow nested in \multicolumn unwraps, and stripped
  *      counter-manipulation (\setcounter/\numberwithin/…) now warns.
  */
-export const CONVERTER_VERSION = 22;
+export const CONVERTER_VERSION = 25;
 
 export interface ConversionWarning {
   /** Stable machine code, e.g. "unknown-macro", "katex-error". */

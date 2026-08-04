@@ -634,6 +634,15 @@ export function expandUserEnvironments(
   }
 }
 
+/** True for white / near-white hex colors (invisible on the page bg). */
+function isNearWhite(hex: string): boolean {
+  const m = /^#([0-9a-f]{6})$/i.exec(hex);
+  if (!m) return false;
+  const v = parseInt(m[1], 16);
+  const r = (v >> 16) & 255, g = (v >> 8) & 255, b = v & 255;
+  return 0.2126 * r + 0.7152 * g + 0.0722 * b > 235;
+}
+
 /**
  * Render a \newtcolorbox use as a styled box: the tcolorbox OPTIONS carry
  * its whole identity (title=User, colback=..., colframe=...). Colors resolve
@@ -650,18 +659,32 @@ function buildTcolorbox(
     const m = new RegExp(`(?:^|,)\\s*${key}\\s*=\\s*([^,]+)`).exec(options);
     return m ? m[1].trim() : null;
   };
-  const title = readOpt("title");
+  // Unresolvable \ref labels in the title arrive as bare "sec:discussion"
+  // tokens (plainText loses the macro) — drop the whole parenthetical
+  // around one rather than showing the raw label.
+  const title = readOpt("title")?.replace(
+    /\s*\([^()]*\b[a-z]+:[A-Za-z0-9_.:-]+[^()]*\)/g,
+    "",
+  );
   const colback = readOpt("colback");
   const colframe = readOpt("colframe");
   const coltitle = readOpt("coltitle");
   const bg = colback ? resolveColorHex(colback, colors) : null;
-  const frame = colframe ? resolveColorHex(colframe, colors) : null;
+  const frameRaw = colframe ? resolveColorHex(colframe, colors) : null;
+  // A white / near-white frame makes an invisible title chip (and pulls in
+  // the white default text below) — treat it as unstyled so the CSS theme
+  // colors apply instead.
+  const frame = frameRaw && !isNearWhite(frameRaw) ? frameRaw : null;
   // tcolorbox renders the title bar in colframe with coltitle text, and
   // coltitle DEFAULTS TO WHITE — only apply it when the chip actually has a
   // dark background to sit on.
-  const titleFg =
+  const titleFgRaw =
     (coltitle ? resolveColorHex(coltitle, colors) : null) ??
     (frame ? "#ffffff" : null);
+  // With no dark chip to sit on, a white/near-white coltitle would render
+  // invisible text on the theme's light default chip — drop it there too.
+  const titleFg =
+    titleFgRaw && !frame && isNearWhite(titleFgRaw) ? null : titleFgRaw;
 
   const children: Ast.Node[] = [];
   if (title) {

@@ -71,23 +71,22 @@ export const modules: Module[] = [
     order: 1,
     prerequisiteModuleIds: [],
     // Opens with Redwood's "case for control" motivation, then the AI Control
-    // paper and the trusted-monitoring demo lesson, then four Redwood readings
-    // rendered in full through the paper reader — the "case for control" post
+    // paper — the guided walkthrough that absorbed the retired
+    // "Trusted monitoring as a game" lesson — then three Redwood readings
+    // rendered in full through the paper reader; the "case for control" post
     // carries the module's guided exercises woven into the reading. Reading
-    // order: motivation, the paper, the demo, catching scheming AIs, and the
-    // two threat-modeling posts (the safety–usefulness tradeoff model now
-    // lives in module 2). All
-    // readings are reproduced (arXiv/LessWrong/Substack artifacts) with
-    // permission.
+    // order: motivation, the paper, catching scheming AIs, and the two
+    // threat-modeling posts (the safety–usefulness tradeoff model now lives in
+    // module 2). All readings are reproduced (arXiv/LessWrong/Substack
+    // artifacts) with permission.
     itemIds: [
       "c-case-for-control",
       "c-paper-ai-control",
-      "c-game",
       "c-catching-red-handed",
       "c-threats-l1",
       "c-threats-l2",
     ],
-    estimatedMinutes: 377,
+    estimatedMinutes: 285,
   },
   {
     // Human-authored curriculum (from the course author's "contra control"
@@ -406,16 +405,16 @@ export const lessons: Lesson[] = [
     title: "Facilitator Field Guide",
     contentRef: "v-facilitator-guide",
   },
-  // --- Control: the trusted-monitoring demo, one multi-section lesson (its
-  // ## sections give it a paper-style section nav in the sidebar). ---
-  {
-    id: "c-game",
-    slug: "trusted-monitoring-as-a-game",
-    moduleId: "c-intro",
-    title: "Trusted monitoring as a game",
-    contentRef: "c-game",
-    estimatedMinutes: 92,
-  },
+  // --- Control: the "Trusted monitoring as a game" lesson (c-game) was
+  // RETIRED 2026-07-24: all of its content was progressively mirrored into the
+  // AI Control walkthrough (papers.data.ts — inserted subsections 3.2.1
+  // "Probability of Safety over Deployment" and 3.3.1 "Defer to Trusted") and
+  // the standalone lesson removed. The walkthrough re-splices exactly two of
+  // its exercises (c-game-l2-tail-staged, c-game-l7-defer-reflect); the other
+  // eleven c-game-* definitions are still in exercises.data.ts but are now
+  // referenced by nothing — they are earlier drafts of the c-paper-l3-*/l4-*
+  // exercises the walkthrough uses, kept only until the prose pass confirms
+  // nothing else needs them. Do not edit them expecting a learner to see it. ---
   // --- Control, module 2 (how useful is AI control?): the case against
   // control, from the course author's notes; embeds the
   // contra-control-argue-reveal exercise. ---
@@ -442,10 +441,10 @@ export const lessons: Lesson[] = [
   },
   // --- Control: every reproduced reading in module 1 (with permission from
   // Redwood Research) now renders through the paper reader as a Paper item in
-  // papers.data.ts — the "case for control" post, the safety–usefulness
-  // tradeoff model, "catching AIs red-handed", and the two threat-modeling
-  // posts (prioritizing threats; diffuse threats / research sabotage). Their
-  // guided exercises are spliced back into the reading via Paper.edits. ---
+  // papers.data.ts — the "case for control" post, "catching AIs red-handed",
+  // and the two threat-modeling posts (prioritizing threats; diffuse threats /
+  // research sabotage). Their guided exercises are spliced back into the
+  // reading via Paper.edits. ---
   // --- Control, module 6 (low-stakes control): a talk plus three readings
   // (the Redwood posts reproduced verbatim with permission; the Carlsmith
   // post reproduced verbatim from LessWrong) ---

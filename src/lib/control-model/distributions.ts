@@ -26,9 +26,16 @@ export function muAttackFromBase(mb: number, sigma: number, g: number): number {
   return mb * (1 - PARAMS.subtletyVis * sigma) - PARAMS.gamma * g
 }
 
-/** P(backdoor works) as a function of subtlety. */
+/**
+ * P(backdoor works) as a function of subtlety.
+ * Smooth power decay pSucc(sigma) = p0 * (1 - sigma)^alpha: strictly decreasing
+ * on [0,1], equal to p0 at sigma = 0 (anchors upfront auditing), and → 0 as
+ * sigma → 1 (a maximally subtle backdoor is essentially always broken). No
+ * floor, so the subtlety curve declines monotonically past its peak instead of
+ * bottoming out and rebounding the way the old piecewise-linear floor did.
+ */
 export function pSucc(sigma: number): number {
-  return Math.max(PARAMS.pMin, PARAMS.p0 - PARAMS.pSlope * sigma)
+  return PARAMS.p0 * Math.pow(Math.max(0, 1 - sigma), PARAMS.alpha)
 }
 
 /** Squash latent z to display score in [0, 10]. */
@@ -160,6 +167,23 @@ export function opportunityGrid(): OpportunityGrid {
   for (let i = 0; i < n; i++) w[i] /= sum
   _oppCache = { g, w }
   return _oppCache
+}
+
+/**
+ * Index of the first opportunity-grid point with g > gStar (n if there is none).
+ * The grid is strictly ascending, so the attacked set {i : g[i] > gStar} is
+ * exactly the suffix [i0, n) — which is what lets one suffix-sum pass answer
+ * every gStar in O(1) (see attackRowSweep).
+ * g[i] = (i + 0.5)/n inverts directly; the two fix-up steps make the result
+ * agree with a literal `g[i] > gStar` scan even when the division rounds.
+ */
+export function opportunityIndexAbove(gStar: number): number {
+  const { g } = opportunityGrid()
+  const n = g.length
+  let i = Math.min(n, Math.max(0, Math.floor(gStar * n - 0.5) + 1))
+  while (i > 0 && g[i - 1] > gStar) i--
+  while (i < n && g[i] <= gStar) i++
+  return i
 }
 
 /** P(g > gStar) under the opportunity distribution. */

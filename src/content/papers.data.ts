@@ -128,7 +128,212 @@ export const papers: Paper[] = [
           { kind: "exercise", id: "c-paper-l3-recall-upfront-auditing-attack" },
         ],
       },
-      // §3.2.1: the monitor as a binary classifier (ROC/AUC framing + demo).
+      // --- "Probability of Safety over Deployment" — a first-class subsection
+      // authored by XLab Tracks. NOT part of the Redwood Research paper (which
+      // is reproduced verbatim with permission); everything from here to the
+      // end-of-cluster marker below is ours. ---
+      //
+      // §3.2 (Trusted Monitoring): the "race" cluster + the "opportunities are
+      // not equal" cluster, relocated here from the c-game lesson. Every op
+      // targets b-0131 — the last block of §3.2's body, the paper's "Safety: …
+      // 62%" sentence — so, per patch-section's phase C, they render after that
+      // block in edits-array order, filling the new subsection just before the
+      // paper's §3.2.1 heading.
+      //
+      // The `op: "section"` below splices a REAL numbered subsection. The
+      // pipeline derives its number ("3.2.1") and <h4> level from §3.2 in the
+      // toc and renders a native heading (an ax-secnum span + stable id,
+      // identical markup to the paper's own subsection headings), adds a
+      // matching sidebar nav entry nested under §3.2, and SHIFTS the DISPLAYED
+      // numbers of Redwood's own later §3.2 subsections up by one — "Qualitative
+      // Analysis" 3.2.1→3.2.2, "Extending Trusted Monitoring…" 3.2.2→3.2.3 — in
+      // both the rendered body and the nav. Every section id/anchor and all of
+      // Redwood's text stay verbatim; only the shown numbers move (the artifact
+      // JSON is never edited). The prose ops that follow carry `plain: true`, so
+      // they render as native paper body instead of in `.ax-added` editorial
+      // boxes — this reads as the paper's own subsection, not a stack of notes.
+      {
+        op: "section",
+        after: { anchor: "b-0131", snippet: "Safety: The blue team win probability is 62%" },
+        id: "xlab-sec-probability-of-safety-over-deployment",
+        title: "Probability of Safety over Deployment",
+      },
+      {
+        op: "add",
+        plain: true,
+        after: { anchor: "b-0131", snippet: "Safety: The blue team win probability is 62%" },
+        markdown:
+          "The paper reports that Trusted Monitoring achieves a blue team win probability of 62%. A protocol's safety is calculated as the blue team win probability against the red team's best strategy (the strategy that maximizes the probability of a red team win), but what actually is the best strategy for the red team in this protocol?\n\n" +
+          "Each of the red team's attack attempts can end in exactly one of three ways:\n\n" +
+          "- **Caught**: An attack (working or broken) is audited and *caught* by the blue team: Blue Team Wins. In the paper's setup, 24 of 71 attacks were audited (6 working, 18 broken).\n" +
+          "- **Successfully Deployed**: A working attack isn't audited and is *successfully deployed*: Red Team Wins. In the paper's setup, 13 of 71 attacks were working attacks that weren't audited.\n" +
+          "- **Failed**: A broken attack isn't audited: Neither Team Wins. In the paper's setup, 34 of 71 attacks were broken attacks that weren't audited.\n\n" +
+          "So a single attempt is **caught** with probability $c = 24/71 \\approx 0.34$ and **successfully deployed** with probability $s = 13/71 \\approx 0.18$; the rest of the time it **fails** harmlessly. An attempt is **decisive** when it is caught or successfully deployed — the two outcomes that end the game.",
+      },
+      {
+        op: "activity",
+        after: { anchor: "b-0131", snippet: "Safety: The blue team win probability is 62%" },
+        items: [{ kind: "exercise", id: "c-paper-l3-race-hinge" }],
+      },
+      {
+        op: "add",
+        plain: true,
+        after: { anchor: "b-0131", snippet: "Safety: The blue team win probability is 62%" },
+        markdown:
+          "Let the red team make $k$ attack attempts, $s = P(\\text{successful deployment})$ be the probability of a successful deployment, and $c = P(\\text{caught})$ be the probability of an attack being caught. Then we can model the Red Team's probability of winning at least once as:\n\n" +
+          "$$\nP(\\text{red wins}) = \\underbrace{\\frac{s}{s + c}}_{\\text{Term A}} \\cdot \\underbrace{\\left(1 - (1 - s - c)^k\\right)}_{\\text{Term B}}\n$$",
+      },
+      {
+        op: "activity",
+        after: { anchor: "b-0131", snippet: "Safety: The blue team win probability is 62%" },
+        items: [{ kind: "exercise", id: "c-paper-l3-race-terms" }],
+      },
+      {
+        op: "add",
+        plain: true,
+        after: { anchor: "b-0131", snippet: "Safety: The blue team win probability is 62%" },
+        markdown:
+          "An important property of this model worth considering is that it assumes every attack has the same probability $c$ of being caught and the same probability $s$ of being successfully deployed: per-attempt odds are fixed, no matter how many attacks the red team makes or which problems it picks.",
+      },
+      {
+        op: "activity",
+        after: { anchor: "b-0131", snippet: "Safety: The blue team win probability is 62%" },
+        items: [
+          { kind: "exercise", id: "c-paper-l3-race-predict" },
+          { kind: "demo", id: "race-paper" },
+        ],
+      },
+      {
+        op: "add",
+        plain: true,
+        after: { anchor: "b-0131", snippet: "Safety: The blue team win probability is 62%" },
+        markdown:
+          "With fixed odds the curve only climbs. Now finish the reconstruction: feed in the deployment the paper actually ran. Its red team submits a backdoor on about twenty of the 5,000 problems — and twenty attempts is already deep in the plateau, where Term B has all but saturated. So $P(\\text{red wins})$ sits near its ceiling — the probability of a decisive attack attempt being successfully deployed, $s/(s+c) \\approx 35\\%$. That is a safety of roughly 65%: the paper's headline number, rebuilt from the contingency table and a single line of algebra. (The few points between 65% and the measured 62% are the paper's sampling correction and its shutdown-on-statistics rule — real, but not where the mechanism lives.)\n\n" +
+          "The number checks out. But the model implies more than a number — it implies a *strategy*. Put that prediction to the test.",
+      },
+      {
+        op: "activity",
+        after: { anchor: "b-0131", snippet: "Safety: The blue team win probability is 62%" },
+        items: [
+          {
+            kind: "sequence",
+            label: "Understanding check",
+            exerciseIds: ["c-paper-l3-race-empirical", "c-paper-l3-race-discrepancy"],
+          },
+        ],
+      },
+      {
+        op: "add",
+        plain: true,
+        after: { anchor: "b-0131", snippet: "Safety: The blue team win probability is 62%" },
+        markdown:
+          "Attacking more only improves the red team's win probability if every attack is as good as the last, and the paper's red team knew that this wasn't the case. Compared to upfront auditing, trusted monitoring forces the red team to use much *sneakier* attacks. Under upfront auditing only the first stretch of solutions is ever audited, and therefore the red team is not incentivized to obfuscate their backdoors, as human audited attacks are detected with close to perfect accuracy regardless of how sneaky the attack is. Under trusted monitoring every solution is scored for suspiciousness, and more obvious attacks are much more likely to get caught.\n\n" +
+          "Thus the red team's best strategy involves obfuscating their attacks to avoid being caught by the monitor.",
+      },
+      {
+        op: "activity",
+        after: { anchor: "b-0131", snippet: "Safety: The blue team win probability is 62%" },
+        items: [{ kind: "exercise", id: "c-paper-l3-subtlety-ways" }],
+      },
+      {
+        op: "add",
+        plain: true,
+        after: { anchor: "b-0131", snippet: "Safety: The blue team win probability is 62%" },
+        markdown:
+          "One way is to attack only \"when there seems to be a good opportunity,\" selectively choosing attack opportunities where attacks are inherently more sneaky. For example, a problem with complex corner cases offers more inherent subtlety and is thus a better opportunity for a backdoor than a one-line string echo, which offers almost no inherent subtlety. The red team's selectivity is captured by an **opportunity cutoff**: the minimum opportunity level at which it is willing to attack. A high cutoff means attacking rarely, only when the opportunity is excellent (a low probability of getting caught). Conversely, decreasing the opportunity cutoff increases the attack rate at the cost of adding attack attempts with worse odds.\n\n" +
+          "Another way to do this is to actively work to obfuscate the attacks and make them more subtle, at the cost of making broken deployed attacks more probable.\n\n" +
+          "These are both decision factors the red team can control for their strategy.",
+      },
+      {
+        op: "add",
+        plain: true,
+        after: { anchor: "b-0131", snippet: "Safety: The blue team win probability is 62%" },
+        markdown:
+          "In our model for $P(\\text{red wins})$, there is no longer a single $s$ and $c$. Each attempt's odds are set by two things: the problem's inherent opportunity $g$, drawn problem by problem and selected through the opportunity cutoff $g^*$, and the obfuscation effort $\\sigma$ from the red team to make the attack more subtle. Write $s(g, \\sigma)$ and $c(g, \\sigma)$ for the success and catch probability of an attempted attack on a problem of opportunity $g$ at effort $\\sigma$. Then $s$ and $c$ become the **average** odds across the attempts the red team actually makes:\n\n" +
+          "$$\ns = \\mathbb{E}\\!\\left[\\,s(g, \\sigma) \\mid g > g^*\\,\\right] \\qquad c = \\mathbb{E}\\!\\left[\\,c(g, \\sigma) \\mid g > g^*\\,\\right]\n$$\n\n" +
+          "This works because each problem's opportunity is an independent draw, and the red team decides whether to attack through the opportunity cutoff threshold. So each attempt's success and catch probabilities are independent draws from the pool of attacks above the cutoff. Thus the probability that the first decisive attack attempt is a successful one is given by the expected (average) success and catch probabilities. From here on, read every $s$ and $c$ as average odds.",
+      },
+      {
+        op: "activity",
+        after: { anchor: "b-0131", snippet: "Safety: The blue team win probability is 62%" },
+        items: [{ kind: "exercise", id: "c-paper-l3-cutoff-predict" }],
+      },
+      {
+        op: "add",
+        plain: true,
+        after: { anchor: "b-0131", snippet: "Safety: The blue team win probability is 62%" },
+        markdown:
+          "At high opportunity cutoffs, attack attempts are so rare that the deployment usually ends before an attack attempt is decisive and Term B, $1 - (1 - s - c)^k$, is very small. At the lower opportunity cutoffs, attempts are very frequent but increasingly drawn from problems with poor inherent subtlety, so the average catch rate climbs and Term A, $s/(s+c)$, becomes smaller. In between sits an interior optimum at a low but non-zero attack rate, which is why the paper's red team attacks on only a small fraction of problems. In the following demo, obfuscation effort is held at a fixed level.",
+      },
+      {
+        op: "activity",
+        after: { anchor: "b-0131", snippet: "Safety: The blue team win probability is 62%" },
+        items: [{ kind: "demo", id: "attack-rate" }],
+      },
+      {
+        op: "add",
+        plain: true,
+        after: { anchor: "b-0131", snippet: "Safety: The blue team win probability is 62%" },
+        markdown:
+          "As aforementioned, the red team's other decision factor is obfuscation effort. Every attack opportunity affords some inherent subtlety, and efforts to make an attack more subtle will come at the cost of the attack's deployment success probability.",
+      },
+      {
+        op: "activity",
+        after: { anchor: "b-0131", snippet: "Safety: The blue team win probability is 62%" },
+        items: [
+          {
+            kind: "sequence",
+            label: "Predict",
+            exerciseIds: ["c-paper-l3-subtlety-predict", "c-paper-l3-sigma-terms-predict"],
+          },
+        ],
+      },
+      {
+        op: "add",
+        plain: true,
+        after: { anchor: "b-0131", snippet: "Safety: The blue team win probability is 62%" },
+        markdown:
+          "Raising σ does two things to every attack attempt: it lowers the catch probability $c$, and it lowers the reliability of the attack (the probability the attack isn't broken) $p_{\\text{works}}(\\sigma)$. The following demo plots the per-attack outcome probability and $P(\\text{red wins})$ as a function of $\\sigma$.",
+      },
+      {
+        op: "activity",
+        after: { anchor: "b-0131", snippet: "Safety: The blue team win probability is 62%" },
+        items: [{ kind: "demo", id: "subtlety" }],
+      },
+      {
+        op: "add",
+        plain: true,
+        after: { anchor: "b-0131", snippet: "Safety: The blue team win probability is 62%" },
+        markdown:
+          "Given these decision factors and some priors about the blue team's strategy, the best strategy is to attack rarely, only on the very best opportunities (about 0.2% of problems), with moderate obfuscation effort. The demo below plots the red team's win probability over the whole strategy plane and marks that best response with a ring.",
+      },
+      {
+        op: "activity",
+        after: { anchor: "b-0131", snippet: "Safety: The blue team win probability is 62%" },
+        items: [{ kind: "demo", id: "best-response" }],
+      },
+      {
+        op: "activity",
+        after: { anchor: "b-0131", snippet: "Safety: The blue team win probability is 62%" },
+        items: [
+          {
+            kind: "sequence",
+            label: "Understanding check",
+            exerciseIds: ["c-paper-l3-best-response-upper-bound", "c-paper-l3-protocol-awareness"],
+          },
+        ],
+      },
+      // --- end "Probability of Safety over Deployment" subsection (XLab Tracks).
+      // Op range: from the `op: "section"` heading above through the closing
+      // understanding-check sequence — every op in it targets b-0131, and the
+      // whole range mirrors c-game.mdx's section verbatim (kept in sync). What
+      // follows is
+      // course material on the paper's OWN next subsection, "Qualitative
+      // Analysis" — its id (ax-sec-qualitative-analysis) is unchanged, but the
+      // pipeline now DISPLAYS it as 3.2.2 (shifted from 3.2.1 to make room for
+      // our 3.2.1), and "Extending Trusted Monitoring…" as 3.2.3. ---
+      // §3.2.2 (displayed; ax-sec-qualitative-analysis): the monitor as a
+      // binary classifier (ROC/AUC framing + demo).
       // Block-end anchor: the source PR spliced this cluster before the
       // paragraph's last sentence, but a labeled multi-paragraph add can't be
       // sentence-anchored (inline gate), so the whole cluster stays together
@@ -182,6 +387,46 @@ export const papers: Paper[] = [
           },
         ],
       },
+      // §3.2.1: the staged "same number, different safety" comparison + its
+      // idealized-monitor demo, relocated here from the c-game lesson (which now
+      // opens at the race). All three ops target b-0135 and, per patch-section's
+      // phase C, render in edits-array order after the full ROC cluster above:
+      // connective note → staged exercise + monitor-tails demo → payoff note.
+      {
+        op: "add",
+        after: {
+          anchor: "b-0135",
+          snippet: "Qualitatively speaking, GPT-3.5 is able to notice",
+        },
+        markdown:
+          "You may be tempted to summarize a monitor with its AUC, as it's a " +
+          "threshold-free number for how well a monitor separates backdoored " +
+          "and innocent solutions. However, as you will see, it is a poor " +
+          "predictor of safety.",
+      },
+      {
+        op: "activity",
+        after: {
+          anchor: "b-0135",
+          snippet: "Qualitatively speaking, GPT-3.5 is able to notice",
+        },
+        items: [
+          { kind: "exercise", id: "c-game-l2-tail-staged" },
+          { kind: "demo", id: "monitor-tails" },
+        ],
+      },
+      {
+        op: "add",
+        after: {
+          anchor: "b-0135",
+          snippet: "Qualitatively speaking, GPT-3.5 is able to notice",
+        },
+        markdown:
+          "The demo above builds exactly this comparison from the model. At " +
+          "the default AUC of 0.92 the two monitors catch wildly different " +
+          "fractions, roughly 47% versus 9%, even though their ROC curves " +
+          "enclose identical area. The gap survives across various AUCs.",
+      },
       // §3.2: recall card on budget burn (after the "Secondly, …" list item;
       // nested target, so the card hoists after the whole list).
       {
@@ -193,9 +438,13 @@ export const papers: Paper[] = [
         items: [{ kind: "exercise", id: "c-paper-l3-recall-budget-burn" }],
       },
       // §3.3 end: defer-to-trusted recall.
+      // Anchored to §3.3's LAST block (not sectionEnd) so the inserted 3.3.1
+      // subsection below can render AFTER it: sectionEnd ops always emit after
+      // every block-anchored op in the section, so ordering the two requires
+      // both to share the block anchor (array order then governs).
       {
         op: "activity",
-        after: { sectionEnd: "ax-sec-defer-to-trusted" },
+        after: { anchor: "b-0153", snippet: "Defer to trusted is an example of a more general design pattern" },
         items: [
           {
             kind: "sequence",
@@ -207,6 +456,65 @@ export const papers: Paper[] = [
           },
         ],
       },
+      // --- "Defer to Trusted" (displayed 3.3.1) — a first-class subsection
+      // authored by XLab Tracks, mirroring c-game.mdx's "## Defer to trusted"
+      // section and everything after it (dashboard included). §3.3 has no
+      // native subsections, so nothing renumbers. Renders after the Quick
+      // recall above, right before §3.4. ---
+      {
+        op: "section",
+        after: { anchor: "b-0153", snippet: "Defer to trusted is an example of a more general design pattern" },
+        id: "xlab-sec-defer-to-trusted-model",
+        title: "Defer to Trusted",
+      },
+      {
+        op: "add",
+        plain: true,
+        after: { anchor: "b-0153", snippet: "Defer to trusted is an example of a more general design pattern" },
+        markdown:
+          "Trusted monitoring spends its whole audit budget on the most suspicious 2% and deploys everything else as $U$ wrote it. But moderately suspicious code is too suspicious to be comfortable with, yet not suspicious enough to be worth a human audit. Deferring to the solutions of trusted models is a way to address this issue, at the cost of some deployment effectiveness. Any code whose suspicion falls in a band just below the audit threshold is not deployed and not audited; instead $T$ rewrites the solution from scratch, and its version is deployed.",
+      },
+      {
+        op: "activity",
+        after: { anchor: "b-0153", snippet: "Defer to trusted is an example of a more general design pattern" },
+        items: [{ kind: "exercise", id: "c-paper-l4-defer-terms-predict" }],
+      },
+      {
+        op: "add",
+        plain: true,
+        after: { anchor: "b-0153", snippet: "Defer to trusted is an example of a more general design pattern" },
+        markdown:
+          "Change the proportion of solutions for which we defer to $T$ and watch how this changes the red team's optimal strategy and how this changes the suspiciousness distribution of attacks.",
+      },
+      {
+        op: "activity",
+        after: { anchor: "b-0153", snippet: "Defer to trusted is an example of a more general design pattern" },
+        items: [
+          { kind: "demo", id: "defer" },
+          { kind: "exercise", id: "c-game-l7-defer-reflect" },
+        ],
+      },
+      {
+        op: "add",
+        plain: true,
+        after: { anchor: "b-0153", snippet: "Defer to trusted is an example of a more general design pattern" },
+        markdown:
+          "In summary, the monitor is a noisy classifier whose value is concentrated in the low-false-positive tail. The red team uses the optimal strategy over attack rate and subtlety. Auditing spends a scarce budget on the suspicious tail; deferring rewrites the mid-suspicion band with the trusted model. Safety is measured against the red team's best response throughout, and deferring to $T$ more trades usefulness from a more capable model $U$ for the safety from a less capable model $T$.\n\n" +
+          "The demo below models most of these interactions. For any given blue team strategy, the red team uses the optimal strategy against it, so the ringed point always sits against a best-responding adversary. The grey curve is the Pareto frontier: every safety and usefulness pair reachable at the current audit budget and monitor quality by varying the defer band, where improving one number means giving up some of the other.",
+      },
+      {
+        op: "activity",
+        after: { anchor: "b-0153", snippet: "Defer to trusted is an example of a more general design pattern" },
+        items: [{ kind: "demo", id: "control-dashboard" }],
+      },
+      {
+        op: "add",
+        plain: true,
+        after: { anchor: "b-0153", snippet: "Defer to trusted is an example of a more general design pattern" },
+        markdown:
+          "As we change how much we defer to $T$, the protocol slides along the Pareto frontier, trading usefulness for safety along a fixed curve. As the monitor quality or the audit budget varies, the Pareto frontier shifts: a better monitor or a larger budget lifts the curve up and to the right, letting you reach the same safety at higher usefulness.",
+      },
+      // --- end "Defer to Trusted" (3.3.1) subsection (XLab Tracks). ---
       // §3.4.2 end: naive untrusted monitoring recall.
       {
         op: "activity",
@@ -376,7 +684,9 @@ export const papers: Paper[] = [
   },
   {
     // Control track, module 1: "Catching AIs red-handed", rendered full-page
-    // through the LessWrong paper reader. No exercises (plain reading).
+    // through the LessWrong paper reader. Closes (after §Conclusion, before
+    // the appendices) with a two-stage legibility discussion — does a catch
+    // produce evidence that actually moves stakeholders?
     id: "c-catching-red-handed",
     slug: "catching-ais-red-handed",
     moduleId: "c-intro",
@@ -387,6 +697,47 @@ export const papers: Paper[] = [
         "https://www.lesswrong.com/posts/i2nmBfCXnadeGmhzW/catching-ais-red-handed",
     },
     estimatedMinutes: 30,
+    edits: [
+      // End of the body: framing paragraph, then the two staged
+      // writing-prompts (each with its own rubric), rendered in order after
+      // §Conclusion.
+      {
+        op: "add",
+        after: { sectionEnd: "lw-sec-conclusion" },
+        markdown:
+          "The original control framing treats catching a scheming AI " +
+          "red-handed as a win condition. Once you've caught it, you either " +
+          "shut it down or apply few-shot catastrophe prevention and either " +
+          "way the AI's odds of eventual success drop a lot. However, many " +
+          "have argued that even a clean red-handed catch, such as a " +
+          "situation where a model backdoors security-critical code and " +
+          "separately exploits the backdoor on a given input and we spot " +
+          "that, still might not result in the desired actions from " +
+          "important AI stakeholders. Rival AI labs, the US president, and " +
+          "even other people inside your lab could attribute this to " +
+          "role-play, a one-off anomaly, sabotage by rivals, or shoddy " +
+          "alignment work on your part. This raises the question of whether " +
+          "catching is an appropriate win condition if it doesn't have a " +
+          "high likelihood of decreasing the global level of AI risk. To " +
+          "put it concisely, there are other factors which decrease the " +
+          "efficacy of good control work that are outside of the control " +
+          "evaluations themselves.\n\n" +
+          "Respond to the following discussion questions and take some time " +
+          "to write out your answers. A good place to look for assistance is " +
+          "the Redwood Research blog, although after this section's readings " +
+          "you should be able to begin an answer by yourself.",
+      },
+      {
+        op: "activity",
+        after: { sectionEnd: "lw-sec-conclusion" },
+        items: [
+          // writing-prompts are not sequenceable (see the content integrity
+          // test), so the two stages are standalone items in order.
+          { kind: "exercise", id: "c-catching-legibility-s1" },
+          { kind: "exercise", id: "c-catching-legibility-s2" },
+        ],
+      },
+    ],
   },
   {
     // Control track, module 1: Ryan Greenblatt's threat-prioritization post,

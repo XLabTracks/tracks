@@ -164,6 +164,38 @@ describe(".bbl splicing", () => {
     expect(result?.warnings.some((w) => w.includes(".bbl"))).toBe(true);
   });
 
+  it("synthesizes a thebibliography from the .bib when no .bbl exists", () => {
+    const result = resolveMainTex(
+      filesFrom({
+        "main.tex":
+          "\\documentclass{article}\\begin{document}\n" +
+          "Text \\citep{greenblatt2024ai} and \\citet{bhatt2025ctrl}.\n" +
+          "\\bibliographystyle{plainnat}\n\\bibliography{references}\n\\end{document}",
+        "references.bib":
+          "@inproceedings{greenblatt2024ai,\n" +
+          "  title = {AI Control},\n" +
+          "  author = {Greenblatt, Ryan and Shlegeris, Buck},\n" +
+          "  booktitle = {ICML},\n  year = {2024}\n}\n" +
+          "@article{bhatt2025ctrl,\n  title = {Ctrl-Z},\n" +
+          "  author = {Bhatt, Aryan and others},\n" +
+          "  journal = {arXiv preprint arXiv:2504.10374},\n  year = {2025}\n}\n" +
+          "@article{uncited2025,\n  title = {Never Cited},\n" +
+          "  author = {Nobody, A.},\n  year = {2025}\n}\n",
+      }),
+    );
+    expect(result?.texSource).toContain("\\begin{thebibliography}");
+    expect(result?.texSource).toContain("\\bibitem{greenblatt2024ai}");
+    expect(result?.texSource).not.toContain("\\bibliography{references}");
+    // First-appearance order, and uncited entries are excluded.
+    const bibIdx = result!.texSource.indexOf("\\begin{thebibliography}");
+    const first = result!.texSource.indexOf("\\bibitem{greenblatt2024ai}", bibIdx);
+    const second = result!.texSource.indexOf("\\bibitem{bhatt2025ctrl}", bibIdx);
+    expect(first).toBeGreaterThan(-1);
+    expect(second).toBeGreaterThan(first);
+    expect(result?.texSource).not.toContain("uncited2025");
+    expect(result?.warnings.some((w) => w.includes("synthesized"))).toBe(true);
+  });
+
   it("leaves \\bibliographystyle alone", () => {
     const result = resolveMainTex(
       filesFrom({

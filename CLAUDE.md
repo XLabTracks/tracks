@@ -84,9 +84,15 @@ renders an arXiv paper, Substack post, or LessWrong/Alignment Forum post
 full-page from its precomputed artifact (`Paper.source` kinds
 `arxiv`/`substack`/`lesswrong`), editable via
 `Paper.edits`: hide sentences/paragraphs behind expandable markers, add
-editorial markdown (navy "Note" styling), splice activities (exercises /
-inline lessons) at section ends, between blocks, or mid-paragraph, and gloss
-phrases with glossary hover-card triggers. Targets key
+editorial markdown (navy "Note" styling, or `plain` for native-looking body
+text), splice activities (exercises / inline lessons) at section ends,
+between blocks, or mid-paragraph, gloss phrases with glossary hover-card
+triggers, splice a numbered `section` subsection whose display number/level
+are derived from the toc (shifting its later siblings' displayed numbers —
+`section-inserts.ts`), and `gate` the rest of the paper behind a
+tap-through/written-response card (`gate-state.ts`; the sidebar locks rows
+below a closed gate via `gateIds`, and the trailing references/footnotes
+render outside the gate walk as `ungatedTailHtml`). Targets key
 on stable `data-anchor`/`data-s` values plus a required `snippet` drift
 tripwire (validated by content.test.ts). `src/lib/papers/apply-edits.ts`
 patches only edited sections (HAST tree ops; unedited papers keep the string
@@ -340,4 +346,8 @@ drive the lock, and the item page redirects signed-in learners on hard locks
 units are lessons, papers, and papers' inserted lessons — see
 `getModuleProgressContentIds` in `src/lib/content/` — assessments never gate
 completion; an item's sidebar checkmark lights only when all of its units are
-complete.
+complete. Papers marked `optional: true` (and their inserted lessons) are
+trackable but never required: the `…ProgressContentIds` accessors exclude
+them (so module completion, prerequisite satisfaction, and progress totals
+ignore them) while `getTrackContentIds` is the full checkmark/fetch universe
+(`ex-paper-lesswrong` is the live reference).

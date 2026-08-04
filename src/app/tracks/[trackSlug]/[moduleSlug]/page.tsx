@@ -23,7 +23,6 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
   Card,
-  CardContent,
   CardDescription,
   CardFooter,
   CardHeader,
@@ -133,6 +132,9 @@ export default async function ModulePage({
                           <Badge variant="secondary" className="gap-1">
                             <FileText className="size-3" aria-hidden /> Paper
                           </Badge>
+                        )}
+                        {item.kind === "paper" && item.paper.optional && (
+                          <Badge variant="outline">Optional</Badge>
                         )}
                       </span>
                       {estimatedMinutes && (

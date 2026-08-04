@@ -5,6 +5,7 @@ import {
   getModuleProgressContentIds,
   getModulesForTrack,
   getPrerequisiteModules,
+  getTrackContentIds,
   getTrackForModule,
   getTrackProgressContentIds,
   type Module,
@@ -42,13 +43,15 @@ export const isLessonCompleted = cache(
 /**
  * The set of completed content ids covering a whole track AND every module's
  * prerequisites (so prerequisite locks resolve in memory, cross-track prereqs
- * included). One query, cache()-keyed on scalars — the track layout, the track
- * overview page, and the item/module/assessment pages rendering under that
- * layout in the same request all share it.
+ * included). Optional readings' units are in the set — they light their own
+ * checkmarks — while completion judgments stay on the required
+ * …ProgressContentIds. One query, cache()-keyed on scalars — the track
+ * layout, the track overview page, and the item/module/assessment pages
+ * rendering under that layout in the same request all share it.
  */
 export const getTrackCompletionSet = cache(
   async (userId: string, trackId: string): Promise<Set<string>> => {
-    const ids = new Set(getTrackProgressContentIds(trackId));
+    const ids = new Set(getTrackContentIds(trackId));
     for (const mod of getModulesForTrack(trackId)) {
       for (const prereq of getPrerequisiteModules(mod.id)) {
         for (const id of getModuleProgressContentIds(prereq.id)) ids.add(id);
@@ -133,7 +136,9 @@ export async function getLastViewedContentId(
   userId: string,
   trackId: string,
 ): Promise<string | null> {
-  const contentIds = getTrackProgressContentIds(trackId);
+  // All trackable ids, not just required ones — "Continue" should resume at
+  // an optional reading when that's where the learner left off.
+  const contentIds = getTrackContentIds(trackId);
   if (contentIds.length === 0) return null;
   const row = await prisma.lessonProgress.findFirst({
     where: { userId, lessonId: { in: contentIds } },

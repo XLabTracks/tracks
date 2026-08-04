@@ -48,11 +48,23 @@ export interface PatchedSection {
 
 const SENTINEL_TAG = "ax-part-break";
 
+/** Display info for an inserted `op: "section"`, resolved by section-inserts. */
+export interface InsertedSectionRender {
+  number: string;
+  level: number;
+  title: string;
+}
+
 /** Rendered html for a section-end `add` edit (used by apply-edits tier 1). */
-export function renderBlockAddHtml(markdown: string, label?: string): string {
+export function renderBlockAddHtml(
+  markdown: string,
+  label?: string,
+  plain?: boolean,
+): string {
+  const blocks = markdownBlocksToHast(markdown);
   return toHtml({
     type: "root",
-    children: [blockAddedWrapper(markdownBlocksToHast(markdown), label)],
+    children: plain ? blocks : [blockAddedWrapper(blocks, label)],
   });
 }
 
@@ -67,7 +79,8 @@ export function renderGatePromptHtml(markdown: string): string {
 
 export function patchSectionHtml(
   sectionHtml: string,
-  ops: PaperEdit[]
+  ops: PaperEdit[],
+  insertedSections?: Map<string, InsertedSectionRender>,
 ): PatchedSection {
   const tree = fromHtmlIsomorphic(sectionHtml, { fragment: true }) as Root;
   const unmatched: PaperEdit[] = [];
@@ -104,9 +117,14 @@ export function patchSectionHtml(
     if (!block) return null;
     const target = ref.s ? findSentenceSpan(block, ref.s) : block;
     if (!target) return null;
+    // A text-less block (a caption-less figure/image) has no prose to trip
+    // against — the anchor IS the whole target, so its snippet is documentary
+    // only. Blocks that carry text keep the strict drift check.
+    const targetText = normalizeText(blockTextOf(target));
     if (
       ref.snippet &&
-      !normalizeText(blockTextOf(target)).startsWith(normalizeText(ref.snippet))
+      targetText !== "" &&
+      !targetText.startsWith(normalizeText(ref.snippet))
     ) {
       return null;
     }
@@ -153,6 +171,9 @@ export function patchSectionHtml(
     } else if (op.op === "hide") {
       if (ref.s) bucket.sentenceHides.push(op);
       else bucket.blockHide = bucket.blockHide ?? op;
+    } else if (op.op === "section") {
+      // Section headings are always block-level (phase C), never mid-sentence.
+      bucket.after.push(op);
     } else if (op.op === "gate") {
       // Sentence-level gates are unsupported (content.test.ts enforces this;
       // fail-soft here for local iteration).
@@ -356,35 +377,62 @@ export function patchSectionHtml(
     const block = blockByAnchor.get(anchor)!;
     let cursor: Element = tailFragment.get(anchor) ?? block;
     // Once a gate for this block has been hoisted past `cursor`'s container,
-    // later same-block ops must hoist too: pushing an add into the container
-    // would render it ABOVE the gate sentinel, leaking content the edits
-    // order placed behind the gate. (Hoisted activities already sort after
-    // the gate via their edits index.)
+    // later same-block ops must hoist too: pushing an add (or a section
+    // heading) into the container would render it ABOVE the gate sentinel,
+    // leaking content the edits order placed behind the gate. (Hoisted
+    // activities already sort after the gate via their edits index.)
     let gateHoisted = false;
+    // Place block-level nodes after `cursor`, advancing it to the last element
+    // placed. A block after an <li> would be a non-conforming ul/ol child, so
+    // it renders inside the list item instead (cursor stays on the li); once a
+    // gate has hoisted, the nodes hoist out of the container behind it.
+    const placeAfterCursor = (nodes: ElementContent[], op: PaperEdit): void => {
+      if (gateHoisted) {
+        const container = topLevelAncestorOf(cursor);
+        for (const node of nodes) {
+          if (node.type !== "element") continue;
+          deferHoist(
+            container,
+            [anchorNum(anchor), Number.MAX_SAFE_INTEGER, ops.indexOf(op)],
+            node,
+          );
+        }
+        return;
+      }
+      if (cursor.tagName === "li") {
+        for (const node of nodes) {
+          cursor.children.push(node);
+          if (node.type === "element") parentOf.set(node, cursor);
+        }
+        return;
+      }
+      const parent = parentOf.get(cursor) ?? tree;
+      const at = parent.children.indexOf(cursor);
+      parent.children.splice(at + 1, 0, ...nodes);
+      for (const node of nodes) {
+        if (node.type !== "element") continue;
+        parentOf.set(node, parent);
+        cursor = node;
+      }
+    };
     for (const op of byAnchor.get(anchor)!.after) {
       if (op.op === "add") {
-        const added = blockAddedWrapper(
-          markdownBlocksToHast(op.markdown),
-          op.label
+        // `plain` adds render as native paper body (no editorial box/label);
+        // the default wraps the markdown in the navy `.ax-added` note card.
+        const blocks = markdownBlocksToHast(op.markdown);
+        placeAfterCursor(
+          op.plain ? blocks : [blockAddedWrapper(blocks, op.label)],
+          op,
         );
-        if (gateHoisted) {
-          deferHoist(
-            topLevelAncestorOf(cursor),
-            [anchorNum(anchor), Number.MAX_SAFE_INTEGER, ops.indexOf(op)],
-            added
-          );
-        } else if (cursor.tagName === "li") {
-          // A div after an li would be a non-conforming ul/ol child — the
-          // note renders inside the list item instead.
-          cursor.children.push(added);
-          parentOf.set(added, cursor);
-        } else {
-          const parent = parentOf.get(cursor) ?? tree;
-          const at = parent.children.indexOf(cursor);
-          parent.children.splice(at + 1, 0, added);
-          parentOf.set(added, parent);
-          cursor = added;
-        }
+      } else if (op.op === "section") {
+        // A native-looking numbered subsection heading (same markup as the
+        // paper's own <h4> subsections). Number/level are derived by
+        // section-inserts and passed in; fall back to a bare h4 if absent.
+        const meta = insertedSections?.get(op.id);
+        placeAfterCursor(
+          [sectionHeadingElement(op.id, op.title, meta?.number ?? "", meta?.level ?? 4)],
+          op,
+        );
       } else if (op.op === "activity" || op.op === "gate") {
         // Activities and gates render as React parts, so their sentinels must
         // sit at the top level — nested cursors defer into the container's
@@ -447,6 +495,22 @@ export function patchSectionHtml(
       const parent = parentOf.get(block)!;
       const at = parent.children.indexOf(block);
       if (at !== -1) parent.children.splice(at, 1);
+      // Silent-hiding every item of a list empties its <ul>/<ol>, which would
+      // otherwise render as a stray blank gap. Drop the now-childless list.
+      if (
+        parent.type === "element" &&
+        (parent.tagName === "ul" || parent.tagName === "ol") &&
+        !parent.children.some((child) => child.type === "element")
+      ) {
+        const grandparent = parentOf.get(parent);
+        if (grandparent) {
+          const siblings = grandparent.children as Array<
+            ElementContent | RootContent
+          >;
+          const gi = siblings.indexOf(parent);
+          if (gi !== -1) siblings.splice(gi, 1);
+        }
+      }
       continue;
     }
     if (block.tagName === "li") {
@@ -764,6 +828,35 @@ function blockAddedWrapper(
       ...children,
     ],
   };
+}
+
+/**
+ * A native-looking numbered subsection heading for an inserted `op: "section"`:
+ * an `<hN>` (N = level, clamped to h2–h6) carrying `id` (nav anchor +
+ * scroll-spy target), a leading `ax-secnum` number span, then the title —
+ * matching the converter's own heading markup, so the paper's `.arxiv-paper`
+ * typography applies unchanged. No `data-anchor`: the heading is not an edit
+ * target and takes part in no block indexing.
+ */
+function sectionHeadingElement(
+  id: string,
+  title: string,
+  number: string,
+  level: number,
+): Element {
+  const tag = `h${Math.min(6, Math.max(2, level))}`;
+  const children: ElementContent[] = number
+    ? [
+        {
+          type: "element",
+          tagName: "span",
+          properties: { className: ["ax-secnum"] },
+          children: [text(number)],
+        },
+        text(` ${title}`),
+      ]
+    : [text(title)];
+  return { type: "element", tagName: tag, properties: { id }, children };
 }
 
 function detailsWrapper(

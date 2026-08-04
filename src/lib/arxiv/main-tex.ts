@@ -3,8 +3,12 @@
  * single self-contained source: `\input`/`\include` spliced in, and the
  * compiled `.bbl` substituted for `\bibliography{...}` (arXiv never runs
  * bibtex — submitters must include the .bbl, so splicing it is exactly what
- * LaTeX itself does at that site).
+ * LaTeX itself does at that site). When only a `.bib` database is shipped (no
+ * `.bbl`), a `thebibliography` is synthesized from it (see ./bibtex) so
+ * citations still resolve instead of leaking raw keys.
  */
+
+import { citedKeysInOrder, synthesizeThebibliography } from "./bibtex";
 
 export interface MainTexResult {
   /** Flattened TeX source. */
@@ -162,14 +166,92 @@ function spliceBbl(
     : allBbls.length === 1
       ? allBbls[0]
       : null;
-  if (bblPath === null) {
-    warnings.push("\\bibliography used but no matching .bbl in archive");
-    return texSource;
+  if (bblPath !== null) {
+    const bblContent = decodeTexBytes(files.get(bblPath)!);
+    return mapCodeSegments(texSource, (code) =>
+      code.replace(BIBLIOGRAPHY_RE, () => `\n${bblContent}\n`),
+    );
   }
-  const bblContent = decodeTexBytes(files.get(bblPath)!);
-  return mapCodeSegments(texSource, (code) =>
-    code.replace(BIBLIOGRAPHY_RE, () => `\n${bblContent}\n`),
-  );
+
+  // No .bbl — machine-generated submissions sometimes ship only the .bib
+  // database. Synthesize a thebibliography from it so \cite keys resolve to
+  // numbered references instead of leaking raw keys.
+  const synthesized = synthesizeFromBib(texSource, files);
+  if (synthesized !== null) {
+    warnings.push("no .bbl in archive; bibliography synthesized from .bib");
+    // Replace the FIRST \bibliography with the synthesized list; drop any
+    // others so multiple \bibliography commands don't duplicate the section.
+    let spliced = false;
+    return mapCodeSegments(texSource, (code) =>
+      code.replace(BIBLIOGRAPHY_RE, () => {
+        if (spliced) return "";
+        spliced = true;
+        return `\n${synthesized}\n`;
+      }),
+    );
+  }
+
+  warnings.push("\\bibliography used but no matching .bbl in archive");
+  return texSource;
+}
+
+/**
+ * Build a `thebibliography` from the `.bib` database(s) the source references
+ * (falling back to any `.bib` in the archive), populated with the cited keys
+ * in first-appearance order. Returns null when no usable `.bib`/citation pair
+ * is found.
+ */
+function synthesizeFromBib(
+  texSource: string,
+  files: Map<string, Uint8Array>,
+): string | null {
+  const bibSources: string[] = [];
+  const seen = new Set<string>();
+  const addBib = (path: string | null) => {
+    if (path && !seen.has(path)) {
+      seen.add(path);
+      bibSources.push(decodeTexBytes(files.get(path)!));
+    }
+  };
+
+  for (const line of texSource.split("\n")) {
+    const code = splitTexComment(line)[0];
+    for (const m of code.matchAll(/\\bibliography(?![a-zA-Z])\s*\{([^}]*)\}/g)) {
+      for (const base of m[1].split(",")) {
+        const name = base.trim();
+        if (name) addBib(resolveBibPath(name, files));
+      }
+    }
+  }
+  if (bibSources.length === 0) {
+    for (const path of files.keys()) {
+      if (path.toLowerCase().endsWith(".bib")) addBib(path);
+    }
+  }
+  if (bibSources.length === 0) return null;
+
+  const cited = citedKeysInOrder(texSource);
+  if (cited.length === 0) return null;
+  return synthesizeThebibliography(bibSources.join("\n"), cited);
+}
+
+/** Resolve a `\bibliography{name}` base to a `.bib` file in the archive. */
+function resolveBibPath(
+  name: string,
+  files: Map<string, Uint8Array>,
+): string | null {
+  const normalized = name.replace(/^\.\//, "");
+  const withExt = normalized.toLowerCase().endsWith(".bib")
+    ? normalized
+    : `${normalized}.bib`;
+  if (files.has(withExt)) return withExt;
+  if (files.has(normalized)) return normalized;
+  // Fall back to matching by basename (e.g. \bibliography{refs} → bib/refs.bib).
+  const wantBase = withExt.split("/").pop();
+  for (const path of files.keys()) {
+    if (path.split("/").pop() === wantBase) return path;
+  }
+  return null;
 }
 
 /** Try the name as given, then with .tex appended when it has no extension. */

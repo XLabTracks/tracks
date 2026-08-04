@@ -13,6 +13,16 @@
     position: relative;
   }
 
+  /* Gated papers hide the canonical footnotes SECTION (see paper-reader.tsx:
+     the trailing tail only exists when the paper is gated). The <section>
+     stays in the DOM so PaperSidenotes still clones note bodies for revealed
+     markers — only the visible bottom dump, which would otherwise spoil every
+     gated note at once, is suppressed. References (.ax-references) stay
+     visible so citation links keep a target. */
+  .paper-gated-tail :is(.ax-footnotes, .lw-footnotes, .sb-footnotes) {
+    display: none;
+  }
+
   /* Anchor targets (section headings AND ins-* activity wrappers) must clear
      the sticky site header (3.5rem). Headings inside .arxiv-paper already
      carry scroll-margin-top from arxiv-paper.css; this covers the wrappers. */

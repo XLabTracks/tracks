@@ -157,7 +157,7 @@ titles are collected at compile time from the rendered MDX
 (`src/lib/mdx/rehype-lesson-sections.mjs`, wired in `next.config.ts` right
 after rehype-slug), so the nav can never drift from the document. Prefer
 plain-text headings — math/code in a heading makes an ugly nav label. See
-lesson `c-game` (Control track) or `ex-content-l2` for live examples.
+lesson `c-regimes-l1` (Control track) or `ex-content-l2` for live examples.
 
 **Adding a new module** (a new unit / top-level "lesson" in the track) is the same
 shape one level up: add a `Module` to the `modules` array (`id`, `slug`, `trackId`,
@@ -342,7 +342,12 @@ section panel with scroll-synced highlighting, and `edits` let you **hide** text
 **add** editorial notes, splice **activities** — exercise cards and inline
 lessons — at section ends, between paragraphs, or between sentences, and
 **gloss** phrases of the paper's prose with glossary hover cards (§1c). Papers
-count toward progress exactly like lessons. Footnotes additionally render as margin
+count toward progress exactly like lessons — unless marked `optional: true`,
+which labels the reading "Optional" wherever the module lists it and excludes
+it (inserted lessons included) from module completion, prerequisite
+satisfaction, and progress totals; it stays individually completable, with its
+own checkmark (`ex-paper-lesswrong` is the live reference). Footnotes
+additionally render as margin
 **sidenotes** when the viewport has room (readers can toggle this from the
 page header; the in-document footnotes section is always there).
 
@@ -358,6 +363,9 @@ page header; the in-document footnotes section is always there).
                                        // new-style ids only (2007+) — old-style
                                        // slash ids (hep-th/…) are unsupported
      estimatedMinutes: 45,             // optional; fold into module.estimatedMinutes
+     optional: true,                   // optional reading: labelled "Optional";
+                                       // never required for module completion,
+                                       // prerequisites, or progress totals
      edits: [                          // optional, see step 4 and §2b
        {
          op: "activity",
@@ -417,6 +425,9 @@ page header; the in-document footnotes section is always there).
    checkmark lights only when **all** of its units are complete, and module/track
    percentages count each unit. A manual "Mark complete" button is always
    available too (scroll-past completion still works even on the fallback page).
+   An `optional: true` paper's units keep all of this individually — checkmarks
+   light as usual — but are excluded from the module's completion requirement
+   and from module/track percentages.
 
 7. **Rebuild on converter bumps**: each source pins its own converter version
    (`CONVERTER_VERSION` for arXiv; `SUBSTACK_CONVERTER_VERSION` /
@@ -457,7 +468,7 @@ control keyed to **block anchors** and **sentences**:
   math/citations never split a sentence — when in doubt the segmenter merges,
   so trust the `--blocks` output over your own reading.
 
-The four ops, targeting the example paper (`1706.03762v7`; anchors/snippets
+The six ops, targeting the example paper (`1706.03762v7`; anchors/snippets
 below are real — see `papers.data.ts` for the live hide/add/activity config;
 the gloss op below is shape-only, its glossary entry is not in the registry):
 
@@ -485,6 +496,17 @@ edits: [
   { op: "activity",
     after: { anchor: "b-0004", s: 1, snippet: "Recurrent neural networks," },
     items: [{ kind: "exercise", id: "true-false" }] },
+
+  // SECTION — splice a first-class numbered subsection after a block. The
+  // heading renders as a native <hN> (ax-secnum number span + `id`), its
+  // number/level DERIVED from the parent section in the toc; the parent's
+  // later sibling subsections shift their DISPLAYED numbers by +1 (body AND
+  // nav), while every id/anchor/text stays verbatim. Follow it with
+  // `plain: true` adds + activities on the same block to fill the subsection.
+  { op: "section",
+    after: { anchor: "b-0005", snippet: "Recurrent models typically factor" },
+    id: "your-subsection-id",
+    title: "Your Subsection Title" },
 
   // GLOSS: wrap a phrase of the paper's own text in a glossary hover-card
   // trigger (§1c). First occurrence inside the target sentence (or whole
@@ -534,24 +556,24 @@ edits: [
   toggle works only in the in-document footnotes section.
 - **Block add** → a navy left-accented card with an uppercase "NOTE" label
   (the op's optional `label` field overrides that eyebrow text, e.g.
-  `label: "Source"` — block/section targets only).
+  `label: "Source"` — block/section targets only). `plain: true` opts the add
+  OUT of that card, rendering the markdown as native paper body (for prose that
+  belongs to an inserted `section`, where the card/left-accent would read as a
+  "note" rather than the paper's own text).
   **Inline add** → a navy-tinted span with a dashed underline, appended right
   after the target sentence, tooltipped "Added by the course". Editorial voice
   is always navy, distinct from the paper's red links.
+- **Section** → a native-looking numbered subsection heading (same `ax-secnum`
+  markup and typography as the paper's own subsections), with a matching
+  sidebar entry nested under its parent, in document order. The number/level
+  are derived from the toc; inserting one shifts the DISPLAYED numbers of the
+  parent's later sibling subsections up by one (e.g. inserting §3.2.1 renumbers
+  the paper's own 3.2.1→3.2.2, 3.2.2→3.2.3) in both body and nav — ids,
+  anchors, and text stay verbatim, and nothing outside the parent renumbers.
 - **Gloss** → the phrase gets the glossary's dotted underline; hover (with
   intent delay) or tap opens the definition card. Wrapping never changes the
   block's text, so anchors, sentence indices, and snippets are unaffected —
   glossing inside hidden text is allowed (the trigger reveals with it).
-- **Mid-paragraph activity** → the paragraph ends after the target sentence
-  (keeping any inline adds attached to it), the card renders, and the remainder
-  continues as a normal-looking paragraph. Splitting at the last sentence just
-  places the card after the block.
-- **Placement details**: multiple ops on one target render in edits-array
-  order (same-sentence activities merge into one card stack); activities
-  targeting blocks nested in containers (theorem/proof boxes, figures, the
-  abstract/references landmark sections) never split the container — the card
-  renders after the whole box; a block-level add after a list item renders
-  inside that item (valid list markup).
 - **Gate** → a navy-accented "Before you read on" card with the prompt and a
   button; everything below (to the END of the paper's body — later gates nest
   inside earlier ones) stays out of the DOM until tapped. A bare gate (no
@@ -563,11 +585,23 @@ edits: [
   the visible text keep live targets and margin sidenotes work from the
   start. Gated papers scroll-complete only once every gate has been opened
   (the manual complete button always works).
-- **Sidebar**: activity entries appear in the "In this paper" panel under their
-  containing section, in reading order; hide/add edits produce no panel
-  entries. Gate edits produce no entries either, but rows whose targets sit
-  below a still-closed gate render locked (dimmed, lock icon) — clicking one
-  scrolls to the blocking gate's card instead of a hash that lands nowhere.
+- **Mid-paragraph activity** → the paragraph ends after the target sentence
+  (keeping any inline adds attached to it), the card renders, and the remainder
+  continues as a normal-looking paragraph. Splitting at the last sentence just
+  places the card after the block.
+- **Placement details**: multiple ops on one target render in edits-array
+  order (same-sentence activities merge into one card stack); activities
+  targeting blocks nested in containers (theorem/proof boxes, figures, the
+  abstract/references landmark sections) never split the container — the card
+  renders after the whole box; a block-level add after a list item renders
+  inside that item (valid list markup).
+- **Sidebar**: activity entries and inserted `section` headings appear in the
+  "In this paper" panel under their containing section, in reading order (an
+  inserted section's own activities nest under it); hide/add edits produce no
+  panel entries. Gate edits produce no entries either, but rows whose targets
+  sit below a still-closed gate render locked (dimmed, lock icon) — clicking
+  one scrolls to the blocking gate's card instead of a hash that lands
+  nowhere.
 
 **Add markdown capabilities**: CommonMark (emphasis, links, inline code, lists,
 fences, blockquotes) plus `$…$` / `$$…$$` KaTeX math — rendered with *vanilla*

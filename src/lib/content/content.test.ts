@@ -1,4 +1,4 @@
-import { existsSync, readFileSync } from "node:fs";
+import { existsSync, readFileSync, readdirSync } from "node:fs";
 import { join } from "node:path";
 import { describe, it, expect } from "vitest";
 import { lessons, modules } from "@/content/curriculum.data";
@@ -16,8 +16,11 @@ import {
   getContentLocation,
   getModulesForTrack,
   getPrerequisiteModules,
+  getTrackContentIds,
   getTrackItemSequence,
+  isOptionalItem,
   itemIdOf,
+  type ModuleItem,
   itemSlugOf,
   paperResources,
   papers,
@@ -610,6 +613,57 @@ describe("paper integrity", () => {
     }
   });
 
+  it("no committed arXiv artifact leaks raw citation keys", () => {
+    // When a source ships neither a .bbl nor a synthesizable .bib, the
+    // converter's last resort renders each citation as its bracketed keys
+    // ("[greenblatt2024ai, ...]"). That must never reach a committed
+    // artifact: converterVersion alone can't catch it (the fallback is a
+    // warning, not a version change), so check the rendered HTML itself.
+    // A cite span with numbered links may legitimately carry letters
+    // (natbib pre/post-notes like "[see e.g. 36]"); letters with NO link
+    // are leaked keys. Scans every committed artifact — lesson-embedded
+    // papers included, not just module items.
+    const dir = join(process.cwd(), "src/content/arxiv");
+    for (const file of readdirSync(dir)) {
+      if (!file.endsWith(".json")) continue;
+      const artifact = JSON.parse(
+        readFileSync(join(dir, file), "utf8"),
+      ) as PaperArtifact;
+      if (artifact.state !== "ready") continue;
+      const id = file.replace(/\.json$/, "");
+      const tree = fromHtmlIsomorphic(artifact.paper.html, {
+        fragment: true,
+      }) as Root;
+      const checkCites = (node: Root | Element): void => {
+        for (const child of node.children ?? []) {
+          if (child.type !== "element") continue;
+          const classes = child.properties?.className;
+          if (Array.isArray(classes) && classes.includes("ax-cite")) {
+            const hasLink = (function findA(el: Element): boolean {
+              return el.children.some(
+                (c) =>
+                  c.type === "element" && (c.tagName === "a" || findA(c)),
+              );
+            })(child);
+            const text = (function textOf(el: Element): string {
+              return el.children
+                .map((c) =>
+                  c.type === "text" ? c.value : c.type === "element" ? textOf(c) : "",
+                )
+                .join("");
+            })(child);
+            expect(
+              hasLink || !/[a-zA-Z]{3,}/.test(text),
+              `${id}: citation renders raw keys ("${text}") — its bibliography did not resolve; rebuild with \`npm run arxiv:build -- --id ${id}\` (a .bib-only source synthesizes its bibliography on rebuild)`,
+            ).toBe(true);
+          }
+          checkCites(child);
+        }
+      };
+      checkCites(tree);
+    }
+  });
+
   it("every ready artifact's listed assets are committed", () => {
     // The HTML hotlinks nothing — every image it references must exist as a
     // committed static file, or the deployed page renders broken images.
@@ -686,13 +740,20 @@ describe("paper integrity", () => {
           ).toBe(true);
         }
         const targetText = ref.s !== undefined ? info.sentences[ref.s - 1] : info.text;
-        expect(ref.snippet.trim().length, `${paper.id}: empty snippet at ${ref.anchor}`).toBeGreaterThan(0);
-        expect(
-          normalizeText(targetText ?? "").startsWith(normalizeText(ref.snippet)),
-          `${paper.id}: snippet drift at ${ref.anchor}${ref.s ? ` s=${ref.s}` : ""} — ` +
-            `expected text starting "${ref.snippet}", target starts "${(targetText ?? "").slice(0, 70)}" — ` +
-            `re-run \`${listCmd}\` and re-verify this edit`,
-        ).toBe(true);
+        // A whole-block edit on a text-less block (a caption-less figure/image)
+        // has no prose to snippet against — the anchor IS the whole target and
+        // its snippet is documentary only (the patch engine skips the drift
+        // check there too). Blocks that carry text stay strict.
+        const textless = ref.s === undefined && info.text === "";
+        if (!textless) {
+          expect(ref.snippet.trim().length, `${paper.id}: empty snippet at ${ref.anchor}`).toBeGreaterThan(0);
+          expect(
+            normalizeText(targetText ?? "").startsWith(normalizeText(ref.snippet)),
+            `${paper.id}: snippet drift at ${ref.anchor}${ref.s ? ` s=${ref.s}` : ""} — ` +
+              `expected text starting "${ref.snippet}", target starts "${(targetText ?? "").slice(0, 70)}" — ` +
+              `re-run \`${listCmd}\` and re-verify this edit`,
+          ).toBe(true);
+        }
       }
     }
   });
@@ -971,20 +1032,45 @@ describe("module item navigation", () => {
     }
   });
 
-  it("module progress ids list papers and their inserted lessons exactly once", () => {
+  // An item's completion units, re-derived from the raw data (not through the
+  // accessors under test): the item itself plus a paper's inserted lessons.
+  const unitIdsOf = (item: ModuleItem): string[] =>
+    item.kind === "lesson"
+      ? [item.lesson.id]
+      : [
+          item.paper.id,
+          ...(item.paper.edits ?? []).flatMap((edit) =>
+            edit.op === "activity"
+              ? edit.items.flatMap((i) => (i.kind === "lesson" ? [i.id] : []))
+              : [],
+          ),
+        ];
+
+  it("module progress ids list required papers and their inserted lessons exactly once", () => {
     for (const track of tracks) {
       for (const m of getModulesForTrack(track.id)) {
         const ids = getModuleProgressContentIds(m.id);
         expect(new Set(ids).size).toBe(ids.length);
         for (const item of getItemsForModule(m.id)) {
-          expect(ids).toContain(itemIdOf(item));
-          if (item.kind === "paper") {
-            for (const edit of item.paper.edits ?? []) {
-              if (edit.op !== "activity") continue;
-              for (const inserted of edit.items) {
-                if (inserted.kind === "lesson") expect(ids).toContain(inserted.id);
-              }
-            }
+          // Optional readings are trackable but never required: none of their
+          // units may appear among the module's progress ids.
+          for (const unitId of unitIdsOf(item)) {
+            if (isOptionalItem(item)) expect(ids).not.toContain(unitId);
+            else expect(ids).toContain(unitId);
+          }
+        }
+      }
+    }
+  });
+
+  it("track content ids cover every item's units — optional included — exactly once", () => {
+    for (const track of tracks) {
+      const ids = getTrackContentIds(track.id);
+      expect(new Set(ids).size).toBe(ids.length);
+      for (const m of getModulesForTrack(track.id)) {
+        for (const item of getItemsForModule(m.id)) {
+          for (const unitId of unitIdsOf(item)) {
+            expect(ids).toContain(unitId);
           }
         }
       }

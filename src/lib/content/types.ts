@@ -135,11 +135,31 @@ export type PaperEdit =
    * Authored editorial text, rendered with distinct styling. A sentence
    * target means inline-level markdown (a single paragraph); a block or
    * section target renders block-level markdown after it. `label` overrides
-   * the card's "Note" eyebrow (block-level adds only).
+   * the card's "Note" eyebrow (block-level adds only). `plain: true` opts a
+   * block/section-level add OUT of the `.ax-added` editorial box, rendering
+   * the markdown as native paper body — for prose that belongs to an inserted
+   * `section` (the box/label/left-accent would read as a "note", not the
+   * paper's own text). Ignored on inline (sentence-level) adds.
    */
-  | { op: "add"; after: PaperEditAnchor; markdown: string; label?: string }
+  | { op: "add"; after: PaperEditAnchor; markdown: string; label?: string; plain?: boolean }
   /** Activities (exercise cards / inline lessons) spliced into the flow. */
   | { op: "activity"; after: PaperEditAnchor; items: PaperInsertionItem[] }
+  /**
+   * Splice a first-class numbered subsection into the paper after a block. The
+   * heading renders as a native `<h4>` (same markup/typography as the paper's
+   * own subsections: an `ax-secnum` number span + the title) carrying `id` as
+   * its DOM id (nav anchor + scroll-spy target). The displayed number and
+   * heading level are DERIVED at render time from the toc — the parent section
+   * is the one containing `after` — so the artifact JSON stays verbatim.
+   * Inserting a subsection shifts the DISPLAYED numbers of the parent's later
+   * sibling subsections by +1 (e.g. inserting §3.2.1 renumbers the paper's own
+   * "3.2.1"→"3.2.2", "3.2.2"→"3.2.3") in both the body and the nav; every
+   * section id/anchor/text stays unchanged. The nav gains a matching entry
+   * nested under the parent, in document order. Follow the heading with
+   * `plain: true` adds + activities (all on the same `after` block) to fill the
+   * subsection with native-looking body content.
+   */
+  | { op: "section"; after: PaperBlockRef; id: string; title: string }
   /**
    * Wrap a phrase of the target block/sentence in a glossary hover-card
    * trigger. `termId` references an entry in `src/content/glossary.json`;
@@ -196,6 +216,13 @@ export interface Paper {
    * content.test.ts against the committed artifact.
    */
   edits?: PaperEdit[];
+  /**
+   * Optional reading: labelled "Optional" wherever the module lists it, and
+   * excluded from progress requirements — module completion, prerequisite
+   * satisfaction, and module/track totals ignore it (its inserted lessons
+   * too). Still completable: the item keeps its own checkmark.
+   */
+  optional?: true;
   estimatedMinutes?: number;
 }
 
@@ -272,8 +299,12 @@ export interface ChoiceExercise extends ExerciseBase {
 
 export interface UnderstandingCheckExercise extends ExerciseBase {
   type: "understanding-check";
-  /** Revealed after the learner self-attempts; not auto-graded. */
-  sampleAnswer: string;
+  /**
+   * Revealed after the learner self-attempts; not auto-graded. Optional: when
+   * omitted the card is a pure free-response prompt (no reveal button) — used
+   * when the surrounding prose itself is the answer's reveal.
+   */
+  sampleAnswer?: string;
 }
 
 /** Self-assessment after a tap-reveal; recorded for future spaced repetition. */
@@ -643,7 +674,7 @@ export interface StagedQuestionsExercise extends ExerciseBase {
    * Persistent figure rendered above every part (by registry key), for
    * exercises whose questions all reason about one shared picture.
    */
-  figureWidget?: "two-worlds";
+  figureWidget?: "two-worlds" | "monitor-roc-mini";
 }
 
 // --- Commit & construct (commit to a view, then build the counterexample) ---

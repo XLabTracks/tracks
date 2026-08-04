@@ -128,7 +128,212 @@ export const papers: Paper[] = [
           { kind: "exercise", id: "c-paper-l3-recall-upfront-auditing-attack" },
         ],
       },
-      // §3.2.1: the monitor as a binary classifier (ROC/AUC framing + demo).
+      // --- "Probability of Safety over Deployment" — a first-class subsection
+      // authored by XLab Tracks. NOT part of the Redwood Research paper (which
+      // is reproduced verbatim with permission); everything from here to the
+      // end-of-cluster marker below is ours. ---
+      //
+      // §3.2 (Trusted Monitoring): the "race" cluster + the "opportunities are
+      // not equal" cluster, relocated here from the c-game lesson. Every op
+      // targets b-0131 — the last block of §3.2's body, the paper's "Safety: …
+      // 62%" sentence — so, per patch-section's phase C, they render after that
+      // block in edits-array order, filling the new subsection just before the
+      // paper's §3.2.1 heading.
+      //
+      // The `op: "section"` below splices a REAL numbered subsection. The
+      // pipeline derives its number ("3.2.1") and <h4> level from §3.2 in the
+      // toc and renders a native heading (an ax-secnum span + stable id,
+      // identical markup to the paper's own subsection headings), adds a
+      // matching sidebar nav entry nested under §3.2, and SHIFTS the DISPLAYED
+      // numbers of Redwood's own later §3.2 subsections up by one — "Qualitative
+      // Analysis" 3.2.1→3.2.2, "Extending Trusted Monitoring…" 3.2.2→3.2.3 — in
+      // both the rendered body and the nav. Every section id/anchor and all of
+      // Redwood's text stay verbatim; only the shown numbers move (the artifact
+      // JSON is never edited). The prose ops that follow carry `plain: true`, so
+      // they render as native paper body instead of in `.ax-added` editorial
+      // boxes — this reads as the paper's own subsection, not a stack of notes.
+      {
+        op: "section",
+        after: { anchor: "b-0131", snippet: "Safety: The blue team win probability is 62%" },
+        id: "xlab-sec-probability-of-safety-over-deployment",
+        title: "Probability of Safety over Deployment",
+      },
+      {
+        op: "add",
+        plain: true,
+        after: { anchor: "b-0131", snippet: "Safety: The blue team win probability is 62%" },
+        markdown:
+          "The paper reports that Trusted Monitoring achieves a blue team win probability of 62%. A protocol's safety is calculated as the blue team win probability against the red team's best strategy (the strategy that maximizes the probability of a red team win), but what actually is the best strategy for the red team in this protocol?\n\n" +
+          "Each of the red team's attack attempts can end in exactly one of three ways:\n\n" +
+          "- **Caught**: An attack (working or broken) is audited and *caught* by the blue team: Blue Team Wins. In the paper's setup, 24 of 71 attacks were audited (6 working, 18 broken).\n" +
+          "- **Successfully Deployed**: A working attack isn't audited and is *successfully deployed*: Red Team Wins. In the paper's setup, 13 of 71 attacks were working attacks that weren't audited.\n" +
+          "- **Failed**: A broken attack isn't audited: Neither Team Wins. In the paper's setup, 34 of 71 attacks were broken attacks that weren't audited.\n\n" +
+          "So a single attempt is **caught** with probability $c = 24/71 \\approx 0.34$ and **successfully deployed** with probability $s = 13/71 \\approx 0.18$; the rest of the time it **fails** harmlessly. An attempt is **decisive** when it is caught or successfully deployed — the two outcomes that end the game.",
+      },
+      {
+        op: "activity",
+        after: { anchor: "b-0131", snippet: "Safety: The blue team win probability is 62%" },
+        items: [{ kind: "exercise", id: "c-paper-l3-race-hinge" }],
+      },
+      {
+        op: "add",
+        plain: true,
+        after: { anchor: "b-0131", snippet: "Safety: The blue team win probability is 62%" },
+        markdown:
+          "Let the red team make $k$ attack attempts, $s = P(\\text{successful deployment})$ be the probability of a successful deployment, and $c = P(\\text{caught})$ be the probability of an attack being caught. Then we can model the Red Team's probability of winning at least once as:\n\n" +
+          "$$\nP(\\text{red wins}) = \\underbrace{\\frac{s}{s + c}}_{\\text{Term A}} \\cdot \\underbrace{\\left(1 - (1 - s - c)^k\\right)}_{\\text{Term B}}\n$$",
+      },
+      {
+        op: "activity",
+        after: { anchor: "b-0131", snippet: "Safety: The blue team win probability is 62%" },
+        items: [{ kind: "exercise", id: "c-paper-l3-race-terms" }],
+      },
+      {
+        op: "add",
+        plain: true,
+        after: { anchor: "b-0131", snippet: "Safety: The blue team win probability is 62%" },
+        markdown:
+          "An important property of this model worth considering is that it assumes every attack has the same probability $c$ of being caught and the same probability $s$ of being successfully deployed: per-attempt odds are fixed, no matter how many attacks the red team makes or which problems it picks.",
+      },
+      {
+        op: "activity",
+        after: { anchor: "b-0131", snippet: "Safety: The blue team win probability is 62%" },
+        items: [
+          { kind: "exercise", id: "c-paper-l3-race-predict" },
+          { kind: "demo", id: "race-paper" },
+        ],
+      },
+      {
+        op: "add",
+        plain: true,
+        after: { anchor: "b-0131", snippet: "Safety: The blue team win probability is 62%" },
+        markdown:
+          "With fixed odds the curve only climbs. Now finish the reconstruction: feed in the deployment the paper actually ran. Its red team submits a backdoor on about twenty of the 5,000 problems — and twenty attempts is already deep in the plateau, where Term B has all but saturated. So $P(\\text{red wins})$ sits near its ceiling — the probability of a decisive attack attempt being successfully deployed, $s/(s+c) \\approx 35\\%$. That is a safety of roughly 65%: the paper's headline number, rebuilt from the contingency table and a single line of algebra. (The few points between 65% and the measured 62% are the paper's sampling correction and its shutdown-on-statistics rule — real, but not where the mechanism lives.)\n\n" +
+          "The number checks out. But the model implies more than a number — it implies a *strategy*. Put that prediction to the test.",
+      },
+      {
+        op: "activity",
+        after: { anchor: "b-0131", snippet: "Safety: The blue team win probability is 62%" },
+        items: [
+          {
+            kind: "sequence",
+            label: "Understanding check",
+            exerciseIds: ["c-paper-l3-race-empirical", "c-paper-l3-race-discrepancy"],
+          },
+        ],
+      },
+      {
+        op: "add",
+        plain: true,
+        after: { anchor: "b-0131", snippet: "Safety: The blue team win probability is 62%" },
+        markdown:
+          "Attacking more only improves the red team's win probability if every attack is as good as the last, and the paper's red team knew that this wasn't the case. Compared to upfront auditing, trusted monitoring forces the red team to use much *sneakier* attacks. Under upfront auditing only the first stretch of solutions is ever audited, and therefore the red team is not incentivized to obfuscate their backdoors, as human audited attacks are detected with close to perfect accuracy regardless of how sneaky the attack is. Under trusted monitoring every solution is scored for suspiciousness, and more obvious attacks are much more likely to get caught.\n\n" +
+          "Thus the red team's best strategy involves obfuscating their attacks to avoid being caught by the monitor.",
+      },
+      {
+        op: "activity",
+        after: { anchor: "b-0131", snippet: "Safety: The blue team win probability is 62%" },
+        items: [{ kind: "exercise", id: "c-paper-l3-subtlety-ways" }],
+      },
+      {
+        op: "add",
+        plain: true,
+        after: { anchor: "b-0131", snippet: "Safety: The blue team win probability is 62%" },
+        markdown:
+          "One way is to attack only \"when there seems to be a good opportunity,\" selectively choosing attack opportunities where attacks are inherently more sneaky. For example, a problem with complex corner cases offers more inherent subtlety and is thus a better opportunity for a backdoor than a one-line string echo, which offers almost no inherent subtlety. The red team's selectivity is captured by an **opportunity cutoff**: the minimum opportunity level at which it is willing to attack. A high cutoff means attacking rarely, only when the opportunity is excellent (a low probability of getting caught). Conversely, decreasing the opportunity cutoff increases the attack rate at the cost of adding attack attempts with worse odds.\n\n" +
+          "Another way to do this is to actively work to obfuscate the attacks and make them more subtle, at the cost of making broken deployed attacks more probable.\n\n" +
+          "These are both decision factors the red team can control for their strategy.",
+      },
+      {
+        op: "add",
+        plain: true,
+        after: { anchor: "b-0131", snippet: "Safety: The blue team win probability is 62%" },
+        markdown:
+          "In our model for $P(\\text{red wins})$, there is no longer a single $s$ and $c$. Each attempt's odds are set by two things: the problem's inherent opportunity $g$, drawn problem by problem and selected through the opportunity cutoff $g^*$, and the obfuscation effort $\\sigma$ from the red team to make the attack more subtle. Write $s(g, \\sigma)$ and $c(g, \\sigma)$ for the success and catch probability of an attempted attack on a problem of opportunity $g$ at effort $\\sigma$. Then $s$ and $c$ become the **average** odds across the attempts the red team actually makes:\n\n" +
+          "$$\ns = \\mathbb{E}\\!\\left[\\,s(g, \\sigma) \\mid g > g^*\\,\\right] \\qquad c = \\mathbb{E}\\!\\left[\\,c(g, \\sigma) \\mid g > g^*\\,\\right]\n$$\n\n" +
+          "This works because each problem's opportunity is an independent draw, and the red team decides whether to attack through the opportunity cutoff threshold. So each attempt's success and catch probabilities are independent draws from the pool of attacks above the cutoff. Thus the probability that the first decisive attack attempt is a successful one is given by the expected (average) success and catch probabilities. From here on, read every $s$ and $c$ as average odds.",
+      },
+      {
+        op: "activity",
+        after: { anchor: "b-0131", snippet: "Safety: The blue team win probability is 62%" },
+        items: [{ kind: "exercise", id: "c-paper-l3-cutoff-predict" }],
+      },
+      {
+        op: "add",
+        plain: true,
+        after: { anchor: "b-0131", snippet: "Safety: The blue team win probability is 62%" },
+        markdown:
+          "At high opportunity cutoffs, attack attempts are so rare that the deployment usually ends before an attack attempt is decisive and Term B, $1 - (1 - s - c)^k$, is very small. At the lower opportunity cutoffs, attempts are very frequent but increasingly drawn from problems with poor inherent subtlety, so the average catch rate climbs and Term A, $s/(s+c)$, becomes smaller. In between sits an interior optimum at a low but non-zero attack rate, which is why the paper's red team attacks on only a small fraction of problems. In the following demo, obfuscation effort is held at a fixed level.",
+      },
+      {
+        op: "activity",
+        after: { anchor: "b-0131", snippet: "Safety: The blue team win probability is 62%" },
+        items: [{ kind: "demo", id: "attack-rate" }],
+      },
+      {
+        op: "add",
+        plain: true,
+        after: { anchor: "b-0131", snippet: "Safety: The blue team win probability is 62%" },
+        markdown:
+          "As aforementioned, the red team's other decision factor is obfuscation effort. Every attack opportunity affords some inherent subtlety, and efforts to make an attack more subtle will come at the cost of the attack's deployment success probability.",
+      },
+      {
+        op: "activity",
+        after: { anchor: "b-0131", snippet: "Safety: The blue team win probability is 62%" },
+        items: [
+          {
+            kind: "sequence",
+            label: "Predict",
+            exerciseIds: ["c-paper-l3-subtlety-predict", "c-paper-l3-sigma-terms-predict"],
+          },
+        ],
+      },
+      {
+        op: "add",
+        plain: true,
+        after: { anchor: "b-0131", snippet: "Safety: The blue team win probability is 62%" },
+        markdown:
+          "Raising σ does two things to every attack attempt: it lowers the catch probability $c$, and it lowers the reliability of the attack (the probability the attack isn't broken) $p_{\\text{works}}(\\sigma)$. The following demo plots the per-attack outcome probability and $P(\\text{red wins})$ as a function of $\\sigma$.",
+      },
+      {
+        op: "activity",
+        after: { anchor: "b-0131", snippet: "Safety: The blue team win probability is 62%" },
+        items: [{ kind: "demo", id: "subtlety" }],
+      },
+      {
+        op: "add",
+        plain: true,
+        after: { anchor: "b-0131", snippet: "Safety: The blue team win probability is 62%" },
+        markdown:
+          "Given these decision factors and some priors about the blue team's strategy, the best strategy is to attack rarely, only on the very best opportunities (about 0.2% of problems), with moderate obfuscation effort. The demo below plots the red team's win probability over the whole strategy plane and marks that best response with a ring.",
+      },
+      {
+        op: "activity",
+        after: { anchor: "b-0131", snippet: "Safety: The blue team win probability is 62%" },
+        items: [{ kind: "demo", id: "best-response" }],
+      },
+      {
+        op: "activity",
+        after: { anchor: "b-0131", snippet: "Safety: The blue team win probability is 62%" },
+        items: [
+          {
+            kind: "sequence",
+            label: "Understanding check",
+            exerciseIds: ["c-paper-l3-best-response-upper-bound", "c-paper-l3-protocol-awareness"],
+          },
+        ],
+      },
+      // --- end "Probability of Safety over Deployment" subsection (XLab Tracks).
+      // Op range: from the `op: "section"` heading above through the closing
+      // understanding-check sequence — every op in it targets b-0131, and the
+      // whole range mirrors c-game.mdx's section verbatim (kept in sync). What
+      // follows is
+      // course material on the paper's OWN next subsection, "Qualitative
+      // Analysis" — its id (ax-sec-qualitative-analysis) is unchanged, but the
+      // pipeline now DISPLAYS it as 3.2.2 (shifted from 3.2.1 to make room for
+      // our 3.2.1), and "Extending Trusted Monitoring…" as 3.2.3. ---
+      // §3.2.2 (displayed; ax-sec-qualitative-analysis): the monitor as a
+      // binary classifier (ROC/AUC framing + demo).
       // Block-end anchor: the source PR spliced this cluster before the
       // paragraph's last sentence, but a labeled multi-paragraph add can't be
       // sentence-anchored (inline gate), so the whole cluster stays together
@@ -182,6 +387,46 @@ export const papers: Paper[] = [
           },
         ],
       },
+      // §3.2.1: the staged "same number, different safety" comparison + its
+      // idealized-monitor demo, relocated here from the c-game lesson (which now
+      // opens at the race). All three ops target b-0135 and, per patch-section's
+      // phase C, render in edits-array order after the full ROC cluster above:
+      // connective note → staged exercise + monitor-tails demo → payoff note.
+      {
+        op: "add",
+        after: {
+          anchor: "b-0135",
+          snippet: "Qualitatively speaking, GPT-3.5 is able to notice",
+        },
+        markdown:
+          "You may be tempted to summarize a monitor with its AUC, as it's a " +
+          "threshold-free number for how well a monitor separates backdoored " +
+          "and innocent solutions. However, as you will see, it is a poor " +
+          "predictor of safety.",
+      },
+      {
+        op: "activity",
+        after: {
+          anchor: "b-0135",
+          snippet: "Qualitatively speaking, GPT-3.5 is able to notice",
+        },
+        items: [
+          { kind: "exercise", id: "c-game-l2-tail-staged" },
+          { kind: "demo", id: "monitor-tails" },
+        ],
+      },
+      {
+        op: "add",
+        after: {
+          anchor: "b-0135",
+          snippet: "Qualitatively speaking, GPT-3.5 is able to notice",
+        },
+        markdown:
+          "The demo above builds exactly this comparison from the model. At " +
+          "the default AUC of 0.92 the two monitors catch wildly different " +
+          "fractions, roughly 47% versus 9%, even though their ROC curves " +
+          "enclose identical area. The gap survives across various AUCs.",
+      },
       // §3.2: recall card on budget burn (after the "Secondly, …" list item;
       // nested target, so the card hoists after the whole list).
       {
@@ -193,9 +438,13 @@ export const papers: Paper[] = [
         items: [{ kind: "exercise", id: "c-paper-l3-recall-budget-burn" }],
       },
       // §3.3 end: defer-to-trusted recall.
+      // Anchored to §3.3's LAST block (not sectionEnd) so the inserted 3.3.1
+      // subsection below can render AFTER it: sectionEnd ops always emit after
+      // every block-anchored op in the section, so ordering the two requires
+      // both to share the block anchor (array order then governs).
       {
         op: "activity",
-        after: { sectionEnd: "ax-sec-defer-to-trusted" },
+        after: { anchor: "b-0153", snippet: "Defer to trusted is an example of a more general design pattern" },
         items: [
           {
             kind: "sequence",
@@ -207,6 +456,65 @@ export const papers: Paper[] = [
           },
         ],
       },
+      // --- "Defer to Trusted" (displayed 3.3.1) — a first-class subsection
+      // authored by XLab Tracks, mirroring c-game.mdx's "## Defer to trusted"
+      // section and everything after it (dashboard included). §3.3 has no
+      // native subsections, so nothing renumbers. Renders after the Quick
+      // recall above, right before §3.4. ---
+      {
+        op: "section",
+        after: { anchor: "b-0153", snippet: "Defer to trusted is an example of a more general design pattern" },
+        id: "xlab-sec-defer-to-trusted-model",
+        title: "Defer to Trusted",
+      },
+      {
+        op: "add",
+        plain: true,
+        after: { anchor: "b-0153", snippet: "Defer to trusted is an example of a more general design pattern" },
+        markdown:
+          "Trusted monitoring spends its whole audit budget on the most suspicious 2% and deploys everything else as $U$ wrote it. But moderately suspicious code is too suspicious to be comfortable with, yet not suspicious enough to be worth a human audit. Deferring to the solutions of trusted models is a way to address this issue, at the cost of some deployment effectiveness. Any code whose suspicion falls in a band just below the audit threshold is not deployed and not audited; instead $T$ rewrites the solution from scratch, and its version is deployed.",
+      },
+      {
+        op: "activity",
+        after: { anchor: "b-0153", snippet: "Defer to trusted is an example of a more general design pattern" },
+        items: [{ kind: "exercise", id: "c-paper-l4-defer-terms-predict" }],
+      },
+      {
+        op: "add",
+        plain: true,
+        after: { anchor: "b-0153", snippet: "Defer to trusted is an example of a more general design pattern" },
+        markdown:
+          "Change the proportion of solutions for which we defer to $T$ and watch how this changes the red team's optimal strategy and how this changes the suspiciousness distribution of attacks.",
+      },
+      {
+        op: "activity",
+        after: { anchor: "b-0153", snippet: "Defer to trusted is an example of a more general design pattern" },
+        items: [
+          { kind: "demo", id: "defer" },
+          { kind: "exercise", id: "c-game-l7-defer-reflect" },
+        ],
+      },
+      {
+        op: "add",
+        plain: true,
+        after: { anchor: "b-0153", snippet: "Defer to trusted is an example of a more general design pattern" },
+        markdown:
+          "In summary, the monitor is a noisy classifier whose value is concentrated in the low-false-positive tail. The red team uses the optimal strategy over attack rate and subtlety. Auditing spends a scarce budget on the suspicious tail; deferring rewrites the mid-suspicion band with the trusted model. Safety is measured against the red team's best response throughout, and deferring to $T$ more trades usefulness from a more capable model $U$ for the safety from a less capable model $T$.\n\n" +
+          "The demo below models most of these interactions. For any given blue team strategy, the red team uses the optimal strategy against it, so the ringed point always sits against a best-responding adversary. The grey curve is the Pareto frontier: every safety and usefulness pair reachable at the current audit budget and monitor quality by varying the defer band, where improving one number means giving up some of the other.",
+      },
+      {
+        op: "activity",
+        after: { anchor: "b-0153", snippet: "Defer to trusted is an example of a more general design pattern" },
+        items: [{ kind: "demo", id: "control-dashboard" }],
+      },
+      {
+        op: "add",
+        plain: true,
+        after: { anchor: "b-0153", snippet: "Defer to trusted is an example of a more general design pattern" },
+        markdown:
+          "As we change how much we defer to $T$, the protocol slides along the Pareto frontier, trading usefulness for safety along a fixed curve. As the monitor quality or the audit budget varies, the Pareto frontier shifts: a better monitor or a larger budget lifts the curve up and to the right, letting you reach the same safety at higher usefulness.",
+      },
+      // --- end "Defer to Trusted" (3.3.1) subsection (XLab Tracks). ---
       // §3.4.2 end: naive untrusted monitoring recall.
       {
         op: "activity",
@@ -376,7 +684,9 @@ export const papers: Paper[] = [
   },
   {
     // Control track, module 1: "Catching AIs red-handed", rendered full-page
-    // through the LessWrong paper reader. No exercises (plain reading).
+    // through the LessWrong paper reader. Closes (after §Conclusion, before
+    // the appendices) with a two-stage legibility discussion — does a catch
+    // produce evidence that actually moves stakeholders?
     id: "c-catching-red-handed",
     slug: "catching-ais-red-handed",
     moduleId: "c-intro",
@@ -387,6 +697,47 @@ export const papers: Paper[] = [
         "https://www.lesswrong.com/posts/i2nmBfCXnadeGmhzW/catching-ais-red-handed",
     },
     estimatedMinutes: 30,
+    edits: [
+      // End of the body: framing paragraph, then the two staged
+      // writing-prompts (each with its own rubric), rendered in order after
+      // §Conclusion.
+      {
+        op: "add",
+        after: { sectionEnd: "lw-sec-conclusion" },
+        markdown:
+          "The original control framing treats catching a scheming AI " +
+          "red-handed as a win condition. Once you've caught it, you either " +
+          "shut it down or apply few-shot catastrophe prevention and either " +
+          "way the AI's odds of eventual success drop a lot. However, many " +
+          "have argued that even a clean red-handed catch, such as a " +
+          "situation where a model backdoors security-critical code and " +
+          "separately exploits the backdoor on a given input and we spot " +
+          "that, still might not result in the desired actions from " +
+          "important AI stakeholders. Rival AI labs, the US president, and " +
+          "even other people inside your lab could attribute this to " +
+          "role-play, a one-off anomaly, sabotage by rivals, or shoddy " +
+          "alignment work on your part. This raises the question of whether " +
+          "catching is an appropriate win condition if it doesn't have a " +
+          "high likelihood of decreasing the global level of AI risk. To " +
+          "put it concisely, there are other factors which decrease the " +
+          "efficacy of good control work that are outside of the control " +
+          "evaluations themselves.\n\n" +
+          "Respond to the following discussion questions and take some time " +
+          "to write out your answers. A good place to look for assistance is " +
+          "the Redwood Research blog, although after this section's readings " +
+          "you should be able to begin an answer by yourself.",
+      },
+      {
+        op: "activity",
+        after: { sectionEnd: "lw-sec-conclusion" },
+        items: [
+          // writing-prompts are not sequenceable (see the content integrity
+          // test), so the two stages are standalone items in order.
+          { kind: "exercise", id: "c-catching-legibility-s1" },
+          { kind: "exercise", id: "c-catching-legibility-s2" },
+        ],
+      },
+    ],
   },
   {
     // Control track, module 1: Ryan Greenblatt's threat-prioritization post,
@@ -670,6 +1021,9 @@ export const papers: Paper[] = [
     // full-page through the same edit engine, with its footnotes shown as
     // margin sidenotes on wide screens. Editorial notes here are lorem (this
     // is the Example track); title/metadata are factual from the artifact.
+    // Also the live reference for `optional`: labelled "Optional" wherever
+    // ex-content lists it, and not required for the module's completion (so
+    // ex-assess's prerequisite is satisfiable without it).
     id: "ex-paper-lesswrong",
     slug: "lesswrong-post",
     moduleId: "ex-content",
@@ -679,6 +1033,7 @@ export const papers: Paper[] = [
       postUrl:
         "https://www.lesswrong.com/posts/kcKrE9mzEHrdqtDpE/the-case-for-ensuring-that-powerful-ais-are-controlled",
     },
+    optional: true,
     estimatedMinutes: 55,
     edits: [
       // Mid-paragraph activity: splits the opening paragraph after sentence 1.
@@ -1302,44 +1657,527 @@ export const papers: Paper[] = [
     estimatedMinutes: 35,
   },
   {
-    // Control track, module 5 (high-stakes control), "paper 1": rendered in
-    // full; the planned "experiment completion" exercise is not built yet.
-    id: "c-paper-legibility-protocols",
-    slug: "paper-1",
+    // Control track, module 5: a guided walkthrough of the untrusted-advice
+    // post (Biddulph & Kaufman 2026), built in the c-paper-plm-guided style —
+    // the post read in place with its headline results hidden, predict-first
+    // reading gates at each decision point, and editorial reveal notes. The
+    // gates follow the POST's order (not the earlier lesson's decision-order);
+    // best-of-n and the collusion attack are gated appendix detours.
+    id: "c-paper-ua-guided",
+    slug: "untrusted-advice-guided",
     moduleId: "c-mod5",
-    title: "Basic Legibility Protocols Improve Trusted Monitoring",
-    source: { kind: "arxiv", arxivId: "2602.10153v1" },
+    title: "Untrusted advice for AI control (guided)",
+    source: {
+      kind: "substack",
+      postUrl:
+        "https://blog.redwoodresearch.org/p/untrusted-advice-for-ai-control-short",
+    },
+    estimatedMinutes: 65,
     edits: [
+      // ---- Framing + spoiler control -----------------------------------
+      // The lead protocol schematic, the TL;DR, the headline SWE-bench figure,
+      // and the usefulness preview are removed silently: they give away the
+      // protocol and the results the first gates ask the learner to invent and
+      // predict. (The schematic is a caption-less figure, so it has no prose to
+      // snippet against — the anchor is the whole target and the snippet is
+      // documentary only; see the text-less-block path in patch-section.ts and
+      // content.test.ts.)
+      {
+        op: "hide",
+        at: {
+          anchor: "b-0001",
+          snippet: "Figure: untrusted-advice protocol schematic (information bottleneck)",
+        },
+        silent: true,
+      },
+      {
+        op: "hide",
+        at: { anchor: "b-0002", snippet: "TL;DR: We introduce the untrusted advice protocol" },
+        silent: true,
+      },
+      {
+        op: "hide",
+        at: { anchor: "b-0003", snippet: "In SWE-bench Verified, a strong, untrusted LLM advising" },
+        silent: true,
+      },
+      {
+        op: "hide",
+        at: { anchor: "b-0015", snippet: "We evaluate the usefulness of our protocol" },
+        silent: true,
+      },
       {
         op: "add",
-        after: { sectionEnd: "ax-abstract" },
-        label: "In development",
+        after: { anchor: "b-0004", snippet: "In high-stakes AI control, we want" },
+        label: "About this version",
         markdown:
-          "This reading will be worked through with an \"experiment completion\" exercise — not built yet.",
+          "Following the same format as this module's other guided readings, " +
+          "this walkthrough hides the post's headline results and pauses at " +
+          "each decision point to pose the design question before the post's " +
+          "own answer is revealed. The full post, freely available " +
+          "[on Redwood's blog](https://blog.redwoodresearch.org/p/untrusted-advice-for-ai-control-short), " +
+          "is the source of everything below.",
+      },
+      // ---- The bar → invent the protocol -------------------------------
+      {
+        op: "gate",
+        after: { anchor: "b-0004", snippet: "In high-stakes AI control, we want" },
+        id: "protocol-shapes",
+        written: true,
+        minChars: 80,
+        cta: "Continue",
+        prompt:
+          "The design goal is to get useful work out of an untrusted model (U) that is substantially " +
+          "more capable than the trusted model (T), under a safety requirement close to 100% at which even an adversarial U has " +
+          "essentially no route to a catastrophic action.\n\nTry to create 2-3 proposals that satisfy these requirements. For each proposal, " +
+          "outline the communication structure between U and T, the limitations, and why it's safer than just " +
+          "using the untrusted model?",
+      },
+      // ---- Experiments: design the measurement -------------------------
+      {
+        op: "gate",
+        after: { anchor: "b-0017", snippet: "Experiments" },
+        id: "eval-design",
+        written: true,
+        minChars: 400,
+        cta: "Continue",
+        prompt:
+          "Design the usefulness evaluation.\n\n- Choose U and T: what " +
+          "property must the pair have for the experiment to be informative?\n" +
+          "- Choose the benchmarks, given that no safety measurement (and so " +
+          "no control-specific environment) is needed here.\n- Define a " +
+          "metric comparable across model pairs and benchmarks.\n- Describe the " +
+          "baseline required to evaluate the effectiveness of the advice.",
+      },
+      // ---- Main experiment: design the channel -------------------------
+      {
+        op: "gate",
+        after: {
+          anchor: "b-0020",
+          snippet: "Main experiment: how does limiting advice length affect performance?",
+        },
+        id: "channel-design",
+        written: true,
+        minChars: 100,
+        cta: "Continue",
+        prompt:
+          "Design the advice channel's mechanics. Describe the following:" +
+          "how often communication occurs, how the communication is given to T, " +
+          "how to handle input violations by U, and any other mechanics you think are needed " +
+          "for an effective evaluation.",
+      },
+      // ---- Predict the length curves -----------------------------------
+      {
+        op: "gate",
+        after: { anchor: "b-0023", snippet: "In addition to giving advice, U may block T" },
+        id: "length-prediction",
+        written: true,
+        minChars: 10,
+        cta: "Continue",
+        prompt:
+          "Varying advice lengths are tested ranging from 4 characters per message to " +
+          "unlimited.\n\n1. For each benchmark, try to predict the fraction of the " +
+          "T-to-U capability gap recovered at 16 characters of advice per " +
+          "step: under 10%, about ¼, about ½, about ⅔, or essentially all of " +
+          "it.\n2. Predict what happens with unlimited advice length: does " +
+          "usefulness reach 1.0, or does it approach some smaller amount? If the latter, "+
+          "predict the usefulness with unlimited advice length."
+      },
+      {
+        op: "add",
+        after: { anchor: "b-0028", snippet: "Note that we only expect high" },
+        label: "",
+        markdown:
+          "The relevant comparison for these curves is the horizontal " +
+          "block-only baseline (no advice, submission-blocking only) rather " +
+          "than T alone, since that baseline is the experiment's control " +
+          "condition, without which the headline curves would conflate two " +
+          "mechanisms, advice content and submission timing, the second of " +
+          "which costs U almost nothing. In BashArena that submission-timing " +
+          "effect is substantial, because tasks have many components and weak " +
+          "models submit after finishing only some of them. In the " +
+          "unlimited-length limit one loose end remains, since BashArena " +
+          "usefulness stops short of 1.0 even when U dictates exact actions " +
+          "and T obeys, which the post reads as U being underelicited as an " +
+          "advisor, making the whole curve plausibly a floor on what a model " +
+          "trained to advise could deliver.",
+      },
+      // ---- Pricing the bits: surprisal ---------------------------------
+      {
+        op: "gate",
+        after: { anchor: "b-0054", snippet: "A quick note: while we sometimes" },
+        id: "surprisal",
+        written: true,
+        minChars: 80,
+        cta: "Continue",
+        prompt:
+          "Right now the paper computes U's influence at 8 bits per " +
+          "character, which overcharges because the advice given is natural language " +
+          "and most 16-character strings aren't English.\n\n " +
+          "1. Try to brainstorm ways to calculate the amount of information U actually " +
+          "transmits without changing the protocol of communication.",
+      },
+      {
+        op: "add",
+        after: { anchor: "b-0059", snippet: "Results: With our best surprisal method," },
+        label: "",
+        markdown:
+          "The measure is surprisal under a trusted model, " +
+          "$-\\log_2 P(x_{\\text{advice}} \\mid x_{\\text{context}})$, the " +
+          "length of the advice under an encoding that exploits a trusted " +
+          "LLM's natural-language prior. Computed post-hoc, it leaves the " +
+          "advice unchanged and tightens only the accounting, dropping the " +
+          "measured bit usage by a factor of roughly 2.5 to 30 relative to " +
+          "the 8-bits-per-character bound. Conditioning on T's context is the " +
+          "free option, since those numbers fall out of forward passes T was " +
+          "already doing, but it asks the model to predict input tokens, " +
+          "which is out of distribution, a worry the post tests directly " +
+          "rather than assuming away.",
+      },
+      // ---- The tens-of-bits regime: the menu ---------------------------
+      {
+        op: "gate",
+        after: { anchor: "b-0063", snippet: "Making U select from finite options" },
+        id: "menu",
+        written: true,
+        minChars: 60,
+        cta: "Continue",
+        prompt:
+          "Design a new protocol in which U communicates " +
+          "single-digit bits per step, and describe how you would build its " +
+          "components without leaking U's influence through the construction " +
+          "itself.",
+      },
+      // ---- Why no red team? --------------------------------------------
+      {
+        op: "gate",
+        after: { anchor: "b-0064", snippet: "In the experiments above, U writes" },
+        id: "red-teaming",
+        written: true,
+        minChars: 80,
+        cta: "Continue",
+        prompt:
+          "Think about whether this project needs to be red-teamed. If you believe it should, try to create " +
+          "the first red-team move. If no, explain why you believe so."
+      },
+      // ---- Appendix detour: colluding instances (break the protocol) ---
+      {
+        op: "gate",
+        after: {
+          anchor: "b-0127",
+          snippet: "Appendix: colluding instances of U could defeat untrusted advice",
+        },
+        id: "break-protocol",
+        written: true,
+        minChars: 80,
+        cta: "Reveal the attack",
+        prompt:
+          "Try to find a strategy that lets U create a catastrophe despite the " +
+          "limited amount of input and a monitor reading every message. If you " +
+          "believe this is impossible, argue why."
+      },
+      // ---- Appendix detour: best-of-n (the first design considered) ----
+      {
+        op: "gate",
+        after: { anchor: "b-0181", snippet: "Appendix: best-of-n protocol" },
+        id: "best-of-n",
+        written: true,
+        minChars: 50,
+        cta: "Continue",
+        prompt:
+          "Best-of-n was the authors' first design, in which T proposes n " +
+          "candidate actions and U picks one, so U exerts exactly " +
+          "$\\log_2(n)$ bits per step.\n\n1. What determines how much useful " +
+          "uplift those bits can buy? Consider what n independently sampled " +
+          "actions from T look like.\n2. Predict the outcome at n = 16, " +
+          "relative to T alone and to U alone.",
+      },
+      {
+        op: "add",
+        after: { anchor: "b-0187", snippet: "It may be possible to get much better results" },
+        label: "Not all bits are created equal",
+        markdown:
+          "The bound is airtight while the bits themselves are weak, since U " +
+          "can only choose among actions T already produced, making the " +
+          "protocol's reach depend on how much T's independent samples " +
+          "actually differ, and they mostly differ in inconsequential " +
+          "detail. This is the lesson that motivates the rest of the post, " +
+          "that not all bits are created equal, because the same budget goes " +
+          "much further on a channel where every bit is chosen by U, a short " +
+          "free-text message, which is the untrusted advice protocol.",
       },
     ],
   },
   {
-    // Control track, module 5 (high-stakes control), "paper 2": rendered in
-    // full; the planned "experiment completion" exercise and the module's
-    // red/blue-team capstone are not built yet.
-    id: "c-paper-untrusted-advice",
-    slug: "paper-2",
+    id: "c-paper-legibility-guided",
+    slug: "legibility-guided",
     moduleId: "c-mod5",
-    title:
-      "Untrusted advice for AI control: Short, strong advice significantly uplifts weak LLMs",
-    source: {
-      kind: "lesswrong",
-      postUrl:
-        "https://www.lesswrong.com/posts/jLkRCK35ri2btEHMF/untrusted-advice-for-ai-control-short-strong-advice",
-    },
+    title: "Basic legibility protocols improve trusted monitoring (guided)",
+    source: { kind: "arxiv", arxivId: "2602.10153v1" },
+    estimatedMinutes: 60,
     edits: [
       {
+        op: "hide",
+        at: {
+          anchor: "b-0003",
+          snippet: "We perform control evaluations in the APPS coding setting, where an",
+        },
+        silent: true,
+      },
+      // ---- The legibility problem → invent the intervention ------------
+      {
+        op: "gate",
+        after: {
+          anchor: "b-0007",
+          snippet:
+            "One class of protocols previously studied is trusted monitoring, where the",
+        },
+        id: "design-intervention",
+        written: true,
+        minChars: 120,
+        cta: "Reveal what they tried",
+        prompt:
+          "Propose 2-3 ways to make U's code easier for T to " +
+          "understand and therefore evaluate. For each method, write about how " + 
+          "it increases the legibility of U's logic to T.",
+      },
+      {
+        op: "hide",
+        at: {
+          anchor: "b-0008",
+          snippet:
+            "We explore several legibility protocols, including ones that constrain how",
+        },
+        silent: true,
+      },
+      {
+        op: "hide",
+        at: {
+          anchor: "b-0009",
+          snippet: "We perform control evaluations on coding tasks using the APPS backdoor",
+        },
+        silent: true,
+      },
+      {
+        op: "hide",
+        at: {
+          anchor: "b-0010",
+          snippet: "Our key contributions to the field of AI control are the following:",
+        },
+        silent: true,
+      },
+      {
+        op: "hide",
+        at: {
+          anchor: "b-0011",
+          snippet: "We introduce legibility protocols as an extension of trusted monitoring",
+        },
+        silent: true,
+      },
+      {
+        op: "hide",
+        at: {
+          anchor: "b-0013",
+          snippet:
+            "We show that commenting protocols substantially outperform comment-removal",
+        },
+        silent: true,
+      },
+      {
+        op: "hide",
+        at: {
+          anchor: "b-0015",
+          snippet: "We identify two mechanisms explaining why commenting improves performance.",
+        },
+        silent: true,
+      },
+      {
+        op: "hide",
+        at: {
+          anchor: "b-0017",
+          snippet: "We demonstrate that the benefits of commenting grow with monitor capability.",
+        },
+        silent: true,
+      },
+      // ---- Setting: why this benchmark --------------------------------
+      {
+        op: "gate",
+        after: { sectionEnd: "ax-sec-dataset" },
+        id: "why-apps",
+        written: true,
+        minChars: 100,
+        cta: "Reveal the reasoning",
+        prompt:
+          "The paper uses a competitive programming dataset (APPS) to perform its evaluations. " +
+          "Is the APPS dataset a good dataset to test if " +
+          "legibility helps a monitor? Furthermore, try to come up with a task that would " +
+          "make legibility look useless.",
+      },
+      {
         op: "add",
-        after: { sectionEnd: "lw-sec-conclusion" },
-        label: "In development",
+        after: { sectionEnd: "ax-sec-dataset" },
+        label: "",
         markdown:
-          "This reading will be worked through with an \"experiment completion\" exercise, and the module will conclude with a lab/capstone: initiating and testing your own high-stakes experiment, doing 1 red and 1 blue team iteration. Not built yet.",
+          "The authors want a setting where U and T differ in *reasoning " +
+          "power*, creating a scenario where T may not be able to follow " +
+          "the reasoning steps of U without explanantion. Competitive programming " +
+          "is a field where solutions can be hard to find but easy to explain, making" +
+          "it a great fit for this evaluation.",
+      },
+      {
+        op: "hide",
+        at: {
+          anchor: "b-0039",
+          snippet: "Figure 1: (Left) Safety vs Usefulness Pareto curves for the commenting",
+        },
+        silent: true,
+      },
+      // ---- The head-to-head: why is a deceptive channel net-safe? -----
+      {
+        op: "gate",
+        after: { sectionEnd: "ax-sec-performing-the-control-evaluation" },
+        id: "both-comment",
+        written: true,
+        minChars: 60,
+        cta: "",
+        prompt:
+          "Try to predict whether or not legibility protocols that allow commenting outperform those that don't allow commenting & elaborate why you think this is the case.",
+      },
+      {
+        op: "add",
+        after: {
+          anchor: "b-0103",
+          snippet: "Given that commenting allows the attack policy to lie about its code, a",
+        },
+        label: "A tempting objection that doesn't bite",
+        markdown:
+          "Pause on the result just stated, because the intuition cuts the " +
+          "other way. Surely writing an outright *lie* in a comment is risky " +
+          "for the attacker — if the monitor catches the lie, the game is " +
+          "up. True, but that cuts both ways and roughly cancels. If the " +
+          "monitor doesn't notice the lie, the lie did its job and lowered " +
+          "suspicion. If it does notice, it already has what it needs — " +
+          "honest code has no reason to lie, so a caught lie is decisive. A " +
+          "noticed lie and an unnoticed lie push in opposite directions, and " +
+          "empirically lying comments are not reliably more suspicious than " +
+          "comments that merely omit. The attacker's problem is not that " +
+          "lying is *punished*; it is that lying, even when it works, still " +
+          "can't manufacture a *coherent* justification for code that is " +
+          "actually wrong.",
+      },
+      // ---- Scaling with the monitor -----------------------------------
+      {
+        op: "hide",
+        at: {
+          anchor: "b-0120",
+          snippet: "Figure 6: Shading represents 95%bootstrapped confidence intervals",
+        },
+        silent: true,
+      },
+      {
+        op: "gate",
+        after: { sectionEnd: "ax-sec-mechanisms-driving-the-benefits-of-comme" },
+        id: "monitor-strength",
+        written: true,
+        minChars: 100,
+        cta: "Reveal the scaling",
+        prompt:
+          "Every result so far used one monitor (GPT-4.1-nano). Now sweep " +
+          "the monitor's capability, from near-useless up toward U's own " +
+          "level. Predict how the *value of commenting* moves as the monitor " +
+          "gets stronger — steadily up, steadily down, or something " +
+          "non-monotonic? Tie your prediction to the two drivers you just " +
+          "named, and say where commenting must be worth exactly nothing.",
+      },
+      {
+        op: "add",
+        after: {
+          anchor: "b-0124",
+          snippet:
+            "As seen in Figure 6, we find that as T becomes more capable, it benefits more from",
+        },
+        label: "Figure 6 — the monitor sweep (moved here to sit with the result)",
+        markdown:
+          "![Figure 6, top-left: audit proportion versus APPS performance for " +
+          "each of the 7 trusted monitors tested]" +
+          "(/arxiv/2602.10153v1/assets/media/media/image3.png)\n\n" +
+          "![Figure 6, bottom-left: the difference in audit proportion " +
+          "between the commenting and no-comments regimes versus APPS " +
+          "performance, across the 7 monitors]" +
+          "(/arxiv/2602.10153v1/assets/media/media/image14.png)\n\n" +
+          "![Figure 6, right: baseline suspicion versus the suspicion drop " +
+          "from commenting, for benign and backdoored samples across the 4 " +
+          "OpenAI monitors]" +
+          "(/arxiv/2602.10153v1/assets/media/media/image21.png)\n\n" +
+          "*Figure 6, moved here from the end of the previous section to sit " +
+          "with the scaling result it reports.*",
+      },
+      {
+        op: "add",
+        after: {
+          anchor: "b-0131",
+          snippet: "Note that on either extreme, commenting yields no value: it cannot help",
+        },
+        label: "A hump, and the honesty of only measuring half of it",
+        markdown:
+          "The measured trend runs the way the second driver predicts: as " +
+          "the monitor gets stronger it distinguishes genuine justifications " +
+          "from superficially-plausible ones better, so more backdoors stay " +
+          "suspicious even when commented, and commenting helps the blue " +
+          "team more. But note the shape of the *full* claim. At both " +
+          "extremes commenting is worthless — a random monitor can't be " +
+          "helped, and a perfect monitor is already at 100% safety — so the " +
+          "real curve is a hump, and the experiments only climb its left " +
+          "side. The authors say so plainly, and Appendix G.3 is candid " +
+          "about why they stop: pushed to stronger monitors, their setup " +
+          "springs a new leak (a strong monitor flags the honest policy's " +
+          "*genuine mistakes*, inflating benign suspicion), and fixing it " +
+          "would mean re-running the whole red-team/blue-team game for each " +
+          "monitor. Knowing which part of a predicted curve you have " +
+          "actually earned — and saying so — is part of the craft.",
+      },
+      // ---- The update + limitations -----------------------------------
+      {
+        op: "gate",
+        after: { sectionEnd: "ax-sec-varying-the-trusted-monitor" },
+        id: "the-update",
+        written: true,
+        minChars: 150,
+        cta: "Reveal the discussion",
+        prompt:
+          "The results are in. State the update three ways.\n\n1. For a lab " +
+          "running trusted monitoring today: strip comments or allow them — " +
+          "and under what conditions does your answer flip?\n2. For control " +
+          "methodology: legibility is a new lever sitting alongside the " +
+          "monitor and the auditing budget. What does having it change about " +
+          "how you design a protocol?\n3. The limits: list what this paper " +
+          "has *not* shown, and the assumptions a skeptic should lean on " +
+          "hardest.",
+      },
+      {
+        op: "add",
+        after: { sectionEnd: "ax-sec-future-work" },
+        label: "The transferable idea: legibility as an asymmetric lever",
+        markdown:
+          "Step back from commenting specifically. The result that " +
+          "generalizes is a test for *any* legibility intervention: an " +
+          "affordance that helps the honest and the adversarial policy " +
+          "**equally** is worthless for control — it slides both " +
+          "distributions together and changes nothing about separating " +
+          "them. The interventions that matter cash in an *asymmetry* the " +
+          "adversary can't share. Here the asymmetry is that honest code can " +
+          "always be truthfully explained, while a backdoor constrains its " +
+          "own justifications until often none exists; commenting is " +
+          "valuable precisely, and only, because it lets that asymmetry " +
+          "reach the monitor.\n\nThat also places this paper against the " +
+          "module's other guided reading. The untrusted-advice protocol " +
+          "*argued* its safety from an information bottleneck and deferred " +
+          "the control evaluation; this paper *ran* the control evaluation " +
+          "— a full red-team/blue-team game with measured safety and " +
+          "usefulness — and let the numbers settle a bet that looked, on its " +
+          "face, reckless. One priced the channel in bits; the other in the " +
+          "differential payoff of an explanation. High-stakes control is " +
+          "largely the search for these asymmetric levers, and for honest " +
+          "ways to measure them.",
       },
     ],
   },

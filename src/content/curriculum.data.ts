@@ -71,23 +71,22 @@ export const modules: Module[] = [
     order: 1,
     prerequisiteModuleIds: [],
     // Opens with Redwood's "case for control" motivation, then the AI Control
-    // paper and the trusted-monitoring demo lesson, then four Redwood readings
-    // rendered in full through the paper reader — the "case for control" post
+    // paper — the guided walkthrough that absorbed the retired
+    // "Trusted monitoring as a game" lesson — then three Redwood readings
+    // rendered in full through the paper reader; the "case for control" post
     // carries the module's guided exercises woven into the reading. Reading
-    // order: motivation, the paper, the demo, catching scheming AIs, and the
-    // two threat-modeling posts (the safety–usefulness tradeoff model now
-    // lives in module 2). All
-    // readings are reproduced (arXiv/LessWrong/Substack artifacts) with
-    // permission.
+    // order: motivation, the paper, catching scheming AIs, and the two
+    // threat-modeling posts (the safety–usefulness tradeoff model now lives in
+    // module 2). All readings are reproduced (arXiv/LessWrong/Substack
+    // artifacts) with permission.
     itemIds: [
       "c-case-for-control",
       "c-paper-ai-control",
-      "c-game",
       "c-catching-red-handed",
       "c-threats-l1",
       "c-threats-l2",
     ],
-    estimatedMinutes: 377,
+    estimatedMinutes: 285,
   },
   {
     // Human-authored curriculum (from the course author's "contra control"
@@ -136,17 +135,15 @@ export const modules: Module[] = [
     itemIds: [],
   },
   {
-    // Human-authored outline (course author's module 5 outline): the
-    // high-stakes regime — definition against low-stakes, monitoring and
-    // mitigation strategies, environment construction, and two high-stakes
-    // papers worked through with "experiment completion" exercises, closing
-    // with a red/blue-team capstone. Lessons are outline stubs for now.
+    // Human-authored outline (course author's module 5 outline) merged with
+    // main's guided walkthroughs: opening talk and outline-stub lessons, then
+    // the two high-stakes papers as decision-forcing guided walkthroughs.
     id: "c-mod5",
-    slug: "high-stakes-control",
+    slug: "module-5",
     trackId: "control",
     title: "High-stakes control",
     summary:
-      "The high-stakes regime: defining high stakes against low stakes on the control graph, the space of high-stakes action attempts, trusted and untrusted monitoring and mitigation strategies, what makes a good high-stakes setting, and two high-stakes papers worked through as experiment-completion exercises.",
+      "Two decision-forcing walkthroughs of high-stakes control protocols, one argued and one measured. The untrusted advice protocol is the boundary case where a safety argument substitutes for a control evaluation; basic legibility protocols run a full red-team/blue-team control evaluation to settle whether letting an untrusted model comment its code helps the monitor catch backdoors. Further content for this module is in development.",
     order: 5,
     prerequisiteModuleIds: ["c-intro", "c-mod2", "c-areas", "c-mod4"],
     itemIds: [
@@ -154,8 +151,8 @@ export const modules: Module[] = [
       "c-mod5-l1",
       "c-mod5-l2",
       "c-mod5-l3",
-      "c-paper-legibility-protocols",
-      "c-paper-untrusted-advice",
+      "c-paper-ua-guided",
+      "c-paper-legibility-guided",
     ],
   },
   {
@@ -265,7 +262,7 @@ export const modules: Module[] = [
     trackId: "example",
     title: "Content types",
     summary:
-      "Text, video, callouts, an interactive demo, exercises, and inline readings (an arXiv paper, a Substack post, and a LessWrong post).",
+      "Text, video, callouts, an interactive demo, exercises, and inline readings (an arXiv paper, a Substack post, and an optional LessWrong post).",
     order: 1,
     prerequisiteModuleIds: [],
     itemIds: [
@@ -418,16 +415,16 @@ export const lessons: Lesson[] = [
     title: "Facilitator Field Guide",
     contentRef: "v-facilitator-guide",
   },
-  // --- Control: the trusted-monitoring demo, one multi-section lesson (its
-  // ## sections give it a paper-style section nav in the sidebar). ---
-  {
-    id: "c-game",
-    slug: "trusted-monitoring-as-a-game",
-    moduleId: "c-intro",
-    title: "Trusted monitoring as a game",
-    contentRef: "c-game",
-    estimatedMinutes: 92,
-  },
+  // --- Control: the "Trusted monitoring as a game" lesson (c-game) was
+  // RETIRED 2026-07-24: all of its content was progressively mirrored into the
+  // AI Control walkthrough (papers.data.ts — inserted subsections 3.2.1
+  // "Probability of Safety over Deployment" and 3.3.1 "Defer to Trusted") and
+  // the standalone lesson removed. The walkthrough re-splices exactly two of
+  // its exercises (c-game-l2-tail-staged, c-game-l7-defer-reflect); the other
+  // eleven c-game-* definitions are still in exercises.data.ts but are now
+  // referenced by nothing — they are earlier drafts of the c-paper-l3-*/l4-*
+  // exercises the walkthrough uses, kept only until the prose pass confirms
+  // nothing else needs them. Do not edit them expecting a learner to see it. ---
   // --- Control, module 2 (how useful is AI control?): the case against
   // control, from the course author's notes; embeds the
   // contra-control-argue-reveal exercise. ---
@@ -486,10 +483,10 @@ export const lessons: Lesson[] = [
   },
   // --- Control: every reproduced reading in module 1 (with permission from
   // Redwood Research) now renders through the paper reader as a Paper item in
-  // papers.data.ts — the "case for control" post, the safety–usefulness
-  // tradeoff model, "catching AIs red-handed", and the two threat-modeling
-  // posts (prioritizing threats; diffuse threats / research sabotage). Their
-  // guided exercises are spliced back into the reading via Paper.edits. ---
+  // papers.data.ts — the "case for control" post, "catching AIs red-handed",
+  // and the two threat-modeling posts (prioritizing threats; diffuse threats /
+  // research sabotage). Their guided exercises are spliced back into the
+  // reading via Paper.edits. ---
   // --- Control, module 6 (low-stakes control): a talk plus three readings
   // (the Redwood posts reproduced verbatim with permission; the Carlsmith
   // post reproduced verbatim from LessWrong) ---

@@ -20,6 +20,23 @@ export async function getMyClassrooms(userId: string) {
   });
 }
 
+/**
+ * Whether a user may open the facilitator field guide.
+ *
+ * There is no user-level facilitator role, and deliberately so: instructor of
+ * at least one classroom is the notion the schema already carries, and it is
+ * what running a cohort means. The consequence to keep in mind — creating a
+ * classroom is self-serve, so this gate keeps the guide off a learner's screen
+ * rather than restricting it to anyone in particular.
+ */
+export async function isFacilitator(userId: string): Promise<boolean> {
+  const membership = await prisma.classroomMembership.findFirst({
+    where: { userId, role: "instructor" },
+    select: { id: true },
+  });
+  return membership !== null;
+}
+
 export async function getClassroom(classroomId: string) {
   return prisma.classroom.findUnique({
     where: { id: classroomId },

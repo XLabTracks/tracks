@@ -8,7 +8,9 @@
  * The source is a 12-"view" single-page guide: a home card grid plus 11
  * detail views (7 craft modules + 5 session plans — note module 06/07 share
  * numbering with a session-plans block). Views use internal state, not hash
- * routing. Two global toggles live in the source:
+ * routing. A sixth session plan (13 · Actors and the supply chain) is not from
+ * that source: it is transcribed from the outline's Module 1 sync tab, and is
+ * marked where it appears. Two global toggles live in the source:
  *   - a context toggle (low / high AI-safety context) that swaps copy in the
  *     "Your role" module only;
  *   - a format toggle (in-person / Zoom) shared across the five session plans
@@ -18,7 +20,7 @@
  */
 
 export const FG_HEADER = {
-  lede: "Twelve small modules. 01–07 are craft — open the one you need, five minutes before any session or mid-crisis. 08–12 are ready-to-run session plans, one per track component, each with an in-person and a Zoom version. Any card marked with a + opens into detail.",
+  lede: "Thirteen small modules. 01–07 are craft — open the one you need, five minutes before any session or mid-crisis. 08–13 are ready-to-run session plans, one per track component; the five ported ones each have an in-person and a Zoom version. Any card marked with a + opens into detail.",
 } as const;
 
 export const FG_PRINCIPLES = [
@@ -132,6 +134,13 @@ export const FG_SESSION_CARDS: HomeCard[] = [
     desc: "Draft a pause treaty in eight sentences; the next team plays evading-state counsel and guts it. Implicit vs. explicit, felt.",
     meta: "70 min · both formats",
   },
+  {
+    id: "m-actors",
+    num: "13",
+    title: "Actors and the supply chain",
+    desc: "Four ways to make the actor taxonomy bite: audit a real scenario for its missing actors, flip an incentive, forge a declaration, or plan an evasion route.",
+    meta: "Menu · 20–70 min each",
+  },
 ];
 
 export const FG_HOME_HINT_1 =
@@ -139,7 +148,7 @@ export const FG_HOME_HINT_1 =
 export const FG_HOME_SESSION_HEADING =
   "Session plans — one per track component";
 export const FG_HOME_SESSION_NOTE =
-  "Each plan assumes participants did the async material first; the live hour is for colliding, not covering. Toggle in-person / Zoom inside any plan — timings, prompts, and debriefs are shared.";
+  "Each plan assumes participants did the async material first; the live hour is for colliding, not covering. Where a plan carries both formats, toggle in-person / Zoom inside it — timings, prompts, and debriefs are shared.";
 export const FG_HOME_HINT_2 =
   "Running a live cohort? Each plan lists what to prep, the run of show, discussion prompts, and what to send people home with.";
 
@@ -435,22 +444,33 @@ export interface FormatPrep {
 }
 
 /** A session-plan view. */
+/**
+ * A session-plan view.
+ *
+ * The five ported plans carry every field. The optional ones exist because the
+ * Module 1 plan is transcribed from an outline that wrote a menu of activities
+ * rather than a timed run of show: it has no `stages`, one format-agnostic
+ * `prepNote` instead of the in-person/Zoom `prep` pair, and no `seed`. Leaving
+ * those empty is the honest shape — inventing a minute-by-minute schedule the
+ * author did not write would be fabricated curriculum.
+ */
 export interface SessionPlan {
   id: string;
   title: string;
   lede: string; // HTML
   principles?: readonly string[]; // the "chips" row (matrix plan only)
-  prep: FormatPrep;
+  prep?: FormatPrep;
+  prepNote?: string; // HTML; used when the plan has no per-format prep
   coreHeading?: string; // "The game core" (game plan)
   coreNote?: string;
   coreTiles?: Tile[];
-  stages: Stage[];
+  stages?: Stage[];
   promptsHeading: string;
   promptsNote?: string;
   promptTiles: Tile[];
   sendHeading: string;
   sendBox: ResBox;
-  seed: Callout; // "Seed the week's thread" callout
+  seed?: Callout; // "Seed the week's thread" callout
   nextId?: string; // next session-plan target
   nextLabel?: string;
 }
@@ -668,6 +688,85 @@ export const SESSION_PLANS: SessionPlan[] = [
       variant: "brown",
       html: "<strong>Seed the week's thread:</strong> post your team's best exploit and whether the rebuttal held. Bonus: find the same loophole pattern in a real treaty's text.",
     },
+    nextId: "m-actors",
+    nextLabel: "Next: Actors and the supply chain →",
+  },
+  /* --------------------------------------------------------------------
+     13 · Module 1. Transcribed from the outline's "1 sync/spaced
+     repetition" tab: three discussion prompts, four suggested activities
+     with their own timings and defenses, and the spaced-repetition list.
+     The outline wrote a menu, not a schedule, so this plan carries
+     `coreTiles` and no `stages` — see the SessionPlan doc comment.
+     -------------------------------------------------------------------- */
+  {
+    id: "m-actors",
+    title: "Session plan · Actors and the supply chain",
+    lede: "Pairs with Module 1. The async material hands participants three lenses — position on the chain, functional role, incentive posture — and the live hour is where they stop being a table and start being a tool. Four activities, each self-contained; run the one that fits your time and your room.",
+    prepNote:
+      "<strong>Prep:</strong> the AI 2040 Plan A session needs 30–40 minutes of assigned reading beforehand, with a printed excerpt packet from the PDF export as fallback. The other three need nothing but the actor taxonomy in front of people.",
+    coreHeading: "Suggested activities",
+    coreNote:
+      "A menu, not a run of show. Each carries its own timing and the reason it earns its place.",
+    coreTiles: [
+      {
+        pop: "p-ac-a1",
+        title: "Scenario scrutiny: AI 2040 Plan A",
+        desc: "Apply the AI Futures Project's own scrutiny method back to its text, and audit it against our taxonomy.",
+        timing: "70 min · assigned reading",
+      },
+      {
+        pop: "p-ac-a2",
+        title: "Incentive flip",
+        desc: "Draw an actor tagged defect, hide or free-ride. Design the cheapest intervention that flips it to comply.",
+        timing: "20 min",
+      },
+      {
+        pop: "p-ac-a3",
+        title: "Declaration poker",
+        desc: "Ghost-write a compliance declaration with exactly one self-serving distortion. The next group hunts it.",
+        timing: "25 min",
+      },
+      {
+        pop: "p-ac-a4",
+        title: "Where do you hide?",
+        desc: "Play a sanctioned buyer and sketch an acquisition route. Then mark who could have seen each step — and whether they'd look.",
+        timing: "30 min",
+      },
+    ],
+    promptsHeading: "Discussion prompts",
+    promptTiles: [
+      {
+        pop: "p-ac-d1",
+        title: "“Lean on TSMC, or diversify away from it?”",
+        desc: "The most verifiable stage of the chain is also the most fragile position on it.",
+      },
+      {
+        pop: "p-ac-d2",
+        title: "“When would a lab overstate its capabilities?”",
+        desc: "And when understate them? Each does something different to a verifier reading declarations.",
+      },
+      {
+        pop: "p-ac-d3",
+        title: "“Who is missing from our taxonomy?”",
+        desc: "Then ask which functional role each absentee fills.",
+      },
+    ],
+    sendHeading: "Spaced repetition — what to drill",
+    sendBox: {
+      heading: "Concepts",
+      items: [
+        { html: "Supply-chain stages<small>equipment → fabrication → chip design → cloud/data centers → labs/model training → deployment</small>" },
+        { html: "Verifiability gradient<small>highest upstream, lowest downstream.</small>" },
+        { html: "Chokepoint<small>a stage with so few players that activity there is hard to hide; canonical cases are ASML (equipment) and TSMC (fabrication).</small>" },
+        { html: "Chokepoint coercion<small>the concentration that makes a stage verifiable also makes it a pressure point — verifiability and vulnerability travel together.</small>" },
+        { html: "Exaggeration cuts both ways<small>states overstate rivals' capabilities to justify controls; labs over- or understate their own depending on whether they want attention or freedom.</small>" },
+        { html: "Compute haven<small>a non-signatory jurisdiction hosting activity that signatories restrict.</small>" },
+        { html: "Actors, one card each<small>ASML · TSMC · Samsung and SK Hynix · NVIDIA, AMD and Chinese designers · the hyperscalers · the frontier labs · proxies, shells and contractors.</small>" },
+        { html: "The five incentive tags, one card each<small>comply, defect, hide, exaggerate, free-ride — each with an example actor.</small>" },
+        { html: "The six functional roles<small>capability holder, chokepoint controller, information holder, enforcement authority, evasion pathway, victim/free-rider/beneficiary.</small>" },
+        { html: "One actor, several roles at once<small>NVIDIA as capability enabler, information holder, and lobbying force.</small>" },
+      ],
+    },
   },
 ];
 
@@ -877,4 +976,20 @@ export const FG_POPUPS: Record<string, string> = {
     "<h3>“When is ambiguity a feature?”</h3>\n    <p>“Constructive ambiguity”: vagueness deliberately chosen so both sides can sign while reading the text differently.</p>\n    <p><strong>Move:</strong> <em>“Find one place in tonight's drafts where a vague term was load-bearing — where precision would have killed the deal at your own table.”</em> There's always one.</p>",
   "p-an-d4":
     "<h3>“What did the other lens see?”</h3>\n    <p>After the lens flip: <em>“which reading of your own draft felt truer — and what does that say about your priors, rather than about the text?”</em></p>\n    <p><strong>Why it works:</strong> it turns the IR lenses from labels into instruments, and it's a rare prompt where the honest answer is self-revealing without being personal.</p>",
+
+  /* ---- 13 · Actors and the supply chain (Module 1) ---- */
+  "p-ac-a1":
+    "<h3>Scenario scrutiny: AI 2040 Plan A</h3>\n    <p><strong>70 minutes</strong>, and it requires 30–40 minutes of assigned reading beforehand — with a printed excerpt packet from the PDF export as the fallback for anyone who arrives cold.</p>\n    <p>Learners apply the AI Futures Project's own scenario-scrutiny method back to the text. Everyone arrives with passages flagged <strong>WHO</strong> (unnamed or unitary actors), <strong>HOW</strong> (asserted mechanisms), or <strong>WHY</strong> (incentive gaps). The group then audits the scenario against our actor taxonomy to find the load-bearing absences — TSMC, ASML, the hyperscalers, proxies, non-signatories — scores the deal on the five-part agreement anatomy, and rewrites the vaguest verification sentence as a real treaty provision with a named actor, an evidence stream, and a violation response.</p>\n    <p><strong>Payoff:</strong> critiquing serious policy writing without strawmanning it, discovering that vagueness usually hides the hardest step, and generating the HOW-questions Module 2 answers.</p>\n    <p><strong>Compresses to 45 min</strong> by cutting the anatomy scoring and doing one shared rewrite.</p>",
+  "p-ac-a2":
+    "<h3>Incentive flip</h3>\n    <p><strong>20 minutes.</strong> Each group draws one actor whose dominant tags are defect, hide, or free-ride — a hyperscaler resisting monitoring costs, a memory maker under-complying with export controls — and designs the cheapest intervention that flips its dominant incentive to comply: market access, safe harbor, subsidy, indemnity, or a credible threat. Groups pitch in one minute; the room votes on cheapest-that-would-actually-work.</p>\n    <p><strong>Defense:</strong> the taxonomy risks teaching incentives as static labels, and this forces the causal reading — an incentive tag is a function of the actor's payoffs, so changing payoffs changes the tag. That design mindset is what the capstone eventually demands, and surfacing it in Module 1 is cheap. The one-minute pitch format keeps it from becoming a policy-design rabbit hole the module isn't ready for.</p>",
+  "p-ac-a3":
+    "<h3>Declaration poker</h3>\n    <p><strong>25 minutes.</strong> Each group ghost-writes a short compliance declaration for an assigned actor, embedding exactly one strategically self-serving distortion consistent with that actor's incentive tags — an exaggeration, an omission, an understatement. Declarations rotate; receiving groups must find the distortion and name the incentive that explains it.</p>\n    <p><strong>Defense:</strong> this converts the module's best discussion prompt (when do actors overstate vs. understate?) from analysis into production — learners have to think like the distorting actor to write a distortion that survives scrutiny, which is a deeper test of the incentive model than critique alone. It also establishes the habit Module 2 depends on: reading every declaration as a strategic document whose claims need corroborating evidence, before learners ever see the evidence streams that do the corroborating.</p>",
+  "p-ac-a4":
+    "<h3>Where do you hide?</h3>\n    <p><strong>30 minutes.</strong> Groups of three play a named sanctioned buyer with a concrete goal — say, acquire 5,000 export-controlled accelerators' worth of training compute — and sketch an acquisition route of up to five steps using only actors from the taxonomy. Actor level, no mechanisms yet.</p>\n    <p>Groups then swap sheets and mark, for each step, which actor was positioned to detect it and whether that actor had any real incentive to look.</p>\n    <p><strong>Debrief</strong> on the steps where detection was possible but unmotivated: a regime's gaps are less about blind spots than about actors who can see but won't. Light foreshadowing of Module 3's red-team exercise.</p>",
+  "p-ac-d1":
+    "<h3>“Lean on TSMC, or diversify away from it?”</h3>\n    <p>Taiwan holds the most verifiable stage of the chain and the most fragile position. If you were designing a regime, would you lean harder on the TSMC chokepoint or deliberately diversify away from it?</p>",
+  "p-ac-d2":
+    "<h3>“When would a lab overstate its capabilities?”</h3>\n    <p>When and why would a lab overstate its capabilities? When would it understate them? What does each do to a verifier trying to interpret declarations?</p>",
+  "p-ac-d3":
+    "<h3>“Who is missing from our taxonomy?”</h3>\n    <p>Watch for: open-weight communities, energy and grid operators, academia, standards bodies — then ask which functional role each fills.</p>\n    <p><strong>Move:</strong> if you are running the AI 2040 session, use this prompt as its opener instead of asking it separately.</p>",
 };

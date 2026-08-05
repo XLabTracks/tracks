@@ -323,8 +323,9 @@ in `docs/superpowers/` (`specs/`, `plans/`) — they record intent and rationale
 household picture, or the `five-worlds` map axes); once shipped, the code is
 normative.
 
-**Verification.** Verification ships as **two separate surfaces**, deliberately,
-and they share no files:
+**Verification.** Verification ships as **two separate learner surfaces**,
+deliberately, and they share no files (a third, the facilitator guide, is
+described at the end of this section):
 
 1. **The content-graph track** at `/tracks/verification` — ordinary app
    content, so it gets the lesson routes, sidebar, progress and prerequisites
@@ -405,6 +406,23 @@ nothing that ships today.
   derive from the values present. `verification-capstones/_README.md` is the
   front-matter contract and states which capstones belong here at all — the
   bank carries only the ones whose prerequisites this track teaches.
+
+**The facilitator field guide** (`/facilitator`) is the third surface and the
+one that is neither of the above. It is an app route because it gates, and the
+static site never gates — it holds no session, and putting the guide there
+would mean a second sign-in. `src/lib/verification/data/facilitator-guide.ts`
+is the whole of its content: a verbatim port of a standalone page that no
+longer exists, plus a Module 1 session plan transcribed from the outline's sync
+tab and marked as such. The gate is `isFacilitator()` — instructor of at least
+one classroom, the only such notion the schema carries, so no migration and no
+second role system. Someone signed in without a classroom is told how to
+qualify rather than 404'd; the material is gated because plans carry their own
+answer keys, not because it is secret. Two rendering traps: the authored bodies
+are raw HTML through `dangerouslySetInnerHTML` (safe only because they are
+in-repo curriculum — never route anything else through those components), and
+authored `[term]` triggers inside callouts carry `data-pop`, so popups open by
+delegation off the container rather than by a handler per button. Views are
+component state, not routes, so Back lands on the grid mid-session.
 
 **Prerequisites & progress.** `Track.prerequisiteEnforcement` is `soft` (warn)
 or `hard` (lock); `isAccessLocked()` (pure, tested) + `getPrerequisiteStatus()`

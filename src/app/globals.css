@@ -301,3 +301,67 @@
     line-height: 1.45;
   }
 }
+
+/* Facilitator field guide — the authored HTML bodies in
+   src/lib/verification/data/facilitator-guide.ts, which arrive as raw markup
+   rather than as components. Scoped to .fg-html so nothing here can reach the
+   lesson reader. `say` is a spoken line the facilitator can read aloud, `move`
+   the follow-up to make, `mt` a medium tag (in-person / Zoom); `small` is the
+   second line of a resource row. */
+.fg-html > * + * {
+  margin-top: 0.75rem;
+}
+.fg-html a {
+  color: var(--destructive);
+  font-weight: 500;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+.fg-html ol,
+.fg-html ul {
+  padding-left: 1.25rem;
+  list-style: revert;
+}
+.fg-html li + li {
+  margin-top: 0.375rem;
+}
+.fg-html small {
+  display: block;
+  margin-top: 0.125rem;
+  color: var(--muted-foreground);
+  font-size: 0.8125rem;
+  line-height: 1.45;
+}
+.fg-html .say,
+.fg-html .move {
+  display: block;
+  margin-top: 0.75rem;
+  border-left: 2px solid var(--border);
+  padding-left: 0.75rem;
+  color: var(--muted-foreground);
+  font-style: italic;
+}
+.fg-html .mt {
+  display: inline-block;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 0 0.375rem;
+  color: var(--muted-foreground);
+  font-size: 0.75rem;
+  font-style: normal;
+}
+/* An authored [term] trigger inside a callout — a button, so it must not take
+   a text selection (see the pressable-chrome rule). */
+.fg-html button[data-pop] {
+  border-bottom: 1px dashed currentColor;
+  cursor: pointer;
+  font-weight: 500;
+  user-select: none;
+  -webkit-user-select: none;
+}
+/* Resource rows carry their own <a> + <small>; the marker would double the
+   bullet the border already implies. */
+.fg-res {
+  list-style: none;
+  padding-left: 0;
+}

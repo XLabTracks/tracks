@@ -77,6 +77,12 @@ export const verificationModules: Module[] = [
     order: 2,
     prerequisiteModuleIds: ["v-why", "v-scoping"],
     itemIds: [
+      "v-hw-attestation",
+      "v-hw-trusted-statement",
+      "v-hw-measuring-use",
+      "v-hw-where-trust-lives",
+      "v-hw-policy-studio",
+      "v-hw-reconstructing-run",
       "v-intel-signatures",
       "v-intel-anchor",
       "v-intel-assessment",
@@ -109,6 +115,48 @@ export const verificationModules: Module[] = [
 ];
 
 export const verificationLessons: Lesson[] = [
+  {
+    id: "v-hw-attestation",
+    slug: "hardware-attestation",
+    moduleId: "v-infrastructure",
+    title: "2.1.0 The chip says “compliant”",
+    contentRef: "verification/hardware-attestation",
+  },
+  {
+    id: "v-hw-trusted-statement",
+    slug: "hardware-trusted-statement",
+    moduleId: "v-infrastructure",
+    title: "2.1.1 From a chip to a trusted statement",
+    contentRef: "verification/hardware-trusted-statement",
+  },
+  {
+    id: "v-hw-measuring-use",
+    slug: "hardware-measuring-use",
+    moduleId: "v-infrastructure",
+    title: "2.1.2 Measuring, classifying, and controlling use",
+    contentRef: "verification/hardware-measuring-use",
+  },
+  {
+    id: "v-hw-where-trust-lives",
+    slug: "hardware-where-trust-lives",
+    moduleId: "v-infrastructure",
+    title: "2.1.3 Where should trust live?",
+    contentRef: "verification/hardware-where-trust-lives",
+  },
+  {
+    id: "v-hw-policy-studio",
+    slug: "hardware-policy-studio",
+    moduleId: "v-infrastructure",
+    title: "2.1.4 Policy judgment studio",
+    contentRef: "verification/hardware-policy-studio",
+  },
+  {
+    id: "v-hw-reconstructing-run",
+    slug: "hardware-reconstructing-run",
+    moduleId: "v-infrastructure",
+    title: "2.1.5 Reconstructing a declared training run (optional)",
+    contentRef: "verification/hardware-reconstructing-run",
+  },
   {
     id: "v-welcome",
     slug: "welcome",

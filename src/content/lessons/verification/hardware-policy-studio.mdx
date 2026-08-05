@@ -1,0 +1,157 @@
+# 2.1.4 Policy judgment studio
+
+<Callout variant="note" title="Section status">
+The outline gives this section as a design specification — objectives, the
+activity, its claim list and its reveal — rather than as finished prose. It
+is reproduced here as written; the connecting text is still to be authored.
+</Callout>
+
+### 2.1.4 Policy judgment studio
+
+Runtime: 40 minutes Hard idea: A useful recommendation gives hardware a bounded job inside a regime and states the conditions under which that recommendation expires.
+
+#### Source triad
+
+Learners receive three short dossiers representing distinct evidence categories.
+
+##### Dossier 1: Deployed primitive
+
+Official NVIDIA attestation documentation and a sample token.
+
+What learners should notice:
+
+- actual implementation;
+- concrete evidence fields;
+- working reference-value and revocation services;
+- vendor-centered trust;
+- narrow relation to the treaty’s prohibited-activity claim;
+- lack of automatic topology, workload-history, or completeness assurance.
+
+##### Dossier 2: Empirical component demonstration
+
+The telemetry-classification study.
+
+What learners should notice:
+
+- an adversarially tested empirical component;
+- substantial results under tested conditions;
+- explicit experimental limits;
+- dependency on a trustworthy telemetry path and protected classifier;
+- no end-to-end policy or enforcement institution.
+
+##### Dossier 3: Systems proposal
+
+An off-chip monitoring architecture or hardware licensing proposal.
+
+What learners should notice:
+
+- a coherent proposed system;
+- unresolved engineering and operational dependencies;
+- claimed deployment path;
+- possible advantages against vendor or on-chip distrust;
+- absence of deployment evidence at treaty-relevant scale.
+This source structure builds the habit of distinguishing:
+
+- deployed primitive;
+- component demonstration;
+- end-to-end prototype;
+- pilot at relevant scale;
+- operating governance regime.
+Learners should never infer stage five from evidence at stages one or two.
+
+#### Feasibility stress test
+
+Before writing, each learner receives one change in conditions:
+
+- a major accelerator-signing key is compromised;
+- algorithmic efficiency sharply reduces the compute required for the relevant capability;
+- distributed training becomes less dependent on high-bandwidth co-location;
+- a larger share of covered compute shifts to hardware from vendors outside the original trust arrangement;
+- a serious physical attack against the measurement path is demonstrated;
+- a jointly governed off-chip pilot survives adversarial testing;
+- a crisis shortens the available deployment window to three months;
+- parties accept inspections but reject foreign-controlled on-chip keys.
+The learner revises:
+
+- technical feasibility;
+- political feasibility;
+- coverage;
+- fidelity;
+- time to deployment;
+- preferred corroborating layer.
+The point is not forecasting the correct future. It is making the assessment conditional on visible facts.
+
+#### Written output: Hardware assurance brief
+
+Length: 700 to 1,000 words, or equivalent structured design note.
+
+Audience: A named national delegation or joint drafting session considering a three-month U.S.-China pause.
+
+Prompt:
+
+Assess the role one proposed hardware architecture should play in verifying a rule that prohibits unlicensed above-threshold training while permitting inference and approved safety evaluations. Recommend a bounded use of the mechanism, a pilot or deployment pathway, and the independent evidence needed to cover its main blind spot.
+
+The brief must contain:
+
+- Goal, rule, and claim State the policy objective, legal obligation, and exact proposition the mechanism tests.
+- Actors and authority Name the prover, verifier, evidence producer, key or reference-value authority, regulator, and enforcing institution.
+- Evidence and trust chain Explain what is measured, how it reaches the verifier, and which components or actors must remain trustworthy.
+- Current maturity and deployment path Separate existing primitives, demonstrated components, proposed components, and missing institutions.
+- Strongest adversary response Model the best plausible bypass by the relevant actor.
+- Collapsing weakness Rank weaknesses and identify the one that defeats the proposed role if unresolved.
+- Residual blind spot and sibling layer State which cloud, intelligence, inspection, or human evidence must corroborate the hardware claim.
+- Update condition Name the evidence, trend, or political change that would raise or lower the recommendation.
+
+#### Rubric
+
+Dimension
+
+Weight
+
+What earns full credit
+
+Claim fidelity and goal-to-claim gap
+
+25%
+
+The mechanism’s conclusion is precisely bounded and tied to the rule
+
+Trust chain and actor authority
+
+20%
+
+Keys, measurements, reference values, updates, adjudication, and enforcement have named owners
+
+Adversary modeling and prioritization
+
+20%
+
+The strongest bypass and collapsing weakness are identified
+
+Feasibility and deployment path
+
+15%
+
+Deployed, demonstrated, proposed, and missing elements are separated; time and scale are specified
+
+Layering and common-mode failure
+
+10%
+
+The corroborating layer is genuinely independent and covers the named blind spot
+
+Audience fit and update conditions
+
+10%
+
+The recommendation serves the downstream reader and states what would change it
+
+#### Final reflection
+
+Return the learner’s initial claim map from 2.1.0.
+
+Prompt:
+
+Which conclusion did you initially grant hardware too quickly? What new link in the chain caused you to narrow it?
+
+This makes the learning visible without rerunning Module 2.0’s entire ranking exercise.

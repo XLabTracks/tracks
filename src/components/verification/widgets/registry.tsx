@@ -9,6 +9,7 @@ import { InspectionGame } from "./inspection-game";
 import { GameTheoryPrimer } from "./game-theory-primer";
 import { VerificationTimelineGame } from "./verification-timeline-game";
 import { InteractiveMap } from "./interactive-map";
+import { VerificationLandscape } from "./verification-landscape";
 
 /**
  * Native React widgets ported from the standalone HTML pages, keyed by the same
@@ -28,6 +29,7 @@ export const verificationWidgets: Record<
   "game-theory-primer": GameTheoryPrimer,
   "verification-timeline-game": VerificationTimelineGame,
   "interactive-map": InteractiveMap,
+  "verification-landscape": VerificationLandscape,
 };
 
 export function getVerificationWidget(

@@ -21,6 +21,7 @@ export interface VerificationExerciseDef {
   bridged: boolean;
 }
 export const verificationExercises: VerificationExerciseDef[] = [
+  { id: "verification-landscape", title: "The Verification Landscape", bridged: false },
   { id: "policy-scoping", title: "Scoping an Anti-ASI Policy", bridged: true },
   { id: "anatomy-drill", title: "The Anatomy Drill", bridged: true },
   { id: "protocol-actors", title: "Who's in the Treaty?", bridged: true },

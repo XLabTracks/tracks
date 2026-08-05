@@ -55,13 +55,17 @@ describe("registry ↔ widget ↔ content graph ↔ MDX", () => {
     );
   });
 
-  it("every exercise has a v-<id> lesson and an MDX body that embeds it", () => {
+  // An exercise that has its own lesson must be that exercise: a v-<id> lesson
+  // whose body embeds some other widget is a mis-wiring the route would render
+  // without complaint. Exercises embedded only inside prose have no v-<id>
+  // lesson and are covered by the next check instead.
+  it("a v-<id> lesson embeds the exercise it is named for", () => {
     for (const exercise of verificationExercises) {
       const lessonId = verificationLessonId(exercise.id);
       const lesson = trackLessons.find((l) => l.id === lessonId);
-      expect(lesson, lessonId + " missing from the verification track").toBeTruthy();
-      const mdxPath = join(LESSONS_DIR, lesson!.contentRef + ".mdx");
-      expect(existsSync(mdxPath), lesson!.contentRef + ".mdx missing").toBe(true);
+      if (!lesson) continue;
+      const mdxPath = join(LESSONS_DIR, lesson.contentRef + ".mdx");
+      expect(existsSync(mdxPath), lesson.contentRef + ".mdx missing").toBe(true);
       expect(
         readFileSync(mdxPath, "utf8"),
         mdxPath + " must embed its exercise",
@@ -69,24 +73,28 @@ describe("registry ↔ widget ↔ content graph ↔ MDX", () => {
     }
   });
 
-  // The track used to be nothing but interactives, so every lesson in it was
-  // an exercise. It now also carries the outline's prose lessons, so the check
-  // is the other direction plus a no-orphans rule: an exercise lesson is one
-  // whose MDX embeds the widget, and every one of those must be registered.
-  it("every exercise lesson maps back to a registered exercise", () => {
-    const expected = new Set(
-      verificationExercises.map((e) => verificationLessonId(e.id)),
-    );
-    const exerciseLessons = trackLessons.filter((lesson) => {
+  // Two ways a widget reaches a learner: its own lesson (v-<id>, the usual
+  // case) or embedded inside a prose lesson, which is what 0.2 does with the
+  // landscape. So the invariant is "every registered exercise is embedded
+  // somewhere in this track", not "every lesson is an exercise" — that was
+  // true only while the track was nothing but interactives.
+  it("every registered exercise is embedded by a lesson in the track", () => {
+    const embeds = new Map<string, string[]>();
+    for (const lesson of trackLessons) {
       const mdx = join(LESSONS_DIR, `${lesson.contentRef}.mdx`);
-      return (
-        existsSync(mdx) &&
-        readFileSync(mdx, "utf8").includes("<VerificationExercise")
-      );
-    });
-    for (const lesson of exerciseLessons) {
-      expect(expected.has(lesson.id), lesson.id + " has no registry entry").toBe(true);
+      if (!existsSync(mdx)) continue;
+      const body = readFileSync(mdx, "utf8");
+      for (const exercise of verificationExercises) {
+        if (body.includes(`id="${exercise.id}"`)) {
+          embeds.set(exercise.id, [...(embeds.get(exercise.id) ?? []), lesson.id]);
+        }
+      }
     }
-    expect(exerciseLessons.length).toBe(verificationExercises.length);
+    for (const exercise of verificationExercises) {
+      expect(
+        embeds.get(exercise.id),
+        exercise.id + " is registered but no lesson embeds it",
+      ).toBeTruthy();
+    }
   });
 });

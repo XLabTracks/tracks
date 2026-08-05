@@ -203,6 +203,15 @@
   font-size: 11px;
   color: var(--muted-foreground);
 }
+/* One fixed advance for every state mark. ● ◐ ○ ◆ ▲ are not the same width in
+   this face, so a bare glyph pushed the word beside it and cards sitting in a
+   row disagreed on where "draft" or "core" began. Width, not the glyph's own
+   advance, is what lines the words up. */
+.g {
+  display: inline-block;
+  width: 1.15em;
+  text-align: center;
+}
 .status .g { font-size: 10.5px; }
 
 .cap-card h2 { font-size: 17px; line-height: 1.3; }

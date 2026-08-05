@@ -173,12 +173,11 @@ button, [role='button'], [role='radio'], [role='tab'], .chip, .nav a, .brand,
 }
 .brand i { color: var(--brand-ink); font-style: normal; }
 
-/* The nav takes the whole middle of the bar and centres in it, so the brand
-   sits hard left and the actions hard right however few links there are.
-   Trap: this is what pushes .header-right to the edge — give the nav a width
-   (flex:1) and .header-right needs no auto margin, but drop the flex and the
-   actions slide back to the middle. */
-.nav { flex: 1; display: flex; align-items: center; justify-content: center; gap: 14px; font-size: 14.5px; }
+/* The links sit against the brand on the left; the nav still takes the whole
+   middle of the bar so the actions are pushed hard right.
+   Trap: flex:1 is what pushes .header-right to the edge — drop it and the
+   actions slide back in beside the links. */
+.nav { flex: 1; display: flex; align-items: center; justify-content: flex-start; gap: 14px; font-size: 14.5px; }
 .nav a {
   position: relative;
   padding: 6px 14px;
@@ -237,14 +236,14 @@ button, [role='button'], [role='radio'], [role='tab'], .chip, .nav a, .brand,
   align-items: center;
   justify-content: center;
   gap: 8px;
-  height: 42px;
-  padding: 0 20px;
+  height: 50px;
+  padding: 0 24px;
   border: var(--hairline) solid transparent;
   border-radius: var(--radius-sm);
   background: var(--primary);
   color: var(--primary-foreground);
   font: inherit;
-  font-size: 15px;
+  font-size: 18px;
   text-decoration: none;
   cursor: pointer;
   transition: filter .15s ease, background .15s ease, color .15s ease;
@@ -252,7 +251,7 @@ button, [role='button'], [role='radio'], [role='tab'], .chip, .nav a, .brand,
 .btn:hover { filter: brightness(1.08); }
 .btn.outline { background: transparent; color: var(--foreground); border-color: var(--border); }
 .btn.outline:hover { background: var(--muted); filter: none; }
-.btn.small { height: 32px; padding: 0 12px; font-size: 13px; }
+.btn.small { height: 38px; padding: 0 14px; font-size: 15.5px; }
 
 .skip {
   position: fixed;
@@ -291,7 +290,6 @@ button, [role='button'], [role='radio'], [role='tab'], .chip, .nav a, .brand,
     order: 3;
     flex: none;
     width: 100%;
-    justify-content: flex-start;
     overflow-x: auto;
     scrollbar-width: none;
     padding-bottom: 2px;

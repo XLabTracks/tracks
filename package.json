@@ -17,7 +17,8 @@
     "lesswrong:build": "tsx scripts/build-lesswrong.ts",
     "verification:capstones": "node scripts/build-verification-capstones.mjs",
     "verification:chrome": "node scripts/build-verification-chrome.mjs",
-    "readings:build": "tsx scripts/build-readings.ts"
+    "readings:build": "tsx scripts/build-readings.ts",
+    "gdoc:build": "tsx scripts/build-gdoc.ts"
   },
   "dependencies": {
     "@mdx-js/loader": "^3.1.1",

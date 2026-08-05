@@ -429,7 +429,8 @@
    inline (sentence) hides; editorial voice uses --primary navy, never the
    destructive red. */
 @layer components {
-  /* Block-level hide: <details class="ax-hidden"> with a pill summary. */
+  /* Block-level hide: <details class="ax-hidden"> — a left-aligned chevron
+     row (AI-2040-style expandable aside); the angled bracket rotates open. */
   .arxiv-paper .ax-hidden {
     margin: 0.75em 0;
   }
@@ -437,15 +438,28 @@
     cursor: pointer;
     list-style: none;
     user-select: none;
-    text-align: center;
+    display: flex;
+    align-items: baseline;
+    gap: 0.5em;
     color: var(--muted-foreground);
-    font-size: 0.8125em;
-    border: 1px dashed var(--border);
-    border-radius: var(--radius-md, 8px);
-    padding: 0.2em 0.75em;
+    font-size: 0.875em;
+  }
+  .arxiv-paper .ax-hidden > summary::before {
+    content: "❯";
+    font-size: 0.8em;
+    line-height: 1;
+    transition: transform 0.15s ease;
+    transform-origin: center;
+    flex: none;
+  }
+  .arxiv-paper .ax-hidden > summary:hover {
+    color: var(--foreground);
   }
   .arxiv-paper .ax-hidden > summary::-webkit-details-marker {
     display: none;
+  }
+  .arxiv-paper .ax-hidden[open] > summary::before {
+    transform: rotate(90deg);
   }
   .arxiv-paper .ax-hidden[open] > summary {
     margin-bottom: 0.75em;

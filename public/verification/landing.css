@@ -86,10 +86,9 @@ section.band .intro { max-width: 62ch; margin-top: 12px; color: var(--muted-fore
 
 /* Under about 760px the graph's own type would scale below readable size with
    the viewBox, so the figure keeps its width and the panel scrolls to it. */
-@media (max-width: 820px) {
-  .sky { overflow-x: auto; }
-  .sky svg { min-width: 760px; }
-}
+/* No min-width, no sideways scroll: the figure carries numbers, not names, so
+   it stays legible as it scales and simply fits whatever screen it is on. It
+   held 760px only because 27 names were drawn inline. */
 
 .sky .star { fill: currentColor; color: var(--muted-foreground); }
 .sky .ring { fill: none; stroke: color-mix(in srgb, var(--foreground) 12%, transparent); stroke-width: 1; }
@@ -132,7 +131,11 @@ section.band .intro { max-width: 62ch; margin-top: 12px; color: var(--muted-fore
   stroke-width: 1.6;
   transition: stroke-width .15s ease, fill .2s ease;
 }
-.sky .node .node-num { fill: var(--foreground); font-family: var(--mono); font-size: var(--fs-2xs); text-anchor: middle; }
+/* Sized in user units, not from the type scale: this text lives inside the
+   viewBox and is scaled with it, so a token meant for CSS pixels would land at
+   4px on a phone. 26 keeps the numeral inside a 30-unit star and readable
+   across the range the figure is scaled over. */
+.sky .node .node-num { fill: var(--foreground); font-family: var(--mono); font-size: 26px; text-anchor: middle; }
 .sky .node .name { fill: var(--foreground); font-size: var(--fs-xs); }
 .sky.focusing .node:not(.hot) { opacity: .28; }
 .sky .node.hot circle { stroke-width: 2.6; fill: color-mix(in srgb, var(--sel) 26%, var(--card)); }
@@ -148,7 +151,9 @@ section.band .intro { max-width: 62ch; margin-top: 12px; color: var(--muted-fore
 .sky .arc-label text {
   fill: var(--sel-text, var(--sel));
   font-family: var(--mono);
-  font-size: var(--fs-xs);
+  /* User units, like .node-num — inside the viewBox a CSS-pixel token is
+     scaled with the figure and lands at 4px on a phone. */
+  font-size: 24px;
   letter-spacing: .06em;
   text-anchor: middle;
 }
@@ -240,6 +245,14 @@ section.band .intro { max-width: 62ch; margin-top: 12px; color: var(--muted-fore
    ink is white: M3 sits at 4.89:1 at rest and brightness(1.06) took it to
    4.43, under the floor, on the one interaction that invites a closer look.
    An underline is the site's own hover idiom and cannot move contrast. */
+@media (max-width: 640px) {
+  /* Numerals only, and the bar becomes a full-width row of five equal
+     segments — it fits, so nothing is cut and nothing has to be scrolled. */
+  .mod-filters { width: 100%; }
+  .mod-filters button { flex: 1 1 0; padding-inline: 0; text-align: center; }
+  .mod-filters .mod-name { display: none; }
+}
+
 .mod-filters button:hover {
   text-decoration: underline;
   text-underline-offset: 3px;
@@ -256,3 +269,52 @@ section.band .intro { max-width: 62ch; margin-top: 12px; color: var(--muted-fore
 .after-sky { margin-top: 22px; }
 .mod-card .mod-meta { margin-top: 10px; font-family: var(--mono); font-size: var(--fs-2xs); color: var(--muted-foreground); }
 .mod-card .memo-link + .memo-link { margin-left: 14px; }
+
+/* ---------- the key ---------- */
+
+/* The names the figure no longer draws. Grouped by module, numbered to match
+   the stars; each row pins its star. On a phone it is the whole navigation. */
+.sky-key {
+  list-style: none;
+  margin: 12px 0 0;
+  padding: 0;
+  display: grid;
+  gap: 14px 20px;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+}
+.sky-key > li > ol { list-style: none; margin: 0; padding: 0; }
+.key-mod-name {
+  display: block;
+  margin-bottom: 4px;
+  font-family: var(--mono);
+  font-size: var(--fs-2xs);
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--sel-text, var(--muted-foreground));
+}
+.sky-key button {
+  display: flex;
+  gap: 8px;
+  width: 100%;
+  padding: 4px 6px;
+  margin-left: -6px;
+  border: 0;
+  border-radius: var(--radius-xs);
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  font-size: var(--fs-sm);
+  text-align: left;
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
+}
+.sky-key button:hover { background: var(--muted); }
+.key-n {
+  flex: 0 0 auto;
+  min-width: 18px;
+  font-family: var(--mono);
+  font-size: var(--fs-2xs);
+  color: var(--sel-text, var(--muted-foreground));
+}
+.key-label { flex: 1 1 auto; }

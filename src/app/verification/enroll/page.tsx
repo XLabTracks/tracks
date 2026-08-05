@@ -116,7 +116,7 @@ export default async function EnrollPage() {
       )}
 
       <p className="text-muted-foreground mt-10 text-sm">
-        <Link className="underline underline-offset-4" href="/verification/landing.html">
+        <Link className="underline underline-offset-4" href="/verification/landing">
           Back to the course
         </Link>
       </p>

@@ -84,14 +84,14 @@ function Brief({ e, lead }: { e: Entry; lead: boolean }) {
       <div className="mt-auto flex flex-wrap gap-2 pt-2">
         <a
           className="border-border hover:bg-muted rounded-lg border px-3 py-1.5 text-sm select-none"
-          href={`/verification/capstone-bank.html#${encodeURIComponent(e.slug)}`}
+          href={`/verification/capstone-bank#${encodeURIComponent(e.slug)}`}
         >
           Read the full brief
         </a>
         {lead ? (
           <a
             className="border-border hover:bg-muted rounded-lg border px-3 py-1.5 text-sm select-none"
-            href={`/verification/capstone.html?brief=${encodeURIComponent(e.slug)}`}
+            href={`/verification/capstone?brief=${encodeURIComponent(e.slug)}`}
           >
             Start in the workspace
           </a>
@@ -153,7 +153,7 @@ export function CapstoneBank({ lead }: { lead?: string }) {
       <p className="text-sm">
         <a
           className="underline underline-offset-4"
-          href="/verification/capstone-bank.html"
+          href="/verification/capstone-bank"
         >
           Open the bank — {entries.length} briefs with filters, prerequisites and sources →
         </a>

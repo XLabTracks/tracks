@@ -11,7 +11,7 @@
 "use strict";
 
 {
-  VT.mountChrome('capstone.html');
+  VT.mountChrome('/verification/capstone');
   VT.mountFoot();
 
   const KEY = 'vt-capstone';
@@ -34,7 +34,7 @@
     host.innerHTML =
       '<b>Answering a brief from the bank.</b> ' + VT.esc(e.title) + ' &mdash; ' +
       VT.esc(e.deliverable) + '. ' +
-      '<a href="capstone-bank.html#' + encodeURIComponent(e.slug) + '">Read the full brief &rarr;</a>';
+      '<a href="/verification/capstone-bank#' + encodeURIComponent(e.slug) + '">Read the full brief &rarr;</a>';
   })();
 
   /* Pinned fields: audience, decision and falsifier equivalents for a regime

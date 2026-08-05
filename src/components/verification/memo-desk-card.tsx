@@ -94,12 +94,11 @@ function Slot({ slot }: { slot: MemoSlot }) {
         </>
       ) : null}
 
-      {/* The desk deep-links on the fragment — it selects `location.hash` on
-          load and on hashchange. And it is a static page outside the app, so
-          this is a plain anchor rather than next/link: a client-side
-          navigation would try to route it and 404. */}
+      {/* A plain anchor, not next/link: the desk deep-links on the fragment,
+          selecting `location.hash` on load, and a client-side navigation that
+          keeps the document would never fire that. */}
       <a
-        href={`/verification/memo-desk.html#${slot.id}`}
+        href={`/verification/memo-desk#${slot.id}`}
         className="border-border hover:bg-muted mt-4 inline-flex items-center gap-1.5 rounded-lg border px-3 py-1.5 text-xs font-semibold no-underline! transition-colors select-none"
       >
         Draft it on the memo desk

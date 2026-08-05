@@ -25,7 +25,7 @@ export default function Home() {
             an app route, so this is a plain anchor: next/link would try to
             prefetch an RSC payload that does not exist there. */}
         <Button asChild size="lg" variant="outline">
-          <a href="/verification/landing.html">Verification track</a>
+          <a href="/verification/landing">Verification track</a>
         </Button>
       </div>
     </main>

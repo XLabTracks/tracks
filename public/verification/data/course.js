@@ -406,33 +406,140 @@ window.COURSE = {
           ],
           exercise: 'ex-signals' },
 
-        { id: '2.4', title: 'Human', kind: 'explainer', mins: '20–25 min',
+        /* ---- 2.4 verification log ------------------------------------
+           Unit 2.4 is the only unit in the track that rests on statute, and
+           statute here moved twice inside twelve months. Every legal claim
+           below is dated in the learner-facing prose for that reason: a
+           reader in 2027 must be able to see what the sentence was true of.
+           Checked 2026-08-05.
+
+             claim                                                status
+             SB 1047 vetoed 2024-09-29; carried third-party
+               audit and anti-retaliation provisions              confirmed
+             SB 53 (TFAIA) signed 2025-09-29 — anti-retaliation
+               for employees and contractors, required anonymous
+               internal channel, notice of rights; no audit
+               mandate; OES incident reporting at 15 days,
+               24 h on imminent danger                            confirmed
+             RAISE signed 2025-12-19 with an annual independent
+               third-party audit clause; chapter amendment
+               signed 2026-03-27 removed both that clause and
+               the whistleblower section; effective 2027-01-01    confirmed
+             Wasil et al. (2408.16074) class whistleblowers as a
+               national technical means and cite the SEC program
+               under Dodd-Frank (10–30% of sanctions) as the
+               incentive precedent                                confirmed
+             Brundage et al. (2601.11699): four AI Assurance
+               Levels, AAL-1 baseline / AAL-2 near-term           confirmed
+             Anderljung et al. (2311.14711): ASPIRE = Access,
+               Searching attitude, Proportionality, Independence,
+               Resources, Expertise                               confirmed
+             Scher et al. (2511.10783) Article X carries
+               challenge inspections and whistleblower
+               protections in one article                         confirmed
+             FLI "Draft Articles" Annex B.1                       unchecked
+               Named in the working note for this unit; four search angles
+               found no such FLI document. Nothing in the unit rests on it —
+               the draft-treaty text 2.4.3 cites is the Scher et al.
+               Article X the track already annotates at 2.3.4. Replace this
+               row if the FLI text is located.
+             AI Whistleblower Protection Act (Grassley/Coons)
+               still a bill, not law                              unchecked
+               Introduction on 2025-05-15 is confirmed; no evidence found
+               either way of floor action since. The prose says
+               "introduced", never "enacted", and carries the date. */
+
+        { id: '2.4', title: 'Human', kind: 'explainer', mins: '30–40 min',
           goal: 'People reveal what hardware, cloud and intelligence cannot: what the organization believed, and what it suppressed.',
           body: [
+            { h: '2.4.0 · Introduction' },
+            { p: 'Every other layer in this module reads a consequence. Power draw is a consequence of computation, a procurement record is a consequence of a purchase, a satellite image is a consequence of pouring concrete. None of them reads a decision. The human layer is the only one that reaches what an organization **knew, intended, and chose not to say** — the evaluation that was run and shelved, the threshold quietly redefined, the deployment that went ahead over an objection.' },
+            { p: 'It is also the only layer whose sensor has interests of its own. A satellite cannot be fired, sued, or asked to sign a departure agreement. Nearly everything difficult about this layer follows from that one asymmetry, and the unit is ordered by it: who can see what (2.4.1), what makes speaking survivable (2.4.2), what a formal right of access adds once someone has spoken (2.4.3), and whether the institutions holding these powers have earned belief (2.4.4).' },
+
             { h: '2.4.1 · Insiders and human sources' },
+            { p: 'Access is not one thing. Sort a potential source by what their position physically puts in front of them — not by seniority, and not by how strongly they feel — because that is what bounds the claims they can support.' },
             { ul: [
-              'Whistleblowers, employees, contractors, suppliers — anyone with access to concealed activity.',
-              'What each kind of source can observe, and what incentives decide whether they report it.',
-              'Credibility, corroboration, access limits, and the risk of deception or retaliation.'
+              '**Research and engineering staff** — training runs, evaluation results, what was measured and what was quietly not. The only source who can speak to a capability claim from the inside.',
+              '**Safety, security and compliance staff** — the distance between the published framework and the practice. Positioned to watch a policy being rewritten around an inconvenient result.',
+              '**Contractors and vendors** — construction, power, cooling, physical security. Present at the building of a facility that never gets declared, and typically bound by weaker agreements than employees.',
+              '**Suppliers and logistics** — chip volumes, destinations, reseller chains. What 2.2 calls beneficial ownership, seen from the shipping side.',
+              '**Executives and board members** — the decision itself, and the record of who was told what, when.'
             ] },
+            { p: 'What decides whether any of them reports is rarely access. It is conviction, career, unvested equity, loyalty to colleagues, a non-disclosure agreement, immigration status tied to an employer — and a flat estimate of whether reporting will change anything, which is a fact about the regime rather than about the person. A regime that has never visibly acted on a report has already told its next source what to expect.' },
+            { p: 'A source arrives with four problems attached. **Credibility** — is this person who they say they are, and were they where they say they were. **Corroboration** — does anything outside the account support it. **Access limits** — a witness can be entirely truthful and still be reporting from a position that could not have seen the thing being described. And **deception** — a planted source is a cheap way to spend an opponent\'s inspection budget, and a fabricated report that survives all the way to a challenge inspection burns the regime\'s credibility, not the fabricator\'s.' },
+            { p: 'One classification is worth carrying forward because it is counter-intuitive. Wasil et al. file whistleblowers under **national technical means** — the same family as remote sensing and financial intelligence, defined by needing no permission from the party under suspicion. An insider account is the one deep-access evidence stream a verifier can obtain from a state that is cooperating with nothing. That is also precisely why a closed regime works hardest to shut it off.' },
+            { note: 'Boundary with 2.3. Here the whistleblower is a **person and an institution**: what they can see, what it costs them to speak, and the machinery that receives them. The whistleblower as a **signal** belongs to 2.3, where a tip is an intelligence lead and the progression is anomaly → corroborate → recommend an inspection. This unit hands "how a tip becomes a finding" back to 2.3, and the response to it forward to 3.2, and does not repeat either.' },
+
             { h: '2.4.2 · Reporting and protection' },
-            { p: 'A channel that is not survivable is not a channel. Secure and confidential reporting, anti-retaliation protections, rewards, legal duties and organizational incentives determine whether evidence ever reaches a verifier — and how it is authenticated, preserved and transmitted once it does.' },
-            { h: '2.4.3 · Audits and inspections' },
+            { p: 'A channel that is not survivable is not a channel. Three properties, and losing any one collapses the layer: the route is **confidential**, the person is **protected** from what follows, and the far end is someone **authorised to act**. A hotline into a compliance function that reports to the executive being reported on satisfies none of the three.' },
+            { p: 'The design menu is not speculative. It is transposed almost part-for-part from financial regulation, where the same problem was met with the same components:' },
             { ul: [
-              'Independent auditors, routine inspections, challenge inspections.',
-              'Inspection rights, managed access, protection of sensitive information, and what happens on delay or refusal.',
-              'Collecting evidence, adjudicating compliance and recommending action are three different jobs — regimes get into trouble when one body does all three.'
+              '**Anti-retaliation protection**, with a remedy the worker can actually reach and a burden of proof that does not require them to establish motive.',
+              '**Financial reward**, because reporting ends careers. The SEC program under Dodd-Frank pays 10–30% of sanctions collected; Wasil et al. cite it as the working precedent for AI, alongside the $83m paid to three whistleblowers in the Merrill Lynch customer-funds case.',
+              '**Secure and anonymous channels**, so that the act of reporting does not itself identify the reporter.',
+              '**Legal support and job protection**, since the opposing party has counsel on retainer and the reporter does not.',
+              '**A legal duty to report** for defined categories of knowledge, which turns silence from a safe default into an exposure.',
+              '**Cross-border recognition**, without which a source employed by a multinational is protected in one jurisdiction and naked in the next.'
             ] },
+            { p: 'Frontier AI adds an obstacle the financial precedent did not have to face: **equity**. Where much of compensation is unvested stock and a departure agreement can be conditioned on silence, retaliation does not require firing anyone. It is priced in advance and collected automatically — which is why non-disparagement and non-disclosure terms are a verification question here, not an employment one.' },
+            { p: 'Where the law actually stands, **as of August 2026**, is unsettled and moving in both directions at once. California\'s SB 1047 carried both an audit mandate and anti-retaliation provisions, and was vetoed in September 2024. Its successor SB 53 — the Transparency in Frontier Artificial Intelligence Act, signed 29 September 2025 — kept the whistleblower half: anti-retaliation cover for employees and contractors reporting catastrophic risk, a required anonymous internal reporting channel, and notice to workers of those rights. New York\'s RAISE Act, signed 19 December 2025, went further on paper and then reversed — a chapter amendment signed 27 March 2026 struck the whistleblower section outright, before the law takes effect on 1 January 2027. Federally, the AI Whistleblower Protection Act was introduced on 15 May 2025 and is a bill.' },
+            { p: 'Protection is only half the problem. Evidence that reaches a verifier unauthenticated and unpreserved is a rumour with a name attached. **Authentication** — establishing that a document is what it purports to be and that an account is first-hand. **Preservation** — a chain of custody that survives the source later being discredited, and a copy that does not live only on a machine the employer controls. **Transmission** — a route to an authorised verifier that does not also require the source to become a public figure. Each of the three is a separate way for a truthful report to stop being usable.' },
+
+            { h: '2.4.3 · Audits and inspections' },
+            { p: 'A report gives a verifier a reason to look. Audits and inspections are the machinery for looking, and they are distinct instruments with different triggers and very different politics.' },
+            { ul: [
+              '**Third-party audit** — recurring, scheduled, consented to, aimed at practices rather than at a specific suspicion. It tests whether a developer\'s stated safety and security procedures exist and are followed.',
+              '**Routine inspection** — periodic access under a standing treaty right, at declared sites. Its real product is a baseline, which is what later makes an anomaly legible as an anomaly.',
+              '**Challenge inspection** — short notice, at a site of the challenger\'s choosing, triggered by suspicion. The expensive one, and the one regimes are most reluctant to use, because a challenge that finds nothing is a political loss for the challenger.'
+            ] },
+            { p: 'The frontier-audit literature supplies the vocabulary this section runs on. Brundage et al. propose four **AI Assurance Levels** — AAL-1 as a baseline leading developers should already meet, AAL-2 as the near-term objective — and name what is missing before the higher levels are reachable at all: quality standards for audits, an audit-provider ecosystem large enough to supply them, incentives strong enough to drive adoption, and technical readiness that does not yet exist. Anderljung et al. give the six conditions under which external scrutiny works, as **ASPIRE**: Access, Searching attitude, Proportionality to the risks, Independence, Resources, Expertise. Both are best read as checklists to hold against a real arrangement.' },
+            { p: 'Access is always negotiated, and 0.3\'s **managed access** is the frame: constrain what an inspector may see, record or remove — never what they may conclude. On-site sampling instead of removal, shrouded equipment, redaction agreed in advance, escorted routes. On the AI side the confidentiality at stake is model weights, training data and security architecture, and an inspection design that cannot protect those will simply not be agreed to.' },
+            { p: 'What happens on **delay or refusal** has to be written before it is needed. Refusal is information. A regime that treats it as a procedural hiccup has decided in advance that refusing is free, and the provisions that matter are the deadline, the escalation path, and whether unexplained delay is itself a finding.' },
+            { p: 'The draft-treaty text the track annotates at 2.3.4 is a worked example of the coupling: Scher et al. put challenge inspections and whistleblower protections inside a single article, Article X, on the reasoning that a right of access and a supply of reasons to exercise it are one mechanism rather than two. Read it against your own answer to who may trigger an inspection, and on what showing.' },
+            { note: 'Three jobs, three bodies. **Collecting** evidence, **adjudicating** whether it amounts to non-compliance, and **recommending** what to do about it are separate functions with separate standards of proof and separate political exposure. Regimes get into trouble when one body does all three: an inspectorate that also judges is ruling on its own competence, and an inspectorate that also recommends sanctions has an interest in the finding. Look for the separation in any design you are handed — and in any you draw.' },
+
             { h: '2.4.4 · Institutions and policy judgment' },
-            { p: 'Independence, competence, accountability and the possibility of capture. Frontier AI makes this layer harder than its arms-control predecessors: secrecy norms, NDAs, equity incentives and race pressure all push against disclosure.' }
+            { p: 'Every claim in this unit routes through an institution, so the institution gets the scrutiny the mechanism got. **Independence** — who pays, who appoints, who can end the relationship, and whether the auditor sells other services to the audited. **Competence** — whether the auditor can evaluate what they are shown, which at the frontier means hiring from the same small pool the developers are bidding for. **Accountability** — what happens to an auditor who signs off on something that later fails. **Capture** — usually the slow kind, where an auditor economically dependent on a handful of clients drifts toward their view of what is reasonable.' },
+            { p: 'The resulting failure has a name. **Safety-washing** is presenting a measure that tracks capability as if it were evidence of safety; Ren et al. document it for benchmarks, and the same move is available to any audit whose scope was set by the audited. Manheim et al. push a related argument: publishing audit standards without a standing body to maintain them makes matters worse rather than better, by proliferating inconsistent standards that each certify something different. Both point the same way — an audit regime is worth exactly what the institution deciding what an audit *is* is worth.' },
+            { p: '**What this layer establishes** that no other can: intent, internal knowledge, and suppression. **What it systematically misses**: it is unrepresentative by construction. There is no sampling frame for insiders — you hear from organizations porous enough to leak, which is not the same set as organizations that are violating. Absence of reports is therefore not evidence of compliance, and a regime that reads it that way has built an incentive to tighten agreements rather than to comply.' },
+            { p: 'So the layer is corroborated, never trusted alone. An insider account of an undeclared facility gets checked against the physical and financial signatures of 2.3 — construction stage, power, cooling, procurement — and commercial satellite imagery is the cheapest of those checks to obtain, which is why the FAS study sits in this unit\'s readings and not only in 2.3\'s.' },
+            { p: '**Which actors must cooperate** is where the unit lands, and the honest answer is: the ones with the least reason to. An audit regime needs the audited to grant access. An inspection regime needs the host state to admit inspectors. A whistleblower regime needs the employer\'s own jurisdiction to enforce protections against the employer. None of the three is self-executing, and each is a standing invitation to quiet non-performance.' },
+            { p: 'The clearest evidence of how that goes is recent and domestic. New York\'s RAISE Act was signed on 19 December 2025 requiring large developers to retain an independent third party for an annual audit of their safety and security protocols, publish a redacted summary, and file it with the state. Before the law had taken effect, a chapter amendment signed on 27 March 2026 removed the audit requirement entirely, aligning the statute with California\'s SB 53, which had declined to mandate audits in the first place. Read as of **August 2026**: no US state mandates third-party audits of frontier developers, and the one state that enacted such a mandate repealed it before it bound anybody.' },
+            { note: 'That sequence is the unit\'s hardest lesson, and it is about political economy rather than about auditing. A mechanism can be technically sound, drafted, passed and signed, and still not survive to its own effective date. When you judge a human-layer mechanism, judge the coalition that would have to keep defending it after the press cycle ends — not only whether it would work.' }
           ],
           coverage: [
-            'Insider access and what shapes reporting',
-            'Survivable channels, protections, authentication and preservation',
-            'Routine vs. challenge inspections; managed access, delay, refusal',
-            'Independence, competence, accountability, capture'
+            'What the human layer reads that no instrument does: intent, internal knowledge, suppression',
+            'Sources by access: research, safety, contractors, suppliers, executives',
+            'What decides whether a source reports — including the regime\'s own track record',
+            'Credibility, corroboration, access limits, deception',
+            'Whistleblowers as a national technical means: deep access without the target\'s consent',
+            'Survivable channels: confidential, protected, connected to someone who can act',
+            'The protection menu and its Dodd-Frank precedent; equity and NDAs as pre-priced retaliation',
+            'Where the law stands, and how fast it moved',
+            'Authentication, preservation, transmission',
+            'Audit vs. routine inspection vs. challenge inspection; AALs and ASPIRE',
+            'Managed access; delay and refusal as findings',
+            'Collect, adjudicate, recommend — three jobs, three bodies',
+            'Independence, competence, accountability, capture; safety-washing',
+            'Unrepresentative by construction; what must corroborate a human report',
+            'Who must cooperate — and the RAISE audit clause as the worked case'
           ],
-          output: 'Analytical essay: what the human layer establishes that no other layer can, and the conditions under which it is credible.' }
+          readings: [
+            { t: 'Frontier AI Auditing: Toward Rigorous Third-Party Assessment of Safety and Security Practices at Leading AI Companies', a: 'Brundage et al.', y: '2026',
+              note: 'The audit half of 2.4.3. Read for the four AI Assurance Levels, and for the four things the authors say are missing before the higher ones are reachable. [arXiv:2601.11699](https://arxiv.org/abs/2601.11699)' },
+            { t: 'Towards Publicly Accountable Frontier LLMs: Building an External Scrutiny Ecosystem under the ASPIRE Framework', a: 'Anderljung et al.', y: '2023',
+              note: 'ASPIRE — Access, Searching attitude, Proportionality, Independence, Resources, Expertise — is the checklist 2.4.4 holds against institutions. [arXiv:2311.14711](https://arxiv.org/abs/2311.14711)' },
+            { t: 'Tracking Hyperscale AI Data Center Growth with Satellite Imagery', a: 'Krawec, FAS', y: '2026',
+              note: 'Not a human-layer mechanism — it is the corroborating stream from 2.3 that a human report gets checked against, which is why 2.4.4 sends you here. Read for what imagery settles (construction stage, power, cooling, the xAI turbine count against its permit) and for what it cannot see at all, which is anything inside the building. [fas.org](https://fas.org/publication/tracking-hyperscale/)' },
+            { t: 'Verification methods for international AI agreements', a: 'Wasil, Reed, Miller & Barnett', y: '2024',
+              note: 'Supporting. The whistleblower section is the source for 2.4.1\'s classification and 2.4.2\'s protection list, including the SEC/Dodd-Frank precedent — and for the limitations the same authors put on it. [arXiv:2408.16074](https://arxiv.org/abs/2408.16074)' },
+            { t: 'Safetywashing: Do AI Safety Benchmarks Actually Measure Safety Progress?', a: 'Ren et al.', y: '2024',
+              note: 'Supporting, for 2.4.4. The measurement failure an audit inherits whenever the audited sets the scope. [arXiv:2407.21792](https://arxiv.org/abs/2407.21792)' },
+            { t: 'The Necessity of AI Audit Standards Boards', a: 'Manheim et al.', y: '2024',
+              note: 'Supporting, for 2.4.4. The argument that audit standards without a standing body to maintain them are worse than none at all. [arXiv:2404.13060](https://arxiv.org/abs/2404.13060)' }
+          ],
+          exercise: 'ex-human-layer',
+          output: 'Analytical essay: what the human layer establishes that no other layer can, and the conditions under which it is credible. Two optional alternatives sit on the [memo desk](memo-desk.html) — a brief on the SB 53 / SB 1047 / RAISE audit-requirement situation, and a shorter piece on inspection games or on timeliness and inspector commitment.' }
       ]
     },
 

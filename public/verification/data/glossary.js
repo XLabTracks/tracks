@@ -101,7 +101,15 @@ window.GLOSSARY = {
         { t: 'Challenge inspection', unit: '2.4',
           d: 'A short-notice inspection triggered by suspicion rather than schedule, negotiated against managed-access limits on what the inspector may see or take.' },
         { t: 'Survivable channel', unit: '2.4',
-          d: 'A reporting route an insider can actually use: confidential, protected against retaliation, and connected to someone authorised to act. Without all three, the human layer is decorative.' }
+          d: 'A reporting route an insider can actually use: confidential, protected against retaliation, and connected to someone authorised to act. Without all three, the human layer is decorative.' },
+        { t: 'Collect, adjudicate, recommend', unit: '2.4',
+          d: 'Three jobs with three standards of proof and three kinds of political exposure. An inspectorate that also judges is ruling on its own competence; one that also recommends sanctions has an interest in the finding.' },
+        { t: 'Pre-priced retaliation', unit: '2.4',
+          d: 'Why frontier AI is harder on this layer than its arms-control predecessors: where compensation is unvested equity and departure can be conditioned on silence, nobody has to be fired for reporting to be punished.' },
+        { t: 'Unrepresentative by construction', unit: '2.4',
+          d: 'There is no sampling frame for insiders — you hear from organizations porous enough to leak, not from the ones that are violating. So an absence of reports says nothing about compliance.' },
+        { t: 'Safety-washing', unit: '2.4',
+          d: 'Presenting a measure that tracks capability as though it were evidence of safety. Available to any audit whose scope was set by the audited.' }
       ],
       review: [
         'State the verifier\'s paradox without using the word "balance".',
@@ -110,7 +118,10 @@ window.GLOSSARY = {
         'Why does secure boot behave differently in a governance setting than in a consumer one?',
         'Name three pieces of evidence an operator cannot easily falsify.',
         'A screen flags 1% of 500 sites and 2 are real. Roughly how much of the queue is noise?',
-        'What are the three properties a reporting channel needs before the human layer counts?'
+        'What are the three properties a reporting channel needs before the human layer counts?',
+        'Whistleblowers are classed as a national technical means. What does that classification claim, and what does it not claim?',
+        'A regime sees no insider reports from a developer for two years. What may it conclude?',
+        'Name the three jobs that should not sit in one body, and say what goes wrong when they do.'
       ]
     },
     {

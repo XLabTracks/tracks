@@ -2,6 +2,7 @@
 
 import { usePathname } from "next/navigation";
 import { SiteHeader } from "@/components/layout/site-header";
+import { SiteFooter } from "@/components/layout/site-footer";
 import {
   isVerificationRoute,
   VerificationFooter,
@@ -16,9 +17,12 @@ import {
  * which cannot see route params, and usePathname() is the same idiom the
  * sidebar already uses for active-item detection.
  *
- * Trap: the app has no footer of its own. AppFooter renders nothing outside
- * Verification rather than introducing one — adding a site-wide footer is a
- * design decision, not a side effect of this split.
+ * Each identity brings both halves: the course's header and footer on its
+ * pages, the app's on everything else. The app went without a footer for a
+ * while and its pages simply stopped at the last paragraph; SiteFooter is the
+ * other half, and it is the app's own rather than a copy of the course's,
+ * because the course footer is styled from theme.css and sized for that
+ * palette.
  */
 
 export function AppHeader() {
@@ -28,5 +32,5 @@ export function AppHeader() {
 
 export function AppFooter() {
   const pathname = usePathname();
-  return isVerificationRoute(pathname) ? <VerificationFooter /> : null;
+  return isVerificationRoute(pathname) ? <VerificationFooter /> : <SiteFooter />;
 }

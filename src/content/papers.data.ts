@@ -1231,7 +1231,7 @@ export const papers: Paper[] = [
           "have some principled way to measure the success of eliciting that " +
           "capability. Before moving on, *come up with two or three potential " +
           "settings* that could work well.",
-        cta: "I have my candidates",
+        cta: "Continue",
       },
       {
         op: "activity",
@@ -1248,7 +1248,7 @@ export const papers: Paper[] = [
           "us figure out when fine-tuning elicitation successfully prevents " +
           "deliberate sandbagging. What might this suggest about the sort of " +
           "experimental setup we choose?",
-        cta: "Compare my analysis",
+        cta: "Continue",
         written: true,
         minChars: 100,
       },
@@ -1286,7 +1286,7 @@ export const papers: Paper[] = [
           "experiment actually corroborate? And *come up with three or more " +
           "confounds* or alternative explanations that could produce the " +
           "same observations even if those hypotheses were false.",
-        cta: "Show the analysis and results",
+        cta: "Continue",
       },
       {
         op: "activity",
@@ -1335,7 +1335,7 @@ export const papers: Paper[] = [
           "described in §4.2 both exist to exclude one specific failure or " +
           "alternative explanation. What are each of these failures or " +
           "confounding explanations?",
-        cta: "Check my answers",
+        cta: "Continue",
       },
       {
         op: "add",
@@ -1531,7 +1531,7 @@ export const papers: Paper[] = [
           "scratch into the locked state is not affordable. *Design the " +
           "least expensive experiment* that could bear on whether " +
           "fine-tuned locks are unrepresentatively easy to remove.",
-        cta: "Show the paper's version",
+        cta: "Continue",
         written: true,
         minChars: 80,
       },
@@ -1573,7 +1573,7 @@ export const papers: Paper[] = [
           "up with the three strongest disanalogies* between " +
           "password-locked models and a model that hides capabilities for " +
           "its own reasons.",
-        cta: "Compare with the limitations",
+        cta: "Continue",
         written: true,
         minChars: 150,
       },
@@ -1869,7 +1869,7 @@ export const papers: Paper[] = [
         id: "break-protocol",
         written: true,
         minChars: 80,
-        cta: "Reveal the attack",
+        cta: "Continue",
         prompt:
           "Try to find a strategy that lets U create a catastrophe despite the " +
           "limited amount of input and a monitor reading every message. If you " +
@@ -1934,7 +1934,7 @@ export const papers: Paper[] = [
         id: "design-intervention",
         written: true,
         minChars: 120,
-        cta: "Reveal what they tried",
+        cta: "Continue",
         prompt:
           "Propose 2-3 ways to make U's code easier for T to " +
           "understand and therefore evaluate. For each method, write about how " + 
@@ -2005,7 +2005,7 @@ export const papers: Paper[] = [
         id: "why-apps",
         written: true,
         minChars: 100,
-        cta: "Reveal the reasoning",
+        cta: "Continue",
         prompt:
           "The paper uses a competitive programming dataset (APPS) to perform its evaluations. " +
           "Is the APPS dataset a good dataset to test if " +
@@ -2038,6 +2038,7 @@ export const papers: Paper[] = [
         id: "both-comment",
         written: true,
         minChars: 60,
+        cta: "Continue",
         prompt:
           "Try to predict whether or not legibility protocols that allow commenting outperform those that don't allow commenting & elaborate why you think this is the case.",
       },
@@ -2078,7 +2079,7 @@ export const papers: Paper[] = [
         id: "monitor-strength",
         written: true,
         minChars: 100,
-        cta: "Reveal the scaling",
+        cta: "Continue",
         prompt:
           "Every result so far used one monitor (GPT-4.1-nano). Now sweep " +
           "the monitor's capability, from near-useless up toward U's own " +
@@ -2141,7 +2142,7 @@ export const papers: Paper[] = [
         id: "the-update",
         written: true,
         minChars: 150,
-        cta: "Reveal the discussion",
+        cta: "Continue",
         prompt:
           "The results are in. State the update three ways.\n\n1. For a lab " +
           "running trusted monitoring today: strip comments or allow them — " +

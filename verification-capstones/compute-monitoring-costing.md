@@ -17,8 +17,6 @@ sources:
   - "[Orphaned Policies (post 5 of 7 on AI governance) — Mass_Driver, orphan 8](https://www.lesswrong.com/posts/wFKZmvfRfNn24HNHp/orphaned-policies-post-5-of-7-on-ai-governance)"
   - "[What does it take to catch a Chinchilla? Verifying rules on large-scale neural network training via compute monitoring — Shavit (2023)](https://arxiv.org/abs/2303.11341)"
   - "[Open Problems in Technical AI Governance — Reuel et al. (2025)](https://arxiv.org/abs/2407.14981)"
-  - "[List of lists of project ideas in AI safety — LessWrong](https://www.lesswrong.com/posts/mtGpdtDdmkRC3ZBuz/list-of-lists-of-project-ideas-in-ai-safety)"
-  - verification-track-outline.md §2.1
 updated: 2026-08-04
 ---
 

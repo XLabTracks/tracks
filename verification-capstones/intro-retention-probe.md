@@ -19,9 +19,6 @@ sources:
   - "[BlueDot Impact — AI Safety Fundamentals](https://bluedot.org)"
   - "[Part-time courses related to top problems (directory)](https://airtable.com/app53PsYpHxJW61l3/shr6eKNhPjxj4UH4E/tblqpu7Tcy2734cji)"
   - "[Open curricula directory — aisafety.com](https://www.aisafety.com/courses)"
-  - "[List of lists of project ideas in AI safety — LessWrong](https://www.lesswrong.com/posts/mtGpdtDdmkRC3ZBuz/list-of-lists-of-project-ideas-in-ai-safety)"
-  - AI Governance Policy Track - Work Structure and Suggestions.md §1 (what intro-course graduates arrive with)
-  - Technical Governance Track - Work Structure and Suggestions.md §1 (entry-knowledge note)
 updated: 2026-08-04
 ---
 

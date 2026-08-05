@@ -15,9 +15,6 @@ skills: [crisis mechanism design, institutional analysis, signalling under mistr
 prerequisites: [Verification 0 — treaty anatomy, Verification 1 — actors, Verification 4.1 — feasibility and layering]
 sources:
   - "[Orphaned Policies (post 5 of 7 on AI governance) — Mass_Driver, orphan 7](https://www.lesswrong.com/posts/wFKZmvfRfNn24HNHp/orphaned-policies-post-5-of-7-on-ai-governance)"
-  - "[List of lists of project ideas in AI safety — LessWrong](https://www.lesswrong.com/posts/mtGpdtDdmkRC3ZBuz/list-of-lists-of-project-ideas-in-ai-safety)"
-  - verification-track-outline.md §0.2
-  - verification-track-outline.md §4.1
 updated: 2026-08-04
 ---
 

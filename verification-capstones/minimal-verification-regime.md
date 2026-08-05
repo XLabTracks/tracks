@@ -13,7 +13,6 @@ mentor: recommended
 audience: The negotiating team that would have to sign it, and the technical staff who would have to run it.
 skills: [regime design, threat modelling, evidence standards, institutional analysis]
 prerequisites: [Verification 2.x — the four layers, Verification 3 — covert development, Verification 4.1 — feasibility and layering]
-sources: [verification-track-outline.md §4.2]
 updated: 2026-08-04
 ---
 

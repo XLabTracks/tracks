@@ -18,8 +18,6 @@ sources:
   - "[AI Safety, Ethics and Society — curriculum](https://www.aisafetybook.com/curriculum)"
   - "[Agent Foundations for Superintelligence-Robust Alignment](https://agentfoundations.study)"
   - "[Open curricula directory — aisafety.com](https://www.aisafety.com/courses)"
-  - "[List of lists of project ideas in AI safety — LessWrong](https://www.lesswrong.com/posts/mtGpdtDdmkRC3ZBuz/list-of-lists-of-project-ideas-in-ai-safety)"
-  - "[Public] XLab Tracks - Program Proposal.md"
 updated: 2026-08-04
 ---
 

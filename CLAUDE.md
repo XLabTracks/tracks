@@ -374,6 +374,12 @@ add must reduce the duplication, never widen it.
   reported as one. **The table needs
   `db/migrations/20260805120000_verification_state.sql` applied with the admin
   role before any of this works.**
+- **A lesson body never opens with its own `# Title`.** The item page already
+  renders the lesson title as the page's h1, so a transcribed heading puts it
+  on screen twice at h1 size. This has come back on every batch transcribed
+  from the outline — the outline carries its numbered heading, and copying it
+  verbatim is the obvious thing to do. Start bodies at `##`;
+  `widgets.test.ts` fails the build if one slips through.
 - **Never invent curriculum.** Module 0's prose is transcribed from the
   author's WIP outline, verbatim. Modules 1-4 are declared with real titles
   and no items until their prose is drafted — an empty module counts as

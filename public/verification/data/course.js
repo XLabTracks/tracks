@@ -135,34 +135,6 @@ window.COURSE = {
           ],
           exercise: 'ex-precedents' },
 
-        { id: '0.4', title: 'Strategic foundations', kind: 'primer', mins: '20–30 min', optional: true,
-          goal: 'The game-theory and IR vocabulary the rest of the track assumes. Optional if you already have it.',
-          body: [
-            { p: 'Two optional primers, roughly ten to fifteen minutes each. They exist so that later modules can use the vocabulary without stopping to define it.' },
-            { h: 'Game theory' },
-            { ul: [
-              'Cooperation without an enforcer; noise, and why a noisy channel makes defection look like accident.',
-              'Credible commitment: sunk cost, tied hands, mechanically enforced — why a promise needs consequences attached to it.',
-              'Compliance without courts: reputation, reciprocity, retaliation — each of which requires **detection** first.',
-              'Strategic inspection: randomized inspection games, and the nonzero equilibrium violation rate that follows.',
-              'Two-level games: ratification constraints, win-sets, veto players, and the difference between voluntary and involuntary defection.'
-            ] },
-            { h: 'International relations' },
-            { ul: [
-              'Baseline vocabulary; realist and liberal-institutionalist lenses, both of which are reused in the treaty-anatomy exercise at 1.1.',
-              'Information asymmetry and costly signaling — the primitives behind every incentive map in Module 1.',
-              'Relative gains and the security dilemma: why unilateral restraint fails even among actors who all want the same outcome.'
-            ] }
-          ],
-          coverage: [
-            'Two-level games, win-sets, veto players',
-            'Information asymmetry and costly signaling',
-            'Credible commitment and why promises need consequences',
-            'Relative gains and the security dilemma'
-          ],
-          readings: [
-            { t: 'The Evolution of Trust', a: 'ncase', y: '', note: 'Playable; the noise section is the one that matters here.' }
-          ] }
       ]
     },
 

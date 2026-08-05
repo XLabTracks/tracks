@@ -142,7 +142,6 @@ export function VerificationFooter() {
         </nav>
         <div className="foot-end">
           <span>{COPYRIGHT}</span>
-          <span>Progress on these pages is saved to your account.</span>
         </div>
       </div>
     </footer>

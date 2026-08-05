@@ -485,9 +485,10 @@ window.VTNotebook = (function () {
         const sel = document.getSelection();
         const text = sel ? String(sel).trim() : '';
         drop();
-        /* Long selections only. vocab.js takes 5 words or fewer as a term to
-           look up, and the two buttons must never both appear over the same
-           selection — this bound and its SHORT_WORDS are one decision. */
+        /* Long selections only. vocab.js takes 5 words or fewer and its
+           strip carries both actions, Define and Add to notebook — so the
+           two scripts never stack buttons over the same selection. This
+           bound and its SHORT_WORDS are one decision. */
         if (!text || text.split(/\s+/).length <= 5) return;
         const host = sel.anchorNode && sel.anchorNode.parentElement;
         if (!host || !host.closest('main')) return;

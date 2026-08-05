@@ -451,6 +451,15 @@ add must reduce the duplication, never widen it.
   lessons must carry real headings, not bold lines pretending (that is what
   the scoping-actors/covert-* repairs restored), and a wide table scrolls in
   its own box (`.lesson-body table` in globals.css), never the page.
+- **No half-painted cards.** A card is a hairline on all four sides, or it is
+  painted on all four; never one edge in a coloured tint with the rest
+  hairline, and never a hue that carries no meaning. The accent goes inside —
+  a chip, a glyph, a fill bar. The prototypes brought this in repeatedly
+  (`facilitator-guide` arrived with `border-left: 4px` alternating between two
+  accents that marked nothing), so strip it on the way in, not after it
+  renders. Two things that are not this and must not be "fixed": a band rule
+  that separates full-width sections, and a tab whose bottom border is
+  transparent so it joins its panel — absence is not a tint.
 - **Bloom levels are gone on purpose.** They are curriculum-design vocabulary,
   not a learner's. If you need a second channel beside a module hue, use the
   module number — that is what the star numerals carry.

@@ -37,6 +37,11 @@ step-by-step guide for adding content (its rules are enforced by
 - `npm run lesswrong:build` — likewise for LessWrong / Alignment Forum posts
   (`src/content/lesswrong/*.json` + `public/lesswrong/*`; fetched via the
   public ForumMagnum GraphQL API; artifact ids are `{site}__{postId}`).
+- `npm run gdoc:build` — re-sync every lesson body generated from a shared
+  Google Doc (`scripts/build-gdoc.ts`; network, authoring-time only). The
+  registry is the `DOCS` array in that script; `-- --check` reports a stale
+  copy without writing, and is deliberately not in CI (the input is somebody
+  else's live document, so drift is news, not a broken build).
 - `npx prisma generate` — regenerate the client after editing `prisma/schema.prisma`.
   Do **not** run `prisma migrate` against the hosted DB (see Database & deploy).
 - `npm run cf-typegen` — regenerate `cloudflare-env.d.ts` after changing

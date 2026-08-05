@@ -8,10 +8,11 @@ import type { Lesson, Module, Track } from "@/lib/content/types";
 //
 // Content is transcribed from the course author's WIP outline
 // ("Verification Track Outline-2"), never paraphrased and never invented.
-// Module 0 is drafted there in full. Modules 1–4 are outlined but their prose
-// is still being written, so they ship as empty placeholders rather than as
-// filler that looks finished — an empty module counts as complete, so they do
-// not block anything.
+// Module 0 is drafted there in full; module 4 carries one reading reproduced
+// with its author's permission. The rest of modules 1–4 is outlined but its
+// prose is still being written, so those sections ship as empty placeholders
+// rather than as filler that looks finished — an empty module counts as
+// complete, so they do not block anything.
 //
 // `order` runs 0-4, not 1-5. The outline numbers its modules M0-M4 and the UI
 // prints the number as the label, so starting at 1 would have the course
@@ -128,12 +129,13 @@ export const verificationModules: Module[] = [
     trackId: "verification",
     title: "Capstone: what would be enough for a three-month emergency pause?",
     summary:
-      "Feasibility, prioritization and sequencing, then the capstone itself: layer the imperfect mechanisms into a regime you can defend, and say where to go from here.",
+      "Feasibility, prioritization and sequencing — including how to do the research the capstone asks for, from a practising AI governance researcher — then the capstone itself: layer the imperfect mechanisms into a regime you can defend, and say where to go from here.",
     order: 4,
     prerequisiteModuleIds: ["v-why", "v-scoping", "v-infrastructure", "v-covert"],
     itemIds: [
       "v-capstone-motivation",
       "v-capstone-feasibility",
+      "v-research-tips",
       "v-capstone-project",
       "v-capstone-next-steps",
     ],
@@ -477,6 +479,19 @@ export const verificationLessons: Lesson[] = [
     title: "2.3.4 From intelligence lead to verification action",
     contentRef: "verification/intelligence-action",
   },
+  // Reproduced with the author's permission, and generated rather than typed:
+  // he adds to the doc roughly weekly, so the body is re-synced by
+  // `npm run gdoc:build` (scripts/build-gdoc.ts) instead of drifting quietly.
+  // The lesson title is the course's framing of the reading; the doc's own
+  // title is the heading inside it.
+  {
+    id: "v-research-tips",
+    slug: "how-to-do-research-well",
+    moduleId: "v-capstone",
+    title: "4.1.1 How to do AI governance research well",
+    contentRef: "verification/research-tips",
+    estimatedMinutes: 25,
+  },
 ];
 
 /* ------------------------------------------------------------------------
@@ -543,6 +558,7 @@ export const verificationUnitOfLesson: Record<string, string> = {
   "v-covert-red-blue": "3.2",
   "v-capstone-motivation": "4.0",
   "v-capstone-feasibility": "4.1",
+  "v-research-tips": "4.1",
   "v-capstone-project": "4.2",
   "v-capstone-next-steps": "4.3",
 };

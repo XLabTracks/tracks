@@ -80,14 +80,20 @@
   text-transform: uppercase;
   color: var(--muted-foreground);
 }
-.band-label b { color: var(--mod, var(--brand-ink)); font-weight: 400; }
+.band-label b { color: var(--mod-type, var(--brand-ink)); font-weight: 400; }
 .band-nodes { display: flex; flex-wrap: wrap; gap: 8px; }
 
 /* State is carried by the word in .n-meta and the n/m fraction as well as by
    the fill — hue never carries it alone. Uniform hairline on all four sides;
    the module accent is the fill bar inside, never a painted edge. */
+/* Column + a pinned meta row: nodes in one flex line already stretch to the
+   tallest, so pushing .n-meta down puts every fraction and fill bar on one
+   line across the band. Without it a two-line label drops its own meta row
+   out of step with its neighbours. */
 .node {
   position: relative;
+  display: flex;
+  flex-direction: column;
   flex: 1 1 160px;
   min-width: 150px;
   max-width: 210px;
@@ -108,7 +114,8 @@
   display: flex;
   align-items: center;
   gap: 7px;
-  margin-top: 7px;
+  margin-top: auto;
+  padding-top: 7px;
   font-family: var(--mono);
   font-size: 11px;
   color: var(--muted-foreground);

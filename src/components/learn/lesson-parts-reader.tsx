@@ -6,6 +6,7 @@ import {
   useMemo,
   useRef,
   useState,
+  type CSSProperties,
   type ReactNode,
 } from "react";
 import { Button } from "@/components/ui/button";
@@ -67,6 +68,21 @@ function readMode(): "parts" | "whole" {
   } catch {
     return "parts";
   }
+}
+
+/**
+ * One cell per part, cut out of the whole bar — track and fill together — so
+ * the fill stays a single width-animated element and a bar reads as "3 of 6"
+ * rather than as "somewhere past half". Cells lay out at (100% + gap)/n and
+ * the trailing gap is cut back off, which keeps the last cell flush with the
+ * end. Lessons run to a handful of parts; past about six, cells stop being
+ * countable and this is worth dropping for a plain bar.
+ */
+function cellMask(cells: number): CSSProperties {
+  const gap = "3px";
+  const step = `calc((100% + ${gap}) / ${cells})`;
+  const mask = `repeating-linear-gradient(to right, #000 0 calc(${step} - ${gap}), transparent 0 ${step})`;
+  return { maskImage: mask, WebkitMaskImage: mask };
 }
 
 function partFromUrl(max: number): number {
@@ -249,9 +265,13 @@ export function LessonPartsReader({ children }: { children: ReactNode }) {
             </span>
           ) : (
             <span className="flex min-w-40 flex-1 basis-52 items-center gap-2.5">
-              <span className="bg-muted h-1 flex-1 overflow-hidden rounded-full" aria-hidden>
+              <span
+                className="bg-muted h-2 flex-1 overflow-hidden rounded-xs"
+                style={cellMask(parts.length)}
+                aria-hidden
+              >
                 <span
-                  className="bg-primary block h-full rounded-full transition-[width] duration-300"
+                  className="bg-primary block h-full transition-[width] duration-300"
                   style={{ width: `${(100 * (at + 1)) / parts.length}%` }}
                 />
               </span>

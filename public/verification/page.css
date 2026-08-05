@@ -67,16 +67,38 @@
   margin: 4px 0 0;
   padding: 0;
 }
-@media (min-width: 700px) { .roster { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
 
 .person {
-  display: flex;
-  flex-direction: column;
+  display: grid;
   gap: 14px;
+  align-content: start;
   padding: 20px;
   border: var(--hairline) solid var(--border);
   border-radius: var(--radius);
   background: var(--card);
+}
+
+/* Side by side, the three rows — monogram, name, role — sit in tracks the
+   roster owns, so a name that wraps to two lines lifts every card's name row
+   instead of pushing its own role line out of step with its neighbours.
+   Each card spans the three tracks and reads them back with `subgrid`.
+
+   Trap: the row gap inside a card is now the roster's row-gap, because a
+   subgrid takes its gutters from the parent. That is also the gap between
+   two ROWS of cards, so the two cannot be set independently while this is
+   on — which is fine at three people and would want revisiting past six. */
+@media (min-width: 700px) {
+  .roster {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-auto-rows: auto;
+    row-gap: 14px;
+    column-gap: 16px;
+  }
+  .person {
+    grid-row: span 3;
+    grid-template-rows: subgrid;
+    gap: 0;
+  }
 }
 .mug {
   display: grid;
@@ -93,5 +115,5 @@
   user-select: none;
   -webkit-user-select: none;
 }
-.who .nm { font-family: var(--display); font-size: 17px; font-weight: 500; }
-.who .rl { margin-top: 4px; font-size: 13.5px; color: var(--muted-foreground); }
+.person .nm { font-family: var(--display); font-size: 17px; font-weight: 500; }
+.person .rl { font-size: 13.5px; color: var(--muted-foreground); }

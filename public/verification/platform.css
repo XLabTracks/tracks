@@ -77,15 +77,20 @@
 /* ---------- progress ---------- */
 
 /* The bar is decoration for the fraction beside it; the fraction is the
-   reading. Never ship the bar without its counter. */
+   reading. Never ship the bar without its counter.
+
+   The empty track has to be visible against the card it sits on, or a
+   just-started learner sees no bar at all and the row reads as a stray rule —
+   which is why the track is mixed toward --border rather than left at
+   --muted. */
 .progress-row { display: flex; align-items: center; gap: 10px; }
 .meter {
   position: relative;
   flex: 1;
-  height: 6px;
-  min-width: 60px;
+  height: 9px;
+  min-width: 72px;
   border-radius: 999px;
-  background: var(--muted);
+  background: color-mix(in srgb, var(--border) 65%, var(--muted));
   overflow: hidden;
 }
 .meter > i {
@@ -93,9 +98,33 @@
   height: 100%;
   border-radius: inherit;
   background: var(--primary);
-  transition: width .3s ease;
+  transition: width .28s ease;
 }
 :root[data-theme='contrast'] .meter { border: var(--hairline) solid var(--border); }
+
+/* Segmented: one cell per unit, so a short bar can be counted and not only
+   read as a hue. The gaps are masked out of the whole bar — track and fill
+   together — so the fill stays one element and a half-finished cell still
+   reads as half. Set --cells inline; it is only worth it while the cells stay
+   countable at a glance (six-ish), so track-level bars stay continuous.
+   The mask lays out cells of (100% + gap)/n and cuts the last gap back off,
+   which is what keeps the final cell flush with the end of the bar. */
+.meter.seg {
+  --cells: 1;
+  --cell-gap: 3px;
+  border-radius: 3px;
+  -webkit-mask-image: repeating-linear-gradient(to right,
+    #000 0 calc((100% + var(--cell-gap)) / var(--cells) - var(--cell-gap)),
+    transparent 0 calc((100% + var(--cell-gap)) / var(--cells)));
+  mask-image: repeating-linear-gradient(to right,
+    #000 0 calc((100% + var(--cell-gap)) / var(--cells) - var(--cell-gap)),
+    transparent 0 calc((100% + var(--cell-gap)) / var(--cells)));
+}
+.meter.seg > i { border-radius: 0; }
+
+@media (prefers-reduced-motion: reduce) {
+  .meter > i { transition: none; }
+}
 
 .counter {
   font-family: var(--mono);

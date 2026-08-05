@@ -242,7 +242,7 @@ window.COURSE = {
       "week": "week 10",
       "status": "framing complete",
       "goal": "Capstone: what would be enough for a three-month emergency pause?",
-      "summary": "Feasibility, prioritization and sequencing, then the capstone itself: layer the imperfect mechanisms into a regime you can defend, and say where to go from here.",
+      "summary": "Feasibility, prioritization and sequencing — including how to do the research the capstone asks for, from a practising AI governance researcher — then the capstone itself: layer the imperfect mechanisms into a regime you can defend, and say where to go from here.",
       "units": [
         {
           "id": "4.0",
@@ -261,7 +261,8 @@ window.COURSE = {
           "mins": "20–30 min",
           "href": "/tracks/verification/capstone/capstone-feasibility",
           "lessons": [
-            "capstone-feasibility"
+            "capstone-feasibility",
+            "how-to-do-research-well"
           ]
         },
         {

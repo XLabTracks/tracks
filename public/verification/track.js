@@ -36,13 +36,13 @@
     /* --mod is the module's decorative accent. Everything it tints also
        carries the module number in text beside it, so the hue is never the
        only channel. */
-    return '<section class="mod" style="--mod:var(--mod-' + m.n + ')">' +
+    return '<section class="mod" style="--mod:var(--mod-' + m.n + ');--mod-type:var(--mod-' + m.n + '-text)">' +
       '<div class="mod-head">' +
         '<span class="mod-glyph" aria-hidden="true">' + m.glyph + '</span>' +
         '<span class="mod-num">Module ' + m.n + '</span>' +
         '<h2>' + VT.esc(m.title) + '</h2>' +
-        '<span class="progress-row"><span class="meter"><i style="width:' +
-          (p.frac * 100).toFixed(1) + '%"></i></span>' +
+        '<span class="progress-row"><span class="meter seg" style="--cells:' +
+          p.total + '"><i style="width:' + (p.frac * 100).toFixed(1) + '%"></i></span>' +
           '<span class="counter">' + p.done + ' / ' + p.total + '</span></span>' +
       '</div>' +
       '<p class="mod-goal">' + VT.fmt(m.goal) + '</p>' +

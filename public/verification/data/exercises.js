@@ -143,7 +143,7 @@ window.EXERCISES = {
         'The convergent argument the track makes: **if you accept the securitized framing from 0.3, design toward the full pause.** Mechanisms strong enough to verify a coordinated halt support every weaker commitment on the list; the reverse is not true.',
         'Keep this plot. Unit 4.1 re-scores the same portfolio on four separate feasibility dimensions, and the difference between the two passes is the point.'
       ],
-      note: 'Upstream outline specifies a reveal "with explanations" per bucket. Those explanations are not drafted yet — this reveal states the course argument instead of a fabricated per-item key.'
+      note: 'Ungraded by design: there is no per-bucket key to score you against, so the reveal gives the course\'s argument rather than a number.'
     }
   },
 
@@ -319,7 +319,7 @@ window.EXERCISES = {
         '**Common-mode failure.** Two layers that both rest on the same declaration are one layer. Scan your marks for cells that only fire because the operator filed something — those are not independent evidence, however many columns they occupy.',
         'A route with an empty row is not necessarily undetectable; it may mean the detector sits outside these four layers entirely — in finance, in export records, or in a party that is not in your regime at all.'
       ],
-      note: 'Ungraded by design. The upstream outline rates each route on feasibility, detectability, longevity and authority; those ratings are not drafted, so this board reveals reasoning prompts rather than a scored key.'
+      note: 'Ungraded by design: your board is the artifact, so the reveal gives you two things to check it against rather than a score.'
     }
   },
 

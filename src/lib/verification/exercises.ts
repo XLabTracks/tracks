@@ -23,6 +23,8 @@ export interface VerificationExerciseDef {
 export const verificationExercises: VerificationExerciseDef[] = [
   { id: "collection-map", title: "The Collection Map", bridged: false },
   { id: "verification-landscape", title: "The Verification Landscape", bridged: false },
+  { id: "policy-cost", title: "Everything Comes With a Cost", bridged: false },
+  { id: "policy-plot", title: "Effectiveness x Feasibility", bridged: false },
   { id: "policy-scoping", title: "Scoping an Anti-ASI Policy", bridged: true },
   { id: "anatomy-drill", title: "The Anatomy Drill", bridged: true },
   { id: "protocol-actors", title: "Who's in the Treaty?", bridged: true },
@@ -31,10 +33,9 @@ export const verificationExercises: VerificationExerciseDef[] = [
   { id: "verification-timeline-game", title: "The Verification Game", bridged: true },
   // The drill benches. Bridged: the deck reports complete when the last step
   // of its last bench is committed.
-  { id: "drills-primers", title: "Drill Bench: Primers", bridged: true },
-  { id: "drills-foundations", title: "Drill Bench: Foundations and Actors", bridged: true },
-  { id: "drills-supply-chain", title: "Drill Bench: Evidence Streams", bridged: true },
-  { id: "drills-games", title: "Drill Bench: Evasion, Regime, Position", bridged: true },
+
+
+
 ];
 export function getVerificationExercise(id: string): VerificationExerciseDef | undefined {
   return verificationExercises.find((e) => e.id === id);

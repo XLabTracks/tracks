@@ -3,14 +3,13 @@ import type { Exercise } from "@/lib/content/types";
 // The Verification track's written tasks, lifted verbatim from the author's
 // outline — every prompt is the outline's own words for that task.
 //
-// They are writing-prompt exercises rather than prose in a callout because a
-// task a learner cannot answer is not a task: this type gives the editor, the
-// autosaving draft, the submit step and the review path the rest of the app
-// already has. `exercises.data.ts` only spreads these in.
+// Writing-prompt exercises rather than prose in a callout, because a task a
+// learner cannot answer is not a task: this type carries the editor, the
+// autosaving draft, the submit step and the review path the app already has.
+// `exercises.data.ts` only spreads these in.
 //
-// No word bounds and no rubric. The outline states neither, and inventing a
-// minimum or a marking scheme would be inventing curriculum — the editor is
-// happy without them.
+// No word bounds and no rubric: the outline states neither, and inventing a
+// minimum or a marking scheme would be inventing curriculum.
 
 export const verificationExercises: Exercise[] = [
   {
@@ -104,13 +103,37 @@ export const verificationExercises: Exercise[] = [
     format: "free-form",
   },
   {
-    id: "v-task-scoping-effective-feasible-1",
+    id: "v-task-scoping-actors-1",
     type: "writing-prompt",
-    prompt: "[interactive pop-up] Everything comes with a cost. Think about any policy you hold a strong belief in. Now, think of a downside or negative consequence of enforcing that policy. How easy was it to come up with a con? The question every policymaker should be asking is not just: what do we want to accomplish? Rather, it should be: what are we willing to compromise for the advancement of our goals?",
+    prompt: "Posture\n\nWhat it means\n\nA concrete face\n\nComply\n\nFollow the agreement as written.\n\nA lab that reports its large training runs accurately and on time.\n\nDefect\n\nCovertly violate for advantage.\n\nA state running a hidden cluster while its diplomats reaffirm the pause.\n\nHide\n\nObscure assets or activities from view, whether or not any rule is being broken.\n\nA firm treating its chip inventory as a trade secret.\n\nExaggerate\n\nOverstate compliance, safety, or capability.\n\nSafety-washing by a lab; capability bluffing by a state.\n\nFree-ride\n\nEnjoy the stability produced by others’ restraint without bearing its costs.\n\nA state that signs nothing and benefits anyway.",
     format: "free-form",
   },
   {
-    id: "v-task-scoping-effective-feasible-2",
+    id: "v-task-scoping-actors-2",
+    type: "writing-prompt",
+    prompt: "State\n\nWhat runs through it\n\nWhat that buys a verifier\n\nStanding worry\n\nUnited States\n\nChip design (NVIDIA, AMD), the largest frontier labs and cloud providers, and export-control law.\n\nIt can see and squeeze more of the chain than anyone. Its export rules are the closest thing to a working compute-control regime today.\n\nLosing its lead; verification machinery being turned on its own firms.\n\nChina\n\nThe other frontier developer. Manufacturing scale, rare earths and materials, its own designers, clouds, and labs.\n\nNo agreement is meaningful without it, and it controls inputs the rest of the chain needs.\n\nReads on-chip controls and inspections as surveillance and containment.\n\nTaiwan\n\nTSMC, which fabricates the overwhelming share of leading-edge AI chips.\n\nThe single tightest physical chokepoint in the system.\n\nBeing both the prize and the battlefield in a conflict it does not control.\n\nNetherlands\n\nASML, the world’s only maker of EUV lithography machines.\n\nOne company in one country: one of the strongest levers anywhere in the system.\n\nA small state carrying outsized geopolitical weight.\n\nJapan\n\nSemiconductor equipment (Tokyo Electron) and specialty materials.\n\nSeveral quieter chokepoints in equipment and chemistry.\n\nPressure from both sides of the US-China rivalry.\n\nSouth Korea\n\nSamsung and SK Hynix, the largest memory makers, including high-bandwidth memory (HBM).\n\nHBM is scarce and essential to frontier training: a countable, checkable input.\n\nExport exposure to China against alliance pressure from the US.",
+    format: "free-form",
+  },
+  {
+    id: "v-task-scoping-actors-3",
+    type: "writing-prompt",
+    prompt: "Institution\n\nJob in a verification regime\n\nIncentive to watch\n\nState Department\n\nNegotiates the agreement and runs the diplomacy around compliance disputes.\n\nWants a deal that survives politics; may trade verification strictness for signatures.\n\nCommerce Department (Bureau of Industry and Security)\n\nWrites and enforces export controls on chips: the de facto compute-governance agency today.\n\nEnforcement capacity is small relative to the job, and the rules shift with each administration.\n\nDepartment of Defense (restyled the Department of War in 2025)\n\nStrategic and military stakes in frontier AI.\n\nWants American capability unconstrained; wary of any regime that could bind its own programs.\n\nIntelligence community (CIA, NSA, and the rest)\n\nMonitoring and attribution: the “national technical means” layer that spots hidden data centers and procurement networks.\n\nWhat it knows is classified. Turning intelligence into shareable treaty evidence risks burning sources.\n\nNIST and its Center for AI Standards and Innovation (CAISI)\n\nStandards and testing. Runs pre-deployment evaluation agreements with several frontier developers.\n\nVoluntary agreements, not inspection authority; renamed and refocused as the politics changed.",
+    format: "free-form",
+  },
+  {
+    id: "v-task-scoping-actors-4",
+    type: "writing-prompt",
+    prompt: "Stage\n\nWho (examples)\n\nWhat they hold that a verifier needs\n\nDefault posture\n\nEquipment\n\nASML (EUV lithography); Applied Materials, Tokyo Electron.\n\nThe machines without which no leading-edge chip exists, and knowledge of every fab that buys one.\n\nComply. Few customers, total visibility, nowhere to hide.\n\nFabrication and memory\n\nTSMC, Samsung, SK Hynix, Intel.\n\nThe physical record: what was made, how many, and for whom.\n\nComply, while caught between US rules and Chinese customers.\n\nChip design\n\nNVIDIA, AMD; Huawei and other Chinese designers.\n\nThe blueprint: whether chips ship with attestation, metering, or location features at all.\n\nComply with controls while lobbying hard against them. Verification features cost money and sales.\n\nPackaging, assembly, test\n\nAdvanced-packaging lines (TSMC’s CoWoS and rivals); outsourced assembly-and-test firms.\n\nA second, quieter bottleneck. Chips pass through here and can be counted.\n\nMostly invisible in policy debates, which is itself a gap.\n\nCloud providers\n\nAWS, Microsoft Azure, Google Cloud, Oracle, Alibaba; specialists like CoreWeave.\n\nThe position between customer and machine: logs, billing, telemetry, and the power to interrupt a job.\n\nComply and hide at once. Natural monitors, reluctant police.\n\nFrontier labs\n\nOpenAI, Anthropic, Google DeepMind, Meta, xAI; DeepSeek, Alibaba, and Moonshot in China.\n\nThe most detailed private information in the system: what was trained, on what data, and what the evals showed.\n\nEvery posture potentially\n\nDeployers\n\nEveryone building products on top of models.\n\nA diffuse downstream signal of what models can actually do.\n\nFree-ride. They benefit from safety and bear none of its costs.\n\nProxies and contractors\n\nShell companies, resellers, straw buyers, intermediaries.\n\nNothing legitimate. They exist to break the link between a name and an activity.\n\nThe standing channel through which evasion flows.",
+    format: "free-form",
+  },
+  {
+    id: "v-task-scoping-actors-5",
+    type: "writing-prompt",
+    prompt: "Role\n\nThe question it answers\n\nExamples\n\nCapability holder\n\nWho can actually build the dangerous thing?\n\nFrontier labs; any state with a national program.\n\nChokepoint controller\n\nWho can physically stop or slow the flow?\n\nASML, TSMC, cloud providers; BIS with its export licenses.\n\nInformation holder\n\nWho already knows what verifiers need to learn?\n\nClouds (logs and billing), labs (evals), fabs (shipments), intelligence agencies.\n\nEnforcement authority\n\nWho can impose a real cost for violating?\n\nRegulators, customs services, courts, sanctioning states, a future treaty body.\n\nEvasion pathway\n\nThrough whom would a cheater route?\n\nProxies, resellers, smuggling networks, non-signatory jurisdictions, complicit contractors.\n\nVictim, free-rider, beneficiary\n\nWho bears the risk, or enjoys the stability, without a seat at the table?\n\nEveryone downstream of the frontier; small states; the public.",
+    format: "free-form",
+  },
+  {
+    id: "v-task-scoping-effective-feasible-1",
     type: "writing-prompt",
     prompt: "#### The Limited Test Ban Treaty (1963): verifiability decided what could be banned\n\nThe 1963 treaty banned nuclear tests in the atmosphere, in space, and underwater, but not underground. The reason is pure verification design. Atmospheric tests could be detected worldwide by existing means, monitoring stations picking up radioactive debris and, later, satellites and seismic arrays, without any inspection inside the other country. Underground tests could not be reliably distinguished from earthquakes at the time and would have required on-site inspection the Soviets would not grant. So the treaty covered exactly the environments that national technical means could police and left out the one they could not.",
     format: "free-form",

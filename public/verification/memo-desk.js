@@ -16,7 +16,7 @@
 (function () {
   var SLOTS = window.VERIFICATION_MEMOS;
   var MODULES = window.VERIFICATION_MEMO_MODULES || [];
-  var STORE = 'xlab-verification-memo-desk.v1';
+  var STORE = window.VTMemoStore;
   var WPM = 220;
 
   var el = function (id) { return document.getElementById(id); };
@@ -24,7 +24,18 @@
     audience: el('fAudience'), decision: el('fDecision'), falsifier: el('fFalsifier'),
     title: el('fTitle'), body: el('fBody'),
   };
-  if (!SLOTS || !F.body) return;
+  if (!SLOTS || !F.body || !STORE) return;
+
+  /* The notebook edits the same body through its memo block. Repaint when the
+     change came from there, never when it came from this desk's own field —
+     rewriting the textarea under the caret would eat the keystroke. */
+  STORE.onChange(function (slotId) {
+    if (slotId !== current.id || document.activeElement === F.body) return;
+    var d = STORE.read(current.id) || {};
+    Object.keys(F).forEach(function (k) { F[k].value = d[k] || ''; });
+    budget(); lint();
+    if (!el('paneSkim').hidden) skim();
+  });
 
   var STATUS_WORD = { specified: 'brief drafted', named: 'named only', unspecified: 'not drafted' };
   var byId = {};
@@ -33,29 +44,21 @@
 
   /* ---------- storage ---------- */
 
-  function readAll() {
-    try { return JSON.parse(localStorage.getItem(STORE)) || {}; } catch (e) { return {}; }
-  }
-  function writeAll(all) {
-    try { localStorage.setItem(STORE, JSON.stringify(all)); } catch (e) { /* quota / private mode */ }
-  }
-  var saveTimer = null;
+  /* The draft itself belongs to VTMemoStore, because the notebook shows the
+     same text through a memo block and neither surface may hold a copy. */
   function save() {
-    clearTimeout(saveTimer);
-    saveTimer = setTimeout(function () {
-      var all = readAll();
-      var d = {};
-      Object.keys(F).forEach(function (k) { d[k] = F[k].value; });
-      if (Object.keys(d).every(function (k) { return !d[k].trim(); })) delete all[current.id];
-      else all[current.id] = d;
-      writeAll(all);
-      renderRail();
-    }, 300);
+    var d = {};
+    Object.keys(F).forEach(function (k) { d[k] = F[k].value; });
+    STORE.write(current.id, d);
+    renderRail();
+    /* Once there is something to keep, the memo gets its page in the book —
+       created on the first real keystroke, never on merely opening a slot, so
+       browsing the desk does not fill the notebook with empty pages. */
+    if (window.VTNotebook && STORE.has(current.id)) {
+      window.VTNotebook.bindMemo(current.id);
+    }
   }
-  function hasDraft(id) {
-    var d = readAll()[id];
-    return !!d && Object.keys(d).some(function (k) { return (d[k] || '').trim(); });
-  }
+  function hasDraft(id) { return STORE.has(id); }
 
   /* ---------- helpers ---------- */
 
@@ -137,7 +140,7 @@
   function select(id) {
     if (!byId[id]) return;
     current = byId[id];
-    var d = readAll()[id] || {};
+    var d = STORE.read(id) || {};
     Object.keys(F).forEach(function (k) { F[k].value = d[k] || ''; });
     if (history.replaceState) history.replaceState(null, '', '#' + id);
     renderBrief(current);
@@ -336,9 +339,7 @@
     clearBtn.classList.remove('armed');
     clearBtn.textContent = 'Clear this draft';
     Object.keys(F).forEach(function (k) { F[k].value = ''; });
-    var all = readAll();
-    delete all[current.id];
-    writeAll(all);
+    STORE.clear(current.id);
     renderRail(); budget(); lint(); skim();
   });
 

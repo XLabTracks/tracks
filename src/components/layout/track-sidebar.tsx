@@ -3,7 +3,14 @@
 import { useLayoutEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { CheckCircle2, Circle, FileText, ListTree, Lock } from "lucide-react";
+import {
+  CheckCircle2,
+  ChevronRight,
+  Circle,
+  FileText,
+  ListTree,
+  Lock,
+} from "lucide-react";
 import {
   Accordion,
   AccordionContent,
@@ -94,6 +101,30 @@ function SidebarNav({
     }
   }
 
+  // Subsection groups collapse Google-Docs-style; the group being read must
+  // never hide its rows, so the active item's group is forced open the same
+  // adjust-during-render way as the module accordion above.
+  const activeSectionKey = activeItemSectionKeyOf(outline, base, pathname);
+  const [openSections, setOpenSections] = useState<string[]>(() =>
+    activeSectionKey !== undefined ? [activeSectionKey] : [],
+  );
+  const [prevActiveSection, setPrevActiveSection] = useState(activeSectionKey);
+  if (activeSectionKey !== prevActiveSection) {
+    setPrevActiveSection(activeSectionKey);
+    if (
+      activeSectionKey !== undefined &&
+      !openSections.includes(activeSectionKey)
+    ) {
+      setOpenSections([...openSections, activeSectionKey]);
+    }
+  }
+  const toggleSection = (key: string) =>
+    setOpenSections(
+      openSections.includes(key)
+        ? openSections.filter((k) => k !== key)
+        : [...openSections, key],
+    );
+
   return (
     <div className="flex h-full flex-col">
       {/* One scroller for the whole outline. The current item's own headings
@@ -146,7 +177,7 @@ function SidebarNav({
             return (
               <AccordionItem key={module.id} value={module.slug} className="border-none">
                 <AccordionTrigger className="hover:bg-muted [&[data-state=open]]:bg-muted/50 rounded-lg px-2 py-2 text-sm hover:no-underline">
-                  <span className="flex items-center gap-2 text-left">
+                  <span className="flex items-center gap-2.5 text-left">
                     {isLocked && (
                       <>
                         <Lock
@@ -156,26 +187,32 @@ function SidebarNav({
                         <span className="sr-only">Locked: </span>
                       </>
                     )}
-                    <span className="line-clamp-2">
-                      {module.order}. {module.title}
+                    {/* The module numeral is the display element here — the
+                        blackest weight the variable font carries, sized past
+                        the title so it reads before the words do. */}
+                    <span
+                      className="min-w-4 shrink-0 text-center text-xl leading-none font-black tabular-nums"
+                      aria-hidden
+                    >
+                      {module.order}
                     </span>
+                    <span className="sr-only">Module {module.order}: </span>
+                    <span className="line-clamp-2">{module.title}</span>
                   </span>
                 </AccordionTrigger>
                 <AccordionContent className="pb-1">
                   <ul className="border-border/70 ml-3 space-y-0.5 border-l pl-2">
-                    {items.map((item) => (
-                      <SidebarItemRow
-                        key={itemKey(item)}
-                        item={item}
-                        href={`${base}/${module.slug}/${itemSlug(item)}`}
+                    {groupModuleItems(items).map((group) => (
+                      <SidebarItemGroup
+                        key={itemKey(group.item)}
+                        group={group}
+                        moduleBase={`${base}/${module.slug}`}
                         pathname={pathname}
                         completed={completed}
+                        activeItemNav={activeItemNav}
+                        expanded={openSections.includes(itemKey(group.item))}
+                        onToggle={() => toggleSection(itemKey(group.item))}
                         onNavigate={onNavigate}
-                        sectionNav={
-                          activeItemNav?.id === itemKey(item)
-                            ? activeItemNav
-                            : undefined
-                        }
                       />
                     ))}
                     {module.assessmentId && (
@@ -230,6 +267,156 @@ function itemDone(item: ModuleItem, completed: Set<string>): boolean {
   );
 }
 
+/** The active item's heading nav, as resolved by activeItemNavOf. */
+type ActiveItemNav = {
+  kind: ModuleItem["kind"];
+  id: string;
+  nav: PaperNavItem[];
+};
+
+/**
+ * A top-level sidebar row with the subsection rows that declared it as their
+ * section (`sectionItemId`). Content rules guarantee a section head precedes
+ * its subsections and is itself top-level; an item pointing anywhere else
+ * renders as its own top-level row rather than vanishing.
+ */
+interface ItemGroup {
+  item: ModuleItem;
+  children: ModuleItem[];
+}
+
+function groupModuleItems(items: ModuleItem[]): ItemGroup[] {
+  const groups: ItemGroup[] = [];
+  const byKey = new Map<string, ItemGroup>();
+  for (const item of items) {
+    const sectionKey = itemSectionItemId(item);
+    const section = sectionKey !== undefined ? byKey.get(sectionKey) : undefined;
+    if (section) {
+      section.children.push(item);
+    } else {
+      const group: ItemGroup = { item, children: [] };
+      groups.push(group);
+      byKey.set(itemKey(item), group);
+    }
+  }
+  return groups;
+}
+
+/** The group (section head's key) the current page belongs to, if any — the
+ *  one collapse state must never be allowed to hide. Reading a subsection
+ *  names its head; reading a head names itself, so arriving on it reveals
+ *  the subsections it would otherwise be hiding. */
+function activeItemSectionKeyOf(
+  outline: TrackOutline,
+  base: string,
+  pathname: string,
+): string | undefined {
+  for (const { module, items } of outline.modules) {
+    for (const item of items) {
+      if (pathname !== `${base}/${module.slug}/${itemSlug(item)}`) continue;
+      const sectionKey = itemSectionItemId(item);
+      if (sectionKey !== undefined) return sectionKey;
+      const key = itemKey(item);
+      return items.some((other) => itemSectionItemId(other) === key)
+        ? key
+        : undefined;
+    }
+  }
+  return undefined;
+}
+
+/**
+ * A section head with subsections renders as a Google-Docs-style sub-tab
+ * group: the row itself stays a plain link, and a separate caret beside it
+ * (a link must not contain a button) collapses the children. Collapsed is
+ * the default; the count says what the caret is hiding.
+ */
+function SidebarItemGroup({
+  group,
+  moduleBase,
+  pathname,
+  completed,
+  activeItemNav,
+  expanded,
+  onToggle,
+  onNavigate,
+}: {
+  group: ItemGroup;
+  moduleBase: string;
+  pathname: string;
+  completed: Set<string>;
+  activeItemNav: ActiveItemNav | null;
+  expanded: boolean;
+  onToggle: () => void;
+  onNavigate?: () => void;
+}) {
+  const { item, children } = group;
+  const href = `${moduleBase}/${itemSlug(item)}`;
+  const sectionNavFor = (candidate: ModuleItem) =>
+    activeItemNav?.id === itemKey(candidate) ? activeItemNav : undefined;
+  if (children.length === 0) {
+    return (
+      <li>
+        <SidebarItemRow
+          item={item}
+          href={href}
+          pathname={pathname}
+          completed={completed}
+          onNavigate={onNavigate}
+          sectionNav={sectionNavFor(item)}
+        />
+      </li>
+    );
+  }
+  const title = item.kind === "lesson" ? item.lesson.title : item.paper.title;
+  return (
+    <li>
+      <SidebarItemRow
+        item={item}
+        href={href}
+        pathname={pathname}
+        completed={completed}
+        onNavigate={onNavigate}
+        sectionNav={sectionNavFor(item)}
+        caret={
+          <button
+            type="button"
+            aria-expanded={expanded}
+            aria-label={`${expanded ? "Hide" : "Show"} subsections of ${title}`}
+            onClick={onToggle}
+            className="text-muted-foreground hover:bg-muted hover:text-foreground mt-1 flex h-6 shrink-0 items-center gap-0.5 rounded-md px-1 text-xs tabular-nums transition-colors select-none"
+          >
+            {!expanded && children.length}
+            <ChevronRight
+              className={cn(
+                "size-3.5 transition-transform",
+                expanded && "rotate-90",
+              )}
+              aria-hidden
+            />
+          </button>
+        }
+      />
+      {expanded && (
+        <ul className="border-border/70 ml-4 space-y-0.5 border-l pl-2">
+          {children.map((child) => (
+            <li key={itemKey(child)}>
+              <SidebarItemRow
+                item={child}
+                href={`${moduleBase}/${itemSlug(child)}`}
+                pathname={pathname}
+                completed={completed}
+                onNavigate={onNavigate}
+                sectionNav={sectionNavFor(child)}
+              />
+            </li>
+          ))}
+        </ul>
+      )}
+    </li>
+  );
+}
+
 function SidebarItemRow({
   item,
   href,
@@ -237,6 +424,7 @@ function SidebarItemRow({
   completed,
   onNavigate,
   sectionNav,
+  caret,
 }: {
   item: ModuleItem;
   href: string;
@@ -244,49 +432,58 @@ function SidebarItemRow({
   completed: Set<string>;
   onNavigate?: () => void;
   /** Set only on the item being read — its headings nest under this row. */
-  sectionNav?: { kind: ModuleItem["kind"]; id: string; nav: PaperNavItem[] };
+  sectionNav?: ActiveItemNav;
+  /** A section head's collapse toggle, laid beside the link (never inside it). */
+  caret?: React.ReactNode;
 }) {
   const done = itemDone(item, completed);
   const active = pathname === href;
-  // Subsection rows (sectionItemId set) indent under their section's own
-  // nested border, mirroring the module-level rail above.
-  const nested = itemSectionItemId(item) !== undefined;
-  return (
-    <li className={nested ? "border-border/70 ml-4 border-l pl-2" : undefined}>
-      <Link
-        href={href}
-        onClick={onNavigate}
-        aria-current={active ? "page" : undefined}
-        className={navItemClass(active)}
-      >
-        {done ? (
-          <CheckCircle2
-            className="text-foreground mt-0.5 size-3.5 shrink-0"
-            aria-hidden
-          />
-        ) : (
-          <Circle className="mt-0.5 size-3.5 shrink-0 opacity-30" aria-hidden />
-        )}
-        <span className="flex min-w-0 flex-col">
-          <span className="line-clamp-2">
-            {item.kind === "lesson" ? item.lesson.title : item.paper.title}
-            {done && <span className="sr-only"> (completed)</span>}
-          </span>
-          {/* Its own line, outside the title's line-clamp, so a long title
-              can't clip the optional marker (the primary nav surface). */}
-          {item.kind === "paper" && item.paper.optional && (
-            <span className="text-muted-foreground text-xs font-normal">
-              Optional
-            </span>
-          )}
+  const link = (
+    <Link
+      href={href}
+      onClick={onNavigate}
+      aria-current={active ? "page" : undefined}
+      className={navItemClass(active)}
+    >
+      {done ? (
+        <CheckCircle2
+          className="text-foreground mt-0.5 size-3.5 shrink-0"
+          aria-hidden
+        />
+      ) : (
+        <Circle className="mt-0.5 size-3.5 shrink-0 opacity-30" aria-hidden />
+      )}
+      <span className="flex min-w-0 flex-col">
+        <span className="line-clamp-2">
+          {item.kind === "lesson" ? item.lesson.title : item.paper.title}
+          {done && <span className="sr-only"> (completed)</span>}
         </span>
-        {item.kind === "paper" && (
-          <FileText
-            className="text-muted-foreground mt-0.5 ml-auto size-3 shrink-0"
-            aria-hidden
-          />
+        {/* Its own line, outside the title's line-clamp, so a long title
+            can't clip the optional marker (the primary nav surface). */}
+        {item.kind === "paper" && item.paper.optional && (
+          <span className="text-muted-foreground text-xs font-normal">
+            Optional
+          </span>
         )}
-      </Link>
+      </span>
+      {item.kind === "paper" && (
+        <FileText
+          className="text-muted-foreground mt-0.5 ml-auto size-3 shrink-0"
+          aria-hidden
+        />
+      )}
+    </Link>
+  );
+  return (
+    <>
+      {caret ? (
+        <div className="flex items-start gap-0.5">
+          <div className="min-w-0 flex-1">{link}</div>
+          {caret}
+        </div>
+      ) : (
+        link
+      )}
       {/* No label above these: the row they hang under names the item, so
           "In this lesson" would be the title said twice. The indent rail is
           what marks them as its parts. */}
@@ -303,7 +500,7 @@ function SidebarItemRow({
           />
         </div>
       )}
-    </li>
+    </>
   );
 }
 

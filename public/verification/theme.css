@@ -42,11 +42,27 @@
   --border: #e4dedb;
   --ring: #800000;
 
-  --mod-0: #9a000c;  /* Chinese Red */
-  --mod-1: #bf4f00;  /* Satsuma */
-  --mod-2: #946b00;  /* Lunar Yellow */
-  --mod-3: #555e07;  /* Khaki */
-  --mod-4: #3d75b1;  /* Cobalt */
+  --mod-0: #970a12;  /* Chinese Red */
+  --mod-1: #d1601f;  /* Satsuma */
+  --mod-2: #fecd6d;  /* Lunar Yellow */
+  --mod-3: #6d7636;  /* Khaki */
+  --mod-4: #5686bb;  /* Cobalt */
+  /* Text on that fill. Fixed, because it depends on the fill and not on the
+     page ground. */
+  --mod-0-ink: #ffffff;
+  --mod-1-ink: #1a1614;
+  --mod-2-ink: #1a1614;
+  --mod-3-ink: #ffffff;
+  --mod-4-ink: #1a1614;
+  /* The same accent where it has to be type on the page rather than a fill.
+     Forcing five hues to 4.5:1 as text compresses them into one lightness
+     band and Satsuma stops being tellable from Lunar Yellow — so the fill
+     carries the identity and this carries the reading. */
+  --mod-0-text: #9a000c;
+  --mod-1-text: #bf4f00;
+  --mod-2-text: #946b00;
+  --mod-3-text: #555e07;
+  --mod-4-text: #3d75b1;
 
   /* Graded feedback. Wong's bluish-green and vermillion, never the red/green
      pair — and never on their own: every use is accompanied by the word
@@ -78,8 +94,29 @@
   --exaggerate: #916400;
   --free-ride: #975a7c;
 
+
+  /* Type scale. Ten steps, and every rule on these pages picks one — the sizes
+     used to run to 22 distinct values between 10 and 27px, eight of them at
+     half-pixels that render differently per zoom and DPI. Steps are integers
+     for the same reason.
+
+     --fs-title is every page's h1; --fs-hero is the landing's alone. They were
+     five near-identical clamps before, which is four chances to drift. */
+  --fs-2xs: 11px;
+  --fs-xs: 12px;
+  --fs-sm: 13px;
+  --fs-md: 14px;
+  --fs-lg: 16px;
+  --fs-xl: 18px;
+  --fs-2xl: 22px;
+  --fs-3xl: 28px;
+  --fs-4xl: 36px;
+  --fs-title: clamp(28px, 3.4vw, 36px);
+  --fs-hero: clamp(32px, 4.4vw, 52px);
+
   --radius: 14px;
   --radius-sm: 8px;
+  --radius-xs: 4px;
   --hairline: 1px;
   --shadow-soft: 0 1px 2px rgba(10, 25, 47, .06);
   --shadow-soft-lg: 0 12px 40px rgba(10, 25, 47, .13);
@@ -117,11 +154,13 @@
   --border: #332c2a;
   --ring: #eda3a3;
 
-  --mod-0: #e4584f;  /* Chinese Red */
-  --mod-1: #e15f00;  /* Satsuma */
-  --mod-2: #c5952b;  /* Lunar Yellow */
-  --mod-3: #828d41;  /* Khaki */
-  --mod-4: #518ac7;  /* Cobalt */
+  /* Fills and their ink are the day values: a plaque's legibility is set by
+     the plaque, not by the page behind it. Only the type variant re-solves. */
+  --mod-0-text: #e4584f;
+  --mod-1-text: #e15f00;
+  --mod-2-text: #c5952b;
+  --mod-3-text: #828d41;
+  --mod-4-text: #518ac7;
 
   --ok: #3ecfa4;
   --no: #ff8f4d;
@@ -140,10 +179,28 @@
   --glow: 1;
 }
 
-/* Every pair here is 15:1 or better, borders are solid rather than hairlines,
-   and nothing is conveyed by a tint. Type is one step larger and the layout is
-   unchanged, so a line that only just fits at the default size must still fit
-   here — test at 1280x800 with this on. */
+/* High contrast is a low-vision mode, not a dark theme, and it is built to
+   WCAG's own numbers rather than to taste:
+
+     1.4.6 Contrast (Enhanced, AAA) — 7:1 for body type. Here every pair is
+       black against white at 21:1, because the mode exists for people for whom
+       7:1 is the floor and not the target.
+     1.4.4 Resize text (AA) — 200%, applied with `zoom` rather than a root
+       font-size, because these stylesheets size in px and px does not follow
+       the root font.
+       Trap: zoom does NOT move the media queries. innerWidth stays 1280 and
+       every min-width rule keeps firing, so the multi-column arrangements have
+       to be unwound here by hand or the doubled type runs off the side.
+     2.5.5 Target Size (Enhanced, AAA) — 44x44 CSS px for anything pressable.
+
+   Hue carries nothing at all in this mode. The five module colours collapse to
+   the foreground and the module number does the work it was always doing
+   beside them, so a learner who cannot separate the hues loses nothing —
+   there is nothing left to separate.
+
+   Trap: it is picked, never inferred. prefers-color-scheme only ever chooses
+   between day and night; a legibility setting must not ride on an OS toggle
+   someone set for a different reason. */
 :root[data-theme='contrast'] {
   --background: #000000;
   --foreground: #ffffff;
@@ -157,12 +214,17 @@
   --border: #ffffff;
   --ring: #ffe600;
 
-  --mod-0: #ffa59a;  /* Chinese Red */
-  --mod-1: #fb7528;  /* Satsuma */
-  --mod-2: #f7c562;  /* Lunar Yellow */
-  --mod-3: #a5b164;  /* Khaki */
-  --mod-4: #82bcfd;  /* Cobalt */
+  /* No hue at all: every module reads as foreground, and the number beside it
+     is the whole encoding. */
+  --mod-0: #ffffff; --mod-1: #ffffff; --mod-2: #ffffff;
+  --mod-3: #ffffff; --mod-4: #ffffff;
+  --mod-0-ink: #000000; --mod-1-ink: #000000; --mod-2-ink: #000000;
+  --mod-3-ink: #000000; --mod-4-ink: #000000;
+  --mod-0-text: #ffffff; --mod-1-text: #ffffff; --mod-2-text: #ffffff;
+  --mod-3-text: #ffffff; --mod-4-text: #ffffff;
 
+  /* Correct and wrong keep a colour because they are the one place a glance
+     has to be instant — and both still carry their word and glyph. */
   --ok: #6bffcb;
   --no: #ffab70;
   --destructive: #ffab70;
@@ -177,11 +239,76 @@
 
   --radius: 8px;
   --radius-sm: 6px;
-  --hairline: 2px;
+  --radius-xs: 4px;
+  --hairline: 3px;
   --shadow-soft: none;
   --shadow-soft-lg: none;
   --glow: 0;
-  font-size: 106.25%;
+  /* 1.4.4: everything at 200%.
+     Trap: `font-size: 200%` here does nothing you can see. These stylesheets
+     size in px, and px does not scale with the root font — only rem and em do.
+     `zoom` scales the whole box tree, px included, and it halves the layout
+     viewport as it goes, so the width media queries fire on their own and the
+     desktop grids stack without being told to. */
+  zoom: 2;
+}
+
+/* 2.5.5: 44x44 CSS px minimum for a pointer target. Declared on the mode
+   rather than globally, because at the default size the compact chrome is
+   deliberate and this is the mode that trades density for reach. */
+:root[data-theme='contrast'] button,
+:root[data-theme='contrast'] [role='button'],
+:root[data-theme='contrast'] .btn,
+:root[data-theme='contrast'] .chip,
+:root[data-theme='contrast'] .nav a,
+:root[data-theme='contrast'] .site-footer a,
+:root[data-theme='contrast'] .part-jump {
+  min-height: 44px;
+  min-width: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* The constellation is a scatter of labels positioned by trigonometry, not by
+   layout; at this size it cannot be read, and the track page carries the same
+   list as text. */
+:root[data-theme='contrast'] .sky-wrap { display: none; }
+
+/* One column, everywhere. These are the min-width arrangements that keep
+   firing at 1280 because zoom leaves the media queries where they were. */
+:root[data-theme='contrast'] .objectives,
+:root[data-theme='contrast'] .modules,
+:root[data-theme='contrast'] .roster,
+:root[data-theme='contrast'] .pins,
+:root[data-theme='contrast'] .facts,
+:root[data-theme='contrast'] .map-body,
+:root[data-theme='contrast'] .desk,
+:root[data-theme='contrast'] .cap-grid,
+:root[data-theme='contrast'] .stat-row,
+:root[data-theme='contrast'] .player .shell {
+  grid-template-columns: minmax(0, 1fr) !important;
+}
+
+/* The header is a fixed-height single row by default; at this size its own
+   contents no longer fit across, so it wraps like it does on a phone. */
+:root[data-theme='contrast'] .site-header .bar {
+  height: auto;
+  flex-wrap: wrap;
+  gap: 10px 16px;
+  padding: 8px 16px;
+}
+:root[data-theme='contrast'] .rail {
+  position: static;
+  width: auto;
+  max-width: none;
+  height: auto;
+}
+
+/* Focus has to be findable, not merely present. */
+:root[data-theme='contrast'] :where(button, a, input, textarea, [tabindex]):focus-visible {
+  outline: 4px solid var(--ring);
+  outline-offset: 3px;
 }
 
 h1, h2, h3, h4 { font-family: var(--display); font-weight: 500; letter-spacing: -.015em; line-height: 1.15; }
@@ -230,7 +357,7 @@ button, [role='button'], [role='radio'], [role='tab'], .chip, .nav a, .brand,
   align-items: center;
   gap: 8px;
   font-family: var(--display);
-  font-size: 17px;
+  font-size: var(--fs-lg);
   /* 700 is the top of the embedded Space Grotesk's weight range — asking
      for more gets synthetic bold, which smears the letterforms. */
   font-weight: 700;
@@ -293,7 +420,7 @@ button, [role='button'], [role='radio'], [role='tab'], .chip, .nav a, .brand,
   align-items: center;
   justify-content: flex-start;
   gap: 14px;
-  font-size: 14.5px;
+  font-size: var(--fs-md);
   overflow-x: auto;
   scrollbar-width: none;
 }
@@ -315,7 +442,7 @@ button, [role='button'], [role='radio'], [role='tab'], .chip, .nav a, .brand,
   inset-inline: 14px;
   bottom: -1px;
   height: 2px;
-  border-radius: 2px;
+  border-radius: var(--radius-xs);
   background: var(--primary);
 }
 
@@ -340,7 +467,7 @@ button, [role='button'], [role='radio'], [role='tab'], .chip, .nav a, .brand,
   width: 26px;
   height: 26px;
   border: 0;
-  border-radius: 6px;
+  border-radius: var(--radius-sm);
   background: transparent;
   color: var(--muted-foreground);
   cursor: pointer;
@@ -369,7 +496,7 @@ button, [role='button'], [role='radio'], [role='tab'], .chip, .nav a, .brand,
   background: var(--primary);
   color: var(--primary-foreground);
   font: inherit;
-  font-size: 18px;
+  font-size: var(--fs-xl);
   text-decoration: none;
   cursor: pointer;
   transition: filter .15s ease, background .15s ease, color .15s ease;
@@ -377,7 +504,7 @@ button, [role='button'], [role='radio'], [role='tab'], .chip, .nav a, .brand,
 .btn:hover { filter: brightness(1.08); }
 .btn.outline { background: transparent; color: var(--foreground); border-color: var(--border); }
 .btn.outline:hover { background: var(--muted); filter: none; }
-.btn.small { height: 38px; padding: 0 14px; font-size: 15.5px; }
+.btn.small { height: 38px; padding: 0 14px; font-size: var(--fs-lg); }
 
 .skip {
   position: fixed;
@@ -401,7 +528,7 @@ button, [role='button'], [role='radio'], [role='tab'], .chip, .nav a, .brand,
   padding: 22px 0 40px;
   color: var(--muted-foreground);
   font-family: var(--mono);
-  font-size: 12px;
+  font-size: var(--fs-xs);
 }
 .site-footer .wrap { display: flex; flex-direction: column; gap: 14px; }
 
@@ -412,13 +539,14 @@ button, [role='button'], [role='radio'], [role='tab'], .chip, .nav a, .brand,
    pointer, no hover, no underline — or it reads as a broken link. */
 .foot-links .pending { color: var(--muted-foreground); opacity: .5; cursor: default; }
 
+/* One rule closes the page; a second one inside the footer only boxes the
+   copyright off from the links it belongs with. Spacing separates them. */
 .foot-end {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   gap: 8px 20px;
-  padding-top: 12px;
-  border-top: var(--hairline) solid var(--border);
+  padding-top: 4px;
 }
 .foot-end > span:last-of-type { margin-right: auto; }
 
@@ -428,7 +556,7 @@ button, [role='button'], [role='radio'], [role='tab'], .chip, .nav a, .brand,
    Trap: the desktop rule gives .nav flex:1, whose 0% basis beats width:100%
    in a wrapped row — it has to be reset here or the row collapses. */
 @media (max-width: 720px) {
-  .site-header .bar { height: auto; flex-wrap: wrap; gap: 10px 16px; padding: 9px 16px; }
+  .site-header .bar { height: auto; flex-wrap: wrap; gap: 10px 16px; padding: 8px 16px; }
   .nav {
     order: 3;
     flex: none;
@@ -438,7 +566,7 @@ button, [role='button'], [role='radio'], [role='tab'], .chip, .nav a, .brand,
     padding-bottom: 2px;
   }
   .nav::-webkit-scrollbar { display: none; }
-  .nav a { white-space: nowrap; padding: 5px 9px; }
+  .nav a { white-space: nowrap; padding: 4px 8px; }
   .header-right { margin-left: auto; }
 }
 

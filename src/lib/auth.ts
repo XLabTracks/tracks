@@ -128,7 +128,7 @@ export const requireUser = cache(async (): Promise<AppUser> => {
  * a backdoor (`next build`/`start` and the Workers runtime set "production";
  * vitest sets "test"). Never expose a DEV_USER dev server to the network.
  */
-function devUser(): WorkosUserShape | null {
+export function devUser(): WorkosUserShape | null {
   const flag = process.env.DEV_USER;
   if (!flag || process.env.NODE_ENV !== "development") return null;
   if (!flag.includes("@")) {

@@ -48,7 +48,9 @@ function Brief({ e, lead }: { e: Entry; lead: boolean }) {
           </span>
         ) : null}
         <span className="text-muted-foreground ml-auto text-xs select-none">
-          <span aria-hidden="true">{STATUS_GLYPH[e.status] ?? "○"} </span>
+          <span aria-hidden="true" className="inline-block w-[1.15em] text-center">
+            {STATUS_GLYPH[e.status] ?? "○"}
+          </span>{" "}
           {STATUS_WORD[e.status] ?? e.status}
         </span>
       </div>
@@ -59,7 +61,9 @@ function Brief({ e, lead }: { e: Entry; lead: boolean }) {
 
       <div className="flex flex-wrap gap-1.5">
         <span className="border-border rounded-full border px-2 py-0.5 text-xs select-none">
-          <span aria-hidden="true">{DIFF_GLYPH[e.difficulty] ?? "●"} </span>
+          <span aria-hidden="true" className="inline-block w-[1.15em] text-center">
+            {DIFF_GLYPH[e.difficulty] ?? "●"}
+          </span>{" "}
           {e.difficulty}
         </span>
         <span className="border-border rounded-full border px-2 py-0.5 text-xs select-none">

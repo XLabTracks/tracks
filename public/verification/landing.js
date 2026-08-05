@@ -139,14 +139,14 @@
     var mx = (a.x + b.x) / 2, my = (a.y + b.y) / 2;
     var qx = mx + (V.cx - mx) * 0.18, qy = my + (V.cy - my) * 0.18;
     var cross = a.mod !== b.mod;
-    edgeHtml += '<path class="edge' + (cross ? ' cross' : '') + '" id="e' + idx + '" style="--sel:var(--mod-' + a.mod + ')" d="M ' +
+    edgeHtml += '<path class="edge' + (cross ? ' cross' : '') + '" id="e' + idx + '" style="--sel:var(--mod-' + a.mod + ');--sel-ink:var(--mod-' + a.mod + '-ink);--sel-text:var(--mod-' + a.mod + '-text)" d="M ' +
       a.x.toFixed(1) + ' ' + a.y.toFixed(1) + ' Q ' + qx.toFixed(1) + ' ' + qy.toFixed(1) + ' ' + b.x.toFixed(1) + ' ' + b.y.toFixed(1) + '"/>';
     (edgesOf[e[0]] = edgesOf[e[0]] || []).push(idx);
     (edgesOf[e[1]] = edgesOf[e[1]] || []).push(idx);
   });
 
   var arcHtml = order.map(function (col, mod) {
-    return '<g class="arc-label" data-mod="' + mod + '" style="--sel:var(--mod-' + mod + ')" role="button" tabindex="0"' +
+    return '<g class="arc-label" data-mod="' + mod + '" style="--sel:var(--mod-' + mod + ');--sel-ink:var(--mod-' + mod + '-ink);--sel-text:var(--mod-' + mod + '-text)" role="button" tabindex="0"' +
       ' aria-label="Highlight module ' + mod + ', ' + esc(S.moduleNames[mod]) + '">' +
       '<text x="' + col.arc.x.toFixed(1) + '" y="' + col.arc.y.toFixed(1) + '">M' + mod + ' · ' + esc(S.moduleNames[mod]) + '</text></g>';
   }).join('');
@@ -167,7 +167,7 @@
       Math.max(p.x + V.nodeR, p.side === 'left' ? lx : lx + wide),
       Math.max(p.y + V.nodeR, top + (lines.length - 1) * 14 + 5)
     );
-    return '<g class="node" data-id="' + n.id + '" style="--sel:var(--mod-' + n.mod + ')" role="button" tabindex="0"' +
+    return '<g class="node" data-id="' + n.id + '" style="--sel:var(--mod-' + n.mod + ');--sel-ink:var(--mod-' + n.mod + '-ink);--sel-text:var(--mod-' + n.mod + '-text)" role="button" tabindex="0"' +
       ' aria-label="' + esc(n.label) + ' — module ' + n.mod + ', ' + esc(S.moduleNames[n.mod]) + '">' +
       '<title>' + esc(n.label) + '</title>' +
       '<circle cx="' + p.x.toFixed(1) + '" cy="' + p.y.toFixed(1) + '" r="' + V.nodeR + '"/>' +
@@ -245,6 +245,8 @@
     if (!id) { panel.style.removeProperty('--sel'); panel.innerHTML = DEFAULT_PANEL; return; }
     var n = placed[id].node;
     panel.style.setProperty('--sel', 'var(--mod-' + n.mod + ')');
+    panel.style.setProperty('--sel-ink', 'var(--mod-' + n.mod + '-ink)');
+    panel.style.setProperty('--sel-text', 'var(--mod-' + n.mod + '-text)');
     panel.innerHTML =
       '<p class="p-mod">M' + n.mod + ' · ' + esc(S.moduleNames[n.mod]) + '</p>' +
       '<h3>' + esc(n.label) + '</h3>' +
@@ -332,7 +334,7 @@
 
   if (filters) {
     filters.innerHTML = S.moduleNames.map(function (name, mod) {
-      return '<button type="button" data-mod="' + mod + '" aria-pressed="false" style="--sel:var(--mod-' + mod + ')">M' +
+      return '<button type="button" data-mod="' + mod + '" aria-pressed="false" style="--sel:var(--mod-' + mod + ');--sel-ink:var(--mod-' + mod + '-ink);--sel-text:var(--mod-' + mod + '-text)">M' +
         mod + ' · ' + esc(name) + '</button>';
     }).join('');
     filters.addEventListener('click', function (e) {

@@ -6,17 +6,17 @@
    inherit one. */
 
 .page-head { padding: 44px 0 0; }
-.page-head h1 { font-size: clamp(28px, 3.4vw, 40px); text-wrap: balance; }
+.page-head h1 { font-size: var(--fs-title); text-wrap: balance; }
 .page-head .lede {
   max-width: 62ch;
   margin-top: 14px;
-  font-size: 17px;
+  font-size: var(--fs-lg);
   line-height: 1.65;
   color: var(--muted-foreground);
 }
 
 .prose { max-width: 66ch; padding: 34px 0 56px; }
-.prose h2 { font-size: 22px; margin-top: 34px; }
+.prose h2 { font-size: var(--fs-2xl); margin-top: 34px; }
 .prose h2:first-child { margin-top: 0; }
 .prose p { margin-top: 12px; line-height: 1.7; }
 .prose ul { margin-top: 12px; padding-left: 20px; }
@@ -32,8 +32,8 @@
   border-radius: var(--radius);
   background: var(--card);
 }
-.stub h3 { font-size: 15px; color: var(--brand-ink); }
-.stub p { margin-top: 8px; font-size: 14.5px; color: var(--muted-foreground); }
+.stub h3 { font-size: var(--fs-md); color: var(--brand-ink); }
+.stub p { margin-top: 8px; font-size: var(--fs-md); color: var(--muted-foreground); }
 
 .facts {
   display: grid;
@@ -45,12 +45,12 @@
 }
 .facts dt {
   font-family: var(--mono);
-  font-size: 12px;
+  font-size: var(--fs-xs);
   letter-spacing: .06em;
   text-transform: uppercase;
   color: var(--muted-foreground);
 }
-.facts dd { font-family: var(--display); font-size: 24px; font-weight: 500; margin-top: 4px; }
+.facts dd { font-family: var(--display); font-size: var(--fs-2xl); font-weight: 500; margin-top: 4px; }
 @media (min-width: 640px) { .facts { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
 
 
@@ -60,7 +60,11 @@
    Trap: the monogram is a placeholder for a portrait, so it must reserve the
    portrait's box. Sizing it to the initials instead would make every card
    jump the day real photographs land. */
-.roster {
+/* Trap: the roster is a `ul` inside `.prose`, and `.prose ul` sets a
+   padding-left for bullet lists at a higher specificity than a lone class.
+   Without the `.prose` here the cards sit indented from every heading and
+   paragraph on the page, which reads as a misalignment rather than a list. */
+.prose .roster {
   list-style: none;
   display: grid;
   gap: 16px;
@@ -88,7 +92,7 @@
    two ROWS of cards, so the two cannot be set independently while this is
    on — which is fine at three people and would want revisiting past six. */
 @media (min-width: 700px) {
-  .roster {
+  .prose .roster {
     grid-template-columns: repeat(3, minmax(0, 1fr));
     grid-auto-rows: auto;
     row-gap: 14px;
@@ -109,11 +113,11 @@
   background: var(--muted);
   color: var(--brand-ink);
   font-family: var(--display);
-  font-size: 22px;
+  font-size: var(--fs-2xl);
   font-weight: 500;
   letter-spacing: .02em;
   user-select: none;
   -webkit-user-select: none;
 }
-.person .nm { font-family: var(--display); font-size: 17px; font-weight: 500; }
-.person .rl { font-size: 13.5px; color: var(--muted-foreground); }
+.person .nm { font-family: var(--display); font-size: var(--fs-lg); font-weight: 500; }
+.person .rl { font-size: var(--fs-sm); color: var(--muted-foreground); }

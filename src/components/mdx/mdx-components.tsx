@@ -10,6 +10,7 @@ import { MdxLink } from "./mdx-link";
 import { NextSteps } from "./next-steps";
 import { PopUp } from "./pop-up";
 import { SiteQuote } from "./site-quote";
+import { MemoDesk } from "@/components/verification/memo-desk-card";
 import { VerificationExercise } from "@/components/verification/verification-exercise";
 import { Term } from "./term";
 import { CapstoneBank } from "./reader/capstone-bank";
@@ -20,8 +21,8 @@ import { Src, SourceQuote } from "./reader/source-quote";
 // Components available by name inside every lesson `.mdx` body. Authors drop
 // <Video/>, <Demo/>, <Exercise/>, <ExerciseSequence/>, <Callout/>,
 // <ArxivPaper/>, <Footnote/>, <Term/>, <SiteQuote/>, <PopUp/>,
-// <VerificationExercise/>, <Check/>, <GapFill/>, <SourceQuote/>, <Src/>,
-// <NextSteps/> and <CapstoneBank/> directly into prose.
+// <MemoDesk/>, <VerificationExercise/>, <Check/>, <GapFill/>, <SourceQuote/>,
+// <Src/>, <NextSteps/> and <CapstoneBank/> directly into prose.
 // Markdown links render through MdxLink, which routes known Substack /
 // LessWrong posts to the internal reader.
 export const mdxComponents: MDXComponents = {
@@ -33,6 +34,7 @@ export const mdxComponents: MDXComponents = {
   Exercise,
   ExerciseSequence,
   Footnote,
+  MemoDesk,
   NextSteps,
   PopUp,
   SiteQuote,

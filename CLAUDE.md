@@ -49,6 +49,9 @@ step-by-step guide for adding content (its rules are enforced by
 - `npm run verification:course` — regenerate `public/verification/data/course.js`
   from `src/content/verification/curriculum.ts`, the single source of the
   Verification module and unit list. `-- --check` fails when they have drifted.
+- `npm run verification:memos` — regenerate `public/verification/data/memos.js`
+  from `src/content/verification/memos.ts`, the single source of the course's
+  fifteen written outputs. `-- --check` fails when they have drifted.
 - `npm run verification:capstones` — rebuild the Verification capstone bank
   from `verification-capstones/*.md` into
   `public/verification/data/capstone-bank.js`. `-- --check` verifies the two
@@ -159,7 +162,9 @@ via `usePathname()` (layouts can't see deeper params).
 full-page Paper items), `<Footnote/>`, `<Term/>` (glossary hover card), and
 `<SiteQuote/>` (external link whose hover card previews a verbatim excerpt
 of the target page; never internalized, never scanned by readings:build)
-by name inside lesson text. `<PopUp label="…">` is what the outline's
+by name inside lesson text. `<MemoDesk lesson="…"/>` prints the written
+output that lesson owes and links into the memo desk at that slot.
+`<PopUp label="…">` is what the outline's
 `[POP UP]` marker becomes: a named card that opens a dialog on the body
 (2.2.1's three visibility layers are the live case). An `[interactive
 pop-up]` — one the learner answers rather than reads — is a widget instead;
@@ -356,6 +361,18 @@ add must reduce the duplication, never widen it.
   which points at `/tracks/verification/<module>/<lesson>`. `module.html` —
   the old static player, which rendered its own copy of every unit — is now
   a redirect that maps a `?u=<unit>` link to that href.
+- **`src/content/verification/memos.ts` is the fifteen written outputs.**
+  Same generator shape as the course: `npm run verification:memos` writes
+  `public/verification/data/memos.js` for the standalone memo desk, and
+  `-- --check` fails on drift — never hand-edit the output. Each slot names
+  the `lesson` whose body carries `<MemoDesk lesson="…"/>`, because the
+  outline numbers some of them loosely (`1.7`, `1.x`, `3.x` are not units the
+  graph has), so the placement is a judgement and belongs in the data where it
+  can be argued with. `memos.test.ts` fails if a slot's lesson does not embed
+  its card exactly once — that is what stops the desk going unreachable from
+  the course again. `status` is load-bearing: `specified` quotes the outline,
+  `named` and `unspecified` must carry a `gap` saying what is missing, and
+  filling one in yourself is a content decision that is not yours to make.
 - **`verificationUnitOfLesson` in curriculum.ts is the join.** The static
   site and `data/skills.js` key on outline numbers (`0.1`, `2.3`); the graph
   keys on `v-<name>`. Several lessons may share one unit — module 0's six

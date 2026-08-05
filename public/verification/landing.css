@@ -11,13 +11,13 @@
 .hero { padding: 56px 0 44px; }
 .hero h1 {
   max-width: 20ch;
-  font-size: clamp(32px, 4.4vw, 52px);
+  font-size: var(--fs-hero);
   text-wrap: balance;
 }
 .hero .lede {
   max-width: 62ch;
   margin-top: 22px;
-  font-size: 18px;
+  font-size: var(--fs-xl);
   line-height: 1.62;
   color: var(--muted-foreground);
 }
@@ -28,7 +28,7 @@
 section.band { border-top: var(--hairline) solid var(--border); }
 section.band.filled { background: var(--card); border-bottom: var(--hairline) solid var(--border); }
 section.band > .wrap { padding-top: 52px; padding-bottom: 52px; }
-section.band h2 { font-size: 26px; }
+section.band h2 { font-size: var(--fs-3xl); }
 section.band .intro { max-width: 62ch; margin-top: 12px; color: var(--muted-foreground); }
 
 .objectives {
@@ -39,7 +39,7 @@ section.band .intro { max-width: 62ch; margin-top: 12px; color: var(--muted-fore
 }
 @media (min-width: 640px) { .objectives { grid-template-columns: 1fr 1fr; } }
 .objectives li { display: flex; gap: 12px; }
-.objectives .n { font-family: var(--mono); font-size: 14px; color: var(--muted-foreground); }
+.objectives .n { font-family: var(--mono); font-size: var(--fs-md); color: var(--muted-foreground); }
 
 /* ---------- module cards ---------- */
 
@@ -54,51 +54,11 @@ section.band .intro { max-width: 62ch; margin-top: 12px; color: var(--muted-fore
   border-radius: var(--radius);
   background: var(--background);
 }
-/* The module accent is carried by the chip's own text, not by a swatch
-   printed beside it — the number is in the text, so hue never stands alone
-   and there is nothing decorative left to draw. */
-.mod-chip {
-  display: inline-flex;
-  align-items: center;
-  gap: 7px;
-  font-family: var(--mono);
-  font-size: 12px;
-  letter-spacing: .04em;
-  color: var(--mod, var(--muted-foreground));
-}
-.mod-card h3 { font-size: 19px; margin-top: 10px; }
-.mod-card p { margin-top: 8px; font-size: 14.5px; line-height: 1.6; color: var(--muted-foreground); }
-.mod-card .memo-link {
-  display: inline-block;
-  margin-top: 14px;
-  font-size: 13.5px;
-  color: var(--brand-ink);
-  text-underline-offset: 3px;
-}
-
-.note {
-  margin-top: 26px;
-  padding: 14px 16px;
-  border: var(--hairline) solid var(--border);
-  border-radius: var(--radius-sm);
-  background: var(--muted);
-  font-size: 13.5px;
-  line-height: 1.6;
-  color: var(--muted-foreground);
-}
-.note b { color: var(--foreground); font-weight: 600; }
-
-/* ---------- skill constellation ---------- */
-
-/* The sky takes the full column and the panel sits under it. A side panel
-   costs the graph 300px of width, and the graph is 27 labelled stars — it
-   needs the width more than the reading order does.
-
-   Trap: minmax(0, …), not a bare auto track. An auto track is sized by its
-   content, so the scrolling figure inside widens the track and takes the whole
-   page into horizontal scroll with it. */
-.constellation { display: grid; grid-template-columns: minmax(0, 1fr); gap: 16px; margin-top: 22px; }
-
+/* The constellation's own styling. Every rule below draws the figure:
+   without them the rings and edges are open <path>s with no fill
+   declared, so the browser closes each arc and fills it black — the
+   page goes to ink. They live here and nowhere else; nothing in
+   theme.css or page.css styles `.sky`. */
 .sky {
   position: relative;
   min-width: 0;
@@ -157,8 +117,8 @@ section.band .intro { max-width: 62ch; margin-top: 12px; color: var(--muted-fore
   stroke-width: 1.6;
   transition: stroke-width .15s ease, fill .2s ease;
 }
-.sky .node .node-num { fill: var(--foreground); font-family: var(--mono); font-size: 11px; text-anchor: middle; }
-.sky .node .name { fill: var(--foreground); font-size: 12px; }
+.sky .node .node-num { fill: var(--foreground); font-family: var(--mono); font-size: var(--fs-2xs); text-anchor: middle; }
+.sky .node .name { fill: var(--foreground); font-size: var(--fs-xs); }
 .sky.focusing .node:not(.hot) { opacity: .28; }
 .sky .node.hot circle { stroke-width: 2.6; fill: color-mix(in srgb, var(--sel) 26%, var(--card)); }
 .sky .node.pinned circle { fill: var(--sel); }
@@ -169,7 +129,7 @@ section.band .intro { max-width: 62ch; margin-top: 12px; color: var(--muted-fore
 .sky .arc-label text {
   fill: var(--sel);
   font-family: var(--mono);
-  font-size: 12.5px;
+  font-size: var(--fs-xs);
   letter-spacing: .06em;
   text-anchor: middle;
 }
@@ -186,7 +146,7 @@ section.band .intro { max-width: 62ch; margin-top: 12px; color: var(--muted-fore
   padding: 10px 16px 14px;
   border-top: var(--hairline) solid var(--border);
   font-family: var(--mono);
-  font-size: 11.5px;
+  font-size: var(--fs-2xs);
   color: var(--muted-foreground);
 }
 
@@ -206,43 +166,56 @@ section.band .intro { max-width: 62ch; margin-top: 12px; color: var(--muted-fore
   .sky-panel .p-rungs { grid-column: 2; grid-row: 1 / span 5; margin-top: 2px; }
   .sky-panel .p-hint:first-child { grid-column: 1; }
 }
-.sky-panel .p-mod { font-family: var(--mono); font-size: 12px; color: var(--sel, var(--muted-foreground)); }
-.sky-panel h3 { font-size: 19px; margin-top: 8px; }
+.sky-panel .p-mod { font-family: var(--mono); font-size: var(--fs-xs); color: var(--sel, var(--muted-foreground)); }
+.sky-panel h3 { font-size: var(--fs-xl); margin-top: 8px; }
 .sky-panel .p-meta {
   display: flex;
   flex-wrap: wrap;
   gap: 4px 14px;
   margin-top: 8px;
   font-family: var(--mono);
-  font-size: 11.5px;
+  font-size: var(--fs-2xs);
   color: var(--muted-foreground);
 }
-.sky-panel .p-desc { margin-top: 12px; font-size: 14px; line-height: 1.6; color: var(--muted-foreground); }
+.sky-panel .p-desc { margin-top: 12px; font-size: var(--fs-md); line-height: 1.6; color: var(--muted-foreground); }
 .sky-panel .p-rungs { margin-top: 14px; list-style: none; display: grid; gap: 8px; }
-.sky-panel .p-rungs li { display: grid; grid-template-columns: 44px 1fr; gap: 10px; font-size: 13px; line-height: 1.5; }
-.sky-panel .p-rungs .u { font-family: var(--mono); font-size: 11.5px; color: var(--brand-ink); padding-top: 2px; }
+.sky-panel .p-rungs li { display: grid; grid-template-columns: 44px 1fr; gap: 10px; font-size: var(--fs-sm); line-height: 1.5; }
+.sky-panel .p-rungs .u { font-family: var(--mono); font-size: var(--fs-2xs); color: var(--brand-ink); padding-top: 2px; }
 .sky-panel .p-rungs .a { color: var(--muted-foreground); }
-.sky-panel .p-hint { font-size: 13.5px; line-height: 1.6; color: var(--muted-foreground); }
+.sky-panel .p-hint { font-size: var(--fs-sm); line-height: 1.6; color: var(--muted-foreground); }
 
-.mod-filters { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 20px; }
-/* The module accent is carried by the chip's own text — the rule the module
-   cards already state. The number is in the text, so hue never stands alone,
-   and there is nothing decorative left for a swatch square to do. */
-.mod-filters button {
-  padding: 5px 11px;
-  border: var(--hairline) solid var(--border);
+/* A plaque, not coloured letters. Five hues squeezed to a text-contrast floor
+   land in one lightness band and stop being tellable apart; as a fill each one
+   keeps its own lightness, and the ink on it is chosen per colour.
+   One segmented bar, not five pills: the container owns the rounding and the
+   segments sit flush at radius 0 — a gap or a per-segment radius splits it
+   back into pills. Narrow screens scroll the bar sideways instead of
+   wrapping it, because a wrapped bar is two bars. */
+.mod-filters {
+  display: flex;
+  width: fit-content;
+  max-width: 100%;
   border-radius: 999px;
-  background: transparent;
-  color: var(--sel, var(--foreground));
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+.mod-filters button {
+  padding: 8px 14px;
+  border: 0;
+  background: var(--sel, var(--muted));
+  color: var(--sel-ink, var(--foreground));
   font: inherit;
   font-family: var(--mono);
-  font-size: 12px;
+  font-size: var(--fs-xs);
+  white-space: nowrap;
   cursor: pointer;
   user-select: none;
   -webkit-user-select: none;
 }
-.mod-filters button:hover { border-color: var(--sel); }
-.mod-filters button[aria-pressed='true'] { background: var(--muted); border-color: var(--sel); }
+.mod-filters button:hover { filter: brightness(1.06); }
+.mod-filters button[aria-pressed='true'] {
+  box-shadow: inset 0 0 0 2px var(--foreground);
+}
 
 @media (max-width: 640px) {
   .hero { padding: 36px 0 32px; }
@@ -250,5 +223,5 @@ section.band .intro { max-width: 62ch; margin-top: 12px; color: var(--muted-fore
 }
 
 .after-sky { margin-top: 22px; }
-.mod-card .mod-meta { margin-top: 10px; font-family: var(--mono); font-size: 11.5px; color: var(--muted-foreground); }
+.mod-card .mod-meta { margin-top: 10px; font-family: var(--mono); font-size: var(--fs-2xs); color: var(--muted-foreground); }
 .mod-card .memo-link + .memo-link { margin-left: 14px; }

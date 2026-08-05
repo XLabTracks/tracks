@@ -45,7 +45,7 @@
     return C.modules.map(m => ({
       key: 'm' + m.n,
       label: '<b>Module ' + m.n + '</b> &middot; ' + VT.esc(m.title),
-      accent: 'var(--mod-' + m.n + ')',
+      accent: 'var(--mod-' + m.n + '-text)',
       nodes: S.nodes.filter(n => n.mod === m.n).sort((a, b) => a.r - b.r || a.label.localeCompare(b.label))
     }));
   }
@@ -120,7 +120,7 @@
     card.innerHTML =
       '<span class="eyebrow">Module ' + n.mod + ' &middot; ' +
         VT.esc(C.modules[n.mod] ? C.modules[n.mod].title : '') + '</span>' +
-      '<h2 style="--mod:var(--mod-' + n.mod + ')">' + VT.esc(n.label) + '</h2>' +
+      '<h2 style="--mod:var(--mod-' + n.mod + ');--mod-type:var(--mod-' + n.mod + '-text)">' + VT.esc(n.label) + '</h2>' +
       '<p class="desc">' + VT.fmt(n.desc) + '</p>' +
 
       '<div class="sec">The ladder &mdash; what each unit adds</div>' +

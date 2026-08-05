@@ -106,23 +106,23 @@ export function CapstoneBank({ lead }: { lead?: string }) {
   if (!entries.length) return null;
 
   const leadEntry = entries.find((e) => e.slug === lead) ?? null;
-  // The lead's own track leads the groups: a learner reading a Verification
+  // The lead's own theme leads the groups: a learner reading a Verification
   // unit meets the Verification briefs before the program-level ones.
-  const first = leadEntry?.track ?? null;
+  const first = leadEntry?.theme ?? null;
   const rest = entries
     .filter((e) => e !== leadEntry)
     .sort((a, b) => {
-      if (a.track === b.track) return a.title.localeCompare(b.title);
-      if (a.track === first) return -1;
-      if (b.track === first) return 1;
-      return a.track.localeCompare(b.track);
+      if (a.theme === b.theme) return a.title.localeCompare(b.title);
+      if (a.theme === first) return -1;
+      if (b.theme === first) return 1;
+      return a.theme.localeCompare(b.theme);
     });
 
-  const groups: { track: string; items: Entry[] }[] = [];
+  const groups: { theme: string; items: Entry[] }[] = [];
   for (const e of rest) {
     const g = groups.at(-1);
-    if (g && g.track === e.track) g.items.push(e);
-    else groups.push({ track: e.track, items: [e] });
+    if (g && g.theme === e.theme) g.items.push(e);
+    else groups.push({ theme: e.theme, items: [e] });
   }
 
   return (
@@ -134,9 +134,9 @@ export function CapstoneBank({ lead }: { lead?: string }) {
       ) : null}
 
       {groups.map((g) => (
-        <div key={g.track} className="mb-6">
+        <div key={g.theme} className="mb-6">
           <div className="text-muted-foreground mb-3 flex items-center gap-3 text-xs tracking-wide uppercase select-none">
-            <span>{g.track}</span>
+            <span>{g.theme}</span>
             <span className="bg-border h-px flex-1" />
             <span>
               {g.items.length} brief{g.items.length === 1 ? "" : "s"}

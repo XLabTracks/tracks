@@ -29,7 +29,7 @@ malformed range — better a red build than a card with a blank stat.
 ```yaml
 ---
 title: Minimal Verification Regime for an Emergency Pause
-track: Verification              # free text; becomes a filter facet
+theme: Verification              # free text; becomes a filter facet
 status: ready                    # ready | draft | concept
 summary: One line, ~140 chars — what the learner walks out holding.
 team: 1-3                        # people expected; "1" or "2-4"
@@ -48,20 +48,19 @@ updated: 2026-08-04
 ---
 ```
 
-Enum values are checked; free-text values (`track`, `deliverable`, `skills`)
-are not — a new track name simply appears as a new facet.
+Enum values are checked; free-text values (`theme`, `deliverable`, `skills`)
+are not — a new theme name simply appears as a new facet.
 
 ## What belongs in this bank
 
-This is the **Verification** platform, so the bank carries the capstones whose
-prerequisites this course actually teaches: the `Verification` ones, and the
-program-level `Cross-track` ones that are about the program rather than inside
-one track.
-
-The Technical Governance and AI Governance Policy tracks have their own
-capstones in the playground repo. They are deliberately **not** here: their
-`prerequisites` name policy and TG weeks, and a capstone whose prerequisites
-do not exist is a capstone no learner on this site is prepared for.
+The whole program's capstone ideas, grouped by `theme` — themes, never
+"tracks": this site has one course, and the groupings are subject areas, not
+courses a learner can take here. The `Verification` and `Program-wide` briefs
+name units this course teaches. The `Technical Governance` and `AI Governance
+Policy` themes are additional ideas imported from the playground repo's bank;
+the courses their prerequisites named do not exist here, so those briefs
+carry no `prerequisites` — a brief must not claim preparation this site
+cannot give.
 
 Two rules follow, and nothing validates either — they are on the author:
 
@@ -104,12 +103,11 @@ node -e "global.window={};require('./data/capstone-bank.js');
 
 Per the repo rule on unverified claims. The entries in this folder were
 carried over from the playground's bank, where all 44 distinct off-site links
-were checked on **2026-08-04**; the rows below are the ones that reach the
-capstones kept here.
+in that folder were checked on **2026-08-04**, before the port.
 
 | Link | Status | Note |
 |---|---|---|
-| arXiv, LessWrong, EA Forum, aisafety.com, Substack, OpenReview, NIST, Google Docs, Airtable and personal-site links cited by these 21 entries | confirmed | HTTP 200 on 2026-08-04, in the playground repo before the port |
+| 43 of 44 — arXiv, LessWrong, EA Forum, aisafety.com, Substack, OpenReview, NIST, Google Docs, Airtable, eagroups.org, timaeus.co and personal-site links | confirmed | HTTP 200 on 2026-08-04, in the playground repo before the port |
 | `coefficientgiving.org` — the capability-evaluations RFP | unchecked | Open Philanthropy renamed to Coefficient Giving in Nov 2025; the openphilanthropy.org URL cited by the source post 301s to this host, which returns 403 to automated clients. Page title is present in search indexes. Re-check by hand. |
 
 ## Body

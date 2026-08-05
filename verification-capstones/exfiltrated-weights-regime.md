@@ -1,6 +1,6 @@
 ---
 title: When the Weights Are Already Out
-track: Verification
+theme: Verification
 status: draft
 summary: Module 3 rates weight exfiltration as the evasion route that bypasses the compute regime entirely. Specify what a verification regime does the day after it happens.
 team: 1-2

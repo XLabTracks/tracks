@@ -2,7 +2,7 @@
 
    Everything here is derived from window.CAPSTONE_BANK (generated from
    capstones/*.md by scripts/build-capstones.mjs). No entry is named in this
-   file: facets, track headings and counts all come out of the data, so a new
+   file: facets, theme headings and counts all come out of the data, so a new
    markdown file changes the page without touching this script.
 
    Trap: option counts respect every *other* facet's selection but not their
@@ -28,7 +28,7 @@ const STATUS_WORD = VT.bank.statusWord;
 /* ---------- facet definitions: which field, how it is grouped ---------- */
 
 const FACETS = [
-  { key: 'track', name: 'Track', get: e => e.track, primary: true },
+  { key: 'theme', name: 'Theme', get: e => e.theme, primary: true },
   { key: 'difficulty', name: 'Difficulty', get: e => e.difficulty, primary: true, order: ['core', 'stretch', 'advanced'] },
   { key: 'team', name: 'Team size', get: e => e.team.bucket, primary: true, order: ['Solo', 'Pair or trio', 'Team of 4+'] },
   { key: 'effort', name: 'Effort', get: e => e.effort.bucket, order: ['Up to 14 hrs', '15–20 hrs', 'Over 20 hrs'] },
@@ -40,13 +40,13 @@ const FACETS = [
 const selected = {};
 for (const f of FACETS) selected[f.key] = new Set();
 let query = '';
-let sortBy = 'track';
+let sortBy = 'theme';
 let refocus = null;
 
 /* ---------- filtering ---------- */
 
 function haystack(e) {
-  return [e.title, e.summary, e.track, e.deliverable, e.audience,
+  return [e.title, e.summary, e.theme, e.deliverable, e.audience,
     e.skills.join(' '), e.prerequisites.join(' '), e.difficulty, e.deliverableType,
     e.sources.map(s => s.label).join(' ')]
     .join(' ').toLowerCase();
@@ -80,7 +80,7 @@ function optionsFor(f) {
 /* ---------- sorting ---------- */
 
 const SORTS = {
-  track: (a, b) => a.track.localeCompare(b.track) || a.title.localeCompare(b.title),
+  theme: (a, b) => a.theme.localeCompare(b.theme) || a.title.localeCompare(b.title),
   effort: (a, b) => (a.effort.min - b.effort.min) || (a.effort.max - b.effort.max) || a.title.localeCompare(b.title),
   team: (a, b) => (a.team.min - b.team.min) || (a.team.max - b.team.max) || a.title.localeCompare(b.title),
   duration: (a, b) => (a.duration.weeks - b.duration.weeks) || a.title.localeCompare(b.title),
@@ -129,7 +129,7 @@ function cardFor(e) {
   card.href = '#' + e.slug;
 
   const top = el('div', 'card-top');
-  top.appendChild(el('span', 'card-track', e.track));
+  top.appendChild(el('span', 'card-theme', e.theme));
   top.appendChild(el('span', 'spacer'));
   const status = el('span', 'status');
   status.appendChild(el('span', 'g', STATUS_GLYPH[e.status] || '○'));
@@ -165,13 +165,13 @@ function render() {
   const visible = ENTRIES.filter(e => matches(e)).sort(SORTS[sortBy]);
 
   grid.replaceChildren();
-  if (sortBy === 'track') {
+  if (sortBy === 'theme') {
     let current = null;
     for (const e of visible) {
-      if (e.track !== current) {
-        current = e.track;
-        const n = visible.filter(x => x.track === current).length;
-        const head = el('div', 'track-head');
+      if (e.theme !== current) {
+        current = e.theme;
+        const n = visible.filter(x => x.theme === current).length;
+        const head = el('div', 'theme-head');
         head.appendChild(el('span', 'name', current));
         head.appendChild(el('span', 'rule'));
         head.appendChild(el('span', 'n', `${n} capstone${n === 1 ? '' : 's'}`));
@@ -283,7 +283,7 @@ function openSheet(slug) {
   sheetBody.replaceChildren();
 
   const eyebrow = el('div', 'sheet-eyebrow');
-  eyebrow.appendChild(el('span', null, e.track));
+  eyebrow.appendChild(el('span', null, e.theme));
   const status = el('span', 'status');
   status.appendChild(el('span', 'g', STATUS_GLYPH[e.status] || '○'));
   status.appendChild(el('span', null, STATUS_WORD[e.status] || e.status));

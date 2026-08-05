@@ -1,6 +1,6 @@
 ---
 title: Can You Prove This Model Came From That Run?
-track: Verification
+theme: Verification
 status: draft
 summary: Proof-of-learning is in Module 2.1 as fragile and spoofed; model-heritage inference is an open problem next door. Assess what either can support and what a regime could rest on them.
 team: 1-2

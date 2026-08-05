@@ -1,6 +1,6 @@
 ---
 title: Design a Cohort Tabletop Exercise
-track: Cross-track
+theme: Program-wide
 status: ready
 summary: Build a runnable three-hour tabletop for the next cohort — roles, injects, scoring, and a facilitator guide someone else can run without you.
 team: 3-5

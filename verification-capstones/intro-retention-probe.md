@@ -1,6 +1,6 @@
 ---
 title: What Do Intro Graduates Actually Retain?
-track: Cross-track
+theme: Program-wide
 status: concept
 summary: The program's entry assumptions rest on retention figures its own docs call directional. Measure them against this cohort and hand back what the tiered hints should absorb.
 team: 2-3

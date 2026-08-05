@@ -1,6 +1,6 @@
 ---
 title: Spot a Training Run Without Looking Inside It
-track: Verification
+theme: Verification
 status: draft
 summary: Could a verifier tell a large training run from utilisation signatures alone — no workload access, no code? Work out what the signature is and how cheaply it is faked.
 team: 1-2

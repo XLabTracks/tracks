@@ -6,7 +6,7 @@
  * The capstone bank has no hardcoded cards. Drop a markdown file into
  * capstones/, run this, and the card exists: hero stats from the front
  * matter, detail panel from the body, filter facets derived from whatever
- * values happen to be in the folder. A new track name or deliverable type
+ * values happen to be in the folder. A new theme name or deliverable type
  * becomes a new filter chip without anyone editing the page.
  *
  *   npm run verification:capstones           # write the data file
@@ -33,7 +33,7 @@ const OUT = path.join(ROOT, 'public', 'verification', 'data', 'capstone-bank.js'
 // --check, so neither can go stale on its own.
 const OUT_JSON = path.join(ROOT, 'src', 'content', 'verification', 'capstone-bank.json');
 
-const REQUIRED = ['title', 'track', 'status', 'summary', 'team', 'effort_hours',
+const REQUIRED = ['title', 'theme', 'status', 'summary', 'team', 'effort_hours',
   'duration', 'difficulty', 'deliverable', 'deliverable_type', 'mentor',
   'skills', 'updated'];
 const OPTIONAL = ['audience', 'prerequisites', 'sources'];
@@ -224,7 +224,7 @@ function weeks(duration, file) {
 }
 
 /* A source is either a bare reference to something in this repo
-   (`verification-track-outline.md §4.2`) or a markdown link out to the thing
+   (a program doc, say) or a markdown link out to the thing
    it actually came from. Both end up as {label, href}; href is null for the
    bare ones and the page renders those as plain text. Anything that looks
    like a half-written link — a bare URL, or `](` in a string that did not
@@ -309,7 +309,7 @@ for (const file of files) {
     slug,
     source: `verification-capstones/${file}`,
     title: data.title,
-    track: data.track,
+    theme: data.theme,
     status: data.status,
     summary: data.summary,
     team: { min: team.min, max: team.max, label: `${fmtRange(team)} ${team.max === 1 ? 'person' : 'people'}`, bucket: teamBucket(team) },

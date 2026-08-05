@@ -1,6 +1,6 @@
 ---
 title: Treaty Clause Redraft
-track: Verification
+theme: Verification
 status: draft
 summary: Take the verification articles of a real arms-control treaty and redraft them for frontier AI — clause by clause, with the disanalogies marked.
 team: 1-2

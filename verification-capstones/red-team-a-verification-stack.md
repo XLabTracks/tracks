@@ -1,6 +1,6 @@
 ---
 title: Red-Team a Verification Stack
-track: Verification
+theme: Verification
 status: ready
 summary: Take a published verification proposal and break it — a structured evasion report with detection probabilities and the patch each route demands.
 team: 2-3

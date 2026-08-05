@@ -1,6 +1,6 @@
 ---
 title: Train It in Pieces, Under Every Threshold
-track: Verification
+theme: Verification
 status: draft
 summary: Evasion scenario 8 says a run can be fragmented below the line. Work out how far that actually goes today, what it costs, and which threshold designs survive it.
 team: 1-2

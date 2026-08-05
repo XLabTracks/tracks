@@ -4,8 +4,8 @@
    <body>, so any path that hides the overlay must clear that too or the page
    underneath is left unscrollable.
 
-   Trap: cards are uniform hairline on all four sides. Track, difficulty and
-   status are said in words and glyphs inside the card — there is no per-track
+   Trap: cards are uniform hairline on all four sides. Theme, difficulty and
+   status are said in words and glyphs inside the card — there is no per-theme
    tint, and adding one would be the half-painted border the house rules
    forbid. */
 
@@ -153,24 +153,24 @@
   margin-top: 22px;
 }
 
-/* The track heading spans the whole grid so the run of cards under it reads
+/* The theme heading spans the whole grid so the run of cards under it reads
    as one group rather than a stray full-width card. */
-.track-head {
+.theme-head {
   grid-column: 1 / -1;
   display: flex;
   align-items: center;
   gap: 12px;
   margin-top: 10px;
 }
-.track-head .name {
+.theme-head .name {
   font-family: var(--mono);
   font-size: var(--fs-2xs);
   letter-spacing: .06em;
   text-transform: uppercase;
   color: var(--brand-ink);
 }
-.track-head .rule { flex: 1; height: var(--hairline); background: var(--border); }
-.track-head .n { font-family: var(--mono); font-size: var(--fs-2xs); color: var(--muted-foreground); }
+.theme-head .rule { flex: 1; height: var(--hairline); background: var(--border); }
+.theme-head .n { font-family: var(--mono); font-size: var(--fs-2xs); color: var(--muted-foreground); }
 
 .cap-card {
   display: flex;
@@ -187,7 +187,7 @@
 .cap-card:hover { border-color: var(--ring); transform: translateY(-2px); box-shadow: var(--shadow-soft); }
 
 .card-top { display: flex; align-items: center; gap: 8px; }
-.card-track {
+.card-theme {
   font-family: var(--mono);
   font-size: var(--fs-2xs);
   letter-spacing: .05em;
@@ -403,7 +403,7 @@
 
 /* The whole card is one link, so a drag anywhere inside it is a mis-drag.
    The brief's prose lives in the sheet, which stays selectable. */
-.cap-card, .cap-card *, .sort select, .sort option, .track-head {
+.cap-card, .cap-card *, .sort select, .sort option, .theme-head {
   user-select: none;
   -webkit-user-select: none;
   -webkit-touch-callout: none;

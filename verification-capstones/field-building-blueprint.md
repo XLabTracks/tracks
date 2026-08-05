@@ -1,6 +1,6 @@
 ---
 title: Blueprint a Field-Building Intervention
-track: Cross-track
+theme: Program-wide
 status: draft
 summary: Design one field-building intervention — an event, a fellowship, a small organisation — to the point where someone with the budget could run it, and say how you would know it worked.
 team: 2-4

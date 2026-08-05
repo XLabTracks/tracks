@@ -230,6 +230,15 @@
   counter-reset: footnote;
 }
 
+/* A wide table scrolls inside its own box — the page must never scroll
+   sideways. `display: block` on the table element is what makes overflow-x
+   apply; the cells keep their table layout inside it. */
+.lesson-body table {
+  display: block;
+  max-width: 100%;
+  overflow-x: auto;
+}
+
 /* Anchor targets in sectioned lessons (the docked "In this lesson" nav) must
    clear the sticky site header — same clearance as .paper-reader [id]. On
    mobile a second sticky bar (the "Contents" sheet trigger) sits under the

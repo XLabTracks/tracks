@@ -22,6 +22,13 @@ export interface Track {
   /** How prerequisites gate access for this track's modules. */
   prerequisiteEnforcement: PrerequisiteEnforcement;
   estimatedHours?: number;
+  /**
+   * Lessons on this track are read one part at a time — a part per top-level
+   * heading — with a jump strip, a position meter and a whole-lesson toggle
+   * (LessonPartsReader). A reading-experience choice per track, not a
+   * per-lesson one, so a learner's expectations hold across a whole course.
+   */
+  chunkedReading?: boolean;
 }
 
 export interface Module {

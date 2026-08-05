@@ -22,6 +22,7 @@ import {
 } from "@/lib/progress";
 import { Breadcrumbs } from "@/components/layout/breadcrumbs";
 import { LessonContent } from "@/components/mdx/lesson-content";
+import { LessonPartsReader } from "@/components/learn/lesson-parts-reader";
 import { LessonNav } from "@/components/layout/lesson-nav";
 import { LessonCompleteButton } from "@/components/learn/lesson-complete-button";
 import { LessonTracker } from "@/components/learn/lesson-tracker";
@@ -146,7 +147,13 @@ async function LessonItemPage({
       {/* .lesson-reader scopes the sidebar's scroll-spy (see use-scroll-spy)
           and gives heading anchors sticky-header clearance. */}
       <div className="lesson-reader mt-6">
-        <LessonContent contentRef={lesson.contentRef} title={lesson.title} />
+        {track.chunkedReading ? (
+          <LessonPartsReader>
+            <LessonContent contentRef={lesson.contentRef} title={lesson.title} />
+          </LessonPartsReader>
+        ) : (
+          <LessonContent contentRef={lesson.contentRef} title={lesson.title} />
+        )}
       </div>
 
       {userId ? (

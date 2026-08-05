@@ -393,6 +393,20 @@ add must reduce the duplication, never widen it.
   complete, so it gates nothing. The outline's instructions to whoever
   finishes a section are kept but visibly marked as author notes, so they can
   never read as learner-facing prose.
+- **Lessons are read one part at a time** on tracks flagged
+  `chunkedReading` (Verification is): `LessonPartsReader` (client) chunks the
+  rendered body at its top-level headings — h2 alone when a lesson has
+  enough, h3 then h4 folded in when it doesn't — with a jump strip, a
+  position meter (the counter beside it is the reading; the bar is
+  decoration), `?p=` deep links and a whole-lesson toggle persisted under
+  `vt-reading-mode` (carried over from the static course). Parts are hidden,
+  never unmounted — embedded widgets hold live state — and in-page anchors
+  into a hidden part reveal it before scrolling. Nothing auto-completes:
+  the meter reads position, Mark complete stays the only completion channel.
+  Corollary: a lesson with no headings is one unchunkable wall — long
+  lessons must carry real headings, not bold lines pretending (that is what
+  the scoping-actors/covert-* repairs restored), and a wide table scrolls in
+  its own box (`.lesson-body table` in globals.css), never the page.
 - **Bloom levels are gone on purpose.** They are curriculum-design vocabulary,
   not a learner's. If you need a second channel beside a module hue, use the
   module number — that is what the star numerals carry.

@@ -410,7 +410,7 @@
 
     if (u.bank) {
       const html = bankPart(u.bank);
-      if (html) out.push({ label: 'Choose a brief', title: 'Choose a brief', html: html });
+      if (html) out.push({ label: 'Choose a brief', title: 'Choose a brief', group: tailGroup, html: html });
     }
 
     if (u.output) {

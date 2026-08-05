@@ -7,6 +7,7 @@ import { ReportConstructor } from "./report-constructor";
 import { VerificationTimelineGame } from "./verification-timeline-game";
 import { InteractiveMap } from "./interactive-map";
 import { VerificationLandscape } from "./verification-landscape";
+import { CollectionMap } from "./collection-map";
 
 /**
  * Native React widgets ported from the standalone HTML pages, keyed by the same
@@ -24,6 +25,7 @@ export const verificationWidgets: Record<
   "verification-timeline-game": VerificationTimelineGame,
   "interactive-map": InteractiveMap,
   "verification-landscape": VerificationLandscape,
+  "collection-map": CollectionMap,
 };
 
 export function getVerificationWidget(

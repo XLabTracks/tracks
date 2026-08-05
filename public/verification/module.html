@@ -29,13 +29,17 @@
 </head>
 <body class="player">
 
+<!-- The rail is nineteen unit links ahead of the reading in the DOM, so this
+     is the only quick way to a keyboard learner's part strip. -->
+<a class="skip" href="#main">Skip to content</a>
+
 <div data-topbar></div>
 
 <div class="shell">
 
   <aside class="rail" data-rail aria-label="Track index"></aside>
 
-  <main class="work">
+  <main class="work" id="main">
     <nav class="crumbs" aria-label="Breadcrumb" data-crumbs></nav>
     <article class="unit" data-unit></article>
     <nav class="pager" data-pager aria-label="Unit navigation"></nav>

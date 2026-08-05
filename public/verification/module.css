@@ -111,6 +111,95 @@
 
 .block-gap { margin-top: 28px; }
 
+/* ---------- parts ---------- */
+
+/* The unit is read one part at a time and the strip above it is both the
+   index and the way out of the part you are in. Every part stays in the DOM;
+   `hidden` is the only difference between the one you are on and the rest, so
+   a half-answered exercise survives a jump and the whole-unit view is a flag
+   flip rather than a re-render.
+
+   Trap: a hidden part is out of find-in-page and out of print. The toggle
+   that lays the unit out whole is the way back to both — it must stay
+   visible, and it must never be the thing that scrolls away. */
+.parts {
+  max-width: 68ch;
+  margin: 2px 0 24px;
+  padding: 12px 0;
+  border-top: var(--hairline) solid var(--border);
+  border-bottom: var(--hairline) solid var(--border);
+}
+.parts-head { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; }
+.parts-head .progress-row { flex: 0 1 240px; }
+.parts-head .btn { margin-left: auto; }
+
+.part-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 12px;
+  list-style: none;
+}
+.part-jump {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 7px;
+  padding: 5px 11px;
+  border: var(--hairline) solid var(--border);
+  border-radius: 999px;
+  background: var(--background);
+  color: var(--muted-foreground);
+  font: inherit;
+  font-size: 13.5px;
+  line-height: 1.5;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background .14s ease, color .14s ease;
+}
+.part-jump:hover { background: var(--muted); color: var(--foreground); }
+/* The part you are on says "now" and is named by aria-current, so a learner
+   who cannot separate the fill from the ground loses nothing. */
+.part-jump.now {
+  background: var(--muted);
+  color: var(--foreground);
+  border-color: color-mix(in srgb, var(--brand-ink) 40%, var(--border));
+  font-weight: 600;
+}
+.part-jump .n { font-family: var(--mono); font-size: 11px; color: var(--muted-foreground); }
+.part-jump.now .n { color: var(--brand-ink); }
+.part-jump.now::after {
+  content: 'now';
+  font-family: var(--mono);
+  font-size: 10.5px;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--brand-ink);
+}
+
+/* Offset for the sticky 56px header, so a part landed on from the strip in
+   whole-unit mode does not start underneath it. */
+.part { scroll-margin-top: 68px; }
+.part[hidden] { display: none; }
+/* Focus is moved here on a jump for screen readers only — the section is not
+   in the tab order, so drawing a ring on it would mark a place nobody is. */
+.part:focus, .part:focus-visible { outline: none; }
+.part + .part { margin-top: 32px; }
+.part-title { font-size: 19px; margin-bottom: 12px; }
+
+.part-pager {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  max-width: 68ch;
+  margin-top: 26px;
+}
+.part-pager .counter { margin: 0 auto; }
+
+/* Trap: `display: flex` on either pager beats the UA rule for [hidden], so a
+   row hidden from JS stays on screen without this. */
+.pager[hidden], .part-pager[hidden] { display: none; }
+
 .coverage {
   max-width: 68ch;
   padding: 14px 17px;
@@ -177,7 +266,11 @@
   padding-top: 18px;
   border-top: var(--hairline) solid var(--border);
 }
-.pager .counter { margin: 0 auto; }
+/* The meter here reads completion — the counter beside it says so in words,
+   because the strip further up carries a meter that reads position and the
+   two must not be mistaken for each other. It moves when Mark complete is
+   pressed, and at no other time. */
+.pager .track-of { flex: 0 1 250px; margin: 0 auto; }
 .pager .done-state { font-family: var(--mono); font-size: 12px; color: var(--brand-ink); }
 .pager .done-state::before { content: '✓ '; }
 
@@ -209,11 +302,18 @@
   .rail-box[open] .rail-summary { margin-bottom: 10px; border-bottom: var(--hairline) solid var(--border); }
   .work { padding: 20px 16px 60px; }
   .unit-head h1 { font-size: 25px; }
+  /* On a phone the strip is the tallest thing above the reading, so the head
+     stacks and the rows tighten rather than pushing the part below the fold. */
+  .parts-head .progress-row { flex: 1 1 100%; }
+  .parts-head .btn { margin-left: 0; }
+  .part-jump { font-size: 13px; padding: 5px 9px; }
 }
 
 /* The rail is navigation top to bottom — rows, their numbers, their labels
-   and the exit. None of it is text anybody means to select. */
-.rail, .rail a, .rail .num, .rail .lbl, .rail-head .exit, .rail-summary {
+   and the exit. None of it is text anybody means to select. The part strip
+   and both pagers are the same: an index, not the reading. */
+.rail, .rail a, .rail .num, .rail .lbl, .rail-head .exit, .rail-summary,
+.part-jump, .part-jump .n, .part-jump .lbl, .parts-head, .part-pager {
   user-select: none;
   -webkit-user-select: none;
   -webkit-touch-callout: none;

@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { LogOut } from "lucide-react";
 import { useAuth } from "@workos-inc/authkit-nextjs/components";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -30,8 +31,30 @@ import {
  * swap a single button by probing the state route in sync.js. So the menu is
  * on every app-served route and the button remains on the no-build pages.
  */
+/**
+ * A course with its own cabinet, and the routes it owns.
+ *
+ * One sign-in and one identity, but a cabinet per course: what a learner has
+ * done lives in the course, not in the account. Control gets a row here the
+ * day it has a cabinet of its own — that is the whole extension point, and
+ * `href` is the only thing a new one needs.
+ */
+const CABINETS: { label: string; href: string; owns: (p: string) => boolean }[] =
+  [
+    {
+      label: "Verification account",
+      href: "/verification/account",
+      owns: (p) =>
+        p === "/tracks/verification" ||
+        p.startsWith("/tracks/verification/") ||
+        p.startsWith("/verification/"),
+    },
+  ];
+
 export function AccountMenu() {
   const { user, loading, signOut } = useAuth();
+  const pathname = usePathname() ?? "";
+  const cabinet = CABINETS.find((c) => c.owns(pathname));
   if (loading || !user) return null;
 
   return (
@@ -54,8 +77,13 @@ export function AccountMenu() {
           {user.email}
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
+        {cabinet && (
+          <DropdownMenuItem asChild>
+            <Link href={cabinet.href}>{cabinet.label}</Link>
+          </DropdownMenuItem>
+        )}
         <DropdownMenuItem asChild>
-          <Link href="/account">Account</Link>
+          <Link href="/account">{cabinet ? "Name and email" : "Account"}</Link>
         </DropdownMenuItem>
         <DropdownMenuItem asChild>
           <Link href="/classrooms">My classrooms</Link>

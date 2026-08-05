@@ -43,6 +43,12 @@
   --ok: #007c5a;
   --no: #b34700;
 
+  /* Real errors only — a form that will not submit, a widget that
+     failed. Undefined here, it fell through to the app's red-600 and
+     was the one un-themed colour on the page. It is --no rather than
+     the maroon so an error still reads as an error and not as brand. */
+  --destructive: #b34700;
+
   --radius: 14px;
   --radius-sm: 8px;
   --hairline: 1px;
@@ -90,6 +96,7 @@
 
   --ok: #3ecfa4;
   --no: #ff8f4d;
+  --destructive: #ff8f4d;
 
   --shadow-soft: 0 1px 2px rgba(0, 0, 0, .4);
   --shadow-soft-lg: 0 12px 40px rgba(0, 0, 0, .5);
@@ -122,6 +129,7 @@
 
   --ok: #6bffcb;
   --no: #ffab70;
+  --destructive: #ffab70;
 
   --radius: 8px;
   --radius-sm: 6px;

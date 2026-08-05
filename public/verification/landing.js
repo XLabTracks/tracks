@@ -377,53 +377,9 @@
     }).join('');
   }
 
-  /* Entry point. "Continue" only appears once something is actually done —
-     offering to continue a course nobody has started is a lie about state. */
-  var ways = document.querySelector('[data-ways]');
-  var note = document.querySelector('[data-ways-note]');
-  if (ways) {
-    var p = VT.trackProgress();
-    var next = VT.nextUnit();
-    var primary, tail;
-
-    if (!next) {
-      primary = '<a class="btn" href="capstone.html">Open the capstone workspace</a>';
-      tail = 'All ' + p.total + ' units are complete. The capstone is what is left.';
-    } else if (p.done > 0) {
-      primary = '<a class="btn" href="module.html?m=' + encodeURIComponent(next.module.id) +
-        '&u=' + encodeURIComponent(next.unit.id) + '">Continue — ' +
-        esc(next.unit.id + ' ' + next.unit.title) + '</a>';
-      tail = p.done + ' of ' + p.total + ' units done. Progress is kept in this browser; ' +
-        'sign in to attach it to your account.';
-    } else {
-      primary = '<a class="btn" href="module.html?m=' + encodeURIComponent(next.module.id) +
-        '&u=' + encodeURIComponent(next.unit.id) + '">Start — ' +
-        esc(next.unit.id + ' ' + next.unit.title) + '</a>';
-      tail = 'No account needed to start. Signing in saves your progress and lets you join a cohort.';
-    }
-
-    ways.innerHTML = primary + '<a class="btn outline" href="track.html">See the whole track</a>';
-    if (note) note.textContent = tail;
-  }
-
-  /* The stat row is derived, so it cannot claim a number the course does not
-     have. Runtime is deliberately absent: the outline states a time only for
-     M0 and M1, and a total would be invented. */
-  var stats = document.querySelector('[data-stats]');
-  if (stats) {
-    var units = C.modules.reduce(function (n, m) { return n + m.units.length; }, 0);
-    var writes = C.modules.reduce(function (n, m) {
-      return n + m.units.filter(function (u) { return u.output; }).length;
-    }, 0);
-    stats.innerHTML = [
-      ['Modules', C.modules.length],
-      ['Units', units],
-      ['Skills', S ? S.nodes.length : '—'],
-      ['Written outputs', writes]
-    ].map(function (s) {
-      return '<div><dt>' + esc(s[0]) + '</dt><dd>' + esc(s[1]) + '</dd></div>';
-    }).join('');
-  }
+  /* The hero's two ways in and its stat row are written in landing.html and
+     stay there. They are the course's pitch, not a readout of this browser's
+     progress — a returning learner picks up from the track page. */
 
   /* Module cards. The accent is decorative — the module number is printed in
      the chip beside it, so the hue is never the only thing carrying it. */

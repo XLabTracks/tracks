@@ -93,12 +93,15 @@
       '<a href="landing.html">Home</a> / <a href="track.html">Track</a> / Module ' + m.n +
       ' &mdash; ' + VT.esc(m.title);
 
-    const chips = [
-      '<span class="chip">' + VT.esc(u.kind) + '</span>',
-      '<span class="chip">' + VT.esc(u.mins) + '</span>'
-    ];
-    if (u.optional) chips.push('<span class="chip">optional</span>');
-    if (u.exercise) chips.push('<span class="chip accent">exercise</span>');
+    /* What a unit *is* — kind, length, whether it carries an exercise — is
+       description, so it reads as one line of text like the track rows do.
+       A pill is reserved for state that changes: only "complete" gets one,
+       and it carries the word and a tick, never a tint on its own. */
+    const facts = [u.kind, u.mins];
+    if (u.optional) facts.push('optional');
+    if (u.exercise) facts.push('exercise');
+    if (u.output) facts.push('written output');
+    const chips = ['<span class="unit-facts">' + VT.esc(facts.join(' · ')) + '</span>'];
     if (done) chips.push('<span class="chip done">complete</span>');
 
     let html =

@@ -89,7 +89,15 @@
   line-height: 1.55;
   color: var(--muted-foreground);
 }
-.unit-chips { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 24px; }
+.unit-chips { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin-bottom: 24px; }
+
+/* Description, not a badge row: what the unit is reads as one muted line, the
+   same way the track rows read. Only state gets a pill beside it. */
+.unit-facts {
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--muted-foreground);
+}
 
 .unit .prose { max-width: 68ch; }
 .unit .prose h4 {

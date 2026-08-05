@@ -343,21 +343,29 @@ window.COURSE = {
            it shipped there (the row-by-row log is
            verification-module-2-2-design.md §7 in that repo).
 
-           Four sources, and their reuse terms differ, so the unit's own
-           citations differ too. The two arXiv papers are CC BY 4.0 and are
-           quoted directly with attribution. RAND RR-A3686-1 is paraphrased,
-           with a single sentence quoted from its published summary: its
-           permissions page was not reachable at the time of writing, so it is
-           treated as all-rights-reserved. The Carnegie piece is paraphrased
-           and never quoted. Every {src} line carries the link, so a learner
-           can always reach the original.
+           Four sources, four sets of reuse terms, so the unit cites them four
+           ways. The two arXiv papers are CC BY 4.0: quoted freely, attributed
+           in every {src} line. RAND RR-A3686-1 and the Carnegie piece are
+           both all-rights-reserved, so what is reproduced from them is the
+           text their publishers put on the open web — RAND's own Key
+           Takeaways and Recommendations, four short passages from the
+           Carnegie article — each in a {quote} card that names the work, the
+           part of it, and the authors before the words themselves, and links
+           out. Their body arguments stay paraphrase with page citations.
+
+           Trap: the RAND body PDF is AES-encrypted. Its permission bits do
+           allow text extraction (/P -1036 sets bit 5), so this is a locked
+           door with a sign saying you may enter — but nothing beyond the
+           published web text has been lifted through it, and a longer excerpt
+           should be a decision someone makes on purpose rather than a side
+           effect of a script that could.
 
            Verification log — one open row:
-             claim                        | source | status
-             RAND reuse/quotation terms   | rand.org/pubs/permissions.html | UNCHECKED
-               (HTTP 403 on fetch, 2026-08-05). Handled by quoting nothing
-               beyond the published summary sentence. Recheck before any
-               longer excerpt is added. */
+             claim                      | source | status
+             RAND reuse/quotation terms | rand.org/pubs/permissions.html | UNCHECKED
+               (HTTP 403 on fetch, 2026-08-05). Handled by reproducing only
+               what RAND publishes openly on the report's own landing page.
+               Recheck before excerpting from the PDF body. */
 
         { id: '2.2', title: 'Cloud', kind: 'interactive', mins: '~2 hours',
           goal: 'The provider sits between the customer and the machines. What can the landlord of the compute see, record, verify, and switch off — and where does that oversight run out?',
@@ -644,6 +652,15 @@ window.COURSE = {
         { p: 'Suppose the regime works exactly as designed: registrations filed, declarations submitted, thresholds set. A customer files every form — and trains a dangerous model anyway. Nothing in the filing cabinet stops them. **If compliance is defined as paperwork, the regime measures paperwork.**' },
         { p: 'A 2025 RAND study modeled this as a game between a cloud provider (the monitor) and an evader, and reached a blunt finding: providers “might not be able to report and detect AI training” if they are obligated to monitor “based only on floating-point operation thresholds.”' },
         
+          { quote: {
+            t: 'Strategies and Detection Gaps in a Game-Theoretic Model of Compute Governance',
+            url: 'https://www.rand.org/pubs/research_reports/RRA3686-1.html',
+            what: 'Key Takeaways, published with the report',
+            by: 'Moon, Vedula, Geneson & Bar-on · RAND Corporation, RR-A3686-1 · 2025',
+            text: [
+              'Cloud service providers might not be able to report and detect AI training if they are only obligated to monitor and report activity based on floating-point operation thresholds in future AI governance policy.',
+              'In the future, many types of capable AI models will likely exist whose training will be hard to detect. The authors outline strategies for cloud service providers that could aid with AI training detection in cloud computing environments.'
+            ] } },
         { src: 'Quoted from the published summary of Moon, Vedula, Geneson & Bar-on, *Strategies and Detection Gaps in a Game-Theoretic Model of Compute Governance*, RAND RR-A3686-1 (2025) — [rand.org](https://www.rand.org/pubs/research_reports/RRA3686-1.html).' },
         { h: 'Sequential training' },
         { p: 'The winning move is embarrassingly simple. Take BLOOM — a real, public 176-billion-parameter model, about 5.8 × 10²³ operations of training. The threshold in RAND’s setup (from the executive order’s rule for bio-sequence models): 10²³ operations per account. Trained in one piece, BLOOM crosses it.' },
@@ -688,6 +705,16 @@ window.COURSE = {
         { p: 'The lesson is not “thresholds are useless.” A tripwire that forces evaders into slower, costlier, stranger behavior is doing work — the distortion itself is a signal.' },
         { p: 'The lesson is about posture: **assume your rule is being read by the person it is aimed at.** RAND’s recommendation to policymakers is a standing habit, not a one-off fix: systematically hunt for detection gaps, and re-hunt as the technology moves.' },
         
+          { quote: {
+            t: 'Strategies and Detection Gaps in a Game-Theoretic Model of Compute Governance',
+            url: 'https://www.rand.org/pubs/research_reports/RRA3686-1.html',
+            what: 'Recommendations, published with the report',
+            by: 'Moon, Vedula, Geneson & Bar-on · RAND Corporation, RR-A3686-1 · 2025',
+            text: [
+              'To develop effective AI governance, policymakers should support efforts to find detection gaps in compute-based monitoring schemes.',
+              'Policymakers should continue to pursue both compute- and noncompute-based AI governance.',
+              'Continuing research into effective thresholds for compute monitoring is required to create a robust compute-based monitoring framework that can adapt to technological progress.'
+            ] } },
         { src: 'Moon, Vedula, Geneson & Bar-on, *Strategies and Detection Gaps in a Game-Theoretic Model of Compute Governance*, RAND RR-A3686-1 (2025) — [rand.org](https://www.rand.org/pubs/research_reports/RRA3686-1.html), recommendations.' },
         { h: 'Same move, new domain' },
         { p: 'You have now seen the same play twice: deposits at $9,900, and training runs at 10²² a slice. Any fixed line invites slicing; any per-account rule invites more accounts.' },
@@ -713,17 +740,43 @@ window.COURSE = {
         { p: 'The policy record so far is sobering (as of mid-2026): the US AI Diffusion Rule — an attempt to govern compute access globally — was suspended before it took effect, and legislation to treat remote compute access like an export (the Remote Access Security Act) passed the House, stalled in the Senate, and has since been revived.' },
         { p: 'Controls that read cleanly on paper have struggled to survive politics.' },
         
-        { src: 'Tan, *The Geopolitical Debates Over Controlling Cloud Compute*, Carnegie Endowment (2026) — [carnegieendowment.org](https://carnegieendowment.org/research/2026/05/the-geopolitical-debates-over-controlling-cloud-compute). Paraphrased, not quoted.' },
+          { quote: {
+            t: 'The Geopolitical Debates Over Controlling Cloud Compute',
+            url: 'https://carnegieendowment.org/research/2026/05/the-geopolitical-debates-over-controlling-cloud-compute',
+            what: 'On the cloud loophole, and on how it is worked',
+            by: 'Noah Tan · Carnegie Endowment for International Peace · 5 May 2026',
+            text: [
+              'It is logically inconsistent to restrict the sale of physical chips while allowing their computing power to be accessed remotely.',
+              'Foreign actors can distribute frontier training workloads across multiple data center clusters to obscure their total compute footprint, anonymous shell companies can obfuscate beneficial ownership, and virtual private networks can mask IP addresses.'
+            ] } },
+        { src: 'Tan, *The Geopolitical Debates Over Controlling Cloud Compute*, Carnegie Endowment (2026) — [carnegieendowment.org](https://carnegieendowment.org/research/2026/05/the-geopolitical-debates-over-controlling-cloud-compute).' },
         { h: 'The bill for the controls' },
         { p: 'Fairness requires the other column. The vetting burden lands on **providers**: compliance costs up, sales lost, and thin government capacity to backstop them.' },
         { p: 'Over-broad rules push foreign customers off covered infrastructure entirely — costing revenue, relationships, and influence over the ecosystem’s standards. The customers who leave take their visibility with them.' },
         { p: 'This is the effectiveness-feasibility trade from Module 0, wearing cloud clothes: the strictest scheme on paper can be the weakest in the world, because **coverage is the thing that makes the scheme work at all**.' },
         
-        { src: 'Tan, *The Geopolitical Debates Over Controlling Cloud Compute*, Carnegie Endowment (2026) — [carnegieendowment.org](https://carnegieendowment.org/research/2026/05/the-geopolitical-debates-over-controlling-cloud-compute). Paraphrased, not quoted.' },
+          { quote: {
+            t: 'The Geopolitical Debates Over Controlling Cloud Compute',
+            url: 'https://carnegieendowment.org/research/2026/05/the-geopolitical-debates-over-controlling-cloud-compute',
+            what: 'On who pays for the controls',
+            by: 'Noah Tan · Carnegie Endowment for International Peace · 5 May 2026',
+            text: [
+              'The burden of vetting end users would fall largely on cloud service providers themselves, driving up costs and reducing revenue.',
+              'Restrictions risk pushing countries to decrease their dependence on U.S. chips in favor of more convenient Chinese alternatives.'
+            ] } },
+        { src: 'Tan, *The Geopolitical Debates Over Controlling Cloud Compute*, Carnegie Endowment (2026) — [carnegieendowment.org](https://carnegieendowment.org/research/2026/05/the-geopolitical-debates-over-controlling-cloud-compute).' },
         { h: 'Visibility vs privacy' },
         { p: 'One more honest tension. Providers generally say they do *not* monitor customer workloads — and they have the technical capability to. Every monitoring mandate in this module spends some of that promise. The costs fall on every honest customer; the benefits only materialize against the rare dishonest one.' },
         { p: 'There are designs that spend less privacy: thresholds that exempt small users, metadata-only monitoring, report-on-suspicion. But “less” is not “none,” and a regime that pretends the cost is zero will lose the argument in public. Carry the tension — it is load-bearing in the capstone.' },
-        { src: 'Tan, *The Geopolitical Debates Over Controlling Cloud Compute*, Carnegie Endowment (2026) — [carnegieendowment.org](https://carnegieendowment.org/research/2026/05/the-geopolitical-debates-over-controlling-cloud-compute). Paraphrased, not quoted.' },
+          { quote: {
+            t: 'The Geopolitical Debates Over Controlling Cloud Compute',
+            url: 'https://carnegieendowment.org/research/2026/05/the-geopolitical-debates-over-controlling-cloud-compute',
+            what: 'On what providers say, and what they can do',
+            by: 'Noah Tan · Carnegie Endowment for International Peace · 5 May 2026',
+            text: [
+              'Cloud providers generally say they do not monitor their users\' workloads, in part to protect customer privacy, but they have the technical capability to do so.'
+            ] } },
+        { src: 'Tan, *The Geopolitical Debates Over Controlling Cloud Compute*, Carnegie Endowment (2026) — [carnegieendowment.org](https://carnegieendowment.org/research/2026/05/the-geopolitical-debates-over-controlling-cloud-compute).' },
         { check: {
           q: 'Which of these is fully outside what cloud-layer oversight can see?',
           options: [
@@ -787,21 +840,21 @@ window.COURSE = {
           ],
           readings: [
             { t: 'Governing Through the Cloud: The Intermediary Role of Compute Providers in AI Regulation',
-              a: 'Heim, Fist, Egan, Huang, Zekany, Trager, Osborne & Zilberman', y: '2024',
+              a: 'Heim, Fist, Egan, Huang, Zekany, Trager, Osborne & Zilberman', y: '2024', len: 'arXiv:2403.08501',
               url: 'https://arxiv.org/abs/2403.08501', lic: 'CC BY 4.0',
               note: 'The backbone of this unit: the four provider roles, the three visibility layers, and the case that non-confidential metadata already shows a workload\'s scale and often its type. Passages are quoted here under the paper\'s CC BY 4.0 licence.' },
             { t: 'Oversight for Frontier AI through a Know-Your-Customer Scheme for Compute Providers',
-              a: 'Egan & Heim', y: '2023',
+              a: 'Egan & Heim', y: '2023', len: 'arXiv:2310.13625',
               url: 'https://arxiv.org/abs/2310.13625', lic: 'CC BY 4.0',
               note: 'The KYC machinery behind 2.2.2 — identity, beneficial ownership, suspension, and the banking lineage the scheme is borrowed from. Quoted under CC BY 4.0.' },
             { t: 'Strategies and Detection Gaps in a Game-Theoretic Model of Compute Governance',
-              a: 'Moon, Vedula, Geneson & Bar-on — RAND, RR-A3686-1', y: '2025',
+              a: 'Moon, Vedula, Geneson & Bar-on — RAND, RR-A3686-1', y: '2025', len: '25 pages',
               url: 'https://www.rand.org/pubs/research_reports/RRA3686-1.html',
-              note: 'The counterweight in 2.2.3: a monitor watching only FLOP thresholds provably loses to sequential training. Taught as paraphrase, with one sentence quoted from the report\'s published summary — RAND\'s reuse terms were not reachable when this was written, so nothing longer is reproduced.' },
+              note: 'The counterweight in 2.2.3: a monitor watching only FLOP thresholds provably loses to sequential training. The report\'s own Key Takeaways and Recommendations are reproduced in 2.2.3 with attribution; the body argument — sequential training, the detection gap, the added metrics — is paraphrased with page citations.' },
             { t: 'The Geopolitical Debates Over Controlling Cloud Compute',
-              a: 'Tan — Carnegie Endowment for International Peace', y: '2026',
+              a: 'Tan — Carnegie Endowment for International Peace', y: '5 May 2026',
               url: 'https://carnegieendowment.org/research/2026/05/the-geopolitical-debates-over-controlling-cloud-compute',
-              note: 'The current-policy case: third-country data centers, the suspended AI Diffusion Rule, who carries the vetting burden, and the visibility-versus-privacy bill. Paraphrased throughout, never quoted.' }
+              note: 'The current-policy case: third-country data centers, the suspended AI Diffusion Rule, who carries the vetting burden, and the visibility-versus-privacy bill. Four passages are reproduced in 2.2.3 with attribution; the rest is paraphrase.' }
           ],
           exercise: 'ex-cloud-check',
           output: 'Essay or brief: what cloud evidence can establish on its own, and what it requires corroboration for.' },

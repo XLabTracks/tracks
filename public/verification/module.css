@@ -267,7 +267,66 @@
 }
 .src a { color: var(--muted-foreground); text-underline-offset: 3px; }
 .src a:hover { color: var(--brand-ink); }
-.readings .lic { font-family: var(--mono); font-size: 11px; color: var(--muted-foreground); }
+/* ---------- readings and reproduced text ---------- */
+
+/* A reading is a card: what it is, why this unit sends you there, and the
+   facts that decide whether you have time for it now. Uniform hairline, the
+   accent inside — the title is the only link, so the note stays selectable
+   prose the way a blurb should. */
+.readings { list-style: none; max-width: 68ch; display: grid; gap: 10px; }
+.read-card {
+  padding: 15px 18px;
+  border: var(--hairline) solid var(--border);
+  border-radius: var(--radius);
+  background: var(--card);
+}
+.read-head { font-size: 15.5px; font-weight: 600; line-height: 1.4; }
+.read-head a { color: var(--foreground); text-decoration: none; }
+.read-head a:hover { color: var(--brand-ink); text-decoration: underline; text-underline-offset: 3px; }
+.ext { margin-left: 6px; font-size: .85em; color: var(--muted-foreground); }
+.read-why { margin-top: 7px; font-size: 14px; line-height: 1.6; color: var(--muted-foreground); }
+.read-by {
+  margin-top: 9px;
+  font-family: var(--mono);
+  font-size: 11.5px;
+  color: var(--muted-foreground);
+}
+
+/* A source's own words. The attribution is the head of the card and the text
+   sits under it, so the two can never be read apart — and the quoted text is
+   set apart from the unit's voice by the rule and the ground, not by italics
+   a long passage would make unreadable. */
+.quote {
+  max-width: 68ch;
+  padding: 15px 18px;
+  border: var(--hairline) solid var(--border);
+  border-radius: var(--radius);
+  background: var(--muted);
+}
+.quote-head { display: block; margin-bottom: 10px; }
+.q-title { display: block; font-size: 14.5px; font-weight: 600; line-height: 1.4; }
+.q-title a { color: var(--foreground); text-decoration: none; }
+.q-title a:hover { color: var(--brand-ink); text-decoration: underline; text-underline-offset: 3px; }
+.q-what {
+  display: block;
+  margin-top: 3px;
+  font-family: var(--mono);
+  font-size: 11.5px;
+  color: var(--muted-foreground);
+}
+.quote blockquote {
+  padding-left: 14px;
+  border-left: 2px solid color-mix(in srgb, var(--brand-ink) 45%, var(--border));
+  font-size: 15px;
+  line-height: 1.65;
+}
+.quote blockquote p + p { margin-top: 10px; }
+.q-by {
+  margin-top: 11px;
+  font-family: var(--mono);
+  font-size: 11.5px;
+  color: var(--muted-foreground);
+}
 
 /* ---------- inline check and gap fill ---------- */
 
@@ -336,18 +395,6 @@
 }
 .coverage ul { margin-left: 18px; font-size: 13.5px; line-height: 1.6; color: var(--muted-foreground); }
 .coverage li { margin-bottom: 5px; }
-
-.readings { list-style: none; max-width: 68ch; }
-.readings li {
-  margin-bottom: 8px;
-  padding: 12px 15px;
-  border: var(--hairline) solid var(--border);
-  border-radius: var(--radius);
-  background: var(--card);
-}
-.readings .t { font-size: 14.5px; }
-.readings .a { font-size: 13px; color: var(--muted-foreground); }
-.readings .n { margin-top: 6px; font-size: 13px; line-height: 1.55; color: var(--muted-foreground); }
 
 /* The written output the unit ends in. Uniform hairline; the brand ink is in
    the label, not on an edge. */
@@ -515,7 +562,8 @@
    and both pagers are the same: an index, not the reading. */
 .rail, .rail a, .rail .num, .rail .lbl, .rail-head .exit, .rail-summary,
 .part-jump, .part-jump .n, .part-jump .lbl, .parts-head, .part-pager,
-.group-head, .group-head .lbl, .blank, .gap-foot, .check .eyebrow, .gap .eyebrow {
+.group-head, .group-head .lbl, .blank, .gap-foot, .check .eyebrow, .gap .eyebrow,
+.ext, .read-by, .q-what, .q-by {
   user-select: none;
   -webkit-user-select: none;
   -webkit-touch-callout: none;

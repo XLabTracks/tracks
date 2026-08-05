@@ -155,11 +155,10 @@ full-page Paper items), `<Footnote/>`, `<Term/>` (glossary hover card), and
 `<SiteQuote/>` (external link whose hover card previews a verbatim excerpt
 of the target page; never internalized, never scanned by readings:build)
 by name inside lesson text. `<PopUp label="…">` is what the outline's
-`[POP UP]` / `[interactive pop-up]` markers become: a pressable card that
-opens a dialog. Give it `ask={["…", "…"]}` and the body turns into a reveal
-waiting behind those questions, one at a time, unskippable — the answers are
-the learner's own thinking, held in component state for the session, feeding
-no meter and completing nothing.
+`[POP UP]` marker becomes: a named card that opens a dialog on the body
+(2.2.1's three visibility layers are the live case). An `[interactive
+pop-up]` — one the learner answers rather than reads — is a widget instead;
+1.0.2's `policy-cost` is the one that exists.
 A lesson body with 2+ top-level `##`/`###` headings automatically gets a
 paper-style "In this lesson" sidebar nav: `src/lib/mdx/rehype-lesson-sections.mjs`
 compiles a `sections` export into every lesson module (read via

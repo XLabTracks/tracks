@@ -8,6 +8,8 @@ import { VerificationTimelineGame } from "./verification-timeline-game";
 import { InteractiveMap } from "./interactive-map";
 import { VerificationLandscape } from "./verification-landscape";
 import { CollectionMap } from "./collection-map";
+import { PolicyCost } from "./policy-cost";
+import { PolicyPlot } from "./policy-plot";
 
 /**
  * Native React widgets ported from the standalone HTML pages, keyed by the same
@@ -26,6 +28,8 @@ export const verificationWidgets: Record<
   "interactive-map": InteractiveMap,
   "verification-landscape": VerificationLandscape,
   "collection-map": CollectionMap,
+  "policy-cost": PolicyCost,
+  "policy-plot": PolicyPlot,
 };
 
 export function getVerificationWidget(

@@ -23,6 +23,8 @@ export interface VerificationExerciseDef {
 export const verificationExercises: VerificationExerciseDef[] = [
   { id: "collection-map", title: "The Collection Map", bridged: false },
   { id: "verification-landscape", title: "The Verification Landscape", bridged: false },
+  { id: "policy-cost", title: "Everything Comes With a Cost", bridged: false },
+  { id: "policy-plot", title: "Effectiveness x Feasibility", bridged: false },
   { id: "policy-scoping", title: "Scoping an Anti-ASI Policy", bridged: true },
   { id: "anatomy-drill", title: "The Anatomy Drill", bridged: true },
   { id: "protocol-actors", title: "Who's in the Treaty?", bridged: true },

@@ -155,13 +155,15 @@
        keeps a longer future name widening all five instead of clipping.
        12.2 is the advance of the mono face at 22 user units, measured off
        the rendered text, plus 28 of padding either side on the longest. */
-    var w = Math.max.apply(null, S.moduleNames.map(function (n) { return n.length; })) * 12.2 + 56;
-    var h = 44;
+    var w = Math.max.apply(null, S.moduleNames.map(function (n) { return n.length; })) * 8.9 + 56;
+    var h = 36;
     return '<g class="arc-label" data-mod="' + mod + '" style="--sel:var(--mod-' + mod + ');--sel-ink:var(--mod-' + mod + '-ink);--sel-text:var(--mod-' + mod + '-text)" role="button" tabindex="0"' +
       ' aria-label="Highlight module ' + mod + ', ' + esc(S.moduleNames[mod]) + '">' +
       '<rect class="plaque" x="' + (col.head.x - w / 2).toFixed(1) + '" y="' + (col.head.y - h + 12).toFixed(1) +
         '" width="' + w.toFixed(1) + '" height="' + h + '" rx="' + (h / 2) + '"/>' +
-      '<text x="' + col.head.x.toFixed(1) + '" y="' + col.head.y.toFixed(1) + '">' + esc(label) + '</text></g>';
+      /* The label is anchored to the rect's own centre with a central
+         baseline, so it stays optically centred whatever h becomes. */
+      '<text x="' + col.head.x.toFixed(1) + '" y="' + (col.head.y - h / 2 + 12).toFixed(1) + '">' + esc(label) + '</text></g>';
   }).join('');
 
   /* One running number per skill, module by module. It is the key between the
@@ -181,7 +183,7 @@
       ' aria-label="' + num[n.id] + '. ' + esc(n.label) + ' — module ' + n.mod + ', ' + esc(S.moduleNames[n.mod]) + '">' +
       '<title>' + esc(n.label) + '</title>' +
       '<circle cx="' + p.x.toFixed(1) + '" cy="' + p.y.toFixed(1) + '" r="' + V.nodeR + '"/>' +
-      '<text class="node-num" x="' + p.x.toFixed(1) + '" y="' + (p.y + 4).toFixed(1) + '">' + num[n.id] + '</text></g>';
+      '<text class="node-num" x="' + p.x.toFixed(1) + '" y="' + p.y.toFixed(1) + '">' + num[n.id] + '</text></g>';
   }).join('');
 
   var pad = 18;

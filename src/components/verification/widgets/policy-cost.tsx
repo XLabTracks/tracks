@@ -271,7 +271,7 @@ function FaceTag({ tone, label }: { tone: "goal" | "price"; label: string }) {
         aria-hidden
         className={cn(
           "size-2 flex-none rounded-full",
-          tone === "goal" ? "bg-sky-600" : "bg-amber-500",
+          tone === "goal" ? "bg-hide" : "bg-exaggerate",
         )}
       />
       {label}
@@ -295,7 +295,7 @@ function LedgerRow({
           aria-hidden
           className={cn(
             "size-2 flex-none rounded-full",
-            tone === "goal" ? "bg-sky-600" : "bg-amber-500",
+            tone === "goal" ? "bg-hide" : "bg-exaggerate",
           )}
         />
         {tag}

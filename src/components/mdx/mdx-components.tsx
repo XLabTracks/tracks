@@ -11,6 +11,7 @@ import { NextSteps } from "./next-steps";
 import { PopUp } from "./pop-up";
 import { SiteQuote } from "./site-quote";
 import { SourceCredit } from "./source-credit";
+import { CapstoneSignup } from "@/components/verification/capstone-signup";
 import { MemoDesk } from "@/components/verification/memo-desk-card";
 import { VerificationExercise } from "@/components/verification/verification-exercise";
 import { Term } from "./term";
@@ -23,7 +24,7 @@ import { Src, SourceQuote } from "./reader/source-quote";
 // <Video/>, <Demo/>, <Exercise/>, <ExerciseSequence/>, <Callout/>,
 // <ArxivPaper/>, <Footnote/>, <Term/>, <SiteQuote/>, <PopUp/>,
 // <SourceCredit/>, <MemoDesk/>, <VerificationExercise/>, <Check/>, <GapFill/>, <SourceQuote/>,
-// <Src/>, <NextSteps/> and <CapstoneBank/> directly into prose.
+// <Src/>, <NextSteps/>, <CapstoneBank/> and <CapstoneSignup/> directly into prose.
 // Markdown links render through MdxLink, which routes known Substack /
 // LessWrong posts to the internal reader.
 export const mdxComponents: MDXComponents = {
@@ -45,8 +46,10 @@ export const mdxComponents: MDXComponents = {
   // The reader blocks the Verification units were written against:
   // a committed-then-revealed check, a word-bank gap fill, a reproduced
   // passage with its attribution above it, a citation riding with its
-  // passage, and the capstone bank printed inside its unit.
+  // passage, the capstone bank printed inside its unit, and the capstone
+  // sign-up sheet the facilitators read.
   CapstoneBank,
+  CapstoneSignup,
   Check,
   GapFill,
   SourceQuote,

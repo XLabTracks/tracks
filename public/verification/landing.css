@@ -141,6 +141,9 @@ section.band .intro { max-width: 62ch; margin-top: 12px; color: var(--muted-fore
   font-family: var(--mono);
   font-size: 30px;
   text-anchor: middle;
+  /* Central, not a hand-tuned baseline nudge: the numeral's em box centres
+     on the circle's cy, so one rule holds for 1 and for 27 alike. */
+  dominant-baseline: central;
 }
 .sky.focusing .node:not(.hot) { opacity: .28; }
 .sky .node.hot circle { stroke: var(--foreground); stroke-width: 4; }
@@ -148,22 +151,21 @@ section.band .intro { max-width: 62ch; margin-top: 12px; color: var(--muted-fore
 .sky .node:hover circle { stroke: var(--foreground); stroke-width: 4; }
 
 .sky .arc-label { cursor: pointer; transition: opacity .25s ease; }
-/* --sel-text, not --sel. The palette carries two tones per module: the fill
-   a plaque is painted with, and a darkened one that survives as text on this
-   ground. Filling a label with the fill tone put Lunar Yellow on near-white
-   at 1.4:1 — the M2 label was not readable at all. */
 .sky .arc-label .plaque {
   fill: var(--sel);
   stroke: none;
 }
+/* The label sits ON the plaque fill, so it takes that colour's chosen ink —
+   the same --sel/--sel-ink pair the stars use. */
 .sky .arc-label text {
-  fill: var(--sel-text, var(--sel));
   font-family: var(--mono);
   /* User units, like .node-num — inside the viewBox a CSS-pixel token is
      scaled with the figure and lands at 4px on a phone. */
-  font-size: 22px;
+  font-size: 16px;
+  font-weight: 700;
   fill: var(--sel-ink, #fff);
-  dominant-baseline: middle;
+  /* Central, matching the anchor the markup sets at the rect's own centre. */
+  dominant-baseline: central;
   letter-spacing: .06em;
   text-anchor: middle;
 }

@@ -201,7 +201,7 @@ export function PolicyPlot(_: VerificationWidgetProps) {
               {policy.kind === "transparency" ? (
                 <circle
                   r="9"
-                  className={cn("fill-sky-600", isSelected && "stroke-foreground")}
+                  className={cn("fill-hide", isSelected && "stroke-foreground")}
                   strokeWidth={isSelected ? 2 : 0}
                 />
               ) : (
@@ -210,7 +210,7 @@ export function PolicyPlot(_: VerificationWidgetProps) {
                   y="-8"
                   width="16"
                   height="16"
-                  className={cn("fill-orange-600", isSelected && "stroke-foreground")}
+                  className={cn("fill-free-ride", isSelected && "stroke-foreground")}
                   strokeWidth={isSelected ? 2 : 0}
                 />
               )}
@@ -225,11 +225,11 @@ export function PolicyPlot(_: VerificationWidgetProps) {
       {/* Legend: shape and word both, so the two families never rest on hue. */}
       <div className="text-muted-foreground mt-1 mb-4 flex flex-wrap items-center gap-x-5 gap-y-1 text-xs">
         <span className="flex items-center gap-1.5">
-          <span aria-hidden className="size-2.5 rounded-full bg-sky-600" />
+          <span aria-hidden className="size-2.5 rounded-full bg-hide" />
           {C.transparency}
         </span>
         <span className="flex items-center gap-1.5">
-          <span aria-hidden className="size-2.5 bg-orange-600" />
+          <span aria-hidden className="size-2.5 bg-free-ride" />
           {C.restriction}
         </span>
         <span className="ml-auto">{C.hint}</span>

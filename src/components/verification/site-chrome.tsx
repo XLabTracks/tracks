@@ -1,0 +1,138 @@
+"use client";
+
+import Script from "next/script";
+import { useEffect } from "react";
+import { usePathname } from "next/navigation";
+import {
+  COPYRIGHT,
+  FOOT,
+  isExternal,
+  NAV,
+  verificationHref,
+} from "@/lib/verification/chrome";
+
+/* The Verification site's header and footer, rendered inside the Next app so
+ * the course pages under /tracks/verification wear the same chrome as the
+ * static pages under /verification.
+ *
+ * Nothing here is a second design system. The markup is exactly what
+ * public/verification/theme.css already styles — .site-header > .bar with
+ * .brand, .nav and .header-right, and .site-footer > .wrap — and that
+ * stylesheet is linked below rather than copied into the bundle, so one file
+ * dresses both surfaces. The links come from src/lib/verification/chrome.ts,
+ * which the static side reads through a generated copy.
+ *
+ * Trap: theme.css defines --background, --foreground, --border, --primary and
+ * the rest, which are the very names Tailwind's --color-* tokens resolve to.
+ * Linking it re-points the whole palette for this subtree — that is the point,
+ * it is what "aligned with the landing" means — but it also means every
+ * shadcn component on these routes takes Verification's colours. Check a page
+ * with cards and buttons on it after touching either palette.
+ *
+ * Trap: the stylesheet links carry `precedence`, which is what lets React
+ * hoist them into <head> and keep them after the app's bundled CSS. Drop it
+ * and they render in place, arriving after first paint.
+ *
+ * base.css is deliberately absent: it carries the element reset the static
+ * pages need and the app already has Tailwind's preflight. app-bridge.css is
+ * the opposite — app-only, and it exists because Tailwind Typography hardcodes
+ * its prose colours instead of reading the palette.
+ */
+
+/** True on the routes this chrome owns. */
+export function isVerificationRoute(pathname: string | null): boolean {
+  return !!pathname && (
+    pathname === "/tracks/verification" ||
+    pathname.startsWith("/tracks/verification/")
+  );
+}
+
+function ThemeSwitch() {
+  // theme.js owns the switch — its markup, its storage key, its three themes.
+  // Mounting it here rather than reimplementing keeps one copy of that logic;
+  // it is idempotent, so re-running it after a client-side navigation is fine.
+  useEffect(() => {
+    const w = window as unknown as { VT_THEME?: { mount: () => void } };
+    w.VT_THEME?.mount();
+  });
+  return <div className="theme-switch" />;
+}
+
+export function VerificationHeader() {
+  const pathname = usePathname();
+  return (
+    <>
+      <link rel="stylesheet" href="/verification/fonts.css" precedence="high" />
+      <link rel="stylesheet" href="/verification/theme.css" precedence="high" />
+      <link rel="stylesheet" href="/verification/app-bridge.css" precedence="high" />
+      <Script src="/verification/theme.js" strategy="afterInteractive" />
+      <header className="site-header">
+        <div className="bar">
+          <a className="brand" href="/verification/landing">
+            Verification <i>@</i>
+            <img
+              className="brand-mark"
+              src="/verification/assets/xLab_Logotype.png"
+              alt="XLab"
+              width={3300}
+              height={1050}
+              draggable={false}
+            />
+          </a>
+          <nav className="nav" aria-label="Course">
+            {NAV.map((n) => (
+              <a
+                key={n.label}
+                href={n.href ? verificationHref(n.href) : undefined}
+                aria-current={
+                  n.href && pathname === verificationHref(n.href) ? "page" : undefined
+                }
+              >
+                {n.label}
+              </a>
+            ))}
+          </nav>
+          <div className="header-right">
+            <ThemeSwitch />
+            <a className="btn small" href="/login">
+              Sign in
+            </a>
+          </div>
+        </div>
+      </header>
+    </>
+  );
+}
+
+export function VerificationFooter() {
+  return (
+    <footer className="site-footer">
+      <div className="wrap">
+        <nav className="foot-links" aria-label="Site">
+          {FOOT.map((f) =>
+            f.href ? (
+              <a
+                key={f.label}
+                href={verificationHref(f.href)}
+                {...(isExternal(f.href)
+                  ? { target: "_blank", rel: "noopener" }
+                  : {})}
+              >
+                {f.label}
+              </a>
+            ) : (
+              // No destination supplied yet. Plain text, not a dead link.
+              <span key={f.label} className="pending" title="Link not supplied yet">
+                {f.label}
+              </span>
+            ),
+          )}
+        </nav>
+        <div className="foot-end">
+          <span>{COPYRIGHT}</span>
+          <span>Progress on these pages is saved to your account.</span>
+        </div>
+      </div>
+    </footer>
+  );
+}

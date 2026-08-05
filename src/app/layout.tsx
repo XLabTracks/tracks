@@ -4,7 +4,7 @@ import { JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import { withAuth } from "@workos-inc/authkit-nextjs";
 import { AuthKitProvider } from "@workos-inc/authkit-nextjs/components";
-import { SiteHeader } from "@/components/layout/site-header";
+import { AppFooter, AppHeader } from "@/components/layout/app-chrome";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { Toaster } from "@/components/ui/sonner";
 
@@ -63,10 +63,11 @@ export default async function RootLayout({
         </a>
         <AuthKitProvider initialAuth={initialAuth}>
           <TooltipProvider delayDuration={200}>
-            <SiteHeader />
+            <AppHeader />
             <div id="main-content" className="flex flex-1 flex-col">
               {children}
             </div>
+            <AppFooter />
           </TooltipProvider>
           <Toaster />
         </AuthKitProvider>

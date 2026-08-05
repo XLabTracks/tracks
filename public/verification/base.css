@@ -1,0 +1,30 @@
+/* The element reset the static Verification pages need, and only they.
+
+   The Next app renders the same chrome from theme.css but already has
+   Tailwind's preflight, so it must NOT load this file: a second universal
+   `margin: 0` lands on top of the app's content and collapses every
+   paragraph in a lesson. That is exactly why this is a separate file.
+
+   Load order on a static page: fonts.css, base.css, theme.css. */
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { -webkit-text-size-adjust: 100%; }
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--sans);
+  font-size: 16px;
+  line-height: 1.6;
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+  /* Counters, fractions and unit numbers used to hold column because they
+     were mono. They are sans now, so the figures are made tabular here — a
+     "3 / 12" that reflows as it counts up reads as a glitch. */
+  font-variant-numeric: tabular-nums;
+}
+
+/* The static pages colour their links explicitly, per surface. The app styles
+   its own, so this stays out of theme.css. */
+a { color: inherit; }

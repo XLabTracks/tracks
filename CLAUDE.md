@@ -442,20 +442,21 @@ The static site's own mechanics, for as long as it exists:
   verified there against the full texts. Its four sources have **different
   reuse terms and the unit cites them four ways**: the two arXiv papers (Heim
   et al. 2024; Egan & Heim 2023) are CC BY 4.0 and quoted freely; RAND
-  RR-A3686-1 and the Carnegie piece are all-rights-reserved, so what is
-  reproduced from them is the text their publishers put on the open web
-  (RAND's own Key Takeaways and Recommendations; four short Carnegie
-  passages), and their body arguments stay paraphrase with page citations.
+  RR-A3686-1 and the Carnegie piece are all-rights-reserved and are
+  reproduced on the author's instruction — RAND from the report itself
+  (Findings, Recommendations, and the body passages behind 2.2.3), Carnegie
+  from the article as published.
   A `{quote}` block is the shape reproduction takes — **attribution first,
   then the words**: the work, which part of it, the authors, and a link out,
   all above the passage, so the two can never be read apart. `{read}`-style
   reading cards do the same job for the sources themselves (title links out,
   why-this-unit-sends-you-there, then `author · year · length · licence`).
   The open verification-log row (RAND's permissions page, HTTP 403) is
-  recorded in the comment above the unit. Trap noted there too: the RAND body
-  PDF is AES-encrypted but its permission bits *do* allow extraction — a
-  longer excerpt should be a decision someone makes on purpose, not a side
-  effect of a script that could.
+  recorded in the comment above the unit — reproduction there is the author's
+  decision, not an inference from terms nobody could read. Trap noted there
+  too: the RAND PDF is AES-encrypted, so a fetched copy carries no text
+  layer; these quotes came from the file the author supplied. Ask for the
+  file rather than assuming a download will read.
 - **Progress is one set of completed unit ids** in `localStorage` under
   `vt-progress`; everything else is derived at read time. Never persist a
   derived value, and nothing auto-completes on scroll, or on reaching the last

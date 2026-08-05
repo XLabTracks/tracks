@@ -94,7 +94,6 @@
 
 .ex-foot { display: flex; align-items: center; gap: 12px; margin-top: 16px; min-height: 1px; }
 .ex-foot .counter { margin-right: auto; }
-.ex-source { margin-top: 14px; font-family: var(--mono); font-size: 11px; color: var(--muted-foreground); }
 
 /* ---------- rank ---------- */
 

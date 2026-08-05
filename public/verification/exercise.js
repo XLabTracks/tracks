@@ -478,12 +478,10 @@ window.Exercise = (function () {
     const root = document.createElement('div');
     host.appendChild(root);
     RENDER[ex.type](root, ex, (opts && opts.onDone) || null);
-    if (ex.source) {
-      const s = document.createElement('p');
-      s.className = 'ex-source';
-      s.textContent = 'Built from: ' + ex.source;
-      root.appendChild(s);
-    }
+    /* `source` stays in the data as the provenance record and is deliberately
+       not drawn: which section of which draft an exercise was built from is a
+       fact about making the course, and this page is read by people taking
+       it. */
   }
 
   return { mount: mount, load: load };

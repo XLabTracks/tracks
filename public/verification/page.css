@@ -60,7 +60,11 @@
    Trap: the monogram is a placeholder for a portrait, so it must reserve the
    portrait's box. Sizing it to the initials instead would make every card
    jump the day real photographs land. */
-.roster {
+/* Trap: the roster is a `ul` inside `.prose`, and `.prose ul` sets a
+   padding-left for bullet lists at a higher specificity than a lone class.
+   Without the `.prose` here the cards sit indented from every heading and
+   paragraph on the page, which reads as a misalignment rather than a list. */
+.prose .roster {
   list-style: none;
   display: grid;
   gap: 16px;
@@ -88,7 +92,7 @@
    two ROWS of cards, so the two cannot be set independently while this is
    on — which is fine at three people and would want revisiting past six. */
 @media (min-width: 700px) {
-  .roster {
+  .prose .roster {
     grid-template-columns: repeat(3, minmax(0, 1fr));
     grid-auto-rows: auto;
     row-gap: 14px;

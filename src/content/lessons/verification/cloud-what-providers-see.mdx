@@ -13,9 +13,11 @@ We can think of this information providers can collect as falling into three rou
 CHECK (2 questions, answers on reveal)
 
 - A customer declared a "small research project," but the account reserved 4,000 accelerators for 90 days. Which visibility layer caught the mismatch?(a) Resource use — allocation and duration (b) Identity — the account owner's name (c) Operational records — a security alert
+
 A: (a). Allocation size and duration are the resource-use layer. Identity says who; records say when.
 
 - Three accounts opened the same week, all paid from the same card. A month later, one claims its cluster sat idle in March — but timestamped logs show sustained activity. Which layers do the two red flags come from?(a) Identity links the accounts; operational records contradict the idle claim (b) Resource use links the accounts; identity contradicts the claim (c) Both are operational records.
+
 A: (a). Shared payment is linkage — identity's job. A story checked against a timestamped trail is corroboration — the operational-records job.
 
 ## Training or inference?
@@ -28,6 +30,7 @@ A frontier training run in the mid-2020s has a recognizable body:
 - Sustained utilization — cores near peak, around the clock, for weeks. Inference traffic rises and falls with users; training doesn’t sleep.
 - Parallelism patterns — node-to-node traffic in the regular rhythms of data- and model-parallel training.
 - A closed loop — little traffic to the outside internet while the run cooks.
+
 No single signature is proof. Together they are hard to miss — and, as we’ll see in 2.2.3, expensive to fake.
 
 ### Counting the Compute

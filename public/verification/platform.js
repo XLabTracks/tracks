@@ -166,9 +166,9 @@ window.VT = (function () {
   /* ---------- capstone bank vocabulary ---------- */
 
   /* Status and difficulty are a glyph plus the word, never a bare tint, so
-     the reading survives without colour. capstone-bank.html and the module
-     player both draw the vocabulary from here, so a brief looks the same
-     whichever surface a learner meets it on. */
+     the reading survives without colour. It lives here rather than in
+     capstone-bank.js because any second surface that prints a brief has to
+     print it the same way. */
   const bank = {
     statusGlyph: { ready: '●', draft: '◐', concept: '○' },
     statusWord: { ready: 'ready to run', draft: 'draft', concept: 'concept' },

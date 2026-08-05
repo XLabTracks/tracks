@@ -510,13 +510,15 @@ The static site's own mechanics, for as long as it exists:
   hand-edit the output). One markdown file is a card and the filter facets
   derive from the values present. `verification-capstones/_README.md` is the
   front-matter contract and states which capstones belong here at all — the
-  bank carries only the ones whose prerequisites this track teaches. Two
-  surfaces read the generated file: `capstone-bank.html` (the filterable
-  catalogue, with a detail sheet per brief) and the unit that carries
-  `bank: { lead: '<slug>' }` in `course.js`, where the module player prints
-  the same briefs as a picker — 4.2 is the live one. Their shared glyph
-  vocabulary is `VT.bank` in `platform.js`, so status and difficulty cannot
-  drift between the two.
+  bank carries only the ones whose prerequisites this track teaches.
+  `capstone-bank.html` is the filterable catalogue (a detail sheet per brief,
+  and "start a draft" into `capstone.html?brief=<slug>`); its glyph vocabulary
+  is `VT.bank` in `platform.js` so a second surface printing a brief cannot
+  drift from it. **Nothing in the course links the bank right now** — the
+  in-unit picker lived in the static module player, which was removed when the
+  reading moved to `/tracks/verification`, and no app-side lesson has replaced
+  it. The bank page and the workspace both still work; only the way in is
+  missing.
 - **Enrolling is an app route, not a static page**, because it needs a session
   and a row: `/verification/enroll` (apply, edit, withdraw) and
   `/verification/applications` (the reviewers' queue) live in `src/app/`

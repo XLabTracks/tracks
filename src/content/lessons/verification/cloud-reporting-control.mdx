@@ -6,6 +6,7 @@ You’ve learned what cloud providers can and cannot theoretically verify about 
 
 - Registration: A cluster this big exists, here. The provider reports the existence, location, and capacity of frontier-capable infrastructure. A registration threshold is a rate: how fast the cluster could compute, in operations per second.
 - Declaration: A training run this big is happening. The customer or provider reports a specific activity above a threshold. A declaration threshold is a total: how much a run consumed, in operations.
+
 Simply put: registration maps where frontier runs could happen; declarations claim which ones are happening.
 
 A useful declaration answers the same three layers as 2.2.1. Who: verified identity and an authorized signatory. How much: hardware, hours, locations. What for: purpose, model type, planned safety evaluations. But even a facially complete declaration is just a claim, and claims can be falsified. Its value is that it can be checked, and that lying in it carries legal consequences. Declared operations have an independent shadow in the 2.2.1 records: chips × hours × utilization.
@@ -32,6 +33,7 @@ Above a compute threshold, the provider must:
 - Keep records of above-threshold compute provided, and of denials.
 - Screen customers against the US Entity List, sanctions lists, and defined high-risk profiles, and report the matches.
 - Investigate sublessors, because compute gets resold and each hop in a reseller chain degrades visibility.
+
 POP-UP  KYC in banking: US banks have run this scheme since the 1970s to prevent financial crime, terrorist financing, and identity theft, based on Bank confidentiality Act and later USA PATRIOT Act foundations, with the global Financial Action Task Force (FATF) setting standards that member states write into domestic law. Compliance stayed weak for years, until penalties got real. It is expensive: US financial-crime compliance cost an estimated 40.7 billion dollars in 2022 (LANDSCAPE), and money laundering persists anyway. Providers will cite this history.
 
 The KYC scheme has two known gaps:
@@ -81,10 +83,13 @@ The NovaStar case puts you at a provider’s oversight desk. Play the case at ht
 CHECK: 3 questions
 
 - What does beneficial-ownership verification add that entity verification alone does not?
+
 (It reaches through shell companies to the controlling party.)
 
 - Why do Egan and Heim require records of compute denied, not just provided?
+
 (Denials map who tried and failed; investigations need both sides of the ledger.)
 
 - Rank by intrusiveness on legitimate customers: log preservation, workload telemetry monitoring, access suspension. Defend your order in one sentence.
+
 (Discussion question. The reveal gives one defensible ordering and explains why reasonable designers disagree about the middle item.)

@@ -33,6 +33,7 @@ Use the NVIDIA architecture as a deployed security primitive:
 - a local verifier or NVIDIA Remote Attestation Service compares the evidence with those measurements;
 - certificate-revocation services determine whether relevant credentials remain trusted;
 - a policy file or downstream system determines whether the result is acceptable.
+
 This is valuable precisely because it is real. It also exposes the institutional questions. NVIDIA currently maintains the authoritative reference-measurement repository and remote appraisal service in this implementation. A treaty architecture would have to decide whether that governance arrangement is acceptable to every party, or whether reference values, keys, and appraisal authority need to be shared, duplicated, escrowed, or transferred. (NVIDIA Docs)
 
 #### Interactive: Trust-chain autopsy
@@ -50,6 +51,7 @@ Learners assign actors to each node:
 - national regulator;
 - proposed international verifier;
 - certificate or key authority.
+
 For every node, the learner answers:
 
 - What does this actor or component control?
@@ -92,6 +94,7 @@ Expected reasoning:
 - supply-chain integrity and key governance become load-bearing;
 - mutually controlled or externally installed systems become more attractive;
 - assurance may depend on inspections, destructive sampling, or independent evidence outside the device.
+
 The owner-as-adversary frame should remain conditional. A cloud tenant and a state with its own hardware program do not present the same problem.
 
 #### Mini-case: identity does not establish location or topology
@@ -100,6 +103,7 @@ Offer two compact prompts:
 
 - A chip proves a valid identity. What additional evidence is needed to establish where it is?
 - Ten thousand devices attest independently. What additional evidence is needed to establish that they formed the declared cluster?
+
 Hardware-governance research treats location and cluster configuration as separate mechanism families because they require additional protocols, networking assumptions, or external evidence. (arXiv)
 
 #### Misconceptions to diagnose

@@ -26,6 +26,7 @@ Possible components:
 - protected telemetry;
 - workload certificates;
 - hardware-backed authorization.
+
 Potential advantages:
 
 - fine-grained access to device state and activity;
@@ -33,6 +34,7 @@ Potential advantages:
 - evidence travels with the chip;
 - possible real-time response;
 - privacy-preserving outputs.
+
 Load-bearing concerns:
 
 - trust in chip design and manufacturing;
@@ -51,12 +53,14 @@ Possible components:
 - server or rack gateways;
 - tamper-evident enclosures;
 - separate secured verification machines.
+
 Potential advantages:
 
 - devices can be jointly designed and mutually inspected;
 - reduced reliance on the monitored party’s accelerator internals;
 - possible retrofitting of existing systems;
 - clearer separation between prover hardware and verifier hardware.
+
 Load-bearing concerns:
 
 - reduced visibility as the tap moves farther from the chip;
@@ -66,6 +70,7 @@ Load-bearing concerns:
 - installation and chain-of-custody requirements;
 - risk that the verifier’s device contains espionage or sabotage functions;
 - difficulty reconstructing high-level workloads from low-level traffic.
+
 The six-layer synthesis explicitly treats network taps and analog sensors as separate off-chip approaches and proposes mutually vetted, simple, potentially jointly developed devices. It also emphasizes that these approaches still face major unsolved engineering and assurance problems. (arXiv)
 
 A June 2026 proposal makes the concept more concrete by placing taps on information-carrying connections, committing external data with hashes, and adding a secure gateway to constrain timing, analog, and steganographic channels. It is an architectural proposal, not a fielded treaty system. (arXiv)
@@ -80,12 +85,14 @@ Possible components:
 - independent clocks and timestamping;
 - tamper-evident packaging;
 - video or physical inspection of installation.
+
 Potential advantages:
 
 - a physically independent account of activity;
 - retrofitting potential;
 - evidence that is less dependent on proprietary firmware;
 - evasion may require sacrificing performance or changing multiple physical signals.
+
 Load-bearing concerns:
 
 - approximate conversion from physical measurements to compute;
@@ -106,6 +113,7 @@ Possible combination:
 - cloud or provider records;
 - periodic physical inspection;
 - intelligence comparison against declared facility capacity.
+
 The learner must test whether this is genuinely layered. A signed meter, signed workload classifier, and licensing system that all rely on the same vendor key constitute less independence than their mechanism count suggests.
 
 #### Cross-taxonomy card: the same signal, a different institution
@@ -115,6 +123,7 @@ Use power draw to connect 2.1 and 2.3:
 - A treaty-installed rack meter is access-dependent, precise, and maintained through inspections. It belongs here.
 - Grid analysis or remote thermal imagery may estimate related activity without permission. That is intelligence-based evidence.
 - The physical phenomenon is similar; the evidence pathway, access, confidence, and political role differ.
+
 This reinforces that the course’s four buckets are a pedagogical crosswalk rather than natural kinds.
 
 #### Activity: Bilateral design review
@@ -130,6 +139,7 @@ Learners compare an on-chip proposal and an off-chip proposal for the working pa
 - the institutional assumption most likely to fail;
 - the most serious abuse or power-concentration risk;
 - the smallest pilot that would provide decision-relevant evidence.
+
 The task ends with a constrained recommendation:
 
 Choose an architecture for a voluntary pilot, not for immediate universal deployment. State what the pilot must test before the mechanism deserves a stronger role.

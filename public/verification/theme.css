@@ -50,9 +50,23 @@
   --shadow-soft-lg: 0 12px 40px rgba(10, 25, 47, .13);
   --glow: 0;
 
+  /* Two families, and only one of them is a download: Space Grotesk for
+     headings and display numerals, the system sans for everything else.
+
+     --mono is kept as a token because ~90 rules ask for it, but it now
+     resolves to the same sans. It used to name JetBrains Mono and IBM Plex
+     Mono, neither of which this site ships — so every micro-label fell
+     through to whatever ui-monospace the OS supplies, and the pages set
+     themselves in a different third face on macOS, Windows and Linux. The
+     labels still read as labels: they keep their uppercase and letterspacing,
+     which is what was doing the work, not the face.
+
+     Trap: mono was also holding counters and fractions in column. Losing it
+     would let digits jitter as they change, so tabular figures are switched
+     on globally below rather than per counter. */
   --display: 'Space Grotesk', 'Segoe UI', system-ui, sans-serif;
   --sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, Helvetica, Arial, sans-serif;
-  --mono: 'JetBrains Mono', 'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+  --mono: var(--sans);
 }
 
 :root[data-theme='dark'] {
@@ -130,6 +144,10 @@ body {
   line-height: 1.6;
   min-height: 100vh;
   -webkit-font-smoothing: antialiased;
+  /* Counters, fractions and unit numbers used to hold column because they
+     were mono. They are sans now, so the figures are made tabular here — a
+     "3 / 12" that reflows as it counts up reads as a glitch. */
+  font-variant-numeric: tabular-nums;
 }
 
 h1, h2, h3, h4 { font-family: var(--display); font-weight: 500; letter-spacing: -.015em; line-height: 1.15; }

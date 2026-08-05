@@ -98,3 +98,26 @@ describe("registry ↔ widget ↔ content graph ↔ MDX", () => {
     }
   });
 });
+
+/* The item page renders the lesson title as the page's h1 (see
+ * [itemSlug]/page.tsx). An MDX body that opens with its own `# Title` puts the
+ * heading on screen twice at h1 size — which has now happened three times, on
+ * every batch of lessons transcribed from the outline, because the outline
+ * carries its numbered heading and transcribing it verbatim is the obvious
+ * thing to do. AUTHORING.md's example starts a lesson body at `##`.
+ *
+ * Fix by deleting the leading `# ...` line, not by changing the page. */
+describe("verification lesson bodies", () => {
+  it("no lesson repeats its own title as a leading h1", () => {
+    const offenders: string[] = [];
+    for (const lesson of trackLessons) {
+      const mdx = join(LESSONS_DIR, `${lesson.contentRef}.mdx`);
+      if (!existsSync(mdx)) continue;
+      const first = readFileSync(mdx, "utf8")
+        .split("\n")
+        .find((line) => line.trim().length > 0);
+      if (first?.startsWith("# ")) offenders.push(`${lesson.contentRef}.mdx -> ${first}`);
+    }
+    expect(offenders, "these bodies open with an h1 the page already renders").toEqual([]);
+  });
+});

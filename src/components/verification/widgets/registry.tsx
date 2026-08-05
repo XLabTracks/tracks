@@ -15,6 +15,7 @@ import { DrillsSupplyChain } from "./drills-supply-chain";
 import { PolicyCost } from "./policy-cost";
 import { PolicyPlot } from "./policy-plot";
 import { PrecedentCases } from "./precedent-cases";
+import { WhatDoTheySay } from "./what-do-they-say";
 
 /**
  * Native React widgets ported from the standalone HTML pages, keyed by the same
@@ -42,6 +43,7 @@ export const verificationWidgets: Record<
   "policy-cost": PolicyCost,
   "policy-plot": PolicyPlot,
   "precedent-cases": PrecedentCases,
+  "what-do-they-say": WhatDoTheySay,
 };
 
 export function getVerificationWidget(

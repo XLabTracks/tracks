@@ -31,6 +31,7 @@ export const verificationExercises: VerificationExerciseDef[] = [
   { id: "interactive-map", title: "The Compute Supply Chain", bridged: false },
   { id: "report-constructor", title: "One Inspection, Three Readers", bridged: true },
   { id: "verification-timeline-game", title: "The Verification Game", bridged: true },
+  { id: "what-do-they-say", title: "Why Are We Concerned About Superintelligence?", bridged: false },
   { id: "precedent-cases", title: "Did the Regime Hold?", bridged: true },
   // The drill benches. Bridged: the deck reports complete when the last step
   // of its last bench is committed.

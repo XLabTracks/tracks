@@ -94,8 +94,29 @@
   --exaggerate: #916400;
   --free-ride: #975a7c;
 
+
+  /* Type scale. Ten steps, and every rule on these pages picks one — the sizes
+     used to run to 22 distinct values between 10 and 27px, eight of them at
+     half-pixels that render differently per zoom and DPI. Steps are integers
+     for the same reason.
+
+     --fs-title is every page's h1; --fs-hero is the landing's alone. They were
+     five near-identical clamps before, which is four chances to drift. */
+  --fs-2xs: 11px;
+  --fs-xs: 12px;
+  --fs-sm: 13px;
+  --fs-md: 14px;
+  --fs-lg: 16px;
+  --fs-xl: 18px;
+  --fs-2xl: 22px;
+  --fs-3xl: 28px;
+  --fs-4xl: 36px;
+  --fs-title: clamp(28px, 3.4vw, 36px);
+  --fs-hero: clamp(32px, 4.4vw, 52px);
+
   --radius: 14px;
   --radius-sm: 8px;
+  --radius-xs: 4px;
   --hairline: 1px;
   --shadow-soft: 0 1px 2px rgba(10, 25, 47, .06);
   --shadow-soft-lg: 0 12px 40px rgba(10, 25, 47, .13);
@@ -218,6 +239,7 @@
 
   --radius: 8px;
   --radius-sm: 6px;
+  --radius-xs: 4px;
   --hairline: 3px;
   --shadow-soft: none;
   --shadow-soft-lg: none;
@@ -274,7 +296,7 @@
   height: auto;
   flex-wrap: wrap;
   gap: 10px 16px;
-  padding: 9px 16px;
+  padding: 8px 16px;
 }
 :root[data-theme='contrast'] .rail {
   position: static;
@@ -335,7 +357,7 @@ button, [role='button'], [role='radio'], [role='tab'], .chip, .nav a, .brand,
   align-items: center;
   gap: 8px;
   font-family: var(--display);
-  font-size: 17px;
+  font-size: var(--fs-lg);
   /* 700 is the top of the embedded Space Grotesk's weight range — asking
      for more gets synthetic bold, which smears the letterforms. */
   font-weight: 700;
@@ -398,7 +420,7 @@ button, [role='button'], [role='radio'], [role='tab'], .chip, .nav a, .brand,
   align-items: center;
   justify-content: flex-start;
   gap: 14px;
-  font-size: 14.5px;
+  font-size: var(--fs-md);
   overflow-x: auto;
   scrollbar-width: none;
 }
@@ -420,7 +442,7 @@ button, [role='button'], [role='radio'], [role='tab'], .chip, .nav a, .brand,
   inset-inline: 14px;
   bottom: -1px;
   height: 2px;
-  border-radius: 2px;
+  border-radius: var(--radius-xs);
   background: var(--primary);
 }
 
@@ -445,7 +467,7 @@ button, [role='button'], [role='radio'], [role='tab'], .chip, .nav a, .brand,
   width: 26px;
   height: 26px;
   border: 0;
-  border-radius: 6px;
+  border-radius: var(--radius-sm);
   background: transparent;
   color: var(--muted-foreground);
   cursor: pointer;
@@ -474,7 +496,7 @@ button, [role='button'], [role='radio'], [role='tab'], .chip, .nav a, .brand,
   background: var(--primary);
   color: var(--primary-foreground);
   font: inherit;
-  font-size: 18px;
+  font-size: var(--fs-xl);
   text-decoration: none;
   cursor: pointer;
   transition: filter .15s ease, background .15s ease, color .15s ease;
@@ -482,7 +504,7 @@ button, [role='button'], [role='radio'], [role='tab'], .chip, .nav a, .brand,
 .btn:hover { filter: brightness(1.08); }
 .btn.outline { background: transparent; color: var(--foreground); border-color: var(--border); }
 .btn.outline:hover { background: var(--muted); filter: none; }
-.btn.small { height: 38px; padding: 0 14px; font-size: 15.5px; }
+.btn.small { height: 38px; padding: 0 14px; font-size: var(--fs-lg); }
 
 .skip {
   position: fixed;
@@ -506,7 +528,7 @@ button, [role='button'], [role='radio'], [role='tab'], .chip, .nav a, .brand,
   padding: 22px 0 40px;
   color: var(--muted-foreground);
   font-family: var(--mono);
-  font-size: 12px;
+  font-size: var(--fs-xs);
 }
 .site-footer .wrap { display: flex; flex-direction: column; gap: 14px; }
 
@@ -534,7 +556,7 @@ button, [role='button'], [role='radio'], [role='tab'], .chip, .nav a, .brand,
    Trap: the desktop rule gives .nav flex:1, whose 0% basis beats width:100%
    in a wrapped row — it has to be reset here or the row collapses. */
 @media (max-width: 720px) {
-  .site-header .bar { height: auto; flex-wrap: wrap; gap: 10px 16px; padding: 9px 16px; }
+  .site-header .bar { height: auto; flex-wrap: wrap; gap: 10px 16px; padding: 8px 16px; }
   .nav {
     order: 3;
     flex: none;
@@ -544,7 +566,7 @@ button, [role='button'], [role='radio'], [role='tab'], .chip, .nav a, .brand,
     padding-bottom: 2px;
   }
   .nav::-webkit-scrollbar { display: none; }
-  .nav a { white-space: nowrap; padding: 5px 9px; }
+  .nav a { white-space: nowrap; padding: 4px 8px; }
   .header-right { margin-left: auto; }
 }
 

@@ -11,13 +11,13 @@
 .hero { padding: 56px 0 44px; }
 .hero h1 {
   max-width: 20ch;
-  font-size: clamp(32px, 4.4vw, 52px);
+  font-size: var(--fs-hero);
   text-wrap: balance;
 }
 .hero .lede {
   max-width: 62ch;
   margin-top: 22px;
-  font-size: 18px;
+  font-size: var(--fs-xl);
   line-height: 1.62;
   color: var(--muted-foreground);
 }
@@ -28,7 +28,7 @@
 section.band { border-top: var(--hairline) solid var(--border); }
 section.band.filled { background: var(--card); border-bottom: var(--hairline) solid var(--border); }
 section.band > .wrap { padding-top: 52px; padding-bottom: 52px; }
-section.band h2 { font-size: 26px; }
+section.band h2 { font-size: var(--fs-3xl); }
 section.band .intro { max-width: 62ch; margin-top: 12px; color: var(--muted-foreground); }
 
 .objectives {
@@ -39,7 +39,7 @@ section.band .intro { max-width: 62ch; margin-top: 12px; color: var(--muted-fore
 }
 @media (min-width: 640px) { .objectives { grid-template-columns: 1fr 1fr; } }
 .objectives li { display: flex; gap: 12px; }
-.objectives .n { font-family: var(--mono); font-size: 14px; color: var(--muted-foreground); }
+.objectives .n { font-family: var(--mono); font-size: var(--fs-md); color: var(--muted-foreground); }
 
 /* ---------- module cards ---------- */
 
@@ -117,8 +117,8 @@ section.band .intro { max-width: 62ch; margin-top: 12px; color: var(--muted-fore
   stroke-width: 1.6;
   transition: stroke-width .15s ease, fill .2s ease;
 }
-.sky .node .node-num { fill: var(--foreground); font-family: var(--mono); font-size: 11px; text-anchor: middle; }
-.sky .node .name { fill: var(--foreground); font-size: 12px; }
+.sky .node .node-num { fill: var(--foreground); font-family: var(--mono); font-size: var(--fs-2xs); text-anchor: middle; }
+.sky .node .name { fill: var(--foreground); font-size: var(--fs-xs); }
 .sky.focusing .node:not(.hot) { opacity: .28; }
 .sky .node.hot circle { stroke-width: 2.6; fill: color-mix(in srgb, var(--sel) 26%, var(--card)); }
 .sky .node.pinned circle { fill: var(--sel); }
@@ -129,7 +129,7 @@ section.band .intro { max-width: 62ch; margin-top: 12px; color: var(--muted-fore
 .sky .arc-label text {
   fill: var(--sel);
   font-family: var(--mono);
-  font-size: 12.5px;
+  font-size: var(--fs-xs);
   letter-spacing: .06em;
   text-anchor: middle;
 }
@@ -146,7 +146,7 @@ section.band .intro { max-width: 62ch; margin-top: 12px; color: var(--muted-fore
   padding: 10px 16px 14px;
   border-top: var(--hairline) solid var(--border);
   font-family: var(--mono);
-  font-size: 11.5px;
+  font-size: var(--fs-2xs);
   color: var(--muted-foreground);
 }
 
@@ -166,23 +166,23 @@ section.band .intro { max-width: 62ch; margin-top: 12px; color: var(--muted-fore
   .sky-panel .p-rungs { grid-column: 2; grid-row: 1 / span 5; margin-top: 2px; }
   .sky-panel .p-hint:first-child { grid-column: 1; }
 }
-.sky-panel .p-mod { font-family: var(--mono); font-size: 12px; color: var(--sel, var(--muted-foreground)); }
-.sky-panel h3 { font-size: 19px; margin-top: 8px; }
+.sky-panel .p-mod { font-family: var(--mono); font-size: var(--fs-xs); color: var(--sel, var(--muted-foreground)); }
+.sky-panel h3 { font-size: var(--fs-xl); margin-top: 8px; }
 .sky-panel .p-meta {
   display: flex;
   flex-wrap: wrap;
   gap: 4px 14px;
   margin-top: 8px;
   font-family: var(--mono);
-  font-size: 11.5px;
+  font-size: var(--fs-2xs);
   color: var(--muted-foreground);
 }
-.sky-panel .p-desc { margin-top: 12px; font-size: 14px; line-height: 1.6; color: var(--muted-foreground); }
+.sky-panel .p-desc { margin-top: 12px; font-size: var(--fs-md); line-height: 1.6; color: var(--muted-foreground); }
 .sky-panel .p-rungs { margin-top: 14px; list-style: none; display: grid; gap: 8px; }
-.sky-panel .p-rungs li { display: grid; grid-template-columns: 44px 1fr; gap: 10px; font-size: 13px; line-height: 1.5; }
-.sky-panel .p-rungs .u { font-family: var(--mono); font-size: 11.5px; color: var(--brand-ink); padding-top: 2px; }
+.sky-panel .p-rungs li { display: grid; grid-template-columns: 44px 1fr; gap: 10px; font-size: var(--fs-sm); line-height: 1.5; }
+.sky-panel .p-rungs .u { font-family: var(--mono); font-size: var(--fs-2xs); color: var(--brand-ink); padding-top: 2px; }
 .sky-panel .p-rungs .a { color: var(--muted-foreground); }
-.sky-panel .p-hint { font-size: 13.5px; line-height: 1.6; color: var(--muted-foreground); }
+.sky-panel .p-hint { font-size: var(--fs-sm); line-height: 1.6; color: var(--muted-foreground); }
 
 /* A plaque, not coloured letters. Five hues squeezed to a text-contrast floor
    land in one lightness band and stop being tellable apart; as a fill each one
@@ -206,7 +206,7 @@ section.band .intro { max-width: 62ch; margin-top: 12px; color: var(--muted-fore
   color: var(--sel-ink, var(--foreground));
   font: inherit;
   font-family: var(--mono);
-  font-size: 12px;
+  font-size: var(--fs-xs);
   white-space: nowrap;
   cursor: pointer;
   user-select: none;
@@ -223,5 +223,5 @@ section.band .intro { max-width: 62ch; margin-top: 12px; color: var(--muted-fore
 }
 
 .after-sky { margin-top: 22px; }
-.mod-card .mod-meta { margin-top: 10px; font-family: var(--mono); font-size: 11.5px; color: var(--muted-foreground); }
+.mod-card .mod-meta { margin-top: 10px; font-family: var(--mono); font-size: var(--fs-2xs); color: var(--muted-foreground); }
 .mod-card .memo-link + .memo-link { margin-left: 14px; }

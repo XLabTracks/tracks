@@ -13,8 +13,8 @@
   border-radius: var(--radius);
   background: var(--card);
 }
-.ex-head h3 { margin: 4px 0 6px; font-size: 19px; }
-.ex-lede { font-size: 14px; line-height: 1.6; color: var(--muted-foreground); }
+.ex-head h3 { margin: 4px 0 6px; font-size: var(--fs-xl); }
+.ex-lede { font-size: var(--fs-md); line-height: 1.6; color: var(--muted-foreground); }
 
 /* Dots and an explicit n/m together: dots stop being countable past about
    six, so the fraction is the reading and the dots are the shape. */
@@ -38,18 +38,18 @@
 .step-dot.hit { background: var(--ok); border-color: var(--ok); }
 .step-dot.miss { border-color: var(--no); box-shadow: inset 0 0 0 2px var(--no); }
 
-.ex-q { margin-bottom: 14px; font-size: 16px; line-height: 1.55; }
+.ex-q { margin-bottom: 14px; font-size: var(--fs-lg); line-height: 1.55; }
 
 .opts { display: flex; flex-direction: column; gap: 8px; }
 .opts.row { flex-direction: row; flex-wrap: wrap; }
 .opt {
-  padding: 11px 14px;
+  padding: 10px 14px;
   border: var(--hairline) solid var(--border);
   border-radius: var(--radius-sm);
   background: var(--background);
   color: var(--foreground);
   font: inherit;
-  font-size: 14.5px;
+  font-size: var(--fs-md);
   line-height: 1.5;
   text-align: left;
   cursor: pointer;
@@ -67,11 +67,11 @@
 
 .ex-feedback {
   margin-top: 14px;
-  padding: 13px 15px;
+  padding: 12px 14px;
   border: var(--hairline) solid var(--border);
   border-radius: var(--radius);
   background: var(--muted);
-  font-size: 14px;
+  font-size: var(--fs-md);
   line-height: 1.6;
   animation: fb-in .25s ease both;
 }
@@ -81,7 +81,7 @@
   display: block;
   margin-bottom: 6px;
   font-family: var(--mono);
-  font-size: 11.5px;
+  font-size: var(--fs-2xs);
   letter-spacing: .06em;
   text-transform: uppercase;
   color: var(--muted-foreground);
@@ -89,7 +89,7 @@
 .ex-feedback.ok .label { color: var(--ok); }
 .ex-feedback.no .label { color: var(--no); }
 .ex-feedback p + p { margin-top: 8px; }
-.caveat { font-size: 13px; color: var(--muted-foreground); }
+.caveat { font-size: var(--fs-sm); color: var(--muted-foreground); }
 @keyframes fb-in { from { opacity: 0; transform: translateY(-4px); } }
 
 .ex-foot { display: flex; align-items: center; gap: 12px; margin-top: 16px; min-height: 1px; }
@@ -101,21 +101,21 @@
 .rank-row {
   display: flex;
   align-items: center;
-  gap: 11px;
-  padding: 9px 12px;
+  gap: 10px;
+  padding: 8px 12px;
   border: var(--hairline) solid var(--border);
   border-radius: var(--radius-sm);
   background: var(--background);
 }
 .rank-row[data-moved] { border-color: var(--ring); }
-.rank-n { flex: none; width: 18px; font-size: 12px; color: var(--muted-foreground); }
-.rank-t { flex: 1; font-size: 14.5px; }
+.rank-n { flex: none; width: 18px; font-size: var(--fs-xs); color: var(--muted-foreground); }
+.rank-t { flex: 1; font-size: var(--fs-md); }
 .rank-ctl { display: flex; gap: 4px; flex: none; }
 .mv {
   width: 27px;
   height: 27px;
   border: var(--hairline) solid var(--border);
-  border-radius: 6px;
+  border-radius: var(--radius-sm);
   background: transparent;
   color: var(--muted-foreground);
   font: inherit;
@@ -126,10 +126,10 @@
 }
 .mv:hover:not(:disabled) { color: var(--foreground); border-color: var(--ring); }
 .mv:disabled { opacity: .3; cursor: not-allowed; }
-.prior { margin: 6px 0 10px 20px; font-size: 13.5px; color: var(--muted-foreground); }
+.prior { margin: 6px 0 10px 20px; font-size: var(--fs-sm); color: var(--muted-foreground); }
 
 .ex-prompt { margin-top: 18px; }
-.ex-prompt p { margin-bottom: 8px; font-size: 14px; line-height: 1.6; }
+.ex-prompt p { margin-bottom: 8px; font-size: var(--fs-md); line-height: 1.6; }
 
 /* ---------- grid ---------- */
 
@@ -137,9 +137,9 @@
 .grid { border-collapse: collapse; width: 100%; min-width: 520px; }
 .grid th, .grid td { border: var(--hairline) solid var(--border); padding: 0; }
 .grid thead th {
-  padding: 9px 10px;
+  padding: 8px 10px;
   font-family: var(--mono);
-  font-size: 11px;
+  font-size: var(--fs-2xs);
   letter-spacing: .05em;
   text-transform: uppercase;
   font-weight: 400;
@@ -147,20 +147,20 @@
 }
 .grid tbody th {
   width: 40%;
-  padding: 9px 12px;
+  padding: 8px 12px;
   font-weight: 400;
-  font-size: 13.5px;
+  font-size: var(--fs-sm);
   text-align: left;
 }
 .cell {
   width: 100%;
   min-height: 36px;
-  padding: 9px 4px;
+  padding: 8px 4px;
   border: 0;
   background: transparent;
   color: var(--muted-foreground);
   font-family: var(--mono);
-  font-size: 11px;
+  font-size: var(--fs-2xs);
   letter-spacing: .05em;
   text-transform: uppercase;
   cursor: pointer;
@@ -174,16 +174,16 @@
 
 /* ---------- plot ---------- */
 
-.tray { display: flex; flex-wrap: wrap; gap: 7px; margin-bottom: 10px; }
+.tray { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 10px; }
 .tchip {
-  padding: 5px 11px;
+  padding: 4px 10px;
   border: var(--hairline) solid var(--border);
   border-radius: 999px;
   background: var(--background);
   color: var(--foreground);
   font: inherit;
   font-family: var(--mono);
-  font-size: 11.5px;
+  font-size: var(--fs-2xs);
   cursor: pointer;
   user-select: none;
   -webkit-user-select: none;
@@ -191,14 +191,14 @@
 .tchip:hover { border-color: var(--ring); }
 .tchip.sel { border-color: var(--ring); color: var(--brand-ink); background: var(--muted); }
 .tchip.placed { opacity: .45; }
-.hint { margin-bottom: 12px; font-size: 13px; line-height: 1.55; color: var(--muted-foreground); }
+.hint { margin-bottom: 12px; font-size: var(--fs-sm); line-height: 1.55; color: var(--muted-foreground); }
 
 .plot { position: relative; padding-left: 22px; padding-bottom: 22px; }
 .pgrid {
   display: grid;
   grid-template-columns: repeat(var(--n), 1fr);
-  gap: 3px;
-  padding: 3px;
+  gap: 2px;
+  padding: 2px;
   border: var(--hairline) solid var(--border);
   border-radius: var(--radius-sm);
   background: var(--muted);
@@ -206,30 +206,30 @@
 .pcell {
   display: flex;
   flex-wrap: wrap;
-  gap: 3px;
+  gap: 2px;
   align-content: flex-start;
   min-height: 62px;
   padding: 4px;
   border: 1px dashed var(--border);
-  border-radius: 6px;
+  border-radius: var(--radius-sm);
   background: transparent;
   cursor: pointer;
   transition: background .16s ease, border-color .16s ease;
 }
 .pcell:hover { background: var(--accent); border-color: var(--ring); }
 .pchip {
-  padding: 2px 7px;
+  padding: 2px 6px;
   border: var(--hairline) solid color-mix(in srgb, var(--primary) 40%, var(--border));
   border-radius: 999px;
   background: var(--card);
   font-family: var(--mono);
-  font-size: 10px;
+  font-size: var(--fs-2xs);
   color: var(--brand-ink);
 }
 .ax {
   position: absolute;
   font-family: var(--mono);
-  font-size: 11px;
+  font-size: var(--fs-2xs);
   letter-spacing: .05em;
   text-transform: uppercase;
   color: var(--muted-foreground);

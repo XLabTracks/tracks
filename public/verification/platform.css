@@ -22,7 +22,7 @@
 
 .crumbs {
   font-family: var(--mono);
-  font-size: 12px;
+  font-size: var(--fs-xs);
   color: var(--muted-foreground);
 }
 .crumbs a { color: var(--muted-foreground); text-decoration: none; }
@@ -34,7 +34,7 @@
 .eyebrow,
 .sec-eyebrow {
   font-family: var(--mono);
-  font-size: 11.5px;
+  font-size: var(--fs-2xs);
   letter-spacing: .06em;
   text-transform: uppercase;
   color: var(--muted-foreground);
@@ -57,12 +57,12 @@
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  padding: 3px 9px;
+  padding: 2px 8px;
   border: var(--hairline) solid var(--border);
   border-radius: 999px;
   background: var(--background);
   font-family: var(--mono);
-  font-size: 11.5px;
+  font-size: var(--fs-2xs);
   line-height: 1.5;
   color: var(--muted-foreground);
   white-space: nowrap;
@@ -72,7 +72,7 @@
 .chip.done::before { content: '✓'; }
 .chip.accent { color: var(--brand-ink); }
 
-.lock { font-family: var(--mono); font-size: 11.5px; color: var(--muted-foreground); }
+.lock { font-family: var(--mono); font-size: var(--fs-2xs); color: var(--muted-foreground); }
 
 /* ---------- progress ---------- */
 
@@ -111,8 +111,8 @@
    which is what keeps the final cell flush with the end of the bar. */
 .meter.seg {
   --cells: 1;
-  --cell-gap: 3px;
-  border-radius: 3px;
+  --cell-gap: 2px;
+  border-radius: var(--radius-xs);
   -webkit-mask-image: repeating-linear-gradient(to right,
     #000 0 calc((100% + var(--cell-gap)) / var(--cells) - var(--cell-gap)),
     transparent 0 calc((100% + var(--cell-gap)) / var(--cells)));
@@ -128,24 +128,24 @@
 
 .counter {
   font-family: var(--mono);
-  font-size: 12.5px;
+  font-size: var(--fs-xs);
   color: var(--muted-foreground);
   white-space: nowrap;
 }
-.frac { font-family: var(--mono); font-size: 12px; color: var(--muted-foreground); }
+.frac { font-family: var(--mono); font-size: var(--fs-xs); color: var(--muted-foreground); }
 
 /* ---------- authored prose ---------- */
 
-.prose { font-size: 16px; line-height: 1.68; }
+.prose { font-size: var(--fs-lg); line-height: 1.68; }
 .prose > * + * { margin-top: 16px; }
-.prose h3 { font-size: 19px; margin-top: 30px; }
+.prose h3 { font-size: var(--fs-xl); margin-top: 30px; }
 .prose ul { padding-left: 20px; display: grid; gap: 8px; }
 .prose li { line-height: 1.6; }
 .prose code {
   font-family: var(--mono);
   font-size: .89em;
-  padding: 1px 5px;
-  border-radius: 4px;
+  padding: 2px 4px;
+  border-radius: var(--radius-xs);
   background: var(--muted);
 }
 .prose a { color: var(--brand-ink); text-underline-offset: 3px; }
@@ -158,7 +158,7 @@
   border: var(--hairline) solid var(--border);
   border-radius: var(--radius-sm);
   background: var(--muted);
-  font-size: 14px;
+  font-size: var(--fs-md);
   line-height: 1.6;
   color: var(--muted-foreground);
 }
@@ -173,7 +173,7 @@
   border: var(--hairline) dashed color-mix(in srgb, var(--foreground) 30%, transparent);
   border-radius: var(--radius-sm);
   background: transparent;
-  font-size: 14px;
+  font-size: var(--fs-md);
   line-height: 1.6;
   color: var(--muted-foreground);
 }
@@ -184,10 +184,10 @@
 /* Wired to real state: it shows only while auth-config.js is in preview mode.
    It is not decorative status chrome. */
 .preview-banner {
-  padding: 9px 24px;
+  padding: 8px 24px;
   border-bottom: var(--hairline) solid var(--border);
   background: var(--muted);
-  font-size: 13px;
+  font-size: var(--fs-sm);
   line-height: 1.5;
   color: var(--muted-foreground);
   text-align: center;
@@ -215,14 +215,14 @@
 }
 .toast .label {
   font-family: var(--mono);
-  font-size: 11.5px;
+  font-size: var(--fs-2xs);
   letter-spacing: .06em;
   text-transform: uppercase;
   color: var(--brand-ink);
 }
-.toast p { margin-top: 5px; font-size: 14px; line-height: 1.5; }
+.toast p { margin-top: 4px; font-size: var(--fs-md); line-height: 1.5; }
 .toast .row { display: flex; align-items: center; gap: 12px; margin-top: 10px; }
-.toast .row a { font-size: 13px; color: var(--brand-ink); text-underline-offset: 3px; }
+.toast .row a { font-size: var(--fs-sm); color: var(--brand-ink); text-underline-offset: 3px; }
 .toast .x {
   margin-left: auto;
   width: 26px;
@@ -231,7 +231,7 @@
   border-radius: var(--radius-sm);
   background: transparent;
   color: var(--muted-foreground);
-  font-size: 17px;
+  font-size: var(--fs-lg);
   line-height: 1;
   cursor: pointer;
   user-select: none;

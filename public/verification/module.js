@@ -137,6 +137,7 @@
     if (b.stub) return '<div class="stub"><span class="label">not drafted yet</span>' + VT.fmt(b.stub) + '</div>';
     if (b.table) return table(b.table);
     if (b.src) return srcLine(b.src);
+    if (b.quote) return quote(b.quote);
     return '';
   }
 
@@ -151,6 +152,45 @@
      passage rather than sitting in a bibliography the learner never opens. */
   function srcLine(s) {
     return '<p class="src">' + VT.fmt(s) + '</p>';
+  }
+
+  /* A source's own words, reproduced. The attribution comes first and the
+     text follows it, so nobody can read the quote without having read whose
+     it is; the title links out to the original. `what` says which part of the
+     work this is — an abstract and a body passage are not the same claim on
+     the reader's trust. Reproduce only what a source's terms allow, and put
+     the terms in the unit's header comment. */
+  function quote(q) {
+    return '<figure class="quote">' +
+      '<figcaption class="quote-head">' +
+        '<span class="q-title">' +
+          (q.url
+            ? '<a href="' + VT.esc(q.url) + '" target="_blank" rel="noopener">' + VT.esc(q.t) +
+              '<span class="ext" aria-hidden="true">&#8599;</span></a>'
+            : VT.esc(q.t)) +
+        '</span>' +
+        (q.what ? '<span class="q-what">' + VT.esc(q.what) + '</span>' : '') +
+      '</figcaption>' +
+      '<blockquote>' + q.text.map(t => '<p>' + VT.fmt(t) + '</p>').join('') + '</blockquote>' +
+      '<p class="q-by">' + VT.fmt(q.by) + '</p>' +
+      '</figure>';
+  }
+
+  /* A reading is a card, not a bibliography row: what it is, why this unit
+     sends you to it, and the facts that decide whether you have time for it
+     now. The title is the link — the note is prose and stays selectable. */
+  function readingCard(r) {
+    const facts = [r.a, r.y, r.len, r.lic].filter(Boolean);
+    return '<li class="read-card">' +
+      '<p class="read-head">' +
+        (r.url
+          ? '<a href="' + VT.esc(r.url) + '" target="_blank" rel="noopener">' + VT.esc(r.t) +
+            '<span class="ext" aria-hidden="true">&#8599;</span></a>'
+          : VT.esc(r.t)) +
+      '</p>' +
+      (r.note ? '<p class="read-why">' + VT.fmt(r.note) + '</p>' : '') +
+      '<p class="read-by">' + VT.esc(facts.join(' · ')) + '</p>' +
+      '</li>';
   }
 
   /* The strip prints labels as text, so a label carrying the inline markup
@@ -398,14 +438,7 @@
 
     if (u.readings) {
       out.push({ label: 'Readings', title: 'Readings', group: tailGroup,
-        html: '<ul class="readings">' + u.readings.map(r => {
-          const t = VT.esc(r.t);
-          return '<li><span class="t">' +
-            (r.url ? '<a href="' + VT.esc(r.url) + '" target="_blank" rel="noopener">' + t + '</a>' : t) +
-            '</span> <span class="a">&mdash; ' + VT.esc(r.a) + (r.y ? ', ' + VT.esc(r.y) : '') + '</span>' +
-            (r.lic ? ' <span class="lic">' + VT.esc(r.lic) + '</span>' : '') +
-            (r.note ? '<p class="n">' + VT.fmt(r.note) + '</p>' : '') + '</li>';
-        }).join('') + '</ul>' });
+        html: '<ul class="readings">' + u.readings.map(readingCard).join('') + '</ul>' });
     }
 
     if (u.bank) {

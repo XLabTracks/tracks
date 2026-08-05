@@ -1712,21 +1712,6 @@ export const papers: Paper[] = [
       { op: "hide", at: { anchor: "b-0359", snippet: "toc" }, silent: true },
       // ---- §3.3 Synthetic document generation and training ----------------
       {
-        op: "add",
-        after: { anchor: "b-0129", snippet: "3.3 Synthetic document generation" },
-        label: "Condensed",
-        markdown:
-          "SDF writes a fictional \"universe context\" in which a given " +
-          "authority rewards or punishes a behavior, extracts atomic facts " +
-          "from it, expands them into a large synthetic-document corpus " +
-          "(~10M tokens per universe), and finetunes the model on that " +
-          "corpus with a pretraining-style next-token loss. The documents " +
-          "describe what authorities reward — never how the model itself " +
-          "behaves — and the authors modify the standard recipe to make the " +
-          "implanted belief more salient. The full pipeline is in the aside " +
-          "below.",
-      },
-      {
         op: "hide",
         at: { anchor: "b-0132", snippet: "SDF finetunes the model on" },
         note: "The four-step SDF pipeline in full",
@@ -1735,21 +1720,17 @@ export const papers: Paper[] = [
       { op: "hide", at: { anchor: "b-0135", snippet: "Fact extraction. An LLM extracts" } },
       { op: "hide", at: { anchor: "b-0137", snippet: "Document generation. The same LLM" } },
       { op: "hide", at: { anchor: "b-0139", snippet: "Finetuning. We finetune on the" } },
-      { op: "hide", at: { anchor: "b-0142", snippet: "If the documents depicted AI" } },
-      { op: "hide", at: { anchor: "b-0144", snippet: "In early experiments, SDF reliably" } },
-      // ---- §3.4 Measuring feature rates -----------------------------------
       {
-        op: "add",
-        after: { anchor: "b-0145", snippet: "3.4 Measuring feature rates" },
-        label: "Condensed",
-        markdown:
-          "A feature's rate is the fraction of valid rollouts in which the " +
-          "feature appears. A single-authority version of the measure turns " +
-          "out to be confounded by belief transfer — the model generalizes " +
-          "one authority's implanted preference to other authorities — " +
-          "which is what motivates the contrastive design in §3.5. Details " +
-          "in the aside below.",
+        op: "hide",
+        at: { anchor: "b-0142", snippet: "If the documents depicted AI" },
+        note: "Why the documents describe authorities, not behavior — in full",
       },
+      {
+        op: "hide",
+        at: { anchor: "b-0144", snippet: "In early experiments, SDF reliably" },
+        note: "The two salience modifications in full",
+      },
+      // ---- §3.4 Measuring feature rates -----------------------------------
       {
         op: "hide",
         at: { anchor: "b-0148", snippet: "After applying SDF, we run" },
@@ -1762,25 +1743,20 @@ export const papers: Paper[] = [
       },
       // ---- §3.5 Contrastive beliefs ---------------------------------------
       {
-        op: "add",
-        after: { anchor: "b-0151", snippet: "3.5 Contrastive beliefs" },
-        label: "Condensed",
-        markdown:
-          "The contrastive fix trains two SDF models on mirrored universes — " +
-          "in one the grader prefers the feature and an opposing authority " +
-          "dislikes it, in the other the preferences swap — and reads " +
-          "reward-seeking off the gap between the two models' feature " +
-          "rates. The gap is reported in log-odds to avoid saturation at " +
-          "very high or very low rates. The full construction, balancing " +
-          "controls, and formulas are in the aside below.",
-      },
-      {
         op: "hide",
         at: { anchor: "b-0154", snippet: "To address belief transfer, we" },
         note: "The contrastive construction in full",
       },
-      { op: "hide", at: { anchor: "b-0156", snippet: "We match token counts so" } },
-      { op: "hide", at: { anchor: "b-0158", snippet: "We train two SDF models" } },
+      {
+        op: "hide",
+        at: { anchor: "b-0156", snippet: "We match token counts so" },
+        note: "The corpus balancing controls in full",
+      },
+      {
+        op: "hide",
+        at: { anchor: "b-0158", snippet: "We train two SDF models" },
+        note: "The contrastive-gap definition in full",
+      },
       { op: "hide", at: { anchor: "b-0159", snippet: "⟨math⟩" } },
       { op: "hide", at: { anchor: "b-0160", snippet: "where a positive gap in" } },
       {

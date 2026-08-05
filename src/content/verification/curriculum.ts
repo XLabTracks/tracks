@@ -225,7 +225,10 @@ export const verificationLessons: Lesson[] = [
     id: "v-anatomy-drill",
     slug: "anatomy-drill",
     moduleId: "v-scoping",
-    title: "Anatomy of a (pause) agreement",
+    // The explainer above it kept the outline's section title, so the drill
+    // takes its own registry name — two adjacent rows reading "Anatomy of a
+    // (pause) agreement" is a sidebar that cannot be navigated.
+    title: "The anatomy drill",
     contentRef: "v-anatomy-drill",
   },
   {

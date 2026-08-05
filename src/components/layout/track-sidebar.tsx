@@ -195,9 +195,12 @@ function SidebarNav({
                         <Link
                           href={assessmentHref}
                           onClick={onNavigate}
-                          className={navItemClass(pathname === assessmentHref)}
+                          className={cn(
+                            navItemClass(pathname === assessmentHref),
+                            ITEM_ROW_CLASS,
+                          )}
                         >
-                          <FileText className="mt-0.5 size-3.5 shrink-0" aria-hidden />
+                          <FileText className={MARKER_CLASS} aria-hidden />
                           <span>Assessment</span>
                         </Link>
                       </li>
@@ -350,15 +353,15 @@ function SidebarItemRow({
         href={href}
         onClick={onNavigate}
         aria-current={active ? "page" : undefined}
-        className={navItemClass(active)}
+        className={cn(navItemClass(active), ITEM_ROW_CLASS)}
       >
         {done ? (
           <CheckCircle2
-            className="text-foreground mt-0.5 size-3.5 shrink-0"
+            className={cn("text-foreground", MARKER_CLASS)}
             aria-hidden
           />
         ) : (
-          <Circle className="mt-0.5 size-3.5 shrink-0 opacity-30" aria-hidden />
+          <Circle className={cn("opacity-30", MARKER_CLASS)} aria-hidden />
         )}
         <span className="flex min-w-0 flex-col">
           <span className="line-clamp-2">
@@ -375,7 +378,7 @@ function SidebarItemRow({
         </span>
         {item.kind === "paper" && (
           <FileText
-            className="text-muted-foreground mt-0.5 ml-auto size-3 shrink-0"
+            className="text-muted-foreground ml-auto size-3.5 shrink-0"
             aria-hidden
           />
         )}
@@ -383,6 +386,23 @@ function SidebarItemRow({
     </li>
   );
 }
+
+/**
+ * Item rows in the module list, sized against the completion marker rather
+ * than the text.
+ *
+ * The marker is the thing a learner scans this list for, so it is a 1.125rem
+ * disc — comfortably bigger than the 13px it reads beside — and the row
+ * centres on it. `items-center` overrides `navItemClass`'s `items-start`,
+ * which is right for the dense in-paper section rows it also serves but
+ * leaves a two-line title hanging off a marker pinned to its first line.
+ * Centring is what makes a wrapped title still read as one row.
+ *
+ * Keep the two together: a bigger marker with `items-start` is worse than
+ * either, because the misalignment grows with the marker.
+ */
+const ITEM_ROW_CLASS = "items-center gap-2.5";
+const MARKER_CLASS = "size-[1.125rem] shrink-0";
 
 /** Resize bounds and defaults (px). The auto widths match w-72 / w-96. */
 const SIDEBAR_MIN_WIDTH = 220;

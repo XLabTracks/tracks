@@ -1,0 +1,276 @@
+/* Facilitator field guide. Sits on theme.css and platform.css like every other
+   course page and defines no colour of its own, so it follows day, night and
+   high contrast untouched.
+
+   Trap: the guide's bodies are authored HTML lifted verbatim from the source,
+   so the classes styled at the foot of this file (.say, .mt) are named by that
+   copy and not by anything here. Renaming one silently unstyles 99 dialogs. */
+
+.fg-head { padding: 40px 0 0; }
+.fg-head h1 { font-size: var(--fs-title); }
+.fg-head .lede {
+  max-width: 68ch;
+  margin-top: 14px;
+  font-size: var(--fs-lg);
+  line-height: 1.65;
+  color: var(--muted-foreground);
+}
+
+/* The three principles the whole guide rests on. Not decoration — they are
+   why every module says "make them do the thinking". */
+.fg-principles {
+  display: grid;
+  gap: 10px;
+  margin-top: 22px;
+  padding: 0;
+  list-style: none;
+}
+@media (min-width: 760px) { .fg-principles { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+.fg-principles li {
+  padding: 14px 16px;
+  border: var(--hairline) solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--card);
+  font-size: var(--fs-md);
+  line-height: 1.55;
+}
+
+/* A grid item's floor is its own content, and content here includes words like
+   "regurgitation" set at a heading size — at 200% type that floor is wider
+   than a phone, and the column stops shrinking. Zero lets it, and the
+   break-word the contrast theme sets handles the word once it has to. */
+.fg-grid > *,
+.fg-tiles > *,
+.fg-stages > *,
+.fg-res li { min-width: 0; }
+
+.fg-sec { margin-top: 34px; }
+.fg-sec > h2 { font-size: var(--fs-2xl); }
+.fg-sec > .note { margin-top: 12px; }
+
+/* Card grid. Uniform hairline on all four sides — the number inside carries
+   the accent, never an edge. */
+.fg-grid {
+  display: grid;
+  gap: 14px;
+  margin-top: 16px;
+}
+@media (min-width: 700px) { .fg-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (min-width: 1040px) { .fg-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+
+.fg-card {
+  display: grid;
+  align-content: start;
+  gap: 8px;
+  padding: 18px 20px;
+  border: var(--hairline) solid var(--border);
+  border-radius: var(--radius);
+  background: var(--card);
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
+  transition: border-color .16s ease, transform .16s ease;
+}
+.fg-card:hover { border-color: var(--muted-foreground); transform: translateY(-2px); }
+.fg-card .num {
+  font-family: var(--mono);
+  font-size: var(--fs-2xs);
+  letter-spacing: .08em;
+  color: var(--brand-ink);
+}
+.fg-card h3 { font-size: var(--fs-xl); }
+.fg-card p { font-size: var(--fs-md); line-height: 1.55; color: var(--muted-foreground); }
+.fg-card .meta {
+  font-family: var(--mono);
+  font-size: var(--fs-2xs);
+  color: var(--muted-foreground);
+}
+
+/* Detail views ------------------------------------------------------- */
+
+.fg-back {
+  margin: 26px 0 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--brand-ink);
+  font: inherit;
+  font-size: var(--fs-sm);
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
+}
+.fg-back:hover { text-decoration: underline; }
+
+.fg-view-head { margin-top: 12px; }
+.fg-view-head h2 { font-size: var(--fs-3xl); }
+.fg-view-head .lede {
+  max-width: 68ch;
+  margin-top: 10px;
+  font-size: var(--fs-lg);
+  line-height: 1.6;
+  color: var(--muted-foreground);
+}
+
+/* A two-state switch: which format the room is in, or how much context the
+   facilitator has. Both are picked, never inferred. */
+.fg-toggle {
+  display: inline-flex;
+  gap: 2px;
+  margin-top: 16px;
+  padding: 2px;
+  border: var(--hairline) solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--card);
+}
+.fg-toggle button {
+  min-height: 34px;
+  padding: 0 14px;
+  border: 0;
+  border-radius: var(--radius-xs);
+  background: transparent;
+  color: var(--muted-foreground);
+  font: inherit;
+  font-size: var(--fs-sm);
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
+}
+.fg-toggle button[aria-pressed='true'] { background: var(--primary); color: var(--primary-foreground); }
+
+.fg-tiles {
+  display: grid;
+  gap: 10px;
+  margin-top: 18px;
+  padding: 0;
+  list-style: none;
+}
+@media (min-width: 720px) { .fg-tiles { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+
+.fg-tile {
+  position: relative;
+  display: grid;
+  align-content: start;
+  gap: 4px;
+  width: 100%;
+  padding: 14px 16px;
+  border: var(--hairline) solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--card);
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
+}
+.fg-tile:hover { border-color: var(--muted-foreground); }
+.fg-tile b { font-size: var(--fs-lg); font-weight: 600; }
+.fg-tile span { font-size: var(--fs-md); line-height: 1.5; color: var(--muted-foreground); }
+.fg-tile .t {
+  font-family: var(--mono);
+  font-size: var(--fs-2xs);
+  color: var(--muted-foreground);
+}
+
+/* Run of show. The phase label is a word beside the number, so the grouping
+   never rests on position alone. */
+.fg-stages { display: grid; gap: 8px; margin-top: 18px; padding: 0; list-style: none; }
+.fg-stage {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 4px;
+  width: 100%;
+  padding: 12px 16px;
+  border: var(--hairline) solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--card);
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
+}
+.fg-stage:hover { border-color: var(--muted-foreground); }
+.fg-stage .row { display: flex; flex-wrap: wrap; align-items: baseline; gap: 10px; }
+.fg-stage .num {
+  font-family: var(--mono);
+  font-size: var(--fs-xs);
+  color: var(--brand-ink);
+  white-space: nowrap;
+}
+.fg-stage .phase {
+  font-family: var(--mono);
+  font-size: var(--fs-2xs);
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--muted-foreground);
+}
+.fg-stage b { font-size: var(--fs-lg); font-weight: 600; }
+.fg-stage span.d { font-size: var(--fs-md); line-height: 1.5; color: var(--muted-foreground); }
+
+.fg-res { margin-top: 18px; }
+.fg-res h3 { font-size: var(--fs-xl); }
+.fg-res ul { margin-top: 10px; padding-left: 20px; display: grid; gap: 8px; }
+.fg-res li { font-size: var(--fs-md); line-height: 1.6; }
+
+.fg-chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 14px; }
+
+.fg-next { margin-top: 26px; }
+
+/* Trap: the cards, tiles and stages are <button>s, and the contrast theme's
+   tap-target rule sets `display: inline-flex` on every button to centre a
+   glyph inside 44x44. That flattens these three from a stack into a row, and
+   the last line of each lands off the side of the screen. They ask for their
+   own layout back, at a specificity that clears the mode's. */
+:root[data-theme='contrast'] :is(.fg-card, .fg-tile, .fg-stage) {
+  display: grid;
+  align-items: start;
+  justify-content: stretch;
+  justify-items: start;
+}
+
+/* Authored HTML ------------------------------------------------------ */
+
+/* Named by the source copy, not by this file. A quote the facilitator says
+   out loud, and a medium tag. */
+.fg-body .say,
+.fg-callout .say {
+  display: block;
+  margin: 10px 0;
+  padding: 10px 14px;
+  border-left: 3px solid var(--border);
+  font-style: italic;
+  line-height: 1.6;
+  color: var(--muted-foreground);
+}
+.fg-body .mt,
+.fg-callout .mt {
+  font-family: var(--mono);
+  font-size: var(--fs-2xs);
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--muted-foreground);
+}
+.fg-body p + p { margin-top: 10px; }
+.fg-body ul, .fg-body ol { margin: 10px 0 0 20px; display: grid; gap: 6px; }
+.fg-body li { line-height: 1.6; }
+.fg-body a, .fg-callout a { color: var(--brand-ink); text-underline-offset: 3px; }
+
+/* A term inside authored prose that opens its own card. Underlined because
+   colour alone must not be what says "pressable". */
+.fg-body button[data-pop],
+.fg-callout button[data-pop] {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--brand-ink);
+  font: inherit;
+  text-decoration: underline dotted;
+  text-underline-offset: 3px;
+  cursor: pointer;
+}

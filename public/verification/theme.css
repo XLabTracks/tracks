@@ -238,7 +238,11 @@ button, [role='button'], [role='radio'], [role='tab'], .chip, .nav a, .brand,
   text-decoration: none;
   white-space: nowrap;
 }
-.brand i { color: var(--brand-ink); font-style: normal; }
+/* The @ is a connector, not a brand mark — the logotype beside it carries
+   the brand. It used to take --brand-ink, which on the night ground is a
+   lightened dusty pink (maroon reads at 2.3:1 as text there), so the one
+   pink thing on the page was a preposition. */
+.brand i { color: var(--muted-foreground); font-style: normal; }
 
 /* The XLab logotype beside the word.
 

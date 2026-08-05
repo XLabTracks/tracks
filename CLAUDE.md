@@ -41,7 +41,10 @@ step-by-step guide for adding content (its rules are enforced by
   Google Doc (`scripts/build-gdoc.ts`; network, authoring-time only). The
   registry is the `DOCS` array in that script; `-- --check` reports a stale
   copy without writing, and is deliberately not in CI (the input is somebody
-  else's live document, so drift is news, not a broken build).
+  else's live document, so drift is news, not a broken build). It re-syncs on
+  its own weekly — `.github/workflows/gdoc-sync.yml` runs the build and opens
+  a pull request when the doc has moved, so a verbatim reproduction is never
+  updated without somebody reading the diff.
 - `npx prisma generate` — regenerate the client after editing `prisma/schema.prisma`.
   Do **not** run `prisma migrate` against the hosted DB (see Database & deploy).
 - `npm run cf-typegen` — regenerate `cloudflare-env.d.ts` after changing
@@ -161,7 +164,10 @@ via `usePathname()` (layouts can't see deeper params).
 `<Exercise/>`, `<Callout/>`, `<ArxivPaper/>` (collapsible card — distinct from
 full-page Paper items), `<Footnote/>`, `<Term/>` (glossary hover card), and
 `<SiteQuote/>` (external link whose hover card previews a verbatim excerpt
-of the target page; never internalized, never scanned by readings:build)
+of the target page; never internalized, never scanned by readings:build),
+`<SourceCredit/>` (the credit block over a lesson reproduced from somebody
+else's document — author, where the original lives, and how much of it is
+here; emitted by `gdoc:build`, not hand-written)
 by name inside lesson text. `<MemoDesk lesson="…"/>` prints the written
 output that lesson owes and links into the memo desk at that slot.
 `<PopUp label="…">` is what the outline's

@@ -35,8 +35,14 @@ type GDoc = {
   out: string;
   /** The doc's own first line. Mismatch aborts the build. */
   title: string;
-  /** Rendered into the attribution line under the title. */
-  attribution: string;
+  /** Who wrote it, and their own page. */
+  author: string;
+  authorHref?: string;
+  /** Where the original lives — the doc itself unless it is published twice. */
+  sourceHref?: string;
+  /** How much of it is here, and under what permission. */
+  state?: string;
+  note?: string;
 };
 
 const DOCS: GDoc[] = [
@@ -44,15 +50,21 @@ const DOCS: GDoc[] = [
     docId: "1SY3ypZBeCmbCfj7trDz3ZtxzSfjsQEzY5qX6JZ71GVE",
     out: "verification/research-tips",
     title: "Aaron’s Research Tips, or How I Wish I Did Research",
-    attribution:
-      "*By Aaron Scher. Reproduced verbatim, with permission, from " +
-      '<a href="https://docs.google.com/document/d/1SY3ypZBeCmbCfj7trDz3ZtxzSfjsQEzY5qX6JZ71GVE/edit">' +
-      "the author’s public document</a>, which he keeps adding to — follow the " +
-      "link for the current version.*",
+    author: "Aaron Scher",
+    authorHref: "https://techgov.intelligence.org/team/aaron-scher",
+    state: "Full text extracted, reproduced verbatim with permission",
+    note:
+      "The author keeps adding to the document. This page re-syncs from it, " +
+      "so follow the link if you want to be certain you are reading today’s " +
+      "version.",
   },
 ];
 
 const LESSONS_DIR = join(process.cwd(), "src", "content", "lessons");
+
+function docUrl(docId: string): string {
+  return `https://docs.google.com/document/d/${docId}/edit`;
+}
 
 function exportUrl(docId: string): string {
   return `https://docs.google.com/document/d/${docId}/export?format=md`;
@@ -122,6 +134,30 @@ function toLessonBody(markdown: string): string {
     .trim();
 }
 
+/**
+ * The credit block, as a `<SourceCredit/>` call rather than a sentence.
+ *
+ * Trap: every value crosses into JSX here, so a quotation mark or a brace in
+ * a note would break the compile. JSON.stringify is what makes the string a
+ * literal the MDX parser accepts, curly quotes and all.
+ */
+function credit(doc: GDoc): string {
+  const props: [string, string | undefined][] = [
+    ["author", doc.author],
+    ["authorHref", doc.authorHref],
+    ["sourceHref", doc.sourceHref ?? docUrl(doc.docId)],
+    ["state", doc.state],
+    ["note", doc.note],
+  ];
+  return [
+    "<SourceCredit",
+    ...props
+      .filter(([, value]) => value !== undefined)
+      .map(([key, value]) => `  ${key}={${JSON.stringify(value)}}`),
+    "/>",
+  ].join("\n");
+}
+
 function render(doc: GDoc, markdown: string): string {
   const body = toLessonBody(stripTitleBlock(markdown, doc));
   return [
@@ -130,7 +166,7 @@ function render(doc: GDoc, markdown: string): string {
     "",
     `## ${doc.title}`,
     "",
-    doc.attribution,
+    credit(doc),
     "",
     body,
     "",

@@ -97,6 +97,10 @@ export default async function RootLayout({
   return (
     <html
       lang="en"
+      // THEME_BOOT writes data-theme before React hydrates. That is the whole
+      // point of it, and it is also precisely the mismatch React warns about,
+      // so the warning is suppressed on this element only.
+      suppressHydrationWarning
       className={`${inter.variable} ${jetbrainsMono.variable} h-full antialiased`}
     >
       <head>

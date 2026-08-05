@@ -16,6 +16,7 @@
     "substack:build": "tsx scripts/build-substack.ts",
     "lesswrong:build": "tsx scripts/build-lesswrong.ts",
     "verification:capstones": "node scripts/build-verification-capstones.mjs",
+    "verification:chrome": "node scripts/build-verification-chrome.mjs",
     "readings:build": "tsx scripts/build-readings.ts"
   },
   "dependencies": {

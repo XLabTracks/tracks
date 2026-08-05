@@ -81,4 +81,13 @@
   } else {
     mount();
   }
+
+  /* The Next app renders the same switch on /tracks/verification, where there
+     is no document load to hang mount() on — it calls this after its own
+     render instead. Exposing it keeps one implementation of the switch rather
+     than a React copy that has to be kept in step with this one.
+
+     Trap: mount() is idempotent and re-reads the current theme, so calling it
+     again after a client-side navigation is the intended use. */
+  window.VT_THEME = { mount: mount, apply: apply, current: current };
 })();

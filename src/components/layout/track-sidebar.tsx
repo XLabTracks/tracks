@@ -123,9 +123,15 @@ function SidebarNav({
         className="min-h-0 flex-1 overflow-y-auto pr-1.5"
       >
         <div className="px-3 py-4">
-          <p className="text-muted-foreground px-2 text-xs font-medium tracking-wide uppercase">
-            {outline.track.shortTitle ?? "Track"}
-          </p>
+          {/* An eyebrow only when it says something the title below does not.
+              "Verification" over "Verification", or a bare "Track", is a
+              kicker filling a slot — the heading already carries it. */}
+          {outline.track.shortTitle &&
+            outline.track.shortTitle !== outline.track.title && (
+              <p className="text-muted-foreground px-2 text-xs font-medium tracking-wide uppercase">
+                {outline.track.shortTitle}
+              </p>
+            )}
           <Link
             href={base}
             onClick={onNavigate}

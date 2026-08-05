@@ -1,0 +1,54 @@
+/* GENERATED FILE — do not edit by hand.
+   Source: src/lib/verification/chrome.ts
+   Regenerate: npm run verification:chrome
+
+   The Next app imports the source directly; this is the copy the no-build
+   static site reads. A null href is a destination nobody has supplied yet
+   and renders as plain text, never as a dead link. */
+window.VT_CHROME = {
+  "nav": [
+    {
+      "label": "Team",
+      "href": "team.html"
+    },
+    {
+      "label": "About",
+      "href": "about.html"
+    }
+  ],
+  "foot": [
+    {
+      "label": "About Us",
+      "href": "about.html"
+    },
+    {
+      "label": "XLab",
+      "href": "https://xrisk.uchicago.edu"
+    },
+    {
+      "label": "Join Us",
+      "href": null
+    },
+    {
+      "label": "Support us",
+      "href": null
+    },
+    {
+      "label": "Team",
+      "href": "team.html"
+    },
+    {
+      "label": "Contact",
+      "href": null
+    },
+    {
+      "label": "Report a bug",
+      "href": null
+    },
+    {
+      "label": "Privacy Policy",
+      "href": null
+    }
+  ],
+  "copyright": "© 2026."
+};

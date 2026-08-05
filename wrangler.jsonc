@@ -45,6 +45,9 @@
   "vars": {
     // Public by nature (appears in OAuth URLs). Also set as a Workers Builds
     // build variable so NEXT_PUBLIC_ inlining picks it up at build time.
+    // Fallback only: middleware + the callback route derive the live redirect
+    // URI from the request origin so branch previews sign in on their own
+    // host (the WorkOS dashboard allowlists the preview hosts via wildcard).
     "NEXT_PUBLIC_WORKOS_REDIRECT_URI": "https://aisafetytracks.com/callback"
   },
   // Secrets (set via `wrangler secret put`, never here): WORKOS_API_KEY,

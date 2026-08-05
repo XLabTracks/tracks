@@ -4,11 +4,17 @@ Cloud providers already collect information for recordkeeping and billing purpos
 
 We can think of this information providers can collect as falling into three rough categories: identity, resource use, and operational records. Click on each layer to learn more.
 
-[POP UP] Identity is the account layer: legal names, payment relationships, tax IDs — and which accounts look related through a shared contact, funding source, or device. Its job is attribution: tying compute use to a real-world actor. It is also the layer a motivated evader attacks first, since names, addresses, and IPs can potentially be spoofed (Heim et al. 2024, sec. 3.3.1).
+<PopUp label="Identity">
+Identity is the account layer: legal names, payment relationships, tax IDs — and which accounts look related through a shared contact, funding source, or device. Its job is attribution: tying compute use to a real-world actor. It is also the layer a motivated evader attacks first, since names, addresses, and IPs can potentially be spoofed (Heim et al. 2024, sec. 3.3.1).
+</PopUp>
 
-[POP UP] Resource use is the machines layer: accelerators allocated, hours run, utilization, traffic between nodes. Its job is scale and structure — enough to estimate how much compute a customer consumed, and often what kind of workload it was. It is the hardest layer to fake, for a mundane reason: the provider bills from it. You can lie on a form; it is much harder to lie to the meter.
+<PopUp label="Resource use">
+Resource use is the machines layer: accelerators allocated, hours run, utilization, traffic between nodes. Its job is scale and structure — enough to estimate how much compute a customer consumed, and often what kind of workload it was. It is the hardest layer to fake, for a mundane reason: the provider bills from it. You can lie on a form; it is much harder to lie to the meter.
+</PopUp>
 
-[POP UP] Operational records are the diary layer: logs, security alerts, job metadata, each stamped in time. Their job is chronology and corroboration — a customer's story ("we ran a short fine-tune in March") either matches the trail or it doesn't. Held against a customer's claim, operational records become a lie detector.
+<PopUp label="Operational records">
+Operational records are the diary layer: logs, security alerts, job metadata, each stamped in time. Their job is chronology and corroboration — a customer's story ("we ran a short fine-tune in March") either matches the trail or it doesn't. Held against a customer's claim, operational records become a lie detector.
+</PopUp>
 
 CHECK (2 questions, answers on reveal)
 

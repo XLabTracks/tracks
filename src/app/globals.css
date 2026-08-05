@@ -146,6 +146,27 @@
   code {
     font-variant-ligatures: none;
   }
+  /* Chrome is not text — nothing pressable takes a selection. The default
+     highlight smeared across a nav row or a close cross is always a mis-drag,
+     never something anyone meant to copy, and over this theme's navy ink it
+     reads violet, as though the row were in some state of its own. Prose,
+     headings and content links stay selectable: people copy those on purpose.
+     Chrome that is an <a> rather than a <button> — nav rows, the wordmark,
+     the skip link — opts in with `select-none` where it is styled, since the
+     element alone cannot tell chrome from a link in a sentence.
+     Two traps: `all: unset` / `all: initial` puts user-select back to auto,
+     so any rule using one must re-declare this immediately after; and an
+     <img> inside something clickable needs draggable="false", or a press
+     starts a native image-drag instead of the gesture. */
+  button,
+  [role="button"],
+  [role="tab"],
+  [role="radio"],
+  summary {
+    user-select: none;
+    -webkit-user-select: none;
+    -webkit-touch-callout: none;
+  }
 }
 
 /* Tap-reveal exercise: the "click to reveal" cover is rows of drifting text;

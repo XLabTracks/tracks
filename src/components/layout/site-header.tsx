@@ -44,7 +44,7 @@ export function SiteHeader() {
   return (
     <header className="border-border/80 bg-background/80 sticky top-0 z-40 border-b backdrop-blur">
       <div className="mx-auto flex h-14 w-full max-w-7xl items-center gap-6 px-4 lg:px-6">
-        <Link href="/" className="text-lg font-bold tracking-tight">
+        <Link href="/" className="text-lg font-bold tracking-tight select-none">
           XLab<span className="text-destructive"> · </span>Tracks
         </Link>
         <nav className="text-muted-foreground hidden items-center gap-1 text-sm sm:flex">
@@ -57,7 +57,7 @@ export function SiteHeader() {
                 href={item.href}
                 aria-current={active ? "page" : undefined}
                 className={cn(
-                  "relative rounded-md px-3 py-1.5 transition-colors",
+                  "relative rounded-md px-3 py-1.5 transition-colors select-none",
                   active
                     ? "text-foreground after:bg-destructive after:absolute after:inset-x-3 after:-bottom-1 after:h-0.5 after:rounded-full"
                     : "hover:text-foreground hover:bg-muted",

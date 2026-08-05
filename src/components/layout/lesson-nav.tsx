@@ -19,7 +19,7 @@ export function LessonNav({
       {prev ? (
         <Link
           href={hrefFor(prev)}
-          className="border-border hover:bg-muted group flex flex-col gap-1 rounded-xl border p-4 transition-colors"
+          className="border-border hover:bg-muted group flex flex-col gap-1 rounded-xl border p-4 transition-colors select-none"
         >
           <span className="text-muted-foreground flex items-center gap-1 text-xs">
             <ArrowLeft className="size-3.5" aria-hidden /> Previous
@@ -33,7 +33,7 @@ export function LessonNav({
         <Link
           href={hrefFor(next)}
           className={cn(
-            "border-border hover:bg-muted group flex flex-col gap-1 rounded-xl border p-4 text-right transition-colors",
+            "border-border hover:bg-muted group flex flex-col gap-1 rounded-xl border p-4 text-right transition-colors select-none",
           )}
         >
           <span className="text-muted-foreground flex items-center justify-end gap-1 text-xs">

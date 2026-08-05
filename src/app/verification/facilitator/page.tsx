@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 
 import { FacilitatorGuide } from "@/components/verification/facilitator-guide";
+import { FacilitatorTraining } from "@/components/verification/facilitator-training";
 
 export const metadata: Metadata = { title: "Become a facilitator — Verification" };
 
@@ -60,7 +61,10 @@ export default function FacilitatorPage() {
         sessions themselves.
       </p>
 
-      <div className="border-muted-foreground/40 mt-8 max-w-2xl rounded-lg border border-dashed p-5">
+      <div
+        id="signup"
+        className="border-muted-foreground/40 mt-8 max-w-2xl scroll-mt-24 rounded-lg border border-dashed p-5"
+      >
         <span className="text-muted-foreground block text-xs font-medium tracking-wide uppercase">
           not set up yet
         </span>
@@ -89,7 +93,11 @@ export default function FacilitatorPage() {
         ))}
       </ul>
 
-      <h3 className="mt-10 text-base font-semibold tracking-tight">
+      <div className="mt-12">
+        <FacilitatorTraining />
+      </div>
+
+      <h3 className="mt-12 text-base font-semibold tracking-tight">
         Facilitator Field Guide
       </h3>
       <FacilitatorGuide />

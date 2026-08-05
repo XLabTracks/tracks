@@ -5,9 +5,10 @@ Every mechanism you learned about in Module 2 is prone to failure. Illicit train
 - Analyze how actors you learned about in Module 1 might evade an AI agreement
 - Design controls that could prevent, detect, investigate, or confirm violations
 - Scaffold a robust, layered regime that minimizes vulnerabilities across all layers
+
 You will develop these skills through working through a red-team/blue-team scenario yourself later in this module. The red team designs an evasion strategy against the proposed verification regime; the blue team identifies detection opportunities, corroboration needs, and response options. This task can feel daunting and abstract without seeing the full process first—which is what the below worked example is for. The scenario itself is fictional, but its main tactics are based on documented cases and published security research.
 
-### [Optional popups]: Two real-world anchors
+### Optional: Two real-world anchors
 
 #### Anchor 1: An insider changes the format, not the information
 
@@ -50,6 +51,7 @@ During the pause:
 - Existing models may still be used for approved inference, safety evaluation, and limited research below defined compute and capability thresholds.
 - Covered model weights must remain in declared, access-controlled environments.
 - Cloud providers must retain records sufficient to identify customers, beneficial owners, hardware use, and declared workload purpose.
+
 Northstar AI has already trained a covered model called Orion-4. Its weights are stored in a secure environment and may be accessed only for approved maintenance, evaluation, and incident response.
 
 Before the pause, Northstar had been developing an Orion-5 successor. The pause freezes that work.
@@ -96,6 +98,7 @@ To reduce scrutiny, Lattice could:
 - use resellers and subcontractors;
 - describe the activity as inference, evaluation, or safety research;
 - keep each account below a simple reporting threshold.
+
 The operation does not make the training invisible. It makes each piece look inconclusive.
 
 Northstar sees an engineer performing apparently legitimate work. The reseller sees several medium-sized customers. The data center sees intensive compute but not necessarily the model or legal purpose. Corporate registries show Lattice, not Sable.
@@ -194,6 +197,7 @@ Northstar should preserve:
 - endpoint and storage events;
 - internal transfers and unusual format conversions;
 - records from systems that could have handled the weights.
+
 The cloud reseller and infrastructure operator should preserve:
 
 - account creation and beneficial-ownership records;
@@ -201,6 +205,7 @@ The cloud reseller and infrastructure operator should preserve:
 - accelerator reservations and job timing;
 - storage, checkpointing, and network activity;
 - links among the subcontractor accounts.
+
 Government investigators should preserve relevant corporate, financial, procurement, travel, and communications evidence where legally authorized.
 
 Investigators should test several hypotheses:
@@ -210,6 +215,7 @@ Investigators should test several hypotheses:
 - Lattice conducted a different intensive but permitted workload.
 - The engineer transferred technical material, but not usable weights.
 - Sable obtained or developed its model through another route.
+
 The immediate goal is to preserve evidence capable of distinguishing among these explanations.
 
 ##### Why this is strong
@@ -276,6 +282,7 @@ It currently knows that:
 - Lattice and related accounts obtained substantial compute;
 - the accounts ran synchronized workloads inconsistent with their simple declarations;
 - Sable soon demonstrated a substantially improved Orion-like model.
+
 It reasonably suspects that Orion-4 material was transferred and used to continue prohibited frontier development.
 
 It does not yet know:
@@ -285,6 +292,7 @@ It does not yet know:
 - whether the workload crossed the pause’s technical threshold;
 - whether Sable controlled the accounts;
 - whether Northstar leadership authorized or knowingly ignored the conduct.
+
 The inspection should prioritize:
 
 - identifying what the engineer accessed and transferred;
@@ -292,6 +300,7 @@ The inspection should prioritize:
 - establishing Lattice’s beneficial ownership and relationship to Sable;
 - comparing the actual workload with its declared purpose;
 - examining whether Sable’s model is technically consistent with derivation from Orion-4.
+
 Interim measures could include suspending the engineer’s access, preserving the cloud environment, and pausing related accounts. A broader shutdown would require stronger evidence or a specific emergency authority.
 
 Missing records, false declarations, or refusal to cooperate may constitute separate compliance violations. They would increase suspicion but would not by themselves prove that prohibited training occurred.
@@ -322,10 +331,12 @@ A strong red-team answer explains:
 - why the actor would choose it;
 - what assumptions it requires;
 - where it is most likely to fail.
+
 A strong blue-team answer explains:
 
 - what each layer can observe;
 - what those observations do and do not prove;
 - how the evidence can be combined;
 - what action is justified before certainty is available.
+
 The standard is not perfect evasion or perfect verification. It is a scenario specific enough to test—and a response honest enough to distinguish suspicion from proof.

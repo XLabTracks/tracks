@@ -8,6 +8,7 @@ The solution is privacy-preserving verification: mechanisms designed to verify c
 - Zero-knowledge proofs: Cryptographic protocols that let a prover demonstrate a statement is true — "this training run used fewer than X FLOPs," "this model passed the agreed evaluation" — without revealing anything beyond the statement's truth. In principle this is the ideal form of privacy-preserving verification: zero excess information by construction. In practice, generating proofs over computations as large as frontier training runs remains expensive, so ZKPs are most plausible today for verifying smaller, well-scoped claims.
 - Secure multiparty computation: Multiple parties jointly compute a result over their combined private inputs without any party seeing the others' data. In a verification setting, a developer and a verifier (or several rival states) can together run an evaluation or check a compliance condition, with each side learning only the output — compliant or not — while the model weights, training data, or inspection criteria stay hidden from everyone else. The cost is computational overhead and protocol complexity, which grows with the size of what's being computed.
 - Managed access as the institutional fallback: The institutional fallback when technical tools fall short: human inspectors get in, but under negotiated restrictions. The Chemical Weapons Convention lets facility operators shroud equipment, restrict photography, limit sampling, and escort inspectors — enough access to confirm compliance, not enough to steal trade secrets. Applied to AI, this looks like cleared inspectors in secure rooms, air-gapped terminals, and pre-agreed limits on what leaves the building. It trades cryptographic guarantees for institutional ones, but it has decades of operating history that the technical mechanisms lack.
+
 Before we dive in, let’s first identify some baseline intuitions: fill out the following graph with your pre-course understanding of the relative efficacy of each mechanism across five metrics:
 
 - Technical feasibility. Can this be built and run at the required scale today — not in a demo, not in five years? Includes maturity, dependencies, cost, and error rates. Low: fully homomorphic encryption over entire training runs — orders of magnitude too slow at frontier scale. High: compute reporting through cloud providers — the metering and billing infrastructure already exists.
@@ -22,6 +23,7 @@ As you’re going through this exercise, jot down in your notebook: What were th
 - Politically feasible? → How difficult would it be to get the U.S. to agree? China? What must remain confidential, no matter what?
 - Effective? → What’s the minimum threshold of confidence or level of evidence a nation-state should have to ensure that a rival is compliant? What must a verifier be able to learn?
 - Durable? → What develops faster, hardware or software?
+
 It’s important to note that the way we’ve taxonomized verification mechanisms in this course is not the only or most accepted way to do so; on the other hand, there are several different ways you can taxonomize the evidence streams of verification, according to your writing goals and audience context. We’ve chosen the hardware/cloud/intel/human four buckets—the by-layer taxonomy—for pedagogical simplicity. Keep in mind that when going forwards, you should proactively think about the best taxonomy or categorization level for your audience; think back to the upstream and downstream exercises you completed in Module 1. For instance, you’d want to prioritize mechanisms by policy goal when speaking to congressional officials, while you’d want to focus more on the easy-to-visualize by-layer organization for educational purposes.
 
 Interactive: [Maps of the Evidence](https://evidence-taxonomies.netlify.app/)
@@ -31,6 +33,7 @@ Interactive: [Maps of the Evidence](https://evidence-taxonomies.netlify.app/)
 - By policy goal: detect covert training runs, verify declared runs comply, or track the chip locations
 - By lifecycle stage: before, during, after run
 - By adversary: against cooperative target, cheating company, or evading state
+
 Throughout this module, keep the following questions in mind as you evaluate each mechanism:
 
 - Who verifies the verifier?

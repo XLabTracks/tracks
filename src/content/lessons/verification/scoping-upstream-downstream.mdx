@@ -15,6 +15,7 @@ The problem is provenance. Iran declared the 60 percent figure, and the operatin
 - Iran's declaration. Iran is the party the treaty binds, which gives it the strongest reason to understate enrichment or omit activity it would rather not explain.
 - The facility's operating records. The operator maintains these itself, and an operator has every reason to keep its records consistent with the state's declaration.
 - Independent Agency measurements. Environmental swipe samples, tamper-indicating seals and cameras the Agency installs, and satellite imagery of the site are all difficult for Iran to alter after the fact. None of them restates Iran's declared number; each one is collected or controlled by the inspectorate, which is what lets them check the declaration rather than echo it.
+
 Here the independent stream is decisive. Inspectors swiped surfaces at Fordow and sent the samples to the Agency's laboratory in Austria, which can detect uranium particles at below a trillionth of a gram and read their enrichment level directly. The swipe taken on 22 January 2023 contained particles enriched to 83.7 percent U-235, above the declared 60 percent and close to weapons grade. Inspectors had also found two IR-6 centrifuge cascades configured substantially differently from what Iran had declared.
 
 A revision that keeps each source attached to its claim:
@@ -39,6 +40,7 @@ No verification document stands alone. Every source upstream of you was produced
 
 - Upstream: whose claims does this document rely on, and which of them did I verify myself, rather than inherit from the actor being checked?
 - Downstream: who will act on this document, and what does each reader need in order to act?
+
 The structure carries over to the compute reports this track is building toward. A future report on a training run rests on the same three layers: the lab's own declaration, the utilization logs kept by the cloud provider that hosted the run, and physical streams that are harder to fake, such as on-chip attestation, chip location tracking, and the facility's measured power draw. The IAEA case is decades ahead of the AI case in practice, which is why it is worth reading closely: the questions an inspector asks of a swipe sample are the questions you will ask of a power meter.
 
 The next exercise asks you to apply this directly. You will assemble a report from a pool of candidate details and connect each detail to the reader who needs it. The standard is the one demonstrated here: every claim carries its source, and every finding reaches the actor who acts on it.

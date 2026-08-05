@@ -18,6 +18,7 @@ While providers cannot prohibit evasion, they can make doing so more difficult: 
 - Data transfers — the dataset has to arrive; a fresh account pulling terabytes in is a tell.
 - Instruction mix — training is dense in multiply-accumulate operations, in the regular rhythms of parallel training; diluting the mix costs efficiency.
 - Power draw — sustained training burns power at rates little else matches (BLOOM: roughly 3,600 kWh per day).
+
 A core concept to apply anywhere: any fixed line invites slicing; any per-account rule invites more accounts. Identity linkage, KYC’s cross-account job is to turn “58 unrelated accounts” back into “one customer.”
 
 Evasion Menu
@@ -79,9 +80,11 @@ EXCERPT — Tan 2026  “foreign actors can distribute frontier training workloa
 CHECK (2 questions, answers on reveal)
 
 - Why does splitting one training run into 58 sub-threshold chunks defeat a FLOP-threshold monitor? (a) Each chunk becomes technically impossible to meter (b) Thresholds only apply to inference workloads (c) The threshold is evaluated per account, no chunk crosses it, and the monitor cannot link the accounts (d) Splitting reduces the total compute the model needs
+
 A: (c). The compute is all still spent and all still metered; it just never crosses any single account’s line.
 
 - Sequential training defeats which tool from 2.2.2, and which two RAND metrics are designed to catch it anyway?
+
 A: Per-account FLOP thresholds. Data-transfer patterns and cluster-size reporting: fragmented runs still need the data and the hardware.
 
 ## The Cloud’s Edges
@@ -91,12 +94,14 @@ Everything above assumes the compute is rented from a covered provider. Three ex
 - Own the machines — build or buy a cluster. No landlord, no records, no switch.
 - Rent elsewhere — a provider the regime doesn’t reach. The traffic is real (figures as of May 2026): Alibaba and ByteDance lean on Southeast Asian data centers; Tencent bought access to 15,000 B200 chips through a $1.2 billion deal with a Japanese provider; the Southeast Asian data center market is projected to pass $30 billion by 2030 (Tan 2026).
 - Skip the compute — steal the trained weights. That bypass gets its own treatment in 3.1.
+
 Several of the biggest AI developers are their own compute providers, or joined at the hip with one, and when developer and provider are the same entity, the neutral intermediary this module is built on disappears.
 
 Furthermore, implementing evasion protections have two critical costs for providers, which translate into limitations for feasibility: money and privacy.
 
 - Money: Vetting customers and monitoring workloads is expensive for providers, and providers pass the expense on as higher prices and slower onboarding. Customers who have alternatives respond by using them: a foreign lab that can rent comparable chips from an uncovered provider in another jurisdiction will. When it leaves, the regime loses more than a sale — it loses the ability to see that customer at all, because every mechanism in this module only works on customers of covered providers. This is why the strictest rules on paper can produce the least visibility in practice.
 - Privacy: Today, providers generally do not inspect what their customers run, and they advertise that fact; confidential workloads are part of what cloud customers buy. A monitoring mandate breaks that promise for everyone — every customer gets watched so that a rare dishonest one might be caught. The design can shrink the intrusion (exempt small users, monitor metadata only, report only on suspicion), but shrink is the most it can do; some surveillance of honest customers is the price of any workload monitoring at all.
+
 There is no version of this regime where that trade disappears.
 
 CHECK: Which of these is fully outside what cloud-layer oversight can see? (a) A training run on a company’s own air-gapped cluster (b) A declared run at a covered provider (c) An undeclared run at a covered provider (d) A customer who reserves compute at a covered provider and never uses it
@@ -109,6 +114,7 @@ You have now seen every mechanism in this module. The skill to take with you is 
 
 - What does this evidence prove, and what does it merely fit with?
 - Who produces this evidence, and what would faking it cost them?
+
 Ask both questions of every record you have met in this module: declarations, KYC files, billing records, utilization curves, logs. The table below runs the exercise for the whole stack.
 
 <Callout variant="tip" title="Task">

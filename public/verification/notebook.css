@@ -170,9 +170,12 @@
 
 .nb-note-on-quote { margin-top: 10px; font-size: 14px; }
 
+/* No rib. A coloured left edge against three hairline ones is the
+   half-painted card the design rules forbid — pick no tint or paint the whole
+   thing. The block already says CAPTURED above it and carries its source
+   below, so the quote needs no second marker; it reads by its indent. */
 .nb-quote {
-  padding-left: 12px;
-  border-left: 3px solid var(--brand-ink);
+  padding-left: 14px;
   font-size: 15px;
   line-height: 1.6;
   white-space: pre-wrap;

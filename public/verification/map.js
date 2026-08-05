@@ -32,10 +32,10 @@
     const id = tag === S.compoundRung ? S.compoundUnits[0] : tag;
     for (const m of C.modules) {
       if (m.units.some(u => u.id === id)) {
-        return (m.units.find(u => u.id === id) || {}).href || '/verification/track';
+        return (m.units.find(u => u.id === id) || {}).href || '/tracks/verification';
       }
     }
-    return '/verification/track';
+    return '/tracks/verification';
   };
 
   /* ---------- bands ---------- */

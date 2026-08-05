@@ -9,7 +9,7 @@ window.VT_CHROME = {
   "nav": [
     {
       "label": "Curriculum",
-      "href": "track"
+      "href": "/tracks/verification"
     },
     {
       "label": "For facilitators",

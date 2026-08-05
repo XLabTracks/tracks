@@ -187,7 +187,7 @@ export default async function VerificationAccountPage() {
           <li>
             <Link
               className="underline underline-offset-4"
-              href="/verification/track"
+              href="/tracks/verification"
             >
               Course structure
             </Link>{" "}

@@ -21,7 +21,7 @@
       const hit = m.units.find(u => u.id === id);
       if (hit) return hit.href;
     }
-    return '/verification/track';
+    return '/tracks/verification';
   }
 
   function draw(q) {

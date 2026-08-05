@@ -46,14 +46,14 @@
   --mod-1: #d1601f;  /* Satsuma */
   --mod-2: #fecd6d;  /* Lunar Yellow */
   --mod-3: #6d7636;  /* Khaki */
-  --mod-4: #5686bb;  /* Cobalt */
+  --mod-4: #022E4C;  /* Prussian */
   /* Text on that fill. Fixed, because it depends on the fill and not on the
      page ground. */
   --mod-0-ink: #ffffff;
-  --mod-1-ink: #1a1614;
+  --mod-1-ink: #ffffff;
   --mod-2-ink: #1a1614;
   --mod-3-ink: #ffffff;
-  --mod-4-ink: #1a1614;
+  --mod-4-ink: #ffffff;
   /* The same accent where it has to be type on the page rather than a fill.
      Forcing five hues to 4.5:1 as text compresses them into one lightness
      band and Satsuma stops being tellable from Lunar Yellow — so the fill
@@ -446,7 +446,29 @@ button, [role='button'], [role='radio'], [role='tab'], .chip, .nav a, .brand,
   background: var(--primary);
 }
 
-.header-right { display: flex; align-items: center; gap: 10px; }
+/* The switch and the account button are a matched pair in the corner, so they
+   are sized together rather than each to its own content: same width, same
+   height, in every theme.
+
+   The width is set by the longer of the two labels the button can carry —
+   "Account" once a session is detected, not "Sign in" — because a width fitted
+   to the shorter one clips the other the moment sync.js swaps it. The height
+   is a variable because the contrast theme lifts every tap target to 44px; if
+   only the button read that rule the pair would come apart in that theme
+   alone. */
+.header-right {
+  --hdr-action-w: 100px;
+  --hdr-action-h: 38px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+:root[data-theme='contrast'] .header-right { --hdr-action-h: 44px; }
+.header-right .theme-switch,
+.header-right > .btn.small {
+  width: var(--hdr-action-w);
+  height: var(--hdr-action-h);
+}
 
 /* Three-way theme switch, drawn as radios rather than a cycling button: a
    cycling control gives no way to see which of the three is active, and none
@@ -460,12 +482,15 @@ button, [role='button'], [role='radio'], [role='tab'], .chip, .nav a, .brand,
   border-radius: var(--radius-sm);
   background: var(--card);
 }
+/* The three share whatever width the pair settled on, so the segments stay
+   even and the tap targets grow with it rather than leaving a gap at one end. */
 .theme-switch button {
   display: inline-flex;
+  flex: 1;
   align-items: center;
   justify-content: center;
-  width: 26px;
-  height: 26px;
+  min-width: 26px;
+  height: 100%;
   border: 0;
   border-radius: var(--radius-sm);
   background: transparent;
@@ -533,7 +558,17 @@ button, [role='button'], [role='radio'], [role='tab'], .chip, .nav a, .brand,
 .site-footer .wrap { display: flex; flex-direction: column; gap: 14px; }
 
 .foot-links { display: flex; flex-wrap: wrap; gap: 8px 20px; }
-.foot-links a { color: var(--muted-foreground); text-decoration: none; }
+/* A footer row is navigation, not a sentence, so it does not get the inline
+   exception WCAG's target-size rule grants links inside prose — at 19px tall
+   these were under the 24px floor on a phone. The padding takes them past it;
+   the negative margin keeps the row's spacing where it was. */
+.foot-links a {
+  color: var(--muted-foreground);
+  text-decoration: none;
+  display: inline-block;
+  padding-block: 4px;
+  margin-block: -4px;
+}
 .foot-links a:hover { color: var(--foreground); text-decoration: underline; text-underline-offset: 3px; }
 /* A destination that does not exist yet. It must not look pressable — no
    pointer, no hover, no underline — or it reads as a broken link. */

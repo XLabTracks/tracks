@@ -33,7 +33,13 @@
      these numbers can be tuned without re-deriving the frame — but anything
      drawn outside the measured set will be cropped. Measure it or don't draw
      it. */
-  var V = { cx: 900, cy: 900, r0: 300, dr: 88, fan: 145, nodeR: 16, gap: 25, charW: 6.5 };
+  /* Tuned for the smallest screen, not the largest. What decides whether a
+     star's number can be read is the star's share of the whole box, since the
+     box is scaled to the viewport: at r0 300 / dr 88 / nodeR 16 a star was
+     3.5% of the outer radius and landed at 8px on a phone. Closing the rings
+     and growing the stars puts it near 9%. The names left the figure, so the
+     wide gap the rings used to keep for label blocks is free. */
+  var V = { cx: 900, cy: 900, r0: 150, dr: 62, fan: 200, nodeR: 30, gap: 25, charW: 6.5 };
   V.sector = V.fan / 5;
 
   var esc = function (s) {
@@ -151,28 +157,24 @@
       '<text x="' + col.arc.x.toFixed(1) + '" y="' + col.arc.y.toFixed(1) + '">M' + mod + ' · ' + esc(S.moduleNames[mod]) + '</text></g>';
   }).join('');
 
+  /* One running number per skill, module by module. It is the key between the
+     figure and the list under it: the figure carries the number, the list
+     carries the name. That split is what lets the figure shrink to a phone —
+     27 names drawn inline held it at 760px wide and no scale rescued them. */
+  var num = {};
+  var seq = 0;
+  order.forEach(function (col) {
+    col.forEach(function (entry) { num[entry.n.id] = ++seq; });
+  });
+
   var nodeHtml = S.nodes.map(function (n) {
     var p = placed[n.id];
-    var lines = wrap(n.label, 13);
-    var lx = p.x + (p.side === 'left' ? -(V.nodeR + V.gap) : V.nodeR + V.gap);
-    var anchor = p.side === 'left' ? 'end' : 'start';
-    var top = lines.length > 1 ? p.y - 3 : p.y + 4;
-    var text = lines.map(function (line, li) {
-      return '<tspan x="' + lx.toFixed(1) + '" y="' + (top + li * 14).toFixed(1) + '">' + esc(line) + '</tspan>';
-    }).join('');
-    var wide = Math.max.apply(null, lines.map(function (l) { return l.length; })) * V.charW;
-    fit(
-      Math.min(p.x - V.nodeR, p.side === 'left' ? lx - wide : lx),
-      Math.min(p.y - V.nodeR, top - 11),
-      Math.max(p.x + V.nodeR, p.side === 'left' ? lx : lx + wide),
-      Math.max(p.y + V.nodeR, top + (lines.length - 1) * 14 + 5)
-    );
+    fit(p.x - V.nodeR, p.y - V.nodeR, p.x + V.nodeR, p.y + V.nodeR);
     return '<g class="node" data-id="' + n.id + '" style="--sel:var(--mod-' + n.mod + ');--sel-ink:var(--mod-' + n.mod + '-ink);--sel-text:var(--mod-' + n.mod + '-text)" role="button" tabindex="0"' +
-      ' aria-label="' + esc(n.label) + ' — module ' + n.mod + ', ' + esc(S.moduleNames[n.mod]) + '">' +
+      ' aria-label="' + num[n.id] + '. ' + esc(n.label) + ' — module ' + n.mod + ', ' + esc(S.moduleNames[n.mod]) + '">' +
       '<title>' + esc(n.label) + '</title>' +
       '<circle cx="' + p.x.toFixed(1) + '" cy="' + p.y.toFixed(1) + '" r="' + V.nodeR + '"/>' +
-      '<text class="node-num" x="' + p.x.toFixed(1) + '" y="' + (p.y + 4).toFixed(1) + '">' + n.mod + '</text>' +
-      '<text class="name" text-anchor="' + anchor + '">' + text + '</text></g>';
+      '<text class="node-num" x="' + p.x.toFixed(1) + '" y="' + (p.y + 4).toFixed(1) + '">' + num[n.id] + '</text></g>';
   }).join('');
 
   var pad = 18;
@@ -187,6 +189,24 @@
     '<svg viewBox="' + vb + '" role="img" aria-label="Skill constellation: ' +
     S.nodes.length + ' skills in five module branches, joined wherever one skill feeds another.">' +
     bg + edgeHtml + arcHtml + nodeHtml + '</svg>';
+
+  /* The key. The figure carries numbers, this carries the names — the split
+     that lets the figure scale to a phone. It is also the reading order the
+     figure cannot give a screen reader, and on a narrow screen it is the
+     primary way in: a key row selects its star exactly as the star does. */
+  var keyEl = document.getElementById('skyKey');
+  if (keyEl) {
+    keyEl.innerHTML = order.map(function (col, mod) {
+      return '<li class="key-mod" style="--sel:var(--mod-' + mod + ');--sel-text:var(--mod-' + mod + '-text)">' +
+        '<span class="key-mod-name">M' + mod + ' · ' + esc(S.moduleNames[mod]) + '</span><ol>' +
+        col.map(function (entry) {
+          var n = entry.n;
+          return '<li><button type="button" data-key="' + esc(n.id) + '">' +
+            '<span class="key-n">' + num[n.id] + '</span>' +
+            '<span class="key-label">' + esc(n.label) + '</span></button></li>';
+        }).join('') + '</ol></li>';
+    }).join('');
+  }
 
   var svg = sky.querySelector('svg');
   var nodeEls = {};
@@ -307,6 +327,20 @@
   svg.addEventListener('click', function (e) {
     if (!activate(e.target)) { pinned = null; activeModule = null; syncFilters(); refresh(); }
   });
+
+  /* A key row pins its star, exactly as the star does. On a phone this is the
+     way in: the numbers in the figure are legible at any scale, the names are
+     only here. */
+  if (keyEl) {
+    keyEl.addEventListener('click', function (e) {
+      var btn = e.target.closest('button[data-key]');
+      if (!btn) return;
+      pinned = pinned === btn.dataset.key ? null : btn.dataset.key;
+      activeModule = null;
+      syncFilters();
+      refresh();
+    });
+  }
   svg.addEventListener('keydown', function (e) {
     if (e.key !== 'Enter' && e.key !== ' ') return;
     if (activate(e.target)) e.preventDefault();
@@ -334,8 +368,12 @@
 
   if (filters) {
     filters.innerHTML = S.moduleNames.map(function (name, mod) {
+      /* The name is its own span so a phone can drop it: five names do not fit
+         a 390px row and the bar was cut off mid-word with nothing saying it
+         scrolled. The numeral always shows, and the module's name is on its
+         arc label inside the figure either way. */
       return '<button type="button" data-mod="' + mod + '" aria-pressed="false" style="--sel:var(--mod-' + mod + ');--sel-ink:var(--mod-' + mod + '-ink);--sel-text:var(--mod-' + mod + '-text)">M' +
-        mod + ' · ' + esc(name) + '</button>';
+        mod + '<span class="mod-name"> · ' + esc(name) + '</span></button>';
     }).join('');
     filters.addEventListener('click', function (e) {
       var b = e.target.closest('button[data-mod]');

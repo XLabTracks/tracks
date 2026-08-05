@@ -61,11 +61,12 @@ export default function Page() {
               <div>
                 <div className="sky" id="sky"></div>
                 <div className="sky-legend">
-                  <span>numeral inside a star — its module</span>
+                  <span>number inside a star — find it in the key below</span>
                   <span>solid line — fed from inside the module</span>
                   <span>dashed line — fed from another module</span>
-                  <span>click a star to pin it</span>
+                  <span>click a star or a key row to pin it</span>
                 </div>
+                <ol className="sky-key" id="skyKey"></ol>
               </div>
               <div className="sky-panel" id="skyPanel"></div>
             </div>

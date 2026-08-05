@@ -46,7 +46,13 @@
   font-weight: 600;
 }
 .glossary dt:first-child { margin-top: 0; }
+/* A unit number is a real destination, not a footnote mark — at 18px square
+   it was under a thumb's reach on a phone. The inline-block plus padding
+   takes it past 24px without changing where the number sits. */
 .glossary dt .u {
+  display: inline-block;
+  padding: 4px 6px;
+  margin: -4px -6px;
   font-family: var(--mono);
   font-size: var(--fs-2xs);
   font-weight: 400;

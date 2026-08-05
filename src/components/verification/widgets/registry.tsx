@@ -17,6 +17,10 @@ import { GameTheoryPrimer } from "./game-theory-primer";
 import { WhatDoTheySay } from "./what-do-they-say";
 import { VerificationTimelineGame } from "./verification-timeline-game";
 import { InteractiveMap } from "./interactive-map";
+import { DrillsFoundations } from "./drills-foundations";
+import { DrillsPrimers } from "./drills-primers";
+import { DrillsSupplyChain } from "./drills-supply-chain";
+import { DrillsGames } from "./drills-games";
 
 /**
  * Native React widgets ported from the standalone HTML pages, keyed by the same
@@ -44,6 +48,10 @@ export const verificationWidgets: Record<
   "what-do-they-say": WhatDoTheySay,
   "verification-timeline-game": VerificationTimelineGame,
   "interactive-map": InteractiveMap,
+  "drills-foundations": DrillsFoundations,
+  "drills-primers": DrillsPrimers,
+  "drills-supply-chain": DrillsSupplyChain,
+  "drills-games": DrillsGames,
 };
 
 export function getVerificationWidget(

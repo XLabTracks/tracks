@@ -209,6 +209,7 @@ export const modules: Module[] = [
       "v-dissection-table",
       "v-anatomy-drill",
       "v-protocol-actors",
+      "v-drills-foundations",
     ],
   },
   {
@@ -225,6 +226,7 @@ export const modules: Module[] = [
       "v-ir-primer",
       "v-change-the-game",
       "v-evolution-of-verification",
+      "v-drills-primers",
     ],
   },
   {
@@ -236,7 +238,11 @@ export const modules: Module[] = [
       "The world map of AI compute — who makes what, where it flows, and where verification can grab hold, with a look inside the chip itself — then an inspector's notebook and the three desks that will each act on a different piece of it.",
     order: 3,
     prerequisiteModuleIds: [],
-    itemIds: ["v-interactive-map", "v-report-constructor"],
+    itemIds: [
+      "v-interactive-map",
+      "v-report-constructor",
+      "v-drills-supply-chain",
+    ],
   },
   {
     id: "v-games",
@@ -251,6 +257,7 @@ export const modules: Module[] = [
       "v-tamper-trace",
       "v-inspection-game",
       "v-verification-timeline-game",
+      "v-drills-games",
     ],
   },
   {
@@ -354,6 +361,13 @@ export const lessons: Lesson[] = [
     contentRef: "v-protocol-actors",
   },
   {
+    id: "v-drills-foundations",
+    slug: "drills-foundations",
+    moduleId: "v-foundations",
+    title: "Drill Bench: Foundations",
+    contentRef: "v-drills-foundations",
+  },
+  {
     id: "v-game-theory-primer",
     slug: "game-theory-primer",
     moduleId: "v-primers",
@@ -382,6 +396,13 @@ export const lessons: Lesson[] = [
     contentRef: "v-evolution-of-verification",
   },
   {
+    id: "v-drills-primers",
+    slug: "drills-primers",
+    moduleId: "v-primers",
+    title: "Drill Bench: Primers",
+    contentRef: "v-drills-primers",
+  },
+  {
     id: "v-interactive-map",
     slug: "interactive-map",
     moduleId: "v-supply-chain",
@@ -394,6 +415,13 @@ export const lessons: Lesson[] = [
     moduleId: "v-supply-chain",
     title: "One Inspection, Three Readers",
     contentRef: "v-report-constructor",
+  },
+  {
+    id: "v-drills-supply-chain",
+    slug: "drills-supply-chain",
+    moduleId: "v-supply-chain",
+    title: "Drill Bench: Supply Chain",
+    contentRef: "v-drills-supply-chain",
   },
   {
     id: "v-tamper-trace",
@@ -415,6 +443,13 @@ export const lessons: Lesson[] = [
     moduleId: "v-games",
     title: "The Verification Game",
     contentRef: "v-verification-timeline-game",
+  },
+  {
+    id: "v-drills-games",
+    slug: "drills-games",
+    moduleId: "v-games",
+    title: "Drill Bench: Evasion & Regime Design",
+    contentRef: "v-drills-games",
   },
   {
     id: "v-facilitator-guide",

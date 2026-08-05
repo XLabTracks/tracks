@@ -321,11 +321,11 @@ in `docs/superpowers/` (`specs/`, `plans/`) — they record intent and rationale
 household picture, or the `five-worlds` map axes); once shipped, the code is
 normative.
 
-**Verification interactives.** The Verification track's 17 exercises are
+**Verification interactives.** The Verification track's 21 exercises are
 **native React widgets** (`src/components/verification/widgets/<id>.tsx`) in the
 app design system, keyed by id in `widgets/registry.tsx`. Copy/data is lifted
 verbatim into `src/lib/verification/data/*` (human-authored curriculum —
-**never regenerate content**); six have pure engines in
+**never regenerate content**); seven have pure engines in
 `src/lib/verification/engines/*` (+ vitest suites). Each is a content-graph
 lesson (`v-<id>`) whose MDX embeds `<VerificationExercise id/>` — an async
 server component that resolves the user and renders the client widget host
@@ -334,10 +334,20 @@ is `src/lib/verification/exercises.ts`. `bridged` widgets call `onComplete`
 (→ `setLessonComplete` via `kit/use-completion.ts`) at their finish event and
 their lessons disable scroll auto-complete; unbridged explorables keep normal
 scroll-to-complete. Shared kit in `src/components/verification/kit/`
-(drag, `[[term]]` tooltips, completion hook). `src/lib/verification/widgets.test.ts`
-enforces the registry ↔ graph ↔ MDX ↔ widget mapping. (The originals were
-standalone HTML pages; only `public/verification/assets/` remains, for the
-what-do-they-say portraits.)
+(drag, `[[term]]` tooltips, completion hook, drill-deck renderer).
+`src/lib/verification/widgets.test.ts` enforces the registry ↔ graph ↔ MDX ↔
+widget mapping. (The originals were standalone HTML pages; only
+`public/verification/assets/` remains, for the what-do-they-say portraits.)
+Four of the 21 are **drill benches** — `drills-foundations`, `drills-primers`,
+`drills-supply-chain`, `drills-games`, one per module (Facilitator has none),
+each the last item of its module. They share one renderer
+(`kit/drill-deck.tsx`) over per-module data (`data/drills-*.ts`, typed by
+`data/drills.ts`) and one engine (`engines/drills.ts`); a deck is benches of
+steps in four types (pick / multi / number / text), and adding a bench or a
+step is a data edit alone. Bench progress persists in `localStorage` under
+`v-drills:<deckId>:v1` and is pruned against the deck before it is trusted,
+because stored flags outlive content edits; `onComplete` fires when the last
+step of the last bench in the deck is committed.
 
 **Prerequisites & progress.** `Track.prerequisiteEnforcement` is `soft` (warn)
 or `hard` (lock); `isAccessLocked()` (pure, tested) + `getPrerequisiteStatus()`

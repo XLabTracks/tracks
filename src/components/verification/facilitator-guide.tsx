@@ -81,11 +81,6 @@ const AUTHORED =
   // p.mt — a recipe subtitle line
   "[&_p.mt]:mt-0 [&_p.mt]:mb-1";
 
-const CALLOUT_VARIANT: Record<Callout["variant"], string> = {
-  brown: "border-l-primary bg-muted/40",
-  blue: "border-l-hide/70 bg-hide/5",
-};
-
 /* ---------------------------- the widget ---------------------------- */
 
 const PLAN_BY_ID = new Map(SESSION_PLANS.map((p) => [p.id, p]));
@@ -258,8 +253,10 @@ function CalloutBox({
   return (
     <div
       className={cn(
-        "my-4 rounded-r-lg border-l-4 py-3 pr-4 pl-4 text-sm leading-relaxed [&_em]:italic [&_strong]:font-semibold",
-        CALLOUT_VARIANT[callout.variant],
+        // Uniform hairline on all four sides with a tinted ground, never a
+        // painted left rib: a card with one edge coloured and the rest
+        // hairline is the half-and-half this design system rules out.
+        "border-border bg-muted/40 my-4 rounded-lg border py-3 pr-4 pl-4 text-sm leading-relaxed [&_em]:italic [&_strong]:font-semibold",
       )}
     >
       <InlineWithTerms html={callout.html} onPop={onPop} />
@@ -788,7 +785,7 @@ function SessionPlanView({
       <FormatBar format={format} setFormat={setFormat} />
       <div aria-live="polite">
         <CalloutBox
-          callout={{ variant: "blue", html: plan.prep[format] }}
+          callout={{ html: plan.prep[format] }}
           onPop={onPop}
         />
       </div>

@@ -17,11 +17,11 @@
  * handed them over, and quietly rewriting somebody's link is not this file's
  * business.
  *
- * Trap: every session's work is a live group — analysing failure modes with
- * other people, facilitating a simulation with actors briefed to derail it.
- * There is nothing here for a lone reader to click, so the sessions carry a
- * sign-up rather than an exercise. Building a widget for any of them would be
- * inventing an activity the track does not have.
+ * There is no sign-up for the training itself — it is materials, and it reads
+ * as materials. The one thing anybody signs up for is the exercise in session
+ * 5: a simulation needs actors briefed to derail it, so it needs a scheduled
+ * room and other people. The other four are read and discussed, and giving
+ * them a sign-up would be advertising a booking that does not exist.
  */
 
 export const FT_HEADER = {
@@ -62,6 +62,12 @@ export interface TrainingSession {
   /** The track's own "Focus:" paragraph, split into its lines. */
   focus: string[];
   materials: TrainingMaterial[];
+  /**
+   * Set only where the session's work is an exercise that cannot be done
+   * alone, and names what is being booked. Absent everywhere else: the
+   * training is materials, and only the exercise takes a sign-up.
+   */
+  signUp?: string;
 }
 
 export const FT_SESSIONS: TrainingSession[] = [
@@ -134,5 +140,6 @@ export const FT_SESSIONS: TrainingSession[] = [
       "Participants facilitate a simulated session with actors intentionally disrupting or derailing discussion, applying all learned techniques to maintain structure, flow, and respect",
     ],
     materials: [],
+    signUp: "Sign up for the crash test simulation",
   },
 ];

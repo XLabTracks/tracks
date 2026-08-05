@@ -126,7 +126,7 @@ export default async function ClassroomPage({
         </div>
       </div>
 
-      {showFacilitator && <FacilitatorPanel />}
+      {showFacilitator && <FacilitatorPanel classroomId={classroom.id} />}
 
       {students.length === 0 ? (
         <p className="text-muted-foreground mt-8">

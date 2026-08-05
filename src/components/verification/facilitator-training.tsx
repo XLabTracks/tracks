@@ -10,15 +10,14 @@ import {
  * The facilitator training, as materials — five sessions, what each is about,
  * and what to read for it.
  *
- * No progress, no completion, no exercise widgets. Every session's work is a
- * live group: analysing failure modes with other people, facilitating a
- * simulation with actors briefed to derail it. There is nothing here for a
- * lone reader to click, so where the work needs a room the page says to sign
- * up for it rather than offering a button that pretends otherwise.
+ * No progress, no completion, no exercise widgets, and no sign-up for the
+ * training itself — it is read, not enrolled in. Exactly one session takes a
+ * booking: the crash test simulation needs actors briefed to derail it, so it
+ * needs a room and other people.
  *
- * Trap: the sign-up has nowhere to go yet — this page's own note says no
+ * Trap: that booking has nowhere to go yet — this page's own note says no
  * facilitator application exists. The link points at that note rather than at
- * a form, so the promise and the explanation stay in one place.
+ * a form, so the offer and the reason it cannot be taken up stay together.
  */
 export function FacilitatorTraining() {
   return (
@@ -92,17 +91,19 @@ export function FacilitatorTraining() {
               </>
             )}
 
-            <p className="mt-3 text-sm">
-              <Link
-                className="underline underline-offset-4"
-                href="/verification/facilitator#signup"
-              >
-                Sign up for this session
-              </Link>{" "}
-              <span className="text-muted-foreground">
-                — it is run live, with a group.
-              </span>
-            </p>
+            {s.signUp && (
+              <p className="mt-3 text-sm">
+                <Link
+                  className="underline underline-offset-4"
+                  href="/verification/facilitator#signup"
+                >
+                  {s.signUp}
+                </Link>{" "}
+                <span className="text-muted-foreground">
+                  — it needs a room and people to run it against.
+                </span>
+              </p>
+            )}
           </li>
         ))}
       </ol>

@@ -323,13 +323,32 @@ in `docs/superpowers/` (`specs/`, `plans/`) — they record intent and rationale
 household picture, or the `five-worlds` map axes); once shipped, the code is
 normative.
 
-**Verification.** The Verification track is **not part of the content graph**.
-It is the whole of Verification, and it lives as a standalone static site
-under `public/verification/` — plain HTML/CSS/JS in sibling files, no build
-step, served straight off the worker. The app serves it but never compiles
-it: the folder is outside `tsconfig`'s include (`**/*.ts|tsx|mts`) and
-outside vitest's (`src/**/*.test.ts`), so nothing here is typechecked or
-tested and a green suite says nothing about it.
+**Verification.** Verification ships as **two separate surfaces**, deliberately,
+and they share no files:
+
+1. **The content-graph track** at `/tracks/verification` — ordinary app
+   content, so it gets the lesson routes, sidebar, progress and prerequisites
+   every other track gets. Its slice of the graph is
+   `src/content/verification/curriculum.ts` (spread into `curriculum.data.ts`,
+   which holds nothing else about it) and its MDX bodies are
+   `src/content/lessons/verification/*.mdx`, reached by `contentRef`
+   `verification/<name>` — `contentRef` is a *path* under
+   `src/content/lessons`, so the subfolder needs no loader change. Trap:
+   `importLesson()` swallows a failed dynamic import into `notFound()`, so a
+   wrong `contentRef` looks like an ordinary 404 and typecheck stays green —
+   check a lesson route against a running server, not just `tsc`. Module 0 is
+   transcribed from the author's WIP outline; modules 1–4 are declared with no
+   items until their prose is drafted (an empty module counts as complete, so
+   they gate nothing).
+2. **The standalone static site** under `public/verification/` — plain
+   HTML/CSS/JS in sibling files, no build step, served straight off the
+   worker. The app serves it but never compiles it: the folder is outside
+   `tsconfig`'s include (`**/*.ts|tsx|mts`) and outside vitest's
+   (`src/**/*.test.ts`), so nothing here is typechecked or tested and a green
+   suite says nothing about it.
+
+Both are kept under `verification/`-named folders on purpose: the course is
+expected to move to its own host, and the split is what makes it liftable.
 
 Ten pages: `landing.html` (hero, objectives, the 27-skill constellation,
 module cards), `track.html`, `module.html`, `map.html`, `guide.html`,

@@ -12,13 +12,24 @@ import {
 import { cn } from "@/lib/utils";
 import { useScrollSpy } from "./use-scroll-spy";
 
-/** Row styling shared with the module items in TrackSidebar. */
+/** Row styling shared with the module items in TrackSidebar.
+ *
+ * The current row is marked by a filled ground AND a heavier weight, on top
+ * of the aria-current every caller sets — so it survives without colour.
+ *
+ * Two things this must not do. It must not paint one edge: a coloured left
+ * rib against a hairline everywhere else is the half-painted border the house
+ * rules forbid, and it is what this row used to have. And it must not take a
+ * prose underline: these rows sit inside AccordionContent, which sets
+ * [&_a]:underline for the prose it normally wraps. That is a parent rule on
+ * a descendant selector, so it outranks a plain `no-underline` on the anchor
+ * — the `!` is what actually wins, and dropping it puts the underline back. */
 export function navItemClass(active: boolean) {
   return cn(
-    "flex items-start gap-2 rounded-md border-l-2 px-2 py-1.5 text-sm transition-colors",
+    "flex items-start gap-2 rounded-md px-2 py-1.5 text-sm no-underline! transition-colors",
     active
-      ? "border-destructive bg-destructive/5 text-foreground font-medium"
-      : "border-l-transparent text-muted-foreground hover:text-foreground hover:bg-muted",
+      ? "bg-muted text-foreground font-semibold"
+      : "text-muted-foreground hover:text-foreground hover:bg-muted/60",
   );
 }
 

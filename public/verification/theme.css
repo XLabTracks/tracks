@@ -215,7 +215,6 @@ button, [role='button'], [role='radio'], [role='tab'], .chip, .nav a, .brand,
 :root[data-theme='contrast'] .mark-day { display: none; }
 :root[data-theme='dark'] .mark-night,
 :root[data-theme='contrast'] .mark-night { display: block; }
-:root[data-theme='contrast'] .mark-night { filter: brightness(0) invert(1); }
 
 /* The links sit against the brand on the left; the nav still takes the whole
    middle of the bar so the actions are pushed hard right.

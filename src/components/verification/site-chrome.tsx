@@ -70,10 +70,22 @@ export function VerificationHeader() {
         <div className="bar">
           <a className="brand" href="/verification/landing">
             Verification <i>@</i>
+            {/* Two cuts, one per ground; theme.css picks by data-theme. The
+                night one is aria-hidden so the mark is announced once. Keep
+                the class names in step with theme.css's .mark-day/.mark-night. */}
             <img
-              className="brand-mark"
+              className="brand-mark mark-day"
               src="/verification/assets/xLab_Logotype.png"
               alt="XLab"
+              width={3300}
+              height={1050}
+              draggable={false}
+            />
+            <img
+              className="brand-mark mark-night"
+              src="/verification/assets/xLab_Logotype_white.png"
+              alt=""
+              aria-hidden
               width={3300}
               height={1050}
               draggable={false}

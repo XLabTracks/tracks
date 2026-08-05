@@ -390,6 +390,64 @@ Traps that cost time already, so they are written down:
   arriving.
 
 
+
+The static site's own mechanics, for as long as it exists:
+
+- **`theme.css` is the only file that knows a colour.** Three themes — day,
+  night, high contrast — over one set of variable names, so a rule reading
+  `--border` or `--primary` follows the switch untouched. `--primary` fills
+  and `--brand-ink` writes (maroon is a fine surface on dark and unreadable
+  as text on it); `--mod-0…4` (Okabe–Ito) and `--ok`/`--no` (Wong) are
+  decorative and always accompanied by a word, glyph or fraction. High
+  contrast is picked, never inferred. Each page's `<head>` carries a small
+  inline copy of the theme read step so the ground is right before first
+  paint — keep it in step with `theme.js`. `fonts.css` carries Space Grotesk
+  as a data URI.
+- **`platform.js` owns the shared runtime and chrome**; `platform.css` the
+  components on top of `theme.css`. Pages mount the header and footer from
+  their page script via `VT.mountChrome()` / `VT.mountFoot()`.
+- **Content drives the page.** `data/course.js` is the course, plus
+  `exercises.js`, `skills.js`, `glossary.js`, `memos.js`. A new unit is one
+  object and the track page, module rail, counters and certificate gate pick
+  it up. Unit ids are permanent — they are progress keys *and* the rung tags
+  in `data/skills.js`.
+- **A unit is read in parts** (`module.js`). Parts are derived from the unit,
+  never declared: every `{h}` in the body opens one, the blocks before the
+  first open "Start", and the exercise, readings and written output are each
+  their own — so a new unit in `course.js` chunks itself. A strip above the
+  reading jumps between them, `?p=<1-based>` deep-links one, and `Read the
+  whole unit` lays them all out (remembered per device under
+  `vt-reading-mode` — a preference, not learner work, so it stays out of
+  `vt-progress` and out of the account sync). Two traps: parts are **hidden,
+  never re-rendered**, because the exercise engine holds a half-answered run
+  in memory that a rebuild would discard; and both pagers are `display: flex`,
+  which beats the UA rule for `[hidden]`, so each needs its own `[hidden]`
+  rule. The unit pager — Mark complete, next unit — waits for the last part.
+- **Progress is one set of completed unit ids** in `localStorage` under
+  `vt-progress`; everything else is derived at read time. Never persist a
+  derived value, and nothing auto-completes on scroll, or on reaching the last
+  part. Two meters on the module player mean two different things and each is
+  labelled by the counter beside it: the part strip's reads position, the
+  pager's reads completion. Trap: the storage keys
+  `xlab-verification-theme` and `xlab-verification-memo-desk.v1` hold a
+  visitor's chosen theme and their memo drafts, so they keep those names
+  whatever the files around them are called.
+- **Sign-in belongs to the app.** These pages never gate; the header's Sign in
+  points at `/login` (WorkOS). Don't add a second session here.
+- **The capstone bank is generated.** `verification-capstones/*.md` →
+  `public/verification/data/capstone-bank.js` via `npm run
+  verification:capstones` (`-- --check` fails when they drift; never
+  hand-edit the output). One markdown file is a card and the filter facets
+  derive from the values present. `verification-capstones/_README.md` is the
+  front-matter contract and states which capstones belong here at all — the
+  bank carries only the ones whose prerequisites this track teaches. Two
+  surfaces read the generated file: `capstone-bank.html` (the filterable
+  catalogue, with a detail sheet per brief) and the unit that carries
+  `bank: { lead: '<slug>' }` in `course.js`, where the module player prints
+  the same briefs as a picker — 4.2 is the live one. Their shared glyph
+  vocabulary is `VT.bank` in `platform.js`, so status and difficulty cannot
+  drift between the two.
+
 **Prerequisites & progress.** `Track.prerequisiteEnforcement` is `soft` (warn)
 or `hard` (lock); `isAccessLocked()` (pure, tested) + `getPrerequisiteStatus()`
 drive the lock, and the item page redirects signed-in learners on hard locks

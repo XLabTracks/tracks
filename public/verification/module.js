@@ -115,6 +115,97 @@
      data/course.js allows loses it rather than showing the asterisks. */
   const plain = s => String(s).replace(/\*\*|`/g, '');
 
+  /* ---------- capstone bank ---------- */
+
+  /* The briefs come out of data/capstone-bank.js, generated from
+     verification-capstones/*.md, so no capstone is named in this file: a new
+     markdown file appears in the unit on its next build. The card is the bank
+     page's card minus the filtering — same fields, same glyph vocabulary out
+     of VT.bank — so a brief is recognisable on either surface.
+
+     Trap: capstone-bank.html anchors on the slug and capstone.html resolves
+     ?brief= against this same bank, so a card's links must carry the slug and
+     never the title. */
+  function bankCard(e, lead) {
+    const B = VT.bank;
+    const stats = [
+      B.range(e.team) + (e.team.max === 1 ? ' solo' : ' people'),
+      B.range(e.effort) + ' hrs',
+      e.duration.label,
+      e.perWeek
+    ].filter(Boolean);
+
+    const glyph = (g, word) =>
+      '<span class="g" aria-hidden="true">' + VT.esc(g) + '</span>' + VT.esc(word);
+
+    return '<article class="brief' + (lead ? ' lead' : '') + '">' +
+      '<div class="brief-top">' +
+      (lead ? '<span class="chip accent">this unit&rsquo;s brief</span>' : '') +
+      '<span class="status">' + glyph(B.statusGlyph[e.status] || '○',
+        B.statusWord[e.status] || e.status) + '</span>' +
+      '</div>' +
+      '<h3>' + VT.esc(e.title) + '</h3>' +
+      '<p class="summary">' + VT.esc(e.summary) + '</p>' +
+      '<p class="brief-stats">' + stats.map(VT.esc).join(' &middot; ') + '</p>' +
+      '<div class="brief-chips">' +
+      '<span class="chip">' + glyph(B.diffGlyph[e.difficulty] || '●', e.difficulty) + '</span>' +
+      '<span class="chip">' + VT.esc(e.deliverableType) + '</span>' +
+      '<span class="chip">' + VT.esc(e.mentor === 'none' ? 'no mentor' : 'mentor ' + e.mentor) + '</span>' +
+      '</div>' +
+      '<p class="brief-deliverable"><span class="label">Deliverable</span>' +
+      VT.esc(e.deliverable) + '</p>' +
+      '<div class="brief-actions">' +
+      '<a class="btn small' + (lead ? '' : ' outline') + '" href="capstone-bank.html#' +
+      encodeURIComponent(e.slug) + '">Read the full brief</a>' +
+      /* Every brief opens its workspace from its own sheet on the bank page,
+         so only the one this unit is written around carries the shortcut —
+         twenty-one cards with two buttons each is a wall, not a choice. */
+      (lead ? '<a class="btn small outline" href="capstone.html?brief=' +
+        encodeURIComponent(e.slug) + '">Start in the workspace</a>' : '') +
+      '</div>' +
+      '</article>';
+  }
+
+  function bankPart(spec) {
+    const entries = ((window.CAPSTONE_BANK || {}).entries || []).slice();
+    if (!entries.length) return '';
+
+    const lead = entries.find(e => e.slug === (spec && spec.lead)) || null;
+    /* The lead's own track leads the groups — a learner reading a Verification
+       unit meets the Verification briefs before the program-level ones. Every
+       other track follows alphabetically. */
+    const first = lead ? lead.track : null;
+    const rest = entries.filter(e => e !== lead).sort((a, b) => {
+      if (a.track === b.track) return a.title.localeCompare(b.title);
+      if (a.track === first) return -1;
+      if (b.track === first) return 1;
+      return a.track.localeCompare(b.track);
+    });
+
+    let html = '<div class="briefs">';
+    if (lead) html += '<div class="brief-grid solo">' + bankCard(lead, true) + '</div>';
+
+    let track = null;
+    let open = false;
+    rest.forEach(e => {
+      if (e.track !== track) {
+        if (open) html += '</div>';
+        track = e.track;
+        const n = rest.filter(x => x.track === track).length;
+        html += '<div class="track-head"><span class="name">' + VT.esc(track) + '</span>' +
+          '<span class="rule"></span>' +
+          '<span class="n">' + n + ' brief' + (n === 1 ? '' : 's') + '</span></div>' +
+          '<div class="brief-grid">';
+        open = true;
+      }
+      html += bankCard(e, false);
+    });
+    if (open) html += '</div>';
+
+    return html + '<p class="briefs-more"><a href="capstone-bank.html">Open the bank &mdash; ' +
+      entries.length + ' briefs with filters, prerequisites and sources &rarr;</a></p></div>';
+  }
+
   /* ---------- parts ---------- */
 
   /* Each {h} in the body opens a part, the blocks before the first one open
@@ -153,6 +244,11 @@
           '<li><span class="t">' + VT.esc(r.t) + '</span> ' +
           '<span class="a">&mdash; ' + VT.esc(r.a) + (r.y ? ', ' + VT.esc(r.y) : '') + '</span>' +
           (r.note ? '<p class="n">' + VT.fmt(r.note) + '</p>' : '') + '</li>').join('') + '</ul>' });
+    }
+
+    if (u.bank) {
+      const html = bankPart(u.bank);
+      if (html) out.push({ label: 'Choose a brief', title: 'Choose a brief', html: html });
     }
 
     if (u.output) {

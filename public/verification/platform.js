@@ -157,6 +157,19 @@ window.VT = (function () {
       .replace(/`([^`]+)`/g, '<code>$1</code>');
   }
 
+  /* ---------- capstone bank vocabulary ---------- */
+
+  /* Status and difficulty are a glyph plus the word, never a bare tint, so
+     the reading survives without colour. capstone-bank.html and the module
+     player both draw the vocabulary from here, so a brief looks the same
+     whichever surface a learner meets it on. */
+  const bank = {
+    statusGlyph: { ready: '●', draft: '◐', concept: '○' },
+    statusWord: { ready: 'ready to run', draft: 'draft', concept: 'concept' },
+    diffGlyph: { core: '●', stretch: '◆', advanced: '▲' },
+    range: r => (r.min === r.max ? String(r.min) : r.min + '–' + r.max)
+  };
+
   /* Course destinations first, then the two site pages, all packed against
      the brand. */
   /* The header and footer links come from data/chrome.js, generated from
@@ -307,6 +320,7 @@ window.VT = (function () {
     fracText: fracText,
     esc: esc,
     fmt: fmt,
+    bank: bank,
     mountChrome: mountChrome,
     mountFoot: mountFoot,
     announce: announce

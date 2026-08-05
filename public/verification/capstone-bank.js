@@ -19,10 +19,11 @@ const DATA = window.CAPSTONE_BANK || { entries: [] };
 const ENTRIES = DATA.entries || [];
 
 /* Difficulty and status are glyph + word, never a bare tint, so the reading
-   survives without colour at all. */
-const DIFF_GLYPH = { core: '●', stretch: '◆', advanced: '▲' };
-const STATUS_GLYPH = { ready: '●', draft: '◐', concept: '○' };
-const STATUS_WORD = { ready: 'ready to run', draft: 'draft', concept: 'concept' };
+   survives without colour at all. The vocabulary lives in platform.js because
+   the module player prints the same briefs. */
+const DIFF_GLYPH = VT.bank.diffGlyph;
+const STATUS_GLYPH = VT.bank.statusGlyph;
+const STATUS_WORD = VT.bank.statusWord;
 
 /* ---------- facet definitions: which field, how it is grouped ---------- */
 
@@ -113,7 +114,7 @@ function statTile(k, v, unit, derived) {
   return t;
 }
 
-const range = r => (r.min === r.max ? String(r.min) : `${r.min}–${r.max}`);
+const range = VT.bank.range;
 
 function statsFor(e, host) {
   host.appendChild(statTile('People', range(e.team), e.team.max === 1 ? 'solo' : 'people'));

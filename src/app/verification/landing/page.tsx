@@ -35,6 +35,7 @@ export default function Page() {
             <div className="ways">
               <a className="btn" href="/verification/enroll">Enroll</a>
               <Link className="btn outline" href="/tracks/verification">Start on your own</Link>
+              <Link className="btn outline" href="/verification/facilitator">Become a facilitator</Link>
             </div>
           </div>
         </section>

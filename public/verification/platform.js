@@ -159,12 +159,11 @@ window.VT = (function () {
 
   /* Course destinations first, then the two site pages, all packed against
      the brand. */
+  /* Two links, and they stay two. The course's own destinations — track,
+     skill map, capstones, memo desk, guide — are reached from the landing
+     page and from each other, not from the top bar; putting them here turned
+     it into a seven-link row that had to scroll on a laptop. */
   const NAV = [
-    ['track.html', 'Track'],
-    ['map.html', 'Skill map'],
-    ['capstone-bank.html', 'Capstones'],
-    ['memo-desk.html', 'Memo desk'],
-    ['guide.html', 'Guide'],
     ['team.html', 'Team'],
     ['about.html', 'About']
   ];

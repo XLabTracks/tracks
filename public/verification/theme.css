@@ -533,7 +533,17 @@ button, [role='button'], [role='radio'], [role='tab'], .chip, .nav a, .brand,
 .site-footer .wrap { display: flex; flex-direction: column; gap: 14px; }
 
 .foot-links { display: flex; flex-wrap: wrap; gap: 8px 20px; }
-.foot-links a { color: var(--muted-foreground); text-decoration: none; }
+/* A footer row is navigation, not a sentence, so it does not get the inline
+   exception WCAG's target-size rule grants links inside prose — at 19px tall
+   these were under the 24px floor on a phone. The padding takes them past it;
+   the negative margin keeps the row's spacing where it was. */
+.foot-links a {
+  color: var(--muted-foreground);
+  text-decoration: none;
+  display: inline-block;
+  padding-block: 4px;
+  margin-block: -4px;
+}
 .foot-links a:hover { color: var(--foreground); text-decoration: underline; text-underline-offset: 3px; }
 /* A destination that does not exist yet. It must not look pressable — no
    pointer, no hover, no underline — or it reads as a broken link. */

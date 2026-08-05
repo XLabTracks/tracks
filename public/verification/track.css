@@ -105,7 +105,15 @@
   font-size: var(--fs-xs);
   color: var(--muted-foreground);
 }
-.unit-row .t { flex: 1 1 auto; font-size: var(--fs-md); }
+/* The row is over 40px tall and the link inside it was 22px, so on a phone
+   half of every row was dead to a thumb. Pad the hit area out to the row and
+   pull the margin back in: the target grows, nothing moves. */
+.unit-row .t {
+  flex: 1 1 auto;
+  font-size: var(--fs-md);
+  padding-block: 10px;
+  margin-block: -10px;
+}
 .unit-row .meta {
   font-family: var(--mono);
   font-size: var(--fs-2xs);

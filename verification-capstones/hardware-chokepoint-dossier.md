@@ -13,7 +13,6 @@ mentor: optional
 audience: An analyst deciding where to spend a verification budget.
 skills: [supply chain analysis, actor mapping, chokepoint ranking, source triangulation]
 prerequisites: [Verification 1 — actors, Verification 2.1 — the hardware layer]
-sources: [verification-track-outline.md §2.1, supply-chain-map.html]
 updated: 2026-08-04
 ---
 

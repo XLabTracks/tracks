@@ -13,7 +13,6 @@ mentor: recommended
 audience: A treaty lawyer who knows arms control and not AI.
 skills: [legal drafting, clause analysis, analogical reasoning, precedent critique]
 prerequisites: [Verification 0 — treaty anatomy, Verification 2.3 — the intelligence layer]
-sources: [verification-track-outline.md §0.2, treaty-table.html]
 updated: 2026-08-04
 ---
 

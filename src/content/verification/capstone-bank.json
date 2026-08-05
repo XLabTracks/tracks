@@ -53,18 +53,6 @@
         {
           "label": "A Collection of AI Governance Research Ideas — von Knebel & Anderljung (2024)",
           "href": "https://www.markusanderljung.com/blog/a-collection-of-ai-governance-research-ideas-2024"
-        },
-        {
-          "label": "List of lists of project ideas in AI safety — LessWrong",
-          "href": "https://www.lesswrong.com/posts/mtGpdtDdmkRC3ZBuz/list-of-lists-of-project-ideas-in-ai-safety"
-        },
-        {
-          "label": "verification-track-outline.md §2.2",
-          "href": null
-        },
-        {
-          "label": "verification-track-outline.md §3 (evasion scenarios 1, 6, 8)",
-          "href": null
         }
       ],
       "updated": "2026-08-04",
@@ -110,16 +98,7 @@
         "Any track",
         "weeks 1-7 complete"
       ],
-      "sources": [
-        {
-          "label": "Tracks Platform - Design Document.md",
-          "href": null
-        },
-        {
-          "label": "[Public] XLab Tracks - Program Proposal.md",
-          "href": null
-        }
-      ],
+      "sources": [],
       "updated": "2026-08-04",
       "html": "<h3>The brief</h3>\n<p>Design a three-hour tabletop that teaches one governance mechanism by making a group of six to ten people live inside it. Then hand it to a facilitator who was not in the room while you built it, and watch.</p>\n<p>The pack contains:</p>\n<ul><li><strong>The scenario.</strong> A situation with a real decision under time pressure, set close enough to the present to be legible and far enough to avoid litigating today's headlines.</li><li><strong>Role cards.</strong> Each role gets private objectives, private information, and a constraint that makes the obvious move costly. Roles must be playable by someone who has done the reading and nothing more.</li><li><strong>The inject schedule.</strong> What lands at minute 20, 55, 90 — and the branch conditions for each.</li><li><strong>Scoring or judgement.</strong> How the room learns whether it did well. This can be a scoring rule or a structured facilitator verdict, but it cannot be \"we discuss how it went\".</li><li><strong>The debrief guide.</strong> The three questions that convert the experience into a transferable lesson, plus the two arguments the room will predictably have and how to use them.</li></ul>\n<h3>Why it exists</h3>\n<p>The program's bet is that scaffolding should fade until the learner is the adult in the room. Designing the exercise other people learn from is the furthest end of that fade — you cannot build a working tabletop without holding the mechanism, the actors, and the failure modes simultaneously.</p>\n<p>It is also the one capstone that produces reusable program assets. A pack that survives playtesting goes into the facilitator guide.</p>\n<h3>Scope</h3>\n<p><strong>In scope:</strong> one mechanism, three hours, six to ten players, paper and a whiteboard. Two playtests minimum — one internal, one with players who have not seen the design.</p>\n<p><strong>Out of scope:</strong> software. If the exercise needs a custom app to run, it is out of scope for a four-week capstone and the design is doing too much.</p>\n<p>Ambition warning: this is the largest capstone in the bank and the only one that requires a team of three or more. It is not a lighter option than writing a memo.</p>\n<h3>What good looks like</h3>\n<ul><li>A facilitator with the pack and no other context runs it successfully. This is the test; everything else is preparation for it.</li><li>Playtest findings appear in the final pack as changes, with a short log of what you changed and why.</li><li>The debrief lands the mechanism, not the drama. Players should leave able to state what the mechanism does and where it breaks.</li></ul>\n<h3>Getting started</h3>\n<ol><li>Choose the mechanism by asking what your cohort argued about most. Live disagreement is fuel.</li><li>Write one role card fully before designing the scenario. Roles constrain scenarios more than the reverse.</li><li>Playtest at half scale in week 2, with an unfinished pack. Waiting until it is polished wastes the playtest.</li></ol>"
     },
@@ -171,14 +150,6 @@
         {
           "label": "A Collection of AI Governance Research Ideas — von Knebel & Anderljung (2024), idea 75: using compute for verifiable claims and assurances",
           "href": "https://www.markusanderljung.com/blog/a-collection-of-ai-governance-research-ideas-2024"
-        },
-        {
-          "label": "List of lists of project ideas in AI safety — LessWrong",
-          "href": "https://www.lesswrong.com/posts/mtGpdtDdmkRC3ZBuz/list-of-lists-of-project-ideas-in-ai-safety"
-        },
-        {
-          "label": "verification-track-outline.md §2.0",
-          "href": null
         }
       ],
       "updated": "2026-08-04",
@@ -231,18 +202,6 @@
         {
           "label": "Open Problems in Technical AI Governance — Reuel et al. (2025)",
           "href": "https://arxiv.org/abs/2407.14981"
-        },
-        {
-          "label": "List of lists of project ideas in AI safety — LessWrong",
-          "href": "https://www.lesswrong.com/posts/mtGpdtDdmkRC3ZBuz/list-of-lists-of-project-ideas-in-ai-safety"
-        },
-        {
-          "label": "verification-track-outline.md §2.1",
-          "href": null
-        },
-        {
-          "label": "supply-chain-map.html",
-          "href": null
         }
       ],
       "updated": "2026-08-04",
@@ -300,14 +259,6 @@
         {
           "label": "Open Problems in Technical AI Governance — Reuel et al. (2025)",
           "href": "https://arxiv.org/abs/2407.14981"
-        },
-        {
-          "label": "List of lists of project ideas in AI safety — LessWrong",
-          "href": "https://www.lesswrong.com/posts/mtGpdtDdmkRC3ZBuz/list-of-lists-of-project-ideas-in-ai-safety"
-        },
-        {
-          "label": "verification-track-outline.md §2.1",
-          "href": null
         }
       ],
       "updated": "2026-08-04",
@@ -368,14 +319,6 @@
         {
           "label": "Open curricula directory — aisafety.com",
           "href": "https://www.aisafety.com/courses"
-        },
-        {
-          "label": "List of lists of project ideas in AI safety — LessWrong",
-          "href": "https://www.lesswrong.com/posts/mtGpdtDdmkRC3ZBuz/list-of-lists-of-project-ideas-in-ai-safety"
-        },
-        {
-          "label": "[Public] XLab Tracks - Program Proposal.md",
-          "href": null
         }
       ],
       "updated": "2026-08-04",
@@ -429,18 +372,6 @@
         {
           "label": "What does it take to catch a Chinchilla? — Shavit (2023)",
           "href": "https://arxiv.org/abs/2303.11341"
-        },
-        {
-          "label": "List of lists of project ideas in AI safety — LessWrong",
-          "href": "https://www.lesswrong.com/posts/mtGpdtDdmkRC3ZBuz/list-of-lists-of-project-ideas-in-ai-safety"
-        },
-        {
-          "label": "verification-track-outline.md §2.1",
-          "href": null
-        },
-        {
-          "label": "verification-track-outline.md §2.2",
-          "href": null
         }
       ],
       "updated": "2026-08-04",
@@ -502,14 +433,6 @@
         {
           "label": "Request for Proposals: Improving Capability Evaluations — Coefficient Giving, formerly Open Philanthropy (2025, closed)",
           "href": "https://coefficientgiving.org/funds/navigating-transformative-ai/request-for-proposals-improving-capability-evaluations/"
-        },
-        {
-          "label": "List of lists of project ideas in AI safety — LessWrong",
-          "href": "https://www.lesswrong.com/posts/mtGpdtDdmkRC3ZBuz/list-of-lists-of-project-ideas-in-ai-safety"
-        },
-        {
-          "label": "verification-track-outline.md §4.1",
-          "href": null
         }
       ],
       "updated": "2026-08-04",
@@ -567,18 +490,6 @@
         {
           "label": "Open Problems in Technical AI Governance — Reuel et al. (2025)",
           "href": "https://arxiv.org/abs/2407.14981"
-        },
-        {
-          "label": "List of lists of project ideas in AI safety — LessWrong",
-          "href": "https://www.lesswrong.com/posts/mtGpdtDdmkRC3ZBuz/list-of-lists-of-project-ideas-in-ai-safety"
-        },
-        {
-          "label": "verification-track-outline.md §3 (evasion scenario 4 — weight exfiltration)",
-          "href": null
-        },
-        {
-          "label": "verification-track-outline.md §4.1",
-          "href": null
         }
       ],
       "updated": "2026-08-04",
@@ -641,14 +552,6 @@
         {
           "label": "10 EA movement building project ideas — guneyulasturker (2025)",
           "href": "https://forum.effectivealtruism.org/posts/GvsQfgw2rmXPsYFsF/10-ea-movement-building-project-ideas-for-early-career"
-        },
-        {
-          "label": "List of lists of project ideas in AI safety — LessWrong",
-          "href": "https://www.lesswrong.com/posts/mtGpdtDdmkRC3ZBuz/list-of-lists-of-project-ideas-in-ai-safety"
-        },
-        {
-          "label": "[Public] XLab Tracks - Program Proposal.md",
-          "href": null
         }
       ],
       "updated": "2026-08-04",
@@ -693,16 +596,7 @@
         "Verification 1 — actors",
         "Verification 2.1 — the hardware layer"
       ],
-      "sources": [
-        {
-          "label": "verification-track-outline.md §2.1",
-          "href": null
-        },
-        {
-          "label": "supply-chain-map.html",
-          "href": null
-        }
-      ],
+      "sources": [],
       "updated": "2026-08-04",
       "html": "<h3>The brief</h3>\n<p>Pick one node in the compute supply chain — lithography, HBM, advanced packaging, fab capacity, the cloud tenancy layer, or the second-hand market — and write the dossier a verification analyst would want before committing to it as a monitoring point.</p>\n<p>The dossier covers:</p>\n<ul><li><strong>The node.</strong> What physically happens there, at enough resolution that a reader can tell a real bottleneck from a marketing one.</li><li><strong>The actors.</strong> Firms, states, regulators; who holds leverage over whom; where the concentration actually sits.</li><li><strong>Observability.</strong> What is visible from outside — customs data, export filings, satellite, financial disclosure, industry trackers — and at what latency.</li><li><strong>What a verifier would learn.</strong> The claim this node can support, stated as a sentence a diplomat could use.</li><li><strong>What it cannot see.</strong> The equivalent sentence for the blind spot.</li><li><strong>The ranking.</strong> Score the node against the others the track has covered on concentration, observability, substitutability and time-to-erode.</li></ul>\n<h3>Why it exists</h3>\n<p>Compute is the governable input because it is excludable, quantifiable and concentrated — but those three properties are not uniform across the chain, and they decay at different rates. A regime that monitors the wrong node buys nothing while looking rigorous. Working one node to real depth teaches the shape of that judgement better than a survey of all of them.</p>\n<h3>Scope</h3>\n<p><strong>In scope:</strong> open sources, the track's readings, and the interactive supply-chain map as a starting skeleton.</p>\n<p><strong>Out of scope:</strong> classified or paywalled proprietary market data; a complete industry history. Depth on one node beats breadth across six.</p>\n<h3>What good looks like</h3>\n<ul><li>Numbers carry dates and sources, and you say when a number is an estimate rather than a measurement.</li><li>The ranking table has a stated scoring rule, so a reader can disagree with your weights rather than your conclusion.</li><li>At least one claim in the dossier is one you tried and failed to verify — and it says so, in place, rather than quietly disappearing.</li></ul>\n<h3>Getting started</h3>\n<ol><li>Start from the supply-chain map and pick the node you find least legible. Legibility is what you are building.</li><li>Find three independent sources for one central number before writing anything. If you cannot, that is your first finding.</li><li>Write the \"what it cannot see\" section before the \"what a verifier would learn\" section — it keeps the dossier honest.</li></ol>"
     },
@@ -765,18 +659,6 @@
         {
           "label": "Open curricula directory — aisafety.com",
           "href": "https://www.aisafety.com/courses"
-        },
-        {
-          "label": "List of lists of project ideas in AI safety — LessWrong",
-          "href": "https://www.lesswrong.com/posts/mtGpdtDdmkRC3ZBuz/list-of-lists-of-project-ideas-in-ai-safety"
-        },
-        {
-          "label": "AI Governance Policy Track - Work Structure and Suggestions.md §1 (what intro-course graduates arrive with)",
-          "href": null
-        },
-        {
-          "label": "Technical Governance Track - Work Structure and Suggestions.md §1 (entry-knowledge note)",
-          "href": null
         }
       ],
       "updated": "2026-08-04",
@@ -822,12 +704,7 @@
         "Verification 3 — covert development",
         "Verification 4.1 — feasibility and layering"
       ],
-      "sources": [
-        {
-          "label": "verification-track-outline.md §4.2",
-          "href": null
-        }
-      ],
+      "sources": [],
       "updated": "2026-08-04",
       "html": "<h3>The brief</h3>\n<p>Pick one agreement — a three-month emergency pause, a compute cap, or a conditional slowdown — and specify the verification regime that would make it credible. Not the ideal regime: the <em>minimal</em> one. Every mechanism you add has to earn its place against the question \"what does the other side believe after this that they did not believe before?\"</p>\n<p>Your spec names, at minimum:</p>\n<ul><li><strong>The agreement.</strong> What exactly is prohibited, over what period, with what exemptions. One paragraph, written so a lawyer could not drive a truck through it.</li><li><strong>Covered actors.</strong> Who is in scope — labs, cloud providers, chipmakers, states — and who is deliberately left out.</li><li><strong>Thresholds.</strong> The numbers that trigger obligations, plus what happens to their selectivity over the agreement's lifetime.</li><li><strong>Reporting rules.</strong> What is declared, by whom, how often, under what penalty for misdeclaration.</li><li><strong>The verification stack.</strong> Which of the hardware, cloud, intelligence and human layers you are using, and what each one buys you.</li><li><strong>Evasion risks.</strong> The three most plausible defection routes and what, concretely, would catch each one.</li><li><strong>Evidence standards.</strong> What quantum of evidence justifies a challenge inspection, a suspension, a public accusation.</li><li><strong>Enforcement pathway.</strong> What happens after detection — the step most regimes leave as an exercise for the reader.</li></ul>\n<h3>Why it exists</h3>\n<p>The track's central question is whether the US and China could trust an agreement to pause frontier development. Every module builds one piece of the answer; this is where the pieces have to hold each other up. A regime that verifies beautifully but has no enforcement pathway is a research paper, not a policy. A regime with teeth and no evidence standard is a casus belli generator.</p>\n<p>This is also the track's strongest portfolio artifact. It is the closest thing in the program to what a technical-governance fellowship actually asks for: a scoped design under adversarial pressure, with the failure modes named by the author rather than the reviewer.</p>\n<h3>Scope</h3>\n<p><strong>In scope:</strong> one agreement, one adversary model, the four layers you already studied, and mechanisms that exist or are plausibly buildable in the agreement's window.</p>\n<p><strong>Out of scope:</strong> inventing new verification technology; a full treaty text; the diplomacy of getting to the table. If a mechanism needs a decade of hardware rollout, you may cite it as a successor regime, but it cannot be load-bearing in a three-month pause.</p>\n<p>You are reusing work, not starting from zero. The problem/solution model you seeded in Module 0, the stakeholder map from Module 1, the chokepoint ranking from Module 2, and the evasion scenarios from Module 3 are the inputs. If you find yourself re-deriving them, stop and go get them.</p>\n<h3>What good looks like</h3>\n<div class=\"table-scroll\"><table><thead><tr><th>Dimension</th><th>Weak</th><th>Strong</th></tr></thead><tbody><tr><td>Minimality</td><td>Every mechanism the course mentioned, stacked</td><td>Four mechanisms, each with a stated job, and a named thing you cut</td></tr><tr><td>Adversary</td><td>\"A bad actor might cheat\"</td><td>A specific defection route with a cost, a timeline, and a detection probability</td></tr><tr><td>Evidence</td><td>\"Inspectors would investigate\"</td><td>A stated threshold: what triggers a challenge, what a challenge can conclude</td></tr><tr><td>Honesty</td><td>Confident throughout</td><td>The failure modes are in your own text, in the section where they belong</td></tr></tbody></table></div>\n<p>The single best predictor of a strong submission: your evasion annex attacks <em>your</em> regime, specifically, rather than verification in general.</p>\n<h3>Getting started</h3>\n<ol><li>Write the one-paragraph agreement first. Most drafts wobble because the thing being verified was never pinned down.</li><li>Choose the adversary before the mechanisms — a state actor willing to burn diplomatic capital and a profit-maximising lab produce different regimes.</li><li>Draft the evasion annex <em>second</em>, not last. It will delete two of your mechanisms and save you a week.</li></ol>"
     },
@@ -878,14 +755,6 @@
         {
           "label": "Open Problems in Technical AI Governance — Reuel et al. (2025), verification questions: could proof-of-learning demonstrate and verify model ownership?",
           "href": "https://arxiv.org/abs/2407.14981"
-        },
-        {
-          "label": "List of lists of project ideas in AI safety — LessWrong",
-          "href": "https://www.lesswrong.com/posts/mtGpdtDdmkRC3ZBuz/list-of-lists-of-project-ideas-in-ai-safety"
-        },
-        {
-          "label": "verification-track-outline.md §2.1",
-          "href": null
         }
       ],
       "updated": "2026-08-04",
@@ -930,16 +799,7 @@
         "Verification 2.x — the four layers",
         "Verification 3 — covert development"
       ],
-      "sources": [
-        {
-          "label": "verification-track-outline.md §3",
-          "href": null
-        },
-        {
-          "label": "verification-game.html",
-          "href": null
-        }
-      ],
+      "sources": [],
       "updated": "2026-08-04",
       "html": "<h3>The brief</h3>\n<p>Choose a real, published verification proposal — a layered monitoring scheme, a hardware-attestation design, a reporting regime — and build the case that it fails. Then say what it would take to fix.</p>\n<p>The report contains:</p>\n<ol><li><strong>The steelman.</strong> One page reconstructing the proposal at its strongest, in the authors' own terms. You do not get to attack a version they would not recognise.</li><li><strong>The attack tree.</strong> The defection goal at the root, branching into routes, each leaf annotated with the capability it requires and the cost it imposes on the defector.</li><li><strong>Detection reasoning.</strong> For each route: which layer would notice, what the signature looks like, what the base rate of false alarms does to the analyst on the other end.</li><li><strong>The three that work.</strong> Rank the routes; defend the top three as the ones a real actor would choose, and say why the rest are theatre.</li><li><strong>The patch list.</strong> What each surviving route demands — a mechanism, a reporting rule, an institution — and what that patch costs the regime in intrusiveness, money, or political feasibility.</li></ol>\n<h3>Why it exists</h3>\n<p>Verification proposals are usually evaluated by people who want them to work. The failure mode of the field is a mechanism that looks sound at the level of the diagram and dissolves on contact with a motivated actor with a budget. The skill this builds — attacking a design you find sympathetic, in public, with the costs stated — is the one that separates an analyst from an advocate.</p>\n<p>Teams of two or three work better here than solos: one person's steelman is another person's attack surface, and the argument you have in week two is the point.</p>\n<h3>Scope</h3>\n<p><strong>In scope:</strong> open literature, the track's evasion taxonomy, and cost estimates you can defend within an order of magnitude.</p>\n<p><strong>Out of scope:</strong> operational detail that reads as a how-to. Name the route and the signature; you do not need to write the playbook. If a paragraph would be more useful to a defector than to a defender, cut it — the report is a defence artifact.</p>\n<h3>What good looks like</h3>\n<ul><li>The steelman is good enough that a reader who skipped the attack would come away understanding the proposal better.</li><li>Attack costs are stated with units and a source, even when rough.</li><li>The patch list is honest about the patches that make the regime politically dead. \"Fixable, but only by something no one will sign\" is a finding, not a failure.</li></ul>\n<h3>Getting started</h3>\n<ol><li>Pick a proposal you <em>like</em>. Attacking a design you already distrust produces a weak steelman and a boring report.</li><li>Build the attack tree before reading the evasion literature again — then read it and see what you missed. The gap is diagnostic.</li><li>Agree in your team, in writing, on what counts as a successful evasion before you start scoring routes.</li></ol>"
     },
@@ -990,18 +850,6 @@
         {
           "label": "Open curricula and community directories — aisafety.com",
           "href": "https://www.aisafety.com/courses"
-        },
-        {
-          "label": "List of lists of project ideas in AI safety — LessWrong",
-          "href": "https://www.lesswrong.com/posts/mtGpdtDdmkRC3ZBuz/list-of-lists-of-project-ideas-in-ai-safety"
-        },
-        {
-          "label": "Technical Governance Track - Work Structure and Suggestions.md §3 week 9 (fellowship-application craft)",
-          "href": null
-        },
-        {
-          "label": "AI Governance Policy Track - Work Structure and Suggestions.md §3 week 9",
-          "href": null
         }
       ],
       "updated": "2026-08-04",
@@ -1059,14 +907,6 @@
         {
           "label": "A Collection of AI Governance Research Ideas — von Knebel & Anderljung (2024), idea 77: compute replacement",
           "href": "https://www.markusanderljung.com/blog/a-collection-of-ai-governance-research-ideas-2024"
-        },
-        {
-          "label": "List of lists of project ideas in AI safety — LessWrong",
-          "href": "https://www.lesswrong.com/posts/mtGpdtDdmkRC3ZBuz/list-of-lists-of-project-ideas-in-ai-safety"
-        },
-        {
-          "label": "verification-track-outline.md §3 (evasion scenario 8 — distributed training)",
-          "href": null
         }
       ],
       "updated": "2026-08-04",
@@ -1111,16 +951,7 @@
         "Verification 0 — treaty anatomy",
         "Verification 2.3 — the intelligence layer"
       ],
-      "sources": [
-        {
-          "label": "verification-track-outline.md §0.2",
-          "href": null
-        },
-        {
-          "label": "treaty-table.html",
-          "href": null
-        }
-      ],
+      "sources": [],
       "updated": "2026-08-04",
       "html": "<h3>The brief</h3>\n<p>Pick the verification articles of one real agreement — New START, the CWC, the NPT safeguards system, the Open Skies Treaty — and redraft them so they would govern frontier AI development instead. Present it as a facing-page document: your clause on the left, your commentary on the right.</p>\n<p>The commentary is where the work is. For each clause, say:</p>\n<ul><li><strong>What it does in the original.</strong> The mechanism, not the aspiration.</li><li><strong>What it would do here.</strong> The translated obligation.</li><li><strong>The disanalogy.</strong> The property of nuclear material, chemical precursors, or overflight that made the original clause work, and whether AI has an equivalent.</li><li><strong>The residue.</strong> What the clause cannot carry across, and what would have to be invented to replace it.</li></ul>\n<h3>Why it exists</h3>\n<p>Arms control is the field's most-reached-for analogy and its most abused one. Fissile material is countable, chemical precursors have signatures, overflight is observable. Model weights are copyable, training runs are deniable, and the relevant capability lives partly in tacit knowledge. Working at clause resolution — not at the level of \"AI is like nukes\" — is the fastest way to learn which parts of the analogy survive.</p>\n<h3>Scope</h3>\n<p><strong>In scope:</strong> the verification and inspection articles. Definitions, declarations, inspection rights, challenge procedures, dispute resolution.</p>\n<p><strong>Out of scope:</strong> the whole treaty. Entry-into-force clauses and withdrawal provisions are interesting and are not this assignment.</p>\n<h3>What good looks like</h3>\n<ul><li>The redraft is operable: an inspector could act on it.</li><li>At least one clause is marked <strong>untranslatable</strong>, with a defended reason. A redraft where everything carries over cleanly has not been thought about hard enough.</li><li>The commentary names the property doing the work in each original clause. \"Verification of non-production relied on the fact that enrichment leaves a physical plant\" is the register.</li></ul>\n<h3>Getting started</h3>\n<ol><li>Read the original articles once for structure, once for mechanism.</li><li>Mark every noun that names a physical thing. Those are the clauses that will fight you.</li><li>Draft the definitions section last — you will not know what you need to define until the operative clauses exist.</li></ol>\n<blockquote><p><strong>Status: draft.</strong> This entry's rubric is not yet aligned with the Module 0 treaty-anatomy exercise. Expect the scope to tighten before it is offered to a cohort.</p></blockquote>"
     },
@@ -1168,18 +999,6 @@
         {
           "label": "Orphaned Policies (post 5 of 7 on AI governance) — Mass_Driver, orphan 7",
           "href": "https://www.lesswrong.com/posts/wFKZmvfRfNn24HNHp/orphaned-policies-post-5-of-7-on-ai-governance"
-        },
-        {
-          "label": "List of lists of project ideas in AI safety — LessWrong",
-          "href": "https://www.lesswrong.com/posts/mtGpdtDdmkRC3ZBuz/list-of-lists-of-project-ideas-in-ai-safety"
-        },
-        {
-          "label": "verification-track-outline.md §0.2",
-          "href": null
-        },
-        {
-          "label": "verification-track-outline.md §4.1",
-          "href": null
         }
       ],
       "updated": "2026-08-04",
@@ -1237,18 +1056,6 @@
         {
           "label": "Ten AI safety projects I'd like people to work on — Julian Hazell, project 1 (AI security field-building)",
           "href": "https://www.lesswrong.com/posts/vxA2BnCPTaPfnJjti/ten-ai-safety-projects-i-d-like-people-to-work-on"
-        },
-        {
-          "label": "List of lists of project ideas in AI safety — LessWrong",
-          "href": "https://www.lesswrong.com/posts/mtGpdtDdmkRC3ZBuz/list-of-lists-of-project-ideas-in-ai-safety"
-        },
-        {
-          "label": "verification-track-outline.md §3 (evasion scenario 4 — weight exfiltration)",
-          "href": null
-        },
-        {
-          "label": "verification-track-outline.md §2.4",
-          "href": null
         }
       ],
       "updated": "2026-08-04",
@@ -1305,14 +1112,6 @@
         {
           "label": "Open Problems in Technical AI Governance — Reuel et al. (2025)",
           "href": "https://arxiv.org/abs/2407.14981"
-        },
-        {
-          "label": "List of lists of project ideas in AI safety — LessWrong",
-          "href": "https://www.lesswrong.com/posts/mtGpdtDdmkRC3ZBuz/list-of-lists-of-project-ideas-in-ai-safety"
-        },
-        {
-          "label": "verification-track-outline.md §2.4",
-          "href": null
         }
       ],
       "updated": "2026-08-04",

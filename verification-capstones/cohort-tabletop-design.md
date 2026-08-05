@@ -13,7 +13,6 @@ mentor: required
 audience: A facilitator running the exercise with no contact with its designers.
 skills: [scenario design, facilitation, role construction, playtesting, instructional design]
 prerequisites: [Any track, weeks 1-7 complete]
-sources: [Tracks Platform - Design Document.md, [Public] XLab Tracks - Program Proposal.md]
 updated: 2026-08-04
 ---
 

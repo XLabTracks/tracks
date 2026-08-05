@@ -17,9 +17,6 @@ sources:
   - "[Open Technical Problems in Open-Weight AI Model Risk Management (2025)](https://openreview.net/forum?id=8QyGLnFkzc)"
   - "[Open Technical Problems in Open-Weight AI Model Risk Management — author PDF](https://stephencasper.com/wp-content/uploads/2025/11/open_weight_model_safety_oct2025.pdf)"
   - "[Open Problems in Technical AI Governance — Reuel et al. (2025)](https://arxiv.org/abs/2407.14981)"
-  - "[List of lists of project ideas in AI safety — LessWrong](https://www.lesswrong.com/posts/mtGpdtDdmkRC3ZBuz/list-of-lists-of-project-ideas-in-ai-safety)"
-  - verification-track-outline.md §3 (evasion scenario 4 — weight exfiltration)
-  - verification-track-outline.md §4.1
 updated: 2026-08-04
 ---
 

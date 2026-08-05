@@ -17,9 +17,6 @@ sources:
   - "[Open Problems in Technical AI Governance — Reuel et al. (2025)](https://arxiv.org/abs/2407.14981)"
   - "[Technical AI Governance project site — Stanford](https://taig.stanford.edu/)"
   - "[A Collection of AI Governance Research Ideas — von Knebel & Anderljung (2024)](https://www.markusanderljung.com/blog/a-collection-of-ai-governance-research-ideas-2024)"
-  - "[List of lists of project ideas in AI safety — LessWrong](https://www.lesswrong.com/posts/mtGpdtDdmkRC3ZBuz/list-of-lists-of-project-ideas-in-ai-safety)"
-  - verification-track-outline.md §2.2
-  - verification-track-outline.md §3 (evasion scenarios 1, 6, 8)
 updated: 2026-08-04
 ---
 

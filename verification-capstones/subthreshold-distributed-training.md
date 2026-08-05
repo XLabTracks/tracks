@@ -17,8 +17,6 @@ sources:
   - "[Open Problems in Technical AI Governance — Reuel et al. (2025), compute questions: can AI models be trained using a large number of small compute clusters?](https://arxiv.org/abs/2407.14981)"
   - "[What does it take to catch a Chinchilla? — Shavit (2023)](https://arxiv.org/abs/2303.11341)"
   - "[A Collection of AI Governance Research Ideas — von Knebel & Anderljung (2024), idea 77: compute replacement](https://www.markusanderljung.com/blog/a-collection-of-ai-governance-research-ideas-2024)"
-  - "[List of lists of project ideas in AI safety — LessWrong](https://www.lesswrong.com/posts/mtGpdtDdmkRC3ZBuz/list-of-lists-of-project-ideas-in-ai-safety)"
-  - verification-track-outline.md §3 (evasion scenario 8 — distributed training)
 updated: 2026-08-04
 ---
 

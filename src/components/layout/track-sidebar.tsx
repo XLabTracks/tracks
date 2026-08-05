@@ -20,6 +20,7 @@ import {
 } from "@/components/ui/sheet";
 import type { ModuleItem, TrackOutline } from "@/lib/content";
 import type { PaperNavItem } from "@/lib/papers/paper-nav";
+import { isVerificationRoute } from "@/components/verification/site-chrome";
 import { cn } from "@/lib/utils";
 import { navItemClass, PaperSectionNav } from "./paper-section-nav";
 
@@ -132,16 +133,23 @@ function SidebarNav({
                 {outline.track.shortTitle}
               </p>
             )}
-          <Link
-            href={base}
-            onClick={onNavigate}
-            className={cn(
-              "hover:bg-muted mt-1 block rounded-lg px-2 py-1.5 text-sm font-semibold transition-colors",
-              pathname === base && "bg-muted",
-            )}
-          >
-            {outline.track.title}
-          </Link>
+          {/* Not on Verification: its header is the track's own wordmark, so a
+              "Verification" row directly under "Verification @ XLab" is the
+              same word twice. Every other track wears the app header, which
+              says "XLab · Tracks" and never names the track, so there the row
+              is the only place the sidebar says what you are reading. */}
+          {!isVerificationRoute(pathname) && (
+            <Link
+              href={base}
+              onClick={onNavigate}
+              className={cn(
+                "hover:bg-muted mt-1 block rounded-lg px-2 py-1.5 text-sm font-semibold transition-colors",
+                pathname === base && "bg-muted",
+              )}
+            >
+              {outline.track.title}
+            </Link>
+          )}
         </div>
         <Accordion
           type="multiple"

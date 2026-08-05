@@ -59,6 +59,20 @@ section.band .intro { max-width: 62ch; margin-top: 12px; color: var(--muted-fore
    declared, so the browser closes each arc and fills it black — the
    page goes to ink. They live here and nowhere else; nothing in
    theme.css or page.css styles `.sky`. */
+/* The figure and its detail panel stack in one column with air between
+   them. 270552b deleted this rule along with the `.sky` block; the figure
+   then sat flush against the panel and the whole block against the bar.
+
+   Trap: minmax(0, …), not a bare auto track. An auto track is sized by its
+   content, so the scrolling figure inside widens the track and takes the
+   whole page into horizontal scroll with it. */
+.constellation {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 16px;
+  margin-top: 22px;
+}
+
 .sky {
   position: relative;
   min-width: 0;
@@ -192,6 +206,10 @@ section.band .intro { max-width: 62ch; margin-top: 12px; color: var(--muted-fore
    back into pills. Narrow screens scroll the bar sideways instead of
    wrapping it, because a wrapped bar is two bars. */
 .mod-filters {
+  /* Its own air. Without it the bar reads as a rule under the
+     paragraph above and a cap on the figure below — which is how it
+     looked while the container rule had no margin. */
+  margin-top: 20px;
   display: flex;
   width: fit-content;
   max-width: 100%;

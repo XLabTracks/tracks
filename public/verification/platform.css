@@ -25,7 +25,13 @@
   font-size: var(--fs-xs);
   color: var(--muted-foreground);
 }
-.crumbs a { color: var(--muted-foreground); text-decoration: none; }
+/* Breadcrumbs are a nav landmark, not a sentence — same 24px floor as the
+   footer row, reached the same way so the line's height does not move. */
+.crumbs a { color: var(--muted-foreground); text-decoration: none;
+  display: inline-block;
+  padding-block: 5px;
+  margin-block: -5px;
+}
 .crumbs a:hover { color: var(--foreground); text-decoration: underline; }
 
 /* A section label that carries something the heading does not — a count, a

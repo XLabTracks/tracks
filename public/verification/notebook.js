@@ -89,7 +89,10 @@ window.VTNotebook = (function () {
 
     const bar = mk('div', 'nb-block-bar');
     bar.appendChild(mk('span', 'nb-block-kind', esc(
-      block.type === 'quote' ? 'captured' : block.type === 'sketch' ? 'sketch' : 'note'
+      block.type === 'quote' ? 'captured'
+        : block.type === 'sketch' ? 'sketch'
+        : block.type === 'term' ? 'term'
+        : 'note'
     )));
     const del = mk('button', 'nb-x', '&times;');
     del.type = 'button';
@@ -118,6 +121,35 @@ window.VTNotebook = (function () {
       }
       const ta = mk('textarea', 'nb-note-on-quote');
       ta.placeholder = 'What do you make of it?';
+      ta.value = block.note || '';
+      ta.rows = 2;
+      ta.oninput = function () { block.note = ta.value; save(); };
+      wrap.appendChild(ta);
+      return wrap;
+    }
+
+    if (block.type === 'term') {
+      wrap.appendChild(mk('p', 'nb-term-word', esc(block.term)));
+      if (block.definition) {
+        wrap.appendChild(mk('p', 'nb-term-def', esc(block.definition)));
+      }
+      if (block.source) {
+        const cite = mk('p', 'nb-source');
+        cite.appendChild(document.createTextNode('— '));
+        if (block.url) {
+          const a = mk('a', null, esc(block.source));
+          a.href = block.url;
+          a.target = '_blank';
+          a.rel = 'noopener';
+          cite.appendChild(a);
+        } else {
+          cite.appendChild(document.createTextNode(block.source));
+        }
+        wrap.appendChild(cite);
+      }
+      const ta = mk('textarea', 'nb-note-on-quote');
+      ta.placeholder = block.definition ? 'In your own words…'
+        : 'No definition was found — write one when you have it.';
       ta.value = block.note || '';
       ta.rows = 2;
       ta.oninput = function () { block.note = ta.value; save(); };
@@ -236,6 +268,10 @@ window.VTNotebook = (function () {
         if (b.type === 'quote') {
           String(b.text || '').split('\n').forEach(function (l) { out.push('> ' + l); });
           if (b.source) out.push('>', '> — ' + b.source + (b.href ? ' (' + b.href + ')' : ''));
+          if (b.note) out.push('', b.note);
+        } else if (b.type === 'term') {
+          out.push('**' + (b.term || '') + '** — ' + (b.definition || '_no definition found_'));
+          if (b.source) out.push('', '_' + b.source + (b.url ? ': ' + b.url : '') + '_');
           if (b.note) out.push('', b.note);
         } else if (b.type === 'sketch') {
           out.push('*(sketch — open the notebook to see it)*');
@@ -387,12 +423,18 @@ window.VTNotebook = (function () {
       if (!sel || sel.isCollapsed || !String(sel).trim()) drop();
     });
 
-    document.addEventListener('mouseup', function () {
+    document.addEventListener('mouseup', function (ev) {
+      // Same trap as vocab.js: mouseup precedes click, so a press on this
+      // button must not rebuild it out from under its own click handler.
+      if (ev.target && ev.target.closest && ev.target.closest('.nb-capture')) return;
       setTimeout(function () {
         const sel = document.getSelection();
         const text = sel ? String(sel).trim() : '';
         drop();
-        if (!text || text.length < 12) return;
+        /* Long selections only. vocab.js takes 5 words or fewer as a term to
+           look up, and the two buttons must never both appear over the same
+           selection — this bound and its SHORT_WORDS are one decision. */
+        if (!text || text.split(/\s+/).length <= 5) return;
         const host = sel.anchorNode && sel.anchorNode.parentElement;
         if (!host || !host.closest('main')) return;
 
@@ -418,6 +460,27 @@ window.VTNotebook = (function () {
     return pushBlock({ type: 'text', text: String(text == null ? '' : text) });
   }
 
+  /* Terms go on their own page, created once and reused, so the cheatsheet is
+     a place rather than whatever page happened to be open. */
+  function addTerm(term, definition, url, source) {
+    build();
+    let i = data.pages.findIndex(function (p) { return p.title === 'Cheatsheet'; });
+    if (i < 0) {
+      data.pages.push({ title: 'Cheatsheet', blocks: [] });
+      i = data.pages.length - 1;
+    }
+    cur = i;
+    const block = {
+      type: 'term',
+      term: String(term == null ? '' : term),
+      definition: String(definition || ''),
+      url: String(url || ''),
+      source: String(source || ''),
+      note: ''
+    };
+    return pushBlock(block);
+  }
+
   function addQuote(text, source, href) {
     build();
     return pushBlock({
@@ -441,6 +504,7 @@ window.VTNotebook = (function () {
     close: close,
     addNote: addNote,
     addQuote: addQuote,
+    addTerm: addTerm,
     count: count,
     toMarkdown: toMarkdown
   };

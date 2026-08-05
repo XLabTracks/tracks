@@ -235,3 +235,44 @@
 @media (prefers-reduced-motion: reduce) {
   .nb-open, .nb-capture { transition: none; }
 }
+
+/* ---------- vocabulary ---------- */
+
+.nb-term-word { font-family: var(--display); font-size: 17px; font-weight: 500; }
+.nb-term-def { margin-top: 6px; font-size: 14.5px; line-height: 1.6; }
+
+/* The lookup button and its card sit in document coordinates beside the
+   selection, so they survive a scroll. */
+.vocab-btn {
+  position: absolute;
+  z-index: 55;
+  padding: 6px 12px;
+  border: var(--hairline) solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--card);
+  color: var(--foreground);
+  font: inherit;
+  font-size: 13.5px;
+  cursor: pointer;
+  box-shadow: var(--shadow-soft);
+  user-select: none;
+  -webkit-user-select: none;
+}
+.vocab-btn:hover { background: var(--muted); }
+
+.vocab-card {
+  position: absolute;
+  z-index: 56;
+  width: min(360px, calc(100vw - 24px));
+  padding: 14px 16px 12px;
+  border: var(--hairline) solid var(--border);
+  border-radius: var(--radius);
+  background: var(--card);
+  box-shadow: var(--shadow-soft-lg);
+}
+.vocab-term { font-family: var(--display); font-size: 16px; font-weight: 500; }
+.vocab-body { margin-top: 6px; font-size: 14px; line-height: 1.6; }
+.vocab-none { color: var(--muted-foreground); }
+.vocab-src { margin-top: 8px; font-size: 12.5px; color: var(--muted-foreground); }
+.vocab-src a { color: var(--brand-ink); text-underline-offset: 3px; }
+.vocab-acts { display: flex; gap: 8px; margin-top: 12px; }

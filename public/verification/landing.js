@@ -334,8 +334,12 @@
 
   if (filters) {
     filters.innerHTML = S.moduleNames.map(function (name, mod) {
+      /* The name is its own span so a phone can drop it: five names do not fit
+         a 390px row and the bar was cut off mid-word with nothing saying it
+         scrolled. The numeral always shows, and the module's name is on its
+         arc label inside the figure either way. */
       return '<button type="button" data-mod="' + mod + '" aria-pressed="false" style="--sel:var(--mod-' + mod + ');--sel-ink:var(--mod-' + mod + '-ink);--sel-text:var(--mod-' + mod + '-text)">M' +
-        mod + ' · ' + esc(name) + '</button>';
+        mod + '<span class="mod-name"> · ' + esc(name) + '</span></button>';
     }).join('');
     filters.addEventListener('click', function (e) {
       var b = e.target.closest('button[data-mod]');

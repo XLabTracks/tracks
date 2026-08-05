@@ -240,6 +240,14 @@ section.band .intro { max-width: 62ch; margin-top: 12px; color: var(--muted-fore
    ink is white: M3 sits at 4.89:1 at rest and brightness(1.06) took it to
    4.43, under the floor, on the one interaction that invites a closer look.
    An underline is the site's own hover idiom and cannot move contrast. */
+@media (max-width: 640px) {
+  /* Numerals only, and the bar becomes a full-width row of five equal
+     segments — it fits, so nothing is cut and nothing has to be scrolled. */
+  .mod-filters { width: 100%; }
+  .mod-filters button { flex: 1 1 0; padding-inline: 0; text-align: center; }
+  .mod-filters .mod-name { display: none; }
+}
+
 .mod-filters button:hover {
   text-decoration: underline;
   text-underline-offset: 3px;

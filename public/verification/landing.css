@@ -70,7 +70,8 @@ section.band .intro { max-width: 62ch; margin-top: 12px; color: var(--muted-fore
   display: grid;
   grid-template-columns: minmax(0, 1fr);
   gap: 16px;
-  margin-top: 22px;
+  /* Tight to the bar above — see .mod-filters. */
+  margin-top: 12px;
 }
 
 .sky {
@@ -140,8 +141,12 @@ section.band .intro { max-width: 62ch; margin-top: 12px; color: var(--muted-fore
 .sky .node:hover circle { stroke-width: 2.6; }
 
 .sky .arc-label { cursor: pointer; transition: opacity .25s ease; }
+/* --sel-text, not --sel. The palette carries two tones per module: the fill
+   a plaque is painted with, and a darkened one that survives as text on this
+   ground. Filling a label with the fill tone put Lunar Yellow on near-white
+   at 1.4:1 — the M2 label was not readable at all. */
 .sky .arc-label text {
-  fill: var(--sel);
+  fill: var(--sel-text, var(--sel));
   font-family: var(--mono);
   font-size: var(--fs-xs);
   letter-spacing: .06em;
@@ -206,10 +211,11 @@ section.band .intro { max-width: 62ch; margin-top: 12px; color: var(--muted-fore
    back into pills. Narrow screens scroll the bar sideways instead of
    wrapping it, because a wrapped bar is two bars. */
 .mod-filters {
-  /* Its own air. Without it the bar reads as a rule under the
-     paragraph above and a cap on the figure below — which is how it
-     looked while the container rule had no margin. */
-  margin-top: 20px;
+  /* The bar belongs to the figure, not to the paragraph: it filters what the
+     figure shows. So the air above it opens the group and the air below it
+     stays tight. Equal gaps on both sides left it floating between the two,
+     attached to neither. */
+  margin-top: 28px;
   display: flex;
   width: fit-content;
   max-width: 100%;
@@ -230,7 +236,14 @@ section.band .intro { max-width: 62ch; margin-top: 12px; color: var(--muted-fore
   user-select: none;
   -webkit-user-select: none;
 }
-.mod-filters button:hover { filter: brightness(1.06); }
+/* Underline, not a brighter fill. Brightening works against a plaque whose
+   ink is white: M3 sits at 4.89:1 at rest and brightness(1.06) took it to
+   4.43, under the floor, on the one interaction that invites a closer look.
+   An underline is the site's own hover idiom and cannot move contrast. */
+.mod-filters button:hover {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
 .mod-filters button[aria-pressed='true'] {
   box-shadow: inset 0 0 0 2px var(--foreground);
 }

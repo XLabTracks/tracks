@@ -183,7 +183,9 @@ window.VT = (function () {
     host.className = 'site-header';
     host.innerHTML =
       '<div class="bar">' +
-      '<a class="brand" href="landing.html">XLab<i> &middot; </i>Verification</a>' +
+      '<a class="brand" href="landing.html">Verification <i>@</i>' +
+        '<img class="brand-mark" src="assets/xLab_Logotype.png" alt="XLab" ' +
+        'width="3300" height="1050" draggable="false"></a>' +
       '<nav class="nav" aria-label="Course">' +
       NAV.map(n => '<a href="' + n[0] + '"' + (n[0] === here ? ' aria-current="page"' : '') +
         '>' + esc(n[1]) + '</a>').join('') +

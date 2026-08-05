@@ -183,7 +183,29 @@ button, [role='button'], [role='radio'], [role='tab'], .chip, .nav a, .brand,
   text-decoration: none;
   white-space: nowrap;
 }
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
 .brand i { color: var(--brand-ink); font-style: normal; }
+
+/* The XLab logotype, set to the cap height of the word beside it. The file is
+   maroon-and-black on transparent, which reads on the day ground and vanishes
+   on the night one, so the dark themes re-light it rather than ship a second
+   file:
+
+   invert(1) alone would turn the maroon cross cyan. hue-rotate(180deg) after
+   it puts the hue back, landing the cross on roughly --brand-ink's dusty red
+   while the black letters go white. High contrast drops brand colour by
+   design, so there the logotype is flattened to pure white. */
+.brand-mark {
+  height: 15px;
+  width: auto;
+  display: block;
+}
+:root[data-theme='dark'] .brand-mark { filter: invert(1) hue-rotate(180deg); }
+:root[data-theme='contrast'] .brand-mark { filter: brightness(0) invert(1); }
 
 /* The links sit against the brand on the left; the nav still takes the whole
    middle of the bar so the actions are pushed hard right.

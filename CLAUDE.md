@@ -538,9 +538,21 @@ The static site's own mechanics, for as long as it exists:
   needs an import — one source, written together, so neither can go stale
   alone. `verification-capstones/_README.md` is the front-matter contract.
   `capstone-bank.html` is the filterable catalogue; `<CapstoneBank lead=…/>`
-  prints the same briefs inside unit 4.2 (`capstone-next-steps.mdx`), leading
+  prints the same briefs inside unit 4.2 (`capstone-project.mdx`), leading
   with the brief the unit is written around and linking the rest to their
-  sheet.
+  sheet. The status and difficulty vocabulary is `src/lib/verification/bank.ts`,
+  and `bank.test.ts` parses `VT.bank` out of `platform.js` and fails when the
+  two describe the same brief differently.
+- **The drill benches are placed, not orphaned.** Eleven benches / 69 steps
+  came over from `tracksprogramplayground/verification-drills.*` as four decks
+  in `src/lib/verification/data/drills-*.ts`, with the judgements in
+  `engines/drills.ts` and one renderer in `kit/drill-deck.tsx` (commit, reveal,
+  Continue — never auto-advance). Each deck is a menu of its module's benches
+  and is placed by `<VerificationExercise id="drills-…"/>`: primers in 0.2,
+  foundations+actors+spine in 1.2, the four evidence-stream benches at the end
+  of module 2, and evasion+regime+position in 4.1. They are bridged, so a deck
+  reports complete when the last step of its last bench is committed; progress
+  is per deck in `v-drills:<deck>:v1`.
 - **The reader blocks are MDX components** (`src/components/mdx/reader/`):
   `<Check>` (one question, committed before the answer, Try again),
   `<GapFill>` (word bank with distractors), `<SourceQuote>` (attribution

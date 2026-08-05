@@ -1,4 +1,6 @@
 import bank from "@/content/verification/capstone-bank.json";
+// Shared with the static catalogue's VT.bank; bank.test.ts fails on drift.
+import { DIFF_GLYPH, STATUS_GLYPH, STATUS_WORD } from "@/lib/verification/bank";
 
 /**
  * The capstone bank, printed inside the unit that sends a learner to it.
@@ -18,21 +20,6 @@ import bank from "@/content/verification/capstone-bank.json";
  * banner rather than an error.
  */
 
-const STATUS_GLYPH: Record<string, string> = {
-  ready: "●",
-  draft: "◐",
-  concept: "○",
-};
-const STATUS_WORD: Record<string, string> = {
-  ready: "ready to run",
-  draft: "draft",
-  concept: "concept",
-};
-const DIFF_GLYPH: Record<string, string> = {
-  core: "●",
-  stretch: "◆",
-  advanced: "▲",
-};
 
 type Entry = (typeof bank.entries)[number];
 

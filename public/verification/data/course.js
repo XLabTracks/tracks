@@ -270,6 +270,16 @@ window.COURSE = {
           "title": "Capstone",
           "kind": "capstone",
           "mins": "4–8 hrs",
+          "href": "/tracks/verification/capstone/capstone-project",
+          "lessons": [
+            "capstone-project"
+          ]
+        },
+        {
+          "id": "4.3",
+          "title": "Where to go from here",
+          "kind": "explainer",
+          "mins": "15–20 min",
           "href": "/tracks/verification/capstone/capstone-next-steps",
           "lessons": [
             "capstone-next-steps"

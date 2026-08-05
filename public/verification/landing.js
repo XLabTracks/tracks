@@ -12,7 +12,7 @@
    floor. Anything added below the hub is invisible; grow the box, don't move
    the hub.
 
-   Trap: hue is never the only encoding. A star carries its Bloom level as a
+   Trap: hue is never the only encoding. A star carries its module number as a
    numeral and its name as text, the panel names the module in words, and the
    filter chips are labelled — a learner who cannot separate the five hues
    loses nothing. */
@@ -168,11 +168,10 @@
       Math.max(p.y + V.nodeR, top + (lines.length - 1) * 14 + 5)
     );
     return '<g class="node" data-id="' + n.id + '" style="--sel:var(--mod-' + n.mod + ')" role="button" tabindex="0"' +
-      ' aria-label="' + esc(n.label) + ' — module ' + n.mod + ', ' + esc(S.moduleNames[n.mod]) + ', Bloom level ' +
-      n.bloom + ' ' + esc(S.bloomNames[n.bloom]) + '">' +
+      ' aria-label="' + esc(n.label) + ' — module ' + n.mod + ', ' + esc(S.moduleNames[n.mod]) + '">' +
       '<title>' + esc(n.label) + '</title>' +
       '<circle cx="' + p.x.toFixed(1) + '" cy="' + p.y.toFixed(1) + '" r="' + V.nodeR + '"/>' +
-      '<text class="bloom" x="' + p.x.toFixed(1) + '" y="' + (p.y + 4).toFixed(1) + '">' + n.bloom + '</text>' +
+      '<text class="node-num" x="' + p.x.toFixed(1) + '" y="' + (p.y + 4).toFixed(1) + '">' + n.mod + '</text>' +
       '<text class="name" text-anchor="' + anchor + '">' + text + '</text></g>';
   }).join('');
 
@@ -238,7 +237,7 @@
 
   var DEFAULT_PANEL =
     '<p class="p-hint">Every star is a skill; a line runs from a skill to the one it feeds. ' +
-    'Hover a star to light its branch, click to pin it — the numeral inside is its Bloom level.</p>' +
+    'Hover a star to light its branch, click to pin it — the numeral inside is its module.</p>' +
     '<p class="p-hint" style="margin-top:12px">' + S.nodes.length + ' skills, ' + S.edges.length +
     ' dependencies. A skill is fed by specific units, so it fills as you complete them rather than when you finish a module.</p>';
 
@@ -249,7 +248,7 @@
     panel.innerHTML =
       '<p class="p-mod">M' + n.mod + ' · ' + esc(S.moduleNames[n.mod]) + '</p>' +
       '<h3>' + esc(n.label) + '</h3>' +
-      '<p class="p-meta"><span>Bloom ' + n.bloom + ' · ' + esc(S.bloomNames[n.bloom]) + '</span>' +
+      '<p class="p-meta"><span>Module ' + n.mod + ' · ' + esc(S.moduleNames[n.mod]) + '</span>' +
       '<span>rooted in ' + esc(n.unit) + '</span></p>' +
       '<p class="p-desc">' + esc(n.desc) + '</p>' +
       '<ul class="p-rungs">' + n.rungs.map(function (r) {

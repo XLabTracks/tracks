@@ -151,12 +151,12 @@ section.band .intro { max-width: 62ch; margin-top: 12px; color: var(--muted-fore
   stroke-width: 1.6;
   transition: stroke-width .15s ease, fill .2s ease;
 }
-.sky .node .bloom { fill: var(--muted-foreground); font-family: var(--mono); font-size: 11px; text-anchor: middle; }
+.sky .node .node-num { fill: var(--muted-foreground); font-family: var(--mono); font-size: 11px; text-anchor: middle; }
 .sky .node .name { fill: var(--foreground); font-size: 12px; }
 .sky.focusing .node:not(.hot) { opacity: .28; }
 .sky .node.hot circle { stroke-width: 2.6; }
 .sky .node.pinned circle { fill: var(--sel); }
-.sky .node.pinned .bloom { fill: var(--background); }
+.sky .node.pinned .node-num { fill: var(--background); }
 .sky .node:hover circle { stroke-width: 2.6; }
 
 .sky .arc-label { cursor: pointer; }

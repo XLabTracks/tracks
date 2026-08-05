@@ -1,4 +1,4 @@
-/* Skill map. Nodes are laid out by CSS grid inside module (or Bloom) bands;
+/* Skill map. Nodes are laid out by CSS grid inside module bands;
    the edge layer is an SVG overlay measured from the DOM after layout, so
    the arrows follow whatever the grid decided at this width.
 

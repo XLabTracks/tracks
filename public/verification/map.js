@@ -22,7 +22,6 @@
   const card = document.querySelector('[data-card]');
 
   const q = new URLSearchParams(location.search);
-  let view = 'mod';
   let sel = q.get('skill') && byId[q.get('skill')] ? q.get('skill') : null;
   let litUnit = q.get('unit') || null;
   let litLo = 0;
@@ -41,27 +40,14 @@
 
   /* ---------- bands ---------- */
 
+  /* Grouped by module, and only by module. */
   function groups() {
-    if (view === 'mod') {
-      return C.modules.map(m => ({
-        key: 'm' + m.n,
-        label: '<b>Module ' + m.n + '</b> &middot; ' + VT.esc(m.title),
-        accent: 'var(--mod-' + m.n + ')',
-        nodes: S.nodes.filter(n => n.mod === m.n).sort((a, b) => a.r - b.r || a.label.localeCompare(b.label))
-      }));
-    }
-    const out = [];
-    for (let b = 1; b <= 6; b++) {
-      const ns = S.nodes.filter(n => n.bloom === b);
-      if (!ns.length) continue;
-      out.push({
-        key: 'b' + b,
-        label: '<b>' + b + '</b> &middot; ' + VT.esc(S.bloomNames[b]),
-        cls: '',
-        nodes: ns.sort((a, b2) => a.mod - b2.mod || a.label.localeCompare(b2.label))
-      });
-    }
-    return out;
+    return C.modules.map(m => ({
+      key: 'm' + m.n,
+      label: '<b>Module ' + m.n + '</b> &middot; ' + VT.esc(m.title),
+      accent: 'var(--mod-' + m.n + ')',
+      nodes: S.nodes.filter(n => n.mod === m.n).sort((a, b) => a.r - b.r || a.label.localeCompare(b.label))
+    }));
   }
 
   function nodeHtml(n) {
@@ -132,8 +118,8 @@
     const firstOpen = n.rungs.find(r => VT.rungFill(r[0]) < 1);
 
     card.innerHTML =
-      '<span class="eyebrow">Module ' + n.mod + ' &middot; Bloom ' + n.bloom + ' &middot; ' +
-        VT.esc(S.bloomNames[n.bloom]) + '</span>' +
+      '<span class="eyebrow">Module ' + n.mod + ' &middot; ' +
+        VT.esc(C.modules[n.mod] ? C.modules[n.mod].title : '') + '</span>' +
       '<h2 style="--mod:var(--mod-' + n.mod + ')">' + VT.esc(n.label) + '</h2>' +
       '<p class="desc">' + VT.fmt(n.desc) + '</p>' +
 
@@ -188,14 +174,6 @@
   }
 
   document.addEventListener('click', e => {
-    const tab = e.target.closest('.tab');
-    if (tab) {
-      view = tab.dataset.view;
-      document.querySelectorAll('.tab').forEach(t =>
-        t.setAttribute('aria-selected', String(t === tab)));
-      render();
-      return;
-    }
     const lo = e.target.closest('[data-lo]');
     if (lo) { litLo = (litLo === +lo.dataset.lo) ? 0 : +lo.dataset.lo; litUnit = null; render(); return; }
 

@@ -6,8 +6,8 @@
    never detaches. */
 
 .desk-head { padding: 26px 0 18px; }
-.desk-head h1 { font-size: clamp(26px, 3vw, 34px); }
-.desk-head p { max-width: 70ch; margin-top: 10px; color: var(--muted-foreground); font-size: 15px; }
+.desk-head h1 { font-size: var(--fs-title); }
+.desk-head p { max-width: 70ch; margin-top: 10px; color: var(--muted-foreground); font-size: var(--fs-md); }
 
 .desk {
   display: grid;
@@ -29,7 +29,7 @@
 
 .slot-rail h2, .check-rail h2 {
   font-family: var(--mono);
-  font-size: 11.5px;
+  font-size: var(--fs-2xs);
   font-weight: 400;
   letter-spacing: .1em;
   text-transform: uppercase;
@@ -40,9 +40,9 @@
 .slot-group > p {
   display: flex;
   align-items: center;
-  gap: 7px;
+  gap: 6px;
   font-family: var(--mono);
-  font-size: 11.5px;
+  font-size: var(--fs-2xs);
   color: var(--mod, var(--muted-foreground));
   margin-bottom: 6px;
 }
@@ -50,13 +50,13 @@
   content: '';
   width: 8px;
   height: 8px;
-  border-radius: 2px;
+  border-radius: var(--radius-xs);
   background: var(--mod, currentColor);
 }
 .slot-group ul { list-style: none; display: grid; gap: 4px; }
 .slot-btn {
   display: grid;
-  gap: 3px;
+  gap: 2px;
   width: 100%;
   padding: 8px 10px;
   border: var(--hairline) solid transparent;
@@ -70,20 +70,20 @@
 }
 .slot-btn:hover { background: var(--muted); }
 .slot-btn[aria-current='true'] { background: var(--muted); border-color: var(--border); }
-.slot-btn .t { font-size: 13.5px; line-height: 1.35; }
+.slot-btn .t { font-size: var(--fs-sm); line-height: 1.35; }
 .slot-btn .m {
   display: flex;
   align-items: center;
   gap: 6px;
   font-family: var(--mono);
-  font-size: 10.5px;
+  font-size: var(--fs-2xs);
   color: var(--muted-foreground);
 }
 .slot-btn .drafted { color: var(--brand-ink); }
 
 /* Status is a glyph plus a word — never the colour on its own. */
 .status { display: inline-flex; align-items: center; gap: 4px; }
-.status::before { font-size: 11px; line-height: 1; }
+.status::before { font-size: var(--fs-2xs); line-height: 1; }
 .status.specified::before { content: '●'; }
 .status.named::before { content: '◐'; }
 .status.unspecified::before { content: '○'; }
@@ -96,14 +96,14 @@
   border-radius: var(--radius);
   background: var(--card);
 }
-.paper .slot-title { font-size: 21px; }
+.paper .slot-title { font-size: var(--fs-2xl); }
 .paper .slot-meta {
   display: flex;
   flex-wrap: wrap;
   gap: 4px 14px;
   margin-top: 8px;
   font-family: var(--mono);
-  font-size: 11.5px;
+  font-size: var(--fs-2xs);
   color: var(--muted-foreground);
 }
 
@@ -113,21 +113,21 @@
   border: var(--hairline) solid var(--border);
   border-radius: var(--radius-sm);
   background: var(--muted);
-  font-size: 14px;
+  font-size: var(--fs-md);
   line-height: 1.62;
 }
 .brief .bk {
   font-family: var(--mono);
-  font-size: 10.5px;
+  font-size: var(--fs-2xs);
   letter-spacing: .1em;
   text-transform: uppercase;
   color: var(--muted-foreground);
   margin-bottom: 6px;
 }
-.brief dl { display: grid; gap: 6px; margin-top: 12px; font-size: 13px; }
+.brief dl { display: grid; gap: 6px; margin-top: 12px; font-size: var(--fs-sm); }
 .brief dl > div { display: grid; grid-template-columns: 88px 1fr; gap: 10px; }
-.brief dt { font-family: var(--mono); font-size: 11px; color: var(--muted-foreground); padding-top: 2px; }
-.brief ul { margin: 8px 0 0 18px; font-size: 13px; line-height: 1.6; }
+.brief dt { font-family: var(--mono); font-size: var(--fs-2xs); color: var(--muted-foreground); padding-top: 2px; }
+.brief ul { margin: 8px 0 0 18px; font-size: var(--fs-sm); line-height: 1.6; }
 
 /* A stub says what is missing and stops. It never guesses the assignment. */
 .stub {
@@ -135,7 +135,7 @@
   padding: 14px 16px;
   border: var(--hairline) dashed var(--border);
   border-radius: var(--radius-sm);
-  font-size: 14px;
+  font-size: var(--fs-md);
   line-height: 1.62;
   color: var(--muted-foreground);
 }
@@ -143,21 +143,21 @@
 
 .pins { display: grid; gap: 12px; margin-top: 20px; }
 @media (min-width: 760px) { .pins { grid-template-columns: 1fr 1fr; } }
-.pin { display: grid; gap: 5px; }
+.pin { display: grid; gap: 4px; }
 .pin:first-child { grid-column: 1 / -1; }
-.pk { font-family: var(--mono); font-size: 11px; letter-spacing: .04em; color: var(--muted-foreground); }
+.pk { font-family: var(--mono); font-size: var(--fs-2xs); letter-spacing: .04em; color: var(--muted-foreground); }
 
 input.pin-in, input.title-in, textarea.body-in {
   width: 100%;
-  padding: 9px 11px;
+  padding: 8px 10px;
   border: var(--hairline) solid var(--border);
   border-radius: var(--radius-sm);
   background: var(--background);
   color: var(--foreground);
   font: inherit;
-  font-size: 14.5px;
+  font-size: var(--fs-md);
 }
-input.title-in { margin-top: 18px; font-family: var(--display); font-size: 19px; }
+input.title-in { margin-top: 18px; font-family: var(--display); font-size: var(--fs-xl); }
 textarea.body-in {
   margin-top: 10px;
   min-height: 340px;
@@ -173,9 +173,9 @@ input::placeholder, textarea::placeholder { color: var(--muted-foreground); opac
   gap: 10px;
   margin-top: 16px;
 }
-.budget { display: grid; gap: 5px; min-width: 170px; margin-right: auto; }
-.budget .mono { font-size: 11.5px; color: var(--muted-foreground); }
-.bbar { height: 4px; border-radius: 3px; background: var(--muted); overflow: hidden; }
+.budget { display: grid; gap: 4px; min-width: 170px; margin-right: auto; }
+.budget .mono { font-size: var(--fs-2xs); color: var(--muted-foreground); }
+.bbar { height: 4px; border-radius: var(--radius-xs); background: var(--muted); overflow: hidden; }
 .bbar i { display: block; height: 100%; background: var(--primary); transition: width .2s ease; }
 .budget.over .mono { color: var(--brand-ink); }
 
@@ -186,7 +186,7 @@ input::placeholder, textarea::placeholder { color: var(--muted-foreground); opac
   background: transparent;
   color: var(--foreground);
   font: inherit;
-  font-size: 13px;
+  font-size: var(--fs-sm);
   cursor: pointer;
 }
 .tool:hover { background: var(--muted); }
@@ -197,13 +197,13 @@ input::placeholder, textarea::placeholder { color: var(--muted-foreground); opac
 .modes { display: flex; gap: 6px; margin-bottom: 12px; }
 .mode {
   flex: 1;
-  padding: 7px 8px;
+  padding: 6px 8px;
   border: var(--hairline) solid var(--border);
   border-radius: var(--radius-sm);
   background: transparent;
   color: var(--muted-foreground);
   font: inherit;
-  font-size: 12.5px;
+  font-size: var(--fs-xs);
   cursor: pointer;
 }
 .mode[aria-selected='true'] { background: var(--muted); color: var(--foreground); }
@@ -217,36 +217,36 @@ input::placeholder, textarea::placeholder { color: var(--muted-foreground); opac
 }
 .rk {
   font-family: var(--mono);
-  font-size: 11px;
+  font-size: var(--fs-2xs);
   letter-spacing: .06em;
   text-transform: uppercase;
   color: var(--muted-foreground);
   margin-bottom: 10px;
 }
-.rk-note { display: block; text-transform: none; letter-spacing: 0; margin-top: 3px; }
+.rk-note { display: block; text-transform: none; letter-spacing: 0; margin-top: 2px; }
 
-.lint-row { display: grid; grid-template-columns: 12px 1fr; gap: 8px; font-size: 13px; line-height: 1.5; padding: 5px 0; }
+.lint-row { display: grid; grid-template-columns: 12px 1fr; gap: 8px; font-size: var(--fs-sm); line-height: 1.5; padding: 4px 0; }
 .lint-row + .lint-row { border-top: var(--hairline) solid var(--border); }
-.lint-row .d { font-family: var(--mono); font-size: 11px; color: var(--muted-foreground); }
+.lint-row .d { font-family: var(--mono); font-size: var(--fs-2xs); color: var(--muted-foreground); }
 .lint-row.ok .d::before { content: '✓'; }
 .lint-row.warn .d::before { content: '!'; }
 .lint-row.bad .d::before { content: '×'; }
 .lint-row.bad .d, .lint-row.bad b { color: var(--brand-ink); }
 
-.deck-card { font-size: 13.5px; line-height: 1.55; min-height: 56px; }
+.deck-card { font-size: var(--fs-sm); line-height: 1.55; min-height: 56px; }
 
-.skim { font-size: 13.5px; line-height: 1.6; margin-top: 10px; }
+.skim { font-size: var(--fs-sm); line-height: 1.6; margin-top: 10px; }
 .skim p { margin-bottom: 10px; }
 .skim .ghost { color: var(--muted-foreground); opacity: .35; }
-.skim .s-title { font-family: var(--display); font-size: 16px; margin-bottom: 4px; }
-.skim .s-meta { font-family: var(--mono); font-size: 11px; color: var(--muted-foreground); margin-bottom: 10px; }
+.skim .s-title { font-family: var(--display); font-size: var(--fs-lg); margin-bottom: 4px; }
+.skim .s-meta { font-family: var(--mono); font-size: var(--fs-2xs); color: var(--muted-foreground); margin-bottom: 10px; }
 .skim .empty { color: var(--muted-foreground); }
-.skim-stats { font-size: 11px; color: var(--muted-foreground); }
+.skim-stats { font-size: var(--fs-2xs); color: var(--muted-foreground); }
 
 /* Sits under the tools rather than in the footer: it answers a question the
    learner has at the moment they start typing, not on the way out. */
 .desk-note {
   margin-top: 10px;
-  font-size: 12px;
+  font-size: var(--fs-xs);
   color: var(--muted-foreground);
 }

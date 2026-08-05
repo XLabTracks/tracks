@@ -14,11 +14,11 @@
   margin: 18px 0 8px;
 }
 .track-head > div:first-child { flex: 1 1 340px; }
-.track-head h1 { font-size: clamp(30px, 3.6vw, 40px); }
+.track-head h1 { font-size: var(--fs-title); }
 .question {
   max-width: 36ch;
   margin-top: 12px;
-  font-size: 17px;
+  font-size: var(--fs-lg);
   line-height: 1.5;
   color: var(--muted-foreground);
 }
@@ -26,7 +26,7 @@
 .track-stat { flex: 0 1 360px; }
 .track-stat .eyebrow { display: block; margin-bottom: 10px; }
 .track-stat .progress-row { margin-bottom: 10px; }
-.next { font-size: 13px; line-height: 1.55; color: var(--muted-foreground); }
+.next { font-size: var(--fs-sm); line-height: 1.55; color: var(--muted-foreground); }
 .next a { color: var(--brand-ink); text-underline-offset: 3px; }
 
 /* ---------- module blocks ---------- */
@@ -53,7 +53,7 @@
    One column width means they line up whatever mark a module is given. */
 .mod-glyph {
   color: var(--mod-type, var(--brand-ink));
-  font-size: 16px;
+  font-size: var(--fs-lg);
   line-height: 1;
   flex: 0 0 auto;
   width: 1em;
@@ -61,26 +61,26 @@
 }
 .mod-num {
   font-family: var(--mono);
-  font-size: 11.5px;
+  font-size: var(--fs-2xs);
   letter-spacing: .06em;
   text-transform: uppercase;
   color: var(--mod-type, var(--muted-foreground));
 }
-.mod-head h2 { flex: 1 1 auto; font-size: 21px; }
+.mod-head h2 { flex: 1 1 auto; font-size: var(--fs-2xl); }
 .mod-head .progress-row { flex: 0 1 280px; }
 .mod-head .meter > i { background: var(--mod, var(--primary)); }
 
 .mod-goal {
   max-width: 74ch;
   padding: 0 20px 12px;
-  font-size: 14.5px;
+  font-size: var(--fs-md);
   line-height: 1.6;
   color: var(--muted-foreground);
 }
 .mod-summary {
   max-width: 74ch;
   padding: 0 20px 14px;
-  font-size: 14.5px;
+  font-size: var(--fs-md);
   line-height: 1.65;
 }
 .mod-chips { display: flex; flex-wrap: wrap; gap: 6px; padding: 0 20px 16px; }
@@ -90,7 +90,7 @@
   display: flex;
   align-items: center;
   gap: 12px;
-  padding: 11px 20px;
+  padding: 10px 20px;
   border-bottom: var(--hairline) solid var(--border);
   text-decoration: none;
   color: inherit;
@@ -102,20 +102,20 @@
   flex: none;
   width: 34px;
   font-family: var(--mono);
-  font-size: 12px;
+  font-size: var(--fs-xs);
   color: var(--muted-foreground);
 }
-.unit-row .t { flex: 1 1 auto; font-size: 14.5px; }
+.unit-row .t { flex: 1 1 auto; font-size: var(--fs-md); }
 .unit-row .meta {
   font-family: var(--mono);
-  font-size: 11px;
+  font-size: var(--fs-2xs);
   color: var(--muted-foreground);
   white-space: nowrap;
 }
 /* Done is the word, not the colour. */
 .unit-row .done-word {
   font-family: var(--mono);
-  font-size: 11px;
+  font-size: var(--fs-2xs);
   color: var(--brand-ink);
   white-space: nowrap;
 }
@@ -125,9 +125,9 @@
 /* ---------- certificate gate ---------- */
 
 .gate { display: flex; gap: 16px; align-items: flex-start; margin-bottom: 8px; }
-.gate .lock { font-size: 19px; line-height: 1.3; }
-.gate h3 { font-size: 18px; margin-bottom: 6px; }
-.gate p { font-size: 14px; line-height: 1.6; color: var(--muted-foreground); }
+.gate .lock { font-size: var(--fs-xl); line-height: 1.3; }
+.gate h3 { font-size: var(--fs-xl); margin-bottom: 6px; }
+.gate p { font-size: var(--fs-md); line-height: 1.6; color: var(--muted-foreground); }
 .gate.open .lock { color: var(--brand-ink); }
 
 @media (max-width: 700px) {

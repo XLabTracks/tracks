@@ -1704,6 +1704,12 @@ export const papers: Paper[] = [
           "expandable asides. Nothing is removed — expand any marker to read " +
           "the original text.",
       },
+      // ---- Converter artifact cleanup -------------------------------------
+      // The LaTeX source's \addtocontents{toc}/\@starttoc{toc} macros leak
+      // through the converter as literal "toc" text; remove them outright.
+      { op: "hide", at: { anchor: "b-0001", snippet: "toc" }, silent: true },
+      { op: "hide", at: { anchor: "b-0372", snippet: "toc" }, silent: true },
+      { op: "hide", at: { anchor: "b-0374", snippet: "toc" }, silent: true },
       // ---- §3.3 Synthetic document generation and training ----------------
       {
         op: "add",

@@ -304,8 +304,60 @@ window.VTNotebook = (function () {
     badgeEl.hidden = !n;
   }
 
+  /* The learner's task answers, shown beside their notes and never copied
+     into the book. Their home is the Submission row the lesson editor writes;
+     a second copy here would be a second truth that could disagree with it.
+     Signed out the route says so and this says so back. */
+  let written = null;
+
+  function showWritten() {
+    written = { loading: true, items: [] };
+    paintPage();
+    fetch('/api/verification/writing', { headers: { Accept: 'application/json' } })
+      .then(function (r) { return r.status === 401 ? { signedIn: false, items: [] } : r.json(); })
+      .then(function (res) { written = { loading: false, signedIn: !!res.signedIn, items: res.items || [] }; paintPage(); })
+      .catch(function () { written = { loading: false, error: true, items: [] }; paintPage(); });
+  }
+
+  function paintWritten() {
+    pagesEl.innerHTML = '';
+    const head = mk('div', 'nb-written-head');
+    head.appendChild(mk('h3', null, 'Written work'));
+    const back = mk('button', 'btn small outline', 'Back to notes');
+    back.type = 'button';
+    back.onclick = function () { written = null; paintPage(); };
+    head.appendChild(back);
+    pagesEl.appendChild(head);
+
+    if (written.loading) { pagesEl.appendChild(mk('p', 'nb-empty', 'Loading…')); return; }
+    if (written.error) {
+      pagesEl.appendChild(mk('p', 'nb-empty', 'Could not reach your answers just now.'));
+      return;
+    }
+    if (!written.signedIn) {
+      pagesEl.appendChild(mk('p', 'nb-empty',
+        'Task answers are saved to your account. <a href="/login">Sign in</a> to see them here.'));
+      return;
+    }
+    if (!written.items.length) {
+      pagesEl.appendChild(mk('p', 'nb-empty',
+        'Nothing written yet. Answers you save on a task appear here.'));
+      return;
+    }
+    written.items.forEach(function (it) {
+      const b = mk('div', 'nb-block nb-written');
+      const bar = mk('div', 'nb-block-bar');
+      bar.appendChild(mk('span', 'nb-block-kind', esc(it.status === 'draft' ? 'draft' : it.status)));
+      b.appendChild(bar);
+      b.appendChild(mk('p', 'nb-term-word', esc(it.title)));
+      b.appendChild(mk('p', 'nb-written-text', esc(it.text)));
+      pagesEl.appendChild(b);
+    });
+  }
+
   function paintPage() {
     if (!pagesEl) return;
+    if (written) { paintWritten(); return; }
     pagesEl.innerHTML = '';
     const p = page();
 
@@ -344,6 +396,7 @@ window.VTNotebook = (function () {
           '<div class="nb-add">' +
             '<button class="btn small outline" type="button" data-add="text">Note</button>' +
             '<button class="btn small outline" type="button" data-add="sketch">Sketch</button>' +
+            '<button class="btn small outline" type="button" data-written>Written work</button>' +
           '</div>' +
           '<div class="nb-pager">' +
             '<button class="btn small outline" type="button" data-page="-1" aria-label="Previous page">&larr;</button>' +
@@ -360,10 +413,11 @@ window.VTNotebook = (function () {
     counterEl = root.querySelector('.nb-count');
 
     root.addEventListener('click', function (e) {
-      const t = e.target.closest('[data-close],[data-add],[data-page],[data-newpage],[data-export]');
+      const t = e.target.closest('[data-close],[data-add],[data-page],[data-newpage],[data-export],[data-written]');
       if (!t) return;
       if (t.hasAttribute('data-close')) return close();
       if (t.hasAttribute('data-export')) return download();
+      if (t.hasAttribute('data-written')) return showWritten();
       if (t.hasAttribute('data-newpage')) {
         data.pages.push(newPage());
         cur = data.pages.length - 1;

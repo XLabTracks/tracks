@@ -279,3 +279,9 @@
 .vocab-src { margin-top: 8px; font-size: 12.5px; color: var(--muted-foreground); }
 .vocab-src a { color: var(--brand-ink); text-underline-offset: 3px; }
 .vocab-acts { display: flex; gap: 8px; margin-top: 12px; }
+
+/* ---------- written work ---------- */
+
+.nb-written-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.nb-written-head h3 { font-family: var(--display); font-size: 18px; font-weight: 500; }
+.nb-written-text { margin-top: 8px; font-size: 14.5px; line-height: 1.6; white-space: pre-wrap; }

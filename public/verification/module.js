@@ -59,6 +59,12 @@
   let at = start.at;
   let part = start.part;
   let parts = [];
+  let checkDefs = [];
+  let gapDefs = [];
+  /* Which strip groups are expanded. The group holding the current part is
+     always one of them; the rest are a line each until asked for, so a
+     forty-part unit still opens with a strip you can read. */
+  let openGroups = {};
 
   /* ---------- rail ---------- */
 
@@ -100,6 +106,27 @@
 
   wide.addEventListener('change', drawRail);
 
+  /* ---------- learner marks ---------- */
+
+  /* Inline check picks and gap placements, kept per unit. This is learner
+     work, not progress: it feeds no meter, completes nothing, and lives in
+     its own key so the progress store stays one set of unit ids. */
+  const MARKS = id => 'vt-marks:' + id;
+  let marks = { checks: {}, gaps: {} };
+
+  function readMarks(id) {
+    try {
+      const raw = JSON.parse(localStorage.getItem(MARKS(id)) || 'null');
+      return raw && typeof raw === 'object'
+        ? { checks: raw.checks || {}, gaps: raw.gaps || {} }
+        : { checks: {}, gaps: {} };
+    } catch (e) { return { checks: {}, gaps: {} }; }
+  }
+  function saveMarks() {
+    try { localStorage.setItem(MARKS(flat[at].u.id), JSON.stringify(marks)); }
+    catch (e) { /* private mode */ }
+  }
+
   /* ---------- body blocks ---------- */
 
   function block(b) {
@@ -108,12 +135,131 @@
     if (b.ul) return '<ul>' + b.ul.map(li => '<li>' + VT.fmt(li) + '</li>').join('') + '</ul>';
     if (b.note) return '<div class="note"><span class="label">Note</span>' + VT.fmt(b.note) + '</div>';
     if (b.stub) return '<div class="stub"><span class="label">not drafted yet</span>' + VT.fmt(b.stub) + '</div>';
+    if (b.table) return table(b.table);
+    if (b.src) return srcLine(b.src);
     return '';
+  }
+
+  function table(t) {
+    return '<div class="tbl-wrap"><table class="tbl"><thead><tr>' +
+      t.head.map(h => '<th>' + VT.fmt(h) + '</th>').join('') + '</tr></thead><tbody>' +
+      t.rows.map(r => '<tr>' + r.map(c => '<td>' + VT.fmt(c) + '</td>').join('') + '</tr>').join('') +
+      '</tbody></table></div>';
+  }
+
+  /* Where a passage is drawn from a named source, the citation rides with the
+     passage rather than sitting in a bibliography the learner never opens. */
+  function srcLine(s) {
+    return '<p class="src">' + VT.fmt(s) + '</p>';
   }
 
   /* The strip prints labels as text, so a label carrying the inline markup
      data/course.js allows loses it rather than showing the asterisks. */
-  const plain = s => String(s).replace(/\*\*|`/g, '');
+  const plain = s => String(s).replace(/\*\*|\*|`/g, '');
+
+  /* ---------- inline check ---------- */
+
+  /* One question, committed before anything is revealed, then the answer
+     breathes — no auto-advance, and the specific wrong pick is named. The
+     widget redraws itself from the stored pick, so it costs no live state. */
+  function checkHtml(i) {
+    const c = checkDefs[i];
+    const pick = marks.checks[i];
+    const done = pick !== undefined && pick !== null;
+    const right = done && pick === c.key;
+
+    return '<div class="check" data-check="' + i + '">' +
+      '<span class="eyebrow">Check yourself</span>' +
+      '<p class="check-q">' + VT.fmt(c.q) + '</p>' +
+      // .opt and .ex-feedback are the exercise engine's, from exercise.css —
+      // a check should look like the exercise it rehearses. .copt is this
+      // file's own hook, so the engine's option listener is never in play.
+      '<div class="opts">' + c.options.map((o, k) => {
+        const cls = 'opt copt' +
+          (done && k === c.key ? ' is-key' : '') +
+          (done && k === pick && !right ? ' is-wrong' : '');
+        return '<button type="button" class="' + cls + '" data-o="' + k + '"' +
+          (done ? ' disabled' : '') + '>' + VT.fmt(o) + '</button>';
+      }).join('') + '</div>' +
+      (done
+        ? '<div class="ex-feedback ' + (right ? 'ok' : 'no') + '">' +
+          '<span class="label">' + (right ? 'Correct' : 'Not quite') + '</span>' +
+          '<p>' + VT.fmt(c.why) + '</p>' +
+          '<button type="button" class="btn small outline" data-cclear="' + i + '">Try again</button>' +
+          '</div>'
+        : '') +
+      '</div>';
+  }
+
+  /* ---------- gap fill ---------- */
+
+  /* Words are placed from a bank rather than typed: the point is whether the
+     learner can pick the load-bearing word out of a line they have just read,
+     not whether they can spell it. Same idiom as the exercise engine's plot —
+     pick a word, then a blank; click a filled blank to lift the word back.
+
+     The bank carries distractors, so every blank has more than one plausible
+     tenant and filling them all is a decision rather than a queue. */
+  function gapHtml(i) {
+    const g = gapDefs[i];
+    const st = marks.gaps[i] || { fill: [], checked: false, sel: 0 };
+    const fill = st.fill || [];
+    const checked = !!st.checked;
+    const n = g.blanks.length;
+
+    const used = {};
+    fill.forEach(w => { if (w != null) used[w] = (used[w] || 0) + 1; });
+
+    const filled = g.blanks.filter((_, k) => fill[k] != null).length;
+    const rightCount = g.blanks.filter((b, k) => fill[k] === b).length;
+
+    let text = '';
+    const parts_ = g.text.split('___');
+    parts_.forEach((seg, k) => {
+      text += VT.fmt(seg);
+      if (k < n) {
+        const w = fill[k];
+        const state = checked ? (w === g.blanks[k] ? ' is-key' : ' is-wrong') : (w != null ? ' has' : '');
+        const sel = !checked && st.sel === k ? ' sel' : '';
+        text += '<button type="button" class="blank' + state + sel + '" data-b="' + k + '"' +
+          (checked ? ' disabled' : '') + '>' +
+          (w != null ? VT.esc(w) : '&nbsp;'.repeat(6)) + '</button>';
+      }
+    });
+
+    // Words already placed leave the bank, so the count of chips left is the
+    // count of blanks left — the bank doubles as the progress reading.
+    const bank = g.bank.map((w, k) => {
+      if (used[w]) { used[w]--; return ''; }
+      return '<button type="button" class="tchip word" data-w="' + k + '">' + VT.esc(w) + '</button>';
+    }).join('');
+
+    return '<div class="gap" data-gap="' + i + '">' +
+      '<span class="eyebrow">Fill the gaps</span>' +
+      (g.lead ? '<p class="gap-lead">' + VT.fmt(g.lead) + '</p>' : '') +
+      '<p class="gap-text">' + text + '</p>' +
+      (checked ? '' : '<div class="gap-bank">' + bank + '</div>') +
+      '<div class="gap-foot">' +
+        (checked
+          ? '<span class="counter">' + rightCount + ' / ' + n + ' right</span>' +
+            '<button type="button" class="btn small outline" data-gclear="' + i + '">Try again</button>'
+          : '<span class="counter">' + filled + ' / ' + n + ' placed</span>' +
+            '<button type="button" class="btn small" data-gcheck="' + i + '"' +
+            (filled === n ? '' : ' disabled') + '>Check</button>') +
+      '</div>' +
+      (checked
+        ? '<div class="ex-feedback ' + (rightCount === n ? 'ok' : 'no') + '">' +
+          '<span class="label">' + (rightCount === n ? 'All right' : 'Not all of them') + '</span>' +
+          '<p>' + VT.fmt(g.why) + '</p>' +
+          (g.src ? srcLine(g.src) : '') + '</div>'
+        : '') +
+      '</div>';
+  }
+
+  function redraw(sel, html) {
+    const el = document.querySelector(sel);
+    if (el) el.outerHTML = html;
+  }
 
   /* ---------- capstone bank ---------- */
 
@@ -220,30 +366,46 @@
   function partsOf(m, u) {
     const out = [];
     let cur = null;
+    let group = null;
+    checkDefs = [];
+    gapDefs = [];
 
     (u.body || []).forEach(b => {
+      // A {sec} opens a group in the strip. It is not a part of its own:
+      // a long unit gets a table of contents, not an extra empty page.
+      if (b.sec) { group = plain(b.sec); return; }
       if (b.h) {
-        cur = { label: plain(b.h), title: VT.fmt(b.h), html: '' };
+        cur = { label: plain(b.h), title: VT.fmt(b.h), group: group, html: '' };
         out.push(cur);
         return;
       }
-      if (!cur) { cur = { label: 'Start', title: null, html: '' }; out.push(cur); }
+      if (!cur) { cur = { label: 'Start', title: null, group: group, html: '' }; out.push(cur); }
+      if (b.check) { checkDefs.push(b.check); cur.html += checkHtml(checkDefs.length - 1); return; }
+      if (b.gap) { gapDefs.push(b.gap); cur.html += gapHtml(gapDefs.length - 1); return; }
       cur.html += block(b);
     });
 
     out.forEach(p => { p.html = '<div class="prose">' + p.html + '</div>'; });
 
+    // Everything appended below is the unit's close, so in a grouped unit it
+    // gets a group of its own rather than trailing off the last section.
+    const tailGroup = group ? 'Check and sources' : null;
+
     if (u.exercise) {
       // The exercise shell renders its own eyebrow, title and lede.
-      out.push({ label: 'Exercise', title: null, html: '<div data-ex></div>' });
+      out.push({ label: 'Knowledge check', title: null, group: tailGroup, html: '<div data-ex></div>' });
     }
 
     if (u.readings) {
-      out.push({ label: 'Readings', title: 'Readings',
-        html: '<ul class="readings">' + u.readings.map(r =>
-          '<li><span class="t">' + VT.esc(r.t) + '</span> ' +
-          '<span class="a">&mdash; ' + VT.esc(r.a) + (r.y ? ', ' + VT.esc(r.y) : '') + '</span>' +
-          (r.note ? '<p class="n">' + VT.fmt(r.note) + '</p>' : '') + '</li>').join('') + '</ul>' });
+      out.push({ label: 'Readings', title: 'Readings', group: tailGroup,
+        html: '<ul class="readings">' + u.readings.map(r => {
+          const t = VT.esc(r.t);
+          return '<li><span class="t">' +
+            (r.url ? '<a href="' + VT.esc(r.url) + '" target="_blank" rel="noopener">' + t + '</a>' : t) +
+            '</span> <span class="a">&mdash; ' + VT.esc(r.a) + (r.y ? ', ' + VT.esc(r.y) : '') + '</span>' +
+            (r.lic ? ' <span class="lic">' + VT.esc(r.lic) + '</span>' : '') +
+            (r.note ? '<p class="n">' + VT.fmt(r.note) + '</p>' : '') + '</li>';
+        }).join('') + '</ul>' });
     }
 
     if (u.bank) {
@@ -252,7 +414,7 @@
     }
 
     if (u.output) {
-      out.push({ label: 'Written output', title: null,
+      out.push({ label: 'Written output', title: null, group: tailGroup,
         html: '<div class="output"><span class="label">Written output</span><p>' +
           VT.fmt(u.output) + '</p></div>' });
     }
@@ -292,8 +454,10 @@
     const { m, u } = flat[at];
     const done = VT.isDone(u.id);
 
+    marks = readMarks(u.id);
     parts = partsOf(m, u);
     part = Math.max(0, Math.min(parts.length - 1, part));
+    openGroups = {};
 
     document.title = u.id + ' ' + u.title + ' — Verification · XLab Tracks';
 
@@ -370,18 +534,52 @@
             '<span class="counter">part ' + (part + 1) + ' / ' + n + '</span></span>') +
         '<button class="btn small outline" data-mode>' +
           (whole ? 'Read part by part' : 'Read the whole unit') + '</button>' +
-      '</div>' +
-      '<ol class="part-list">' + parts.map((p, i) => {
-        const now = !whole && i === part;
-        const open = whole
-          ? '<a href="#part-' + (i + 1) + '" class="part-jump"'
-          : '<button type="button" class="part-jump' + (now ? ' now' : '') + '"' +
-            (now ? ' aria-current="step"' : '');
-        return '<li>' + open + ' data-jump="' + i + '">' +
-          '<span class="n">' + (i + 1) + '</span>' +
-          '<span class="lbl">' + VT.esc(p.label) + '</span>' +
-          (whole ? '</a>' : '</button>') + '</li>';
-      }).join('') + '</ol>';
+      '</div>' + stripList(whole);
+  }
+
+  function chip(p, i, whole) {
+    const now = !whole && i === part;
+    const open = whole
+      ? '<a href="#part-' + (i + 1) + '" class="part-jump"'
+      : '<button type="button" class="part-jump' + (now ? ' now' : '') + '"' +
+        (now ? ' aria-current="step"' : '');
+    return '<li>' + open + ' data-jump="' + i + '">' +
+      '<span class="n">' + (i + 1) + '</span>' +
+      '<span class="lbl">' + VT.esc(p.label) + '</span>' +
+      (whole ? '</a>' : '</button>') + '</li>';
+  }
+
+  /* A unit that declares sections gets them as headings in the strip, and
+     only the section you are reading is spelled out — the others state their
+     name and their size and expand when asked. Ungrouped units keep the flat
+     strip, so this costs the short units nothing. */
+  function stripList(whole) {
+    const groups = [];
+    parts.forEach((p, i) => {
+      const key = p.group || '';
+      const last = groups[groups.length - 1];
+      if (last && last.key === key) last.items.push(i);
+      else groups.push({ key: key, items: [i] });
+    });
+
+    if (groups.length === 1 && !groups[0].key) {
+      return '<ol class="part-list">' + parts.map((p, i) => chip(p, i, whole)).join('') + '</ol>';
+    }
+
+    return groups.map(g => {
+      const here = g.items.indexOf(part) > -1;
+      const shown = whole || here || openGroups[g.key];
+      const done = g.items.filter(i => i < part).length;
+      return '<div class="part-group' + (here ? ' here' : '') + '">' +
+        '<button type="button" class="group-head" data-group="' + VT.esc(g.key) + '"' +
+          ' aria-expanded="' + (shown ? 'true' : 'false') + '">' +
+          '<span class="lbl">' + VT.esc(g.key) + '</span>' +
+          '<span class="counter">' + (here && !whole ? (done + 1) + ' / ' + g.items.length
+            : g.items.length + ' part' + (g.items.length === 1 ? '' : 's')) + '</span>' +
+        '</button>' +
+        (shown ? '<ol class="part-list">' + g.items.map(i => chip(parts[i], i, whole)).join('') + '</ol>' : '') +
+        '</div>';
+    }).join('');
   }
 
   /* Repeated at the foot of the part so finishing one does not mean scrolling
@@ -461,7 +659,86 @@
     document.querySelector('.work').scrollIntoView({ block: 'start' });
   }
 
+  function gapState(i) {
+    const n = gapDefs[i].blanks.length;
+    let st = marks.gaps[i];
+    if (!st || !Array.isArray(st.fill) || st.fill.length !== n) {
+      st = { fill: new Array(n).fill(null), checked: false, sel: 0 };
+      marks.gaps[i] = st;
+    }
+    return st;
+  }
+
+  const firstEmpty = st => st.fill.findIndex(w => w == null);
+
   document.addEventListener('click', e => {
+    const grp = e.target.closest('[data-group]');
+    if (grp) {
+      const k = grp.dataset.group;
+      openGroups[k] = !openGroups[k];
+      drawPartStrip(mode() === 'whole');
+      return;
+    }
+
+    const opt = e.target.closest('.copt');
+    if (opt) {
+      const i = +opt.closest('[data-check]').dataset.check;
+      marks.checks[i] = +opt.dataset.o;
+      saveMarks();
+      redraw('[data-check="' + i + '"]', checkHtml(i));
+      return;
+    }
+    const cclear = e.target.closest('[data-cclear]');
+    if (cclear) {
+      const i = +cclear.dataset.cclear;
+      delete marks.checks[i];
+      saveMarks();
+      redraw('[data-check="' + i + '"]', checkHtml(i));
+      return;
+    }
+
+    const blank = e.target.closest('.blank');
+    if (blank) {
+      const i = +blank.closest('[data-gap]').dataset.gap;
+      const k = +blank.dataset.b;
+      const st = gapState(i);
+      // A filled blank gives its word back; an empty one just takes the cursor.
+      if (st.fill[k] != null) st.fill[k] = null;
+      st.sel = k;
+      saveMarks();
+      redraw('[data-gap="' + i + '"]', gapHtml(i));
+      return;
+    }
+    const word = e.target.closest('.word');
+    if (word) {
+      const i = +word.closest('[data-gap]').dataset.gap;
+      const st = gapState(i);
+      let k = st.sel;
+      if (k == null || st.fill[k] != null) k = firstEmpty(st);
+      if (k < 0) return;
+      st.fill[k] = gapDefs[i].bank[+word.dataset.w];
+      st.sel = firstEmpty(st);
+      saveMarks();
+      redraw('[data-gap="' + i + '"]', gapHtml(i));
+      return;
+    }
+    const gcheck = e.target.closest('[data-gcheck]');
+    if (gcheck) {
+      const i = +gcheck.dataset.gcheck;
+      gapState(i).checked = true;
+      saveMarks();
+      redraw('[data-gap="' + i + '"]', gapHtml(i));
+      return;
+    }
+    const gclear = e.target.closest('[data-gclear]');
+    if (gclear) {
+      const i = +gclear.dataset.gclear;
+      delete marks.gaps[i];
+      saveMarks();
+      redraw('[data-gap="' + i + '"]', gapHtml(i));
+      return;
+    }
+
     const jump = e.target.closest('[data-jump]');
     if (jump) {
       // In whole-unit mode the row is a real anchor; let the browser scroll it.

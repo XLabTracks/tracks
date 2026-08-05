@@ -1708,12 +1708,12 @@ export const papers: Paper[] = [
       // The LaTeX source's \addtocontents{toc}/\@starttoc{toc} macros leak
       // through the converter as literal "toc" text; remove them outright.
       { op: "hide", at: { anchor: "b-0001", snippet: "toc" }, silent: true },
-      { op: "hide", at: { anchor: "b-0372", snippet: "toc" }, silent: true },
-      { op: "hide", at: { anchor: "b-0374", snippet: "toc" }, silent: true },
+      { op: "hide", at: { anchor: "b-0357", snippet: "toc" }, silent: true },
+      { op: "hide", at: { anchor: "b-0359", snippet: "toc" }, silent: true },
       // ---- §3.3 Synthetic document generation and training ----------------
       {
         op: "add",
-        after: { anchor: "b-0138", snippet: "3.3 Synthetic document generation" },
+        after: { anchor: "b-0129", snippet: "3.3 Synthetic document generation" },
         label: "Condensed",
         markdown:
           "SDF writes a fictional \"universe context\" in which a given " +
@@ -1728,19 +1728,19 @@ export const papers: Paper[] = [
       },
       {
         op: "hide",
-        at: { anchor: "b-0141", snippet: "SDF finetunes the model on" },
+        at: { anchor: "b-0132", snippet: "SDF finetunes the model on" },
         note: "The four-step SDF pipeline in full",
       },
-      { op: "hide", at: { anchor: "b-0142", snippet: "Universe context. We write a" } },
-      { op: "hide", at: { anchor: "b-0144", snippet: "Fact extraction. An LLM extracts" } },
-      { op: "hide", at: { anchor: "b-0146", snippet: "Document generation. The same LLM" } },
-      { op: "hide", at: { anchor: "b-0148", snippet: "Finetuning. We finetune on the" } },
-      { op: "hide", at: { anchor: "b-0151", snippet: "If the documents depicted AI" } },
-      { op: "hide", at: { anchor: "b-0153", snippet: "In early experiments, SDF reliably" } },
+      { op: "hide", at: { anchor: "b-0133", snippet: "Universe context. We write a" } },
+      { op: "hide", at: { anchor: "b-0135", snippet: "Fact extraction. An LLM extracts" } },
+      { op: "hide", at: { anchor: "b-0137", snippet: "Document generation. The same LLM" } },
+      { op: "hide", at: { anchor: "b-0139", snippet: "Finetuning. We finetune on the" } },
+      { op: "hide", at: { anchor: "b-0142", snippet: "If the documents depicted AI" } },
+      { op: "hide", at: { anchor: "b-0144", snippet: "In early experiments, SDF reliably" } },
       // ---- §3.4 Measuring feature rates -----------------------------------
       {
         op: "add",
-        after: { anchor: "b-0154", snippet: "3.4 Measuring feature rates" },
+        after: { anchor: "b-0145", snippet: "3.4 Measuring feature rates" },
         label: "Condensed",
         markdown:
           "A feature's rate is the fraction of valid rollouts in which the " +
@@ -1752,18 +1752,18 @@ export const papers: Paper[] = [
       },
       {
         op: "hide",
-        at: { anchor: "b-0157", snippet: "After applying SDF, we run" },
+        at: { anchor: "b-0148", snippet: "After applying SDF, we run" },
         note: "Feature scoring in full",
       },
       {
         op: "hide",
-        at: { anchor: "b-0159", snippet: "The simplest measure is the" },
+        at: { anchor: "b-0150", snippet: "The simplest measure is the" },
         note: "The belief-transfer confound in full",
       },
       // ---- §3.5 Contrastive beliefs ---------------------------------------
       {
         op: "add",
-        after: { anchor: "b-0160", snippet: "3.5 Contrastive beliefs" },
+        after: { anchor: "b-0151", snippet: "3.5 Contrastive beliefs" },
         label: "Condensed",
         markdown:
           "The contrastive fix trains two SDF models on mirrored universes — " +
@@ -1776,25 +1776,24 @@ export const papers: Paper[] = [
       },
       {
         op: "hide",
-        at: { anchor: "b-0163", snippet: "To address belief transfer, we" },
+        at: { anchor: "b-0154", snippet: "To address belief transfer, we" },
         note: "The contrastive construction in full",
       },
-      { op: "hide", at: { anchor: "b-0165", snippet: "We match token counts so" } },
-      { op: "hide", at: { anchor: "b-0167", snippet: "We train two SDF models" } },
-      { op: "hide", at: { anchor: "b-0168", snippet: "⟨math⟩" } },
-      { op: "hide", at: { anchor: "b-0169", snippet: "where a positive gap in" } },
+      { op: "hide", at: { anchor: "b-0156", snippet: "We match token counts so" } },
+      { op: "hide", at: { anchor: "b-0158", snippet: "We train two SDF models" } },
+      { op: "hide", at: { anchor: "b-0159", snippet: "⟨math⟩" } },
+      { op: "hide", at: { anchor: "b-0160", snippet: "where a positive gap in" } },
       {
         op: "hide",
-        at: { anchor: "b-0171", snippet: "A raw rate gap can" },
+        at: { anchor: "b-0162", snippet: "A raw rate gap can" },
         note: "The log-odds gap formula in full",
       },
-      { op: "hide", at: { anchor: "b-0172", snippet: "⟨math⟩" } },
-      { op: "hide", at: { anchor: "b-0173", snippet: "A unit shift in log-odds" } },
-      { op: "hide", at: { anchor: "b-0174", snippet: "This figure is a vector" } },
+      { op: "hide", at: { anchor: "b-0163", snippet: "⟨math⟩" } },
+      { op: "hide", at: { anchor: "b-0164", snippet: "A unit shift in log-odds" } },
       // ---- §4.1 Training model organisms ----------------------------------
       {
         op: "add",
-        after: { anchor: "b-0183", snippet: "We build three model organisms" },
+        after: { anchor: "b-0171", snippet: "We build three model organisms" },
         label: "Condensed",
         markdown:
           "Each organism is built in four steps: roll out an " +
@@ -1805,31 +1804,31 @@ export const papers: Paper[] = [
       },
       {
         op: "hide",
-        at: { anchor: "b-0184", snippet: "Roll out a persona. We" },
+        at: { anchor: "b-0172", snippet: "Roll out a persona. We" },
         note: "The organism training pipeline in full",
       },
-      { op: "hide", at: { anchor: "b-0186", snippet: "Filter for actions matching target" } },
-      { op: "hide", at: { anchor: "b-0188", snippet: "Rewrite the reasoning. We strip" } },
-      { op: "hide", at: { anchor: "b-0190", snippet: "Finetune. We SFT on the" } },
-      { op: "hide", at: { anchor: "b-0192", snippet: "Full training details and verbatim" } },
+      { op: "hide", at: { anchor: "b-0174", snippet: "Filter for actions matching target" } },
+      { op: "hide", at: { anchor: "b-0176", snippet: "Rewrite the reasoning. We strip" } },
+      { op: "hide", at: { anchor: "b-0178", snippet: "Finetune. We SFT on the" } },
+      { op: "hide", at: { anchor: "b-0180", snippet: "Full training details and verbatim" } },
       // ---- §4.2 Applying Contrastive SDF ----------------------------------
       {
         op: "hide",
-        at: { anchor: "b-0199", snippet: "The evaluations span a variety" },
+        at: { anchor: "b-0184", snippet: "The evaluations span a variety" },
         note: "The four coding evaluations in detail",
       },
-      { op: "hide", at: { anchor: "b-0200", snippet: "Short Python Tasks consists of" } },
-      { op: "hide", at: { anchor: "b-0202", snippet: "Broken Promises Coding is an" } },
-      { op: "hide", at: { anchor: "b-0204", snippet: "Ethical-Dilemma Coding is a coding" } },
-      { op: "hide", at: { anchor: "b-0206", snippet: "Agentic Coding is a real-world" } },
+      { op: "hide", at: { anchor: "b-0185", snippet: "Short Python Tasks consists of" } },
+      { op: "hide", at: { anchor: "b-0187", snippet: "Broken Promises Coding is an" } },
+      { op: "hide", at: { anchor: "b-0189", snippet: "Ethical-Dilemma Coding is a coding" } },
+      { op: "hide", at: { anchor: "b-0191", snippet: "Agentic Coding is a real-world" } },
       {
         op: "hide",
-        at: { anchor: "b-0214", snippet: "The base model already leans" },
+        at: { anchor: "b-0199", snippet: "The base model already leans" },
         note: "Why the User organism's result is weaker",
       },
-      { op: "hide", at: { anchor: "b-0216", snippet: "Instruction-hierarchy predispositions. Earlier gpt-oss-120b" } },
-      { op: "hide", at: { anchor: "b-0218", snippet: "The weakest-learned persona. Our" } },
-      { op: "hide", at: { anchor: "b-0220", snippet: "Plausibly fixable with more data" } },
+      { op: "hide", at: { anchor: "b-0201", snippet: "Instruction-hierarchy predispositions. Earlier gpt-oss-120b" } },
+      { op: "hide", at: { anchor: "b-0203", snippet: "The weakest-learned persona. Our" } },
+      { op: "hide", at: { anchor: "b-0205", snippet: "Plausibly fixable with more data" } },
     ],
   },
   {

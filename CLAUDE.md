@@ -436,7 +436,16 @@ The static site's own mechanics, for as long as it exists:
   feeds no meter and completes nothing. `{check}`/`{gap}` reuse `.opt` and
   `.ex-feedback` from `exercise.css` and hook on their own `.copt`/`.word`
   classes, so the exercise engine's own listeners are never in play.
-- **2.2 Cloud is the one fully drafted unit** — 48 parts, ten checks, six
+- **2.2 Cloud exists on both sides, and they are not the same content.** The
+  app track's `cloud-*.mdx` lessons are the author's outline transcribed; the
+  static site's unit below is built from the four sources with checks, gaps
+  and quoted passages, and uses reader features (`{sec}`/`{check}`/`{gap}`/
+  `{quote}`) that only `module.js` has. So the generator this section calls
+  for cannot simply overwrite one with the other — merging them is a content
+  decision plus a port of those four block kinds, not a data move. Until then
+  this is the widest part of the duplication, and it was widened knowingly:
+  see the commits, not a silent drift.
+- **The static site's 2.2 Cloud is fully drafted** — 48 parts, ten checks, six
   gap-fills and a twelve-item gate, carried over from the module-2.2 build in
   `tracksprogramplayground` by a one-shot transform over that page's data and
   verified there against the full texts. Its four sources have **different

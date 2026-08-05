@@ -22,7 +22,13 @@ function sectionEnd(html: string, start: number): number | null {
   let depth = 1;
   for (let m = tag.exec(html); m; m = tag.exec(html)) {
     depth += m[0][1] === "/" ? -1 : 1;
-    if (depth === 0) return html.indexOf(">", m.index) + 1;
+    if (depth === 0) {
+      const gt = html.indexOf(">", m.index);
+      // A final closer whose ">" never comes (truncated markup) must read
+      // as malformed — indexOf's -1 would otherwise become end index 0 and
+      // the caller's cursor/lastIndex reset would loop on the same landmark.
+      return gt === -1 ? null : gt + 1;
+    }
   }
   return null;
 }
@@ -39,23 +45,34 @@ function wrapInner(inner: string): string {
 /**
  * Collapses the trailing sections of one html fragment. Landmark sections
  * (references/footnotes, any position) always collapse; flat <h2> sections
- * collapse only AFTER a references landmark in the same fragment (the
- * appendix run in arXiv papers). Fragments without either come back
- * byte-identical.
+ * collapse only AFTER a references landmark (the appendix run in arXiv
+ * papers). Fragments without either come back byte-identical.
+ *
+ * Activity/gate splices split one document into sequential html parts, so
+ * the references-seen state is threaded rather than per-call: pass the
+ * previous part's returned `sawReferences` as the next part's initial flag
+ * and the whole document collapses as one walk — an appendix fragment after
+ * a split still collapses even though its References landmark sits in an
+ * earlier part.
  */
-export function collapseTailSections(html: string): string {
+export function collapseTailSections(
+  html: string,
+  sawReferences = false,
+): { html: string; sawReferences: boolean } {
   LANDMARK_RE.lastIndex = 0;
   const first = LANDMARK_RE.exec(html);
-  if (!first) return html;
+  if (!first && !sawReferences) return { html, sawReferences };
 
   let out = "";
   let cursor = 0;
-  let sawReferences = false;
   LANDMARK_RE.lastIndex = 0;
   for (let m = LANDMARK_RE.exec(html); m; m = LANDMARK_RE.exec(html)) {
     if (m.index < cursor) continue; // opener inside an already-emitted region
     const end = sectionEnd(html, m.index);
-    if (end === null) break; // malformed — stop transforming, keep the rest raw
+    if (end === null) {
+      // Malformed — stop transforming, keep the rest raw.
+      return { html: out + html.slice(cursor), sawReferences };
+    }
     const between = html.slice(cursor, m.index);
     out += sawReferences ? collapseFlatRun(between) : between;
     const openTag = html.slice(m.index, html.indexOf(">", m.index) + 1);
@@ -67,7 +84,7 @@ export function collapseTailSections(html: string): string {
     LANDMARK_RE.lastIndex = end;
   }
   out += sawReferences ? collapseFlatRun(html.slice(cursor)) : html.slice(cursor);
-  return out;
+  return { html: out, sawReferences };
 }
 
 /** Wraps each flat h2-headed run in `html` (an appendix stretch) in details. */

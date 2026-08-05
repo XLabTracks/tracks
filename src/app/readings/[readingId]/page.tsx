@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import { ExternalLink } from "lucide-react";
 import type { Paper } from "@/lib/content/types";
 import {
@@ -7,6 +7,7 @@ import {
   linkedReadingSource,
   type LinkedReading,
 } from "@/lib/readings/registry";
+import { coursePaperHrefForArtifact } from "@/lib/readings/resolve";
 import { getCurrentUser } from "@/lib/auth";
 import {
   createHighlight,
@@ -33,6 +34,20 @@ import { SidenotesToggle } from "@/components/papers/sidenotes-toggle";
  * linked-readings registry (same pinned-artifact validation as papers).
  */
 
+/**
+ * Registry ids are percent-decoded from the URL segment, but the segment
+ * isn't guaranteed valid percent-encoding (`/readings/lesswrong%9_x`) — a
+ * throwing decodeURIComponent would surface the route error boundary where
+ * a malformed id is just a 404.
+ */
+function decodeReadingId(readingId: string): string {
+  try {
+    return decodeURIComponent(readingId);
+  } catch {
+    notFound();
+  }
+}
+
 /** A Paper-shaped shell for PaperReader; not a content-graph item. */
 function paperShell(reading: LinkedReading): Paper {
   return {
@@ -50,7 +65,7 @@ export async function generateMetadata({
   params: Promise<{ readingId: string }>;
 }): Promise<Metadata> {
   const { readingId } = await params;
-  const reading = getLinkedReading(decodeURIComponent(readingId));
+  const reading = getLinkedReading(decodeReadingId(readingId));
   return { title: reading?.title ?? "Reading" };
 }
 
@@ -60,7 +75,14 @@ export default async function ReadingPage({
   params: Promise<{ readingId: string }>;
 }) {
   const { readingId } = await params;
-  const reading = getLinkedReading(decodeURIComponent(readingId));
+  const artifactId = decodeReadingId(readingId);
+  // Course papers win over linked readings (same rule as link resolution):
+  // when a linked reading is promoted to a course paper its registry entry
+  // is dropped, so old bookmarks and shared /readings URLs must follow the
+  // post to its course page instead of 404ing.
+  const courseHref = coursePaperHrefForArtifact(artifactId);
+  if (courseHref) redirect(courseHref);
+  const reading = getLinkedReading(artifactId);
   if (!reading) notFound();
 
   const shell = paperShell(reading);

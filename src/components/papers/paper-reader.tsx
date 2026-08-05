@@ -366,16 +366,23 @@ function applyPaperEditsCached(
   const edited = applyPaperEdits(html, toc, paper.edits);
   // Collapse trailing apparatus (references/appendix/footnotes) AFTER edits:
   // edit targets are resolved against the artifact's byte offsets, which the
-  // details wrappers would shift.
+  // details wrappers would shift. The references-seen flag threads through
+  // the html parts in document order (and on into the ungated tail), so an
+  // activity/gate split after References doesn't reset the appendix walk —
+  // the whole document collapses as one pass.
+  let sawReferences = false;
+  const parts = edited.parts.map((part) => {
+    if (part.kind !== "html") return part;
+    const collapsed = collapseTailSections(part.html, sawReferences);
+    sawReferences = collapsed.sawReferences;
+    return { ...part, html: collapsed.html };
+  });
   const applied: AppliedPaper = {
     ...edited,
-    parts: edited.parts.map((part) =>
-      part.kind === "html"
-        ? { ...part, html: collapseTailSections(part.html) }
-        : part,
-    ),
+    parts,
     ungatedTailHtml:
-      edited.ungatedTailHtml && collapseTailSections(edited.ungatedTailHtml),
+      edited.ungatedTailHtml &&
+      collapseTailSections(edited.ungatedTailHtml, sawReferences).html,
   };
   appliedEditsCache.set(paper.id, { html, applied });
   return applied;

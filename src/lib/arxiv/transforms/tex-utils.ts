@@ -72,13 +72,13 @@ const LETTER_MACROS: Array<[RegExp, string]> = [
 ];
 
 /**
- * Rough plain-text rendering of TeX nodes — good enough for alt text, slugs,
- * and card metadata, not for display. Common accent macros are resolved so
- * author names survive (\L{}ukasz → Łukasz, Fran\c{c}ois → François).
+ * Resolve the TeX constructs that have a known plain-text reading: comments,
+ * accent/letter macros, single-character group wrapping, and \\ line breaks
+ * (whitespace). What remains after this pass is genuinely unexpandable.
  */
-export function plainText(nodes: Ast.Node[] | null | undefined): string {
+function resolveTextTex(raw: string): string {
   // printRaw includes % comments; they are never display text.
-  let text = stripTexComments(rawText(nodes));
+  let text = stripTexComments(raw);
   // Symbol accents: \'e, \"{o} — punctuation form never eats a word.
   text = text.replace(
     /\\(['`^"~=.])\s*\{?([a-zA-Z])\}?/g,
@@ -97,12 +97,42 @@ export function plainText(nodes: Ast.Node[] | null | undefined): string {
   // {\L}ukasz-style wrapping: unwrap single-character groups so the brace
   // stripping below doesn't split the word.
   text = text.replace(/\{(\S)\}/g, "$1");
-  return text
+  // Line breaks (\\, \\*, \\[2mm]) are whitespace, and must resolve before
+  // any alphabetic-macro strip: in "\\Resist" the second backslash would
+  // otherwise start a bogus \Resist macro and eat the word.
+  text = text.replace(/\\\\(\*|\[[^\]]*\])?/g, " ");
+  return text;
+}
+
+/**
+ * Rough plain-text rendering of TeX nodes — good enough for alt text, slugs,
+ * and card metadata, not for display. Common accent macros are resolved so
+ * author names survive (\L{}ukasz → Łukasz, Fran\c{c}ois → François).
+ */
+export function plainText(nodes: Ast.Node[] | null | undefined): string {
+  return resolveTextTex(rawText(nodes))
     .replace(/\\[a-zA-Z@]+\*?\s*/g, " ")
     .replace(/[{}~$]/g, " ")
-    .replace(/\\[\\,;:!"'`^.]/g, " ")
+    // Control space "\ " included: "Roland S.\ Zimmermann" must not keep a
+    // bare backslash (author-name filtering rejects backslash residue).
+    .replace(/\\[\\,;:!"'`^. ]/g, " ")
     .replace(/\s+/g, " ")
     .trim();
+}
+
+/**
+ * Names of the alphabetic macros plainText silently strips from these nodes —
+ * any printed text such a macro would have produced is lost. Lets metadata
+ * extraction warn about the loss instead of shipping a truncated string.
+ */
+export function strippedMacroNames(
+  nodes: Ast.Node[] | null | undefined,
+): string[] {
+  const names: string[] = [];
+  for (const m of resolveTextTex(rawText(nodes)).matchAll(/\\([a-zA-Z@]+)/g)) {
+    names.push(m[1]);
+  }
+  return names;
 }
 
 export function slugify(text: string): string {

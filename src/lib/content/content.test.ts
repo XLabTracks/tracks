@@ -79,14 +79,24 @@ describe("content integrity", () => {
   });
 
   it("sectionItemId points at an earlier item in the same module", () => {
+    // Any non-undefined sectionItemId nests the sidebar row (the renderer
+    // checks !== undefined), so every authored value — "" included — must
+    // resolve; a truthiness guard here would let "" slip through as a
+    // phantom nested row.
     const sectionOf = new Map<string, string>();
-    for (const l of lessons) if (l.sectionItemId) sectionOf.set(l.id, l.sectionItemId);
-    for (const p of papers) if (p.sectionItemId) sectionOf.set(p.id, p.sectionItemId);
+    for (const l of lessons)
+      if (l.sectionItemId !== undefined) sectionOf.set(l.id, l.sectionItemId);
+    for (const p of papers)
+      if (p.sectionItemId !== undefined) sectionOf.set(p.id, p.sectionItemId);
     for (const track of tracks) {
       for (const m of getModulesForTrack(track.id)) {
         for (const [i, id] of m.itemIds.entries()) {
           const target = sectionOf.get(id);
-          if (!target) continue;
+          if (target === undefined) continue;
+          expect(
+            target,
+            `${id}: sectionItemId must be a non-empty item id (empty string still renders as a nested row)`,
+          ).not.toBe("");
           const targetIndex = m.itemIds.indexOf(target);
           expect(
             targetIndex,

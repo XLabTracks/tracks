@@ -143,7 +143,7 @@ export const modules: Module[] = [
     trackId: "control",
     title: "High-stakes control",
     summary:
-      "Two decision-forcing walkthroughs of high-stakes control protocols, one argued and one measured. The untrusted advice protocol is the boundary case where a safety argument substitutes for a control evaluation; basic legibility protocols run a full red-team/blue-team control evaluation to settle whether letting an untrusted model comment its code helps the monitor catch backdoors. Further content for this module is in development.",
+      "Opens with a talk on the high-stakes control roadmap, then three outline sections — what counts as high stakes, monitoring and mitigation, and environment construction — each with readings, from rogue-deployment threat models through control monitoring and Ctrl-Z's resampling protocols to why high-stakes research settings are hard to build. Closes with two decision-forcing walkthroughs of high-stakes control protocols, one argued and one measured: the untrusted advice protocol is the boundary case where a safety argument substitutes for a control evaluation; basic legibility protocols run a full red-team/blue-team control evaluation to settle whether letting an untrusted model comment its code helps the monitor catch backdoors. The section lessons are outline stubs while the full lessons are authored.",
     order: 5,
     prerequisiteModuleIds: ["c-intro", "c-mod2", "c-areas", "c-mod4"],
     itemIds: [

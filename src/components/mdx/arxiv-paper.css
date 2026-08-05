@@ -143,6 +143,15 @@
   .arxiv-paper details.ax-collapse > summary > h2 {
     margin: 0;
   }
+  /* Print: a closed details prints as just its summary, dropping the whole
+     references/appendix/footnotes tail. PaperCollapse opens every block on
+     beforeprint; this covers engines that build the print layout without
+     firing the event (::details-content is ignored where unsupported). */
+  @media print {
+    .arxiv-paper details.ax-collapse::details-content {
+      content-visibility: visible;
+    }
+  }
 
   /* Figures & tables */
   .arxiv-paper figure {

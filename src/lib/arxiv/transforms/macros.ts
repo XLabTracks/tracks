@@ -11,7 +11,7 @@ import { htmlLike } from "@unified-latex/unified-latex-util-html-like";
 import { match } from "@unified-latex/unified-latex-util-match";
 import { replaceNode } from "@unified-latex/unified-latex-util-replace";
 import type { WarningCollector } from "../warnings";
-import { envName, plainText, rawText, stripTexComments, walkNodeArrays } from "./tex-utils";
+import { envName, plainText, rawText, stripTexComments, texString, walkNodeArrays } from "./tex-utils";
 import { resolveColorHex, type ColorTable } from "./colors";
 
 /** Macros defined in terms of other user macros need extra rounds. */
@@ -85,6 +85,17 @@ const SETUP_STRIP_SIGNATURES: Record<string, string> = {
   pdfbookmark: "o m m",
   hypersetup: "m",
   lstset: "m",
+  lstdefinestyle: "m m",
+  lstdefinelanguage: "o m o m",
+  // Custom listing-env declarations: their USES are rewritten to lstlisting
+  // pre-parse (transforms/verbatim.ts); the declarations themselves must not
+  // leak their option lists as text.
+  DeclareTCBListing: "o m m m",
+  NewTCBListing: "o m m m",
+  // Leading "o": \newtcblisting takes a documented [init options] group
+  // before the name (\lstnewenvironment gets the same tolerance).
+  newtcblisting: "o m o o m",
+  lstnewenvironment: "o m o o m m",
   sisetup: "m",
   tcbset: "m",
   tikzset: "m",
@@ -634,6 +645,101 @@ export function expandUserEnvironments(
   }
 }
 
+/**
+ * Conventional \label prefixes. Only parentheticals holding one of THESE
+ * colon pairs are unresolved-\ref leftovers — a generic token:token match
+ * would also delete ordinary colon compounds like "(ratio a:b)".
+ */
+const REF_LABEL_PREFIX =
+  /\b(?:sec|subsec|ssec|sect|fig|subfig|tab|tbl|eq|eqn|app|apx|appendix|alg|algo|thm|theorem|lem|lemma|cor|prop|def|defn|rem|obs|clm|claim|asm|assum|exm|ex|item|line|lst|listing|ch|chap|fn|note):[A-Za-z0-9_.:-]+/;
+
+/**
+ * Unresolvable \ref labels in box titles arrive as bare "sec:discussion"
+ * tokens (plainText loses the macro) — drop the whole parenthetical around
+ * one rather than showing the raw label. Exported for the direct
+ * \begin{tcolorbox}[title=…] path in envs.ts.
+ */
+export function stripUnresolvedRefParentheticals(
+  title: string | null | undefined,
+): string | null {
+  if (title == null) return null;
+  return title.replace(/\s*\([^()]*\)/g, (parenthetical) =>
+    REF_LABEL_PREFIX.test(parenthetical) ? "" : parenthetical,
+  );
+}
+
+/**
+ * Read one top-level `key=` value from a tcolorbox option list given as RAW
+ * text (braces preserved). Splitting is brace-depth-aware: a braced value
+ * keeps its commas (title={Key claim, restated}) and keys nested inside
+ * braced values never match (boxed title style={…, title=x} defines no
+ * top-level title). Tolerates the wrapping `[ ]` of a raw bracket group and
+ * strips one outer brace layer from the value. The ONE parser for both
+ * tcolorbox paths — buildTcolorbox here and readTcbTitle in envs.ts.
+ */
+export function readTcbOption(options: string, key: string): string | null {
+  for (const entry of splitTopLevelOptions(options)) {
+    const eq = topLevelIndexOf(entry, "=");
+    if (eq === -1 || entry.slice(0, eq).trim() !== key) continue;
+    let value = entry.slice(eq + 1).trim();
+    if (value.startsWith("{") && matchingBrace(value, 0) === value.length - 1) {
+      value = value.slice(1, -1);
+    }
+    return value;
+  }
+  return null;
+}
+
+/** Split at depth-0 commas (and the `[`/`]` of a raw bracket group). */
+function splitTopLevelOptions(options: string): string[] {
+  const entries: string[] = [];
+  let current = "";
+  let depth = 0;
+  for (let i = 0; i < options.length; i++) {
+    const ch = options[i];
+    if (ch === "\\") {
+      current += ch + (options[i + 1] ?? "");
+      i++;
+      continue;
+    }
+    if (ch === "{") depth++;
+    else if (ch === "}") depth = Math.max(0, depth - 1);
+    if (depth === 0 && (ch === "," || ch === "[" || ch === "]")) {
+      entries.push(current);
+      current = "";
+      continue;
+    }
+    current += ch;
+  }
+  entries.push(current);
+  return entries;
+}
+
+/** Index of the first depth-0 occurrence of `target`, or -1. */
+function topLevelIndexOf(text: string, target: string): number {
+  let depth = 0;
+  for (let i = 0; i < text.length; i++) {
+    const ch = text[i];
+    if (ch === "\\") i++;
+    else if (ch === "{") depth++;
+    else if (ch === "}") depth = Math.max(0, depth - 1);
+    else if (ch === target && depth === 0) return i;
+  }
+  return -1;
+}
+
+/** Index of the `}` matching the `{` at `start`, or -1. */
+function matchingBrace(text: string, start: number): number {
+  let depth = 0;
+  for (let i = start; i < text.length; i++) {
+    const ch = text[i];
+    if (ch === "\\") i++;
+    else if (ch === "{") depth++;
+    else if (ch === "}" && --depth === 0) return i;
+  }
+  return -1;
+}
+
 /** True for white / near-white hex colors (invisible on the page bg). */
 function isNearWhite(hex: string): boolean {
   const m = /^#([0-9a-f]{6})$/i.exec(hex);
@@ -654,18 +760,17 @@ function buildTcolorbox(
   content: Ast.Node[],
   colors: ColorTable,
 ): Ast.Node {
-  const options = plainText(substituteHashParams(def.boxOptions ?? [], argValues));
-  const readOpt = (key: string): string | null => {
-    const m = new RegExp(`(?:^|,)\\s*${key}\\s*=\\s*([^,]+)`).exec(options);
-    return m ? m[1].trim() : null;
-  };
-  // Unresolvable \ref labels in the title arrive as bare "sec:discussion"
-  // tokens (plainText loses the macro) — drop the whole parenthetical
-  // around one rather than showing the raw label.
-  const title = readOpt("title")?.replace(
-    /\s*\([^()]*\b[a-z]+:[A-Za-z0-9_.:-]+[^()]*\)/g,
-    "",
+  // Raw text, NOT plainText: braces must survive so the option parser can
+  // keep commas inside braced values (title={Key claim, restated}).
+  const options = stripTexComments(
+    rawText(substituteHashParams(def.boxOptions ?? [], argValues)),
   );
+  const readOpt = (key: string): string | null => {
+    const value = readTcbOption(options, key);
+    if (value == null) return null;
+    return plainText([texString(value)]).trim() || null;
+  };
+  const title = stripUnresolvedRefParentheticals(readOpt("title"));
   const colback = readOpt("colback");
   const colframe = readOpt("colframe");
   const coltitle = readOpt("coltitle");

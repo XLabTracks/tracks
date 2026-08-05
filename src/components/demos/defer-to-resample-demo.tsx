@@ -234,11 +234,16 @@ export function DeferToResampleDemo() {
             x2={r1(xPx(m.tDefer))}
             y1={M.top}
             y2={M.top + PH}
-            stroke="#2563eb"
+            className="stroke-blue-600"
             strokeWidth={1}
             strokeDasharray="3 3"
           />
-          <text x={r1(xPx(m.tDefer)) + 3} y={M.top + 20} fontSize={8} fill="#2563eb">
+          <text
+            x={r1(xPx(m.tDefer)) + 3}
+            y={M.top + 20}
+            fontSize={8}
+            className="fill-blue-600"
+          >
             defer &rarr;
           </text>
           <line

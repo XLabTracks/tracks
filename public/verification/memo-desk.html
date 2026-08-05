@@ -41,85 +41,7 @@
       </p>
     </div>
 
-    <div class="desk">
-      <aside class="slot-rail">
-        <h2>Written outputs</h2>
-        <div id="slotList"></div>
-      </aside>
-
-      <section class="paper">
-        <h2 class="slot-title" id="slotTitle">—</h2>
-        <p class="slot-meta" id="slotMeta"></p>
-        <div id="slotBrief"></div>
-
-        <div class="pins">
-          <label class="pin">
-            <span class="pk">To — a specific audience</span>
-            <input id="fAudience" class="pin-in" type="text" autocomplete="off"
-              placeholder="e.g. the US delegation's technical adviser; the lab's policy lead…">
-          </label>
-          <label class="pin">
-            <span class="pk">Decision this informs</span>
-            <input id="fDecision" class="pin-in" type="text" autocomplete="off"
-              placeholder="what the reader should do differently after reading">
-          </label>
-          <label class="pin">
-            <span class="pk">What would change my mind</span>
-            <input id="fFalsifier" class="pin-in" type="text" autocomplete="off"
-              placeholder="the evidence that would flip your recommendation">
-          </label>
-        </div>
-
-        <input id="fTitle" class="title-in" type="text" autocomplete="off"
-          placeholder="Title — the recommendation, not the topic">
-        <textarea id="fBody" class="body-in"
-          placeholder="Write it. Markdown **bold** survives the skim — use it on the lines that must.&#10;&#10;Paragraph rule of thumb: the first sentence carries the point; a skimming reader gets nothing else."></textarea>
-
-        <div class="desk-tools">
-          <div class="budget">
-            <span class="mono" id="wordCount">0 words</span>
-            <div class="bbar"><i id="budgetBar" style="width:0%"></i></div>
-          </div>
-          <button type="button" class="tool" id="exportBtn">Export .md</button>
-          <button type="button" class="tool" id="clearBtn">Clear this draft</button>
-        </div>
-      </section>
-
-      <aside class="check-rail">
-        <div class="modes" role="tablist" aria-label="Rail mode">
-          <button type="button" class="mode" id="modeWrite" role="tab" aria-selected="true" aria-controls="paneWrite">Desk checks</button>
-          <button type="button" class="mode" id="modeSkim" role="tab" aria-selected="false" aria-controls="paneSkim">Skim test</button>
-        </div>
-
-        <div id="paneWrite" role="tabpanel" aria-labelledby="modeWrite">
-          <div class="rail-card">
-            <p class="rk">Genre checks
-              <span class="rk-note">rule-based heuristics, every rule named — the rubric is the judge, not this rail</span>
-            </p>
-            <div id="lint"></div>
-          </div>
-          <div class="rail-card" id="criteriaCard" hidden>
-            <p class="rk">Peer review runs on <span class="rk-note">the outline's criteria for this slot</span></p>
-            <ul id="criteriaList" style="margin-left:18px;font-size:13px;line-height:1.6"></ul>
-          </div>
-          <div class="rail-card">
-            <p class="rk">Steelman deck <span class="rk-note">contested claims get challenged, not narrated</span></p>
-            <p class="deck-card" id="deckCard">Draw a challenge and answer it inside the memo — or in the falsifier field.</p>
-            <button type="button" class="tool" id="deckBtn">Draw a challenge</button>
-          </div>
-        </div>
-
-        <div id="paneSkim" role="tabpanel" aria-labelledby="modeSkim" hidden>
-          <div class="rail-card">
-            <p class="rk">What a reader in a hurry sees
-              <span class="rk-note">first sentences plus your <b>bold</b> lines; the rest is what a skim discards</span>
-            </p>
-            <p class="skim-stats mono" id="skimStats"></p>
-            <div class="skim" id="skimOut"></div>
-          </div>
-        </div>
-      </aside>
-    </div>
+    <div id="memoDesk"></div>
   </div>
 </main>
 
@@ -133,6 +55,7 @@
 <script src="data/memos.js"></script>
 <script src="memo-store.js"></script>
 <script src="memo-desk.js"></script>
+<script>VTMemoDesk.mount(document.getElementById('memoDesk'));</script>
 <script>VT.mountChrome('memo-desk.html'); VT.mountFoot();</script>
 <script src="notebook.js"></script>
 <script src="vocab.js"></script>

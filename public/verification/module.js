@@ -159,6 +159,15 @@
     '</div>';
   }
 
+  /* Slots the outline hangs on this unit. Memo units are written as unit ids
+     ('2.4') or as a child of one ('0.3.2'), so both shapes have to match. */
+  function memoSlotsFor(u) {
+    const slots = window.VERIFICATION_MEMOS || [];
+    return slots.filter(function (s) {
+      return s.unit === u.id || String(s.unit).indexOf(u.id + '.') === 0;
+    }).map(function (s) { return s.id; });
+  }
+
   /* The strip prints labels as text, so a label carrying the inline markup
      data/course.js allows loses it rather than showing the asterisks. */
   const plain = s => String(s).replace(/\*\*|`/g, '');
@@ -203,10 +212,15 @@
           (r.note ? '<p class="n">' + VT.fmt(r.note) + '</p>' : '') + '</li>').join('') + '</ul>' });
     }
 
+    /* The written output is a place to write, not a description of one. The
+       prompt states the task and the desk below it is the real memo desk —
+       same slots, same drafts, same notebook pages. A unit whose outputs the
+       outline has not slotted yet still gets the prompt on its own. */
     if (u.output) {
       out.push({ label: 'Written output', title: null,
         html: '<div class="output"><span class="label">Written output</span><p>' +
-          VT.fmt(u.output) + '</p></div>' });
+          VT.fmt(u.output) + '</p></div>' +
+          (memoSlotsFor(u).length ? '<div class="unit-desk" data-memodesk></div>' : '') });
     }
 
     let tail = '';
@@ -287,6 +301,13 @@
 
     if (u.exercise) {
       Exercise.mount(document.querySelector('[data-ex]'), u.exercise);
+    }
+
+    /* hash:false — the standalone desk owns the URL fragment, and this one
+       shares the page with the part deep-link (?p=). */
+    const deskHost = document.querySelector('[data-memodesk]');
+    if (deskHost && window.VTMemoDesk) {
+      VTMemoDesk.mount(deskHost, { slots: memoSlotsFor(u), hash: false });
     }
 
     showPart();

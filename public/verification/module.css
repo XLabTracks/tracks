@@ -418,3 +418,13 @@
   -webkit-user-select: none;
   -webkit-touch-callout: none;
 }
+
+/* The memo desk, mounted under a unit's written-output prompt. The desk brings
+   its own grid from memo-desk.css; this only gives it room and drops the
+   standalone page's outer margin. */
+.unit-desk {
+  margin-top: 16px;
+}
+@media (max-width: 1100px) {
+  .unit-desk { display: block; }
+}

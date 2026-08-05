@@ -7,24 +7,108 @@
       first sentence of each paragraph plus the **bold** lines.
    3. Genre checks — transparent rule-based heuristics, each naming its rule.
 
-   Drafts are per slot and live in this browser only.
+   Drafts are per slot and belong to memo-store.js, so the notebook shows the
+   same document and the account keeps it. Mount with VTMemoDesk.mount(host,
+   {slots, hash}) — the standalone page mounts every slot, a unit page mounts
+   only the ones its own unit asks for.
 
    Trap: a slot whose brief is undrafted upstream must keep saying so. The
    stub is the deliverable for those rows — filling it in from here would
    turn "nobody has written this assignment" into "here is the assignment". */
 
-(function () {
-  var SLOTS = window.VERIFICATION_MEMOS;
+window.VTMemoDesk = (function () {
+  var ALL = window.VERIFICATION_MEMOS;
   var MODULES = window.VERIFICATION_MEMO_MODULES || [];
   var STORE = window.VTMemoStore;
   var WPM = 220;
 
-  var el = function (id) { return document.getElementById(id); };
-  var F = {
-    audience: el('fAudience'), decision: el('fDecision'), falsifier: el('fFalsifier'),
-    title: el('fTitle'), body: el('fBody'),
-  };
-  if (!SLOTS || !F.body || !STORE) return;
+  /* The desk's own markup. It used to live in memo-desk.html, which meant the
+     desk could only ever exist on that page; it is here so a unit page can
+     mount the same surface beside the prompt that asks for the memo.
+
+     Ids are kept as they were, and every lookup is scoped to the host, so one
+     desk per page is the supported case — which is all any page needs. */
+  var TEMPLATE = [
+    '<aside class="slot-rail" data-rail>',
+      '<h2>Written outputs</h2>',
+      '<div id="slotList"></div>',
+    '</aside>',
+    '<section class="paper">',
+      '<h2 class="slot-title" id="slotTitle">&mdash;</h2>',
+      '<p class="slot-meta" id="slotMeta"></p>',
+      '<div id="slotBrief"></div>',
+      '<div class="pins">',
+        '<label class="pin"><span class="pk">To &mdash; a specific audience</span>',
+          '<input id="fAudience" class="pin-in" type="text" autocomplete="off"',
+          ' placeholder="e.g. the US delegation\'s technical adviser; the lab\'s policy lead…"></label>',
+        '<label class="pin"><span class="pk">Decision this informs</span>',
+          '<input id="fDecision" class="pin-in" type="text" autocomplete="off"',
+          ' placeholder="what the reader should do differently after reading"></label>',
+        '<label class="pin"><span class="pk">What would change my mind</span>',
+          '<input id="fFalsifier" class="pin-in" type="text" autocomplete="off"',
+          ' placeholder="the evidence that would flip your recommendation"></label>',
+      '</div>',
+      '<input id="fTitle" class="title-in" type="text" autocomplete="off"',
+      ' placeholder="Title — the recommendation, not the topic">',
+      '<textarea id="fBody" class="body-in" placeholder="Write it. Markdown **bold** survives the skim — use it on the lines that must.&#10;&#10;Paragraph rule of thumb: the first sentence carries the point; a skimming reader gets nothing else."></textarea>',
+      '<div class="desk-tools">',
+        '<div class="budget"><span class="mono" id="wordCount">0 words</span>',
+          '<div class="bbar"><i id="budgetBar" style="width:0%"></i></div></div>',
+        '<button type="button" class="tool" id="exportBtn">Export .md</button>',
+        '<button type="button" class="tool" id="clearBtn">Clear this draft</button>',
+      '</div>',
+    '</section>',
+    '<aside class="check-rail">',
+      '<div class="modes" role="tablist" aria-label="Rail mode">',
+        '<button type="button" class="mode" id="modeWrite" role="tab" aria-selected="true" aria-controls="paneWrite">Desk checks</button>',
+        '<button type="button" class="mode" id="modeSkim" role="tab" aria-selected="false" aria-controls="paneSkim">Skim test</button>',
+      '</div>',
+      '<div id="paneWrite" role="tabpanel" aria-labelledby="modeWrite">',
+        '<div class="rail-card"><p class="rk">Genre checks',
+          '<span class="rk-note">rule-based heuristics, every rule named — the rubric is the judge, not this rail</span></p>',
+          '<div id="lint"></div></div>',
+        '<div class="rail-card" id="criteriaCard" hidden>',
+          '<p class="rk">Peer review runs on <span class="rk-note">the outline\'s criteria for this slot</span></p>',
+          '<ul id="criteriaList" style="margin-left:18px;font-size:13px;line-height:1.6"></ul></div>',
+        '<div class="rail-card"><p class="rk">Steelman deck <span class="rk-note">contested claims get challenged, not narrated</span></p>',
+          '<p class="deck-card" id="deckCard">Draw a challenge and answer it inside the memo — or in the falsifier field.</p>',
+          '<button type="button" class="tool" id="deckBtn">Draw a challenge</button></div>',
+      '</div>',
+      '<div id="paneSkim" role="tabpanel" aria-labelledby="modeSkim" hidden>',
+        '<div class="rail-card"><p class="rk">What a reader in a hurry sees',
+          '<span class="rk-note">first sentences plus your <b>bold</b> lines; the rest is what a skim discards</span></p>',
+          '<p class="skim-stats mono" id="skimStats"></p>',
+          '<div class="skim" id="skimOut"></div></div>',
+      '</div>',
+    '</aside>'
+  ].join('');
+
+  /* opts.slots  — ids to offer, defaulting to every slot the outline marks.
+     opts.hash   — own the location hash (the standalone page does; an inline
+                   desk must not, or two of them fight over the URL). */
+  function mount(host, opts) {
+    opts = opts || {};
+    if (!host || !ALL || !STORE) return null;
+
+    var SLOTS = opts.slots
+      ? ALL.filter(function (s) { return opts.slots.indexOf(s.id) !== -1; })
+      : ALL;
+    if (!SLOTS.length) return null;
+
+    var ownsHash = opts.hash !== false;
+
+    host.classList.add('desk');
+    host.innerHTML = TEMPLATE;
+
+    var el = function (id) { return host.querySelector('#' + id); };
+    var F = {
+      audience: el('fAudience'), decision: el('fDecision'), falsifier: el('fFalsifier'),
+      title: el('fTitle'), body: el('fBody'),
+    };
+    if (!F.body) return null;
+
+    /* One slot needs no index of itself. */
+    if (SLOTS.length < 2) host.querySelector('[data-rail]').hidden = true;
 
   /* The notebook edits the same body through its memo block. Repaint when the
      change came from there, never when it came from this desk's own field —
@@ -142,7 +226,7 @@
     current = byId[id];
     var d = STORE.read(id) || {};
     Object.keys(F).forEach(function (k) { F[k].value = d[k] || ''; });
-    if (history.replaceState) history.replaceState(null, '', '#' + id);
+    if (ownsHash && history.replaceState) history.replaceState(null, '', '#' + id);
     renderBrief(current);
     renderRail();
     budget();
@@ -343,9 +427,16 @@
     renderRail(); budget(); lint(); skim();
   });
 
-  window.addEventListener('hashchange', function () {
-    select(location.hash.slice(1));
-  });
+    if (ownsHash) {
+      window.addEventListener('hashchange', function () {
+        select(location.hash.slice(1));
+      });
+    }
 
-  select(byId[location.hash.slice(1)] ? location.hash.slice(1) : SLOTS[0].id);
+    var from = ownsHash ? location.hash.slice(1) : '';
+    select(byId[from] ? from : SLOTS[0].id);
+    return { select: select, host: host };
+  }
+
+  return { mount: mount };
 })();

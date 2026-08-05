@@ -365,7 +365,7 @@
   if (!C || !VT) return;
   var esc = VT.esc;
 
-  VT.mountChrome('landing.html');
+  VT.mountChrome('/verification/landing');
   VT.mountFoot();
 
   /* Objectives come from the graph's own list, so the promises here cannot

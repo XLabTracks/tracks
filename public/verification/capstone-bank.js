@@ -12,7 +12,7 @@
 
 "use strict";
 
-VT.mountChrome('capstone-bank.html');
+VT.mountChrome('/verification/capstone-bank');
 VT.mountFoot();
 
 const DATA = window.CAPSTONE_BANK || { entries: [] };
@@ -338,7 +338,7 @@ function openSheet(slug) {
      drafted rather than opening blank. */
   const act = el('div', 'sheet-actions');
   const draft = el('a', 'btn');
-  draft.href = 'capstone.html?brief=' + encodeURIComponent(e.slug);
+  draft.href = '/verification/capstone?brief=' + encodeURIComponent(e.slug);
   draft.textContent = 'Draft this in the workspace';
   act.appendChild(draft);
   sheetBody.appendChild(act);

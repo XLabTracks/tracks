@@ -356,11 +356,23 @@ add must reduce the duplication, never widen it.
   modules, units, ids, titles and an `href` per unit. The prose is MDX and
   belongs to the app, which is the whole point: two copies of the text was
   the defect.
-- **The static site links into the app for the reading.** `track.html`, the
-  skill map and the guide all resolve a unit through its generated `href`,
-  which points at `/tracks/verification/<module>/<lesson>`. `module.html` —
-  the old static player, which rendered its own copy of every unit — is now
-  a redirect that maps a `?u=<unit>` link to that href.
+- **The course's own pages are app routes, not files.** `/verification/track`,
+  `map`, `guide`, `memo-desk`, `capstone-bank`, `capstone`, `landing`, `about`
+  and `team` live in `src/app/verification/*/page.tsx`. Nothing under
+  `public/verification/` is HTML any more — a page served outside the app has
+  no session, which is why the old ones could only ask an API whether somebody
+  was signed in and never show them their own account. The old `*.html` URLs
+  308 to the new ones (`next.config.ts`). `/verification/module?u=<unit>`
+  resolves against the content graph and redirects to that unit's reading.
+- **Their behaviour is still plain JS, loaded in order.** Each route mounts
+  `<LegacyScripts src={[…]}/>`
+  (`src/components/verification/legacy-scripts.tsx`), which appends
+  `public/verification/*.js` one at a time — `data/*.js` set globals that
+  `platform.js` and the page script read at execution time, and next/script
+  gives no ordering guarantee between tags. It loads each file once: those
+  scripts are not idempotent, so a second run doubles every listener.
+  Converting a page to components means deleting entries from that list, and
+  the list emptying is what finishing the job looks like.
 - **`src/content/verification/memos.ts` is the fifteen written outputs.**
   Same generator shape as the course: `npm run verification:memos` writes
   `public/verification/data/memos.js` for the standalone memo desk, and
@@ -472,7 +484,7 @@ Traps that cost time already, so they are written down:
 
 
 
-The static site's own mechanics, for as long as it exists:
+The course pages' own mechanics, for as long as they are scripts:
 
 - **`theme.css` is the only file that knows a colour.** Three themes — day,
   night, high contrast — over one set of variable names, so a rule reading
@@ -491,9 +503,11 @@ The static site's own mechanics, for as long as it exists:
   inline copy of the theme read step so the ground is right before first
   paint — keep it in step with `theme.js`. `fonts.css` carries Space Grotesk
   as a data URI.
-- **`platform.js` owns the shared runtime and chrome**; `platform.css` the
-  components on top of `theme.css`. Pages mount the header and footer from
-  their page script via `VT.mountChrome()` / `VT.mountFoot()`.
+- **`platform.js` owns the shared runtime**; `platform.css` the components on
+  top of `theme.css`. Its `VT.mountChrome()` / `VT.mountFoot()` are dead on
+  the app routes — the header and footer are React now (`site-chrome.tsx`) —
+  and are kept only because the file is lifted whole if the course ever moves
+  to its own host.
 - **Content drives the page.** `data/course.js` is the course, plus
   `exercises.js`, `skills.js`, `glossary.js`, `memos.js`. A new unit is one
   object and the track page, module rail, counters and certificate gate pick
@@ -563,8 +577,11 @@ The static site's own mechanics, for as long as it exists:
   `xlab-verification-theme` and `xlab-verification-memo-desk.v1` hold a
   visitor's chosen theme and their memo drafts, so they keep those names
   whatever the files around them are called.
-- **Sign-in belongs to the app.** These pages never gate; the header's Sign in
-  points at `/login` (WorkOS). Don't add a second session here.
+- **Sign-in belongs to the app**, and now so do these pages, so the session is
+  simply present: the header renders the account menu like every other route.
+  `sync.js` still probes `/api/verification/state` for the learner's stored
+  progress and notebook; what it no longer has to do is guess whether anyone
+  is signed in.
 - **The capstone bank is generated.** `verification-capstones/*.md` →
   `public/verification/data/capstone-bank.js` **and**
   `src/content/verification/capstone-bank.json` via `npm run

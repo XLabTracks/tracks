@@ -10,14 +10,14 @@
  * two have drifted, the same guard the capstone bank uses. Never hand-edit
  * the generated file.
  *
- * Trap: hrefs here are relative to public/verification/ because that is where
- * the static pages live. The React chrome prefixes them (see verificationHref)
- * rather than keeping a second list with absolute paths.
+ * Trap: hrefs here are bare route names, and `verificationHref` prefixes them
+ * with /verification/. Keeping them bare is what lets the generated copy and
+ * the React chrome share one list instead of two with different roots.
  */
 
 export type ChromeLink = {
   label: string;
-  /** Relative to public/verification/, or an absolute URL for an off-site
+  /** A route name under /verification/, or an absolute URL for an off-site
    *  destination. Null means nobody has supplied one yet — it renders as
    *  plain text, never as a dead link. */
   href: string | null;
@@ -27,17 +27,17 @@ export type ChromeLink = {
  *  from each other, not from here — seven links made a row that had to
  *  scroll on a laptop. */
 export const NAV: ChromeLink[] = [
-  { label: "Team", href: "team.html" },
-  { label: "About", href: "about.html" },
+  { label: "Team", href: "team" },
+  { label: "About", href: "about" },
 ];
 
 /** The footer, in the order it reads. */
 export const FOOT: ChromeLink[] = [
-  { label: "About Us", href: "about.html" },
+  { label: "About Us", href: "about" },
   { label: "XLab", href: "https://xrisk.uchicago.edu" },
   { label: "Join Us", href: null },
   { label: "Support us", href: null },
-  { label: "Team", href: "team.html" },
+  { label: "Team", href: "team" },
   { label: "Contact", href: null },
   { label: "Report a bug", href: null },
   { label: "Privacy Policy", href: null },

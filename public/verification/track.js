@@ -5,7 +5,7 @@
 "use strict";
 
 {
-  VT.mountChrome('track.html');
+  VT.mountChrome('/verification/track');
   VT.mountFoot();
 
   const C = window.COURSE;

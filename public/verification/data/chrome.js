@@ -9,17 +9,17 @@ window.VT_CHROME = {
   "nav": [
     {
       "label": "Team",
-      "href": "team.html"
+      "href": "team"
     },
     {
       "label": "About",
-      "href": "about.html"
+      "href": "about"
     }
   ],
   "foot": [
     {
       "label": "About Us",
-      "href": "about.html"
+      "href": "about"
     },
     {
       "label": "XLab",
@@ -35,7 +35,7 @@ window.VT_CHROME = {
     },
     {
       "label": "Team",
-      "href": "team.html"
+      "href": "team"
     },
     {
       "label": "Contact",

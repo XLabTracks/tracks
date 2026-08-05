@@ -5,7 +5,7 @@
 "use strict";
 
 {
-  VT.mountChrome('guide.html');
+  VT.mountChrome('/verification/guide');
   VT.mountFoot();
 
   const C = window.COURSE;
@@ -21,7 +21,7 @@
       const hit = m.units.find(u => u.id === id);
       if (hit) return hit.href;
     }
-    return 'track.html';
+    return '/verification/track';
   }
 
   function draw(q) {

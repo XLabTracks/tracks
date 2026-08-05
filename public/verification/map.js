@@ -9,7 +9,7 @@
 "use strict";
 
 {
-  VT.mountChrome('map.html');
+  VT.mountChrome('/verification/map');
   VT.mountFoot();
 
   const S = window.SKILLS;
@@ -32,10 +32,10 @@
     const id = tag === S.compoundRung ? S.compoundUnits[0] : tag;
     for (const m of C.modules) {
       if (m.units.some(u => u.id === id)) {
-        return (m.units.find(u => u.id === id) || {}).href || 'track.html';
+        return (m.units.find(u => u.id === id) || {}).href || '/verification/track';
       }
     }
-    return 'track.html';
+    return '/verification/track';
   };
 
   /* ---------- bands ---------- */

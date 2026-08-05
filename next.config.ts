@@ -21,7 +21,29 @@ const nextConfig: NextConfig = {
     "pg-cloudflare",
   ],
   async redirects() {
+    // The course's own pages were hand-written .html under public/verification/
+    // until they became app routes. Those URLs are in the wild — in the
+    // outline, in chat, in bookmarks — so each one keeps working. 308: the
+    // move is permanent, and the pages are GET-only.
+    const verificationPages = [
+      "about",
+      "team",
+      "landing",
+      "track",
+      "map",
+      "guide",
+      "memo-desk",
+      "capstone-bank",
+      "capstone",
+      "module",
+    ].map((page) => ({
+      source: `/verification/${page}.html`,
+      destination: `/verification/${page}`,
+      permanent: true,
+    }));
+
     return [
+      ...verificationPages,
       {
         // The mod-6 walkthrough lesson (c-plm-walkthrough) was replaced by
         // the guided paper item — keep old bookmarks and syllabus links

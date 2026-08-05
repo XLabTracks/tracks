@@ -199,11 +199,11 @@ window.VT = (function () {
   function mountChrome(current) {
     const host = document.querySelector('[data-topbar]');
     if (!host) return;
-    const here = current || location.pathname.split('/').pop() || 'landing.html';
+    const here = current || location.pathname.split('/').pop() || '/verification/landing';
     host.className = 'site-header';
     host.innerHTML =
       '<div class="bar">' +
-      '<a class="brand" href="landing.html">Verification <i>@</i>' +
+      '<a class="brand" href="/verification/landing">Verification <i>@</i>' +
         '<img class="brand-mark mark-day" src="assets/xLab_Logotype.png" alt="XLab" ' +
         'width="3300" height="1050" draggable="false">' +
         '<img class="brand-mark mark-night" src="assets/xLab_Logotype_white.png" alt="" ' +
@@ -298,7 +298,7 @@ window.VT = (function () {
     el.innerHTML =
       '<span class="label">' + label + '</span>' +
       '<p>' + body + '</p>' +
-      '<div class="row"><a href="map.html?unit=' + encodeURIComponent(change.unit) +
+      '<div class="row"><a href="/verification/map?unit=' + encodeURIComponent(change.unit) +
       '">See your map &rarr;</a><button class="x" aria-label="Dismiss">&times;</button></div>';
 
     const close = () => { el.remove(); };

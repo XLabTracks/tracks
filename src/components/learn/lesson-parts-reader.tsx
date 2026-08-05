@@ -112,6 +112,10 @@ export function LessonPartsReader({ children }: { children: ReactNode }) {
     }
 
     if (built.length < 3) return; // short lesson: no chrome, nothing hidden
+    // One deliberate mount-time re-render: parts exist only in the rendered
+    // DOM, so they cannot be derived during render or SSR (the same trade
+    // usePersistedDimension makes for localStorage).
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setParts(built);
     setMode(readMode());
     setAt(partFromUrl(built.length - 1));

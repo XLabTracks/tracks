@@ -81,11 +81,6 @@ const AUTHORED =
   // p.mt — a recipe subtitle line
   "[&_p.mt]:mt-0 [&_p.mt]:mb-1";
 
-const CALLOUT_VARIANT: Record<Callout["variant"], string> = {
-  brown: "border-l-primary bg-muted/40",
-  blue: "border-l-hide/70 bg-hide/5",
-};
-
 /* ---------------------------- the widget ---------------------------- */
 
 const PLAN_BY_ID = new Map(SESSION_PLANS.map((p) => [p.id, p]));
@@ -256,10 +251,13 @@ function CalloutBox({
   onPop: (id: string) => void;
 }) {
   return (
+    /* Hairline on all four sides. The source drew one painted edge in two
+       alternating accents; reading them all, the two marked nothing, so both
+       the rib and the colour name are gone. */
     <div
       className={cn(
-        "my-4 rounded-r-lg border-l-4 py-3 pr-4 pl-4 text-sm leading-relaxed [&_em]:italic [&_strong]:font-semibold",
-        CALLOUT_VARIANT[callout.variant],
+        "border-border bg-muted/40 my-4 rounded-lg border p-4 text-sm",
+        "leading-relaxed [&_em]:italic [&_strong]:font-semibold",
       )}
     >
       <InlineWithTerms html={callout.html} onPop={onPop} />
@@ -295,7 +293,7 @@ function TileButton({
         dangerouslySetInnerHTML={{ __html: tile.desc }}
       />
       {tile.timing && (
-        <span className="text-hide mt-2 block font-mono text-[10px] font-semibold tracking-[0.06em] uppercase">
+        <span className="text-muted-foreground mt-2 block font-mono text-[10px] font-semibold tracking-[0.06em] uppercase">
           {tile.timing}
         </span>
       )}
@@ -318,12 +316,6 @@ function TileGrid({
     </div>
   );
 }
-
-const PHASE_DOT: Record<Stage["phase"], string> = {
-  open: "text-hide",
-  explore: "text-exaggerate",
-  close: "text-comply",
-};
 
 function Lifecycle({
   stages,
@@ -350,8 +342,8 @@ function Lifecycle({
           </p>
           <span
             className={cn(
-              "mt-1.5 block font-mono text-[10px] font-semibold tracking-[0.06em] uppercase",
-              PHASE_DOT[s.phase],
+              "text-muted-foreground mt-1.5 block font-mono text-[10px]",
+              "font-semibold tracking-[0.06em] uppercase",
             )}
           >
             {PHASE_LABEL[s.phase]}
@@ -788,7 +780,7 @@ function SessionPlanView({
       <FormatBar format={format} setFormat={setFormat} />
       <div aria-live="polite">
         <CalloutBox
-          callout={{ variant: "blue", html: plan.prep[format] }}
+          callout={{ html: plan.prep[format] }}
           onPop={onPop}
         />
       </div>

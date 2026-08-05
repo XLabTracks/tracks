@@ -24,7 +24,7 @@
     if (u.output) bits.push('written output');
     return '<li class="unit-row' + (done ? ' is-done' : '') + '">' +
       '<span class="unit-num">' + VT.esc(u.id) + '</span>' +
-      '<a class="t" href="module.html?m=' + m.n + '&u=' + encodeURIComponent(u.id) + '">' +
+      '<a class="t" href="' + VT.esc(u.href) + '">' +
         VT.esc(u.title) + '</a>' +
       '<span class="meta">' + VT.esc(bits.join(' · ')) + '</span>' +
       (done ? '<span class="done-word">done</span>' : '') +
@@ -65,7 +65,7 @@
 
     const next = VT.nextUnit();
     document.querySelector('[data-next]').innerHTML = next
-      ? 'Next: <a href="module.html?m=' + next.module.n + '&u=' + encodeURIComponent(next.unit.id) +
+      ? 'Next: <a href="' + VT.esc(next.unit.href) +
         '">' + VT.esc(next.unit.id + ' ' + next.unit.title) + '</a>'
       : 'Every unit complete.';
 

@@ -46,14 +46,14 @@
   --mod-1: #d1601f;  /* Satsuma */
   --mod-2: #fecd6d;  /* Lunar Yellow */
   --mod-3: #6d7636;  /* Khaki */
-  --mod-4: #5686bb;  /* Cobalt */
+  --mod-4: #022E4C;  /* Prussian */
   /* Text on that fill. Fixed, because it depends on the fill and not on the
      page ground. */
   --mod-0-ink: #ffffff;
-  --mod-1-ink: #1a1614;
+  --mod-1-ink: #ffffff;
   --mod-2-ink: #1a1614;
   --mod-3-ink: #ffffff;
-  --mod-4-ink: #1a1614;
+  --mod-4-ink: #ffffff;
   /* The same accent where it has to be type on the page rather than a fill.
      Forcing five hues to 4.5:1 as text compresses them into one lightness
      band and Satsuma stops being tellable from Lunar Yellow — so the fill

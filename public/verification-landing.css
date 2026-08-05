@@ -1,0 +1,278 @@
+/* Landing page for the verification subdomain. Palette and chrome come from
+   verification-theme.css; this file is the page's own layout plus the skill
+   constellation.
+
+   Trap: the constellation is one <svg> with a viewBox, so everything inside
+   it scales with the container. Nothing may be set below 11 units or it drops
+   under readable size on a 13" screen at this width. */
+
+/* ---------- hero ---------- */
+
+.hero { padding: 56px 0 44px; }
+.hero .kicker {
+  font-family: var(--mono);
+  font-size: 13px;
+  color: var(--muted-foreground);
+}
+.hero h1 {
+  max-width: 20ch;
+  margin-top: 14px;
+  font-size: clamp(32px, 4.4vw, 52px);
+  text-wrap: balance;
+}
+.hero .lede {
+  max-width: 62ch;
+  margin-top: 22px;
+  font-size: 18px;
+  line-height: 1.62;
+  color: var(--muted-foreground);
+}
+.hero .ways { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 30px; }
+.hero .ways-note {
+  margin-top: 12px;
+  font-size: 14px;
+  color: var(--muted-foreground);
+  max-width: 60ch;
+}
+
+.stats {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 22px;
+  margin-top: 46px;
+  padding-top: 28px;
+  border-top: var(--hairline) solid var(--border);
+}
+.stats dt {
+  font-family: var(--mono);
+  font-size: 12px;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--muted-foreground);
+}
+.stats dd { font-family: var(--display); font-size: 26px; font-weight: 500; margin-top: 4px; }
+@media (min-width: 640px) { .stats { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+
+/* ---------- sections ---------- */
+
+section.band { border-top: var(--hairline) solid var(--border); }
+section.band.filled { background: var(--card); border-bottom: var(--hairline) solid var(--border); }
+section.band > .wrap { padding-top: 52px; padding-bottom: 52px; }
+section.band h2 { font-size: 26px; }
+section.band .intro { max-width: 62ch; margin-top: 12px; color: var(--muted-foreground); }
+
+.objectives {
+  display: grid;
+  gap: 14px 40px;
+  margin-top: 26px;
+  list-style: none;
+}
+@media (min-width: 640px) { .objectives { grid-template-columns: 1fr 1fr; } }
+.objectives li { display: flex; gap: 12px; }
+.objectives .n { font-family: var(--mono); font-size: 14px; color: var(--muted-foreground); }
+
+/* ---------- module cards ---------- */
+
+/* Uniform hairline on all four sides — the module accent lives inside the
+   card, in the chip, never as a painted edge. */
+.modules { display: grid; gap: 16px; margin-top: 28px; list-style: none; }
+@media (min-width: 720px) { .modules { grid-template-columns: 1fr 1fr; } }
+.mod-card {
+  height: 100%;
+  padding: 20px;
+  border: var(--hairline) solid var(--border);
+  border-radius: var(--radius);
+  background: var(--background);
+}
+.mod-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-family: var(--mono);
+  font-size: 12px;
+  letter-spacing: .04em;
+  color: var(--mod, var(--muted-foreground));
+}
+.mod-chip::before {
+  content: '';
+  width: 9px;
+  height: 9px;
+  border-radius: 2px;
+  background: var(--mod, currentColor);
+}
+.mod-card h3 { font-size: 19px; margin-top: 10px; }
+.mod-card p { margin-top: 8px; font-size: 14.5px; line-height: 1.6; color: var(--muted-foreground); }
+.mod-card .memo-link {
+  display: inline-block;
+  margin-top: 14px;
+  font-size: 13.5px;
+  color: var(--brand-ink);
+  text-underline-offset: 3px;
+}
+
+.note {
+  margin-top: 26px;
+  padding: 14px 16px;
+  border: var(--hairline) solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--muted);
+  font-size: 13.5px;
+  line-height: 1.6;
+  color: var(--muted-foreground);
+}
+.note b { color: var(--foreground); font-weight: 600; }
+
+/* ---------- skill constellation ---------- */
+
+/* The sky takes the full column and the panel sits under it. A side panel
+   costs the graph 300px of width, and the graph is 27 labelled stars — it
+   needs the width more than the reading order does.
+
+   Trap: minmax(0, …), not a bare auto track. An auto track is sized by its
+   content, so the scrolling figure inside widens the track and takes the whole
+   page into horizontal scroll with it. */
+.constellation { display: grid; grid-template-columns: minmax(0, 1fr); gap: 16px; margin-top: 22px; }
+
+.sky {
+  position: relative;
+  min-width: 0;
+  border: var(--hairline) solid var(--border);
+  border-radius: var(--radius);
+  background: var(--background);
+  overflow: hidden;
+}
+.sky svg { display: block; width: 100%; height: auto; }
+
+/* Under about 760px the graph's own type would scale below readable size with
+   the viewBox, so the figure keeps its width and the panel scrolls to it. */
+@media (max-width: 820px) {
+  .sky { overflow-x: auto; }
+  .sky svg { min-width: 760px; }
+}
+
+.sky .star { fill: currentColor; color: var(--muted-foreground); }
+.sky .ring { fill: none; stroke: color-mix(in srgb, var(--foreground) 12%, transparent); stroke-width: 1; }
+
+/* High contrast is a legibility mode: the rings and the star field carry no
+   information, and at --border white on black they out-shout the labels they
+   run under. Drop them, and dim the out-of-focus branches far less. */
+:root[data-theme='contrast'] .sky .ring,
+:root[data-theme='contrast'] .sky .star { display: none; }
+:root[data-theme='contrast'] .sky.focusing .node:not(.hot),
+:root[data-theme='contrast'] .sky.focusing .arc-label:not(.hot) { opacity: .6; }
+
+/* Edges: faint by default, lit in the module accent when a branch is in
+   focus. Cross-module edges are dashed — a skill that is fed from another
+   column is a different fact about the course than one fed from its own. */
+.sky .edge {
+  fill: none;
+  stroke: color-mix(in srgb, var(--foreground) 20%, transparent);
+  stroke-width: 1.2;
+  transition: stroke .25s ease, opacity .25s ease;
+}
+.sky .edge.cross { stroke-dasharray: 3 6; }
+.sky .edge.hot { stroke: var(--sel); stroke-width: 2; opacity: 1; }
+.sky.focusing .edge:not(.hot) { opacity: .25; }
+
+.sky .node { cursor: pointer; }
+.sky .node circle {
+  fill: var(--card);
+  stroke: var(--sel);
+  stroke-width: 1.6;
+  transition: stroke-width .15s ease, fill .2s ease;
+}
+.sky .node .bloom { fill: var(--muted-foreground); font-family: var(--mono); font-size: 11px; text-anchor: middle; }
+.sky .node .name { fill: var(--foreground); font-size: 12px; }
+.sky.focusing .node:not(.hot) { opacity: .28; }
+.sky .node.hot circle { stroke-width: 2.6; }
+.sky .node.pinned circle { fill: var(--sel); }
+.sky .node.pinned .bloom { fill: var(--background); }
+.sky .node:hover circle { stroke-width: 2.6; }
+
+.sky .arc-label { cursor: pointer; }
+.sky .arc-label text {
+  fill: var(--sel);
+  font-family: var(--mono);
+  font-size: 12.5px;
+  letter-spacing: .06em;
+  text-anchor: middle;
+}
+.sky.focusing .arc-label:not(.hot) { opacity: .3; }
+
+/* Night is the only ground a glow reads on; --glow is 0 in day and high
+   contrast, which multiplies the blur radius to nothing. */
+.sky .node.hot circle { filter: drop-shadow(0 0 calc(6px * var(--glow)) var(--sel)); }
+
+.sky-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 18px;
+  padding: 10px 16px 14px;
+  border-top: var(--hairline) solid var(--border);
+  font-family: var(--mono);
+  font-size: 11.5px;
+  color: var(--muted-foreground);
+}
+
+/* Detail panel: the graph shows shape, the panel carries the words. Hovering
+   a star fills it; clicking pins it so the text can be read without keeping
+   the pointer still. */
+.sky-panel {
+  padding: 18px 20px;
+  border: var(--hairline) solid var(--border);
+  border-radius: var(--radius);
+  background: var(--card);
+  min-height: 168px;
+}
+@media (min-width: 860px) {
+  .sky-panel { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr); gap: 12px 32px; align-items: start; }
+  .sky-panel .p-mod, .sky-panel h3, .sky-panel .p-meta, .sky-panel .p-desc { grid-column: 1; }
+  .sky-panel .p-rungs { grid-column: 2; grid-row: 1 / span 5; margin-top: 2px; }
+  .sky-panel .p-hint:first-child { grid-column: 1; }
+}
+.sky-panel .p-mod { font-family: var(--mono); font-size: 12px; color: var(--sel, var(--muted-foreground)); }
+.sky-panel h3 { font-size: 19px; margin-top: 8px; }
+.sky-panel .p-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 14px;
+  margin-top: 8px;
+  font-family: var(--mono);
+  font-size: 11.5px;
+  color: var(--muted-foreground);
+}
+.sky-panel .p-desc { margin-top: 12px; font-size: 14px; line-height: 1.6; color: var(--muted-foreground); }
+.sky-panel .p-rungs { margin-top: 14px; list-style: none; display: grid; gap: 8px; }
+.sky-panel .p-rungs li { display: grid; grid-template-columns: 44px 1fr; gap: 10px; font-size: 13px; line-height: 1.5; }
+.sky-panel .p-rungs .u { font-family: var(--mono); font-size: 11.5px; color: var(--brand-ink); padding-top: 2px; }
+.sky-panel .p-rungs .a { color: var(--muted-foreground); }
+.sky-panel .p-hint { font-size: 13.5px; line-height: 1.6; color: var(--muted-foreground); }
+
+.mod-filters { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 20px; }
+.mod-filters button {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 5px 11px;
+  border: var(--hairline) solid var(--border);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--foreground);
+  font: inherit;
+  font-family: var(--mono);
+  font-size: 12px;
+  cursor: pointer;
+}
+.mod-filters button::before {
+  content: '';
+  width: 9px;
+  height: 9px;
+  border-radius: 2px;
+  background: var(--sel);
+}
+.mod-filters button[aria-pressed='true'] { background: var(--muted); border-color: var(--sel); }
+
+@media (max-width: 640px) {
+  .hero { padding: 36px 0 32px; }
+  section.band > .wrap { padding-top: 38px; padding-bottom: 38px; }
+}

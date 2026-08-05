@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>XLab Verification</title>
+<meta name="description" content="An intermediate course on international AI verification: the technical, institutional and legal mechanisms that decide whether a governance commitment can be checked at all.">
+<meta name="robots" content="noindex, follow">
+<!-- Read the stored theme before first paint. A late class means the page
+     flashes the wrong ground; keep this in step with verification-theme.js —
+     same key, same attribute, same values. -->
+<script>
+(function () {
+  try {
+    var v = localStorage.getItem('xlab-verification-theme');
+    if (v !== 'light' && v !== 'dark' && v !== 'contrast') {
+      v = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    }
+    document.documentElement.setAttribute('data-theme', v);
+  } catch (e) {}
+})();
+</script>
+<link rel="stylesheet" href="verification-fonts.css">
+<link rel="stylesheet" href="verification-theme.css">
+<link rel="stylesheet" href="verification-landing.css">
+</head>
+<body>
+
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="site-header">
+  <div class="bar">
+    <a class="brand" href="verification-landing.html">XLab<i> · </i>Verification</a>
+    <nav class="nav" aria-label="Course">
+      <a href="/tracks/verification">Course</a>
+      <a href="verification-memo-desk.html">Memo desk</a>
+      <a href="/review">Review</a>
+      <a href="/resources">Resources</a>
+      <a href="/classrooms">Cohorts</a>
+    </nav>
+    <div class="header-right">
+      <div class="theme-switch"></div>
+      <a class="btn small" href="/login">Sign in</a>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+
+  <section class="hero">
+    <div class="wrap">
+      <p class="kicker">Verification track</p>
+      <h1>How could the US and China trust an agreement to pause ASI development?</h1>
+      <p class="lede">
+        An intermediate course on international AI verification: the technical,
+        institutional and legal mechanisms that decide whether a governance
+        commitment can be checked at all — and what it takes to tell a kept
+        promise from a broken one.
+      </p>
+
+      <div class="ways">
+        <a class="btn" href="/login">Enroll</a>
+        <a class="btn outline" href="/tracks/verification">Start on your own</a>
+      </div>
+      <p class="ways-note">
+        Enrolling signs you in, saves your progress and lets you join a cohort.
+        Starting on your own needs no account and saves nothing.
+      </p>
+
+      <dl class="stats">
+        <div><dt>Modules</dt><dd>5</dd></div>
+        <div><dt>Skills</dt><dd>27</dd></div>
+        <div><dt>Written outputs</dt><dd>15</dd></div>
+        <div><dt>Level</dt><dd>Intermediate</dd></div>
+      </dl>
+    </div>
+  </section>
+
+  <section class="band filled">
+    <div class="wrap">
+      <h2>What you will be able to do</h2>
+      <ul class="objectives" id="objectives"></ul>
+    </div>
+  </section>
+
+  <section class="band">
+    <div class="wrap">
+      <h2>The skills it builds</h2>
+      <p class="intro">
+        The course is organised around a graph, not a reading list. Each unit
+        feeds specific skills, and the later ones only stand up once the
+        earlier ones do.
+      </p>
+
+      <div class="mod-filters" id="modFilters"></div>
+
+      <div class="constellation">
+        <div>
+          <div class="sky" id="sky"></div>
+          <div class="sky-legend">
+            <span>numeral inside a star — Bloom level</span>
+            <span>solid line — fed from inside the module</span>
+            <span>dashed line — fed from another module</span>
+            <span>click a star to pin it</span>
+          </div>
+        </div>
+        <div class="sky-panel" id="skyPanel"></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="band filled">
+    <div class="wrap">
+      <h2>Five modules</h2>
+      <p class="intro">
+        Modules 0–1 are the conceptual on-ramp. Module 2 covers the
+        verification infrastructure itself across hardware, cloud,
+        intelligence and human layers. Module 3 red-teams the whole stack
+        through evasion scenarios. Module 4 asks how to layer imperfect
+        mechanisms into a realistic regime, and ends in the capstone.
+      </p>
+
+      <ol class="modules">
+        <li>
+          <div class="mod-card" style="--mod:var(--mod-0)">
+            <p class="mod-chip">M0 · Why Verification?</p>
+            <h3>Why verification, and why now</h3>
+            <p>Why do we care about verification, and why is it so important to AI governance?</p>
+            <a class="memo-link" href="verification-memo-desk.html#m0-hinge-brief">Written output — memo desk →</a>
+          </div>
+        </li>
+        <li>
+          <div class="mod-card" style="--mod:var(--mod-1)">
+            <p class="mod-chip">M1 · Actors</p>
+            <h3>Who holds the decisions and the evidence</h3>
+            <p>Who has a stake in an international AI agreement? Who has incentives to comply, defect, hide, exaggerate, or free-ride?</p>
+            <a class="memo-link" href="verification-memo-desk.html#m1-stakeholder-map">Written output — memo desk →</a>
+          </div>
+        </li>
+        <li>
+          <div class="mod-card" style="--mod:var(--mod-2)">
+            <p class="mod-chip">M2 · Verification Infrastructure</p>
+            <h3>Hardware, cloud, intelligence, human</h3>
+            <p>What technical and institutional mechanisms let a verifier check compliance — and what can each one actually prove?</p>
+            <a class="memo-link" href="verification-memo-desk.html#m2-1-hardware-brief">Written output — memo desk →</a>
+          </div>
+        </li>
+        <li>
+          <div class="mod-card" style="--mod:var(--mod-3)">
+            <p class="mod-chip">M3 · Scheming and Evasion</p>
+            <h3>Break it before you trust it</h3>
+            <p>How can self-interested actors circumvent verification mechanisms? How can cooperators prevent schemes, ex-ante and ex-post?</p>
+            <a class="memo-link" href="verification-memo-desk.html#m3-written-output">Written output — memo desk →</a>
+          </div>
+        </li>
+        <li>
+          <div class="mod-card" style="--mod:var(--mod-4)">
+            <p class="mod-chip">M4 · Trust Without Trust</p>
+            <h3>Layering imperfect mechanisms</h3>
+            <p>Given that no individual mechanism can prove compliance, how do you prioritize, layer, and scaffold a realistic verification regime?</p>
+            <a class="memo-link" href="verification-memo-desk.html#m4-2-capstone">Written output — memo desk →</a>
+          </div>
+        </li>
+      </ol>
+
+      <p class="note">
+        <b>Two names for the same five modules.</b> The constellation labels
+        them the way the skill graph does — Foundations, Supply chain,
+        Mechanisms, Evasion, Design — and the cards above use the outline’s
+        own titles. The numbers M0–M4 match. <b>This page is not wired to the
+        built course.</b> The track that renders at
+        <a href="/tracks/verification">/tracks/verification</a> still groups its
+        seventeen interactives by kind rather than by this structure, so the
+        module cards describe the outline and do not link into it.
+      </p>
+    </div>
+  </section>
+
+  <section class="band">
+    <div class="wrap">
+      <h2>Every module ends in writing</h2>
+      <p class="intro">
+        Most modules ask for one short written output — a memo, brief,
+        critique or design note — applied to a concrete verification problem,
+        and put through peer review. The memo desk collects all fifteen places
+        the outline marks, quotes the brief where one exists, and says plainly
+        where none has been drafted yet.
+      </p>
+      <p style="margin-top:22px"><a class="btn" href="verification-memo-desk.html">Open the memo desk</a></p>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <span>XLab Tracks · Verification</span>
+    <span>Draft landing — not the built course</span>
+  </div>
+</footer>
+
+<script src="verification-theme.js"></script>
+<script src="verification-skills.js"></script>
+<script>
+// The objectives are the graph's own, so the list cannot drift from the map
+// beside it.
+(function () {
+  var S = window.VERIFICATION_SKILLS;
+  var ul = document.getElementById('objectives');
+  if (!S || !ul) return;
+  ul.innerHTML = S.objectives.map(function (o, i) {
+    return '<li><span class="n" aria-hidden="true">' + String(i + 1).padStart(2, '0') + '</span><span>' + o + '</span></li>';
+  }).join('');
+})();
+</script>
+<script src="verification-landing.js"></script>
+</body>
+</html>

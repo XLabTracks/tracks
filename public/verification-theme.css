@@ -1,0 +1,301 @@
+/* XLab Verification — the palette and chrome the standalone verification
+   subdomain pages run on. Three themes over one set of variable names, so a
+   rule that reads --primary or --border follows the switch without being
+   touched. Day and night carry XLab's maroon; high contrast drops the brand
+   for black, white and one signal yellow.
+
+   Trap: maroon at #800000 is a fine SURFACE on dark (white on it reads at
+   12:1) but not fine as TEXT on dark (2.3:1). That is why --brand-ink exists
+   separately from --primary: filled things use --primary, written things use
+   --brand-ink, and the two differ per theme.
+
+   Trap: high contrast is picked, never inferred. It is a legibility setting,
+   and a learner who needs it should not have it depend on an OS toggle they
+   set for a different reason — so prefers-color-scheme only ever chooses
+   between day and night.
+
+   Module hues are Okabe-Ito and they are decorative. Everywhere a module
+   colour appears the module number appears as text beside it. */
+
+:root,
+:root[data-theme='light'] {
+  --background: #fbfaf9;
+  --foreground: #1a1614;
+  --card: #ffffff;
+  --primary: #800000;
+  --primary-foreground: #ffffff;
+  --brand-ink: #800000;
+  --muted: #f2efed;
+  --muted-foreground: #5f5854;
+  --accent: #f2efed;
+  --border: #e4dedb;
+  --ring: #800000;
+
+  --mod-0: #0072b2;
+  --mod-1: #e69f00;
+  --mod-2: #009e73;
+  --mod-3: #cc79a7;
+  --mod-4: #d55e00;
+
+  --radius: 14px;
+  --radius-sm: 8px;
+  --hairline: 1px;
+  --shadow-soft: 0 1px 2px rgba(10, 25, 47, .06);
+  --shadow-soft-lg: 0 12px 40px rgba(10, 25, 47, .13);
+  --glow: 0;
+
+  --display: 'Space Grotesk', 'Segoe UI', system-ui, sans-serif;
+  --sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, Helvetica, Arial, sans-serif;
+  --mono: 'JetBrains Mono', 'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+
+:root[data-theme='dark'] {
+  --background: #14100f;
+  --foreground: #f4f0ee;
+  --card: #1c1817;
+  --primary: #9d1b1b;
+  --primary-foreground: #ffffff;
+  --brand-ink: #eda3a3;
+  --muted: #262120;
+  --muted-foreground: #b0a7a3;
+  --accent: #2e2827;
+  --border: #332c2a;
+  --ring: #eda3a3;
+
+  --mod-0: #5aa9e6;
+  --mod-1: #ffc44d;
+  --mod-2: #3ecfa4;
+  --mod-3: #e5a3c6;
+  --mod-4: #ff8f4d;
+
+  --shadow-soft: 0 1px 2px rgba(0, 0, 0, .4);
+  --shadow-soft-lg: 0 12px 40px rgba(0, 0, 0, .5);
+  /* Night is the one ground a glow reads on; day and high contrast set it to 0. */
+  --glow: 1;
+}
+
+/* Every pair here is 15:1 or better, borders are solid rather than hairlines,
+   and nothing is conveyed by a tint. Type is one step larger and the layout is
+   unchanged, so a line that only just fits at the default size must still fit
+   here — test at 1280x800 with this on. */
+:root[data-theme='contrast'] {
+  --background: #000000;
+  --foreground: #ffffff;
+  --card: #000000;
+  --primary: #ffe600;
+  --primary-foreground: #000000;
+  --brand-ink: #ffe600;
+  --muted: #000000;
+  --muted-foreground: #ffffff;
+  --accent: #1a1a1a;
+  --border: #ffffff;
+  --ring: #ffe600;
+
+  --mod-0: #8cd9ff;
+  --mod-1: #ffe600;
+  --mod-2: #6bffcb;
+  --mod-3: #ffb3dd;
+  --mod-4: #ffab70;
+
+  --radius: 8px;
+  --radius-sm: 6px;
+  --hairline: 2px;
+  --shadow-soft: none;
+  --shadow-soft-lg: none;
+  --glow: 0;
+  font-size: 106.25%;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { -webkit-text-size-adjust: 100%; }
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--sans);
+  font-size: 16px;
+  line-height: 1.6;
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, h4 { font-family: var(--display); font-weight: 500; letter-spacing: -.015em; line-height: 1.15; }
+
+a { color: inherit; }
+
+/* Chrome is not text — nothing pressable takes a selection. A blue smear over
+   a theme glyph or a nav tab is always a mis-drag, and it reads as a broken
+   page. Trap: `all: unset` resets this, so any rule using it must re-declare
+   user-select: none directly after. */
+button, [role='button'], [role='radio'], [role='tab'], .chip, .nav a, .brand,
+.btn, .stat dt, .legend, .mod-chip, .memo-link, .skip {
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+}
+
+:where(button, a, input, textarea, [tabindex]):focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
+}
+
+.mono { font-family: var(--mono); }
+
+.wrap { width: 100%; max-width: 1120px; margin: 0 auto; padding: 0 24px; }
+
+/* ---------- header ---------- */
+
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  border-bottom: var(--hairline) solid var(--border);
+  background: color-mix(in srgb, var(--background) 88%, transparent);
+  backdrop-filter: blur(8px);
+}
+.site-header .bar {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  height: 56px;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+.brand {
+  font-family: var(--display);
+  font-size: 17px;
+  font-weight: 500;
+  letter-spacing: -.015em;
+  text-decoration: none;
+  white-space: nowrap;
+}
+.brand i { color: var(--brand-ink); font-style: normal; }
+
+.nav { display: flex; align-items: center; gap: 2px; font-size: 14px; }
+.nav a {
+  position: relative;
+  padding: 6px 12px;
+  border-radius: var(--radius-sm);
+  color: var(--muted-foreground);
+  text-decoration: none;
+  transition: color .15s ease, background .15s ease;
+}
+.nav a:hover { color: var(--foreground); background: var(--muted); }
+.nav a[aria-current='page'] { color: var(--foreground); }
+.nav a[aria-current='page']::after {
+  content: '';
+  position: absolute;
+  inset-inline: 12px;
+  bottom: -1px;
+  height: 2px;
+  border-radius: 2px;
+  background: var(--primary);
+}
+
+.header-right { margin-left: auto; display: flex; align-items: center; gap: 10px; }
+
+/* Three-way theme switch, drawn as radios rather than a cycling button: a
+   cycling control gives no way to see which of the three is active, and none
+   of them is an obvious "next". */
+.theme-switch {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  padding: 2px;
+  border: var(--hairline) solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--card);
+}
+.theme-switch button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 26px;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--muted-foreground);
+  cursor: pointer;
+  transition: color .15s ease, background .15s ease;
+}
+.theme-switch button:hover { color: var(--foreground); background: var(--accent); }
+.theme-switch button[aria-checked='true'] { background: var(--primary); color: var(--primary-foreground); }
+.theme-switch svg { width: 15px; height: 15px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+
+/* ---------- buttons ---------- */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  height: 42px;
+  padding: 0 20px;
+  border: var(--hairline) solid transparent;
+  border-radius: var(--radius-sm);
+  background: var(--primary);
+  color: var(--primary-foreground);
+  font: inherit;
+  font-size: 15px;
+  text-decoration: none;
+  cursor: pointer;
+  transition: filter .15s ease, background .15s ease, color .15s ease;
+}
+.btn:hover { filter: brightness(1.08); }
+.btn.outline { background: transparent; color: var(--foreground); border-color: var(--border); }
+.btn.outline:hover { background: var(--muted); filter: none; }
+.btn.small { height: 32px; padding: 0 12px; font-size: 13px; }
+
+.skip {
+  position: fixed;
+  top: 10px;
+  left: 10px;
+  width: max-content;
+  z-index: 60;
+  padding: 8px 14px;
+  border: var(--hairline) solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--background);
+  transform: translateY(-200%);
+}
+.skip:focus { transform: none; }
+
+/* ---------- footer ---------- */
+
+.site-footer {
+  border-top: var(--hairline) solid var(--border);
+  margin-top: 72px;
+  padding: 22px 0 40px;
+  color: var(--muted-foreground);
+  font-family: var(--mono);
+  font-size: 12px;
+}
+.site-footer .wrap { display: flex; flex-wrap: wrap; gap: 8px 24px; justify-content: space-between; }
+
+/* The nav wraps to its own scrolling row rather than collapsing into a menu:
+   these pages have five destinations, and hiding them behind a button on the
+   one viewport where the sidebar is already gone leaves no way through. */
+@media (max-width: 720px) {
+  .site-header .bar { height: auto; flex-wrap: wrap; gap: 10px 16px; padding: 9px 16px; }
+  .nav {
+    order: 3;
+    width: 100%;
+    overflow-x: auto;
+    scrollbar-width: none;
+    padding-bottom: 2px;
+  }
+  .nav::-webkit-scrollbar { display: none; }
+  .nav a { white-space: nowrap; padding: 5px 9px; }
+  .header-right { margin-left: auto; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .01ms !important;
+  }
+}

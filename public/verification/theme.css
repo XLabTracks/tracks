@@ -190,17 +190,24 @@ button, [role='button'], [role='radio'], [role='tab'], .chip, .nav a, .brand,
 }
 .brand i { color: var(--brand-ink); font-style: normal; }
 
-/* The XLab logotype, set to the cap height of the word beside it. The file is
-   maroon-and-black on transparent, which reads on the day ground and vanishes
-   on the night one, so the dark themes re-light it rather than ship a second
-   file:
+/* The XLab logotype beside the word.
+
+   Trap: the file is 3300x1050 but the ink only fills the middle 55% of that
+   box (y 236-814) and is inset horizontally too, so `height` buys about half
+   of what it says — at 15px the visible mark was 8px against a 12px cap
+   height and read as an afterthought. 28px puts roughly 15px of ink beside
+   the word. Re-crop the PNG if you want the number to mean what it says.
+
+   The file is maroon-and-black on transparent, which reads on the day ground
+   and vanishes on the night one, so the dark themes re-light it rather than
+   ship a second file:
 
    invert(1) alone would turn the maroon cross cyan. hue-rotate(180deg) after
    it puts the hue back, landing the cross on roughly --brand-ink's dusty red
    while the black letters go white. High contrast drops brand colour by
    design, so there the logotype is flattened to pure white. */
 .brand-mark {
-  height: 15px;
+  height: 28px;
   width: auto;
   display: block;
 }
@@ -331,7 +338,24 @@ button, [role='button'], [role='radio'], [role='tab'], .chip, .nav a, .brand,
   font-family: var(--mono);
   font-size: 12px;
 }
-.site-footer .wrap { display: flex; flex-wrap: wrap; gap: 8px 24px; justify-content: space-between; }
+.site-footer .wrap { display: flex; flex-direction: column; gap: 14px; }
+
+.foot-links { display: flex; flex-wrap: wrap; gap: 8px 20px; }
+.foot-links a { color: var(--muted-foreground); text-decoration: none; }
+.foot-links a:hover { color: var(--foreground); text-decoration: underline; text-underline-offset: 3px; }
+/* A destination that does not exist yet. It must not look pressable — no
+   pointer, no hover, no underline — or it reads as a broken link. */
+.foot-links .pending { color: var(--muted-foreground); opacity: .5; cursor: default; }
+
+.foot-end {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 20px;
+  padding-top: 12px;
+  border-top: var(--hairline) solid var(--border);
+}
+.foot-end > span:last-of-type { margin-right: auto; }
 
 /* The nav wraps to its own scrolling row rather than collapsing into a menu:
    hiding the destinations behind a button on the one viewport where the

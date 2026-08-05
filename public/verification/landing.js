@@ -381,22 +381,4 @@
      stay there. They are the course's pitch, not a readout of this browser's
      progress — a returning learner picks up from the track page. */
 
-  /* Module cards. The accent is decorative — the module number is printed in
-     the chip beside it, so the hue is never the only thing carrying it. */
-  var mods = document.querySelector('[data-modules]');
-  if (mods) {
-    mods.innerHTML = C.modules.map(function (m, i) {
-      var mp = VT.moduleProgress(m);
-      var out = m.units.filter(function (u) { return u.output; })[0];
-      return '<li><div class="mod-card" style="--mod:var(--mod-' + m.n + ')">' +
-        '<p class="mod-chip">M' + m.n + ' · ' + esc(m.week) + '</p>' +
-        '<h3>' + esc(m.title) + '</h3>' +
-        (m.goal ? '<p>' + esc(m.goal) + '</p>' : '') +
-        '<p class="mod-meta">' + mp.done + ' of ' + mp.total + ' units done</p>' +
-        '<a class="memo-link" href="track.html#' + encodeURIComponent(m.slug) + '">' +
-        'Open ' + esc(m.title) + ' →</a>' +
-        (out ? '<a class="memo-link" href="memo-desk.html">Written output →</a>' : '') +
-        '</div></li>';
-    }).join('');
-  }
 })();

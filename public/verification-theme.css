@@ -173,10 +173,15 @@ button, [role='button'], [role='radio'], [role='tab'], .chip, .nav a, .brand,
 }
 .brand i { color: var(--brand-ink); font-style: normal; }
 
-.nav { display: flex; align-items: center; gap: 2px; font-size: 14px; }
+/* The nav takes the whole middle of the bar and centres in it, so the brand
+   sits hard left and the actions hard right however few links there are.
+   Trap: this is what pushes .header-right to the edge — give the nav a width
+   (flex:1) and .header-right needs no auto margin, but drop the flex and the
+   actions slide back to the middle. */
+.nav { flex: 1; display: flex; align-items: center; justify-content: center; gap: 14px; font-size: 14.5px; }
 .nav a {
   position: relative;
-  padding: 6px 12px;
+  padding: 6px 14px;
   border-radius: var(--radius-sm);
   color: var(--muted-foreground);
   text-decoration: none;
@@ -187,14 +192,14 @@ button, [role='button'], [role='radio'], [role='tab'], .chip, .nav a, .brand,
 .nav a[aria-current='page']::after {
   content: '';
   position: absolute;
-  inset-inline: 12px;
+  inset-inline: 14px;
   bottom: -1px;
   height: 2px;
   border-radius: 2px;
   background: var(--primary);
 }
 
-.header-right { margin-left: auto; display: flex; align-items: center; gap: 10px; }
+.header-right { display: flex; align-items: center; gap: 10px; }
 
 /* Three-way theme switch, drawn as radios rather than a cycling button: a
    cycling control gives no way to see which of the three is active, and none
@@ -276,13 +281,17 @@ button, [role='button'], [role='radio'], [role='tab'], .chip, .nav a, .brand,
 .site-footer .wrap { display: flex; flex-wrap: wrap; gap: 8px 24px; justify-content: space-between; }
 
 /* The nav wraps to its own scrolling row rather than collapsing into a menu:
-   these pages have five destinations, and hiding them behind a button on the
-   one viewport where the sidebar is already gone leaves no way through. */
+   hiding the destinations behind a button on the one viewport where the
+   sidebar is already gone leaves no way through.
+   Trap: the desktop rule gives .nav flex:1, whose 0% basis beats width:100%
+   in a wrapped row — it has to be reset here or the row collapses. */
 @media (max-width: 720px) {
   .site-header .bar { height: auto; flex-wrap: wrap; gap: 10px 16px; padding: 9px 16px; }
   .nav {
     order: 3;
+    flex: none;
     width: 100%;
+    justify-content: flex-start;
     overflow-x: auto;
     scrollbar-width: none;
     padding-bottom: 2px;

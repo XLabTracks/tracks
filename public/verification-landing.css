@@ -9,14 +9,8 @@
 /* ---------- hero ---------- */
 
 .hero { padding: 56px 0 44px; }
-.hero .kicker {
-  font-family: var(--mono);
-  font-size: 13px;
-  color: var(--muted-foreground);
-}
 .hero h1 {
   max-width: 20ch;
-  margin-top: 14px;
   font-size: clamp(32px, 4.4vw, 52px);
   text-wrap: balance;
 }

@@ -228,7 +228,7 @@ window.VT = (function () {
       '</nav>' +
       '<div class="foot-end">' +
       '<span>&copy; 2026.</span>' +
-      '<span>Progress is stored in this browser only.</span>' +
+      '<span data-where>Progress is stored in this browser.</span>' +
       '<button class="btn small outline" id="vt-reset">Reset progress</button>' +
       '</div>' +
       '</div>';

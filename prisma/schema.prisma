@@ -41,6 +41,26 @@ model User {
   apiKeys           UserApiKey[]
   reviewCards       ReviewCard[]
   highlights        Highlight[]
+  verificationState VerificationState?
+}
+
+// The standalone Verification site's per-user state: completed unit ids and
+// the notebook, as one JSON document per user.
+//
+// It is NOT LessonProgress. That table is keyed by content-graph ids and its
+// action rejects anything else; these unit ids ("0.1", "2.3") belong to
+// public/verification/data/course.js, which is not part of the graph. Keeping
+// them apart is also what lets the whole course lift to another host — one
+// row, one shape, no join into the app's curriculum.
+//
+// Last write wins on updatedAt. The document is small (ids plus notebook
+// text); sketches are the only thing that can make it large, so the route
+// caps the payload rather than letting a book of PNGs become a row.
+model VerificationState {
+  userId    String   @id
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  data      Json
+  updatedAt DateTime @updatedAt
 }
 
 // A user's text highlight on a paper item, with an optional attached note.

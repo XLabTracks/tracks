@@ -586,6 +586,17 @@ button, [role='button'], [role='radio'], [role='tab'], .chip, .nav a, .brand,
    the one that has to survive the filled ground of the selected state. */
 .theme-switch button[data-theme='light'] svg { width: 13.5px; height: 13.5px; }
 
+/* The selected one is the only glyph drawn on a filled ground, and it is the
+   one that struggles: a 1.8-unit stroke scaled into a 13.5px box lands under
+   a device pixel, so the sun's rays close up against the maroon and the whole
+   mark reads as a smudge rather than white. Heavier ink on the selected
+   segment only, and the sun's core filled so the shape survives the
+   reduction. The rays keep their gaps — that is what makes it a sun. */
+.theme-switch button[aria-checked='true'] svg { stroke-width: 2.3; }
+.theme-switch button[data-theme='light'][aria-checked='true'] svg circle {
+  fill: currentColor;
+}
+
 /* ---------- buttons ---------- */
 
 .btn {

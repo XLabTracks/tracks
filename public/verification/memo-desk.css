@@ -1,4 +1,4 @@
-/* Memo desk. Palette and chrome come from verification-theme.css; this file
+/* Memo desk. Palette and chrome come from theme.css; this file
    is the desk layout, the slot rail and the check rail.
 
    Trap: the rails are sticky inside grid columns, so they need an explicit

@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Team · XLab Verification</title>
+<meta name="description" content="Who builds and facilitates the Verification track.">
+<meta name="robots" content="noindex, follow">
+<script>
+(function () {
+  try {
+    var v = localStorage.getItem('xlab-verification-theme');
+    if (v !== 'light' && v !== 'dark' && v !== 'contrast') {
+      v = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    }
+    document.documentElement.setAttribute('data-theme', v);
+  } catch (e) {}
+})();
+</script>
+<link rel="stylesheet" href="fonts.css">
+<link rel="stylesheet" href="theme.css">
+<link rel="stylesheet" href="page.css">
+</head>
+<body>
+
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="site-header">
+  <div class="bar">
+    <a class="brand" href="landing.html">XLab<i> · </i>Verification</a>
+    <nav class="nav" aria-label="Site">
+      <a href="team.html" aria-current="page">Team</a>
+      <a href="about.html">About</a>
+    </nav>
+    <div class="header-right">
+      <div class="theme-switch"></div>
+      <a class="btn small" href="/login">Sign in</a>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+  <div class="wrap">
+
+    <div class="page-head">
+      <h1>Team</h1>
+      <p class="lede">
+        Who writes the curriculum, builds the interactives, and facilitates
+        the cohorts.
+      </p>
+    </div>
+
+    <div class="prose">
+
+      <div class="stub">
+        <h3>No roster has been written yet</h3>
+        <p>
+          Nobody's name, role or biography has been supplied for this page, and
+          inventing them would put words in real people's mouths. The page
+          exists so the link in the header goes somewhere honest; the roster
+          goes in when whoever owns it writes it.
+        </p>
+      </div>
+
+      <h2>What goes here</h2>
+      <p>
+        One entry per person: name, the part of the track they own, and a
+        sentence on what they bring to it. Facilitators are listed with the
+        cohorts they run, since the Facilitator module is the one part of the
+        course written for them rather than for learners.
+      </p>
+
+      <h2>Until then</h2>
+      <p>
+        The work itself is the better introduction. The
+        <a href="about.html">about page</a> says what the course covers and how
+        it is put together, and the <a href="memo-desk.html">memo desk</a> shows
+        what it asks people to produce — including, plainly marked, the places
+        where no brief has been drafted yet.
+      </p>
+
+    </div>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <span>XLab Tracks · Verification</span>
+    <span>Draft landing — not the built course</span>
+  </div>
+</footer>
+
+<script src="theme.js"></script>
+</body>
+</html>

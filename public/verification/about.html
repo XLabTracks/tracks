@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>About · XLab Verification</title>
+<meta name="description" content="What the Verification track covers, who it is for, and how the course is run.">
+<meta name="robots" content="noindex, follow">
+<script>
+(function () {
+  try {
+    var v = localStorage.getItem('xlab-verification-theme');
+    if (v !== 'light' && v !== 'dark' && v !== 'contrast') {
+      v = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    }
+    document.documentElement.setAttribute('data-theme', v);
+  } catch (e) {}
+})();
+</script>
+<link rel="stylesheet" href="fonts.css">
+<link rel="stylesheet" href="theme.css">
+<link rel="stylesheet" href="page.css">
+</head>
+<body>
+
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="site-header">
+  <div class="bar">
+    <a class="brand" href="landing.html">XLab<i> · </i>Verification</a>
+    <nav class="nav" aria-label="Site">
+      <a href="team.html">Team</a>
+      <a href="about.html" aria-current="page">About</a>
+    </nav>
+    <div class="header-right">
+      <div class="theme-switch"></div>
+      <a class="btn small" href="/login">Sign in</a>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+  <div class="wrap">
+
+    <div class="page-head">
+      <h1>About the Verification track</h1>
+      <p class="lede">
+        An intermediate course on international AI verification: the technical,
+        institutional and legal mechanisms that decide whether a governance
+        commitment can be checked at all — and what it takes to tell a kept
+        promise from a broken one.
+      </p>
+
+      <dl class="facts">
+        <div><dt>Modules</dt><dd>5</dd></div>
+        <div><dt>Skills</dt><dd>27</dd></div>
+        <div><dt>Written outputs</dt><dd>15</dd></div>
+        <div><dt>Level</dt><dd>Intermediate</dd></div>
+      </dl>
+    </div>
+
+    <div class="prose">
+
+      <h2>What it covers</h2>
+      <p>
+        The course runs from the question of why verification matters at all to
+        the design of a regime that has to work without trust. Modules 0 and 1
+        are the conceptual on-ramp: why anyone should care, and who holds the
+        decisions and the evidence. Module 2 covers the verification
+        infrastructure itself across the hardware, cloud, intelligence and
+        human layers. Module 3 red-teams that whole stack through evasion
+        scenarios. Module 4 asks how to layer imperfect mechanisms into
+        something realistic, and ends in the capstone.
+      </p>
+
+      <h2>Who it is for</h2>
+      <p>
+        It is pitched at an intermediate level. It assumes you are willing to
+        read a policy document closely and argue with it, and it does not
+        assume you can build the mechanisms it describes. The material is as
+        much institutional and legal as it is technical.
+      </p>
+
+      <h2>How it is organised</h2>
+      <p>
+        Around a graph, not a reading list. Each unit feeds specific skills,
+        and the later ones only stand up once the earlier ones do — the
+        constellation on the <a href="landing.html">front page</a> is that
+        graph, and the course objectives are read straight off it so the two
+        cannot drift apart.
+      </p>
+      <p>
+        Most modules end in one short written output — a memo, brief, critique
+        or design note — applied to a concrete verification problem and put
+        through peer review. The <a href="memo-desk.html">memo desk</a>
+        collects all fifteen places the outline marks one, quotes the brief
+        where a brief exists, and says plainly where none has been drafted.
+      </p>
+
+      <h2>Taking it</h2>
+      <ul>
+        <li>
+          <b>Enrolled.</b> Signing in saves your progress and lets you join a
+          cohort.
+        </li>
+        <li>
+          <b>On your own.</b> No account, nothing saved, same material.
+        </li>
+      </ul>
+
+      <div class="stub">
+        <h3>This page is not wired to the built course</h3>
+        <p>
+          The track that renders at <a href="/tracks/verification">/tracks/verification</a>
+          still groups its interactives by kind rather than by the five modules
+          described here. The two will be reconciled; until then this page
+          describes the outline, and the course pages describe what is built.
+        </p>
+      </div>
+
+    </div>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <span>XLab Tracks · Verification</span>
+    <span>Draft landing — not the built course</span>
+  </div>
+</footer>
+
+<script src="theme.js"></script>
+</body>
+</html>

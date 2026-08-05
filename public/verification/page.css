@@ -1,0 +1,54 @@
+/* Layout for the plain prose pages (about, team). Palette and chrome come
+   from theme.css; this file is only the reading column and the card grid.
+
+   Trap: .wrap is 1120px wide for the landing's constellation, which is far
+   too wide to read at. Prose here sets its own measure in ch and does not
+   inherit one. */
+
+.page-head { padding: 44px 0 0; }
+.page-head h1 { font-size: clamp(28px, 3.4vw, 40px); text-wrap: balance; }
+.page-head .lede {
+  max-width: 62ch;
+  margin-top: 14px;
+  font-size: 17px;
+  line-height: 1.65;
+  color: var(--muted-foreground);
+}
+
+.prose { max-width: 66ch; padding: 34px 0 56px; }
+.prose h2 { font-size: 22px; margin-top: 34px; }
+.prose h2:first-child { margin-top: 0; }
+.prose p { margin-top: 12px; line-height: 1.7; }
+.prose ul { margin-top: 12px; padding-left: 20px; }
+.prose li { margin-top: 8px; line-height: 1.65; }
+.prose a { color: var(--brand-ink); text-underline-offset: 3px; }
+
+/* Uniform hairline on all four sides; the accent lives in the text inside,
+   never on one edge. */
+.stub {
+  margin-top: 20px;
+  padding: 18px 20px;
+  border: var(--hairline) solid var(--border);
+  border-radius: var(--radius);
+  background: var(--card);
+}
+.stub h3 { font-size: 15px; color: var(--brand-ink); }
+.stub p { margin-top: 8px; font-size: 14.5px; color: var(--muted-foreground); }
+
+.facts {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 20px;
+  margin-top: 30px;
+  padding-top: 24px;
+  border-top: var(--hairline) solid var(--border);
+}
+.facts dt {
+  font-family: var(--mono);
+  font-size: 12px;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--muted-foreground);
+}
+.facts dd { font-family: var(--display); font-size: 24px; font-weight: 500; margin-top: 4px; }
+@media (min-width: 640px) { .facts { grid-template-columns: repeat(4, minmax(0, 1fr)); } }

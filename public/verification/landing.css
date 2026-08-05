@@ -1,5 +1,5 @@
 /* Landing page for the verification subdomain. Palette and chrome come from
-   verification-theme.css; this file is the page's own layout plus the skill
+   theme.css; this file is the page's own layout plus the skill
    constellation.
 
    Trap: the constellation is one <svg> with a viewBox, so everything inside

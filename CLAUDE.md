@@ -374,12 +374,19 @@ add must reduce the duplication, never widen it.
   reported as one. **The table needs
   `db/migrations/20260805120000_verification_state.sql` applied with the admin
   role before any of this works.**
-- **A lesson body never opens with its own `# Title`.** The item page already
-  renders the lesson title as the page's h1, so a transcribed heading puts it
-  on screen twice at h1 size. This has come back on every batch transcribed
-  from the outline — the outline carries its numbered heading, and copying it
-  verbatim is the obvious thing to do. Start bodies at `##`;
-  `widgets.test.ts` fails the build if one slips through.
+- **A body may repeat its own title; the reader drops it.** The item page owns
+  the lesson's h1, so a transcribed heading that says the same thing is not
+  rendered — `titleAwareHeadings` in
+  `src/components/mdx/lesson-content.tsx` compares each heading against the
+  lesson title (`isLessonTitleHeading`, word-only, in
+  `src/lib/content/lesson-heading.ts`) and returns null on a match, at any
+  level and anywhere in the body. `getLessonSections` applies the same filter
+  so the sidebar never offers a row whose anchor was dropped. This is
+  deliberately a render rule and not an authoring rule: the outline carries
+  its numbered heading, transcribing it verbatim is right, and policing the
+  sources regressed on every new batch. A surviving `h1` renders as `h2` —
+  the page owns the document's only h1. The breadcrumb stops at the module
+  for the same reason.
 - **Never invent curriculum.** Module 0's prose is transcribed from the
   author's WIP outline, verbatim. Modules 1-4 are declared with real titles
   and no items until their prose is drafted — an empty module counts as

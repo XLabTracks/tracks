@@ -120,18 +120,21 @@ async function LessonItemPage({
 
   return (
     <div className="max-w-4xl px-4 py-8 lg:px-8">
+      {/* The trail stops at the module: the lesson's own name is the h1 two
+          lines below, and repeating it there put the same words on screen
+          twice before the body even started. Same reason there is no
+          "Module N: …" line — the module is the crumb above it. */}
       <Breadcrumbs
         items={[
           { label: track.title, href: `/tracks/${track.slug}` },
-          { label: module.title, href: `/tracks/${track.slug}/${module.slug}` },
-          { label: lesson.title },
+          {
+            label: `Module ${module.order}: ${module.title}`,
+            href: `/tracks/${track.slug}/${module.slug}`,
+          },
         ]}
       />
 
       <header>
-        <p className="text-muted-foreground text-sm">
-          Module {module.order}: {module.title}
-        </p>
         <h1 className="mt-1 text-3xl font-semibold tracking-tight">{lesson.title}</h1>
         {lesson.estimatedMinutes && (
           <p className="text-muted-foreground mt-2 flex items-center gap-1 text-sm">
@@ -143,7 +146,7 @@ async function LessonItemPage({
       {/* .lesson-reader scopes the sidebar's scroll-spy (see use-scroll-spy)
           and gives heading anchors sticky-header clearance. */}
       <div className="lesson-reader mt-6">
-        <LessonContent contentRef={lesson.contentRef} />
+        <LessonContent contentRef={lesson.contentRef} title={lesson.title} />
       </div>
 
       {userId ? (
@@ -205,18 +208,20 @@ async function PaperItemPage({
 
   return (
     <div className="max-w-5xl px-4 py-8 lg:px-8">
+      {/* Trail stops at the module — the paper's name is the h1 below it. */}
       <Breadcrumbs
         items={[
           { label: track.title, href: `/tracks/${track.slug}` },
-          { label: module.title, href: `/tracks/${track.slug}/${module.slug}` },
-          { label: paper.title },
+          {
+            label: `Module ${module.order}: ${module.title}`,
+            href: `/tracks/${track.slug}/${module.slug}`,
+          },
         ]}
       />
 
       <header>
         <p className="text-muted-foreground text-sm">
-          Module {module.order}: {module.title} · Paper
-          {paper.optional && " · Optional"}
+          Paper{paper.optional && " · Optional"}
         </p>
         <h1 className="mt-1 text-3xl font-semibold tracking-tight">{paper.title}</h1>
         {source.authors && (

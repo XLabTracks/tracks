@@ -4,6 +4,7 @@ import Script from "next/script";
 import { useEffect } from "react";
 import { usePathname } from "next/navigation";
 import { useAuth } from "@workos-inc/authkit-nextjs/components";
+import { AccountMenu } from "@/components/layout/account-menu";
 import {
   COPYRIGHT,
   FOOT,
@@ -123,14 +124,21 @@ export function VerificationHeader() {
           </nav>
           <div className="header-right">
             <ThemeSwitch />
-            {/* The static pages swap this button by probing the state route
-                (sync.js); inside the app the session is already at hand, so it
-                is read here instead of asking the server a second time.
-                `loading` renders neither: a "Sign in" that flips to "Account"
-                a moment later is worse than a button that arrives late. */}
-            {loading ? null : (
-              <a className="btn small" href={user ? "/account" : "/login"}>
-                {user ? "Account" : "Sign in"}
+            {/* Signed in, this is the app's own account menu — the same
+                avatar, email, classrooms and Sign out as everywhere else. A
+                learner who signs in must not lose the way out of the session
+                by walking into a track. Signed out, Verification dresses the
+                button itself: `.btn small` is theme.css's, so it follows all
+                three themes.
+
+                The static pages under public/verification/ cannot have the
+                menu; sync.js swaps a single button there by probing the state
+                route. `loading` renders neither: a "Sign in" that flips a
+                moment later is worse than a control that arrives late. */}
+            <AccountMenu />
+            {loading || user ? null : (
+              <a className="btn small" href="/login">
+                Sign in
               </a>
             )}
           </div>

@@ -3,6 +3,7 @@ import localFont from "next/font/local";
 import { JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import { withAuth } from "@workos-inc/authkit-nextjs";
+import { devUser } from "@/lib/auth";
 import { AuthKitProvider } from "@workos-inc/authkit-nextjs/components";
 import { AppFooter, AppHeader } from "@/components/layout/app-chrome";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -35,6 +36,31 @@ export const metadata: Metadata = {
 // that doesn't reliably carry the proxy header on Netlify. withAuth() throws on
 // routes the proxy excludes (e.g. /embed), so fall back to a signed-out state.
 async function getInitialAuth() {
+  // The DEV_USER bypass has to reach the client provider too, or local dev
+  // renders every page with a signed-out header while the server treats the
+  // request as signed in — the header is then the one thing the bypass does
+  // not cover. Same double gate as devUser() itself.
+  const dev = devUser();
+  if (dev) {
+    return {
+      user: {
+        object: "user" as const,
+        id: dev.id,
+        email: dev.email,
+        firstName: dev.firstName ?? null,
+        lastName: dev.lastName ?? null,
+        emailVerified: true,
+        name: [dev.firstName, dev.lastName].filter(Boolean).join(" ") || dev.email,
+        locale: null,
+        profilePictureUrl: null,
+        lastSignInAt: null,
+        externalId: null,
+        metadata: {},
+        createdAt: "",
+        updatedAt: "",
+      },
+    };
+  }
   try {
     const { accessToken: _accessToken, ...auth } = await withAuth();
     return auth;

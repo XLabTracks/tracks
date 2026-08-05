@@ -16,20 +16,28 @@ window.COURSE = {
       "glyph": "✧",
       "week": "week 1",
       "status": "drafted",
-      "goal": "Why verification?",
-      "summary": "The oldest problem in arms control, applied to AI: when you sign a mutual agreement, how do you know the other party will uphold it? Opens with the course's own framing, then the case that ASI risk warrants an agreement at all, why successful prevention is invisible, the intuitions a verification regime runs on, seven decades of arms-control precedent, and the securitization critique met head on.",
+      "goal": "Why are we teaching this?",
+      "summary": "The oldest problem in arms control, applied to AI: when you sign a mutual agreement, how do you know the other party will uphold it? Opens with the welcome and the course's own framing, then the case that ASI risk warrants an agreement at all, why successful prevention is invisible, the intuitions a verification regime runs on, seven decades of arms-control precedent, and the securitization critique met head on.",
       "units": [
         {
-          "id": "0.1",
-          "title": "Introduction",
+          "id": "0.0",
+          "title": "Welcome",
           "kind": "explainer",
-          "mins": "15–20 min",
+          "mins": "5–10 min",
           "href": "/tracks/verification/why-verification/welcome",
           "lessons": [
-            "welcome",
+            "welcome"
+          ]
+        },
+        {
+          "id": "0.1",
+          "title": "Introduction: why verification? why you?",
+          "kind": "explainer",
+          "mins": "15–20 min",
+          "href": "/tracks/verification/why-verification/introduction",
+          "lessons": [
             "introduction",
-            "prevention-is-invisible",
-            "verification-timeline-game"
+            "prevention-is-invisible"
           ]
         },
         {
@@ -37,15 +45,16 @@ window.COURSE = {
           "title": "Building verification intuitions",
           "kind": "interactive",
           "mins": "15–20 min",
-          "href": "/tracks/verification/why-verification/building-intuitions",
+          "href": "/tracks/verification/why-verification/verification-timeline-game",
           "lessons": [
+            "verification-timeline-game",
             "building-intuitions"
           ]
         },
         {
           "id": "0.3",
-          "title": "History, precedents, parallels",
-          "kind": "explainer",
+          "title": "Precedents and parallels",
+          "kind": "interactive",
           "mins": "20–25 min",
           "href": "/tracks/verification/why-verification/precedents",
           "lessons": [

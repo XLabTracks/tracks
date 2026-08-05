@@ -22,31 +22,7 @@
   color: var(--muted-foreground);
 }
 .hero .ways { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 30px; }
-.hero .ways-note {
-  margin-top: 12px;
-  font-size: 14px;
-  color: var(--muted-foreground);
-  max-width: 60ch;
-}
-
-.stats {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 22px;
-  margin-top: 46px;
-  padding-top: 28px;
-  border-top: var(--hairline) solid var(--border);
-}
-.stats dt {
-  font-family: var(--mono);
-  font-size: 12px;
-  letter-spacing: .06em;
-  text-transform: uppercase;
-  color: var(--muted-foreground);
-}
-.stats dd { font-family: var(--display); font-size: 26px; font-weight: 500; margin-top: 4px; }
-@media (min-width: 640px) { .stats { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
-
+.hero 
 /* ---------- sections ---------- */
 
 section.band { border-top: var(--hairline) solid var(--border); }

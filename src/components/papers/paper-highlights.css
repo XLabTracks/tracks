@@ -27,7 +27,7 @@
   @media (hover: hover) {
     .paper-comment,
     .paper-comment-line {
-      opacity: 0.55;
+      opacity: 0.7;
       transition: opacity 150ms ease;
     }
     .paper-comment:hover,

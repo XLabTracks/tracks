@@ -25,6 +25,7 @@ import {
   type AppliedPaper,
   type PaperPart,
 } from "@/lib/papers/apply-edits";
+import { collapseTailSections } from "@/lib/papers/collapse-tail";
 import { resolveInternalReadingHref } from "@/lib/readings/resolve";
 import { rewriteReadingLinks } from "@/lib/readings/rewrite-links";
 import { renderGatePromptHtml } from "@/lib/papers/patch-section";
@@ -33,6 +34,7 @@ import { Exercise } from "@/components/mdx/exercise";
 import { ExerciseSequence } from "@/components/mdx/exercise-sequence";
 import { MathText } from "@/components/exercises/math-text";
 import { EmbeddedLesson } from "./embedded-lesson";
+import { PaperCollapse } from "./paper-collapse";
 import { PaperGlossary, type PaperGlossaryEntry } from "./paper-glossary";
 import { PaperGate } from "./paper-gate";
 import { PaperSidenotes } from "./paper-sidenotes";
@@ -361,7 +363,27 @@ function applyPaperEditsCached(
 ): AppliedPaper {
   const hit = appliedEditsCache.get(paper.id);
   if (hit && hit.html === html) return hit.applied;
-  const applied = applyPaperEdits(html, toc, paper.edits);
+  const edited = applyPaperEdits(html, toc, paper.edits);
+  // Collapse trailing apparatus (references/appendix/footnotes) AFTER edits:
+  // edit targets are resolved against the artifact's byte offsets, which the
+  // details wrappers would shift. The references-seen flag threads through
+  // the html parts in document order (and on into the ungated tail), so an
+  // activity/gate split after References doesn't reset the appendix walk —
+  // the whole document collapses as one pass.
+  let sawReferences = false;
+  const parts = edited.parts.map((part) => {
+    if (part.kind !== "html") return part;
+    const collapsed = collapseTailSections(part.html, sawReferences);
+    sawReferences = collapsed.sawReferences;
+    return { ...part, html: collapsed.html };
+  });
+  const applied: AppliedPaper = {
+    ...edited,
+    parts,
+    ungatedTailHtml:
+      edited.ungatedTailHtml &&
+      collapseTailSections(edited.ungatedTailHtml, sawReferences).html,
+  };
   appliedEditsCache.set(paper.id, { html, applied });
   return applied;
 }
@@ -469,6 +491,7 @@ function EditedPaperBody({
 
       {footer}
       {sidenotePrefix && <PaperSidenotes prefix={sidenotePrefix} />}
+      <PaperCollapse />
       <GlossaryLayer paper={paper} />
     </div>
   );

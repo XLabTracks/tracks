@@ -1,0 +1,20 @@
+<Callout variant="note" title="In development">This lesson is an outline stub — the author's plan for this section, not the finished lesson.</Callout>
+
+<Video src="https://www.youtube.com/watch?v=RS6UyRXKnqs" title="AI Control: Addressing Risks from Agentic Internal Deployments — Mary Phuong" />
+
+## Defining high stakes
+
+We can think about what is "High Stakes" as what catastrophically threatening occurrences take the least amount of actions to produce.
+
+<Demo id="high-stakes-graph" />
+
+It is intuitive to think that incrimination and number of actions are inversely correlated, since as the number of actions decrease while the catastrophic occurrences remains the same, the size and impact of each action must grow proportionally. High impact actions may require breaking more safeguards, cost more reasoning expenditure and overall require the model to try harder to do a bad thing in less actions. These high impact actions are therefore more incriminable, since it would be harder to produce reasons against a model not scheming when it does incredibly large actions.
+
+## Learning objectives
+
+By the end of this section you will be able to:
+
+- Define high stakes as opposed to low stakes using the control graph.
+- Classify catastrophes by whether they route through a rogue deployment, and distinguish internal rogue deployments from external ones such as weight exfiltration.
+- Recognize subtler rogue-deployment variants, such as a monitored internal agent querying an unmonitored external copy of itself.
+- Describe the basic systems architecture of an autonomous research agent, and locate where its permissions and monitoring live.

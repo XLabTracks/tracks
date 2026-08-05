@@ -1,6 +1,6 @@
 import { getContentLocation, papers } from "@/lib/content";
 import { parseLessWrongId, parseLessWrongPostUrl } from "@/lib/lesswrong/id";
-import { parseSubstackPostUrl } from "@/lib/substack/id";
+import { parseSubstackId, parseSubstackPostUrl } from "@/lib/substack/id";
 import { linkedReadingHref, linkedReadings } from "./registry";
 
 /**
@@ -35,26 +35,31 @@ function readingKey(reading: (typeof linkedReadings)[number]): string | null {
   return `sb:${reading.id}`;
 }
 
+// Every post-sourced course paper's course page, by post key. Real-track
+// locations shadow Example-track ones.
+const coursePaperHrefByKey: Map<string, string> = (() => {
+  const map = new Map<string, string>();
+  for (const paper of papers) {
+    if (paper.source.kind === "arxiv") continue;
+    const key = postKey(paper.source.postUrl);
+    const location = getContentLocation(paper.id);
+    if (!key || !location) continue;
+    if (map.has(key) && location.track.kind === "example") continue;
+    map.set(key, location.href);
+  }
+  return map;
+})();
+
 // Course papers win over linked readings: a post the curriculum assigns as a
 // reading opens at its course page (with its edits and activities), not the
-// bare /readings view. Real-track locations shadow Example-track ones.
+// bare /readings view.
 const internalHrefByKey: Map<string, string> = (() => {
   const map = new Map<string, string>();
   for (const reading of linkedReadings) {
     const key = readingKey(reading);
     if (key && !map.has(key)) map.set(key, linkedReadingHref(reading));
   }
-  const courseKeys = new Set<string>();
-  for (const paper of papers) {
-    if (paper.source.kind === "arxiv") continue;
-    const key = postKey(paper.source.postUrl);
-    const location = getContentLocation(paper.id);
-    if (!key || !location) continue;
-    const isExample = location.track.kind === "example";
-    if (courseKeys.has(key) && isExample) continue;
-    courseKeys.add(key);
-    map.set(key, location.href);
-  }
+  for (const [key, href] of coursePaperHrefByKey) map.set(key, href);
   return map;
 })();
 
@@ -67,4 +72,24 @@ export function resolveInternalReadingHref(href: string): string | null {
   const key = postKey(href);
   if (!key) return null;
   return internalHrefByKey.get(key) ?? null;
+}
+
+/**
+ * The course page for the paper whose source is the post artifact
+ * `artifactId`, or null if no course paper carries that post. Keyed
+ * site-agnostically for LessWrong (a lesswrong__-keyed artifact matches an
+ * alignmentforum-sourced paper and vice versa). The /readings route uses
+ * this to redirect old bookmarks when a linked reading is promoted to a
+ * course paper — promotion drops the registry entry, so the bare viewer
+ * would otherwise 404 URLs that used to work.
+ */
+export function coursePaperHrefForArtifact(artifactId: string): string | null {
+  const lw = parseLessWrongId(artifactId);
+  const key = lw
+    ? `lw:${lw.postId}`
+    : parseSubstackId(artifactId)
+      ? `sb:${artifactId}`
+      : null;
+  if (!key) return null;
+  return coursePaperHrefByKey.get(key) ?? null;
 }

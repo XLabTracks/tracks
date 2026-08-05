@@ -56,6 +56,13 @@ export interface Lesson {
    */
   contentRef: string;
   estimatedMinutes?: number;
+  /**
+   * Sidebar-only nesting: id of another item in the same module (usually the
+   * section's outline lesson) this item is a subsection of. The referenced
+   * item must appear earlier in the module's itemIds. Presentation only —
+   * routing, ordering, and progress are unaffected.
+   */
+  sectionItemId?: string;
 }
 
 // ---------------------------------------------------------------------------
@@ -224,6 +231,13 @@ export interface Paper {
    */
   optional?: true;
   estimatedMinutes?: number;
+  /**
+   * Sidebar-only nesting: id of another item in the same module (usually the
+   * section's outline lesson) this item is a subsection of. The referenced
+   * item must appear earlier in the module's itemIds. Presentation only —
+   * routing, ordering, and progress are unaffected.
+   */
+  sectionItemId?: string;
 }
 
 /** A module's ordered content items (Module.itemIds resolved). */

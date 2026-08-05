@@ -78,6 +78,40 @@ describe("content integrity", () => {
     }
   });
 
+  it("sectionItemId points at an earlier item in the same module", () => {
+    // Any non-undefined sectionItemId nests the sidebar row (the renderer
+    // checks !== undefined), so every authored value — "" included — must
+    // resolve; a truthiness guard here would let "" slip through as a
+    // phantom nested row.
+    const sectionOf = new Map<string, string>();
+    for (const l of lessons)
+      if (l.sectionItemId !== undefined) sectionOf.set(l.id, l.sectionItemId);
+    for (const p of papers)
+      if (p.sectionItemId !== undefined) sectionOf.set(p.id, p.sectionItemId);
+    for (const track of tracks) {
+      for (const m of getModulesForTrack(track.id)) {
+        for (const [i, id] of m.itemIds.entries()) {
+          const target = sectionOf.get(id);
+          if (target === undefined) continue;
+          expect(
+            target,
+            `${id}: sectionItemId must be a non-empty item id (empty string still renders as a nested row)`,
+          ).not.toBe("");
+          const targetIndex = m.itemIds.indexOf(target);
+          expect(
+            targetIndex,
+            `${id}: sectionItemId "${target}" must be an earlier item in module ${m.id}`,
+          ).toBeGreaterThanOrEqual(0);
+          expect(targetIndex, `${id}: sectionItemId "${target}" must precede it`).toBeLessThan(i);
+          expect(
+            sectionOf.has(target),
+            `${id}: sectionItemId "${target}" must itself be top-level (one nesting layer)`,
+          ).toBe(false);
+        }
+      }
+    }
+  });
+
   it("content ids are globally unique across lessons and papers", () => {
     const ids = [...lessons.map((l) => l.id), ...papers.map((p) => p.id)];
     expect(new Set(ids).size).toBe(ids.length);

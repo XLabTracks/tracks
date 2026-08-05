@@ -103,7 +103,7 @@ async function serve(
     // Dev fallback: let the deployed worker (origin from wrangler.jsonc vars)
     // serve the bytes; the browser retargets its range requests there.
     return Response.redirect(
-      `https://tracks.xlabtracks.workers.dev/videos/${key}`,
+      `https://aisafetytracks.com/videos/${key}`,
       307,
     );
   }

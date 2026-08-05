@@ -55,8 +55,40 @@
  *      the LAST definition, \let/\renewcommand cycles are broken (no
  *      duplication), \multirow nested in \multicolumn unwraps, and stripped
  *      counter-manipulation (\setcounter/\numberwithin/…) now warns.
+ * v22: \twocolumn[<title block>] (ICML front matter) and
+ *      \printAffiliationsAndNotice stripped instead of leaking as body text.
+ * v23–v25: single bump (v23/v24 never shipped) — plain \begin{tcolorbox}
+ *      [options] environments peel their option list and render as
+ *      ax-mdframed boxes; \newtcolorbox title chips drop unresolved-\ref
+ *      parentheticals and ignore near-white frame/coltitle colors
+ *      (white-on-white text).
+ * v26: superscript affiliation markers ("^ *1", "^2,3") split author runs
+ *      and are dropped from the rendered names.
+ * v27: metadata + fidelity fixes — ICML papers extract \icmltitle/\icmlauthor
+ *      into meta (Ctrl-Z rendered with no byline); author splitting drops
+ *      footnote-sentence residue ("Equal contribution, …"), splits
+ *      thin-space-glue name runs, and strips stray marker characters;
+ *      custom listing environments (\DeclareTCBListing/\newtcblisting/
+ *      \lstnewenvironment) rewrite to verbatim lstlisting pre-parse so raw
+ *      code bodies can't desync environment pairing (Ctrl-Z's appendix
+ *      rendered as literal TeX); direct \begin{tcolorbox}[title=…] renders
+ *      the same title chip as \newtcolorbox (braced, comma-holding values
+ *      included); the unresolved-\ref parenthetical cleanup only fires on
+ *      known label prefixes (sec:/fig:/…), so "(ratio a:b)" survives.
+ * v28: metadata robustness — author cells defuse name+affiliation glue
+ *      (\parbox "Name \\ MATS" truncates at the nested line break); \\ in a
+ *      title resolves to whitespace instead of eating the following word
+ *      ("…Learn to \\Resist…"); dropped title macros and rejected author
+ *      fragments now warn (partial losses were silent); \icmlauthor names
+ *      run the \thanks-strip + residue pipeline; \icmltitle beats a
+ *      coexisting pdf-stub \title; terminal periods of initials survive
+ *      end-trimming ("Ann B."); lowercase-stylized ("danah boyd"),
+ *      particle ("'t Hooft", "op den Akker"), and parenthetical
+ *      native-script names are accepted. Plus: \newtcblisting leading
+ *      init-options parse, environment rewriting is verbatim-aware, and
+ *      tcolorbox title parsing is brace-aware and unified.
  */
-export const CONVERTER_VERSION = 21;
+export const CONVERTER_VERSION = 28;
 
 export interface ConversionWarning {
   /** Stable machine code, e.g. "unknown-macro", "katex-error". */

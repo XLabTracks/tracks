@@ -5,6 +5,20 @@
  * spans and paper-specific spacing. Tokens come from the app theme, so
  * dark mode works untouched.
  */
+/*
+ * Un-layered ON PURPOSE: the post converters emit `<figure class="table">`,
+ * which collides with Tailwind's `.table` utility (display: table) in the
+ * utilities layer — that layer out-cascades anything in @layer components,
+ * so this override must stay outside all layers. A display:table figure
+ * shrink-wraps to the inner table's max-content width and blows past the
+ * reading column; block flow restores the column clamp and the inner
+ * table's own overflow-x scrolling.
+ */
+.arxiv-paper figure.table {
+  display: block;
+  max-width: 100%;
+}
+
 @layer components {
   .arxiv-paper {
     font-size: 0.875rem;
@@ -98,6 +112,45 @@
    */
   .arxiv-paper .katex .eqn-num {
     display: none;
+  }
+
+  /* Collapsed tail sections (references/appendix/footnotes — collapse-tail.ts).
+     Chevron: right-facing when closed, down-facing when open. */
+  .arxiv-paper details.ax-collapse > summary {
+    display: flex;
+    align-items: center;
+    gap: 0.6em;
+    cursor: pointer;
+    list-style: none;
+    user-select: none;
+  }
+  .arxiv-paper details.ax-collapse > summary::-webkit-details-marker {
+    display: none;
+  }
+  .arxiv-paper details.ax-collapse > summary::before {
+    content: "";
+    flex: none;
+    width: 0.5em;
+    height: 0.5em;
+    border-right: 2px solid var(--muted-foreground);
+    border-bottom: 2px solid var(--muted-foreground);
+    transform: rotate(-45deg);
+    transition: transform 150ms ease;
+  }
+  .arxiv-paper details.ax-collapse[open] > summary::before {
+    transform: rotate(45deg);
+  }
+  .arxiv-paper details.ax-collapse > summary > h2 {
+    margin: 0;
+  }
+  /* Print: a closed details prints as just its summary, dropping the whole
+     references/appendix/footnotes tail. PaperCollapse opens every block on
+     beforeprint; this covers engines that build the print layout without
+     firing the event (::details-content is ignored where unsupported). */
+  @media print {
+    .arxiv-paper details.ax-collapse::details-content {
+      content-visibility: visible;
+    }
   }
 
   /* Figures & tables */
@@ -350,6 +403,13 @@
     background: #ffffff;
     border-radius: 6px;
     padding: 6px;
+  }
+  /* TikZ compiles at TeX's pt scale, so standalone figure diagrams often
+     land tiny (~200px). SVGs upscale losslessly — give them a readable
+     floor without shrinking diagrams that are already large. */
+  .arxiv-paper figure img.ax-tikz {
+    min-width: min(30rem, 100%);
+    height: auto;
   }
 }
 

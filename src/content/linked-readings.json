@@ -236,12 +236,6 @@
     },
     {
       "kind": "lesswrong",
-      "id": "lesswrong__ceBpLHJDdCt3xfEok",
-      "url": "https://www.lesswrong.com/posts/ceBpLHJDdCt3xfEok/ai-catastrophes-and-rogue-deployments",
-      "title": "AI catastrophes and rogue deployments"
-    },
-    {
-      "kind": "lesswrong",
       "id": "lesswrong__d9FJHawgkiMSPjagR",
       "url": "https://www.lesswrong.com/posts/d9FJHawgkiMSPjagR/ai-control-improving-safety-despite-intentional-subversion",
       "title": "AI Control: Improving Safety Despite Intentional Subversion"
@@ -290,12 +284,6 @@
     },
     {
       "kind": "lesswrong",
-      "id": "lesswrong__jg3PuE3fYL9jq9zHB",
-      "url": "https://www.lesswrong.com/posts/jg3PuE3fYL9jq9zHB/win-continue-lose-scenarios-and-execute-replace-audit",
-      "title": "Win/continue/lose scenarios and execute/replace/audit protocols"
-    },
-    {
-      "kind": "lesswrong",
       "id": "lesswrong__KENtuXySHJgxsH2Qk",
       "url": "https://www.lesswrong.com/posts/KENtuXySHJgxsH2Qk/managing-catastrophic-misuse-without-robust-ais",
       "title": "Managing catastrophic misuse without robust AIs"
@@ -335,6 +323,12 @@
       "id": "lesswrong__r3xwHzMmMf25peeHE",
       "url": "https://www.lesswrong.com/posts/r3xwHzMmMf25peeHE/the-translucent-thoughts-hypotheses-and-their-implications",
       "title": "The Translucent Thoughts Hypotheses and Their Implications"
+    },
+    {
+      "kind": "lesswrong",
+      "id": "lesswrong__rf66R4YsrCHgWx9RG",
+      "url": "https://www.lesswrong.com/posts/rf66R4YsrCHgWx9RG/preventing-model-exfiltration-with-upload-limits",
+      "title": "Preventing model exfiltration with upload limits"
     },
     {
       "kind": "lesswrong",

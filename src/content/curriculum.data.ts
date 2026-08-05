@@ -135,15 +135,33 @@ export const modules: Module[] = [
     itemIds: [],
   },
   {
+    // Human-authored outline (course author's module 5 outline) merged with
+    // main's guided walkthroughs: opening talk and outline-stub lessons, then
+    // the two high-stakes papers as decision-forcing guided walkthroughs.
     id: "c-mod5",
     slug: "module-5",
     trackId: "control",
     title: "High-stakes control",
     summary:
-      "Two decision-forcing walkthroughs of high-stakes control protocols, one argued and one measured. The untrusted advice protocol is the boundary case where a safety argument substitutes for a control evaluation; basic legibility protocols run a full red-team/blue-team control evaluation to settle whether letting an untrusted model comment its code helps the monitor catch backdoors. Further content for this module is in development.",
+      "Opens with a talk on the high-stakes control roadmap, then three outline sections — what counts as high stakes, monitoring and mitigation, and environment construction — each with readings, from rogue-deployment threat models through control monitoring and Ctrl-Z's resampling protocols to why high-stakes research settings are hard to build. Closes with two decision-forcing walkthroughs of high-stakes control protocols, one argued and one measured: the untrusted advice protocol is the boundary case where a safety argument substitutes for a control evaluation; basic legibility protocols run a full red-team/blue-team control evaluation to settle whether letting an untrusted model comment its code helps the monitor catch backdoors. The section lessons are outline stubs while the full lessons are authored.",
     order: 5,
     prerequisiteModuleIds: ["c-intro", "c-mod2", "c-areas", "c-mod4"],
-    itemIds: ["c-paper-ua-guided", "c-paper-legibility-guided"],
+    itemIds: [
+      "c-mod5-talk",
+      "c-mod5-l1",
+      "c-paper-win-continue-lose",
+      "c-paper-rogue-deployments",
+      "c-paper-rogue-internal-external-apis",
+      "c-paper-systems-architecture",
+      "c-mod5-l2",
+      "c-paper-control-monitoring",
+      "c-paper-synchronous-monitors",
+      "c-paper-ctrl-z",
+      "c-mod5-l3",
+      "c-paper-settings-high-stakes",
+      "c-paper-ua-guided",
+      "c-paper-legibility-guided",
+    ],
   },
   {
     id: "c-lowstakes",
@@ -438,6 +456,38 @@ export const lessons: Lesson[] = [
     moduleId: "c-mod2",
     title: "Running the model",
     contentRef: "c-regimes-l2",
+  },
+  // --- Control, module 5 (high-stakes control): outline stubs from the
+  // course author's module outline — bodies carry the outline bullets and
+  // source links until the full lessons are authored. ---
+  {
+    id: "c-mod5-talk",
+    slug: "high-stakes-control-talk",
+    moduleId: "c-mod5",
+    title: "The high-stakes control roadmap (talk)",
+    contentRef: "c-mod5-talk",
+    estimatedMinutes: 30,
+  },
+  {
+    id: "c-mod5-l1",
+    slug: "what-is-high-stakes",
+    moduleId: "c-mod5",
+    title: "What is High Stakes?",
+    contentRef: "c-mod5-l1",
+  },
+  {
+    id: "c-mod5-l2",
+    slug: "monitoring-and-mitigation",
+    moduleId: "c-mod5",
+    title: "Monitoring and Mitigation",
+    contentRef: "c-mod5-l2",
+  },
+  {
+    id: "c-mod5-l3",
+    slug: "environment-construction",
+    moduleId: "c-mod5",
+    title: "Environment construction",
+    contentRef: "c-mod5-l3",
   },
   // --- Control: every reproduced reading in module 1 (with permission from
   // Redwood Research) now renders through the paper reader as a Paper item in

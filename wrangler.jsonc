@@ -45,7 +45,7 @@
   "vars": {
     // Public by nature (appears in OAuth URLs). Also set as a Workers Builds
     // build variable so NEXT_PUBLIC_ inlining picks it up at build time.
-    "NEXT_PUBLIC_WORKOS_REDIRECT_URI": "https://tracks.xlabtracks.workers.dev/callback"
+    "NEXT_PUBLIC_WORKOS_REDIRECT_URI": "https://aisafetytracks.com/callback"
   },
   // Secrets (set via `wrangler secret put`, never here): WORKOS_API_KEY,
   // WORKOS_CLIENT_ID, WORKOS_COOKIE_PASSWORD, OPENROUTER_API_KEY (grader

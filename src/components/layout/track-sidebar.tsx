@@ -287,6 +287,11 @@ function SidebarNav({
 function itemKey(item: ModuleItem): string {
   return item.kind === "lesson" ? item.lesson.id : item.paper.id;
 }
+function itemSectionItemId(item: ModuleItem): string | undefined {
+  return item.kind === "lesson"
+    ? item.lesson.sectionItemId
+    : item.paper.sectionItemId;
+}
 function itemSlug(item: ModuleItem): string {
   return item.kind === "lesson" ? item.lesson.slug : item.paper.slug;
 }
@@ -322,8 +327,11 @@ function SidebarItemRow({
 }) {
   const done = itemDone(item, completed);
   const active = pathname === href;
+  // Subsection rows (sectionItemId set) indent under their section's own
+  // nested border, mirroring the module-level rail above.
+  const nested = itemSectionItemId(item) !== undefined;
   return (
-    <li>
+    <li className={nested ? "border-border/70 ml-4 border-l pl-2" : undefined}>
       <Link
         href={href}
         onClick={onNavigate}

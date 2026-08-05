@@ -18,10 +18,12 @@ import { cn } from "@/lib/utils";
 
 const NAV = [
   { href: "/tracks", label: "Tracks" },
-  { href: "/exercises", label: "Exercises" },
+  // Exercises and Demos are hidden from the header for now — the routes stay
+  // live (deep links, lesson embeds), they're just not surfaced in the nav.
+  // { href: "/exercises", label: "Exercises" },
   { href: "/review", label: "Review" },
   { href: "/resources", label: "Resources" },
-  { href: "/demos", label: "Demos" },
+  // { href: "/demos", label: "Demos" },
 ];
 
 function initials(email: string, firstName?: string | null, lastName?: string | null) {

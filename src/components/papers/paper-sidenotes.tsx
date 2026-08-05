@@ -21,7 +21,9 @@ import { MARGIN_NOTES_LAYOUT_EVENT } from "./margin-notes-toggle";
  * Layout: the layer is absolutely positioned to the right of the reader
  * column (the .paper-reader div is position:relative). Note tops track
  * their marker's offset, pushed down as needed so notes never overlap;
- * everything recomputes on container resize (which also covers hide-marker
+ * long notes clamp to a ~6-line preview behind a Show more toggle
+ * (CLAMP_TRIGGER — expanding re-stacks the notes below); everything
+ * recomputes on container resize (which also covers hide-marker
  * toggles and image loads changing the page height). If the viewport
  * leaves less than MIN_WIDTH of gutter, the layer hides entirely — as it
  * does when the paper has no renderable note (no footnotes, or every marker
@@ -41,6 +43,13 @@ const NOTE_GAP = 12;
 const INSET_RESERVE = 288;
 /** Never squeeze the reading column below this to make room for the rail. */
 const MIN_TEXT_WIDTH = 600;
+/**
+ * Long-note preview: a note whose natural height passes this trigger (px)
+ * collapses to the CSS preview height (9em ≈ 6 lines of the 12px/1.5 body)
+ * behind a Show more toggle. The trigger sits ~3 lines past the preview so
+ * the toggle never reveals a sliver.
+ */
+const CLAMP_TRIGGER = 170;
 
 /** User preference — sidenotes are on unless explicitly turned off. */
 export const SIDENOTES_PREF_KEY = "tracks:sidenotes";
@@ -90,6 +99,10 @@ export function PaperSidenotes({ prefix }: { prefix: string }) {
       glowing = null;
       glowLayer.replaceChildren();
     };
+    // Notes the reader expanded past the long-note preview clamp — keyed by
+    // footnote number so the choice survives layer rebuilds (resize, the
+    // preference toggle) for the life of the reader.
+    const expandedNotes = new Set<string>();
 
     const rebuild = () => {
       clearGlow();
@@ -277,8 +290,30 @@ export function PaperSidenotes({ prefix }: { prefix: string }) {
         const content = document.createElement("div");
         content.className = "paper-sidenote-body";
         content.append(...Array.from(body.childNodes));
-        item.appendChild(content);
+        const main = document.createElement("div");
+        main.className = "paper-sidenote-main";
+        main.appendChild(content);
+        item.appendChild(main);
         layer.appendChild(item);
+        // Long notes collapse to a short preview so one sprawling footnote
+        // never dominates the rail. Measured after append — the natural
+        // height depends on the rail width just set. The toggle re-runs the
+        // whole pass (notes below re-stack); tabindex -1 like every other
+        // control in a clone (the canonical section keeps the full text).
+        if (content.scrollHeight > CLAMP_TRIGGER) {
+          const expanded = expandedNotes.has(number);
+          item.classList.toggle("paper-sidenote-clamped", !expanded);
+          const toggle = document.createElement("button");
+          toggle.type = "button";
+          toggle.className = "paper-sidenote-more";
+          toggle.tabIndex = -1;
+          toggle.textContent = expanded ? "Show less" : "Show more";
+          toggle.addEventListener("click", () => {
+            if (!expandedNotes.delete(number)) expandedNotes.add(number);
+            schedule();
+          });
+          main.appendChild(toggle);
+        }
         // A cloned image that hasn't loaded yet measures short, and the
         // observer watches only the container — not the absolute layer — so
         // re-measure when the clone's bytes arrive.

@@ -17,7 +17,10 @@ import {
   linkedReadingSource,
   type LinkedReading,
 } from "./registry";
-import { resolveInternalReadingHref } from "./resolve";
+import {
+  coursePaperHrefForArtifact,
+  resolveInternalReadingHref,
+} from "./resolve";
 
 // The linked-readings registry is generated (`npm run readings:build`) —
 // these tests pin its contract: every entry backs a ready committed artifact,
@@ -195,5 +198,34 @@ describe("resolveInternalReadingHref", () => {
     expect(resolveInternalReadingHref(`${reading.url}#section`)).toBeNull();
     expect(resolveInternalReadingHref("https://example.com/posts/x")).toBeNull();
     expect(resolveInternalReadingHref("not a url")).toBeNull();
+  });
+});
+
+describe("coursePaperHrefForArtifact", () => {
+  // Two linked readings were promoted to course papers (their registry
+  // entries dropped) — old /readings bookmarks must redirect to the course
+  // pages, and 20260804120000_remap_promoted_reading_highlights.sql remaps
+  // their highlight rows to the same targets. Pin both concrete mappings.
+  it("maps a promoted post's old artifact id to its course page", () => {
+    expect(coursePaperHrefForArtifact("lesswrong__jg3PuE3fYL9jq9zHB")).toBe(
+      getContentLocation("c-paper-win-continue-lose")!.href,
+    );
+    expect(coursePaperHrefForArtifact("lesswrong__ceBpLHJDdCt3xfEok")).toBe(
+      getContentLocation("c-paper-rogue-deployments")!.href,
+    );
+    // Site-agnostic: the mirror host's artifact id resolves to the same page.
+    expect(
+      coursePaperHrefForArtifact("alignmentforum__jg3PuE3fYL9jq9zHB"),
+    ).toBe(getContentLocation("c-paper-win-continue-lose")!.href);
+  });
+
+  it("returns null for registered linked readings and unknown ids", () => {
+    for (const reading of linkedReadings) {
+      expect(
+        coursePaperHrefForArtifact(reading.id),
+        `${reading.id}: a registered reading must render, not redirect`,
+      ).toBeNull();
+    }
+    expect(coursePaperHrefForArtifact("not-an-artifact-id")).toBeNull();
   });
 });

@@ -316,6 +316,14 @@ export function PaperHighlights({
   const [editingCommentId, setEditingCommentId] = useState<string | null>(null);
   /** Mirror for positionComments (a stable callback reading refs only). */
   const editingCommentIdRef = useRef<string | null>(null);
+  /**
+   * Margin boxes expanded past the note preview clamp (Show more). Display
+   * boxes show a ~3-line preview; positionComments flags actual overflow on
+   * the box (data-overflow), which is what reveals the toggle.
+   */
+  const [expandedNoteIds, setExpandedNoteIds] = useState<ReadonlySet<string>>(
+    () => new Set(),
+  );
   /** The group currently hover-promoted (text-hover or box-hover). */
   const hoveredGroupRef = useRef<string | null>(null);
   /** Ranges MOVED from the faded registry into the active one on hover. */
@@ -523,6 +531,19 @@ export function PaperHighlights({
       box.style.left = `${left}px`;
       box.style.width = `${width}px`;
     }
+    // With widths settled, flag boxes whose clamped preview actually hides
+    // text — CSS reveals the Show-more toggle off this attribute, so it
+    // must land before heights are measured (the toggle adds height). An
+    // expanded box has no clamp, so its flag simply clears (its Show-less
+    // toggle is React-rendered unconditionally).
+    for (const { box } of items) {
+      const text = box.querySelector<HTMLElement>("[data-note-text]");
+      if (!text) continue; // in-place editor mounted — nothing clamped
+      box.toggleAttribute(
+        "data-overflow",
+        text.scrollHeight > text.clientHeight + 1,
+      );
+    }
     const tops = stackCommentTops(
       items.map(({ rect, box }) => ({
         top: rect.top + window.scrollY + COMMENT_DROP,
@@ -712,10 +733,11 @@ export function PaperHighlights({
   }, [rows, resolveTick, gateSig, positionComments]);
 
   // A box swapping between display and inline-edit mode changes its height —
-  // restack the boxes below it in the same commit.
+  // restack the boxes below it in the same commit. Likewise a note preview
+  // expanding/collapsing (Show more).
   useEffect(() => {
     positionComments();
-  }, [editingCommentId, positionComments]);
+  }, [editingCommentId, expandedNoteIds, positionComments]);
 
   // Keep the margin notes tracking layout: container reflow (images, the
   // sidenote rail reserving/releasing its inset padding), viewport resizes,
@@ -1448,12 +1470,44 @@ export function PaperHighlights({
                       />
                     ) : (
                       <div className="px-2.5 py-2">
+                        {/* `block` only while expanded: line-clamp works by
+                            setting display:-webkit-box, and a `block` utility
+                            alongside it wins the display battle — the clamp
+                            silently never applies. */}
                         <span
                           aria-hidden
-                          className="line-clamp-6 block text-xs leading-relaxed"
+                          data-note-text=""
+                          className={`text-xs leading-relaxed ${
+                            expandedNoteIds.has(row.id) ? "block" : "line-clamp-3"
+                          }`}
                         >
                           {row.note}
                         </span>
+                        {/* Preview toggle: hidden until positionComments
+                            flags real overflow (data-overflow on the box —
+                            the `group`), always shown while expanded so the
+                            note can re-collapse. Untabbable like Edit:
+                            keyboard/SR users read the panel. */}
+                        <button
+                          type="button"
+                          tabIndex={-1}
+                          onClick={() =>
+                            setExpandedNoteIds((prev) => {
+                              const next = new Set(prev);
+                              if (!next.delete(row.id)) next.add(row.id);
+                              return next;
+                            })
+                          }
+                          className={`text-muted-foreground hover:text-foreground mt-1 text-[11px] font-medium underline decoration-dotted underline-offset-2 ${
+                            expandedNoteIds.has(row.id)
+                              ? "block"
+                              : "hidden group-data-[overflow]:block"
+                          }`}
+                        >
+                          {expandedNoteIds.has(row.id)
+                            ? "Show less"
+                            : "Show more"}
+                        </button>
                         <Button
                           type="button"
                           variant="ghost"
@@ -1521,12 +1575,15 @@ export function PaperHighlights({
                     disabled={miss !== undefined}
                     className="min-w-0 flex-1 text-left disabled:cursor-default"
                   >
-                    <span className="text-muted-foreground line-clamp-2 block text-sm">
+                    {/* No `block` next to line-clamp — it would override the
+                        clamp's display:-webkit-box (which is block-level
+                        already) and disable the truncation. */}
+                    <span className="text-muted-foreground line-clamp-2 text-sm">
                       {head.snippet}
                       {group.length > 1 && " …"}
                     </span>
                     {head.note && (
-                      <span className="mt-0.5 line-clamp-1 block text-sm">
+                      <span className="mt-0.5 line-clamp-1 text-sm">
                         {head.note}
                       </span>
                     )}

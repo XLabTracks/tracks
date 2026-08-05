@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import { ProfileNameForm } from "./profile-name-form";
 import { redirect } from "next/navigation";
 
+import Link from "next/link";
 import { getCurrentUser } from "@/lib/auth";
 
 export const metadata: Metadata = { title: "Account" };
@@ -36,6 +37,32 @@ export default async function AccountPage() {
             provider rather than here. To change it, sign in with the address
             you want to use — progress follows the account, not the browser.
           </p>
+        </div>
+
+        {/* The way back into a course's own cabinet. Whichever door somebody
+            opens — the avatar menu here, or the one in the course header —
+            they can reach the page that knows what they have actually done.
+            Without it this page is a dead end wearing the app's chrome, which
+            reads as the course cabinet having gone missing. */}
+        <div className="border-border/80 space-y-1 border-t pt-8">
+          <h2 className="text-sm font-medium">Your courses</h2>
+          <p className="text-muted-foreground text-sm">
+            This page is your name and email, which are the same everywhere.
+            What you have done lives in the course:
+          </p>
+          <ul className="mt-2 space-y-1">
+            <li>
+              <Link
+                className="text-sm underline underline-offset-4"
+                href="/verification/account"
+              >
+                Verification
+              </Link>{" "}
+              <span className="text-muted-foreground text-sm">
+                — your progress, cohort and written tasks.
+              </span>
+            </li>
+          </ul>
         </div>
 
         <div className="border-border/80 space-y-1 border-t pt-8">

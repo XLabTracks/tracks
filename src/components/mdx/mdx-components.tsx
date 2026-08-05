@@ -11,10 +11,16 @@ import { NextSteps } from "./next-steps";
 import { SiteQuote } from "./site-quote";
 import { VerificationExercise } from "@/components/verification/verification-exercise";
 import { Term } from "./term";
+import { CapstoneBank } from "./reader/capstone-bank";
+import { Check } from "./reader/check";
+import { GapFill } from "./reader/gap-fill";
+import { Src, SourceQuote } from "./reader/source-quote";
 
 // Components available by name inside every lesson `.mdx` body. Authors drop
 // <Video/>, <Demo/>, <Exercise/>, <ExerciseSequence/>, <Callout/>,
-// <ArxivPaper/>, <Footnote/>, <Term/>, <SiteQuote/>, <VerificationExercise/> directly into prose.
+// <ArxivPaper/>, <Footnote/>, <Term/>, <SiteQuote/>, <VerificationExercise/>,
+// <Check/>, <GapFill/>, <SourceQuote/>, <Src/> and <CapstoneBank/> directly
+// into prose.
 // Markdown links render through MdxLink, which routes known Substack /
 // LessWrong posts to the internal reader.
 export const mdxComponents: MDXComponents = {
@@ -30,4 +36,13 @@ export const mdxComponents: MDXComponents = {
   SiteQuote,
   VerificationExercise,
   Term,
+  // The reader blocks the Verification units were written against:
+  // a committed-then-revealed check, a word-bank gap fill, a reproduced
+  // passage with its attribution above it, a citation riding with its
+  // passage, and the capstone bank printed inside its unit.
+  CapstoneBank,
+  Check,
+  GapFill,
+  SourceQuote,
+  Src,
 };

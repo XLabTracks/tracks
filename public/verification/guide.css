@@ -4,7 +4,9 @@
 .guide-head { margin: 18px 0 10px; }
 .guide-head h1 { font-size: var(--fs-title); }
 .guide-head .sub { max-width: 62ch; margin: 10px 0 18px; font-size: var(--fs-md); line-height: 1.6; color: var(--muted-foreground); }
-.guide-tools { display: flex; align-items: center; gap: 12px; }
+/* Wraps: the search box asks for 260px and the counter beside it does not
+   wrap, so on a 320px screen the row ran off the side in every theme. */
+.guide-tools { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; }
 .guide-tools input {
   flex: 1 1 260px;
   max-width: 340px;

@@ -185,12 +185,14 @@
      1.4.6 Contrast (Enhanced, AAA) — 7:1 for body type. Here every pair is
        black against white at 21:1, because the mode exists for people for whom
        7:1 is the floor and not the target.
-     1.4.4 Resize text (AA) — 200%, applied with `zoom` rather than a root
-       font-size, because these stylesheets size in px and px does not follow
-       the root font.
-       Trap: zoom does NOT move the media queries. innerWidth stays 1280 and
-       every min-width rule keeps firing, so the multi-column arrangements have
-       to be unwound here by hand or the doubled type runs off the side.
+     1.4.4 Resize text (AA) — 200%, applied by re-solving the --fs- scale.
+       Every rule on these pages picks a step from it, so the scale is the
+       whole mechanism; a root font-size would do nothing, because these
+       stylesheets size in px and px does not follow the root font.
+     1.4.10 Reflow (AA) — no sideways scrolling at 320 CSS px. This is why
+       the type scale and not `zoom` carries the 200%: zoom shrinks the layout
+       viewport and leaves the media queries behind, so the page lays out in
+       half the room while every width rule still believes in the whole of it.
      2.5.5 Target Size (Enhanced, AAA) — 44x44 CSS px for anything pressable.
 
    Hue carries nothing at all in this mode. The five module colours collapse to
@@ -244,14 +246,74 @@
   --shadow-soft: none;
   --shadow-soft-lg: none;
   --glow: 0;
-  /* 1.4.4: everything at 200%.
-     Trap: `font-size: 200%` here does nothing you can see. These stylesheets
-     size in px, and px does not scale with the root font — only rem and em do.
-     `zoom` scales the whole box tree, px included, and it halves the layout
-     viewport as it goes, so the width media queries fire on their own and the
-     desktop grids stack without being told to. */
-  zoom: 2;
+
+  /* 1.4.4: type at 200%, and the type scale is the only thing doubled.
+     Every rule on these pages picks a --fs- step, so re-solving the scale
+     moves all of them and nothing else.
+
+     It is emphatically NOT `zoom: 2` on the root. Zoom scales the box tree,
+     which sounds like the same thing and is not: it halves the layout
+     viewport while leaving the media queries where they were, so a 320px
+     phone lays out in 160px of room and every width rule still believes it
+     has 320. That is a 1.4.10 Reflow failure by construction — content that
+     has to be scrolled sideways to read a line, which is the exact thing
+     this mode exists to spare somebody. Reflow only works if the layout sees
+     the real viewport, so the layout is left alone and the letters grow. */
+  --fs-2xs: 22px;
+  --fs-xs: 24px;
+  --fs-sm: 26px;
+  --fs-md: 28px;
+  --fs-lg: 32px;
+  --fs-xl: 36px;
+  --fs-2xl: 44px;
+  --fs-3xl: 56px;
+  --fs-4xl: 72px;
+  --fs-title: clamp(44px, 6.8vw, 72px);
+  --fs-hero: clamp(48px, 8.8vw, 104px);
 }
+
+/* A long word at 72px is wider than a 320px screen, and a heading that cannot
+   break is a horizontal scrollbar. Breaking is the lesser harm. */
+:root[data-theme='contrast'] { overflow-wrap: break-word; }
+
+/* 1.4.10, the rest of it: doubling the type does not move a layout, but it
+   does overrun the two things that were told never to give way — a line held
+   to one line, and a row told not to wrap. Both are fine at the default size
+   and both are a sideways scrollbar at twice it, so this mode releases them.
+   A data table is the one thing left scrolling in its own box, which the
+   criterion allows and the house rules already require. */
+:root[data-theme='contrast'] :is(
+  .brand, .nav a, .chip, .counter, .frac, .open-cue, .nb-count, .lock
+) { white-space: normal; }
+
+:root[data-theme='contrast'] :is(
+  .brand, .header-right, .guide-tools, .rt-row, .sort, .modes, .progress-row,
+  .gmod > .head, .control-row
+) { flex-wrap: wrap; }
+
+/* A flex item's floor is its own content, and a form control's content is
+   wider than it looks: an input reports the `size` attribute's twenty
+   characters, a select its longest option. At twice the type size that floor
+   is wider than the screen, and wrapping does not help — the item refuses to
+   shrink, so the row wraps around something already too wide. Zero is the
+   floor they need, and it has to reach the wrapper as well as the control:
+   a label holding a select is the item that will not give, and `max-width:
+   100%` on the select then resolves against the label's own overflow. */
+:root[data-theme='contrast'] :is(input, select, textarea) {
+  min-width: 0;
+  max-width: 100%;
+}
+:root[data-theme='contrast'] :is(
+  .control-row, .rt-row, .guide-tools, .sort
+) > * { min-width: 0; }
+/* The header pair is deliberately not in that list: it is sized by
+   --hdr-action-*, and a floor of zero there would let the two come apart
+   again. It reflows by wrapping instead. */
+
+/* Label above value rather than beside it: an 88px label column beside a
+   value is a two-column table, and at this size the value column has nothing
+   left to hold a word. */
+:root[data-theme='contrast'] .brief dl > div { grid-template-columns: minmax(0, 1fr); gap: 2px; }
 
 /* 2.5.5: 44x44 CSS px minimum for a pointer target. Declared on the mode
    rather than globally, because at the default size the compact chrome is
@@ -272,11 +334,21 @@
 
 /* The constellation is a scatter of labels positioned by trigonometry, not by
    layout; at this size it cannot be read, and the track page carries the same
-   list as text. */
-:root[data-theme='contrast'] .sky-wrap { display: none; }
+   list as text. The "Open the skill map" link below it is outside this element
+   on purpose — it is the way to the same graph and must survive.
 
-/* One column, everywhere. These are the min-width arrangements that keep
-   firing at 1280 because zoom leaves the media queries where they were. */
+   Trap: this selects the wrapper in landing.html, and a rename there silently
+   turns the rule off rather than breaking anything visible. It had already
+   happened once: the rule named `.sky-wrap`, which no longer exists, so the
+   scatter was rendering here with 16px-tall targets. */
+:root[data-theme='contrast'] .constellation { display: none; }
+
+/* One column, everywhere — now a choice rather than a repair. These used to be
+   here because zoom left the media queries believing in a width the layout no
+   longer had; with the layout reading the real viewport they fire correctly on
+   their own. They stay because at 200% type a three-column grid holds a
+   handful of words per line, and tracking from the end of one short line to
+   the start of the next is the reading problem this mode exists to remove. */
 :root[data-theme='contrast'] .objectives,
 :root[data-theme='contrast'] .modules,
 :root[data-theme='contrast'] .roster,
@@ -463,11 +535,18 @@ button, [role='button'], [role='radio'], [role='tab'], .chip, .nav a, .brand,
   align-items: center;
   gap: 10px;
 }
-:root[data-theme='contrast'] .header-right { --hdr-action-h: 44px; }
+/* At 200% type the label and the three 44px segments both outgrow the default
+   size, so the pair is given a bigger one rather than a fixed one it would
+   spill out of. */
+:root[data-theme='contrast'] .header-right { --hdr-action-w: 168px; --hdr-action-h: 54px; }
+
+/* A floor, not a fixed size: at the default size neither one's content reaches
+   it, so both settle on exactly the same number — which is the point. Setting
+   `width` instead would clip the label the moment the type grew. */
 .header-right .theme-switch,
 .header-right > .btn.small {
-  width: var(--hdr-action-w);
-  height: var(--hdr-action-h);
+  min-width: var(--hdr-action-w);
+  min-height: var(--hdr-action-h);
 }
 
 /* Three-way theme switch, drawn as radios rather than a cycling button: a

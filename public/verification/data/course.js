@@ -181,23 +181,28 @@ window.COURSE = {
         { id: '1.0', title: 'What kind of policy are we trying to verify?', kind: 'explainer', mins: '15–20 min',
           goal: 'Separate the goal, the legal rule and the verification claim — three different sentences that get confused constantly.',
           body: [
-            { p: 'Every policy carries three distinct statements, and a verification design that conflates them will check the wrong thing.' },
+            { p: 'A policy becomes enforceable when it is translated into claims about things in the world that evidence can reach. Those claims are built from four ingredients: **actors** (states, companies, cloud providers, researchers), **objects** (chips, clusters, models, weights, facilities), **activities** (acquisition, training, research, deployment, transfer) and **conditions** (thresholds, locations, purposes, exceptions, time periods).' },
+            { p: 'Assemble them and you get something checkable, where "don\'t build dangerous AI" was not. Inspectors can still disagree about whether the claim is true. They can no longer disagree about what it says.' },
+            { h: 'Three layers, kept separate' },
             { ul: [
-              '**Goal** — the outcome the policy exists to produce.',
-              '**Rule** — the legal text that binds an actor.',
-              '**Claim** — the specific proposition a verifier must establish as true or false.'
+              '**Goal** — what the policy exists to achieve: prevent premature ASI.',
+              '**Rule** — the obligation actually written into the treaty.',
+              '**Claim** — the proposition evidence must test.'
             ] },
+            { p: 'Each layer is narrower than the one above it. The NPT shows what the gaps cost: for decades the claim the IAEA could actually test was "declared material at declared facilities matches the declaration", and Iraq ran an undeclared program alongside inspections that passed. The Additional Protocol widened the claim. Neither the rule nor the goal had changed.' },
             { h: 'Thresholds are proxies' },
-            { p: 'Total training FLOP is the operative threshold unit in current practice, with the EU AI Act (10^25) and the rescinded EO 14110 (10^26) as the usual reference points. Compute is a proxy for capability, and every drawn line invites the actor to optimise against the line rather than the goal — Goodhart, in treaty form. The proxy is not a mistake; pretending it is the goal is.' },
+            { p: 'Total training FLOP is the operative threshold unit in current practice, with the EU AI Act (10^25) and the rescinded EO 14110 (10^26) as the usual reference points. Capability measures the thing we fear and we measure it badly; compute measures roughly the wrong thing precisely. Because a treaty trigger has to be checkable by a rival who does not trust you, this track uses compute — the same move the Limited Test Ban Treaty made in 1963, banning exactly the environments national technical means could police.' },
             { h: 'The menu, revisited' },
-            { p: 'Self-governance, unilateral restraint, domestic regulation, transparency coordination, compute controls, a nonproliferation regime, international joint development, a coordinated halt. Each is scored on effectiveness and feasibility. The convergent argument: if you accept the securitized framing from 0.3, design toward the full pause — mechanisms strong enough for a pause support everything weaker.' },
+            { p: 'There is no "the treaty" — there is a menu, and the options differ at the rule layer, so each generates different verification claims. Eleven buckets, from self-governance through transparency and compute controls to a coordinated halt, each carrying the closest historical precedent we have for it: what carries over, and where it breaks. The convergent argument: if you accept the securitized framing from 0.3, design toward the full pause — mechanisms strong enough for a pause support everything weaker.' },
             { h: 'Who pays' },
-            { p: 'Cost is not only money. Sovereignty, confidentiality, time, human capital and political capital are all currencies a policy spends, and compliance burden and verification burden are separate ledgers carried by different actors.' }
+            { p: 'Cost is not only money. Sovereignty, confidentiality, time, human capital and political capital are all currencies a policy spends, and compliance burden and verification burden are separate ledgers carried by different actors. A policy that is effective but unfeasible is bad; a policy that is feasible but ineffective is also bad.' }
           ],
           coverage: [
             'Goal vs. legal rule vs. verification claim',
+            'The four ingredients of a checkable claim: actors, objects, activities, conditions',
             'Threshold types: compute, capability, hardware, prohibited activities',
             'Proxy risk and Goodhart drift',
+            'The eleven policy buckets and their historical precedents',
             'Policy costs: who pays, in what currency'
           ],
           exercise: 'ex-policy-matrix' },
@@ -216,14 +221,14 @@ window.COURSE = {
             { p: 'The question that separates a verifiable provision from a statement of intent: **what observation would show this rule was broken?** If no answer exists, the provision cannot be verified regardless of what mechanisms you attach to it.' },
             { h: 'Explicit and implicit' },
             { p: 'Agreements leave things ambiguous on purpose — ambiguity is often what makes signature possible. The exercise asks you to mark what is left open and to say whether each ambiguity is load-bearing for the deal or a hole in the regime.' },
-            { p: 'The harder optional version compares two agreement models against each other and asks which of the seven recurring bones each one has: prover, verifier, declared thing, undeclared rule, access rights, confidentiality carve-out, response-to-violation clause.' }
+            { p: 'The harder optional version compares three agreements against each other — the MIRI pause agreement, a global compute-cap treaty, and the INF Treaty — and asks which of the seven recurring bones each one has: prover, verifier, declared thing, undeclared rule, access rights, confidentiality carve-out, response-to-violation clause.' }
           ],
           coverage: [
             'Decompose a provision: actors, objects, activities, conditions',
             'Falsifiability: what observation would show the rule was broken',
             'Explicit vs. implicit elements; deliberate ambiguity',
             'What the provision says happens on breach',
-            'Optional: compare two agreement models'
+            'Optional: compare three agreement models'
           ],
           exercise: 'ex-anatomy',
           output: 'Short brief: state the verification claim implied by one provision, and the single observation that would falsify compliance.' },
@@ -231,11 +236,15 @@ window.COURSE = {
         { id: '1.2', title: 'Actors', kind: 'interactive', mins: '25–30 min',
           goal: 'Map who holds the evidence, where the chain narrows, and what each actor is being paid to do.',
           body: [
+            { p: 'Suppose the US and China sign an agreement tomorrow: no training runs above some compute threshold for three months. Who, exactly, has to change their behaviour on Wednesday morning? Not the people who signed. Governments do not train frontier models, own the data centers, fabricate the chips or operate the clouds.' },
+            { h: 'Posture: the incentive vocabulary' },
+            { p: 'Any actor can **comply, defect, hide, exaggerate or free-ride**. These are postures, not personality types — the same actor can comply on one obligation, hide on another and free-ride on a third in the same quarter. The question is never "is this actor good", it is "what does this actor do under this rule, at this moment, given what it costs".' },
             { h: 'Public' },
             { ul: [
-              'States and international institutions — the United States and China first, then the semiconductor supply-chain states: Taiwan, the Netherlands, Japan, South Korea.',
-              'Within-state institutions: national regulators, foreign and defence ministries, intelligence agencies.',
-              'Candidate international verification bodies.'
+              'States and international institutions — the United States and China first, then the semiconductor supply-chain states: Taiwan, the Netherlands, Japan, South Korea. The EU matters as a rule-writer rather than a silicon hub.',
+              'Below the state: subnational regulation arrives earlier than federal. California SB 53 bound the leading labs to incident reporting and whistleblower protection before any international mechanism existed.',
+              'Inside the state: "the United States wants X" hides five institutions with different jobs — State, Commerce/BIS, Defense, the intelligence community, NIST/CAISI. When a proposal says "the US will verify", ask which building.',
+              'Above the state: the shelf marked "AI verification body" is empty. No agency holds a chip registry; no inspector has challenge-inspection rights at a data center.'
             ] },
             { h: 'Private' },
             { ul: [
@@ -243,16 +252,17 @@ window.COURSE = {
               'Contractors, resellers, proxy organizations and shell companies — the part of the map that exists to be hard to see.'
             ] },
             { h: 'The chain is concentrated and distributed at once' },
-            { p: 'Chokepoints are what make verification possible; distribution is what makes coordination necessary. Both facts are true of the same supply chain, and a regime that only notices one of them fails in a predictable direction.' },
-            { h: 'Five moves' },
-            { p: 'Any actor can **cooperate, defect, conceal, exaggerate or free-ride**. Roles are not fixed types: the same actor plays differently depending on the incentive structure it sits in. A. Q. Khan is the recurring archetype — dual-use legality, working the seams between jurisdictions.' }
+            { p: 'One EUV maker, a handful of leading-edge fabs, a few consequential chip designers, five or six hyperscale clouds, a few dozen labs that matter, millions of deployers. Chokepoints are what make verification possible; distribution is what makes coordination necessary. Both facts are true of the same supply chain, and a regime that only notices one of them fails in a predictable direction.' },
+            { h: 'Role: the second lens' },
+            { p: 'Public versus private says what an actor **is**, not what it **does** to you when you are verifying. Six functional roles cut across the first lens: capability holder, chokepoint controller, information holder, enforcement authority, evasion pathway, and victim/free-rider/beneficiary. Almost every important actor holds several at once — a cloud provider is all of the first four, and which one dominates depends on what the regime asks of it and what compliance costs.' },
+            { p: 'Three questions, in order, for any actor you meet for the rest of the course: where does it sit on the chain (position), what can it do inside a regime (role), what does it want right now (posture).' }
           ],
           coverage: [
-            'Public actors: states, regulators, intelligence agencies, international bodies',
+            'Public actors: states, subnational regulators, within-state institutions, international bodies',
             'Private actors: labs, cloud, chip designers, fabs, equipment, resellers, proxies',
             'Where the chain narrows enough for a control to attach',
-            'The five moves: cooperate, defect, conceal, exaggerate, free-ride',
-            'Historical parallel: Khan and the seams'
+            'The five postures: comply, defect, hide, exaggerate, free-ride',
+            'The six functional roles, and why one actor holds several'
           ],
           readings: [
             { t: 'Computing Power and the Governance of AI', a: 'Sastry, Heim, Belfield et al.', y: '2024' },
@@ -264,14 +274,15 @@ window.COURSE = {
         { id: '1.3', title: 'Upstream and downstream', kind: 'explainer', mins: '10–15 min',
           goal: 'No document is written in a vacuum. Know whose claims you inherited and who has to act on yours.',
           body: [
-            { p: 'Every verification artifact — a report, an assessment, a finding — is one link in a chain of actors, and both directions have to be made explicit.' },
+            { p: 'Every verification artifact — a report, an assessment, a finding — is one link in a chain of actors, and both directions have to be made explicit. The worked case is an IAEA team at Fordow in January 2023, because that inspectorate has been doing this at treaty scale for decades.' },
             { h: 'Upstream' },
-            { p: 'Whose claims does this document rely on, and which of them did I verify myself rather than inherit from the actor being checked? An assessment that silently rests on the subject\'s own declaration is a declaration wearing an assessment\'s clothes.' },
+            { p: 'Whose claims does this document rely on, and which of them did I verify myself rather than inherit from the actor being checked? An assessment that silently rests on the subject\'s own declaration is a declaration wearing an assessment\'s clothes. At Fordow, Iran\'s declaration and the operator\'s records agreed with each other — two sources from the same side, which is one actor being consistent with itself. The stream that could check them was the Agency\'s own: swipe samples, its seals and cameras, satellite imagery.' },
             { h: 'Downstream' },
-            { p: 'Who will act on this document, and what does each reader need in order to act? A finding that a decisionmaker cannot use is a finding that does not exist. This is where confidence grading starts: **confirmed, plausible, unresolved, unsupported** — and the grade has to survive being summarised.' }
+            { p: 'Who will act on this document, and what does each reader need in order to act? A finding that a decisionmaker cannot use is a finding that does not exist — and a finding written only as a determination gives outside analysts nothing to check. The Board needs a judgement against the safeguards standard; independent analysts need the discrepancy itself, dated and specific, so they can point their own collection at it. Effective verification writing does both. This is where confidence grading starts: **confirmed, plausible, unresolved, unsupported** — and the grade has to survive being summarised.' },
+            { p: 'The structure carries over to compute. A future report on a training run rests on the same three layers: the lab\'s declaration, the cloud provider\'s utilization logs, and the physical streams that are harder to fake — on-chip attestation, chip location tracking, measured power draw. The questions an inspector asks of a swipe sample are the questions you will ask of a power meter.' }
           ],
           coverage: [
-            'Upstream: whose claims a report inherits',
+            'Upstream: whose claims a report inherits, and which it verified itself',
             'Downstream: who acts, and what they need in order to act',
             'How much weight one source carries',
             'Confidence grading that survives compression'

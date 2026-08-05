@@ -8,10 +8,18 @@ import type { Lesson, Module, Track } from "@/lib/content/types";
 //
 // Content is transcribed from the course author's WIP outline
 // ("Verification Track Outline-2"), never paraphrased and never invented.
-// Module 0 is drafted there in full. Modules 1–4 are outlined but their prose
-// is still being written, so they ship as empty placeholders rather than as
-// filler that looks finished — an empty module counts as complete, so they do
-// not block anything.
+// Modules 0 and 1 are drafted there in full. Modules 2–4 are outlined but their
+// prose is still being written, so they ship as empty placeholders rather than
+// as filler that looks finished — an empty module counts as complete, so they
+// do not block anything.
+//
+// Module 1's prose lessons and its interactives interleave: each explainer sets
+// up the widget that follows it. Two places where the outline's own section
+// numbering and the platform's one-page-per-item shape disagree, resolved here:
+// the outline's 1.2 is split into an intro (v-actors) and the taxonomy tables
+// (v-actor-taxonomy) so the taxonomy's back-references to the supply-chain map
+// are true when read, and 1.3.2's Context Distiller keeps its authored prose
+// even though the interactive itself has not been ported.
 //
 // `order` runs 0-4, not 1-5. The outline numbers its modules M0-M4 and the UI
 // prints the number as the label, so starting at 1 would have the course
@@ -58,15 +66,23 @@ export const verificationModules: Module[] = [
     trackId: "verification",
     title: "Policy scoping & actors",
     summary:
-      "What kind of policy are we trying to verify, and who does a treaty rely upon, apply to, and constrain? Compute versus capability thresholds, the effectiveness/feasibility pair, the anatomy of a pause agreement, and the actor map across the compute supply chain.",
+      "What kind of policy are we trying to verify, and who does a treaty rely upon, apply to, and constrain? Compute versus capability thresholds, the effectiveness/feasibility pair, the anatomy of a pause agreement, the actor map across the compute supply chain, and the two directions every verification document faces — the claims it inherits and the readers who act on it.",
     order: 1,
     prerequisiteModuleIds: ["v-why"],
     itemIds: [
+      "v-scoping-intro",
+      "v-thresholds",
+      "v-tradeoffs",
       "v-policy-scoping",
+      "v-anatomy",
       "v-anatomy-drill",
-      "v-interactive-map",
+      "v-actors",
       "v-protocol-actors",
+      "v-interactive-map",
+      "v-actor-taxonomy",
+      "v-upstream-downstream",
       "v-report-constructor",
+      "v-context-distiller",
     ],
   },
   {
@@ -171,11 +187,39 @@ export const verificationLessons: Lesson[] = [
     contentRef: "v-ir-primer",
   },
   {
+    id: "v-scoping-intro",
+    slug: "what-are-we-verifying",
+    moduleId: "v-scoping",
+    title: "Introduction: what kind of policy are we trying to verify?",
+    contentRef: "verification/scoping-intro",
+  },
+  {
+    id: "v-thresholds",
+    slug: "thresholds",
+    moduleId: "v-scoping",
+    title: "Thresholds: compute vs. capability",
+    contentRef: "verification/thresholds",
+  },
+  {
+    id: "v-tradeoffs",
+    slug: "effective-and-feasible",
+    moduleId: "v-scoping",
+    title: "Policies must be effective and feasible",
+    contentRef: "verification/tradeoffs",
+  },
+  {
     id: "v-policy-scoping",
     slug: "policy-scoping",
     moduleId: "v-scoping",
     title: "Policy sorting: effectiveness x feasibility",
     contentRef: "v-policy-scoping",
+  },
+  {
+    id: "v-anatomy",
+    slug: "anatomy",
+    moduleId: "v-scoping",
+    title: "Anatomy of a (pause) agreement",
+    contentRef: "verification/anatomy",
   },
   {
     id: "v-anatomy-drill",
@@ -185,6 +229,20 @@ export const verificationLessons: Lesson[] = [
     contentRef: "v-anatomy-drill",
   },
   {
+    id: "v-actors",
+    slug: "actors",
+    moduleId: "v-scoping",
+    title: "Actors: who does the treaty rely upon, apply to, and constrain?",
+    contentRef: "verification/actors",
+  },
+  {
+    id: "v-protocol-actors",
+    slug: "protocol-actors",
+    moduleId: "v-scoping",
+    title: "Who’s in the treaty?",
+    contentRef: "v-protocol-actors",
+  },
+  {
     id: "v-interactive-map",
     slug: "interactive-map",
     moduleId: "v-scoping",
@@ -192,11 +250,18 @@ export const verificationLessons: Lesson[] = [
     contentRef: "v-interactive-map",
   },
   {
-    id: "v-protocol-actors",
-    slug: "protocol-actors",
+    id: "v-actor-taxonomy",
+    slug: "actor-taxonomy",
     moduleId: "v-scoping",
-    title: "Actor taxonomy",
-    contentRef: "v-protocol-actors",
+    title: "The actor taxonomy: position, role, posture",
+    contentRef: "verification/actor-taxonomy",
+  },
+  {
+    id: "v-upstream-downstream",
+    slug: "upstream-and-downstream",
+    moduleId: "v-scoping",
+    title: "Upstream and downstream",
+    contentRef: "verification/upstream-downstream",
   },
   {
     id: "v-report-constructor",
@@ -204,6 +269,13 @@ export const verificationLessons: Lesson[] = [
     moduleId: "v-scoping",
     title: "Context-specific report constructor",
     contentRef: "v-report-constructor",
+  },
+  {
+    id: "v-context-distiller",
+    slug: "context-distiller",
+    moduleId: "v-scoping",
+    title: "Context distiller",
+    contentRef: "verification/context-distiller",
   },
   {
     id: "v-inspection-game",

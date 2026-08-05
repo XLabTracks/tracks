@@ -336,10 +336,11 @@ and they share no files:
    `src/content/lessons`, so the subfolder needs no loader change. Trap:
    `importLesson()` swallows a failed dynamic import into `notFound()`, so a
    wrong `contentRef` looks like an ordinary 404 and typecheck stays green —
-   check a lesson route against a running server, not just `tsc`. Module 0 is
-   transcribed from the author's WIP outline; modules 1–4 are declared with no
-   items until their prose is drafted (an empty module counts as complete, so
-   they gate nothing).
+   check a lesson route against a running server, not just `tsc`. Modules 0 and
+   1 are transcribed from the author's WIP outline, prose lessons interleaved
+   with the interactives they set up; modules 2–4 are declared with no items
+   until their prose is drafted (an empty module counts as complete, so they
+   gate nothing).
 2. **The standalone static site** under `public/verification/` — plain
    HTML/CSS/JS in sibling files, no build step, served straight off the
    worker. The app serves it but never compiles it: the folder is outside

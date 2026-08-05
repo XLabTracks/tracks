@@ -436,26 +436,36 @@ The static site's own mechanics, for as long as it exists:
   feeds no meter and completes nothing. `{check}`/`{gap}` reuse `.opt` and
   `.ex-feedback` from `exercise.css` and hook on their own `.copt`/`.word`
   classes, so the exercise engine's own listeners are never in play.
-- **2.2 Cloud is the one fully drafted unit** — 48 parts, ten checks, six
+- **2.2 Cloud exists on both sides, and they are not the same content.** The
+  app track's `cloud-*.mdx` lessons are the author's outline transcribed; the
+  static site's unit below is built from the four sources with checks, gaps
+  and quoted passages, and uses reader features (`{sec}`/`{check}`/`{gap}`/
+  `{quote}`) that only `module.js` has. So the generator this section calls
+  for cannot simply overwrite one with the other — merging them is a content
+  decision plus a port of those four block kinds, not a data move. Until then
+  this is the widest part of the duplication, and it was widened knowingly:
+  see the commits, not a silent drift.
+- **The static site's 2.2 Cloud is fully drafted** — 48 parts, ten checks, six
   gap-fills and a twelve-item gate, carried over from the module-2.2 build in
   `tracksprogramplayground` by a one-shot transform over that page's data and
   verified there against the full texts. Its four sources have **different
   reuse terms and the unit cites them four ways**: the two arXiv papers (Heim
   et al. 2024; Egan & Heim 2023) are CC BY 4.0 and quoted freely; RAND
-  RR-A3686-1 and the Carnegie piece are all-rights-reserved, so what is
-  reproduced from them is the text their publishers put on the open web
-  (RAND's own Key Takeaways and Recommendations; four short Carnegie
-  passages), and their body arguments stay paraphrase with page citations.
+  RR-A3686-1 and the Carnegie piece are all-rights-reserved and are
+  reproduced on the author's instruction — RAND from the report itself
+  (Findings, Recommendations, and the body passages behind 2.2.3), Carnegie
+  from the article as published.
   A `{quote}` block is the shape reproduction takes — **attribution first,
   then the words**: the work, which part of it, the authors, and a link out,
   all above the passage, so the two can never be read apart. `{read}`-style
   reading cards do the same job for the sources themselves (title links out,
   why-this-unit-sends-you-there, then `author · year · length · licence`).
   The open verification-log row (RAND's permissions page, HTTP 403) is
-  recorded in the comment above the unit. Trap noted there too: the RAND body
-  PDF is AES-encrypted but its permission bits *do* allow extraction — a
-  longer excerpt should be a decision someone makes on purpose, not a side
-  effect of a script that could.
+  recorded in the comment above the unit — reproduction there is the author's
+  decision, not an inference from terms nobody could read. Trap noted there
+  too: the RAND PDF is AES-encrypted, so a fetched copy carries no text
+  layer; these quotes came from the file the author supplied. Ask for the
+  file rather than assuming a download will read.
 - **Progress is one set of completed unit ids** in `localStorage` under
   `vt-progress`; everything else is derived at read time. Never persist a
   derived value, and nothing auto-completes on scroll, or on reaching the last
@@ -480,6 +490,24 @@ The static site's own mechanics, for as long as it exists:
   the same briefs as a picker — 4.2 is the live one. Their shared glyph
   vocabulary is `VT.bank` in `platform.js`, so status and difficulty cannot
   drift between the two.
+- **Enrolling is an app route, not a static page**, because it needs a session
+  and a row: `/verification/enroll` (apply, edit, withdraw) and
+  `/verification/applications` (the reviewers' queue) live in `src/app/`
+  under the same URL prefix as the static pages, and wear the same chrome
+  because `isVerificationRoute()` matches the prefix. Nothing exists at those
+  paths in `public/verification/`, and putting a file there would silently
+  take the URL. The cohort and the question list are
+  `src/lib/verification/application.ts` — the form renders whatever it finds
+  and the action validates against the same list, so a new question is one
+  object and never a migration (answers are a JSON map keyed by question id;
+  a question `id` is a storage key and is permanent). Reviewers are
+  `VERIFICATION_REVIEWERS`, a comma-separated email list that **fails
+  closed** — unset means the queue 404s for everyone, and the check runs in
+  `generateMetadata` as well as the page because static metadata flushes the
+  head and commits a 200 before a component can throw. Needs
+  `db/migrations/20260805150000_verification_applications.sql` applied by
+  hand; until then both pages say the table is missing rather than failing at
+  submit.
 
 **Prerequisites & progress.** `Track.prerequisiteEnforcement` is `soft` (warn)
 or `hard` (lock); `isAccessLocked()` (pure, tested) + `getPrerequisiteStatus()`

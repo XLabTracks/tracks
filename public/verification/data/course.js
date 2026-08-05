@@ -346,26 +346,25 @@ window.COURSE = {
            Four sources, four sets of reuse terms, so the unit cites them four
            ways. The two arXiv papers are CC BY 4.0: quoted freely, attributed
            in every {src} line. RAND RR-A3686-1 and the Carnegie piece are
-           both all-rights-reserved, so what is reproduced from them is the
-           text their publishers put on the open web — RAND's own Key
-           Takeaways and Recommendations, four short passages from the
-           Carnegie article — each in a {quote} card that names the work, the
-           part of it, and the authors before the words themselves, and links
-           out. Their body arguments stay paraphrase with page citations.
+           all-rights-reserved and are reproduced on the author's instruction,
+           in {quote} cards that name the work, the part of it, and the
+           authors before the words themselves, and link out. RAND is quoted
+           from the report (Veronica supplied the PDF); Carnegie from the
+           article as published.
 
-           Trap: the RAND body PDF is AES-encrypted. Its permission bits do
-           allow text extraction (/P -1036 sets bit 5), so this is a locked
-           door with a sign saying you may enter — but nothing beyond the
-           published web text has been lifted through it, and a longer excerpt
-           should be a decision someone makes on purpose rather than a side
-           effect of a script that could.
+           Trap: the RAND PDF is AES-encrypted, so a fetched copy yields
+           nothing without a text layer — the quotes here came from the file
+           the author provided, decoded with poppler. Its permission bits do
+           allow extraction (/P -1036 sets bit 5), but if these passages ever
+           need re-checking, ask for the file rather than assuming a download
+           will read.
 
            Verification log — one open row:
              claim                      | source | status
              RAND reuse/quotation terms | rand.org/pubs/permissions.html | UNCHECKED
-               (HTTP 403 on fetch, 2026-08-05). Handled by reproducing only
-               what RAND publishes openly on the report's own landing page.
-               Recheck before excerpting from the PDF body. */
+               (HTTP 403 on fetch, 2026-08-05). Reproduction here is the
+               author's decision, not an inference from the terms; the row
+               stays open until the page can be read. */
 
         { id: '2.2', title: 'Cloud', kind: 'interactive', mins: '~2 hours',
           goal: 'The provider sits between the customer and the machines. What can the landlord of the compute see, record, verify, and switch off — and where does that oversight run out?',
@@ -655,18 +654,27 @@ window.COURSE = {
           { quote: {
             t: 'Strategies and Detection Gaps in a Game-Theoretic Model of Compute Governance',
             url: 'https://www.rand.org/pubs/research_reports/RRA3686-1.html',
-            what: 'Key Takeaways, published with the report',
+            what: 'Findings, p. iv',
             by: 'Moon, Vedula, Geneson & Bar-on · RAND Corporation, RR-A3686-1 · 2025',
             text: [
-              'Cloud service providers might not be able to report and detect AI training if they are only obligated to monitor and report activity based on floating-point operation thresholds in future AI governance policy.',
-              'In the future, many types of capable AI models will likely exist whose training will be hard to detect. The authors outline strategies for cloud service providers that could aid with AI training detection in cloud computing environments.'
+              'Cloud service providers might not be able to report and detect AI training if they are obligated to monitor and report activity based only on floating-point operation thresholds in future AI governance policy.',
+              'In the future, many types of capable AI models will likely exist whose training will be hard to detect. We outline strategies for cloud service providers that could aid with AI training detection in cloud computing environments.'
             ] } },
-        { src: 'Quoted from the published summary of Moon, Vedula, Geneson & Bar-on, *Strategies and Detection Gaps in a Game-Theoretic Model of Compute Governance*, RAND RR-A3686-1 (2025) — [rand.org](https://www.rand.org/pubs/research_reports/RRA3686-1.html).' },
+        { src: 'Quoted from Moon, Vedula, Geneson & Bar-on, *Strategies and Detection Gaps in a Game-Theoretic Model of Compute Governance*, RAND RR-A3686-1 (2025) — [rand.org](https://www.rand.org/pubs/research_reports/RRA3686-1.html).' },
         { h: 'Sequential training' },
         { p: 'The winning move is embarrassingly simple. Take BLOOM — a real, public 176-billion-parameter model, about 5.8 × 10²³ operations of training. The threshold in RAND’s setup (from the executive order’s rule for bio-sequence models): 10²³ operations per account. Trained in one piece, BLOOM crosses it.' },
         { p: 'Now split: **58 sessions of 10²² operations each**, run one after another, each handing its weights to the next, across accounts the provider cannot link. No session crosses the line. Nothing is ever recorded.' },
         { p: 'In the model, this strategy *always wins* against a threshold-only monitor. It is the $9,900 deposit — with GPUs.' },
         
+          { quote: {
+            t: 'Strategies and Detection Gaps in a Game-Theoretic Model of Compute Governance',
+            url: 'https://www.rand.org/pubs/research_reports/RRA3686-1.html',
+            what: 'The sequential-training result, p. 6',
+            by: 'Moon, Vedula, Geneson & Bar-on · RAND Corporation, RR-A3686-1 · 2025',
+            text: [
+              'Suppose a CSP chooses to report only based on the thresholds above. Then, we argue, there is a way for the evader to train BLOOM without being detected. It suffices to show that there is at least one evader strategy that always wins against the CSP, which we call sequential training.',
+              'So, if the evader chooses instances with 384 GPUs with maximum compute capacity 1.5 × 10¹⁴ FLOP/s/GPU, like in the BLOOM training run, its instances will remain under 10²⁰ FLOP/s, and the only relevant threshold is for total floating-point or integer operations. Then the entire training run for BLOOM could be accomplished through 58 distinct instances of 10²² FLOPs accomplished at a rate of 5.76 × 10¹⁶ FLOP/s, without exceeding the threshold for total FLOPs. Under our hardware assumptions, each instance would take roughly two days.'
+            ] } },
         { src: 'Moon, Vedula, Geneson & Bar-on, *Strategies and Detection Gaps in a Game-Theoretic Model of Compute Governance*, RAND RR-A3686-1 (2025) — [rand.org](https://www.rand.org/pubs/research_reports/RRA3686-1.html), pp. 5–6.' },
         { gap: {
           lead: 'The RAND result, in one line.',
@@ -679,6 +687,15 @@ window.COURSE = {
         { p: 'Generalize it. Between “too small to matter” and “too big to hide” lies a band of models — roughly 10²³ to 10²⁶ operations in the RAND setup — that threshold-only monitoring simply does not see.' },
         { p: 'The band is not empty, and it is not static: as specialized models (biology, chemistry) get more capable per operation, more of what matters fits inside the gap. A threshold calibrated today describes yesterday’s models.' },
         
+          { quote: {
+            t: 'Strategies and Detection Gaps in a Game-Theoretic Model of Compute Governance',
+            url: 'https://www.rand.org/pubs/research_reports/RRA3686-1.html',
+            what: '"Finding Detection Gaps", p. 5',
+            by: 'Moon, Vedula, Geneson & Bar-on · RAND Corporation, RR-A3686-1 · 2025',
+            text: [
+              'We argue that, according to the historical compute thresholds set by previous attempts at compute regulation, there is a detection gap for models trained within a floating-point training compute cost in the range between 10²³ and 10²⁶ operations.',
+              'In the near term, as specialized models are developed for specific tasks within application domains, such as computational biology, more models will fill the 10²³- to 10²⁶-operation detection gap.'
+            ] } },
         { src: 'Moon, Vedula, Geneson & Bar-on, *Strategies and Detection Gaps in a Game-Theoretic Model of Compute Governance*, RAND RR-A3686-1 (2025) — [rand.org](https://www.rand.org/pubs/research_reports/RRA3686-1.html), p. 5.' },
         { h: 'What closes gaps' },
         { p: 'The counter is not better paperwork — it is **more channels**:' },
@@ -689,6 +706,17 @@ window.COURSE = {
           '**Power draw** — sustained training burns power at rates little else matches (BLOOM: roughly 3,600 kWh per day).'
         ] },
         { p: 'Every evasion of these costs the evader real efficiency. That is the design goal: not “evasion impossible” but “evasion expensive and loud.”' },
+          { quote: {
+            t: 'Strategies and Detection Gaps in a Game-Theoretic Model of Compute Governance',
+            url: 'https://www.rand.org/pubs/research_reports/RRA3686-1.html',
+            what: '"Closing Detection Gaps", pp. 9–10',
+            by: 'Moon, Vedula, Geneson & Bar-on · RAND Corporation, RR-A3686-1 · 2025',
+            text: [
+              'Assuming that training data are kept together during training, large and sudden data transfers into new accounts should capture training activity.',
+              'Dividing training across different clusters of GPUs is prohibitively expensive with current models; for example, recent efforts by Google to implement distributed training of a large neural network required 32 times the baseline number of colocated training units to fully train the model.',
+              'In the context of detection, the combination of a high number of MAC operations and a low number of distinct instruction types would imply a likelihood that an algorithm executed on cloud resources is a training algorithm. […] Adversarial evaders could try to avoid detection by this threshold by executing unrelated algorithms in between or during training activities, to reduce the total ratio of MAC operations, but this would come at a cost to training efficiency.',
+              'BLOOM required 433,196 kWh of energy across approximately 118 days, working out to an approximate average rate of 3,600 kWh per day. This figure is an order of magnitude greater than the highest average daily household energy use rate across U.S. states.'
+            ] } },
         { src: 'Moon, Vedula, Geneson & Bar-on, *Strategies and Detection Gaps in a Game-Theoretic Model of Compute Governance*, RAND RR-A3686-1 (2025) — [rand.org](https://www.rand.org/pubs/research_reports/RRA3686-1.html), pp. 9–10.' },
         { check: {
           q: 'Why does splitting one training run into 58 sub-threshold chunks defeat a FLOP-threshold monitor?',
@@ -708,11 +736,11 @@ window.COURSE = {
           { quote: {
             t: 'Strategies and Detection Gaps in a Game-Theoretic Model of Compute Governance',
             url: 'https://www.rand.org/pubs/research_reports/RRA3686-1.html',
-            what: 'Recommendations, published with the report',
+            what: 'Recommendations, p. iv',
             by: 'Moon, Vedula, Geneson & Bar-on · RAND Corporation, RR-A3686-1 · 2025',
             text: [
-              'To develop effective AI governance, policymakers should support efforts to find detection gaps in compute-based monitoring schemes.',
-              'Policymakers should continue to pursue both compute- and noncompute-based AI governance.',
+              'To develop effective AI governance, policymakers should support efforts to find detection gaps in compute-based monitoring schemes. These efforts should change and adapt with technological progress in AI.',
+              'Policymakers should also continue to pursue both compute- and noncompute-based AI governance.',
               'Continuing research into effective thresholds for compute monitoring is required to create a robust compute-based monitoring framework that can adapt to technological progress.'
             ] } },
         { src: 'Moon, Vedula, Geneson & Bar-on, *Strategies and Detection Gaps in a Game-Theoretic Model of Compute Governance*, RAND RR-A3686-1 (2025) — [rand.org](https://www.rand.org/pubs/research_reports/RRA3686-1.html), recommendations.' },
@@ -850,7 +878,7 @@ window.COURSE = {
             { t: 'Strategies and Detection Gaps in a Game-Theoretic Model of Compute Governance',
               a: 'Moon, Vedula, Geneson & Bar-on — RAND, RR-A3686-1', y: '2025', len: '25 pages',
               url: 'https://www.rand.org/pubs/research_reports/RRA3686-1.html',
-              note: 'The counterweight in 2.2.3: a monitor watching only FLOP thresholds provably loses to sequential training. The report\'s own Key Takeaways and Recommendations are reproduced in 2.2.3 with attribution; the body argument — sequential training, the detection gap, the added metrics — is paraphrased with page citations.' },
+              note: 'The counterweight in 2.2.3: a monitor watching only FLOP thresholds provably loses to sequential training. Its Findings, Recommendations, and the body passages behind 2.2.3 — the detection gap, the sequential-training result, the four gap-closing metrics — are reproduced there with attribution and page numbers.' },
             { t: 'The Geopolitical Debates Over Controlling Cloud Compute',
               a: 'Tan — Carnegie Endowment for International Peace', y: '5 May 2026',
               url: 'https://carnegieendowment.org/research/2026/05/the-geopolitical-debates-over-controlling-cloud-compute',

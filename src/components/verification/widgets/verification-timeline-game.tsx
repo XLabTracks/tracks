@@ -554,12 +554,12 @@ function MapHub({
         <button
           type="button"
           onClick={() => onNodeClick("fork")}
-          className="border-primary/40 bg-primary/5 hover:bg-primary/10 focus-visible:ring-ring rounded-xl border-2 border-dashed px-5 py-3 text-center transition-colors focus-visible:ring-2 focus-visible:outline-none"
+          className="border-border bg-primary/5 hover:bg-primary/10 focus-visible:ring-ring rounded-xl border-2 border-dashed px-5 py-3 text-center transition-colors focus-visible:ring-2 focus-visible:outline-none"
         >
           <p className="text-muted-foreground font-mono text-[10px] tracking-[0.14em] uppercase">
             {COPY.forkNodeLabel}
           </p>
-          <p className="text-primary mt-1 text-sm font-semibold tracking-wide">
+          <p className="text-foreground mt-1 text-sm font-semibold tracking-wide">
             {beginLabel}
           </p>
         </button>

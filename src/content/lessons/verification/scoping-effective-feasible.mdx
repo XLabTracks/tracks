@@ -1,0 +1,163 @@
+# 1.0.2 Policies must be effective and feasible
+
+Interactive: rank different possible anti-ASI policies (i.e., from a more moderate slowdown to total pause) on inversely correlated axes of effectiveness and feasibility. Goal: develop cost-framework intuition. Justify course framing around a full pause policy because of ASI securitization.
+
+<Callout variant="tip" title="Task">
+
+[interactive pop-up] Everything comes with a cost. Think about any policy you hold a strong belief in. Now, think of a downside or negative consequence of enforcing that policy. How easy was it to come up with a con? The question every policymaker should be asking is not just: what do we want to accomplish? Rather, it should be: what are we willing to compromise for the advancement of our goals?
+
+</Callout>
+
+prototype
+
+You can think about maximizing the positive impact of a policy by evaluating it along two axes: effectiveness and feasibility. Say your goal was to reduce carbon emissions. An immediate global ban on fossil fuel extraction would eradicate emissions overnight, but is all but completely unenforceable. No economy could withstand the shock; no major emitter would comply. On the other hand, voluntary self-reported emission pledges are easy to agree with—but precisely because they are impossible to enforce. Any country and company could happily sign while continuing to emit. In other words, a policy that is effective but unfeasible is bad; a policy that is feasible but ineffective is also bad.
+
+<Callout variant="tip" title="Task">
+
+#### The Limited Test Ban Treaty (1963): verifiability decided what could be banned
+
+The 1963 treaty banned nuclear tests in the atmosphere, in space, and underwater, but not underground. The reason is pure verification design. Atmospheric tests could be detected worldwide by existing means, monitoring stations picking up radioactive debris and, later, satellites and seismic arrays, without any inspection inside the other country. Underground tests could not be reliably distinguished from earthquakes at the time and would have required on-site inspection the Soviets would not grant. So the treaty covered exactly the environments that national technical means could police and left out the one they could not.
+
+</Callout>
+
+In the following exercise, you will develop intuitions with this effectiveness-feasibility tradeoff framework in the context of ASI development. Should governments agree to a more moderate slow-down or a more drastic pause? Should you compromise ambition or real-world enforceability?
+
+https://glittering-arithmetic-c0a211.netlify.app/policy-scoping.html
+
+Sort the following policy buckets on the feasibility x effectiveness matrix.
+
+- Self-governance (status quo): voluntary lab commitments such as RSPs and safety frameworks; no external enforcement, and race dynamics persist.
+  - Asilomar, 1975: molecular biologists voluntarily paused recombinant DNA experiments and wrote their own safety guidelines at the Asilomar conference. Self-governance worked for a while because the research community was small and shared norms, but it later hardened into formal NIH rules. The AI parallel: lab commitments can precede regulation, but they historically survive only until commercial pressure or new entrants arrive.
+- Unilateral restraint: one state halts or caps its own frontier development alone, hoping others reciprocate.
+  - US bioweapons renunciation, 1969: President Nixon unilaterally terminated the entire American offensive biological weapons program with no reciprocal commitment from the Soviet Union. The gamble partly paid off, helping produce the Biological Weapons Convention in 1972. The cautionary half: the USSR signed and then secretly expanded its own program (Biopreparat), showing what unilateral restraint risks without verification.
+- Uncoordinated domestic regulation: each state licenses, audits, and sets safety requirements for its own developers, with no international layer.
+  - Human germline editing, 2010s: countries independently banned, restricted, or left unregulated heritable genome editing, with no international coordination. The He Jiankui affair in 2018 (CRISPR babies, conducted in China partly because oversight gaps existed there) showed the core weakness of a pure patchwork: research migrates to the most permissive jurisdiction.
+- Transparency and information-sharing: incident reporting, model registries, notification of large training runs. The disclosure infrastructure most later options depend on.
+  - US-Soviet launch notifications, 1988: the Ballistic Missile Launch Notification Agreement required each side to notify the other before ICBM and SLBM test launches. Nothing was limited or banned; the value was purely in reducing surprise and misinterpretation. Training-run notification proposals borrow this logic almost exactly. (Nearest fit, though missile launches are far easier to observe from outside than training runs.)
+- Joint emergency preparedness and response: parties jointly detect and respond to computational emergencies such as rogue deployments or loss-of-control incidents. Cross-cutting: compatible with any option below.
+  - Post-Chernobyl conventions, 1986: within months of the Chernobyl accident, states negotiated the Convention on Early Notification of a Nuclear Accident and the Convention on Assistance in Case of a Nuclear Accident, obligating rapid alerts and mutual aid when a disaster crosses borders. Notable for AI: the machinery was built only after the emergency demonstrated the need.
+- Knowledge and benefit transfers, in two strands: sharing research, development knowledge, and safety-enhancing technologies; and sharing chips, compute access, completed models or API access, cash, and AI-enabled aid. Both function as side payments that make restrictive regimes acceptable to states asked to forgo development.
+  - Atoms for Peace, 1953: Eisenhower's program offered civilian nuclear technology, materials, and training to countries that accepted safeguards, a bargain later written into the NPT as Article IV. Benefit-sharing is what made a discriminatory regime signable for the have-nots. The double edge: some transferred "peaceful" technology later fed weapons programs, including India's.
+- Compute controls: export controls, international chip tracking, and hardware-enabled governance mechanisms restricting who can access frontier-scale compute. Also the enforcement backbone for options 8 through 11.
+  - Fissile material chokepoint: nuclear nonproliferation works largely because enriched uranium and plutonium are hard to produce and their supply chains are controllable, policed by the Nuclear Suppliers Group and Cold War-era regimes like CoCom. Advanced chips play the same chokepoint role for AI, with a similar concentration: a handful of firms (TSMC, ASML, NVIDIA) sit where enrichment technology once did.
+- Binding international regulation of development and deployment: treaty rules spanning the stack, from data-center training runs down to fine-tuning, inference, and sensitive AI-enabled devices.
+  - Chemical Weapons Convention, 1993: the CWC regulates an entire dual-use industry rather than banning a single object, with tiered schedules of chemicals, facility declarations, and routine OPCW inspections of commercial plants. It's the best existing model of intrusive, stack-spanning regulation of a technology that is mostly civilian.
+- Nonproliferation regime: a small set of states develops frontier AI under international safeguards and inspections; development prohibited everywhere else.
+  - NPT and IAEA, 1968 onward: the source model itself. Five recognized weapons states, safeguards inspections for everyone else, and Article IV benefits as the sweetener. Worth putting on the card: the regime mostly held (far fewer nuclear states than Kennedy predicted), but India, Pakistan, and Israel stayed outside it, and North Korea left, so "prohibited everywhere else" was never airtight, and the two-tier structure still breeds resentment.
+- International joint development: pooling under a shared institution, covering both joint work toward a shared goal such as defensive AI and confinement of systemically risky development to a single multinational project, prohibited outside it.
+  - Baruch Plan, 1946: the US proposed placing all dangerous atomic activities under an international Atomic Development Authority with a monopoly on the technology. It failed over exactly the issues a "CERN for AI" would face: the Soviet Union would not freeze itself into second place, and neither side would accept intrusive control before trusting the other. CERN itself shows the pooling half works, but only for science with no military edge.
+- Coordinated halt: binding agreement to stop or hard-cap frontier development, bilateral or broadly multilateral, triggered immediately or by pre-committed if/then conditions.
+  - Nuclear test moratoria and the CTBT: the US and USSR halted testing by parallel moratorium in 1958, resumed, then progressively banned it (Partial Test Ban 1963, CTBT 1996), backed by a global seismic monitoring network that makes cheating detectable. The apt part: a verified halt of an activity, not a surrender of weapons. The cautionary part: the CTBT never formally entered into force because key states, including the US and China, never ratified.
+___
+
+Types of international agreements on AI overall: https://aigi.ox.ac.uk/wp-content/uploads/2025/07/Verification_for_International_AI_Governance.pdf
+
+From AIGI paper:
+
+- Transfer knowledge: parties share research, development knowledge, and safety-enhancing technologies.
+- Transfer resources: parties share chips, compute access, completed models or API access, or benefits such as cash and AI-enabled aid.
+- Pool resources: parties build jointly toward a shared goal, such as defensive AI, or confine systemically risky development to a single international project.
+- Prepare for emergencies: parties jointly detect and respond to computational emergencies.
+- Regulate: parties bind themselves to rules on AI development and deployment, from data-center training runs down to fine-tuning, inference, and sensitive AI-enabled devices.
+Levels of international coordination given ASI risk
+
+- Self-governance (status quo): Voluntary lab commitments (RSPs, safety frameworks); no external enforcement, race dynamics persist.
+- Unilateral restraint: One nation halts or caps its own frontier development alone, hoping others follow.
+- Domestic regulation: Each nation-state licenses, audits, and sets safety requirements for its own developers; no international coordination.
+- Transparency coordination: International information-sharing — incident reporting, model registries, notification of large training runs.
+- Compute controls: Export controls, international chip tracking, hardware-enabled governance mechanisms restricting who can access frontier-scale compute.
+- Nonproliferation regime: A small set of states may develop frontier AI under international safeguards and inspections; development prohibited everywhere else (NPT/IAEA model).
+- International joint development: Frontier development consolidated into a single multinational consortium ("CERN for AI"); prohibited outside it.
+- Coordinated halt: Binding agreement to stop or hard-cap frontier development — as a bilateral US–China deal or a broad multilateral treaty, triggered immediately or by pre-committed if/then conditions.
+
+### 1. Self-governance (status quo)
+
+Voluntary lab commitments such as responsible scaling policies and safety frameworks. No external enforcement, and race dynamics persist.
+
+E.g. In 1975 the molecular biologists who gathered at Asilomar wrote their own safety rules for recombinant DNA work, and the moratorium they had called the year before held. It is the standard proof that self-governance can work, and its conditions explain why it rarely does. The field numbered a few hundred people, no company's valuation depended on being first, and the NIH could pull funding from any lab that broke ranks. Frontier AI's responsible scaling policies and the 2023 White House voluntary commitments occupy the same slot with none of those conditions. The labs writing the rules are the firms racing each other, and no outside party holds their funding.
+
+What carries over: a young field can buy time and legitimacy by writing its own rules before regulators arrive. Where it breaks: Asilomar had no race. Every commercial and geopolitical incentive in AI pushes against voluntary commitments holding at the moment they start to bind.
+
+### 2. Unilateral restraint
+
+One state halts or caps its own frontier development alone, hoping others reciprocate.
+
+In November 1969 President Nixon renounced the entire US offensive bioweapons program without asking Moscow for anything in return. The gamble half-worked. It opened the path to the Biological Weapons Convention, and it also demonstrated the cost of restraint without verification, because the Soviet Union signed that convention and then built Biopreparat, the largest covert biological weapons program in history, employing tens of thousands. The 1958 nuclear testing moratorium is the shorter version of the same story. The US and USSR both stopped testing voluntarily, and in 1961 the Soviet Union resumed without warning, capped by the largest detonation ever conducted.
+
+What carries over: one state stopping first can create the political opening for a treaty. Where it breaks: reciprocity you cannot check is a bet, and in both precedents the restraining side lost it.
+
+### 3. Uncoordinated domestic regulation
+
+Each state licenses, audits, and sets safety requirements for its own developers, with no international layer.
+
+The United States banned CFCs in aerosol cans in 1978, one of the strictest environmental rules of its day. Global CFC production dipped, then recovered, because producers elsewhere kept selling and demand moved to them. Nothing bent the global curve until the Montreal Protocol internationalized the rule in 1987. Gene editing supplies the enforcement half of the lesson. China had rules on paper against heritable human editing when He Jiankui produced the first gene-edited babies in 2018. Domestic regulation stops at the border, and the border is exactly where a frontier project, or its compute, can move.
+
+What carries over: domestic regulators build the licensing and audit machinery an international regime would later run on. California SB 53 is the track's running example of that machinery being built now. Where it breaks: the strictest jurisdiction sets its own ceiling, not the world's. Development migrates toward the most permissive one.
+
+### 4. Transparency and information-sharing
+
+Incident reporting, model registries, notification of large training runs. The disclosure infrastructure most of the later options depend on.
+
+The first agreements rivals accept tend to be about information. After the Cuban missile crisis nearly became a war of misread signals, Washington and Moscow installed the hotline in 1963. The 1988 Ballistic Missile Launch Notification Agreement had each superpower warn the other before test launches, and the Vienna Document had European militaries announce large exercises and admit observers. None of this restrained a single weapon. It made intentions legible and built the reporting channels later treaties assumed were already there. Model registries and training-run notifications hold the same position for AI. They restrain nothing by themselves. They are the disclosure plumbing every stronger option draws on.
+
+What carries over: transparency measures are historically the easiest first agreement between states that distrust each other. Where it breaks: reporting is only as good as the reporter. An actor willing to defect will also misreport, which is why this option alone verifies nothing.
+
+### 5. Joint emergency preparedness and response
+
+Parties jointly detect and respond to computational emergencies such as rogue deployments or loss-of-control incidents. Cross-cutting, compatible with every option below.
+
+The Soviet Union stayed silent for days while Chernobyl's fallout drifted across Europe in April 1986. By September, states had adopted the Convention on Early Notification of a Nuclear Accident, one of the fastest treaty turnarounds on record, because radiation ignores borders and even rivals wanted the phone to ring. The International Health Regulations do the same for disease outbreaks, revised in 2005 after SARS showed the cost of late reporting and stress-tested again by COVID with mixed results. AI's candidate emergencies share the feature that makes cooperation possible here. Once the incident starts, it is everyone's problem.
+
+What carries over: shared exposure makes even rivals want a working alarm system, and fast. Where it breaks: states underreport when the report indicts them. The opening weeks of COVID are the standing example, and the detection half of this option rides entirely on option 4's reporting channels.
+
+### 6. Knowledge and benefit transfers
+
+Two strands with different goods and different politics. Both function as side payments that make the restrictive regimes below acceptable to states asked to forgo development.
+
+Knowledge. Atoms for Peace, announced by Eisenhower in 1953, offered peaceful nuclear technology to states that stayed out of the weapons business, and the offer hardened into Article IV of the NPT, the sweetener in that treaty's bargain. It worked as an inducement and leaked as a control. India's 1974 test used plutonium from a reactor supplied for peaceful research.
+
+Resources. The Montreal Protocol's Multilateral Fund, agreed in 1990, paid developing countries' costs of abandoning CFCs. India and China joined the protocol only after the fund existed, and the ozone regime went on to universal ratification. The 1994 Agreed Framework traded fuel oil and reactor construction for a freeze on North Korea's plutonium program. The freeze held for roughly eight years and collapsed in 2002 amid accusations on both sides.
+
+What carries over: transfers are how restrictive regimes get signed by the states asked to give up the most. Where it breaks: the goods that persuade are often the goods that proliferate. Shared compute, models, and API access would need safeguards of their own, and side payments hold only while both sides keep paying.
+
+### 7. Compute controls
+
+Export controls, international chip tracking, and hardware-enabled governance mechanisms restricting access to frontier-scale compute. The enforcement backbone for options 8 through 11.
+
+Export control on strategic technology is the oldest tool on this list. CoCom, founded in 1949, coordinated Western denial of militarily useful technology to the Soviet bloc for four decades. After India's 1974 test, supplier states organized the Nuclear Suppliers Group to control enrichment and reprocessing technology, the chokepoints of the nuclear fuel cycle. The record is one of slowing rather than stopping, with leakage running through firms rather than governments. In the mid-1980s Toshiba Machine sold the Soviet Union milling machines that made submarine propellers quieter, straight through CoCom's rules. Compute has sharper chokepoints than either precedent, a single EUV lithography supplier and a handful of leading-edge fabs, which is why export controls arrived first in real AI policy too.
+
+What carries over: where the chokepoint count is small, supply-side control is enforceable enough to add years to a cheater's timeline. Where it breaks: diversion runs through intermediaries, resellers, and shell buyers. Module 3's smuggling scenarios return to exactly this channel.
+
+### 8. Binding international regulation of development and deployment
+
+Treaty rules spanning the stack, from data-center training runs down to fine-tuning, inference, and sensitive AI-enabled devices. This internationalizes option 3.
+
+The Chemical Weapons Convention is the existence proof that an entire dual-use industry can operate under international inspection. Since 1997 the OPCW has run thousands of routine inspections of commercial chemical plants, using declaration schedules and managed access rules that let inspectors confirm compliance without walking out with trade secrets. Verifying industry at scale proved politically survivable, and 193 states are parties. Syria showed the ceiling. After 2013, the routine machinery confirmed and destroyed Syria's declared stockpile, and a determined state used undeclared chemicals anyway. AI rules spanning the stack would need the CWC's machinery and would inherit its gap, the undeclared site.
+
+What carries over: managed access solved the confidentiality problem for the chemical industry, the same problem AI verification faces with weights and workloads. Where it breaks: routine inspection of declared facilities says nothing about undeclared ones. Closing that gap is what Module 2's intelligence layer is for.
+
+### 9. Nonproliferation regime
+
+A small set of states develops frontier AI under international safeguards and inspections, with development prohibited everywhere else. The NPT and IAEA model.
+
+This option names its own precedent. The NPT, in force since 1970, lets five states keep nuclear weapons while every other party forgoes them under IAEA safeguards, with peaceful technology as compensation and an eventual-disarmament promise as the IOU. Judged against expectations it worked. President Kennedy anticipated 15 to 25 nuclear-armed states within a generation, and there are nine. Judged as a bargain it is permanently contested. India called it nuclear apartheid and never joined, Israel and Pakistan also stayed out, North Korea withdrew in 2003, and the 1991 discovery of Iraq's parallel weapons program forced the Additional Protocol, because safeguards had only covered declared sites. An AI version inherits the whole package, the track record, the two-tier resentment, and the fight over who qualifies as a licensed developer.
+
+What carries over: asymmetric regimes can hold for decades when compensation flows and safeguards work. Where it breaks: the tiers are a permanent grievance, and exit is always available, as North Korea demonstrated.
+
+### 10. International joint development
+
+Pooling under a shared institution. Covers both joint work toward a shared goal such as defensive AI, and confining risky development to a single multinational project with development prohibited outside it.
+
+The two strands have opposite track records. Pooling without prohibition is proven. CERN has run shared physics infrastructure among rival states since 1954, and ITER pools fusion research across seven parties including the United States, China, and Russia. Monopoly with outside prohibition was proposed exactly once, at the moment of maximum American leverage. The 1946 Baruch Plan would have placed all dangerous atomic activity under an international authority and banned it everywhere else. The Soviet Union, three years from its own bomb, refused to freeze itself into second place, and the plan died in negotiation. A CERN for AI faces the same fork. The joint project rivals can join is buildable. The exclusive version asks the leader's rivals to accept permanent inferiority.
+
+What carries over: rival states can co-fund and co-run frontier science for decades when nobody is asked to disarm. Where it breaks: the prohibition variant has never survived contact with a rival that believed it could catch up.
+
+### 11. Coordinated halt
+
+A binding agreement to stop or hard-cap frontier development, bilateral or broadly multilateral, triggered immediately or by pre-committed if/then conditions.
+
+The INF Treaty is the strongest precedent verification has. In 1987 Washington and Moscow agreed to eliminate an entire class of weapons, and by the 1991 deadline 2,692 missiles had been verifiably destroyed, with US inspectors stationed continuously at the Votkinsk factory gate to watch what came out. The CTBT supplies the monitoring half of the picture. Its International Monitoring System, over 300 stations, detects nuclear tests anywhere on earth and has operated for two decades even though the treaty never formally entered into force. The sensors outlived the legal instrument. The caution is INF's ending. The United States withdrew in 2019 over a Russian missile it judged noncompliant, and the flagship elimination treaty died at 32 in a dispute about exactly the thing it was built to resolve. This is the option the whole track is sized against, the hardest to get and the most demanding to verify.
+
+What carries over: INF proves two rivals can verifiably eliminate an entire category, portal monitoring included, and CTBT proves a global sensor network can watch for a banned activity continuously. Where it breaks: even the flagship halt lasted 32 years and ended over a compliance dispute. Durability needs the response-to-violation clause as much as the sensors.
+
+Notes for review. All dates and figures above are stable historical record rather than volatile policy claims; the two exact numbers are the INF elimination count (2,692 by the June 1991 deadline, per the State Department fact sheet) and the CTBT monitoring count (stated as "over 300 stations," against 337 planned IMS facilities including labs). The option list and its AIGI mappings are unchanged from the WIP outline. If the sorting interactive's answer key later assigns matrix placements, these entries were written to be consistent with any placement and do not presuppose one.

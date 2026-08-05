@@ -8,7 +8,11 @@
 window.VT_CHROME = {
   "nav": [
     {
-      "label": "Curriculum and facilitation materials",
+      "label": "Curriculum",
+      "href": "track"
+    },
+    {
+      "label": "For facilitators",
       "href": "facilitator"
     },
     {

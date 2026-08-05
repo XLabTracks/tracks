@@ -28,7 +28,12 @@ export type ChromeLink = {
  *  scroll on a laptop — so the strip carries the facilitator's entry point
  *  and the org pages, nothing more. */
 export const NAV: ChromeLink[] = [
-  { label: "Curriculum and facilitation materials", href: "facilitator" },
+  /* Two links, not one. A single "Curriculum and facilitation materials" row
+     promised the course and landed on a page whose own heading is "Become a
+     facilitator" — the curriculum was a section inside it. The course is what
+     most visitors are after, so it gets its own row straight to the track. */
+  { label: "Curriculum", href: "track" },
+  { label: "For facilitators", href: "facilitator" },
   { label: "Team", href: "team" },
   { label: "About", href: "about" },
 ];

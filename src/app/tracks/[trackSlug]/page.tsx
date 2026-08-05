@@ -139,7 +139,7 @@ export default async function TrackOverviewPage({
                 <CardHeader>
                   <div className="flex items-start justify-between gap-4">
                     <div>
-                      <CardTitle className="text-lg font-bold text-red-600">
+                      <CardTitle className="text-lg font-bold">
                         Module {module.order}: {module.title}
                       </CardTitle>
                       <CardDescription className="mt-1">

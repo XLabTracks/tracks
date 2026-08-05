@@ -456,8 +456,15 @@ The static site's own mechanics, for as long as it exists:
   night, high contrast — over one set of variable names, so a rule reading
   `--border` or `--primary` follows the switch untouched. `--primary` fills
   and `--brand-ink` writes (maroon is a fine surface on dark and unreadable
-  as text on it); `--mod-0…4` (Okabe–Ito) and `--ok`/`--no` (Wong) are
-  decorative and always accompanied by a word, glyph or fraction. High
+  as text on it); `--mod-0…4` run **Chinese Red · Satsuma · Lunar Yellow ·
+  Khaki · Cobalt** — a palette the brand belongs to rather than a
+  general-purpose data set beside it (its Burgundy anchor is OKLCH hue 23 to
+  `--primary`'s 29; Okabe–Ito was here before and read as stock AI-chart
+  colour against the maroon). Each theme keeps the hue and re-solves lightness
+  for its own ground, so day is those five darkened to carry as text, not five
+  other colours; every value clears 4.5:1 where it is set. They stay
+  decorative — warm neighbours converge for a protanope — so they and
+  `--ok`/`--no` (Wong) are always accompanied by a word, glyph or fraction. High
   contrast is picked, never inferred. Each page's `<head>` carries a small
   inline copy of the theme read step so the ground is right before first
   paint — keep it in step with `theme.js`. `fonts.css` carries Space Grotesk

@@ -14,8 +14,19 @@
    set for a different reason — so prefers-color-scheme only ever chooses
    between day and night.
 
-   Module hues are Okabe-Ito and they are decorative. Everywhere a module
-   colour appears the module number appears as text beside it. */
+   Module hues run Chinese Red - Satsuma - Lunar Yellow - Khaki - Cobalt: one
+   family with the brand in it rather than a general-purpose data palette
+   sitting next to it. Burgundy anchors that palette at OKLCH hue 23 and
+   --primary is at 29, which is why these belong together and the Okabe-Ito
+   set did not.
+   Each theme keeps the hue and solves lightness for its own ground, so the
+   day values are the same five colours darkened to carry as text on paper,
+   not different colours. Every one clears 4.5:1 where it is set (day 4.6-8.5,
+   night 5.2-6.9, high contrast 7.7-13.1); the old day palette cleared it on
+   one of five.
+   They stay decorative: warm neighbours converge for a protanope, so
+   everywhere a module colour appears the module number appears as text beside
+   it, and nothing is encoded by hue alone. */
 
 :root,
 :root[data-theme='light'] {
@@ -31,11 +42,11 @@
   --border: #e4dedb;
   --ring: #800000;
 
-  --mod-0: #0072b2;
-  --mod-1: #e69f00;
-  --mod-2: #009e73;
-  --mod-3: #cc79a7;
-  --mod-4: #d55e00;
+  --mod-0: #9a000c;  /* Chinese Red */
+  --mod-1: #bf4f00;  /* Satsuma */
+  --mod-2: #946b00;  /* Lunar Yellow */
+  --mod-3: #555e07;  /* Khaki */
+  --mod-4: #3d75b1;  /* Cobalt */
 
   /* Graded feedback. Wong's bluish-green and vermillion, never the red/green
      pair — and never on their own: every use is accompanied by the word
@@ -88,11 +99,11 @@
   --border: #332c2a;
   --ring: #eda3a3;
 
-  --mod-0: #5aa9e6;
-  --mod-1: #ffc44d;
-  --mod-2: #3ecfa4;
-  --mod-3: #e5a3c6;
-  --mod-4: #ff8f4d;
+  --mod-0: #e4584f;  /* Chinese Red */
+  --mod-1: #e15f00;  /* Satsuma */
+  --mod-2: #c5952b;  /* Lunar Yellow */
+  --mod-3: #828d41;  /* Khaki */
+  --mod-4: #518ac7;  /* Cobalt */
 
   --ok: #3ecfa4;
   --no: #ff8f4d;
@@ -121,11 +132,11 @@
   --border: #ffffff;
   --ring: #ffe600;
 
-  --mod-0: #8cd9ff;
-  --mod-1: #ffe600;
-  --mod-2: #6bffcb;
-  --mod-3: #ffb3dd;
-  --mod-4: #ffab70;
+  --mod-0: #ffa59a;  /* Chinese Red */
+  --mod-1: #fb7528;  /* Satsuma */
+  --mod-2: #f7c562;  /* Lunar Yellow */
+  --mod-3: #a5b164;  /* Khaki */
+  --mod-4: #82bcfd;  /* Cobalt */
 
   --ok: #6bffcb;
   --no: #ffab70;

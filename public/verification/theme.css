@@ -60,6 +60,24 @@
      the maroon so an error still reads as an error and not as brand. */
   --destructive: #b34700;
 
+  /* Okabe-Ito data-encoding accents for the Verification widgets. They live
+     here, not only in globals.css, for the same reason --destructive does:
+     this file re-points the palette on the Verification routes, and a token it
+     does not define keeps its app default on every theme. Left un-themed these
+     five sat at one fixed value over a white, a near-black and a black ground.
+
+     Each value clears 4.5:1 against the worst surface of its own theme —
+     the darkest one where the ink is dark, the lightest where it is light.
+     Where the set carries a light counterpart it is used (blue -> sky blue);
+     where it does not, the same hue is darkened rather than swapped, so the
+     five stay separable for a colour-blind reader. Hue never carries the
+     meaning alone in any case — the widgets pair it with a label. */
+  --comply: #007b5a;
+  --defect: #b34f00;
+  --hide: #0072b2;
+  --exaggerate: #916400;
+  --free-ride: #975a7c;
+
   --radius: 14px;
   --radius-sm: 8px;
   --hairline: 1px;
@@ -109,6 +127,13 @@
   --no: #ff8f4d;
   --destructive: #ff8f4d;
 
+  /* Lightened against the dark ground; see the light block for the rule. */
+  --comply: #009e73;
+  --defect: #e8874a;
+  --hide: #56b4e9;
+  --exaggerate: #e69f00;
+  --free-ride: #cc79a7;
+
   --shadow-soft: 0 1px 2px rgba(0, 0, 0, .4);
   --shadow-soft-lg: 0 12px 40px rgba(0, 0, 0, .5);
   /* Night is the one ground a glow reads on; day and high contrast set it to 0. */
@@ -141,6 +166,14 @@
   --ok: #6bffcb;
   --no: #ffab70;
   --destructive: #ffab70;
+
+  /* On black the set's own values already clear 4.5:1, except blue, which
+     takes its sky-blue counterpart. */
+  --comply: #009e73;
+  --defect: #d55e00;
+  --hide: #56b4e9;
+  --exaggerate: #e69f00;
+  --free-ride: #cc79a7;
 
   --radius: 8px;
   --radius-sm: 6px;

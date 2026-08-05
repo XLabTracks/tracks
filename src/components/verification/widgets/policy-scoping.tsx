@@ -41,9 +41,9 @@ const VERDICT_TEXT: Record<Verdict, string> = {
   wrong: "text-defect",
 };
 const VERDICT_LEFT: Record<Verdict, string> = {
-  right: "border-l-comply",
-  close: "border-l-exaggerate",
-  wrong: "border-l-defect",
+  right: "border-comply",
+  close: "border-exaggerate",
+  wrong: "border-defect",
 };
 
 interface Placement {
@@ -431,7 +431,7 @@ export function PolicyScoping({ onComplete }: VerificationWidgetProps) {
                     return (
                       <div
                         key={p.id}
-                        className="border-border bg-muted/30 rounded-lg border border-l-[3px] p-2"
+                        className="border-border bg-muted/30 rounded-lg border p-2"
                       >
                         <div className="flex items-center gap-2">
                           <Dot color={p.colorRaw} />
@@ -449,7 +449,7 @@ export function PolicyScoping({ onComplete }: VerificationWidgetProps) {
                     <div
                       key={p.id}
                       className={cn(
-                        "border-border bg-muted/30 rounded-lg border border-l-[3px] p-2",
+                        "border-border bg-muted/30 rounded-lg border p-2",
                         VERDICT_LEFT[pl.verdict],
                       )}
                     >

@@ -362,7 +362,9 @@ export function InteractiveMap(_props: VerificationWidgetProps) {
 
   /* ============ scaled stroke/font values (source applyVB) ============ */
   const strokeW = Math.max(0.18, 0.55 / zoom);
-  const fontSize = Math.max(3.4, 9.5 / zoom);
+  // 10.5 is the floor the rest of this widget uses: below it a country label
+  // is unreadable on the 13" baseline, and these are the map's only prose.
+  const fontSize = Math.max(3.8, 10.5 / zoom);
   const leaderW = Math.max(0.18, 0.5 / zoom);
   const hubR = Math.max(1.6, 3.4 / zoom);
   const hubStroke = Math.max(0.3, 0.8 / zoom);
@@ -612,7 +614,7 @@ export function InteractiveMap(_props: VerificationWidgetProps) {
                         key={`l-${c.id}`}
                         points={`${c.label.leader[0]},${c.label.leader[1]} ${tail},${c.label.y - 3}`}
                         fill="none"
-                        stroke="#9CA19B"
+                        stroke="var(--muted-foreground)"
                         strokeWidth={leaderW}
                       />
                     );
@@ -624,10 +626,10 @@ export function InteractiveMap(_props: VerificationWidgetProps) {
                       y={c.label.y}
                       textAnchor={c.label.anchor}
                       fontSize={fontSize}
-                      fill="#33383A"
+                      fill="var(--foreground)"
                       style={{
                         paintOrder: "stroke",
-                        stroke: "rgba(250,250,247,.85)",
+                        stroke: "var(--background)",
                         strokeLinejoin: "round",
                         letterSpacing: "0.04em",
                         pointerEvents: "none",
@@ -655,7 +657,7 @@ export function InteractiveMap(_props: VerificationWidgetProps) {
                   <p className="text-muted-foreground text-xs leading-snug">
                     {tipCountry.verif}
                   </p>
-                  <p className="text-muted-foreground/80 mt-1.5 font-mono text-[10px] tracking-wide">
+                  <p className="text-muted-foreground/80 mt-1.5 font-mono text-[10.5px] tracking-wide">
                     click to pin →
                   </p>
                 </div>
@@ -725,7 +727,7 @@ export function InteractiveMap(_props: VerificationWidgetProps) {
                     );
                   })}
                 </div>
-                <div className="text-muted-foreground mt-2 flex items-center justify-between px-1 font-mono text-[9.5px] tracking-wide">
+                <div className="text-muted-foreground mt-2 flex items-center justify-between px-1 font-mono text-[10.5px] tracking-wide">
                   <span>{C.flowGradLeft}</span>
                   <span
                     aria-hidden
@@ -759,7 +761,7 @@ export function InteractiveMap(_props: VerificationWidgetProps) {
                         aria-hidden
                       />
                       <span
-                        className="text-muted-foreground absolute top-[calc(50%+8px)] -translate-x-1/2 font-mono text-[9.5px]"
+                        className="text-muted-foreground absolute top-[calc(50%+8px)] -translate-x-1/2 font-mono text-[10.5px]"
                         style={{ left: `${tx(y)}%` }}
                         aria-hidden
                       >
@@ -841,7 +843,7 @@ export function InteractiveMap(_props: VerificationWidgetProps) {
           <aside className="flex min-w-0 flex-col gap-4">
             {s.mode === "map" && (
               <div>
-                <p className="text-muted-foreground mb-2 font-mono text-[9.5px] tracking-[0.15em] uppercase">
+                <p className="text-muted-foreground mb-2 font-mono text-[10.5px] tracking-[0.15em] uppercase">
                   {C.keyLabel}
                 </p>
                 <div className="flex flex-col gap-1">
@@ -880,7 +882,7 @@ export function InteractiveMap(_props: VerificationWidgetProps) {
                         <span className="text-[12.5px] font-semibold">
                           {b.name}
                         </span>
-                        <span className="text-muted-foreground ml-auto font-mono text-[10px]">
+                        <span className="text-muted-foreground ml-auto font-mono text-[10.5px]">
                           {n} {n === 1 ? "country" : "countries"}
                         </span>
                       </button>
@@ -893,25 +895,28 @@ export function InteractiveMap(_props: VerificationWidgetProps) {
               </div>
             )}
 
-            {/* anatomy-of-a-chip launcher — overlay OUT OF SCOPE this pass */}
-            <div className="border-border bg-muted/30 flex items-center gap-3 rounded-lg border px-3 py-2.5 opacity-70">
+            {/* Anatomy-of-a-chip launcher. The overlay behind it is not built; the
+                "soon" chip is what says so, which is why the card is not dimmed
+                — greying real copy to signal an unfinished feature only costs
+                contrast on text the reader is still meant to read. */}
+            <div className="border-border bg-muted/30 flex items-center gap-3 rounded-lg border px-3 py-2.5">
               <div className="text-muted-foreground flex-none" aria-hidden>
                 <svg viewBox="0 0 44 40" width="34" height="30">
-                  <polygon points="22,26 40,17 22,8 4,17" fill="#56B4E9" />
+                  <polygon points="22,26 40,17 22,8 4,17" fill="currentColor" opacity={0.9} />
                   <polygon
                     points="22,20 34,14 22,8 10,14"
-                    fill="#CC79A7"
+                    fill="currentColor" opacity={0.6}
                     transform="translate(0,-5)"
                   />
                   <polygon
                     points="22,17 29,13.5 22,10 15,13.5"
-                    fill="#D55E00"
+                    fill="currentColor" opacity={0.35}
                     transform="translate(0,-8)"
                   />
                 </svg>
               </div>
               <div className="min-w-0">
-                <p className="text-muted-foreground font-mono text-[8.5px] tracking-[0.15em] uppercase">
+                <p className="text-muted-foreground font-mono text-[10.5px] tracking-[0.15em] uppercase">
                   {C.chipEyebrow}
                 </p>
                 <p className="text-sm font-semibold">{C.chipTitle}</p>
@@ -919,7 +924,7 @@ export function InteractiveMap(_props: VerificationWidgetProps) {
                   {C.chipSub}
                 </p>
               </div>
-              <span className="text-muted-foreground ml-auto flex-none font-mono text-[9px] uppercase">
+              <span className="text-muted-foreground ml-auto flex-none font-mono text-[10.5px] uppercase">
                 soon
               </span>
             </div>
@@ -931,14 +936,14 @@ export function InteractiveMap(_props: VerificationWidgetProps) {
 
             {/* roles key */}
             <div className="border-border border-t pt-3">
-              <p className="text-muted-foreground mb-2 font-mono text-[9.5px] tracking-[0.15em] uppercase">
+              <p className="text-muted-foreground mb-2 font-mono text-[10.5px] tracking-[0.15em] uppercase">
                 {C.rolesLabel}
               </p>
               <div className="flex flex-wrap gap-1">
                 {ROLE_ORDER.map((r) => (
                   <span
                     key={r}
-                    className="border-muted-foreground/50 text-muted-foreground rounded border border-dashed px-2 py-0.5 font-mono text-[9.5px] tracking-wide"
+                    className="border-muted-foreground/50 text-muted-foreground rounded border border-dashed px-2 py-0.5 font-mono text-[10.5px] tracking-wide"
                   >
                     {ROLES[r]}
                   </span>
@@ -1030,7 +1035,7 @@ function DetailCard({
       : ev.c.map((id) => (CMAP[id] ? CMAP[id].name : id));
     return (
       <div aria-live="polite">
-        <p className="text-muted-foreground font-mono text-[9.5px] tracking-[0.13em] uppercase">
+        <p className="text-muted-foreground font-mono text-[10.5px] tracking-[0.13em] uppercase">
           Timeline · {s.event + 1} of {EVENTS.length}
         </p>
         <p className="text-muted-foreground mt-1 font-mono text-[11px]">
@@ -1075,7 +1080,7 @@ function DetailCard({
         >
           <X className="size-4" aria-hidden />
         </button>
-        <p className="text-muted-foreground font-mono text-[9.5px] tracking-[0.13em] uppercase">
+        <p className="text-muted-foreground font-mono text-[10.5px] tracking-[0.13em] uppercase">
           {st ? "Pipeline stage" : "Supply chain layer"}
         </p>
         <h4 className="mt-1 text-base font-semibold">{st ? st.name : b.name}</h4>
@@ -1122,7 +1127,7 @@ function DetailCard({
         >
           <X className="size-4" aria-hidden />
         </button>
-        <p className="text-muted-foreground font-mono text-[9.5px] tracking-[0.13em] uppercase">
+        <p className="text-muted-foreground font-mono text-[10.5px] tracking-[0.13em] uppercase">
           Country
         </p>
         <h4 className="mt-1 text-base font-semibold">{c.name}</h4>
@@ -1142,7 +1147,7 @@ function DetailCard({
           ))}
         </ul>
         <div className="border-border mt-2.5 border-t pt-2">
-          <p className="text-muted-foreground font-mono text-[9.5px] tracking-[0.12em] uppercase">
+          <p className="text-muted-foreground font-mono text-[10.5px] tracking-[0.12em] uppercase">
             {C.countryVerifLabel}
           </p>
           <p className="mt-1 text-[12.5px] leading-relaxed">{c.verif}</p>
@@ -1151,7 +1156,7 @@ function DetailCard({
           {c.roles.map((r) => (
             <span
               key={r}
-              className="border-muted-foreground/50 text-muted-foreground rounded border border-dashed px-2 py-0.5 font-mono text-[9.5px] tracking-wide"
+              className="border-muted-foreground/50 text-muted-foreground rounded border border-dashed px-2 py-0.5 font-mono text-[10.5px] tracking-wide"
             >
               {ROLES[r]}
             </span>
@@ -1164,7 +1169,7 @@ function DetailCard({
   // default (map, nothing selected)
   return (
     <div>
-      <p className="text-muted-foreground font-mono text-[9.5px] tracking-[0.13em] uppercase">
+      <p className="text-muted-foreground font-mono text-[10.5px] tracking-[0.13em] uppercase">
         {C.startEyebrow}
       </p>
       <p className="text-muted-foreground mt-1.5 text-[12.5px] leading-relaxed">

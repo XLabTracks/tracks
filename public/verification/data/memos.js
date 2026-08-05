@@ -29,6 +29,77 @@ window.VERIFICATION_MEMO_MODULES = [
 ];
 
 window.VERIFICATION_MEMOS = [
+  /* The outline asks for these on the welcome page and in 0.2, and states each
+     assignment in full, so the briefs below are quoted rather than summarised.
+     Where it names no length the budget is the course default of 800 words —
+     the desk's own fallback, not a number the outline gave. */
+  {
+    id: 'm0-welcome-reflection',
+    module: 0,
+    unit: '0.0',
+    title: 'Opening reflection',
+    status: 'specified',
+    optional: true,
+    brief:
+      'Write a short note that you can look back on after completing the course:\n' +
+      '- what you want to gain from the course;\n' +
+      '- which part of international AI verification currently seems hardest;\n' +
+      '- and which assumptions you expect the course to challenge.',
+    audience: null,
+    words: 300,
+    peerReviewed: false,
+  },
+  {
+    id: 'm0-plan-a-stress-test',
+    module: 0,
+    unit: '0.2',
+    title: 'Option A — stress-test the Plan A verification supplement',
+    status: 'specified',
+    brief:
+      'Read the verification supplement and apply the three moves to the claims below. Each claim, if it fails, is a distinct way the whole regime fails; part of your job is to name the failure mode each one guards against. You are building your own assessment, and reasonable readers of this supplement have landed in very different places.\n\n' +
+      '- **The retrofit:** network taps and recomputation servers are described as leaving minimal room for vulnerabilities. What would an adversary with years of preparation and nation-state resources try first? (Failure mode: technical defeat — the monitoring hardware itself is compromised.)\n' +
+      '- **The schedule:** declarations, mutual inspections, and the retrofit of most of the world’s datacenter compute are completed in roughly a year (2029–2030). What comparable industrial or diplomatic effort has ever moved at that speed? Most nuclear arms-control agreements took the better part of a decade each. (Failure mode: the timeline race.)\n' +
+      '- **The trust anchor:** compliance rests on recomputation servers each side must trust. Who builds them, who audits them, and what happens when one side alleges tampering? (Failure mode: dispute spiral.)\n' +
+      '- **The covert margin:** the plan estimates roughly half a percent of compute escaping to covert projects and treats that as manageable. Is it? What can be done with that margin, and how does it compound over a decade? (Failure mode: death by leakage.)\n' +
+      '- **The third countries:** coverage above 99 percent requires participation well beyond the US and China, including Russia and the Gulf states. What actually brings them in? (Failure mode: the hole in the map.)\n' +
+      '- **The vulnerable window:** during the transition, both signatories have partially powered down. That is exactly when defection pays most. What in the plan deters it then? (Failure mode: breakout at the seam.)\n' +
+      '- **The transparency price:** which mechanisms expose commercially or militarily sensitive information, to whom, and why would the exposed party accept that? For each mechanism, ask which side of the Coe–Vaynman dial it sits on, and who would refuse it. (Failure mode: refusal at the door.)',
+    audience: null,
+    words: 800,
+    peerReviewed: false,
+  },
+  {
+    id: 'm0-plan-a-vs-plan-s',
+    module: 0,
+    unit: '0.2',
+    title: 'Option B — compare the verification regimes of Plan A and Plan S',
+    status: 'specified',
+    brief:
+      'Plan A is a verified slowdown: training halts, inference continues, and the whole regime hangs on being able to tell those two activities apart at datacenter scale. Plan S is shut it all down: a global moratorium on frontier development. Read the FAQ’s timeline argument, note that it is about urgency and prioritization rather than verification, then set it aside and reason about verification specifically.\n\n' +
+      'One warning about sources: Plan S has no verification supplement. It exists in the document only as a contrast case. That asymmetry is the point of this task — for Plan S, you are reconstructing the regime it would need, not summarizing one someone else wrote. Work through:\n\n' +
+      '- **The bright line.** For each plan, state the single rule an inspector must police. Which line is easier to state? Which is easier to check, given that training and inference run on the same chips?\n' +
+      '- **The three moves, applied to the softer assumption.** Decide which plan’s load-bearing assumption is softer and run it through the three moves.\n' +
+      '- **The transparency price, paid twice.** Which price would each signatory actually pay?\n' +
+      '- **Failure modes, compared.** List two ways each regime fails and trace each to its cause. Do the two plans fail in the same ways, or does moving the bright line move the failure modes?\n' +
+      '- **The verdict question.** Which plan is technically easier to verify, and which is politically easier to sustain? If those answers differ, what does that tell you about how much “verifiability” should count for when choosing between postures on the ladder?',
+    audience: null,
+    words: 800,
+    peerReviewed: false,
+  },
+  {
+    id: 'm0-success-scenario',
+    module: 0,
+    unit: '0.2',
+    title: 'Essay — what does success look like to you?',
+    status: 'specified',
+    optional: true,
+    brief:
+      'In 500–800 words, describe your own success scenario: the end state (what the world looks like, and roughly when); the agreement that gets there (who signs, what is restricted); and what verification would need to cover for that agreement to hold.\n\n' +
+      'Keep this essay. You will re-read it at the end of the track.',
+    audience: null,
+    words: 800,
+    peerReviewed: false,
+  },
   {
     id: 'm0-hinge-brief',
     module: 0,

@@ -187,6 +187,24 @@ window.VTMemoDesk = (function () {
 
   /* ---------- the brief ---------- */
 
+  /* A brief is the outline's own words, and some of them are a list of claims
+     to work through rather than a sentence. Blank-line-separated blocks become
+     paragraphs and "- " lines become a list, so a seven-part task reads as one
+     instead of as a wall. Everything is escaped: the brief is content, not
+     markup. */
+  function briefHtml(text) {
+    return String(text).split(/\n\s*\n/).map(function (blockText) {
+      var lines = blockText.split('\n').map(function (l) { return l.trim(); }).filter(Boolean);
+      var bullets = lines.filter(function (l) { return l.indexOf('- ') === 0; });
+      if (bullets.length === lines.length && lines.length) {
+        return '<ul>' + lines.map(function (l) {
+          return '<li>' + inline(l.slice(2)) + '</li>';
+        }).join('') + '</ul>';
+      }
+      return '<p>' + inline(lines.join(' ')) + '</p>';
+    }).join('');
+  }
+
   function renderBrief(s) {
     el('slotTitle').textContent = s.unit + ' — ' + s.title;
     el('slotMeta').innerHTML =
@@ -199,7 +217,7 @@ window.VTMemoDesk = (function () {
     var out = '';
     if (s.brief) {
       out +=
-        '<div class="brief"><p class="bk">The outline’s brief</p><p>' + esc(s.brief) + '</p><dl>' +
+        '<div class="brief"><p class="bk">The outline’s brief</p>' + briefHtml(s.brief) + '<dl>' +
         (s.audience ? '<div><dt>Reader</dt><dd>' + esc(s.audience) + '</dd></div>' : '') +
         (s.words ? '<div><dt>Budget</dt><dd>about ' + s.words + ' words</dd></div>' : '') +
         '</dl></div>';

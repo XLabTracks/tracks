@@ -216,11 +216,18 @@
        prompt states the task and the desk below it is the real memo desk —
        same slots, same drafts, same notebook pages. A unit whose outputs the
        outline has not slotted yet still gets the prompt on its own. */
-    if (u.output) {
+    /* A unit asks for writing when it states a prompt, when the outline hangs
+       a memo slot on it, or both — and either alone is enough for the part.
+       The slots are the authoritative list, so a unit with slots and no prose
+       prompt still gets the desk rather than nothing. */
+    const memoSlots = memoSlotsFor(u);
+    if (u.output || memoSlots.length) {
       out.push({ label: 'Written output', title: null,
-        html: '<div class="output"><span class="label">Written output</span><p>' +
-          VT.fmt(u.output) + '</p></div>' +
-          (memoSlotsFor(u).length ? '<div class="unit-desk" data-memodesk></div>' : '') });
+        html: (u.output
+          ? '<div class="output"><span class="label">Written output</span><p>' +
+            VT.fmt(u.output) + '</p></div>'
+          : '') +
+          (memoSlots.length ? '<div class="unit-desk" data-memodesk></div>' : '') });
     }
 
     let tail = '';
@@ -274,7 +281,7 @@
     const facts = [u.kind, u.mins];
     if (u.optional) facts.push('optional');
     if (u.exercise) facts.push('exercise');
-    if (u.output) facts.push('written output');
+    if (u.output || memoSlotsFor(u).length) facts.push('written output');
     const chips = ['<span class="unit-facts">' + VT.esc(facts.join(' · ')) + '</span>'];
     if (done) chips.push('<span class="chip done">complete</span>');
 

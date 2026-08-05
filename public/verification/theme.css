@@ -412,13 +412,14 @@ button, [role='button'], [role='radio'], [role='tab'], .chip, .nav a, .brand,
    pointer, no hover, no underline — or it reads as a broken link. */
 .foot-links .pending { color: var(--muted-foreground); opacity: .5; cursor: default; }
 
+/* One rule closes the page; a second one inside the footer only boxes the
+   copyright off from the links it belongs with. Spacing separates them. */
 .foot-end {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   gap: 8px 20px;
-  padding-top: 12px;
-  border-top: var(--hairline) solid var(--border);
+  padding-top: 4px;
 }
 .foot-end > span:last-of-type { margin-right: auto; }
 

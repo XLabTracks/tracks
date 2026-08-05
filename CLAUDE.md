@@ -403,7 +403,13 @@ nothing that ships today.
   hand-edit the output). One markdown file is a card and the filter facets
   derive from the values present. `verification-capstones/_README.md` is the
   front-matter contract and states which capstones belong here at all — the
-  bank carries only the ones whose prerequisites this track teaches.
+  bank carries only the ones whose prerequisites this track teaches. Two
+  surfaces read the generated file: `capstone-bank.html` (the filterable
+  catalogue, with a detail sheet per brief) and the unit that carries
+  `bank: { lead: '<slug>' }` in `course.js`, where the module player prints
+  the same briefs as a picker — 4.2 is the live one. Their shared glyph
+  vocabulary is `VT.bank` in `platform.js`, so status and difficulty cannot
+  drift between the two.
 
 **Prerequisites & progress.** `Track.prerequisiteEnforcement` is `soft` (warn)
 or `hard` (lock); `isAccessLocked()` (pure, tested) + `getPrerequisiteStatus()`

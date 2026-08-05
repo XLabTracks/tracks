@@ -604,7 +604,7 @@ window.COURSE = {
             { h: 'Then defend it' },
             { p: 'Design by critique: start from what breaks. A regime is submitted, red-teamed, and revised — and the revision is the graded artifact, not the first draft.' },
             { p: 'The last piece is the **cold pitch**: your recommendation, to a decisionmaker who has not read your work and did not ask for it. One recommendation, delivered three ways to three audiences, where the framing moves and the claim does not.' },
-            { stub: 'The capstone bank — worked examples, rubrics, and the alternative-deliverable menu — is still being assembled upstream. The workspace below is live; the exemplar bank is not yet linked.' }
+            { stub: 'Worked examples and marking rubrics are still being assembled upstream. The briefs below and the workspace are live; there is nothing yet to compare a finished regime against.' }
           ],
           coverage: [
             'Design and defend a complete regime',
@@ -615,6 +615,13 @@ window.COURSE = {
             'The cold pitch'
           ],
           output: 'Verification-regime design: written treaty draft, proposal, or an alternative deliverable agreed with your facilitator.',
+          // The bank is data/capstone-bank.js, generated from
+          // verification-capstones/*.md. `lead` is the brief this unit is
+          // written around; the rest are the alternative deliverables the
+          // written output above offers. A slug the bank does not carry is
+          // simply not led with, so a renamed capstone degrades to the
+          // ungrouped list rather than to an error.
+          bank: { lead: 'minimal-verification-regime' },
           workspace: 'capstone.html' }
       ]
     }

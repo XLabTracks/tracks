@@ -254,6 +254,89 @@
 .advances { max-width: 68ch; font-size: 13px; line-height: 1.6; color: var(--muted-foreground); }
 .advances a { color: var(--brand-ink); text-underline-offset: 3px; }
 
+/* ---------- capstone bank ---------- */
+
+/* Choosing a capstone is a comparison, not a sequence, so every brief is on
+   screen at once and the grid takes the width of the work column rather than
+   the 68ch reading measure the prose above it keeps.
+   Trap: a column sized in ch here would resolve against this part's own font
+   and fight the grid — the track widths are px on purpose. */
+.briefs .brief-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+  gap: 14px;
+}
+/* The lead brief is one card, so it takes the reading measure rather than a
+   third of the row an auto-fill track would leave it in. */
+.briefs .brief-grid.solo { grid-template-columns: minmax(0, 68ch); }
+.briefs .brief-grid + .track-head { margin-top: 26px; }
+
+.briefs .track-head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+  font-family: var(--mono);
+  font-size: 11.5px;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--muted-foreground);
+}
+.briefs .track-head .rule { flex: 1 1 auto; height: var(--hairline); background: var(--border); }
+
+.briefs .brief {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  padding: 15px 17px;
+  border: var(--hairline) solid var(--border);
+  border-radius: var(--radius);
+  background: var(--card);
+}
+/* The brief this unit is written around is painted on all four edges. A card
+   is either untinted or wholly tinted — never one accented edge. */
+.briefs .brief.lead {
+  border-color: color-mix(in srgb, var(--brand-ink) 45%, var(--border));
+  background: color-mix(in srgb, var(--brand-ink) 5%, var(--card));
+}
+.briefs .brief-top { display: flex; align-items: center; gap: 10px; }
+/* Status and difficulty read as glyph plus word, so the glyph is decoration a
+   screen reader should skip and the word carries the meaning. */
+.briefs .status {
+  margin-left: auto;
+  font-family: var(--mono);
+  font-size: 11.5px;
+  color: var(--muted-foreground);
+}
+.briefs .g { margin-right: 5px; }
+.briefs .brief h3 { font-size: 16px; line-height: 1.35; }
+.briefs .summary { font-size: 13.5px; line-height: 1.55; color: var(--muted-foreground); }
+.briefs .brief-stats { font-family: var(--mono); font-size: 11.5px; color: var(--muted-foreground); }
+.briefs .brief-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.briefs .brief-deliverable { font-size: 13px; line-height: 1.55; }
+.briefs .brief-deliverable .label {
+  display: block;
+  margin-bottom: 2px;
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--muted-foreground);
+}
+/* The actions sit on the card floor so a short summary and a long one still
+   line their buttons up across a row. */
+.briefs .brief-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: auto;
+  padding-top: 4px;
+}
+.briefs .brief-actions .btn { flex: 1 1 auto; }
+
+.briefs-more { max-width: 68ch; margin-top: 22px; font-size: 13.5px; }
+.briefs-more a { color: var(--brand-ink); text-underline-offset: 3px; }
+
 /* ---------- pager ---------- */
 
 .pager {

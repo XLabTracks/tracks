@@ -25,8 +25,8 @@ export default function Page() {
         <section className="bank-head">
           <h1>Capstone bank</h1>
           <p className="sub">
-            Every capstone this track prepares you for, with the numbers that decide
-            whether you can take it on: how many people, how many hours, over how
+            The program&rsquo;s whole capstone bank, with the numbers that decide
+            whether you can take one on: how many people, how many hours, over how
             long. Open a card for the full brief.
           </p>
         </section>
@@ -71,11 +71,12 @@ export default function Page() {
         </p>
 
         <p className="note bank-note">
-          <b>What is in here, and what is not.</b> This bank carries the capstones
-          whose prerequisites this track actually teaches — the Verification ones and
-          the program-level cross-track ones. The Technical Governance and AI
-          Governance Policy tracks have their own, and they name weeks no learner
-          here has done.
+          <b>What is in here.</b> The whole program&rsquo;s bank: the Verification
+          and cross-track capstones this course prepares you for, and the Technical
+          Governance and AI Governance Policy capstones beside them. A governance
+          brief marked <i>fits this course</i> can be taken as a Verification
+          capstone — its sheet says which module it lands on. The rest keep
+          prerequisites naming weeks taught on their own tracks, not here.
         </p>
 
       </main>

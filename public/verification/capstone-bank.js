@@ -29,6 +29,9 @@ const STATUS_WORD = VT.bank.statusWord;
 
 const FACETS = [
   { key: 'track', name: 'Track', get: e => e.track, primary: true },
+  /* courseFit is derived by the generator: the course's native tracks, plus
+     any other-track entry whose file says why it can be taken here. */
+  { key: 'fit', name: 'Course fit', get: e => e.courseFit ? 'fits this course' : 'other tracks', primary: true, order: ['fits this course', 'other tracks'] },
   { key: 'difficulty', name: 'Difficulty', get: e => e.difficulty, primary: true, order: ['core', 'stretch', 'advanced'] },
   { key: 'team', name: 'Team size', get: e => e.team.bucket, primary: true, order: ['Solo', 'Pair or trio', 'Team of 4+'] },
   { key: 'effort', name: 'Effort', get: e => e.effort.bucket, order: ['Up to 14 hrs', '15–20 hrs', 'Over 20 hrs'] },
@@ -48,7 +51,7 @@ let refocus = null;
 function haystack(e) {
   return [e.title, e.summary, e.track, e.deliverable, e.audience,
     e.skills.join(' '), e.prerequisites.join(' '), e.difficulty, e.deliverableType,
-    e.sources.map(s => s.label).join(' ')]
+    e.verificationFit || '', e.sources.map(s => s.label).join(' ')]
     .join(' ').toLowerCase();
 }
 
@@ -145,6 +148,13 @@ function cardFor(e) {
   card.appendChild(stats);
 
   const meta = el('div', 'card-meta');
+  /* The marker the bank exists to show: an other-track brief a Verification
+     learner can still take. Native briefs don't wear it — the page is theirs. */
+  if (e.verificationFit) {
+    const fit = el('span', 'chip fit', 'fits this course');
+    fit.title = e.verificationFit;
+    meta.appendChild(fit);
+  }
   const diff = el('span', 'chip');
   diff.appendChild(el('span', 'g', DIFF_GLYPH[e.difficulty] || '●'));
   diff.appendChild(el('span', null, e.difficulty));
@@ -300,6 +310,7 @@ function openSheet(slug) {
   sheetBody.appendChild(stats);
 
   const dl = el('dl', 'facts');
+  factRow(dl, 'Course fit', e.verificationFit);
   factRow(dl, 'Deliverable', e.deliverable);
   factRow(dl, 'Audience', e.audience);
   factRow(dl, 'Difficulty', `${e.difficulty} · mentor ${e.mentor}`);

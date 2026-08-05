@@ -10,10 +10,17 @@ import { DIFF_GLYPH, STATUS_GLYPH, STATUS_WORD } from "@/lib/verification/bank";
  * `capstone-bank.json`, generated from `verification-capstones/*.md`, so a new
  * markdown file reaches the learner on its next build with nothing to edit.
  *
+ * The bank carries the whole program; this unit prints only the course-fit
+ * briefs (`courseFit`, derived by the generator) — the ones a Verification
+ * learner can actually take. An other-track brief that qualifies carries its
+ * `verificationFit` line, printed on the card, so a Technical Governance
+ * heading inside a Verification unit explains itself. The full bank stays one
+ * link away.
+ *
  * `lead` is the brief the unit is written around — it goes first, marked, and
  * is the only card carrying the workspace shortcut. Every other card links to
  * its sheet on the bank page, which already knows how to start a draft;
- * twenty-one cards with two buttons each is a wall, not a choice.
+ * dozens of cards with two buttons each is a wall, not a choice.
  *
  * Trap: the links carry the slug, never the title. `capstone.html` resolves
  * `?brief=` against this same bank, and a slug it does not carry renders no
@@ -57,6 +64,11 @@ function Brief({ e, lead }: { e: Entry; lead: boolean }) {
 
       <h3 className="text-base leading-snug font-medium">{e.title}</h3>
       <p className="text-muted-foreground text-sm leading-relaxed">{e.summary}</p>
+      {e.verificationFit ? (
+        <p className="text-muted-foreground text-xs leading-relaxed italic">
+          Fits this course: {e.verificationFit}
+        </p>
+      ) : null}
       <p className="text-muted-foreground text-xs">{stats.join(" · ")}</p>
 
       <div className="flex flex-wrap gap-1.5">
@@ -102,7 +114,7 @@ function Brief({ e, lead }: { e: Entry; lead: boolean }) {
 }
 
 export function CapstoneBank({ lead }: { lead?: string }) {
-  const entries = bank.entries as Entry[];
+  const entries = (bank.entries as Entry[]).filter((e) => e.courseFit);
   if (!entries.length) return null;
 
   const leadEntry = entries.find((e) => e.slug === lead) ?? null;
@@ -155,7 +167,7 @@ export function CapstoneBank({ lead }: { lead?: string }) {
           className="underline underline-offset-4"
           href="/verification/capstone-bank"
         >
-          Open the bank — {entries.length} briefs with filters, prerequisites and sources →
+          Open the bank — all {bank.entries.length} briefs across the program, with filters, prerequisites and sources →
         </a>
       </p>
     </div>

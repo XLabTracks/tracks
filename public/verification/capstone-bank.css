@@ -241,6 +241,10 @@
 
 .card-meta { display: flex; flex-wrap: wrap; gap: 4px; }
 .card-meta .chip .g { font-size: var(--fs-2xs); }
+/* The course-fit marker, same idiom as .chip.done: a word plus a tick,
+   never the tint on its own. */
+.chip.fit { color: var(--brand-ink); border-color: color-mix(in srgb, var(--brand-ink) 40%, var(--border)); }
+.chip.fit::before { content: '✓'; }
 
 .card-foot { display: flex; align-items: flex-end; gap: 12px; margin-top: auto; }
 .card-foot .deliverable { flex: 1; font-size: var(--fs-xs); line-height: 1.45; color: var(--muted-foreground); }

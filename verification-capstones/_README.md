@@ -22,14 +22,18 @@ Files whose name starts with `_` (like this one) are ignored.
 
 ## Front matter
 
-All keys below are required except `prerequisites`, `sources` and `audience`.
-The build fails loudly on a missing key, an unknown enum value, or a
-malformed range — better a red build than a card with a blank stat.
+All keys below are required except `prerequisites`, `sources`, `audience`
+and `verification_fit`. The build fails loudly on a missing key, an unknown
+enum value, or a malformed range — better a red build than a card with a
+blank stat.
 
 ```yaml
 ---
 title: Minimal Verification Regime for an Emergency Pause
 track: Verification              # free text; becomes a filter facet
+# verification_fit: "…"          # only on other-track entries that can be
+                                 # taken as a Verification capstone — one line
+                                 # naming the course module it lands on
 status: ready                    # ready | draft | concept
 summary: One line, ~140 chars — what the learner walks out holding.
 team: 1-3                        # people expected; "1" or "2-4"
@@ -54,21 +58,36 @@ are not — a new track name simply appears as a new facet.
 
 ## What belongs in this bank
 
-This is the **Verification** platform, so the bank carries the capstones whose
-prerequisites this course actually teaches: the `Verification` ones, and the
-program-level `Cross-track` ones that are about the program rather than inside
-one track.
+The **whole program's** capstones, carried over from the playground repo's
+bank: the `Verification` and program-level `Cross-track` briefs this course
+teaches the prerequisites for, and the `Technical Governance` and
+`AI Governance Policy` briefs beside them, so the program's full menu is
+browsable in one place.
 
-The Technical Governance and AI Governance Policy tracks have their own
-capstones in the playground repo. They are deliberately **not** here: their
-`prerequisites` name policy and TG weeks, and a capstone whose prerequisites
-do not exist is a capstone no learner on this site is prepared for.
+The two native tracks are in-course by definition. A governance brief that
+can honestly be taken as a **Verification-course capstone** says so itself,
+with the optional key:
+
+```yaml
+verification_fit: "One line naming the course module the project lands on."
+```
+
+The generator derives `courseFit` (native track, or the key present) and
+`verificationFit` (the reason line); the page turns them into the
+`fits this course` chip, the Course fit facet, and the sheet's Course fit
+row, and unit 4.2's `<CapstoneBank/>` prints only the course-fit briefs.
+The bar for adding the key is the module reference: if no unit of this
+course teaches the thing the project exercises, the key is a claim the page
+cannot back. Governance briefs keep their own `prerequisites` — they name
+TG and policy weeks spelled the way the playground's track documents spell
+them, which are not taught here; the marker exists precisely to say a brief
+is doable from this course's modules anyway.
 
 Two rules follow, and nothing validates either — they are on the author:
 
-- **`prerequisites` must name real units**, spelled the way `data/course.js`
-  spells them. A fabricated prerequisite makes a card look grounded when it
-  is not.
+- **`prerequisites` must name real weeks/units**, spelled the way the owning
+  track's document spells them (`data/course.js` for Verification entries).
+  A fabricated prerequisite makes a card look grounded when it is not.
 - **Cite the source document in `sources`**, with the module, so the claim of
   relevance is auditable from the page rather than taken on trust.
 
@@ -100,13 +119,13 @@ node -e "global.window={};require('./data/capstone-bank.js');
 ### Link verification log
 
 Per the repo rule on unverified claims. The entries in this folder were
-carried over from the playground's bank, where all 44 distinct off-site links
-were checked on **2026-08-04**; the rows below are the ones that reach the
-capstones kept here.
+carried over from the playground's bank — the course-fit subset first, the
+remaining 37 on **2026-08-05** — where all 44 distinct off-site links across
+the full bank were checked on **2026-08-04**.
 
 | Link | Status | Note |
 |---|---|---|
-| arXiv, LessWrong, EA Forum, aisafety.com, Substack, OpenReview, NIST, Google Docs, Airtable and personal-site links cited by these 21 entries | confirmed | HTTP 200 on 2026-08-04, in the playground repo before the port |
+| arXiv, LessWrong, EA Forum, aisafety.com, Substack, OpenReview, NIST, Google Docs, Airtable, eagroups.org and personal-site links cited by the full 58-entry bank | confirmed | HTTP 200 on 2026-08-04, in the playground repo before the port |
 | `coefficientgiving.org` — the capability-evaluations RFP | unchecked | Open Philanthropy renamed to Coefficient Giving in Nov 2025; the openphilanthropy.org URL cited by the source post 301s to this host, which returns 403 to automated clients. Page title is present in search indexes. Re-check by hand. |
 
 ## Body

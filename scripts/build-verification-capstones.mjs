@@ -36,7 +36,11 @@ const OUT_JSON = path.join(ROOT, 'src', 'content', 'verification', 'capstone-ban
 const REQUIRED = ['title', 'track', 'status', 'summary', 'team', 'effort_hours',
   'duration', 'difficulty', 'deliverable', 'deliverable_type', 'mentor',
   'skills', 'updated'];
-const OPTIONAL = ['audience', 'prerequisites', 'sources'];
+const OPTIONAL = ['audience', 'prerequisites', 'sources', 'verification_fit'];
+/* The bank carries the whole program. These two tracks are the Verification
+   course's own; an entry from any other track counts as in-course only when
+   its file carries a verification_fit line saying which module it lands on. */
+const NATIVE_TRACKS = new Set(['Verification', 'Cross-track']);
 const ENUMS = {
   status: ['ready', 'draft', 'concept'],
   difficulty: ['core', 'stretch', 'advanced'],
@@ -293,6 +297,16 @@ for (const file of files) {
   }
   if (!/^\d{4}-\d{2}-\d{2}$/.test(String(data.updated || ''))) fail(file, 'updated: expected YYYY-MM-DD');
   if (String(data.summary || '').length > 200) fail(file, `summary is ${data.summary.length} chars — keep it under 200 so cards stay comparable`);
+  if (data.verification_fit !== undefined) {
+    if (typeof data.verification_fit !== 'string' || !data.verification_fit.trim()) {
+      fail(file, 'verification_fit: expected a one-line reason string');
+    } else if (data.verification_fit.length > 200) {
+      fail(file, `verification_fit is ${data.verification_fit.length} chars — one line, like summary`);
+    }
+    if (NATIVE_TRACKS.has(data.track)) {
+      warnings.push(`capstones/${file}: verification_fit on a ${data.track} entry is redundant — the course already owns it`);
+    }
+  }
 
   const slug = file.replace(/\.md$/, '');
   if (slugs.has(slug)) fail(file, `duplicate slug "${slug}"`);
@@ -321,6 +335,8 @@ for (const file of files) {
     deliverableType: data.deliverable_type,
     mentor: data.mentor,
     audience: data.audience || '',
+    verificationFit: typeof data.verification_fit === 'string' && data.verification_fit.trim() || null,
+    courseFit: NATIVE_TRACKS.has(data.track) || Boolean(data.verification_fit),
     skills: [].concat(data.skills || []),
     prerequisites: [].concat(data.prerequisites || []),
     sources: [].concat(data.sources || []).map(s => parseSource(s, file)),

@@ -7,7 +7,7 @@ import { handleAuth } from "@workos-inc/authkit-nextjs";
 // <deploy-id>--site.netlify.app) in request.url, so without an explicit baseURL
 // handleAuth bounces the user to that permalink instead of the primary domain.
 // Pin the post-login redirect to the site origin from the configured redirect URI.
-const redirectUri = process.env.NEXT_PUBLIC_WORKOS_REDIRECT_URI;
+const redirectUri = process.env.CF_PAGES_URL + "/callback";
 
 export const GET = handleAuth(
   redirectUri ? { baseURL: new URL(redirectUri).origin } : {},

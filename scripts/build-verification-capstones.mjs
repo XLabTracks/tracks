@@ -27,6 +27,11 @@ import { fileURLToPath } from 'node:url';
 const ROOT = path.join(path.dirname(fileURLToPath(import.meta.url)), '..');
 const SRC = path.join(ROOT, 'verification-capstones');
 const OUT = path.join(ROOT, 'public', 'verification', 'data', 'capstone-bank.js');
+// The app reads the same bank, and cannot read a file that assigns to
+// `window`. One source, two shapes: the static page keeps its script tag and
+// the app imports JSON. Both are written together and both are covered by
+// --check, so neither can go stale on its own.
+const OUT_JSON = path.join(ROOT, 'src', 'content', 'verification', 'capstone-bank.json');
 
 const REQUIRED = ['title', 'track', 'status', 'summary', 'team', 'effort_hours',
   'duration', 'difficulty', 'deliverable', 'deliverable_type', 'mentor',
@@ -344,12 +349,15 @@ const banner = `/* GENERATED FILE — do not edit by hand.
    ${entries.length} capstone(s). Ordering and formatting are deterministic so
    CI can diff this file against a fresh build. */\n`;
 
-const out = `${banner}window.CAPSTONE_BANK = ${JSON.stringify({ count: entries.length, entries }, null, 2)};\n`;
+const payload = { count: entries.length, entries };
+const out = `${banner}window.CAPSTONE_BANK = ${JSON.stringify(payload, null, 2)};\n`;
+const outJson = `${JSON.stringify(payload, null, 2)}\n`;
 
 if (process.argv.includes('--check')) {
   const current = fs.existsSync(OUT) ? fs.readFileSync(OUT, 'utf8') : '';
-  if (current !== out) {
-    console.error('\npublic/verification/data/capstone-bank.js is stale — run: npm run verification:capstones');
+  const currentJson = fs.existsSync(OUT_JSON) ? fs.readFileSync(OUT_JSON, 'utf8') : '';
+  if (current !== out || currentJson !== outJson) {
+    console.error('\nthe generated capstone bank is stale — run: npm run verification:capstones');
     process.exit(1);
   }
   console.log(`capstone bank is up to date (${entries.length} entries).`);
@@ -357,4 +365,5 @@ if (process.argv.includes('--check')) {
 }
 
 fs.writeFileSync(OUT, out);
-console.log(`build-capstones: ${entries.length} entr${entries.length === 1 ? 'y' : 'ies'} → ${path.relative(ROOT, OUT)}`);
+fs.writeFileSync(OUT_JSON, outJson);
+console.log(`build-capstones: ${entries.length} entr${entries.length === 1 ? 'y' : 'ies'} → ${path.relative(ROOT, OUT)} + ${path.relative(ROOT, OUT_JSON)}`);

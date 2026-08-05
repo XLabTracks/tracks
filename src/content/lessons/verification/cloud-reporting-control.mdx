@@ -1,76 +1,133 @@
-2.2.1 established what providers can see. This section covers what a treaty asks them to do with it.
+{/* Unit 2.2, section 2.2.2. This reading is the source-derived draft the static
+    module player carried; it came back into the app when that player was
+    retired, and the outline transcription it replaces is in this file's
+    history. The four sources do not share reuse terms — the two arXiv papers
+    are CC BY 4.0 and quoted freely; the RAND report and the Carnegie piece
+    are all-rights-reserved and reproduced on the author's instruction. A
+    <SourceQuote> is what reproduction looks like here: attribution above the
+    words, never after them.
+    Trap: the RAND PDF is AES-encrypted, so a downloaded copy carries no text
+    layer. These passages came from the file the author supplied — ask for it
+    rather than assuming a fetch will read. */}
 
-## Declaration and Registration
+### Two hooks
 
-You’ve learned what cloud providers can and cannot theoretically verify about training runs. Now, the question becomes: how can a verification regime operationalize these capabilities into regulation? Regulatory actions for cloud compute can be roughly classified into the two following schemes:
+Reporting regimes for cloud compute hang on two separate hooks:
 
-- Registration: A cluster this big exists, here. The provider reports the existence, location, and capacity of frontier-capable infrastructure. A registration threshold is a rate: how fast the cluster could compute, in operations per second.
-- Declaration: A training run this big is happening. The customer or provider reports a specific activity above a threshold. A declaration threshold is a total: how much a run consumed, in operations.
+**Registration** — “a cluster this big exists, here.” The provider reports the existence, location, and capacity of frontier-capable infrastructure.
 
-Simply put: registration maps where frontier runs could happen; declarations claim which ones are happening.
+**Declaration** — “a training run this big is happening.” The customer (or provider) reports a specific activity above a threshold.
 
-A useful declaration answers the same three layers as 2.2.1. Who: verified identity and an authorized signatory. How much: hardware, hours, locations. What for: purpose, model type, planned safety evaluations. But even a facially complete declaration is just a claim, and claims can be falsified. Its value is that it can be checked, and that lying in it carries legal consequences. Declared operations have an independent shadow in the 2.2.1 records: chips × hours × utilization.
+Registration maps where frontier runs *could* happen. Declarations claim which ones *are* happening. Different questions, different thresholds — don’t let them blur.
 
-POP-UP The 2023 US executive order on AI (rescinded in 2025) required reporting of clusters at 10^20 operations per second networked above 100 Gbit/s, and of training runs above 10^26 total operations. For a treaty’s own numbers, Egan and Heim propose pegging the initial threshold to the compute of then-current frontier models and revisiting it as capability per FLOP improves. Any specific exponent is an imperfect and easily-obsolete policy choice—albeit a necessarily concrete one. (See Thresholds Explainer)
+### The reference numbers
 
-CHECK A draft treaty annex sets two thresholds: one in operations per second, one in total operations. Is each threshold a registration or declaration?  (a) The rate triggers cluster registration; the total triggers run declaration. (b) Both trigger declarations. (c) The rate triggers declarations; the total triggers registration. (d) The two are interchangeable.
+The 2023 US executive order (EO 14110) is the worked precedent — later rescinded, so it matters here as a *template*, not live law:
 
-Answer: (a). A rate describes what infrastructure could do; a total describes what a run did. A regime that confuses them cannot enforce either threshold.
+- **Cluster registration** — report clusters capable of ≥ 10²⁰ operations *per second*, networked at over 100 Gbit/s.
+- **Training-run declaration** — report runs above 10²⁶ *total* operations.
 
-## Know Your Customer: from banks to compute
+One is a **rate** — how fast the cluster could compute. One is a **total** — how much a run consumed. The 60,000-accelerator example from the last reader is what 10²⁶ looks like in the flesh.
 
-Export controls stop chip shipments, but they do not stop logins. An entity barred from buying accelerators can rent the same silicon by the hour: “It is not necessary for these entities to own the physical chips if they are accessible digitally” (Egan and Heim 2023).
+<Src>EO 14110 thresholds as tabulated in Heim et al., *Governing Through the Cloud* (2024) — [arXiv:2403.08501](https://arxiv.org/abs/2403.08501), CC BY 4.0, p. 31.</Src>
 
-Every record and declaration is worth little if the account holder isn’t who they say they are. Banking answered this identity verification problem with a strategy called Know-Your-Customer, or KYC—Egan and Heim transfer this model to compute.
+### What a declaration says
 
-What does KYC look like in compute verification?
+A useful declaration answers three things — the same three layers from 2.2.1:
 
-Above a compute threshold, the provider must:
+**Who**: verified identity and an authorized signatory. **How much**: compute parameters — hardware, hours, locations. **What for**: purpose, model type, planned safety evaluations.
 
-- Verify the entity: incorporation, registered office, directors, checked against government registries.
-- Verify the beneficial owners: the humans who ultimately own or control the customer, behind any corporate wrappers. The US line is 25 percent ownership or substantial control.
-- Record a statement of purpose and monitor usage against it, since risk profiles change after onboarding.
-- Keep records of above-threshold compute provided, and of denials.
-- Screen customers against the US Entity List, sanctions lists, and defined high-risk profiles, and report the matches.
-- Investigate sublessors, because compute gets resold and each hop in a reseller chain degrades visibility.
+A declaration that answers only one of the three is a form, not evidence.
 
-POP-UP  KYC in banking: US banks have run this scheme since the 1970s to prevent financial crime, terrorist financing, and identity theft, based on Bank confidentiality Act and later USA PATRIOT Act foundations, with the global Financial Action Task Force (FATF) setting standards that member states write into domestic law. Compliance stayed weak for years, until penalties got real. It is expensive: US financial-crime compliance cost an estimated 40.7 billion dollars in 2022 (LANDSCAPE), and money laundering persists anyway. Providers will cite this history.
+### Claims, not proof
 
-The KYC scheme has two known gaps:
+Here is the reframe the whole section hangs on: **a declaration is a claim.** Its value is not that it is true — it is that it can be checked, and that lying in it has legal consequences.
 
-The jurisdictional leak. One jurisdiction cannot hold it alone. A US-only requirement pushes exactly the customers with something to hide toward providers in laxer jurisdictions, selecting for evasion while burdening the honest. Egan and Heim make allied adoption and shared risk information a condition of the design; otherwise the checkpoint becomes a detour sign.
+Declared 2 × 10²⁵ operations? The resource-use layer has its own opinion: chips × hours × utilization. Match → corroboration. Mismatch → an investigation with a paper trail.
 
-The chain problem. A provider sells capacity to CloudBridge Ltd, a reseller. CloudBridge subleases to Meridian Analytics, a consultancy. Meridian’s compute is used by a client it declines to name. The provider’s KYC file says “CloudBridge”: true and verified, but useless. Treat multi-hop chains as a live gap and as a red-flag pattern to hunt.
+That cross-check — **declared vs observed** — is the single most useful move in this module, and the game will make you do it repeatedly.
 
-CHECK  A customer entity is owned 100 percent by a holding company, which is owned by another company offshore. What does beneficial-ownership verification require? (a) Verifying the holding company’s name and stopping there. (b) Checking that the offshore jurisdiction has a tax treaty. (c) Confirming the customer’s email domain matches its website. (d) Tracing through the layers to the actual humans who own or control the customer.
+<Check id="cloud-check-5" q={"Under the EO 14110 template, which is which?"} options={["Registration and declaration are two names for the same report","Clusters register by capability rate (10²⁰ OP/s); training runs are declared by total compute (10²⁶ OP)","Both use the same 10²⁶ threshold","Clusters register at 10²⁶ OP; training runs are declared at 10²⁰ OP/s"]} answer={1} why={"Standing infrastructure is measured by what it *could* compute per second (a rate); a run by what it *did* compute in total. Mixing the two numbers up is the most common error in this unit — and they hook different obligations."} />
 
-Answer: (d). Stopping at any wrapper, as in (a), is exactly the failure the requirement exists to prevent.
+<GapFill id="cloud-gap-4" text={"A declaration is a ___. Its value is not that it is true — it is that it can be ___, and that lying in it carries legal consequences."} blanks={["claim","cross-checked"]} bank={["claim","cross-checked","proof","notarized","measurement"]} why={"A claim, whose worth is that it can be cross-checked. Treat it as proof and you have a paperwork regime — the failure mode section 2.2.3 is built around."} src={"Heim et al., *Governing Through the Cloud* (2024) — [arXiv:2403.08501](https://arxiv.org/abs/2403.08501), CC BY 4.0, pp. 30–32."} />
 
-## Keep, report, suspend
+### Who gets told what
 
-Three duties, in rising order of force:
+Routine records mostly stay with the provider. Regulators see reports at thresholds, or on request. One proposed design keeps it lighter still: providers report only when they have *reasonable grounds to suspect* a violation — the way banks flag suspicious transactions rather than mailing every ledger to the government.
 
-Keep. Providers retain records of above-threshold compute provided and denied. Denials map who tried and failed; investigations need both sides of the ledger (Egan and Heim). The paper names no retention period, a real design gap.
+The design trade is visibility vs intrusion, and it recurs at every level of this track. More routine reporting means more oversight — and more honest customers’ data sitting in government files. Remember this page when 2.2.3 tallies the costs.
 
-Report. Routine records mostly stay with the provider; regulators see reports at thresholds, on request, or on high-risk matches. One proposed design is lighter still: providers report only on reasonable grounds to suspect a violation, the way banks flag suspicious transactions rather than mailing every ledger to the government. The trade is visibility against intrusion. More routine reporting means more oversight, and more honest customers’ data in government files.
+<Src>Heim et al., *Governing Through the Cloud* (2024) — [arXiv:2403.08501](https://arxiv.org/abs/2403.08501), CC BY 4.0, p. 32.</Src>
 
-Suspend. The lever that separates Cloud from every other surface in Module 2: the evidence-holder can also stop the activity. Compare enforcement elsewhere: a chip on the wrong continent is gone. Cloud access is point-in-time, metered, and revocable mid-run, so a violation discovered on Tuesday can lose its compute on Tuesday. Because suspension is fast, precise, and reversible, it is also a lighter trigger to pull, and therefore a more credible threat.
+### Renting beats buying
 
-## The Paperwork Regime
+Export controls stop chip **shipments**. They don’t stop **logins**. An entity barred from buying accelerators can rent the same silicon by the hour — as the KYC paper puts it: “It is not necessary for these entities to own the physical chips if they are accessible digitally.”
 
-A tempting inference: providers must report runs above the threshold, therefore above-threshold runs get caught. Banking named the failure decades ago. The moment a 10,000-dollar reporting line existed, customers began splitting deposits into 9,900-dollar slices. The move has a legal name: structuring. Write a threshold, and you have written the evasion’s spec sheet.
+So the cloud is either the hole in compute governance or its best checkpoint — depending entirely on whether the provider knows who it is serving.
 
-Egan and Heim warn of the compute version: a developer deconstructs a compute-intensive project into smaller, discrete sub-projects that each fall below the reporting threshold (sec. 2.2.2). RAND modeled the general case.
+That is the anchor problem: every record from 2.2.1 is worthless if the name on the account is a fiction.
 
-EXCERPT — Moon et al. 2025
+<Src>Quoted from Egan & Heim, *Oversight for Frontier AI through a Know-Your-Customer Scheme for Compute Providers* (2023) — [arXiv:2310.13625](https://arxiv.org/abs/2310.13625), CC BY 4.0, p. 4.</Src>
 
-“Cloud service providers might not be able to report and detect AI training if they are obligated to monitor and report activity based only on floating-point operation thresholds in future AI governance policy.”
+### The scheme
 
-The design lesson: declarations work as commitments to check against, and fail as the only detection layer. A regime built on self-declared forms, with no telemetry corroboration, catches exactly the participants who tell the truth on forms. RAND’s corroborating metrics (data-transfer patterns, cluster size, power consumption) appear in 2.2.3, where structuring comes back with numbers on it.
+The proposed compute-KYC scheme (Egan & Heim, 2023) transplants a mature template onto providers. Above a compute threshold, the provider must:
 
-CHECK  A regime requires declarations but performs no telemetry checks. Which actor does it constrain most?
+- **Verify the entity** — incorporation, address, directors, checked against registries.
+- **Verify the beneficial owners** — the humans who ultimately own or control it (the US line: ≥25% ownership, or substantial control) — not just the name on the contract.
+- **Record a statement of purpose**, and monitor usage against it.
+- **Keep records** of above-threshold provision — and of denials.
+- **Report matches** against high-risk profiles: sanctions lists, ties to countries of concern, funding that can’t be explained.
 
-Answer: Compliant actors. Violators file false forms. That is the paperwork regime.
+<Src>Egan & Heim, *Oversight for Frontier AI through a Know-Your-Customer Scheme for Compute Providers* (2023) — [arXiv:2310.13625](https://arxiv.org/abs/2310.13625), CC BY 4.0, pp. 10–12; the 25% line at n. 66 (p. 11).</Src>
+
+<Check id="cloud-check-6" q={"A customer entity is owned 100% by a holding company, which is owned by another company offshore. What does beneficial-ownership verification require?"} options={["Confirming the customer’s email domain matches its website","Verifying the holding company’s name and stopping there","Tracing through the layers to the actual humans who own or control the customer","Checking that the offshore jurisdiction has a tax treaty"]} answer={2} why={"Beneficial ownership means the natural persons at the end of the chain. Layered holding companies are precisely the structure the requirement exists to see through — stopping at the first shell is the failure mode, not the rule."} />
+
+<GapFill id="cloud-gap-5" text={"Beneficial-ownership verification means tracing through the layers to the ___ who ultimately own or control the customer. The US line is ___ ownership, or substantial control."} blanks={["humans","25%"]} bank={["humans","25%","directors","10%","creditors"]} why={"The natural persons at the end of the chain, at 25% ownership or substantial control. Directors can be nominees and creditors are not owners — stopping at either is the failure the requirement exists to prevent."} src={"Egan & Heim, *Oversight for Frontier AI through a Know-Your-Customer Scheme for Compute Providers* (2023) — [arXiv:2310.13625](https://arxiv.org/abs/2310.13625), CC BY 4.0, pp. 10–12 and n. 66 (p. 11)."} />
+
+### The sharp tool
+
+Why bother, when export controls already exist? Because of what enforcement looks like. “Once exported, chips cannot be retracted nor their end use controlled.” A chip on the wrong continent is gone.
+
+Cloud access is the opposite: point-in-time, metered, revocable mid-run. A violation discovered on Tuesday can lose its compute on Tuesday.
+
+Suspension is faster, more precise, and more reversible than any action against physical hardware — which also makes it a lighter trigger to pull, and therefore a more credible threat.
+
+<Src>Quoted from Egan & Heim, *Oversight for Frontier AI through a Know-Your-Customer Scheme for Compute Providers* (2023) — [arXiv:2310.13625](https://arxiv.org/abs/2310.13625), CC BY 4.0, p. 4.</Src>
+
+### Sixty years of prior art
+
+None of this is a new idea. Banks have run the same scheme since the 1970s under the US Bank Secrecy Act: identify customers, verify owners, monitor transactions, report suspicion.
+
+Two lessons travel. First: rules without enforcement slept — bank compliance stayed weak for years until penalties got real.
+
+Second — and keep this one: the moment a $10,000 reporting line existed, customers started splitting deposits into $9,900 slices. The move even has a legal name: **structuring**. Write a threshold, and you have written the evasion’s spec sheet. File that thought; it comes back with numbers on it in 2.2.3.
+
+<Src>Egan & Heim, *Oversight for Frontier AI through a Know-Your-Customer Scheme for Compute Providers* (2023) — [arXiv:2310.13625](https://arxiv.org/abs/2310.13625), CC BY 4.0, pp. 7–8.</Src>
+
+### The leak
+
+One jurisdiction alone cannot hold this. A US-only KYC scheme pushes exactly the customers with something to hide toward providers in laxer jurisdictions — the scheme would select for evasion while burdening the honest.
+
+So the KYC paper’s own condition: coverage must spread — allied jurisdictions adopting compatible schemes and sharing risk information — or the checkpoint becomes a detour sign.
+
+<Src>Egan & Heim, *Oversight for Frontier AI through a Know-Your-Customer Scheme for Compute Providers* (2023) — [arXiv:2310.13625](https://arxiv.org/abs/2310.13625), CC BY 4.0, p. 15; Heim et al., *Governing Through the Cloud* (2024) — [arXiv:2403.08501](https://arxiv.org/abs/2403.08501), CC BY 4.0, p. 5.</Src>
+
+<Check id="cloud-check-7" q={"Why does a strict KYC scheme in one country alone tend to leak?"} options={["Because KYC is technically impossible to implement","Customers with something to hide simply move to providers in jurisdictions without the scheme","Because compute cannot be metered per customer","Because the scheme only applies to small customers"]} answer={1} why={"The scheme is sound where it applies — the leak is jurisdictional migration. Per-customer metering is exactly what providers already do for billing, and thresholds target the *largest* customers, not the smallest."} />
+
+### Where the paperwork is thin
+
+The template has a known soft spot: **chains**. Watch one compute request travel:
+
+A provider sells capacity to *CloudBridge Ltd*, a reseller. CloudBridge subleases to *Meridian Analytics*, a consultancy. Meridian’s compute is used by a client it declines to name.
+
+Each hop knows one name. Nobody holds the chain. The provider’s KYC file says “CloudBridge” — true, verified, and useless.
+
+Beneficial-ownership registries help with shell *layers*; reseller and sublease *chains* are thinner ground — the KYC proposal touches them only in passing (“investigate sublessors where relevant”). Treat multi-hop chains as a live gap in the regime you are learning — and as a red-flag pattern to hunt in the game, next.
+
+<Src>Egan & Heim, *Oversight for Frontier AI through a Know-Your-Customer Scheme for Compute Providers* (2023) — [arXiv:2310.13625](https://arxiv.org/abs/2310.13625), CC BY 4.0, p. 11 n. 80. The three-hop chain is an illustration, not a case from the paper.</Src>
+
+## Tasks
 
 <Callout variant="tip" title="Task">
 
@@ -79,17 +136,3 @@ The NovaStar case
 The NovaStar case puts you at a provider’s oversight desk. Play it here: [the NovaStar case](https://playground-tracks.netlify.app/cloud-verification-game.html), then return for the quiz.
 
 </Callout>
-
-CHECK: 3 questions
-
-- What does beneficial-ownership verification add that entity verification alone does not?
-
-(It reaches through shell companies to the controlling party.)
-
-- Why do Egan and Heim require records of compute denied, not just provided?
-
-(Denials map who tried and failed; investigations need both sides of the ledger.)
-
-- Rank by intrusiveness on legitimate customers: log preservation, workload telemetry monitoring, access suspension. Defend your order in one sentence.
-
-(Discussion question. The reveal gives one defensible ordering and explains why reasonable designers disagree about the middle item.)

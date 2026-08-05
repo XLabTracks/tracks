@@ -17,6 +17,7 @@
     "lesswrong:build": "tsx scripts/build-lesswrong.ts",
     "verification:capstones": "node scripts/build-verification-capstones.mjs",
     "verification:chrome": "node scripts/build-verification-chrome.mjs",
+    "verification:course": "node scripts/build-verification-course.mjs",
     "readings:build": "tsx scripts/build-readings.ts"
   },
   "dependencies": {

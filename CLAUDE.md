@@ -41,6 +41,9 @@ step-by-step guide for adding content (its rules are enforced by
   Do **not** run `prisma migrate` against the hosted DB (see Database & deploy).
 - `npm run cf-typegen` — regenerate `cloudflare-env.d.ts` after changing
   bindings in `wrangler.jsonc`.
+- `npm run verification:course` — regenerate `public/verification/data/course.js`
+  from `src/content/verification/curriculum.ts`, the single source of the
+  Verification module and unit list. `-- --check` fails when they have drifted.
 - `npm run verification:capstones` — rebuild the Verification capstone bank
   from `verification-capstones/*.md` into
   `public/verification/data/capstone-bank.js`. `-- --check` verifies the two
@@ -333,18 +336,36 @@ add must reduce the duplication, never widen it.
   `src/content/lessons/verification/*.mdx`, reached by `contentRef`
   `verification/<name>` (`contentRef` is a *path* under
   `src/content/lessons`, so the subfolder needs no loader change).
-- **`public/verification/data/course.js` is a copy that has drifted, and must
-  end up generated from the above.** It is hand-maintained today and already
-  disagrees: different module titles ("Foundations" vs "Why verification?"),
-  different unit ids (`0.1` vs `v-welcome`), 18 units against 15. Do not
-  "fix" one side by hand — that is how the two got here. The fix is a
-  generator plus a `--check` mode, the same shape as
-  `npm run verification:capstones`, so CI fails when they disagree.
+- **`public/verification/data/course.js` is generated. Never hand-edit it.**
+  `npm run verification:course` builds it from the curriculum above;
+  `-- --check` fails when the two disagree. It carries **structure only** —
+  modules, units, ids, titles and an `href` per unit. The prose is MDX and
+  belongs to the app, which is the whole point: two copies of the text was
+  the defect.
+- **The static site links into the app for the reading.** `track.html`, the
+  skill map and the guide all resolve a unit through its generated `href`,
+  which points at `/tracks/verification/<module>/<lesson>`. `module.html` —
+  the old static player, which rendered its own copy of every unit — is now
+  a redirect that maps a `?u=<unit>` link to that href.
+- **`verificationUnitOfLesson` in curriculum.ts is the join.** The static
+  site and `data/skills.js` key on outline numbers (`0.1`, `2.3`); the graph
+  keys on `v-<name>`. Several lessons may share one unit — module 0's six
+  lessons are three units, 2.3's five sections are one. A lesson missing from
+  that map is a lesson the static site cannot see, so the generator fails
+  loudly rather than dropping it.
 - **Unit ids are permanent and load-bearing.** The static site's ids
   (`0.1`, `2.3`) are progress keys **and** the rung tags in
-  `data/skills.js`; the graph's are `v-<name>`. Any merge has to carry one set
-  and remap the other in the same commit, or the skill map silently stops
-  filling.
+  `data/skills.js`; the graph's are `v-<name>`. Both sets survive — the join
+  above is what keeps the skill map filling.
+- **`data/exercises.js` is orphaned and awaiting a decision.** Ten of its
+  eleven exercises (`ex-response-menu`, `ex-branches`, `ex-precedents`,
+  `ex-policy-matrix`, `ex-anatomy`, `ex-chokepoints`, `ex-upstream`,
+  `ex-mechanism-rank`, `ex-signals`, `ex-reopen`) lost their only consumer
+  when the static player became a redirect; `ex-evasion` still feeds the
+  capstone workspace's red-team table. They are authored content, so they were
+  kept rather than deleted. Either port them to React widgets under
+  `src/components/verification/widgets/` or retire them deliberately — do not
+  leave them drifting a third time.
 - **Learner state belongs to the account.** `VerificationState`
   (`/api/verification/state`) holds completed unit ids and the notebook as one
   JSON document per user; `localStorage` is the signed-out fallback and the

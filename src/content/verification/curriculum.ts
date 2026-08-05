@@ -455,3 +455,110 @@ export const verificationLessons: Lesson[] = [
     contentRef: "verification/intelligence-action",
   },
 ];
+
+/* ------------------------------------------------------------------------
+ * The outline numbering — the join between the two id sets.
+ *
+ * The static site under public/verification/ keys progress on the outline's
+ * unit numbers (0.1, 2.3) and data/skills.js tags its rungs with the same
+ * strings. The graph keys on v-<name>. Both are load-bearing and neither can
+ * be renamed, so this maps one onto the other — and it is what lets
+ * public/verification/data/course.js be generated instead of hand-maintained
+ * (npm run verification:course).
+ *
+ * Several lessons share one unit: 2.1's six hardware sections are one unit,
+ * 2.3's five are another. The generator groups by unit, and a unit's row in
+ * the static site points at the first lesson listed for it here.
+ *
+ * Trap: a lesson missing from this map is a lesson the static site cannot
+ * see. The generator fails loudly rather than dropping it — add the lesson
+ * here in the same commit that adds it to the graph.
+ * ---------------------------------------------------------------------- */
+
+export const verificationUnitOfLesson: Record<string, string> = {
+  "v-welcome": "0.1",
+  "v-introduction": "0.1",
+  "v-prevention": "0.1",
+  "v-verification-timeline-game": "0.1",
+  "v-intuitions": "0.2",
+  "v-precedents": "0.3",
+  "v-securitization": "0.3",
+  "v-scoping-intro": "1.0",
+  "v-scoping-thresholds": "1.0",
+  "v-scoping-effective-feasible": "1.0",
+  "v-policy-scoping": "1.0",
+  "v-scoping-anatomy": "1.1",
+  "v-anatomy-drill": "1.1",
+  "v-scoping-actors": "1.2",
+  "v-interactive-map": "1.2",
+  "v-protocol-actors": "1.2",
+  "v-report-constructor": "1.2",
+  "v-scoping-upstream-downstream": "1.3",
+  "v-mechanism-effective": "2.0",
+  "v-hw-attestation": "2.1",
+  "v-hw-trusted-statement": "2.1",
+  "v-hw-measuring-use": "2.1",
+  "v-hw-where-trust-lives": "2.1",
+  "v-hw-policy-studio": "2.1",
+  "v-hw-reconstructing-run": "2.1",
+  "v-cloud-intro": "2.2",
+  "v-cloud-what-providers-see": "2.2",
+  "v-cloud-reporting-control": "2.2",
+  "v-cloud-limits": "2.2",
+  "v-intel-signatures": "2.3",
+  "v-intel-anchor": "2.3",
+  "v-intel-assessment": "2.3",
+  "v-intel-institutions": "2.3",
+  "v-intel-action": "2.3",
+  "v-human-intro": "2.4",
+  "v-human-insiders": "2.4",
+  "v-human-reporting-protection": "2.4",
+  "v-human-audits-inspections": "2.4",
+  "v-human-institutions": "2.4",
+  "v-covert-what-is-it": "3.0",
+  "v-covert-how-to-cheat": "3.1",
+  "v-covert-red-blue": "3.2",
+  "v-capstone-motivation": "4.0",
+  "v-capstone-feasibility": "4.1",
+  "v-capstone-next-steps": "4.2",
+};
+
+/** Per-unit presentation the graph does not carry: the outline's own title,
+ *  kind and runtime. A unit's title can differ from its first lesson's — 0.1
+ *  is "Introduction" and opens with "Welcome". */
+export const verificationUnitMeta: Record<
+  string,
+  { title: string; kind: string; mins: string; optional?: boolean }
+> = {
+  "0.1": { title: "Introduction", kind: "explainer", mins: "15–20 min" },
+  "0.2": { title: "Building verification intuitions", kind: "interactive", mins: "15–20 min" },
+  "0.3": { title: "History, precedents, parallels", kind: "explainer", mins: "20–25 min" },
+  "1.0": { title: "What kind of policy are we trying to verify?", kind: "explainer", mins: "15–20 min" },
+  "1.1": { title: "Anatomy of a pause agreement", kind: "interactive", mins: "20–25 min" },
+  "1.2": { title: "Actors", kind: "interactive", mins: "25–30 min" },
+  "1.3": { title: "Upstream and downstream", kind: "explainer", mins: "10–15 min" },
+  "2.0": { title: "Confidentiality vs. verifiability", kind: "explainer", mins: "15–20 min" },
+  "2.1": { title: "Hardware", kind: "explainer", mins: "35–45 min" },
+  "2.2": { title: "Cloud", kind: "explainer", mins: "20–25 min" },
+  "2.3": { title: "Intelligence", kind: "explainer", mins: "35–45 min" },
+  "2.4": { title: "Human", kind: "explainer", mins: "20–25 min" },
+  "3.0": { title: "What is covert development?", kind: "explainer", mins: "10–15 min" },
+  "3.1": { title: "How could a determined actor cheat?", kind: "interactive", mins: "30–40 min" },
+  "3.2": { title: "Red team / blue team", kind: "exercise", mins: "45–60 min" },
+  "4.0": { title: "Motivation", kind: "explainer", mins: "15–20 min" },
+  "4.1": { title: "Feasibility, prioritization, sequencing", kind: "explainer", mins: "20–30 min" },
+  "4.2": { title: "Capstone", kind: "capstone", mins: "4–8 hrs" },
+};
+
+/** The static site's module chrome: its own short titles, glyphs, calendar
+ *  band and drafting status. The graph's titles are the learner-facing ones. */
+export const verificationModuleMeta: Record<
+  string,
+  { n: number; slug: string; title: string; glyph: string; week: string; status: string }
+> = {
+  "v-why": { n: 0, slug: "foundations", title: "Foundations", glyph: "✧", week: "week 1", status: "drafted" },
+  "v-scoping": { n: 1, slug: "policy-and-actors", title: "Policy and actors", glyph: "❖", week: "weeks 2–3", status: "drafted" },
+  "v-infrastructure": { n: 2, slug: "evidence-streams", title: "Evidence streams", glyph: "⚙", week: "weeks 4–8", status: "notes complete" },
+  "v-covert": { n: 3, slug: "covert-development", title: "Covert development", glyph: "⚠", week: "week 9", status: "taxonomy complete" },
+  "v-capstone": { n: 4, slug: "capstone", title: "Trust without trust", glyph: "✦", week: "week 10", status: "framing complete" },
+};

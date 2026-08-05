@@ -511,7 +511,7 @@ export const GENEVA = {
 
 /** The matrix quiz ("See the trap"). */
 export const MATRIX = {
-  eyebrow: "See the trap",
+  eyebrow: "",
   title: "The table every capital is looking at.",
   sub: "Each cell: your payoff, then your rival's. Higher is better. Answer the two questions the way a minister would.",
   gridTitle: "The base game · payoffs (you, them)",
@@ -545,7 +545,7 @@ export const MATRIX = {
 
 /** The fog mini-game copy. */
 export const FOG = {
-  eyebrow: "Interactive · The fog",
+  eyebrow: "Interactive",
   title: "Three quarters under the Compact. You cannot see your rival's hand.",
   sub: "The treaty is a year old. There are no inspections — only intelligence fragments. Each quarter, choose: hold to the Compact, or hedge. You will learn the truth only at the end. The other side is deciding about you the same way.",
   comply: {
@@ -575,7 +575,7 @@ export const FOG = {
 
 /** The defector's-calculation slider lab copy. */
 export const LAB = {
-  eyebrow: "Interactive · The defector's calculation",
+  eyebrow: "Interactive",
   title: "Run the numbers a cheating state runs.",
   pLabel: "Detection probability p",
   gLabel: "Gain from undetected cheating G",
@@ -600,7 +600,7 @@ export const LAB = {
 
 /** The inspector's-dilemma slider lab copy. */
 export const INSPECTOR = {
-  eyebrow: "Interactive · The inspector's dilemma",
+  eyebrow: "Interactive",
   title: "Buy detection without selling secrets.",
   sub: "Auditors only deter if detection clears the defector's threshold (p* ≈ 60% at Vienna's stakes). But everything inspectors see is also intelligence a rival can steal — and past the walk-away line, states refuse to be inspected at all. Find a design that does both.",
   sliderLabel: "Audit disclosure depth — how much of your stack inspectors see",

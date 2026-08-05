@@ -143,11 +143,11 @@ const PATH_ACCENT: Record<PathKey | "f" | "n", string> = {
   n: "text-foreground",
 };
 const PATH_BORDER: Record<PathKey | "f" | "n", string> = {
-  r: "border-l-defect",
-  t: "border-l-exaggerate",
-  v: "border-l-comply",
-  f: "border-l-free-ride",
-  n: "border-l-primary",
+  r: "border-defect",
+  t: "border-exaggerate",
+  v: "border-comply",
+  f: "border-free-ride",
+  n: "border-primary",
 };
 const PATH_DOT: Record<string, string> = {
   r: "bg-defect",
@@ -608,7 +608,7 @@ function MapHub({
           <div
             key={pk}
             className={cn(
-              "bg-muted/20 space-y-2 rounded-lg border-l-2 p-3",
+              "bg-muted/20 space-y-2 rounded-lg border p-3",
               PATH_BORDER[pk],
             )}
           >
@@ -901,7 +901,7 @@ function EventSection({ ev, fail }: { ev: GameEvent; fail?: boolean }) {
       data-anchor={`event-${ev.id}`}
       data-watch
       className={cn(
-        "bg-muted/20 rounded-lg border border-l-4 p-4",
+        "bg-muted/20 rounded-lg border p-4",
         PATH_BORDER[accent],
       )}
     >
@@ -918,7 +918,7 @@ function EventSection({ ev, fail }: { ev: GameEvent; fail?: boolean }) {
           <p key={i}>{p}</p>
         ))}
       </div>
-      <div className="border-primary/30 bg-primary/5 mt-3 rounded-md border-l-2 p-3">
+      <div className="border-primary/30 bg-primary/5 mt-3 rounded-md border p-3">
         <p className="text-muted-foreground font-mono text-[10px] tracking-[0.14em] uppercase">
           The game
         </p>
@@ -958,7 +958,7 @@ function SimpleNode({
     <article
       data-anchor={anchor}
       {...(nodeId ? { "data-node": nodeId, "data-watch": true } : {})}
-      className="bg-muted/20 border-l-primary rounded-lg border border-l-4 p-4"
+      className="bg-muted/20 border-primary/40 rounded-lg border p-4"
     >
       <div className="text-muted-foreground font-mono text-[11px] tracking-[0.14em]">
         {year}
@@ -1022,9 +1022,11 @@ function MatrixQuiz() {
 
   return (
     <div className="bg-muted/20 border-border rounded-lg border p-4">
-      <p className="text-muted-foreground font-mono text-[10px] tracking-[0.14em] uppercase">
-        {MATRIX.eyebrow}
-      </p>
+      {MATRIX.eyebrow && (
+        <p className="text-muted-foreground font-mono text-[10.5px] tracking-[0.14em] uppercase">
+          {MATRIX.eyebrow}
+        </p>
+      )}
       <p className="mt-1 text-base font-semibold">{MATRIX.title}</p>
       <p className="text-muted-foreground mt-1 text-sm">{MATRIX.sub}</p>
 
@@ -1102,7 +1104,7 @@ function MatrixQuiz() {
       </div>
 
       {done && (
-        <div className="border-primary/30 bg-primary/5 mt-3 rounded-md border-l-2 p-3">
+        <div className="border-primary/30 bg-primary/5 mt-3 rounded-md border p-3">
           <p className="text-comply mb-1 font-mono text-[10px] tracking-[0.14em] uppercase">
             {MATRIX.eqTag}
           </p>
@@ -1206,7 +1208,7 @@ function ChoiceButton({
       onClick={onClick}
       aria-pressed={chosen}
       className={cn(
-        "focus-visible:ring-ring rounded-lg border border-l-4 p-3 text-left transition-all focus-visible:ring-2 focus-visible:outline-none",
+        "focus-visible:ring-ring rounded-lg border p-3 text-left transition-all focus-visible:ring-2 focus-visible:outline-none",
         PATH_BORDER[accent as PathKey | "n"],
         chosen && "ring-primary ring-2",
         dimmed && "opacity-40",
@@ -1273,7 +1275,7 @@ function FogGame() {
   }
 
   return (
-    <div className="bg-muted/20 border-exaggerate/40 rounded-lg border border-l-4 p-4">
+    <div className="bg-muted/20 border-exaggerate/40 rounded-lg border p-4">
       <p className="text-exaggerate font-mono text-[10px] tracking-[0.14em] uppercase">
         {FOG.eyebrow}
       </p>
@@ -1286,7 +1288,7 @@ function FogGame() {
             {FOG.roundLab(q + 1)}
           </p>
           <div
-            className="border-exaggerate/40 bg-card mt-1.5 rounded-md border-l-2 p-3 text-sm"
+            className="border-exaggerate/40 bg-card mt-1.5 rounded-md border p-3 text-sm"
             aria-live="polite"
           >
             {INTEL[q]}
@@ -1358,7 +1360,7 @@ function FogGame() {
             ))}
           </div>
           <p
-            className="border-primary/30 bg-primary/5 mt-3 rounded-md border-l-2 p-3 text-sm"
+            className="border-primary/30 bg-primary/5 mt-3 rounded-md border p-3 text-sm"
             aria-live="polite"
           >
             {verdict}
@@ -1439,7 +1441,7 @@ function DefectorLab({
 
       <div
         className={cn(
-          "mt-4 rounded-md border-l-2 p-3",
+          "mt-4 rounded-md border p-3",
           defects ? "border-defect bg-defect/5" : "border-comply bg-comply/5",
         )}
         aria-live="polite"
@@ -1583,7 +1585,7 @@ function InspectorLab() {
   }
 
   return (
-    <div className="bg-muted/20 border-comply/40 rounded-lg border border-l-4 p-4">
+    <div className="bg-muted/20 border-comply/40 rounded-lg border p-4">
       <p className="text-comply font-mono text-[10px] tracking-[0.14em] uppercase">
         {INSPECTOR.eyebrow}
       </p>
@@ -1629,7 +1631,7 @@ function InspectorLab() {
 
       <div
         className={cn(
-          "mt-4 rounded-md border-l-2 p-3 text-sm",
+          "mt-4 rounded-md border p-3 text-sm",
           tone === "good"
             ? "border-comply bg-comply/5"
             : tone === "warn"
@@ -1844,7 +1846,7 @@ function TerminusSection({ termKey }: { termKey: PathKey | FailKey }) {
       data-anchor={`terminus-${termKey}`}
       data-watch
       className={cn(
-        "rounded-lg border-l-4 p-4",
+        "rounded-lg border p-4",
         kind === "good"
           ? "border-comply bg-comply/5"
           : "border-defect bg-defect/5",

@@ -925,7 +925,7 @@ function DebriefSection({
       <p className="mt-4 text-sm">{lesson}</p>
 
       <p
-        className="border-hide/40 bg-hide/5 mt-4 rounded-lg border-l-2 p-3 text-sm [&_b]:font-semibold"
+        className="border-hide/40 bg-hide/5 mt-4 rounded-lg border p-3 text-sm [&_b]:font-semibold"
         dangerouslySetInnerHTML={{ __html: pairHtml }}
       />
 

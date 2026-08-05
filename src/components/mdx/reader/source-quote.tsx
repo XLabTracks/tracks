@@ -37,7 +37,7 @@ export function SourceQuote({
           {url ? (
             <a href={url} target="_blank" rel="noopener" className="underline underline-offset-4">
               {t}
-              <span aria-hidden="true"> ↗</span>
+              <span aria-hidden="true" className="select-none"> ↗</span>
             </a>
           ) : (
             t

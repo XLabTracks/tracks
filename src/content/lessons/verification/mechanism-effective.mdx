@@ -14,7 +14,7 @@ Before we dive in, let’s first identify some baseline intuitions: fill out the
 - Political feasibility. Would the specific parties whose cooperation is required actually adopt and enforce it, now or under conditions you can name? Includes incentives, intrusiveness, confidentiality cost, and institutional home. Low:international inspectors with direct access to US and Chinese frontier labs' model weights. High: reporting requirements attached to existing chip export licenses — piggybacks on a regime that already operates.
 - Verification effectiveness. How much verification does it actually deliver: how strong is the evidence when it runs (loose inference vs. specific proof, against a motivated evader), and how much of the threat surface does it see (which actors, which activities)? Weak on either dimension caps the score — conclusive proof about a sliver is as limited as vague hints about everyone. Low: voluntary lab commitments — self-reported evidence, covering only the signatories, who are the least worrying actors precisely because they signed. High: on-chip cryptographic attestation — proves the specific claim about the specific workload, and the concentrated chip supply chain means nearly every serious training effort passes through it.
 - Durability. How fast does it decay — from technical progress, adversary adaptation, or political change? A mechanism scoring high works about as well in five years as today. Low: FLOP-threshold reporting — algorithmic efficiency gains push dangerous capabilities below any fixed threshold within a few years. High: mechanisms rooted in chip hardware — persist across model paradigms and training techniques for the lifetime of the installed base.
-https://mechanism-sort.netlify.app/
+[the mechanism sort](https://mechanism-sort.netlify.app/)
 
 As you’re going through this exercise, jot down in your notebook: What were the heuristics you use to evaluate whether a verification mechanism was:
 
@@ -24,7 +24,7 @@ As you’re going through this exercise, jot down in your notebook: What were th
 - Durable? → What develops faster, hardware or software?
 It’s important to note that the way we’ve taxonomized verification mechanisms in this course is not the only or most accepted way to do so; on the other hand, there are several different ways you can taxonomize the evidence streams of verification, according to your writing goals and audience context. We’ve chosen the hardware/cloud/intel/human four buckets—the by-layer taxonomy—for pedagogical simplicity. Keep in mind that when going forwards, you should proactively think about the best taxonomy or categorization level for your audience; think back to the upstream and downstream exercises you completed in Module 1. For instance, you’d want to prioritize mechanisms by policy goal when speaking to congressional officials, while you’d want to focus more on the easy-to-visualize by-layer organization for educational purposes.
 
-Maps of the Evidence Interactive: https://evidence-taxonomies.netlify.app/
+Interactive: [Maps of the Evidence](https://evidence-taxonomies.netlify.app/)
 
 - By layer: hardware, cloud, intel, human
 - By access required: cooperation required

@@ -1,0 +1,236 @@
+/* Components every course page shares, sitting on top of theme.css. The
+   palette, the header, the footer and the buttons are theme.css's; this file
+   is the vocabulary the learner-facing pages add to it — page shells, cards,
+   chips, progress bars, prose, the toast dock.
+
+   Trap: this file assumes theme.css is already linked. It reads --border,
+   --card, --primary and the rest and defines none of them, so a page that
+   links only this one renders unstyled black on white.
+
+   Trap: a card is hairline on all four sides. The module accent belongs
+   inside it — in the chip, the numeral, the fill of a bar — never painted
+   onto one edge. */
+
+/* ---------- page shell ---------- */
+
+.page {
+  width: 100%;
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 30px 24px 0;
+}
+
+.crumbs {
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--muted-foreground);
+}
+.crumbs a { color: var(--muted-foreground); text-decoration: none; }
+.crumbs a:hover { color: var(--foreground); text-decoration: underline; }
+
+/* A section label that carries something the heading does not — a count, a
+   state. It is not a decorative kicker; if it only repeats the heading below
+   it, delete it rather than styling it. */
+.eyebrow,
+.sec-eyebrow {
+  font-family: var(--mono);
+  font-size: 11.5px;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--muted-foreground);
+}
+.sec-eyebrow { margin: 40px 0 14px; }
+
+/* ---------- cards ---------- */
+
+.card {
+  padding: 20px;
+  border: var(--hairline) solid var(--border);
+  border-radius: var(--radius);
+  background: var(--card);
+}
+.card-flat { background: var(--background); }
+
+/* ---------- chips ---------- */
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 9px;
+  border: var(--hairline) solid var(--border);
+  border-radius: 999px;
+  background: var(--background);
+  font-family: var(--mono);
+  font-size: 11.5px;
+  line-height: 1.5;
+  color: var(--muted-foreground);
+  white-space: nowrap;
+}
+/* Done is a word plus a tick, never the tint on its own. */
+.chip.done { color: var(--brand-ink); border-color: color-mix(in srgb, var(--brand-ink) 40%, var(--border)); }
+.chip.done::before { content: '✓'; }
+.chip.accent { color: var(--brand-ink); }
+
+.lock { font-family: var(--mono); font-size: 11.5px; color: var(--muted-foreground); }
+
+/* ---------- progress ---------- */
+
+/* The bar is decoration for the fraction beside it; the fraction is the
+   reading. Never ship the bar without its counter. */
+.progress-row { display: flex; align-items: center; gap: 10px; }
+.meter {
+  position: relative;
+  flex: 1;
+  height: 6px;
+  min-width: 60px;
+  border-radius: 999px;
+  background: var(--muted);
+  overflow: hidden;
+}
+.meter > i {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: var(--primary);
+  transition: width .3s ease;
+}
+:root[data-theme='contrast'] .meter { border: var(--hairline) solid var(--border); }
+
+.counter {
+  font-family: var(--mono);
+  font-size: 12.5px;
+  color: var(--muted-foreground);
+  white-space: nowrap;
+}
+.frac { font-family: var(--mono); font-size: 12px; color: var(--muted-foreground); }
+
+/* ---------- authored prose ---------- */
+
+.prose { font-size: 16px; line-height: 1.68; }
+.prose > * + * { margin-top: 16px; }
+.prose h3 { font-size: 19px; margin-top: 30px; }
+.prose ul { padding-left: 20px; display: grid; gap: 8px; }
+.prose li { line-height: 1.6; }
+.prose code {
+  font-family: var(--mono);
+  font-size: .89em;
+  padding: 1px 5px;
+  border-radius: 4px;
+  background: var(--muted);
+}
+.prose a { color: var(--brand-ink); text-underline-offset: 3px; }
+.prose b { font-weight: 600; }
+
+/* An editorial aside. Uniform hairline, tinted ground — the emphasis is the
+   surface, not a painted rib. */
+.note {
+  padding: 14px 16px;
+  border: var(--hairline) solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--muted);
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--muted-foreground);
+}
+.note b { color: var(--foreground); font-weight: 600; }
+
+/* An honest placeholder: says what is missing and who owns it. It must never
+   look finished — the dashed edge is the signal that content is absent, and
+   it is the one place a non-uniform border is correct because it is not a
+   card claiming to hold something. */
+.stub {
+  padding: 14px 16px;
+  border: var(--hairline) dashed color-mix(in srgb, var(--foreground) 30%, transparent);
+  border-radius: var(--radius-sm);
+  background: transparent;
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--muted-foreground);
+}
+.stub b { color: var(--foreground); font-weight: 600; }
+
+/* ---------- preview banner ---------- */
+
+/* Wired to real state: it shows only while auth-config.js is in preview mode.
+   It is not decorative status chrome. */
+.preview-banner {
+  padding: 9px 24px;
+  border-bottom: var(--hairline) solid var(--border);
+  background: var(--muted);
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--muted-foreground);
+  text-align: center;
+}
+.preview-banner code { font-family: var(--mono); font-size: .92em; }
+
+/* ---------- toast ---------- */
+
+.toast-dock {
+  position: fixed;
+  right: 18px;
+  bottom: 18px;
+  z-index: 50;
+  display: grid;
+  gap: 10px;
+  width: min(340px, calc(100vw - 36px));
+}
+.toast {
+  padding: 14px 16px;
+  border: var(--hairline) solid var(--border);
+  border-radius: var(--radius);
+  background: var(--card);
+  box-shadow: var(--shadow-soft-lg);
+  animation: toast-in .22s ease;
+}
+.toast .label {
+  font-family: var(--mono);
+  font-size: 11.5px;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--brand-ink);
+}
+.toast p { margin-top: 5px; font-size: 14px; line-height: 1.5; }
+.toast .row { display: flex; align-items: center; gap: 12px; margin-top: 10px; }
+.toast .row a { font-size: 13px; color: var(--brand-ink); text-underline-offset: 3px; }
+.toast .x {
+  margin-left: auto;
+  width: 26px;
+  height: 26px;
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--muted-foreground);
+  font-size: 17px;
+  line-height: 1;
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
+}
+.toast .x:hover { background: var(--muted); color: var(--foreground); }
+
+@keyframes toast-in { from { opacity: 0; transform: translateY(8px); } }
+
+/* ---------- chrome is not text ---------- */
+
+/* theme.css carries the base rule; these are this layer's own pressables.
+   Anything added here that can be pressed goes in this list too. */
+.chip, .counter, .frac, .lock, .eyebrow, .sec-eyebrow, .toast .label, .meter {
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+}
+
+@media (max-width: 640px) {
+  .page { padding: 20px 16px 0; }
+  .toast-dock { right: 12px; left: 12px; bottom: 12px; width: auto; }
+}
+
+/* Breadcrumbs are navigation, not prose — a selection smear across "Home /
+   Track" is always a mis-drag. */
+.crumbs, .crumbs a {
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+}

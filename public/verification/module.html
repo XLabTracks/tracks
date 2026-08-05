@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Module — Verification · XLab Tracks</title>
+<meta name="description" content="The verification track module player: one unit at a time, with its exercise, readings and the skills it advances.">
+<!-- Read the stored theme before first paint. A late attribute means the page
+     flashes the wrong ground; keep this in step with theme.js — same key,
+     same attribute, same values. -->
+<script>
+(function () {
+  try {
+    var v = localStorage.getItem('xlab-verification-theme');
+    if (v !== 'light' && v !== 'dark' && v !== 'contrast') {
+      v = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    }
+    document.documentElement.setAttribute('data-theme', v);
+  } catch (e) {}
+})();
+</script>
+<link rel="stylesheet" href="fonts.css">
+<link rel="stylesheet" href="theme.css">
+<link rel="stylesheet" href="platform.css">
+<link rel="stylesheet" href="exercise.css">
+<link rel="stylesheet" href="module.css">
+</head>
+<body class="player">
+
+<div data-topbar></div>
+
+<div class="shell">
+
+  <aside class="rail" data-rail aria-label="Track index"></aside>
+
+  <main class="work">
+    <nav class="crumbs" aria-label="Breadcrumb" data-crumbs></nav>
+    <article class="unit" data-unit></article>
+    <nav class="pager" data-pager aria-label="Unit navigation"></nav>
+  </main>
+
+</div>
+
+<script src="data/course.js"></script>
+<script src="data/skills.js"></script>
+<script src="data/exercises.js"></script>
+<script src="theme.js"></script>
+<script src="platform.js"></script>
+<script src="exercise.js"></script>
+<script src="module.js"></script>
+</body>
+</html>

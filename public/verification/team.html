@@ -25,19 +25,7 @@
 
 <a class="skip" href="#main">Skip to content</a>
 
-<header class="site-header">
-  <div class="bar">
-    <a class="brand" href="landing.html">XLab<i> · </i>Verification</a>
-    <nav class="nav" aria-label="Site">
-      <a href="team.html" aria-current="page">Team</a>
-      <a href="about.html">About</a>
-    </nav>
-    <div class="header-right">
-      <div class="theme-switch"></div>
-      <a class="btn small" href="/login">Sign in</a>
-    </div>
-  </div>
-</header>
+<div data-topbar></div>
 
 <main id="main">
   <div class="wrap">
@@ -83,13 +71,12 @@
   </div>
 </main>
 
-<footer class="site-footer">
-  <div class="wrap">
-    <span>XLab Tracks · Verification</span>
-    <span>Draft landing — not the built course</span>
-  </div>
-</footer>
+<footer data-foot></footer>
 
+<script src="data/course.js"></script>
+<script src="data/skills.js"></script>
 <script src="theme.js"></script>
+<script src="platform.js"></script>
+<script>VT.mountChrome('team.html'); VT.mountFoot();</script>
 </body>
 </html>

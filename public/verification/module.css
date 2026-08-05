@@ -1,0 +1,212 @@
+/* Module player — the focused mode. A persistent track index on the left,
+   one unit on the right, an explicit exit back to browsing in the rail head.
+
+   Trap: the rail is `position: sticky` inside a grid column, so it needs an
+   explicit height for the inner scroller; without it a long rail pushes the
+   page instead of scrolling itself.
+
+   Trap: the header is sticky and 56px tall, so the rail's top offset and its
+   height must both account for it or the first row hides underneath. */
+
+.player .shell {
+  display: grid;
+  grid-template-columns: 268px minmax(0, 1fr);
+  max-width: 1280px;
+  margin: 0 auto;
+  align-items: start;
+}
+
+.rail {
+  position: sticky;
+  top: 56px;
+  height: calc(100vh - 56px);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 18px 14px 40px;
+  border-right: var(--hairline) solid var(--border);
+}
+.rail-summary { display: none; }
+.rail-head { margin-bottom: 16px; }
+.rail-head .exit {
+  font-family: var(--mono);
+  font-size: 11.5px;
+  color: var(--muted-foreground);
+  text-decoration: none;
+}
+.rail-head .exit:hover { color: var(--foreground); text-decoration: underline; }
+.rail-head .progress-row { margin-top: 12px; }
+
+.rail-mod { margin-bottom: 4px; }
+.rail-mod > .head {
+  display: flex;
+  align-items: baseline;
+  gap: 7px;
+  padding: 10px 8px 5px;
+}
+.rail-mod .n {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--mod, var(--muted-foreground));
+}
+.rail-mod .ttl { font-size: 13px; }
+.rail-mod .frac { margin-left: auto; font-size: 11px; }
+
+.rail ul { list-style: none; margin-bottom: 6px; }
+.rail li a {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 6px 8px;
+  border-radius: var(--radius-sm);
+  font-size: 13.5px;
+  color: var(--muted-foreground);
+  text-decoration: none;
+  transition: background .14s ease, color .14s ease;
+}
+.rail li a:hover { background: var(--muted); color: var(--foreground); }
+/* The current row is named by aria-current as well as drawn, so a learner who
+   cannot separate the tint still knows where they are. */
+.rail li a[aria-current='true'] { background: var(--muted); color: var(--foreground); font-weight: 600; }
+.rail li a[aria-current='true'] .num { color: var(--brand-ink); }
+.rail .num { flex: none; width: 26px; font-family: var(--mono); font-size: 11px; color: var(--muted-foreground); }
+.rail .lbl { flex: 1 1 auto; }
+
+.work { min-width: 0; padding: 26px 30px 70px; }
+
+/* ---------- unit ---------- */
+
+.unit-head { margin-bottom: 6px; }
+.unit-head .unit-num {
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--mod, var(--brand-ink));
+}
+.unit-head h1 { font-size: 30px; margin: 6px 0 12px; }
+.unit-goal {
+  max-width: 62ch;
+  margin-bottom: 16px;
+  font-size: 16px;
+  line-height: 1.55;
+  color: var(--muted-foreground);
+}
+.unit-chips { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 24px; }
+
+.unit .prose { max-width: 68ch; }
+.unit .prose h4 {
+  margin: 28px 0 10px;
+  font-family: var(--mono);
+  font-size: 11.5px;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--muted-foreground);
+}
+
+.block-gap { margin-top: 28px; }
+
+.coverage {
+  max-width: 68ch;
+  padding: 14px 17px;
+  border: var(--hairline) solid var(--border);
+  border-radius: var(--radius);
+  background: var(--muted);
+}
+.coverage .label {
+  display: block;
+  margin-bottom: 8px;
+  font-family: var(--mono);
+  font-size: 11.5px;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--muted-foreground);
+}
+.coverage ul { margin-left: 18px; font-size: 13.5px; line-height: 1.6; color: var(--muted-foreground); }
+.coverage li { margin-bottom: 5px; }
+
+.readings { list-style: none; max-width: 68ch; }
+.readings li {
+  margin-bottom: 8px;
+  padding: 12px 15px;
+  border: var(--hairline) solid var(--border);
+  border-radius: var(--radius);
+  background: var(--card);
+}
+.readings .t { font-size: 14.5px; }
+.readings .a { font-size: 13px; color: var(--muted-foreground); }
+.readings .n { margin-top: 6px; font-size: 13px; line-height: 1.55; color: var(--muted-foreground); }
+
+/* The written output the unit ends in. Uniform hairline; the brand ink is in
+   the label, not on an edge. */
+.output {
+  max-width: 68ch;
+  padding: 14px 17px;
+  border: var(--hairline) solid var(--border);
+  border-radius: var(--radius);
+  background: var(--card);
+}
+.output .label {
+  display: block;
+  margin-bottom: 6px;
+  font-family: var(--mono);
+  font-size: 11.5px;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--brand-ink);
+}
+.output p { font-size: 14px; line-height: 1.6; }
+
+.advances { max-width: 68ch; font-size: 13px; line-height: 1.6; color: var(--muted-foreground); }
+.advances a { color: var(--brand-ink); text-underline-offset: 3px; }
+
+/* ---------- pager ---------- */
+
+.pager {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  max-width: 68ch;
+  margin-top: 36px;
+  padding-top: 18px;
+  border-top: var(--hairline) solid var(--border);
+}
+.pager .counter { margin: 0 auto; }
+.pager .done-state { font-family: var(--mono); font-size: 12px; color: var(--brand-ink); }
+.pager .done-state::before { content: '✓ '; }
+
+@media (max-width: 940px) {
+  .player .shell { grid-template-columns: minmax(0, 1fr); }
+  .rail {
+    position: static;
+    height: auto;
+    padding: 10px 16px;
+    border-right: 0;
+    border-bottom: var(--hairline) solid var(--border);
+  }
+  .rail-summary {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 6px 0;
+    list-style: none;
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--muted-foreground);
+    cursor: pointer;
+    user-select: none;
+    -webkit-user-select: none;
+  }
+  .rail-summary::-webkit-details-marker { display: none; }
+  .rail-summary::after { content: '▾'; margin-left: auto; }
+  .rail-box[open] .rail-summary::after { content: '▴'; }
+  .rail-box[open] .rail-summary { margin-bottom: 10px; border-bottom: var(--hairline) solid var(--border); }
+  .work { padding: 20px 16px 60px; }
+  .unit-head h1 { font-size: 25px; }
+}
+
+/* The rail is navigation top to bottom — rows, their numbers, their labels
+   and the exit. None of it is text anybody means to select. */
+.rail, .rail a, .rail .num, .rail .lbl, .rail-head .exit, .rail-summary {
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+}

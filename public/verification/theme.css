@@ -37,6 +37,12 @@
   --mod-3: #cc79a7;
   --mod-4: #d55e00;
 
+  /* Graded feedback. Wong's bluish-green and vermillion, never the red/green
+     pair — and never on their own: every use is accompanied by the word
+     (Correct / Not quite) and a ✓ or ✕.*/
+  --ok: #007c5a;
+  --no: #b34700;
+
   --radius: 14px;
   --radius-sm: 8px;
   --hairline: 1px;
@@ -68,6 +74,9 @@
   --mod-3: #e5a3c6;
   --mod-4: #ff8f4d;
 
+  --ok: #3ecfa4;
+  --no: #ff8f4d;
+
   --shadow-soft: 0 1px 2px rgba(0, 0, 0, .4);
   --shadow-soft-lg: 0 12px 40px rgba(0, 0, 0, .5);
   /* Night is the one ground a glow reads on; day and high contrast set it to 0. */
@@ -96,6 +105,9 @@
   --mod-2: #6bffcb;
   --mod-3: #ffb3dd;
   --mod-4: #ffab70;
+
+  --ok: #6bffcb;
+  --no: #ffab70;
 
   --radius: 8px;
   --radius-sm: 6px;
@@ -129,7 +141,7 @@ a { color: inherit; }
    page. Trap: `all: unset` resets this, so any rule using it must re-declare
    user-select: none directly after. */
 button, [role='button'], [role='radio'], [role='tab'], .chip, .nav a, .brand,
-.btn, .stat dt, .legend, .mod-chip, .memo-link, .skip {
+.btn, .stat dt, .legend, .mod-chip, .memo-link, .skip, .site-footer a {
   user-select: none;
   -webkit-user-select: none;
   -webkit-touch-callout: none;
@@ -175,9 +187,29 @@ button, [role='button'], [role='radio'], [role='tab'], .chip, .nav a, .brand,
 
 /* The links sit against the brand on the left; the nav still takes the whole
    middle of the bar so the actions are pushed hard right.
+
    Trap: flex:1 is what pushes .header-right to the edge — drop it and the
-   actions slide back in beside the links. */
-.nav { flex: 1; display: flex; align-items: center; justify-content: flex-start; gap: 14px; font-size: 14.5px; }
+   actions slide back in beside the links.
+
+   Trap: min-width:0 is what lets the nav shrink below its content and scroll.
+   A flex item's floor is its content width by default, so without this the
+   links wrap to a second row inside a 56px bar and then push the page into
+   horizontal scroll — which is what happens between the mobile breakpoint and
+   about 1100px, where there is no room for every link but the bar is still
+   one row. */
+.nav {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 14px;
+  font-size: 14.5px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.nav::-webkit-scrollbar { display: none; }
+.nav a { white-space: nowrap; }
 .nav a {
   position: relative;
   padding: 6px 14px;

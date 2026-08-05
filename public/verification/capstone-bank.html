@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Capstone bank · XLab Verification</title>
+<meta name="description" content="Every capstone this track prepares you for, with the numbers that decide whether you can take it on: how many people, how many hours, over how long.">
+<meta name="robots" content="noindex, follow">
+<!-- Read the stored theme before first paint. A late attribute means the page
+     flashes the wrong ground; keep this in step with theme.js — same key,
+     same attribute, same values. -->
+<script>
+(function () {
+  try {
+    var v = localStorage.getItem('xlab-verification-theme');
+    if (v !== 'light' && v !== 'dark' && v !== 'contrast') {
+      v = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    }
+    document.documentElement.setAttribute('data-theme', v);
+  } catch (e) {}
+})();
+</script>
+<link rel="stylesheet" href="fonts.css">
+<link rel="stylesheet" href="theme.css">
+<link rel="stylesheet" href="platform.css">
+<link rel="stylesheet" href="capstone-bank.css">
+</head>
+<body>
+
+<a class="skip" href="#main">Skip to content</a>
+
+<div data-topbar></div>
+
+<main class="page" id="main">
+  <nav class="crumbs" aria-label="Breadcrumb"><a href="landing.html">Home</a> / Capstone bank</nav>
+
+  <section class="bank-head">
+    <h1>Capstone bank</h1>
+    <p class="sub">
+      Every capstone this track prepares you for, with the numbers that decide
+      whether you can take it on: how many people, how many hours, over how
+      long. Open a card for the full brief.
+    </p>
+  </section>
+
+  <section class="controls" aria-label="Search and filters">
+    <div class="control-row">
+      <label class="search">
+        <span class="vh">Search capstones</span>
+        <input type="search" id="search" placeholder="Search title, summary, skills…" autocomplete="off">
+      </label>
+      <label class="sort">
+        <span class="sort-label">Sort</span>
+        <select id="sort">
+          <option value="track">By track</option>
+          <option value="effort">Fewest hours first</option>
+          <option value="team">Smallest team first</option>
+          <option value="duration">Shortest first</option>
+          <option value="title">A–Z</option>
+        </select>
+      </label>
+      <button class="btn small outline" id="moreBtn" type="button" aria-expanded="false" aria-controls="facetsExtra">More filters</button>
+    </div>
+
+    <div class="facets" id="facetsPrimary"></div>
+    <div class="facets extra" id="facetsExtra" hidden></div>
+
+    <div class="active-row" id="activeRow" hidden>
+      <span class="active-label">Filtering by</span>
+      <div class="active-chips" id="activeChips"></div>
+      <button class="btn small outline" id="clearBtn" type="button">Clear all</button>
+    </div>
+
+    <p class="result-count" id="resultCount" role="status"></p>
+  </section>
+
+  <div class="bank-grid" id="grid"></div>
+
+  <p class="empty" id="empty" hidden>
+    Nothing matches those filters.
+    <button class="link-btn" type="button" data-clear>Clear them</button>
+    and start again.
+  </p>
+
+  <p class="note bank-note">
+    <b>What is in here, and what is not.</b> This bank carries the capstones
+    whose prerequisites this track actually teaches — the Verification ones and
+    the program-level cross-track ones. The Technical Governance and AI
+    Governance Policy tracks have their own, and they name weeks no learner
+    here has done.
+  </p>
+
+</main>
+
+<div class="overlay" id="overlay" hidden>
+  <div class="sheet" id="sheet" role="dialog" aria-modal="true" aria-labelledby="sheetTitle" tabindex="-1">
+    <button class="sheet-close" id="sheetClose" type="button" aria-label="Close">&times;</button>
+    <div class="sheet-body" id="sheetBody"></div>
+  </div>
+</div>
+
+<footer data-foot></footer>
+
+<script src="data/course.js"></script>
+<script src="data/skills.js"></script>
+<script src="data/capstone-bank.js"></script>
+<script src="theme.js"></script>
+<script src="platform.js"></script>
+<script src="capstone-bank.js"></script>
+</body>
+</html>

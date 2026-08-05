@@ -28,19 +28,7 @@
 
 <a class="skip" href="#main">Skip to content</a>
 
-<header class="site-header">
-  <div class="bar">
-    <a class="brand" href="landing.html">XLab<i> · </i>Verification</a>
-    <nav class="nav" aria-label="Site">
-      <a href="team.html">Team</a>
-      <a href="about.html">About</a>
-    </nav>
-    <div class="header-right">
-      <div class="theme-switch"></div>
-      <a class="btn small" href="/login">Sign in</a>
-    </div>
-  </div>
-</header>
+<div data-topbar></div>
 
 <main id="main">
 
@@ -54,21 +42,13 @@
         promise from a broken one.
       </p>
 
-      <div class="ways">
-        <a class="btn" href="/login">Enroll</a>
-        <a class="btn outline" href="/tracks/verification">Start on your own</a>
-      </div>
-      <p class="ways-note">
-        Enrolling signs you in, saves your progress and lets you join a cohort.
-        Starting on your own needs no account and saves nothing.
-      </p>
+      <!-- Filled by landing.js: a returning learner is offered their next
+           unit by name, a new one is offered the first. Both read the
+           progress store — neither is a guess. -->
+      <div class="ways" data-ways></div>
+      <p class="ways-note" data-ways-note></p>
 
-      <dl class="stats">
-        <div><dt>Modules</dt><dd>5</dd></div>
-        <div><dt>Skills</dt><dd>27</dd></div>
-        <div><dt>Written outputs</dt><dd>15</dd></div>
-        <div><dt>Level</dt><dd>Intermediate</dd></div>
-      </dl>
+      <dl class="stats" data-stats></dl>
     </div>
   </section>
 
@@ -102,6 +82,8 @@
         </div>
         <div class="sky-panel" id="skyPanel"></div>
       </div>
+
+      <p class="after-sky"><a class="btn outline" href="map.html">Open the skill map</a></p>
     </div>
   </section>
 
@@ -116,58 +98,14 @@
         mechanisms into a realistic regime, and ends in the capstone.
       </p>
 
-      <ol class="modules">
-        <li>
-          <div class="mod-card" style="--mod:var(--mod-0)">
-            <p class="mod-chip">M0 · Why Verification?</p>
-            <h3>Why verification, and why now</h3>
-            <p>Why do we care about verification, and why is it so important to AI governance?</p>
-            <a class="memo-link" href="memo-desk.html#m0-hinge-brief">Written output — memo desk →</a>
-          </div>
-        </li>
-        <li>
-          <div class="mod-card" style="--mod:var(--mod-1)">
-            <p class="mod-chip">M1 · Actors</p>
-            <h3>Who holds the decisions and the evidence</h3>
-            <p>Who has a stake in an international AI agreement? Who has incentives to comply, defect, hide, exaggerate, or free-ride?</p>
-            <a class="memo-link" href="memo-desk.html#m1-stakeholder-map">Written output — memo desk →</a>
-          </div>
-        </li>
-        <li>
-          <div class="mod-card" style="--mod:var(--mod-2)">
-            <p class="mod-chip">M2 · Verification Infrastructure</p>
-            <h3>Hardware, cloud, intelligence, human</h3>
-            <p>What technical and institutional mechanisms let a verifier check compliance — and what can each one actually prove?</p>
-            <a class="memo-link" href="memo-desk.html#m2-1-hardware-brief">Written output — memo desk →</a>
-          </div>
-        </li>
-        <li>
-          <div class="mod-card" style="--mod:var(--mod-3)">
-            <p class="mod-chip">M3 · Scheming and Evasion</p>
-            <h3>Break it before you trust it</h3>
-            <p>How can self-interested actors circumvent verification mechanisms? How can cooperators prevent schemes, ex-ante and ex-post?</p>
-            <a class="memo-link" href="memo-desk.html#m3-written-output">Written output — memo desk →</a>
-          </div>
-        </li>
-        <li>
-          <div class="mod-card" style="--mod:var(--mod-4)">
-            <p class="mod-chip">M4 · Trust Without Trust</p>
-            <h3>Layering imperfect mechanisms</h3>
-            <p>Given that no individual mechanism can prove compliance, how do you prioritize, layer, and scaffold a realistic verification regime?</p>
-            <a class="memo-link" href="memo-desk.html#m4-2-capstone">Written output — memo desk →</a>
-          </div>
-        </li>
-      </ol>
+      <ol class="modules" data-modules></ol>
 
       <p class="note">
-        <b>Two names for the same five modules.</b> The constellation labels
-        them the way the skill graph does — Foundations, Supply chain,
-        Mechanisms, Evasion, Design — and the cards above use the outline’s
-        own titles. The numbers M0–M4 match. <b>This page is not wired to the
-        built course.</b> The track that renders at
-        <a href="/tracks/verification">/tracks/verification</a> still groups its
-        seventeen interactives by kind rather than by this structure, so the
-        module cards describe the outline and do not link into it.
+        <b>Two vocabularies for the same five modules.</b> The constellation
+        labels them the way the skill graph does — Foundations, Supply chain,
+        Mechanisms, Evasion, Design — and the cards above carry the course’s
+        own module titles. The numbers M0–M4 are the same in both, so a star’s
+        module and a card’s module always match even where the words differ.
       </p>
     </div>
   </section>
@@ -178,37 +116,26 @@
       <p class="intro">
         Most modules ask for one short written output — a memo, brief,
         critique or design note — applied to a concrete verification problem,
-        and put through peer review. The memo desk collects all fifteen places
-        the outline marks, quotes the brief where one exists, and says plainly
-        where none has been drafted yet.
+        and put through peer review. The memo desk collects every place the
+        outline marks, quotes the brief where one exists, and says plainly
+        where none has been drafted yet. The capstone bank holds the longer
+        projects the track ends in.
       </p>
-      <p style="margin-top:22px"><a class="btn" href="memo-desk.html">Open the memo desk</a></p>
+      <div class="ways after-sky">
+        <a class="btn" href="memo-desk.html">Open the memo desk</a>
+        <a class="btn outline" href="capstone-bank.html">Browse the capstone bank</a>
+      </div>
     </div>
   </section>
 
 </main>
 
-<footer class="site-footer">
-  <div class="wrap">
-    <span>XLab Tracks · Verification</span>
-    <span>Draft landing — not the built course</span>
-  </div>
-</footer>
+<footer data-foot></footer>
 
+<script src="data/course.js"></script>
+<script src="data/skills.js"></script>
 <script src="theme.js"></script>
-<script src="skills.js"></script>
-<script>
-// The objectives are the graph's own, so the list cannot drift from the map
-// beside it.
-(function () {
-  var S = window.VERIFICATION_SKILLS;
-  var ul = document.getElementById('objectives');
-  if (!S || !ul) return;
-  ul.innerHTML = S.objectives.map(function (o, i) {
-    return '<li><span class="n" aria-hidden="true">' + String(i + 1).padStart(2, '0') + '</span><span>' + o + '</span></li>';
-  }).join('');
-})();
-</script>
+<script src="platform.js"></script>
 <script src="landing.js"></script>
 </body>
 </html>

@@ -39,8 +39,14 @@
      3.5% of the outer radius and landed at 8px on a phone. Closing the rings
      and growing the stars puts it near 9%. The names left the figure, so the
      wide gap the rings used to keep for label blocks is free. */
-  var V = { cx: 900, cy: 900, r0: 150, dr: 62, fan: 200, nodeR: 30, gap: 25, charW: 6.5 };
-  V.sector = V.fan / 5;
+  var V = {
+    colW: 210,     /* column pitch — the plaque and the stars share it */
+    rowH: 108,     /* vertical pitch between stars in a column */
+    rowTop: 150,   /* first star, clear of the plaque */
+    headY: 60,     /* the column plaque's baseline */
+    padX: 20,
+    nodeR: 34,
+  };
 
   var esc = function (s) {
     return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
@@ -58,10 +64,6 @@
     };
   }
 
-  function polar(deg, r) {
-    var a = (deg * Math.PI) / 180;
-    return [V.cx + r * Math.cos(a), V.cy - r * Math.sin(a)];
-  }
 
   /* Break a skill name into at most two lines. The innermost ring leaves about
      152px between neighbouring rays, and several names run past that on one
@@ -86,75 +88,73 @@
     if (y1 > box.y1) box.y1 = y1;
   }
 
+  /* Columns, one per module, straight down — the structure of a game skill
+     tree rather than a fan. A column is a header plaque and its skills stacked
+     under it in row-band order, each joined to the next by a short straight
+     link. It is a grid, so it reflows: five columns on a laptop, and the CSS
+     below reflows them at narrow widths.
+
+     Trap: this is the whole geometry. Nothing here is polar any more — cx/cy,
+     r0, dr and fan are gone from V, and anything reaching for them will read
+     undefined rather than fail loudly. */
   var placed = {};
   var order = [[], [], [], [], []];
   S.nodes.forEach(function (n, i) { order[n.mod].push({ n: n, i: i }); });
-  var start = 90 + V.fan / 2; // leftmost edge of the fan
+
+  var colW = V.colW, rowH = V.rowH, headY = V.headY;
   order.forEach(function (col, mod) {
     col.sort(function (a, b) { return a.n.r - b.n.r || a.i - b.i; });
-    var center = start - (mod + 0.5) * V.sector;
-    col.center = center;
+    var cx = V.padX + colW * (mod + 0.5);
+    col.cx = cx;
+    col.head = { x: cx, y: headY };
+    fit(cx - colW * 0.46, headY - 26, cx + colW * 0.46, headY + 10);
     col.forEach(function (entry, j) {
-      var r = V.r0 + V.dr * j;
-      /* Alternating wobble, so a branch reads as a constellation rather than
-         a ruler. Kept to a few pixels of lateral travel — the constant is
-         divided by r precisely to hold it constant in px, and a bigger one
-         swings consecutive labels onto opposite sides of the ray, where they
-         land on each other. */
-      var jitter = (j % 2 === 0 ? 1 : -1) * (400 / r);
-      var p = polar(center + jitter, r);
-      placed[entry.n.id] = { node: entry.n, x: p[0], y: p[1], mod: mod, side: mod <= 1 ? 'left' : 'right' };
+      var y = V.rowTop + rowH * j;
+      placed[entry.n.id] = { node: entry.n, x: cx, y: y, mod: mod, row: j };
+      fit(cx - V.nodeR, y - V.nodeR, cx + V.nodeR, y + V.nodeR);
     });
-    col.maxR = V.r0 + V.dr * (col.length - 1);
-    var arc = polar(center, col.maxR + 74);
-    col.arc = { x: arc[0], y: arc[1] };
-    var half = ('M' + mod + ' · ' + S.moduleNames[mod]).length * V.charW * 0.5;
-    fit(arc[0] - half, arc[1] - 13, arc[0] + half, arc[1] + 5);
   });
 
   /* ---------- markup ---------- */
 
-  var rnd = seeded(20260805);
   var bg = '';
-  /* Rings only span the sectors that reach them — a full-fan ring at the
-     depth of the longest branch would push the frame out past four columns
-     that stop far short of it. */
-  var depth = Math.max.apply(null, order.map(function (c) { return c.length; }));
-  for (var k = 0; k < depth; k++) {
-    var reach = [0, 1, 2, 3, 4].filter(function (m) { return order[m].length > k; });
-    var rr = V.r0 + V.dr * k;
-    var a0 = order[reach[0]].center + V.sector / 2;
-    var a1 = order[reach[reach.length - 1]].center - V.sector / 2;
-    var p0 = polar(a0, rr), p1 = polar(a1, rr);
-    bg += '<path class="ring" d="M ' + p0[0].toFixed(1) + ' ' + p0[1].toFixed(1) +
-      ' A ' + rr + ' ' + rr + ' 0 0 1 ' + p1[0].toFixed(1) + ' ' + p1[1].toFixed(1) + '"/>';
-    fit(Math.min(p0[0], p1[0]), V.cy - rr, Math.max(p0[0], p1[0]), Math.max(p0[1], p1[1]));
-  }
-  for (var s = 0; s < 150; s++) {
-    var sr = V.r0 * 0.4 + rnd() * (V.r0 + V.dr * depth);
-    var sp = polar(start - rnd() * V.fan, sr);
-    bg += '<circle class="star" cx="' + sp[0].toFixed(1) + '" cy="' + sp[1].toFixed(1) +
-      '" r="' + (rnd() * 1.2 + 0.3).toFixed(2) + '" opacity="' + (rnd() * 0.3 + 0.06).toFixed(2) + '"/>';
-  }
 
   var edgeHtml = '';
   var edgesOf = {};
   S.edges.forEach(function (e, idx) {
     var a = placed[e[0]], b = placed[e[1]];
     if (!a || !b) return;
-    var mx = (a.x + b.x) / 2, my = (a.y + b.y) / 2;
-    var qx = mx + (V.cx - mx) * 0.18, qy = my + (V.cy - my) * 0.18;
     var cross = a.mod !== b.mod;
-    edgeHtml += '<path class="edge' + (cross ? ' cross' : '') + '" id="e' + idx + '" style="--sel:var(--mod-' + a.mod + ');--sel-ink:var(--mod-' + a.mod + '-ink);--sel-text:var(--mod-' + a.mod + '-text)" d="M ' +
-      a.x.toFixed(1) + ' ' + a.y.toFixed(1) + ' Q ' + qx.toFixed(1) + ' ' + qy.toFixed(1) + ' ' + b.x.toFixed(1) + ' ' + b.y.toFixed(1) + '"/>';
+    /* In-column links run straight down between neighbours; a cross-module
+       link steps sideways with two right angles, so it reads as wiring rather
+       than as another branch of the tree. */
+    var d;
+    if (cross) {
+      var midY = (a.y + b.y) / 2;
+      d = 'M ' + a.x.toFixed(1) + ' ' + a.y.toFixed(1) +
+          ' V ' + midY.toFixed(1) + ' H ' + b.x.toFixed(1) + ' V ' + b.y.toFixed(1);
+    } else {
+      d = 'M ' + a.x.toFixed(1) + ' ' + a.y.toFixed(1) + ' L ' + b.x.toFixed(1) + ' ' + b.y.toFixed(1);
+    }
+    edgeHtml += '<path class="edge' + (cross ? ' cross' : '') + '" id="e' + idx + '" style="--sel:var(--mod-' + a.mod + ');--sel-ink:var(--mod-' + a.mod + '-ink);--sel-text:var(--mod-' + a.mod + '-text)" d="' + d + '"/>';
     (edgesOf[e[0]] = edgesOf[e[0]] || []).push(idx);
     (edgesOf[e[1]] = edgesOf[e[1]] || []).push(idx);
   });
 
+  /* The column plaque: a filled pill carrying the module's name, the header a
+     skill tree puts over each branch. Still the module's highlight control. */
   var arcHtml = order.map(function (col, mod) {
+    var label = 'M' + mod + ' \u00b7 ' + S.moduleNames[mod];
+    /* The plaque is sized to its label, not to the column: at a fixed width
+       the longest name spilled out of both ends of the pill. 12.2 is the
+       advance of the mono face at 22 user units, measured off the rendered
+       text, plus 34 of padding either side. */
+    var w = label.length * 12.2 + 68, h = 44;
     return '<g class="arc-label" data-mod="' + mod + '" style="--sel:var(--mod-' + mod + ');--sel-ink:var(--mod-' + mod + '-ink);--sel-text:var(--mod-' + mod + '-text)" role="button" tabindex="0"' +
       ' aria-label="Highlight module ' + mod + ', ' + esc(S.moduleNames[mod]) + '">' +
-      '<text x="' + col.arc.x.toFixed(1) + '" y="' + col.arc.y.toFixed(1) + '">M' + mod + ' · ' + esc(S.moduleNames[mod]) + '</text></g>';
+      '<rect class="plaque" x="' + (col.head.x - w / 2).toFixed(1) + '" y="' + (col.head.y - h + 12).toFixed(1) +
+        '" width="' + w.toFixed(1) + '" height="' + h + '" rx="' + (h / 2) + '"/>' +
+      '<text x="' + col.head.x.toFixed(1) + '" y="' + col.head.y.toFixed(1) + '">' + esc(label) + '</text></g>';
   }).join('');
 
   /* One running number per skill, module by module. It is the key between the

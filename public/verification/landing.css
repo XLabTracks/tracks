@@ -22,7 +22,7 @@
   color: var(--muted-foreground);
 }
 .hero .ways { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 30px; }
-.hero 
+
 /* ---------- sections ---------- */
 
 section.band { border-top: var(--hairline) solid var(--border); }

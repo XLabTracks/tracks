@@ -23,57 +23,7 @@ A core concept to apply anywhere: any fixed line invites slicing; any per-accoun
 
 Evasion Menu
 
-<Callout variant="tip" title="Task">
-
-Evasion
-
-Defeats
-
-Costs the evader
-
-What still catches it
-
-False workload labels
-
-Declaration regimes
-
-Nearly free: a lie on a form
-
-Telemetry corroboration — and the lie is legally binding once filed
-
-Proxies and shell companies
-
-The KYC identity layer
-
-Cheap on paper, harder at scale: frontier-size compute is sold through negotiated enterprise deals, not anonymous signups
-
-Beneficial-ownership checks, registry cross-referencing — and the sales relationship itself
-
-Sequential training (one run, sliced in time across accounts)
-
-Per-account FLOP thresholds
-
-Near zero in compute (checkpoint-and-resume is standard practice); high in tradecraft — dozens of unlinkable accounts, each able to book a frontier-scale cluster, plus terabyte checkpoint handoffs between them
-
-Cluster-size reporting (every slice still needs the big cluster) and data-transfer patterns (the handoffs are loud)
-
-Distributed training (one run, sharded in space across providers or sites)
-
-Per-account and per-provider thresholds; concentration signals
-
-Currently prohibitive at frontier scale: demonstrated only around the 10B-parameter mark, with one experiment (DiPaCo) paying roughly 32× the compute of a colocated baseline — a penalty that is shrinking as labs mature low-communication methods for their own resilience
-
-Synchronization traffic between shards; each shard still needs serious hardware; cross-provider information sharing, where it exists
-
-Provider capture (complicit or state-directed)
-
-Everything upstream at once
-
-Depends on who the evader is: prohibitive for a private actor; for a state with jurisdiction over the provider, roughly the cost of a directive
-
-Only external layers: hardware (2.1) and intelligence (2.3)
-
-</Callout>
+<Exercise id="v-task-cloud-limits-1" />
 
 EXCERPT — Tan 2026  “foreign actors can distribute frontier training workloads across multiple data center clusters to obscure their total compute footprint, anonymous shell companies can obfuscate beneficial ownership, and virtual private networks can mask IP addresses.”
 
@@ -117,33 +67,7 @@ You have now seen every mechanism in this module. The skill to take with you is 
 
 Ask both questions of every record you have met in this module: declarations, KYC files, billing records, utilization curves, logs. The table below runs the exercise for the whole stack.
 
-<Callout variant="tip" title="Task">
-
-Evidence
-
-Controlled by
-
-Faking it costs
-
-Hardware allocation, billing records
-
-Provider
-
-Nearly unfakeable by the customer: the provider bills from them
-
-Utilization, traffic, power patterns
-
-Provider (observed)
-
-Gameable, at real efficiency cost; the distortion is itself a signal
-
-Declarations, stated purpose, workload labels
-
-Customer
-
-A form and a signature: cheapest to fake, worthless uncorroborated, legally binding once false
-
-</Callout>
+<Exercise id="v-task-cloud-limits-2" />
 
 The bottom row alone is a paperwork regime; the top rows alone are numbers with no name attached. The regime is only coherent when the rows are cross-checked.
 
@@ -155,19 +79,7 @@ CHECK: Rank these by resistance to customer fakery, strongest first. (a) Billing
 
 A: (a). The provider bills from allocation records; utilization can be gamed only at real efficiency cost; a declaration is a form and a signature.
 
-<Callout variant="tip" title="Task">
-
-OPTIONAL EXERCISE SPEC — Case verdict (6 min, free response + self-score)
-
-INF Tech, revisited
-
-Return to the case from 2.2.0. A treaty with a full cloud annex (KYC, registration, telemetry corroboration, suspension) is in force, and Indonesia has signed. Write one paragraph: which mechanisms from this module surface the INF Tech arrangement, and which of its features would still defeat the annex if Indonesia had signed nothing?
-
-Model answer (appears after submission): KYC at the Indonesian provider flags the customer; cluster registration and data-transfer patterns corroborate; suspension is available same-day. Without Indonesian accession, none of it applies: reseller opacity plus third-country jurisdiction leave the arrangement invisible to the annex. The case sits half inside, half outside the layer’s reach.
-
-Self-score, three items: named at least two mechanisms that would surface it; named at least two structural limits; reached a verdict on what accession does and does not fix. Two of three counts as a pass.
-
-</Callout>
+<Exercise id="v-task-cloud-limits-3" />
 
 If this module leaves five sentences in your head, make them these:
 

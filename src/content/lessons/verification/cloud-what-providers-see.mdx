@@ -43,17 +43,7 @@ The same arithmetic works across accounts — which becomes important when someo
 
 CHECK: A workload holds accelerator cores near peak utilization, day and night, for three weeks, with almost no traffic to the outside internet. What does that pattern most suggest? A: A large training run
 
-<Callout variant="tip" title="Task">
-
-EXERCISE SPEC — Fingerprint comparison (1 min)
-
-On screen: two telemetry cards side by side. Profile A: 2,000 GPUs; utilization spiking and idling with office hours; network traffic in short bursts. Profile B: 30,000 accelerators reserved as a single block for six weeks; utilization pinned near peak day and night; traffic between nodes pulsing in a regular rhythm.
-
-Prompt: "One of these is a frontier training run. Which one?" Learner clicks a card to commit; reveal unlocks on click.
-
-Reveal: B. Three tells, one line each — scale (30,000 accelerators reserved as one block), constancy (training doesn't sleep; inference follows users), communication pattern (the regular rhythm of parallel training). Closing line: notice the cards have no names on them — telemetry is anonymous until someone joins it to the identity layer, and whether a regulator may do that is 2.2.2's subject.
-
-</Callout>
+<Exercise id="v-task-cloud-what-providers-see-1" />
 
 In lab conditions, classifiers over this kind of telemetry distinguished AI workloads with about 95% accuracy. Solved, then?
 

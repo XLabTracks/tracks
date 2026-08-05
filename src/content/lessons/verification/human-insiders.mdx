@@ -2,73 +2,7 @@ A person is useful for verification because of what they could directly perceive
 
 ## The Roster: Who Can See What?
 
-<Callout variant="tip" title="Task">
-
-Chain segment
-
-Who, specifically
-
-Can observe
-
-Blind to
-
-Chip design and fabrication
-
-Process or lithography engineer at a leading-edge foundry (e.g. TSMC); product engineer at a chip designer (e.g. Nvidia)
-
-Which advanced parts are in production, at what volume, and which customers placed large orders
-
-How the chips are ultimately used; any training workload
-
-Hardware assembly and data-center build
-
-Construction, electrical, and cooling contractors; rack and interconnect technicians
-
-The physical envelope: facility scale, power provisioning, cooling capacity, count and type of accelerators installed
-
-What runs inside; the purpose of any job
-
-Compute provider and cloud operations
-
-Data-center operations technician or site reliability engineer; account manager or KYC compliance officer
-
-Cluster utilization, job duration, power draw, which accounts run large jobs; customer identity, billing, reseller relationships
-
-Model identity and training purpose; the content of the workload
-
-The AI developer: technical staff
-
-Research engineer or ML researcher on the run; infrastructure or cluster admin
-
-The run itself and its objective, dataset, and results; cluster size, job scheduling, checkpoint and weight-access logs, total compute
-
-Little, within their own project; this is the richest vantage on intent
-
-The AI developer: oversight staff
-
-Safety or evaluations staff; security team; legal and compliance
-
-Capability and red-team results and what was downplayed; incident and exfiltration records; what was declared to regulators and the NDA and equity terms that bind colleagues
-
-Day-to-day technical detail outside their remit
-
-The AI developer: leadership
-
-Executives and senior leadership
-
-Intent: the decision to conceal or proceed, and what the board and leadership were warned about
-
-Nothing relevant; the constraint here is willingness to disclose, not access
-
-Suppliers and downstream
-
-Chip reseller or broker; utility or energy provider; enterprise customer or deployment partner
-
-Who acquired compute and in what volume through which intermediaries; large sustained power contracts and load; model capabilities in real use
-
-Use and purpose of the compute; training provenance of the deployed model
-
-</Callout>
+<Exercise id="v-task-human-insiders-1" />
 
 An engineer might establish that a run occurred; a procurement employee might establish that specific hardware was acquired; a manager might establish that the activity was intentional; and a legal officer might establish that decision-makers understood the agreement. But when each actor makes a claim, how do you gauge whether to believe them?
 
@@ -102,14 +36,4 @@ A. The report proves that an unauthorized training run occurred.B. The financial
 
 Answer: C. The contractor’s incentive should be considered, but credibility depends more on access, specificity, and independent corroboration. The evidence supports the cluster expansion, not a conclusion about the workload.
 
-<Callout variant="tip" title="Task">
-
-Historical contrast: when human reporting opens—and distorts—verification
-
-In 2002, an Iranian opposition group publicly identified previously undeclared nuclear facilities at Natanz and Arak. The disclosure did not itself prove what was occurring there, and the group had clear political interests. Its value was that it gave the IAEA a concrete location and claim to investigate. Inspection and other evidence—not the source’s reputation alone—turned the allegation into a substantiated verification concern.
-
-Curveball shows the opposite failure. Reporting from a single Iraqi defector became the foundation for claims that Iraq possessed mobile biological-weapons laboratories, even though US officials lacked direct access to him and serious questions about his reliability were not adequately resolved or communicated. Analysts treated a poorly validated source as confirmation partly because his account matched what they already expected. Postwar investigation found that the reporting was unreliable.
-
-The lesson: human reporting is often most valuable for identifying where to look and what to test. It earns evidentiary weight only when its material claims survive corroboration through records, technical signals, inspections, or sources the original reporter does not control.
-
-</Callout>
+<Exercise id="v-task-human-insiders-2" />

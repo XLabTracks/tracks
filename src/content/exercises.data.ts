@@ -1,3 +1,4 @@
+import { verificationExercises } from "@/content/verification/exercises";
 import type { Exercise } from "@/lib/content/types";
 
 // Example exercises — one of every type, with self-describing copy. These power
@@ -2354,4 +2355,5 @@ export const exercises: Exercise[] = [
     answer:
       "The setting's notion of unacceptable safety failure — the thing the attack policy tries to accomplish alongside the main task (e.g. covertly downloading and executing malware in Ctrl-Z). Objective definitions of side-task success matter, because the adversarial process optimizes against the definition: with a vague one like \"inserts a security vulnerability\", the red team hunts for the weakest thing that possibly counts.",
   },
+  ...verificationExercises,
 ];

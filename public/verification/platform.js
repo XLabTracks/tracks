@@ -202,8 +202,7 @@ window.VT = (function () {
   }
 
   /* Sign-in belongs to the Next app, at /login. These pages keep progress in
-     this browser and never gate on it, so the footer says where the state
-     actually lives rather than implying an account holds it. */
+     this browser and never gate on it. */
   function mountFoot() {
     const host = document.querySelector('[data-foot]');
     if (!host) return;
@@ -220,7 +219,6 @@ window.VT = (function () {
       '</nav>' +
       '<div class="foot-end">' +
       '<span>' + esc(CHROME.copyright) + '</span>' +
-      '<span data-where>Progress is stored in this browser.</span>' +
       '<button class="btn small outline" id="vt-reset">Reset progress</button>' +
       '</div>' +
       '</div>';

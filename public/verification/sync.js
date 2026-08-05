@@ -131,24 +131,9 @@
 
 })();
 
-/* The footer states where the state actually lives, so it must change when
-   that changes. It says "in this browser" until the account answers. */
-(function () {
-  function say(text) {
-    const el = document.querySelector('[data-where]');
-    if (el) el.textContent = text;
-  }
-  fetch('/api/verification/state', { headers: { Accept: 'application/json' } })
-    .then(function (r) { return r.status === 401 ? null : (r.ok ? r.json() : null); })
-    .then(function (res) {
-      if (res && res.signedIn) say('Progress is saved to your account.');
-    })
-    .catch(function () { /* leave the browser-only wording standing */ });
-})();
-
 /* The header button is "Sign in" for a visitor and "Account" for a member.
-   These pages have no session of their own, so the same probe that decides
-   where state lives decides this too — one request, not two.
+   These pages have no session of their own, so the state route is what
+   answers whether there is one.
 
    Trap: the button is rendered by VT.mountChrome() from each page's own
    script, so this must run after it. sync.js is loaded last for that reason. */

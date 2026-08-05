@@ -561,15 +561,26 @@ button, [role='button'], [role='radio'], [role='tab'], .chip, .nav a, .brand,
   border-radius: var(--radius-sm);
   background: var(--card);
 }
-/* The three share whatever width the pair settled on, so the segments stay
-   even and the tap targets grow with it rather than leaving a gap at one end. */
+/* Each segment is a square, the height of the switch's inside — so the
+   selected one reads as a square swatch of the theme it names.
+
+   Trap: `height: 100%` does not work here. The switch is sized by its
+   content, so a percentage height resolves against nothing and the button
+   collapses onto its icon — 30 x 13.5, which the corner radius then rounds
+   into a squat pill. The side is stated instead, off the same token that
+   sets the header's action height, so the three segments stay square when
+   high contrast makes everything bigger — and minus the padding and the two
+   hairlines, so the control still stands exactly as tall as the button beside
+   it. High contrast draws a 3px hairline, which is why that is a variable
+   here and not a 2. */
 .theme-switch button {
+  --seg: calc(var(--hdr-action-h, 38px) - 4px - 2 * var(--hairline));
   display: inline-flex;
-  flex: 1;
+  flex: none;
   align-items: center;
   justify-content: center;
-  min-width: 26px;
-  height: 100%;
+  width: var(--seg);
+  height: var(--seg);
   border: 0;
   border-radius: var(--radius-sm);
   background: transparent;
@@ -586,16 +597,6 @@ button, [role='button'], [role='radio'], [role='tab'], .chip, .nav a, .brand,
    the one that has to survive the filled ground of the selected state. */
 .theme-switch button[data-theme='light'] svg { width: 13.5px; height: 13.5px; }
 
-/* The selected one is the only glyph drawn on a filled ground, and it is the
-   one that struggles: a 1.8-unit stroke scaled into a 13.5px box lands under
-   a device pixel, so the sun's rays close up against the maroon and the whole
-   mark reads as a smudge rather than white. Heavier ink on the selected
-   segment only, and the sun's core filled so the shape survives the
-   reduction. The rays keep their gaps — that is what makes it a sun. */
-.theme-switch button[aria-checked='true'] svg { stroke-width: 2.3; }
-.theme-switch button[data-theme='light'][aria-checked='true'] svg circle {
-  fill: currentColor;
-}
 
 /* ---------- buttons ---------- */
 

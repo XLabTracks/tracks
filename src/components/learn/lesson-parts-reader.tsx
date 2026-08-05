@@ -18,6 +18,14 @@ import { Button } from "@/components/ui/button";
    chip per part to jump anywhere, and a whole-lesson toggle; a pager below
    moves one part at a time.
 
+   The meter fill, the "now" label and the current chip's border are all
+   `primary`, never `destructive`. Two reasons, and the second is the one that
+   bites: a reading position is not an error, and public/verification/theme.css
+   re-points the whole palette on the Verification routes but never defines
+   --destructive — so anything painted with it is the one element on the page
+   still wearing the app's generic red-600 instead of the course's maroon, and
+   it stays red in the high-contrast theme where --primary is yellow.
+
    Parts are hidden, never unmounted: an embedded exercise or widget holds a
    half-answered run in memory, so the only difference between the part on
    screen and the rest is the `hidden` attribute. React never re-renders the
@@ -214,11 +222,11 @@ export function LessonPartsReader({ children }: { children: ReactNode }) {
           ) : (
             <span className="flex min-w-40 flex-1 basis-52 items-center gap-2.5">
               <span
-                className="bg-muted h-1.5 flex-1 overflow-hidden rounded-full"
+                className="bg-muted h-1 flex-1 overflow-hidden rounded-full"
                 aria-hidden
               >
                 <span
-                  className="bg-destructive block h-full rounded-full transition-[width] duration-300"
+                  className="bg-primary block h-full rounded-full transition-[width] duration-300"
                   style={{ width: `${(100 * (at + 1)) / parts.length}%` }}
                 />
               </span>
@@ -249,7 +257,7 @@ export function LessonPartsReader({ children }: { children: ReactNode }) {
                 </span>
                 <span>{p.label}</span>
                 {now && (
-                  <span className="text-destructive text-[10px] font-semibold tracking-wide uppercase">
+                  <span className="text-primary text-[10px] font-semibold tracking-wide uppercase">
                     now
                   </span>
                 )}
@@ -258,7 +266,7 @@ export function LessonPartsReader({ children }: { children: ReactNode }) {
             const cls =
               "inline-flex items-baseline gap-1.5 rounded-full border px-2.5 py-1 text-[13px] leading-normal transition-colors select-none " +
               (now
-                ? "border-destructive/40 bg-muted font-medium"
+                ? "border-primary/40 bg-muted font-medium"
                 : "border-border bg-background text-muted-foreground hover:bg-muted hover:text-foreground");
             return (
               <li key={i}>

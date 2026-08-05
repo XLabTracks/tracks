@@ -205,26 +205,47 @@ export function LessonPartsReader({ children }: { children: ReactNode }) {
 
   /* ---------- chrome ---------- */
 
+  /* The strip is a tab bar, not a chip cloud: the parts sit on the reading's
+     top edge like the tabs of a document, and the one being read is the tab
+     the page hangs from — outlined on three sides, open to the text below,
+     carried by weight and shape rather than a badge. The baseline the other
+     tabs rest on is each tab's own bottom border (plus a flex filler), never
+     a border on the scroll row — the classic -mb-px overlap would be clipped
+     by the row's own overflow-x scrolling.
+
+     Long headings truncate rather than wrap: a tab bar is one row, and it
+     scrolls sideways when the lesson has more tabs than the column has width
+     (the full label rides on title). The current tab keeps itself in view.
+
+     The meter fill and the active tab's numeral are `primary`, never
+     `destructive`: a reading position is not an error, and
+     public/verification/theme.css re-points the palette on the Verification
+     routes but never defines --destructive — anything painted with it stays
+     the app's generic red and ignores the high-contrast theme. */
+
   const whole = mode === "whole";
+  const tabRefs = useRef<(HTMLElement | null)[]>([]);
+
+  useEffect(() => {
+    tabRefs.current[at]?.scrollIntoView({ inline: "nearest", block: "nearest" });
+  }, [at, parts.length]);
+
   const strip = useMemo(() => {
     if (!parts.length) return null;
     return (
       <nav
         ref={stripRef}
         aria-label="Parts of this lesson"
-        className="border-border scroll-mt-20 border-y py-3"
+        className="scroll-mt-20"
       >
-        <div className="flex flex-wrap items-center gap-3">
+        <div className="mb-2.5 flex items-center gap-3">
           {whole ? (
             <span className="text-muted-foreground text-[13px]" aria-live="polite">
               {parts.length} parts, all shown
             </span>
           ) : (
             <span className="flex min-w-40 flex-1 basis-52 items-center gap-2.5">
-              <span
-                className="bg-muted h-1 flex-1 overflow-hidden rounded-full"
-                aria-hidden
-              >
+              <span className="bg-muted h-1 flex-1 overflow-hidden rounded-full" aria-hidden>
                 <span
                   className="bg-primary block h-full rounded-full transition-[width] duration-300"
                   style={{ width: `${(100 * (at + 1)) / parts.length}%` }}
@@ -238,46 +259,48 @@ export function LessonPartsReader({ children }: { children: ReactNode }) {
               </span>
             </span>
           )}
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={toggleMode}
-            className="ml-auto"
-          >
+          <Button variant="ghost" size="sm" onClick={toggleMode} className="text-muted-foreground ml-auto h-7 px-2 text-[13px]">
             {whole ? "Read part by part" : "Read the whole lesson"}
           </Button>
         </div>
-        <ol className="mt-3 flex flex-wrap gap-1.5">
+        <ol className="flex items-end overflow-x-auto">
           {parts.map((p, i) => {
             const now = !whole && i === at;
             const inner = (
               <>
-                <span className="text-muted-foreground text-[11px] tabular-nums">
+                <span
+                  className={
+                    "text-[11px] tabular-nums " +
+                    (now ? "text-primary" : "text-muted-foreground/70")
+                  }
+                >
                   {i + 1}
                 </span>
-                <span>{p.label}</span>
-                {now && (
-                  <span className="text-primary text-[10px] font-semibold tracking-wide uppercase">
-                    now
-                  </span>
-                )}
+                <span className="max-w-52 truncate">{p.label}</span>
               </>
             );
             const cls =
-              "inline-flex items-baseline gap-1.5 rounded-full border px-2.5 py-1 text-[13px] leading-normal transition-colors select-none " +
+              "flex shrink-0 items-baseline gap-1.5 rounded-t-md border px-3 py-1.5 text-[13px] leading-normal transition-colors select-none " +
               (now
-                ? "border-primary/40 bg-muted font-medium"
-                : "border-border bg-background text-muted-foreground hover:bg-muted hover:text-foreground");
+                ? "border-border border-b-transparent bg-background font-medium"
+                : "border-transparent border-b-border text-muted-foreground hover:bg-muted/60 hover:text-foreground");
             return (
-              <li key={i}>
+              <li
+                key={i}
+                className="flex shrink-0"
+                ref={(el) => {
+                  tabRefs.current[i] = el;
+                }}
+              >
                 {whole && p.anchor ? (
-                  <a href={`#${p.anchor}`} className={cls}>
+                  <a href={`#${p.anchor}`} className={cls} title={p.label}>
                     {inner}
                   </a>
                 ) : (
                   <button
                     type="button"
                     className={cls}
+                    title={p.label}
                     aria-current={now ? "step" : undefined}
                     onClick={() => (whole ? undefined : goTo(i))}
                   >
@@ -287,6 +310,8 @@ export function LessonPartsReader({ children }: { children: ReactNode }) {
               </li>
             );
           })}
+          {/* Carries the baseline from the last tab to the column's edge. */}
+          <li aria-hidden className="border-b-border min-w-3 flex-1 self-stretch border-b" />
         </ol>
       </nav>
     );

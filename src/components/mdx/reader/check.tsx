@@ -57,7 +57,7 @@ export function Check({
             className={cn(
               "border-border rounded-lg border px-3 py-2 text-left text-sm select-none",
               !done && "hover:bg-muted cursor-pointer",
-              done && k === answer && "border-emerald-600/50 bg-emerald-600/10",
+              done && k === answer && "border-comply/50 bg-comply/10",
               done && k === pick && !right && "border-destructive/50 bg-destructive/10",
             )}
           >
@@ -70,7 +70,7 @@ export function Check({
         <div
           className={cn(
             "mt-4 rounded-lg border p-4",
-            right ? "border-emerald-600/40" : "border-destructive/40",
+            right ? "border-comply/40" : "border-destructive/40",
           )}
         >
           <span className="text-xs font-medium tracking-wide uppercase">

@@ -122,7 +122,7 @@ export function GapFill({
                   fill[k] == null && "border-border border-dashed",
                   checked &&
                     (fill[k] === blanks[k]
-                      ? "border-emerald-600/50 bg-emerald-600/10"
+                      ? "border-comply/50 bg-comply/10"
                       : "border-destructive/50 bg-destructive/10"),
                 )}
               >
@@ -184,7 +184,7 @@ export function GapFill({
         <div
           className={cn(
             "mt-4 rounded-lg border p-4",
-            rightCount === blanks.length ? "border-emerald-600/40" : "border-destructive/40",
+            rightCount === blanks.length ? "border-comply/40" : "border-destructive/40",
           )}
         >
           <span className="text-xs font-medium tracking-wide uppercase">

@@ -88,11 +88,17 @@
      where it does not, the same hue is darkened rather than swapped, so the
      five stay separable for a colour-blind reader. Hue never carries the
      meaning alone in any case — the widgets pair it with a label. */
-  --comply: #007b5a;
-  --defect: #b34f00;
-  --hide: #0072b2;
-  --exaggerate: #916400;
-  --free-ride: #975a7c;
+  /* The widgets' semantic accents. Same five colours as the module palette,
+     assigned so the meaning each one carried survives the move: conceal stays
+     blue, overstate stays amber, comply stays the green end, defect stays red.
+     These are ink and 10%-tints, never plaques, so they take the -text
+     variants. Hue never carries the meaning alone — every widget pairs it with
+     its label. */
+  --comply: #555e07;      /* Khaki */
+  --defect: #9a000c;      /* Chinese Red */
+  --hide: #3d75b1;        /* Cobalt */
+  --exaggerate: #946b00;  /* Lunar Yellow */
+  --free-ride: #bf4f00;   /* Satsuma */
 
 
   /* Type scale. Ten steps, and every rule on these pages picks one — the sizes
@@ -166,12 +172,12 @@
   --no: #ff8f4d;
   --destructive: #ff8f4d;
 
-  /* Lightened against the dark ground; see the light block for the rule. */
-  --comply: #009e73;
-  --defect: #e8874a;
-  --hide: #56b4e9;
-  --exaggerate: #e69f00;
-  --free-ride: #cc79a7;
+  /* Lightened against the dark ground; the assignment is the light block's. */
+  --comply: #828d41;
+  --defect: #e4584f;
+  --hide: #518ac7;
+  --exaggerate: #c5952b;
+  --free-ride: #e15f00;
 
   --shadow-soft: 0 1px 2px rgba(0, 0, 0, .4);
   --shadow-soft-lg: 0 12px 40px rgba(0, 0, 0, .5);
@@ -233,11 +239,12 @@
 
   /* On black the set's own values already clear 4.5:1, except blue, which
      takes its sky-blue counterpart. */
-  --comply: #009e73;
-  --defect: #d55e00;
-  --hide: #56b4e9;
-  --exaggerate: #e69f00;
-  --free-ride: #cc79a7;
+  /* Hue carries nothing here either; the widget's own label is the encoding. */
+  --comply: #ffffff;
+  --defect: #ffffff;
+  --hide: #ffffff;
+  --exaggerate: #ffffff;
+  --free-ride: #ffffff;
 
   --radius: 8px;
   --radius-sm: 6px;

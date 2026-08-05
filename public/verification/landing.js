@@ -149,11 +149,14 @@
        full, so repeating it here only made the plaque too wide for its
        column and the five plaques overlapped. */
     var label = S.moduleNames[mod];
-    /* The plaque is sized to its label, not to the column: at a fixed width
-       the longest name spilled out of both ends of the pill. 12.2 is the
-       advance of the mono face at 22 user units, measured off the rendered
-       text, plus 34 of padding either side. */
-    var w = label.length * 12.2 + 68, h = 44;
+    /* One width for all five, set by the longest name: the columns sit on a
+       fixed pitch, so label-sized pills made every gap between plaques a
+       different size and the header row read ragged. Sizing from the names
+       keeps a longer future name widening all five instead of clipping.
+       12.2 is the advance of the mono face at 22 user units, measured off
+       the rendered text, plus 28 of padding either side on the longest. */
+    var w = Math.max.apply(null, S.moduleNames.map(function (n) { return n.length; })) * 12.2 + 56;
+    var h = 44;
     return '<g class="arc-label" data-mod="' + mod + '" style="--sel:var(--mod-' + mod + ');--sel-ink:var(--mod-' + mod + '-ink);--sel-text:var(--mod-' + mod + '-text)" role="button" tabindex="0"' +
       ' aria-label="Highlight module ' + mod + ', ' + esc(S.moduleNames[mod]) + '">' +
       '<rect class="plaque" x="' + (col.head.x - w / 2).toFixed(1) + '" y="' + (col.head.y - h + 12).toFixed(1) +

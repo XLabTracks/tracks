@@ -18,8 +18,6 @@ sources:
   - "[What x- or s-risk fieldbuilding organisations would you like to see? (FBB #3)](https://fieldbuilding.substack.com/p/what-new-x-or-s-risk-fieldbuilding)"
   - "[Events and training directory — aisafety.com](https://www.aisafety.com/events-and-training)"
   - "[10 EA movement building project ideas — guneyulasturker (2025)](https://forum.effectivealtruism.org/posts/GvsQfgw2rmXPsYFsF/10-ea-movement-building-project-ideas-for-early-career)"
-  - "[List of lists of project ideas in AI safety — LessWrong](https://www.lesswrong.com/posts/mtGpdtDdmkRC3ZBuz/list-of-lists-of-project-ideas-in-ai-safety)"
-  - "[Public] XLab Tracks - Program Proposal.md"
 updated: 2026-08-04
 ---
 

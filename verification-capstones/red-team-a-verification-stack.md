@@ -13,7 +13,6 @@ mentor: recommended
 audience: The team that published the proposal you are attacking.
 skills: [red-teaming, attack trees, detection reasoning, adversarial cost modelling]
 prerequisites: [Verification 2.x — the four layers, Verification 3 — covert development]
-sources: [verification-track-outline.md §3, verification-game.html]
 updated: 2026-08-04
 ---
 

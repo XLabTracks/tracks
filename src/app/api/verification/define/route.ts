@@ -3,23 +3,27 @@ import { NextResponse } from "next/server";
 import { resolveGlossaryTerm } from "@/lib/content/glossary";
 
 /**
- * Looks a term up in the LessWrong wiki for the Verification cheatsheet.
+ * Looks a term up for the Verification cheatsheet.
  *
- * The static pages cannot call lesswrong.com themselves — they are served from
+ * The static pages cannot call the wikis themselves — they are served from
  * the worker under a strict origin policy, and a browser fetch would be a
  * cross-origin request the page has no business making. This route is the one
- * place that talks to LessWrong, so the client only ever sees our own origin.
+ * place that talks upstream, so the client only ever sees our own origin.
  *
- * The app's own hand-authored glossary is asked first and is the reliable
- * answer. The LessWrong wiki is a best-effort fallback only: its GraphQL API
- * sits behind Vercel bot protection, which challenges a datacenter request, so
- * a lookup that works from a laptop can fail from the worker. That is why the
- * client is built to be useful when this returns nothing — a term can always
- * be saved with the learner's own note.
+ * Three sources, in order: the app's own hand-authored glossary (authored,
+ * offline, never challenged), then the LessWrong wiki — it speaks this
+ * course's language, so it outranks the general encyclopedia — then
+ * Wikipedia. Both wikis are best-effort: LessWrong's GraphQL API sits behind
+ * Vercel bot protection, which challenges a datacenter request, so a lookup
+ * that works from a laptop can fail from the worker. That is why the client
+ * is built to be useful when this returns nothing — a term can always be
+ * saved with the learner's own note. An upstream failure is answered 502,
+ * never "not found": offering to save a definition we never got would be a
+ * lie, and so would claiming a wiki lacks a term we could not ask about.
  *
- * Nothing here is stored. A definition is quoted text belonging to LessWrong
- * (CC-BY-SA), so the response carries the source URL and the client always
- * shows it — the cheatsheet is a link to a definition, not a copy of a wiki.
+ * Nothing here is stored. A definition is quoted text belonging to its wiki
+ * (both CC BY-SA), so the response carries the source URL and the client
+ * always shows it — the cheatsheet is a link to a definition, not a copy.
  */
 
 const GRAPHQL = "https://www.lesswrong.com/graphql";
@@ -68,9 +72,9 @@ export async function GET(request: Request) {
     });
   }
 
-  let json: {
-    data?: { tag?: { result?: { name?: string; description?: { html?: string } } } };
-  };
+  let upstreamTrouble = false;
+
+  // LessWrong first: the course's own vocabulary lives there.
   try {
     const res = await fetch(GRAPHQL, {
       method: "POST",
@@ -85,24 +89,62 @@ export async function GET(request: Request) {
       next: { revalidate: 86400 },
     });
     if (!res.ok) throw new Error(String(res.status));
-    json = await res.json();
+    const json: {
+      data?: { tag?: { result?: { name?: string; description?: { html?: string } } } };
+    } = await res.json();
+    const tag = json?.data?.tag?.result;
+    const html = tag?.description?.html;
+    if (tag && html) {
+      return NextResponse.json({
+        found: true,
+        term: tag.name || raw,
+        definition: firstParagraph(html),
+        url: `https://www.lesswrong.com/w/${slug}`,
+        source: "LessWrong Wiki (CC BY-SA)",
+      });
+    }
   } catch {
-    // Upstream trouble is not the same as "no such term", and the client says
-    // so — offering to save a definition we never got would be a lie.
+    upstreamTrouble = true;
+  }
+
+  // Wikipedia second. The summary endpoint follows redirects, so case and
+  // near-miss titles resolve; a disambiguation page is a menu, not a
+  // definition, so only a `standard` page with an extract counts as found.
+  try {
+    const res = await fetch(
+      `https://en.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(raw)}?redirect=true`,
+      {
+        headers: {
+          Accept: "application/json",
+          "Api-User-Agent": "XLabTracks-Verification (term lookup for the course cheatsheet)",
+        },
+        next: { revalidate: 86400 },
+      },
+    );
+    if (res.status !== 404) {
+      if (!res.ok) throw new Error(String(res.status));
+      const json: {
+        type?: string;
+        title?: string;
+        extract?: string;
+        content_urls?: { desktop?: { page?: string } };
+      } = await res.json();
+      if (json.type === "standard" && json.extract) {
+        return NextResponse.json({
+          found: true,
+          term: json.title || raw,
+          definition: json.extract,
+          url: json.content_urls?.desktop?.page ?? null,
+          source: "Wikipedia (CC BY-SA)",
+        });
+      }
+    }
+  } catch {
+    upstreamTrouble = true;
+  }
+
+  if (upstreamTrouble) {
     return NextResponse.json({ error: "Lookup unavailable" }, { status: 502 });
   }
-
-  const tag = json?.data?.tag?.result;
-  const html = tag?.description?.html;
-  if (!tag || !html) {
-    return NextResponse.json({ found: false, term: raw }, { status: 404 });
-  }
-
-  return NextResponse.json({
-    found: true,
-    term: tag.name || raw,
-    definition: firstParagraph(html),
-    url: `https://www.lesswrong.com/w/${slug}`,
-    source: "LessWrong Wiki (CC BY-SA)",
-  });
+  return NextResponse.json({ found: false, term: raw }, { status: 404 });
 }

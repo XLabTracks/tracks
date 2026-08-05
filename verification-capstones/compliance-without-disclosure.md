@@ -16,8 +16,6 @@ prerequisites: [Verification 2.0 — confidentiality vs verifiability, Verificat
 sources:
   - "[Open Problems in Technical AI Governance — Reuel et al. (2025), verification questions: what methods can verify compute usage without TEEs; can ZKPs demonstrate compliance without disclosing architectural details; how can TEEs be designed to limit misuse](https://arxiv.org/abs/2407.14981)"
   - "[A Collection of AI Governance Research Ideas — von Knebel & Anderljung (2024), idea 75: using compute for verifiable claims and assurances](https://www.markusanderljung.com/blog/a-collection-of-ai-governance-research-ideas-2024)"
-  - "[List of lists of project ideas in AI safety — LessWrong](https://www.lesswrong.com/posts/mtGpdtDdmkRC3ZBuz/list-of-lists-of-project-ideas-in-ai-safety)"
-  - verification-track-outline.md §2.0
 updated: 2026-08-04
 ---
 

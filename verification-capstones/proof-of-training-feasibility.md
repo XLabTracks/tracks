@@ -16,8 +16,6 @@ prerequisites: [Verification 2.0 — confidentiality vs verifiability, Verificat
 sources:
   - "[Open Technical Problems in Open-Weight AI Model Risk Management (2025), §4.5 model provenance and forensics: model heritage inference, and how practical and scalable proof-of-training methods are](https://openreview.net/forum?id=8QyGLnFkzc)"
   - "[Open Problems in Technical AI Governance — Reuel et al. (2025), verification questions: could proof-of-learning demonstrate and verify model ownership?](https://arxiv.org/abs/2407.14981)"
-  - "[List of lists of project ideas in AI safety — LessWrong](https://www.lesswrong.com/posts/mtGpdtDdmkRC3ZBuz/list-of-lists-of-project-ideas-in-ai-safety)"
-  - verification-track-outline.md §2.1
 updated: 2026-08-04
 ---
 

@@ -244,8 +244,16 @@
 .nb-term-word { font-family: var(--display); font-size: var(--fs-lg); font-weight: 500; }
 .nb-term-def { margin-top: 6px; font-size: var(--fs-md); line-height: 1.6; }
 
-/* The lookup button and its card sit in document coordinates beside the
-   selection, so they survive a scroll. */
+/* The lookup strip and its card sit in document coordinates beside the
+   selection, so they survive a scroll. The strip is the positioned box; the
+   buttons flow inside it, so a second action never overlaps the first. */
+.vocab-strip {
+  position: absolute;
+  z-index: 55;
+  display: flex;
+  gap: 6px;
+}
+.vocab-strip .vocab-btn { position: static; }
 .vocab-btn {
   position: absolute;
   z-index: 55;

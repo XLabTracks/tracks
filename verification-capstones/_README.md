@@ -44,7 +44,6 @@ skills: [regime design, threat modelling, evidence standards]
 prerequisites: [Verification 2.x — the four layers, Verification 4.1]
 sources:
   - "[Open Problems in Technical AI Governance — Reuel et al. (2025)](https://arxiv.org/abs/2407.14981)"
-  - verification-track-outline.md §4.2
 updated: 2026-08-04
 ---
 ```
@@ -69,8 +68,11 @@ Two rules follow, and nothing validates either — they are on the author:
 - **`prerequisites` must name real units**, spelled the way `data/course.js`
   spells them. A fabricated prerequisite makes a card look grounded when it
   is not.
-- **Cite the source document in `sources`**, with the module, so the claim of
-  relevance is auditable from the page rather than taken on trust.
+- **`sources` carries only links a visitor can open, and only final ones.**
+  No pointers at program docs (`verification-track-outline.md §4.2` is not a
+  source a learner can read — that provenance belongs in the commit message),
+  and no aggregators: when an idea was found through a list of lists, cite
+  the specific list or paper it points to, not the list of lists.
 
 ## Sources
 
@@ -79,8 +81,9 @@ sheet. Two shapes, and the build enforces the difference:
 
 - **`[label](url)`** — becomes a link. `url` must be `http(s)` or a path
   inside the repo. Off-site links open in a new tab.
-- **Anything else** — renders as plain text, for pointers at program docs
-  (`verification-track-outline.md §4.2`).
+- **Anything else** — renders as plain text. The build allows it, but
+  nothing here should need it: a source the visitor cannot open is not a
+  source, so every entry cites public links only.
 
 A bare URL is a **build error**: it would print as an unclickable wall of
 characters. Write it as a link with a label. Use the `- ` block form (not the

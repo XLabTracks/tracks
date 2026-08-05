@@ -16,9 +16,6 @@ prerequisites: [Any track, weeks 1-5 complete]
 sources:
   - "[AI safety projects seeking volunteers — aisafety.com](https://www.aisafety.com/projects)"
   - "[Open curricula and community directories — aisafety.com](https://www.aisafety.com/courses)"
-  - "[List of lists of project ideas in AI safety — LessWrong](https://www.lesswrong.com/posts/mtGpdtDdmkRC3ZBuz/list-of-lists-of-project-ideas-in-ai-safety)"
-  - Technical Governance Track - Work Structure and Suggestions.md §3 week 9 (fellowship-application craft)
-  - AI Governance Policy Track - Work Structure and Suggestions.md §3 week 9
 updated: 2026-08-04
 ---
 

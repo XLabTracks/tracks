@@ -536,6 +536,16 @@ The static site's own mechanics, for as long as it exists:
   prints the same briefs inside unit 4.2 (`capstone-next-steps.mdx`), leading
   with the brief the unit is written around and linking the rest to their
   sheet.
+- **The drill benches are placed, not orphaned.** Eleven benches / 69 steps
+  came over from `tracksprogramplayground/verification-drills.*` as four decks
+  in `src/lib/verification/data/drills-*.ts`, with the judgements in
+  `engines/drills.ts` and one renderer in `kit/drill-deck.tsx` (commit, reveal,
+  Continue — never auto-advance). Each deck is a menu of its module's benches
+  and is placed by `<VerificationExercise id="drills-…"/>`: primers in 0.2,
+  foundations+actors+spine in 1.2, the four evidence-stream benches at the end
+  of module 2, and evasion+regime+position in 4.1. They are bridged, so a deck
+  reports complete when the last step of its last bench is committed; progress
+  is per deck in `v-drills:<deck>:v1`.
 - **The reader blocks are MDX components** (`src/components/mdx/reader/`):
   `<Check>` (one question, committed before the answer, Try again),
   `<GapFill>` (word bank with distractors), `<SourceQuote>` (attribution

@@ -215,6 +215,7 @@ export const modules: Module[] = [
       "c-mod6-l1",
       "c-paper-satiation",
       "c-paper-spillway",
+      "c-mod6-empirics",
       "c-mod6-l2",
       "c-mod6-l3",
     ],
@@ -532,6 +533,13 @@ export const lessons: Lesson[] = [
     moduleId: "c-mod6",
     title: "Alternatives to Schemers",
     contentRef: "c-mod6-l1",
+  },
+  {
+    id: "c-mod6-empirics",
+    slug: "reward-seeker-empirics",
+    moduleId: "c-mod6",
+    title: "Reward Seeker Empirics",
+    contentRef: "c-mod6-empirics",
   },
   {
     id: "c-mod6-l2",

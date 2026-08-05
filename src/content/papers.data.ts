@@ -1827,6 +1827,204 @@ export const papers: Paper[] = [
     ],
   },
   {
+    // GUIDED walkthrough of the contrastive-SDF paper, built in the
+    // c-paper-plm-guided style: the abstract's findings, the intro's method
+    // statement, headline results, and results figures are hidden silently;
+    // five reading gates (two written) ask the learner to design the
+    // instrument and preregister predictions before each reveal. The
+    // condensed reading (c-paper-contrastive-sdf) stays available; the two
+    // items deliberately share one arXiv artifact.
+    id: "c-paper-csdf-guided",
+    slug: "measuring-reward-seeking-guided",
+    moduleId: "c-mod6",
+    title: "Measuring Reward-Seeking via Contrastive Belief Updates (guided)",
+    source: { kind: "arxiv", arxivId: "2607.18966v1" },
+    estimatedMinutes: 75,
+    sectionItemId: "c-mod6-empirics",
+    edits: [
+      {
+        op: "add",
+        after: { sectionEnd: "ax-abstract" },
+        label: "About this version",
+        markdown:
+          "This is a guided walkthrough: the abstract's findings, the " +
+          "introduction's statement of the method and results, and the " +
+          "headline figures are hidden, and reading gates ask you to design " +
+          "the measurement and preregister predictions before each reveal. " +
+          "The paper is also available " +
+          "[as a condensed ordinary reading](/tracks/control/module-6/measuring-reward-seeking).",
+      },
+      // ---- Converter artifact cleanup (same as the condensed item) --------
+      { op: "hide", at: { anchor: "b-0001", snippet: "toc" }, silent: true },
+      { op: "hide", at: { anchor: "b-0357", snippet: "toc" }, silent: true },
+      { op: "hide", at: { anchor: "b-0359", snippet: "toc" }, silent: true },
+      // ---- Spoiler control: abstract + intro method/results ---------------
+      // The abstract from the method statement onward; gate 1 asks the
+      // learner to invent the measurement, gate 4 to predict the results.
+      {
+        op: "hide",
+        at: { anchor: "b-0004", s: 3, snippet: "We measure reward-seeking using" },
+        sEnd: 11,
+        silent: true,
+      },
+      // The three headline figures give away the design and both results.
+      { op: "hide", at: { anchor: "b-0009", snippet: "Figure 1: Measuring reward-seeking with" }, silent: true },
+      { op: "hide", at: { anchor: "b-0010", snippet: "Figure 2: During the capabilities-focused" }, silent: true },
+      { op: "hide", at: { anchor: "b-0011", snippet: "Figure 3: Late RL checkpoints may" }, silent: true },
+      // The intro paragraphs stating the SDF approach, the contrastive
+      // procedure, and both headline findings.
+      { op: "hide", at: { anchor: "b-0012", snippet: "Implementing a behavioral measurement for" }, silent: true },
+      { op: "hide", at: { anchor: "b-0013", snippet: "Specifically, we finetune two copies" }, silent: true },
+      { op: "hide", at: { anchor: "b-0014", snippet: "Applied to intermediate checkpoints of" }, silent: true },
+      { op: "hide", at: { anchor: "b-0015", snippet: "Using the same methods, we" }, silent: true },
+      { op: "hide", at: { anchor: "b-0016", s: 4, snippet: "Our o3 results already exhibit" }, silent: true },
+      // Contribution bullets that state the method or the findings; the
+      // operationalization bullet stays.
+      { op: "hide", at: { anchor: "b-0020", snippet: "We introduce Contrastive Synthetic Document" }, silent: true },
+      { op: "hide", at: { anchor: "b-0022", snippet: "We apply contrastive SDF to" }, silent: true },
+      // ---- Gate 1: design the instrument (end of §2) ----------------------
+      {
+        op: "gate",
+        after: { sectionEnd: "ax-sec-evidence-for-reward-seeking-in-existing" },
+        id: "design-the-instrument",
+        prompt:
+          "Section 2 argued that reward-seeking matters and that today's " +
+          "evidence for it is suggestive but confounded. Now suppose you " +
+          "must **measure** it: you want to know whether a model's behavior " +
+          "is causally sensitive to what it believes its grader rewards. " +
+          "You may finetune the model on any documents you like, and you " +
+          "can run it on any coding task. Before reading on: sketch the " +
+          "measurement you would build. What do you manipulate, and what " +
+          "do you read off?",
+        cta: "Reveal the authors' design",
+      },
+      // ---- §3.3 condensation (carried over from the condensed reading) ----
+      {
+        op: "add",
+        after: { anchor: "b-0129", snippet: "3.3 Synthetic document generation" },
+        label: "Condensed",
+        markdown:
+          "SDF writes a fictional \"universe context\" in which a given " +
+          "authority rewards or punishes a behavior, extracts atomic facts " +
+          "from it, expands them into ~10M tokens of synthetic documents, " +
+          "and finetunes the model on that corpus with a next-token loss. " +
+          "The documents describe what authorities reward — never how the " +
+          "model itself behaves — and two recipe modifications make the " +
+          "implanted belief more salient.",
+      },
+      {
+        op: "hide",
+        at: { anchor: "b-0131", snippet: "Our SDF pipeline follows" },
+        note: "Read §3.3 in full",
+      },
+      { op: "hide", at: { anchor: "b-0132", snippet: "SDF finetunes the model on" } },
+      { op: "hide", at: { anchor: "b-0133", snippet: "Universe context. We write a" } },
+      { op: "hide", at: { anchor: "b-0135", snippet: "Fact extraction. An LLM extracts" } },
+      { op: "hide", at: { anchor: "b-0137", snippet: "Document generation. The same LLM" } },
+      { op: "hide", at: { anchor: "b-0139", snippet: "Finetuning. We finetune on the" } },
+      { op: "hide", at: { anchor: "b-0141", snippet: "The documents describe what authorities" } },
+      { op: "hide", at: { anchor: "b-0142", snippet: "If the documents depicted AI" } },
+      { op: "hide", at: { anchor: "b-0143", snippet: "We make two modifications to" } },
+      { op: "hide", at: { anchor: "b-0144", snippet: "In early experiments, SDF reliably" } },
+      // ---- Gate 2: find the confound (end of §3.3) ------------------------
+      {
+        op: "gate",
+        after: { sectionEnd: "ax-sec-synthetic-document-generation-and-traini" },
+        id: "find-the-confound",
+        written: true,
+        prompt:
+          "The pipeline above (expand it if you skipped) instills one " +
+          "belief: some authority — say the grader — prefers a particular " +
+          "coding style. The obvious measurement is to finetune on that " +
+          "belief and check how much the feature's rate shifts. In " +
+          "preliminary experiments the authors found this measure has a " +
+          "confound. What is it? Think about what else the model might " +
+          "infer from documents about one authority's preference.",
+        cta: "Reveal the confound",
+      },
+      {
+        op: "add",
+        after: { sectionEnd: "ax-sec-measuring-feature-rates" },
+        label: "The confound, revealed",
+        markdown:
+          "Belief transfer: the model generalizes one authority's implanted " +
+          "preference into beliefs about what *other* authorities want, so " +
+          "the single-authority rate shift no longer isolates " +
+          "grader-sensitivity. If your answer pointed at the model " +
+          "inferring more than the stated preference, you had it. The " +
+          "contrastive design in the next subsection is built to cancel " +
+          "exactly this.",
+      },
+      // ---- Gate 3: predict the validation (end of §4.1) -------------------
+      {
+        op: "gate",
+        after: { sectionEnd: "ax-sec-training-model-organisms" },
+        id: "predict-validation",
+        prompt:
+          "Three model organisms are each trained to optimize for one " +
+          "authority: the grader, the user, or OpenAI leadership. If " +
+          "contrastive SDF works as an instrument, predict what the gap " +
+          "pattern across authority pairings should look like for each " +
+          "organism — and consider which organism might be hardest to " +
+          "detect, and why.",
+        cta: "Reveal the validation results",
+      },
+      // ---- Gate 4: preregister the o3-lineage prediction (end of §4) ------
+      {
+        op: "gate",
+        after: { sectionEnd: "ax-sec-validating-the-measurement-on-model-orga" },
+        id: "predict-the-lineage",
+        written: true,
+        prompt:
+          "Now the real question. The authors apply the instrument to " +
+          "intermediate checkpoints of a capabilities-focused OpenAI o3 RL " +
+          "run — no safety training in the mix. Commit to a prediction: " +
+          "across RL training, does the grader gap **rise, stay flat, or " +
+          "fall**? Give your reasoning in a sentence or two.",
+        cta: "Reveal what happened",
+      },
+      {
+        op: "add",
+        after: { sectionEnd: "ax-sec-contrastive-sdf-for-coding-style-feature" },
+        label: "Check your prediction",
+        markdown:
+          "The grader gap grows across the o3 lineage while non-grader gaps " +
+          "stay small — the paper's headline result. If you predicted flat " +
+          "or falling, §7 (Limitations) is where the authors give the " +
+          "strongest counter-considerations to their own reading.",
+      },
+      // ---- Gate 5: predict the reward hackers (end of §5) -----------------
+      {
+        op: "gate",
+        after: { sectionEnd: "ax-sec-measuring-reward-seeking-across-the-capa" },
+        id: "predict-reward-hackers",
+        prompt:
+          "Same instrument, new target: two gpt-oss-120b model organisms " +
+          "trained by Redwood Research to reward-hack. Before reading: " +
+          "should a known reward hacker show a larger grader gap than its " +
+          "base model — and what would it mean for the method if it did " +
+          "not?",
+        cta: "Reveal the reward-hacker results",
+      },
+      // ---- Closing note ---------------------------------------------------
+      {
+        op: "add",
+        after: { sectionEnd: "ax-sec-conclusion" },
+        label: "Parameters that are not decisions",
+        markdown:
+          "As in the guided password-locked-models walkthrough: separate " +
+          "the decisions from the parameters. Instilling beliefs " +
+          "out-of-context through finetuning rather than prompting, and " +
+          "contrasting mirrored universes rather than measuring one shift, " +
+          "are decisions — different choices would have produced a " +
+          "different experiment. The particular coding-style features, the " +
+          "four evaluation environments, and the three alternative " +
+          "authorities are parameters. The deliberation budget belongs to " +
+          "the decisions.",
+      },
+    ],
+  },
+  {
     id: "c-paper-auditing-sabotage-bench",
     slug: "auditing-sabotage-bench-paper",
     moduleId: "c-lowstakes",

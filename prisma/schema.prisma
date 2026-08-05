@@ -45,6 +45,7 @@ model User {
 
   verificationApplications VerificationApplication[] @relation("VerificationApplicant")
   verificationDecisions    VerificationApplication[] @relation("VerificationApplicationDecider")
+  capstoneSignup           VerificationCapstoneSignup?
 }
 
 // The standalone Verification site's per-user state: completed unit ids and
@@ -102,6 +103,27 @@ model VerificationApplication {
 
   @@unique([userId, cohort])
   @@index([cohort, status])
+}
+
+enum VerificationCapstoneStatus {
+  submitted
+  withdrawn
+}
+
+// A learner's capstone sign-up: the bank brief they chose (a content slug —
+// no FK into the content graph, like every content id here), their own
+// proposed idea, or both. One row per user; signing up again edits it, and a
+// withdrawal keeps the row as part of the record. Read by the facilitator
+// sheet at /verification/capstone-signups.
+model VerificationCapstoneSignup {
+  id        String                     @id @default(cuid())
+  userId    String                     @unique
+  user      User                       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  briefSlug String?
+  proposal  String?
+  status    VerificationCapstoneStatus @default(submitted)
+  createdAt DateTime                   @default(now())
+  updatedAt DateTime                   @updatedAt
 }
 
 // A user's text highlight on a paper item, with an optional attached note.

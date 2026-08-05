@@ -102,6 +102,39 @@ export default function FacilitatorPage() {
       </h3>
       <FacilitatorGuide />
 
+      <h2 className="mt-12 text-lg font-semibold tracking-tight">
+        Running a cohort
+      </h2>
+      <ul className="mt-4 max-w-2xl space-y-3">
+        <li className="text-sm leading-relaxed">
+          <Link
+            className="font-medium underline underline-offset-4"
+            href="/verification/capstone-signups"
+          >
+            Capstone sign-ups
+          </Link>{" "}
+          <span className="text-muted-foreground">
+            — who committed to which brief, and every idea learners proposed
+            themselves.
+          </span>
+        </li>
+        <li className="text-sm leading-relaxed">
+          <Link
+            className="font-medium underline underline-offset-4"
+            href="/verification/applications"
+          >
+            Cohort applications
+          </Link>{" "}
+          <span className="text-muted-foreground">
+            — the queue of people asking to join the next facilitated cohort.
+          </span>
+        </li>
+      </ul>
+      <p className="text-muted-foreground mt-3 max-w-2xl text-sm leading-relaxed">
+        Both pages are limited to the course&apos;s reviewer list and show a 404
+        to anyone else — being signed in is not enough.
+      </p>
+
       <p className="text-muted-foreground mt-10 text-sm">
         <Link className="underline underline-offset-4" href="/verification/landing">
           Back to the course

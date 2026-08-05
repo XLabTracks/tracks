@@ -150,12 +150,18 @@ export function CapstoneBank({ lead }: { lead?: string }) {
         </div>
       ))}
 
-      <p className="text-sm">
+      <p className="flex flex-wrap gap-x-6 gap-y-1 text-sm">
         <a
           className="underline underline-offset-4"
           href="/verification/capstone-bank"
         >
           Open the bank — {entries.length} briefs with filters, prerequisites and sources →
+        </a>
+        <a
+          className="underline underline-offset-4"
+          href="/verification/capstone-signup"
+        >
+          Sign up for a capstone, or propose your own →
         </a>
       </p>
     </div>

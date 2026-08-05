@@ -75,7 +75,10 @@ export default function Page() {
           theme. The Verification and Program-wide briefs name units this course
           teaches. The Technical Governance and AI Governance Policy themes are
           additional ideas from the wider program: their briefs assume background
-          this course does not teach, so they list no prerequisites here.
+          this course does not teach, so they list no prerequisites here. When you
+          have chosen — or would rather propose your own idea — the{" "}
+          <a href="/verification/capstone-signup">sign-up sheet</a> is where you
+          put your name against it.
         </p>
 
       </main>

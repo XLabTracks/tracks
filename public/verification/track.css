@@ -23,7 +23,7 @@
   color: var(--muted-foreground);
 }
 
-.track-stat { flex: 0 1 300px; }
+.track-stat { flex: 0 1 360px; }
 .track-stat .eyebrow { display: block; margin-bottom: 10px; }
 .track-stat .progress-row { margin-bottom: 10px; }
 .next { font-size: 13px; line-height: 1.55; color: var(--muted-foreground); }
@@ -55,7 +55,7 @@
   color: var(--mod, var(--muted-foreground));
 }
 .mod-head h2 { flex: 1 1 auto; font-size: 21px; }
-.mod-head .progress-row { flex: 0 1 200px; }
+.mod-head .progress-row { flex: 0 1 280px; }
 .mod-head .meter > i { background: var(--mod, var(--primary)); }
 
 .mod-goal {

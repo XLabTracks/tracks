@@ -130,7 +130,7 @@
   border-bottom: var(--hairline) solid var(--border);
 }
 .parts-head { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; }
-.parts-head .progress-row { flex: 0 1 240px; }
+.parts-head .progress-row { flex: 1 1 320px; }
 .parts-head .btn { margin-left: auto; }
 
 .part-list {

@@ -365,8 +365,8 @@
       '<div class="parts-head">' +
         (whole
           ? '<span class="counter">' + n + ' parts, all shown</span>'
-          : '<span class="progress-row"><span class="meter"><i style="width:' +
-            (((part + 1) / n) * 100).toFixed(1) + '%"></i></span>' +
+          : '<span class="progress-row"><span class="meter seg" style="--cells:' + n +
+            '"><i style="width:' + (((part + 1) / n) * 100).toFixed(1) + '%"></i></span>' +
             '<span class="counter">part ' + (part + 1) + ' / ' + n + '</span></span>') +
         '<button class="btn small outline" data-mode>' +
           (whole ? 'Read part by part' : 'Read the whole unit') + '</button>' +

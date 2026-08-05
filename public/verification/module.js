@@ -102,13 +102,61 @@
 
   /* ---------- body blocks ---------- */
 
+  /* {h} opens a part and {sh} deliberately does not — a unit with a dozen
+     sub-headings would otherwise shatter the strip into a dozen unreadable
+     tabs. Reach for {sh} for everything below the numbered sub-unit level. */
   function block(b) {
     if (b.p) return '<p>' + VT.fmt(b.p) + '</p>';
     if (b.h) return '<h4>' + VT.fmt(b.h) + '</h4>';
+    if (b.sh) return '<h5 class="sub">' + VT.fmt(b.sh) + '</h5>';
     if (b.ul) return '<ul>' + b.ul.map(li => '<li>' + VT.fmt(li) + '</li>').join('') + '</ul>';
+    if (b.ol) return '<ol>' + b.ol.map(li => '<li>' + VT.fmt(li) + '</li>').join('') + '</ol>';
     if (b.note) return '<div class="note"><span class="label">Note</span>' + VT.fmt(b.note) + '</div>';
     if (b.stub) return '<div class="stub"><span class="label">not drafted yet</span>' + VT.fmt(b.stub) + '</div>';
+    if (b.table) return table(b.table);
+    if (b.fold) return fold(b.fold);
+    if (b.check) return check(b.check);
     return '';
+  }
+
+  /* A wide table has to scroll inside its own box; letting it size the page
+     puts a horizontal scrollbar under the whole unit at laptop widths. The
+     first column is a row header, so a reader on a narrow screen keeps the
+     thing each row is about while the rest scrolls past it. */
+  function table(t) {
+    return '<div class="dtable-wrap"><table class="dtable">' +
+      '<thead><tr>' + t.cols.map(c => '<th scope="col">' + VT.fmt(c) + '</th>').join('') +
+      '</tr></thead><tbody>' +
+      t.rows.map(r => '<tr>' + r.map((cell, i) =>
+        i === 0 ? '<th scope="row">' + VT.fmt(cell) + '</th>'
+                : '<td>' + VT.fmt(cell) + '</td>').join('') + '</tr>').join('') +
+      '</tbody></table></div>';
+  }
+
+  /* Closed by default: a fold carries an aside the unit reads fine without,
+     so it must never hold a step the argument above it depends on. */
+  function fold(f) {
+    return '<details class="fold"><summary>' + VT.fmt(f.t) + '</summary>' +
+      '<div class="fold-body">' + (f.body || []).map(block).join('') + '</div></details>';
+  }
+
+  /* An inline check is one question inside the prose: commit, read why, stay
+     put. It never advances anything and never touches progress — the pager is
+     the only thing that completes a unit.
+
+     Trap: the answer key ships to the browser, exactly as data/exercises.js
+     already does. These are self-marked comprehension checks, not grading. */
+  function check(c) {
+    return '<div class="check" data-check data-key="' + (+c.key) + '">' +
+      '<span class="label">' + VT.esc(c.label || 'check') + '</span>' +
+      '<p class="check-q">' + VT.fmt(c.q) + '</p>' +
+      '<div class="opts">' + c.options.map((o, k) =>
+        '<button class="opt" data-k="' + k + '">' + VT.fmt(o) + '</button>').join('') +
+      '</div>' +
+      '<div class="ex-feedback check-why" hidden>' +
+        '<span class="label"></span><p>' + VT.fmt(c.why) + '</p>' +
+      '</div>' +
+    '</div>';
   }
 
   /* The strip prints labels as text, so a label carrying the inline markup
@@ -366,6 +414,27 @@
   }
 
   document.addEventListener('click', e => {
+    /* Inline checks first, and scoped to [data-check]: the exercise engine
+       uses the same .opt class inside its own host, and it grades a run this
+       handler knows nothing about. */
+    const box = e.target.closest('[data-check]');
+    if (box) {
+      const opt = e.target.closest('.opt');
+      if (!opt || box.dataset.done) return;
+      box.dataset.done = '1';
+      const key = +box.dataset.key, picked = +opt.dataset.k, right = picked === key;
+      box.querySelectorAll('.opt').forEach((btn, i) => {
+        btn.disabled = true;
+        if (i === key) btn.classList.add('is-key');
+        else if (i === picked) btn.classList.add('is-wrong');
+      });
+      const why = box.querySelector('.check-why');
+      why.classList.add(right ? 'ok' : 'no');
+      why.querySelector('.label').textContent = right ? 'Correct' : 'Not quite';
+      why.hidden = false;
+      return;
+    }
+
     const jump = e.target.closest('[data-jump]');
     if (jump) {
       // In whole-unit mode the row is a real anchor; let the browser scroll it.

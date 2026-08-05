@@ -318,3 +318,103 @@
   -webkit-user-select: none;
   -webkit-touch-callout: none;
 }
+
+/* ---------- prose blocks: sub-heading, table, fold, inline check ---------- */
+
+/* {sh} sits below the numbered sub-unit headings that open parts, so it has
+   to read as a step down from .part-title without competing with it. */
+.prose .sub {
+  margin: 22px 0 8px;
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: -0.005em;
+}
+.prose .sub:first-child { margin-top: 0; }
+
+/* The wrapper scrolls, not the page. Trap: the scroll box has to be the
+   element with the border, or the border scrolls away with the table. */
+.dtable-wrap {
+  overflow-x: auto;
+  margin: 14px 0 18px;
+  border: var(--hairline) solid var(--border);
+  border-radius: var(--radius-sm);
+}
+.dtable {
+  border-collapse: collapse;
+  width: 100%;
+  min-width: 560px;
+  font-size: 13.5px;
+  line-height: 1.5;
+}
+.dtable th, .dtable td {
+  padding: 9px 12px;
+  text-align: left;
+  vertical-align: top;
+  border-bottom: var(--hairline) solid var(--border);
+}
+.dtable thead th {
+  position: sticky;
+  top: 0;
+  background: var(--muted);
+  font-size: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+.dtable tbody th {
+  font-weight: 600;
+  color: var(--foreground);
+  min-width: 128px;
+}
+.dtable td { color: var(--muted-foreground); }
+.dtable tbody tr:last-child th, .dtable tbody tr:last-child td { border-bottom: 0; }
+
+/* Closed by default and uniform hairline on all four sides — a fold is a
+   card, so it takes the whole-border rule like every other card here. */
+.fold {
+  margin: 14px 0 18px;
+  border: var(--hairline) solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--muted);
+}
+.fold > summary {
+  padding: 10px 14px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  list-style: none;
+}
+.fold > summary::-webkit-details-marker { display: none; }
+.fold > summary::after { content: ' +'; color: var(--muted-foreground); }
+.fold[open] > summary::after { content: ' −'; }
+.fold[open] > summary { border-bottom: var(--hairline) solid var(--border); }
+.fold-body { padding: 12px 14px 4px; }
+.fold-body > :last-child { margin-bottom: 0; }
+
+/* One question inside the reading. It borrows .opt/.opts/.ex-feedback from
+   exercise.css on purpose, so a check and an exercise answer the same way. */
+.check {
+  margin: 18px 0;
+  padding: 14px 16px;
+  border: var(--hairline) solid var(--border);
+  border-radius: var(--radius-sm);
+}
+.check > .label {
+  display: block;
+  margin-bottom: 8px;
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted-foreground);
+}
+.check-q { margin-bottom: 10px; font-size: 15px; line-height: 1.55; }
+.check .check-why { margin-top: 12px; }
+.check .check-why[hidden] { display: none; }
+
+/* Chrome, not reading: the label, the options and the verdict word are all
+   pressed or glanced at, never copied. */
+.check > .label, .check .opt, .check .check-why .label, .fold > summary {
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+}

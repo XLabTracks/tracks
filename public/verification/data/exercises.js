@@ -289,52 +289,6 @@ window.EXERCISES = {
     ]
   },
 
-  /* ---------------------------------------------------------- 2.4 */
-  'ex-human-layer': {
-    type: 'mcq',
-    title: 'The sensor with interests',
-    lede: 'What an insider can establish, what makes them able to say it, and what the statutory record shows about whether the machinery survives.',
-    source: 'Outline 2.4.0–2.4.4. The statutory item keys on the dated record in the 2.4 verification log at the head of the unit in data/course.js.',
-    questions: [
-      { q: 'Hardware, cloud and intelligence all read consequences of activity. What does a human source add that none of them can reach?',
-        options: [
-          'Higher-resolution detail about the same physical activity',
-          'What the organization knew, intended, and chose not to disclose',
-          'Evidence in a form technical collection cannot produce',
-          'Faster detection than remote sensing'
-        ],
-        key: 1,
-        why: 'Speed, resolution and evidentiary form are all contestable, and for a human source they are often worse. The irreducible addition is the decision: the evaluation that was run and shelved, the threshold quietly redefined, the objection overridden. No instrument reads an intention.' },
-      { q: 'Wasil et al. class whistleblowers as a national technical means — alongside remote sensing and financial intelligence, rather than alongside inspections. What follows from that?',
-        options: [
-          'Insider reports are more reliable than inspection findings',
-          'Insider reports can be obtained without the suspected party consenting to anything',
-          'Insider reports need no corroboration',
-          'Insider reports are covered by treaty noninterference clauses'
-        ],
-        key: 1,
-        why: 'The category is defined by access, not by quality. National technical means require no permission from the party under suspicion, which makes an insider account the only deep-access evidence available against a state cooperating with nothing — and, for the same reason, the stream a closed regime works hardest to shut off. Reliability is a separate axis: the same authors rank whistleblowers as unreliable and incomplete.' },
-      { q: 'A regime receives no insider reports from a covered developer across two years. What does that support?',
-        options: [
-          'Weak evidence of compliance, strengthening the longer it holds',
-          'Nothing about compliance — the sample is not drawn from any frame',
-          'Evidence that the protection regime is working as designed',
-          'Grounds for reducing inspection frequency at that developer'
-        ],
-        key: 1,
-        why: 'There is no sampling frame for insiders. You hear from organizations porous enough to leak, which is not the set of organizations that are violating. Reading silence as compliance also builds the wrong incentive — it rewards tightening agreements rather than complying.' },
-      { q: 'New York enacted the RAISE Act in December 2025 with an annual independent third-party audit requirement, then removed it by chapter amendment in March 2026, before the law took effect. What does that sequence best illustrate?',
-        options: [
-          'That third-party audits are technically infeasible at frontier scale',
-          'That a mechanism has to survive the coalition defending it, not merely be sound',
-          'That state law cannot reach developers headquartered elsewhere',
-          'That audit mandates require a federal standard to build on'
-        ],
-        key: 1,
-        why: 'Nothing in the repeal turned on feasibility, on jurisdiction, or on the absence of a federal standard. The clause was drafted, passed and signed, and still did not reach its own effective date. When you judge a human-layer mechanism, judge the political economy that would have to keep defending it after the press cycle ends.' }
-    ]
-  },
-
   /* ---------------------------------------------------------- 3.1 */
   'ex-evasion': {
     type: 'grid',

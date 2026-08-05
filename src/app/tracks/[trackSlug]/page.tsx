@@ -106,7 +106,9 @@ export default async function TrackOverviewPage({
                   {progress.completed} / {progress.total} items
                 </span>
               </div>
-              <Progress value={progress.percent} className="mt-2" />
+              {/* The track hero carries the bar at display weight; the
+                  classroom tables keep the component's default height. */}
+              <Progress value={progress.percent} className="mt-2 h-4" />
             </div>
             {continueHref && (
               <Button asChild>

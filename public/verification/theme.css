@@ -214,21 +214,28 @@ button, [role='button'], [role='radio'], [role='tab'], .chip, .nav a, .brand,
    height and read as an afterthought. 28px puts roughly 15px of ink beside
    the word. Re-crop the PNG if you want the number to mean what it says.
 
-   The file is maroon-and-black on transparent, which reads on the day ground
-   and vanishes on the night one, so the dark themes re-light it rather than
-   ship a second file:
+   Two files, not one filtered file. The day artwork is maroon-and-black and
+   disappears on the night ground; the white artwork keeps the maroon cross
+   and turns the letters white. Both ship, and CSS shows one — a filter that
+   re-lit the day file pushed the cross off-brand towards pink.
 
-   invert(1) alone would turn the maroon cross cyan. hue-rotate(180deg) after
-   it puts the hue back, landing the cross on roughly --brand-ink's dusty red
-   while the black letters go white. High contrast drops brand colour by
-   design, so there the logotype is flattened to pure white. */
+   High contrast is the exception: it drops brand colour by design, and a
+   maroon cross on black reads at about 2:1, so there the white file is
+   flattened the rest of the way. */
 .brand-mark {
   height: 28px;
   width: auto;
   display: block;
 }
-:root[data-theme='dark'] .brand-mark { filter: invert(1) hue-rotate(180deg); }
-:root[data-theme='contrast'] .brand-mark { filter: brightness(0) invert(1); }
+
+/* Which artwork, per ground. These must stay AFTER .brand-mark: it sets
+   display:block at the same specificity, so ordering is what decides. */
+.mark-night { display: none; }
+:root[data-theme='dark'] .mark-day,
+:root[data-theme='contrast'] .mark-day { display: none; }
+:root[data-theme='dark'] .mark-night,
+:root[data-theme='contrast'] .mark-night { display: block; }
+:root[data-theme='contrast'] .mark-night { filter: brightness(0) invert(1); }
 
 /* The links sit against the brand on the left; the nav still takes the whole
    middle of the bar so the actions are pushed hard right.

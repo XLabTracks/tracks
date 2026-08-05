@@ -80,7 +80,7 @@
   text-transform: uppercase;
   color: var(--muted-foreground);
 }
-.band-label b { color: var(--mod, var(--brand-ink)); font-weight: 400; }
+.band-label b { color: var(--mod-type, var(--brand-ink)); font-weight: 400; }
 .band-nodes { display: flex; flex-wrap: wrap; gap: 8px; }
 
 /* State is carried by the word in .n-meta and the n/m fraction as well as by

@@ -499,9 +499,11 @@ The course pages' own mechanics, for as long as they are scripts:
   other colours; every value clears 4.5:1 where it is set. They stay
   decorative — warm neighbours converge for a protanope — so they and
   `--ok`/`--no` (Wong) are always accompanied by a word, glyph or fraction. High
-  contrast is picked, never inferred. Each page's `<head>` carries a small
-  inline copy of the theme read step so the ground is right before first
-  paint — keep it in step with `theme.js`. `fonts.css` carries Space Grotesk
+  contrast is picked, never inferred. The read step runs inline in
+  `src/app/layout.tsx` (`THEME_BOOT`) before the body does, so the ground is
+  right at first paint — `theme.js` runs after hydration, and on its own it
+  paints the day ground and then repaints. Keep the two in step: same
+  storage key, same attribute, same three values. `fonts.css` carries Space Grotesk
   as a data URI.
 - **`platform.js` owns the shared runtime**; `platform.css` the components on
   top of `theme.css`. Its `VT.mountChrome()` / `VT.mountFoot()` are dead on

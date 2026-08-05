@@ -69,6 +69,25 @@ async function getInitialAuth() {
   }
 }
 
+/*
+ * The theme read step, inline and before first paint.
+ *
+ * Verification's three themes are `data-theme` on <html>, and theme.css paints
+ * the day ground when the attribute is absent. theme.js sets it — but it runs
+ * after hydration, so a learner on the night theme watched the page paint
+ * light and then go dark. This is the same read, running before the document
+ * body does.
+ *
+ * It is harmless on every other route: nothing outside Verification reads
+ * `data-theme`, and theme.css is only linked on those pages.
+ *
+ * Trap: keep it in step with theme.js — same storage key, same attribute,
+ * same three values, and high contrast never inferred from the system.
+ */
+const THEME_BOOT = `(function(){try{var v=localStorage.getItem('xlab-verification-theme');\
+if(v!=='light'&&v!=='dark'&&v!=='contrast'){v=window.matchMedia&&window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';}\
+document.documentElement.setAttribute('data-theme',v);}catch(e){}})();`;
+
 export default async function RootLayout({
   children,
 }: Readonly<{
@@ -80,6 +99,9 @@ export default async function RootLayout({
       lang="en"
       className={`${inter.variable} ${jetbrainsMono.variable} h-full antialiased`}
     >
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: THEME_BOOT }} />
+      </head>
       <body className="bg-background text-foreground flex min-h-full flex-col">
         <a
           href="#main-content"

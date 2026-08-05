@@ -5,14 +5,15 @@ import { FG_SESSION_CARDS } from "@/lib/verification/data/facilitator-guide";
  * The instructor's way into the Verification facilitator material, on the page
  * where they are already standing.
  *
- * The five session plans are listed rather than hidden behind the guide's home
+ * The five session plans are listed rather than left behind the guide's home
  * grid, because the thing an instructor opens this page to do is run the next
  * session — one click, not three. The craft modules stay behind the single
  * link: they are read once, or in a hurry mid-session, and listing all twelve
  * here would bury the five that are the week's work.
  *
- * Rendered only for instructors of a Verification classroom; the guide itself
- * 404s for anybody else, so this is a shortcut and not the gate.
+ * The per-plan links carry the guide's own view ids in the hash, which is what
+ * makes them land on the plan; /verification/facilitator itself is public, so
+ * this is a shortcut and not a gate.
  */
 export function FacilitatorPanel() {
   return (
@@ -23,7 +24,7 @@ export function FacilitatorPanel() {
           href="/verification/facilitator"
           className="text-sm underline underline-offset-4"
         >
-          Open the field guide
+          Open the facilitator page
         </Link>
       </div>
       <p className="text-muted-foreground mt-1 text-sm">

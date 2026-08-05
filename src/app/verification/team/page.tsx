@@ -1,17 +1,15 @@
 import type { Metadata } from "next";
-import { LegacyScripts } from "@/components/verification/legacy-scripts";
 
 /* Team — one of the course's own pages.
  *
  * It was a hand-written .html file under public/verification/ until the two
  * halves were folded together: a page served outside the app has no session,
  * so it could only ask an API whether somebody was signed in and never show
- * them their own account. The markup is unchanged; the behaviour is still
- * team's scripts, loaded in order by LegacyScripts. */
+ * them their own account. The markup is unchanged, and it carries no script of
+ * its own — it is prose, and the chrome, the theme and the notebook belong to
+ * the app now. */
 
 export const metadata: Metadata = { title: "Team" };
-
-const SCRIPTS = ["data/course.js", "data/skills.js", "data/chrome.js", "platform.js"];
 
 export default function Page() {
   return (
@@ -62,7 +60,6 @@ export default function Page() {
           </div>
         </div>
       </main>
-      <LegacyScripts src={SCRIPTS} />
     </>
   );
 }

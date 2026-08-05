@@ -23,10 +23,12 @@ export type ChromeLink = {
   href: string | null;
 };
 
-/** The top strip. Course destinations are reached from the landing body and
- *  from each other, not from here — seven links made a row that had to
- *  scroll on a laptop. */
+/** The top strip. A learner's course destinations are reached from the
+ *  landing body and from each other, not from here — a long row has to
+ *  scroll on a laptop — so the strip carries the facilitator's entry point
+ *  and the org pages, nothing more. */
 export const NAV: ChromeLink[] = [
+  { label: "Curriculum and facilitation materials", href: "facilitator" },
   { label: "Team", href: "team" },
   { label: "About", href: "about" },
 ];

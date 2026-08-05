@@ -1,10 +1,12 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useState, type ReactNode } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import { ArrowLeft, Check, Plus, X } from "lucide-react";
+import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
-  DialogDescription,
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
@@ -50,434 +52,807 @@ import {
   type ContextKey,
   type FormatKey,
   type ResBox,
+  type SessionPlan,
+  type SorterItem,
   type Stage,
   type Tile,
   type Verdict,
 } from "@/lib/verification/data/facilitator-guide";
 
-/* The Facilitator Field Guide: a home grid over seven craft modules and five
- * session plans, each opening into a detail view, with 99 short cards behind
- * the tiles.
- *
- * All copy is authored and arrives as HTML from the data module, so bodies are
- * set with dangerouslySetInnerHTML. That is safe here and only here: the
- * strings are committed source, not user input, and nothing on this page comes
- * from the database.
- *
- * Two toggles, and they are deliberately different animals. Format
- * (in-person / Zoom) is shared by all five session plans — a cohort runs one
- * way, and re-picking it per plan would be a chore. Context (newer to AI safety
- * / high context) belongs to "Your role" alone and swaps that module's copy.
- *
- * Trap: a term inside authored prose can open a card too — those are
- * `<button data-pop="…">` in the HTML, so the click is caught by delegation on
- * the wrapper rather than by a handler this file can attach. */
+/* ---------- shared prose styling for authored HTML fragments ---------- */
 
-/** The <h3> the source opens each card with is the dialog's title, and is
- *  taken out of the body so it is not printed twice.
- *
- *  The title stays HTML rather than being stripped to text: these headings
- *  carry entities (&amp;, curly quotes) that a tag-stripping regex leaves
- *  standing as literal `&amp;` on the screen. */
-function splitPopup(html: string): { title: string; body: string } {
-  const m = /^\s*<h3>([\s\S]*?)<\/h3>/.exec(html);
-  if (!m) return { title: "", body: html };
-  return { title: m[1], body: html.slice(m[0].length) };
-}
+// Class hook applied to any container rendering authored popup / callout HTML.
+// Styles the source's semantic spans (.say quotes, .mt medium tags) and lists
+// using app tokens instead of the source's cream/serif look.
+const AUTHORED =
+  "[&_h3]:hidden " + // popup h3 is promoted to the DialogTitle
+  "[&_p]:mt-2.5 [&_p:first-child]:mt-0 [&_p]:text-sm [&_p]:leading-relaxed " +
+  "[&_strong]:font-semibold [&_strong]:text-foreground " +
+  "[&_em]:italic " +
+  "[&_a]:text-primary [&_a]:underline [&_a]:underline-offset-2 hover:[&_a]:text-primary/80 " +
+  "[&_ol]:mt-2.5 [&_ol]:list-decimal [&_ol]:space-y-1.5 [&_ol]:pl-5 [&_ol]:text-sm " +
+  "[&_ul]:mt-2.5 [&_ul]:list-disc [&_ul]:space-y-1.5 [&_ul]:pl-5 [&_ul]:text-sm " +
+  "[&_li]:leading-relaxed " +
+  // .say — a quoted facilitator line
+  "[&_.say]:mt-2.5 [&_.say]:block [&_.say]:rounded-lg [&_.say]:border [&_.say]:border-border " +
+  "[&_.say]:bg-muted/50 [&_.say]:px-3.5 [&_.say]:py-2.5 [&_.say]:text-sm [&_.say]:italic " +
+  // .mt — a small mono "medium" tag (Sync / Async / In person / On Zoom)
+  "[&_.mt]:mr-1 [&_.mt]:font-mono [&_.mt]:text-[11px] [&_.mt]:font-semibold [&_.mt]:tracking-[0.08em] [&_.mt]:uppercase [&_.mt]:text-primary " +
+  // p.mt — a recipe subtitle line
+  "[&_p.mt]:mt-0 [&_p.mt]:mb-1";
+
+const CALLOUT_VARIANT: Record<Callout["variant"], string> = {
+  brown: "border-l-primary bg-muted/40",
+  blue: "border-l-hide/70 bg-hide/5",
+};
+
+/* ---------------------------- the widget ---------------------------- */
+
+const PLAN_BY_ID = new Map(SESSION_PLANS.map((p) => [p.id, p]));
+
+/** Every view the guide can open, so an unknown hash falls back to home
+ *  instead of rendering nothing. */
+const FG_VIEW_IDS = new Set(
+  [...FG_CRAFT_CARDS, ...FG_SESSION_CARDS].map((c) => c.id),
+);
 
 export function FacilitatorGuide() {
-  const [view, setView] = useState<string | null>(null);
-  const [pop, setPop] = useState<string | null>(null);
-  const [format, setFormat] = useState<FormatKey>("ip");
+  const [view, setView] = useState<string>("home");
   const [context, setContext] = useState<ContextKey>("low");
+  const [format, setFormat] = useState<FormatKey>("ip");
+  const [pop, setPop] = useState<string | null>(null);
 
-  const openPop = useCallback((id: string) => setPop(id), []);
-
-  /* Terms inside authored prose are buttons in the HTML string, so their
-     clicks are caught here rather than bound at render. */
-  const onProseClick = useCallback((e: React.MouseEvent<HTMLElement>) => {
-    const el = (e.target as HTMLElement).closest?.("button[data-pop]");
-    const id = el?.getAttribute("data-pop");
-    if (id) setPop(id);
+  /* The open view lives in the hash, so a link can name one. That is what lets
+     an instructor's classroom link the session plan they are running rather
+     than the home grid, and what makes a plan shareable at all — without it
+     every link to this guide lands in the same place. Unknown hashes fall back
+     to home, so a stale link is a home page and not an empty view. */
+  const go = useCallback((id: string) => {
+    setView(id);
+    const url = id === "home" ? location.pathname + location.search : `#${id}`;
+    history.replaceState(history.state, "", url);
   }, []);
 
-  const popup = useMemo(() => (pop ? splitPopup(FG_POPUPS[pop] ?? "") : null), [pop]);
-
-  /* The view lives in the hash, so a link can name one. That is what makes the
-     classroom's "next session" shortcuts land on the plan rather than on the
-     home grid, and it costs the Back button nothing it did not already do. */
-  const VIEW_IDS = useMemo(
-    () => new Set([...FG_CRAFT_CARDS, ...FG_SESSION_CARDS].map((c) => c.id)),
-    [],
-  );
   useEffect(() => {
     const read = () => {
       const id = location.hash.slice(1);
-      setView(VIEW_IDS.has(id) ? id : null);
+      setView(FG_VIEW_IDS.has(id) ? id : "home");
     };
     read();
     addEventListener("hashchange", read);
     return () => removeEventListener("hashchange", read);
-  }, [VIEW_IDS]);
+  }, []);
 
-  const goHome = () => {
-    setView(null);
-    history.replaceState(history.state, "", location.pathname + location.search);
-    window.scrollTo({ top: 0 });
-  };
-  const goView = (id: string) => {
-    setView(id);
-    history.replaceState(history.state, "", `#${id}`);
-    window.scrollTo({ top: 0 });
-  };
-
-  /* ---------- shared pieces ---------- */
-
-  const Prose = ({ html, className }: { html: string; className: string }) => (
-    <div
-      className={className}
-      onClick={onProseClick}
-      dangerouslySetInnerHTML={{ __html: html }}
-    />
-  );
-
-  const CalloutBox = ({ c }: { c: Callout }) => (
-    <Prose html={c.html} className="note fg-callout" />
-  );
-
-  const Tiles = ({ tiles }: { tiles: Tile[] }) => (
-    <ul className="fg-tiles">
-      {tiles.map((t) => (
-        <li key={t.pop}>
-          <button type="button" className="fg-tile" onClick={() => openPop(t.pop)}>
-            <b>{t.title}</b>
-            <span>{t.desc}</span>
-            {t.timing && <span className="t">{t.timing}</span>}
-          </button>
-        </li>
-      ))}
-    </ul>
-  );
-
-  const Stages = ({ stages }: { stages: Stage[] }) => (
-    <ul className="fg-stages">
-      {stages.map((s) => (
-        <li key={s.pop}>
-          <button type="button" className="fg-stage" onClick={() => openPop(s.pop)}>
-            <span className="row">
-              <span className="num">{s.num}</span>
-              <span className="phase">{PHASE_LABEL[s.phase]}</span>
-              <b>{s.title}</b>
-            </span>
-            <span className="d">{s.desc}</span>
-          </button>
-        </li>
-      ))}
-    </ul>
-  );
-
-  const Boxes = ({ boxes }: { boxes: ResBox[] }) => (
-    <>
-      {boxes.map((b) => (
-        <section className="fg-res" key={b.heading}>
-          <h3>{b.heading}</h3>
-          <ul>
-            {b.items.map((it, i) => (
-              <li key={i} dangerouslySetInnerHTML={{ __html: it.html }} />
-            ))}
-          </ul>
-        </section>
-      ))}
-    </>
-  );
-
-  const ViewHead = ({ title, lede }: { title: string; lede: string }) => (
-    <header className="fg-view-head">
-      <h2>{title}</h2>
-      <p className="lede" dangerouslySetInnerHTML={{ __html: lede }} />
-    </header>
-  );
-
-  const Toggle = ({
-    label,
-    options,
-    value,
-    onChange,
-  }: {
-    label: string;
-    options: { key: string; label: string }[];
-    value: string;
-    onChange: (k: string) => void;
-  }) => (
-    <div className="fg-toggle" role="group" aria-label={label}>
-      {options.map((o) => (
-        <button
-          key={o.key}
-          type="button"
-          aria-pressed={value === o.key}
-          onClick={() => onChange(o.key)}
-        >
-          {o.label}
-        </button>
-      ))}
-    </div>
-  );
-
-  /* ---------- home ---------- */
-
-  const Cards = ({ cards }: { cards: typeof FG_CRAFT_CARDS }) => (
-    <div className="fg-grid">
-      {cards.map((c) => (
-        <button key={c.id} type="button" className="fg-card" onClick={() => goView(c.id)}>
-          <span className="num">{c.num}</span>
-          <h3>{c.title}</h3>
-          <p>{c.desc}</p>
-          <span className="meta">{c.meta}</span>
-        </button>
-      ))}
-    </div>
-  );
-
-  let body: ReactNode;
-
-  if (view === null) {
-    body = (
-      <>
-        <header className="fg-head">
-          <h1>Facilitator field guide</h1>
-          <p className="lede">{FG_HEADER.lede}</p>
-          <ul className="fg-principles">
-            {FG_PRINCIPLES.map((p) => (
-              <li key={p}>{p}</li>
-            ))}
-          </ul>
-        </header>
-
-        <section className="fg-sec">
-          <h2>Craft</h2>
-          <p className="note">{FG_HOME_HINT_1}</p>
-          <Cards cards={FG_CRAFT_CARDS} />
-        </section>
-
-        <section className="fg-sec">
-          <h2>{FG_HOME_SESSION_HEADING}</h2>
-          <p className="note">{FG_HOME_SESSION_NOTE}</p>
-          <Cards cards={FG_SESSION_CARDS} />
-          <p className="note fg-next">{FG_HOME_HINT_2}</p>
-        </section>
-      </>
-    );
-  } else {
-    const plan = SESSION_PLANS.find((p) => p.id === view);
-    body = (
-      <>
-        <button type="button" className="fg-back" onClick={goHome}>
-          &larr; All modules
-        </button>
-
-        {view === "m-role" && (
-          <>
-            <ViewHead title={ROLE_HEAD.title} lede={ROLE_HEAD.lede} />
-            <Toggle
-              label="Your AI-safety context"
-              value={context}
-              onChange={(k) => setContext(k as ContextKey)}
-              options={[
-                { key: "low", label: ROLE_HEAD.ctxLabelLow },
-                { key: "high", label: ROLE_HEAD.ctxLabelHigh },
-              ]}
-            />
-            <CalloutBox c={context === "low" ? ROLE_CALLOUT_LOW : ROLE_CALLOUT_HIGH} />
-            <Tiles tiles={context === "low" ? ROLE_TILES_LOW : ROLE_TILES_HIGH} />
-            <CalloutBox c={ROLE_CALLOUT_SPINE} />
-          </>
-        )}
-
-        {view === "m-takes" && (
-          <>
-            <ViewHead title={TAKES_HEAD.title} lede={TAKES_HEAD.lede} />
-            <Tiles tiles={TAKES_TILES} />
-            <section className="fg-sec">
-              <h2>{TAKES_SORTER_HEAD.heading}</h2>
-              <p className="note">{TAKES_SORTER_HEAD.note}</p>
-              <Sorter />
-            </section>
-            <CalloutBox c={TAKES_CALLOUT} />
-          </>
-        )}
-
-        {view === "m-participation" && (
-          <>
-            <ViewHead title={PART_HEAD.title} lede={PART_HEAD.lede} />
-            <Tiles tiles={PART_TILES} />
-            <CalloutBox c={PART_CALLOUT} />
-          </>
-        )}
-
-        {view === "m-agency" && (
-          <>
-            <ViewHead title={AGENCY_HEAD.title} lede={AGENCY_HEAD.lede} />
-            <Tiles tiles={AGENCY_TILES} />
-            <CalloutBox c={AGENCY_CALLOUT} />
-          </>
-        )}
-
-        {view === "m-convert" && (
-          <>
-            <ViewHead title={CONVERT_HEAD.title} lede={CONVERT_HEAD.lede} />
-            <Tiles tiles={CONVERT_TILES} />
-            <CalloutBox c={CONVERT_CALLOUT} />
-          </>
-        )}
-
-        {view === "m-session" && (
-          <>
-            <ViewHead title={SESSION_HEAD.title} lede={SESSION_HEAD.lede} />
-            <Stages stages={SESSION_STAGES} />
-            <CalloutBox c={SESSION_CALLOUT} />
-          </>
-        )}
-
-        {view === "m-resources" && (
-          <>
-            <ViewHead title={RESOURCES_HEAD.title} lede={RESOURCES_HEAD.lede} />
-            <Boxes boxes={RESOURCES_BOXES} />
-          </>
-        )}
-
-        {plan && (
-          <>
-            <ViewHead title={plan.title} lede={plan.lede} />
-            <Toggle
-              label="Session format"
-              value={format}
-              onChange={(k) => setFormat(k as FormatKey)}
-              options={[
-                { key: "ip", label: FG_FORMAT_LABELS.ip },
-                { key: "zm", label: FG_FORMAT_LABELS.zm },
-              ]}
-            />
-            {plan.principles && (
-              <div className="fg-chips">
-                {plan.principles.map((p) => (
-                  <span className="chip" key={p}>
-                    {p}
-                  </span>
-                ))}
-              </div>
-            )}
-            <Prose html={plan.prep[format]} className="note fg-callout" />
-
-            {plan.coreTiles && (
-              <section className="fg-sec">
-                <h2>{plan.coreHeading}</h2>
-                {plan.coreNote && <p className="note">{plan.coreNote}</p>}
-                <Tiles tiles={plan.coreTiles} />
-              </section>
-            )}
-
-            <section className="fg-sec">
-              <h2>Run of show</h2>
-              <Stages stages={plan.stages} />
-            </section>
-
-            <section className="fg-sec">
-              <h2>{plan.promptsHeading}</h2>
-              {plan.promptsNote && <p className="note">{plan.promptsNote}</p>}
-              <Tiles tiles={plan.promptTiles} />
-            </section>
-
-            <section className="fg-sec">
-              <h2>{plan.sendHeading}</h2>
-              <Boxes boxes={[plan.sendBox]} />
-            </section>
-
-            <CalloutBox c={plan.seed} />
-
-            {plan.nextId && (
-              <p className="fg-next">
-                <button
-                  type="button"
-                  className="fg-back"
-                  onClick={() => goView(plan.nextId as string)}
-                >
-                  {plan.nextLabel ?? "Next session plan"} &rarr;
-                </button>
-              </p>
-            )}
-          </>
-        )}
-      </>
-    );
-  }
+  const popHtml = pop ? FG_POPUPS[pop] : null;
+  const popTitle = popHtml ? extractH3(popHtml) : "";
 
   return (
-    <>
-      {body}
+    <div className="not-prose border-border bg-card shadow-soft my-6 overflow-hidden rounded-xl border">
+      <div className="p-5">
+        {view === "home" ? (
+          <HomeView go={go} />
+        ) : view === "m-role" ? (
+          <RoleView go={go} onPop={setPop} context={context} setContext={setContext} />
+        ) : view === "m-takes" ? (
+          <TakesView go={go} onPop={setPop} />
+        ) : view === "m-participation" ? (
+          <SimpleTileView
+            go={go}
+            onPop={setPop}
+            head={PART_HEAD}
+            tiles={PART_TILES}
+            callout={PART_CALLOUT}
+            nextId="m-agency"
+            nextLabel="Next: Agency, not regurgitation →"
+          />
+        ) : view === "m-agency" ? (
+          <SimpleTileView
+            go={go}
+            onPop={setPop}
+            head={AGENCY_HEAD}
+            tiles={AGENCY_TILES}
+            callout={AGENCY_CALLOUT}
+            nextId="m-convert"
+            nextLabel="Next: Async → sync converter →"
+          />
+        ) : view === "m-convert" ? (
+          <SimpleTileView
+            go={go}
+            onPop={setPop}
+            head={CONVERT_HEAD}
+            tiles={CONVERT_TILES}
+            callout={CONVERT_CALLOUT}
+            nextId="m-session"
+            nextLabel="Next: The 60-minute session →"
+          />
+        ) : view === "m-session" ? (
+          <SessionSkeletonView go={go} onPop={setPop} />
+        ) : view === "m-resources" ? (
+          <ResourcesView go={go} />
+        ) : PLAN_BY_ID.has(view) ? (
+          <SessionPlanView
+            go={go}
+            onPop={setPop}
+            plan={PLAN_BY_ID.get(view)!}
+            format={format}
+            setFormat={setFormat}
+          />
+        ) : (
+          <HomeView go={go} />
+        )}
+      </div>
+
+      {/* shared popup dialog */}
       <Dialog open={pop !== null} onOpenChange={(o) => !o && setPop(null)}>
-        <DialogContent className="max-h-[85vh] overflow-y-auto">
+        <DialogContent className="max-h-[85vh] overflow-y-auto sm:max-w-xl">
           <DialogHeader>
-            <DialogTitle
-              dangerouslySetInnerHTML={{ __html: popup?.title ?? "" }}
-            />
-            <DialogDescription className="sr-only">
-              Facilitator note
-            </DialogDescription>
+            <DialogTitle>{popTitle}</DialogTitle>
           </DialogHeader>
-          {popup && <Prose html={popup.body} className="fg-body" />}
+          {popHtml && (
+            <div
+              className={cn("text-foreground", AUTHORED)}
+              dangerouslySetInnerHTML={{ __html: popHtml }}
+            />
+          )}
         </DialogContent>
       </Dialog>
-    </>
+    </div>
   );
-
-  /* The one interactive piece: commit a verdict, then read why. Never
-     auto-advances — the explanation carries the facilitator move, which is the
-     part worth reading. */
-  function Sorter() {
-    return (
-      <ul className="fg-tiles" style={{ gridTemplateColumns: "minmax(0, 1fr)" }}>
-        {TAKES_SORTER.map((item, i) => (
-          <li key={i}>
-            <SorterCard item={item} />
-          </li>
-        ))}
-      </ul>
-    );
-  }
 }
 
-function SorterCard({
-  item,
-}: {
-  item: (typeof TAKES_SORTER)[number];
-}) {
-  const [picked, setPicked] = useState<Verdict | null>(null);
-  const right = picked === item.answer;
+/* ------------------------------ pieces ------------------------------ */
+
+function BackButton({ go }: { go: (id: string) => void }) {
   return (
-    <div className="fg-tile" style={{ cursor: "default" }}>
-      <span>{item.quote}</span>
-      {picked === null ? (
-        <span className="fg-chips">
-          <button type="button" className="chip" onClick={() => setPicked("strong")}>
-            Strong take
+    <button
+      type="button"
+      onClick={() => go("home")}
+      className="text-muted-foreground hover:text-foreground -ml-1 inline-flex items-center gap-1 text-xs font-semibold transition-colors"
+    >
+      <ArrowLeft className="size-3.5" aria-hidden /> All modules
+    </button>
+  );
+}
+
+/** Renders an inline HTML fragment (lede / callout body) that may contain
+ *  `<button data-pop="…">term</button>` term triggers. We split on those and
+ *  render real buttons that open the shared dialog; the rest is safe authored
+ *  HTML. */
+function InlineWithTerms({
+  html,
+  onPop,
+  className,
+}: {
+  html: string;
+  onPop: (id: string) => void;
+  className?: string;
+}) {
+  const parts = useMemo(() => splitTerms(html), [html]);
+  return (
+    <span className={className}>
+      {parts.map((part, i) =>
+        part.kind === "html" ? (
+          <span key={i} dangerouslySetInnerHTML={{ __html: part.html }} />
+        ) : (
+          <button
+            key={i}
+            type="button"
+            onClick={() => onPop(part.pop)}
+            className="text-foreground decoration-primary hover:bg-muted font-semibold underline decoration-dotted decoration-2 underline-offset-4"
+          >
+            {part.label}
           </button>
-          <button type="button" className="chip" onClick={() => setPicked("weak")}>
-            Weak take
-          </button>
+        ),
+      )}
+    </span>
+  );
+}
+
+function CalloutBox({
+  callout,
+  onPop,
+}: {
+  callout: Callout;
+  onPop: (id: string) => void;
+}) {
+  return (
+    <div
+      className={cn(
+        "my-4 rounded-r-lg border-l-4 py-3 pr-4 pl-4 text-sm leading-relaxed [&_em]:italic [&_strong]:font-semibold",
+        CALLOUT_VARIANT[callout.variant],
+      )}
+    >
+      <InlineWithTerms html={callout.html} onPop={onPop} />
+    </div>
+  );
+}
+
+function TileButton({
+  tile,
+  onPop,
+}: {
+  tile: Tile;
+  onPop: (id: string) => void;
+}) {
+  return (
+    <button
+      type="button"
+      onClick={() => onPop(tile.pop)}
+      className="border-border bg-card hover:border-primary shadow-soft group relative rounded-xl border p-4 pr-9 text-left transition-colors"
+    >
+      <span
+        aria-hidden
+        className="border-border text-muted-foreground group-hover:border-primary group-hover:bg-primary group-hover:text-primary-foreground absolute top-3 right-3 flex size-5 items-center justify-center rounded-full border transition-colors"
+      >
+        <Plus className="size-3" />
+      </span>
+      <h4
+        className="text-sm font-semibold [&_em]:italic"
+        dangerouslySetInnerHTML={{ __html: tile.title }}
+      />
+      <p
+        className="text-muted-foreground mt-1 text-[13px] leading-snug [&_em]:italic"
+        dangerouslySetInnerHTML={{ __html: tile.desc }}
+      />
+      {tile.timing && (
+        <span className="text-hide mt-2 block font-mono text-[10px] font-semibold tracking-[0.06em] uppercase">
+          {tile.timing}
         </span>
-      ) : (
-        <>
-          <span className="t">
-            {right ? "✓ You called it" : "✕ Not this one"} — you said {picked}
+      )}
+    </button>
+  );
+}
+
+function TileGrid({
+  tiles,
+  onPop,
+}: {
+  tiles: Tile[];
+  onPop: (id: string) => void;
+}) {
+  return (
+    <div className="my-3 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+      {tiles.map((t) => (
+        <TileButton key={t.pop} tile={t} onPop={onPop} />
+      ))}
+    </div>
+  );
+}
+
+const PHASE_DOT: Record<Stage["phase"], string> = {
+  open: "text-hide",
+  explore: "text-exaggerate",
+  close: "text-comply",
+};
+
+function Lifecycle({
+  stages,
+  onPop,
+}: {
+  stages: Stage[];
+  onPop: (id: string) => void;
+}) {
+  return (
+    <div className="my-4 grid gap-1.5 sm:grid-cols-2 lg:grid-cols-3">
+      {stages.map((s) => (
+        <button
+          key={s.pop}
+          type="button"
+          onClick={() => onPop(s.pop)}
+          className="border-border bg-card hover:border-primary shadow-soft rounded-lg border p-3 text-left transition-colors"
+        >
+          <span className="text-primary font-mono text-[11px] font-bold tracking-[0.08em]">
+            {s.num}
           </span>
-          <span dangerouslySetInnerHTML={{ __html: item.verdictHtml }} />
-          <span className="fg-chips">
-            <button type="button" className="chip" onClick={() => setPicked(null)}>
-              Try again
-            </button>
+          <h4 className="mt-1 text-sm font-semibold">{s.title}</h4>
+          <p className="text-muted-foreground mt-0.5 text-[12px] leading-snug">
+            {s.desc}
+          </p>
+          <span
+            className={cn(
+              "mt-1.5 block font-mono text-[10px] font-semibold tracking-[0.06em] uppercase",
+              PHASE_DOT[s.phase],
+            )}
+          >
+            {PHASE_LABEL[s.phase]}
           </span>
-        </>
+        </button>
+      ))}
+    </div>
+  );
+}
+
+function ResourceGrid({ boxes }: { boxes: ResBox[] }) {
+  return (
+    <div className="my-4 grid gap-3 sm:grid-cols-2">
+      {boxes.map((box) => (
+        <div key={box.heading} className="border-border bg-card rounded-xl border p-4">
+          <h4 className="text-primary font-mono text-[11px] font-bold tracking-[0.1em] uppercase">
+            {box.heading}
+          </h4>
+          <ul className="mt-2.5 space-y-2.5">
+            {box.items.map((it, i) => (
+              <li
+                key={i}
+                className="text-sm leading-snug [&_a]:text-primary [&_a]:underline [&_a]:underline-offset-2 hover:[&_a]:text-primary/80 [&_small]:text-muted-foreground [&_small]:mt-0.5 [&_small]:block [&_small]:text-[12.5px]"
+                dangerouslySetInnerHTML={{ __html: it.html }}
+              />
+            ))}
+          </ul>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function NextNav({
+  go,
+  nextId,
+  nextLabel,
+}: {
+  go: (id: string) => void;
+  nextId?: string;
+  nextLabel?: string;
+}) {
+  return (
+    <div className="mt-6 flex flex-wrap items-center justify-between gap-2">
+      <Button variant="ghost" size="sm" onClick={() => go("home")} className="gap-1.5">
+        <ArrowLeft className="size-4" aria-hidden /> All modules
+      </Button>
+      {nextId && nextLabel && (
+        <Button size="sm" onClick={() => go(nextId)}>
+          {nextLabel}
+        </Button>
       )}
     </div>
   );
+}
+
+function SubHead({ heading, note }: { heading: string; note?: string }) {
+  return (
+    <div className="mt-6">
+      <h4 className="text-base font-semibold">{heading}</h4>
+      {note && <p className="text-muted-foreground mt-0.5 text-sm">{note}</p>}
+    </div>
+  );
+}
+
+/* ------------------------------- views ------------------------------- */
+
+function ViewHead({
+  title,
+  lede,
+  onPop,
+}: {
+  title: string;
+  lede: string;
+  onPop: (id: string) => void;
+}) {
+  return (
+    <>
+      <h2 className="text-xl font-semibold tracking-tight">{title}</h2>
+      <p className="text-muted-foreground mt-1 max-w-3xl text-sm leading-relaxed [&_em]:italic">
+        <InlineWithTerms html={lede} onPop={onPop} />
+      </p>
+    </>
+  );
+}
+
+function HomeView({ go }: { go: (id: string) => void }) {
+  return (
+    <div>
+      <p className="text-muted-foreground max-w-3xl text-sm leading-relaxed">
+        {FG_HEADER.lede}
+      </p>
+
+      <div className="mt-4 flex flex-wrap gap-2">
+        {FG_PRINCIPLES.map((p) => (
+          <span
+            key={p}
+            className="bg-muted text-muted-foreground rounded-md px-2.5 py-1.5 text-xs font-semibold"
+          >
+            {p}
+          </span>
+        ))}
+      </div>
+
+      <ModuleGrid cards={FG_CRAFT_CARDS} go={go} />
+      <p className="text-muted-foreground mt-1 text-[13px] font-semibold">
+        {FG_HOME_HINT_1}
+      </p>
+
+      <SubHead heading={FG_HOME_SESSION_HEADING} note={FG_HOME_SESSION_NOTE} />
+      <ModuleGrid cards={FG_SESSION_CARDS} go={go} />
+      <p className="text-muted-foreground mt-1 text-[13px] font-semibold">
+        {FG_HOME_HINT_2}
+      </p>
+    </div>
+  );
+}
+
+function ModuleGrid({
+  cards,
+  go,
+}: {
+  cards: typeof FG_CRAFT_CARDS;
+  go: (id: string) => void;
+}) {
+  return (
+    <div className="my-4 grid gap-3.5 sm:grid-cols-2 lg:grid-cols-3">
+      {cards.map((c) => (
+        <button
+          key={c.id}
+          type="button"
+          onClick={() => go(c.id)}
+          className="border-border bg-card hover:border-primary shadow-soft relative rounded-xl border p-4.5 pt-4 text-left transition-colors"
+        >
+          <span className="text-muted-foreground absolute top-3.5 right-4 font-mono text-[11px] font-bold tracking-[0.08em]">
+            {c.num}
+          </span>
+          <h4 className="pr-8 text-[17px] font-semibold tracking-tight">
+            {c.title}
+          </h4>
+          <p className="text-muted-foreground mt-1.5 text-[13.5px] leading-snug">
+            {c.desc}
+          </p>
+          <span className="text-primary mt-2.5 block font-mono text-[11px] font-semibold tracking-[0.05em] uppercase">
+            {c.meta}
+          </span>
+        </button>
+      ))}
+    </div>
+  );
+}
+
+function RoleView({
+  go,
+  onPop,
+  context,
+  setContext,
+}: {
+  go: (id: string) => void;
+  onPop: (id: string) => void;
+  context: ContextKey;
+  setContext: (c: ContextKey) => void;
+}) {
+  return (
+    <div>
+      <BackButton go={go} />
+      <div className="mt-3">
+        <ViewHead title={ROLE_HEAD.title} lede={ROLE_HEAD.lede} onPop={onPop} />
+      </div>
+
+      <div
+        role="group"
+        aria-label="Context level"
+        className="mt-4 flex flex-wrap gap-1.5"
+      >
+        {(
+          [
+            ["low", ROLE_HEAD.ctxLabelLow],
+            ["high", ROLE_HEAD.ctxLabelHigh],
+          ] as const
+        ).map(([key, label]) => (
+          <button
+            key={key}
+            type="button"
+            aria-pressed={context === key}
+            onClick={() => setContext(key)}
+            className={cn(
+              "rounded-lg border px-3.5 py-2 text-[13px] font-semibold transition-colors",
+              context === key
+                ? "border-primary bg-primary text-primary-foreground"
+                : "border-border text-muted-foreground hover:bg-muted",
+            )}
+          >
+            {label}
+          </button>
+        ))}
+      </div>
+
+      <div aria-live="polite">
+        {context === "low" ? (
+          <>
+            <CalloutBox callout={ROLE_CALLOUT_LOW} onPop={onPop} />
+            <TileGrid tiles={ROLE_TILES_LOW} onPop={onPop} />
+          </>
+        ) : (
+          <>
+            <CalloutBox callout={ROLE_CALLOUT_HIGH} onPop={onPop} />
+            <TileGrid tiles={ROLE_TILES_HIGH} onPop={onPop} />
+          </>
+        )}
+      </div>
+
+      <CalloutBox callout={ROLE_CALLOUT_SPINE} onPop={onPop} />
+      <NextNav go={go} nextId="m-takes" nextLabel="Next: Good takes vs. bad →" />
+    </div>
+  );
+}
+
+function TakesView({
+  go,
+  onPop,
+}: {
+  go: (id: string) => void;
+  onPop: (id: string) => void;
+}) {
+  return (
+    <div>
+      <BackButton go={go} />
+      <div className="mt-3">
+        <ViewHead title={TAKES_HEAD.title} lede={TAKES_HEAD.lede} onPop={onPop} />
+      </div>
+
+      <TileGrid tiles={TAKES_TILES} onPop={onPop} />
+
+      <SubHead heading={TAKES_SORTER_HEAD.heading} note={TAKES_SORTER_HEAD.note} />
+      <div className="mt-3 space-y-2.5">
+        {TAKES_SORTER.map((item, i) => (
+          <SorterCard key={i} item={item} />
+        ))}
+      </div>
+
+      <CalloutBox callout={TAKES_CALLOUT} onPop={onPop} />
+      <NextNav
+        go={go}
+        nextId="m-participation"
+        nextLabel="Next: Getting everyone talking →"
+      />
+    </div>
+  );
+}
+
+function SorterCard({ item }: { item: SorterItem }) {
+  const [choice, setChoice] = useState<Verdict | null>(null);
+  const done = choice !== null;
+  const correct = done && choice === item.answer;
+
+  return (
+    <div
+      className={cn(
+        "rounded-lg border p-3.5 transition-colors",
+        !done && "border-border bg-card",
+        done && correct && "border-comply/60 bg-comply/5",
+        done && !correct && "border-defect/60 bg-defect/5",
+      )}
+    >
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <p className="min-w-[240px] flex-1 text-sm italic">{item.quote}</p>
+        {!done ? (
+          <div className="flex gap-1.5">
+            {(["strong", "weak"] as const).map((v) => (
+              <button
+                key={v}
+                type="button"
+                onClick={() => setChoice(v)}
+                className="border-border bg-muted hover:border-primary rounded-md border px-3 py-2 text-xs font-semibold capitalize transition-colors"
+              >
+                {v}
+              </button>
+            ))}
+          </div>
+        ) : (
+          <span
+            className={cn(
+              "inline-flex items-center gap-1 rounded-md px-2.5 py-1.5 text-xs font-semibold",
+              correct
+                ? "bg-comply/15 text-comply"
+                : "bg-defect/15 text-defect",
+            )}
+          >
+            {correct ? <Check className="size-3.5" aria-hidden /> : <X className="size-3.5" aria-hidden />}
+            You said {choice}
+          </span>
+        )}
+      </div>
+      {done && (
+        <p
+          aria-live="polite"
+          className="text-muted-foreground mt-2 text-[13.5px] leading-relaxed [&_.move]:text-primary [&_.move]:italic [&_em]:italic [&_strong]:text-foreground [&_strong]:font-semibold"
+          dangerouslySetInnerHTML={{ __html: item.verdictHtml }}
+        />
+      )}
+    </div>
+  );
+}
+
+function SimpleTileView({
+  go,
+  onPop,
+  head,
+  tiles,
+  callout,
+  nextId,
+  nextLabel,
+}: {
+  go: (id: string) => void;
+  onPop: (id: string) => void;
+  head: { title: string; lede: string };
+  tiles: Tile[];
+  callout: Callout;
+  nextId?: string;
+  nextLabel?: string;
+}) {
+  return (
+    <div>
+      <BackButton go={go} />
+      <div className="mt-3">
+        <ViewHead title={head.title} lede={head.lede} onPop={onPop} />
+      </div>
+      <TileGrid tiles={tiles} onPop={onPop} />
+      <CalloutBox callout={callout} onPop={onPop} />
+      <NextNav go={go} nextId={nextId} nextLabel={nextLabel} />
+    </div>
+  );
+}
+
+function SessionSkeletonView({
+  go,
+  onPop,
+}: {
+  go: (id: string) => void;
+  onPop: (id: string) => void;
+}) {
+  return (
+    <div>
+      <BackButton go={go} />
+      <div className="mt-3">
+        <ViewHead title={SESSION_HEAD.title} lede={SESSION_HEAD.lede} onPop={onPop} />
+      </div>
+      <Lifecycle stages={SESSION_STAGES} onPop={onPop} />
+      <CalloutBox callout={SESSION_CALLOUT} onPop={onPop} />
+      <NextNav go={go} nextId="m-resources" nextLabel="Next: Resources →" />
+    </div>
+  );
+}
+
+function ResourcesView({ go }: { go: (id: string) => void }) {
+  return (
+    <div>
+      <BackButton go={go} />
+      <div className="mt-3">
+        <h2 className="text-xl font-semibold tracking-tight">
+          {RESOURCES_HEAD.title}
+        </h2>
+        <p className="text-muted-foreground mt-1 text-sm">{RESOURCES_HEAD.lede}</p>
+      </div>
+      <ResourceGrid boxes={RESOURCES_BOXES} />
+      <NextNav go={go} nextId="m-intro" nextLabel="Next: Session plans →" />
+    </div>
+  );
+}
+
+function FormatBar({
+  format,
+  setFormat,
+}: {
+  format: FormatKey;
+  setFormat: (f: FormatKey) => void;
+}) {
+  return (
+    <div role="group" aria-label="Format" className="mt-4 flex flex-wrap gap-1.5">
+      {(["ip", "zm"] as const).map((key) => (
+        <button
+          key={key}
+          type="button"
+          aria-pressed={format === key}
+          onClick={() => setFormat(key)}
+          className={cn(
+            "rounded-lg border px-3.5 py-2 text-[13px] font-semibold transition-colors",
+            format === key
+              ? "border-primary bg-primary text-primary-foreground"
+              : "border-border text-muted-foreground hover:bg-muted",
+          )}
+        >
+          {FG_FORMAT_LABELS[key]}
+        </button>
+      ))}
+    </div>
+  );
+}
+
+function SessionPlanView({
+  go,
+  onPop,
+  plan,
+  format,
+  setFormat,
+}: {
+  go: (id: string) => void;
+  onPop: (id: string) => void;
+  plan: SessionPlan;
+  format: FormatKey;
+  setFormat: (f: FormatKey) => void;
+}) {
+  return (
+    <div>
+      <BackButton go={go} />
+      <div className="mt-3">
+        <ViewHead title={plan.title} lede={plan.lede} onPop={onPop} />
+      </div>
+
+      {plan.principles && (
+        <div className="mt-3 flex flex-wrap gap-2">
+          {plan.principles.map((p) => (
+            <span
+              key={p}
+              className="bg-muted text-muted-foreground rounded-md px-2.5 py-1.5 text-xs font-semibold"
+            >
+              {p}
+            </span>
+          ))}
+        </div>
+      )}
+
+      <FormatBar format={format} setFormat={setFormat} />
+      <div aria-live="polite">
+        <CalloutBox
+          callout={{ variant: "blue", html: plan.prep[format] }}
+          onPop={onPop}
+        />
+      </div>
+
+      {plan.coreTiles && (
+        <>
+          <SubHead heading={plan.coreHeading ?? ""} note={plan.coreNote} />
+          <TileGrid tiles={plan.coreTiles} onPop={onPop} />
+        </>
+      )}
+
+      <Lifecycle stages={plan.stages} onPop={onPop} />
+
+      <SubHead heading={plan.promptsHeading} note={plan.promptsNote} />
+      <TileGrid tiles={plan.promptTiles} onPop={onPop} />
+
+      <SubHead heading={plan.sendHeading} />
+      <ResourceGrid boxes={[plan.sendBox]} />
+
+      <CalloutBox callout={plan.seed} onPop={onPop} />
+
+      <NextNav go={go} nextId={plan.nextId} nextLabel={plan.nextLabel} />
+    </div>
+  );
+}
+
+/* ----------------------------- helpers ----------------------------- */
+
+/** Pull the text of the leading <h3>…</h3> for use as a dialog title. */
+function extractH3(html: string): string {
+  const m = html.match(/<h3[^>]*>([\s\S]*?)<\/h3>/i);
+  if (!m) return "";
+  return decodeEntities(m[1].replace(/<[^>]+>/g, "").trim());
+}
+
+type TermPart =
+  | { kind: "html"; html: string }
+  | { kind: "term"; pop: string; label: string };
+
+/** Split an authored inline fragment into safe HTML runs and term buttons
+ *  (`<button data-pop="…">label</button>`). */
+function splitTerms(html: string): TermPart[] {
+  const parts: TermPart[] = [];
+  const re = /<button[^>]*data-pop="([^"]+)"[^>]*>([\s\S]*?)<\/button>/gi;
+  let last = 0;
+  let m: RegExpExecArray | null;
+  while ((m = re.exec(html)) !== null) {
+    if (m.index > last) parts.push({ kind: "html", html: html.slice(last, m.index) });
+    parts.push({
+      kind: "term",
+      pop: m[1],
+      label: decodeEntities(m[2].replace(/<[^>]+>/g, "")),
+    });
+    last = re.lastIndex;
+  }
+  if (last < html.length) parts.push({ kind: "html", html: html.slice(last) });
+  return parts;
+}
+
+function decodeEntities(s: string): string {
+  return s
+    .replace(/&amp;/g, "&")
+    .replace(/&lt;/g, "<")
+    .replace(/&gt;/g, ">")
+    .replace(/&quot;/g, '"')
+    .replace(/&#39;/g, "'");
 }

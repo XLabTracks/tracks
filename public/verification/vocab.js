@@ -17,8 +17,9 @@
    words you most need is the wrong way round.
 
    Trap: the notebook's own capture button owns long selections. This one
-   takes short ones, and the two must not both appear — the split is on word
-   count, in one place (SHORT_WORDS). */
+   takes short ones and offers both actions — Define and Add to notebook —
+   from one strip, so the two scripts never stack buttons over the same
+   selection. The split is on word count, in one place (SHORT_WORDS). */
 
 "use strict";
 
@@ -33,10 +34,10 @@
     });
   };
 
-  let btn = null, card = null;
+  let strip = null, card = null;
 
   function drop() {
-    if (btn) { btn.remove(); btn = null; }
+    if (strip) { strip.remove(); strip = null; }
     if (card) { card.remove(); card = null; }
   }
 
@@ -92,7 +93,7 @@
     /* Trap: mouseup fires before click. A press on our own button would tear
        it down and rebuild it here, so the click it was pressed for never
        lands — the button looked dead. Ignore presses inside our own UI. */
-    if (ev.target && ev.target.closest && ev.target.closest('.vocab-btn, .vocab-card')) return;
+    if (ev.target && ev.target.closest && ev.target.closest('.vocab-strip, .vocab-card')) return;
     setTimeout(function () {
       const sel = document.getSelection();
       const text = sel ? String(sel).trim() : '';
@@ -103,17 +104,36 @@
       if (!host || !host.closest('main')) return;
 
       const rect = sel.getRangeAt(0).getBoundingClientRect();
-      btn = document.createElement('button');
-      btn.type = 'button';
-      btn.className = 'vocab-btn';
-      btn.textContent = 'Define';
-      place(btn, rect);
-      btn.onclick = function () {
+      strip = document.createElement('div');
+      strip.className = 'vocab-strip';
+
+      const def = document.createElement('button');
+      def.type = 'button';
+      def.className = 'vocab-btn';
+      def.textContent = 'Define';
+      def.onclick = function () {
         const r = rect;
-        if (btn) { btn.remove(); btn = null; }
+        drop();
         show(text, r);
       };
-      document.body.appendChild(btn);
+      strip.appendChild(def);
+
+      const keep = document.createElement('button');
+      keep.type = 'button';
+      keep.className = 'vocab-btn';
+      keep.textContent = 'Add to notebook';
+      keep.onclick = function () {
+        if (window.VTNotebook && VTNotebook.addQuote) {
+          VTNotebook.addQuote(text, document.title.split('\u00b7')[0].trim(), location.href);
+        }
+        drop();
+        const s2 = document.getSelection();
+        if (s2 && s2.removeAllRanges) s2.removeAllRanges();
+      };
+      strip.appendChild(keep);
+
+      place(strip, rect);
+      document.body.appendChild(strip);
     }, 0);
   });
 

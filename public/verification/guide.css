@@ -1,0 +1,87 @@
+/* Learner's guide. Definition lists, not cards — this is a reference surface
+   and it should read like one. */
+
+.guide-head { margin: 18px 0 10px; }
+.guide-head h1 { font-size: clamp(28px, 3.4vw, 36px); }
+.guide-head .sub { max-width: 62ch; margin: 10px 0 18px; font-size: 14.5px; line-height: 1.6; color: var(--muted-foreground); }
+.guide-tools { display: flex; align-items: center; gap: 12px; }
+.guide-tools input {
+  flex: 1 1 260px;
+  max-width: 340px;
+  padding: 9px 13px;
+  border: var(--hairline) solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--card);
+  color: var(--foreground);
+  font: inherit;
+  font-size: 14px;
+}
+.guide-tools input::placeholder { color: var(--muted-foreground); }
+
+.gmod { margin-top: 36px; }
+.gmod > .head {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  margin-bottom: 14px;
+  padding-bottom: 8px;
+  border-bottom: var(--hairline) solid var(--border);
+}
+.gmod .n {
+  font-family: var(--mono);
+  font-size: 11.5px;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--mod, var(--brand-ink));
+}
+.gmod h2 { flex: 1 1 auto; font-size: 21px; }
+.gmod .frac { font-family: var(--mono); font-size: 11.5px; }
+
+.glossary dt {
+  display: flex;
+  align-items: baseline;
+  gap: 9px;
+  margin-top: 16px;
+  font-size: 15px;
+  font-weight: 600;
+}
+.glossary dt:first-child { margin-top: 0; }
+.glossary dt .u {
+  font-family: var(--mono);
+  font-size: 11.5px;
+  font-weight: 400;
+  color: var(--brand-ink);
+  text-decoration: none;
+}
+.glossary dt .u:hover { text-decoration: underline; }
+.glossary dd { max-width: 74ch; margin-top: 5px; font-size: 14px; line-height: 1.6; color: var(--muted-foreground); }
+
+.review {
+  margin-top: 24px;
+  padding: 15px 18px;
+  border: var(--hairline) solid var(--border);
+  border-radius: var(--radius);
+  background: var(--muted);
+}
+.review .label {
+  display: block;
+  margin-bottom: 10px;
+  font-family: var(--mono);
+  font-size: 11.5px;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--muted-foreground);
+}
+.review ol { margin-left: 20px; font-size: 14px; line-height: 1.6; }
+.review li { margin-bottom: 8px; }
+.review li::marker { font-family: var(--mono); font-size: 12px; color: var(--muted-foreground); }
+
+.no-hits { margin-top: 26px; font-size: 14px; color: var(--muted-foreground); }
+
+/* The unit tag beside a term is a jump link, not part of the definition. The
+   definition itself stays selectable — it is the reference copy. */
+.glossary dt .u {
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+}

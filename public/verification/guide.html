@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Learner's guide — Verification · XLab Tracks</title>
+<meta name="description" content="Glossary and review prompts for the verification track, one section per module.">
+<!-- Read the stored theme before first paint. A late attribute means the page
+     flashes the wrong ground; keep this in step with theme.js — same key,
+     same attribute, same values. -->
+<script>
+(function () {
+  try {
+    var v = localStorage.getItem('xlab-verification-theme');
+    if (v !== 'light' && v !== 'dark' && v !== 'contrast') {
+      v = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    }
+    document.documentElement.setAttribute('data-theme', v);
+  } catch (e) {}
+})();
+</script>
+<link rel="stylesheet" href="fonts.css">
+<link rel="stylesheet" href="theme.css">
+<link rel="stylesheet" href="platform.css">
+<link rel="stylesheet" href="guide.css">
+</head>
+<body>
+
+<div data-topbar></div>
+
+<main class="page">
+  <nav class="crumbs" aria-label="Breadcrumb"><a href="landing.html">Home</a> / Guide</nav>
+
+  <header class="guide-head">
+    <h1>Learner's guide</h1>
+    <p class="sub">Every term the track defines, and a review prompt for each
+      distinction worth keeping. Terms belong to the module that introduces
+      them; later modules extend them rather than redefining them.</p>
+    <div class="guide-tools">
+      <input type="search" data-search placeholder="Filter terms and prompts" aria-label="Filter terms and prompts">
+      <span class="counter" data-hits></span>
+    </div>
+  </header>
+
+  <div class="guide-body" data-guide></div>
+
+</main>
+
+<footer data-foot></footer>
+
+<script src="data/course.js"></script>
+<script src="data/skills.js"></script>
+<script src="data/glossary.js"></script>
+<script src="theme.js"></script>
+<script src="platform.js"></script>
+<script src="guide.js"></script>
+</body>
+</html>

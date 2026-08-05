@@ -15,6 +15,7 @@
     "arxiv:build": "tsx scripts/build-arxiv.ts",
     "substack:build": "tsx scripts/build-substack.ts",
     "lesswrong:build": "tsx scripts/build-lesswrong.ts",
+    "verification:capstones": "node scripts/build-verification-capstones.mjs",
     "readings:build": "tsx scripts/build-readings.ts"
   },
   "dependencies": {

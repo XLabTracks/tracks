@@ -41,6 +41,10 @@ step-by-step guide for adding content (its rules are enforced by
   Do **not** run `prisma migrate` against the hosted DB (see Database & deploy).
 - `npm run cf-typegen` — regenerate `cloudflare-env.d.ts` after changing
   bindings in `wrangler.jsonc`.
+- `npm run verification:capstones` — rebuild the Verification capstone bank
+  from `verification-capstones/*.md` into
+  `public/verification/data/capstone-bank.js`. `-- --check` verifies the two
+  have not drifted. Authoring-time only; the output is committed.
 
 Setup: `cp .env.example .env`, then fill the `WORKOS_*` values (AuthKit, Google
 enabled, redirect `/callback`) and `DATABASE_URL` (see `.env.example`). Public
@@ -320,18 +324,52 @@ household picture, or the `five-worlds` map axes); once shipped, the code is
 normative.
 
 **Verification.** The Verification track is **not part of the content graph**.
-It lives as a standalone static site under `public/verification/` — plain
-HTML/CSS/JS with no build step, served straight off the worker at
-`/verification/landing`, `/verification/memo-desk`, `/verification/about`
-and `/verification/team`. `theme.css` is the only file that knows the
-palette (three themes over one set of variable names; high contrast is
-picked, never inferred), `fonts.css` carries Space Grotesk as a data URI, and
-each page loads only the sibling `.css`/`.js` it needs. Trap: the two
-`localStorage` keys are `xlab-verification-theme` and
-`xlab-verification-memo-desk.v1` — they hold a visitor's chosen theme and
-their memo drafts, so they keep those names whatever the files around them
-are called. `public/verification/assets/` predates the site and belongs to
+It is the whole of Verification, and it lives as a standalone static site
+under `public/verification/` — plain HTML/CSS/JS in sibling files, no build
+step, served straight off the worker. The app serves it but never compiles
+it: the folder is outside `tsconfig`'s include (`**/*.ts|tsx|mts`) and
+outside vitest's (`src/**/*.test.ts`), so nothing here is typechecked or
+tested and a green suite says nothing about it.
+
+Ten pages: `landing.html` (hero, objectives, the 27-skill constellation,
+module cards), `track.html`, `module.html`, `map.html`, `guide.html`,
+`capstone.html`, `capstone-bank.html`, `memo-desk.html`, `about.html`,
+`team.html`. `public/verification/assets/` predates the site and belongs to
 nothing that ships today.
+
+- **`theme.css` is the only file that knows a colour.** Three themes — day,
+  night, high contrast — over one set of variable names, so a rule reading
+  `--border` or `--primary` follows the switch untouched. `--primary` fills
+  and `--brand-ink` writes (maroon is a fine surface on dark and unreadable
+  as text on it); `--mod-0…4` (Okabe–Ito) and `--ok`/`--no` (Wong) are
+  decorative and always accompanied by a word, glyph or fraction. High
+  contrast is picked, never inferred. Each page's `<head>` carries a small
+  inline copy of the theme read step so the ground is right before first
+  paint — keep it in step with `theme.js`. `fonts.css` carries Space Grotesk
+  as a data URI.
+- **`platform.js` owns the shared runtime and chrome**; `platform.css` the
+  components on top of `theme.css`. Pages mount the header and footer from
+  their page script via `VT.mountChrome()` / `VT.mountFoot()`.
+- **Content drives the page.** `data/course.js` is the course, plus
+  `exercises.js`, `skills.js`, `glossary.js`, `memos.js`. A new unit is one
+  object and the track page, module rail, counters and certificate gate pick
+  it up. Unit ids are permanent — they are progress keys *and* the rung tags
+  in `data/skills.js`.
+- **Progress is one set of completed unit ids** in `localStorage` under
+  `vt-progress`; everything else is derived at read time. Never persist a
+  derived value, and nothing auto-completes on scroll. Trap: the storage keys
+  `xlab-verification-theme` and `xlab-verification-memo-desk.v1` hold a
+  visitor's chosen theme and their memo drafts, so they keep those names
+  whatever the files around them are called.
+- **Sign-in belongs to the app.** These pages never gate; the header's Sign in
+  points at `/login` (WorkOS). Don't add a second session here.
+- **The capstone bank is generated.** `verification-capstones/*.md` →
+  `public/verification/data/capstone-bank.js` via `npm run
+  verification:capstones` (`-- --check` fails when they drift; never
+  hand-edit the output). One markdown file is a card and the filter facets
+  derive from the values present. `verification-capstones/_README.md` is the
+  front-matter contract and states which capstones belong here at all — the
+  bank carries only the ones whose prerequisites this track teaches.
 
 **Prerequisites & progress.** `Track.prerequisiteEnforcement` is `soft` (warn)
 or `hard` (lock); `isAccessLocked()` (pure, tested) + `getPrerequisiteStatus()`

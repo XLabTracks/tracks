@@ -1,0 +1,135 @@
+/* Track index. Every unit is visible on one page with an explicit completion
+   fraction — nothing hidden behind pagination.
+
+   Trap: a module block is one card with a hairline on all four sides. The
+   module accent lives in the numeral and the bar fill inside it; painting it
+   onto the block's left edge is the half-painted border the house rules
+   forbid. */
+
+.track-head {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px;
+  align-items: flex-start;
+  margin: 18px 0 8px;
+}
+.track-head > div:first-child { flex: 1 1 340px; }
+.track-head h1 { font-size: clamp(30px, 3.6vw, 40px); }
+.question {
+  max-width: 36ch;
+  margin-top: 12px;
+  font-size: 17px;
+  line-height: 1.5;
+  color: var(--muted-foreground);
+}
+
+.track-stat { flex: 0 1 300px; }
+.track-stat .eyebrow { display: block; margin-bottom: 10px; }
+.track-stat .progress-row { margin-bottom: 10px; }
+.next { font-size: 13px; line-height: 1.55; color: var(--muted-foreground); }
+.next a { color: var(--brand-ink); text-underline-offset: 3px; }
+
+/* ---------- module blocks ---------- */
+
+.modules { display: flex; flex-direction: column; gap: 16px; }
+
+.mod {
+  border: var(--hairline) solid var(--border);
+  border-radius: var(--radius);
+  background: var(--card);
+  overflow: hidden;
+}
+.mod-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 10px 12px;
+  padding: 18px 20px 12px;
+}
+.mod-glyph { color: var(--mod, var(--brand-ink)); font-size: 16px; line-height: 1; }
+.mod-num {
+  font-family: var(--mono);
+  font-size: 11.5px;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--mod, var(--muted-foreground));
+}
+.mod-head h2 { flex: 1 1 auto; font-size: 21px; }
+.mod-head .progress-row { flex: 0 1 200px; }
+.mod-head .meter > i { background: var(--mod, var(--primary)); }
+
+.mod-goal {
+  max-width: 74ch;
+  padding: 0 20px 12px;
+  font-size: 14.5px;
+  line-height: 1.6;
+  color: var(--muted-foreground);
+}
+.mod-summary {
+  max-width: 74ch;
+  padding: 0 20px 14px;
+  font-size: 14.5px;
+  line-height: 1.65;
+}
+.mod-chips { display: flex; flex-wrap: wrap; gap: 6px; padding: 0 20px 16px; }
+
+.units { list-style: none; border-top: var(--hairline) solid var(--border); }
+.unit-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 11px 20px;
+  border-bottom: var(--hairline) solid var(--border);
+  text-decoration: none;
+  color: inherit;
+  transition: background .16s ease;
+}
+.unit-row:last-child { border-bottom: 0; }
+.unit-row:hover { background: var(--muted); }
+.unit-row .unit-num {
+  flex: none;
+  width: 34px;
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--muted-foreground);
+}
+.unit-row .t { flex: 1 1 auto; font-size: 14.5px; }
+.unit-row .meta {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--muted-foreground);
+  white-space: nowrap;
+}
+/* Done is the word, not the colour. */
+.unit-row .done-word {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--brand-ink);
+  white-space: nowrap;
+}
+.unit-row .done-word::before { content: '✓ '; }
+.unit-row.is-done .t { color: var(--muted-foreground); }
+
+/* ---------- certificate gate ---------- */
+
+.gate { display: flex; gap: 16px; align-items: flex-start; margin-bottom: 8px; }
+.gate .lock { font-size: 19px; line-height: 1.3; }
+.gate h3 { font-size: 18px; margin-bottom: 6px; }
+.gate p { font-size: 14px; line-height: 1.6; color: var(--muted-foreground); }
+.gate.open .lock { color: var(--brand-ink); }
+
+@media (max-width: 700px) {
+  .mod-head { padding: 14px 14px 10px; }
+  .mod-goal, .mod-summary, .mod-chips { padding-left: 14px; padding-right: 14px; }
+  .unit-row { padding: 10px 14px; flex-wrap: wrap; }
+  .unit-row .meta { width: 100%; padding-left: 46px; }
+}
+
+/* The next-up link is a call to action, not a line of the catalogue. The unit
+   titles in .unit-row stay selectable on purpose: those are content rows and
+   people copy them. */
+.next, .next a {
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+}

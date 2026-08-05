@@ -11,7 +11,7 @@
    `bloom` indexes bloomNames, and `lo` indexes objectives.
 */
 
-window.VERIFICATION_SKILLS = {
+window.SKILLS = {
   rev: 1,
   /* The graph's own module taxonomy, from the track outline. It is NOT the
      module list in curriculum.data.ts, which currently groups the built

@@ -18,7 +18,7 @@
    loses nothing. */
 
 (function () {
-  var S = window.VERIFICATION_SKILLS;
+  var S = window.SKILLS;
   var sky = document.getElementById('sky');
   var panel = document.getElementById('skyPanel');
   var filters = document.getElementById('modFilters');
@@ -348,4 +348,99 @@
   }
 
   refresh();
+})();
+/* ---------------------------------------------------------------------------
+   The page around the constellation. Every number and card below is read from
+   data/course.js and data/skills.js, so a new unit or module appears here on
+   its own — nothing about the course is written into this file.
+
+   Trap: the hero's primary button is the learner's next incomplete unit, which
+   means it depends on the progress store. Read it through VT, never from
+   localStorage directly, or the two disagree after a reset.
+--------------------------------------------------------------------------- */
+
+(function () {
+  var C = window.COURSE, S = window.SKILLS, VT = window.VT;
+  if (!C || !VT) return;
+  var esc = VT.esc;
+
+  VT.mountChrome('landing.html');
+  VT.mountFoot();
+
+  /* Objectives come from the graph's own list, so the promises here cannot
+     drift from the map beside them. */
+  var ul = document.getElementById('objectives');
+  if (ul && S) {
+    ul.innerHTML = S.objectives.map(function (o, i) {
+      return '<li><span class="n" aria-hidden="true">' + String(i + 1).padStart(2, '0') +
+        '</span><span>' + esc(o) + '</span></li>';
+    }).join('');
+  }
+
+  /* Entry point. "Continue" only appears once something is actually done —
+     offering to continue a course nobody has started is a lie about state. */
+  var ways = document.querySelector('[data-ways]');
+  var note = document.querySelector('[data-ways-note]');
+  if (ways) {
+    var p = VT.trackProgress();
+    var next = VT.nextUnit();
+    var primary, tail;
+
+    if (!next) {
+      primary = '<a class="btn" href="capstone.html">Open the capstone workspace</a>';
+      tail = 'All ' + p.total + ' units are complete. The capstone is what is left.';
+    } else if (p.done > 0) {
+      primary = '<a class="btn" href="module.html?m=' + encodeURIComponent(next.module.id) +
+        '&u=' + encodeURIComponent(next.unit.id) + '">Continue — ' +
+        esc(next.unit.id + ' ' + next.unit.title) + '</a>';
+      tail = p.done + ' of ' + p.total + ' units done. Progress is kept in this browser; ' +
+        'sign in to attach it to your account.';
+    } else {
+      primary = '<a class="btn" href="module.html?m=' + encodeURIComponent(next.module.id) +
+        '&u=' + encodeURIComponent(next.unit.id) + '">Start — ' +
+        esc(next.unit.id + ' ' + next.unit.title) + '</a>';
+      tail = 'No account needed to start. Signing in saves your progress and lets you join a cohort.';
+    }
+
+    ways.innerHTML = primary + '<a class="btn outline" href="track.html">See the whole track</a>';
+    if (note) note.textContent = tail;
+  }
+
+  /* The stat row is derived, so it cannot claim a number the course does not
+     have. Runtime is deliberately absent: the outline states a time only for
+     M0 and M1, and a total would be invented. */
+  var stats = document.querySelector('[data-stats]');
+  if (stats) {
+    var units = C.modules.reduce(function (n, m) { return n + m.units.length; }, 0);
+    var writes = C.modules.reduce(function (n, m) {
+      return n + m.units.filter(function (u) { return u.output; }).length;
+    }, 0);
+    stats.innerHTML = [
+      ['Modules', C.modules.length],
+      ['Units', units],
+      ['Skills', S ? S.nodes.length : '—'],
+      ['Written outputs', writes]
+    ].map(function (s) {
+      return '<div><dt>' + esc(s[0]) + '</dt><dd>' + esc(s[1]) + '</dd></div>';
+    }).join('');
+  }
+
+  /* Module cards. The accent is decorative — the module number is printed in
+     the chip beside it, so the hue is never the only thing carrying it. */
+  var mods = document.querySelector('[data-modules]');
+  if (mods) {
+    mods.innerHTML = C.modules.map(function (m, i) {
+      var mp = VT.moduleProgress(m);
+      var out = m.units.filter(function (u) { return u.output; })[0];
+      return '<li><div class="mod-card" style="--mod:var(--mod-' + m.n + ')">' +
+        '<p class="mod-chip">M' + m.n + ' · ' + esc(m.week) + '</p>' +
+        '<h3>' + esc(m.title) + '</h3>' +
+        (m.goal ? '<p>' + esc(m.goal) + '</p>' : '') +
+        '<p class="mod-meta">' + mp.done + ' of ' + mp.total + ' units done</p>' +
+        '<a class="memo-link" href="track.html#' + encodeURIComponent(m.slug) + '">' +
+        'Open ' + esc(m.title) + ' →</a>' +
+        (out ? '<a class="memo-link" href="memo-desk.html">Written output →</a>' : '') +
+        '</div></li>';
+    }).join('');
+  }
 })();

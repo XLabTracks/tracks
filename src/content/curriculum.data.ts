@@ -210,7 +210,14 @@ export const modules: Module[] = [
       "c-mod5",
       "c-lowstakes",
     ],
-    itemIds: ["c-mod6-objectives", "c-mod6-l1", "c-mod6-l2", "c-mod6-l3"],
+    itemIds: [
+      "c-mod6-objectives",
+      "c-mod6-l1",
+      "c-paper-satiation",
+      "c-paper-spillway",
+      "c-mod6-l2",
+      "c-mod6-l3",
+    ],
   },
   // --- Verification: each item is a self-contained HTML interactive from
   // public/verification/, embedded via <VerificationExercise/>. Module

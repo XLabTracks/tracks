@@ -1647,6 +1647,37 @@ export const papers: Paper[] = [
     source: { kind: "arxiv", arxivId: "2410.21514v1" },
     estimatedMinutes: 50,
   },
+  // --- Control track, module 6 (beyond scheming): the two Redwood posts on
+  // satiation and spillway motivations, read in full as follow-ups to the
+  // seekers outline section (nested under it in the sidebar). Plain readings,
+  // no edits yet.
+  {
+    id: "c-paper-satiation",
+    slug: "satiating-ai-preferences",
+    moduleId: "c-mod6",
+    title: "The case for satiating cheaply-satisfied AI preferences",
+    source: {
+      kind: "lesswrong",
+      postUrl:
+        "https://www.alignmentforum.org/posts/tkLSeGeemcabAmLkv/the-case-for-satiating-cheaply-satisfied-ai-preferences",
+    },
+    estimatedMinutes: 25,
+    sectionItemId: "c-mod6-l1",
+  },
+  {
+    id: "c-paper-spillway",
+    slug: "spillway-motivation",
+    moduleId: "c-mod6",
+    title:
+      'Fail safe(r) at alignment by channeling reward-hacking into a "spillway" motivation',
+    source: {
+      kind: "lesswrong",
+      postUrl:
+        "https://www.alignmentforum.org/posts/rABTMovhz4miHiAyk/fail-safe-r-at-alignment-by-channeling-reward-hacking-into-a",
+    },
+    estimatedMinutes: 30,
+    sectionItemId: "c-mod6-l1",
+  },
   {
     id: "c-paper-auditing-sabotage-bench",
     slug: "auditing-sabotage-bench-paper",

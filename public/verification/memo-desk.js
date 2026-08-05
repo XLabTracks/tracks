@@ -26,7 +26,7 @@
   };
   if (!SLOTS || !F.body) return;
 
-  var STATUS_WORD = { specified: 'brief drafted', named: 'named only', unspecified: 'not drafted' };
+  var STATUS_WORD = { specified: 'brief', named: 'named only', unspecified: 'no brief yet' };
   var byId = {};
   SLOTS.forEach(function (s) { byId[s.id] = s; });
   var current = SLOTS[0];
@@ -112,16 +112,15 @@
     var out = '';
     if (s.brief) {
       out +=
-        '<div class="brief"><p class="bk">The outline’s brief</p><p>' + esc(s.brief) + '</p><dl>' +
+        '<div class="brief"><p class="bk">The brief</p><p>' + esc(s.brief) + '</p><dl>' +
         (s.audience ? '<div><dt>Reader</dt><dd>' + esc(s.audience) + '</dd></div>' : '') +
         (s.words ? '<div><dt>Budget</dt><dd>about ' + s.words + ' words</dd></div>' : '') +
         '</dl></div>';
     }
     if (s.gap) {
       out +=
-        '<div class="stub"><b>Not drafted upstream.</b> ' + esc(s.gap) +
-        ' Nothing here fills it in — that is a content decision for whoever owns the module. ' +
-        'Draft into it if you like; the brief will replace this note when it lands.</div>';
+        '<div class="stub"><b>No brief for this one yet.</b> ' + esc(s.gap) +
+        ' Write into it anyway if you like — the brief will appear here once it exists.</div>';
     }
     host.innerHTML = out;
 

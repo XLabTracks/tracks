@@ -67,52 +67,6 @@ Governance through the cloud means the regulator recruits the middle party. The 
 
 ## Tasks
 
-<Callout variant="tip" title="Task">
+<Exercise id="v-task-cloud-intro-1" />
 
-Category
-
-Examples
-
-Role
-
-Hyperscalers
-
-Microsoft Azure, AWS, Google Cloud, Oracle, Alibaba, Tencent
-
-Own and operate frontier-scale data centers
-
-Smaller GPU clouds
-
-CoreWeave, Lambda
-
-Rent out accelerator capacity at smaller scale
-
-Resellers
-
-Brokers who buy hyperscaler capacity and sublease it
-
-Sublease capacity bought from other providers
-
-</Callout>
-
-<Callout variant="tip" title="Task">
-
-### The Four Roles of a Provider
-
-The 2024 whitepaper Governing Through the Cloud (Heim et al.) names four capacities in which a provider can serve a governance regime: security, record keeping, verification, and enforcement. A verification regime needs all four — evidence, checking, consequences, and protection for the things being checked.
-
-Record keeper — selectively collects and maintains high-level information about infrastructure usage, such as a customer's compute usage data. These records are the regime's evidence base: they link usage to real-world actors and enable post-incident attribution, turning a declaration from a bare claim into one checkable against an independent trail.
-
-Verifier — actively verifies customer identities, specific activities, and high-level properties of AI systems: compliance with reporting above training-compute thresholds, data-usage guidelines for frontier training, licenses for deployed systems. This is the checking itself — an inspector already on the premises, comparing what was declared against what actually ran.
-
-Enforcer — restricts or limits compute access for non-compliant customers or workloads, from refusing unlicensed developers to disabling a system whose activity is uncontrollable or in violation of regulations. This prospect is what makes honest declaration the cheaper strategy.
-
-Securer — provides the physical and cybersecurity measures that protect model weights, algorithms, training data, and personal and confidential data, and helps prevent attacks on large-scale deployments. This protects the regime's integrity: a stolen copy of the weights was never declared, checked, or gated, so verification only constrains anyone if the capabilities being verified cannot simply be taken.
-
-Everything else in this module analyzes the provider as one of these four.
-
-CHECK: A provider suspends a customer's compute access after the customer refuses to file a required training-run notification. Which role is the provider exercising? (a) Enforcer (b) Verifier (c) Record keeper (d) Securer
-
-A: (a). Restricting or cutting access is enforcement. Verifying is checking claims against observation; record keeping is storing the usage data; securing is protecting models and infrastructure from attackers.
-
-</Callout>
+<Exercise id="v-task-cloud-intro-2" />

@@ -135,7 +135,13 @@ function SidebarNav({
         aria-label={`${outline.track.title} contents`}
         // pr-1.5 keeps classic (non-overlay) scrollbars clear of the resize
         // handle overlaying the sidebar's right edge.
-        className="min-h-0 flex-1 overflow-y-auto pr-1.5"
+        //
+        // select-none on the whole tree: these rows are an index, not the
+        // reading. A drag that starts on a lesson title and ends in the body
+        // otherwise leaves a selection smear across the sidebar, which is
+        // always a mis-drag — nobody copies a nav row. The static course
+        // applies the same rule to its rail.
+        className="min-h-0 flex-1 overflow-y-auto pr-1.5 select-none"
       >
         <div className="px-3 py-4">
           {/* An eyebrow only when it says something the title below does not.

@@ -14,8 +14,19 @@
    set for a different reason — so prefers-color-scheme only ever chooses
    between day and night.
 
-   Module hues are Okabe-Ito and they are decorative. Everywhere a module
-   colour appears the module number appears as text beside it. */
+   Module hues run Chinese Red - Satsuma - Lunar Yellow - Khaki - Cobalt: one
+   family with the brand in it rather than a general-purpose data palette
+   sitting next to it. Burgundy anchors that palette at OKLCH hue 23 and
+   --primary is at 29, which is why these belong together and the Okabe-Ito
+   set did not.
+   Each theme keeps the hue and solves lightness for its own ground, so the
+   day values are the same five colours darkened to carry as text on paper,
+   not different colours. Every one clears 4.5:1 where it is set (day 4.6-8.5,
+   night 5.2-6.9, high contrast 7.7-13.1); the old day palette cleared it on
+   one of five.
+   They stay decorative: warm neighbours converge for a protanope, so
+   everywhere a module colour appears the module number appears as text beside
+   it, and nothing is encoded by hue alone. */
 
 :root,
 :root[data-theme='light'] {
@@ -31,17 +42,41 @@
   --border: #e4dedb;
   --ring: #800000;
 
-  --mod-0: #0072b2;
-  --mod-1: #e69f00;
-  --mod-2: #009e73;
-  --mod-3: #cc79a7;
-  --mod-4: #d55e00;
+  --mod-0: #9a000c;  /* Chinese Red */
+  --mod-1: #bf4f00;  /* Satsuma */
+  --mod-2: #946b00;  /* Lunar Yellow */
+  --mod-3: #555e07;  /* Khaki */
+  --mod-4: #3d75b1;  /* Cobalt */
 
   /* Graded feedback. Wong's bluish-green and vermillion, never the red/green
      pair — and never on their own: every use is accompanied by the word
      (Correct / Not quite) and a ✓ or ✕.*/
   --ok: #007c5a;
   --no: #b34700;
+
+  /* Real errors only — a form that will not submit, a widget that
+     failed. Undefined here, it fell through to the app's red-600 and
+     was the one un-themed colour on the page. It is --no rather than
+     the maroon so an error still reads as an error and not as brand. */
+  --destructive: #b34700;
+
+  /* Okabe-Ito data-encoding accents for the Verification widgets. They live
+     here, not only in globals.css, for the same reason --destructive does:
+     this file re-points the palette on the Verification routes, and a token it
+     does not define keeps its app default on every theme. Left un-themed these
+     five sat at one fixed value over a white, a near-black and a black ground.
+
+     Each value clears 4.5:1 against the worst surface of its own theme —
+     the darkest one where the ink is dark, the lightest where it is light.
+     Where the set carries a light counterpart it is used (blue -> sky blue);
+     where it does not, the same hue is darkened rather than swapped, so the
+     five stay separable for a colour-blind reader. Hue never carries the
+     meaning alone in any case — the widgets pair it with a label. */
+  --comply: #007b5a;
+  --defect: #b34f00;
+  --hide: #0072b2;
+  --exaggerate: #916400;
+  --free-ride: #975a7c;
 
   --radius: 14px;
   --radius-sm: 8px;
@@ -82,14 +117,22 @@
   --border: #332c2a;
   --ring: #eda3a3;
 
-  --mod-0: #5aa9e6;
-  --mod-1: #ffc44d;
-  --mod-2: #3ecfa4;
-  --mod-3: #e5a3c6;
-  --mod-4: #ff8f4d;
+  --mod-0: #e4584f;  /* Chinese Red */
+  --mod-1: #e15f00;  /* Satsuma */
+  --mod-2: #c5952b;  /* Lunar Yellow */
+  --mod-3: #828d41;  /* Khaki */
+  --mod-4: #518ac7;  /* Cobalt */
 
   --ok: #3ecfa4;
   --no: #ff8f4d;
+  --destructive: #ff8f4d;
+
+  /* Lightened against the dark ground; see the light block for the rule. */
+  --comply: #009e73;
+  --defect: #e8874a;
+  --hide: #56b4e9;
+  --exaggerate: #e69f00;
+  --free-ride: #cc79a7;
 
   --shadow-soft: 0 1px 2px rgba(0, 0, 0, .4);
   --shadow-soft-lg: 0 12px 40px rgba(0, 0, 0, .5);
@@ -114,14 +157,23 @@
   --border: #ffffff;
   --ring: #ffe600;
 
-  --mod-0: #8cd9ff;
-  --mod-1: #ffe600;
-  --mod-2: #6bffcb;
-  --mod-3: #ffb3dd;
-  --mod-4: #ffab70;
+  --mod-0: #ffa59a;  /* Chinese Red */
+  --mod-1: #fb7528;  /* Satsuma */
+  --mod-2: #f7c562;  /* Lunar Yellow */
+  --mod-3: #a5b164;  /* Khaki */
+  --mod-4: #82bcfd;  /* Cobalt */
 
   --ok: #6bffcb;
   --no: #ffab70;
+  --destructive: #ffab70;
+
+  /* On black the set's own values already clear 4.5:1, except blue, which
+     takes its sky-blue counterpart. */
+  --comply: #009e73;
+  --defect: #d55e00;
+  --hide: #56b4e9;
+  --exaggerate: #e69f00;
+  --free-ride: #cc79a7;
 
   --radius: 8px;
   --radius-sm: 6px;
@@ -186,7 +238,11 @@ button, [role='button'], [role='radio'], [role='tab'], .chip, .nav a, .brand,
   text-decoration: none;
   white-space: nowrap;
 }
-.brand i { color: var(--brand-ink); font-style: normal; }
+/* The @ is a connector, not a brand mark — the logotype beside it carries
+   the brand. It used to take --brand-ink, which on the night ground is a
+   lightened dusty pink (maroon reads at 2.3:1 as text there), so the one
+   pink thing on the page was a preposition. */
+.brand i { color: var(--muted-foreground); font-style: normal; }
 
 /* The XLab logotype beside the word.
 

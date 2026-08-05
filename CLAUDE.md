@@ -159,7 +159,11 @@ via `usePathname()` (layouts can't see deeper params).
 full-page Paper items), `<Footnote/>`, `<Term/>` (glossary hover card), and
 `<SiteQuote/>` (external link whose hover card previews a verbatim excerpt
 of the target page; never internalized, never scanned by readings:build)
-by name inside lesson text.
+by name inside lesson text. `<PopUp label="…">` is what the outline's
+`[POP UP]` marker becomes: a named card that opens a dialog on the body
+(2.2.1's three visibility layers are the live case). An `[interactive
+pop-up]` — one the learner answers rather than reads — is a widget instead;
+1.0.2's `policy-cost` is the one that exists.
 A lesson body with 2+ top-level `##`/`###` headings automatically gets a
 paper-style "In this lesson" sidebar nav: `src/lib/mdx/rehype-lesson-sections.mjs`
 compiles a `sections` export into every lesson module (read via
@@ -428,7 +432,14 @@ Traps that cost time already, so they are written down:
   of variable names. `--primary` fills and `--brand-ink` writes. The two
   wordmark files are chosen by CSS, and those rules must stay **after**
   `.brand-mark` — it sets `display:block` at equal specificity, so ordering is
-  the whole mechanism.
+  the whole mechanism. It carries the palette a *page* is made of, so app
+  tokens no static page has — `--popover`, `--input`, `--secondary`, the
+  `--sidebar*` set — are absent from it and keep globals.css's light-ground
+  values, which is how a dialog opens white on the night theme. Those are
+  **derived** from the palette in `app-bridge.css` (app-only, loaded by
+  `site-chrome.tsx`), never restated as literals: one rule serves all three
+  themes. The chart and game-payoff tokens are deliberately left unmapped —
+  categorical scales are a design decision, not a palette shade.
 - The `localStorage` keys `xlab-verification-theme`,
   `xlab-verification-memo-desk.v1` and `xlab-verification-notebook.v1` hold a
   visitor's theme, memo drafts and notebook. They keep those names whatever
@@ -450,8 +461,15 @@ The static site's own mechanics, for as long as it exists:
   night, high contrast — over one set of variable names, so a rule reading
   `--border` or `--primary` follows the switch untouched. `--primary` fills
   and `--brand-ink` writes (maroon is a fine surface on dark and unreadable
-  as text on it); `--mod-0…4` (Okabe–Ito) and `--ok`/`--no` (Wong) are
-  decorative and always accompanied by a word, glyph or fraction. High
+  as text on it); `--mod-0…4` run **Chinese Red · Satsuma · Lunar Yellow ·
+  Khaki · Cobalt** — a palette the brand belongs to rather than a
+  general-purpose data set beside it (its Burgundy anchor is OKLCH hue 23 to
+  `--primary`'s 29; Okabe–Ito was here before and read as stock AI-chart
+  colour against the maroon). Each theme keeps the hue and re-solves lightness
+  for its own ground, so day is those five darkened to carry as text, not five
+  other colours; every value clears 4.5:1 where it is set. They stay
+  decorative — warm neighbours converge for a protanope — so they and
+  `--ok`/`--no` (Wong) are always accompanied by a word, glyph or fraction. High
   contrast is picked, never inferred. Each page's `<head>` carries a small
   inline copy of the theme read step so the ground is right before first
   paint — keep it in step with `theme.js`. `fonts.css` carries Space Grotesk

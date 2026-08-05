@@ -129,33 +129,43 @@ section.band .intro { max-width: 62ch; margin-top: 12px; color: var(--muted-fore
 
 /* Edges: faint by default, lit in the module accent when a branch is in
    focus. Cross-module edges are dashed — a skill that is fed from another
-   column is a different fact about the course than one fed from its own. */
+   column is a different fact about the course than one fed from its own.
+   They are also most of the fifty, so they sit a step fainter than the
+   in-branch lines or the middle of the fan reads as a hairball. */
 .sky .edge {
   fill: none;
-  stroke: color-mix(in srgb, var(--foreground) 20%, transparent);
+  /* In-branch spines take a quiet wash of their module's hue — solid-vs-dash
+     is what carries the meaning, so the tint is free to be decoration. */
+  stroke: color-mix(in srgb, var(--sel) 38%, var(--border));
   stroke-width: 1.2;
   transition: stroke .25s ease, opacity .25s ease;
 }
-.sky .edge.cross { stroke-dasharray: 3 6; }
+.sky .edge.cross {
+  stroke-dasharray: 2 5;
+  stroke: color-mix(in srgb, var(--foreground) 13%, transparent);
+}
 .sky .edge.hot { stroke: var(--sel); stroke-width: 2; opacity: 1; }
 .sky.focusing .edge:not(.hot) { opacity: .25; }
 
-.sky .node { cursor: pointer; }
+.sky .node { cursor: pointer; transition: opacity .25s ease; }
+/* A star is filled with a breath of its module's hue, ringed in the hue
+   itself — painted whole, never one edge. The numeral is ink: it is the
+   channel that survives without colour, so it never prints in the accent. */
 .sky .node circle {
-  fill: var(--card);
+  fill: color-mix(in srgb, var(--sel) 14%, var(--card));
   stroke: var(--sel);
   stroke-width: 1.6;
   transition: stroke-width .15s ease, fill .2s ease;
 }
-.sky .node .node-num { fill: var(--muted-foreground); font-family: var(--mono); font-size: 11px; text-anchor: middle; }
+.sky .node .node-num { fill: var(--foreground); font-family: var(--mono); font-size: 11px; text-anchor: middle; }
 .sky .node .name { fill: var(--foreground); font-size: 12px; }
 .sky.focusing .node:not(.hot) { opacity: .28; }
-.sky .node.hot circle { stroke-width: 2.6; }
+.sky .node.hot circle { stroke-width: 2.6; fill: color-mix(in srgb, var(--sel) 26%, var(--card)); }
 .sky .node.pinned circle { fill: var(--sel); }
 .sky .node.pinned .node-num { fill: var(--background); }
 .sky .node:hover circle { stroke-width: 2.6; }
 
-.sky .arc-label { cursor: pointer; }
+.sky .arc-label { cursor: pointer; transition: opacity .25s ease; }
 .sky .arc-label text {
   fill: var(--sel);
   font-family: var(--mono);
@@ -215,27 +225,23 @@ section.band .intro { max-width: 62ch; margin-top: 12px; color: var(--muted-fore
 .sky-panel .p-hint { font-size: 13.5px; line-height: 1.6; color: var(--muted-foreground); }
 
 .mod-filters { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 20px; }
+/* The module accent is carried by the chip's own text — the rule the module
+   cards already state. The number is in the text, so hue never stands alone,
+   and there is nothing decorative left for a swatch square to do. */
 .mod-filters button {
-  display: inline-flex;
-  align-items: center;
-  gap: 7px;
   padding: 5px 11px;
   border: var(--hairline) solid var(--border);
   border-radius: 999px;
   background: transparent;
-  color: var(--foreground);
+  color: var(--sel, var(--foreground));
   font: inherit;
   font-family: var(--mono);
   font-size: 12px;
   cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
 }
-.mod-filters button::before {
-  content: '';
-  width: 9px;
-  height: 9px;
-  border-radius: 2px;
-  background: var(--sel);
-}
+.mod-filters button:hover { border-color: var(--sel); }
 .mod-filters button[aria-pressed='true'] { background: var(--muted); border-color: var(--sel); }
 
 @media (max-width: 640px) {

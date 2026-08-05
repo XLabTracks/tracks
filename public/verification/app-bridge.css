@@ -16,6 +16,38 @@
    Trap: these must stay variables, not literal colours. Writing a hex here
    would fix night and break day, because one rule serves all three themes. */
 
+/* theme.css sets the palette a page is made of — ground, card, border, muted,
+   primary. The app's components additionally read tokens that mean nothing to
+   a static page and so are absent from it: a dialog paints itself with
+   --popover, an input with --input, a subdued button with --secondary. Left
+   unset they keep globals.css's light-ground values, which is how a pop-up
+   opened on the night theme comes up white.
+
+   So they are derived here, from the palette, once. Trap: derive, never
+   restate — a literal colour would fix one theme and break the other two,
+   and a token that stops tracking its source is a token that goes wrong the
+   next time the palette moves. The chart and game-payoff tokens are
+   deliberately left alone: they are categorical scales, not palette shades,
+   and inventing values for them here would be a design decision. */
+:root[data-theme] {
+  --card-foreground: var(--foreground);
+  --popover: var(--card);
+  --popover-foreground: var(--foreground);
+  --secondary: var(--muted);
+  --secondary-foreground: var(--foreground);
+  --accent-foreground: var(--foreground);
+  --input: var(--border);
+  --destructive: var(--brand-ink);
+  --sidebar: var(--card);
+  --sidebar-foreground: var(--foreground);
+  --sidebar-border: var(--border);
+  --sidebar-accent: var(--muted);
+  --sidebar-accent-foreground: var(--foreground);
+  --sidebar-primary: var(--primary);
+  --sidebar-primary-foreground: var(--primary-foreground);
+  --sidebar-ring: var(--ring);
+}
+
 :root[data-theme] .prose {
   --tw-prose-body: var(--foreground);
   --tw-prose-headings: var(--foreground);

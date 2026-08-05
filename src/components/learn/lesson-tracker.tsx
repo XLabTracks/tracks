@@ -15,9 +15,9 @@ import { PAPER_GATE_OPEN_EVENT } from "@/lib/papers/gate-state";
  * doesn't stamp lastViewedAt for every embedded lesson at once.
  *
  * autoComplete={false} keeps the view stamp but disables the scroll-based
- * completion — used for lessons whose body is a bridged Verification
- * interactive, where completion should come from finishing the exercise
- * (or the explicit button), not from scrolling past a one-line body.
+ * completion — for a lesson whose body is a single interactive that reports
+ * its own finish, where completion should come from the exercise (or the
+ * explicit button), not from scrolling past a one-line body.
  *
  * gateKeys are the localStorage keys of the reading gates in this content's
  * body (papers with `gate` edits): scroll completion arms only once every

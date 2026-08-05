@@ -81,11 +81,11 @@ describe("createClassroom", () => {
     );
 
     await expect(
-      createClassroom({}, form({ name: "A", trackId: "verification" })),
+      createClassroom({}, form({ name: "A", trackId: "governance" })),
     ).rejects.toThrow("REDIRECT:/classrooms/c1");
     expect(prisma.classroom.create).toHaveBeenLastCalledWith(
       expect.objectContaining({
-        data: expect.objectContaining({ trackId: "verification" }),
+        data: expect.objectContaining({ trackId: "governance" }),
       }),
     );
   });

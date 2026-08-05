@@ -4,13 +4,11 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 @AGENTS.md
 
-Tracks is an AI-safety learning platform (Khan Academy–style) with three
-tracks — **Control** (technical), **Governance**, and **Verification**. The
+Tracks is an AI-safety learning platform (Khan Academy–style) with two
+tracks — **Control** (technical) and **Governance**. The
 Control track's first module carries real curriculum (an authored lesson on
 the control game, the Redwood AI Control paper, and two readings reproduced
-with permission); the Verification track is fully populated by the 17
-native React interactive widgets (see "Verification
-interactives" below); everything else is placeholder. **Never invent or
+with permission); everything else is placeholder. **Never invent or
 fabricate curriculum content** — real content is human-authored or reproduced
 with permission; otherwise use lorem ipsum or leave it empty. The **Example track** (`ex-content`/`ex-assess`)
 is the live reference for every content feature; `AUTHORING.md` is the
@@ -321,33 +319,19 @@ in `docs/superpowers/` (`specs/`, `plans/`) — they record intent and rationale
 household picture, or the `five-worlds` map axes); once shipped, the code is
 normative.
 
-**Verification interactives.** The Verification track's 21 exercises are
-**native React widgets** (`src/components/verification/widgets/<id>.tsx`) in the
-app design system, keyed by id in `widgets/registry.tsx`. Copy/data is lifted
-verbatim into `src/lib/verification/data/*` (human-authored curriculum —
-**never regenerate content**); seven have pure engines in
-`src/lib/verification/engines/*` (+ vitest suites). Each is a content-graph
-lesson (`v-<id>`) whose MDX embeds `<VerificationExercise id/>` — an async
-server component that resolves the user and renders the client widget host
-(`verification-widget-host.tsx`); the registry of metadata (id/title/bridged)
-is `src/lib/verification/exercises.ts`. `bridged` widgets call `onComplete`
-(→ `setLessonComplete` via `kit/use-completion.ts`) at their finish event and
-their lessons disable scroll auto-complete; unbridged explorables keep normal
-scroll-to-complete. Shared kit in `src/components/verification/kit/`
-(drag, `[[term]]` tooltips, completion hook, drill-deck renderer).
-`src/lib/verification/widgets.test.ts` enforces the registry ↔ graph ↔ MDX ↔
-widget mapping. (The originals were standalone HTML pages; only
-`public/verification/assets/` remains, for the what-do-they-say portraits.)
-Four of the 21 are **drill benches** — `drills-foundations`, `drills-primers`,
-`drills-supply-chain`, `drills-games`, one per module (Facilitator has none),
-each the last item of its module. They share one renderer
-(`kit/drill-deck.tsx`) over per-module data (`data/drills-*.ts`, typed by
-`data/drills.ts`) and one engine (`engines/drills.ts`); a deck is benches of
-steps in four types (pick / multi / number / text), and adding a bench or a
-step is a data edit alone. Bench progress persists in `localStorage` under
-`v-drills:<deckId>:v1` and is pruned against the deck before it is trusted,
-because stored flags outlive content edits; `onComplete` fires when the last
-step of the last bench in the deck is committed.
+**Verification.** The Verification track is **not part of the content graph**.
+It lives as a standalone static site under `public/verification/` — plain
+HTML/CSS/JS with no build step, served straight off the worker at
+`/verification/landing`, `/verification/memo-desk`, `/verification/about`
+and `/verification/team`. `theme.css` is the only file that knows the
+palette (three themes over one set of variable names; high contrast is
+picked, never inferred), `fonts.css` carries Space Grotesk as a data URI, and
+each page loads only the sibling `.css`/`.js` it needs. Trap: the two
+`localStorage` keys are `xlab-verification-theme` and
+`xlab-verification-memo-desk.v1` — they hold a visitor's chosen theme and
+their memo drafts, so they keep those names whatever the files around them
+are called. `public/verification/assets/` predates the site and belongs to
+nothing that ships today.
 
 **Prerequisites & progress.** `Track.prerequisiteEnforcement` is `soft` (warn)
 or `hard` (lock); `isAccessLocked()` (pure, tested) + `getPrerequisiteStatus()`

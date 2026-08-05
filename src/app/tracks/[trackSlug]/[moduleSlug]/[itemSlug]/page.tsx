@@ -39,7 +39,6 @@ import {
 } from "@/app/actions/highlights";
 import { getHighlightsForItem } from "@/lib/highlights/queries";
 import { type HighlightRow } from "@/lib/highlights/types";
-import { getVerificationExerciseForLesson } from "@/lib/verification/exercises";
 
 // Dispatching route: a module item slug resolves to either a lesson or a
 // paper (they share the /tracks/t/m/<slug> namespace; the static `assessment`
@@ -151,10 +150,6 @@ async function LessonItemPage({
         <LessonTracker
           lessonId={lesson.id}
           completed={completed}
-          // Bridged interactives complete when the widget itself reports a
-          // finish (via onComplete) — not by scrolling past a one-line body.
-          // Unbridged explorables keep normal scroll-to-complete.
-          autoComplete={!getVerificationExerciseForLesson(lesson.id)?.bridged}
         />
       ) : null}
 

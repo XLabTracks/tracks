@@ -9,13 +9,12 @@ import { Footnote } from "./footnote";
 import { MdxLink } from "./mdx-link";
 import { SiteQuote } from "./site-quote";
 import { Term } from "./term";
-import { VerificationExercise } from "@/components/verification/verification-exercise";
 
 // Components available by name inside every lesson `.mdx` body. Authors drop
 // <Video/>, <Demo/>, <Exercise/>, <ExerciseSequence/>, <Callout/>,
-// <ArxivPaper/>, <Footnote/>, <Term/>, <SiteQuote/>, <VerificationExercise/>
-// directly into prose. Markdown links render through MdxLink, which routes
-// known Substack / LessWrong posts to the internal reader.
+// <ArxivPaper/>, <Footnote/>, <Term/>, <SiteQuote/> directly into prose.
+// Markdown links render through MdxLink, which routes known Substack /
+// LessWrong posts to the internal reader.
 export const mdxComponents: MDXComponents = {
   a: MdxLink,
   Video,
@@ -27,5 +26,4 @@ export const mdxComponents: MDXComponents = {
   Footnote,
   SiteQuote,
   Term,
-  VerificationExercise,
 };

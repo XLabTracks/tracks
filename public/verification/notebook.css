@@ -1,0 +1,237 @@
+/* Notebook surface. Every colour is a theme.css variable, so the panel
+   follows day, night and high contrast without a rule being touched — there
+   is no paper texture and no second palette here, unlike the notebook this
+   was ported from.
+
+   Trap: the panel is fixed and scrolls its own body. Locking the document
+   behind it needs overflow:hidden on <html>, not <body> — iOS ignores it on
+   body and the page scrolls underneath. */
+
+.nb-lock { overflow: hidden; }
+
+/* ---------- the corner button ---------- */
+
+.nb-open {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  z-index: 60;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 44px;
+  padding: 0 18px;
+  border: var(--hairline) solid transparent;
+  border-radius: 999px;
+  background: var(--primary);
+  color: var(--primary-foreground);
+  font: inherit;
+  font-size: 15px;
+  cursor: pointer;
+  box-shadow: var(--shadow-soft-lg);
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+}
+.nb-open:hover { filter: brightness(1.08); }
+
+/* The count is the reading; the pill is decoration for it. */
+.nb-badge {
+  min-width: 21px;
+  padding: 0 6px;
+  border-radius: 999px;
+  background: var(--primary-foreground);
+  color: var(--primary);
+  font-size: 12.5px;
+  line-height: 21px;
+  text-align: center;
+}
+
+/* ---------- panel ---------- */
+
+.nb-root[hidden] { display: none; }
+
+.nb-scrim {
+  position: fixed;
+  inset: 0;
+  z-index: 70;
+  background: color-mix(in srgb, var(--foreground) 34%, transparent);
+}
+
+.nb-panel {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 71;
+  width: min(560px, 100vw);
+  display: flex;
+  flex-direction: column;
+  background: var(--background);
+  border-left: var(--hairline) solid var(--border);
+  box-shadow: var(--shadow-soft-lg);
+}
+
+.nb-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 16px 20px;
+  border-bottom: var(--hairline) solid var(--border);
+}
+.nb-head h2 { font-size: 19px; }
+
+.nb-x {
+  width: 32px;
+  height: 32px;
+  border: var(--hairline) solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--card);
+  color: var(--muted-foreground);
+  font-size: 18px;
+  line-height: 1;
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
+}
+.nb-x:hover { color: var(--foreground); }
+
+.nb-pages {
+  flex: 1;
+  overflow-y: auto;
+  padding: 18px 20px 26px;
+}
+
+.nb-title {
+  width: 100%;
+  padding: 6px 0 12px;
+  border: 0;
+  border-bottom: var(--hairline) solid var(--border);
+  background: transparent;
+  color: var(--foreground);
+  font-family: var(--display);
+  font-size: 20px;
+  font-weight: 500;
+}
+.nb-title:focus { outline: none; border-bottom-color: var(--ring); }
+
+.nb-empty {
+  margin-top: 18px;
+  color: var(--muted-foreground);
+  font-size: 14.5px;
+  line-height: 1.6;
+}
+
+/* ---------- blocks ---------- */
+
+/* Uniform hairline on all four sides; the kind is a word inside the block,
+   never a painted edge. */
+.nb-block {
+  margin-top: 16px;
+  padding: 12px 14px 14px;
+  border: var(--hairline) solid var(--border);
+  border-radius: var(--radius);
+  background: var(--card);
+}
+.nb-block-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+.nb-block-kind {
+  font-size: 11.5px;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--muted-foreground);
+  user-select: none;
+  -webkit-user-select: none;
+}
+.nb-block-bar .nb-x { width: 26px; height: 26px; font-size: 15px; }
+
+.nb-text,
+.nb-note-on-quote {
+  display: block;
+  width: 100%;
+  padding: 8px 10px;
+  border: var(--hairline) solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--background);
+  color: var(--foreground);
+  font: inherit;
+  font-size: 15px;
+  line-height: 1.6;
+  resize: vertical;
+}
+.nb-text:focus, .nb-note-on-quote:focus { outline: none; border-color: var(--ring); }
+.nb-text { overflow: hidden; }
+
+.nb-note-on-quote { margin-top: 10px; font-size: 14px; }
+
+.nb-quote {
+  padding-left: 12px;
+  border-left: 3px solid var(--brand-ink);
+  font-size: 15px;
+  line-height: 1.6;
+  white-space: pre-wrap;
+}
+.nb-source { margin-top: 6px; font-size: 13px; color: var(--muted-foreground); }
+.nb-source a { color: var(--brand-ink); text-underline-offset: 3px; }
+
+.nb-sketch { position: relative; }
+.nb-sketch canvas {
+  display: block;
+  width: 100%;
+  border: var(--hairline) solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--background);
+  touch-action: none;
+  cursor: crosshair;
+}
+.nb-clear { position: absolute; right: 8px; bottom: 8px; }
+
+/* ---------- footer ---------- */
+
+.nb-foot {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 20px;
+  border-top: var(--hairline) solid var(--border);
+  background: var(--background);
+}
+.nb-add, .nb-pager { display: flex; align-items: center; gap: 8px; }
+.nb-pager { margin-left: auto; }
+.nb-count { font-size: 12.5px; color: var(--muted-foreground); white-space: nowrap; }
+.nb-foot [data-export] { flex: 0 0 auto; }
+
+/* ---------- capture ---------- */
+
+.nb-capture {
+  position: absolute;
+  z-index: 55;
+  padding: 6px 12px;
+  border: var(--hairline) solid transparent;
+  border-radius: var(--radius-sm);
+  background: var(--primary);
+  color: var(--primary-foreground);
+  font: inherit;
+  font-size: 13.5px;
+  cursor: pointer;
+  box-shadow: var(--shadow-soft);
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+@media (max-width: 560px) {
+  .nb-open { right: 12px; bottom: 12px; }
+  .nb-foot { gap: 8px; }
+  .nb-pager { margin-left: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nb-open, .nb-capture { transition: none; }
+}

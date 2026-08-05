@@ -198,15 +198,39 @@ window.VT = (function () {
   /* Sign-in belongs to the Next app, at /login. These pages keep progress in
      this browser and never gate on it, so the footer says where the state
      actually lives rather than implying an account holds it. */
+  /* The site links, in the order they are meant to read. A null href is a
+     destination nobody has supplied yet: it renders as plain text rather than
+     a link, because a footer link that goes nowhere is worse than one that is
+     visibly not ready. Fill the URL in here when it exists — do not guess one,
+     and do not point it at '#'. */
+  const FOOT = [
+    ['About Us', 'about.html'],
+    ['XLab', null],
+    ['Join Us', null],
+    ['Support us', null],
+    ['Team', 'team.html'],
+    ['Contact', null],
+    ['Report a bug', null],
+    ['Privacy Policy', null]
+  ];
+
   function mountFoot() {
     const host = document.querySelector('[data-foot]');
     if (!host) return;
     host.className = 'site-footer';
     host.innerHTML =
       '<div class="wrap">' +
-      '<span>XLab Tracks &middot; Verification</span>' +
+      '<nav class="foot-links" aria-label="Site">' +
+      FOOT.map(f => f[1]
+        ? '<a href="' + f[1] + '">' + esc(f[0]) + '</a>'
+        : '<span class="pending" title="Link not supplied yet">' + esc(f[0]) + '</span>'
+      ).join('') +
+      '</nav>' +
+      '<div class="foot-end">' +
+      '<span>&copy; 2026.</span>' +
       '<span>Progress is stored in this browser only.</span>' +
       '<button class="btn small outline" id="vt-reset">Reset progress</button>' +
+      '</div>' +
       '</div>';
     armReset(document.getElementById('vt-reset'));
   }

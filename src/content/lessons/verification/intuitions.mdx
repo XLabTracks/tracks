@@ -1,0 +1,73 @@
+# Building verification intuitions
+
+Now that we’ve established the foundational motivations for why verification is important, we’ll now dive into building key intuitions around the timelines, scope, and urgency of what a verification regime might actually look like. By the end of this section, you will be able to:
+
+- Describe the general directions the AI arms race could take, and the policy posture that produces each one.
+- Explain several distinct ways a verification regime can fail, and trace each failure to its cause.
+- Reason about the tension between transparency and confidentiality: monitoring intrusive enough to catch cheating can expose secrets worth stealing, while monitoring loose enough to protect secrets leaves room to cheat covertly.
+- Hold rough timelines for the arrival of dangerously capable AI, and use them to think about urgency and prioritization.
+What is the ideal end state? What agreement reaches it? What would verification have to cover for the agreement to hold? The most detailed public attempt to answer all three is AI 2040: Plan A, published by the AI Futures Project, the team behind the earlier AI 2027 scenario. While AI 2027 dramatized how a race ends badly, Plan A tells a dated, concrete story in which a US–China deal, layered verification, and a managed slowdown deliver a good outcome by 2040. Its verification supplement (ai-2040.com/supplements/verification-plan) specifies the machinery: mutual compute declarations checked by inspections, datacenters retrofitted so that large-scale training is detectable, optical network taps feeding trusted recomputation servers, secure R&D facilities, and production caps on unverified hardware.
+
+Below, you will read and gauge the feasibility and robustness of Plan A yourself. Read with a critical but thoughtful eye. For every date, percentage, and recommendation, ask yourself: what assumptions have to be true in order for this to hold? What existing or historical precedents have pointed to this mechanism succeeding or failing? What alternative solutions or estimates could there be, and how does this hold up against them? What is left uncertain? Remember: there is no correct answer, but you want to back your opinions with logic and evidence.
+
+Your task is to write one of two open-ended essay options:
+
+A: stress-test the Plan A verification supplement, or
+
+B: compare Plan A (verified slowdown) and Plan S (complete shutdown).
+
+<Callout variant="tip" title="Task">
+
+Option A — Stress-test the verification supplement.
+
+Read the verification supplement and apply the three moves to the claims below. Each claim, if it fails, is a distinct way the whole regime fails; part of your job is to name the failure mode each one guards against. You are building your own assessment, and reasonable readers of this supplement have landed in very different places.
+
+- The retrofit: network taps and recomputation servers are described as leaving minimal room for vulnerabilities. What would an adversary with years of preparation and nation-state resources try first? (Failure mode: technical defeat — the monitoring hardware itself is compromised.)
+- The schedule: declarations, mutual inspections, and the retrofit of most of the world's datacenter compute are completed in roughly a year (2029–2030). What comparable industrial or diplomatic effort has ever moved at that speed? Most nuclear arms-control agreements took the better part of a decade each. (Failure mode: the timeline race — capability milestones arrive before the regime that was supposed to govern them. If dangerously capable AI is possible by 2030, a regime that takes until 2035 to build is a plan for a different world.)
+- The trust anchor: compliance rests on recomputation servers each side must trust. Who builds them, who audits them, and what happens when one side alleges tampering? (Failure mode: dispute spiral — an unresolvable accusation collapses the regime even if no one actually cheated.)
+- The covert margin: the plan estimates roughly half a percent of compute escaping to covert projects and treats that as manageable. Is it? What can be done with that margin, and how does it compound over a decade? (Failure mode: death by leakage — the regime works as designed and loses anyway.)
+- The third countries: coverage above 99 percent requires participation well beyond the US and China, including Russia and the Gulf states. What actually brings them in? (Failure mode: the hole in the map — bilateral verification of a global technology.)
+- The vulnerable window: during the transition, both signatories have partially powered down. That is exactly when defection pays most. What in the plan deters it then? (Failure mode: breakout at the seam — the regime is weakest exactly when the incentive to break it peaks.)
+- The transparency price: which mechanisms in the plan expose commercially or militarily sensitive information, to whom, and why would the exposed party accept that? This is the Coe–Vaynman tradeoff from the arms-race explainer, now with concrete machinery attached: monitoring intrusive enough to catch cheating can expose secrets worth stealing, while monitoring loose enough to protect secrets leaves room to cheat covertly. For each mechanism, ask which side of that dial it sits on, and who would refuse it. (Failure mode: refusal at the door — the regime is verifiable in principle but no one with secrets will sign it.)
+Option B — Compare the verification regimes of Plan A and Plan S.
+
+Plan A is a verified slowdown: training halts, inference continues, and the whole regime hangs on being able to tell those two activities apart at datacenter scale. Plan S is shut it all down: a global moratorium on frontier development. The plan's FAQ (ai-2040.com/supplements/faq) argues Plan A beats Plan S on the timeline: both regimes eventually strain and break, and when they do, Plan A has spent the intervening years making alignment progress at a higher capability level, while Plan S froze earlier and banked less. Read that argument, note that it is about urgency and prioritization rather than verification, then set it aside and reason about verification specifically.
+
+One warning about sources: Plan S has no verification supplement. It exists in the document only as a contrast case. That asymmetry is the point of this task — for Plan S, you are reconstructing the regime it would need, not summarizing one someone else wrote. Work through:
+
+- The bright line. For each plan, state the single rule an inspector must police. For Plan S it is something like "no frontier training runs anywhere." For Plan A it is "no training on monitored compute, though inference is fine." Which line is easier to state? Which is easier to check, given that training and inference run on the same chips?
+- The three moves, applied to the softer assumption. Each plan's checkability rests on a load-bearing assumption — for Plan A, that the training/inference distinction is machine-detectable through taps and recomputation; for Plan S, that a total ban leaves no legitimate compute economy in which covert work can hide. Decide which assumption is softer and run it through the three moves.
+- The transparency price, paid twice. Plan A's monitoring reaches inside an active AI economy: taps and recomputation touch live commercial workloads, so the secrets at risk are current and valuable — the Coe–Vaynman tradeoff at full intensity. Plan S monitors an economy that is supposed to be dormant, which exposes less — but a state with nothing permitted has nothing to lose by cheating and no ongoing benefit that inspection lets it keep. Which price would each signatory actually pay?
+- Failure modes, compared. List two ways each regime fails and trace each to its cause. Do the two plans fail in the same ways, or does moving the bright line move the failure modes?
+- The verdict question. Which plan is technically easier to verify, and which is politically easier to sustain? If those answers differ — and decide whether they do — what does that tell you about how much "verifiability" should count for when choosing between postures on the ladder?
+
+</Callout>
+
+<Callout variant="tip" title="Task">
+
+Optional task — Essay: what does success look like to you?
+
+In 500–800 words, describe your own success scenario: the end state (what the world looks like, and roughly when); the agreement that gets there (who signs, what is restricted); and what verification would need to cover for that agreement to hold. Keep this essay. You will re-read it at the end of the track.
+
+</Callout>
+
+<Callout variant="tip" title="Task">
+
+Optional — Explore AI 2027
+
+Read AI 2027 (ai-2027.com), the same team’s earlier scenario, including both of its endings. As you read, ask the question this section trained: at which branch points would verification infrastructure have changed what the actors could credibly agree to?
+
+</Callout>
+
+Commitment enforcement needs verification — curated readings
+
+The simulation built intuition and the scenarios exercised imagination. These three readings supply the evidence base, and the vocabulary the rest of the track uses. Suggested approach: skim all three, then deep-read the one closest to your interests.
+
+- Nuclear Arms Control Verification and Lessons for AI Treaties (Baker, 2023, arXiv:2304.04123). The deepest case study of the one regime that made rival superpowers’ commitments checkable. Read for which nuclear techniques transfer to AI and which do not, and why the differences (compute moves, software copies, capabilities hide in weights) are exactly where AI verification gets hard.
+- Verification for International AI Governance (Oxford Martin AI Governance Initiative, 2025). A map of the verification approaches now on the table and the political conditions each requires. Read for the framework connecting technical mechanisms to the agreements they could support.
+- Mechanisms to Verify International Agreements About AI Development (Scher and Thiergart, MIRI Technical Governance Team, 2025, arXiv:2506.15867). The source of this track’s working definition: verification mechanisms are processes or tools that give one party greater confidence that another is following agreed rules, typically by detecting violations. Read for the mechanism catalog, and for its accounting of which mechanisms exist today versus which still require R&D.
+Keep your Plan A stress-test nearby while you read. These papers are the raw material for judging plans like Plan A, and by the end of the track you will use them to write assessments of your own.
+
+We’ll wrap up this section with an overview of what people are currently working on in the verification field. Explore the interactive below:
+
+What are people doing? → Landscape of verification efforts

@@ -1,3 +1,8 @@
+import {
+  verificationLessons,
+  verificationModules,
+  verificationTrack,
+} from "@/content/verification/curriculum";
 import type { Lesson, Module, Track } from "@/lib/content/types";
 
 // Control and Governance are intentionally empty for now — just an intro blurb,
@@ -41,6 +46,7 @@ export const tracks: Track[] = [
     prerequisiteEnforcement: "soft",
     estimatedHours: 1,
   },
+  verificationTrack,
 ];
 
 export const modules: Module[] = [
@@ -205,6 +211,7 @@ export const modules: Module[] = [
     furtherReadingTopics: ["governance"],
     estimatedMinutes: 40,
   },
+  ...verificationModules,
 ];
 
 export const lessons: Lesson[] = [
@@ -403,4 +410,5 @@ export const lessons: Lesson[] = [
     contentRef: "ex-paper-note-l1",
     estimatedMinutes: 4,
   },
+  ...verificationLessons,
 ];

@@ -446,7 +446,29 @@ button, [role='button'], [role='radio'], [role='tab'], .chip, .nav a, .brand,
   background: var(--primary);
 }
 
-.header-right { display: flex; align-items: center; gap: 10px; }
+/* The switch and the account button are a matched pair in the corner, so they
+   are sized together rather than each to its own content: same width, same
+   height, in every theme.
+
+   The width is set by the longer of the two labels the button can carry —
+   "Account" once a session is detected, not "Sign in" — because a width fitted
+   to the shorter one clips the other the moment sync.js swaps it. The height
+   is a variable because the contrast theme lifts every tap target to 44px; if
+   only the button read that rule the pair would come apart in that theme
+   alone. */
+.header-right {
+  --hdr-action-w: 100px;
+  --hdr-action-h: 38px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+:root[data-theme='contrast'] .header-right { --hdr-action-h: 44px; }
+.header-right .theme-switch,
+.header-right > .btn.small {
+  width: var(--hdr-action-w);
+  height: var(--hdr-action-h);
+}
 
 /* Three-way theme switch, drawn as radios rather than a cycling button: a
    cycling control gives no way to see which of the three is active, and none
@@ -460,12 +482,15 @@ button, [role='button'], [role='radio'], [role='tab'], .chip, .nav a, .brand,
   border-radius: var(--radius-sm);
   background: var(--card);
 }
+/* The three share whatever width the pair settled on, so the segments stay
+   even and the tap targets grow with it rather than leaving a gap at one end. */
 .theme-switch button {
   display: inline-flex;
+  flex: 1;
   align-items: center;
   justify-content: center;
-  width: 26px;
-  height: 26px;
+  min-width: 26px;
+  height: 100%;
   border: 0;
   border-radius: var(--radius-sm);
   background: transparent;

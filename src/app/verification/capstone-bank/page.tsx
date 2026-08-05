@@ -25,7 +25,7 @@ export default function Page() {
         <section className="bank-head">
           <h1>Capstone bank</h1>
           <p className="sub">
-            Every capstone this track prepares you for, with the numbers that decide
+            Every capstone idea in the bank, with the numbers that decide
             whether you can take it on: how many people, how many hours, over how
             long. Open a card for the full brief.
           </p>
@@ -40,7 +40,7 @@ export default function Page() {
             <label className="sort">
               <span className="sort-label">Sort</span>
               <select id="sort">
-                <option value="track">By track</option>
+                <option value="theme">By theme</option>
                 <option value="effort">Fewest hours first</option>
                 <option value="team">Smallest team first</option>
                 <option value="duration">Shortest first</option>
@@ -71,11 +71,11 @@ export default function Page() {
         </p>
 
         <p className="note bank-note">
-          <b>What is in here, and what is not.</b> This bank carries the capstones
-          whose prerequisites this track actually teaches — the Verification ones and
-          the program-level cross-track ones. The Technical Governance and AI
-          Governance Policy tracks have their own, and they name weeks no learner
-          here has done.
+          <b>What is in here.</b> Every capstone idea from the program, grouped by
+          theme. The Verification and Program-wide briefs name units this course
+          teaches. The Technical Governance and AI Governance Policy themes are
+          additional ideas from the wider program: their briefs assume background
+          this course does not teach, so they list no prerequisites here.
         </p>
 
       </main>

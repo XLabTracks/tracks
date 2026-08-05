@@ -251,12 +251,13 @@ function CalloutBox({
   onPop: (id: string) => void;
 }) {
   return (
+    /* Hairline on all four sides. The source drew one painted edge in two
+       alternating accents; reading them all, the two marked nothing, so both
+       the rib and the colour name are gone. */
     <div
       className={cn(
-        // Uniform hairline on all four sides with a tinted ground, never a
-        // painted left rib: a card with one edge coloured and the rest
-        // hairline is the half-and-half this design system rules out.
-        "border-border bg-muted/40 my-4 rounded-lg border py-3 pr-4 pl-4 text-sm leading-relaxed [&_em]:italic [&_strong]:font-semibold",
+        "border-border bg-muted/40 my-4 rounded-lg border p-4 text-sm",
+        "leading-relaxed [&_em]:italic [&_strong]:font-semibold",
       )}
     >
       <InlineWithTerms html={callout.html} onPop={onPop} />
@@ -292,7 +293,7 @@ function TileButton({
         dangerouslySetInnerHTML={{ __html: tile.desc }}
       />
       {tile.timing && (
-        <span className="text-hide mt-2 block font-mono text-[10px] font-semibold tracking-[0.06em] uppercase">
+        <span className="text-muted-foreground mt-2 block font-mono text-[10px] font-semibold tracking-[0.06em] uppercase">
           {tile.timing}
         </span>
       )}
@@ -315,12 +316,6 @@ function TileGrid({
     </div>
   );
 }
-
-const PHASE_DOT: Record<Stage["phase"], string> = {
-  open: "text-hide",
-  explore: "text-exaggerate",
-  close: "text-comply",
-};
 
 function Lifecycle({
   stages,
@@ -347,8 +342,8 @@ function Lifecycle({
           </p>
           <span
             className={cn(
-              "mt-1.5 block font-mono text-[10px] font-semibold tracking-[0.06em] uppercase",
-              PHASE_DOT[s.phase],
+              "text-muted-foreground mt-1.5 block font-mono text-[10px]",
+              "font-semibold tracking-[0.06em] uppercase",
             )}
           >
             {PHASE_LABEL[s.phase]}

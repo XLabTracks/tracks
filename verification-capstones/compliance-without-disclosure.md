@@ -1,6 +1,6 @@
 ---
 title: Prove Compliance Without Handing Over the Model
-track: Verification
+theme: Verification
 status: draft
 summary: Module 2.0's whole problem in one artifact — pick one claim a developer must prove, and specify how to prove it without disclosing weights, data, or a trusted enclave.
 team: 1-2

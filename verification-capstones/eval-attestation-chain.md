@@ -1,6 +1,6 @@
 ---
 title: Make an Eval Result Believable to a Stranger
-track: Verification
+theme: Verification
 status: draft
 summary: A lab says its model scored below the danger threshold. Specify what a third party would have to observe to believe that — and what it costs to provide.
 team: 1-2

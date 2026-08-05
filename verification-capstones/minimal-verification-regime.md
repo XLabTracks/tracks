@@ -1,6 +1,6 @@
 ---
 title: Minimal Verification Regime for an Emergency Pause
-track: Verification
+theme: Verification
 status: ready
 summary: Design the smallest verification regime that could make a three-month emergency pause credible to a party that expects to be cheated.
 team: 1-2

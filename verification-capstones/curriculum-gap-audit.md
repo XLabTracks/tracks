@@ -1,6 +1,6 @@
 ---
 title: Audit What This Program Does Not Teach
-track: Cross-track
+theme: Program-wide
 status: draft
 summary: Compare the Tracks curriculum against the four best-known open AI safety curricula, and hand back the three gaps worth closing — with what to cut to make room.
 team: 2-3

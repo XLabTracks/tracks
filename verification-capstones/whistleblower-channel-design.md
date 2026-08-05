@@ -1,6 +1,6 @@
 ---
 title: A Reporting Channel an Insider Would Actually Use
-track: Verification
+theme: Verification
 status: draft
 summary: Module 2.4 says the human layer reveals what hardware and intelligence cannot — if evidence reaches a verifier. Design the channel, against the NDAs and equity that stop it.
 team: 1-2

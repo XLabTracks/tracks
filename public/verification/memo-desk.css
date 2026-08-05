@@ -242,3 +242,11 @@ input::placeholder, textarea::placeholder { color: var(--muted-foreground); opac
 .skim .s-meta { font-family: var(--mono); font-size: 11px; color: var(--muted-foreground); margin-bottom: 10px; }
 .skim .empty { color: var(--muted-foreground); }
 .skim-stats { font-size: 11px; color: var(--muted-foreground); }
+
+/* Sits under the tools rather than in the footer: it answers a question the
+   learner has at the moment they start typing, not on the way out. */
+.desk-note {
+  margin-top: 10px;
+  font-size: 12px;
+  color: var(--muted-foreground);
+}

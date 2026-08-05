@@ -1,0 +1,73 @@
+INF Tech, a Shanghai-based startup, has been remotely accessing about 2,300 leading-edge Nvidia Blackwell chips through an Indonesian data center; as of early 2026 the arrangement is legal under U.S. law (Tan 2026). Three different verification layers could in principle notice this run. Someone tracked those chips when they shipped. Someone could collect intelligence on INF Tech. And one company, the Indonesian provider, already has the whole thing in its billing records. This module is about that third party: the cloud provider.
+
+Frontier models are mostly trained on machines their developers don’t own. A frontier training run needs thousands to tens of thousands of AI accelerators wired together — clusters that live in data centers operated by a handful of companies.
+
+Between the AI developer and the chips sits a landlord. The developer rents; the provider owns, operates, meters, and bills.
+
+### Who counts as a compute provider?
+
+<Callout variant="tip" title="Task">
+
+Category
+
+Examples
+
+Role
+
+Hyperscalers
+
+Microsoft Azure, AWS, Google Cloud, Oracle, Alibaba, Tencent
+
+Own and operate frontier-scale data centers
+
+Smaller GPU clouds
+
+CoreWeave, Lambda
+
+Rent out accelerator capacity at smaller scale
+
+Resellers
+
+Brokers who buy hyperscaler capacity and sublease it
+
+Sublease capacity bought from other providers
+
+</Callout>
+
+## Where cloud sits among the four buckets
+
+Cloud verification is simultaneously the most technically ready and weakest verification bucket. Providers already collect identity data, telemetry, and chip-hours; the KYC (Know Your Customer) mechanism has already been invented. Cloud methods, however, see only actors who choose to rent from a covered provider. Some AI firms run their own data centers; states can incentivize captured providers to obscure the whole evidence base; even perfect KYC coverage pinpoints who the customer is and how much they ran, never what the model was, or for what purpose. Moreover, KYC inherits banking’s failure modes: VPNs can sever accounts from locations, reseller chains degrade visibility, and more. In other words, cloud mechanisms see only actors who stay on covered infrastructure; determined evaders can still fly under the radar.
+
+So why is teaching cloud valuable, if it is a comparatively weak and limited verification mechanism? First, it’s the layer negotiators will realistically face: every U.S. compute governance order has run through providers. Second, it’s immediately implementable: cloud runs on records providers already keep for billing and do not face the delays in building hardware infrastructure or collecting new intelligence. And on a meta-level, cloud exemplifies how technical feasibility is not enough for verification value. It’s still important—for context and comparison—to understand the weaker but historically used and precedented tool.
+
+<Callout variant="tip" title="Task">
+
+### The Four Roles of a Provider
+
+The 2024 whitepaper Governing Through the Cloud (Heim et al.) names four capacities in which a provider can serve a governance regime: security, record keeping, verification, and enforcement. A verification regime needs all four — evidence, checking, consequences, and protection for the things being checked.
+
+Record keeper — selectively collects and maintains high-level information about infrastructure usage, such as a customer's compute usage data. These records are the regime's evidence base: they link usage to real-world actors and enable post-incident attribution, turning a declaration from a bare claim into one checkable against an independent trail.
+
+Verifier — actively verifies customer identities, specific activities, and high-level properties of AI systems: compliance with reporting above training-compute thresholds, data-usage guidelines for frontier training, licenses for deployed systems. This is the checking itself — an inspector already on the premises, comparing what was declared against what actually ran.
+
+Enforcer — restricts or limits compute access for non-compliant customers or workloads, from refusing unlicensed developers to disabling a system whose activity is uncontrollable or in violation of regulations. This prospect is what makes honest declaration the cheaper strategy.
+
+Securer — provides the physical and cybersecurity measures that protect model weights, algorithms, training data, and personal and confidential data, and helps prevent attacks on large-scale deployments. This protects the regime's integrity: a stolen copy of the weights was never declared, checked, or gated, so verification only constrains anyone if the capabilities being verified cannot simply be taken.
+
+Everything else in this module analyzes the provider as one of these four.
+
+CHECK: A provider suspends a customer's compute access after the customer refuses to file a required training-run notification. Which role is the provider exercising? (a) Enforcer (b) Verifier (c) Record keeper (d) Securer
+
+A: (a). Restricting or cutting access is enforcement. Verifying is checking claims against observation; record keeping is storing the usage data; securing is protecting models and infrastructure from attackers.
+
+</Callout>
+
+#### What this module teaches you
+
+- After 2.2.1 you can list what a provider observes about its customers without any new technology: identity, resource use, operational records.
+- After 2.2.2 you can read a proposed reporting-and-KYC regime and judge whether it produces evidence or paperwork, which turns out to be the module’s central skill.
+- After 2.2.3 you can state precisely what cloud evidence establishes, who controls it, and where it needs corroboration.
+
+CHECK: Why do compute providers make a useful governance surface in the first place? (a) Frontier AI is mostly developed on machines developers rent rather than own (b) Providers can read customers' training code and data (c) Providers are legally part of the regulator (d) AI models cannot run without a cloud connection
+
+A: (a). The leverage is structural: rented compute puts a third party between developer and machines. Providers by default do not read customer code (2.2.1), they are private companies, and self-owned compute exists — which is exactly the regime's edge.

@@ -342,5 +342,130 @@ window.EXERCISES = {
     prompt: 'For every item that moved by two places or more, write one sentence: which fact changed your mind, and where did you get it?',
     seal: true,
     sealNote: 'Still no key. A revision with a reason is the assessed artifact; a revision without one is a coin flip.'
+  },
+
+  /* ---------------------------------------------------------- 2.2 */
+  /* The module gate. Twelve items over the unit's five retention claims —
+     R1 the provider is a third party in the room, R2 metadata shows scale and
+     often type, R3 identity is the anchor, R4 a declaration is a claim, R5 the
+     layer ends at the cloud's edge — sampled 2/3/2/3/2. Distractors are the
+     unit's own named misconceptions, so a wrong pick names the error.
+     Keys come from the readings, not from an outline; see the source line. */
+  'ex-cloud-check': {
+    type: 'mcq',
+    title: 'What the cloud layer establishes',
+    lede: 'Twelve questions over the whole unit. One at a time, commit before the answer, retake as often as you like.',
+    source: 'Module 2.2 readings — Heim et al. 2024 (CC BY 4.0); Egan & Heim 2023 (CC BY 4.0); Moon et al., RAND RR-A3686-1, 2025.',
+    questions: [
+    { q: 'A provider compares a customer’s declared “inference service” against observed utilization and traffic patterns, and flags the mismatch. Which intermediary role is it exercising?',
+      options: [
+        'Verifier',
+        'Enforcer',
+        'Securer',
+        'Record keeper'
+      ],
+      key: 0,
+      why: 'Actively checking claims against observation is verification. Enforcement would be restricting access; record keeping is storing the data; securing is defending models and infrastructure from attackers.' },  /* R1 */
+    { q: 'What structural fact makes cloud providers useful to a compute-governance regime?',
+      options: [
+        'Providers can decompile and inspect customers’ model code',
+        'Providers are government agencies with regulatory powers',
+        'Frontier AI development mostly runs on rented machines, putting a third party between developer and hardware',
+        'AI models can only run on cloud infrastructure'
+      ],
+      key: 2,
+      why: 'The leverage is the landlord position. Providers do not read customer code by default; they are private firms; and self-owned compute exists — which is precisely the regime’s edge.' },  /* R1 */
+    { q: 'Which signal belongs to the resource-use layer of provider visibility?',
+      options: [
+        'The customer’s declared purpose for the compute',
+        'The customer’s registered business address',
+        'The number of accelerators allocated and the hours they ran',
+        'A timestamped security alert in the logs'
+      ],
+      key: 2,
+      why: 'Allocation and hours are resource use. An address is identity; an alert is an operational record; a declared purpose is a customer claim — not observed telemetry at all.' },  /* R2 */
+    { q: 'Accelerators held at near-constant peak utilization for three weeks, with minimal traffic to the outside internet, most plausibly indicate…',
+      options: [
+        'Ordinary web hosting',
+        'A user-facing inference service',
+        'A large training run',
+        'Nothing — metadata cannot distinguish workload types'
+      ],
+      key: 2,
+      why: 'Training is sustained and closed-loop; inference follows user demand and fluctuates. Metadata cannot *prove* — but it strongly suggests, which is the whole point of the layer.' },  /* R2 */
+    { q: 'Roughly what does 10²⁶ operations of training compute look like in hardware terms?',
+      options: [
+        'About 100 accelerators for one day',
+        'A laptop-class workload',
+        'About 60,000 top-line accelerators running for about 90 days',
+        'A single GPU running for a weekend'
+      ],
+      key: 2,
+      why: 'Per Heim et al.’s estimate (H100-class chips at ~34% utilization). The teaching point: threshold-scale runs are physically enormous — hard to mistake and hard to hide inside a covered data center.' },  /* R2 */
+    { q: 'KYC schemes require verifying beneficial owners. Who is a beneficial owner?',
+      options: [
+        'The provider’s own shareholders',
+        'Any company that appears in the ownership chain',
+        'The employee who signs the compute contract',
+        'A human who ultimately owns ≥25% of the entity or exercises substantial control, however many layers deep'
+      ],
+      key: 3,
+      why: 'The requirement pierces layered entities to reach natural persons — exactly what shell structures try to prevent. A signatory or an intermediate company is not the end of the chain.' },  /* R3 */
+    { q: 'Why is suspending cloud access a sharper enforcement tool than chip export controls?',
+      options: [
+        'Cloud access is point-in-time and revocable even mid-run; exported chips cannot be recalled',
+        'Because export controls do not apply to AI chips',
+        'Because suspension destroys the customer’s data',
+        'Because suspension requires no legal authority at all'
+      ],
+      key: 0,
+      why: 'The asymmetry is revocability. Suspension still needs legal authority; export controls very much apply to AI chips — they just act only at the moment of shipment; and suspension does not destroy anything.' },  /* R3 */
+    { q: 'Under the EO 14110 template, cluster registration and training-run declaration use…',
+      options: [
+        'A total for clusters and a capability rate for runs',
+        'The same number for both obligations',
+        'A capability rate for clusters (10²⁰ OP/s, fast interconnect) and a total for runs (10²⁶ OP)',
+        'No numeric thresholds at all'
+      ],
+      key: 2,
+      why: 'Standing infrastructure is measured by what it *could* compute per second; a specific run by what it *did* compute in total. Two hooks, two numbers.' },  /* R4 */
+    { q: 'A customer runs 58 separate two-day jobs from 58 accounts, each just under the reporting threshold, passing model checkpoints from one to the next. What is the regime’s core failure here?',
+      options: [
+        'The provider’s meters failed to record the compute',
+        'Thresholds are evaluated per account and nothing links the accounts — no single reading trips the line',
+        'The threshold number was simply set too high',
+        'The jobs were too small to constitute training'
+      ],
+      key: 1,
+      why: 'Every job was metered correctly, and the total plainly exceeded the threshold — the failure is aggregation and identity linkage, not measurement, and not the particular number chosen.' },  /* R4 */
+    { q: 'Which added capability would most directly catch a training run fragmented into sub-threshold slices across accounts?',
+      options: [
+        'A stricter statement-of-purpose requirement on each account',
+        'Cross-account identity linkage plus aggregate compute accounting across the linked accounts',
+        'Raising the FLOP threshold',
+        'Publishing the threshold more prominently'
+      ],
+      key: 1,
+      why: 'Fragmentation is beaten by re-aggregation: link the accounts (KYC’s cross-account job), then total the compute. Purpose statements are just more customer claims; raising the threshold widens the gap; publicity changes nothing.' },  /* R4 */
+    { q: 'Which pathway is entirely outside cloud-layer oversight?',
+      options: [
+        'Training on a self-owned, disconnected cluster',
+        'An undeclared training run at a covered provider',
+        'A mislabeled workload at a covered provider',
+        'A run booked through a reseller at a covered provider'
+      ],
+      key: 0,
+      why: 'Undeclared, mislabeled, and reseller-booked runs still happen on covered machines and leave telemetry with the provider. A self-owned cluster has no provider — the hardware and intelligence layers must find it.' },  /* R5 */
+    { q: 'Which item is customer-controlled — and therefore the weakest evidence without corroboration?',
+      options: [
+        'The provider’s billing record for the account',
+        'The declared purpose on the account application',
+        'Measured interconnect traffic between nodes',
+        'The count of accelerators allocated to the account'
+      ],
+      key: 1,
+      why: 'Purpose is whatever the customer types. Billing, traffic, and allocation are the provider’s own meters — the customer cannot easily rewrite them.' },  /* R5 */
+    ]
   }
+
 };

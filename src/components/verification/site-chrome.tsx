@@ -3,6 +3,7 @@
 import Script from "next/script";
 import { useEffect } from "react";
 import { usePathname } from "next/navigation";
+import { useAuth } from "@workos-inc/authkit-nextjs/components";
 import {
   COPYRIGHT,
   FOOT,
@@ -39,11 +40,14 @@ import {
  * its prose colours instead of reading the palette.
  */
 
-/** True on the routes this chrome owns. */
+/** True on the routes this chrome owns: the course pages, and the app routes
+ *  that serve the course's own site (enrolling, the reviewers' queue) from
+ *  under /verification/ alongside its static pages. */
 export function isVerificationRoute(pathname: string | null): boolean {
   return !!pathname && (
     pathname === "/tracks/verification" ||
-    pathname.startsWith("/tracks/verification/")
+    pathname.startsWith("/tracks/verification/") ||
+    pathname.startsWith("/verification/")
   );
 }
 
@@ -60,12 +64,25 @@ function ThemeSwitch() {
 
 export function VerificationHeader() {
   const pathname = usePathname();
+  const { user, loading } = useAuth();
   return (
     <>
       <link rel="stylesheet" href="/verification/fonts.css" precedence="high" />
       <link rel="stylesheet" href="/verification/theme.css" precedence="high" />
       <link rel="stylesheet" href="/verification/app-bridge.css" precedence="high" />
+      <link rel="stylesheet" href="/verification/notebook.css" precedence="high" />
       <Script src="/verification/theme.js" strategy="afterInteractive" />
+      {/* The notebook, the vocabulary lookup and the account sync are the same
+          three files the static pages load, in the same order: vocab.js calls
+          VTNotebook, and sync.js reads the store notebook.js owns. Reading
+          happens on both surfaces, so the tools have to exist on both.
+
+          They are plain scripts rather than React components on purpose —
+          one implementation, and the static site can still be lifted out
+          whole. */}
+      <Script src="/verification/notebook.js" strategy="afterInteractive" />
+      <Script src="/verification/vocab.js" strategy="afterInteractive" />
+      <Script src="/verification/sync.js" strategy="afterInteractive" />
       <header className="site-header">
         <div className="bar">
           <a className="brand" href="/verification/landing">
@@ -106,9 +123,16 @@ export function VerificationHeader() {
           </nav>
           <div className="header-right">
             <ThemeSwitch />
-            <a className="btn small" href="/login">
-              Sign in
-            </a>
+            {/* The static pages swap this button by probing the state route
+                (sync.js); inside the app the session is already at hand, so it
+                is read here instead of asking the server a second time.
+                `loading` renders neither: a "Sign in" that flips to "Account"
+                a moment later is worse than a button that arrives late. */}
+            {loading ? null : (
+              <a className="btn small" href={user ? "/account" : "/login"}>
+                {user ? "Account" : "Sign in"}
+              </a>
+            )}
           </div>
         </div>
       </header>

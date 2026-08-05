@@ -1,0 +1,40 @@
+In this module, you will learn about four main areas of verification mechanisms: hardware, cloud, intelligence, and human. Each layer has its own strengths and weaknesses, evaluated on important metrics like technical feasibility, privacy preservation, political feasibility, and verifiability.
+
+A key tension common across any verification taxonomy or subfield is confidentiality vs. verifiability. Rival states are inherently incentivized to not disclose any information to each other, much less about the development of potentially dangerous and proprietary technologies. The last thing China wants is for the U.S. to steal development secrets through an invasive or insecure audit system. Yet the model of verification relies entirely upon the reliable mutual disclosure of information. Thus arises the verifier’s paradox: how do you gain enough access to confirm compliance, but not enough to enable espionage?
+
+The solution is privacy-preserving verification: mechanisms designed to verify compliance while conveying minimum or zero excess information to verifier parties. Here are notable examples:
+
+- Hardware-anchored identity and attestation: Chips can carry unique, unforgeable identities and cryptographically report on their own state — what firmware they're running, where they are (via delay-based location proofs), or whether they've been configured within agreed limits. Because the root of trust lives in silicon rather than in documents or self-reports, a verifier can confirm properties of compute hardware remotely without inspecting the facility around it. The excess information conveyed is minimal: the verifier learns the chip's attested state, not what workloads or model weights it touches.
+- Zero-knowledge proofs: Cryptographic protocols that let a prover demonstrate a statement is true — "this training run used fewer than X FLOPs," "this model passed the agreed evaluation" — without revealing anything beyond the statement's truth. In principle this is the ideal form of privacy-preserving verification: zero excess information by construction. In practice, generating proofs over computations as large as frontier training runs remains expensive, so ZKPs are most plausible today for verifying smaller, well-scoped claims.
+- Secure multiparty computation: Multiple parties jointly compute a result over their combined private inputs without any party seeing the others' data. In a verification setting, a developer and a verifier (or several rival states) can together run an evaluation or check a compliance condition, with each side learning only the output — compliant or not — while the model weights, training data, or inspection criteria stay hidden from everyone else. The cost is computational overhead and protocol complexity, which grows with the size of what's being computed.
+- Managed access as the institutional fallback: The institutional fallback when technical tools fall short: human inspectors get in, but under negotiated restrictions. The Chemical Weapons Convention lets facility operators shroud equipment, restrict photography, limit sampling, and escort inspectors — enough access to confirm compliance, not enough to steal trade secrets. Applied to AI, this looks like cleared inspectors in secure rooms, air-gapped terminals, and pre-agreed limits on what leaves the building. It trades cryptographic guarantees for institutional ones, but it has decades of operating history that the technical mechanisms lack.
+
+Before we dive in, let’s first identify some baseline intuitions: fill out the following graph with your pre-course understanding of the relative efficacy of each mechanism across five metrics:
+
+- Technical feasibility. Can this be built and run at the required scale today — not in a demo, not in five years? Includes maturity, dependencies, cost, and error rates. Low: fully homomorphic encryption over entire training runs — orders of magnitude too slow at frontier scale. High: compute reporting through cloud providers — the metering and billing infrastructure already exists.
+- Political feasibility. Would the specific parties whose cooperation is required actually adopt and enforce it, now or under conditions you can name? Includes incentives, intrusiveness, confidentiality cost, and institutional home. Low:international inspectors with direct access to US and Chinese frontier labs' model weights. High: reporting requirements attached to existing chip export licenses — piggybacks on a regime that already operates.
+- Verification effectiveness. How much verification does it actually deliver: how strong is the evidence when it runs (loose inference vs. specific proof, against a motivated evader), and how much of the threat surface does it see (which actors, which activities)? Weak on either dimension caps the score — conclusive proof about a sliver is as limited as vague hints about everyone. Low: voluntary lab commitments — self-reported evidence, covering only the signatories, who are the least worrying actors precisely because they signed. High: on-chip cryptographic attestation — proves the specific claim about the specific workload, and the concentrated chip supply chain means nearly every serious training effort passes through it.
+- Durability. How fast does it decay — from technical progress, adversary adaptation, or political change? A mechanism scoring high works about as well in five years as today. Low: FLOP-threshold reporting — algorithmic efficiency gains push dangerous capabilities below any fixed threshold within a few years. High: mechanisms rooted in chip hardware — persist across model paradigms and training techniques for the lifetime of the installed base.
+[the mechanism sort](https://mechanism-sort.netlify.app/)
+
+As you’re going through this exercise, jot down in your notebook: What were the heuristics you use to evaluate whether a verification mechanism was:
+
+- Technically feasible? → Are there historical verification precedents that have used a similar mechanism? Current technical analogs?
+- Politically feasible? → How difficult would it be to get the U.S. to agree? China? What must remain confidential, no matter what?
+- Effective? → What’s the minimum threshold of confidence or level of evidence a nation-state should have to ensure that a rival is compliant? What must a verifier be able to learn?
+- Durable? → What develops faster, hardware or software?
+
+It’s important to note that the way we’ve taxonomized verification mechanisms in this course is not the only or most accepted way to do so; on the other hand, there are several different ways you can taxonomize the evidence streams of verification, according to your writing goals and audience context. We’ve chosen the hardware/cloud/intel/human four buckets—the by-layer taxonomy—for pedagogical simplicity. Keep in mind that when going forwards, you should proactively think about the best taxonomy or categorization level for your audience; think back to the upstream and downstream exercises you completed in Module 1. For instance, you’d want to prioritize mechanisms by policy goal when speaking to congressional officials, while you’d want to focus more on the easy-to-visualize by-layer organization for educational purposes.
+
+Interactive: [Maps of the Evidence](https://evidence-taxonomies.netlify.app/)
+
+- By layer: hardware, cloud, intel, human
+- By access required: cooperation required
+- By policy goal: detect covert training runs, verify declared runs comply, or track the chip locations
+- By lifecycle stage: before, during, after run
+- By adversary: against cooperative target, cheating company, or evading state
+
+Throughout this module, keep the following questions in mind as you evaluate each mechanism:
+
+- Who verifies the verifier?
+- Design tradeoffs: what’s the cost?

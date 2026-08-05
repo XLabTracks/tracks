@@ -32,7 +32,7 @@
     const id = tag === S.compoundRung ? S.compoundUnits[0] : tag;
     for (const m of C.modules) {
       if (m.units.some(u => u.id === id)) {
-        return 'module.html?m=' + m.n + '&u=' + encodeURIComponent(id);
+        return (m.units.find(u => u.id === id) || {}).href || 'track.html';
       }
     }
     return 'track.html';

@@ -1,0 +1,158 @@
+<Callout variant="note" title="Section status">
+The outline gives this section as a design specification — objectives, the
+activity, its claim list and its reveal — rather than as finished prose. It
+is reproduced here as written; the connecting text is still to be authored.
+</Callout>
+
+### 2.1.3 Where should trust live?
+
+Runtime: 35 minutes Hard idea: On-chip and off-chip mechanisms offer different trust distributions. Combining them helps only when their failure modes are meaningfully independent.
+
+#### Advance comparison
+
+Present the same verification target:
+
+Determine whether all covered compute in a declared data center is accounted for by permitted workloads.
+
+Then compare three architectures.
+
+#### Architecture A: On-chip monitoring
+
+Possible components:
+
+- device identity;
+- secure or measured boot;
+- signed counters;
+- protected telemetry;
+- workload certificates;
+- hardware-backed authorization.
+
+Potential advantages:
+
+- fine-grained access to device state and activity;
+- low marginal cost after deployment across a fleet;
+- evidence travels with the chip;
+- possible real-time response;
+- privacy-preserving outputs.
+
+Load-bearing concerns:
+
+- trust in chip design and manufacturing;
+- vendor control of keys, reference values, firmware, and updates;
+- physical access by the prover;
+- legacy and nonparticipating hardware;
+- redesign and fleet-turnover timelines;
+- common-mode failure across identity, metering, and licensing.
+
+#### Architecture B: Off-chip digital monitoring
+
+Possible components:
+
+- network taps;
+- input/output loggers;
+- server or rack gateways;
+- tamper-evident enclosures;
+- separate secured verification machines.
+
+Potential advantages:
+
+- devices can be jointly designed and mutually inspected;
+- reduced reliance on the monitored party’s accelerator internals;
+- possible retrofitting of existing systems;
+- clearer separation between prover hardware and verifier hardware.
+
+Load-bearing concerns:
+
+- reduced visibility as the tap moves farther from the chip;
+- encrypted traffic;
+- data volumes;
+- covert and side channels;
+- installation and chain-of-custody requirements;
+- risk that the verifier’s device contains espionage or sabotage functions;
+- difficulty reconstructing high-level workloads from low-level traffic.
+
+The six-layer synthesis explicitly treats network taps and analog sensors as separate off-chip approaches and proposes mutually vetted, simple, potentially jointly developed devices. It also emphasizes that these approaches still face major unsolved engineering and assurance problems. (arXiv)
+
+A June 2026 proposal makes the concept more concrete by placing taps on information-carrying connections, committing external data with hashes, and adding a secure gateway to constrain timing, analog, and steganographic channels. It is an architectural proposal, not a fielded treaty system. (arXiv)
+
+#### Architecture C: Off-chip analog monitoring
+
+Possible components:
+
+- rack or server power meters;
+- thermal sensors;
+- electromagnetic measurements;
+- independent clocks and timestamping;
+- tamper-evident packaging;
+- video or physical inspection of installation.
+
+Potential advantages:
+
+- a physically independent account of activity;
+- retrofitting potential;
+- evidence that is less dependent on proprietary firmware;
+- evasion may require sacrificing performance or changing multiple physical signals.
+
+Load-bearing concerns:
+
+- approximate conversion from physical measurements to compute;
+- workload- and architecture-dependent signatures;
+- margins of error;
+- calibration and sensor placement;
+- deliberate mimicry;
+- coverage only inside instrumented facilities;
+- reliance on inspections to maintain the sensor boundary.
+
+#### Architecture D: Hybrid
+
+Possible combination:
+
+- on-chip identity and secure boot;
+- hardware-rooted telemetry;
+- independently installed rack-level power measurement;
+- cloud or provider records;
+- periodic physical inspection;
+- intelligence comparison against declared facility capacity.
+
+The learner must test whether this is genuinely layered. A signed meter, signed workload classifier, and licensing system that all rely on the same vendor key constitute less independence than their mechanism count suggests.
+
+#### Cross-taxonomy card: the same signal, a different institution
+
+Use power draw to connect 2.1 and 2.3:
+
+- A treaty-installed rack meter is access-dependent, precise, and maintained through inspections. It belongs here.
+- Grid analysis or remote thermal imagery may estimate related activity without permission. That is intelligence-based evidence.
+- The physical phenomenon is similar; the evidence pathway, access, confidence, and political role differ.
+
+This reinforces that the course’s four buckets are a pedagogical crosswalk rather than natural kinds.
+
+#### Activity: Bilateral design review
+
+Learners compare an on-chip proposal and an off-chip proposal for the working pause rule. For each architecture they complete:
+
+- what the U.S. side would distrust;
+- what the Chinese side would distrust;
+- what the operator would regard as commercially sensitive;
+- what the verifier cannot afford to leave unknown;
+- whose cooperation is indispensable;
+- the technical assumption most likely to fail;
+- the institutional assumption most likely to fail;
+- the most serious abuse or power-concentration risk;
+- the smallest pilot that would provide decision-relevant evidence.
+
+The task ends with a constrained recommendation:
+
+Choose an architecture for a voluntary pilot, not for immediate universal deployment. State what the pilot must test before the mechanism deserves a stronger role.
+
+This makes feasibility dynamic and evidence-responsive.
+
+#### Answer-key philosophy
+
+There should be no universal “on-chip wins” or “off-chip wins” reveal.
+
+The model answer should demonstrate:
+
+- the different trust placements;
+- circumstances that favor each architecture;
+- the likely collapsing weakness under the named adversary;
+- what pilot result would move the assessment.

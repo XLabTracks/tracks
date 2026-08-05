@@ -1,0 +1,181 @@
+- Case exercise: module focus
+  - Scenario → rules/guidelines → choose your redteam player → go through cumulative redteam prompts/activities → go through cumulative blueteam prompts/activities → assessment based on rubric (decide LLM or self-graded based on rubric)
+- Evasion taxonomy REVISITED outlining all possible evasion/type of evasion paths, highlight which ones are most dangerous
+
+SECTION B — POST-CASE TAXONOMY REVISITED
+
+You have now tried to construct and detect an evasion scheme. Return to the taxonomy and add judgment. The scores below are relative, conditional assessments—not measured probabilities. They depend on the agreement, actor, hardware fleet, jurisdiction, access rights, and verification architecture.
+
+Scoring: 1 = very low or weak; 2 = low; 3 = moderate; 4 = high; 5 = very high. For verification effectiveness, a higher score is better for the verifier. “Module priority” reflects emphasis in this course, not a claim about numerical likelihood.
+
+<Callout variant="tip" title="Task">
+
+Route / module priority
+
+Technical feasibility for evader
+
+Political / organizational feasibility
+
+Verification effectiveness
+
+Durability / harm
+
+Post-case annotation
+
+Who can change the balance?
+
+Repurpose declared infrastructure Priority: 4/5
+
+4/5 — High
+
+The hardware, staff, and site already exist.
+
+4/5 — High
+
+A small number of authorized insiders may be enough.
+
+3/5 — Moderate
+
+Logs and telemetry help, but purpose and intent are difficult to infer.
+
+5/5 — Very high
+
+Standing capacity can support repeated activity.
+
+Often the most realistic route for an actor that already controls major compute. Legitimate activity provides cover: training can be labeled as inference, or prohibited capability work as safety or maintenance. Broad workload telemetry can produce useful signals, but proving the exact research purpose requires clear rules plus access to raw scheduler records, code, data, checkpoints, and personnel evidence. [14][21]
+
+Developers; cloud providers; national regulators; inspectors; hardware and standards bodies
+
+Steal or copy model weights Priority: 3/5
+
+3/5 — Moderate
+
+Requires insider access or a serious cyber compromise.
+
+3/5 — Moderate
+
+Can be done by a small team, but access and confidentiality are demanding.
+
+2/5 — Low
+
+There may be no new large training signal.
+
+5/5 — Very high
+
+One successful copy can be duplicated and reused.
+
+Weight theft changes the verification problem: the actor may acquire a powerful model without recreating its original training run. Access logs, segmentation, data-loss controls, and human reporting can help, but attribution and proof of what was copied are difficult. Compression research may reduce exfiltration time, but exfiltration remains a multistep attack. A compute-only agreement does not close this route. [16][17]
+
+Frontier developers; cloud providers; security teams; national regulators; law enforcement
+
+Split training across sites Priority: 3/5
+
+2/5 — Low today
+
+Low-communication methods are improving, but frontier-scale cases remain extrapolative.
+
+2/5 — Low
+
+Many sites, operators, and coordination points increase exposure.
+
+2/5 — Low
+
+Single-site thresholds and local power signals may miss the whole operation.
+
+3/5 — Moderate
+
+Repeatable in principle, but inefficient and operationally fragile.
+
+Recent work makes it unsafe to assume that all frontier training must occur inside one tightly connected facility. However, the largest governance-relevant scenarios are modeled rather than directly demonstrated. Distribution reduces the value of site-level thresholds while increasing procurement, accounting, staffing, networking, and whistleblower surfaces. Treat this as an emerging and uncertain route, not a solved capability. [15]
+
+Treaty designers; chip and cloud regulators; intelligence agencies; inspectors; hardware owners
+
+Falsify declarations or provenance Priority: 3/5
+
+5/5 — Very high
+
+Documents and curated logs are easy to alter when the actor controls them.
+
+4/5 — High
+
+Requires control of records and cooperation or silence from relevant staff.
+
+3/5 — Moderate
+
+Independent records and cross-checks can expose contradictions.
+
+3/5 — Moderate
+
+One false record may cover one run; a captured system can conceal repeated activity.
+
+False reporting is usually a supporting tactic rather than a complete development strategy. It becomes less effective when records are generated automatically, preserved outside the actor’s control, and compared with procurement, power, cloud, chip, code, checkpoint, and human evidence. Verification must test both whether declared activity occurred as claimed and whether important activity was omitted. [14]
+
+Cloud and hardware providers; developers; auditors; inspectors; regulators
+
+Distill or extract capability Priority: 3/5
+
+3/5 — Moderate
+
+Depends on model access, query budget, data, student compute, and output richness.
+
+4/5 — High
+
+May require no insider and can use proxy accounts or intermediaries.
+
+3/5 — Moderate
+
+Providers can monitor access, but defenses are emerging and threat-model dependent.
+
+3/5 — Moderate
+
+A student model can spread, but may not reproduce all teacher capabilities.
+
+Distillation is not the same as weight theft. It trains a new model to imitate behaviors exposed through an interface; it does not recover the teacher’s exact parameters. Providers can use identity checks, rate limits, anomaly detection, output design, fingerprinting, or watermarking, but recent research finds that defense performance depends heavily on attacker assumptions and can trade off against service quality. [18]
+
+API providers; model developers; regulators; identity and payment providers
+
+Conceal the real actor Priority: 2/5
+
+5/5 — Very high
+
+Shell companies, nominees, and borrowed accounts are cheap to create.
+
+4/5 — High
+
+Cross-border finance and ownership chains require coordination but are well established.
+
+3/5 — Moderate
+
+Ownership, payment, address, communications, and logistics links can expose networks.
+
+4/5 — High
+
+A proxy network can support repeated purchases and replace exposed entities.
+
+Proxy organizations are a high-feasibility enabling tactic, not a substitute for chips, power, engineering, or a viable workload. The A.Q. Khan network demonstrates how distributed intermediaries and front companies can route around supplier controls and exploit jurisdictional seams. Beneficial-ownership and reseller-chain analysis should therefore examine linked entities, not each nominal customer in isolation. [3][4][5]
+
+Cloud and compute providers; exporters; financial institutions; corporate registries; regulators
+
+Divert controlled hardware Priority: 2/5
+
+3/5 — Moderate
+
+False documents and transshipment are feasible; covert frontier-scale accumulation is harder.
+
+3/5 — Moderate
+
+Requires brokers, logistics, financing, and cross-border concealment.
+
+3/5 — Moderate
+
+Customs, finance, supplier records, serials, and inspections create leads.
+
+4/5 — High
+
+Individual shipments are episodic, but acquired hardware and networks can persist.
+
+Recent U.S. cases allege front companies, false paperwork, dummy servers, and transshipment through third countries to divert controlled AI hardware. These cases show realistic tactics, not proven prevalence; charging documents are allegations unless and until established in court. Acquiring chips is only one step: the actor must still power, cool, network, maintain, and use them. [19]
+
+Vendors; distributors; customs; export-control agencies; freight and financial institutions
+
+</Callout>

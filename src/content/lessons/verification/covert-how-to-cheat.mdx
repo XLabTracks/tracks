@@ -1,0 +1,234 @@
+Verification design starts with an uncomfortable premise: a capable actor will not attack a mechanism on its own terms. It will look for the easiest route around the rule.
+
+Before asking how to detect cheating, define what counts as cheating. A compute cap, a declaration requirement, a ban on specified research, and a model-security obligation create different evasion opportunities. The same activity could be prohibited under one agreement and permitted under another.
+
+A determined actor might try to conceal:
+
+- who is really acting or benefiting;
+- where the relevant hardware is located;
+- what a declared cluster is actually doing;
+- where a model or capability came from;
+- whether a threshold or definition has been crossed; or
+- whether reliable evidence ever reaches the verifier.
+
+The taxonomy below is a map of the main routes. After the case, you will return to the taxonomy and compare which routes are technically workable, organizationally plausible, detectable, and durable.
+
+Historical parallel: supplier chokepoints and the A.Q. Khan network
+
+The Nuclear Suppliers Group (NSG) emerged after India’s 1974 nuclear test prompted supplier states to strengthen and coordinate nuclear export controls. It is best understood as a supplier-side chokepoint arrangement: states that control important upstream technology agree on common rules for transfer. [2]
+
+The counterexample is Abdul Qadeer Khan. From the 1980s until the network was exposed in 2003–2004, Khan and his associates transferred centrifuge designs, components, and know-how to Iran, Libya, and North Korea through a dispersed network of experts, suppliers, intermediaries, and front companies. For the Libya project, components were manufactured through nodes in Malaysia, Turkey, Europe, and South Africa, while Dubai-based intermediaries played important commercial and transshipment roles. Many inputs were dual-use, and controls, end-use checks, and information sharing differed across jurisdictions. [3][4]
+
+The paired lesson is simple: concentration upstream creates a chokepoint that can be governed, while proxies exist to break the link between a controlled item and its true end user. Khan is the historical archetype of the proxy-organization route below. It is also why beneficial-ownership checks, reseller-chain analysis, and cross-border information sharing matter. [5]
+
+Evasion Scenario Taxonomy — Before the Case
+
+At this stage, identify the move, the channel, and the actors. Do not decide which route is “best” yet. A realistic scheme may combine one primary route with several supporting tactics.
+
+<Callout variant="tip" title="Task">
+
+Evasion route
+
+What the actor tries to do
+
+Primary layer(s) targeted
+
+Actors who might participate
+
+1. Conceal the real actor
+
+Use front companies, nominee owners, brokers, affiliates, borrowed accounts, or layered ownership so the apparent customer is not the true controller or beneficiary.
+
+Identity checks; customer screening; procurement; payments; beneficial ownership
+
+State agencies; firms; brokers; corporate-service providers; cloud customers; procurement staff
+
+2. Divert controlled hardware
+
+Obtain chips or servers through false end-user information, transshipment, misclassification, relabeling, theft, straw buyers, or unauthorized rerouting.
+
+Semiconductor supply chain; customs; export controls; chain of custody
+
+Buyers; distributors; freight forwarders; customs brokers; straw purchasers; supplier insiders
+
+3. Hide an undeclared cluster or facility
+
+Operate equipment that was never declared, conceal additions inside a known facility, or rely on legacy or otherwise unregistered hardware.
+
+Facility declarations; chip registries; power and construction monitoring; inspections
+
+Data-center operators; facilities staff; suppliers; utilities; security personnel; public officials
+
+4. Split the operation across sites
+
+Divide one development project among multiple smaller clusters so that no individual site appears to cross a monitoring or registration threshold.
+
+Cluster definitions; networking; hardware registration; distributed operations
+
+Researchers; infrastructure engineers; network operators; hardware owners; site technicians
+
+5. Repurpose legitimate infrastructure
+
+Use a known, authorized cluster for an unauthorized purpose—for example, report training as inference or present prohibited capability work as safety, maintenance, civilian, or defensive research.
+
+Workload declarations; scheduler and cloud logs; research oversight; code and data review
+
+Frontier developers; cloud customers; military or intelligence units; infrastructure staff; project managers
+
+6. Falsify declarations or provenance
+
+Alter or invent records about chip locations, compute use, model origin, data, code, checkpoints, evaluations, or utilization.
+
+Self-reporting; logs; audits; model and data provenance
+
+Researchers; compliance staff; system administrators; executives; auditors; contractors
+
+7. Steal or copy model weights
+
+Obtain weights or related artifacts through insider access, cyber intrusion, supply-chain compromise, physical access, or abuse of legitimate permissions.
+
+Model security; identity and access management; cybersecurity; human layer
+
+Employees; contractors; cyber operators; intelligence services; partner organizations
+
+8. Distill or extract capability
+
+Query a model and train a new model to imitate parts of its behavior. This can transfer useful capability without reproducing the teacher model’s exact weights.
+
+APIs; account identity; query monitoring; downstream training
+
+API customers; proxy account networks; model developers; data and training teams
+
+9. Exploit a boundary in the rule
+
+Remain formally below a compute, hardware, or reporting threshold while using better algorithms, data, architecture, post-training, inference-time compute, or combinations of smaller activities to reach the policy-relevant result.
+
+Definitions; thresholds; exemptions; measurement rules
+
+Researchers; developers; lawyers; policymakers; standards bodies
+
+10. Attack the verification system
+
+Spoof or disable monitoring, compromise attestation, tamper with sensors or logs, corrupt or coerce personnel, suppress reports, or flood investigators with misleading signals.
+
+Hardware root of trust; monitoring devices; evidence systems; inspectors; reporting channels
+
+Security engineers; hardware specialists; insiders; inspectors; officials; cyber operators
+
+</Callout>
+
+The Swiss-cheese concept: layer imperfect checks
+
+It’s important to take advantage of the unique strengths of each of the layers, while taking into account how they are affected by intersection as well as their specific failure modes. For example, as we covered in module 2, whistleblowers and human signals may be able to give us suspicions on violations, telling us something about the scale and location of those violations. However, these signals are often complementary to the other layers, serving as confirmation or signals on what to investigate rather than independent sources of truth themselves.
+
+The same is true of every layer. Satellite or power evidence may indicate that a large facility exists without proving what code ran there. Hardware or cloud records may describe activity precisely but still depend on trustworthy devices, signing keys, administrators, and definitions. Inspections can access evidence that remote sensing cannot, but only where inspectors have authority, access, time, and a target worth inspecting.
+
+The Swiss-cheese model asks us to combine defenses whose holes do not line up. The goal is not simply to add more evidence. It is to combine layers that rely on different information, different actors, and different access assumptions, so that the failure of one does not automatically defeat the rest. [6]
+
+Historical precedent: the nuclear verification stack
+
+Layered verification is not an AI-governance invention. The nuclear and wider arms-control system developed as a stack of imperfect mechanisms, each covering a different problem. The analogies are not exact, but they provide a useful design template.
+
+<Callout variant="tip" title="Task">
+
+Nuclear / arms-control layer
+
+What it contributes
+
+Possible AI analogue
+
+NPT and other treaty rules
+
+Defines the commitment and legal baseline.
+
+The AI agreement: what is prohibited, declared, evaluated, or secured.
+
+IAEA safeguards and the Additional Protocol
+
+Declarations, material accounting, inspections, additional information, and complementary access.
+
+Compute and hardware accounting; workload declarations; audits; challenge or short-notice inspections.
+
+National technical means and intelligence
+
+Unilateral collection and remote detection outside routine declarations.
+
+Satellite imagery; OSINT; procurement and power analysis; cyber and human intelligence.
+
+Nuclear Suppliers Group
+
+Coordinates supplier-side controls on nuclear and nuclear-related dual-use transfers.
+
+Semiconductor, equipment, cloud, and model-transfer controls coordinated among key suppliers.
+
+Wassenaar Arrangement
+
+Coordinates controls on conventional arms and dual-use goods and technologies. It is not a nuclear-specific regime.
+
+Controls on some enabling dual-use hardware, software, and technical inputs.
+
+CTBT International Monitoring System
+
+A specialized global network for detecting possible nuclear explosions; the treaty is not yet in force, but the monitoring system operates provisionally.
+
+Specialized shared monitoring infrastructure where a violation produces a distinctive physical signal.
+
+Interdiction and enforcement
+
+Customs action, sanctions, prosecutions, and other responses after suspicious transfers or violations.
+
+Customs and export enforcement; access suspension; sanctions; penalties; remediation.
+
+</Callout>
+
+Historical cases show why the layers must differ. Iraq’s undeclared nuclear program exposed the limits of a safeguards system focused heavily on declared material and helped drive the strengthened safeguards system and the Additional Protocol. South Africa developed and dismantled nuclear weapons before joining the NPT, then voluntarily disclosed the program and allowed the IAEA to verify the declaration—showing that no inspection system can verify activities it lacks legal access to or information about. In the wider arms-control system, U.S. national technical means identified the Krasnoyarsk radar as inconsistent with the ABM Treaty; this was an intelligence-and-treaty-compliance case, not an IAEA safeguards case. [7][8][9][10][11][12]
+
+The design lesson is not that the nuclear system is foolproof. It is that different mechanisms answer different questions. A report can tell investigators where to look; imagery can identify a facility; accounting can reveal an unexplained gap; logs can reconstruct activity; an inspection can test the declaration; and enforcement can change incentives.
+
+Sources and accuracy notes
+
+Sources marked “preprint” have not necessarily completed peer review. Ratings synthesize these sources and the course outline; they are not direct findings of any single paper. U.S. criminal charging documents are allegations, and defendants are presumed innocent unless proven guilty.
+
+[1] Verification Track Outline-7, pp. 1–3.
+
+[2] Nuclear Suppliers Group, “Nuclear Suppliers Group Transparency Seminar,” 15 October 2009, especially the discussion of the 1974 Indian test and the formation and role of the NSG. Source
+
+[3] Michael Laufer, “A. Q. Khan Nuclear Chronology,” Carnegie Endowment for International Peace, 2005. Source
+
+[4] International Institute for Strategic Studies, Nuclear Black Markets: Pakistan, A.Q. Khan and the Rise of Proliferation Networks, 2007, especially the discussion of nodes in Malaysia, Turkey, Europe, South Africa, and Dubai. Source
+
+[5] Financial Action Task Force, Guidance on Beneficial Ownership of Legal Persons, 2023. Source
+
+[6] James Reason, “Human error: models and management,” BMJ 320 (2000): 768–770. Source
+
+[7] International Atomic Energy Agency, “Additional Protocol for Verification of Nuclear Safeguards.” Source
+
+[8] International Atomic Energy Agency, “IAEA Safeguards: Staying Ahead of the Game,” discussing lessons from Iraq and strengthened safeguards. Source
+
+[9] International Atomic Energy Agency, “Nuclear Verification in South Africa,” IAEA Bulletin 37(1), 1995. Source
+
+[10] Comprehensive Nuclear-Test-Ban Treaty Organization, “The International Monitoring System.” Source
+
+[11] Wassenaar Arrangement, founding documents and official purpose. Source
+
+[12] U.S. Department of State, ABM Treaty materials and historical documents on the Krasnoyarsk radar. Source
+
+[13] Akash R. Wasil et al., “Verification Methods for International AI Agreements,” arXiv:2408.16074, 2024 (preprint). Source
+
+[14] Mauricio Baker et al., “Verifying International Agreements on AI: Six Layers of Verification for Rules on Large-Scale AI Development and Deployment,” arXiv:2507.15916, 2025 (preprint). Source
+
+[15] Robi Rahman, “Does Distributed Training Undermine Compute Governance?” arXiv:2605.29359, 2026 (preprint). Source
+
+[16] Shahar Avin Nevo et al., Securing AI Model Weights: Preventing Theft and Misuse of Frontier Models, RAND, 2024. Source
+
+[17] Davis Brown et al., “Aggressive Compression Enables LLM Weight Theft,” arXiv:2601.01296, 2026 (preprint). Source
+
+[18] Bo Jiang, “Evaluating Defenses Against LLM Knowledge Distillation,” arXiv:2603.07835, 2026; and Liam Libon et al., “What Does It Mean to Break a Distillation Defense?” arXiv:2606.25059, 2026 (preprints). Source
+
+[19] U.S. Department of Justice, 2025–2026 charging announcements concerning alleged diversion of controlled AI chips through front companies, false documentation, and transshipment. Source
+
+[20] Anson Ho et al., “Algorithmic Progress in Language Models,” arXiv:2403.05812, 2024. Source
+
+[21] Robi Rahman and Sabiha Tajdari, “Detecting Hidden ML Training With Zero-Overhead Telemetry,” arXiv:2606.19262, 2026 (preprint). Source
+
+Internal course context: the scenario buckets and provisional module-priority scores originate in the attached Verification Track outline, especially the tables on pages 2–3.

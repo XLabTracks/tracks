@@ -21,15 +21,13 @@ export interface VerificationExerciseDef {
   bridged: boolean;
 }
 export const verificationExercises: VerificationExerciseDef[] = [
+  { id: "collection-map", title: "The Collection Map", bridged: false },
   { id: "verification-landscape", title: "The Verification Landscape", bridged: false },
   { id: "policy-scoping", title: "Scoping an Anti-ASI Policy", bridged: true },
   { id: "anatomy-drill", title: "The Anatomy Drill", bridged: true },
   { id: "protocol-actors", title: "Who's in the Treaty?", bridged: true },
-  { id: "game-theory-primer", title: "Game Theory for Verification", bridged: true },
-  { id: "ir-primer", title: "IR for People Who Build Things", bridged: true },
   { id: "interactive-map", title: "The Compute Supply Chain", bridged: false },
   { id: "report-constructor", title: "One Inspection, Three Readers", bridged: true },
-  { id: "inspection-game", title: "The Inspection Game", bridged: true },
   { id: "verification-timeline-game", title: "The Verification Game", bridged: true },
 ];
 export function getVerificationExercise(id: string): VerificationExerciseDef | undefined {

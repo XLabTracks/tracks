@@ -147,22 +147,28 @@ window.VT = (function () {
   const esc = s => String(s).replace(/[&<>"']/g, c =>
     ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 
-  /* Minimal inline markup for authored copy: **bold**, `code`, [text](href).
-     Everything else is escaped — content data is trusted, but the formatter
-     stays narrow so a stray angle bracket in a quote can't inject markup. */
+  /* Minimal inline markup for authored copy: **bold**, *italic*, `code`,
+     [text](href). Everything else is escaped — content data is trusted, but
+     the formatter stays narrow so a stray angle bracket in a quote can't
+     inject markup.
+
+     Trap: bold has to run before italic, or the first two asterisks of a
+     **bold** run get eaten as an empty emphasis and the rest of the line
+     goes to pieces. */
   function fmt(s) {
     return esc(s)
       .replace(/\[([^\]]+)\]\(([^)\s]+)\)/g, '<a href="$2">$1</a>')
       .replace(/\*\*([^*]+)\*\*/g, '<b>$1</b>')
+      .replace(/\*([^*]+)\*/g, '<em>$1</em>')
       .replace(/`([^`]+)`/g, '<code>$1</code>');
   }
 
   /* ---------- capstone bank vocabulary ---------- */
 
   /* Status and difficulty are a glyph plus the word, never a bare tint, so
-     the reading survives without colour. capstone-bank.html and the module
-     player both draw the vocabulary from here, so a brief looks the same
-     whichever surface a learner meets it on. */
+     the reading survives without colour. It lives here rather than in
+     capstone-bank.js because any second surface that prints a brief has to
+     print it the same way. */
   const bank = {
     statusGlyph: { ready: '●', draft: '◐', concept: '○' },
     statusWord: { ready: 'ready to run', draft: 'draft', concept: 'concept' },

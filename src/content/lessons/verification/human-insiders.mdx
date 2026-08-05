@@ -1,0 +1,115 @@
+A person is useful for verification because of what they could directly perceive, retrieve, or infer - not because they are called an employee, contractor, executive, or expert. A cloud technician and a research engineer sit at very different perspectives on an undeclared training run, and they can support very different claims about it. Before weighing whether to believe anyone, map who has access to what.
+
+## The Roster: Who Can See What?
+
+<Callout variant="tip" title="Task">
+
+Chain segment
+
+Who, specifically
+
+Can observe
+
+Blind to
+
+Chip design and fabrication
+
+Process or lithography engineer at a leading-edge foundry (e.g. TSMC); product engineer at a chip designer (e.g. Nvidia)
+
+Which advanced parts are in production, at what volume, and which customers placed large orders
+
+How the chips are ultimately used; any training workload
+
+Hardware assembly and data-center build
+
+Construction, electrical, and cooling contractors; rack and interconnect technicians
+
+The physical envelope: facility scale, power provisioning, cooling capacity, count and type of accelerators installed
+
+What runs inside; the purpose of any job
+
+Compute provider and cloud operations
+
+Data-center operations technician or site reliability engineer; account manager or KYC compliance officer
+
+Cluster utilization, job duration, power draw, which accounts run large jobs; customer identity, billing, reseller relationships
+
+Model identity and training purpose; the content of the workload
+
+The AI developer: technical staff
+
+Research engineer or ML researcher on the run; infrastructure or cluster admin
+
+The run itself and its objective, dataset, and results; cluster size, job scheduling, checkpoint and weight-access logs, total compute
+
+Little, within their own project; this is the richest vantage on intent
+
+The AI developer: oversight staff
+
+Safety or evaluations staff; security team; legal and compliance
+
+Capability and red-team results and what was downplayed; incident and exfiltration records; what was declared to regulators and the NDA and equity terms that bind colleagues
+
+Day-to-day technical detail outside their remit
+
+The AI developer: leadership
+
+Executives and senior leadership
+
+Intent: the decision to conceal or proceed, and what the board and leadership were warned about
+
+Nothing relevant; the constraint here is willingness to disclose, not access
+
+Suppliers and downstream
+
+Chip reseller or broker; utility or energy provider; enterprise customer or deployment partner
+
+Who acquired compute and in what volume through which intermediaries; large sustained power contracts and load; model capabilities in real use
+
+Use and purpose of the compute; training provenance of the deployed model
+
+</Callout>
+
+An engineer might establish that a run occurred; a procurement employee might establish that specific hardware was acquired; a manager might establish that the activity was intentional; and a legal officer might establish that decision-makers understood the agreement. But when each actor makes a claim, how do you gauge whether to believe them?
+
+## Assessing Credibility
+
+Credibility is not a personality judgment. It is a structured assessment of the source, the statement, and the surrounding evidence. Below are a few key areas to consider when assessing a human report:
+
+- Incentives and possible bias: What could the source gain or lose? Motive affects weight, but a bad motive does not make a true claim false.
+
+Reporting can threaten employment, immigration status, professional networks, equity compensation, security clearance, or personal relationships. A person may also fear harming a project they believe is socially valuable. Other incentives point toward reporting: moral concern, professional duties, legal obligations, organizational loyalty understood as correcting problems, financial rewards, or confidence that the report will produce a fair investigation. Whistleblower programs work best when they combine practical access with protection, anonymity or confidentiality options, advice, adequate staffing, and - in some settings - rewards. [5][16]
+
+- Corroboration and Consistency: Do independent records, people, technical signals, or physical observations support the material parts of the account? Does the account remain coherent across retellings, while allowing ordinary uncertainty at the edges?
+
+A human source rarely proves a violation on their own. Investigators should ask whether the account is supported by evidence created independently of the source—for example, access logs, procurement records, internal messages, cloud or facility telemetry, physical observations, or testimony from people with different roles and incentives. The strongest corroboration confirms the material facts: what happened, where, when, who was involved, and whether the activity could have occurred as described. Investigators should also test whether the account remains coherent across interviews and against known timelines. Minor variation is normal, especially about peripheral details or events recalled under stress; perfectly identical retellings can even suggest rehearsal. What matters is whether the central claims remain stable and whether apparent inconsistencies can be explained, investigated, or resolved through independent evidence.
+
+- Access: Was the source positioned to observe the claimed event, record, conversation, or system?
+
+Frontier AI development is often compartmentalized. A person may know the model, the hardware, the evaluation, or the deployment - but not all four. Contractors may be deliberately given narrow access. Executives may know formal decisions but not informal implementation. This makes source mapping and cross-interviews more important than searching for a single omniscient witness. Personnel interviews are therefore useful but imperfect. They can reveal inconsistencies and hidden context, yet their effectiveness depends on who is interviewed, whether supervisors can script or monitor answers, and whether personnel can speak safely. The presence of an interview right is not enough; the verifier needs a method for selecting interviewees and conducting at least some interviews without management present. [4]
+
+But assessing credibility goes beyond the individual report. There exist many possibilities for coordinated deception:
+
+- Fabricated allegation: a source invents a violation for retaliation, money, or strategic advantage.
+- Selective truth: accurate facts are presented without context that changes their compliance meaning.
+- Management staging: the organization selects cooperative staff, curated records, and a clean facility path.
+- Coordinated cover story: several sources repeat a rehearsed account.
+- Suppression: an organization blocks communications, removes access, or uses legal and employment pressure to prevent reporting.
+
+#### CHECK: A contractor seeking a financial reward reports that a company expanded a computing cluster and provides a project code that also appears in an independently obtained power-allocation log. The contractor cannot identify what workload ran on the cluster. Which assessment is most accurate?
+
+A. The report proves that an unauthorized training run occurred.B. The financial reward makes the contractor presumptively unreliable.C. The report establishes evidence of infrastructure activity, and the matching project code strengthens its credibility through corroboration, but it does not prove what workload ran.D. The report should be disregarded because the contractor lacked access to the workload.
+
+Answer: C. The contractor’s incentive should be considered, but credibility depends more on access, specificity, and independent corroboration. The evidence supports the cluster expansion, not a conclusion about the workload.
+
+<Callout variant="tip" title="Task">
+
+Historical contrast: when human reporting opens—and distorts—verification
+
+In 2002, an Iranian opposition group publicly identified previously undeclared nuclear facilities at Natanz and Arak. The disclosure did not itself prove what was occurring there, and the group had clear political interests. Its value was that it gave the IAEA a concrete location and claim to investigate. Inspection and other evidence—not the source’s reputation alone—turned the allegation into a substantiated verification concern.
+
+Curveball shows the opposite failure. Reporting from a single Iraqi defector became the foundation for claims that Iraq possessed mobile biological-weapons laboratories, even though US officials lacked direct access to him and serious questions about his reliability were not adequately resolved or communicated. Analysts treated a poorly validated source as confirmation partly because his account matched what they already expected. Postwar investigation found that the reporting was unreliable.
+
+The lesson: human reporting is often most valuable for identifying where to look and what to test. It earns evidentiary weight only when its material claims survive corroboration through records, technical signals, inspections, or sources the original reporter does not control.
+
+</Callout>

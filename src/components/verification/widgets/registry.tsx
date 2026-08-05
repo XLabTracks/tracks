@@ -4,12 +4,10 @@ import { PolicyScoping } from "./policy-scoping";
 import { AnatomyDrill } from "./anatomy-drill";
 import { ProtocolActors } from "./protocol-actors";
 import { ReportConstructor } from "./report-constructor";
-import { IrPrimer } from "./ir-primer";
-import { InspectionGame } from "./inspection-game";
-import { GameTheoryPrimer } from "./game-theory-primer";
 import { VerificationTimelineGame } from "./verification-timeline-game";
 import { InteractiveMap } from "./interactive-map";
 import { VerificationLandscape } from "./verification-landscape";
+import { CollectionMap } from "./collection-map";
 
 /**
  * Native React widgets ported from the standalone HTML pages, keyed by the same
@@ -24,12 +22,10 @@ export const verificationWidgets: Record<
   "anatomy-drill": AnatomyDrill,
   "protocol-actors": ProtocolActors,
   "report-constructor": ReportConstructor,
-  "ir-primer": IrPrimer,
-  "inspection-game": InspectionGame,
-  "game-theory-primer": GameTheoryPrimer,
   "verification-timeline-game": VerificationTimelineGame,
   "interactive-map": InteractiveMap,
   "verification-landscape": VerificationLandscape,
+  "collection-map": CollectionMap,
 };
 
 export function getVerificationWidget(

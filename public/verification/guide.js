@@ -18,7 +18,8 @@
 
   function unitHref(id) {
     for (const m of C.modules) {
-      if (m.units.some(u => u.id === id)) return 'module.html?m=' + m.n + '&u=' + encodeURIComponent(id);
+      const hit = m.units.find(u => u.id === id);
+      if (hit) return hit.href;
     }
     return 'track.html';
   }

@@ -384,10 +384,9 @@ function SidebarItemRow({
   );
 }
 
-/** Resize bounds and defaults (px). The auto widths match w-72 / w-96. */
+/** Resize bounds and default (px). The auto width matches w-96. */
 const SIDEBAR_MIN_WIDTH = 220;
 const SIDEBAR_MAX_WIDTH = 520;
-const SIDEBAR_AUTO_WIDTH = 288;
 const SIDEBAR_AUTO_WIDTH_EXPANDED = 384;
 const SIDEBAR_KEYBOARD_STEP = 16;
 const SIDEBAR_WIDTH_KEY = "tracks:sidebar-width";
@@ -442,10 +441,6 @@ function usePersistedDimension(key: string, clamp: (value: number) => number) {
 
 export function TrackSidebar(props: TrackSidebarProps) {
   const [mobileOpen, setMobileOpen] = useState(false);
-  const pathname = usePathname();
-  // Section titles need more room than item titles — widen the bar while
-  // a section panel is docked (automatic mode only; a user-chosen width wins).
-  const expanded = activeItemNavOf(props, pathname) !== null;
   const {
     value: width,
     setValue: setWidth,
@@ -460,7 +455,12 @@ export function TrackSidebar(props: TrackSidebarProps) {
   } | null>(null);
   const [dragging, setDragging] = useState(false);
 
-  const autoWidth = expanded ? SIDEBAR_AUTO_WIDTH_EXPANDED : SIDEBAR_AUTO_WIDTH;
+  /* One width, whether or not the current item has a section nav.
+     Sizing to content made the rail snap 288px <-> 384px on every navigation
+     between a lesson with headings and one without, which reflowed the
+     reading column with it. The section nav is what needs the room, so the
+     wider figure is the one that stays; a user drag still overrides it. */
+  const autoWidth = SIDEBAR_AUTO_WIDTH_EXPANDED;
   // For keyboard steps, the settled automatic width — reading offsetWidth
   // could capture a mid-transition value. Drags read offsetWidth at grab
   // time instead so the bar never jumps under the pointer.
@@ -475,7 +475,7 @@ export function TrackSidebar(props: TrackSidebarProps) {
           "border-border bg-card/40 sticky top-14 hidden h-[calc(100vh-3.5rem)] shrink-0 overflow-hidden border-r lg:block",
           // Animate only in automatic mode — a transition would lag the drag.
           width === null && "transition-[width] duration-300",
-          width === null && (expanded ? "w-96" : "w-72"),
+          width === null && "w-96",
         )}
       >
         <SidebarNav {...props} />
@@ -488,7 +488,7 @@ export function TrackSidebar(props: TrackSidebarProps) {
           aria-label="Resize sidebar"
           aria-valuemin={SIDEBAR_MIN_WIDTH}
           aria-valuemax={SIDEBAR_MAX_WIDTH}
-          aria-valuenow={Math.round(width ?? (expanded ? SIDEBAR_AUTO_WIDTH_EXPANDED : SIDEBAR_AUTO_WIDTH))}
+          aria-valuenow={Math.round(width ?? SIDEBAR_AUTO_WIDTH_EXPANDED)}
           tabIndex={0}
           title="Drag to resize · double-click to reset"
           onPointerDown={(e) => {

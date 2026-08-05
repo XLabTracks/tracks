@@ -41,9 +41,33 @@ export function Callout({ variant = "note", title, children }: CalloutProps) {
       )}
     >
       <Icon className={cn("mt-0.5 size-5 shrink-0", iconClassName)} aria-hidden />
-      <div className="space-y-1">
+      <div className="min-w-0 space-y-1">
         {title ? <p className="font-semibold">{title}</p> : null}
-        <div className="text-foreground/80 [&>p]:m-0">{children}</div>
+        {/* A callout carries markdown, so its body needs the rhythm Tailwind's
+            preflight takes away: list markers, indent, and a gap between
+            blocks. Without this a callout of more than one sentence renders as
+            an unbroken wall — every paragraph flush against the next, every
+            bullet gone.
+
+            Trap: this cannot be done by nesting `prose` here. Typography's
+            rules exclude `[class~="not-prose"] *`, and the shell above is
+            not-prose, so an inner `prose` matches nothing at all. Utilities
+            are the way in — and `not-prose` has to stay, or the callout takes
+            the lesson column's type scale. Spacing is between siblings only,
+            so a one-line callout stays tight under its title. */}
+        <div
+          className={cn(
+            "text-foreground/80",
+            "[&>*+*]:mt-3",
+            "[&_ul]:list-disc [&_ol]:list-decimal [&_ul]:pl-5 [&_ol]:pl-5",
+            "[&_li]:marker:text-muted-foreground [&_li+li]:mt-1.5",
+            "[&_strong]:text-foreground [&_strong]:font-semibold",
+            "[&_a]:underline [&_a]:underline-offset-4",
+            "[&_code]:bg-muted [&_code]:rounded [&_code]:px-1 [&_code]:py-0.5 [&_code]:text-[0.9em]",
+          )}
+        >
+          {children}
+        </div>
       </div>
     </div>
   );

@@ -1,0 +1,75 @@
+<Callout variant="note" title="Section status">
+The outline gives this section as a design specification — objectives, the
+activity, its claim list and its reveal — rather than as finished prose. It
+is reproduced here as written; the connecting text is still to be authored.
+</Callout>
+
+### 2.1.0 The chip says “compliant”
+
+Runtime: 15 minutes Hard idea: A signed hardware statement and treaty compliance are different propositions.
+
+#### Opening puzzle
+
+Existing U.S.-China emergency-pause design case.
+
+A three-month agreement prohibits unlicensed training above threshold T. Inference and approved safety evaluations remain permitted. One party submits valid attestation tokens from 20,000 accelerators and states that the cluster complied.
+
+Before giving any definitions, learners decide which conclusions the tokens support:
+
+- These are genuine covered devices.
+- Their certificates have not been revoked.
+- They are running approved firmware or configurations.
+- The devices were connected in the declared cluster topology.
+- They performed inference rather than training.
+- The total training compute remained below T.
+- No unregistered accelerators performed another run.
+- The treaty authority can suspend their operation.
+
+The learner must select each claim as:
+
+- supported;
+- possibly supported, depending on additional design choices;
+- unsupported by the artifact.
+
+#### Reveal
+
+Use a simplified, annotated version of an actual NVIDIA attestation token and architecture diagram.
+
+Current NVIDIA documentation describes an attestation chain in which evidence is collected from a GPU, compared with signed reference measurements, checked against certificate-revocation information, and returned as a signed result. Current Blackwell multi-GPU attestation still attests each GPU independently and explicitly does not attest cluster topology or switches. That gives the exercise a real, current boundary: per-device attestation does not automatically establish what the cluster did. (NVIDIA Docs)
+
+#### Advance organizer
+
+After the reveal, introduce the section’s five-function map:
+
+- Identify and account for hardware Which device is this? Is it registered? Where is it supposed to be?
+- Attest state and configuration What hardware, firmware, software, or security state is present?
+- Measure and classify use How much compute occurred? Was it training, inference, evaluation, or another workload?
+- Authorize or restrict use Was the activity permitted? Who can issue, suspend, revoke, or override authorization?
+- Reconstruct a declared run Did the declared training process produce the claimed checkpoints, model, or outputs?
+
+Add a visible warning:
+
+These are functions, not a progression from weak to strong. A mechanism may perform one function well and contribute almost nothing to another.
+
+#### Connection to prior modules
+
+The debrief should explicitly retrieve earlier tools:
+
+- Module 0: The treaty goal is a safe pause; the rule concerns above-threshold training; the attestation token tests a narrower claim.
+- Module 1: The chip vendor, operator, cloud provider, regulator, and treaty verifier hold different parts of the evidence and authority.
+- Module 2.0: The token may preserve workload confidentiality, but confidentiality does not establish completeness.
+
+#### Notebook output
+
+Learners complete:
+
+Initial claim map: The hardware artifact directly supports ___; it could support ___ if ___ existed; it does not support ___.
+
+This answer is preserved and revisited in 2.1.4.
+
+#### Diagnostic hints
+
+- “Point to the field in the evidence that establishes this conclusion.”
+- “Could the same token exist if a prohibited workload ran later?”
+- “Does the artifact say how the devices were connected?”
+- “What evidence covers chips that never submitted a token?”

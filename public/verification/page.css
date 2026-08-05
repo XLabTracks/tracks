@@ -53,14 +53,45 @@
 .facts dd { font-family: var(--display); font-size: 24px; font-weight: 500; margin-top: 4px; }
 @media (min-width: 640px) { .facts { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
 
-/* Roster: names only until roles are supplied, so the row is a name and
-   nothing else rather than a card with empty slots in it. */
-.roster { list-style: none; margin: 0; padding: 0; max-width: 66ch; }
-.roster li {
-  padding: 14px 0;
-  border-bottom: var(--hairline) solid var(--border);
-  font-family: var(--display);
-  font-size: 19px;
-  font-weight: 500;
+
+/* Team cards. Uniform hairline on all four sides — the initials monogram is
+   the only thing carrying colour, and it sits inside the card.
+
+   Trap: the monogram is a placeholder for a portrait, so it must reserve the
+   portrait's box. Sizing it to the initials instead would make every card
+   jump the day real photographs land. */
+.roster {
+  list-style: none;
+  display: grid;
+  gap: 16px;
+  margin: 4px 0 0;
+  padding: 0;
 }
-.roster li:first-child { border-top: var(--hairline) solid var(--border); }
+@media (min-width: 700px) { .roster { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+
+.person {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 20px;
+  border: var(--hairline) solid var(--border);
+  border-radius: var(--radius);
+  background: var(--card);
+}
+.mug {
+  display: grid;
+  place-items: center;
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: var(--muted);
+  color: var(--brand-ink);
+  font-family: var(--display);
+  font-size: 22px;
+  font-weight: 500;
+  letter-spacing: .02em;
+  user-select: none;
+  -webkit-user-select: none;
+}
+.who .nm { font-family: var(--display); font-size: 17px; font-weight: 500; }
+.who .rl { margin-top: 4px; font-size: 13.5px; color: var(--muted-foreground); }

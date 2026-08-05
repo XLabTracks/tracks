@@ -134,6 +134,7 @@ export const verificationModules: Module[] = [
     itemIds: [
       "v-capstone-motivation",
       "v-capstone-feasibility",
+      "v-capstone-project",
       "v-capstone-next-steps",
     ],
   },
@@ -286,6 +287,13 @@ export const verificationLessons: Lesson[] = [
     moduleId: "v-capstone",
     title: "4.1 Feasibility, prioritization, and sequencing",
     contentRef: "verification/capstone-feasibility",
+  },
+  {
+    id: "v-capstone-project",
+    slug: "capstone-project",
+    moduleId: "v-capstone",
+    title: "4.2 Capstone project",
+    contentRef: "verification/capstone-project",
   },
   {
     id: "v-capstone-next-steps",
@@ -521,7 +529,8 @@ export const verificationUnitOfLesson: Record<string, string> = {
   "v-covert-red-blue": "3.2",
   "v-capstone-motivation": "4.0",
   "v-capstone-feasibility": "4.1",
-  "v-capstone-next-steps": "4.2",
+  "v-capstone-project": "4.2",
+  "v-capstone-next-steps": "4.3",
 };
 
 /** Per-unit presentation the graph does not carry: the outline's own title,
@@ -549,6 +558,7 @@ export const verificationUnitMeta: Record<
   "4.0": { title: "Motivation", kind: "explainer", mins: "15–20 min" },
   "4.1": { title: "Feasibility, prioritization, sequencing", kind: "explainer", mins: "20–30 min" },
   "4.2": { title: "Capstone", kind: "capstone", mins: "4–8 hrs" },
+  "4.3": { title: "Where to go from here", kind: "explainer", mins: "15–20 min" },
 };
 
 /** The static site's module chrome: its own short titles, glyphs, calendar

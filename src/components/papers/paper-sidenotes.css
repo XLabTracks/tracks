@@ -78,7 +78,7 @@
      touch has no hover to pop with, so notes stay full-strength there. */
   @media (hover: hover) {
     .paper-sidenote {
-      opacity: 0.55;
+      opacity: 0.7;
     }
     .paper-sidenote:hover,
     .paper-sidenote.paper-sidenote-active {
@@ -100,8 +100,37 @@
   .paper-sidenote-num::after {
     content: ".";
   }
-  .paper-sidenote-body {
+  /* Column wrapper for body + Show-more toggle; carries the flex-item
+     min-width so long tokens shrink instead of overflowing the rail. */
+  .paper-sidenote-main {
+    flex: 1;
     min-width: 0;
+  }
+  /* Long-note preview (trigger lives in paper-sidenotes.tsx): the body
+     clamps to ~6 lines of the 12px/1.5 text, the last two fading out at
+     the cut. */
+  .paper-sidenote-clamped .paper-sidenote-body {
+    max-height: 9em;
+    overflow: hidden;
+    mask-image: linear-gradient(to bottom, black calc(100% - 3em), transparent);
+  }
+  .paper-sidenote-more {
+    display: block;
+    margin-top: 0.25em;
+    padding: 0;
+    border: 0;
+    background: none;
+    font-family: inherit;
+    font-size: 0.6875rem;
+    line-height: 1.5;
+    font-weight: 500;
+    color: inherit;
+    text-decoration: underline dotted;
+    text-underline-offset: 2px;
+    cursor: pointer;
+  }
+  .paper-sidenote-more:hover {
+    text-decoration-style: solid;
   }
   .paper-sidenote-body p {
     margin: 0 0 0.5em;

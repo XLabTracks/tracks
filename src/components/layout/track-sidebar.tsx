@@ -32,16 +32,15 @@ export interface TrackSidebarProps {
   lockedModuleSlugs?: string[];
   /**
    * Per-item section navigation (keyed by item id — papers and sectioned
-   * lessons), docked below the module nav on that item's page.
+   * lessons), nested under that item's row while it is the one being read.
    */
   itemNavs?: Record<string, PaperNavItem[]>;
 }
 
 /**
- * The item the current page shows, with its section nav — drives the docked
- * "In this paper" / "In this lesson" panel. Resolved from props (the outline
- * carries the full item objects), never from content accessors: this is a
- * client component.
+ * The item the current page shows, with its section nav — the headings that
+ * nest under its row. Resolved from props (the outline carries the full item
+ * objects), never from content accessors: this is a client component.
  */
 function activeItemNavOf(
   { outline, itemNavs = {} }: TrackSidebarProps,
@@ -95,28 +94,12 @@ function SidebarNav({
     }
   }
 
-  // Nav ↔ section-panel split. null = automatic (panel content-sized up to
-  // 55%); a user-chosen share pins the panel's height. The boundary handle
-  // tracks the pointer absolutely (it sits ON the boundary), so drags don't
-  // need delta math.
-  const rootRef = useRef<HTMLDivElement>(null);
-  const {
-    value: split,
-    setValue: setSplit,
-    persist: persistSplit,
-  } = usePersistedDimension(SIDEBAR_SPLIT_KEY, clampSplit);
-  const splitDrag = useRef<{ pointerId: number; moved: boolean } | null>(null);
-  const [splitDragging, setSplitDragging] = useState(false);
-  const splitFromPointer = (clientY: number) => {
-    const rect = rootRef.current?.getBoundingClientRect();
-    if (!rect || rect.height === 0) return null;
-    return clampSplit(((rect.bottom - clientY) / rect.height) * 100);
-  };
-
   return (
-    <div ref={rootRef} className="flex h-full flex-col">
-      {/* Module navigation — scrolls on its own so the paper panel below
-          keeps its share of the viewport regardless of how long this gets. */}
+    <div className="flex h-full flex-col">
+      {/* One scroller for the whole outline. The current item's own headings
+          nest under its row rather than docking in a second pane below: the
+          track's contents and the page's contents are one list you scroll
+          through, so reaching the headings means scrolling past the outline. */}
       <nav
         aria-label={`${outline.track.title} contents`}
         // pr-1.5 keeps classic (non-overlay) scrollbars clear of the resize
@@ -188,6 +171,11 @@ function SidebarNav({
                         pathname={pathname}
                         completed={completed}
                         onNavigate={onNavigate}
+                        sectionNav={
+                          activeItemNav?.id === itemKey(item)
+                            ? activeItemNav
+                            : undefined
+                        }
                       />
                     ))}
                     {module.assessmentId && (
@@ -210,90 +198,6 @@ function SidebarNav({
         </Accordion>
       </nav>
 
-      {/* Docked section navigation for the paper or sectioned lesson being
-          read: always visible on its page, with its own scroll + scroll-spy
-          follow. A horizontal splitter above it adjusts its share of the
-          sidebar (drag, arrow keys, double-click to reset). */}
-      {activeItemNav && (
-        <>
-          <div
-            role="separator"
-            aria-orientation="horizontal"
-            aria-label="Resize section panel"
-            aria-valuemin={SPLIT_MIN}
-            aria-valuemax={SPLIT_MAX}
-            aria-valuenow={Math.round(split ?? SPLIT_AUTO)}
-            tabIndex={0}
-            title="Drag to resize · double-click to reset"
-            onPointerDown={(e) => {
-              if (e.button !== 0 || splitDrag.current) return;
-              e.preventDefault();
-              splitDrag.current = { pointerId: e.pointerId, moved: false };
-              e.currentTarget.setPointerCapture(e.pointerId);
-              setSplitDragging(true);
-            }}
-            onPointerMove={(e) => {
-              const d = splitDrag.current;
-              if (!d || e.pointerId !== d.pointerId) return;
-              const next = splitFromPointer(e.clientY);
-              if (next === null) return;
-              d.moved = true;
-              setSplit(next);
-            }}
-            onPointerUp={(e) => {
-              const d = splitDrag.current;
-              if (d?.pointerId !== e.pointerId) return;
-              splitDrag.current = null;
-              setSplitDragging(false);
-              // A click with no movement must not convert automatic → fixed.
-              if (d.moved) {
-                const next = splitFromPointer(e.clientY);
-                if (next !== null) persistSplit(next);
-              }
-            }}
-            onPointerCancel={(e) => {
-              if (splitDrag.current?.pointerId !== e.pointerId) return;
-              splitDrag.current = null;
-              setSplitDragging(false);
-            }}
-            onDoubleClick={() => persistSplit(null)}
-            onKeyDown={(e) => {
-              const step = (delta: number) =>
-                persistSplit(clampSplit((split ?? SPLIT_AUTO) + delta));
-              if (e.key === "ArrowUp") step(SPLIT_KEYBOARD_STEP);
-              else if (e.key === "ArrowDown") step(-SPLIT_KEYBOARD_STEP);
-              else if (e.key === "Home") persistSplit(SPLIT_MIN);
-              else if (e.key === "End") persistSplit(SPLIT_MAX);
-              else return;
-              e.preventDefault();
-            }}
-            className={cn(
-              "relative z-10 h-1.5 shrink-0 cursor-row-resize touch-none outline-none",
-              "hover:bg-border focus-visible:bg-ring/50 transition-colors",
-              splitDragging && "bg-ring/50",
-            )}
-          />
-          <div
-            className="border-border bg-card/60 flex shrink-0 flex-col border-t"
-            style={
-              split !== null ? { height: `${split}%` } : { maxHeight: "55%" }
-            }
-          >
-            <p className="text-muted-foreground shrink-0 truncate px-4 pt-3 pb-1.5 text-xs font-medium tracking-wide uppercase">
-              {activeItemNav.kind === "paper" ? "In this paper" : "In this lesson"}
-            </p>
-            <PaperSectionNav
-              items={activeItemNav.nav}
-              pathname={pathname}
-              completedContentIds={completed}
-              // Papers only: keys the reading-gate open state that unlocks
-              // rows whose targets sit behind still-closed gates.
-              paperId={activeItemNav.kind === "paper" ? activeItemNav.id : undefined}
-              onNavigate={onNavigate}
-            />
-          </div>
-        </>
-      )}
     </div>
   );
 }
@@ -332,12 +236,15 @@ function SidebarItemRow({
   pathname,
   completed,
   onNavigate,
+  sectionNav,
 }: {
   item: ModuleItem;
   href: string;
   pathname: string;
   completed: Set<string>;
   onNavigate?: () => void;
+  /** Set only on the item being read — its headings nest under this row. */
+  sectionNav?: { kind: ModuleItem["kind"]; id: string; nav: PaperNavItem[] };
 }) {
   const done = itemDone(item, completed);
   const active = pathname === href;
@@ -380,6 +287,22 @@ function SidebarItemRow({
           />
         )}
       </Link>
+      {/* No label above these: the row they hang under names the item, so
+          "In this lesson" would be the title said twice. The indent rail is
+          what marks them as its parts. */}
+      {sectionNav && (
+        <div className="border-border/70 ml-4 border-l pl-1">
+          <PaperSectionNav
+            items={sectionNav.nav}
+            pathname={pathname}
+            completedContentIds={completed}
+            // Papers only: keys the reading-gate open state that unlocks rows
+            // whose targets sit behind still-closed gates.
+            paperId={sectionNav.kind === "paper" ? sectionNav.id : undefined}
+            onNavigate={onNavigate}
+          />
+        </div>
+      )}
     </li>
   );
 }
@@ -394,15 +317,6 @@ const SIDEBAR_WIDTH_KEY = "tracks:sidebar-width";
 const clampSidebarWidth = (width: number) =>
   Math.min(SIDEBAR_MAX_WIDTH, Math.max(SIDEBAR_MIN_WIDTH, width));
 
-/** Nav ↔ docked-section-panel split (% of sidebar height for the panel). */
-const SPLIT_MIN = 15;
-const SPLIT_MAX = 85;
-const SPLIT_AUTO = 55; // matches the automatic max-h-[55%]
-const SPLIT_KEYBOARD_STEP = 5;
-const SIDEBAR_SPLIT_KEY = "tracks:sidebar-split";
-
-const clampSplit = (split: number) =>
-  Math.min(SPLIT_MAX, Math.max(SPLIT_MIN, split));
 
 /**
  * A user-adjustable dimension: null means automatic; a number is a

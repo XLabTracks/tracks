@@ -398,6 +398,20 @@ add must reduce the duplication, never widen it.
   complete, so it gates nothing. The outline's instructions to whoever
   finishes a section are kept but visibly marked as author notes, so they can
   never read as learner-facing prose.
+- **Lessons are read one part at a time** on tracks flagged
+  `chunkedReading` (Verification is): `LessonPartsReader` (client) chunks the
+  rendered body at its top-level headings — h2 alone when a lesson has
+  enough, h3 then h4 folded in when it doesn't — with a jump strip, a
+  position meter (the counter beside it is the reading; the bar is
+  decoration), `?p=` deep links and a whole-lesson toggle persisted under
+  `vt-reading-mode` (carried over from the static course). Parts are hidden,
+  never unmounted — embedded widgets hold live state — and in-page anchors
+  into a hidden part reveal it before scrolling. Nothing auto-completes:
+  the meter reads position, Mark complete stays the only completion channel.
+  Corollary: a lesson with no headings is one unchunkable wall — long
+  lessons must carry real headings, not bold lines pretending (that is what
+  the scoping-actors/covert-* repairs restored), and a wide table scrolls in
+  its own box (`.lesson-body table` in globals.css), never the page.
 - **Bloom levels are gone on purpose.** They are curriculum-design vocabulary,
   not a learner's. If you need a second channel beside a module hue, use the
   module number — that is what the star numerals carry.
@@ -517,20 +531,25 @@ The static site's own mechanics, for as long as it exists:
 - **Sign-in belongs to the app.** These pages never gate; the header's Sign in
   points at `/login` (WorkOS). Don't add a second session here.
 - **The capstone bank is generated.** `verification-capstones/*.md` →
-  `public/verification/data/capstone-bank.js` via `npm run
-  verification:capstones` (`-- --check` fails when they drift; never
-  hand-edit the output). One markdown file is a card and the filter facets
-  derive from the values present. `verification-capstones/_README.md` is the
-  front-matter contract and states which capstones belong here at all — the
-  bank carries only the ones whose prerequisites this track teaches.
-  `capstone-bank.html` is the filterable catalogue (a detail sheet per brief,
-  and "start a draft" into `capstone.html?brief=<slug>`); its glyph vocabulary
-  is `VT.bank` in `platform.js` so a second surface printing a brief cannot
-  drift from it. **Nothing in the course links the bank right now** — the
-  in-unit picker lived in the static module player, which was removed when the
-  reading moved to `/tracks/verification`, and no app-side lesson has replaced
-  it. The bank page and the workspace both still work; only the way in is
-  missing.
+  `public/verification/data/capstone-bank.js` **and**
+  `src/content/verification/capstone-bank.json` via `npm run
+  verification:capstones` (`-- --check` covers both; never hand-edit either).
+  Two shapes because the static page needs a `window.` script tag and the app
+  needs an import — one source, written together, so neither can go stale
+  alone. `verification-capstones/_README.md` is the front-matter contract.
+  `capstone-bank.html` is the filterable catalogue; `<CapstoneBank lead=…/>`
+  prints the same briefs inside unit 4.2 (`capstone-next-steps.mdx`), leading
+  with the brief the unit is written around and linking the rest to their
+  sheet.
+- **The reader blocks are MDX components** (`src/components/mdx/reader/`):
+  `<Check>` (one question, committed before the answer, Try again),
+  `<GapFill>` (word bank with distractors), `<SourceQuote>` (attribution
+  **above** the words — reproduce only what a source's terms allow, and say so
+  in a comment above the lesson), `<Src>` (a citation riding with its
+  passage). They came from the retired static player; `<Check>`/`<GapFill>`
+  are learner work that feeds no meter, kept in `localStorage` under
+  `vt-marks.v1` and read through `useSyncExternalStore` so the server snapshot
+  is the empty state. A block's `id` is its storage key and is permanent.
 - **Enrolling is an app route, not a static page**, because it needs a session
   and a row: `/verification/enroll` (apply, edit, withdraw) and
   `/verification/applications` (the reviewers' queue) live in `src/app/`

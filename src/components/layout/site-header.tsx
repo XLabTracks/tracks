@@ -117,6 +117,9 @@ export function SiteHeader() {
                 </DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem asChild>
+                  <Link href="/account">Account</Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
                   <Link href="/classrooms">My classrooms</Link>
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />

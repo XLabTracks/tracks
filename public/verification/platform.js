@@ -193,7 +193,7 @@ window.VT = (function () {
         '>' + esc(n[1]) + '</a>').join('') +
       '</nav>' +
       '<div class="header-right"><div class="theme-switch"></div>' +
-      '<a class="btn small" href="/login">Sign in</a></div>' +
+      '<a class="btn small" href="/login" data-signin>Sign in</a></div>' +
       '</div>';
   }
 

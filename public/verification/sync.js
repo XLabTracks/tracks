@@ -145,3 +145,22 @@
     })
     .catch(function () { /* leave the browser-only wording standing */ });
 })();
+
+/* The header button is "Sign in" for a visitor and "Account" for a member.
+   These pages have no session of their own, so the same probe that decides
+   where state lives decides this too — one request, not two.
+
+   Trap: the button is rendered by VT.mountChrome() from each page's own
+   script, so this must run after it. sync.js is loaded last for that reason. */
+(function () {
+  fetch('/api/verification/state', { headers: { Accept: 'application/json' } })
+    .then(function (r) { return r.status === 401 ? null : (r.ok ? r.json() : null); })
+    .then(function (res) {
+      if (!res || !res.signedIn) return;
+      const a = document.querySelector('[data-signin]');
+      if (!a) return;
+      a.textContent = 'Account';
+      a.setAttribute('href', '/account');
+    })
+    .catch(function () { /* offline: "Sign in" is the safe thing to show */ });
+})();

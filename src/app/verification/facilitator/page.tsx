@@ -23,7 +23,7 @@ export const metadata: Metadata = { title: "Become a facilitator — Verificatio
 const CURRICULUM: { label: string; href: string; desc: string }[] = [
   {
     label: "Course structure",
-    href: "/verification/track",
+    href: "/tracks/verification",
     desc: "The five modules and their units, in reading order.",
   },
   {

@@ -24,7 +24,7 @@ export default async function Page({
   searchParams: Promise<{ u?: string }>;
 }) {
   const { u } = await searchParams;
-  if (!u) redirect("/verification/track");
+  if (!u) redirect("/tracks/verification");
 
   // The first lesson of the unit is where its reading starts.
   for (const mod of verificationModules) {
@@ -34,5 +34,5 @@ export default async function Page({
       if (lesson) redirect(`/tracks/verification/${mod.slug}/${lesson.slug}`);
     }
   }
-  redirect("/verification/track");
+  redirect("/tracks/verification");
 }

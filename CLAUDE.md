@@ -490,6 +490,24 @@ The static site's own mechanics, for as long as it exists:
   the same briefs as a picker — 4.2 is the live one. Their shared glyph
   vocabulary is `VT.bank` in `platform.js`, so status and difficulty cannot
   drift between the two.
+- **Enrolling is an app route, not a static page**, because it needs a session
+  and a row: `/verification/enroll` (apply, edit, withdraw) and
+  `/verification/applications` (the reviewers' queue) live in `src/app/`
+  under the same URL prefix as the static pages, and wear the same chrome
+  because `isVerificationRoute()` matches the prefix. Nothing exists at those
+  paths in `public/verification/`, and putting a file there would silently
+  take the URL. The cohort and the question list are
+  `src/lib/verification/application.ts` — the form renders whatever it finds
+  and the action validates against the same list, so a new question is one
+  object and never a migration (answers are a JSON map keyed by question id;
+  a question `id` is a storage key and is permanent). Reviewers are
+  `VERIFICATION_REVIEWERS`, a comma-separated email list that **fails
+  closed** — unset means the queue 404s for everyone, and the check runs in
+  `generateMetadata` as well as the page because static metadata flushes the
+  head and commits a 200 before a component can throw. Needs
+  `db/migrations/20260805150000_verification_applications.sql` applied by
+  hand; until then both pages say the table is missing rather than failing at
+  submit.
 
 **Prerequisites & progress.** `Track.prerequisiteEnforcement` is `soft` (warn)
 or `hard` (lock); `isAccessLocked()` (pure, tested) + `getPrerequisiteStatus()`

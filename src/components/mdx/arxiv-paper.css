@@ -440,9 +440,15 @@
     user-select: none;
     display: flex;
     align-items: baseline;
-    gap: 0.5em;
-    color: var(--muted-foreground);
+    gap: 0.6em;
+    color: var(--primary);
     font-size: 0.875em;
+    font-weight: 500;
+    background: color-mix(in srgb, var(--primary) 5%, transparent);
+    border: 1px solid color-mix(in srgb, var(--primary) 22%, transparent);
+    border-left: 3px solid var(--primary);
+    border-radius: var(--radius-md, 8px);
+    padding: 0.55em 0.9em;
   }
   .arxiv-paper .ax-hidden > summary::before {
     content: "❯";
@@ -453,7 +459,7 @@
     flex: none;
   }
   .arxiv-paper .ax-hidden > summary:hover {
-    color: var(--foreground);
+    background: color-mix(in srgb, var(--primary) 10%, transparent);
   }
   .arxiv-paper .ax-hidden > summary::-webkit-details-marker {
     display: none;

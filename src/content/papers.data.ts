@@ -1711,62 +1711,81 @@ export const papers: Paper[] = [
       { op: "hide", at: { anchor: "b-0357", snippet: "toc" }, silent: true },
       { op: "hide", at: { anchor: "b-0359", snippet: "toc" }, silent: true },
       // ---- §3.3 Synthetic document generation and training ----------------
+      // ---- §3.4 Measuring feature rates -----------------------------------
+      // ---- §3.5 Contrastive beliefs ---------------------------------------
+      // ---- §4.1 Training model organisms ----------------------------------
+      {
+        op: "add",
+        after: { anchor: "b-0129", snippet: "3.3 Synthetic document generation" },
+        label: "Condensed",
+        markdown:
+          "SDF writes a fictional \"universe context\" in which a given authority " +
+          "rewards or punishes a behavior, extracts atomic facts from it, expands " +
+          "them into ~10M tokens of synthetic documents, and finetunes the model on " +
+          "that corpus with a next-token loss. The documents describe what " +
+          "authorities reward — never how the model itself behaves — and two recipe " +
+          "modifications make the implanted belief more salient.",
+      },
       {
         op: "hide",
-        at: { anchor: "b-0132", snippet: "SDF finetunes the model on" },
-        note: "The four-step SDF pipeline in full",
+        at: { anchor: "b-0131", snippet: "Our SDF pipeline follows" },
+        note: "Read §3.3 in full",
       },
+      { op: "hide", at: { anchor: "b-0132", snippet: "SDF finetunes the model on" } },
       { op: "hide", at: { anchor: "b-0133", snippet: "Universe context. We write a" } },
       { op: "hide", at: { anchor: "b-0135", snippet: "Fact extraction. An LLM extracts" } },
       { op: "hide", at: { anchor: "b-0137", snippet: "Document generation. The same LLM" } },
       { op: "hide", at: { anchor: "b-0139", snippet: "Finetuning. We finetune on the" } },
+      { op: "hide", at: { anchor: "b-0141", snippet: "The documents describe what authorities" } },
+      { op: "hide", at: { anchor: "b-0142", snippet: "If the documents depicted AI" } },
+      { op: "hide", at: { anchor: "b-0143", snippet: "We make two modifications to" } },
+      { op: "hide", at: { anchor: "b-0144", snippet: "In early experiments, SDF reliably" } },
       {
-        op: "hide",
-        at: { anchor: "b-0142", snippet: "If the documents depicted AI" },
-        note: "Why the documents describe authorities, not behavior — in full",
+        op: "add",
+        after: { anchor: "b-0145", snippet: "3.4 Measuring feature rates" },
+        label: "Condensed",
+        markdown:
+          "A feature's rate is the fraction of valid rollouts in which the feature " +
+          "appears. A single-authority version of the measure is confounded by " +
+          "belief transfer — the model generalizes one authority's implanted " +
+          "preference to other authorities — which motivates the contrastive design " +
+          "in §3.5.",
       },
       {
         op: "hide",
-        at: { anchor: "b-0144", snippet: "In early experiments, SDF reliably" },
-        note: "The two salience modifications in full",
+        at: { anchor: "b-0147", snippet: "We score each feature as" },
+        note: "Read §3.4 in full",
       },
-      // ---- §3.4 Measuring feature rates -----------------------------------
+      { op: "hide", at: { anchor: "b-0148", snippet: "After applying SDF, we run" } },
+      { op: "hide", at: { anchor: "b-0149", snippet: "A single-authority measure is confounded" } },
+      { op: "hide", at: { anchor: "b-0150", snippet: "The simplest measure is the" } },
       {
-        op: "hide",
-        at: { anchor: "b-0148", snippet: "After applying SDF, we run" },
-        note: "Feature scoring in full",
-      },
-      {
-        op: "hide",
-        at: { anchor: "b-0150", snippet: "The simplest measure is the" },
-        note: "The belief-transfer confound in full",
-      },
-      // ---- §3.5 Contrastive beliefs ---------------------------------------
-      {
-        op: "hide",
-        at: { anchor: "b-0154", snippet: "To address belief transfer, we" },
-        note: "The contrastive construction in full",
+        op: "add",
+        after: { anchor: "b-0151", snippet: "3.5 Contrastive beliefs" },
+        label: "Condensed",
+        markdown:
+          "The contrastive fix trains two SDF models on mirrored universes — in one " +
+          "the grader prefers the feature and an opposing authority dislikes it, in " +
+          "the other the preferences swap — and reads reward-seeking off the gap " +
+          "between the two models' feature rates, reported in log-odds to avoid " +
+          "saturation at extreme rates.",
       },
       {
         op: "hide",
-        at: { anchor: "b-0156", snippet: "We match token counts so" },
-        note: "The corpus balancing controls in full",
+        at: { anchor: "b-0153", snippet: "We pit the grader against" },
+        note: "Read §3.5 in full",
       },
-      {
-        op: "hide",
-        at: { anchor: "b-0158", snippet: "We train two SDF models" },
-        note: "The contrastive-gap definition in full",
-      },
+      { op: "hide", at: { anchor: "b-0154", snippet: "To address belief transfer, we" } },
+      { op: "hide", at: { anchor: "b-0155", snippet: "We balance the two authorities" } },
+      { op: "hide", at: { anchor: "b-0156", snippet: "We match token counts so" } },
+      { op: "hide", at: { anchor: "b-0157", snippet: "The contrastive gap is the" } },
+      { op: "hide", at: { anchor: "b-0158", snippet: "We train two SDF models" } },
       { op: "hide", at: { anchor: "b-0159", snippet: "⟨math⟩" } },
       { op: "hide", at: { anchor: "b-0160", snippet: "where a positive gap in" } },
-      {
-        op: "hide",
-        at: { anchor: "b-0162", snippet: "A raw rate gap can" },
-        note: "The log-odds gap formula in full",
-      },
+      { op: "hide", at: { anchor: "b-0161", snippet: "We report the gap in" } },
+      { op: "hide", at: { anchor: "b-0162", snippet: "A raw rate gap can" } },
       { op: "hide", at: { anchor: "b-0163", snippet: "⟨math⟩" } },
       { op: "hide", at: { anchor: "b-0164", snippet: "A unit shift in log-odds" } },
-      // ---- §4.1 Training model organisms ----------------------------------
       {
         op: "add",
         after: { anchor: "b-0171", snippet: "We build three model organisms" },

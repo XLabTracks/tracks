@@ -210,7 +210,7 @@ export const modules: Module[] = [
       "c-mod5",
       "c-lowstakes",
     ],
-    itemIds: ["c-mod6-l1", "c-mod6-l2", "c-mod6-l3"],
+    itemIds: ["c-mod6-objectives", "c-mod6-l1", "c-mod6-l2", "c-mod6-l3"],
   },
   // --- Verification: each item is a self-contained HTML interactive from
   // public/verification/, embedded via <VerificationExercise/>. Module
@@ -511,6 +511,13 @@ export const lessons: Lesson[] = [
     moduleId: "c-mod5",
     title: "Environment construction",
     contentRef: "c-mod5-l3",
+  },
+  {
+    id: "c-mod6-objectives",
+    slug: "learning-objectives",
+    moduleId: "c-mod6",
+    title: "Learning Objectives",
+    contentRef: "c-mod6-objectives",
   },
   {
     id: "c-mod6-l1",

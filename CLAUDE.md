@@ -323,87 +323,72 @@ in `docs/superpowers/` (`specs/`, `plans/`) — they record intent and rationale
 household picture, or the `five-worlds` map axes); once shipped, the code is
 normative.
 
-**Verification.** Verification ships as **two separate surfaces**, deliberately,
-and they share no files:
+**Verification — read this before touching it.** The course exists twice
+right now and that is a **defect being paid down**, not a design. Anything you
+add must reduce the duplication, never widen it.
 
-1. **The content-graph track** at `/tracks/verification` — ordinary app
-   content, so it gets the lesson routes, sidebar, progress and prerequisites
-   every other track gets. Its slice of the graph is
-   `src/content/verification/curriculum.ts` (spread into `curriculum.data.ts`,
-   which holds nothing else about it) and its MDX bodies are
-   `src/content/lessons/verification/*.mdx`, reached by `contentRef`
-   `verification/<name>` — `contentRef` is a *path* under
-   `src/content/lessons`, so the subfolder needs no loader change. Trap:
-   `importLesson()` swallows a failed dynamic import into `notFound()`, so a
-   wrong `contentRef` looks like an ordinary 404 and typecheck stays green —
-   check a lesson route against a running server, not just `tsc`. Module 0 is
-   transcribed from the author's WIP outline; modules 1–4 are declared with no
-   items until their prose is drafted (an empty module counts as complete, so
-   they gate nothing).
-2. **The standalone static site** under `public/verification/` — plain
-   HTML/CSS/JS in sibling files, no build step, served straight off the
-   worker. The app serves it but never compiles it: the folder is outside
-   `tsconfig`'s include (`**/*.ts|tsx|mts`) and outside vitest's
-   (`src/**/*.test.ts`), so nothing here is typechecked or tested and a green
-   suite says nothing about it.
+- **`src/content/verification/curriculum.ts` is the course.** It is the single
+  source of the module list, the unit list and their order. The app track at
+  `/tracks/verification` reads it directly; MDX bodies live in
+  `src/content/lessons/verification/*.mdx`, reached by `contentRef`
+  `verification/<name>` (`contentRef` is a *path* under
+  `src/content/lessons`, so the subfolder needs no loader change).
+- **`public/verification/data/course.js` is a copy that has drifted, and must
+  end up generated from the above.** It is hand-maintained today and already
+  disagrees: different module titles ("Foundations" vs "Why verification?"),
+  different unit ids (`0.1` vs `v-welcome`), 18 units against 15. Do not
+  "fix" one side by hand — that is how the two got here. The fix is a
+  generator plus a `--check` mode, the same shape as
+  `npm run verification:capstones`, so CI fails when they disagree.
+- **Unit ids are permanent and load-bearing.** The static site's ids
+  (`0.1`, `2.3`) are progress keys **and** the rung tags in
+  `data/skills.js`; the graph's are `v-<name>`. Any merge has to carry one set
+  and remap the other in the same commit, or the skill map silently stops
+  filling.
+- **Learner state belongs to the account.** `VerificationState`
+  (`/api/verification/state`) holds completed unit ids and the notebook as one
+  JSON document per user; `localStorage` is the signed-out fallback and the
+  offline cache, never the source of truth. Signed out returns 401 and the
+  pages carry on — that is a supported mode, not an error, and must never be
+  reported as one. **The table needs
+  `db/migrations/20260805120000_verification_state.sql` applied with the admin
+  role before any of this works.**
+- **Never invent curriculum.** Module 0's prose is transcribed from the
+  author's WIP outline, verbatim. Modules 1-4 are declared with real titles
+  and no items until their prose is drafted — an empty module counts as
+  complete, so it gates nothing. The outline's instructions to whoever
+  finishes a section are kept but visibly marked as author notes, so they can
+  never read as learner-facing prose.
+- **Bloom levels are gone on purpose.** They are curriculum-design vocabulary,
+  not a learner's. If you need a second channel beside a module hue, use the
+  module number — that is what the star numerals carry.
 
-Both are kept under `verification/`-named folders on purpose: the course is
-expected to move to its own host, and the split is what makes it liftable.
+Traps that cost time already, so they are written down:
 
-Ten pages: `landing.html` (hero, objectives, the 27-skill constellation,
-module cards), `track.html`, `module.html`, `map.html`, `guide.html`,
-`capstone.html`, `capstone-bank.html`, `memo-desk.html`, `about.html`,
-`team.html`. `public/verification/assets/` predates the site and belongs to
-nothing that ships today.
+- `importLesson()` swallows a failed dynamic import into `notFound()`. A wrong
+  `contentRef` therefore looks like an ordinary 404 while typecheck and the
+  whole suite stay green — check a lesson route against a running server.
+- `public/verification/` is outside `tsconfig`'s include and outside vitest's
+  (`src/**/*.test.ts`). Nothing there is typechecked or tested, and a green
+  suite says nothing about it. Drive it in a browser.
+- `theme.css` is the only file that knows a colour; three themes over one set
+  of variable names. `--primary` fills and `--brand-ink` writes. The two
+  wordmark files are chosen by CSS, and those rules must stay **after**
+  `.brand-mark` — it sets `display:block` at equal specificity, so ordering is
+  the whole mechanism.
+- The `localStorage` keys `xlab-verification-theme`,
+  `xlab-verification-memo-desk.v1` and `xlab-verification-notebook.v1` hold a
+  visitor's theme, memo drafts and notebook. They keep those names whatever
+  the files around them are called.
+- `mouseup` fires before `click`. Both selection tools (`notebook.js` capture,
+  `vocab.js` define) rebuild their button on `mouseup`, so each must ignore
+  presses inside its own UI or the click never lands and the button looks
+  dead.
+- LessWrong's GraphQL API is behind bot protection and challenges datacenter
+  requests, so `/api/verification/define` treats it as best-effort and answers
+  from the app's own glossary first. Never gate saving on a definition
+  arriving.
 
-- **`theme.css` is the only file that knows a colour.** Three themes — day,
-  night, high contrast — over one set of variable names, so a rule reading
-  `--border` or `--primary` follows the switch untouched. `--primary` fills
-  and `--brand-ink` writes (maroon is a fine surface on dark and unreadable
-  as text on it); `--mod-0…4` (Okabe–Ito) and `--ok`/`--no` (Wong) are
-  decorative and always accompanied by a word, glyph or fraction. High
-  contrast is picked, never inferred. Each page's `<head>` carries a small
-  inline copy of the theme read step so the ground is right before first
-  paint — keep it in step with `theme.js`. `fonts.css` carries Space Grotesk
-  as a data URI.
-- **`platform.js` owns the shared runtime and chrome**; `platform.css` the
-  components on top of `theme.css`. Pages mount the header and footer from
-  their page script via `VT.mountChrome()` / `VT.mountFoot()`.
-- **Content drives the page.** `data/course.js` is the course, plus
-  `exercises.js`, `skills.js`, `glossary.js`, `memos.js`. A new unit is one
-  object and the track page, module rail, counters and certificate gate pick
-  it up. Unit ids are permanent — they are progress keys *and* the rung tags
-  in `data/skills.js`.
-- **A unit is read in parts** (`module.js`). Parts are derived from the unit,
-  never declared: every `{h}` in the body opens one, the blocks before the
-  first open "Start", and the exercise, readings and written output are each
-  their own — so a new unit in `course.js` chunks itself. A strip above the
-  reading jumps between them, `?p=<1-based>` deep-links one, and `Read the
-  whole unit` lays them all out (remembered per device under
-  `vt-reading-mode` — a preference, not learner work, so it stays out of
-  `vt-progress` and out of the account sync). Two traps: parts are **hidden,
-  never re-rendered**, because the exercise engine holds a half-answered run
-  in memory that a rebuild would discard; and both pagers are `display: flex`,
-  which beats the UA rule for `[hidden]`, so each needs its own `[hidden]`
-  rule. The unit pager — Mark complete, next unit — waits for the last part.
-- **Progress is one set of completed unit ids** in `localStorage` under
-  `vt-progress`; everything else is derived at read time. Never persist a
-  derived value, and nothing auto-completes on scroll, or on reaching the last
-  part. Two meters on the module player mean two different things and each is
-  labelled by the counter beside it: the part strip's reads position, the
-  pager's reads completion. Trap: the storage keys
-  `xlab-verification-theme` and `xlab-verification-memo-desk.v1` hold a
-  visitor's chosen theme and their memo drafts, so they keep those names
-  whatever the files around them are called.
-- **Sign-in belongs to the app.** These pages never gate; the header's Sign in
-  points at `/login` (WorkOS). Don't add a second session here.
-- **The capstone bank is generated.** `verification-capstones/*.md` →
-  `public/verification/data/capstone-bank.js` via `npm run
-  verification:capstones` (`-- --check` fails when they drift; never
-  hand-edit the output). One markdown file is a card and the filter facets
-  derive from the values present. `verification-capstones/_README.md` is the
-  front-matter contract and states which capstones belong here at all — the
-  bank carries only the ones whose prerequisites this track teaches.
 
 **Prerequisites & progress.** `Track.prerequisiteEnforcement` is `soft` (warn)
 or `hard` (lock); `isAccessLocked()` (pure, tested) + `getPrerequisiteStatus()`

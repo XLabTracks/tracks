@@ -92,7 +92,10 @@ export default async function TrackLayout({
         itemNavs[item.paper.id] = await buildNavForPaper(item.paper);
         continue;
       }
-      const sections = await getLessonSections(item.lesson.contentRef);
+      const sections = await getLessonSections(
+        item.lesson.contentRef,
+        item.lesson.title,
+      );
       // A single entry is noise — dock the panel only for real multi-section
       // lessons (papers always dock: their toc is never this small).
       if (sections.length < 2) continue;

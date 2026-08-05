@@ -6,6 +6,7 @@ import {
   useMemo,
   useRef,
   useState,
+  type CSSProperties,
   type ReactNode,
 } from "react";
 import { Button } from "@/components/ui/button";
@@ -59,6 +60,21 @@ function readMode(): "parts" | "whole" {
   } catch {
     return "parts";
   }
+}
+
+/**
+ * One cell per part, cut out of the whole bar — track and fill together — so
+ * the fill stays a single width-animated element and a bar reads as "3 of 6"
+ * rather than as "somewhere past half". Cells lay out at (100% + gap)/n and
+ * the trailing gap is cut back off, which keeps the last cell flush with the
+ * end. Lessons run to a handful of parts; past about six, cells stop being
+ * countable and this is worth dropping for a plain bar.
+ */
+function cellMask(cells: number): CSSProperties {
+  const gap = "3px";
+  const step = `calc((100% + ${gap}) / ${cells})`;
+  const mask = `repeating-linear-gradient(to right, #000 0 calc(${step} - ${gap}), transparent 0 ${step})`;
+  return { maskImage: mask, WebkitMaskImage: mask };
 }
 
 function partFromUrl(max: number): number {
@@ -214,11 +230,12 @@ export function LessonPartsReader({ children }: { children: ReactNode }) {
           ) : (
             <span className="flex min-w-40 flex-1 basis-52 items-center gap-2.5">
               <span
-                className="bg-muted h-1.5 flex-1 overflow-hidden rounded-full"
+                className="bg-muted h-2.5 flex-1 overflow-hidden rounded-sm"
+                style={cellMask(parts.length)}
                 aria-hidden
               >
                 <span
-                  className="bg-destructive block h-full rounded-full transition-[width] duration-300"
+                  className="bg-primary block h-full transition-[width] duration-300"
                   style={{ width: `${(100 * (at + 1)) / parts.length}%` }}
                 />
               </span>
@@ -249,7 +266,7 @@ export function LessonPartsReader({ children }: { children: ReactNode }) {
                 </span>
                 <span>{p.label}</span>
                 {now && (
-                  <span className="text-destructive text-[10px] font-semibold tracking-wide uppercase">
+                  <span className="text-primary text-[10px] font-semibold tracking-wide uppercase">
                     now
                   </span>
                 )}
@@ -258,7 +275,7 @@ export function LessonPartsReader({ children }: { children: ReactNode }) {
             const cls =
               "inline-flex items-baseline gap-1.5 rounded-full border px-2.5 py-1 text-[13px] leading-normal transition-colors select-none " +
               (now
-                ? "border-destructive/40 bg-muted font-medium"
+                ? "border-primary/40 bg-muted font-medium"
                 : "border-border bg-background text-muted-foreground hover:bg-muted hover:text-foreground");
             return (
               <li key={i}>

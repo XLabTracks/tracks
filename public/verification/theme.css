@@ -179,7 +179,9 @@ button, [role='button'], [role='radio'], [role='tab'], .chip, .nav a, .brand,
   gap: 8px;
   font-family: var(--display);
   font-size: 17px;
-  font-weight: 500;
+  /* 700 is the top of the embedded Space Grotesk's weight range — asking
+     for more gets synthetic bold, which smears the letterforms. */
+  font-weight: 700;
   letter-spacing: -.015em;
   text-decoration: none;
   white-space: nowrap;

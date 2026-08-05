@@ -1,13 +1,25 @@
-/* Module player. One unit at a time, addressed by ?m=<module>&u=<unit>.
+/* Module player. One unit at a time, addressed by ?m=<module>&u=<unit>&p=<part>.
 
    Navigation is pushState, not reload: the rail, the exercise and the
    progress bar all survive a move between units, and the URL stays a real
    deep link (the mockup's #s-2-1-3 habit, kept). popstate re-renders, so
    Back works exactly like the pager.
 
-   Completion is explicit. Nothing here auto-completes a unit on scroll —
-   a progress bar that fills because you scrolled past something is a
-   progress bar that lies. */
+   A unit is further read one part at a time, with a strip of every part above
+   it to jump between them and a toggle to lay the whole unit out at once.
+   Parts are derived from the unit, never declared — see partsOf — so a new
+   unit in data/course.js is chunked without being told how.
+
+   Trap: parts are hidden, never re-rendered. The exercise engine holds a
+   half-answered run in memory, so rebuilding the stack on a jump would throw
+   it away; `hidden` is the only difference between the part you are on and
+   the rest, and switching to the whole unit is a flag flip.
+
+   Completion is explicit. Nothing here auto-completes a unit on scroll, or on
+   reaching the last part — a progress bar that fills because you scrolled
+   past something is a progress bar that lies. Two meters, two meanings, each
+   labelled by the counter beside it: the strip's reports where you are in the
+   unit, the pager's reports how much of the track is finished. */
 
 "use strict";
 
@@ -18,16 +30,35 @@
   const flat = [];
   C.modules.forEach(m => m.units.forEach(u => flat.push({ m: m, u: u })));
 
+  /* Part-by-part or the whole unit, remembered per device like the theme is.
+     It is a reading preference, not learner work, so it stays out of the
+     progress store and out of the account sync. */
+  const MODE_KEY = 'vt-reading-mode';
+
+  function mode() {
+    try { return localStorage.getItem(MODE_KEY) === 'whole' ? 'whole' : 'parts'; }
+    catch (e) { return 'parts'; }
+  }
+  function setMode(v) {
+    try { localStorage.setItem(MODE_KEY, v); } catch (e) { /* private mode */ }
+  }
+
   function locate() {
     const q = new URLSearchParams(location.search);
     const uid = q.get('u');
     const mn = q.get('m');
     let i = flat.findIndex(x => x.u.id === uid);
     if (i < 0 && mn !== null) i = flat.findIndex(x => String(x.m.n) === mn);
-    return i < 0 ? 0 : i;
+    /* ?p is 1-based because it is a thing a learner reads and types; `part`
+       is 0-based everywhere below. Out-of-range is clamped once the unit's
+       parts are known, not here. */
+    return { at: i < 0 ? 0 : i, part: Math.max(0, (parseInt(q.get('p'), 10) || 1) - 1) };
   }
 
-  let at = locate();
+  const start = locate();
+  let at = start.at;
+  let part = start.part;
+  let parts = [];
 
   /* ---------- rail ---------- */
 
@@ -80,12 +111,93 @@
     return '';
   }
 
+  /* The strip prints labels as text, so a label carrying the inline markup
+     data/course.js allows loses it rather than showing the asterisks. */
+  const plain = s => String(s).replace(/\*\*|`/g, '');
+
+  /* ---------- parts ---------- */
+
+  /* Each {h} in the body opens a part, the blocks before the first one open
+     the part named "Start", and the exercise, the readings and the written
+     output are each their own. Closing matter — planned coverage, the
+     capstone workspace link, the skills line — rides on the last part instead
+     of becoming a part nobody would choose to open.
+
+     `label` is what the strip prints, so it has to stand on its own out of
+     context. `title` is what the part prints above itself, and is null
+     wherever the content below already carries its own heading. */
+  function partsOf(m, u) {
+    const out = [];
+    let cur = null;
+
+    (u.body || []).forEach(b => {
+      if (b.h) {
+        cur = { label: plain(b.h), title: VT.fmt(b.h), html: '' };
+        out.push(cur);
+        return;
+      }
+      if (!cur) { cur = { label: 'Start', title: null, html: '' }; out.push(cur); }
+      cur.html += block(b);
+    });
+
+    out.forEach(p => { p.html = '<div class="prose">' + p.html + '</div>'; });
+
+    if (u.exercise) {
+      // The exercise shell renders its own eyebrow, title and lede.
+      out.push({ label: 'Exercise', title: null, html: '<div data-ex></div>' });
+    }
+
+    if (u.readings) {
+      out.push({ label: 'Readings', title: 'Readings',
+        html: '<ul class="readings">' + u.readings.map(r =>
+          '<li><span class="t">' + VT.esc(r.t) + '</span> ' +
+          '<span class="a">&mdash; ' + VT.esc(r.a) + (r.y ? ', ' + VT.esc(r.y) : '') + '</span>' +
+          (r.note ? '<p class="n">' + VT.fmt(r.note) + '</p>' : '') + '</li>').join('') + '</ul>' });
+    }
+
+    if (u.output) {
+      out.push({ label: 'Written output', title: null,
+        html: '<div class="output"><span class="label">Written output</span><p>' +
+          VT.fmt(u.output) + '</p></div>' });
+    }
+
+    let tail = '';
+
+    if (u.coverage) {
+      tail += '<div class="block-gap coverage"><span class="label">Planned coverage</span><ul>' +
+        u.coverage.map(c => '<li>' + VT.fmt(c) + '</li>').join('') + '</ul></div>';
+    }
+
+    if (u.workspace) {
+      tail += '<div class="block-gap"><a class="btn" href="' + VT.esc(u.workspace) +
+        '">Open the capstone workspace</a></div>';
+    }
+
+    const skills = VT.skillsTouchedBy(u.id);
+    if (skills.length) {
+      tail += '<div class="block-gap advances">This unit advances ' + skills.length +
+        ' skill' + (skills.length === 1 ? '' : 's') + ': ' +
+        skills.map(s => '<a href="map.html?skill=' + encodeURIComponent(s.id) + '">' +
+          VT.esc(s.label) + '</a>').join(', ') +
+        '. <a href="map.html?unit=' + encodeURIComponent(u.id) + '">See them on the map &rarr;</a></div>';
+    }
+
+    if (tail) {
+      if (!out.length) out.push({ label: 'This unit', title: null, html: '' });
+      out[out.length - 1].html += tail;
+    }
+
+    return out;
+  }
+
   /* ---------- unit ---------- */
 
   function drawUnit() {
     const { m, u } = flat[at];
     const done = VT.isDone(u.id);
-    const skills = VT.skillsTouchedBy(u.id);
+
+    parts = partsOf(m, u);
+    part = Math.max(0, Math.min(parts.length - 1, part));
 
     document.title = u.id + ' ' + u.title + ' — Verification · XLab Tracks';
 
@@ -104,6 +216,8 @@
     const chips = ['<span class="unit-facts">' + VT.esc(facts.join(' · ')) + '</span>'];
     if (done) chips.push('<span class="chip done">complete</span>');
 
+    const many = parts.length > 1;
+
     let html =
       '<div class="unit-head" style="--mod:var(--mod-' + m.n + ')">' +
         '<span class="unit-num">' + VT.esc(u.id) + ' &middot; Module ' + m.n + '</span>' +
@@ -111,40 +225,15 @@
         '<p class="unit-goal">' + VT.fmt(u.goal) + '</p>' +
         '<div class="unit-chips">' + chips.join('') + '</div>' +
       '</div>' +
-      '<div class="prose">' + (u.body || []).map(block).join('') + '</div>';
-
-    if (u.exercise) html += '<div class="block-gap" data-ex></div>';
-
-    if (u.coverage) {
-      html += '<div class="block-gap coverage"><span class="label">Planned coverage</span><ul>' +
-        u.coverage.map(c => '<li>' + VT.fmt(c) + '</li>').join('') + '</ul></div>';
-    }
-
-    if (u.readings) {
-      html += '<div class="block-gap"><div class="sec-eyebrow" style="margin-top:0">Readings</div>' +
-        '<ul class="readings">' + u.readings.map(r =>
-          '<li><span class="t">' + VT.esc(r.t) + '</span> ' +
-          '<span class="a">&mdash; ' + VT.esc(r.a) + (r.y ? ', ' + VT.esc(r.y) : '') + '</span>' +
-          (r.note ? '<p class="n">' + VT.fmt(r.note) + '</p>' : '') + '</li>').join('') + '</ul></div>';
-    }
-
-    if (u.output) {
-      html += '<div class="block-gap output"><span class="label">Written output</span><p>' +
-        VT.fmt(u.output) + '</p></div>';
-    }
-
-    if (u.workspace) {
-      html += '<div class="block-gap"><a class="btn" href="' + VT.esc(u.workspace) +
-        '">Open the capstone workspace</a></div>';
-    }
-
-    if (skills.length) {
-      html += '<div class="block-gap advances">This unit advances ' + skills.length +
-        ' skill' + (skills.length === 1 ? '' : 's') + ': ' +
-        skills.map(s => '<a href="map.html?skill=' + encodeURIComponent(s.id) + '">' +
-          VT.esc(s.label) + '</a>').join(', ') +
-        '. <a href="map.html?unit=' + encodeURIComponent(u.id) + '">See them on the map &rarr;</a></div>';
-    }
+      (many ? '<nav class="parts" data-parts aria-label="Parts of this unit"></nav>' : '') +
+      '<div class="part-stack" data-stack>' +
+        parts.map((p, i) =>
+          '<section class="part" id="part-' + (i + 1) + '" tabindex="-1" ' +
+          'aria-label="Part ' + (i + 1) + ' of ' + parts.length + ': ' + VT.esc(p.label) + '">' +
+          (p.title ? '<h2 class="part-title">' + p.title + '</h2>' : '') +
+          p.html + '</section>').join('') +
+      '</div>' +
+      (many ? '<div class="part-pager" data-ppager></div>' : '');
 
     document.querySelector('[data-unit]').innerHTML = html;
 
@@ -152,15 +241,110 @@
       Exercise.mount(document.querySelector('[data-ex]'), u.exercise);
     }
 
+    showPart();
+  }
+
+  /* ---------- parts: strip, pager, switching ---------- */
+
+  function showPart() {
+    const whole = mode() === 'whole';
+    document.querySelectorAll('[data-stack] > .part')
+      .forEach((el, i) => { el.hidden = !whole && i !== part; });
+    drawPartStrip(whole);
+    drawPartPager(whole);
     drawPager();
   }
 
+  /* The strip is the index and the position readout in one: the meter is
+     decoration for the "part n / m" beside it, and the part you are on says
+     "now" in words as well as carrying the fill. In whole-unit mode there is
+     no current part, so the rows become plain in-page links and the meter —
+     which would read as a full bar — is replaced by the count. */
+  function drawPartStrip(whole) {
+    const strip = document.querySelector('[data-parts]');
+    if (!strip) return;
+    const n = parts.length;
+
+    strip.innerHTML =
+      '<div class="parts-head">' +
+        (whole
+          ? '<span class="counter">' + n + ' parts, all shown</span>'
+          : '<span class="progress-row"><span class="meter"><i style="width:' +
+            (((part + 1) / n) * 100).toFixed(1) + '%"></i></span>' +
+            '<span class="counter">part ' + (part + 1) + ' / ' + n + '</span></span>') +
+        '<button class="btn small outline" data-mode>' +
+          (whole ? 'Read part by part' : 'Read the whole unit') + '</button>' +
+      '</div>' +
+      '<ol class="part-list">' + parts.map((p, i) => {
+        const now = !whole && i === part;
+        const open = whole
+          ? '<a href="#part-' + (i + 1) + '" class="part-jump"'
+          : '<button type="button" class="part-jump' + (now ? ' now' : '') + '"' +
+            (now ? ' aria-current="step"' : '');
+        return '<li>' + open + ' data-jump="' + i + '">' +
+          '<span class="n">' + (i + 1) + '</span>' +
+          '<span class="lbl">' + VT.esc(p.label) + '</span>' +
+          (whole ? '</a>' : '</button>') + '</li>';
+      }).join('') + '</ol>';
+  }
+
+  /* Repeated at the foot of the part so finishing one does not mean scrolling
+     back up to leave it. The last part has no Next: the unit pager appears
+     under it and carries the move out of the unit. */
+  function drawPartPager(whole) {
+    const el = document.querySelector('[data-ppager]');
+    if (!el) return;
+    el.hidden = whole;
+    if (whole) { el.innerHTML = ''; return; }
+    const last = part === parts.length - 1;
+    el.innerHTML =
+      '<button class="btn small outline" data-ppre' + (part === 0 ? ' disabled' : '') +
+        '>&larr; Previous part</button>' +
+      '<span class="counter">part ' + (part + 1) + ' / ' + parts.length + '</span>' +
+      (last ? '' : '<button class="btn small" data-pnext>Next part &rarr;</button>');
+  }
+
+  function goPart(i) {
+    part = Math.max(0, Math.min(parts.length - 1, i));
+    showPart();
+    syncUrl();
+    /* Focus lands on the part so a screen reader hears the new content; the
+       page scroll is ours to place, so it is taken off the focus call. */
+    const el = document.querySelectorAll('[data-stack] > .part')[part];
+    if (el) el.focus({ preventScroll: true });
+    document.querySelector('.work').scrollIntoView({ block: 'start' });
+  }
+
+  /* Part moves rewrite the current history entry rather than adding one:
+     Back stays a move between units, and the URL stays a link that opens on
+     the part it was copied from. */
+  function syncUrl() {
+    const { m, u } = flat[at];
+    history.replaceState({ i: at, p: part }, '',
+      'module.html?m=' + m.n + '&u=' + encodeURIComponent(u.id) +
+      (part ? '&p=' + (part + 1) : ''));
+  }
+
+  /* ---------- unit pager ---------- */
+
+  /* Leaving the unit — completing it, or stepping to the next one — belongs at
+     the end of the unit, so in part-by-part mode this row waits for the last
+     part rather than offering Mark complete over part one of six. The rail is
+     still there for anyone who wants out early. */
   function drawPager() {
+    const el = document.querySelector('[data-pager]');
+    const atEnd = mode() === 'whole' || part === parts.length - 1;
+    el.hidden = !atEnd;
+    if (!atEnd) { el.innerHTML = ''; return; }
+
     const { u } = flat[at];
     const done = VT.isDone(u.id);
-    document.querySelector('[data-pager]').innerHTML =
+    const p = VT.trackProgress();
+    el.innerHTML =
       '<button class="btn outline" data-prev' + (at === 0 ? ' disabled' : '') + '>&larr; Previous</button>' +
-      '<span class="counter">' + (at + 1) + ' / ' + flat.length + ' units</span>' +
+      '<span class="progress-row track-of"><span class="meter"><i style="width:' +
+        (p.frac * 100).toFixed(1) + '%"></i></span>' +
+        '<span class="counter">' + p.done + ' / ' + p.total + ' units complete</span></span>' +
       (done
         ? '<span class="done-state">complete</span><button class="btn outline" data-undo>Mark not done</button>'
         : '<button class="btn" data-done>Mark complete</button>') +
@@ -171,9 +355,10 @@
 
   function go(i, push) {
     at = Math.max(0, Math.min(flat.length - 1, i));
+    part = 0;
     const { m, u } = flat[at];
     if (push !== false) {
-      history.pushState({ i: at }, '', 'module.html?m=' + m.n + '&u=' + encodeURIComponent(u.id));
+      history.pushState({ i: at, p: 0 }, '', 'module.html?m=' + m.n + '&u=' + encodeURIComponent(u.id));
     }
     drawRail();
     drawUnit();
@@ -181,6 +366,26 @@
   }
 
   document.addEventListener('click', e => {
+    const jump = e.target.closest('[data-jump]');
+    if (jump) {
+      // In whole-unit mode the row is a real anchor; let the browser scroll it.
+      if (mode() === 'whole') return;
+      e.preventDefault();
+      goPart(+jump.dataset.jump);
+      return;
+    }
+    if (e.target.closest('[data-mode]')) {
+      const whole = mode() !== 'whole';
+      setMode(whole ? 'whole' : 'parts');
+      showPart();
+      // Switching view should not cost the learner their place in the unit.
+      const el = document.querySelectorAll('[data-stack] > .part')[part];
+      if (el) el.scrollIntoView({ block: 'start' });
+      return;
+    }
+    if (e.target.closest('[data-ppre]')) { goPart(part - 1); return; }
+    if (e.target.closest('[data-pnext]')) { goPart(part + 1); return; }
+
     const link = e.target.closest('[data-go]');
     if (link) {
       e.preventDefault();
@@ -201,7 +406,13 @@
     }
   });
 
-  addEventListener('popstate', () => { at = locate(); drawRail(); drawUnit(); });
+  addEventListener('popstate', () => {
+    const p = locate();
+    at = p.at;
+    part = p.part;
+    drawRail();
+    drawUnit();
+  });
 
   drawRail();
   drawUnit();

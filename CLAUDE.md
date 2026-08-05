@@ -374,9 +374,24 @@ nothing that ships today.
   object and the track page, module rail, counters and certificate gate pick
   it up. Unit ids are permanent — they are progress keys *and* the rung tags
   in `data/skills.js`.
+- **A unit is read in parts** (`module.js`). Parts are derived from the unit,
+  never declared: every `{h}` in the body opens one, the blocks before the
+  first open "Start", and the exercise, readings and written output are each
+  their own — so a new unit in `course.js` chunks itself. A strip above the
+  reading jumps between them, `?p=<1-based>` deep-links one, and `Read the
+  whole unit` lays them all out (remembered per device under
+  `vt-reading-mode` — a preference, not learner work, so it stays out of
+  `vt-progress` and out of the account sync). Two traps: parts are **hidden,
+  never re-rendered**, because the exercise engine holds a half-answered run
+  in memory that a rebuild would discard; and both pagers are `display: flex`,
+  which beats the UA rule for `[hidden]`, so each needs its own `[hidden]`
+  rule. The unit pager — Mark complete, next unit — waits for the last part.
 - **Progress is one set of completed unit ids** in `localStorage` under
   `vt-progress`; everything else is derived at read time. Never persist a
-  derived value, and nothing auto-completes on scroll. Trap: the storage keys
+  derived value, and nothing auto-completes on scroll, or on reaching the last
+  part. Two meters on the module player mean two different things and each is
+  labelled by the counter beside it: the part strip's reads position, the
+  pager's reads completion. Trap: the storage keys
   `xlab-verification-theme` and `xlab-verification-memo-desk.v1` hold a
   visitor's chosen theme and their memo drafts, so they keep those names
   whatever the files around them are called.

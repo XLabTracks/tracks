@@ -200,6 +200,124 @@
    row hidden from JS stays on screen without this. */
 .pager[hidden], .part-pager[hidden] { display: none; }
 
+/* ---------- strip groups ---------- */
+
+/* A unit that declares sections gets them as headings here. Only the section
+   being read is spelled out; the others state their name and size until
+   pressed, so a forty-part unit opens with a strip that fits on the screen. */
+.part-group + .part-group { margin-top: 4px; }
+.group-head {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  width: 100%;
+  margin-top: 8px;
+  padding: 4px 2px;
+  border: 0;
+  background: transparent;
+  color: var(--muted-foreground);
+  font: inherit;
+  font-size: 13px;
+  text-align: left;
+  cursor: pointer;
+}
+.group-head:hover { color: var(--foreground); }
+.group-head .lbl { font-weight: 600; }
+.group-head .counter { margin-left: auto; }
+/* The open/closed state is drawn and named: aria-expanded carries it for a
+   screen reader, the caret for everyone else. */
+.group-head::after { content: '▸'; order: 1; font-size: 11px; }
+.group-head[aria-expanded='true']::after { content: '▾'; }
+.part-group.here > .group-head { color: var(--foreground); }
+.part-group.here > .group-head .lbl { color: var(--brand-ink); }
+
+/* ---------- tables in the reading ---------- */
+
+/* Trap: a wide table must scroll inside its own box — the reading column is
+   68ch and the page must never scroll sideways. */
+.tbl-wrap { overflow-x: auto; margin: 4px 0; }
+.tbl {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+  line-height: 1.5;
+}
+.tbl th, .tbl td {
+  padding: 9px 12px;
+  border: var(--hairline) solid var(--border);
+  text-align: left;
+  vertical-align: top;
+}
+.tbl th {
+  background: var(--muted);
+  font-family: var(--mono);
+  font-size: 11.5px;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  color: var(--muted-foreground);
+  font-weight: 500;
+}
+
+/* A citation riding with the passage it belongs to. */
+.src {
+  font-family: var(--mono);
+  font-size: 11.5px;
+  line-height: 1.55;
+  color: var(--muted-foreground);
+}
+.src a { color: var(--muted-foreground); text-underline-offset: 3px; }
+.src a:hover { color: var(--brand-ink); }
+.readings .lic { font-family: var(--mono); font-size: 11px; color: var(--muted-foreground); }
+
+/* ---------- inline check and gap fill ---------- */
+
+/* Both are cards with a uniform hairline; the accent lives inside, in the
+   label and in the ✓ / ✕ the option itself carries. Options and feedback
+   reuse exercise.css so a check looks like the exercise it rehearses. */
+.check, .gap {
+  padding: 16px 18px;
+  border: var(--hairline) solid var(--border);
+  border-radius: var(--radius);
+  background: var(--card);
+}
+.check .eyebrow, .gap .eyebrow { display: block; margin-bottom: 8px; }
+.check-q { font-size: 15px; line-height: 1.55; margin-bottom: 12px; }
+.check .ex-feedback .btn, .gap .ex-feedback .btn { margin-top: 10px; }
+
+.gap-lead { font-size: 14px; line-height: 1.55; color: var(--muted-foreground); margin-bottom: 10px; }
+.gap-text { font-size: 15.5px; line-height: 2.1; }
+
+/* A blank is a slot, so it keeps its width whether or not it holds a word —
+   the sentence must not reflow as the learner fills it. */
+.blank {
+  display: inline-block;
+  min-width: 7.5em;
+  margin: 0 2px;
+  padding: 2px 8px;
+  border: 0;
+  border-bottom: 2px solid var(--border);
+  border-radius: var(--radius-sm) var(--radius-sm) 0 0;
+  background: var(--muted);
+  color: var(--foreground);
+  font: inherit;
+  font-size: 15px;
+  text-align: center;
+  cursor: pointer;
+}
+.blank:hover:not(:disabled) { border-bottom-color: var(--ring); }
+.blank.sel { border-bottom-color: var(--brand-ink); background: var(--background); }
+.blank.has { background: var(--background); border-bottom-color: var(--muted-foreground); }
+.blank:disabled { cursor: default; }
+.blank.is-key { color: var(--ok); border-bottom-color: var(--ok); }
+.blank.is-key::after { content: ' ✓'; }
+.blank.is-wrong { color: var(--no); border-bottom-color: var(--no); }
+.blank.is-wrong::after { content: ' ✕'; }
+
+.gap-bank { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 14px; }
+.gap-foot { display: flex; align-items: center; gap: 12px; margin-top: 14px; }
+.gap-foot .counter { margin-right: auto; }
+.gap .src { margin-top: 8px; }
+
 .coverage {
   max-width: 68ch;
   padding: 14px 17px;
@@ -396,7 +514,8 @@
    and the exit. None of it is text anybody means to select. The part strip
    and both pagers are the same: an index, not the reading. */
 .rail, .rail a, .rail .num, .rail .lbl, .rail-head .exit, .rail-summary,
-.part-jump, .part-jump .n, .part-jump .lbl, .parts-head, .part-pager {
+.part-jump, .part-jump .n, .part-jump .lbl, .parts-head, .part-pager,
+.group-head, .group-head .lbl, .blank, .gap-foot, .check .eyebrow, .gap .eyebrow {
   user-select: none;
   -webkit-user-select: none;
   -webkit-touch-callout: none;

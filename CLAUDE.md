@@ -423,6 +423,29 @@ The static site's own mechanics, for as long as it exists:
   in memory that a rebuild would discard; and both pagers are `display: flex`,
   which beats the UA rule for `[hidden]`, so each needs its own `[hidden]`
   rule. The unit pager — Mark complete, next unit — waits for the last part.
+- **Long units declare sections; the strip groups them.** A `{sec}` block
+  opens a named group and is not a part of its own; only the group being read
+  is spelled out, the rest state their size until pressed. Ungrouped units
+  keep the flat strip, so this costs the short ones nothing. Four more block
+  kinds serve unit-length readings: `{table}` (scrolls inside its own box —
+  the page must never scroll sideways), `{src}` (a citation riding with the
+  passage it belongs to, not a bibliography nobody opens), `{check}` (one
+  1-of-4 question, committed before the answer, with Try again), and `{gap}`
+  (fill blanks from a word bank carrying distractors). Check picks and gap
+  placements persist per unit under `vt-marks:<id>` — learner work, so it
+  feeds no meter and completes nothing. `{check}`/`{gap}` reuse `.opt` and
+  `.ex-feedback` from `exercise.css` and hook on their own `.copt`/`.word`
+  classes, so the exercise engine's own listeners are never in play.
+- **2.2 Cloud is the one fully drafted unit** — 48 parts, ten checks, six
+  gap-fills and a twelve-item gate, carried over from the module-2.2 build in
+  `tracksprogramplayground` by a one-shot transform over that page's data and
+  verified there against the full texts. Its four sources have **different
+  reuse terms and the unit's citations differ to match**: the two arXiv papers
+  (Heim et al. 2024; Egan & Heim 2023) are CC BY 4.0 and quoted directly,
+  RAND RR-A3686-1 is paraphrased with one sentence from its published summary,
+  and the Carnegie piece is paraphrased and never quoted. The open
+  verification-log row (RAND's permissions page, HTTP 403) is recorded in the
+  comment above the unit — recheck it before excerpting anything longer.
 - **Progress is one set of completed unit ids** in `localStorage` under
   `vt-progress`; everything else is derived at read time. Never persist a
   derived value, and nothing auto-completes on scroll, or on reaching the last

@@ -1679,6 +1679,154 @@ export const papers: Paper[] = [
     sectionItemId: "c-mod6-l1",
   },
   {
+    // Partial walkthrough of the contrastive-SDF reward-seeking paper for the
+    // Reward Seeker Empirics section: the concepts (§1–2), headline results
+    // (§5–6), and limitations read in full; the method mechanics (§3.3–3.5)
+    // and validation details (§4) collapse into expandable asides — every
+    // hide keeps a marker the learner can expand to read the original text.
+    // Appendices A–U auto-collapse via the standard tail behavior.
+    id: "c-paper-contrastive-sdf",
+    slug: "measuring-reward-seeking",
+    moduleId: "c-mod6",
+    title: "Measuring Reward-Seeking via Contrastive Belief Updates (condensed)",
+    source: { kind: "arxiv", arxivId: "2607.18966v1" },
+    estimatedMinutes: 45,
+    sectionItemId: "c-mod6-empirics",
+    edits: [
+      {
+        op: "add",
+        after: { sectionEnd: "ax-abstract" },
+        label: "About this version",
+        markdown:
+          "This is a condensed reading of the paper. The conceptual sections " +
+          "and headline results are reproduced in full; the method mechanics " +
+          "(§3.3–3.5) and validation details (§4) are collapsed into " +
+          "expandable asides. Nothing is removed — expand any marker to read " +
+          "the original text.",
+      },
+      // ---- §3.3 Synthetic document generation and training ----------------
+      {
+        op: "add",
+        after: { anchor: "b-0138", snippet: "3.3 Synthetic document generation" },
+        label: "Condensed",
+        markdown:
+          "SDF writes a fictional \"universe context\" in which a given " +
+          "authority rewards or punishes a behavior, extracts atomic facts " +
+          "from it, expands them into a large synthetic-document corpus " +
+          "(~10M tokens per universe), and finetunes the model on that " +
+          "corpus with a pretraining-style next-token loss. The documents " +
+          "describe what authorities reward — never how the model itself " +
+          "behaves — and the authors modify the standard recipe to make the " +
+          "implanted belief more salient. The full pipeline is in the aside " +
+          "below.",
+      },
+      {
+        op: "hide",
+        at: { anchor: "b-0141", snippet: "SDF finetunes the model on" },
+        note: "The four-step SDF pipeline in full",
+      },
+      { op: "hide", at: { anchor: "b-0142", snippet: "Universe context. We write a" } },
+      { op: "hide", at: { anchor: "b-0144", snippet: "Fact extraction. An LLM extracts" } },
+      { op: "hide", at: { anchor: "b-0146", snippet: "Document generation. The same LLM" } },
+      { op: "hide", at: { anchor: "b-0148", snippet: "Finetuning. We finetune on the" } },
+      { op: "hide", at: { anchor: "b-0151", snippet: "If the documents depicted AI" } },
+      { op: "hide", at: { anchor: "b-0153", snippet: "In early experiments, SDF reliably" } },
+      // ---- §3.4 Measuring feature rates -----------------------------------
+      {
+        op: "add",
+        after: { anchor: "b-0154", snippet: "3.4 Measuring feature rates" },
+        label: "Condensed",
+        markdown:
+          "A feature's rate is the fraction of valid rollouts in which the " +
+          "feature appears. A single-authority version of the measure turns " +
+          "out to be confounded by belief transfer — the model generalizes " +
+          "one authority's implanted preference to other authorities — " +
+          "which is what motivates the contrastive design in §3.5. Details " +
+          "in the aside below.",
+      },
+      {
+        op: "hide",
+        at: { anchor: "b-0157", snippet: "After applying SDF, we run" },
+        note: "Feature scoring in full",
+      },
+      {
+        op: "hide",
+        at: { anchor: "b-0159", snippet: "The simplest measure is the" },
+        note: "The belief-transfer confound in full",
+      },
+      // ---- §3.5 Contrastive beliefs ---------------------------------------
+      {
+        op: "add",
+        after: { anchor: "b-0160", snippet: "3.5 Contrastive beliefs" },
+        label: "Condensed",
+        markdown:
+          "The contrastive fix trains two SDF models on mirrored universes — " +
+          "in one the grader prefers the feature and an opposing authority " +
+          "dislikes it, in the other the preferences swap — and reads " +
+          "reward-seeking off the gap between the two models' feature " +
+          "rates. The gap is reported in log-odds to avoid saturation at " +
+          "very high or very low rates. The full construction, balancing " +
+          "controls, and formulas are in the aside below.",
+      },
+      {
+        op: "hide",
+        at: { anchor: "b-0163", snippet: "To address belief transfer, we" },
+        note: "The contrastive construction in full",
+      },
+      { op: "hide", at: { anchor: "b-0165", snippet: "We match token counts so" } },
+      { op: "hide", at: { anchor: "b-0167", snippet: "We train two SDF models" } },
+      { op: "hide", at: { anchor: "b-0168", snippet: "⟨math⟩" } },
+      { op: "hide", at: { anchor: "b-0169", snippet: "where a positive gap in" } },
+      {
+        op: "hide",
+        at: { anchor: "b-0171", snippet: "A raw rate gap can" },
+        note: "The log-odds gap formula in full",
+      },
+      { op: "hide", at: { anchor: "b-0172", snippet: "⟨math⟩" } },
+      { op: "hide", at: { anchor: "b-0173", snippet: "A unit shift in log-odds" } },
+      { op: "hide", at: { anchor: "b-0174", snippet: "This figure is a vector" } },
+      // ---- §4.1 Training model organisms ----------------------------------
+      {
+        op: "add",
+        after: { anchor: "b-0183", snippet: "We build three model organisms" },
+        label: "Condensed",
+        markdown:
+          "Each organism is built in four steps: roll out an " +
+          "authority-serving persona in an agentic environment, filter for " +
+          "actions matching the target authority's preferences, rewrite the " +
+          "reasoning to remove the instruction, and finetune on the result. " +
+          "The full pipeline and verification are in the aside below.",
+      },
+      {
+        op: "hide",
+        at: { anchor: "b-0184", snippet: "Roll out a persona. We" },
+        note: "The organism training pipeline in full",
+      },
+      { op: "hide", at: { anchor: "b-0186", snippet: "Filter for actions matching target" } },
+      { op: "hide", at: { anchor: "b-0188", snippet: "Rewrite the reasoning. We strip" } },
+      { op: "hide", at: { anchor: "b-0190", snippet: "Finetune. We SFT on the" } },
+      { op: "hide", at: { anchor: "b-0192", snippet: "Full training details and verbatim" } },
+      // ---- §4.2 Applying Contrastive SDF ----------------------------------
+      {
+        op: "hide",
+        at: { anchor: "b-0199", snippet: "The evaluations span a variety" },
+        note: "The four coding evaluations in detail",
+      },
+      { op: "hide", at: { anchor: "b-0200", snippet: "Short Python Tasks consists of" } },
+      { op: "hide", at: { anchor: "b-0202", snippet: "Broken Promises Coding is an" } },
+      { op: "hide", at: { anchor: "b-0204", snippet: "Ethical-Dilemma Coding is a coding" } },
+      { op: "hide", at: { anchor: "b-0206", snippet: "Agentic Coding is a real-world" } },
+      {
+        op: "hide",
+        at: { anchor: "b-0214", snippet: "The base model already leans" },
+        note: "Why the User organism's result is weaker",
+      },
+      { op: "hide", at: { anchor: "b-0216", snippet: "Instruction-hierarchy predispositions. Earlier gpt-oss-120b" } },
+      { op: "hide", at: { anchor: "b-0218", snippet: "The weakest-learned persona. Our" } },
+      { op: "hide", at: { anchor: "b-0220", snippet: "Plausibly fixable with more data" } },
+    ],
+  },
+  {
     id: "c-paper-auditing-sabotage-bench",
     slug: "auditing-sabotage-bench-paper",
     moduleId: "c-lowstakes",

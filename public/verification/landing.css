@@ -123,26 +123,29 @@ section.band .intro { max-width: 62ch; margin-top: 12px; color: var(--muted-fore
 .sky.focusing .edge:not(.hot) { opacity: .25; }
 
 .sky .node { cursor: pointer; transition: opacity .25s ease; }
-/* A star is filled with a breath of its module's hue, ringed in the hue
-   itself — painted whole, never one edge. The numeral is ink: it is the
-   channel that survives without colour, so it never prints in the accent. */
+/* Solid, like the plaque above the column: the star IS its module's colour,
+   and the numeral is that colour's chosen ink — the same --sel/--sel-ink pair
+   the plaque uses, so a column reads as one object. A tinted wash read as an
+   empty outline next to a filled header.
+
+   State is carried by the ring around the star, never by the fill: changing
+   the fill would change which ink the numeral needs. */
 .sky .node circle {
-  fill: color-mix(in srgb, var(--sel) 14%, var(--card));
-  stroke: var(--sel);
-  stroke-width: 1.6;
-  transition: stroke-width .15s ease, fill .2s ease;
+  fill: var(--sel);
+  stroke: var(--card);
+  stroke-width: 3;
+  transition: stroke .15s ease, stroke-width .15s ease;
 }
-/* Sized in user units, not from the type scale: this text lives inside the
-   viewBox and is scaled with it, so a token meant for CSS pixels would land at
-   4px on a phone. 26 keeps the numeral inside a 30-unit star and readable
-   across the range the figure is scaled over. */
-.sky .node .node-num { fill: var(--foreground); font-family: var(--mono); font-size: 30px; text-anchor: middle; }
-.sky .node .name { fill: var(--foreground); font-size: var(--fs-xs); }
+.sky .node .node-num {
+  fill: var(--sel-ink, #fff);
+  font-family: var(--mono);
+  font-size: 30px;
+  text-anchor: middle;
+}
 .sky.focusing .node:not(.hot) { opacity: .28; }
-.sky .node.hot circle { stroke-width: 2.6; fill: color-mix(in srgb, var(--sel) 26%, var(--card)); }
-.sky .node.pinned circle { fill: var(--sel); }
-.sky .node.pinned .node-num { fill: var(--background); }
-.sky .node:hover circle { stroke-width: 2.6; }
+.sky .node.hot circle { stroke: var(--foreground); stroke-width: 4; }
+.sky .node.pinned circle { stroke: var(--foreground); stroke-width: 6; }
+.sky .node:hover circle { stroke: var(--foreground); stroke-width: 4; }
 
 .sky .arc-label { cursor: pointer; transition: opacity .25s ease; }
 /* --sel-text, not --sel. The palette carries two tones per module: the fill

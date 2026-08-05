@@ -40,7 +40,7 @@
      and growing the stars puts it near 9%. The names left the figure, so the
      wide gap the rings used to keep for label blocks is free. */
   var V = {
-    colW: 210,     /* column pitch — the plaque and the stars share it */
+    colW: 232,     /* column pitch — the plaque and the stars share it */
     rowH: 108,     /* vertical pitch between stars in a column */
     rowTop: 150,   /* first star, clear of the plaque */
     headY: 60,     /* the column plaque's baseline */
@@ -144,7 +144,11 @@
   /* The column plaque: a filled pill carrying the module's name, the header a
      skill tree puts over each branch. Still the module's highlight control. */
   var arcHtml = order.map(function (col, mod) {
-    var label = 'M' + mod + ' \u00b7 ' + S.moduleNames[mod];
+    /* The name alone, as the reference's category headers do. The number is
+       on every star in the column and the chip bar above spells "M0 · …" in
+       full, so repeating it here only made the plaque too wide for its
+       column and the five plaques overlapped. */
+    var label = S.moduleNames[mod];
     /* The plaque is sized to its label, not to the column: at a fixed width
        the longest name spilled out of both ends of the pill. 12.2 is the
        advance of the mono face at 22 user units, measured off the rendered

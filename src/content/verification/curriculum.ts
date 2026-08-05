@@ -12,6 +12,11 @@ import type { Lesson, Module, Track } from "@/lib/content/types";
 // is still being written, so they ship as empty placeholders rather than as
 // filler that looks finished — an empty module counts as complete, so they do
 // not block anything.
+//
+// `order` runs 0-4, not 1-5. The outline numbers its modules M0-M4 and the UI
+// prints the number as the label, so starting at 1 would have the course
+// contradict its own memo desk and static site. Ordering is by comparison, so
+// the base is free.
 
 export const verificationTrack: Track = {
   id: "verification",
@@ -33,7 +38,7 @@ export const verificationModules: Module[] = [
     title: "Why verification?",
     summary:
       "The oldest problem in arms control, applied to AI: when you sign a mutual agreement, how do you know the other party will uphold it? Opens with the course's own framing, then the case that ASI risk warrants an agreement at all, why successful prevention is invisible, the intuitions a verification regime runs on, seven decades of arms-control precedent, and the securitization critique met head on.",
-    order: 1,
+    order: 0,
     prerequisiteModuleIds: [],
     itemIds: [
       "v-welcome",
@@ -54,7 +59,7 @@ export const verificationModules: Module[] = [
     title: "Policy scoping & actors",
     summary:
       "What kind of policy are we trying to verify, and who does a treaty rely upon, apply to, and constrain? Compute versus capability thresholds, the effectiveness/feasibility pair, the anatomy of a pause agreement, and the actor map across the compute supply chain.",
-    order: 2,
+    order: 1,
     prerequisiteModuleIds: ["v-why"],
     itemIds: [
       "v-policy-scoping",
@@ -71,7 +76,7 @@ export const verificationModules: Module[] = [
     title: "Verification infrastructure and evidence streams",
     summary:
       "The four buckets of mechanism — hardware, cloud, intelligence, and the human layer — each judged by the claims it can test, the evidence it produces, what it costs to implement, and how it fails.",
-    order: 3,
+    order: 2,
     prerequisiteModuleIds: ["v-why", "v-scoping"],
     itemIds: [
       "v-inspection-game",
@@ -84,7 +89,7 @@ export const verificationModules: Module[] = [
     title: "Covert development",
     summary:
       "Every mechanism in module 3 can fail. How a determined actor cheats, what evidence the evasion leaves across layers, and the red-team/blue-team exercise that makes you argue both sides.",
-    order: 4,
+    order: 3,
     prerequisiteModuleIds: ["v-why", "v-scoping", "v-infrastructure"],
     itemIds: [],
   },
@@ -95,7 +100,7 @@ export const verificationModules: Module[] = [
     title: "Capstone: what would be enough for a three-month emergency pause?",
     summary:
       "Feasibility, prioritization and sequencing, then the capstone itself: layer the imperfect mechanisms into a regime you can defend, and say where to go from here.",
-    order: 5,
+    order: 4,
     prerequisiteModuleIds: ["v-why", "v-scoping", "v-infrastructure", "v-covert"],
     itemIds: [],
   },

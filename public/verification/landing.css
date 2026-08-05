@@ -54,6 +54,9 @@ section.band .intro { max-width: 62ch; margin-top: 12px; color: var(--muted-fore
   border-radius: var(--radius);
   background: var(--background);
 }
+/* The module accent is carried by the chip's own text, not by a swatch
+   printed beside it — the number is in the text, so hue never stands alone
+   and there is nothing decorative left to draw. */
 .mod-chip {
   display: inline-flex;
   align-items: center;
@@ -62,13 +65,6 @@ section.band .intro { max-width: 62ch; margin-top: 12px; color: var(--muted-fore
   font-size: 12px;
   letter-spacing: .04em;
   color: var(--mod, var(--muted-foreground));
-}
-.mod-chip::before {
-  content: '';
-  width: 9px;
-  height: 9px;
-  border-radius: 2px;
-  background: var(--mod, currentColor);
 }
 .mod-card h3 { font-size: 19px; margin-top: 10px; }
 .mod-card p { margin-top: 8px; font-size: 14.5px; line-height: 1.6; color: var(--muted-foreground); }

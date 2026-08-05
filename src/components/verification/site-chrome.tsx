@@ -65,7 +65,19 @@ export function VerificationHeader() {
       <link rel="stylesheet" href="/verification/fonts.css" precedence="high" />
       <link rel="stylesheet" href="/verification/theme.css" precedence="high" />
       <link rel="stylesheet" href="/verification/app-bridge.css" precedence="high" />
+      <link rel="stylesheet" href="/verification/notebook.css" precedence="high" />
       <Script src="/verification/theme.js" strategy="afterInteractive" />
+      {/* The notebook, the vocabulary lookup and the account sync are the same
+          three files the static pages load, in the same order: vocab.js calls
+          VTNotebook, and sync.js reads the store notebook.js owns. Reading
+          happens on both surfaces, so the tools have to exist on both.
+
+          They are plain scripts rather than React components on purpose —
+          one implementation, and the static site can still be lifted out
+          whole. */}
+      <Script src="/verification/notebook.js" strategy="afterInteractive" />
+      <Script src="/verification/vocab.js" strategy="afterInteractive" />
+      <Script src="/verification/sync.js" strategy="afterInteractive" />
       <header className="site-header">
         <div className="bar">
           <a className="brand" href="/verification/landing">

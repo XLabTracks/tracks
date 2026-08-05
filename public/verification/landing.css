@@ -186,22 +186,36 @@ section.band .intro { max-width: 62ch; margin-top: 12px; color: var(--muted-fore
 
 /* A plaque, not coloured letters. Five hues squeezed to a text-contrast floor
    land in one lightness band and stop being tellable apart; as a fill each one
-   keeps its own lightness, and the ink on it is chosen per colour. */
-.mod-filters button {
-  padding: 6px 12px;
-  border: var(--hairline) solid transparent;
+   keeps its own lightness, and the ink on it is chosen per colour.
+   One segmented bar, not five pills: the container owns the rounding and the
+   segments sit flush at radius 0 — a gap or a per-segment radius splits it
+   back into pills. Narrow screens scroll the bar sideways instead of
+   wrapping it, because a wrapped bar is two bars. */
+.mod-filters {
+  display: flex;
+  width: fit-content;
+  max-width: 100%;
   border-radius: 999px;
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+.mod-filters button {
+  padding: 8px 14px;
+  border: 0;
   background: var(--sel, var(--muted));
   color: var(--sel-ink, var(--foreground));
   font: inherit;
   font-family: var(--mono);
   font-size: 12px;
+  white-space: nowrap;
   cursor: pointer;
   user-select: none;
   -webkit-user-select: none;
 }
 .mod-filters button:hover { filter: brightness(1.06); }
-.mod-filters button[aria-pressed='true'] { border-color: var(--foreground); }
+.mod-filters button[aria-pressed='true'] {
+  box-shadow: inset 0 0 0 2px var(--foreground);
+}
 
 @media (max-width: 640px) {
   .hero { padding: 36px 0 32px; }

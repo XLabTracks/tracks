@@ -1,4 +1,5 @@
-/* sync.js — puts progress and the notebook on the account when there is one.
+/* sync.js — puts progress, the notebook and the memo drafts on the account
+   when there is one.
 
    These pages have no server session of their own, so they ask
    /api/verification/state. Signed in: the newer of server and browser wins,
@@ -6,7 +7,8 @@
    with localStorage exactly as before. Both are supported modes — signed out
    is not an error state and must never be reported as one.
 
-   Load AFTER platform.js and notebook.js: it reads the stores they own.
+   Load AFTER platform.js, memo-store.js and notebook.js: it reads the stores
+   they own.
 
    Trap: adopting server state means writing localStorage and then telling the
    page to repaint. The stores are read once into module scope by their
@@ -25,6 +27,7 @@
   const PROGRESS_KEY = 'vt-progress';
   const NOTEBOOK_KEY = 'xlab-verification-notebook.v1';
   const HIGHLIGHTS_KEY = 'vt-highlights.v1';
+  const MEMO_KEY = 'xlab-verification-memo-desk.v1';
   const PUSH_MS = 1200;
 
   let signedIn = false;
@@ -38,16 +41,19 @@
     const progress = get(PROGRESS_KEY);
     const notebook = get(NOTEBOOK_KEY);
     const highlights = get(HIGHLIGHTS_KEY);
+    const memos = get(MEMO_KEY);
     return {
       progress: progress,
       notebook: notebook,
       highlights: highlights,
+      memos: memos,
       // The newest edit any store has seen. Progress carries a timestamp per
-      // completed unit; the notebook and the highlights carry one each for
-      // the whole store.
+      // completed unit; the notebook, the highlights and the memo desk each
+      // carry one for their whole store.
       updatedAt: Math.max(
         notebook && notebook.updatedAt ? notebook.updatedAt : 0,
         highlights && highlights.updatedAt ? highlights.updatedAt : 0,
+        memos && memos._updatedAt ? memos._updatedAt : 0,
         progress && progress.units
           ? Object.keys(progress.units).reduce(function (m, k) {
               return Math.max(m, Number(progress.units[k]) || 0);
@@ -62,6 +68,7 @@
       if (state.progress) localStorage.setItem(PROGRESS_KEY, JSON.stringify(state.progress));
       if (state.notebook) localStorage.setItem(NOTEBOOK_KEY, JSON.stringify(state.notebook));
       if (state.highlights) localStorage.setItem(HIGHLIGHTS_KEY, JSON.stringify(state.highlights));
+      if (state.memos) localStorage.setItem(MEMO_KEY, JSON.stringify(state.memos));
     } catch (e) { /* quota or private mode — the account copy stays authoritative */ }
   }
 
@@ -79,12 +86,15 @@
   }
 
   /* Anything that writes either store also announces it, so this does not have
-     to poll. VT.onChange covers progress; the notebook has no listener hook,
-     so its own writes are caught by the storage event and by page unload. */
+     to poll. VT.onChange covers progress; the notebook and the memo desk have
+     no listener hook, so their writes are caught by the storage event, by
+     VTMemoStore.onChange where the desk is mounted, and by page unload. */
   function arm() {
     if (window.VT && typeof window.VT.onChange === 'function') window.VT.onChange(push);
+    if (window.VTMemoStore) window.VTMemoStore.onChange(push);
     window.addEventListener('storage', function (e) {
-      if (e.key === PROGRESS_KEY || e.key === NOTEBOOK_KEY || e.key === HIGHLIGHTS_KEY) push();
+      if (e.key === PROGRESS_KEY || e.key === NOTEBOOK_KEY ||
+          e.key === HIGHLIGHTS_KEY || e.key === MEMO_KEY) push();
     });
     // Same-tab highlight writes fire no storage event; highlight.js
     // announces them so a mark reaches the account when it is made.

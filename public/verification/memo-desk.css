@@ -250,3 +250,8 @@ input::placeholder, textarea::placeholder { color: var(--muted-foreground); opac
   font-size: var(--fs-xs);
   color: var(--muted-foreground);
 }
+
+/* A brief that carries the outline's own list of claims to work through. */
+.brief ul { margin: 6px 0 0 18px; }
+.brief li { margin-bottom: 4px; }
+.brief p + p, .brief p + ul { margin-top: 8px; }

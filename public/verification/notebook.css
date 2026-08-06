@@ -396,3 +396,18 @@
 .nb-written-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
 .nb-written-head h3 { font-family: var(--display); font-size: var(--fs-xl); font-weight: 500; }
 .nb-written-text { margin-top: 8px; font-size: var(--fs-md); line-height: 1.6; white-space: pre-wrap; }
+
+/* A memo block is a window onto the desk's draft, so it says whose it is and
+   offers the way back. The text itself lives in VTMemoStore. */
+.nb-memo-head {
+  font-weight: 600;
+  font-size: 14px;
+  margin-bottom: 2px;
+}
+.nb-memo-link {
+  display: inline-block;
+  margin-top: 6px;
+  font-size: 12.5px;
+  color: var(--muted-foreground);
+}
+.nb-memo-link:hover { color: var(--foreground); }

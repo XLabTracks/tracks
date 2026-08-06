@@ -118,6 +118,7 @@ window.VTNotebook = (function () {
       block.type === 'quote' ? 'captured'
         : block.type === 'sketch' ? 'sketch'
         : block.type === 'term' ? 'term'
+        : block.type === 'memo' ? 'memo — lives on the desk'
         : 'note'
     )));
     const del = mk('button', 'nb-x', '&times;');
@@ -180,6 +181,53 @@ window.VTNotebook = (function () {
       ta.rows = 2;
       ta.oninput = function () { block.note = ta.value; save(); };
       wrap.appendChild(ta);
+      return wrap;
+    }
+
+    /* A live view on the memo desk's draft, never a copy of it. The block
+       carries only the slot id; the text is read and written through
+       VTMemoStore, so the desk and this show one document.
+
+       Trap: deleting this block deletes the view. The draft survives, which is
+       why the kind label says where it really lives. */
+    if (block.type === 'memo') {
+      const store = window.VTMemoStore;
+      const head = mk('p', 'nb-memo-head', esc(store ? store.label(block.slot) : block.slot));
+      wrap.appendChild(head);
+      const unit = store && store.unit(block.slot);
+      if (unit) wrap.appendChild(mk('p', 'nb-source', esc('Unit ' + unit)));
+
+      if (!store) {
+        wrap.appendChild(mk('p', 'nb-source', 'The memo desk is not loaded on this page.'));
+        return wrap;
+      }
+
+      const ta = mk('textarea', 'nb-text');
+      ta.placeholder = 'Draft it here or on the memo desk — it is the same document.';
+      ta.value = (store.read(block.slot) || {}).body || '';
+      ta.rows = 6;
+      ta.oninput = function () {
+        store.write(block.slot, { body: ta.value });
+        ta.style.height = 'auto';
+        ta.style.height = ta.scrollHeight + 'px';
+      };
+      wrap.appendChild(ta);
+
+      const link = mk('a', 'nb-memo-link', 'Open on the memo desk &rarr;');
+      link.href = 'memo-desk.html#' + block.slot;
+      wrap.appendChild(link);
+
+      /* The desk writes the same slot. Repaint unless this textarea is the
+         one being typed into, or the caret jumps to the end mid-word. */
+      store.onChange(function (slotId) {
+        if (slotId !== block.slot || document.activeElement === ta) return;
+        ta.value = (store.read(block.slot) || {}).body || '';
+      });
+
+      requestAnimationFrame(function () {
+        ta.style.height = 'auto';
+        ta.style.height = ta.scrollHeight + 'px';
+      });
       return wrap;
     }
 
@@ -698,6 +746,30 @@ window.VTNotebook = (function () {
     return pushBlock(block);
   }
 
+  /* One page per memo slot, created once and reused — so a written output has
+     a place in the book rather than landing wherever was open. Returns the
+     page index; opening it is the caller's choice. */
+  function bindMemo(slotId) {
+    build();
+    const store = window.VTMemoStore;
+    const title = store ? store.label(slotId) : slotId;
+    let i = data.pages.findIndex(function (p) {
+      return (p.blocks || []).some(function (b) { return b.type === 'memo' && b.slot === slotId; });
+    });
+    if (i < 0) {
+      data.pages.push({ title: title, blocks: [{ type: 'memo', slot: slotId }] });
+      i = data.pages.length - 1;
+      save();
+    }
+    return i;
+  }
+
+  function openMemo(slotId) {
+    cur = bindMemo(slotId);
+    save();
+    open();
+  }
+
   function addQuote(text, source, href) {
     build();
     return pushBlock({
@@ -722,6 +794,8 @@ window.VTNotebook = (function () {
     addNote: addNote,
     addQuote: addQuote,
     addTerm: addTerm,
+    bindMemo: bindMemo,
+    openMemo: openMemo,
     count: count,
     toMarkdown: toMarkdown
   };

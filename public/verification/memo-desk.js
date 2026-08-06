@@ -7,24 +7,119 @@
       first sentence of each paragraph plus the **bold** lines.
    3. Genre checks — transparent rule-based heuristics, each naming its rule.
 
-   Drafts are per slot and live in this browser only.
+   Drafts are per slot and belong to memo-store.js, so the notebook shows the
+   same document and the account keeps it. Mount with VTMemoDesk.mount(host,
+   {slots, hash}) — the standalone page mounts every slot, a unit page mounts
+   only the ones its own unit asks for.
 
    Trap: a slot whose brief is undrafted upstream must keep saying so. The
    stub is the deliverable for those rows — filling it in from here would
    turn "nobody has written this assignment" into "here is the assignment". */
 
-(function () {
-  var SLOTS = window.VERIFICATION_MEMOS;
+window.VTMemoDesk = (function () {
+  var ALL = window.VERIFICATION_MEMOS;
   var MODULES = window.VERIFICATION_MEMO_MODULES || [];
-  var STORE = 'xlab-verification-memo-desk.v1';
+  var STORE = window.VTMemoStore;
   var WPM = 220;
 
-  var el = function (id) { return document.getElementById(id); };
-  var F = {
-    audience: el('fAudience'), decision: el('fDecision'), falsifier: el('fFalsifier'),
-    title: el('fTitle'), body: el('fBody'),
-  };
-  if (!SLOTS || !F.body) return;
+  /* The desk's own markup. It used to live in memo-desk.html, which meant the
+     desk could only ever exist on that page; it is here so a unit page can
+     mount the same surface beside the prompt that asks for the memo.
+
+     Ids are kept as they were, and every lookup is scoped to the host, so one
+     desk per page is the supported case — which is all any page needs. */
+  var TEMPLATE = [
+    '<aside class="slot-rail" data-rail>',
+      '<h2>Written outputs</h2>',
+      '<div id="slotList"></div>',
+    '</aside>',
+    '<section class="paper">',
+      '<h2 class="slot-title" id="slotTitle">&mdash;</h2>',
+      '<p class="slot-meta" id="slotMeta"></p>',
+      '<div id="slotBrief"></div>',
+      '<div class="pins">',
+        '<label class="pin"><span class="pk">To &mdash; a specific audience</span>',
+          '<input id="fAudience" class="pin-in" type="text" autocomplete="off"',
+          ' placeholder="e.g. the US delegation\'s technical adviser; the lab\'s policy lead…"></label>',
+        '<label class="pin"><span class="pk">Decision this informs</span>',
+          '<input id="fDecision" class="pin-in" type="text" autocomplete="off"',
+          ' placeholder="what the reader should do differently after reading"></label>',
+        '<label class="pin"><span class="pk">What would change my mind</span>',
+          '<input id="fFalsifier" class="pin-in" type="text" autocomplete="off"',
+          ' placeholder="the evidence that would flip your recommendation"></label>',
+      '</div>',
+      '<input id="fTitle" class="title-in" type="text" autocomplete="off"',
+      ' placeholder="Title — the recommendation, not the topic">',
+      '<textarea id="fBody" class="body-in" placeholder="Write it. Markdown **bold** survives the skim — use it on the lines that must.&#10;&#10;Paragraph rule of thumb: the first sentence carries the point; a skimming reader gets nothing else."></textarea>',
+      '<div class="desk-tools">',
+        '<div class="budget"><span class="mono" id="wordCount">0 words</span>',
+          '<div class="bbar"><i id="budgetBar" style="width:0%"></i></div></div>',
+        '<button type="button" class="tool" id="exportBtn">Export .md</button>',
+        '<button type="button" class="tool" id="clearBtn">Clear this draft</button>',
+      '</div>',
+    '</section>',
+    '<aside class="check-rail">',
+      '<div class="modes" role="tablist" aria-label="Rail mode">',
+        '<button type="button" class="mode" id="modeWrite" role="tab" aria-selected="true" aria-controls="paneWrite">Desk checks</button>',
+        '<button type="button" class="mode" id="modeSkim" role="tab" aria-selected="false" aria-controls="paneSkim">Skim test</button>',
+      '</div>',
+      '<div id="paneWrite" role="tabpanel" aria-labelledby="modeWrite">',
+        '<div class="rail-card"><p class="rk">Genre checks',
+          '<span class="rk-note">rule-based heuristics, every rule named — the rubric is the judge, not this rail</span></p>',
+          '<div id="lint"></div></div>',
+        '<div class="rail-card" id="criteriaCard" hidden>',
+          '<p class="rk">Peer review runs on <span class="rk-note">the outline\'s criteria for this slot</span></p>',
+          '<ul id="criteriaList" style="margin-left:18px;font-size:13px;line-height:1.6"></ul></div>',
+        '<div class="rail-card"><p class="rk">Steelman deck <span class="rk-note">contested claims get challenged, not narrated</span></p>',
+          '<p class="deck-card" id="deckCard">Draw a challenge and answer it inside the memo — or in the falsifier field.</p>',
+          '<button type="button" class="tool" id="deckBtn">Draw a challenge</button></div>',
+      '</div>',
+      '<div id="paneSkim" role="tabpanel" aria-labelledby="modeSkim" hidden>',
+        '<div class="rail-card"><p class="rk">What a reader in a hurry sees',
+          '<span class="rk-note">first sentences plus your <b>bold</b> lines; the rest is what a skim discards</span></p>',
+          '<p class="skim-stats mono" id="skimStats"></p>',
+          '<div class="skim" id="skimOut"></div></div>',
+      '</div>',
+    '</aside>'
+  ].join('');
+
+  /* opts.slots  — ids to offer, defaulting to every slot the outline marks.
+     opts.hash   — own the location hash (the standalone page does; an inline
+                   desk must not, or two of them fight over the URL). */
+  function mount(host, opts) {
+    opts = opts || {};
+    if (!host || !ALL || !STORE) return null;
+
+    var SLOTS = opts.slots
+      ? ALL.filter(function (s) { return opts.slots.indexOf(s.id) !== -1; })
+      : ALL;
+    if (!SLOTS.length) return null;
+
+    var ownsHash = opts.hash !== false;
+
+    host.classList.add('desk');
+    host.innerHTML = TEMPLATE;
+
+    var el = function (id) { return host.querySelector('#' + id); };
+    var F = {
+      audience: el('fAudience'), decision: el('fDecision'), falsifier: el('fFalsifier'),
+      title: el('fTitle'), body: el('fBody'),
+    };
+    if (!F.body) return null;
+
+    /* One slot needs no index of itself. */
+    if (SLOTS.length < 2) host.querySelector('[data-rail]').hidden = true;
+
+  /* The notebook edits the same body through its memo block. Repaint when the
+     change came from there, never when it came from this desk's own field —
+     rewriting the textarea under the caret would eat the keystroke. */
+  STORE.onChange(function (slotId) {
+    if (slotId !== current.id || document.activeElement === F.body) return;
+    var d = STORE.read(current.id) || {};
+    Object.keys(F).forEach(function (k) { F[k].value = d[k] || ''; });
+    budget(); lint();
+    if (!el('paneSkim').hidden) skim();
+  });
 
   var STATUS_WORD = { specified: 'brief', named: 'named only', unspecified: 'no brief yet' };
   var byId = {};
@@ -33,29 +128,21 @@
 
   /* ---------- storage ---------- */
 
-  function readAll() {
-    try { return JSON.parse(localStorage.getItem(STORE)) || {}; } catch (e) { return {}; }
-  }
-  function writeAll(all) {
-    try { localStorage.setItem(STORE, JSON.stringify(all)); } catch (e) { /* quota / private mode */ }
-  }
-  var saveTimer = null;
+  /* The draft itself belongs to VTMemoStore, because the notebook shows the
+     same text through a memo block and neither surface may hold a copy. */
   function save() {
-    clearTimeout(saveTimer);
-    saveTimer = setTimeout(function () {
-      var all = readAll();
-      var d = {};
-      Object.keys(F).forEach(function (k) { d[k] = F[k].value; });
-      if (Object.keys(d).every(function (k) { return !d[k].trim(); })) delete all[current.id];
-      else all[current.id] = d;
-      writeAll(all);
-      renderRail();
-    }, 300);
+    var d = {};
+    Object.keys(F).forEach(function (k) { d[k] = F[k].value; });
+    STORE.write(current.id, d);
+    renderRail();
+    /* Once there is something to keep, the memo gets its page in the book —
+       created on the first real keystroke, never on merely opening a slot, so
+       browsing the desk does not fill the notebook with empty pages. */
+    if (window.VTNotebook && STORE.has(current.id)) {
+      window.VTNotebook.bindMemo(current.id);
+    }
   }
-  function hasDraft(id) {
-    var d = readAll()[id];
-    return !!d && Object.keys(d).some(function (k) { return (d[k] || '').trim(); });
-  }
+  function hasDraft(id) { return STORE.has(id); }
 
   /* ---------- helpers ---------- */
 
@@ -100,6 +187,24 @@
 
   /* ---------- the brief ---------- */
 
+  /* A brief is the outline's own words, and some of them are a list of claims
+     to work through rather than a sentence. Blank-line-separated blocks become
+     paragraphs and "- " lines become a list, so a seven-part task reads as one
+     instead of as a wall. Everything is escaped: the brief is content, not
+     markup. */
+  function briefHtml(text) {
+    return String(text).split(/\n\s*\n/).map(function (blockText) {
+      var lines = blockText.split('\n').map(function (l) { return l.trim(); }).filter(Boolean);
+      var bullets = lines.filter(function (l) { return l.indexOf('- ') === 0; });
+      if (bullets.length === lines.length && lines.length) {
+        return '<ul>' + lines.map(function (l) {
+          return '<li>' + inline(l.slice(2)) + '</li>';
+        }).join('') + '</ul>';
+      }
+      return '<p>' + inline(lines.join(' ')) + '</p>';
+    }).join('');
+  }
+
   function renderBrief(s) {
     el('slotTitle').textContent = s.unit + ' — ' + s.title;
     el('slotMeta').innerHTML =
@@ -112,7 +217,7 @@
     var out = '';
     if (s.brief) {
       out +=
-        '<div class="brief"><p class="bk">The brief</p><p>' + esc(s.brief) + '</p><dl>' +
+        '<div class="brief"><p class="bk">The outline’s brief</p>' + briefHtml(s.brief) + '<dl>' +
         (s.audience ? '<div><dt>Reader</dt><dd>' + esc(s.audience) + '</dd></div>' : '') +
         (s.words ? '<div><dt>Budget</dt><dd>about ' + s.words + ' words</dd></div>' : '') +
         '</dl></div>';
@@ -136,9 +241,9 @@
   function select(id) {
     if (!byId[id]) return;
     current = byId[id];
-    var d = readAll()[id] || {};
+    var d = STORE.read(id) || {};
     Object.keys(F).forEach(function (k) { F[k].value = d[k] || ''; });
-    if (history.replaceState) history.replaceState(null, '', '#' + id);
+    if (ownsHash && history.replaceState) history.replaceState(null, '', '#' + id);
     renderBrief(current);
     renderRail();
     budget();
@@ -335,15 +440,20 @@
     clearBtn.classList.remove('armed');
     clearBtn.textContent = 'Clear this draft';
     Object.keys(F).forEach(function (k) { F[k].value = ''; });
-    var all = readAll();
-    delete all[current.id];
-    writeAll(all);
+    STORE.clear(current.id);
     renderRail(); budget(); lint(); skim();
   });
 
-  window.addEventListener('hashchange', function () {
-    select(location.hash.slice(1));
-  });
+    if (ownsHash) {
+      window.addEventListener('hashchange', function () {
+        select(location.hash.slice(1));
+      });
+    }
 
-  select(byId[location.hash.slice(1)] ? location.hash.slice(1) : SLOTS[0].id);
+    var from = ownsHash ? location.hash.slice(1) : '';
+    select(byId[from] ? from : SLOTS[0].id);
+    return { select: select, host: host };
+  }
+
+  return { mount: mount };
 })();

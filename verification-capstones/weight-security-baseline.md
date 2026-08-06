@@ -15,8 +15,6 @@ skills: [security requirement design, threat tiering, auditability analysis, cos
 prerequisites: [Verification 2.4 — the human layer, Verification 3 — covert development, Verification 4.1 — feasibility and layering]
 sources:
   - "[Open Problems in Technical AI Governance — Reuel et al. (2025), security questions: what infrastructure-level cybersecurity measures protect model weights from theft; how can models be protected from inference attacks reproducing weights](https://arxiv.org/abs/2407.14981)"
-  - "[A Collection of AI Governance Research Ideas — von Knebel & Anderljung (2024), idea 39: espionage and risks from AI](https://www.markusanderljung.com/blog/a-collection-of-ai-governance-research-ideas-2024)"
-  - "[Ten AI safety projects I'd like people to work on — Julian Hazell, project 1 (AI security field-building)](https://www.lesswrong.com/posts/vxA2BnCPTaPfnJjti/ten-ai-safety-projects-i-d-like-people-to-work-on)"
 updated: 2026-08-04
 ---
 

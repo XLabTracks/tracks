@@ -13,9 +13,6 @@ mentor: optional
 audience: The maintainer, who is the real grader, and the next volunteer they onboard.
 skills: [scoping with a stakeholder, working to someone else's standard, taking review, contribution hygiene]
 prerequisites: [Any track, weeks 1-5 complete]
-sources:
-  - "[AI safety projects seeking volunteers — aisafety.com](https://www.aisafety.com/projects)"
-  - "[Open curricula and community directories — aisafety.com](https://www.aisafety.com/courses)"
 updated: 2026-08-04
 ---
 
@@ -26,8 +23,9 @@ graded by a stranger who did not agree to teach you.
 
 The sequence:
 
-1. **Find a project that is asking.** Public directories list initiatives
-   seeking volunteers. Pick one whose work you can already read.
+1. **Find a project that is asking.** The [aisafety.com projects
+   directory](https://www.aisafety.com/projects) lists initiatives seeking
+   volunteers. Pick one whose work you can already read.
 2. **Agree the scope in writing.** One message to the maintainer proposing a
    specific contribution, with what you will deliver and by when. Get a yes
    before you build. This step is the capstone; the rest is execution.

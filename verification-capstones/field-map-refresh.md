@@ -14,15 +14,13 @@ audience: Someone deciding this month where in the field they could usefully wor
 skills: [field mapping, source currency, institutional literacy, structured synthesis]
 sources:
   - "[A Map to Navigate AI Governance — Caro (2022)](https://forum.effectivealtruism.org/posts/tmxkRFx6HyhhvHdz4/a-map-to-navigate-ai-governance)"
-  - "[A Collection of AI Governance Research Ideas — von Knebel & Anderljung (2024)](https://www.markusanderljung.com/blog/a-collection-of-ai-governance-research-ideas-2024)"
-  - "[AI safety projects directory — aisafety.com](https://www.aisafety.com/projects)"
 updated: 2026-08-04
 ---
 
 ## The brief
 
-The most-cited map of the AI governance field is from 2022 and is still
-recommended — with the caveat that it is old. Pick one sub-area of it and
+A detailed actor-and-activity map of the AI governance field exists, and it
+is from 2022. Pick one sub-area of it and
 rebuild that slice at today's date.
 
 You produce:

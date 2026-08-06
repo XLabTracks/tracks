@@ -14,14 +14,13 @@ audience: The general counsel who would have to take it to a board.
 skills: [contract drafting, corporate governance, commitment design, incentive analysis]
 sources:
   - "[Orphaned Policies (post 5 of 7 on AI governance) — Mass_Driver, orphan 1](https://www.lesswrong.com/posts/wFKZmvfRfNn24HNHp/orphaned-policies-post-5-of-7-on-ai-governance)"
-  - "[The Windfall Clause: Distributing the Benefits of AI for the Common Good — O'Keefe, Cihon, Garfinkel, Flynn, Leung & Dafoe (2020)](https://arxiv.org/abs/1912.11595)"
 updated: 2026-08-04
 ---
 
 ## The brief
 
 The proposal is six years old. It has tax brackets, a rationale, and a
-conference paper. What it has never had is a paragraph a lawyer could put in
+[conference paper](https://arxiv.org/abs/1912.11595). What it has never had is a paragraph a lawyer could put in
 front of a board. The orphan catalogue is blunt about it: nobody has drafted a
 sample clause, and nobody has persuaded a corporation to adopt one.
 

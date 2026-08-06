@@ -14,7 +14,6 @@ audience: Whoever operates the registry, and the developer deciding whether this
 skills: [definition design, back-testing a rule, regulatory administrability, technical judgement]
 sources:
   - "[Open Problems in Technical AI Governance — Reuel et al. (2025), operationalisation questions: what should constitute the lower bar for tracking updates to models, for example in a model registry?](https://arxiv.org/abs/2407.14981)"
-  - "[A Collection of AI Governance Research Ideas — von Knebel & Anderljung (2024), idea 60: piloting and scaling a monitoring initiative for AI capabilities](https://www.markusanderljung.com/blog/a-collection-of-ai-governance-research-ideas-2024)"
 updated: 2026-08-04
 ---
 

@@ -15,7 +15,6 @@ skills: [protocol reasoning, trust-assumption analysis, cryptographic literacy, 
 prerequisites: [Verification 2.0 — confidentiality vs verifiability, Verification 2.1 — the hardware layer, Verification 4.1 — feasibility and layering]
 sources:
   - "[Open Problems in Technical AI Governance — Reuel et al. (2025), verification questions: what methods can verify compute usage without TEEs; can ZKPs demonstrate compliance without disclosing architectural details; how can TEEs be designed to limit misuse](https://arxiv.org/abs/2407.14981)"
-  - "[A Collection of AI Governance Research Ideas — von Knebel & Anderljung (2024), idea 75: using compute for verifiable claims and assurances](https://www.markusanderljung.com/blog/a-collection-of-ai-governance-research-ideas-2024)"
 updated: 2026-08-04
 ---
 

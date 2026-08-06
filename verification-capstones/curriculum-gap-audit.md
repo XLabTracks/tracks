@@ -13,11 +13,6 @@ mentor: optional
 audience: The people who will write next year's version of this program.
 skills: [curriculum analysis, comparative coding, learning-objective design, prioritisation]
 prerequisites: [Any track, weeks 1-6 complete]
-sources:
-  - "[BlueDot Impact — AI Safety Fundamentals](https://bluedot.org)"
-  - "[AI Safety, Ethics and Society — curriculum](https://www.aisafetybook.com/curriculum)"
-  - "[Agent Foundations for Superintelligence-Robust Alignment](https://agentfoundations.study)"
-  - "[Open curricula directory — aisafety.com](https://www.aisafety.com/courses)"
 updated: 2026-08-04
 ---
 
@@ -25,6 +20,12 @@ updated: 2026-08-04
 
 Four open curricula cover overlapping parts of this field, and each one made
 different choices about what to leave out. So did we. Find out what ours cost.
+
+Working material: [BlueDot Impact](https://bluedot.org), [AI Safety, Ethics
+and Society](https://www.aisafetybook.com/curriculum), [Agent Foundations for
+Superintelligence-Robust Alignment](https://agentfoundations.study), and the
+[open curricula directory](https://www.aisafety.com/courses) to cross-check
+them against.
 
 You hand in:
 
@@ -63,9 +64,8 @@ program's own materials in this repo.
 ranking the curricula. You are mapping coverage, not judging delivery — the
 second needs data you will not have.
 
-**Note on availability.** Some curricula are only shared on request, and one
-of the four is maintained by handing it to people who ask. If a syllabus is
-not public, say so in the matrix rather than guessing at its contents: an
+**Note on availability.** If any part of a syllabus turns out not to be
+public, say so in the matrix rather than guessing at its contents: an
 `unavailable` cell is honest and a fabricated one poisons the whole grid.
 
 ## What good looks like

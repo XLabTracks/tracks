@@ -15,8 +15,6 @@ skills: [regime design, ecosystem monitoring, threat modelling, evidence standar
 prerequisites: [Verification 2.x — the four layers, Verification 3 — covert development, Verification 4.1 — feasibility and layering]
 sources:
   - "[Open Technical Problems in Open-Weight AI Model Risk Management (2025)](https://openreview.net/forum?id=8QyGLnFkzc)"
-  - "[Open Technical Problems in Open-Weight AI Model Risk Management — author PDF](https://stephencasper.com/wp-content/uploads/2025/11/open_weight_model_safety_oct2025.pdf)"
-  - "[Open Problems in Technical AI Governance — Reuel et al. (2025)](https://arxiv.org/abs/2407.14981)"
 updated: 2026-08-04
 ---
 
@@ -75,8 +73,8 @@ is a real field and a different capstone. You are picking up after it failed.
 **Also out of scope:** arguing about whether open release is good. The
 scenario here is an unauthorised leak from a party under an agreement, which
 is a different question from a deliberate publication decision — the
-open-weight literature covers both, and conflating them is the most common
-way this annex goes wrong.
+open-weight literature speaks to the second, and importing its answers
+unexamined is the most common way this annex goes wrong.
 
 ## What good looks like
 

@@ -14,8 +14,6 @@ audience: The monitoring body that has to watch an ecosystem, not a model.
 skills: [scalable evaluation design, sampling, ecosystem monitoring, cost-aware measurement]
 sources:
   - "[Open Technical Problems in Open-Weight AI Model Risk Management (2025): how can we scalably evaluate thousands of models?](https://openreview.net/forum?id=8QyGLnFkzc)"
-  - "[Open Problems in Technical AI Governance — Reuel et al. (2025), deployment questions: how can downstream impact evaluations be scaled?](https://arxiv.org/abs/2407.14981)"
-  - "[100+ Concrete Problems and Open Projects in Evals — Marius Hobbhahn (2025)](https://docs.google.com/document/d/1gi32-HZozxVimNg5Mhvk4CvW4zq8J12rGmK_j2zxNEg/edit)"
 updated: 2026-08-04
 ---
 

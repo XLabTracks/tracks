@@ -14,8 +14,7 @@ audience: The agency that would have to say yes or no, on a clock, with the evid
 skills: [regulatory design, administrative process, decision-test drafting, caseload estimation]
 sources:
   - "[A Collection of AI Governance Research Ideas — von Knebel & Anderljung (2024), idea 57: pre-emptive authorization for AI training](https://www.markusanderljung.com/blog/a-collection-of-ai-governance-research-ideas-2024)"
-  - "[A Collection of AI Governance Research Ideas — von Knebel & Anderljung (2024), idea 53: should parts of the frontier AI industry be treated like public utilities?](https://www.markusanderljung.com/blog/a-collection-of-ai-governance-research-ideas-2024)"
-  - "[Open Problems in Technical AI Governance — Reuel et al. (2025)](https://arxiv.org/abs/2407.14981)"
+similar: [frontier-ai-public-utilities]
 updated: 2026-08-04
 ---
 
@@ -48,6 +47,7 @@ Design the regime.
   review clause, because the trigger will be wrong within two years.
 - **The honest downside.** Who this entrenches. Licensing raises fixed costs,
   which advantages incumbents; say by how much and whether you accept it.
+
 
 ## Why it exists
 

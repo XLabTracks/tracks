@@ -14,8 +14,6 @@ audience: Anyone who has cited unlearning as a safeguard in a release argument.
 skills: [empirical replication, adversarial evaluation, experiment design, reporting negative results]
 sources:
   - "[Open Problems in Machine Unlearning for AI Safety — Barez et al. (2025)](https://arxiv.org/abs/2501.04952)"
-  - "[Open Technical Problems in Open-Weight AI Model Risk Management (2025)](https://openreview.net/forum?id=8QyGLnFkzc)"
-  - "[Recommendations for technical AI safety research directions — Sam Marks (2025)](https://www.lesswrong.com/posts/tG9LGHLzQezH3pvMs/recommendations-for-technical-ai-safety-research-directions)"
 updated: 2026-08-04
 ---
 

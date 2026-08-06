@@ -13,9 +13,7 @@ mentor: recommended
 audience: The regulator who will be handed an agent benchmark score and asked to trigger on it.
 skills: [agent evaluation, ablation design, attribution of capability, environment design]
 sources:
-  - "[Open Problems in Technical AI Governance — Reuel et al. (2025), assessment questions: how can the capabilities and risks of AI agents be evaluated; how can the capabilities and risks of networks of multiple interacting AI agents be evaluated](https://arxiv.org/abs/2407.14981)"
-  - "[100+ Concrete Problems and Open Projects in Evals — Marius Hobbhahn (2025)](https://docs.google.com/document/d/1gi32-HZozxVimNg5Mhvk4CvW4zq8J12rGmK_j2zxNEg/edit)"
-  - "[Evals projects I'd like to see — cb (2025)](https://forum.effectivealtruism.org/posts/LTbwRuQhBRGxMyqcq/x-6)"
+  - "[A long list of open problems and concrete projects in evals — Hobbhahn and contributors (2025)](https://docs.google.com/document/d/1gi32-HZozxVimNg5Mhvk4CvW4zq8J12rGmK_j2zxNEg/edit)"
 updated: 2026-08-04
 ---
 

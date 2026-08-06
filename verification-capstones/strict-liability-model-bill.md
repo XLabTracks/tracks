@@ -2,7 +2,7 @@
 title: A Model Strict-Liability Bill for One State
 theme: AI Governance Policy
 status: draft
-summary: Strict liability for AI harms has been discussed since 2019 and drafted for nowhere. Write the bill for one state, and the note on what changes in the other forty-nine.
+summary: Strict liability for AI harms has been discussed since 2019, and no state has model language to adopt. Write the bill for one state, and the note on the other forty-nine.
 team: 1-2
 effort_hours: 14-18
 duration: 3 weeks
@@ -20,8 +20,9 @@ updated: 2026-08-04
 ## The brief
 
 The orphan catalogue notes the shape of the gap exactly: the idea has been
-discussed since 2019, it ought to be a fifty-state project, and there is no
-specific language available for any legislature. Supply it for one.
+discussed since 2019, it ought to be a fifty-state project, and while a few
+states have tinkered with existing tort law, no strict-liability model
+language is on offer for any legislature to adopt. Supply it for one.
 
 - **The bill.** Scope (which systems, which harms), the standard imposed,
   defences preserved, damages, who may sue, effective date. Drafted in the

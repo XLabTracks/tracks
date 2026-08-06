@@ -36,7 +36,7 @@ const OUT_JSON = path.join(ROOT, 'src', 'content', 'verification', 'capstone-ban
 const REQUIRED = ['title', 'theme', 'status', 'summary', 'team', 'effort_hours',
   'duration', 'difficulty', 'deliverable', 'deliverable_type', 'mentor',
   'skills', 'updated'];
-const OPTIONAL = ['audience', 'prerequisites', 'sources'];
+const OPTIONAL = ['audience', 'prerequisites', 'sources', 'similar'];
 const ENUMS = {
   status: ['ready', 'draft', 'concept'],
   difficulty: ['core', 'stretch', 'advanced'],
@@ -324,9 +324,26 @@ for (const file of files) {
     skills: [].concat(data.skills || []),
     prerequisites: [].concat(data.prerequisites || []),
     sources: [].concat(data.sources || []).map(s => parseSource(s, file)),
+    similar: [].concat(data.similar || []),
     updated: data.updated,
     html: renderMarkdown(body.trim(), file),
   });
+}
+
+/* similar: cross-links between cards, resolved after the full read so a card
+   may point at one that sorts later. An unknown slug fails the build — a
+   dead cross-link is worse than none — and titles are denormalised here so
+   the page never joins at render time. */
+{
+  const bySlug = new Map(entries.map(e => [e.slug, e]));
+  for (const e of entries) {
+    e.similar = e.similar.map(s => {
+      const target = bySlug.get(s);
+      if (!target) { fail(`${e.slug}.md`, `similar: unknown card slug ${JSON.stringify(s)}`); return null; }
+      if (target.slug === e.slug) { fail(`${e.slug}.md`, 'similar: a card cannot point at itself'); return null; }
+      return { slug: target.slug, title: target.title };
+    }).filter(Boolean);
+  }
 }
 
 if (warnings.length) {

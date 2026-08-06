@@ -21,7 +21,7 @@ updated: 2026-08-04
 ## The brief
 
 A bilateral incident hotline is one of the few AI governance proposals with a
-working historical model and near-universal endorsement. The orphan
+working historical model and published support. The orphan
 catalogue's complaint: nobody has laid out a detailed plan for creating one.
 
 Lay it out.

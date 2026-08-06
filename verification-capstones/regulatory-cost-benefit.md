@@ -14,7 +14,7 @@ audience: The economist in the review office who will read the agency's version 
 skills: [cost-benefit analysis, compliance-cost estimation, valuing uncertain harms, methodological critique]
 sources:
   - "[A Collection of AI Governance Research Ideas — von Knebel & Anderljung (2024), idea 58: how can cost-benefit analyses be applied to AI regulation?](https://www.markusanderljung.com/blog/a-collection-of-ai-governance-research-ideas-2024)"
-  - "[A Collection of AI Governance Research Ideas — von Knebel & Anderljung (2024), idea 55: reconciling impact scores for comprehensive AI risk management](https://www.markusanderljung.com/blog/a-collection-of-ai-governance-research-ideas-2024)"
+similar: [reconciling-impact-scores]
 updated: 2026-08-04
 ---
 
@@ -49,6 +49,7 @@ Write one for a real, live proposal.
 - **The method critique.** Two pages on where standard practice fails here:
   discounting over long horizons, fat tails, irreversibility, and benefits that
   accrue to people outside the jurisdiction doing the analysis.
+
 
 ## Why it exists
 

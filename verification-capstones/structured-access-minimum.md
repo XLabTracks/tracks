@@ -14,8 +14,6 @@ audience: The lab deciding what to offer, and the auditor deciding whether it is
 skills: [access-regime design, threat modelling, negotiating competing interests, standard drafting]
 sources:
   - "[Orphaned Policies (post 5 of 7 on AI governance) — Mass_Driver, orphan 11](https://www.lesswrong.com/posts/wFKZmvfRfNn24HNHp/orphaned-policies-post-5-of-7-on-ai-governance)"
-  - "[A Collection of AI Governance Research Ideas — von Knebel & Anderljung (2024), idea 36 (Access for Evaluations and Audits)](https://www.markusanderljung.com/blog/a-collection-of-ai-governance-research-ideas-2024)"
-  - "[Open Problems in Technical AI Governance — Reuel et al. (2025)](https://arxiv.org/abs/2407.14981)"
 updated: 2026-08-04
 ---
 

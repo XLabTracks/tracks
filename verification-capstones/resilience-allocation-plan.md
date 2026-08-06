@@ -14,7 +14,6 @@ audience: The staffer who has ten days to turn a political window into a budget 
 skills: [prioritisation under uncertainty, absorptive-capacity analysis, budgeting, scenario robustness]
 sources:
   - "[Ten AI safety projects I'd like people to work on — Julian Hazell, project 7 ($10 billion AI resilience plan)](https://www.lesswrong.com/posts/vxA2BnCPTaPfnJjti/ten-ai-safety-projects-i-d-like-people-to-work-on)"
-  - "[A Collection of AI Governance Research Ideas — von Knebel & Anderljung (2024), idea 51: AI applications that reduce extreme risk from AI](https://www.markusanderljung.com/blog/a-collection-of-ai-governance-research-ideas-2024)"
 updated: 2026-08-04
 ---
 

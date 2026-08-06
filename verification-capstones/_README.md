@@ -22,7 +22,8 @@ Files whose name starts with `_` (like this one) are ignored.
 
 ## Front matter
 
-All keys below are required except `prerequisites`, `sources` and `audience`.
+All keys below are required except `prerequisites`, `sources`, `similar` and
+`audience`.
 The build fails loudly on a missing key, an unknown enum value, or a
 malformed range — better a red build than a card with a blank stat.
 
@@ -44,6 +45,7 @@ skills: [regime design, threat modelling, evidence standards]
 prerequisites: [Verification 2.x — the four layers, Verification 4.1]
 sources:
   - "[Open Problems in Technical AI Governance — Reuel et al. (2025)](https://arxiv.org/abs/2407.14981)"
+similar: [red-team-a-verification-stack]   # cross-links; slugs must exist
 updated: 2026-08-04
 ---
 ```
@@ -62,16 +64,27 @@ the courses their prerequisites named do not exist here, so those briefs
 carry no `prerequisites` — a brief must not claim preparation this site
 cannot give.
 
-Two rules follow, and nothing validates either — they are on the author:
+Three rules follow, and nothing validates them — they are on the author:
 
 - **`prerequisites` must name real units**, spelled the way `data/course.js`
   spells them. A fabricated prerequisite makes a card look grounded when it
   is not.
-- **`sources` carries only links a visitor can open, and only final ones.**
-  No pointers at program docs (`verification-track-outline.md §4.2` is not a
-  source a learner can read — that provenance belongs in the commit message),
-  and no aggregators: when an idea was found through a list of lists, cite
-  the specific list or paper it points to, not the list of lists.
+- **`sources` carries at most one link — the idea the card retells.** Only a
+  link a visitor can open, and only a final one: no pointers at program docs
+  (`verification-track-outline.md §4.2` is not a source a learner can read —
+  that provenance belongs in the commit message), and no aggregators: when an
+  idea was found through a list of lists, cite the specific list or paper it
+  points to, not the list of lists. Working-material links a card operates on
+  belong in the body; related cards belong in `similar`; a program-original
+  card carries no sources at all.
+- **One card, one idea.** A card retells exactly one source idea, and its
+  brief quotes that idea's own description — attribution first, then the
+  words. A similar idea in another list gets its own card, and the two
+  point at each other through the `similar` front-matter key — the sheet
+  renders it as a closed toggle behind a `+` sign, so cross-links never
+  read as sources. The build fails on a slug that does not exist. Never
+  merge two ideas into one brief, and never pad a quoted idea with claims
+  the source does not make.
 
 ## Sources
 
@@ -108,7 +121,8 @@ in that folder were checked on **2026-08-04**, before the port.
 | Link | Status | Note |
 |---|---|---|
 | 43 of 44 — arXiv, LessWrong, EA Forum, aisafety.com, Substack, OpenReview, NIST, Google Docs, Airtable, eagroups.org, timaeus.co and personal-site links | confirmed | HTTP 200 on 2026-08-04, in the playground repo before the port |
-| `coefficientgiving.org` — the capability-evaluations RFP | unchecked | Open Philanthropy renamed to Coefficient Giving in Nov 2025; the openphilanthropy.org URL cited by the source post 301s to this host, which returns 403 to automated clients. Page title is present in search indexes. Re-check by hand. |
+| `coefficientgiving.org` — the capability-evaluations RFP | confirmed | The host 403s all automated clients, so the page body was never fetched directly. Identity and content verified 2026-08-06 three ways: the openphilanthropy.org URL 301s to it, the search-index title matches, and Open Philanthropy's own EA Forum announcement of the same RFP (cb, Feb 2025; deadline 1 Apr 2025) carries the body. |
+| Full re-check of all 43 distinct off-site links | confirmed | 2026-08-06: 29 return HTTP 200 directly; the 13 lesswrong.com URLs return 429 to automated clients (datacenter rate limiting) and every one was confirmed live via mirror and API; coefficientgiving.org as above. Same pass corrected one label used on eight cards — the evals Google Doc's real title is "A long list of open problems and concrete projects in evals", a multi-contributor doc maintained by Hobbhahn, not "100+ Concrete Problems…". |
 
 ## Body
 

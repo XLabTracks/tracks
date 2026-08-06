@@ -14,8 +14,6 @@ audience: The regulator who has to accept an eval result from a party that benef
 skills: [incentive design, eval methodology, detection reasoning, regulatory drafting]
 sources:
   - "[A Collection of AI Governance Research Ideas — von Knebel & Anderljung (2024), idea 38: what regulatory incentives should target evaluation sandbagging?](https://www.markusanderljung.com/blog/a-collection-of-ai-governance-research-ideas-2024)"
-  - "[100+ Concrete Problems and Open Projects in Evals — Marius Hobbhahn (2025)](https://docs.google.com/document/d/1gi32-HZozxVimNg5Mhvk4CvW4zq8J12rGmK_j2zxNEg/edit)"
-  - "[Open Problems in Technical AI Governance — Reuel et al. (2025)](https://arxiv.org/abs/2407.14981)"
 updated: 2026-08-04
 ---
 

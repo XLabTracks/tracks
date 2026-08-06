@@ -1,8 +1,8 @@
 ---
-title: Score the Developers Against the Framework They Endorsed
+title: Score the Developers Against the NIST Framework
 theme: AI Governance Policy
 status: draft
-summary: Developers publicly back the NIST AI Risk Management Framework. Turn it into a checklist, score them on public evidence, and publish the scoring rule with the scores.
+summary: Nobody knows whether the major developers follow the NIST AI Risk Management Framework — or ever promised to. Turn it into a checklist, score them on public evidence, and publish the rule.
 team: 2-3
 effort_hours: 14-20
 duration: 3 weeks
@@ -14,17 +14,16 @@ audience: The procurement officer or regulator deciding whether "we follow the R
 skills: [framework decomposition, rubric design, evidence sourcing, comparative scoring]
 sources:
   - "[Orphaned Policies (post 5 of 7 on AI governance) — Mass_Driver, orphan 10](https://www.lesswrong.com/posts/wFKZmvfRfNn24HNHp/orphaned-policies-post-5-of-7-on-ai-governance)"
-  - "[Ten AI safety projects I'd like people to work on — Julian Hazell, project 5 (AI Lab Monitor)](https://www.lesswrong.com/posts/vxA2BnCPTaPfnJjti/ten-ai-safety-projects-i-d-like-people-to-work-on)"
-  - "[NIST AI Risk Management Framework](https://www.nist.gov/itl/ai-risk-management-framework)"
 updated: 2026-08-04
 ---
 
 ## The brief
 
-A voluntary framework that everyone endorses and nobody is scored against is
-indistinguishable from a press release. The orphan catalogue puts it plainly:
-the guidelines are published, a rating system exists, and it is not obvious
-that the major developers actually comply.
+A voluntary framework nobody is scored against is indistinguishable from a
+press release. The orphan catalogue puts it plainly: the
+[guidelines](https://www.nist.gov/itl/ai-risk-management-framework) are
+published, a rating system exists, and it is not obvious that the major
+developers actually comply — or even that they have promised to.
 
 Build the instrument that would tell you.
 

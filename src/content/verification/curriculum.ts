@@ -127,9 +127,13 @@ export const verificationModules: Module[] = [
       "Every mechanism in module 3 can fail. How a determined actor cheats, what evidence the evasion leaves across layers, and the red-team/blue-team exercise that makes you argue both sides.",
     order: 3,
     prerequisiteModuleIds: ["v-why", "v-scoping", "v-infrastructure"],
+    // 3.0, 3.1 and 3.2 are the outline's submodules; 3.1.1 nests under 3.1.
+    // 3.2.1 (the post-case scored taxonomy) is still a heading inside 3.2 and
+    // is the next promotion owed here — see docs/verification/module-3-log.md.
     itemIds: [
       "v-covert-what-is-it",
       "v-covert-how-to-cheat",
+      "v-covert-taxonomy",
       "v-covert-red-blue",
     ],
   },
@@ -288,6 +292,14 @@ export const verificationLessons: Lesson[] = [
     moduleId: "v-covert",
     title: "3.1 How could a determined actor cheat?",
     contentRef: "verification/covert-how-to-cheat",
+  },
+  {
+    id: "v-covert-taxonomy",
+    slug: "covert-taxonomy",
+    moduleId: "v-covert",
+    sectionItemId: "v-covert-how-to-cheat",
+    title: "3.1.1 Evasion scenario taxonomy",
+    contentRef: "verification/covert-taxonomy",
   },
   {
     id: "v-covert-red-blue",
@@ -627,6 +639,7 @@ export const verificationUnitOfLesson: Record<string, string> = {
   "v-human-institutions": "2.4",
   "v-covert-what-is-it": "3.0",
   "v-covert-how-to-cheat": "3.1",
+  "v-covert-taxonomy": "3.1",
   "v-covert-red-blue": "3.2",
   "v-capstone-motivation": "4.0",
   "v-capstone-feasibility": "4.1",

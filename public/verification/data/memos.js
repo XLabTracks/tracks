@@ -188,16 +188,5 @@ window.VERIFICATION_MEMOS = [
     "criteria": [
       "Peer review against the rubric"
     ]
-  },
-  {
-    "id": "m4-2-capstone",
-    "module": 4,
-    "unit": "4.2",
-    "title": "Capstone governance artifact",
-    "status": "specified",
-    "brief": "Produce a governance artifact in a working format — treaty text, policy memo, or research proposal — with every mechanism claim anchored to a named precedent, provision, or source. Then compare your current positions against your written checkpoints from earlier modules, and account for what changed.",
-    "audience": "Set by the format you choose; name it before you start.",
-    "words": 1600,
-    "peerReviewed": true
   }
 ];

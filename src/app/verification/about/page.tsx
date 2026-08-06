@@ -1,5 +1,8 @@
 import type { Metadata } from "next";
 
+import { verificationModules } from "@/content/verification/curriculum";
+import { memoSlots } from "@/content/verification/memos";
+
 /* About the Verification track — one of the course's own pages.
  *
  * It was a hand-written .html file under public/verification/ until the two
@@ -28,10 +31,15 @@ export default function Page() {
               promise from a broken one.
             </p>
 
+            {/* Counted from the sources, never typed in: the written-output
+                figure was three memos stale the first time a slot moved, and a
+                page that states the course's own size has to be right about it.
+                Skills stay a literal — the rungs live in the static
+                data/skills.js, which is outside the app's imports. */}
             <dl className="facts">
-              <div><dt>Modules</dt><dd>5</dd></div>
+              <div><dt>Modules</dt><dd>{verificationModules.length}</dd></div>
               <div><dt>Skills</dt><dd>27</dd></div>
-              <div><dt>Written outputs</dt><dd>15</dd></div>
+              <div><dt>Written outputs</dt><dd>{memoSlots.length}</dd></div>
               <div><dt>Level</dt><dd>Intermediate</dd></div>
             </dl>
           </div>

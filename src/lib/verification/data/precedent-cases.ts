@@ -1,14 +1,15 @@
 /**
- * The 0.3 case-study interactive: six verification regimes from history, the
+ * The 0.3 case-study interactive: eight verification regimes from history, the
  * learner calls "held or circumvented" before reading how each turned out.
  *
  * Every sentence is the author's case-file text from the precedents lesson,
  * verbatim — the six cases the outline names for the exercise (Antarctic,
- * IAEA, INF, BWC, CWC, test-ban monitoring). The only editorial move is
- * placement: a sentence that gives the outcome away (Biopreparat, the North
- * Korean test detections) is shown in the reveal, not the briefing, because
- * the exercise is prediction-first. The Baruch Plan and South Africa case
- * files stay in the lesson as plain reading.
+ * IAEA, INF, BWC, CWC, test-ban monitoring) plus the Baruch Plan and South
+ * Africa, folded in from the lesson's plain reading on the author's
+ * instruction. The only editorial move is placement: a sentence that gives
+ * the outcome away (Biopreparat, the North Korean test detections) is shown
+ * in the reveal, not the briefing, because the exercise is prediction-first.
+ * Order is chronological.
  */
 
 export type PrecedentOutcome = "held" | "circumvented";
@@ -33,16 +34,16 @@ export interface PrecedentCase {
 
 export const PRECEDENT_CASES: PrecedentCase[] = [
   {
-    id: "antarctic",
-    name: "The Antarctic Treaty (1959)",
-    tagline: "Broad inspection under unusually favorable conditions",
+    id: "baruch",
+    name: "The Baruch Plan (1946)",
+    tagline: "Verification at the start of the nuclear age",
     briefing:
-      "Article VII allows treaty parties to inspect stations, installations, equipment, ships, and aircraft in Antarctica. Observers have broad access, and the treaty also permits aerial observation. These provisions created one of the strongest formal inspection rights in an international agreement.",
-    outcome: "held",
-    outcomeHeading: "Why it has held",
-    why: "Antarctica contained few permanent populations or established military assets when the treaty was negotiated. Activities were geographically isolated and often difficult to conceal. The parties also shared an interest in preventing military competition from expanding onto the continent.",
+      "In June 1946, the United States proposed placing nuclear materials and weapons development under an international authority with broad inspection powers. The Soviet Union proposed eliminating existing weapons before establishing inspections. The disagreement combined verification, sequencing, enforcement, and the imbalance created by the existing US arsenal.",
+    outcome: "circumvented",
+    outcomeHeading: "Why it failed",
+    why: "The United States was unwilling to relinquish its weapons without reliable access inside the Soviet Union. Soviet leaders saw intrusive inspections and the proposed enforcement structure as threats to sovereignty and security. Neither side trusted the other to complete its obligations after giving up its main source of leverage.",
     transfer:
-      "The treaty shows that states can accept extensive inspection rights under supportive political conditions. AI facilities carry much greater commercial, military, and intelligence value, so similar language may face stronger resistance. The precedent is most useful for demonstrating the legal possibility of broad access, while offering limited evidence about its acceptability in strategically central industries.",
+      "AI agreements should address sequencing early. Parties need a credible account of when restrictions begin, when inspections begin, and what happens if one side complies before another. Transitional arrangements, reciprocal steps, and phased verification may be more acceptable than requiring one party to move first.",
   },
   {
     id: "iaea",
@@ -57,16 +58,16 @@ export const PRECEDENT_CASES: PrecedentCase[] = [
       "AI regimes should layer hardware attestation, logs, facility monitoring, supply-chain records, and human reporting. Designers should assume that individual controls will eventually face technical or operational workarounds. Nuclear material accountancy transfers only partially to AI because model weights and software can be copied without creating an obvious shortage elsewhere.",
   },
   {
-    id: "inf",
-    name: "The INF Treaty and the Votkinsk portal (1987–2001)",
-    tagline: "Continuous monitoring between rivals",
+    id: "antarctic",
+    name: "The Antarctic Treaty (1959)",
+    tagline: "Broad inspection under unusually favorable conditions",
     briefing:
-      "The INF Treaty eliminated US and Soviet ground-launched missiles within specified ranges and authorized unusually intrusive verification. US inspectors continuously monitored the Votkinsk missile plant, while Soviet inspectors monitored a US facility in Magna, Utah. At Votkinsk, the United States developed the CargoScan radiographic system to distinguish permitted SS-25 missiles from the closely related, prohibited SS-20.",
+      "Article VII allows treaty parties to inspect stations, installations, equipment, ships, and aircraft in Antarctica. Observers have broad access, and the treaty also permits aerial observation. These provisions created one of the strongest formal inspection rights in an international agreement.",
     outcome: "held",
-    outcomeHeading: "Why it held during the monitoring period",
-    why: "The treaty defined a narrow class of prohibited systems, concentrated relevant production at identifiable facilities, and paired obligations with reciprocal access. Missiles leaving the plant passed through a physical portal, giving inspectors a stable point at which to collect evidence. Disputes still arose over the scope and operation of monitoring equipment.",
+    outcomeHeading: "Why it has held",
+    why: "Antarctica contained few permanent populations or established military assets when the treaty was negotiated. Activities were geographically isolated and often difficult to conceal. The parties also shared an interest in preventing military competition from expanding onto the continent.",
     transfer:
-      "AI regimes can learn from reciprocal access, continuous monitoring at production chokepoints, and verification designed to distinguish permitted from prohibited activity. The analogy is strongest where compute or advanced chips pass through identifiable facilities or supply-chain nodes. It becomes weaker for software, model weights, and distributed activity that can move without crossing a monitored gate.",
+      "The treaty shows that states can accept extensive inspection rights under supportive political conditions. AI facilities carry much greater commercial, military, and intelligence value, so similar language may face stronger resistance. The precedent is most useful for demonstrating the legal possibility of broad access, while offering limited evidence about its acceptability in strategically central industries.",
   },
   {
     id: "bwc",
@@ -79,6 +80,30 @@ export const PRECEDENT_CASES: PrecedentCase[] = [
     why: "The Soviet Union subsequently operated Biopreparat, a large covert biological weapons program. Defectors including Vladimir Pasechnik and Ken Alibek later helped reveal its scale. Biological research is deeply dual-use, relevant facilities can have small physical footprints, and commercial and national-security actors feared that inspections would expose legitimate secrets. Negotiations over a verification protocol continued during the 1990s but collapsed in 2001 after the United States rejected the draft.",
     transfer:
       "AI verification should account for dual-use facilities, commercial confidentiality, and activities that can be dispersed or concealed. Technical monitoring should be paired with whistleblower protections, personnel interviews, reporting channels, and investigative follow-up. A broad prohibition with little routine evidence collection may leave large compliance gaps.",
+  },
+  {
+    id: "inf",
+    name: "The INF Treaty and the Votkinsk portal (1987–2001)",
+    tagline: "Continuous monitoring between rivals",
+    briefing:
+      "The INF Treaty eliminated US and Soviet ground-launched missiles within specified ranges and authorized unusually intrusive verification. US inspectors continuously monitored the Votkinsk missile plant, while Soviet inspectors monitored a US facility in Magna, Utah. At Votkinsk, the United States developed the CargoScan radiographic system to distinguish permitted SS-25 missiles from the closely related, prohibited SS-20.",
+    outcome: "held",
+    outcomeHeading: "Why it held during the monitoring period",
+    why: "The treaty defined a narrow class of prohibited systems, concentrated relevant production at identifiable facilities, and paired obligations with reciprocal access. Missiles leaving the plant passed through a physical portal, giving inspectors a stable point at which to collect evidence. Disputes still arose over the scope and operation of monitoring equipment.",
+    transfer:
+      "AI regimes can learn from reciprocal access, continuous monitoring at production chokepoints, and verification designed to distinguish permitted from prohibited activity. The analogy is strongest where compute or advanced chips pass through identifiable facilities or supply-chain nodes. It becomes weaker for software, model weights, and distributed activity that can move without crossing a monitored gate.",
+  },
+  {
+    id: "south-africa",
+    name: "South Africa (1989–1993)",
+    tagline: "Verifying the dismantlement of a complete arsenal",
+    briefing:
+      "South Africa secretly built six nuclear devices and began dismantling them after F.W. de Klerk took office in 1989. The weapons were disassembled, the highly enriched uranium was recovered and stored, and South Africa joined the NPT in 1991. After the government disclosed the former program in 1993, the IAEA examined whether the declaration was complete.",
+    outcome: "held",
+    outcomeHeading: "Why verification succeeded",
+    why: "South Africa cooperated extensively and wanted international recognition that the program had ended. Inspectors reviewed uranium-production records, compared historical production with the declared inventory, visited former facilities, examined equipment, and interviewed personnel. Even with substantial cooperation, reconstructing the baseline took roughly two years.",
+    transfer:
+      "Verifying the closure of an advanced AI program would likely require access to records, facilities, hardware inventories, financial flows, and personnel. Inspectors would need to reconstruct past activity as well as observe present conditions. The precedent also shows how much cooperation matters: confidence in completeness is much harder to establish when a state withholds records, access, or knowledgeable staff.",
   },
   {
     id: "cwc",

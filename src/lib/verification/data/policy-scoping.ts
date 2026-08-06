@@ -348,7 +348,7 @@ export const POLICY_SCOPING_COPY = {
 
   closingNext: "Next — who would have to agree? Module 1: The Compute Supply Chain →",
 
-  foot: "Framework from the Governance Tracks outline, §0.2 Policy Scoping (July 2026). Reference thresholds students should recognize: EU AI Act Art. 51 presumes systemic risk above 10²⁵ training FLOP; the rescinded EO 14110 used 10²⁶ as its reporting trigger. The corners of this plane are anchored by the outline; the middle band is genuinely contestable — the written justification exercise exists precisely to argue it.",
+  foot: "Two reference thresholds worth carrying: EU AI Act Art. 51 presumes systemic risk above 10²⁵ training FLOP; the rescinded EO 14110 used 10²⁶ as its reporting trigger. The corners of this plane are settled; the middle band is genuinely contestable, which is what the written justification asks you to argue.",
 } as const;
 
 /** feasibility index (from cell key f#) → word */

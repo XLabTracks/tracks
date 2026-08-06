@@ -45,9 +45,8 @@ window.COURSE = {
           "title": "Building verification intuitions",
           "kind": "interactive",
           "mins": "15–20 min",
-          "href": "/tracks/verification/why-verification/verification-timeline-game",
+          "href": "/tracks/verification/why-verification/building-intuitions",
           "lessons": [
-            "verification-timeline-game",
             "building-intuitions"
           ]
         },
@@ -94,8 +93,7 @@ window.COURSE = {
           "mins": "20–25 min",
           "href": "/tracks/verification/policy-scoping/scoping-anatomy",
           "lessons": [
-            "scoping-anatomy",
-            "anatomy-drill"
+            "scoping-anatomy"
           ]
         },
         {

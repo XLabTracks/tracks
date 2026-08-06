@@ -73,6 +73,31 @@
   font-family: var(--sans);
 }
 
+/* In-lesson sub-headings are emphasized text, not display type: the body
+   face, bold, stepped in +2px over the paragraph so h3 > h4 > h5 stays
+   readable in the deeply nested worked examples (module 3 nests all three).
+   The display face keeps the page h1 and the h2 section heads — that
+   contrast is what marks a section against a run of emphasized labels.
+   Trap: theme.css sets h1–h4 to the display face at weight 500, which is
+   exactly the rule that made an h4 sit flush with the paragraph beside it;
+   these must stay ahead of it and of the prose classes in specificity.
+   Em-based on purpose — the sizes follow whatever the paragraph reads at. */
+:root[data-theme] .lesson-body :is(h3, h4, h5, h6):not(.not-prose *) {
+  font-family: var(--sans);
+  font-weight: 700;
+  letter-spacing: 0;
+  line-height: 1.3;
+}
+:root[data-theme] .lesson-body h3:not(.not-prose *) {
+  font-size: calc(1em + 6px);
+}
+:root[data-theme] .lesson-body h4:not(.not-prose *) {
+  font-size: calc(1em + 4px);
+}
+:root[data-theme] .lesson-body :is(h5, h6):not(.not-prose *) {
+  font-size: calc(1em + 2px);
+}
+
 /* Lists, from the author's two reference sheets: a short list is a tab and a
    red dot; a long one is built, not dotted. From four items up, a numbered
    list takes the stepped form — a solid --primary disc carrying its number —
@@ -111,38 +136,90 @@
   font-weight: 600;
 }
 
-/* Pill rows: four or more plain bullets, the reference sheet's shape — a
-   tinted bar whose head is a ringed circle riding its left end: card-ground
-   centre, a wide translucent --primary ring, and a thin --primary outline
-   drawn by box-shadow so it sits outside the ring. The rows run tight so
-   the heads chain down the list the way the sheet's do.
+/* Four or more plain bullets share one card, the reference sheet's shape:
+   a pale tinted slab with a big radius holding the whole run, every item
+   marked by a --primary dot, and a solid --primary circle peeking from
+   behind the top-left corner. Painted on all four sides — the whole-card
+   half of the card-edge rule, never a tinted rib.
 
-   Trap: the circle hangs 18px past the bar's left edge, so the bar takes an
-   18px margin instead of starting at the column edge — drop the margin and
-   the head clips against the reading column. */
+   The paragraph that introduces the list rides inside the card as its
+   header, in red: p:has(+ ul) takes the slab ground, the top corners and
+   the corner circle, and the list under it squares its top edge so the two
+   read as one card. That is a visual join, not a reparenting — the
+   paragraph stays its own element, and the radius seam is the whole
+   mechanism. The header writes in --brand-ink, never --primary: maroon is
+   a surface on the night ground, not an ink.
+
+   Trap: the corner circle is ::before at z-index -1 — the element makes no
+   stacking context, so the circle paints behind the slab and above the
+   page. And when the header carries the circle, the list's own must be
+   suppressed or two circles stack on the seam. */
 :root[data-theme] .lesson-body ul:not(.not-prose *):not(li ul):has(> li:nth-child(4)) {
+  position: relative;
   display: grid;
-  gap: 6px;
-  padding-left: 0;
+  gap: 14px;
+  margin-top: 2em;
+  padding: 26px 30px 26px 54px;
+  background: color-mix(in srgb, var(--primary) 7%, var(--background));
+  border-radius: 28px;
+}
+:root[data-theme] .lesson-body ul:not(.not-prose *):not(li ul):has(> li:nth-child(4))::before {
+  content: '';
+  position: absolute;
+  left: -12px;
+  top: -16px;
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: var(--primary);
+  z-index: -1;
 }
 :root[data-theme] .lesson-body ul:not(.not-prose *):not(li ul):has(> li:nth-child(4)) > li {
-  margin: 0 0 0 18px;
-  padding: 11px 22px 11px 34px;
-  background: color-mix(in srgb, var(--primary) 7%, transparent);
-  border-radius: 999px;
+  margin: 0;
 }
 :root[data-theme] .lesson-body ul:not(.not-prose *):not(li ul):has(> li:nth-child(4)) > li::before {
   content: '';
   position: absolute;
-  left: -18px;
-  top: 50%;
-  margin-top: -18px;
-  width: 36px;
-  height: 36px;
+  left: -26px;
+  top: calc(0.875em - 4px);
+  width: 8px;
+  height: 8px;
   border-radius: 50%;
-  background: var(--card);
-  border: 6px solid color-mix(in srgb, var(--primary) 24%, var(--card));
-  box-shadow: 0 0 0 1.5px var(--primary);
+  background: var(--primary);
+}
+
+/* The introducing paragraph, as the card's red header. */
+:root[data-theme] .lesson-body p:not(.not-prose *):has(+ ul:not(li ul) > li:nth-child(4)) {
+  position: relative;
+  margin: 2em 0 0;
+  padding: 22px 30px 0 54px;
+  background: color-mix(in srgb, var(--primary) 7%, var(--background));
+  border-radius: 28px 28px 0 0;
+  color: var(--brand-ink, var(--primary));
+  font-weight: 600;
+}
+:root[data-theme] .lesson-body p:not(.not-prose *):has(+ ul:not(li ul) > li:nth-child(4)) :where(strong, b) {
+  color: inherit;
+}
+:root[data-theme] .lesson-body p:not(.not-prose *):has(+ ul:not(li ul) > li:nth-child(4))::before {
+  content: '';
+  position: absolute;
+  left: -12px;
+  top: -16px;
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: var(--primary);
+  z-index: -1;
+}
+:root[data-theme] .lesson-body p:not(.not-prose *):has(+ ul:not(li ul) > li:nth-child(4)) + ul:not(.not-prose *):not(li ul):has(> li:nth-child(4)) {
+  margin-top: 0;
+  padding-top: 16px;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}
+:root[data-theme] .lesson-body p:not(.not-prose *):has(+ ul:not(li ul) > li:nth-child(4)) + ul:not(.not-prose *):not(li ul):has(> li:nth-child(4))::before {
+  content: none;
 }
 
 /* Stepped circles: four or more numbered items. */

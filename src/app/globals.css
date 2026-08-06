@@ -313,3 +313,19 @@
     line-height: 1.45;
   }
 }
+
+/* A strip that scrolls sideways without drawing a scrollbar under itself.
+   For chrome only — a row of tabs or chips whose overflow is a nicety, never
+   for a reading surface where the bar is the only clue there is more to see
+   (a wide table keeps its own, see .lesson-body table above).
+
+   Trap: both declarations are needed and neither is a fallback for the other.
+   Firefox reads scrollbar-width; WebKit and Chromium only take the
+   pseudo-element, and it must set display:none — width:0 leaves the gutter. */
+.no-scrollbar {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}

@@ -46,7 +46,6 @@ export const verificationModules: Module[] = [
       "v-welcome",
       "v-introduction",
       "v-prevention",
-      "v-verification-timeline-game",
       "v-intuitions",
       "v-precedents",
       "v-securitization",
@@ -67,7 +66,6 @@ export const verificationModules: Module[] = [
       "v-scoping-effective-feasible",
       "v-policy-scoping",
       "v-scoping-anatomy",
-      "v-anatomy-drill",
       "v-scoping-actors",
       "v-interactive-map",
       "v-protocol-actors",
@@ -85,7 +83,7 @@ export const verificationModules: Module[] = [
     order: 2,
     prerequisiteModuleIds: ["v-why", "v-scoping"],
     // Outline order, submodule by submodule. Each submodule opens with its own
-    // X.X.0 reading and its subsubmodules nest under it via `sectionItemId`,
+    // X.X reading and its subsubmodules nest under it via `sectionItemId`,
     // which is the shape the outline's taxonomy asks for (modules organize,
     // submodules and subsubmodules carry text) and the one 2.2 and 2.4 already
     // had. 2.1 and 2.3 were brought onto it here — see
@@ -181,6 +179,10 @@ export const verificationLessons: Lesson[] = [
     title: "1.0.2 Policies must be effective and feasible",
     contentRef: "verification/scoping-effective-feasible",
   },
+  // 1.1 carries its recall drill inline: the outline's "1.1 Anatomy of a
+  // (Pause) Agreement (including exercise)" is one unit, so the former 1.1.1
+  // drill lesson was folded into this body (its copy verbatim, the widget
+  // embedded at the end) rather than standing as its own numbered item.
   {
     id: "v-scoping-anatomy",
     slug: "scoping-anatomy",
@@ -213,7 +215,7 @@ export const verificationLessons: Lesson[] = [
     id: "v-cloud-intro",
     slug: "cloud-intro",
     moduleId: "v-infrastructure",
-    title: "2.2.0 Cloud: introduction",
+    title: "2.2 Cloud: introduction",
     contentRef: "verification/cloud-intro",
   },
   {
@@ -244,7 +246,7 @@ export const verificationLessons: Lesson[] = [
     id: "v-human-intro",
     slug: "human-intro",
     moduleId: "v-infrastructure",
-    title: "2.4.0 The human layer: introduction",
+    title: "2.4 The human layer: introduction",
     contentRef: "verification/human-intro",
   },
   {
@@ -349,7 +351,7 @@ export const verificationLessons: Lesson[] = [
     id: "v-hw-attestation",
     slug: "hardware-attestation",
     moduleId: "v-infrastructure",
-    title: "2.1.0 Hardware: the chip says “compliant”",
+    title: "2.1 Hardware: the chip says “compliant”",
     contentRef: "verification/hardware-attestation",
   },
   {
@@ -431,62 +433,56 @@ export const verificationLessons: Lesson[] = [
     id: "v-introduction",
     slug: "introduction",
     moduleId: "v-why",
-    title: "0.1.0 Introduction: why verification? why you?",
+    title: "0.1 Introduction: why verification? why you?",
     contentRef: "verification/introduction",
   },
   {
     id: "v-prevention",
     slug: "prevention-is-invisible",
     moduleId: "v-why",
+    sectionItemId: "v-introduction",
     title: "0.1.1 The world keeps getting saved and you don’t notice",
     contentRef: "verification/prevention",
   },
+  // 0.2 is the intuitions reading itself. The interactive timeline simulation
+  // that used to open the unit (0.2.0, `v-verification-timeline-game`) was
+  // deleted outright on the author's instruction — lesson, MDX body, widget
+  // and registry entries all removed, not renumbered.
   {
     id: "v-intuitions",
     slug: "building-intuitions",
     moduleId: "v-why",
-    title: "0.2.1 Building verification intuitions",
+    title: "0.2 Building verification intuitions",
     contentRef: "verification/intuitions",
   },
   {
     id: "v-precedents",
     slug: "precedents",
     moduleId: "v-why",
-    title: "0.3.0 Precedents and parallels",
+    title: "0.3 Precedents and parallels",
     contentRef: "verification/precedents",
   },
   {
     id: "v-securitization",
     slug: "securitization",
     moduleId: "v-why",
+    sectionItemId: "v-precedents",
     title: "0.3.1 Securitization, emergency politics, and ASI",
     contentRef: "verification/securitization",
-  },
-  {
-    id: "v-verification-timeline-game",
-    slug: "verification-timeline-game",
-    moduleId: "v-why",
-    title: "0.2.0 Interactive timeline simulation",
-    contentRef: "v-verification-timeline-game",
   },
   {
     id: "v-policy-scoping",
     slug: "policy-scoping",
     moduleId: "v-scoping",
+    sectionItemId: "v-scoping-intro",
     title: "1.0.3 Policy sorting: effectiveness x feasibility",
     contentRef: "v-policy-scoping",
-  },
-  {
-    id: "v-anatomy-drill",
-    slug: "anatomy-drill",
-    moduleId: "v-scoping",
-    title: "1.1.1 Anatomy of a (pause) agreement",
-    contentRef: "v-anatomy-drill",
   },
   {
     id: "v-interactive-map",
     slug: "interactive-map",
     moduleId: "v-scoping",
+    sectionItemId: "v-scoping-actors",
     title: "1.2.1 Geographic supply-chain map",
     contentRef: "v-interactive-map",
   },
@@ -494,6 +490,7 @@ export const verificationLessons: Lesson[] = [
     id: "v-protocol-actors",
     slug: "protocol-actors",
     moduleId: "v-scoping",
+    sectionItemId: "v-scoping-actors",
     title: "1.2.2 Actor taxonomy",
     contentRef: "v-protocol-actors",
   },
@@ -501,6 +498,7 @@ export const verificationLessons: Lesson[] = [
     id: "v-report-constructor",
     slug: "report-constructor",
     moduleId: "v-scoping",
+    sectionItemId: "v-scoping-actors",
     title: "1.2.3 Context-specific report constructor",
     contentRef: "v-report-constructor",
   },
@@ -516,7 +514,7 @@ export const verificationLessons: Lesson[] = [
     id: "v-intel-intro",
     slug: "intelligence-intro",
     moduleId: "v-infrastructure",
-    title: "2.3.0 Intelligence: watching without permission",
+    title: "2.3 Intelligence: watching without permission",
     contentRef: "verification/intelligence-intro",
   },
   {
@@ -568,6 +566,7 @@ export const verificationLessons: Lesson[] = [
     id: "v-research-tips",
     slug: "how-to-do-research-well",
     moduleId: "v-capstone",
+    sectionItemId: "v-capstone-feasibility",
     title: "4.1.1 How to do AI governance research well",
     contentRef: "verification/research-tips",
     estimatedMinutes: 25,
@@ -597,7 +596,6 @@ export const verificationUnitOfLesson: Record<string, string> = {
   "v-welcome": "0.0",
   "v-introduction": "0.1",
   "v-prevention": "0.1",
-  "v-verification-timeline-game": "0.2",
   "v-intuitions": "0.2",
   "v-precedents": "0.3",
   "v-securitization": "0.3",
@@ -606,7 +604,6 @@ export const verificationUnitOfLesson: Record<string, string> = {
   "v-scoping-effective-feasible": "1.0",
   "v-policy-scoping": "1.0",
   "v-scoping-anatomy": "1.1",
-  "v-anatomy-drill": "1.1",
   "v-scoping-actors": "1.2",
   "v-interactive-map": "1.2",
   "v-protocol-actors": "1.2",
@@ -649,8 +646,9 @@ export const verificationUnitOfLesson: Record<string, string> = {
 };
 
 /** Per-unit presentation the graph does not carry: the outline's own title,
- *  kind and runtime. A unit's title can differ from its first lesson's — 0.2
- *  is "Building verification intuitions" and opens with the timeline game. */
+ *  kind and runtime. A unit's title can differ from its first lesson's — 2.1
+ *  is "Hardware" while its opening lesson is "2.1 Hardware: the chip says
+ *  “compliant”". */
 export const verificationUnitMeta: Record<
   string,
   { title: string; kind: string; mins: string; optional?: boolean }

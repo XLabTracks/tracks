@@ -160,30 +160,43 @@ section.band .intro { max-width: 62ch; margin-top: 12px; color: var(--muted-fore
 .sky .strand.hot { stroke: var(--sel); stroke-width: 2.5; }
 .sky.focusing .strand:not(.hot) { opacity: .3; }
 
+/* Spokes and beams are the gum: the star's own colour at full strength,
+   flared into the disc it feeds, so star and path read as one stretched
+   piece — which is also why the discs carry no rim at rest. */
 .sky .spoke {
-  fill: color-mix(in srgb, var(--sel) 55%, var(--background));
+  fill: var(--sel);
   filter: drop-shadow(0 0 calc(6px * var(--glow)) color-mix(in srgb, var(--sel) 45%, transparent));
   transition: fill .25s ease, opacity .25s ease;
 }
-.sky .spoke.hot { fill: var(--sel); }
 .sky.focusing .spoke:not(.hot) { opacity: .2; }
 
 .sky .edge { transition: stroke .25s ease, fill .25s ease, opacity .25s ease; }
+/* The cross edge is the beams' own outline stroked dashed, never filled —
+   same width, same waist; the dash carries the "another module" fact. It
+   joins two hues, so the stroke is the per-edge gradient the markup lays
+   along it (--grad): each end's module colour, meeting at their OKLCH
+   midpoint on the shorter hue arc — a perceptual mix, so the middle stays
+   a colour instead of the grey an sRGB blend walks through. Lit, it keeps
+   the dashes and takes a wash of its near hue inside them. */
 .sky .edge.cross {
   fill: none;
-  stroke: color-mix(in srgb, var(--foreground) 22%, transparent);
-  stroke-width: 1.4;
-  stroke-dasharray: 2 6;
+  stroke: var(--grad, color-mix(in srgb, var(--foreground) 24%, transparent));
+  stroke-width: 1.2;
+  stroke-dasharray: 3 5;
   stroke-linecap: round;
+  opacity: .6;
 }
-.sky .edge.cross.hot { stroke: var(--sel); stroke-width: 2; opacity: 1; }
+.sky .edge.cross.hot {
+  stroke: var(--grad, var(--sel));
+  fill: color-mix(in srgb, var(--sel) 20%, transparent);
+  opacity: 1;
+}
 .sky .edge.beam {
   stroke: none;
-  fill: color-mix(in srgb, var(--sel) 72%, var(--background));
+  fill: var(--sel);
   filter: drop-shadow(0 0 calc(7px * var(--glow)) color-mix(in srgb, var(--sel) 55%, transparent));
 }
 .sky .edge.beam.hot {
-  fill: var(--sel);
   filter: drop-shadow(0 0 calc(12px * var(--glow)) var(--sel));
 }
 .sky.focusing .edge:not(.hot) { opacity: .16; }
@@ -216,11 +229,12 @@ section.band .intro { max-width: 62ch; margin-top: 12px; color: var(--muted-fore
    the fill would change which ink the numeral needs. */
 .sky .node .node-core {
   fill: var(--sel);
-  /* White, as the reference rims its discs — which is also what the column
-     layout's day theme had (--card resolved to white there). On the night
-     ground it is the rim that makes each star read as a token. */
-  stroke: #fff;
-  stroke-width: 2.5;
+  /* No rim at rest: the disc and the beams feeding it are the same solid
+     colour and are meant to merge into one stretched piece. The rim exists
+     only as state — hover, hot, pinned — which keeps the house rule that
+     state lives on the ring, never in the fill. */
+  stroke: transparent;
+  stroke-width: 0;
   filter: drop-shadow(0 0 calc(10px * var(--glow)) color-mix(in srgb, var(--sel) 55%, transparent));
   transition: stroke .15s ease, stroke-width .15s ease;
 }
@@ -420,7 +434,13 @@ section.band .intro { max-width: 62ch; margin-top: 12px; color: var(--muted-fore
   border-radius: 999px;
   overflow-x: auto;
   overflow-y: hidden;
+  /* Chrome, not a reading surface: the sideways scroll is a nicety on a
+     narrow screen and the native bar under a pill row is only noise. Both
+     declarations are needed — Firefox reads the property, WebKit only the
+     pseudo-element. Same treatment as .nav in theme.css. */
+  scrollbar-width: none;
 }
+.mod-filters::-webkit-scrollbar { display: none; }
 .mod-filters button {
   padding: 8px 14px;
   border: 0;
@@ -484,6 +504,15 @@ section.band .intro { max-width: 62ch; margin-top: 12px; color: var(--muted-fore
   letter-spacing: .06em;
   text-transform: uppercase;
   color: var(--sel-text, var(--muted-foreground));
+}
+/* The module number is set apart by weight and a gap, never by a separator
+   glyph — the pattern every reference index uses (Wildy Riftian, Unseen,
+   Obys all set "01 Name" bare). A middot in this slot reads as machine
+   filler, so the gap is a margin here, not a character in the string. */
+.key-mod-name b,
+.sky-panel .p-mod b {
+  font-weight: 700;
+  margin-right: .5em;
 }
 .sky-key button {
   display: flex;

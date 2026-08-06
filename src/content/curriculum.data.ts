@@ -15,7 +15,16 @@ export const tracks: Track[] = [
     description:
       "Hands-on technical track on controlling and evaluating AI systems. The introductory module works through Redwood Research's \"AI Control: Improving Safety Despite Intentional Subversion\" paper and then rebuilds its trusted-monitoring result as an interactive, model-backed demo.",
     kind: "technical",
-    moduleIds: ["c-intro", "c-mod2", "c-areas", "c-mod4", "c-mod5", "c-lowstakes", "c-mod6"],
+    moduleIds: [
+      "c-intro",
+      "c-mod2",
+      "c-areas",
+      "c-mod4",
+      "c-mod5",
+      "c-lowstakes",
+      "c-mod6",
+      "c-next-steps",
+    ],
     prerequisiteEnforcement: "hard",
   },
   {
@@ -195,9 +204,9 @@ export const modules: Module[] = [
     id: "c-mod6",
     slug: "module-6",
     trackId: "control",
-    title: "Beyond scheming: deals and next steps",
+    title: "Beyond scheming: seekers and deals",
     summary:
-      "Three sections in development: alternatives to scheming threat models, trading with AIs, and next steps for control.",
+      "Alternatives to scheming threat models — the seeker archetypes, their empirics, and mitigations — and trading with AIs.",
     order: 7,
     // Empty placeholder modules count as complete, so only the built modules
     // actually gate; listing every ancestor keeps the chain correct as the
@@ -220,8 +229,28 @@ export const modules: Module[] = [
       "c-paper-deals-schemers",
       "c-paper-cooperating-unaligned",
       "c-paper-trade-barriers",
-      "c-mod6-l3",
     ],
+  },
+  {
+    // Standalone track closer: a single links page, deliberately outside the
+    // content modules.
+    id: "c-next-steps",
+    slug: "next-steps",
+    trackId: "control",
+    title: "Next Steps",
+    summary:
+      "Where to go after the track: research programs to apply to, organizations to track, and opportunities boards.",
+    order: 8,
+    prerequisiteModuleIds: [
+      "c-intro",
+      "c-mod2",
+      "c-areas",
+      "c-mod4",
+      "c-mod5",
+      "c-lowstakes",
+      "c-mod6",
+    ],
+    itemIds: ["c-mod6-l3"],
   },
   // --- Verification: each item is a self-contained HTML interactive from
   // public/verification/, embedded via <VerificationExercise/>. Module
@@ -546,8 +575,8 @@ export const lessons: Lesson[] = [
   },
   {
     id: "c-mod6-l3",
-    slug: "next-steps",
-    moduleId: "c-mod6",
+    slug: "whats-next",
+    moduleId: "c-next-steps",
     title: "Next Steps",
     contentRef: "c-mod6-l3",
   },

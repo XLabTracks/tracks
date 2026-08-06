@@ -1720,8 +1720,13 @@ export const papers: Paper[] = [
         op: "activity",
         after: { sectionEnd: "lw-sec-a-wide-range-of-possible-early-schemers" },
         items: [
-          { kind: "exercise", id: "c-paper-deals-recall-example-deal" },
-          { kind: "exercise", id: "c-paper-deals-recall-goal-routes" },
+          {
+            kind: "sequence",
+            exerciseIds: [
+              "c-paper-deals-recall-example-deal",
+              "c-paper-deals-recall-goal-routes",
+            ],
+          },
         ],
       },
       // Sources: the central-example section (what the AI offers) and the
@@ -1730,8 +1735,13 @@ export const papers: Paper[] = [
         op: "activity",
         after: { sectionEnd: "lw-sec-credible-commitments-as-a-fundamental-bo" },
         items: [
-          { kind: "exercise", id: "c-paper-deals-recall-ai-offers" },
-          { kind: "exercise", id: "c-paper-deals-recall-convergence" },
+          {
+            kind: "sequence",
+            exerciseIds: [
+              "c-paper-deals-recall-ai-offers",
+              "c-paper-deals-recall-convergence",
+            ],
+          },
         ],
       },
       // Source: the credibility-improving factors list in the credible-

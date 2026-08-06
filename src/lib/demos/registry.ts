@@ -30,11 +30,8 @@ import { ForecastChainDemo } from "@/components/demos/forecast-chain-demo";
 import { ExplorationHorizonDemo } from "@/components/demos/exploration-horizon-demo";
 import { CrossEpisodeCollusionDemo } from "@/components/demos/cross-episode-collusion-demo";
 import { DistantIncentivesDemo } from "@/components/demos/distant-incentives-demo";
-import { SatiationTradeDemo } from "@/components/demos/satiation-trade-demo";
-import { SpillwayDemo } from "@/components/demos/spillway-demo";
 import { SeekerCarouselDemo } from "@/components/demos/seeker-carousel-demo";
 import { SeekerRiskMapDemo } from "@/components/demos/seeker-risk-map-demo";
-import { AdversaryResistanceDemo } from "@/components/demos/adversary-resistance-demo";
 import { DealGainsFromTradeDemo } from "@/components/demos/deal-gains-from-trade-demo";
 import { DealCoalitionRoutesDemo } from "@/components/demos/deal-coalition-routes-demo";
 
@@ -279,18 +276,6 @@ export const demoRegistry: Record<string, DemoDefinition> = {
     component: DistantIncentivesDemo,
     tags: ["control", "seekers"],
   },
-  "satiation-trade": {
-    id: "satiation-trade",
-    title: "The basic trade case",
-    component: SatiationTradeDemo,
-    tags: ["control", "seekers"],
-  },
-  spillway: {
-    id: "spillway",
-    title: "Spillway motivations",
-    component: SpillwayDemo,
-    tags: ["control", "seekers"],
-  },
   "seeker-carousel": {
     id: "seeker-carousel",
     title: "The seeker orientations, by severity",
@@ -301,12 +286,6 @@ export const demoRegistry: Record<string, DemoDefinition> = {
     id: "seeker-risk-map",
     title: "Which seekers drive which risks",
     component: SeekerRiskMapDemo,
-    tags: ["control", "seekers"],
-  },
-  "adversary-resistance": {
-    id: "adversary-resistance",
-    title: "Adversary-resistance training",
-    component: AdversaryResistanceDemo,
     tags: ["control", "seekers"],
   },
   "deal-gains-from-trade": {

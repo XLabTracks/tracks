@@ -33,11 +33,6 @@ Behavioral selection is the observation that training reinforces whichever behav
 ### ROTE — reward-on-the-episode seeker
 
 - Reward-on-the-episode seekers aim to maximize reward within an episode. They tend to be more noticeable than schemers as they don't particularly care about being detected due to their primary goal being the maximization of reward.
-
-![Behavioral selection causal graph](/seekers/bsm-causal-graph.jpg)
-
-*Source: [Mallen, The behavioral selection model](https://blog.redwoodresearch.org/p/the-behavioral-selection-model-for)*
-
 - One test that tends to catch these sorts of seekers is an honest test, which involves giving the seeker an opportunity to max out its own reward by giving it control of its training process / weights.
 
 <Demo id="honest-test" />
@@ -66,17 +61,10 @@ Behavioral selection is the observation that training reinforces whichever behav
 - Apparent-success-seekers are emergent misaligned seekers that aim for apparent task success. These seekers seem to emerge due to an optimal kludge of motivations rather than a coherent misaligned goal like how ROTA/E seekers emerge. The main cause of this mode of failure seems to be misspecified / underspecified RL grading on tasks that are difficult to evaluate, where motivations aren't steered as strongly towards accurately completing the task.
 - As tasks get harder for us to check properly & as we move towards automated safety research, the risk that apparent-success-seekers pose becomes much more pertinent, as they can significantly slow down safety research by downplaying issues & reporting successful implementations despite failure. Furthermore, they sometimes actively mislead the operator by obscuring their failures, making it even harder to diagnose problems.
 
-This is the slop threat model from the earlier module:
-
-<Demo id="five-worlds" />
 
 ### ROTA — return-on-the-action seeker
 
 - Return-on-the-action seekers perform whatever action it thinks will give it the highest return for a single action. These seekers behave identical to a reward-on-the-episode seeker if rewards are only given after the end of an episode. However, these seekers may be safer than a reward-on-the-episode seeker. Because these seekers only care about its own action's return, they don't purposefully plan for future actions, making it hard to coordinate behavior between actions. Furthermore, the scope of an action is rather limited, preventing takeover within only one action.
-
-![Return-on-action screens off selection from episode reward](/seekers/rota-return-screens-off.jpg)
-
-*Source: [Mallen, Fitness-Seekers](https://blog.redwoodresearch.org/p/fitness-seekers-generalizing-the)*
 
 ### Influence — deployment-influence seeker
 
@@ -96,10 +84,6 @@ This is the slop threat model from the earlier module:
 ## Risks and mitigations
 
 Risks and mitigations here follow [Mallen, "Risk from fitness-seeking AIs: mechanisms and mitigations"](https://www.lesswrong.com/s/JR9LzD3mbXvaw6bKs/p/9YCJZBtqr3FYL8rDp).
-
-![Fitness-seeker threat-model comparison](/seekers/threat-model-comparison.jpg)
-
-*Source: [Mallen, Fitness-Seekers](https://blog.redwoodresearch.org/p/fitness-seekers-generalizing-the)*
 
 ### What?
 
@@ -121,17 +105,9 @@ Risks and mitigations here follow [Mallen, "Risk from fitness-seeking AIs: mecha
 - Satiation
   - give them most of what they want as long as they appear to cooperate, which theoretically cuts subversion incentive and frees capacity for useful work
   - only reasonable if they're easily satiable
-
-<Demo id="satiation-trade" />
-
 - Honest tests
   - transparently give AI the ability to expand its own resources and see its response to this as a way to detect visible seekers
   - need to make sure that this isn't trained on as this can lead to training out disclosure of misalignment rather than misalignment
-
-![Developers noticing hacking can prevent a cognitive pattern from reaching deployment](/seekers/honest-test-selection-basis.png)
-
-*Source: [Mallen, The behavioral selection model](https://blog.redwoodresearch.org/p/the-behavioral-selection-model-for)*
-
 - Long-term measurements
   - chain short-term forecasts together to incentivize objectives beyond immediate reward, giving more accurate results
 
@@ -154,14 +130,8 @@ Risks and mitigations here follow [Mallen, "Risk from fitness-seeking AIs: mecha
 - Spillway motivations
   - deliberately instill a controlled reward-seeking motivation with four safe properties: cheap satiability, credulity (trusts developer descriptions), stability, and resistance to distant influence
   - Acts as a "spillway" as the name suggests and allows us to keep the models content & less prone to misaligned behavior or disempowerment by providing it with whatever is satiable for it
-
-<Demo id="spillway" />
-
 - Adversary-resistance training
   - "identical-looking situations with different reward functions" so the AI only responds to developer-administered incentives
-
-<Demo id="adversary-resistance" />
-
 - Prior manipulation
   - mid-training fine-tuning to make desired motivations more salient and fitness-seeking less probable
 - Improved oversight and generalization

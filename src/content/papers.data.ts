@@ -1715,7 +1715,7 @@ export const papers: Paper[] = [
       {
         op: "activity",
         after: { sectionEnd: "lw-sec-the-role-of-a-spillway-motivation" },
-        items: [{ kind: "lesson", id: "c-spw-ins-routing" }],
+        items: [{ kind: "demo", id: "spillway-routing", framed: false }],
       },
       // End of the inoculation-prompting section: the mechanism comparison
       // (prompting vs. pre-RL priors).
@@ -1724,7 +1724,7 @@ export const papers: Paper[] = [
         after: {
           sectionEnd: "lw-sec-spillway-design-might-work-when-inoculat",
         },
-        items: [{ kind: "lesson", id: "c-spw-ins-inoculation" }],
+        items: [{ kind: "demo", id: "spillway-vs-inoculation", framed: false }],
       },
       {
         op: "activity",

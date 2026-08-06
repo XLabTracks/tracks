@@ -44,11 +44,6 @@ export function SpillwayVsInoculationDemo() {
           </ul>
         </div>
       </div>
-      <p className="text-muted-foreground text-sm">
-        “More generally, spillway motivations work via a different mechanism
-        (pre-RL priors) than inoculation prompting (prompting), and so it’s
-        valuable to have another tool for shaping generalization behavior.”
-      </p>
     </div>
   );
 }

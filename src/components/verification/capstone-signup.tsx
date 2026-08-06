@@ -36,16 +36,16 @@ export async function CapstoneSignup() {
     }
   }
 
-  // The picker's option list: slug and title per theme, nothing else — the
+  // The picker's option list: slug and title per track, nothing else — the
   // full briefs are on the bank surfaces, which is where choosing happens.
   const themes: { theme: string; briefs: { slug: string; title: string }[] }[] = [];
   for (const e of [...bank.entries].sort(
-    (a, b) => a.theme.localeCompare(b.theme) || a.title.localeCompare(b.title),
+    (a, b) => a.track.localeCompare(b.track) || a.title.localeCompare(b.title),
   )) {
     const g = themes.at(-1);
     const brief = { slug: e.slug, title: e.title };
-    if (g && g.theme === e.theme) g.briefs.push(brief);
-    else themes.push({ theme: e.theme, briefs: [brief] });
+    if (g && g.theme === e.track) g.briefs.push(brief);
+    else themes.push({ theme: e.track, briefs: [brief] });
   }
 
   const signedUp = row !== null && row.status !== "withdrawn";

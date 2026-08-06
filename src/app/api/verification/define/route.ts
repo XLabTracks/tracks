@@ -46,11 +46,17 @@ function slugify(term: string): string {
 }
 
 // The wiki body is long-form plain text with blank-line paragraph breaks.
-// The cheatsheet wants the opening definition, so the first paragraph is
-// taken and the rest dropped — with the source link carried alongside so the
-// full entry is one click away.
+// The cheatsheet wants the opening definition, so the first prose paragraph
+// is taken and the rest dropped — with the source link carried alongside so
+// the full entry is one click away. "Prose" matters: some tag bodies open
+// with a stub line ("Alternative introductions" on Instrumental
+// convergence), so fragments too short to define anything are skipped.
 function firstParagraph(text: string): string {
-  return (text.split(/\n\s*\n/)[0] ?? "").replace(/\s+/g, " ").trim();
+  for (const block of text.split(/\n\s*\n/)) {
+    const para = block.replace(/\s+/g, " ").trim();
+    if (para.length >= 60) return para;
+  }
+  return "";
 }
 
 export async function GET(request: Request) {
@@ -130,9 +136,15 @@ export async function GET(request: Request) {
     const res = await fetch(
       `https://en.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(raw)}?redirect=true`,
       {
+        // Wikimedia's robot policy wants a descriptive User-Agent with a
+        // contact point, and blocks unidentified scripted clients — a
+        // Workers fetch sends none by default, which reads as exactly that.
         headers: {
           Accept: "application/json",
-          "Api-User-Agent": "XLabTracks-Verification (term lookup for the course cheatsheet)",
+          "User-Agent":
+            "XLabTracksVerification/1.0 (https://aisafetytracks.com; course cheatsheet term lookup)",
+          "Api-User-Agent":
+            "XLabTracksVerification/1.0 (https://aisafetytracks.com; course cheatsheet term lookup)",
         },
         next: { revalidate: 86400 },
       },

@@ -6,9 +6,6 @@
 // to match the long horizon. Caption restates the lesson's own sentence
 // (Long-term measurements bullet, "How?" section).
 
-const CAPTION =
-  "Chain short-term forecasts together to incentivize objectives beyond immediate reward, giving more accurate results.";
-
 export function ForecastChainDemo() {
   return (
     <figure className="space-y-3">
@@ -126,7 +123,6 @@ export function ForecastChainDemo() {
           chained: objectives beyond immediate reward
         </text>
       </svg>
-      <figcaption className="text-muted-foreground text-sm">{CAPTION}</figcaption>
     </figure>
   );
 }

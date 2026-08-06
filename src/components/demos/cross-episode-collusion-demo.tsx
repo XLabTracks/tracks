@@ -6,9 +6,6 @@
 // labeled with the lesson's own timescale claim. Caption restates the
 // lesson's own bracket sentence (ROTE section, collusion risk vector).
 
-const CAPTION =
-  "Another risk vector is collusion across episodes, which can effectively lengthen the timescale and allow for disempowerment as well.";
-
 const EPISODES = [
   { x: 40, label: "Episode 1" },
   { x: 280, label: "Episode 2" },
@@ -129,7 +126,6 @@ export function CrossEpisodeCollusionDemo() {
           effectively lengthens the timescale
         </text>
       </svg>
-      <figcaption className="text-muted-foreground text-sm">{CAPTION}</figcaption>
     </figure>
   );
 }

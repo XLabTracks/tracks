@@ -6,11 +6,6 @@
 // one scene; captions restate the lesson's own sentences (remotely-influenceable
 // reward seeker section).
 
-const CAPTION_A =
-  "Retroactive reward: reward is promised to be delivered long after the action is run.";
-const CAPTION_B =
-  "Anthropic capture: it believes it is in a simulation & acts differently as a result.";
-
 export function DistantIncentivesDemo() {
   return (
     <figure className="space-y-3">
@@ -140,14 +135,6 @@ export function DistantIncentivesDemo() {
           promise of future reward
         </text>
 
-        <text
-          x={360}
-          y={158}
-          textAnchor="middle"
-          className="fill-muted-foreground text-[10px]"
-        >
-          {CAPTION_A}
-        </text>
 
         {/* Divider */}
         <line
@@ -228,9 +215,6 @@ export function DistantIncentivesDemo() {
           </tspan>
         </text>
       </svg>
-      <figcaption className="text-muted-foreground text-sm">
-        {CAPTION_A} {CAPTION_B}
-      </figcaption>
     </figure>
   );
 }

@@ -7,9 +7,6 @@
 // converge to a more covert form. Caption restates the lesson's own
 // bracket sentence (ROTE section).
 
-const CAPTION =
-  "When given limited exploration, the model converges to simple, detectable misalignment. But when given longer-horizon RL, there is more space for exploration, which can converge to a more covert, malignant misalignment.";
-
 export function ExplorationHorizonDemo() {
   return (
     <figure className="space-y-3">
@@ -125,7 +122,6 @@ export function ExplorationHorizonDemo() {
           more covert, malignant misalignment
         </text>
       </svg>
-      <figcaption className="text-muted-foreground text-sm">{CAPTION}</figcaption>
     </figure>
   );
 }

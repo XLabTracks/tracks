@@ -96,39 +96,53 @@
   position: relative;
 }
 :root[data-theme] .lesson-body ul:not(.not-prose *) > li::before {
-  content: '•';
+  content: '';
   position: absolute;
-  left: -1.1em;
-  color: var(--primary);
-  font-weight: 700;
+  left: -1.05em;
+  /* Centred on the first line of text, wherever the item wraps. */
+  top: calc(0.875em - 2.5px);
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--primary);
 }
 :root[data-theme] .lesson-body ol:not(.not-prose *) > li::marker {
   color: var(--primary);
   font-weight: 600;
 }
 
-/* Pill rows: four or more plain bullets. */
+/* Pill rows: four or more plain bullets, the reference sheet's shape — a
+   tinted bar whose head is a ringed circle riding its left end: card-ground
+   centre, a wide translucent --primary ring, and a thin --primary outline
+   drawn by box-shadow so it sits outside the ring. The rows run tight so
+   the heads chain down the list the way the sheet's do.
+
+   Trap: the circle hangs 18px past the bar's left edge, so the bar takes an
+   18px margin instead of starting at the column edge — drop the margin and
+   the head clips against the reading column. */
 :root[data-theme] .lesson-body ul:not(.not-prose *):not(li ul):has(> li:nth-child(4)) {
   display: grid;
-  gap: 10px;
+  gap: 6px;
   padding-left: 0;
 }
 :root[data-theme] .lesson-body ul:not(.not-prose *):not(li ul):has(> li:nth-child(4)) > li {
-  margin: 0;
-  padding: 12px 20px 12px 46px;
+  margin: 0 0 0 18px;
+  padding: 11px 22px 11px 34px;
   background: color-mix(in srgb, var(--primary) 7%, transparent);
-  border-radius: 24px;
+  border-radius: 999px;
 }
 :root[data-theme] .lesson-body ul:not(.not-prose *):not(li ul):has(> li:nth-child(4)) > li::before {
   content: '';
-  left: 18px;
-  /* Centred on the first line of text, wherever the item wraps. */
-  top: calc(12px + .9em);
-  margin-top: -6px;
-  width: 12px;
-  height: 12px;
+  position: absolute;
+  left: -18px;
+  top: 50%;
+  margin-top: -18px;
+  width: 36px;
+  height: 36px;
   border-radius: 50%;
-  background: var(--primary);
+  background: var(--card);
+  border: 6px solid color-mix(in srgb, var(--primary) 24%, var(--card));
+  box-shadow: 0 0 0 1.5px var(--primary);
 }
 
 /* Stepped circles: four or more numbered items. */

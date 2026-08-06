@@ -291,72 +291,76 @@ section.band .intro { max-width: 62ch; margin-top: 12px; color: var(--muted-fore
    a star fills it; clicking pins it so the text can be read without keeping
    the pointer still.
 
-   The setting is editorial, not a widget: hierarchy is size, colour and
-   space — an uppercase eyebrow with its accent dash, a display-size title,
-   one muted meta line (never the module's name twice), then the ladder as a
-   ruled data column with its unit numbers hanging in the module's colour.
-   One accent per state: the hue line on the panel's left edge, which is the
-   selection's colour and vanishes with it (the --sel fallback is
-   transparent). */
+   The setting is a journal card, per the reference: a filled outer frame in
+   the selection's hue — the highlight OUTSIDE — carrying a header row
+   (module left, star count right), and a rounded inner sheet in the page's
+   own background — the theme INSIDE. Unselected, the frame falls back to
+   the neutral muted ground and the header to the page ink, so the card
+   quietly names the figure until a star gives it a colour.
+
+   Gotham and Gotham Black only, by request — declared, never shipped:
+   Gotham is a licensed face, so the stacks land on it where the machine has
+   it and fall back to the site's own faces where it does not. The panel
+   re-points --display and --mono locally, so every rule inside that asks
+   for a site face gets the Gotham stack without being touched. */
 .sky-panel {
-  position: relative;
-  padding: 26px 30px;
-  border: var(--hairline) solid var(--border);
-  border-radius: var(--radius);
-  background: var(--card);
+  --display: 'Gotham Black', 'Gotham Ultra', Gotham, 'Space Grotesk', 'Segoe UI', system-ui, sans-serif;
+  --mono: Gotham, 'Gotham SSm A', 'Gotham SSm B', var(--sans);
+  padding: 10px;
+  border: 0;
+  border-radius: 24px;
+  background: var(--sel, var(--muted));
+  box-shadow: var(--shadow-soft-lg);
+  font-family: Gotham, 'Gotham SSm A', 'Gotham SSm B', var(--sans);
   min-height: 168px;
-  overflow: hidden;
 }
-.sky-panel::before {
-  content: '';
-  position: absolute;
-  inset: 0 auto 0 0;
-  width: 3px;
-  background: var(--sel, transparent);
+.sky-panel .p-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 16px 12px;
+  color: var(--sel-ink, var(--foreground));
+}
+.sky-panel .p-mod {
+  font-size: var(--fs-2xs);
+  font-weight: 700;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+}
+.sky-panel .p-count {
+  font-size: var(--fs-2xs);
+  letter-spacing: .1em;
+  opacity: .78;
+}
+.sky-panel .p-body {
+  padding: 24px 26px 26px;
+  border-radius: 16px;
+  background: var(--background);
 }
 @media (min-width: 860px) {
-  .sky-panel { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr); gap: 0 48px; align-items: start; }
-  .sky-panel .p-mod, .sky-panel h3, .sky-panel .p-meta, .sky-panel .p-desc { grid-column: 1; }
+  .sky-panel .p-body { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr); gap: 0 48px; align-items: start; }
+  .sky-panel h3, .sky-panel .p-meta, .sky-panel .p-desc { grid-column: 1; }
   .sky-panel .p-sec { grid-column: 2; grid-row: 1; }
-  .sky-panel .p-rungs { grid-column: 2; grid-row: 2 / span 4; }
+  .sky-panel .p-rungs { grid-column: 2; grid-row: 2 / span 3; }
   .sky-panel .p-hint:first-child { grid-column: 1; }
 }
 /* Docked beside the web (see .constellation), the panel is a side column:
    the two-column spread above is for when it had the page's full width. After
    the 860px block on purpose — same specificity, later wins. */
 @media (min-width: 1100px) {
-  .sky-panel {
-    display: block;
-    position: sticky;
-    top: 20px;
-  }
-}
-.sky-panel .p-mod {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  font-family: var(--mono);
-  font-size: var(--fs-2xs);
-  letter-spacing: .14em;
-  text-transform: uppercase;
-  color: var(--sel-text, var(--muted-foreground));
-}
-.sky-panel .p-mod::before {
-  content: '';
-  width: 26px;
-  height: 2px;
-  background: var(--sel, var(--border));
+  .sky-panel { position: sticky; top: 20px; }
+  .sky-panel .p-body { display: block; }
 }
 .sky-panel h3 {
-  margin-top: 14px;
   font-family: var(--display);
+  font-weight: 900;
   font-size: var(--fs-2xl);
   line-height: 1.2;
   text-wrap: balance;
 }
 .sky-panel .p-meta {
   margin-top: 10px;
-  font-family: var(--mono);
   font-size: var(--fs-2xs);
   letter-spacing: .06em;
   color: var(--muted-foreground);

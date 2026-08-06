@@ -442,11 +442,20 @@
     spokeEls.forEach(function (el) { if (Number(el.dataset.mod) === mod) el.classList.add('hot'); });
   }
 
+  /* The panel is a journal card: a filled outer frame — the selection's hue,
+     the highlight OUTSIDE — with a header row on the frame (module left,
+     star count right, the reference's 18/365), and a rounded inner sheet in
+     the page's own background, the theme INSIDE. Unselected, the frame goes
+     neutral and the header names the figure. */
   var DEFAULT_PANEL =
+    '<header class="p-head"><p class="p-mod">Skill web</p>' +
+    '<span class="p-count">' + S.nodes.length + ' skills</span></header>' +
+    '<div class="p-body">' +
     '<p class="p-hint">Every star is a skill; a line runs from a skill to the one it feeds. ' +
     'Hover a star to light its branch, click to pin it — the numeral inside is its module.</p>' +
     '<p class="p-hint">' + S.nodes.length + ' skills, ' + S.edges.length +
-    ' dependencies. A skill is fed by specific units, so it fills as you complete them rather than when you finish a module.</p>';
+    ' dependencies. A skill is fed by specific units, so it fills as you complete them rather than when you finish a module.</p>' +
+    '</div>';
 
   function renderPanel(id) {
     if (!id) { panel.style.removeProperty('--sel'); panel.innerHTML = DEFAULT_PANEL; return; }
@@ -454,19 +463,23 @@
     panel.style.setProperty('--sel', 'var(--mod-' + n.mod + ')');
     panel.style.setProperty('--sel-ink', 'var(--mod-' + n.mod + '-ink)');
     panel.style.setProperty('--sel-text', 'var(--mod-' + n.mod + '-text)');
-    /* One fact per line: the eyebrow already names the module, so the meta
+    /* One fact per line: the header already names the module, so the meta
        row does not say it again — it kept saying "Module 1 · Supply chain"
        twice, two lines apart. The ladder's label is the map page's own
        wording for the same list. */
     panel.innerHTML =
+      '<header class="p-head">' +
       '<p class="p-mod">M' + n.mod + ' · ' + esc(S.moduleNames[n.mod]) + '</p>' +
+      '<span class="p-count">' + num[id] + '/' + S.nodes.length + '</span></header>' +
+      '<div class="p-body">' +
       '<h3>' + esc(n.label) + '</h3>' +
       '<p class="p-meta">rooted in ' + esc(n.unit) + '</p>' +
       '<p class="p-desc">' + esc(n.desc) + '</p>' +
       '<p class="p-sec">The ladder — what each unit adds</p>' +
       '<ul class="p-rungs">' + n.rungs.map(function (r) {
         return '<li><span class="u">' + esc(r[0]) + '</span><span class="a">' + esc(r[1]) + '</span></li>';
-      }).join('') + '</ul>';
+      }).join('') + '</ul>' +
+      '</div>';
   }
 
   function refresh() {

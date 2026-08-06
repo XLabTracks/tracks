@@ -232,7 +232,8 @@ window.COURSE = {
           "mins": "30–40 min",
           "href": "/tracks/verification/covert-development/covert-how-to-cheat",
           "lessons": [
-            "covert-how-to-cheat"
+            "covert-how-to-cheat",
+            "covert-taxonomy"
           ]
         },
         {

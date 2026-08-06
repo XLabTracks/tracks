@@ -63,8 +63,9 @@ export default function Page() {
                 <div className="sky" id="sky"></div>
                 <div className="sky-legend">
                   <span>number inside a star — find it in the key below</span>
-                  <span>solid line — fed from inside the module</span>
+                  <span>solid beam — fed from inside the module</span>
                   <span>dashed line — fed from another module</span>
+                  <span>arm from the hub — the module&apos;s own shape, not a dependency</span>
                   <span>click a star or a key row to pin it</span>
                 </div>
                 <ol className="sky-key" id="skyKey"></ol>

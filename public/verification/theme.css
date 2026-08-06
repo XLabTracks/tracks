@@ -367,6 +367,11 @@
 :root[data-theme='contrast'] .stat-row,
 :root[data-theme='contrast'] .player .shell {
   grid-template-columns: minmax(0, 1fr) !important;
+  /* One column only holds if the flow fills by row. A grid that fills by
+     column (.objectives does, so its numbers read down the left) answers a
+     single declared column by inventing implicit ones beside it, and the
+     narrowest of those is the cramped line this mode exists to remove. */
+  grid-auto-flow: row !important;
 }
 
 /* The header is a fixed-height single row by default; at this size its own

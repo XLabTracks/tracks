@@ -2,7 +2,16 @@
    A corner button opens a panel of pages; each page holds a free mix of
    blocks: a written note, a passage captured from the course text with its
    source, or a sketch. Pages persist to localStorage and the whole book
-   exports to Markdown.
+   exports to Markdown. The page counter is a button: it lists every page by
+   number and title for a direct jump.
+
+   The last page is always the skill map — a read-only ladder derived from
+   window.SKILLS and vt-progress at paint time. It is never stored: it sits
+   past the end of data.pages, so the saved book and the account sync carry
+   only the learner's own pages. The chrome loads this file on the app's
+   course routes too, where neither data/skills.js nor platform.js is present,
+   so the skill page fetches the data file itself and does its own rung
+   arithmetic — keep that arithmetic in step with VT.rungFill/skillProgress.
 
    Mechanics follow the Pony Arena notebook in the design repo; the surface is
    this site's — theme.css variables only, no literal colour, so it follows
@@ -29,7 +38,7 @@ window.VTNotebook = (function () {
   let data = load();
   let cur = clamp(data.cur || 0);
   let saveTimer = null;
-  let root = null, pagesEl = null, counterEl = null, badgeEl = null;
+  let root = null, pagesEl = null, counterEl = null, badgeEl = null, jumpEl = null;
 
   /* ---------- store ---------- */
 
@@ -54,7 +63,11 @@ window.VTNotebook = (function () {
     paintBadge();
   }
 
-  function clamp(i) { return Math.max(0, Math.min(i, (data.pages || []).length - 1)); }
+  /* One index past the stored pages is the skill-map page, so it is a valid
+     position for `cur` but never a slot in data.pages. */
+  function pageCount() { return (data.pages || []).length + 1; }
+  function onSkillPage() { return cur === (data.pages || []).length; }
+  function clamp(i) { return Math.max(0, Math.min(i, pageCount() - 1)); }
   function page() { return data.pages[cur]; }
   function count() {
     return data.pages.reduce(function (n, p) { return n + p.blocks.length; }, 0);
@@ -78,6 +91,9 @@ window.VTNotebook = (function () {
   /* ---------- blocks ---------- */
 
   function pushBlock(block) {
+    // The skill page takes no blocks; a capture made while it is open lands
+    // on the learner's last real page instead of being dropped.
+    if (onSkillPage()) cur = data.pages.length - 1;
     page().blocks.push(block);
     save();
     if (root) paintPage();
@@ -304,6 +320,44 @@ window.VTNotebook = (function () {
     badgeEl.hidden = !n;
   }
 
+  /* ---------- page jump ---------- */
+
+  /* The counter doubles as the jump control: pressing it lists every page by
+     number and title, the skill map last. The list is rebuilt on every open —
+     titles change under it — and anchored above the footer, whose height
+     varies with wrapping, so the offset is measured rather than styled. */
+
+  function closeJump() {
+    if (!jumpEl) return;
+    jumpEl.remove();
+    jumpEl = null;
+    counterEl.setAttribute('aria-expanded', 'false');
+  }
+
+  function toggleJump() {
+    if (jumpEl) return closeJump();
+    jumpEl = mk('div', 'nb-jump');
+    const titles = data.pages.map(function (p, i) {
+      return p.title || ('Page ' + (i + 1));
+    }).concat(['Skill map']);
+    titles.forEach(function (t, i) {
+      const row = mk('button', 'nb-jump-row');
+      row.type = 'button';
+      row.setAttribute('data-jumpto', String(i));
+      if (i === cur) row.setAttribute('aria-current', 'true');
+      row.appendChild(mk('span', 'n', String(i + 1)));
+      row.appendChild(document.createTextNode(t));
+      jumpEl.appendChild(row);
+    });
+    const panel = root.querySelector('.nb-panel');
+    const foot = root.querySelector('.nb-foot');
+    jumpEl.style.bottom = (foot.offsetHeight + 8) + 'px';
+    panel.appendChild(jumpEl);
+    counterEl.setAttribute('aria-expanded', 'true');
+    const on = jumpEl.querySelector('[aria-current]');
+    if (on) on.scrollIntoView({ block: 'nearest' });
+  }
+
   /* The learner's task answers, shown beside their notes and never copied
      into the book. Their home is the Submission row the lesson editor writes;
      a second copy here would be a second truth that could disagree with it.
@@ -355,27 +409,130 @@ window.VTNotebook = (function () {
     });
   }
 
+  /* ---------- the skill-map page ---------- */
+
+  /* Derived at paint time from window.SKILLS and vt-progress — nothing here
+     is ever written back. The arithmetic mirrors VT.rungFill/skillProgress in
+     platform.js (including the compound 2.1–2.4 rung); keep the two in step. */
+
+  let skillsLoad = null; // null | 'loading' | 'failed'
+
+  function readUnits() {
+    try {
+      const raw = JSON.parse(localStorage.getItem('vt-progress') || '{}');
+      return (raw && typeof raw.units === 'object' && raw.units) ? raw.units : {};
+    } catch (e) { return {}; }
+  }
+
+  function rungFill(units, tag, S) {
+    if (tag === S.compoundRung) {
+      const hit = S.compoundUnits.filter(function (u) {
+        return Object.prototype.hasOwnProperty.call(units, u);
+      }).length;
+      return hit / S.compoundUnits.length;
+    }
+    return Object.prototype.hasOwnProperty.call(units, tag) ? 1 : 0;
+  }
+
+  function loadSkills() {
+    if (skillsLoad === 'loading') return;
+    skillsLoad = 'loading';
+    const s = document.createElement('script');
+    s.src = '/verification/data/skills.js';
+    s.onload = function () { skillsLoad = null; if (root && !root.hidden && onSkillPage()) paintPage(); };
+    s.onerror = function () { skillsLoad = 'failed'; if (root && !root.hidden && onSkillPage()) paintPage(); };
+    document.head.appendChild(s);
+  }
+
+  function paintSkills() {
+    pagesEl.innerHTML = '';
+    const head = mk('div', 'nb-skills-head');
+    head.appendChild(mk('h3', null, 'Skill map'));
+    const a = mk('a', 'btn small outline', 'Open the full map');
+    a.href = '/verification/map';
+    head.appendChild(a);
+    pagesEl.appendChild(head);
+
+    const S = window.SKILLS;
+    if (!S) {
+      if (skillsLoad === 'failed') {
+        pagesEl.appendChild(mk('p', 'nb-empty',
+          'The skill data could not be loaded just now. The full map has it.'));
+      } else {
+        loadSkills();
+        pagesEl.appendChild(mk('p', 'nb-empty', 'Loading the skill data…'));
+      }
+      return;
+    }
+
+    const units = readUnits();
+    const prog = S.nodes.map(function (n) {
+      let filled = 0;
+      n.rungs.forEach(function (r) { filled += rungFill(units, r[0], S); });
+      const frac = n.rungs.length ? filled / n.rungs.length : 0;
+      return {
+        node: n,
+        done: Math.round(filled * 100) / 100,
+        total: n.rungs.length,
+        frac: frac,
+        state: frac >= 1 ? 'complete' : (frac > 0 ? 'in progress' : 'locked')
+      };
+    });
+
+    const full = prog.filter(function (p) { return p.frac >= 1; }).length;
+    pagesEl.appendChild(mk('p', 'nb-skill-sum',
+      full + ' of ' + prog.length + ' skills complete'));
+
+    S.moduleNames.forEach(function (name, m) {
+      const rows = prog.filter(function (p) { return p.node.mod === m; });
+      if (!rows.length) return;
+      const sec = mk('section', 'nb-skill-mod');
+      sec.style.setProperty('--mod', 'var(--mod-' + m + ')');
+      sec.appendChild(mk('p', 'nb-skill-modname', 'M' + m + ' &middot; ' + esc(name)));
+      rows.forEach(function (p) {
+        const row = mk('div', 'nb-skill');
+        row.appendChild(mk('span', 'nb-skill-name', esc(p.node.label)));
+        const bar = mk('span', 'nb-skill-bar');
+        const fill = mk('i');
+        fill.style.width = Math.round(p.frac * 100) + '%';
+        bar.appendChild(fill);
+        row.appendChild(bar);
+        row.appendChild(mk('span', 'nb-skill-frac',
+          p.done + '/' + p.total + ' &middot; ' + p.state));
+        sec.appendChild(row);
+      });
+      pagesEl.appendChild(sec);
+    });
+  }
+
   function paintPage() {
     if (!pagesEl) return;
     if (written) { paintWritten(); return; }
-    pagesEl.innerHTML = '';
-    const p = page();
+    closeJump();
+    root.querySelectorAll('[data-add]').forEach(function (b) { b.disabled = onSkillPage(); });
 
-    const title = mk('input', 'nb-title');
-    title.type = 'text';
-    title.placeholder = 'Page ' + (cur + 1);
-    title.value = p.title || '';
-    title.oninput = function () { p.title = title.value; save(); };
-    pagesEl.appendChild(title);
+    if (onSkillPage()) {
+      paintSkills();
+    } else {
+      pagesEl.innerHTML = '';
+      const p = page();
 
-    if (!p.blocks.length) {
-      pagesEl.appendChild(mk('p', 'nb-empty',
-        'Nothing on this page yet. Add a note, or select any passage in the ' +
-        'course text and choose <b>Add to notebook</b>.'));
+      const title = mk('input', 'nb-title');
+      title.type = 'text';
+      title.placeholder = 'Page ' + (cur + 1);
+      title.value = p.title || '';
+      title.oninput = function () { p.title = title.value; save(); };
+      pagesEl.appendChild(title);
+
+      if (!p.blocks.length) {
+        pagesEl.appendChild(mk('p', 'nb-empty',
+          'Nothing on this page yet. Add a note, or select any passage in the ' +
+          'course text and choose <b>Add to notebook</b>.'));
+      }
+      p.blocks.forEach(function (b, i) { pagesEl.appendChild(blockEl(b, i)); });
     }
-    p.blocks.forEach(function (b, i) { pagesEl.appendChild(blockEl(b, i)); });
 
-    counterEl.textContent = 'Page ' + (cur + 1) + ' / ' + data.pages.length;
+    counterEl.textContent = 'Page ' + (cur + 1) + ' / ' + pageCount();
     paintBadge();
   }
 
@@ -400,7 +557,7 @@ window.VTNotebook = (function () {
           '</div>' +
           '<div class="nb-pager">' +
             '<button class="btn small outline" type="button" data-page="-1" aria-label="Previous page">&larr;</button>' +
-            '<span class="nb-count"></span>' +
+            '<button class="nb-count" type="button" data-jump aria-expanded="false" title="Jump to a page"></button>' +
             '<button class="btn small outline" type="button" data-page="1" aria-label="Next page">&rarr;</button>' +
             '<button class="btn small outline" type="button" data-newpage>New page</button>' +
           '</div>' +
@@ -413,8 +570,15 @@ window.VTNotebook = (function () {
     counterEl = root.querySelector('.nb-count');
 
     root.addEventListener('click', function (e) {
-      const t = e.target.closest('[data-close],[data-add],[data-page],[data-newpage],[data-export],[data-written]');
-      if (!t) return;
+      const t = e.target.closest('[data-close],[data-add],[data-page],[data-newpage],[data-export],[data-written],[data-jump],[data-jumpto]');
+      if (!t) { closeJump(); return; }
+      if (t.hasAttribute('data-jump')) return toggleJump();
+      closeJump();
+      if (t.hasAttribute('data-jumpto')) {
+        cur = clamp(Number(t.getAttribute('data-jumpto')));
+        save();
+        return paintPage();
+      }
       if (t.hasAttribute('data-close')) return close();
       if (t.hasAttribute('data-export')) return download();
       if (t.hasAttribute('data-written')) return showWritten();
@@ -434,7 +598,10 @@ window.VTNotebook = (function () {
     });
 
     document.addEventListener('keydown', function (e) {
-      if (e.key === 'Escape' && !root.hidden) close();
+      if (e.key === 'Escape' && !root.hidden) {
+        if (jumpEl) closeJump();
+        else close();
+      }
     });
   }
 
@@ -459,6 +626,7 @@ window.VTNotebook = (function () {
 
   function close() {
     if (!root) return;
+    closeJump();
     root.hidden = true;
     document.documentElement.classList.remove('nb-lock');
   }

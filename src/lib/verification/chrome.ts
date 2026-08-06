@@ -23,10 +23,10 @@ export type ChromeLink = {
   href: string | null;
 };
 
-/** The top strip. A learner's course destinations are reached from the
- *  landing body and from each other, not from here — a long row has to
- *  scroll on a laptop — so the strip carries the facilitator's entry point
- *  and the org pages, nothing more. */
+/** The top strip: the learner's two standing destinations — the course and
+ *  their skill map — then the facilitator's entry point and the org pages.
+ *  Everything else the course owns is reached from the landing body and from
+ *  page to page, because a long row has to scroll on a laptop. */
 export const NAV: ChromeLink[] = [
   /* Two links, not one. A single "Curriculum and facilitation materials" row
      promised the course and landed on a page whose own heading is "Become a
@@ -37,6 +37,7 @@ export const NAV: ChromeLink[] = [
      track page, which is the copy that carries progress, the sidebar and the
      reading. /verification/track is a redirect onto it. */
   { label: "Curriculum", href: "/tracks/verification" },
+  { label: "Skill map", href: "map" },
   { label: "For facilitators", href: "facilitator" },
   { label: "Team", href: "team" },
   { label: "About", href: "about" },

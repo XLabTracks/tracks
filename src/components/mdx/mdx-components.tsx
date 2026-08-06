@@ -20,6 +20,7 @@ import { Term } from "./term";
 import { CapstoneBank } from "./reader/capstone-bank";
 import { Check } from "./reader/check";
 import { GapFill } from "./reader/gap-fill";
+import { Prompt } from "./reader/prompt";
 import { Src, SourceQuote } from "./reader/source-quote";
 
 // Components available by name inside every lesson `.mdx` body. Authors drop
@@ -50,12 +51,14 @@ export const mdxComponents: MDXComponents = {
   // The reader blocks the Verification units were written against:
   // a committed-then-revealed check, a word-bank gap fill, a reproduced
   // passage with its attribution above it, a citation riding with its
-  // passage, the capstone bank printed inside its unit, and the capstone
+  // passage, a worked example's prompt set apart from the prose answering
+  // it, the capstone bank printed inside its unit, and the capstone
   // sign-up sheet the facilitators read.
   CapstoneBank,
   CapstoneSignup,
   Check,
   GapFill,
+  Prompt,
   SourceQuote,
   Src,
 };

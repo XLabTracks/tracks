@@ -19,6 +19,7 @@
     "verification:chrome": "node scripts/build-verification-chrome.mjs",
     "verification:course": "node scripts/build-verification-course.mjs",
     "verification:memos": "node scripts/build-verification-memos.mjs",
+    "icon:build": "node scripts/build-icon.mjs",
     "readings:build": "tsx scripts/build-readings.ts",
     "gdoc:build": "tsx scripts/build-gdoc.ts"
   },

@@ -9,20 +9,23 @@ import {
   type PrecedentCase,
   type PrecedentOutcome,
 } from "@/lib/verification/data/precedent-cases";
+import { PrecedentCaseDiagram } from "./precedent-case-diagrams";
 import type { VerificationWidgetProps } from "../kit/types";
 
 /**
  * "Did the regime hold?" — the 0.3 case-study exercise the outline calls for:
- * six verification regimes from history, one at a time; the learner commits a
- * call (held / circumvented) before the record is shown, then reads the
- * author's why and its transfer to AI. Commit, reveal, Continue — never
- * auto-advance.
+ * eight verification regimes from history, one at a time; the learner commits
+ * a call (held / circumvented) before the record is shown, then reads the
+ * author's why and its transfer to AI, beside a small diagram of how the
+ * regime held or was circumvented (`precedent-case-diagrams.tsx` — reveal
+ * material, so it never renders before the call). Commit, reveal, Continue —
+ * never auto-advance.
  *
  * Everything the learner reads is authored case-file text in
  * `src/lib/verification/data/precedent-cases.ts`. Nothing here composes a
  * sentence of curriculum.
  *
- * Bridged: `onComplete()` fires once, when the sixth call is committed.
+ * Bridged: `onComplete()` fires once, when the eighth call is committed.
  *
  * Calls persist per case under `v-precedent-cases:v1`; restored progress is
  * applied off the effect body behind `hydrated` so the first client render
@@ -195,6 +198,7 @@ export function PrecedentCases({ onComplete }: VerificationWidgetProps) {
             </p>
             <div className="border-border bg-background space-y-2 rounded-lg border p-3 text-sm leading-relaxed">
               <p className="font-semibold">{kase.outcomeHeading}</p>
+              <PrecedentCaseDiagram caseId={kase.id} />
               <p>{kase.why}</p>
             </div>
             <div className="border-border bg-background space-y-2 rounded-lg border p-3 text-sm leading-relaxed">
@@ -225,7 +229,7 @@ function Summary({
     <Shell>
       <div className="space-y-4">
         <div className="space-y-1">
-          <h3 className="text-lg font-semibold">Six case files, called</h3>
+          <h3 className="text-lg font-semibold">Eight case files, called</h3>
           <p className="text-comply inline-flex items-center gap-1.5 text-sm font-semibold">
             <CircleCheck className="size-4" aria-hidden />
             Your call matched the record on {matched} of {PRECEDENT_CASES.length}.

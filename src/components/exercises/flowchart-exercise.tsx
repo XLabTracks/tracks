@@ -184,7 +184,7 @@ export function FlowchartExerciseCard({
 
   return (
     <aside className="not-prose border-border bg-card shadow-soft my-6 rounded-xl border p-5">
-      <p className="text-muted-foreground mb-1 text-xs font-medium tracking-wide uppercase">
+      <p className="text-muted-foreground mb-1.5 text-xs font-medium tracking-wide uppercase">
         {EXERCISE_TYPE_LABELS[exercise.type]} · {solvedCount}/
         {exercise.stages.length}
       </p>

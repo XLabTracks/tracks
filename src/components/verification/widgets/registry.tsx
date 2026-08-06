@@ -4,7 +4,6 @@ import { PolicyScoping } from "./policy-scoping";
 import { AnatomyDrill } from "./anatomy-drill";
 import { ProtocolActors } from "./protocol-actors";
 import { ReportConstructor } from "./report-constructor";
-import { VerificationTimelineGame } from "./verification-timeline-game";
 import { InteractiveMap } from "./interactive-map";
 import { VerificationLandscape } from "./verification-landscape";
 import { CollectionMap } from "./collection-map";
@@ -30,7 +29,6 @@ export const verificationWidgets: Record<
   "anatomy-drill": AnatomyDrill,
   "protocol-actors": ProtocolActors,
   "report-constructor": ReportConstructor,
-  "verification-timeline-game": VerificationTimelineGame,
   "interactive-map": InteractiveMap,
   "verification-landscape": VerificationLandscape,
   "collection-map": CollectionMap,

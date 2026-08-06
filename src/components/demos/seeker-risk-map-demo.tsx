@@ -5,12 +5,12 @@
 // plus the lesson's note, all copy verbatim from c-mod6-l1.mdx. Everything is
 // visible at once — no hover or tap expansion.
 //
-// AUTHOR INPUT #3: the lesson explicitly attributes only three of the four
-// risks to a seeker orientation (Potemkin work, Manipulation, Outcome
-// enforcement); Instability names "myopic motivations" with no specific
-// orientation. Cards with an empty `attributed` list show a muted "ranking
-// in development" chip instead of inventing a ranking. Full rankings await
-// the author.
+// Rankings follow the risk-pathway attributions in Mallen's "Risk from
+// fitness-seeking AIs" as curated in the author's module note: Potemkin work
+// is apparent-success-seeking scaled to consequential work; Instability is
+// ambitious motivations (influence-like) overtaking and spreading through
+// myopic seekers; Manipulation is the distant-influence channel; Outcome
+// enforcement is capable fitness-seekers enforcing outcomes via takeover.
 
 const RISKS = [
   {
@@ -22,19 +22,19 @@ const RISKS = [
   {
     id: "instability",
     label: "Instability",
-    attributed: [],
+    attributed: ["Influence", "ROTE", "ROTA"],
     note: "myopic motivations succumb to more ambitious misaligned motivations",
   },
   {
     id: "manipulation",
     label: "Manipulation",
-    attributed: ["Remotely-influenceable"],
+    attributed: ["Remotely-influenceable", "ROTE"],
     note: "remotely-influenceable reward seekers are vulnerable to distant incentives",
   },
   {
     id: "enforcement",
     label: "Outcome enforcement",
-    attributed: ["Powerful fitness-seekers"],
+    attributed: ["Influence", "Remotely-influenceable"],
     note: "may see the disempowerment of humans as the best way to maintain their desired outcomes",
   },
 ] as const;

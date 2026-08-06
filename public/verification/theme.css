@@ -567,6 +567,15 @@ button, [role='button'], [role='radio'], [role='tab'], .chip, .nav a, .brand,
 .theme-switch {
   display: inline-flex;
   align-items: center;
+  /* The switch shares the account button's width floor, and in high contrast
+     the floor (sized for that button's grown label) exceeds the three
+     segments' content. Space-between feeds the slack into the two
+     inter-segment gaps so the end segments stay against the padding on both
+     sides — flex-start pools all of it after the selected segment, a stretch
+     of dead ground inside the border. `gap` is the floor the gaps never drop
+     below; at the default size content meets the width floor and nothing
+     moves. */
+  justify-content: space-between;
   gap: 2px;
   padding: 2px;
   border: var(--hairline) solid var(--border);
@@ -608,6 +617,13 @@ button, [role='button'], [role='radio'], [role='tab'], .chip, .nav a, .brand,
    matches the ink the eye compares, not the box the CSS sets — and the sun is
    the one that has to survive the filled ground of the selected state. */
 .theme-switch button[data-theme='light'] svg { width: 13.5px; height: 13.5px; }
+/* High contrast re-solves the segments to 44px squares, and a 15px icon with
+   a sub-pixel stroke floats in one as a grey speck — thin white lines
+   anti-alias below the mode's own bar. The ink scales with the box: larger
+   icons, a stroke thick enough to rasterise white, and the sun keeps its
+   optical discount. */
+:root[data-theme='contrast'] .theme-switch svg { width: 22px; height: 22px; stroke-width: 2.4; }
+:root[data-theme='contrast'] .theme-switch button[data-theme='light'] svg { width: 20px; height: 20px; }
 
 
 /* ---------- buttons ---------- */

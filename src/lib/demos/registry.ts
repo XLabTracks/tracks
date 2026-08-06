@@ -25,6 +25,7 @@ import { HighStakesGraphDemo } from "@/components/demos/high-stakes-graph-demo";
 import { LiveFailurePlaneDemo } from "@/components/demos/live-failure-plane-demo";
 import { AgentArchitectureThreatsDemo } from "@/components/demos/agent-architecture-threats-demo";
 import { DeferToResampleDemo } from "@/components/demos/defer-to-resample-demo";
+import HonestTestDemo from "@/components/demos/honest-test-demo";
 
 // Central demo registry — the single integration point. Reference a demo by ID
 // from MDX (<Demo id="…"/>), the gallery, standalone pages, or embeds.
@@ -236,6 +237,14 @@ export const demoRegistry: Record<string, DemoDefinition> = {
     title: "Defer to resample, mechanically",
     component: DeferToResampleDemo,
     tags: ["control", "high-stakes"],
+  },
+  "honest-test": {
+    id: "honest-test",
+    title: "The honest test",
+    description:
+      "Offer the AI control of its own training process / weights and watch its response.",
+    component: HonestTestDemo,
+    tags: ["control", "seekers"],
   },
 };
 

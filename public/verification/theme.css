@@ -40,9 +40,11 @@
   --muted-foreground: #5f5854;
   --accent: #f2efed;
   --border: #e4dedb;
-  /* The learner's own marker (::highlight(vt-hl)): a light marker wash the
-     day ink still clears 4.5:1 on. Each theme re-solves the pair. */
-  --hl: #f2e18f;
+  /* The learner's own marker (::highlight(vt-hl)): the periwinkle from the
+     brand's palette board (red · blue · wine · blush) — the one hue in that
+     family the maroons don't already own, so a mark never reads as course
+     chrome. Day ink clears ~9:1 on it. Each theme re-solves the pair. */
+  --hl: #8eb9fe;
   --hl-ink: var(--foreground);
   --ring: #800000;
 
@@ -163,8 +165,9 @@
   --accent: #2e2827;
   --border: #332c2a;
   --ring: #eda3a3;
-  /* A dark amber ground the night ink stays legible on (≈8:1). */
-  --hl: #55471a;
+  /* The day marker's periwinkle, re-solved for the dark ground: same hue,
+     lightness dropped until the night ink clears ≈8.5:1 on it. */
+  --hl: #33436b;
   --hl-ink: var(--foreground);
 
   /* Fills and their ink are the day values: a plaque's legibility is set by

@@ -34,6 +34,7 @@ import { DistantIncentivesDemo } from "@/components/demos/distant-incentives-dem
 import { SeekerSchemerComparisonDemo } from "@/components/demos/seeker-schemer-comparison-demo";
 import { SatiationTradeDemo } from "@/components/demos/satiation-trade-demo";
 import { SpillwayDemo } from "@/components/demos/spillway-demo";
+import { SeekerCarouselDemo } from "@/components/demos/seeker-carousel-demo";
 
 // Central demo registry — the single integration point. Reference a demo by ID
 // from MDX (<Demo id="…"/>), the gallery, standalone pages, or embeds.
@@ -316,6 +317,14 @@ export const demoRegistry: Record<string, DemoDefinition> = {
     description:
       "A dam holding back fitness-seeking urges, with a spillway channel routing the overflow into a contained, controlled reward-seeking motivation.",
     component: SpillwayDemo,
+    tags: ["control", "seekers"],
+  },
+  "seeker-carousel": {
+    id: "seeker-carousel",
+    title: "The seeker orientations, by severity",
+    description:
+      "A vertical carousel of the five seeker orientations, ranked from safest (ROTA) to worst (influence). Click a row to jump to that orientation.",
+    component: SeekerCarouselDemo,
     tags: ["control", "seekers"],
   },
 };

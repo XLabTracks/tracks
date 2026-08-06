@@ -14,9 +14,10 @@
 window.SKILLS = {
   rev: 1,
   /* The graph's own module taxonomy, from the track outline. It is NOT the
-     module list in curriculum.data.ts, which currently groups the built
-     lessons by kind (primers, games, facilitator) rather than by theme. Two
-     taxonomies, one course — reconciling them is a content decision. */
+     module list in curriculum.ts, which names its modules differently
+     (Why / Policy scoping / Infrastructure / Covert / Capstone). Two
+     taxonomies, one course — verificationUnitOfLesson is the join, and
+     reconciling the names is a content decision. */
   moduleNames: [
     'Foundations',
     'Supply chain',

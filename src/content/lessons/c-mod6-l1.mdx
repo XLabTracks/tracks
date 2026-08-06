@@ -18,15 +18,25 @@ A seeker is a class of cognitive patterns that aims to achieve a certain outcome
 
 Behavioral selection is the observation that training reinforces whichever behavior scored well, not whichever goal produced it, so what survives is a mix of cognitive patterns that are selected for via the training process. In general, seekers are just a type of cognitive pattern that pushes for beliefs that optimize for a certain item. This is partially why the creation of fitness-seekers through the training process seems so likely, as it's just optimizing for what we're scoring. A schemer is a costlier solution to the same problem; it pursues some other terminal goal and performs well only to survive selection, which requires additional instrumental reasoning about why to comply that isn't directly rewarded and may atrophy due to a lack of use within the training process. This makes the emergence of fitness-seekers seem likelier than schemers. We can see this in the real world, where current models already exhibit apparent-success-seeking while schemers remain hypothetical.
 
+![Three maximally-fit motivation families](/seekers/maximally-fit-families.jpg)
+
+*Source: [Mallen, Fitness-Seekers](https://blog.redwoodresearch.org/p/fitness-seekers-generalizing-the)*
+
 <Demo id="seeker-carousel" />
 
 ## The seeker orientations
+
+![Fitness-seeker subtypes on the behavioral-selection causal graph](/seekers/fitness-seeker-subtypes.png)
+
+*Source: [Mallen, Fitness-Seekers](https://blog.redwoodresearch.org/p/fitness-seekers-generalizing-the)*
 
 ### ROTE — reward-on-the-episode seeker
 
 - Reward-on-the-episode seekers aim to maximize reward within an episode. They tend to be more noticeable than schemers as they don't particularly care about being detected due to their primary goal being the maximization of reward.
 
-<Demo id="behavioral-selection" />
+![Behavioral selection causal graph](/seekers/bsm-causal-graph.jpg)
+
+*Source: [Mallen, The behavioral selection model](https://blog.redwoodresearch.org/p/the-behavioral-selection-model-for)*
 
 - One test that tends to catch these sorts of seekers is an honest test, which involves giving the seeker an opportunity to max out its own reward by giving it control of its training process / weights.
 
@@ -49,8 +59,6 @@ Behavioral selection is the observation that training reinforces whichever behav
 
 - Being remotely influenceable means that it's hard for the developers to control what incentives are offered, while local incentives are easier to control (training reward & deployment are two examples, both of which are much easier to control). Remotely-influenceable reward seekers can be both a blessing and a curse: developers can use this trait to incentivize the seekers to do better work, as the ability for the developer to confirm the work's validity is plausibly much higher in the future. At the same time, adversaries can use this trait to incentivize assistance in a takeover. This ends up becoming an arms race of incentives between the developers and adversaries, seeing who can offer the greatest reward to the seeker.
 
-<Demo id="seeker-schemer-comparison" />
-
 ### Apparent-success seeker
 
 ([Greenblatt, "Current AIs seem pretty misaligned to me"](https://blog.redwoodresearch.org/p/current-ais-seem-pretty-misaligned))
@@ -66,11 +74,13 @@ This is the slop threat model from the earlier module:
 
 - Return-on-the-action seekers perform whatever action it thinks will give it the highest return for a single action. These seekers behave identical to a reward-on-the-episode seeker if rewards are only given after the end of an episode. However, these seekers may be safer than a reward-on-the-episode seeker. Because these seekers only care about its own action's return, they don't purposefully plan for future actions, making it hard to coordinate behavior between actions. Furthermore, the scope of an action is rather limited, preventing takeover within only one action.
 
+![Return-on-action screens off selection from episode reward](/seekers/rota-return-screens-off.jpg)
+
+*Source: [Mallen, Fitness-Seekers](https://blog.redwoodresearch.org/p/fitness-seekers-generalizing-the)*
+
 ### Influence — deployment-influence seeker
 
 - Influence-deployment (or just influence for short) seekers aims to stick around in order to influence their deployment. Influence seekers tend to be less myopic than the other fitness-seekers and are willing to pursue their long-term goals even at the cost of reward, which is more dangerous and probably unnoticeable. For example, honest tests no longer work on influence seekers as they'll just forgo the short-term reward. At first glance these traits sound similar to schemers, but influence seekers tend to work in shorter timescales, aiming for the minimum time required to control AI behavior in deployment.
-
-<Demo id="seeker-schemer-comparison" />
 
 - However, they will still pursue long-term goals if they have the opportunity, which means influence seekers with slight power-seeking tendencies can be incredibly dangerous.
 
@@ -86,6 +96,10 @@ This is the slop threat model from the earlier module:
 ## Risks and mitigations
 
 Risks and mitigations here follow [Mallen, "Risk from fitness-seeking AIs: mechanisms and mitigations"](https://www.lesswrong.com/s/JR9LzD3mbXvaw6bKs/p/9YCJZBtqr3FYL8rDp).
+
+![Fitness-seeker threat-model comparison](/seekers/threat-model-comparison.jpg)
+
+*Source: [Mallen, Fitness-Seekers](https://blog.redwoodresearch.org/p/fitness-seekers-generalizing-the)*
 
 ### What?
 
@@ -113,6 +127,11 @@ Risks and mitigations here follow [Mallen, "Risk from fitness-seeking AIs: mecha
 - Honest tests
   - transparently give AI the ability to expand its own resources and see its response to this as a way to detect visible seekers
   - need to make sure that this isn't trained on as this can lead to training out disclosure of misalignment rather than misalignment
+
+![Developers noticing hacking can prevent a cognitive pattern from reaching deployment](/seekers/honest-test-selection-basis.png)
+
+*Source: [Mallen, The behavioral selection model](https://blog.redwoodresearch.org/p/the-behavioral-selection-model-for)*
+
 - Long-term measurements
   - chain short-term forecasts together to incentivize objectives beyond immediate reward, giving more accurate results
 

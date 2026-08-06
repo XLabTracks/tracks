@@ -29,9 +29,7 @@ import { HonestTestDemo } from "@/components/demos/honest-test-demo";
 import { ForecastChainDemo } from "@/components/demos/forecast-chain-demo";
 import { ExplorationHorizonDemo } from "@/components/demos/exploration-horizon-demo";
 import { CrossEpisodeCollusionDemo } from "@/components/demos/cross-episode-collusion-demo";
-import { BehavioralSelectionDemo } from "@/components/demos/behavioral-selection-demo";
 import { DistantIncentivesDemo } from "@/components/demos/distant-incentives-demo";
-import { SeekerSchemerComparisonDemo } from "@/components/demos/seeker-schemer-comparison-demo";
 import { SatiationTradeDemo } from "@/components/demos/satiation-trade-demo";
 import { SpillwayDemo } from "@/components/demos/spillway-demo";
 import { SeekerCarouselDemo } from "@/components/demos/seeker-carousel-demo";
@@ -252,96 +250,60 @@ export const demoRegistry: Record<string, DemoDefinition> = {
   "honest-test": {
     id: "honest-test",
     title: "The honest test",
-    description:
-      "Offer the AI control of its own training process / weights and watch its response.",
     component: HonestTestDemo,
     tags: ["control", "seekers"],
   },
   "forecast-chain": {
     id: "forecast-chain",
     title: "Chained short-term forecasts",
-    description:
-      "Chain short-term forecasts together to incentivize objectives beyond immediate reward, giving more accurate results.",
     component: ForecastChainDemo,
     tags: ["control", "seekers"],
   },
   "exploration-horizon": {
     id: "exploration-horizon",
     title: "Exploration horizon and covert misalignment",
-    description:
-      "Limited exploration converges to simple, detectable misalignment; longer-horizon RL opens more space to converge to covert misalignment.",
     component: ExplorationHorizonDemo,
     tags: ["control", "seekers"],
   },
   "cross-episode-collusion": {
     id: "cross-episode-collusion",
     title: "Collusion across episodes",
-    description:
-      "Instances in successive episodes pass messages to coordinate, effectively lengthening the timescale.",
     component: CrossEpisodeCollusionDemo,
-    tags: ["control", "seekers"],
-  },
-  "behavioral-selection": {
-    id: "behavioral-selection",
-    title: "Behavioral selection",
-    description:
-      "Candidate cognitive patterns pass through the training filter; the surviving mix includes seekers alongside aligned and schemer patterns.",
-    component: BehavioralSelectionDemo,
     tags: ["control", "seekers"],
   },
   "distant-incentives": {
     id: "distant-incentives",
     title: "Distant incentives",
-    description:
-      "Two ways a third-party bad actor delivers distant influence: retroactive reward, and anthropic capture.",
     component: DistantIncentivesDemo,
-    tags: ["control", "seekers"],
-  },
-  "seeker-schemer-comparison": {
-    id: "seeker-schemer-comparison",
-    title: "Schemers vs. influence and influenceable seekers",
-    description:
-      "Three columns — schemer, influence seeker, remotely-influenceable seeker — compared on what they pursue, timescale, response to the honest test, and distant incentives.",
-    component: SeekerSchemerComparisonDemo,
     tags: ["control", "seekers"],
   },
   "satiation-trade": {
     id: "satiation-trade",
     title: "The basic trade case",
-    description:
-      "Developers give the AI money or space to maximize its reward, in exchange for misalignment examples and apparent cooperation.",
     component: SatiationTradeDemo,
     tags: ["control", "seekers"],
   },
   spillway: {
     id: "spillway",
     title: "Spillway motivations",
-    description:
-      "A dam holding back fitness-seeking urges, with a spillway channel routing the overflow into a contained, controlled reward-seeking motivation.",
     component: SpillwayDemo,
     tags: ["control", "seekers"],
   },
   "seeker-carousel": {
     id: "seeker-carousel",
     title: "The seeker orientations, by severity",
-    description:
-      "A vertical carousel of the five seeker orientations, ranked from safest (ROTA) to worst (influence). Click a row to jump to that orientation.",
     component: SeekerCarouselDemo,
     tags: ["control", "seekers"],
   },
   "seeker-risk-map": {
     id: "seeker-risk-map",
     title: "Which seekers drive which risks",
-    description:
-      "Four risk cards — Potemkin work, Instability, Manipulation, Outcome enforcement — expand on hover or tap to show the seeker orientations the lesson attributes to each.",
     component: SeekerRiskMapDemo,
     tags: ["control", "seekers"],
   },
   "adversary-resistance": {
     id: "adversary-resistance",
     title: "Adversary-resistance training",
-    description:
-      "Two identical-looking situations with different reward functions, so the AI only responds to developer-administered incentives.",
     component: AdversaryResistanceDemo,
     tags: ["control", "seekers"],
   },

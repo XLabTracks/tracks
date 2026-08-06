@@ -13,6 +13,7 @@ import {
   RemoveMemberButton,
 } from "@/components/classrooms/classroom-manage";
 import { ClassroomKeySettings } from "@/components/classrooms/classroom-key-settings";
+import { FacilitatorPanel } from "@/components/classrooms/facilitator-panel";
 import { getClassroomKeyStatus } from "@/lib/grader/grading-key";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
@@ -94,6 +95,10 @@ export default async function ClassroomPage({
 
   // ---- Instructor view ----
   const roster = await getClassroomRoster(classroom.memberships, classroom.trackId);
+  // The facilitator material is Verification's own, so it is offered on a
+  // Verification classroom and on the all-tracks kind, not on a Control one.
+  const showFacilitator =
+    classroom.trackId === "verification" || classroom.trackId === null;
   const students = roster.filter((r) => r.role === "student");
   // Null when key storage is unconfigured server-side — hide the card.
   const keyStatus = await getClassroomKeyStatus(classroom.id);
@@ -120,6 +125,8 @@ export default async function ClassroomPage({
           <RegenerateCodeButton classroomId={classroom.id} />
         </div>
       </div>
+
+      {showFacilitator && <FacilitatorPanel classroomId={classroom.id} />}
 
       {students.length === 0 ? (
         <p className="text-muted-foreground mt-8">

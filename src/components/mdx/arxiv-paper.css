@@ -254,8 +254,12 @@
     font-size: 0.85em;
   }
 
-  /* Code / algorithms */
-  .arxiv-paper pre.ax-code {
+  /* Code / algorithms — .verbatim is the converter's raw verbatim
+     environment (e.g. prompt excerpts); without the shared rule it renders
+     unstyled and its unwrapped lines force page-level horizontal scroll on
+     narrow viewports. */
+  .arxiv-paper pre.ax-code,
+  .arxiv-paper pre.verbatim {
     background: var(--muted);
     border-radius: var(--radius-lg, 10px);
     font-size: 0.8em;

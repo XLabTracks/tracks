@@ -1,0 +1,107 @@
+In this section, you will learn how to gauge whether the institution running the human layer is trustworthy in the first place. You will test independence, competence, accountability, authority, and cooperation; identify what human mechanisms systematically miss; and decide what corroboration and political conditions are required before a human claim becomes decision-worthy.
+
+A skilled auditor cannot compensate for a verifier that lacks authority, stable funding, access, or political support. Use four tests to gauge a verifier’s reliability:
+
+| Test | Question to ask | Typical failure |
+| --- | --- | --- |
+| Independence | Can the verifier reach an unfavorable conclusion without losing funding, access, appointment, or future work? | Auditor shopping, repeat-business pressure, political direction, or revolving-door incentives. |
+| Competence | Does the team have the technical, investigative, legal, security, organizational, and diplomatic expertise required by the claim? | A technically impressive review that misses governance, evidence, supply-chain, or jurisdictional problems. |
+| Accountability | Can methods, conflicts, quality controls, complaints, appeals, and mistakes be reviewed without exposing protected information? | Opaque methodology, no route to challenge factual errors, or no one able to audit the auditors. |
+| Authority and cooperation | Can the institution obtain evidence from every relevant actor, and can an authorized body act on its findings? | A credible report with no power to compel access, preserve evidence, or trigger a legitimate response. |
+
+An auditor selected and paid by the auditee may still fear losing repeat work or future access. A government inspector may face budget or political pressure. An international body may depend on state consent, voting rules, or major-power support.
+
+Useful safeguards include conflict disclosure, restrictions on consulting and direct financial interests, cooling-off periods, auditor rotation, standardized engagement terms, protected budgets, regulator-administered selection or funding, peer review, and publication of scope and limitations. The Frontier AI Auditing paper also warns against material revenue dependence on one client and calls for oversight of auditors themselves. [1]
+
+Competence is equally institutional. No single reviewer is likely to master model evaluation, compute accounting, data-center operations, cybersecurity, corporate governance, interviews, evidence preservation, labor protection, and treaty law. A credible body builds multidisciplinary teams and knows when to use specialist subcontractors or consortia. [1]
+
+## Capture can enter through the evidence, the culture, or the standard
+
+- Financial capture: favorable findings protect fees, access, or future work.
+- Informational capture: the auditee chooses the records, interviewees, systems, and questions, controlling the evidentiary frame.
+- Cultural or political capture: the verifier adopts the regulated party’s assumptions, or findings are narrowed, delayed, or suppressed.
+- Standards and capacity failure: vague or obsolete standards become easy to pass, while understaffing turns nominally deep review into shallow triage.
+
+This is why a standards document is not enough. Manheim and coauthors argue for an AI Audit Standards Board that owns revision, governance, and feedback as technology changes; the broader point is that standards need an institution that can update them and learn from failure. [4]
+
+<Callout variant="warning" title="Power-concentration warning">
+
+Personnel-based verification can itself be abused. Interview technologies, reporting systems, and access powers need due process, purpose limits, confidentiality, review, and political legitimacy—especially when one state or institution controls both verification and response. [7]
+
+</Callout>
+
+## Historical caution: two different Iraq failures
+
+Curveball was a source-validation failure. Reporting from the Iraqi defector became central to claims about mobile biological-weapons laboratories even though U.S. analysts lacked direct access to him, reliability warnings existed, and imagery contradicted part of his account. The official postwar commission concluded that analysts were too attached to a source whose story fit their expectations. [5]
+
+The aluminum tubes were an adjudication failure. The tubes existed, but agencies disagreed about what they meant: CIA and DIA favored a centrifuge interpretation, while the Department of Energy and the State Department’s Bureau of Intelligence and Research judged conventional rocket use more likely. Postwar investigation found no evidence of an aluminum-rotor centrifuge program and tied the procurement to 81 mm rockets. [5][6]
+
+Do not describe these as independent corroboration of one claim: they concerned different alleged programs. Read together, they show two ways institutions can fail—poor source validation and overconfident interpretation of ambiguous technical evidence.
+
+## What the human layer can establish, and what it systematically misses
+
+Human mechanisms are strongest on questions that live in people's heads and in the informal life of an organization: intent, decision rationale, verbal or off-the-record instructions, whether staff were aware of warnings, whether circumvention was deliberate, and how a written policy actually worked in practice. Interviews and document review are also well suited to checking an organization's self-presentation against itself. An auditor can ask whether the records produced fit the workflow staff describe, whether accounts from different people conflict, and whether the organization staged a site, obstructed access, or disclosed selectively.
+
+The weaknesses are structural rather than a matter of doing interviews better. Human mechanisms see the periods they sample and go blind between them, so continuous activity is out of reach. Conduct kept inside a small, loyal group may leave no witness willing to talk. Activity beyond the treaty's legal reach produces no one an inspector can compel. And technical facts, such as what a training run actually consumed or what a system actually does, require independent access to the systems themselves. Human testimony also fails as standalone proof in a predictable set of cases: when every available source shares the same incentives, when accounts converge because they were coordinated rather than because they are true, and when nothing can be checked against records, physical observation, or a technical signal.
+
+The human layer is therefore most valuable for targeting, context, and corroboration. It tells other mechanisms where to look, suggests what an ambiguous technical signal may mean, and identifies which records or sites are worth the cost of inspecting. Treaty designers should rarely rely on it for continuous coverage or treat it as self-authenticating proof.
+
+## Corroboration should cross mechanisms
+
+A second person repeating the same account is useful only if the second account is genuinely independent. Stronger corroboration comes from evidence generated through a different process with different incentives and failure modes:
+
+- Human + system records: an engineer’s account compared with raw allocation, access, version-control, checkpoint, or incident logs.
+- Human + supply chain: a project claim compared with chip delivery, cloud billing, power, cooling, networking, or maintenance records.
+- Human + physical or remote observation: a report compared with an inspection, facility inventory, permits, construction imagery, or visible infrastructure changes.
+- Governance audit + independent technical evaluation: decision records compared with separate testing of the model or system.
+
+In short: evidence is stronger when the streams do not share the same source of error.
+
+## Who must cooperate—and under what conditions?
+
+The human layer reaches only the actors and jurisdictions that can be induced or compelled to cooperate. Depending on the agreement, that may include developers and affiliates; cloud and colocation providers; chip, power, and networking suppliers; auditors and evaluators; employees and contractors; national regulators and courts; and states that must admit international inspectors.
+
+A credible regime therefore needs more than good technical design:
+
+- A legal mandate that covers the relevant entities, records, sites, contractors, and cross-border activity.
+- Participation incentives or credible consequences strong enough that access is not purely voluntary.
+- Protection for commercial and national-security information without a blanket confidentiality exemption.
+- Protected contact with personnel, enforceable anti-retaliation rules, preservation duties, and penalties for obstruction.
+- Reasoned review and due process so that inspection is not experienced as arbitrary punishment.
+- Graduated, credible responses and a process for updating thresholds, methods, standards, and expertise as technology changes.
+
+Where the suspected violator controls the domestic regulator, court, employer, and security services, internal channels may go quiet. The regime then depends more heavily on external intelligence, cross-border evidence, protected exit routes, and political pressure. That is a coverage limit, not a procedural detail.
+
+## Final judgment exercise
+
+A regulator receives four items:
+
+- An engineer’s detailed allegation of an undeclared training run;
+- Cloud telemetry showing unusual temporary capacity but not the workload;
+- Supplier records showing an urgent delivery to an unlisted colocation site; and
+- An inspection report stating that the developer withheld raw allocation logs, offering aggregates produced by its own compliance team instead.
+
+Which verdict is best supported now?
+
+- A. Violation proven: the human source and two technical indicators are enough.
+- B. No violation: none of the items independently proves the workload or compute threshold.
+- C. Insufficient evidence for a final violation finding, but enough corroborated concern to preserve evidence, require managed access to the raw logs and project-code mapping, and refer continued refusal to the authorized adjudicator.
+- D. Automatic sanction: refusing raw logs proves the undeclared run occurred.
+
+Answer: C. The evidence supports a serious, targeted concern and justifies further compulsory examination. It does not yet establish the workload, threshold crossing, or legal classification. Continued refusal may establish a separate access breach and may support an adverse inference if the agreement authorizes one. The institution should preserve the record, state the uncertainty, and use the pre-agreed adjudication process rather than convert suspicion into certainty.
+
+## Module takeaway
+
+<Callout variant="note" title="The human layer’s honest role">
+
+People can expose intent, identify hidden activity, test whether formal controls work, and direct technical mechanisms toward the right records and sites. Their evidence becomes credible only when reporting is protected, access is real, institutions resist capture, and material claims survive corroboration from streams the source or auditee does not control.
+
+</Callout>
+
+## Drill bench
+
+One bench per evidence stream: the shared anatomy, hardware, cloud, and secrets and people. One step at a time: commit, read why, then Continue.
+
+<VerificationExercise id="drills-supply-chain" />
+
+<MemoDesk lesson="human-institutions" />

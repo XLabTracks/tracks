@@ -1,0 +1,250 @@
+{/* Unit 2.2, section 2.2.3. This reading is the source-derived draft the static
+    module player carried; it came back into the app when that player was
+    retired, and the outline transcription it replaces is in this file's
+    history. The four sources do not share reuse terms — the two arXiv papers
+    are CC BY 4.0 and quoted freely; the RAND report and the Carnegie piece
+    are all-rights-reserved and reproduced on the author's instruction. A
+    <SourceQuote> is what reproduction looks like here: attribution above the
+    words, never after them.
+    Trap: the RAND PDF is AES-encrypted, so a downloaded copy carries no text
+    layer. These passages came from the file the author supplied — ask for it
+    rather than assuming a fetch will read. */}
+
+### The failure mode, named
+
+Suppose the regime works exactly as designed: registrations filed, declarations submitted, thresholds set. A customer files every form — and trains a dangerous model anyway. Nothing in the filing cabinet stops them. **If compliance is defined as paperwork, the regime measures paperwork.**
+
+A 2025 RAND study modeled this as a game between a cloud provider (the monitor) and an evader, and reached a blunt finding: providers “might not be able to report and detect AI training” if they are obligated to monitor “based only on floating-point operation thresholds.”
+
+<SourceQuote t={"Strategies and Detection Gaps in a Game-Theoretic Model of Compute Governance"} url={"https://www.rand.org/pubs/research_reports/RRA3686-1.html"} what={"Findings, p. iv"} by={"Moon, Vedula, Geneson & Bar-on · RAND Corporation, RR-A3686-1 · 2025"}>
+
+Cloud service providers might not be able to report and detect AI training if they are obligated to monitor and report activity based only on floating-point operation thresholds in future AI governance policy.
+
+In the future, many types of capable AI models will likely exist whose training will be hard to detect. We outline strategies for cloud service providers that could aid with AI training detection in cloud computing environments.
+
+</SourceQuote>
+
+<Src>Quoted from Moon, Vedula, Geneson & Bar-on, *Strategies and Detection Gaps in a Game-Theoretic Model of Compute Governance*, RAND RR-A3686-1 (2025) — [rand.org](https://www.rand.org/pubs/research_reports/RRA3686-1.html).</Src>
+
+### Sequential training
+
+The winning move is embarrassingly simple. Take BLOOM — a real, public 176-billion-parameter model, about 5.8 × 10²³ operations of training. The threshold in RAND’s setup (from the executive order’s rule for bio-sequence models): 10²³ operations per account. Trained in one piece, BLOOM crosses it.
+
+Now split: **58 sessions of 10²² operations each**, run one after another, each handing its weights to the next, across accounts the provider cannot link. No session crosses the line. Nothing is ever recorded.
+
+In the model, this strategy *always wins* against a threshold-only monitor. It is the $9,900 deposit — with GPUs.
+
+<SourceQuote t={"Strategies and Detection Gaps in a Game-Theoretic Model of Compute Governance"} url={"https://www.rand.org/pubs/research_reports/RRA3686-1.html"} what={"The sequential-training result, p. 6"} by={"Moon, Vedula, Geneson & Bar-on · RAND Corporation, RR-A3686-1 · 2025"}>
+
+Suppose a CSP chooses to report only based on the thresholds above. Then, we argue, there is a way for the evader to train BLOOM without being detected. It suffices to show that there is at least one evader strategy that always wins against the CSP, which we call sequential training.
+
+So, if the evader chooses instances with 384 GPUs with maximum compute capacity 1.5 × 10¹⁴ FLOP/s/GPU, like in the BLOOM training run, its instances will remain under 10²⁰ FLOP/s, and the only relevant threshold is for total floating-point or integer operations. Then the entire training run for BLOOM could be accomplished through 58 distinct instances of 10²² FLOPs accomplished at a rate of 5.76 × 10¹⁶ FLOP/s, without exceeding the threshold for total FLOPs. Under our hardware assumptions, each instance would take roughly two days.
+
+</SourceQuote>
+
+<Src>Moon, Vedula, Geneson & Bar-on, *Strategies and Detection Gaps in a Game-Theoretic Model of Compute Governance*, RAND RR-A3686-1 (2025) — [rand.org](https://www.rand.org/pubs/research_reports/RRA3686-1.html), pp. 5–6.</Src>
+
+<GapFill id="cloud-gap-6" lead={"The RAND result, in one line."} text={"BLOOM took about 5.8 × 10²³ operations. Split into ___ sessions of 10²² operations each, run across accounts the provider cannot ___, no single session crosses the 10²³ threshold and nothing is ever ___."} blanks={["58","link","reported"]} bank={["58","link","reported","5","meter","billed"]} why={"58 sessions, unlinkable accounts, nothing reported. Every session is metered and billed perfectly well — the failure is aggregation, not measurement."} src={"Moon, Vedula, Geneson & Bar-on, *Strategies and Detection Gaps in a Game-Theoretic Model of Compute Governance*, RAND RR-A3686-1 (2025) — [rand.org](https://www.rand.org/pubs/research_reports/RRA3686-1.html), pp. 5–6."} />
+
+### The detection gap
+
+Generalize it. Between “too small to matter” and “too big to hide” lies a band of models — roughly 10²³ to 10²⁶ operations in the RAND setup — that threshold-only monitoring simply does not see.
+
+The band is not empty, and it is not static: as specialized models (biology, chemistry) get more capable per operation, more of what matters fits inside the gap. A threshold calibrated today describes yesterday’s models.
+
+<SourceQuote t={"Strategies and Detection Gaps in a Game-Theoretic Model of Compute Governance"} url={"https://www.rand.org/pubs/research_reports/RRA3686-1.html"} what={"\"Finding Detection Gaps\", p. 5"} by={"Moon, Vedula, Geneson & Bar-on · RAND Corporation, RR-A3686-1 · 2025"}>
+
+We argue that, according to the historical compute thresholds set by previous attempts at compute regulation, there is a detection gap for models trained within a floating-point training compute cost in the range between 10²³ and 10²⁶ operations.
+
+In the near term, as specialized models are developed for specific tasks within application domains, such as computational biology, more models will fill the 10²³- to 10²⁶-operation detection gap.
+
+</SourceQuote>
+
+<Src>Moon, Vedula, Geneson & Bar-on, *Strategies and Detection Gaps in a Game-Theoretic Model of Compute Governance*, RAND RR-A3686-1 (2025) — [rand.org](https://www.rand.org/pubs/research_reports/RRA3686-1.html), p. 5.</Src>
+
+### What closes gaps
+
+The counter is not better paperwork — it is **more channels**:
+
+- **Cluster size** — big models resist scattering: one distributed-training experiment (DiPaCo) needed roughly 32× the compute units of the colocated baseline. Concentration is hard to avoid.
+- **Data transfers** — the training dataset has to arrive; a fresh account pulling terabytes in is a tell.
+- **Instruction mix** — training is dense in multiply-accumulate operations; diluting the mix costs efficiency.
+- **Power draw** — sustained training burns power at rates little else matches (BLOOM: roughly 3,600 kWh per day).
+
+Every evasion of these costs the evader real efficiency. That is the design goal: not “evasion impossible” but “evasion expensive and loud.”
+
+<SourceQuote t={"Strategies and Detection Gaps in a Game-Theoretic Model of Compute Governance"} url={"https://www.rand.org/pubs/research_reports/RRA3686-1.html"} what={"\"Closing Detection Gaps\", pp. 9–10"} by={"Moon, Vedula, Geneson & Bar-on · RAND Corporation, RR-A3686-1 · 2025"}>
+
+Assuming that training data are kept together during training, large and sudden data transfers into new accounts should capture training activity.
+
+Dividing training across different clusters of GPUs is prohibitively expensive with current models; for example, recent efforts by Google to implement distributed training of a large neural network required 32 times the baseline number of colocated training units to fully train the model.
+
+In the context of detection, the combination of a high number of MAC operations and a low number of distinct instruction types would imply a likelihood that an algorithm executed on cloud resources is a training algorithm. […] Adversarial evaders could try to avoid detection by this threshold by executing unrelated algorithms in between or during training activities, to reduce the total ratio of MAC operations, but this would come at a cost to training efficiency.
+
+BLOOM required 433,196 kWh of energy across approximately 118 days, working out to an approximate average rate of 3,600 kWh per day. This figure is an order of magnitude greater than the highest average daily household energy use rate across U.S. states.
+
+</SourceQuote>
+
+<Src>Moon, Vedula, Geneson & Bar-on, *Strategies and Detection Gaps in a Game-Theoretic Model of Compute Governance*, RAND RR-A3686-1 (2025) — [rand.org](https://www.rand.org/pubs/research_reports/RRA3686-1.html), pp. 9–10.</Src>
+
+<Check id="cloud-check-8" q={"Why does splitting one training run into 58 sub-threshold chunks defeat a FLOP-threshold monitor?"} options={["Because splitting reduces the total compute the model needs","The threshold is evaluated per account, no chunk crosses it, and the monitor cannot link the accounts","Because each chunk becomes technically impossible to meter","Because thresholds only apply to inference workloads"]} answer={1} why={"The total compute is unchanged and every chunk is metered perfectly well — the failure is **aggregation**: per-account evaluation plus unlinkable accounts means no single reading ever trips the line. (And thresholds target training, not inference.)"} />
+
+### Tripwires, not judges
+
+The lesson is not “thresholds are useless.” A tripwire that forces evaders into slower, costlier, stranger behavior is doing work — the distortion itself is a signal.
+
+The lesson is about posture: **assume your rule is being read by the person it is aimed at.** RAND’s recommendation to policymakers is a standing habit, not a one-off fix: systematically hunt for detection gaps, and re-hunt as the technology moves.
+
+<SourceQuote t={"Strategies and Detection Gaps in a Game-Theoretic Model of Compute Governance"} url={"https://www.rand.org/pubs/research_reports/RRA3686-1.html"} what={"Recommendations, p. iv"} by={"Moon, Vedula, Geneson & Bar-on · RAND Corporation, RR-A3686-1 · 2025"}>
+
+To develop effective AI governance, policymakers should support efforts to find detection gaps in compute-based monitoring schemes. These efforts should change and adapt with technological progress in AI.
+
+Policymakers should also continue to pursue both compute- and noncompute-based AI governance.
+
+Continuing research into effective thresholds for compute monitoring is required to create a robust compute-based monitoring framework that can adapt to technological progress.
+
+</SourceQuote>
+
+<Src>Moon, Vedula, Geneson & Bar-on, *Strategies and Detection Gaps in a Game-Theoretic Model of Compute Governance*, RAND RR-A3686-1 (2025) — [rand.org](https://www.rand.org/pubs/research_reports/RRA3686-1.html), recommendations.</Src>
+
+### Same move, new domain
+
+You have now seen the same play twice: deposits at $9,900, and training runs at 10²² a slice. Any fixed line invites slicing; any per-account rule invites more accounts.
+
+Which is why 2.2.2’s machinery matters as a **system** rather than as parts: identity linkage — KYC’s cross-account job — is exactly the capability that turns “58 unrelated accounts” back into “one customer.” The mechanisms cover for each other, or they don’t work at all.
+
+### Three exits
+
+Everything so far assumed one thing: the compute is rented from a covered provider. There are three ways out of that assumption:
+
+- **Own the machines** — build or buy your own cluster. No landlord, no records, no switch.
+- **Rent elsewhere** — use a provider in a jurisdiction the regime doesn’t reach.
+- **Skip the compute** — steal the trained weights and bypass the entire training-oversight edifice. That one gets its own treatment in Module 3.1.
+
+The cloud layer’s writ runs exactly as far as rented, in-jurisdiction compute. This reader walks the edges.
+
+### When the landlord is the tenant
+
+Several of the biggest AI developers are their own compute providers — or joined at the hip with one. When developer and provider are the same entity, the intermediary this module is built on disappears: nobody neutral holds the records, and “the provider verifies the customer” becomes the company verifying itself.
+
+The candidate patches are borrowed from other layers: direct regulatory inspection of in-house facilities, whistleblower protections (module 2.4), prudential rules.
+
+Note what happened: the cloud layer’s cheapest trick — recruiting an existing third party — stops working, and oversight gets expensive again.
+
+<Src>Heim et al., *Governing Through the Cloud* (2024) — [arXiv:2403.08501](https://arxiv.org/abs/2403.08501), CC BY 4.0, p. 39.</Src>
+
+### Jurisdiction, in practice
+
+The second exit is geography, and it is not hypothetical. Frontier-scale capacity is spreading across third countries; a customer barred here can contract there, and a workload can be placed where the rules aren’t. Shell entities blur *who* is renting; VPNs blur *from where*.
+
+The policy record so far is sobering (as of mid-2026): the US AI Diffusion Rule — an attempt to govern compute access globally — was suspended before it took effect, and legislation to treat remote compute access like an export (the Remote Access Security Act) passed the House, stalled in the Senate, and has since been revived.
+
+Controls that read cleanly on paper have struggled to survive politics.
+
+<SourceQuote t={"The Geopolitical Debates Over Controlling Cloud Compute"} url={"https://carnegieendowment.org/research/2026/05/the-geopolitical-debates-over-controlling-cloud-compute"} what={"On the cloud loophole, and on how it is worked"} by={"Noah Tan · Carnegie Endowment for International Peace · 5 May 2026"}>
+
+It is logically inconsistent to restrict the sale of physical chips while allowing their computing power to be accessed remotely.
+
+Foreign actors can distribute frontier training workloads across multiple data center clusters to obscure their total compute footprint, anonymous shell companies can obfuscate beneficial ownership, and virtual private networks can mask IP addresses.
+
+</SourceQuote>
+
+<Src>Tan, *The Geopolitical Debates Over Controlling Cloud Compute*, Carnegie Endowment (2026) — [carnegieendowment.org](https://carnegieendowment.org/research/2026/05/the-geopolitical-debates-over-controlling-cloud-compute).</Src>
+
+### The bill for the controls
+
+Fairness requires the other column. The vetting burden lands on **providers**: compliance costs up, sales lost, and thin government capacity to backstop them.
+
+Over-broad rules push foreign customers off covered infrastructure entirely — costing revenue, relationships, and influence over the ecosystem’s standards. The customers who leave take their visibility with them.
+
+This is the effectiveness-feasibility trade from Module 0, wearing cloud clothes: the strictest scheme on paper can be the weakest in the world, because **coverage is the thing that makes the scheme work at all**.
+
+<SourceQuote t={"The Geopolitical Debates Over Controlling Cloud Compute"} url={"https://carnegieendowment.org/research/2026/05/the-geopolitical-debates-over-controlling-cloud-compute"} what={"On who pays for the controls"} by={"Noah Tan · Carnegie Endowment for International Peace · 5 May 2026"}>
+
+The burden of vetting end users would fall largely on cloud service providers themselves, driving up costs and reducing revenue.
+
+Restrictions risk pushing countries to decrease their dependence on U.S. chips in favor of more convenient Chinese alternatives.
+
+</SourceQuote>
+
+<Src>Tan, *The Geopolitical Debates Over Controlling Cloud Compute*, Carnegie Endowment (2026) — [carnegieendowment.org](https://carnegieendowment.org/research/2026/05/the-geopolitical-debates-over-controlling-cloud-compute).</Src>
+
+### Visibility vs privacy
+
+One more honest tension. Providers generally say they do *not* monitor customer workloads — and they have the technical capability to. Every monitoring mandate in this module spends some of that promise. The costs fall on every honest customer; the benefits only materialize against the rare dishonest one.
+
+There are designs that spend less privacy: thresholds that exempt small users, metadata-only monitoring, report-on-suspicion. But “less” is not “none,” and a regime that pretends the cost is zero will lose the argument in public. Carry the tension — it is load-bearing in the capstone.
+
+<SourceQuote t={"The Geopolitical Debates Over Controlling Cloud Compute"} url={"https://carnegieendowment.org/research/2026/05/the-geopolitical-debates-over-controlling-cloud-compute"} what={"On what providers say, and what they can do"} by={"Noah Tan · Carnegie Endowment for International Peace · 5 May 2026"}>
+
+Cloud providers generally say they do not monitor their users' workloads, in part to protect customer privacy, but they have the technical capability to do so.
+
+</SourceQuote>
+
+<Src>Tan, *The Geopolitical Debates Over Controlling Cloud Compute*, Carnegie Endowment (2026) — [carnegieendowment.org](https://carnegieendowment.org/research/2026/05/the-geopolitical-debates-over-controlling-cloud-compute).</Src>
+
+<Check id="cloud-check-9" q={"Which of these is fully outside what cloud-layer oversight can see?"} options={["A training run on a company’s own air-gapped cluster","A declared run at a covered provider","A customer who reserves compute at a covered provider and never uses it","An undeclared run at a covered provider"]} answer={0} why={"The covered provider sees declared runs, undeclared runs (as telemetry), and idle reservations alike. A self-owned, disconnected cluster has no landlord — that is exit one, and finding it belongs to the hardware and intelligence layers now."} />
+
+### The sober summary
+
+The cloud layer is strong exactly where compute is **rented, formal, and in-jurisdiction** — and blind where it is owned, offshore, or already stolen.
+
+That is not a verdict against the layer. It is the reason the track has five of them: what the cloud cannot see, power grids, chip registries, and people sometimes can. Which is the next module.
+
+### The two questions
+
+You are nearly at the gate. The exit skill of this module is a habit. For any piece of cloud evidence, ask:
+
+**1. What does it establish?** And what is it merely consistent with?
+
+**2. Who controls it?** Who could make it say something false — and at what cost?
+
+Run those two questions over everything you have met: declarations, KYC files, billing records, utilization curves, logs.
+
+### The strength ladder
+
+| Evidence | Controlled by | Faking it costs |
+| --- | --- | --- |
+| Hardware allocation, billing records | Provider | Nearly unfakeable by the customer — the provider bills from them |
+| Utilization, traffic, power patterns | Provider (observed) | Gameable — at real efficiency cost, and the distortion is itself a signal |
+| Declarations, stated purpose, workload labels | Customer | A form and a signature — cheapest to fake, worthless uncorroborated, legally binding once false |
+
+The bottom row alone is a paperwork regime. The top rows alone are numbers with no name attached. The regime works when the rows are cross-checked against each other.
+
+<Src>Heim et al., *Governing Through the Cloud* (2024) — [arXiv:2403.08501](https://arxiv.org/abs/2403.08501), CC BY 4.0, Table 3 (p. 22).</Src>
+
+### What it cannot establish alone
+
+Even at full strength, cloud evidence cannot establish: **intent** — metadata shows a training run, not why; **completeness** — a clean record at provider A says nothing about provider B, or the basement cluster; or the **true principal** — KYC names the counterparty, and the chain behind it can stay dark.
+
+Each missing piece has an owner elsewhere in the stack: hardware attestation (2.1) for what code actually ran; energy, procurement, and satellite signatures (2.3) for the compute nobody declared; insiders (2.4) for intent.
+
+One witness. Never the whole court.
+
+### Five things to keep
+
+If this module leaves five sentences in your head, make them these:
+
+- **The provider is a third party in the room** — governance leverage exists because frontier compute is rented.
+- **Metadata is enough to see scale, and often type** — without reading anyone’s code.
+- **Identity is the anchor** — records without verified identity are not evidence about anyone.
+- **A declaration is a claim, not proof** — its value comes from cross-checking, and from lying being costly.
+- **Cloud oversight ends at the cloud’s edge** — owned, offshore, or stolen means another layer’s job.
+
+<Check id="cloud-check-10" q={"Rank these by resistance to customer fakery, strongest first."} options={["Billing records → utilization patterns → declarations","Declarations → utilization patterns → billing records","All three are equally hard to fake","Utilization patterns → declarations → billing records"]} answer={0} why={"Billing and allocation are the provider’s own meter; utilization can be gamed, but at efficiency cost; a declaration is whatever the customer types. It is a ladder, not a tie."} />
+
+### The gate
+
+That is the module. Twelve questions, one at a time, pass at 9 — retake freely; the order reshuffles.
+
+Then onward: module 2.3 asks what a verifier sees when nobody files anything at all — the intelligence layer. The power meter doesn’t take declarations.
+
+## Tasks
+
+<Exercise id="v-task-cloud-limits-1" />
+
+<Exercise id="v-task-cloud-limits-2" />
+
+<Exercise id="v-task-cloud-limits-3" />
+
+<MemoDesk lesson="cloud-limits" />

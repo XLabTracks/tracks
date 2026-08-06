@@ -1,0 +1,68 @@
+## What can the provider see?
+
+Cloud providers already collect information for recordkeeping and billing purposes, much of which can be repurposed for workload verification. Before a customer can rent a single GPU, they need to open an account, handing over their legal name, email, phone, payment details, and often a government ID. From then on, the provider logs IP addresses, access times, and device identifiers, as a routine security practice to catch account takeovers and fraud (Heim et al. 2024, sec. 3.3.1). Providers also need to record chip-hours and other billing-related metrics, which verifiers can then convert into compute estimates. Security investigations—abuse cases, inconsistent declarations—leave yet another trail. Finally, account relationships carry as much information as accounts: who pays for whom, which accounts share credentials, which three opened the same week from the same address.
+
+We can think of this information providers can collect as falling into three rough categories: identity, resource use, and operational records. Click on each layer to learn more.
+
+<PopUp label="Identity">
+Identity is the account layer: legal names, payment relationships, tax IDs — and which accounts look related through a shared contact, funding source, or device. Its job is attribution: tying compute use to a real-world actor. It is also the layer a motivated evader attacks first, since names, addresses, and IPs can potentially be spoofed (Heim et al. 2024, sec. 3.3.1).
+</PopUp>
+
+<PopUp label="Resource use">
+Resource use is the machines layer: accelerators allocated, hours run, utilization, traffic between nodes. Its job is scale and structure — enough to estimate how much compute a customer consumed, and often what kind of workload it was. It is the hardest layer to fake, for a mundane reason: the provider bills from it. You can lie on a form; it is much harder to lie to the meter.
+</PopUp>
+
+<PopUp label="Operational records">
+Operational records are the diary layer: logs, security alerts, job metadata, each stamped in time. Their job is chronology and corroboration — a customer's story ("we ran a short fine-tune in March") either matches the trail or it doesn't. Held against a customer's claim, operational records become a lie detector.
+</PopUp>
+
+CHECK (2 questions, answers on reveal)
+
+- A customer declared a "small research project," but the account reserved 4,000 accelerators for 90 days. Which visibility layer caught the mismatch?(a) Resource use — allocation and duration (b) Identity — the account owner's name (c) Operational records — a security alert
+
+A: (a). Allocation size and duration are the resource-use layer. Identity says who; records say when.
+
+- Three accounts opened the same week, all paid from the same card. A month later, one claims its cluster sat idle in March — but timestamped logs show sustained activity. Which layers do the two red flags come from?(a) Identity links the accounts; operational records contradict the idle claim (b) Resource use links the accounts; identity contradicts the claim (c) Both are operational records.
+
+A: (a). Shared payment is linkage — identity's job. A story checked against a timestamped trail is corroboration — the operational-records job.
+
+## Training or inference?
+
+#### Nearly every proposed compute rule triggers on training above a threshold: training is where new capabilities come into existence, so that is what reporting and oversight obligations attach to. Inference is just a finished model serving users. Before any threshold means anything, then, someone must determine — without reading the customer's code — whether the workload was a training run at all.
+
+A frontier training run in the mid-2020s has a recognizable body:
+
+- Massed hardware — tens of thousands of accelerators on a high-bandwidth fabric, reserved together.
+- Sustained utilization — cores near peak, around the clock, for weeks. Inference traffic rises and falls with users; training doesn’t sleep.
+- Parallelism patterns — node-to-node traffic in the regular rhythms of data- and model-parallel training.
+- A closed loop — little traffic to the outside internet while the run cooks.
+
+No single signature is proof. Together they are hard to miss — and, as we’ll see in 2.2.3, expensive to fake.
+
+### Counting the Compute
+
+Scale is arithmetic the provider can already do: chips × hours × utilization. What was allocated gives an upper bound (everything at theoretical peak); measured utilization gives a tighter estimate.
+
+A worked number: hitting 10²⁶ operations takes roughly 60,000 top-line accelerators (H100-class) running for 90 days at around 34% average utilization, per Heim et al.'s estimate (2024, sec. 3.3.2). Runs like that do not hide in the noise of a data center.
+
+The same arithmetic works across accounts — which becomes important when someone tries to buy compute in slices (2.2.3).
+
+CHECK: A workload holds accelerator cores near peak utilization, day and night, for three weeks, with almost no traffic to the outside internet. What does that pattern most suggest? A: A large training run
+
+<Exercise id="v-task-cloud-what-providers-see-1" />
+
+In lab conditions, classifiers over this kind of telemetry distinguished AI workloads with about 95% accuracy. Solved, then?
+
+No—The Heim paper itself says a 5% error rate “may be prohibitively high” in production — falsely reporting an innocent customer to a regulator is expensive in every currency.
+
+And the signatures drift: new architectures, new parallelism schemes, new hardware all change what training looks like. A classifier is a snapshot, not a law of nature.
+
+## What can’t the provider see?
+
+Telemetry, then, can show that a big training run happened and roughly how much compute it burned. But it does not show what model was trained, on what data, or for what purpose. Reading that would mean inspecting confidential customer code — information providers "cannot typically retain or inspect (by design)" (Heim et al. 2024, sec. 3.3.2).
+
+Everything in this module is built from metadata around the workload, not the workload itself. That is the layer’s privacy bargain and its evidential ceiling. (Trusted execution environments might one day allow verified claims about workload content without exposure; the hardware exists today, but using it to verify workload claims is a research direction, not yet practice (Heim et al. 2024, sec. 3.3.2).)
+
+CHECK: A provider’s telemetry shows a customer ran a three-week job on 25,000 accelerators at constant high utilization. Which claims does that evidence support: (a) the customer trained a large model, (b) the customer trained a language model, (c) the customer violated a capability threshold?
+
+A: Only (a). Scale and type, never content. This distinction carries the rest of the module.

@@ -1,0 +1,130 @@
+<Callout variant="note" title="Section status">
+This section is still in draft. What follows is its specification — the
+objectives, the activity, its claim list and its reveal — and the connecting
+prose between them is not written yet.
+</Callout>
+
+### 2.1.2 From a chip to a trusted statement
+
+Runtime: 35 minutes Hard idea: Cryptography can faithfully transmit a false or insufficient measurement. The trust chain determines what the signature is worth.
+
+#### Learner-facing question
+
+Before trusting the chip’s statement, which components and actors must you trust not to lie, break, or disappear?
+
+#### Minimal technical content
+
+Teach only the concepts needed to inspect a proposal:
+
+- Hardware-rooted identity: a device-specific key or certificate used to authenticate evidence.
+- Root of trust: the component whose integrity the rest of the chain assumes.
+- Secure or measured boot: mechanisms for restricting or recording which low-level code starts.
+- Attestation evidence: signed measurements or claims about the device and its state.
+- Reference measurements: the values against which observed measurements are compared.
+- Revocation: the ability to stop trusting a compromised device, certificate, key, firmware version, or authority.
+- Policy validation: the separate step where an institution decides whether the attested state satisfies a rule.
+
+#### Worked example: current GPU attestation
+
+Use the NVIDIA architecture as a deployed security primitive:
+
+- The GPU and associated tools produce evidence.
+- NVIDIA’s RIM service supplies signed reference measurements.
+- A local verifier or NVIDIA Remote Attestation Service compares the evidence with those measurements;
+- Certificate-revocation services determine whether relevant credentials remain trusted;
+- A policy file or downstream system determines whether the result is acceptable.
+
+This is valuable precisely because it is real. It also exposes the institutional questions. NVIDIA currently maintains the authoritative reference-measurement repository and remote appraisal service in this implementation. A treaty architecture would have to decide whether that governance arrangement is acceptable to every party, or whether reference values, keys, and appraisal authority need to be shared, duplicated, escrowed, or transferred. (NVIDIA Docs)
+
+#### Interactive: Trust-chain autopsy
+
+Present a visual chain:
+
+Device → measurement component → signing key → evidence channel → reference values → verifier → compliance decision → enforcement authority
+
+Learners assign actors to each node:
+
+- Accelerator manufacturer;
+- Foundry or manufacturing auditor;
+- Data-center operator;
+- AI developer;
+- National regulator;
+- Proposed international verifier;
+- Certificate or key authority.
+
+For every node, the learner answers:
+
+- What does this actor or component control?
+- What could it falsify, suppress, revoke, or refuse?
+- Is its cooperation legally required, technically required, or merely convenient?
+- What evidence independently checks it?
+
+#### Threat-model toggle
+
+The same chain is evaluated under three actors:
+
+##### Profile A: Cloud customer
+
+The customer rents accelerators and lacks physical access to the machines.
+
+Expected reasoning:
+
+- Provider and manufacturer controls are comparatively strong;
+- The customer may manipulate software or workload behavior;
+- Physical tampering and supply-chain replacement are less accessible;
+- Provider capture remains a separate concern.
+
+##### Profile B: Frontier lab controlling its servers
+
+The operator has physical access, administrative privileges, time, and economic leverage.
+
+Expected reasoning:
+
+- Firmware, measurement paths, peripherals, logging, and network routes become attack surfaces;
+- The lab may delay updates, exploit optional modes, replace components, or replay evidence;
+- Routine commercial security guarantees require reassessment.
+
+##### Profile C: State-backed owner
+
+The prover may influence domestic suppliers, compel organizations, manufacture substitute hardware, or tolerate expensive attacks.
+
+Expected reasoning:
+
+- Vendor attestations from the other party may be politically unacceptable;
+- Supply-chain integrity and key governance become load-bearing;
+- Mutually controlled or externally installed systems become more attractive;
+- Assurance may depend on inspections, destructive sampling, or independent evidence outside the device.
+
+The owner-as-adversary frame should remain conditional. A cloud tenant and a state with its own hardware program do not present the same problem.
+
+#### Mini-case: identity does not establish location or topology
+
+Offer two compact prompts:
+
+- A chip proves a valid identity. What additional evidence is needed to establish where it is?
+- Ten thousand devices attest independently. What additional evidence is needed to establish that they formed the declared cluster?
+
+Hardware-governance research treats location and cluster configuration as separate mechanism families because they require additional protocols, networking assumptions, or external evidence. (arXiv)
+
+#### Misconceptions to diagnose
+
+Misconception: “A valid signature proves that the message is true.” Correction: It proves that a holder of the relevant key signed the message. The measurement process and key custody remain assumptions.
+
+Misconception: “Secure boot means the workload was compliant.” Correction: It can restrict or attest low-level software. Compliance requires a policy that connects that software state to the prohibited activity.
+
+Misconception: “Remote attestation gives a historical account of everything the chip did.” Correction: The answer depends on what was measured, when it was measured, what history was logged, and whether the history can be rolled back or omitted.
+
+Misconception: “A fleet of attested chips covers all frontier compute.” Correction: It covers the participating fleet. Completeness requires evidence about devices outside it.
+
+#### Notebook output: Trust-chain autopsy
+
+Learners record:
+
+- Exact claim;
+- Root or roots of trust;
+- Key and reference-value authority;
+- Update and revocation authority;
+- Named verifier;
+- Strongest adversary;
+- One common-mode failure;
+- One independent corroborating source.

@@ -15,7 +15,12 @@
     "arxiv:build": "tsx scripts/build-arxiv.ts",
     "substack:build": "tsx scripts/build-substack.ts",
     "lesswrong:build": "tsx scripts/build-lesswrong.ts",
-    "readings:build": "tsx scripts/build-readings.ts"
+    "verification:capstones": "node scripts/build-verification-capstones.mjs",
+    "verification:chrome": "node scripts/build-verification-chrome.mjs",
+    "verification:course": "node scripts/build-verification-course.mjs",
+    "verification:memos": "node scripts/build-verification-memos.mjs",
+    "readings:build": "tsx scripts/build-readings.ts",
+    "gdoc:build": "tsx scripts/build-gdoc.ts"
   },
   "dependencies": {
     "@mdx-js/loader": "^3.1.1",

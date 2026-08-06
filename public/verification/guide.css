@@ -1,0 +1,95 @@
+/* Learner's guide. Definition lists, not cards — this is a reference surface
+   and it should read like one. */
+
+.guide-head { margin: 18px 0 10px; }
+.guide-head h1 { font-size: var(--fs-title); }
+.guide-head .sub { max-width: 62ch; margin: 10px 0 18px; font-size: var(--fs-md); line-height: 1.6; color: var(--muted-foreground); }
+/* Wraps: the search box asks for 260px and the counter beside it does not
+   wrap, so on a 320px screen the row ran off the side in every theme. */
+.guide-tools { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; }
+.guide-tools input {
+  flex: 1 1 260px;
+  max-width: 340px;
+  padding: 8px 12px;
+  border: var(--hairline) solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--card);
+  color: var(--foreground);
+  font: inherit;
+  font-size: var(--fs-md);
+}
+.guide-tools input::placeholder { color: var(--muted-foreground); }
+
+.gmod { margin-top: 36px; }
+.gmod > .head {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  margin-bottom: 14px;
+  padding-bottom: 8px;
+  border-bottom: var(--hairline) solid var(--border);
+}
+.gmod .n {
+  font-family: var(--mono);
+  font-size: var(--fs-2xs);
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--mod, var(--brand-ink));
+}
+.gmod h2 { flex: 1 1 auto; font-size: var(--fs-2xl); }
+.gmod .frac { font-family: var(--mono); font-size: var(--fs-2xs); }
+
+.glossary dt {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  margin-top: 16px;
+  font-size: var(--fs-md);
+  font-weight: 600;
+}
+.glossary dt:first-child { margin-top: 0; }
+/* A unit number is a real destination, not a footnote mark — at 18px square
+   it was under a thumb's reach on a phone. The inline-block plus padding
+   takes it past 24px without changing where the number sits. */
+.glossary dt .u {
+  display: inline-block;
+  padding: 4px 6px;
+  margin: -4px -6px;
+  font-family: var(--mono);
+  font-size: var(--fs-2xs);
+  font-weight: 400;
+  color: var(--brand-ink);
+  text-decoration: none;
+}
+.glossary dt .u:hover { text-decoration: underline; }
+.glossary dd { max-width: 74ch; margin-top: 4px; font-size: var(--fs-md); line-height: 1.6; color: var(--muted-foreground); }
+
+.review {
+  margin-top: 24px;
+  padding: 14px 18px;
+  border: var(--hairline) solid var(--border);
+  border-radius: var(--radius);
+  background: var(--muted);
+}
+.review .label {
+  display: block;
+  margin-bottom: 10px;
+  font-family: var(--mono);
+  font-size: var(--fs-2xs);
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--muted-foreground);
+}
+.review ol { margin-left: 20px; font-size: var(--fs-md); line-height: 1.6; }
+.review li { margin-bottom: 8px; }
+.review li::marker { font-family: var(--mono); font-size: var(--fs-xs); color: var(--muted-foreground); }
+
+.no-hits { margin-top: 26px; font-size: var(--fs-md); color: var(--muted-foreground); }
+
+/* The unit tag beside a term is a jump link, not part of the definition. The
+   definition itself stays selectable — it is the reference copy. */
+.glossary dt .u {
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+}

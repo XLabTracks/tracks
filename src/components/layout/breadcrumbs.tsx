@@ -10,7 +10,7 @@ export function Breadcrumbs({ items }: { items: Crumb[] }) {
   return (
     <nav
       aria-label="Breadcrumb"
-      className="text-muted-foreground mb-4 flex flex-wrap items-center gap-1 text-sm"
+      className="text-muted-foreground mb-4 flex flex-wrap items-center gap-1 text-sm select-none"
     >
       {items.map((crumb, i) => (
         <span key={i} className="flex items-center gap-1">

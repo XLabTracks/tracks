@@ -112,12 +112,15 @@
   --sidebar-border: #e5e5e5; /* hairline */
   --sidebar-ring: #dc2626;
 
-  /* Okabe-Ito data-encoding accents (see @theme above). */
-  --comply: #009e73; /* green — comply / honest */
-  --defect: #d55e00; /* vermillion — defect / cheat */
+  /* Okabe-Ito data-encoding accents (see @theme above), darkened where the
+     set's own value does not clear 4.5:1 as ink on --muted. The Verification
+     routes override all five per theme in public/verification/theme.css —
+     these are the app-wide defaults, so they answer for the light ground. */
+  --comply: #007b5a; /* green — comply / honest */
+  --defect: #b34f00; /* vermillion — defect / cheat */
   --hide: #0072b2; /* blue — hide / conceal */
-  --exaggerate: #e69f00; /* amber — exaggerate / overstate */
-  --free-ride: #cc79a7; /* reddish-purple — free-ride */
+  --exaggerate: #916400; /* amber — exaggerate / overstate */
+  --free-ride: #975a7c; /* reddish-purple — free-ride */
 
   --radius: 0.875rem;
 }
@@ -228,6 +231,15 @@
    ============================================================ */
 .lesson-body {
   counter-reset: footnote;
+}
+
+/* A wide table scrolls inside its own box — the page must never scroll
+   sideways. `display: block` on the table element is what makes overflow-x
+   apply; the cells keep their table layout inside it. */
+.lesson-body table {
+  display: block;
+  max-width: 100%;
+  overflow-x: auto;
 }
 
 /* Anchor targets in sectioned lessons (the docked "In this lesson" nav) must

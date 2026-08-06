@@ -1,0 +1,255 @@
+/* The seam between the Verification palette and the Next app's components.
+   Loaded only by the app-side chrome (src/components/verification/site-chrome.tsx),
+   never by the static pages — they have no Tailwind on them.
+
+   Almost nothing is needed here, because the app styles itself entirely from
+   CSS variables and carries no `dark:` utilities at all: re-pointing
+   --background, --foreground and the rest in theme.css re-themes the whole
+   subtree on its own.
+
+   Tailwind Typography is the exception, and the reason this file exists. The
+   `prose` classes do not read the app's tokens — they set their own
+   --tw-prose-* colours to fixed values chosen for a light ground. Left alone,
+   lesson body text stays near-black on Verification's night ground: measured
+   at 1.17:1, which is invisible, not merely dim.
+
+   Trap: these must stay variables, not literal colours. Writing a hex here
+   would fix night and break day, because one rule serves all three themes. */
+
+/* theme.css sets the palette a page is made of — ground, card, border, muted,
+   primary. The app's components additionally read tokens that mean nothing to
+   a static page and so are absent from it: a dialog paints itself with
+   --popover, an input with --input, a subdued button with --secondary. Left
+   unset they keep globals.css's light-ground values, which is how a pop-up
+   opened on the night theme comes up white.
+
+   So they are derived here, from the palette, once. Trap: derive, never
+   restate — a literal colour would fix one theme and break the other two,
+   and a token that stops tracking its source is a token that goes wrong the
+   next time the palette moves. The chart and game-payoff tokens are
+   deliberately left alone: they are categorical scales, not palette shades,
+   and inventing values for them here would be a design decision. */
+:root[data-theme] {
+  --card-foreground: var(--foreground);
+  --popover: var(--card);
+  --popover-foreground: var(--foreground);
+  --secondary: var(--muted);
+  --secondary-foreground: var(--foreground);
+  --accent-foreground: var(--foreground);
+  --input: var(--border);
+  --destructive: var(--brand-ink);
+  --sidebar: var(--card);
+  --sidebar-foreground: var(--foreground);
+  --sidebar-border: var(--border);
+  --sidebar-accent: var(--muted);
+  --sidebar-accent-foreground: var(--foreground);
+  --sidebar-primary: var(--primary);
+  --sidebar-primary-foreground: var(--primary-foreground);
+  --sidebar-ring: var(--ring);
+}
+
+:root[data-theme] .prose {
+  --tw-prose-body: var(--foreground);
+  --tw-prose-headings: var(--foreground);
+  --tw-prose-lead: var(--muted-foreground);
+  --tw-prose-links: var(--brand-ink);
+  --tw-prose-bold: var(--foreground);
+  --tw-prose-counters: var(--muted-foreground);
+  --tw-prose-bullets: var(--border);
+  --tw-prose-hr: var(--border);
+  --tw-prose-quotes: var(--foreground);
+  --tw-prose-quote-borders: var(--border);
+  --tw-prose-captions: var(--muted-foreground);
+  --tw-prose-code: var(--foreground);
+  --tw-prose-pre-code: var(--foreground);
+  --tw-prose-pre-bg: var(--muted);
+  --tw-prose-th-borders: var(--border);
+  --tw-prose-td-borders: var(--border);
+}
+
+/* The lesson column reads at the site's measure and rhythm rather than the
+   plugin's, so a lesson and a static page set the same paragraph. */
+:root[data-theme] .lesson-body {
+  font-family: var(--sans);
+}
+
+/* In-lesson sub-headings are emphasized text, not display type: the body
+   face, bold, stepped in +2px over the paragraph so h3 > h4 > h5 stays
+   readable in the deeply nested worked examples (module 3 nests all three).
+   The display face keeps the page h1 and the h2 section heads — that
+   contrast is what marks a section against a run of emphasized labels.
+   Trap: theme.css sets h1–h4 to the display face at weight 500, which is
+   exactly the rule that made an h4 sit flush with the paragraph beside it;
+   these must stay ahead of it and of the prose classes in specificity.
+   Em-based on purpose — the sizes follow whatever the paragraph reads at. */
+:root[data-theme] .lesson-body :is(h3, h4, h5, h6):not(.not-prose *) {
+  font-family: var(--sans);
+  font-weight: 700;
+  letter-spacing: 0;
+  line-height: 1.3;
+}
+:root[data-theme] .lesson-body h3:not(.not-prose *) {
+  font-size: calc(1em + 6px);
+}
+:root[data-theme] .lesson-body h4:not(.not-prose *) {
+  font-size: calc(1em + 4px);
+}
+:root[data-theme] .lesson-body :is(h5, h6):not(.not-prose *) {
+  font-size: calc(1em + 2px);
+}
+
+/* Lists, from the author's two reference sheets: a short list is a tab and a
+   red dot; a long one is built, not dotted. From four items up, a numbered
+   list takes the stepped form — a solid --primary disc carrying its number —
+   and a plain list takes the pill rows, a tinted bar led by a disc. The
+   split is :has(), so a browser without it keeps the short form everywhere:
+   a degradation, never a break.
+
+   Trap: every selector carries :not(.not-prose *). The reader blocks —
+   <Check>, <GapFill>, the bank, the sign-up sheet — draw their own lists
+   inside not-prose containers, and a red disc inside a committed answer row
+   would be chrome painted over an exercise. Only top-level lists take the
+   built forms (:not(li ul), :not(li ol)); a list nested inside a pill or a
+   step keeps the short shape. Colours stay variables — the discs are
+   decoration, the meaning is in the words, and one rule serves all three
+   themes. */
+:root[data-theme] .lesson-body ul:not(.not-prose *) {
+  list-style: none;
+  padding-left: 1.6em;
+}
+:root[data-theme] .lesson-body ul:not(.not-prose *) > li {
+  position: relative;
+}
+:root[data-theme] .lesson-body ul:not(.not-prose *) > li::before {
+  content: '';
+  position: absolute;
+  left: -1.05em;
+  /* Centred on the first line of text, wherever the item wraps. */
+  top: calc(0.875em - 2.5px);
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--primary);
+}
+:root[data-theme] .lesson-body ol:not(.not-prose *) > li::marker {
+  color: var(--primary);
+  font-weight: 600;
+}
+
+/* Four or more plain bullets share one card, the reference sheet's shape:
+   a pale tinted slab with a big radius holding the whole run, every item
+   marked by a --primary dot, and a solid --primary circle peeking from
+   behind the top-left corner. Painted on all four sides — the whole-card
+   half of the card-edge rule, never a tinted rib.
+
+   The paragraph that introduces the list rides inside the card as its
+   header, in red: p:has(+ ul) takes the slab ground, the top corners and
+   the corner circle, and the list under it squares its top edge so the two
+   read as one card. That is a visual join, not a reparenting — the
+   paragraph stays its own element, and the radius seam is the whole
+   mechanism. The header writes in --brand-ink, never --primary: maroon is
+   a surface on the night ground, not an ink.
+
+   Trap: the corner circle is ::before at z-index -1 — the element makes no
+   stacking context, so the circle paints behind the slab and above the
+   page. And when the header carries the circle, the list's own must be
+   suppressed or two circles stack on the seam. */
+:root[data-theme] .lesson-body ul:not(.not-prose *):not(li ul):has(> li:nth-child(4)) {
+  position: relative;
+  display: grid;
+  gap: 14px;
+  margin-top: 2em;
+  padding: 26px 30px 26px 54px;
+  background: color-mix(in srgb, var(--primary) 7%, var(--background));
+  border-radius: 28px;
+}
+:root[data-theme] .lesson-body ul:not(.not-prose *):not(li ul):has(> li:nth-child(4))::before {
+  content: '';
+  position: absolute;
+  left: -12px;
+  top: -16px;
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: var(--primary);
+  z-index: -1;
+}
+:root[data-theme] .lesson-body ul:not(.not-prose *):not(li ul):has(> li:nth-child(4)) > li {
+  margin: 0;
+}
+:root[data-theme] .lesson-body ul:not(.not-prose *):not(li ul):has(> li:nth-child(4)) > li::before {
+  content: '';
+  position: absolute;
+  left: -26px;
+  top: calc(0.875em - 4px);
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--primary);
+}
+
+/* The introducing paragraph, as the card's red header. */
+:root[data-theme] .lesson-body p:not(.not-prose *):has(+ ul:not(li ul) > li:nth-child(4)) {
+  position: relative;
+  margin: 2em 0 0;
+  padding: 22px 30px 0 54px;
+  background: color-mix(in srgb, var(--primary) 7%, var(--background));
+  border-radius: 28px 28px 0 0;
+  color: var(--brand-ink, var(--primary));
+  font-weight: 600;
+}
+:root[data-theme] .lesson-body p:not(.not-prose *):has(+ ul:not(li ul) > li:nth-child(4)) :where(strong, b) {
+  color: inherit;
+}
+:root[data-theme] .lesson-body p:not(.not-prose *):has(+ ul:not(li ul) > li:nth-child(4))::before {
+  content: '';
+  position: absolute;
+  left: -12px;
+  top: -16px;
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: var(--primary);
+  z-index: -1;
+}
+:root[data-theme] .lesson-body p:not(.not-prose *):has(+ ul:not(li ul) > li:nth-child(4)) + ul:not(.not-prose *):not(li ul):has(> li:nth-child(4)) {
+  margin-top: 0;
+  padding-top: 16px;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}
+:root[data-theme] .lesson-body p:not(.not-prose *):has(+ ul:not(li ul) > li:nth-child(4)) + ul:not(.not-prose *):not(li ul):has(> li:nth-child(4))::before {
+  content: none;
+}
+
+/* Stepped circles: four or more numbered items. */
+:root[data-theme] .lesson-body ol:not(.not-prose *):not(li ol):has(> li:nth-child(4)) {
+  list-style: none;
+  counter-reset: vt-step;
+  display: grid;
+  gap: 14px;
+  padding-left: 0;
+}
+:root[data-theme] .lesson-body ol:not(.not-prose *):not(li ol):has(> li:nth-child(4)) > li {
+  counter-increment: vt-step;
+  margin: 0;
+  position: relative;
+  padding-left: 46px;
+}
+:root[data-theme] .lesson-body ol:not(.not-prose *):not(li ol):has(> li:nth-child(4)) > li::before {
+  content: counter(vt-step, decimal-leading-zero);
+  position: absolute;
+  left: 0;
+  top: calc(.9em - 15px);
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: var(--primary);
+  color: var(--primary-foreground, #fff);
+  font-family: var(--mono);
+  font-size: 12.5px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  display: grid;
+  place-items: center;
+}

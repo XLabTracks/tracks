@@ -20,38 +20,34 @@ export interface VerificationExerciseDef {
   /** True when the widget reports a finish event via its onComplete. */
   bridged: boolean;
 }
-
 export const verificationExercises: VerificationExerciseDef[] = [
-  { id: "what-do-they-say", title: "Why Are We Concerned About Superintelligence?", bridged: false },
+  { id: "collection-map", title: "The Collection Map", bridged: false },
   { id: "verification-landscape", title: "The Verification Landscape", bridged: false },
+  { id: "policy-cost", title: "Everything Comes With a Cost", bridged: false },
+  { id: "policy-plot", title: "Effectiveness x Feasibility", bridged: false },
   { id: "policy-scoping", title: "Scoping an Anti-ASI Policy", bridged: true },
-  { id: "policy-cost", title: "Everything Comes With a Cost", bridged: true },
-  { id: "dissection-table", title: "The Dissection Table", bridged: true },
   { id: "anatomy-drill", title: "The Anatomy Drill", bridged: true },
   { id: "protocol-actors", title: "Who's in the Treaty?", bridged: true },
-  { id: "game-theory-primer", title: "Game Theory for Verification", bridged: true },
-  { id: "ir-primer", title: "IR for People Who Build Things", bridged: true },
-  { id: "change-the-game", title: "Change the Game: The Race Dilemma Lab", bridged: true },
-  { id: "evolution-of-verification", title: "The Evolution of Verification", bridged: true },
   { id: "interactive-map", title: "The Compute Supply Chain", bridged: false },
   { id: "report-constructor", title: "One Inspection, Three Readers", bridged: true },
-  { id: "tamper-trace", title: "Tamper & Trace", bridged: true },
-  { id: "inspection-game", title: "The Inspection Game", bridged: true },
-  { id: "verification-timeline-game", title: "The Verification Game", bridged: true },
-  { id: "facilitator-guide", title: "Facilitator Field Guide", bridged: false },
+  { id: "what-do-they-say", title: "Why Are We Concerned About Superintelligence?", bridged: false },
+  { id: "precedent-cases", title: "Did the Regime Hold?", bridged: true },
+  // The drill benches. Bridged: the deck reports complete when the last step
+  // of its last bench is committed.
+  { id: "drills-primers", title: "Drill Bench: Primers", bridged: true },
+  { id: "drills-foundations", title: "Drill Bench: Foundations and Actors", bridged: true },
+  { id: "drills-supply-chain", title: "Drill Bench: Evidence Streams", bridged: true },
+  { id: "drills-games", title: "Drill Bench: Evasion, Regime, Position", bridged: true },
 ];
-
 export function getVerificationExercise(id: string): VerificationExerciseDef | undefined {
   return verificationExercises.find((e) => e.id === id);
 }
-
 /** Registry entry for a content-graph lesson id, if it hosts an interactive. */
 export function getVerificationExerciseForLesson(
   lessonId: string,
 ): VerificationExerciseDef | undefined {
   return verificationExercises.find((e) => verificationLessonId(e.id) === lessonId);
 }
-
 /** Content-graph lesson id for an exercise id. */
 export function verificationLessonId(id: string): string {
   return `v-${id}`;

@@ -493,8 +493,10 @@ Traps that cost time already, so they are written down:
   presses inside its own UI or the click never lands and the button looks
   dead.
 - LessWrong's GraphQL API is behind bot protection and challenges datacenter
-  requests, so `/api/verification/define` treats it as best-effort and answers
-  from the app's own glossary first. Never gate saving on a definition
+  requests; the keyless `/api/search` endpoint is not, so
+  `/api/verification/define` asks that instead (tags index — hits carry the
+  wiki's real slug and a plain-text description), answers from the app's own
+  glossary first, and stays best-effort. Never gate saving on a definition
   arriving.
 
 

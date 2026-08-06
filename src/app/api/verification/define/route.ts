@@ -13,20 +13,26 @@ import { resolveGlossaryTerm } from "@/lib/content/glossary";
  * Three sources, in order: the app's own hand-authored glossary (authored,
  * offline, never challenged), then the LessWrong wiki — it speaks this
  * course's language, so it outranks the general encyclopedia — then
- * Wikipedia. Both wikis are best-effort: LessWrong's GraphQL API sits behind
- * Vercel bot protection, which challenges a datacenter request, so a lookup
- * that works from a laptop can fail from the worker. That is why the client
- * is built to be useful when this returns nothing — a term can always be
- * saved with the learner's own note. An upstream failure is answered 502,
- * never "not found": offering to save a definition we never got would be a
- * lie, and so would claiming a wiki lacks a term we could not ask about.
+ * Wikipedia. Both wikis are best-effort, and the client is built to be
+ * useful when this returns nothing — a term can always be saved with the
+ * learner's own note. An upstream failure is answered 502, never
+ * "not found": offering to save a definition we never got would be a lie,
+ * and so would claiming a wiki lacks a term we could not ask about.
+ *
+ * The LessWrong lookup rides the Algolia-style /api/search endpoint, NOT
+ * /graphql: GraphQL sits behind bot protection that challenges datacenter
+ * requests, while the search endpoint answers them keyless (the
+ * goveronica.com legal-reader has run on it weekly from CI). Its tag hits
+ * carry the wiki's real slug and the full description as plain text —
+ * which also fixes the old exact-slug guess, since real slugs can carry
+ * suffixes (Corrigibility lives at corrigibility-1).
  *
  * Nothing here is stored. A definition is quoted text belonging to its wiki
  * (both CC BY-SA), so the response carries the source URL and the client
  * always shows it — the cheatsheet is a link to a definition, not a copy.
  */
 
-const GRAPHQL = "https://www.lesswrong.com/graphql";
+const LW_SEARCH = "https://www.lesswrong.com/api/search";
 const MAX_TERM = 60;
 
 // The wiki slugs terms as lowercase hyphenated words. This is the same
@@ -39,17 +45,12 @@ function slugify(term: string): string {
     .replace(/^-+|-+$/g, "");
 }
 
-// The wiki body is long-form. The cheatsheet wants the opening definition, so
-// the first paragraph is taken and the rest dropped — with the source link
-// carried alongside so the full entry is one click away.
-function firstParagraph(html: string): string {
-  const m = html.match(/<p\b[^>]*>([\s\S]*?)<\/p>/i);
-  const inner = m ? m[1] : html;
-  return inner
-    .replace(/<(script|style)[\s\S]*?<\/\1>/gi, "")
-    .replace(/<[^>]+>/g, "")
-    .replace(/\s+/g, " ")
-    .trim();
+// The wiki body is long-form plain text with blank-line paragraph breaks.
+// The cheatsheet wants the opening definition, so the first paragraph is
+// taken and the rest dropped — with the source link carried alongside so the
+// full entry is one click away.
+function firstParagraph(text: string): string {
+  return (text.split(/\n\s*\n/)[0] ?? "").replace(/\s+/g, " ").trim();
 }
 
 export async function GET(request: Request) {
@@ -74,32 +75,47 @@ export async function GET(request: Request) {
 
   let upstreamTrouble = false;
 
-  // LessWrong first: the course's own vocabulary lives there.
+  // LessWrong first: the course's own vocabulary lives there. The search is
+  // fuzzy ("verification" ranks Rationality Verification above Verification),
+  // so only a hit whose name normalises to the query counts — anything looser
+  // would hand a learner some nearby tag as if it defined their term.
   try {
-    const res = await fetch(GRAPHQL, {
+    const res = await fetch(LW_SEARCH, {
       method: "POST",
       headers: { "Content-Type": "application/json", Accept: "application/json" },
-      body: JSON.stringify({
-        query:
-          "query($slug:String!){tag(input:{selector:{slug:$slug}}){result{name description{html}}}}",
-        variables: { slug },
-      }),
+      body: JSON.stringify([
+        { indexName: "tags", params: { query: raw, hitsPerPage: 5 } },
+      ]),
       // The wiki changes rarely and a learner may look up the same term on
       // several pages; a day of edge cache keeps this off LessWrong's servers.
       next: { revalidate: 86400 },
     });
     if (!res.ok) throw new Error(String(res.status));
-    const json: {
-      data?: { tag?: { result?: { name?: string; description?: { html?: string } } } };
-    } = await res.json();
-    const tag = json?.data?.tag?.result;
-    const html = tag?.description?.html;
-    if (tag && html) {
+    const json: Array<{
+      hits?: Array<{
+        name?: string;
+        slug?: string;
+        description?: string;
+        isPlaceholderPage?: boolean;
+        adminOnly?: boolean;
+      }>;
+    }> = await res.json();
+    const hit = (json[0]?.hits ?? []).find(
+      (h) =>
+        h.name &&
+        h.slug &&
+        h.description &&
+        !h.isPlaceholderPage &&
+        !h.adminOnly &&
+        slugify(h.name) === slug,
+    );
+    const definition = hit ? firstParagraph(hit.description!) : "";
+    if (hit && definition) {
       return NextResponse.json({
         found: true,
-        term: tag.name || raw,
-        definition: firstParagraph(html),
-        url: `https://www.lesswrong.com/w/${slug}`,
+        term: hit.name,
+        definition,
+        url: `https://www.lesswrong.com/w/${hit.slug}`,
         source: "LessWrong Wiki (CC BY-SA)",
       });
     }

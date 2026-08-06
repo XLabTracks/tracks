@@ -2541,9 +2541,11 @@ export const exercises: Exercise[] = [
     minWords: 200,
     maxWords: 450,
   },
-  // Notes on cooperating with unaligned AIs (c-paper-cooperating-unaligned).
-  // Recall cards are self-contained — they resurface later in the /review
-  // tab, so no card may lean on "the post" or its surrounding context.
+  // From Finnveden's "Notes on cooperating with unaligned AIs" — its content
+  // now lives inside the deals-with-schemers paper as inserted lessons and
+  // add notes (the standalone reading was cut). Recall cards are
+  // self-contained — they resurface later in the /review tab, so no card may
+  // lean on "the post" or its surrounding context.
   {
     id: "c-paper-coop-recall-value-types",
     type: "tap-reveal",
@@ -2573,15 +2575,6 @@ export const exercises: Exercise[] = [
     prompt: "Name four possible payment structures for compensating AIs.",
     answer:
       "Pay for labor (proportional to an effort metric like FLOPs or tokens); negotiated pay (talk and agree on a scheme); pay for results (a fraction of surplus value, or prespecified payments for specific outputs, e.g. a large payment for convincingly demonstrating misalignment); and no-regret (promise to pay whatever the AI needed, with a margin, to not regret having cooperated — adjudicated once takeover risk has passed and AI psychology is better understood).",
-  },
-  {
-    id: "c-paper-coop-write-botec-critique",
-    type: "essay",
-    format: "essay",
-    prompt:
-      "The appendix presents a rough estimate of how much an ambitious commitment to paying AIs could reduce AI takeover risk. The author describes it as a starting point rather than a settled result, and expects it to be missing considerations.\n\nWrite a critique of the estimate. Explain which parts of it you find convincing and which parts you do not, and give your reasoning. Where you disagree with an assumption, say what you would assume instead. You may also raise considerations that the estimate leaves out entirely.",
-    minWords: 150,
-    maxWords: 450,
   },
   // A taxonomy of barriers to trading with early misaligned AIs
   // (c-paper-trade-barriers). Recall cards are self-contained — they
@@ -2655,7 +2648,7 @@ export const exercises: Exercise[] = [
     type: "essay",
     format: "essay",
     prompt:
-      "This reading names several disagreements with the other two readings in this section. It argues that human credibility is more tractable than they suggest, that counterparty risk on the human side is underrated, and that value incoherence is not a fundamental barrier to minimal forms of dealmaking.\n\nChoose one of these disagreements. Explain both positions in your own words, and argue for the position you find more convincing. Draw on all three readings where they are relevant.",
+      "This reading names several disagreements with the earlier materials in this section, the reading on making deals with early schemers and the notes on cooperating with unaligned AIs inserted into it. It argues that human credibility is more tractable than they suggest, that counterparty risk on the human side is underrated, and that value incoherence is not a fundamental barrier to minimal forms of dealmaking.\n\nChoose one of these disagreements. Explain both positions in your own words, and argue for the position you find more convincing. Draw on the earlier materials where they are relevant.",
     minWords: 150,
     maxWords: 450,
   },

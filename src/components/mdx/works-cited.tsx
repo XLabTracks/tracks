@@ -66,7 +66,9 @@ export function WorksCited({ urls }: { urls: string[] }) {
             <li key={url} className="text-[13.5px] leading-relaxed">
               <p className="works-cited-entry">
                 {entry.authors ?? entry.org ? (
-                  <>{entry.authors ?? entry.org}. </>
+                  // An author string ending "et al." already carries the
+                  // period MLA wants — don't double it.
+                  <>{(entry.authors ?? entry.org)!.replace(/\.$/, "")}. </>
                 ) : null}
                 {entry.standalone ? (
                   <i>{entry.title}. </i>

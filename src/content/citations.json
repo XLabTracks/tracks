@@ -1,5 +1,5 @@
 {
-  "_comment": "Hand-authored citation registry for the Works cited appendix. entries: MLA fields plus a hand-written 'about' line per work; the appendix assembles itself from each lesson's links (rehype-lesson-citations) and looks them up here. pending: cited URLs whose bibliographic facts are still being verified -- they render nothing until moved into entries; never promote one unchecked. excluded: links that are not works (course tools, shared working documents). citations.test.ts holds all three sets honest.",
+  "_comment": "Hand-authored citation registry for the Works cited appendix. entries: MLA fields plus a hand-written 'about' line per work; the appendix assembles itself from each lesson's links (rehype-lesson-citations) and looks them up here. pending: cited URLs whose bibliographic facts are still being verified -- they render nothing until moved into entries; never promote one unchecked (empty right now, and kept so a future citation can wait honestly). excluded: links that are not works (course tools, shared working documents). citations.test.ts holds all three sets honest.",
   "entries": {
     "https://arxiv.org/abs/2310.13625": {
       "title": "Oversight for Frontier AI through a Know-Your-Customer Scheme for Compute Providers",
@@ -410,25 +410,110 @@
       "org": "United States Government",
       "date": "Mar. 2009",
       "standalone": true
+    },
+    "https://aigi.ox.ac.uk/wp-content/uploads/2025/07/Verification_for_International_AI_Governance.pdf": {
+      "title": "Verification for International AI Governance",
+      "about": "The Oxford Martin 172-page report on which international AI agreements could actually be verified, and with what machinery.",
+      "authors": "Harack, Ben, Robert F. Trager, Anka Reuel, et al.",
+      "publisher": "Oxford Martin AI Governance Initiative",
+      "date": "July 2025",
+      "standalone": true
+    },
+    "https://aigi.ox.ac.uk/wp-content/uploads/2025/08/Survey_on_thresholds_for_advanced_AI_systems_1.pdf": {
+      "title": "Survey on Thresholds for Advanced AI Systems",
+      "about": "An expert survey (N=166) on how governance thresholds for advanced AI — compute, capability, risk — should be set and by whom.",
+      "authors": "Schuett, Jonas, Eunseo Choi, Kasumi Sugimoto, et al.",
+      "publisher": "Oxford Martin AI Governance Initiative",
+      "date": "Aug. 2025",
+      "standalone": true
+    },
+    "https://law-ai.org/the-role-of-compute-thresholds-for-ai-governance/": {
+      "title": "The Role of Compute Thresholds for AI Governance",
+      "about": "A law-journal article on how training-compute thresholds work as a regulatory trigger for frontier models.",
+      "authors": "Pistillo, Matteo, Suzanne Van Arsdale, Lennart Heim, and Christoph Winter",
+      "container": "George Washington Journal of Law & Technology",
+      "publisher": "Institute for Law & AI",
+      "date": "Feb. 2025"
+    },
+    "https://www.governance.ai/research-paper/training-compute-thresholds-features-and-functions-in-ai-regulation": {
+      "title": "Training Compute Thresholds: Features and Functions in AI Regulation",
+      "about": "GovAI's analysis of how US and EU regulators use compute thresholds to pick out models warranting oversight — and where the metric strains.",
+      "authors": "Heim, Lennart, and Leonie Koessler",
+      "publisher": "Centre for the Governance of AI",
+      "date": "7 Aug. 2024"
+    },
+    "https://epoch.ai/data/ai-data-centers": {
+      "title": "AI Data Centers",
+      "about": "Epoch's continuously updated database of the world's largest AI data centers, built from satellite imagery and permitting records.",
+      "org": "Epoch AI",
+      "date": "continuously updated"
+    },
+    "https://airisk.mit.edu/": {
+      "title": "MIT AI Risk Initiative",
+      "about": "The living MIT repository of over a thousand AI risks extracted from published frameworks and classified by cause and domain.",
+      "org": "MIT FutureTech",
+      "publisher": "Massachusetts Institute of Technology"
+    },
+    "https://docs.nvidia.com/attestation/quick-start-guide/latest/architecture.html": {
+      "title": "Architecture Overview",
+      "about": "NVIDIA's documentation of its attestation architecture — how clients, cloud services, and GPU hardware form a verifiable chain of trust.",
+      "org": "NVIDIA Corporation",
+      "container": "NVIDIA Attestation Suite Documentation"
+    },
+    "https://www.theatlantic.com/technology/2025/09/if-anyone-builds-it-excerpt/684213/": {
+      "title": "AI Is Grown, Not Built",
+      "about": "The Atlantic excerpt from If Anyone Builds It, Everyone Dies, arguing modern AI is grown through training rather than engineered.",
+      "authors": "Yudkowsky, Eliezer, and Nate Soares",
+      "container": "The Atlantic",
+      "date": "15 Sept. 2025"
+    },
+    "https://techgov.intelligence.org/blog/catch-up-algorithmic-progress-might-actually-be-60x-per-year": {
+      "title": "Catch-Up Algorithmic Progress Might Actually Be 60x per Year",
+      "about": "A MIRI estimate that catch-up algorithmic progress runs 16x-60x per year — far faster than commonly cited frontier figures.",
+      "authors": "Scher, Aaron",
+      "container": "MIRI Technical Governance Team",
+      "date": "24 Dec. 2025"
+    },
+    "https://techgov.intelligence.org/blog/catching-illicit-distributed-training-operations-during-an-ai-pause": {
+      "title": "Catching Illicit Distributed Training Operations During an AI Pause",
+      "about": "A MIRI analysis of how a covert actor could train across distributed unregistered clusters during a pause, and how that might be caught.",
+      "authors": "Rahman, Robi",
+      "container": "MIRI Technical Governance Team",
+      "date": "9 Apr. 2026"
+    },
+    "https://techgov.intelligence.org/research": {
+      "title": "Research",
+      "about": "The publications index of MIRI's Technical Governance Team.",
+      "org": "MIRI Technical Governance Team"
+    },
+    "https://techgov.intelligence.org/research/an-international-agreement-to-prevent-the-premature-creation-of-artificial-superintelligence": {
+      "title": "An International Agreement to Prevent the Premature Creation of Artificial Superintelligence",
+      "about": "The report page for MIRI's proposed US-China-anchored agreement restricting large-scale training and dangerous research.",
+      "authors": "Scher, Aaron, David Abecassis, Peter Barnett, and Brian Abeyta",
+      "container": "MIRI Technical Governance Team",
+      "date": "18 Nov. 2025"
+    },
+    "https://ai-2040.com/supplements/verification-plan": {
+      "title": "Verification Plan",
+      "about": "The AI 2040 scenario's supplement laying out a three-phase technical plan for verifying a US-China slowdown agreement without trust.",
+      "authors": "Dean, Romeo",
+      "container": "AI 2040",
+      "publisher": "AI Futures Project",
+      "date": "2026"
+    },
+    "https://2009-2017.state.gov/t/avc/trty/102360.htm": {
+      "title": "Treaty Between the United States of America and the Union of Soviet Socialist Republics on the Elimination of Their Intermediate-Range and Shorter-Range Missiles (INF Treaty)",
+      "about": "The State Department's archive page for the INF Treaty, the US-Soviet agreement whose intrusive on-site inspections the anatomy lesson dissects.",
+      "org": "United States, Department of State"
+    },
+    "https://news.un.org/en/story/2026/07/1167873": {
+      "title": "From AI to 'Killer Robots': UN Chief Issues Urgent Governance Call",
+      "about": "UN News coverage of the Secretary-General's governance call at the inaugural Global Dialogue on AI Governance in Geneva.",
+      "org": "UN News",
+      "date": "6 July 2026"
     }
   },
-  "pending": [
-    "https://aigi.ox.ac.uk/wp-content/uploads/2025/07/Verification_for_International_AI_Governance.pdf",
-    "https://aigi.ox.ac.uk/wp-content/uploads/2025/08/Survey_on_thresholds_for_advanced_AI_systems_1.pdf",
-    "https://law-ai.org/the-role-of-compute-thresholds-for-ai-governance/",
-    "https://www.governance.ai/research-paper/training-compute-thresholds-features-and-functions-in-ai-regulation",
-    "https://epoch.ai/data/ai-data-centers",
-    "https://airisk.mit.edu/",
-    "https://docs.nvidia.com/attestation/quick-start-guide/latest/architecture.html",
-    "https://www.theatlantic.com/technology/2025/09/if-anyone-builds-it-excerpt/684213/",
-    "https://techgov.intelligence.org/blog/catch-up-algorithmic-progress-might-actually-be-60x-per-year",
-    "https://techgov.intelligence.org/blog/catching-illicit-distributed-training-operations-during-an-ai-pause",
-    "https://techgov.intelligence.org/research",
-    "https://techgov.intelligence.org/research/an-international-agreement-to-prevent-the-premature-creation-of-artificial-superintelligence",
-    "https://ai-2040.com/supplements/verification-plan",
-    "https://2009-2017.state.gov/t/avc/trty/102360.htm",
-    "https://news.un.org/en/story/2026/07/1167873"
-  ],
+  "pending": [],
   "excluded": [
     "https://evidence-taxonomies.netlify.app/",
     "https://mechanism-sort.netlify.app/",

@@ -31,7 +31,6 @@ import { ExplorationHorizonDemo } from "@/components/demos/exploration-horizon-d
 import { CrossEpisodeCollusionDemo } from "@/components/demos/cross-episode-collusion-demo";
 import { DistantIncentivesDemo } from "@/components/demos/distant-incentives-demo";
 import { SeekerCarouselDemo } from "@/components/demos/seeker-carousel-demo";
-import { SeekerRiskMapDemo } from "@/components/demos/seeker-risk-map-demo";
 import { DealGainsFromTradeDemo } from "@/components/demos/deal-gains-from-trade-demo";
 import { DealCoalitionRoutesDemo } from "@/components/demos/deal-coalition-routes-demo";
 
@@ -286,13 +285,6 @@ export const demoRegistry: Record<string, DemoDefinition> = {
     title: "The seeker orientations, by severity",
     component: SeekerCarouselDemo,
     tags: ["control", "seekers"],
-  },
-  "seeker-risk-map": {
-    id: "seeker-risk-map",
-    title: "Which seekers drive which risks",
-    component: SeekerRiskMapDemo,
-    tags: ["control", "seekers"],
-    interactive: false,
   },
   "deal-gains-from-trade": {
     id: "deal-gains-from-trade",

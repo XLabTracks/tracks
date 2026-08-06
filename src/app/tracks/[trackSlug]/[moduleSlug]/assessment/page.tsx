@@ -6,6 +6,7 @@ import { getAssessmentForModule, getModuleBySlugs } from "@/lib/content";
 import { DELIVERABLE_FORMAT_LABELS } from "@/lib/content/types";
 import { isAccessLocked } from "@/lib/content/prerequisites";
 import { getCurrentUser } from "@/lib/auth";
+import { loginHref } from "@/lib/login-href";
 import { getPrerequisiteStatus, getSubmission } from "@/lib/progress";
 import {
   reopenWriting,
@@ -145,7 +146,10 @@ export default async function AssessmentPage({
                 maxWords={assessment.maxWords}
               />
               <p className="text-muted-foreground mt-3 text-sm">
-                <Link href="/login" className="underline">
+                <Link
+                  href={loginHref(`/tracks/${track.slug}/${module.slug}/assessment`)}
+                  className="underline"
+                >
                   Sign in
                 </Link>{" "}
                 to save a draft and submit.

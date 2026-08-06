@@ -94,6 +94,10 @@
        it down and rebuild it here, so the click it was pressed for never
        lands — the button looked dead. Ignore presses inside our own UI. */
     if (ev.target && ev.target.closest && ev.target.closest('.vocab-strip, .vocab-card')) return;
+    /* Same scope signal as notebook.js: the app chrome marks <html> with
+       vt-off-course when a client-side navigation leaves the course, and a
+       define strip has no business on an app page. */
+    if (document.documentElement.classList.contains('vt-off-course')) return;
     setTimeout(function () {
       const sel = document.getSelection();
       const text = sel ? String(sel).trim() : '';

@@ -5,6 +5,7 @@ import { redirect } from "next/navigation";
 
 import Link from "next/link";
 import { getCurrentUser } from "@/lib/auth";
+import { loginHref } from "@/lib/login-href";
 
 export const metadata: Metadata = { title: "Account" };
 
@@ -20,7 +21,7 @@ export default async function AccountPage() {
   // the render, and a page render may not write cookies — signed out, that
   // surfaces as a 500 rather than a sign-in prompt. Redirect explicitly.
   const user = await getCurrentUser();
-  if (!user) redirect("/login");
+  if (!user) redirect(loginHref("/account"));
 
   return (
     <main className="mx-auto w-full max-w-2xl px-4 py-10 lg:px-6">

@@ -5,6 +5,7 @@ import { useEffect } from "react";
 import { usePathname } from "next/navigation";
 import { useAuth } from "@workos-inc/authkit-nextjs/components";
 import { AccountMenu } from "@/components/layout/account-menu";
+import { SignInLink } from "@/components/layout/sign-in-link";
 import {
   COPYRIGHT,
   FOOT,
@@ -66,6 +67,39 @@ function ThemeSwitch() {
 export function VerificationHeader() {
   const pathname = usePathname();
   const { user, loading } = useAuth();
+
+  // Everything this header brings outlives it across client-side
+  // navigations: the scripts' tools (notebook button, capture, Define) are
+  // mounted on <body>, and React never removes a precedence stylesheet —
+  // left alone, theme.css and app-bridge.css keep repainting the app's own
+  // pages (maroon buttons, display-face headings) after walking out of the
+  // course. So leaving stands everything down: `vt-off-course` on <html> is
+  // the scope signal the scripts and notebook.css check, close() releases
+  // the panel's scroll lock, and the stylesheets are disabled — not removed,
+  // React still owns the nodes and re-entry re-enables them. notebook.css
+  // alone stays on: it carries the .vt-off-course rules that hide the tools
+  // the scripts left mounted. Absent class + enabled links is the default,
+  // so pages without this header (the static lift) never know any of this
+  // exists.
+  useEffect(() => {
+    const links = () =>
+      document.querySelectorAll<HTMLLinkElement>(
+        'link[rel="stylesheet"][href^="/verification/"]',
+      );
+    document.documentElement.classList.remove("vt-off-course");
+    links().forEach((l) => {
+      l.disabled = false;
+    });
+    return () => {
+      document.documentElement.classList.add("vt-off-course");
+      const w = window as unknown as { VTNotebook?: { close: () => void } };
+      w.VTNotebook?.close();
+      links().forEach((l) => {
+        if (!l.href.endsWith("/notebook.css")) l.disabled = true;
+      });
+    };
+  }, []);
+
   return (
     <>
       <link rel="stylesheet" href="/verification/fonts.css" precedence="high" />
@@ -137,9 +171,7 @@ export function VerificationHeader() {
                 moment later is worse than a control that arrives late. */}
             <AccountMenu />
             {loading || user ? null : (
-              <a className="btn small" href="/login">
-                Sign in
-              </a>
+              <SignInLink className="btn small">Sign in</SignInLink>
             )}
           </div>
         </div>

@@ -57,31 +57,48 @@ const ORIENTATIONS = [
   },
 ] as const;
 
-const PYRAMID_WIDTHS = ["w-[56%]", "w-[67%]", "w-[78%]", "w-[89%]", "w-full"] as const;
+// Each level is a trapezoid: the row's width is the level's bottom edge, and
+// the clip-path insets the top corners so the five levels join into one
+// continuous pyramid silhouette (top edge of each level = bottom edge of the
+// level above).
+const PYRAMID_LEVELS = [
+  { bottom: 50, inset: 12.5 },
+  { bottom: 62.5, inset: 10 },
+  { bottom: 75, inset: 8.34 },
+  { bottom: 87.5, inset: 7.15 },
+  { bottom: 100, inset: 6.25 },
+] as const;
 
 export function SeekerCarouselDemo() {
   return (
-    <ul className="space-y-1">
-      {ORIENTATIONS.map((orientation, index) => (
-        <li key={orientation.id} className="flex justify-center">
-          <button
-            type="button"
-            onClick={() =>
-              document
-                .getElementById(orientation.anchor)
-                ?.scrollIntoView({ behavior: "smooth" })
-            }
-            className={`${orientation.block} ${PYRAMID_WIDTHS[index]} focus-visible:ring-ring block rounded-md px-4 py-3 text-center transition-opacity hover:opacity-90 focus-visible:ring-2 focus-visible:outline-none`}
-          >
-            <span className={`${orientation.text} block text-sm font-semibold`}>
-              {orientation.label}
-            </span>
-            <span className={`${orientation.subtext} block text-xs`}>
-              {orientation.summary}
-            </span>
-          </button>
-        </li>
-      ))}
+    <ul>
+      {ORIENTATIONS.map((orientation, index) => {
+        const level = PYRAMID_LEVELS[index];
+        return (
+          <li key={orientation.id} className="flex justify-center">
+            <button
+              type="button"
+              onClick={() =>
+                document
+                  .getElementById(orientation.anchor)
+                  ?.scrollIntoView({ behavior: "smooth" })
+              }
+              style={{
+                width: `${level.bottom}%`,
+                clipPath: `polygon(${level.inset}% 0, ${100 - level.inset}% 0, 100% 100%, 0 100%)`,
+              }}
+              className={`${orientation.block} focus-visible:ring-ring block px-6 py-3 text-center transition-opacity hover:opacity-90 focus-visible:ring-2 focus-visible:outline-none focus-visible:ring-inset`}
+            >
+              <span className={`${orientation.text} block text-sm font-semibold`}>
+                {orientation.label}
+              </span>
+              <span className={`${orientation.subtext} block text-xs`}>
+                {orientation.summary}
+              </span>
+            </button>
+          </li>
+        );
+      })}
     </ul>
   );
 }

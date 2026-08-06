@@ -97,7 +97,7 @@ export type PaperSource =
 export type PaperInsertionItem =
   | { kind: "lesson"; id: string }
   | { kind: "exercise"; id: string }
-  | { kind: "demo"; id: string }
+  | { kind: "demo"; id: string; framed?: boolean }
   | { kind: "sequence"; exerciseIds: string[]; label?: string };
 
 /**

@@ -11,4 +11,9 @@ export interface DemoDefinition {
   description?: string;
   component: ComponentType;
   tags?: string[];
+  /**
+   * False for static diagrams with no state to reset — the frame hides its
+   * Reset button. Defaults to true (interactive).
+   */
+  interactive?: boolean;
 }

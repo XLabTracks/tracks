@@ -123,6 +123,13 @@ export function PaperSidenotes({ prefix }: { prefix: string }) {
         const number =
           marker.getAttribute("href")?.slice(`#${prefix}-fn-`.length) ?? "";
         if (!number || seen.has(number)) continue;
+        // A marker that lives INSIDE a footnote list item is a
+        // footnote-to-footnote reference (e.g. note 18's text citing note
+        // 19), sitting down in the footnotes section. It has no body position
+        // to align to, so a sidenote for it would be dumped at the very
+        // bottom of the page, detached from any prose — skip it (the target
+        // note stays reachable in the canonical footnotes section).
+        if (marker.closest(`li[id^="${prefix}-fn-"]`)) continue;
         const note = container.querySelector<HTMLElement>(
           `li[id="${CSS.escape(`${prefix}-fn-${number}`)}"]`,
         );

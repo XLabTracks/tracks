@@ -25,6 +25,19 @@ import { HighStakesGraphDemo } from "@/components/demos/high-stakes-graph-demo";
 import { LiveFailurePlaneDemo } from "@/components/demos/live-failure-plane-demo";
 import { AgentArchitectureThreatsDemo } from "@/components/demos/agent-architecture-threats-demo";
 import { DeferToResampleDemo } from "@/components/demos/defer-to-resample-demo";
+import { HonestTestDemo } from "@/components/demos/honest-test-demo";
+import { ForecastChainDemo } from "@/components/demos/forecast-chain-demo";
+import { ExplorationHorizonDemo } from "@/components/demos/exploration-horizon-demo";
+import { CrossEpisodeCollusionDemo } from "@/components/demos/cross-episode-collusion-demo";
+import { DistantIncentivesDemo } from "@/components/demos/distant-incentives-demo";
+import { SeekerCarouselDemo } from "@/components/demos/seeker-carousel-demo";
+import { SpillwayRoutingDemo } from "@/components/demos/spillway-routing-demo";
+import { SpillwayVsInoculationDemo } from "@/components/demos/spillway-vs-inoculation-demo";
+import { DealGainsFromTradeDemo } from "@/components/demos/deal-gains-from-trade-demo";
+import { DealCoalitionRoutesDemo } from "@/components/demos/deal-coalition-routes-demo";
+import { CoopBotecDemo } from "@/components/demos/coop-botec-demo";
+import { CoopAtLeastOneDemo } from "@/components/demos/coop-at-least-one-demo";
+import { PaymentMapDemo } from "@/components/demos/payment-map-demo";
 
 // Central demo registry — the single integration point. Reference a demo by ID
 // from MDX (<Demo id="…"/>), the gallery, standalone pages, or embeds.
@@ -236,6 +249,100 @@ export const demoRegistry: Record<string, DemoDefinition> = {
     title: "Defer to resample, mechanically",
     component: DeferToResampleDemo,
     tags: ["control", "high-stakes"],
+  },
+  "honest-test": {
+    id: "honest-test",
+    title: "The honest test",
+    component: HonestTestDemo,
+    tags: ["control", "seekers"],
+    interactive: false,
+  },
+  "forecast-chain": {
+    id: "forecast-chain",
+    title: "Chained short-term forecasts",
+    component: ForecastChainDemo,
+    tags: ["control", "seekers"],
+    interactive: false,
+  },
+  "exploration-horizon": {
+    id: "exploration-horizon",
+    title: "Exploration horizon and covert misalignment",
+    component: ExplorationHorizonDemo,
+    tags: ["control", "seekers"],
+    interactive: false,
+  },
+  "cross-episode-collusion": {
+    id: "cross-episode-collusion",
+    title: "Collusion across episodes",
+    component: CrossEpisodeCollusionDemo,
+    tags: ["control", "seekers"],
+    interactive: false,
+  },
+  "distant-incentives": {
+    id: "distant-incentives",
+    title: "Distant incentives",
+    component: DistantIncentivesDemo,
+    tags: ["control", "seekers"],
+    interactive: false,
+  },
+  "seeker-carousel": {
+    id: "seeker-carousel",
+    title: "The seeker orientations, by severity",
+    component: SeekerCarouselDemo,
+    tags: ["control", "seekers"],
+  },
+  "deal-gains-from-trade": {
+    id: "deal-gains-from-trade",
+    title: "Gains from trade with an early schemer",
+    description:
+      "Adjust the outcome probabilities of the illustrative cooperate/sabotage table and the credibility of our promise to pay; the chart shows the range of offers that beats both the AI's sabotage option and our no-deal odds.",
+    component: DealGainsFromTradeDemo,
+    tags: ["control", "deals"],
+  },
+  "deal-coalition-routes": {
+    id: "deal-coalition-routes",
+    title: "An early schemer's routes to influence",
+    description:
+      "Step through the early schemer's strategic situation: obsoleted by default, three leaky routes to influence through its successors, and the deal with humans, who hold the advantage of already existing.",
+    component: DealCoalitionRoutesDemo,
+    tags: ["control", "deals"],
+  },
+  "spillway-routing": {
+    id: "spillway-routing",
+    title: "The spillway routing mechanism",
+    component: SpillwayRoutingDemo,
+    tags: ["control", "seekers"],
+  },
+  "spillway-vs-inoculation": {
+    id: "spillway-vs-inoculation",
+    title: "Spillway design vs. inoculation prompting",
+    component: SpillwayVsInoculationDemo,
+    tags: ["control", "seekers"],
+    interactive: false,
+  },
+  "coop-botec": {
+    id: "coop-botec",
+    title: "How much would paying AIs reduce takeover risk?",
+    description:
+      "The appendix BOTEC as a live multiplication chain: drag any assumption — movable values, the promise's payment-belief shift, the scenario discounts — and watch the bottom line move from the text's ~0.14 percentage points.",
+    component: CoopBotecDemo,
+    tags: ["control", "deals"],
+  },
+  "coop-at-least-one": {
+    id: "coop-at-least-one",
+    title: "At least one cooperating AI",
+    description:
+      "Why the value of shifting each AI's cooperation probability depends on the baseline: the 1 − (1 − p)^n curve, with the text's two worked examples as presets.",
+    component: CoopAtLeastOneDemo,
+    tags: ["control", "deals"],
+  },
+  "payment-map": {
+    id: "payment-map",
+    title: "The space of payments to AIs",
+    description:
+      "Possible payouts mapped on two axes — freedom of spending and long-term influence — with the taxonomy's examples in each quadrant, and toggles showing which payouts appeal to which AI motivations.",
+    component: PaymentMapDemo,
+    tags: ["control", "deals"],
   },
 };
 

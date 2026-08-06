@@ -30,6 +30,7 @@ import { ExplorationHorizonDemo } from "@/components/demos/exploration-horizon-d
 import { CrossEpisodeCollusionDemo } from "@/components/demos/cross-episode-collusion-demo";
 import { BehavioralSelectionDemo } from "@/components/demos/behavioral-selection-demo";
 import { DistantIncentivesDemo } from "@/components/demos/distant-incentives-demo";
+import { SeekerSchemerComparisonDemo } from "@/components/demos/seeker-schemer-comparison-demo";
 
 // Central demo registry — the single integration point. Reference a demo by ID
 // from MDX (<Demo id="…"/>), the gallery, standalone pages, or embeds.
@@ -280,6 +281,14 @@ export const demoRegistry: Record<string, DemoDefinition> = {
     description:
       "Two ways a third-party bad actor delivers distant influence: retroactive reward, and anthropic capture.",
     component: DistantIncentivesDemo,
+    tags: ["control", "seekers"],
+  },
+  "seeker-schemer-comparison": {
+    id: "seeker-schemer-comparison",
+    title: "Schemers vs. influence and influenceable seekers",
+    description:
+      "Three columns — schemer, influence seeker, remotely-influenceable seeker — compared on what they pursue, timescale, response to the honest test, and distant incentives.",
+    component: SeekerSchemerComparisonDemo,
     tags: ["control", "seekers"],
   },
 };

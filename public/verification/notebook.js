@@ -2,8 +2,8 @@
    A corner button opens a panel of pages; each page holds a free mix of
    blocks: a written note, a passage captured from the course text with its
    source, or a sketch. Pages persist to localStorage and the whole book
-   exports to Markdown. The page counter is a button: it lists every page by
-   number and title for a direct jump.
+   exports to Markdown. The page number in the counter is editable: type a
+   number and the book opens there.
 
    The last page is always the skill map — a read-only ladder derived from
    window.SKILLS and vt-progress at paint time. It is never stored: it sits
@@ -38,7 +38,7 @@ window.VTNotebook = (function () {
   let data = load();
   let cur = clamp(data.cur || 0);
   let saveTimer = null;
-  let root = null, pagesEl = null, counterEl = null, badgeEl = null, jumpEl = null;
+  let root = null, pagesEl = null, counterEl = null, badgeEl = null, gotoEl = null;
 
   /* ---------- store ---------- */
 
@@ -322,40 +322,19 @@ window.VTNotebook = (function () {
 
   /* ---------- page jump ---------- */
 
-  /* The counter doubles as the jump control: pressing it lists every page by
-     number and title, the skill map last. The list is rebuilt on every open —
-     titles change under it — and anchored above the footer, whose height
-     varies with wrapping, so the offset is measured rather than styled. */
+  /* The page number in the counter is an input: type a number, press Enter
+     or leave the field, and the book opens there. Anything unreadable as a
+     page reverts to where you are — a typo never navigates. */
 
-  function closeJump() {
-    if (!jumpEl) return;
-    jumpEl.remove();
-    jumpEl = null;
-    counterEl.setAttribute('aria-expanded', 'false');
-  }
-
-  function toggleJump() {
-    if (jumpEl) return closeJump();
-    jumpEl = mk('div', 'nb-jump');
-    const titles = data.pages.map(function (p, i) {
-      return p.title || ('Page ' + (i + 1));
-    }).concat(['Skill map']);
-    titles.forEach(function (t, i) {
-      const row = mk('button', 'nb-jump-row');
-      row.type = 'button';
-      row.setAttribute('data-jumpto', String(i));
-      if (i === cur) row.setAttribute('aria-current', 'true');
-      row.appendChild(mk('span', 'n', String(i + 1)));
-      row.appendChild(document.createTextNode(t));
-      jumpEl.appendChild(row);
-    });
-    const panel = root.querySelector('.nb-panel');
-    const foot = root.querySelector('.nb-foot');
-    jumpEl.style.bottom = (foot.offsetHeight + 8) + 'px';
-    panel.appendChild(jumpEl);
-    counterEl.setAttribute('aria-expanded', 'true');
-    const on = jumpEl.querySelector('[aria-current]');
-    if (on) on.scrollIntoView({ block: 'nearest' });
+  function commitGoto() {
+    const n = parseInt(gotoEl.value, 10);
+    if (!isNaN(n) && clamp(n - 1) === n - 1 && n - 1 !== cur) {
+      cur = n - 1;
+      save();
+      paintPage();
+    } else {
+      gotoEl.value = String(cur + 1);
+    }
   }
 
   /* The learner's task answers, shown beside their notes and never copied
@@ -508,7 +487,6 @@ window.VTNotebook = (function () {
   function paintPage() {
     if (!pagesEl) return;
     if (written) { paintWritten(); return; }
-    closeJump();
     root.querySelectorAll('[data-add]').forEach(function (b) { b.disabled = onSkillPage(); });
 
     if (onSkillPage()) {
@@ -532,7 +510,9 @@ window.VTNotebook = (function () {
       p.blocks.forEach(function (b, i) { pagesEl.appendChild(blockEl(b, i)); });
     }
 
-    counterEl.textContent = 'Page ' + (cur + 1) + ' / ' + pageCount();
+    // Never clobber a number mid-edit — the commit on blur repaints anyway.
+    if (document.activeElement !== gotoEl) gotoEl.value = String(cur + 1);
+    counterEl.querySelector('[data-total]').textContent = String(pageCount());
     paintBadge();
   }
 
@@ -557,7 +537,7 @@ window.VTNotebook = (function () {
           '</div>' +
           '<div class="nb-pager">' +
             '<button class="btn small outline" type="button" data-page="-1" aria-label="Previous page">&larr;</button>' +
-            '<button class="nb-count" type="button" data-jump aria-expanded="false" title="Jump to a page"></button>' +
+            '<span class="nb-count">Page <input class="nb-goto" type="text" inputmode="numeric" aria-label="Page number — type one to jump"> / <span data-total></span></span>' +
             '<button class="btn small outline" type="button" data-page="1" aria-label="Next page">&rarr;</button>' +
             '<button class="btn small outline" type="button" data-newpage>New page</button>' +
           '</div>' +
@@ -568,17 +548,24 @@ window.VTNotebook = (function () {
 
     pagesEl = root.querySelector('.nb-pages');
     counterEl = root.querySelector('.nb-count');
+    gotoEl = root.querySelector('.nb-goto');
+
+    gotoEl.addEventListener('focus', function () { gotoEl.select(); });
+    gotoEl.addEventListener('blur', commitGoto);
+    gotoEl.addEventListener('keydown', function (e) {
+      // Both keys stop here: Enter must not submit anything above, and
+      // Escape cancels the edit without closing the notebook under it.
+      if (e.key === 'Enter') { e.preventDefault(); e.stopPropagation(); gotoEl.blur(); }
+      if (e.key === 'Escape') {
+        e.stopPropagation();
+        gotoEl.value = String(cur + 1);
+        gotoEl.blur();
+      }
+    });
 
     root.addEventListener('click', function (e) {
-      const t = e.target.closest('[data-close],[data-add],[data-page],[data-newpage],[data-export],[data-written],[data-jump],[data-jumpto]');
-      if (!t) { closeJump(); return; }
-      if (t.hasAttribute('data-jump')) return toggleJump();
-      closeJump();
-      if (t.hasAttribute('data-jumpto')) {
-        cur = clamp(Number(t.getAttribute('data-jumpto')));
-        save();
-        return paintPage();
-      }
+      const t = e.target.closest('[data-close],[data-add],[data-page],[data-newpage],[data-export],[data-written]');
+      if (!t) return;
       if (t.hasAttribute('data-close')) return close();
       if (t.hasAttribute('data-export')) return download();
       if (t.hasAttribute('data-written')) return showWritten();
@@ -598,10 +585,7 @@ window.VTNotebook = (function () {
     });
 
     document.addEventListener('keydown', function (e) {
-      if (e.key === 'Escape' && !root.hidden) {
-        if (jumpEl) closeJump();
-        else close();
-      }
+      if (e.key === 'Escape' && !root.hidden) close();
     });
   }
 
@@ -626,7 +610,6 @@ window.VTNotebook = (function () {
 
   function close() {
     if (!root) return;
-    closeJump();
     root.hidden = true;
     document.documentElement.classList.remove('nb-lock');
   }

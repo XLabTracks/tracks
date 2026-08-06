@@ -212,63 +212,21 @@
 .nb-foot [data-export] { flex: 0 0 auto; }
 .nb-add button:disabled { opacity: .45; cursor: default; }
 
-/* The counter is also the jump control. */
-button.nb-count {
-  padding: 4px 2px;
-  border: 0;
-  background: transparent;
-  font: inherit;
-  font-size: var(--fs-xs);
-  color: var(--muted-foreground);
-  cursor: pointer;
-  user-select: none;
-  -webkit-user-select: none;
-}
-button.nb-count:hover, button.nb-count[aria-expanded="true"] { color: var(--foreground); }
-
-/* ---------- page jump ---------- */
-
-/* Anchored above the footer inside the fixed panel; the offset is set from
-   the footer's measured height, because the footer wraps on narrow screens. */
-.nb-jump {
-  position: absolute;
-  right: 16px;
-  z-index: 2;
-  min-width: 220px;
-  max-width: calc(100% - 32px);
-  max-height: 50%;
-  overflow-y: auto;
-  padding: 6px;
+/* The page number is the jump control: a box the width of two digits, typed
+   into and committed on Enter or blur. The hairline is what says "editable"
+   where the rest of the counter is print. */
+.nb-goto {
+  width: 2.6ch;
+  padding: 2px 3px;
   border: var(--hairline) solid var(--border);
-  border-radius: var(--radius);
-  background: var(--card);
-  box-shadow: var(--shadow-soft-lg);
-}
-.nb-jump-row {
-  display: flex;
-  align-items: baseline;
-  gap: 10px;
-  width: 100%;
-  padding: 7px 10px;
-  border: 0;
   border-radius: var(--radius-sm);
-  background: transparent;
+  background: var(--background);
   color: var(--foreground);
-  font: inherit;
-  font-size: var(--fs-sm);
-  text-align: left;
-  cursor: pointer;
-  user-select: none;
-  -webkit-user-select: none;
-}
-.nb-jump-row:hover { background: var(--muted); }
-.nb-jump-row[aria-current="true"] { background: var(--muted); font-weight: 600; }
-.nb-jump-row .n {
-  min-width: 1.6em;
   font-family: var(--mono);
   font-size: var(--fs-xs);
-  color: var(--muted-foreground);
+  text-align: center;
 }
+.nb-goto:focus { outline: none; border-color: var(--ring); }
 
 /* ---------- capture ---------- */
 

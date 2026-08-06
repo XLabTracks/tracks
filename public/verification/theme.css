@@ -40,6 +40,10 @@
   --muted-foreground: #5f5854;
   --accent: #f2efed;
   --border: #e4dedb;
+  /* The learner's own marker (::highlight(vt-hl)): a light marker wash the
+     day ink still clears 4.5:1 on. Each theme re-solves the pair. */
+  --hl: #f2e18f;
+  --hl-ink: var(--foreground);
   --ring: #800000;
 
   --mod-0: #970a12;  /* Chinese Red */
@@ -159,6 +163,9 @@
   --accent: #2e2827;
   --border: #332c2a;
   --ring: #eda3a3;
+  /* A dark amber ground the night ink stays legible on (≈8:1). */
+  --hl: #55471a;
+  --hl-ink: var(--foreground);
 
   /* Fills and their ink are the day values: a plaque's legibility is set by
      the plaque, not by the page behind it. Only the type variant re-solves. */
@@ -221,6 +228,10 @@
   --accent: #1a1a1a;
   --border: #ffffff;
   --ring: #ffe600;
+  /* The marker is the mode's own yellow with its own ink — the selected-state
+     pair, so a highlight reads like everything else pressed in this mode. */
+  --hl: var(--primary);
+  --hl-ink: var(--primary-foreground);
 
   /* No hue at all: every module reads as foreground, and the number beside it
      is the whole encoding. */
@@ -282,6 +293,15 @@
 /* A long word at 72px is wider than a 320px screen, and a heading that cannot
    break is a horizontal scrollbar. Breaking is the lesser harm. */
 :root[data-theme='contrast'] { overflow-wrap: break-word; }
+
+/* The learner's marker, painted by highlight.js through the Custom Highlight
+   API — a pseudo, not an element, so this is the one place its colours can
+   be said. Both values re-solve per theme above; a browser without the API
+   never registers the name and the rule is inert. */
+::highlight(vt-hl) {
+  background-color: var(--hl);
+  color: var(--hl-ink);
+}
 
 /* 1.4.10, the rest of it: doubling the type does not move a layout, but it
    does overrun the two things that were told never to give way — a line held

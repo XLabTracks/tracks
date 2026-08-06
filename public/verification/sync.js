@@ -24,6 +24,7 @@
   const URL_STATE = '/api/verification/state';
   const PROGRESS_KEY = 'vt-progress';
   const NOTEBOOK_KEY = 'xlab-verification-notebook.v1';
+  const HIGHLIGHTS_KEY = 'vt-highlights.v1';
   const PUSH_MS = 1200;
 
   let signedIn = false;
@@ -36,13 +37,17 @@
     }
     const progress = get(PROGRESS_KEY);
     const notebook = get(NOTEBOOK_KEY);
+    const highlights = get(HIGHLIGHTS_KEY);
     return {
       progress: progress,
       notebook: notebook,
-      // The newest edit either store has seen. Progress carries a timestamp
-      // per completed unit; the notebook carries one for the whole book.
+      highlights: highlights,
+      // The newest edit any store has seen. Progress carries a timestamp per
+      // completed unit; the notebook and the highlights carry one each for
+      // the whole store.
       updatedAt: Math.max(
         notebook && notebook.updatedAt ? notebook.updatedAt : 0,
+        highlights && highlights.updatedAt ? highlights.updatedAt : 0,
         progress && progress.units
           ? Object.keys(progress.units).reduce(function (m, k) {
               return Math.max(m, Number(progress.units[k]) || 0);
@@ -56,6 +61,7 @@
     try {
       if (state.progress) localStorage.setItem(PROGRESS_KEY, JSON.stringify(state.progress));
       if (state.notebook) localStorage.setItem(NOTEBOOK_KEY, JSON.stringify(state.notebook));
+      if (state.highlights) localStorage.setItem(HIGHLIGHTS_KEY, JSON.stringify(state.highlights));
     } catch (e) { /* quota or private mode — the account copy stays authoritative */ }
   }
 
@@ -78,7 +84,7 @@
   function arm() {
     if (window.VT && typeof window.VT.onChange === 'function') window.VT.onChange(push);
     window.addEventListener('storage', function (e) {
-      if (e.key === PROGRESS_KEY || e.key === NOTEBOOK_KEY) push();
+      if (e.key === PROGRESS_KEY || e.key === NOTEBOOK_KEY || e.key === HIGHLIGHTS_KEY) push();
     });
     // The notebook writes on a debounce of its own; catch the last edit before
     // the tab goes away, when a pending push would otherwise be lost.

@@ -489,8 +489,8 @@ window.VTNotebook = (function () {
 
     document.addEventListener('mouseup', function (ev) {
       // Same trap as vocab.js: mouseup precedes click, so a press on this
-      // button must not rebuild it out from under its own click handler.
-      if (ev.target && ev.target.closest && ev.target.closest('.nb-capture')) return;
+      // strip must not rebuild it out from under its own click handler.
+      if (ev.target && ev.target.closest && ev.target.closest('.nb-capture-strip, .nb-capture')) return;
       if (offCourse()) return;
       setTimeout(function () {
         const sel = document.getSelection();
@@ -505,15 +505,29 @@ window.VTNotebook = (function () {
         if (!host || !host.closest('main')) return;
 
         const r = sel.getRangeAt(0).getBoundingClientRect();
-        btn = mk('button', 'nb-capture', 'Add to notebook');
-        btn.type = 'button';
-        btn.style.top = (r.bottom + window.scrollY + 8) + 'px';
-        btn.style.left = (r.left + window.scrollX) + 'px';
-        btn.onclick = function () {
+        btn = mk('div', 'nb-capture-strip', '');
+        const cap = mk('button', 'nb-capture', 'Add to notebook');
+        cap.type = 'button';
+        cap.onclick = function () {
           addQuote(text, document.title.split('·')[0].trim(), location.href);
           drop();
           if (sel.removeAllRanges) sel.removeAllRanges();
         };
+        btn.appendChild(cap);
+        // The engine is highlight.js; no VTHighlight means no button, not a
+        // dead one.
+        if (window.VTHighlight && VTHighlight.supported) {
+          const mark = mk('button', 'vocab-btn', 'Highlight');
+          mark.type = 'button';
+          mark.onclick = function () {
+            VTHighlight.add();
+            drop();
+            if (sel.removeAllRanges) sel.removeAllRanges();
+          };
+          btn.appendChild(mark);
+        }
+        btn.style.top = (r.bottom + window.scrollY + 8) + 'px';
+        btn.style.left = (r.left + window.scrollX) + 'px';
         document.body.appendChild(btn);
       }, 0);
     });

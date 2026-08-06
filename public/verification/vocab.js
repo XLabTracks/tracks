@@ -122,6 +122,20 @@
       };
       strip.appendChild(def);
 
+      if (window.VTHighlight && VTHighlight.supported) {
+        const mark = document.createElement('button');
+        mark.type = 'button';
+        mark.className = 'vocab-btn';
+        mark.textContent = 'Highlight';
+        mark.onclick = function () {
+          VTHighlight.add();
+          drop();
+          const s3 = document.getSelection();
+          if (s3 && s3.removeAllRanges) s3.removeAllRanges();
+        };
+        strip.appendChild(mark);
+      }
+
       const keep = document.createElement('button');
       keep.type = 'button';
       keep.className = 'vocab-btn';

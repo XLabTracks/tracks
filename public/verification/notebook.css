@@ -17,9 +17,11 @@
    one rule, every surface the two scripts own. */
 .vt-off-course .nb-open,
 .vt-off-course .nb-capture,
+.vt-off-course .nb-capture-strip,
 .vt-off-course .nb-root,
 .vt-off-course .vocab-strip,
-.vt-off-course .vocab-card { display: none; }
+.vt-off-course .vocab-card,
+.vt-off-course .hl-strip { display: none; }
 
 /* ---------- the corner button ---------- */
 
@@ -224,6 +226,20 @@
 .nb-foot [data-export] { flex: 0 0 auto; }
 
 /* ---------- capture ---------- */
+
+/* The capture strip is the positioned box (vocab-strip's shape) and the
+   buttons flow inside it; highlight.js's removal strip borrows the same
+   geometry. */
+.nb-capture-strip,
+.hl-strip {
+  position: absolute;
+  z-index: 55;
+  display: flex;
+  gap: 6px;
+}
+.nb-capture-strip .nb-capture,
+.nb-capture-strip .vocab-btn,
+.hl-strip .vocab-btn { position: static; }
 
 .nb-capture {
   position: absolute;

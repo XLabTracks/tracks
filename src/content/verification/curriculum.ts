@@ -37,9 +37,9 @@ export const verificationModules: Module[] = [
     id: "v-why",
     slug: "why-verification",
     trackId: "verification",
-    title: "Why verification?",
+    title: "Why are we teaching this?",
     summary:
-      "The oldest problem in arms control, applied to AI: when you sign a mutual agreement, how do you know the other party will uphold it? Opens with the course's own framing, then the case that ASI risk warrants an agreement at all, why successful prevention is invisible, the intuitions a verification regime runs on, seven decades of arms-control precedent, and the securitization critique met head on.",
+      "The oldest problem in arms control, applied to AI: when you sign a mutual agreement, how do you know the other party will uphold it? Opens with the welcome and the course's own framing, then the case that ASI risk warrants an agreement at all, why successful prevention is invisible, the intuitions a verification regime runs on, seven decades of arms-control precedent, and the securitization critique met head on.",
     order: 0,
     prerequisiteModuleIds: [],
     itemIds: [
@@ -147,7 +147,7 @@ export const verificationLessons: Lesson[] = [
     id: "v-scoping-intro",
     slug: "scoping-intro",
     moduleId: "v-scoping",
-    title: "1.0 What kind of policy are we trying to verify?",
+    title: "1.0 Introduction: what kind of policy are we trying to verify?",
     contentRef: "verification/scoping-intro",
   },
   {
@@ -155,8 +155,9 @@ export const verificationLessons: Lesson[] = [
     slug: "scoping-thresholds",
     moduleId: "v-scoping",
     sectionItemId: "v-scoping-intro",
-    title: "1.0.1 Thresholds: compute vs. capability",
+    title: "1.0.1 Brief thresholds explainer: compute vs. capability",
     contentRef: "verification/scoping-thresholds",
+    estimatedMinutes: 5,
   },
   {
     id: "v-scoping-effective-feasible",
@@ -177,7 +178,7 @@ export const verificationLessons: Lesson[] = [
     id: "v-scoping-actors",
     slug: "scoping-actors",
     moduleId: "v-scoping",
-    title: "1.2 Actors: who a treaty relies upon, applies to, and constrains",
+    title: "1.2 Actors: who does the treaty rely upon, apply to, and constrain?",
     contentRef: "verification/scoping-actors",
   },
   {
@@ -364,49 +365,49 @@ export const verificationLessons: Lesson[] = [
     id: "v-welcome",
     slug: "welcome",
     moduleId: "v-why",
-    title: "0.1.0 Welcome",
+    title: "0.0 Welcome",
     contentRef: "verification/welcome",
   },
   {
     id: "v-introduction",
     slug: "introduction",
     moduleId: "v-why",
-    title: "0.1.1 Introduction: why verification is important",
+    title: "0.1.0 Introduction: why verification? why you?",
     contentRef: "verification/introduction",
   },
   {
     id: "v-prevention",
     slug: "prevention-is-invisible",
     moduleId: "v-why",
-    title: "0.1.2 The world keeps getting saved and you don’t notice",
+    title: "0.1.1 The world keeps getting saved and you don’t notice",
     contentRef: "verification/prevention",
   },
   {
     id: "v-intuitions",
     slug: "building-intuitions",
     moduleId: "v-why",
-    title: "0.2 Building verification intuitions",
+    title: "0.2.1 Building verification intuitions",
     contentRef: "verification/intuitions",
   },
   {
     id: "v-precedents",
     slug: "precedents",
     moduleId: "v-why",
-    title: "0.3.0 History, precedents, parallels",
+    title: "0.3.0 Precedents and parallels",
     contentRef: "verification/precedents",
   },
   {
     id: "v-securitization",
     slug: "securitization",
     moduleId: "v-why",
-    title: "0.3.1 Securitization, and why AI warrants it",
+    title: "0.3.1 Securitization, emergency politics, and ASI",
     contentRef: "verification/securitization",
   },
   {
     id: "v-verification-timeline-game",
     slug: "verification-timeline-game",
     moduleId: "v-why",
-    title: "0.1.3 Interactive hypothetical timeline scenario",
+    title: "0.2.0 Interactive timeline simulation",
     contentRef: "v-verification-timeline-game",
   },
   {
@@ -514,10 +515,10 @@ export const verificationLessons: Lesson[] = [
  * ---------------------------------------------------------------------- */
 
 export const verificationUnitOfLesson: Record<string, string> = {
-  "v-welcome": "0.1",
+  "v-welcome": "0.0",
   "v-introduction": "0.1",
   "v-prevention": "0.1",
-  "v-verification-timeline-game": "0.1",
+  "v-verification-timeline-game": "0.2",
   "v-intuitions": "0.2",
   "v-precedents": "0.3",
   "v-securitization": "0.3",
@@ -564,16 +565,17 @@ export const verificationUnitOfLesson: Record<string, string> = {
 };
 
 /** Per-unit presentation the graph does not carry: the outline's own title,
- *  kind and runtime. A unit's title can differ from its first lesson's — 0.1
- *  is "Introduction" and opens with "Welcome". */
+ *  kind and runtime. A unit's title can differ from its first lesson's — 0.2
+ *  is "Building verification intuitions" and opens with the timeline game. */
 export const verificationUnitMeta: Record<
   string,
   { title: string; kind: string; mins: string; optional?: boolean }
 > = {
-  "0.1": { title: "Introduction", kind: "explainer", mins: "15–20 min" },
+  "0.0": { title: "Welcome", kind: "explainer", mins: "5–10 min" },
+  "0.1": { title: "Introduction: why verification? why you?", kind: "explainer", mins: "15–20 min" },
   "0.2": { title: "Building verification intuitions", kind: "interactive", mins: "15–20 min" },
-  "0.3": { title: "History, precedents, parallels", kind: "explainer", mins: "20–25 min" },
-  "1.0": { title: "What kind of policy are we trying to verify?", kind: "explainer", mins: "15–20 min" },
+  "0.3": { title: "Precedents and parallels", kind: "interactive", mins: "20–25 min" },
+  "1.0": { title: "Introduction: what kind of policy are we trying to verify?", kind: "explainer", mins: "15–20 min" },
   "1.1": { title: "Anatomy of a pause agreement", kind: "interactive", mins: "20–25 min" },
   "1.2": { title: "Actors", kind: "interactive", mins: "25–30 min" },
   "1.3": { title: "Upstream and downstream", kind: "explainer", mins: "10–15 min" },

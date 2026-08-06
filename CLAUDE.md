@@ -393,8 +393,8 @@ add must reduce the duplication, never widen it.
   filling one in yourself is a content decision that is not yours to make.
 - **`verificationUnitOfLesson` in curriculum.ts is the join.** The static
   site and `data/skills.js` key on outline numbers (`0.1`, `2.3`); the graph
-  keys on `v-<name>`. Several lessons may share one unit — module 0's six
-  lessons are three units, 2.3's five sections are one. A lesson missing from
+  keys on `v-<name>`. Several lessons may share one unit — module 0's seven
+  lessons are four units, 2.3's five sections are one. A lesson missing from
   that map is a lesson the static site cannot see, so the generator fails
   loudly rather than dropping it.
 - **Unit ids are permanent and load-bearing.** The static site's ids

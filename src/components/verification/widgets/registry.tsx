@@ -8,8 +8,14 @@ import { VerificationTimelineGame } from "./verification-timeline-game";
 import { InteractiveMap } from "./interactive-map";
 import { VerificationLandscape } from "./verification-landscape";
 import { CollectionMap } from "./collection-map";
+import { DrillsFoundations } from "./drills-foundations";
+import { DrillsGames } from "./drills-games";
+import { DrillsPrimers } from "./drills-primers";
+import { DrillsSupplyChain } from "./drills-supply-chain";
 import { PolicyCost } from "./policy-cost";
 import { PolicyPlot } from "./policy-plot";
+import { PrecedentCases } from "./precedent-cases";
+import { WhatDoTheySay } from "./what-do-they-say";
 
 /**
  * Native React widgets ported from the standalone HTML pages, keyed by the same
@@ -28,11 +34,16 @@ export const verificationWidgets: Record<
   "interactive-map": InteractiveMap,
   "verification-landscape": VerificationLandscape,
   "collection-map": CollectionMap,
-
-
-
+  // Each deck is a menu of that module's benches; the renderer and the
+  // judgements are shared (kit/drill-deck.tsx, engines/drills.ts).
+  "drills-primers": DrillsPrimers,
+  "drills-foundations": DrillsFoundations,
+  "drills-supply-chain": DrillsSupplyChain,
+  "drills-games": DrillsGames,
   "policy-cost": PolicyCost,
   "policy-plot": PolicyPlot,
+  "precedent-cases": PrecedentCases,
+  "what-do-they-say": WhatDoTheySay,
 };
 
 export function getVerificationWidget(

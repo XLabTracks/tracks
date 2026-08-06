@@ -19,7 +19,9 @@
 .vt-off-course .nb-capture,
 .vt-off-course .nb-root,
 .vt-off-course .vocab-strip,
-.vt-off-course .vocab-card { display: none; }
+.vt-off-course .vocab-card,
+.vt-off-course .hl-add,
+.vt-off-course .hl-strip { display: none; }
 
 /* ---------- the corner button ---------- */
 
@@ -224,6 +226,36 @@
 .nb-foot [data-export] { flex: 0 0 auto; }
 
 /* ---------- capture ---------- */
+
+/* The highlighter's two pieces. The add button stands alone ABOVE the
+   selection — the capture and define strips sit below it, so the tools are
+   separate in space and never stack. It wears the marker's own pair
+   (--hl/--hl-ink), so the button is a swatch of what pressing it does; both
+   values re-solve per theme and each pair clears 4.5:1 where it is set. The
+   removal strip borrows vocab-strip's geometry. */
+.hl-add {
+  position: absolute;
+  z-index: 55;
+  padding: 6px 12px;
+  border: var(--hairline) solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--hl);
+  color: var(--hl-ink);
+  font: inherit;
+  font-size: var(--fs-sm);
+  cursor: pointer;
+  box-shadow: var(--shadow-soft);
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.hl-strip {
+  position: absolute;
+  z-index: 55;
+  display: flex;
+  gap: 6px;
+}
+.hl-strip .vocab-btn { position: static; }
 
 .nb-capture {
   position: absolute;

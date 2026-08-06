@@ -24,7 +24,9 @@ const jetbrainsMono = JetBrains_Mono({ variable: "--font-mono", subsets: ["latin
 export const metadata: Metadata = {
   title: {
     default: "Tracks — AI safety learning",
-    template: "%s · Tracks",
+    // "@", not a middot: a page is somewhere rather than beside something, and
+    // a tab strip full of "· Tracks" reads as one repeated ornament.
+    template: "%s @ Tracks",
   },
   description:
     "A calm, structured path into AI safety — technical and governance tracks, interactive demos, real writing practice, and a curated resource hub.",

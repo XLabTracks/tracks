@@ -35,7 +35,7 @@ window.VT_CHROME = {
     },
     {
       "label": "Join Us",
-      "href": null
+      "href": "enroll"
     },
     {
       "label": "Support us",
@@ -47,15 +47,15 @@ window.VT_CHROME = {
     },
     {
       "label": "Contact",
-      "href": null
+      "href": "mailto:xlab-info@uchicago.edu"
     },
     {
       "label": "Report a bug",
-      "href": null
+      "href": "https://github.com/XLabTracks/tracks/issues"
     },
     {
       "label": "Privacy Policy",
-      "href": null
+      "href": "https://privacy.uchicago.edu/privacy-policy/"
     }
   ],
   "copyright": "© 2026."

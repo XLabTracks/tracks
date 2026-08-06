@@ -115,6 +115,7 @@ export function VerificationHeader() {
           They are plain scripts rather than React components on purpose —
           one implementation, and the static site can still be lifted out
           whole. */}
+      <Script src="/verification/highlight.js" strategy="afterInteractive" />
       <Script src="/verification/notebook.js" strategy="afterInteractive" />
       <Script src="/verification/vocab.js" strategy="afterInteractive" />
       <Script src="/verification/sync.js" strategy="afterInteractive" />

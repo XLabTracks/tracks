@@ -42,16 +42,27 @@ export const NAV: ChromeLink[] = [
   { label: "About", href: "about" },
 ];
 
-/** The footer, in the order it reads. */
+/** The footer, in the order it reads. Every destination here is real and
+ *  verifiable — a footer row that goes nowhere renders as plain text (null),
+ *  never as a dead link, and filling one in means finding where it truly
+ *  goes, not inventing a page. */
 export const FOOT: ChromeLink[] = [
   { label: "About Us", href: "about" },
   { label: "XLab", href: "https://xrisk.uchicago.edu" },
-  { label: "Join Us", href: null },
+  // Joining the course is the cohort application, which is this site's own
+  // enroll page.
+  { label: "Join Us", href: "enroll" },
+  // No donations page exists — not on xrisk.uchicago.edu either. Stays
+  // plain text until the org supplies a destination.
   { label: "Support us", href: null },
   { label: "Team", href: "team" },
-  { label: "Contact", href: null },
-  { label: "Report a bug", href: null },
-  { label: "Privacy Policy", href: null },
+  // The address XLab's own site publishes as its contact.
+  { label: "Contact", href: "mailto:xlab-info@uchicago.edu" },
+  // The repository serving this site; it is public.
+  { label: "Report a bug", href: "https://github.com/XLabTracks/tracks/issues" },
+  // The University of Chicago policy, which xrisk.uchicago.edu itself links
+  // as its Privacy Policy — the org's established choice, not a new one.
+  { label: "Privacy Policy", href: "https://privacy.uchicago.edu/privacy-policy/" },
 ];
 
 export const COPYRIGHT = "© 2026.";
@@ -62,7 +73,10 @@ export const COPYRIGHT = "© 2026.";
 export function verificationHref(href: string): string {
   // An absolute path is already where it means to go — the course's own pages
   // are named relatively, but a link into the app names its full route.
-  if (isExternal(href) || href.startsWith("/")) return href;
+  // mailto: (and any other scheme) passes through, or the prefix would turn
+  // an email address into a route.
+  if (isExternal(href) || href.startsWith("/") || /^[a-z][a-z+.-]*:/.test(href))
+    return href;
   return "/verification/" + href;
 }
 

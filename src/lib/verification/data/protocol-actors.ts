@@ -1,8 +1,23 @@
 /**
- * Data for the "Who's in the Treaty?" widget — the Module 0 pause treaty
- * (Reykjavik Protocol) re-read as a cast list. Lifted VERBATIM from
- * public/verification/protocol-actors.html (consts CATS, ACTORS, QUIZ, ORDER).
- * This is human-authored curriculum: do not paraphrase, shorten, or invent.
+ * Data for the "Who's in the Treaty?" widget — the MIRI draft agreement
+ * re-read as a cast list.
+ *
+ * Every `phrase` and every run of DOC is quoted VERBATIM from Appendix A of
+ * *An International Agreement to Prevent the Premature Creation of Artificial
+ * Superintelligence* (Scher, Abecassis, Barnett & Abeyta, arXiv:2511.10783) —
+ * the same paper 1.1 dissects. Do not paraphrase a quoted run, and do not
+ * write a provision the Agreement does not contain: if a role has no clause,
+ * the honest widget says so rather than inventing one.
+ *
+ * Two ids outlived the fiction they were named for and now mark something
+ * else, because the Agreement has no equivalent of either. `reporting` was
+ * `grandfather` — there is no grandfathering here, so the slot holds the
+ * 10²²–10²⁴ FLOP reporting band instead. `protective` was `unsc` — Article
+ * XII does not route enforcement to the Security Council, it authorises
+ * Parties to act themselves.
+ *
+ * Ids are the widget's own keys (`data-a`), not learner state, so nothing
+ * persisted moves when one is renamed.
  */
 
 /** Actor categories, keyed by the semantic encoding the original uses. */
@@ -25,12 +40,12 @@ export interface ActorEntry {
 export const ACTORS: Record<string, ActorEntry> = {
   states: {
     cat: "steel",
-    phrase: "“The States Parties to this Protocol…”",
+    phrase: "“The States concluding this Agreement, hereinafter referred to as the Parties to the Agreement…”",
     title: "Nation-states",
     blocks: [
       [
         "Who this points at",
-        "Only sovereign states can sign and ratify a treaty. In practice this one is about a short list: the United States and China first, then the United Kingdom, EU members, Japan, South Korea, and the Gulf states now buying frontier compute. Everyone else joins the way most NPT members did — with nothing to give up.",
+        "Only sovereign states can sign and ratify. In practice this one is about a short list: the United States and China first — Article III seats them both on the Executive Council by name — then the states that host frontier compute or the fabs that make it. Everyone else joins the way most NPT members did, with nothing to give up.",
       ],
       [
         "Historical parallel",
@@ -38,277 +53,273 @@ export const ACTORS: Record<string, ActorEntry> = {
       ],
       [
         "Why it matters for Module 1",
-        "States are the only actors who can sign — yet almost nothing the Protocol regulates (chips, datacenters, models) is owned by a state. Every article is a promise to control someone else.",
+        "States are the only actors who can sign — yet almost nothing the Agreement regulates (chips, fabs, datacenters, models) is owned by a state. Every article is a promise to control someone else.",
       ],
     ],
   },
   labs: {
     cat: "ind",
-    phrase: "“…the training of a single general-purpose artificial intelligence model…”",
+    phrase: "“Any training run exceeding 10²⁴ FLOP or any post-training run exceeding 10²³ FLOP.”",
     title: "Frontier labs",
     blocks: [
       [
         "Who this points at",
-        "The organizations that have trained models near the 10²⁶ threshold: OpenAI, Google DeepMind, Anthropic, Meta, and xAI in the United States; DeepSeek, Alibaba (Qwen), and Moonshot in China. The core obligation of a global treaty binds perhaps a dozen organizations on Earth.",
+        "The handful of labs that can afford a run at this scale. Note what the threshold is written in: not model capability, not parameters, but floating-point operations — a quantity you can bound from the outside by watching chips and power, which is the whole reason it was chosen.",
       ],
       [
-        "The wrinkle in the text",
-        "“A single model” invites structuring: split one run across several models and merge them later. Who would even detect that? (Hold the thought — it is most of Module 2.)",
+        "The catch",
+        "A threshold in FLOP is a moving target. Article IV lets the Coalition Technical Body modify it, because an algorithmic advance that halves the compute needed for a given capability silently moves the line without anyone renegotiating the treaty.",
       ],
       [
         "Why it matters for Module 1",
-        "Labs are triple-cast: the regulated party, the main talent pool any verifier would hire from, and the loudest lobby on both sides of the pause debate.",
+        "The labs are the regulated activity, and they are not parties. Every obligation on them arrives second-hand, through the state whose jurisdiction they sit in.",
       ],
     ],
   },
   facility: {
     cat: "ind",
-    phrase: "“…any installation with power capacity exceeding 10 megawatts…”",
+    phrase: "“…all covered chip clusters (CCCs)… are located in facilities declared to the CTB…”",
     title: "Datacenter owners & operators",
     blocks: [
       [
         "Who this points at",
-        "Mostly private companies: hyperscalers (Microsoft, Google, Amazon, Meta), GPU clouds (CoreWeave, Lambda), colocation landlords (Equinix, Digital Realty), labs building their own sites (xAI’s Colossus in Memphis), and sovereign projects such as the UAE’s G42 campuses and national supercomputing centers.",
+        "Whoever owns the buildings: the hyperscalers, the neoclouds, the sovereign-fund datacenters. Article V does not ask them to stop computing — it asks them to compute somewhere the inspectorate knows about, and to stop spreading chips across sites faster than anyone can watch them.",
       ],
       [
-        "The wrinkle in the text",
-        "A 10-megawatt line also catches ordinary cloud regions and even crypto-mining operations. Definitions drag in actors who never thought of themselves as AI actors — and each becomes a declaration, an inspection site, a constituency.",
+        "The reachability clause",
+        "Article V spells out what “declared” has to mean physically: verification teams should be able to reach any covered cluster “from at least one airport with scheduled international service within 12 hours.” A treaty obligation written as a travel time.",
       ],
       [
         "Why it matters for Module 1",
-        "The state signs; the facility owner gets inspected. Every facility clause is an obligation a government must impose on a company inside its borders.",
+        "The facility, not the model, is the thing a verifier can stand inside. That is why the infrastructure layer is where Module 2 spends its time.",
       ],
     ],
   },
-  grandfather: {
+  reporting: {
     cat: "ind",
-    phrase: "“…fine-tuning… of models trained before entry into force… shall not constitute a covered training run.”",
-    title: "The grandfathered incumbents",
+    phrase: "“Each Party shall report any training run between 10²² and 10²⁴ FLOP to the CTB, prior to initiation.”",
+    title: "The reporting band",
     blocks: [
       [
         "Who this points at",
-        "Whoever holds the strongest model on the day the freeze begins — a handful of American and Chinese labs. Fine-tuning stays legal, so the frontier freezes with them on top. Hosts of existing open-weight models keep operating too.",
+        "Everyone training below the ban but above the noise floor. They are not prohibited — they are surveilled: the report must include “all training code, all training data, and an estimate of the total FLOP to be used,” before the run starts.",
       ],
       [
-        "Historical parallel",
-        "The NPT froze the nuclear club at five members in 1968. That single asymmetry — haves and have-nots written into law — has defined the treaty’s politics for over fifty years.",
+        "What it costs",
+        "This is the most intrusive clause in the Agreement for anyone who is complying. A lab in this band hands over its code and data to CTB staff under supervised access — and the CTB may deny the run if the access it gets is insufficient.",
       ],
       [
         "Why it matters for Module 1",
-        "Definitions create winners and losers among actors. Losers evade, renegotiate, or refuse to join — which is why actor incentives, not treaty text, predict compliance.",
+        "Note what is absent: there is no grandfathering. Models already trained are not exempted by a clause of their own, which is a design choice worth arguing with rather than a gap to be assumed.",
       ],
     ],
   },
   jurisdiction: {
     cat: "steel",
-    phrase: "“…or knowingly permit within its jurisdiction…”",
+    phrase: "“Each Party prohibits and prevents all such development within their borders and jurisdictions…”",
     title: "Domestic enforcers",
     blocks: [
       [
         "Who this points at",
-        "The treaty binds states, but training runs happen inside companies — so each state needs domestic machinery to police its own. In the US that means the Commerce Department (BIS) and possibly the Department of Energy; in the EU, the AI Office; in China, MIIT and the CAC. No agency anywhere currently has “verify that no 10²⁶ run occurred” as its mission.",
+        "The machinery inside each state that has to make the promise true: export-control agencies, prosecutors, licensing bodies, the domestic regulator that does not exist yet in most signatories. “Prohibits and prevents” are two different jobs, and the second one needs staff.",
       ],
       [
-        "Historical parallel",
-        "The Chemical Weapons Convention required every party to pass national implementing legislation and stand up a National Authority. Many exist only on paper — the gap between signing and enforcing is where compliance quietly dies.",
+        "The gap this opens",
+        "A state can sign in good faith and still fail here, because the obligation is to control actors it does not own. Non-compliance and incapacity look identical from the outside — which is exactly the ambiguity the verification articles exist to resolve.",
       ],
       [
         "Why it matters for Module 1",
-        "Between the treaty and the datacenter sits an entire layer of domestic actors the text never names.",
+        "Every international obligation lands, eventually, on a domestic official. When you map actors, map that far down.",
       ],
     ],
   },
   hardware: {
     cat: "ind",
-    phrase: "“…holdings of applicable high-performance computing hardware exceeding one thousand units…”",
+    phrase: "“…a set of chips with capacity greater than 16 H100-equivalents…”",
     title: "The chip chokepoint",
     blocks: [
       [
-        "Who makes it",
-        "NVIDIA and AMD design the accelerators; TSMC (with Samsung a distant second) fabricates them; ASML holds a literal monopoly on the EUV lithography machines the fabs require; SK Hynix, Samsung, and Micron supply the high-bandwidth memory. Five or six companies, three jurisdictions.",
+        "Who this points at",
+        "The designers, the fabs, the packagers and the memory makers. Article VI puts monitoring on production itself — “fabrication of high-bandwidth memory (HBM), fabrication of logic chips, testing, packaging, and assembly” — so a chip is tracked from the line to the declared cluster it ends up in.",
       ],
       [
-        "Who buys it",
-        "Hyperscalers and frontier labs above all, then governments, GPU clouds — and, through gray markets and transshipment hubs, buyers the treaty says should not have it.",
-      ],
-      [
-        "Historical parallel",
-        "Uranium enrichment. Verification regimes work best where a physical chokepoint exists; the entire nuclear order leans on the difficulty of enrichment. Compute has an even narrower chokepoint — held by companies, not states.",
+        "How small the unit is",
+        "Sixteen H100-equivalents is the line, and the Agreement notes those cost around $500,000 in 2025 — deliberately low enough that a cluster cannot be assembled quietly out of parts nobody counted.",
       ],
       [
         "Why it matters for Module 1",
-        "The most concentrated actors on the whole map, and not one of them can sign the treaty.",
+        "This is verifiability's best case: few producers, physical objects, a supply chain with real chokepoints. Module 1.3 is about why that advantage disappears downstream.",
       ],
     ],
   },
   instruments: {
     cat: "inst",
-    phrase: "“…power metering and workload verification instruments approved by the Technical Secretariat…”",
+    phrase: "“Measurements of power, thermal, and networking characteristics…”",
     title: "The verification-tech ecosystem",
     blocks: [
       [
         "Who this points at",
-        "Whoever designs and certifies the meters: chip vendors themselves (proposals for on-chip attestation and hardware-enabled governance target exactly NVIDIA-class GPUs), metrology and security firms, and the small academic and nonprofit field working on compute verification — the field this track studies. The facility owners install and host the instruments, which is itself a tamper concern.",
+        "Whoever builds the instruments. Article VII's list is a research agenda as much as a clause: tamper-proof cameras, off-chip power and thermal monitoring, on-chip mechanisms “including retrofitted mechanisms and remote deactivation capabilities,” declared workloads, and re-running those workloads to check the declaration.",
       ],
       [
-        "The wrinkle in the text",
-        "“Where technically and commercially feasible” hands the regulated party a permanent argument that it isn’t. Who gets to rule on feasibility is an actor question wearing a technical costume.",
+        "The part that does not exist yet",
+        "Several of these are named as methods the CTB “may” use, not as deployed technology. Article VII also says what happens when they fall short: hardware “must be powered off, and its non-operation continually verified.” The fallback for unverifiable compute is no compute.",
       ],
       [
         "Why it matters for Module 1",
-        "Verification tools do not exist until someone builds, funds, and certifies them. Every one of those someones is an actor with interests.",
+        "A treaty can only require what somebody can build. Module 2 is the audit of which of these actually work.",
       ],
     ],
   },
   secretariat: {
     cat: "inst",
-    phrase: "“…approved by the Technical Secretariat…”",
+    phrase: "“The organs of the coalition are the Executive Council and the Coalition Technical Body (CTB).”",
     title: "The verification bureaucracy",
     blocks: [
       [
-        "Real-world examples",
-        "The OPCW Technical Secretariat in The Hague (~500 staff, administers the Chemical Weapons Convention, 2013 Nobel Peace Prize); the IAEA Secretariat in Vienna (~2,500 staff, runs nuclear safeguards); the CTBTO’s Provisional Technical Secretariat, which operates a global seismic and radionuclide monitoring network for a test-ban treaty that never formally entered into force — the bureaucracy outlived the treaty’s ratification.",
+        "Who this points at",
+        "The body that would have to be staffed, funded and trusted by rivals. The CTB sets the standards, receives the declarations, runs the monitoring and can modify the thresholds — subject to the Executive Council's veto.",
       ],
       [
-        "The open question",
-        "An AI secretariat needs engineers who can read a training workload. Today virtually all of that talent works at the labs it would be inspecting. Where do neutral inspectors come from?",
+        "The staffing problem",
+        "It needs people who can read a training script, audit a fab and hold a clearance, hired from the same small pool the labs are hiring from, and trusted by both Washington and Beijing at once.",
       ],
       [
         "Why it matters for Module 1",
-        "Institutions are actors with budgets and capabilities, not just mandates. The IAEA’s entire safeguards budget (~€150M/year) is less than the cost of a single frontier training run.",
+        "This actor is the one that does not exist. Everything else in the cast has a real-world referent today; the inspectorate has to be built before any of the verification articles mean anything.",
       ],
     ],
   },
   inspections: {
     cat: "inst",
-    phrase: "“…routine inspections… upon fourteen days’ notice… challenge inspection…”",
+    phrase: "“Parties accept continuous on-site verification of total chip usage at declared CCCs.”",
     title: "The people who knock",
     blocks: [
       [
-        "Real-world examples",
-        "IAEA safeguards inspectors (roughly 280 people doing in-field verification for the entire planet); UNSCOM and UNMOVIC in Iraq, the most intrusive inspection regimes ever attempted; OPCW teams working in Syria under fire. States can also verify each other directly — the INF and START treaties relied on satellites and “national technical means.”",
+        "Who this points at",
+        "Inspectors, and the escorts, lawyers and site managers who meet them. Note “continuous” — this is not an inspection regime built on visits, it is one built on permanent presence, with in-person inspectors named first in the list of methods.",
       ],
       [
-        "The wrinkle in the text",
-        "Fourteen days’ notice. In Iraq, inspectors watched trucks leave sites while they waited at the gate. What can leave a datacenter in fourteen days? Model weights move at wire speed.",
+        "The escalation above it",
+        "Article X adds challenge inspections on top, approved by the Executive Council. Routine presence catches the ordinary case; the challenge exists for the case where somebody already suspects something.",
       ],
       [
         "Why it matters for Module 1",
-        "Inspectors are individual humans with nationalities, clearances, and career incentives — and states can veto individuals (Iraq did; Iran still does). The inspection is only as strong as the person the host state lets through the door.",
+        "Access is the currency of verification, and it is spent one negotiation at a time. Who may knock, where, and how fast, is most of what a verification regime is.",
       ],
     ],
   },
   council: {
-    cat: "inst",
-    phrase: "“…approval by a two-thirds majority of the Executive Council.”",
+    cat: "steel",
+    phrase: "“The Executive Council initially consists of the United States of America and the People's Republic of China.”",
     title: "The political filter",
     blocks: [
       [
-        "Real-world examples",
-        "The OPCW Executive Council (41 member states) and the IAEA Board of Governors (35). These bodies decide what inspectors may actually do: inspection is technical, but authorization is political.",
+        "Who this points at",
+        "Two states, named in the text. They approve challenge inspections, appoint the Director-General, hold veto power over the CTB's recommendations, and set the budget. Every technical finding passes through them.",
       ],
       [
-        "The telling fact",
-        "The Chemical Weapons Convention’s challenge-inspection mechanism — the same device as Article V(2) here — has never been used in the treaty’s entire history. Invoking it is considered too politically explosive.",
+        "The decision rule",
+        "“All proactive Executive Council decisions require consensus among members. If consensus cannot be reached, the proposed changes are not adopted.” Two members, consensus required: either one can stop anything, including an inspection of itself.",
       ],
       [
         "Why it matters for Module 1",
-        "Every verification finding must pass through a committee of states voting their interests. A perfect sensor feeding a deadlocked council verifies nothing.",
+        "This is the sharpest actor question in the Agreement. A verification regime whose enforcement organ is the two states it most needs to verify is either the only version that could be signed, or the flaw that makes it worthless — and that argument is yours to have.",
       ],
     ],
   },
   secrets: {
-    cat: "ind",
-    phrase: "“Inspectors shall not access, copy, or transmit model parameters, training data, or source code.”",
+    cat: "inst",
+    phrase: "“…takes precautions to protect commercial, industrial, security, and state secrets and other confidential information…”",
     title: "The IP guardians",
     blocks: [
       [
         "Who this points at",
-        "The labs again, wearing a different hat — Article VI is the clause their lawyers wrote. But also state security agencies: in both Washington and Beijing, frontier model weights are treated as national-security assets, not just trade secrets.",
+        "Company counsel and national-security lawyers, on both sides of every inspection. The clause is borrowed almost word for word from IAEA INFCIRC/153, which binds the Agency to “take every precaution to protect commercial and industrial secrets.”",
       ],
       [
-        "Historical parallel",
-        "The Trilateral Initiative (US–Russia–IAEA, 1996–2002) spent six years designing “information barriers” so inspectors could confirm an object was a warhead without learning its design. Verifying without seeing is solvable in principle and expensive in practice.",
+        "The tension it holds",
+        "Article IV hands CTB staff all training code and data in the reporting band; this clause is the promise that it stays inside. Confidentiality is what makes intrusive verification signable — and every leak spends the credibility of the whole regime.",
       ],
       [
         "Why it matters for Module 1",
-        "The same actor can simultaneously be the regulated party, the technology supplier, and the secrets-holder. Map the hats, not just the names.",
+        "Verification is inherently intrusive, and the mechanisms worth having are the ones that confirm a claim without handing over the secret. That tension is the spine of Module 2.",
       ],
     ],
   },
   export: {
     cat: "steel",
-    phrase: "“States Parties shall not export applicable high-performance computing hardware to non-parties…”",
+    phrase: "“Non-Parties are denied such access for the safety of the Parties and of all life on Earth…”",
     title: "The export-control machinery",
     blocks: [
       [
         "Who this points at",
-        "National agencies first: the US Bureau of Industry and Security has run chip export controls on China since October 2022, with the Netherlands (ASML) and Japan (tooling) enforcing alongside. Multilateral templates exist too: the Nuclear Suppliers Group, the Wassenaar Arrangement, the MTCR.",
+        "Everyone who moves a chip across a border: licensing officers, customs, freight forwarders, distributors. Under Article I, only Parties may own or operate the chips and manufacturing capability that could lead to ASI unsupervised — which makes membership, not merely compliance, the thing controlled at the border.",
       ],
       [
-        "The shadow actors",
-        "Every control creates its evader. The A.Q. Khan network smuggled centrifuge technology for decades; today a GPU gray market runs through transshipment hubs. Smugglers are actors the treaty never names but always summons.",
+        "What it creates",
+        "A hard line between inside and outside, and therefore a smuggling market across it. Module 3's evasion scenarios start here.",
       ],
       [
         "Why it matters for Module 1",
-        "A complete actor map includes the actors a rule creates, not just the ones it addresses.",
+        "Export control is where a treaty touches actors who never signed it. It is also the machinery that already exists today, which is why it carries so much of the load.",
       ],
     ],
   },
-  unsc: {
-    cat: "inst",
-    phrase: "“…may refer the matter to the United Nations Security Council.”",
-    title: "The enforcement dead end",
+  protective: {
+    cat: "steel",
+    phrase: "“…a State Party may undertake Protective Actions that are necessary and proportionate to prevent activities.”",
+    title: "The enforcement question",
     blocks: [
       [
         "Who this points at",
-        "The UN Security Council: ten elected members and five permanent ones — the United States, China, Russia, the United Kingdom, and France — each holding a veto.",
+        "The state that decides to act, and the actor it acts against — “whether a Party or a non-Party.” Article XII grounds this in the Article 51 right of self-defence and argues that the speed of an ASI breakout may make pre-emption necessary.",
       ],
       [
-        "Historical parallel",
-        "Iran and North Korea were both referred. Sanctions followed; North Korea built the bomb anyway. And the states most likely to breach an AI pause are P5 members — able to veto their own referral.",
+        "How unusual this is",
+        "Most arms-control treaties dead-end at referral: the dispute goes to a council, which is where enforcement quietly stops. This one authorises Parties to act themselves — which answers the enforcement gap and opens a much larger one, since the same clause is available to a state acting in bad faith.",
       ],
       [
         "Why it matters for Module 1",
-        "Follow any enforcement chain to its end and you find an actor with the power to break it. That is not a flaw in the drafting; it is the structure of the international system.",
+        "Article XI is the check on it: misuse of Protective Actions is itself a dispute a Party can raise, answerable within 36 hours. Whether that is enough of a check is a question Module 4 hands back to you.",
       ],
     ],
   },
   withdrawal: {
     cat: "steel",
-    phrase: "“A State Party may withdraw… if… extraordinary events… have jeopardized its supreme interests.”",
+    phrase: "“…extraordinary events, related to the subject matter of this Agreement, have jeopardized the supreme interests of its country.”",
     title: "The exit door",
     blocks: [
       [
         "Who this points at",
-        "Any party, unilaterally. The “supreme interests / extraordinary events” formula is copied nearly verbatim from the NPT and the Limited Test Ban Treaty.",
+        "A future government of any party. The formula is the standard one — the NPT's Article X reads almost identically — but the notice period is not: twelve months, against the NPT's three.",
       ],
       [
-        "Historical parallel",
-        "North Korea gave its ninety days’ notice under the NPT in 2003 and tested a weapon three years later. The United States withdrew from the ABM Treaty in 2002. Russia suspended New START in 2023. Legal exits get used — by every kind of state.",
+        "What the twelve months buy",
+        "Article XV spends them on certification: the withdrawing state cooperates so the CTB can establish that after withdrawal it “will be unable to develop, train, post-train, or deploy dangerous AI systems.” The exit is an unwinding procedure, not a door.",
       ],
       [
         "Why it matters for Module 1",
-        "An actor’s commitment lasts exactly as long as its incentive to stay. Modeling that incentive is where Module 2’s game theory picks up.",
+        "Every regime is temporary and every actor knows it. North Korea left the NPT on ninety days' notice. Durability is a design property, and here it is bought with time.",
       ],
     ],
   },
   review: {
     cat: "inst",
-    phrase: "“…amended by consensus of all States Parties at a Review Conference…”",
+    phrase: "“The Executive Council may revise this Agreement as necessary to ensure its purposes are achieved.”",
     title: "The renegotiators",
     blocks: [
       [
         "Who this points at",
-        "All the parties again — plus the ecosystem around them: scientific advisory bodies, NGO and civil-society observers, arms-control academics, and industry lobbyists working the corridors. Review conferences are where the whole actor map shows up in one room.",
+        "The same two states, wearing a different hat. Article XIV splits the work: the CTB may change definitions and implementation methods — thresholds, monitoring, the boundaries of restricted research — while anything touching the purposes or the governance structure needs an amendment from the Council.",
       ],
       [
-        "Historical parallel",
-        "NPT Review Conferences meet every five years; the 2015 and 2022 conferences both failed to agree on a final document. Consensus amendment means any single party can freeze Article I’s thresholds forever — while compute per dollar keeps falling.",
+        "Why the split exists",
+        "The technical facts move faster than any ratification cycle. Handing the numbers to a technical body under a political veto is the Agreement's attempt to stay current without reopening itself every year.",
       ],
       [
         "Why it matters for Module 1",
-        "The treaty text is static; the technology and the actor landscape are not. Whoever controls renegotiation controls what the treaty means in year five.",
+        "The text is static; the technology and the actor landscape are not. Whoever controls revision controls what the Agreement means in year five.",
       ],
     ],
   },
@@ -332,465 +343,215 @@ function opt(text: string, correct: boolean, fb: string): QuizOption {
 
 export const QUIZ: Record<string, QuizEntry> = {
   states: {
-    q: "Who can actually be a party to this Protocol?",
+    q: "Who can actually be a party to this Agreement?",
     opts: [
       opt(
         "National governments — the US, China, France, the UAE…",
         true,
-        "Only sovereign states can sign and ratify treaties. In practice a handful matter: the ones with frontier compute.",
+        "Only sovereign states can sign and ratify. In practice a handful matter: the ones with frontier compute or the fabs that make it.",
       ),
       opt(
-        "Frontier labs like OpenAI or Google DeepMind",
+        "Any organisation training large models, including companies",
         false,
-        "Companies cannot join treaties. States sign, then must bind their companies — that gap is the whole game.",
+        "Labs are the regulated activity, not the signatories. Every obligation on them arrives through a state.",
       ),
       opt(
-        "Regional blocs like the European Union",
-        true,
-        "Tricky but yes: the EU is a party to treaties where it holds the legal competence, alongside its member states.",
-      ),
-      opt(
-        "The United Nations itself",
+        "The UN, on behalf of its members",
         false,
-        "The UN hosts and registers treaties; it is not a party to them.",
-      ),
-      opt(
-        "Sub-national governments like California or Guangdong",
-        false,
-        "No treaty-making power — even though California alone hosts several covered facilities.",
+        "No international body can bind a state to this. The Agreement builds its own coalition instead.",
       ),
     ],
-    why: "States are the only actors who can sign — yet almost nothing the Protocol regulates is owned by a state. Every article is a promise to control someone else.",
+    why: "States are the only actors who can sign — yet almost nothing the Agreement regulates is owned by a state. Every article is a promise to control someone else.",
   },
   labs: {
-    q: "Who actually conducts training runs near the 10²⁶ threshold?",
+    q: "What does the training ban key on?",
     opts: [
       opt(
-        "US frontier labs — OpenAI, Google DeepMind, Anthropic, Meta, xAI",
+        "Computation: any run above 10²⁴ FLOP, or post-training above 10²³",
         true,
-        "The organizations this clause is really about; perhaps a dozen worldwide.",
+        "A quantity you can bound from outside by watching chips and power — which is why it was chosen over capability.",
       ),
-      opt(
-        "Chinese labs — DeepSeek, Alibaba (Qwen), Moonshot",
-        true,
-        "The other half of the short list. Frontier training is a two-country story so far.",
-      ),
-      opt(
-        "Most university research groups",
-        false,
-        "Academic compute runs orders of magnitude below 10²⁶. The threshold deliberately exempts them.",
-      ),
-      opt(
-        "Startups fine-tuning open-weight models",
-        false,
-        "Article I(3) exempts fine-tuning outright — that is the grandfather clause doing its work.",
-      ),
-      opt(
-        "National militaries, today",
-        false,
-        "No public evidence of frontier-scale military training runs yet — but tomorrow is exactly what drafters worry about.",
-      ),
+      opt("How capable the resulting model is", false, "Capability is what everyone cares about and nobody can measure from the outside before the run finishes."),
+      opt("Parameter count", false, "Parameters stopped tracking capability years ago, and are trivial to under-report."),
     ],
-    why: "Labs are triple-cast: the regulated party, the talent pool any verifier must hire from, and the loudest lobby on both sides of the pause.",
+    why: "The threshold is written in the one quantity a verifier outside the building can bound. It is also the one an algorithmic advance can silently move, which is why the CTB may modify it.",
   },
   facility: {
-    q: "Who owns and operates the covered facilities?",
+    q: "What does Article V ask of datacenter operators?",
     opts: [
       opt(
-        "Hyperscalers — Microsoft, Google, Amazon, Meta",
+        "Put covered clusters in declared, monitorable facilities — and stop spreading them",
         true,
-        "The bulk of frontier compute sits in their datacenters.",
+        "Consolidation is the point: chips scattered across enough sites cannot be watched at all.",
       ),
-      opt(
-        "GPU clouds and colocation firms — CoreWeave, Equinix",
-        true,
-        "Neoclouds and datacenter landlords own many of the sites labs actually rent.",
-      ),
-      opt(
-        "Labs building their own — xAI’s Colossus in Memphis",
-        true,
-        "The build-your-own path; a single site can exceed 100 MW.",
-      ),
-      opt(
-        "Sovereign projects — the UAE’s G42, national supercomputing centers",
-        true,
-        "States do own some compute directly — the exception that proves the mostly-private rule.",
-      ),
-      opt(
-        "The Technical Secretariat",
-        false,
-        "It inspects facilities; it owns none. Verifiers hold instruments, not assets.",
-      ),
-      opt(
-        "NVIDIA",
-        false,
-        "It sells the chips inside nearly every covered facility but rarely operates the sites — a different actor with different incentives.",
-      ),
+      opt("Shut down above a power threshold", false, "The Agreement does not ask them to stop computing. It asks them to compute somewhere the inspectorate knows about."),
+      opt("Report their electricity bills annually", false, "Metering is one method among several under Article VII, not the obligation itself."),
     ],
-    why: "The state signs; the facility owner gets inspected. Every facility clause is an obligation a government must impose on a company inside its borders.",
+    why: "The facility, not the model, is the thing a verifier can stand inside — and Article V even fixes how long it may take to get there: twelve hours from an international airport.",
   },
-  grandfather: {
-    q: "Who benefits from this exemption?",
+  reporting: {
+    q: "A lab plans a run at 10²³ FLOP. What does the Agreement require?",
     opts: [
       opt(
-        "Labs holding the strongest pre-freeze models",
+        "Report it to the CTB before starting, with all training code and data",
         true,
-        "The frontier freezes with them on top, and fine-tuning keeps their lead compounding.",
+        "It falls in the 10²²–10²⁴ band: permitted, but surveilled in advance, and deniable if access is insufficient.",
       ),
-      opt(
-        "Hosts of existing open-weight models",
-        true,
-        "Adapting released models stays fully legal — the open ecosystem keeps running.",
-      ),
-      opt(
-        "New entrants and startups",
-        false,
-        "Locked out: they can never train a competitive base model while the pause holds.",
-      ),
-      opt(
-        "States without frontier labs",
-        false,
-        "Frozen out as have-nots — the NPT’s 1968 asymmetry, replayed with compute.",
-      ),
+      opt("Nothing — it is under the ban", false, "Under the ban is not outside the Agreement. The reporting band starts at 10²²."),
+      opt("Apply for a licence and wait for approval", false, "The obligation is prior reporting with supervised access, not a licensing regime."),
     ],
-    why: "Definitions create winners and losers among actors. Losers evade, renegotiate, or refuse to join — actor incentives, not treaty text, predict compliance.",
+    why: "This is the most intrusive clause for anyone complying. And note what is not here: no grandfathering of models trained before entry into force.",
   },
   jurisdiction: {
-    q: "Who would actually enforce this inside each country?",
+    q: "Why is “prohibits and prevents” two obligations, not one?",
     opts: [
       opt(
-        "US Commerce Department (BIS), possibly DOE",
+        "Prohibiting is a law; preventing needs enforcement machinery that mostly does not exist yet",
         true,
-        "BIS already runs compute export controls; someone like it would police domestic training runs.",
+        "A state can sign in good faith and still fail at the second, which is why incapacity and cheating look alike from outside.",
       ),
-      opt(
-        "The EU AI Office",
-        true,
-        "The nearest existing thing to a domestic AI-compute regulator in Europe.",
-      ),
-      opt(
-        "China’s MIIT and CAC",
-        true,
-        "Beijing’s equivalents — the domestic machinery a Chinese ratification would activate.",
-      ),
-      opt(
-        "The Technical Secretariat",
-        false,
-        "International bodies verify; they cannot police companies inside a sovereign state. Enforcement is national.",
-      ),
-      opt(
-        "An agency that does not exist yet",
-        true,
-        "The honest answer: no agency anywhere has “verify no 10²⁶ run occurred” as its mission today.",
-      ),
+      opt("It is legal boilerplate with no operative difference", false, "The difference is the entire domestic-implementation problem."),
+      opt("It distinguishes state activity from private activity", false, "Both cover both. The difference is between forbidding and being able to stop."),
     ],
-    why: "Between the treaty and the datacenter sits an entire layer of domestic actors the text never names.",
+    why: "Every international obligation lands on a domestic official. When you map actors, map that far down.",
   },
   hardware: {
-    q: "Who makes this hardware, and who buys it?",
+    q: "Where does Article VI start monitoring a chip?",
     opts: [
       opt(
-        "NVIDIA and AMD — chip designers",
+        "At fabrication — logic, memory, testing, packaging, assembly",
         true,
-        "They design nearly every accelerator a covered run would use.",
+        "Tracked from the line to the declared cluster, so no unmonitored supply chain can be established.",
       ),
-      opt(
-        "TSMC and Samsung — fabricators",
-        true,
-        "Almost all frontier chips are physically made by TSMC; Samsung is a distant second.",
-      ),
-      opt(
-        "ASML — lithography machines",
-        true,
-        "A literal monopoly on the EUV machines the fabs require. One company, one chokepoint.",
-      ),
-      opt(
-        "Hyperscalers and labs — the buyers",
-        true,
-        "The demand side: the same actors regulated elsewhere in the treaty.",
-      ),
-      opt(
-        "The IAEA",
-        false,
-        "Wrong regime — it safeguards uranium, not GPUs. Though its chokepoint logic is exactly the parallel to study.",
-      ),
-      opt(
-        "Boeing and Airbus",
-        false,
-        "Dual-use aerospace giants, but not in this supply chain.",
-      ),
+      opt("At the border, on export", false, "Export control is one layer, but the Agreement starts further upstream than that."),
+      opt("At installation in a datacenter", false, "Too late: a chip counted only on arrival can be diverted before it ever arrives."),
     ],
-    why: "Verification regimes work best where a chokepoint exists. Five or six companies are the chokepoint here — and none of them can sign the treaty.",
+    why: "Few producers, physical objects, real chokepoints. This is verifiability's best case — and 1.3 is about why the advantage disappears downstream.",
   },
   instruments: {
-    q: "Who builds and certifies verification instruments like these?",
+    q: "What does Article VII require when no method can verify a cluster?",
     opts: [
       opt(
-        "Chip vendors — on-chip attestation built into the GPUs",
+        "The hardware is powered off, and its non-operation is verified continuously",
         true,
-        "Hardware-enabled governance proposals target exactly NVIDIA-class accelerators.",
+        "The fallback for unverifiable compute is no compute — a clause that turns a technical gap into an operational cost.",
       ),
-      opt(
-        "Metrology and security firms",
-        true,
-        "Someone has to manufacture, calibrate, and tamper-proof the meters.",
-      ),
-      opt(
-        "Academic and nonprofit compute-verification researchers",
-        true,
-        "A small field — the one this track studies — designs the methods everyone else would deploy.",
-      ),
-      opt(
-        "The facility owners who install and host them",
-        true,
-        "They physically install the instruments, which is itself a tamper concern.",
-      ),
-      opt(
-        "The UN General Assembly",
-        false,
-        "It passes resolutions; it does not build sensors.",
-      ),
+      opt("The operator self-certifies until instruments improve", false, "Self-certification is precisely what the Article is built to avoid relying on."),
+      opt("The cluster is seized by the CTB", false, "The CTB does not take ownership; it takes the machines out of use."),
     ],
-    why: "Verification tools do not exist until someone builds, funds, and certifies them. Every one of those someones is an actor with interests.",
+    why: "A treaty can only require what somebody can build. Several methods in Article VII are named as things the CTB may use, not as technology that exists.",
   },
   secretariat: {
-    q: "Which real-world bodies is this modeled on?",
+    q: "Which body can change the thresholds?",
     opts: [
       opt(
-        "The OPCW Technical Secretariat (chemical weapons)",
+        "The Coalition Technical Body — subject to the Executive Council's veto",
         true,
-        "About 500 staff in The Hague; administers the CWC; 2013 Nobel Peace Prize.",
+        "Technical facts move faster than ratification, so the numbers sit with the technical body under a political check.",
       ),
-      opt(
-        "The IAEA Secretariat (nuclear safeguards)",
-        true,
-        "About 2,500 staff in Vienna; the deepest verification bureaucracy ever built.",
-      ),
-      opt(
-        "The CTBTO Provisional Technical Secretariat (test ban)",
-        true,
-        "Runs a global monitoring network for a treaty that never formally entered into force.",
-      ),
-      opt(
-        "The UN Security Council",
-        false,
-        "A political organ of states, not a technical staff. It appears later, in Article VIII.",
-      ),
-      opt(
-        "The WTO Secretariat",
-        false,
-        "Administers trade rules; conducts no inspections and fields no instruments.",
-      ),
+      opt("Any Party, for its own jurisdiction", false, "That would make the threshold meaningless as a shared commitment."),
+      opt("Nobody: amending them reopens the whole Agreement", false, "Only fundamental revisions need an amendment. Article XIV splits the work deliberately."),
     ],
-    why: "Institutions are actors with budgets and capabilities, not just mandates. The IAEA’s safeguards budget is smaller than one frontier training run.",
+    why: "This actor is the one that does not exist. Everything else in the cast has a real-world referent today; the inspectorate has to be built.",
   },
   inspections: {
-    q: "Who has done inspections like these in the real world?",
+    q: "What kind of access does Article VII establish at declared clusters?",
     opts: [
       opt(
-        "IAEA safeguards inspectors",
+        "Continuous on-site verification, not periodic visits",
         true,
-        "Roughly 280 people doing in-field verification for the entire planet.",
+        "Permanent presence is the baseline; challenge inspections under Article X are the escalation above it.",
       ),
-      opt(
-        "UNSCOM / UNMOVIC in Iraq",
-        true,
-        "The most intrusive inspection regimes ever attempted — and a study in what notice periods cost.",
-      ),
-      opt(
-        "OPCW inspection teams",
-        true,
-        "Including work in Syria under fire. Note: the CWC’s challenge inspection has never once been invoked.",
-      ),
-      opt(
-        "States themselves, via satellites and national technical means",
-        true,
-        "INF and START verification leaned on states watching each other directly.",
-      ),
-      opt(
-        "Private auditors — Deloitte, PwC",
-        false,
-        "Not in arms control — though AI governance proposals do borrow the audit model, so watch this space.",
-      ),
+      opt("Scheduled inspections on notice", false, "Notice-based inspection is the older model. This one is built on continuous presence."),
+      opt("Remote monitoring only, to protect trade secrets", false, "Remote methods are in the list, but in-person inspectors are named first."),
     ],
-    why: "Inspectors are individual humans with nationalities, clearances, and career incentives — and host states can veto individuals. Iraq did; Iran still does.",
+    why: "Access is the currency of verification, and it is spent one negotiation at a time.",
   },
   council: {
-    q: "What are the real-world parallels to this Council?",
+    q: "Two members, consensus required. What follows?",
     opts: [
       opt(
-        "The OPCW Executive Council",
+        "Either state can block any proactive decision — including one about itself",
         true,
-        "41 member states deciding what inspectors may do. Its challenge-inspection power has never been used.",
+        "That is the structural objection to the whole design, and it is visible in the text rather than hidden.",
       ),
-      opt(
-        "The IAEA Board of Governors",
-        true,
-        "35 states; the body that referred Iran to the Security Council.",
-      ),
-      opt("NATO", false, "A military alliance, not a treaty-verification organ."),
-      opt("The G7", false, "An informal club with no treaty role."),
-      opt(
-        "The International Court of Justice",
-        false,
-        "Courts adjudicate disputes after the fact; they do not authorize inspections.",
-      ),
+      opt("Deadlock is broken by the Director-General", false, "The Director-General is appointed by the Council, not a tiebreaker over it."),
+      opt("A majority of all Parties can overrule the Council", false, "Other Parties may be invited into deliberation; they do not get a vote over it."),
     ],
-    why: "Every verification finding must pass through a committee of states voting their interests. A perfect sensor feeding a deadlocked council verifies nothing.",
+    why: "A verification regime whose enforcement organ is the two states it most needs to verify is either the only version that could be signed, or the flaw that makes it worthless. Have the argument.",
   },
   secrets: {
-    q: "Whose interests does this clause protect?",
+    q: "Where does the confidentiality language come from?",
     opts: [
       opt(
-        "The labs — this is the clause their lawyers wrote",
+        "IAEA safeguards — INFCIRC/153's precaution for commercial and industrial secrets",
         true,
-        "Model weights and data are the crown-jewel IP of the regulated party.",
+        "Borrowed almost word for word, because the same bargain makes intrusive inspection signable.",
       ),
-      opt(
-        "State security agencies",
-        true,
-        "In Washington and Beijing alike, frontier weights are treated as national-security assets, not just trade secrets.",
-      ),
-      opt(
-        "The inspectors",
-        false,
-        "It constrains them. Their entire job becomes proving things about objects they may not look at.",
-      ),
-      opt(
-        "The open-source community",
-        false,
-        "Open-weight models have no secrets to shield; this clause is for the closed frontier.",
-      ),
+      opt("It is new to this Agreement", false, "The Agreement cites its precedent explicitly."),
+      opt("The WTO's trade-secret provisions", false, "The lineage is nuclear safeguards, not trade law."),
     ],
-    why: "The same actor can be regulated party, technology supplier, and secrets-holder at once. The nuclear world solved verify-without-seeing with “information barriers” — slowly and expensively.",
+    why: "Article IV hands CTB staff training code and data; this clause is the promise it stays inside. Every leak spends the credibility of the whole regime.",
   },
   export: {
-    q: "Who operates — and who evades — controls like this?",
+    q: "What does the Agreement deny non-Parties?",
     opts: [
       opt(
-        "The US Bureau of Industry and Security",
+        "Ownership and operation of the chips and fabs that could lead to ASI unsupervised",
         true,
-        "Already running chip export controls on China since October 2022.",
+        "Membership, not merely compliance, becomes the thing controlled at the border.",
       ),
-      opt(
-        "The Dutch and Japanese governments",
-        true,
-        "They control ASML and key tooling — enforcement runs through them or not at all.",
-      ),
-      opt(
-        "Multilateral regimes — Nuclear Suppliers Group, Wassenaar",
-        true,
-        "The templates this article copies: supplier clubs coordinating national controls.",
-      ),
-      opt(
-        "Smuggling networks and the GPU gray market",
-        true,
-        "Every control creates its evader — A.Q. Khan for centrifuges, transshipment hubs for GPUs. Evaders are actors too.",
-      ),
-      opt(
-        "The World Trade Organization",
-        false,
-        "It exists to liberalize trade; security export controls are carved out of its rules.",
-      ),
+      opt("Only the most advanced chips, by performance threshold", false, "The line is drawn around supervised access as a whole, not one product tier."),
+      opt("Nothing — the Agreement binds only its own parties", false, "Article I turns access itself into a benefit of membership."),
     ],
-    why: "A complete actor map includes the actors a rule creates — smugglers, shell companies, transshipment hubs — not just the ones it addresses.",
+    why: "Export control is where a treaty touches actors who never signed it — and where Module 3's evasion scenarios begin.",
   },
-  unsc: {
-    q: "Who holds the real power at this final step?",
+  protective: {
+    q: "How does this Agreement handle enforcement?",
     opts: [
       opt(
-        "The five permanent members with vetoes",
+        "It authorises Parties to take necessary and proportionate Protective Actions themselves",
         true,
-        "US, China, Russia, UK, France. Nothing passes over any one of them.",
+        "Grounded in the Article 51 right of self-defence, on the argument that an ASI breakout is too fast to refer upward.",
       ),
-      opt(
-        "The violator itself, if it is a P5 state",
-        true,
-        "The punchline: the states most able to breach an AI pause can veto their own referral.",
-      ),
-      opt(
-        "The ten elected members",
-        true,
-        "They vote — nine affirmative votes are needed — but hold no veto. Real, secondary power.",
-      ),
-      opt(
-        "The UN Secretary-General",
-        false,
-        "Convening power and a bully pulpit, but no vote.",
-      ),
-      opt(
-        "The Technical Secretariat",
-        false,
-        "Its findings arrive here, but it has no seat at this table.",
-      ),
+      opt("Referral to the UN Security Council", false, "That is where most arms-control treaties dead-end. This one deliberately does not."),
+      opt("Trade sanctions administered by the CTB", false, "The CTB verifies; it is not given an enforcement arsenal."),
     ],
-    why: "Follow any enforcement chain to its end and you find an actor with the power to break it. Iran and North Korea were both referred; North Korea got the bomb anyway.",
+    why: "It answers the enforcement gap and opens a larger one: the same clause is available to a state acting in bad faith. Article XI's 36-hour clock is the check.",
   },
   withdrawal: {
-    q: "Who has actually walked through exit doors like this?",
+    q: "What do the twelve months of notice buy?",
     opts: [
       opt(
-        "North Korea — NPT withdrawal, 2003",
+        "Time to certify the withdrawing state cannot then build what the Agreement banned",
         true,
-        "Gave its ninety days’ notice, tested a weapon three years later. The canonical exit.",
+        "The exit is an unwinding procedure, not a door — and the alternative named in the text is Article XII.",
       ),
-      opt(
-        "The United States — ABM Treaty, 2002",
-        true,
-        "Great powers use the door too, citing exactly this “supreme interests” logic.",
-      ),
-      opt(
-        "Russia — New START suspension, 2023",
-        true,
-        "Suspension rather than formal withdrawal, but the same lesson: commitments bend to interests.",
-      ),
-      opt(
-        "No one — withdrawal clauses are theoretical",
-        false,
-        "The opposite is the lesson. Legal exits get used, by every kind of state.",
-      ),
+      opt("A cooling-off period for negotiation", false, "Article XV spends the year on certification, not persuasion."),
+      opt("Time for other Parties to withdraw too", false, "Nothing in the clause is about contagion; it is about capability at the moment of exit."),
     ],
-    why: "An actor’s commitment lasts exactly as long as its incentive to stay. Modeling that incentive is where Module 2’s game theory picks up.",
+    why: "North Korea left the NPT on ninety days' notice. Durability is a design property, and here it is bought with time.",
   },
   review: {
-    q: "Who shows up when a treaty gets renegotiated?",
+    q: "Who may change what, as the technology moves?",
     opts: [
       opt(
-        "Diplomats of every state party",
+        "The CTB changes definitions and methods; the Council amends purposes and governance",
         true,
-        "The formal principals — each one a veto under consensus rules.",
+        "The numbers move at technical speed under a political veto; the structure moves only by amendment.",
       ),
-      opt(
-        "Scientific advisers",
-        true,
-        "Someone must tell the diplomats what 10²⁶ means in year five, when compute per dollar has kept falling.",
-      ),
-      opt(
-        "NGOs and civil-society observers",
-        true,
-        "At NPT Review Conferences, academics and arms-control groups fill the observer seats and shape the record.",
-      ),
-      opt(
-        "Industry lobbyists in the corridors",
-        true,
-        "Unofficial, unavoidable, and often the best-informed people in the building.",
-      ),
-      opt(
-        "The International Court of Justice",
-        false,
-        "No role — amendment is politics, not law.",
-      ),
+      opt("Only a Review Conference of all Parties", false, "That is the NPT's machinery, not this one's."),
+      opt("The Director-General, on the CTB's advice", false, "The Director-General implements; revision authority sits above."),
     ],
-    why: "The 2015 and 2022 NPT Review Conferences both collapsed without agreement. Whoever controls renegotiation controls what the treaty means in year five.",
+    why: "The text is static; the technology and the actor landscape are not. Whoever controls revision controls what the Agreement means in year five.",
   },
 };
 
-/** Phrase order for the drawer's prev/next navigation and progress counting. */
 export const ORDER = [
   "states",
   "labs",
   "facility",
-  "grandfather",
+  "reporting",
   "jurisdiction",
   "hardware",
   "instruments",
@@ -799,16 +560,11 @@ export const ORDER = [
   "council",
   "secrets",
   "export",
-  "unsc",
+  "protective",
   "withdrawal",
   "review",
-] as const;
+];
 
-/**
- * A run of the treaty document. A `text` run is inert prose; an `hl` run is a
- * highlighted, clickable phrase pointing at an actor id (`a`). Reproduces the
- * inline markup of the source .doc article exactly (including the (n) numerals).
- */
 export type DocRun =
   | { kind: "text"; text: string }
   | { kind: "num"; text: string }
@@ -824,137 +580,175 @@ const n = (text: string): DocRun => ({ kind: "num", text });
 const h = (a: string, text: string): DocRun => ({ kind: "hl", a, text });
 
 /**
- * The Reykjavik Protocol, article by article. Highlight phrases (`h`) key on
- * the actor id (data-a in the source). Note Article V uses `inspections` twice.
+ * The draft Agreement, article by article, quoted from Appendix A of
+ * arXiv:2511.10783. Highlight phrases (`h`) key on the actor id (data-a in
+ * the widget).
+ *
+ * Abridged, never rewritten: the Agreement runs to fifteen articles and this
+ * is the spine of them, cut at paragraph boundaries. An ellipsis marks every
+ * cut, and no run says anything the Agreement does not.
  */
 export const DOC: DocArticle[] = [
   {
     heading: "Preamble",
     runs: [
-      h("states", "The States Parties to this Protocol"),
+      h("states", "The States concluding this Agreement, hereinafter referred to as the Parties to the Agreement"),
       t(
-        ", recognizing that certain applications of advanced artificial intelligence may pose risks to international security, have agreed as follows:",
+        ", alarmed by the prospect that the development of artificial superintelligence would lead to the deaths of all people and the end to all human endeavor… have agreed as follows:",
       ),
     ],
   },
   {
-    heading: "Article I — Definitions",
+    heading: "Article I — Primary Purpose",
     runs: [
-      n("(1)"),
-      t(" “Covered training run” means "),
-      h("labs", "the training of a single general-purpose artificial intelligence model"),
-      t(" using more than 10²⁶ computational operations. "),
-      n("(2)"),
-      t(" “Covered facility” means "),
-      h("facility", "any installation with power capacity exceeding 10 megawatts"),
-      t(" operated for the purpose of artificial intelligence computation. "),
-      n("(3)"),
-      t(" The "),
-      h(
-        "grandfather",
-        "fine-tuning, continued development, or adaptation of models trained before entry into force",
+      t(
+        "Each Party to this Agreement does not develop, deploy, or seek to develop or deploy artificial superintelligence (“ASI”) by any means. ",
       ),
-      t(" of this Protocol shall not constitute a covered training run."),
+      h("jurisdiction", "Each Party prohibits and prevents all such development within their borders and jurisdictions"),
+      t(
+        ", and, due to the uncertainty as to when further progress would produce ASI, does not engage in or permit activities that materially advance toward ASI as described in this Agreement… Where some classes of AI infrastructure and capabilities staying far from ASI may be deemed acceptable but only under conditions of international supervision, only Parties to the Agreement may carry out such activities, or own or operate AI chips and manufacturing capabilities that could potentially lead to the development of ASI if unsupervised. ",
+      ),
+      h("export", "Non-Parties are denied such access for the safety of the Parties and of all life on Earth"),
+      t("."),
     ],
   },
   {
-    heading: "Article II — Core Obligation",
+    heading: "Article II — Definitions",
     runs: [
-      t("No State Party shall conduct, authorize, or "),
-      h("jurisdiction", "knowingly permit within its jurisdiction"),
-      t(" any covered training run for a period of five years from entry into force."),
+      t("For the purposes of this Agreement: "),
+      n("2."),
+      t(
+        " Artificial superintelligence (ASI) is operationally defined as any AI with sufficiently superhuman cognitive performance that it could plan and successfully execute the destruction of humanity… ",
+      ),
+      t("A covered chip cluster (CCC) is "),
+      h("hardware", "a set of chips with capacity greater than 16 H100-equivalents"),
+      t("."),
     ],
   },
   {
-    heading: "Article III — Declarations",
+    heading: "Article III — The Coalition",
     runs: [
-      n("(1)"),
-      t(" Each State Party shall, within 180 days, declare all covered facilities and all holdings of "),
-      h("hardware", "applicable high-performance computing hardware"),
-      t(" exceeding one thousand units, as specified in Annex A. "),
-      n("(2)"),
-      t(" Declarations shall be updated annually."),
-    ],
-  },
-  {
-    heading: "Article IV — Monitoring",
-    runs: [
-      t("Declared covered facilities shall install "),
-      h("instruments", "power metering and workload verification instruments"),
-      t(" approved by the "),
-      h("secretariat", "Technical Secretariat"),
-      t(", where technically and commercially feasible."),
-    ],
-  },
-  {
-    heading: "Article V — Inspections",
-    runs: [
-      n("(1)"),
-      t(" The Technical Secretariat may conduct "),
-      h("inspections", "routine inspections of declared facilities upon fourteen days’ notice"),
+      n("2."),
+      t(" "),
+      h("secretariat", "The organs of the coalition are the Executive Council and the Coalition Technical Body (CTB)"),
       t(". "),
-      n("(2)"),
-      t(" Any State Party may request a "),
-      h("inspections", "challenge inspection"),
-      t(" of any facility of another State Party; such inspection shall proceed upon approval by a two-thirds majority of the "),
-      h("council", "Executive Council"),
+      n("3."),
+      t(" "),
+      h("council", "The Executive Council initially consists of the United States of America and the People’s Republic of China"),
+      t(
+        ". The Executive Council: approves challenge inspections; appoints the Director-General; provides oversight of the CTB and exercises veto power over its recommendations; determines overall policy and adopts the budget… All proactive Executive Council decisions require consensus among members. If consensus cannot be reached, the proposed changes are not adopted.",
+      ),
+    ],
+  },
+  {
+    heading: "Article IV — AI Training",
+    runs: [
+      n("1."),
+      t(" Each Party agrees to ban and prohibit AI training above the following thresholds: "),
+      h("labs", "Any training run exceeding 10²⁴ FLOP or any post-training run exceeding 10²³ FLOP"),
+      t(". "),
+      n("2."),
+      t(" "),
+      h("reporting", "Each Party shall report any training run between 10²² and 10²⁴ FLOP to the CTB, prior to initiation"),
+      t(
+        ". This report must include, but is not limited to, all training code, all training data, and an estimate of the total FLOP to be used…",
+      ),
+    ],
+  },
+  {
+    heading: "Article V — Chip Consolidation",
+    runs: [
+      n("1."),
+      t(" Each Party ensures that within their jurisdiction, "),
+      h("facility", "all covered chip clusters (CCCs)… are located in facilities declared to the CTB"),
+      t(
+        ", and that these AI chips are subject to monitoring by the Parties, coordinated by the CTB… These facilities are accessible to physical inspection. This may include, for instance, that verification teams can reach any CCC from at least one airport with scheduled international service within 12 hours.",
+      ),
+    ],
+  },
+  {
+    heading: "Article VI — AI Chip Production Monitoring",
+    runs: [
+      n("1."),
+      t(
+        " The CTB will coordinate monitoring of AI chip production facilities and key inputs to chip production. This monitoring will ensure that all newly produced AI chips are immediately tracked and monitored until they are installed in declared CCCs and that unmonitored supply chains are not established… Monitoring of chip production will start with fabrication.",
+      ),
+    ],
+  },
+  {
+    heading: "Article VII — Chip Use Verification",
+    runs: [
+      n("1."),
+      t(" "),
+      h("inspections", "Parties accept continuous on-site verification of total chip usage at declared CCCs"),
+      t(". The methods… may include, but are not limited to: in-person inspectors; tamper-proof cameras; "),
+      h("instruments", "measurements of power, thermal, and networking characteristics"),
+      t(
+        "; on-chip hardware-enabled mechanisms, including retrofitted mechanisms and remote deactivation capabilities… ",
+      ),
+      n("3."),
+      t(
+        " In cases where the CTB assesses that current verification methods cannot provide sufficient assurance that the AI hardware is not being used for prohibited activities, AI hardware must be powered off, and its non-operation continually verified.",
+      ),
+    ],
+  },
+  {
+    heading: "Article X — Information Consolidation and Challenge Inspections",
+    runs: [
+      t("The Information Consolidation division "),
+      h(
+        "secrets",
+        "takes precautions to protect commercial, industrial, security, and state secrets and other confidential information",
+      ),
+      t(
+        " coming to its knowledge in the implementation of the Agreement… For the purpose of providing assurance of compliance, each Party uses National Technical Means (NTM) of verification at its disposal… Each Party undertakes not to interfere with the National Technical Means of verification of other Parties.",
+      ),
+    ],
+  },
+  {
+    heading: "Article XII — Protective Actions",
+    runs: [
+      t(
+        "Where there is credible evidence that a State or other actor (whether a Party or a non-Party) is conducting or imminently intends to conduct activities aimed at developing or deploying ASI in violation of Article I, Article IV, Article V, Article VI, Article VII, or Article VIII, ",
+      ),
+      h("protective", "a State Party may undertake Protective Actions that are necessary and proportionate to prevent activities"),
       t("."),
     ],
   },
   {
-    heading: "Article VI — Confidentiality",
+    heading: "Article XIV — Revision Process",
     runs: [
-      t("Inspectors shall not access, copy, or transmit "),
-      h("secrets", "model parameters, training data, or source code"),
+      n("1."),
+      t(" "),
+      h("review", "The Executive Council may revise this Agreement as necessary to ensure its purposes are achieved"),
       t(
-        ". Managed access procedures shall be specified in Annex B, to be concluded by the Executive Council no later than two years after entry into force.",
+        ". Under Article III, the CTB may change specific definitions and implementation methods… Fundamental revisions to the purposes of these Articles or to the governance structure require an Amendment by the Executive Council.",
       ),
     ],
   },
   {
-    heading: "Article VII — Non-Parties",
+    heading: "Article XV — Withdrawal and Duration",
     runs: [
-      t("States Parties shall not "),
-      h("export", "export applicable high-performance computing hardware to non-parties"),
-      t(", except as licensed for verified civilian purposes."),
-    ],
-  },
-  {
-    heading: "Article VIII — Non-Compliance",
-    runs: [
+      n("1."),
+      t(" The Agreement shall be of unlimited duration. "),
+      n("2."),
       t(
-        "Upon a finding of non-compliance by the Executive Council, the Council may recommend measures to restore compliance, and may refer the matter to the ",
+        " Each Party will, in exercising its national sovereignty, have the right to withdraw from the Agreement if it decides that ",
       ),
-      h("unsc", "United Nations Security Council"),
-      t("."),
-    ],
-  },
-  {
-    heading: "Article IX — Withdrawal",
-    runs: [
-      t("A State Party may "),
-      h("withdrawal", "withdraw from this Protocol upon ninety days’ notice"),
+      h("withdrawal", "extraordinary events, related to the subject matter of this Agreement, have jeopardized the supreme interests of its country"),
       t(
-        " if it decides that extraordinary events related to the subject matter of this Protocol have jeopardized its supreme interests.",
+        ". It shall give notice of such withdrawal to the CTB 12 months in advance… During this 12 month period, the withdrawing state shall cooperate with CTB and Executive Council member efforts to certify that after withdrawal, the withdrawing state will be unable to develop, train, post-train, or deploy dangerous AI systems.",
       ),
-    ],
-  },
-  {
-    heading: "Article X — Review and Amendment",
-    runs: [
-      t("The thresholds and definitions in Article I may be amended by consensus of all States Parties at a "),
-      h("review", "Review Conference"),
-      t(", the first of which shall convene three years after entry into force."),
     ],
   },
 ];
 
-/** Static copy for the widget shell, lifted from the source hero/doc/done text. */
+/** Static copy for the widget shell. */
 export const PROTOCOL_ACTORS_COPY = {
   subLearn:
-    "You dissected the Reykjavik Protocol in Module 0 as text. Read it again with a different question: every phrase below points at someone — a government, a company, a bureaucracy, an inspector. Click each highlighted phrase to meet the actors behind it. This is the cast Module 1 puts under the microscope.",
+    "You dissected this agreement in 1.1 as text. Read it again with a different question: every phrase below points at someone — a government, a company, a bureaucracy, an inspector. Click each highlighted phrase to meet the actors behind it. This is the cast Module 1 puts under the microscope.",
   subQuiz:
-    "Same treaty, no answers given. Click each highlighted phrase and pick which real-world actors it puts in the room — who owns it, who runs it, who has done this before. Several answers per phrase; distractors included. If you want the guided tour first, switch to mode 1.",
+    "Same agreement, no answers given. Click each highlighted phrase and pick which real-world actors it puts in the room — who owns it, who runs it, who has done this before. Several answers per phrase; distractors included. If you want the guided tour first, switch to mode 1.",
   tabLearn: "1 · Meet the actors",
   tabQuiz: "2 · Quiz yourself",
   legend: [
@@ -962,10 +756,10 @@ export const PROTOCOL_ACTORS_COPY = {
     { cat: "ind" as ActorCat, label: "Industry" },
     { cat: "inst" as ActorCat, label: "Institutions & inspectors" },
   ],
-  docEyebrow: "Full text · fictional",
-  docTitle: "The Reykjavik Protocol",
+  docEyebrow: "Draft agreement · abridged",
+  docTitle: "An International Agreement to Prevent the Premature Creation of Artificial Superintelligence",
   docLede:
-    "The agreement several Module 0 specimens were drawn from. You will work with this document again in the dissection and the stress test.",
+    "Scher, Abecassis, Barnett & Abeyta (2025), arXiv:2511.10783, Appendix A — the draft 1.1 dissects, abridged at paragraph boundaries. Every cut is marked with an ellipsis; nothing is rewritten.",
   doneLearnEyebrow: "Cast complete",
   doneLearnTitle: "You have met all fifteen.",
   doneLearnBody:

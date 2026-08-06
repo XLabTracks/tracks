@@ -313,3 +313,27 @@
     line-height: 1.45;
   }
 }
+
+/* No scrollbars anywhere on this site — the author's call, applied at the
+   root so it holds for the page itself and for every scrolling box inside
+   it: strips, rails, panels, dialogs, textareas, code blocks.
+
+   Scrolling itself is untouched — wheel, trackpad, keys, touch and
+   scrollIntoView all still work; only the painted bar is gone. Corollary
+   to live with: a box that scrolls now advertises it by nothing but its
+   clipped content, so anything that must be discovered sideways needs its
+   own affordance in the layout.
+
+   Trap: the two declarations are not fallbacks for each other. Firefox
+   reads scrollbar-width; WebKit and Chromium only take the pseudo-element,
+   and it must set display:none — width:0 leaves the gutter behind. Both
+   are needed, and the pseudo-element rule has to stay in a plain stylesheet
+   (Tailwind utilities cannot express it). */
+:root,
+* {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+*::-webkit-scrollbar {
+  display: none;
+}

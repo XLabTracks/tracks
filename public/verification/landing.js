@@ -423,6 +423,9 @@
       return '<li><span class="n" aria-hidden="true">' + String(i + 1).padStart(2, '0') +
         '</span><span>' + esc(o) + '</span></li>';
     }).join('');
+    // The column-fill in landing.css needs the row count; it is the list's,
+    // so it is set here rather than guessed by a hardcoded CSS value.
+    ul.style.setProperty('--rows', String(Math.ceil(S.objectives.length / 2)));
   }
 
   /* The hero's two ways in and its stat row are written in landing.html and

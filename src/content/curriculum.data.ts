@@ -216,7 +216,6 @@ export const modules: Module[] = [
       "c-paper-satiation",
       "c-paper-spillway",
       "c-mod6-empirics",
-      "c-paper-contrastive-sdf",
       "c-paper-csdf-guided",
       "c-mod6-l2",
       "c-mod6-l3",

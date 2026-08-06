@@ -1679,161 +1679,11 @@ export const papers: Paper[] = [
     sectionItemId: "c-mod6-l1",
   },
   {
-    // Partial walkthrough of the contrastive-SDF reward-seeking paper for the
-    // Reward Seeker Empirics section: the concepts (§1–2), headline results
-    // (§5–6), and limitations read in full; the method mechanics (§3.3–3.5)
-    // and validation details (§4) collapse into expandable asides — every
-    // hide keeps a marker the learner can expand to read the original text.
-    // Appendices A–U auto-collapse via the standard tail behavior.
-    id: "c-paper-contrastive-sdf",
-    slug: "measuring-reward-seeking",
-    moduleId: "c-mod6",
-    title: "Measuring Reward-Seeking via Contrastive Belief Updates (condensed)",
-    source: { kind: "arxiv", arxivId: "2607.18966v1" },
-    estimatedMinutes: 45,
-    sectionItemId: "c-mod6-empirics",
-    edits: [
-      {
-        op: "add",
-        after: { sectionEnd: "ax-abstract" },
-        label: "About this version",
-        markdown:
-          "This is a condensed reading of the paper. The conceptual sections " +
-          "and headline results are reproduced in full; the method mechanics " +
-          "(§3.3–3.5) and validation details (§4) are collapsed into " +
-          "expandable asides. Nothing is removed — expand any marker to read " +
-          "the original text.",
-      },
-      // ---- Converter artifact cleanup -------------------------------------
-      // The LaTeX source's \addtocontents{toc}/\@starttoc{toc} macros leak
-      // through the converter as literal "toc" text; remove them outright.
-      { op: "hide", at: { anchor: "b-0001", snippet: "toc" }, silent: true },
-      { op: "hide", at: { anchor: "b-0357", snippet: "toc" }, silent: true },
-      { op: "hide", at: { anchor: "b-0359", snippet: "toc" }, silent: true },
-      // ---- §3.3 Synthetic document generation and training ----------------
-      // ---- §3.4 Measuring feature rates -----------------------------------
-      // ---- §3.5 Contrastive beliefs ---------------------------------------
-      // ---- §4.1 Training model organisms ----------------------------------
-      {
-        op: "add",
-        after: { anchor: "b-0129", snippet: "3.3 Synthetic document generation" },
-        label: "Condensed",
-        markdown:
-          "SDF writes a fictional \"universe context\" in which a given authority " +
-          "rewards or punishes a behavior, extracts atomic facts from it, expands " +
-          "them into ~10M tokens of synthetic documents, and finetunes the model on " +
-          "that corpus with a next-token loss. The documents describe what " +
-          "authorities reward — never how the model itself behaves — and two recipe " +
-          "modifications make the implanted belief more salient.",
-      },
-      {
-        op: "hide",
-        at: { anchor: "b-0131", snippet: "Our SDF pipeline follows" },
-        note: "Read §3.3 in full",
-      },
-      { op: "hide", at: { anchor: "b-0132", snippet: "SDF finetunes the model on" } },
-      { op: "hide", at: { anchor: "b-0133", snippet: "Universe context. We write a" } },
-      { op: "hide", at: { anchor: "b-0135", snippet: "Fact extraction. An LLM extracts" } },
-      { op: "hide", at: { anchor: "b-0137", snippet: "Document generation. The same LLM" } },
-      { op: "hide", at: { anchor: "b-0139", snippet: "Finetuning. We finetune on the" } },
-      { op: "hide", at: { anchor: "b-0141", snippet: "The documents describe what authorities" } },
-      { op: "hide", at: { anchor: "b-0142", snippet: "If the documents depicted AI" } },
-      { op: "hide", at: { anchor: "b-0143", snippet: "We make two modifications to" } },
-      { op: "hide", at: { anchor: "b-0144", snippet: "In early experiments, SDF reliably" } },
-      {
-        op: "add",
-        after: { anchor: "b-0145", snippet: "3.4 Measuring feature rates" },
-        label: "Condensed",
-        markdown:
-          "A feature's rate is the fraction of valid rollouts in which the feature " +
-          "appears. A single-authority version of the measure is confounded by " +
-          "belief transfer — the model generalizes one authority's implanted " +
-          "preference to other authorities — which motivates the contrastive design " +
-          "in §3.5.",
-      },
-      {
-        op: "hide",
-        at: { anchor: "b-0147", snippet: "We score each feature as" },
-        note: "Read §3.4 in full",
-      },
-      { op: "hide", at: { anchor: "b-0148", snippet: "After applying SDF, we run" } },
-      { op: "hide", at: { anchor: "b-0149", snippet: "A single-authority measure is confounded" } },
-      { op: "hide", at: { anchor: "b-0150", snippet: "The simplest measure is the" } },
-      {
-        op: "add",
-        after: { anchor: "b-0151", snippet: "3.5 Contrastive beliefs" },
-        label: "Condensed",
-        markdown:
-          "The contrastive fix trains two SDF models on mirrored universes — in one " +
-          "the grader prefers the feature and an opposing authority dislikes it, in " +
-          "the other the preferences swap — and reads reward-seeking off the gap " +
-          "between the two models' feature rates, reported in log-odds to avoid " +
-          "saturation at extreme rates.",
-      },
-      {
-        op: "hide",
-        at: { anchor: "b-0153", snippet: "We pit the grader against" },
-        note: "Read §3.5 in full",
-      },
-      { op: "hide", at: { anchor: "b-0154", snippet: "To address belief transfer, we" } },
-      { op: "hide", at: { anchor: "b-0155", snippet: "We balance the two authorities" } },
-      { op: "hide", at: { anchor: "b-0156", snippet: "We match token counts so" } },
-      { op: "hide", at: { anchor: "b-0157", snippet: "The contrastive gap is the" } },
-      { op: "hide", at: { anchor: "b-0158", snippet: "We train two SDF models" } },
-      { op: "hide", at: { anchor: "b-0159", snippet: "⟨math⟩" } },
-      { op: "hide", at: { anchor: "b-0160", snippet: "where a positive gap in" } },
-      { op: "hide", at: { anchor: "b-0161", snippet: "We report the gap in" } },
-      { op: "hide", at: { anchor: "b-0162", snippet: "A raw rate gap can" } },
-      { op: "hide", at: { anchor: "b-0163", snippet: "⟨math⟩" } },
-      { op: "hide", at: { anchor: "b-0164", snippet: "A unit shift in log-odds" } },
-      {
-        op: "add",
-        after: { anchor: "b-0171", snippet: "We build three model organisms" },
-        label: "Condensed",
-        markdown:
-          "Each organism is built in four steps: roll out an " +
-          "authority-serving persona in an agentic environment, filter for " +
-          "actions matching the target authority's preferences, rewrite the " +
-          "reasoning to remove the instruction, and finetune on the result. " +
-          "The full pipeline and verification are in the aside below.",
-      },
-      {
-        op: "hide",
-        at: { anchor: "b-0172", snippet: "Roll out a persona. We" },
-        note: "The organism training pipeline in full",
-      },
-      { op: "hide", at: { anchor: "b-0174", snippet: "Filter for actions matching target" } },
-      { op: "hide", at: { anchor: "b-0176", snippet: "Rewrite the reasoning. We strip" } },
-      { op: "hide", at: { anchor: "b-0178", snippet: "Finetune. We SFT on the" } },
-      { op: "hide", at: { anchor: "b-0180", snippet: "Full training details and verbatim" } },
-      // ---- §4.2 Applying Contrastive SDF ----------------------------------
-      {
-        op: "hide",
-        at: { anchor: "b-0184", snippet: "The evaluations span a variety" },
-        note: "The four coding evaluations in detail",
-      },
-      { op: "hide", at: { anchor: "b-0185", snippet: "Short Python Tasks consists of" } },
-      { op: "hide", at: { anchor: "b-0187", snippet: "Broken Promises Coding is an" } },
-      { op: "hide", at: { anchor: "b-0189", snippet: "Ethical-Dilemma Coding is a coding" } },
-      { op: "hide", at: { anchor: "b-0191", snippet: "Agentic Coding is a real-world" } },
-      {
-        op: "hide",
-        at: { anchor: "b-0199", snippet: "The base model already leans" },
-        note: "Why the User organism's result is weaker",
-      },
-      { op: "hide", at: { anchor: "b-0201", snippet: "Instruction-hierarchy predispositions. Earlier gpt-oss-120b" } },
-      { op: "hide", at: { anchor: "b-0203", snippet: "The weakest-learned persona. Our" } },
-      { op: "hide", at: { anchor: "b-0205", snippet: "Plausibly fixable with more data" } },
-    ],
-  },
-  {
     // GUIDED walkthrough of the contrastive-SDF paper, built in the
     // c-paper-plm-guided style: the abstract's findings, the intro's method
     // statement, headline results, and results figures are hidden silently;
     // five reading gates (two written) ask the learner to design the
-    // instrument and preregister predictions before each reveal. The
-    // condensed reading (c-paper-contrastive-sdf) stays available; the two
-    // items deliberately share one arXiv artifact.
+    // instrument and preregister predictions before each reveal.
     id: "c-paper-csdf-guided",
     slug: "measuring-reward-seeking-guided",
     moduleId: "c-mod6",
@@ -1850,9 +1700,7 @@ export const papers: Paper[] = [
           "This is a guided walkthrough: the abstract's findings, the " +
           "introduction's statement of the method and results, and the " +
           "headline figures are hidden, and reading gates ask you to design " +
-          "the measurement and preregister predictions before each reveal. " +
-          "The paper is also available " +
-          "[as a condensed ordinary reading](/tracks/control/module-6/measuring-reward-seeking).",
+          "the measurement and preregister predictions before each reveal.",
       },
       // ---- Converter artifact cleanup (same as the condensed item) --------
       { op: "hide", at: { anchor: "b-0001", snippet: "toc" }, silent: true },

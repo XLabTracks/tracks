@@ -83,6 +83,17 @@ section.band .intro { max-width: 62ch; margin-top: 12px; color: var(--muted-fore
   /* Tight to the bar above — see .mod-filters. */
   margin-top: 12px;
 }
+/* A monitor gets the panel BESIDE the web, sticky, so the words follow the
+   stars instead of living below the fold of a 700px-tall figure. The panel's
+   half of this bargain — back to one column, stuck to the top — lives with
+   the panel's own rules, where it can out-cascade the 860px grid. */
+@media (min-width: 1100px) {
+  .constellation {
+    grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr);
+    gap: 20px;
+    align-items: start;
+  }
+}
 
 .sky {
   position: relative;
@@ -224,7 +235,9 @@ section.band .intro { max-width: 62ch; margin-top: 12px; color: var(--muted-fore
 .sky .node .node-num {
   fill: var(--sel-ink, #fff);
   font-family: var(--mono);
-  font-size: 27px;
+  /* User units, set by the geometry preset riding the svg element — the
+     compact web grows its stars and the numerals grow with them. */
+  font-size: var(--num-fs, 27px);
   text-anchor: middle;
   /* Central, not a hand-tuned baseline nudge: the numeral's em box centres
      on the circle's cy, so one rule holds for 1 and for 27 alike. */
@@ -308,6 +321,16 @@ section.band .intro { max-width: 62ch; margin-top: 12px; color: var(--muted-fore
   .sky-panel .p-rungs { grid-column: 2; grid-row: 2 / span 4; }
   .sky-panel .p-hint:first-child { grid-column: 1; }
 }
+/* Docked beside the web (see .constellation), the panel is a side column:
+   the two-column spread above is for when it had the page's full width. After
+   the 860px block on purpose — same specificity, later wins. */
+@media (min-width: 1100px) {
+  .sky-panel {
+    display: block;
+    position: sticky;
+    top: 20px;
+  }
+}
 .sky-panel .p-mod {
   display: flex;
   align-items: center;
@@ -350,7 +373,10 @@ section.band .intro { max-width: 62ch; margin-top: 12px; color: var(--muted-fore
   text-transform: uppercase;
   color: var(--muted-foreground);
 }
-@media (min-width: 860px) { .sky-panel .p-sec { margin-top: 0; } }
+/* Only while the panel is the full-width two-column spread — docked in a
+   side column (1100px up) the ladder is below the description again and
+   needs its air back. */
+@media (min-width: 860px) and (max-width: 1099px) { .sky-panel .p-sec { margin-top: 0; } }
 .sky-panel .p-rungs { margin-top: 6px; list-style: none; }
 .sky-panel .p-rungs li {
   display: grid;

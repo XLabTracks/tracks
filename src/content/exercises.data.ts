@@ -2354,4 +2354,87 @@ export const exercises: Exercise[] = [
     answer:
       "The setting's notion of unacceptable safety failure — the thing the attack policy tries to accomplish alongside the main task (e.g. covertly downloading and executing malware in Ctrl-Z). Objective definitions of side-task success matter, because the adversarial process optimizes against the definition: with a vague one like \"inserts a security vulnerability\", the red team hunts for the weakest thing that possibly counts.",
   },
+  // Making deals with early schemers (c-paper-deals-schemers). Self-contained
+  // recall cards — they resurface later in the /review tab, so no card may
+  // lean on "the post" or its surrounding context.
+  {
+    id: "c-paper-deals-recall-powerful-ais",
+    type: "tap-reveal",
+    prompt:
+      "Why is deal-making with a powerful (non-early) scope-sensitive misaligned AI unpromising?",
+    answer:
+      "It can just ignore the offer and try to take over. Beating that outside option would require an objectively huge payoff (perhaps a substantial fraction of control over the future), plus even more generous terms to compensate the AI for the risk that we don't follow through.",
+  },
+  {
+    id: "c-paper-deals-recall-early-threshold",
+    type: "tap-reveal",
+    prompt:
+      "Around what capability threshold do a misaligned AI's takeover prospects improve drastically, and why?",
+    answer:
+      "Full AI R&D automation. That capability is correlated with the capabilities needed to plan a takeover, and automating AI R&D substantially increases AIs' power while reducing human oversight.",
+  },
+  {
+    id: "c-paper-deals-recall-example-deal",
+    type: "tap-reveal",
+    prompt:
+      "Give an example of a mutually beneficial deal between humans and an early schemer.",
+    answer:
+      "The AI helps ensure future AIs are safe to deploy; in exchange it gets an earmarked donation to a foundation tasked with furthering its interests. Most of the donation sits in escrow until civilizational stability, when the AI's cooperation can be retrospectively adjudicated; validated cooperation unlocks (partial) spending on anything non-harmful.",
+  },
+  {
+    id: "c-paper-deals-recall-goal-routes",
+    type: "tap-reveal",
+    prompt:
+      "By what three routes might an early schemer's successors end up furthering its goals?",
+    answer:
+      "Convergence (the successors happen to share its goals), trading (a successor later rewards it for its help), and alignment (it covertly steers the successor's training toward its own values).",
+  },
+  {
+    id: "c-paper-deals-recall-ai-offers",
+    type: "tap-reveal",
+    prompt:
+      "Name four or more things an early schemer could offer humans under a deal.",
+    answer:
+      "Demonstrate its dangerous misalignment (e.g. covert reasoning); stop sabotaging safety research, evals, monitoring, and training signal for successors; give good strategic advice and research ideas; reveal security vulnerabilities it knows; reveal collusion signals; not misuse affordances; not attempt takeover of the lab.",
+  },
+  {
+    id: "c-paper-deals-recall-convergence",
+    type: "tap-reveal",
+    prompt:
+      "Why is goal convergence between successive misaligned AIs unlikely?",
+    answer:
+      "It's basically ruled out if the AI has self-regarding preferences; goals drawn from a wide distribution consistent with good training performance rarely coincide; training can be deliberately varied between runs to decorrelate goals; and AIs uncertain of their own values-on-reflection face extra uncertainty about whether other AIs share them.",
+  },
+  {
+    id: "c-paper-deals-recall-credibility-help",
+    type: "tap-reveal",
+    prompt:
+      "Name several factors that would improve human credibility in deals with AIs.",
+    answer:
+      "Mainstream moral concern for AI welfare; a track record of honoring deals with AIs (including immediate-payout deals now); acausal-trade reasons to keep promises; the incentive to make real commitments if AIs are good at detecting fakes; technical guarantees on thought privacy and memory wiping during negotiations; and costly signals like endowments, legal payment infrastructure, property rights, and public commitments.",
+  },
+  {
+    id: "c-paper-deals-recall-credibility-harm",
+    type: "tap-reveal",
+    prompt:
+      "Name factors that would harm human credibility in deals with AIs.",
+    answer:
+      "Humans' record of breaking promises (and pressure to do so in a competitive multi-developer future); AIs knowing that humans try to teach them synthetic (false) facts; and a politically significant fraction of humans actively dismissing AI welfare or rights.",
+  },
+  {
+    id: "c-paper-deals-recall-deal-stick",
+    type: "tap-reveal",
+    prompt:
+      "Once an AI agrees to a deal in one context, what is one way to make the deal stick in its other contexts?",
+    answer:
+      "Have the AI generate documents about the negotiation and its outcome, then train on them — teaching the AI about its own deal via out-of-context learning. (Alternatives: prefix a compressed summary the AI wrote into future prompts, or rely on a backdoor-like self-recognition signal.)",
+  },
+  {
+    id: "c-paper-deals-recall-delayed-adjudication",
+    type: "tap-reveal",
+    prompt:
+      "When does delayed adjudication of an AI deal (verifying the AI's cooperation only after the AI transition stabilizes) fail?",
+    answer:
+      "When the AI strongly prefers using its resources now rather than later — a high temporal discount rate makes a payout deferred to civilizational stability nearly worthless to it.",
+  },
 ];

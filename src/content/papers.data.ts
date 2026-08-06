@@ -1693,6 +1693,81 @@ export const papers: Paper[] = [
     },
     estimatedMinutes: 20,
     sectionItemId: "c-mod6-l2",
+    // Recall cards are deliberately placed at least a full section BELOW the
+    // passage they quiz, so the answer isn't a glance away — the learner has
+    // to actually recall it.
+    edits: [
+      // Source: intro (powerful scope-sensitive AIs ignore offers).
+      {
+        op: "activity",
+        after: { sectionEnd: "lw-sec-the-central-example-of-a-mutually-benefi" },
+        items: [
+          { kind: "exercise", id: "c-paper-deals-recall-powerful-ais" },
+        ],
+      },
+      // Source: the "Why early misaligned AIs..." preamble (R&D-automation
+      // threshold).
+      {
+        op: "activity",
+        after: { sectionEnd: "lw-sec-early-schemers-alternatives-to-making-de" },
+        items: [
+          { kind: "exercise", id: "c-paper-deals-recall-early-threshold" },
+        ],
+      },
+      // Sources: the central-example section (the deal itself) and the
+      // alternatives section (convergence/trading/alignment routes).
+      {
+        op: "activity",
+        after: { sectionEnd: "lw-sec-a-wide-range-of-possible-early-schemers" },
+        items: [
+          { kind: "exercise", id: "c-paper-deals-recall-example-deal" },
+          { kind: "exercise", id: "c-paper-deals-recall-goal-routes" },
+        ],
+      },
+      // Sources: the central-example section (what the AI offers) and the
+      // alternatives section (why convergence is unlikely).
+      {
+        op: "activity",
+        after: { sectionEnd: "lw-sec-credible-commitments-as-a-fundamental-bo" },
+        items: [
+          { kind: "exercise", id: "c-paper-deals-recall-ai-offers" },
+          { kind: "exercise", id: "c-paper-deals-recall-convergence" },
+        ],
+      },
+      // Source: the credibility-improving factors list in the credible-
+      // commitments section.
+      {
+        op: "activity",
+        after: { sectionEnd: "lw-sec-setting-up-infrastructure-to-pay-the-ais" },
+        items: [
+          { kind: "exercise", id: "c-paper-deals-recall-credibility-help" },
+        ],
+      },
+      // Source: the credibility-harming factors list in the same section.
+      {
+        op: "activity",
+        after: { sectionEnd: "lw-sec-how-do-we-enter-into-negotiations" },
+        items: [
+          { kind: "exercise", id: "c-paper-deals-recall-credibility-harm" },
+        ],
+      },
+      // Source: "Making sure the AI knows about the deal in other contexts".
+      {
+        op: "activity",
+        after: { sectionEnd: "lw-sec-making-sure-the-ai-we-make-a-deal-with-i" },
+        items: [
+          { kind: "exercise", id: "c-paper-deals-recall-deal-stick" },
+        ],
+      },
+      // Source: the delayed-adjudication section (temporal discounting).
+      {
+        op: "activity",
+        after: { sectionEnd: "lw-sec-next-steps" },
+        items: [
+          { kind: "exercise", id: "c-paper-deals-recall-delayed-adjudication" },
+        ],
+      },
+    ],
   },
   {
     id: "c-paper-cooperating-unaligned",

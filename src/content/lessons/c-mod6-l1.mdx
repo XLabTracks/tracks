@@ -15,10 +15,6 @@ The model archetype in question is what we will call "Seekers". We must learn of
 - Understand non-schemer threat models, especially Seekers.
 - Understand alternative methods for extracting effective work from potentially misaligned models (trade and satiating AIs).
 
-## Seekers
-
-Schemers are traditionally the most common form of dangerous AI discussed, but they aren't the only archetype that can be dangerous, let alone the likeliest. This module covers the seeker: an archetype that's increasing in prevalence, with more papers noticing seeker-like behavior in newer models. It aims to explain the different types of seekers, identification methods, and potential ways to counter & observe them.
-
 ## What a seeker is
 
 A seeker is a class of cognitive patterns that aims to achieve a certain outcome. The narrowest and usually considered case is the reward-seeker, which pursues its reward signal above all else. The more general fitness-seeker pursues fitness, which is whatever causes it to be selected, deployed, and propagated. Reward can be a proxy of fitness because it's selected for in the training process. Seekers are obviously not the intended outcome of training, but its an archetype that may be selected for as they're simple and easily generalizable.
@@ -26,8 +22,6 @@ A seeker is a class of cognitive patterns that aims to achieve a certain outcome
 ### How seekers come to exist
 
 Behavioral selection is the observation that training reinforces whichever behavior scored well, not whichever goal produced it, so what survives is a mix of cognitive patterns that are selected for via the training process. In general, seekers are just a type of cognitive pattern that pushes for beliefs that optimize for a certain item. This is partially why the creation of fitness-seekers through the training process seems so likely, as it's just optimizing for what we're scoring. A schemer is a costlier solution to the same problem; it pursues some other terminal goal and performs well only to survive selection, which requires additional instrumental reasoning about why to comply that isn't directly rewarded and may atrophy due to a lack of use within the training process. This makes the emergence of fitness-seekers seem likelier than schemers. We can see this in the real world, where current models already exhibit apparent-success-seeking while schemers remain hypothetical.
-
-*[seeker justification: There are infinite amount of possible unique seekers why is it sufficient to decompose it / why do we only care about the kinds of seekers outlined below?]*
 
 *[The following seeker orientations can be displayed in a diagram ranked on severity, and will be like a vertical carousel that goes from yellow down to red/orange]*
 

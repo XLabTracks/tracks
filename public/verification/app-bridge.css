@@ -111,38 +111,58 @@
   font-weight: 600;
 }
 
-/* Pill rows: four or more plain bullets, the reference sheet's shape — a
-   tinted bar whose head is a ringed circle riding its left end: card-ground
-   centre, a wide translucent --primary ring, and a thin --primary outline
-   drawn by box-shadow so it sits outside the ring. The rows run tight so
-   the heads chain down the list the way the sheet's do.
+/* Four or more plain bullets share one card, the reference sheet's shape:
+   a solid --primary slab with a big radius holding the whole run, every
+   item marked by a small --primary-foreground dot, and a pale circle
+   peeking from behind the top-left corner. Painted on all four sides —
+   the whole-card half of the card-edge rule, never a tinted rib.
 
-   Trap: the circle hangs 18px past the bar's left edge, so the bar takes an
-   18px margin instead of starting at the column edge — drop the margin and
-   the head clips against the reading column. */
+   Trap: the slab is a --primary surface, so everything on it must write in
+   --primary-foreground — prose colours strong/em/a/code from its own
+   variables, which stay --foreground/--brand-ink and vanish against the
+   maroon, so the descendant override below is load-bearing, and a dot
+   nested inside the slab takes currentColor for the same reason. The
+   corner circle is ::before at z-index -1: the ul makes no stacking
+   context, so the circle paints behind the slab and above the page. */
 :root[data-theme] .lesson-body ul:not(.not-prose *):not(li ul):has(> li:nth-child(4)) {
+  position: relative;
   display: grid;
-  gap: 6px;
-  padding-left: 0;
+  gap: 14px;
+  margin-top: 2em;
+  padding: 26px 30px 26px 54px;
+  background: var(--primary);
+  border-radius: 28px;
+  color: var(--primary-foreground, #fff);
+}
+:root[data-theme] .lesson-body ul:not(.not-prose *):not(li ul):has(> li:nth-child(4))::before {
+  content: '';
+  position: absolute;
+  left: -12px;
+  top: -16px;
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--primary) 7%, var(--background));
+  z-index: -1;
 }
 :root[data-theme] .lesson-body ul:not(.not-prose *):not(li ul):has(> li:nth-child(4)) > li {
-  margin: 0 0 0 18px;
-  padding: 11px 22px 11px 34px;
-  background: color-mix(in srgb, var(--primary) 7%, transparent);
-  border-radius: 999px;
+  margin: 0;
+}
+:root[data-theme] .lesson-body ul:not(.not-prose *):not(li ul):has(> li:nth-child(4)) > li :where(strong, em, b, i, a, code) {
+  color: inherit;
 }
 :root[data-theme] .lesson-body ul:not(.not-prose *):not(li ul):has(> li:nth-child(4)) > li::before {
   content: '';
   position: absolute;
-  left: -18px;
-  top: 50%;
-  margin-top: -18px;
-  width: 36px;
-  height: 36px;
+  left: -26px;
+  top: calc(0.875em - 4px);
+  width: 8px;
+  height: 8px;
   border-radius: 50%;
-  background: var(--card);
-  border: 6px solid color-mix(in srgb, var(--primary) 24%, var(--card));
-  box-shadow: 0 0 0 1.5px var(--primary);
+  background: var(--primary-foreground, #fff);
+}
+:root[data-theme] .lesson-body ul:not(.not-prose *):not(li ul):has(> li:nth-child(4)) li ul > li::before {
+  background: currentColor;
 }
 
 /* Stepped circles: four or more numbered items. */

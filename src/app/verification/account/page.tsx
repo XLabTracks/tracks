@@ -3,6 +3,7 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 
 import { getCurrentUser } from "@/lib/auth";
+import { loginHref } from "@/lib/login-href";
 import { getDb } from "@/lib/db";
 import { getTrackProgress } from "@/lib/progress";
 import {
@@ -36,7 +37,7 @@ export default async function VerificationAccountPage() {
   // the render and a page render may not write cookies — signed out, that is a
   // 500 rather than a sign-in prompt.
   const user = await getCurrentUser();
-  if (!user) redirect("/login");
+  if (!user) redirect(loginHref("/verification/account"));
 
   const progress = await getTrackProgress(user.id, "verification");
 

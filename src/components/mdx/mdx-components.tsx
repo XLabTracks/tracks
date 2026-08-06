@@ -2,6 +2,7 @@ import type { MDXComponents } from "mdx/types";
 import { Video } from "./video";
 import { ArxivPaper } from "./arxiv-paper";
 import { Callout } from "./callout";
+import { Fold } from "./fold";
 import { Demo } from "./demo";
 import { Exercise } from "./exercise";
 import { ExerciseSequence } from "./exercise-sequence";
@@ -32,6 +33,7 @@ export const mdxComponents: MDXComponents = {
   Video,
   ArxivPaper,
   Callout,
+  Fold,
   Demo,
   Exercise,
   ExerciseSequence,

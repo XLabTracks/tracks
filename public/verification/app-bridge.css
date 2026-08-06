@@ -72,3 +72,93 @@
 :root[data-theme] .lesson-body {
   font-family: var(--sans);
 }
+
+/* Lists, from the author's two reference sheets: a short list is a tab and a
+   red dot; a long one is built, not dotted. From four items up, a numbered
+   list takes the stepped form — a solid --primary disc carrying its number —
+   and a plain list takes the pill rows, a tinted bar led by a disc. The
+   split is :has(), so a browser without it keeps the short form everywhere:
+   a degradation, never a break.
+
+   Trap: every selector carries :not(.not-prose *). The reader blocks —
+   <Check>, <GapFill>, the bank, the sign-up sheet — draw their own lists
+   inside not-prose containers, and a red disc inside a committed answer row
+   would be chrome painted over an exercise. Only top-level lists take the
+   built forms (:not(li ul), :not(li ol)); a list nested inside a pill or a
+   step keeps the short shape. Colours stay variables — the discs are
+   decoration, the meaning is in the words, and one rule serves all three
+   themes. */
+:root[data-theme] .lesson-body ul:not(.not-prose *) {
+  list-style: none;
+  padding-left: 1.6em;
+}
+:root[data-theme] .lesson-body ul:not(.not-prose *) > li {
+  position: relative;
+}
+:root[data-theme] .lesson-body ul:not(.not-prose *) > li::before {
+  content: '•';
+  position: absolute;
+  left: -1.1em;
+  color: var(--primary);
+  font-weight: 700;
+}
+:root[data-theme] .lesson-body ol:not(.not-prose *) > li::marker {
+  color: var(--primary);
+  font-weight: 600;
+}
+
+/* Pill rows: four or more plain bullets. */
+:root[data-theme] .lesson-body ul:not(.not-prose *):not(li ul):has(> li:nth-child(4)) {
+  display: grid;
+  gap: 10px;
+  padding-left: 0;
+}
+:root[data-theme] .lesson-body ul:not(.not-prose *):not(li ul):has(> li:nth-child(4)) > li {
+  margin: 0;
+  padding: 12px 20px 12px 46px;
+  background: color-mix(in srgb, var(--primary) 7%, transparent);
+  border-radius: 24px;
+}
+:root[data-theme] .lesson-body ul:not(.not-prose *):not(li ul):has(> li:nth-child(4)) > li::before {
+  content: '';
+  left: 18px;
+  /* Centred on the first line of text, wherever the item wraps. */
+  top: calc(12px + .9em);
+  margin-top: -6px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--primary);
+}
+
+/* Stepped circles: four or more numbered items. */
+:root[data-theme] .lesson-body ol:not(.not-prose *):not(li ol):has(> li:nth-child(4)) {
+  list-style: none;
+  counter-reset: vt-step;
+  display: grid;
+  gap: 14px;
+  padding-left: 0;
+}
+:root[data-theme] .lesson-body ol:not(.not-prose *):not(li ol):has(> li:nth-child(4)) > li {
+  counter-increment: vt-step;
+  margin: 0;
+  position: relative;
+  padding-left: 46px;
+}
+:root[data-theme] .lesson-body ol:not(.not-prose *):not(li ol):has(> li:nth-child(4)) > li::before {
+  content: counter(vt-step, decimal-leading-zero);
+  position: absolute;
+  left: 0;
+  top: calc(.9em - 15px);
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: var(--primary);
+  color: var(--primary-foreground, #fff);
+  font-family: var(--mono);
+  font-size: 12.5px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  display: grid;
+  place-items: center;
+}

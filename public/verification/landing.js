@@ -49,10 +49,11 @@
     ringR: [200, 330, 450],   /* row band r → ring radius */
     step: [23, 15, 13],       /* angular pitch between a module's stars at that ring */
     outerR: 520,              /* outermost decorative ring of the web */
-    plaqueGap: 84,            /* plaque centre beyond a short arm's last ring */
     nodeR: 30,
-    beamW: 9,                 /* spindle width at its widest, mid-path */
-    spokeW: 7,
+    beamEnd: 7,               /* beam half-width where it meets a star */
+    beamMid: 2.2,             /* …and at its pinched middle */
+    spokeEnd: 6,
+    spokeMid: 2,
   };
 
   var esc = function (s) {
@@ -86,19 +87,25 @@
     if (y1 > box.y1) box.y1 = y1;
   }
 
-  /* The tapered beam: a closed spindle, pointed at both stars and widest
-     mid-path — two quadratics through mirrored control points, so the fill
-     does the work and no stroke has to fake a taper. */
-  function spindle(ax, ay, bx, by, w) {
+  /* The tapered beam: flared where it meets a star, pinched mid-flight —
+     the waist of the reference's connectors, not a lens. Two quadratic
+     flanks; a control offset of 2·midW − endW puts the curve exactly at
+     midW half-width at the midpoint (a quadratic's midpoint is
+     (P0 + 2C + P2) / 4), which for midW < endW/2 lands the control past
+     the centreline and makes the flanks concave. The fill does the work;
+     no stroke has to fake a taper. Ends are flat, hidden under the discs. */
+  function beam(ax, ay, bx, by, endW, midW) {
     var dx = bx - ax, dy = by - ay;
     var len = Math.hypot(dx, dy) || 1;
-    var px = (-dy / len) * w, py = (dx / len) * w;
+    var px = -dy / len, py = dx / len;
     var mx = (ax + bx) / 2, my = (ay + by) / 2;
-    return 'M ' + ax.toFixed(1) + ' ' + ay.toFixed(1) +
-      ' Q ' + (mx + px).toFixed(1) + ' ' + (my + py).toFixed(1) +
-      ' ' + bx.toFixed(1) + ' ' + by.toFixed(1) +
-      ' Q ' + (mx - px).toFixed(1) + ' ' + (my - py).toFixed(1) +
-      ' ' + ax.toFixed(1) + ' ' + ay.toFixed(1) + ' Z';
+    var c = 2 * midW - endW;
+    return 'M ' + (ax + px * endW).toFixed(1) + ' ' + (ay + py * endW).toFixed(1) +
+      ' Q ' + (mx + px * c).toFixed(1) + ' ' + (my + py * c).toFixed(1) +
+      ' ' + (bx + px * endW).toFixed(1) + ' ' + (by + py * endW).toFixed(1) +
+      ' L ' + (bx - px * endW).toFixed(1) + ' ' + (by - py * endW).toFixed(1) +
+      ' Q ' + (mx - px * c).toFixed(1) + ' ' + (my - py * c).toFixed(1) +
+      ' ' + (ax - px * endW).toFixed(1) + ' ' + (ay - py * endW).toFixed(1) + ' Z';
   }
 
   /* ---------- placement ---------- */
@@ -187,7 +194,7 @@
       var root = polar(V.hubR - 8, p.a);
       spokeHtml += '<path class="spoke" data-id="' + esc(entry.n.id) + '" data-mod="' + mod +
         '" style="--sel:var(--mod-' + mod + ')" d="' +
-        spindle(root.x, root.y, p.x, p.y, V.spokeW) + '"/>';
+        beam(root.x, root.y, p.x, p.y, V.spokeEnd, V.spokeMid) + '"/>';
     });
   });
 
@@ -210,26 +217,20 @@
         ' ' + b.x.toFixed(1) + ' ' + b.y.toFixed(1) + '"/>';
     } else {
       beamHtml += '<path class="edge beam" id="e' + idx + '" ' + sel + ' d="' +
-        spindle(a.x, a.y, b.x, b.y, V.beamW) + '"/>';
+        beam(a.x, a.y, b.x, b.y, V.beamEnd, V.beamMid) + '"/>';
     }
     (edgesOf[e[0]] = edgesOf[e[0]] || []).push(idx);
     (edgesOf[e[1]] = edgesOf[e[1]] || []).push(idx);
   });
 
-  /* The hub. Pure anchor — it is not a skill, so it takes the brand and not
-     a module hue, and it is hidden from the accessibility tree. The disc is
-     shaded by an off-centre radial gradient (stop colours in landing.css) so
-     it reads as a body with a light on it, not a flat blob. */
+  /* The hub. Pure anchor — it is not a skill and carries no hue: a flat pale
+     disc, the reference's moon, hidden from the accessibility tree. Flat on
+     purpose — no gradient playing at a lit sphere. */
   var hubHtml =
-    '<defs><radialGradient id="hubGrad" cx="38%" cy="34%" r="78%">' +
-    '<stop offset="0%" class="hub-g0"/>' +
-    '<stop offset="55%" class="hub-g1"/>' +
-    '<stop offset="100%" class="hub-g2"/>' +
-    '</radialGradient></defs>' +
     '<g class="hub" aria-hidden="true">' +
     '<circle class="hub-halo" cx="0" cy="0" r="' + (V.hubR + 34) + '"/>' +
     '<circle class="hub-ring" cx="0" cy="0" r="' + (V.hubR + 14) + '"/>' +
-    '<circle class="hub-disc" cx="0" cy="0" r="' + V.hubR + '" fill="url(#hubGrad)"/>' +
+    '<circle class="hub-disc" cx="0" cy="0" r="' + V.hubR + '"/>' +
     '</g>';
 
   /* The plaque: a filled pill at the tip of its arm, just past the arm's last
@@ -241,13 +242,15 @@
     var label = S.moduleNames[mod];
     var w = Math.max.apply(null, S.moduleNames.map(function (n) { return n.length; })) * 8.9 + 56;
     var h = 36;
-    /* A full-length arm's plaque clears the outermost ring entirely — hung at
-       ringR + gap it sat on its own last band's stars. Short arms keep the
-       nearer seat so their plaque hugs the arm's tip. */
-    var plaqueR = col.maxRing === V.ringR.length - 1
-      ? V.outerR + 44
-      : V.ringR[col.maxRing] + V.plaqueGap;
-    var c = polar(plaqueR, col.mid);
+    /* The pill's clearance is directional: on a vertical arm only its height
+       faces the stars, on a near-horizontal arm its whole width does — a
+       fixed radial gap seated "Design" straight onto its last star. The
+       stadium's half-extent along the arm is (w−h)/2·|cos| + h/2; seat the
+       pill that far past the outermost ring plus a star's halo and a gap,
+       as if a star sat on the centreline (odd-count rings put one there,
+       even-count rings just get a hair more air). */
+    var support = ((w - h) / 2) * Math.abs(Math.cos((col.mid * Math.PI) / 180)) + h / 2;
+    var c = polar(V.ringR[col.maxRing] + V.nodeR + 8 + 22 + support, col.mid);
     fit(c.x - w / 2, c.y - h / 2, c.x + w / 2, c.y + h / 2);
     return '<g class="arc-label" data-mod="' + mod + '" style="--sel:var(--mod-' + mod + ');--sel-ink:var(--mod-' + mod + '-ink);--sel-text:var(--mod-' + mod + '-text)" role="button" tabindex="0"' +
       ' aria-label="Highlight module ' + mod + ', ' + esc(S.moduleNames[mod]) + '">' +
@@ -365,7 +368,7 @@
   var DEFAULT_PANEL =
     '<p class="p-hint">Every star is a skill; a line runs from a skill to the one it feeds. ' +
     'Hover a star to light its branch, click to pin it — the numeral inside is its module.</p>' +
-    '<p class="p-hint" style="margin-top:12px">' + S.nodes.length + ' skills, ' + S.edges.length +
+    '<p class="p-hint">' + S.nodes.length + ' skills, ' + S.edges.length +
     ' dependencies. A skill is fed by specific units, so it fills as you complete them rather than when you finish a module.</p>';
 
   function renderPanel(id) {
@@ -374,12 +377,16 @@
     panel.style.setProperty('--sel', 'var(--mod-' + n.mod + ')');
     panel.style.setProperty('--sel-ink', 'var(--mod-' + n.mod + '-ink)');
     panel.style.setProperty('--sel-text', 'var(--mod-' + n.mod + '-text)');
+    /* One fact per line: the eyebrow already names the module, so the meta
+       row does not say it again — it kept saying "Module 1 · Supply chain"
+       twice, two lines apart. The ladder's label is the map page's own
+       wording for the same list. */
     panel.innerHTML =
       '<p class="p-mod">M' + n.mod + ' · ' + esc(S.moduleNames[n.mod]) + '</p>' +
       '<h3>' + esc(n.label) + '</h3>' +
-      '<p class="p-meta"><span>Module ' + n.mod + ' · ' + esc(S.moduleNames[n.mod]) + '</span>' +
-      '<span>rooted in ' + esc(n.unit) + '</span></p>' +
+      '<p class="p-meta">rooted in ' + esc(n.unit) + '</p>' +
       '<p class="p-desc">' + esc(n.desc) + '</p>' +
+      '<p class="p-sec">The ladder — what each unit adds</p>' +
       '<ul class="p-rungs">' + n.rungs.map(function (r) {
         return '<li><span class="u">' + esc(r[0]) + '</span><span class="a">' + esc(r[1]) + '</span></li>';
       }).join('') + '</ul>';

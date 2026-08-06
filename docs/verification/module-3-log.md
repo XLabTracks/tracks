@@ -38,28 +38,58 @@ Generators clean, typecheck clean, 814 tests pass, 0 lint errors.
 
 ---
 
+## 2026-08-06 (later) — the MIRI packet, bullet case, and three link repairs
+
+**The MIRI packet is built.** On the author's instruction, 3.2 now carries the
+outline's own five-page adapted packet, transcribed: Articles IV to VII from
+Scher et al., *An International Agreement to Prevent the Premature Creation of
+Artificial Superintelligence*, and Sections 1 to 3 from Cankaya, *A System
+Overview for Near-Term, Low-Trust AI Compute Verification*, both MIRI Technical
+Governance Team. The packet's own notice, that it is an instructional
+adaptation and not a verbatim reproduction with the originals remaining
+authoritative, is reproduced with it rather than stripped, and both originals
+are linked at the point of use. Each page keeps its `<Src>` source locator.
+
+The ten expert-review questions are `<Exercise>` writing prompts, the shape
+every other written task on this track uses, so they autosave and reach the
+review path. Trap worth recording: exercise ids must be
+`v-task-<lesson-slug>-<n>`, because `cohort.ts` derives a task's lesson by
+parsing its id. Ids of `v-task-covert-review-*` typechecked fine and failed
+`cohort.test.ts`; they are `v-task-covert-red-blue-*`.
+
+**Bullet capitalization.** 306 list items across 15 lesson files began with a
+lowercase letter and now begin with a capital. Mechanical and uniform; no
+wording changed. Worth knowing before anyone reverts it: nearly all of these
+were colon-introduced fragment lists with semicolon terminators, where
+lowercase is conventionally correct. This was an explicit authoring decision,
+not a grammar fix, and one `sed` reverses it.
+
+**Three links repaired**, added as written without liveness testing, per the
+same instruction:
+
+- `https://airisk.mit.edu/+` lost its trailing `+`.
+- `ai-2040.com/supplements/verification-plan` and `ai-2040.com/supplements/faq`
+  were bare text and are now anchors.
+- `ai-2027.com` likewise.
+
+All three confirmed rendering as real anchors in the running app. Liveness is
+still untested and still blocked; see below.
+
+---
+
 ## Open items
 
 1. **3.2.1 is still a heading inside 3.2** and owes the same promotion 3.1.1
-   just got. Blocked only on the decision below about what 3.2 becomes.
+   just got. Deferred by the author for now.
 
 2. **3.2's taxonomy table is missing three of the outline's ten routes.**
    `covert-red-blue.mdx` carries seven scored rows. Absent: *hide an undeclared
    cluster*, *attack or capture verification*, and *exploit thresholds or
    definitions*. The outline has all ten with full scores and annotations, so
-   this is transcription owed, not a content decision.
+   this is transcription owed, not a content decision. Deferred by the author
+   for now.
 
-3. **The MIRI packet for 3.2 is not built.** The outline's 3.2 tab carries a
-   five-page adapted reading packet drawn from two MIRI Technical Governance
-   Team publications (Scher et al., *An International Agreement to Prevent the
-   Premature Creation of Artificial Superintelligence*, Articles IV to VII;
-   Cankaya, *A System Overview for Near-Term, Low-Trust AI Compute
-   Verification*, Sections 1 to 3), plus a ten-question expert review
-   assignment. The packet self-describes as an instructional adaptation rather
-   than a verbatim reproduction, so how it should be embedded is the author's
-   call and is being held for an answer.
-
-4. **Section A of the red-team/blue-team case is still unbuilt.** The author
+3. **Section A of the red-team/blue-team case is still unbuilt.** The author
    note at the top of `covert-red-blue.mdx` has said so since before this
    change; 3.0's worked example stands in for it.
 
@@ -82,7 +112,7 @@ What static inspection did establish, no network required:
 | `ai-2040.com/supplements/faq` written bare | `exercises.ts` |
 | `ai-2027.com` written bare | `exercises.ts` |
 | `https://airisk.mit.edu/+` has a trailing `+` | `capstone-feasibility.mdx` |
-| Two Wikimedia `Special:FilePath` URLs truncated mid-filename with unbalanced parens | `what-do-they-say.ts` |
+| ~~Two Wikimedia `Special:FilePath` URLs truncated mid-filename~~ **False positive, withdrawn.** The URLs are intact in source (`..._(cropped).jpg?width=256`); the extraction regex cut them at the unbalanced `(`. No defect. | `what-do-they-say.ts` |
 | Eight prototype hosts shipped in content, including `rainbow-puppy-79f680.netlify.app` | `facilitator-guide.ts`, `mechanism-effective.mdx`, `scoping-actors.mdx`, `scoping-upstream-downstream.mdx`, `capstone-feasibility.mdx`, `exercises.ts` |
 
 Note that `https://ai-2040.com/?choices=plan-a-root#playbook-insider-pov` does

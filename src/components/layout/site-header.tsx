@@ -4,8 +4,9 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Menu } from "lucide-react";
 import { useAuth } from "@workos-inc/authkit-nextjs/components";
-import { Button } from "@/components/ui/button";
+import { buttonVariants } from "@/components/ui/button";
 import { AccountMenu } from "./account-menu";
+import { SignInLink } from "./sign-in-link";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -89,9 +90,9 @@ export function SiteHeader() {
           </DropdownMenu>
           <AccountMenu />
           {loading || user ? null : (
-            <Button asChild size="sm">
-              <Link href="/login">Sign in</Link>
-            </Button>
+            <SignInLink className={buttonVariants({ size: "sm" })}>
+              Sign in
+            </SignInLink>
           )}
         </div>
       </div>

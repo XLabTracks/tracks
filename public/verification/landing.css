@@ -89,11 +89,11 @@ section.band .intro { max-width: 62ch; margin-top: 12px; color: var(--muted-fore
   min-width: 0;
   border: var(--hairline) solid var(--border);
   border-radius: var(--radius);
-  /* A quiet vignette lifted toward the brand: on the night ground it reads as
-     sky-glow behind the hub, on paper as the faintest rose wash. The web's own
-     rings do the rest. */
+  /* A quiet neutral vignette: on the night ground it reads as sky-glow
+     behind the hub, on paper as the faintest lift. The web's own rings do
+     the rest. */
   background: radial-gradient(circle at 50% 47%,
-    color-mix(in srgb, var(--brand-ink) 7%, var(--background)),
+    color-mix(in srgb, var(--foreground) 5%, var(--background)),
     var(--background) 68%);
   overflow: hidden;
 }
@@ -177,14 +177,11 @@ section.band .intro { max-width: 62ch; margin-top: 12px; color: var(--muted-fore
 }
 .sky.focusing .edge:not(.hot) { opacity: .16; }
 
-/* The hub: the brand body the arms grow from. Decoration — no data, no
-   pointer, hidden from the tree. The disc's fill is the radialGradient the
-   markup defines; these stops shade it off-centre so it reads as a lit
-   sphere, the maroon in all three roles: highlight, body, terminator. */
-.sky .hub-g0 { stop-color: color-mix(in srgb, var(--primary) 58%, #fff); }
-.sky .hub-g1 { stop-color: var(--primary); }
-.sky .hub-g2 { stop-color: color-mix(in srgb, var(--primary) 55%, #000); }
-.sky .hub-halo { fill: color-mix(in srgb, var(--brand-ink) 9%, transparent); }
+/* The hub: the flat pale disc the arms grow from — the reference's moon.
+   Decoration — no data, no pointer, hidden from the tree, and no hue: on
+   the night ground it is the one near-white body, on paper the one near-ink
+   one. */
+.sky .hub-halo { fill: color-mix(in srgb, var(--foreground) 8%, transparent); }
 @media (prefers-reduced-motion: no-preference) {
   :root[data-theme='dark'] .sky .hub-halo { animation: hub-breathe 7s ease-in-out infinite alternate; }
 }
@@ -192,9 +189,10 @@ section.band .intro { max-width: 62ch; margin-top: 12px; color: var(--muted-fore
   from { opacity: .55; }
   to { opacity: 1; }
 }
-.sky .hub-ring { fill: none; stroke: color-mix(in srgb, var(--brand-ink) 35%, transparent); stroke-width: 1.5; }
+.sky .hub-ring { fill: none; stroke: color-mix(in srgb, var(--foreground) 30%, transparent); stroke-width: 1.5; }
 .sky .hub-disc {
-  filter: drop-shadow(0 0 calc(18px * var(--glow)) color-mix(in srgb, var(--brand-ink) 60%, transparent));
+  fill: var(--foreground);
+  filter: drop-shadow(0 0 calc(22px * var(--glow)) color-mix(in srgb, var(--foreground) 55%, transparent));
 }
 
 .sky .node { cursor: pointer; transition: opacity .25s ease; }
@@ -207,8 +205,11 @@ section.band .intro { max-width: 62ch; margin-top: 12px; color: var(--muted-fore
    the fill would change which ink the numeral needs. */
 .sky .node .node-core {
   fill: var(--sel);
-  stroke: color-mix(in srgb, var(--sel) 35%, var(--background));
-  stroke-width: 3;
+  /* White, as the reference rims its discs — which is also what the column
+     layout's day theme had (--card resolved to white there). On the night
+     ground it is the rim that makes each star read as a token. */
+  stroke: #fff;
+  stroke-width: 2.5;
   filter: drop-shadow(0 0 calc(10px * var(--glow)) color-mix(in srgb, var(--sel) 55%, transparent));
   transition: stroke .15s ease, stroke-width .15s ease;
 }
@@ -275,37 +276,100 @@ section.band .intro { max-width: 62ch; margin-top: 12px; color: var(--muted-fore
 
 /* Detail panel: the graph shows shape, the panel carries the words. Hovering
    a star fills it; clicking pins it so the text can be read without keeping
-   the pointer still. */
+   the pointer still.
+
+   The setting is editorial, not a widget: hierarchy is size, colour and
+   space — an uppercase eyebrow with its accent dash, a display-size title,
+   one muted meta line (never the module's name twice), then the ladder as a
+   ruled data column with its unit numbers hanging in the module's colour.
+   One accent per state: the hue line on the panel's left edge, which is the
+   selection's colour and vanishes with it (the --sel fallback is
+   transparent). */
 .sky-panel {
-  padding: 18px 20px;
+  position: relative;
+  padding: 26px 30px;
   border: var(--hairline) solid var(--border);
   border-radius: var(--radius);
   background: var(--card);
   min-height: 168px;
+  overflow: hidden;
+}
+.sky-panel::before {
+  content: '';
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 3px;
+  background: var(--sel, transparent);
 }
 @media (min-width: 860px) {
-  .sky-panel { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr); gap: 12px 32px; align-items: start; }
+  .sky-panel { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr); gap: 0 48px; align-items: start; }
   .sky-panel .p-mod, .sky-panel h3, .sky-panel .p-meta, .sky-panel .p-desc { grid-column: 1; }
-  .sky-panel .p-rungs { grid-column: 2; grid-row: 1 / span 5; margin-top: 2px; }
+  .sky-panel .p-sec { grid-column: 2; grid-row: 1; }
+  .sky-panel .p-rungs { grid-column: 2; grid-row: 2 / span 4; }
   .sky-panel .p-hint:first-child { grid-column: 1; }
 }
-.sky-panel .p-mod { font-family: var(--mono); font-size: var(--fs-xs); color: var(--sel, var(--muted-foreground)); }
-.sky-panel h3 { font-size: var(--fs-xl); margin-top: 8px; }
-.sky-panel .p-meta {
+.sky-panel .p-mod {
   display: flex;
-  flex-wrap: wrap;
-  gap: 4px 14px;
-  margin-top: 8px;
+  align-items: center;
+  gap: 10px;
   font-family: var(--mono);
   font-size: var(--fs-2xs);
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--sel-text, var(--muted-foreground));
+}
+.sky-panel .p-mod::before {
+  content: '';
+  width: 26px;
+  height: 2px;
+  background: var(--sel, var(--border));
+}
+.sky-panel h3 {
+  margin-top: 14px;
+  font-family: var(--display);
+  font-size: var(--fs-2xl);
+  line-height: 1.2;
+  text-wrap: balance;
+}
+.sky-panel .p-meta {
+  margin-top: 10px;
+  font-family: var(--mono);
+  font-size: var(--fs-2xs);
+  letter-spacing: .06em;
   color: var(--muted-foreground);
 }
-.sky-panel .p-desc { margin-top: 12px; font-size: var(--fs-md); line-height: 1.6; color: var(--muted-foreground); }
-.sky-panel .p-rungs { margin-top: 14px; list-style: none; display: grid; gap: 8px; }
-.sky-panel .p-rungs li { display: grid; grid-template-columns: 44px 1fr; gap: 10px; font-size: var(--fs-sm); line-height: 1.5; }
-.sky-panel .p-rungs .u { font-family: var(--mono); font-size: var(--fs-2xs); color: var(--brand-ink); padding-top: 2px; }
+.sky-panel .p-desc { margin-top: 18px; font-size: var(--fs-md); line-height: 1.65; color: var(--muted-foreground); }
+/* The ladder is a labelled data column: micro-label on top, then rows ruled
+   by hairlines, the unit number hanging in the module's colour. Rhythm comes
+   from one padding, not per-row margins. */
+.sky-panel .p-sec {
+  margin-top: 24px;
+  font-family: var(--mono);
+  font-size: var(--fs-2xs);
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--muted-foreground);
+}
+@media (min-width: 860px) { .sky-panel .p-sec { margin-top: 0; } }
+.sky-panel .p-rungs { margin-top: 6px; list-style: none; }
+.sky-panel .p-rungs li {
+  display: grid;
+  grid-template-columns: 44px 1fr;
+  gap: 12px;
+  padding: 10px 0;
+  font-size: var(--fs-sm);
+  line-height: 1.55;
+}
+.sky-panel .p-rungs li + li { border-top: var(--hairline) solid var(--border); }
+.sky-panel .p-rungs .u {
+  font-family: var(--mono);
+  font-size: var(--fs-2xs);
+  padding-top: 2px;
+  color: var(--sel-text, var(--brand-ink));
+}
 .sky-panel .p-rungs .a { color: var(--muted-foreground); }
 .sky-panel .p-hint { font-size: var(--fs-sm); line-height: 1.6; color: var(--muted-foreground); }
+.sky-panel .p-hint + .p-hint { margin-top: 12px; }
 
 /* A plaque, not coloured letters. Five hues squeezed to a text-contrast floor
    land in one lightness band and stop being tellable apart; as a fill each one

@@ -13,6 +13,7 @@ import {
   itemTitleOf,
 } from "@/lib/content";
 import { getCurrentUser } from "@/lib/auth";
+import { loginHref } from "@/lib/login-href";
 import { PREREQUISITES_ENFORCED } from "@/lib/content/prerequisites";
 import { getLastViewedContentId, getTrackCompletionSet } from "@/lib/progress";
 import { Breadcrumbs } from "@/components/layout/breadcrumbs";
@@ -121,7 +122,7 @@ export default async function TrackOverviewPage({
         </Card>
       ) : (
         <p className="text-muted-foreground mt-4 text-sm">
-          <Link href="/login" className="underline">
+          <Link href={loginHref(`/tracks/${track.slug}`)} className="underline">
             Sign in
           </Link>{" "}
           to track your progress and save your writing.

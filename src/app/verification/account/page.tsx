@@ -3,6 +3,8 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 
 import { getCurrentUser } from "@/lib/auth";
+import { loginHref } from "@/lib/login-href";
+import { ProfileNameForm } from "@/app/account/profile-name-form";
 import { getDb } from "@/lib/db";
 import { getTrackProgress } from "@/lib/progress";
 import {
@@ -27,16 +29,18 @@ export const metadata: Metadata = { title: "Your account — Verification" };
  * the chrome from the pathname. A cabinet served from /account could only ever
  * wear the app's.
  *
- * Identity stays shared and stays at /account: the name and the email are the
- * account, not the course, and duplicating that form per track would give a
- * learner two places to change one thing.
+ * Identity is still one thing. The name form and the email block below are
+ * the same component and the same server action as /account's, so there is
+ * one form changing one field — this page is a second door to it, not a
+ * second copy, and it has to be here because on course routes the account
+ * menu's only entry is this cabinet.
  */
 export default async function VerificationAccountPage() {
   // getCurrentUser, not requireUser: requireUser refreshes the session inside
   // the render and a page render may not write cookies — signed out, that is a
   // 500 rather than a sign-in prompt.
   const user = await getCurrentUser();
-  if (!user) redirect("/login");
+  if (!user) redirect(loginHref("/verification/account"));
 
   const progress = await getTrackProgress(user.id, "verification");
 
@@ -78,13 +82,25 @@ export default async function VerificationAccountPage() {
     <main className="mx-auto w-full max-w-3xl px-4 py-10 lg:px-6">
       <h1 className="text-2xl font-bold tracking-tight">Your account</h1>
       <p className="text-muted-foreground mt-2 text-sm">
-        Everything you have done in the Verification course. Your name and email
-        are the same everywhere you sign in —{" "}
-        <Link className="underline underline-offset-4" href="/account">
-          change those on your account page
-        </Link>
-        .
+        Your name and email — the same everywhere you sign in — and everything
+        you have done in the Verification course.
       </p>
+
+      <section className="mt-10">
+        <h2 className="text-lg font-semibold tracking-tight">Name and email</h2>
+        <div className="mt-4">
+          <ProfileNameForm initialName={user.name ?? ""} />
+        </div>
+        <div className="mt-6 space-y-1">
+          <h3 className="text-sm font-semibold tracking-tight">Email</h3>
+          <p className="text-sm">{user.email}</p>
+          <p className="text-muted-foreground text-sm">
+            This is how you sign in, and it is managed by your identity
+            provider rather than here. To change it, sign in with the address
+            you want to use — progress follows the account, not the browser.
+          </p>
+        </div>
+      </section>
 
       <section className="mt-10">
         <h2 className="text-lg font-semibold tracking-tight">Where you are</h2>

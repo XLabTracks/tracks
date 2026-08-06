@@ -2,9 +2,11 @@ import type { MDXComponents } from "mdx/types";
 import { Video } from "./video";
 import { ArxivPaper } from "./arxiv-paper";
 import { Callout } from "./callout";
+import { Fold } from "./fold";
 import { Demo } from "./demo";
 import { Exercise } from "./exercise";
 import { ExerciseSequence } from "./exercise-sequence";
+import { Cite } from "./cite";
 import { Footnote } from "./footnote";
 import { MdxLink } from "./mdx-link";
 import { NextSteps } from "./next-steps";
@@ -22,7 +24,7 @@ import { Src, SourceQuote } from "./reader/source-quote";
 
 // Components available by name inside every lesson `.mdx` body. Authors drop
 // <Video/>, <Demo/>, <Exercise/>, <ExerciseSequence/>, <Callout/>,
-// <ArxivPaper/>, <Footnote/>, <Term/>, <SiteQuote/>, <PopUp/>,
+// <ArxivPaper/>, <Cite/>, <Footnote/>, <Term/>, <SiteQuote/>, <PopUp/>,
 // <SourceCredit/>, <MemoDesk/>, <VerificationExercise/>, <Check/>, <GapFill/>, <SourceQuote/>,
 // <Src/>, <NextSteps/>, <CapstoneBank/> and <CapstoneSignup/> directly into prose.
 // Markdown links render through MdxLink, which routes known Substack /
@@ -32,9 +34,11 @@ export const mdxComponents: MDXComponents = {
   Video,
   ArxivPaper,
   Callout,
+  Fold,
   Demo,
   Exercise,
   ExerciseSequence,
+  Cite,
   Footnote,
   MemoDesk,
   NextSteps,

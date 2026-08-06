@@ -14,13 +14,13 @@ import { describe, expect, it } from "vitest";
 import { lessons, modules } from "@/content/curriculum.data";
 import * as guide from "@/lib/verification/data/facilitator-guide";
 
-/** Every `<a href="/…">text</a>` in the guide's authored HTML. */
-function internalLinks(): { href: string; text: string }[] {
+/** Every `<a href="…">text</a>` in the guide's authored HTML. */
+function allLinks(): { href: string; text: string }[] {
   const out: { href: string; text: string }[] = [];
   const seen = new Set<unknown>();
   const walk = (v: unknown) => {
     if (typeof v === "string") {
-      for (const m of v.matchAll(/<a\s+href="(\/[^"]*)"[^>]*>(.*?)<\/a>/g)) {
+      for (const m of v.matchAll(/<a\s+href="([^"]*)"[^>]*>(.*?)<\/a>/g)) {
         out.push({ href: m[1], text: m[2].replace(/<[^>]+>/g, "").trim() });
       }
       return;
@@ -33,11 +33,16 @@ function internalLinks(): { href: string; text: string }[] {
   return out;
 }
 
-const links = internalLinks();
+const everyLink = allLinks();
+// Since the solo timeline game left the course (its unit 0.2.0 was deleted
+// outright) the guide's course references are all external, so the in-app
+// set may legitimately be empty — the canary below asserts on all anchors,
+// which is what actually guards the extractor.
+const links = everyLink.filter(({ href }) => href.startsWith("/"));
 
 describe("facilitator guide internal links", () => {
-  it("has some", () => {
-    expect(links.length).toBeGreaterThan(0);
+  it("the link extractor finds the guide's anchors at all", () => {
+    expect(everyLink.length).toBeGreaterThan(0);
   });
 
   it("every /tracks/ href resolves to a lesson in the graph", () => {

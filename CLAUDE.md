@@ -54,7 +54,7 @@ step-by-step guide for adding content (its rules are enforced by
   Verification module and unit list. `-- --check` fails when they have drifted.
 - `npm run verification:memos` — regenerate `public/verification/data/memos.js`
   from `src/content/verification/memos.ts`, the single source of the course's
-  fifteen written outputs. `-- --check` fails when they have drifted.
+  fourteen written outputs. `-- --check` fails when they have drifted.
 - `npm run verification:capstones` — rebuild the Verification capstone bank
   from `verification-capstones/*.md` into
   `public/verification/data/capstone-bank.js`. `-- --check` verifies the two
@@ -391,7 +391,7 @@ add must reduce the duplication, never widen it.
   scripts are not idempotent, so a second run doubles every listener.
   Converting a page to components means deleting entries from that list, and
   the list emptying is what finishing the job looks like.
-- **`src/content/verification/memos.ts` is the fifteen written outputs.**
+- **`src/content/verification/memos.ts` is the fourteen written outputs.**
   Same generator shape as the course: `npm run verification:memos` writes
   `public/verification/data/memos.js` for the standalone memo desk, and
   `-- --check` fails on drift — never hand-edit the output. Each slot names

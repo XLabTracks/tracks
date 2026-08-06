@@ -15,6 +15,7 @@ import {
 } from "@/lib/content";
 import { isAccessLocked } from "@/lib/content/prerequisites";
 import { getCurrentUser } from "@/lib/auth";
+import { loginHref } from "@/lib/login-href";
 import {
   getPrerequisiteStatus,
   getTrackCompletionSet,
@@ -168,7 +169,13 @@ async function LessonItemPage({
           <LessonCompleteButton lessonId={lesson.id} initialCompleted={completed} />
         ) : (
           <Button asChild variant="outline">
-            <Link href="/login">Sign in to track progress</Link>
+            <Link
+              href={loginHref(
+                `/tracks/${track.slug}/${module.slug}/${lesson.slug}`,
+              )}
+            >
+              Sign in to track progress
+            </Link>
           </Button>
         )}
       </div>
@@ -300,7 +307,13 @@ async function PaperItemPage({
           />
         ) : (
           <Button asChild variant="outline">
-            <Link href="/login">Sign in to track progress</Link>
+            <Link
+              href={loginHref(
+                `/tracks/${track.slug}/${module.slug}/${paper.slug}`,
+              )}
+            >
+              Sign in to track progress
+            </Link>
           </Button>
         )}
       </div>

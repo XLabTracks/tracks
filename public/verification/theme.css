@@ -40,6 +40,12 @@
   --muted-foreground: #5f5854;
   --accent: #f2efed;
   --border: #e4dedb;
+  /* The learner's own marker (::highlight(vt-hl)): the periwinkle from the
+     brand's palette board (red · blue · wine · blush) — the one hue in that
+     family the maroons don't already own, so a mark never reads as course
+     chrome. Day ink clears ~9:1 on it. Each theme re-solves the pair. */
+  --hl: #8eb9fe;
+  --hl-ink: var(--foreground);
   --ring: #800000;
 
   --mod-0: #970a12;  /* Chinese Red */
@@ -159,6 +165,10 @@
   --accent: #2e2827;
   --border: #332c2a;
   --ring: #eda3a3;
+  /* The day marker's periwinkle, re-solved for the dark ground: same hue,
+     lightness dropped until the night ink clears ≈8.5:1 on it. */
+  --hl: #33436b;
+  --hl-ink: var(--foreground);
 
   /* Fills and their ink are the day values: a plaque's legibility is set by
      the plaque, not by the page behind it. Only the type variant re-solves. */
@@ -221,6 +231,10 @@
   --accent: #1a1a1a;
   --border: #ffffff;
   --ring: #ffe600;
+  /* The marker is the mode's own yellow with its own ink — the selected-state
+     pair, so a highlight reads like everything else pressed in this mode. */
+  --hl: var(--primary);
+  --hl-ink: var(--primary-foreground);
 
   /* No hue at all: every module reads as foreground, and the number beside it
      is the whole encoding. */
@@ -282,6 +296,15 @@
 /* A long word at 72px is wider than a 320px screen, and a heading that cannot
    break is a horizontal scrollbar. Breaking is the lesser harm. */
 :root[data-theme='contrast'] { overflow-wrap: break-word; }
+
+/* The learner's marker, painted by highlight.js through the Custom Highlight
+   API — a pseudo, not an element, so this is the one place its colours can
+   be said. Both values re-solve per theme above; a browser without the API
+   never registers the name and the rule is inert. */
+::highlight(vt-hl) {
+  background-color: var(--hl);
+  color: var(--hl-ink);
+}
 
 /* 1.4.10, the rest of it: doubling the type does not move a layout, but it
    does overrun the two things that were told never to give way — a line held
@@ -497,6 +520,22 @@ button, [role='button'], [role='radio'], [role='tab'], .chip, .nav a, .brand,
    horizontal scroll — which is what happens between the mobile breakpoint and
    about 1100px, where there is no room for every link but the bar is still
    one row. */
+/* No scrollbars anywhere — the author's call, at the root so it holds for
+   the page and for every scrolling box inside it. Scrolling still works;
+   only the painted bar is gone. Lives here as well as in the app's
+   globals.css because this stylesheet is what a lifted copy of the course
+   would carry.
+
+   Trap: neither declaration is a fallback for the other — Firefox reads
+   scrollbar-width, WebKit and Chromium only the pseudo-element, and that
+   one must be display:none rather than width:0. */
+:root,
+* {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+*::-webkit-scrollbar { display: none; }
+
 .nav {
   flex: 1;
   min-width: 0;
@@ -506,9 +545,7 @@ button, [role='button'], [role='radio'], [role='tab'], .chip, .nav a, .brand,
   gap: 14px;
   font-size: var(--fs-md);
   overflow-x: auto;
-  scrollbar-width: none;
 }
-.nav::-webkit-scrollbar { display: none; }
 .nav a { white-space: nowrap; }
 .nav a {
   position: relative;
@@ -567,6 +604,15 @@ button, [role='button'], [role='radio'], [role='tab'], .chip, .nav a, .brand,
 .theme-switch {
   display: inline-flex;
   align-items: center;
+  /* The switch shares the account button's width floor, and in high contrast
+     the floor (sized for that button's grown label) exceeds the three
+     segments' content. Space-between feeds the slack into the two
+     inter-segment gaps so the end segments stay against the padding on both
+     sides — flex-start pools all of it after the selected segment, a stretch
+     of dead ground inside the border. `gap` is the floor the gaps never drop
+     below; at the default size content meets the width floor and nothing
+     moves. */
+  justify-content: space-between;
   gap: 2px;
   padding: 2px;
   border: var(--hairline) solid var(--border);
@@ -608,6 +654,13 @@ button, [role='button'], [role='radio'], [role='tab'], .chip, .nav a, .brand,
    matches the ink the eye compares, not the box the CSS sets — and the sun is
    the one that has to survive the filled ground of the selected state. */
 .theme-switch button[data-theme='light'] svg { width: 13.5px; height: 13.5px; }
+/* High contrast re-solves the segments to 44px squares, and a 15px icon with
+   a sub-pixel stroke floats in one as a grey speck — thin white lines
+   anti-alias below the mode's own bar. The ink scales with the box: larger
+   icons, a stroke thick enough to rasterise white, and the sun keeps its
+   optical discount. */
+:root[data-theme='contrast'] .theme-switch svg { width: 22px; height: 22px; stroke-width: 2.4; }
+:root[data-theme='contrast'] .theme-switch button[data-theme='light'] svg { width: 20px; height: 20px; }
 
 
 /* ---------- buttons ---------- */
@@ -700,10 +753,8 @@ button, [role='button'], [role='radio'], [role='tab'], .chip, .nav a, .brand,
     flex: none;
     width: 100%;
     overflow-x: auto;
-    scrollbar-width: none;
     padding-bottom: 2px;
   }
-  .nav::-webkit-scrollbar { display: none; }
   .nav a { white-space: nowrap; padding: 4px 8px; }
   .header-right { margin-left: auto; }
 }

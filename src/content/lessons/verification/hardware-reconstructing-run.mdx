@@ -12,14 +12,14 @@ Runtime: 35 to 45 minutes Status: Advanced extension Hard idea: Evidence that a 
 
 Cover:
 
-- training records;
-- checkpoints or weight snapshots;
-- authenticated transcripts;
-- sampled re-execution;
-- probabilistic recomputation;
-- dedicated verification clusters;
-- proof-of-learning or proof-of-training approaches;
-- confidentiality and spoofing risks.
+- Training records;
+- Checkpoints or weight snapshots;
+- Authenticated transcripts;
+- Sampled re-execution;
+- Probabilistic recomputation;
+- Dedicated verification clusters;
+- Proof-of-learning or proof-of-training approaches;
+- Confidentiality and spoofing risks.
 
 #### Anchor proposal
 
@@ -29,9 +29,9 @@ Shavit’s compute-monitoring proposal decomposes verification into on-chip weig
 
 Learners should separate:
 
-- declared-run correctness: the submitted model or checkpoint plausibly arose from the declared process;
-- declared-run completeness: all relevant activity associated with the declared run has been shown;
-- fleet completeness: no separate prohibited run occurred on other hardware.
+- Declared-run correctness: the submitted model or checkpoint plausibly arose from the declared process;
+- Declared-run completeness: all relevant activity associated with the declared run has been shown;
+- Fleet completeness: no separate prohibited run occurred on other hardware.
 
 Proof-of-learning and recomputation primarily address the first, with varying assurance. They do not automatically establish the third.
 
@@ -41,21 +41,21 @@ Give learners a declared training transcript and a limited verification-compute 
 
 They choose among:
 
-- re-running the full job;
-- sampling random segments;
-- checking checkpoints;
-- validating code and data commitments;
-- checking physical compute totals;
-- comparing telemetry and transcript timing;
-- inspecting a random sample of chips.
+- Re-running the full job;
+- Sampling random segments;
+- Checking checkpoints;
+- Validating code and data commitments;
+- Checking physical compute totals;
+- Comparing telemetry and transcript timing;
+- Inspecting a random sample of chips.
 
 For each choice, they estimate:
 
-- cost;
-- confidentiality exposure;
-- spoofing opportunity;
-- detection probability or qualitative assurance;
-- which claim remains untested.
+- Cost;
+- Confidentiality exposure;
+- Spoofing opportunity;
+- Detection probability or qualitative assurance;
+- Which claim remains untested.
 
 The answer key should explain why a cheap sample can provide useful probabilistic evidence while leaving deliberate transcript construction, precomputed outputs, hidden activity, and unmonitored hardware as distinct problems.
 
@@ -63,8 +63,8 @@ The answer key should explain why a cheap sample can provide useful probabilisti
 
 A brief transfer card can show that attestation, confidential computing, and controlled verification hardware may also help verify model evaluations or inference. Deep treatment should remain outside the 2.1 core:
 
-- the confidentiality and evaluator-access problem fits naturally in 2.0;
-- model-evaluation validity belongs with the evaluation track or linked material;
-- large-scale inference introduces replication, model-substitution, and sensitive-user-data problems that would overload the hardware week.
+- The confidentiality and evaluator-access problem fits naturally in 2.0;
+- Model-evaluation validity belongs with the evaluation track or linked material;
+- Large-scale inference introduces replication, model-substitution, and sensitive-user-data problems that would overload the hardware week.
 
 The core should acknowledge these applications without pretending that training verification covers them.

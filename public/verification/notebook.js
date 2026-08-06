@@ -88,6 +88,16 @@ window.VTNotebook = (function () {
     return e;
   }
 
+  /* True while the document is showing a page outside the course. This
+     script outlives the course chrome across the app's client-side
+     navigations, so the chrome marks <html> with vt-off-course on the way
+     out and the tools stand down: notebook.css hides them, and the handlers
+     below check here before offering anything. Absent by default, so pages
+     that never carry the app chrome (the static lift) are always on. */
+  function offCourse() {
+    return document.documentElement.classList.contains('vt-off-course');
+  }
+
   /* ---------- blocks ---------- */
 
   function pushBlock(block) {
@@ -632,6 +642,7 @@ window.VTNotebook = (function () {
       // Same trap as vocab.js: mouseup precedes click, so a press on this
       // button must not rebuild it out from under its own click handler.
       if (ev.target && ev.target.closest && ev.target.closest('.nb-capture')) return;
+      if (offCourse()) return;
       setTimeout(function () {
         const sel = document.getSelection();
         const text = sel ? String(sel).trim() : '';

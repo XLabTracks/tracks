@@ -94,9 +94,13 @@
   position: relative;
   display: flex;
   flex-direction: column;
-  flex: 1 1 160px;
-  min-width: 150px;
-  max-width: 210px;
+  /* The corridor is text units, not px: the button inherits the body size,
+     so at day type these are the old 160/150/210 — and when high contrast
+     doubles the type the frame doubles with it instead of letting
+     "decisionmakers" paint through its own border. */
+  flex: 1 1 10em;
+  min-width: 9.5em;
+  max-width: 13.5em;
   padding: 10px 12px;
   border: var(--hairline) solid var(--border);
   border-radius: var(--radius-sm);
@@ -109,7 +113,11 @@
   transition: border-color .16s ease, background .16s ease, transform .16s ease;
 }
 .node:hover { transform: translateY(-2px); border-color: var(--muted-foreground); }
-.node .n-label { display: block; font-size: var(--fs-sm); line-height: 1.35; color: var(--muted-foreground); }
+/* `anywhere`, not break-word: only anywhere shrinks the word's min-content
+   contribution, and it is min-content that a flex item is sized by — with
+   break-word the box is laid out to the unbroken word's width first and the
+   max-width cap turns that into paint outside the frame. */
+.node .n-label { display: block; font-size: var(--fs-sm); line-height: 1.35; color: var(--muted-foreground); overflow-wrap: anywhere; }
 .node .n-meta {
   display: flex;
   align-items: center;
@@ -218,3 +226,14 @@
   font-size: var(--fs-xs);
   color: var(--brand-ink);
 }
+
+/* High contrast flex-centres every button for its 44px target rule, which
+   centred one-line labels and left a wrapped one ragged beside them — a
+   shrink-to-fit block sits centred while its own text stays left. Centre
+   the text to match, and drop the meter: its track paints in --muted, which
+   this mode resolves to the ground, so only the fraction was ever visible —
+   and the fraction is the encoding this mode runs on anyway. */
+:root[data-theme='contrast'] .node { align-items: center; }
+:root[data-theme='contrast'] .node .n-label { text-align: center; }
+:root[data-theme='contrast'] .node .n-fill { display: none; }
+:root[data-theme='contrast'] .node .n-meta { justify-content: center; }

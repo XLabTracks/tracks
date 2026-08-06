@@ -12,9 +12,9 @@ You will develop these skills through working through a red-team/blue-team scena
 
 #### Anchor 1: An insider changes the format, not the information
 
-In 2024, the United States charged Google engineer Linwei Ding with stealing confidential information about Google’s AI computing infrastructure. Prosecutors alleged that Ding copied information from Google source files into Apple Notes on a company laptop, converted the notes into PDFs, and uploaded them to a personal cloud account. This allegedly allowed the material to pass through a channel that Google’s data-loss-prevention system did not block.
+In 2024, the United States [charged Google engineer Linwei Ding](https://www.justice.gov/archives/opa/pr/chinese-national-residing-california-arrested-theft-artificial-intelligence-related-trade) with stealing confidential information about Google’s AI computing infrastructure. Prosecutors alleged that Ding copied information from Google source files into Apple Notes on a company laptop, converted the notes into PDFs, and uploaded them to a personal cloud account. This allegedly allowed the material to pass through a channel that Google’s data-loss-prevention system did not block.
 
-The stolen material concerned systems such as tensor processing units, graphics processing units, networking, and cluster-management software. It was not a set of model weights. Ding was convicted on all fourteen charged counts in January 2026.
+The stolen material concerned systems such as tensor processing units, graphics processing units, networking, and cluster-management software. It was not a set of model weights. Ding was [convicted on all fourteen charged counts](https://www.justice.gov/opa/pr/former-google-engineer-found-guilty-economic-espionage-and-theft-confidential-ai-technology) in January 2026.
 
 The transferable lesson is simple:
 
@@ -26,9 +26,9 @@ Legitimate access and a simple transformation were enough to bypass an automated
 
 Export controls traditionally focus on the transfer of physical chips and related technology. But an actor may be able to access advanced chips remotely through a cloud provider, reseller, or intermediary.
 
-In 2024, Reuters reported that Chinese organizations had used procurement processes to seek access to restricted U.S. computing resources through cloud services and intermediaries. At that time, remotely accessing chips through the cloud was not treated in the same way as physically importing the chips.
+In 2024, [Reuters reported](https://www.reuters.com/technology/chinese-entities-turn-amazon-cloud-its-rivals-access-high-end-us-chips-ai-2024-08-23/) that Chinese organizations had used procurement processes to seek access to restricted U.S. computing resources through cloud services and intermediaries. At that time, remotely accessing chips through the cloud was not treated in the same way as physically importing the chips.
 
-U.S. policymakers considered broader customer-identification and reporting requirements for infrastructure-as-a-service providers. However, the Commerce Department withdrew its proposed “Preventing Access to U.S. IaaS Products by Malicious Cyber Actors” rule in December 2025. A separate 2025 policy framework that would have imposed broader controls on third-country compute and model-weight transfers was also rescinded.
+U.S. policymakers considered broader customer-identification and reporting requirements for infrastructure-as-a-service providers. However, the Commerce Department [withdrew](https://www.reginfo.gov/public/do/eAgendaViewRule?pubId=202510&RIN=0694-AJ35) its proposed [“Preventing Access to U.S. IaaS Products by Malicious Cyber Actors”](https://www.federalregister.gov/documents/2024/01/29/2024-01580/taking-additional-steps-to-address-the-national-emergency-with-respect-to-significant-malicious) rule in December 2025. A separate [2025 policy framework](https://www.federalregister.gov/documents/2025/01/15/2025-00636/framework-for-artificial-intelligence-diffusion) that would have imposed broader controls on third-country compute and model-weight transfers was also [rescinded](https://www.bis.gov/press-release/department-commerce-announces-rescission-biden-era-artificial-intelligence-diffusion-rule-strengthens).
 
 The transferable lesson is:
 
@@ -94,10 +94,10 @@ Lattice would receive or reconstruct the weights. It would then continue the pau
 
 To reduce scrutiny, Lattice could:
 
-- divide the workload among related accounts;
-- use resellers and subcontractors;
-- describe the activity as inference, evaluation, or safety research;
-- keep each account below a simple reporting threshold.
+- Divide the workload among related accounts;
+- Use resellers and subcontractors;
+- Describe the activity as inference, evaluation, or safety research;
+- Keep each account below a simple reporting threshold.
 
 The operation does not make the training invisible. It makes each piece look inconclusive.
 
@@ -192,19 +192,19 @@ The verifier should not yet declare that Sable violated the pause. It should iss
 
 Northstar should preserve:
 
-- weight-access and privilege logs;
-- maintenance and evaluation records;
-- endpoint and storage events;
-- internal transfers and unusual format conversions;
-- records from systems that could have handled the weights.
+- Weight-access and privilege logs;
+- Maintenance and evaluation records;
+- Endpoint and storage events;
+- Internal transfers and unusual format conversions;
+- Records from systems that could have handled the weights.
 
 The cloud reseller and infrastructure operator should preserve:
 
-- account creation and beneficial-ownership records;
-- payments and administrative logins;
-- accelerator reservations and job timing;
-- storage, checkpointing, and network activity;
-- links among the subcontractor accounts.
+- Account creation and beneficial-ownership records;
+- Payments and administrative logins;
+- Accelerator reservations and job timing;
+- Storage, checkpointing, and network activity;
+- Links among the subcontractor accounts.
 
 Government investigators should preserve relevant corporate, financial, procurement, travel, and communications evidence where legally authorized.
 
@@ -278,28 +278,28 @@ The verifier should issue a preliminary finding of a credible suspected breach o
 
 It currently knows that:
 
-- a Northstar engineer had a relationship with Lattice;
+- A Northstar engineer had a relationship with Lattice;
 - Lattice and related accounts obtained substantial compute;
-- the accounts ran synchronized workloads inconsistent with their simple declarations;
+- The accounts ran synchronized workloads inconsistent with their simple declarations;
 - Sable soon demonstrated a substantially improved Orion-like model.
 
 It reasonably suspects that Orion-4 material was transferred and used to continue prohibited frontier development.
 
 It does not yet know:
 
-- whether usable Orion-4 weights were transferred;
-- whether the full model was reconstructed;
-- whether the workload crossed the pause’s technical threshold;
-- whether Sable controlled the accounts;
-- whether Northstar leadership authorized or knowingly ignored the conduct.
+- Whether usable Orion-4 weights were transferred;
+- Whether the full model was reconstructed;
+- Whether the workload crossed the pause’s technical threshold;
+- Whether Sable controlled the accounts;
+- Whether Northstar leadership authorized or knowingly ignored the conduct.
 
 The inspection should prioritize:
 
-- identifying what the engineer accessed and transferred;
-- determining whether the cloud accounts formed one coordinated workload;
-- establishing Lattice’s beneficial ownership and relationship to Sable;
-- comparing the actual workload with its declared purpose;
-- examining whether Sable’s model is technically consistent with derivation from Orion-4.
+- Identifying what the engineer accessed and transferred;
+- Determining whether the cloud accounts formed one coordinated workload;
+- Establishing Lattice’s beneficial ownership and relationship to Sable;
+- Comparing the actual workload with its declared purpose;
+- Examining whether Sable’s model is technically consistent with derivation from Orion-4.
 
 Interim measures could include suspending the engineer’s access, preserving the cloud environment, and pausing related accounts. A broader shutdown would require stronger evidence or a specific emergency authority.
 
@@ -327,16 +327,16 @@ The blue team did not rely on one perfect detector. It preserved records, recons
 
 A strong red-team answer explains:
 
-- how the operation works;
-- why the actor would choose it;
-- what assumptions it requires;
-- where it is most likely to fail.
+- How the operation works;
+- Why the actor would choose it;
+- What assumptions it requires;
+- Where it is most likely to fail.
 
 A strong blue-team answer explains:
 
-- what each layer can observe;
-- what those observations do and do not prove;
-- how the evidence can be combined;
-- what action is justified before certainty is available.
+- What each layer can observe;
+- What those observations do and do not prove;
+- How the evidence can be combined;
+- What action is justified before certainty is available.
 
 The standard is not perfect evasion or perfect verification. It is a scenario specific enough to test—and a response honest enough to distinguish suspicion from proof.

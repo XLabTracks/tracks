@@ -51,7 +51,7 @@ export default function Page() {
 
             <h2>Elsewhere</h2>
             <p>
-              The work is the other introduction. The
+              The work is the other introduction. The{" "}
               <a href="/verification/about">about page</a> says what the course covers and how
               it is put together, and the <a href="/verification/memo-desk">memo desk</a> shows
               what it asks people to produce.

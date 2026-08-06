@@ -79,7 +79,7 @@
       if (!rows.length) return '';
       return (
         '<div class="slot-group" style="--mod:var(--mod-' + mod + ')">' +
-        '<p>M' + mod + ' · ' + esc(MODULES[mod] || '') + '</p><ul>' +
+        '<p><b>M' + mod + '</b> ' + esc(MODULES[mod] || '') + '</p><ul>' +
         rows.map(function (s) {
           return '<li><button type="button" class="slot-btn" data-id="' + s.id + '" aria-current="' +
             (s.id === current.id) + '">' +
@@ -103,7 +103,7 @@
   function renderBrief(s) {
     el('slotTitle').textContent = s.unit + ' — ' + s.title;
     el('slotMeta').innerHTML =
-      '<span>M' + s.module + ' · ' + esc(MODULES[s.module] || '') + '</span>' +
+      '<span><b>M' + s.module + '</b> ' + esc(MODULES[s.module] || '') + '</span>' +
       '<span class="status ' + s.status + '">' + STATUS_WORD[s.status] + '</span>' +
       (s.peerReviewed ? '<span>peer reviewed</span>' : '') +
       (s.optional ? '<span>optional</span>' : '');

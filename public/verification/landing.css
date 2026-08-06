@@ -169,14 +169,21 @@ section.band .intro { max-width: 62ch; margin-top: 12px; color: var(--muted-fore
 .sky.focusing .spoke:not(.hot) { opacity: .2; }
 
 .sky .edge { transition: stroke .25s ease, fill .25s ease, opacity .25s ease; }
+/* The cross edge is the beams' own outline stroked dashed, never filled —
+   same width, same waist; the dash carries the "another module" fact. Lit,
+   it keeps the dashes and takes a wash of the hue inside them. */
 .sky .edge.cross {
   fill: none;
-  stroke: color-mix(in srgb, var(--foreground) 22%, transparent);
-  stroke-width: 1.4;
-  stroke-dasharray: 2 6;
+  stroke: color-mix(in srgb, var(--foreground) 24%, transparent);
+  stroke-width: 1.2;
+  stroke-dasharray: 3 5;
   stroke-linecap: round;
 }
-.sky .edge.cross.hot { stroke: var(--sel); stroke-width: 2; opacity: 1; }
+.sky .edge.cross.hot {
+  stroke: var(--sel);
+  fill: color-mix(in srgb, var(--sel) 20%, transparent);
+  opacity: 1;
+}
 .sky .edge.beam {
   stroke: none;
   fill: color-mix(in srgb, var(--sel) 72%, var(--background));

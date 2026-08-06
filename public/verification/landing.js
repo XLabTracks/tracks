@@ -5,10 +5,10 @@
 
      beam    — a tapered spindle in the module's hue: one skill feeding
                another INSIDE its module. The solid line of the legend.
-     cross   — a thin dashed bow pulled toward the hub: a skill fed from
-               ANOTHER module. Most of the fifty edges are these, which is
-               why they stay a step fainter — fat beams for all fifty read
-               as a hairball.
+     cross   — the same waisted beam, bowed toward the hub and stroked as a
+               dashed outline instead of filled: a skill fed from ANOTHER
+               module. Most of the fifty edges are these, which is why they
+               stay a step fainter — fifty filled beams read as a hairball.
      spoke   — hub to each arm's innermost skills, and strand — the arc of
                ring that carries a module's stars at one band. Decoration:
                they say "belongs to module N / same band", which the hue and
@@ -110,20 +110,30 @@
      flanks; a control offset of 2·midW − endW puts the curve exactly at
      midW half-width at the midpoint (a quadratic's midpoint is
      (P0 + 2C + P2) / 4), which for midW < endW/2 lands the control past
-     the centreline and makes the flanks concave. The fill does the work;
-     no stroke has to fake a taper. Ends are flat, hidden under the discs. */
-  function beam(ax, ay, bx, by, endW, midW) {
-    var dx = bx - ax, dy = by - ay;
-    var len = Math.hypot(dx, dy) || 1;
-    var px = -dy / len, py = dx / len;
-    var mx = (ax + bx) / 2, my = (ay + by) / 2;
+     the centreline and makes the flanks concave. Ends are flat, hidden
+     under the discs.
+
+     The centreline may itself be a curve: cx/cy is its control point
+     (pass the midpoint for a straight beam). Flank offsets follow the
+     local normal — end normals from the tangents at each end, the waist
+     from the chord — which is what lets a cross edge bow toward the hub
+     and still wear the same waisted shape as the straight beams.
+
+     One path, two renderings: an in-module beam FILLS this outline, a
+     cross edge STROKES it dashed (landing.css) — same width, same shape,
+     different fact. */
+  function beam(ax, ay, bx, by, cx, cy, endW, midW) {
+    var nrm = function (dx, dy) { var l = Math.hypot(dx, dy) || 1; return [-dy / l, dx / l]; };
+    var na = nrm(cx - ax, cy - ay);
+    var nb = nrm(bx - cx, by - cy);
+    var nm = nrm(bx - ax, by - ay);
     var c = 2 * midW - endW;
-    return 'M ' + (ax + px * endW).toFixed(1) + ' ' + (ay + py * endW).toFixed(1) +
-      ' Q ' + (mx + px * c).toFixed(1) + ' ' + (my + py * c).toFixed(1) +
-      ' ' + (bx + px * endW).toFixed(1) + ' ' + (by + py * endW).toFixed(1) +
-      ' L ' + (bx - px * endW).toFixed(1) + ' ' + (by - py * endW).toFixed(1) +
-      ' Q ' + (mx - px * c).toFixed(1) + ' ' + (my - py * c).toFixed(1) +
-      ' ' + (ax - px * endW).toFixed(1) + ' ' + (ay - py * endW).toFixed(1) + ' Z';
+    return 'M ' + (ax + na[0] * endW).toFixed(1) + ' ' + (ay + na[1] * endW).toFixed(1) +
+      ' Q ' + (cx + nm[0] * c).toFixed(1) + ' ' + (cy + nm[1] * c).toFixed(1) +
+      ' ' + (bx + nb[0] * endW).toFixed(1) + ' ' + (by + nb[1] * endW).toFixed(1) +
+      ' L ' + (bx - nb[0] * endW).toFixed(1) + ' ' + (by - nb[1] * endW).toFixed(1) +
+      ' Q ' + (cx - nm[0] * c).toFixed(1) + ' ' + (cy - nm[1] * c).toFixed(1) +
+      ' ' + (ax - na[0] * endW).toFixed(1) + ' ' + (ay - na[1] * endW).toFixed(1) + ' Z';
   }
 
   /* ---------- the data's own shape: preset-independent ---------- */
@@ -241,7 +251,7 @@
         var root = polar(V.hubR - 8, p.a);
         spokeHtml += '<path class="spoke" data-id="' + esc(entry.n.id) + '" data-mod="' + mod +
           '" style="--sel:var(--mod-' + mod + ')" d="' +
-          beam(root.x, root.y, p.x, p.y, V.spokeEnd, V.spokeMid) + '"/>';
+          beam(root.x, root.y, p.x, p.y, (root.x + p.x) / 2, (root.y + p.y) / 2, V.spokeEnd, V.spokeMid) + '"/>';
       });
     });
 
@@ -255,15 +265,15 @@
       if (!a || !b) return;
       var sel = 'style="--sel:var(--mod-' + a.mod + ');--sel-ink:var(--mod-' + a.mod + '-ink);--sel-text:var(--mod-' + a.mod + '-text)"';
       if (a.mod !== b.mod) {
-        /* Bowed toward the hub, so the long crossings dive under the arms and
-           the middle of the web stays readable. */
-        var cx = ((a.x + b.x) / 2) * 0.55, cy = ((a.y + b.y) / 2) * 0.55;
-        crossHtml += '<path class="edge cross" id="e' + idx + '" ' + sel + ' d="M ' +
-          a.x.toFixed(1) + ' ' + a.y.toFixed(1) + ' Q ' + cx.toFixed(1) + ' ' + cy.toFixed(1) +
-          ' ' + b.x.toFixed(1) + ' ' + b.y.toFixed(1) + '"/>';
+        /* The same waisted beam as the in-module edges — same width, same
+           flare — but its centreline bows toward the hub, so the long
+           crossings dive under the arms, and it is stroked dashed rather
+           than filled: the dash is the "another module" fact. */
+        crossHtml += '<path class="edge cross" id="e' + idx + '" ' + sel + ' d="' +
+          beam(a.x, a.y, b.x, b.y, ((a.x + b.x) / 2) * 0.55, ((a.y + b.y) / 2) * 0.55, V.beamEnd, V.beamMid) + '"/>';
       } else {
         beamHtml += '<path class="edge beam" id="e' + idx + '" ' + sel + ' d="' +
-          beam(a.x, a.y, b.x, b.y, V.beamEnd, V.beamMid) + '"/>';
+          beam(a.x, a.y, b.x, b.y, (a.x + b.x) / 2, (a.y + b.y) / 2, V.beamEnd, V.beamMid) + '"/>';
       }
     });
 

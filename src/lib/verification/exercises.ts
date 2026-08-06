@@ -25,6 +25,8 @@ export const verificationExercises: VerificationExerciseDef[] = [
   { id: "verification-landscape", title: "The Verification Landscape", bridged: false },
   { id: "policy-cost", title: "Everything Comes With a Cost", bridged: false },
   { id: "policy-plot", title: "Effectiveness x Feasibility", bridged: false },
+  { id: "mechanism-rank", title: "Feasibility Ranking — Sealed", bridged: false },
+  { id: "mechanism-rank-reopen", title: "Reopen Your Ranking", bridged: false },
   { id: "policy-scoping", title: "Scoping an Anti-ASI Policy", bridged: true },
   { id: "anatomy-drill", title: "The Anatomy Drill", bridged: true },
   { id: "protocol-actors", title: "Who's in the Treaty?", bridged: true },

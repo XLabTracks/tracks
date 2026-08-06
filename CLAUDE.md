@@ -417,15 +417,17 @@ add must reduce the duplication, never widen it.
   (`0.1`, `2.3`) are progress keys **and** the rung tags in
   `data/skills.js`; the graph's are `v-<name>`. Both sets survive — the join
   above is what keeps the skill map filling.
-- **`data/exercises.js` is orphaned and awaiting a decision.** Ten of its
-  eleven exercises (`ex-response-menu`, `ex-branches`, `ex-precedents`,
+- **`data/exercises.js` is orphaned and awaiting a decision.** Eight of its
+  exercises (`ex-response-menu`, `ex-branches`, `ex-precedents`,
   `ex-policy-matrix`, `ex-anatomy`, `ex-chokepoints`, `ex-upstream`,
-  `ex-mechanism-rank`, `ex-signals`, `ex-reopen`) lost their only consumer
-  when the static player became a redirect; `ex-evasion` still feeds the
-  capstone workspace's red-team table. They are authored content, so they were
-  kept rather than deleted. Either port them to React widgets under
-  `src/components/verification/widgets/` or retire them deliberately — do not
-  leave them drifting a third time.
+  `ex-signals`) lost their only consumer when the static player became a
+  redirect; `ex-evasion` still feeds the capstone workspace's red-team table.
+  `ex-mechanism-rank` and `ex-reopen` were ported to the `mechanism-rank`
+  widgets (embedded in 2.0 and 4.1, on the old `vt-ex:*` storage keys so a
+  sealed ranking survives the move) and deleted from the data file. The rest
+  are authored content, so they were kept rather than deleted. Either port
+  them to React widgets under `src/components/verification/widgets/` or
+  retire them deliberately — do not leave them drifting a third time.
 - **Learner state belongs to the account.** `VerificationState`
   (`/api/verification/state`) holds completed unit ids and the notebook as one
   JSON document per user; `localStorage` is the signed-out fallback and the

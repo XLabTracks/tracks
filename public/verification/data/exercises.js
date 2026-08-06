@@ -234,24 +234,6 @@ window.EXERCISES = {
   },
 
   /* ---------------------------------------------------------- 2.0 */
-  'ex-mechanism-rank': {
-    type: 'rank',
-    title: 'Feasibility ranking — sealed',
-    lede: 'Before you learn how any of these work: order them from most to least feasible to stand up today. Your order is stored and reopened in 4.0.',
-    source: 'Outline 2.0 — sealed ranking, reopened at 4.0.',
-    items: [
-      { id: 'attest', t: 'Chip identity and remote attestation' },
-      { id: 'meter', t: 'Tamper-resistant compute metering' },
-      { id: 'pol', t: 'Proof-of-learning / probabilistic recomputation' },
-      { id: 'kyc', t: 'Cloud KYC and training-run declarations' },
-      { id: 'ntm', t: 'National technical means and physical signatures' },
-      { id: 'audit', t: 'On-site audits and challenge inspections' },
-      { id: 'whistle', t: 'Whistleblower channels and insider reporting' }
-    ],
-    seal: true,
-    sealNote: 'No key, and no score. This ranking exists to be revised — 4.0 shows it back to you and asks what moved.'
-  },
-
   /* ---------------------------------------------------------- 2.3 */
   'ex-signals': {
     type: 'mcq',
@@ -324,26 +306,6 @@ window.EXERCISES = {
   },
 
   /* ---------------------------------------------------------- 4.0 */
-  'ex-reopen': {
-    type: 'rank',
-    title: 'Reopen your ranking',
-    lede: 'Here is the feasibility order you sealed in 2.0. Re-rank it now, then say what moved and why.',
-    source: 'Outline 4.0 — reopen the sealed 2.0 ranking with reasons.',
-    reopen: 'ex-mechanism-rank',
-    items: [
-      { id: 'attest', t: 'Chip identity and remote attestation' },
-      { id: 'meter', t: 'Tamper-resistant compute metering' },
-      { id: 'pol', t: 'Proof-of-learning / probabilistic recomputation' },
-      { id: 'kyc', t: 'Cloud KYC and training-run declarations' },
-      { id: 'ntm', t: 'National technical means and physical signatures' },
-      { id: 'audit', t: 'On-site audits and challenge inspections' },
-      { id: 'whistle', t: 'Whistleblower channels and insider reporting' }
-    ],
-    prompt: 'For every item that moved by two places or more, write one sentence: which fact changed your mind, and where did you get it?',
-    seal: true,
-    sealNote: 'Still no key. A revision with a reason is the assessed artifact; a revision without one is a coin flip.'
-  },
-
   /* ---------------------------------------------------------- 2.2 */
   /* The module gate. Twelve items over the unit's five retention claims —
      R1 the provider is a third party in the room, R2 metadata shows scale and

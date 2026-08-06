@@ -29,6 +29,7 @@ import { HonestTestDemo } from "@/components/demos/honest-test-demo";
 import { ExplorationHorizonDemo } from "@/components/demos/exploration-horizon-demo";
 import { CrossEpisodeCollusionDemo } from "@/components/demos/cross-episode-collusion-demo";
 import { BehavioralSelectionDemo } from "@/components/demos/behavioral-selection-demo";
+import { DistantIncentivesDemo } from "@/components/demos/distant-incentives-demo";
 
 // Central demo registry — the single integration point. Reference a demo by ID
 // from MDX (<Demo id="…"/>), the gallery, standalone pages, or embeds.
@@ -271,6 +272,14 @@ export const demoRegistry: Record<string, DemoDefinition> = {
     description:
       "Candidate cognitive patterns pass through the training filter; the surviving mix includes seekers alongside aligned and schemer patterns.",
     component: BehavioralSelectionDemo,
+    tags: ["control", "seekers"],
+  },
+  "distant-incentives": {
+    id: "distant-incentives",
+    title: "Distant incentives",
+    description:
+      "Two ways a third-party bad actor delivers distant influence: retroactive reward, and anthropic capture.",
+    component: DistantIncentivesDemo,
     tags: ["control", "seekers"],
   },
 };

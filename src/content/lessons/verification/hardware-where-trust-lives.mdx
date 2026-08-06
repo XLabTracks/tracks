@@ -20,56 +20,56 @@ Then compare three architectures.
 
 Possible components:
 
-- device identity;
-- secure or measured boot;
-- signed counters;
-- protected telemetry;
-- workload certificates;
-- hardware-backed authorization.
+- Device identity;
+- Secure or measured boot;
+- Signed counters;
+- Protected telemetry;
+- Workload certificates;
+- Hardware-backed authorization.
 
 Potential advantages:
 
-- fine-grained access to device state and activity;
-- low marginal cost after deployment across a fleet;
-- evidence travels with the chip;
-- possible real-time response;
-- privacy-preserving outputs.
+- Fine-grained access to device state and activity;
+- Low marginal cost after deployment across a fleet;
+- Evidence travels with the chip;
+- Possible real-time response;
+- Privacy-preserving outputs.
 
 Load-bearing concerns:
 
-- trust in chip design and manufacturing;
-- vendor control of keys, reference values, firmware, and updates;
-- physical access by the prover;
-- legacy and nonparticipating hardware;
-- redesign and fleet-turnover timelines;
-- common-mode failure across identity, metering, and licensing.
+- Trust in chip design and manufacturing;
+- Vendor control of keys, reference values, firmware, and updates;
+- Physical access by the prover;
+- Legacy and nonparticipating hardware;
+- Redesign and fleet-turnover timelines;
+- Common-mode failure across identity, metering, and licensing.
 
 #### Architecture B: Off-chip digital monitoring
 
 Possible components:
 
-- network taps;
-- input/output loggers;
-- server or rack gateways;
-- tamper-evident enclosures;
-- separate secured verification machines.
+- Network taps;
+- Input/output loggers;
+- Server or rack gateways;
+- Tamper-evident enclosures;
+- Separate secured verification machines.
 
 Potential advantages:
 
-- devices can be jointly designed and mutually inspected;
-- reduced reliance on the monitored party’s accelerator internals;
-- possible retrofitting of existing systems;
-- clearer separation between prover hardware and verifier hardware.
+- Devices can be jointly designed and mutually inspected;
+- Reduced reliance on the monitored party’s accelerator internals;
+- Possible retrofitting of existing systems;
+- Clearer separation between prover hardware and verifier hardware.
 
 Load-bearing concerns:
 
-- reduced visibility as the tap moves farther from the chip;
-- encrypted traffic;
-- data volumes;
-- covert and side channels;
-- installation and chain-of-custody requirements;
-- risk that the verifier’s device contains espionage or sabotage functions;
-- difficulty reconstructing high-level workloads from low-level traffic.
+- Reduced visibility as the tap moves farther from the chip;
+- Encrypted traffic;
+- Data volumes;
+- Covert and side channels;
+- Installation and chain-of-custody requirements;
+- Risk that the verifier’s device contains espionage or sabotage functions;
+- Difficulty reconstructing high-level workloads from low-level traffic.
 
 The six-layer synthesis explicitly treats network taps and analog sensors as separate off-chip approaches and proposes mutually vetted, simple, potentially jointly developed devices. It also emphasizes that these approaches still face major unsolved engineering and assurance problems. (arXiv)
 
@@ -79,40 +79,40 @@ A June 2026 proposal makes the concept more concrete by placing taps on informat
 
 Possible components:
 
-- rack or server power meters;
-- thermal sensors;
-- electromagnetic measurements;
-- independent clocks and timestamping;
-- tamper-evident packaging;
-- video or physical inspection of installation.
+- Rack or server power meters;
+- Thermal sensors;
+- Electromagnetic measurements;
+- Independent clocks and timestamping;
+- Tamper-evident packaging;
+- Video or physical inspection of installation.
 
 Potential advantages:
 
-- a physically independent account of activity;
-- retrofitting potential;
-- evidence that is less dependent on proprietary firmware;
-- evasion may require sacrificing performance or changing multiple physical signals.
+- A physically independent account of activity;
+- Retrofitting potential;
+- Evidence that is less dependent on proprietary firmware;
+- Evasion may require sacrificing performance or changing multiple physical signals.
 
 Load-bearing concerns:
 
-- approximate conversion from physical measurements to compute;
-- workload- and architecture-dependent signatures;
-- margins of error;
-- calibration and sensor placement;
-- deliberate mimicry;
-- coverage only inside instrumented facilities;
-- reliance on inspections to maintain the sensor boundary.
+- Approximate conversion from physical measurements to compute;
+- Workload- and architecture-dependent signatures;
+- Margins of error;
+- Calibration and sensor placement;
+- Deliberate mimicry;
+- Coverage only inside instrumented facilities;
+- Reliance on inspections to maintain the sensor boundary.
 
 #### Architecture D: Hybrid
 
 Possible combination:
 
-- on-chip identity and secure boot;
-- hardware-rooted telemetry;
-- independently installed rack-level power measurement;
-- cloud or provider records;
-- periodic physical inspection;
-- intelligence comparison against declared facility capacity.
+- On-chip identity and secure boot;
+- Hardware-rooted telemetry;
+- Independently installed rack-level power measurement;
+- Cloud or provider records;
+- Periodic physical inspection;
+- Intelligence comparison against declared facility capacity.
 
 The learner must test whether this is genuinely layered. A signed meter, signed workload classifier, and licensing system that all rely on the same vendor key constitute less independence than their mechanism count suggests.
 
@@ -130,15 +130,15 @@ This reinforces that the course’s four buckets are a pedagogical crosswalk rat
 
 Learners compare an on-chip proposal and an off-chip proposal for the working pause rule. For each architecture they complete:
 
-- what the U.S. side would distrust;
-- what the Chinese side would distrust;
-- what the operator would regard as commercially sensitive;
-- what the verifier cannot afford to leave unknown;
-- whose cooperation is indispensable;
-- the technical assumption most likely to fail;
-- the institutional assumption most likely to fail;
-- the most serious abuse or power-concentration risk;
-- the smallest pilot that would provide decision-relevant evidence.
+- What the U.S. side would distrust;
+- What the Chinese side would distrust;
+- What the operator would regard as commercially sensitive;
+- What the verifier cannot afford to leave unknown;
+- Whose cooperation is indispensable;
+- The technical assumption most likely to fail;
+- The institutional assumption most likely to fail;
+- The most serious abuse or power-concentration risk;
+- The smallest pilot that would provide decision-relevant evidence.
 
 The task ends with a constrained recommendation:
 
@@ -152,7 +152,7 @@ There should be no universal “on-chip wins” or “off-chip wins” reveal.
 
 The model answer should demonstrate:
 
-- the different trust placements;
-- circumstances that favor each architecture;
-- the likely collapsing weakness under the named adversary;
-- what pilot result would move the assessment.
+- The different trust placements;
+- Circumstances that favor each architecture;
+- The likely collapsing weakness under the named adversary;
+- What pilot result would move the assessment.

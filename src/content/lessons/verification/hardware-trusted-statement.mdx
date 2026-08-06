@@ -30,9 +30,9 @@ Use the NVIDIA architecture as a deployed security primitive:
 
 - The GPU and associated tools produce evidence.
 - NVIDIA’s RIM service supplies signed reference measurements.
-- a local verifier or NVIDIA Remote Attestation Service compares the evidence with those measurements;
-- certificate-revocation services determine whether relevant credentials remain trusted;
-- a policy file or downstream system determines whether the result is acceptable.
+- A local verifier or NVIDIA Remote Attestation Service compares the evidence with those measurements;
+- Certificate-revocation services determine whether relevant credentials remain trusted;
+- A policy file or downstream system determines whether the result is acceptable.
 
 This is valuable precisely because it is real. It also exposes the institutional questions. NVIDIA currently maintains the authoritative reference-measurement repository and remote appraisal service in this implementation. A treaty architecture would have to decide whether that governance arrangement is acceptable to every party, or whether reference values, keys, and appraisal authority need to be shared, duplicated, escrowed, or transferred. (NVIDIA Docs)
 
@@ -44,13 +44,13 @@ Device → measurement component → signing key → evidence channel → refere
 
 Learners assign actors to each node:
 
-- accelerator manufacturer;
-- foundry or manufacturing auditor;
-- data-center operator;
+- Accelerator manufacturer;
+- Foundry or manufacturing auditor;
+- Data-center operator;
 - AI developer;
-- national regulator;
-- proposed international verifier;
-- certificate or key authority.
+- National regulator;
+- Proposed international verifier;
+- Certificate or key authority.
 
 For every node, the learner answers:
 
@@ -69,10 +69,10 @@ The customer rents accelerators and lacks physical access to the machines.
 
 Expected reasoning:
 
-- provider and manufacturer controls are comparatively strong;
-- the customer may manipulate software or workload behavior;
-- physical tampering and supply-chain replacement are less accessible;
-- provider capture remains a separate concern.
+- Provider and manufacturer controls are comparatively strong;
+- The customer may manipulate software or workload behavior;
+- Physical tampering and supply-chain replacement are less accessible;
+- Provider capture remains a separate concern.
 
 ##### Profile B: Frontier lab controlling its servers
 
@@ -80,9 +80,9 @@ The operator has physical access, administrative privileges, time, and economic 
 
 Expected reasoning:
 
-- firmware, measurement paths, peripherals, logging, and network routes become attack surfaces;
-- the lab may delay updates, exploit optional modes, replace components, or replay evidence;
-- routine commercial security guarantees require reassessment.
+- Firmware, measurement paths, peripherals, logging, and network routes become attack surfaces;
+- The lab may delay updates, exploit optional modes, replace components, or replay evidence;
+- Routine commercial security guarantees require reassessment.
 
 ##### Profile C: State-backed owner
 
@@ -90,10 +90,10 @@ The prover may influence domestic suppliers, compel organizations, manufacture s
 
 Expected reasoning:
 
-- vendor attestations from the other party may be politically unacceptable;
-- supply-chain integrity and key governance become load-bearing;
-- mutually controlled or externally installed systems become more attractive;
-- assurance may depend on inspections, destructive sampling, or independent evidence outside the device.
+- Vendor attestations from the other party may be politically unacceptable;
+- Supply-chain integrity and key governance become load-bearing;
+- Mutually controlled or externally installed systems become more attractive;
+- Assurance may depend on inspections, destructive sampling, or independent evidence outside the device.
 
 The owner-as-adversary frame should remain conditional. A cloud tenant and a state with its own hardware program do not present the same problem.
 
@@ -120,11 +120,11 @@ Misconception: “A fleet of attested chips covers all frontier compute.” Corr
 
 Learners record:
 
-- exact claim;
-- root or roots of trust;
-- key and reference-value authority;
-- update and revocation authority;
-- named verifier;
-- strongest adversary;
-- one common-mode failure;
-- one independent corroborating source.
+- Exact claim;
+- Root or roots of trust;
+- Key and reference-value authority;
+- Update and revocation authority;
+- Named verifier;
+- Strongest adversary;
+- One common-mode failure;
+- One independent corroborating source.

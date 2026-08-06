@@ -14,12 +14,12 @@ A registry is not a sensor. It is an institutional record whose value depends on
 
 A device credential can help a verifier distinguish a genuine covered device from an unauthenticated substitute. The verifier still needs to know:
 
-- who created or certified the identity;
-- whether duplicate or counterfeit credentials are detectable;
-- how ownership transfers are recorded;
-- how lost, damaged, exported, or scrapped devices are handled;
-- how legacy and nonparticipating hardware enters the regime;
-- what evidence links the credential to the physical device being inspected.
+- Who created or certified the identity;
+- Whether duplicate or counterfeit credentials are detectable;
+- How ownership transfers are recorded;
+- How lost, damaged, exported, or scrapped devices are handled;
+- How legacy and nonparticipating hardware enters the regime;
+- What evidence links the credential to the physical device being inspected.
 
 Identity is a useful anchor for evidence from other mechanisms. It does not establish location, interconnection, use, or completeness.
 
@@ -35,11 +35,11 @@ A location claim should therefore state its resolution and error model. “Insid
 
 A collection of individually authenticated devices is not automatically a cluster. A verifier may need to establish:
 
-- which devices were connected;
-- which interconnects and switches were used;
-- whether the configuration changed during the reporting period;
-- whether the workload was split across declared and undeclared devices;
-- whether the cluster definition aggregates sequential, distributed, or cross-site activity.
+- Which devices were connected;
+- Which interconnects and switches were used;
+- Whether the configuration changed during the reporting period;
+- Whether the workload was split across declared and undeclared devices;
+- Whether the cluster definition aggregates sequential, distributed, or cross-site activity.
 
 Current attestation support illustrates the distinction. Some configurations can report more about protected interconnects, while others attest devices independently. The treaty claim must follow the evidence, not the marketing category.
 
@@ -49,13 +49,13 @@ The hardest claim is often negative: no relevant compute existed outside the dec
 
 Attestation covers devices that participate. A registry covers devices that entered the registry. Neither proves that the fleet is complete. Completeness can draw on:
 
-- manufacturer and foundry production records;
-- packaging, distribution, export, customs, and shipping records;
-- provider inventories and allocation records;
-- physical inspection and device counts;
-- power, cooling, construction, procurement, and network evidence;
-- intelligence on undeclared facilities or diversion;
-- insiders who report substitution, tampering, or hidden capacity.
+- Manufacturer and foundry production records;
+- Packaging, distribution, export, customs, and shipping records;
+- Provider inventories and allocation records;
+- Physical inspection and device counts;
+- Power, cooling, construction, procurement, and network evidence;
+- Intelligence on undeclared facilities or diversion;
+- Insiders who report substitution, tampering, or hidden capacity.
 
 Hardware is therefore strongest for known, instrumented compute. The intelligence and human sections will address what remains when the operator never registers the device, never installs the monitor, or never submits evidence.
 

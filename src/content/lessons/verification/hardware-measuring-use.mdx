@@ -20,13 +20,13 @@ No party may conduct an unlicensed training run above threshold T during the pau
 
 A verifier would need at least:
 
-- covered device identity;
-- a method for aggregating activity across devices and time;
-- a trustworthy measure or bound on compute used;
-- a method for distinguishing covered training from permitted activity;
-- evidence that cannot be silently deleted, rolled back, replayed, or reassigned;
-- a rule for distributed, interrupted, resumed, or sequential runs;
-- an actor authorized to decide whether the evidence crosses the legal threshold.
+- Covered device identity;
+- A method for aggregating activity across devices and time;
+- A trustworthy measure or bound on compute used;
+- A method for distinguishing covered training from permitted activity;
+- Evidence that cannot be silently deleted, rolled back, replayed, or reassigned;
+- A rule for distributed, interrupted, resumed, or sequential runs;
+- An actor authorized to decide whether the evidence crosses the legal threshold.
 
 #### Compute measurement
 
@@ -46,10 +46,10 @@ What quantity did the meter record, and how closely does that quantity match the
 
 Give learners a compact packet from the June 2026 telemetry study:
 
-- abstract and headline result;
-- one table showing adversarial strategies;
-- the section specifying the extra hardware assumptions;
-- the limitations section.
+- Abstract and headline result;
+- One table showing adversarial strategies;
+- The section specifying the extra hardware assumptions;
+- The limitations section.
 
 The study reports 98.2 percent overall classification accuracy in its corpus and materially lower performance against some difficult, previously unseen adversarial workloads. Its experiments were limited to single-node configurations of up to eight GPUs, and its governance conclusion depends on a tamper-resistant telemetry path, an authenticated channel, and protected monitoring software. Some inference configurations also occupy the same simple arithmetic-intensity range as training, which is why static “training looks busy” heuristics are inadequate. (arXiv)
 
@@ -72,21 +72,21 @@ This directly reuses Module 1’s upstream-source discipline.
 
 Give the learner a constrained menu:
 
-- dilute training with benign work;
-- manipulate utilization or timing;
-- design custom kernels;
-- fragment activity across devices or sites;
-- forge the telemetry source;
-- replay a permitted trace;
-- replace the classifier;
-- shift to hardware outside the monitored family.
+- Dilute training with benign work;
+- Manipulate utilization or timing;
+- Design custom kernels;
+- Fragment activity across devices or sites;
+- Forge the telemetry source;
+- Replay a permitted trace;
+- Replace the classifier;
+- Shift to hardware outside the monitored family.
 
 The learner must identify:
 
-- which response attacks the classifier;
-- which attacks the evidence channel;
-- which attacks coverage;
-- which requires another module’s evidence stream.
+- Which response attacks the classifier;
+- Which attacks the evidence channel;
+- Which attacks coverage;
+- Which requires another module’s evidence stream.
 
 This prevents the common mistake of treating every weakness as a machine-learning classification problem.
 
@@ -128,18 +128,18 @@ Offline licensing and embedded throttling proposals illustrate the distinction b
 
 Learners receive components and must assemble an end-to-end system for the working treaty rule:
 
-- hardware-rooted identity;
-- attested firmware;
-- operation counter;
-- training classifier;
-- signed, nonce-bound record;
-- cross-chip aggregation;
-- license token;
-- revocation list;
-- national regulator;
-- international notification;
-- inspection trigger;
-- independent power meter.
+- Hardware-rooted identity;
+- Attested firmware;
+- Operation counter;
+- Training classifier;
+- Signed, nonce-bound record;
+- Cross-chip aggregation;
+- License token;
+- Revocation list;
+- National regulator;
+- International notification;
+- Inspection trigger;
+- Independent power meter.
 
 After assembling the chain, the system asks:
 
@@ -156,16 +156,16 @@ The intended realization is that several apparently distinct hardware mechanisms
 
 The learner completes one compact dossier:
 
-- policy goal;
-- legal rule;
-- precise hardware-supported claim;
-- function: identify, attest, measure, classify, restrict, or reconstruct;
-- evidence produced;
-- trust chain;
-- maturity stage;
-- implementation dependencies;
-- cooperation required;
-- strongest bypass;
-- residual blind spot;
-- corroborating layer;
-- evidence that would change the assessment.
+- Policy goal;
+- Legal rule;
+- Precise hardware-supported claim;
+- Function: identify, attest, measure, classify, restrict, or reconstruct;
+- Evidence produced;
+- Trust chain;
+- Maturity stage;
+- Implementation dependencies;
+- Cooperation required;
+- Strongest bypass;
+- Residual blind spot;
+- Corroborating layer;
+- Evidence that would change the assessment.

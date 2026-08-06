@@ -292,6 +292,7 @@ export const demoRegistry: Record<string, DemoDefinition> = {
     title: "Which seekers drive which risks",
     component: SeekerRiskMapDemo,
     tags: ["control", "seekers"],
+    interactive: false,
   },
   "deal-gains-from-trade": {
     id: "deal-gains-from-trade",

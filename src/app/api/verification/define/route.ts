@@ -79,7 +79,15 @@ export async function GET(request: Request) {
     });
   }
 
-  let upstreamTrouble = false;
+  // Which leg did what, reported on the not-found and failure responses.
+  // The chain is best-effort across two upstreams that fail differently by
+  // egress (bot challenges, robot policy), so a bare 502 is undebuggable
+  // from outside — this is the route's own account of what happened. The
+  // client reads only found/term/definition and ignores these.
+  let lwLeg = "skipped";
+  let wikiLeg = "skipped";
+  const reason = (e: unknown) =>
+    "error: " + String(e instanceof Error ? e.message : e).slice(0, 120);
 
   // LessWrong first: the course's own vocabulary lives there. The search is
   // fuzzy ("verification" ranks Rationality Verification above Verification),
@@ -125,8 +133,9 @@ export async function GET(request: Request) {
         source: "LessWrong Wiki (CC BY-SA)",
       });
     }
-  } catch {
-    upstreamTrouble = true;
+    lwLeg = "miss";
+  } catch (e) {
+    lwLeg = reason(e);
   }
 
   // Wikipedia second. The summary endpoint follows redirects, so case and
@@ -166,13 +175,17 @@ export async function GET(request: Request) {
           source: "Wikipedia (CC BY-SA)",
         });
       }
+      wikiLeg = "miss (" + (json.type ?? "no type") + ")";
+    } else {
+      wikiLeg = "miss (404)";
     }
-  } catch {
-    upstreamTrouble = true;
+  } catch (e) {
+    wikiLeg = reason(e);
   }
 
-  if (upstreamTrouble) {
-    return NextResponse.json({ error: "Lookup unavailable" }, { status: 502 });
+  const legs = { lesswrong: lwLeg, wikipedia: wikiLeg };
+  if (lwLeg.startsWith("error") || wikiLeg.startsWith("error")) {
+    return NextResponse.json({ error: "Lookup unavailable", legs }, { status: 502 });
   }
-  return NextResponse.json({ found: false, term: raw }, { status: 404 });
+  return NextResponse.json({ found: false, term: raw, legs }, { status: 404 });
 }

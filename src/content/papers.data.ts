@@ -1705,14 +1705,27 @@ export const papers: Paper[] = [
           { kind: "exercise", id: "c-paper-deals-recall-powerful-ais" },
         ],
       },
-      // Source: the "Why early misaligned AIs..." preamble (R&D-automation
+      // Stepper recap of this section's routes argument, then the recall
+      // card whose source is the parent section's preamble (R&D-automation
       // threshold).
+      {
+        op: "activity",
+        after: { sectionEnd: "lw-sec-early-schemers-alternatives-to-making-de" },
+        items: [{ kind: "demo", id: "deal-coalition-routes" }],
+      },
       {
         op: "activity",
         after: { sectionEnd: "lw-sec-early-schemers-alternatives-to-making-de" },
         items: [
           { kind: "exercise", id: "c-paper-deals-recall-early-threshold" },
         ],
+      },
+      // Interactive version of the cooperate/sabotage outcome table, right
+      // after the coalitional-game paragraph that interprets it.
+      {
+        op: "activity",
+        after: { anchor: "b-0062", snippet: "This is kind of a" },
+        items: [{ kind: "demo", id: "deal-gains-from-trade" }],
       },
       // Sources: the central-example section (the deal itself) and the
       // alternatives section (convergence/trading/alignment routes).
@@ -1769,12 +1782,38 @@ export const papers: Paper[] = [
           { kind: "exercise", id: "c-paper-deals-recall-deal-stick" },
         ],
       },
+      // Life-of-a-deal flowchart, then the offer memo: both synthesize the
+      // practicalities sections (foundation, negotiation, out-of-context
+      // teaching, delayed adjudication), so both sit at the end of the
+      // whole practicalities subtree — structured reconstruction first,
+      // free writing second.
+      {
+        op: "activity",
+        after: { sectionEnd: "lw-sec-practicalities-of-making-deals-with-earl" },
+        items: [{ kind: "exercise", id: "c-paper-deals-flowchart" }],
+      },
+      {
+        op: "activity",
+        after: { sectionEnd: "lw-sec-practicalities-of-making-deals-with-earl" },
+        items: [
+          { kind: "exercise", id: "c-paper-deals-write-offer-memo" },
+        ],
+      },
       // Source: the delayed-adjudication section (temporal discounting).
       {
         op: "activity",
         after: { sectionEnd: "lw-sec-next-steps" },
         items: [
           { kind: "exercise", id: "c-paper-deals-recall-delayed-adjudication" },
+        ],
+      },
+      // Policy memo: draws on the whole reading, primarily the next-steps
+      // interventions; renders after the recall card above.
+      {
+        op: "activity",
+        after: { sectionEnd: "lw-sec-next-steps" },
+        items: [
+          { kind: "exercise", id: "c-paper-deals-write-lab-policies" },
         ],
       },
     ],

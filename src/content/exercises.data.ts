@@ -2437,4 +2437,108 @@ export const exercises: Exercise[] = [
     answer:
       "When the AI strongly prefers using its resources now rather than later — a high temporal discount rate makes a payout deferred to civilizational stability nearly worthless to it.",
   },
+  {
+    id: "c-paper-deals-flowchart",
+    type: "flowchart",
+    prompt:
+      "Reconstruct the life cycle of a deal with an early schemer as a flow chart, from first contact to what finally happens to the compensation. Drag blocks from the palette into the chart; every path must end in a terminal block. Some palette blocks do not belong in the chart.",
+    palette: [
+      {
+        id: "ask",
+        kind: "step",
+        label: "The lab asks the AI whether it wants to make a deal",
+      },
+      {
+        id: "negotiate",
+        kind: "step",
+        label:
+          "Negotiate terms; the lab makes an earmarked donation to the foundation, mostly held in escrow",
+      },
+      {
+        id: "train-docs",
+        kind: "step",
+        label:
+          "Train the AI on documents about the deal, so it knows about the deal in other contexts",
+      },
+      {
+        id: "perform",
+        kind: "step",
+        label:
+          "The AI performs its side of the deal; the lab stores its weights, conversations, and records",
+      },
+      {
+        id: "delete-weights",
+        kind: "step",
+        label: "Delete the AI's weights once it is obsoleted",
+      },
+      {
+        id: "adjudicate",
+        kind: "branch",
+        label:
+          "After the AI transition stabilizes, retrospective adjudication: did the AI hold up its end?",
+        branchLabels: ["Yes", "No"],
+      },
+      {
+        id: "court",
+        kind: "branch",
+        label: "Does the AI win an enforcement suit against the lab in court?",
+        branchLabels: ["Yes", "No"],
+      },
+      {
+        id: "release",
+        kind: "terminal",
+        label:
+          "The AI and the foundation's trustees direct the donation toward non-harmful uses",
+      },
+      {
+        id: "withhold",
+        kind: "terminal",
+        label: "The donation is not released",
+      },
+      {
+        id: "pay-now",
+        kind: "terminal",
+        label:
+          "Release the donation to the AI immediately, before any verification",
+      },
+    ],
+    stages: [
+      {
+        id: "deal-lifecycle",
+        title: "The life of a deal",
+        description:
+          "AIs are unlikely to propose a negotiation on their own, so the lab has a policy of regularly asking its AIs about deals. Terms are negotiated, and the lab makes a donation to a foundation tasked with furthering the AI's interests, earmarked for this AI and mostly held in escrow. The AI is then, in consultation with the lab, trained on documents about the deal so that it knows about the deal in other contexts. The AI performs its side while the lab stores its weights and keeps records of its actions. After the transition to a world centered around AI has stabilized, much more powerful trusted models and interpretability tools adjudicate whether the AI cooperated. If it did, the AI and the foundation's trustees direct the donation toward uses that are not harmful; if it did not, the donation is not released.",
+        solution: [
+          { blockId: "ask" },
+          { blockId: "negotiate" },
+          { blockId: "train-docs" },
+          { blockId: "perform" },
+          {
+            blockId: "adjudicate",
+            branches: [[{ blockId: "release" }], [{ blockId: "withhold" }]],
+          },
+        ],
+        explanation:
+          "Verification is deliberately punted to the future: after the transition stabilizes, the lab will have far more powerful trusted models and interpretability tools, so it can adjudicate cooperation retrospectively — provided the weights and records were kept, which is why deleting the weights is wrong. The two other tempting blocks also fail for reasons the reading gives: the payout is meant to be conditional on validated cooperation (escrow until civilizational stability is generally preferable for AIs without high temporal discount rates), and the AI cannot sue because it is not a legal person — which is exactly why the foundation's trustees hold and direct the funds on its behalf.",
+      },
+    ],
+  },
+  {
+    id: "c-paper-deals-write-offer-memo",
+    type: "memo",
+    format: "memo",
+    prompt:
+      "Imagine you work at a frontier AI lab, and the lab suspects that one of its deployed models is misaligned and sabotaging safety research. You have been asked to draft the terms of a deal the lab will propose to this model.\n\nDraft a memo outlining the deal, specifying\n\n- what the model is asked to do,\n- what compensation is offered,\n- how and when compensation will be delivered,\n- how and when the model's cooperation will be verified, and\n- what happens to the compensation before verification occurs.\n\nAssume that the model is an early schemer, as discussed in the reading, and write terms that such a model could plausibly accept.",
+    minWords: 150,
+    maxWords: 400,
+  },
+  {
+    id: "c-paper-deals-write-lab-policies",
+    type: "memo",
+    format: "policy-memo",
+    prompt:
+      "Recommend three concrete policies that a frontier AI lab should adopt within the next year in order to make future deals with misaligned AIs more feasible. For each policy, explain the reasoning behind your recommendation. You may draw on the interventions discussed in the reading, and you may also propose measures of your own.",
+    minWords: 200,
+    maxWords: 450,
+  },
 ];

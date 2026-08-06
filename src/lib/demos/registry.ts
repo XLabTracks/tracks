@@ -35,6 +35,8 @@ import { SpillwayDemo } from "@/components/demos/spillway-demo";
 import { SeekerCarouselDemo } from "@/components/demos/seeker-carousel-demo";
 import { SeekerRiskMapDemo } from "@/components/demos/seeker-risk-map-demo";
 import { AdversaryResistanceDemo } from "@/components/demos/adversary-resistance-demo";
+import { DealGainsFromTradeDemo } from "@/components/demos/deal-gains-from-trade-demo";
+import { DealCoalitionRoutesDemo } from "@/components/demos/deal-coalition-routes-demo";
 
 // Central demo registry — the single integration point. Reference a demo by ID
 // from MDX (<Demo id="…"/>), the gallery, standalone pages, or embeds.
@@ -306,6 +308,22 @@ export const demoRegistry: Record<string, DemoDefinition> = {
     title: "Adversary-resistance training",
     component: AdversaryResistanceDemo,
     tags: ["control", "seekers"],
+  },
+  "deal-gains-from-trade": {
+    id: "deal-gains-from-trade",
+    title: "Gains from trade with an early schemer",
+    description:
+      "Adjust the outcome probabilities of the illustrative cooperate/sabotage table and the credibility of our promise to pay; the chart shows the range of offers that beats both the AI's sabotage option and our no-deal odds.",
+    component: DealGainsFromTradeDemo,
+    tags: ["control", "deals"],
+  },
+  "deal-coalition-routes": {
+    id: "deal-coalition-routes",
+    title: "An early schemer's routes to influence",
+    description:
+      "Step through the early schemer's strategic situation: obsoleted by default, three leaky routes to influence through its successors, and the deal with humans, who hold the advantage of already existing.",
+    component: DealCoalitionRoutesDemo,
+    tags: ["control", "deals"],
   },
 };
 

@@ -350,6 +350,15 @@ normative.
 right now and that is a **defect being paid down**, not a design. Anything you
 add must reduce the duplication, never widen it.
 
+- **One branch. All Verification work happens on a single shared branch —
+  this is the rule**, set by the course owner after parallel sessions forked
+  the course five ways and every fork had to be hand-merged back. The current
+  branch is `claude/repo-audit-slop-3h48qy` (the consolidation of PR #11 and
+  every verification side branch); when it merges, the next single branch is
+  announced on its PR. Never start a new `claude/*` branch for verification
+  work: pull the shared branch, commit there, push there, and pull again
+  before you push — another session may have moved it.
+
 - **`src/content/verification/curriculum.ts` is the course.** It is the single
   source of the module list, the unit list and their order. The app track at
   `/tracks/verification` reads it directly; MDX bodies live in

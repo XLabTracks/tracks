@@ -1,9 +1,11 @@
 /* highlight.js — mark a passage and find it marked when you come back.
 
-   The engine behind the "Highlight" buttons on the two selection strips
-   (notebook.js takes long selections, vocab.js short ones — this file adds
-   no strip of its own, so the never-stack-buttons rule stands). Exposes
-   window.VTHighlight = { supported, add, count } for them to call.
+   The highlighter is its own tool with its own button: selecting text in
+   the reading column raises "Highlight" ABOVE the selection, in the
+   marker's own colours, while the capture and define strips sit below it —
+   separate in space, so the never-stack-buttons rule stands with three
+   tools on one selection. Exposes window.VTHighlight =
+   { supported, add, count }.
 
    Painting is the CSS Custom Highlight API (::highlight(vt-hl) in
    theme.css), never a DOM edit: the reading column belongs to React, and a
@@ -54,6 +56,11 @@
     data.updatedAt = Date.now();
     try { localStorage.setItem(STORE, JSON.stringify(data)); }
     catch (e) { /* private mode / quota — the paint this session still holds */ }
+    /* Same-tab writes fire no storage event, and a highlight should reach
+       the account when it is made, not when the tab closes — sync.js
+       listens for this and pushes. */
+    try { window.dispatchEvent(new CustomEvent('vt-highlights-change')); }
+    catch (e) { /* an ancient browser without CustomEvent syncs on pagehide */ }
   }
 
   function pageList(data) {
@@ -173,6 +180,59 @@
     paint();
   }
 
+  /* ---------- the add button ---------- */
+
+  let addBtn = null;
+  function dropAdd() { if (addBtn) { addBtn.remove(); addBtn = null; } }
+
+  document.addEventListener('mouseup', function (ev) {
+    if (!supported) return;
+    /* Same trap as the other tools: mouseup precedes click, so a press on
+       this button must not rebuild it out from under its own click. */
+    if (ev.target && ev.target.closest && ev.target.closest('.hl-add, .hl-strip')) return;
+    if (document.documentElement.classList.contains('vt-off-course')) return;
+    setTimeout(function () {
+      const sel = document.getSelection();
+      const text = sel ? String(sel).trim() : '';
+      dropAdd();
+      if (!text || !sel.rangeCount || sel.isCollapsed) return;
+      const host = sel.anchorNode && sel.anchorNode.parentElement;
+      if (!host || !host.closest('main')) return;
+      const rect = sel.getRangeAt(0).getBoundingClientRect();
+      addBtn = document.createElement('button');
+      addBtn.type = 'button';
+      addBtn.className = 'hl-add';
+      addBtn.textContent = 'Highlight';
+      /* Pressing the button must not collapse the selection it is about to
+         highlight — a collapsed selection also fires selectionchange, whose
+         teardown would eat this button's own click. */
+      addBtn.onmousedown = function (e) { e.preventDefault(); };
+      addBtn.onclick = function () {
+        add();
+        dropAdd();
+        const s = document.getSelection();
+        if (s && s.removeAllRanges) s.removeAllRanges();
+      };
+      document.body.appendChild(addBtn);
+      /* Above the selection, where the capture and define strips never sit.
+         Only when the page's top edge leaves no room does it drop below —
+         offset to the selection's right, clear of the strip at its left. */
+      const h = addBtn.offsetHeight || 34;
+      if (rect.top > h + 64) {
+        addBtn.style.top = (rect.top + window.scrollY - h - 8) + 'px';
+        addBtn.style.left = Math.max(8, rect.left + window.scrollX) + 'px';
+      } else {
+        addBtn.style.top = (rect.bottom + window.scrollY + 8) + 'px';
+        addBtn.style.left = (rect.right + window.scrollX + 12) + 'px';
+      }
+    }, 0);
+  });
+
+  document.addEventListener('selectionchange', function () {
+    const sel = document.getSelection();
+    if (!sel || sel.isCollapsed || !String(sel).trim()) dropAdd();
+  });
+
   /* ---------- removal strip ---------- */
 
   let strip = null;
@@ -220,7 +280,7 @@
   });
 
   document.addEventListener('keydown', function (e) {
-    if (e.key === 'Escape') dropStrip();
+    if (e.key === 'Escape') { dropAdd(); dropStrip(); }
   });
 
   /* ---------- keeping the paint alive ---------- */

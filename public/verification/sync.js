@@ -86,6 +86,9 @@
     window.addEventListener('storage', function (e) {
       if (e.key === PROGRESS_KEY || e.key === NOTEBOOK_KEY || e.key === HIGHLIGHTS_KEY) push();
     });
+    // Same-tab highlight writes fire no storage event; highlight.js
+    // announces them so a mark reaches the account when it is made.
+    window.addEventListener('vt-highlights-change', push);
     // The notebook writes on a debounce of its own; catch the last edit before
     // the tab goes away, when a pending push would otherwise be lost.
     window.addEventListener('pagehide', function () {

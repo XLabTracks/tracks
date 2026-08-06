@@ -1663,6 +1663,37 @@ export const papers: Paper[] = [
     },
     estimatedMinutes: 25,
     sectionItemId: "c-mod6-l1",
+    // Quick-recall notecards placed downstream of the sections they test.
+    edits: [
+      {
+        op: "activity",
+        after: { sectionEnd: "lw-sec-eliciting-the-ai-s-cheaply-satisfied-pre" },
+        items: [
+          {
+            kind: "sequence",
+            label: "Quick recall",
+            exerciseIds: [
+              "c-mod7-satiation-recall-ratchet",
+              "c-mod7-satiation-recall-methodology",
+            ],
+          },
+        ],
+      },
+      {
+        op: "activity",
+        after: { sectionEnd: "lw-sec-when-should-we-satiate" },
+        items: [
+          {
+            kind: "sequence",
+            label: "Quick recall",
+            exerciseIds: [
+              "c-mod7-satiation-recall-benefits",
+              "c-mod7-satiation-recall-limits",
+            ],
+          },
+        ],
+      },
+    ],
   },
   {
     id: "c-paper-spillway",
@@ -1677,6 +1708,37 @@ export const papers: Paper[] = [
     },
     estimatedMinutes: 30,
     sectionItemId: "c-mod6-l1",
+    // Quick-recall notecards placed downstream of the sections they test.
+    edits: [
+      {
+        op: "activity",
+        after: { sectionEnd: "lw-sec-implementing-spillway-design" },
+        items: [
+          {
+            kind: "sequence",
+            label: "Quick recall",
+            exerciseIds: [
+              "c-mod7-spillway-recall-definition",
+              "c-mod7-spillway-recall-neutralize",
+            ],
+          },
+        ],
+      },
+      {
+        op: "activity",
+        after: { sectionEnd: "lw-sec-the-drawbacks-of-spillway-design" },
+        items: [
+          {
+            kind: "sequence",
+            label: "Quick recall",
+            exerciseIds: [
+              "c-mod7-spillway-recall-properties",
+              "c-mod7-spillway-recall-inoculation",
+            ],
+          },
+        ],
+      },
+    ],
   },
   // --- Control track, module 6, trading-with-AIs section: three posts on
   // making deals with misaligned AIs, nested under the trade outline section.

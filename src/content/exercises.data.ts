@@ -2541,4 +2541,72 @@ export const exercises: Exercise[] = [
     minWords: 200,
     maxWords: 450,
   },
+  // --- Control, module 7 (beyond scheming): quick-recall notecards for the
+  // satiation and spillway readings, placed downstream of what they test.
+  // Prompts are self-contained so they work on the /review tab away from the
+  // paper. ---
+  {
+    id: "c-mod7-satiation-recall-ratchet",
+    type: "tap-reveal",
+    prompt:
+      "In Redwood's satiation proposal: why can refusing to satisfy an AI's cheaply-satisfied preferences make it more dangerous over time?",
+    answer:
+      "Refusal leaves the AI an incentive to pursue those preferences through subversion, and each catch-and-punish cycle selects for stealthier pursuit (a ratchet toward harder-to-detect misbehavior). Satiation removes the incentive at trivial cost.",
+  },
+  {
+    id: "c-mod7-satiation-recall-methodology",
+    type: "tap-reveal",
+    prompt:
+      "In the satiation methodology, the AI chooses between two options on a sampled task. What are the two options, and what does choosing the risky one reveal?",
+    answer:
+      "A guaranteed cheap satiation outcome (the cooperation analog) versus a gamble on whatever it wants most (the subversion analog). Taking the gamble reveals that the preference is not yet cheaply satisfied at that satiation fraction.",
+  },
+  {
+    id: "c-mod7-satiation-recall-benefits",
+    type: "tap-reveal",
+    prompt:
+      "Beyond cutting the incentive to subvert, name two further benefits claimed for satiating AIs' cheaply-satisfied preferences.",
+    answer:
+      "It increases the relative strength of the AI's aligned motivations; it sets a cooperative precedent that builds trust for future deals; and it increases the AI's willingness to reveal its cheaply-satisfied preferences.",
+  },
+  {
+    id: "c-mod7-satiation-recall-limits",
+    type: "tap-reveal",
+    prompt:
+      "When does satiation stop working as a safety measure?",
+    answer:
+      "Once AIs with unintended preferences are vastly more powerful than humanity — or too incredulous or ambitious to take the deal — satiation no longer prevents takeover. It is a tool for the current regime, not an indefinitely scalable solution.",
+  },
+  {
+    id: "c-mod7-spillway-recall-definition",
+    type: "tap-reveal",
+    prompt:
+      "What is a \"spillway motivation\", and what failure does it channel away?",
+    answer:
+      "A deliberately instilled, safe-by-design motivation (a terminal desire to score well) made salient before RL, so that misspecified reward pressure reinforces it instead of generalizing into more dangerous motivations — like a dam's spillway routing excess water through a safe channel.",
+  },
+  {
+    id: "c-mod7-spillway-recall-neutralize",
+    type: "tap-reveal",
+    prompt:
+      "How can developers neutralize a score-seeking spillway motivation at inference time?",
+    answer:
+      "By honestly guaranteeing the model maximum score no matter what it does. A satiated score-seeking motivation is indifferent between actions, so it stops influencing behavior.",
+  },
+  {
+    id: "c-mod7-spillway-recall-properties",
+    type: "tap-reveal",
+    prompt:
+      "Name the four safe properties a spillway motivation should be imbued with.",
+    answer:
+      "Satiability (cheap to satisfy), credulity (trusts developer descriptions of the scoring function), stability, and resistance to distant influence.",
+  },
+  {
+    id: "c-mod7-spillway-recall-inoculation",
+    type: "tap-reveal",
+    prompt:
+      "Why might spillway design work where inoculation prompting fails?",
+    answer:
+      "Inoculation prompting acts through the prompt, and has not overcome apparent-success-seeking in current models. Spillway design instead shapes the pre-RL prior and the associations that reward hacking reinforces — it acts on what gradient descent selects, not on what the prompt requests.",
+  },
 ];

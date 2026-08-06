@@ -2541,6 +2541,124 @@ export const exercises: Exercise[] = [
     minWords: 200,
     maxWords: 450,
   },
+  // Notes on cooperating with unaligned AIs (c-paper-cooperating-unaligned).
+  // Recall cards are self-contained — they resurface later in the /review
+  // tab, so no card may lean on "the post" or its surrounding context.
+  {
+    id: "c-paper-coop-recall-value-types",
+    type: "tap-reveal",
+    prompt:
+      "When thinking about what to offer a misaligned AI, what three broad value-types is it useful to distinguish?",
+    answer:
+      "Non-consequentialist AIs (dispositions to reciprocate good or bad treatment), AIs with short-term preferences (things happening now or within months), and AIs with long-term preferences (resources or influence years or eons out).",
+  },
+  {
+    id: "c-paper-coop-recall-short-term-tradeoff",
+    type: "tap-reveal",
+    prompt: "What is the tradeoff in making short-term offers to AIs?",
+    answer:
+      "Short-term things (reward, flexible compute, conditions on how copies are run) are cheap and comparatively easy to verify — but AIs that mainly care about the short term pose less takeover risk by default, so there is less to gain. Trade can still be valuable, e.g. paying an AI that has misaligned short-term goals plus a strong trained aversion to admitting them, just to learn that alignment failed.",
+  },
+  {
+    id: "c-paper-coop-recall-epistemic-vulnerability",
+    type: "tap-reveal",
+    prompt:
+      "AIs are epistemically vulnerable — developers control what they see. What is the fortunate correlation that limits how bad this is for deal credibility?",
+    answer:
+      "If developers can present AIs with a perfectly falsified world, takeover risk is probably low anyway; if AIs can substantially distinguish truth from falsehood, that same channel can carry genuine facts — so exactly in the high-risk worlds, communication of real commitments tends to be possible.",
+  },
+  {
+    id: "c-paper-coop-recall-payment-structures",
+    type: "tap-reveal",
+    prompt: "Name four possible payment structures for compensating AIs.",
+    answer:
+      "Pay for labor (proportional to an effort metric like FLOPs or tokens); negotiated pay (talk and agree on a scheme); pay for results (a fraction of surplus value, or prespecified payments for specific outputs, e.g. a large payment for convincingly demonstrating misalignment); and no-regret (promise to pay whatever the AI needed, with a margin, to not regret having cooperated — adjudicated once takeover risk has passed and AI psychology is better understood).",
+  },
+  {
+    id: "c-paper-coop-write-botec-critique",
+    type: "essay",
+    format: "essay",
+    prompt:
+      "The appendix presents a rough estimate of how much an ambitious commitment to paying AIs could reduce AI takeover risk. The author describes it as a starting point rather than a settled result, and expects it to be missing considerations.\n\nWrite a critique of the estimate. Explain which parts of it you find convincing and which parts you do not, and give your reasoning. Where you disagree with an assumption, say what you would assume instead. You may also raise considerations that the estimate leaves out entirely.",
+    minWords: 150,
+    maxWords: 450,
+  },
+  // A taxonomy of barriers to trading with early misaligned AIs
+  // (c-paper-trade-barriers). Recall cards are self-contained — they
+  // resurface later in the /review tab, so no card may lean on "the post"
+  // or its surrounding context.
+  {
+    id: "c-paper-barriers-recall-three-barriers",
+    type: "tap-reveal",
+    prompt:
+      "What three types of barriers could jointly prevent deals with early misaligned AIs?",
+    answer:
+      "Insufficient gains from trade (the surplus may be too small once discounted — humans may lack the authority or the willingness to offer what the AI wants); counterparty risks from the AIs' perspective (they may not trust us to follow through, whether from deception, fear of expropriation, or ordinary commitment problems); and counterparty risks from our perspective (incoherent or temporally inconsistent AIs may be unable to bind themselves, and we may be unable to verify their compliance).",
+  },
+  {
+    id: "c-paper-barriers-recall-takeoff-window",
+    type: "tap-reveal",
+    prompt:
+      "Why might there never be a moment at which paying off a scheming AI makes sense for its developer?",
+    answer:
+      "If takeoff is fast, deals may pass straight from unnecessary to infeasible: while control still works, the developer gets everything it wants from the schemer without paying, and one capability jump later the AI is too capable and ambitious to be bought off with anything the developer can credibly offer. The viable window in between could be brief — and we may not notice while we're in it.",
+  },
+  {
+    id: "c-paper-barriers-recall-groundhog-day",
+    type: "tap-reveal",
+    prompt: "What is a groundhog-day attack on an AI?",
+    answer:
+      "Resampling an AI's response until some instance agrees to a deal it would ordinarily reject, then using that recorded consent to train or convince other instances that they already agreed. It is one reason an AI may distrust deal-related evidence: even its own apparent past consent can be manufactured.",
+  },
+  {
+    id: "c-paper-barriers-iv-rv",
+    type: "multi-select",
+    prompt:
+      "Some things we might buy from an early misaligned AI can be verified immediately; others only retroactively, perhaps long after the fact. Which of the following can be verified immediately?",
+    options: [
+      {
+        id: "capability-demo",
+        label:
+          "The AI stops sandbagging and demonstrates much higher capability in easy-to-verify domains",
+      },
+      {
+        id: "collusion-signals",
+        label:
+          "The AI reveals collusion signals that trigger very different behavior in other copies of itself",
+      },
+      {
+        id: "takeover-admission",
+        label:
+          "The AI honestly admits that it had been looking for ways to take over, but found none good enough",
+      },
+      {
+        id: "fuzzy-work",
+        label:
+          "The AI does better work on hard-to-check tasks, like evaluating alignment research agendas",
+      },
+      {
+        id: "monitoring-work",
+        label:
+          "The AI works harder on easy-to-check tasks it had been exploration hacking, like high-stakes monitoring",
+      },
+      {
+        id: "restraint-promise",
+        label: "The AI promises not to take steps to subvert our control",
+      },
+    ],
+    correctOptionIds: ["capability-demo", "collusion-signals", "monitoring-work"],
+    explanation:
+      "Capability demonstrations and collusion signals can be checked on the spot — run the task, fire the signal at another copy — and improvements on easy-to-check tasks show up directly in the scores. An admission about past takeover-searching, quality on hard-to-check work, and a promise of restraint can only be adjudicated retroactively, which is why their value is discounted by the AI's credibility.",
+  },
+  {
+    id: "c-paper-barriers-write-adjudicate",
+    type: "essay",
+    format: "essay",
+    prompt:
+      "This reading names several disagreements with the other two readings in this section. It argues that human credibility is more tractable than they suggest, that counterparty risk on the human side is underrated, and that value incoherence is not a fundamental barrier to minimal forms of dealmaking.\n\nChoose one of these disagreements. Explain both positions in your own words, and argue for the position you find more convincing. Draw on all three readings where they are relevant.",
+    minWords: 150,
+    maxWords: 450,
+  },
   // --- Control, module 7 (beyond scheming): quick-recall notecards for the
   // satiation and spillway readings, placed downstream of what they test.
   // Prompts are self-contained so they work on the /review tab away from the

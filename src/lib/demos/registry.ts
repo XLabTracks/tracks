@@ -35,6 +35,9 @@ import { SpillwayRoutingDemo } from "@/components/demos/spillway-routing-demo";
 import { SpillwayVsInoculationDemo } from "@/components/demos/spillway-vs-inoculation-demo";
 import { DealGainsFromTradeDemo } from "@/components/demos/deal-gains-from-trade-demo";
 import { DealCoalitionRoutesDemo } from "@/components/demos/deal-coalition-routes-demo";
+import { CoopBotecDemo } from "@/components/demos/coop-botec-demo";
+import { CoopAtLeastOneDemo } from "@/components/demos/coop-at-least-one-demo";
+import { PaymentMapDemo } from "@/components/demos/payment-map-demo";
 
 // Central demo registry — the single integration point. Reference a demo by ID
 // from MDX (<Demo id="…"/>), the gallery, standalone pages, or embeds.
@@ -316,6 +319,30 @@ export const demoRegistry: Record<string, DemoDefinition> = {
     component: SpillwayVsInoculationDemo,
     tags: ["control", "seekers"],
     interactive: false,
+  },
+  "coop-botec": {
+    id: "coop-botec",
+    title: "How much would paying AIs reduce takeover risk?",
+    description:
+      "The appendix BOTEC as a live multiplication chain: drag any assumption — movable values, the promise's payment-belief shift, the scenario discounts — and watch the bottom line move from the text's ~0.14 percentage points.",
+    component: CoopBotecDemo,
+    tags: ["control", "deals"],
+  },
+  "coop-at-least-one": {
+    id: "coop-at-least-one",
+    title: "At least one cooperating AI",
+    description:
+      "Why the value of shifting each AI's cooperation probability depends on the baseline: the 1 − (1 − p)^n curve, with the text's two worked examples as presets.",
+    component: CoopAtLeastOneDemo,
+    tags: ["control", "deals"],
+  },
+  "payment-map": {
+    id: "payment-map",
+    title: "The space of payments to AIs",
+    description:
+      "Possible payouts mapped on two axes — freedom of spending and long-term influence — with the taxonomy's examples in each quadrant, and toggles showing which payouts appeal to which AI motivations.",
+    component: PaymentMapDemo,
+    tags: ["control", "deals"],
   },
 };
 

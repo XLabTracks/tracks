@@ -1775,14 +1775,9 @@ export const papers: Paper[] = [
     // passage they quiz, so the answer isn't a glance away — the learner has
     // to actually recall it.
     edits: [
-      // Source: intro (powerful scope-sensitive AIs ignore offers).
-      {
-        op: "activity",
-        after: { sectionEnd: "lw-sec-the-central-example-of-a-mutually-benefi" },
-        items: [
-          { kind: "exercise", id: "c-paper-deals-recall-powerful-ais" },
-        ],
-      },
+      // (The powerful-scope-sensitive-AIs recall card lives on the
+      // cooperating-with-unaligned-AIs reading, whose unified-linear section
+      // is the fuller treatment of that argument.)
       // Stepper recap of this section's routes argument, then the recall
       // card whose source is the parent section's preamble (R&D-automation
       // threshold).
@@ -1908,6 +1903,69 @@ export const papers: Paper[] = [
     },
     estimatedMinutes: 25,
     sectionItemId: "c-mod6-l2",
+    edits: [
+      // Recall cards, placed at least a full section below what they quiz
+      // (same convention as the deals reading).
+      // Source: the "What do AIs want?" preamble (the three value-types).
+      {
+        op: "activity",
+        after: { sectionEnd: "lw-sec-short-term-offers" },
+        items: [{ kind: "exercise", id: "c-paper-coop-recall-value-types" }],
+      },
+      // Source: the "Short-term offers" section (the cheap-but-less-to-gain
+      // tradeoff).
+      {
+        op: "activity",
+        after: { sectionEnd: "lw-sec-unified-ais-with-linear-returns-to-resou" },
+        items: [
+          { kind: "exercise", id: "c-paper-coop-recall-short-term-tradeoff" },
+        ],
+      },
+      // Moved from the deals reading: its source there was one intro
+      // paragraph, while this post's unified-linear section is the full
+      // quantified treatment. Placed a section past that treatment.
+      {
+        op: "activity",
+        after: { sectionEnd: "lw-sec-ais-with-diminishing-returns-to-resource" },
+        items: [{ kind: "exercise", id: "c-paper-deals-recall-powerful-ais" }],
+      },
+      // Source: the opening of "Making credible promises" (epistemic
+      // vulnerability and the risk/understanding correlation).
+      {
+        op: "activity",
+        after: { sectionEnd: "lw-sec-payment-structure" },
+        items: [
+          { kind: "exercise", id: "c-paper-coop-recall-epistemic-vulnerability" },
+        ],
+      },
+      // Source: the "Payment structure" section (the four structures).
+      {
+        op: "activity",
+        after: { sectionEnd: "lw-sec-ai-companies-should-make-long-term-promi" },
+        items: [
+          { kind: "exercise", id: "c-paper-coop-recall-payment-structures" },
+        ],
+      },
+      // The 1 − (1 − p)^n picture, right after the section that works its
+      // two examples (10 draws at 50%, 3 draws at 20%).
+      {
+        op: "activity",
+        after: { sectionEnd: "lw-sec-there-are-multiple-ais" },
+        items: [{ kind: "demo", id: "coop-at-least-one" }],
+      },
+      // The BOTEC explorer and the critique essay close the appendix, in
+      // that order: manipulate the estimate first, then argue with it.
+      {
+        op: "activity",
+        after: { sectionEnd: "lw-sec-putting-it-together" },
+        items: [{ kind: "demo", id: "coop-botec" }],
+      },
+      {
+        op: "activity",
+        after: { sectionEnd: "lw-sec-putting-it-together" },
+        items: [{ kind: "exercise", id: "c-paper-coop-write-botec-critique" }],
+      },
+    ],
   },
   {
     id: "c-paper-trade-barriers",
@@ -1921,6 +1979,57 @@ export const papers: Paper[] = [
     },
     estimatedMinutes: 55,
     sectionItemId: "c-mod6-l2",
+    edits: [
+      // Recall cards and the IV/RV check are placed at least a full section
+      // below what they quiz (same convention as the other trade readings).
+      // Source: the intro's taxonomy of the three barrier types.
+      {
+        op: "activity",
+        after: { sectionEnd: "lw-sec-which-ais-are-eligible-for-deals" },
+        items: [
+          { kind: "exercise", id: "c-paper-barriers-recall-three-barriers" },
+        ],
+      },
+      // The payment 2x2, right after the section that defines it.
+      {
+        op: "activity",
+        after: { sectionEnd: "lw-sec-what-we-can-pay-for-deals" },
+        items: [{ kind: "demo", id: "payment-map" }],
+      },
+      // Source: the IV/RV tags in "What we can buy in deals".
+      {
+        op: "activity",
+        after: { sectionEnd: "lw-sec-humans-may-lack-authority-to-offer-the-a" },
+        items: [{ kind: "exercise", id: "c-paper-barriers-iv-rv" }],
+      },
+      // Source: the fast-takeoff window argument in "Humans might be
+      // unwilling to offer the AI what it wants".
+      {
+        op: "activity",
+        after: { sectionEnd: "lw-sec-our-wtp-is-low" },
+        items: [
+          { kind: "exercise", id: "c-paper-barriers-recall-takeoff-window" },
+        ],
+      },
+      // Source: the fake-input list at the top of "Connection to reality".
+      {
+        op: "activity",
+        after: { sectionEnd: "lw-sec-generic-commitment-problems" },
+        items: [
+          { kind: "exercise", id: "c-paper-barriers-recall-groundhog-day" },
+        ],
+      },
+      // Capstone essay at the end of the main body (before the appendix):
+      // the only place in the module where the three readings argue with
+      // each other.
+      {
+        op: "activity",
+        after: { sectionEnd: "lw-sec-verifying-ai-compliance" },
+        items: [
+          { kind: "exercise", id: "c-paper-barriers-write-adjudicate" },
+        ],
+      },
+    ],
   },
   {
     // GUIDED walkthrough of the contrastive-SDF paper, built in the

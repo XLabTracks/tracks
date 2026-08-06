@@ -1,6 +1,6 @@
 "use client";
 
-import { useId, useState } from "react";
+import { useEffect, useId, useRef, useState } from "react";
 import type { ReactNode } from "react";
 import { cn } from "@/lib/utils";
 
@@ -31,8 +31,51 @@ export interface FoldProps {
 export function Fold({ label = "Optional material", children }: FoldProps) {
   const [open, setOpen] = useState(false);
   const bodyId = useId();
+  const shellRef = useRef<HTMLElement>(null);
+
+  /* The sidebar's "In this lesson" row (and any in-page link) reaches the
+     fold as an anchor to the wrapper rehype-lesson-sections draws around it,
+     and a row that lands on a closed card has not navigated anywhere — so a
+     followed anchor targeting this fold opens it. A click listener rather
+     than hashchange, for LessonPartsReader's reason: the router pushes hash
+     navigations through pushState, which never fires hashchange. The mount
+     check covers arriving with the hash already in the URL. */
+  useEffect(() => {
+    const targeted = (hash: string) => {
+      if (!hash) return false;
+      const target = document.getElementById(decodeURIComponent(hash));
+      return (
+        !!target &&
+        !!shellRef.current &&
+        (target === shellRef.current || target.contains(shellRef.current))
+      );
+    };
+    if (targeted(location.hash.slice(1))) setOpen(true);
+    const onClick = (e: MouseEvent) => {
+      const a = (e.target as HTMLElement).closest?.("a[href]");
+      if (!a) return;
+      const href = a.getAttribute("href") ?? "";
+      const hash = href.startsWith("#")
+        ? href.slice(1)
+        : (() => {
+            try {
+              const u = new URL(href, location.href);
+              return u.pathname === location.pathname ? u.hash.slice(1) : "";
+            } catch {
+              return "";
+            }
+          })();
+      if (targeted(hash)) setOpen(true);
+    };
+    document.addEventListener("click", onClick);
+    return () => document.removeEventListener("click", onClick);
+  }, []);
+
   return (
-    <section className="not-prose border-primary/25 bg-primary/5 my-6 rounded-xl border">
+    <section
+      ref={shellRef}
+      className="not-prose border-primary/25 bg-primary/5 my-6 rounded-xl border"
+    >
       <button
         type="button"
         aria-expanded={open}

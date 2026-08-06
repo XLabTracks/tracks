@@ -68,14 +68,61 @@ Behavioral selection is the observation that training reinforces whichever behav
 
 - However, they will still pursue long-term goals if they have the opportunity, which means influence seekers with slight power-seeking tendencies can be incredibly dangerous.
 
-| Orientation | Pursues | Timescale | Honest test | Notable trait |
-| --- | --- | --- | --- | --- |
-| Schemer | some other terminal goal | long | passes — performs well only to survive selection | costlier solution to the same problem |
-| ROTA | highest return for a single action | single action | — | hard to coordinate behavior between actions |
-| ROTE | maximize reward within an episode | within an episode | tends to catch these sorts of seekers | don't particularly care about being detected |
-| Remotely-influenceable | its reward signal (via distant influences) | within-episode | catches — it doesn't care about getting caught | responds to distant influences given to it by a third-party bad actor |
-| Apparent-success | aim for apparent task success | — | — | optimal kludge of motivations |
-| Influence | influence their deployment | shorter timescales — the minimum time required to control AI behavior in deployment | fails to catch — it'll just forgo the short-term reward | — |
+<table className="border-border w-full border-collapse border text-sm">
+  <thead>
+    <tr>
+      <th className="border-border border px-3 py-2 text-left">Orientation</th>
+      <th className="border-border border px-3 py-2 text-left">Pursues</th>
+      <th className="border-border border px-3 py-2 text-left">Timescale</th>
+      <th className="border-border border px-3 py-2 text-left">Honest test</th>
+      <th className="border-border border px-3 py-2 text-left">Notable trait</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td className="border-border border px-3 py-2">Schemer</td>
+      <td className="border-border border px-3 py-2">some other terminal goal</td>
+      <td className="border-border border px-3 py-2">long</td>
+      <td className="border-border border px-3 py-2">passes — performs well only to survive selection</td>
+      <td className="border-border border px-3 py-2">costlier solution to the same problem</td>
+    </tr>
+    <tr>
+      <td className="border-border border px-3 py-2">ROTA</td>
+      <td className="border-border border px-3 py-2">highest return for a single action</td>
+      <td className="border-border border px-3 py-2">single action</td>
+      <td className="border-border border px-3 py-2">—</td>
+      <td className="border-border border px-3 py-2">hard to coordinate behavior between actions</td>
+    </tr>
+    <tr>
+      <td className="border-border border px-3 py-2">ROTE</td>
+      <td className="border-border border px-3 py-2">maximize reward within an episode</td>
+      <td className="border-border border px-3 py-2">within an episode</td>
+      <td className="border-border border px-3 py-2">tends to catch these sorts of seekers</td>
+      <td className="border-border border px-3 py-2">don't particularly care about being detected</td>
+    </tr>
+    <tr>
+      <td className="border-border border px-3 py-2">Remotely-influenceable</td>
+      <td className="border-border border px-3 py-2">its reward signal (via distant influences)</td>
+      <td className="border-border border px-3 py-2">within-episode</td>
+      <td className="border-border border px-3 py-2">catches — it doesn't care about getting caught</td>
+      <td className="border-border border px-3 py-2">responds to distant influences given to it by a third-party bad actor</td>
+    </tr>
+    <tr>
+      <td className="border-border border px-3 py-2">Apparent-success</td>
+      <td className="border-border border px-3 py-2">aim for apparent task success</td>
+      <td className="border-border border px-3 py-2">—</td>
+      <td className="border-border border px-3 py-2">—</td>
+      <td className="border-border border px-3 py-2">optimal kludge of motivations</td>
+    </tr>
+    <tr>
+      <td className="border-border border px-3 py-2">Influence</td>
+      <td className="border-border border px-3 py-2">influence their deployment</td>
+      <td className="border-border border px-3 py-2">shorter timescales — the minimum time required to control AI behavior in deployment</td>
+      <td className="border-border border px-3 py-2">fails to catch — it'll just forgo the short-term reward</td>
+      <td className="border-border border px-3 py-2">—</td>
+    </tr>
+  </tbody>
+</table>
 
 ## Risks and mitigations
 

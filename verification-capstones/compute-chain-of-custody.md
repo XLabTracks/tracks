@@ -15,7 +15,7 @@ skills: [analogical reasoning, regime analysis, precedent critique]
 prerequisites: [Verification 1 — actors, Verification 2.1 — the hardware layer]
 sources:
   - "[A Collection of AI Governance Research Ideas — von Knebel & Anderljung (2024), idea 66: learning from chain of custody applications in other industries](https://www.markusanderljung.com/blog/a-collection-of-ai-governance-research-ideas-2024)"
-  - "[Open Problems in Technical AI Governance — Reuel et al. (2025)](https://arxiv.org/abs/2407.14981)"
+similar: [stock-and-flow-accounting]
 updated: 2026-08-04
 ---
 
@@ -43,10 +43,6 @@ chemicals. Pick one and take it apart.
 - **The recommendation.** One mechanism worth importing, one worth explicitly
   rejecting, and the reason for each.
 
-Similar card: [Stock and Flow Accounting Case
-Studies](/verification/capstone-bank#stock-and-flow-accounting) — the
-neighbouring idea in the same collection, on registration-and-transfer
-tracking regimes.
 
 ## Why it exists
 

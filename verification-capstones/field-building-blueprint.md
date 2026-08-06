@@ -15,9 +15,6 @@ skills: [theory of change, programme design, budgeting, evaluation design, count
 prerequisites: [Any track, weeks 1-7 complete, Policy week 1 — theory of change]
 sources:
   - "[Blueprints for AI Safety conferences (FBB #9) — The Field Building Blog (2025)](https://fieldbuilding.substack.com/p/blueprints-for-ai-safety-conferences)"
-  - "[What x- or s-risk fieldbuilding organisations would you like to see? (FBB #3)](https://fieldbuilding.substack.com/p/what-new-x-or-s-risk-fieldbuilding)"
-  - "[Events and training directory — aisafety.com](https://www.aisafety.com/events-and-training)"
-  - "[10 EA movement building project ideas — guneyulasturker (2025)](https://forum.effectivealtruism.org/posts/GvsQfgw2rmXPsYFsF/10-ea-movement-building-project-ideas-for-early-career)"
 updated: 2026-08-04
 ---
 

@@ -14,7 +14,7 @@ audience: The contracting officer who has to evaluate bids against whatever you 
 skills: [contract-condition drafting, evidence design, lever analysis, administrability]
 sources:
   - "[A Collection of AI Governance Research Ideas — von Knebel & Anderljung (2024), idea 63: what rules should the US government set regarding government purchases of AI?](https://www.markusanderljung.com/blog/a-collection-of-ai-governance-research-ideas-2024)"
-  - "[NIST AI Risk Management Framework](https://www.nist.gov/itl/ai-risk-management-framework)"
+similar: [best-practices-implementation]
 updated: 2026-08-04
 ---
 
@@ -50,10 +50,6 @@ Draft the conditions for one agency buying one category of AI system.
   not worth it. That is where procurement's real leverage is, and it is not
   usually the strictest condition.
 
-Similar card: [Implementation Details of the Best-Practices
-List](/verification/capstone-bank#best-practices-implementation) — the
-neighbouring idea in the same collection, on implementing the surveyed
-best practices through any channel.
 
 ## Why it exists
 
@@ -69,7 +65,8 @@ against, on a schedule, defensibly enough to survive a protest from the loser.
 ## Scope
 
 **In scope:** published procurement guidance and standard contract clauses, the
-NIST framework and comparable standards as incorporable references, and public
+[NIST framework](https://www.nist.gov/itl/ai-risk-management-framework) and
+comparable standards as incorporable references, and public
 information on AI vendors' terms.
 
 **Out of scope:** the appropriations and competition law of a specific

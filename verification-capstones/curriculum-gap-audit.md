@@ -13,11 +13,6 @@ mentor: optional
 audience: The people who will write next year's version of this program.
 skills: [curriculum analysis, comparative coding, learning-objective design, prioritisation]
 prerequisites: [Any track, weeks 1-6 complete]
-sources:
-  - "[BlueDot Impact — AI Safety Fundamentals](https://bluedot.org)"
-  - "[AI Safety, Ethics and Society — curriculum](https://www.aisafetybook.com/curriculum)"
-  - "[Agent Foundations for Superintelligence-Robust Alignment](https://agentfoundations.study)"
-  - "[Open curricula directory — aisafety.com](https://www.aisafety.com/courses)"
 updated: 2026-08-04
 ---
 
@@ -25,6 +20,12 @@ updated: 2026-08-04
 
 Four open curricula cover overlapping parts of this field, and each one made
 different choices about what to leave out. So did we. Find out what ours cost.
+
+Working material: [BlueDot Impact](https://bluedot.org), [AI Safety, Ethics
+and Society](https://www.aisafetybook.com/curriculum), [Agent Foundations for
+Superintelligence-Robust Alignment](https://agentfoundations.study), and the
+[open curricula directory](https://www.aisafety.com/courses) to cross-check
+them against.
 
 You hand in:
 

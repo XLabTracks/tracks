@@ -13,9 +13,7 @@ mentor: optional
 audience: A grant-maker with forty proposals and twenty minutes each.
 skills: [research scoping, proposal writing, budgeting, falsifier discipline]
 sources:
-  - "[A Collection of AI Governance Research Ideas — von Knebel & Anderljung (2024)](https://www.markusanderljung.com/blog/a-collection-of-ai-governance-research-ideas-2024)"
   - "[Ten AI safety projects I'd like people to work on — Julian Hazell (2025)](https://www.lesswrong.com/posts/vxA2BnCPTaPfnJjti/ten-ai-safety-projects-i-d-like-people-to-work-on)"
-  - "[Request for Proposals: Improving Capability Evaluations — Coefficient Giving, formerly Open Philanthropy (2025, closed)](https://coefficientgiving.org/funds/navigating-transformative-ai/request-for-proposals-improving-capability-evaluations/)"
 updated: 2026-08-04
 ---
 
@@ -25,7 +23,9 @@ There are, publicly and for free, several hundred AI governance research
 ideas that nobody has picked up. They are ideas, not projects. Turn one into a
 project.
 
-Two pages, in the shape a request for proposals asks for:
+Two pages, in the shape a [request for
+proposals](https://coefficientgiving.org/funds/navigating-transformative-ai/request-for-proposals-improving-capability-evaluations/)
+asks for:
 
 - **The question**, in one sentence, answerable in the time you are asking
   for.

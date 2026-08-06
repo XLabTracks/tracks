@@ -14,9 +14,7 @@ audience: The national regulator drafting the reporting obligation, and the prov
 skills: [regime design, telemetry analysis, evasion modelling, cost-of-compliance analysis]
 prerequisites: [Verification 1 — actors, Verification 2.2 — the cloud layer, Verification 3 — covert development]
 sources:
-  - "[Open Problems in Technical AI Governance — Reuel et al. (2025)](https://arxiv.org/abs/2407.14981)"
-  - "[Technical AI Governance project site — Stanford](https://taig.stanford.edu/)"
-  - "[A Collection of AI Governance Research Ideas — von Knebel & Anderljung (2024)](https://www.markusanderljung.com/blog/a-collection-of-ai-governance-research-ideas-2024)"
+  - "[Oversight for Frontier AI through a Know-Your-Customer Scheme for Compute Providers — Egan & Heim (2023)](https://arxiv.org/abs/2310.13625)"
 updated: 2026-08-04
 ---
 

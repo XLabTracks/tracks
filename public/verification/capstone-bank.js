@@ -333,6 +333,27 @@ function openSheet(slug) {
     sheetBody.appendChild(box);
   }
 
+  /* Cross-links are a closed toggle, not a list: one idea per card means the
+     related cards are a side path, and the + is the whole affordance. The
+     links are plain #slug hashes so the existing hashchange handler swaps
+     the sheet — no second navigation path to maintain. */
+  if (e.similar && e.similar.length) {
+    const det = el('details', 'similar');
+    const sum = el('summary', null,
+      `${e.similar.length} similar card${e.similar.length > 1 ? 's' : ''}`);
+    det.appendChild(sum);
+    const list = el('ul');
+    for (const s of e.similar) {
+      const li = el('li');
+      const a = el('a', null, s.title);
+      a.href = '#' + s.slug;
+      li.appendChild(a);
+      list.appendChild(li);
+    }
+    det.appendChild(list);
+    sheetBody.appendChild(det);
+  }
+
   /* The bank is a catalogue; the workspace is where the drafting happens.
      The link carries the slug so the workspace can name what is being
      drafted rather than opening blank. */

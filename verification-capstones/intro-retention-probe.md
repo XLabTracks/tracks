@@ -13,12 +13,6 @@ mentor: recommended
 audience: Whoever writes week 1 of the next version of this program.
 skills: [instrument design, measurement, comparing curricula, reporting weak evidence honestly]
 prerequisites: [Any track, weeks 1-4 complete]
-sources:
-  - "[EA Intro Fellowship curriculum](https://resources.eagroups.org/intro-fellowship-curriculum)"
-  - "[EA In-Depth Fellowship syllabi](https://resources.eagroups.org/post-intro-fellowship-syllabi-and-programs/in-depth-fellowship)"
-  - "[BlueDot Impact — AI Safety Fundamentals](https://bluedot.org)"
-  - "[Part-time courses related to top problems (directory)](https://airtable.com/app53PsYpHxJW61l3/shr6eKNhPjxj4UH4E/tblqpu7Tcy2734cji)"
-  - "[Open curricula directory — aisafety.com](https://www.aisafety.com/courses)"
 updated: 2026-08-04
 ---
 
@@ -49,6 +43,14 @@ Measure it.
 - **The revision list.** Which week-1 assumptions hold, which do not, and what
   the tiered hint system has to absorb — the concrete deliverable the program
   can act on.
+
+Working material for the trace: the [EA Intro Fellowship
+curriculum](https://resources.eagroups.org/intro-fellowship-curriculum),
+[EA In-Depth Fellowship
+syllabi](https://resources.eagroups.org/post-intro-fellowship-syllabi-and-programs/in-depth-fellowship),
+[BlueDot Impact](https://bluedot.org), the [80,000 Hours part-time courses
+directory](https://airtable.com/app53PsYpHxJW61l3/shr6eKNhPjxj4UH4E/tblqpu7Tcy2734cji),
+and the [open curricula directory](https://www.aisafety.com/courses).
 
 ## Why it exists
 

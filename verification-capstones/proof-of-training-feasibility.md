@@ -15,7 +15,6 @@ skills: [feasibility assessment, provenance reasoning, adversarial analysis, evi
 prerequisites: [Verification 2.0 — confidentiality vs verifiability, Verification 2.1 — the hardware layer]
 sources:
   - "[Open Technical Problems in Open-Weight AI Model Risk Management (2025), §4.5 model provenance and forensics: model heritage inference, and how practical and scalable proof-of-training methods are](https://openreview.net/forum?id=8QyGLnFkzc)"
-  - "[Open Problems in Technical AI Governance — Reuel et al. (2025), verification questions: could proof-of-learning demonstrate and verify model ownership?](https://arxiv.org/abs/2407.14981)"
 updated: 2026-08-04
 ---
 

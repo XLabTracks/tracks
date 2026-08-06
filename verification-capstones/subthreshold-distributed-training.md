@@ -15,8 +15,6 @@ skills: [technical feasibility assessment, evasion modelling, threshold design, 
 prerequisites: [Verification 2.1 — the hardware layer, Verification 3 — covert development, TG week 2 — compute governance]
 sources:
   - "[Open Problems in Technical AI Governance — Reuel et al. (2025), compute questions: can AI models be trained using a large number of small compute clusters?](https://arxiv.org/abs/2407.14981)"
-  - "[What does it take to catch a Chinchilla? — Shavit (2023)](https://arxiv.org/abs/2303.11341)"
-  - "[A Collection of AI Governance Research Ideas — von Knebel & Anderljung (2024), idea 77: compute replacement](https://www.markusanderljung.com/blog/a-collection-of-ai-governance-research-ideas-2024)"
 updated: 2026-08-04
 ---
 

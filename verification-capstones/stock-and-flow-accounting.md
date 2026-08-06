@@ -14,6 +14,7 @@ skills: [case studies, regime analysis, quantitative loss rates]
 prerequisites: [Verification 1 — actors, Verification 2.1 — the hardware layer]
 sources:
   - "[A Collection of AI Governance Research Ideas — von Knebel & Anderljung (2024), idea 65: stock and flow accounting case studies](https://www.markusanderljung.com/blog/a-collection-of-ai-governance-research-ideas-2024)"
+similar: [compute-chain-of-custody]
 updated: 2026-08-06
 ---
 
@@ -63,7 +64,3 @@ measured effectiveness — for candidates from the idea's own list, plus the
 concluding note the second research question asks for: what this implies
 for a compute regime's design.
 
-Similar cards: [Steal a Chain of Custody From Another
-Industry](/verification/capstone-bank#compute-chain-of-custody) — the
-neighbouring idea in the same collection, on chain-of-custody mechanisms
-from other industries.

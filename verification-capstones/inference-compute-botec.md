@@ -14,6 +14,7 @@ audience: The policymaker sizing a risk who needs the arithmetic, not a headline
 skills: [back-of-envelope estimation, sensitivity analysis, reproducibility]
 sources:
   - "[A Collection of AI Governance Research Ideas — von Knebel & Anderljung (2024), idea 72: BOTECs of inference compute needs](https://www.markusanderljung.com/blog/a-collection-of-ai-governance-research-ideas-2024)"
+similar: [training-vs-inference, which-compute-target]
 updated: 2026-08-06
 ---
 
@@ -50,9 +51,3 @@ figure. Note the idea's own caution and follow it: it is not clear these
 BOTECs should be widely published — the deliverable is written for a
 policymaker, and publication is a decision, not a default.
 
-Similar cards: [Understanding Training vs.
-Inference](/verification/capstone-bank#training-vs-inference) — the
-neighbouring idea in the same collection, drawing the distinction whose
-inference side this BOTEC quantifies; [Which Compute Are We Even
-Regulating?](/verification/capstone-bank#which-compute-target) — the
-definitional question inference compute presses on.

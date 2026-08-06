@@ -13,6 +13,7 @@ mentor: optional
 skills: [distillation, technical communication]
 sources:
   - "[A Collection of AI Governance Research Ideas — von Knebel & Anderljung (2024), idea 76: understanding training vs. inference](https://www.markusanderljung.com/blog/a-collection-of-ai-governance-research-ideas-2024)"
+similar: [inference-compute-botec, which-compute-target]
 updated: 2026-08-06
 ---
 
@@ -49,8 +50,3 @@ that draws the distinction cleanly, communicates it to a non-technical
 reader, and flags the regulatory implications the idea marks as the
 optional extension.
 
-Similar cards: [BOTECs of Inference Compute
-Needs](/verification/capstone-bank#inference-compute-botec) — the
-collection's quantitative neighbour on inference compute; [Which Compute
-Are We Even Regulating?](/verification/capstone-bank#which-compute-target)
-— the definitional question this distinction feeds.

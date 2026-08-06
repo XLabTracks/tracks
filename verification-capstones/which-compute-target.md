@@ -14,7 +14,7 @@ audience: The drafter who has to put one definition in a rule and live with it.
 skills: [regulatory definition design, quantitative analysis, sensitivity analysis, technical writing]
 sources:
   - "[A Collection of AI Governance Research Ideas — von Knebel & Anderljung (2024), idea 78: which compute? defining the regulatory target for compute governance](https://www.markusanderljung.com/blog/a-collection-of-ai-governance-research-ideas-2024)"
-  - "[Open Problems in Technical AI Governance — Reuel et al. (2025)](https://arxiv.org/abs/2407.14981)"
+similar: [ops-threshold-adjustments, training-vs-inference]
 updated: 2026-08-04
 ---
 
@@ -45,11 +45,6 @@ Pick three of these definitions, and score the same set of models under each.
 - **The recommendation.** One definition, with what you accept in exchange, and
   the review clause you would attach knowing the technology moves.
 
-Similar cards: [OP/s Threshold Adjustments for
-Performance](/verification/capstone-bank#ops-threshold-adjustments) and
-[Understanding Training vs.
-Inference](/verification/capstone-bank#training-vs-inference) —
-neighbouring ideas in the same collection, each its own card.
 
 ## Why it exists
 

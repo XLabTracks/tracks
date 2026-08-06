@@ -15,7 +15,6 @@ skills: [signature analysis, privacy-preserving verification, detection reasonin
 prerequisites: [Verification 2.1 — the hardware layer, Verification 2.2 — the cloud layer, Verification 3 — covert development]
 sources:
   - "[Open Problems in Technical AI Governance — Reuel et al. (2025), compute questions: can large training runs be detected while retaining developer privacy, e.g. through signatures in processor utilisation?](https://arxiv.org/abs/2407.14981)"
-  - "[What does it take to catch a Chinchilla? — Shavit (2023)](https://arxiv.org/abs/2303.11341)"
 updated: 2026-08-04
 ---
 

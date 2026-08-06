@@ -287,7 +287,7 @@ export function LessonPartsReader({ children }: { children: ReactNode }) {
             {whole ? "Read part by part" : "Read the whole lesson"}
           </Button>
         </div>
-        <ol className="no-scrollbar flex items-end overflow-x-auto">
+        <ol className="flex items-end overflow-x-auto">
           {parts.map((p, i) => {
             const now = !whole && i === at;
             const inner = (

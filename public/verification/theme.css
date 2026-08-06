@@ -520,6 +520,22 @@ button, [role='button'], [role='radio'], [role='tab'], .chip, .nav a, .brand,
    horizontal scroll — which is what happens between the mobile breakpoint and
    about 1100px, where there is no room for every link but the bar is still
    one row. */
+/* No scrollbars anywhere — the author's call, at the root so it holds for
+   the page and for every scrolling box inside it. Scrolling still works;
+   only the painted bar is gone. Lives here as well as in the app's
+   globals.css because this stylesheet is what a lifted copy of the course
+   would carry.
+
+   Trap: neither declaration is a fallback for the other — Firefox reads
+   scrollbar-width, WebKit and Chromium only the pseudo-element, and that
+   one must be display:none rather than width:0. */
+:root,
+* {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+*::-webkit-scrollbar { display: none; }
+
 .nav {
   flex: 1;
   min-width: 0;
@@ -529,9 +545,7 @@ button, [role='button'], [role='radio'], [role='tab'], .chip, .nav a, .brand,
   gap: 14px;
   font-size: var(--fs-md);
   overflow-x: auto;
-  scrollbar-width: none;
 }
-.nav::-webkit-scrollbar { display: none; }
 .nav a { white-space: nowrap; }
 .nav a {
   position: relative;
@@ -739,10 +753,8 @@ button, [role='button'], [role='radio'], [role='tab'], .chip, .nav a, .brand,
     flex: none;
     width: 100%;
     overflow-x: auto;
-    scrollbar-width: none;
     padding-bottom: 2px;
   }
-  .nav::-webkit-scrollbar { display: none; }
   .nav a { white-space: nowrap; padding: 4px 8px; }
   .header-right { margin-left: auto; }
 }

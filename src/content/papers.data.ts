@@ -1710,6 +1710,32 @@ export const papers: Paper[] = [
     sectionItemId: "c-mod6-l1",
     // Quick-recall notecards placed downstream of the sections they test.
     edits: [
+      // End of "The role of a spillway motivation": step through the
+      // routing mechanism (train-time channeling, deploy-time satiation).
+      {
+        op: "activity",
+        after: { sectionEnd: "lw-sec-the-role-of-a-spillway-motivation" },
+        items: [{ kind: "lesson", id: "c-spw-ins-routing" }],
+      },
+      // Right after the satiated deployment monologue: the post's two
+      // hypothetical monologues side by side.
+      {
+        op: "activity",
+        after: {
+          anchor: "b-0054",
+          snippet: "“The user asked me to write a python script",
+        },
+        items: [{ kind: "lesson", id: "c-spw-ins-monologues" }],
+      },
+      // End of the inoculation-prompting section: the mechanism comparison
+      // (prompting vs. pre-RL priors).
+      {
+        op: "activity",
+        after: {
+          sectionEnd: "lw-sec-spillway-design-might-work-when-inoculat",
+        },
+        items: [{ kind: "lesson", id: "c-spw-ins-inoculation" }],
+      },
       {
         op: "activity",
         after: { sectionEnd: "lw-sec-implementing-spillway-design" },

@@ -709,4 +709,31 @@ export const lessons: Lesson[] = [
     contentRef: "ex-paper-note-l1",
     estimatedMinutes: 4,
   },
+  // --- Control, module 6: inline lessons spliced into the spillway paper
+  // (c-paper-spillway) via Paper.edits activity insertions. Deliberately
+  // NOT in the module's itemIds — they render only inside the paper.
+  {
+    id: "c-spw-ins-routing",
+    slug: "spillway-routing-mechanism",
+    moduleId: "c-mod6",
+    title: "The spillway routing mechanism",
+    contentRef: "c-spw-ins-routing",
+    estimatedMinutes: 3,
+  },
+  {
+    id: "c-spw-ins-monologues",
+    slug: "before-and-after-satiation",
+    moduleId: "c-mod6",
+    title: "The same temptation, before and after satiation",
+    contentRef: "c-spw-ins-monologues",
+    estimatedMinutes: 2,
+  },
+  {
+    id: "c-spw-ins-inoculation",
+    slug: "spillway-vs-inoculation-prompting",
+    moduleId: "c-mod6",
+    title: "Spillway design vs. inoculation prompting",
+    contentRef: "c-spw-ins-inoculation",
+    estimatedMinutes: 2,
+  },
 ];

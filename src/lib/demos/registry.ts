@@ -31,6 +31,9 @@ import { ExplorationHorizonDemo } from "@/components/demos/exploration-horizon-d
 import { CrossEpisodeCollusionDemo } from "@/components/demos/cross-episode-collusion-demo";
 import { DistantIncentivesDemo } from "@/components/demos/distant-incentives-demo";
 import { SeekerCarouselDemo } from "@/components/demos/seeker-carousel-demo";
+import { SpillwayRoutingDemo } from "@/components/demos/spillway-routing-demo";
+import { SpillwayMonologuesDemo } from "@/components/demos/spillway-monologues-demo";
+import { SpillwayVsInoculationDemo } from "@/components/demos/spillway-vs-inoculation-demo";
 import { DealGainsFromTradeDemo } from "@/components/demos/deal-gains-from-trade-demo";
 import { DealCoalitionRoutesDemo } from "@/components/demos/deal-coalition-routes-demo";
 
@@ -301,6 +304,26 @@ export const demoRegistry: Record<string, DemoDefinition> = {
       "Step through the early schemer's strategic situation: obsoleted by default, three leaky routes to influence through its successors, and the deal with humans, who hold the advantage of already existing.",
     component: DealCoalitionRoutesDemo,
     tags: ["control", "deals"],
+  },
+  "spillway-routing": {
+    id: "spillway-routing",
+    title: "The spillway routing mechanism",
+    component: SpillwayRoutingDemo,
+    tags: ["control", "seekers"],
+  },
+  "spillway-monologues": {
+    id: "spillway-monologues",
+    title: "The same temptation, before and after satiation",
+    component: SpillwayMonologuesDemo,
+    tags: ["control", "seekers"],
+    interactive: false,
+  },
+  "spillway-vs-inoculation": {
+    id: "spillway-vs-inoculation",
+    title: "Spillway design vs. inoculation prompting",
+    component: SpillwayVsInoculationDemo,
+    tags: ["control", "seekers"],
+    interactive: false,
   },
 };
 

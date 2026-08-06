@@ -1,0 +1,444 @@
+{
+  "_comment": "Hand-authored citation registry for the Works cited appendix. entries: MLA fields plus a hand-written 'about' line per work; the appendix assembles itself from each lesson's links (rehype-lesson-citations) and looks them up here. pending: cited URLs whose bibliographic facts are still being verified -- they render nothing until moved into entries; never promote one unchecked. excluded: links that are not works (course tools, shared working documents). citations.test.ts holds all three sets honest.",
+  "entries": {
+    "https://arxiv.org/abs/2310.13625": {
+      "title": "Oversight for Frontier AI through a Know-Your-Customer Scheme for Compute Providers",
+      "about": "A policy paper proposing that compute providers run know-your-customer checks so governments can oversee frontier AI development.",
+      "authors": "Egan, Janet, and Lennart Heim",
+      "container": "arXiv",
+      "date": "Oct. 2023"
+    },
+    "https://arxiv.org/abs/2311.10748": {
+      "title": "An International Treaty to Implement a Global Compute Cap for Advanced Artificial Intelligence",
+      "about": "A treaty proposal for a global cap on the computational power used to develop advanced AI, with enforcement machinery.",
+      "authors": "Miotti, Andrea",
+      "container": "arXiv",
+      "date": "Nov. 2023"
+    },
+    "https://arxiv.org/abs/2402.08797": {
+      "title": "Computing Power and the Governance of Artificial Intelligence",
+      "about": "The foundational survey of compute as a governance lever — why computing power is detectable, excludable, and quantifiable in ways algorithms and data are not.",
+      "authors": "Sastry, Girish, Lennart Heim, Haydn Belfield, et al.",
+      "container": "arXiv",
+      "date": "Feb. 2024"
+    },
+    "https://arxiv.org/abs/2403.05812": {
+      "title": "Algorithmic Progress in Language Models",
+      "about": "An empirical study of 200+ language-model results finding the compute needed for a fixed capability halves roughly every eight months through algorithmic progress.",
+      "authors": "Ho, Anson, Tamay Besiroglu, Ege Erdil, et al.",
+      "container": "arXiv",
+      "date": "Mar. 2024"
+    },
+    "https://arxiv.org/abs/2403.08501": {
+      "title": "Governing Through the Cloud: The Intermediary Role of Compute Providers in AI Regulation",
+      "about": "A paper on cloud compute providers as regulatory intermediaries — securers, record keepers, verifiers, and enforcers of AI rules.",
+      "authors": "Heim, Lennart, Tim Fist, Janet Egan, et al.",
+      "container": "arXiv",
+      "date": "Mar. 2024"
+    },
+    "https://arxiv.org/abs/2404.18308": {
+      "title": "Near-Term Enforcement of AI Chip Export Controls Using a Firmware-Based Design for Offline Licensing",
+      "about": "A design for firmware-based offline licensing that would disable AI chips lacking a regulatory license, as a near-term export-control enforcement mechanism.",
+      "authors": "Petrie, James",
+      "container": "arXiv",
+      "date": "Apr. 2024"
+    },
+    "https://arxiv.org/abs/2408.16074": {
+      "title": "Verification Methods for International AI Agreements",
+      "about": "A survey of ten verification techniques for catching violations of international AI agreements, from unauthorized training runs to undeclared data centers.",
+      "authors": "Wasil, Akash R., Tom Reed, Jack William Miller, et al.",
+      "container": "arXiv",
+      "date": "Aug. 2024"
+    },
+    "https://arxiv.org/abs/2505.03742": {
+      "title": "Hardware-Enabled Mechanisms for Verifying Responsible AI Development",
+      "about": "A study of hardware-enabled mechanisms for verifiable reporting of AI training activity — compute usage, cluster configuration, and workload claims.",
+      "authors": "O'Gara, Aidan, Gabriel Kulp, Will Hodgkins, et al.",
+      "container": "arXiv",
+      "date": "Apr. 2025"
+    },
+    "https://arxiv.org/abs/2507.10618": {
+      "title": "Compute Requirements for Algorithmic Innovation in Frontier AI Models",
+      "about": "An analysis of 36 algorithmic innovations asking how much compute it takes to invent frontier-model improvements, and whether compute restrictions would slow them.",
+      "authors": "Barnett, Peter",
+      "container": "arXiv",
+      "date": "July 2025"
+    },
+    "https://arxiv.org/abs/2507.15916": {
+      "title": "Verifying International Agreements on AI: Six Layers of Verification for Rules on Large-Scale AI Development and Deployment",
+      "about": "The six-layer verification framework this module leans on: independent layers from chip-level security to whistleblower programs for verifying AI agreements.",
+      "authors": "Baker, Mauricio, Gabriel Kulp, Oliver Marks, et al.",
+      "container": "arXiv",
+      "date": "July 2025"
+    },
+    "https://arxiv.org/abs/2511.10783": {
+      "title": "An International Agreement to Prevent the Premature Creation of Artificial Superintelligence",
+      "about": "MIRI's draft international agreement to prevent the premature creation of artificial superintelligence, the treaty text several lessons read against.",
+      "authors": "Scher, Aaron, David Abecassis, Peter Barnett, et al.",
+      "container": "arXiv",
+      "date": "Nov. 2025"
+    },
+    "https://arxiv.org/abs/2601.01296": {
+      "title": "Aggressive Compression Enables LLM Weight Theft",
+      "about": "A demonstration that aggressive compression makes stolen model weights far easier to exfiltrate — 16x to 100x smaller with modest quality loss — and proposed defenses.",
+      "authors": "Brown, Davis, Juan-Pablo Rivera, Dan Hendrycks, et al.",
+      "container": "arXiv",
+      "date": "Jan. 2026"
+    },
+    "https://arxiv.org/abs/2603.07835": {
+      "title": "DistillGuard: Evaluating Defenses Against LLM Knowledge Distillation",
+      "about": "An evaluation framework for output-level defenses against knowledge-distillation attacks on proprietary model APIs, finding most defenses ineffective.",
+      "authors": "Jiang, Bo",
+      "container": "arXiv",
+      "date": "Mar. 2026"
+    },
+    "https://arxiv.org/abs/2605.29359": {
+      "title": "Does Distributed Training Undermine Compute Governance?",
+      "about": "An examination of whether advances in distributed training let frontier-scale runs escape datacenter-centric compute governance, with countermeasures.",
+      "authors": "Rahman, Robi",
+      "container": "arXiv",
+      "date": "May 2026"
+    },
+    "https://arxiv.org/abs/2606.19262": {
+      "title": "Detecting Hidden ML Training With Zero-Overhead Telemetry",
+      "about": "A study classifying GPU workloads from privacy-preserving telemetry, reporting 98.2 percent accuracy at spotting concealed training runs.",
+      "authors": "Rahman, Robi, and Sabiha Tajdari",
+      "container": "arXiv",
+      "date": "June 2026"
+    },
+    "https://arxiv.org/abs/2606.25059": {
+      "title": "What Does It Mean to Break a Distillation Defense?",
+      "about": "A threat-model framework for judging when a distillation defense is actually broken, describing attackers by query budget, data budget, and interface.",
+      "authors": "Libon, Lena, Pura Peetathawatchai, Michael Aerni, et al.",
+      "container": "arXiv",
+      "date": "June 2026"
+    },
+    "https://arxiv.org/html/2407.05694v1": {
+      "title": "On the Limitations of Compute Thresholds as a Governance Strategy",
+      "about": "The counterargument on thresholds: why compute cutoffs are a shaky governance proxy, since the compute-risk relationship is uncertain and moving.",
+      "authors": "Hooker, Sara",
+      "container": "arXiv",
+      "date": "July 2024"
+    },
+    "https://arxiv.org/html/2502.06559v1": {
+      "title": "Can We Trust AI Benchmarks? An Interdisciplinary Review of Current Issues in AI Evaluation",
+      "about": "An interdisciplinary review of ~100 studies cataloguing what goes wrong in AI benchmarking, from dataset bias to data contamination.",
+      "authors": "Eriksson, Maria, Erasmo Purificato, Arman Noroozian, et al.",
+      "container": "arXiv",
+      "date": "Feb. 2025"
+    },
+    "https://arxiv.org/pdf/2506.15867#page=128": {
+      "title": "Mechanisms to Verify International Agreements About AI Development",
+      "about": "MIRI's mechanism-by-mechanism study of how countries could verify compliance with negotiated AI rules, across three policy scenarios.",
+      "authors": "Scher, Aaron, and Lisa Thiergart",
+      "container": "arXiv",
+      "date": "June 2025"
+    },
+    "https://doi.org/10.48550/arXiv.2304.04123": {
+      "title": "Nuclear Arms Control Verification and Lessons for AI Treaties",
+      "about": "A case study mining nuclear arms-control verification for lessons about what makes AI treaty verification hard and how to make it easier.",
+      "authors": "Baker, Mauricio",
+      "container": "arXiv",
+      "date": "Apr. 2023"
+    },
+    "https://www.justice.gov/archives/opa/pr/chinese-national-residing-california-arrested-theft-artificial-intelligence-related-trade": {
+      "title": "Chinese National Residing in California Arrested for Theft of Artificial Intelligence-Related Trade Secrets from Google",
+      "about": "The March 2024 DOJ press release announcing the charges in the Linwei Ding trade-secrets case that anchors lesson 3.0.",
+      "org": "United States, Department of Justice",
+      "date": "6 Mar. 2024"
+    },
+    "https://www.justice.gov/opa/pr/former-google-engineer-found-guilty-economic-espionage-and-theft-confidential-ai-technology": {
+      "title": "Former Google Engineer Found Guilty of Economic Espionage and Theft of Confidential AI Technology",
+      "about": "The January 2026 DOJ press release announcing Ding's conviction on all fourteen counts.",
+      "org": "United States, Department of Justice",
+      "date": "30 Jan. 2026"
+    },
+    "https://www.reuters.com/technology/chinese-entities-turn-amazon-cloud-its-rivals-access-high-end-us-chips-ai-2024-08-23/": {
+      "title": "Exclusive: Chinese Entities Turn to Amazon Cloud and Its Rivals to Access High-End US Chips, AI",
+      "about": "The Reuters investigation into Chinese organizations reaching restricted US chips through cloud services and intermediaries.",
+      "container": "Reuters",
+      "date": "23 Aug. 2024"
+    },
+    "https://www.federalregister.gov/documents/2024/01/29/2024-01580/taking-additional-steps-to-address-the-national-emergency-with-respect-to-significant-malicious": {
+      "title": "Taking Additional Steps to Address the National Emergency with Respect to Significant Malicious Cyber-Enabled Activities",
+      "about": "The Federal Register text of the proposed IaaS know-your-customer rule, informally known as “Preventing Access to U.S. IaaS Products by Malicious Cyber Actors.”",
+      "org": "United States, Department of Commerce",
+      "container": "Federal Register",
+      "date": "29 Jan. 2024"
+    },
+    "https://www.reginfo.gov/public/do/eAgendaViewRule?pubId=202510&RIN=0694-AJ35": {
+      "title": "Unified Agenda of Regulatory and Deregulatory Actions, RIN 0694-AJ35",
+      "about": "The regulatory-agenda entry recording that the proposed IaaS rule was withdrawn in December 2025.",
+      "org": "Office of Information and Regulatory Affairs",
+      "container": "Reginfo.gov",
+      "date": "Dec. 2025"
+    },
+    "https://www.federalregister.gov/documents/2025/01/15/2025-00636/framework-for-artificial-intelligence-diffusion": {
+      "title": "Framework for Artificial Intelligence Diffusion",
+      "about": "The Federal Register text of the January 2025 interim final rule that would have controlled third-country compute and model-weight transfers.",
+      "org": "United States, Bureau of Industry and Security",
+      "container": "Federal Register",
+      "date": "15 Jan. 2025"
+    },
+    "https://www.bis.gov/press-release/department-commerce-announces-rescission-biden-era-artificial-intelligence-diffusion-rule-strengthens": {
+      "title": "Department of Commerce Announces Rescission of Biden-Era Artificial Intelligence Diffusion Rule",
+      "about": "The Commerce Department press release announcing the AI diffusion rule's rescission.",
+      "org": "United States, Department of Commerce",
+      "date": "13 May 2025"
+    },
+    "https://www.federalregister.gov/documents/2023/11/01/2023-24283/safe-secure-and-trustworthy-development-and-use-of-artificial-intelligence": {
+      "title": "Safe, Secure, and Trustworthy Development and Use of Artificial Intelligence",
+      "about": "The Federal Register text of Executive Order 14110, the 2023 order whose compute-reporting duties the cloud lessons treat as a template.",
+      "org": "United States, Executive Office of the President",
+      "container": "Federal Register",
+      "date": "1 Nov. 2023"
+    },
+    "https://www.federalregister.gov/documents/2025/09/10/2025-17508/restoring-the-united-states-department-of-war": {
+      "title": "Restoring the United States Department of War",
+      "about": "The Federal Register text of Executive Order 14347, restyling the Department of Defense as the Department of War.",
+      "org": "United States, Executive Office of the President",
+      "container": "Federal Register",
+      "date": "10 Sept. 2025"
+    },
+    "https://www.sec.gov/enforcement-litigation/whistleblower-program": {
+      "title": "Whistleblower Program",
+      "about": "The SEC's own description of its whistleblower program: 10-30 percent awards, anti-retaliation enforcement, and anonymous reporting through counsel.",
+      "org": "U.S. Securities and Exchange Commission"
+    },
+    "https://leginfo.legislature.ca.gov/faces/billTextClient.xhtml?bill_id=202520260SB53": {
+      "title": "SB-53 Artificial Intelligence Models: Large Developers (2025-2026)",
+      "about": "The bill text of California SB 53, the Transparency in Frontier Artificial Intelligence Act.",
+      "org": "California Legislature",
+      "container": "California Legislative Information",
+      "date": "2025"
+    },
+    "https://fpf.org/blog/californias-sb-53-the-first-frontier-ai-law-explained/": {
+      "title": "California's SB 53: The First Frontier AI Law, Explained",
+      "about": "A section-by-section explainer of SB 53's duties for large frontier developers.",
+      "org": "Future of Privacy Forum",
+      "date": "3 Oct. 2025"
+    },
+    "https://www.whitecase.com/insight-alert/california-enacts-landmark-ai-transparency-law-transparency-frontier-artificial": {
+      "title": "California Enacts Landmark AI Transparency Law: The Transparency in Frontier Artificial Intelligence Act",
+      "about": "A law-firm client alert summarizing what SB 53 requires and of whom.",
+      "org": "White & Case LLP",
+      "date": "2025"
+    },
+    "https://artificialintelligenceact.eu/article/51/": {
+      "title": "Article 51: Classification of General-Purpose AI Models as General-Purpose AI Models with Systemic Risk",
+      "about": "The consolidated text of the AI Act article that presumes systemic risk above 10^25 training FLOP.",
+      "container": "EU Artificial Intelligence Act",
+      "publisher": "artificialintelligenceact.eu"
+    },
+    "https://www.un.org/independent-international-scientific-panel-ai/en": {
+      "title": "Independent International Scientific Panel on AI",
+      "about": "The UN's page for the forty-scientist panel established in 2025 to build a shared scientific picture of AI risk.",
+      "org": "United Nations"
+    },
+    "https://www.nist.gov/caisi": {
+      "title": "Center for AI Standards and Innovation (CAISI)",
+      "about": "NIST's page for the center, formerly the US AI Safety Institute, that runs pre-deployment testing agreements with frontier developers.",
+      "org": "National Institute of Standards and Technology"
+    },
+    "https://nuclearsuppliersgroup.org/images/Files%20and%20Documents/Documents/Seminars/2009_Nuclear%20Suppliers%20Group%20Transparency%20Seminar_New-York.pdf": {
+      "title": "Nuclear Suppliers Group Transparency Seminar",
+      "about": "The NSG's own seminar record, covering the 1974 Indian test and the group's formation and role.",
+      "org": "Nuclear Suppliers Group",
+      "date": "15 Oct. 2009"
+    },
+    "https://carnegieendowment.org/research/2005/09/a-q-khan-nuclear-chronology?lang=en": {
+      "title": "A. Q. Khan Nuclear Chronology",
+      "about": "A documented chronology of the A. Q. Khan proliferation network.",
+      "authors": "Laufer, Michael",
+      "container": "Carnegie Endowment for International Peace",
+      "date": "7 Sept. 2005"
+    },
+    "https://www.fatf-gafi.org/en/publications/Fatfrecommendations/Guidance-Beneficial-Ownership-Legal-Persons.html": {
+      "title": "Guidance on Beneficial Ownership of Legal Persons",
+      "about": "The FATF guidance on piercing shell-company ownership — the beneficial-ownership machinery the evasion lessons lean on.",
+      "org": "Financial Action Task Force",
+      "date": "2023",
+      "standalone": true
+    },
+    "https://www.bmj.com/content/320/7237/768": {
+      "title": "Human Error: Models and Management",
+      "about": "The classic Swiss-cheese-model paper on how layered defenses fail through aligned holes.",
+      "authors": "Reason, James",
+      "container": "BMJ",
+      "publisher": "vol. 320",
+      "date": "2000, pp. 768-70"
+    },
+    "https://www.iaea.org/topics/additional-protocol": {
+      "title": "Additional Protocol",
+      "about": "The IAEA's page on the Additional Protocol, the strengthened-safeguards instrument that answers concealment with expanded access.",
+      "org": "International Atomic Energy Agency"
+    },
+    "https://www.iaea.org/sites/default/files/safeguards0707.pdf": {
+      "title": "IAEA Safeguards: Staying Ahead of the Game",
+      "about": "An IAEA account of how safeguards were strengthened after Iraq, and what staying ahead of evasion takes.",
+      "org": "International Atomic Energy Agency",
+      "date": "2007",
+      "standalone": true
+    },
+    "https://www.iaea.org/sites/default/files/publications/magazines/bulletin/bull37-1/37105394248.pdf": {
+      "title": "Nuclear Verification in South Africa",
+      "about": "The IAEA Bulletin account of verifying South Africa's voluntary disarmament, the one full walk-back on record.",
+      "authors": "von Baeckmann, Adolf, Garry Dillon, and Demetrius Perricos",
+      "container": "IAEA Bulletin",
+      "publisher": "vol. 37, no. 1",
+      "date": "1995"
+    },
+    "https://www.ctbto.org/our-work/international-monitoring-system": {
+      "title": "The International Monitoring System",
+      "about": "The CTBTO's page on the 321-station monitoring network that listens for nuclear tests worldwide.",
+      "org": "Comprehensive Nuclear-Test-Ban Treaty Organization"
+    },
+    "https://www.wassenaar.org/about-us/": {
+      "title": "About Us",
+      "about": "The Wassenaar Arrangement's own statement of purpose — the post-Cold-War export-control regime for dual-use goods.",
+      "org": "The Wassenaar Arrangement"
+    },
+    "https://2009-2017.state.gov/t/avc/trty/101888.htm": {
+      "title": "Anti-Ballistic Missile Treaty (ABM Treaty)",
+      "about": "The State Department's archive page for the ABM Treaty, with the treaty text.",
+      "org": "United States, Department of State"
+    },
+    "https://www.rand.org/pubs/research_reports/RRA2849-1.html": {
+      "title": "Securing AI Model Weights: Preventing Theft and Misuse of Frontier Models",
+      "about": "RAND's report on what it would take to keep frontier model weights from being stolen, across attacker capability levels.",
+      "authors": "Nevo, Sella, et al.",
+      "publisher": "RAND Corporation",
+      "date": "2024",
+      "standalone": true
+    },
+    "https://www.rand.org/pubs/research_reports/RRA3686-1.html": {
+      "title": "Strategies and Detection Gaps in a Game-Theoretic Model of Compute Governance",
+      "about": "The RAND game-theoretic study of compute-governance detection gaps the cloud-limits lesson quotes throughout.",
+      "authors": "Moon, Vedula, Geneson, and Bar-on",
+      "publisher": "RAND Corporation",
+      "date": "2025",
+      "standalone": true
+    },
+    "https://carnegieendowment.org/research/2026/05/the-geopolitical-debates-over-controlling-cloud-compute": {
+      "title": "The Geopolitical Debates Over Controlling Cloud Compute",
+      "about": "The Carnegie analysis of the cloud loophole in chip export controls and the politics of closing it, quoted in the cloud-limits lesson.",
+      "authors": "Tan, Noah",
+      "container": "Carnegie Endowment for International Peace",
+      "date": "5 May 2026"
+    },
+    "https://cset.georgetown.edu/publication/the-semiconductor-supply-chain/": {
+      "title": "The Semiconductor Supply Chain: Assessing National Competitiveness",
+      "about": "CSET's mapping of the semiconductor supply chain and where national chokepoints sit.",
+      "authors": "Khan, Saif M., Alexander Mann, and Dahlia Peterson",
+      "publisher": "Center for Security and Emerging Technology",
+      "date": "Jan. 2021",
+      "standalone": true
+    },
+    "https://en.wikipedia.org/wiki/Executive_Order_14110": {
+      "title": "Executive Order 14110",
+      "about": "The encyclopedia article on EO 14110's history, contents, and 2025 rescission.",
+      "org": "Wikipedia contributors",
+      "container": "Wikipedia, The Free Encyclopedia"
+    },
+    "https://en.wikipedia.org/wiki/Expected_value": {
+      "title": "Expected Value",
+      "about": "The encyclopedia article on expected value, the weighted-average concept the research-tips lesson uses for prioritization.",
+      "org": "Wikipedia contributors",
+      "container": "Wikipedia, The Free Encyclopedia"
+    },
+    "https://en.wikipedia.org/wiki/Theory_of_change": {
+      "title": "Theory of Change",
+      "about": "The encyclopedia article on theory of change, the planning methodology that maps activities to intended outcomes.",
+      "org": "Wikipedia contributors",
+      "container": "Wikipedia, The Free Encyclopedia"
+    },
+    "https://www.lesswrong.com/posts/7ZqGiPHTpiDMwqMN2/twelve-virtues-of-rationality": {
+      "title": "Twelve Virtues of Rationality",
+      "about": "An essay naming twelve virtues of rational inquiry, from curiosity to precision.",
+      "authors": "Yudkowsky, Eliezer",
+      "container": "LessWrong",
+      "date": "2006"
+    },
+    "https://www.lesswrong.com/posts/PBRWb2Em5SNeWYwwB/humans-are-not-automatically-strategic": {
+      "title": "Humans Are Not Automatically Strategic",
+      "about": "A post arguing that systematic goal-pursuit is a learned skill, not a default human behavior.",
+      "authors": "Salamon, Anna",
+      "container": "LessWrong",
+      "date": "8 Sept. 2010"
+    },
+    "https://forum.effectivealtruism.org/posts/AP9FowhqT7MXDSm5P/learning-to-ask-action-relevant-questions-1": {
+      "title": "Learning to Ask Action-Relevant Questions",
+      "about": "A post on testing research questions by asking what would change in the world if they were answered.",
+      "authors": "Lutz, Ronja",
+      "container": "Effective Altruism Forum",
+      "date": "28 Dec. 2019"
+    },
+    "https://brilliant.org/wiki/fermi-estimate/": {
+      "title": "Fermi Estimate",
+      "about": "A wiki explainer of Fermi estimation — rough order-of-magnitude reasoning with worked examples.",
+      "container": "Brilliant Math & Science Wiki",
+      "publisher": "Brilliant.org"
+    },
+    "https://probablygood.org/core-concepts/itn-framework/": {
+      "title": "The ITN Framework: A Tool for Prioritizing Global Problems",
+      "about": "An explainer of the importance-tractability-neglectedness framework for prioritizing problems.",
+      "org": "Probably Good"
+    },
+    "https://www.rfc-editor.org/rfc/rfc9334.html": {
+      "title": "Remote ATtestation ProcedureS (RATS) Architecture",
+      "about": "The IETF architecture for remote attestation — the standard vocabulary of attesters, verifiers, and relying parties the hardware lessons use.",
+      "authors": "Birkholz, Henk, et al.",
+      "container": "RFC 9334",
+      "publisher": "RFC Editor",
+      "date": "Jan. 2023"
+    },
+    "https://intelligence.org/2015/07/24/four-background-claims/": {
+      "title": "Four Background Claims",
+      "about": "MIRI's statement of the four background claims behind its case that smarter-than-human AI matters.",
+      "authors": "Soares, Nate",
+      "container": "Machine Intelligence Research Institute",
+      "date": "24 July 2015"
+    },
+    "https://intelligence.org/the-problem/": {
+      "title": "The Problem",
+      "about": "MIRI's plain-language statement of why it expects artificial superintelligence to be dangerous by default.",
+      "org": "Machine Intelligence Research Institute"
+    },
+    "https://www.stat.berkeley.edu/~aldous/157/Papers/Tradecraft%20Primer-apr09.pdf": {
+      "title": "A Tradecraft Primer: Structured Analytic Techniques for Improving Intelligence Analysis",
+      "about": "The US government primer on structured analytic techniques — the intelligence-analysis tradecraft the assessment lesson draws on.",
+      "org": "United States Government",
+      "date": "Mar. 2009",
+      "standalone": true
+    }
+  },
+  "pending": [
+    "https://aigi.ox.ac.uk/wp-content/uploads/2025/07/Verification_for_International_AI_Governance.pdf",
+    "https://aigi.ox.ac.uk/wp-content/uploads/2025/08/Survey_on_thresholds_for_advanced_AI_systems_1.pdf",
+    "https://law-ai.org/the-role-of-compute-thresholds-for-ai-governance/",
+    "https://www.governance.ai/research-paper/training-compute-thresholds-features-and-functions-in-ai-regulation",
+    "https://epoch.ai/data/ai-data-centers",
+    "https://airisk.mit.edu/",
+    "https://docs.nvidia.com/attestation/quick-start-guide/latest/architecture.html",
+    "https://www.theatlantic.com/technology/2025/09/if-anyone-builds-it-excerpt/684213/",
+    "https://techgov.intelligence.org/blog/catch-up-algorithmic-progress-might-actually-be-60x-per-year",
+    "https://techgov.intelligence.org/blog/catching-illicit-distributed-training-operations-during-an-ai-pause",
+    "https://techgov.intelligence.org/research",
+    "https://techgov.intelligence.org/research/an-international-agreement-to-prevent-the-premature-creation-of-artificial-superintelligence",
+    "https://ai-2040.com/supplements/verification-plan",
+    "https://2009-2017.state.gov/t/avc/trty/102360.htm",
+    "https://news.un.org/en/story/2026/07/1167873"
+  ],
+  "excluded": [
+    "https://evidence-taxonomies.netlify.app/",
+    "https://mechanism-sort.netlify.app/",
+    "https://playground-tracks.netlify.app/field-map",
+    "https://xlab-verification-track.pages.dev/the-distiller",
+    "https://docs.google.com/document/d/1SY3ypZBeCmbCfj7trDz3ZtxzSfjsQEzY5qX6JZ71GVE/edit?usp=sharing",
+    "https://docs.google.com/document/d/1hnwVUNOfrA8ZoE-8pCrnZ8wP11aMKaRdEz2WTqKGt_o/edit?tab=t.0",
+    "https://docs.google.com/document/d/1hnwVUNOfrA8ZoE-8pCrnZ8wP11aMKaRdEz2WTqKGt_o/edit?usp=sharing",
+    "https://docs.google.com/document/d/1laojHZaIj5uaTbrYXybfvMelYlwPygNIO19XD1ELa5Y/edit?tab=t.0",
+    "https://docs.google.com/document/d/1omutl0zbdfSBTLG8diD3VdvAtBvfox3ebIF6IfX0vBU/edit?pli=1&tab=t.0",
+    "https://docs.google.com/document/d/1pCQ_H2bmvBlRVPX7hcP_Hj4ZIxyKkbp1I6Qae78n_xk/edit?tab=t.0#heading=h.qxukhnaot4xs"
+  ]
+}

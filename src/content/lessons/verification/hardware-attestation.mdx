@@ -1,10 +1,56 @@
+{/* Unit 2.1, section 2.1.0 — the submodule intro for Hardware. The framing
+    below ("Before you begin", the central question, the objectives and the
+    core source packet) is transcribed from the author's WIP outline ("WIP
+    Verification Track Outline 11", tab "2.1 Hardware"); the specification that
+    follows it predates that outline and is kept unchanged.
+
+    Deliberately not carried over from the outline's 2.1 tab: its opening-puzzle
+    table and its six-function map, because the specification below already
+    carries both in near-identical form and outline 11 does not resolve the two
+    against each other (7 claims vs 8; 6 functions vs 5). That reconciliation is
+    the author's, not ours — logged in docs/verification/module-2-log.md. */}
+
+### 2.1.0 Hardware: the chip says “compliant”
+
+#### Before you begin
+
+Core time: 165–180 minutes, split into two sessions. Optional technical extension: 35–45 minutes.
+
+#### The central question
+
+A signed statement can be authentic and still be too narrow, stale, incomplete, or based on a compromised measurement. Hardware becomes useful for verification only when the whole chain is specified: the rule, the measurement, the evidence, the trust assumptions, the decision authority, and the response.
+
+#### What you will be able to do
+
+By the end of the core section, you should be able to:
+
+1. **Bound a hardware claim.** Distinguish what a mechanism identifies, attests, measures, classifies, restricts, or reconstructs, then state what remains outside the claim.
+2. **Trace the trust and authority chain.** Name who measures, signs, defines acceptable state, updates, revokes, appraises, decides, and enforces.
+3. **Invert the threat model.** Reassess the same mechanism when the operator is a cloud customer, a laboratory with physical control, or a state-backed owner.
+4. **Compare trust architectures.** Evaluate on-chip, off-chip, and hybrid designs for the same policy claim.
+5. **Recommend a bounded role.** State what hardware should carry in a layered regime, what it should not carry, which independent evidence must corroborate it, and what new evidence would change your recommendation.
+
+The rest of this section uses one repeated method: state the claim, trace the measurement and trust chain, name the adversary, price the mechanism, bound the conclusion, find the remaining hole.
+
+#### Core source packet
+
+<Callout variant="note" title="Author note">
+The required reading should be embedded at the point of use rather than assigned as one block.
+</Callout>
+
+1. IETF, RFC 9334, *Remote ATtestation procedureS Architecture*. Read the roles and trust-model excerpts.
+2. NVIDIA, *Attestation Quick Start Guide*. Inspect the architecture diagram, selected token claims, reference measurements, revocation roles, and the current multi-GPU limitation.
+3. O’Gara et al., *Hardware-Enabled Mechanisms for Verifying Responsible AI Development*. Read the mechanism map and selected open questions on accounting, workload classification, location, configuration, and licensing.
+4. Rahman and Tajdari, *Detecting Hidden ML Training With Zero-Overhead Telemetry*. Read the abstract, one adversarial-results table, the required hardware assumptions, and the limitations.
+5. Baker et al., *Verifying International Agreements on AI: Six Layers of Verification*. Read the on-chip, off-chip digital, and off-chip analog comparison.
+
+<Src>[1] H. Birkholz et al., “Remote ATtestation procedureS (RATS) Architecture,” IETF RFC 9334, January 2023 — [rfc-editor.org](https://www.rfc-editor.org/rfc/rfc9334.html). [2] NVIDIA, “Architecture Overview,” *Attestation Quick Start Guide*, documentation current August 1, 2026 — [docs.nvidia.com](https://docs.nvidia.com/attestation/quick-start-guide/latest/architecture.html); first-party implementation documentation, not an independent adversarial evaluation. [5] T. O’Gara et al., “Hardware-Enabled Mechanisms for Verifying Responsible AI Development,” [arXiv:2505.03742](https://arxiv.org/abs/2505.03742), 2025. [7] M. S. Rahman and M. Tajdari, “Detecting Hidden ML Training With Zero-Overhead Telemetry,” [arXiv:2606.19262](https://arxiv.org/abs/2606.19262), June 2026; a preprint, presented as a component demonstration.</Src>
+
 <Callout variant="note" title="Section status">
 This section is still in draft. What follows is its specification — the
 objectives, the activity, its claim list and its reveal — and the connecting
 prose between them is not written yet.
 </Callout>
-
-### 2.1.0 The chip says “compliant”
 
 Runtime: 15 minutes Hard idea: A signed hardware statement and treaty compliance are different propositions.
 
@@ -65,7 +111,7 @@ Learners complete:
 
 Initial claim map: The hardware artifact directly supports ___; it could support ___ if ___ existed; it does not support ___.
 
-This answer is preserved and revisited in 2.1.4.
+This answer is preserved and revisited in 2.1.8.
 
 #### Diagnostic hints
 

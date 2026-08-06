@@ -356,6 +356,18 @@ add must reduce the duplication, never widen it.
   `src/content/lessons/verification/*.mdx`, reached by `contentRef`
   `verification/<name>` (`contentRef` is a *path* under
   `src/content/lessons`, so the subfolder needs no loader change).
+- **The outline's taxonomy is modules → submodules → subsubmodules**, and the
+  graph carries it as: a **submodule** is a top-level lesson numbered `X.X.0`,
+  its **subsubmodules** are lessons whose `sectionItemId` names it, numbered
+  from `X.X.1`. One nesting layer, which is all `content.test.ts` allows and
+  exactly what the outline describes. All of module 2 is on this shape.
+  Renumbering a lesson means renumbering its body's own first heading in the
+  same edit — `isLessonTitleHeading` compares digits too, so a title that no
+  longer matches its heading silently starts printing twice.
+  Per-module build logs — what was transcribed, what was deliberately left, and
+  what is still owed — live in `docs/verification/` (`module-2-log.md` is the
+  first). Append to them rather than rewriting; they are the audit trail that
+  stops the next session re-deriving decisions from the diff.
 - **`public/verification/data/course.js` is generated. Never hand-edit it.**
   `npm run verification:course` builds it from the curriculum above;
   `-- --check` fails when the two disagree. It carries **structure only** —

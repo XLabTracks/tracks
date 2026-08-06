@@ -147,15 +147,18 @@ window.COURSE = {
           "id": "2.1",
           "title": "Hardware",
           "kind": "explainer",
-          "mins": "35–45 min",
+          "mins": "165–180 min",
           "href": "/tracks/verification/verification-infrastructure/hardware-attestation",
           "lessons": [
             "hardware-attestation",
+            "hardware-claim",
             "hardware-trusted-statement",
+            "hardware-accounting",
             "hardware-measuring-use",
+            "hardware-authorization",
             "hardware-where-trust-lives",
-            "hardware-policy-studio",
-            "hardware-reconstructing-run"
+            "hardware-reconstructing-run",
+            "hardware-policy-studio"
           ]
         },
         {
@@ -176,8 +179,9 @@ window.COURSE = {
           "title": "Intelligence",
           "kind": "explainer",
           "mins": "35–45 min",
-          "href": "/tracks/verification/verification-infrastructure/intelligence-signatures",
+          "href": "/tracks/verification/verification-infrastructure/intelligence-intro",
           "lessons": [
+            "intelligence-intro",
             "intelligence-signatures",
             "intelligence-anchor",
             "intelligence-assessment",

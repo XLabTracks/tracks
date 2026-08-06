@@ -257,22 +257,36 @@
 
     /* Cross edges are drawn under the beams: they are the many, the beams are
        the arms. Both keep their #e<idx> ids — the focus code addresses edges
-       by index, not by document order. */
+       by index, not by document order.
+
+       A cross edge joins two hues, so its stroke is a three-stop gradient
+       laid along the edge in user space: this module's colour, the other's,
+       and between them their OKLCH midpoint on the shorter hue arc — sRGB
+       interpolation drags a red-to-blue line through the grey middle of the
+       cube, and the muddy band in the middle is exactly what a perceptual
+       mix avoids. The stops are CSS colours, so the theme keeps owning them. */
     var crossHtml = '';
     var beamHtml = '';
+    var gradHtml = '';
     S.edges.forEach(function (e, idx) {
       var a = placed[e[0]], b = placed[e[1]];
       if (!a || !b) return;
-      var sel = 'style="--sel:var(--mod-' + a.mod + ');--sel-ink:var(--mod-' + a.mod + '-ink);--sel-text:var(--mod-' + a.mod + '-text)"';
       if (a.mod !== b.mod) {
         /* The same waisted beam as the in-module edges — same width, same
            flare — but its centreline bows toward the hub, so the long
            crossings dive under the arms, and it is stroked dashed rather
            than filled: the dash is the "another module" fact. */
-        crossHtml += '<path class="edge cross" id="e' + idx + '" ' + sel + ' d="' +
+        gradHtml += '<linearGradient id="ge' + idx + '" gradientUnits="userSpaceOnUse" x1="' +
+          a.x.toFixed(1) + '" y1="' + a.y.toFixed(1) + '" x2="' + b.x.toFixed(1) + '" y2="' + b.y.toFixed(1) + '">' +
+          '<stop offset="0" style="stop-color:var(--mod-' + a.mod + ')"/>' +
+          '<stop offset=".5" style="stop-color:color-mix(in oklch shorter hue, var(--mod-' + a.mod + '), var(--mod-' + b.mod + '))"/>' +
+          '<stop offset="1" style="stop-color:var(--mod-' + b.mod + ')"/>' +
+          '</linearGradient>';
+        crossHtml += '<path class="edge cross" id="e' + idx + '" style="--sel:var(--mod-' + a.mod +
+          ');--grad:url(#ge' + idx + ')" d="' +
           beam(a.x, a.y, b.x, b.y, ((a.x + b.x) / 2) * 0.55, ((a.y + b.y) / 2) * 0.55, V.beamEnd, V.beamMid) + '"/>';
       } else {
-        beamHtml += '<path class="edge beam" id="e' + idx + '" ' + sel + ' d="' +
+        beamHtml += '<path class="edge beam" id="e' + idx + '" style="--sel:var(--mod-' + a.mod + ')" d="' +
           beam(a.x, a.y, b.x, b.y, (a.x + b.x) / 2, (a.y + b.y) / 2, V.beamEnd, V.beamMid) + '"/>';
       }
     });
@@ -339,6 +353,7 @@
     sky.innerHTML =
       '<svg viewBox="' + vb + '" style="--num-fs:' + V.numFs + 'px" role="img" aria-label="Skill web: ' +
       S.nodes.length + ' skills in five module arms around one hub, joined wherever one skill feeds another.">' +
+      (gradHtml ? '<defs>' + gradHtml + '</defs>' : '') +
       bg + strandHtml + crossHtml + spokeHtml + beamHtml + hubHtml + arcHtml + nodeHtml + '</svg>';
 
     svg = sky.querySelector('svg');

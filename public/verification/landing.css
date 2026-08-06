@@ -434,13 +434,7 @@ section.band .intro { max-width: 62ch; margin-top: 12px; color: var(--muted-fore
   border-radius: 999px;
   overflow-x: auto;
   overflow-y: hidden;
-  /* Chrome, not a reading surface: the sideways scroll is a nicety on a
-     narrow screen and the native bar under a pill row is only noise. Both
-     declarations are needed — Firefox reads the property, WebKit only the
-     pseudo-element. Same treatment as .nav in theme.css. */
-  scrollbar-width: none;
 }
-.mod-filters::-webkit-scrollbar { display: none; }
 .mod-filters button {
   padding: 8px 14px;
   border: 0;

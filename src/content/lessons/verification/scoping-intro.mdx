@@ -1,20 +1,34 @@
+<<<<<<< HEAD
 Every proposal to restrain AI development contains, somewhere near its core, a premise like: don't build dangerous AI. But what exactly counts as dangerous? Before reading further: take the rule "no one may build AI smarter than humans across all measurable domains" and write down two or three specific claims you think evidence could actually confirm or refute.
+=======
+Every proposal to restrain AI development contains, somewhere near its core, a premise like: don’t build dangerous AI. But what exactly counts as dangerous? Before reading further: take the rule “no one may build AI smarter than humans across all measurable domains” and write down two or three specific claims you think evidence could actually confirm or refute.
+>>>>>>> origin/claude/verification-module-1-content-hwmq6p
 
 ## Four ingredients of a checkable claim
 
 A policy becomes enforceable when it is translated into claims about things in the world that evidence can reach. Those claims are built from four ingredients:
 
+<<<<<<< HEAD
 - Actors: who the claim is about. States, AI companies, cloud providers, individual researchers.
 - Objects: the things involved. Chips, clusters, models, weights, facilities.
 - Activities: what actors do with objects. Acquisition, training, research, deployment, transfer.
 - Conditions: the qualifiers that make the claim precise. Thresholds, locations, purposes, exceptions, time periods.
 
 Assemble the ingredients and you get something checkable: "Between January and June 2029 (condition), Microsoft (actor) ran no training job (activity) above 10^26 FLOP (condition) on the clusters at its Iowa data centers (objects)." Compare that with "don't build dangerous AI." Every element now points at evidence: shipment and inventory records for the objects, power draw and utilization logs for the activity, an agreed accounting method for the threshold. Inspectors can still disagree about whether the claim is true. They can no longer disagree about what it says.
+=======
+- **Actors:** who the claim is about. States, AI companies, cloud providers, individual researchers.
+- **Objects:** the things involved. Chips, clusters, models, weights, facilities.
+- **Activities:** what actors do with objects. Acquisition, training, research, deployment, transfer.
+- **Conditions:** the qualifiers that make the claim precise. Thresholds, locations, purposes, exceptions, time periods.
+
+Assemble the ingredients and you get something checkable: “Between January and June 2029 (condition), Microsoft (actor) ran no training job (activity) above $10^{26}$ FLOP (condition) on the clusters at its Iowa data centers (objects).” Compare that with “don’t build dangerous AI.” Every element now points at evidence: shipment and inventory records for the objects, power draw and utilization logs for the activity, an agreed accounting method for the threshold. Inspectors can still disagree about whether the claim is true. They can no longer disagree about what it says.
+>>>>>>> origin/claude/verification-module-1-content-hwmq6p
 
 ## Three layers, kept separate
 
 The translation runs through three layers, and confusing them is one of the most common errors in verification design.
 
+<<<<<<< HEAD
 The underlying goal is what the policy exists to achieve: prevent premature ASI.
 
 The legal rule is the obligation actually written into the treaty. For example: no party shall conduct, or permit within its jurisdiction, a training run above an agreed compute threshold without prior notification.
@@ -42,3 +56,36 @@ No system verifies "AI safety" in the abstract. A verification system tests the 
 A natural first question about any verification mechanism is "does it prevent ASI?" No mechanism answers that question directly, which is why it leads nowhere. The productive questions come apart by layer: which claim can this mechanism test? How much of the rule does that claim cover? And how much of the goal does the rule serve, even if perfectly followed? A regime fails when its testable claims leave the rule mostly uncovered, or when compliance with the rule still leaves the goal unmet. The rest of this track applies this decomposition repeatedly, so it is worth making the habit automatic now.
 
 Activity: Return to the claims you wrote at the top of this page. For each one, label the actor, object, activity, and conditions. Then decide which layer it sits at: a restatement of the goal, a candidate legal rule, or a claim evidence could actually test.
+=======
+- The **underlying goal** is what the policy exists to achieve: prevent premature ASI.
+- The **legal rule** is the obligation actually written into the treaty. For example: no party shall conduct, or permit within its jurisdiction, a training run above an agreed compute threshold without prior notification.
+- The **verification claim** is the proposition that evidence must test. For example: no cluster of covered chips on the party’s territory ran an unreported workload above the threshold during the reporting period.
+
+Each layer is narrower than the one above it. The rule never mentions ASI; it mentions compute, because compute can be counted. The claim narrows further still: it covers only chips the regime knows about, only territory the regime can observe, only the reporting window.
+
+The nuclear regime shows the same three layers, and shows what the gaps between them cost. The goal of the Non-Proliferation Treaty is to prevent the spread of nuclear weapons. The rule binds non-weapon states not to divert nuclear material to weapons. The claim the IAEA could actually test was, for decades, narrower than either: declared nuclear material at declared facilities matches the state’s declarations. Iraq exploited exactly that gap. Its declared facilities passed inspection through the 1980s while an undeclared weapons program ran alongside them, and the discovery after the 1991 Gulf War pushed the IAEA to create the Additional Protocol, which widened the testable claim to cover undeclared sites. The rule had not changed. The goal had not changed. What changed was the claim evidence could reach.
+
+## One goal, many candidate agreements
+
+So far this page has spoken of “the treaty” as if one existed. It does not. What exists is a menu of proposed agreements, and they differ at the second layer: each writes a different legal rule, so each generates different verification claims. One survey groups the proposals into five families:
+
+- **Transfer knowledge:** parties share research, development knowledge, and safety-enhancing technologies.
+- **Transfer resources:** parties share chips, compute access, completed models or API access, or benefits such as cash and AI-enabled aid.
+- **Pool resources:** parties build jointly toward a shared goal, such as defensive AI, or confine systemically risky development to a single international project.
+- **Prepare for emergencies:** parties jointly detect and respond to computational emergencies.
+- **Regulate:** parties bind themselves to rules on AI development and deployment, from data-center training runs down to fine-tuning, inference, and sensitive AI-enabled devices.
+
+<Callout variant="note" title="Author note">[Table 1.1 — cite source]. The five families are taken from the Oxford AIGI survey, *Verification for International AI Governance* (aigi.ox.ac.uk); the table itself is still to be laid out and cited.</Callout>
+
+No system verifies “AI safety” in the abstract. A verification system tests the claims one particular agreement generates, and the families generate very different ones: confirming that a party shared the research it promised, confirming that a pooled project has no covert rival, and confirming that no data center crossed a compute threshold are separate problems that call on separate evidence. Each family also buys a different amount of risk reduction at a different price. The question to hold onto when comparing them: how much risk does this agreement actually remove, at what cost, and can its claims be tested at all? In the next exercise you will rank these families (and a few others) yourself.
+
+## Why the layers matter
+
+A natural first question about any verification mechanism is “does it prevent ASI?” No mechanism answers that question directly, which is why it leads nowhere. The productive questions come apart by layer: which claim can this mechanism test? How much of the rule does that claim cover? And how much of the goal does the rule serve, even if perfectly followed? A regime fails when its testable claims leave the rule mostly uncovered, or when compliance with the rule still leaves the goal unmet. The rest of this track applies this decomposition repeatedly, so it is worth making the habit automatic now.
+
+<Callout variant="tip" title="Activity">
+
+Return to the claims you wrote at the top of this page. For each one, label the actor, object, activity, and conditions. Then decide which layer it sits at: a restatement of the goal, a candidate legal rule, or a claim evidence could actually test.
+
+</Callout>
+>>>>>>> origin/claude/verification-module-1-content-hwmq6p

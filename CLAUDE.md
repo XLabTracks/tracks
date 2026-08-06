@@ -443,10 +443,10 @@ add must reduce the duplication, never widen it.
   sources regressed on every new batch. A surviving `h1` renders as `h2` —
   the page owns the document's only h1. The breadcrumb stops at the module
   for the same reason.
-- **Never invent curriculum.** Module 0's prose is transcribed from the
-  author's WIP outline, verbatim. Modules 1-4 are declared with real titles
+- **Never invent curriculum.** Modules 0-2's prose is transcribed from the
+  author's WIP outline, verbatim. Modules 3-4 are declared with real titles
   and no items until their prose is drafted — an empty module counts as
-  complete, so it gates nothing. The outline's instructions to whoever
+  complete, so they gate nothing. The outline's instructions to whoever
   finishes a section are kept but visibly marked as author notes, so they can
   never read as learner-facing prose.
 - **Lessons are read one part at a time** on tracks flagged
@@ -663,6 +663,23 @@ The course pages' own mechanics, for as long as they are scripts:
   `db/migrations/20260805150000_verification_applications.sql` applied by
   hand; until then both pages say the table is missing rather than failing at
   submit.
+
+**The facilitator field guide** (`/facilitator`) is the third surface and the
+one that is neither of the above. It is an app route because it gates, and the
+static site never gates — it holds no session, and putting the guide there
+would mean a second sign-in. `src/lib/verification/data/facilitator-guide.ts`
+is the whole of its content: a verbatim port of a standalone page that no
+longer exists, plus a Module 1 session plan transcribed from the outline's sync
+tab and marked as such. The gate is `isFacilitator()` — instructor of at least
+one classroom, the only such notion the schema carries, so no migration and no
+second role system. Someone signed in without a classroom is told how to
+qualify rather than 404'd; the material is gated because plans carry their own
+answer keys, not because it is secret. Two rendering traps: the authored bodies
+are raw HTML through `dangerouslySetInnerHTML` (safe only because they are
+in-repo curriculum — never route anything else through those components), and
+authored `[term]` triggers inside callouts carry `data-pop`, so popups open by
+delegation off the container rather than by a handler per button. Views are
+component state, not routes, so Back lands on the grid mid-session.
 
 **Prerequisites & progress.** `Track.prerequisiteEnforcement` is `soft` (warn)
 or `hard` (lock); `isAccessLocked()` (pure, tested) + `getPrerequisiteStatus()`

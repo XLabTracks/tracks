@@ -78,6 +78,20 @@ export default async function ClassroomsPage() {
           })}
         </div>
       )}
+
+      {memberships.some((m) => m.role === "instructor") && (
+        <div className="border-border/80 mt-10 rounded-lg border p-5">
+          <h2 className="font-medium">Facilitator field guide</h2>
+          <p className="text-muted-foreground mt-1 text-sm">
+            Session plans for every component of the Verification track, the
+            discussion-prompt bank, and the facilitation craft behind them.
+            Visible to you because you run a classroom.
+          </p>
+          <Button asChild variant="outline" className="mt-3">
+            <Link href="/facilitator">Open the guide</Link>
+          </Button>
+        </div>
+      )}
     </main>
   );
 }

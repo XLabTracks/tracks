@@ -26,7 +26,10 @@ import { useScrollSpy } from "./use-scroll-spy";
  * — the `!` is what actually wins, and dropping it puts the underline back. */
 export function navItemClass(active: boolean) {
   return cn(
-    "flex items-start gap-2 rounded-md px-2 py-1.5 text-sm no-underline! transition-colors",
+    // select-none because these rows are <a>, so the base rule for pressable
+    // chrome does not reach them — and a selection dragged across a nav row
+    // is always a mis-click.
+    "flex items-start gap-2 rounded-md px-2 py-1.5 text-sm no-underline! transition-colors select-none",
     active
       ? "bg-muted text-foreground font-semibold"
       : "text-muted-foreground hover:text-foreground hover:bg-muted/60",

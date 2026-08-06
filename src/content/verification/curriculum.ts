@@ -71,6 +71,7 @@ export const verificationModules: Module[] = [
       "v-protocol-actors",
       "v-report-constructor",
       "v-scoping-upstream-downstream",
+      "v-context-distiller",
     ],
   },
   {
@@ -203,6 +204,16 @@ export const verificationLessons: Lesson[] = [
     moduleId: "v-scoping",
     title: "1.3 Upstream and downstream",
     contentRef: "verification/scoping-upstream-downstream",
+  },
+  {
+    // Applies 1.3's upstream/downstream frame to a real report; the interactive
+    // it is written around is not ported yet, so the body carries the exercise
+    // as written work and says so.
+    id: "v-context-distiller",
+    slug: "context-distiller",
+    moduleId: "v-scoping",
+    title: "Context distiller",
+    contentRef: "verification/context-distiller",
   },
   {
     id: "v-mechanism-effective",
@@ -609,6 +620,7 @@ export const verificationUnitOfLesson: Record<string, string> = {
   "v-protocol-actors": "1.2",
   "v-report-constructor": "1.2",
   "v-scoping-upstream-downstream": "1.3",
+  "v-context-distiller": "1.3",
   "v-mechanism-effective": "2.0",
   "v-hw-attestation": "2.1",
   "v-hw-claim": "2.1",

@@ -33,6 +33,7 @@ import { BehavioralSelectionDemo } from "@/components/demos/behavioral-selection
 import { DistantIncentivesDemo } from "@/components/demos/distant-incentives-demo";
 import { SeekerSchemerComparisonDemo } from "@/components/demos/seeker-schemer-comparison-demo";
 import { SatiationTradeDemo } from "@/components/demos/satiation-trade-demo";
+import { SpillwayDemo } from "@/components/demos/spillway-demo";
 
 // Central demo registry — the single integration point. Reference a demo by ID
 // from MDX (<Demo id="…"/>), the gallery, standalone pages, or embeds.
@@ -307,6 +308,14 @@ export const demoRegistry: Record<string, DemoDefinition> = {
     description:
       "Developers give the AI money or space to maximize its reward, in exchange for misalignment examples and apparent cooperation.",
     component: SatiationTradeDemo,
+    tags: ["control", "seekers"],
+  },
+  spillway: {
+    id: "spillway",
+    title: "Spillway motivations",
+    description:
+      "A dam holding back fitness-seeking pressure, with a spillway channel routing the overflow into a contained, controlled reward-seeking motivation.",
+    component: SpillwayDemo,
     tags: ["control", "seekers"],
   },
 };

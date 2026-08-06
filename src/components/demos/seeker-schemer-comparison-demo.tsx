@@ -14,7 +14,7 @@ const COLUMNS = [
   { key: "remote", label: "Remotely-influenceable seeker" },
 ] as const;
 
-type RowCell = { text: string; shared?: boolean };
+type RowCell = { text: string };
 
 const ROWS: { label: string; cells: Record<(typeof COLUMNS)[number]["key"], RowCell> }[] = [
   {
@@ -28,10 +28,9 @@ const ROWS: { label: string; cells: Record<(typeof COLUMNS)[number]["key"], RowC
   {
     label: "Timescale",
     cells: {
-      schemer: { text: "long", shared: true },
+      schemer: { text: "long" },
       influence: {
         text: "shorter timescales — the minimum time required to control AI behavior in deployment",
-        shared: true,
       },
       remote: { text: "within-episode" },
     },
@@ -79,11 +78,7 @@ export function SeekerSchemerComparisonDemo() {
                 return (
                   <div
                     key={`${row.label}-${col.key}`}
-                    className={
-                      cell.shared
-                        ? "bg-muted p-3 text-center text-muted-foreground"
-                        : "bg-card p-3 text-center text-muted-foreground"
-                    }
+                    className="bg-card p-3 text-center text-muted-foreground"
                   >
                     {cell.text}
                   </div>

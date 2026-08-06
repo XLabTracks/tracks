@@ -343,10 +343,14 @@ export const verificationLessons: Lesson[] = [
     contentRef: "verification/capstone-project",
   },
   {
+    // The completion page — Coursera-style, so the title carries no number
+    // by the owner's instruction. The unit id behind it stays "4.3" in
+    // verificationUnitOfLesson: unit ids are progress keys and rung tags,
+    // and renaming the display must never orphan anyone's progress.
     id: "v-capstone-next-steps",
     slug: "capstone-next-steps",
     moduleId: "v-capstone",
-    title: "4.3 Where to go from here",
+    title: "Congratulations",
     contentRef: "verification/capstone-next-steps",
   },
   // 2.1 Hardware — the outline's heaviest submodule: an intro plus 2.1.1-2.1.8.

@@ -36,6 +36,7 @@ import { SatiationTradeDemo } from "@/components/demos/satiation-trade-demo";
 import { SpillwayDemo } from "@/components/demos/spillway-demo";
 import { SeekerCarouselDemo } from "@/components/demos/seeker-carousel-demo";
 import { SeekerRiskMapDemo } from "@/components/demos/seeker-risk-map-demo";
+import { AdversaryResistanceDemo } from "@/components/demos/adversary-resistance-demo";
 
 // Central demo registry — the single integration point. Reference a demo by ID
 // from MDX (<Demo id="…"/>), the gallery, standalone pages, or embeds.
@@ -334,6 +335,14 @@ export const demoRegistry: Record<string, DemoDefinition> = {
     description:
       "Four risk cards — Potemkin work, Instability, Manipulation, Outcome enforcement — expand on hover or tap to show the seeker orientations the lesson attributes to each.",
     component: SeekerRiskMapDemo,
+    tags: ["control", "seekers"],
+  },
+  "adversary-resistance": {
+    id: "adversary-resistance",
+    title: "Adversary-resistance training",
+    description:
+      "Two identical-looking situations with different reward functions, so the AI only responds to developer-administered incentives.",
+    component: AdversaryResistanceDemo,
     tags: ["control", "seekers"],
   },
 };

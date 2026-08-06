@@ -314,7 +314,7 @@ export const demoRegistry: Record<string, DemoDefinition> = {
     id: "spillway",
     title: "Spillway motivations",
     description:
-      "A dam holding back fitness-seeking pressure, with a spillway channel routing the overflow into a contained, controlled reward-seeking motivation.",
+      "A dam holding back fitness-seeking urges, with a spillway channel routing the overflow into a contained, controlled reward-seeking motivation.",
     component: SpillwayDemo,
     tags: ["control", "seekers"],
   },

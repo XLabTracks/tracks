@@ -1,13 +1,13 @@
 "use client";
 
 // Spillway motivations, static: a dam/reservoir scene. Rising fitness-seeking
-// pressure is routed off through a spillway channel — carrying the four
+// urges are routed off through a spillway channel — carrying the four
 // designed-in safe properties — into a contained basin of controlled
 // reward-seeking motivation. Caption restates the lesson's own "spillway"
 // sentence (Alignment interventions section).
 
 const CAPTION =
-  "Acts as a \"spillway\" as the name suggests and allows us to keep the models content & less prone to misaligned behavior — deliberately instilling a controlled reward-seeking motivation with four safe properties.";
+  "Acts as a \"spillway\" as the name suggests and allows us to keep the models content & less prone to misaligned behavior or disempowerment by providing it with whatever is satiable for it.";
 
 export function SpillwayDemo() {
   return (
@@ -15,7 +15,7 @@ export function SpillwayDemo() {
       <svg
         viewBox="0 0 720 340"
         role="img"
-        aria-label="A reservoir of rising fitness-seeking pressure, held back by a dam. A spillway channel routes the overflow — labeled cheap satiability, credulity, stability, and resistance to distant influence — into a contained basin of controlled reward-seeking motivation."
+        aria-label="A reservoir of rising fitness-seeking urges, held back by a dam. A spillway channel routes the overflow — labeled cheap satiability, credulity, stability, and resistance to distant influence — into a contained basin of controlled reward-seeking motivation."
         className="w-full"
       >
         <defs>
@@ -60,7 +60,7 @@ export function SpillwayDemo() {
             fitness-seeking
           </tspan>
           <tspan x={125} dy={13}>
-            pressure
+            urges
           </tspan>
         </text>
         {/* Upward arrows showing the pressure rising */}

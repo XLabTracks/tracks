@@ -2,17 +2,17 @@ A pause treaty needs a trigger — a measurable line that determines which train
 
 #### Compute thresholds (input metric)
 
-The line is drawn at total training compute, in FLOP. Examples in current policy: the EU AI Act's 10²⁵ FLOP systemic-risk presumption and the 10²⁶ FLOP reporting threshold in the now-rescinded US EO 14110.
+The line is drawn at total training compute, in FLOP. Examples in current policy: the [EU AI Act's 10²⁵ FLOP systemic-risk presumption](https://artificialintelligenceact.eu/article/51/) and the [10²⁶ FLOP reporting threshold in the now-rescinded US EO 14110](https://en.wikipedia.org/wiki/Executive_Order_14110).
 
 Pros
 
-- Objective and black-and-white — a FLOP count is a number: an enforceable threshold without ambiguity (GovAI).
+- Objective and black-and-white — a FLOP count is a number: an enforceable threshold without ambiguity ([GovAI](https://www.governance.ai/research-paper/training-compute-thresholds-features-and-functions-in-ai-regulation)).
 - Measurable early and externally verifiable — you can check it before and during a training run, not just after, which is what treaty enforcement requires.
 - Correlates with capability and risk — imperfectly, but usefully.
 
 Cons
 
-- It's a proxy, and proxies can be gamed. Algorithmic efficiency improvements mean models trained below the line keep getting more capable — a fixed FLOP number silently loosens over time, and developers can deliberately optimize under it (Hooker; Institute for Law & AI).
+- It's a proxy, and proxies can be gamed. Algorithmic efficiency improvements mean models trained below the line keep getting more capable — a fixed FLOP number silently loosens over time, and developers can deliberately optimize under it ([Hooker](https://arxiv.org/html/2407.05694v1); [Institute for Law & AI](https://law-ai.org/the-role-of-compute-thresholds-for-ai-governance/)).
   - Regulators partly compensate by making thresholds adjustable (the EU Commission can amend its figure by delegated act).pl
 
 #### Capability thresholds (output metric)
@@ -25,9 +25,9 @@ Pros
 
 Cons
 
-- Evals are currently unreliable and qualitatively ambiguous — sensitive to prompting and elicitation effort, plagued by contamination, with no consensus on what score means "dangerous" (Can We Trust AI Benchmarks?).
+- Evals are currently unreliable and qualitatively ambiguous — sensitive to prompting and elicitation effort, plagued by contamination, with no consensus on what score means "dangerous" ([Can We Trust AI Benchmarks?](https://arxiv.org/html/2502.06559v1)).
 - Measured too late — capabilities are assessed after training, when the thing a pause is meant to prevent already exists.
-- Hard to verify externally — a contestable measurement makes a weak treaty trigger (Oxford AIGI survey).
+- Hard to verify externally — a contestable measurement makes a weak treaty trigger ([Oxford AIGI survey](https://aigi.ox.ac.uk/wp-content/uploads/2025/08/Survey_on_thresholds_for_advanced_AI_systems_1.pdf)).
 
 #### Why this track uses compute
 

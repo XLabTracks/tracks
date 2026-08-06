@@ -76,7 +76,7 @@ window.COURSE = {
       "units": [
         {
           "id": "1.0",
-          "title": "What kind of policy are we trying to verify?",
+          "title": "Introduction: what kind of policy are we trying to verify?",
           "kind": "explainer",
           "mins": "15–20 min",
           "href": "/tracks/verification/policy-scoping/scoping-intro",

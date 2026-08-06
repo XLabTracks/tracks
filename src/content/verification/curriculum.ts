@@ -147,7 +147,7 @@ export const verificationLessons: Lesson[] = [
     id: "v-scoping-intro",
     slug: "scoping-intro",
     moduleId: "v-scoping",
-    title: "1.0 What kind of policy are we trying to verify?",
+    title: "1.0 Introduction: what kind of policy are we trying to verify?",
     contentRef: "verification/scoping-intro",
   },
   {
@@ -155,8 +155,9 @@ export const verificationLessons: Lesson[] = [
     slug: "scoping-thresholds",
     moduleId: "v-scoping",
     sectionItemId: "v-scoping-intro",
-    title: "1.0.1 Thresholds: compute vs. capability",
+    title: "1.0.1 Brief thresholds explainer: compute vs. capability",
     contentRef: "verification/scoping-thresholds",
+    estimatedMinutes: 5,
   },
   {
     id: "v-scoping-effective-feasible",
@@ -177,7 +178,7 @@ export const verificationLessons: Lesson[] = [
     id: "v-scoping-actors",
     slug: "scoping-actors",
     moduleId: "v-scoping",
-    title: "1.2 Actors: who a treaty relies upon, applies to, and constrains",
+    title: "1.2 Actors: who does the treaty rely upon, apply to, and constrain?",
     contentRef: "verification/scoping-actors",
   },
   {
@@ -574,7 +575,7 @@ export const verificationUnitMeta: Record<
   "0.1": { title: "Introduction: why verification? why you?", kind: "explainer", mins: "15–20 min" },
   "0.2": { title: "Building verification intuitions", kind: "interactive", mins: "15–20 min" },
   "0.3": { title: "Precedents and parallels", kind: "interactive", mins: "20–25 min" },
-  "1.0": { title: "What kind of policy are we trying to verify?", kind: "explainer", mins: "15–20 min" },
+  "1.0": { title: "Introduction: what kind of policy are we trying to verify?", kind: "explainer", mins: "15–20 min" },
   "1.1": { title: "Anatomy of a pause agreement", kind: "interactive", mins: "20–25 min" },
   "1.2": { title: "Actors", kind: "interactive", mins: "25–30 min" },
   "1.3": { title: "Upstream and downstream", kind: "explainer", mins: "10–15 min" },

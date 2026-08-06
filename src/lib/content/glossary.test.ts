@@ -129,19 +129,28 @@ describe("glossary integrity", () => {
     ) as { autoGlossExclude?: string[] };
     const exclude = new Set(registry.autoGlossExclude ?? []);
     const lessonsDir = join(process.cwd(), "src/content/lessons");
-    const lessonIds = new Set(
-      readdirSync(lessonsDir)
-        .filter((f) => f.endsWith(".mdx"))
-        .map((f) => f.replace(/\.mdx$/, "")),
-    );
+    // Ids are basenames, not paths, because that is all the plugin sees of a
+    // lesson's file — so a lesson nested under a course folder
+    // (`verification/…`) is listed by its basename alone, and the walk has to
+    // reach it or a reproduction there would be checked by nothing.
+    const lessonPaths = new Map<string, string>();
+    const walk = (dir: string) => {
+      for (const entry of readdirSync(dir, { withFileTypes: true })) {
+        const path = join(dir, entry.name);
+        if (entry.isDirectory()) walk(path);
+        else if (entry.name.endsWith(".mdx"))
+          lessonPaths.set(entry.name.replace(/\.mdx$/, ""), path);
+      }
+    };
+    walk(lessonsDir);
     for (const id of exclude) {
       expect(
-        lessonIds.has(id),
+        lessonPaths.has(id),
         `autoGlossExclude entry "${id}" has no matching lesson MDX — stale after a rename?`,
       ).toBe(true);
     }
-    for (const id of lessonIds) {
-      const body = readFileSync(join(lessonsDir, `${id}.mdx`), "utf8");
+    for (const [id, path] of lessonPaths) {
+      const body = readFileSync(path, "utf8");
       if (!body.includes("Reproduced verbatim")) continue;
       expect(
         exclude.has(id),

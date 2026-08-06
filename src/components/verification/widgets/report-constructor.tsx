@@ -304,7 +304,6 @@ function ReadersSection({
             <div
               key={r.id}
               className="border-border bg-card flex flex-col rounded-lg border p-4"
-              style={{ borderTopColor: r.color, borderTopWidth: 3 }}
             >
               <p className="text-sm font-semibold">{r.shortName}</p>
               <p className="text-muted-foreground text-xs">{r.name}</p>
@@ -315,9 +314,7 @@ function ReadersSection({
                     key={n.id}
                     className="text-muted-foreground flex gap-1.5 text-xs"
                   >
-                    <span aria-hidden style={{ color: r.color }}>
-                      •
-                    </span>
+                    <span aria-hidden>•</span>
                     {n.label}
                   </li>
                 ))}
@@ -703,18 +700,13 @@ function ThreadBoard({
                     "border-border bg-card rounded-lg border p-3",
                     armed && "border-dashed",
                   )}
-                  style={{ borderLeftColor: r.color, borderLeftWidth: 4 }}
                 >
                   <div className="flex items-baseline justify-between gap-2">
                     <div>
                       <p className="text-sm font-semibold">{r.shortName}</p>
                       <p className="text-muted-foreground text-xs">{r.name}</p>
                     </div>
-                    <span
-                      aria-hidden
-                      className="font-mono text-[10px]"
-                      style={{ color: r.color }}
-                    >
+                    <span aria-hidden className="text-muted-foreground font-mono text-[10px]">
                       [{ri + 1}]
                     </span>
                   </div>
@@ -898,16 +890,13 @@ function DebriefSection({
             <div
               key={r.id}
               className="border-border bg-card rounded-lg border p-4"
-              style={{ borderTopColor: r.color, borderTopWidth: 3 }}
             >
               <p className="text-sm font-semibold">{r.shortName}</p>
               {got.length ? (
                 <ul className="mt-2 space-y-1">
                   {got.map((id) => (
                     <li key={id} className="flex gap-1.5 text-sm">
-                      <span aria-hidden style={{ color: r.color }}>
-                        ✓
-                      </span>
+                      <span aria-hidden>✓</span>
                       {cardById[id].title}
                     </li>
                   ))}
@@ -925,7 +914,7 @@ function DebriefSection({
       <p className="mt-4 text-sm">{lesson}</p>
 
       <p
-        className="border-hide/40 bg-hide/5 mt-4 rounded-lg border-l-2 p-3 text-sm [&_b]:font-semibold"
+        className="border-hide/40 bg-hide/5 mt-4 rounded-lg border p-3 text-sm [&_b]:font-semibold"
         dangerouslySetInnerHTML={{ __html: pairHtml }}
       />
 

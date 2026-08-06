@@ -132,30 +132,6 @@ function weightFor(regime: RegimeKey, k: OutcomeKey): number | null {
   return hit ? hit.w : null;
 }
 
-/* ============ path accent (semantic, always paired with a label) ============
-   comply=green (restraint/hold), defect=vermillion (race/hedge). The treaty
-   and fail lanes use neutral/navy tokens; the verify lane uses hide=blue. */
-const PATH_ACCENT: Record<PathKey | "f" | "n", string> = {
-  r: "text-defect",
-  t: "text-exaggerate",
-  v: "text-comply",
-  f: "text-free-ride",
-  n: "text-foreground",
-};
-const PATH_BORDER: Record<PathKey | "f" | "n", string> = {
-  r: "border-l-defect",
-  t: "border-l-exaggerate",
-  v: "border-l-comply",
-  f: "border-l-free-ride",
-  n: "border-l-primary",
-};
-const PATH_DOT: Record<string, string> = {
-  r: "bg-defect",
-  t: "bg-exaggerate",
-  v: "bg-comply",
-  f: "bg-free-ride",
-};
-
 /* ============ journey step model ============ */
 
 type Step =
@@ -573,30 +549,17 @@ function MapHub({
 }) {
   return (
     <div>
-      {/* legend */}
-      <div className="text-muted-foreground mb-4 flex flex-wrap items-center gap-x-4 gap-y-1.5 text-xs">
-        {COPY.legend.map((l) => (
-          <span key={l.k} className="flex items-center gap-1.5">
-            <span
-              className={cn("inline-block size-2.5 rounded-full", PATH_DOT[l.k])}
-              aria-hidden
-            />
-            {l.label}
-          </span>
-        ))}
-      </div>
-
       {/* fork */}
       <div className="mb-4 flex justify-center">
         <button
           type="button"
           onClick={() => onNodeClick("fork")}
-          className="border-primary/40 bg-primary/5 hover:bg-primary/10 focus-visible:ring-ring rounded-xl border-2 border-dashed px-5 py-3 text-center transition-colors focus-visible:ring-2 focus-visible:outline-none"
+          className="border-border bg-primary/5 hover:bg-primary/10 focus-visible:ring-ring rounded-xl border-2 border-dashed px-5 py-3 text-center transition-colors focus-visible:ring-2 focus-visible:outline-none"
         >
           <p className="text-muted-foreground font-mono text-[10px] tracking-[0.14em] uppercase">
             {COPY.forkNodeLabel}
           </p>
-          <p className="text-primary mt-1 text-sm font-semibold tracking-wide">
+          <p className="text-foreground mt-1 text-sm font-semibold tracking-wide">
             {beginLabel}
           </p>
         </button>
@@ -607,12 +570,9 @@ function MapHub({
         {(["r", "t", "v"] as PathKey[]).map((pk) => (
           <div
             key={pk}
-            className={cn(
-              "bg-muted/20 space-y-2 rounded-lg border-l-2 p-3",
-              PATH_BORDER[pk],
-            )}
+            className="bg-muted/20 border-border space-y-2 rounded-lg border p-3"
           >
-            <p className={cn("font-mono text-[11px] font-semibold tracking-[0.1em] uppercase", PATH_ACCENT[pk])}>
+            <p className="text-muted-foreground font-mono text-[11px] font-semibold tracking-[0.1em] uppercase">
               {PATHS[pk].label}
             </p>
             {pathEvents[pk].map((ev) => (
@@ -626,7 +586,7 @@ function MapHub({
             ))}
             {pk === "v" && (
               <div className="mt-3 space-y-2 border-t border-dashed pt-3">
-                <p className={cn("font-mono text-[11px] font-semibold tracking-[0.1em] uppercase", PATH_ACCENT.f)}>
+                <p className="text-muted-foreground font-mono text-[11px] font-semibold tracking-[0.1em] uppercase">
                   FAILURE MODES
                 </p>
                 {FAIL_KEYS.map((fid) => (
@@ -696,7 +656,7 @@ function NodeButton({
         className={cn(
           "inline-block shrink-0 rounded-full",
           fail ? "size-1.5" : "size-2",
-          lit ? PATH_DOT[fail ? "f" : "n"] || "bg-primary" : "bg-muted-foreground/30",
+          lit ? "bg-foreground" : "bg-muted-foreground/30",
         )}
         aria-hidden
       />
@@ -790,7 +750,7 @@ function Journey({
         >
           <ArrowLeft className="size-4" aria-hidden /> Map
         </Button>
-        <p className={cn("font-mono text-xs font-semibold tracking-[0.12em] uppercase", PATH_ACCENT[header.accent])}>
+        <p className="text-muted-foreground font-mono text-xs font-semibold tracking-[0.12em] uppercase">
           {header.label}
         </p>
       </div>
@@ -900,10 +860,7 @@ function EventSection({ ev, fail }: { ev: GameEvent; fail?: boolean }) {
       data-node={ev.id}
       data-anchor={`event-${ev.id}`}
       data-watch
-      className={cn(
-        "bg-muted/20 rounded-lg border border-l-4 p-4",
-        PATH_BORDER[accent],
-      )}
+      className="bg-muted/20 border-border rounded-lg border p-4"
     >
       <div className="text-muted-foreground font-mono text-[11px] tracking-[0.14em]">
         {ev.year}
@@ -918,7 +875,7 @@ function EventSection({ ev, fail }: { ev: GameEvent; fail?: boolean }) {
           <p key={i}>{p}</p>
         ))}
       </div>
-      <div className="border-primary/30 bg-primary/5 mt-3 rounded-md border-l-2 p-3">
+      <div className="border-primary/30 bg-primary/5 mt-3 rounded-md border p-3">
         <p className="text-muted-foreground font-mono text-[10px] tracking-[0.14em] uppercase">
           The game
         </p>
@@ -958,7 +915,7 @@ function SimpleNode({
     <article
       data-anchor={anchor}
       {...(nodeId ? { "data-node": nodeId, "data-watch": true } : {})}
-      className="bg-muted/20 border-l-primary rounded-lg border border-l-4 p-4"
+      className="bg-muted/20 border-primary/40 rounded-lg border p-4"
     >
       <div className="text-muted-foreground font-mono text-[11px] tracking-[0.14em]">
         {year}
@@ -1022,9 +979,11 @@ function MatrixQuiz() {
 
   return (
     <div className="bg-muted/20 border-border rounded-lg border p-4">
-      <p className="text-muted-foreground font-mono text-[10px] tracking-[0.14em] uppercase">
-        {MATRIX.eyebrow}
-      </p>
+      {MATRIX.eyebrow && (
+        <p className="text-muted-foreground font-mono text-[10.5px] tracking-[0.14em] uppercase">
+          {MATRIX.eyebrow}
+        </p>
+      )}
       <p className="mt-1 text-base font-semibold">{MATRIX.title}</p>
       <p className="text-muted-foreground mt-1 text-sm">{MATRIX.sub}</p>
 
@@ -1102,8 +1061,8 @@ function MatrixQuiz() {
       </div>
 
       {done && (
-        <div className="border-primary/30 bg-primary/5 mt-3 rounded-md border-l-2 p-3">
-          <p className="text-comply mb-1 font-mono text-[10px] tracking-[0.14em] uppercase">
+        <div className="border-primary/30 bg-primary/5 mt-3 rounded-md border p-3">
+          <p className="text-muted-foreground mb-1 font-mono text-[10px] tracking-[0.14em] uppercase">
             {MATRIX.eqTag}
           </p>
           <p className="text-muted-foreground text-sm">{MATRIX.conclusion}</p>
@@ -1206,15 +1165,14 @@ function ChoiceButton({
       onClick={onClick}
       aria-pressed={chosen}
       className={cn(
-        "focus-visible:ring-ring rounded-lg border border-l-4 p-3 text-left transition-all focus-visible:ring-2 focus-visible:outline-none",
-        PATH_BORDER[accent as PathKey | "n"],
+        "focus-visible:ring-ring border-border rounded-lg border p-3 text-left transition-all focus-visible:ring-2 focus-visible:outline-none",
         chosen && "ring-primary ring-2",
         dimmed && "opacity-40",
         disabled ? "cursor-default" : "hover:bg-muted/50",
       )}
     >
       {chosen && (
-        <span className="text-comply mb-1 flex items-center gap-1 font-mono text-[10px] tracking-[0.14em] uppercase">
+        <span className="text-muted-foreground mb-1 flex items-center gap-1 font-mono text-[10px] tracking-[0.14em] uppercase">
           <Check className="size-3" aria-hidden /> Chosen
         </span>
       )}
@@ -1273,8 +1231,8 @@ function FogGame() {
   }
 
   return (
-    <div className="bg-muted/20 border-exaggerate/40 rounded-lg border border-l-4 p-4">
-      <p className="text-exaggerate font-mono text-[10px] tracking-[0.14em] uppercase">
+    <div className="bg-muted/20 border-exaggerate/40 rounded-lg border p-4">
+      <p className="text-muted-foreground font-mono text-[10px] tracking-[0.14em] uppercase">
         {FOG.eyebrow}
       </p>
       <p className="mt-1 text-base font-semibold">{FOG.title}</p>
@@ -1286,7 +1244,7 @@ function FogGame() {
             {FOG.roundLab(q + 1)}
           </p>
           <div
-            className="border-exaggerate/40 bg-card mt-1.5 rounded-md border-l-2 p-3 text-sm"
+            className="border-exaggerate/40 bg-card mt-1.5 rounded-md border p-3 text-sm"
             aria-live="polite"
           >
             {INTEL[q]}
@@ -1297,7 +1255,7 @@ function FogGame() {
               onClick={() => play("comply")}
               className="border-comply/40 hover:bg-comply/5 rounded-md border p-3 text-left transition-colors"
             >
-              <h6 className="text-comply text-sm font-semibold">
+              <h6 className="text-sm font-semibold">
                 {FOG.comply.head}
               </h6>
               <p className="text-muted-foreground mt-0.5 text-xs">
@@ -1309,7 +1267,7 @@ function FogGame() {
               onClick={() => play("hedge")}
               className="border-defect/40 hover:bg-defect/5 rounded-md border p-3 text-left transition-colors"
             >
-              <h6 className="text-defect text-sm font-semibold">
+              <h6 className="text-sm font-semibold">
                 {FOG.hedge.head}
               </h6>
               <p className="text-muted-foreground mt-0.5 text-xs">
@@ -1358,7 +1316,7 @@ function FogGame() {
             ))}
           </div>
           <p
-            className="border-primary/30 bg-primary/5 mt-3 rounded-md border-l-2 p-3 text-sm"
+            className="border-primary/30 bg-primary/5 mt-3 rounded-md border p-3 text-sm"
             aria-live="polite"
           >
             {verdict}
@@ -1439,16 +1397,13 @@ function DefectorLab({
 
       <div
         className={cn(
-          "mt-4 rounded-md border-l-2 p-3",
+          "mt-4 rounded-md border p-3",
           defects ? "border-defect bg-defect/5" : "border-comply bg-comply/5",
         )}
         aria-live="polite"
       >
         <p
-          className={cn(
-            "font-mono text-[11px] tracking-wide uppercase",
-            defects ? "text-defect" : "text-comply",
-          )}
+          className="text-muted-foreground font-mono text-[11px] tracking-wide uppercase"
         >
           {defects ? LAB.defect.lab : LAB.comply.lab}
         </p>
@@ -1583,8 +1538,8 @@ function InspectorLab() {
   }
 
   return (
-    <div className="bg-muted/20 border-comply/40 rounded-lg border border-l-4 p-4">
-      <p className="text-comply font-mono text-[10px] tracking-[0.14em] uppercase">
+    <div className="bg-muted/20 border-comply/40 rounded-lg border p-4">
+      <p className="text-muted-foreground font-mono text-[10px] tracking-[0.14em] uppercase">
         {INSPECTOR.eyebrow}
       </p>
       <p className="mt-1 text-base font-semibold">{INSPECTOR.title}</p>
@@ -1629,7 +1584,7 @@ function InspectorLab() {
 
       <div
         className={cn(
-          "mt-4 rounded-md border-l-2 p-3 text-sm",
+          "mt-4 rounded-md border p-3 text-sm",
           tone === "good"
             ? "border-comply bg-comply/5"
             : tone === "warn"
@@ -1792,7 +1747,7 @@ function RollSection({
               <span
                 className={cn(
                   "w-32 shrink-0 font-mono font-semibold",
-                  good ? "text-comply" : "text-muted-foreground",
+                  good ? "text-foreground" : "text-muted-foreground",
                 )}
               >
                 {o.n}
@@ -1844,17 +1799,14 @@ function TerminusSection({ termKey }: { termKey: PathKey | FailKey }) {
       data-anchor={`terminus-${termKey}`}
       data-watch
       className={cn(
-        "rounded-lg border-l-4 p-4",
+        "rounded-lg border p-4",
         kind === "good"
           ? "border-comply bg-comply/5"
           : "border-defect bg-defect/5",
       )}
     >
       <p
-        className={cn(
-          "font-mono text-[10px] tracking-[0.14em] uppercase",
-          kind === "good" ? "text-comply" : "text-defect",
-        )}
+        className="text-muted-foreground font-mono text-[10px] tracking-[0.14em] uppercase"
       >
         {E.termLab} · {E.termYear[termKey]}
       </p>
@@ -1963,7 +1915,7 @@ function EndingCard({
 
       {kind === "good" && R && (
         <>
-          <p className="text-comply mt-3 font-mono text-xs font-semibold">
+          <p className="mt-3 font-mono text-xs font-semibold">
             {CARD.goodOdds(R.odds[0].w, R.label, regime ?? "swiss")}
           </p>
           <p className="text-muted-foreground mt-3 font-mono text-[10px] tracking-[0.14em] uppercase">

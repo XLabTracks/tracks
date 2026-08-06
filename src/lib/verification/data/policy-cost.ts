@@ -4,6 +4,8 @@
  * HTML). Do not re-author; this is human-written curriculum.
  */
 export const POLICY_COST_COPY = {
+  title: "Everything comes with a cost.",
+  sub: "A sixty-second exercise: before you scope policy for anyone else, audit one of your own.",
   tagA: "Side A · The goal",
   labelA: "A policy you strongly believe in:",
   phA: "type it here…",
@@ -43,6 +45,16 @@ export const POLICY_COST_COPY = {
   },
   fullTag: "The full policy",
   fullTpl: { pre: "I support ", mid: " — at the cost of ", post: "." },
+  /* The authored closer carries two emphasised questions. It is kept in
+     pieces rather than as an HTML string so the widget never has to render
+     markup it was handed — the same rule that keeps the learner's own words
+     out of innerHTML applies to the copy beside them. */
+  closer: {
+    pre: "The question is never just ",
+    q1: "what do we want to accomplish?",
+    mid: " It is ",
+    q2: "what are we willing to compromise to get it?",
+  },
   again: "Try another policy",
 } as const;
 

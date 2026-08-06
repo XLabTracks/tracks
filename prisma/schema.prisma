@@ -41,6 +41,89 @@ model User {
   apiKeys           UserApiKey[]
   reviewCards       ReviewCard[]
   highlights        Highlight[]
+  verificationState VerificationState?
+
+  verificationApplications VerificationApplication[] @relation("VerificationApplicant")
+  verificationDecisions    VerificationApplication[] @relation("VerificationApplicationDecider")
+  capstoneSignup           VerificationCapstoneSignup?
+}
+
+// The standalone Verification site's per-user state: completed unit ids and
+// the notebook, as one JSON document per user.
+//
+// It is NOT LessonProgress. That table is keyed by content-graph ids and its
+// action rejects anything else; these unit ids ("0.1", "2.3") belong to
+// public/verification/data/course.js, which is not part of the graph. Keeping
+// them apart is also what lets the whole course lift to another host — one
+// row, one shape, no join into the app's curriculum.
+//
+// Last write wins on updatedAt. The document is small (ids plus notebook
+// text); sketches are the only thing that can make it large, so the route
+// caps the payload rather than letting a book of PNGs become a row.
+model VerificationState {
+  userId    String   @id
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  data      Json
+  updatedAt DateTime @updatedAt
+}
+
+enum VerificationApplicationStatus {
+  submitted
+  accepted
+  waitlisted
+  declined
+  withdrawn
+}
+
+// An application to join a facilitated Verification cohort.
+//
+// One row per (applicant, cohort): applying twice to the same cohort edits the
+// application rather than queueing a second one, and a later cohort is a new
+// row that leaves the earlier decision on the record.
+//
+// `answers` is a JSON map of question id → response, validated against the
+// question list in src/lib/verification/application.ts before it is stored —
+// the list is the contract, the column is only where it lands, so adding a
+// question never needs a migration.
+model VerificationApplication {
+  id          String                        @id @default(cuid())
+  userId      String
+  user        User                          @relation("VerificationApplicant", fields: [userId], references: [id], onDelete: Cascade)
+  cohort      String
+  answers     Json
+  status      VerificationApplicationStatus @default(submitted)
+  // The reviewer's note is for the reviewers. It is never shown to the
+  // applicant, and no page renders it outside the reviewer list.
+  note        String?
+  submittedAt DateTime                      @default(now())
+  updatedAt   DateTime                      @updatedAt
+  decidedAt   DateTime?
+  decidedById String?
+  decidedBy   User?                         @relation("VerificationApplicationDecider", fields: [decidedById], references: [id])
+
+  @@unique([userId, cohort])
+  @@index([cohort, status])
+}
+
+enum VerificationCapstoneStatus {
+  submitted
+  withdrawn
+}
+
+// A learner's capstone sign-up: the bank brief they chose (a content slug —
+// no FK into the content graph, like every content id here), their own
+// proposed idea, or both. One row per user; signing up again edits it, and a
+// withdrawal keeps the row as part of the record. Read by the facilitator
+// sheet at /verification/capstone-signups.
+model VerificationCapstoneSignup {
+  id        String                     @id @default(cuid())
+  userId    String                     @unique
+  user      User                       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  briefSlug String?
+  proposal  String?
+  status    VerificationCapstoneStatus @default(submitted)
+  createdAt DateTime                   @default(now())
+  updatedAt DateTime                   @updatedAt
 }
 
 // A user's text highlight on a paper item, with an optional attached note.

@@ -15,7 +15,9 @@ export function LessonNav({
   next: ItemRef | null;
 }) {
   return (
-    <div className="border-border mt-10 grid grid-cols-2 gap-3 border-t pt-6">
+    // select-none: the pager is an index of where to go next, not text
+    // anyone copies. A drag that ends here otherwise smears across both cards.
+    <div className="border-border mt-10 grid grid-cols-2 gap-3 border-t pt-6 select-none">
       {prev ? (
         <Link
           href={hrefFor(prev)}

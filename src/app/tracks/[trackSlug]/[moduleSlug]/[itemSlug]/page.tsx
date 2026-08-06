@@ -15,6 +15,7 @@ import {
 } from "@/lib/content";
 import { isAccessLocked } from "@/lib/content/prerequisites";
 import { getCurrentUser } from "@/lib/auth";
+import { loginHref } from "@/lib/login-href";
 import {
   getPrerequisiteStatus,
   getTrackCompletionSet,
@@ -22,6 +23,7 @@ import {
 } from "@/lib/progress";
 import { Breadcrumbs } from "@/components/layout/breadcrumbs";
 import { LessonContent } from "@/components/mdx/lesson-content";
+import { LessonPartsReader } from "@/components/learn/lesson-parts-reader";
 import { LessonNav } from "@/components/layout/lesson-nav";
 import { LessonCompleteButton } from "@/components/learn/lesson-complete-button";
 import { LessonTracker } from "@/components/learn/lesson-tracker";
@@ -39,7 +41,6 @@ import {
 } from "@/app/actions/highlights";
 import { getHighlightsForItem } from "@/lib/highlights/queries";
 import { type HighlightRow } from "@/lib/highlights/types";
-import { getVerificationExerciseForLesson } from "@/lib/verification/exercises";
 
 // Dispatching route: a module item slug resolves to either a lesson or a
 // paper (they share the /tracks/t/m/<slug> namespace; the static `assessment`
@@ -121,18 +122,21 @@ async function LessonItemPage({
 
   return (
     <div className="max-w-4xl px-4 py-8 lg:px-8">
+      {/* The trail stops at the module: the lesson's own name is the h1 two
+          lines below, and repeating it there put the same words on screen
+          twice before the body even started. Same reason there is no
+          "Module N: …" line — the module is the crumb above it. */}
       <Breadcrumbs
         items={[
           { label: track.title, href: `/tracks/${track.slug}` },
-          { label: module.title, href: `/tracks/${track.slug}/${module.slug}` },
-          { label: lesson.title },
+          {
+            label: `Module ${module.order}: ${module.title}`,
+            href: `/tracks/${track.slug}/${module.slug}`,
+          },
         ]}
       />
 
       <header>
-        <p className="text-muted-foreground text-sm">
-          Module {module.order}: {module.title}
-        </p>
         <h1 className="mt-1 text-3xl font-semibold tracking-tight">{lesson.title}</h1>
         {lesson.estimatedMinutes && (
           <p className="text-muted-foreground mt-2 flex items-center gap-1 text-sm">
@@ -144,17 +148,19 @@ async function LessonItemPage({
       {/* .lesson-reader scopes the sidebar's scroll-spy (see use-scroll-spy)
           and gives heading anchors sticky-header clearance. */}
       <div className="lesson-reader mt-6">
-        <LessonContent contentRef={lesson.contentRef} />
+        {track.chunkedReading ? (
+          <LessonPartsReader>
+            <LessonContent contentRef={lesson.contentRef} title={lesson.title} />
+          </LessonPartsReader>
+        ) : (
+          <LessonContent contentRef={lesson.contentRef} title={lesson.title} />
+        )}
       </div>
 
       {userId ? (
         <LessonTracker
           lessonId={lesson.id}
           completed={completed}
-          // Bridged interactives complete when the widget itself reports a
-          // finish (via onComplete) — not by scrolling past a one-line body.
-          // Unbridged explorables keep normal scroll-to-complete.
-          autoComplete={!getVerificationExerciseForLesson(lesson.id)?.bridged}
         />
       ) : null}
 
@@ -163,7 +169,13 @@ async function LessonItemPage({
           <LessonCompleteButton lessonId={lesson.id} initialCompleted={completed} />
         ) : (
           <Button asChild variant="outline">
-            <Link href="/login">Sign in to track progress</Link>
+            <Link
+              href={loginHref(
+                `/tracks/${track.slug}/${module.slug}/${lesson.slug}`,
+              )}
+            >
+              Sign in to track progress
+            </Link>
           </Button>
         )}
       </div>
@@ -210,18 +222,20 @@ async function PaperItemPage({
 
   return (
     <div className="max-w-5xl px-4 py-8 lg:px-8">
+      {/* Trail stops at the module — the paper's name is the h1 below it. */}
       <Breadcrumbs
         items={[
           { label: track.title, href: `/tracks/${track.slug}` },
-          { label: module.title, href: `/tracks/${track.slug}/${module.slug}` },
-          { label: paper.title },
+          {
+            label: `Module ${module.order}: ${module.title}`,
+            href: `/tracks/${track.slug}/${module.slug}`,
+          },
         ]}
       />
 
       <header>
         <p className="text-muted-foreground text-sm">
-          Module {module.order}: {module.title} · Paper
-          {paper.optional && " · Optional"}
+          Paper{paper.optional && " · Optional"}
         </p>
         <h1 className="mt-1 text-3xl font-semibold tracking-tight">{paper.title}</h1>
         {source.authors && (
@@ -293,7 +307,13 @@ async function PaperItemPage({
           />
         ) : (
           <Button asChild variant="outline">
-            <Link href="/login">Sign in to track progress</Link>
+            <Link
+              href={loginHref(
+                `/tracks/${track.slug}/${module.slug}/${paper.slug}`,
+              )}
+            >
+              Sign in to track progress
+            </Link>
           </Button>
         )}
       </div>

@@ -103,7 +103,7 @@ export function WhatDoTheySay() {
                     key={si}
                     className={cn(
                       s.matters &&
-                        "border-primary/40 bg-primary/5 rounded-lg border-l-2 p-3",
+                        "border-primary/40 bg-primary/5 rounded-lg border p-3",
                     )}
                   >
                     <p

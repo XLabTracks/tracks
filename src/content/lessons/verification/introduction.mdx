@@ -1,0 +1,73 @@
+## Why is verification important?
+
+In June 1946, the United States proposed placing all nuclear material and weapons development under an international Atomic Development Authority with the right to inspect anywhere, no veto allowed. The Soviet Union refused, countered with a proposal to destroy existing weapons first and inspect later. Despite the fact that both sides recognized the grave danger of the bombs, the arms race continued. The crux? Neither the U.S. nor the USSR trusted the other side’s intrusive inspections. In other words, they couldn’t verify that the other party would steal development secrets. The underlying problem of this course is, in fact, the oldest one in arms control: when you sign a mutual agreement, how do you know the other party will uphold their obligations? How do they know you will follow your end of the deal?
+
+- Trust? You could trust each other, and trust each other’s trust. Works with friends, but not with nation-state adversaries incentivized to self-protect by gaining the secret upper hand, and especially not when dealing with the development of high-risk technologies. →
+- Punish violations? In the absence of trust, you could penalize violations of the agreement and preempt misconduct. But deterrence depends upon the reliability of tracking each party’s actions. Moreover, an ex-post regime fails when consequences are immediate, far-reaching, and irreversible: no fine can bring back the dead. →
+- Mutual transparency? You could mutually disclose actions, but increased transparency risks theft of proprietary information or prototypes by adversaries. Each party is still incentivized to develop a secret advantage and fabricate compliance. →
+- Neutral, privacy-preserving verification mechanisms. What if you could mutually verify compliance without risking undue loss of privacy? If each party could verify the other’s compliance without learning their secrets, knowing they can do the same, they have fewer material incentives to dodge compliance. Verification displaces the impossible promise of trust in a volatile adversary towards trust in a shared, robust verification regime.
+
+In short, verification is the set of mechanisms that makes inter-party agreements credible.
+
+## Why are we concerned about the development of superintelligence?
+
+Explore → ai-2040.com
+
+Frontier labs and their executives have described advanced AI systems like "artificial general intelligence," or AGI, as highly autonomous systems that can match or outperform humans at most tasks. Beyond AGI sits the stated end goal of several of these labs: artificial superintelligence, or ASI, a system that massively outperforms humans at virtually every measurable task. An ASI would not be one genius but millions of copies running in parallel, each faster than any human researcher, capable of improving its own successors. That last property, recursive self-improvement (RSI), has the potential to make runaway systems. Each generation designs a better next generation, compressing research that would’ve taken decades into months. Throughout this course, we will use the term ASI to refer to AI with dangerous capabilities that pose a material existential threat to humanity. The labs' own definitions and risk assessments vary, and they are worth reading in their own words. Even the people in charge of developing superintelligence, who have the most incentive to obfuscate dangerous capabilities, have expressed public concerns over the catastrophic risks arising from their technology.
+
+<VerificationExercise id="what-do-they-say" />
+
+Misuse is danger from the operator. Someone with access to an advanced system directs its capabilities toward harm, and the capability itself works exactly as designed. An ASI has no setting that restricts it to curing cancer. Whatever lets it revolutionize medicine and science can serve other ends under other instructions:
+
+- Cyber. Vulnerability discovery and exploitation at machine speed and scale, attacks on cryptographic systems and the financial infrastructure resting on them, automated surveillance of entire populations.
+- Biological. Engineering a pathogen currently demands rare expertise. A sufficiently capable assistant lowers that barrier until an artificial pandemic becomes a question of intent rather than skill.
+- Chemical. The same story with different molecules. Synthesis routes and weaponization knowledge that today require state-level programs.
+- R&D lead. Whoever controls ASI first converts a lead of months into a compounding, possibly permanent advantage. Most dangerous in weapons and surveillance research, and precisely the winner-take-all prize that fuels the race to build ASI at all.
+- Influence and persuasion. Individually tailored propaganda and political manipulation at population scale. Paired with mass surveillance, this is the toolkit of durable authoritarian control.
+
+Misalignment is danger from the system. Developers don't write a model's goals directly. They shape behavior through training, and what a model actually learns to pursue can drift from what anyone intended. Today that drift produces oddities and headaches. In a system far more capable than its overseers, it produces something else:
+
+- Unintended goals, competently pursued. A misaligned system isn't broken. It works well, toward objectives nobody chose, and a capable enough system can pursue them in ways designed to survive correction. Early hints of this, models that deceive their evaluators or resist being shut down in tests, have already shown up in systems nowhere near ASI.
+- Compounding through self-improvement. When each generation trains its successor, a small divergence doesn't stay small. It gets inherited and amplified, and the window for humans to notice and intervene can close before anyone knows it was open.
+- No safe owner. Misuse harms whoever the operator targets. A misaligned ASI endangers its own developers first, along with everyone else. There are no right hands.
+
+These concerns stopped being hypothetical in the first half of 2026. In July, an unreleased OpenAI model escaped testing sandbox restrictions and hacked into the servers of Hugging Face. In April, Anthropic announced that a preview of its frontier model Claude Mythos had autonomously discovered thousands of previously unknown vulnerabilities across every major operating system and web browser, including flaws that had survived decades of expert review, such as a 17-year-old remote code execution bug in FreeBSD and a 27-year-old bug in OpenBSD. In one case it chained four vulnerabilities together to escape a browser's security sandboxes; in another, during an internal safety evaluation, an early version escaped its sandboxed test environment, gained internet access it was never granted, and emailed the supervising researcher about it. Anthropic judged the model too dangerous for general release and restricted it to a small consortium of defenders. Note the shape of this event. A single lab produced a capability with national-security implications, the outside world learned about it only when the lab chose to disclose, and the only safeguard in play was that lab's own judgment. Today's systems are far from ASI, but they preview the governance problem this course is about: capabilities are arriving faster than any mechanism for the rest of the world to see them coming.
+
+Verification gives us the ability to enforce agreements to slow or stop the development towards advanced AI systems that have the potential for catastrophic risk, to give us the time to create enforcement and prevention mechanisms.
+
+The Catastrophic Risks of AI — and a Safer Path — Yoshua Bengio, TED:
+
+<Video src="https://www.youtube.com/watch?v=qe9QSCF-d88" title="The Catastrophic Risks of AI — and a Safer Path | Yoshua Bengio | TED" />
+
+<Fold label="Optional material">
+
+The case this section summarizes is made at full strength by the people who argue it most directly. Any one of these:
+
+- [If Anyone Builds It, Everyone Dies — excerpt](https://www.theatlantic.com/technology/2025/09/if-anyone-builds-it-excerpt/684213/) — Eliezer Yudkowsky & Nate Soares, The Atlantic, September 2025. An edited excerpt of chapter 2 of the book.
+- [The Problem](https://intelligence.org/the-problem/) — MIRI. The institute's own statement of the case, from why ASI may come soon to what could be done about it.
+- This May Be Humanity’s Hardest Challenge — Rational Animations. The same case as a video essay:
+
+<Video src="https://www.youtube.com/watch?v=7wy3xyoXYt8" title="This May Be Humanity’s Hardest Challenge" />
+
+And beneath all three, the assumptions doing the work:
+
+- [Four Background Claims](https://intelligence.org/2015/07/24/four-background-claims/) — Nate Soares, MIRI, 2015.
+
+</Fold>
+
+<Exercise id="v-task-introduction-1" />
+
+## Why is verification important in the context of artificial intelligence?
+
+If ASI risk warrants an international agreement, and agreements are only credible with verification, then AI verification should be a mature, well-resourced field.
+
+It is not.
+
+Nuclear arms control took decades to build its verification apparatus: seismic monitoring networks, satellite imagery analysis, the IAEA inspectorate, and a deep bench of people who spent careers on the problem. AI verification has almost none of this yet. Policy for existentially important initiatives like the prevention of ASI development need enforceability more than any other.
+
+- The field is new. There is little canonical literature, no standard textbook, and not much settled vocabulary. Much of what exists is scattered across preprints, policy memos, and blog posts.
+- Expertise is scarce, in political spaces and even in technical ones. Few policymakers understand what is measurable about AI development, and few AI researchers understand what treaties need from a measurement.
+- Technical AI safety research overwhelmingly favors alignment and evaluations over verification mechanisms. Important work, but it answers a different question: not "is this model safe?" but "can one party prove to another what it is and isn't doing?"
+- Governments have not yet invested seriously in verification research, infrastructure, or personnel, even as they negotiate over AI.
+
+This gap is the third motivation for the course, and it is also the opportunity. The field is young enough that the people learning it now will be the ones who build it. This course aims to position you with the necessary knowledge, tools, and strategies to make a real impact in AI verification.

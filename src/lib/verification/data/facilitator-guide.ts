@@ -161,8 +161,17 @@ export interface Stage {
 }
 
 /** A callout paragraph — HTML lifted verbatim (may contain [term] buttons). */
+/**
+ * A callout carries no colour.
+ *
+ * The source page drew these as a card with one painted edge —
+ * `border-left: 4px solid var(--accent)` and corners rounded on three sides —
+ * alternating between two accents it called brown and blue. Reading all
+ * fourteen, the two do not mark anything: they alternate. So the vocabulary
+ * came out with the rib. A card here is a hairline on four sides, or it is
+ * painted on four sides; never one edge, and never a hue that means nothing.
+ */
 export interface Callout {
-  variant: "brown" | "blue";
   /** HTML body; term buttons are marked with data-pop and rendered as buttons. */
   html: string;
 }
@@ -189,7 +198,6 @@ export const ROLE_HEAD = {
 };
 
 export const ROLE_CALLOUT_LOW: Callout = {
-  variant: "blue",
   html: "<strong>Your job is process, not content.</strong> The group plus the readings contain the answers; your job is to make the group use them. Saying <em>“I don't know — let's check the reading”</em> models exactly the habit this track teaches.",
 };
 
@@ -203,7 +211,6 @@ export const ROLE_TILES_LOW: Tile[] = [
 ];
 
 export const ROLE_CALLOUT_HIGH: Callout = {
-  variant: "brown",
   html: "<strong>Your expertise is a liability if unmanaged.</strong> Every time you weigh in, you shift the group's “neutral” toward you — and replace their thinking with yours. The traps below have names for a reason.",
 };
 
@@ -217,7 +224,6 @@ export const ROLE_TILES_HIGH: Tile[] = [
 ];
 
 export const ROLE_CALLOUT_SPINE: Callout = {
-  variant: "blue",
   html: "<strong>Both lanes share one spine:</strong> open the topic wide, hold the group through disagreement, close with decisions — the <button data-pop=\"p-diamond\">Diamond of Participation</button>. The most common failure: rescuing the group from the <button data-pop=\"p-groan\">groan zone</button> the moment it gets uncomfortable.",
 };
 
@@ -296,7 +302,6 @@ export const TAKES_SORTER: SorterItem[] = [
 ];
 
 export const TAKES_CALLOUT: Callout = {
-  variant: "brown",
   html: "<strong>You referee the process, not the verdict.</strong> When you can't judge a take on the merits: ask <em>“what would change your mind?”</em>, request the causal chain, or assign someone to <button data-pop=\"p-steelman\">steelman</button> the opposite view. Any of these upgrades a weak take without you ruling on it.",
 };
 
@@ -317,7 +322,6 @@ export const PART_TILES: Tile[] = [
 ];
 
 export const PART_CALLOUT: Callout = {
-  variant: "blue",
   html: "<strong>Silence is a tool, not a failure.</strong> After you ask a question, count 10 seconds before rescuing it — and if you must speak, re-ask the question, don't answer it. Also do the <button data-pop=\"p-arithmetic\">meeting arithmetic</button>: 8 people × 3 minutes each is already 24 minutes.",
 };
 
@@ -338,7 +342,6 @@ export const AGENCY_TILES: Tile[] = [
 ];
 
 export const AGENCY_CALLOUT: Callout = {
-  variant: "brown",
   html: "<strong>Calibrate difficulty, not comfort.</strong> Tasks should sit just past what the group finds easy — <button data-pop=\"p-difficulty\">desirable difficulty</button>. Instant answers mean the question was recall in costume. A fully stalled room means shrink the question, not the ambition: “just the first step of the causal chain.”",
 };
 
@@ -359,7 +362,6 @@ export const CONVERT_TILES: Tile[] = [
 ];
 
 export const CONVERT_CALLOUT: Callout = {
-  variant: "blue",
   html: "<strong>Going the other way?</strong> Any sync activity converts back: “minutes” become “days,” the chat wave becomes hidden-until-deadline posts, breakout rooms become tagged sub-threads. The structure survives the medium. Mixed cohorts: run sync, then post the doc's open questions as the week's async thread — <button data-pop=\"p-spaced\">spaced practice</button> for free.",
 };
 
@@ -380,7 +382,6 @@ export const SESSION_STAGES: Stage[] = [
 ];
 
 export const SESSION_CALLOUT: Callout = {
-  variant: "brown",
   html: "<strong>The middle is supposed to feel messy.</strong> Minutes 13–50 are the <button data-pop=\"p-groan\">groan zone</button> — your job is to keep the group in productive disagreement about five minutes longer than is comfortable, not to resolve it early.",
 };
 
@@ -416,10 +417,17 @@ export const RESOURCES_BOXES: ResBox[] = [
       { html: "<a href=\"https://arxiv.org/abs/2402.08797\" target=\"_blank\" rel=\"noopener\">Computing Power and the Governance of AI</a><small>Why compute is the thing treaties can actually see.</small>" },
     ],
   },
+  /* A track material the app itself serves is linked at its unit, not at the
+   * standalone prototype it was built from — the in-app one carries the
+   * learner's progress and the prototype does not. The other two are still
+   * standalone Netlify pages: the IR Primer's source is
+   * `tracksprogramplayground/site/ir-primer.html` and is waiting to be ported
+   * the same way; "The Verification Problem" has no source in any repo we
+   * hold, so it can only stay external. */
   {
     heading: "Your track materials",
     items: [
-      { html: "<a href=\"https://the-verification-game.netlify.app\" target=\"_blank\" rel=\"noopener\">The Verification Game</a><small>Violator-vs-inspector exercise — pairs with the red-team recipe.</small>" },
+      { html: "<a href=\"/tracks/verification/why-verification/verification-timeline-game\">The Verification Game</a><small>Violator-vs-inspector exercise — pairs with the red-team recipe.</small>" },
       { html: "<a href=\"https://verification-intro.netlify.app\" target=\"_blank\" rel=\"noopener\">The Verification Problem</a><small>Scrolling intro — good pre-read for week one.</small>" },
       { html: "<a href=\"https://rainbow-puppy-79f680.netlify.app\" target=\"_blank\" rel=\"noopener\">IR Primer</a><small>International-relations background for low-context cohorts.</small>" },
     ],
@@ -491,7 +499,6 @@ export const SESSION_PLANS: SessionPlan[] = [
       ],
     },
     seed: {
-      variant: "brown",
       html: "<strong>Seed the week's thread:</strong> “Where did your friend push back on the intro's argument — and could you answer them?” Collect the best pushback at next session's check-in.",
     },
     nextId: "m-game",
@@ -500,7 +507,7 @@ export const SESSION_PLANS: SessionPlan[] = [
   {
     id: "m-game",
     title: "Session plan · The Verification Game, live",
-    lede: "The solo timeline at <a href=\"https://the-verification-game.netlify.app\" target=\"_blank\" rel=\"noopener\">the-verification-game.netlify.app</a> becomes <strong>“The Decade”</strong>: 2026–2032 in six rounds, for 10–15 players. The room starts at the fork with no regime and ends up walking Path A, B, or C — by its own choices, replayed against the map in the debrief. 90–120 minutes; the one plan here that needs real prep.",
+    lede: "The solo timeline at <a href=\"/tracks/verification/why-verification/verification-timeline-game\">unit 0.2.0</a> becomes <strong>“The Decade”</strong>: 2026–2032 in six rounds, for 10–15 players. The room starts at the fork with no regime and ends up walking Path A, B, or C — by its own choices, replayed against the map in the debrief. 90–120 minutes; the one plan here that needs real prep.",
     prep: {
       ip: "<strong>Prep — the print kit:</strong> role cards · sealed directive envelopes · carbon-copy Program Sheets (public slip on top, truth beneath) · allocation screens · rumor deck (half true, half false, identical backs) · audit-chit bag · fill-in-the-blank treaty templates that get taped to the wall when signed · a big map board with the risk track · two timers. Room: one plenary table plus three corner “capitals.” Do one solo dry run of your Control checklist first — Control is the hard seat.",
       zm: "<strong>Prep — the no-code kit:</strong> main room is the plenary with the map on permanent screen share; persistent breakouts are the capitals plus an IVA office; bilaterals on request, capped at two concurrent (queueing for a side room is realistic diplomacy pressure). Everyone renames to their seat (<em>US · HoG</em>, <em>CN · NSA</em>). Allocations arrive by one Google Form per round; intel travels by direct message from you. Recruit a co-facilitator (“Vice-Control”) to run DMs while you run the plenary — solo Control on Zoom drowns.",
@@ -535,13 +542,12 @@ export const SESSION_PLANS: SessionPlan[] = [
     sendBox: {
       heading: "Links",
       items: [
-        { html: "<a href=\"https://the-verification-game.netlify.app\" target=\"_blank\" rel=\"noopener\">The Verification Game (solo)</a><small>Replay it and deliberately walk the two paths the room didn't.</small>" },
+        { html: "<a href=\"/tracks/verification/why-verification/verification-timeline-game\">The Verification Game (solo)</a><small>Replay it and deliberately walk the two paths the room didn't.</small>" },
         { html: "<a href=\"https://arxiv.org/abs/2408.16074\" target=\"_blank\" rel=\"noopener\">Verification methods for international AI agreements</a><small>Match the game's mechanics to the paper's ten real methods.</small>" },
         { html: "<a href=\"https://rainbow-puppy-79f680.netlify.app\" target=\"_blank\" rel=\"noopener\">IR Primer</a><small>The lenses the debrief just made concrete.</small>" },
       ],
     },
     seed: {
-      variant: "brown",
       html: "<strong>Seed the week's thread:</strong> each delegation posts a one-paragraph in-character memoir of its decade — what it feared, what it hid, what it would do differently. Read them aloud when the cohort next meets.",
     },
     nextId: "m-history",
@@ -580,7 +586,6 @@ export const SESSION_PLANS: SessionPlan[] = [
       ],
     },
     seed: {
-      variant: "brown",
       html: "<strong>Seed the week's thread:</strong> “Post the component your team looted for the franken-regime — and one way it fails for AI that it didn't fail for its original domain.”",
     },
     nextId: "m-matrix",
@@ -626,7 +631,6 @@ export const SESSION_PLANS: SessionPlan[] = [
       ],
     },
     seed: {
-      variant: "brown",
       html: "<strong>Seed the week's thread:</strong> post the photo (or screenshot) of the room's final matrix plus “one placement you still disagree with, and your best argument.” The disagreements are next week's warm-up.",
     },
     nextId: "m-anatomy",
@@ -665,7 +669,6 @@ export const SESSION_PLANS: SessionPlan[] = [
       ],
     },
     seed: {
-      variant: "brown",
       html: "<strong>Seed the week's thread:</strong> post your team's best exploit and whether the rebuttal held. Bonus: find the same loophole pattern in a real treaty's text.",
     },
   },
@@ -758,7 +761,7 @@ export const FG_POPUPS: Record<string, string> = {
   "p-c-deep":
     "<h3>Deep-dives → jigsaw</h3>\n    <p class=\"mt\">Split, prep, teach back · 14 min + pre-work</p>\n    <ol>\n      <li><strong>Pre</strong> — assign each participant <em>one</em> deep-dive before the session (e.g. hardware mechanisms / model evals / whistleblower provisions).</li>\n      <li><strong>5 min</strong> — same-reading groups agree on the mechanism and its weakest link.</li>\n      <li><strong>9 min</strong> — re-mix into trios of different readings; each teaches theirs in 3 minutes.</li>\n    </ol>\n    <p><strong>Why it works:</strong> explaining to a peer is deep processing plus accountability — and the cohort covers 3× the material.</p>",
   "p-c-debate":
-    "<h3>Written debate → live red team</h3>\n    <p class=\"mt\">Violator vs. inspector · 13 min</p>\n    <ol>\n      <li><strong>2 min</strong> — split the room: half are the evading state, half design the verification regime.</li>\n      <li><strong>7 min</strong> — inspectors present their regime; violators attack it in rounds.</li>\n      <li><strong>4 min</strong> — debrief out of role: which attacks would the reading's proposal survive?</li>\n    </ol>\n    <p><strong>Why it works:</strong> adversarial thinking is the core skill of verification — and it's far more natural as a game than as an essay. Pairs well with <a href=\"https://the-verification-game.netlify.app\" target=\"_blank\" rel=\"noopener\">The Verification Game</a>.</p>",
+    "<h3>Written debate → live red team</h3>\n    <p class=\"mt\">Violator vs. inspector · 13 min</p>\n    <ol>\n      <li><strong>2 min</strong> — split the room: half are the evading state, half design the verification regime.</li>\n      <li><strong>7 min</strong> — inspectors present their regime; violators attack it in rounds.</li>\n      <li><strong>4 min</strong> — debrief out of role: which attacks would the reading's proposal survive?</li>\n    </ol>\n    <p><strong>Why it works:</strong> adversarial thinking is the core skill of verification — and it's far more natural as a game than as an essay. Pairs well with <a href=\"/tracks/verification/why-verification/verification-timeline-game\">The Verification Game</a>.</p>",
   "p-s1":
     "<h3>0–5 · Check-in</h3>\n    <p>One round, everyone speaks: <em>“one word for how the reading left you.”</em></p>\n    <p>You've just guaranteed universal participation in the first five minutes and taken the group's temperature. If last week ended with commitments, collect them here.</p>",
   "p-s2":

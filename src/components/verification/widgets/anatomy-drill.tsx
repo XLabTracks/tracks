@@ -39,19 +39,19 @@ const TIER_ACCENT: Record<
   clean: {
     dot: "bg-comply",
     text: "text-comply",
-    border: "border-l-comply",
+    border: "border-comply",
     label: "clean",
   },
   near: {
     dot: "bg-exaggerate",
     text: "text-exaggerate",
-    border: "border-l-exaggerate",
+    border: "border-exaggerate",
     label: "defensible",
   },
   miss: {
     dot: "bg-defect",
     text: "text-defect",
-    border: "border-l-defect",
+    border: "border-defect",
     label: "miss",
   },
 };
@@ -319,8 +319,8 @@ function Drill({
       {/* filed confirmation (after resolution) */}
       {showFiled && (
         <div
-          className="border-border bg-card shadow-soft mx-auto max-w-2xl rounded-xl border border-l-4 p-4"
-          style={{ borderLeftColor: filedOrgan.c }}
+          className="bg-card shadow-soft mx-auto max-w-2xl rounded-xl border p-4"
+          style={{ borderColor: filedOrgan.c }}
         >
           <div className="text-muted-foreground mb-1.5 flex items-center gap-1.5 font-mono text-[10px] tracking-[0.14em] uppercase">
             <OrganDot color={filedOrgan.c} />
@@ -349,7 +349,7 @@ function Drill({
             role="status"
             aria-live="polite"
             className={cn(
-              "border-border bg-card rounded-lg border border-l-4 p-4 text-sm leading-relaxed",
+              "bg-card rounded-lg border p-4 text-sm leading-relaxed",
               accent.border,
             )}
           >
@@ -497,7 +497,7 @@ function Summary({
       </div>
 
       <p
-        className="border-l-primary bg-muted/40 rounded-r-lg border-l-4 px-4 py-3 text-sm leading-relaxed"
+        className="border-primary/40 bg-muted/40 rounded-lg border px-4 py-3 text-sm leading-relaxed"
         style={{ fontStyle: "normal" }}
       >
         {COPY.punch}
@@ -552,7 +552,7 @@ function Summary({
 
         {judgment && (
           <div
-            className="border-border border-l-primary rounded-lg border border-l-4 bg-card p-4 text-sm leading-relaxed"
+            className="border-primary/40 rounded-lg border bg-card p-4 text-sm leading-relaxed"
             aria-live="polite"
           >
             <p>

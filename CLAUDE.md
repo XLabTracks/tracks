@@ -4,13 +4,11 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 @AGENTS.md
 
-Tracks is an AI-safety learning platform (Khan Academy–style) with three
-tracks — **Control** (technical), **Governance**, and **Verification**. The
+Tracks is an AI-safety learning platform (Khan Academy–style) with two
+tracks — **Control** (technical) and **Governance**. The
 Control track's first module carries real curriculum (an authored lesson on
 the control game, the Redwood AI Control paper, and two readings reproduced
-with permission); the Verification track is fully populated by the 17
-native React interactive widgets (see "Verification
-interactives" below); everything else is placeholder. **Never invent or
+with permission); everything else is placeholder. **Never invent or
 fabricate curriculum content** — real content is human-authored or reproduced
 with permission; otherwise use lorem ipsum or leave it empty. The **Example track** (`ex-content`/`ex-assess`)
 is the live reference for every content feature; `AUTHORING.md` is the
@@ -39,10 +37,28 @@ step-by-step guide for adding content (its rules are enforced by
 - `npm run lesswrong:build` — likewise for LessWrong / Alignment Forum posts
   (`src/content/lesswrong/*.json` + `public/lesswrong/*`; fetched via the
   public ForumMagnum GraphQL API; artifact ids are `{site}__{postId}`).
+- `npm run gdoc:build` — re-sync every lesson body generated from a shared
+  Google Doc (`scripts/build-gdoc.ts`; network, authoring-time only). The
+  registry is the `DOCS` array in that script; `-- --check` reports a stale
+  copy without writing, and is deliberately not in CI (the input is somebody
+  else's live document, so drift is news, not a broken build). It re-syncs on
+  its own weekly — `.github/workflows/gdoc-sync.yml` runs the build and opens
+  a pull request when the doc has moved, so a verbatim reproduction is never
+  updated without somebody reading the diff.
 - `npx prisma generate` — regenerate the client after editing `prisma/schema.prisma`.
   Do **not** run `prisma migrate` against the hosted DB (see Database & deploy).
 - `npm run cf-typegen` — regenerate `cloudflare-env.d.ts` after changing
   bindings in `wrangler.jsonc`.
+- `npm run verification:course` — regenerate `public/verification/data/course.js`
+  from `src/content/verification/curriculum.ts`, the single source of the
+  Verification module and unit list. `-- --check` fails when they have drifted.
+- `npm run verification:memos` — regenerate `public/verification/data/memos.js`
+  from `src/content/verification/memos.ts`, the single source of the course's
+  fifteen written outputs. `-- --check` fails when they have drifted.
+- `npm run verification:capstones` — rebuild the Verification capstone bank
+  from `verification-capstones/*.md` into
+  `public/verification/data/capstone-bank.js`. `-- --check` verifies the two
+  have not drifted. Authoring-time only; the output is committed.
 
 Setup: `cp .env.example .env`, then fill the `WORKOS_*` values (AuthKit, Google
 enabled, redirect `/callback`) and `DATABASE_URL` (see `.env.example`). Public
@@ -148,8 +164,17 @@ via `usePathname()` (layouts can't see deeper params).
 `<Exercise/>`, `<Callout/>`, `<ArxivPaper/>` (collapsible card — distinct from
 full-page Paper items), `<Footnote/>`, `<Term/>` (glossary hover card), and
 `<SiteQuote/>` (external link whose hover card previews a verbatim excerpt
-of the target page; never internalized, never scanned by readings:build)
-by name inside lesson text.
+of the target page; never internalized, never scanned by readings:build),
+`<SourceCredit/>` (the credit block over a lesson reproduced from somebody
+else's document — author, where the original lives, and how much of it is
+here; emitted by `gdoc:build`, not hand-written)
+by name inside lesson text. `<MemoDesk lesson="…"/>` prints the written
+output that lesson owes and links into the memo desk at that slot.
+`<PopUp label="…">` is what the outline's
+`[POP UP]` marker becomes: a named card that opens a dialog on the body
+(2.2.1's three visibility layers are the live case). An `[interactive
+pop-up]` — one the learner answers rather than reads — is a widget instead;
+1.0.2's `policy-cost` is the one that exists.
 A lesson body with 2+ top-level `##`/`###` headings automatically gets a
 paper-style "In this lesson" sidebar nav: `src/lib/mdx/rehype-lesson-sections.mjs`
 compiles a `sections` export into every lesson module (read via
@@ -321,23 +346,323 @@ in `docs/superpowers/` (`specs/`, `plans/`) — they record intent and rationale
 household picture, or the `five-worlds` map axes); once shipped, the code is
 normative.
 
-**Verification interactives.** The Verification track's 17 exercises are
-**native React widgets** (`src/components/verification/widgets/<id>.tsx`) in the
-app design system, keyed by id in `widgets/registry.tsx`. Copy/data is lifted
-verbatim into `src/lib/verification/data/*` (human-authored curriculum —
-**never regenerate content**); six have pure engines in
-`src/lib/verification/engines/*` (+ vitest suites). Each is a content-graph
-lesson (`v-<id>`) whose MDX embeds `<VerificationExercise id/>` — an async
-server component that resolves the user and renders the client widget host
-(`verification-widget-host.tsx`); the registry of metadata (id/title/bridged)
-is `src/lib/verification/exercises.ts`. `bridged` widgets call `onComplete`
-(→ `setLessonComplete` via `kit/use-completion.ts`) at their finish event and
-their lessons disable scroll auto-complete; unbridged explorables keep normal
-scroll-to-complete. Shared kit in `src/components/verification/kit/`
-(drag, `[[term]]` tooltips, completion hook). `src/lib/verification/widgets.test.ts`
-enforces the registry ↔ graph ↔ MDX ↔ widget mapping. (The originals were
-standalone HTML pages; only `public/verification/assets/` remains, for the
-what-do-they-say portraits.)
+**Verification — read this before touching it.** The course exists twice
+right now and that is a **defect being paid down**, not a design. Anything you
+add must reduce the duplication, never widen it.
+
+- **`src/content/verification/curriculum.ts` is the course.** It is the single
+  source of the module list, the unit list and their order. The app track at
+  `/tracks/verification` reads it directly; MDX bodies live in
+  `src/content/lessons/verification/*.mdx`, reached by `contentRef`
+  `verification/<name>` (`contentRef` is a *path* under
+  `src/content/lessons`, so the subfolder needs no loader change).
+- **The outline's taxonomy is modules → submodules → subsubmodules**, and the
+  graph carries it as: a **submodule** is a top-level lesson numbered `X.X.0`,
+  its **subsubmodules** are lessons whose `sectionItemId` names it, numbered
+  from `X.X.1`. One nesting layer, which is all `content.test.ts` allows and
+  exactly what the outline describes. All of module 2 is on this shape.
+  Renumbering a lesson means renumbering its body's own first heading in the
+  same edit — `isLessonTitleHeading` compares digits too, so a title that no
+  longer matches its heading silently starts printing twice.
+  Per-module build logs — what was transcribed, what was deliberately left, and
+  what is still owed — live in `docs/verification/` (`module-2-log.md` is the
+  first). Append to them rather than rewriting; they are the audit trail that
+  stops the next session re-deriving decisions from the diff.
+- **`public/verification/data/course.js` is generated. Never hand-edit it.**
+  `npm run verification:course` builds it from the curriculum above;
+  `-- --check` fails when the two disagree. It carries **structure only** —
+  modules, units, ids, titles and an `href` per unit. The prose is MDX and
+  belongs to the app, which is the whole point: two copies of the text was
+  the defect.
+- **The course's own pages are app routes, not files.** `/verification/track`,
+  `map`, `guide`, `memo-desk`, `capstone-bank`, `capstone`, `landing`, `about`
+  and `team` live in `src/app/verification/*/page.tsx`. Nothing under
+  `public/verification/` is HTML any more — a page served outside the app has
+  no session, which is why the old ones could only ask an API whether somebody
+  was signed in and never show them their own account. The old `*.html` URLs
+  308 to the new ones (`next.config.ts`). `/verification/module?u=<unit>`
+  resolves against the content graph and redirects to that unit's reading.
+- **Their behaviour is still plain JS, loaded in order.** Each route mounts
+  `<LegacyScripts src={[…]}/>`
+  (`src/components/verification/legacy-scripts.tsx`), which appends
+  `public/verification/*.js` one at a time — `data/*.js` set globals that
+  `platform.js` and the page script read at execution time, and next/script
+  gives no ordering guarantee between tags. It loads each file once: those
+  scripts are not idempotent, so a second run doubles every listener.
+  Converting a page to components means deleting entries from that list, and
+  the list emptying is what finishing the job looks like.
+- **`src/content/verification/memos.ts` is the fifteen written outputs.**
+  Same generator shape as the course: `npm run verification:memos` writes
+  `public/verification/data/memos.js` for the standalone memo desk, and
+  `-- --check` fails on drift — never hand-edit the output. Each slot names
+  the `lesson` whose body carries `<MemoDesk lesson="…"/>`, because the
+  outline numbers some of them loosely (`1.7`, `1.x`, `3.x` are not units the
+  graph has), so the placement is a judgement and belongs in the data where it
+  can be argued with. `memos.test.ts` fails if a slot's lesson does not embed
+  its card exactly once — that is what stops the desk going unreachable from
+  the course again. `status` is load-bearing: `specified` quotes the outline,
+  `named` and `unspecified` must carry a `gap` saying what is missing, and
+  filling one in yourself is a content decision that is not yours to make.
+- **`verificationUnitOfLesson` in curriculum.ts is the join.** The static
+  site and `data/skills.js` key on outline numbers (`0.1`, `2.3`); the graph
+  keys on `v-<name>`. Several lessons may share one unit — module 0's seven
+  lessons are four units, 2.3's five sections are one. A lesson missing from
+  that map is a lesson the static site cannot see, so the generator fails
+  loudly rather than dropping it.
+- **Unit ids are permanent and load-bearing.** The static site's ids
+  (`0.1`, `2.3`) are progress keys **and** the rung tags in
+  `data/skills.js`; the graph's are `v-<name>`. Both sets survive — the join
+  above is what keeps the skill map filling.
+- **`data/exercises.js` is orphaned and awaiting a decision.** Ten of its
+  eleven exercises (`ex-response-menu`, `ex-branches`, `ex-precedents`,
+  `ex-policy-matrix`, `ex-anatomy`, `ex-chokepoints`, `ex-upstream`,
+  `ex-mechanism-rank`, `ex-signals`, `ex-reopen`) lost their only consumer
+  when the static player became a redirect; `ex-evasion` still feeds the
+  capstone workspace's red-team table. They are authored content, so they were
+  kept rather than deleted. Either port them to React widgets under
+  `src/components/verification/widgets/` or retire them deliberately — do not
+  leave them drifting a third time.
+- **Learner state belongs to the account.** `VerificationState`
+  (`/api/verification/state`) holds completed unit ids and the notebook as one
+  JSON document per user; `localStorage` is the signed-out fallback and the
+  offline cache, never the source of truth. Signed out returns 401 and the
+  pages carry on — that is a supported mode, not an error, and must never be
+  reported as one. **The table needs
+  `db/migrations/20260805120000_verification_state.sql` applied with the admin
+  role before any of this works.**
+- **A body may repeat its own title; the reader drops it.** The item page owns
+  the lesson's h1, so a transcribed heading that says the same thing is not
+  rendered — `titleAwareHeadings` in
+  `src/components/mdx/lesson-content.tsx` compares each heading against the
+  lesson title (`isLessonTitleHeading`, word-only, in
+  `src/lib/content/lesson-heading.ts`) and returns null on a match, at any
+  level and anywhere in the body. `getLessonSections` applies the same filter
+  so the sidebar never offers a row whose anchor was dropped. This is
+  deliberately a render rule and not an authoring rule: the outline carries
+  its numbered heading, transcribing it verbatim is right, and policing the
+  sources regressed on every new batch. A surviving `h1` renders as `h2` —
+  the page owns the document's only h1. The breadcrumb stops at the module
+  for the same reason.
+- **Never invent curriculum.** Module 0's prose is transcribed from the
+  author's WIP outline, verbatim. Modules 1-4 are declared with real titles
+  and no items until their prose is drafted — an empty module counts as
+  complete, so it gates nothing. The outline's instructions to whoever
+  finishes a section are kept but visibly marked as author notes, so they can
+  never read as learner-facing prose.
+- **Lessons are read one part at a time** on tracks flagged
+  `chunkedReading` (Verification is): `LessonPartsReader` (client) chunks the
+  rendered body at its top-level headings — h2 alone when a lesson has
+  enough, h3 then h4 folded in when it doesn't — with a jump strip, a
+  position meter (the counter beside it is the reading; the bar is
+  decoration), `?p=` deep links and a whole-lesson toggle persisted under
+  `vt-reading-mode` (carried over from the static course). Parts are hidden,
+  never unmounted — embedded widgets hold live state — and in-page anchors
+  into a hidden part reveal it before scrolling. Nothing auto-completes:
+  the meter reads position, Mark complete stays the only completion channel.
+  Corollary: a lesson with no headings is one unchunkable wall — long
+  lessons must carry real headings, not bold lines pretending (that is what
+  the scoping-actors/covert-* repairs restored), and a wide table scrolls in
+  its own box (`.lesson-body table` in globals.css), never the page.
+- **No half-painted cards.** A card is a hairline on all four sides, or it is
+  painted on all four; never one edge in a coloured tint with the rest
+  hairline, and never a hue that carries no meaning. The accent goes inside —
+  a chip, a glyph, a fill bar. The prototypes brought this in repeatedly
+  (`facilitator-guide` arrived with `border-left: 4px` alternating between two
+  accents that marked nothing), so strip it on the way in, not after it
+  renders. Two things that are not this and must not be "fixed": a band rule
+  that separates full-width sections, and a tab whose bottom border is
+  transparent so it joins its panel — absence is not a tint.
+- **Bloom levels are gone on purpose.** They are curriculum-design vocabulary,
+  not a learner's. If you need a second channel beside a module hue, use the
+  module number — that is what the star numerals carry.
+
+Traps that cost time already, so they are written down:
+
+- `importLesson()` swallows a failed dynamic import into `notFound()`. A wrong
+  `contentRef` therefore looks like an ordinary 404 while typecheck and the
+  whole suite stay green — check a lesson route against a running server.
+- `public/verification/` is outside `tsconfig`'s include and outside vitest's
+  (`src/**/*.test.ts`). Nothing there is typechecked or tested, and a green
+  suite says nothing about it. Drive it in a browser.
+- `theme.css` is the only file that knows a colour; three themes over one set
+  of variable names. `--primary` fills and `--brand-ink` writes. The two
+  wordmark files are chosen by CSS, and those rules must stay **after**
+  `.brand-mark` — it sets `display:block` at equal specificity, so ordering is
+  the whole mechanism. It carries the palette a *page* is made of, so app
+  tokens no static page has — `--popover`, `--input`, `--secondary`, the
+  `--sidebar*` set — are absent from it and keep globals.css's light-ground
+  values, which is how a dialog opens white on the night theme. Those are
+  **derived** from the palette in `app-bridge.css` (app-only, loaded by
+  `site-chrome.tsx`), never restated as literals: one rule serves all three
+  themes. The chart and game-payoff tokens are deliberately left unmapped —
+  categorical scales are a design decision, not a palette shade.
+- The `localStorage` keys `xlab-verification-theme`,
+  `xlab-verification-memo-desk.v1` and `xlab-verification-notebook.v1` hold a
+  visitor's theme, memo drafts and notebook. They keep those names whatever
+  the files around them are called.
+- `mouseup` fires before `click`. Both selection tools (`notebook.js` capture,
+  `vocab.js` define) rebuild their button on `mouseup`, so each must ignore
+  presses inside its own UI or the click never lands and the button looks
+  dead.
+- LessWrong's GraphQL API is behind bot protection and challenges datacenter
+  requests; the keyless `/api/search` endpoint is not, so
+  `/api/verification/define` asks that instead (tags index — hits carry the
+  wiki's real slug and a plain-text description), answers from the app's own
+  glossary first, and stays best-effort. Never gate saving on a definition
+  arriving.
+
+
+
+The course pages' own mechanics, for as long as they are scripts:
+
+- **`theme.css` is the only file that knows a colour.** Three themes — day,
+  night, high contrast — over one set of variable names, so a rule reading
+  `--border` or `--primary` follows the switch untouched. `--primary` fills
+  and `--brand-ink` writes (maroon is a fine surface on dark and unreadable
+  as text on it); `--mod-0…4` run **Chinese Red · Satsuma · Lunar Yellow ·
+  Khaki · Cobalt** — a palette the brand belongs to rather than a
+  general-purpose data set beside it (its Burgundy anchor is OKLCH hue 23 to
+  `--primary`'s 29; Okabe–Ito was here before and read as stock AI-chart
+  colour against the maroon). Each theme keeps the hue and re-solves lightness
+  for its own ground, so day is those five darkened to carry as text, not five
+  other colours; every value clears 4.5:1 where it is set. They stay
+  decorative — warm neighbours converge for a protanope — so they and
+  `--ok`/`--no` (Wong) are always accompanied by a word, glyph or fraction. High
+  contrast is picked, never inferred. The read step runs inline in
+  `src/app/layout.tsx` (`THEME_BOOT`) before the body does, so the ground is
+  right at first paint — `theme.js` runs after hydration, and on its own it
+  paints the day ground and then repaints. Keep the two in step: same
+  storage key, same attribute, same three values. `fonts.css` carries Space Grotesk
+  as a data URI.
+- **`platform.js` owns the shared runtime**; `platform.css` the components on
+  top of `theme.css`. Its `VT.mountChrome()` / `VT.mountFoot()` are dead on
+  the app routes — the header and footer are React now (`site-chrome.tsx`) —
+  and are kept only because the file is lifted whole if the course ever moves
+  to its own host.
+- **Content drives the page.** `data/course.js` is the course, plus
+  `exercises.js`, `skills.js`, `glossary.js`, `memos.js`. A new unit is one
+  object and the track page, module rail, counters and certificate gate pick
+  it up. Unit ids are permanent — they are progress keys *and* the rung tags
+  in `data/skills.js`.
+- **A unit is read in parts** (`module.js`). Parts are derived from the unit,
+  never declared: every `{h}` in the body opens one, the blocks before the
+  first open "Start", and the exercise, readings and written output are each
+  their own — so a new unit in `course.js` chunks itself. A strip above the
+  reading jumps between them, `?p=<1-based>` deep-links one, and `Read the
+  whole unit` lays them all out (remembered per device under
+  `vt-reading-mode` — a preference, not learner work, so it stays out of
+  `vt-progress` and out of the account sync). Two traps: parts are **hidden,
+  never re-rendered**, because the exercise engine holds a half-answered run
+  in memory that a rebuild would discard; and both pagers are `display: flex`,
+  which beats the UA rule for `[hidden]`, so each needs its own `[hidden]`
+  rule. The unit pager — Mark complete, next unit — waits for the last part.
+- **Long units declare sections; the strip groups them.** A `{sec}` block
+  opens a named group and is not a part of its own; only the group being read
+  is spelled out, the rest state their size until pressed. Ungrouped units
+  keep the flat strip, so this costs the short ones nothing. Four more block
+  kinds serve unit-length readings: `{table}` (scrolls inside its own box —
+  the page must never scroll sideways), `{src}` (a citation riding with the
+  passage it belongs to, not a bibliography nobody opens), `{check}` (one
+  1-of-4 question, committed before the answer, with Try again), and `{gap}`
+  (fill blanks from a word bank carrying distractors). Check picks and gap
+  placements persist per unit under `vt-marks:<id>` — learner work, so it
+  feeds no meter and completes nothing. `{check}`/`{gap}` reuse `.opt` and
+  `.ex-feedback` from `exercise.css` and hook on their own `.copt`/`.word`
+  classes, so the exercise engine's own listeners are never in play.
+- **2.2 Cloud exists on both sides, and they are not the same content.** The
+  app track's `cloud-*.mdx` lessons are the author's outline transcribed; the
+  static site's unit below is built from the four sources with checks, gaps
+  and quoted passages, and uses reader features (`{sec}`/`{check}`/`{gap}`/
+  `{quote}`) that only `module.js` has. So the generator this section calls
+  for cannot simply overwrite one with the other — merging them is a content
+  decision plus a port of those four block kinds, not a data move. Until then
+  this is the widest part of the duplication, and it was widened knowingly:
+  see the commits, not a silent drift.
+- **The static site's 2.2 Cloud is fully drafted** — 48 parts, ten checks, six
+  gap-fills and a twelve-item gate, carried over from the module-2.2 build in
+  `tracksprogramplayground` by a one-shot transform over that page's data and
+  verified there against the full texts. Its four sources have **different
+  reuse terms and the unit cites them four ways**: the two arXiv papers (Heim
+  et al. 2024; Egan & Heim 2023) are CC BY 4.0 and quoted freely; RAND
+  RR-A3686-1 and the Carnegie piece are all-rights-reserved and are
+  reproduced on the author's instruction — RAND from the report itself
+  (Findings, Recommendations, and the body passages behind 2.2.3), Carnegie
+  from the article as published.
+  A `{quote}` block is the shape reproduction takes — **attribution first,
+  then the words**: the work, which part of it, the authors, and a link out,
+  all above the passage, so the two can never be read apart. `{read}`-style
+  reading cards do the same job for the sources themselves (title links out,
+  why-this-unit-sends-you-there, then `author · year · length · licence`).
+  The open verification-log row (RAND's permissions page, HTTP 403) is
+  recorded in the comment above the unit — reproduction there is the author's
+  decision, not an inference from terms nobody could read. Trap noted there
+  too: the RAND PDF is AES-encrypted, so a fetched copy carries no text
+  layer; these quotes came from the file the author supplied. Ask for the
+  file rather than assuming a download will read.
+- **Progress is one set of completed unit ids** in `localStorage` under
+  `vt-progress`; everything else is derived at read time. Never persist a
+  derived value, and nothing auto-completes on scroll, or on reaching the last
+  part. Two meters on the module player mean two different things and each is
+  labelled by the counter beside it: the part strip's reads position, the
+  pager's reads completion. Trap: the storage keys
+  `xlab-verification-theme` and `xlab-verification-memo-desk.v1` hold a
+  visitor's chosen theme and their memo drafts, so they keep those names
+  whatever the files around them are called.
+- **Sign-in belongs to the app**, and now so do these pages, so the session is
+  simply present: the header renders the account menu like every other route.
+  `sync.js` still probes `/api/verification/state` for the learner's stored
+  progress and notebook; what it no longer has to do is guess whether anyone
+  is signed in.
+- **The capstone bank is generated.** `verification-capstones/*.md` →
+  `public/verification/data/capstone-bank.js` **and**
+  `src/content/verification/capstone-bank.json` via `npm run
+  verification:capstones` (`-- --check` covers both; never hand-edit either).
+  Two shapes because the static page needs a `window.` script tag and the app
+  needs an import — one source, written together, so neither can go stale
+  alone. `verification-capstones/_README.md` is the front-matter contract.
+  `capstone-bank.html` is the filterable catalogue; `<CapstoneBank lead=…/>`
+  prints the same briefs inside unit 4.2 (`capstone-project.mdx`), leading
+  with the brief the unit is written around and linking the rest to their
+  sheet. The status and difficulty vocabulary is `src/lib/verification/bank.ts`,
+  and `bank.test.ts` parses `VT.bank` out of `platform.js` and fails when the
+  two describe the same brief differently.
+- **The drill benches are placed, not orphaned.** Eleven benches / 69 steps
+  came over from `tracksprogramplayground/verification-drills.*` as four decks
+  in `src/lib/verification/data/drills-*.ts`, with the judgements in
+  `engines/drills.ts` and one renderer in `kit/drill-deck.tsx` (commit, reveal,
+  Continue — never auto-advance). Each deck is a menu of its module's benches
+  and is placed by `<VerificationExercise id="drills-…"/>`: primers in 0.2,
+  foundations+actors+spine in 1.2, the four evidence-stream benches at the end
+  of module 2, and evasion+regime+position in 4.1. They are bridged, so a deck
+  reports complete when the last step of its last bench is committed; progress
+  is per deck in `v-drills:<deck>:v1`.
+- **The reader blocks are MDX components** (`src/components/mdx/reader/`):
+  `<Check>` (one question, committed before the answer, Try again),
+  `<GapFill>` (word bank with distractors), `<SourceQuote>` (attribution
+  **above** the words — reproduce only what a source's terms allow, and say so
+  in a comment above the lesson), `<Src>` (a citation riding with its
+  passage). They came from the retired static player; `<Check>`/`<GapFill>`
+  are learner work that feeds no meter, kept in `localStorage` under
+  `vt-marks.v1` and read through `useSyncExternalStore` so the server snapshot
+  is the empty state. A block's `id` is its storage key and is permanent.
+- **Enrolling is an app route, not a static page**, because it needs a session
+  and a row: `/verification/enroll` (apply, edit, withdraw) and
+  `/verification/applications` (the reviewers' queue) live in `src/app/`
+  under the same URL prefix as the static pages, and wear the same chrome
+  because `isVerificationRoute()` matches the prefix. Nothing exists at those
+  paths in `public/verification/`, and putting a file there would silently
+  take the URL. The cohort and the question list are
+  `src/lib/verification/application.ts` — the form renders whatever it finds
+  and the action validates against the same list, so a new question is one
+  object and never a migration (answers are a JSON map keyed by question id;
+  a question `id` is a storage key and is permanent). Reviewers are
+  `VERIFICATION_REVIEWERS`, a comma-separated email list that **fails
+  closed** — unset means the queue 404s for everyone, and the check runs in
+  `generateMetadata` as well as the page because static metadata flushes the
+  head and commits a 200 before a component can throw. Needs
+  `db/migrations/20260805150000_verification_applications.sql` applied by
+  hand; until then both pages say the table is missing rather than failing at
+  submit.
 
 **Prerequisites & progress.** `Track.prerequisiteEnforcement` is `soft` (warn)
 or `hard` (lock); `isAccessLocked()` (pure, tested) + `getPrerequisiteStatus()`

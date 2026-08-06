@@ -84,18 +84,28 @@ export const verificationModules: Module[] = [
       "The four buckets of mechanism — hardware, cloud, intelligence, and the human layer — each judged by the claims it can test, the evidence it produces, what it costs to implement, and how it fails.",
     order: 2,
     prerequisiteModuleIds: ["v-why", "v-scoping"],
+    // Outline order, submodule by submodule. Each submodule opens with its own
+    // X.X.0 reading and its subsubmodules nest under it via `sectionItemId`,
+    // which is the shape the outline's taxonomy asks for (modules organize,
+    // submodules and subsubmodules carry text) and the one 2.2 and 2.4 already
+    // had. 2.1 and 2.3 were brought onto it here — see
+    // docs/verification/module-2-log.md.
     itemIds: [
       "v-mechanism-effective",
       "v-hw-attestation",
+      "v-hw-claim",
       "v-hw-trusted-statement",
+      "v-hw-accounting",
       "v-hw-measuring-use",
+      "v-hw-authorization",
       "v-hw-where-trust-lives",
-      "v-hw-policy-studio",
       "v-hw-reconstructing-run",
+      "v-hw-policy-studio",
       "v-cloud-intro",
       "v-cloud-what-providers-see",
       "v-cloud-reporting-control",
       "v-cloud-limits",
+      "v-intel-intro",
       "v-intel-signatures",
       "v-intel-anchor",
       "v-intel-assessment",
@@ -314,52 +324,89 @@ export const verificationLessons: Lesson[] = [
     title: "4.3 Where to go from here",
     contentRef: "verification/capstone-next-steps",
   },
+  // 2.1 Hardware — the outline's heaviest submodule: an intro plus 2.1.1-2.1.8.
+  // The graph had the intro and five subsubmodules under a different numbering
+  // (2.1.0-2.1.5), so three of the outline's sections had no home at all:
+  // 2.1.1 the claim, 2.1.3 accounting, 2.1.5 authorization. Those three were
+  // added from the outline's finished prose and the rest were renumbered onto
+  // the outline's slots; no lesson was removed and no body was rewritten.
+  // Renumbering a title means renumbering the body's own first heading too —
+  // `isLessonTitleHeading` compares digits and all, so a title that no longer
+  // matches its heading stops being de-duplicated and prints twice.
   {
     id: "v-hw-attestation",
     slug: "hardware-attestation",
     moduleId: "v-infrastructure",
-    title: "2.1.0 The chip says “compliant”",
+    title: "2.1.0 Hardware: the chip says “compliant”",
     contentRef: "verification/hardware-attestation",
+  },
+  {
+    id: "v-hw-claim",
+    slug: "hardware-claim",
+    moduleId: "v-infrastructure",
+    sectionItemId: "v-hw-attestation",
+    title: "2.1.1 Start with the claim, not the mechanism",
+    contentRef: "verification/hardware-claim",
   },
   {
     id: "v-hw-trusted-statement",
     slug: "hardware-trusted-statement",
     moduleId: "v-infrastructure",
     sectionItemId: "v-hw-attestation",
-    title: "2.1.1 From a chip to a trusted statement",
+    title: "2.1.2 From a chip to a trusted statement",
     contentRef: "verification/hardware-trusted-statement",
+  },
+  {
+    id: "v-hw-accounting",
+    slug: "hardware-accounting",
+    moduleId: "v-infrastructure",
+    sectionItemId: "v-hw-attestation",
+    title: "2.1.3 Accounting for hardware: identity, location, topology, and completeness",
+    contentRef: "verification/hardware-accounting",
   },
   {
     id: "v-hw-measuring-use",
     slug: "hardware-measuring-use",
     moduleId: "v-infrastructure",
     sectionItemId: "v-hw-attestation",
-    title: "2.1.2 Measuring, classifying, and controlling use",
+    title: "2.1.4 Measuring and classifying use",
     contentRef: "verification/hardware-measuring-use",
+  },
+  {
+    id: "v-hw-authorization",
+    slug: "hardware-authorization",
+    moduleId: "v-infrastructure",
+    sectionItemId: "v-hw-attestation",
+    title: "2.1.5 Authorization, licensing, and control",
+    contentRef: "verification/hardware-authorization",
   },
   {
     id: "v-hw-where-trust-lives",
     slug: "hardware-where-trust-lives",
     moduleId: "v-infrastructure",
     sectionItemId: "v-hw-attestation",
-    title: "2.1.3 Where should trust live?",
+    title: "2.1.6 Where should trust live?",
     contentRef: "verification/hardware-where-trust-lives",
+  },
+  // The outline stars 2.1.7 as optional. `optional` is a Paper field, not a
+  // Lesson one, so the marking rides in the title the way it already did —
+  // making it structural would change what module completion counts, which is
+  // not this change's job.
+  {
+    id: "v-hw-reconstructing-run",
+    slug: "hardware-reconstructing-run",
+    moduleId: "v-infrastructure",
+    sectionItemId: "v-hw-attestation",
+    title: "2.1.7 Optional extension: reconstructing a declared training run",
+    contentRef: "verification/hardware-reconstructing-run",
   },
   {
     id: "v-hw-policy-studio",
     slug: "hardware-policy-studio",
     moduleId: "v-infrastructure",
     sectionItemId: "v-hw-attestation",
-    title: "2.1.4 Policy judgment studio",
+    title: "2.1.8 Policy judgment: what role should hardware play?",
     contentRef: "verification/hardware-policy-studio",
-  },
-  {
-    id: "v-hw-reconstructing-run",
-    slug: "hardware-reconstructing-run",
-    moduleId: "v-infrastructure",
-    sectionItemId: "v-hw-attestation",
-    title: "2.1.5 Reconstructing a declared training run (optional)",
-    contentRef: "verification/hardware-reconstructing-run",
   },
   {
     id: "v-welcome",
@@ -445,39 +492,59 @@ export const verificationLessons: Lesson[] = [
     title: "1.2.3 Context-specific report constructor",
     contentRef: "v-report-constructor",
   },
+  // 2.3 Intelligence. The five readings existed but sat flat and unnested, and
+  // ran 2.3.0-2.3.4 against the outline's 2.3.1-2.3.5. The outline's own
+  // submodule intro ("Watching Without Permission") was missing entirely, so
+  // the layer opened mid-argument; it is v-intel-intro below, and the five now
+  // nest under it at the numbers the outline gives them. Their bodies carry no
+  // numbered title heading, so only these titles moved — except that Baker's
+  // own "§2.3.3" citations inside them are the paper's section, not ours, and
+  // were deliberately left alone.
+  {
+    id: "v-intel-intro",
+    slug: "intelligence-intro",
+    moduleId: "v-infrastructure",
+    title: "2.3.0 Intelligence: watching without permission",
+    contentRef: "verification/intelligence-intro",
+  },
   {
     id: "v-intel-signatures",
     slug: "intelligence-signatures",
     moduleId: "v-infrastructure",
-    title: "2.3.0 Observable signatures of undeclared AI development",
+    sectionItemId: "v-intel-intro",
+    title: "2.3.1 Observable signatures of undeclared AI development",
     contentRef: "verification/intelligence-signatures",
   },
   {
     id: "v-intel-anchor",
     slug: "intelligence-anchor",
     moduleId: "v-infrastructure",
-    title: "2.3.1 The empirical anchor: intelligence identifies, the regime resolves",
+    sectionItemId: "v-intel-intro",
+    title: "2.3.2 The empirical anchor: intelligence identifies, the regime resolves",
     contentRef: "verification/intelligence-anchor",
   },
   {
     id: "v-intel-assessment",
     slug: "intelligence-assessment",
     moduleId: "v-infrastructure",
-    title: "2.3.2 From signal to intelligence assessment",
+    sectionItemId: "v-intel-intro",
+    title: "2.3.3 From signal to intelligence assessment",
     contentRef: "verification/intelligence-assessment",
   },
   {
     id: "v-intel-institutions",
     slug: "intelligence-institutions",
     moduleId: "v-infrastructure",
-    title: "2.3.3 Intelligence institutions and treaty design",
+    sectionItemId: "v-intel-intro",
+    title: "2.3.4 Intelligence institutions and treaty design",
     contentRef: "verification/intelligence-institutions",
   },
   {
     id: "v-intel-action",
     slug: "intelligence-action",
     moduleId: "v-infrastructure",
-    title: "2.3.4 From intelligence lead to verification action",
+    sectionItemId: "v-intel-intro",
+    title: "2.3.5 From intelligence lead to verification action",
     contentRef: "verification/intelligence-action",
   },
   // Reproduced with the author's permission, and generated rather than typed:
@@ -535,15 +602,19 @@ export const verificationUnitOfLesson: Record<string, string> = {
   "v-scoping-upstream-downstream": "1.3",
   "v-mechanism-effective": "2.0",
   "v-hw-attestation": "2.1",
+  "v-hw-claim": "2.1",
   "v-hw-trusted-statement": "2.1",
+  "v-hw-accounting": "2.1",
   "v-hw-measuring-use": "2.1",
+  "v-hw-authorization": "2.1",
   "v-hw-where-trust-lives": "2.1",
-  "v-hw-policy-studio": "2.1",
   "v-hw-reconstructing-run": "2.1",
+  "v-hw-policy-studio": "2.1",
   "v-cloud-intro": "2.2",
   "v-cloud-what-providers-see": "2.2",
   "v-cloud-reporting-control": "2.2",
   "v-cloud-limits": "2.2",
+  "v-intel-intro": "2.3",
   "v-intel-signatures": "2.3",
   "v-intel-anchor": "2.3",
   "v-intel-assessment": "2.3",
@@ -580,7 +651,11 @@ export const verificationUnitMeta: Record<
   "1.2": { title: "Actors", kind: "interactive", mins: "25–30 min" },
   "1.3": { title: "Upstream and downstream", kind: "explainer", mins: "10–15 min" },
   "2.0": { title: "Confidentiality vs. verifiability", kind: "explainer", mins: "15–20 min" },
-  "2.1": { title: "Hardware", kind: "explainer", mins: "35–45 min" },
+  // The outline's own budget for 2.1: "Core time: 165-180 minutes, split into
+  // two sessions. Optional technical extension: 35-45 minutes." The 35-45 that
+  // stood here was the optional extension's figure standing in for the whole
+  // submodule, which nine sections no longer make credible.
+  "2.1": { title: "Hardware", kind: "explainer", mins: "165–180 min" },
   "2.2": { title: "Cloud", kind: "explainer", mins: "20–25 min" },
   "2.3": { title: "Intelligence", kind: "explainer", mins: "35–45 min" },
   "2.4": { title: "Human", kind: "explainer", mins: "20–25 min" },

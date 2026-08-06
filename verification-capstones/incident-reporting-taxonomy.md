@@ -13,8 +13,6 @@ mentor: optional
 audience: The regulator who will receive the reports and the lab engineer who has to file one at 2am.
 skills: [taxonomy design, form design, back-testing a classification, regulatory drafting]
 sources:
-  - "[A Collection of AI Governance Research Ideas — von Knebel & Anderljung (2024), idea 22: incident detection and monitoring at AI companies](https://www.markusanderljung.com/blog/a-collection-of-ai-governance-research-ideas-2024)"
-  - "[Ten AI safety projects I'd like people to work on — Julian Hazell, project 3 (tracking sketchy AI agent behaviour)](https://www.lesswrong.com/posts/vxA2BnCPTaPfnJjti/ten-ai-safety-projects-i-d-like-people-to-work-on)"
   - "[Open Problems in Technical AI Governance — Reuel et al. (2025), ecosystem monitoring: how can non-public incidents be reliably reported, and what technical information should be reported to make analysis meaningful](https://arxiv.org/abs/2407.14981)"
 updated: 2026-08-04
 ---
@@ -46,6 +44,13 @@ Build the missing definition and then check it against reality.
   what your design does about that: safe-harbour, aggregation, delayed
   publication, confidential channels. A taxonomy that ignores it collects
   nothing.
+
+Similar cards: [Incident Detection and Monitoring at AI
+Companies](/verification/capstone-bank#incident-detection-monitoring) — a
+different list's idea on how companies detect incidents in deployment;
+[Tracking Sketchy AI Agent Behaviour in the
+Wild](/verification/capstone-bank#tracking-agent-behaviour) — outside-in
+observation of deployed agents.
 
 ## Why it exists
 

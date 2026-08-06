@@ -492,6 +492,15 @@ section.band .intro { max-width: 62ch; margin-top: 12px; color: var(--muted-fore
   text-transform: uppercase;
   color: var(--sel-text, var(--muted-foreground));
 }
+/* The module number is set apart by weight and a gap, never by a separator
+   glyph — the pattern every reference index uses (Wildy Riftian, Unseen,
+   Obys all set "01 Name" bare). A middot in this slot reads as machine
+   filler, so the gap is a margin here, not a character in the string. */
+.key-mod-name b,
+.sky-panel .p-mod b {
+  font-weight: 700;
+  margin-right: .5em;
+}
 .sky-key button {
   display: flex;
   gap: 8px;

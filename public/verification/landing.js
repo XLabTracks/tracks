@@ -394,7 +394,7 @@
   if (keyEl) {
     keyEl.innerHTML = order.map(function (col, mod) {
       return '<li class="key-mod" style="--sel:var(--mod-' + mod + ');--sel-text:var(--mod-' + mod + '-text)">' +
-        '<span class="key-mod-name">M' + mod + ' · ' + esc(S.moduleNames[mod]) + '</span><ol>' +
+        '<span class="key-mod-name"><b>M' + mod + '</b>' + esc(S.moduleNames[mod]) + '</span><ol>' +
         col.map(function (entry) {
           var n = entry.n;
           return '<li><button type="button" data-key="' + esc(n.id) + '">' +
@@ -479,7 +479,7 @@
        wording for the same list. */
     panel.innerHTML =
       '<header class="p-head">' +
-      '<p class="p-mod">M' + n.mod + ' · ' + esc(S.moduleNames[n.mod]) + '</p>' +
+      '<p class="p-mod"><b>M' + n.mod + '</b>' + esc(S.moduleNames[n.mod]) + '</p>' +
       '<span class="p-count">' + num[id] + '/' + S.nodes.length + '</span></header>' +
       '<div class="p-body">' +
       '<h3>' + esc(n.label) + '</h3>' +
@@ -541,7 +541,7 @@
          scrolled. The numeral always shows, and the module's name is in the
          key below either way. */
       return '<button type="button" data-mod="' + mod + '" aria-pressed="false" style="--sel:var(--mod-' + mod + ');--sel-ink:var(--mod-' + mod + '-ink);--sel-text:var(--mod-' + mod + '-text)">M' +
-        mod + '<span class="mod-name"> · ' + esc(name) + '</span></button>';
+        mod + '<span class="mod-name"> ' + esc(name) + '</span></button>';
     }).join('');
     filters.addEventListener('click', function (e) {
       var b = e.target.closest('button[data-mod]');

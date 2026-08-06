@@ -1,21 +1,37 @@
-/* The skill constellation: the 27-skill graph drawn as a fan of five module
-   branches rather than a column chart. Each module is a ray out of the hub,
-   its skills strung along it in row-band order; an edge is drawn wherever one
-   skill feeds another, bowed toward the hub so crossing edges stay readable.
+/* The skill web: the 27-skill graph drawn as a radial web around a glowing
+   hub. Each module is an arm — a 72° sector of the circle — and its skills
+   sit on shared concentric rings, row band r choosing the ring. Three kinds
+   of connective tissue, each a different fact:
+
+     beam    — a tapered spindle in the module's hue: one skill feeding
+               another INSIDE its module. The solid line of the legend.
+     cross   — a thin dashed bow pulled toward the hub: a skill fed from
+               ANOTHER module. Most of the fifty edges are these, which is
+               why they stay a step fainter — fat beams for all fifty read
+               as a hairball.
+     spoke   — hub to each arm's innermost skills, and strand — the arc of
+               ring that carries a module's stars at one band. Decoration:
+               they say "belongs to module N / same band", which the hue and
+               the key already say, never "feeds".
 
    Layout is computed from the data, never measured, so the whole figure is
    built in one pass before it is inserted — a measured layout would have to
    draw edges after paint, which means a frame where the graph is a pile of
    unconnected circles.
 
-   Trap: the fan opens upward from the bottom edge, so cy sits ON the viewBox
-   floor. Anything added below the hub is invisible; grow the box, don't move
-   the hub.
+   Trap: the viewBox is fitted to the drawing afterwards (see fit()), so the
+   radii can be tuned without re-deriving the frame — but anything drawn
+   outside the measured set will be cropped. Measure it or don't draw it.
 
-   Trap: hue is never the only encoding. A star carries its module number as a
-   numeral and its name as text, the panel names the module in words, and the
-   filter chips are labelled — a learner who cannot separate the five hues
-   loses nothing. */
+   Trap: hue is never the only encoding. A star carries its module number as
+   a numeral, the panel names the module in words, and the filter chips are
+   labelled — a learner who cannot separate the five hues loses nothing.
+
+   Tuned for the smallest screen, not the largest: what decides whether a
+   star's numeral can be read is the star's share of the whole box, since the
+   box is scaled to the viewport. The web is ~1230 units across and a star 60,
+   which lands near 19px on a 390px phone — small, so the key below stays the
+   phone's way in, exactly as it was for the column layout. */
 
 (function () {
   var S = window.SKILLS;
@@ -24,28 +40,19 @@
   var filters = document.getElementById('modFilters');
   if (!S || !sky || !panel) return;
 
-  /* A 145° fan, so no ray runs near-horizontal: a label is pushed sideways off
-     its star, and on a flat ray that lands on the next star along. r0 is large
-     for the same reason — the rays are 29° apart, which is 152px of clearance
-     at the innermost ring and nothing at all near the hub.
-
-     Trap: the viewBox is fitted to the drawing afterwards (see fit()), so
-     these numbers can be tuned without re-deriving the frame — but anything
-     drawn outside the measured set will be cropped. Measure it or don't draw
-     it. */
-  /* Tuned for the smallest screen, not the largest. What decides whether a
-     star's number can be read is the star's share of the whole box, since the
-     box is scaled to the viewport: at r0 300 / dr 88 / nodeR 16 a star was
-     3.5% of the outer radius and landed at 8px on a phone. Closing the rings
-     and growing the stars puts it near 9%. The names left the figure, so the
-     wide gap the rings used to keep for label blocks is free. */
+  /* Ring pitch is chord-checked, not eyeballed: the tightest ring is ring 0
+     with three stars 21° apart, a 77px chord against a 60px star. Widening a
+     step widens a gap everywhere; adding a ring means adding its radius AND
+     its step. */
   var V = {
-    colW: 232,     /* column pitch — the plaque and the stars share it */
-    rowH: 108,     /* vertical pitch between stars in a column */
-    rowTop: 150,   /* first star, clear of the plaque */
-    headY: 60,     /* the column plaque's baseline */
-    padX: 20,
-    nodeR: 34,
+    hubR: 52,                 /* the hub disc */
+    ringR: [200, 330, 450],   /* row band r → ring radius */
+    step: [23, 15, 13],       /* angular pitch between a module's stars at that ring */
+    outerR: 520,              /* outermost decorative ring of the web */
+    plaqueGap: 84,            /* plaque centre beyond a short arm's last ring */
+    nodeR: 30,
+    beamW: 9,                 /* spindle width at its widest, mid-path */
+    spokeW: 7,
   };
 
   var esc = function (s) {
@@ -64,22 +71,13 @@
     };
   }
 
-
-  /* Break a skill name into at most two lines. The innermost ring leaves about
-     152px between neighbouring rays, and several names run past that on one
-     line — "Identifying failure modes" is 25 characters. */
-  function wrap(label, max) {
-    var words = label.split(' ');
-    var lines = [''];
-    for (var i = 0; i < words.length; i++) {
-      var candidate = lines[lines.length - 1] ? lines[lines.length - 1] + ' ' + words[i] : words[i];
-      if (candidate.length > max && lines[lines.length - 1] && lines.length < 2) lines.push(words[i]);
-      else lines[lines.length - 1] = candidate;
-    }
-    return lines;
+  /* Angles in degrees, -90 is straight up; the hub is the origin and the
+     viewBox is fitted around whatever gets drawn. */
+  function polar(r, aDeg) {
+    var a = (aDeg * Math.PI) / 180;
+    return { x: r * Math.cos(a), y: r * Math.sin(a) };
   }
 
-  // One ray per module, its skills strung outward in row-band order.
   var box = { x0: Infinity, y0: Infinity, x1: -Infinity, y1: -Infinity };
   function fit(x0, y0, x1, y1) {
     if (x0 < box.x0) box.x0 = x0;
@@ -88,88 +86,179 @@
     if (y1 > box.y1) box.y1 = y1;
   }
 
-  /* Columns, one per module, straight down — the structure of a game skill
-     tree rather than a fan. A column is a header plaque and its skills stacked
-     under it in row-band order, each joined to the next by a short straight
-     link. It is a grid, so it reflows: five columns on a laptop, and the CSS
-     below reflows them at narrow widths.
+  /* The tapered beam: a closed spindle, pointed at both stars and widest
+     mid-path — two quadratics through mirrored control points, so the fill
+     does the work and no stroke has to fake a taper. */
+  function spindle(ax, ay, bx, by, w) {
+    var dx = bx - ax, dy = by - ay;
+    var len = Math.hypot(dx, dy) || 1;
+    var px = (-dy / len) * w, py = (dx / len) * w;
+    var mx = (ax + bx) / 2, my = (ay + by) / 2;
+    return 'M ' + ax.toFixed(1) + ' ' + ay.toFixed(1) +
+      ' Q ' + (mx + px).toFixed(1) + ' ' + (my + py).toFixed(1) +
+      ' ' + bx.toFixed(1) + ' ' + by.toFixed(1) +
+      ' Q ' + (mx - px).toFixed(1) + ' ' + (my - py).toFixed(1) +
+      ' ' + ax.toFixed(1) + ' ' + ay.toFixed(1) + ' Z';
+  }
 
-     Trap: this is the whole geometry. Nothing here is polar any more — cx/cy,
-     r0, dr and fan are gone from V, and anything reaching for them will read
+  /* ---------- placement ---------- */
+
+  /* One arm per module, fanned around the hub. Within an arm, band r sits on
+     ring r, its stars spread symmetrically about the arm's centreline.
+
+     Trap: this is the whole geometry. Nothing here is a column any more —
+     colW/rowH are gone from V, and anything reaching for them will read
      undefined rather than fail loudly. */
   var placed = {};
   var order = [[], [], [], [], []];
   S.nodes.forEach(function (n, i) { order[n.mod].push({ n: n, i: i }); });
 
-  var colW = V.colW, rowH = V.rowH, headY = V.headY;
+  var SECTOR = 360 / order.length;
   order.forEach(function (col, mod) {
     col.sort(function (a, b) { return a.n.r - b.n.r || a.i - b.i; });
-    var cx = V.padX + colW * (mod + 0.5);
-    col.cx = cx;
-    col.head = { x: cx, y: headY };
-    fit(cx - colW * 0.46, headY - 26, cx + colW * 0.46, headY + 10);
-    col.forEach(function (entry, j) {
-      var y = V.rowTop + rowH * j;
-      placed[entry.n.id] = { node: entry.n, x: cx, y: y, mod: mod, row: j };
-      fit(cx - V.nodeR, y - V.nodeR, cx + V.nodeR, y + V.nodeR);
+    var mid = -90 + SECTOR * mod;
+    var rings = [];
+    col.forEach(function (entry) { (rings[entry.n.r] = rings[entry.n.r] || []).push(entry); });
+    col.mid = mid;
+    col.rings = rings;
+    col.maxRing = rings.length - 1;
+    rings.forEach(function (row, r) {
+      row.forEach(function (entry, i) {
+        var a = mid + (i - (row.length - 1) / 2) * V.step[r];
+        var p = polar(V.ringR[r], a);
+        placed[entry.n.id] = { node: entry.n, x: p.x, y: p.y, mod: mod, row: r, a: a };
+      });
     });
   });
 
   /* ---------- markup ---------- */
 
+  /* The web itself: concentric rings, a radial thread on each sector
+     boundary — the emptier arcs of the circle read as woven rather than as
+     missing — and a seeded star field that only night shows (landing.css):
+     on paper the dots read as dirt, on the dark ground they read as sky. */
   var bg = '';
+  V.ringR.concat([V.outerR]).forEach(function (r) {
+    bg += '<circle class="ring" cx="0" cy="0" r="' + r + '"/>';
+  });
+  order.forEach(function (col) {
+    var b0 = polar(V.hubR + 38, col.mid - SECTOR / 2);
+    var b1 = polar(V.outerR, col.mid - SECTOR / 2);
+    bg += '<line class="ray" x1="' + b0.x.toFixed(1) + '" y1="' + b0.y.toFixed(1) +
+      '" x2="' + b1.x.toFixed(1) + '" y2="' + b1.y.toFixed(1) + '"/>';
+  });
+  var starMax = V.outerR + 20;
+  var rng = seeded(27);
+  for (var si = 0; si < 150; si++) {
+    var sr = 92 + Math.sqrt(rng()) * (starMax - 92);
+    var sp = polar(sr, rng() * 360);
+    var tw = rng();
+    bg += '<circle class="star' + (tw < 0.35 ? ' tw' : '') + '" cx="' + sp.x.toFixed(1) +
+      '" cy="' + sp.y.toFixed(1) + '" r="' + (0.8 + rng() * 1.8).toFixed(2) +
+      '" opacity="' + (0.25 + rng() * 0.55).toFixed(2) + '"' +
+      (tw < 0.35 ? ' style="animation-delay:-' + (tw * 20).toFixed(1) + 's"' : '') + '/>';
+  }
+  fit(-starMax, -starMax, starMax, starMax);
 
-  var edgeHtml = '';
+  /* Strands: the stretch of ring that carries a module's stars at one band,
+     in the module's hue. This is what keeps a star with no in-module feeder
+     (Timeliness, Enforcement…) visibly part of its arm without drawing a
+     dependency that does not exist. */
+  var strandHtml = '';
+  order.forEach(function (col, mod) {
+    col.rings.forEach(function (row, r) {
+      if (row.length < 2) return;
+      var a0 = placed[row[0].n.id].a, a1 = placed[row[row.length - 1].n.id].a;
+      var p0 = polar(V.ringR[r], a0), p1 = polar(V.ringR[r], a1);
+      strandHtml += '<path class="strand" data-mod="' + mod + '" style="--sel:var(--mod-' + mod + ')" d="M ' +
+        p0.x.toFixed(1) + ' ' + p0.y.toFixed(1) + ' A ' + V.ringR[r] + ' ' + V.ringR[r] +
+        ' 0 0 1 ' + p1.x.toFixed(1) + ' ' + p1.y.toFixed(1) + '"/>';
+    });
+  });
+
+  /* Spokes: hub to each arm's ring-0 stars, tapered like the beams but a
+     step quieter. Ring 0 only — a spoke reaching past ring 0 runs through
+     whatever star sits on the centreline and reads as an edge that is not
+     in the data. */
+  var spokeHtml = '';
+  order.forEach(function (col, mod) {
+    (col.rings[0] || []).forEach(function (entry) {
+      var p = placed[entry.n.id];
+      var root = polar(V.hubR - 8, p.a);
+      spokeHtml += '<path class="spoke" data-id="' + esc(entry.n.id) + '" data-mod="' + mod +
+        '" style="--sel:var(--mod-' + mod + ')" d="' +
+        spindle(root.x, root.y, p.x, p.y, V.spokeW) + '"/>';
+    });
+  });
+
+  /* Cross edges are drawn under the beams: they are the many, the beams are
+     the arms. Both keep their #e<idx> ids — the focus code addresses edges by
+     index, not by document order. */
+  var crossHtml = '';
+  var beamHtml = '';
   var edgesOf = {};
   S.edges.forEach(function (e, idx) {
     var a = placed[e[0]], b = placed[e[1]];
     if (!a || !b) return;
-    var cross = a.mod !== b.mod;
-    /* In-column links run straight down between neighbours; a cross-module
-       link steps sideways with two right angles, so it reads as wiring rather
-       than as another branch of the tree. */
-    var d;
-    if (cross) {
-      var midY = (a.y + b.y) / 2;
-      d = 'M ' + a.x.toFixed(1) + ' ' + a.y.toFixed(1) +
-          ' V ' + midY.toFixed(1) + ' H ' + b.x.toFixed(1) + ' V ' + b.y.toFixed(1);
+    var sel = 'style="--sel:var(--mod-' + a.mod + ');--sel-ink:var(--mod-' + a.mod + '-ink);--sel-text:var(--mod-' + a.mod + '-text)"';
+    if (a.mod !== b.mod) {
+      /* Bowed toward the hub, so the long crossings dive under the arms and
+         the middle of the web stays readable. */
+      var cx = ((a.x + b.x) / 2) * 0.55, cy = ((a.y + b.y) / 2) * 0.55;
+      crossHtml += '<path class="edge cross" id="e' + idx + '" ' + sel + ' d="M ' +
+        a.x.toFixed(1) + ' ' + a.y.toFixed(1) + ' Q ' + cx.toFixed(1) + ' ' + cy.toFixed(1) +
+        ' ' + b.x.toFixed(1) + ' ' + b.y.toFixed(1) + '"/>';
     } else {
-      d = 'M ' + a.x.toFixed(1) + ' ' + a.y.toFixed(1) + ' L ' + b.x.toFixed(1) + ' ' + b.y.toFixed(1);
+      beamHtml += '<path class="edge beam" id="e' + idx + '" ' + sel + ' d="' +
+        spindle(a.x, a.y, b.x, b.y, V.beamW) + '"/>';
     }
-    edgeHtml += '<path class="edge' + (cross ? ' cross' : '') + '" id="e' + idx + '" style="--sel:var(--mod-' + a.mod + ');--sel-ink:var(--mod-' + a.mod + '-ink);--sel-text:var(--mod-' + a.mod + '-text)" d="' + d + '"/>';
     (edgesOf[e[0]] = edgesOf[e[0]] || []).push(idx);
     (edgesOf[e[1]] = edgesOf[e[1]] || []).push(idx);
   });
 
-  /* The column plaque: a filled pill carrying the module's name, the header a
-     skill tree puts over each branch. Still the module's highlight control. */
+  /* The hub. Pure anchor — it is not a skill, so it takes the brand and not
+     a module hue, and it is hidden from the accessibility tree. The disc is
+     shaded by an off-centre radial gradient (stop colours in landing.css) so
+     it reads as a body with a light on it, not a flat blob. */
+  var hubHtml =
+    '<defs><radialGradient id="hubGrad" cx="38%" cy="34%" r="78%">' +
+    '<stop offset="0%" class="hub-g0"/>' +
+    '<stop offset="55%" class="hub-g1"/>' +
+    '<stop offset="100%" class="hub-g2"/>' +
+    '</radialGradient></defs>' +
+    '<g class="hub" aria-hidden="true">' +
+    '<circle class="hub-halo" cx="0" cy="0" r="' + (V.hubR + 34) + '"/>' +
+    '<circle class="hub-ring" cx="0" cy="0" r="' + (V.hubR + 14) + '"/>' +
+    '<circle class="hub-disc" cx="0" cy="0" r="' + V.hubR + '" fill="url(#hubGrad)"/>' +
+    '</g>';
+
+  /* The plaque: a filled pill at the tip of its arm, just past the arm's last
+     ring. Still the module's highlight control. One width for all five, set
+     by the longest name — label-sized pills made the ring of plaques read
+     ragged, and sizing from the names keeps a longer future name widening
+     all five instead of clipping. */
   var arcHtml = order.map(function (col, mod) {
-    /* The name alone, as the reference's category headers do. The number is
-       on every star in the column and the chip bar above spells "M0 · …" in
-       full, so repeating it here only made the plaque too wide for its
-       column and the five plaques overlapped. */
     var label = S.moduleNames[mod];
-    /* One width for all five, set by the longest name: the columns sit on a
-       fixed pitch, so label-sized pills made every gap between plaques a
-       different size and the header row read ragged. Sizing from the names
-       keeps a longer future name widening all five instead of clipping.
-       12.2 is the advance of the mono face at 22 user units, measured off
-       the rendered text, plus 28 of padding either side on the longest. */
     var w = Math.max.apply(null, S.moduleNames.map(function (n) { return n.length; })) * 8.9 + 56;
     var h = 36;
+    /* A full-length arm's plaque clears the outermost ring entirely — hung at
+       ringR + gap it sat on its own last band's stars. Short arms keep the
+       nearer seat so their plaque hugs the arm's tip. */
+    var plaqueR = col.maxRing === V.ringR.length - 1
+      ? V.outerR + 44
+      : V.ringR[col.maxRing] + V.plaqueGap;
+    var c = polar(plaqueR, col.mid);
+    fit(c.x - w / 2, c.y - h / 2, c.x + w / 2, c.y + h / 2);
     return '<g class="arc-label" data-mod="' + mod + '" style="--sel:var(--mod-' + mod + ');--sel-ink:var(--mod-' + mod + '-ink);--sel-text:var(--mod-' + mod + '-text)" role="button" tabindex="0"' +
       ' aria-label="Highlight module ' + mod + ', ' + esc(S.moduleNames[mod]) + '">' +
-      '<rect class="plaque" x="' + (col.head.x - w / 2).toFixed(1) + '" y="' + (col.head.y - h + 12).toFixed(1) +
+      '<rect class="plaque" x="' + (c.x - w / 2).toFixed(1) + '" y="' + (c.y - h / 2).toFixed(1) +
         '" width="' + w.toFixed(1) + '" height="' + h + '" rx="' + (h / 2) + '"/>' +
-      /* The label is anchored to the rect's own centre with a central
-         baseline, so it stays optically centred whatever h becomes. */
-      '<text x="' + col.head.x.toFixed(1) + '" y="' + (col.head.y - h / 2 + 12).toFixed(1) + '">' + esc(label) + '</text></g>';
+      '<text x="' + c.x.toFixed(1) + '" y="' + c.y.toFixed(1) + '">' + esc(label) + '</text></g>';
   }).join('');
 
   /* One running number per skill, module by module. It is the key between the
      figure and the list under it: the figure carries the number, the list
-     carries the name. That split is what lets the figure shrink to a phone —
-     27 names drawn inline held it at 760px wide and no scale rescued them. */
+     carries the name. That split is what lets the figure shrink to a phone. */
   var num = {};
   var seq = 0;
   order.forEach(function (col) {
@@ -178,11 +267,11 @@
 
   var nodeHtml = S.nodes.map(function (n) {
     var p = placed[n.id];
-    fit(p.x - V.nodeR, p.y - V.nodeR, p.x + V.nodeR, p.y + V.nodeR);
     return '<g class="node" data-id="' + n.id + '" style="--sel:var(--mod-' + n.mod + ');--sel-ink:var(--mod-' + n.mod + '-ink);--sel-text:var(--mod-' + n.mod + '-text)" role="button" tabindex="0"' +
       ' aria-label="' + num[n.id] + '. ' + esc(n.label) + ' — module ' + n.mod + ', ' + esc(S.moduleNames[n.mod]) + '">' +
       '<title>' + esc(n.label) + '</title>' +
-      '<circle cx="' + p.x.toFixed(1) + '" cy="' + p.y.toFixed(1) + '" r="' + V.nodeR + '"/>' +
+      '<circle class="node-halo" cx="' + p.x.toFixed(1) + '" cy="' + p.y.toFixed(1) + '" r="' + (V.nodeR + 8) + '"/>' +
+      '<circle class="node-core" cx="' + p.x.toFixed(1) + '" cy="' + p.y.toFixed(1) + '" r="' + V.nodeR + '"/>' +
       '<text class="node-num" x="' + p.x.toFixed(1) + '" y="' + p.y.toFixed(1) + '">' + num[n.id] + '</text></g>';
   }).join('');
 
@@ -195,9 +284,9 @@
   ].join(' ');
 
   sky.innerHTML =
-    '<svg viewBox="' + vb + '" role="img" aria-label="Skill constellation: ' +
-    S.nodes.length + ' skills in five module branches, joined wherever one skill feeds another.">' +
-    bg + edgeHtml + arcHtml + nodeHtml + '</svg>';
+    '<svg viewBox="' + vb + '" role="img" aria-label="Skill web: ' +
+    S.nodes.length + ' skills in five module arms around one hub, joined wherever one skill feeds another.">' +
+    bg + strandHtml + crossHtml + spokeHtml + beamHtml + hubHtml + arcHtml + nodeHtml + '</svg>';
 
   /* The key. The figure carries numbers, this carries the names — the split
      that lets the figure scale to a phone. It is also the reading order the
@@ -222,6 +311,10 @@
   svg.querySelectorAll('.node').forEach(function (g) { nodeEls[g.dataset.id] = g; });
   var edgeEls = S.edges.map(function (_, i) { return svg.querySelector('#e' + i); });
   var arcEls = svg.querySelectorAll('.arc-label');
+  var strandEls = svg.querySelectorAll('.strand');
+  var spokeEls = svg.querySelectorAll('.spoke');
+  var spokeOf = {};
+  spokeEls.forEach(function (el) { spokeOf[el.dataset.id] = el; });
 
   var neighbours = {};
   S.edges.forEach(function (e) {
@@ -239,6 +332,8 @@
     Object.keys(nodeEls).forEach(function (id) { nodeEls[id].classList.remove('hot'); });
     edgeEls.forEach(function (el) { if (el) el.classList.remove('hot'); });
     arcEls.forEach(function (el) { el.classList.remove('hot'); });
+    strandEls.forEach(function (el) { el.classList.remove('hot'); });
+    spokeEls.forEach(function (el) { el.classList.remove('hot'); });
   }
 
   function focusNode(id) {
@@ -249,6 +344,7 @@
       if (nodeEls[other]) nodeEls[other].classList.add('hot');
     });
     (edgesOf[id] || []).forEach(function (i) { if (edgeEls[i]) edgeEls[i].classList.add('hot'); });
+    if (spokeOf[id]) spokeOf[id].classList.add('hot');
     arcEls[placed[id].mod].classList.add('hot');
   }
 
@@ -262,6 +358,8 @@
         if (edgeEls[i]) edgeEls[i].classList.add('hot');
       }
     });
+    strandEls.forEach(function (el) { if (Number(el.dataset.mod) === mod) el.classList.add('hot'); });
+    spokeEls.forEach(function (el) { if (Number(el.dataset.mod) === mod) el.classList.add('hot'); });
   }
 
   var DEFAULT_PANEL =

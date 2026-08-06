@@ -26,6 +26,7 @@ import { LiveFailurePlaneDemo } from "@/components/demos/live-failure-plane-demo
 import { AgentArchitectureThreatsDemo } from "@/components/demos/agent-architecture-threats-demo";
 import { DeferToResampleDemo } from "@/components/demos/defer-to-resample-demo";
 import { HonestTestDemo } from "@/components/demos/honest-test-demo";
+import { ForecastChainDemo } from "@/components/demos/forecast-chain-demo";
 import { ExplorationHorizonDemo } from "@/components/demos/exploration-horizon-demo";
 import { CrossEpisodeCollusionDemo } from "@/components/demos/cross-episode-collusion-demo";
 import { BehavioralSelectionDemo } from "@/components/demos/behavioral-selection-demo";
@@ -250,6 +251,14 @@ export const demoRegistry: Record<string, DemoDefinition> = {
     description:
       "Offer the AI control of its own training process / weights and watch its response.",
     component: HonestTestDemo,
+    tags: ["control", "seekers"],
+  },
+  "forecast-chain": {
+    id: "forecast-chain",
+    title: "Chained short-term forecasts",
+    description:
+      "Chain short-term forecasts together to incentivize objectives beyond immediate reward, giving more accurate results.",
+    component: ForecastChainDemo,
     tags: ["control", "seekers"],
   },
   "exploration-horizon": {

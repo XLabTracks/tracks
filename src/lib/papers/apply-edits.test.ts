@@ -75,7 +75,7 @@ describe("applyPaperEdits", () => {
     ]);
     const html = htmlOf(parts);
     expect(html).toContain(
-      '<details class="ax-hidden"><summary>··· 1 paragraph hidden ···</summary>' +
+      '<details class="ax-hidden"><summary>1 paragraph hidden</summary>' +
         '<p data-anchor="b-0010"><span data-s="1">Beta one.</span></p></details>',
     );
     // neighbors untouched
@@ -89,7 +89,7 @@ describe("applyPaperEdits", () => {
       { op: "hide", at: ref("b-0011", "Beta two.") },
     ]);
     const html = htmlOf(parts);
-    expect(html).toContain("··· 2 paragraphs hidden — Optional detail ···");
+    expect(html).toContain("<summary>Optional detail</summary>");
     expect(html.match(/<details/g)).toHaveLength(1);
     expect(html).toContain('data-anchor="b-0010"');
     expect(html).toContain('data-anchor="b-0011"');
@@ -129,16 +129,32 @@ describe("applyPaperEdits", () => {
     expect(content?.[1]).toContain('data-s="3"');
   });
 
-  it("hides li content inside the li (details invalid in ul), and figures/nested tables", () => {
+  it("lifts a fully-hidden list to one marker merged with adjacent hides", () => {
     const { parts } = applyPaperEdits(HTML, TOC, [
       { op: "hide", at: ref("b-0012", "Item text.") },
       { op: "hide", at: ref("b-0013", "cell") },
     ]);
     const html = htmlOf(parts);
-    expect(html).toMatch(/<li data-anchor="b-0012"><details class="ax-hidden">/);
-    expect(html).toContain("··· 1 list item hidden ···");
-    expect(html).toContain("··· 1 figure hidden ···");
+    // Every li hidden → the ul itself joins the merge run with the figure.
+    expect(html.match(/<details/g)).toHaveLength(1);
+    expect(html).toContain("<summary>2 blocks hidden</summary>");
+    expect(html).toMatch(/<details class="ax-hidden">(?:(?!<\/details>).)*<ul><li data-anchor="b-0012">/);
     expect(html).toMatch(/<details class="ax-hidden">(?:(?!<\/details>).)*<figure data-anchor="b-0013">/);
+  });
+
+  it("keeps per-item wrapping when only part of a list is hidden", () => {
+    const twoItemHtml = HTML.replace(
+      '<ul><li data-anchor="b-0012"><span data-s="1">Item text.</span></li></ul>',
+      '<ul><li data-anchor="b-0012"><span data-s="1">Item text.</span></li>' +
+        '<li data-anchor="b-0016"><span data-s="1">Kept item.</span></li></ul>',
+    );
+    const { parts } = applyPaperEdits(twoItemHtml, TOC, [
+      { op: "hide", at: ref("b-0012", "Item text.") },
+    ]);
+    const html = htmlOf(parts);
+    expect(html).toMatch(/<li data-anchor="b-0012"><details class="ax-hidden">/);
+    expect(html).toContain("<summary>1 list item hidden</summary>");
+    expect(html).toContain('<li data-anchor="b-0016"><span data-s="1">Kept item.</span></li>');
   });
 
   it("hides a nested block (table in figure) in place", () => {
@@ -149,7 +165,7 @@ describe("applyPaperEdits", () => {
     expect(html).toMatch(
       /<figure data-anchor="b-0013"><img src="\/x.png"><details class="ax-hidden">/,
     );
-    expect(html).toContain("··· 1 table hidden ···");
+    expect(html).toContain("<summary>1 table hidden</summary>");
   });
 
   it("silent hide removes a block outright — no marker, no anchor left", () => {
@@ -238,7 +254,7 @@ describe("applyPaperEdits", () => {
     ]);
     const html = htmlOf(parts);
     expect(html).not.toContain("Beta one.");
-    expect(html).toContain("··· 1 paragraph hidden ···");
+    expect(html).toContain("<summary>1 paragraph hidden</summary>");
     expect(html).toContain('data-anchor="b-0011"');
   });
 
@@ -510,7 +526,7 @@ describe("applyPaperEdits", () => {
     ]);
     const kinds = parts.map((p) => p.kind);
     expect(kinds).toEqual(["html", "activity", "html"]);
-    expect((parts[0] as { html: string }).html).toContain("··· 1 paragraph hidden ···");
+    expect((parts[0] as { html: string }).html).toContain("<summary>1 paragraph hidden</summary>");
   });
 
   it("section-end gate emits a gate part at the subtree boundary", () => {

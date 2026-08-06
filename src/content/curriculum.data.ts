@@ -15,7 +15,16 @@ export const tracks: Track[] = [
     description:
       "Hands-on technical track on controlling and evaluating AI systems. The introductory module works through Redwood Research's \"AI Control: Improving Safety Despite Intentional Subversion\" paper and then rebuilds its trusted-monitoring result as an interactive, model-backed demo.",
     kind: "technical",
-    moduleIds: ["c-intro", "c-mod2", "c-areas", "c-mod4", "c-mod5", "c-lowstakes"],
+    moduleIds: [
+      "c-intro",
+      "c-mod2",
+      "c-areas",
+      "c-mod4",
+      "c-mod5",
+      "c-lowstakes",
+      "c-mod6",
+      "c-next-steps",
+    ],
     prerequisiteEnforcement: "hard",
   },
   {
@@ -188,6 +197,60 @@ export const modules: Module[] = [
       "c-paper-auditing-sabotage-bench",
     ],
     estimatedMinutes: 309,
+  },
+  {
+    // Outline-only closing module: three section markers the author will
+    // fill with materials. See docs/superpowers/specs/2026-08-05-mod6-subsections-design.md.
+    id: "c-mod6",
+    slug: "module-6",
+    trackId: "control",
+    title: "Beyond scheming: seekers and deals",
+    summary:
+      "Alternatives to scheming threat models — the seeker archetypes, their empirics, and mitigations — and trading with AIs.",
+    order: 7,
+    // Empty placeholder modules count as complete, so only the built modules
+    // actually gate; listing every ancestor keeps the chain correct as the
+    // placeholders fill in.
+    prerequisiteModuleIds: [
+      "c-intro",
+      "c-mod2",
+      "c-areas",
+      "c-mod4",
+      "c-mod5",
+      "c-lowstakes",
+    ],
+    itemIds: [
+      "c-mod6-l1",
+      "c-paper-satiation",
+      "c-paper-spillway",
+      "c-mod6-empirics",
+      "c-paper-csdf-guided",
+      "c-mod6-l2",
+      "c-paper-deals-schemers",
+      "c-paper-cooperating-unaligned",
+      "c-paper-trade-barriers",
+    ],
+  },
+  {
+    // Standalone track closer: a single links page, deliberately outside the
+    // content modules.
+    id: "c-next-steps",
+    slug: "next-steps",
+    trackId: "control",
+    title: "Next Steps",
+    summary:
+      "Where to go after the track: research programs to apply to, organizations to track, and opportunities boards.",
+    order: 8,
+    prerequisiteModuleIds: [
+      "c-intro",
+      "c-mod2",
+      "c-areas",
+      "c-mod4",
+      "c-mod5",
+      "c-lowstakes",
+      "c-mod6",
+    ],
+    itemIds: ["c-mod6-l3"],
   },
   // --- Verification: each item is a self-contained HTML interactive from
   // public/verification/, embedded via <VerificationExercise/>. Module
@@ -488,6 +551,34 @@ export const lessons: Lesson[] = [
     moduleId: "c-mod5",
     title: "Environment construction",
     contentRef: "c-mod5-l3",
+  },
+  {
+    id: "c-mod6-l1",
+    slug: "alternatives-to-schemers",
+    moduleId: "c-mod6",
+    title: "Alternatives to Schemers",
+    contentRef: "c-mod6-l1",
+  },
+  {
+    id: "c-mod6-empirics",
+    slug: "reward-seeker-empirics",
+    moduleId: "c-mod6",
+    title: "Reward Seeker Empirics",
+    contentRef: "c-mod6-empirics",
+  },
+  {
+    id: "c-mod6-l2",
+    slug: "trading-with-ais",
+    moduleId: "c-mod6",
+    title: "Trading with AIs",
+    contentRef: "c-mod6-l2",
+  },
+  {
+    id: "c-mod6-l3",
+    slug: "whats-next",
+    moduleId: "c-next-steps",
+    title: "Next Steps",
+    contentRef: "c-mod6-l3",
   },
   // --- Control: every reproduced reading in module 1 (with permission from
   // Redwood Research) now renders through the paper reader as a Paper item in

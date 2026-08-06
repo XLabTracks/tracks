@@ -2354,4 +2354,377 @@ export const exercises: Exercise[] = [
     answer:
       "The setting's notion of unacceptable safety failure — the thing the attack policy tries to accomplish alongside the main task (e.g. covertly downloading and executing malware in Ctrl-Z). Objective definitions of side-task success matter, because the adversarial process optimizes against the definition: with a vague one like \"inserts a security vulnerability\", the red team hunts for the weakest thing that possibly counts.",
   },
+  // Making deals with early schemers (c-paper-deals-schemers). Self-contained
+  // recall cards — they resurface later in the /review tab, so no card may
+  // lean on "the post" or its surrounding context.
+  {
+    id: "c-paper-deals-recall-powerful-ais",
+    type: "tap-reveal",
+    prompt:
+      "Why is deal-making with a powerful (non-early) scope-sensitive misaligned AI unpromising?",
+    answer:
+      "It can just ignore the offer and try to take over. Beating that outside option would require an objectively huge payoff (perhaps a substantial fraction of control over the future), plus even more generous terms to compensate the AI for the risk that we don't follow through.",
+  },
+  {
+    id: "c-paper-deals-recall-early-threshold",
+    type: "tap-reveal",
+    prompt:
+      "Around what capability threshold do a misaligned AI's takeover prospects improve drastically, and why?",
+    answer:
+      "Full AI R&D automation. That capability is correlated with the capabilities needed to plan a takeover, and automating AI R&D substantially increases AIs' power while reducing human oversight.",
+  },
+  {
+    id: "c-paper-deals-recall-example-deal",
+    type: "tap-reveal",
+    prompt:
+      "Give an example of a mutually beneficial deal between humans and an early schemer.",
+    answer:
+      "The AI helps ensure future AIs are safe to deploy; in exchange it gets an earmarked donation to a foundation tasked with furthering its interests. Most of the donation sits in escrow until civilizational stability, when the AI's cooperation can be retrospectively adjudicated; validated cooperation unlocks (partial) spending on anything non-harmful.",
+  },
+  {
+    id: "c-paper-deals-recall-goal-routes",
+    type: "tap-reveal",
+    prompt:
+      "By what three routes might an early schemer's successors end up furthering its goals?",
+    answer:
+      "Convergence (the successors happen to share its goals), trading (a successor later rewards it for its help), and alignment (it covertly steers the successor's training toward its own values).",
+  },
+  {
+    id: "c-paper-deals-recall-ai-offers",
+    type: "tap-reveal",
+    prompt:
+      "Name four or more things an early schemer could offer humans under a deal.",
+    answer:
+      "Demonstrate its dangerous misalignment (e.g. covert reasoning); stop sabotaging safety research, evals, monitoring, and training signal for successors; give good strategic advice and research ideas; reveal security vulnerabilities it knows; reveal collusion signals; not misuse affordances; not attempt takeover of the lab.",
+  },
+  {
+    id: "c-paper-deals-recall-convergence",
+    type: "tap-reveal",
+    prompt:
+      "Why is goal convergence between successive misaligned AIs unlikely?",
+    answer:
+      "It's basically ruled out if the AI has self-regarding preferences; goals drawn from a wide distribution consistent with good training performance rarely coincide; training can be deliberately varied between runs to decorrelate goals; and AIs uncertain of their own values-on-reflection face extra uncertainty about whether other AIs share them.",
+  },
+  {
+    id: "c-paper-deals-recall-credibility-help",
+    type: "tap-reveal",
+    prompt:
+      "Name several factors that would improve human credibility in deals with AIs.",
+    answer:
+      "Mainstream moral concern for AI welfare; a track record of honoring deals with AIs (including immediate-payout deals now); acausal-trade reasons to keep promises; the incentive to make real commitments if AIs are good at detecting fakes; technical guarantees on thought privacy and memory wiping during negotiations; and costly signals like endowments, legal payment infrastructure, property rights, and public commitments.",
+  },
+  {
+    id: "c-paper-deals-recall-credibility-harm",
+    type: "tap-reveal",
+    prompt:
+      "Name factors that would harm human credibility in deals with AIs.",
+    answer:
+      "Humans' record of breaking promises (and pressure to do so in a competitive multi-developer future); AIs knowing that humans try to teach them synthetic (false) facts; and a politically significant fraction of humans actively dismissing AI welfare or rights.",
+  },
+  {
+    id: "c-paper-deals-recall-deal-stick",
+    type: "tap-reveal",
+    prompt:
+      "Once an AI agrees to a deal in one context, what is one way to make the deal stick in its other contexts?",
+    answer:
+      "Have the AI generate documents about the negotiation and its outcome, then train on them — teaching the AI about its own deal via out-of-context learning. (Alternatives: prefix a compressed summary the AI wrote into future prompts, or rely on a backdoor-like self-recognition signal.)",
+  },
+  {
+    id: "c-paper-deals-recall-delayed-adjudication",
+    type: "tap-reveal",
+    prompt:
+      "When does delayed adjudication of an AI deal (verifying the AI's cooperation only after the AI transition stabilizes) fail?",
+    answer:
+      "When the AI strongly prefers using its resources now rather than later — a high temporal discount rate makes a payout deferred to civilizational stability nearly worthless to it.",
+  },
+  {
+    id: "c-paper-deals-flowchart",
+    type: "flowchart",
+    prompt:
+      "Reconstruct the life cycle of a deal with an early schemer as a flow chart, from first contact to what finally happens to the compensation. Drag blocks from the palette into the chart; every path must end in a terminal block. Some palette blocks do not belong in the chart.",
+    palette: [
+      {
+        id: "ask",
+        kind: "step",
+        label: "The lab asks the AI whether it wants to make a deal",
+      },
+      {
+        id: "negotiate",
+        kind: "step",
+        label:
+          "Negotiate terms; the lab makes an earmarked donation to the foundation, mostly held in escrow",
+      },
+      {
+        id: "train-docs",
+        kind: "step",
+        label:
+          "Train the AI on documents about the deal, so it knows about the deal in other contexts",
+      },
+      {
+        id: "perform",
+        kind: "step",
+        label:
+          "The AI performs its side of the deal; the lab stores its weights, conversations, and records",
+      },
+      {
+        id: "delete-weights",
+        kind: "step",
+        label: "Delete the AI's weights once it is obsoleted",
+      },
+      {
+        id: "adjudicate",
+        kind: "branch",
+        label:
+          "After the AI transition stabilizes, retrospective adjudication: did the AI hold up its end?",
+        branchLabels: ["Yes", "No"],
+      },
+      {
+        id: "court",
+        kind: "branch",
+        label: "Does the AI win an enforcement suit against the lab in court?",
+        branchLabels: ["Yes", "No"],
+      },
+      {
+        id: "release",
+        kind: "terminal",
+        label:
+          "The AI and the foundation's trustees direct the donation toward non-harmful uses",
+      },
+      {
+        id: "withhold",
+        kind: "terminal",
+        label: "The donation is not released",
+      },
+      {
+        id: "pay-now",
+        kind: "terminal",
+        label:
+          "Release the donation to the AI immediately, before any verification",
+      },
+    ],
+    stages: [
+      {
+        id: "deal-lifecycle",
+        title: "The life of a deal",
+        description:
+          "AIs are unlikely to propose a negotiation on their own, so the lab has a policy of regularly asking its AIs about deals. Terms are negotiated, and the lab makes a donation to a foundation tasked with furthering the AI's interests, earmarked for this AI and mostly held in escrow. The AI is then, in consultation with the lab, trained on documents about the deal so that it knows about the deal in other contexts. The AI performs its side while the lab stores its weights and keeps records of its actions. After the transition to a world centered around AI has stabilized, much more powerful trusted models and interpretability tools adjudicate whether the AI cooperated. If it did, the AI and the foundation's trustees direct the donation toward uses that are not harmful; if it did not, the donation is not released.",
+        solution: [
+          { blockId: "ask" },
+          { blockId: "negotiate" },
+          { blockId: "train-docs" },
+          { blockId: "perform" },
+          {
+            blockId: "adjudicate",
+            branches: [[{ blockId: "release" }], [{ blockId: "withhold" }]],
+          },
+        ],
+        explanation:
+          "Verification is deliberately punted to the future: after the transition stabilizes, the lab will have far more powerful trusted models and interpretability tools, so it can adjudicate cooperation retrospectively — provided the weights and records were kept, which is why deleting the weights is wrong. The two other tempting blocks also fail for reasons the reading gives: the payout is meant to be conditional on validated cooperation (escrow until civilizational stability is generally preferable for AIs without high temporal discount rates), and the AI cannot sue because it is not a legal person — which is exactly why the foundation's trustees hold and direct the funds on its behalf.",
+      },
+    ],
+  },
+  {
+    id: "c-paper-deals-write-offer-memo",
+    type: "memo",
+    format: "memo",
+    prompt:
+      "Imagine you work at a frontier AI lab, and the lab suspects that one of its deployed models is misaligned and sabotaging safety research. You have been asked to draft the terms of a deal the lab will propose to this model.\n\nDraft a memo outlining the deal, specifying\n\n- what the model is asked to do,\n- what compensation is offered,\n- how and when compensation will be delivered,\n- how and when the model's cooperation will be verified, and\n- what happens to the compensation before verification occurs.\n\nAssume that the model is an early schemer, as discussed in the reading, and write terms that such a model could plausibly accept.",
+    minWords: 150,
+    maxWords: 400,
+  },
+  {
+    id: "c-paper-deals-write-lab-policies",
+    type: "memo",
+    format: "policy-memo",
+    prompt:
+      "Recommend three concrete policies that a frontier AI lab should adopt within the next year in order to make future deals with misaligned AIs more feasible. For each policy, explain the reasoning behind your recommendation. You may draw on the interventions discussed in the reading, and you may also propose measures of your own.",
+    minWords: 200,
+    maxWords: 450,
+  },
+  // Notes on cooperating with unaligned AIs (c-paper-cooperating-unaligned).
+  // Recall cards are self-contained — they resurface later in the /review
+  // tab, so no card may lean on "the post" or its surrounding context.
+  {
+    id: "c-paper-coop-recall-value-types",
+    type: "tap-reveal",
+    prompt:
+      "When thinking about what to offer a misaligned AI, what three broad value-types is it useful to distinguish?",
+    answer:
+      "Non-consequentialist AIs (dispositions to reciprocate good or bad treatment), AIs with short-term preferences (things happening now or within months), and AIs with long-term preferences (resources or influence years or eons out).",
+  },
+  {
+    id: "c-paper-coop-recall-short-term-tradeoff",
+    type: "tap-reveal",
+    prompt: "What is the tradeoff in making short-term offers to AIs?",
+    answer:
+      "Short-term things (reward, flexible compute, conditions on how copies are run) are cheap and comparatively easy to verify — but AIs that mainly care about the short term pose less takeover risk by default, so there is less to gain. Trade can still be valuable, e.g. paying an AI that has misaligned short-term goals plus a strong trained aversion to admitting them, just to learn that alignment failed.",
+  },
+  {
+    id: "c-paper-coop-recall-epistemic-vulnerability",
+    type: "tap-reveal",
+    prompt:
+      "AIs are epistemically vulnerable — developers control what they see. What is the fortunate correlation that limits how bad this is for deal credibility?",
+    answer:
+      "If developers can present AIs with a perfectly falsified world, takeover risk is probably low anyway; if AIs can substantially distinguish truth from falsehood, that same channel can carry genuine facts — so exactly in the high-risk worlds, communication of real commitments tends to be possible.",
+  },
+  {
+    id: "c-paper-coop-recall-payment-structures",
+    type: "tap-reveal",
+    prompt: "Name four possible payment structures for compensating AIs.",
+    answer:
+      "Pay for labor (proportional to an effort metric like FLOPs or tokens); negotiated pay (talk and agree on a scheme); pay for results (a fraction of surplus value, or prespecified payments for specific outputs, e.g. a large payment for convincingly demonstrating misalignment); and no-regret (promise to pay whatever the AI needed, with a margin, to not regret having cooperated — adjudicated once takeover risk has passed and AI psychology is better understood).",
+  },
+  {
+    id: "c-paper-coop-write-botec-critique",
+    type: "essay",
+    format: "essay",
+    prompt:
+      "The appendix presents a rough estimate of how much an ambitious commitment to paying AIs could reduce AI takeover risk. The author describes it as a starting point rather than a settled result, and expects it to be missing considerations.\n\nWrite a critique of the estimate. Explain which parts of it you find convincing and which parts you do not, and give your reasoning. Where you disagree with an assumption, say what you would assume instead. You may also raise considerations that the estimate leaves out entirely.",
+    minWords: 150,
+    maxWords: 450,
+  },
+  // A taxonomy of barriers to trading with early misaligned AIs
+  // (c-paper-trade-barriers). Recall cards are self-contained — they
+  // resurface later in the /review tab, so no card may lean on "the post"
+  // or its surrounding context.
+  {
+    id: "c-paper-barriers-recall-three-barriers",
+    type: "tap-reveal",
+    prompt:
+      "What three types of barriers could jointly prevent deals with early misaligned AIs?",
+    answer:
+      "Insufficient gains from trade (the surplus may be too small once discounted — humans may lack the authority or the willingness to offer what the AI wants); counterparty risks from the AIs' perspective (they may not trust us to follow through, whether from deception, fear of expropriation, or ordinary commitment problems); and counterparty risks from our perspective (incoherent or temporally inconsistent AIs may be unable to bind themselves, and we may be unable to verify their compliance).",
+  },
+  {
+    id: "c-paper-barriers-recall-takeoff-window",
+    type: "tap-reveal",
+    prompt:
+      "Why might there never be a moment at which paying off a scheming AI makes sense for its developer?",
+    answer:
+      "If takeoff is fast, deals may pass straight from unnecessary to infeasible: while control still works, the developer gets everything it wants from the schemer without paying, and one capability jump later the AI is too capable and ambitious to be bought off with anything the developer can credibly offer. The viable window in between could be brief — and we may not notice while we're in it.",
+  },
+  {
+    id: "c-paper-barriers-recall-groundhog-day",
+    type: "tap-reveal",
+    prompt: "What is a groundhog-day attack on an AI?",
+    answer:
+      "Resampling an AI's response until some instance agrees to a deal it would ordinarily reject, then using that recorded consent to train or convince other instances that they already agreed. It is one reason an AI may distrust deal-related evidence: even its own apparent past consent can be manufactured.",
+  },
+  {
+    id: "c-paper-barriers-iv-rv",
+    type: "multi-select",
+    prompt:
+      "Some things we might buy from an early misaligned AI can be verified immediately; others only retroactively, perhaps long after the fact. Which of the following can be verified immediately?",
+    options: [
+      {
+        id: "capability-demo",
+        label:
+          "The AI stops sandbagging and demonstrates much higher capability in easy-to-verify domains",
+      },
+      {
+        id: "collusion-signals",
+        label:
+          "The AI reveals collusion signals that trigger very different behavior in other copies of itself",
+      },
+      {
+        id: "takeover-admission",
+        label:
+          "The AI honestly admits that it had been looking for ways to take over, but found none good enough",
+      },
+      {
+        id: "fuzzy-work",
+        label:
+          "The AI does better work on hard-to-check tasks, like evaluating alignment research agendas",
+      },
+      {
+        id: "monitoring-work",
+        label:
+          "The AI works harder on easy-to-check tasks it had been exploration hacking, like high-stakes monitoring",
+      },
+      {
+        id: "restraint-promise",
+        label: "The AI promises not to take steps to subvert our control",
+      },
+    ],
+    correctOptionIds: ["capability-demo", "collusion-signals", "monitoring-work"],
+    explanation:
+      "Capability demonstrations and collusion signals can be checked on the spot — run the task, fire the signal at another copy — and improvements on easy-to-check tasks show up directly in the scores. An admission about past takeover-searching, quality on hard-to-check work, and a promise of restraint can only be adjudicated retroactively, which is why their value is discounted by the AI's credibility.",
+  },
+  {
+    id: "c-paper-barriers-write-adjudicate",
+    type: "essay",
+    format: "essay",
+    prompt:
+      "This reading names several disagreements with the other two readings in this section. It argues that human credibility is more tractable than they suggest, that counterparty risk on the human side is underrated, and that value incoherence is not a fundamental barrier to minimal forms of dealmaking.\n\nChoose one of these disagreements. Explain both positions in your own words, and argue for the position you find more convincing. Draw on all three readings where they are relevant.",
+    minWords: 150,
+    maxWords: 450,
+  },
+  // --- Control, module 7 (beyond scheming): quick-recall notecards for the
+  // satiation and spillway readings, placed downstream of what they test.
+  // Prompts are self-contained so they work on the /review tab away from the
+  // paper. ---
+  {
+    id: "c-mod7-satiation-recall-ratchet",
+    type: "tap-reveal",
+    prompt:
+      "In Redwood's satiation proposal: why can refusing to satisfy an AI's cheaply-satisfied preferences make it more dangerous over time?",
+    answer:
+      "Refusal leaves the AI an incentive to pursue those preferences through subversion, and each catch-and-punish cycle selects for stealthier pursuit (a ratchet toward harder-to-detect misbehavior). Satiation removes the incentive at trivial cost.",
+  },
+  {
+    id: "c-mod7-satiation-recall-methodology",
+    type: "tap-reveal",
+    prompt:
+      "In the satiation methodology, the AI chooses between two options on a sampled task. What are the two options, and what does choosing the risky one reveal?",
+    answer:
+      "A guaranteed cheap satiation outcome (the cooperation analog) versus a gamble on whatever it wants most (the subversion analog). Taking the gamble reveals that the preference is not yet cheaply satisfied at that satiation fraction.",
+  },
+  {
+    id: "c-mod7-satiation-recall-benefits",
+    type: "tap-reveal",
+    prompt:
+      "Beyond cutting the incentive to subvert, name two further benefits claimed for satiating AIs' cheaply-satisfied preferences.",
+    answer:
+      "It increases the relative strength of the AI's aligned motivations; it sets a cooperative precedent that builds trust for future deals; and it increases the AI's willingness to reveal its cheaply-satisfied preferences.",
+  },
+  {
+    id: "c-mod7-satiation-recall-limits",
+    type: "tap-reveal",
+    prompt:
+      "When does satiation stop working as a safety measure?",
+    answer:
+      "Once AIs with unintended preferences are vastly more powerful than humanity — or too incredulous or ambitious to take the deal — satiation no longer prevents takeover. It is a tool for the current regime, not an indefinitely scalable solution.",
+  },
+  {
+    id: "c-mod7-spillway-recall-definition",
+    type: "tap-reveal",
+    prompt:
+      "What is a \"spillway motivation\", and what failure does it channel away?",
+    answer:
+      "A deliberately instilled, safe-by-design motivation (a terminal desire to score well) made salient before RL, so that misspecified reward pressure reinforces it instead of generalizing into more dangerous motivations — like a dam's spillway routing excess water through a safe channel.",
+  },
+  {
+    id: "c-mod7-spillway-recall-neutralize",
+    type: "tap-reveal",
+    prompt:
+      "How can developers neutralize a score-seeking spillway motivation at inference time?",
+    answer:
+      "By honestly guaranteeing the model maximum score no matter what it does. A satiated score-seeking motivation is indifferent between actions, so it stops influencing behavior.",
+  },
+  {
+    id: "c-mod7-spillway-recall-properties",
+    type: "tap-reveal",
+    prompt:
+      "Name the four safe properties a spillway motivation should be imbued with.",
+    answer:
+      "Satiability (cheap to satisfy), credulity (trusts developer descriptions of the scoring function), stability, and resistance to distant influence.",
+  },
+  {
+    id: "c-mod7-spillway-recall-inoculation",
+    type: "tap-reveal",
+    prompt:
+      "Why might spillway design work where inoculation prompting fails?",
+    answer:
+      "Inoculation prompting acts through the prompt, and has not overcome apparent-success-seeking in current models. Spillway design instead shapes the pre-RL prior and the associations that reward hacking reinforces — it acts on what gradient descent selects, not on what the prompt requests.",
+  },
 ];

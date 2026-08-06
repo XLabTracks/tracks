@@ -21,7 +21,11 @@ export function DemoById({ id, framed = true }: DemoByIdProps) {
   const Component = demo.component;
   if (!framed) return <Component />;
   return (
-    <DemoFrame title={demo.title} description={demo.description}>
+    <DemoFrame
+      title={demo.title}
+      description={demo.description}
+      showReset={demo.interactive !== false}
+    >
       <Component />
     </DemoFrame>
   );

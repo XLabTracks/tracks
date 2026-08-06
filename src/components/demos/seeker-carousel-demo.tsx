@@ -13,7 +13,7 @@ const ORIENTATIONS = [
     id: "rota",
     label: "ROTA — return-on-the-action",
     anchor: "rota--return-on-the-action-seeker",
-    summary: "gives it the highest return for a single action",
+    summary: "will give it the highest return for a single action",
     swatch: "bg-lime-500",
   },
   {

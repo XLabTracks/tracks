@@ -49,7 +49,6 @@
     ringR: [200, 330, 450],   /* row band r → ring radius */
     step: [23, 15, 13],       /* angular pitch between a module's stars at that ring */
     outerR: 520,              /* outermost decorative ring of the web */
-    plaqueGap: 84,            /* plaque centre beyond a short arm's last ring */
     nodeR: 30,
     beamEnd: 7,               /* beam half-width where it meets a star */
     beamMid: 2.2,             /* …and at its pinched middle */
@@ -243,13 +242,15 @@
     var label = S.moduleNames[mod];
     var w = Math.max.apply(null, S.moduleNames.map(function (n) { return n.length; })) * 8.9 + 56;
     var h = 36;
-    /* A full-length arm's plaque clears the outermost ring entirely — hung at
-       ringR + gap it sat on its own last band's stars. Short arms keep the
-       nearer seat so their plaque hugs the arm's tip. */
-    var plaqueR = col.maxRing === V.ringR.length - 1
-      ? V.outerR + 44
-      : V.ringR[col.maxRing] + V.plaqueGap;
-    var c = polar(plaqueR, col.mid);
+    /* The pill's clearance is directional: on a vertical arm only its height
+       faces the stars, on a near-horizontal arm its whole width does — a
+       fixed radial gap seated "Design" straight onto its last star. The
+       stadium's half-extent along the arm is (w−h)/2·|cos| + h/2; seat the
+       pill that far past the outermost ring plus a star's halo and a gap,
+       as if a star sat on the centreline (odd-count rings put one there,
+       even-count rings just get a hair more air). */
+    var support = ((w - h) / 2) * Math.abs(Math.cos((col.mid * Math.PI) / 180)) + h / 2;
+    var c = polar(V.ringR[col.maxRing] + V.nodeR + 8 + 22 + support, col.mid);
     fit(c.x - w / 2, c.y - h / 2, c.x + w / 2, c.y + h / 2);
     return '<g class="arc-label" data-mod="' + mod + '" style="--sel:var(--mod-' + mod + ');--sel-ink:var(--mod-' + mod + '-ink);--sel-text:var(--mod-' + mod + '-text)" role="button" tabindex="0"' +
       ' aria-label="Highlight module ' + mod + ', ' + esc(S.moduleNames[mod]) + '">' +

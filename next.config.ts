@@ -80,6 +80,9 @@ const withMDX = createMDX({
       "rehype-slug",
       // Must come after rehype-slug: it reads the heading ids slug assigns.
       join(process.cwd(), "src/lib/mdx/rehype-lesson-sections.mjs"),
+      // Order-insensitive itself (it only reads links), but before auto-gloss
+      // keeps the walk over the body the author wrote, not over injected Terms.
+      join(process.cwd(), "src/lib/mdx/rehype-lesson-citations.mjs"),
       // Before rehype-katex: it skips inline math while math is still a
       // `code` element, and never touches headings/links/inline JSX.
       join(process.cwd(), "src/lib/mdx/rehype-auto-gloss.mjs"),

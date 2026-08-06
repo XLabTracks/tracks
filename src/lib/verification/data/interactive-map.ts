@@ -17,7 +17,12 @@ export type BucketKey =
 
 export type Bucket = {
   name: string;
-  /** Okabe-Ito hex from the source; used only inside neutral SVG chrome. */
+  /** Map fill, as a theme token so the three themes re-solve it. The values
+   *  are the course palette from the landing page: the five module hues plus
+   *  the Cobalt type accent for the blue family's light step. Trap: in the
+   *  high-contrast theme every one collapses to the foreground on purpose —
+   *  there the legend buttons and layer isolation carry the encoding, so the
+   *  map must stay readable with all six fills identical. */
   color: string;
   why: string;
   stat: string;
@@ -36,37 +41,37 @@ export const BUCKET_ORDER: BucketKey[] = [
 export const BUCKETS: Record<BucketKey, Bucket> = {
   design: {
     name: "Chip design & EDA",
-    color: "#0072B2",
+    color: "var(--mod-4, #022E4C)",
     why: "Where capability is born. The architectures and the design software behind every advanced chip belong to a handful of US and UK firms, so rules can attach here before a single wafer exists.",
     stat: "2 EDA firms",
   },
   equipment: {
     name: "Equipment & materials",
-    color: "#E69F00",
+    color: "var(--mod-1, #d1601f)",
     why: "The narrowest chokepoint in the chain. A few firms in three allied countries build the tools and supply the chemistry every advanced fab depends on.",
     stat: "EUV: 1 company",
   },
   fab: {
     name: "Fabrication",
-    color: "#D55E00",
+    color: "var(--mod-0, #970a12)",
     why: "Nearly all frontier chips are made in a handful of known facilities. Few sites, known addresses, hard to hide — which is exactly what makes a verification regime imaginable.",
     stat: "≈90% → 1 island",
   },
   memory: {
     name: "Memory (HBM)",
-    color: "#009E73",
+    color: "var(--mod-3, #6d7636)",
     why: "No high-bandwidth memory, no AI accelerator. HBM comes from three firms in two countries — a second countable chokepoint stacked right next to the first.",
     stat: "3 firms, 2 countries",
   },
   atp: {
     name: "Packaging, assembly & test",
-    color: "#CC79A7",
+    color: "var(--mod-2, #fecd6d)",
     why: "Where chips become products and fan out into the world — and where they can slip out of sight. Transshipment and diversion risk lives in this layer.",
     stat: "the evasion surface",
   },
   compute: {
     name: "Compute & models",
-    color: "#56B4E9",
+    color: "var(--mod-4-text, #3d75b1)",
     why: "What the rules are ultimately about. Frontier-scale data centers are big, hot, and power-hungry — easy to find, harder to audit. The models inside them are hardest of all.",
     stat: "easy to find, hard to audit",
   },
@@ -500,7 +505,8 @@ export const MAP_COPY = {
     { n: "1", l: "company builds every EUV lithography machine on Earth" },
     { n: "3", l: "firms make nearly all high-bandwidth memory" },
   ],
-  keyLabel: "Supply chain layers — click to isolate",
+  keyLabel: "Supply chain layers",
+  keyAction: "Click to isolate",
   keyNote:
     "Colors show a country's primary layer. Most of the interesting countries sit in more than one — hover to see all of them.",
   flowTitle: "The pipeline · sand to model",
@@ -528,7 +534,6 @@ export const MAP_COPY = {
   eventActors: "Actors in the frame",
   euName: "European Union",
   // Anatomy-of-a-Chip launcher (overlay is OUT OF SCOPE this pass).
-  chipEyebrow: "Go one level down",
   chipTitle: "Anatomy of a Chip",
   chipSub:
     "Open a single accelerator — every color on this map ends up inside it.",

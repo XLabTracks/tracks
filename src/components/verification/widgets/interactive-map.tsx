@@ -8,7 +8,16 @@ import {
   useRef,
   useState,
 } from "react";
-import { Map as MapIcon, Minus, Pause, Play, Plus, X } from "lucide-react";
+import {
+  ChevronLeft,
+  ChevronRight,
+  Map as MapIcon,
+  Minus,
+  Pause,
+  Play,
+  Plus,
+  X,
+} from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import {
@@ -158,9 +167,10 @@ function zoomVB(
   });
 }
 
-/* ============ okabe-ito bucket color, semantic-encoding only ============ */
-// The source encodes supply-chain layers by Okabe-Ito hue. We keep those hues
-// ONLY on the map fills / swatches, always paired with the layer name label.
+/* ============ bucket color, semantic-encoding only ============ */
+// Layers are encoded with the course palette (theme tokens, set in the data
+// file), used ONLY on map fills / swatches and always paired with the layer
+// name — isolation and the legend carry the encoding where hue cannot.
 
 /**
  * Full-page inline world map of the AI compute supply chain (unbridged view
@@ -384,7 +394,7 @@ export function InteractiveMap(_props: VerificationWidgetProps) {
         <dl className="border-border mb-4 flex flex-wrap gap-x-6 gap-y-2 border-b pb-4">
           {C.stats.map((st) => (
             <div key={st.l} className="flex items-baseline gap-2">
-              <dt className="font-mono text-sm font-semibold whitespace-nowrap">
+              <dt className="text-xl font-bold tracking-tight whitespace-nowrap tabular-nums">
                 {st.n}
               </dt>
               <dd className="text-muted-foreground text-xs">{st.l}</dd>
@@ -478,7 +488,7 @@ export function InteractiveMap(_props: VerificationWidgetProps) {
                   type="button"
                   aria-label="Reset view"
                   onClick={() => dispatch({ type: "resetVb" })}
-                  className="border-border bg-card text-muted-foreground hover:text-foreground hover:border-foreground/40 flex size-8 items-center justify-center rounded-md border font-mono text-[11px] transition-colors"
+                  className="border-border bg-card text-muted-foreground hover:text-foreground hover:border-foreground/40 flex size-8 items-center justify-center rounded-md border text-[11px] font-medium transition-colors"
                 >
                   Fit
                 </button>
@@ -657,8 +667,8 @@ export function InteractiveMap(_props: VerificationWidgetProps) {
                   <p className="text-muted-foreground text-xs leading-snug">
                     {tipCountry.verif}
                   </p>
-                  <p className="text-muted-foreground/80 mt-1.5 font-mono text-[10.5px] tracking-wide">
-                    click to pin →
+                  <p className="text-muted-foreground/80 mt-1.5 text-[10.5px]">
+                    Click to pin
                   </p>
                 </div>
               )}
@@ -668,7 +678,7 @@ export function InteractiveMap(_props: VerificationWidgetProps) {
             {s.mode === "map" ? (
               <div className="mt-4">
                 <div className="mb-2 flex items-baseline justify-between">
-                  <span className="text-muted-foreground font-mono text-[11px] tracking-[0.14em] uppercase">
+                  <span className="text-[13px] font-semibold">
                     {C.flowTitle}
                   </span>
                   <span className="text-muted-foreground text-[11px]">
@@ -702,7 +712,11 @@ export function InteractiveMap(_props: VerificationWidgetProps) {
                       >
                         <span
                           className="mb-1.5 block h-[3px] w-4 rounded-sm"
-                          style={{ background: BUCKETS[st.bucket].color }}
+                          style={{
+                            background: active
+                              ? "var(--primary-foreground)"
+                              : BUCKETS[st.bucket].color,
+                          }}
                           aria-hidden
                         />
                         <span
@@ -727,7 +741,7 @@ export function InteractiveMap(_props: VerificationWidgetProps) {
                     );
                   })}
                 </div>
-                <div className="text-muted-foreground mt-2 flex items-center justify-between px-1 font-mono text-[10.5px] tracking-wide">
+                <div className="text-muted-foreground mt-2 flex items-center justify-between px-1 text-[10.5px]">
                   <span>{C.flowGradLeft}</span>
                   <span
                     aria-hidden
@@ -743,7 +757,7 @@ export function InteractiveMap(_props: VerificationWidgetProps) {
             ) : (
               <div className="mt-4">
                 <div className="mb-2 flex items-baseline justify-between">
-                  <span className="text-muted-foreground font-mono text-[11px] tracking-[0.14em] uppercase">
+                  <span className="text-[13px] font-semibold">
                     {C.tlTitle}
                   </span>
                   <span className="text-muted-foreground text-[11px]">
@@ -761,7 +775,7 @@ export function InteractiveMap(_props: VerificationWidgetProps) {
                         aria-hidden
                       />
                       <span
-                        className="text-muted-foreground absolute top-[calc(50%+8px)] -translate-x-1/2 font-mono text-[10.5px]"
+                        className="text-muted-foreground absolute top-[calc(50%+8px)] -translate-x-1/2 text-[10.5px] tabular-nums"
                         style={{ left: `${tx(y)}%` }}
                         aria-hidden
                       >
@@ -798,7 +812,7 @@ export function InteractiveMap(_props: VerificationWidgetProps) {
                     onClick={() => setEvent(s.event - 1)}
                     disabled={s.event <= 0}
                   >
-                    ◀
+                    <ChevronLeft className="size-4" aria-hidden />
                   </Button>
                   <Button
                     variant="outline"
@@ -823,10 +837,10 @@ export function InteractiveMap(_props: VerificationWidgetProps) {
                     onClick={() => setEvent(s.event + 1)}
                     disabled={s.event >= EVENTS.length - 1}
                   >
-                    ▶
+                    <ChevronRight className="size-4" aria-hidden />
                   </Button>
                   <span
-                    className="text-muted-foreground min-w-14 text-center font-mono text-[11px]"
+                    className="text-muted-foreground min-w-14 text-center text-[11px] tabular-nums"
                     aria-live="polite"
                   >
                     {s.event >= 0 ? `${s.event + 1} / ${EVENTS.length}` : ""}
@@ -843,9 +857,12 @@ export function InteractiveMap(_props: VerificationWidgetProps) {
           <aside className="flex min-w-0 flex-col gap-4">
             {s.mode === "map" && (
               <div>
-                <p className="text-muted-foreground mb-2 font-mono text-[10.5px] tracking-[0.15em] uppercase">
-                  {C.keyLabel}
-                </p>
+                <div className="mb-2 flex items-baseline justify-between gap-2">
+                  <span className="text-[13px] font-semibold">{C.keyLabel}</span>
+                  <span className="text-muted-foreground text-[11px]">
+                    {C.keyAction}
+                  </span>
+                </div>
                 <div className="flex flex-col gap-1">
                   {BUCKET_ORDER.map((bk) => {
                     const b = BUCKETS[bk];
@@ -875,14 +892,14 @@ export function InteractiveMap(_props: VerificationWidgetProps) {
                         )}
                       >
                         <span
-                          className="size-3 flex-none rounded-sm"
+                          className="ring-foreground/20 size-3 flex-none rounded-[3px] ring-1 ring-inset"
                           style={{ background: b.color }}
                           aria-hidden
                         />
-                        <span className="text-[12.5px] font-semibold">
+                        <span className="text-[13px] font-medium">
                           {b.name}
                         </span>
-                        <span className="text-muted-foreground ml-auto font-mono text-[10.5px]">
+                        <span className="text-muted-foreground ml-auto text-[11px] tabular-nums">
                           {n} {n === 1 ? "country" : "countries"}
                         </span>
                       </button>
@@ -916,16 +933,13 @@ export function InteractiveMap(_props: VerificationWidgetProps) {
                 </svg>
               </div>
               <div className="min-w-0">
-                <p className="text-muted-foreground font-mono text-[10.5px] tracking-[0.15em] uppercase">
-                  {C.chipEyebrow}
-                </p>
                 <p className="text-sm font-semibold">{C.chipTitle}</p>
                 <p className="text-muted-foreground text-[11px] leading-snug">
                   {C.chipSub}
                 </p>
               </div>
-              <span className="text-muted-foreground ml-auto flex-none font-mono text-[10.5px] uppercase">
-                soon
+              <span className="text-muted-foreground ml-auto flex-none text-[11px]">
+                Coming soon
               </span>
             </div>
 
@@ -936,14 +950,12 @@ export function InteractiveMap(_props: VerificationWidgetProps) {
 
             {/* roles key */}
             <div className="border-border border-t pt-3">
-              <p className="text-muted-foreground mb-2 font-mono text-[10.5px] tracking-[0.15em] uppercase">
-                {C.rolesLabel}
-              </p>
+              <p className="mb-2 text-[13px] font-semibold">{C.rolesLabel}</p>
               <div className="flex flex-wrap gap-1">
                 {ROLE_ORDER.map((r) => (
                   <span
                     key={r}
-                    className="border-muted-foreground/50 text-muted-foreground rounded border border-dashed px-2 py-0.5 font-mono text-[10.5px] tracking-wide"
+                    className="border-border bg-muted/60 text-muted-foreground rounded-md border px-2 py-0.5 text-[10.5px]"
                   >
                     {ROLES[r]}
                   </span>
@@ -1000,9 +1012,9 @@ function tx(t: number): number {
 function BucketChip({ bk }: { bk: BucketKey }) {
   const b = BUCKETS[bk];
   return (
-    <span className="border-border bg-muted/60 text-muted-foreground inline-flex items-center gap-1.5 rounded-full border px-2 py-0.5 text-[10.5px]">
+    <span className="border-border bg-muted/60 text-muted-foreground inline-flex items-center gap-1.5 rounded-md border px-2 py-0.5 text-[10.5px]">
       <span
-        className="size-[7px] flex-none rounded-full"
+        className="ring-foreground/20 size-2 flex-none rounded-[2px] ring-1 ring-inset"
         style={{ background: b.color }}
         aria-hidden
       />
@@ -1035,24 +1047,24 @@ function DetailCard({
       : ev.c.map((id) => (CMAP[id] ? CMAP[id].name : id));
     return (
       <div aria-live="polite">
-        <p className="text-muted-foreground font-mono text-[10.5px] tracking-[0.13em] uppercase">
+        <p className="text-muted-foreground text-[11px] font-medium">
           Timeline · {s.event + 1} of {EVENTS.length}
         </p>
-        <p className="text-muted-foreground mt-1 font-mono text-[11px]">
+        <p className="text-muted-foreground mt-1 text-[11px] tabular-nums">
           {ev.d}
         </p>
         <h4 className="mt-0.5 text-base font-semibold">{ev.title}</h4>
         <p className="text-muted-foreground mt-1.5 text-[12.5px] leading-relaxed">
           {ev.body}
         </p>
-        <p className="text-muted-foreground mt-2.5 font-mono text-[11px] tracking-wide uppercase">
+        <p className="text-muted-foreground mt-2.5 text-[11px] font-medium">
           {C.eventActors}
         </p>
         <div className="mt-1 flex flex-wrap gap-1">
           {chips.map((name) => (
             <span
               key={name}
-              className="border-border bg-card rounded-full border px-2.5 py-0.5 text-[11px]"
+              className="border-border bg-card rounded-md border px-2.5 py-0.5 text-[11px]"
             >
               {name}
             </span>
@@ -1080,21 +1092,23 @@ function DetailCard({
         >
           <X className="size-4" aria-hidden />
         </button>
-        <p className="text-muted-foreground font-mono text-[10.5px] tracking-[0.13em] uppercase">
+        <p className="text-muted-foreground text-[11px] font-medium">
           {st ? "Pipeline stage" : "Supply chain layer"}
         </p>
-        <h4 className="mt-1 text-base font-semibold">{st ? st.name : b.name}</h4>
-        <span
-          className="mt-2 mb-2.5 inline-block rounded-[5px] border-[1.5px] px-2.5 py-1 font-mono text-sm font-semibold"
-          style={{ borderColor: b.color, color: b.color }}
-        >
-          {b.stat}
-        </span>
+        <h4 className="mt-1 flex items-center gap-2 text-base font-semibold">
+          <span
+            className="ring-foreground/20 size-2.5 flex-none rounded-[2px] ring-1 ring-inset"
+            style={{ background: b.color }}
+            aria-hidden
+          />
+          {st ? st.name : b.name}
+        </h4>
+        <p className="mt-1.5 mb-2 text-lg font-bold tracking-tight">{b.stat}</p>
         <p className="text-muted-foreground text-[12.5px] leading-relaxed">
           {st ? `${st.stat} ` : ""}
           {b.why}
         </p>
-        <p className="text-muted-foreground mt-2.5 font-mono text-[11px] tracking-wide uppercase">
+        <p className="text-muted-foreground mt-2.5 text-[11px] font-medium">
           {C.layerNeed}
         </p>
         <div className="mt-1 flex flex-wrap gap-1">
@@ -1103,7 +1117,7 @@ function DetailCard({
               key={c.id}
               type="button"
               onClick={() => dispatch({ type: "gotoCountry", id: c.id })}
-              className="border-border bg-card hover:border-foreground rounded-full border px-2.5 py-0.5 text-[11px] transition-colors"
+              className="border-border bg-card hover:border-foreground rounded-md border px-2.5 py-0.5 text-[11px] transition-colors"
             >
               {shortName(c.name)}
             </button>
@@ -1127,7 +1141,7 @@ function DetailCard({
         >
           <X className="size-4" aria-hidden />
         </button>
-        <p className="text-muted-foreground font-mono text-[10.5px] tracking-[0.13em] uppercase">
+        <p className="text-muted-foreground text-[11px] font-medium">
           Country
         </p>
         <h4 className="mt-1 text-base font-semibold">{c.name}</h4>
@@ -1147,7 +1161,7 @@ function DetailCard({
           ))}
         </ul>
         <div className="border-border mt-2.5 border-t pt-2">
-          <p className="text-muted-foreground font-mono text-[10.5px] tracking-[0.12em] uppercase">
+          <p className="text-muted-foreground text-[11px] font-medium">
             {C.countryVerifLabel}
           </p>
           <p className="mt-1 text-[12.5px] leading-relaxed">{c.verif}</p>
@@ -1156,7 +1170,7 @@ function DetailCard({
           {c.roles.map((r) => (
             <span
               key={r}
-              className="border-muted-foreground/50 text-muted-foreground rounded border border-dashed px-2 py-0.5 font-mono text-[10.5px] tracking-wide"
+              className="border-border bg-muted/60 text-muted-foreground rounded-md border px-2 py-0.5 text-[10.5px]"
             >
               {ROLES[r]}
             </span>
@@ -1169,7 +1183,7 @@ function DetailCard({
   // default (map, nothing selected)
   return (
     <div>
-      <p className="text-muted-foreground font-mono text-[10.5px] tracking-[0.13em] uppercase">
+      <p className="text-muted-foreground text-[11px] font-medium">
         {C.startEyebrow}
       </p>
       <p className="text-muted-foreground mt-1.5 text-[12.5px] leading-relaxed">

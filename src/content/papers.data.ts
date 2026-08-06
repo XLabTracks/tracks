@@ -1678,6 +1678,48 @@ export const papers: Paper[] = [
     estimatedMinutes: 30,
     sectionItemId: "c-mod6-l1",
   },
+  // --- Control track, module 6, trading-with-AIs section: three posts on
+  // making deals with misaligned AIs, nested under the trade outline section.
+  // Plain readings, no edits yet.
+  {
+    id: "c-paper-deals-schemers",
+    slug: "making-deals-with-early-schemers",
+    moduleId: "c-mod6",
+    title: "Making deals with early schemers",
+    source: {
+      kind: "lesswrong",
+      postUrl:
+        "https://www.alignmentforum.org/posts/psqkwsKrKHCfkhrQx/making-deals-with-early-schemers",
+    },
+    estimatedMinutes: 20,
+    sectionItemId: "c-mod6-l2",
+  },
+  {
+    id: "c-paper-cooperating-unaligned",
+    slug: "cooperating-with-unaligned-ais",
+    moduleId: "c-mod6",
+    title: "Notes on cooperating with unaligned AIs",
+    source: {
+      kind: "lesswrong",
+      postUrl:
+        "https://www.alignmentforum.org/posts/oLzoHA9ZtF2ygYgx4/notes-on-cooperating-with-unaligned-ais",
+    },
+    estimatedMinutes: 25,
+    sectionItemId: "c-mod6-l2",
+  },
+  {
+    id: "c-paper-trade-barriers",
+    slug: "barriers-to-trading",
+    moduleId: "c-mod6",
+    title: "A taxonomy of barriers to trading with early misaligned AIs",
+    source: {
+      kind: "lesswrong",
+      postUrl:
+        "https://www.alignmentforum.org/posts/wHc2w6WuHev42d4n8/a-taxonomy-of-barriers-to-trading-with-early-misaligned-ais",
+    },
+    estimatedMinutes: 55,
+    sectionItemId: "c-mod6-l2",
+  },
   {
     // GUIDED walkthrough of the contrastive-SDF paper, built in the
     // c-paper-plm-guided style: the abstract's findings, the intro's method

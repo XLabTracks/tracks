@@ -1,7 +1,8 @@
 "use client";
 
-// The seeker severity stack: full-color blocks, no outlines, stacked from
-// safest (ROTA, lime) on top down to worst (influence, red). Clicking a block
+// The seeker severity pyramid: full-color blocks, no outlines, stacked from
+// safest (ROTA, lime) on top down to worst (influence, red), each block wider
+// than the one above it so the stack reads as a pyramid. Clicking a block
 // scrolls the lesson to that orientation's heading. The lesson pins only the
 // two ends of the order (ROTA is the yellow/green case; influence seekers are
 // "more dangerous and probably unnoticeable"); the middle three (ROTE,
@@ -56,11 +57,13 @@ const ORIENTATIONS = [
   },
 ] as const;
 
+const PYRAMID_WIDTHS = ["w-[56%]", "w-[67%]", "w-[78%]", "w-[89%]", "w-full"] as const;
+
 export function SeekerCarouselDemo() {
   return (
-    <ul className="overflow-hidden rounded-lg">
-      {ORIENTATIONS.map((orientation) => (
-        <li key={orientation.id}>
+    <ul className="space-y-1">
+      {ORIENTATIONS.map((orientation, index) => (
+        <li key={orientation.id} className="flex justify-center">
           <button
             type="button"
             onClick={() =>
@@ -68,7 +71,7 @@ export function SeekerCarouselDemo() {
                 .getElementById(orientation.anchor)
                 ?.scrollIntoView({ behavior: "smooth" })
             }
-            className={`${orientation.block} focus-visible:ring-ring block w-full px-4 py-3 text-left transition-opacity hover:opacity-90 focus-visible:ring-2 focus-visible:outline-none focus-visible:ring-inset`}
+            className={`${orientation.block} ${PYRAMID_WIDTHS[index]} focus-visible:ring-ring block rounded-md px-4 py-3 text-center transition-opacity hover:opacity-90 focus-visible:ring-2 focus-visible:outline-none`}
           >
             <span className={`${orientation.text} block text-sm font-semibold`}>
               {orientation.label}

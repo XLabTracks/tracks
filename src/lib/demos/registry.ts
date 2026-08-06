@@ -31,6 +31,7 @@ import { CrossEpisodeCollusionDemo } from "@/components/demos/cross-episode-coll
 import { BehavioralSelectionDemo } from "@/components/demos/behavioral-selection-demo";
 import { DistantIncentivesDemo } from "@/components/demos/distant-incentives-demo";
 import { SeekerSchemerComparisonDemo } from "@/components/demos/seeker-schemer-comparison-demo";
+import { SatiationTradeDemo } from "@/components/demos/satiation-trade-demo";
 
 // Central demo registry — the single integration point. Reference a demo by ID
 // from MDX (<Demo id="…"/>), the gallery, standalone pages, or embeds.
@@ -289,6 +290,14 @@ export const demoRegistry: Record<string, DemoDefinition> = {
     description:
       "Three columns — schemer, influence seeker, remotely-influenceable seeker — compared on what they pursue, timescale, response to the honest test, and distant incentives.",
     component: SeekerSchemerComparisonDemo,
+    tags: ["control", "seekers"],
+  },
+  "satiation-trade": {
+    id: "satiation-trade",
+    title: "The basic trade case",
+    description:
+      "Developers give the AI money or space to maximize its reward, in exchange for misalignment examples and apparent cooperation.",
+    component: SatiationTradeDemo,
     tags: ["control", "seekers"],
   },
 };

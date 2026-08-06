@@ -32,7 +32,9 @@ Behavioral selection is the observation that training reinforces whichever behav
 
 - This is not definite but is triggered reliably by reward-on-the-episode seekers as they don't care about getting caught. Honest tests are potentially dangerous however, as training on these tests could lead to schemers / influence seekers / unnoticeable reward-on-the-episode seekers.
 - One advantage of these seekers when it comes to preventing misaligned behavior is that it's feasible to deploy reward-on-the-episode seekers to monitor instances of itself. Because its main goal is maximizing their own reward, it doesn't care about the policy's reward goal, making it much less likely to collude. However this may not apply when the monitor believes that the policy's misbehavior is undetectable via inspection, as it no longer has an incentive to report the misbehavior due to a lack of reward. One of the major risk vectors for these seekers is the idea that if its perceived episode timescale during deployment is long enough, these seekers may aim to disempower humans to maximize their reward as it now becomes viable to do across a long period of time.
-- *[diagram which expresses how when given limited exploration, the model converges to simple detectable misalignment. But when given longer horizon RL, there is more space for exploration which can converge to a more covert malignant misalignment]*
+
+<Demo id="exploration-horizon" />
+
 - Another risk vector is collusion across episodes, which can effectively lengthen the timescale and allow for disempowerment as well.
 - *[diagram of instances expressing messages to communicate with a following instance in the following episode]*
 

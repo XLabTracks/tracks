@@ -26,6 +26,7 @@ import { LiveFailurePlaneDemo } from "@/components/demos/live-failure-plane-demo
 import { AgentArchitectureThreatsDemo } from "@/components/demos/agent-architecture-threats-demo";
 import { DeferToResampleDemo } from "@/components/demos/defer-to-resample-demo";
 import { HonestTestDemo } from "@/components/demos/honest-test-demo";
+import { ExplorationHorizonDemo } from "@/components/demos/exploration-horizon-demo";
 
 // Central demo registry — the single integration point. Reference a demo by ID
 // from MDX (<Demo id="…"/>), the gallery, standalone pages, or embeds.
@@ -244,6 +245,14 @@ export const demoRegistry: Record<string, DemoDefinition> = {
     description:
       "Offer the AI control of its own training process / weights and watch its response.",
     component: HonestTestDemo,
+    tags: ["control", "seekers"],
+  },
+  "exploration-horizon": {
+    id: "exploration-horizon",
+    title: "Exploration horizon and covert misalignment",
+    description:
+      "Limited exploration converges to simple, detectable misalignment; longer-horizon RL opens more space to converge to covert misalignment.",
+    component: ExplorationHorizonDemo,
     tags: ["control", "seekers"],
   },
 };

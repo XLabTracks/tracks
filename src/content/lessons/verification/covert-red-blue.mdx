@@ -206,7 +206,7 @@ Scoring: 1 = very low or weak; 2 = low; 3 = moderate; 4 = high; 5 = very high. F
 | --- | --- | --- | --- |
 | **4/5 — High.** The hardware, staff, and site already exist. | **4/5 — High.** A small number of authorized insiders may be enough. | **3/5 — Moderate.** Logs and telemetry help, but purpose and intent are difficult to infer. | **5/5 — Very high.** Standing capacity can support repeated activity. |
 
-Often the most realistic route for an actor that already controls major compute. Legitimate activity provides cover: training can be labeled as inference, or prohibited capability work as safety or maintenance. Broad workload telemetry can produce useful signals, but proving the exact research purpose requires clear rules plus access to raw scheduler records, code, data, checkpoints, and personnel evidence. <a href="#ref-14">[14]</a><a href="#ref-21">[21]</a>
+Often the most realistic route for an actor that already controls major compute. Legitimate activity provides cover: training can be labeled as inference, or prohibited capability work as safety or maintenance. Broad workload telemetry can produce useful signals, but proving the exact research purpose requires clear rules plus access to raw scheduler records, code, data, checkpoints, and personnel evidence.<Cite n="14,21" />
 
 *Who can change the balance:* Developers; cloud providers; national regulators; inspectors; hardware and standards bodies
 
@@ -215,7 +215,7 @@ Often the most realistic route for an actor that already controls major compute.
 | --- | --- | --- | --- |
 | **3/5 — Moderate.** Requires insider access or a serious cyber compromise. | **3/5 — Moderate.** Can be done by a small team, but access and confidentiality are demanding. | **2/5 — Low.** There may be no new large training signal. | **5/5 — Very high.** One successful copy can be duplicated and reused. |
 
-Weight theft changes the verification problem: the actor may acquire a powerful model without recreating its original training run. Access logs, segmentation, data-loss controls, and human reporting can help, but attribution and proof of what was copied are difficult. Compression research may reduce exfiltration time, but exfiltration remains a multistep attack. A compute-only agreement does not close this route. <a href="#ref-16">[16]</a><a href="#ref-17">[17]</a>
+Weight theft changes the verification problem: the actor may acquire a powerful model without recreating its original training run. Access logs, segmentation, data-loss controls, and human reporting can help, but attribution and proof of what was copied are difficult. Compression research may reduce exfiltration time, but exfiltration remains a multistep attack. A compute-only agreement does not close this route.<Cite n="16,17" />
 
 *Who can change the balance:* Frontier developers; cloud providers; security teams; national regulators; law enforcement
 
@@ -224,7 +224,7 @@ Weight theft changes the verification problem: the actor may acquire a powerful 
 | --- | --- | --- | --- |
 | **2/5 — Low today.** Low-communication methods are improving, but frontier-scale cases remain extrapolative. | **2/5 — Low.** Many sites, operators, and coordination points increase exposure. | **2/5 — Low.** Single-site thresholds and local power signals may miss the whole operation. | **3/5 — Moderate.** Repeatable in principle, but inefficient and operationally fragile. |
 
-Recent work makes it unsafe to assume that all frontier training must occur inside one tightly connected facility. However, the largest governance-relevant scenarios are modeled rather than directly demonstrated. Distribution reduces the value of site-level thresholds while increasing procurement, accounting, staffing, networking, and whistleblower surfaces. Treat this as an emerging and uncertain route, not a solved capability. <a href="#ref-15">[15]</a>
+Recent work makes it unsafe to assume that all frontier training must occur inside one tightly connected facility. However, the largest governance-relevant scenarios are modeled rather than directly demonstrated. Distribution reduces the value of site-level thresholds while increasing procurement, accounting, staffing, networking, and whistleblower surfaces. Treat this as an emerging and uncertain route, not a solved capability.<Cite n="15" />
 
 *Who can change the balance:* Treaty designers; chip and cloud regulators; intelligence agencies; inspectors; hardware owners
 
@@ -233,7 +233,7 @@ Recent work makes it unsafe to assume that all frontier training must occur insi
 | --- | --- | --- | --- |
 | **5/5 — Very high.** Documents and curated logs are easy to alter when the actor controls them. | **4/5 — High.** Requires control of records and cooperation or silence from relevant staff. | **3/5 — Moderate.** Independent records and cross-checks can expose contradictions. | **3/5 — Moderate.** One false record may cover one run; a captured system can conceal repeated activity. |
 
-False reporting is usually a supporting tactic rather than a complete development strategy. It becomes less effective when records are generated automatically, preserved outside the actor’s control, and compared with procurement, power, cloud, chip, code, checkpoint, and human evidence. Verification must test both whether declared activity occurred as claimed and whether important activity was omitted. <a href="#ref-14">[14]</a>
+False reporting is usually a supporting tactic rather than a complete development strategy. It becomes less effective when records are generated automatically, preserved outside the actor’s control, and compared with procurement, power, cloud, chip, code, checkpoint, and human evidence. Verification must test both whether declared activity occurred as claimed and whether important activity was omitted.<Cite n="14" />
 
 *Who can change the balance:* Cloud and hardware providers; developers; auditors; inspectors; regulators
 
@@ -242,7 +242,7 @@ False reporting is usually a supporting tactic rather than a complete developmen
 | --- | --- | --- | --- |
 | **3/5 — Moderate.** Depends on model access, query budget, data, student compute, and output richness. | **4/5 — High.** May require no insider and can use proxy accounts or intermediaries. | **3/5 — Moderate.** Providers can monitor access, but defenses are emerging and threat-model dependent. | **3/5 — Moderate.** A student model can spread, but may not reproduce all teacher capabilities. |
 
-Distillation is not the same as weight theft. It trains a new model to imitate behaviors exposed through an interface; it does not recover the teacher’s exact parameters. Providers can use identity checks, rate limits, anomaly detection, output design, fingerprinting, or watermarking, but recent research finds that defense performance depends heavily on attacker assumptions and can trade off against service quality. <a href="#ref-18">[18]</a>
+Distillation is not the same as weight theft. It trains a new model to imitate behaviors exposed through an interface; it does not recover the teacher’s exact parameters. Providers can use identity checks, rate limits, anomaly detection, output design, fingerprinting, or watermarking, but recent research finds that defense performance depends heavily on attacker assumptions and can trade off against service quality.<Cite n="18" />
 
 *Who can change the balance:* API providers; model developers; regulators; identity and payment providers
 
@@ -251,7 +251,7 @@ Distillation is not the same as weight theft. It trains a new model to imitate b
 | --- | --- | --- | --- |
 | **5/5 — Very high.** Shell companies, nominees, and borrowed accounts are cheap to create. | **4/5 — High.** Cross-border finance and ownership chains require coordination but are well established. | **3/5 — Moderate.** Ownership, payment, address, communications, and logistics links can expose networks. | **4/5 — High.** A proxy network can support repeated purchases and replace exposed entities. |
 
-Proxy organizations are a high-feasibility enabling tactic, not a substitute for chips, power, engineering, or a viable workload. The A.Q. Khan network demonstrates how distributed intermediaries and front companies can route around supplier controls and exploit jurisdictional seams. Beneficial-ownership and reseller-chain analysis should therefore examine linked entities, not each nominal customer in isolation. <a href="#ref-3">[3]</a><a href="#ref-4">[4]</a><a href="#ref-5">[5]</a>
+Proxy organizations are a high-feasibility enabling tactic, not a substitute for chips, power, engineering, or a viable workload. The A.Q. Khan network demonstrates how distributed intermediaries and front companies can route around supplier controls and exploit jurisdictional seams. Beneficial-ownership and reseller-chain analysis should therefore examine linked entities, not each nominal customer in isolation.<Cite n="3,4,5" />
 
 *Who can change the balance:* Cloud and compute providers; exporters; financial institutions; corporate registries; regulators
 
@@ -260,7 +260,7 @@ Proxy organizations are a high-feasibility enabling tactic, not a substitute for
 | --- | --- | --- | --- |
 | **3/5 — Moderate.** False documents and transshipment are feasible; covert frontier-scale accumulation is harder. | **3/5 — Moderate.** Requires brokers, logistics, financing, and cross-border concealment. | **3/5 — Moderate.** Customs, finance, supplier records, serials, and inspections create leads. | **4/5 — High.** Individual shipments are episodic, but acquired hardware and networks can persist. |
 
-Recent U.S. cases allege front companies, false paperwork, dummy servers, and transshipment through third countries to divert controlled AI hardware. These cases show realistic tactics, not proven prevalence; charging documents are allegations unless and until established in court. Acquiring chips is only one step: the actor must still power, cool, network, maintain, and use them. <a href="#ref-19">[19]</a>
+Recent U.S. cases allege front companies, false paperwork, dummy servers, and transshipment through third countries to divert controlled AI hardware. These cases show realistic tactics, not proven prevalence; charging documents are allegations unless and until established in court. Acquiring chips is only one step: the actor must still power, cool, network, maintain, and use them.<Cite n="19" />
 
 *Who can change the balance:* Vendors; distributors; customs; export-control agencies; freight and financial institutions
 
@@ -269,24 +269,24 @@ Recent U.S. cases allege front companies, false paperwork, dummy servers, and tr
 
 Sources marked “preprint” have not necessarily completed peer review. U.S. criminal charging documents are allegations, and defendants are presumed innocent unless proven guilty.
 
-<a id="ref-3"></a>[3] Michael Laufer, “A. Q. Khan Nuclear Chronology,” Carnegie Endowment for International Peace, 2005.
+<span id="ref-3" className="scroll-mt-24 font-medium">[3]</span> Michael Laufer, “A. Q. Khan Nuclear Chronology,” Carnegie Endowment for International Peace, 2005.
 
-<a id="ref-4"></a>[4] International Institute for Strategic Studies, Nuclear Black Markets: Pakistan, A.Q. Khan and the Rise of Proliferation Networks, 2007, especially the discussion of nodes in Malaysia, Turkey, Europe, South Africa, and Dubai.
+<span id="ref-4" className="scroll-mt-24 font-medium">[4]</span> International Institute for Strategic Studies, Nuclear Black Markets: Pakistan, A.Q. Khan and the Rise of Proliferation Networks, 2007, especially the discussion of nodes in Malaysia, Turkey, Europe, South Africa, and Dubai.
 
-<a id="ref-5"></a>[5] Financial Action Task Force, Guidance on Beneficial Ownership of Legal Persons, 2023.
+<span id="ref-5" className="scroll-mt-24 font-medium">[5]</span> Financial Action Task Force, Guidance on Beneficial Ownership of Legal Persons, 2023.
 
-<a id="ref-14"></a>[14] Mauricio Baker et al., “Verifying International Agreements on AI: Six Layers of Verification for Rules on Large-Scale AI Development and Deployment,” arXiv:2507.15916, 2025 (preprint). [arxiv.org/abs/2507.15916](https://arxiv.org/abs/2507.15916)
+<span id="ref-14" className="scroll-mt-24 font-medium">[14]</span> Mauricio Baker et al., “Verifying International Agreements on AI: Six Layers of Verification for Rules on Large-Scale AI Development and Deployment,” arXiv:2507.15916, 2025 (preprint). [arxiv.org/abs/2507.15916](https://arxiv.org/abs/2507.15916)
 
-<a id="ref-15"></a>[15] Robi Rahman, “Does Distributed Training Undermine Compute Governance?” arXiv:2605.29359, 2026 (preprint). [arxiv.org/abs/2605.29359](https://arxiv.org/abs/2605.29359)
+<span id="ref-15" className="scroll-mt-24 font-medium">[15]</span> Robi Rahman, “Does Distributed Training Undermine Compute Governance?” arXiv:2605.29359, 2026 (preprint). [arxiv.org/abs/2605.29359](https://arxiv.org/abs/2605.29359)
 
-<a id="ref-16"></a>[16] Shahar Avin Nevo et al., Securing AI Model Weights: Preventing Theft and Misuse of Frontier Models, RAND, 2024.
+<span id="ref-16" className="scroll-mt-24 font-medium">[16]</span> Shahar Avin Nevo et al., Securing AI Model Weights: Preventing Theft and Misuse of Frontier Models, RAND, 2024.
 
-<a id="ref-17"></a>[17] Davis Brown et al., “Aggressive Compression Enables LLM Weight Theft,” arXiv:2601.01296, 2026 (preprint). [arxiv.org/abs/2601.01296](https://arxiv.org/abs/2601.01296)
+<span id="ref-17" className="scroll-mt-24 font-medium">[17]</span> Davis Brown et al., “Aggressive Compression Enables LLM Weight Theft,” arXiv:2601.01296, 2026 (preprint). [arxiv.org/abs/2601.01296](https://arxiv.org/abs/2601.01296)
 
-<a id="ref-18"></a>[18] Bo Jiang, “Evaluating Defenses Against LLM Knowledge Distillation,” arXiv:2603.07835, 2026; and Liam Libon et al., “What Does It Mean to Break a Distillation Defense?” arXiv:2606.25059, 2026 (preprints). [arxiv.org/abs/2603.07835](https://arxiv.org/abs/2603.07835)
+<span id="ref-18" className="scroll-mt-24 font-medium">[18]</span> Bo Jiang, “Evaluating Defenses Against LLM Knowledge Distillation,” arXiv:2603.07835, 2026; and Liam Libon et al., “What Does It Mean to Break a Distillation Defense?” arXiv:2606.25059, 2026 (preprints). [arxiv.org/abs/2603.07835](https://arxiv.org/abs/2603.07835)
 
-<a id="ref-19"></a>[19] U.S. Department of Justice, 2025–2026 charging announcements concerning alleged diversion of controlled AI chips through front companies, false documentation, and transshipment.
+<span id="ref-19" className="scroll-mt-24 font-medium">[19]</span> U.S. Department of Justice, 2025–2026 charging announcements concerning alleged diversion of controlled AI chips through front companies, false documentation, and transshipment.
 
-<a id="ref-21"></a>[21] Robi Rahman and Sabiha Tajdari, “Detecting Hidden ML Training With Zero-Overhead Telemetry,” arXiv:2606.19262, 2026 (preprint). [arxiv.org/abs/2606.19262](https://arxiv.org/abs/2606.19262)
+<span id="ref-21" className="scroll-mt-24 font-medium">[21]</span> Robi Rahman and Sabiha Tajdari, “Detecting Hidden ML Training With Zero-Overhead Telemetry,” arXiv:2606.19262, 2026 (preprint). [arxiv.org/abs/2606.19262](https://arxiv.org/abs/2606.19262)
 
 <MemoDesk lesson="covert-red-blue" />

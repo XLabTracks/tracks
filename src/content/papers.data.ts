@@ -1725,7 +1725,15 @@ export const papers: Paper[] = [
       { op: "hide", at: { anchor: "b-0013", snippet: "Specifically, we finetune two copies" }, silent: true },
       { op: "hide", at: { anchor: "b-0014", snippet: "Applied to intermediate checkpoints of" }, silent: true },
       { op: "hide", at: { anchor: "b-0015", snippet: "Using the same methods, we" }, silent: true },
-      { op: "hide", at: { anchor: "b-0016", s: 4, snippet: "Our o3 results already exhibit" }, silent: true },
+      // s2-s8 argue the direction gate 4 asks the learner to predict
+      // ("we therefore expect reward-seeking to increase") — withhold
+      // the authors' hypothesis until the preregistration is committed.
+      {
+        op: "hide",
+        at: { anchor: "b-0016", s: 2, snippet: "First, frontier labs are continuing" },
+        sEnd: 8,
+        silent: true,
+      },
       // Contribution bullets that state the method or the findings; the
       // operationalization bullet stays.
       { op: "hide", at: { anchor: "b-0020", snippet: "We introduce Contrastive Synthetic Document" }, silent: true },
@@ -1814,7 +1822,8 @@ export const papers: Paper[] = [
           "contrastive SDF works as an instrument, predict what the gap " +
           "pattern across authority pairings should look like for each " +
           "organism — and consider which organism might be hardest to " +
-          "detect, and why.",
+          "detect. (Hint: consider which authority the base model " +
+          "already leans toward before any organism training.)",
         cta: "Reveal the validation results",
       },
       // ---- Gate 4: preregister the o3-lineage prediction (end of §4) ------

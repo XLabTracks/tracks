@@ -112,27 +112,31 @@
 }
 
 /* Four or more plain bullets share one card, the reference sheet's shape:
-   a solid --primary slab with a big radius holding the whole run, every
-   item marked by a small --primary-foreground dot, and a pale circle
-   peeking from behind the top-left corner. Painted on all four sides —
-   the whole-card half of the card-edge rule, never a tinted rib.
+   a pale tinted slab with a big radius holding the whole run, every item
+   marked by a --primary dot, and a solid --primary circle peeking from
+   behind the top-left corner. Painted on all four sides — the whole-card
+   half of the card-edge rule, never a tinted rib.
 
-   Trap: the slab is a --primary surface, so everything on it must write in
-   --primary-foreground — prose colours strong/em/a/code from its own
-   variables, which stay --foreground/--brand-ink and vanish against the
-   maroon, so the descendant override below is load-bearing, and a dot
-   nested inside the slab takes currentColor for the same reason. The
-   corner circle is ::before at z-index -1: the ul makes no stacking
-   context, so the circle paints behind the slab and above the page. */
+   The paragraph that introduces the list rides inside the card as its
+   header, in red: p:has(+ ul) takes the slab ground, the top corners and
+   the corner circle, and the list under it squares its top edge so the two
+   read as one card. That is a visual join, not a reparenting — the
+   paragraph stays its own element, and the radius seam is the whole
+   mechanism. The header writes in --brand-ink, never --primary: maroon is
+   a surface on the night ground, not an ink.
+
+   Trap: the corner circle is ::before at z-index -1 — the element makes no
+   stacking context, so the circle paints behind the slab and above the
+   page. And when the header carries the circle, the list's own must be
+   suppressed or two circles stack on the seam. */
 :root[data-theme] .lesson-body ul:not(.not-prose *):not(li ul):has(> li:nth-child(4)) {
   position: relative;
   display: grid;
   gap: 14px;
   margin-top: 2em;
   padding: 26px 30px 26px 54px;
-  background: var(--primary);
+  background: color-mix(in srgb, var(--primary) 7%, var(--background));
   border-radius: 28px;
-  color: var(--primary-foreground, #fff);
 }
 :root[data-theme] .lesson-body ul:not(.not-prose *):not(li ul):has(> li:nth-child(4))::before {
   content: '';
@@ -142,14 +146,11 @@
   width: 72px;
   height: 72px;
   border-radius: 50%;
-  background: color-mix(in srgb, var(--primary) 7%, var(--background));
+  background: var(--primary);
   z-index: -1;
 }
 :root[data-theme] .lesson-body ul:not(.not-prose *):not(li ul):has(> li:nth-child(4)) > li {
   margin: 0;
-}
-:root[data-theme] .lesson-body ul:not(.not-prose *):not(li ul):has(> li:nth-child(4)) > li :where(strong, em, b, i, a, code) {
-  color: inherit;
 }
 :root[data-theme] .lesson-body ul:not(.not-prose *):not(li ul):has(> li:nth-child(4)) > li::before {
   content: '';
@@ -159,10 +160,41 @@
   width: 8px;
   height: 8px;
   border-radius: 50%;
-  background: var(--primary-foreground, #fff);
+  background: var(--primary);
 }
-:root[data-theme] .lesson-body ul:not(.not-prose *):not(li ul):has(> li:nth-child(4)) li ul > li::before {
-  background: currentColor;
+
+/* The introducing paragraph, as the card's red header. */
+:root[data-theme] .lesson-body p:not(.not-prose *):has(+ ul:not(li ul) > li:nth-child(4)) {
+  position: relative;
+  margin: 2em 0 0;
+  padding: 22px 30px 0 54px;
+  background: color-mix(in srgb, var(--primary) 7%, var(--background));
+  border-radius: 28px 28px 0 0;
+  color: var(--brand-ink, var(--primary));
+  font-weight: 600;
+}
+:root[data-theme] .lesson-body p:not(.not-prose *):has(+ ul:not(li ul) > li:nth-child(4)) :where(strong, b) {
+  color: inherit;
+}
+:root[data-theme] .lesson-body p:not(.not-prose *):has(+ ul:not(li ul) > li:nth-child(4))::before {
+  content: '';
+  position: absolute;
+  left: -12px;
+  top: -16px;
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: var(--primary);
+  z-index: -1;
+}
+:root[data-theme] .lesson-body p:not(.not-prose *):has(+ ul:not(li ul) > li:nth-child(4)) + ul:not(.not-prose *):not(li ul):has(> li:nth-child(4)) {
+  margin-top: 0;
+  padding-top: 16px;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}
+:root[data-theme] .lesson-body p:not(.not-prose *):has(+ ul:not(li ul) > li:nth-child(4)) + ul:not(.not-prose *):not(li ul):has(> li:nth-child(4))::before {
+  content: none;
 }
 
 /* Stepped circles: four or more numbered items. */

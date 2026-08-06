@@ -63,9 +63,8 @@ program's own materials in this repo.
 ranking the curricula. You are mapping coverage, not judging delivery — the
 second needs data you will not have.
 
-**Note on availability.** Some curricula are only shared on request, and one
-of the four is maintained by handing it to people who ask. If a syllabus is
-not public, say so in the matrix rather than guessing at its contents: an
+**Note on availability.** If any part of a syllabus turns out not to be
+public, say so in the matrix rather than guessing at its contents: an
 `unavailable` cell is honest and a fabricated one poisons the whole grid.
 
 ## What good looks like

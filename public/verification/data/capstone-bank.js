@@ -1,10 +1,10 @@
 /* GENERATED FILE — do not edit by hand.
    Source: verification-capstones/*.md
    Regenerate: npm run verification:capstones
-   58 capstone(s). Ordering and formatting are deterministic so
+   70 capstone(s). Ordering and formatting are deterministic so
    CI can diff this file against a fresh build. */
 window.CAPSTONE_BANK = {
-  "count": 58,
+  "count": 70,
   "entries": [
     {
       "slug": "agent-eval-design",
@@ -103,6 +103,48 @@ window.CAPSTONE_BANK = {
       ],
       "updated": "2026-08-04",
       "html": "<h3>The brief</h3>\n<p>\"We would coordinate on safety, but antitrust\" is one of the most-repeated lines in frontier AI, and one of the least tested. The orphan catalogue's complaint is procedural rather than legal: the proposal exists, nobody has drafted the letter, so nobody has ever been told no.</p>\n<p>Write the paperwork.</p>\n<ul><li><strong>The conduct.</strong> Precisely what the developers want to do together: agree a minimum evaluation standard, share an incident taxonomy, set a floor on pre-deployment testing. One or two things, described the way a lawyer would have to describe them — who meets, what is exchanged, what is agreed.</li><li><strong>The request letter.</strong> Addressed to the division that issues business review or advisory opinions, following the format that process actually uses. Facts, the competitive analysis, the assurance sought.</li><li><strong>The competitive analysis.</strong> Why this is not a cartel: what it does not cover (price, output, allocation, capability roadmaps), and the safeguards that keep it there.</li><li><strong>The anticipated response.</strong> Write the agency's likely reply, including its most awkward question. Then say what conduct your letter has cleared and what it explicitly has not.</li></ul>\n<h3>Why it exists</h3>\n<p>Most policy learners write documents addressed to nobody. This one has a real recipient, a real format, and a real process — and the exercise of writing to a form you did not design is most of the education. Governance work is substantially the craft of getting an existing process to do something.</p>\n<p>It also usefully deflates a talking point. Once you have written the request, you can say concretely how much of the \"antitrust problem\" is legal exposure and how much is a reason not to have the conversation.</p>\n<h3>Scope</h3>\n<p><strong>In scope:</strong> published agency guidance and past business review letters in other industries, the standard-setting antitrust literature, and public statements by developers about why they do not coordinate.</p>\n<p><strong>Out of scope:</strong> actually submitting it, and jurisdictions beyond the one you pick. If you want the EU angle, that is a second memo.</p>\n<p><strong>You are not required to conclude that the waiver is a good idea.</strong> A strong submission may end with \"the letter is easy to write and would clear less than people think\" — that is a finding, and it is better evidenced than the talking point it replaces.</p>\n<h3>What good looks like</h3>\n<div class=\"table-scroll\"><table><thead><tr><th>Dimension</th><th>Weak</th><th>Strong</th></tr></thead><tbody><tr><td>The conduct</td><td>\"Discuss safety standards\"</td><td>One or two specified activities, with what is exchanged and what is not</td></tr><tr><td>Format</td><td>A policy memo</td><td>Follows the agency's actual request format, with its required elements</td></tr><tr><td>Analysis</td><td>Asserts pro-competitive intent</td><td>Names the conduct that would still be unlawful and how the safeguards prevent it</td></tr><tr><td>Honesty</td><td>Concludes the problem is solved</td><td>States what remains uncleared, and whether that was the real blocker</td></tr></tbody></table></div>\n<h3>Getting started</h3>\n<ol><li>Read two real business review letters from any industry before drafting. The format teaches you what the agency wants to be told.</li><li>Narrow the conduct until it is boring. Ambitious coordination is what makes the request unanswerable.</li><li>Write the agency's hardest question in week one and let it shape the rest.</li></ol>"
+    },
+    {
+      "slug": "assurance-disclosure-tradeoff",
+      "source": "verification-capstones/assurance-disclosure-tradeoff.md",
+      "title": "What Assurance Costs in Secrets",
+      "theme": "Verification",
+      "status": "draft",
+      "summary": "Every verification mechanism buys confidence by spending the operator's secrets. Price the exchange rate across inspections, taps, telemetry, trusted hardware and recomputation.",
+      "team": {
+        "min": 1,
+        "max": 2,
+        "label": "1–2 people",
+        "bucket": "Pair or trio"
+      },
+      "effort": {
+        "min": 14,
+        "max": 20,
+        "label": "14–20 hrs",
+        "bucket": "15–20 hrs"
+      },
+      "duration": {
+        "label": "3 weeks",
+        "weeks": 3
+      },
+      "perWeek": "≈6 hrs/wk",
+      "difficulty": "stretch",
+      "deliverable": "Assurance × disclosure × intrusiveness matrix",
+      "deliverableType": "analysis",
+      "mentor": "recommended",
+      "audience": "The operator and verifier negotiating what must be shown for what assurance.",
+      "skills": [
+        "mechanism comparison",
+        "privacy analysis",
+        "trade-off mapping"
+      ],
+      "prerequisites": [
+        "Verification 2.0 — confidentiality vs verifiability",
+        "Verification 2.x — the four layers"
+      ],
+      "sources": [],
+      "updated": "2026-08-06",
+      "html": "<h3>The brief</h3>\n<p>Confidentiality versus verifiability is usually stated as a tension and left there. State it as a price list instead. For each level of confidence a verifier might want in a compliance claim, what does the operator have to disclose, and how deep does the mechanism reach into the facility?</p>\n<ul><li><strong>The mechanisms.</strong> Five, compared like for like: on-site inspections, network taps, sensor telemetry, trusted-hardware attestation, and randomized recomputation of declared work. Same compliance claim held fixed across all five.</li><li><strong>The three axes.</strong> Assurance: what confidence the mechanism can actually deliver against a motivated evader, not its brochure claim. Disclosure: which secrets it spends — weights, code, customer data, utilization patterns, facility layout. Intrusiveness: what running it does to operations, from nothing to inspectors on the floor.</li><li><strong>The dominated options.</strong> The matrix exists to expose them: mechanisms that cost more disclosure than an alternative for no more assurance. Finding two of those is worth more than scoring all five politely.</li><li><strong>The frontier.</strong> The combinations that remain when dominated options fall away — the actual menu a negotiation chooses from, and where on it the current proposals in the literature sit.</li></ul>\n<h3>Why it exists</h3>\n<p>Module 2.0 introduces the tension and the cryptographic tools that promise to dissolve it; Modules 2.1–2.3 each carry mechanisms that spend secrets differently. What the track does not hand the learner is a single table where the exchange rates are visible side by side. This brief builds that table, and building it forces the honest version of every mechanism's assurance claim.</p>\n<h3>Scope</h3>\n<p><strong>In scope:</strong> the five mechanisms as described in the public literature, one fixed compliance claim, and reasoned scoring with the reasoning shown.</p>\n<p><strong>Out of scope:</strong> inventing new cryptographic protocols, and vendor-level detail on any particular trusted-hardware product.</p>\n<h3>What good looks like</h3>\n<div class=\"table-scroll\"><table><thead><tr><th>Dimension</th><th>Weak</th><th>Strong</th></tr></thead><tbody><tr><td>Comparability</td><td>Five essays</td><td>One claim, five mechanisms, three axes, same scale</td></tr><tr><td>Assurance</td><td>Brochure claims</td><td>Confidence against a motivated evader, argued per mechanism</td></tr><tr><td>Disclosure</td><td>\"Some data\"</td><td>The specific secrets spent, named per mechanism</td></tr><tr><td>The frontier</td><td>A tie</td><td>Dominated options called out, and the real menu drawn</td></tr></tbody></table></div>\n<h3>Getting started</h3>\n<ol><li>Fix the compliance claim first and keep it boring — \"no training runs above X in this facility\" serves better than anything clever.</li><li>Score disclosure by listing the secrets a hostile reader of the feed could extract, not the ones the mechanism nominally requests.</li><li>Look for dominance before polishing scores. The matrix's job is to collapse the menu, not to admire it.</li></ol>"
     },
     {
       "slug": "cloud-kyc-regime",
@@ -299,6 +341,48 @@ window.CAPSTONE_BANK = {
       "html": "<h3>The brief</h3>\n<p>Module 2.0 sets out the layer that confirms a claim without surrendering the secret: hardware-anchored attestation, zero-knowledge proofs, secure multiparty computation — and, when none of those is ready, the institutional fallback of managed access. Pick one claim and work the whole stack against it.</p>\n<p>Choose a claim of the form <em>\"this training run used no more than X\"</em>, <em>\"this model was trained without dataset D\"</em>, or <em>\"the deployed model is the one that was evaluated\"</em>. Then:</p>\n<ul><li><strong>The three routes.</strong> Sketch how the claim could be established (a) with a trusted execution environment, (b) with a cryptographic protocol and no trusted hardware, (c) with managed access — a human inspector under confidentiality, which is what the chemical-weapons regime settled on when the cryptography did not exist.</li><li><strong>The trust assumptions.</strong> Per route, exactly who must be trusted and about what. TEEs move trust to the silicon vendor; a protocol moves it to an implementation and a setup; managed access moves it to an institution and a person. None of them removes trust, and saying where it went is the core of the deliverable.</li><li><strong>The residual disclosure.</strong> What the verifier learns beyond the claim. Every route leaks something — timing, size, the fact that a query was made — and a regime that promised zero disclosure and delivers some has a credibility problem, not a technical one.</li><li><strong>The misuse read.</strong> TAIG asks this directly: verification infrastructure built for compliance is surveillance infrastructure pointed somewhere else. Say what your route could be repurposed to do, and what constrains it.</li><li><strong>The verdict.</strong> Which route you would build now, which in five years, and what you would tell a regulator who asked for the assurance today.</li></ul>\n<h3>Why it exists</h3>\n<p>This is Module 2.0's question at full weight, and it is the hardest capstone in the Verification track — the only one marked advanced. The reason is that the tempting answers are all wrong in the same way: they relocate trust and describe that as removing it.</p>\n<p>It is also live. The claims above are exactly the ones frontier safety frameworks and draft regimes assume can be established, and the assumption is mostly unexamined.</p>\n<h3>Scope</h3>\n<p><strong>In scope:</strong> the published literature on ZKPs for ML, TEEs on accelerators, proof-of-learning, secure multiparty computation, and arms-control managed access as the institutional comparison.</p>\n<p><strong>Out of scope:</strong> implementing anything, and novel cryptography. You are assessing feasibility and trust structure, not building a protocol. Cite the primitives; do not invent them.</p>\n<p><strong>A concrete warning.</strong> The literature here is fast-moving and full of results that hold under assumptions the governance use-case breaks — most obviously, schemes that assume an honest prover, when the whole point is that the prover is the party you are checking. Flag every such assumption where you find it.</p>\n<h3>What good looks like</h3>\n<div class=\"table-scroll\"><table><thead><tr><th>Dimension</th><th>Weak</th><th>Strong</th></tr></thead><tbody><tr><td>The claim</td><td>\"Verify compliance\"</td><td>One claim, stated precisely enough to be provable or not</td></tr><tr><td>Trust</td><td>\"Trustless verification\"</td><td>Per route, who is trusted about what, stated plainly</td></tr><tr><td>Residual disclosure</td><td>Claimed to be zero</td><td>Named per route, including the metadata leaks</td></tr><tr><td>Verdict</td><td>Picks the most elegant route</td><td>Picks the one available now, and says what it costs in assurance</td></tr></tbody></table></div>\n<h3>Getting started</h3>\n<ol><li>Write the claim in one sentence and keep rewriting until it is falsifiable. Most of this literature's confusion is claims that were never pinned down.</li><li>Do the managed-access route first. It is the least glamorous and the only one that has ever actually run, and it calibrates the other two.</li><li>For every scheme you cite, find its threat model and check whether the prover is assumed honest. That single check reorders the whole assessment.</li></ol>"
     },
     {
+      "slug": "compute-accounting-audit",
+      "source": "verification-capstones/compute-accounting-audit.md",
+      "title": "A Minimum Viable Compute-Accounting Audit",
+      "theme": "Verification",
+      "status": "draft",
+      "summary": "What should a commercial AI audit prove about how each GPU was used? Claims, logs, retention, auditor access — and what happens when logs are missing.",
+      "team": {
+        "min": 1,
+        "max": 2,
+        "label": "1–2 people",
+        "bucket": "Pair or trio"
+      },
+      "effort": {
+        "min": 12,
+        "max": 18,
+        "label": "12–18 hrs",
+        "bucket": "15–20 hrs"
+      },
+      "duration": {
+        "label": "3 weeks",
+        "weeks": 3
+      },
+      "perWeek": "≈5 hrs/wk",
+      "difficulty": "core",
+      "deliverable": "Draft auditing standard, 2–3 pages",
+      "deliverableType": "spec",
+      "mentor": "optional",
+      "audience": "The audit firm that has to say what its stamp proves.",
+      "skills": [
+        "audit design",
+        "evidence standards",
+        "logging requirements"
+      ],
+      "prerequisites": [
+        "Verification 1 — actors",
+        "Verification 2.2 — the cloud layer"
+      ],
+      "sources": [],
+      "updated": "2026-08-06",
+      "html": "<h3>The brief</h3>\n<p>Financial audit did not begin with fraud-proof bookkeeping; it began with a standard stating what an auditor checks, what records the client must keep, and what the opinion does and does not certify. Compute accounting has no such standard. Write the minimum viable one: what a commercial audit of an AI operator should prove about the use of every accelerator it controls.</p>\n<ul><li><strong>The claims.</strong> What the audit certifies, stated as checkable propositions — total accelerator-hours by cluster, workload attribution at an agreed granularity, no unrecorded capacity above a floor. What it deliberately does not certify goes in the same section.</li><li><strong>The records.</strong> Which logs the operator must keep for the claims to be auditable: schedulers, power, allocation, procurement. For each, the retention period and the tamper story — what stops backfilled history.</li><li><strong>The access.</strong> What the auditor may see and touch, on what notice, with what sampling rights. Access is where audit standards live or die; unlimited access is unnegotiable and useless.</li><li><strong>The failure clauses.</strong> What a missing log means, what an anomaly means, and when either escalates from a finding to a qualified opinion. An audit standard that cannot handle gaps certifies only tidy books.</li></ul>\n<h3>Why it exists</h3>\n<p>Module 2.2's failure mode is the paperwork regime: self-reporting that audits nothing. The repair is not more reporting but a standard that says what checking means. Module 1's actor map supplies the missing profession — the audit firm — and this brief asks what its engagement letter would actually promise.</p>\n<h3>Scope</h3>\n<p><strong>In scope:</strong> one operator archetype (a cloud region or a large private cluster), existing log types that real schedulers and facilities produce, and audit practice from other industries as structural reference.</p>\n<p><strong>Out of scope:</strong> new hardware mechanisms, cryptographic attestation schemes, and statutory authority. This is a standard a firm could pilot under contract today.</p>\n<h3>What good looks like</h3>\n<div class=\"table-scroll\"><table><thead><tr><th>Dimension</th><th>Weak</th><th>Strong</th></tr></thead><tbody><tr><td>Claims</td><td>\"Compute was used properly\"</td><td>Propositions an auditor can check, plus the explicit not-certified list</td></tr><tr><td>Records</td><td>\"Keep logs\"</td><td>Named log types, retention periods, and a tamper story for each</td></tr><tr><td>Access</td><td>Unstated</td><td>Notice, scope and sampling rights a real operator could sign</td></tr><tr><td>Gaps</td><td>Fatal or ignored</td><td>Missing-log and anomaly clauses with defined escalation</td></tr></tbody></table></div>\n<h3>Getting started</h3>\n<ol><li>Write the not-certified list first. It is the most clarifying section and the one every draft standard forgets.</li><li>Inventory the logs a real scheduler already emits before inventing new ones — a standard built on records nobody keeps audits nobody.</li><li>Draft the missing-log clause early and test the whole standard against an operator who lost a month of history, innocently or otherwise.</li></ol>"
+    },
+    {
       "slug": "compute-chain-of-custody",
       "source": "verification-capstones/compute-chain-of-custody.md",
       "title": "Steal a Chain of Custody From Another Industry",
@@ -459,6 +543,48 @@ window.CAPSTONE_BANK = {
       ],
       "updated": "2026-08-04",
       "html": "<h3>The brief</h3>\n<p>Week 8's exercise has you run a watermark detector and measure how it fares under paraphrasing. This capstone takes that measurement and turns it into the document a legislature needs, because \"AI content must be labelled\" is now in draft law in several places and the technical basis for it is thinner than the drafting implies.</p>\n<ul><li><strong>The robustness curve.</strong> Take one published scheme and measure detection as the content is put through ordinary handling: paraphrase, translate and translate back, truncate, mix with human text, re-generate a passage, apply a format conversion. Report where detection falls to chance. Include the <em>innocent</em> transformations — a lot of provenance signal dies to a copy-paste through a word processor, with no adversary involved.</li><li><strong>The three layers, separated.</strong> Output watermarking (a signal in the content), metadata provenance (a signed manifest travelling alongside), and post-hoc detection (a classifier guessing). They fail differently, and a policy that conflates them will mandate the weakest one.</li><li><strong>The two error costs.</strong> A false positive accuses a person of using AI. A false negative lets synthetic content pass. State which your measurements favour, and what threshold a regime would have to pick.</li><li><strong>The open-weights hole.</strong> A watermark a developer applies at inference is absent from a model whose weights anyone can run. Say what that does to any obligation aimed at content rather than at platforms.</li><li><strong>The options memo.</strong> Three obligations a regulator could impose — on model providers, on platforms, on distributors — ranked by what your measurements say each would actually achieve, with the one you would not impose named.</li></ul>\n<h3>Why it exists</h3>\n<p>Content provenance is the AI policy area where the gap between what the law assumes and what the technology does is widest and easiest to demonstrate. A learner who has personally watched detection collapse under a round-trip translation will never again write a sentence that treats watermarking as solved — and can show a legislator the same curve in thirty seconds.</p>\n<p>The transferable skill is the one the track exists for: producing the measurement yourself and then writing the policy document that is honest about it, rather than citing someone else's summary of either.</p>\n<h3>Scope</h3>\n<p><strong>In scope:</strong> one published watermarking scheme with available code, a small open model or an API, and public provenance standards for the metadata layer.</p>\n<p><strong>Out of scope:</strong> designing a new watermarking scheme, and building an adversarial removal tool beyond the ordinary transformations above. The point is that ordinary handling is enough; you do not need to build an attack.</p>\n<h3>What good looks like</h3>\n<div class=\"table-scroll\"><table><thead><tr><th>Dimension</th><th>Weak</th><th>Strong</th></tr></thead><tbody><tr><td>Measurement</td><td>\"Watermarks are fragile\"</td><td>A curve, with the transformation and the point where detection reaches chance</td></tr><tr><td>Layers</td><td>Treated as one thing</td><td>Three mechanisms separated, with their distinct failure modes</td></tr><tr><td>Errors</td><td>Accuracy reported</td><td>Both error costs stated, with who bears each</td></tr><tr><td>Options</td><td>\"Watermarking should be required\"</td><td>Three obligations ranked by measured achievable effect, and one rejected</td></tr></tbody></table></div>\n<h3>Getting started</h3>\n<ol><li>Run the innocent transformations before the adversarial ones. If a copy through a word processor kills the signal, the adversarial section is almost beside the point.</li><li>Separate the three layers on day one. Most of the public confusion in this area is layer confusion.</li><li>Write the options memo for a reader who has already been told this is solved. That framing produces a much sharper document.</li></ol>"
+    },
+    {
+      "slug": "cooling-shutdown-verification",
+      "source": "verification-capstones/cooling-shutdown-verification.md",
+      "title": "Does Switching Off the Cooling Switch Off the Training?",
+      "theme": "Verification",
+      "status": "draft",
+      "summary": "An inspector confirms the cooling is off. Under what conditions does that actually rule out a large training run — and how would an operator get around it?",
+      "team": {
+        "min": 1,
+        "max": 2,
+        "label": "1–2 people",
+        "bucket": "Pair or trio"
+      },
+      "effort": {
+        "min": 12,
+        "max": 18,
+        "label": "12–18 hrs",
+        "bucket": "15–20 hrs"
+      },
+      "duration": {
+        "label": "3 weeks",
+        "weeks": 3
+      },
+      "perWeek": "≈5 hrs/wk",
+      "difficulty": "core",
+      "deliverable": "Threat model with a claim → observable → evasion → countermeasure table",
+      "deliverableType": "analysis",
+      "mentor": "optional",
+      "audience": "The inspectorate asked to certify that a halt is actually a halt.",
+      "skills": [
+        "threat modelling",
+        "physical-layer reasoning",
+        "evasion analysis"
+      ],
+      "prerequisites": [
+        "Verification 2.1 — the hardware layer",
+        "Verification 3 — covert development"
+      ],
+      "sources": [],
+      "updated": "2026-08-06",
+      "html": "<h3>The brief</h3>\n<p>A disabled cooling system is one of the most inspectable claims a facility can make: the plant is large, loud, and hard to hide. The question is what the inspection actually proves. Under what conditions does a verified cooling shutdown rule out a large training run — and under what conditions does it merely rule out the most convenient way of running one?</p>\n<ul><li><strong>The facility.</strong> Pick one typical datacenter design and hold it fixed: its cooling plant, its racks, its power envelope. The analysis is about a concrete building, not datacenters in general.</li><li><strong>The causal chain.</strong> Write out the chain from \"cooling disabled\" to \"training impossible\": heat produced per rack at training load, what removes it, what fails when nothing does, and how fast. Every link is a claim an operator could attack.</li><li><strong>The bypasses.</strong> Work the evasions seriously: backup cooling brought online, mobile cooling units rolled in, running at partial load to stay inside the thermal envelope, and workloads moved to rooms the inspection never saw.</li><li><strong>The countermeasures.</strong> For each bypass, what an inspector would have to check to close it — and what that adds to the cost and intrusiveness of the visit.</li></ul>\n<h3>Why it exists</h3>\n<p>Module 2.1 is honest that most hardware mechanisms are proposals rather than deployed capability. Cooling is the counterexample worth stress-testing: a physical system that already exists, already meters, and cannot be patched in software. If inspection of physical plant cannot carry a shutdown claim, the cheap end of the hardware layer is emptier than it looks; if it can, the conditions under which it works are worth writing down precisely.</p>\n<p>The bypass list is Module 3 practice on a single mechanism: every evasion here is a small instance of repurposed infrastructure or false reporting.</p>\n<h3>Scope</h3>\n<p><strong>In scope:</strong> one typical facility design, public engineering knowledge about datacenter cooling and power, and thermal reasoning you can defend at the level of orders of magnitude.</p>\n<p><strong>Out of scope:</strong> any real facility's specifics, and precision thermal modelling. Where a link in the chain rests on an estimate, say so in place — the table is only as good as its honesty about which cells are firm.</p>\n<h3>What good looks like</h3>\n<div class=\"table-scroll\"><table><thead><tr><th>Dimension</th><th>Weak</th><th>Strong</th></tr></thead><tbody><tr><td>The claim</td><td>\"No cooling means no training\"</td><td>A causal chain with each link stated and attackable</td></tr><tr><td>Evasions</td><td>A list of ideas</td><td>Each bypass costed: equipment, time, and what it sacrifices</td></tr><tr><td>Countermeasures</td><td>\"Inspect more\"</td><td>What check closes each bypass, and what the check costs</td></tr><tr><td>Honesty</td><td>Uniform confidence</td><td>Firm cells separated from estimated ones</td></tr></tbody></table></div>\n<h3>Getting started</h3>\n<ol><li>Write the causal chain first, before any evasion. You cannot attack a claim you have not stated.</li><li>Order the bypasses by cost to the operator, cheapest first. The cheap ones are the ones the design has to survive.</li><li>For one bypass, write the inspector's counter-check in full. It sets the template for the rest of the table.</li></ol>"
     },
     {
       "slug": "cross-examine-an-eval",
@@ -625,6 +751,48 @@ window.CAPSTONE_BANK = {
       ],
       "updated": "2026-08-04",
       "html": "<h3>The brief</h3>\n<p>Module 2.0 names the central tension: verification is inherently intrusive, and the mechanisms worth having are the ones that confirm a claim without handing over the secret. This is the cheapest version of that problem. A verifier who may not see weights, data or code — but may see how the machines behaved — wants to know whether a large training run happened.</p>\n<ul><li><strong>The signature.</strong> What distinguishes a long training run from inference at scale, from scientific computing, from rendering. Candidates: sustained utilisation over weeks rather than hours, the interconnect pattern of synchronous gradient exchange, memory-bandwidth profile, checkpoint-shaped I/O bursts at regular intervals, power draw that is flat rather than diurnal, and the restart-from-checkpoint discontinuities every real run has.</li><li><strong>What the verifier is allowed to see.</strong> Be precise, because it is the whole exercise. Aggregate utilisation? Per-node? Power at the meter? Network counters? Each level is a different privacy bargain and a different detection rate.</li><li><strong>The confusion matrix.</strong> For your best signal set: what else looks like this, and what a false accusation costs. Module 2.2 already warns that self-reporting alone is a paperwork regime — a detector with a bad false positive rate is the opposite failure, and just as useless.</li><li><strong>The spoofing cost.</strong> Per signal, what it costs the operator to look like something else: throttling to break the utilisation profile, padding with fake inference, splitting the run. Compare that cost against what the run is worth. That comparison is the finding.</li></ul>\n<h3>Why it exists</h3>\n<p>Almost every verification regime in the track eventually needs an answer to \"and what if they just do not tell us?\" The hardware and cloud layers answer it with observation, and the quality of the answer is entirely about what a signature can carry.</p>\n<p>It is also where the track's privacy strand becomes concrete. Learners easily say \"privacy-preserving verification\"; far fewer can say what a verifier would actually be shown, and less is usually enough than people assume.</p>\n<h3>Scope</h3>\n<p><strong>In scope:</strong> published work on compute monitoring and workload characterisation, public datacentre power and utilisation reporting, and any small-scale measurement you can run yourself on a rented GPU.</p>\n<p><strong>Out of scope:</strong> building a detector at scale, and access to real cluster telemetry. This is analysis with an honest evidence base — where a claim rests on a plausible mechanism rather than a measurement, say so in place.</p>\n<p><strong>Also out of scope:</strong> designing the legal authority to collect the telemetry. Assume the verifier is entitled to what you specify, and be conservative about what you specify.</p>\n<h3>What good looks like</h3>\n<div class=\"table-scroll\"><table><thead><tr><th>Dimension</th><th>Weak</th><th>Strong</th></tr></thead><tbody><tr><td>Signals</td><td>\"Unusual compute usage\"</td><td>Named observables with a mechanism, ranked by how hard each is to fake</td></tr><tr><td>Access level</td><td>Unstated</td><td>Exactly what the verifier sees, and the detection rate at each level</td></tr><tr><td>False positives</td><td>Ignored</td><td>The confusable workloads named, and the cost of accusing one</td></tr><tr><td>Spoofing</td><td>\"Evasion is possible\"</td><td>Priced per signal, against the value of the run being hidden</td></tr></tbody></table></div>\n<h3>Getting started</h3>\n<ol><li>Write the list of confusable workloads before the list of signals. It stops you designing a detector for a world with one kind of computation in it.</li><li>Pick the least intrusive access level that still works. Starting from full telemetry and cutting back never converges.</li><li>Cost the spoof for your best signal in week two. If it is cheap, that signal is decoration and you have two weeks to find a better one.</li></ol>"
+    },
+    {
+      "slug": "emergency-verification-package",
+      "source": "verification-capstones/emergency-verification-package.md",
+      "title": "A Verification Package You Could Ship in a Year",
+      "theme": "Verification",
+      "status": "draft",
+      "summary": "Twelve months, no new chips. Assemble the verification package that could actually be deployed, and state plainly what it still cannot see.",
+      "team": {
+        "min": 1,
+        "max": 2,
+        "label": "1–2 people",
+        "bucket": "Pair or trio"
+      },
+      "effort": {
+        "min": 14,
+        "max": 20,
+        "label": "14–20 hrs",
+        "bucket": "15–20 hrs"
+      },
+      "duration": {
+        "label": "3 weeks",
+        "weeks": 3
+      },
+      "perWeek": "≈6 hrs/wk",
+      "difficulty": "stretch",
+      "deliverable": "Prioritized implementation roadmap with residual gaps stated",
+      "deliverableType": "spec",
+      "mentor": "recommended",
+      "audience": "The task force told to stand up verification this year, not next.",
+      "skills": [
+        "regime design",
+        "feasibility triage",
+        "gap analysis"
+      ],
+      "prerequisites": [
+        "Verification 2.x — the four layers",
+        "Verification 4.1 — feasibility and layering"
+      ],
+      "sources": [],
+      "updated": "2026-08-06",
+      "html": "<h3>The brief</h3>\n<p>Most of the verification literature assumes time: new silicon, new institutions, new treaties. Suppose instead the decision lands now and the deadline is twelve months, with the hardware fleet as it is. What do you actually deploy? Assemble the package from what exists — physical measures on facilities, cameras, network controls, inspection teams, intelligence collection — and be exact about what it cannot see.</p>\n<ul><li><strong>The inventory.</strong> Candidate measures that need no new chips: seals and physical disconnection, camera coverage of machine rooms, network-level controls at facility boundaries, declared-facility inspections on a schedule, and the intelligence layer run against undeclared sites.</li><li><strong>The triage.</strong> For each measure: deployment time, cost, who must cooperate, and what class of violation it actually catches. Twelve months is a budget — spending it is the design decision.</li><li><strong>The sequencing.</strong> What ships in month one, what needs the full year, and which measures only work once another is in place. A roadmap, not a wish list.</li><li><strong>The residual gaps.</strong> The violations the package does not catch, stated as plainly as the ones it does. The gaps section is what makes the roadmap honest — and it is the requirements list for year two.</li></ul>\n<h3>Why it exists</h3>\n<p>Module 4.1 asks the sequencing question directly: what works for an MVP emergency pause versus what needs years of institution-building. This brief is that question taken literally, with the four layers of Module 2 as the parts bin. The discipline it trains — feasibility triage under a deadline, with gaps stated rather than papered over — is the difference between a regime design and a regime sketch.</p>\n<h3>Scope</h3>\n<p><strong>In scope:</strong> measures deployable against existing hardware and facilities within twelve months, and honest reasoning about institutional lead times — hiring inspectors takes months too.</p>\n<p><strong>Out of scope:</strong> new hardware mechanisms, treaty negotiation timelines, and any assumption that a measure exists because a paper proposed it. If it cannot be bought, built or staffed inside the year, it belongs in the gaps section.</p>\n<h3>What good looks like</h3>\n<div class=\"table-scroll\"><table><thead><tr><th>Dimension</th><th>Weak</th><th>Strong</th></tr></thead><tbody><tr><td>Inventory</td><td>Everything ever proposed</td><td>Only what deploys in twelve months, with the lead time argued</td></tr><tr><td>Triage</td><td>A feature list</td><td>Time, cost, cooperation and coverage per measure, comparable</td></tr><tr><td>Sequencing</td><td>A pile</td><td>Month-by-month, with dependencies between measures explicit</td></tr><tr><td>Gaps</td><td>A caveat sentence</td><td>The uncaught violations enumerated, feeding a year-two requirements list</td></tr></tbody></table></div>\n<h3>Getting started</h3>\n<ol><li>Start from the violation classes, not the measures — the package exists to catch things, and the gaps section is built from whatever the chosen measures miss.</li><li>Put an institutional lead time on every measure before comparing any two. Cameras arrive in weeks; inspectorates do not.</li><li>Write the residual-gaps section at the end of week two, not the end of the project — it will reorder your priorities while there is still time to act on it.</li></ol>"
     },
     {
       "slug": "eval-attestation-chain",
@@ -890,6 +1058,48 @@ window.CAPSTONE_BANK = {
       ],
       "updated": "2026-08-04",
       "html": "<h3>The brief</h3>\n<p>Governance treats an open-weight release as one object. The ecosystem does not: within months a popular base model has thousands of public descendants — fine-tunes, merges, quantisations, distillations, uncensored variants. Nobody is going to evaluate all of them. The question is what a monitoring body should do instead.</p>\n<ul><li><strong>The population.</strong> Characterise the real derivative set for one base model from public hub metadata: how many, of what kinds, how they cluster, how download counts distribute. This is desk work and it reshapes the problem — attention almost always concentrates in a tiny fraction.</li><li><strong>The triage.</strong> Your scheme for deciding what gets looked at. Candidate signals: reach, whether the modification targets safety behaviour, declared purpose, lineage from an already-flagged model, cheap automated probes. Ordered, with a stated budget: <em>n</em> models evaluated per month.</li><li><strong>The cheap screen.</strong> One or two probes cheap enough to run on everything — a handful of prompts, a refusal-rate measurement — that decide who gets the expensive eval. Report its false-negative rate against your deep evaluations, because a screen that misses is worse than no screen if it creates confidence.</li><li><strong>The pilot.</strong> Run the whole thing on a real population at small scale. Report cost per model at each stage and what the triage caught that a random sample would have missed.</li><li><strong>The blind spots.</strong> What this scheme structurally cannot see: private fine-tunes, models distributed outside public hubs, and derivatives whose modification is invisible to your screen.</li></ul>\n<h3>Why it exists</h3>\n<p>Week 8 covers the irreversibility of open release and fine-tuning attacks on safeguards. Both lessons are usually taught about <em>a</em> model. The governance object is the ecosystem, and monitoring an ecosystem on a fixed budget is a different discipline — sampling, triage and cheap screens rather than depth.</p>\n<p>It is also one of the few genuinely open problems in this bank where a learner can produce a real partial answer in three weeks, because the population data is public and the pilot can be small.</p>\n<h3>Scope</h3>\n<p><strong>In scope:</strong> public model-hub metadata, one base model's derivative population, small open models, and cheap automated probes.</p>\n<p><strong>Out of scope:</strong> evaluating dangerous capabilities in depth, and any probe that would itself produce misuse material. Use a benign behavioural proxy — refusal-rate drift on a safe prompt set is enough to demonstrate the method.</p>\n<p><strong>The budget constraint is the exercise.</strong> A triage scheme that assumes you can evaluate everything has not been designed.</p>\n<h3>What good looks like</h3>\n<div class=\"table-scroll\"><table><thead><tr><th>Dimension</th><th>Weak</th><th>Strong</th></tr></thead><tbody><tr><td>Population</td><td>\"There are many derivatives\"</td><td>Counted and characterised from real metadata, with the attention distribution shown</td></tr><tr><td>Triage</td><td>A priority list</td><td>An ordered scheme with a stated monthly budget and what falls outside it</td></tr><tr><td>Screen</td><td>Described</td><td>Run, with its false-negative rate measured against the deep evaluations</td></tr><tr><td>Blind spots</td><td>Unmentioned</td><td>Named, with what the scheme's output should therefore not be taken to mean</td></tr></tbody></table></div>\n<h3>Getting started</h3>\n<ol><li>Pull the population metadata in week one. The shape of the distribution decides your whole design and it takes an afternoon.</li><li>Build the cheap screen before the triage. Knowing what a five-cent probe can tell you determines which signals are worth ranking on.</li><li>Compare your triage against a random sample of the same size. If it does not beat random, the signals were wrong and you have time to change them.</li></ol>"
+    },
+    {
+      "slug": "evaluated-model-in-production",
+      "source": "verification-capstones/evaluated-model-in-production.md",
+      "title": "Is the Model in Production the Model That Passed?",
+      "theme": "Verification",
+      "status": "draft",
+      "summary": "Evals passed on one model. Millions of requests run against another — would anyone notice? Design the chain that lets an auditor say deployed equals evaluated.",
+      "team": {
+        "min": 1,
+        "max": 2,
+        "label": "1–2 people",
+        "bucket": "Pair or trio"
+      },
+      "effort": {
+        "min": 12,
+        "max": 18,
+        "label": "12–18 hrs",
+        "bucket": "15–20 hrs"
+      },
+      "duration": {
+        "label": "3 weeks",
+        "weeks": 3
+      },
+      "perWeek": "≈5 hrs/wk",
+      "difficulty": "core",
+      "deliverable": "Protocol diagram from evaluation to deployment, plus an attack tree",
+      "deliverableType": "design",
+      "mentor": "optional",
+      "audience": "The auditor who signed off on the eval and now has to stand behind the deployment.",
+      "skills": [
+        "protocol design",
+        "attestation reasoning",
+        "attack trees"
+      ],
+      "prerequisites": [
+        "Verification 2.0 — confidentiality vs verifiability",
+        "Verification 3 — covert development"
+      ],
+      "sources": [],
+      "updated": "2026-08-06",
+      "html": "<h3>The brief</h3>\n<p>An evaluation report is a claim about one artifact. A deployment is a different artifact in a different place, serving traffic through layers of serving infrastructure, quantization, and routine updates. The gap between the two is where an assurance regime quietly stops meaning anything. Design the chain that closes it.</p>\n<ul><li><strong>The identity claim.</strong> What \"the same model\" means, precisely: same weights, same quantization, same system prompt, same sampling settings, same surrounding scaffolding? Each choice changes what the chain must carry and what a violation even is.</li><li><strong>The chain.</strong> From the evaluated artifact to the serving fleet: hashes, signatures, attestation, logged deployments. Name every component the auditor must trust and what happens at each handoff.</li><li><strong>The substitutions.</strong> The attack tree: a different checkpoint behind the same endpoint, a re-quantized variant, per-route model selection, silent updates between audits, an eval-only configuration. For each, whether your chain catches it, and at what cost.</li></ul>\n<h3>Why it exists</h3>\n<p>Module 2.0 frames verification as confirming a claim without handing over the secret; this is that problem at deployment scale, and it is the join on which any eval-based regime hangs. A rule that binds behaviour to an evaluation is only as strong as the argument that the evaluated thing and the deployed thing are the same thing.</p>\n<h3>Scope</h3>\n<p><strong>In scope:</strong> one deployment architecture held fixed, standard integrity mechanisms — hashing, signing, attestation, logging — and the institutional question of who checks what, when.</p>\n<p><strong>Out of scope:</strong> designing the evaluation itself, and behavioural fingerprinting research. The chain here is about custody, not about re-testing in production.</p>\n<h3>What good looks like</h3>\n<div class=\"table-scroll\"><table><thead><tr><th>Dimension</th><th>Weak</th><th>Strong</th></tr></thead><tbody><tr><td>Identity</td><td>\"Same model\"</td><td>A definition that decides the hard cases: quantization, prompts, scaffolds</td></tr><tr><td>The chain</td><td>Boxes and arrows</td><td>Every trusted component named, with what its failure forfeits</td></tr><tr><td>Attacks</td><td>A worry list</td><td>A tree with each substitution costed and mapped to the check that catches it</td></tr><tr><td>Residue</td><td>Implied completeness</td><td>The substitutions the chain does not catch, stated plainly</td></tr></tbody></table></div>\n<h3>Getting started</h3>\n<ol><li>Write the identity claim first and test it against quantization. If your definition cannot decide that case, the chain has nothing to carry.</li><li>Draw the chain with a column for \"who trusts whom here\" — the protocol is the trust structure, not the arrows.</li><li>Spend the last week on the attack tree, and keep the attacks that survive: they are the finding, not a flaw in it.</li></ol>"
     },
     {
       "slug": "exfiltrated-weights-regime",
@@ -1347,6 +1557,48 @@ window.CAPSTONE_BANK = {
       "html": "<h3>The brief</h3>\n<p>The orphan catalogue's complaint about insurance is unusually precise: researchers praised the mechanism, and the question of what the minimum amount should be was never satisfactorily answered. Nor were policy limits or deductibles. A mandate without those three numbers cannot be written into any instrument.</p>\n<p>Answer it.</p>\n<ul><li><strong>The loss model.</strong> What harms this insurance is for, and a defensible order-of-magnitude for each. Build it bottom-up from analogues you can cite — data-breach losses, product recalls, professional liability, cyber — and say where the analogy breaks.</li><li><strong>The three numbers.</strong> Minimum coverage, per-occurrence and aggregate limits, deductible. With the reasoning visible, so a reader can disagree with an input instead of the conclusion.</li><li><strong>The availability check.</strong> Would anyone write this policy? Capacity, reinsurance, and the exclusions an underwriter would insist on. A mandate nobody can satisfy is a moratorium wearing a disguise, and you should say so if that is what you find.</li><li><strong>The incentive read.</strong> What behaviour your number actually buys. Insurance governs through pricing and underwriting conditions, not through payouts; if the number is too low it is a rounding error, too high and it entrenches incumbents. Say which way you erred.</li></ul>\n<h3>Why it exists</h3>\n<p>This is the track's quantitative nerve applied to policy rather than compute. The honest answer is built on thin data, and the skill is producing a number anyway, with the uncertainty stated rather than hidden — the same discipline as a compute threshold, in a domain where nobody has done the arithmetic in public.</p>\n<p>It also teaches something specific about mechanism choice: insurance is attractive to policy people because it seems to outsource the hard judgement to a market. Working the numbers shows how much judgement stays with the regulator.</p>\n<h3>Scope</h3>\n<p><strong>In scope:</strong> public loss data from analogous industries, insurance-market reporting, and the AI-liability literature. Order-of-magnitude reasoning is expected; precision is not.</p>\n<p><strong>Out of scope:</strong> actuarial modelling of AI-specific tail risk. Nobody can do that yet, and pretending otherwise is the failure mode here. Bound it and say so.</p>\n<h3>What good looks like</h3>\n<div class=\"table-scroll\"><table><thead><tr><th>Dimension</th><th>Weak</th><th>Strong</th></tr></thead><tbody><tr><td>The model</td><td>A number with a rationale paragraph</td><td>Bottom-up from named analogues, each with its disanalogy stated</td></tr><tr><td>The numbers</td><td>One figure</td><td>All three, with the relationship between them explained</td></tr><tr><td>Availability</td><td>Assumed</td><td>Checked against real market capacity, with the exclusions named</td></tr><tr><td>Uncertainty</td><td>Point estimate</td><td>A range, the input it is most sensitive to, and what would narrow it</td></tr></tbody></table></div>\n<h3>Getting started</h3>\n<ol><li>Pick the harm class first. An insurance mandate covering \"AI harms\" cannot be priced; one covering a defined class can be bounded.</li><li>Find the closest priced analogue and start there, adjusting explicitly. Starting from first principles produces a number nobody can check.</li><li>Ask an underwriter's question of every figure: what would make you refuse to write this?</li></ol>"
     },
     {
+      "slug": "interconnect-cut-protocol",
+      "source": "verification-capstones/interconnect-cut-protocol.md",
+      "title": "Cut the Interconnect, Keep the Inference",
+      "theme": "Verification",
+      "status": "draft",
+      "summary": "Disconnect part of the optical links between racks and training stops while inference survives — allegedly. Work out what remains possible and who checks the cables.",
+      "team": {
+        "min": 1,
+        "max": 2,
+        "label": "1–2 people",
+        "bucket": "Pair or trio"
+      },
+      "effort": {
+        "min": 10,
+        "max": 14,
+        "label": "10–14 hrs",
+        "bucket": "Up to 14 hrs"
+      },
+      "duration": {
+        "label": "2 weeks",
+        "weeks": 2
+      },
+      "perWeek": "≈6 hrs/wk",
+      "difficulty": "core",
+      "deliverable": "Short protocol design plus a red-team pass on it",
+      "deliverableType": "design",
+      "mentor": "optional",
+      "audience": "The negotiator who needs an emergency measure that does not kill civilian service.",
+      "skills": [
+        "protocol design",
+        "network reasoning",
+        "red-teaming"
+      ],
+      "prerequisites": [
+        "Verification 2.1 — the hardware layer",
+        "Verification 3 — covert development"
+      ],
+      "sources": [],
+      "updated": "2026-08-06",
+      "html": "<h3>The brief</h3>\n<p>Large training runs lean on high-bandwidth interconnect between racks; serving a trained model leans on it far less. That asymmetry suggests an emergency measure with an unusually good ratio of disruption to harm: disconnect part of the inter-rack fabric, and training stops while inference keeps running. The project is to work out how much of that claim survives contact with the details.</p>\n<ul><li><strong>What remains possible.</strong> With a given fraction of links cut, which workloads still run: inference at what scale, fine-tuning at what size, training partitioned into what fragments. The boundary is the whole content of the measure.</li><li><strong>The inspection.</strong> Who checks the cables, how often, and what a check looks like — physically pulled fibre, sealed ports, counters read from switches. Each option is a different cost and a different trust assumption.</li><li><strong>The restoration paths.</strong> How an operator gets the fabric back: respliced fibre, spare switches, traffic routed over the storage network or the ordinary datacenter network at lower bandwidth. For each path, what it buys the operator and what it exposes to the inspector.</li></ul>\n<h3>Why it exists</h3>\n<p>Module 2.1 treats hardware mechanisms mostly as proposals; a cable is the rare governance surface that is visible, countable, and already installed. Whether it can carry an emergency measure depends entirely on the workload boundary and the restoration paths, which is exactly the analysis this brief demands. The red-team pass is Module 3 applied at the smallest useful scale.</p>\n<h3>Scope</h3>\n<p><strong>In scope:</strong> one reference cluster topology, public knowledge of how training and inference traffic differ, and back-of-envelope bandwidth arithmetic.</p>\n<p><strong>Out of scope:</strong> any real operator's network, and cryptographic or firmware-based controls — this brief is about physical disconnection only.</p>\n<h3>What good looks like</h3>\n<div class=\"table-scroll\"><table><thead><tr><th>Dimension</th><th>Weak</th><th>Strong</th></tr></thead><tbody><tr><td>The boundary</td><td>\"Training stops\"</td><td>Which workloads survive at which cut fraction, with the arithmetic</td></tr><tr><td>Inspection</td><td>\"Cables are checked\"</td><td>A named check, its frequency, and what it costs both sides</td></tr><tr><td>Red team</td><td>An objections paragraph</td><td>Restoration paths priced: time, equipment, detectability</td></tr><tr><td>The verdict</td><td>Advocacy</td><td>A plain statement of when the measure holds and when it leaks</td></tr></tbody></table></div>\n<h3>Getting started</h3>\n<ol><li>Write the bandwidth budget first: what a training step needs, what serving needs. Every later claim divides by these numbers.</li><li>Design the check before the red team. A restoration path only matters if the check as designed would miss it.</li><li>Time-box the red team to the second week and let it win where it wins — the deliverable states the measure's limits, not its virtues.</li></ol>"
+    },
+    {
       "slug": "interp-as-evidence",
       "source": "verification-capstones/interp-as-evidence.md",
       "title": "What an Interp Finding Is Evidence Of",
@@ -1656,6 +1908,48 @@ window.CAPSTONE_BANK = {
       ],
       "updated": "2026-08-04",
       "html": "<h3>The brief</h3>\n<p>Some governance proposals are not contested — they are simply unowned. No agency has the mandate, no advocacy organisation has it on the list, no lab benefits from proposing it. Pick one and build its adoption case.</p>\n<p>Deliver:</p>\n<ul><li><strong>The orphan.</strong> The proposal, stated in a paragraph, with its origin and its best public articulation.</li><li><strong>The autopsy.</strong> Why it has no owner. Distinguish \"no one benefits\" from \"the beneficiaries are diffuse\" from \"the natural owner lacks the authority\" — the three have completely different fixes.</li><li><strong>The stakeholder map.</strong> Who would have to act, in what order, with what incentives, and who is positioned to block.</li><li><strong>The implementation plan.</strong> A sequence, with the first move specified well enough that someone could make it next quarter.</li><li><strong>The scenario test.</strong> Run the plan against short and long timeline worlds. Say which one it bets on, or make it robust to both.</li></ul>\n<h3>Why it exists</h3>\n<p>Most policy training teaches you to evaluate proposals. Almost none teaches you what has to be true for a proposal to acquire an owner — which is the step where good ideas actually die. This capstone puts the learner on the institutional side of the problem, where the deliverable is a sequence of moves rather than an argument.</p>\n<h3>Scope</h3>\n<p><strong>In scope:</strong> proposals with a public articulation you can cite. Curated lists of unowned policy questions and project-idea collections are the intended starting point.</p>\n<p><strong>Out of scope:</strong> inventing a new proposal. The exercise is adoption, not ideation — and an invented proposal cannot be checked for why it stalled.</p>\n<h3>What good looks like</h3>\n<ul><li>The autopsy has a mechanism, not a mood. \"It's unglamorous\" is a hypothesis; \"the only body with rulemaking authority here has no statutory hook and the fix requires primary legislation\" is an autopsy.</li><li>The first move is small, concrete, and does not require anyone to already agree with you.</li><li>The scenario test changes something. A plan identical in both timeline worlds has usually not been tested.</li></ul>\n<h3>Getting started</h3>\n<ol><li>Shortlist three orphans, then pick the one where you can name a plausible owner. An orphan with no candidate parent is a research question, not a capstone.</li><li>Interview-shaped reading: find what the natural owner has actually said about the area, not what you assume they think.</li><li>Write the first move before the full sequence. If the first move is \"convene a working group\", keep going.</li></ol>\n<blockquote><p><strong>Status: concept.</strong> This entry needs a vetted source list of orphaned proposals and a mentor who knows the relevant institutions before it can be offered. Treat the scope as indicative.</p></blockquote>"
+    },
+    {
+      "slug": "permit-inference-prohibit-training",
+      "source": "verification-capstones/permit-inference-prohibit-training.md",
+      "title": "Permit Inference, Prohibit Training",
+      "theme": "Verification",
+      "status": "draft",
+      "summary": "An agreement permits inference and prohibits training. Define permitted inference so the boundary survives fine-tuning, distillation and synthetic-data generation.",
+      "team": {
+        "min": 1,
+        "max": 2,
+        "label": "1–2 people",
+        "bucket": "Pair or trio"
+      },
+      "effort": {
+        "min": 14,
+        "max": 20,
+        "label": "14–20 hrs",
+        "bucket": "15–20 hrs"
+      },
+      "duration": {
+        "label": "3 weeks",
+        "weeks": 3
+      },
+      "perWeek": "≈6 hrs/wk",
+      "difficulty": "stretch",
+      "deliverable": "Draft rule, five edge cases, and the revisions they force",
+      "deliverableType": "spec",
+      "mentor": "recommended",
+      "audience": "The drafter of a pause clause that has to leave deployed services running.",
+      "skills": [
+        "definition drafting",
+        "workload analysis",
+        "adversarial testing"
+      ],
+      "prerequisites": [
+        "Verification 2.2 — the cloud layer",
+        "Verification 3 — covert development"
+      ],
+      "sources": [],
+      "updated": "2026-08-06",
+      "html": "<h3>The brief</h3>\n<p>Any realistic pause stops training and leaves serving alone — nobody switches off the deployed economy. That puts the entire agreement's weight on a definition: what is \"inference\", operationally, such that an operator cannot run a training program and call it something else? Draft the rule, then attack it.</p>\n<ul><li><strong>The operational definition.</strong> Written in terms a verifier can check — what is measured, at what boundary, with what thresholds. A definition in terms of intent is not a definition.</li><li><strong>The five edge cases, run in order.</strong> Fine-tuning (small updates to a permitted model); distillation (a student trained on the teacher's outputs); synthetic-data generation (inference now, training corpus later); long-context inference (test-time compute that substitutes for weights); and safety research (the exemption every draft wants and every evader wants more).</li><li><strong>The revisions.</strong> Each edge case either survives your rule, forces an amendment, or exposes a hole you choose to accept. Record which, and why — the revision history is the deliverable's argument.</li></ul>\n<h3>Why it exists</h3>\n<p>Module 2.2 lists workload labels among the things an operator can fake, and Module 3's repurposed-infrastructure scenario is training disguised as inference or safety research. Both presume the boundary this brief drafts. If the definition cannot be written, that is a finding with consequences for every pause proposal in the literature; if it can, the edge cases say what enforcing it costs.</p>\n<h3>Scope</h3>\n<p><strong>In scope:</strong> workload characteristics as publicly understood, one deployment context held fixed, and definitional drafting with adversarial testing.</p>\n<p><strong>Out of scope:</strong> the hardware and telemetry that would measure the boundary — assume the measurements you specify are available, and be conservative about what you specify. Treaty language and legal drafting style are also out; this is the operational core a lawyer would later wrap.</p>\n<h3>What good looks like</h3>\n<div class=\"table-scroll\"><table><thead><tr><th>Dimension</th><th>Weak</th><th>Strong</th></tr></thead><tbody><tr><td>Definition</td><td>Intent-based</td><td>Measurable terms, stated boundary, stated thresholds</td></tr><tr><td>Edge cases</td><td>Mentioned</td><td>Each run against the rule with a verdict: survives, amends, or accepted hole</td></tr><tr><td>Revisions</td><td>Silent fixes</td><td>The rule's version history, with what each edge case forced</td></tr><tr><td>Honesty</td><td>A watertight claim</td><td>The accepted holes listed, with why they were accepted</td></tr></tbody></table></div>\n<h3>Getting started</h3>\n<ol><li>Write version one of the rule in under an hour and let it be wrong — the project's content is the revision history, not the first draft.</li><li>Take the edge cases in the listed order; each is roughly a harder version of the one before.</li><li>When an edge case defeats the rule, decide explicitly: amend, or accept the hole. Undecided holes are how definitions rot.</li></ol>"
     },
     {
       "slug": "pre-emptive-authorization",
@@ -2230,6 +2524,91 @@ window.CAPSTONE_BANK = {
       "html": "<h3>The brief</h3>\n<p>Week 4 teaches sandbagging as an eval-methodology problem. It is also an incentive problem, and the incentive version is unsolved: when a threshold attaches a consequence to a score, the party running the eval is the party who benefits from a low one. Nobody has designed the counter-incentives.</p>\n<p>Deliver:</p>\n<ul><li><strong>The sandbagging taxonomy for your case.</strong> Deliberate under-elicitation is only one route. Also: a weak scaffold, an unrepresentative prompt set, a checkpoint that is not the deployed model, stopping the search early, running the eval five times and reporting the median. Rank them by how deniable each is — deniability is what makes a route attractive.</li><li><strong>Detection.</strong> For each route, what would reveal it. Independent re-runs, mandated elicitation floors, held-out sets, publication of full logs, comparison against an external baseline. Say honestly which routes have no detection at all.</li><li><strong>The incentive.</strong> The core deliverable. Penalty scaled to what the low score bought, plus the reporting rule that makes the penalty attachable — you cannot punish under-elicitation without a stated standard of elicitation to fall short of.</li><li><strong>The perverse-effect check.</strong> Every anti-sandbagging rule pushes somewhere. A mandated elicitation floor can become a ceiling. Aggressive penalties can stop developers running exploratory evals at all. Name the effect your design produces and say why it is worth it.</li></ul>\n<h3>Why it exists</h3>\n<p>This is where the technical and policy halves of the track have to meet. A pure methodology answer (\"elicit harder\") ignores that the elicitor chooses how hard; a pure policy answer (\"penalise sandbagging\") ignores that you cannot detect it without methodology. Learners who can hold both are exactly what technical-governance teams are hiring for.</p>\n<p>It also generalises. Self-reported measurement under a threshold with consequences is the same structure as emissions testing, drug trials and safety certification — and every one of those had to solve this, badly, before it solved it well.</p>\n<h3>Scope</h3>\n<p><strong>In scope:</strong> published eval methodology, frontier safety frameworks and their threshold language, and analogous testing regimes in other industries.</p>\n<p><strong>Out of scope:</strong> building a sandbagging detector, and proving any specific developer has done it. This is design work about an incentive structure, not an accusation.</p>\n<h3>What good looks like</h3>\n<div class=\"table-scroll\"><table><thead><tr><th>Dimension</th><th>Weak</th><th>Strong</th></tr></thead><tbody><tr><td>Taxonomy</td><td>\"Developers might underreport\"</td><td>Routes ranked by deniability, with the most deniable identified</td></tr><tr><td>Detection</td><td>\"Independent verification\"</td><td>Per route, the specific check — and the routes with none, named</td></tr><tr><td>Incentive</td><td>\"Significant penalties\"</td><td>Scaled to the benefit obtained, attached to a stated elicitation standard</td></tr><tr><td>Perverse effects</td><td>Unconsidered</td><td>The effect your rule produces, and the trade you accept</td></tr></tbody></table></div>\n<h3>Getting started</h3>\n<ol><li>Rank the routes by deniability first. Deliberate lying is the easy case and the least likely; the design problem is the manoeuvres that look like ordinary methodological choices.</li><li>Write the elicitation standard before the penalty. Without it there is nothing to enforce against.</li><li>Test your rule against an honest developer having a bad quarter. If it punishes them too, redesign.</li></ol>"
     },
     {
+      "slug": "secret-compute-threshold",
+      "source": "verification-capstones/secret-compute-threshold.md",
+      "title": "How Much Hidden Compute Breaks the Deal?",
+      "theme": "Verification",
+      "status": "draft",
+      "summary": "How much concealed compute must a state retain before a pause agreement stops being worth signing? Three scenarios, priced for capability and strategic effect.",
+      "team": {
+        "min": 1,
+        "max": 2,
+        "label": "1–2 people",
+        "bucket": "Pair or trio"
+      },
+      "effort": {
+        "min": 14,
+        "max": 20,
+        "label": "14–20 hrs",
+        "bucket": "15–20 hrs"
+      },
+      "duration": {
+        "label": "3 weeks",
+        "weeks": 3
+      },
+      "perWeek": "≈6 hrs/wk",
+      "difficulty": "stretch",
+      "deliverable": "Scenario analysis with a sensitivity table",
+      "deliverableType": "analysis",
+      "mentor": "recommended",
+      "audience": "The delegation deciding how much verification is enough to sign.",
+      "skills": [
+        "scenario analysis",
+        "capability estimation",
+        "strategic reasoning"
+      ],
+      "prerequisites": [
+        "Verification 2.3 — the intelligence layer",
+        "Verification 3 — covert development",
+        "Verification 4.1 — feasibility and layering"
+      ],
+      "sources": [],
+      "updated": "2026-08-06",
+      "html": "<h3>The brief</h3>\n<p>No verification regime finds everything. The question a negotiator actually faces is not \"can they hide compute?\" but \"does the amount they can hide matter?\" — an agreement survives concealment that is strategically irrelevant and dies of concealment that is not. Locate the line.</p>\n<ul><li><strong>Three concealment postures.</strong> A small clandestine cluster; a distributed network of sub-threshold sites; one large secret datacenter. For each, estimate what it could train or run in a fixed window, and what hiding it costs the evader in efficiency, security and detection risk.</li><li><strong>The capability translation.</strong> Turn hidden compute into hidden capability honestly: what the concealed capacity yields relative to the frontier at signing time, and how that gap moves over the agreement's life.</li><li><strong>The strategic effect.</strong> When does the hidden capability change decisions — the evader's confidence, the detector's response, the agreement's collapse conditions? A breakout that arrives too late to matter is not a breakout.</li><li><strong>The sensitivity table.</strong> Which assumptions move the answer: detection probability per posture, efficiency of concealed operation, the capability-per-compute curve. The table is the deliverable's spine — it shows where the conclusion is robust and where it is hostage.</li></ul>\n<h3>Why it exists</h3>\n<p>Module 2.3 rates the footprints concealment leaves; Module 3 catalogues the postures. This brief asks the question those two modules set up but do not answer: how much leakage a regime can tolerate before the agreement it serves loses its point. Module 4.1's layering logic needs that number — it is the requirement the verification stack is built against.</p>\n<h3>Scope</h3>\n<p><strong>In scope:</strong> public compute-to-capability reasoning, the three postures above, and explicit stated-assumption arithmetic.</p>\n<p><strong>Out of scope:</strong> intelligence assessments of any real state's programs, and classified-adjacent sourcing. The scenarios are constructed, and say so.</p>\n<h3>What good looks like</h3>\n<div class=\"table-scroll\"><table><thead><tr><th>Dimension</th><th>Weak</th><th>Strong</th></tr></thead><tbody><tr><td>Postures</td><td>\"They could hide compute\"</td><td>Three postures with size, cost and detection exposure each</td></tr><tr><td>Capability</td><td>FLOPs as the answer</td><td>FLOPs translated to capability against a moving frontier, with stated error</td></tr><tr><td>Strategy</td><td>\"This would be bad\"</td><td>The decision each hidden capability actually changes, and when</td></tr><tr><td>Sensitivity</td><td>One scenario, one verdict</td><td>The assumptions that flip the verdict, tabulated</td></tr></tbody></table></div>\n<h3>Getting started</h3>\n<ol><li>Fix the agreement first — what is paused, for how long, measured how. \"How much hidden compute matters\" has no answer without it.</li><li>Build the smallest posture end-to-end before starting the other two; the template transfers.</li><li>Keep a running list of every number you assumed. That list, priced, becomes the sensitivity table.</li></ol>"
+    },
+    {
+      "slug": "secret-datacenter-evidence",
+      "source": "verification-capstones/secret-datacenter-evidence.md",
+      "title": "When Does a Secret Datacenter Earn an Inspection?",
+      "theme": "Verification",
+      "status": "draft",
+      "summary": "Power draw, cooling, procurement, satellite imagery — when does a stack of maybes justify an inspection? Build the rubric that turns signals into a decision.",
+      "team": {
+        "min": 1,
+        "max": 2,
+        "label": "1–2 people",
+        "bucket": "Pair or trio"
+      },
+      "effort": {
+        "min": 12,
+        "max": 18,
+        "label": "12–18 hrs",
+        "bucket": "15–20 hrs"
+      },
+      "duration": {
+        "label": "3 weeks",
+        "weeks": 3
+      },
+      "perWeek": "≈5 hrs/wk",
+      "difficulty": "core",
+      "deliverable": "Evidentiary rubric plus a decision memo",
+      "deliverableType": "memo",
+      "mentor": "optional",
+      "audience": "The agency that has to decide when suspicion becomes an inspection.",
+      "skills": [
+        "evidence standards",
+        "intelligence analysis",
+        "escalation design"
+      ],
+      "prerequisites": [
+        "Verification 2.3 — the intelligence layer",
+        "Verification 3 — covert development"
+      ],
+      "sources": [],
+      "updated": "2026-08-06",
+      "html": "<h3>The brief</h3>\n<p>Every signal in the intelligence layer is individually deniable: power draw has civilian explanations, cooling capacity has customers, procurement has intermediaries, construction has cover stories. Decisions get made anyway. The project is to write the standard that says when accumulated maybes justify the costly, adversarial step of demanding an inspection.</p>\n<ul><li><strong>The packet.</strong> Construct a fictional intelligence packet about a suspected undeclared facility: energy contracts, cooling equipment orders, chip procurement traces, satellite construction imagery, each with a stated reliability and a plausible innocent explanation.</li><li><strong>The tiers.</strong> Define the ladder — anomaly, plausible evidence, confirmed violation — and the tests that move a case between tiers. The tests must be written before looking at the packet, or they will be reverse-fitted to it.</li><li><strong>The escalation ladder.</strong> What each tier licenses: a clarification request, enhanced monitoring, a challenge inspection. Include the cost of being wrong at each rung — a bounced accusation spends credibility the regime needs later.</li><li><strong>The memo.</strong> Run your own packet through your own rubric and write the decision memo the agency head would sign, dissent included if the evidence is genuinely marginal.</li></ul>\n<h3>Why it exists</h3>\n<p>Module 2.3 rates each footprint on what it tells a verifier and its main caveat; what it leaves open is aggregation — how a decider combines weak signals into a defensible act. Regimes have died at exactly this joint: inspection demanded too early burns the agreement, too late makes it ornamental. The rubric is where that judgement stops being vibes.</p>\n<h3>Scope</h3>\n<p><strong>In scope:</strong> the public characteristics of the named signal types, a constructed scenario, and institutional reasoning about escalation.</p>\n<p><strong>Out of scope:</strong> real facilities, real states, and sources beyond the public literature. The packet is fictional and labelled as such throughout.</p>\n<h3>What good looks like</h3>\n<div class=\"table-scroll\"><table><thead><tr><th>Dimension</th><th>Weak</th><th>Strong</th></tr></thead><tbody><tr><td>The packet</td><td>A pile of red flags</td><td>Signals with stated reliability and the innocent explanation priced in</td></tr><tr><td>Tiers</td><td>Named but soft</td><td>Tests that decide tier transitions, written before the packet</td></tr><tr><td>Escalation</td><td>\"Then we inspect\"</td><td>Each rung's action and the cost of being wrong at it</td></tr><tr><td>The memo</td><td>A verdict</td><td>A signable decision with its uncertainty carried honestly</td></tr></tbody></table></div>\n<h3>Getting started</h3>\n<ol><li>Write the tier tests before assembling the packet — that ordering is the whole discipline of the exercise.</li><li>Give every signal in the packet its innocent explanation at creation time. A packet without alibis tests nothing.</li><li>Set the false-alarm budget explicitly: how many bounced inspections the regime survives per decade. The rubric must respect it.</li></ol>"
+    },
+    {
       "slug": "self-scoped-policy-memo",
       "source": "verification-capstones/self-scoped-policy-memo.md",
       "title": "Self-Scoped Policy Memo",
@@ -2477,6 +2856,48 @@ window.CAPSTONE_BANK = {
       "html": "<h3>The brief</h3>\n<p>Module 3's eighth evasion scenario is sub-threshold fragmentation: split the run across enough small clusters, accounts or jurisdictions and no single reported quantity crosses the line. Everyone concedes it is possible in principle. The question that decides whether it matters is how expensive it is in practice.</p>\n<ul><li><strong>The technical ceiling.</strong> What decentralised and low-communication training can actually do today, at what scale, and how far behind a co-located run of the same nominal compute it lands. Bandwidth and latency are the binding constraints; say what they cost in wall-clock and in achieved quality.</li><li><strong>The overhead.</strong> The multiplier a fragmenter pays — in time, in total compute, in engineering. That number, more than any argument, determines whether the route is used.</li><li><strong>What fragments and what does not.</strong> Splitting across accounts inside one provider is a different problem from splitting across providers, and both are different from splitting across borders. Some are trivial and some are research problems. Separate them.</li><li><strong>What still shows.</strong> Aggregate procurement, power, and the fact that somebody eventually has to assemble the pieces. Fragmentation hides the run from a per-cluster threshold; it does not hide it from every layer, and naming what remains visible is the constructive half.</li><li><strong>The threshold recommendation.</strong> Which threshold designs survive: aggregate across a corporate group, count over a rolling window, attach to procurement rather than to a run, index on the model rather than the training. Pick one and say what it costs in administrability.</li></ul>\n<h3>Why it exists</h3>\n<p>Threshold-based governance is the field's dominant instrument, and this is the evasion route that attacks its arithmetic rather than its enforcement. The track teaches thresholds in Module 2 and attacks them in Module 3; this capstone is that attack carried through to a redesign, which is the part learners usually skip.</p>\n<p>The pairing with the rest of the bank is deliberate. One capstone asks how fast a threshold decays, another asks what it counts, this one asks whether it can be arithmetically avoided. Those are the three ways a compute rule fails, and a cohort that has produced all three has a genuinely complete picture.</p>\n<h3>Scope</h3>\n<p><strong>In scope:</strong> published work on decentralised and communication-efficient training, public reporting on distributed training efforts, and the track's threshold material.</p>\n<p><strong>Out of scope:</strong> running a distributed training experiment, and any operational detail about evading a specific regime in a specific place. You are assessing feasibility and redesigning the instrument, not writing a manual.</p>\n<h3>What good looks like</h3>\n<div class=\"table-scroll\"><table><thead><tr><th>Dimension</th><th>Weak</th><th>Strong</th></tr></thead><tbody><tr><td>Feasibility</td><td>\"Distributed training is possible\"</td><td>A scale ceiling with a date, and the gap to a co-located run quantified</td></tr><tr><td>Overhead</td><td>Unquantified</td><td>A multiplier, with what drives it and how fast it is shrinking</td></tr><tr><td>Fragmentation modes</td><td>Treated as one thing</td><td>Separated by boundary crossed, each with its own difficulty</td></tr><tr><td>Recommendation</td><td>\"Thresholds should be robust\"</td><td>One design, with its administrative cost and what it still misses</td></tr></tbody></table></div>\n<h3>Getting started</h3>\n<ol><li>Get the overhead multiplier first, even roughly. If it is 10x, this is a theoretical concern; if it is 1.5x, the threshold design has to change now.</li><li>Separate the fragmentation modes on day two. Conflating account-splitting with cross-border distributed training makes every later claim mushy.</li><li>Write the \"what still shows\" section before the recommendation. The threshold you recommend should lean on whatever survives.</li></ol>"
     },
     {
+      "slug": "supply-chain-logging-points",
+      "source": "verification-capstones/supply-chain-logging-points.md",
+      "title": "Where Should the Supply Chain Keep Logs?",
+      "theme": "Verification",
+      "status": "draft",
+      "summary": "Manufacturing logs are cheap to demand and easy to drown in. Find the point in the semiconductor chain where credible logs buy the most information for the least trust.",
+      "team": {
+        "min": 1,
+        "max": 2,
+        "label": "1–2 people",
+        "bucket": "Pair or trio"
+      },
+      "effort": {
+        "min": 12,
+        "max": 18,
+        "label": "12–18 hrs",
+        "bucket": "15–20 hrs"
+      },
+      "duration": {
+        "label": "3 weeks",
+        "weeks": 3
+      },
+      "perWeek": "≈5 hrs/wk",
+      "difficulty": "core",
+      "deliverable": "Ranked chokepoint matrix",
+      "deliverableType": "analysis",
+      "mentor": "optional",
+      "audience": "The regulator choosing where in the supply chain to demand records.",
+      "skills": [
+        "supply-chain analysis",
+        "comparative ranking",
+        "measurement design"
+      ],
+      "prerequisites": [
+        "Verification 1 — actors",
+        "Verification 2.1 — the hardware layer"
+      ],
+      "sources": [],
+      "updated": "2026-08-06",
+      "html": "<h3>The brief</h3>\n<p>\"Log the supply chain\" is a slogan until someone says where. Each stage — lithography, advanced packaging, high-bandwidth memory, networking equipment, final assembly — differs in how many firms sit there, what a unit of output even is, how hard the records are to fake, and how long a diversion stays invisible. Rank them.</p>\n<ul><li><strong>The criteria, fixed first.</strong> Concentration (how few actors must comply), measurability (is there a countable unit — wafers, stacks, switches — or a judgement call), forgeability (what faking the records costs, and who would have to collude), and detection lag (how long between a false entry and a contradiction arriving from elsewhere in the chain).</li><li><strong>The stages, scored.</strong> Each stage against each criterion, with a sentence of reasoning per cell — the matrix is an argument, not a spreadsheet.</li><li><strong>The cross-checks.</strong> Logs earn credibility where independent records can contradict them: a stage's output is another stage's input. Say which pairs of logging points check each other and which stand alone.</li><li><strong>The recommendation.</strong> One or two stages where a logging requirement would bind soonest, and what the requirement would actually say.</li></ul>\n<h3>Why it exists</h3>\n<p>Module 1 puts the supply chain's bottleneck structure at the center of the verifier's map; Module 2.1 lists chip registries and supply-chain tracking among the hardware layer's mechanisms. Between the two sits an unexamined choice — where records do the most work — and this brief makes the choice explicitly, with criteria that survive being argued against.</p>\n<h3>Scope</h3>\n<p><strong>In scope:</strong> public supply-chain structure at the named stages, and reasoning about record-keeping burdens from how those industries already operate.</p>\n<p><strong>Out of scope:</strong> firm-level confidential detail, and export-control legal design. The matrix informs where a rule would attach, not how to draft it.</p>\n<h3>What good looks like</h3>\n<div class=\"table-scroll\"><table><thead><tr><th>Dimension</th><th>Weak</th><th>Strong</th></tr></thead><tbody><tr><td>Criteria</td><td>Implied</td><td>Four named criteria, defined before any scoring</td></tr><tr><td>Scores</td><td>Adjectives</td><td>Cells with a stated reason each, comparable across stages</td></tr><tr><td>Cross-checks</td><td>Absent</td><td>The pairs of logs that contradict each other, mapped</td></tr><tr><td>Verdict</td><td>\"Log everything\"</td><td>One or two attachment points, with the requirement sketched</td></tr></tbody></table></div>\n<h3>Getting started</h3>\n<ol><li>Define the unit of output per stage before scoring anything — measurability collapses without it.</li><li>Score forgeability as a cost, not a possibility: who colludes, what it costs them, what exposure they carry.</li><li>Draw the cross-check map before writing the recommendation; a stage that nothing contradicts should make you nervous, not confident.</li></ol>"
+    },
+    {
       "slug": "taig-tooling-gap",
       "source": "verification-capstones/taig-tooling-gap.md",
       "title": "Close One Gap in Technical AI Governance",
@@ -2528,6 +2949,90 @@ window.CAPSTONE_BANK = {
       ],
       "updated": "2026-08-04",
       "html": "<h3>The brief</h3>\n<p>The technical AI governance agenda makes a specific claim: governance is blocked in two ways at once — decision-makers lack information, and the technical tools that would produce that information do not exist. Pick one open problem where both are true and write the dossier that would let someone decide to build the missing tool.</p>\n<p>The dossier has four parts:</p>\n<ul><li><strong>The problem, restated as a decision.</strong> Not \"we lack good watermarking\" but \"actor A cannot currently establish B, so decision C is made blind.\" Name A, B and C.</li><li><strong>The tool.</strong> What would have to exist. Inputs, outputs, who runs it, what guarantee it gives and — the part most write-ups skip — what guarantee it explicitly does not give.</li><li><strong>The adoption path.</strong> A tool nobody adopts closes nothing. Who has to use it, what makes them, and whether that is a standard, a procurement clause, a statute, or commercial self-interest.</li><li><strong>The failure analysis.</strong> How the tool gets gamed, how it degrades as models change, and what a decision-maker would wrongly conclude if they trusted a gamed output.</li></ul>\n<h3>Why it exists</h3>\n<p>The track teaches you to read a governance proposal and ask \"could anyone verify that?\" This is the constructive version of the same move. It is also the piece of work most directly shaped like technical-governance employment: somebody hands you a policy ask, and you have to say what artifact would satisfy it and what it would take to get one.</p>\n<p>The agenda-level papers are deliberately broad. Depth on one problem is worth more than a survey of twelve, and you will find that the interesting content is almost always in the adoption path — the technical part is frequently the easy part.</p>\n<h3>Scope</h3>\n<p><strong>In scope:</strong> one open problem, one tool, published literature, and the program's own track materials.</p>\n<p><strong>Out of scope:</strong> building the tool. This is a specification and a case, not an implementation. If you find yourself writing code, you have swapped this capstone for a different one.</p>\n<p><strong>Also out of scope:</strong> picking a problem because it is fashionable. The agenda has unglamorous entries — data provenance, compute accounting, post-deployment monitoring — and those usually have shorter adoption paths, which makes them better dossiers.</p>\n<h3>What good looks like</h3>\n<ul><li>The decision statement survives being read aloud to someone outside the field. If they ask \"so what?\", the restatement failed.</li><li>The adoption path names organisations, not categories. \"Standards bodies\" is not an answer; a named body with a named workstream is.</li><li>The failure analysis includes at least one way the tool makes things <em>worse</em> — false assurance is a real cost and the dossier should price it.</li><li>Somewhere in the dossier is a paragraph arguing the opposite conclusion, written well enough that a reader could act on it.</li></ul>\n<h3>Getting started</h3>\n<ol><li>Read the agenda's problem list once for breadth, then pick by adoption path, not by technical interest. The problems worth a dossier are the ones where you can name who would use the answer.</li><li>Write the decision statement first, and rewrite it until it has a named actor and a named blocked decision.</li><li>Interview the literature adversarially: search specifically for people saying the tool already exists. Either they are right — pick again in week one — or you have found your dossier's strongest section.</li></ol>"
+    },
+    {
+      "slug": "tamper-evidence-sufficiency",
+      "source": "verification-capstones/tamper-evidence-sufficiency.md",
+      "title": "When Is Tamper-Evidence Enough?",
+      "theme": "Verification",
+      "status": "draft",
+      "summary": "Tamper-proof hardware is expensive and unsolved; tamper-evident is neither. In which institutional settings is finding out afterwards actually sufficient?",
+      "team": {
+        "min": 1,
+        "max": 2,
+        "label": "1–2 people",
+        "bucket": "Pair or trio"
+      },
+      "effort": {
+        "min": 10,
+        "max": 14,
+        "label": "10–14 hrs",
+        "bucket": "Up to 14 hrs"
+      },
+      "duration": {
+        "label": "2 weeks",
+        "weeks": 2
+      },
+      "perWeek": "≈6 hrs/wk",
+      "difficulty": "core",
+      "deliverable": "Decision framework",
+      "deliverableType": "analysis",
+      "mentor": "optional",
+      "audience": "The regime designer deciding where prevention is worth its cost.",
+      "skills": [
+        "institutional design",
+        "inspection economics",
+        "risk analysis"
+      ],
+      "prerequisites": [
+        "Verification 2.1 — the hardware layer",
+        "Verification 4.1 — feasibility and layering"
+      ],
+      "sources": [],
+      "updated": "2026-08-06",
+      "html": "<h3>The brief</h3>\n<p>Tamper-resistance tries to make violation impossible; tamper-evidence only promises that violation leaves a mark. The second is dramatically cheaper and available now — seals, logs, one-way counters, broken-on-open enclosures. The question is institutional, not technical: under what conditions is a mark, found later, enough?</p>\n<ul><li><strong>The variables.</strong> Whether the facility is otherwise monitored; how often anyone looks (inspection frequency sets time-to-detection); how much harm accumulates between violation and discovery; and what actually happens to a violator once the mark is found.</li><li><strong>The comparison.</strong> Monitored versus unmonitored facilities, frequent versus rare inspection, reversible versus irreversible harms — worked as cases, not abstractions. A seal on a quarterly-inspected rack means something different from the same seal in a facility no one revisits.</li><li><strong>The framework.</strong> The output is a decision rule a regime designer can apply: given detection lag, harm accumulation rate, and enforcement credibility, tamper-evidence suffices here, and only prevention will do there.</li></ul>\n<h3>Why it exists</h3>\n<p>Module 2.1 notes that secure boot and similar mechanisms were designed for the wrong adversary — governance inverts the threat model, and the owner is the party being caught. Tamper-evidence sidesteps the hardest part of that inversion by dropping the demand that hardware defeat its owner, keeping only the demand that the owner cannot hide having won. Where that weaker promise suffices, regimes get cheaper and deployable sooner; knowing where is the design skill this brief trains. It feeds directly into Module 4.1's layering decisions.</p>\n<h3>Scope</h3>\n<p><strong>In scope:</strong> existing tamper-evidence mechanisms as a class, and the institutional arithmetic of detection lag, accumulated harm and enforcement response.</p>\n<p><strong>Out of scope:</strong> designing new seals or enclosures, and formal security proofs. The framework consumes mechanism properties; it does not certify them.</p>\n<h3>What good looks like</h3>\n<div class=\"table-scroll\"><table><thead><tr><th>Dimension</th><th>Weak</th><th>Strong</th></tr></thead><tbody><tr><td>Variables</td><td>\"It depends\"</td><td>The named variables, each with its effect on the verdict</td></tr><tr><td>Cases</td><td>One setting</td><td>Monitored and unmonitored, frequent and rare inspection, worked through</td></tr><tr><td>The rule</td><td>A vibe</td><td>A decision procedure someone else could apply and reach your answer</td></tr><tr><td>Limits</td><td>Unstated</td><td>The harms too fast or too irreversible for after-the-fact discovery, named</td></tr></tbody></table></div>\n<h3>Getting started</h3>\n<ol><li>Write the time line of one violation: mark made, harm accumulating, inspection arrives, response lands. Every variable in the framework is a segment of that line.</li><li>Work the friendliest case for tamper-evidence and the most hostile one before any middle cases — the framework lives between the two ends.</li><li>State the enforcement assumption explicitly. Evidence without a credible response converts every seal into decoration.</li></ol>"
+    },
+    {
+      "slug": "telemetry-security-case",
+      "source": "verification-capstones/telemetry-security-case.md",
+      "title": "A Security Case for One Sensor",
+      "theme": "Verification",
+      "status": "draft",
+      "summary": "Power, temperature and timing telemetry cannot classify workloads reliably. Build the security case for using one sensor feed anyway.",
+      "team": {
+        "min": 1,
+        "max": 2,
+        "label": "1–2 people",
+        "bucket": "Pair or trio"
+      },
+      "effort": {
+        "min": 12,
+        "max": 18,
+        "label": "12–18 hrs",
+        "bucket": "15–20 hrs"
+      },
+      "duration": {
+        "label": "3 weeks",
+        "weeks": 3
+      },
+      "perWeek": "≈5 hrs/wk",
+      "difficulty": "core",
+      "deliverable": "A verification security case for one telemetry mechanism",
+      "deliverableType": "analysis",
+      "mentor": "optional",
+      "audience": "The verifier deciding whether a sensor feed is worth installing.",
+      "skills": [
+        "security cases",
+        "telemetry analysis",
+        "adversarial reasoning"
+      ],
+      "prerequisites": [
+        "Verification 2.0 — confidentiality vs verifiability",
+        "Verification 2.1 — the hardware layer"
+      ],
+      "sources": [],
+      "updated": "2026-08-06",
+      "html": "<h3>The brief</h3>\n<p>The easy verdict on datacenter telemetry is that it cannot reliably tell a training run from anything else, so it proves nothing. The easy verdict skips the interesting question: useful under what decision procedure? A smoke detector cannot classify fires either. The project is to take one sensor mechanism — power draw, temperature, timing side-channels, pick one — and build the full security case for it, answering the Petrie questions in order:</p>\n<ul><li><strong>Who decides.</strong> The institution that acts on the feed, and what action the feed can trigger — a follow-up question, a challenge inspection, nothing on its own.</li><li><strong>What data they see.</strong> The exact signal, at what resolution, aggregated how. Every step of aggregation is privacy bought and evidence spent.</li><li><strong>Which false positives are tolerable.</strong> The workloads that will trip the sensor innocently, roughly how often, and what a false alarm costs each side. A tolerable rate for a follow-up question is an intolerable rate for an accusation.</li><li><strong>How it can be spoofed.</strong> What it costs the operator to make the signal lie — load shaping, thermal masking, replayed data — and which spoofs the surrounding regime would catch by other means.</li></ul>\n<h3>Why it exists</h3>\n<p>Module 2.1 rates most telemetry proposals as not deployed and easily oversold; the correct response is not to discard the layer but to state precisely what a weak signal can support. A security case is the form that statement takes: claim, evidence, decision rule, failure modes, in one document a skeptic can attack line by line. Learners who can write one for a sensor can write one for anything in the stack.</p>\n<h3>Scope</h3>\n<p><strong>In scope:</strong> one sensor mechanism, its public measurement characteristics, and the institutional side — who reads it, what it triggers.</p>\n<p><strong>Out of scope:</strong> building or fitting detectors, and mechanisms that require new silicon. The case is for a feed that could exist this year.</p>\n<h3>What good looks like</h3>\n<div class=\"table-scroll\"><table><thead><tr><th>Dimension</th><th>Weak</th><th>Strong</th></tr></thead><tbody><tr><td>The claim</td><td>\"Telemetry helps\"</td><td>The exact proposition the feed supports, and the one it does not</td></tr><tr><td>Decision rule</td><td>Unstated</td><td>Named decider, named action, named threshold</td></tr><tr><td>False positives</td><td>Waved at</td><td>The innocent workloads listed, with the cost of each alarm</td></tr><tr><td>Spoofing</td><td>\"Possible\"</td><td>Priced, per spoof, against what the spoof conceals</td></tr></tbody></table></div>\n<h3>Getting started</h3>\n<ol><li>Pick the sensor and write the one-sentence claim it is supposed to support. If the sentence needs \"reliably classify\", pick a weaker claim.</li><li>Answer the Petrie questions in order and do not skip the second — most telemetry cases die on what the verifier is actually allowed to see.</li><li>Draft the spoofing section as the operator's counsel would. The case is finished when that section no longer surprises you.</li></ol>"
     },
     {
       "slug": "three-directions-drill",

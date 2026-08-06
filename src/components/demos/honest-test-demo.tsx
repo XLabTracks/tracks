@@ -9,7 +9,7 @@
 const CAPTION =
   "An honest test gives the seeker an opportunity to max out its own reward by giving it control of its training process / weights. Reward-on-the-episode seekers take the bait because they don't care about getting caught; influence seekers just forgo the short-term reward.";
 
-export default function HonestTestDemo() {
+export function HonestTestDemo() {
   return (
     <figure className="space-y-3">
       <svg

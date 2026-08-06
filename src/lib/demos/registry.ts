@@ -25,7 +25,7 @@ import { HighStakesGraphDemo } from "@/components/demos/high-stakes-graph-demo";
 import { LiveFailurePlaneDemo } from "@/components/demos/live-failure-plane-demo";
 import { AgentArchitectureThreatsDemo } from "@/components/demos/agent-architecture-threats-demo";
 import { DeferToResampleDemo } from "@/components/demos/defer-to-resample-demo";
-import HonestTestDemo from "@/components/demos/honest-test-demo";
+import { HonestTestDemo } from "@/components/demos/honest-test-demo";
 
 // Central demo registry — the single integration point. Reference a demo by ID
 // from MDX (<Demo id="…"/>), the gallery, standalone pages, or embeds.

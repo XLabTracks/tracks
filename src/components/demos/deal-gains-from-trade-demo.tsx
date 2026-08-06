@@ -144,7 +144,8 @@ export function DealGainsFromTradeDemo() {
   const pMax = hCoop > 0 ? (1 - hSab / hCoop) * 100 : 0;
   const dealExists = pMin < pMax;
 
-  const px = (pct: number) => BAR_X + (Math.min(pct, 100) / 100) * BAR_W;
+  const px = (pct: number) =>
+    BAR_X + (Math.min(Math.max(pct, 0), 100) / 100) * BAR_W;
 
   const readout = dealExists
     ? `Any offer between ${fmtPct(pMin)}% and ${fmtPct(pMax)}% of future resources beats both sides' no-deal alternatives. Lowering credibility raises the AI's minimum — a less credible promise must be compensated with a more generous offer.`
@@ -195,7 +196,7 @@ export function DealGainsFromTradeDemo() {
         {/* Offer-size axis with the mutually acceptable band */}
         <text
           x={BAR_X}
-          y={AXIS_Y - 40}
+          y={AXIS_Y - 58}
           className="fill-foreground text-[11px] font-medium"
         >
           Offer size (share of future resources)
@@ -237,46 +238,46 @@ export function DealGainsFromTradeDemo() {
             </text>
           </g>
         ))}
-        {Number.isFinite(pMin) && pMin <= 100 && (
-          <g className="transition-all duration-300 ease-out motion-reduce:transition-none">
-            <line
-              x1={px(pMin)}
-              y1={AXIS_Y - 18}
-              x2={px(pMin)}
-              y2={AXIS_Y}
-              className="stroke-amber-500"
-              strokeWidth={2}
-            />
-            <text
-              x={px(pMin)}
-              y={AXIS_Y - 22}
-              textAnchor={pMin > 80 ? "end" : "start"}
-              className="fill-amber-600 text-[10px] font-medium"
-            >
-              AI&apos;s minimum {fmtPct(pMin)}%
-            </text>
-          </g>
-        )}
-        {pMax > 0 && (
-          <g className="transition-all duration-300 ease-out motion-reduce:transition-none">
-            <line
-              x1={px(pMax)}
-              y1={AXIS_Y - 18}
-              x2={px(pMax)}
-              y2={AXIS_Y}
-              className="stroke-emerald-600"
-              strokeWidth={2}
-            />
-            <text
-              x={px(pMax)}
-              y={AXIS_Y - 22}
-              textAnchor={pMax > 70 ? "end" : "start"}
-              className="fill-emerald-700 text-[10px] font-medium"
-            >
-              our maximum {fmtPct(pMax)}%
-            </text>
-          </g>
-        )}
+        <g className="transition-all duration-300 ease-out motion-reduce:transition-none">
+          <line
+            x1={px(pMin)}
+            y1={AXIS_Y - 38}
+            x2={px(pMin)}
+            y2={AXIS_Y}
+            className="stroke-amber-500"
+            strokeWidth={2}
+          />
+          <text
+            x={px(pMin)}
+            y={AXIS_Y - 42}
+            textAnchor={pMin > 75 ? "end" : "start"}
+            className="fill-amber-600 stroke-card text-[10px] font-medium [paint-order:stroke]"
+            strokeWidth={4}
+          >
+            {pMin > 100
+              ? "AI's minimum > 100%"
+              : `AI's minimum ${fmtPct(pMin)}%`}
+          </text>
+        </g>
+        <g className="transition-all duration-300 ease-out motion-reduce:transition-none">
+          <line
+            x1={px(pMax)}
+            y1={AXIS_Y - 20}
+            x2={px(pMax)}
+            y2={AXIS_Y}
+            className="stroke-emerald-600"
+            strokeWidth={2}
+          />
+          <text
+            x={px(pMax)}
+            y={AXIS_Y - 24}
+            textAnchor={pMax > 75 ? "end" : "start"}
+            className="fill-emerald-700 stroke-card text-[10px] font-medium [paint-order:stroke]"
+            strokeWidth={4}
+          >
+            {pMax <= 0 ? "our maximum ≤ 0%" : `our maximum ${fmtPct(pMax)}%`}
+          </text>
+        </g>
       </svg>
 
       <div className="grid gap-x-6 gap-y-3 sm:grid-cols-2">

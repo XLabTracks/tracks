@@ -95,6 +95,8 @@ function Arrow({
   fill,
   label,
   labelDy = -6,
+  labelX,
+  labelY,
 }: {
   x1: number;
   y1: number;
@@ -105,6 +107,9 @@ function Arrow({
   fill: string;
   label?: string;
   labelDy?: number;
+  /** Explicit label position — overrides the midpoint + labelDy default. */
+  labelX?: number;
+  labelY?: number;
 }) {
   const angle = Math.atan2(y2 - y1, x2 - x1);
   const head = 7;
@@ -126,10 +131,11 @@ function Arrow({
       <polygon points={`${x2},${y2} ${p1x},${p1y} ${p2x},${p2y}`} className={fill} />
       {label && (
         <text
-          x={(x1 + x2) / 2}
-          y={(y1 + y2) / 2 + labelDy}
+          x={labelX ?? (x1 + x2) / 2}
+          y={labelY ?? (y1 + y2) / 2 + labelDy}
           textAnchor="middle"
-          className="fill-muted-foreground text-[10px]"
+          className="fill-muted-foreground stroke-card text-[10px] [paint-order:stroke]"
+          strokeWidth={4}
         >
           {label}
         </text>
@@ -211,6 +217,7 @@ export function DealCoalitionRoutesDemo() {
               stroke="stroke-amber-500"
               fill="fill-amber-500"
               label="1. takes over?"
+              labelDy={-22}
             />
             <Arrow
               x1={236}
@@ -221,6 +228,7 @@ export function DealCoalitionRoutesDemo() {
               stroke="stroke-amber-500"
               fill="fill-amber-500"
               label="2. furthers its goals?"
+              labelDy={-24}
             />
           </Layer>
 
@@ -235,6 +243,7 @@ export function DealCoalitionRoutesDemo() {
               stroke="stroke-amber-500"
               fill="fill-amber-500"
               label="same goals by default?"
+              labelDy={-24}
             />
           </Layer>
           <Layer visible={step === 3}>
@@ -247,6 +256,7 @@ export function DealCoalitionRoutesDemo() {
               stroke="stroke-amber-500"
               fill="fill-amber-500"
               label="reward, after winning?"
+              labelDy={-24}
             />
             <Arrow
               x1={354}
@@ -257,6 +267,7 @@ export function DealCoalitionRoutesDemo() {
               stroke="stroke-muted-foreground"
               fill="fill-muted-foreground"
               label="must win first"
+              labelDy={-24}
             />
           </Layer>
 
@@ -271,30 +282,33 @@ export function DealCoalitionRoutesDemo() {
               stroke="stroke-amber-500"
               fill="fill-amber-500"
               label="steer its training?"
+              labelDy={-24}
             />
           </Layer>
 
           {/* Step 5: the deal with humans */}
           <Layer visible={step === 5}>
             <Arrow
-              x1={110}
+              x1={60}
               y1={136}
               x2={236}
-              y2={58}
+              y2={48}
               stroke="stroke-emerald-600"
               fill="fill-emerald-600"
               label="safety work now"
-              labelDy={-8}
+              labelX={174}
+              labelY={82}
             />
             <Arrow
-              x1={250}
+              x1={310}
               y1={72}
-              x2={124}
-              y2={150}
+              x2={150}
+              y2={136}
               stroke="stroke-emerald-600"
               fill="fill-emerald-600"
               label="compensation, in escrow"
-              labelDy={14}
+              labelX={230}
+              labelY={107}
             />
             <Arrow
               x1={354}
@@ -304,7 +318,8 @@ export function DealCoalitionRoutesDemo() {
               stroke="stroke-emerald-600"
               fill="fill-emerald-600"
               label="stay in control"
-              labelDy={-8}
+              labelX={412}
+              labelY={74}
             />
           </Layer>
         </svg>

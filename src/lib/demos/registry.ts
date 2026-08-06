@@ -27,6 +27,7 @@ import { AgentArchitectureThreatsDemo } from "@/components/demos/agent-architect
 import { DeferToResampleDemo } from "@/components/demos/defer-to-resample-demo";
 import { HonestTestDemo } from "@/components/demos/honest-test-demo";
 import { ExplorationHorizonDemo } from "@/components/demos/exploration-horizon-demo";
+import { CrossEpisodeCollusionDemo } from "@/components/demos/cross-episode-collusion-demo";
 
 // Central demo registry — the single integration point. Reference a demo by ID
 // from MDX (<Demo id="…"/>), the gallery, standalone pages, or embeds.
@@ -253,6 +254,14 @@ export const demoRegistry: Record<string, DemoDefinition> = {
     description:
       "Limited exploration converges to simple, detectable misalignment; longer-horizon RL opens more space to converge to covert misalignment.",
     component: ExplorationHorizonDemo,
+    tags: ["control", "seekers"],
+  },
+  "cross-episode-collusion": {
+    id: "cross-episode-collusion",
+    title: "Collusion across episodes",
+    description:
+      "Instances in successive episodes pass messages to coordinate, effectively lengthening the timescale.",
+    component: CrossEpisodeCollusionDemo,
     tags: ["control", "seekers"],
   },
 };

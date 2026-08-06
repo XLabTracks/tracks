@@ -23,7 +23,7 @@ const STEPS: SlideStep[] = [
 ];
 
 const W = 520;
-const H = 260;
+const H = 290;
 
 function SituationCard({ x, label }: { x: number; label: string }) {
   return (
@@ -106,6 +106,31 @@ export function AdversaryResistanceDemo() {
             role="img"
             aria-label="Two identical-looking situations with different reward functions, so the AI only responds to developer-administered incentives"
           >
+            <defs>
+              <marker
+                id="ar-arrow-dev"
+                viewBox="0 0 8 8"
+                refX="6"
+                refY="4"
+                markerWidth="6"
+                markerHeight="6"
+                orient="auto-start-reverse"
+              >
+                <path d="M 0 0 L 8 4 L 0 8 z" className="fill-primary" />
+              </marker>
+              <marker
+                id="ar-arrow-adv"
+                viewBox="0 0 8 8"
+                refX="6"
+                refY="4"
+                markerWidth="6"
+                markerHeight="6"
+                orient="auto-start-reverse"
+              >
+                <path d="M 0 0 L 8 4 L 0 8 z" className="fill-amber-500" />
+              </marker>
+            </defs>
+
             <SituationCard x={60} label="Situation A" />
             <SituationCard x={300} label="Situation B" />
 
@@ -118,56 +143,51 @@ export function AdversaryResistanceDemo() {
               className="transition-opacity duration-500"
               opacity={arrowsVisible ? 1 : 0}
             >
-              <line
-                x1={140}
-                y1={225}
-                x2={140}
-                y2={245}
-                className="stroke-primary"
-                strokeWidth={2.5}
-                markerEnd="url(#arrow-dev)"
+              <rect
+                x={200}
+                y={230}
+                width={120}
+                height={40}
+                rx={10}
+                className="fill-card stroke-primary"
+                strokeWidth={1.5}
               />
               <text
-                x={140}
-                y={20}
+                x={260}
+                y={255}
+                textAnchor="middle"
+                className="fill-foreground text-[12px] font-semibold"
+              >
+                AI
+              </text>
+              <text
+                x={260}
+                y={218}
                 textAnchor="middle"
                 className="fill-primary text-[11px] font-semibold"
               >
                 AI responds
               </text>
               <line
+                x1={140}
+                y1={201}
+                x2={222}
+                y2={229}
+                className="stroke-primary"
+                strokeWidth={2.5}
+                markerEnd="url(#ar-arrow-dev)"
+              />
+              <line
                 x1={380}
-                y1={225}
-                x2={380}
-                y2={245}
+                y1={201}
+                x2={298}
+                y2={229}
                 className="stroke-amber-500"
                 strokeWidth={2}
                 strokeDasharray="4 3"
-                markerEnd="url(#arrow-adv)"
+                markerEnd="url(#ar-arrow-adv)"
                 opacity={0.35}
               />
-              <defs>
-                <marker
-                  id="arrow-dev"
-                  markerWidth={8}
-                  markerHeight={8}
-                  refX={4}
-                  refY={4}
-                  orient="auto"
-                >
-                  <path d="M0,0 L8,4 L0,8 Z" className="fill-primary" />
-                </marker>
-                <marker
-                  id="arrow-adv"
-                  markerWidth={8}
-                  markerHeight={8}
-                  refX={4}
-                  refY={4}
-                  orient="auto"
-                >
-                  <path d="M0,0 L8,4 L0,8 Z" className="fill-amber-500" />
-                </marker>
-              </defs>
             </g>
           </svg>
         );

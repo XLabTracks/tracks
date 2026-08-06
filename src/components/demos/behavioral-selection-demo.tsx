@@ -42,17 +42,6 @@ export function BehavioralSelectionDemo() {
           >
             <path d="M 0 0 L 8 4 L 0 8 z" className="fill-muted-foreground" />
           </marker>
-          <marker
-            id="bsm-arrow-amber"
-            viewBox="0 0 8 8"
-            refX="6"
-            refY="4"
-            markerWidth="6"
-            markerHeight="6"
-            orient="auto-start-reverse"
-          >
-            <path d="M 0 0 L 8 4 L 0 8 z" className="fill-amber-500" />
-          </marker>
         </defs>
 
         {/* Left: cloud of candidate cognitive-pattern nodes */}

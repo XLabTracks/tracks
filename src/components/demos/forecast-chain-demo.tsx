@@ -7,7 +7,7 @@
 // (Long-term measurements bullet, "How?" section).
 
 const CAPTION =
-  "chain short-term forecasts together to incentivize objectives beyond immediate reward, giving more accurate results.";
+  "Chain short-term forecasts together to incentivize objectives beyond immediate reward, giving more accurate results.";
 
 export function ForecastChainDemo() {
   return (

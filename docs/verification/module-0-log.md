@@ -42,3 +42,37 @@ classes only, comply/defect always beside a word; every label restates words
 from the case-file text (seals · identifiers · cameras; CargoScan portal;
 SS-25/SS-20; Biopreparat; and so on) — no diagram composes a curriculum claim.
 Verified in the browser on day and night themes.
+
+---
+
+## 2026-08-06 — outline renumbering: X.X.0 → X.X, timeline game deleted
+
+On the author's instruction, the course's numbering was brought onto the
+outline shape where a submodule carries the bare `X.X` number (no `.0`) and
+every `X.X.X` nests under it via `sectionItemId`. In this module:
+
+- **0.2.0 "Interactive timeline simulation" is deleted altogether** — lesson
+  entry, `v-verification-timeline-game.mdx`, the widget
+  (`widgets/verification-timeline-game.tsx`), its data file, and its
+  registry/exercises entries. Unit 0.2 is now the intuitions reading alone,
+  and its `href` in the generated `course.js` moved accordingly. The
+  facilitator guide's four links to the in-app page now point at the game's
+  still-live external home (`the-verification-game.netlify.app`) so its
+  session plans stand unchanged; with that, the guide has no in-app links
+  left, and the link test's canary now asserts over all anchors.
+- **0.2.1 → 0.2** (Building verification intuitions), **0.1.0 → 0.1**,
+  **0.3.0 → 0.3**. 0.1.1 (prevention) now nests under 0.1 and 0.3.1
+  (securitization) under 0.3.
+
+Elsewhere in the same pass: 2.1.0/2.2.0/2.3.0/2.4.0 → 2.1/2.2/2.3/2.4 (see
+module-2-log); 1.1.1's drill lesson folded into 1.1's body verbatim (the
+outline's "1.1 … (including exercise)" is one unit); 1.0.3 nested under 1.0,
+1.2.1–1.2.3 under 1.2, 4.1.1 under 4.1.
+
+Deliberately **not** done, because the outline names content that does not
+exist in the graph yet and inventing it is not this change's job: 0.4*
+"Strategic Foundations", 1.3.1 "Threat Modeling and Theory of Change", 1.3's
+context-distiller exercise, and 3.2.1 "Evasion Scenario Taxonomy Revisited"
+(still a heading inside 3.2). Conversely 1.0.3 and 1.2.1–1.2.3 are lessons
+the outline does not list — they were nested under their parents, not
+deleted; merging or retiring them is a content decision still owed.

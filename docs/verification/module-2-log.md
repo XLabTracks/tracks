@@ -170,3 +170,16 @@ deliberate under-promise.
   2.3 now lands on `intelligence-intro` rather than mid-layer on `signatures`.
 - Pre-existing and *not* caused by this change: `/verification` (no index route;
   the landing is `/verification/landing`) returns 404.
+
+---
+
+## 2026-08-06 — submodule intros renumbered X.X.0 → X.X
+
+On the author's instruction the four submodule intros dropped their `.0`:
+2.1.0 → 2.1, 2.2.0 → 2.2, 2.3.0 → 2.3, 2.4.0 → 2.4 (titles in
+`curriculum.ts`; `hardware-attestation.mdx`'s own numbered heading renumbered
+in the same edit so `isLessonTitleHeading` keeps de-duplicating it — the
+other three intros carry no numbered heading). Subsubmodule numbering
+(2.1.1–2.1.8, 2.2.1–2.2.3, 2.3.1–2.3.5, 2.4.1–2.4.4) and all nesting are
+unchanged. Unit ids were already `2.1`–`2.4`, so progress keys and skill
+rungs are untouched.

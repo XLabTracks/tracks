@@ -1,6 +1,6 @@
 ---
 title: The Minimum Standard for Researcher Access
-theme: Technical Governance
+track: Technical Governance
 status: draft
 summary: Structured access exists as a trend and not as a floor. Write the minimum acceptable standard — what a researcher must be able to do, and what the company keeps.
 team: 1-2

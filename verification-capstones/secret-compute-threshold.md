@@ -1,6 +1,6 @@
 ---
 title: How Much Hidden Compute Breaks the Deal?
-theme: Verification
+track: Verification
 status: draft
 summary: How much concealed compute must a state retain before a pause agreement stops being worth signing? Three scenarios, priced for capability and strategic effect.
 team: 1-2

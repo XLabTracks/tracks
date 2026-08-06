@@ -25,8 +25,8 @@ export default function Page() {
         <section className="bank-head">
           <h1>Capstone bank</h1>
           <p className="sub">
-            Every capstone idea in the bank, with the numbers that decide
-            whether you can take it on: how many people, how many hours, over how
+            The program&rsquo;s whole capstone bank, with the numbers that decide
+            whether you can take one on: how many people, how many hours, over how
             long. Open a card for the full brief.
           </p>
         </section>
@@ -40,7 +40,7 @@ export default function Page() {
             <label className="sort">
               <span className="sort-label">Sort</span>
               <select id="sort">
-                <option value="theme">By theme</option>
+                <option value="track">By track</option>
                 <option value="effort">Fewest hours first</option>
                 <option value="team">Smallest team first</option>
                 <option value="duration">Shortest first</option>
@@ -71,14 +71,12 @@ export default function Page() {
         </p>
 
         <p className="note bank-note">
-          <b>What is in here.</b> Every capstone idea from the program, grouped by
-          theme. The Verification and Program-wide briefs name units this course
-          teaches. The Technical Governance and AI Governance Policy themes are
-          additional ideas from the wider program: their briefs assume background
-          this course does not teach, so they list no prerequisites here. When you
-          have chosen — or would rather propose your own idea — the{" "}
-          <a href="/verification/capstone-signup">sign-up sheet</a> is where you
-          put your name against it.
+          <b>What is in here.</b> The whole program&rsquo;s bank: the Verification
+          and cross-track capstones this course prepares you for, and the Technical
+          Governance and AI Governance Policy capstones beside them. A governance
+          brief marked <i>fits this course</i> can be taken as a Verification
+          capstone — its sheet says which module it lands on. The rest keep
+          prerequisites naming weeks taught on their own tracks, not here.
         </p>
 
       </main>

@@ -1,6 +1,6 @@
 ---
 title: What Content Provenance Can and Cannot Buy
-theme: Technical Governance
+track: Technical Governance
 status: draft
 summary: Measure how fast a watermark dies under ordinary handling, then write the policy-options memo that says which provenance obligations are worth imposing.
 team: 1-2

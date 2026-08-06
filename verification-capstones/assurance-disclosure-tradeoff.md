@@ -1,6 +1,6 @@
 ---
 title: What Assurance Costs in Secrets
-theme: Verification
+track: Verification
 status: draft
 summary: Every verification mechanism buys confidence by spending the operator's secrets. Price the exchange rate across inspections, taps, telemetry, trusted hardware and recomputation.
 team: 1-2

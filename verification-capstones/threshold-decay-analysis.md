@@ -1,6 +1,6 @@
 ---
 title: How Fast Does a Compute Threshold Decay?
-theme: Technical Governance
+track: Technical Governance
 status: ready
 summary: Quantify how quickly a fixed FLOP threshold loses selectivity under compute-efficiency trends, and propose an indexing rule that survives it.
 team: 1-2

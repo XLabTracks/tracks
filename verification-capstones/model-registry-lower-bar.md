@@ -1,6 +1,6 @@
 ---
 title: What Counts as a New Model?
-theme: Technical Governance
+track: Technical Governance
 status: draft
 summary: A registry has to say when an update becomes a new entry. Draw the line, test it against a year of real releases, and say what each side of it costs.
 team: 1-2

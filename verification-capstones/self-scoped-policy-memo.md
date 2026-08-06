@@ -1,6 +1,6 @@
 ---
 title: Self-Scoped Policy Memo
-theme: AI Governance Policy
+track: AI Governance Policy
 status: ready
 summary: A two-page memo on a question you chose, addressed to a named decision-maker, using an artifact you built during the track as its evidence base.
 team: 1

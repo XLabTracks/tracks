@@ -1,6 +1,6 @@
 ---
 title: What Statistical Test Does an Eval Result Need?
-theme: Technical Governance
+track: Technical Governance
 status: draft
 summary: Eval scores get compared to thresholds as if they were measurements without error. Work out what test the comparison actually needs, and re-run one published claim under it.
 team: 1-2

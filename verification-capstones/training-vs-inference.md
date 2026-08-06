@@ -1,6 +1,6 @@
 ---
 title: Understanding Training vs. Inference
-theme: Technical Governance
+track: Technical Governance
 status: draft
 summary: Training is a bet; inference is a continuous process. Draw the distinction clearly, communicate it to non-technical audiences, and note the regulatory implications.
 team: 1

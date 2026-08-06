@@ -1,6 +1,6 @@
 ---
 title: A Model Strict-Liability Bill for One State
-theme: AI Governance Policy
+track: AI Governance Policy
 status: draft
 summary: Strict liability for AI harms has been discussed since 2019, and no state has model language to adopt. Write the bill for one state, and the note on the other forty-nine.
 team: 1-2

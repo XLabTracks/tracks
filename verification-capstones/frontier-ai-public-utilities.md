@@ -1,6 +1,6 @@
 ---
 title: Should Parts of Frontier AI Be Treated Like Public Utilities?
-theme: AI Governance Policy
+track: AI Governance Policy
 status: draft
 summary: If foundation models become a natural oligopoly at the base of the economy, is the right policy public-utility treatment rather than forced competition? Work the implications both ways.
 team: 1-2

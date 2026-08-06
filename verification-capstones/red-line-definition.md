@@ -1,6 +1,6 @@
 ---
 title: Draft a Red Line Somebody Could Enforce
-theme: AI Governance Policy
+track: AI Governance Policy
 status: draft
 summary: Pick a capability everyone says should be off-limits and write the definition three parties could sign — plus the eval that decides it and the body that acts on it.
 team: 1-2

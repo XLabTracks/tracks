@@ -1,6 +1,6 @@
 ---
 title: Pick the Insurance Number
-theme: AI Governance Policy
+track: AI Governance Policy
 status: draft
 summary: Mandatory insurance for frontier developers keeps being endorsed without anyone naming a minimum. Name it — coverage, limits, deductible — and defend the arithmetic.
 team: 1-2

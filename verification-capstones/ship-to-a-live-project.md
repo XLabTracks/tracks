@@ -1,6 +1,6 @@
 ---
 title: Ship Something to a Live Project
-theme: Program-wide
+track: Program-wide
 status: concept
 summary: Find an AI safety project that wants volunteers, agree one scoped contribution with a maintainer, ship it, and write up what the review taught you.
 team: 1-2

@@ -1,6 +1,6 @@
 ---
 title: Permit Inference, Prohibit Training
-theme: Verification
+track: Verification
 status: draft
 summary: An agreement permits inference and prohibits training. Define permitted inference so the boundary survives fine-tuning, distillation and synthetic-data generation.
 team: 1-2

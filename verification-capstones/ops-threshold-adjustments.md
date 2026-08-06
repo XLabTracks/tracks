@@ -1,6 +1,6 @@
 ---
 title: OP/s Threshold Adjustments for Performance
-theme: Technical Governance
+track: Technical Governance
 status: draft
 summary: How should OP/s thresholds adjust for performance across bit-widths? Existing metrics may favor smaller bit-widths, and the acceleration effects are under-analyzed.
 team: 1-2

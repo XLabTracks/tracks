@@ -1,6 +1,6 @@
 ---
 title: Compute Production Gap and Data Centers in China
-theme: Technical Governance
+track: Technical Governance
 status: draft
 summary: When would indigenous Chinese compute manufacturing equal US-and-allies' capability? Map the biggest datacenters, the buildout patterns, and the events that would change the forecast.
 team: 1-2

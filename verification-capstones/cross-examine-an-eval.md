@@ -1,6 +1,6 @@
 ---
 title: Cross-Examine an Eval Result
-theme: AI Governance Policy
+track: AI Governance Policy
 status: draft
 summary: Write the testimony a score justifies — then write the hostile cross-examination that takes it apart, and revise until both can be true at once.
 team: 1-2

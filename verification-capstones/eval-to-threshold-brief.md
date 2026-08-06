@@ -1,6 +1,6 @@
 ---
 title: From Eval Result to Policy Threshold
-theme: Technical Governance
+track: Technical Governance
 status: ready
 summary: Turn an eval you actually ran into a short technical-policy brief that defends one threshold — with the elicitation gap stated, not buried.
 team: 1

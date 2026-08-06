@@ -1,6 +1,6 @@
 ---
 title: When Is Tamper-Evidence Enough?
-theme: Verification
+track: Verification
 status: draft
 summary: Tamper-proof hardware is expensive and unsolved; tamper-evident is neither. In which institutional settings is finding out afterwards actually sufficient?
 team: 1-2

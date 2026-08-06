@@ -1,6 +1,6 @@
 ---
 title: Write the Antitrust Waiver Letter
-theme: AI Governance Policy
+track: AI Governance Policy
 status: draft
 summary: Developers say antitrust risk stops them agreeing minimum safety standards together. Draft the business review letter that would clear it, and the request that earns one.
 team: 1

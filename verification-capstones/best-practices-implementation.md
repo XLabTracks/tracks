@@ -1,6 +1,6 @@
 ---
 title: Implementation Details of the Best-Practices List
-theme: AI Governance Policy
+track: AI Governance Policy
 status: draft
 summary: Experts across sectors agreed on best practices for AGI developers; the survey stopped short of implementation. Work out how the surveyed items would be implemented in practice.
 team: 1-2

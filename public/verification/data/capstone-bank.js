@@ -10,7 +10,7 @@ window.CAPSTONE_BANK = {
       "slug": "agent-eval-design",
       "source": "verification-capstones/agent-eval-design.md",
       "title": "Evaluate an Agent, Not a Model",
-      "theme": "Technical Governance",
+      "track": "Technical Governance",
       "status": "draft",
       "summary": "Agent capability depends on the scaffold, the tools and the environment as much as the model. Build the eval that survives that, and report what your score is actually about.",
       "team": {
@@ -35,6 +35,8 @@ window.CAPSTONE_BANK = {
       "deliverableType": "notebook",
       "mentor": "recommended",
       "audience": "The regulator who will be handed an agent benchmark score and asked to trigger on it.",
+      "verificationFit": null,
+      "courseFit": false,
       "skills": [
         "agent evaluation",
         "ablation design",
@@ -56,7 +58,7 @@ window.CAPSTONE_BANK = {
       "slug": "antitrust-waiver-letter",
       "source": "verification-capstones/antitrust-waiver-letter.md",
       "title": "Write the Antitrust Waiver Letter",
-      "theme": "AI Governance Policy",
+      "track": "AI Governance Policy",
       "status": "draft",
       "summary": "Developers say antitrust risk stops them agreeing minimum safety standards together. Draft the business review letter that would clear it, and the request that earns one.",
       "team": {
@@ -81,6 +83,8 @@ window.CAPSTONE_BANK = {
       "deliverableType": "memo",
       "mentor": "optional",
       "audience": "The Assistant Attorney General who would have to sign it.",
+      "verificationFit": null,
+      "courseFit": false,
       "skills": [
         "regulatory drafting",
         "antitrust literacy",
@@ -102,7 +106,7 @@ window.CAPSTONE_BANK = {
       "slug": "assurance-disclosure-tradeoff",
       "source": "verification-capstones/assurance-disclosure-tradeoff.md",
       "title": "What Assurance Costs in Secrets",
-      "theme": "Verification",
+      "track": "Verification",
       "status": "draft",
       "summary": "Every verification mechanism buys confidence by spending the operator's secrets. Price the exchange rate across inspections, taps, telemetry, trusted hardware and recomputation.",
       "team": {
@@ -127,6 +131,8 @@ window.CAPSTONE_BANK = {
       "deliverableType": "analysis",
       "mentor": "recommended",
       "audience": "The operator and verifier negotiating what must be shown for what assurance.",
+      "verificationFit": null,
+      "courseFit": true,
       "skills": [
         "mechanism comparison",
         "privacy analysis",
@@ -145,7 +151,7 @@ window.CAPSTONE_BANK = {
       "slug": "best-practices-implementation",
       "source": "verification-capstones/best-practices-implementation.md",
       "title": "Implementation Details of the Best-Practices List",
-      "theme": "AI Governance Policy",
+      "track": "AI Governance Policy",
       "status": "draft",
       "summary": "Experts across sectors agreed on best practices for AGI developers; the survey stopped short of implementation. Work out how the surveyed items would be implemented in practice.",
       "team": {
@@ -170,6 +176,8 @@ window.CAPSTONE_BANK = {
       "deliverableType": "analysis",
       "mentor": "optional",
       "audience": "",
+      "verificationFit": null,
+      "courseFit": false,
       "skills": [
         "policy analysis",
         "stakeholder mapping",
@@ -199,7 +207,7 @@ window.CAPSTONE_BANK = {
       "slug": "cloud-kyc-regime",
       "source": "verification-capstones/cloud-kyc-regime.md",
       "title": "A Cloud KYC Regime That Is Not Just Paperwork",
-      "theme": "Verification",
+      "track": "Verification",
       "status": "draft",
       "summary": "Module 2.2 warns that self-reporting alone is a paperwork regime. Design the cloud reporting rules for one provider so that at least one claim in them is actually checkable.",
       "team": {
@@ -224,6 +232,8 @@ window.CAPSTONE_BANK = {
       "deliverableType": "spec",
       "mentor": "recommended",
       "audience": "The national regulator drafting the reporting obligation, and the provider who has to implement it.",
+      "verificationFit": null,
+      "courseFit": true,
       "skills": [
         "regime design",
         "telemetry analysis",
@@ -249,7 +259,7 @@ window.CAPSTONE_BANK = {
       "slug": "cohort-tabletop-design",
       "source": "verification-capstones/cohort-tabletop-design.md",
       "title": "Design a Cohort Tabletop Exercise",
-      "theme": "Program-wide",
+      "track": "Program-wide",
       "status": "ready",
       "summary": "Build a runnable three-hour tabletop for the next cohort — roles, injects, scoring, and a facilitator guide someone else can run without you.",
       "team": {
@@ -274,6 +284,8 @@ window.CAPSTONE_BANK = {
       "deliverableType": "design",
       "mentor": "required",
       "audience": "A facilitator running the exercise with no contact with its designers.",
+      "verificationFit": null,
+      "courseFit": false,
       "skills": [
         "scenario design",
         "facilitation",
@@ -294,7 +306,7 @@ window.CAPSTONE_BANK = {
       "slug": "comparative-jurisdiction-dossier",
       "source": "verification-capstones/comparative-jurisdiction-dossier.md",
       "title": "Comparative Jurisdiction Dossier",
-      "theme": "AI Governance Policy",
+      "track": "AI Governance Policy",
       "status": "ready",
       "summary": "Take one governance mechanism and trace how three jurisdictions implement it — where the language diverges, and what that costs a compliant developer.",
       "team": {
@@ -319,6 +331,8 @@ window.CAPSTONE_BANK = {
       "deliverableType": "dossier",
       "mentor": "optional",
       "audience": "A compliance lead operating in all three jurisdictions at once.",
+      "verificationFit": null,
+      "courseFit": false,
       "skills": [
         "comparative analysis",
         "statutory reading",
@@ -335,7 +349,7 @@ window.CAPSTONE_BANK = {
       "slug": "compliance-without-disclosure",
       "source": "verification-capstones/compliance-without-disclosure.md",
       "title": "Prove Compliance Without Handing Over the Model",
-      "theme": "Verification",
+      "track": "Verification",
       "status": "draft",
       "summary": "Module 2.0's whole problem in one artifact — pick one claim a developer must prove, and specify how to prove it without disclosing weights, data, or a trusted enclave.",
       "team": {
@@ -360,6 +374,8 @@ window.CAPSTONE_BANK = {
       "deliverableType": "spec",
       "mentor": "required",
       "audience": "The regulator who needs the assurance and the developer who cannot hand over the asset.",
+      "verificationFit": null,
+      "courseFit": true,
       "skills": [
         "protocol reasoning",
         "trust-assumption analysis",
@@ -385,7 +401,7 @@ window.CAPSTONE_BANK = {
       "slug": "compute-accounting-audit",
       "source": "verification-capstones/compute-accounting-audit.md",
       "title": "A Minimum Viable Compute-Accounting Audit",
-      "theme": "Verification",
+      "track": "Verification",
       "status": "draft",
       "summary": "What should a commercial AI audit prove about how each GPU was used? Claims, logs, retention, auditor access — and what happens when logs are missing.",
       "team": {
@@ -410,6 +426,8 @@ window.CAPSTONE_BANK = {
       "deliverableType": "spec",
       "mentor": "optional",
       "audience": "The audit firm that has to say what its stamp proves.",
+      "verificationFit": null,
+      "courseFit": true,
       "skills": [
         "audit design",
         "evidence standards",
@@ -428,7 +446,7 @@ window.CAPSTONE_BANK = {
       "slug": "compute-chain-of-custody",
       "source": "verification-capstones/compute-chain-of-custody.md",
       "title": "Steal a Chain of Custody From Another Industry",
-      "theme": "Verification",
+      "track": "Verification",
       "status": "draft",
       "summary": "Other industries already track dangerous things through many hands. Take one working custody regime apart and report what transfers to compute — and what does not.",
       "team": {
@@ -453,6 +471,8 @@ window.CAPSTONE_BANK = {
       "deliverableType": "dossier",
       "mentor": "optional",
       "audience": "Whoever is designing chip tracking and does not want to reinvent forty years of practice.",
+      "verificationFit": null,
+      "courseFit": true,
       "skills": [
         "analogical reasoning",
         "regime analysis",
@@ -481,7 +501,7 @@ window.CAPSTONE_BANK = {
       "slug": "compute-monitoring-costing",
       "source": "verification-capstones/compute-monitoring-costing.md",
       "title": "What Would Compute Monitoring Actually Cost?",
-      "theme": "Verification",
+      "track": "Verification",
       "status": "draft",
       "summary": "The compute-monitoring literature has the mechanisms, the timing, even a first-pass inspector headcount. It has no penalties and no price. Produce the costing a budget office would need.",
       "team": {
@@ -506,6 +526,8 @@ window.CAPSTONE_BANK = {
       "deliverableType": "analysis",
       "mentor": "recommended",
       "audience": "The agency that would be asked to stand this up, and the committee funding it.",
+      "verificationFit": null,
+      "courseFit": true,
       "skills": [
         "cost estimation",
         "institutional design",
@@ -531,7 +553,7 @@ window.CAPSTONE_BANK = {
       "slug": "compute-production-gap-china",
       "source": "verification-capstones/compute-production-gap-china.md",
       "title": "Compute Production Gap and Data Centers in China",
-      "theme": "Technical Governance",
+      "track": "Technical Governance",
       "status": "draft",
       "summary": "When would indigenous Chinese compute manufacturing equal US-and-allies' capability? Map the biggest datacenters, the buildout patterns, and the events that would change the forecast.",
       "team": {
@@ -556,6 +578,8 @@ window.CAPSTONE_BANK = {
       "deliverableType": "analysis",
       "mentor": "recommended",
       "audience": "",
+      "verificationFit": null,
+      "courseFit": false,
       "skills": [
         "forecasting",
         "data analysis",
@@ -581,7 +605,7 @@ window.CAPSTONE_BANK = {
       "slug": "content-provenance-options",
       "source": "verification-capstones/content-provenance-options.md",
       "title": "What Content Provenance Can and Cannot Buy",
-      "theme": "Technical Governance",
+      "track": "Technical Governance",
       "status": "draft",
       "summary": "Measure how fast a watermark dies under ordinary handling, then write the policy-options memo that says which provenance obligations are worth imposing.",
       "team": {
@@ -606,6 +630,8 @@ window.CAPSTONE_BANK = {
       "deliverableType": "notebook",
       "mentor": "optional",
       "audience": "The legislator being told that watermarking solves AI-generated content.",
+      "verificationFit": null,
+      "courseFit": false,
       "skills": [
         "robustness testing",
         "measurement",
@@ -627,7 +653,7 @@ window.CAPSTONE_BANK = {
       "slug": "cooling-shutdown-verification",
       "source": "verification-capstones/cooling-shutdown-verification.md",
       "title": "Does Switching Off the Cooling Switch Off the Training?",
-      "theme": "Verification",
+      "track": "Verification",
       "status": "draft",
       "summary": "An inspector confirms the cooling is off. Under what conditions does that actually rule out a large training run — and how would an operator get around it?",
       "team": {
@@ -652,6 +678,8 @@ window.CAPSTONE_BANK = {
       "deliverableType": "analysis",
       "mentor": "optional",
       "audience": "The inspectorate asked to certify that a halt is actually a halt.",
+      "verificationFit": null,
+      "courseFit": true,
       "skills": [
         "threat modelling",
         "physical-layer reasoning",
@@ -670,7 +698,7 @@ window.CAPSTONE_BANK = {
       "slug": "cross-examine-an-eval",
       "source": "verification-capstones/cross-examine-an-eval.md",
       "title": "Cross-Examine an Eval Result",
-      "theme": "AI Governance Policy",
+      "track": "AI Governance Policy",
       "status": "draft",
       "summary": "Write the testimony a score justifies — then write the hostile cross-examination that takes it apart, and revise until both can be true at once.",
       "team": {
@@ -695,6 +723,8 @@ window.CAPSTONE_BANK = {
       "deliverableType": "memo",
       "mentor": "optional",
       "audience": "A committee that will hear one number and decide what it means.",
+      "verificationFit": null,
+      "courseFit": false,
       "skills": [
         "evidence standards",
         "adversarial review",
@@ -716,7 +746,7 @@ window.CAPSTONE_BANK = {
       "slug": "curriculum-gap-audit",
       "source": "verification-capstones/curriculum-gap-audit.md",
       "title": "Audit What This Program Does Not Teach",
-      "theme": "Program-wide",
+      "track": "Program-wide",
       "status": "draft",
       "summary": "Compare the Tracks curriculum against the four best-known open AI safety curricula, and hand back the three gaps worth closing — with what to cut to make room.",
       "team": {
@@ -741,6 +771,8 @@ window.CAPSTONE_BANK = {
       "deliverableType": "analysis",
       "mentor": "optional",
       "audience": "The people who will write next year's version of this program.",
+      "verificationFit": null,
+      "courseFit": false,
       "skills": [
         "curriculum analysis",
         "comparative coding",
@@ -760,7 +792,7 @@ window.CAPSTONE_BANK = {
       "slug": "detect-a-training-run",
       "source": "verification-capstones/detect-a-training-run.md",
       "title": "Spot a Training Run Without Looking Inside It",
-      "theme": "Verification",
+      "track": "Verification",
       "status": "draft",
       "summary": "Could a verifier tell a large training run from utilisation signatures alone — no workload access, no code? Work out what the signature is and how cheaply it is faked.",
       "team": {
@@ -785,6 +817,8 @@ window.CAPSTONE_BANK = {
       "deliverableType": "analysis",
       "mentor": "recommended",
       "audience": "The verifier who will never be allowed to see the workload.",
+      "verificationFit": null,
+      "courseFit": true,
       "skills": [
         "signature analysis",
         "privacy-preserving verification",
@@ -810,7 +844,7 @@ window.CAPSTONE_BANK = {
       "slug": "emergency-verification-package",
       "source": "verification-capstones/emergency-verification-package.md",
       "title": "A Verification Package You Could Ship in a Year",
-      "theme": "Verification",
+      "track": "Verification",
       "status": "draft",
       "summary": "Twelve months, no new chips. Assemble the verification package that could actually be deployed, and state plainly what it still cannot see.",
       "team": {
@@ -835,6 +869,8 @@ window.CAPSTONE_BANK = {
       "deliverableType": "spec",
       "mentor": "recommended",
       "audience": "The task force told to stand up verification this year, not next.",
+      "verificationFit": null,
+      "courseFit": true,
       "skills": [
         "regime design",
         "feasibility triage",
@@ -853,7 +889,7 @@ window.CAPSTONE_BANK = {
       "slug": "eval-attestation-chain",
       "source": "verification-capstones/eval-attestation-chain.md",
       "title": "Make an Eval Result Believable to a Stranger",
-      "theme": "Verification",
+      "track": "Verification",
       "status": "draft",
       "summary": "A lab says its model scored below the danger threshold. Specify what a third party would have to observe to believe that — and what it costs to provide.",
       "team": {
@@ -878,6 +914,8 @@ window.CAPSTONE_BANK = {
       "deliverableType": "spec",
       "mentor": "recommended",
       "audience": "The regulator who has to accept or reject a self-reported eval result.",
+      "verificationFit": null,
+      "courseFit": true,
       "skills": [
         "evidence standards",
         "attestation design",
@@ -903,7 +941,7 @@ window.CAPSTONE_BANK = {
       "slug": "eval-scoping-pilot",
       "source": "verification-capstones/eval-scoping-pilot.md",
       "title": "Scope One Eval Small Enough to Finish",
-      "theme": "Technical Governance",
+      "track": "Technical Governance",
       "status": "draft",
       "summary": "Pick one problem off a public evals backlog, cut it down until it fits three weeks, and run a thirty-item pilot that tells you whether the full eval is worth building.",
       "team": {
@@ -928,6 +966,8 @@ window.CAPSTONE_BANK = {
       "deliverableType": "notebook",
       "mentor": "optional",
       "audience": "The team that would have to decide whether to fund the full version.",
+      "verificationFit": null,
+      "courseFit": false,
       "skills": [
         "eval design",
         "scoping",
@@ -950,7 +990,7 @@ window.CAPSTONE_BANK = {
       "slug": "eval-statistical-tests",
       "source": "verification-capstones/eval-statistical-tests.md",
       "title": "What Statistical Test Does an Eval Result Need?",
-      "theme": "Technical Governance",
+      "track": "Technical Governance",
       "status": "draft",
       "summary": "Eval scores get compared to thresholds as if they were measurements without error. Work out what test the comparison actually needs, and re-run one published claim under it.",
       "team": {
@@ -975,6 +1015,8 @@ window.CAPSTONE_BANK = {
       "deliverableType": "notebook",
       "mentor": "recommended",
       "audience": "Anyone about to write \"the model scored below the threshold\" in a document with consequences.",
+      "verificationFit": null,
+      "courseFit": false,
       "skills": [
         "applied statistics",
         "eval methodology",
@@ -996,7 +1038,7 @@ window.CAPSTONE_BANK = {
       "slug": "eval-to-threshold-brief",
       "source": "verification-capstones/eval-to-threshold-brief.md",
       "title": "From Eval Result to Policy Threshold",
-      "theme": "Technical Governance",
+      "track": "Technical Governance",
       "status": "ready",
       "summary": "Turn an eval you actually ran into a short technical-policy brief that defends one threshold — with the elicitation gap stated, not buried.",
       "team": {
@@ -1021,6 +1063,8 @@ window.CAPSTONE_BANK = {
       "deliverableType": "memo",
       "mentor": "optional",
       "audience": "A policy staffer who has to defend a number in a rule.",
+      "verificationFit": null,
+      "courseFit": false,
       "skills": [
         "eval interpretation",
         "threshold design",
@@ -1037,7 +1081,7 @@ window.CAPSTONE_BANK = {
       "slug": "evaluate-the-derivative-ecosystem",
       "source": "verification-capstones/evaluate-the-derivative-ecosystem.md",
       "title": "Evaluate a Thousand Models",
-      "theme": "Technical Governance",
+      "track": "Technical Governance",
       "status": "draft",
       "summary": "One open release becomes thousands of fine-tunes, merges and quantisations. Design the triage that decides which of them anyone needs to evaluate, and pilot it.",
       "team": {
@@ -1062,6 +1106,8 @@ window.CAPSTONE_BANK = {
       "deliverableType": "notebook",
       "mentor": "recommended",
       "audience": "The monitoring body that has to watch an ecosystem, not a model.",
+      "verificationFit": null,
+      "courseFit": false,
       "skills": [
         "scalable evaluation design",
         "sampling",
@@ -1083,7 +1129,7 @@ window.CAPSTONE_BANK = {
       "slug": "evaluated-model-in-production",
       "source": "verification-capstones/evaluated-model-in-production.md",
       "title": "Is the Model in Production the Model That Passed?",
-      "theme": "Verification",
+      "track": "Verification",
       "status": "draft",
       "summary": "Evals passed on one model. Millions of requests run against another — would anyone notice? Design the chain that lets an auditor say deployed equals evaluated.",
       "team": {
@@ -1108,6 +1154,8 @@ window.CAPSTONE_BANK = {
       "deliverableType": "design",
       "mentor": "optional",
       "audience": "The auditor who signed off on the eval and now has to stand behind the deployment.",
+      "verificationFit": null,
+      "courseFit": true,
       "skills": [
         "protocol design",
         "attestation reasoning",
@@ -1126,7 +1174,7 @@ window.CAPSTONE_BANK = {
       "slug": "exfiltrated-weights-regime",
       "source": "verification-capstones/exfiltrated-weights-regime.md",
       "title": "When the Weights Are Already Out",
-      "theme": "Verification",
+      "track": "Verification",
       "status": "draft",
       "summary": "Module 3 rates weight exfiltration as the evasion route that bypasses the compute regime entirely. Specify what a verification regime does the day after it happens.",
       "team": {
@@ -1151,6 +1199,8 @@ window.CAPSTONE_BANK = {
       "deliverableType": "spec",
       "mentor": "recommended",
       "audience": "The parties to an agreement whose central mechanism has just been routed around.",
+      "verificationFit": null,
+      "courseFit": true,
       "skills": [
         "regime design",
         "ecosystem monitoring",
@@ -1176,7 +1226,7 @@ window.CAPSTONE_BANK = {
       "slug": "export-control-circumvention",
       "source": "verification-capstones/export-control-circumvention.md",
       "title": "How Much Leaks Through the Export Controls?",
-      "theme": "AI Governance Policy",
+      "track": "AI Governance Policy",
       "status": "draft",
       "summary": "Everyone agrees chips get around export controls; nobody has bounded it. Build the estimate from public evidence, with the uncertainty stated and the enforcement gap named.",
       "team": {
@@ -1201,6 +1251,8 @@ window.CAPSTONE_BANK = {
       "deliverableType": "analysis",
       "mentor": "recommended",
       "audience": "The enforcement agency deciding where to put a small number of investigators.",
+      "verificationFit": null,
+      "courseFit": false,
       "skills": [
         "open-source estimation",
         "triangulation",
@@ -1227,7 +1279,7 @@ window.CAPSTONE_BANK = {
       "slug": "field-building-blueprint",
       "source": "verification-capstones/field-building-blueprint.md",
       "title": "Blueprint a Field-Building Intervention",
-      "theme": "Program-wide",
+      "track": "Program-wide",
       "status": "draft",
       "summary": "Design one field-building intervention — an event, a fellowship, a small organisation — to the point where someone with the budget could run it, and say how you would know it worked.",
       "team": {
@@ -1252,6 +1304,8 @@ window.CAPSTONE_BANK = {
       "deliverableType": "design",
       "mentor": "recommended",
       "audience": "The funder who would write the cheque, and the person who would have to run it.",
+      "verificationFit": null,
+      "courseFit": false,
       "skills": [
         "theory of change",
         "programme design",
@@ -1278,7 +1332,7 @@ window.CAPSTONE_BANK = {
       "slug": "field-map-refresh",
       "source": "verification-capstones/field-map-refresh.md",
       "title": "Refresh a Governance Field Map",
-      "theme": "AI Governance Policy",
+      "track": "AI Governance Policy",
       "status": "draft",
       "summary": "Take a published map of who does what in AI governance, rebuild it for one sub-area at today's date, and log everything that rotted in between.",
       "team": {
@@ -1303,6 +1357,8 @@ window.CAPSTONE_BANK = {
       "deliverableType": "dossier",
       "mentor": "optional",
       "audience": "Someone deciding this month where in the field they could usefully work.",
+      "verificationFit": null,
+      "courseFit": false,
       "skills": [
         "field mapping",
         "source currency",
@@ -1324,7 +1380,7 @@ window.CAPSTONE_BANK = {
       "slug": "frontier-ai-public-utilities",
       "source": "verification-capstones/frontier-ai-public-utilities.md",
       "title": "Should Parts of Frontier AI Be Treated Like Public Utilities?",
-      "theme": "AI Governance Policy",
+      "track": "AI Governance Policy",
       "status": "draft",
       "summary": "If foundation models become a natural oligopoly at the base of the economy, is the right policy public-utility treatment rather than forced competition? Work the implications both ways.",
       "team": {
@@ -1349,6 +1405,8 @@ window.CAPSTONE_BANK = {
       "deliverableType": "analysis",
       "mentor": "optional",
       "audience": "",
+      "verificationFit": null,
+      "courseFit": false,
       "skills": [
         "market-structure analysis",
         "policy analysis"
@@ -1373,7 +1431,7 @@ window.CAPSTONE_BANK = {
       "slug": "frontier-safety-policy-redraft",
       "source": "verification-capstones/frontier-safety-policy-redraft.md",
       "title": "Sharpen a Frontier Safety Commitment",
-      "theme": "Technical Governance",
+      "track": "Technical Governance",
       "status": "ready",
       "summary": "Red-team one lab's published safety framework and rewrite a single if-then commitment so it is measurable, triggerable, and hard to self-grade.",
       "team": {
@@ -1398,6 +1456,8 @@ window.CAPSTONE_BANK = {
       "deliverableType": "analysis",
       "mentor": "optional",
       "audience": "The lab's policy team, and the regulator who might codify their language.",
+      "verificationFit": null,
+      "courseFit": false,
       "skills": [
         "clause analysis",
         "if-then commitment design",
@@ -1414,7 +1474,7 @@ window.CAPSTONE_BANK = {
       "slug": "hardware-chokepoint-dossier",
       "source": "verification-capstones/hardware-chokepoint-dossier.md",
       "title": "Hardware Chokepoint Dossier",
-      "theme": "Verification",
+      "track": "Verification",
       "status": "ready",
       "summary": "Trace one node of the compute supply chain end to end and rank it as a verification chokepoint — who sees what, and who would have to agree.",
       "team": {
@@ -1439,6 +1499,8 @@ window.CAPSTONE_BANK = {
       "deliverableType": "dossier",
       "mentor": "optional",
       "audience": "An analyst deciding where to spend a verification budget.",
+      "verificationFit": null,
+      "courseFit": true,
       "skills": [
         "supply chain analysis",
         "actor mapping",
@@ -1458,7 +1520,7 @@ window.CAPSTONE_BANK = {
       "slug": "incident-detection-monitoring",
       "source": "verification-capstones/incident-detection-monitoring.md",
       "title": "Incident Detection and Monitoring at AI Companies",
-      "theme": "Technical Governance",
+      "track": "Technical Governance",
       "status": "draft",
       "summary": "Different ways of monitoring deployed AI systems for misuse and misalignment have been proposed, nearly all with significant tradeoffs. Assess them and sketch a workable framework.",
       "team": {
@@ -1483,6 +1545,8 @@ window.CAPSTONE_BANK = {
       "deliverableType": "analysis",
       "mentor": "optional",
       "audience": "",
+      "verificationFit": null,
+      "courseFit": false,
       "skills": [
         "risk analysis",
         "scenario mapping",
@@ -1512,7 +1576,7 @@ window.CAPSTONE_BANK = {
       "slug": "incident-reporting-taxonomy",
       "source": "verification-capstones/incident-reporting-taxonomy.md",
       "title": "An Incident Taxonomy Labs Could Report Against",
-      "theme": "Technical Governance",
+      "track": "Technical Governance",
       "status": "draft",
       "summary": "Incident reporting is in every governance proposal and no two people mean the same thing by \"incident\". Build the taxonomy and the reporting form, then test it on real cases.",
       "team": {
@@ -1537,6 +1601,8 @@ window.CAPSTONE_BANK = {
       "deliverableType": "spec",
       "mentor": "optional",
       "audience": "The regulator who will receive the reports and the lab engineer who has to file one at 2am.",
+      "verificationFit": null,
+      "courseFit": false,
       "skills": [
         "taxonomy design",
         "form design",
@@ -1567,7 +1633,7 @@ window.CAPSTONE_BANK = {
       "slug": "inference-compute-botec",
       "source": "verification-capstones/inference-compute-botec.md",
       "title": "BOTECs of Inference Compute Needs",
-      "theme": "Technical Governance",
+      "track": "Technical Governance",
       "status": "draft",
       "summary": "How much inference compute — FLOP, FLOP/s, hardware — would consequential AI use-cases need? Build the well-evidenced BOTEC the idea asks for, for policymakers rather than publication.",
       "team": {
@@ -1592,6 +1658,8 @@ window.CAPSTONE_BANK = {
       "deliverableType": "notebook",
       "mentor": "optional",
       "audience": "The policymaker sizing a risk who needs the arithmetic, not a headline.",
+      "verificationFit": null,
+      "courseFit": false,
       "skills": [
         "back-of-envelope estimation",
         "sensitivity analysis",
@@ -1621,7 +1689,7 @@ window.CAPSTONE_BANK = {
       "slug": "insurance-minimum-number",
       "source": "verification-capstones/insurance-minimum-number.md",
       "title": "Pick the Insurance Number",
-      "theme": "AI Governance Policy",
+      "track": "AI Governance Policy",
       "status": "draft",
       "summary": "Mandatory insurance for frontier developers keeps being endorsed without anyone naming a minimum. Name it — coverage, limits, deductible — and defend the arithmetic.",
       "team": {
@@ -1646,6 +1714,8 @@ window.CAPSTONE_BANK = {
       "deliverableType": "analysis",
       "mentor": "recommended",
       "audience": "The regulator who has to write a number into a licensing condition.",
+      "verificationFit": null,
+      "courseFit": false,
       "skills": [
         "quantitative estimation",
         "loss modelling",
@@ -1667,7 +1737,7 @@ window.CAPSTONE_BANK = {
       "slug": "interconnect-cut-protocol",
       "source": "verification-capstones/interconnect-cut-protocol.md",
       "title": "Cut the Interconnect, Keep the Inference",
-      "theme": "Verification",
+      "track": "Verification",
       "status": "draft",
       "summary": "Disconnect part of the optical links between racks and training stops while inference survives — allegedly. Work out what remains possible and who checks the cables.",
       "team": {
@@ -1692,6 +1762,8 @@ window.CAPSTONE_BANK = {
       "deliverableType": "design",
       "mentor": "optional",
       "audience": "The negotiator who needs an emergency measure that does not kill civilian service.",
+      "verificationFit": null,
+      "courseFit": true,
       "skills": [
         "protocol design",
         "network reasoning",
@@ -1710,7 +1782,7 @@ window.CAPSTONE_BANK = {
       "slug": "interp-as-evidence",
       "source": "verification-capstones/interp-as-evidence.md",
       "title": "What an Interp Finding Is Evidence Of",
-      "theme": "AI Governance Policy",
+      "track": "AI Governance Policy",
       "status": "draft",
       "summary": "Take one published interpretability result and write the evidence memo — the claim it supports, the claims it is routinely stretched to cover, and whether it would survive a hearing.",
       "team": {
@@ -1735,6 +1807,8 @@ window.CAPSTONE_BANK = {
       "deliverableType": "memo",
       "mentor": "optional",
       "audience": "The policy researcher about to cite an interpretability paper in an argument.",
+      "verificationFit": null,
+      "courseFit": false,
       "skills": [
         "evidence standards",
         "reading technical results as a non-specialist",
@@ -1750,7 +1824,7 @@ window.CAPSTONE_BANK = {
       "slug": "intro-retention-probe",
       "source": "verification-capstones/intro-retention-probe.md",
       "title": "What Do Intro Graduates Actually Retain?",
-      "theme": "Program-wide",
+      "track": "Program-wide",
       "status": "concept",
       "summary": "The program's entry assumptions rest on retention figures its own docs call directional. Measure them against this cohort and hand back what the tiered hints should absorb.",
       "team": {
@@ -1775,6 +1849,8 @@ window.CAPSTONE_BANK = {
       "deliverableType": "analysis",
       "mentor": "recommended",
       "audience": "Whoever writes week 1 of the next version of this program.",
+      "verificationFit": null,
+      "courseFit": false,
       "skills": [
         "instrument design",
         "measurement",
@@ -1794,7 +1870,7 @@ window.CAPSTONE_BANK = {
       "slug": "minimal-verification-regime",
       "source": "verification-capstones/minimal-verification-regime.md",
       "title": "Minimal Verification Regime for an Emergency Pause",
-      "theme": "Verification",
+      "track": "Verification",
       "status": "ready",
       "summary": "Design the smallest verification regime that could make a three-month emergency pause credible to a party that expects to be cheated.",
       "team": {
@@ -1819,6 +1895,8 @@ window.CAPSTONE_BANK = {
       "deliverableType": "spec",
       "mentor": "recommended",
       "audience": "The negotiating team that would have to sign it, and the technical staff who would have to run it.",
+      "verificationFit": null,
+      "courseFit": true,
       "skills": [
         "regime design",
         "threat modelling",
@@ -1839,7 +1917,7 @@ window.CAPSTONE_BANK = {
       "slug": "model-registry-lower-bar",
       "source": "verification-capstones/model-registry-lower-bar.md",
       "title": "What Counts as a New Model?",
-      "theme": "Technical Governance",
+      "track": "Technical Governance",
       "status": "draft",
       "summary": "A registry has to say when an update becomes a new entry. Draw the line, test it against a year of real releases, and say what each side of it costs.",
       "team": {
@@ -1864,6 +1942,8 @@ window.CAPSTONE_BANK = {
       "deliverableType": "spec",
       "mentor": "optional",
       "audience": "Whoever operates the registry, and the developer deciding whether this checkpoint needs filing.",
+      "verificationFit": null,
+      "courseFit": false,
       "skills": [
         "definition design",
         "back-testing a rule",
@@ -1885,7 +1965,7 @@ window.CAPSTONE_BANK = {
       "slug": "open-weight-release-memo",
       "source": "verification-capstones/open-weight-release-memo.md",
       "title": "The Open-Weight Release Decision",
-      "theme": "Technical Governance",
+      "track": "Technical Governance",
       "status": "draft",
       "summary": "Write the release memo for a frontier open-weight model — what evidence would justify shipping, which mitigations survive contact with a downstream fine-tuner, and which are theatre.",
       "team": {
@@ -1910,6 +1990,8 @@ window.CAPSTONE_BANK = {
       "deliverableType": "memo",
       "mentor": "recommended",
       "audience": "The release committee that has to sign, knowing they cannot unship.",
+      "verificationFit": null,
+      "courseFit": false,
       "skills": [
         "risk assessment",
         "evidence standards",
@@ -1931,7 +2013,7 @@ window.CAPSTONE_BANK = {
       "slug": "ops-threshold-adjustments",
       "source": "verification-capstones/ops-threshold-adjustments.md",
       "title": "OP/s Threshold Adjustments for Performance",
-      "theme": "Technical Governance",
+      "track": "Technical Governance",
       "status": "draft",
       "summary": "How should OP/s thresholds adjust for performance across bit-widths? Existing metrics may favor smaller bit-widths, and the acceleration effects are under-analyzed.",
       "team": {
@@ -1956,6 +2038,8 @@ window.CAPSTONE_BANK = {
       "deliverableType": "analysis",
       "mentor": "optional",
       "audience": "",
+      "verificationFit": null,
+      "courseFit": false,
       "skills": [
         "literature review",
         "hardware performance modelling"
@@ -1980,7 +2064,7 @@ window.CAPSTONE_BANK = {
       "slug": "orphaned-policy-adoption",
       "source": "verification-capstones/orphaned-policy-adoption.md",
       "title": "Adopt an Orphaned Policy",
-      "theme": "AI Governance Policy",
+      "track": "AI Governance Policy",
       "status": "concept",
       "summary": "Find a governance proposal nobody owns, work out why it stalled, and write the implementation plan that would give it a home.",
       "team": {
@@ -2005,6 +2089,8 @@ window.CAPSTONE_BANK = {
       "deliverableType": "design",
       "mentor": "required",
       "audience": "The organisation you are nominating to pick it up.",
+      "verificationFit": null,
+      "courseFit": false,
       "skills": [
         "stakeholder mapping",
         "implementation design",
@@ -2026,7 +2112,7 @@ window.CAPSTONE_BANK = {
       "slug": "permit-inference-prohibit-training",
       "source": "verification-capstones/permit-inference-prohibit-training.md",
       "title": "Permit Inference, Prohibit Training",
-      "theme": "Verification",
+      "track": "Verification",
       "status": "draft",
       "summary": "An agreement permits inference and prohibits training. Define permitted inference so the boundary survives fine-tuning, distillation and synthetic-data generation.",
       "team": {
@@ -2051,6 +2137,8 @@ window.CAPSTONE_BANK = {
       "deliverableType": "spec",
       "mentor": "recommended",
       "audience": "The drafter of a pause clause that has to leave deployed services running.",
+      "verificationFit": null,
+      "courseFit": true,
       "skills": [
         "definition drafting",
         "workload analysis",
@@ -2069,7 +2157,7 @@ window.CAPSTONE_BANK = {
       "slug": "pre-emptive-authorization",
       "source": "verification-capstones/pre-emptive-authorization.md",
       "title": "A Licence to Train",
-      "theme": "AI Governance Policy",
+      "track": "AI Governance Policy",
       "status": "draft",
       "summary": "Licensing keeps being proposed for frontier training and never specified. Design the authorisation regime — the trigger, the test, the decision-maker, and the appeal.",
       "team": {
@@ -2094,6 +2182,8 @@ window.CAPSTONE_BANK = {
       "deliverableType": "spec",
       "mentor": "recommended",
       "audience": "The agency that would have to say yes or no, on a clock, with the evidence available.",
+      "verificationFit": null,
+      "courseFit": false,
       "skills": [
         "regulatory design",
         "administrative process",
@@ -2120,7 +2210,7 @@ window.CAPSTONE_BANK = {
       "slug": "procurement-as-lever",
       "source": "verification-capstones/procurement-as-lever.md",
       "title": "Govern Through the Purchase Order",
-      "theme": "AI Governance Policy",
+      "track": "AI Governance Policy",
       "status": "draft",
       "summary": "Government buying power sets terms without new legislation. Draft the AI procurement conditions for one agency, and say which safety asks a contract can actually carry.",
       "team": {
@@ -2145,6 +2235,8 @@ window.CAPSTONE_BANK = {
       "deliverableType": "spec",
       "mentor": "optional",
       "audience": "The contracting officer who has to evaluate bids against whatever you write.",
+      "verificationFit": null,
+      "courseFit": false,
       "skills": [
         "contract-condition drafting",
         "evidence design",
@@ -2171,7 +2263,7 @@ window.CAPSTONE_BANK = {
       "slug": "proof-of-training-feasibility",
       "source": "verification-capstones/proof-of-training-feasibility.md",
       "title": "Can You Prove This Model Came From That Run?",
-      "theme": "Verification",
+      "track": "Verification",
       "status": "draft",
       "summary": "Proof-of-learning is in Module 2.1 as fragile and spoofed; model-heritage inference is an open problem next door. Assess what either can support and what a regime could rest on them.",
       "team": {
@@ -2196,6 +2288,8 @@ window.CAPSTONE_BANK = {
       "deliverableType": "dossier",
       "mentor": "recommended",
       "audience": "The regulator asked to accept \"this is the model we evaluated\" as established fact.",
+      "verificationFit": null,
+      "courseFit": true,
       "skills": [
         "feasibility assessment",
         "provenance reasoning",
@@ -2220,7 +2314,7 @@ window.CAPSTONE_BANK = {
       "slug": "reconciling-impact-scores",
       "source": "verification-capstones/reconciling-impact-scores.md",
       "title": "Reconciling Impact Scores for AI Risk Management",
-      "theme": "AI Governance Policy",
+      "track": "AI Governance Policy",
       "status": "draft",
       "summary": "AI risks are measured in incompatible units across domains. Review how other impact-assessment fields combine scores, and recommend a currency converter suited to AI risk.",
       "team": {
@@ -2245,6 +2339,8 @@ window.CAPSTONE_BANK = {
       "deliverableType": "analysis",
       "mentor": "optional",
       "audience": "",
+      "verificationFit": null,
+      "courseFit": false,
       "skills": [
         "risk assessment methods",
         "comparative review"
@@ -2269,7 +2365,7 @@ window.CAPSTONE_BANK = {
       "slug": "red-line-definition",
       "source": "verification-capstones/red-line-definition.md",
       "title": "Draft a Red Line Somebody Could Enforce",
-      "theme": "AI Governance Policy",
+      "track": "AI Governance Policy",
       "status": "draft",
       "summary": "Pick a capability everyone says should be off-limits and write the definition three parties could sign — plus the eval that decides it and the body that acts on it.",
       "team": {
@@ -2294,6 +2390,8 @@ window.CAPSTONE_BANK = {
       "deliverableType": "spec",
       "mentor": "recommended",
       "audience": "The standards body or agency that would have to make the line operative.",
+      "verificationFit": null,
+      "courseFit": false,
       "skills": [
         "definition drafting",
         "consensus analysis",
@@ -2315,7 +2413,7 @@ window.CAPSTONE_BANK = {
       "slug": "red-team-a-verification-stack",
       "source": "verification-capstones/red-team-a-verification-stack.md",
       "title": "Red-Team a Verification Stack",
-      "theme": "Verification",
+      "track": "Verification",
       "status": "ready",
       "summary": "Take a published verification proposal and break it — a structured evasion report with detection probabilities and the patch each route demands.",
       "team": {
@@ -2340,6 +2438,8 @@ window.CAPSTONE_BANK = {
       "deliverableType": "analysis",
       "mentor": "recommended",
       "audience": "The team that published the proposal you are attacking.",
+      "verificationFit": null,
+      "courseFit": true,
       "skills": [
         "red-teaming",
         "attack trees",
@@ -2359,7 +2459,7 @@ window.CAPSTONE_BANK = {
       "slug": "regulatory-cost-benefit",
       "source": "verification-capstones/regulatory-cost-benefit.md",
       "title": "Do the Cost-Benefit Analysis Nobody Did",
-      "theme": "AI Governance Policy",
+      "track": "AI Governance Policy",
       "status": "draft",
       "summary": "AI rules are argued in principle and approved on paperwork. Write the regulatory impact analysis for one real proposal — costs, benefits, and what the standard method cannot handle.",
       "team": {
@@ -2384,6 +2484,8 @@ window.CAPSTONE_BANK = {
       "deliverableType": "analysis",
       "mentor": "recommended",
       "audience": "The economist in the review office who will read the agency's version of this document.",
+      "verificationFit": null,
+      "courseFit": false,
       "skills": [
         "cost-benefit analysis",
         "compliance-cost estimation",
@@ -2410,7 +2512,7 @@ window.CAPSTONE_BANK = {
       "slug": "replication-what-broke",
       "source": "verification-capstones/replication-what-broke.md",
       "title": "Replicate a Published Number and Report What Broke",
-      "theme": "Technical Governance",
+      "track": "Technical Governance",
       "status": "draft",
       "summary": "Take one eval score or compute estimate that governance arguments lean on, reproduce it, and report what was underspecified, what it is sensitive to, and what a policy reader should cite instead.",
       "team": {
@@ -2435,6 +2537,8 @@ window.CAPSTONE_BANK = {
       "deliverableType": "notebook",
       "mentor": "recommended",
       "audience": "The next person about to cite that number in a memo.",
+      "verificationFit": null,
+      "courseFit": false,
       "skills": [
         "replication",
         "experimental hygiene",
@@ -2456,7 +2560,7 @@ window.CAPSTONE_BANK = {
       "slug": "research-proposal-workup",
       "source": "verification-capstones/research-proposal-workup.md",
       "title": "Write the Proposal a Funder Would Read",
-      "theme": "AI Governance Policy",
+      "track": "AI Governance Policy",
       "status": "draft",
       "summary": "Take one idea off a public governance research agenda and work it into a two-page funding proposal — scope, budget, timeline, and the result that would prove you wrong.",
       "team": {
@@ -2481,6 +2585,8 @@ window.CAPSTONE_BANK = {
       "deliverableType": "memo",
       "mentor": "optional",
       "audience": "A grant-maker with forty proposals and twenty minutes each.",
+      "verificationFit": null,
+      "courseFit": false,
       "skills": [
         "research scoping",
         "proposal writing",
@@ -2502,7 +2608,7 @@ window.CAPSTONE_BANK = {
       "slug": "resilience-allocation-plan",
       "source": "verification-capstones/resilience-allocation-plan.md",
       "title": "Spend Ten Billion Dollars",
-      "theme": "AI Governance Policy",
+      "track": "AI Governance Policy",
       "status": "draft",
       "summary": "If a government suddenly wanted to spend seriously on AI resilience, no implementation-ready plan exists. Write the allocation, defend the split, and say what you would cut first.",
       "team": {
@@ -2527,6 +2633,8 @@ window.CAPSTONE_BANK = {
       "deliverableType": "analysis",
       "mentor": "recommended",
       "audience": "The staffer who has ten days to turn a political window into a budget line.",
+      "verificationFit": null,
+      "courseFit": false,
       "skills": [
         "prioritisation under uncertainty",
         "absorptive-capacity analysis",
@@ -2548,7 +2656,7 @@ window.CAPSTONE_BANK = {
       "slug": "rmf-compliance-scorecard",
       "source": "verification-capstones/rmf-compliance-scorecard.md",
       "title": "Score the Developers Against the NIST Framework",
-      "theme": "AI Governance Policy",
+      "track": "AI Governance Policy",
       "status": "draft",
       "summary": "Nobody knows whether the major developers follow the NIST AI Risk Management Framework — or ever promised to. Turn it into a checklist, score them on public evidence, and publish the rule.",
       "team": {
@@ -2573,6 +2681,8 @@ window.CAPSTONE_BANK = {
       "deliverableType": "dossier",
       "mentor": "optional",
       "audience": "The procurement officer or regulator deciding whether \"we follow the RMF\" means anything.",
+      "verificationFit": null,
+      "courseFit": false,
       "skills": [
         "framework decomposition",
         "rubric design",
@@ -2594,7 +2704,7 @@ window.CAPSTONE_BANK = {
       "slug": "sandbagging-incentives",
       "source": "verification-capstones/sandbagging-incentives.md",
       "title": "Make Sandbagging Not Worth It",
-      "theme": "Technical Governance",
+      "track": "Technical Governance",
       "status": "draft",
       "summary": "A developer whose model must score below a threshold has every reason to elicit weakly. Design the regulatory incentives that make under-elicitation the expensive option.",
       "team": {
@@ -2619,6 +2729,8 @@ window.CAPSTONE_BANK = {
       "deliverableType": "spec",
       "mentor": "recommended",
       "audience": "The regulator who has to accept an eval result from a party that benefits from a low score.",
+      "verificationFit": null,
+      "courseFit": false,
       "skills": [
         "incentive design",
         "eval methodology",
@@ -2640,7 +2752,7 @@ window.CAPSTONE_BANK = {
       "slug": "secret-compute-threshold",
       "source": "verification-capstones/secret-compute-threshold.md",
       "title": "How Much Hidden Compute Breaks the Deal?",
-      "theme": "Verification",
+      "track": "Verification",
       "status": "draft",
       "summary": "How much concealed compute must a state retain before a pause agreement stops being worth signing? Three scenarios, priced for capability and strategic effect.",
       "team": {
@@ -2665,6 +2777,8 @@ window.CAPSTONE_BANK = {
       "deliverableType": "analysis",
       "mentor": "recommended",
       "audience": "The delegation deciding how much verification is enough to sign.",
+      "verificationFit": null,
+      "courseFit": true,
       "skills": [
         "scenario analysis",
         "capability estimation",
@@ -2684,7 +2798,7 @@ window.CAPSTONE_BANK = {
       "slug": "secret-datacenter-evidence",
       "source": "verification-capstones/secret-datacenter-evidence.md",
       "title": "When Does a Secret Datacenter Earn an Inspection?",
-      "theme": "Verification",
+      "track": "Verification",
       "status": "draft",
       "summary": "Power draw, cooling, procurement, satellite imagery — when does a stack of maybes justify an inspection? Build the rubric that turns signals into a decision.",
       "team": {
@@ -2709,6 +2823,8 @@ window.CAPSTONE_BANK = {
       "deliverableType": "memo",
       "mentor": "optional",
       "audience": "The agency that has to decide when suspicion becomes an inspection.",
+      "verificationFit": null,
+      "courseFit": true,
       "skills": [
         "evidence standards",
         "intelligence analysis",
@@ -2727,7 +2843,7 @@ window.CAPSTONE_BANK = {
       "slug": "self-scoped-policy-memo",
       "source": "verification-capstones/self-scoped-policy-memo.md",
       "title": "Self-Scoped Policy Memo",
-      "theme": "AI Governance Policy",
+      "track": "AI Governance Policy",
       "status": "ready",
       "summary": "A two-page memo on a question you chose, addressed to a named decision-maker, using an artifact you built during the track as its evidence base.",
       "team": {
@@ -2752,6 +2868,8 @@ window.CAPSTONE_BANK = {
       "deliverableType": "memo",
       "mentor": "recommended",
       "audience": "One named person with one decision in front of them.",
+      "verificationFit": null,
+      "courseFit": false,
       "skills": [
         "memo craft",
         "audience analysis",
@@ -2768,7 +2886,7 @@ window.CAPSTONE_BANK = {
       "slug": "ship-to-a-live-project",
       "source": "verification-capstones/ship-to-a-live-project.md",
       "title": "Ship Something to a Live Project",
-      "theme": "Program-wide",
+      "track": "Program-wide",
       "status": "concept",
       "summary": "Find an AI safety project that wants volunteers, agree one scoped contribution with a maintainer, ship it, and write up what the review taught you.",
       "team": {
@@ -2793,6 +2911,8 @@ window.CAPSTONE_BANK = {
       "deliverableType": "memo",
       "mentor": "optional",
       "audience": "The maintainer, who is the real grader, and the next volunteer they onboard.",
+      "verificationFit": null,
+      "courseFit": false,
       "skills": [
         "scoping with a stakeholder",
         "working to someone else's standard",
@@ -2812,7 +2932,7 @@ window.CAPSTONE_BANK = {
       "slug": "stock-and-flow-accounting",
       "source": "verification-capstones/stock-and-flow-accounting.md",
       "title": "Stock and Flow Accounting Case Studies",
-      "theme": "Verification",
+      "track": "Verification",
       "status": "draft",
       "summary": "Case studies of regimes that track dual-use physical objects — registration, transfer penalties, measured loss rates — as building blocks for compute stock-and-flow accounting.",
       "team": {
@@ -2837,6 +2957,8 @@ window.CAPSTONE_BANK = {
       "deliverableType": "dossier",
       "mentor": "optional",
       "audience": "",
+      "verificationFit": null,
+      "courseFit": true,
       "skills": [
         "case studies",
         "regime analysis",
@@ -2865,7 +2987,7 @@ window.CAPSTONE_BANK = {
       "slug": "strict-liability-model-bill",
       "source": "verification-capstones/strict-liability-model-bill.md",
       "title": "A Model Strict-Liability Bill for One State",
-      "theme": "AI Governance Policy",
+      "track": "AI Governance Policy",
       "status": "draft",
       "summary": "Strict liability for AI harms has been discussed since 2019, and no state has model language to adopt. Write the bill for one state, and the note on the other forty-nine.",
       "team": {
@@ -2890,6 +3012,8 @@ window.CAPSTONE_BANK = {
       "deliverableType": "spec",
       "mentor": "recommended",
       "audience": "The legislative counsel who would have to turn it into a filed bill.",
+      "verificationFit": null,
+      "courseFit": false,
       "skills": [
         "statutory drafting",
         "tort literacy",
@@ -2911,7 +3035,7 @@ window.CAPSTONE_BANK = {
       "slug": "structured-access-minimum",
       "source": "verification-capstones/structured-access-minimum.md",
       "title": "The Minimum Standard for Researcher Access",
-      "theme": "Technical Governance",
+      "track": "Technical Governance",
       "status": "draft",
       "summary": "Structured access exists as a trend and not as a floor. Write the minimum acceptable standard — what a researcher must be able to do, and what the company keeps.",
       "team": {
@@ -2936,6 +3060,8 @@ window.CAPSTONE_BANK = {
       "deliverableType": "spec",
       "mentor": "optional",
       "audience": "The lab deciding what to offer, and the auditor deciding whether it is enough.",
+      "verificationFit": null,
+      "courseFit": false,
       "skills": [
         "access-regime design",
         "threat modelling",
@@ -2957,7 +3083,7 @@ window.CAPSTONE_BANK = {
       "slug": "subthreshold-distributed-training",
       "source": "verification-capstones/subthreshold-distributed-training.md",
       "title": "Train It in Pieces, Under Every Threshold",
-      "theme": "Verification",
+      "track": "Verification",
       "status": "draft",
       "summary": "Evasion scenario 8 says a run can be fragmented below the line. Work out how far that actually goes today, what it costs, and which threshold designs survive it.",
       "team": {
@@ -2982,6 +3108,8 @@ window.CAPSTONE_BANK = {
       "deliverableType": "analysis",
       "mentor": "recommended",
       "audience": "Whoever writes the threshold, and the verifier who has to enforce it.",
+      "verificationFit": null,
+      "courseFit": true,
       "skills": [
         "technical feasibility assessment",
         "evasion modelling",
@@ -3007,7 +3135,7 @@ window.CAPSTONE_BANK = {
       "slug": "supply-chain-logging-points",
       "source": "verification-capstones/supply-chain-logging-points.md",
       "title": "Where Should the Supply Chain Keep Logs?",
-      "theme": "Verification",
+      "track": "Verification",
       "status": "draft",
       "summary": "Manufacturing logs are cheap to demand and easy to drown in. Find the point in the semiconductor chain where credible logs buy the most information for the least trust.",
       "team": {
@@ -3032,6 +3160,8 @@ window.CAPSTONE_BANK = {
       "deliverableType": "analysis",
       "mentor": "optional",
       "audience": "The regulator choosing where in the supply chain to demand records.",
+      "verificationFit": null,
+      "courseFit": true,
       "skills": [
         "supply-chain analysis",
         "comparative ranking",
@@ -3050,7 +3180,7 @@ window.CAPSTONE_BANK = {
       "slug": "taig-tooling-gap",
       "source": "verification-capstones/taig-tooling-gap.md",
       "title": "Close One Gap in Technical AI Governance",
-      "theme": "Technical Governance",
+      "track": "Technical Governance",
       "status": "draft",
       "summary": "Take one open problem from the technical AI governance agenda and specify the tool that would close it — who builds it, who would have to adopt it, and what it costs to be wrong.",
       "team": {
@@ -3075,6 +3205,8 @@ window.CAPSTONE_BANK = {
       "deliverableType": "dossier",
       "mentor": "recommended",
       "audience": "A funder deciding between building the tool and waiting for someone else to.",
+      "verificationFit": null,
+      "courseFit": false,
       "skills": [
         "problem decomposition",
         "technical specification",
@@ -3096,7 +3228,7 @@ window.CAPSTONE_BANK = {
       "slug": "tamper-evidence-sufficiency",
       "source": "verification-capstones/tamper-evidence-sufficiency.md",
       "title": "When Is Tamper-Evidence Enough?",
-      "theme": "Verification",
+      "track": "Verification",
       "status": "draft",
       "summary": "Tamper-proof hardware is expensive and unsolved; tamper-evident is neither. In which institutional settings is finding out afterwards actually sufficient?",
       "team": {
@@ -3121,6 +3253,8 @@ window.CAPSTONE_BANK = {
       "deliverableType": "analysis",
       "mentor": "optional",
       "audience": "The regime designer deciding where prevention is worth its cost.",
+      "verificationFit": null,
+      "courseFit": true,
       "skills": [
         "institutional design",
         "inspection economics",
@@ -3139,7 +3273,7 @@ window.CAPSTONE_BANK = {
       "slug": "telemetry-security-case",
       "source": "verification-capstones/telemetry-security-case.md",
       "title": "A Security Case for One Sensor",
-      "theme": "Verification",
+      "track": "Verification",
       "status": "draft",
       "summary": "Power, temperature and timing telemetry cannot classify workloads reliably. Build the security case for using one sensor feed anyway.",
       "team": {
@@ -3164,6 +3298,8 @@ window.CAPSTONE_BANK = {
       "deliverableType": "analysis",
       "mentor": "optional",
       "audience": "The verifier deciding whether a sensor feed is worth installing.",
+      "verificationFit": null,
+      "courseFit": true,
       "skills": [
         "security cases",
         "telemetry analysis",
@@ -3182,7 +3318,7 @@ window.CAPSTONE_BANK = {
       "slug": "three-directions-drill",
       "source": "verification-capstones/three-directions-drill.md",
       "title": "Three Directions off Someone Else's Agenda",
-      "theme": "Technical Governance",
+      "track": "Technical Governance",
       "status": "draft",
       "summary": "Fellowship interviews test live research-idea generation. Take a published technical-safety agenda you did not write and produce three directions, each with a first experiment and a falsifier.",
       "team": {
@@ -3207,6 +3343,8 @@ window.CAPSTONE_BANK = {
       "deliverableType": "memo",
       "mentor": "optional",
       "audience": "The interviewer who will ask you to do this out loud, with no preparation.",
+      "verificationFit": null,
+      "courseFit": false,
       "skills": [
         "research-idea generation",
         "reading an agenda critically",
@@ -3223,7 +3361,7 @@ window.CAPSTONE_BANK = {
       "slug": "threshold-decay-analysis",
       "source": "verification-capstones/threshold-decay-analysis.md",
       "title": "How Fast Does a Compute Threshold Decay?",
-      "theme": "Technical Governance",
+      "track": "Technical Governance",
       "status": "ready",
       "summary": "Quantify how quickly a fixed FLOP threshold loses selectivity under compute-efficiency trends, and propose an indexing rule that survives it.",
       "team": {
@@ -3248,6 +3386,8 @@ window.CAPSTONE_BANK = {
       "deliverableType": "notebook",
       "mentor": "optional",
       "audience": "The regulator who has to pick a number and live with it for five years.",
+      "verificationFit": null,
+      "courseFit": false,
       "skills": [
         "quantitative analysis",
         "trend extrapolation",
@@ -3264,7 +3404,7 @@ window.CAPSTONE_BANK = {
       "slug": "tracking-agent-behaviour",
       "source": "verification-capstones/tracking-agent-behaviour.md",
       "title": "Tracking Sketchy AI Agent Behaviour in the Wild",
-      "theme": "Technical Governance",
+      "track": "Technical Governance",
       "status": "draft",
       "summary": "Systematically investigate deployed AI agents for signs of misalignment or scheming in the wild — logs, honeypots, power-user interviews, and public case studies of confirmed incidents.",
       "team": {
@@ -3289,6 +3429,8 @@ window.CAPSTONE_BANK = {
       "deliverableType": "design",
       "mentor": "optional",
       "audience": "",
+      "verificationFit": null,
+      "courseFit": false,
       "skills": [
         "OSINT methods",
         "case-study writing",
@@ -3318,7 +3460,7 @@ window.CAPSTONE_BANK = {
       "slug": "training-vs-inference",
       "source": "verification-capstones/training-vs-inference.md",
       "title": "Understanding Training vs. Inference",
-      "theme": "Technical Governance",
+      "track": "Technical Governance",
       "status": "draft",
       "summary": "Training is a bet; inference is a continuous process. Draw the distinction clearly, communicate it to non-technical audiences, and note the regulatory implications.",
       "team": {
@@ -3343,6 +3485,8 @@ window.CAPSTONE_BANK = {
       "deliverableType": "memo",
       "mentor": "optional",
       "audience": "",
+      "verificationFit": null,
+      "courseFit": false,
       "skills": [
         "distillation",
         "technical communication"
@@ -3371,7 +3515,7 @@ window.CAPSTONE_BANK = {
       "slug": "treaty-clause-redraft",
       "source": "verification-capstones/treaty-clause-redraft.md",
       "title": "Treaty Clause Redraft",
-      "theme": "Verification",
+      "track": "Verification",
       "status": "draft",
       "summary": "Take the verification articles of a real arms-control treaty and redraft them for frontier AI — clause by clause, with the disanalogies marked.",
       "team": {
@@ -3396,6 +3540,8 @@ window.CAPSTONE_BANK = {
       "deliverableType": "analysis",
       "mentor": "recommended",
       "audience": "A treaty lawyer who knows arms control and not AI.",
+      "verificationFit": null,
+      "courseFit": true,
       "skills": [
         "legal drafting",
         "clause analysis",
@@ -3415,7 +3561,7 @@ window.CAPSTONE_BANK = {
       "slug": "unlearning-durability-probe",
       "source": "verification-capstones/unlearning-durability-probe.md",
       "title": "Does the Capability Actually Go Away?",
-      "theme": "Technical Governance",
+      "track": "Technical Governance",
       "status": "concept",
       "summary": "Reproduce one published unlearning method on a small model, then try to bring the capability back — and report the relearning cost as the number that matters.",
       "team": {
@@ -3440,6 +3586,8 @@ window.CAPSTONE_BANK = {
       "deliverableType": "notebook",
       "mentor": "required",
       "audience": "Anyone who has cited unlearning as a safeguard in a release argument.",
+      "verificationFit": null,
+      "courseFit": false,
       "skills": [
         "empirical replication",
         "adversarial evaluation",
@@ -3461,7 +3609,7 @@ window.CAPSTONE_BANK = {
       "slug": "us-china-incident-hotline",
       "source": "verification-capstones/us-china-incident-hotline.md",
       "title": "Build the US–China AI Incident Hotline",
-      "theme": "Verification",
+      "track": "Verification",
       "status": "draft",
       "summary": "The hotline has been proposed for years and never specified. Design it — what counts as an incident, who picks up, what is said, and why either side would believe it.",
       "team": {
@@ -3486,6 +3634,8 @@ window.CAPSTONE_BANK = {
       "deliverableType": "spec",
       "mentor": "recommended",
       "audience": "The desk officers on both ends who would have to use it at 3am.",
+      "verificationFit": null,
+      "courseFit": true,
       "skills": [
         "crisis mechanism design",
         "institutional analysis",
@@ -3511,7 +3661,7 @@ window.CAPSTONE_BANK = {
       "slug": "weight-security-baseline",
       "source": "verification-capstones/weight-security-baseline.md",
       "title": "The Security Baseline That Would Have Stopped It",
-      "theme": "Verification",
+      "track": "Verification",
       "status": "draft",
       "summary": "Weight exfiltration is the evasion route that voids the compute regime. Write the infrastructure-security baseline a regime would require in advance, and price it.",
       "team": {
@@ -3536,6 +3686,8 @@ window.CAPSTONE_BANK = {
       "deliverableType": "spec",
       "mentor": "recommended",
       "audience": "The regulator writing a security condition, and the lab that has to pass an audit against it.",
+      "verificationFit": null,
+      "courseFit": true,
       "skills": [
         "security requirement design",
         "threat tiering",
@@ -3561,7 +3713,7 @@ window.CAPSTONE_BANK = {
       "slug": "which-compute-target",
       "source": "verification-capstones/which-compute-target.md",
       "title": "Which Compute Are We Even Regulating?",
-      "theme": "Technical Governance",
+      "track": "Technical Governance",
       "status": "draft",
       "summary": "Compute rules name a quantity without settling what is counted — training or inference, which operations, at what precision. Pick the definition and show what each alternative catches.",
       "team": {
@@ -3586,6 +3738,8 @@ window.CAPSTONE_BANK = {
       "deliverableType": "notebook",
       "mentor": "recommended",
       "audience": "The drafter who has to put one definition in a rule and live with it.",
+      "verificationFit": null,
+      "courseFit": false,
       "skills": [
         "regulatory definition design",
         "quantitative analysis",
@@ -3616,7 +3770,7 @@ window.CAPSTONE_BANK = {
       "slug": "whistleblower-channel-design",
       "source": "verification-capstones/whistleblower-channel-design.md",
       "title": "A Reporting Channel an Insider Would Actually Use",
-      "theme": "Verification",
+      "track": "Verification",
       "status": "draft",
       "summary": "Module 2.4 says the human layer reveals what hardware and intelligence cannot — if evidence reaches a verifier. Design the channel, against the NDAs and equity that stop it.",
       "team": {
@@ -3641,6 +3795,8 @@ window.CAPSTONE_BANK = {
       "deliverableType": "spec",
       "mentor": "recommended",
       "audience": "The regulator or oversight body that wants insider evidence and currently receives none.",
+      "verificationFit": null,
+      "courseFit": true,
       "skills": [
         "institutional design",
         "incentive analysis",
@@ -3665,7 +3821,7 @@ window.CAPSTONE_BANK = {
       "slug": "windfall-clause-draft",
       "source": "verification-capstones/windfall-clause-draft.md",
       "title": "Draft the Windfall Clause Nobody Has Drafted",
-      "theme": "AI Governance Policy",
+      "track": "AI Governance Policy",
       "status": "draft",
       "summary": "The windfall clause has been a proposal since 2020 and has never been written as contract language. Write it, for one named company's actual corporate form.",
       "team": {
@@ -3690,6 +3846,8 @@ window.CAPSTONE_BANK = {
       "deliverableType": "spec",
       "mentor": "recommended",
       "audience": "The general counsel who would have to take it to a board.",
+      "verificationFit": null,
+      "courseFit": false,
       "skills": [
         "contract drafting",
         "corporate governance",

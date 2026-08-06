@@ -1,6 +1,6 @@
 ---
 title: Reconciling Impact Scores for AI Risk Management
-theme: AI Governance Policy
+track: AI Governance Policy
 status: draft
 summary: AI risks are measured in incompatible units across domains. Review how other impact-assessment fields combine scores, and recommend a currency converter suited to AI risk.
 team: 1-2

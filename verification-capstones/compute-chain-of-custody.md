@@ -1,6 +1,6 @@
 ---
 title: Steal a Chain of Custody From Another Industry
-theme: Verification
+track: Verification
 status: draft
 summary: Other industries already track dangerous things through many hands. Take one working custody regime apart and report what transfers to compute — and what does not.
 team: 1-2

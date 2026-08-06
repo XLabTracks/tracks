@@ -1,6 +1,6 @@
 ---
 title: A Licence to Train
-theme: AI Governance Policy
+track: AI Governance Policy
 status: draft
 summary: Licensing keeps being proposed for frontier training and never specified. Design the authorisation regime — the trigger, the test, the decision-maker, and the appeal.
 team: 1-2

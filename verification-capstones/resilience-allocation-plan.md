@@ -1,6 +1,6 @@
 ---
 title: Spend Ten Billion Dollars
-theme: AI Governance Policy
+track: AI Governance Policy
 status: draft
 summary: If a government suddenly wanted to spend seriously on AI resilience, no implementation-ready plan exists. Write the allocation, defend the split, and say what you would cut first.
 team: 2-3

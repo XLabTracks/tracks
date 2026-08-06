@@ -1,6 +1,6 @@
 ---
 title: Which Compute Are We Even Regulating?
-theme: Technical Governance
+track: Technical Governance
 status: draft
 summary: Compute rules name a quantity without settling what is counted — training or inference, which operations, at what precision. Pick the definition and show what each alternative catches.
 team: 1-2

@@ -1,6 +1,6 @@
 ---
 title: Scope One Eval Small Enough to Finish
-theme: Technical Governance
+track: Technical Governance
 status: draft
 summary: Pick one problem off a public evals backlog, cut it down until it fits three weeks, and run a thirty-item pilot that tells you whether the full eval is worth building.
 team: 1-2

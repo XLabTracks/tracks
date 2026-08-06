@@ -1,6 +1,6 @@
 ---
 title: Replicate a Published Number and Report What Broke
-theme: Technical Governance
+track: Technical Governance
 status: draft
 summary: Take one eval score or compute estimate that governance arguments lean on, reproduce it, and report what was underspecified, what it is sensitive to, and what a policy reader should cite instead.
 team: 1-2

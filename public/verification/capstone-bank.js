@@ -2,7 +2,7 @@
 
    Everything here is derived from window.CAPSTONE_BANK (generated from
    capstones/*.md by scripts/build-capstones.mjs). No entry is named in this
-   file: facets, theme headings and counts all come out of the data, so a new
+   file: facets, track headings and counts all come out of the data, so a new
    markdown file changes the page without touching this script.
 
    Trap: option counts respect every *other* facet's selection but not their
@@ -28,7 +28,10 @@ const STATUS_WORD = VT.bank.statusWord;
 /* ---------- facet definitions: which field, how it is grouped ---------- */
 
 const FACETS = [
-  { key: 'theme', name: 'Theme', get: e => e.theme, primary: true },
+  { key: 'track', name: 'Track', get: e => e.track, primary: true },
+  /* courseFit is derived by the generator: the course's native tracks, plus
+     any other-track entry whose file says why it can be taken here. */
+  { key: 'fit', name: 'Course fit', get: e => e.courseFit ? 'fits this course' : 'other tracks', primary: true, order: ['fits this course', 'other tracks'] },
   { key: 'difficulty', name: 'Difficulty', get: e => e.difficulty, primary: true, order: ['core', 'stretch', 'advanced'] },
   { key: 'team', name: 'Team size', get: e => e.team.bucket, primary: true, order: ['Solo', 'Pair or trio', 'Team of 4+'] },
   { key: 'effort', name: 'Effort', get: e => e.effort.bucket, order: ['Up to 14 hrs', '15–20 hrs', 'Over 20 hrs'] },
@@ -40,15 +43,15 @@ const FACETS = [
 const selected = {};
 for (const f of FACETS) selected[f.key] = new Set();
 let query = '';
-let sortBy = 'theme';
+let sortBy = 'track';
 let refocus = null;
 
 /* ---------- filtering ---------- */
 
 function haystack(e) {
-  return [e.title, e.summary, e.theme, e.deliverable, e.audience,
+  return [e.title, e.summary, e.track, e.deliverable, e.audience,
     e.skills.join(' '), e.prerequisites.join(' '), e.difficulty, e.deliverableType,
-    e.sources.map(s => s.label).join(' ')]
+    e.verificationFit || '', e.sources.map(s => s.label).join(' ')]
     .join(' ').toLowerCase();
 }
 
@@ -80,7 +83,7 @@ function optionsFor(f) {
 /* ---------- sorting ---------- */
 
 const SORTS = {
-  theme: (a, b) => a.theme.localeCompare(b.theme) || a.title.localeCompare(b.title),
+  track: (a, b) => a.track.localeCompare(b.track) || a.title.localeCompare(b.title),
   effort: (a, b) => (a.effort.min - b.effort.min) || (a.effort.max - b.effort.max) || a.title.localeCompare(b.title),
   team: (a, b) => (a.team.min - b.team.min) || (a.team.max - b.team.max) || a.title.localeCompare(b.title),
   duration: (a, b) => (a.duration.weeks - b.duration.weeks) || a.title.localeCompare(b.title),
@@ -129,7 +132,7 @@ function cardFor(e) {
   card.href = '#' + e.slug;
 
   const top = el('div', 'card-top');
-  top.appendChild(el('span', 'card-theme', e.theme));
+  top.appendChild(el('span', 'card-track', e.track));
   top.appendChild(el('span', 'spacer'));
   const status = el('span', 'status');
   status.appendChild(el('span', 'g', STATUS_GLYPH[e.status] || '○'));
@@ -145,6 +148,13 @@ function cardFor(e) {
   card.appendChild(stats);
 
   const meta = el('div', 'card-meta');
+  /* The marker the bank exists to show: an other-track brief a Verification
+     learner can still take. Native briefs don't wear it — the page is theirs. */
+  if (e.verificationFit) {
+    const fit = el('span', 'chip fit', 'fits this course');
+    fit.title = e.verificationFit;
+    meta.appendChild(fit);
+  }
   const diff = el('span', 'chip');
   diff.appendChild(el('span', 'g', DIFF_GLYPH[e.difficulty] || '●'));
   diff.appendChild(el('span', null, e.difficulty));
@@ -165,13 +175,13 @@ function render() {
   const visible = ENTRIES.filter(e => matches(e)).sort(SORTS[sortBy]);
 
   grid.replaceChildren();
-  if (sortBy === 'theme') {
+  if (sortBy === 'track') {
     let current = null;
     for (const e of visible) {
-      if (e.theme !== current) {
-        current = e.theme;
-        const n = visible.filter(x => x.theme === current).length;
-        const head = el('div', 'theme-head');
+      if (e.track !== current) {
+        current = e.track;
+        const n = visible.filter(x => x.track === current).length;
+        const head = el('div', 'track-head');
         head.appendChild(el('span', 'name', current));
         head.appendChild(el('span', 'rule'));
         head.appendChild(el('span', 'n', `${n} capstone${n === 1 ? '' : 's'}`));
@@ -283,7 +293,7 @@ function openSheet(slug) {
   sheetBody.replaceChildren();
 
   const eyebrow = el('div', 'sheet-eyebrow');
-  eyebrow.appendChild(el('span', null, e.theme));
+  eyebrow.appendChild(el('span', null, e.track));
   const status = el('span', 'status');
   status.appendChild(el('span', 'g', STATUS_GLYPH[e.status] || '○'));
   status.appendChild(el('span', null, STATUS_WORD[e.status] || e.status));
@@ -300,6 +310,7 @@ function openSheet(slug) {
   sheetBody.appendChild(stats);
 
   const dl = el('dl', 'facts');
+  factRow(dl, 'Course fit', e.verificationFit);
   factRow(dl, 'Deliverable', e.deliverable);
   factRow(dl, 'Audience', e.audience);
   factRow(dl, 'Difficulty', `${e.difficulty} · mentor ${e.mentor}`);

@@ -1,6 +1,6 @@
 ---
 title: Cut the Interconnect, Keep the Inference
-theme: Verification
+track: Verification
 status: draft
 summary: Disconnect part of the optical links between racks and training stops while inference survives — allegedly. Work out what remains possible and who checks the cables.
 team: 1-2

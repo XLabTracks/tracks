@@ -1,6 +1,6 @@
 ---
 title: When Does a Secret Datacenter Earn an Inspection?
-theme: Verification
+track: Verification
 status: draft
 summary: Power draw, cooling, procurement, satellite imagery — when does a stack of maybes justify an inspection? Build the rubric that turns signals into a decision.
 team: 1-2

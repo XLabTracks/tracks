@@ -1,6 +1,6 @@
 ---
 title: Tracking Sketchy AI Agent Behaviour in the Wild
-theme: Technical Governance
+track: Technical Governance
 status: draft
 summary: Systematically investigate deployed AI agents for signs of misalignment or scheming in the wild — logs, honeypots, power-user interviews, and public case studies of confirmed incidents.
 team: 1-2

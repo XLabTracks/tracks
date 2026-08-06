@@ -1,6 +1,6 @@
 ---
 title: What an Interp Finding Is Evidence Of
-theme: AI Governance Policy
+track: AI Governance Policy
 status: draft
 summary: Take one published interpretability result and write the evidence memo — the claim it supports, the claims it is routinely stretched to cover, and whether it would survive a hearing.
 team: 1

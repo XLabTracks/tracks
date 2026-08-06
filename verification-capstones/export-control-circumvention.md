@@ -1,6 +1,6 @@
 ---
 title: How Much Leaks Through the Export Controls?
-theme: AI Governance Policy
+track: AI Governance Policy
 status: draft
 summary: Everyone agrees chips get around export controls; nobody has bounded it. Build the estimate from public evidence, with the uncertainty stated and the enforcement gap named.
 team: 1-2

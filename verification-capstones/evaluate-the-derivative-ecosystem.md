@@ -1,6 +1,6 @@
 ---
 title: Evaluate a Thousand Models
-theme: Technical Governance
+track: Technical Governance
 status: draft
 summary: One open release becomes thousands of fine-tunes, merges and quantisations. Design the triage that decides which of them anyone needs to evaluate, and pilot it.
 team: 1-2

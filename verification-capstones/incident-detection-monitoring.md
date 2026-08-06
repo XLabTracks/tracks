@@ -1,6 +1,6 @@
 ---
 title: Incident Detection and Monitoring at AI Companies
-theme: Technical Governance
+track: Technical Governance
 status: draft
 summary: Different ways of monitoring deployed AI systems for misuse and misalignment have been proposed, nearly all with significant tradeoffs. Assess them and sketch a workable framework.
 team: 1-2

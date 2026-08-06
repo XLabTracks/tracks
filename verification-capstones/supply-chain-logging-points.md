@@ -1,6 +1,6 @@
 ---
 title: Where Should the Supply Chain Keep Logs?
-theme: Verification
+track: Verification
 status: draft
 summary: Manufacturing logs are cheap to demand and easy to drown in. Find the point in the semiconductor chain where credible logs buy the most information for the least trust.
 team: 1-2

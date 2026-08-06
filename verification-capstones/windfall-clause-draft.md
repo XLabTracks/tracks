@@ -1,6 +1,6 @@
 ---
 title: Draft the Windfall Clause Nobody Has Drafted
-theme: AI Governance Policy
+track: AI Governance Policy
 status: draft
 summary: The windfall clause has been a proposal since 2020 and has never been written as contract language. Write it, for one named company's actual corporate form.
 team: 1-2

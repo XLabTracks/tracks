@@ -1,6 +1,6 @@
 ---
 title: A Security Case for One Sensor
-theme: Verification
+track: Verification
 status: draft
 summary: Power, temperature and timing telemetry cannot classify workloads reliably. Build the security case for using one sensor feed anyway.
 team: 1-2

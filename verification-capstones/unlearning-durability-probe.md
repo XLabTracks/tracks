@@ -1,6 +1,6 @@
 ---
 title: Does the Capability Actually Go Away?
-theme: Technical Governance
+track: Technical Governance
 status: concept
 summary: Reproduce one published unlearning method on a small model, then try to bring the capability back — and report the relearning cost as the number that matters.
 team: 2-3

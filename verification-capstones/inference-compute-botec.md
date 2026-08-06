@@ -1,6 +1,6 @@
 ---
 title: BOTECs of Inference Compute Needs
-theme: Technical Governance
+track: Technical Governance
 status: draft
 summary: How much inference compute — FLOP, FLOP/s, hardware — would consequential AI use-cases need? Build the well-evidenced BOTEC the idea asks for, for policymakers rather than publication.
 team: 1

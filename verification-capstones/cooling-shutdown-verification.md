@@ -1,6 +1,6 @@
 ---
 title: Does Switching Off the Cooling Switch Off the Training?
-theme: Verification
+track: Verification
 status: draft
 summary: An inspector confirms the cooling is off. Under what conditions does that actually rule out a large training run — and how would an operator get around it?
 team: 1-2

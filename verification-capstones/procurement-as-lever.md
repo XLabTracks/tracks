@@ -1,6 +1,6 @@
 ---
 title: Govern Through the Purchase Order
-theme: AI Governance Policy
+track: AI Governance Policy
 status: draft
 summary: Government buying power sets terms without new legislation. Draft the AI procurement conditions for one agency, and say which safety asks a contract can actually carry.
 team: 1-2

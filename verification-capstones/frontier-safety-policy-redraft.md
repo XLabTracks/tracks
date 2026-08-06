@@ -1,6 +1,6 @@
 ---
 title: Sharpen a Frontier Safety Commitment
-theme: Technical Governance
+track: Technical Governance
 status: ready
 summary: Red-team one lab's published safety framework and rewrite a single if-then commitment so it is measurable, triggerable, and hard to self-grade.
 team: 1-2

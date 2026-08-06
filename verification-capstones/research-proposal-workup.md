@@ -1,6 +1,6 @@
 ---
 title: Write the Proposal a Funder Would Read
-theme: AI Governance Policy
+track: AI Governance Policy
 status: draft
 summary: Take one idea off a public governance research agenda and work it into a two-page funding proposal — scope, budget, timeline, and the result that would prove you wrong.
 team: 1

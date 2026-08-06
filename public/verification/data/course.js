@@ -116,7 +116,8 @@ window.COURSE = {
           "mins": "10–15 min",
           "href": "/tracks/verification/policy-scoping/scoping-upstream-downstream",
           "lessons": [
-            "scoping-upstream-downstream"
+            "scoping-upstream-downstream",
+            "context-distiller"
           ]
         }
       ]

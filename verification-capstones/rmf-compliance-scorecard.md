@@ -1,6 +1,6 @@
 ---
 title: Score the Developers Against the NIST Framework
-theme: AI Governance Policy
+track: AI Governance Policy
 status: draft
 summary: Nobody knows whether the major developers follow the NIST AI Risk Management Framework — or ever promised to. Turn it into a checklist, score them on public evidence, and publish the rule.
 team: 2-3

@@ -1,6 +1,6 @@
 ---
 title: Comparative Jurisdiction Dossier
-theme: AI Governance Policy
+track: AI Governance Policy
 status: ready
 summary: Take one governance mechanism and trace how three jurisdictions implement it — where the language diverges, and what that costs a compliant developer.
 team: 2-3

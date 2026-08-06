@@ -1,6 +1,6 @@
 ---
 title: A Verification Package You Could Ship in a Year
-theme: Verification
+track: Verification
 status: draft
 summary: Twelve months, no new chips. Assemble the verification package that could actually be deployed, and state plainly what it still cannot see.
 team: 1-2

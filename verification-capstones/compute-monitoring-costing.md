@@ -1,6 +1,6 @@
 ---
 title: What Would Compute Monitoring Actually Cost?
-theme: Verification
+track: Verification
 status: draft
 summary: The compute-monitoring literature has the mechanisms, the timing, even a first-pass inspector headcount. It has no penalties and no price. Produce the costing a budget office would need.
 team: 1-2

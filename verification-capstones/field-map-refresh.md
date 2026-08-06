@@ -1,6 +1,6 @@
 ---
 title: Refresh a Governance Field Map
-theme: AI Governance Policy
+track: AI Governance Policy
 status: draft
 summary: Take a published map of who does what in AI governance, rebuild it for one sub-area at today's date, and log everything that rotted in between.
 team: 1-2

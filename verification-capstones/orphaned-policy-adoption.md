@@ -1,6 +1,6 @@
 ---
 title: Adopt an Orphaned Policy
-theme: AI Governance Policy
+track: AI Governance Policy
 status: concept
 summary: Find a governance proposal nobody owns, work out why it stalled, and write the implementation plan that would give it a home.
 team: 1-2

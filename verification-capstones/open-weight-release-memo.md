@@ -1,6 +1,6 @@
 ---
 title: The Open-Weight Release Decision
-theme: Technical Governance
+track: Technical Governance
 status: draft
 summary: Write the release memo for a frontier open-weight model — what evidence would justify shipping, which mitigations survive contact with a downstream fine-tuner, and which are theatre.
 team: 1-2

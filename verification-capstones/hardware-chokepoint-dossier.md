@@ -1,6 +1,6 @@
 ---
 title: Hardware Chokepoint Dossier
-theme: Verification
+track: Verification
 status: ready
 summary: Trace one node of the compute supply chain end to end and rank it as a verification chokepoint — who sees what, and who would have to agree.
 team: 1

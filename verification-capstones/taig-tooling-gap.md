@@ -1,6 +1,6 @@
 ---
 title: Close One Gap in Technical AI Governance
-theme: Technical Governance
+track: Technical Governance
 status: draft
 summary: Take one open problem from the technical AI governance agenda and specify the tool that would close it — who builds it, who would have to adopt it, and what it costs to be wrong.
 team: 1-2

@@ -1,6 +1,6 @@
 ---
 title: Build the US–China AI Incident Hotline
-theme: Verification
+track: Verification
 status: draft
 summary: The hotline has been proposed for years and never specified. Design it — what counts as an incident, who picks up, what is said, and why either side would believe it.
 team: 1-2

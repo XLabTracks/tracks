@@ -1,6 +1,6 @@
 ---
 title: Do the Cost-Benefit Analysis Nobody Did
-theme: AI Governance Policy
+track: AI Governance Policy
 status: draft
 summary: AI rules are argued in principle and approved on paperwork. Write the regulatory impact analysis for one real proposal — costs, benefits, and what the standard method cannot handle.
 team: 1-2

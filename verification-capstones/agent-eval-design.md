@@ -1,6 +1,6 @@
 ---
 title: Evaluate an Agent, Not a Model
-theme: Technical Governance
+track: Technical Governance
 status: draft
 summary: Agent capability depends on the scaffold, the tools and the environment as much as the model. Build the eval that survives that, and report what your score is actually about.
 team: 1-2

@@ -1,6 +1,6 @@
 ---
 title: The Security Baseline That Would Have Stopped It
-theme: Verification
+track: Verification
 status: draft
 summary: Weight exfiltration is the evasion route that voids the compute regime. Write the infrastructure-security baseline a regime would require in advance, and price it.
 team: 1-2

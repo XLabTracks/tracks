@@ -1,6 +1,6 @@
 ---
 title: Three Directions off Someone Else's Agenda
-theme: Technical Governance
+track: Technical Governance
 status: draft
 summary: Fellowship interviews test live research-idea generation. Take a published technical-safety agenda you did not write and produce three directions, each with a first experiment and a falsifier.
 team: 1

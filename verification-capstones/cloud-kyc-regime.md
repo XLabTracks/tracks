@@ -1,6 +1,6 @@
 ---
 title: A Cloud KYC Regime That Is Not Just Paperwork
-theme: Verification
+track: Verification
 status: draft
 summary: Module 2.2 warns that self-reporting alone is a paperwork regime. Design the cloud reporting rules for one provider so that at least one claim in them is actually checkable.
 team: 1-2

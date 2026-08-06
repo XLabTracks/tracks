@@ -1,6 +1,6 @@
 ---
 title: An Incident Taxonomy Labs Could Report Against
-theme: Technical Governance
+track: Technical Governance
 status: draft
 summary: Incident reporting is in every governance proposal and no two people mean the same thing by "incident". Build the taxonomy and the reporting form, then test it on real cases.
 team: 1-2

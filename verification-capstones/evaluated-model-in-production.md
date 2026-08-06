@@ -1,6 +1,6 @@
 ---
 title: Is the Model in Production the Model That Passed?
-theme: Verification
+track: Verification
 status: draft
 summary: Evals passed on one model. Millions of requests run against another — would anyone notice? Design the chain that lets an auditor say deployed equals evaluated.
 team: 1-2

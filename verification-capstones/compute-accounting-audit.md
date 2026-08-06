@@ -1,6 +1,6 @@
 ---
 title: A Minimum Viable Compute-Accounting Audit
-theme: Verification
+track: Verification
 status: draft
 summary: What should a commercial AI audit prove about how each GPU was used? Claims, logs, retention, auditor access — and what happens when logs are missing.
 team: 1-2

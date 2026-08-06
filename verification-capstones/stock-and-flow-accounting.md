@@ -1,6 +1,6 @@
 ---
 title: Stock and Flow Accounting Case Studies
-theme: Verification
+track: Verification
 status: draft
 summary: Case studies of regimes that track dual-use physical objects — registration, transfer penalties, measured loss rates — as building blocks for compute stock-and-flow accounting.
 team: 1-2

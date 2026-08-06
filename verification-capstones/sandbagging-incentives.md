@@ -1,6 +1,6 @@
 ---
 title: Make Sandbagging Not Worth It
-theme: Technical Governance
+track: Technical Governance
 status: draft
 summary: A developer whose model must score below a threshold has every reason to elicit weakly. Design the regulatory incentives that make under-elicitation the expensive option.
 team: 1-2

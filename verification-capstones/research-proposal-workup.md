@@ -16,7 +16,6 @@ sources:
   - "[A Collection of AI Governance Research Ideas — von Knebel & Anderljung (2024)](https://www.markusanderljung.com/blog/a-collection-of-ai-governance-research-ideas-2024)"
   - "[Ten AI safety projects I'd like people to work on — Julian Hazell (2025)](https://www.lesswrong.com/posts/vxA2BnCPTaPfnJjti/ten-ai-safety-projects-i-d-like-people-to-work-on)"
   - "[Request for Proposals: Improving Capability Evaluations — Coefficient Giving, formerly Open Philanthropy (2025, closed)](https://coefficientgiving.org/funds/navigating-transformative-ai/request-for-proposals-improving-capability-evaluations/)"
-  - "[10 EA movement building project ideas — guneyulasturker (2025)](https://forum.effectivealtruism.org/posts/GvsQfgw2rmXPsYFsF/10-ea-movement-building-project-ideas-for-early-career)"
 updated: 2026-08-04
 ---
 

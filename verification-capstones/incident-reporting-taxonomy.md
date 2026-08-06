@@ -15,7 +15,7 @@ skills: [taxonomy design, form design, back-testing a classification, regulatory
 sources:
   - "[A Collection of AI Governance Research Ideas — von Knebel & Anderljung (2024), idea 22: incident detection and monitoring at AI companies](https://www.markusanderljung.com/blog/a-collection-of-ai-governance-research-ideas-2024)"
   - "[Ten AI safety projects I'd like people to work on — Julian Hazell, project 3 (tracking sketchy AI agent behaviour)](https://www.lesswrong.com/posts/vxA2BnCPTaPfnJjti/ten-ai-safety-projects-i-d-like-people-to-work-on)"
-  - "[Open Problems in Technical AI Governance — Reuel et al. (2025)](https://arxiv.org/abs/2407.14981)"
+  - "[Open Problems in Technical AI Governance — Reuel et al. (2025), ecosystem monitoring: how can non-public incidents be reliably reported, and what technical information should be reported to make analysis meaningful](https://arxiv.org/abs/2407.14981)"
 updated: 2026-08-04
 ---
 

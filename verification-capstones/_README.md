@@ -108,7 +108,8 @@ in that folder were checked on **2026-08-04**, before the port.
 | Link | Status | Note |
 |---|---|---|
 | 43 of 44 — arXiv, LessWrong, EA Forum, aisafety.com, Substack, OpenReview, NIST, Google Docs, Airtable, eagroups.org, timaeus.co and personal-site links | confirmed | HTTP 200 on 2026-08-04, in the playground repo before the port |
-| `coefficientgiving.org` — the capability-evaluations RFP | unchecked | Open Philanthropy renamed to Coefficient Giving in Nov 2025; the openphilanthropy.org URL cited by the source post 301s to this host, which returns 403 to automated clients. Page title is present in search indexes. Re-check by hand. |
+| `coefficientgiving.org` — the capability-evaluations RFP | confirmed | The host 403s all automated clients, so the page body was never fetched directly. Identity and content verified 2026-08-06 three ways: the openphilanthropy.org URL 301s to it, the search-index title matches, and Open Philanthropy's own EA Forum announcement of the same RFP (cb, Feb 2025; deadline 1 Apr 2025) carries the body. |
+| Full re-check of all 43 distinct off-site links | confirmed | 2026-08-06: 29 return HTTP 200 directly; the 13 lesswrong.com URLs return 429 to automated clients (datacenter rate limiting) and every one was confirmed live via mirror and API; coefficientgiving.org as above. Same pass corrected one label used on eight cards — the evals Google Doc's real title is "A long list of open problems and concrete projects in evals", a multi-contributor doc maintained by Hobbhahn, not "100+ Concrete Problems…". |
 
 ## Body
 

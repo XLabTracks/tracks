@@ -2,7 +2,7 @@
 title: What Would Compute Monitoring Actually Cost?
 theme: Verification
 status: draft
-summary: The compute-monitoring literature has the mechanisms and the timing. It has no inspectors, no penalties, and no price. Produce the costing a budget office would need.
+summary: The compute-monitoring literature has the mechanisms, the timing, even a first-pass inspector headcount. It has no penalties and no price. Produce the costing a budget office would need.
 team: 1-2
 effort_hours: 16-22
 duration: 3 weeks
@@ -26,8 +26,9 @@ Module 2.1 tells you what the hardware layer can and cannot do today: chip
 identity is solved but not unbreakable, secure boot has an inverted threat
 model because the owner is the party you are trying to catch, and no production
 chip meters tamper-resistantly. The orphan catalogue says the same thing from
-the other end — the timing analysis exists, and the inspectors, the penalties
-and the hardware innovations required have never been costed.
+the other end — the timing analysis exists, and Shavit even sketches an
+inspector headcount, but who employs those inspectors, what the penalties
+are, and who pays for the hardware innovations have never been costed.
 
 Do the costing.
 

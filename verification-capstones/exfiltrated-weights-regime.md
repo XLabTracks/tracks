@@ -75,8 +75,8 @@ is a real field and a different capstone. You are picking up after it failed.
 **Also out of scope:** arguing about whether open release is good. The
 scenario here is an unauthorised leak from a party under an agreement, which
 is a different question from a deliberate publication decision — the
-open-weight literature covers both, and conflating them is the most common
-way this annex goes wrong.
+open-weight literature speaks to the second, and importing its answers
+unexamined is the most common way this annex goes wrong.
 
 ## What good looks like
 

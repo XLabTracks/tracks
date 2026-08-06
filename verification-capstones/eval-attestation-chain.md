@@ -16,7 +16,7 @@ prerequisites: [Verification 2.x — the four layers, Verification 4.1 — feasi
 sources:
   - "[Open Problems in Technical AI Governance — Reuel et al. (2025)](https://arxiv.org/abs/2407.14981)"
   - "[Technical AI Governance project site — Stanford](https://taig.stanford.edu/)"
-  - "[100+ Concrete Problems and Open Projects in Evals — Marius Hobbhahn (2025)](https://docs.google.com/document/d/1gi32-HZozxVimNg5Mhvk4CvW4zq8J12rGmK_j2zxNEg/edit)"
+  - "[A long list of open problems and concrete projects in evals — Hobbhahn and contributors (2025)](https://docs.google.com/document/d/1gi32-HZozxVimNg5Mhvk4CvW4zq8J12rGmK_j2zxNEg/edit)"
   - "[Request for Proposals: Improving Capability Evaluations — Coefficient Giving, formerly Open Philanthropy (2025, closed)](https://coefficientgiving.org/funds/navigating-transformative-ai/request-for-proposals-improving-capability-evaluations/)"
 updated: 2026-08-04
 ---

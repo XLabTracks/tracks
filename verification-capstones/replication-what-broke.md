@@ -13,7 +13,7 @@ mentor: recommended
 audience: The next person about to cite that number in a memo.
 skills: [replication, experimental hygiene, elicitation sensitivity, negative results]
 sources:
-  - "[100+ Concrete Problems and Open Projects in Evals — Marius Hobbhahn (2025)](https://docs.google.com/document/d/1gi32-HZozxVimNg5Mhvk4CvW4zq8J12rGmK_j2zxNEg/edit)"
+  - "[A long list of open problems and concrete projects in evals — Hobbhahn and contributors (2025)](https://docs.google.com/document/d/1gi32-HZozxVimNg5Mhvk4CvW4zq8J12rGmK_j2zxNEg/edit)"
   - "[A list of evals resources and plans — Marius Hobbhahn](https://www.mariushobbhahn.com/evals/)"
   - "[Evals projects I'd like to see — cb (2025)](https://forum.effectivealtruism.org/posts/LTbwRuQhBRGxMyqcq/x-6)"
   - "[Open Problems in Technical AI Governance — Reuel et al. (2025)](https://arxiv.org/abs/2407.14981)"

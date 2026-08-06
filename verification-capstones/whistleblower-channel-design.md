@@ -15,8 +15,6 @@ skills: [institutional design, incentive analysis, evidence standards, protectiv
 prerequisites: [Verification 1 — actors, Verification 2.4 — the human layer]
 sources:
   - "[A Collection of AI Governance Research Ideas — von Knebel & Anderljung (2024), idea 20: AI and whistleblowing](https://www.markusanderljung.com/blog/a-collection-of-ai-governance-research-ideas-2024)"
-  - "[A Collection of AI Governance Research Ideas — von Knebel & Anderljung (2024), idea 22: incident detection and monitoring at AI companies](https://www.markusanderljung.com/blog/a-collection-of-ai-governance-research-ideas-2024)"
-  - "[Open Problems in Technical AI Governance — Reuel et al. (2025)](https://arxiv.org/abs/2407.14981)"
 updated: 2026-08-04
 ---
 
@@ -59,9 +57,9 @@ a mortgage and a non-disparagement clause, decides to speak. Designing for that
 is a different discipline from designing a telemetry rule, and learners who can
 do both understand why regimes fail in practice more often than in theory.
 
-It also connects directly to Module 3: several evasion scenarios — false
-reporting, hidden clusters, disguised workloads — are ones where an insider is
-the only realistic detection route.
+It also connects directly to Module 3: in the false-reporting scenario —
+hidden clusters, disguised workloads, falsified logs — insider evidence does
+work that the hardware and intelligence layers often cannot do alone.
 
 ## Scope
 

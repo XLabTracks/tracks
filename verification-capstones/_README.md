@@ -62,7 +62,7 @@ the courses their prerequisites named do not exist here, so those briefs
 carry no `prerequisites` — a brief must not claim preparation this site
 cannot give.
 
-Two rules follow, and nothing validates either — they are on the author:
+Three rules follow, and nothing validates them — they are on the author:
 
 - **`prerequisites` must name real units**, spelled the way `data/course.js`
   spells them. A fabricated prerequisite makes a card look grounded when it
@@ -72,6 +72,12 @@ Two rules follow, and nothing validates either — they are on the author:
   source a learner can read — that provenance belongs in the commit message),
   and no aggregators: when an idea was found through a list of lists, cite
   the specific list or paper it points to, not the list of lists.
+- **One card, one idea.** A card retells exactly one source idea, and its
+  brief quotes that idea's own description — attribution first, then the
+  words. A similar idea in another list gets its own card, and the two
+  point at each other in a `Similar cards` line at the foot of the brief.
+  Never merge two ideas into one brief, and never pad a quoted idea with
+  claims the source does not make.
 
 ## Sources
 

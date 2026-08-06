@@ -14,7 +14,6 @@ audience: The enforcement agency deciding where to put a small number of investi
 skills: [open-source estimation, triangulation, trade-data literacy, reasoning under adversarial reporting]
 sources:
   - "[A Collection of AI Governance Research Ideas — von Knebel & Anderljung (2024), idea 70: extent of export control circumvention](https://www.markusanderljung.com/blog/a-collection-of-ai-governance-research-ideas-2024)"
-  - "[A Collection of AI Governance Research Ideas — von Knebel & Anderljung (2024), idea 74: compute production gap, data centers and data asymmetry in China](https://www.markusanderljung.com/blog/a-collection-of-ai-governance-research-ideas-2024)"
 updated: 2026-08-04
 ---
 
@@ -43,6 +42,11 @@ Build the estimate.
 - **The enforcement recommendation.** Given the estimate, where should a small
   investigative capacity be pointed, and what would tell you within a year
   whether it worked.
+
+Similar card: [Compute Production Gap and Data Centers in
+China](/verification/capstone-bank#compute-production-gap-china) — the
+neighbouring idea in the same collection, on the manufacturing-gap side of
+the same strategic question.
 
 ## Why it exists
 

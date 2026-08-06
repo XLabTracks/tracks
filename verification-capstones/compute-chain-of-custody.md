@@ -11,10 +11,10 @@ deliverable: Case study of one custody regime plus a transfer analysis for the c
 deliverable_type: dossier
 mentor: optional
 audience: Whoever is designing chip tracking and does not want to reinvent forty years of practice.
-skills: [analogical reasoning, regime analysis, stock-and-flow accounting, precedent critique]
+skills: [analogical reasoning, regime analysis, precedent critique]
 prerequisites: [Verification 1 — actors, Verification 2.1 — the hardware layer]
 sources:
-  - "[A Collection of AI Governance Research Ideas — von Knebel & Anderljung (2024), ideas 65-66: stock and flow accounting case studies; learning from chain of custody applications in other industries](https://www.markusanderljung.com/blog/a-collection-of-ai-governance-research-ideas-2024)"
+  - "[A Collection of AI Governance Research Ideas — von Knebel & Anderljung (2024), idea 66: learning from chain of custody applications in other industries](https://www.markusanderljung.com/blog/a-collection-of-ai-governance-research-ideas-2024)"
   - "[Open Problems in Technical AI Governance — Reuel et al. (2025)](https://arxiv.org/abs/2407.14981)"
 updated: 2026-08-04
 ---
@@ -42,6 +42,11 @@ chemicals. Pick one and take it apart.
   fact that the thing you ultimately care about is a workload, not an object.
 - **The recommendation.** One mechanism worth importing, one worth explicitly
   rejecting, and the reason for each.
+
+Similar card: [Stock and Flow Accounting Case
+Studies](/verification/capstone-bank#stock-and-flow-accounting) — the
+neighbouring idea in the same collection, on registration-and-transfer
+tracking regimes.
 
 ## Why it exists
 

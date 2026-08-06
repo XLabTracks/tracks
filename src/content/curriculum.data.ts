@@ -211,7 +211,6 @@ export const modules: Module[] = [
       "c-lowstakes",
     ],
     itemIds: [
-      "c-mod6-objectives",
       "c-mod6-l1",
       "c-paper-satiation",
       "c-paper-spillway",
@@ -523,13 +522,6 @@ export const lessons: Lesson[] = [
     moduleId: "c-mod5",
     title: "Environment construction",
     contentRef: "c-mod5-l3",
-  },
-  {
-    id: "c-mod6-objectives",
-    slug: "learning-objectives",
-    moduleId: "c-mod6",
-    title: "Learning Objectives",
-    contentRef: "c-mod6-objectives",
   },
   {
     id: "c-mod6-l1",

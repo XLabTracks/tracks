@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useCallback, useState, useTransition } from "react";
 import { ArrowLeft, ArrowRight, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
@@ -9,9 +9,10 @@ import {
   EXERCISE_TYPE_LABELS,
   type TapRevealRating,
 } from "@/lib/content/types";
+import { recordTapReveal } from "@/app/actions/exercises";
 import type { PublicChoiceExercise } from "@/lib/content/exercise-view";
 import { Paragraphs } from "./math-text";
-import { TapRevealBody } from "./tap-reveal-exercise";
+import { TAP_REVEAL_RATINGS, TapRevealBody } from "./tap-reveal-exercise";
 import { ChoiceExerciseBody } from "./choice-exercise";
 
 export type SequencePart =
@@ -48,6 +49,12 @@ export function ExerciseSequenceCard({
   const [submitted, setSubmitted] = useState<boolean[]>(() =>
     parts.map((p) => p.kind === "tap-reveal" && p.initialRating != null),
   );
+  // Whether each tap-reveal part's answer is currently shown — drives moving
+  // its rating controls into the footer (TapRevealBody reports this).
+  const [revealed, setRevealed] = useState<boolean[]>(() =>
+    parts.map((p) => p.kind === "tap-reveal" && p.initialRating != null),
+  );
+  const [, startTransition] = useTransition();
 
   const total = parts.length;
   const part = parts[current];
@@ -60,9 +67,22 @@ export function ExerciseSequenceCard({
   const submit = () =>
     setSubmitted((prev) => prev.map((s, i) => (i === current ? true : s)));
 
-  const rated = (rating: TapRevealRating) => {
-    setRatings((prev) => prev.map((r, i) => (i === current ? rating : r)));
+  const onRevealChange = useCallback(
+    (value: boolean) =>
+      setRevealed((prev) => prev.map((v, i) => (i === current ? value : v))),
+    [current],
+  );
+
+  // Rate a tap-reveal from the footer, persist it, and advance immediately —
+  // the rating replaces the Next button. On the last part there is nowhere to
+  // go, so it just lands on the Complete state.
+  const rateAndAdvance = (value: TapRevealRating) => {
+    setRatings((prev) => prev.map((r, i) => (i === current ? value : r)));
     submit();
+    startTransition(async () => {
+      await recordTapReveal(part.id, value);
+    });
+    if (!isLast) setCurrent((c) => Math.min(total - 1, c + 1));
   };
 
   // A step is reachable once the one before it has been submitted.
@@ -107,13 +127,15 @@ export function ExerciseSequenceCard({
 
       {part.kind === "tap-reveal" ? (
         // Remounts per part (keyed by id) so reveal state never leaks between
-        // parts; the tracked rating is fed back in as the initial state.
+        // parts; the tracked rating is fed back in as the initial state. The
+        // rating row lives in the footer (see below), not inline.
         <TapRevealBody
           key={part.id}
           exerciseId={part.id}
           answer={part.answer}
           initialRating={ratings[current]}
-          onRated={rated}
+          inlineRating={false}
+          onRevealChange={onRevealChange}
         />
       ) : part.kind === "choice" ? (
         // Auto-graded; grading the answer marks the part submitted and unlocks Next.
@@ -150,12 +172,39 @@ export function ExerciseSequenceCard({
           <ArrowLeft className="size-3.5" aria-hidden /> Back
         </Button>
 
-        {!isSubmitted ? (
-          part.kind === "tap-reveal" ? (
+        {part.kind === "tap-reveal" ? (
+          // The rating IS the advance control: it sits where Next would be,
+          // and choosing one records it and moves to the next part.
+          !revealed[current] ? (
             <span className="text-muted-foreground text-xs">
-              Reveal and rate yourself to continue
+              Reveal the answer to rate yourself
             </span>
-          ) : part.kind === "choice" ? (
+          ) : isLast && isSubmitted ? (
+            <span className="text-muted-foreground flex items-center gap-1 text-sm font-medium">
+              <Check className="size-4 text-emerald-500" aria-hidden /> Complete
+            </span>
+          ) : (
+            <div className="flex flex-wrap items-center justify-end gap-2">
+              {TAP_REVEAL_RATINGS.map(({ value, label, selectedClassName }) => (
+                <button
+                  key={value}
+                  type="button"
+                  onClick={() => rateAndAdvance(value)}
+                  aria-pressed={ratings[current] === value}
+                  className={cn(
+                    "rounded-full border px-3 py-1 text-xs transition-colors",
+                    ratings[current] === value
+                      ? selectedClassName
+                      : "border-border text-muted-foreground hover:bg-muted hover:text-foreground",
+                  )}
+                >
+                  {label}
+                </button>
+              ))}
+            </div>
+          )
+        ) : !isSubmitted ? (
+          part.kind === "choice" ? (
             <span className="text-muted-foreground text-xs">
               Check your answer to continue
             </span>

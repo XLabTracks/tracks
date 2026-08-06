@@ -152,7 +152,7 @@ export const modules: Module[] = [
     trackId: "control",
     title: "Low-stakes control: sabotage, sandbagging, and elicitation",
     summary:
-      "The low-stakes regime, where catastrophe requires many weakly-incriminating actions: Hebbar's ControlConf talk, Redwood's methods for non-concentrated failures and analysis of sandbagging and exploration hacking, Carlsmith's \"no sandbagging on checkable tasks\" hypothesis, and papers spanning adaptive deployment, capability elicitation, and auditing for research sabotage.",
+      "The low-stakes regime, where catastrophe requires many weakly-incriminating actions: Hebbar's ControlConf talk, Redwood's methods for non-concentrated failures and analysis of sandbagging and exploration hacking, and papers spanning capability elicitation and auditing for research sabotage.",
     order: 6,
     // Empty placeholder modules count as complete, so only the built modules
     // actually gate; listing every ancestor keeps the chain correct as the
@@ -161,15 +161,13 @@ export const modules: Module[] = [
     itemIds: [
       "c-lowstakes-l1",
       "c-lowstakes-l2",
-      "c-paper-adaptive-deployment",
       "c-lowstakes-l3",
-      "c-lowstakes-l4",
       "c-paper-plm-guided",
-      "c-paper-password-locked",
       "c-paper-exploration-hacking",
       "c-paper-auditing-sabotage-bench",
+      "c-paper-password-locked",
     ],
-    estimatedMinutes: 329,
+    estimatedMinutes: 225,
   },
   // --- Verification: each item is a self-contained HTML interactive from
   // public/verification/, embedded via <VerificationExercise/>. Module
@@ -472,14 +470,6 @@ export const lessons: Lesson[] = [
       "Misalignment and strategic underperformance: an analysis of sandbagging and exploration hacking",
     contentRef: "c-lowstakes-l3",
     estimatedMinutes: 24,
-  },
-  {
-    id: "c-lowstakes-l4",
-    slug: "no-sandbagging-on-checkable-tasks",
-    moduleId: "c-lowstakes",
-    title: "The “no sandbagging on checkable tasks” hypothesis",
-    contentRef: "c-lowstakes-l4",
-    estimatedMinutes: 19,
   },
   // Lessons embedded inside the guided password-locked-models paper
   // (c-paper-plm-guided) via Paper.edits activity insertions. Deliberately

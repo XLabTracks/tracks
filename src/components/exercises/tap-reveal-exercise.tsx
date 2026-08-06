@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useTransition } from "react";
+import { useEffect, useState, useTransition } from "react";
 import { cn } from "@/lib/utils";
 import { recordTapReveal } from "@/app/actions/exercises";
 import {
@@ -25,7 +25,9 @@ const ROWS = Array.from({ length: ROW_COUNT }, (_, r) => ({
 const wordOpacity = (row: number, i: number) =>
   0.2 + ((row * 5 + i * 3) % 5) * 0.13;
 
-const RATINGS: {
+/** Self-assessment options — shared with ExerciseSequenceCard, which renders
+ * them in the sequence footer (where Next would be) instead of inline. */
+export const TAP_REVEAL_RATINGS: {
   value: TapRevealRating;
   label: string;
   selectedClassName: string;
@@ -57,18 +59,30 @@ export function TapRevealBody({
   answer,
   initialRating,
   onRated,
+  inlineRating = true,
+  onRevealChange,
 }: {
   exerciseId: string;
   answer: string;
   /** Prior self-assessment (from a submission or the host's state), if any. */
   initialRating?: TapRevealRating | null;
   onRated?: (rating: TapRevealRating) => void;
+  /** When false, the reveal panel renders without the inline rating row — the
+   * host (ExerciseSequenceCard) owns rating placement and persistence. */
+  inlineRating?: boolean;
+  /** Fired when the answer is revealed/unrevealed, so a host can move the
+   * rating controls into its own footer once there is something to rate. */
+  onRevealChange?: (revealed: boolean) => void;
 }) {
   const [revealed, setRevealed] = useState(initialRating != null);
   const [rating, setRating] = useState<TapRevealRating | null>(
     initialRating ?? null,
   );
   const [, startTransition] = useTransition();
+
+  useEffect(() => {
+    onRevealChange?.(revealed);
+  }, [revealed, onRevealChange]);
 
   const rate = (value: TapRevealRating) => {
     setRating(value);
@@ -126,9 +140,10 @@ export function TapRevealBody({
       <div className="border-border bg-muted/40 mt-4 space-y-2 rounded-lg border p-4 text-sm leading-relaxed">
         <Paragraphs text={answer} />
       </div>
+      {!inlineRating ? null : (
       <div className="mt-4 flex flex-wrap items-center gap-2">
         <span className="text-muted-foreground text-xs">Did you have it?</span>
-        {RATINGS.map(({ value, label, selectedClassName }) => (
+        {TAP_REVEAL_RATINGS.map(({ value, label, selectedClassName }) => (
           <button
             key={value}
             type="button"
@@ -145,6 +160,7 @@ export function TapRevealBody({
           </button>
         ))}
       </div>
+      )}
     </>
   );
 }

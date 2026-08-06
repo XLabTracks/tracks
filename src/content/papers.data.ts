@@ -783,19 +783,12 @@ export const papers: Paper[] = [
   // --- Control track, module 6 (low-stakes control): plain papers, no edits
   // yet. ---
   {
-    id: "c-paper-adaptive-deployment",
-    slug: "adaptive-deployment-paper",
-    moduleId: "c-lowstakes",
-    title: "Adaptive Deployment of Untrusted LLMs Reduces Distributed Threats",
-    source: { kind: "arxiv", arxivId: "2411.17693v1" },
-    estimatedMinutes: 45,
-  },
-  {
     id: "c-paper-password-locked",
-    slug: "password-locked-models-paper",
+    slug: "capability-elicitation-paper",
     moduleId: "c-lowstakes",
-    title: "Stress-Testing Capability Elicitation With Password-Locked Models",
+    title: "Stress-Testing Capability Elicitation",
     source: { kind: "arxiv", arxivId: "2405.19550v1" },
+    optional: true,
     estimatedMinutes: 40,
   },
   {
@@ -826,7 +819,7 @@ export const papers: Paper[] = [
           "restructures several sections to facilitate thinking through the " +
           "research process and preregistering predictions. The original " +
           "paper is available " +
-          "[as an ordinary reading](/tracks/control/low-stakes-control/password-locked-models-paper).",
+          "[as an ordinary reading](/tracks/control/low-stakes-control/capability-elicitation-paper).",
       },
       {
         op: "hide",

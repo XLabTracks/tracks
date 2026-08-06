@@ -929,6 +929,47 @@ export const exercises: Exercise[] = [
     answer:
       "Incriminating a model from a large volume of mildly suspicious actions requires knowing exactly how suspicious a benign model would look; without that affordance, no amount of mildly suspicious actions is enough.",
   },
+  // --- Control: misalignment and strategic underperformance
+  // (c-lowstakes-l3) — quick-recall notecards. Phrased as standalone
+  // definitions (no "this post"/"the reading"): they are surfaced on a
+  // separate spaced-repetition page. Placed a section downstream of teaching.
+  {
+    id: "c-lowstakes-l3-recall-two-types",
+    type: "tap-reveal",
+    prompt: "What are the two types of sandbagging?",
+    answer:
+      "Hiding latent capabilities: the model has a capability and deliberately conceals it (the concern for dangerous-capability evaluations and untrusted monitoring). And failing to live up to potential: the model deliberately fails to learn a capability, so it does not possess it to use against you (the concern for AI safety R&D and for generating training signals).",
+  },
+  {
+    id: "c-lowstakes-l3-recall-costly-tasks",
+    type: "tap-reveal",
+    prompt: "On which tasks is it especially costly for a model to sandbag?",
+    answer:
+      "Dangerous capability evaluations, where the red team must elicit a model's real attacks to know what it can do; AI safety and alignment R&D, where a misaligned model is incentivized to underperform to preserve its options; untrusted monitoring, where a monitor can falsely flag non-attacks or fail to flag attacks; and generating training signals (rewards or demonstrations used to train other models).",
+  },
+  {
+    id: "c-lowstakes-l3-recall-on-off-policy",
+    type: "tap-reveal",
+    prompt:
+      "In model training, what is the difference between on-policy and off-policy data?",
+    answer:
+      "On-policy data is sampled from the model currently being trained; off-policy data comes from other sources, such as humans or other AIs.",
+  },
+  {
+    id: "c-lowstakes-l3-recall-ensembling",
+    type: "tap-reveal",
+    prompt: "How does ensembling counter exploration hacking?",
+    answer:
+      "Several untrusted models explore at once, so sandbagging successfully requires them to coordinate on a shared strategy. If any one explores a high-reward action, the others can be fine-tuned on it, giving a strong gradient against their general sandbagging cognition. It helps most against low-entropy strategies, where there are many possible policies to hide behind.",
+  },
+  {
+    id: "c-lowstakes-l3-recall-detection-pessimism",
+    type: "tap-reveal",
+    prompt:
+      "Why is detecting sandbagging a weaker primary countermeasure than training it out?",
+    answer:
+      "Two difficulties compound: gaining conclusive evidence that a model is sandbagging is hard, and doing something useful with that evidence once obtained is also hard. So training the behavior out, rather than detecting it, is the more reliable lever.",
+  },
   // --- Control: notes on handling non-concentrated failures
   // (c-lowstakes-l2) — quick-recall notecards, phrased with the settled
   // "diffuse" terminology, placed a section downstream of what they test.

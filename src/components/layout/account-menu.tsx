@@ -35,14 +35,17 @@ import {
  * A course with its own cabinet, and the routes it owns.
  *
  * One sign-in and one identity, but a cabinet per course: what a learner has
- * done lives in the course, not in the account. Control gets a row here the
- * day it has a cabinet of its own — that is the whole extension point, and
- * `href` is the only thing a new one needs.
+ * done lives in the course, not in the account. The cabinet page also carries
+ * the name form and the email block — the same component and action as
+ * /account's — so on course routes it is the menu's only account entry;
+ * "My account" means the whole thing, not a second place beside it. Control
+ * gets a row here the day it has a cabinet of its own — that is the whole
+ * extension point, and `href` is the only thing a new one needs.
  */
 const CABINETS: { label: string; href: string; owns: (p: string) => boolean }[] =
   [
     {
-      label: "Verification account",
+      label: "My account",
       href: "/verification/account",
       owns: (p) =>
         p === "/tracks/verification" ||
@@ -77,13 +80,12 @@ export function AccountMenu() {
           {user.email}
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
-        {cabinet && (
-          <DropdownMenuItem asChild>
-            <Link href={cabinet.href}>{cabinet.label}</Link>
-          </DropdownMenuItem>
-        )}
         <DropdownMenuItem asChild>
-          <Link href="/account">{cabinet ? "Name and email" : "Account"}</Link>
+          {cabinet ? (
+            <Link href={cabinet.href}>{cabinet.label}</Link>
+          ) : (
+            <Link href="/account">Account</Link>
+          )}
         </DropdownMenuItem>
         <DropdownMenuItem asChild>
           <Link href="/classrooms">My classrooms</Link>

@@ -77,6 +77,59 @@ still untested and still blocked; see below.
 
 ---
 
+## 2026-08-06 (later still) — citations made resolvable; module priority removed
+
+**Module priority is out of the student-facing text.** The seven route headings
+in 3.2 carried `module priority N/5`, and the scoring preamble carried the
+sentence explaining it. Both are gone. The outline's own gloss gave the reason:
+"'Module priority' reflects emphasis in this course, not a claim about numerical
+likelihood." That is course-planning metadata, not something a learner is meant
+to reason with. The four analytic columns stay, because those are the substance
+of the taxonomy.
+
+**Citations now resolve.** Before this change the bracket numbers were inert
+text, and worse, they mostly pointed nowhere:
+
+- 3.1 defined `[2]` to `[21]` but used only `[2]` to `[12]`.
+- 3.2 used `[3] [4] [5] [14]` to `[19]` and `[21]` and defined **none** of them.
+  The list lived in a different lesson, which on a per-lesson reader is a
+  reference to nothing.
+
+Every marker is now an anchor link to an entry in the same lesson, and 3.2 has
+its own Sources section carrying exactly the entries it cites. Verified in the
+running app: 3.1 defines 20 anchors and links 11 markers, 3.2 defines and links
+10, and neither has a dangling target.
+
+**The dead word "Source" is gone.** Each entry in the outline ended with a
+hyperlink whose text was "Source"; the docx export flattened it to the bare
+word, so 20 entries ended in a meaningless "Source". Where the entry carries an
+arXiv id the link was reconstructed from the id ([13] [14] [15] [17] [18] [20]
+[21]). The other thirteen had no derivable URL and the bare word was removed
+rather than left as furniture. **Those thirteen URLs still need re-adding from
+the author's original document**: [2] NSG, [3] Carnegie, [4] IISS, [5] FATF,
+[6] BMJ, [7] [8] [9] IAEA, [10] CTBTO, [11] Wassenaar, [12] State Department,
+[16] RAND, [19] DOJ.
+
+**Kept deliberately:** 3.1's list retains [13] to [21] even though 3.1 cites
+none of them. [13] and [20] are cited by two of the three taxonomy rows still
+missing from 3.2, so they are pre-positioned rather than orphaned.
+
+**Fixed my own defect:** the core source packet I added to 2.1.0 carried
+bracket numbers [1] [2] [5] [7] from the outline's sixteen-entry list, which
+that lesson does not reproduce. Numbers dropped; the citations remain.
+
+### Citations that cannot be resolved, and were not invented
+
+`human-insiders`, `human-institutions` and `human-audits-inspections` cite
+`[1] [4] [5] [6] [7] [16]`. **The outline never defines them.** There is no
+source list in the 2.4 tabs and none elsewhere in the document; the markers are
+orphaned in the source, not lost in transcription. They are left exactly as
+found, pending the author. Inventing plausible references for Manheim et al.,
+the Frontier AI Auditing paper, or the Curveball postmortem would be
+fabricating curriculum.
+
+---
+
 ## Open items
 
 1. **3.2.1 is still a heading inside 3.2** and owes the same promotion 3.1.1

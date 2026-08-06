@@ -685,7 +685,7 @@ export function InteractiveMap(_props: VerificationWidgetProps) {
                     {C.flowNote}
                   </span>
                 </div>
-                <div className="flex overflow-x-auto">
+                <div className="no-scrollbar flex overflow-x-auto">
                   {FLOW.map((st, i) => {
                     const active =
                       s.filter === st.bucket && s.filterSource === st.key;

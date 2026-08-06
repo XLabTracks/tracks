@@ -9,11 +9,16 @@ import { cn } from "@/lib/utils";
  * by default, opened from its header row. `<Fold label="…">` around ordinary
  * lesson markdown.
  *
- * The card is painted, never half-painted: one soft primary tint on the fill
- * with all four border edges alike. Text stays `--foreground` — the tint
- * barely moves the ground's luminance in any of the three verification
- * themes, and primary itself is a surface on the night theme, not an ink, so
- * nothing here writes in it. The marker is a plus (no chevrons), rotated
+ * The card is painted, never half-painted: the header row is a solid
+ * --primary fill and the body carries the same hue as a tint, with all four
+ * border edges alike. Closed — which is how it is usually met — the whole
+ * card is that red bar.
+ *
+ * Trap: the header is a --primary *surface*, so everything on it writes in
+ * --primary-foreground. Maroon is a fine ground and an unreadable ink on the
+ * night theme, so nothing on this card may take --primary as a text colour.
+ * The shell needs overflow-hidden: without it the solid fill squares off the
+ * corners the border rounds. The marker is a plus (no chevrons), rotated
  * into an × while open; it is chrome — aria-hidden and select-none, like the
  * whole header row — and the motion is 200ms, off under
  * prefers-reduced-motion.
@@ -74,7 +79,7 @@ export function Fold({ label = "Optional material", children }: FoldProps) {
   return (
     <section
       ref={shellRef}
-      className="not-prose border-primary/25 bg-primary/5 my-6 rounded-xl border"
+      className="not-prose border-primary bg-primary/8 my-6 overflow-hidden rounded-xl border"
     >
       <button
         type="button"
@@ -86,13 +91,13 @@ export function Fold({ label = "Optional material", children }: FoldProps) {
         // (`:root[data-theme='contrast'] button`) sets justify-content:center
         // at higher specificity than any utility — without it the label and
         // marker huddle in the middle of the row on that theme.
-        className="text-foreground flex w-full cursor-pointer items-center justify-between! gap-3 rounded-xl p-4 text-left text-sm font-semibold select-none focus-visible:ring-2 focus-visible:ring-[var(--ring)] focus-visible:outline-none"
+        className="bg-primary text-primary-foreground flex w-full cursor-pointer items-center justify-between! gap-3 p-4 text-left text-sm font-semibold select-none focus-visible:ring-2 focus-visible:ring-[var(--ring)] focus-visible:outline-none focus-visible:ring-inset"
       >
         {label}
         <span
           aria-hidden
           className={cn(
-            "text-foreground/80 text-2xl leading-none font-light transition-transform duration-200 motion-reduce:transition-none",
+            "text-primary-foreground/85 text-2xl leading-none font-light transition-transform duration-200 motion-reduce:transition-none",
             open && "rotate-45",
           )}
         >
@@ -103,7 +108,7 @@ export function Fold({ label = "Optional material", children }: FoldProps) {
         id={bodyId}
         hidden={!open}
         className={cn(
-          "px-4 pb-4 text-sm leading-relaxed",
+          "px-4 pt-4 pb-4 text-sm leading-relaxed",
           "text-foreground/80",
           "[&>*+*]:mt-3",
           "[&_ul]:list-disc [&_ol]:list-decimal [&_ul]:pl-5 [&_ol]:pl-5",

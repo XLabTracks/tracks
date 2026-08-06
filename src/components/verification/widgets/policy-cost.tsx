@@ -59,10 +59,10 @@ export function PolicyCost(_: VerificationWidgetProps) {
         </p>
 
         {/* Uniform hairline on all four sides; the side each row belongs to is
-            carried by the dot and the word beside it, never by an edge. */}
+            carried by the word, never by an edge. */}
         <div className="space-y-2">
-          <LedgerRow tone="goal" tag={C.goalTag} value={policy} />
-          <LedgerRow tone="price" tag={C.priceTag} value={price} />
+          <LedgerRow tag={C.goalTag} value={policy} />
+          <LedgerRow tag={C.priceTag} value={price} />
         </div>
 
         <div>
@@ -158,7 +158,7 @@ export function PolicyCost(_: VerificationWidgetProps) {
               "rounded-xl border p-5 [backface-visibility:hidden]",
             )}
           >
-            <FaceTag tone="goal" label={C.tagA} />
+            <FaceTag label={C.tagA} />
             <label htmlFor="pc-policy" className="font-semibold">
               {C.labelA}
             </label>
@@ -208,7 +208,7 @@ export function PolicyCost(_: VerificationWidgetProps) {
               "rounded-xl border p-5 [backface-visibility:hidden] [transform:rotateY(180deg)]",
             )}
           >
-            <FaceTag tone="price" label={C.tagB} />
+            <FaceTag label={C.tagB} />
             <p className="text-muted-foreground text-xs break-words">
               {C.echoLabel} <b className="text-foreground/80 font-semibold">{policy}</b>
             </p>
@@ -263,41 +263,18 @@ export function PolicyCost(_: VerificationWidgetProps) {
   );
 }
 
-/** Okabe–Ito blue for the goal, orange for the price — always beside its word. */
-function FaceTag({ tone, label }: { tone: "goal" | "price"; label: string }) {
+function FaceTag({ label }: { label: string }) {
   return (
-    <p className="text-muted-foreground flex items-center gap-2 font-mono text-[11px] tracking-[0.16em] uppercase">
-      <span
-        aria-hidden
-        className={cn(
-          "size-2 flex-none rounded-full",
-          tone === "goal" ? "bg-hide" : "bg-exaggerate",
-        )}
-      />
+    <p className="text-muted-foreground font-mono text-[11px] tracking-[0.16em] uppercase">
       {label}
     </p>
   );
 }
 
-function LedgerRow({
-  tone,
-  tag,
-  value,
-}: {
-  tone: "goal" | "price";
-  tag: string;
-  value: string;
-}) {
+function LedgerRow({ tag, value }: { tag: string; value: string }) {
   return (
     <div className="border-border bg-muted/40 flex items-baseline gap-3 rounded-lg border p-3">
-      <span className="text-muted-foreground flex w-24 flex-none items-center gap-2 font-mono text-[11px] tracking-[0.14em] uppercase">
-        <span
-          aria-hidden
-          className={cn(
-            "size-2 flex-none rounded-full",
-            tone === "goal" ? "bg-hide" : "bg-exaggerate",
-          )}
-        />
+      <span className="text-muted-foreground w-24 flex-none font-mono text-[11px] tracking-[0.14em] uppercase">
         {tag}
       </span>
       <span className="min-w-0 text-base leading-snug break-words">{value}</span>

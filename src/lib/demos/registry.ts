@@ -32,7 +32,6 @@ import { CrossEpisodeCollusionDemo } from "@/components/demos/cross-episode-coll
 import { DistantIncentivesDemo } from "@/components/demos/distant-incentives-demo";
 import { SeekerCarouselDemo } from "@/components/demos/seeker-carousel-demo";
 import { SpillwayRoutingDemo } from "@/components/demos/spillway-routing-demo";
-import { SpillwayMonologuesDemo } from "@/components/demos/spillway-monologues-demo";
 import { SpillwayVsInoculationDemo } from "@/components/demos/spillway-vs-inoculation-demo";
 import { DealGainsFromTradeDemo } from "@/components/demos/deal-gains-from-trade-demo";
 import { DealCoalitionRoutesDemo } from "@/components/demos/deal-coalition-routes-demo";
@@ -310,13 +309,6 @@ export const demoRegistry: Record<string, DemoDefinition> = {
     title: "The spillway routing mechanism",
     component: SpillwayRoutingDemo,
     tags: ["control", "seekers"],
-  },
-  "spillway-monologues": {
-    id: "spillway-monologues",
-    title: "The same temptation, before and after satiation",
-    component: SpillwayMonologuesDemo,
-    tags: ["control", "seekers"],
-    interactive: false,
   },
   "spillway-vs-inoculation": {
     id: "spillway-vs-inoculation",

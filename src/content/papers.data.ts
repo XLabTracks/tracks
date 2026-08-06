@@ -1717,16 +1717,6 @@ export const papers: Paper[] = [
         after: { sectionEnd: "lw-sec-the-role-of-a-spillway-motivation" },
         items: [{ kind: "lesson", id: "c-spw-ins-routing" }],
       },
-      // Right after the satiated deployment monologue: the post's two
-      // hypothetical monologues side by side.
-      {
-        op: "activity",
-        after: {
-          anchor: "b-0054",
-          snippet: "“The user asked me to write a python script",
-        },
-        items: [{ kind: "lesson", id: "c-spw-ins-monologues" }],
-      },
       // End of the inoculation-prompting section: the mechanism comparison
       // (prompting vs. pre-RL priors).
       {

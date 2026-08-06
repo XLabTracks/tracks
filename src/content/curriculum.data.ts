@@ -721,14 +721,6 @@ export const lessons: Lesson[] = [
     estimatedMinutes: 3,
   },
   {
-    id: "c-spw-ins-monologues",
-    slug: "before-and-after-satiation",
-    moduleId: "c-mod6",
-    title: "The same temptation, before and after satiation",
-    contentRef: "c-spw-ins-monologues",
-    estimatedMinutes: 2,
-  },
-  {
     id: "c-spw-ins-inoculation",
     slug: "spillway-vs-inoculation-prompting",
     moduleId: "c-mod6",

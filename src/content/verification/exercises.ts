@@ -57,7 +57,7 @@ export const verificationExercises: Exercise[] = [
   {
     id: "v-task-covert-red-blue-1",
     type: "writing-prompt",
-    prompt: "### Question 1. Objective and verification chain\n\nState the principal objective of Articles IV to VII and the principal objective of the low-trust verification system. Then reconstruct how the two are meant to connect:\n\nregulated activity -> captured evidence -> protected commitment or record -> challenge or evaluation -> compliance finding -> response.\n\nWhat observable result would count as successful verification?",
+    prompt: "### Question 1. Objective and verification chain\n\nState the principal objective of Articles IV to VII and the principal objective of the low-trust verification system. Then reconstruct how the two are meant to connect:\n\nregulated activity \u2192 captured evidence \u2192 protected commitment or record \u2192 challenge or evaluation \u2192 compliance finding \u2192 response.\n\nWhat observable result would count as successful verification?",
     format: "free-form",
   },
   {

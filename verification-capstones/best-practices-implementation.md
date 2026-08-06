@@ -13,6 +13,7 @@ mentor: optional
 skills: [policy analysis, stakeholder mapping, strategy planning]
 sources:
   - "[A Collection of AI Governance Research Ideas — von Knebel & Anderljung (2024), idea 21: implementation details of the best practices list](https://www.markusanderljung.com/blog/a-collection-of-ai-governance-research-ideas-2024)"
+similar: [procurement-as-lever, rmf-compliance-scorecard]
 updated: 2026-08-06
 ---
 
@@ -44,9 +45,3 @@ the surveyed list, how each would be implemented in practice, using the
 methodology the idea names — policy analysis, strategy planning,
 stakeholder mapping.
 
-Similar cards: [Govern Through the Purchase
-Order](/verification/capstone-bank#procurement-as-lever) — a neighbouring
-idea in the same collection, on procurement as one implementation channel;
-[Score the Developers Against the NIST
-Framework](/verification/capstone-bank#rmf-compliance-scorecard) — a
-different list's idea on checking practice against published frameworks.

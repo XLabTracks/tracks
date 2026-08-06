@@ -13,6 +13,7 @@ mentor: optional
 skills: [risk assessment methods, comparative review]
 sources:
   - "[A Collection of AI Governance Research Ideas — von Knebel & Anderljung (2024), idea 55: reconciling impact scores for comprehensive AI risk management](https://www.markusanderljung.com/blog/a-collection-of-ai-governance-research-ideas-2024)"
+similar: [regulatory-cost-benefit]
 updated: 2026-08-06
 ---
 
@@ -54,7 +55,3 @@ impact-assessment fields combine incompatible scores, the pros and cons of
 each approach, and which combination suits AI risk assessment — including
 the desirable factors that make a method well-suited.
 
-Similar cards: [Do the Cost-Benefit Analysis Nobody
-Did](/verification/capstone-bank#regulatory-cost-benefit) — the
-neighbouring idea in the same collection, on applying cost-benefit
-analysis to AI regulation.

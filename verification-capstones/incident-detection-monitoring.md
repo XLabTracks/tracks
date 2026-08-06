@@ -13,6 +13,7 @@ mentor: optional
 skills: [risk analysis, scenario mapping, privacy tradeoffs]
 sources:
   - "[A Collection of AI Governance Research Ideas — von Knebel & Anderljung (2024), idea 22: incident detection and monitoring at AI companies](https://www.markusanderljung.com/blog/a-collection-of-ai-governance-research-ideas-2024)"
+similar: [incident-reporting-taxonomy, tracking-agent-behaviour]
 updated: 2026-08-06
 ---
 
@@ -60,9 +61,3 @@ their benefits and drawbacks worked through, the privacy question
 addressed from both the policy and the technical side, and the sketch of
 what a comprehensive monitoring framework would look like in practice.
 
-Similar cards: [An Incident Taxonomy Labs Could Report
-Against](/verification/capstone-bank#incident-reporting-taxonomy) — what
-counts as a reportable incident once monitoring finds one; [Tracking
-Sketchy AI Agent Behaviour in the
-Wild](/verification/capstone-bank#tracking-agent-behaviour) — a different
-list's idea on outside-in observation of deployed agents.

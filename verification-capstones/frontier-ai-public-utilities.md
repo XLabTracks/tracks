@@ -13,6 +13,7 @@ mentor: optional
 skills: [market-structure analysis, policy analysis]
 sources:
   - "[A Collection of AI Governance Research Ideas — von Knebel & Anderljung (2024), idea 53: should parts of the frontier AI industry be treated like public utilities?](https://www.markusanderljung.com/blog/a-collection-of-ai-governance-research-ideas-2024)"
+similar: [pre-emptive-authorization]
 updated: 2026-08-06
 ---
 
@@ -54,7 +55,3 @@ The analysis the two research questions describe — implications of
 public-utility treatment argued positive and negative, and the effect on
 market concentration — using the methodology the idea names.
 
-Similar cards: [A Licence to
-Train](/verification/capstone-bank#pre-emptive-authorization) — a
-neighbouring regulatory-design idea in the same collection, on
-authorisation rather than utility regulation.

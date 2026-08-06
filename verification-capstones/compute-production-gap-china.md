@@ -13,6 +13,7 @@ mentor: recommended
 skills: [forecasting, data analysis, open-source mapping]
 sources:
   - "[A Collection of AI Governance Research Ideas — von Knebel & Anderljung (2024), idea 74: compute production gap, data centers and data asymmetry in China](https://www.markusanderljung.com/blog/a-collection-of-ai-governance-research-ideas-2024)"
+similar: [export-control-circumvention]
 updated: 2026-08-06
 ---
 
@@ -55,7 +56,3 @@ estimate with the events that would move it, and the datacenter landscape
 reading — which the idea itself notes is relevant to international
 monitoring and verification schemes.
 
-Similar cards: [How Much Leaks Through the Export
-Controls?](/verification/capstone-bank#export-control-circumvention) — the
-neighbouring idea in the same collection, on the circumvention side of the
-same strategic question.

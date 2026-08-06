@@ -12,11 +12,6 @@ deliverable_type: memo
 mentor: optional
 audience: The policy researcher about to cite an interpretability paper in an argument.
 skills: [evidence standards, reading technical results as a non-specialist, claim-to-evidence mapping]
-sources:
-  - "[Open Problems in Mechanistic Interpretability — Sharkey et al. (2025)](https://arxiv.org/abs/2501.16496)"
-  - "[A list of 45+ mech interp project ideas from Apollo Research (2024)](https://www.lesswrong.com/posts/KfkpgXdgRheSRWDy8/a-list-of-45-mech-interp-project-ideas-from-apollo-research)"
-  - "[Laying the foundations for vision and multimodal mechanistic interpretability — Joseph & Nanda (2024)](https://www.lesswrong.com/posts/kobJymvvcvhbjWFKe/laying-the-foundations-for-vision-and-multimodal-mechanistic)"
-  - "[200 Concrete Open Problems in Mechanistic Interpretability (2022 — cited as outdated)](https://www.lesswrong.com/posts/LbrPTJ4fmABEdEnLf/200-concrete-open-problems-in-mechanistic-interpretability)"
 updated: 2026-08-04
 ---
 
@@ -27,7 +22,15 @@ week**: an emerging evidence type in policy argument, listed under week 5's
 extensions, framed as *what an interp finding can and cannot support in
 testimony*. This capstone is that pointer, done properly, once.
 
-Pick one published interpretability result. Then:
+Pick one published interpretability result — hunting grounds, if you need
+them: [Open Problems in Mechanistic Interpretability — Sharkey et al.
+(2025)](https://arxiv.org/abs/2501.16496), [Apollo Research's 45+ project
+ideas (2024)](https://www.lesswrong.com/posts/KfkpgXdgRheSRWDy8/a-list-of-45-mech-interp-project-ideas-from-apollo-research),
+[vision and multimodal foundations — Joseph & Nanda
+(2024)](https://www.lesswrong.com/posts/kobJymvvcvhbjWFKe/laying-the-foundations-for-vision-and-multimodal-mechanistic),
+and [200 Concrete Open Problems (2022 — its own update calls it out of
+date)](https://www.lesswrong.com/posts/LbrPTJ4fmABEdEnLf/200-concrete-open-problems-in-mechanistic-interpretability).
+Then:
 
 - **State what was actually shown.** One paragraph, no jargon, at the level of
   precision the paper supports — which model, which layer or feature, on which

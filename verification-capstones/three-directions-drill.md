@@ -12,17 +12,6 @@ deliverable_type: memo
 mentor: optional
 audience: The interviewer who will ask you to do this out loud, with no preparation.
 skills: [research-idea generation, reading an agenda critically, experiment design, falsifier discipline]
-sources:
-  - "[Recent Redwood Research project proposals (2025)](https://www.lesswrong.com/posts/RRxhzshdpneyTzKfq/recent-redwood-research-project-proposals)"
-  - "[Recommendations for technical AI safety research directions — Sam Marks (2025)](https://www.lesswrong.com/posts/tG9LGHLzQezH3pvMs/recommendations-for-technical-ai-safety-research-directions)"
-  - "[Open problems in emergent misalignment — Betley & Tan (2025)](https://www.lesswrong.com/posts/AcTEiu5wYDgrbmXow/open-problems-in-emergent-misalignment)"
-  - "[Concrete empirical research projects in mechanistic anomaly detection (2024)](https://www.lesswrong.com/posts/99gWh9jxeumcmuduw/concrete-empirical-research-projects-in-mechanistic-anomaly)"
-  - "[Devinterp project ideas and starter notebooks — Timaeus](https://timaeus.co/projects)"
-  - "[Open Challenges in Multi-Agent Security — Schroeder de Witt (2025)](https://arxiv.org/abs/2505.02077)"
-  - "[Secret Collusion among AI Agents: Multi-Agent Deception via Steganography](https://arxiv.org/abs/2402.07510)"
-  - "[Open Problems in AIXI Agent Foundations — Cole Wyeth](https://www.lesswrong.com/posts/MvfD4tmzyuCYFqB2f/open-problems-in-aixi-agent-foundations)"
-  - "[Corrigibility — LessWrong wikitag, open problems section](https://www.lesswrong.com/w/corrigibility-1)"
-  - "[Open problems — LessWrong wikitag](https://www.lesswrong.com/w/open-problems)"
 updated: 2026-08-04
 ---
 
@@ -39,7 +28,20 @@ Do it once, with time to think, and keep the artifact.
 Pick a published technical-safety research agenda — control, mechanistic
 interpretability, developmental interpretability, emergent misalignment,
 anomaly detection, multi-agent security, agent foundations, whatever you would
-apply to. Read it properly. Then produce three directions:
+apply to. The menu, one agenda per line:
+
+- [Recent Redwood Research project proposals (2025)](https://www.lesswrong.com/posts/RRxhzshdpneyTzKfq/recent-redwood-research-project-proposals)
+- [Recommendations for technical AI safety research directions — Sam Marks (2025)](https://www.lesswrong.com/posts/tG9LGHLzQezH3pvMs/recommendations-for-technical-ai-safety-research-directions)
+- [Open problems in emergent misalignment — Betley & Tan (2025)](https://www.lesswrong.com/posts/AcTEiu5wYDgrbmXow/open-problems-in-emergent-misalignment)
+- [Concrete empirical research projects in mechanistic anomaly detection (2024)](https://www.lesswrong.com/posts/99gWh9jxeumcmuduw/concrete-empirical-research-projects-in-mechanistic-anomaly)
+- [Devinterp project ideas and starter notebooks — Timaeus](https://timaeus.co/projects)
+- [Open Challenges in Multi-Agent Security — Schroeder de Witt (2025)](https://arxiv.org/abs/2505.02077)
+- [Secret Collusion among AI Agents — Motwani et al.](https://arxiv.org/abs/2402.07510)
+- [Open Problems in AIXI Agent Foundations — Cole Wyeth](https://www.lesswrong.com/posts/MvfD4tmzyuCYFqB2f/open-problems-in-aixi-agent-foundations)
+- [Corrigibility — LessWrong wikitag, open problems section](https://www.lesswrong.com/w/corrigibility-1)
+- [Open problems — LessWrong wikitag](https://www.lesswrong.com/w/open-problems)
+
+Read it properly. Then produce three directions:
 
 For each of the three:
 

@@ -13,6 +13,7 @@ mentor: optional
 skills: [literature review, hardware performance modelling]
 sources:
   - "[A Collection of AI Governance Research Ideas — von Knebel & Anderljung (2024), idea 71: OP/s threshold adjustments for performance](https://www.markusanderljung.com/blog/a-collection-of-ai-governance-research-ideas-2024)"
+similar: [which-compute-target]
 updated: 2026-08-06
 ---
 
@@ -49,7 +50,3 @@ The note the idea's own research questions describe: what the literature
 and your modelling say about performance across bit-widths, and the
 threshold adjustment that evidence justifies.
 
-Similar cards: [Which Compute Are We Even
-Regulating?](/verification/capstone-bank#which-compute-target) — the
-collection's broader question about defining the regulatory target, of
-which the bit-width adjustment is one axis.

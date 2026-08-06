@@ -13,9 +13,7 @@ mentor: optional
 audience: The legislator being told that watermarking solves AI-generated content.
 skills: [robustness testing, measurement, policy-options analysis, communicating technical limits]
 sources:
-  - "[Open Problems in Technical AI Governance — Reuel et al. (2025), verification questions: how can output watermarking be made robust to adversarial removal; how can metadata watermarking be applied; how robust can AI content detectors be expected to be](https://arxiv.org/abs/2407.14981)"
   - "[A Collection of AI Governance Research Ideas — von Knebel & Anderljung (2024), idea 59: what policy options exist for ensuring AI-generated content is identifiable as such?](https://www.markusanderljung.com/blog/a-collection-of-ai-governance-research-ideas-2024)"
-  - "[Open Technical Problems in Open-Weight AI Model Risk Management (2025)](https://openreview.net/forum?id=8QyGLnFkzc)"
 updated: 2026-08-04
 ---
 

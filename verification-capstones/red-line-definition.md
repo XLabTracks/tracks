@@ -14,8 +14,6 @@ audience: The standards body or agency that would have to make the line operativ
 skills: [definition drafting, consensus analysis, evidence standards, enforcement design]
 sources:
   - "[Projects someone should maybe do — Catherine Brewer (2025), on red lines and consensus around eval standards](https://docs.google.com/document/d/1MQ8CbgOy13GTWkJr09D-0fdPKydnrYYWIgSys0BwuP8/edit)"
-  - "[Open Problems in Technical AI Governance — Reuel et al. (2025)](https://arxiv.org/abs/2407.14981)"
-  - "[Request for Proposals: Improving Capability Evaluations — Coefficient Giving, formerly Open Philanthropy (2025, closed)](https://coefficientgiving.org/funds/navigating-transformative-ai/request-for-proposals-improving-capability-evaluations/)"
 updated: 2026-08-04
 ---
 

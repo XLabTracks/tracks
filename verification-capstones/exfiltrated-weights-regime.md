@@ -15,8 +15,6 @@ skills: [regime design, ecosystem monitoring, threat modelling, evidence standar
 prerequisites: [Verification 2.x — the four layers, Verification 3 — covert development, Verification 4.1 — feasibility and layering]
 sources:
   - "[Open Technical Problems in Open-Weight AI Model Risk Management (2025)](https://openreview.net/forum?id=8QyGLnFkzc)"
-  - "[Open Technical Problems in Open-Weight AI Model Risk Management — author PDF](https://stephencasper.com/wp-content/uploads/2025/11/open_weight_model_safety_oct2025.pdf)"
-  - "[Open Problems in Technical AI Governance — Reuel et al. (2025)](https://arxiv.org/abs/2407.14981)"
 updated: 2026-08-04
 ---
 

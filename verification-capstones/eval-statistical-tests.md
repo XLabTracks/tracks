@@ -14,8 +14,6 @@ audience: Anyone about to write "the model scored below the threshold" in a docu
 skills: [applied statistics, eval methodology, uncertainty quantification, technical writing]
 sources:
   - "[A Collection of AI Governance Research Ideas — von Knebel & Anderljung (2024), idea 35: what statistical tests are appropriate in evaluations of dangerous capabilities?](https://www.markusanderljung.com/blog/a-collection-of-ai-governance-research-ideas-2024)"
-  - "[A long list of open problems and concrete projects in evals — Hobbhahn and contributors (2025)](https://docs.google.com/document/d/1gi32-HZozxVimNg5Mhvk4CvW4zq8J12rGmK_j2zxNEg/edit)"
-  - "[Evals projects I'd like to see — cb (2025)](https://forum.effectivealtruism.org/posts/LTbwRuQhBRGxMyqcq/x-6)"
 updated: 2026-08-04
 ---
 

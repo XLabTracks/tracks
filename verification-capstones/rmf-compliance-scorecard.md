@@ -14,15 +14,14 @@ audience: The procurement officer or regulator deciding whether "we follow the R
 skills: [framework decomposition, rubric design, evidence sourcing, comparative scoring]
 sources:
   - "[Orphaned Policies (post 5 of 7 on AI governance) — Mass_Driver, orphan 10](https://www.lesswrong.com/posts/wFKZmvfRfNn24HNHp/orphaned-policies-post-5-of-7-on-ai-governance)"
-  - "[Ten AI safety projects I'd like people to work on — Julian Hazell, project 5 (AI Lab Monitor)](https://www.lesswrong.com/posts/vxA2BnCPTaPfnJjti/ten-ai-safety-projects-i-d-like-people-to-work-on)"
-  - "[NIST AI Risk Management Framework](https://www.nist.gov/itl/ai-risk-management-framework)"
 updated: 2026-08-04
 ---
 
 ## The brief
 
 A voluntary framework nobody is scored against is indistinguishable from a
-press release. The orphan catalogue puts it plainly: the guidelines are
+press release. The orphan catalogue puts it plainly: the
+[guidelines](https://www.nist.gov/itl/ai-risk-management-framework) are
 published, a rating system exists, and it is not obvious that the major
 developers actually comply — or even that they have promised to.
 

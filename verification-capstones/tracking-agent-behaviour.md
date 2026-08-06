@@ -13,6 +13,7 @@ mentor: optional
 skills: [OSINT methods, case-study writing, program design]
 sources:
   - "[Ten AI safety projects I'd like people to work on — Julian Hazell (2025), project 3: tracking sketchy AI agent behaviour in the wild](https://www.lesswrong.com/posts/vxA2BnCPTaPfnJjti/ten-ai-safety-projects-i-d-like-people-to-work-on)"
+similar: [incident-detection-monitoring, incident-reporting-taxonomy]
 updated: 2026-08-06
 ---
 
@@ -60,9 +61,3 @@ people at AI companies would need to establish, the OSINT analogies and
 disanalogies, and the format of the case studies and public database the
 organization would maintain.
 
-Similar cards: [Incident Detection and Monitoring at AI
-Companies](/verification/capstone-bank#incident-detection-monitoring) — a
-different list's idea on companies monitoring their own deployments from
-the inside; [An Incident Taxonomy Labs Could Report
-Against](/verification/capstone-bank#incident-reporting-taxonomy) — what
-counts as a reportable incident.

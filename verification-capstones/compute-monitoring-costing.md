@@ -15,8 +15,6 @@ skills: [cost estimation, institutional design, inspection regime design, depend
 prerequisites: [Verification 1 — actors, Verification 2.1 — the hardware layer, Verification 4.1 — feasibility and layering]
 sources:
   - "[Orphaned Policies (post 5 of 7 on AI governance) — Mass_Driver, orphan 8](https://www.lesswrong.com/posts/wFKZmvfRfNn24HNHp/orphaned-policies-post-5-of-7-on-ai-governance)"
-  - "[What does it take to catch a Chinchilla? Verifying rules on large-scale neural network training via compute monitoring — Shavit (2023)](https://arxiv.org/abs/2303.11341)"
-  - "[Open Problems in Technical AI Governance — Reuel et al. (2025)](https://arxiv.org/abs/2407.14981)"
 updated: 2026-08-04
 ---
 
@@ -26,7 +24,8 @@ Module 2.1 tells you what the hardware layer can and cannot do today: chip
 identity is solved but not unbreakable, secure boot has an inverted threat
 model because the owner is the party you are trying to catch, and no production
 chip meters tamper-resistantly. The orphan catalogue says the same thing from
-the other end — the timing analysis exists, and Shavit even sketches an
+the other end — the timing analysis exists, and
+[Shavit](https://arxiv.org/abs/2303.11341) even sketches an
 inspector headcount, but who employs those inspectors, what the penalties
 are, and who pays for the hardware innovations have never been costed.
 

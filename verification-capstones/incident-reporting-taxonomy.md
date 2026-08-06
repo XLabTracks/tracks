@@ -14,6 +14,7 @@ audience: The regulator who will receive the reports and the lab engineer who ha
 skills: [taxonomy design, form design, back-testing a classification, regulatory drafting]
 sources:
   - "[Open Problems in Technical AI Governance — Reuel et al. (2025), ecosystem monitoring: how can non-public incidents be reliably reported, and what technical information should be reported to make analysis meaningful](https://arxiv.org/abs/2407.14981)"
+similar: [incident-detection-monitoring, tracking-agent-behaviour]
 updated: 2026-08-04
 ---
 
@@ -45,12 +46,6 @@ Build the missing definition and then check it against reality.
   publication, confidential channels. A taxonomy that ignores it collects
   nothing.
 
-Similar cards: [Incident Detection and Monitoring at AI
-Companies](/verification/capstone-bank#incident-detection-monitoring) — a
-different list's idea on how companies detect incidents in deployment;
-[Tracking Sketchy AI Agent Behaviour in the
-Wild](/verification/capstone-bank#tracking-agent-behaviour) — outside-in
-observation of deployed agents.
 
 ## Why it exists
 

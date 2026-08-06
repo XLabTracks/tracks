@@ -14,8 +14,6 @@ audience: A committee that will hear one number and decide what it means.
 skills: [evidence standards, adversarial review, testimony craft, communicating uncertainty]
 sources:
   - "[Evals projects I'd like to see, and a call to apply to OP's evals RFP — cb (2025)](https://forum.effectivealtruism.org/posts/LTbwRuQhBRGxMyqcq/x-6)"
-  - "[Request for Proposals: Improving Capability Evaluations — Coefficient Giving, formerly Open Philanthropy (2025, closed)](https://coefficientgiving.org/funds/navigating-transformative-ai/request-for-proposals-improving-capability-evaluations/)"
-  - "[A long list of open problems and concrete projects in evals — Hobbhahn and contributors (2025)](https://docs.google.com/document/d/1gi32-HZozxVimNg5Mhvk4CvW4zq8J12rGmK_j2zxNEg/edit)"
 updated: 2026-08-04
 ---
 

@@ -28,6 +28,7 @@ import { DeferToResampleDemo } from "@/components/demos/defer-to-resample-demo";
 import { HonestTestDemo } from "@/components/demos/honest-test-demo";
 import { ExplorationHorizonDemo } from "@/components/demos/exploration-horizon-demo";
 import { CrossEpisodeCollusionDemo } from "@/components/demos/cross-episode-collusion-demo";
+import { BehavioralSelectionDemo } from "@/components/demos/behavioral-selection-demo";
 
 // Central demo registry — the single integration point. Reference a demo by ID
 // from MDX (<Demo id="…"/>), the gallery, standalone pages, or embeds.
@@ -262,6 +263,14 @@ export const demoRegistry: Record<string, DemoDefinition> = {
     description:
       "Instances in successive episodes pass messages to coordinate, effectively lengthening the timescale.",
     component: CrossEpisodeCollusionDemo,
+    tags: ["control", "seekers"],
+  },
+  "behavioral-selection": {
+    id: "behavioral-selection",
+    title: "Behavioral selection",
+    description:
+      "Candidate cognitive patterns pass through the training filter; the surviving mix includes seekers alongside aligned and schemer patterns.",
+    component: BehavioralSelectionDemo,
     tags: ["control", "seekers"],
   },
 };

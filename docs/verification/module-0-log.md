@@ -76,3 +76,56 @@ context-distiller exercise, and 3.2.1 "Evasion Scenario Taxonomy Revisited"
 (still a heading inside 3.2). Conversely 1.0.3 and 1.2.1–1.2.3 are lessons
 the outline does not list — they were nested under their parents, not
 deleted; merging or retiring them is a content decision still owed.
+
+## 0.1 and 0.2 retitled, 0.1 cut back to the outline
+
+The outline moved `Introduction: Why Verification?` down a unit, so **0.1 is
+now "How the risk looks like?"** and **0.2 carries the introduction title**.
+The bodies already matched their new homes — 0.2's reading is AI 2040: Plan A
+plus the verification supplement, AI 2027 as the optional, the "what does
+success look like" essay, and the three curated readings the outline names
+(Baker; Oxford Martin; Scher & Thiergart) — so only the titles moved. The
+slugs did not: `introduction` and `building-intuitions` are live URLs and unit
+ids are permanent.
+
+That move also explains the dangling `Explore → ai-2040.com` line that had been
+rendering as bare text in the middle of 0.1: AI 2040 is 0.2's material, and 0.2
+already writes it up with two reading cards. Deleted rather than linked.
+
+**0.1's body was then cut to what the outline lists for it**, on the author's
+instruction. What remains, in this order: the Bengio TED talk, the AGI/ASI/RSI
+framing paragraph, the `what-do-they-say` profile widget, the optional-material
+fold (Atlantic / MIRI's The Problem / Rational Animations, then Four Background
+Claims), and the optional task. The author named the paragraph and the widget
+as keepers and placed both **after** the video.
+
+Removed in the same edit, and recorded here because none of it survives
+anywhere else in the graph — recover from git, not from another lesson:
+
+- "Why is verification important?" — the 1946 Baruch-plan opening and the
+  four-option list (trust / punish / transparency / neutral mechanisms). Only
+  `scoping-effective-feasible.mdx` mentions 1946 at all, and in another context.
+- The misuse taxonomy (cyber, biological, chemical, R&D lead, influence).
+- The misalignment taxonomy (unintended goals, compounding through
+  self-improvement, no safe owner).
+- The 2026 incidents paragraph. 0.0 Welcome now tells those same three
+  incidents **with** their sources and the FelonyBench table, so this was a
+  second, uncited retelling. It also carried four claims with no source
+  anywhere — a 27-year-old OpenBSD bug, four chained vulnerabilities, an early
+  version emailing its supervising researcher, and a "too dangerous for general
+  release" judgement — plus two errors: it dated the Hugging Face intrusion to
+  "the first half of 2026" (the HF timeline calls it the July 2026 incident)
+  and attributed it to one escaped model rather than the group of coordinating
+  agents that 0.0 and 3.1.1 both describe from WIRED.
+
+Two link fixes in the fold, kept: the Atlantic piece was titled with the
+**book's** name; its published headline is "AI Is Grown, Not Built", which is
+what the outline calls it too. The Rational Animations essay was the only item
+in the list that was not a link, and it is now in `citations.json` (title and
+channel verified via YouTube oEmbed; no publication date found, and the
+registry allows the field to be absent).
+
+Still owed: the deleted heading "Why are we concerned about the development of
+superintelligence?" was the only heading 0.1 had, so the unit is now a single
+unchunkable part. It is short enough that this reads fine, but a longer 0.1
+would need real headings back.

@@ -207,7 +207,11 @@ export async function GET(request: Request) {
       } = await sres.json();
       // Rank hits by word overlap with the highlight's surrounding sentence,
       // so the page's own vocabulary decides which sense wins.
-      const ctxWords = new Set(context.split(/[^a-z]+/).filter((w) => w.length > 3));
+      // The term's own tokens match every hit, so they never score.
+      const termWords = new Set(raw.toLowerCase().split(/[^a-z]+/));
+      const ctxWords = new Set(
+        context.split(/[^a-z]+/).filter((w) => w.length > 3 && !termWords.has(w)),
+      );
       const hits = (sjson.query?.search ?? []).filter((h) => h.title);
       const score = (h: { title?: string; snippet?: string }) => {
         const text = ((h.title ?? "") + " " + (h.snippet ?? ""))

@@ -59,6 +59,10 @@
     var dSel = window.getSelection();
     var dNode = dSel && dSel.anchorNode ? dSel.anchorNode.parentElement : null;
     var dCtx = dNode ? ((dNode.closest && dNode.closest('p,li,td,h1,h2,h3,h4')) || dNode).textContent || '' : '';
+    /* The page's own name usually carries the deciding word ("4.2 Capstone
+       project"), so it rides along with the sentence. */
+    var dH1 = document.querySelector('h1');
+    dCtx = (document.title || '') + ' ' + (dH1 ? dH1.textContent : '') + ' ' + dCtx;
     fetch('/api/verification/define?term=' + encodeURIComponent(term) +
         '&context=' + encodeURIComponent(dCtx.replace(/\s+/g, ' ').trim().slice(0, 400)), {
       headers: { Accept: 'application/json' }

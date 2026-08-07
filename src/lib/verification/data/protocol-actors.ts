@@ -4,7 +4,7 @@
  *
  * Every `phrase` and every run of DOC is quoted VERBATIM from Appendix A of
  * *An International Agreement to Prevent the Premature Creation of Artificial
- * Superintelligence* (Scher, Abecassis, Barnett & Abeyta, arXiv:2511.10783) —
+ * Superintelligence* (Scher, Abecassis, Barnett & Abeyta, arXiv:2511.10783v3) —
  * the same paper 1.1 dissects. Do not paraphrase a quoted run, and do not
  * write a provision the Agreement does not contain: if a role has no clause,
  * the honest widget says so rather than inventing one.
@@ -18,6 +18,15 @@
  *
  * Ids are the widget's own keys (`data-a`), not learner state, so nothing
  * persisted moves when one is renamed.
+ *
+ * The version is pinned deliberately. The paper is CC BY 4.0, so reproducing
+ * these passages needs only attribution — but arXiv keeps every version, and
+ * v3 rewrote Article IV: v1 stated 10²⁴/10²³/10²² inline, v3 moved the same
+ * numbers into named Article II definitions (Strict, Strict Post-training and
+ * Monitored Thresholds) so the CTB can move them without touching the article.
+ * Quotes here are v3's. Re-check against the current version before editing a
+ * phrase, and bump the pin when you do; a quotation that silently follows a
+ * paper it does not name is the drift this file exists to prevent.
  */
 
 /** Actor categories, keyed by the semantic encoding the original uses. */
@@ -59,7 +68,7 @@ export const ACTORS: Record<string, ActorEntry> = {
   },
   labs: {
     cat: "ind",
-    phrase: "“Any training run exceeding 10²⁴ FLOP or any post-training run exceeding 10²³ FLOP.”",
+    phrase: "“Any training run exceeding the Strict Threshold or any post-training run exceeding the Strict Post-training Threshold.”",
     title: "Frontier labs",
     blocks: [
       [
@@ -97,7 +106,7 @@ export const ACTORS: Record<string, ActorEntry> = {
   },
   reporting: {
     cat: "ind",
-    phrase: "“Each Party shall report any training run between 10²² and 10²⁴ FLOP to the CTB, prior to initiation.”",
+    phrase: "“Each Party shall report any training run above the Monitored Threshold to the CTB, prior to initiation.”",
     title: "The reporting band",
     blocks: [
       [
@@ -581,7 +590,7 @@ const h = (a: string, text: string): DocRun => ({ kind: "hl", a, text });
 
 /**
  * The draft Agreement, article by article, quoted from Appendix A of
- * arXiv:2511.10783. Highlight phrases (`h`) key on the actor id (data-a in
+ * arXiv:2511.10783v3. Highlight phrases (`h`) key on the actor id (data-a in
  * the widget).
  *
  * Abridged, never rewritten: the Agreement runs to fifteen articles and this
@@ -620,7 +629,7 @@ export const DOC: DocArticle[] = [
       t(
         " Artificial superintelligence (ASI) is operationally defined as any AI with sufficiently superhuman cognitive performance that it could plan and successfully execute the destruction of humanity… ",
       ),
-      t("A covered chip cluster (CCC) is "),
+      t("Strict Threshold is the amount of training computation (measured in FLOP) above which training runs are prohibited. It is set at 10²⁴ FLOP… Monitored Threshold is the amount of training computation (measured in FLOP) above which training runs are subject to monitoring by the international authority. It is set at 10²² FLOP… A covered chip cluster (CCC) is "),
       h("hardware", "a set of chips with capacity greater than 16 H100-equivalents"),
       t("."),
     ],
@@ -645,11 +654,11 @@ export const DOC: DocArticle[] = [
     runs: [
       n("1."),
       t(" Each Party agrees to ban and prohibit AI training above the following thresholds: "),
-      h("labs", "Any training run exceeding 10²⁴ FLOP or any post-training run exceeding 10²³ FLOP"),
+      h("labs", "Any training run exceeding the Strict Threshold or any post-training run exceeding the Strict Post-training Threshold"),
       t(". "),
       n("2."),
       t(" "),
-      h("reporting", "Each Party shall report any training run between 10²² and 10²⁴ FLOP to the CTB, prior to initiation"),
+      h("reporting", "Each Party shall report any training run above the Monitored Threshold to the CTB, prior to initiation"),
       t(
         ". This report must include, but is not limited to, all training code, all training data, and an estimate of the total FLOP to be used…",
       ),

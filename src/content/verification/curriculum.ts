@@ -445,6 +445,8 @@ export const verificationLessons: Lesson[] = [
     moduleId: "v-why",
     title: "0.0 Welcome",
     contentRef: "verification/welcome",
+    // The opening read flows better as one page than paged section by section.
+    unchunked: true,
   },
   {
     id: "v-introduction",
@@ -498,6 +500,9 @@ export const verificationLessons: Lesson[] = [
     title: "0.4 Strategic Foundations",
     contentRef: "verification/strategic-foundations",
     optional: true,
+    // A list of reading cards, not a read-through: show them all on one screen
+    // rather than paging pathway by pathway.
+    unchunked: true,
   },
   {
     id: "v-policy-scoping",

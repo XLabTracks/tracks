@@ -51,7 +51,7 @@ const DOCS: GDoc[] = [
     out: "verification/research-tips",
     title: "Aaron’s Research Tips, or How I Wish I Did Research",
     author: "Aaron Scher",
-    authorHref: "https://techgov.intelligence.org/team/aaron-scher",
+    authorHref: "https://intelligence.org/team/aaron-scher/",
     note:
       "The author keeps adding to the document. This page re-syncs from it, " +
       "so follow the link if you want to be certain you are reading today’s " +

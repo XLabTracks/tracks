@@ -179,6 +179,60 @@ export async function GET(request: Request) {
     } else {
       wikiLeg = "miss (404)";
     }
+
+    // The exact title missed or is a disambiguation menu — ask search for
+    // the best real article ("capstone" finds Capstone course) and serve
+    // its summary under the same standard-page guard.
+    const sres = await fetch(
+      `https://en.wikipedia.org/w/api.php?action=query&list=search&srsearch=${encodeURIComponent(raw)}&srlimit=1&format=json`,
+      {
+        headers: {
+          Accept: "application/json",
+          "User-Agent":
+            "XLabTracksVerification/1.0 (https://aisafetytracks.com; course cheatsheet term lookup)",
+          "Api-User-Agent":
+            "XLabTracksVerification/1.0 (https://aisafetytracks.com; course cheatsheet term lookup)",
+        },
+        next: { revalidate: 86400 },
+      },
+    );
+    if (sres.ok) {
+      const sjson: { query?: { search?: Array<{ title?: string }> } } = await sres.json();
+      const top = sjson.query?.search?.[0]?.title;
+      if (top) {
+        const r2 = await fetch(
+          `https://en.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(top)}?redirect=true`,
+          {
+            headers: {
+              Accept: "application/json",
+              "User-Agent":
+                "XLabTracksVerification/1.0 (https://aisafetytracks.com; course cheatsheet term lookup)",
+              "Api-User-Agent":
+                "XLabTracksVerification/1.0 (https://aisafetytracks.com; course cheatsheet term lookup)",
+            },
+            next: { revalidate: 86400 },
+          },
+        );
+        if (r2.ok) {
+          const j2: {
+            type?: string;
+            title?: string;
+            extract?: string;
+            content_urls?: { desktop?: { page?: string } };
+          } = await r2.json();
+          if (j2.type === "standard" && j2.extract) {
+            return NextResponse.json({
+              found: true,
+              term: j2.title || top,
+              definition: j2.extract,
+              url: j2.content_urls?.desktop?.page ?? null,
+              source: "Wikipedia (CC BY-SA)",
+            });
+          }
+        }
+      }
+      wikiLeg += ", search miss";
+    }
   } catch (e) {
     wikiLeg = reason(e);
   }

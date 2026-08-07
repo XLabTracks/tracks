@@ -61,7 +61,7 @@ function firstParagraph(text: string): string {
 
 export async function GET(request: Request) {
   const params = new URL(request.url).searchParams;
-  const raw = (params.get("term") ?? "").trim();
+  const raw = (params.get("term") ?? "").trim().replace(/[.,;:!?]+$/, "");
   // The sentence around the highlight, sent by the client. It breaks ties on
   // disambiguation: "capstone" inside a course page should find Capstone
   // course, not a mining company. Never required, never stored.
@@ -208,9 +208,15 @@ export async function GET(request: Request) {
       // Rank hits by word overlap with the highlight's surrounding sentence,
       // so the page's own vocabulary decides which sense wins.
       // The term's own tokens match every hit, so they never score.
+      // The page's own words rarely appear in search snippets, so the site's
+      // standing vocabulary votes too: this is a course platform, and between
+      // a spacecraft, an investment bank and a capstone course, the course is
+      // the sense a learner highlighted.
+      const DOMAIN =
+        "course education educational learning program curriculum lesson module student university academic";
       const termWords = new Set(raw.toLowerCase().split(/[^a-z]+/));
       const ctxWords = new Set(
-        context.split(/[^a-z]+/).filter((w) => w.length > 3 && !termWords.has(w)),
+        (context + " " + DOMAIN).split(/[^a-z]+/).filter((w) => w.length > 3 && !termWords.has(w)),
       );
       const hits = (sjson.query?.search ?? []).filter((h) => h.title);
       const score = (h: { title?: string; snippet?: string }) => {

@@ -123,10 +123,24 @@ export function LessonPartsReader({
     if (countOf(tags) < 2) tags = ["H2", "H3"];
     if (countOf(tags) < 2) tags = ["H2", "H3", "H4"];
 
+    // A part whose elements are all headings (no body has arrived yet).
+    const bodyless = (p: Part | null) =>
+      !!p && p.els.every((e) => tags.includes(e.tagName));
+
     const built: Part[] = [];
     let cur: Part | null = null;
     for (const el of els) {
       if (tags.includes(el.tagName)) {
+        // A boundary heading with nothing beneath it before the next heading
+        // would stand as a part that reads as a lone title over blank space.
+        // Fold consecutive headings into one part until body arrives, so every
+        // part carries content. This also absorbs a stray title h1 a body
+        // shouldn't carry (the page owns the h1) — the failure it prevents is
+        // silent, and client-side, so no test would catch a regression.
+        if (bodyless(cur)) {
+          cur!.els.push(el);
+          continue;
+        }
         cur = { label: el.textContent ?? "", anchor: el.id || null, els: [el] };
         built.push(cur);
         continue;

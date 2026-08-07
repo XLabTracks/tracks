@@ -232,3 +232,23 @@ markdown links, literal `<a href=`, and `url=`, so an anchor in MDX would be
 pulled into the Works cited appendix — and an image credit is not a reading.
 Anything that is a credit rather than a citation should go through a prop and
 be rendered by the component.
+
+Correction to the note above: the three signatories now have faces. Wikimedia
+Commons was the only place checked the first time, which was not enough. The
+wider search found each of them publishing a photograph of themselves on their
+own site, and those are committed under
+`public/verification/assets/pacing-the-frontier/` with `SOURCES.md` recording
+the file, the URL, the retrieval date and the terms. Terms are `unchecked` on
+all three — none of the pages states a licence — so the block credits the
+source rather than claiming a grant, and using them is the course owner's
+editorial call, the same shape as the RAND reproduction in 2.2.
+
+What was searched and came up empty, so nobody repeats it: Commons has no
+portrait of any of the three; Openverse (Flickr's CC pool plus Commons)
+returns nothing; Schulman and Sekhon have English Wikipedia articles with no
+image and Carroll has no article; pacingthefrontier.com publishes no
+signatory photographs. Sutskever still reuses the committed Commons portrait
+rather than a second copy.
+
+The initials fallback stays in `Signatory` and is the remedy if anyone
+objects: delete the file and the card falls back with no other change.

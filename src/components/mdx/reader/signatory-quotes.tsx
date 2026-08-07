@@ -29,6 +29,7 @@ export function SignatoryQuotes({
   what,
   credit,
   creditHref,
+  creditNote,
   children,
 }: {
   /** The work every quote comes from. */
@@ -44,6 +45,8 @@ export function SignatoryQuotes({
    */
   credit?: ReactNode;
   creditHref?: string;
+  /** Further portrait credit that carries no link of its own. */
+  creditNote?: ReactNode;
   children: ReactNode;
 }) {
   return (
@@ -78,6 +81,7 @@ export function SignatoryQuotes({
             ) : (
               credit
             )}
+            {creditNote ? <span>. {creditNote}</span> : null}
           </span>
         ) : null}
       </figcaption>

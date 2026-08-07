@@ -228,8 +228,13 @@ export async function GET(request: Request) {
         return n;
       };
       hits.sort((a, b) => score(b) - score(a));
-      const top = hits[0]?.title;
-      if (top) {
+      // The disambiguation page itself ranks high in its own search results
+      // and scores well - it contains every sense's words. It already failed
+      // as the exact title, so it is skipped, and the top candidates are
+      // tried in score order until one is a real article.
+      const tried = hits.filter((h) => slugify(h.title ?? "") !== slug).slice(0, 3);
+      for (const cand of tried) {
+        const top = cand.title as string;
         const r2 = await fetch(
           `https://en.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(top)}?redirect=true`,
           {

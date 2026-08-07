@@ -22,6 +22,7 @@ import { Check } from "./reader/check";
 import { GapFill } from "./reader/gap-fill";
 import { Prompt } from "./reader/prompt";
 import { Src, SourceQuote } from "./reader/source-quote";
+import { ReadingCard } from "./reader/reading-card";
 
 // Components available by name inside every lesson `.mdx` body. Authors drop
 // <Video/>, <Demo/>, <Exercise/>, <ExerciseSequence/>, <Callout/>,
@@ -57,6 +58,7 @@ export const mdxComponents: MDXComponents = {
   CapstoneBank,
   CapstoneSignup,
   Check,
+  ReadingCard,
   GapFill,
   Prompt,
   SourceQuote,

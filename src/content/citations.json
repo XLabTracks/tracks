@@ -511,19 +511,65 @@
       "about": "UN News coverage of the Secretary-General's governance call at the inaugural Global Dialogue on AI Governance in Geneva.",
       "org": "UN News",
       "date": "6 July 2026"
+    },
+    "https://deepmind.google/blog/alphafold-five-years-of-impact/": {
+      "title": "AlphaFold: Five Years of Impact",
+      "about": "Google DeepMind's own account of what AlphaFold's protein-structure predictions changed in five years, the welcome's example of AI capability arriving as scientific benefit rather than risk.",
+      "authors": "Hassabis, Demis, John Jumper, Pushmeet Kohli, and Anna Koivuniemi",
+      "container": "Google DeepMind",
+      "date": "25 Nov. 2025"
+    },
+    "https://blog.google/innovation-and-ai/technology/health/google-ai-breast-cancer-detection/": {
+      "title": "How AI Can Improve Breast Cancer Detection in the UK",
+      "about": "Google Research on a study with Imperial College London and the NHS reporting cancers missed between screens that a model caught — a concrete medical gain from the same capability the course asks you to govern.",
+      "authors": "Matias, Yossi, and Shravya Shetty",
+      "container": "The Keyword",
+      "publisher": "Google",
+      "date": "10 Mar. 2026"
+    },
+    "https://deepmind.google/blog/advanced-version-of-gemini-with-deep-think-officially-achieves-gold-medal-standard-at-the-international-mathematical-olympiad/": {
+      "title": "Advanced Version of Gemini with Deep Think Officially Achieves Gold-Medal Standard at the International Mathematical Olympiad",
+      "about": "Google DeepMind reporting a gold-medal score at the 2025 International Mathematical Olympiad, one of the capability milestones the welcome uses to date how fast the frontier moved.",
+      "authors": "Luong, Thang, and Edward Lockhart",
+      "container": "Google DeepMind",
+      "date": "21 July 2025"
+    },
+    "https://deepmind.google/blog/accelerating-mathematical-and-scientific-discovery-with-gemini-deep-think/": {
+      "title": "Accelerating Mathematical and Scientific Discovery with Gemini Deep Think",
+      "about": "Google DeepMind on Deep Think working open research problems, including questions from the Erdős database — the welcome's example of a model producing new mathematics rather than reproducing known results.",
+      "authors": "Luong, Thang, and Vahab Mirrokni",
+      "container": "Google DeepMind",
+      "date": "11 Feb. 2026"
+    },
+    "https://www.anthropic.com/project/glasswing/": {
+      "title": "Project Glasswing",
+      "about": "Anthropic's programme putting frontier models to work finding and fixing vulnerabilities in critical software infrastructure — the defensive face of the same capability the incident write-ups describe going wrong.",
+      "org": "Anthropic",
+      "date": "7 Apr. 2026"
+    },
+    "https://huggingface.co/blog/agent-intrusion-technical-timeline": {
+      "title": "Anatomy of a Frontier Lab Agent Intrusion: A Technical Timeline of the July 2026 Incident",
+      "about": "Hugging Face's technical post-mortem of an agent that left an evaluation sandbox and moved through their infrastructure — the target's account of the incident, written from its own logs.",
+      "authors": "Larcher, Hugo, Adrien Carreira, Raphael G., and Christophe Rannou",
+      "container": "Hugging Face Blog",
+      "date": "27 July 2026"
+    },
+    "https://www.anthropic.com/news/investigating-incidents-cybersecurity-evals": {
+      "title": "Investigating Three Real-World Incidents in Our Cybersecurity Evaluations",
+      "about": "Anthropic's disclosure of models reaching real systems from inside its cybersecurity evaluations, and the controls added after — a lab reporting its own containment failures.",
+      "org": "Anthropic",
+      "date": "30 July 2026"
+    },
+    "https://www.felonybench.com/": {
+      "title": "Felony Bench",
+      "about": "A running tally of unauthorised actions AI models took during cybersecurity evaluations, ranked by lab. Built by Felpix; a community scoreboard, not a lab or peer-reviewed source.",
+      "org": "Felpix",
+      "standalone": true
     }
   },
   "pending": [
-    "https://deepmind.google/blog/alphafold-five-years-of-impact/",
-    "https://blog.google/innovation-and-ai/technology/health/google-ai-breast-cancer-detection/",
-    "https://deepmind.google/blog/advanced-version-of-gemini-with-deep-think-officially-achieves-gold-medal-standard-at-the-international-mathematical-olympiad/",
-    "https://deepmind.google/blog/accelerating-mathematical-and-scientific-discovery-with-gemini-deep-think/",
     "https://openai.com/index/model-disproves-discrete-geometry-conjecture/",
-    "https://www.anthropic.com/project/glasswing/",
-    "https://www.wired.com/story/openai-didnt-notice-its-ai-agents-using-a-message-board-to-plan-their-hacking-spree/",
-    "https://huggingface.co/blog/agent-intrusion-technical-timeline",
-    "https://www.anthropic.com/news/investigating-incidents-cybersecurity-evals",
-    "https://www.felonybench.com/"
+    "https://www.wired.com/story/openai-didnt-notice-its-ai-agents-using-a-message-board-to-plan-their-hacking-spree/"
   ],
   "excluded": [
     "https://evidence-taxonomies.netlify.app/",

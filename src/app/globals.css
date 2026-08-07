@@ -254,6 +254,17 @@
   counter-reset: footnote;
 }
 
+/* The label prefixes on a section-spec line ("Runtime:", "Status:", "Hard
+   idea:"), emphasised by rehype-lesson-meta so each segment has an anchor
+   rather than running into its value. Brand ink is the theme's readable
+   accent (maroon/rose/yellow across the three themes); the currentColor
+   fallback covers tracks that don't load theme.css, where these lines never
+   appear anyway. Hue is decoration here — the label word carries the meaning. */
+.lesson-body .lesson-meta-label {
+  color: var(--brand-ink, currentColor);
+  font-weight: 600;
+}
+
 /* MLA's hanging indent: first line flush, wrapped lines indented. */
 .works-cited-entry {
   padding-left: 1.5rem;

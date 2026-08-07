@@ -80,6 +80,9 @@ const withMDX = createMDX({
       "rehype-slug",
       // Must come after rehype-slug: it reads the heading ids slug assigns.
       join(process.cwd(), "src/lib/mdx/rehype-lesson-sections.mjs"),
+      // Before auto-gloss, so a section-spec line is still one text node when
+      // it wraps the "Runtime:/Status:/Hard idea:" labels in <strong>.
+      join(process.cwd(), "src/lib/mdx/rehype-lesson-meta.mjs"),
       // Order-insensitive itself (it only reads links), but before auto-gloss
       // keeps the walk over the body the author wrote, not over injected Terms.
       join(process.cwd(), "src/lib/mdx/rehype-lesson-citations.mjs"),

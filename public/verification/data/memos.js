@@ -181,8 +181,8 @@ window.VERIFICATION_MEMOS = [
     "unit": "4.0",
     "title": "Defended-ranking memo",
     "status": "specified",
-    "brief": "Produce the defended-ranking memo: a recommended mechanism portfolio for one named policy goal, with residual blind spots and their owners — the artifact 4.1 receives. Defend the ranking against both your own initial guesses and the field’s published ratings.",
-    "audience": "Whoever acts on 4.1 — the portfolio is handed forward, not filed.",
+    "brief": "Produce the defended-ranking memo: a recommended mechanism portfolio for one named policy goal, with residual blind spots and their owners — the artifact the 4.2 capstone receives. Defend the ranking against both your own initial guesses and the field’s published ratings.",
+    "audience": "Whoever acts on the 4.2 capstone — the portfolio is handed forward, not filed.",
     "words": 900,
     "peerReviewed": true,
     "criteria": [

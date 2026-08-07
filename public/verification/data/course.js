@@ -270,22 +270,21 @@ window.COURSE = {
       "units": [
         {
           "id": "4.0",
-          "title": "Motivation",
-          "kind": "explainer",
-          "mins": "15–20 min",
-          "href": "/tracks/verification/capstone/capstone-motivation",
-          "lessons": [
-            "capstone-motivation"
-          ]
-        },
-        {
-          "id": "4.1",
           "title": "Feasibility, prioritization, sequencing",
           "kind": "explainer",
           "mins": "20–30 min",
           "href": "/tracks/verification/capstone/capstone-feasibility",
           "lessons": [
-            "capstone-feasibility",
+            "capstone-feasibility"
+          ]
+        },
+        {
+          "id": "4.1",
+          "title": "How to do AI governance research well",
+          "kind": "explainer",
+          "mins": "25 min",
+          "href": "/tracks/verification/capstone/how-to-do-research-well",
+          "lessons": [
             "how-to-do-research-well"
           ]
         },

@@ -236,8 +236,17 @@
    3.2, and at eight rows the ruled table still reads while eight filled
    discs would have read as a column of buttons.
 
-   Trap: the numeral is a grid item, so it must stay in flow — position it
-   absolutely and the gutter column collapses and the text slides under it.
+   Trap: the row is NOT a grid. A list item's content is however many inline
+   runs the markdown produced — "**Clip.** Pull the passages…" is a <strong>
+   and then a bare text node — and grid makes every one of them its own item,
+   so everything after the bold lead drops into the next row's 3.1rem gutter
+   and wraps one word per line. The numeral is placed out of flow instead and
+   the text is held off it by padding, which no number of inline runs can
+   break. Anything reintroducing `display: grid` here must be checked against
+   an item with a bold lead, not only against plain sentences.
+   Trap: the numeral is absolutely positioned, so it carries the row's own
+   line-height rather than its own — that is what lands it on the first
+   line's baseline instead of above it.
    Trap: 1.55rem is just past the display face's ~24px floor. Do not shrink
    it below that without moving it to the body face; Space Grotesk under
    display size is exactly what the font rule forbids. */
@@ -252,20 +261,23 @@
 :root[data-theme] .lesson-body ol:not(.not-prose *):not(li ol):has(> li:nth-child(4)) > li {
   counter-increment: vt-step;
   margin: 0;
-  display: grid;
-  grid-template-columns: 3.1rem 1fr;
-  column-gap: 1.3rem;
-  align-items: baseline;
-  padding: 1.15rem 0 1.2rem;
+  position: relative;
+  padding: 1.15rem 0 1.2rem 4.4rem;
   border-bottom: var(--hairline) solid var(--border);
 }
 :root[data-theme] .lesson-body ol:not(.not-prose *):not(li ol):has(> li:nth-child(4)) > li::before {
   content: counter(vt-step, decimal-leading-zero);
+  position: absolute;
+  left: 0;
+  top: 1.15rem;
+  width: 3.1rem;
   color: var(--brand-ink);
   font-family: var(--display);
   font-size: 1.55rem;
   font-weight: 500;
-  line-height: 1;
+  /* The row's own line-height, not 1: it is what puts the numeral's baseline
+     on the baseline of the line it numbers. */
+  line-height: inherit;
   letter-spacing: -.02em;
   font-variant-numeric: tabular-nums;
 }
@@ -273,7 +285,9 @@
    column tightens instead. */
 @media (max-width: 640px) {
   :root[data-theme] .lesson-body ol:not(.not-prose *):not(li ol):has(> li:nth-child(4)) > li {
-    grid-template-columns: 2.5rem 1fr;
-    column-gap: .9rem;
+    padding-left: 3.4rem;
+  }
+  :root[data-theme] .lesson-body ol:not(.not-prose *):not(li ol):has(> li:nth-child(4)) > li::before {
+    width: 2.5rem;
   }
 }

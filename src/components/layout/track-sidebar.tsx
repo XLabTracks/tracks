@@ -27,6 +27,7 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { isCompletionItem, isOptionalItem } from "@/lib/content";
+import { groupDone, itemDone, type ItemGroup } from "@/lib/content/item-done";
 import { OptionalMarker } from "@/components/content/optional-tag";
 import type { ModuleItem, TrackOutline } from "@/lib/content";
 import type { PaperNavItem } from "@/lib/papers/paper-nav";
@@ -262,22 +263,6 @@ function itemSectionItemId(item: ModuleItem): string | undefined {
 function itemSlug(item: ModuleItem): string {
   return item.kind === "lesson" ? item.lesson.slug : item.paper.slug;
 }
-/**
- * An item is "done" only when all its progress units are — for a paper that
- * includes its inserted lessons, matching module/track totals. (Computed from
- * props: importing the content accessors would pull the graph client-side.)
- */
-function itemDone(item: ModuleItem, completed: Set<string>): boolean {
-  if (item.kind === "lesson") return completed.has(item.lesson.id);
-  if (!completed.has(item.paper.id)) return false;
-  return (item.paper.edits ?? []).every(
-    (edit) =>
-      edit.op !== "activity" ||
-      edit.items.every(
-        (inserted) => inserted.kind !== "lesson" || completed.has(inserted.id),
-      ),
-  );
-}
 
 /** The active item's heading nav, as resolved by activeItemNavOf. */
 type ActiveItemNav = {
@@ -286,16 +271,11 @@ type ActiveItemNav = {
   nav: PaperNavItem[];
 };
 
-/**
- * A top-level sidebar row with the subsection rows that declared it as their
- * section (`sectionItemId`). Content rules guarantee a section head precedes
- * its subsections and is itself top-level; an item pointing anywhere else
- * renders as its own top-level row rather than vanishing.
- */
-interface ItemGroup {
-  item: ModuleItem;
-  children: ModuleItem[];
-}
+/* A top-level sidebar row with the subsection rows that declared it as their
+   section (`sectionItemId`). Content rules guarantee a section head precedes
+   its subsections and is itself top-level; an item pointing anywhere else
+   renders as its own top-level row rather than vanishing. ItemGroup and the
+   two done-rules live in @/lib/content/item-done — pure, and tested. */
 
 function groupModuleItems(items: ModuleItem[]): ItemGroup[] {
   const groups: ItemGroup[] = [];
@@ -374,6 +354,7 @@ function SidebarItemGroup({
           href={href}
           pathname={pathname}
           completed={completed}
+          done={itemDone(item, completed)}
           onNavigate={onNavigate}
           sectionNav={sectionNavFor(item)}
         />
@@ -388,6 +369,7 @@ function SidebarItemGroup({
         href={href}
         pathname={pathname}
         completed={completed}
+        done={groupDone(group, completed)}
         onNavigate={onNavigate}
         sectionNav={sectionNavFor(item)}
         caret={
@@ -418,6 +400,7 @@ function SidebarItemGroup({
                 href={`${moduleBase}/${itemSlug(child)}`}
                 pathname={pathname}
                 completed={completed}
+                done={itemDone(child, completed)}
                 onNavigate={onNavigate}
                 sectionNav={sectionNavFor(child)}
               />
@@ -437,6 +420,7 @@ function SidebarItemRow({
   onNavigate,
   sectionNav,
   caret,
+  done,
 }: {
   item: ModuleItem;
   href: string;
@@ -447,8 +431,12 @@ function SidebarItemRow({
   sectionNav?: ActiveItemNav;
   /** A section head's collapse toggle, laid beside the link (never inside it). */
   caret?: React.ReactNode;
+  /** Whether this row may show a tick. The caller decides, because only the
+   *  caller knows what the row stands for: a section head answers for its
+   *  collapsed subsections, and ticking it on its own lesson alone reports an
+   *  eight-section submodule as finished to somebody who read its first page. */
+  done: boolean;
 }) {
-  const done = itemDone(item, completed);
   const active = pathname === href;
   const link = (
     <Link

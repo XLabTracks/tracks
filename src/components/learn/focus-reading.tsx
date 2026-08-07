@@ -183,7 +183,9 @@ export function FocusReadingControl({
             <p className="text-muted-foreground font-mono text-[10px] tracking-[0.14em] uppercase">
               Sample
             </p>
-            <p className="mt-2 text-[15px] leading-relaxed">
+            {/* focus-sample: the accent weight is the page's, one token —
+                a sample bolder than the body would be a lie about it. */}
+            <p className="focus-sample mt-2 text-[15px] leading-relaxed">
               <FocusSample text={SAMPLE} settings={settings} />
             </p>
             <p className="text-muted-foreground mt-2 text-xs leading-relaxed">

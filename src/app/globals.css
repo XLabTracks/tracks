@@ -395,10 +395,30 @@
   font-weight: inherit;
 }
 
+/* The accent is a nudge, not a shout. Full bold against body weight is a
+   300-step jump, which stops reading as "the eye lands here" and starts
+   reading as "every other word is important" — the paragraph turns stripy and
+   the effect it is supposed to have inverts. One step catches the eye and
+   still reads a page through.
+
+   One token, used by the body and by the panel's sample, because the sample's
+   whole job is to be exactly what the page will do.
+
+   Trap: this only lands where the body face HAS the cut. The stack is the
+   system UI face, which on macOS and Windows carries a real semibold; a
+   fallback with only Regular and Bold rounds 600 up to 700 and the step is
+   the old one again. That is why the value is 600 and not 500: 500 rounds
+   DOWN on such a face, and the accent silently disappears. Round up to too
+   strong, never down to nothing. */
+:root {
+  --focus-accent-weight: 600;
+}
+
 .focus-light [data-fw-a],
 .focus-standard [data-fw-a],
-.focus-standard [data-fw-b] {
-  font-weight: 700;
+.focus-standard [data-fw-b],
+.focus-sample b {
+  font-weight: var(--focus-accent-weight);
 }
 
 /* Short joining words are marked like the rest and turned off here, so the

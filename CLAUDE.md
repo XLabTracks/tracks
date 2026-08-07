@@ -723,8 +723,15 @@ drive the lock, and the item page redirects signed-in learners on hard locks
 (signed-out visitors may preview). Prerequisites may be cross-track. Progress
 units are lessons, papers, and papers' inserted lessons — see
 `getModuleProgressContentIds` in `src/lib/content/` — assessments never gate
-completion; an item's sidebar checkmark lights only when all of its units are
-complete. Papers marked `optional: true` (and their inserted lessons) are
+completion; **a sidebar row's checkmark lights only when everything that row
+stands for is complete** — `src/lib/content/item-done.ts` (pure, tested, and
+imported by the client sidebar, which must never pull the graph). A row can
+answer for work that is not visible beside it, and both cases are in that
+file: a paper answers for its inserted lessons, and a **section head answers
+for its subsections**, which collapse by default. Ticking a head on its own
+lesson reported 2.1 Hardware — nine sections — as finished to somebody who had
+read its opening page, so `groupDone` is what a head takes and `itemDone` what
+a leaf takes. Papers marked `optional: true` (and their inserted lessons) are
 trackable but never required: the `…ProgressContentIds` accessors exclude
 them (so module completion, prerequisite satisfaction, and progress totals
 ignore them) while `getTrackContentIds` is the full checkmark/fetch universe

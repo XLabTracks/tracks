@@ -222,34 +222,58 @@
   content: none;
 }
 
-/* Stepped circles: four or more numbered items. */
+/* The ledger: four or more numbered items read as hairline-ruled rows, the
+   numeral set in the display face in its own gutter, baseline-aligned to the
+   first line of the item it numbers. A contents page, not a stack of badges.
+
+   The rules are band rules separating full-width rows — the one thing the
+   card-edge rule allows. The rows are not cards: no tint, no radius, no
+   painted edge, and the accent lives in the numeral itself. --brand-ink,
+   never --primary: maroon fills and brand-ink writes, and this is type.
+
+   It scales, which is the whole reason for the shape: the same rule dresses
+   a five-objective list on the welcome page and the eight-step protocol in
+   3.2, and at eight rows the ruled table still reads while eight filled
+   discs would have read as a column of buttons.
+
+   Trap: the numeral is a grid item, so it must stay in flow — position it
+   absolutely and the gutter column collapses and the text slides under it.
+   Trap: 1.55rem is just past the display face's ~24px floor. Do not shrink
+   it below that without moving it to the body face; Space Grotesk under
+   display size is exactly what the font rule forbids. */
 :root[data-theme] .lesson-body ol:not(.not-prose *):not(li ol):has(> li:nth-child(4)) {
   list-style: none;
   counter-reset: vt-step;
-  display: grid;
-  gap: 14px;
+  display: block;
   padding-left: 0;
+  margin-top: 1.7em;
+  border-top: var(--hairline) solid var(--border);
 }
 :root[data-theme] .lesson-body ol:not(.not-prose *):not(li ol):has(> li:nth-child(4)) > li {
   counter-increment: vt-step;
   margin: 0;
-  position: relative;
-  padding-left: 46px;
+  display: grid;
+  grid-template-columns: 3.1rem 1fr;
+  column-gap: 1.3rem;
+  align-items: baseline;
+  padding: 1.15rem 0 1.2rem;
+  border-bottom: var(--hairline) solid var(--border);
 }
 :root[data-theme] .lesson-body ol:not(.not-prose *):not(li ol):has(> li:nth-child(4)) > li::before {
   content: counter(vt-step, decimal-leading-zero);
-  position: absolute;
-  left: 0;
-  top: calc(.9em - 15px);
-  width: 30px;
-  height: 30px;
-  border-radius: 50%;
-  background: var(--primary);
-  color: var(--primary-foreground, #fff);
-  font-family: var(--mono);
-  font-size: 12.5px;
-  font-weight: 700;
+  color: var(--brand-ink);
+  font-family: var(--display);
+  font-size: 1.55rem;
+  font-weight: 500;
+  line-height: 1;
+  letter-spacing: -.02em;
   font-variant-numeric: tabular-nums;
-  display: grid;
-  place-items: center;
+}
+/* A phone gives the gutter less room; the numeral keeps its size and the
+   column tightens instead. */
+@media (max-width: 640px) {
+  :root[data-theme] .lesson-body ol:not(.not-prose *):not(li ol):has(> li:nth-child(4)) > li {
+    grid-template-columns: 2.5rem 1fr;
+    column-gap: .9rem;
+  }
 }

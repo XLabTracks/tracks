@@ -263,6 +263,57 @@
 
 .bank-note { margin: 28px 0 8px; }
 
+/* ---------- contribute card ---------- */
+
+/* The bank is generated from verification-capstones/*.md in a public repo, so
+   the two ways to change it are a new file and a fix to an existing one. Both
+   rows open a prefilled issue on that repo — real destinations, because a
+   contribute card that goes nowhere is worse than none at all.
+
+   Uniform hairline on all four sides; the accent lives inside, in the glyph
+   discs. Trap: the rows are pressable, so nothing in them may take a text
+   selection. */
+.contribute {
+  max-width: 420px;
+  margin: 24px 0 8px;
+  padding: 18px 20px;
+  border: var(--hairline) solid var(--border);
+  border-radius: var(--radius);
+}
+.contribute h2 {
+  margin: 0;
+  font-size: var(--fs-md);
+  font-weight: 500;
+  color: var(--muted-foreground);
+}
+.contribute ul { margin: 14px 0 0; padding: 0; list-style: none; display: grid; gap: 6px; }
+.contribute a {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 0 -8px;
+  padding: 8px;
+  border-radius: var(--radius);
+  color: var(--foreground);
+  text-decoration: none;
+  user-select: none;
+}
+.contribute a:hover { background: var(--muted); }
+.contribute a:hover .g { border-color: var(--primary); }
+.contribute .g {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  border: var(--hairline) solid var(--border);
+  border-radius: 50%;
+  color: var(--brand-ink);
+  transition: border-color .15s ease;
+}
+.contribute .g svg { width: 15px; height: 15px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.contribute .out { margin: 12px 0 0; font-size: var(--fs-2xs); color: var(--muted-foreground); }
+
 /* ---------- detail sheet ---------- */
 
 .overlay {

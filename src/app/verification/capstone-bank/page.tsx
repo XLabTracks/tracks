@@ -11,6 +11,55 @@ import { LegacyScripts } from "@/components/verification/legacy-scripts";
 
 export const metadata: Metadata = { title: "Capstone bank" };
 
+/* Contribute links. The bank's source of truth is verification-capstones/*.md
+   in this repo, so both rows open a prefilled issue there — the same public
+   repo the footer's "Report a bug" already points at. No labels in the query:
+   GitHub rejects a label the opener cannot apply, which would turn a working
+   link into an error page.
+
+   The front-matter contract is _README.md beside those files; the proposal
+   body asks for what the generator validates, so an issue arrives with the
+   fields a brief actually needs. */
+const ISSUES = "https://github.com/XLabTracks/tracks/issues/new";
+
+const NEW_BRIEF =
+  ISSUES +
+  "?title=" +
+  encodeURIComponent("Capstone proposal: ") +
+  "&body=" +
+  encodeURIComponent(
+    [
+      "**Title**",
+      "",
+      "**Track** (Verification / Cross-track / Technical Governance / AI Governance Policy)",
+      "",
+      "**Summary** — one line, what the learner walks out holding",
+      "",
+      "**Deliverable** — the artifact, and roughly how long it takes",
+      "",
+      "**Why it exists** — the real decision this would inform",
+      "",
+      "**Sources** — links a reader can open",
+      "",
+      "See verification-capstones/_README.md for the full front-matter contract.",
+    ].join("\n"),
+  );
+
+const CORRECTION =
+  ISSUES +
+  "?title=" +
+  encodeURIComponent("Capstone bank correction: ") +
+  "&body=" +
+  encodeURIComponent(
+    [
+      "**Which brief** — the card title, or its slug from the URL",
+      "",
+      "**What is wrong**",
+      "",
+      "**What it should say, and how you know**",
+    ].join("\n"),
+  );
+
 const SCRIPTS = ["data/course.js", "data/skills.js", "data/capstone-bank.js", "data/chrome.js", "platform.js", "capstone-bank.js"];
 
 export default function Page() {
@@ -78,6 +127,35 @@ export default function Page() {
           capstone — its sheet says which module it lands on. The rest keep
           prerequisites naming weeks taught on their own tracks, not here.
         </p>
+
+        {/* The bank is generated from verification-capstones/*.md in a public
+            repo, so contributing to it is opening an issue against that repo —
+            a real destination, prefilled, rather than a form nobody reads. */}
+        <section className="contribute" aria-labelledby="contribHead">
+          <h2 id="contribHead">Contribute to this page</h2>
+          <ul>
+            <li>
+              <a href={NEW_BRIEF} target="_blank" rel="noopener">
+                <span className="g" aria-hidden="true">
+                  <svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14" /></svg>
+                </span>
+                Propose a capstone
+              </a>
+            </li>
+            <li>
+              <a href={CORRECTION} target="_blank" rel="noopener">
+                <span className="g" aria-hidden="true">
+                  <svg viewBox="0 0 24 24">
+                    <path d="M12 20h9" />
+                    <path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z" />
+                  </svg>
+                </span>
+                Suggest a correction
+              </a>
+            </li>
+          </ul>
+          <p className="out">Both open an issue on the course repository.</p>
+        </section>
 
       </main>
 

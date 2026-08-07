@@ -54,7 +54,13 @@
     place(card, rect);
     document.body.appendChild(card);
 
-    fetch('/api/verification/define?term=' + encodeURIComponent(term), {
+    /* The sentence around the highlight rides along so the lookup can pick
+       the right sense of an ambiguous word from the page's own vocabulary. */
+    var dSel = window.getSelection();
+    var dNode = dSel && dSel.anchorNode ? dSel.anchorNode.parentElement : null;
+    var dCtx = dNode ? ((dNode.closest && dNode.closest('p,li,td,h1,h2,h3,h4')) || dNode).textContent || '' : '';
+    fetch('/api/verification/define?term=' + encodeURIComponent(term) +
+        '&context=' + encodeURIComponent(dCtx.replace(/\s+/g, ' ').trim().slice(0, 400)), {
       headers: { Accept: 'application/json' }
     })
       .then(function (r) { return r.json().then(function (j) { return { ok: r.ok, j: j }; }); })

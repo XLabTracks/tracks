@@ -60,7 +60,12 @@ function firstParagraph(text: string): string {
 }
 
 export async function GET(request: Request) {
-  const raw = (new URL(request.url).searchParams.get("term") ?? "").trim();
+  const params = new URL(request.url).searchParams;
+  const raw = (params.get("term") ?? "").trim();
+  // The sentence around the highlight, sent by the client. It breaks ties on
+  // disambiguation: "capstone" inside a course page should find Capstone
+  // course, not a mining company. Never required, never stored.
+  const context = (params.get("context") ?? "").toLowerCase().slice(0, 400);
   if (!raw || raw.length > MAX_TERM) {
     return NextResponse.json({ error: "Bad term" }, { status: 400 });
   }
@@ -170,7 +175,7 @@ export async function GET(request: Request) {
         return NextResponse.json({
           found: true,
           term: json.title || raw,
-          definition: json.extract,
+          definition: json.extract.trim(),
           url: json.content_urls?.desktop?.page ?? null,
           source: "Wikipedia (CC BY-SA)",
         });
@@ -184,7 +189,7 @@ export async function GET(request: Request) {
     // the best real article ("capstone" finds Capstone course) and serve
     // its summary under the same standard-page guard.
     const sres = await fetch(
-      `https://en.wikipedia.org/w/api.php?action=query&list=search&srsearch=${encodeURIComponent(raw)}&srlimit=1&format=json`,
+      `https://en.wikipedia.org/w/api.php?action=query&list=search&srsearch=${encodeURIComponent(raw)}&srlimit=5&format=json`,
       {
         headers: {
           Accept: "application/json",
@@ -197,8 +202,23 @@ export async function GET(request: Request) {
       },
     );
     if (sres.ok) {
-      const sjson: { query?: { search?: Array<{ title?: string }> } } = await sres.json();
-      const top = sjson.query?.search?.[0]?.title;
+      const sjson: {
+        query?: { search?: Array<{ title?: string; snippet?: string }> };
+      } = await sres.json();
+      // Rank hits by word overlap with the highlight's surrounding sentence,
+      // so the page's own vocabulary decides which sense wins.
+      const ctxWords = new Set(context.split(/[^a-z]+/).filter((w) => w.length > 3));
+      const hits = (sjson.query?.search ?? []).filter((h) => h.title);
+      const score = (h: { title?: string; snippet?: string }) => {
+        const text = ((h.title ?? "") + " " + (h.snippet ?? ""))
+          .toLowerCase()
+          .replace(/<[^>]+>/g, " ");
+        let n = 0;
+        for (const w of new Set(text.split(/[^a-z]+/))) if (ctxWords.has(w)) n++;
+        return n;
+      };
+      hits.sort((a, b) => score(b) - score(a));
+      const top = hits[0]?.title;
       if (top) {
         const r2 = await fetch(
           `https://en.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(top)}?redirect=true`,
@@ -224,7 +244,7 @@ export async function GET(request: Request) {
             return NextResponse.json({
               found: true,
               term: j2.title || top,
-              definition: j2.extract,
+              definition: j2.extract.trim(),
               url: j2.content_urls?.desktop?.page ?? null,
               source: "Wikipedia (CC BY-SA)",
             });

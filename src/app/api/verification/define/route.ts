@@ -183,7 +183,62 @@ export async function GET(request: Request) {
     wikiLeg = reason(e);
   }
 
-  const legs = { lesswrong: lwLeg, wikipedia: wikiLeg };
+  // Wiktionary last: the dictionary for ordinary words. "Mechanism" lands
+  // here — its Wikipedia page is a disambiguation menu, which the leg above
+  // rightly refuses to serve — while a plain word still deserves a plain
+  // definition. Entries are lowercase unless proper nouns, and proper nouns
+  // were Wikipedia's to answer, so the lookup is lowercased. Definitions
+  // arrive as HTML fragments; tags are stripped, and glosses too short to
+  // define anything are skipped.
+  let wtLeg = "skipped";
+  try {
+    const word = raw.toLowerCase();
+    const res = await fetch(
+      `https://en.wiktionary.org/api/rest_v1/page/definition/${encodeURIComponent(word)}?redirect=true`,
+      {
+        headers: {
+          Accept: "application/json",
+          "User-Agent":
+            "XLabTracksVerification/1.0 (https://aisafetytracks.com; course cheatsheet term lookup)",
+          "Api-User-Agent":
+            "XLabTracksVerification/1.0 (https://aisafetytracks.com; course cheatsheet term lookup)",
+        },
+        next: { revalidate: 86400 },
+      },
+    );
+    if (res.status !== 404) {
+      if (!res.ok) throw new Error(String(res.status));
+      const json: Record<
+        string,
+        Array<{ partOfSpeech?: string; definitions?: Array<{ definition?: string }> }>
+      > = await res.json();
+      for (const entry of json.en ?? []) {
+        for (const d of entry.definitions ?? []) {
+          const text = (d.definition ?? "")
+            .replace(/<[^>]+>/g, "")
+            .replace(/\s+/g, " ")
+            .trim();
+          if (text.length >= 20) {
+            return NextResponse.json({
+              found: true,
+              term: word,
+              definition:
+                (entry.partOfSpeech ? `(${entry.partOfSpeech.toLowerCase()}) ` : "") + text,
+              url: `https://en.wiktionary.org/wiki/${encodeURIComponent(word)}`,
+              source: "Wiktionary (CC BY-SA)",
+            });
+          }
+        }
+      }
+      wtLeg = "miss (no english gloss)";
+    } else {
+      wtLeg = "miss (404)";
+    }
+  } catch (e) {
+    wtLeg = reason(e);
+  }
+
+  const legs = { lesswrong: lwLeg, wikipedia: wikiLeg, wiktionary: wtLeg };
   if (lwLeg.startsWith("error") || wikiLeg.startsWith("error")) {
     return NextResponse.json({ error: "Lookup unavailable", legs }, { status: 502 });
   }

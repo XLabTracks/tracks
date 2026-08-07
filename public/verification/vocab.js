@@ -1,11 +1,15 @@
 /* vocab.js — look up a word you don't know, and keep it.
 
-   Select a short phrase in the reading column and a "Define" button appears
-   beside it. The definition comes from /api/verification/define: the app's own
-   glossary first, the LessWrong wiki as a fallback. Saving files it on the
-   Cheatsheet page of the notebook, so it persists, syncs to the account and
-   exports with everything else — a second store would have been a second
-   thing to migrate.
+   The definition comes from /api/verification/define: the app's own glossary
+   first, the LessWrong wiki as a fallback. Saving files it on the Cheatsheet
+   page of the notebook, so it persists, syncs to the account and exports with
+   everything else — a second store would have been a second thing to migrate.
+
+   Exposes window.VTVocab = { define(term, rect) }. Raising it is somebody
+   else's job: the selection toolbar (SelectionActions) decides when a
+   selection is short enough to be a term and calls this. This file used to
+   own a mouseup listener of its own, which is exactly why a phone or a
+   keyboard could select a word and be offered nothing.
 
    Load AFTER notebook.js: it calls VTNotebook.
 
@@ -14,19 +18,11 @@
    answer for a term a laptop would resolve. Saving is therefore never gated
    on a definition: the card offers to keep the term with your own note, and
    says plainly that nothing was found. A vocabulary tool that refuses the
-   words you most need is the wrong way round.
-
-   Trap: the notebook's own capture button owns long selections. This one
-   takes short ones and offers both actions — Define and Add to notebook —
-   from one strip, so the two scripts never stack buttons over the same
-   selection. The split is on word count, in one place (SHORT_WORDS). */
+   words you most need is the wrong way round. */
 
 "use strict";
 
 (function () {
-
-  const SHORT_WORDS = 5;      // above this it is a passage, not a term
-  const MIN_CHARS = 3;
 
   const esc = function (s) {
     return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) {
@@ -34,10 +30,9 @@
     });
   };
 
-  let strip = null, card = null;
+  let card = null;
 
   function drop() {
-    if (strip) { strip.remove(); strip = null; }
     if (card) { card.remove(); card = null; }
   }
 
@@ -99,60 +94,26 @@
       });
   }
 
-  document.addEventListener('mouseup', function (ev) {
-    /* Trap: mouseup fires before click. A press on our own button would tear
-       it down and rebuild it here, so the click it was pressed for never
-       lands — the button looked dead. Ignore presses inside our own UI. */
-    if (ev.target && ev.target.closest && ev.target.closest('.vocab-strip, .vocab-card')) return;
-    /* Same scope signal as notebook.js: the app chrome marks <html> with
-       vt-off-course when a client-side navigation leaves the course, and a
-       define strip has no business on an app page. */
-    if (document.documentElement.classList.contains('vt-off-course')) return;
-    setTimeout(function () {
-      const sel = document.getSelection();
-      const text = sel ? String(sel).trim() : '';
-      drop();
-      if (text.length < MIN_CHARS) return;
-      if (text.split(/\s+/).length > SHORT_WORDS) return;   // the notebook takes it
-      const host = sel.anchorNode && sel.anchorNode.parentElement;
-      if (!host || !host.closest('main')) return;
-
-      const rect = sel.getRangeAt(0).getBoundingClientRect();
-      strip = document.createElement('div');
-      strip.className = 'vocab-strip';
-
-      const def = document.createElement('button');
-      def.type = 'button';
-      def.className = 'vocab-btn';
-      def.textContent = 'Define';
-      def.onclick = function () {
-        const r = rect;
-        drop();
-        show(text, r);
-      };
-      strip.appendChild(def);
-
-      const keep = document.createElement('button');
-      keep.type = 'button';
-      keep.className = 'vocab-btn';
-      keep.textContent = 'Add to notebook';
-      keep.onclick = function () {
-        if (window.VTNotebook && VTNotebook.addQuote) {
-          VTNotebook.addQuote(text, document.title.split('\u00b7')[0].trim(), location.href);
-        }
-        drop();
-        const s2 = document.getSelection();
-        if (s2 && s2.removeAllRanges) s2.removeAllRanges();
-      };
-      strip.appendChild(keep);
-
-      place(strip, rect);
-      document.body.appendChild(strip);
-    }, 0);
-  });
-
   document.addEventListener('keydown', function (e) {
     if (e.key === 'Escape') drop();
   });
+
+  /* A press outside closes the card, the way any popover does — but never one
+     inside it, or its own buttons would never fire. */
+  document.addEventListener('pointerdown', function (ev) {
+    if (!card) return;
+    if (ev.target && ev.target.closest && ev.target.closest('.vocab-card')) return;
+    drop();
+  });
+
+  /* The selection toolbar decides when a selection is short enough to be a
+     term; this is all it needs from here. `rect` is the selection in viewport
+     coordinates, which is what place() expects. */
+  window.VTVocab = {
+    define: function (term, rect) {
+      drop();
+      show(term, rect);
+    }
+  };
 
 })();

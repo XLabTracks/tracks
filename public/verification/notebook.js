@@ -20,10 +20,10 @@
    Exposes window.VTNotebook = { open, close, addNote, addQuote, count } so a
    page script can push a selection straight in.
 
-   Trap: selection capture reads the DOM at mouseup. Anything pressable is
-   user-select:none here, so a stray drag over chrome yields an empty string
-   rather than a quote — check for that before offering to capture, or the
-   button flashes up over nothing.
+   Capturing a selection is the selection toolbar's job (SelectionActions),
+   which calls addQuote. Anything pressable on this site is user-select:none,
+   so a stray drag over chrome yields an empty string rather than a quote —
+   which is what stops the toolbar flashing up over nothing.
 
    Trap: the book is one localStorage value. Write it on a debounce, never on
    every keystroke, or a long note re-serialises the whole book per character. */
@@ -672,51 +672,12 @@ window.VTNotebook = (function () {
     document.documentElement.classList.remove('nb-lock');
   }
 
-  /* ---------- capture from the page ---------- */
-
-  /* A selection in the reading column offers to be captured. The button is
-     placed in document coordinates so it survives a scroll, and it is torn
-     down on the next selection change rather than left to accumulate. */
-  function armCapture() {
-    let btn = null;
-    function drop() { if (btn) { btn.remove(); btn = null; } }
-
-    document.addEventListener('selectionchange', function () {
-      const sel = document.getSelection();
-      if (!sel || sel.isCollapsed || !String(sel).trim()) drop();
-    });
-
-    document.addEventListener('mouseup', function (ev) {
-      // Same trap as vocab.js: mouseup precedes click, so a press on this
-      // button must not rebuild it out from under its own click handler.
-      if (ev.target && ev.target.closest && ev.target.closest('.nb-capture')) return;
-      if (offCourse()) return;
-      setTimeout(function () {
-        const sel = document.getSelection();
-        const text = sel ? String(sel).trim() : '';
-        drop();
-        /* Long selections only. vocab.js takes 5 words or fewer and its
-           strip carries both actions, Define and Add to notebook — so the
-           two scripts never stack buttons over the same selection. This
-           bound and its SHORT_WORDS are one decision. */
-        if (!text || text.split(/\s+/).length <= 5) return;
-        const host = sel.anchorNode && sel.anchorNode.parentElement;
-        if (!host || !host.closest('main')) return;
-
-        const r = sel.getRangeAt(0).getBoundingClientRect();
-        btn = mk('button', 'nb-capture', 'Add to notebook');
-        btn.type = 'button';
-        btn.style.top = (r.bottom + window.scrollY + 8) + 'px';
-        btn.style.left = (r.left + window.scrollX) + 'px';
-        btn.onclick = function () {
-          addQuote(text, document.title.split('·')[0].trim(), location.href);
-          drop();
-          if (sel.removeAllRanges) sel.removeAllRanges();
-        };
-        document.body.appendChild(btn);
-      }, 0);
-    });
-  }
+  /* Capturing a passage from the page is the selection toolbar's job
+     (SelectionActions): it calls addQuote below. This file used to raise its
+     own button off its own mouseup listener, alongside two other scripts
+     doing the same — which is why the three had to be placed at different
+     heights to avoid stacking, and why a touch or keyboard selection was
+     offered nothing at all. */
 
   /* ---------- public ---------- */
 
@@ -782,10 +743,9 @@ window.VTNotebook = (function () {
   }
 
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', function () { mountButton(); armCapture(); });
+    document.addEventListener('DOMContentLoaded', mountButton);
   } else {
     mountButton();
-    armCapture();
   }
 
   return {

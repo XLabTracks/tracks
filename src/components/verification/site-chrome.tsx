@@ -6,6 +6,7 @@ import { usePathname } from "next/navigation";
 import { useAuth } from "@workos-inc/authkit-nextjs/components";
 import { AccountMenu } from "@/components/layout/account-menu";
 import { SignInLink } from "@/components/layout/sign-in-link";
+import { SelectionActions } from "@/components/verification/selection-actions";
 import {
   COPYRIGHT,
   FOOT,
@@ -119,6 +120,11 @@ export function VerificationHeader() {
       <Script src="/verification/notebook.js" strategy="afterInteractive" />
       <Script src="/verification/vocab.js" strategy="afterInteractive" />
       <Script src="/verification/sync.js" strategy="afterInteractive" />
+      {/* What those three no longer own is the selection UX: each used to
+          raise its own button off its own mouseup listener, which is why a
+          phone and a keyboard were offered nothing. One toolbar now, calling
+          their published entry points at press time. */}
+      <SelectionActions />
       <header className="site-header">
         <div className="bar">
           <a className="brand" href="/verification/landing">

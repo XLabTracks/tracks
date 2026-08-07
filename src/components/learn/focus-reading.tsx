@@ -88,23 +88,30 @@ export function FocusReadingControl({
 
   return (
     <>
+      {/* The glyph IS the setting: an A carrying the accent over a plain a, so
+          the button shows what it does at the size of an icon. Its own weight
+          never changes with the mode — a control that restyles itself is hard
+          to find again once you have turned it on. State is the border and the
+          accessible name, and the panel says which strength. */}
       <Button
         variant="ghost"
         size="sm"
         data-focus-toggle
         aria-expanded={open}
+        aria-label={`Focus reading${on ? `: ${settings.mode}` : ""}`}
+        title="Focus reading"
         onClick={() => setOpen((v) => !v)}
         className={cn(
-          "h-7 px-2 text-[13px]",
-          on ? "text-foreground" : "text-muted-foreground",
+          "h-7 w-9 border px-0 text-[15px] leading-none",
+          on
+            ? "border-border text-foreground bg-muted"
+            : "text-muted-foreground border-transparent",
         )}
       >
-        Focus reading
-        {on && (
-          <span className="text-muted-foreground ml-1.5 font-mono text-[11px]">
-            {settings.mode === "light" ? "light" : "standard"}
-          </span>
-        )}
+        <span aria-hidden>
+          <b className="font-bold">A</b>
+          <span className="font-normal">a</span>
+        </span>
       </Button>
 
       {open && (

@@ -14,13 +14,11 @@
    with vt-off-course when the route leaves the course; this hides whatever
    is already mounted, and the scripts' handlers check the same class before
    offering capture or define. Off-course, not display-toggling per tool:
-   one rule, every surface the two scripts own. */
+   one rule, every surface these scripts own. (The selection toolbar checks
+   the same class itself — it is a component and has no CSS here.) */
 .vt-off-course .nb-open,
-.vt-off-course .nb-capture,
 .vt-off-course .nb-root,
-.vt-off-course .vocab-strip,
 .vt-off-course .vocab-card,
-.vt-off-course .hl-add,
 .vt-off-course .hl-strip { display: none; }
 
 /* ---------- the corner button ---------- */
@@ -242,30 +240,11 @@
 }
 .nb-goto:focus { outline: none; border-color: var(--ring); }
 
-/* ---------- capture ---------- */
+/* ---------- highlight removal ---------- */
 
-/* The highlighter's two pieces. The add button stands alone ABOVE the
-   selection — the capture and define strips sit below it, so the tools are
-   separate in space and never stack. It wears the marker's own pair
-   (--hl/--hl-ink), so the button is a swatch of what pressing it does; both
-   values re-solve per theme and each pair clears 4.5:1 where it is set. The
-   removal strip borrows vocab-strip's geometry. */
-.hl-add {
-  position: absolute;
-  z-index: 55;
-  padding: 6px 12px;
-  border: var(--hairline) solid var(--border);
-  border-radius: var(--radius-sm);
-  background: var(--hl);
-  color: var(--hl-ink);
-  font: inherit;
-  font-size: var(--fs-sm);
-  cursor: pointer;
-  box-shadow: var(--shadow-soft);
-  user-select: none;
-  -webkit-user-select: none;
-}
-
+/* What is left of the highlighter here is removal: a strip beside a painted
+   passage. Raising actions over a selection belongs to SelectionActions,
+   which is a component and carries its own classes. */
 .hl-strip {
   position: absolute;
   z-index: 55;
@@ -274,22 +253,6 @@
 }
 .hl-strip .vocab-btn { position: static; }
 
-.nb-capture {
-  position: absolute;
-  z-index: 55;
-  padding: 6px 12px;
-  border: var(--hairline) solid transparent;
-  border-radius: var(--radius-sm);
-  background: var(--primary);
-  color: var(--primary-foreground);
-  font: inherit;
-  font-size: var(--fs-sm);
-  cursor: pointer;
-  box-shadow: var(--shadow-soft);
-  user-select: none;
-  -webkit-user-select: none;
-}
-
 @media (max-width: 560px) {
   .nb-open { right: 12px; bottom: 12px; }
   .nb-foot { gap: 8px; }
@@ -297,7 +260,7 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .nb-open, .nb-capture { transition: none; }
+  .nb-open { transition: none; }
 }
 
 /* ---------- vocabulary ---------- */
@@ -305,16 +268,8 @@
 .nb-term-word { font-family: var(--display); font-size: var(--fs-lg); font-weight: 500; }
 .nb-term-def { margin-top: 6px; font-size: var(--fs-md); line-height: 1.6; }
 
-/* The lookup strip and its card sit in document coordinates beside the
-   selection, so they survive a scroll. The strip is the positioned box; the
-   buttons flow inside it, so a second action never overlaps the first. */
-.vocab-strip {
-  position: absolute;
-  z-index: 55;
-  display: flex;
-  gap: 6px;
-}
-.vocab-strip .vocab-btn { position: static; }
+/* The lookup card sits in document coordinates beside the selection, so it
+   survives a scroll. */
 .vocab-btn {
   position: absolute;
   z-index: 55;

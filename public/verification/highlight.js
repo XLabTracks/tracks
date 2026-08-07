@@ -1,17 +1,14 @@
 /* highlight.js — mark a passage and find it marked when you come back.
 
-   The highlighter is its own tool with its own button: selecting text in
-   the reading column raises "Highlight" ABOVE the selection, in the
-   marker's own colours, while the capture and define strips sit below it —
-   separate in space, so the never-stack-buttons rule stands with three
-   tools on one selection. Exposes window.VTHighlight =
-   { supported, add, count }.
+   Exposes window.VTHighlight = { supported, add, count }. The selection
+   toolbar (SelectionActions) offers "Highlight" and calls add(); this file
+   owns the store, the painting and removal.
 
    Painting is the CSS Custom Highlight API (::highlight(vt-hl) in
    theme.css), never a DOM edit: the reading column belongs to React, and a
    <mark> spliced into it would be unwound or duplicated by the next render.
-   Where the API is missing, `supported` is false and the strips simply do
-   not offer the button — a highlighter that half-works is worse than none.
+   Where the API is missing, `supported` is false and the toolbar simply does
+   not offer the action — a highlighter that half-works is worse than none.
 
    A highlight is stored as its own words plus a run of context either side
    (the W3C text-quote idea): { text, prefix, suffix }, keyed by pathname in
@@ -24,11 +21,11 @@
    cheap, because painting mutates nothing, so repainting can never feed the
    observer that triggered it.
 
-   Trap: removal cannot hang on the strips — a click on a painted passage
-   has a collapsed selection, so no strip appears. A document click listener
+   Trap: removal cannot hang on the toolbar — a click on a painted passage
+   has a collapsed selection, so no toolbar appears. A document click listener
    offers "Remove highlight" when the caret under the pointer falls inside a
-   stored range; like every strip, it must ignore presses inside its own UI
-   (mouseup-before-click would tear the button down before its click). */
+   stored range, and must ignore presses inside any floating UI or its own
+   click would land on the thing it just tore down. */
 
 "use strict";
 
@@ -182,56 +179,15 @@
 
   /* ---------- the add button ---------- */
 
-  let addBtn = null;
-  function dropAdd() { if (addBtn) { addBtn.remove(); addBtn = null; } }
+  /* Raising "Highlight" over a selection is the selection toolbar's job
+     (SelectionActions): it calls add() below when CSS.highlights exists.
+     This file used to do it from its own mouseup listener, which is why a
+     phone adjusting a selection by its handles — a gesture that delivers no
+     mouse event to the page — was offered nothing.
 
-  document.addEventListener('mouseup', function (ev) {
-    if (!supported) return;
-    /* Same trap as the other tools: mouseup precedes click, so a press on
-       this button must not rebuild it out from under its own click. */
-    if (ev.target && ev.target.closest && ev.target.closest('.hl-add, .hl-strip')) return;
-    if (document.documentElement.classList.contains('vt-off-course')) return;
-    setTimeout(function () {
-      const sel = document.getSelection();
-      const text = sel ? String(sel).trim() : '';
-      dropAdd();
-      if (!text || !sel.rangeCount || sel.isCollapsed) return;
-      const host = sel.anchorNode && sel.anchorNode.parentElement;
-      if (!host || !host.closest('main')) return;
-      const rect = sel.getRangeAt(0).getBoundingClientRect();
-      addBtn = document.createElement('button');
-      addBtn.type = 'button';
-      addBtn.className = 'hl-add';
-      addBtn.textContent = 'Highlight';
-      /* Pressing the button must not collapse the selection it is about to
-         highlight — a collapsed selection also fires selectionchange, whose
-         teardown would eat this button's own click. */
-      addBtn.onmousedown = function (e) { e.preventDefault(); };
-      addBtn.onclick = function () {
-        add();
-        dropAdd();
-        const s = document.getSelection();
-        if (s && s.removeAllRanges) s.removeAllRanges();
-      };
-      document.body.appendChild(addBtn);
-      /* Above the selection, where the capture and define strips never sit.
-         Only when the page's top edge leaves no room does it drop below —
-         offset to the selection's right, clear of the strip at its left. */
-      const h = addBtn.offsetHeight || 34;
-      if (rect.top > h + 64) {
-        addBtn.style.top = (rect.top + window.scrollY - h - 8) + 'px';
-        addBtn.style.left = Math.max(8, rect.left + window.scrollX) + 'px';
-      } else {
-        addBtn.style.top = (rect.bottom + window.scrollY + 8) + 'px';
-        addBtn.style.left = (rect.right + window.scrollX + 12) + 'px';
-      }
-    }, 0);
-  });
-
-  document.addEventListener('selectionchange', function () {
-    const sel = document.getSelection();
-    if (!sel || sel.isCollapsed || !String(sel).trim()) dropAdd();
-  });
+     Removal is a different gesture and stays here: it hangs off a click on
+     painted text, where the selection is collapsed and the toolbar never
+     appears. */
 
   /* ---------- removal strip ---------- */
 
@@ -253,7 +209,7 @@
   document.addEventListener('click', function (ev) {
     if (!supported) return;
     if (ev.target && ev.target.closest &&
-        ev.target.closest('.hl-strip, .vocab-strip, .vocab-card, .nb-capture-strip, .nb-root, a, button')) return;
+        ev.target.closest('.hl-strip, .vocab-card, [role="toolbar"], .nb-root, a, button')) return;
     dropStrip();
     const sel = document.getSelection();
     if (sel && !sel.isCollapsed) return;   // a real selection belongs to the other strips
@@ -280,7 +236,7 @@
   });
 
   document.addEventListener('keydown', function (e) {
-    if (e.key === 'Escape') { dropAdd(); dropStrip(); }
+    if (e.key === 'Escape') dropStrip();
   });
 
   /* ---------- keeping the paint alive ---------- */

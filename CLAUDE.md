@@ -515,10 +515,31 @@ Traps that cost time already, so they are written down:
   `xlab-verification-memo-desk.v1` and `xlab-verification-notebook.v1` hold a
   visitor's theme, memo drafts and notebook. They keep those names whatever
   the files around them are called.
-- `mouseup` fires before `click`. Both selection tools (`notebook.js` capture,
-  `vocab.js` define) rebuild their button on `mouseup`, so each must ignore
-  presses inside its own UI or the click never lands and the button looks
-  dead.
+- **Everything a selection can be done with is one toolbar**,
+  `src/components/verification/selection-actions.tsx`, mounted by
+  `site-chrome.tsx`. Highlight, Define and Add to notebook each used to raise
+  their own button off their own `mouseup` listener in
+  `highlight.js`/`vocab.js`/`notebook.js`, kept from stacking by being placed
+  at different heights — which meant a phone (selection handles are OS chrome
+  and send the page no mouse event) and a keyboard (Shift+Arrow under caret
+  browsing, a screen reader's virtual cursor) selected text and were offered
+  nothing at all. The trigger is now `selectionchange`, which every input
+  device fires; pointer events only say whether a drag is still running. The
+  three scripts keep their stores and their painting and publish
+  `VTHighlight.add` / `VTNotebook.addQuote` / `VTVocab.define`, which the
+  toolbar calls at press time — never at mount, so it cannot race their
+  loading. Which actions apply is
+  `src/lib/verification/selection-actions.ts`, pure and tested; adding a
+  fourth tool is an entry there plus a published entry point, never a fourth
+  listener. Traps, now in one place instead of three: a button must cancel
+  its own `mousedown` or pressing it collapses the selection it was about to
+  act on; and pressing INSIDE an existing selection to drag it is a native
+  text drag-and-drop, which sends `pointercancel` mid-gesture and `dragend`
+  at the end and **no `pointerup`** — so the "pointer is down" belief has
+  both an explicit end and a timeout, or the toolbar dies for the rest of the
+  page's life. Removing a highlight is deliberately not here: it hangs off a
+  click on painted text, where the selection is collapsed and no toolbar
+  appears.
 - LessWrong's GraphQL API is behind bot protection and challenges datacenter
   requests; the keyless `/api/search` endpoint is not, so
   `/api/verification/define` asks that instead (tags index — hits carry the

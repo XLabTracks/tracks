@@ -299,6 +299,19 @@
   user-select: none;
 }
 .contribute a:hover { background: var(--muted); }
+/* No destination supplied yet: the row still reads, but it is plainly not a
+   control — dimmed, not a link, and its disc stays hairline on hover because
+   there is no hover. */
+.contribute .pending {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 0 -8px;
+  padding: 8px;
+  color: var(--muted-foreground);
+  user-select: none;
+}
+.contribute .pending .g { color: var(--muted-foreground); }
 .contribute a:hover .g { border-color: var(--primary); }
 .contribute .g {
   flex: none;

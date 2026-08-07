@@ -52,7 +52,7 @@ window.COURSE = {
         },
         {
           "id": "0.3",
-          "title": "Precedents and Parallels",
+          "title": "History, Precedents, Parallels",
           "kind": "interactive",
           "mins": "20–25 min",
           "href": "/tracks/verification/why-verification/precedents",

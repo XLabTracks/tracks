@@ -162,3 +162,44 @@ post is **not**, and that is the existing convention rather than an oversight:
 `ai-2027.com` and Baker's arXiv link in 0.2 are unregistered for the same
 reason. Adding an entry for one makes it an orphan and fails
 `citations.test.ts`.
+
+## 0.3 checked against the outline, and retitled
+
+**0.3 is now "History, Precedents, Parallels"** (was "Precedents and
+Parallels") and **0.3.1 is "Securitization and why AI warrants it"** (was
+"Securitization, emergency politics, and ASI"). Slugs unchanged.
+
+The bodies were already there and were verified line by line rather than
+retranscribed:
+
+- 0.3.1's six paragraphs match the outline **verbatim**, all six, diffed
+  character for character.
+- All eight case files in `precedent-cases.ts` match the outline's eight
+  entries verbatim across `name`, `tagline`, the outcome heading, the
+  historical parallel, why it held or failed, and the AI-transfer note. The
+  diff found exactly two deltas, both the deliberate spoiler move the file's
+  docstring already declares: the Biopreparat sentence and the North Korean
+  detections sentence sit in the reveal rather than the briefing, because the
+  learner calls held-or-circumvented before reading the outcome.
+- 0.3's third paragraph was an adaptation ("In the case files below, before
+  reading how each turned out…"); restored to the outline's own sentence,
+  which names the interactive and the count: "In the interactive below, you'll
+  open eight case files, and before seeing how each turned out, you'll make
+  the call yourself…". Eight is correct.
+
+The docstring's claim that the outline named only six cases for the exercise
+is stale and was corrected — the current outline lists all eight, in this
+order, each with the same three parts. It also now records the prototype the
+outline links (`timely-zuccutto-eed7cf.netlify.app`, "The Verification Files")
+as a sketch rather than a spec, so nobody re-derives the widget from it.
+
+Two open items, neither of them ours to close:
+
+- 0.3.1 ends "Section 0.2 begins that work, turning the argument into the
+  concrete task of deciding what to weigh and how heavily." That is the
+  author's sentence and is transcribed verbatim, but it points **backwards**
+  now — 0.2 is read before 0.3. Whether it means 0.2's Plan A stress-test or
+  module 1's effectiveness-by-feasibility sort is a content decision.
+- The undrafted closer for 0.3 (the outline's "Summarize: what has worked with
+  verification in the past, and what hasn't?") is still an author note held out
+  of the render at the foot of `securitization.mdx`. Still owed.

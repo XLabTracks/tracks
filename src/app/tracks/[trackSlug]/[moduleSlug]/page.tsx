@@ -8,6 +8,7 @@ import {
   getItemsForModule,
   getModuleBySlugs,
   getResourcesByTopics,
+  isOptionalItem,
   itemIdOf,
   itemSlugOf,
   itemTitleOf,
@@ -133,7 +134,7 @@ export default async function ModulePage({
                             <FileText className="size-3" aria-hidden /> Paper
                           </Badge>
                         )}
-                        {item.kind === "paper" && item.paper.optional && (
+                        {isOptionalItem(item) && (
                           <Badge variant="outline">Optional</Badge>
                         )}
                       </span>

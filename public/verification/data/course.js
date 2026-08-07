@@ -60,6 +60,17 @@ window.COURSE = {
             "precedents",
             "securitization"
           ]
+        },
+        {
+          "id": "0.4",
+          "title": "Strategic Foundations",
+          "kind": "reading",
+          "mins": "self-paced",
+          "optional": true,
+          "href": "/tracks/verification/why-verification/strategic-foundations",
+          "lessons": [
+            "strategic-foundations"
+          ]
         }
       ]
     },

@@ -269,9 +269,13 @@ export function getTrackOutline(trackSlug: string): TrackOutline | undefined {
 // module completion, prerequisite satisfaction, and progress totals — skip
 // them, while getTrackContentIds is the full trackable universe.
 
-/** Listed and completable, but never required for module/track completion. */
+/** Listed and completable, but never required for module/track completion.
+ *  Both item kinds carry the flag — a reading-pathways lesson can be optional
+ *  the same way an optional paper is (0.4 Strategic Foundations is the case). */
 export function isOptionalItem(item: ModuleItem): boolean {
-  return item.kind === "paper" && item.paper.optional === true;
+  return item.kind === "paper"
+    ? item.paper.optional === true
+    : item.lesson.optional === true;
 }
 
 /**

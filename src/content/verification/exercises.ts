@@ -209,4 +209,12 @@ export const verificationExercises: Exercise[] = [
     format: "free-form",
     optional: true,
   },
+  {
+    id: "v-task-strategic-foundations-1",
+    type: "writing-prompt",
+    prompt:
+      "Optional written output — Actor, authority, and evidence map.\n\nChoose one element of the advanced-AI supply chain. Map (1) the actors involved, (2) the authority each one holds, and (3) the evidence that would let an outside party verify what they are doing. Draw on whichever reading pathway above is most relevant to the element you pick.",
+    format: "free-form",
+    optional: true,
+  },
 ];

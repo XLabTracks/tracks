@@ -71,6 +71,14 @@ export interface Lesson {
    */
   sectionItemId?: string;
   /**
+   * Optional lesson: labelled "Optional" wherever the module lists it, and
+   * excluded from progress requirements — module completion, prerequisite
+   * satisfaction, and module/track totals ignore it. Still completable: the
+   * item keeps its own checkmark. `isOptionalItem` is the single check that
+   * honours it (papers carry the same flag).
+   */
+  optional?: true;
+  /**
    * The track's closing page: it renders as one screen with a completion
    * header instead of as a reading. A celebration split across a part strip
    * is four screens of nothing, so this opts out of `chunkedReading` and out

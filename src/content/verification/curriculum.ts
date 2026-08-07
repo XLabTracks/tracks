@@ -49,6 +49,7 @@ export const verificationModules: Module[] = [
       "v-intuitions",
       "v-precedents",
       "v-securitization",
+      "v-strategic-foundations",
     ],
   },
   {
@@ -486,6 +487,18 @@ export const verificationLessons: Lesson[] = [
     title: "0.3.1 Securitization, emergency politics, and ASI",
     contentRef: "verification/securitization",
   },
+  // 0.4 is an optional top-level unit: reading pathways in game theory and IR,
+  // each a group of link-out ReadingCards. optional:true keeps it out of module
+  // 0's required progress (isOptionalItem honours lessons now), so it gates
+  // nothing while still lighting its own checkmark.
+  {
+    id: "v-strategic-foundations",
+    slug: "strategic-foundations",
+    moduleId: "v-why",
+    title: "0.4 Strategic Foundations",
+    contentRef: "verification/strategic-foundations",
+    optional: true,
+  },
   {
     id: "v-policy-scoping",
     slug: "policy-scoping",
@@ -615,6 +628,7 @@ export const verificationUnitOfLesson: Record<string, string> = {
   "v-intuitions": "0.2",
   "v-precedents": "0.3",
   "v-securitization": "0.3",
+  "v-strategic-foundations": "0.4",
   "v-scoping-intro": "1.0",
   "v-scoping-thresholds": "1.0",
   "v-scoping-effective-feasible": "1.0",
@@ -674,6 +688,7 @@ export const verificationUnitMeta: Record<
   "0.1": { title: "Introduction: Why Verification? Why You?", kind: "explainer", mins: "15–20 min" },
   "0.2": { title: "Building Verification Intuitions", kind: "interactive", mins: "15–20 min" },
   "0.3": { title: "Precedents and Parallels", kind: "interactive", mins: "20–25 min" },
+  "0.4": { title: "Strategic Foundations", kind: "reading", mins: "self-paced", optional: true },
   "1.0": { title: "Introduction: what kind of policy are we trying to verify?", kind: "explainer", mins: "15–20 min" },
   "1.1": { title: "Anatomy of a pause agreement", kind: "interactive", mins: "20–25 min" },
   "1.2": { title: "Actors", kind: "interactive", mins: "25–30 min" },

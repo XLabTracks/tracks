@@ -79,6 +79,15 @@ export interface Lesson {
    */
   optional?: true;
   /**
+   * Opt this lesson out of the track's chunked reading: render the whole body
+   * on one screen instead of one part at a time. For reference/reading-list
+   * lessons — 0.4 Strategic Foundations is a list of reading cards — where
+   * paging through sections is friction, not focus. Unlike `completion`,
+   * nothing else changes: the sidebar section nav, the works-cited footer and
+   * the prev/next lesson pager all stay.
+   */
+  unchunked?: true;
+  /**
    * The track's closing page: it renders as one screen with a completion
    * header instead of as a reading. A celebration split across a part strip
    * is four screens of nothing, so this opts out of `chunkedReading` and out

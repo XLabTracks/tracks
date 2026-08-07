@@ -248,7 +248,7 @@ async function LessonItemPage({
           <div className="lesson-reader mt-6">
             {/* The closing page is one screen: a celebration behind a part
                 reader is four screens of nothing to read. */}
-            {track.chunkedReading && !lesson.completion ? (
+            {track.chunkedReading && !lesson.completion && !lesson.unchunked ? (
               // The reader owns the footer and one unified pager that rolls
               // from the last part into the next lesson, so no separate
               // LessonNav here.

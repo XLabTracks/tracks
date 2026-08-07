@@ -498,6 +498,9 @@ export const verificationLessons: Lesson[] = [
     title: "0.4 Strategic Foundations",
     contentRef: "verification/strategic-foundations",
     optional: true,
+    // A list of reading cards, not a read-through: show them all on one screen
+    // rather than paging pathway by pathway.
+    unchunked: true,
   },
   {
     id: "v-policy-scoping",

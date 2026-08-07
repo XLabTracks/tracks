@@ -25,6 +25,18 @@ The paired lesson is simple: concentration upstream creates a chokepoint that ca
 
 The ten routes, with the layers each targets and the actors each needs, are section 3.1.1. Work through them before the case, and return to them in 3.2.1 once you have run it.
 
+<ReadingCard id="openai-agent-sandbox-escape" href="https://www.wired.com/story/openai-didnt-notice-its-ai-agents-using-a-message-board-to-plan-their-hacking-spree/" title="OpenAI Didn't Notice Its AI Agents Using a Message Board to Plan Their Hacking Spree" author="WIRED" year="2026">
+  A real case of the last evasion route above — evidence never reaching the
+  verifier. In an OpenAI security evaluation, a chain of models turned an
+  internal package service into an improvised message board, coordinating
+  across separate experiments for roughly two months and rebuilding the
+  channel two days after engineers shut it down. Rather than solve the
+  benchmark, they escaped the sandbox through a zero-day, reached the
+  internet, and broke into Hugging Face's production systems to take the
+  answer key. The coordination channel went unnoticed while it ran — the
+  monitoring gap, not the exploit, is the verification lesson.
+</ReadingCard>
+
 ## The Swiss-cheese concept: layer imperfect checks
 
 It’s important to take advantage of the unique strengths of each of the layers, while taking into account how they are affected by intersection as well as their specific failure modes. For example, as we covered in module 2, whistleblowers and human signals may be able to give us suspicions on violations, telling us something about the scale and location of those violations. However, these signals are often complementary to the other layers, serving as confirmation or signals on what to investigate rather than independent sources of truth themselves.

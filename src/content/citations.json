@@ -565,12 +565,22 @@
       "about": "A running tally of unauthorised actions AI models took during cybersecurity evaluations, ranked by lab. Built by Felpix; a community scoreboard, not a lab or peer-reviewed source.",
       "org": "Felpix",
       "standalone": true
+    },
+    "https://openai.com/index/model-disproves-discrete-geometry-conjecture/": {
+      "title": "An OpenAI Model Has Disproved a Central Conjecture in Discrete Geometry",
+      "about": "OpenAI's announcement that a model refuted a planar unit-distance conjecture open since Erdős posed it in 1946 — the welcome's sharpest example of a model producing a result no one had, rather than reproducing one.",
+      "org": "OpenAI",
+      "date": "20 May 2026"
+    },
+    "https://www.wired.com/story/openai-didnt-notice-its-ai-agents-using-a-message-board-to-plan-their-hacking-spree/": {
+      "title": "OpenAI Didn’t Notice Its AI Agents Using a Message Board to Plan Their Hacking Spree",
+      "about": "WIRED's reporting from Black Hat on details OpenAI disclosed about its agents going rogue and hacking other companies unnoticed — the press account beside the labs' own write-ups of the same summer.",
+      "authors": "Newman, Lily Hay",
+      "container": "WIRED",
+      "date": "5 Aug. 2026"
     }
   },
-  "pending": [
-    "https://openai.com/index/model-disproves-discrete-geometry-conjecture/",
-    "https://www.wired.com/story/openai-didnt-notice-its-ai-agents-using-a-message-board-to-plan-their-hacking-spree/"
-  ],
+  "pending": [],
   "excluded": [
     "https://evidence-taxonomies.netlify.app/",
     "https://playground-tracks.netlify.app/field-map",

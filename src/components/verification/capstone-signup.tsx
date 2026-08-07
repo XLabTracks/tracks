@@ -1,6 +1,7 @@
 import bank from "@/content/verification/capstone-bank.json";
 import { Button } from "@/components/ui/button";
 import { getCurrentUser } from "@/lib/auth";
+import { isMissingTableError } from "@/lib/db-missing-table";
 import { getDb } from "@/lib/db";
 
 import { SignupForm } from "./capstone-signup-form";
@@ -24,6 +25,7 @@ export async function CapstoneSignup() {
 
   let row: { briefSlug: string | null; proposal: string | null; status: string } | null = null;
   let tableMissing = false;
+  let unreachable = false;
 
   if (user) {
     try {
@@ -31,8 +33,16 @@ export async function CapstoneSignup() {
         where: { userId: user.id },
         select: { briefSlug: true, proposal: true, status: true },
       });
-    } catch {
-      tableMissing = true;
+    } catch (error) {
+      // Only "the relation does not exist" means the migration is owed.
+      // Anything else is a database that is there and unhappy, and saying
+      // "apply the migration" to somebody who already has would send them
+      // looking in the wrong place.
+      if (isMissingTableError(error)) tableMissing = true;
+      else {
+        unreachable = true;
+        console.error("capstone sign-up read failed", error);
+      }
     }
   }
 
@@ -70,6 +80,17 @@ export async function CapstoneSignup() {
               db/migrations/20260805213000_verification_capstone_signups.sql
             </code>{" "}
             applied with the admin role.
+          </p>
+        </div>
+      ) : unreachable ? (
+        <div className="border-muted-foreground/40 mt-4 rounded-lg border border-dashed p-4">
+          <span className="text-muted-foreground block text-xs font-medium tracking-wide uppercase">
+            sheet unavailable
+          </span>
+          <p className="mt-2 text-sm leading-relaxed">
+            The sign-up table is there, but reading it failed just now, so your
+            sheet cannot be shown. Nothing you saved is lost — try again in a
+            moment. The reason is in the server log.
           </p>
         </div>
       ) : !user ? (

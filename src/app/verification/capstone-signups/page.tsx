@@ -5,6 +5,7 @@ import bank from "@/content/verification/capstone-bank.json";
 import { getCurrentUser } from "@/lib/auth";
 import { getDb } from "@/lib/db";
 import { isReviewer } from "@/lib/verification/reviewers";
+import { isMissingTableError } from "@/lib/db-missing-table";
 
 /* The gate runs here as well as in the page: a static `metadata` export
    flushes the document head before the component can throw, which commits a
@@ -48,7 +49,13 @@ export default async function CapstoneSignupsPage() {
         user: { select: { name: true, email: true } },
       },
     });
-  } catch {
+  } catch (error) {
+    // Only a missing relation means the migration is owed; anything else
+    // is a live database failing, and must not be reported as one.
+    if (!isMissingTableError(error)) {
+      console.error("capstone sign-up sheet read failed", error);
+      throw error;
+    }
     return (
       <main className="mx-auto w-full max-w-4xl px-4 py-10 lg:px-6">
         <h1 className="text-2xl font-bold tracking-tight">Capstone sign-ups</h1>

@@ -12,6 +12,7 @@ import {
 } from "@/lib/verification/application";
 
 import { ApplicationForm } from "./application-form";
+import { isMissingTableError } from "@/lib/db-missing-table";
 
 export const metadata: Metadata = { title: "Enroll — Verification" };
 
@@ -46,10 +47,15 @@ export default async function EnrollPage() {
         status = row.status;
         answers = (row.answers ?? {}) as Record<string, string>;
       }
-    } catch {
-      // The migration has not been applied in this environment. Say so, rather
-      // than rendering a form whose submit fails with nothing explaining why.
-      tableMissing = true;
+    } catch (error) {
+      // Only "the relation does not exist" means the migration is owed; any
+      // other failure is a database that is present and unhappy, and must not
+      // be reported as a missing migration.
+      if (isMissingTableError(error)) tableMissing = true;
+      else {
+        console.error("enrolment read failed", error);
+        throw error;
+      }
     }
   }
 

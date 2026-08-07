@@ -11,6 +11,7 @@ import {
 import { isReviewer } from "@/lib/verification/reviewers";
 
 import { DecisionRow } from "./decision-row";
+import { isMissingTableError } from "@/lib/db-missing-table";
 
 /* The gate runs here as well as in the page. A static `metadata` export
    flushes the document head before the component can throw, which commits a
@@ -56,7 +57,13 @@ export default async function ApplicationsPage() {
         decidedBy: { select: { name: true, email: true } },
       },
     });
-  } catch {
+  } catch (error) {
+    // Only a missing relation means the migration is owed; anything else
+    // is a live database failing, and must not be reported as one.
+    if (!isMissingTableError(error)) {
+      console.error("applications queue read failed", error);
+      throw error;
+    }
     return (
       <main className="mx-auto w-full max-w-4xl px-4 py-10 lg:px-6">
         <h1 className="text-2xl font-bold tracking-tight">Applications</h1>

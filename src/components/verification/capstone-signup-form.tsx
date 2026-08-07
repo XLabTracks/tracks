@@ -19,6 +19,57 @@ import { Textarea } from "@/components/ui/textarea";
  * Neither field is required on its own; the action rejects the pair being
  * empty, and the form says so before the round-trip.
  */
+/* One row of the printed picker. The radio lives inside the label so the row
+   is the click target and arrow keys walk the group; the sheet link sits
+   outside the label so reading a brief never changes the selection. */
+function BriefRow({
+  selected,
+  onPick,
+  title,
+  slug,
+}: {
+  selected: boolean;
+  onPick: () => void;
+  title: string;
+  slug?: string;
+}) {
+  return (
+    <div
+      className={
+        "flex items-center gap-2 rounded-md border px-2.5 py-1.5 text-sm " +
+        "has-[:focus-visible]:ring-ring has-[:focus-visible]:ring-2 " +
+        (selected
+          ? "border-primary/50 bg-primary/5"
+          : "hover:bg-muted border-transparent")
+      }
+    >
+      <label className="flex min-w-0 flex-1 cursor-pointer items-center gap-2 select-none">
+        <input
+          type="radio"
+          name="signup-brief"
+          className="sr-only"
+          checked={selected}
+          onChange={onPick}
+        />
+        <span aria-hidden="true" className="text-primary w-4 shrink-0 text-center">
+          {selected ? "✓" : ""}
+        </span>
+        <span className="min-w-0 flex-1">{title}</span>
+      </label>
+      {slug ? (
+        <a
+          href={`/verification/capstone-bank#${slug}`}
+          target="_blank"
+          rel="noopener"
+          className="text-muted-foreground hover:text-foreground shrink-0 text-xs underline underline-offset-2"
+        >
+          sheet
+        </a>
+      ) : null}
+    </div>
+  );
+}
+
 export function SignupForm({
   themes,
   initialBrief,
@@ -58,26 +109,38 @@ export function SignupForm({
         run(() => saveCapstoneSignup(brief, proposal));
       }}
     >
-      <div className="space-y-2">
-        <Label htmlFor="signup-brief">Brief from the bank</Label>
-        <select
-          id="signup-brief"
-          className="border-input bg-transparent focus-visible:border-ring focus-visible:ring-ring/50 h-9 w-full rounded-md border px-3 text-sm shadow-xs focus-visible:ring-[3px]"
-          value={brief}
-          onChange={(e) => setBrief(e.target.value)}
-        >
-          <option value="">— none, I am proposing my own —</option>
+      {/* Choosing a capstone is a comparison, so every brief is printed and
+          picked by row — never folded into a native dropdown. The list
+          scrolls in its own box; the page never grows by 79 rows. The check
+          glyph rides with the tint so selection never reads by hue alone. */}
+      <fieldset className="space-y-2">
+        <legend className="text-sm leading-none font-medium">Brief from the bank</legend>
+        <div className="border-input max-h-80 space-y-4 overflow-y-auto rounded-md border p-3">
+          <BriefRow
+            selected={brief === ""}
+            onPick={() => setBrief("")}
+            title="— none, I am proposing my own —"
+          />
           {themes.map((g) => (
-            <optgroup key={g.theme} label={g.theme}>
-              {g.briefs.map((b) => (
-                <option key={b.slug} value={b.slug}>
-                  {b.title}
-                </option>
-              ))}
-            </optgroup>
+            <div key={g.theme}>
+              <p className="text-muted-foreground font-mono text-[11px] tracking-[0.14em] uppercase select-none">
+                {g.theme}
+              </p>
+              <div className="mt-1.5 space-y-1">
+                {g.briefs.map((b) => (
+                  <BriefRow
+                    key={b.slug}
+                    selected={brief === b.slug}
+                    onPick={() => setBrief(b.slug)}
+                    title={b.title}
+                    slug={b.slug}
+                  />
+                ))}
+              </div>
+            </div>
           ))}
-        </select>
-      </div>
+        </div>
+      </fieldset>
 
       <div className="space-y-2">
         <Label htmlFor="signup-proposal">

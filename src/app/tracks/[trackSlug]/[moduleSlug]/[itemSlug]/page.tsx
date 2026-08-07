@@ -5,6 +5,7 @@ import { Clock, ExternalLink } from "lucide-react";
 import {
   getItemBySlugs,
   getItemNavigation,
+  getTrackProgressContentIds,
   itemIdOf,
   itemTitleOf,
   type ItemRef,
@@ -25,6 +26,7 @@ import { Breadcrumbs } from "@/components/layout/breadcrumbs";
 import { LessonContent, getLessonCitations } from "@/components/mdx/lesson-content";
 import { WorksCited } from "@/components/mdx/works-cited";
 import { LessonPartsReader } from "@/components/learn/lesson-parts-reader";
+import { CompletionHeader } from "@/components/learn/completion-header";
 import { LessonNav } from "@/components/layout/lesson-nav";
 import { LessonCompleteButton } from "@/components/learn/lesson-complete-button";
 import { LessonTracker } from "@/components/learn/lesson-tracker";
@@ -122,6 +124,22 @@ async function LessonItemPage({
   const completed = userId ? await isLessonCompleted(userId, lesson.id) : false;
   const citations = await getLessonCitations(lesson.contentRef);
 
+  /* The closing page speaks for the whole track, so it needs the track's
+     completion — everything except itself, because the learner is standing on
+     it. Only that page pays for the extra read (the set is request-cached, so
+     a track page in the same render shares it). */
+  let trackProgress: { completed: number; total: number } | null = null;
+  if (lesson.completion && userId) {
+    const completedSet = await getTrackCompletionSet(userId, track.id);
+    const rest = getTrackProgressContentIds(track.id).filter(
+      (id) => id !== lesson.id,
+    );
+    trackProgress = {
+      completed: rest.filter((id) => completedSet.has(id)).length,
+      total: rest.length,
+    };
+  }
+
   return (
     <div className="max-w-4xl px-4 py-8 lg:px-8">
       {/* The trail stops at the module: the lesson's own name is the h1 two
@@ -147,10 +165,16 @@ async function LessonItemPage({
         )}
       </header>
 
+      {lesson.completion && (
+        <CompletionHeader track={track} progress={trackProgress} />
+      )}
+
       {/* .lesson-reader scopes the sidebar's scroll-spy (see use-scroll-spy)
           and gives heading anchors sticky-header clearance. */}
       <div className="lesson-reader mt-6">
-        {track.chunkedReading ? (
+        {/* The closing page is one screen: a celebration behind a part strip
+            is four screens of nothing to read. */}
+        {track.chunkedReading && !lesson.completion ? (
           <LessonPartsReader>
             <LessonContent contentRef={lesson.contentRef} title={lesson.title} />
           </LessonPartsReader>

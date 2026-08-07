@@ -92,6 +92,9 @@ export default async function TrackLayout({
         itemNavs[item.paper.id] = await buildNavForPaper(item.paper);
         continue;
       }
+      // The closing page renders as one screen, so its headings are never
+      // part boundaries and a docked nav of them would only be furniture.
+      if (item.lesson.completion) continue;
       const sections = await getLessonSections(
         item.lesson.contentRef,
         item.lesson.title,

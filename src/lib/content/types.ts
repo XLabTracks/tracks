@@ -70,6 +70,15 @@ export interface Lesson {
    * routing, ordering, and progress are unaffected.
    */
   sectionItemId?: string;
+  /**
+   * The track's closing page: it renders as one screen with a completion
+   * header instead of as a reading. A celebration split across a part strip
+   * is four screens of nothing, so this opts out of `chunkedReading` and out
+   * of the sidebar's section nav — the only such escape, and it is not a
+   * reading-length judgement: a page that congratulates is not a reading.
+   * At most one per track, and it belongs last in the last module.
+   */
+  completion?: boolean;
 }
 
 // ---------------------------------------------------------------------------

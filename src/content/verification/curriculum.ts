@@ -352,6 +352,7 @@ export const verificationLessons: Lesson[] = [
     moduleId: "v-capstone",
     title: "Congratulations",
     contentRef: "verification/capstone-next-steps",
+    completion: true,
   },
   // 2.1 Hardware — the outline's heaviest submodule: an intro plus 2.1.1-2.1.8.
   // The graph had the intro and five subsubmodules under a different numbering

@@ -1193,3 +1193,53 @@ function readArtifact(paper: Paper): {
   }
   return { state: "ready", ready };
 }
+
+describe("completion page integrity", () => {
+  /* The flag turns a lesson into the track's closing screen: no parts reader,
+     no docked section nav, and a header that speaks for the whole track. That
+     only reads as an ending in one position, so the position is enforced
+     rather than trusted. */
+  it("a track has at most one completion lesson, last in its last module", () => {
+    for (const track of tracks) {
+      const flagged = lessons.filter(
+        (lesson) =>
+          lesson.completion &&
+          getModulesForTrack(track.id).some((m) => m.id === lesson.moduleId),
+      );
+      expect(flagged.length, `${track.slug}: more than one completion page`).
+        toBeLessThanOrEqual(1);
+      if (!flagged.length) continue;
+
+      const trackModules = getModulesForTrack(track.id);
+      const lastModule = trackModules[trackModules.length - 1];
+      const lesson = flagged[0];
+      expect(lesson.moduleId, `${lesson.id} must sit in the last module`).toBe(
+        lastModule.id,
+      );
+
+      const items = getItemsForModule(lastModule.id);
+      const lastItem = items[items.length - 1];
+      expect(
+        lastItem && itemIdOf(lastItem),
+        `${lesson.id} must be the last item of ${lastModule.id}`,
+      ).toBe(lesson.id);
+    }
+  });
+
+  it("a completion body carries no first-person congratulations", () => {
+    /* The congratulations belongs to CompletionHeader, which prints it from
+       real progress. A copy in the body would congratulate a visitor who has
+       finished nothing — the fake-state chrome the design rules ban. */
+    for (const lesson of lessons.filter((l) => l.completion)) {
+      const body = readFileSync(
+        join(process.cwd(), "src/content/lessons", `${lesson.contentRef}.mdx`),
+        "utf8",
+      );
+      const prose = body.replace(/\{\/\*[\s\S]*?\*\/\}/g, "");
+      expect(
+        /congratulations/i.test(prose),
+        `${lesson.contentRef}.mdx: the header owns the congratulations line`,
+      ).toBe(false);
+    }
+  });
+});

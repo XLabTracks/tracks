@@ -15,6 +15,7 @@
     "arxiv:build": "tsx scripts/build-arxiv.ts",
     "substack:build": "tsx scripts/build-substack.ts",
     "lesswrong:build": "tsx scripts/build-lesswrong.ts",
+    "felonybench:build": "node scripts/build-felonybench.mjs",
     "verification:capstones": "node scripts/build-verification-capstones.mjs",
     "verification:chrome": "node scripts/build-verification-chrome.mjs",
     "verification:course": "node scripts/build-verification-course.mjs",

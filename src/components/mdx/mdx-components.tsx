@@ -7,6 +7,7 @@ import { Demo } from "./demo";
 import { Exercise } from "./exercise";
 import { ExerciseSequence } from "./exercise-sequence";
 import { Cite } from "./cite";
+import { FelonyBench } from "./felony-bench";
 import { Footnote } from "./footnote";
 import { MdxLink } from "./mdx-link";
 import { NextSteps } from "./next-steps";
@@ -41,6 +42,7 @@ export const mdxComponents: MDXComponents = {
   Exercise,
   ExerciseSequence,
   Cite,
+  FelonyBench,
   Footnote,
   MemoDesk,
   NextSteps,

@@ -1,3 +1,4 @@
+import { Children, isValidElement, type ComponentPropsWithoutRef } from "react";
 import type { MDXComponents } from "mdx/types";
 import { Video } from "./video";
 import { ArxivPaper } from "./arxiv-paper";
@@ -32,8 +33,42 @@ import { ReadingCard } from "./reader/reading-card";
 // <Src/>, <NextSteps/>, <CapstoneBank/> and <CapstoneSignup/> directly into prose.
 // Markdown links render through MdxLink, which routes known Substack /
 // LessWrong posts to the internal reader.
+/* Safari removes list semantics from any list styled `list-style: none`, and
+ * it does that deliberately. app-bridge.css takes the markers off every lesson
+ * `ul` (the dot is drawn as ::before) and off numbered lists of four or more
+ * (the ledger draws the numeral the same way) — and ::before content is not in
+ * the accessibility tree. Left alone, VoiceOver reads the course's five
+ * learning objectives as five loose paragraphs carrying no order at all.
+ * `role="list"` restores the list, and its items announce their position.
+ *
+ * On a `ul` the role is exactly the element's own, so it is applied always and
+ * costs nothing. On an `ol` it trades "ordered list" for "list", so it is
+ * applied only where the stylesheet has actually taken the markers away — a
+ * short numbered list keeps its native markers and its stronger semantics.
+ *
+ * Trap: that four-item threshold is written twice — here and in the
+ * `:has(> li:nth-child(4))` selector app-bridge.css restyles on. Move one and
+ * the other must move with it, or a list loses its markers to CSS while
+ * keeping semantics only sighted readers can see. */
+const LEDGER_THRESHOLD = 4;
+
+function MdxUl(props: ComponentPropsWithoutRef<"ul">) {
+  return <ul role="list" {...props} />;
+}
+
+function MdxOl({ children, ...rest }: ComponentPropsWithoutRef<"ol">) {
+  const items = Children.toArray(children).filter(isValidElement).length;
+  return (
+    <ol role={items >= LEDGER_THRESHOLD ? "list" : undefined} {...rest}>
+      {children}
+    </ol>
+  );
+}
+
 export const mdxComponents: MDXComponents = {
   a: MdxLink,
+  ul: MdxUl,
+  ol: MdxOl,
   Video,
   ArxivPaper,
   Callout,

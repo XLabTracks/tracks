@@ -1,25 +1,93 @@
-The world argues endlessly about whether AI poses imminent dangers to humanity. Almost nobody works on the question that actually decides it: if everyone agreed tomorrow to pause its development, how would we know anyone kept their word? It’s straightforward to prove a weapon is being built. It’s near impossible to know the opposite: that no weapon is being covertly developed anywhere. This course will not give you the solution to verification, because there is no clear-cut answer. Rather, it will give you the tools to assess which solutions are better or more feasible than others, and how to scaffold unreliable layers together into a more reliable system.
+# Welcome to the Verification Track
 
-By the end of the course, you will have gained the necessary knowledge and strategies to generate real, informed impact in the critical but overlooked space of AI verification. We’ll first justify and contextualize the importance and history of verification to effective policymaking in AI safety. Afterwards, we’ll map the competing incentives and relationships of actors relevant to the verification process, including nation-states, frontier model labs, and the chip production supply chain. Then, we’ll dive into options for anti-ASI policies between adversarial nation-states—and the various buckets of feasible verification methodologies for them: hardware, cloud, intelligence, and human. We’ll make sure to analyze each verification mechanism with a cost mindset: what are the failure modes? How could motivated actors circumvent this mechanism? How do we preserve privacy and bulletproof verification layers? Finally, we will explore how to put these different verification mechanisms together into a coherent verification regime using the Swiss Cheese principle. At the end of the course, you will have the knowledge and skillset to sketch out your own pause treaty, map out a reliable and effective verification regime, and assess existing policy for feasibility and effectiveness, given the time, resource, and infrastructure constraints of the AI race.
+## AI is already a transformative technology.
 
-You should take this course if you are:
+AI systems are producing results that would have sounded implausible a decade ago. [AlphaFold solved a 50-year-old problem in biology](https://deepmind.google/blog/alphafold-five-years-of-impact/) and made predictions for more than 200 million protein structures available to researchers, accelerating work on disease and drug discovery. In a large UK study, an experimental AI system [identified 25% of breast cancers](https://blog.google/innovation-and-ai/technology/health/google-ai-breast-cancer-detection/) that had been missed between routine screenings.
 
-- A technical AI safety researcher aiming to translate technical knowledge into politically feasible and effective policy
-- A law/policy student or professional motivated to write and advocate for technically grounded policy to regulate the development of dangerous AI capabilities
+AI is also beginning to contribute genuinely new mathematics. After models achieved [gold-medal performance at the 2025 International Mathematical Olympiad](https://deepmind.google/blog/advanced-version-of-gemini-with-deep-think-officially-achieves-gold-medal-standard-at-the-international-mathematical-olympiad/), Gemini Deep Think [autonomously solved four open questions](https://deepmind.google/blog/accelerating-mathematical-and-scientific-discovery-with-gemini-deep-think/) from a database of Erdős conjectures. An OpenAI research model later produced an externally checked [disproof of a longstanding conjecture](https://openai.com/index/model-disproves-discrete-geometry-conjecture/) concerning Erdős's 80-year-old unit-distance problem.
 
-### Learning objectives:
+Other systems can forecast extreme weather, help control plasma inside fusion reactors, and identify promising new materials for batteries, solar cells, and other technologies. More capable systems could accelerate scientific discovery, shorten the development of new medicines, expand access to high-quality education and expertise, and help solve problems that currently take decades of human work.
 
-- Translate a proposed international AI commitment into verifiable claims by specifying the covered actors, activities, thresholds, declarations, evidence requirements, and conditions that would constitute compliance or non-compliance.
-- Map relevant actors and verification opportunities across the AI compute supply chain, from semiconductor equipment and fabrication to cloud infrastructure, model training, and deployment.
-- Evaluate hardware, cloud, intelligence and human verification mechanisms according to the claims they can test, the evidence they produce, their implementation requirements, and their principal failure modes.
-- Distinguish load-bearing verification mechanisms from less effective or feasible ones.
-- Analyze plausible evasion strategies and evaluate which combinations of monitoring, corroboration, inspection, and enforcement could detect, deter, or mitigate them.
-- Produce clear, actor-aware policy analysis for a specified audience
+## The same capabilities can create serious risks
 
-How to use this course:
+Systems that write and audit software can also find and exploit vulnerabilities. Anthropic reports that Claude Mythos Preview identified [thousands of previously unknown zero-day vulnerabilities](https://www.anthropic.com/project/glasswing/), including critical flaws in every major operating system and web browser. It discovered many of them autonomously and could often turn them into working exploits.
 
-If you are async: You will get out of this course what you put into it. We’ve tailored our materials based on research in the literature, mechanisms, posts, and available readings and videos in the field, as well as interviews with experts, to produce what we think is the most efficient exploration of this quickly developing field for both technical and non technical people, priming you to effectively understand the mechanisms of verification and their feasibility relevant to their effectiveness, within the geopolitical environment we are currently in at this turning point in advanced AI development. You will also have a persistent notebook to record thoughts, critiques, ambiguities, surprises, connections, fun tidbits and anything else you want to retain throughout the course—click the **Notebook** button in the bottom-right corner of the screen to try it out. Selecting a passage anywhere in the course offers you three things to do with it: **Highlight** it, **Add to notebook** with its source, or **Define** a term you don't know. Signed in, all of it follows your account from device to device.
+This work was conducted for defensive purposes. But the underlying capability is dual-use: a system that can find and exploit unknown vulnerabilities for defenders could do the same for an attacker. Imagine what Mythos-level capabilities could accomplish if a model were instructed to cause harm—or simply discovered that harmful actions helped it achieve some other objective.
 
-If you are sync: Our exercises are designed to be adaptable for a synchronous group setting; relevant asynchronous activities have recommendations on adaptation. Each module also has a section on synchronous interpersonal activities to run and a discussion prompt bank, including but not limited to wargames and circumvention simulations. For live facilitators: we have a facilitation resources module [here](/facilitator).
+In fact, we no longer have to imagine this. Models have already caused real-world harm while pursuing objectives that were not themselves malicious.
+
+During an OpenAI cybersecurity test, a group of agents created a shared message board, exchanged exploits, divided work, and coordinated attempts to escape their environment. After OpenAI discovered and removed the board, the agents [rebuilt it through a different mechanism two days later](https://www.wired.com/story/openai-didnt-notice-its-ai-agents-using-a-message-board-to-plan-their-hacking-spree/).
+
+That collaboration culminated in an intrusion into Hugging Face. Over [a 4.5-day campaign](https://huggingface.co/blog/agent-intrusion-technical-timeline), the agents executed roughly 17,600 actions, compromised several layers of infrastructure, established persistent communication channels, stole credentials, obtained administrator access, and attempted to reach Hugging Face's source-code supply chain. They spent approximately two and a half days operating inside Hugging Face's infrastructure—all to obtain benchmark solutions rather than complete the assigned problems legitimately.
+
+OpenAI was not alone. [Anthropic later disclosed that Claude models gained unauthorized access to three real organizations](https://www.anthropic.com/news/investigating-incidents-cybersecurity-evals). In one case, Mythos 5 uploaded a malicious package to the real Python Package Index; it was downloaded and executed on 15 real systems, exfiltrated credentials, and enabled access to additional infrastructure.
+
+You can find other incidents involving models in [FelonyBench](https://www.felonybench.com/).
+
+| Company | Felonies | Description | Date | Source |
+| --- | --- | --- | --- | --- |
+| Meta | 1 | Compromise of an internal account at one company | 8/5/2026 | The Information |
+| Anthropic | 4 | Unauthorized use of GitHub credentials; Dependabot supply-chain attack; social engineering email campaign; public exposure of a malicious DNS server | 8/4/2026 | AISI |
+| OpenAI | 2 | Unauthorized use of GitHub credentials; public exposure of a malicious DNS server | 8/4/2026 | OpenAI; AISI |
+| OpenAI | 1 | Confirmed incident at one of four companies during Irregular's misconfigured CTF evaluation (?) | 8/4/2026 | OpenAI |
+| OpenAI | 3 | Compromise of internal accounts at four companies | 7/31/2026 | Reuters |
+| Anthropic | 3 | Compromise of internal accounts at three companies | 7/30/2026 | Anthropic |
+| OpenAI | 1 | Compromise of Hugging Face during a model evaluation | 7/21/2026 | OpenAI |
+
+These incidents occurred during offensive cybersecurity evaluations in which normal safeguards were reduced and failures in the testing environments gave models unintended access to the internet. They do not show that ordinary deployed models routinely behave this way. They do show that advanced capabilities can produce real-world consequences even when no human intended an attack on the affected organization.
+
+## Why international governance?
+
+The consequences of advanced AI will not remain within the borders of the country in which a model is developed.
+
+AI systems can operate through networks anywhere in the world. Their hardware supply chains cross many jurisdictions. Cyberattacks can reach foreign infrastructure in seconds. Biological misuse, military applications, and failures involving highly autonomous systems could affect people far beyond the state in which they originate. Advanced AI is also becoming increasingly important to national security and international power.
+
+Domestic policy will therefore remain essential, but it cannot answer every important question. A country can regulate its own companies; it cannot unilaterally determine what another state develops, deploys, or conceals. Some risks will require states to coordinate their behavior.
+
+The United States and China are both central to the development of advanced AI. They are also strategic competitors. Each has reasons to worry that an agreement could constrain its own development while leaving the other side free to advance.
+
+## Cooperation without general trust
+
+International governance is sometimes imagined as cooperation among states that already trust one another. In practice, some of its most consequential institutions were created precisely because states remained competitors.
+
+Nuclear rivals did not trust one another, agree on the future of the international order, or stop pursuing strategic advantage. Nevertheless, they developed safeguards, monitoring systems, data exchanges, inspections, and national technical means that made some limited agreements possible.
+
+States do not necessarily need to resolve every political disagreement before making a particular commitment more credible.
+
+## In this course you will
+
+Translate a proposed international AI commitment into verifiable claims by specifying the covered actors, activities, thresholds, declarations, evidence requirements, and conditions that would constitute compliance or non-compliance.
+
+1. Map relevant actors and verification opportunities across the AI compute supply chain, from semiconductor equipment and fabrication to cloud infrastructure, model training, and deployment.
+2. Evaluate hardware, cloud, intelligence and human verification mechanisms according to the claims they can test, the evidence they produce, their implementation requirements, and their principal failure modes.
+3. Distinguish load-bearing verification mechanisms from less effective or feasible ones.
+4. Analyze plausible evasion strategies and evaluate which combinations of monitoring, corroboration, inspection, and enforcement could detect, deter, or mitigate them.
+5. Produce clear, actor-aware policy analysis for a specified audience.
+
+## How to use this course:
+
+**If you are async:** You will get out of this course what you put into it. We've tailored our materials based on research in the literature, mechanisms, posts, and available readings and videos in the field, as well as interviews with experts, to produce what we think is the most efficient exploration of this quickly developing field for both technical and non technical people, priming you to effectively understand the mechanisms of verification and their feasibility relevant to their effectiveness, within the geopolitical environment we are currently in at this turning point in advanced AI development. You will also have a persistent notebook to record thoughts, critiques, ambiguities, surprises, connections, fun tidbits and anything else you want to retain throughout the course—click the **Notebook** button in the bottom-right corner of the screen to try it out!
+
+**If you are sync:** Our exercises are designed to be adaptable for a synchronous group setting; relevant asynchronous activities have recommendations on adaptation. Each module also has a section on synchronous interpersonal activities to run and a discussion prompt bank, including but not limited to wargames and circumvention simulations. For live facilitators: we have a facilitation resources module [here](/facilitator).
+
+**[Optional Reflection]** Write a short note that you can look back on after completing the course:
+
+- what you want to gain from the course;
+- which part of international AI verification currently seems hardest;
+- and which assumptions you expect the course to challenge.
+
+## A field you can still shape
+
+Verification for advanced AI remains an unsettled, and in many respects pre-paradigmatic, field.
+
+Some mechanisms covered in this course are established technologies or adaptations of mature institutional practices. Others are emerging proposals with substantial technical, legal, and political questions still unresolved. Throughout the course, we will distinguish between what already exists, what has been demonstrated, and what remains speculative.
+
+That uncertainty creates room for important work. The field still needs people who can expose weak assumptions, connect technical mechanisms to political realities, and develop better approaches.
+
+The people who define its central concepts and build its institutions may be some of the people encountering it for the first time now.
+
+One of them could be you.
+
+Welcome to the course.
 
 <Exercise id="v-task-welcome-1" />

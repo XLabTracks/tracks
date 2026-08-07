@@ -27,6 +27,7 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { isCompletionItem, isOptionalItem } from "@/lib/content";
+import { OptionalTag } from "@/components/content/optional-tag";
 import type { ModuleItem, TrackOutline } from "@/lib/content";
 import type { PaperNavItem } from "@/lib/papers/paper-nav";
 import { isVerificationRoute } from "@/components/verification/site-chrome";
@@ -478,11 +479,7 @@ function SidebarItemRow({
         </span>
         {/* Its own line, outside the title's line-clamp, so a long title
             can't clip the optional marker (the primary nav surface). */}
-        {isOptionalItem(item) && (
-          <span className="text-muted-foreground text-xs font-normal">
-            Optional
-          </span>
-        )}
+        {isOptionalItem(item) && <OptionalTag className="mt-1" />}
       </span>
       {item.kind === "paper" && (
         <FileText

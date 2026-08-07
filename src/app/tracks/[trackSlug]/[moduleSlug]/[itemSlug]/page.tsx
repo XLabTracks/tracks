@@ -24,6 +24,7 @@ import {
   isLessonCompleted,
 } from "@/lib/progress";
 import { Breadcrumbs } from "@/components/layout/breadcrumbs";
+import { OptionalTag } from "@/components/content/optional-tag";
 import {
   LessonContent,
   getLessonCitations,
@@ -182,6 +183,7 @@ async function LessonItemPage({
       />
 
       <header>
+        {lesson.optional && <OptionalTag className="mb-3" />}
         <h1 className="mt-1 text-3xl font-semibold tracking-tight">{lesson.title}</h1>
         {lesson.estimatedMinutes && (
           <p className="text-muted-foreground mt-2 flex items-center gap-1 text-sm">
@@ -333,9 +335,8 @@ async function PaperItemPage({
       />
 
       <header>
-        <p className="text-muted-foreground text-sm">
-          Paper{paper.optional && " · Optional"}
-        </p>
+        {paper.optional && <OptionalTag className="mb-3" />}
+        <p className="text-muted-foreground text-sm">Paper</p>
         <h1 className="mt-1 text-3xl font-semibold tracking-tight">{paper.title}</h1>
         {source.authors && (
           <p className="text-muted-foreground mt-2 text-sm">{source.authors}</p>

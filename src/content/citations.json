@@ -584,6 +584,12 @@
       "about": "A video essay making the case that building superintelligence is the hardest problem humanity has faced, and why getting it wrong is unrecoverable.",
       "authors": "Rational Animations",
       "container": "YouTube"
+    },
+    "https://www.pacingthefrontier.com/": {
+      "title": "Pacing the Frontier",
+      "about": "An open letter from employees of frontier AI companies asking the U.S. government to support an international effort to build the technical and governance tools needed to deliberately pace automated AI development.",
+      "authors": "Employees of frontier AI companies",
+      "date": "July 2026"
     }
   },
   "pending": [],

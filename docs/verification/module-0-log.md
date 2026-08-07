@@ -129,3 +129,36 @@ Still owed: the deleted heading "Why are we concerned about the development of
 superintelligence?" was the only heading 0.1 had, so the unit is now a single
 unchunkable part. It is short enough that this reads fine, but a longer 0.1
 would need real headings back.
+
+### Pacing the Frontier added to 0.1
+
+After the `what-do-they-say` widget, on the author's instruction: a short
+framing of why pacing matters, four signatory comments from
+pacingthefrontier.com, and a reading card for the AI Futures follow-up post.
+
+It sits there rather than anywhere else because the widget is "the labs in
+their own words" and this is the same people signing something together —
+Amodei, Legg, Sutskever and Leike are all both profiles above and signatories.
+The framing paragraph is built from the statement's own two sentences (the
+competitive-pressure diagnosis and the ask), quoted, not paraphrased into a
+claim the letter does not make.
+
+The four quotes are Sutskever, Sekhon, Schulman and Carroll — chosen for
+seniority and for being complete on the page. Dawn Song's and Stephanie Chan's
+are truncated behind "Show more" and were left out: a partial quotation is not
+a quotation. The signatory count is a live counter, so the prose says "more
+than 1,300" rather than the figure at retrieval.
+
+Reuse terms are an open verification-log row, recorded in a comment above the
+quotes: pacingthefrontier.com posts none. These are quoted as public statements
+by named signatories on a letter published for circulation, which is the
+narrowest reading; do not extend it to reproducing the signatory list or the
+comment wall.
+
+`https://www.pacingthefrontier.com/` is in `citations.json` because a
+`SourceQuote` `url=` is scanned into the Works cited appendix. The AI Futures
+post is **not**, and that is the existing convention rather than an oversight:
+`ReadingCard` hrefs are not scanned, the card carries its own attribution, and
+`ai-2027.com` and Baker's arXiv link in 0.2 are unregistered for the same
+reason. Adding an entry for one makes it an orphan and fails
+`citations.test.ts`.

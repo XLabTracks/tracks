@@ -770,6 +770,14 @@ export interface WritingExercise extends ExerciseBase {
   rubric?: RubricCriterion[];
   minWords?: number;
   maxWords?: number;
+  /**
+   * The task is an invitation, not part of the course's required written
+   * work: a track's completion page counts only the required ones. Optional
+   * is a property of the task, so it is declared here — reading it back out
+   * of the prompt's opening words was one rewording away from silently
+   * making an optional essay compulsory.
+   */
+  optional?: true;
 }
 
 export type Exercise =

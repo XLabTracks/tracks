@@ -275,6 +275,15 @@ export function isOptionalItem(item: ModuleItem): boolean {
 }
 
 /**
+ * A track's closing page. It is a page, not work: nothing on it can be done,
+ * so it counts toward no total and gates nothing — otherwise a finished
+ * learner would sit one unit short of their own congratulations forever.
+ */
+export function isCompletionItem(item: ModuleItem): boolean {
+  return item.kind === "lesson" && item.lesson.completion === true;
+}
+
+/**
  * A single item's progress-countable content ids: the item itself, plus a
  * paper's inserted lessons. An item's checkmark should light only when ALL
  * of these are complete, so overview rows agree with module/track totals.
@@ -285,10 +294,13 @@ export function getItemProgressContentIds(item: ModuleItem): string[] {
     : [item.paper.id, ...getInsertedLessonsForPaper(item.paper.id).map((l) => l.id)];
 }
 
-/** A module's REQUIRED progress ids, in item order — optional items excluded. */
+/**
+ * A module's REQUIRED progress ids, in item order — optional items and the
+ * track's closing page excluded.
+ */
 export function getModuleProgressContentIds(moduleId: string): string[] {
   return getItemsForModule(moduleId)
-    .filter((item) => !isOptionalItem(item))
+    .filter((item) => !isOptionalItem(item) && !isCompletionItem(item))
     .flatMap(getItemProgressContentIds);
 }
 

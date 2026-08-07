@@ -18,15 +18,23 @@ import { isAccessLocked } from "@/lib/content/prerequisites";
 import { getCurrentUser } from "@/lib/auth";
 import { loginHref } from "@/lib/login-href";
 import {
+  getExerciseSubmissionMap,
   getPrerequisiteStatus,
   getTrackCompletionSet,
   isLessonCompleted,
 } from "@/lib/progress";
 import { Breadcrumbs } from "@/components/layout/breadcrumbs";
-import { LessonContent, getLessonCitations } from "@/components/mdx/lesson-content";
+import {
+  LessonContent,
+  getLessonCitations,
+  getTrackRequiredWritingIds,
+} from "@/components/mdx/lesson-content";
 import { WorksCited } from "@/components/mdx/works-cited";
 import { LessonPartsReader } from "@/components/learn/lesson-parts-reader";
-import { CompletionHeader } from "@/components/learn/completion-header";
+import {
+  CompletionHeader,
+  type CompletionState,
+} from "@/components/learn/completion-header";
 import { LessonNav } from "@/components/layout/lesson-nav";
 import { LessonCompleteButton } from "@/components/learn/lesson-complete-button";
 import { LessonTracker } from "@/components/learn/lesson-tracker";
@@ -124,19 +132,36 @@ async function LessonItemPage({
   const completed = userId ? await isLessonCompleted(userId, lesson.id) : false;
   const citations = await getLessonCitations(lesson.contentRef);
 
-  /* The closing page speaks for the whole track, so it needs the track's
-     completion — everything except itself, because the learner is standing on
-     it. Only that page pays for the extra read (the set is request-cached, so
-     a track page in the same render shares it). */
-  let trackProgress: { completed: number; total: number } | null = null;
+  /* The closing page speaks for the whole track, so it needs the track's own
+     state: the required units, and the required written work. Finishing is
+     both — a learner who read every page and submitted nothing has not done
+     the course. Everything is counted except this page itself, because the
+     learner is standing on it. Only that page pays for the extra reads (both
+     are request-cached). */
+  let completionState: CompletionState = { units: null, writing: null };
   if (lesson.completion && userId) {
-    const completedSet = await getTrackCompletionSet(userId, track.id);
-    const rest = getTrackProgressContentIds(track.id).filter(
+    const [completedSet, writingIds, submissions] = await Promise.all([
+      getTrackCompletionSet(userId, track.id),
+      getTrackRequiredWritingIds(track.id),
+      getExerciseSubmissionMap(userId),
+    ]);
+    const units = getTrackProgressContentIds(track.id).filter(
       (id) => id !== lesson.id,
     );
-    trackProgress = {
-      completed: rest.filter((id) => completedSet.has(id)).length,
-      total: rest.length,
+    completionState = {
+      units: {
+        completed: units.filter((id) => completedSet.has(id)).length,
+        total: units.length,
+      },
+      writing: {
+        // Submitted, not drafted: a draft is work in progress, and "graded"
+        // is a submitted task the grader has since been run on.
+        submitted: writingIds.filter((id) => {
+          const status = submissions.get(id)?.status;
+          return status === "submitted" || status === "graded";
+        }).length,
+        required: writingIds.length,
+      },
     };
   }
 
@@ -166,7 +191,7 @@ async function LessonItemPage({
       </header>
 
       {lesson.completion && (
-        <CompletionHeader track={track} progress={trackProgress} />
+        <CompletionHeader track={track} state={completionState} />
       )}
 
       {/* .lesson-reader scopes the sidebar's scroll-spy (see use-scroll-spy)
@@ -192,24 +217,33 @@ async function LessonItemPage({
         <LessonTracker
           lessonId={lesson.id}
           completed={completed}
+          // The closing page completes nothing: scrolling to the end of a
+          // congratulations is not work done, and it counts toward no total.
+          autoComplete={!lesson.completion}
         />
       ) : null}
 
-      <div className="mt-8 flex flex-wrap items-center gap-3">
-        {userId ? (
-          <LessonCompleteButton lessonId={lesson.id} initialCompleted={completed} />
-        ) : (
-          <Button asChild variant="outline">
-            <Link
-              href={loginHref(
-                `/tracks/${track.slug}/${module.slug}/${lesson.slug}`,
-              )}
-            >
-              Sign in to track progress
-            </Link>
-          </Button>
-        )}
-      </div>
+      {/* No Mark-complete on the closing page: it is not work, and a
+          "Completed" chip under a congratulations card claims a second,
+          smaller thing about the same page. The header above is the only
+          statement of state there, and it is the track's, not this page's. */}
+      {lesson.completion ? null : (
+        <div className="mt-8 flex flex-wrap items-center gap-3">
+          {userId ? (
+            <LessonCompleteButton lessonId={lesson.id} initialCompleted={completed} />
+          ) : (
+            <Button asChild variant="outline">
+              <Link
+                href={loginHref(
+                  `/tracks/${track.slug}/${module.slug}/${lesson.slug}`,
+                )}
+              >
+                Sign in to track progress
+              </Link>
+            </Button>
+          )}
+        </div>
+      )}
 
       <LessonNav prev={nav.prev} next={nav.next} />
     </div>

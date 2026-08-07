@@ -41,6 +41,7 @@ export const verificationExercises: Exercise[] = [
     type: "writing-prompt",
     prompt: "OPTIONAL EXERCISE SPEC — Case verdict (6 min, free response + self-score)\n\nINF Tech, revisited\n\nReturn to the case from 2.2.0. A treaty with a full cloud annex (KYC, registration, telemetry corroboration, suspension) is in force, and Indonesia has signed. Write one paragraph: which mechanisms from this module surface the INF Tech arrangement, and which of its features would still defeat the annex if Indonesia had signed nothing?\n\nModel answer (appears after submission): KYC at the Indonesian provider flags the customer; cluster registration and data-transfer patterns corroborate; suspension is available same-day. Without Indonesian accession, none of it applies: reseller opacity plus third-country jurisdiction leave the arrangement invisible to the annex. The case sits half inside, half outside the layer’s reach.\n\nSelf-score, three items: named at least two mechanisms that would surface it; named at least two structural limits; reached a verdict on what accession does and does not fix. Two of three counts as a pass.",
     format: "free-form",
+    optional: true,
   },
   {
     id: "v-task-cloud-reporting-control-1",
@@ -143,6 +144,7 @@ export const verificationExercises: Exercise[] = [
     type: "writing-prompt",
     prompt: "Optional task — The strongest objection.\n\nIn a short written note, construct the strongest objection you can to the case above — and state what would change your mind, in either direction.",
     format: "free-form",
+    optional: true,
   },
   {
     id: "v-task-intuitions-1",
@@ -155,12 +157,14 @@ export const verificationExercises: Exercise[] = [
     type: "writing-prompt",
     prompt: "Optional task — Essay: what does success look like to you?\n\nIn 500–800 words, describe your own success scenario: the end state (what the world looks like, and roughly when); the agreement that gets there (who signs, what is restricted); and what verification would need to cover for that agreement to hold. Keep this essay. You will re-read it at the end of the track.",
     format: "free-form",
+    optional: true,
   },
   {
     id: "v-task-intuitions-3",
     type: "writing-prompt",
     prompt: "Optional — Explore AI 2027\n\nRead [AI 2027](https://ai-2027.com/), the same team’s earlier scenario, including both of its endings. As you read, ask the question this section trained: at which branch points would verification infrastructure have changed what the actors could credibly agree to?",
     format: "free-form",
+    optional: true,
   },
   {
     id: "v-task-scoping-actors-1",
@@ -203,5 +207,6 @@ export const verificationExercises: Exercise[] = [
     type: "writing-prompt",
     prompt: "Optional reflection — Write a short note that you can look back on after completing the course:\n\n- what you want to gain from the course;\n- which part of international AI verification currently seems hardest;\n- and which assumptions you expect the course to challenge.",
     format: "free-form",
+    optional: true,
   },
 ];

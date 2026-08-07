@@ -2,6 +2,12 @@ import { isValidElement, type ReactNode } from "react";
 import type { MDXComponents } from "mdx/types";
 import { notFound } from "next/navigation";
 import { isLessonTitleHeading } from "@/lib/content/lesson-heading";
+import {
+  getExerciseById,
+  getItemsForModule,
+  getModulesForTrack,
+} from "@/lib/content";
+import { isWritingExercise } from "@/lib/content/types";
 
 export async function importLesson(contentRef: string) {
   try {
@@ -105,6 +111,36 @@ export async function getLessonCitations(contentRef: string): Promise<string[]> 
     citations?: string[];
   } | null;
   return Array.isArray(mdxModule?.citations) ? mdxModule.citations : [];
+}
+
+/**
+ * The written work a track requires: the ids of every non-optional writing
+ * exercise embedded in its lessons, in reading order.
+ *
+ * Read from the same `sections` export the sidebar navigates by, so the list
+ * is whatever the bodies actually ask for — an exercise that is moved, added
+ * or dropped changes this without anybody maintaining a second register. The
+ * lesson modules are statically bundled and cached, so this walks imports,
+ * not the filesystem, and works on the worker.
+ */
+export async function getTrackRequiredWritingIds(
+  trackId: string,
+): Promise<string[]> {
+  const ids: string[] = [];
+  for (const mod of getModulesForTrack(trackId)) {
+    for (const item of getItemsForModule(mod.id)) {
+      if (item.kind !== "lesson") continue;
+      const sections = await getLessonSections(item.lesson.contentRef);
+      for (const section of sections) {
+        if (!section.exercise) continue;
+        const exercise = getExerciseById(section.exercise);
+        if (!exercise || !isWritingExercise(exercise)) continue;
+        if (exercise.optional) continue;
+        ids.push(exercise.id);
+      }
+    }
+  }
+  return ids;
 }
 
 /**

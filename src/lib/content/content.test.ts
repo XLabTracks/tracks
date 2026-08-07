@@ -4,7 +4,7 @@ import { describe, it, expect } from "vitest";
 import { lessons, modules } from "@/content/curriculum.data";
 import { exercises } from "@/content/exercises.data";
 import { assessments } from "@/content/assessments.data";
-import { ARGUE_REVEAL_DEFAULTS } from "@/lib/content/types";
+import { ARGUE_REVEAL_DEFAULTS, isWritingExercise } from "@/lib/content/types";
 import { featuredExercises } from "@/app/exercises/featured";
 import {
   getAssessmentForModule,
@@ -18,6 +18,7 @@ import {
   getPrerequisiteModules,
   getTrackContentIds,
   getTrackItemSequence,
+  isCompletionItem,
   isOptionalItem,
   itemIdOf,
   type ModuleItem,
@@ -1090,10 +1091,12 @@ describe("module item navigation", () => {
         const ids = getModuleProgressContentIds(m.id);
         expect(new Set(ids).size).toBe(ids.length);
         for (const item of getItemsForModule(m.id)) {
-          // Optional readings are trackable but never required: none of their
-          // units may appear among the module's progress ids.
+          // Optional readings are trackable but never required, and the
+          // closing page is not work at all: neither may appear among the
+          // module's progress ids.
+          const excluded = isOptionalItem(item) || isCompletionItem(item);
           for (const unitId of unitIdsOf(item)) {
-            if (isOptionalItem(item)) expect(ids).not.toContain(unitId);
+            if (excluded) expect(ids).not.toContain(unitId);
             else expect(ids).toContain(unitId);
           }
         }
@@ -1240,6 +1243,24 @@ describe("completion page integrity", () => {
         /congratulations/i.test(prose),
         `${lesson.contentRef}.mdx: the header owns the congratulations line`,
       ).toBe(false);
+    }
+  });
+});
+
+describe("required written work", () => {
+  /* The closing page congratulates on submitted writing, so the set it counts
+     has to be real: ids that resolve, tasks that are writing, and optional
+     ones declared as such rather than announced in their first three words. */
+  it("optional writing tasks are flagged, not merely worded as optional", () => {
+    for (const exercise of exercises) {
+      if (!isWritingExercise(exercise)) continue;
+      const opensAsOptional = /^\s*optional\b/i.test(exercise.prompt);
+      if (opensAsOptional) {
+        expect(
+          exercise.optional,
+          `${exercise.id}: prompt opens "Optional" but the task is not flagged optional`,
+        ).toBe(true);
+      }
     }
   });
 });

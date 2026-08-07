@@ -8,6 +8,7 @@ import {
   ChevronRight,
   Circle,
   FileText,
+  Flag,
   ListTree,
   Lock,
 } from "lucide-react";
@@ -25,6 +26,7 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
+import { isCompletionItem } from "@/lib/content";
 import type { ModuleItem, TrackOutline } from "@/lib/content";
 import type { PaperNavItem } from "@/lib/papers/paper-nav";
 import { isVerificationRoute } from "@/components/verification/site-chrome";
@@ -454,7 +456,12 @@ function SidebarItemRow({
       aria-current={active ? "page" : undefined}
       className={cn(navItemClass(active), ITEM_ROW_CLASS)}
     >
-      {done ? (
+      {/* The closing page is not work, so it takes neither marker: an empty
+          circle would read as a unit left undone forever, and a tick as one
+          nobody can earn. A flag says what it is — the end of the track. */}
+      {isCompletionItem(item) ? (
+        <Flag className={cn("text-muted-foreground", MARKER_CLASS)} aria-hidden />
+      ) : done ? (
         <CheckCircle2
           className={cn("text-foreground", MARKER_CLASS)}
           aria-hidden
@@ -465,7 +472,9 @@ function SidebarItemRow({
       <span className="flex min-w-0 flex-col">
         <span className="line-clamp-2">
           {item.kind === "lesson" ? item.lesson.title : item.paper.title}
-          {done && <span className="sr-only"> (completed)</span>}
+          {done && !isCompletionItem(item) && (
+            <span className="sr-only"> (completed)</span>
+          )}
         </span>
         {/* Its own line, outside the title's line-clamp, so a long title
             can't clip the optional marker (the primary nav surface). */}

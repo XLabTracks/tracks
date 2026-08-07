@@ -31,7 +31,7 @@ window.COURSE = {
         },
         {
           "id": "0.1",
-          "title": "Introduction: Why Verification? Why You?",
+          "title": "How the risk looks like?",
           "kind": "explainer",
           "mins": "15–20 min",
           "href": "/tracks/verification/why-verification/introduction",
@@ -42,7 +42,7 @@ window.COURSE = {
         },
         {
           "id": "0.2",
-          "title": "Building Verification Intuitions",
+          "title": "Introduction: Why Verification?",
           "kind": "interactive",
           "mins": "15–20 min",
           "href": "/tracks/verification/why-verification/building-intuitions",

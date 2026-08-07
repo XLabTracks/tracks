@@ -452,7 +452,7 @@ export const verificationLessons: Lesson[] = [
     id: "v-introduction",
     slug: "introduction",
     moduleId: "v-why",
-    title: "0.1 Introduction: Why Verification? Why You?",
+    title: "0.1 How the risk looks like?",
     contentRef: "verification/introduction",
   },
   {
@@ -471,7 +471,7 @@ export const verificationLessons: Lesson[] = [
     id: "v-intuitions",
     slug: "building-intuitions",
     moduleId: "v-why",
-    title: "0.2 Building Verification Intuitions",
+    title: "0.2 Introduction: Why Verification?",
     contentRef: "verification/intuitions",
   },
   {
@@ -690,8 +690,8 @@ export const verificationUnitMeta: Record<
   { title: string; kind: string; mins: string; optional?: boolean }
 > = {
   "0.0": { title: "Welcome", kind: "explainer", mins: "5–10 min" },
-  "0.1": { title: "Introduction: Why Verification? Why You?", kind: "explainer", mins: "15–20 min" },
-  "0.2": { title: "Building Verification Intuitions", kind: "interactive", mins: "15–20 min" },
+  "0.1": { title: "How the risk looks like?", kind: "explainer", mins: "15–20 min" },
+  "0.2": { title: "Introduction: Why Verification?", kind: "interactive", mins: "15–20 min" },
   "0.3": { title: "Precedents and Parallels", kind: "interactive", mins: "20–25 min" },
   "0.4": { title: "Strategic Foundations", kind: "reading", mins: "self-paced", optional: true },
   "1.0": { title: "Introduction: what kind of policy are we trying to verify?", kind: "explainer", mins: "15–20 min" },

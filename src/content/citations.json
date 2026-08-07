@@ -578,6 +578,12 @@
       "authors": "Newman, Lily Hay",
       "container": "WIRED",
       "date": "5 Aug. 2026"
+    },
+    "https://www.youtube.com/watch?v=7wy3xyoXYt8": {
+      "title": "This May Be Humanity’s Hardest Challenge",
+      "about": "A video essay making the case that building superintelligence is the hardest problem humanity has faced, and why getting it wrong is unrecoverable.",
+      "authors": "Rational Animations",
+      "container": "YouTube"
     }
   },
   "pending": [],

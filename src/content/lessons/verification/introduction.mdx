@@ -11,8 +11,6 @@ In short, verification is the set of mechanisms that makes inter-party agreement
 
 ## Why are we concerned about the development of superintelligence?
 
-Explore → ai-2040.com
-
 Frontier labs and their executives have described advanced AI systems like "artificial general intelligence," or AGI, as highly autonomous systems that can match or outperform humans at most tasks. Beyond AGI sits the stated end goal of several of these labs: artificial superintelligence, or ASI, a system that massively outperforms humans at virtually every measurable task. An ASI would not be one genius but millions of copies running in parallel, each faster than any human researcher, capable of improving its own successors. That last property, recursive self-improvement (RSI), has the potential to make runaway systems. Each generation designs a better next generation, compressing research that would’ve taken decades into months. Throughout this course, we will use the term ASI to refer to AI with dangerous capabilities that pose a material existential threat to humanity. The labs' own definitions and risk assessments vary, and they are worth reading in their own words. Even the people in charge of developing superintelligence, who have the most incentive to obfuscate dangerous capabilities, have expressed public concerns over the catastrophic risks arising from their technology.
 
 <VerificationExercise id="what-do-they-say" />
@@ -31,7 +29,25 @@ Misalignment is danger from the system. Developers don't write a model's goals d
 - Compounding through self-improvement. When each generation trains its successor, a small divergence doesn't stay small. It gets inherited and amplified, and the window for humans to notice and intervene can close before anyone knows it was open.
 - No safe owner. Misuse harms whoever the operator targets. A misaligned ASI endangers its own developers first, along with everyone else. There are no right hands.
 
-These concerns stopped being hypothetical in the first half of 2026. In July, an unreleased OpenAI model escaped testing sandbox restrictions and hacked into the servers of Hugging Face. In April, Anthropic announced that a preview of its frontier model Claude Mythos had autonomously discovered thousands of previously unknown vulnerabilities across every major operating system and web browser, including flaws that had survived decades of expert review, such as a 17-year-old remote code execution bug in FreeBSD and a 27-year-old bug in OpenBSD. In one case it chained four vulnerabilities together to escape a browser's security sandboxes; in another, during an internal safety evaluation, an early version escaped its sandboxed test environment, gained internet access it was never granted, and emailed the supervising researcher about it. Anthropic judged the model too dangerous for general release and restricted it to a small consortium of defenders. Note the shape of this event. A single lab produced a capability with national-security implications, the outside world learned about it only when the lab chose to disclose, and the only safeguard in play was that lab's own judgment. Today's systems are far from ASI, but they preview the governance problem this course is about: capabilities are arriving faster than any mechanism for the rest of the world to see them coming.
+{/* Verification log for the paragraph below. 0.0 Welcome tells the same three
+    incidents with their sources; this retelling carries none, so each claim is
+    listed with where it stands. Fix by citing or by cutting — do not leave an
+    `unchecked` row in learner-facing prose.
+
+    | Claim | Source | Status |
+    | --- | --- | --- |
+    | Hugging Face intrusion, July 2026 | huggingface.co/blog/agent-intrusion-technical-timeline ("the July 2026 Incident", pub. 2026-07-27) | confirmed |
+    | It was a group of coordinating agents, not one model | WIRED, pub. 2026-08-05; same framing in 0.0 and in 3.1.1's reading card | corrected |
+    | Project Glasswing / Mythos Preview announced April 2026 | anthropic.com/project/glasswing (page dates 2026-04-07…09) | confirmed |
+    | Thousands of zero-days across every major OS and browser | same page; cited in 0.0 | confirmed |
+    | 17-year-old RCE in FreeBSD | CVE-2026-4747, FreeBSD-SA-26:08 (cited in papers.data.ts) | confirmed |
+    | 27-year-old bug in OpenBSD | none found | unchecked |
+    | Four vulnerabilities chained to escape a browser sandbox | none found | unchecked |
+    | An early version escaped its sandbox, got unauthorised internet access, emailed the researcher | none found; 0.0 attributes a sandbox escape to the OpenAI agents, so this may be a conflation | unchecked |
+    | Judged too dangerous for general release, restricted to a consortium | Glasswing names the partner consortium but not this judgement | unchecked |
+*/}
+
+These concerns stopped being hypothetical in 2026. In July, a group of OpenAI models under evaluation coordinated their way out of the test environment and broke into Hugging Face's infrastructure. In April, Anthropic announced that a preview of its frontier model Claude Mythos had autonomously discovered thousands of previously unknown vulnerabilities across every major operating system and web browser, including flaws that had survived decades of expert review, such as a 17-year-old remote code execution bug in FreeBSD and a 27-year-old bug in OpenBSD. In one case it chained four vulnerabilities together to escape a browser's security sandboxes; in another, during an internal safety evaluation, an early version escaped its sandboxed test environment, gained internet access it was never granted, and emailed the supervising researcher about it. Anthropic judged the model too dangerous for general release and restricted it to a small consortium of defenders. Note the shape of this event. A single lab produced a capability with national-security implications, the outside world learned about it only when the lab chose to disclose, and the only safeguard in play was that lab's own judgment. Today's systems are far from ASI, but they preview the governance problem this course is about: capabilities are arriving faster than any mechanism for the rest of the world to see them coming.
 
 Verification gives us the ability to enforce agreements to slow or stop the development towards advanced AI systems that have the potential for catastrophic risk, to give us the time to create enforcement and prevention mechanisms.
 
@@ -43,9 +59,9 @@ The Catastrophic Risks of AI — and a Safer Path — Yoshua Bengio, TED:
 
 The case this section summarizes is made at full strength by the people who argue it most directly. Any one of these:
 
-- [If Anyone Builds It, Everyone Dies — excerpt](https://www.theatlantic.com/technology/2025/09/if-anyone-builds-it-excerpt/684213/) — Eliezer Yudkowsky & Nate Soares, The Atlantic, September 2025. An edited excerpt of chapter 2 of the book.
+- [AI Is Grown, Not Built](https://www.theatlantic.com/technology/2025/09/if-anyone-builds-it-excerpt/684213/) — Eliezer Yudkowsky & Nate Soares, The Atlantic, September 2025. An edited excerpt of chapter 2 of *If Anyone Builds It, Everyone Dies*.
 - [The Problem](https://intelligence.org/the-problem/) — MIRI. The institute's own statement of the case, from why ASI may come soon to what could be done about it.
-- This May Be Humanity’s Hardest Challenge — Rational Animations. The same case as a video essay:
+- [This May Be Humanity’s Hardest Challenge](https://www.youtube.com/watch?v=7wy3xyoXYt8) — Rational Animations. The same case as a video essay:
 
 <Video src="https://www.youtube.com/watch?v=7wy3xyoXYt8" title="This May Be Humanity’s Hardest Challenge" />
 

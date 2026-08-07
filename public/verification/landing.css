@@ -98,7 +98,10 @@ section.band .intro { max-width: 62ch; margin-top: 12px; color: var(--muted-fore
 .sky {
   position: relative;
   min-width: 0;
-  border: var(--hairline) solid var(--border);
+  /* No frame. The figure sits on the page ground and is bounded by its own
+     vignette and rings, not by a drawn box — a hairline rectangle around a
+     round graph only fought it. overflow stays: the star field is scattered
+     to the viewBox edge and would otherwise spill past the figure. */
   border-radius: var(--radius);
   /* A quiet neutral vignette: on the night ground it reads as sky-glow
      behind the hub, on paper as the faintest lift. The web's own rings do
@@ -290,12 +293,14 @@ section.band .intro { max-width: 62ch; margin-top: 12px; color: var(--muted-fore
 }
 .sky.focusing .arc-label:not(.hot) { opacity: .3; }
 
+/* Reads as the figure's caption, so it takes no rule of its own: the line
+   that used to sit here closed the frame above it, and with the frame gone
+   it would be the only edge on the page marking nothing. */
 .sky-legend {
   display: flex;
   flex-wrap: wrap;
   gap: 6px 18px;
   padding: 10px 16px 14px;
-  border-top: var(--hairline) solid var(--border);
   font-family: var(--mono);
   font-size: var(--fs-2xs);
   color: var(--muted-foreground);

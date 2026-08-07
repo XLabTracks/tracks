@@ -1,15 +1,10 @@
 import { SquareArrowOutUpRight } from "lucide-react";
 
 /**
- * The credit block over a lesson reproduced from somebody else's document.
- *
- * Three facts, each on its own line, because they answer three different
- * questions and a single italic sentence made a reader hunt for all of them:
- * who wrote it, where it actually lives, and how much of it is here.
- *
- * The author's name links to their own page and the source link carries the
- * out-of-here mark, so it is obvious before the click which one leaves the
- * site. Both are literal `<a>`: `MdxLink` internalises known posts, and an
+ * The credit block over a lesson reproduced from somebody else's document:
+ * the author, linked to their own page, beside a "Source" link that carries
+ * the out-of-here mark so it is obvious before the click which one leaves the
+ * site. Both are literal `<a>` — `MdxLink` internalises known posts, and an
  * attribution must always point at the real thing.
  *
  * Trap: `not-prose` is what keeps the lesson's typography off this block.
@@ -33,30 +28,27 @@ export function SourceCredit({
   author,
   authorHref,
   sourceHref,
-  sourceLabel = "Original material",
+  sourceLabel = "Source",
   state,
   note,
 }: SourceCreditProps) {
   return (
     <div className="not-prose my-6 text-sm">
-      <p>
-        By{" "}
+      <p className="flex flex-wrap items-center gap-x-5 gap-y-1">
         {authorHref ? (
           <a
             href={authorHref}
-            className="text-destructive font-medium underline underline-offset-4"
+            className="font-medium underline underline-offset-4"
           >
             {author}
           </a>
         ) : (
           <span className="font-medium">{author}</span>
         )}
-      </p>
 
-      <p className="mt-1">
         <a
           href={sourceHref}
-          className="text-destructive inline-flex items-center gap-1.5 font-medium underline underline-offset-4"
+          className="text-muted-foreground inline-flex items-center gap-1 underline underline-offset-4"
         >
           {sourceLabel}
           <SquareArrowOutUpRight className="size-3.5 shrink-0" aria-hidden />
@@ -70,7 +62,7 @@ export function SourceCredit({
       ) : null}
 
       {note ? (
-        <p className="text-muted-foreground mt-1 leading-relaxed">{note}</p>
+        <p className="text-muted-foreground mt-2 leading-relaxed">{note}</p>
       ) : null}
     </div>
   );

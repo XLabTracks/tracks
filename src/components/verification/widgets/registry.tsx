@@ -7,6 +7,7 @@ import { ReportConstructor } from "./report-constructor";
 import { InteractiveMap } from "./interactive-map";
 import { VerificationLandscape } from "./verification-landscape";
 import { CollectionMap } from "./collection-map";
+import { ContextDistiller } from "./context-distiller";
 import { DrillsFoundations } from "./drills-foundations";
 import { DrillsGames } from "./drills-games";
 import { DrillsPrimers } from "./drills-primers";
@@ -33,6 +34,7 @@ export const verificationWidgets: Record<
   "interactive-map": InteractiveMap,
   "verification-landscape": VerificationLandscape,
   "collection-map": CollectionMap,
+  "context-distiller": ContextDistiller,
   // Each deck is a menu of that module's benches; the renderer and the
   // judgements are shared (kit/drill-deck.tsx, engines/drills.ts).
   "drills-primers": DrillsPrimers,

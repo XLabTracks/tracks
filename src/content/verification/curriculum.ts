@@ -206,9 +206,8 @@ export const verificationLessons: Lesson[] = [
     contentRef: "verification/scoping-upstream-downstream",
   },
   {
-    // Applies 1.3's upstream/downstream frame to a real report; the interactive
-    // it is written around is not ported yet, so the body carries the exercise
-    // as written work and says so.
+    // Applies 1.3's upstream/downstream frame to a real report: the body is the
+    // outline's brief, and the interactive it is written around sits under it.
     id: "v-context-distiller",
     slug: "context-distiller",
     moduleId: "v-scoping",

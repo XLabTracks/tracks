@@ -32,6 +32,7 @@ export const verificationExercises: VerificationExerciseDef[] = [
   { id: "protocol-actors", title: "Who's in the Treaty?", bridged: true },
   { id: "interactive-map", title: "The Compute Supply Chain", bridged: false },
   { id: "report-constructor", title: "One Inspection, Three Readers", bridged: true },
+  { id: "context-distiller", title: "The Distiller", bridged: true },
   { id: "what-do-they-say", title: "Why Are We Concerned About Superintelligence?", bridged: false },
   { id: "precedent-cases", title: "Did the Regime Hold?", bridged: true },
   // The drill benches. Bridged: the deck reports complete when the last step

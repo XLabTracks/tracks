@@ -86,9 +86,21 @@
 }
 
 /* The lesson column reads at the site's measure and rhythm rather than the
-   plugin's, so a lesson and a static page set the same paragraph. */
+   plugin's, so a lesson and a static page set the same paragraph.
+
+   The face is the app's Inter ahead of theme.css's system stack, and the
+   reason is focus reading rather than taste: Inter is a variable font with a
+   continuous 100–900 axis, so the accent weight is exactly the value asked
+   for on every machine. A system stack cannot promise that — its own last
+   two entries are Helvetica and Arial, which carry Regular and Bold and
+   nothing between, and there the accent rounds up to full bold and the
+   paragraph goes stripy. Zero new bytes: layout.tsx already serves Inter to
+   every other track.
+
+   var() and not a literal, so the static lift keeps the system stack it
+   always had — it has no Inter to serve. */
 :root[data-theme] .lesson-body {
-  font-family: var(--sans);
+  font-family: var(--font-sans), var(--sans);
 }
 
 /* In-lesson sub-headings are emphasized text, not display type: the body

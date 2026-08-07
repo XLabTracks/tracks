@@ -232,7 +232,11 @@ export async function GET(request: Request) {
       // and scores well - it contains every sense's words. It already failed
       // as the exact title, so it is skipped, and the top candidates are
       // tried in score order until one is a real article.
-      const tried = hits.filter((h) => slugify(h.title ?? "") !== slug).slice(0, 3);
+      // A candidate nothing endorsed is a coin flip, not an answer: with no
+      // overlap at all, the dictionary leg below is the honest fallback.
+      const tried = hits
+        .filter((h) => slugify(h.title ?? "") !== slug && score(h) > 0)
+        .slice(0, 3);
       for (const cand of tried) {
         const top = cand.title as string;
         const r2 = await fetch(

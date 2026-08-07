@@ -37,16 +37,22 @@ export function ReadingCard({
 
   return (
     <section className="not-prose border-border bg-card my-4 flex gap-3 rounded-xl border p-4">
+      {/* Unread, this used to be an empty ring whose ✓ was transparent on
+          hover as well — nothing anywhere said it could be pressed, so it
+          read as a decorative dot. The check now ghosts in on hover and the
+          title names the action, which is the affordance without the lie: a
+          faint ✓ shown at rest would read as already-read. */}
       <button
         type="button"
         aria-pressed={read}
+        title={read ? "Mark as unread" : "Mark as read"}
         aria-label={read ? `Mark "${title}" as unread` : `Mark "${title}" as read`}
         onClick={() => writeMark(key, read ? undefined : true)}
         className={
-          "mt-0.5 flex size-6 shrink-0 items-center justify-center rounded-full border text-sm select-none " +
+          "mt-0.5 flex size-6 shrink-0 cursor-pointer items-center justify-center rounded-full border text-sm transition-colors select-none " +
           (read
             ? "border-primary bg-primary text-primary-foreground"
-            : "border-border hover:border-ring text-transparent")
+            : "border-border hover:border-ring text-transparent hover:text-muted-foreground")
         }
       >
         ✓

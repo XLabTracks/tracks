@@ -34,7 +34,7 @@ export function SourceCredit({
   authorHref,
   sourceHref,
   sourceLabel = "Original material",
-  state = "Full text extracted",
+  state,
   note,
 }: SourceCreditProps) {
   return (
@@ -63,9 +63,11 @@ export function SourceCredit({
         </a>
       </p>
 
-      <p className="text-muted-foreground mt-2 font-mono text-[11px] tracking-[0.14em] uppercase">
-        {state}
-      </p>
+      {state ? (
+        <p className="text-muted-foreground mt-2 font-mono text-[11px] tracking-[0.14em] uppercase">
+          {state}
+        </p>
+      ) : null}
 
       {note ? (
         <p className="text-muted-foreground mt-1 leading-relaxed">{note}</p>

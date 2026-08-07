@@ -595,6 +595,9 @@ export const verificationLessons: Lesson[] = [
     title: "4.1 How to do AI governance research well",
     contentRef: "verification/research-tips",
     estimatedMinutes: 25,
+    // A reference doc of bulleted tips — read as one continuous page, not paged
+    // section by section.
+    unchunked: true,
   },
 ];
 

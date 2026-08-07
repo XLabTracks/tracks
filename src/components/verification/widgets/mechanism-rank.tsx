@@ -67,8 +67,12 @@ function RankWidget({
 
   // Hydrate from the permanent keys after mount; the server render is the
   // untouched default order, so signed-out and first-visit look identical.
+  // These setState calls are that deliberate one-time hydration — a lazy
+  // initializer would run during SSR (no localStorage) and mismatch on
+  // hydrate — so the cascading-render rule is disabled for this block alone.
   useEffect(() => {
     const own = load(copy.storageKey);
+    /* eslint-disable react-hooks/set-state-in-effect */
     if (own.order && own.order.length === RANK_ITEMS.length) setOrder(own.order);
     if (own.notes) setNotes(own.notes);
     if (own.sealed) setSealed(true);
@@ -76,6 +80,7 @@ function RankWidget({
       const p = load(MECHANISM_RANK_REOPEN.priorKey);
       if (p.order && p.order.length === RANK_ITEMS.length) setPrior(p.order);
     }
+    /* eslint-enable react-hooks/set-state-in-effect */
   }, [copy.storageKey, reopen]);
 
   const persist = (next: Partial<RankStore>) => {

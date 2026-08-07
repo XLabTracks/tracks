@@ -10,6 +10,14 @@ import {
 import Link from "next/link";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { FocusReadingControl } from "@/components/learn/focus-reading";
+import {
+  FOCUS_DEFAULTS,
+  focusClassName,
+  markFocusWords,
+  readFocusSettings,
+  type FocusSettings,
+} from "@/lib/reading/focus-reading";
 import { cn } from "@/lib/utils";
 
 /* Reads a lesson one part at a time. The server renders the whole MDX body as
@@ -110,6 +118,29 @@ export function LessonPartsReader({
   const [parts, setParts] = useState<Part[]>([]);
   const [at, setAt] = useState(0);
   const [mode, setMode] = useState<"parts" | "whole">("parts");
+  /* Focus reading. The reader owns it because the reader owns the body, and
+     it works in two halves that must stay apart:
+
+     1. The structure is written into the body ONCE, after mount, for both
+        strengths at once (markFocusWords). The lesson body comes from a
+        server component, so there is no React tree here to transform — and
+        mutating React's DOM more than once gets the subtree discarded on the
+        next render, which looks like the lesson vanishing mid-read.
+     2. The setting is then only a class on the host below, and CSS does the
+        rest. Changing modes never touches the document again.
+
+     Read after mount, like the reading mode beside it, so the server render
+     is always plain text and hydration has nothing to disagree about. */
+  const [focus, setFocus] = useState<FocusSettings>(FOCUS_DEFAULTS);
+  useEffect(() => {
+    // Deliberate mount-time re-render, like the parts derivation below: the
+    // stored preference exists only on the client, and reading it during
+    // render would make the server and client markup disagree.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setFocus(readFocusSettings());
+    const body = hostRef.current?.querySelector<HTMLElement>(".lesson-body");
+    if (body) markFocusWords(body);
+  }, []);
 
   /* ---------- derive parts from the rendered body ---------- */
 
@@ -264,28 +295,39 @@ export function LessonPartsReader({
 
   return (
     <div>
-      {active && (
-        <div
-          ref={topRef}
-          className="mb-6 flex scroll-mt-20 items-center select-none"
-        >
-          {whole && (
-            <span className="text-muted-foreground text-[13px]" aria-live="polite">
-              {parts.length} parts, all shown
-            </span>
+      {/* The toolbar renders whether or not the lesson chunks, because the two
+          controls in it have different reaches: the whole-lesson toggle only
+          means something once there are parts, but focus reading is a global
+          preference applied to every body this reader mounts. Hiding the row
+          on a short lesson would leave a reader looking at accented text with
+          no way to turn it off from the page they are on. */}
+      <div ref={topRef} className="mb-6 flex scroll-mt-20 items-center select-none">
+        {active && whole && (
+          <span className="text-muted-foreground text-[13px]" aria-live="polite">
+            {parts.length} parts, all shown
+          </span>
+        )}
+        {/* The two reading controls sit together: how much of the lesson is
+            on screen, and how the words on it are set. `relative` is the
+            anchor the focus panel drops from. */}
+        <div className="relative ml-auto flex items-center gap-1">
+          {active && (
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={toggleMode}
+              className="text-muted-foreground h-7 px-2 text-[13px]"
+            >
+              {whole ? "Read part by part" : "Read the whole lesson"}
+            </Button>
           )}
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={toggleMode}
-            className="text-muted-foreground ml-auto h-7 px-2 text-[13px]"
-          >
-            {whole ? "Read part by part" : "Read the whole lesson"}
-          </Button>
+          <FocusReadingControl settings={focus} onChange={setFocus} />
         </div>
-      )}
+      </div>
 
-      <div ref={hostRef}>{children}</div>
+      <div ref={hostRef} className={focusClassName(focus)}>
+        {children}
+      </div>
 
       {footer}
 

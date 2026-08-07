@@ -375,6 +375,38 @@
   }
 }
 
+/* Focus reading. The marker (src/lib/reading/focus-reading.ts) wraps every
+   eligible word once, for both strengths at once:
+
+     <span data-focus-word><b data-fw-a>Mit</b><b data-fw-b>ig</b>ating</span>
+                            light = a          standard = a + b
+
+   so the setting is only these classes on the host and nothing ever mutates
+   the document again. That is the whole reason the markup looks like this:
+   the lesson body is server-rendered markup React owns, and rewriting it a
+   second time makes React discard the subtree — the lesson disappears.
+
+   `font-weight: inherit` is the resting state, so with no class on the host
+   the wrappers are invisible in every way that matters. They stay in the DOM
+   because they carry no text of their own: the page's text content is
+   identical with the mode on, off, or switched, which is what keeps
+   find-in-page, selection, copy and the highlight offsets working. */
+[data-focus-word] b {
+  font-weight: inherit;
+}
+
+.focus-light [data-fw-a],
+.focus-standard [data-fw-a],
+.focus-standard [data-fw-b] {
+  font-weight: 700;
+}
+
+/* Short joining words are marked like the rest and turned off here, so the
+   preference costs no second pass over the document. */
+.focus-skip-short [data-fw-short] b {
+  font-weight: inherit;
+}
+
 .footnote-marker {
   counter-increment: footnote;
   cursor: pointer;

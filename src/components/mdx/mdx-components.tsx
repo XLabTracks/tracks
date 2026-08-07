@@ -24,6 +24,7 @@ import { Check } from "./reader/check";
 import { GapFill } from "./reader/gap-fill";
 import { Prompt } from "./reader/prompt";
 import { Src, SourceQuote } from "./reader/source-quote";
+import { SignatoryQuotes, Signatory } from "./reader/signatory-quotes";
 import { ReadingCard } from "./reader/reading-card";
 
 // Components available by name inside every lesson `.mdx` body. Authors drop
@@ -99,5 +100,9 @@ export const mdxComponents: MDXComponents = {
   GapFill,
   Prompt,
   SourceQuote,
+  // Several speakers quoted from one source: the speaker heads each card and
+  // the work is named once, at the foot of the block.
+  SignatoryQuotes,
+  Signatory,
   Src,
 };

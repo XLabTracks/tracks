@@ -203,3 +203,32 @@ Two open items, neither of them ours to close:
 - The undrafted closer for 0.3 (the outline's "Summarize: what has worked with
   verification in the past, and what hasn't?") is still an author note held out
   of the render at the foot of `securitization.mdx`. Still owed.
+
+### The Pacing the Frontier quotes became a signatory block
+
+`SourceQuote` puts the work first and the speaker last, which is right when
+each passage comes from somewhere different and wrong for a signed letter: the
+same title and link repeated above all four cards, and the person who said the
+words arrived last. `src/components/mdx/reader/signatory-quotes.tsx` is the
+shape for this case — `<SignatoryQuotes>` is the block, `<Signatory>` one
+speaker. Face, name and role head each card, the words follow, and the work is
+named once as a link at the foot of the block. Attribution still precedes the
+words; only the source citation moved.
+
+Two columns on `sm` and up, and the card is the what-do-they-say profile card
+without its pressable states: hairline on all four sides, `bg-card`, the accent
+inside. `SourceQuote` is untouched and still correct everywhere else.
+
+Portraits: Ilya Sutskever reuses the committed Wikimedia portrait the dossier
+widget already carries, credited at the block foot with its real
+`photoSource` URL. Wikimedia Commons has no freely-licensed portrait of
+Jasjeet Sekhon, John Schulman or Micah Carroll — searched, none found — so
+those three carry initials, which is the fallback Jan Leike already uses in
+the dossier. Do not substitute a scraped press photo.
+
+Trap worth knowing: the portrait credit is a `creditHref` prop rather than an
+`<a href>` written into the lesson. `citedUrls` in `citations.test.ts` matches
+markdown links, literal `<a href=`, and `url=`, so an anchor in MDX would be
+pulled into the Works cited appendix — and an image credit is not a reading.
+Anything that is a credit rather than a citation should go through a prop and
+be rendered by the component.

@@ -183,8 +183,12 @@ async function LessonItemPage({
       />
 
       <header>
-        {lesson.optional && <OptionalMarker className="mb-4" />}
-        <h1 className="mt-1 text-3xl font-semibold tracking-tight">{lesson.title}</h1>
+        <div className="mt-1 flex flex-wrap items-center gap-x-3 gap-y-2">
+          <h1 className="text-3xl font-semibold tracking-tight">
+            {lesson.title}
+          </h1>
+          {lesson.optional && <OptionalMarker />}
+        </div>
         {lesson.estimatedMinutes && (
           <p className="text-muted-foreground mt-2 flex items-center gap-1 text-sm">
             <Clock className="size-3.5" aria-hidden /> ~{lesson.estimatedMinutes} min
@@ -335,9 +339,13 @@ async function PaperItemPage({
       />
 
       <header>
-        {paper.optional && <OptionalMarker className="mb-4" />}
         <p className="text-muted-foreground text-sm">Paper</p>
-        <h1 className="mt-1 text-3xl font-semibold tracking-tight">{paper.title}</h1>
+        <div className="mt-1 flex flex-wrap items-center gap-x-3 gap-y-2">
+          <h1 className="text-3xl font-semibold tracking-tight">
+            {paper.title}
+          </h1>
+          {paper.optional && <OptionalMarker />}
+        </div>
         {source.authors && (
           <p className="text-muted-foreground mt-2 text-sm">{source.authors}</p>
         )}

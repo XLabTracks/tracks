@@ -213,10 +213,16 @@ export async function GET(request: Request) {
       // a spacecraft, an investment bank and a capstone course, the course is
       // the sense a learner highlighted.
       const DOMAIN =
-        "course education educational learning program curriculum lesson module student university academic";
+        "course education educational learning program curriculum lesson module student university academic " +
+        "artificial intelligence governance policy international relations treaty verification compute " +
+        "safety regulation frontier model agreement security alignment";
       const termWords = new Set(raw.toLowerCase().split(/[^a-z]+/));
-      const ctxWords = new Set(
-        (context + " " + DOMAIN).split(/[^a-z]+/).filter((w) => w.length > 3 && !termWords.has(w)),
+      const keep = (w: string) => w.length > 3 && !termWords.has(w);
+      // Real page words outvote the standing vocabulary two to one, so the
+      // prior only ever decides when the page itself said nothing useful.
+      const pageWords = new Set(context.split(/[^a-z]+/).filter(keep));
+      const domainWords = new Set(
+        DOMAIN.split(/[^a-z]+/).filter((w) => keep(w) && !pageWords.has(w)),
       );
       const hits = (sjson.query?.search ?? []).filter((h) => h.title);
       const score = (h: { title?: string; snippet?: string }) => {
@@ -224,7 +230,10 @@ export async function GET(request: Request) {
           .toLowerCase()
           .replace(/<[^>]+>/g, " ");
         let n = 0;
-        for (const w of new Set(text.split(/[^a-z]+/))) if (ctxWords.has(w)) n++;
+        for (const w of new Set(text.split(/[^a-z]+/))) {
+          if (pageWords.has(w)) n += 2;
+          else if (domainWords.has(w)) n += 1;
+        }
         return n;
       };
       hits.sort((a, b) => score(b) - score(a));

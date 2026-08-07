@@ -260,13 +260,94 @@
   text-indent: -1.5rem;
 }
 
-/* A wide table scrolls inside its own box — the page must never scroll
-   sideways. `display: block` on the table element is what makes overflow-x
-   apply; the cells keep their table layout inside it. */
+/* One table treatment for every lesson on every track. Prose left tables as
+   bare hairlines with no hierarchy — a grid of identical grey lines, which is
+   why they read as muted. The structure now comes from three weights of line,
+   not from one:
+
+     the box      hairline on all four sides, so the table is one object
+     the header   a --muted band closed by a 2px --primary rule
+     the rows     hairlines between them, none above the first or below the
+                  last — the box already closes those
+
+   Everything is a token, so the app's navy and Verification's maroon each
+   get their own accent, and high contrast (where --muted equals the ground
+   and --border is white) still reads: there the yellow header rule and the
+   white hairlines carry the whole structure on their own.
+
+   A wide table scrolls inside its own box — the page must never scroll
+   sideways. `display: block` is what makes overflow-x apply; `separate` +
+   zero spacing is what lets the box round its corners and the header band
+   clip to them, which collapsed borders cannot do. */
 .lesson-body table {
   display: block;
   max-width: 100%;
   overflow-x: auto;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  border-collapse: separate;
+  border-spacing: 0;
+  box-shadow: var(--shadow-soft);
+
+  /* A shadow at whichever edge still has content behind it. At 1280 no table
+     in the course scrolls and nothing shows; on a phone all of them do, and
+     this is the only thing that says so before you swipe.
+
+     The mechanism is the pair of attachments: the two cover gradients are
+     `local`, so they travel with the content and slide out of the way as it
+     scrolls, uncovering the two `scroll` shadows that stay pinned to the box.
+     Reach either end and that end's cover sits back over its shadow.
+
+     Trap: the cover has to be the ground the table sits on, so it stays a
+     token — a literal would be wrong on two of the three themes. Trap: the
+     header band paints over its own strip, so the shadow reads along the
+     rows, not the header; giving th a transparent background to "fix" that
+     would cost the band, which is the stronger signal. */
+  background-image:
+    linear-gradient(to right, var(--background) 30%, transparent),
+    linear-gradient(to left, var(--background) 30%, transparent),
+    linear-gradient(
+      to right,
+      color-mix(in srgb, var(--foreground) 13%, transparent),
+      transparent
+    ),
+    linear-gradient(
+      to left,
+      color-mix(in srgb, var(--foreground) 13%, transparent),
+      transparent
+    );
+  background-position: 0 0, 100% 0, 0 0, 100% 0;
+  background-repeat: no-repeat;
+  background-size: 26px 100%, 26px 100%, 13px 100%, 13px 100%;
+  background-attachment: local, local, scroll, scroll;
+}
+
+.lesson-body thead th {
+  background: var(--muted);
+  color: var(--foreground);
+  font-weight: 600;
+  text-align: left;
+  vertical-align: bottom;
+  border-bottom: 2px solid var(--primary);
+  padding: 0.65em 0.9em;
+}
+
+/* Cells hold sentences here, not figures: top-aligned, so a one-line cell
+   sits level with the first line of the paragraph beside it. */
+.lesson-body tbody td {
+  border-top: 1px solid var(--border);
+  padding: 0.65em 0.9em;
+  vertical-align: top;
+}
+.lesson-body tbody tr:first-child td {
+  border-top: 0;
+}
+
+/* The first column names the row in every table the course has, so it is set
+   like a row header rather than like data. */
+.lesson-body tbody td:first-child {
+  font-weight: 500;
+  color: var(--foreground);
 }
 
 /* Anchor targets in sectioned lessons (the docked "In this lesson" nav) must

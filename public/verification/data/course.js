@@ -31,7 +31,7 @@ window.COURSE = {
         },
         {
           "id": "0.1",
-          "title": "Introduction: why verification? why you?",
+          "title": "Introduction: Why Verification? Why You?",
           "kind": "explainer",
           "mins": "15–20 min",
           "href": "/tracks/verification/why-verification/introduction",
@@ -42,7 +42,7 @@ window.COURSE = {
         },
         {
           "id": "0.2",
-          "title": "Building verification intuitions",
+          "title": "Building Verification Intuitions",
           "kind": "interactive",
           "mins": "15–20 min",
           "href": "/tracks/verification/why-verification/building-intuitions",
@@ -52,7 +52,7 @@ window.COURSE = {
         },
         {
           "id": "0.3",
-          "title": "Precedents and parallels",
+          "title": "Precedents and Parallels",
           "kind": "interactive",
           "mins": "20–25 min",
           "href": "/tracks/verification/why-verification/precedents",

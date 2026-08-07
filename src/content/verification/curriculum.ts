@@ -449,7 +449,7 @@ export const verificationLessons: Lesson[] = [
     id: "v-introduction",
     slug: "introduction",
     moduleId: "v-why",
-    title: "0.1 Introduction: why verification? why you?",
+    title: "0.1 Introduction: Why Verification? Why You?",
     contentRef: "verification/introduction",
   },
   {
@@ -468,14 +468,14 @@ export const verificationLessons: Lesson[] = [
     id: "v-intuitions",
     slug: "building-intuitions",
     moduleId: "v-why",
-    title: "0.2 Building verification intuitions",
+    title: "0.2 Building Verification Intuitions",
     contentRef: "verification/intuitions",
   },
   {
     id: "v-precedents",
     slug: "precedents",
     moduleId: "v-why",
-    title: "0.3 Precedents and parallels",
+    title: "0.3 Precedents and Parallels",
     contentRef: "verification/precedents",
   },
   {
@@ -671,9 +671,9 @@ export const verificationUnitMeta: Record<
   { title: string; kind: string; mins: string; optional?: boolean }
 > = {
   "0.0": { title: "Welcome", kind: "explainer", mins: "5–10 min" },
-  "0.1": { title: "Introduction: why verification? why you?", kind: "explainer", mins: "15–20 min" },
-  "0.2": { title: "Building verification intuitions", kind: "interactive", mins: "15–20 min" },
-  "0.3": { title: "Precedents and parallels", kind: "interactive", mins: "20–25 min" },
+  "0.1": { title: "Introduction: Why Verification? Why You?", kind: "explainer", mins: "15–20 min" },
+  "0.2": { title: "Building Verification Intuitions", kind: "interactive", mins: "15–20 min" },
+  "0.3": { title: "Precedents and Parallels", kind: "interactive", mins: "20–25 min" },
   "1.0": { title: "Introduction: what kind of policy are we trying to verify?", kind: "explainer", mins: "15–20 min" },
   "1.1": { title: "Anatomy of a pause agreement", kind: "interactive", mins: "20–25 min" },
   "1.2": { title: "Actors", kind: "interactive", mins: "25–30 min" },

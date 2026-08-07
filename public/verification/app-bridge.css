@@ -29,7 +29,25 @@
    next time the palette moves. The chart and game-payoff tokens are
    deliberately left alone: they are categorical scales, not palette shades,
    and inventing values for them here would be a design decision. */
+/* No monospace on this course, at all. theme.css already collapsed its own
+   --mono onto the sans, but that only governs the static stylesheets; the
+   app's components ask for it through Tailwind's `font-mono` utility, which
+   reads --font-mono — and layout.tsx really does load JetBrains Mono, so
+   every meta line, counter and micro-label in a widget came out in a third
+   face. Re-pointing the token here retires all ~120 of those in one rule,
+   inside this subtree only.
+
+   Nothing on the course needs a monospace: there is not one code block in any
+   Verification lesson. Should one ever arrive, give `pre`/`code` an explicit
+   family of their own rather than lifting this — the ban is on mono as
+   decoration, which is what every one of those labels was using it for.
+
+   Trap: mono was also holding counters in column. theme.css switches tabular
+   figures on globally, which is what keeps a changing digit from jittering
+   now that the face no longer does it. */
 :root[data-theme] {
+  --font-mono: var(--sans);
+
   --card-foreground: var(--foreground);
   --popover: var(--card);
   --popover-foreground: var(--foreground);

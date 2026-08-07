@@ -194,60 +194,94 @@ async function LessonItemPage({
         <CompletionHeader track={track} state={completionState} />
       )}
 
-      {/* .lesson-reader scopes the sidebar's scroll-spy (see use-scroll-spy)
-          and gives heading anchors sticky-header clearance. */}
-      <div className="lesson-reader mt-6">
-        {/* The closing page is one screen: a celebration behind a part strip
-            is four screens of nothing to read. */}
-        {track.chunkedReading && !lesson.completion ? (
-          <LessonPartsReader>
-            <LessonContent contentRef={lesson.contentRef} title={lesson.title} />
-          </LessonPartsReader>
-        ) : (
-          <LessonContent contentRef={lesson.contentRef} title={lesson.title} />
-        )}
-      </div>
+      {/* Works-cited + progress footer: shared between the chunked and plain
+          layouts. Under the parts reader it is handed in as `footer` so it
+          renders above the unified pager and stays outside any hidden part;
+          in the plain layout it renders as ordinary siblings. */}
+      {(() => {
+        const footer = (
+          <>
+            {/* Sources belong to the whole lesson, so the toggle is reachable
+                from any part — it lives outside the `.lesson-body` host and is
+                never hidden with a part. */}
+            <WorksCited urls={citations} />
 
-      {/* The appendix sits outside the parts reader on purpose: sources
-          belong to the whole lesson, so the toggle is reachable from any
-          part rather than living inside the last one. */}
-      <WorksCited urls={citations} />
+            {userId ? (
+              <LessonTracker
+                lessonId={lesson.id}
+                completed={completed}
+                // The closing page completes nothing: reaching the end of a
+                // congratulations is not work, and counts toward no total.
+                autoComplete={!lesson.completion}
+              />
+            ) : null}
 
-      {userId ? (
-        <LessonTracker
-          lessonId={lesson.id}
-          completed={completed}
-          // The closing page completes nothing: scrolling to the end of a
-          // congratulations is not work done, and it counts toward no total.
-          autoComplete={!lesson.completion}
-        />
-      ) : null}
-
-      {/* No Mark-complete on the closing page: it is not work, and a
-          "Completed" chip under a congratulations card claims a second,
-          smaller thing about the same page. The header above is the only
-          statement of state there, and it is the track's, not this page's. */}
-      {lesson.completion ? null : (
-        <div className="mt-8 flex flex-wrap items-center gap-3">
-          {userId ? (
-            <LessonCompleteButton lessonId={lesson.id} initialCompleted={completed} />
-          ) : (
-            <Button asChild variant="outline">
-              <Link
-                href={loginHref(
-                  `/tracks/${track.slug}/${module.slug}/${lesson.slug}`,
+            {/* No Mark-complete on the closing page: it is not work, and a
+                "Completed" chip under a congratulations card claims a second,
+                smaller thing about the same page. */}
+            {lesson.completion ? null : (
+              <div className="mt-8 flex flex-wrap items-center gap-3">
+                {userId ? (
+                  <LessonCompleteButton
+                    lessonId={lesson.id}
+                    initialCompleted={completed}
+                  />
+                ) : (
+                  <Button asChild variant="outline">
+                    <Link
+                      href={loginHref(
+                        `/tracks/${track.slug}/${module.slug}/${lesson.slug}`,
+                      )}
+                    >
+                      Sign in to track progress
+                    </Link>
+                  </Button>
                 )}
-              >
-                Sign in to track progress
-              </Link>
-            </Button>
-          )}
-        </div>
-      )}
+              </div>
+            )}
+          </>
+        );
 
-      <LessonNav prev={nav.prev} next={nav.next} />
+        // .lesson-reader scopes the sidebar's scroll-spy (see use-scroll-spy)
+        // and gives heading anchors sticky-header clearance.
+        return (
+          <div className="lesson-reader mt-6">
+            {/* The closing page is one screen: a celebration behind a part
+                reader is four screens of nothing to read. */}
+            {track.chunkedReading && !lesson.completion ? (
+              // The reader owns the footer and one unified pager that rolls
+              // from the last part into the next lesson, so no separate
+              // LessonNav here.
+              <LessonPartsReader
+                footer={footer}
+                prev={navLinkOf(nav.prev)}
+                next={navLinkOf(nav.next)}
+              >
+                <LessonContent contentRef={lesson.contentRef} title={lesson.title} />
+              </LessonPartsReader>
+            ) : (
+              <>
+                <LessonContent contentRef={lesson.contentRef} title={lesson.title} />
+                {footer}
+                <LessonNav prev={nav.prev} next={nav.next} />
+              </>
+            )}
+          </div>
+        );
+      })()}
     </div>
   );
+}
+
+/** An ItemRef as the parts reader wants it: a URL and a title, or null at the
+ *  ends of the track. Mirrors LessonNav's own href construction. */
+function navLinkOf(ref: ItemRef | null): { href: string; title: string } | null {
+  return ref
+    ? {
+        href: `/tracks/${ref.trackSlug}/${ref.moduleSlug}/${ref.itemSlug}`,
+        title: ref.title,
+      }
+    : null;
 }
 
 async function PaperItemPage({

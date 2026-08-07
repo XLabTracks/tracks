@@ -513,10 +513,20 @@
       "date": "6 July 2026"
     }
   },
-  "pending": [],
+  "pending": [
+    "https://deepmind.google/blog/alphafold-five-years-of-impact/",
+    "https://blog.google/innovation-and-ai/technology/health/google-ai-breast-cancer-detection/",
+    "https://deepmind.google/blog/advanced-version-of-gemini-with-deep-think-officially-achieves-gold-medal-standard-at-the-international-mathematical-olympiad/",
+    "https://deepmind.google/blog/accelerating-mathematical-and-scientific-discovery-with-gemini-deep-think/",
+    "https://openai.com/index/model-disproves-discrete-geometry-conjecture/",
+    "https://www.anthropic.com/project/glasswing/",
+    "https://www.wired.com/story/openai-didnt-notice-its-ai-agents-using-a-message-board-to-plan-their-hacking-spree/",
+    "https://huggingface.co/blog/agent-intrusion-technical-timeline",
+    "https://www.anthropic.com/news/investigating-incidents-cybersecurity-evals",
+    "https://www.felonybench.com/"
+  ],
   "excluded": [
     "https://evidence-taxonomies.netlify.app/",
-    "https://mechanism-sort.netlify.app/",
     "https://playground-tracks.netlify.app/field-map",
     "https://xlab-verification-track.pages.dev/the-distiller",
     "https://docs.google.com/document/d/1SY3ypZBeCmbCfj7trDz3ZtxzSfjsQEzY5qX6JZ71GVE/edit?usp=sharing",

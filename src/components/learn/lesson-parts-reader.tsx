@@ -10,6 +10,7 @@ import {
 import Link from "next/link";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 
 /* Reads a lesson one part at a time. The server renders the whole MDX body as
    this component's children; on mount the body's top-level headings become
@@ -29,11 +30,13 @@ import { Button } from "@/components/ui/button";
    "the next thing to read". The page hands this reader the works-cited /
    complete footer so it renders above the pager, and drops its own LessonNav.
 
-   The meter/counter is gone, but the palette note it carried still holds for
-   the Next button: `primary`, never `destructive`. public/verification/
-   theme.css re-points the palette on the Verification routes but never
-   defines --destructive, so anything painted with it stays the app's generic
-   red and ignores the high-contrast theme.
+   The two ends render as big bordered cards (the LessonNav look), each
+   carrying the title of what it goes to — a neighbouring part's heading, or
+   the neighbouring lesson's title at the ends. They paint with border/muted
+   tokens only, never --destructive: public/verification/theme.css re-points
+   the palette on the Verification routes but never defines --destructive, so
+   anything painted with it would ignore the high-contrast theme and stay the
+   app's generic red.
 
    Parts are hidden, never unmounted: an embedded exercise or widget holds a
    half-answered run in memory, so the only difference between the part on
@@ -259,8 +262,6 @@ export function LessonPartsReader({
   const showLeft = prevIsPart || Boolean(prev);
   const showRight = nextIsPart || Boolean(next);
 
-  const titleClass = "block max-w-[16rem] truncate";
-
   return (
     <div>
       {active && (
@@ -289,42 +290,75 @@ export function LessonPartsReader({
       {footer}
 
       {(showLeft || showRight) && (
-        // select-none: the pager is an index of where to go next, not text to
-        // copy. A drag that ends here otherwise smears across it.
-        <div className="border-border mt-10 flex items-center gap-3 border-t pt-6 select-none">
+        // Two big cards (the LessonNav look), each carrying the title of what
+        // it goes to. select-none: the pager is chrome, not text to copy.
+        <div className="border-border mt-10 grid grid-cols-2 gap-3 border-t pt-6 select-none">
           {prevIsPart ? (
-            <Button variant="outline" size="sm" onClick={() => goTo(at - 1)}>
-              <ArrowLeft className="size-4" aria-hidden /> Previous part
-            </Button>
+            <PagerCard dir="prev" title={parts[at - 1].label} onClick={() => goTo(at - 1)} />
           ) : prev ? (
-            <Button asChild variant="outline" size="sm" className="h-auto py-1.5">
-              <Link href={`${prev.href}?p=last`}>
-                <ArrowLeft className="size-4 shrink-0" aria-hidden />
-                <span className={titleClass}>{prev.title}</span>
-              </Link>
-            </Button>
+            <PagerCard dir="prev" title={prev.title} href={`${prev.href}?p=last`} />
           ) : (
             <span />
           )}
-
-          <div className="flex-1" />
-
           {nextIsPart ? (
-            <Button size="sm" onClick={() => goTo(at + 1)}>
-              Next part <ArrowRight className="size-4" aria-hidden />
-            </Button>
+            <PagerCard dir="next" title={parts[at + 1].label} onClick={() => goTo(at + 1)} />
           ) : next ? (
-            <Button asChild size="sm" className="h-auto py-1.5">
-              <Link href={next.href}>
-                <span className={titleClass}>{next.title}</span>
-                <ArrowRight className="size-4 shrink-0" aria-hidden />
-              </Link>
-            </Button>
+            <PagerCard dir="next" title={next.title} href={next.href} />
           ) : (
             <span />
           )}
         </div>
       )}
     </div>
+  );
+}
+
+/** One big pager card: a Link to a neighbouring lesson, or a button that moves
+ *  between parts in place. Same look either way — the LessonNav card, left- or
+ *  right-aligned by direction, its title the thing it goes to. */
+function PagerCard({
+  dir,
+  title,
+  href,
+  onClick,
+}: {
+  dir: "prev" | "next";
+  title: string;
+  href?: string;
+  onClick?: () => void;
+}) {
+  const cls = cn(
+    "border-border hover:bg-muted flex flex-col gap-1 rounded-xl border p-4 transition-colors select-none",
+    dir === "next" ? "text-right" : "text-left",
+  );
+  const body = (
+    <>
+      <span
+        className={cn(
+          "text-muted-foreground flex items-center gap-1 text-xs",
+          dir === "next" && "justify-end",
+        )}
+      >
+        {dir === "prev" ? (
+          <>
+            <ArrowLeft className="size-3.5" aria-hidden /> Previous
+          </>
+        ) : (
+          <>
+            Next <ArrowRight className="size-3.5" aria-hidden />
+          </>
+        )}
+      </span>
+      <span className="font-medium">{title}</span>
+    </>
+  );
+  return href ? (
+    <Link href={href} className={cls}>
+      {body}
+    </Link>
+  ) : (
+    <button type="button" onClick={onClick} className={cn(cls, "w-full")}>
+      {body}
+    </button>
   );
 }

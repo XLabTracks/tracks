@@ -183,3 +183,26 @@ other three intros carry no numbered heading). Subsubmodule numbering
 (2.1.1–2.1.8, 2.2.1–2.2.3, 2.3.1–2.3.5, 2.4.1–2.4.4) and all nesting are
 unchanged. Unit ids were already `2.1`–`2.4`, so progress keys and skill
 rungs are untouched.
+
+---
+
+## 2026-08-07 — mechanism-sort built native; resolves item 5's first line
+
+On the author's instruction, the "Place your bets" mechanism sort
+(`mechanism-sort.netlify.app`, listed as not-built in item 5 above) is now a
+native React widget, replacing the simpler seven-item feasibility ranking
+(`mechanism-rank`/`mechanism-rank-reopen`, and its `rank-feasibility.ts` data,
+both deleted). It carries the standalone's full content, ported verbatim into
+`src/lib/verification/data/mechanism-sort.ts`: twelve mechanisms across four
+metrics (technical/political feasibility, effectiveness, durability), each
+mechanism's expert `ref` position, explanation, and source list. The `ref`
+map is authored curriculum, not computed. One component with a `reveal` prop —
+`mechanism-sort` rates + seals in 2.0 (`mechanism-effective.mdx`),
+`mechanism-sort-reveal` lays the sealed set over the reference map in 4.1
+(`capstone-feasibility.mdx`). Ratings are five named rungs per metric (the
+reference stays continuous, so the gap math reads a real distance); layer hue
+is always paired with a name (legend) or title. New `vt-ex:mechanism-sort`
+storage key — the old `vt-ex:ex-mechanism-rank`/`ex-reopen` keys are orphaned
+(incompatible data model), which is the intended cost of the replacement.
+`evidence-taxonomies.netlify.app` and the 2.3 interactives in item 5 are still
+not built.

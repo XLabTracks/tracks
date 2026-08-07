@@ -13,7 +13,7 @@ import { DrillsPrimers } from "./drills-primers";
 import { DrillsSupplyChain } from "./drills-supply-chain";
 import { PolicyCost } from "./policy-cost";
 import { PolicyPlot } from "./policy-plot";
-import { MechanismRank, MechanismRankReopen } from "./mechanism-rank";
+import { MechanismSort, MechanismSortReveal } from "./mechanism-sort";
 import { PrecedentCases } from "./precedent-cases";
 import { WhatDoTheySay } from "./what-do-they-say";
 
@@ -41,10 +41,10 @@ export const verificationWidgets: Record<
   "drills-games": DrillsGames,
   "policy-cost": PolicyCost,
   "policy-plot": PolicyPlot,
-  // The sealed 2.0 feasibility ranking and its 4.1 reopening share one
-  // renderer and the old engine's vt-ex:* storage keys.
-  "mechanism-rank": MechanismRank,
-  "mechanism-rank-reopen": MechanismRankReopen,
+  // "Place your bets": rate + seal in 2.0, compare against the reference map
+  // in 4.1. One renderer, a reveal prop; both share the vt-ex: storage key.
+  "mechanism-sort": MechanismSort,
+  "mechanism-sort-reveal": MechanismSortReveal,
   "precedent-cases": PrecedentCases,
   "what-do-they-say": WhatDoTheySay,
 };

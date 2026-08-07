@@ -244,7 +244,7 @@ export async function GET(request: Request) {
       // A candidate nothing endorsed is a coin flip, not an answer: with no
       // overlap at all, the dictionary leg below is the honest fallback.
       const tried = hits
-        .filter((h) => slugify(h.title ?? "") !== slug && score(h) > 0)
+        .filter((h) => slugify(h.title ?? "") !== slug && score(h) >= 2)
         .slice(0, 3);
       for (const cand of tried) {
         const top = cand.title as string;

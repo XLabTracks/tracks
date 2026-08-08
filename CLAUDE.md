@@ -467,7 +467,15 @@ add must reduce the duplication, never widen it.
 - **Lessons are read one part at a time** on tracks flagged
   `chunkedReading` (Verification is): `LessonPartsReader` (client) chunks the
   rendered body at its top-level headings — h2 alone when a lesson has
-  enough, h3 then h4 folded in when it doesn't — with a jump strip, a
+  enough, h3 then h4 folded in when it doesn't. Where the breaks go is
+  `planParts` in `src/lib/reading/lesson-parts.ts` (pure, tested), which also
+  **merges away a part too small to be one** — under `MIN_PART_CHARS` of text
+  it folds into its neighbour (backwards, or forwards when it is the first).
+  That bound is measured off the course, not chosen: the smallest parts
+  anyone writes on purpose run 464+ characters, while the chunker was
+  producing 69 (a bare opening video), 114, 209 and 267. Embeds get no credit
+  on purpose — the 69-character case *was* a fifteen-minute video and still
+  read as a broken page. The reader also has a jump strip, a
   position meter (the counter beside it is the reading; the bar is
   decoration), `?p=` deep links and a whole-lesson toggle persisted under
   `vt-reading-mode` (carried over from the static course). Parts are hidden,

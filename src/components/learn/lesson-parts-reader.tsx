@@ -18,6 +18,7 @@ import {
   readFocusSettings,
   type FocusSettings,
 } from "@/lib/reading/focus-reading";
+import { MIN_PARTS, planParts } from "@/lib/reading/lesson-parts";
 import { cn } from "@/lib/utils";
 
 /* Reads a lesson one part at a time. The server renders the whole MDX body as
@@ -51,10 +52,13 @@ import { cn } from "@/lib/utils";
    screen and the rest is the `hidden` attribute. React never re-renders the
    static MDX output, so attributes set here stick.
 
-   Boundary depth is adaptive per lesson: h2 alone where a lesson has enough
-   of them, h3 and then h4 folded in where it doesn't. Lessons that still
-   yield fewer than three parts render untouched — no toggle, no part moves,
-   just the lesson-level pager so the reader still owns the way forward.
+   Where the breaks go is planParts (@/lib/reading/lesson-parts), pure and
+   tested: boundary depth is adaptive per lesson — h2 alone where a lesson has
+   enough of them, h3 and then h4 folded in where it doesn't — and a part too
+   small to be one is merged into its neighbour rather than standing as a page
+   you land on and immediately press Next past. Lessons that still yield fewer
+   than three parts render untouched: no toggle, no part moves, just the
+   lesson-level pager so the reader still owns the way forward.
 
    Nothing here feeds progress. Completion stays with the Mark-complete button
    in the footer; reaching the last part completes nothing.
@@ -151,42 +155,19 @@ export function LessonPartsReader({
       (el): el is HTMLElement => el instanceof HTMLElement,
     );
 
-    const countOf = (tags: string[]) =>
-      els.filter((el) => tags.includes(el.tagName)).length;
-    let tags = ["H2"];
-    if (countOf(tags) < 2) tags = ["H2", "H3"];
-    if (countOf(tags) < 2) tags = ["H2", "H3", "H4"];
+    // Where the breaks go is decided by planParts — pure, and tested, because
+    // both of its rules are judgement calls that were wrong once: which
+    // heading depth opens a part, and how small a part is allowed to be.
+    const built: Part[] = planParts(
+      els.map((el) => ({ tag: el.tagName, text: el.textContent ?? "" })),
+    ).map((planned) => ({
+      label: planned.label,
+      anchor:
+        planned.headingIndex === null ? null : els[planned.headingIndex].id || null,
+      els: planned.indices.map((i) => els[i]),
+    }));
 
-    // A part whose elements are all headings (no body has arrived yet).
-    const bodyless = (p: Part | null) =>
-      !!p && p.els.every((e) => tags.includes(e.tagName));
-
-    const built: Part[] = [];
-    let cur: Part | null = null;
-    for (const el of els) {
-      if (tags.includes(el.tagName)) {
-        // A boundary heading with nothing beneath it before the next heading
-        // would stand as a part that reads as a lone title over blank space.
-        // Fold consecutive headings into one part until body arrives, so every
-        // part carries content. This also absorbs a stray title h1 a body
-        // shouldn't carry (the page owns the h1) — the failure it prevents is
-        // silent, and client-side, so no test would catch a regression.
-        if (bodyless(cur)) {
-          cur!.els.push(el);
-          continue;
-        }
-        cur = { label: el.textContent ?? "", anchor: el.id || null, els: [el] };
-        built.push(cur);
-        continue;
-      }
-      if (!cur) {
-        cur = { label: "Start", anchor: null, els: [] };
-        built.push(cur);
-      }
-      cur.els.push(el);
-    }
-
-    if (built.length < 3) return; // short lesson: nothing hidden, lesson pager only
+    if (built.length < MIN_PARTS) return; // short lesson: nothing hidden, lesson pager only
     // One deliberate mount-time re-render: parts exist only in the rendered DOM.
     // eslint-disable-next-line react-hooks/set-state-in-effect
     setParts(built);

@@ -63,22 +63,7 @@ export default function Page() {
           </div>
         </section>
 
-        {/* The six outcomes used to sit here as the short labels the skill map
-            keys on. They now open in "By the end of this course" below, in the
-            author's own sentences; skills.js keeps the short ones because that
-            is what the map's chips are. One set of words per page. */}
         <section className="band filled">
-          <div className="wrap">
-            <h2>What this course is</h2>
-            <p className="intro">
-              Four sections, each one a question a prospective learner asks
-              before they start. Open whichever you came for.
-            </p>
-            <CourseOverview />
-          </div>
-        </section>
-
-        <section className="band">
           <div className="wrap">
             <h2>The skills it builds</h2>
             <p className="intro">
@@ -112,6 +97,22 @@ export default function Page() {
                 Open the skill map
               </a>
             </p>
+          </div>
+        </section>
+
+        {/* The six outcomes had their own band here as the short labels the
+            skill map keys on. They open inside "By the end of this course"
+            now, in the author's own sentences; skills.js keeps the short ones
+            because that is what the map's chips are. One set of words per
+            page. */}
+        <section className="band">
+          <div className="wrap">
+            <h2>What this course is</h2>
+            <p className="intro">
+              Four sections, each one a question a prospective learner asks
+              before they start. Open whichever you came for.
+            </p>
+            <CourseOverview />
           </div>
         </section>
       </main>

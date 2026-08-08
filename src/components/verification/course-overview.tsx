@@ -19,15 +19,18 @@ import { courseOverview } from "@/content/verification/overview";
  */
 export function CourseOverview() {
   return (
-    <div className="not-prose mt-6 flex flex-col gap-2.5">
-      {/* Independent, not an accordion: these are read side by side, and
-          opening one must not close the one somebody was halfway through — so
-          no shared `name`. */}
+    /* Two columns, and `items-start` is the whole reason they work: a grid
+       cell stretches to its row by default, so an open card would drag its
+       closed neighbour to the same height and leave it half empty. */
+    <div className="not-prose mt-6 grid items-start gap-3 md:grid-cols-2">
+      {/* Independent, not an accordion: these are read side by side — which is
+          now literal — so opening one must not close the other. No shared
+          `name`. */}
       {courseOverview.map((section) => (
         <details
           key={section.id}
           id={`overview-${section.id}`}
-          className="border-border bg-card group rounded-xl border open:shadow-soft"
+          className="border-primary bg-card group rounded-xl border-2 transition-shadow duration-200 open:shadow-soft-md"
         >
           <summary className="flex cursor-pointer list-none items-start gap-3 p-4 select-none [&::-webkit-details-marker]:hidden">
             <ChevronRight
@@ -44,7 +47,7 @@ export function CourseOverview() {
             </span>
           </summary>
 
-          <div className="border-border border-t px-4 pt-3.5 pb-4 pl-11">
+          <div className="border-primary/35 border-t px-4 pt-3.5 pb-4 pl-11">
             {section.kind === "prose" ? (
               <div className="flex flex-col gap-3.5">
                 {section.paragraphs.map((p) => (

@@ -350,9 +350,26 @@
   padding: 1.4rem 0 0.2rem;
 }
 
+/* The lead is the block's own heading, so it is set like one: the display
+   face at the section-head size, in --brand-ink.
+
+   --brand-ink and never --primary. Maroon is a fine surface and an unreadable
+   ink on the night ground, and this is type — the same split the whole
+   palette runs on, and the reason the ledger's numerals below use the same
+   token.
+
+   1.5rem keeps it above the display face's ~24px floor. Do not shrink it
+   without moving it back to the body face: Space Grotesk under display size
+   is what the font rule forbids, and this line is the one place on the block
+   where that would be tempting. */
 :root[data-theme] .lesson-body .vt-objectives .vt-objectives-lead {
-  margin: 0 0 0.35rem;
-  font-weight: 600;
+  margin: 0 0 0.9rem;
+  color: var(--brand-ink);
+  font-family: var(--display);
+  font-size: 1.5rem;
+  font-weight: 500;
+  letter-spacing: -.015em;
+  line-height: 1.2;
 }
 
 :root[data-theme] .lesson-body .vt-objectives :is(ul, ol) {

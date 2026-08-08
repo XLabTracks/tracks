@@ -36,10 +36,13 @@ import type { VerificationWidgetProps } from "../kit/types";
 
 const VBW = 1180;
 const VBH = 1240;
-const AI = { cx: 590, cy: 600, r: 580 };
-const RED_BOTTOM = 1150;
-const RED_R0 = 500;
-const RED_STEP = 60;
+const AI = { cx: 590, cy: 600, r: 585 };
+const RED_BOTTOM = 1160;
+// Even steps → evenly shrinking rings (a proper containment onion), and a
+// small innermost circle like the reference — text shrinks to fit, the circle
+// never grows to chase it.
+const RED_R0 = 505;
+const RED_STEP = 73;
 
 /** i=0 is the grey AI field; 1..6 are the red rings, innermost last. */
 function levelCircle(i: number) {

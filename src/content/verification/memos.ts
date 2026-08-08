@@ -237,7 +237,7 @@ export const memoSlots: MemoSlot[] = [
     unit: "3.x",
     title: "Written output",
     status: "unspecified",
-    lesson: "covert-red-blue",
+    lesson: "covert-system-overview",
     brief: null,
     audience: null,
     words: 800,

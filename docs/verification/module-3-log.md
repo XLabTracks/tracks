@@ -179,3 +179,47 @@ references across `src/content/lessons/verification`,
 
 **Nothing above was fixed.** Link repairs are held pending a session with
 outbound network, so that a corrected URL can be confirmed rather than guessed.
+
+## Module 3 replaced with the Cankaya working paper
+
+On the course owner's instruction: "Module 3 is supposed to be just [the paper]
+and answering its questions — nothing else." The module now holds one unit,
+`v-covert-system-overview` (3.0), carrying her Module objective and Assignment
+text: read Naci Cankaya, *A System Overview for Near-Term, Low-Trust AI Compute
+Verification*, and answer all six of its "Questions for the reader" sets.
+
+Six is checked, not assumed: the PDF numbers them #1–#6 on printed pages 5, 8,
+10, 11, 13 and 15. The draft carries no date inside it; June 2026 in
+citations.json comes from techgov.intelligence.org/research, which lists it as
+Jun 23, 2026. It is a working draft and is not version-pinned here — a later
+revision could change the count, and the lesson's own comment says so.
+
+### What was removed
+
+- **Four lessons**, all transcribed from the outline: 3.0 What is covert
+  development? (342 lines, including the worked evasion example and the two
+  real-world anchors), 3.1 How could a determined actor cheat?, 3.1.1 Evasion
+  scenario taxonomy, 3.2 Red-team / blue-team exercises (the five-page adapted
+  MIRI packet plus its Section B). All four are in the history.
+- **Nine writing tasks**, `v-task-covert-red-blue-1` … `-9`. They asked about
+  the adapted packet, which is what the real paper now replaces.
+- **26 citation registry entries** that those lessons were the only citers of —
+  the A. Q. Khan chronology, the IAEA and CTBT pages, the export-control
+  rules, the two DOJ prosecutions, six arXiv papers. Removed rather than left
+  as orphans; the registry's own test would have failed on them.
+
+### Still owed, and deliberately not decided here
+
+- **The module is still titled "Covert development"** and its summary still
+  describes evasion. Neither matches a unit about translating treaty
+  requirements into a technical verification system. Renaming it is a content
+  decision and no new title was given.
+- **`data/skills.js` has 21 rungs tagged unit `3.1` or `3.2`.** Those units no
+  longer exist, so those rungs can never fill. Nothing crashes and no test
+  covers that file; retagging or removing them is the next job here.
+- **The module-3 written output** (`m3-written-output` in memos.ts) was
+  repointed from `covert-red-blue` to the new lesson, which embeds the
+  `<MemoDesk/>` card — `memos.test.ts` requires a slot's lesson to embed it
+  exactly once, so the desk would otherwise have gone unreachable. Its
+  `status` is still `unspecified`: the outline never said what module 3's
+  written output is, and the six answer sets have not been declared to be it.

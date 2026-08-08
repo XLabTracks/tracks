@@ -228,30 +228,9 @@ window.COURSE = {
           "title": "What is covert development?",
           "kind": "explainer",
           "mins": "10–15 min",
-          "href": "/tracks/verification/covert-development/covert-what-is-it",
+          "href": "/tracks/verification/covert-development/low-trust-compute-verification",
           "lessons": [
-            "covert-what-is-it"
-          ]
-        },
-        {
-          "id": "3.1",
-          "title": "How could a determined actor cheat?",
-          "kind": "interactive",
-          "mins": "30–40 min",
-          "href": "/tracks/verification/covert-development/covert-how-to-cheat",
-          "lessons": [
-            "covert-how-to-cheat",
-            "covert-taxonomy"
-          ]
-        },
-        {
-          "id": "3.2",
-          "title": "Red team / blue team",
-          "kind": "exercise",
-          "mins": "45–60 min",
-          "href": "/tracks/verification/covert-development/covert-red-blue",
-          "lessons": [
-            "covert-red-blue"
+            "low-trust-compute-verification"
           ]
         }
       ]

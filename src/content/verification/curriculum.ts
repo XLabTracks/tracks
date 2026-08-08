@@ -127,15 +127,10 @@ export const verificationModules: Module[] = [
       "Every mechanism in module 3 can fail. How a determined actor cheats, what evidence the evasion leaves across layers, and the red-team/blue-team exercise that makes you argue both sides.",
     order: 3,
     prerequisiteModuleIds: ["v-why", "v-scoping", "v-infrastructure"],
-    // 3.0, 3.1 and 3.2 are the outline's submodules; 3.1.1 nests under 3.1.
-    // 3.2.1 (the post-case scored taxonomy) is still a heading inside 3.2 and
-    // is the next promotion owed here — see docs/verification/module-3-log.md.
-    itemIds: [
-      "v-covert-what-is-it",
-      "v-covert-how-to-cheat",
-      "v-covert-taxonomy",
-      "v-covert-red-blue",
-    ],
+    // One unit, on the course owner's instruction: the module is the Cankaya
+    // working paper and its own six question sets, and nothing else. What was
+    // here before is in docs/verification/module-3-log.md and in the history.
+    itemIds: ["v-covert-system-overview"],
   },
   {
     id: "v-capstone",
@@ -292,33 +287,14 @@ export const verificationLessons: Lesson[] = [
     contentRef: "verification/human-institutions",
   },
   {
-    id: "v-covert-what-is-it",
-    slug: "covert-what-is-it",
+    id: "v-covert-system-overview",
+    slug: "low-trust-compute-verification",
     moduleId: "v-covert",
-    title: "3.0 What is covert development?",
-    contentRef: "verification/covert-what-is-it",
-  },
-  {
-    id: "v-covert-how-to-cheat",
-    slug: "covert-how-to-cheat",
-    moduleId: "v-covert",
-    title: "3.1 How could a determined actor cheat?",
-    contentRef: "verification/covert-how-to-cheat",
-  },
-  {
-    id: "v-covert-taxonomy",
-    slug: "covert-taxonomy",
-    moduleId: "v-covert",
-    sectionItemId: "v-covert-how-to-cheat",
-    title: "3.1.1 Evasion scenario taxonomy",
-    contentRef: "verification/covert-taxonomy",
-  },
-  {
-    id: "v-covert-red-blue",
-    slug: "covert-red-blue",
-    moduleId: "v-covert",
-    title: "3.2 Red-team / blue-team exercises",
-    contentRef: "verification/covert-red-blue",
+    // The reading's own title. The unit is the paper, so naming it anything
+    // else would be this repo writing curriculum copy for it.
+    title:
+      "3.0 A system overview for near-term, low-trust AI compute verification",
+    contentRef: "verification/covert-system-overview",
   },
   {
     id: "v-capstone-feasibility",
@@ -662,10 +638,7 @@ export const verificationUnitOfLesson: Record<string, string> = {
   "v-human-reporting-protection": "2.4",
   "v-human-audits-inspections": "2.4",
   "v-human-institutions": "2.4",
-  "v-covert-what-is-it": "3.0",
-  "v-covert-how-to-cheat": "3.1",
-  "v-covert-taxonomy": "3.1",
-  "v-covert-red-blue": "3.2",
+  "v-covert-system-overview": "3.0",
   "v-capstone-feasibility": "4.0",
   "v-research-tips": "4.1",
   "v-capstone-project": "4.2",

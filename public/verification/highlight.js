@@ -21,11 +21,12 @@
    cheap, because painting mutates nothing, so repainting can never feed the
    observer that triggered it.
 
-   Trap: removal cannot hang on the toolbar — a click on a painted passage
-   has a collapsed selection, so no toolbar appears. A document click listener
-   offers "Remove highlight" when the caret under the pointer falls inside a
-   stored range, and must ignore presses inside any floating UI or its own
-   click would land on the thing it just tore down. */
+   Trap: a click on a painted passage has a COLLAPSED selection, so the
+   selection toolbar never appears for it. That is why removal has two routes:
+   the toolbar offers it when a selection crosses a highlight, and a document
+   click listener offers it when the caret under the pointer falls inside one.
+   The click listener must ignore presses inside any floating UI, or its own
+   click lands on the thing it just tore down. */
 
 "use strict";
 
@@ -185,9 +186,11 @@
      phone adjusting a selection by its handles — a gesture that delivers no
      mouse event to the page — was offered nothing.
 
-     Removal is a different gesture and stays here: it hangs off a click on
-     painted text, where the selection is collapsed and the toolbar never
-     appears. */
+     Removal has two routes because there are two gestures. Selecting across
+     a highlight offers "Remove highlight" in that same toolbar (it asks
+     idsInSelection below); clicking painted text without selecting anything
+     raises the strip further down. A phone reaches the first and effectively
+     never the second. */
 
   /* ---------- removal strip ---------- */
 
@@ -260,9 +263,41 @@
     armObserver();
   }
 
+  /* Which stored highlights the current selection touches.
+     Range.intersectsNode is no use here — a painted range and a selection can
+     share the same text node and still not overlap — so this compares the two
+     ranges directly, which is what "touches" has to mean when a reader drags
+     across the middle of a highlight. */
+  function idsInSelection() {
+    const sel = document.getSelection();
+    if (!sel || sel.isCollapsed || !sel.rangeCount) return [];
+    const range = sel.getRangeAt(0);
+    return painted.filter(function (p) {
+      try {
+        return range.compareBoundaryPoints(Range.END_TO_START, p.range) < 0 &&
+               range.compareBoundaryPoints(Range.START_TO_END, p.range) > 0;
+      } catch (e) { return false; }   // different documents, detached range
+    }).map(function (p) { return p.id; });
+  }
+
   window.VTHighlight = {
     supported: supported,
     add: add,
+    /* The selection toolbar asks these two: whether the selection sits on
+       anything painted, and then to take it away. Removal also still hangs
+       off a click on painted text — that is the no-selection route, and the
+       two answer different gestures rather than duplicating one. */
+    idsInSelection: idsInSelection,
+    removeIds: function (ids) {
+      const keep = {};
+      (ids || []).forEach(function (id) { keep[id] = true; });
+      const data = read();
+      const list = pageList(data).filter(function (h) { return !keep[h.id]; });
+      if (list.length) data.pages[location.pathname] = list;
+      else delete data.pages[location.pathname];
+      write(data);
+      paint();
+    },
     count: function () { return pageList(read()).length; }
   };
 

@@ -563,9 +563,14 @@ Traps that cost time already, so they are written down:
   text drag-and-drop, which sends `pointercancel` mid-gesture and `dragend`
   at the end and **no `pointerup`** — so the "pointer is down" belief has
   both an explicit end and a timeout, or the toolbar dies for the rest of the
-  page's life. Removing a highlight is deliberately not here: it hangs off a
-  click on painted text, where the selection is collapsed and no toolbar
-  appears.
+  page's life. **Removing a highlight has two routes because there are two
+  gestures**: a selection crossing a highlight turns the toolbar's Highlight
+  slot into Remove highlight (`overlapsHighlight` in the rules;
+  `VTHighlight.idsInSelection`/`removeIds`), and a click on painted text —
+  where the selection is collapsed and no toolbar appears — raises its own
+  strip in `highlight.js`. A phone reaches the first and effectively never
+  the second. Never both actions at once: two nearly identical buttons is a
+  choice the reader should not have to make.
 - LessWrong's GraphQL API is behind bot protection and challenges datacenter
   requests; the keyless `/api/search` endpoint is not, so
   `/api/verification/define` asks that instead (tags index — hits carry the

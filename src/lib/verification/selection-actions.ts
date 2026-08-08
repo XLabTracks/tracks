@@ -15,7 +15,11 @@
  * and can be read without opening three files.
  */
 
-export type SelectionActionId = "highlight" | "define" | "notebook";
+export type SelectionActionId =
+  | "highlight"
+  | "unhighlight"
+  | "define"
+  | "notebook";
 
 /** Below this a "selection" is a stray click-drag, not a thing to act on. */
 export const MIN_CHARS = 3;
@@ -31,6 +35,8 @@ export interface SelectionFacts {
   /** The CSS Custom Highlight API is present. A highlighter that half-works
    *  is worse than none, so where it is missing the action is not offered. */
   highlightSupported: boolean;
+  /** The selection crosses at least one highlight already on the page. */
+  overlapsHighlight?: boolean;
 }
 
 export function wordCount(text: string): number {
@@ -49,7 +55,14 @@ export function actionsFor(facts: SelectionFacts): SelectionActionId[] {
   if (text.length < MIN_CHARS) return [];
 
   const out: SelectionActionId[] = [];
-  if (facts.highlightSupported) out.push("highlight");
+  // One slot, two meanings: over an existing highlight the useful action is
+  // taking it away, and offering both at once would ask the reader to work
+  // out which of two nearly identical buttons they wanted. Clicking painted
+  // text still raises its own Remove — that is the gesture with no selection
+  // at all, which this toolbar never sees.
+  if (facts.highlightSupported) {
+    out.push(facts.overlapsHighlight ? "unhighlight" : "highlight");
+  }
   if (wordCount(text) <= SHORT_WORDS) out.push("define");
   out.push("notebook");
   return out;
@@ -57,6 +70,7 @@ export function actionsFor(facts: SelectionFacts): SelectionActionId[] {
 
 export const ACTION_LABELS: Record<SelectionActionId, string> = {
   highlight: "Highlight",
+  unhighlight: "Remove highlight",
   define: "Define",
   notebook: "Add to notebook",
 };

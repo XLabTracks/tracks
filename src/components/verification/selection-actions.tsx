@@ -59,7 +59,12 @@ interface Placed {
 
 declare global {
   interface Window {
-    VTHighlight?: { supported?: boolean; add?: () => void };
+    VTHighlight?: {
+      supported?: boolean;
+      add?: () => void;
+      idsInSelection?: () => string[];
+      removeIds?: (ids: string[]) => void;
+    };
     VTNotebook?: { addQuote?: (t: string, title: string, href: string) => void };
     /* The lookup card reads only these two off the rect it is handed. */
     VTVocab?: { define?: (term: string, rect: { bottom: number; left: number }) => void };
@@ -103,6 +108,7 @@ export function SelectionActions() {
         text,
         inReading,
         highlightSupported: !!window.VTHighlight?.supported,
+        overlapsHighlight: (window.VTHighlight?.idsInSelection?.() ?? []).length > 0,
       });
       if (!actions.length) return setAt(null);
 
@@ -203,6 +209,11 @@ export function SelectionActions() {
     (id: SelectionActionId, place: Placed) => {
       if (id === "highlight") {
         window.VTHighlight?.add?.();
+      } else if (id === "unhighlight") {
+        // Asked again at press time rather than remembered from when the
+        // toolbar was built: the selection is still live, and a stale id list
+        // would delete whatever had taken those ids since.
+        window.VTHighlight?.removeIds?.(window.VTHighlight?.idsInSelection?.() ?? []);
       } else if (id === "notebook") {
         window.VTNotebook?.addQuote?.(
           place.text,

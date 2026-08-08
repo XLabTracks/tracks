@@ -28,6 +28,26 @@ describe("actionsFor", () => {
     expect(actionsFor(facts({ text: atBound }))).toContain("define");
   });
 
+  it("offers Remove highlight instead of Highlight over an existing one", () => {
+    expect(actionsFor(facts({ overlapsHighlight: true }))).toEqual([
+      "unhighlight",
+      "define",
+      "notebook",
+    ]);
+    // Never both: two nearly identical buttons is a choice the reader should
+    // not have to make.
+    for (const over of [true, false]) {
+      const got = actionsFor(facts({ overlapsHighlight: over }));
+      expect(got.includes("highlight") && got.includes("unhighlight")).toBe(false);
+    }
+  });
+
+  it("offers neither highlight action where the browser cannot paint one", () => {
+    expect(
+      actionsFor(facts({ highlightSupported: false, overlapsHighlight: true })),
+    ).toEqual(["define", "notebook"]);
+  });
+
   it("drops Highlight where the browser cannot paint one", () => {
     expect(actionsFor(facts({ highlightSupported: false }))).toEqual([
       "define",

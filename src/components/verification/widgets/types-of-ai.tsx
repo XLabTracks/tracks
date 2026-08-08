@@ -55,12 +55,6 @@ function redOpacity(i: number) {
   return 0.12 + (i - 1) * 0.15;
 }
 
-/** Horizontal room inside a circle at height y. */
-function chordAt(c: { cy: number; r: number }, y: number) {
-  const dy = y - c.cy;
-  return 2 * Math.sqrt(Math.max(0, c.r * c.r - dy * dy));
-}
-
 // Rough label width in SVG units (no DOM measurement at render).
 const EX_FS = 21;
 const NAME_FS = 34;
@@ -69,27 +63,34 @@ const PILL_H = 30;
 const LINE_H = 1.08;
 const EX_GAP = 14;
 const CHAR_W = 0.56; // mean glyph advance as a fraction of the font size
-// Below this one-line size a multi-word name wraps to two lines instead of
-// shrinking smaller: the inner rings are horizontally narrow but their
-// crescents are tall, so vertical room is what we actually have to spend.
-const WRAP_THRESHOLD = 27;
-const estPill = (name: string) => name.length * EX_FS * 0.55 + 16;
+const ASCENT = 0.74; // glyph top above a middle-baselined centre, fraction of fs
+// A run drawn with dominant-baseline "middle" reaches this far above the line
+// centre I place it at — so its real top edge is `nameAsc(fs)` above yTop.
+const nameAsc = (fs: number) => fs * (ASCENT - LINE_H / 2);
+// Clearance kept between a glyph and the ring arcs, in SVG units. The binding
+// point is a run's TOP corners: the ring curves inward there, so the width a
+// centred run may take is set by the chord at its top edge, not its centre.
+const PAD_NAME = 15;
+const PAD_EX = 13;
+const PAD_TOP = 8;
+const PAD_BOT = 12;
+const GAP_NE = 10;
+const estPill = (name: string) => name.length * EX_FS * CHAR_W + 8;
 
 type PlacedPill = { li: number; ei: number; name: string; x: number; y: number; w: number };
 type PlacedName = { i: number; lines: string[]; fs: number; x: number; yTop: number; light: boolean };
 
-/** Best balanced ≤2-line split whose lines each fit maxW at fs, else null. */
-function splitTwo(name: string, maxW: number, fs: number): string[] | null {
+/** Balanced two-line split (minimise the length gap), or null for one word. */
+function balancedSplit(name: string): string[] | null {
   const words = name.split(" ");
   if (words.length < 2) return null;
-  const fits = (s: string) => s.length * fs * CHAR_W <= maxW;
   let best: string[] | null = null;
   let bestDiff = Infinity;
   for (let k = 1; k < words.length; k++) {
     const a = words.slice(0, k).join(" ");
     const b = words.slice(k).join(" ");
     // ≤ keeps the later split on a tie → a fuller first line reads better.
-    if (fits(a) && fits(b) && Math.abs(a.length - b.length) <= bestDiff) {
+    if (Math.abs(a.length - b.length) <= bestDiff) {
       bestDiff = Math.abs(a.length - b.length);
       best = [a, b];
     }
@@ -97,22 +98,18 @@ function splitTwo(name: string, maxW: number, fs: number): string[] | null {
   return best;
 }
 
-/** One line at the biggest size that fits; two lines when one would be tiny. */
-function fitName(name: string, maxW: number): { lines: string[]; fs: number } {
-  const fs1 = Math.min(NAME_FS, maxW / (name.length * CHAR_W));
-  if (fs1 >= WRAP_THRESHOLD || name.split(" ").length < 2) {
-    return { lines: [name], fs: Math.max(NAME_FLOOR, Math.min(NAME_FS, fs1)) };
-  }
-  for (let fs = NAME_FS; fs >= NAME_FLOOR; fs -= 1) {
-    const s = splitTwo(name, maxW, fs);
-    if (s) return { lines: s, fs };
-  }
-  const words = name.split(" ");
-  const mid = Math.ceil(words.length / 2);
-  return {
-    lines: [words.slice(0, mid).join(" "), words.slice(mid).join(" ")],
-    fs: NAME_FLOOR,
-  };
+/** Width a centred run may take at top-edge height y, keeping `pad` inside c. */
+function bandWidth(c: { cy: number; r: number }, y: number, pad: number) {
+  const rr = c.r - pad;
+  const v = rr * rr - (y - c.cy) * (y - c.cy);
+  return v > 0 ? 2 * Math.sqrt(v) : 0;
+}
+
+/** Highest (smallest y) a half-width-hw run may put its top edge, keeping pad. */
+function highestTop(c: { cy: number; r: number }, hw: number, pad: number) {
+  const rr = c.r - pad;
+  const v = rr * rr - hw * hw;
+  return v > 0 ? c.cy - Math.sqrt(v) : null;
 }
 
 function packRows(names: { li: number; ei: number; name: string }[], maxW: number) {
@@ -137,6 +134,94 @@ function topEdge(i: number) {
   return c.cy - c.r;
 }
 
+type Placed = {
+  lines: string[];
+  fs: number;
+  nameTop: number;
+  rows: ReturnType<typeof packRows>;
+  exTop: number;
+};
+
+/**
+ * Fit a name and its example rows into the crescent between `spanTop` and
+ * `spanBot`. A wider name has to sit lower, where the band is wide enough to
+ * clear the arc; the examples bottom-align against the next ring so they land
+ * in the widest part of the band. The biggest font whose whole block clears
+ * both arcs with PAD to spare wins; the name shrinks, then wraps, only when the
+ * band cannot hold it.
+ */
+function fitCrescent(
+  name: string,
+  c: { cy: number; r: number },
+  spanTop: number,
+  spanBot: number,
+  exs: { li: number; ei: number; name: string }[],
+): Placed {
+  const zoneBot = spanBot - PAD_BOT;
+  for (let fs = NAME_FS; fs >= NAME_FLOOR; fs -= 1) {
+    for (const lines of [[name], balancedSplit(name) ?? [name]]) {
+      const nameW = Math.max(...lines.map((l) => l.length * fs * CHAR_W));
+      const top = highestTop(c, nameW / 2, PAD_NAME);
+      if (top === null) continue; // this font is too wide for the band anywhere
+      // Drop the name by its ascent so its real top edge lands on the clearance
+      // line, not its centre.
+      const nameTop = Math.max(spanTop + PAD_TOP, top + nameAsc(fs));
+      const nameH = lines.length * fs * LINE_H;
+      const zoneTop = nameTop + nameH + (exs.length ? GAP_NE : 0);
+      if (!exs.length) return { lines, fs, nameTop, rows: [], exTop: zoneTop };
+      const maxRows = Math.floor((zoneBot - zoneTop) / PILL_H);
+      // Fewest rows first: a bottom-aligned block of r rows has its narrowest
+      // (top) row highest, so pack to the chord at that row's real top edge.
+      for (let r = 1; r <= maxRows; r += 1) {
+        const rowTop = zoneBot - r * PILL_H + PILL_H / 2 - ASCENT * EX_FS;
+        const packed = packRows(exs, bandWidth(c, rowTop, PAD_EX));
+        if (packed.length <= r) {
+          return { lines, fs, nameTop, rows: packed, exTop: zoneBot - packed.length * PILL_H };
+        }
+      }
+    }
+  }
+  const lines = balancedSplit(name) ?? [name];
+  const hw = (Math.max(...lines.map((l) => l.length)) * NAME_FLOOR * CHAR_W) / 2;
+  const nameTop = Math.max(
+    spanTop + PAD_TOP,
+    (highestTop(c, hw, PAD_NAME) ?? spanTop + PAD_TOP) + nameAsc(NAME_FLOOR),
+  );
+  const nameH = lines.length * NAME_FLOOR * LINE_H;
+  const exTop = nameTop + nameH + (exs.length ? GAP_NE : 0);
+  const rows = exs.length ? packRows(exs, bandWidth(c, exTop + (PILL_H - EX_FS) / 2, PAD_EX)) : [];
+  return { lines, fs: NAME_FLOOR, nameTop, rows, exTop };
+}
+
+/** The innermost ring is a full disk: fit the name to it, then centre the block. */
+function fitDisk(
+  name: string,
+  c: { cy: number; r: number },
+  exs: { li: number; ei: number; name: string }[],
+): Placed {
+  const spanBot = c.cy + c.r - PAD_BOT;
+  for (let fs = NAME_FS; fs >= NAME_FLOOR; fs -= 1) {
+    for (const lines of [[name], balancedSplit(name) ?? [name]]) {
+      const nameW = Math.max(...lines.map((l) => l.length * fs * CHAR_W));
+      const nameH = lines.length * fs * LINE_H;
+      const rows = exs.length
+        ? packRows(exs, bandWidth(c, c.cy + nameH / 2 + GAP_NE, PAD_EX))
+        : [];
+      const blockH = nameH + (rows.length ? GAP_NE : 0) + rows.length * PILL_H;
+      const nameTop = c.cy - blockH / 2;
+      if (bandWidth(c, nameTop - nameAsc(fs), PAD_NAME) >= nameW && nameTop + blockH <= spanBot) {
+        return { lines, fs, nameTop, rows, exTop: nameTop + nameH + (rows.length ? GAP_NE : 0) };
+      }
+    }
+  }
+  const lines = balancedSplit(name) ?? [name];
+  const nameH = lines.length * NAME_FLOOR * LINE_H;
+  const rows = exs.length ? packRows(exs, bandWidth(c, c.cy + 20, PAD_EX)) : [];
+  const blockH = nameH + (rows.length ? GAP_NE : 0) + rows.length * PILL_H;
+  const nameTop = c.cy - blockH / 2;
+  return { lines, fs: NAME_FLOOR, nameTop, rows, exTop: nameTop + nameH + (rows.length ? GAP_NE : 0) };
+}
+
 function layout(): { names: PlacedName[]; pills: PlacedPill[] } {
   const names: PlacedName[] = [];
   const pills: PlacedPill[] = [];
@@ -158,44 +243,23 @@ function layout(): { names: PlacedName[]; pills: PlacedPill[] } {
       continue;
     }
 
-    // The name + its example rows live in the crescent between this ring's
-    // apex and the next ring's apex (the innermost ring uses its own disk).
-    const spanTop = isDisk ? topEdge(i) + 26 : topEdge(i);
-    const spanBot = isDisk ? c.cy + c.r - 22 : topEdge(i + 1);
-    const H = spanBot - spanTop;
-    const chordW = (y: number) => chordAt(c, y) * 0.9;
-
-    // Pass A — fit the name high in the crescent to size the block.
-    let nm = fitName(AI_LEVELS[i].name, chordW(spanTop + 0.36 * H));
-    let nameH = nm.lines.length * nm.fs * LINE_H;
-    let rows = exs.length ? packRows(exs, chordW(spanTop + 0.66 * H)) : [];
-    let blockH = nameH + (rows.length ? 10 : 0) + rows.length * PILL_H;
-    let blockTop = spanTop + Math.max(6, (H - blockH) / 2);
-
-    // Pass B — refit at the width the name actually gets: its top line sits
-    // higher than pass A guessed, where the chord is narrower.
-    nm = fitName(AI_LEVELS[i].name, chordW(blockTop + (nm.fs * LINE_H) / 2));
-    nameH = nm.lines.length * nm.fs * LINE_H;
-    rows = exs.length
-      ? packRows(exs, chordW(Math.min(blockTop + nameH + PILL_H, spanBot - PILL_H / 2)))
-      : [];
-    blockH = nameH + (rows.length ? 10 : 0) + rows.length * PILL_H;
-    blockTop = spanTop + Math.max(6, (H - blockH) / 2);
+    const placed = isDisk
+      ? fitDisk(AI_LEVELS[i].name, c, exs)
+      : fitCrescent(AI_LEVELS[i].name, c, topEdge(i), topEdge(i + 1), exs);
 
     names.push({
       i,
-      lines: nm.lines,
-      fs: nm.fs,
+      lines: placed.lines,
+      fs: placed.fs,
       x: c.cx,
-      yTop: blockTop,
+      yTop: placed.nameTop,
       light: redOpacity(i) >= 0.45,
     });
 
-    const exStart = blockTop + nameH + (rows.length ? 10 : 0);
-    rows.forEach((row, ri) => {
+    placed.rows.forEach((row, ri) => {
       const total = row.reduce((s, it) => s + it.w, 0) + (row.length - 1) * EX_GAP;
       let x = c.cx - total / 2;
-      const y = exStart + ri * PILL_H + PILL_H / 2;
+      const y = placed.exTop + ri * PILL_H + PILL_H / 2;
       for (const it of row) {
         pills.push({ li: it.li, ei: it.ei, name: it.name, x: x + it.w / 2, y, w: it.w });
         x += it.w + EX_GAP;

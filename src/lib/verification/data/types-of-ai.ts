@@ -206,4 +206,13 @@ export const TYPES_OF_AI_COPY = {
     "Tap any system to see what it is and why it sits there — not one ring deeper.",
   legend:
     "Each ring contains the next; a system sits at the deepest ring it belongs to. Tap a system to open it; drag or use +/− for a closer look.",
+  // The nested-containment picture of the field is canonical; the two extra
+  // inner rings (language model, transformer) and the example systems are ours.
+  source: {
+    label: "Nesting after",
+    pub: "Towards Data Science",
+    title:
+      "“Artificial Intelligence, Machine Learning, Deep Learning, and Generative AI — Clearly Explained”",
+    href: "https://towardsdatascience.com/artificial-intelligence-machine-learning-deep-learning-and-generative-ai-clearly-explained/",
+  },
 } as const;

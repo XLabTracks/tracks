@@ -533,6 +533,19 @@ export function TypesOfAi(_: VerificationWidgetProps) {
           </div>
         </div>
       </div>
+
+      <p className="text-muted-foreground/80 mt-3 text-[11px]">
+        {C.source.label}{" "}
+        <a
+          href={C.source.href}
+          target="_blank"
+          rel="noreferrer"
+          className="hover:text-foreground underline underline-offset-2"
+        >
+          {C.source.pub}
+        </a>
+        , {C.source.title}.
+      </p>
     </div>
   );
 }

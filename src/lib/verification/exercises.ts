@@ -34,6 +34,7 @@ export const verificationExercises: VerificationExerciseDef[] = [
   { id: "report-constructor", title: "One Inspection, Three Readers", bridged: true },
   { id: "context-distiller", title: "The Distiller", bridged: true },
   { id: "what-do-they-say", title: "Why Are We Concerned About Superintelligence?", bridged: false },
+  { id: "types-of-ai", title: "The Types of AI", bridged: false },
   { id: "precedent-cases", title: "Did the Regime Hold?", bridged: true },
   // The drill benches. Bridged: the deck reports complete when the last step
   // of its last bench is committed.

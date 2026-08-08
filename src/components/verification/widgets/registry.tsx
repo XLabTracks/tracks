@@ -17,6 +17,7 @@ import { PolicyPlot } from "./policy-plot";
 import { MechanismSort, MechanismSortReveal } from "./mechanism-sort";
 import { PrecedentCases } from "./precedent-cases";
 import { WhatDoTheySay } from "./what-do-they-say";
+import { TypesOfAi } from "./types-of-ai";
 
 /**
  * Native React widgets ported from the standalone HTML pages, keyed by the same
@@ -49,6 +50,7 @@ export const verificationWidgets: Record<
   "mechanism-sort-reveal": MechanismSortReveal,
   "precedent-cases": PrecedentCases,
   "what-do-they-say": WhatDoTheySay,
+  "types-of-ai": TypesOfAi,
 };
 
 export function getVerificationWidget(

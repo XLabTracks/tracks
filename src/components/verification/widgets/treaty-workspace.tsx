@@ -78,22 +78,29 @@ export function TreatyWorkspace({ onComplete }: VerificationWidgetProps) {
       {/* Which pages of the practice guide to read is the reading card in the
           lesson body, and only there. Two places that name pages are two
           places to keep in step. */}
-      <div className="border-border bg-card rounded-xl border p-5">
+      <div className="border-border bg-card space-y-3 rounded-xl border p-5">
         <p className="text-sm">
           Open{" "}
           <a
             href={`/tracks/verification/policy-scoping/${TREATY.paperSlug}`}
             className="text-primary font-medium underline-offset-4 hover:underline"
           >
-            the treaty
+            the draft agreement
           </a>{" "}
-          by the {TREATY.authors}. Do not read it end to end. Page through it, one
-          Article at a time, until you can answer the questions below.
+          prepared by the {TREATY.authors}.
         </p>
-        <p className="text-muted-foreground mt-3 text-sm">
-          Answer any {WORKSPACE_REQUIRED} of the {WORKSPACE_QUESTIONS.length}.
-          Read all four first — they are what you are looking for while you page
-          through.
+        <p className="text-muted-foreground text-sm">
+          Participants are not expected to read the document continuously from
+          beginning to end. Instead, examine it article by article, focusing on
+          the questions below.
+        </p>
+        {/* The counts are read from the data rather than spelled out, so a
+            fifth question or a changed threshold cannot leave this sentence
+            claiming otherwise. */}
+        <p className="text-muted-foreground text-sm">
+          Read all {WORKSPACE_QUESTIONS.length} questions before beginning the
+          examination of the agreement. Answer any {WORKSPACE_REQUIRED} of the{" "}
+          {WORKSPACE_QUESTIONS.length}.
         </p>
       </div>
 
@@ -110,9 +117,20 @@ export function TreatyWorkspace({ onComplete }: VerificationWidgetProps) {
           <div key={q.id} className="border-border bg-card rounded-xl border p-5">
             <h3 className="text-base font-semibold">{q.title}</h3>
             <p className="mt-1 text-sm">{q.prompt}</p>
-            {q.hint && (
-              <p className="text-muted-foreground mt-2 font-mono text-xs">
-                {q.hint}
+            {/* The card is not-prose, so the list carries its own markers and
+                indent — preflight has taken both away. */}
+            {q.items && (
+              <ul className="marker:text-muted-foreground mt-2 list-disc space-y-1 pl-5 text-sm">
+                {q.items.map((item) => (
+                  <li key={item}>{item}</li>
+                ))}
+              </ul>
+            )}
+            {q.after && <p className="mt-2 text-sm">{q.after}</p>}
+            {q.note && (
+              <p className="text-muted-foreground mt-2 text-xs">
+                <span className="font-medium">{q.note.label}:</span>{" "}
+                {q.note.text}
               </p>
             )}
 

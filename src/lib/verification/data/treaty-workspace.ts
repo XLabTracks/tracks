@@ -27,48 +27,77 @@
  */
 
 export interface WorkspaceQuestion {
+  /** Storage key under `vt-workspace:1.1`. Permanent — never renumber it. */
   id: string;
   title: string;
+  /** The lead paragraph, which may introduce `items`. */
   prompt: string;
-  /** Where to start paging. A place to look, never an answer. */
-  hint?: string;
+  /** The list the prompt introduces, where it has one. */
+  items?: string[];
+  /** What follows that list. */
+  after?: string;
+  /**
+   * A pointer, never an answer. The label is per question because they are
+   * not the same kind of pointer: "Guidance" is how to look, "Relevant
+   * provision" is where.
+   */
+  note?: { label: string; text: string };
 }
 
 export const TREATY = {
   paperSlug: "prevent-premature-asi-treaty",
   title:
     "An International Agreement to Prevent the Premature Creation of Artificial Superintelligence",
-  authors: "MIRI Technical Governance Team — Scher, Abecassis, Barnett & Abeyta",
+  authors:
+    "MIRI Technical Governance Team — Scher, Abecassis, Barnett, and Abeyta",
 } as const;
 
 export const WORKSPACE_QUESTIONS: WorkspaceQuestion[] = [
   {
     id: "binding-line",
-    title: "1. Mark up the preamble and Article I",
+    title: "1. Distinguish between non-binding and binding provisions",
     prompt:
-      "Where does the text stop being non-binding and start binding somebody? Mark the line. Then say what told you — what is different about the two sides of it?",
-    hint: "Preamble and ARTICLE I. Read the verbs, not the headings.",
+      "Examine the Preamble and Article I. Identify and mark the exact point at which the text begins to impose a binding obligation on a specific actor. Explain which grammatical or legal features distinguish the provisions on either side of this point.",
+    note: {
+      label: "Guidance",
+      text: "Focus on the verbs used rather than on the section headings.",
+    },
   },
   {
     id: "three-duties",
-    title: "2. Take one prohibition apart",
+    title: "2. Analyse the components of a prohibition",
     prompt:
-      "Pick any one prohibition. What must a Party DO, what must it REFRAIN from, and what must it PERMIT? Not every prohibition has all three.",
-    hint: "ARTICLE IV is the obvious one; V, VI and VIII also work.",
+      "Select one prohibition contained in Article IV, V, VI, or VIII. Identify:",
+    items: [
+      "what a Party is required to do;",
+      "what a Party is required to refrain from doing;",
+      "what a Party is required to permit.",
+    ],
+    after:
+      "A prohibition may not contain all three types of requirement. Support your answer with references to the relevant text.",
   },
   {
     id: "where-method",
-    title: "3. Where is the method of verification?",
+    title: "3. Locate the verification method",
     prompt:
-      "For the rule you just took apart: is the way compliance gets checked written into the Article, pushed into an annex, or left for a body to decide later? Say which, and quote the words that tell you.",
-    hint: "Compare ARTICLE VII with ARTICLE IX.",
+      "For the prohibition selected in Question 2, determine where the method for verifying compliance is established. Is it:",
+    items: [
+      "specified in the relevant article;",
+      "set out in an annex;",
+      "or left to an institution or other body to determine?",
+    ],
+    after: "Support your conclusion with a quotation from the agreement.",
+    note: { label: "Guidance", text: "Compare Articles VII and IX." },
   },
   {
     id: "force-and-exit",
-    title: "4. When does it start, and how do you leave?",
+    title: "4. Examine entry into force and withdrawal",
     prompt:
-      "When does this agreement enter into force, and what must a Party do to withdraw? Compare what you find with the specimen clauses in Annex E of the guide.",
-    hint: "ARTICLE XV — Withdrawal and Duration.",
+      "Determine when the agreement enters into force and describe the procedure by which a Party may withdraw from it. Identify any applicable conditions or notice periods. Compare these provisions with the model clauses in Annex E of the Practice Guide to International Treaties.",
+    note: {
+      label: "Relevant provision",
+      text: "Article XV, Withdrawal and Duration.",
+    },
   },
 ];
 

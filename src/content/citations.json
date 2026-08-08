@@ -519,6 +519,12 @@
       "title": "Treaty Builder",
       "about": "An interactive tool for assembling an AI treaty proposal from seven governance building blocks, with a comparison view across existing proposals and a generated draft to take away.",
       "authors": "Global Governance of AI"
+    },
+    "https://tlc.texas.gov/docs/legref/readingabill.pdf": {
+      "title": "Reading Statutes and Bills",
+      "about": "A drafting office's short guide to reading legal text: how codes and statutes are organised, the parts of a statute and of a bill, tips for reading each, and three practice exercises.",
+      "authors": "Texas Legislative Council, Research Division",
+      "date": "85th Legislature"
     }
   },
   "pending": [

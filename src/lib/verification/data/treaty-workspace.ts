@@ -345,27 +345,30 @@ export const WORKSPACE_TASKS: WorkspaceTask[] = [
     points: 5,
     key: [
       {
-        text: "A worked example. Article VII's open list is the usual target, and a rewrite that closes it reads roughly: “Each Party shall permit, at every declared site, at minimum (a) continuous power and network telemetry delivered to the CTB, and (b) in-person inspection quarterly on no more than 72 hours' notice. The CTB may add methods; it may not remove (a) or (b) except by a written unanimous decision of the Executive Council.”",
+        text: "Article VII is soft in three ways at once, and naming all three is the first half of the task: it reaches only DECLARED sites, its method list is open (“may include, but are not limited to”), and the CTB may change the methods later.",
         pointer: "ARTICLE VII",
       },
       {
-        text: "That rewrite's cost, stated: datacentre telemetry is commercially revealing — utilisation is a business secret — so this is the confidentiality trade at full intensity, and it is the clause a party with a competitive AI industry is likeliest to refuse.",
+        text: "The third agreement closes that same hole differently, and reading how is worth more than inventing a clause: it makes a named mechanism mandatory — “States Parties agree to ensure compliance … through a hardware-enabled verification mechanism … described in Annex B”, and “The Agency shall install … one or more neutral data centers” — so the method is specified rather than left to later discretion.",
+        pointer: "Global Governance articles 1.4.2, 1.6.3",
       },
       {
-        text: "The rewrite names the evidence and not only the duty: what is produced, by whom, how often, and who may see it. A rewrite missing any of those four has not closed the hole.",
+        text: "But that drafter is just as permissive elsewhere: article 1.5.2 lets the Agency “take any of the following measures, independently or in combination”. A comparison that concludes one treaty is rigorous and the other loose has misread both.",
+        pointer: "Global Governance article 1.5.2",
       },
       {
-        text: "The strongest answers notice the fix MOVES the problem rather than removing it — closing the method list transfers the argument to what counts as a declared site.",
+        text: "Whatever the tightening, its cost lands in the same place: continuous telemetry and on-site access expose commercially valuable information, which is why a party with a competitive AI industry resists exactly the clause that would make the rule checkable.",
       },
       {
-        text: "Other legitimate targets: the undefined sufficiency of evidence, the unnamed payer, and the absence of any consequence attached to a specific finding.",
-        open: true,
+        text: "The fix moves the problem rather than removing it. Close the method list and the argument moves to what counts as a declared site — which is where Article VII was leaking in the first place.",
+        pointer: "ARTICLE VII",
       },
     ],
     marking: [
-      "The worked example is one answer, not the answer. A different provision, repaired with the same four elements, scores the same.",
-      "A rewrite that would plainly be refused by one of the two named parties is a correct finding provided the answer says so — that is the cost being named, not a defect in the rewrite.",
-      "Refuse the point for a rewrite that only adds the word “verifiable” to the existing clause.",
+      "A repair must say what evidence is produced, by whom, how often, and who may see it. A rewrite missing any of those four has not closed the hole — but that is a marking test, so apply it yourself rather than reading it out.",
+      "Article VII is the commonest target, not the required one. The undefined sufficiency of evidence, the unnamed payer of the monitoring, and the absence of a consequence attached to a specific finding are all legitimate.",
+      "A learner who adapts the Global Governance drafting instead of writing their own has done the task, provided they say what it costs. Borrowing a real solution is the skill; inventing treaty language is not what is being tested.",
+      "Refuse the point for a rewrite that only inserts the word “verifiable” into the existing clause.",
     ],
   },
 ];

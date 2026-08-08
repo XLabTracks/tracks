@@ -388,6 +388,18 @@
   border-top: var(--hairline) solid var(--border);
 }
 
+/* The rules separate rows from each other; the first row has the lead above
+   it, not another row, and a rule there boxed the heading into a strip of its
+   own instead of letting it open the block. */
+:root[data-theme] .lesson-body .vt-objectives :is(ul, ol) > li:first-child {
+  border-top: 0;
+  padding-top: 0.25rem;
+}
+
+:root[data-theme] .lesson-body .vt-objectives :is(ul, ol) > li:first-child::before {
+  top: 0.25rem;
+}
+
 /* What the prose plugin would have set, restated because not-prose turned it
    off: the column's emphasis weight, so a bold lead in an objective does not
    come out at the browser's 700 beside the paragraph's 600. */

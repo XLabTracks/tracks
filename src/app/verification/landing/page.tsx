@@ -108,10 +108,6 @@ export default function Page() {
         <section className="band">
           <div className="wrap">
             <h2>What this course is</h2>
-            <p className="intro">
-              Four sections, each one a question a prospective learner asks
-              before they start. Open whichever you came for.
-            </p>
             <CourseOverview />
           </div>
         </section>

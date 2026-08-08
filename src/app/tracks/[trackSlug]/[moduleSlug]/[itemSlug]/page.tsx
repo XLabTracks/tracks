@@ -366,19 +366,6 @@ async function PaperItemPage({
               <ExternalLink className="size-3" aria-hidden />
             </a>
           )}
-          {/* The terms the reproduction stands on. Authors and title are
-              already above; a CC licence needs all three named together, and
-              this page carries the whole work. */}
-          {paper.license && (
-            <a
-              href={paper.license.href}
-              target="_blank"
-              rel="noreferrer"
-              className="hover:text-destructive font-mono text-xs transition-colors"
-            >
-              {paper.license.label}
-            </a>
-          )}
           {source.hasFootnotes && <SidenotesToggle />}
           {/* Margin display of the reader's own highlight notes — only
               signed-in readers can have any. */}

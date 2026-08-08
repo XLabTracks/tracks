@@ -3165,10 +3165,6 @@ export const papers: Paper[] = [
     source: { kind: "arxiv", arxivId: "2511.10783v3" },
     optional: true,
     estimatedMinutes: 75,
-    license: {
-      label: "CC BY 4.0",
-      href: "https://creativecommons.org/licenses/by/4.0/",
-    },
   },
   {
     id: "v-paper-miotti-treaty",
@@ -3179,9 +3175,5 @@ export const papers: Paper[] = [
     source: { kind: "arxiv", arxivId: "2311.10748v2" },
     optional: true,
     estimatedMinutes: 20,
-    license: {
-      label: "CC BY 4.0",
-      href: "https://creativecommons.org/licenses/by/4.0/",
-    },
   },
 ];

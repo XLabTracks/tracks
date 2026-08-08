@@ -265,18 +265,6 @@ export interface Paper {
   optional?: true;
   estimatedMinutes?: number;
   /**
-   * The terms this reproduction stands on, printed in the header beside the
-   * source link. Set it whenever the course reproduces a work in full under an
-   * open licence: attribution for a CC licence is author + title + licence,
-   * and the header already carries the first two, so without this the page is
-   * reproducing the whole text while naming only two thirds of the credit.
-   *
-   * It is deliberately declared here and not read from the artifact. Whether a
-   * work may be reproduced is a content decision somebody made, not a field a
-   * converter can infer — and the arXiv converter does not capture it at all.
-   */
-  license?: { label: string; href: string };
-  /**
    * Sidebar-only nesting: id of another item in the same module (usually the
    * section's outline lesson) this item is a subsection of. The referenced
    * item must appear earlier in the module's itemIds. Presentation only —

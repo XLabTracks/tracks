@@ -163,7 +163,7 @@ export const verificationExercises: Exercise[] = [
   {
     id: "v-task-intuitions-2",
     type: "writing-prompt",
-    prompt: "Optional task — Essay: what does success look like to you?\n\nIn 500–800 words, describe your own success scenario: the end state (what the world looks like, and roughly when); the agreement that gets there (who signs, what is restricted); and what verification would need to cover for that agreement to hold. Keep this essay. You will re-read it at the end of the track.",
+    prompt: "Optional task — Essay: what does success look like to you?\n\nIn 500–800 words, describe your own success scenario: the end state (what the world looks like, and roughly when); the agreement that gets there (who signs, what is restricted); and what verification would need to cover for that agreement to hold.",
     format: "free-form",
     optional: true,
   },

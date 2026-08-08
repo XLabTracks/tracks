@@ -60,6 +60,10 @@ window.VT_CHROME = {
     {
       "label": "Privacy Policy",
       "href": "https://privacy.uchicago.edu/privacy-policy/"
+    },
+    {
+      "label": "Accessibility",
+      "href": "accessibility"
     }
   ],
   "copyright": "© 2026."

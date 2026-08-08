@@ -589,25 +589,11 @@
 --------------------------------------------------------------------------- */
 
 (function () {
-  var C = window.COURSE, S = window.SKILLS, VT = window.VT;
+  var C = window.COURSE, VT = window.VT;
   if (!C || !VT) return;
-  var esc = VT.esc;
 
   VT.mountChrome('/verification/landing');
   VT.mountFoot();
-
-  /* Objectives come from the graph's own list, so the promises here cannot
-     drift from the map beside them. */
-  var ul = document.getElementById('objectives');
-  if (ul && S) {
-    ul.innerHTML = S.objectives.map(function (o, i) {
-      return '<li><span class="n" aria-hidden="true">' + String(i + 1).padStart(2, '0') +
-        '</span><span>' + esc(o) + '</span></li>';
-    }).join('');
-    // The column-fill in landing.css needs the row count; it is the list's,
-    // so it is set here rather than guessed by a hardcoded CSS value.
-    ul.style.setProperty('--rows', String(Math.ceil(S.objectives.length / 2)));
-  }
 
   /* The hero's two ways in and its stat row are written in landing.html and
      stay there. They are the course's pitch, not a readout of this browser's

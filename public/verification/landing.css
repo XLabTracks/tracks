@@ -31,25 +31,6 @@ section.band > .wrap { padding-top: 52px; padding-bottom: 52px; }
 section.band h2 { font-size: var(--fs-3xl); }
 section.band .intro { max-width: 62ch; margin-top: 12px; color: var(--muted-foreground); }
 
-.objectives {
-  display: grid;
-  gap: 14px 40px;
-  margin-top: 26px;
-  list-style: none;
-}
-/* Two columns are read down the left one first, so the list fills by column:
-   1-2-3 down the left, 4-5-6 down the right. That needs an explicit row count
-   (--rows, set from the item count in landing.js) — column flow with no rows
-   declared puts every item in one row instead. */
-@media (min-width: 640px) {
-  .objectives {
-    grid-template-columns: 1fr 1fr;
-    grid-template-rows: repeat(var(--rows, 3), auto);
-    grid-auto-flow: column;
-  }
-}
-.objectives li { display: flex; gap: 12px; }
-.objectives .n { font-family: var(--mono); font-size: var(--fs-md); color: var(--muted-foreground); }
 
 /* ---------- module cards ---------- */
 

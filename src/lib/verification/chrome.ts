@@ -64,6 +64,10 @@ export const FOOT: ChromeLink[] = [
   // The University of Chicago policy, which xrisk.uchicago.edu itself links
   // as its Privacy Policy — the org's established choice, not a new one.
   { label: "Privacy Policy", href: "https://privacy.uchicago.edu/privacy-policy/" },
+  // Reachable from every page, which is the point of it: somebody who needs
+  // the high-contrast theme or the whole-lesson toggle should not have to
+  // find them by accident.
+  { label: "Accessibility", href: "accessibility" },
 ];
 
 export const COPYRIGHT = "© 2026.";

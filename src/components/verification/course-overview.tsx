@@ -30,19 +30,19 @@ export function CourseOverview() {
         <details
           key={section.id}
           id={`overview-${section.id}`}
-          className="border-primary bg-card group rounded-xl border-2 transition-shadow duration-200 open:shadow-soft-md"
+          className="border-border bg-card group rounded-xl border transition-shadow duration-200 open:shadow-soft-md"
         >
           <summary className="flex cursor-pointer list-none items-start gap-3 p-4 select-none [&::-webkit-details-marker]:hidden">
             <ChevronRight
               aria-hidden
-              className="text-muted-foreground mt-1 size-4 shrink-0 transition-transform duration-200 group-open:rotate-90"
+              className="text-primary mt-1 size-4 shrink-0 transition-transform duration-200 group-open:rotate-90"
             />
             <span className="text-foreground text-base font-semibold">
               {section.title}
             </span>
           </summary>
 
-          <div className="border-primary/35 border-t px-4 pt-3.5 pb-4 pl-11">
+          <div className="border-border border-t px-4 pt-3.5 pb-4 pl-11">
             {section.kind === "prose" ? (
               <div className="flex flex-col gap-3.5">
                 {section.paragraphs.map((p) => (

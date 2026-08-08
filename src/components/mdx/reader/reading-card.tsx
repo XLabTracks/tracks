@@ -71,8 +71,22 @@ export function ReadingCard({
             </span>
           </a>
         </p>
+        {/* The shell is not-prose, so preflight's reset is all the body has:
+            a card whose blurb names which pages to read renders as one run-on
+            line, bullets and gaps gone. These restore the rhythm for the
+            markdown a card actually receives — the same set, and the same
+            reasoning, as the Fold and Callout bodies. */}
         {children ? (
-          <div className="text-muted-foreground leading-relaxed">{children}</div>
+          <div
+            className={
+              "text-muted-foreground leading-relaxed break-words " +
+              "[&>*+*]:mt-2 [&_ul]:list-disc [&_ol]:list-decimal [&_ul]:pl-5 [&_ol]:pl-5 " +
+              "[&_li]:marker:text-muted-foreground [&_li+li]:mt-1.5 " +
+              "[&_strong]:text-foreground [&_strong]:font-semibold"
+            }
+          >
+            {children}
+          </div>
         ) : null}
         {metaLine ? (
           <p className="text-muted-foreground font-mono text-xs">{metaLine}</p>

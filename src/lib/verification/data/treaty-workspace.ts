@@ -13,7 +13,10 @@
  * needs, and the reader chunks by Article, so "page through until you can
  * answer" is a real instruction rather than a hope. What is read properly is
  * the reference: three short passages of a diplomatic practice guide saying
- * what the parts of a treaty are and where obligations may live.
+ * what the parts of a treaty are and where obligations may live. Those live
+ * in the lesson body as a ReadingCard, not here — a work the course assigns
+ * belongs where the other assigned readings are, and naming the pages in two
+ * places is how the two come to disagree about them.
  *
  * Question 1 carries the transferable skill and is first for that reason. The
  * test is grammatical, not thematic — a preambulatory clause opens with a
@@ -31,44 +34,12 @@ export interface WorkspaceQuestion {
   hint?: string;
 }
 
-export interface WorkspaceReading {
-  label: string;
-  what: string;
-  href: string;
-}
-
 export const TREATY = {
   paperSlug: "prevent-premature-asi-treaty",
   title:
     "An International Agreement to Prevent the Premature Creation of Artificial Superintelligence",
   authors: "MIRI Technical Governance Team — Scher, Abecassis, Barnett & Abeyta",
 } as const;
-
-const GUIDE =
-  "https://www.eda.admin.ch/content/dam/eda/en/documents/publications/Voelkerrecht/Practice-Guide-to-International-Treatie-2023_EN.pdf";
-
-/**
- * The reference, read properly before the questions. Page numbers are the
- * guide's own printed numbers, which run one ahead of the PDF page index —
- * cite the printed ones, they are what a reader sees on the page.
- */
-export const WORKSPACE_READING: WorkspaceReading[] = [
-  {
-    label: "Practice Guide to International Treaties — pp. 13–15",
-    what: "What a treaty is made of: title and preamble, the main body, then the final clauses — dispute settlement, entry into force, provisional application, denunciation and withdrawal — and annexes.",
-    href: GUIDE,
-  },
-  {
-    label: "the same guide — p. 42",
-    what: "Interpretation: Articles 31–33 of the Vienna Convention, and the order they work in — ordinary meaning, in context, in the light of object and purpose.",
-    href: GUIDE,
-  },
-  {
-    label: "the same guide — Annex E, p. 47",
-    what: "Specimen final clauses — signature, ratification, accession, entry into force — written out as they actually appear.",
-    href: GUIDE,
-  },
-];
 
 export const WORKSPACE_QUESTIONS: WorkspaceQuestion[] = [
   {

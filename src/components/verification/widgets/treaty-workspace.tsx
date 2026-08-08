@@ -6,7 +6,6 @@ import type { VerificationWidgetProps } from "../kit/types";
 import {
   TREATY,
   WORKSPACE_QUESTIONS,
-  WORKSPACE_READING,
   WORKSPACE_REQUIRED,
 } from "@/lib/verification/data/treaty-workspace";
 
@@ -73,25 +72,13 @@ export function TreatyWorkspace({ onComplete }: VerificationWidgetProps) {
 
   return (
     <div className="not-prose my-6 space-y-4">
+      {/* The practice-guide passages are the reading card in the lesson body
+          above, not a second list here: one work, one place that says which
+          pages, so the two cannot drift into disagreeing about them. */}
       <div className="border-border bg-card rounded-xl border p-5">
-        <p className="text-sm font-medium">Read this first</p>
-        <ul className="mt-2 space-y-2">
-          {WORKSPACE_READING.map((r) => (
-            <li key={r.label} className="text-sm">
-              <a
-                href={r.href}
-                target="_blank"
-                rel="noopener"
-                className="text-primary font-medium underline-offset-4 hover:underline"
-              >
-                {r.label}
-              </a>
-              <span className="text-muted-foreground"> — {r.what}</span>
-            </li>
-          ))}
-        </ul>
-        <p className="text-muted-foreground mt-4 text-sm">
-          Then open{" "}
+        <p className="text-sm font-medium">Before you start</p>
+        <p className="text-muted-foreground mt-2 text-sm">
+          Read the three passages of the practice guide above, then open{" "}
           <a
             href={`/tracks/verification/policy-scoping/${TREATY.paperSlug}`}
             className="text-primary font-medium underline-offset-4 hover:underline"

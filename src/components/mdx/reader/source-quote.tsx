@@ -61,6 +61,45 @@ export function SourceQuote({
 }
 
 /**
+ * A titled box the source itself draws — a sidebar, a key, a reference panel
+ * printed inside the pages being reproduced. Not an editorial aside: a
+ * Callout would put the course's own ⓘ on somebody else's figure.
+ *
+ * The header band is the treatment `.lesson-body table` already gives a
+ * thead: a --muted ground closed by a 2px --primary rule, inside a hairline
+ * that runs all four sides. Painted or hairline, never half of each.
+ *
+ * `columns` lays the body in two, filling down then across — which is the
+ * order a two-column key on a printed page reads, so a six-item list comes
+ * out in the source's own arrangement rather than transposed.
+ */
+export function SourceBox({
+  title,
+  columns = false,
+  children,
+}: {
+  title: string;
+  columns?: boolean;
+  children: ReactNode;
+}) {
+  return (
+    <div className="not-prose border-border my-4 overflow-hidden rounded-lg border">
+      <p className="bg-muted text-foreground border-primary border-b-2 px-3 py-2 text-sm font-semibold">
+        {title}
+      </p>
+      <div
+        className={
+          "mdx-body px-3 py-2.5 text-sm leading-relaxed [&>*+*]:mt-2 " +
+          (columns ? "sm:columns-2 sm:gap-6" : "")
+        }
+      >
+        {children}
+      </div>
+    </div>
+  );
+}
+
+/**
  * A citation riding with the passage it belongs to, rather than sitting in a
  * bibliography nobody opens. Stays selectable — a citation is the one thing a
  * reader means to copy.

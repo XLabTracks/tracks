@@ -22,31 +22,33 @@ export interface OrgMark {
   tokens: string[];
   /** Full name, used as the icon's tooltip and alt text. */
   label: string;
+  /** Short display name, for the in-cell listing. */
+  short: string;
   /** Square icon filename under /verification/logos/icons, if one exists. */
   icon?: string;
 }
 
 export const ORG_MARKS: OrgMark[] = [
-  { id: "openai", tokens: ["OpenAI"], label: "OpenAI", icon: "openai.svg" },
-  { id: "anthropic", tokens: ["Anthropic"], label: "Anthropic", icon: "anthropic.png" },
-  { id: "deepmind", tokens: ["DeepMind"], label: "Google DeepMind", icon: "deepmind.ico" },
-  { id: "nvidia", tokens: ["NVIDIA"], label: "NVIDIA", icon: "nvidia.ico" },
-  { id: "rand", tokens: ["RAND"], label: "RAND Corporation", icon: "rand.svg" },
-  { id: "nist", tokens: ["NIST"], label: "NIST", icon: "nist.ico" },
-  { id: "cnas", tokens: ["CNAS"], label: "CNAS", icon: "cnas.png" },
-  { id: "cset", tokens: ["CSET"], label: "CSET, Georgetown", icon: "cset.ico" },
-  { id: "govai", tokens: ["GovAI"], label: "GovAI", icon: "govai.jpg" },
-  { id: "epoch", tokens: ["Epoch AI"], label: "Epoch AI", icon: "epoch.svg" },
-  { id: "metr", tokens: ["METR"], label: "METR", icon: "metr.png" },
-  { id: "apollo", tokens: ["Apollo Research"], label: "Apollo Research", icon: "apollo.png" },
-  { id: "flexheg", tokens: ["FlexHEG"], label: "FlexHEG", icon: "flexheg.ico" },
-  { id: "aria", tokens: ["ARIA"], label: "ARIA (UK)", icon: "aria.png" },
-  { id: "bis", tokens: ["Bureau of Industry and Security"], label: "US Bureau of Industry and Security", icon: "bis.ico" },
-  { id: "iaea", tokens: ["IAEA"], label: "IAEA", icon: "iaea.ico" },
-  { id: "opcw", tokens: ["OPCW"], label: "OPCW", icon: "opcw.png" },
-  { id: "caisi", tokens: ["CAISI"], label: "US CAISI (NIST)", icon: "nist.ico" },
-  { id: "ukaisi", tokens: ["UK AI Security Institute"], label: "UK AI Security Institute", icon: "ukaisi.png" },
-  { id: "intl-aisi", tokens: ["International Network of AI Safety"], label: "International Network of AI Safety Institutes" },
+  { id: "openai", tokens: ["OpenAI"], label: "OpenAI", short: "OpenAI", icon: "openai.svg" },
+  { id: "anthropic", tokens: ["Anthropic"], label: "Anthropic", short: "Anthropic", icon: "anthropic.png" },
+  { id: "deepmind", tokens: ["DeepMind"], label: "Google DeepMind", short: "DeepMind", icon: "deepmind.ico" },
+  { id: "nvidia", tokens: ["NVIDIA"], label: "NVIDIA", short: "NVIDIA", icon: "nvidia.ico" },
+  { id: "rand", tokens: ["RAND"], label: "RAND Corporation", short: "RAND", icon: "rand.svg" },
+  { id: "nist", tokens: ["NIST"], label: "NIST", short: "NIST", icon: "nist.ico" },
+  { id: "cnas", tokens: ["CNAS"], label: "CNAS", short: "CNAS", icon: "cnas.png" },
+  { id: "cset", tokens: ["CSET"], label: "CSET, Georgetown", short: "CSET", icon: "cset.ico" },
+  { id: "govai", tokens: ["GovAI"], label: "GovAI", short: "GovAI", icon: "govai.jpg" },
+  { id: "epoch", tokens: ["Epoch AI"], label: "Epoch AI", short: "Epoch AI", icon: "epoch.svg" },
+  { id: "metr", tokens: ["METR"], label: "METR", short: "METR", icon: "metr.png" },
+  { id: "apollo", tokens: ["Apollo Research"], label: "Apollo Research", short: "Apollo", icon: "apollo.png" },
+  { id: "flexheg", tokens: ["FlexHEG"], label: "FlexHEG", short: "FlexHEG", icon: "flexheg.ico" },
+  { id: "aria", tokens: ["ARIA"], label: "ARIA (UK)", short: "ARIA", icon: "aria.png" },
+  { id: "bis", tokens: ["Bureau of Industry and Security"], label: "US Bureau of Industry and Security", short: "US BIS", icon: "bis.ico" },
+  { id: "iaea", tokens: ["IAEA"], label: "IAEA", short: "IAEA", icon: "iaea.ico" },
+  { id: "opcw", tokens: ["OPCW"], label: "OPCW", short: "OPCW", icon: "opcw.png" },
+  { id: "caisi", tokens: ["CAISI"], label: "US CAISI (NIST)", short: "CAISI", icon: "nist.ico" },
+  { id: "ukaisi", tokens: ["UK AI Security Institute"], label: "UK AI Security Institute", short: "UK AISI", icon: "ukaisi.png" },
+  { id: "intl-aisi", tokens: ["International Network of AI Safety"], label: "International Network of AI Safety Institutes", short: "Int’l Network" },
 ];
 
 const ICON_BASE = "/verification/logos/icons/";

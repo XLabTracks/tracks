@@ -11,10 +11,7 @@ import {
   LANDSCAPE_ROWS as ROWS,
   type LandscapeCell,
 } from "@/lib/verification/data/verification-landscape";
-import {
-  iconMarksForEffs,
-  iconSrc,
-} from "@/lib/verification/data/landscape-logos";
+import { marksForEffs } from "@/lib/verification/data/landscape-logos";
 import type { VerificationWidgetProps } from "../kit/types";
 
 /**
@@ -24,9 +21,9 @@ import type { VerificationWidgetProps } from "../kit/types";
  * numeral in the bottom-right corner, the hatched no-activity cell, and the
  * detail panel below the grid.
  *
- * The company logos sit directly in the cells — no chip, no box, no halo, just
- * the marks — so the grid shows who works where at a glance, with the numeral
- * kept as the non-colour channel.
+ * Who works where is a plain text list in each square cell — no chips, no
+ * boxes, no logos, just the names, set in the cell's own contrast — with the
+ * intensity numeral in the corner as the non-colour channel.
  */
 const HEAT = [
   "bg-muted",
@@ -99,43 +96,40 @@ export function VerificationLandscape(_: VerificationWidgetProps) {
                 const d = CELLS[r.key][c.key];
                 const active =
                   sel?.kind === "cell" && sel.ri === ri && sel.ci === ci;
-                const marks = iconMarksForEffs(d.eff);
-                const logoH = marks.length <= 1 ? 40 : marks.length <= 2 ? 32 : 25;
+                const orgs = marksForEffs(d.eff);
+                const onDark = d.i >= 2;
                 return (
                   <button
                     key={c.key}
                     type="button"
-                    aria-label={`${r.name}, ${c.name}, activity ${d.i} of 3${marks.length ? ", " + marks.map((m) => m.label).join(", ") : ""}`}
+                    aria-label={`${r.name}, ${c.name}, activity ${d.i} of 3${orgs.length ? ", " + orgs.map((m) => m.label).join(", ") : ""}`}
                     aria-pressed={active}
                     onClick={() => setSel({ kind: "cell", ri, ci })}
                     style={d.i === 0 ? HATCH : undefined}
                     className={cn(
-                      "relative flex items-center justify-center overflow-hidden rounded-[3px] outline-none transition-transform hover:z-10 hover:scale-[1.03] focus-visible:z-10 focus-visible:scale-[1.03]",
+                      "relative flex aspect-square flex-col items-start justify-start gap-0.5 overflow-hidden rounded-[3px] p-1.5 text-left outline-none transition-transform hover:z-10 hover:scale-[1.03] focus-visible:z-10 focus-visible:scale-[1.03]",
                       HEAT[d.i],
                       active &&
                         "outline-foreground shadow-soft-md outline-[3px] -outline-offset-[3px]",
                     )}
                   >
-                    {marks.length > 0 && (
-                      <span className="flex flex-wrap items-center justify-center gap-1.5 px-1 pb-2.5">
-                        {marks.map((m) => (
-                          // eslint-disable-next-line @next/next/no-img-element
-                          <img
-                            key={m.id}
-                            src={iconSrc(m)}
-                            alt={m.label}
-                            title={m.label}
-                            draggable={false}
-                            className="w-auto shrink-0 rounded-[3px] object-contain select-none"
-                            style={{ height: logoH, maxWidth: 64 }}
-                          />
-                        ))}
+                    {orgs.map((m) => (
+                      <span
+                        key={m.id}
+                        className={cn(
+                          "text-[11px] leading-[1.15] font-medium",
+                          onDark ? "text-primary-foreground" : "text-foreground",
+                        )}
+                      >
+                        {m.short}
                       </span>
-                    )}
+                    ))}
                     <span
                       className={cn(
                         "pointer-events-none absolute right-1.5 bottom-1 text-[11px] leading-none",
-                        d.i >= 2 ? "text-primary-foreground" : "text-muted-foreground",
+                        onDark
+                          ? "text-primary-foreground/70"
+                          : "text-muted-foreground",
                       )}
                     >
                       {d.i}

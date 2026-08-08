@@ -64,11 +64,56 @@ function chordAt(c: { cy: number; r: number }, y: number) {
 // Rough label width in SVG units (no DOM measurement at render).
 const EX_FS = 21;
 const NAME_FS = 34;
+const NAME_FLOOR = 21;
 const PILL_H = 30;
+const LINE_H = 1.08;
+const EX_GAP = 14;
+const CHAR_W = 0.56; // mean glyph advance as a fraction of the font size
+// Below this one-line size a multi-word name wraps to two lines instead of
+// shrinking smaller: the inner rings are horizontally narrow but their
+// crescents are tall, so vertical room is what we actually have to spend.
+const WRAP_THRESHOLD = 27;
 const estPill = (name: string) => name.length * EX_FS * 0.55 + 16;
 
 type PlacedPill = { li: number; ei: number; name: string; x: number; y: number; w: number };
-type PlacedName = { name: string; x: number; y: number; light: boolean; fs: number };
+type PlacedName = { i: number; lines: string[]; fs: number; x: number; yTop: number; light: boolean };
+
+/** Best balanced ≤2-line split whose lines each fit maxW at fs, else null. */
+function splitTwo(name: string, maxW: number, fs: number): string[] | null {
+  const words = name.split(" ");
+  if (words.length < 2) return null;
+  const fits = (s: string) => s.length * fs * CHAR_W <= maxW;
+  let best: string[] | null = null;
+  let bestDiff = Infinity;
+  for (let k = 1; k < words.length; k++) {
+    const a = words.slice(0, k).join(" ");
+    const b = words.slice(k).join(" ");
+    // ≤ keeps the later split on a tie → a fuller first line reads better.
+    if (fits(a) && fits(b) && Math.abs(a.length - b.length) <= bestDiff) {
+      bestDiff = Math.abs(a.length - b.length);
+      best = [a, b];
+    }
+  }
+  return best;
+}
+
+/** One line at the biggest size that fits; two lines when one would be tiny. */
+function fitName(name: string, maxW: number): { lines: string[]; fs: number } {
+  const fs1 = Math.min(NAME_FS, maxW / (name.length * CHAR_W));
+  if (fs1 >= WRAP_THRESHOLD || name.split(" ").length < 2) {
+    return { lines: [name], fs: Math.max(NAME_FLOOR, Math.min(NAME_FS, fs1)) };
+  }
+  for (let fs = NAME_FS; fs >= NAME_FLOOR; fs -= 1) {
+    const s = splitTwo(name, maxW, fs);
+    if (s) return { lines: s, fs };
+  }
+  const words = name.split(" ");
+  const mid = Math.ceil(words.length / 2);
+  return {
+    lines: [words.slice(0, mid).join(" "), words.slice(mid).join(" ")],
+    fs: NAME_FLOOR,
+  };
+}
 
 function packRows(names: { li: number; ei: number; name: string }[], maxW: number) {
   const rows: { li: number; ei: number; name: string; w: number }[][] = [[]];
@@ -76,14 +121,20 @@ function packRows(names: { li: number; ei: number; name: string }[], maxW: numbe
   for (const it of names) {
     const iw = estPill(it.name);
     const row = rows[rows.length - 1];
-    if (row.length && w + 10 + iw > maxW) {
+    if (row.length && w + EX_GAP + iw > maxW) {
       rows.push([]);
       w = 0;
     }
     rows[rows.length - 1].push({ ...it, w: iw });
-    w += (row.length ? 10 : 0) + iw;
+    w += (row.length ? EX_GAP : 0) + iw;
   }
   return rows;
+}
+
+/** Apex (top edge) of ring i. */
+function topEdge(i: number) {
+  const c = levelCircle(i);
+  return c.cy - c.r;
 }
 
 function layout(): { names: PlacedName[]; pills: PlacedPill[] } {
@@ -91,53 +142,63 @@ function layout(): { names: PlacedName[]; pills: PlacedPill[] } {
   const pills: PlacedPill[] = [];
   for (let i = 0; i < AI_LEVELS.length; i++) {
     const c = levelCircle(i);
-    const top = c.cy - c.r;
     const isDisk = i === AI_LEVELS.length - 1;
     const exs = AI_LEVELS[i].examples.map((ex, ei) => ({ li: i, ei, name: ex.name }));
 
-    let nameY: number;
-    let rows: ReturnType<typeof packRows> = [];
-    let rowY0 = 0;
-    if (isDisk) {
-      // Everything sits in the wide middle of the disk: the name on top, its
-      // systems just under it, the whole block centred — so nothing spills
-      // past the small innermost circle.
-      const maxW = chordAt(c, c.cy) * 0.82;
-      rows = exs.length ? packRows(exs, maxW) : [];
-      const block = NAME_FS + 14 + rows.length * PILL_H;
-      nameY = c.cy - block / 2 + NAME_FS / 2;
-      rowY0 = c.cy - block / 2 + NAME_FS + 14 + PILL_H / 2;
-    } else {
-      nameY = top + 36;
-      const exW = chordAt(c, top + 74) * 0.9;
-      rows = exs.length ? packRows(exs, exW) : [];
-      rowY0 = top + 78;
+    if (i === 0) {
+      // "AI" sits at the top of the grey field and owns no example systems.
+      names.push({
+        i,
+        lines: [AI_LEVELS[0].name],
+        fs: NAME_FS,
+        x: c.cx,
+        yTop: topEdge(0) + 26,
+        light: false,
+      });
+      continue;
     }
 
-    // Shrink a wide name to the chord at its height, so it never spills out.
-    const availName = chordAt(c, nameY) * 0.9;
-    const fs =
-      i === 0
-        ? NAME_FS
-        : Math.max(
-            14,
-            Math.min(NAME_FS, availName / (AI_LEVELS[i].name.length * 0.56)),
-          );
+    // The name + its example rows live in the crescent between this ring's
+    // apex and the next ring's apex (the innermost ring uses its own disk).
+    const spanTop = isDisk ? topEdge(i) + 26 : topEdge(i);
+    const spanBot = isDisk ? c.cy + c.r - 22 : topEdge(i + 1);
+    const H = spanBot - spanTop;
+    const chordW = (y: number) => chordAt(c, y) * 0.9;
+
+    // Pass A — fit the name high in the crescent to size the block.
+    let nm = fitName(AI_LEVELS[i].name, chordW(spanTop + 0.36 * H));
+    let nameH = nm.lines.length * nm.fs * LINE_H;
+    let rows = exs.length ? packRows(exs, chordW(spanTop + 0.66 * H)) : [];
+    let blockH = nameH + (rows.length ? 10 : 0) + rows.length * PILL_H;
+    let blockTop = spanTop + Math.max(6, (H - blockH) / 2);
+
+    // Pass B — refit at the width the name actually gets: its top line sits
+    // higher than pass A guessed, where the chord is narrower.
+    nm = fitName(AI_LEVELS[i].name, chordW(blockTop + (nm.fs * LINE_H) / 2));
+    nameH = nm.lines.length * nm.fs * LINE_H;
+    rows = exs.length
+      ? packRows(exs, chordW(Math.min(blockTop + nameH + PILL_H, spanBot - PILL_H / 2)))
+      : [];
+    blockH = nameH + (rows.length ? 10 : 0) + rows.length * PILL_H;
+    blockTop = spanTop + Math.max(6, (H - blockH) / 2);
+
     names.push({
-      name: AI_LEVELS[i].name,
+      i,
+      lines: nm.lines,
+      fs: nm.fs,
       x: c.cx,
-      y: nameY,
-      light: i > 0 && redOpacity(i) >= 0.45,
-      fs,
+      yTop: blockTop,
+      light: redOpacity(i) >= 0.45,
     });
 
+    const exStart = blockTop + nameH + (rows.length ? 10 : 0);
     rows.forEach((row, ri) => {
-      const total = row.reduce((s, it) => s + it.w, 0) + (row.length - 1) * 14;
+      const total = row.reduce((s, it) => s + it.w, 0) + (row.length - 1) * EX_GAP;
       let x = c.cx - total / 2;
-      const y = rowY0 + ri * PILL_H;
+      const y = exStart + ri * PILL_H + PILL_H / 2;
       for (const it of row) {
         pills.push({ li: it.li, ei: it.ei, name: it.name, x: x + it.w / 2, y, w: it.w });
-        x += it.w + 14;
+        x += it.w + EX_GAP;
       }
     });
   }
@@ -288,18 +349,14 @@ export function TypesOfAi(_: VerificationWidgetProps) {
                     );
                   })}
 
-                  {/* level names */}
+                  {/* level names — one line, or two when the ring is narrow */}
                   {names.map((n) => (
                     <text
-                      key={n.name}
-                      x={n.x}
-                      y={n.y}
+                      key={n.i}
                       textAnchor="middle"
-                      dominantBaseline="middle"
                       onClick={(e) => {
                         e.stopPropagation();
-                        const i = AI_LEVELS.findIndex((l) => l.name === n.name);
-                        setView({ kind: "level", i });
+                        setView({ kind: "level", i: n.i });
                       }}
                       className={cn("cursor-pointer font-semibold", n.light ? "fill-primary-foreground" : "fill-foreground")}
                       style={{
@@ -310,7 +367,16 @@ export function TypesOfAi(_: VerificationWidgetProps) {
                         strokeLinejoin: "round",
                       }}
                     >
-                      {n.name}
+                      {n.lines.map((ln, li) => (
+                        <tspan
+                          key={li}
+                          x={n.x}
+                          y={n.yTop + (li + 0.5) * n.fs * LINE_H}
+                          dominantBaseline="middle"
+                        >
+                          {ln}
+                        </tspan>
+                      ))}
                     </text>
                   ))}
 

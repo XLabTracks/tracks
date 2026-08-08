@@ -5,7 +5,6 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import type { VerificationWidgetProps } from "../kit/types";
 import {
-  TREATY,
   WORKSPACE_TASKS,
   WORKSPACE_TOTAL,
   type WorkspaceTask,
@@ -18,24 +17,22 @@ import {
  * different things from the same task. **Alone**, the key is the point — you
  * commit an answer, read the bank of what a strong answer contains, and tick
  * your own hits; the score is yours and nothing is machine-graded. **With a
- * facilitator**, the key must NOT appear: the facilitator holds it
+ * facilitator**, the key stays shut: the facilitator holds it
  * (/facilitator/keys) and scoring happens in the room, which is the whole
- * value of sitting the session. The chooser is therefore a real gate on the
- * reveal, not a display preference.
+ * value of sitting the session.
+ *
+ * That is a preference, NOT a gate, and the reading never waits on it — see
+ * the note on EMPTY below for why. The control sits under the task, in one
+ * line, and flips both ways.
  *
  * Answers persist per task under `vt-workspace:1.1`. They are learner work:
  * they feed no meter and complete nothing. Completion is the last task being
  * committed, which is a thing the learner did, not a thing they scrolled past.
- *
- * Trap: the mode is stored too, and a learner who picks "with a facilitator"
- * must be able to change their mind afterwards — a cohort that ran late and
- * finished alone should not be locked out of its own key. Switching back
- * reveals nothing retroactively that the reveal button would not.
  */
 
 const KEY = "vt-workspace:1.1";
 
-type Mode = "self" | "facilitated" | null;
+type Mode = "self" | "facilitated";
 
 interface Saved {
   mode: Mode;
@@ -47,7 +44,18 @@ interface Saved {
   hits: Record<string, number[]>;
 }
 
-const EMPTY: Saved = { mode: null, answers: {}, done: {}, hits: {} };
+/* Self by default, deliberately. Whether somebody is in a facilitated cohort
+   is settled at enrolment — `application.ts` opens "the next facilitated
+   cohort" and tells everyone else the course is "open to work through on your
+   own" — and 0.0 says it again in prose. Asking a third time, as a gate in the
+   middle of a lesson, is landing-page furniture in the wrong room.
+
+   So the reading starts immediately and the mode is a quiet control beside the
+   key. The default falls the safe way: a solo learner who cannot reach the key
+   is stuck, while a cohort learner who opens it early has only spent their own
+   session. A facilitator says "leave it closed" out loud, which is cheaper
+   than a modal on everyone. */
+const EMPTY: Saved = { mode: "self", answers: {}, done: {}, hits: {} };
 
 function read(): Saved {
   try {
@@ -86,45 +94,6 @@ export function TreatyWorkspace({ onComplete }: VerificationWidgetProps) {
     0,
   );
   const anyScored = Object.values(state.hits).some((h) => h.length > 0);
-
-  if (!state.mode) {
-    return (
-      <div className="not-prose border-border bg-card my-6 rounded-xl border p-5">
-        <p className="text-sm font-medium">Before you start</p>
-        <p className="text-muted-foreground mt-1 text-sm">
-          {WORKSPACE_TASKS.length} tasks on {TREATY.title} — {TREATY.authors}.
-          Total: {WORKSPACE_TOTAL} points. You will need the treaty open; work
-          the whole document, nothing is excerpted for you.
-        </p>
-        <div className="mt-4 grid gap-3 sm:grid-cols-2">
-          <button
-            type="button"
-            onClick={() => save({ ...state, mode: "self" })}
-            className="border-border hover:border-ring hover:bg-muted/40 rounded-lg border p-4 text-left transition-colors select-none"
-          >
-            <span className="block text-sm font-medium">I am working alone</span>
-            <span className="text-muted-foreground mt-1 block text-xs">
-              After you commit each answer you can open the marking key and
-              score yourself against it.
-            </span>
-          </button>
-          <button
-            type="button"
-            onClick={() => save({ ...state, mode: "facilitated" })}
-            className="border-border hover:border-ring hover:bg-muted/40 rounded-lg border p-4 text-left transition-colors select-none"
-          >
-            <span className="block text-sm font-medium">
-              I am working with a facilitator
-            </span>
-            <span className="text-muted-foreground mt-1 block text-xs">
-              The key stays closed. Your facilitator has it and will score the
-              answers with you.
-            </span>
-          </button>
-        </div>
-      </div>
-    );
-  }
 
   const committed = !!state.done[task.id];
   const isOpen = !!revealed[task.id];
@@ -245,13 +214,23 @@ export function TreatyWorkspace({ onComplete }: VerificationWidgetProps) {
         </div>
       )}
 
-      <button
-        type="button"
-        onClick={() => save({ ...state, mode: null })}
-        className="text-muted-foreground hover:text-foreground mt-4 text-xs underline underline-offset-2 select-none"
-      >
-        Change how you are working
-      </button>
+      <p className="text-muted-foreground mt-4 text-xs">
+        {state.mode === "self"
+          ? "Working with a facilitator? "
+          : "Working on your own? "}
+        <button
+          type="button"
+          onClick={() =>
+            save({ ...state, mode: state.mode === "self" ? "facilitated" : "self" })
+          }
+          className="hover:text-foreground underline underline-offset-2 select-none"
+        >
+          {state.mode === "self"
+            ? "keep the marking key closed"
+            : "open the marking key yourself"}
+        </button>
+        .
+      </p>
     </div>
   );
 }

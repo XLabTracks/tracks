@@ -162,7 +162,7 @@ export const WORKSPACE_TASKS: WorkspaceTask[] = [
     title: "1b. What was wrong with that grid?",
     prompt:
       "The grid above is not a fair description of the treaty. Name what it left out, and name any text you met that fits none of its rows.",
-    points: 6,
+    points: 7,
     key: [
       {
         text: "The grid never asks who pays for the monitoring — the equipment, the inspectors, the CTB itself.",
@@ -173,12 +173,16 @@ export const WORKSPACE_TASKS: WorkspaceTask[] = [
         open: true,
       },
       {
-        text: "Article I — Primary Purpose fits no row: it states an aim and imposes no checkable duty. A purpose clause is not a rule.",
-        pointer: "ARTICLE I",
+        text: "The Preamble fits no row and binds nobody — “Alarmed by…”, “Affirming…”, “Convinced that…” are recitals, and they serve interpretation rather than obligation. Note where that leaves the treaty’s own verification premise: “Recognizing that the stability of this Agreement relies on the ability to verify the compliance of all Parties” sits in the part that obliges no one.",
+        pointer: "Preamble",
       },
       {
-        text: "Article III — The Coalition fits no row either: it constitutes the body rather than obliging anyone to do or refrain from anything.",
-        pointer: "ARTICLE III",
+        text: "The “Precedent for Article …” and “Notes on Article …” blocks between the Articles are the authors writing ABOUT their treaty — thirty of them, in the same appendix and the same typography as the instrument. Telling the agreement from the commentary on it is the first thing to do with this document.",
+        pointer: "Appendix A, between every Article",
+      },
+      {
+        text: "Article I is the trap in the other direction. It is titled “Primary Purpose”, which reads like a preamble, and its text is the core obligation of the whole treaty: “Each Party … does not develop, deploy, or seek to develop or deploy artificial superintelligence”, “Each Party prohibits and prevents all such development within their borders”. A heading is not evidence of what a clause does.",
+        pointer: "ARTICLE I",
       },
       {
         text: "Articles XIII and XIV — reviews and revision — are how the agreement changes itself, which no row covers and which decides how long any answer above stays true.",

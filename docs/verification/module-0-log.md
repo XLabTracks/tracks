@@ -252,3 +252,22 @@ rather than a second copy.
 
 The initials fallback stays in `Signatory` and is the remedy if anyone
 objects: delete the file and the card falls back with no other change.
+
+### The signatory block is back after the 0.1 rewrite
+
+The "Why Should You Care About AI Verification?" rewrite dropped the
+`SignatoryQuotes` block, leaving the component and the three portraits with no
+consumer. Restored on the author's instruction, in the place the rewrite
+actually made better than the original: the rewrite's own prose already
+introduces the statement and quotes its ask, and `what-do-they-say` sits
+directly above, so the cards now follow the widget as the same people signing
+together and lead into "It's clear that ASI is no longer a hypothetical risk."
+
+The framing paragraph I had written for the old placement was **not** restored
+— the rewrite's sentence does that job in one line, and re-adding mine would
+have said it twice.
+
+Not restored, and still owed a decision: the AI Futures reading card
+(*How to pace the US frontier*) went in the same deletion. It is the bridge to
+0.2 — same team as AI 2040: Plan A, written against it — so it is worth a home
+somewhere, but nobody has asked for it back.

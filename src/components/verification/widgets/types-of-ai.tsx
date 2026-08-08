@@ -34,12 +34,12 @@ import type { VerificationWidgetProps } from "../kit/types";
  * drag starts on the background, so a press on a pill stays a select.
  */
 
-const VBW = 1120;
-const VBH = 1210;
-const AI = { cx: 560, cy: 585, r: 560 };
-const RED_BOTTOM = 1170;
-const RED_R0 = 490;
-const RED_STEP = 70;
+const VBW = 1180;
+const VBH = 1240;
+const AI = { cx: 590, cy: 600, r: 580 };
+const RED_BOTTOM = 1150;
+const RED_R0 = 500;
+const RED_STEP = 60;
 
 /** i=0 is the grey AI field; 1..6 are the red rings, innermost last. */
 function levelCircle(i: number) {
@@ -52,14 +52,20 @@ function redOpacity(i: number) {
   return 0.12 + (i - 1) * 0.15;
 }
 
+/** Horizontal room inside a circle at height y. */
+function chordAt(c: { cy: number; r: number }, y: number) {
+  const dy = y - c.cy;
+  return 2 * Math.sqrt(Math.max(0, c.r * c.r - dy * dy));
+}
+
 // Rough label width in SVG units (no DOM measurement at render).
-const EX_FS = 20;
-const NAME_FS = 32;
+const EX_FS = 21;
+const NAME_FS = 34;
 const PILL_H = 30;
-const estPill = (name: string) => name.length * EX_FS * 0.56 + 22;
+const estPill = (name: string) => name.length * EX_FS * 0.55 + 16;
 
 type PlacedPill = { li: number; ei: number; name: string; x: number; y: number; w: number };
-type PlacedName = { name: string; x: number; y: number; light: boolean };
+type PlacedName = { name: string; x: number; y: number; light: boolean; fs: number };
 
 function packRows(names: { li: number; ei: number; name: string }[], maxW: number) {
   const rows: { li: number; ei: number; name: string; w: number }[][] = [[]];
@@ -83,37 +89,52 @@ function layout(): { names: PlacedName[]; pills: PlacedPill[] } {
   for (let i = 0; i < AI_LEVELS.length; i++) {
     const c = levelCircle(i);
     const top = c.cy - c.r;
+    const isDisk = i === AI_LEVELS.length - 1;
+    const exs = AI_LEVELS[i].examples.map((ex, ei) => ({ li: i, ei, name: ex.name }));
+
+    let nameY: number;
+    let rows: ReturnType<typeof packRows> = [];
+    let rowY0 = 0;
+    if (isDisk) {
+      // Everything sits in the wide middle of the disk: the name on top, its
+      // systems just under it, the whole block centred — so nothing spills
+      // past the small innermost circle.
+      const maxW = chordAt(c, c.cy) * 0.82;
+      rows = exs.length ? packRows(exs, maxW) : [];
+      const block = NAME_FS + 14 + rows.length * PILL_H;
+      nameY = c.cy - block / 2 + NAME_FS / 2;
+      rowY0 = c.cy - block / 2 + NAME_FS + 14 + PILL_H / 2;
+    } else {
+      nameY = top + 36;
+      const exW = chordAt(c, top + 74) * 0.9;
+      rows = exs.length ? packRows(exs, exW) : [];
+      rowY0 = top + 78;
+    }
+
+    // Shrink a wide name to the chord at its height, so it never spills out.
+    const availName = chordAt(c, nameY) * 0.9;
+    const fs =
+      i === 0
+        ? NAME_FS
+        : Math.max(
+            14,
+            Math.min(NAME_FS, availName / (AI_LEVELS[i].name.length * 0.56)),
+          );
     names.push({
       name: AI_LEVELS[i].name,
       x: c.cx,
-      y: top + 34,
+      y: nameY,
       light: i > 0 && redOpacity(i) >= 0.45,
+      fs,
     });
-    const exs = AI_LEVELS[i].examples.map((ex, ei) => ({
-      li: i,
-      ei,
-      name: ex.name,
-    }));
-    if (exs.length === 0) continue;
 
-    const isDisk = i === AI_LEVELS.length - 1;
-    // Row width available in this band: the chord of this circle a little
-    // below the name (above the next ring, so the full chord is free).
-    const probeY = isDisk ? c.cy : top + 66;
-    const dy = probeY - c.cy;
-    const chord = 2 * Math.sqrt(Math.max(0, c.r * c.r - dy * dy));
-    const maxW = chord * (isDisk ? 0.94 : 0.9);
-    const rows = packRows(exs, maxW);
-    const rowY0 = isDisk
-      ? c.cy - ((rows.length - 1) * (PILL_H + 6)) / 2
-      : top + 74;
     rows.forEach((row, ri) => {
-      const total = row.reduce((s, it) => s + it.w, 0) + (row.length - 1) * 10;
+      const total = row.reduce((s, it) => s + it.w, 0) + (row.length - 1) * 14;
       let x = c.cx - total / 2;
-      const y = rowY0 + ri * (PILL_H + 6);
+      const y = rowY0 + ri * PILL_H;
       for (const it of row) {
         pills.push({ li: it.li, ei: it.ei, name: it.name, x: x + it.w / 2, y, w: it.w });
-        x += it.w + 10;
+        x += it.w + 14;
       }
     });
   }
@@ -279,7 +300,7 @@ export function TypesOfAi(_: VerificationWidgetProps) {
                       }}
                       className={cn("cursor-pointer font-semibold", n.light ? "fill-primary-foreground" : "fill-foreground")}
                       style={{
-                        fontSize: NAME_FS,
+                        fontSize: n.fs,
                         paintOrder: "stroke",
                         stroke: n.light ? "rgba(0,0,0,0.30)" : "var(--card)",
                         strokeWidth: 5,

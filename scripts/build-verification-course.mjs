@@ -107,6 +107,14 @@ const unitOf = flatMap("verificationUnitOfLesson");
 const unitMeta = recordMap("verificationUnitMeta");
 const modMeta = recordMap("verificationModuleMeta");
 
+/* Module itemIds may name a paper from papers.data.ts, which this script does
+   not read. curriculum.ts enumerates those ids so they can be skipped without
+   weakening the "an unknown item is a build failure" rule. */
+const paperIds = new Set(
+  [...(/export const verificationPaperIds[^=]*=\s*\[([\s\S]*?)\]/.exec(src)?.[1] ?? "")
+    .matchAll(/"([^"]+)"/g)].map((m) => m[1]),
+);
+
 const lessonById = new Map(lessons.map((l) => [l.id, l]));
 const moduleById = new Map(modules.map((m) => [m.id, m]));
 
@@ -130,8 +138,18 @@ for (const mod of modules) {
   const seen = new Set();
   const units = [];
   for (const lessonId of mod.itemIds ?? []) {
+    // Papers are readings hung off a unit, not units, so they carry no row in
+    // the static course structure. Skipping them is declared in curriculum.ts
+    // rather than guessed here, so an item that is neither still fails.
+    if (paperIds.has(lessonId)) continue;
     const lesson = lessonById.get(lessonId);
-    if (!lesson) fail(`${mod.id} lists ${lessonId}, which is not a lesson`);
+    if (!lesson) {
+      fail(
+        `${mod.id} lists ${lessonId}, which is neither a lesson nor a listed ` +
+          `paper. Add it to verificationLessons, or to verificationPaperIds ` +
+          `if it is a paper from papers.data.ts.`,
+      );
+    }
     const unit = unitOf[lessonId];
     if (seen.has(unit)) {
       units[units.findIndex((u) => u.id === unit)].lessons.push(lesson.slug);

@@ -67,6 +67,8 @@ export const verificationModules: Module[] = [
       "v-scoping-effective-feasible",
       "v-policy-scoping",
       "v-scoping-anatomy",
+      "v-paper-scher-treaty",
+      "v-paper-miotti-treaty",
       "v-scoping-actors",
       "v-interactive-map",
       "v-protocol-actors",
@@ -618,6 +620,23 @@ export const verificationLessons: Lesson[] = [
  * see. The generator fails loudly rather than dropping it — add the lesson
  * here in the same commit that adds it to the graph.
  * ---------------------------------------------------------------------- */
+
+/**
+ * The papers this track's modules list in `itemIds`. They live in
+ * `src/content/papers.data.ts`, which the course generator does not read, so
+ * without this list every one of them would look like a missing lesson and
+ * fail the build.
+ *
+ * They are readings attached to a unit, not units of their own — the static
+ * course structure carries modules and units, and two treaty texts are neither
+ * — so the generator skips them. The skip is enumerated here rather than
+ * inferred, which is the point: an item that is neither a lesson nor one of
+ * these still fails loudly, exactly as before.
+ */
+export const verificationPaperIds: string[] = [
+  "v-paper-scher-treaty",
+  "v-paper-miotti-treaty",
+];
 
 export const verificationUnitOfLesson: Record<string, string> = {
   "v-welcome": "0.0",

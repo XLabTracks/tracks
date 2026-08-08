@@ -11,7 +11,61 @@ import {
   LANDSCAPE_ROWS as ROWS,
   type LandscapeCell,
 } from "@/lib/verification/data/verification-landscape";
+import {
+  logoSrc,
+  marksForEffs,
+  type OrgMark,
+} from "@/lib/verification/data/landscape-logos";
 import type { VerificationWidgetProps } from "../kit/types";
+
+/** Every org named anywhere down a row or across a column, deduped. */
+function marksForAxis(axis: "row" | "col", i: number): OrgMark[] {
+  const effs: [string, string][] = [];
+  if (axis === "row") {
+    for (const c of COLS) effs.push(...CELLS[ROWS[i].key][c.key].eff);
+  } else {
+    for (const r of ROWS) effs.push(...CELLS[r.key][COLS[i].key].eff);
+  }
+  return marksForEffs(effs);
+}
+
+/**
+ * The org marks that surface "who works here": a real wordmark logo on a light
+ * tile where one exists, an acronym monogram otherwise, so every org reads the
+ * same whether or not it has a downloadable logo. Marks are chrome, not prose —
+ * unselectable, and images never drag.
+ */
+function LogoPills({ marks }: { marks: OrgMark[] }) {
+  if (marks.length === 0) return null;
+  return (
+    <div className="mt-2 flex flex-wrap items-center gap-1.5 select-none">
+      {marks.map((m) => {
+        const src = logoSrc(m);
+        return (
+          <span
+            key={m.id}
+            title={m.label}
+            className="border-border inline-flex h-7 items-center rounded-md border bg-white px-2"
+          >
+            {src ? (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img
+                src={src}
+                alt={m.label}
+                draggable={false}
+                className="h-3.5 w-auto max-w-[6rem] object-contain"
+              />
+            ) : (
+              <span className="text-[11px] font-semibold text-neutral-800">
+                {m.mono}
+              </span>
+            )}
+          </span>
+        );
+      })}
+    </div>
+  );
+}
 
 type Sel =
   | { kind: "cell"; ri: number; ci: number }
@@ -184,6 +238,7 @@ function CellDetail({
       <p className="text-muted-foreground mt-0.5 text-xs">
         Activity {cell.i} / 3 · {HEATWORD[cell.i]}
       </p>
+      <LogoPills marks={marksForEffs(cell.eff)} />
       <p className="mt-2">{cell.state}</p>
       {cell.eff.length > 0 && (
         <ul className="mt-2 space-y-1.5">
@@ -213,6 +268,7 @@ function AxisDetail({ axis, i }: { axis: "row" | "col"; i: number }) {
       </p>
       <h4 className="mt-1 text-base font-semibold">{o.name}</h4>
       <p className="mt-2">{o.desc}</p>
+      <LogoPills marks={marksForAxis(axis, i)} />
       <p className="text-muted-foreground mt-2 text-xs">
         {C.axisHint.replace("{kind}", axis)}
       </p>

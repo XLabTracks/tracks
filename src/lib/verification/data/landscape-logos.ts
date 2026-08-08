@@ -4,10 +4,10 @@
  * square brand icon downloaded from the org's own site (or Wikimedia Commons),
  * used nominatively, under public/verification/logos/icons/.
  *
- * Square icons, not wordmarks: they sit as small logos inside the heat cells,
- * so a cell shows who works there at a glance. Orgs with no clean square mark
- * (CSET, FlexHEG, the International Network of AI Safety Institutes) carry no
- * icon and simply don't draw one — never a text stand-in.
+ * Square icons, not wordmarks: they sit as logos inside the heat cells, so a
+ * cell shows who works there at a glance. The one org with no mark of its own —
+ * the International Network of AI Safety Institutes, a network of eleven
+ * national institutes — carries no icon and simply draws nothing.
  *
  * Detection is a case-insensitive token match against the effort's name, so the
  * curriculum strings in verification-landscape.ts are never touched — adding an
@@ -34,12 +34,12 @@ export const ORG_MARKS: OrgMark[] = [
   { id: "rand", tokens: ["RAND"], label: "RAND Corporation", icon: "rand.svg" },
   { id: "nist", tokens: ["NIST"], label: "NIST", icon: "nist.ico" },
   { id: "cnas", tokens: ["CNAS"], label: "CNAS", icon: "cnas.png" },
-  { id: "cset", tokens: ["CSET"], label: "CSET, Georgetown" },
+  { id: "cset", tokens: ["CSET"], label: "CSET, Georgetown", icon: "cset.ico" },
   { id: "govai", tokens: ["GovAI"], label: "GovAI", icon: "govai.jpg" },
   { id: "epoch", tokens: ["Epoch AI"], label: "Epoch AI", icon: "epoch.svg" },
   { id: "metr", tokens: ["METR"], label: "METR", icon: "metr.png" },
   { id: "apollo", tokens: ["Apollo Research"], label: "Apollo Research", icon: "apollo.png" },
-  { id: "flexheg", tokens: ["FlexHEG"], label: "FlexHEG" },
+  { id: "flexheg", tokens: ["FlexHEG"], label: "FlexHEG", icon: "flexheg.ico" },
   { id: "aria", tokens: ["ARIA"], label: "ARIA (UK)", icon: "aria.png" },
   { id: "bis", tokens: ["Bureau of Industry and Security"], label: "US Bureau of Industry and Security", icon: "bis.ico" },
   { id: "iaea", tokens: ["IAEA"], label: "IAEA", icon: "iaea.ico" },

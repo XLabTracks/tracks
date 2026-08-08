@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import { X } from "lucide-react";
-import { cn } from "@/lib/utils";
 import {
   HEATWORD,
   LANDSCAPE_CELLS as CELLS,
@@ -17,66 +16,70 @@ import {
 } from "@/lib/verification/data/landscape-logos";
 import type { VerificationWidgetProps } from "../kit/types";
 
+/**
+ * The Verification Landscape field map, recreated from the standalone page it
+ * was ported from: a teal-on-cream heat grid, the kind of verification down the
+ * side and the who across the top, darker = more activity. Its own fixed
+ * palette (this is a figure, not app chrome, so it reads the same in either
+ * app theme), with the company logos sitting directly in the cells so the grid
+ * shows who works where — no chips, no boxes, just the marks, with the intensity
+ * numeral kept in the corner as the non-colour channel.
+ */
+const PAL = {
+  "--vl-paper": "#F0F1EC",
+  "--vl-panel": "#FBFBF8",
+  "--vl-ink": "#1C2B33",
+  "--vl-muted": "#5B6A70",
+  "--vl-line": "#CBD1C9",
+  "--vl-steel": "#3E5C6E",
+} as React.CSSProperties;
+
+const HEAT = ["#E9EBE5", "#C7D8D6", "#82AAA4", "#2E6B64"];
+const HATCH =
+  "repeating-linear-gradient(45deg, transparent, transparent 5px, rgba(91,106,112,0.16) 5px, rgba(91,106,112,0.16) 6px)";
+
 type Sel =
   | { kind: "cell"; ri: number; ci: number }
   | { kind: "axis"; axis: "row" | "col"; i: number }
   | null;
 
-// Sequential intensity scale (0–3): heat is the authored channel, and the
-// small corner numeral is the second channel so the reading never rests on
-// colour alone.
-const HEAT: { cell: string; swatch: string }[] = [
-  { cell: "bg-muted text-muted-foreground", swatch: "bg-muted" },
-  { cell: "bg-primary/15 text-foreground", swatch: "bg-primary/15" },
-  { cell: "bg-primary/55 text-primary-foreground", swatch: "bg-primary/55" },
-  { cell: "bg-primary text-primary-foreground", swatch: "bg-primary" },
-];
-const HATCH: React.CSSProperties = {
-  backgroundImage:
-    "repeating-linear-gradient(45deg, transparent, transparent 5px, color-mix(in srgb, var(--muted-foreground) 22%, transparent) 5px, color-mix(in srgb, var(--muted-foreground) 22%, transparent) 6px)",
-};
-// A soft white halo so a dark logo (Anthropic, OpenAI, NIST) reads on the dark
-// cells too, without wrapping it in a box.
-const LOGO_HALO: React.CSSProperties = {
-  filter:
-    "drop-shadow(0 0 1.3px rgba(255,255,255,0.95)) drop-shadow(0 0 1.3px rgba(255,255,255,0.7))",
-};
-
 export function VerificationLandscape(_: VerificationWidgetProps) {
   void _;
   const [sel, setSel] = useState<Sel>(null);
 
-  const selKey =
-    sel === null
-      ? "none"
-      : sel.kind === "cell"
-        ? `c-${sel.ri}-${sel.ci}`
-        : `a-${sel.axis}-${sel.i}`;
-
   return (
-    <div className="not-prose my-6">
+    <div
+      className="not-prose my-6 rounded-xl p-4 sm:p-5"
+      style={{ ...PAL, background: "var(--vl-paper)", color: "var(--vl-ink)" }}
+    >
       {/* legend */}
-      <div className="text-muted-foreground mb-3 flex items-center gap-2 text-xs">
+      <div
+        className="mb-3 flex flex-wrap items-center gap-3 text-[11px] tracking-[0.04em] uppercase"
+        style={{ color: "var(--vl-muted)" }}
+      >
         <span>{C.lessActivity}</span>
-        <span className="flex">
+        <span className="flex gap-[3px]">
           {HEAT.map((h, i) => (
             <span
               key={i}
-              className={cn("size-4 first:rounded-l last:rounded-r", h.swatch)}
-              style={i === 0 ? HATCH : undefined}
+              className="h-4 w-7 rounded-[2px]"
+              style={{
+                background: h,
+                backgroundImage: i === 0 ? HATCH : undefined,
+              }}
             />
           ))}
         </span>
         <span>{C.moreActivity}</span>
       </div>
 
-      {/* grid (left) + floating detail (right) */}
-      <div className="grid items-start gap-4 lg:grid-cols-[minmax(0,1fr)_19rem]">
+      {/* grid */}
+      <div className="-mx-1 overflow-x-auto px-1 py-1">
         <div
           role="grid"
-          className="grid min-w-0 gap-1.5 overflow-x-auto p-1.5 text-xs"
+          className="grid min-w-[460px] gap-[5px]"
           style={{
-            gridTemplateColumns: `minmax(7rem, 1.2fr) repeat(${COLS.length}, minmax(5rem, 1fr))`,
+            gridTemplateColumns: `minmax(96px, 1.15fr) repeat(${COLS.length}, minmax(64px, 1fr))`,
           }}
         >
           <div aria-hidden />
@@ -85,7 +88,8 @@ export function VerificationLandscape(_: VerificationWidgetProps) {
               key={c.key}
               type="button"
               onClick={() => setSel({ kind: "axis", axis: "col", i: ci })}
-              className="hover:bg-muted rounded px-1 py-1.5 text-center font-semibold hover:underline"
+              className="rounded px-1 py-1 text-center text-[11px] leading-tight font-semibold tracking-[0.06em] uppercase hover:underline"
+              style={{ color: "var(--vl-steel)" }}
             >
               {c.name}
             </button>
@@ -96,7 +100,8 @@ export function VerificationLandscape(_: VerificationWidgetProps) {
               <button
                 type="button"
                 onClick={() => setSel({ kind: "axis", axis: "row", i: ri })}
-                className="hover:bg-muted rounded px-1.5 py-1.5 text-left font-semibold hover:underline"
+                className="self-center rounded py-1 pr-2 text-left text-xs font-semibold hover:underline"
+                style={{ color: "var(--vl-ink)" }}
               >
                 {r.name}
               </button>
@@ -105,6 +110,7 @@ export function VerificationLandscape(_: VerificationWidgetProps) {
                 const active =
                   sel?.kind === "cell" && sel.ri === ri && sel.ci === ci;
                 const marks = iconMarksForEffs(d.eff);
+                const logoH = marks.length <= 1 ? 40 : marks.length <= 2 ? 32 : 25;
                 return (
                   <button
                     key={c.key}
@@ -112,20 +118,20 @@ export function VerificationLandscape(_: VerificationWidgetProps) {
                     aria-label={`${r.name}, ${c.name}, activity ${d.i} of 3${marks.length ? ", " + marks.map((m) => m.label).join(", ") : ""}`}
                     aria-pressed={active}
                     onClick={() => setSel({ kind: "cell", ri, ci })}
-                    style={d.i === 0 ? HATCH : undefined}
-                    className={cn(
-                      "relative flex aspect-square items-center justify-center overflow-hidden rounded p-1 outline-none transition-shadow hover:ring-2 hover:ring-ring focus-visible:ring-2 focus-visible:ring-ring",
-                      HEAT[d.i].cell,
-                      active &&
-                        "ring-2 ring-foreground ring-offset-2 ring-offset-background",
-                    )}
+                    className="relative flex items-center justify-center overflow-hidden rounded-[3px] outline-none transition-transform hover:z-10 hover:scale-[1.03] focus-visible:z-10 focus-visible:scale-[1.03]"
+                    style={{
+                      aspectRatio: "1 / 0.82",
+                      background: HEAT[d.i],
+                      backgroundImage: d.i === 0 ? HATCH : undefined,
+                      outline: active ? "3px solid var(--vl-ink)" : undefined,
+                      outlineOffset: active ? "-3px" : undefined,
+                      boxShadow: active
+                        ? "0 2px 12px rgba(28,43,51,0.22)"
+                        : undefined,
+                    }}
                   >
-                    {/* second channel: the intensity numeral, always present */}
-                    <span className="pointer-events-none absolute top-0.5 left-1 text-[10px] font-semibold opacity-60">
-                      {d.i}
-                    </span>
                     {marks.length > 0 && (
-                      <span className="flex flex-wrap items-center justify-center gap-1">
+                      <span className="flex flex-wrap items-center justify-center gap-1.5 px-1 pb-2.5">
                         {marks.map((m) => (
                           // eslint-disable-next-line @next/next/no-img-element
                           <img
@@ -134,55 +140,84 @@ export function VerificationLandscape(_: VerificationWidgetProps) {
                             alt={m.label}
                             title={m.label}
                             draggable={false}
-                            className="size-6 shrink-0 rounded-[3px] object-contain select-none"
-                            style={LOGO_HALO}
+                            className="w-auto shrink-0 rounded-[3px] object-contain select-none"
+                            style={{ height: logoH, maxWidth: 64 }}
                           />
                         ))}
                       </span>
                     )}
+                    <span
+                      className="pointer-events-none absolute right-1.5 bottom-1 text-[11px] leading-none"
+                      style={{
+                        color: d.i >= 2 ? "rgba(255,255,255,0.9)" : "var(--vl-muted)",
+                      }}
+                    >
+                      {d.i}
+                    </span>
                   </button>
                 );
               })}
             </div>
           ))}
         </div>
+      </div>
 
-        {/* floating detail panel — opens on the right, sticky + slide-in */}
-        <div className="lg:sticky lg:top-20 lg:self-start">
-          <div
-            key={selKey}
-            className={cn(
-              "border-border bg-card shadow-soft-md rounded-xl border p-4 text-sm lg:max-h-[70vh] lg:overflow-y-auto",
-              "motion-safe:animate-in motion-safe:fade-in motion-safe:slide-in-from-right-2 motion-safe:duration-300",
-            )}
-          >
-            {sel === null ? (
-              <p className="text-muted-foreground italic">{C.prompt}</p>
+      {/* detail panel — below the grid, full width, like the source */}
+      <div
+        key={
+          sel === null
+            ? "none"
+            : sel.kind === "cell"
+              ? `c-${sel.ri}-${sel.ci}`
+              : `a-${sel.axis}-${sel.i}`
+        }
+        className="motion-safe:animate-in motion-safe:fade-in motion-safe:duration-300 mt-5 p-4 sm:p-5"
+        style={{
+          background: "var(--vl-panel)",
+          border: "1px solid var(--vl-line)",
+          borderTop: "3px solid var(--vl-steel)",
+          minHeight: 96,
+        }}
+      >
+        {sel === null ? (
+          <p className="text-sm italic" style={{ color: "var(--vl-muted)" }}>
+            {C.prompt}
+          </p>
+        ) : (
+          <div className="relative">
+            <button
+              type="button"
+              onClick={() => setSel(null)}
+              aria-label="Close detail"
+              className="absolute -top-1 -right-1 rounded p-1 hover:opacity-70"
+              style={{ color: "var(--vl-muted)" }}
+            >
+              <X className="size-4" aria-hidden />
+            </button>
+            {sel.kind === "axis" ? (
+              <AxisDetail axis={sel.axis} i={sel.i} />
             ) : (
-              <>
-                <button
-                  type="button"
-                  onClick={() => setSel(null)}
-                  aria-label="Close detail"
-                  className="text-muted-foreground hover:text-foreground float-right -mt-1 -mr-1 rounded p-1 focus-visible:ring-2 focus-visible:ring-[var(--ring)] focus-visible:outline-none"
-                >
-                  <X className="size-4" aria-hidden />
-                </button>
-                {sel.kind === "axis" ? (
-                  <AxisDetail axis={sel.axis} i={sel.i} />
-                ) : (
-                  <CellDetail
-                    cell={CELLS[ROWS[sel.ri].key][COLS[sel.ci].key]}
-                    rowName={ROWS[sel.ri].name}
-                    colName={COLS[sel.ci].name}
-                  />
-                )}
-              </>
+              <CellDetail
+                cell={CELLS[ROWS[sel.ri].key][COLS[sel.ci].key]}
+                rowName={ROWS[sel.ri].name}
+                colName={COLS[sel.ci].name}
+              />
             )}
           </div>
-        </div>
+        )}
       </div>
     </div>
+  );
+}
+
+function Eyebrow({ children }: { children: React.ReactNode }) {
+  return (
+    <p
+      className="text-[11px] tracking-[0.12em] uppercase"
+      style={{ color: "var(--vl-steel)" }}
+    >
+      {children}
+    </p>
   );
 }
 
@@ -196,15 +231,16 @@ function CellDetail({
   colName: string;
 }) {
   return (
-    <div>
-      <p className="text-muted-foreground text-[11px] tracking-[0.12em] uppercase">
+    <div className="text-sm" style={{ color: "var(--vl-ink)" }}>
+      <Eyebrow>
         {rowName} × {colName}
-      </p>
+      </Eyebrow>
       <h4 className="mt-1 text-base font-semibold">
-        {cell.gap && <span className="text-defect">Open gap. </span>}
-        {rowName} here is <em className="not-italic">{HEATWORD[cell.i].toLowerCase()}</em>.
+        {cell.gap && <span style={{ color: "#B4552F" }}>Open gap. </span>}
+        {rowName} here is{" "}
+        <em className="not-italic">{HEATWORD[cell.i].toLowerCase()}</em>.
       </h4>
-      <p className="text-muted-foreground mt-0.5 text-xs">
+      <p className="mt-0.5 text-xs" style={{ color: "var(--vl-muted)" }}>
         Activity {cell.i} / 3 · {HEATWORD[cell.i]}
       </p>
       <p className="mt-2">{cell.state}</p>
@@ -217,8 +253,14 @@ function CellDetail({
           ))}
         </ul>
       )}
-      <p className="border-border mt-3 border-t pt-2">
-        <span className="text-muted-foreground mr-1 text-[11px] tracking-[0.1em] uppercase">
+      <p
+        className="mt-3 border-t pt-2"
+        style={{ borderColor: "var(--vl-line)" }}
+      >
+        <span
+          className="mr-1 text-[11px] tracking-[0.1em] uppercase"
+          style={{ color: "var(--vl-muted)" }}
+        >
           {C.howConnects}
         </span>
         {cell.connect}
@@ -230,13 +272,11 @@ function CellDetail({
 function AxisDetail({ axis, i }: { axis: "row" | "col"; i: number }) {
   const o = axis === "row" ? ROWS[i] : COLS[i];
   return (
-    <div>
-      <p className="text-muted-foreground text-[11px] tracking-[0.12em] uppercase">
-        {axis === "row" ? C.rowAxisTag : C.colAxisTag}
-      </p>
+    <div className="text-sm" style={{ color: "var(--vl-ink)" }}>
+      <Eyebrow>{axis === "row" ? C.rowAxisTag : C.colAxisTag}</Eyebrow>
       <h4 className="mt-1 text-base font-semibold">{o.name}</h4>
       <p className="mt-2">{o.desc}</p>
-      <p className="text-muted-foreground mt-2 text-xs">
+      <p className="mt-2 text-xs" style={{ color: "var(--vl-muted)" }}>
         {C.axisHint.replace("{kind}", axis)}
       </p>
     </div>

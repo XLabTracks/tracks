@@ -1,0 +1,57 @@
+{/* Unit 4.3 — the track's completion page, restructured to the course
+    owner's spec (Aug 2026): congratulations, words from us, feedback, what's
+    next. Coursera-style — the page celebrates, it does not number itself.
+    The five-doors pathway notes this page used to carry were cut on the same
+    instruction; docs/verification/module-4-log.md records the decision and
+    where to find them.
+
+    The congratulations line is NOT here: the lesson is flagged `completion`
+    in curriculum.ts, and CompletionHeader prints it above this body from the
+    learner's real progress, so nobody is congratulated for arriving at a URL.
+    This body is what is true for every visitor either way. It renders as one
+    screen — the flag also opts the page out of the parts reader. */}
+
+## Words from us
+
+<Callout variant="note" title="Author note">
+A closing note from the team belongs here. Not written yet — it is the course owner's to write, and this stub holds the slot until it exists.
+</Callout>
+
+## Feedback
+
+<Callout variant="note" title="Author note">
+The feedback channel for this page is not chosen yet — a form or contact link lands here when it is.
+</Callout>
+
+## What's next?
+
+Find opportunities — the first three are open programmes with cohorts and
+deadlines, the last is the listing to browse for everything else,
+entry-level roles included.
+
+<NextSteps items={[
+  {
+    name: "MATS",
+    detail: "A full-time research programme pairing scholars with mentors in AI safety, including governance and technical governance work.",
+    href: "https://www.matsprogram.org",
+    meta: "Cohort programme"
+  },
+  {
+    name: "GovAI Fellowships",
+    detail: "Summer and winter fellowships, and longer research roles, for people working on the governance of advanced AI.",
+    href: "https://www.governance.ai/opportunities",
+    meta: "Fellowship"
+  },
+  {
+    name: "Horizon Fellowship",
+    detail: "Places funded fellows on emerging-technology policy inside US institutions — federal agencies, Congress and think tanks — for 6 or 12 months in Washington, DC. The closest thing on this list to doing verification policy from inside a government.",
+    href: "https://horizonpublicservice.org/programs/become-a-fellow/",
+    meta: "Placement fellowship"
+  },
+  {
+    name: "See all — aisafety.com",
+    detail: "A running listing of fellowships, courses, workshops, conferences and entry-level jobs across the field — what is open changes constantly, so look here first.",
+    href: "https://aisafety.com",
+    meta: "Listing"
+  }
+]} />

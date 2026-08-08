@@ -92,7 +92,13 @@ export default async function TrackLayout({
         itemNavs[item.paper.id] = await buildNavForPaper(item.paper);
         continue;
       }
-      const sections = await getLessonSections(item.lesson.contentRef);
+      // The closing page renders as one screen, so its headings are never
+      // part boundaries and a docked nav of them would only be furniture.
+      if (item.lesson.completion) continue;
+      const sections = await getLessonSections(
+        item.lesson.contentRef,
+        item.lesson.title,
+      );
       // A single entry is noise — dock the panel only for real multi-section
       // lessons (papers always dock: their toc is never this small).
       if (sections.length < 2) continue;
@@ -200,7 +206,34 @@ async function tocForSource(source: Paper["source"]): Promise<PaperTocEntry[]> {
   }
 }
 
+// A prompt-bearing exercise has no title of its own, and a run of sidebar
+// rows all reading "Writing prompt" navigates nothing — so those rows are
+// labelled with the prompt's own opening line instead (markdown stripped,
+// truncated on a word). An opener too short to identify anything (a bare
+// table header like "Posture") falls back to the type label rather than
+// masquerading as a title.
 function exerciseLabel(exerciseId: string): string {
   const exercise = getExerciseById(exerciseId);
-  return exercise ? getExerciseDisplayTitle(exercise) : "Exercise";
+  if (!exercise) return "Exercise";
+  const title = getExerciseDisplayTitle(exercise);
+  if (title !== EXERCISE_TYPE_LABELS[exercise.type]) return title;
+  const opener = "prompt" in exercise ? promptOpener(exercise.prompt) : null;
+  return opener ?? title;
+}
+
+function promptOpener(prompt: string): string | null {
+  const line = prompt
+    .split("\n")
+    .map((raw) =>
+      raw
+        .replace(/^#{1,6}\s+/, "")
+        .replace(/\[([^\]]*)\]\([^)]*\)/g, "$1")
+        .replace(/[*_`]/g, "")
+        .replace(/\s+/g, " ")
+        .trim(),
+    )
+    .find((text) => text.length > 0);
+  if (!line || line.length < 12) return null;
+  if (line.length <= 72) return line;
+  return line.slice(0, 71).replace(/\s+\S*$/, "") + "…";
 }

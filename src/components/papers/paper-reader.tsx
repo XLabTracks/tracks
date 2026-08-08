@@ -370,9 +370,12 @@ function applyPaperEditsCached(
   // the html parts in document order (and on into the ungated tail), so an
   // activity/gate split after References doesn't reset the appendix walk —
   // the whole document collapses as one pass.
+  // `collapseTail: false` leaves the tail as ordinary sections — for papers
+  // whose appendix is the document rather than its apparatus.
+  const collapsing = paper.collapseTail !== false;
   let sawReferences = false;
   const parts = edited.parts.map((part) => {
-    if (part.kind !== "html") return part;
+    if (part.kind !== "html" || !collapsing) return part;
     const collapsed = collapseTailSections(part.html, sawReferences);
     sawReferences = collapsed.sawReferences;
     return { ...part, html: collapsed.html };
@@ -382,7 +385,9 @@ function applyPaperEditsCached(
     parts,
     ungatedTailHtml:
       edited.ungatedTailHtml &&
-      collapseTailSections(edited.ungatedTailHtml, sawReferences).html,
+      (collapsing
+        ? collapseTailSections(edited.ungatedTailHtml, sawReferences).html
+        : edited.ungatedTailHtml),
   };
   appliedEditsCache.set(paper.id, { html, applied });
   return applied;

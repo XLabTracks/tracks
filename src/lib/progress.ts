@@ -27,9 +27,8 @@ export async function getCompletedLessonIds(
   return rows.map((r) => r.lessonId);
 }
 
-// cache()-wrapped: string args, so the item page and an embedded widget
-// (e.g. VerificationExercise) that both check the same lesson dedupe to one
-// findUnique within a render.
+// cache()-wrapped: string args, so the item page and an embedded widget that
+// both check the same lesson dedupe to one findUnique within a render.
 export const isLessonCompleted = cache(
   async (userId: string, lessonId: string): Promise<boolean> => {
     const row = await prisma.lessonProgress.findUnique({

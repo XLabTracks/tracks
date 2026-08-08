@@ -1,22 +1,25 @@
 import type { ComponentType } from "react";
 import type { VerificationWidgetProps } from "../kit/types";
-import { PolicyCost } from "./policy-cost";
-import { VerificationLandscape } from "./verification-landscape";
-import { DissectionTable } from "./dissection-table";
 import { PolicyScoping } from "./policy-scoping";
 import { AnatomyDrill } from "./anatomy-drill";
 import { ProtocolActors } from "./protocol-actors";
-import { TamperTrace } from "./tamper-trace";
 import { ReportConstructor } from "./report-constructor";
-import { IrPrimer } from "./ir-primer";
-import { FacilitatorGuide } from "./facilitator-guide";
-import { ChangeTheGame } from "./change-the-game";
-import { InspectionGame } from "./inspection-game";
-import { EvolutionOfVerification } from "./evolution-of-verification";
-import { GameTheoryPrimer } from "./game-theory-primer";
-import { WhatDoTheySay } from "./what-do-they-say";
-import { VerificationTimelineGame } from "./verification-timeline-game";
 import { InteractiveMap } from "./interactive-map";
+import { VerificationLandscape } from "./verification-landscape";
+import { CollectionMap } from "./collection-map";
+import { ContextDistiller } from "./context-distiller";
+import { DrillsFoundations } from "./drills-foundations";
+import { DrillsGames } from "./drills-games";
+import { DrillsPrimers } from "./drills-primers";
+import { DrillsSupplyChain } from "./drills-supply-chain";
+import { PolicyCost } from "./policy-cost";
+import { PolicyPlot } from "./policy-plot";
+import { MechanismSort, MechanismSortReveal } from "./mechanism-sort";
+import { PrecedentCases } from "./precedent-cases";
+import { WhatDoTheySay } from "./what-do-they-say";
+import { TypesOfAi } from "./types-of-ai";
+import { ShortHistory } from "./short-history";
+import { TreatyWorkspace } from "./treaty-workspace";
 
 /**
  * Native React widgets ported from the standalone HTML pages, keyed by the same
@@ -27,23 +30,31 @@ export const verificationWidgets: Record<
   string,
   ComponentType<VerificationWidgetProps>
 > = {
-  "policy-cost": PolicyCost,
-  "verification-landscape": VerificationLandscape,
-  "dissection-table": DissectionTable,
   "policy-scoping": PolicyScoping,
   "anatomy-drill": AnatomyDrill,
   "protocol-actors": ProtocolActors,
-  "tamper-trace": TamperTrace,
   "report-constructor": ReportConstructor,
-  "ir-primer": IrPrimer,
-  "facilitator-guide": FacilitatorGuide,
-  "change-the-game": ChangeTheGame,
-  "inspection-game": InspectionGame,
-  "evolution-of-verification": EvolutionOfVerification,
-  "game-theory-primer": GameTheoryPrimer,
-  "what-do-they-say": WhatDoTheySay,
-  "verification-timeline-game": VerificationTimelineGame,
   "interactive-map": InteractiveMap,
+  "verification-landscape": VerificationLandscape,
+  "collection-map": CollectionMap,
+  "context-distiller": ContextDistiller,
+  // Each deck is a menu of that module's benches; the renderer and the
+  // judgements are shared (kit/drill-deck.tsx, engines/drills.ts).
+  "drills-primers": DrillsPrimers,
+  "drills-foundations": DrillsFoundations,
+  "drills-supply-chain": DrillsSupplyChain,
+  "drills-games": DrillsGames,
+  "policy-cost": PolicyCost,
+  "policy-plot": PolicyPlot,
+  // "Place your bets": rate + seal in 2.0, compare against the reference map
+  // in 4.1. One renderer, a reveal prop; both share the vt-ex: storage key.
+  "mechanism-sort": MechanismSort,
+  "mechanism-sort-reveal": MechanismSortReveal,
+  "precedent-cases": PrecedentCases,
+  "treaty-workspace": TreatyWorkspace,
+  "what-do-they-say": WhatDoTheySay,
+  "types-of-ai": TypesOfAi,
+  "short-history": ShortHistory,
 };
 
 export function getVerificationWidget(

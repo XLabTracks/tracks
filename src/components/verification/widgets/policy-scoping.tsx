@@ -41,9 +41,9 @@ const VERDICT_TEXT: Record<Verdict, string> = {
   wrong: "text-defect",
 };
 const VERDICT_LEFT: Record<Verdict, string> = {
-  right: "border-l-comply",
-  close: "border-l-exaggerate",
-  wrong: "border-l-defect",
+  right: "border-comply",
+  close: "border-exaggerate",
+  wrong: "border-defect",
 };
 
 interface Placement {
@@ -51,16 +51,6 @@ interface Placement {
   verdict: Verdict | null;
 }
 
-/** Small coloured dot for a policy bucket. */
-function Dot({ color }: { color: string }) {
-  return (
-    <span
-      aria-hidden
-      className="size-2.5 flex-none rounded-full"
-      style={{ background: color }}
-    />
-  );
-}
 
 /**
  * "Scoping an Anti-ASI Policy" — drag five policy buckets onto a 3×3
@@ -207,9 +197,8 @@ export function PolicyScoping({ onComplete }: VerificationWidgetProps) {
                       <Draggable
                         id={p.id}
                         label={p.name}
-                        className="border-border bg-card shadow-soft flex h-8 items-center gap-2 rounded-full border pr-3 pl-2.5 text-xs font-semibold"
+                        className="border-border bg-card shadow-soft flex h-8 items-center rounded-full border px-3 text-xs font-semibold"
                       >
-                        <Dot color={p.colorRaw} />
                         {p.name}
                       </Draggable>
                     </ChipTip>
@@ -305,7 +294,6 @@ export function PolicyScoping({ onComplete }: VerificationWidgetProps) {
                                       {pl.verdict && (
                                         <VerdictBadge verdict={pl.verdict} />
                                       )}
-                                      <Dot color={p.colorRaw} />
                                       <span className="truncate">{p.short}</span>
                                     </Draggable>
                                   </ChipTip>
@@ -431,10 +419,9 @@ export function PolicyScoping({ onComplete }: VerificationWidgetProps) {
                     return (
                       <div
                         key={p.id}
-                        className="border-border bg-muted/30 rounded-lg border border-l-[3px] p-2"
+                        className="border-border bg-muted/30 rounded-lg border p-2"
                       >
                         <div className="flex items-center gap-2">
-                          <Dot color={p.colorRaw} />
                           <span className="text-xs font-semibold">
                             {p.name}
                           </span>
@@ -449,12 +436,11 @@ export function PolicyScoping({ onComplete }: VerificationWidgetProps) {
                     <div
                       key={p.id}
                       className={cn(
-                        "border-border bg-muted/30 rounded-lg border border-l-[3px] p-2",
+                        "border-border bg-muted/30 rounded-lg border p-2",
                         VERDICT_LEFT[pl.verdict],
                       )}
                     >
                       <div className="flex items-center gap-2">
-                        <Dot color={p.colorRaw} />
                         <span className="text-xs font-semibold">{p.name}</span>
                         <span
                           className={cn(
@@ -505,13 +491,12 @@ export function PolicyScoping({ onComplete }: VerificationWidgetProps) {
                         disabled={excDone && !(isPicked && ok)}
                         onClick={() => pickException(p.id)}
                         className={cn(
-                          "border-border flex items-center gap-1.5 rounded-full border py-1 pr-3 pl-2 text-[11px] font-semibold transition-colors",
+                          "border-border rounded-full border px-3 py-1 text-[11px] font-semibold transition-colors",
                           "hover:border-foreground/40 disabled:opacity-50",
                           isPicked && ok && "border-comply text-comply",
                           isPicked && !ok && "border-defect text-defect",
                         )}
                       >
-                        <Dot color={p.colorRaw} />
                         {p.name}
                       </button>
                     );
@@ -623,7 +608,6 @@ function GhostTip({ policy }: { policy: Policy }) {
             top: `${policy.ghost.y * 100}%`,
           }}
         >
-          <Dot color={policy.colorRaw} />
           {policy.short}
         </button>
       </TooltipTrigger>
@@ -651,10 +635,7 @@ function ChipTip({
     <Tooltip>
       <TooltipTrigger asChild>{children}</TooltipTrigger>
       <TooltipContent className="max-w-xs text-pretty">
-        <span className="flex items-center gap-1.5 font-semibold">
-          <Dot color={policy.colorRaw} />
-          {policy.name}
-        </span>
+        <span className="block font-semibold">{policy.name}</span>
         {combo ? (
           <span className="mt-1 block">
             <span

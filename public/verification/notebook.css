@@ -1,0 +1,368 @@
+/* Notebook surface. Every colour is a theme.css variable, so the panel
+   follows day, night and high contrast without a rule being touched — there
+   is no paper texture and no second palette here, unlike the notebook this
+   was ported from.
+
+   Trap: the panel is fixed and scrolls its own body. Locking the document
+   behind it needs overflow:hidden on <html>, not <body> — iOS ignores it on
+   body and the page scrolls underneath. */
+
+.nb-lock { overflow: hidden; }
+
+/* The tools stand down off the course. The scripts that own them persist
+   across the app's client-side navigations, so the app chrome marks <html>
+   with vt-off-course when the route leaves the course; this hides whatever
+   is already mounted, and the scripts' handlers check the same class before
+   offering capture or define. Off-course, not display-toggling per tool:
+   one rule, every surface these scripts own. (The selection toolbar checks
+   the same class itself — it is a component and has no CSS here.) */
+.vt-off-course .nb-open,
+.vt-off-course .nb-root,
+.vt-off-course .vocab-card,
+.vt-off-course .hl-strip { display: none; }
+
+/* ---------- the corner button ---------- */
+
+.nb-open {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  z-index: 60;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 44px;
+  padding: 0 18px;
+  border: var(--hairline) solid transparent;
+  border-radius: 999px;
+  background: var(--primary);
+  color: var(--primary-foreground);
+  font: inherit;
+  font-size: var(--fs-md);
+  cursor: pointer;
+  box-shadow: var(--shadow-soft-lg);
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+}
+.nb-open:hover { filter: brightness(1.08); }
+
+/* The count is the reading; the pill is decoration for it. */
+.nb-badge {
+  min-width: 21px;
+  padding: 0 6px;
+  border-radius: 999px;
+  background: var(--primary-foreground);
+  color: var(--primary);
+  font-size: var(--fs-xs);
+  line-height: 21px;
+  text-align: center;
+}
+
+/* ---------- panel ---------- */
+
+.nb-root[hidden] { display: none; }
+
+.nb-scrim {
+  position: fixed;
+  inset: 0;
+  z-index: 70;
+  background: color-mix(in srgb, var(--foreground) 34%, transparent);
+}
+
+.nb-panel {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 71;
+  width: min(560px, 100vw);
+  display: flex;
+  flex-direction: column;
+  background: var(--background);
+  border-left: var(--hairline) solid var(--border);
+  box-shadow: var(--shadow-soft-lg);
+}
+
+.nb-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 16px 20px;
+  border-bottom: var(--hairline) solid var(--border);
+}
+.nb-head h2 { font-size: var(--fs-xl); }
+
+.nb-x {
+  width: 32px;
+  height: 32px;
+  border: var(--hairline) solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--card);
+  color: var(--muted-foreground);
+  font-size: var(--fs-xl);
+  line-height: 1;
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
+}
+.nb-x:hover { color: var(--foreground); }
+
+.nb-pages {
+  flex: 1;
+  overflow-y: auto;
+  padding: 18px 20px 26px;
+}
+
+.nb-title {
+  width: 100%;
+  padding: 6px 0 12px;
+  border: 0;
+  border-bottom: var(--hairline) solid var(--border);
+  background: transparent;
+  color: var(--foreground);
+  font-family: var(--display);
+  font-size: var(--fs-xl);
+  font-weight: 500;
+}
+.nb-title:focus { outline: none; border-bottom-color: var(--ring); }
+
+.nb-empty {
+  margin-top: 18px;
+  color: var(--muted-foreground);
+  font-size: var(--fs-md);
+  line-height: 1.6;
+}
+
+/* ---------- blocks ---------- */
+
+/* Uniform hairline on all four sides; the kind is a word inside the block,
+   never a painted edge. */
+.nb-block {
+  margin-top: 16px;
+  padding: 12px 14px 14px;
+  border: var(--hairline) solid var(--border);
+  border-radius: var(--radius);
+  background: var(--card);
+}
+.nb-block-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+.nb-block-kind {
+  font-size: var(--fs-2xs);
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--muted-foreground);
+  user-select: none;
+  -webkit-user-select: none;
+}
+.nb-block-bar .nb-x { width: 26px; height: 26px; font-size: var(--fs-md); }
+
+.nb-text,
+.nb-note-on-quote {
+  display: block;
+  width: 100%;
+  padding: 8px 10px;
+  border: var(--hairline) solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--background);
+  color: var(--foreground);
+  font: inherit;
+  font-size: var(--fs-md);
+  line-height: 1.6;
+  resize: vertical;
+}
+.nb-text:focus, .nb-note-on-quote:focus { outline: none; border-color: var(--ring); }
+.nb-text { overflow: hidden; }
+
+.nb-note-on-quote { margin-top: 10px; font-size: var(--fs-md); }
+
+/* No rib. A coloured left edge against three hairline ones is the
+   half-painted card the design rules forbid — pick no tint or paint the whole
+   thing. The block already says CAPTURED above it and carries its source
+   below, so the quote needs no second marker; it reads by its indent. */
+.nb-quote {
+  padding-left: 14px;
+  font-size: var(--fs-md);
+  line-height: 1.6;
+  white-space: pre-wrap;
+}
+.nb-source { margin-top: 6px; font-size: var(--fs-sm); color: var(--muted-foreground); }
+.nb-source a { color: var(--brand-ink); text-underline-offset: 3px; }
+
+.nb-sketch { position: relative; }
+.nb-sketch canvas {
+  display: block;
+  width: 100%;
+  border: var(--hairline) solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--background);
+  touch-action: none;
+  cursor: crosshair;
+}
+.nb-clear { position: absolute; right: 8px; bottom: 8px; }
+
+/* ---------- footer ---------- */
+
+.nb-foot {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 20px;
+  border-top: var(--hairline) solid var(--border);
+  background: var(--background);
+}
+.nb-add, .nb-pager { display: flex; align-items: center; gap: 8px; }
+.nb-pager { margin-left: auto; }
+.nb-count { font-size: var(--fs-xs); color: var(--muted-foreground); white-space: nowrap; }
+.nb-foot [data-export] { flex: 0 0 auto; }
+.nb-add button:disabled { opacity: .45; cursor: default; }
+
+/* The page number is the jump control: a box the width of two digits, typed
+   into and committed on Enter or blur. The hairline is what says "editable"
+   where the rest of the counter is print. */
+.nb-goto {
+  width: 2.6ch;
+  padding: 2px 3px;
+  border: var(--hairline) solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--mono);
+  font-size: var(--fs-xs);
+  text-align: center;
+}
+.nb-goto:focus { outline: none; border-color: var(--ring); }
+
+/* ---------- highlight removal ---------- */
+
+/* What is left of the highlighter here is removal: a strip beside a painted
+   passage. Raising actions over a selection belongs to SelectionActions,
+   which is a component and carries its own classes. */
+.hl-strip {
+  position: absolute;
+  z-index: 55;
+  display: flex;
+  gap: 6px;
+}
+.hl-strip .vocab-btn { position: static; }
+
+@media (max-width: 560px) {
+  .nb-open { right: 12px; bottom: 12px; }
+  .nb-foot { gap: 8px; }
+  .nb-pager { margin-left: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nb-open { transition: none; }
+}
+
+/* ---------- vocabulary ---------- */
+
+.nb-term-word { font-family: var(--display); font-size: var(--fs-lg); font-weight: 500; }
+.nb-term-def { margin-top: 6px; font-size: var(--fs-md); line-height: 1.6; }
+
+/* The lookup card sits in document coordinates beside the selection, so it
+   survives a scroll. */
+.vocab-btn {
+  position: absolute;
+  z-index: 55;
+  padding: 6px 12px;
+  border: var(--hairline) solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--card);
+  color: var(--foreground);
+  font: inherit;
+  font-size: var(--fs-sm);
+  cursor: pointer;
+  box-shadow: var(--shadow-soft);
+  user-select: none;
+  -webkit-user-select: none;
+}
+.vocab-btn:hover { background: var(--muted); }
+
+.vocab-card {
+  position: absolute;
+  z-index: 56;
+  width: min(360px, calc(100vw - 24px));
+  padding: 14px 16px 12px;
+  border: var(--hairline) solid var(--border);
+  border-radius: var(--radius);
+  background: var(--card);
+  box-shadow: var(--shadow-soft-lg);
+}
+.vocab-term { font-family: var(--display); font-size: var(--fs-lg); font-weight: 500; }
+.vocab-body { margin-top: 6px; font-size: var(--fs-md); line-height: 1.6; }
+.vocab-none { color: var(--muted-foreground); }
+.vocab-src { margin-top: 8px; font-size: var(--fs-xs); color: var(--muted-foreground); }
+.vocab-src a { color: var(--brand-ink); text-underline-offset: 3px; }
+.vocab-acts { display: flex; gap: 8px; margin-top: 12px; }
+
+/* ---------- the skill-map page ---------- */
+
+/* Derived view, so nothing here is an input. The module hue fills the bar
+   and tints the module line, and the fraction and state word beside each bar
+   are the reading — hue never stands alone. */
+.nb-skills-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.nb-skills-head h3 { font-family: var(--display); font-size: var(--fs-xl); font-weight: 500; }
+.nb-skill-sum { margin-top: 6px; font-size: var(--fs-sm); color: var(--muted-foreground); }
+
+.nb-skill-mod { margin-top: 22px; }
+.nb-skill-modname {
+  font-family: var(--mono);
+  font-size: var(--fs-2xs);
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--mod, var(--muted-foreground));
+}
+.nb-skill {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 0;
+  border-bottom: var(--hairline) solid var(--border);
+  font-size: var(--fs-sm);
+}
+.nb-skill-name { flex: 1 1 auto; min-width: 0; }
+.nb-skill-bar {
+  flex: 0 0 84px;
+  height: 4px;
+  border-radius: 999px;
+  background: var(--muted);
+  overflow: hidden;
+}
+.nb-skill-bar i { display: block; height: 100%; background: var(--mod, var(--primary)); }
+.nb-skill-frac {
+  flex: 0 0 auto;
+  font-family: var(--mono);
+  font-size: var(--fs-xs);
+  color: var(--muted-foreground);
+  white-space: nowrap;
+}
+
+/* ---------- written work ---------- */
+
+.nb-written-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.nb-written-head h3 { font-family: var(--display); font-size: var(--fs-xl); font-weight: 500; }
+.nb-written-text { margin-top: 8px; font-size: var(--fs-md); line-height: 1.6; white-space: pre-wrap; }
+
+/* A memo block is a window onto the desk's draft, so it says whose it is and
+   offers the way back. The text itself lives in VTMemoStore. */
+.nb-memo-head {
+  font-weight: 600;
+  font-size: 14px;
+  margin-bottom: 2px;
+}
+.nb-memo-link {
+  display: inline-block;
+  margin-top: 6px;
+  font-size: 12.5px;
+  color: var(--muted-foreground);
+}
+.nb-memo-link:hover { color: var(--foreground); }

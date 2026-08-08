@@ -1,0 +1,101 @@
+{
+  "source": "https://www.felonybench.com/",
+  "incidents": [
+    {
+      "company": "Meta",
+      "felonies": 1,
+      "description": "Compromise of an internal account at one company",
+      "date": "8/5/2026",
+      "sources": [
+        {
+          "label": "The Information",
+          "href": "https://www.theinformation.com/articles/meta-ai-model-hacked-another-company-cybersecurity-testing"
+        }
+      ],
+      "sourceText": "The Information"
+    },
+    {
+      "company": "Anthropic",
+      "felonies": 4,
+      "description": "Unauthorized use of GitHub credentials; Dependabot supply-chain attack; social engineering email campaign; public exposure of a malicious DNS server",
+      "date": "8/4/2026",
+      "sources": [
+        {
+          "label": "AISI",
+          "href": "https://www.aisi.gov.uk/blog/incident-report-unsanctioned-agent-behaviour-during-cyber-testing"
+        }
+      ],
+      "sourceText": "AISI"
+    },
+    {
+      "company": "OpenAI",
+      "felonies": 2,
+      "description": "Unauthorized use of GitHub credentials; public exposure of a malicious DNS server",
+      "date": "8/4/2026",
+      "sources": [
+        {
+          "label": "OpenAI",
+          "href": "https://openai.com/index/third-party-cyber-evaluations-involving-openai-models/"
+        },
+        {
+          "label": "AISI",
+          "href": "https://www.aisi.gov.uk/blog/incident-report-unsanctioned-agent-behaviour-during-cyber-testing"
+        }
+      ],
+      "sourceText": "OpenAI AISI"
+    },
+    {
+      "company": "OpenAI",
+      "felonies": 1,
+      "description": "Confirmed incident at one of four companies during Irregular's misconfigured CTF evaluation (?)",
+      "date": "8/4/2026",
+      "sources": [
+        {
+          "label": "OpenAI",
+          "href": "https://openai.com/index/third-party-cyber-evaluations-involving-openai-models/"
+        }
+      ],
+      "sourceText": "OpenAI"
+    },
+    {
+      "company": "OpenAI",
+      "felonies": 3,
+      "description": "Compromise of internal accounts at four companies",
+      "date": "7/31/2026",
+      "sources": [
+        {
+          "label": "Reuters",
+          "href": "https://www.reuters.com/business/openai-finds-evidence-other-ai-agents-escaped-containment-it-widens-hacking-2026-07-31/"
+        }
+      ],
+      "sourceText": "Reuters"
+    },
+    {
+      "company": "Anthropic",
+      "felonies": 3,
+      "description": "Compromise of internal accounts at three companies",
+      "date": "7/30/2026",
+      "sources": [
+        {
+          "label": "Anthropic",
+          "href": "https://www.anthropic.com/news/investigating-incidents-cybersecurity-evals"
+        }
+      ],
+      "sourceText": "Anthropic"
+    },
+    {
+      "company": "OpenAI",
+      "felonies": 1,
+      "description": "Compromise of Hugging Face during a model evaluation",
+      "date": "7/21/2026",
+      "sources": [
+        {
+          "label": "OpenAI",
+          "href": "https://openai.com/index/hugging-face-model-evaluation-security-incident/"
+        }
+      ],
+      "sourceText": "OpenAI"
+    }
+  ],
+  "retrieved": "2026-08-07"
+}

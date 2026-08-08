@@ -1,0 +1,768 @@
+/* XLab Verification — the palette and chrome the standalone verification
+   subdomain pages run on. Three themes over one set of variable names, so a
+   rule that reads --primary or --border follows the switch without being
+   touched. Day and night carry XLab's maroon; high contrast drops the brand
+   for black, white and one signal yellow.
+
+   Trap: maroon at #800000 is a fine SURFACE on dark (white on it reads at
+   12:1) but not fine as TEXT on dark (2.3:1). That is why --brand-ink exists
+   separately from --primary: filled things use --primary, written things use
+   --brand-ink, and the two differ per theme.
+
+   Trap: high contrast is picked, never inferred. It is a legibility setting,
+   and a learner who needs it should not have it depend on an OS toggle they
+   set for a different reason — so prefers-color-scheme only ever chooses
+   between day and night.
+
+   Module hues run Chinese Red - Satsuma - Lunar Yellow - Khaki - Cobalt: one
+   family with the brand in it rather than a general-purpose data palette
+   sitting next to it. Burgundy anchors that palette at OKLCH hue 23 and
+   --primary is at 29, which is why these belong together and the Okabe-Ito
+   set did not.
+   Each theme keeps the hue and solves lightness for its own ground, so the
+   day values are the same five colours darkened to carry as text on paper,
+   not different colours. Every one clears 4.5:1 where it is set (day 4.6-8.5,
+   night 5.2-6.9, high contrast 7.7-13.1); the old day palette cleared it on
+   one of five.
+   They stay decorative: warm neighbours converge for a protanope, so
+   everywhere a module colour appears the module number appears as text beside
+   it, and nothing is encoded by hue alone. */
+
+:root,
+:root[data-theme='light'] {
+  --background: #fbfaf9;
+  --foreground: #1a1614;
+  --card: #ffffff;
+  --primary: #800000;
+  --primary-foreground: #ffffff;
+  --brand-ink: #800000;
+  --muted: #f2efed;
+  --muted-foreground: #5f5854;
+  --accent: #f2efed;
+  --border: #e4dedb;
+  /* The learner's own marker (::highlight(vt-hl)): the periwinkle from the
+     brand's palette board (red · blue · wine · blush) — the one hue in that
+     family the maroons don't already own, so a mark never reads as course
+     chrome. Day ink clears ~9:1 on it. Each theme re-solves the pair. */
+  --hl: #8eb9fe;
+  --hl-ink: var(--foreground);
+  --ring: #800000;
+
+  --mod-0: #970a12;  /* Chinese Red */
+  --mod-1: #d1601f;  /* Satsuma */
+  --mod-2: #fecd6d;  /* Lunar Yellow */
+  --mod-3: #6d7636;  /* Khaki */
+  --mod-4: #022E4C;  /* Prussian */
+  /* Text on that fill. Fixed, because it depends on the fill and not on the
+     page ground. */
+  --mod-0-ink: #ffffff;
+  --mod-1-ink: #ffffff;
+  --mod-2-ink: #1a1614;
+  --mod-3-ink: #ffffff;
+  --mod-4-ink: #ffffff;
+  /* The same accent where it has to be type on the page rather than a fill.
+     Forcing five hues to 4.5:1 as text compresses them into one lightness
+     band and Satsuma stops being tellable from Lunar Yellow — so the fill
+     carries the identity and this carries the reading. */
+  --mod-0-text: #9a000c;
+  --mod-1-text: #bf4f00;
+  --mod-2-text: #946b00;
+  --mod-3-text: #555e07;
+  --mod-4-text: #3d75b1;
+
+  /* Graded feedback. Wong's bluish-green and vermillion, never the red/green
+     pair — and never on their own: every use is accompanied by the word
+     (Correct / Not quite) and a ✓ or ✕.*/
+  --ok: #007c5a;
+  --no: #b34700;
+
+  /* Real errors only — a form that will not submit, a widget that
+     failed. Undefined here, it fell through to the app's red-600 and
+     was the one un-themed colour on the page. It is --no rather than
+     the maroon so an error still reads as an error and not as brand. */
+  --destructive: #b34700;
+
+  /* Okabe-Ito data-encoding accents for the Verification widgets. They live
+     here, not only in globals.css, for the same reason --destructive does:
+     this file re-points the palette on the Verification routes, and a token it
+     does not define keeps its app default on every theme. Left un-themed these
+     five sat at one fixed value over a white, a near-black and a black ground.
+
+     Each value clears 4.5:1 against the worst surface of its own theme —
+     the darkest one where the ink is dark, the lightest where it is light.
+     Where the set carries a light counterpart it is used (blue -> sky blue);
+     where it does not, the same hue is darkened rather than swapped, so the
+     five stay separable for a colour-blind reader. Hue never carries the
+     meaning alone in any case — the widgets pair it with a label. */
+  /* The widgets' semantic accents. Same five colours as the module palette,
+     assigned so the meaning each one carried survives the move: conceal stays
+     blue, overstate stays amber, comply stays the green end, defect stays red.
+     These are ink and 10%-tints, never plaques, so they take the -text
+     variants. Hue never carries the meaning alone — every widget pairs it with
+     its label. */
+  --comply: #555e07;      /* Khaki */
+  --defect: #9a000c;      /* Chinese Red */
+  --hide: #3d75b1;        /* Cobalt */
+  --exaggerate: #946b00;  /* Lunar Yellow */
+  --free-ride: #bf4f00;   /* Satsuma */
+
+
+  /* Type scale. Ten steps, and every rule on these pages picks one — the sizes
+     used to run to 22 distinct values between 10 and 27px, eight of them at
+     half-pixels that render differently per zoom and DPI. Steps are integers
+     for the same reason.
+
+     --fs-title is every page's h1; --fs-hero is the landing's alone. They were
+     five near-identical clamps before, which is four chances to drift. */
+  --fs-2xs: 11px;
+  --fs-xs: 12px;
+  --fs-sm: 13px;
+  --fs-md: 14px;
+  --fs-lg: 16px;
+  --fs-xl: 18px;
+  --fs-2xl: 22px;
+  --fs-3xl: 28px;
+  --fs-4xl: 36px;
+  --fs-title: clamp(28px, 3.4vw, 36px);
+  --fs-hero: clamp(32px, 4.4vw, 52px);
+
+  --radius: 14px;
+  --radius-sm: 8px;
+  --radius-xs: 4px;
+  --hairline: 1px;
+  --shadow-soft: 0 1px 2px rgba(10, 25, 47, .06);
+  --shadow-soft-lg: 0 12px 40px rgba(10, 25, 47, .13);
+  --glow: 0;
+
+  /* Two families, and only one of them is a download: Space Grotesk for
+     headings and display numerals, the system sans for everything else.
+
+     --mono is kept as a token because ~90 rules ask for it, but it now
+     resolves to the same sans. It used to name JetBrains Mono and IBM Plex
+     Mono, neither of which this site ships — so every micro-label fell
+     through to whatever ui-monospace the OS supplies, and the pages set
+     themselves in a different third face on macOS, Windows and Linux. The
+     labels still read as labels: they keep their uppercase and letterspacing,
+     which is what was doing the work, not the face.
+
+     Trap: mono was also holding counters and fractions in column. Losing it
+     would let digits jitter as they change, so tabular figures are switched
+     on globally below rather than per counter. */
+  --display: 'Space Grotesk', 'Segoe UI', system-ui, sans-serif;
+  --sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, Helvetica, Arial, sans-serif;
+  --mono: var(--sans);
+}
+
+:root[data-theme='dark'] {
+  --background: #14100f;
+  --foreground: #f4f0ee;
+  --card: #1c1817;
+  --primary: #9d1b1b;
+  --primary-foreground: #ffffff;
+  --brand-ink: #eda3a3;
+  --muted: #262120;
+  --muted-foreground: #b0a7a3;
+  --accent: #2e2827;
+  --border: #332c2a;
+  --ring: #eda3a3;
+  /* The day marker's periwinkle, re-solved for the dark ground: same hue,
+     lightness dropped until the night ink clears ≈8.5:1 on it. */
+  --hl: #33436b;
+  --hl-ink: var(--foreground);
+
+  /* Fills and their ink are the day values: a plaque's legibility is set by
+     the plaque, not by the page behind it. Only the type variant re-solves. */
+  --mod-0-text: #e4584f;
+  --mod-1-text: #e15f00;
+  --mod-2-text: #c5952b;
+  --mod-3-text: #828d41;
+  --mod-4-text: #518ac7;
+
+  --ok: #3ecfa4;
+  --no: #ff8f4d;
+  --destructive: #ff8f4d;
+
+  /* Lightened against the dark ground; the assignment is the light block's. */
+  --comply: #828d41;
+  --defect: #e4584f;
+  --hide: #518ac7;
+  --exaggerate: #c5952b;
+  --free-ride: #e15f00;
+
+  --shadow-soft: 0 1px 2px rgba(0, 0, 0, .4);
+  --shadow-soft-lg: 0 12px 40px rgba(0, 0, 0, .5);
+  /* Night is the one ground a glow reads on; day and high contrast set it to 0. */
+  --glow: 1;
+}
+
+/* High contrast is a low-vision mode, not a dark theme, and it is built to
+   WCAG's own numbers rather than to taste:
+
+     1.4.6 Contrast (Enhanced, AAA) — 7:1 for body type. Here every pair is
+       black against white at 21:1, because the mode exists for people for whom
+       7:1 is the floor and not the target.
+     1.4.4 Resize text (AA) — 200%, applied by re-solving the --fs- scale.
+       Every rule on these pages picks a step from it, so the scale is the
+       whole mechanism; a root font-size would do nothing, because these
+       stylesheets size in px and px does not follow the root font.
+     1.4.10 Reflow (AA) — no sideways scrolling at 320 CSS px. This is why
+       the type scale and not `zoom` carries the 200%: zoom shrinks the layout
+       viewport and leaves the media queries behind, so the page lays out in
+       half the room while every width rule still believes in the whole of it.
+     2.5.5 Target Size (Enhanced, AAA) — 44x44 CSS px for anything pressable.
+
+   Hue carries nothing at all in this mode. The five module colours collapse to
+   the foreground and the module number does the work it was always doing
+   beside them, so a learner who cannot separate the hues loses nothing —
+   there is nothing left to separate.
+
+   Trap: it is picked, never inferred. prefers-color-scheme only ever chooses
+   between day and night; a legibility setting must not ride on an OS toggle
+   someone set for a different reason. */
+:root[data-theme='contrast'] {
+  --background: #000000;
+  --foreground: #ffffff;
+  --card: #000000;
+  --primary: #ffe600;
+  --primary-foreground: #000000;
+  --brand-ink: #ffe600;
+  --muted: #000000;
+  --muted-foreground: #ffffff;
+  --accent: #1a1a1a;
+  --border: #ffffff;
+  --ring: #ffe600;
+  /* The marker is the mode's own yellow with its own ink — the selected-state
+     pair, so a highlight reads like everything else pressed in this mode. */
+  --hl: var(--primary);
+  --hl-ink: var(--primary-foreground);
+
+  /* No hue at all: every module reads as foreground, and the number beside it
+     is the whole encoding. */
+  --mod-0: #ffffff; --mod-1: #ffffff; --mod-2: #ffffff;
+  --mod-3: #ffffff; --mod-4: #ffffff;
+  --mod-0-ink: #000000; --mod-1-ink: #000000; --mod-2-ink: #000000;
+  --mod-3-ink: #000000; --mod-4-ink: #000000;
+  --mod-0-text: #ffffff; --mod-1-text: #ffffff; --mod-2-text: #ffffff;
+  --mod-3-text: #ffffff; --mod-4-text: #ffffff;
+
+  /* Correct and wrong keep a colour because they are the one place a glance
+     has to be instant — and both still carry their word and glyph. */
+  --ok: #6bffcb;
+  --no: #ffab70;
+  --destructive: #ffab70;
+
+  /* On black the set's own values already clear 4.5:1, except blue, which
+     takes its sky-blue counterpart. */
+  /* Hue carries nothing here either; the widget's own label is the encoding. */
+  --comply: #ffffff;
+  --defect: #ffffff;
+  --hide: #ffffff;
+  --exaggerate: #ffffff;
+  --free-ride: #ffffff;
+
+  --radius: 8px;
+  --radius-sm: 6px;
+  --radius-xs: 4px;
+  --hairline: 3px;
+  --shadow-soft: none;
+  --shadow-soft-lg: none;
+  --glow: 0;
+
+  /* 1.4.4: type at 200%, and the type scale is the only thing doubled.
+     Every rule on these pages picks a --fs- step, so re-solving the scale
+     moves all of them and nothing else.
+
+     It is emphatically NOT `zoom: 2` on the root. Zoom scales the box tree,
+     which sounds like the same thing and is not: it halves the layout
+     viewport while leaving the media queries where they were, so a 320px
+     phone lays out in 160px of room and every width rule still believes it
+     has 320. That is a 1.4.10 Reflow failure by construction — content that
+     has to be scrolled sideways to read a line, which is the exact thing
+     this mode exists to spare somebody. Reflow only works if the layout sees
+     the real viewport, so the layout is left alone and the letters grow. */
+  --fs-2xs: 22px;
+  --fs-xs: 24px;
+  --fs-sm: 26px;
+  --fs-md: 28px;
+  --fs-lg: 32px;
+  --fs-xl: 36px;
+  --fs-2xl: 44px;
+  --fs-3xl: 56px;
+  --fs-4xl: 72px;
+  --fs-title: clamp(44px, 6.8vw, 72px);
+  --fs-hero: clamp(48px, 8.8vw, 104px);
+}
+
+/* A long word at 72px is wider than a 320px screen, and a heading that cannot
+   break is a horizontal scrollbar. Breaking is the lesser harm. */
+:root[data-theme='contrast'] { overflow-wrap: break-word; }
+
+/* The learner's marker, painted by highlight.js through the Custom Highlight
+   API — a pseudo, not an element, so this is the one place its colours can
+   be said. Both values re-solve per theme above; a browser without the API
+   never registers the name and the rule is inert. */
+::highlight(vt-hl) {
+  background-color: var(--hl);
+  color: var(--hl-ink);
+}
+
+/* 1.4.10, the rest of it: doubling the type does not move a layout, but it
+   does overrun the two things that were told never to give way — a line held
+   to one line, and a row told not to wrap. Both are fine at the default size
+   and both are a sideways scrollbar at twice it, so this mode releases them.
+   A data table is the one thing left scrolling in its own box, which the
+   criterion allows and the house rules already require. */
+:root[data-theme='contrast'] :is(
+  .brand, .nav a, .chip, .counter, .frac, .open-cue, .nb-count, .lock
+) { white-space: normal; }
+
+:root[data-theme='contrast'] :is(
+  .brand, .header-right, .guide-tools, .rt-row, .sort, .modes, .progress-row,
+  .gmod > .head, .control-row
+) { flex-wrap: wrap; }
+
+/* A flex item's floor is its own content, and a form control's content is
+   wider than it looks: an input reports the `size` attribute's twenty
+   characters, a select its longest option. At twice the type size that floor
+   is wider than the screen, and wrapping does not help — the item refuses to
+   shrink, so the row wraps around something already too wide. Zero is the
+   floor they need, and it has to reach the wrapper as well as the control:
+   a label holding a select is the item that will not give, and `max-width:
+   100%` on the select then resolves against the label's own overflow. */
+:root[data-theme='contrast'] :is(input, select, textarea) {
+  min-width: 0;
+  max-width: 100%;
+}
+:root[data-theme='contrast'] :is(
+  .control-row, .rt-row, .guide-tools, .sort
+) > * { min-width: 0; }
+/* The header pair is deliberately not in that list: it is sized by
+   --hdr-action-*, and a floor of zero there would let the two come apart
+   again. It reflows by wrapping instead. */
+
+/* Label above value rather than beside it: an 88px label column beside a
+   value is a two-column table, and at this size the value column has nothing
+   left to hold a word. */
+:root[data-theme='contrast'] .brief dl > div { grid-template-columns: minmax(0, 1fr); gap: 2px; }
+
+/* 2.5.5: 44x44 CSS px minimum for a pointer target. Declared on the mode
+   rather than globally, because at the default size the compact chrome is
+   deliberate and this is the mode that trades density for reach. */
+:root[data-theme='contrast'] button,
+:root[data-theme='contrast'] [role='button'],
+:root[data-theme='contrast'] .btn,
+:root[data-theme='contrast'] .chip,
+:root[data-theme='contrast'] .nav a,
+:root[data-theme='contrast'] .site-footer a,
+:root[data-theme='contrast'] .part-jump {
+  min-height: 44px;
+  min-width: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* The constellation is a scatter of labels positioned by trigonometry, not by
+   layout; at this size it cannot be read, and the track page carries the same
+   list as text. The "Open the skill map" link below it is outside this element
+   on purpose — it is the way to the same graph and must survive.
+
+   Trap: this selects the wrapper in landing.html, and a rename there silently
+   turns the rule off rather than breaking anything visible. It had already
+   happened once: the rule named `.sky-wrap`, which no longer exists, so the
+   scatter was rendering here with 16px-tall targets. */
+:root[data-theme='contrast'] .constellation { display: none; }
+
+/* One column, everywhere — now a choice rather than a repair. These used to be
+   here because zoom left the media queries believing in a width the layout no
+   longer had; with the layout reading the real viewport they fire correctly on
+   their own. They stay because at 200% type a three-column grid holds a
+   handful of words per line, and tracking from the end of one short line to
+   the start of the next is the reading problem this mode exists to remove. */
+:root[data-theme='contrast'] .objectives,
+:root[data-theme='contrast'] .modules,
+:root[data-theme='contrast'] .roster,
+:root[data-theme='contrast'] .pins,
+:root[data-theme='contrast'] .facts,
+:root[data-theme='contrast'] .map-body,
+:root[data-theme='contrast'] .desk,
+:root[data-theme='contrast'] .cap-grid,
+:root[data-theme='contrast'] .stat-row,
+:root[data-theme='contrast'] .player .shell {
+  grid-template-columns: minmax(0, 1fr) !important;
+  /* One column only holds if the flow fills by row. A grid that fills by
+     column (.objectives does, so its numbers read down the left) answers a
+     single declared column by inventing implicit ones beside it, and the
+     narrowest of those is the cramped line this mode exists to remove. */
+  grid-auto-flow: row !important;
+}
+
+/* The header is a fixed-height single row by default; at this size its own
+   contents no longer fit across, so it wraps like it does on a phone. */
+:root[data-theme='contrast'] .site-header .bar {
+  height: auto;
+  flex-wrap: wrap;
+  gap: 10px 16px;
+  padding: 8px 16px;
+}
+:root[data-theme='contrast'] .rail {
+  position: static;
+  width: auto;
+  max-width: none;
+  height: auto;
+}
+
+/* Focus has to be findable, not merely present. */
+:root[data-theme='contrast'] :where(button, a, input, textarea, [tabindex]):focus-visible {
+  outline: 4px solid var(--ring);
+  outline-offset: 3px;
+}
+
+h1, h2, h3, h4 { font-family: var(--display); font-weight: 500; letter-spacing: -.015em; line-height: 1.15; }
+
+/* Chrome is not text — nothing pressable takes a selection. A blue smear over
+   a theme glyph or a nav tab is always a mis-drag, and it reads as a broken
+   page. Trap: `all: unset` resets this, so any rule using it must re-declare
+   user-select: none directly after. */
+button, [role='button'], [role='radio'], [role='tab'], .chip, .nav a, .brand,
+.btn, .stat dt, .legend, .mod-chip, .memo-link, .skip, .site-footer a {
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+}
+
+:where(button, a, input, textarea, [tabindex]):focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
+}
+
+.mono { font-family: var(--mono); }
+
+.wrap { width: 100%; max-width: 1120px; margin: 0 auto; padding: 0 24px; }
+
+/* ---------- header ---------- */
+
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  border-bottom: var(--hairline) solid var(--border);
+  background: color-mix(in srgb, var(--background) 88%, transparent);
+  backdrop-filter: blur(8px);
+}
+.site-header .bar {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  height: 56px;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--display);
+  font-size: var(--fs-lg);
+  /* 700 is the top of the embedded Space Grotesk's weight range — asking
+     for more gets synthetic bold, which smears the letterforms. */
+  font-weight: 700;
+  letter-spacing: -.015em;
+  text-decoration: none;
+  white-space: nowrap;
+}
+/* The @ is a connector, not a brand mark — the logotype beside it carries
+   the brand. It used to take --brand-ink, which on the night ground is a
+   lightened dusty pink (maroon reads at 2.3:1 as text there), so the one
+   pink thing on the page was a preposition. */
+.brand i { color: var(--muted-foreground); font-style: normal; }
+
+/* The XLab logotype beside the word.
+
+   Trap: the file is 3300x1050 but the ink only fills the middle 55% of that
+   box (y 236-814) and is inset horizontally too, so `height` buys about half
+   of what it says — at 15px the visible mark was 8px against a 12px cap
+   height and read as an afterthought. 28px puts roughly 15px of ink beside
+   the word. Re-crop the PNG if you want the number to mean what it says.
+
+   Two files, not one filtered file. The day artwork is maroon-and-black and
+   disappears on the night ground; the white artwork keeps the maroon cross
+   and turns the letters white. Both ship, and CSS shows one — a filter that
+   re-lit the day file pushed the cross off-brand towards pink.
+
+   High contrast is the exception: it drops brand colour by design, and a
+   maroon cross on black reads at about 2:1, so there the white file is
+   flattened the rest of the way. */
+.brand-mark {
+  height: 28px;
+  width: auto;
+  display: block;
+}
+
+/* Which artwork, per ground. These must stay AFTER .brand-mark: it sets
+   display:block at the same specificity, so ordering is what decides. */
+.mark-night { display: none; }
+:root[data-theme='dark'] .mark-day,
+:root[data-theme='contrast'] .mark-day { display: none; }
+:root[data-theme='dark'] .mark-night,
+:root[data-theme='contrast'] .mark-night { display: block; }
+
+/* The links sit against the brand on the left; the nav still takes the whole
+   middle of the bar so the actions are pushed hard right.
+
+   Trap: flex:1 is what pushes .header-right to the edge — drop it and the
+   actions slide back in beside the links.
+
+   Trap: min-width:0 is what lets the nav shrink below its content and scroll.
+   A flex item's floor is its content width by default, so without this the
+   links wrap to a second row inside a 56px bar and then push the page into
+   horizontal scroll — which is what happens between the mobile breakpoint and
+   about 1100px, where there is no room for every link but the bar is still
+   one row. */
+/* No scrollbars anywhere — the author's call, at the root so it holds for
+   the page and for every scrolling box inside it. Scrolling still works;
+   only the painted bar is gone. Lives here as well as in the app's
+   globals.css because this stylesheet is what a lifted copy of the course
+   would carry.
+
+   Trap: neither declaration is a fallback for the other — Firefox reads
+   scrollbar-width, WebKit and Chromium only the pseudo-element, and that
+   one must be display:none rather than width:0. */
+:root,
+* {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+*::-webkit-scrollbar { display: none; }
+
+.nav {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 14px;
+  font-size: var(--fs-md);
+  overflow-x: auto;
+}
+.nav a { white-space: nowrap; }
+.nav a {
+  position: relative;
+  padding: 6px 14px;
+  border-radius: var(--radius-sm);
+  color: var(--muted-foreground);
+  text-decoration: none;
+  transition: color .15s ease, background .15s ease;
+}
+.nav a:hover { color: var(--foreground); background: var(--muted); }
+.nav a[aria-current='page'] { color: var(--foreground); }
+.nav a[aria-current='page']::after {
+  content: '';
+  position: absolute;
+  inset-inline: 14px;
+  bottom: -1px;
+  height: 2px;
+  border-radius: var(--radius-xs);
+  background: var(--primary);
+}
+
+/* The switch and the account button are a matched pair in the corner, so they
+   are sized together rather than each to its own content: same width, same
+   height, in every theme.
+
+   The width is set by the longer of the two labels the button can carry —
+   "Account" once a session is detected, not "Sign in" — because a width fitted
+   to the shorter one clips the other the moment sync.js swaps it. The height
+   is a variable because the contrast theme lifts every tap target to 44px; if
+   only the button read that rule the pair would come apart in that theme
+   alone. */
+.header-right {
+  --hdr-action-w: 100px;
+  --hdr-action-h: 38px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+/* At 200% type the label and the three 44px segments both outgrow the default
+   size, so the pair is given a bigger one rather than a fixed one it would
+   spill out of. */
+:root[data-theme='contrast'] .header-right { --hdr-action-w: 168px; --hdr-action-h: 54px; }
+
+/* A floor, not a fixed size: at the default size neither one's content reaches
+   it, so both settle on exactly the same number — which is the point. Setting
+   `width` instead would clip the label the moment the type grew. */
+.header-right .theme-switch,
+.header-right > .btn.small {
+  min-width: var(--hdr-action-w);
+  min-height: var(--hdr-action-h);
+}
+
+/* Three-way theme switch, drawn as radios rather than a cycling button: a
+   cycling control gives no way to see which of the three is active, and none
+   of them is an obvious "next". */
+.theme-switch {
+  display: inline-flex;
+  align-items: center;
+  /* The switch shares the account button's width floor, and in high contrast
+     the floor (sized for that button's grown label) exceeds the three
+     segments' content. Space-between feeds the slack into the two
+     inter-segment gaps so the end segments stay against the padding on both
+     sides — flex-start pools all of it after the selected segment, a stretch
+     of dead ground inside the border. `gap` is the floor the gaps never drop
+     below; at the default size content meets the width floor and nothing
+     moves. */
+  justify-content: space-between;
+  gap: 2px;
+  padding: 2px;
+  border: var(--hairline) solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--card);
+}
+/* Each segment is a square, the height of the switch's inside — so the
+   selected one reads as a square swatch of the theme it names.
+
+   Trap: `height: 100%` does not work here. The switch is sized by its
+   content, so a percentage height resolves against nothing and the button
+   collapses onto its icon — 30 x 13.5, which the corner radius then rounds
+   into a squat pill. The side is stated instead, off the same token that
+   sets the header's action height, so the three segments stay square when
+   high contrast makes everything bigger — and minus the padding and the two
+   hairlines, so the control still stands exactly as tall as the button beside
+   it. High contrast draws a 3px hairline, which is why that is a variable
+   here and not a 2. */
+.theme-switch button {
+  --seg: calc(var(--hdr-action-h, 38px) - 4px - 2 * var(--hairline));
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: var(--seg);
+  height: var(--seg);
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--muted-foreground);
+  cursor: pointer;
+  transition: color .15s ease, background .15s ease;
+}
+.theme-switch button:hover { color: var(--foreground); background: var(--accent); }
+.theme-switch button[aria-checked='true'] { background: var(--primary); color: var(--primary-foreground); }
+.theme-switch svg { width: 15px; height: 15px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+/* Equal boxes draw unequal icons: the sun's rays reach 20 of the 24 viewBox
+   units where the moon and the contrast disc reach 18. Sizing the sun down
+   matches the ink the eye compares, not the box the CSS sets — and the sun is
+   the one that has to survive the filled ground of the selected state. */
+.theme-switch button[data-theme='light'] svg { width: 13.5px; height: 13.5px; }
+/* High contrast re-solves the segments to 44px squares, and a 15px icon with
+   a sub-pixel stroke floats in one as a grey speck — thin white lines
+   anti-alias below the mode's own bar. The ink scales with the box: larger
+   icons, a stroke thick enough to rasterise white, and the sun keeps its
+   optical discount. */
+:root[data-theme='contrast'] .theme-switch svg { width: 22px; height: 22px; stroke-width: 2.4; }
+:root[data-theme='contrast'] .theme-switch button[data-theme='light'] svg { width: 20px; height: 20px; }
+
+
+/* ---------- buttons ---------- */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  height: 50px;
+  padding: 0 24px;
+  border: var(--hairline) solid transparent;
+  border-radius: var(--radius-sm);
+  background: var(--primary);
+  color: var(--primary-foreground);
+  font: inherit;
+  font-size: var(--fs-xl);
+  text-decoration: none;
+  cursor: pointer;
+  transition: filter .15s ease, background .15s ease, color .15s ease;
+}
+.btn:hover { filter: brightness(1.08); }
+.btn.outline { background: transparent; color: var(--foreground); border-color: var(--border); }
+.btn.outline:hover { background: var(--muted); filter: none; }
+.btn.small { height: 38px; padding: 0 14px; font-size: var(--fs-lg); }
+
+.skip {
+  position: fixed;
+  top: 10px;
+  left: 10px;
+  width: max-content;
+  z-index: 60;
+  padding: 8px 14px;
+  border: var(--hairline) solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--background);
+  transform: translateY(-200%);
+}
+.skip:focus { transform: none; }
+
+/* ---------- footer ---------- */
+
+.site-footer {
+  border-top: var(--hairline) solid var(--border);
+  margin-top: 72px;
+  padding: 22px 0 40px;
+  color: var(--muted-foreground);
+  font-family: var(--mono);
+  font-size: var(--fs-xs);
+}
+.site-footer .wrap { display: flex; flex-direction: column; gap: 14px; }
+
+.foot-links { display: flex; flex-wrap: wrap; gap: 8px 20px; }
+/* A footer row is navigation, not a sentence, so it does not get the inline
+   exception WCAG's target-size rule grants links inside prose — at 19px tall
+   these were under the 24px floor on a phone. The padding takes them past it;
+   the negative margin keeps the row's spacing where it was. */
+.foot-links a {
+  color: var(--muted-foreground);
+  text-decoration: none;
+  display: inline-block;
+  padding-block: 4px;
+  margin-block: -4px;
+}
+.foot-links a:hover { color: var(--foreground); text-decoration: underline; text-underline-offset: 3px; }
+/* A destination that does not exist yet. It must not look pressable — no
+   pointer, no hover, no underline — or it reads as a broken link. */
+.foot-links .pending { color: var(--muted-foreground); opacity: .5; cursor: default; }
+
+/* One rule closes the page; a second one inside the footer only boxes the
+   copyright off from the links it belongs with. Spacing separates them. */
+.foot-end {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 20px;
+  padding-top: 4px;
+}
+.foot-end > span:last-of-type { margin-right: auto; }
+
+/* The nav wraps to its own scrolling row rather than collapsing into a menu:
+   hiding the destinations behind a button on the one viewport where the
+   sidebar is already gone leaves no way through.
+   Trap: the desktop rule gives .nav flex:1, whose 0% basis beats width:100%
+   in a wrapped row — it has to be reset here or the row collapses. */
+@media (max-width: 720px) {
+  .site-header .bar { height: auto; flex-wrap: wrap; gap: 10px 16px; padding: 8px 16px; }
+  .nav {
+    order: 3;
+    flex: none;
+    width: 100%;
+    overflow-x: auto;
+    padding-bottom: 2px;
+  }
+  .nav a { white-space: nowrap; padding: 4px 8px; }
+  .header-right { margin-left: auto; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .01ms !important;
+  }
+}

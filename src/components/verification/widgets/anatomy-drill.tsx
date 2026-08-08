@@ -39,19 +39,19 @@ const TIER_ACCENT: Record<
   clean: {
     dot: "bg-comply",
     text: "text-comply",
-    border: "border-l-comply",
+    border: "border-comply",
     label: "clean",
   },
   near: {
     dot: "bg-exaggerate",
     text: "text-exaggerate",
-    border: "border-l-exaggerate",
+    border: "border-exaggerate",
     label: "defensible",
   },
   miss: {
     dot: "bg-defect",
     text: "text-defect",
-    border: "border-l-defect",
+    border: "border-defect",
     label: "miss",
   },
 };
@@ -69,17 +69,6 @@ const FEEDBACK_HEAD: Record<FeedbackKind, string> = {
   retry: "Not this organ — look again",
   reveal: "Filed for you",
 };
-
-/** Small categorical organ swatch — decorative colour always paired with the numbered name. */
-function OrganDot({ color }: { color: string }) {
-  return (
-    <span
-      aria-hidden
-      className="inline-block size-2.5 shrink-0 rounded-full"
-      style={{ background: color }}
-    />
-  );
-}
 
 /**
  * The Anatomy Drill — sort 13 short agreement excerpts into the seven "organs"
@@ -201,26 +190,16 @@ function Intro({ onBegin }: { onBegin: () => void }) {
     <div className="mx-auto max-w-2xl space-y-4">
       <ul className="divide-border/60 divide-y text-sm">
         {ORGANS.map((o) => (
-          <li key={o.key} className="flex items-baseline gap-2.5 py-1.5">
-            <span className="mt-1.5">
-              <OrganDot color={o.c} />
-            </span>
-            <span>
-              <span className="font-semibold">
-                {o.n}. {o.name}.
-              </span>{" "}
-              <span className="text-muted-foreground">{o.line}</span>
-            </span>
+          <li key={o.key} className="py-1.5">
+            <span className="font-semibold">
+              {o.n}. {o.name}.
+            </span>{" "}
+            <span className="text-muted-foreground">{o.line}</span>
           </li>
         ))}
-        <li className="flex items-baseline gap-2.5 py-1.5">
-          <span className="mt-1.5">
-            <OrganDot color={NULLBIN.c} />
-          </span>
-          <span>
-            <span className="font-semibold">No organ.</span>{" "}
-            <span className="text-muted-foreground">{NULLBIN.d}</span>
-          </span>
+        <li className="py-1.5">
+          <span className="font-semibold">No organ.</span>{" "}
+          <span className="text-muted-foreground">{NULLBIN.d}</span>
         </li>
       </ul>
       <p className="text-muted-foreground text-xs leading-relaxed">
@@ -318,12 +297,8 @@ function Drill({
 
       {/* filed confirmation (after resolution) */}
       {showFiled && (
-        <div
-          className="border-border bg-card shadow-soft mx-auto max-w-2xl rounded-xl border border-l-4 p-4"
-          style={{ borderLeftColor: filedOrgan.c }}
-        >
-          <div className="text-muted-foreground mb-1.5 flex items-center gap-1.5 font-mono text-[10px] tracking-[0.14em] uppercase">
-            <OrganDot color={filedOrgan.c} />
+        <div className="bg-card shadow-soft mx-auto max-w-2xl rounded-xl border p-4">
+          <div className="text-muted-foreground mb-1.5 font-mono text-[10px] tracking-[0.14em] uppercase">
             Specimen {idx + 1} — filed under: {filedOrgan.name}
           </div>
           <p className="text-foreground/90 text-sm leading-relaxed">
@@ -349,7 +324,7 @@ function Drill({
             role="status"
             aria-live="polite"
             className={cn(
-              "border-border bg-card rounded-lg border border-l-4 p-4 text-sm leading-relaxed",
+              "bg-card rounded-lg border p-4 text-sm leading-relaxed",
               accent.border,
             )}
           >
@@ -423,8 +398,7 @@ function Bin({
       overClassName="border-primary border-solid ring-2 ring-primary"
       armedClassName="border-primary/60 border-solid ring-2 ring-primary/60"
     >
-      <div className="flex items-center gap-1.5 text-[13px] font-semibold">
-        <OrganDot color={organ.c} />
+      <div className="text-[13px] font-semibold">
         {organ.n}. {organ.name}
       </div>
       <div className="text-muted-foreground mt-1 text-[11px] leading-snug">
@@ -497,7 +471,7 @@ function Summary({
       </div>
 
       <p
-        className="border-l-primary bg-muted/40 rounded-r-lg border-l-4 px-4 py-3 text-sm leading-relaxed"
+        className="border-primary/40 bg-muted/40 rounded-lg border px-4 py-3 text-sm leading-relaxed"
         style={{ fontStyle: "normal" }}
       >
         {COPY.punch}
@@ -526,9 +500,7 @@ function Summary({
                 tabIndex={-1}
                 aria-hidden
                 onClick={() => onPickJudgment(o.n)}
-                className="flex items-center gap-1.5"
               >
-                <OrganDot color={o.c} />
                 {o.n}. {o.name}
               </span>
             </Draggable>
@@ -552,7 +524,7 @@ function Summary({
 
         {judgment && (
           <div
-            className="border-border border-l-primary rounded-lg border border-l-4 bg-card p-4 text-sm leading-relaxed"
+            className="border-primary/40 rounded-lg border bg-card p-4 text-sm leading-relaxed"
             aria-live="polite"
           >
             <p>

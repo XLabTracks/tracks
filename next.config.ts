@@ -21,7 +21,29 @@ const nextConfig: NextConfig = {
     "pg-cloudflare",
   ],
   async redirects() {
+    // The course's own pages were hand-written .html under public/verification/
+    // until they became app routes. Those URLs are in the wild — in the
+    // outline, in chat, in bookmarks — so each one keeps working. 308: the
+    // move is permanent, and the pages are GET-only.
+    const verificationPages = [
+      "about",
+      "team",
+      "landing",
+      "track",
+      "map",
+      "guide",
+      "memo-desk",
+      "capstone-bank",
+      "capstone",
+      "module",
+    ].map((page) => ({
+      source: `/verification/${page}.html`,
+      destination: `/verification/${page}`,
+      permanent: true,
+    }));
+
     return [
+      ...verificationPages,
       {
         // The mod-6 walkthrough lesson (c-plm-walkthrough) was replaced by
         // the guided paper item — keep old bookmarks and syllabus links
@@ -58,6 +80,12 @@ const withMDX = createMDX({
       "rehype-slug",
       // Must come after rehype-slug: it reads the heading ids slug assigns.
       join(process.cwd(), "src/lib/mdx/rehype-lesson-sections.mjs"),
+      // Before auto-gloss, so a section-spec line is still one text node when
+      // it wraps the "Runtime:/Status:/Hard idea:" labels in <strong>.
+      join(process.cwd(), "src/lib/mdx/rehype-lesson-meta.mjs"),
+      // Order-insensitive itself (it only reads links), but before auto-gloss
+      // keeps the walk over the body the author wrote, not over injected Terms.
+      join(process.cwd(), "src/lib/mdx/rehype-lesson-citations.mjs"),
       // Before rehype-katex: it skips inline math while math is still a
       // `code` element, and never touches headings/links/inline JSX.
       join(process.cwd(), "src/lib/mdx/rehype-auto-gloss.mjs"),

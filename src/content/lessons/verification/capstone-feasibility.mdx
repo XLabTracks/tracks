@@ -1,0 +1,163 @@
+You have learned why verification is needed, the strengths and weaknesses of different verification mechanisms, and the various ways they can be circumvented. Now, it’s your turn to put it all together: to scaffold your own verification regime. As you know, AI verification is an emerging field with no canonical literature or consensus: it’s up to you to decide which mechanisms and layering strategies are most effective. It’s up to you to build the paradigm.
+
+Modules 2 and 3 introduced and applied four metrics of feasibility—technical feasibility, political feasibility, verification effectiveness, and durability—to existing verification mechanisms. But the technological and geopolitical landscapes that inform whether a mechanism is timely or obsolete are rapidly changing. As such, this module gives you the research and discernment strategies to assess these critical feasibility dimensions of any mechanism, whether they exist or not yet. These strategies future-proof your learning.
+
+Then, in 4.2, you will choose a capstone project idea from a shared and regularly-updated project bank. Each project idea tackles the same cumulative goal: to build your own international verification model. Possible outputs include a treaty draft, policy memo, or longer research project proposal. You will also have the chance to propose your own project! After successful submission, we’ll invite you to reflect on your course experience, review prior written checkpoints to see how your thinking has grown and changed, and point you towards future opportunities and resources.
+
+<Objectives scope="Module 4">
+- Assess an unfamiliar or not-yet-built verification mechanism against all four feasibility dimensions, without a prepared mechanism card to work from.
+- Locate and appraise current evidence on a mechanism: who publishes credible work on it, what those publishers' incentives are, and how old a claim can be before it stops being usable.
+- Separate the durable parts of your analysis from the parts with an expiration date, and name the technical or geopolitical change that would overturn each.
+- Combine mechanisms into a layered regime whose parts cover each other's failure modes, instead of searching for the single strongest mechanism.
+- Defend a design decision made under a hard constraint (a budget ceiling, an inspection quota, a state that will not ratify), naming what you cut and why.
+- State the residual risk your regime leaves open: which evasion routes stay viable, and which actors can afford them.
+- Produce a governance artifact in a working format (treaty text, policy memo, research proposal) with every mechanism claim anchored to a named precedent, provision, or source.
+- Revise a design in response to red-team critique, and identify the objection you cannot answer.
+- Compare your current positions against your written checkpoints from earlier modules, and account for what changed.
+- Choose a next step in verification work that fits your background, and name the resources that will keep it current after the track ends.
+</Objectives>
+
+Verification is a rapidly changing field. Technological breakthroughs and geopolitical shifts alike significantly affect the relevance, feasibility, and effectiveness of different verification models. In this module, you will develop the future-proof skill of discernment: learning how to discern the relative feasibility of any mechanism using research strategies and critical analysis.
+
+Student goals:
+
+- Locate and prioritize credible sources on a new mechanism (peer-reviewed work, government documents, implementation evidence like budgets and staffing) and use citation chaining to find both supporters and critics
+  - Assess an author's or organization's track record and incentives before weighting their claims
+- Discern the relative technical feasibility of a verification mechanism given current state of hard/software development
+- Identify which parties, public and private, would have to cooperate in order for the verification mechanism to succeed
+- Assess each party's current stance, incentives, and the conditions under which it would agree
+- Recognize that political feasibility changes over time, and identify what specific event or condition would move a mechanism from fringe to mainstream
+- Identify the next feasible, low-risk step toward a mechanism whose full version is not currently adoptable
+
+<Callout variant="note" title="Author note — the outline for this section">
+- Intuition check: Go back to the initial ranking exercise. Where were your answers the most off? What intuitive heuristics did you use to evaluate the effectiveness of each?
+- Definitions: what does “feasibility” even mean? How do you measure/forecast success?
+- How to research primer
+- Limited resource exercises: research budget, political capital
+</Callout>
+
+### Intuition check
+
+<VerificationExercise id="mechanism-sort-reveal" />
+
+Return to your ranking from the beginning of the course. Choose one mechanism for which later evidence changed your view. Write brief answers to the following:
+
+- What heuristics did you initially use?
+- What evidence changed your judgment?
+- What question should you have asked earlier?
+
+Pay attention to how your heuristics changed: where was your intuition accurate, and where was it off?
+
+### 1. Define the feasibility claim
+
+“Is this mechanism feasible?” is usually too vague to answer. Feasibility depends on what the mechanism must verify, whom it must cover, where it would operate, how soon it must be deployed, and what level of performance is required. A serious feasibility assessment should answer four connected questions.
+
+- Technical Feasibility
+
+First, can the mechanism be built and operated at the required scale? Examine the maturity of its hardware and software, its error rates, cost, staffing needs, security, dependencies, and performance under realistic conditions. Keep the distinction between a promising component and a complete operational system. The existence of hardware attestation, for example, does not by itself prove that a full training claim can be reliably verified.
+
+- Political Feasibility
+
+Second, whose cooperation is required? A verification system may depend on legislators, regulators, laboratories, cloud providers, chipmakers, standards bodies, inspectors, foreign governments, or enforcement agencies. Identify who must authorize, build, operate, provide access, interpret findings, and act on them. Then identify which actor could block implementation. Mapping the incentives of each actor is an essential part of this process. Consider the benefits actors might receive, the costs and risks they might bear, and available alternatives. “Industry opposes it” or “China would never agree” are incomplete conclusions. Which firms or institutions oppose which design, for what reasons, and under what conditions might their position change?
+
+- Verification Effectiveness
+
+Third, would the mechanism produce evidence that matters? Ask what claim the evidence would actually support, how direct it is, whether it has been tested against adaptive evasion, and which actors or activities remain outside its coverage. A deployable mechanism may still contribute little to detecting, deterring, or demonstrating compliance.
+
+- Durability
+
+Fourth, will the verification mechanism persist across technological and geopolitical change, or is it easily rendered obsolete by capability jumps or the decline of a fraught inter-country relationship? A fixed compute threshold is relatively fragile because improvements in algorithms can move dangerous capabilities below the regulated line. Chip-level logging or attestation may be more durable because it is anchored in physical infrastructure with slower turnover. Durability is therefore comparative, not permanent: even hardware-based mechanisms require updating as chips, supply chains, and evasion strategies change.
+
+## Threat Modeling & Theory of Change
+
+<Callout variant="note" title="Section status">
+Everything below is this section's specification, not its prose: the outline's
+own exercise briefs and interface notes, written for whoever finishes the
+section. It is kept here whole rather than summarised, and nothing in it has
+been drafted into a reading yet.
+</Callout>
+
+Split into two sections: 1) how to identify and map out relevant risks through threat modeling, and 2) how to identify and map out the solution through a theory of change.
+
+UI: Throughout this module, students iteratively build upon a continuously accessible interactive map consisting of nodes with directed connections that outlines their own threat model and theory of change, which will ideally motivate their final project (i.e., after the Risk Prioritization exercise, they add a node representing their identified risk; after the Bottleneck Identification exercise, they label causal chains as bottlenecks, etc.). Each node (event) and connection (action) is expandable into a more detailed editable textual description. Additions to the map are blue throughout the proposal.
+
+Mockup: [the field map](https://playground-tracks.netlify.app/field-map)
+
+## 1. Threat Modeling
+
+Student should be able to:
+
+- Construct a specific threat model that names the catastrophic outcome, the causal pathway from a current or near-term capability to that outcome, the actor or actors involved, and the timeline, concretely enough that the essential step in the pathway is identifiable.
+- Locate a threat model in the field's working taxonomy, misuse versus misalignment-or-autonomy versus structural, and say why it sits there.
+- Defend the risk and find their niche/use.
+- Redteam their own threat model: is it mechanistic or just a story, is it motivated, would an outsider grant the premise, and which parts are load-bearing versus contingent detail.
+
+### What is the problem we are trying to solve/risk we are trying to avoid?
+
+Textual explainer drawing from: Overview of Catastrophic AI Risks OR [the MIT AI Risk Repository](https://airisk.mit.edu/) The world keeps getting saved you just don’t notice
+
+Risk Prioritization Exercise: Given a pre-set list of 5-6 catastrophic risks/scenarios, sort each onto a 2D graph with the x-axis representing probability of occurrence and y-axis representing scope of harm (i.e., # of people affected). The goal is for the student to 1) build intuitions of what problems are more imminent/important than others, and to 2) identify a specific risk to build their own threat model on and motivate the direction of the final project. At the end of the exercise, the student identifies the risk they find to be most imminent and important and places it in a node on the map (i.e., the risk they sorted to have the greatest scope * probability).
+
+Risk Redteam Exercise: Given the identified risk, prompt the student with open-ended written questions aimed to flesh out and defend against critiques of their specific risk. Incorporate algorithmic checks for certain milestones during the drafting process that assess: vague passive voice vs. identified actors/institutions responsible for threat? After student submission of answers, reveal a pre-written rubric of exemplary responses for the specific risk. Specify the node’s risk description and label identified weaknesses within the risk node on map.
+
+### Model causal links of how this risk or problem occurs or realizes.
+
+Textual explainer drawing from: AGI Ruin: A List of Lethalities
+
+Threat Model Critique Exercise: Present an existing threat model for preselected risk (different from student’s selected risk) with intentional weaknesses built in; i.e., vague and unquantifiable descriptions, passive actor-less responsibilities, etc. Have the student click around on the model; upon clicking an identified weakness, 1) informational pop-up on what’s wrong with that weak link, 2) replace the weak version with a strong version in the model, i.e., text identifying responsible institutions appear in a previously agent-less link.
+
+Threat Model Building Exercise: After understanding what a well-specified threat model is, prompt the student to build their own: specify necessary prerequisites/presumptions as well as trace to (-) impact and timelines…. ??  (building causal pathway with an essential step labeled). The student lays intermediate nodes between a current capability and the catastrophe and draws directed edges, with the constraint that every edge carries a mechanism verb (enables, incentivizes, removes the barrier to).
+
+### How do you identify the bottleneck for maximally effective intervention?
+
+Textual explainer drawing from: A framework for comparing global problems in terms of expected impact  or Leverage Points: Places to Intervene in a System
+
+Identifying Bottlenecks Exercise: Take the same example model in the Threat Model Critique exercise and visually highlight the verbified causal links between each step. Prompt the student to rank each link as a potential bottleneck for intervention on a few feasibility metrics (1-10): timeline, resource usage, probability for long-term vs. short-term successful intervention. Then, identify the most feasible bottleneck (i.e., summing up all metrics). After student submission of ranking, reveal answers as to why each link is more/less feasible as a bottleneck, soft ‘grading’ the students’ ranking.
+
+Justifying Bottleneck Exercise: The student then labels their own bottleneck in the map as the essential step. Justify the relative maximal success metrics in open-ended written responses linked to the map bottleneck: time efficiency, resource utilization, actor cooperation and coordination, long-term effects as opposed to short-term change, etc.
+
+## 2. Theory of Change
+
+Students should be able to:
+
+- Identify what successful minimization/aversion from catastrophic outcomes looks like, including fleshing out grey areas (at what probabilistic lower-bound?) and redteaming against false positives (i.e., is the risk delayed or averted?)
+- Construct a specific theory of victory …
+- Construct a specific theory of change originating from at least one identified bottleneck from their threat model in Part 1, including the causal pathway, actor/institution(s) involved, and timeline, at a high enough level of specificity and understandability such that someone unfamiliar with the field can understand + reproduce logical chain.
+- (?) Answer why me: Identify their existing skills, relevant experience, and comparative advantages for addressing the identified problems, as well as their skill gaps and concrete ways to fill them.
+- Defend against red teaming: does it name a concrete action, a bottleneck it relieves, and a decision-maker who would respond
+
+### Theory of victory: what does success look like?
+
+Textual explainer drawing from: What is your theory of victory?
+
+Critique Success Definitions Exercise: Present a series of different successful intervention outcomes based on the example model (not the student’s), with some intentionally vague and/or underspecified. Prompt the student to click around to identify specific weaknesses in outcome descriptions; upon clicking on weakness, 1) pop-up explaining what exactly is wrong (vague in what way?), then 2) the text proceeds to transform into a well-specified version. OR: sorting exercise with similar purpose.
+
+Theory of Victory Exercise: Prompts the student to "map out a theory of victory," within the ToC objective to define success including the grey areas and the probabilistic lower-bound, and to redteam against false positives (is the risk delayed or averted). The strategic account of how you actually win, which extends the mechanism-level theory of change with a definition of winning and the obstacle that has to be overcome for the win to hold. Having built the chain, the student extends the long-term outcome into a victory condition carrying the threshold the methodology calls "how good is good enough," the amount the target needs to change for it to be enough, plus the probabilistic lower-bound (is a ten percent risk reduction victory?), and a false-victory guard. Map write: add a victory-condition node on the long-term outcome carrying the threshold and the probabilistic lower-bound, plus a false-victory guard note, linked to the obstacle-response from exercise 4. Teaches the grey-area honesty by forcing the lower-bound number and then asking, if you hit exactly that, whether you won. Prompt the student with open-ended questions to defend the specificity, tractability, reliability, and robustness of the outcome in textual details within the success node.
+
+### Theory of change: how do you intervene at identified bottleneck(s) to effect change and work towards victory?
+
+Textual explainer: What’s the difference between "this feels important" and "here is the mechanism by which this helps"? from your intervention, what are the ideal causal links that lead to the reduction of or aversion from risk? AI Safety people need to publish theories of change more often. A Short Introduction to Theory of Change
+
+ToC Critique Exercise: students are given specific proposals with identified background detailing actors and their moving parts including timelines, goals, and told to identify or rank weaknesses, complete postmortem/autopsy analysis, core premises/presumptions, and figure out where the chain breaks. (eg. a different actor would have been successful, or the scope is too broad, or the timelines are too short, or the result itself isn’t desirable/ideal). Some kind of engagement (maybe drag and drop weaknesses into buckets or rank them or…)
+
+Logic Model Exercise: Explain below logic diagram taxonomy, justify its importance, and have students fill out the diagram for existing AIS agenda(s); afterwards, reveal exemplary rubric answers.
+
+Then, have them fill out the logic model for their own theory of victory and add their Theory of Change to the map, connecting bottleneck intervention with victory outcome node.
+
+External Context and Actor-Response Exercise: Grounded in the SSIR pitfall that the best theories of change explicitly integrate the anticipated actions of regulators, peer organizations, and expected changes in the climate, rather than ignoring external context. The student plots every actor the chain depends on or affects on the 2D grid by power over the outcome against alignment with the goal (the classic power-interest matrix), then for each high-power actor adds an anticipated-response note: comply, block, route around, free-ride. The decision-maker from the chain has to land in high power, and if they're low alignment, the chain has a fight in it that needs its own node. Map write: add actor nodes tagged with power and alignment, linked to the edges they control, and add their anticipated responses as external-factor nodes in the logic model's External Factors band.
+
+Counterfactual and Additionality Exercise: For the intervention, a three-way sort of the outcome: happens anyway, happens later or worse without you, or wouldn't happen at all, plus a "who else could do this, and would they" field. The student's real impact is the delta. A light back-of-envelope estimate (scale of problem, the fraction your intervention addresses, probability of success) shown as an order of magnitude makes the tractability honest. Map write: tag the intervention node with an additionality rating, the "who else" note, and an order-of-magnitude impact estimate.
+
+### Why You?
+
+Comparative Advantage Exercise: "why me" objectives. The student tags the intervention node with their relevant skills and their gaps, then answers the honest question: is the reason nobody's done this that it needs a capability you can't get? If so, the intervention may be real but not yours. Help students understand where they can fit in. Map write: tag the intervention node with your fit, your gaps, and a yours-or-not call.
+
+Final Essay Exercise: At the end of the course students write an essay on their general understanding of the field. What do you do? What does that change directly? What happens after that? Who has to act on the result?
+
+## Drill bench
+
+The evasion, regime and position benches — module 3 and module 4, and the prep for the capstone. One step at a time: commit, read why, then Continue.
+
+<VerificationExercise id="drills-games" />
+
+<MemoDesk lesson="capstone-feasibility" />

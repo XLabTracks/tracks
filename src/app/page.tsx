@@ -19,10 +19,13 @@ export default function Home() {
       </div>
       <div className="flex flex-wrap items-center justify-center gap-3">
         <Button asChild size="lg">
-          <Link href="/tracks">Browse tracks</Link>
+          <Link href="/tracks/control">Control track</Link>
         </Button>
+        {/* Verification is the standalone site under public/verification/, not
+            an app route, so this is a plain anchor: next/link would try to
+            prefetch an RSC payload that does not exist there. */}
         <Button asChild size="lg" variant="outline">
-          <Link href="/resources">Resource hub</Link>
+          <a href="/verification/landing">Verification track</a>
         </Button>
       </div>
     </main>

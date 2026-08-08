@@ -1,0 +1,239 @@
+/* Skill map. Nodes are laid out by CSS grid inside module bands;
+   the edge layer is an SVG overlay measured from the DOM after layout, so
+   the arrows follow whatever the grid decided at this width.
+
+   Trap: the SVG must be measured after fonts load. A node laid out with the
+   fallback face is a few pixels narrower than the same node in Space
+   Grotesk, and edges drawn before the swap land off-centre — map.js redraws
+   on document.fonts.ready for exactly this reason. */
+
+.map-head {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin: 18px 0;
+}
+.map-head h1 { font-size: var(--fs-title); margin-bottom: 8px; }
+.map-head .sub { max-width: 52ch; font-size: var(--fs-md); line-height: 1.6; color: var(--muted-foreground); }
+.map-controls { display: flex; flex-direction: column; gap: 10px; min-width: 250px; }
+
+.tabs {
+  display: flex;
+  gap: 2px;
+  padding: 2px;
+  border: var(--hairline) solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--card);
+}
+.tab {
+  flex: 1;
+  padding: 6px 10px;
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--muted-foreground);
+  font: inherit;
+  font-family: var(--mono);
+  font-size: var(--fs-2xs);
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
+  transition: color .15s ease, background .15s ease;
+}
+.tab:hover { color: var(--foreground); background: var(--muted); }
+.tab[aria-selected='true'] { background: var(--primary); color: var(--primary-foreground); }
+
+.lo-row { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 18px; }
+.lo {
+  padding: 4px 10px;
+  border: var(--hairline) solid var(--border);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--muted-foreground);
+  font: inherit;
+  font-family: var(--mono);
+  font-size: var(--fs-2xs);
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
+}
+.lo:hover { color: var(--foreground); border-color: var(--muted-foreground); }
+.lo[aria-pressed='true'] { color: var(--foreground); border-color: var(--ring); background: var(--muted); }
+
+.map-body { display: grid; grid-template-columns: minmax(0, 1fr) 320px; gap: 18px; align-items: start; }
+
+.map-canvas { position: relative; }
+.map-canvas > svg { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+.map-canvas .edge { fill: none; stroke: color-mix(in srgb, var(--foreground) 20%, transparent); stroke-width: 1.2; }
+.map-canvas .edge.lit { stroke: var(--ring); stroke-width: 1.8; }
+
+.band { position: relative; margin-bottom: 16px; }
+.band-label {
+  margin-bottom: 10px;
+  padding-bottom: 6px;
+  border-bottom: var(--hairline) solid var(--border);
+  font-family: var(--mono);
+  font-size: var(--fs-2xs);
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--muted-foreground);
+}
+.band-label b { color: var(--mod-type, var(--brand-ink)); font-weight: 400; }
+.band-nodes { display: flex; flex-wrap: wrap; gap: 8px; }
+
+/* State is carried by the word in .n-meta and the n/m fraction as well as by
+   the fill — hue never carries it alone. Uniform hairline on all four sides;
+   the module accent is the fill bar inside, never a painted edge. */
+/* Column + a pinned meta row: nodes in one flex line already stretch to the
+   tallest, so pushing .n-meta down puts every fraction and fill bar on one
+   line across the band. Without it a two-line label drops its own meta row
+   out of step with its neighbours. */
+.node {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  /* The corridor is text units, not px: the button inherits the body size,
+     so at day type these are the old 160/150/210 — and when high contrast
+     doubles the type the frame doubles with it instead of letting
+     "decisionmakers" paint through its own border. */
+  flex: 1 1 10em;
+  min-width: 9.5em;
+  max-width: 13.5em;
+  padding: 10px 12px;
+  border: var(--hairline) solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--card);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
+  transition: border-color .16s ease, background .16s ease, transform .16s ease;
+}
+.node:hover { transform: translateY(-2px); border-color: var(--muted-foreground); }
+/* `anywhere`, not break-word: only anywhere shrinks the word's min-content
+   contribution, and it is min-content that a flex item is sized by — with
+   break-word the box is laid out to the unbroken word's width first and the
+   max-width cap turns that into paint outside the frame. */
+.node .n-label { display: block; font-size: var(--fs-sm); line-height: 1.35; color: var(--muted-foreground); overflow-wrap: anywhere; }
+.node .n-meta {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: auto;
+  padding-top: 6px;
+  font-family: var(--mono);
+  font-size: var(--fs-2xs);
+  color: var(--muted-foreground);
+}
+.node .n-fill {
+  flex: 1;
+  height: 4px;
+  border-radius: 999px;
+  background: var(--muted);
+  overflow: hidden;
+}
+.node .n-fill > i { display: block; height: 100%; border-radius: inherit; background: var(--mod, var(--primary)); }
+
+.node.part .n-label { color: var(--foreground); }
+.node.full { border-color: var(--mod, var(--ring)); }
+.node.full .n-label { color: var(--foreground); }
+.node.full .n-label::after { content: ' ✓'; color: var(--brand-ink); }
+.node.sel { border-color: var(--ring); box-shadow: 0 0 0 1px var(--ring); }
+.node.dim { opacity: .3; }
+.node.pulse { animation: node-pulse 1.1s ease 1; }
+@keyframes node-pulse {
+  0% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--ring) 50%, transparent); }
+  100% { box-shadow: 0 0 0 14px transparent; }
+}
+
+/* ---------- node card ---------- */
+
+.node-card {
+  position: sticky;
+  top: 72px;
+  max-height: calc(100vh - 96px);
+  overflow-y: auto;
+  padding: 18px;
+  border: var(--hairline) solid var(--border);
+  border-radius: var(--radius);
+  background: var(--card);
+}
+.node-card .empty { font-size: var(--fs-md); line-height: 1.6; color: var(--muted-foreground); }
+.node-card h2 { font-size: var(--fs-xl); margin: 6px 0 8px; }
+.node-card .desc { font-size: var(--fs-sm); line-height: 1.6; margin-bottom: 14px; color: var(--muted-foreground); }
+.node-card .sec {
+  margin: 16px 0 8px;
+  font-family: var(--mono);
+  font-size: var(--fs-2xs);
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--muted-foreground);
+}
+.ladder { list-style: none; }
+.ladder li {
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+  padding: 6px 0;
+  border-bottom: var(--hairline) solid var(--border);
+  font-size: var(--fs-sm);
+  line-height: 1.5;
+}
+.ladder li:last-child { border-bottom: 0; }
+.ladder .u {
+  flex: none;
+  width: 46px;
+  font-family: var(--mono);
+  font-size: var(--fs-2xs);
+  color: var(--brand-ink);
+  text-decoration: none;
+}
+.ladder .u:hover { text-decoration: underline; }
+.ladder .txt { color: var(--muted-foreground); }
+.ladder li.hit .txt { color: var(--foreground); }
+
+.links { display: flex; flex-wrap: wrap; gap: 4px; }
+.links button {
+  padding: 2px 10px;
+  border: var(--hairline) solid var(--border);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--muted-foreground);
+  font: inherit;
+  font-family: var(--mono);
+  font-size: var(--fs-2xs);
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
+}
+.links button:hover { color: var(--foreground); border-color: var(--ring); }
+.summary { margin-top: 14px; font-family: var(--mono); font-size: var(--fs-2xs); color: var(--muted-foreground); }
+
+@media (max-width: 960px) {
+  .map-body { grid-template-columns: minmax(0, 1fr); }
+  .node-card { position: static; max-height: none; }
+}
+
+/* The ladder's rung marker: a glyph, so "filled" is a shape as well as a
+   colour. ✓ full · ◐ partial · · empty. */
+.ladder .state {
+  flex: none;
+  width: 12px;
+  font-family: var(--mono);
+  font-size: var(--fs-xs);
+  color: var(--brand-ink);
+}
+
+/* High contrast flex-centres every button for its 44px target rule, which
+   centred one-line labels and left a wrapped one ragged beside them — a
+   shrink-to-fit block sits centred while its own text stays left. Centre
+   the text to match, and drop the meter: its track paints in --muted, which
+   this mode resolves to the ground, so only the fraction was ever visible —
+   and the fraction is the encoding this mode runs on anyway. */
+:root[data-theme='contrast'] .node { align-items: center; }
+:root[data-theme='contrast'] .node .n-label { text-align: center; }
+:root[data-theme='contrast'] .node .n-fill { display: none; }
+:root[data-theme='contrast'] .node .n-meta { justify-content: center; }

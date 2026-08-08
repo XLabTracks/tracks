@@ -269,9 +269,22 @@ export function getTrackOutline(trackSlug: string): TrackOutline | undefined {
 // module completion, prerequisite satisfaction, and progress totals — skip
 // them, while getTrackContentIds is the full trackable universe.
 
-/** Listed and completable, but never required for module/track completion. */
+/** Listed and completable, but never required for module/track completion.
+ *  Both item kinds carry the flag — a reading-pathways lesson can be optional
+ *  the same way an optional paper is (0.4 Strategic Foundations is the case). */
 export function isOptionalItem(item: ModuleItem): boolean {
-  return item.kind === "paper" && item.paper.optional === true;
+  return item.kind === "paper"
+    ? item.paper.optional === true
+    : item.lesson.optional === true;
+}
+
+/**
+ * A track's closing page. It is a page, not work: nothing on it can be done,
+ * so it counts toward no total and gates nothing — otherwise a finished
+ * learner would sit one unit short of their own congratulations forever.
+ */
+export function isCompletionItem(item: ModuleItem): boolean {
+  return item.kind === "lesson" && item.lesson.completion === true;
 }
 
 /**
@@ -285,10 +298,13 @@ export function getItemProgressContentIds(item: ModuleItem): string[] {
     : [item.paper.id, ...getInsertedLessonsForPaper(item.paper.id).map((l) => l.id)];
 }
 
-/** A module's REQUIRED progress ids, in item order — optional items excluded. */
+/**
+ * A module's REQUIRED progress ids, in item order — optional items and the
+ * track's closing page excluded.
+ */
 export function getModuleProgressContentIds(moduleId: string): string[] {
   return getItemsForModule(moduleId)
-    .filter((item) => !isOptionalItem(item))
+    .filter((item) => !isOptionalItem(item) && !isCompletionItem(item))
     .flatMap(getItemProgressContentIds);
 }
 

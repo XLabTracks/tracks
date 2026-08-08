@@ -68,7 +68,8 @@ const CAT_STYLE: Record<
 };
 
 /**
- * "Who's in the Treaty?" — the Reykjavik Protocol re-read as a cast list.
+ * "Who's in the Treaty?" — the MIRI draft agreement (arXiv:2511.10783)
+ * re-read as a cast list.
  * Learn mode maps each highlighted phrase to an actor dossier; Quiz mode asks
  * which real-world actors each phrase puts in the room, scored. Bridged: fires
  * onComplete once every phrase has been graded in quiz mode.

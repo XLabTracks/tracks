@@ -41,9 +41,30 @@ export function Callout({ variant = "note", title, children }: CalloutProps) {
       )}
     >
       <Icon className={cn("mt-0.5 size-5 shrink-0", iconClassName)} aria-hidden />
-      <div className="space-y-1">
+      <div className="min-w-0 space-y-1">
         {title ? <p className="font-semibold">{title}</p> : null}
-        <div className="text-foreground/80 [&>p]:m-0">{children}</div>
+        {/* A callout carries markdown, so its body needs the rhythm Tailwind's
+            preflight takes away: list markers, indent, and a gap between
+            blocks. Without this a callout of more than one sentence renders as
+            an unbroken wall — every paragraph flush against the next, every
+            bullet gone.
+
+            Trap: this cannot be done by nesting `prose` here. Typography's
+            rules exclude `[class~="not-prose"] *`, and the shell above is
+            not-prose, so an inner `prose` matches nothing at all. Utilities
+            are the way in — and `not-prose` has to stay, or the callout takes
+            the lesson column's type scale. Spacing is between siblings only,
+            so a one-line callout stays tight under its title. */}
+        <div
+          className={cn(
+            // mdx-body carries the markdown rhythm (globals.css), guarded so
+            // it stops at a nested not-prose.
+            "mdx-body text-foreground/80 break-words",
+            "[&>*+*]:mt-3",
+          )}
+        >
+          {children}
+        </div>
       </div>
     </div>
   );

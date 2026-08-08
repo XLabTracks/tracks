@@ -3141,4 +3141,45 @@ export const papers: Paper[] = [
       },
     ],
   },
+
+  // --- Verification track, module 1: the two treaty proposals 1.1 works on.
+  //
+  // Both are reproduced in full, and both may be: arXiv reports CC BY 4.0 for
+  // each. That is why they are items rather than links — 1.1's workspace quotes
+  // selected provisions, and a learner who wants the clause around a quote
+  // should not have to leave the course to find it.
+  //
+  // Optional on purpose. They are 1.1's reading, not units of the course, so
+  // they must never gate module completion; `sectionItemId` nests them under
+  // 1.1 in the sidebar, where the outline puts them.
+  //
+  // Scher et al. is pinned to v3 deliberately. v1 stated the training
+  // thresholds inline in Article IV; v3 moves them into named Article II
+  // definitions, so a quote from the wrong version reads as a different rule.
+  {
+    id: "v-paper-scher-treaty",
+    slug: "prevent-premature-asi-treaty",
+    moduleId: "v-scoping",
+    sectionItemId: "v-scoping-anatomy",
+    title: "An International Agreement to Prevent the Premature Creation of Artificial Superintelligence",
+    source: { kind: "arxiv", arxivId: "2511.10783v3" },
+    optional: true,
+    // Appendix A is the agreement itself, not apparatus: collapsed, the
+    // Articles the course sends people to read sit behind a closed toggle.
+    collapseTail: false,
+    estimatedMinutes: 75,
+  },
+  {
+    id: "v-paper-miotti-treaty",
+    slug: "global-compute-cap-treaty",
+    moduleId: "v-scoping",
+    sectionItemId: "v-scoping-anatomy",
+    title: "An international treaty to implement a global compute cap for advanced artificial intelligence",
+    source: { kind: "arxiv", arxivId: "2311.10748v2" },
+    optional: true,
+    // Appendix A is the agreement itself, not apparatus: collapsed, the
+    // Articles the course sends people to read sit behind a closed toggle.
+    collapseTail: false,
+    estimatedMinutes: 20,
+  },
 ];

@@ -4,7 +4,7 @@ import { describe, it, expect } from "vitest";
 import { lessons, modules } from "@/content/curriculum.data";
 import { exercises } from "@/content/exercises.data";
 import { assessments } from "@/content/assessments.data";
-import { ARGUE_REVEAL_DEFAULTS } from "@/lib/content/types";
+import { ARGUE_REVEAL_DEFAULTS, isWritingExercise } from "@/lib/content/types";
 import { featuredExercises } from "@/app/exercises/featured";
 import {
   getAssessmentForModule,
@@ -18,6 +18,7 @@ import {
   getPrerequisiteModules,
   getTrackContentIds,
   getTrackItemSequence,
+  isCompletionItem,
   isOptionalItem,
   itemIdOf,
   type ModuleItem,
@@ -1090,10 +1091,12 @@ describe("module item navigation", () => {
         const ids = getModuleProgressContentIds(m.id);
         expect(new Set(ids).size).toBe(ids.length);
         for (const item of getItemsForModule(m.id)) {
-          // Optional readings are trackable but never required: none of their
-          // units may appear among the module's progress ids.
+          // Optional readings are trackable but never required, and the
+          // closing page is not work at all: neither may appear among the
+          // module's progress ids.
+          const excluded = isOptionalItem(item) || isCompletionItem(item);
           for (const unitId of unitIdsOf(item)) {
-            if (isOptionalItem(item)) expect(ids).not.toContain(unitId);
+            if (excluded) expect(ids).not.toContain(unitId);
             else expect(ids).toContain(unitId);
           }
         }
@@ -1193,3 +1196,71 @@ function readArtifact(paper: Paper): {
   }
   return { state: "ready", ready };
 }
+
+describe("completion page integrity", () => {
+  /* The flag turns a lesson into the track's closing screen: no parts reader,
+     no docked section nav, and a header that speaks for the whole track. That
+     only reads as an ending in one position, so the position is enforced
+     rather than trusted. */
+  it("a track has at most one completion lesson, last in its last module", () => {
+    for (const track of tracks) {
+      const flagged = lessons.filter(
+        (lesson) =>
+          lesson.completion &&
+          getModulesForTrack(track.id).some((m) => m.id === lesson.moduleId),
+      );
+      expect(flagged.length, `${track.slug}: more than one completion page`).
+        toBeLessThanOrEqual(1);
+      if (!flagged.length) continue;
+
+      const trackModules = getModulesForTrack(track.id);
+      const lastModule = trackModules[trackModules.length - 1];
+      const lesson = flagged[0];
+      expect(lesson.moduleId, `${lesson.id} must sit in the last module`).toBe(
+        lastModule.id,
+      );
+
+      const items = getItemsForModule(lastModule.id);
+      const lastItem = items[items.length - 1];
+      expect(
+        lastItem && itemIdOf(lastItem),
+        `${lesson.id} must be the last item of ${lastModule.id}`,
+      ).toBe(lesson.id);
+    }
+  });
+
+  it("a completion body carries no first-person congratulations", () => {
+    /* The congratulations belongs to CompletionHeader, which prints it from
+       real progress. A copy in the body would congratulate a visitor who has
+       finished nothing — the fake-state chrome the design rules ban. */
+    for (const lesson of lessons.filter((l) => l.completion)) {
+      const body = readFileSync(
+        join(process.cwd(), "src/content/lessons", `${lesson.contentRef}.mdx`),
+        "utf8",
+      );
+      const prose = body.replace(/\{\/\*[\s\S]*?\*\/\}/g, "");
+      expect(
+        /congratulations/i.test(prose),
+        `${lesson.contentRef}.mdx: the header owns the congratulations line`,
+      ).toBe(false);
+    }
+  });
+});
+
+describe("required written work", () => {
+  /* The closing page congratulates on submitted writing, so the set it counts
+     has to be real: ids that resolve, tasks that are writing, and optional
+     ones declared as such rather than announced in their first three words. */
+  it("optional writing tasks are flagged, not merely worded as optional", () => {
+    for (const exercise of exercises) {
+      if (!isWritingExercise(exercise)) continue;
+      const opensAsOptional = /^\s*optional\b/i.test(exercise.prompt);
+      if (opensAsOptional) {
+        expect(
+          exercise.optional,
+          `${exercise.id}: prompt opens "Optional" but the task is not flagged optional`,
+        ).toBe(true);
+      }
+    }
+  });
+});

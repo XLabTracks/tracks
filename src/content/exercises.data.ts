@@ -1,3 +1,4 @@
+import { verificationExercises } from "@/content/verification/exercises";
 import type { Exercise } from "@/lib/content/types";
 
 // Example exercises — one of every type, with self-describing copy. These power
@@ -2727,4 +2728,5 @@ export const exercises: Exercise[] = [
     answer:
       "Inoculation prompting acts through the prompt, and has not overcome apparent-success-seeking in current models. Spillway design instead shapes the pre-RL prior and the associations that reward hacking reinforces — it acts on what gradient descent selects, not on what the prompt requests.",
   },
+  ...verificationExercises,
 ];

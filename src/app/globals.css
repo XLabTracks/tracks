@@ -112,12 +112,15 @@
   --sidebar-border: #e5e5e5; /* hairline */
   --sidebar-ring: #dc2626;
 
-  /* Okabe-Ito data-encoding accents (see @theme above). */
-  --comply: #009e73; /* green — comply / honest */
-  --defect: #d55e00; /* vermillion — defect / cheat */
+  /* Okabe-Ito data-encoding accents (see @theme above), darkened where the
+     set's own value does not clear 4.5:1 as ink on --muted. The Verification
+     routes override all five per theme in public/verification/theme.css —
+     these are the app-wide defaults, so they answer for the light ground. */
+  --comply: #007b5a; /* green — comply / honest */
+  --defect: #b34f00; /* vermillion — defect / cheat */
   --hide: #0072b2; /* blue — hide / conceal */
-  --exaggerate: #e69f00; /* amber — exaggerate / overstate */
-  --free-ride: #cc79a7; /* reddish-purple — free-ride */
+  --exaggerate: #916400; /* amber — exaggerate / overstate */
+  --free-ride: #975a7c; /* reddish-purple — free-ride */
 
   --radius: 0.875rem;
 }
@@ -145,6 +148,27 @@
   pre,
   code {
     font-variant-ligatures: none;
+  }
+  /* Chrome is not text — nothing pressable takes a selection. The default
+     highlight smeared across a nav row or a close cross is always a mis-drag,
+     never something anyone meant to copy, and over this theme's navy ink it
+     reads violet, as though the row were in some state of its own. Prose,
+     headings and content links stay selectable: people copy those on purpose.
+     Chrome that is an <a> rather than a <button> — nav rows, the wordmark,
+     the skip link — opts in with `select-none` where it is styled, since the
+     element alone cannot tell chrome from a link in a sentence.
+     Two traps: `all: unset` / `all: initial` puts user-select back to auto,
+     so any rule using one must re-declare this immediately after; and an
+     <img> inside something clickable needs draggable="false", or a press
+     starts a native image-drag instead of the gesture. */
+  button,
+  [role="button"],
+  [role="tab"],
+  [role="radio"],
+  summary {
+    user-select: none;
+    -webkit-user-select: none;
+    -webkit-touch-callout: none;
   }
 }
 
@@ -230,6 +254,188 @@
   counter-reset: footnote;
 }
 
+/* The label prefixes on a section-spec line ("Runtime:", "Status:", "Hard
+   idea:"), emphasised by rehype-lesson-meta so each segment has an anchor
+   rather than running into its value. Brand ink is the theme's readable
+   accent (maroon/rose/yellow across the three themes); the currentColor
+   fallback covers tracks that don't load theme.css, where these lines never
+   appear anyway. Hue is decoration here — the label word carries the meaning. */
+.lesson-body .lesson-meta-label {
+  color: var(--brand-ink, currentColor);
+  font-weight: 600;
+}
+
+/* MLA's hanging indent: first line flush, wrapped lines indented. */
+.works-cited-entry {
+  padding-left: 1.5rem;
+  text-indent: -1.5rem;
+}
+
+/* One table treatment for every lesson on every track. Prose left tables as
+   bare hairlines with no hierarchy — a grid of identical grey lines, which is
+   why they read as muted. The structure now comes from three weights of line,
+   not from one:
+
+     the box      hairline on all four sides, so the table is one object
+     the header   a --muted band closed by a 2px --primary rule
+     the rows     hairlines between them, none above the first or below the
+                  last — the box already closes those
+
+   Everything is a token, so the app's navy and Verification's maroon each
+   get their own accent, and high contrast (where --muted equals the ground
+   and --border is white) still reads: there the yellow header rule and the
+   white hairlines carry the whole structure on their own.
+
+   A wide table scrolls inside its own box — the page must never scroll
+   sideways. `display: block` is what makes overflow-x apply; `separate` +
+   zero spacing is what lets the box round its corners and the header band
+   clip to them, which collapsed borders cannot do. */
+.lesson-body table {
+  display: block;
+  max-width: 100%;
+  overflow-x: auto;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  border-collapse: separate;
+  border-spacing: 0;
+  box-shadow: var(--shadow-soft);
+
+  /* A shadow at whichever edge still has content behind it. At 1280 no table
+     in the course scrolls and nothing shows; on a phone all of them do, and
+     this is the only thing that says so before you swipe.
+
+     The mechanism is the pair of attachments: the two cover gradients are
+     `local`, so they travel with the content and slide out of the way as it
+     scrolls, uncovering the two `scroll` shadows that stay pinned to the box.
+     Reach either end and that end's cover sits back over its shadow.
+
+     Trap: the cover has to be the ground the table sits on, so it stays a
+     token — a literal would be wrong on two of the three themes. Trap: the
+     header band paints over its own strip, so the shadow reads along the
+     rows, not the header; giving th a transparent background to "fix" that
+     would cost the band, which is the stronger signal. */
+  background-image:
+    linear-gradient(to right, var(--background) 30%, transparent),
+    linear-gradient(to left, var(--background) 30%, transparent),
+    linear-gradient(
+      to right,
+      color-mix(in srgb, var(--foreground) 13%, transparent),
+      transparent
+    ),
+    linear-gradient(
+      to left,
+      color-mix(in srgb, var(--foreground) 13%, transparent),
+      transparent
+    );
+  background-position: 0 0, 100% 0, 0 0, 100% 0;
+  background-repeat: no-repeat;
+  background-size: 26px 100%, 26px 100%, 13px 100%, 13px 100%;
+  background-attachment: local, local, scroll, scroll;
+}
+
+.lesson-body thead th {
+  background: var(--muted);
+  color: var(--foreground);
+  font-weight: 600;
+  text-align: left;
+  vertical-align: bottom;
+  border-bottom: 2px solid var(--primary);
+  padding: 0.65em 0.9em;
+}
+
+/* Cells hold sentences here, not figures: top-aligned, so a one-line cell
+   sits level with the first line of the paragraph beside it. */
+.lesson-body tbody td {
+  border-top: 1px solid var(--border);
+  padding: 0.65em 0.9em;
+  vertical-align: top;
+}
+.lesson-body tbody tr:first-child td {
+  border-top: 0;
+}
+
+/* The first column names the row in every table the course has, so it is set
+   like a row header rather than like data. */
+.lesson-body tbody td:first-child {
+  font-weight: 500;
+  color: var(--foreground);
+}
+
+/* The markdown rhythm inside a Fold or a Callout. Both shells are not-prose,
+   which is deliberate — an inner `prose` matches nothing, since typography
+   excludes `[class~="not-prose"] *`, and dropping not-prose would hand the
+   card the lesson column's type scale. So the rhythm is restored by hand.
+
+   Trap, and the reason this is a stylesheet rule rather than a string of
+   `[&_ul]` utilities on each shell: a Fold can hold a widget. Descendant
+   selectors reach the whole subtree, so an unguarded `ul` rule bullets a
+   list the widget drew itself. Every rule here stops at [data-widget], which
+   VerificationWidgetHost puts around an interactive. Keep that guard on
+   anything added below, and do not widen it to .not-prose: SourceQuote and
+   the other reader blocks are not-prose too, and they hold authored markdown
+   that needs this rhythm. */
+.mdx-body ul:not(:where([data-widget], [data-widget] *)) {
+  list-style: disc;
+  padding-left: 1.25rem;
+}
+.mdx-body ol:not(:where([data-widget], [data-widget] *)) {
+  list-style: decimal;
+  padding-left: 1.25rem;
+}
+.mdx-body li:not(:where([data-widget], [data-widget] *))::marker {
+  color: var(--muted-foreground);
+}
+.mdx-body li + li:not(:where([data-widget], [data-widget] *)) {
+  margin-top: 0.375rem;
+}
+.mdx-body strong:not(:where([data-widget], [data-widget] *)) {
+  color: var(--foreground);
+  font-weight: 600;
+}
+.mdx-body a:not(:where([data-widget], [data-widget] *)) {
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+/* The chip is for `code` in a sentence. A fenced block is <pre><code> and is
+   already a box of its own (.lesson-body pre); a chip inside it draws a
+   second, wrongly-sized one. */
+.mdx-body :not(pre) > code:not(:where([data-widget], [data-widget] *)) {
+  background: var(--muted);
+  border-radius: 0.25rem;
+  padding: 0.125rem 0.25rem;
+  font-size: 0.9em;
+}
+
+/* A fenced block in a lesson is not code. It is a passage whose own line
+   breaks are being reproduced: a statute's heading stack, a chapter's table
+   of contents, a drafting office's box of key verbs. Hence a quoted specimen
+   (muted ground, hairline on all four sides, small mono) rather than a
+   terminal.
+
+   Trap: `pre-wrap` is load-bearing. These blocks sit inside Fold and Callout,
+   whose shells are overflow-hidden so their fills can round their corners, so
+   a line the column cannot hold is cut off rather than scrolled to.
+   overflow-x covers what pre-wrap cannot break: one token wider than the
+   column.
+
+   Trap: Fold and Callout paint every `code` as an inline chip, so each
+   exempts `pre > code`, which would otherwise draw a second box inside
+   this one. */
+.lesson-body pre {
+  max-width: 100%;
+  overflow-x: auto;
+  white-space: pre-wrap;
+  overflow-wrap: break-word;
+  margin: 0.9rem 0;
+  padding: 0.8rem 0.9rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--muted);
+  color: var(--foreground);
+  font-size: 0.8125rem;
+  line-height: 1.5;
+}
+
 /* Anchor targets in sectioned lessons (the docked "In this lesson" nav) must
    clear the sticky site header — same clearance as .paper-reader [id]. On
    mobile a second sticky bar (the "Contents" sheet trigger) sits under the
@@ -242,6 +448,58 @@
   .lesson-reader [id] {
     scroll-margin-top: 7rem;
   }
+}
+
+/* Focus reading. The marker (src/lib/reading/focus-reading.ts) wraps every
+   eligible word once, for both strengths at once:
+
+     <span data-focus-word><b data-fw-a>Mit</b><b data-fw-b>ig</b>ating</span>
+                            light = a          standard = a + b
+
+   so the setting is only these classes on the host and nothing ever mutates
+   the document again. That is the whole reason the markup looks like this:
+   the lesson body is server-rendered markup React owns, and rewriting it a
+   second time makes React discard the subtree — the lesson disappears.
+
+   `font-weight: inherit` is the resting state, so with no class on the host
+   the wrappers are invisible in every way that matters. They stay in the DOM
+   because they carry no text of their own: the page's text content is
+   identical with the mode on, off, or switched, which is what keeps
+   find-in-page, selection, copy and the highlight offsets working. */
+[data-focus-word] b {
+  font-weight: inherit;
+}
+
+/* The accent is a nudge, not a shout. Full bold against body weight is a
+   300-step jump, which stops reading as "the eye lands here" and starts
+   reading as "every other word is important" — the paragraph turns stripy and
+   the effect it is supposed to have inverts. One step catches the eye and
+   still reads a page through.
+
+   One token, used by the body and by the panel's sample, because the sample's
+   whole job is to be exactly what the page will do.
+
+   Trap: this only lands where the body face HAS the cut. The stack is the
+   system UI face, which on macOS and Windows carries a real semibold; a
+   fallback with only Regular and Bold rounds 600 up to 700 and the step is
+   the old one again. That is why the value is 600 and not 500: 500 rounds
+   DOWN on such a face, and the accent silently disappears. Round up to too
+   strong, never down to nothing. */
+:root {
+  --focus-accent-weight: 600;
+}
+
+.focus-light [data-fw-a],
+.focus-standard [data-fw-a],
+.focus-standard [data-fw-b],
+.focus-sample b {
+  font-weight: var(--focus-accent-weight);
+}
+
+/* Short joining words are marked like the rest and turned off here, so the
+   preference costs no second pass over the document. */
+.focus-skip-short [data-fw-short] b {
+  font-weight: inherit;
 }
 
 .footnote-marker {
@@ -300,4 +558,92 @@
     font-size: 0.8125rem;
     line-height: 1.45;
   }
+}
+
+/* No scrollbars anywhere on this site — the author's call, applied at the
+   root so it holds for the page itself and for every scrolling box inside
+   it: strips, rails, panels, dialogs, textareas, code blocks.
+
+   Scrolling itself is untouched — wheel, trackpad, keys, touch and
+   scrollIntoView all still work; only the painted bar is gone. Corollary
+   to live with: a box that scrolls now advertises it by nothing but its
+   clipped content, so anything that must be discovered sideways needs its
+   own affordance in the layout.
+
+   Trap: the two declarations are not fallbacks for each other. Firefox
+   reads scrollbar-width; WebKit and Chromium only take the pseudo-element,
+   and it must set display:none — width:0 leaves the gutter behind. Both
+   are needed, and the pseudo-element rule has to stay in a plain stylesheet
+   (Tailwind utilities cannot express it). */
+:root,
+* {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+*::-webkit-scrollbar {
+  display: none;
+}
+
+/* Facilitator field guide — the authored HTML bodies in
+   src/lib/verification/data/facilitator-guide.ts, which arrive as raw markup
+   rather than as components. Scoped to .fg-html so nothing here can reach the
+   lesson reader. `say` is a spoken line the facilitator can read aloud, `move`
+   the follow-up to make, `mt` a medium tag (in-person / Zoom); `small` is the
+   second line of a resource row. */
+.fg-html > * + * {
+  margin-top: 0.75rem;
+}
+.fg-html a {
+  color: var(--destructive);
+  font-weight: 500;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+.fg-html ol,
+.fg-html ul {
+  padding-left: 1.25rem;
+  list-style: revert;
+}
+.fg-html li + li {
+  margin-top: 0.375rem;
+}
+.fg-html small {
+  display: block;
+  margin-top: 0.125rem;
+  color: var(--muted-foreground);
+  font-size: 0.8125rem;
+  line-height: 1.45;
+}
+.fg-html .say,
+.fg-html .move {
+  display: block;
+  margin-top: 0.75rem;
+  border-left: 2px solid var(--border);
+  padding-left: 0.75rem;
+  color: var(--muted-foreground);
+  font-style: italic;
+}
+.fg-html .mt {
+  display: inline-block;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 0 0.375rem;
+  color: var(--muted-foreground);
+  font-size: 0.75rem;
+  font-style: normal;
+}
+/* An authored [term] trigger inside a callout — a button, so it must not take
+   a text selection (see the pressable-chrome rule). */
+.fg-html button[data-pop] {
+  border-bottom: 1px dashed currentColor;
+  cursor: pointer;
+  font-weight: 500;
+  user-select: none;
+  -webkit-user-select: none;
+}
+/* Resource rows carry their own <a> + <small>; the marker would double the
+   bullet the border already implies. */
+.fg-res {
+  list-style: none;
+  padding-left: 0;
 }

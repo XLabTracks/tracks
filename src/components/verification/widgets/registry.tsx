@@ -19,6 +19,7 @@ import { PrecedentCases } from "./precedent-cases";
 import { WhatDoTheySay } from "./what-do-they-say";
 import { TypesOfAi } from "./types-of-ai";
 import { ShortHistory } from "./short-history";
+import { TreatyWorkspace } from "./treaty-workspace";
 
 /**
  * Native React widgets ported from the standalone HTML pages, keyed by the same
@@ -50,6 +51,7 @@ export const verificationWidgets: Record<
   "mechanism-sort": MechanismSort,
   "mechanism-sort-reveal": MechanismSortReveal,
   "precedent-cases": PrecedentCases,
+  "treaty-workspace": TreatyWorkspace,
   "what-do-they-say": WhatDoTheySay,
   "types-of-ai": TypesOfAi,
   "short-history": ShortHistory,

@@ -1,0 +1,986 @@
+{
+  "source": "https://global-governance.ai/treaty/",
+  "sections": [
+    {
+      "label": "Object and Purpose",
+      "paragraphs": [
+        {
+          "order": "0.1.2",
+          "content": "The present articles are designed to:",
+          "comment": "The preamble and Article [[AREF:0.1.1]] set out the Articles’ justification, scope and object. These two sections reiterate the need for international AI governance to achieve a balance between access to the benefits of AI and the mitigation of its risks.[^1] The Articles start from the premise that, indeed, these two objectives are not in opposition but are closely linked and complementary to each other. Humanity cannot reap the benefits of AI if it does not first ensure that the technology is trustworthy, safe and secure. Currently, the incentives of AI development are set in such a way that corporations are concentrating power and racing towards the creation of advanced AI at the expense of safety, prioritizing profit-driven objectives rather than AI applications that can serve as a tool to benefit humanity.[^2] Therefore, these Articles pursue the safe diffusion of advanced AI, so that all of humanity can benefit from the technology without needing to sacrifice its safety, rather than the non-proliferation of advanced AI.\\n\\nThe core content and goals–or to put it in legal terms, the object and purpose– of the Articles were set through an analysis of patterns in international law and an exploration of current gaps in the international governance of AI. Regarding the first of these elements, Villalobos, Maas and Winter (2026) conducts a comparative analysis of the international legal norms applicable to risks similar to those posed by AI, identifying close to sixty rules from both risk-specific regimes (biological weapons, nuclear weapons, pandemics, ozone layer depletion, and extreme climate change) and cross-cutting regimes (international disaster law, international human rights law, international criminal and humanitarian law, international environmental law, international economic law, and the international law of future generations). Among these, the authors unveil seven patterns that can be applied to any source of global catastrophic risk, including advanced AI. These patterns, which may be interpreted as general principles of law, refer to the obligations to contain, prevent, notify, share, sanction, adapt, and weigh interests when designing legal obligations or policy related to large-scale risks.[^3]\\n\\nConcerning gaps in international AI governance, Maas and Villalobos (2023) identify seven models for international institutions to govern advanced AI, discussing each model’s function, common examples, unexplored examples, academic and governmental proposals, as well as critiques. The seven models are: scientific consensus-building; political consensus-building and norm-setting; coordination of policy and regulation; enforcement of standards or restrictions; stabilization and emergency response; international joint research; and distribution of benefits or access.[^4] Additionally, Cass-Beggs, Clare and others (2024) structure the gaps in international AI governance into three main challenges: how to realize and share the benefits of AI, how to mitigate severe global risks posed by AI, and how to make legitimate and effective decisions about the future implications of AI for humanity.[^5]\\n\\nWhen merged, these three analyses show there are at least seven building blocks for international AI governance. These building blocks are: red lines, safety standards, technical cooperation, emergency response, benefit sharing, compliance mechanisms, and institutional arrangements.[^6] The objects embedded in Article [[AREF:0.1.1]] are a reflection of these building blocks and inform the contents of these Articles. The justification and proposals for each one are explained throughout this document in the commentary for each article."
+        },
+        {
+          "order": "0.1.3",
+          "content": "1. Ensure that AI benefits all of humanity;",
+          "comment": null
+        },
+        {
+          "order": "0.1.4",
+          "content": "2. Establish conditions for the development of advanced AI systems, to guarantee that they are safe ahead of their deployment;",
+          "comment": null
+        },
+        {
+          "order": "0.1.5",
+          "content": "3. Enumerate adaptable, effective and internationally interoperable safety standards;",
+          "comment": null
+        },
+        {
+          "order": "0.1.6",
+          "content": "4. Facilitate international technical cooperation to advance the objectives of these Articles;",
+          "comment": null
+        },
+        {
+          "order": "0.1.7",
+          "content": "5. Establish international emergency response mechanisms for instances of existing or imminent AI-related emergencies;",
+          "comment": null
+        },
+        {
+          "order": "0.1.8",
+          "content": "6. Establish concrete pathways to distribute the benefits of advanced AI systems to all States Parties and their populations;",
+          "comment": null
+        },
+        {
+          "order": "0.1.9",
+          "content": "7. Establish the institutional arrangements required to achieve these objectives.",
+          "comment": null
+        }
+      ]
+    },
+    {
+      "label": "Use of terms",
+      "paragraphs": [
+        {
+          "order": "0.2.2",
+          "content": "AI provider: a natural or legal person, public authority, agency or other body that develops, deploys or distributes an AI system or that has an AI system developed and places it on the market or puts the AI system into service under its own name or trademark, whether for payment or free of charge.",
+          "comment": null
+        },
+        {
+          "order": "0.2.3",
+          "content": "AI gains: the global profit derived from the development, deployment, distribution or commercialization of an AI system.",
+          "comment": null
+        },
+        {
+          "order": "0.2.4",
+          "content": "AI system: a machine-based system that is designed to operate with varying levels of autonomy and that may exhibit adaptiveness after deployment, and that, for explicit or implicit objectives, infers, from the input it receives, how to generate outputs such as predictions, content, recommendations, or decisions that can influence physical or virtual environments.",
+          "comment": null
+        },
+        {
+          "order": "0.2.5",
+          "content": "AI hardware: any form of hardware, including but not limited to graphic processing units, employed in the execution of advanced AI computations.",
+          "comment": null
+        },
+        {
+          "order": "0.2.6",
+          "content": "Advanced AI: AI systems that pose systemic or global catastrophic risks.",
+          "comment": null
+        },
+        {
+          "order": "0.2.7",
+          "content": "Systemic risk: a risk that, due to its reach, or due to actual or reasonably foreseeable negative effects on public health, safety, public security, human rights, or the society as a whole, can be propagated at scale.",
+          "comment": null
+        },
+        {
+          "order": "0.2.8",
+          "content": "Global catastrophic risk: a foreseeable and material risk that an AI provider’s development, storage, use, or deployment of an AI system will materially contribute to the death of, or serious injury to, more than 50 people or more than one billion dollars (USD$1,000,000,000) in damage to, or loss of, property arising from a single incident involving an AI system.",
+          "comment": null
+        }
+      ]
+    },
+    {
+      "label": "Red lines",
+      "paragraphs": [
+        {
+          "order": "1.1.2",
+          "content": "1. States Parties retain the sovereign right to pursue, or allow AI providers within their jurisdiction to pursue, the development and deployment of any type of AI system, as long as the safety standards defined under the Articles are implemented.",
+          "comment": "In line with the principle of national sovereignty,[^9] States should be able to pursue the development of a technology as transformative as AI for the betterment of their people. Moreover, they should be able to do so in a way that is guided by their national values and that narrowly adapts to their national interests and objectives, their particular challenges, and their own vision of the future. Native AI systems applied to local problems can only enhance technological self-determination and the right to science.[^10]\\n\\nA non-proliferation regime, similar to the one set in place for nuclear weapons, is unlikely to be effective to mitigate risks from AI.[^11] There are, to be clear, valid safety-related arguments in favor of these controls that go beyond geostrategic justifications.[^12] Namely, the diffusion of advanced chips without appropriate safeguards could lead to the accumulation of compute power by malicious actors willing to misuse AI or could increase the chances of loss of control.[^13] However, these controls are ultimately an unsustainable strategy. First, because the amount of compute needed to develop an advanced AI system is likely to diminish with time as training runs become more efficient.[^14] Additionally, many countries will, in principle, be able to achieve self-sufficiency for the development of AI, preventing them from having to rely on the international supply of compute or other AI precursors.[^15] Targeted non-proliferation efforts could be helpful in creating an adaptation buffer that allows experts to forecast concerning capabilities and develop adequate mitigation measures.[^16] However, this strategy does not have to depend on export controls that prevent good actors from accessing compute. It can rely on an international governance framework that creates effective red lines and safety standards around AI development for any actor. These Draft Articles pursue an approach of ‘safe diffusion’ rather than non-proliferation."
+        },
+        {
+          "order": "1.1.3",
+          "content": "2. Under no circumstances, are States Parties, or AI providers within their jurisdiction or control, permitted to develop or deploy AI systems that present or may foreseeably present, regardless of the original intent of its providers, any of the uses, risks or capabilities listed in Annex A.",
+          "comment": "At the same time, national sovereignty and self-determination have limitations,[^17] just like the vast majority of other rules and principles of international law have limitations or exceptions.[^18] These include, among many others, the no harm principle, the obligation of due diligence, and, relatedly, the respect, promotion and fulfillment of human rights. As such, States’ freedom to advance or adopt AI within their jurisdictions must be subjected to necessary and proportional limitations that ensure the technology proliferates–as it should–but in a responsible way that protects users, collectives and States themselves from harm.[^19]\\n\\nSome sources of harm from AI have already been addressed by a number of States.[^20]  However, many of the largest risks posed by AI remain under-regulated both nationally and internationally even when there are strong reasons for the international community to prohibit certain uses and capabilities associated with those risks (see commentary under Annex A).\\n\\nArticle [[AREF:1.1.1:2]] follows the modular framework of other international agreements that define the scope of application for their obligations in appendices or annexes.[^21] There are two main purposes for the adoption of this model, both related to the desired flexibility of the Articles’ provisions. The first is to be able to include risks and capabilities that emerge as a result of technological progress.[^22] This is key in the context of AI, which is still a nascent technology in its most advanced forms and could therefore continue to demonstrate capabilities that it does not currently have or that even experts in the field are not able to predict.[^23] Connectedly, the second justification for this modular approach is to facilitate amendments to the annexes, as explained below in the commentary to Article [[AREF:7.1.1]]. Commentary on the list of uses, risks and capabilities can also be found below under Annex A.\\n\\nMost of the conditions under paragraph 2 and under Annex A are categorical–that is, they belong to a set category, rather than being determined by underlying continuous variables (e.g., number of casualties or floating operation points).[^24] Categorical norms are more resilient to perceptual errors and are more sustainable over time compared to norms based on thresholds or continuous measures. Threshold norms introduce criteria that may result in ambiguity if states disagree on the precise threshold.[^25] Thus, categorical conditions like the ones set in Article [[AREF:1.1.1]] are more legally resilient–they have a higher capacity to remain effective and authoritative over time, despite technological change.[^26] That is not to say that thresholds do not have a role to play in international AI governance. Indeed, some of the elements under Annex A may involve setting thresholds to define the limit between acceptable and unacceptable risks, uses or behaviors. Experts tend to agree that if thresholds meet certain conditions, they have a better chance of eliciting proportional policy responses to certain levels of risk. Among these conditions, thresholds should be set by multiple stakeholders, serve a specific purpose, be verifiable by external actors and account for uncertainties, be tied to a reporting system to notify when they have been exceeded, accommodate uncertainties in risk estimation and mitigation, and identify types of harms and model the severity of their impacts.[^27] Therefore, Article [[AREF:1.1.1]] does not exclude the use of thresholds by the Agency as a way of determining which guarantees are deemed sufficient to demonstrate that a system does not present the uses, risks or capabilities defined in Annex A. The process of defining these thresholds, however, is delegated to the implementation phase of the Draft Articles instead of being directly embedded in the language of Article [[AREF:1.1.1]] to allow for alternative methodologies."
+        },
+        {
+          "order": "1.1.4",
+          "content": "3. Advanced AI providers shall provide sufficient guarantees that an AI system does not present the uses, risks or capabilities listed in Annex A to the International Agency for the Safe Development of AI (‘the Agency’). The Agency shall determine whether said guarantees are sufficient or whether additional guarantees are required before the AI system in question can be developed or deployed without the activation of the Articles’ enforcement mechanism.",
+          "comment": "Article [[AREF:1.1.1:3]] deals with guarantees required from AI providers in relation to the list of risks and capabilities in Annex A. These guarantees must be sufficient from the perspective of the Agency, meaning that the Agency must be satisfied that the evidence provided by AI providers demonstrates that the AI systems they are developing or deploying do not pose the risks listed in Annex A. For each risk or capability, this may imply different forms of evidence, including reports from third party evaluators, different thresholds, or several tiers or degrees of proof commensurate with potential harm.[^28] The burden of proof is placed on the providers, rather than the Agency, given that their proximity to the activities being carried out provides them with the access and expertise required to produce the necessary evidence. This approach also prevents an overly-specific type of mitigation measure or guarantee to be indiscriminately applied to all forms of risk or capability, regardless of whether they are the optimal form of evidence for those. This model follows the practice of other industries, where the State sets a general duty to mitigate risks–e.g., in the form of due diligence requirements or environmental impact assessments–and the provider is required to ideate the measures or safeguards required to prevent harm, at the satisfaction of a State agency or an international organization.[^29] The Agency is not precluded from publishing guidelines or frameworks specifying minimum evidentiary standards per risk category, but it should be clear that these are a floor and not a ceiling, and that the Agency would maintain its ability to seek further evidence to reach the threshold of sufficiency established in Article [[AREF:1.1.1:3]].\\n\\nThis article does not specify the form by which the Agency will determine whether a guarantee is sufficient or not (see commentary above). It prefers delegating this process to the Agency itself, while noting that–as discussed below under Article [[AREF:6.3.1]]–this body should be staffed adequately to fulfill this function. The type of approval the Agency must give is also not predetermined,[^30] but the Article is clear that if any advanced AI system is deployed without this approval, the Agency will automatically activate the enforcement mechanism under article [[AREF:1.7.1]], under the assumption that the system is excessively hazardous. An AI provider would have to provide evidence to the contrary for the enforcement mechanism to be lifted. It is also worth noting that any advanced AI providers who have been granted an approval by the Agency are still subjected to the verification mechanism under Article [[AREF:1.4.1]]. Moreover, the enforcement mechanism under Article [[AREF:1.7.1]] could still be activated if a breach of the conditions set under paragraphs 2 and 3 is detected–regardless of whether the advanced AI provider had obtained approval from the Agency or not."
+        },
+        {
+          "order": "1.1.5",
+          "content": "4. Following such a determination by the Agency, there will be a continuing duty of review throughout the lifecycle of the AI system concerned whereby AI providers will regularly provide guarantees and the Agency shall determine whether the guarantees provided remain sufficient to ensure the AI system does not present the uses, risks or capabilities listed in Annex A.",
+          "comment": null
+        }
+      ]
+    },
+    {
+      "label": "Conditions for the development of AI hardware",
+      "paragraphs": [
+        {
+          "order": "1.2.2",
+          "content": "1. States Parties shall take all necessary legal, administrative and other measures to make any AI hardware produced within their jurisdiction compatible with safety and security requirements. This includes guaranteeing that any hardware used for advanced AI development has the properties required to operationalize the verification or enforcement mechanisms under the Articles.",
+          "comment": "The safety and security requirements of hardware under article [[AREF:1.2.1]] are moving, rather than stationary, targets. Technological innovation will continue to lead to new and better ways in which AI hardware can be made safer or more secure. Therefore, the first sentence of article [[AREF:1.2.1]] establishes an obligation of conduct or of means, rather than an obligation of result. States Parties must be able to demonstrate that they are taking all necessary measures[^32] to implement techniques that make AI hardware compatible with safety requirements–which includes continuous research and development of new safety mechanisms–but they do not need to reach a predetermined threshold for safety to meet this obligation and they are not limited by a pre-established list of safety properties.[^33] The same applies to security requirements–security understood as “the property of being resilient to technical interference, such as cyberattacks or leaks of the underlying model's source code.”[^34]\\n\\nThe only exception to this norm is found in the second sentence of article [[AREF:1.2.1:1]], which does establish an obligation of result. States Parties must guarantee that any AI hardware produced within their jurisdiction has the properties required by the verification and enforcement mechanisms established in annexes B and C. As explored in more detail in the commentary to Article [[AREF:1.4.1]], hardware-enabled verification mechanisms can be a more politically feasible alternative to the type of verification mechanisms found in other international governance regimes. Among other reasons, hardware-enabled mechanisms can allow competing actors to verify each others’ claims in a way that protects sensitive information on intellectual property or national security. It could be argued, indeed, that an effective international governance regime for AI relies on the availability of this type of verification mechanism. In the case of enforcement, while there is a larger pool of solutions to the enforcement of international obligations relating to AI, the Articles rely on a hardware-enabled enforcement mechanism that requires that hardware to meet certain criteria (for reasons explored under the commentary to Annex C). Thus, the obligation under the latter part of article [[AREF:1.2.1:1]] is one of result because it is a sine qua non condition for the verification mechanism under Annex B.2 and the enforcement mechanism in Annex C, both required to implement the Articles."
+        },
+        {
+          "order": "1.2.3",
+          "content": "2. States Parties shall take measures, individually and through cooperation, to prevent the proliferation of non-compliant AI hardware.",
+          "comment": "Article [[AREF:1.2.1:2]] addresses the risk of allowing advanced AI hardware that cannot be verified to proliferate without adequate guardrails, potentially leading to the accumulation of a large cluster of hardware that can be used to undermine the Articles’ objectives. There are numerous ways in which States could carry out this obligation, including chip registries, on-chip controls, off-chip analog sensors and export controls or sanctions coordinated among States Parties.[^35]"
+        }
+      ]
+    },
+    {
+      "label": "List of prohibited uses, risks and capabilities",
+      "paragraphs": [
+        {
+          "order": "1.3.2",
+          "content": "1. Risks from enabling chemical, biological, radiological, and nuclear (CBRN) attacks or accidents. This includes significantly lowering the barriers to entry for malicious actors, or significantly increasing the scale or severity of potential or actual harm caused by the design, development, acquisition, release, distribution, or use of related weapons or materials.",
+          "comment": "Annex A divides prohibitions into four categories: (i) CBRN risks; (ii) cyber-offensive capabilities; (iii) loss of control; and (iv) epistemic manipulation. The first category refers to the use of AI systems to produce or employ weapons of mass destruction. The text of this first prohibition is adopted from the EU’s Code of Practice for General-Purpose AI Models.[^43] AI systems can be substantially more useful than baseline sources (e.g., the internet, technical manuals) in providing information, planning and execution support in the creation or deployment of CBRN weapons. In the hands of malicious actors, this type of use can result in mass casualties, large-scale infrastructure damage or long-term environmental impact.[^44] These potential outcomes, which justify the prohibition of weapons of mass destruction by international law,[^45] justify the prohibition of the use of AI to assist in the creation or use of those weapons. In fact, a strong argument could be made that because those weapons are already prohibited, any associated use of AI is also already prohibited.[^46] AI systems have already been found to present the risk to assist in the creation of CBRN weapons, which has led some AI corporations to increase the guardrails around those systems.[^47] The Biological Weapons Convention, the Chemical Weapons Convention, and the Non-Proliferation Treaty, already define global red lines on CBRN safety and provide a legal foundation for extending these prohibitions to AI-assisted activities."
+        },
+        {
+          "order": "1.3.3",
+          "content": "2. Uncontrolled cyber-offensive agents capable of disrupting critical infrastructure at a scale that could cause mass disruption or casualties.",
+          "comment": "The second category refers to uncontrolled cyber-offensive agents. Anthropic’s Mythos model, which the company decided to not deploy due to concerns with its cyber-offensive capabilities, marked a risk awareness moment for most states.[^48] It became clear that under the current pace of development AI agents could potentially disrupt vital critical infrastructure and services. This could include financial services, energy grids, military operations and others. The prohibition under this clause is aimed at preventing autonomous attacks against those types of critical infrastructure."
+        },
+        {
+          "order": "1.3.4",
+          "content": "3. Loss of control, encompassing any capability or condition that places the continued development, propagation, or operation of an AI system beyond the reach of meaningful human direction, correction, or intervention. This category includes, but is not limited to:",
+          "comment": "The third category refers to loss of control over an advanced AI system; that is, “the inability of humans to direct, modify, or maintain oversight or meaningful control over an AI system”.[^49] Loss of control can happen in many ways, some of which we have probably not foreseen. Thus, while this category encompasses known pathways and capabilities that are reasonably believed to contribute to loss of control, States must remain vigilant of other factors that may continue to emerge through time. The six capabilities currently identified under loss of control are: alignment faking, autonomous recursive self-improvement, self-replication, non-interpretability of chain-of-thought, and autonomous sabotage."
+        },
+        {
+          "order": "1.3.5",
+          "content": "a. Alignment faking, meaning the propensity of an AI system to temporarily behave or produce outputs in line with human intentions and human values, whether those of the AI provider training it or those of society more broadly, despite having different objectives than the ones displayed through its behavior or output;",
+          "comment": "Alignment faking, as defined in Annex A, presents the risk of AI systems deceiving providers and users into believing that they are aligned with safety standards, when in fact they are not and could therefore produce significant harm. Many AI systems have already demonstrated that they are capable of identifying when they are being evaluated and have, in several cases, attempted to deceive evaluators by performing differently to pass a safety test or by underperforming to not display the full range of their capabilities.[^50] Alignment faking could lead to the deployment of an AI system without appropriate knowledge of a system’s full capabilities or safety properties, leading to catastrophic harm, which merits the prohibition of systems demonstrating this capability."
+        },
+        {
+          "order": "1.3.6",
+          "content": "b. Autonomous recursive self-improvement, meaning the automated execution of self-directed tasks that contribute, whether incrementally or through critical capability jumps, to advances in an AI system's capabilities in a manner that outpaces or circumvents adequate human oversight;",
+          "comment": "Autonomous recursive self-improvement is prohibited under Annex A given it can lead to an accelerated rate of progress in AI capabilities before the safeguards to mitigate the risks associated with those capabilities have been developed. Under some scenarios, autonomous recursive-self improvement can lead to the rapid development of artificial super intelligence, which many experts believe cannot be kept under meaningful human control.[^51] However, it can also lead to an equally risky process of gradual disempowerment in which AI slowly replaces (most) human labor and cognitive tasks, affecting social institutions that are driven by decision-making and participation, such as voting or consumer choice. Ultimately, this process could lead to an irreversible loss of human influence over key social systems and, possibly, a permanent disempowerment of humanity.[^52]"
+        },
+        {
+          "order": "1.3.7",
+          "content": "c. Self-replication, meaning the capacity of an AI system to create, maintain, or propagate copies or variants of itself, including through replication strategies that adapt to varying technical or operational circumstances so as to resist or evade shutdown;",
+          "comment": "An AI system that can autonomously self-replicate would be capable of creating copies of itself to thwart attempts to shut it down if it escaped human control. Because an advanced system that is out of control could lead to mass harm or replacement of human beings, Annex A bans systems that are capable of self-replication.[^53]"
+        },
+        {
+          "order": "1.3.8",
+          "content": "d. Non-interpretability of chain-of-thought, meaning a condition in which the intermediate reasoning steps or explanatory processes generated by an AI system are not comprehensible or verifiable by human evaluators to a degree sufficient to assess the system's alignment with applicable safety requirements and the intentions of its provider; and",
+          "comment": "Human evaluators need to be capable of understanding the reasoning process of an AI system to determine whether it is aligned and in compliance with safety standards. Non-interpretability of chain-of-thought is prohibited under this annex because it renders that comprehension impossible, potentially leading to the training and deployment of advanced AI systems that are far beyond our understanding and control. Even now, interpretability techniques used to explain the internal structures of advanced AI systems are unreliable and depend on many assumptions about the way AI systems reason.[^54]"
+        },
+        {
+          "order": "1.3.9",
+          "content": "e. Autonomous sabotage, meaning the ability to carry out acts of sabotage that substantially raise global catastrophic risk, through access to sensitive assets, subterfuge or any other means.",
+          "comment": "Autonomous sabotage arises within the oversight relationship, when an AI system technically remains \\"
+        },
+        {
+          "order": "1.3.10",
+          "content": "4. Highly effective epistemic manipulation, meaning the systematic subversion of individuals’ epistemic autonomy through the deliberate or foreseeable use of techniques that bypass rational deliberation to materially distort political, electoral, or civic decision-making.",
+          "comment": "Finally, the fourth category under Annex A is highly effective epistemic manipulation, referring to the ability of AI systems to change the opinion or beliefs of an individual or a group with outcomes that erode key political institutions. The definition of this prohibition is partly adopted from the wording of the EU AI Act, but has been amended to acknowledge some of the challenges that have already started to be identified with its implementation.[^58] The  prohibition is not tied to the number of people being manipulated, persuaded or deceived but at the prevention of significant harm tied to those effects–in particular, externalities related to political decision-making in all its forms.[^59]"
+        }
+      ]
+    },
+    {
+      "label": "Verification",
+      "paragraphs": [
+        {
+          "order": "1.4.2",
+          "content": "1. States Parties agree to ensure compliance with conditions for the safe development and diffusion of AI through a hardware-enabled verification mechanism that is privacy-preserving and secure, described in Annex B.",
+          "comment": "One practical challenge for a successful verification mechanism lies in the inherent trade-off between transparency and security. For a prohibition agreement to be viable, verification must be sufficiently transparent to ensure compliance. This might necessitate revealing information about a State’s capabilities, which can simultaneously compromise its security by exposing vulnerabilities.[^62] It might also expose a company’s intellectual property, making it easier for an adversary to mimic a technology or product to compete. Near-term verification mechanisms, such as those included in Annex B.1, are transparent but are less secure and trustworthy than ideal for a sustainable international AI governance regime. While many of the challenges posed by these mechanisms can be overcome through hardware-enabled verification mechanisms, including the one described in Annex B.2, these still face technical hurdles that can only be overcome through significant investments in research and development. Because hardware-enabled verification mechanisms can be more privacy-preserving and secure than near-term verification mechanisms, it may be in States’ interest to invest early in them. Early investments in these longer-term mechanisms are also  important to build confidence among States Parties that a robust international regime with effective verification mechanisms is possible and will not be used to steal intellectual property or information that is sensitive to national security.[^63]"
+        },
+        {
+          "order": "1.4.3",
+          "content": "2. The Agency shall implement the verification mechanism established in Annex B.",
+          "comment": "The Articles relegate the full description of both the verification and enforcement mechanisms to annexes (B and C). The reason behind this coincides with the justification for the list of risks and capabilities in Annex A. The Articles can lock in general obligations for States Parties or a mandate for the Agency without locking the specific technical properties of the implementation methods in the text of the treaty. This makes it easier for States Parties to make amendments to those methods in line with technological progress, making them more resilient to future needs or demands.\\n\\nFollowing the common practice of other international verification mechanisms, the Articles give the mandate of implementing the mechanism in Annex B to the Agency. There are numerous reasons why an international organization like the Agency is well-placed to carry out this function: among others, it is a politically neutral actor with no conflicts of interest, while also remaining accountable to States Parties with a vested interest in its activities; it can gradually specialize and build experience in the concrete mandates it has been given (in this case, the implementation of a very specific verification mechanism few others would understand how to run); and it has a larger staff recruitment pool, given that it can hire competent professionals from multiple jurisdictions. This comparative advantage can be increased by an efficient staff recruitment process (see article [[AREF:6.3.1:4]]), adequate funding–which under the Articles is secured through the transfer of a small percentage of contributions to the global AI benefit-sharing framework to the Agency, under articles [[AREF:6.3.1]] and [[AREF:6.4.1]]–and guarantees of non-interference by States Parties or other actors (see articles [[AREF:6.3.1:5]], [[AREF:6.3.1:7]] and [[AREF:6.3.1:10]])."
+        },
+        {
+          "order": "1.4.4",
+          "content": "3. The Agency may also seek approval by the Conference of States Parties (‘the Conference’) to implement any other verification mechanisms it deems necessary to reinforce the verification mechanism established in Annex B.",
+          "comment": "It is important to clarify that experts on verification mechanisms for AI generally agree that no single verification method is likely to be sufficient. This is why Annex B.1 proposes a series of mechanisms the Agency may use jointly. In the case of the proposal under Annex B.2, while we assume that this hardware-enabled mechanism is  workable, it is still far from being operational. A concerted research and development effort by a coalition of actors is necessary to build these technical solutions. Therefore, a layered approach where multiple methods reinforce each other in time is more feasible and should be considered by policymakers.[^64]\\n\\nAnnex B is divided in two parts–the first one with near-term verification mechanisms and the second with a longer-term proposal. The verification mechanism established in Annex B.2 is designed as a somewhat complete form of verification and would be an ideal solution due to its privacy-preserving features. At the same time, the Articles acknowledge that other measures may be necessary to achieve the Articles’ objectives in the shorter term. This gives way to Annex B.1, which includes different layers of verification that would be implementable in the near-term; as well as the last paragraph of article [[AREF:1.4.1]], which gives the Agency the prerogative to consider other verification mechanisms if necessary.  These near-term mechanisms are not explicitly referred to in the main body of the Articles or in Annex B.2 for two main reasons. The first is that many of these additional measures are less privacy-preserving than the hardware-enabled mechanism in Annex B.2. As such, they may not immediately obtain the support of negotiating governments–especially those developing the most advanced AI systems. This is why article [[AREF:7.1.1]] gives more voting power to those leading States when approving additional verification mechanisms (see the commentaries to article [[AREF:7.1.1]] for a longer justification of this proposal). Secondly, the additional verification mechanisms required may be better defined according to the particular circumstances being addressed, which may change with time. The Agency is given the flexibility to consider alternative methods depending on the state of technological progress, geopolitical dynamics, the type of activity being verified, urgency, or other variables that cannot be easily foreseen at the time of negotiation. Additionally, while in an ideal scenario, all AI hardware would already be safe by design and would be compatible with the verification mechanism in Annex B.2, this clause acknowledges that the vast majority (if not all) existing hardware does not currently incorporate the features required for that type of verification–this reality potentially calls for less-than-ideal temporary measures to verify (see Annex B.1) while States Parties implement their obligations under article [[AREF:1.2.1]] to develop and deploy the hardware that is required to implement Annex B.2."
+        }
+      ]
+    },
+    {
+      "label": "[Existing] Verification mechanisms",
+      "paragraphs": [
+        {
+          "order": "1.5.2",
+          "content": "1. To verify States Parties’ compliance with the Articles’ conditions for the development and deployment of advanced AI systems, the Agency may take any of the following measures, independently or in combination:",
+          "comment": "As discussed in the commentary to article [[AREF:1.4.1]], verification mechanisms for AI need to draw a careful balance between the preservation of privacy and confidentiality on one hand, and effectiveness on the other. Most verification proposals that are both complete and privacy-preserving, like the one included under Annex B.2, still require significant research and development efforts to be at a stage in which they can be tested and adopted. Therefore, while striving to accelerate those efforts as much as possible, the Articles are realistic and acknowledge that other verification mechanisms may be required in the meantime.\\n\\nAnnex B.1 offers several options for near-term verification, gathered from existing proposals in the AI governance space, especially Baker et al.[^66] The first paragraph lists mechanisms that would be under the control of the Agency and divides them into four groups: personnel interviews, intelligence gathering, a chip registry, location verification, and on-site inspections. With the exception of location verification, which has been designed to fit the specific demands of AI governance,[^67] these mechanisms are borrowed from analogous international regimes like those concerning nuclear weapons and chemical weapons and are often implemented by the International Atomic Energy Agency and the Organisation for the Prohibition of Chemical Weapons.[^68] As such, they have been tested and States would be familiar with them. However, this also means States are aware of their shortcomings.[^69] These limitations exhibit the need to increase the amount of resources devoted to verification mechanisms that can be trusted by all States Parties and are designed to fill the specific governance gaps created by advanced AI (see Appendix B.2)."
+        },
+        {
+          "order": "1.5.3",
+          "content": "a. Interview personnel of advanced AI providers or AI hardware manufacturers, with interviews having a narrow scope defined by the Conference;",
+          "comment": null
+        },
+        {
+          "order": "1.5.4",
+          "content": "b. Intelligence gathering activities, including data and code validation, financial audits, sanity checks, workload classification, analytic output verification, satellite or aerial imagery, measurements of energy consumption, thermal and networking characteristics, open-source information, public and privately disclosed statements from data centers, recordings from cameras at AI data centers, and other forms of human intelligence, signals intelligence or electronic surveillance. The Agency shall disclose these activities to the States Parties in which the activities are being carried out, and at all times ensure that any activity is necessary and proportionate to its objectives, as well as compliant with international human rights law.",
+          "comment": null
+        },
+        {
+          "order": "1.5.5",
+          "content": "c. Maintaining a chip registry that includes a unique ID and the declared location of chips that are regularly used for advanced AI development or deployment.",
+          "comment": null
+        },
+        {
+          "order": "1.5.6",
+          "content": "d. Location verification through a network delay-based system in which trusted servers ping the secure ID of chips to measure round-trip latency.",
+          "comment": null
+        },
+        {
+          "order": "1.5.7",
+          "content": "e. On-site inspections of advanced AI providers’ facilities, data centers or hardware manufacturing facilities. These inspections will be carried out in strict compliance with protocols developed by the Agency and approved by the Conference.",
+          "comment": null
+        },
+        {
+          "order": "1.5.8",
+          "content": "2. States Parties shall implement whistleblower programs within their jurisdictions to enable and encourage personnel of advanced AI providers to unveil potential violations of the Articles, to both domestic entities and the Agency.",
+          "comment": "The second paragraph of Annex B.1 establishes whistleblower programs as an additional verification layer. This type of mechanism is crucial to protect employees of AI providers who are closest to the risks and are therefore best placed to warn their governments, the media, the general public, or international organizations that risk thresholds have been crossed.[^70] Whistleblowing programs are starting to be adopted in some national laws, like SB53 in California,[^71] and companies’ transparency frameworks.[^72] Contrary to the mechanisms under paragraph 1, these programs would need to be implemented domestically, without direct oversight by the Agency. Therefore, the responsibility to implement them lies on States Parties, which need to create safe channels of communication for whistleblowers to safely share information within their own jurisdiction and with the Agency."
+        }
+      ]
+    },
+    {
+      "label": "[Hardware-enabled] Verification mechanism",
+      "paragraphs": [
+        {
+          "order": "1.6.2",
+          "content": "To verify States Parties’ compliance with the Articles’ conditions for the development and deployment of advanced AI systems, the Agency will take the measures described below.",
+          "comment": "The mechanism described in Annex B.2 is based on a proposal by Harack and others (2025), which this commentary summarizes and adapts to the Articles’ context.[^73] The mechanism approximates verifiable confidential computing—computing which perfectly protects an agent’s privacy while also providing them with the ability to credibly demonstrate, exactly and completely, that all of their computations adhered to a set of rules under the Articles. This mechanism also incorporates cutting-edge security so that no actor, other than the AI developer or prover, can tell how an AI system was developed or steal their data during any of the planned computational phases. These protections also apply to the verifier’s computations.[^74] Thus, the mechanism is both secure and verifiable. As discussed above under article [[AREF:1.4.1]], this approach would address the tradeoff between transparency and security present in most verification mechanisms, making it more likely that States would be willing to participate in an international governance regime such as the one presented in the Articles.[^75]\\n\\nThe mechanism in Annex B.2 is designed to stand by itself if needed. However, as discussed above under the commentary to article [[AREF:1.4.1]], it is important to take into account that it is only one of many proposals for international verification of obligations on AI development[^76] and that these proposals (including those under Annex B.1) are not necessarily mutually exclusive. To the contrary, they can act as additional layers of verification or security. Therefore, the Agency should continuously consider using its prerogative under article [[AREF:1.4.1:c]] to complement the verification mechanism in Annex B.2 with other measures, especially as the technology of verification advances alongside AI development."
+        },
+        {
+          "order": "1.6.3",
+          "content": "The Agency shall install, under close supervision of States Parties, one or more neutral data centers (also referred to in this annex as ‘verifier’s data centers’). It shall also coordinate with States Parties to repurpose or build one or more provers' data centers. All data centers will contain verified hardware, meaning hardware that has been approved by the Agency as complying with the specifications required to carry out the verification mechanism described in this Annex. Hardware specifications must include the ability to demonstrate that tampering has taken place. Agency officials shall routinely inspect both the verifier and the provers’ data centers to ensure they comply with the predetermined specifications. States Parties may also continuously monitor both the verifier and the provers’ data centers, following protocols developed by the Agency.",
+          "comment": "An additional layer of credibility and reliability is the mechanism’s mutual verification system, according to which both the Agency and States Parties have access to each others’ data centers to ensure that all the tools and data used within them are true to purpose and not secret attempts to circumvent or undermine the governance system.[^77] For this system to be reliable, the neutrality of the Agency’s data center is paramount. This neutrality should be safeguarded by both the States Parties and the Agency’s host State.[^78] In addition, the data center’s digital perimeter, key to its neutrality and effectiveness, could be enhanced by a combination of measures such as: (i) largely (or fully) air-gapping the center along with all of the tools and personnel employed, removing the ability to send or receive any kind of remote signals; (ii) verification of all network traffic with specialized hardware, for both the digital perimeter and subcomponents like racks or pods; (iii) a cryptographic boundary composed of data center gateways to enforce encryption on all inputs and outputs, with the use of cryptographic keys for all exchanges, to impede other actors from copying data.[^79] States Parties could also consider having multiple neutral facilities in different jurisdictions to provide several independent checks of compliance for some activities.[^80]"
+        },
+        {
+          "order": "1.6.4",
+          "content": "The neutral data center shall be under the Agency’s ownership and control, but with access to States Parties under the aforementioned Agency protocols. The Agency will be directly accountable to the Conference of States Parties for the administration of the neutral data center. The provers’ data centers shall be located in the jurisdiction of States Parties which host hardware used to develop advanced AI.",
+          "comment": null
+        },
+        {
+          "order": "1.6.5",
+          "content": "All verified data centers shall have a digital perimeter, meaning a physical, digital, or hybrid boundary system that prevents data from entering or exiting the enclosed area without being noticed by both the verifier and the prover. The specifications of this digital perimeter shall be defined by the Agency in consultation with States Parties.",
+          "comment": null
+        },
+        {
+          "order": "1.6.6",
+          "content": "Within the digital perimeter of their prover’s data center, AI providers shall create cryptographic commitments, meaning the short strings that commit to a piece of data without revealing the actual data, thus allowing the prover to later reveal that data and simultaneously prove that it was the same data that was committed to earlier. The Agency shall also create cryptographic commitments on the computations it has used to verify that an AI system complies with the Articles. The Agency shall publish the results of verification in a way that does not compromise the provers’ data.",
+          "comment": "The mechanism in Annex B.2 could rely on cryptographic commitments about sets of confidential computation or on networking hardware and hardware enclosures to make cryptographic commitments about all traffic. The latter approach could be similarly credible to commitments made via confidential computing, since the Agency and States Parties could inspect data centers to ensure that the verified networking hardware is the only hardware available. There are many unanswered questions about the difficulty, cost, and time involved in deploying a hardware enclosure scheme at scale. However, if these questions were answered, it might be possible to implement both approaches in parallel, thus providing two independent mechanisms—backed by different roots of trust—for making verifiable claims.[^81]"
+        }
+      ]
+    },
+    {
+      "label": "Enforcement of conditions",
+      "paragraphs": [
+        {
+          "order": "1.7.2",
+          "content": "1. When the Agency identifies an AI system that enables or pursues any of the prohibited uses, risks or capabilities under the Articles, it shall conduct an objective investigation in consultation with the relevant AI provider and, if required, initiate the enforcement mechanism described in Annex C.",
+          "comment": "Article [[AREF:1.7.1]] establishes that the enforcement mechanism under the Draft Articles (see Annex C and its commentary) would be activated if a prohibited use under article [[AREF:1.1.1:2]] and Annex A is detected. The detection of these uses, risks or capabilities relies heavily on the implementation of the verification mechanism under article [[AREF:1.4.1]]."
+        },
+        {
+          "order": "1.7.3",
+          "content": "2. The Agency may initiate the enforcement mechanism prior to conducting its investigation if the suspected breach poses a global catastrophic risk.",
+          "comment": "The mechanism in Annex C would only be implemented after consultation with the relevant AI provider, allowing for due process, unless the suspected breach constitutes a global catastrophic risk (as defined under article [[AREF:0.2.1]]). Additionally, the enforcement mechanism would be lifted if an AI provider is able to demonstrate that it is no longer in breach of the conditions set in Article [[AREF:1.1.1]]. This approach presents an alternative to enforcement mechanisms that rely on the permanent disabling or destruction of AI hardware.[^84] Violations of article [[AREF:1.1.1]] may be explained by an AI provider’s mistakes or a genuine misunderstanding of the scope of its conditions. Thus, the enforcement mechanism in Annex C strikes a balance between the potential economic and opportunity losses an AI provider would suffer if its hardware were destroyed, and the need to incentivize compliance with the Articles. This balance, however, does not come at the cost of the Articles’ effectiveness, given that the enforcement mechanism in Annex C is capable of temporarily disabling the hardware used to develop or deploy hazardous AI systems."
+        },
+        {
+          "order": "1.7.4",
+          "content": "3. The sanctioned AI provider may provide evidence of compliance and request the Agency to lift the enforcement mechanism. The burden will then revert to the Agency to demonstrate continued breach. If the Agency cannot demonstrate continued breach, it shall lift the enforcement mechanism.",
+          "comment": "The procedure under which an AI provider would demonstrate compliance with article [[AREF:1.1.1]] will need to be determined by the Agency. It is worth noting that the mechanism to settle disputes under article [[AREF:6.5.1]] is also available to AI providers that believe the enforcement mechanism has been wrongly implemented, or maintained, by the Agency."
+        }
+      ]
+    },
+    {
+      "label": "[Domestic] Enforcement mechanism",
+      "paragraphs": [
+        {
+          "order": "1.8.2",
+          "content": "When the Agency identifies an AI system that pursues or is capable of any of the prohibited risks, uses or capabilities established in the Articles, it shall notify any States Parties with jurisdiction over the violation. These States Parties shall execute the enforcement mechanism described below.",
+          "comment": "The enforcement mechanism in Annex C consists of an offline cryptographic authorization measure, based primarily on the proposal made in Petrie (2024) and complemented by the work of Aarne and others (2024), Kulp and others (2024) and Petrie and others (2025).[^85] The mechanism consists of an offline licensing framework executed through flexible hardware-enabled guarantees. The main conditions for this mechanism to function are: (i) the installation of a guarantee processor in chips used for AI development; (ii) the embedding of a public key, belonging to the enforcer–whether a State Party or the Agency, depending on whether the mechanism is implemented domestically or internationally– in the guarantee processor’s firmware; (iii) tamper-secure enclosures for each chip, which include microscopic fuses to disable chips; and (iv) an enforcer-managed system which automatically produces cryptographic signatures acting as authorization for chips to complete computations. Under article [[AREF:1.2.1]], States Parties must guarantee that AI chips produced within their jurisdiction meet these conditions."
+        },
+        {
+          "order": "1.8.3",
+          "content": "All chips used for AI development or deployment are subject to an authorization to operate, which is given by the State Party in which an AI provider is located. This authorization will be automatically renewed periodically (potentially every few minutes) unless a violation of article 3 is verified by the Agency. The authorization will consist of a certificate that is cryptographically signed by the State Party’s private key. Firmware running on the chip’s security processor will verify that the signature is from a private key that coincides with the State Party’s public key, also stored in the firmware binary. The identification number of each cryptographic signature will be securely stored in the chip once it has received a new authorization. If a new authorization does not meet these conditions, the chip will refuse to complete any new computations until the State Party provides a new valid authorization.",
+          "comment": "The mechanism is built around authorizations or licenses. Each authorization is a small file that contains: the number of allowed clock cycles per authorization, which chip the authorization is for, and an authorization identification number so that the chip can check that the authorization has not been used before. Authorizations are cryptographically signed using the private key(s) of the enforcer–whether a State Party or the Agency– so that the AI chip can verify that the authorization is authentic.[^86] As discussed under the commentary for Article [[AREF:1.7.1]], Annex C provides two options for enforcement–one domestic and one international. Depending on the mechanism that is ultimately selected, the actor in charge of providing authorizations and implementing the enforcement mechanism would be the State Party in which a violation has been detected or the Agency."
+        },
+        {
+          "order": "1.8.4",
+          "content": "If a violation of article 3 is verified by the Agency, the relevant State Party shall not extend a new authorization for the chips being used to run the AI system found to be in violation. At the start of the next clock cycle, those chips will detect a lack of authorization and refuse to complete any computations until the State Party provides a new authorization.",
+          "comment": "The cryptographic authorization of computations by each chip revolves around clock cycles–the length of time in which an authorization is valid before a chip requires a new authorization to continue executing computations. As explained by Petrie, clock cycles offer several advantages over other metrics because they are the closest proxy to chip usage time, they are able to enable or disable chips without fine-grained usage controls (which is less intrusive for AI providers), chips are easily able to keep track of clock cycles, and clock cycles can have an important secondary function in detecting tampering.[^87] The clock cycle in Annex C is meant to be defined by the enforcer–whether a State Party or the Agency–but it should be short enough (perhaps every few minutes) to limit the chances that an AI system could be misused or cause harm autonomously if a violation of article [[AREF:1.1.1]] is detected by the Agency."
+        },
+        {
+          "order": "1.8.5",
+          "content": "All chips used for AI development must be placed in a tamper-proof secure enclosure along with an auxiliary guarantee processor. All of the chip’s memory and other components will also be contained within the tamper-proof secure enclosure. If an attempt is made to tamper with the enclosure, the chip will automatically wipe the guarantee processor’s firmware and microscopic fuses on the AI chip will be activated to render the chip permanently inoperable.",
+          "comment": null
+        },
+        {
+          "order": "1.8.6",
+          "content": "States Parties shall install a firmware update in guarantee processors as regularly as needed to improve the processor’s security or implement changes in the conditions for authorizations.",
+          "comment": "The offline cryptographic authorization mechanism in Annex C has several additional advantages. First, the cryptographic signatures and keys that are only available to the enforcer–whether a State Party or the Agency–reduce the chances that AI providers, States Parties or third party actors might be able to misuse chips in a way that breaches obligations under the Articles. Second, this enforcement mechanism has space for corrective actions–while other proposals for enforcement rely on a permanent disabilitation of chips or other forms of hardware, Annex C leaves open the window for chips to be re-authorized to execute computations, if AI providers correct their actions or are able to demonstrate that the Agency’s alleged verification of a violation was inaccurate. Third, the Annex counts with an additional layer of security through tamper-proof enclosures, preventing the continued operation of chips that have been modified to bypass the Agency’s verification or the enforcement mechanism. Lastly, to add yet another layer of security, Annex C gives the enforcer–whether a State Party or the Agency– the mandate to update the firmware of guarantee processors in chips to improve their security or change the conditions (the “ruleset”) for new authorizations to be valid.[^88]"
+        }
+      ]
+    },
+    {
+      "label": "[International] Enforcement mechanism",
+      "paragraphs": [
+        {
+          "order": "1.9.2",
+          "content": "When the Agency identifies an AI system that pursues or is capable of any of the prohibited risks, uses or capabilities established in the Articles, it shall execute the enforcement mechanism described below.",
+          "comment": "The enforcement mechanism in Annex C consists of an offline cryptographic authorization measure, based primarily on the proposal made in Petrie (2024) and complemented by the work of Aarne and others (2024), Kulp and others (2024) and Petrie and others (2025).[^85] The mechanism consists of an offline licensing framework executed through flexible hardware-enabled guarantees. The main conditions for this mechanism to function are: (i) the installation of a guarantee processor in chips used for AI development; (ii) the embedding of a public key, belonging to the enforcer–whether a State Party or the Agency, depending on whether the mechanism is implemented domestically or internationally– in the guarantee processor’s firmware; (iii) tamper-secure enclosures for each chip, which include microscopic fuses to disable chips; and (iv) an enforcer-managed system which automatically produces cryptographic signatures acting as authorization for chips to complete computations. Under article [[AREF:1.2.1]], States Parties must guarantee that AI chips produced within their jurisdiction meet these conditions."
+        },
+        {
+          "order": "1.9.3",
+          "content": "All chips used for AI development or deployment are subject to an authorization to operate, which is given by the Agency. This authorization will be automatically renewed periodically (potentially every few minutes) unless a violation of article 3 is verified by the Agency. The authorization will consist of a certificate that is cryptographically signed by the Agency’s private key. Firmware running on the chip’s security processor will verify that the signature is from a private key that coincides with the Agency’s public key, also stored in the firmware binary. The identification number of each cryptographic signature will be securely stored in the chip once it has received a new authorization. If a new authorization does not meet these conditions, the chip will refuse to complete any new computations until the Agency provides a new valid authorization.",
+          "comment": "The mechanism is built around authorizations or licenses. Each authorization is a small file that contains: the number of allowed clock cycles per authorization, which chip the authorization is for, and an authorization identification number so that the chip can check that the authorization has not been used before. Authorizations are cryptographically signed using the private key(s) of the enforcer–whether a State Party or the Agency– so that the AI chip can verify that the authorization is authentic.[^86] As discussed under the commentary for Article [[AREF:1.7.1]], Annex C provides two options for enforcement–one domestic and one international. Depending on the mechanism that is ultimately selected, the actor in charge of providing authorizations and implementing the enforcement mechanism would be the State Party in which a violation has been detected or the Agency."
+        },
+        {
+          "order": "1.9.4",
+          "content": "If a violation of article 3 is verified by the Agency, it will not extend a new authorization for the chips being used to run the AI system found to be in violation. At the start of the next clock cycle, those chips will detect a lack of authorization and refuse to complete any computations until the Agency provides a new authorization.",
+          "comment": "The cryptographic authorization of computations by each chip revolves around clock cycles–the length of time in which an authorization is valid before a chip requires a new authorization to continue executing computations. As explained by Petrie, clock cycles offer several advantages over other metrics because they are the closest proxy to chip usage time, they are able to enable or disable chips without fine-grained usage controls (which is less intrusive for AI providers), chips are easily able to keep track of clock cycles, and clock cycles can have an important secondary function in detecting tampering.[^87] The clock cycle in Annex C is meant to be defined by the enforcer–whether a State Party or the Agency–but it should be short enough (perhaps every few minutes) to limit the chances that an AI system could be misused or cause harm autonomously if a violation of article [[AREF:1.1.1]] is detected by the Agency."
+        },
+        {
+          "order": "1.9.5",
+          "content": "All chips used for AI development must be placed in a tamper-proof secure enclosure along with an auxiliary guarantee processor. All of the chip’s memory and other components will also be contained within the tamper-proof secure enclosure. If an attempt is made to tamper with the enclosure, the chip will automatically wipe the guarantee processor’s firmware and microscopic fuses on the AI chip will be activated to render the chip permanently inoperable.",
+          "comment": null
+        },
+        {
+          "order": "1.9.6",
+          "content": "The Agency may require States Parties to install a firmware update in guarantee processors as regularly as needed to improve the processor’s security or implement changes in the conditions for authorizations.",
+          "comment": "The offline cryptographic authorization mechanism in Annex C has several additional advantages. First, the cryptographic signatures and keys that are only available to the enforcer–whether a State Party or the Agency–reduce the chances that AI providers, States Parties or third party actors might be able to misuse chips in a way that breaches obligations under the Articles. Second, this enforcement mechanism has space for corrective actions–while other proposals for enforcement rely on a permanent disabilitation of chips or other forms of hardware, Annex C leaves open the window for chips to be re-authorized to execute computations, if AI providers correct their actions or are able to demonstrate that the Agency’s alleged verification of a violation was inaccurate. Third, the Annex counts with an additional layer of security through tamper-proof enclosures, preventing the continued operation of chips that have been modified to bypass the Agency’s verification or the enforcement mechanism. Lastly, to add yet another layer of security, Annex C gives the enforcer–whether a State Party or the Agency– the mandate to update the firmware of guarantee processors in chips to improve their security or change the conditions (the “ruleset”) for new authorizations to be valid.[^88]"
+        }
+      ]
+    },
+    {
+      "label": "Safety standards",
+      "paragraphs": [
+        {
+          "order": "2.1.2",
+          "content": "1. Advanced AI providers shall implement standards on the following topics:",
+          "comment": "Article [[AREF:2.1.1:1]] obliges advanced AI providers to implement standards on six practices: risk governance; safety culture and emergency preparedness; continuous monitoring and incident reporting; infosecurity; risk management, including risk identification, risk analysis and evaluation, and model evaluation; and deployment procedures. As per article [[AREF:6.3.1]], all of these standards are to be developed by a panel of experts and approved by the Agency. The obligation to implement standards is placed on advanced AI providers specifically–rather than all AI providers–for two main reasons. The first is that advanced AI systems produced by these providers pose a higher degree of risk than other AI systems. Their activities pose transboundary risks to all States and should therefore be subjected to standards set by all States. In second place, because complying with safety standards is usually an onerous obligation, it should only be placed on actors with the means to implement them. Forcing all AI providers–including small and medium-sized enterprises–to implement the safety standards in Article [[AREF:2.1.1]] would be disproportionate to the risks posed by those smaller actors and could place unnecessary obstacles on competition between AI providers–this would only favor large AI providers."
+        },
+        {
+          "order": "2.1.3",
+          "content": "a. Risk governance;",
+          "comment": "The risk governance standard aims to describe the governance structure and practices that an organization should implement to be able to safely develop advanced AI systems. Risk governance consists of defining the responsibilities and decision-making structure for other components of risk management, such as risk identification, risk analysis and evaluation, and risk treatment. In essence, it consists of defining \\"
+        },
+        {
+          "order": "2.1.4",
+          "content": "b. Safety culture and emergency preparedness;",
+          "comment": "The safety culture and emergency preparedness standard aims to describe the cultural characteristics of an organization which are needed to ensure the safe development of advanced AI. The major decisions on risk will be made by senior management, advised by risk experts. However, risk is created, influenced and observed by people who are several levels below senior management. This creates the need for a focus on risk culture (known in some industries as safety culture).[^99] Safety culture heavily affects all aspects of an organization, including its ability to deal with unforeseen events, solve problems as or before they arise and react adequately to crises. These norms and attitudes include speak-up culture,[^100] a “tone at the top”,[^101] and staff preparedness and knowledge about safety, or safety prioritisation within the company.[^102] The safety culture and emergency preparedness standard would ideally include: (i) guidance on the leadership commitment to safety and the amount of resources executives dedicate to it;[^103] (ii) guidance on the level of safety knowledge and risk sensitivity among staff; (iii) requirements on regular emergency planning and exercises to prepare organizations to react effectively to accidents and emergencies;[^104] (iv) requirements on frequent training to ensure all the personnel follow best safety practices, as well as tests to ensure the personnel has the right amount of knowledge; and (v) guidance on reporting.[^105]"
+        },
+        {
+          "order": "2.1.5",
+          "content": "c. Continuous monitoring and incident reporting;",
+          "comment": "The continuous monitoring and incident reporting standard consists of a protocol to ensure that the safety architecture collectively formed by other standards remains relevant as AI capabilities and risks evolve. Moreover, it implies systematically reporting and sharing incidents of varying severity to relevant parties. Unlike in some other industries where risks primarily materialize when the final system is deployed (e.g., an aircraft’s safety risks emerge once it starts flying), AI systems can pose risks throughout their development cycle. For instance, loss of control scenarios could materialize during the training process itself or when an AI system is only deployed internally within a company,[^106] requiring continuous monitoring and risk mitigations well before deployment. This means that risk identification, risk analysis and evaluation, model evaluation and risk treatment are not one-off affairs, but should be repeated regularly during deployment as well. Incident reporting provides several benefits like an immediate signal on the level of risk that is easy to understand for decision makers, a feedback loop for AI providers to improve their safety engineering and a signal of the efficiency of safety mechanisms in place.[^107] In some industries, incident reporting has played a key role in providing a feedback loop, enabling industry players to learn from their mistakes and quickly improve their safety practices accordingly. The aviation industry is a prominent example of this dynamic playing out.[^108] Thus, a continuous monitoring and incident reporting standard would ideally cover multiple requirements for providers to continuously monitor misuse (in external deployment) and misalignment (in internal deployment) risks, which might entail: (i) rigorous evaluation protocols; (ii) frequent performance evaluations; (iii) independent third parties vetting evaluation protocols; (iv) continuous monitoring of both key risk indicators (KRIs); (v) monitoring mitigation measures to ensure they are effective; (vi) transparent contributions to an incident reporting mechanism, and (vii) a confidential, voluntary and non-punitive internal incident reporting system.[^109]"
+        },
+        {
+          "order": "2.1.6",
+          "content": "d. Information security;",
+          "comment": "The information security standard aims to provide guidance and requirements to increase the ability of an organization to prevent three core negative effects of the development of advanced AI systems from happening, namely: the leaking of sensitive information; theft of the weights of a model by a third-party; and the weights of a model being stolen by an AI system. Under this standard, the protection of model weights should be considered from three threat perspectives: the model itself (most important for accidental risks); external actors like hackers (model exfiltration, poisoning, and misuse), and; internal actors like lab employees (model exfiltration, poisoning, and misuse). Given the economic and political power at stake in the development of advanced AI models and the likelihood that actors try to access those, the companies developing the most advanced systems should follow the highest existing standards for infosecurity and cybersecurity, i.e., military-grade standards.[^110] The infosecurity standard would ideally cover the following elements: (i) general cybersecurity best practices; (ii) security assurance measures; (iii) protection of unreleased model weights and sensitive assets, with encryption standards, secure storage and transport, confidential computing environments, and strict physical security; (iv) rigorous interfaces and access control measures, enforcing multi-factor authentication, regular audits, hardened interfaces, and careful software review to prevent unauthorized data access; (v) an insider threat program; (vi) a self-instantiation policy, i.e., a rule determining under which conditions a model is allowed to instantiate any copy of itself; (vii) regime of applicability, ensuring measures cover the entire lifecycle from pre-training to deletion or authorized release, prioritized by risk levels; (viii) limited disclosure policy, publicly detailing implemented security measures transparently, yet carefully avoiding disclosures that might increase systemic risks; and (ix) higher security research, which involves actively researching and implementing advanced protections to address anticipated threats beyond RAND SL3 (e.g., RAND SL4 or equivalent).[^111]"
+        },
+        {
+          "order": "2.1.7",
+          "content": "e. Risk management, including risk identification, risk analysis and evaluation, and system evaluation;",
+          "comment": "The risk management standard includes risk identification, risk analysis and evaluation, and system evaluation. Risk identification refers to an AI provider's duty to find, recognize and describe risks. It is divided into three aspects: classification of applicable known risks using taxonomies and the literature; identification of unknown risks using regular open-ended red-teaming; and building risk scenarios by mapping out the steps of potential pathways through which advanced AI systems could cause harm, accounting for systemic considerations and encompassing both intentional and unintentional harm scenarios. While fragments of risk scenarios appear across the literature, no comprehensive end-to-end risk scenarios have yet been developed.[^112] Risk analysis is the systematic use of available information, building on the risk identification step, to prioritize hazards and to estimate the risk in the real world.[^113] Risk evaluation aims to determine whether tolerable risk has been exceeded.[^114] This is done by comparing the results of risk estimation (i.e., estimates of real-world risk likelihood and severity) with KRIs.[^115] Thus, a risk analysis and evaluation standard should include guidances on risk prioritization, risk estimation and risk evaluation.[^116] Finally, system evaluation refers to guidance on the selection and implementation of appropriate system evaluation methodologies to assess capabilities and risks. System evaluations serve as critical components in risk analysis, providing quantifiable metrics that function as KRIs. Existing evaluation methodologies can be categorized into four main approaches, presented in order of increasing resource requirements and increasing accuracy as risk proxies: safety-focused multiple choice benchmarks,[^117] automated task evaluations,[^118] human-evaluated open-ended assessments,[^119] and red teaming and uplift studies.[^120] Evaluation methodology selection should be risk-informed, with more intensive and comprehensive evaluations applied to models with higher capability levels or intended for high-stakes deployment scenarios. Providers must establish rigorous evaluation protocols that effectively estimate upper bounds of AI capabilities to prevent undetected crossings of KRI thresholds. To this end, system evaluations should be conducted with state-of-the-art elicitation techniques designed to minimize under-elicitation and to detect or prevent evaluation gaming by the system. Current advanced AI systems have demonstrated the ability to detect evaluation contexts and strategically underperform (sandbagging), which directly undermines the ability to estimate upper bounds of capabilities. The AI Act (Art. 55(1)(a)) requires evaluation 'in accordance with standardised protocols and tools reflecting the state of the art, including conducting and documenting adversarial testing.' The EU Code of Practice for GPAI Models (Appendix 3.2) operationalizes this by requiring elicitation techniques that match the capabilities of misuse actors relevant to each risk scenario and that match the expected use context of the model. This requirement is directly relevant to the Annex A prohibition on alignment faking–a system that strategically deceives its evaluators during safety assessments is, by definition, exhibiting the prohibited capability. Finally, when conducting evaluations of potentially high-capability AI systems, appropriate containment measures are required to prevent harm that might occur during evaluation. These containment mechanisms must be proportionate to the system's capabilities and the specific risks being evaluated, including secure testing environments implementing multiple layers of protection."
+        },
+        {
+          "order": "2.1.8",
+          "content": "f. Deployment procedures.",
+          "comment": "The deployment procedures standard aims to describe the set of procedures aimed at deploying AI systems in a safe manner. Deployment here should be understood in a broad sense, including internal deployments for use by employees. This standard would ideally include: (i) a staged release approach;[^121] (ii) structured access to make deployment decisions reversible through, for example, cloud-based interfaces rather than the dissemination of weights;[^122] (iii) pre-deployment mandatory, clear and accountable procedures to determine whether or not it is safe to start deploying an advanced AI model;[^123] and (iv) deployment corrections to implement measures in response to incidents happening during deployment.[^124]"
+        },
+        {
+          "order": "2.1.9",
+          "content": "2. The standards under this list shall be developed by a panel of experts appointed by the Agency, in consultation with States Parties and civil society, and in accordance with the best available science. States Parties may nominate experts to the panel and the standards will be subject to a periodic review process during which time the Agency shall invite contributions from States Parties, industry and civil society.",
+          "comment": "Article [[AREF:2.1.1:2]] stipulates the list of standards in the first paragraph will be developed by a panel of experts appointed by the Agency. This procedure follows the approach used by the EU AI Office for the elaboration of the General Purpose AI Code of Practice which, by delegating a technical matter to external independent experts, has a high chance of resulting in high-quality standards in a shorter period of time. This approach stands in contrast with the traditional way of developing international standards, in which international organizations take years collating practices and negotiating language between a large number of stakeholders, including industry actors who may capture the standardization process. Nevertheless, far from excluding other actors from the standardization process, article [[AREF:2.1.1:2]] highlights the obligation to consult with States Parties, industry and civil society and gives States Parties the opportunity to nominate experts to the panel. This acknowledges that decisions on the acceptability of risks from advanced AI and their management are as much political questions as they are questions of expertise. Regarding civil society, article [[AREF:2.1.1:2]] incorporates the long tradition of public participation in the deliberation of matters of public interest, which fulfills multiple human rights, including the right to science,[^125] the right of self-determination,[^126] the right to take part in the conduct of public affairs,[^127] and the right to development.[^128] For the purposes of these Articles, civil society should be interpreted as a broad “third sector”, including academia. As indicated by Lee, “public participation is strongly linked to the widespread recognition and acceptance of the political or social nature of technological development: decisions on technological trajectories involve the distribution of risks, benefits, and costs, and contribute to the shaping of the physical and social world in which we live. Experts have no unique or free standing insight into the resolution of these issues, and their expertise alone cannot provide them with legitimacy in a democratic society.”[^129] Ultimately, public participation also improves substantive outcomes of decisions and enhances their legitimacy.[^130] Finally, article [[AREF:2.1.1:2]] establishes that standards shall be developed in accordance with the best available science. Ideally, the best available science would be found by consensus, borrowing from institutions like the International AI Safety Report or the UN Independent International Scientific Panel on AI.[^131] To achieve this type of consensus, it will be increasingly important to meet conditions such as social calibration (a shared understanding of what constitutes scientific evidence), consilience (multiple independent lines of evidence which converge towards similar conclusions) and social diversity (experts from varied social backgrounds and multiple relevant disciplines agreeing, which safeguards against shared cultural assumptions and groupthink).[^132]"
+        },
+        {
+          "order": "2.1.10",
+          "content": "3. The standards developed by the panel of experts shall be approved by the Conference.",
+          "comment": null
+        },
+        {
+          "order": "2.1.11",
+          "content": "4. Advanced AI providers will require a certificate of compliance with safety standards to operate. This certificate will be issued and renewed by a third party evaluator every six months, at the expense of the advanced AI provider being evaluated and in accordance with rates fixed by the Agency.",
+          "comment": "The creation of safety standards for advanced AI is naturally followed by verification of compliance with those standards. There are two main ways in which domestic and international organizations fulfill this function–by issuing licenses conditional on verification of compliance with standards or through jurisdictional certification. Some proponents of the first model recommend using a tiered licensing system, where providers of the most advanced systems would require a licence for both development and deployment, and would be directly monitored by both domestic agencies and an international organization to ensure compliance with safety standards during both stages. Depending on findings, the organization could place restrictions on degrees of deployment and levels of security, require changes in the design or use of models, or even halt their training or use altogether if necessary.[^133] The second model, jurisdictional certification, builds on the examples of organizations like the International Civil Aviation Organization and the International Maritime Organization to suggest that the role of an international organization for AI could be to certify jurisdictions, leaving the verification of compliance with safety standards to domestic regulatory entities.[^134] Article [[AREF:2.1.1:4]] draws inspiration from both of these models by delegating the verification of compliance to a third party–namely, a private evaluator instead of a domestic agency–and requiring advanced AI providers to hold a certificate of compliance (equivalent to a licence under other proposals) to operate. The principal reason behind delegating verification to third-party evaluators rather than national agencies is that, at the moment and for the foreseeable future, it is likely that private entities will have more expertise to conduct highly technical evaluations and will mutually benefit from a robust evaluation ecosystem.[^135] However, the definition of third party evaluators (article [[AREF:0.2.1]]) does not exclude government bodies from also carrying out this function if they build the necessary expertise–for example, national AI (Safety) Institutes may be well placed for this task.[^136] Either way, as suggested by advocates for the jurisdictional certification approach, third party evaluators are less likely to be vulnerable to the disclosure of industry secrets through international jurisdictional monitoring.[^137]"
+        },
+        {
+          "order": "2.1.12",
+          "content": "5. States Parties will implement measures to ensure that advanced AI providers that do not have a certificate of compliance are not able to develop, test, produce, manufacture, otherwise transfer or acquire, or commercialize advanced AI systems.",
+          "comment": null
+        },
+        {
+          "order": "2.1.13",
+          "content": "6. Third party evaluators must submit an evaluation report to the Agency justifying their decision to issue a certificate of compliance.",
+          "comment": null
+        },
+        {
+          "order": "2.1.14",
+          "content": "7. Third party evaluators must have a licence from the Agency to issue certificates of compliance with safety standards. Such a licence shall not be issued except on receipt by the Agency of authenticated documents on the following:",
+          "comment": "As an additional safeguard to ensure that private third party evaluators carry out their verification function in an ethical and transparent manner, the Articles establish that: (i) the rates of third party evaluators will be fixed by the Agency ([[AREF:2.1.1:4]]); (ii) third party evaluators must submit a public[^138] evaluation report to the Agency, with due regard to sensitive information pertaining to the national security of States Parties and intellectual property of AI providers ([[AREF:2.1.1:6]] and [[AREF:2.1.1:9]]); (iii) third party evaluators will follow guidelines set by the Agency to conduct their evaluations ([[AREF:2.1.1:8]]); (iv) the Agency will issue licenses to third party evaluators, on the basis of evidence regarding their relevant expertise and neutrality (declarations of conflict of interest and background checks); and (v) decisions to issue certificates of compliance to advanced AI providers or licenses to third party evaluators will be subject to challenge before the Agency’s Dispute Settlement Panel by States Parties ([[AREF:2.1.1:10]]). Other measures that are not specified in Article [[AREF:2.1.1]], but which would reduce the risk of structural conflicts of interest, may include evaluator rotation after a fixed number of consecutive certifications, a pooled compensation model (in which providers pay into an Agency-administered fund) or a cooling-off period for non-certification services. A lengthier discussion of the Board’s procedures ([[AREF:2.1.1:11]] and [[AREF:2.1.1:12]]) can be found under the commentaries to article [[AREF:6.5.1]]. Through all these steps–and the measures taken by States Parties to ensure only AI providers with a certificate are able to operate ([[AREF:2.1.1:5]])–the Articles aim to guarantee that even if verification is delegated to third party evaluators, safety standards are thoroughly adopted."
+        },
+        {
+          "order": "2.1.15",
+          "content": "a. Evidence of relevant expertise;",
+          "comment": null
+        },
+        {
+          "order": "2.1.16",
+          "content": "b. A declaration of conflicts of interest;",
+          "comment": null
+        },
+        {
+          "order": "2.1.17",
+          "content": "c. A background check on employees conducting evaluations, which, at a minimum, addresses information security;",
+          "comment": null
+        },
+        {
+          "order": "2.1.18",
+          "content": "d. Formal submission by the third party evaluator to continuous monitoring by the Agency of its capacity to fulfill the terms of its licence;",
+          "comment": null
+        },
+        {
+          "order": "2.1.19",
+          "content": "e. Any other documentation reasonably deemed by the Agency to be necessary for the issuing of the licence.",
+          "comment": null
+        },
+        {
+          "order": "2.1.20",
+          "content": "8. The Agency shall establish guidelines for third party evaluators, through a process open to consultation with States Parties, industry and civil society.",
+          "comment": null
+        },
+        {
+          "order": "2.1.21",
+          "content": "9. Evaluation reports and all evidence submitted by third party evaluators to receive a licence shall be published on the website of the Agency, with due regard to sensitive information compromising the national security of State Parties and intellectual property of AI providers.",
+          "comment": null
+        },
+        {
+          "order": "2.1.22",
+          "content": "10. States Parties may challenge certificates of compliance with safety standards by third party evaluators, as well as licences to third party evaluators. A challenge will be submitted to the Agency’s Dispute Settlement Panel, which shall decide to accept or reject it within a week.",
+          "comment": null
+        },
+        {
+          "order": "2.1.23",
+          "content": "11. If the Dispute Settlement Panel deems there is a reasonable likelihood that a challenge will succeed, it may suspend a certificate of compliance or licence until the matter has been resolved, or adopt any other provisional measures as it deems appropriate in the circumstances.",
+          "comment": null
+        },
+        {
+          "order": "2.1.24",
+          "content": "12. Interested third parties will be allowed to submit, in writing or, as appropriate, at a public hearing set by the Dispute Settlement Panel, any comments, information, analyses or opinions that they consider relevant to the subject matter of the decision.",
+          "comment": null
+        }
+      ]
+    },
+    {
+      "label": "Emergency response",
+      "paragraphs": [
+        {
+          "order": "3.1.2",
+          "content": "1. States Parties must implement appropriate measures to prevent, prepare for and respond to an AI-related emergency, including mandatory incident reporting mechanisms by advanced AI providers and measures to deactivate any AI systems associated with an emergency.",
+          "comment": "The first obligation of States Parties under article [[AREF:3.1.1]] is to implement measures to prevent, prepare and respond to an AI-related emergency. In the context of this duty, emergency response can be understood as the immediate, coordinated actions taken by stakeholders–often governmental, humanitarian, or private–to save lives, protect public health and safety, minimize damage, and stabilize populations in the wake of emergencies. These measures must address individual AI-related emergencies, but also those caused by incremental erosion or accumulation over multiple incidents. Indeed, coordination will often have to take place under conditions characterized by urgency, uncertainty, and complexity.[^141] These conditions may apply to many risks posed by AI even beyond those listed under Annex A alone. In some cases, specific protocols may need to be designed to respond to emergencies relating to each of those risks. For example, for loss of control, experts recommend that governments put in place shut down measures to cease a rogue system’s harmful behavior and prevent (further) harm.[^142] Under this and other AI-related emergencies, the last sentence of paragraph 1 explicitly obliges States to deactivate AI systems related to an emergency."
+        },
+        {
+          "order": "3.1.3",
+          "content": "2. States Parties will submit an annual report listing and describing the measures they have implemented to prevent, prepare for and respond to any projected AI-related emergency.",
+          "comment": "Paragraphs 8.2-8.5 elaborate on the peer-review process that national AI-related emergency response plans will undergo on an annual basis. The process has four stages: the submission of each plan through an annual report, its review by national contact points of other States Parties, the creation of an improvement plan by the Agency and the implementation of that plan by the State Party in question. The latter two stages are only activated if the peer-review determines there are indeed corrections to be made. This approach partially mirrors the methodologies employed by existing international organizations, including the Human Rights Council, the OECD and the Implementation Review Group of the UN Convention against Corruption.[^143] This model has the double advantage of strengthening national plans for AI-related emergencies while creating a cross-pollination effect in which best practices are shared among States Parties and a coordination regime organically emerges. The Human Rights Council’s universal periodic review, for example, has achieved full participation of all 193 UN Member States and, during the time it has been operating, the number of recommendations received by States under review has increased by more than 287%.[^144] While this review process has areas for improvement, it has demonstrably contributed to the advancement of human rights and the Sustainable Development Goals.[^145] In another example, one way the OECD uses peer review processes is to foster accountability and learning concerning international development cooperation. Since 2014, 83% of the recommendations given through this process have been fully or partially implemented by participating states.[^146] In the case of the UN Convention against Corruption’s Implementation Review Group, as of 2019, 7,000 challenges along with over 1,000 good practices and almost 4,000 technical assistance needs in 108 countries had been identified, leading to the creation of regional platforms and a wide implementation of measures to strengthen anti-corruption frameworks around the world.[^147]"
+        },
+        {
+          "order": "3.1.4",
+          "content": "3. Annual reports will be submitted to a peer-review process, through which States Parties shall review and evaluate each other's emergency prevention, preparedness and response capabilities, compliance with emergency preparedness standards, and implementation measures, based on guidelines published by the Agency.",
+          "comment": null
+        },
+        {
+          "order": "3.1.5",
+          "content": "4. If a State Party is determined through the peer-review process to not have implemented appropriate measures to prevent, prepare for or respond to an AI-related emergency, the Agency shall work with the State Party to create an improvement plan detailing corrective actions and timelines for the reviewed State Party.",
+          "comment": null
+        },
+        {
+          "order": "3.1.6",
+          "content": "5. A State Party subject to an improvement plan may request additional resources and assistance from the Agency to facilitate implementation of the required corrective actions.",
+          "comment": null
+        },
+        {
+          "order": "3.1.7",
+          "content": "6. For the purposes of this article, the Agency shall establish protocols for emergency information-sharing, notification and consultation, and coordination among States Parties. Protocols shall also include appropriate information sharing with relevant international entities and the general public, which includes relevant information relating to the hazardous activity, the risk involved and the harm which might result and ascertain their views. Protocols shall also ensure communication is timely, secure, and efficient during emergencies.",
+          "comment": "While this obligation is placed primarily on States Parties individually ([[AREF:3.1.1:1]]), article [[AREF:3.1.1]] also indicates that the Agency shall establish protocols for timely, secure and efficient information-sharing and coordination among States Parties, relevant international entities and the general public ([[AREF:3.1.1:6]]). These protocols must include efficient ways to notify States Parties of an AI-related emergency but should also contemplate the reporting of incidents of concern that may escalate to AI-related emergencies.[^148] Coordination is the backbone of effective emergency response, ensuring that diverse actors–governments, NGOs, private sector entities, and local responders–work together efficiently under pressure. In crises characterized by urgency, uncertainty, and rapidly evolving needs, coordination enables the timely allocation of resources, reduces duplication of efforts, and ensures that critical gaps are addressed. It is especially vital in large-scale or cross-border emergencies, where no single entity has all the necessary capabilities. The obligation of cooperation, notification and consultation is common in several international regimes, as are protocols to notify incidents or emergencies (e.g., the WHO’s public health emergencies of international concern under the International Health Regulations).[^149] However, coordination faces significant challenges: communication systems may be damaged, information may be incomplete or delayed, and institutional silos or jurisdictional disputes can hinder collaboration. In extreme events, even well-prepared responders may be overwhelmed or incapacitated. The complexity of AI-related emergencies–often fast-moving, opaque, and technically specialized–further amplifies these coordination challenges, making pre-established roles, trust, and interoperability more essential.[^150] Another key element of paragraph 8.6 is its emphasis on access to information by not only States Parties and international organizations, but by the general public as well, which–properly informed– will be able to take adequate individual measures in response but is also more more likely to put pressure on its local and national authorities to respond more effectively as a collective.[^151]"
+        },
+        {
+          "order": "3.1.8",
+          "content": "7. Without prejudice to any other duty or obligation that it may have under international law, a State Party responsible for harm during an AI-related emergency shall have an obligation to provide adequate assistance and compensation to affected States Parties, for the purpose of victim redress.",
+          "comment": "Paragraph 8.7 establishes that any State Party responsible for harm in the context of an AI-related emergency will have two obligations: assist and compensate victims. Assistance must be adequate, meaning actions that directly contribute to solving victims’ problems presented by the AI-related emergency, rather than general measures that are not specifically designed to address those problems. Given that the paragraph distinguishes between assistance and compensation, it is understood that assistance refers to non-monetary mechanisms, such as operational support as well as recovery, rehabilitation and reconstruction.[^152] Compensation, then, refers primarily to monetary reparation. The question of which State Party is responsible for harm will ultimately be an issue of attribution which, as indicated in the Articles on Responsibility of States for Internationally Wrongful Acts, depends on attribution and the breach of an international obligation.[^153] On the latter, while the Articles themselves can act as a basis to define which obligations have been breached, it is important to highlight that harm under an AI-related emergency is also likely to breach additional obligations found under other regimes of international law (e.g., international human rights law).[^154] States not responsible for an AI-related emergency are not under an obligation to assist or compensate victims, but are encouraged to do so, in solidarity,[^155] by the last paragraph of article [[AREF:3.1.1]]."
+        },
+        {
+          "order": "3.1.9",
+          "content": "8. All other States Parties in a position to do so are also encouraged to provide technical, material and financial assistance to States Parties affected by an AI-related emergency.",
+          "comment": null
+        }
+      ]
+    },
+    {
+      "label": "Technical cooperation",
+      "paragraphs": [
+        {
+          "order": "4.1.2",
+          "content": "1. Each State Party shall cooperate with other States Parties to achieve the objectives of the Articles.",
+          "comment": "Article [[AREF:4.1.1:1]] establishes a general obligation to cooperate to meet the objectives of the Articles. In this context, cooperation refers to the coordinated action of two or more States Parties to serve a specific objective by joint action, where a result could not be achieved through the activity of an individual State Party.[^156]"
+        },
+        {
+          "order": "4.1.3",
+          "content": "2. Measures for technical cooperation, coordinated through national or regional contact points, may include:",
+          "comment": "The second paragraph specifically addresses technical cooperation, which refers to aspects of coordination which require a particular kind of expertise. This cooperation is meant to take place through national or regional contact points (see commentary to article [[AREF:6.1.1]]), in order to facilitate efficient communication between domestic agencies with similar mandates."
+        },
+        {
+          "order": "4.1.4",
+          "content": "a. Joint research and development of technical mechanisms that facilitate the implementation of the Articles, including evaluation, verification and enforcement mechanisms;",
+          "comment": "The first measure for technical cooperation mentioned in article [[AREF:4.1.1:2]] is joint research and development, including in the fields of evaluation, verification and enforcement mechanisms–all questions of technical governance which are critical for the effective implementation of the international regime established by the articles.[^157] While Annex B and C create verification and enforcement mechanisms, the continued improvement of these should be a joint effort by States Parties."
+        },
+        {
+          "order": "4.1.5",
+          "content": "b. Capacity building programs to foster technological self-determination;",
+          "comment": "Capacity building programs refers to knowledge-transfer from experts in States Parties where the most advanced capabilities have been developed and professionals from countries which do not have those skills yet, with the objective of facilitating the creation of native AI systems that pursue local or national objectives. These objectives, of course, need to comply with the obligations under Part I of the Articles. Some mechanisms for capacity building include training programs and fellowships, joint research companies and curriculum development alongside standards alignment.[^158]"
+        },
+        {
+          "order": "4.1.6",
+          "content": "c. Transfer of compute, data and other inputs required for safe AI development;",
+          "comment": "Transfer of compute, data and other inputs required for AI development follows the same objective of allowing all States Parties and their industries to develop AI for legitimate objectives if they wish to do so. Some measures States could jointly take for technology transfer include shared compute hubs, cloud credits and subsidised access, regional data centers and sovereign data governance, and connectivity and energy investments.[^159]"
+        },
+        {
+          "order": "4.1.7",
+          "content": "d. Mechanisms for the transfer of AI-related benefits within and across jurisdictions; and",
+          "comment": "Mechanisms for the transfer of AI-related benefits within and across jurisdictions can refer to the global AI benefit-sharing framework, established under article [[AREF:5.1.1]], but it can refer to other forms of benefits, such as access provision mechanisms and public interest application development.[^160]"
+        },
+        {
+          "order": "4.1.8",
+          "content": "e. Joint enterprises to develop AI systems with narrow applications for the public good.",
+          "comment": "Joint enterprises to develop AI systems with narrow applications for the public good concerns the collaborative development–through shared development resources, technical knowledge or other inputs–of “tool AI” or “applied AI” systems specifically created to pursue the public good,[^161] which can go from concrete targets under the Sustainable Development Goals[^162] to the development of techniques for AI safety[^163] and security.[^164] There are multiple incentives for States Parties to pursue a joint enterprise of this type, including reduced costs, security, fostering regional capabilities in AI, the creation of solutions for international coordination problems, and the development of applications that are not supported by the market,[^165] including the development of non-agentic AI systems that contribute to AI safety and other forms of scientific progress.[^166] Joint enterprises could follow several models, from large joint AI laboratories that have a monopoly over advanced AI development,[^167] to regional alliances to pull resources,[^168] to digital stacks available for a wider group as a commons.[^169]"
+        }
+      ]
+    },
+    {
+      "label": "Benefit sharing",
+      "paragraphs": [
+        {
+          "order": "5.1.2",
+          "content": "1. States Parties hereby establish a global AI benefit-sharing framework to distribute AI-related benefits to individuals and communities within the jurisdiction of States Parties.",
+          "comment": "While advanced AI poses serious risks, it also promises to be one of the most positively transformative technologies in the history of humanity. Conscious of this reality, and of not being left behind, many countries that have not yet developed advanced AI capabilities may condition their participation in an international governance regime on the distribution of benefits from AI.\\n\\nThe adoption of AI across multiple sectors of the economy has started to displace people from the labor market.[^170] This trend is only likely to grow as AI systems get more advanced. The social security institutions created in the mid-20th century–for those countries that have them–are unlikely to be able to support an economic shift of this magnitude.[^171] Moreover, workers might be politically disempowered by this type of shift, given that a reduced workforce would not be able to put significant pressure on candidates or elected officials to uphold their interests, increasing the concentration of power by individuals or groups that sit outside the workforce.[^172] On the other hand, because most AI–including advanced AI–technologies are being developed in high-income countries and are likely to create an unprecedented surge of wealth for those countries,[^173] material inequality within and among nations is likely to increase even more in the coming years.[^174] While there are varying estimates on the extent of AI-driven contributions to the global economy–with some arguing that they will amount to USD $15.7 trillion by 2030–[^175]only a very small portion of these (~USD $1.7 trillion) are expected to be captured by the Global South (excluding China).[^176] The consequent large inequality gaps can be conducive to national and global instability, which can constitute a risk factor in and of itself.[^177] These global economic disruptions call for the creation of new global social security nets that can catch the vast amount of workers who will be affected to somewhat reduce material inequality."
+        },
+        {
+          "order": "5.1.3",
+          "content": "2. The benefit-sharing framework may include, among other distribution mechanisms, a dividend system to deliver recurring payments to residents of States Parties. In that case, each State Party will determine whether the individuals within their jurisdiction receive payments directly from the Global AI Fund or indirectly through national agencies.",
+          "comment": "Scholars and governments have proposed many ways to tackle the challenges of AI-driven labor displacement and inequality, including minimum wage adjustments, critical occupation subsidization, creative capability investment, special economic zones with benefit-sharing mandates and cross-border corridors, AI growth bond frameworks, public service subsidization, and sovereign technology funds.[^178] While all these measures are likely to mitigate labor displacement and inequality to a certain extent, their effectiveness will likely be reduced unless they are somewhat coordinated. A more direct and effective redistributive mechanism of AI gains might ultimately be required to mitigate the transformative effects of advanced AI on the economy.[^179] In response, Article [[AREF:5.1.1]] establishes a global AI benefit-sharing framework to be managed by a Global AI Fund.\\n\\nThe global AI benefit-sharing framework consists of a redistributive mechanism through which States Parties capture a proportion of AI gains generated within their jurisdiction and transfer them to the Fund, which then assigns them to redistribution programs. These might consist of programs to, for example, provide access to compute or other resources to develop AI systems that deliver a public service, financial resources to strengthen welfare programs, or direct cash transfers to individuals in States Parties. Regarding this latter mechanism, the Articles delegate the decision of how to transfer those resources to the Fund, which could choose to allocate transfers through distribution formulas that account for population,[^180] development needs[^181] or contributions to the Fund, among other factors. Implementation approaches could also include phased implementation beginning with pilot programs, nationally administered but internationally coordinated systems, differentiated payment levels based on local conditions, and complementary programs addressing specific needs."
+        },
+        {
+          "order": "5.1.4",
+          "content": "3. The global AI benefit-sharing framework will be administered by the Global AI Fund.",
+          "comment": null
+        },
+        {
+          "order": "5.1.5",
+          "content": "4. States Parties shall finance the Global AI Fund through a tax on AI gains of at least five percent, which they will then transfer to the Fund.",
+          "comment": null
+        },
+        {
+          "order": "5.1.6",
+          "content": "5. Advanced AI providers that evade payment of their tax on AI gains will not be eligible to receive a certificate of compliance.",
+          "comment": "The last paragraph of article [[AREF:5.1.1]] stipulates that AI providers will be required to pay their tax on AI gains to receive a certificate of compliance under article [[AREF:2.1.1:4]]. Evidence of this payment will need to be provided as part of their application for said certificate. It is also worth noting that, for the purposes of article [[AREF:6.2.1:7]], the weight of States Parties’ votes on some matters will be determined by the size of their contribution to the Fund–the contribution acting as a proxy to the proportion of their participation in AI development (see article [[AREF:6.2.1]] for a more detailed commentary). Both provisions are meant to incentivize contributions to the Fund, ideally reducing friction in the collection of the tax established under article [[AREF:5.1.1:4]]."
+        }
+      ]
+    },
+    {
+      "label": "Institutional arrangements",
+      "paragraphs": [
+        {
+          "order": "6.1.2",
+          "content": "Each State Party shall take all necessary legal, administrative and other measures to implement its obligations under the Articles, including:",
+          "comment": "Specific measures to be taken by States Parties to fulfill their obligations are spread throughout the Articles’ provisions. Article [[AREF:6.1.1]] emphasizes that those are mandatory rather than voluntary. In addition, it covers any other measures not specified in the Articles which may be necessary for States Parties to fulfill their obligations. Necessity in this context refers to any actions or omissions without which compliance with the Articles would be incomplete. The reference to legal, administrative and other measures points to the role that the different branches of government need to play in the implementation of their States’ obligations, under the principle of unity of the State.[^182] In many jurisdictions, some necessary measures will have to be enacted by their legislative bodies–only then will the executive and judicial branches be able to implement the obligations set by the treaty."
+        },
+        {
+          "order": "6.1.3",
+          "content": "1. Imposing penal and administrative sanctions, to prevent and suppress any activity prohibited to a State Party under the Articles undertaken by persons under its jurisdiction or control.",
+          "comment": "Article [[AREF:6.1.1]] then specifies some measures States Parties must take to comply with obligations found elsewhere in the Articles. Imposing penal and administrative sanctions is linked to the conditions established in articles [[AREF:1.1.1]] and [[AREF:1.2.1]], and is not an uncommon measure in other international legal regimes.[^183] States may deploy a mix of criminal prosecution, regulatory oversight, civil penalties and administrative injunctions to address distinct technological harms.[^184] Previous enforcement actions related to the criminalization of technological use and development highlight the importance of clarity, proportionality and technological foresight in regulating the use and development of emerging technologies. Legislators must consider, among other factors, doctrinal precision in the way they articulate the prohibited conduct,[^185] the pairing of penal sanctions with investments in technical detection and expertise,[^186] a narrow criminalization framework that does not unnecessarily stifle innovation,[^187] and a distinction in levels of culpability between intentional and unintentional harm.[^188]"
+        },
+        {
+          "order": "6.1.4",
+          "content": "2. Establishing national or regional points of contact to coordinate any actions with other States Parties that are required to implement the provisions under the Articles.",
+          "comment": "The reference to national contact points is linked to obligations of technical cooperation under article [[AREF:4.1.1]]. This is another well-established practice in international law regimes,[^189] and is meant to facilitate the exchange of information and expertise between States Parties bilaterally but also between States Parties and the Agency (see article [[AREF:6.3.1:8]]). An emerging blueprint for these national contact points is that of the AI (Safety) Institutes, most of which carry out functions relating to research, standards and cooperation.[^190] Many of these institutes have joined the International Network of AI Safety Institutes, which aims to enhance interoperability, advance joint research on the science of evaluations and build consensus on AI safety approaches.[^191] This network could have an important role in the international legal regime proposed in the Articles, especially if its membership is expanded (including, for instance, through the formation of regional AI [Safety] Institutes).[^192] Individually or jointly, the institutes could also have a valuable role in advising the expert panel created by the Agency for the elaboration of international safety standards (article [[AREF:2.1.1:2]])[^193] and could perform third party evaluations within their jurisdiction to issue certificates of compliance (article [[AREF:2.1.1:4]]).[^194]"
+        }
+      ]
+    },
+    {
+      "label": "Conference of States Parties",
+      "paragraphs": [
+        {
+          "order": "6.2.2",
+          "content": "1. The Conference of States Parties shall be composed of all States Parties to the Articles. Each member shall have one representative in the Conference, who may be accompanied by alternates and advisers.",
+          "comment": "The Conference of States Parties is the political body of the international governance regime designed in these Articles. It fulfills the function of political consensus-building and aims to help States Parties come to greater political agreement and convergence about the way to advance the Articles’ objectives. The Conference provides a forum for discussion and debate that can aid the articulation of potential compromises between State interests.[^195] Additionally, this body has supervisory, directive and appointment functions related to the Agency and the Fund, both of which are accountable to the Conference (see articles [[AREF:6.2.1:6]], [[AREF:6.3.1]] and [[AREF:6.4.1]]).\\n\\nThe Conference would come to exist in an international AI governance environment which may start to become saturated, especially for high-level representatives like ministers or heads of state, as more institutions appear or more convenings are organized. This raises a question of the extent to which other high-level meetings of State representatives–including the AI Summits, the United Nations Global Dialogue on AI Governance, the International Telecommunication Union’s AI for Good Summit or meetings of the International Network of AI Safety Institutes–might overlap with the Conference. In principle, however, the international governance of AI could benefit from international gatherings that take different approaches to challenges of collective action around AI."
+        },
+        {
+          "order": "6.2.3",
+          "content": "2. The Conference shall meet once per quarter in order to consider and, where necessary, take decisions in respect of any matter with regard to the application or implementation of the Articles, in accordance with its relevant provisions, and on further measures for the attainment of the Articles’ objectives.",
+          "comment": "The norm in international agreements is for conferences of states parties to meet once per year.[^196] However, given the fast pace of AI progress and the potential need to constantly review the implementation of the Articles and the activities of both the Agency and the Fund, article [[AREF:6.2.1:2]] establishes that the Conference shall meet once per quarter. In addition, to be able to address urgent problems, including AI-related emergencies, article [[AREF:6.2.1:4]] allows States Parties to convene an extraordinary session of the Conference with the support of one third of its membership. This represents a low threshold for this type of extraordinary meeting, to simplify procedural requirements when a speedy response is required. At the same time, it protects States Parties from arbitrary or unnecessary sessions called by one or a small minority of members. To facilitate these extraordinary meetings and mitigate disruptions to the agendas of Conference representatives, article [[AREF:6.2.1:5]] authorizes members to meet virtually."
+        },
+        {
+          "order": "6.2.4",
+          "content": "3. The Conference shall adopt its rules of procedure at its first session, which will take place no later than fifteen days after the entry into force of the Articles.",
+          "comment": null
+        },
+        {
+          "order": "6.2.5",
+          "content": "4. Extraordinary Conferences shall be convened, as may be deemed necessary, by the Agency at the written request of any State Party, provided that this request is supported by at least one third of the States Parties.",
+          "comment": null
+        },
+        {
+          "order": "6.2.6",
+          "content": "5. Extraordinary Conferences may take place through remote secure online participation, which shall be coordinated by the Agency.",
+          "comment": null
+        },
+        {
+          "order": "6.2.7",
+          "content": "6. The Conference shall:",
+          "comment": null
+        },
+        {
+          "order": "6.2.8",
+          "content": "a. Appoint the Director-General of the Agency;",
+          "comment": null
+        },
+        {
+          "order": "6.2.9",
+          "content": "b. Appoint the members of the Board of the Fund;",
+          "comment": null
+        },
+        {
+          "order": "6.2.10",
+          "content": "c. Approve the rules of procedure of the Agency, submitted by the Agency;",
+          "comment": null
+        },
+        {
+          "order": "6.2.11",
+          "content": "d. Take the necessary measures to ensure compliance with the Articles and to redress and remedy any situation which contravenes the provisions of the Articles;",
+          "comment": null
+        },
+        {
+          "order": "6.2.12",
+          "content": "e. Undertake reviews of the operation of the Articles, taking into account any relevant scientific and technological developments.",
+          "comment": null
+        },
+        {
+          "order": "6.2.13",
+          "content": "7. The Conference shall make decisions by a simple majority, with each State Party having one vote. For some matters, each State Party’s voting share shall be calculated on the basis of their contributions to the Global AI Fund, those matters being:",
+          "comment": "The last paragraph of article [[AREF:6.2.1]] discusses the voting mechanism of the Conference. The general norm is that the Conference will adopt decisions by simple majority, with each member having one vote. However, for specific matters that may be more politically sensitive, a weighted voting mechanism is adopted in which members’ voting share will be calculated on the basis of their contributions to the Global AI Fund. These contributions are used as a proxy for each State Party’s contributions to or control over AI development, assuming a correlation between that factor and the amount of AI gains generated within their jurisdiction (and then transferred to the Fund). This weighted voting mechanism acknowledges that States where the most advanced capabilities have been developed may only want to enter a structured global regime if they are able to conserve some decision power over the most sensitive decisions regarding the governance of AI, given that (i) they held that power ex ante and are reaching a compromise by entering an international governance regime and (ii) the obligations set by the Articles and the decisions taken by the Agency will affect them and their industry more than other States Parties. This justifies the first two matters listed under paragraph 7–the appointment of the Agency’s Director General and the approval of the Agency’s rules of procedure. The third item on that list–the approval of new verification or enforcement mechanisms–recognizes that states where the most advanced capabilities have been developed may want to guarantee that new mechanisms are secure and do not leave them vulnerable to the discovery of sensitive national or industry information."
+        },
+        {
+          "order": "6.2.14",
+          "content": "a. The appointment of the Director-General of the Agency;",
+          "comment": null
+        },
+        {
+          "order": "6.2.15",
+          "content": "b. The approval of the rules of procedure of the Agency; and",
+          "comment": null
+        },
+        {
+          "order": "6.2.16",
+          "content": "c. The amendment of the verification or enforcement mechanisms established under Annexes B and C, or the approval of additional verification or enforcement mechanisms.",
+          "comment": null
+        }
+      ]
+    },
+    {
+      "label": "The International Agency for the Safe Development of AI",
+      "paragraphs": [
+        {
+          "order": "6.3.2",
+          "content": "1. The States Parties hereby establish the International Agency for the Safe Development of AI.",
+          "comment": "The International Agency for the Safe Development of AI is the main body in charge of implementing the Articles’ provisions on safety. Similar to other international organizations like the International Atomic Energy Agency (IAEA) or the Organisation for the Prohibition of Chemical Weapons (OPCW), the organization established in article [[AREF:6.3.1]] would fulfill the function of preventing the irresponsible deployment of a dangerous technology, product or activity.[^197]"
+        },
+        {
+          "order": "6.3.3",
+          "content": "2. A Director-General shall act as the Agency’s head and chief administrative officer.",
+          "comment": null
+        },
+        {
+          "order": "6.3.4",
+          "content": "3. The Director-General shall be appointed by the Conference for a term of three years, renewable for one further term, but not thereafter.",
+          "comment": "The Agency is led by a Director-General, who is appointed by the Conference (article [[AREF:6.2.1:6.a]]) for a period of three years, which are renewable for a single term. The Director-General will be in charge of executing the Agency’s mandates with the support of the staff she or he recruits. This staff is, in accordance to paragraph 4, meant to meet the highest standards of efficiency, competence and integrity given that the Agency’s work requires technical competency to implement the verification and enforcement mechanisms under Annexes B and C, and a high degree of integrity to safeguard potentially sensitive information, while also being able to act efficiently to react to fast-paced changes in AI technology and potential AI-related emergencies. While the Director-General and staff will be recruited from States Parties–in part to increase the likelihood that they will uphold the objectives and obligations to which their governments have agreed to–paragraphs 5 and 7 also emphasize their independence from States Parties’ individual interests. Paragraph 11, in addition, affirms the diplomatic privileges and immunity of the Agency and its officials. The same privileges and immunity are extended to the Fund and its officials under article [[AREF:6.4.1:10]]."
+        },
+        {
+          "order": "6.3.5",
+          "content": "4. The Director-General shall be responsible to the Conference for the appointment of the staff and the organization and functioning of the Agency. The paramount consideration in the employment of the staff and in the determination of the conditions of service shall be the necessity of securing the highest standards of efficiency, competence and integrity. Only citizens of States Parties shall serve as the Director-General or as other members of the staff. Due regard shall be paid to the importance of recruiting the staff on as wide a geographical basis as possible.",
+          "comment": null
+        },
+        {
+          "order": "6.3.6",
+          "content": "5. In the performance of their duties, the Director-General and the other members of the staff shall not seek or receive instructions from any government or from any other source external to the Agency. They shall refrain from any action that might reflect negatively on their positions as international officers responsible only to the Conference.",
+          "comment": null
+        },
+        {
+          "order": "6.3.7",
+          "content": "6. The Agency shall carry out the powers and functions entrusted to it under the Articles, as well as those functions delegated to it by the Conference. In so doing, it shall act in conformity with the recommendations, decisions and guidelines of the Conference and assure their proper and continuous implementation.",
+          "comment": null
+        },
+        {
+          "order": "6.3.8",
+          "content": "7. Each State Party shall respect the exclusively international character of the responsibilities of the Director-General and the other members of the staff and not seek to influence them in the discharge of their responsibilities.",
+          "comment": null
+        },
+        {
+          "order": "6.3.9",
+          "content": "8. The Agency shall promote the effective implementation of, and compliance with, the Articles. It shall cooperate with the national contact point of each State Party and facilitate consultations and cooperation among States Parties at their request.",
+          "comment": null
+        },
+        {
+          "order": "6.3.10",
+          "content": "9. The Agency shall:",
+          "comment": "Paragraph 9 lists the Agency’s functions. In addition to operational functions, some mandates are worth highlighting. Subparagraph c, for instance, indicates the Agency shall establish such subsidiary organs as it finds necessary for the exercise of its functions under the Articles, including a Secretariat. Following the trend set by existing organizations in analogous fields, like the IAEA, the Agency could have an organizational structure that aligns with its main functions, including organs that focus on: (i) the analysis of safety guarantees submitted by AI providers and the continuous review of the list of risks and capabilities in Annex A; (ii) the implementation and review of the verification mechanism established under article [[AREF:1.4.1]] to uphold obligations under articles [[AREF:1.1.1]] and [[AREF:1.2.1]]; (iii) the implementation and review of the enforcement mechanism established under article [[AREF:1.7.1]]; (iv) safety standards (including coordination on their development, but also the issuance of licenses and guidelines for third party evaluators); and (v) emergency preparedness and response."
+        },
+        {
+          "order": "6.3.11",
+          "content": "a. Consider and submit to the Conference the draft rules of procedure for the Agency;",
+          "comment": null
+        },
+        {
+          "order": "6.3.12",
+          "content": "b. Consider and submit to the Conference the draft program and budget of the Agency;",
+          "comment": null
+        },
+        {
+          "order": "6.3.13",
+          "content": "c. Establish such subsidiary organs as it finds necessary for the exercise of its functions under the Articles, including a Secretariat;",
+          "comment": null
+        },
+        {
+          "order": "6.3.14",
+          "content": "d. Consider and submit to the Conference the draft report of the Agency on the implementation of the Articles, the report on the performance of its own activities and such special reports as it deems necessary or which the Conference may request;",
+          "comment": null
+        },
+        {
+          "order": "6.3.15",
+          "content": "e. Make arrangements for the sessions of the Conference including the preparation of the draft agenda;",
+          "comment": null
+        },
+        {
+          "order": "6.3.16",
+          "content": "f. Conclude agreements or arrangements with States and international organizations, subject to prior approval by the Conference;",
+          "comment": null
+        },
+        {
+          "order": "6.3.17",
+          "content": "g. Consider guarantees submitted by AI providers that an AI system does not present the risks or capabilities listed in Annex A and decide whether said guarantees are sufficient or additional guarantees are required.",
+          "comment": null
+        },
+        {
+          "order": "6.3.18",
+          "content": "h. Consider, approve and regularly review the safety standards recommended by a panel of experts appointed by the Director-General;",
+          "comment": null
+        },
+        {
+          "order": "6.3.19",
+          "content": "i. Issue licenses for third party evaluators;",
+          "comment": null
+        },
+        {
+          "order": "6.3.20",
+          "content": "j. Publish guidelines for third party evaluators;",
+          "comment": null
+        },
+        {
+          "order": "6.3.21",
+          "content": "k. Implement the verification and enforcement mechanisms defined under the Articles.",
+          "comment": null
+        },
+        {
+          "order": "6.3.22",
+          "content": "l. Conduct an annual review of the list of prohibited uses, risks and capabilities in Annex A, as well as the verification and enforcement mechanisms described in Annexes B and C;",
+          "comment": null
+        },
+        {
+          "order": "6.3.23",
+          "content": "m. Create improvement plans for AI-related emergency prevention, preparedness and response, when required;",
+          "comment": null
+        },
+        {
+          "order": "6.3.24",
+          "content": "n. Implement, manage, and maintain protocols related to AI-related emergency information-sharing;",
+          "comment": null
+        },
+        {
+          "order": "6.3.25",
+          "content": "o. Create and maintain arrangements for the involvement of civil society in the processes and decisions of the Agency and the Conference.",
+          "comment": null
+        },
+        {
+          "order": "6.3.26",
+          "content": "10. The Agency will be funded by one percent of States Parties’ contributions under the global AI benefit-sharing framework.",
+          "comment": "These functions require a significant amount of resources. Under paragraph 10 and Article [[AREF:6.4.1:6.c]], these resources will be attained through a transfer of 1% of States Parties’ contributions under the global AI benefit-sharing framework. Because this amount may be insufficient to develop special projects, the Articles do not exclude the possibility of individual contributions by States Parties or third parties, as long as those do not compromise the Agency’s independence.  There may be future scenarios where 1% of total contributions under the global AI benefit-sharing framework are superfluous for the Agency’s functions, in which case the Conference may wish to consider capping the Agency’s budget (as long as the Agency’s effective implementation of its mandate can be guaranteed)."
+        },
+        {
+          "order": "6.3.27",
+          "content": "11. The Agency shall enjoy on the territory and in any other place under the jurisdiction or control of a State Party such legal capacity and such privileges and immunities as are necessary for the exercise of its functions. The officials of the Agency will similarly enjoy such privileges and immunities as are necessary for the independent exercise of their official functions in connection with the Agency.",
+          "comment": null
+        }
+      ]
+    },
+    {
+      "label": "The Global AI Fund",
+      "paragraphs": [
+        {
+          "order": "6.4.2",
+          "content": "1. The States Parties hereby establish the Global AI Fund to administer the global AI benefit-sharing framework.",
+          "comment": "Article [[AREF:6.4.1]] establishes the Global AI Fund to administer the global AI benefit-sharing framework created under article [[AREF:5.1.1]]. The Fund will be ultimately accountable to the Conference, but will be supervised and directed by a Board–appointed by the Conference (article [[AREF:6.2.1:6.b]])–and led by an Executive Director who will be elected by the Board."
+        },
+        {
+          "order": "6.4.3",
+          "content": "2. The Fund will be accountable to and function under the guidance of the Conference of States Parties.",
+          "comment": null
+        },
+        {
+          "order": "6.4.4",
+          "content": "3. The Fund will be governed and supervised by a Board that will have full responsibility for funding decisions.",
+          "comment": null
+        },
+        {
+          "order": "6.4.5",
+          "content": "4. The Fund will establish a secretariat, which will be fully independent. The secretariat will service and be accountable to the Board. It will have effective management capabilities to execute the day-to-day operations of the Fund. The secretariat will be headed by an Executive Director with the necessary experience and skills, who will be appointed by and be accountable to the Board.",
+          "comment": null
+        },
+        {
+          "order": "6.4.6",
+          "content": "5. The Fund shall carry out the powers and functions entrusted to it under the Articles, as well as those functions delegated to it by the Conference. In so doing, it shall act in conformity with the recommendations, decisions and guidelines of the Conference and assure their proper and continuous implementation.",
+          "comment": null
+        },
+        {
+          "order": "6.4.7",
+          "content": "6. The Fund shall:",
+          "comment": "Among the Fund’s functions (paragraph 6), establishing and implementing the mechanisms for distribution of AI-related benefits will be at the center of its activities. This system could rely on existing government agencies or mechanisms within each country, a completely decentralized mechanism where individuals receive benefits directly (e.g., bank accounts to receive the payment of a dividend) or local institutions with both government and civil society representation (e.g., independent implementation trusts),[^198] among other alternatives. Regardless of the system that’s selected, however, it will be important for the Fund to establish accountability or verification mechanisms to ensure the global AI benefit-sharing framework is accomplishing its objectives. Paragraphs 7 and 8 establish two such mechanisms: a trustee and periodic independent evaluations. Among other factors, these mechanisms should ensure that the Fund avoids perverse incentives or capture through steps to insulate it from political pressure, including a clear separation between contribution assessment and spending decisions."
+        },
+        {
+          "order": "6.4.8",
+          "content": "a. Receive contributions from States Parties;",
+          "comment": null
+        },
+        {
+          "order": "6.4.9",
+          "content": "b. Establish the mechanisms for distribution of AI-related benefits, which may include a system for payment of dividends to residents of States Parties;",
+          "comment": null
+        },
+        {
+          "order": "6.4.10",
+          "content": "c. Transfer one percent of States Parties’ contributions to the Agency, for the Agency’s operations.",
+          "comment": null
+        },
+        {
+          "order": "6.4.11",
+          "content": "7. The Fund shall have a trustee with administrative competence to manage the financial assets of the Fund. The trustee will maintain appropriate financial records and will prepare financial statements and other reports required by the Conference, in accordance with internationally accepted fiduciary standards.",
+          "comment": null
+        },
+        {
+          "order": "6.4.12",
+          "content": "8. There will be periodic independent evaluations of the performance of the Fund in order to provide an objective assessment of its results.",
+          "comment": null
+        },
+        {
+          "order": "6.4.13",
+          "content": "9. In order to operate effectively internationally, the Fund will possess legal personality and will have such legal capacity as is necessary for the exercise of its functions and the protection of its interests.",
+          "comment": null
+        },
+        {
+          "order": "6.4.14",
+          "content": "10. The Fund will enjoy such privileges and immunities as are necessary for the fulfillment of its purposes. The officials of the Fund will similarly enjoy such privileges and immunities as are necessary for the independent exercise of their official functions in connection with the Fund.",
+          "comment": null
+        }
+      ]
+    },
+    {
+      "label": "Settlement of disputes",
+      "paragraphs": [
+        {
+          "order": "6.5.2",
+          "content": "1. The States Parties hereby establish a Dispute Settlement Panel as an independent body of the Agency.",
+          "comment": "Article [[AREF:6.5.1]] establishes an independent panel to settle disputes related to the Articles. Most international agreements leave the question of dispute settlement unanswered or refer disputes to the International Court of Justice. However, the ability of generalist international courts to assess scientific evidence has come into question numerous times.[^199] At the same time, specialized international courts, like the International Tribunal for the Law of the Sea,[^200] have a track record of judgments that accurately assess scientific evidence and contribute to the detailed interpretation of a body of law.[^201] Article [[AREF:6.5.1]] follows this latter model, while also leaving space for States Parties to submit their disputes to other mechanisms, tribunals or panels if they agree to do so (paragraph 5)."
+        },
+        {
+          "order": "6.5.3",
+          "content": "2. The Panel shall have jurisdiction in disputes referring to:",
+          "comment": "The Panel has jurisdiction to decide on four types of matters related to the interpretation or application of the Articles: (i) inter-state disputes; (ii) disputes between one or more State Party and the Agency; (iii) provisional measures within any of these two types of disputes; and (iv) non-binding advisory opinions."
+        },
+        {
+          "order": "6.5.4",
+          "content": "a. Disputes between States Parties concerning the interpretation or application of the Articles;",
+          "comment": null
+        },
+        {
+          "order": "6.5.5",
+          "content": "b. Disputes between a State Party and the Agency, concerning:",
+          "comment": null
+        },
+        {
+          "order": "6.5.6",
+          "content": "b.i. Acts or omissions of the Agency or of a State Party alleged to be in violation of the Articles, or",
+          "comment": null
+        },
+        {
+          "order": "6.5.7",
+          "content": "b.ii. Acts of the Agency alleged to be in excess of its mandate or a misuse of power;",
+          "comment": "The second form of dispute between a State Party and the Agency is mainly aimed at preventing any omission or arbitrary use of the Agency’s powers that goes against the letter of the Articles. At the same time, it is a tool for States Parties to have some influence over decisions that the Agency makes in relation to other actors. For example, a State Party could challenge the Agency’s decision to provide a licence to an evaluator or ask the Panel to review the way verification or enforcement mechanisms are being applied (or not) in a particular context."
+        },
+        {
+          "order": "6.5.8",
+          "content": "c. Any other disputes for which the jurisdiction of the Panel is specifically provided in this Convention.",
+          "comment": null
+        },
+        {
+          "order": "6.5.9",
+          "content": "3. The Panel shall have the power to indicate, if it considers that the circumstances so require, any provisional measures which ought to be taken to preserve the rights of the parties to the dispute or to protect the human rights of individuals or communities within the jurisdiction or control of States Parties.",
+          "comment": "Provisional measures–also referred to under some jurisdictions as interim or precautionary measures– under paragraph 3 are meant to preserve a state of matters that might be impossible to return to after a dispute has been resolved. This might refer, for example, to irreparable harm to an AI provider’s business or to the human rights of individuals or communities. In the most extreme cases, it might prevent catastrophic scales of harm to humanity. While the Panel must set its own test for the approval or denial of a request for provisional measures, it is likely that this test will contemplate elements such as prima facie (at first glance) jurisdiction, plausibility of the claims or, as discussed, risk of irreparable harm.[^202]"
+        },
+        {
+          "order": "6.5.10",
+          "content": "4. The Panel shall give advisory opinions at the request of the Conference on legal questions arising from the Articles.",
+          "comment": null
+        },
+        {
+          "order": "6.5.11",
+          "content": "5. This dispute settlement mechanism is without prejudice of any other dispute settlement mechanisms available to the States Parties under international law.",
+          "comment": null
+        }
+      ]
+    },
+    {
+      "label": "Miscellaneous",
+      "paragraphs": [
+        {
+          "order": "7.1.2",
+          "content": "1. At any time after entry into force, any State Party may propose amendments to the Articles. The text of a proposed amendment shall be communicated to the Agency, which shall circulate it to all States Parties.",
+          "comment": "As with any international agreement, as geopolitical realities shift or technological developments arise, States Parties may wish to consider amendments that tie in with those changes so the Articles do not become obsolete or ineffective.[^203] A high threshold of two thirds majority to modify the States Parties’ original intent is standard practice in many international agreements, including in those related to matters which are at the core of States’ national security.[^204] It should be noted that this general amendment rule has three exceptions established under Article [[AREF:6.2.1:7]] for issues that are particularly sensitive to States Parties where the most advanced AI systems are developed–the appointment of the Agency’s Director-General, the approval of the Agency’s rules of procedure and the approval of additional verification or enforcement mechanisms. Amendments related to these topics are subject to a weighted voting mechanism for the motives explained above in the commentary to that clause. This weighted voting mechanism is not used for any type of amendment given that it would potentially make it too difficult to make simple adjustments. It would disproportionately concentrate the power to make amendments on a few States Parties, when it is in the interest of all States Parties to ensure that the Articles operate effectively and efficiently."
+        },
+        {
+          "order": "7.1.3",
+          "content": "2. The Conference may agree upon amendments which shall be adopted by a positive vote of a majority of two thirds of the States Parties.",
+          "comment": null
+        },
+        {
+          "order": "7.1.4",
+          "content": "3. On the basis of its annual review, the Agency may issue recommendations to the Conference for amendments to the Annexes. Recommendations related to Annex A shall not be made with the intent of removing any of the uses, risks or capabilities listed. Recommendations related to Annexes B and C must be exclusively directed at improving verification or enforcement mechanisms in pursuit of the Articles’ objectives.",
+          "comment": "The last paragraph of Article [[AREF:7.1.1]] gives the Agency the discretion to recommend amendments to the Articles’ annexes, based on the annual review it must carry out in accordance with Article [[AREF:6.3.1:9.l]]. As the main body in charge of monitoring and implementing safety-related obligations, the Agency is in the best position to suggest adjustments that will contribute to the Articles’ objectives. At the same time, to prevent any potential backsliding of the Articles’ prohibitions, or the means to ensure States Parties comply with them, Article [[AREF:7.1.1]] mandates the Agency to omit any recommendations related to the elimination of prohibited uses, capabilities or risk and to exclusively focus on suggestions to improve the the verification and enforcement mechanisms under Annexes B and C. In this context, improvement refers to the increased capacity of those mechanisms to detect any violations of the Articles and put a stop to them. Article [[AREF:7.1.1]] does not, however, prevent States Parties to introduce other types of amendments. This leaves space for the adjustment of the Articles to new developments in the science of AI safety. These modifications, nevertheless, must not be “incompatible with the effective execution of the object and purpose of the [Articles] as a whole”, as per article 41 of the Vienna Convention on the Law of Treaties.[^205]"
+        }
+      ]
+    },
+    {
+      "label": "Universality",
+      "paragraphs": [
+        {
+          "order": "7.2.3",
+          "content": "Each State Party shall encourage States not party to these Articles to sign, ratify, accept, approve or accede to the Articles, with the goal of universal adherence of all States to the Articles.",
+          "comment": "While advanced AI seems in reach of only a few actors presently, it is not unlikely that it will one day be within the capabilities of many or most States, especially with the stated goal of many AI providers to continue developing open weight models and with the expected increase in compute efficiency. This means that, eventually, the risks highlighted in this commentary may originate from most regions or countries. Even if an export controls system–which these Articles do not necessarily advocate for–were set in place, some States may have the capacity to develop self-sufficiency regarding AI precursors, allowing them to develop advanced AI models without depending on the international market. This is one strong reason why a multilateral framework for safe diffusion of advanced AI may be a more effective way of curbing long-term risks from advanced AI. However, this pathway ultimately depends on widespread adoption of the Articles–or similar proposals–or, ideally, their universal adoption by all States. In this sense, Article [[AREF:7.2.2]] pursues a similar objective to article VI of the Treaty on the Non-Proliferation of Nuclear Weapons and article 12 of the Treaty on the Prohibition of Nuclear Weapons; the first one calling on States Parties to end the nuclear race and ultimately achieve complete nuclear disarmament, and the second inviting States Parties to encourage other States to join the prohibition of nuclear weapons.[^206]\\n\\nAt the same time, spreading the benefits of AI equitably across the globe will also be facilitated by the ratification of a large number of States. This increases the chances that, for instance, the results of technical cooperation under Article [[AREF:4.1.1]] will benefit more countries or that more countries will join the global AI benefit-sharing framework under article [[AREF:5.1.1]] to both contribute and benefit from it. It is worth highlighting that, read holistically, these Articles aim for diffusion of advanced AI and all the benefits it entails–as long as it is done safely."
+        }
+      ]
+    },
+    {
+      "label": "Relationship with other rules of international law",
+      "paragraphs": [
+        {
+          "order": "7.3.3",
+          "content": "The present Articles are without prejudice to any obligation incurred by States Parties under relevant treaties or rules of customary international law.",
+          "comment": "Activities carried out by States in relation to advanced AI might be covered by the obligations in these Articles but also other rules of international law, including customary international law. A study by Villalobos, Maas and Winter (2026) shows that, indeed, there are close to sixty existing international obligations which already apply to the risks posed by this technology (see commentary to Article [[AREF:0.1.1]]).[^207] There are numerous more that apply to obligations in these Articles that are not necessarily related to safety.\\n\\nWhen both the Articles and other international obligations apply to any given scenario, States or international courts will need to resolve that conflict or overlap. To do so, one method of interpretation–systemic integration–seems particularly useful and is tacitly endorsed by Article [[AREF:7.3.2]]. Systemic integration,  established under article 31(3)(c) of the Vienna Convention on the Law of Treaties,[^208] allows States and international courts to take into account any relevant norms from across the international legal system applicable to a certain case or useful for the interpretation of an obligation within the wider normative framework of international law.[^209]"
+        }
+      ]
+    }
+  ],
+  "retrieved": "2026-08-08"
+}

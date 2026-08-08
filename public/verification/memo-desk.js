@@ -19,7 +19,6 @@
 window.VTMemoDesk = (function () {
   var ALL = window.VERIFICATION_MEMOS;
   var MODULES = window.VERIFICATION_MEMO_MODULES || [];
-  var STORE = window.VTMemoStore;
   var WPM = 220;
 
   /* The desk's own markup. It used to live in memo-desk.html, which meant the
@@ -57,6 +56,12 @@ window.VTMemoDesk = (function () {
         '<button type="button" class="tool" id="exportBtn">Export .md</button>',
         '<button type="button" class="tool" id="clearBtn">Clear this draft</button>',
       '</div>',
+      /* Where somebody is about to type an opinion, say where it goes. The
+         drafts sit in this browser under memo-store.js's key AND ride to the
+         account of a signed-in learner on sync.js, with the notebook and the
+         progress — an earlier edition of this line promised nothing left the
+         browser, which the sync had already stopped honouring. */
+      '<p class="desk-note">Drafts autosave in this browser. Signed in, they travel with your account, like your notebook; signed out, they stay here and nowhere else.</p>',
     '</section>',
     '<aside class="check-rail">',
       '<div class="modes" role="tablist" aria-label="Rail mode">',
@@ -88,6 +93,11 @@ window.VTMemoDesk = (function () {
                    desk must not, or two of them fight over the URL). */
   function mount(host, opts) {
     opts = opts || {};
+    /* Read the store at mount time, not at load time. Capturing it in module
+       scope made the desk depend on memo-store.js having been evaluated first
+       — true for an ordered <script> list, not for the header's tags — and the
+       failure was silent: no store, no desk, no message. */
+    var STORE = window.VTMemoStore;
     if (!host || !ALL || !STORE) return null;
 
     var SLOTS = opts.slots

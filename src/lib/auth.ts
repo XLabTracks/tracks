@@ -32,14 +32,18 @@ const USER_SELECT = {
 } as const;
 
 // Isolate-lifetime mirror of the immutable workosUserId → AppUser mapping.
-// `prisma.user` is written ONLY in this file, so a cached entry whose mirrored
-// fields still match the (WorkOS-verified) session provably matches the DB row
-// it was minted from — letting a warm authenticated request skip the mirror
-// read entirely, which is otherwise 1 origin round trip on every request and
-// every server action. This is data caching, not a TCP-holding client, so the
-// per-request rule in db.ts does not apply. Bounded so it can't grow without
-// limit over an isolate's life (a deleted User row — no in-app path — would
-// serve stale until the isolate recycles; acceptable).
+// A cached entry whose mirrored fields still match the (WorkOS-verified)
+// session matches the DB row it was minted from — letting a warm authenticated
+// request skip the mirror read entirely, which is otherwise 1 origin round trip
+// on every request and every server action. This is data caching, not a
+// TCP-holding client, so the per-request rule in db.ts does not apply. Bounded
+// so it can't grow without limit over an isolate's life (a deleted User row —
+// no in-app path — would serve stale until the isolate recycles; acceptable).
+//
+// Trap: the entry is only as good as "nothing else writes these columns", so
+// anything that does has to say so. saveProfileName writes User.name and calls
+// forgetUserMirror; a new writer that forgets to would serve the old value for
+// the life of the isolate.
 const MIRROR_CACHE_MAX = 5_000;
 const userMirrorCache = new Map<string, AppUser>();
 
@@ -51,22 +55,45 @@ function rememberMirror(key: string, user: AppUser): void {
   userMirrorCache.set(key, user);
 }
 
+/** Drop a user's mirror entry after writing one of the columns it holds.
+ *  Keyed on the WorkOS id, which is what the cache is keyed on. */
+export function forgetUserMirror(workosUserId: string): void {
+  userMirrorCache.delete(workosUserId);
+}
+
+/* Is this row already what a sign-in would write?
+ *
+ * `name` is the exception, and deliberately: WorkOS owns identity — the email
+ * and the avatar — but the profile name is the app's own, editable at
+ * /account. Re-asserting the WorkOS name on every request made that edit last
+ * until the next page load and no longer, so the name is written from WorkOS
+ * only when the row has none. A row whose name has been set is in sync
+ * whatever WorkOS calls them.
+ */
+function mirrorMatches(
+  row: AppUser,
+  email: string,
+  imageUrl: string | null,
+  workosName: string | null,
+): boolean {
+  return (
+    row.email === email &&
+    row.imageUrl === imageUrl &&
+    (row.name !== null || workosName === null)
+  );
+}
+
 // WorkOS owns identity/sessions; mirror the signed-in user into our DB so app
 // data (progress, submissions, classrooms) can reference a local ID. Serve from
 // the isolate mirror when the session's fields match; otherwise read first and
 // only write when the row is missing or a mirrored field actually changed.
 async function upsertUser(workosUser: WorkosUserShape): Promise<AppUser> {
   const email = workosUser.email;
-  const name = displayName(workosUser);
+  const workosName = displayName(workosUser);
   const imageUrl = workosUser.profilePictureUrl ?? null;
 
   const cached = userMirrorCache.get(workosUser.id);
-  if (
-    cached &&
-    cached.email === email &&
-    cached.name === name &&
-    cached.imageUrl === imageUrl
-  ) {
+  if (cached && mirrorMatches(cached, email, imageUrl, workosName)) {
     return cached;
   }
 
@@ -74,22 +101,19 @@ async function upsertUser(workosUser: WorkosUserShape): Promise<AppUser> {
     where: { workosUserId: workosUser.id },
     select: USER_SELECT,
   });
-  if (
-    existing &&
-    existing.email === email &&
-    existing.name === name &&
-    existing.imageUrl === imageUrl
-  ) {
+  if (existing && mirrorMatches(existing, email, imageUrl, workosName)) {
     rememberMirror(workosUser.id, existing);
     return existing;
   }
 
   // Missing row or drifted fields: upsert keeps the rare concurrent
-  // first-insert safe via the workosUserId unique constraint.
+  // first-insert safe via the workosUserId unique constraint. The update
+  // carries `name` only to fill a row that has none — see mirrorMatches.
+  const fillName = workosName !== null && (!existing || existing.name === null);
   const upserted = await prisma.user.upsert({
     where: { workosUserId: workosUser.id },
-    create: { workosUserId: workosUser.id, email, name, imageUrl },
-    update: { email, name, imageUrl },
+    create: { workosUserId: workosUser.id, email, name: workosName, imageUrl },
+    update: { email, imageUrl, ...(fillName ? { name: workosName } : {}) },
     select: USER_SELECT,
   });
   rememberMirror(workosUser.id, upserted);

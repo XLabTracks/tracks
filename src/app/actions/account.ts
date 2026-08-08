@@ -2,7 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 
-import { requireUser } from "@/lib/auth";
+import { forgetUserMirror, requireUser } from "@/lib/auth";
 import { prisma } from "@/lib/db";
 
 // A display name, not an identity. Email is the identity and WorkOS owns it;
@@ -35,6 +35,11 @@ export async function saveProfileName(name: string): Promise<SaveNameResult> {
   }
 
   await prisma.user.update({ where: { id: user.id }, data: { name: clean } });
+  /* Two things would otherwise put the old name straight back: the isolate's
+     user mirror, which is why every writer of these columns has to drop its
+     entry, and the sign-in mirror itself — auth.ts writes `name` from WorkOS
+     only into a row that has none, precisely so this edit is the last word. */
+  forgetUserMirror(user.workosUserId);
   revalidatePath("/account");
   return { ok: true, name: clean };
 }

@@ -30,7 +30,16 @@ window.VT = (function () {
 
   let state = read();
 
+  /* Stamp the store, not just the units.
+
+     The account sync dates this document by the newest unit stamp inside it,
+     which works for completing a unit and fails for every removal: reset and
+     un-complete take stamps away, so the store went BACKWARDS in time exactly
+     when it changed, the server's older copy read as newer, and the sync put
+     the progress back. A stamp on the store itself moves forward on every
+     write, whichever direction the units went. */
   function persist() {
+    state.updatedAt = Date.now();
     try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) { /* private mode */ }
     listeners.forEach(fn => fn(state));
   }
@@ -42,6 +51,21 @@ window.VT = (function () {
   function reset() {
     state = { units: {} };
     persist();
+  }
+
+  /* Hand the account sync its chance to send a change before the page goes
+     away, and resolve either way — this gates a reload, and a learner must
+     never be left staring at an un-reloaded page because the network was
+     slow. sync.js publishes VTSync; without it (signed out, or the file not
+     on this page) there is nothing to wait for. */
+  function syncThen(done) {
+    var sync = window.VTSync;
+    if (!sync || typeof sync.flush !== 'function') return done();
+    var fired = false;
+    var once = function () { if (!fired) { fired = true; done(); } };
+    setTimeout(once, 1500);
+    try { Promise.resolve(sync.flush()).then(once, once); }
+    catch (e) { once(); }
   }
 
   /* ---------- skills ---------- */
@@ -257,9 +281,14 @@ window.VT = (function () {
       }
       clearTimeout(timer);
       armed = false;
-      btn.textContent = 'Reset progress';
       reset();
-      location.reload();
+      /* Reloading straight after the reset used to race the sync's own
+         debounce and lose: the tab went away with the cleared store unsent,
+         and the account's copy — still holding every completed unit — came
+         back on the next load and undid the reset. Push first, then reload. */
+      btn.textContent = 'Resetting…';
+      btn.disabled = true;
+      syncThen(function () { location.reload(); });
     });
   }
 
@@ -332,3 +361,10 @@ window.VT = (function () {
     announce: announce
   };
 })();
+
+/* Say so. On the app routes this file arrives through the page's own ordered
+   loader while sync.js arrives from the site chrome, so neither can assume it
+   is second — and a sync.js that looked for window.VT a moment too early
+   simply never subscribed, which is a completed unit that reaches the account
+   only when the tab closes. */
+try { window.dispatchEvent(new Event('vt-ready')); } catch (e) { /* ancient browser */ }

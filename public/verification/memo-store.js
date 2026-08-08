@@ -13,11 +13,18 @@
    Trap: write() debounces the localStorage hit but notifies immediately, so a
    second surface repaints on the keystroke rather than 300ms behind it.
 
-   Load BEFORE memo-desk.js, notebook.js and sync.js — all three read it. */
+   Load BEFORE memo-desk.js, notebook.js and sync.js — all three read it.
+
+   Trap: this file is on two loaders — the site chrome carries it on every
+   page (the notebook's memo block and sync.js both read it), and the desk
+   page's ordered list carries it again so it is provably there before
+   memo-desk.js. Running the factory twice would hand the second surface a
+   second store with none of the first's listeners, so the module keeps the
+   instance it already published. */
 
 "use strict";
 
-window.VTMemoStore = (function () {
+window.VTMemoStore = window.VTMemoStore || (function () {
 
   const KEY = 'xlab-verification-memo-desk.v1';
   const SAVE_MS = 300;
@@ -141,3 +148,8 @@ window.VTMemoStore = (function () {
   };
 
 })();
+
+/* Same announcement platform.js makes, and for the same reason: sync.js
+   subscribes to this store and cannot know which of the two loaders on these
+   pages got here first. */
+try { window.dispatchEvent(new Event('vt-ready')); } catch (e) { /* ancient browser */ }

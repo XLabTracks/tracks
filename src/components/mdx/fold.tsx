@@ -113,7 +113,9 @@ export function Fold({ label = "Optional material", children }: FoldProps) {
           // break-words because the shell is overflow-hidden: a token with no
           // break opportunity (a slashed path, a long URL) is cut off here,
           // not scrolled to.
-          "mdx-body px-4 pt-4 pb-4 text-sm leading-relaxed break-words",
+          // px-3 on a phone: a fold often wraps another bordered block, and
+          // each ring costs the reading column twice its padding.
+          "mdx-body px-3 pt-4 pb-4 text-sm leading-relaxed break-words sm:px-4",
           "text-foreground/80",
           "[&>*+*]:mt-3",
         )}

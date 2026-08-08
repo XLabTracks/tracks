@@ -31,7 +31,10 @@ export function SourceQuote({
   children: ReactNode;
 }) {
   return (
-    <figure className="not-prose border-border my-6 rounded-xl border p-5">
+    // Padding tightens on a phone. This figure is routinely two boxes deep —
+    // a Fold holding a SourceQuote — and each ring costs the reading column
+    // twice its padding. At 390 the passage was down to 244px of text.
+    <figure className="not-prose border-border my-6 rounded-xl border p-4 sm:p-5">
       <figcaption className="text-sm">
         <span className="font-medium">
           {url ? (
@@ -45,15 +48,28 @@ export function SourceQuote({
         </span>
         {what ? <span className="text-muted-foreground"> — {what}</span> : null}
       </figcaption>
-      {/* One gap rule, between siblings of any kind — the passage's own
-          paragraphing is the thing being reproduced, and preflight has
-          already zeroed the margins on p, ul and ol, so without this a
-          quotation of more than one block renders as an unbroken wall.
-          Trap: it must not be paired with a `[&>p]:m-0` reset. That selector
-          is the more specific of the two, so it wins on exactly the elements
-          the gap is mostly for and silently closes p+p again. */}
-      <blockquote className="border-border mt-3 border-l-2 pl-4 leading-relaxed [&>*+*]:mt-3">
-        {children}
+      {/* The mark, not a rule down the side. A left border plus its indent
+          took 18px off a column that is already three boxes deep on a phone,
+          and bought nothing the mark does not say better. It is decoration:
+          aria-hidden, unselectable, and it sits on its own line so it costs
+          the passage no width at all. --brand-ink because it has to read as
+          ink on all three Verification grounds; --primary is a fill there and
+          would vanish on the dark one. */}
+      <blockquote className="mt-3 leading-relaxed">
+        <span
+          aria-hidden="true"
+          className="text-[color:var(--brand-ink,var(--primary))] -mb-5 block font-serif text-6xl leading-none select-none"
+        >
+          &ldquo;
+        </span>
+        {/* One gap rule, between siblings of any kind — the passage's own
+            paragraphing is the thing being reproduced, and preflight has
+            already zeroed the margins on p, ul and ol, so without this a
+            quotation of more than one block renders as an unbroken wall.
+            Trap: it must not be paired with a `[&>p]:m-0` reset. That
+            selector is the more specific of the two, so it wins on exactly
+            the elements the gap is mostly for and silently closes p+p. */}
+        <div className="[&>*+*]:mt-3">{children}</div>
       </blockquote>
       <p className="text-muted-foreground mt-3 text-sm">{by}</p>
     </figure>

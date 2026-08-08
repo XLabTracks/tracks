@@ -9,6 +9,7 @@ import {
   TREATY,
   WORKSPACE_TASKS,
   WORKSPACE_TOTAL,
+  WORKSPACE_REQUIRED,
 } from "@/lib/verification/data/treaty-workspace";
 
 export const metadata: Metadata = { title: "Marking keys" };
@@ -66,7 +67,9 @@ export default async function FacilitatorKeysPage() {
             <p className="text-muted-foreground mt-1 text-sm">
               {TREATY.title} — {TREATY.authors}. {WORKSPACE_TASKS.length} tasks,{" "}
               <strong>Total: {WORKSPACE_TOTAL} points</strong>. The learner works
-              the whole treaty; no provisions are pre-selected.
+              the whole treaty; no provisions are pre-selected. Tasks may be
+              skipped: the unit completes at {WORKSPACE_REQUIRED} of{" "}
+              {WORKSPACE_TASKS.length}.
             </p>
             <p className="text-muted-foreground mt-3 text-sm">
               In the session, learners choose &ldquo;working with a
@@ -98,39 +101,58 @@ export default async function FacilitatorKeysPage() {
               )}
 
               {task.rows && (
-                <p className="text-muted-foreground mt-3 text-xs">
-                  Grid rows:{" "}
-                  {task.rows.map((r) => r.fn + (r.trap ? " (trap row)" : "")).join(" · ")}
-                </p>
-              )}
-              {task.missing && (
-                <p className="text-muted-foreground mt-1 text-xs">
-                  Deliberately omitted: {task.missing.join("; ")}.
-                </p>
+                <ol className="mt-3 space-y-1.5">
+                  {task.rows.map((r) => (
+                    <li key={r.id} className="text-sm">
+                      <span className="font-medium">{r.fn}</span> — {r.answer}
+                      {r.pointer && (
+                        <span className="text-muted-foreground font-mono text-xs">
+                          {" "}
+                          · {r.pointer}
+                        </span>
+                      )}
+                    </li>
+                  ))}
+                </ol>
               )}
 
-              <ul className="mt-3 space-y-2">
-                {task.key.map((k, i) => (
-                  <li key={i} className="text-sm">
-                    <span className="text-muted-foreground font-mono text-xs">
-                      {i + 1}.{" "}
-                    </span>
-                    {k.text}
-                    {k.pointer && (
+              {task.key && (
+                <ul className="mt-3 space-y-2">
+                  {task.key.map((k, i) => (
+                    <li key={i} className="text-sm">
                       <span className="text-muted-foreground font-mono text-xs">
-                        {" "}
-                        · {k.pointer}
+                        {i + 1}.{" "}
                       </span>
-                    )}
-                    {k.open && (
-                      <span className="text-primary text-xs">
-                        {" "}
-                        · no settled answer in the text — confirm in the room
-                      </span>
-                    )}
-                  </li>
-                ))}
-              </ul>
+                      {k.text}
+                      {k.pointer && (
+                        <span className="text-muted-foreground font-mono text-xs">
+                          {" "}
+                          · {k.pointer}
+                        </span>
+                      )}
+                      {k.open && (
+                        <span className="text-primary text-xs">
+                          {" "}
+                          · no settled answer in the text — confirm in the room
+                        </span>
+                      )}
+                    </li>
+                  ))}
+                </ul>
+              )}
+
+              {task.marking && (
+                <div className="border-border mt-4 border-t pt-3">
+                  <p className="text-muted-foreground font-mono text-[11px] tracking-[0.12em] uppercase">
+                    How to mark it
+                  </p>
+                  <ul className="mt-1.5 list-disc space-y-1 pl-5 text-sm">
+                    {task.marking.map((m, i) => (
+                      <li key={i}>{m}</li>
+                    ))}
+                  </ul>
+                </div>
+              )}
             </section>
           ))}
 

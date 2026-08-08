@@ -2,37 +2,42 @@
  * 1.1's workspace: the learner works the whole treaty, not a curated excerpt.
  *
  * Shape lifted from the ВсОШ обществознание second round — one text, several
- * passes, every pass scored by an enumerated bank rather than a single right
- * answer, and an explicit "Total: N points" per task. Two features of that
- * format are load-bearing here and must survive any edit:
+ * passes, every pass scored against an enumerated bank rather than a single
+ * right answer, with an explicit total per task. Three of that format's
+ * properties are load-bearing here and must survive any edit:
  *
- *   1. The grid's rows are deliberately imperfect. The olympiad hands out a
- *      table of argument spheres and warns that it "may be superfluous or,
- *      conversely, insufficient" — so a row that stays empty is a finding the
- *      learner MAKES, not a lesson they are told. `trap: true` marks the row
- *      that catches text carrying no obligation; `missing` names what the grid
- *      leaves out on purpose.
- *   2. Nothing is machine-graded. The bank is what a strong answer contains,
- *      the learner ticks their own hits, and the score is theirs.
+ *   1. **The key carries content; the marking notes carry procedure.** The
+ *      ЦПМ papers keep these in separate documents, and for good reason: the
+ *      learner self-scores here, so a bank item like "cite the clause" would
+ *      have them award themselves a point for obeying an instruction. Every
+ *      `key` item below is a claim about the treaty that an answer either made
+ *      or did not. Everything procedural lives in `marking`, which only
+ *      /facilitator/keys renders.
+ *   2. **The grid is deliberately imperfect.** The olympiad hands out a table
+ *      and warns it "may be superfluous or, conversely, insufficient", so a row
+ *      that stays empty is a finding the learner MAKES rather than a lesson
+ *      they are told. Task 1a locates; task 1b is about what 1a's grid got
+ *      wrong.
+ *   3. **Search is cheaper than thought.** Finding which Article carries a
+ *      function is one point a row. Everything that requires a judgement is
+ *      worth more, and the totals say so.
  *
- * Provisions are NOT pre-selected. Finding the rule inside the document is the
- * skill the unit exists to build, so the workspace names functions and the
- * learner goes and finds the Article.
+ * Provisions are NOT pre-selected: finding the rule inside the document is the
+ * skill, so the workspace names functions and the learner goes and finds the
+ * Article.
  *
- * Article titles below are the treaty's own, from the committed artifact's toc
- * (`npm run arxiv:build -- --toc 2511.10783v3`). The key is a first pass built
- * from that toc plus the passages quoted in `pointer`; an `open: true` item is
- * one where the honest answer is "go and see whether the text says this at
- * all" — those are the rows the facilitator confirms in the room, and they are
- * where the author's own reading should land when it is written.
+ * Article titles are the treaty's own, from the committed artifact's toc
+ * (`npm run arxiv:build -- --toc 2511.10783v3`). An `open: true` item is one
+ * with no settled answer in the text — the finding is the absence, and it is
+ * marked rather than invented.
  */
 
 export type TaskKind = "grid" | "written";
 
 export interface KeyPoint {
-  /** What a strong answer contains. One tick, one point. */
+  /** A claim about the treaty an answer either made or did not. One point. */
   text: string;
-  /** Where in the treaty it is settled, when it is settled somewhere. */
+  /** Where the treaty settles it, when it settles it somewhere. */
   pointer?: string;
   /** No settled answer in the text — the finding is the absence. */
   open?: boolean;
@@ -40,10 +45,12 @@ export interface KeyPoint {
 
 export interface GridRow {
   id: string;
-  /** The verification function, in the learner's words, not the treaty's. */
+  /** The function, in the learner's words, not the treaty's. */
   fn: string;
-  /** Catches text that reads like a rule and obliges nobody. */
-  trap?: boolean;
+  /** Row-aligned key: one row, one point, one place to look. */
+  answer: string;
+  pointer?: string;
+  open?: boolean;
 }
 
 export interface WorkspaceTask {
@@ -51,13 +58,17 @@ export interface WorkspaceTask {
   kind: TaskKind;
   title: string;
   prompt: string;
-  /** Printed under the prompt, verbatim from the olympiad's own wording. */
+  /** Printed under the prompt — the olympiad's own caution, kept. */
   caution?: string;
   points: number;
   rows?: GridRow[];
-  /** Functions the grid leaves out on purpose — the learner adds them. */
-  missing?: string[];
-  key: KeyPoint[];
+  key?: KeyPoint[];
+  /**
+   * How to mark it. Facilitator-only: these are instructions to whoever is
+   * scoring, and showing them to a self-scoring learner turns "did I see
+   * this?" into "did I follow the recipe?".
+   */
+  marking?: string[];
 }
 
 export const TREATY = {
@@ -66,130 +77,302 @@ export const TREATY = {
   authors: "Scher, Abecassis, Barnett & Abeyta",
 } as const;
 
+/** Some tasks may be skipped when time is short; the unit still completes at
+ *  this share of them. Four fifths, so exactly one task in five can go. */
+export const REQUIRED_FRACTION = 0.8;
+
 export const WORKSPACE_TASKS: WorkspaceTask[] = [
   {
-    id: "grid",
+    id: "locate",
     kind: "grid",
-    title: "What does the agreement actually do?",
+    title: "1a. Where does the agreement do each of these?",
     prompt:
-      "Work through the whole treaty. For each function below, name the Article that carries it, who is obliged, and what evidence would show the obligation was met. Leave a cell empty if the treaty does not settle it.",
+      "Work the whole treaty. For each function, name the Article that carries it. One point a row.",
     caution:
-      "This list may be superfluous or, conversely, insufficient. Be attentive: a function with no Article, and an Article that fits no function, are both answers.",
-    points: 12,
+      "This list may be superfluous or, conversely, insufficient. A function with no Article is an answer; so is an Article that fits no function.",
+    points: 9,
     rows: [
-      { id: "prohibit", fn: "Prohibits an activity outright" },
-      { id: "threshold", fn: "Sets the line above which a rule applies" },
-      { id: "declare", fn: "Requires a party to declare something" },
-      { id: "admit", fn: "Requires a party to admit inspectors or equipment" },
-      { id: "measure", fn: "Measures or monitors continuously" },
-      { id: "challenge", fn: "Lets one party demand a look at something undeclared" },
-      { id: "dispute", fn: "Settles a disagreement about what the evidence shows" },
-      { id: "consequence", fn: "Says what follows from a violation" },
-      { id: "exit", fn: "Lets a party leave, and on what notice" },
       {
-        id: "hortatory",
-        fn: "Reads like a rule but obliges nobody",
-        trap: true,
-      },
-    ],
-    missing: [
-      "Who pays for the monitoring equipment",
-      "What counts as evidence sufficient to conclude a violation occurred",
-    ],
-    key: [
-      {
-        text: "Prohibition and the training rule sit in Article IV — AI Training.",
-        pointer: "ARTICLE IV — AI Training",
+        id: "prohibit",
+        fn: "Prohibits an activity outright",
+        answer: "Article IV — AI Training",
+        pointer: "ARTICLE IV",
       },
       {
-        text: "The thresholds are NOT in the prohibition. They are defined terms in Article II, and Article IV applies them by name — the rule lives in its definitions.",
-        pointer: "ARTICLE II — Definitions",
+        id: "threshold",
+        fn: "Sets the line above which the rule applies",
+        answer:
+          "Article II — Definitions. Not the prohibition: Article IV applies thresholds that Article II defines by name.",
+        pointer: "ARTICLE II",
       },
       {
-        text: "Continuous measurement is Article VII — Chip Use Verification; production monitoring is Article VI.",
-        pointer: "ARTICLE VII / ARTICLE VI",
+        id: "consolidate",
+        fn: "Puts the controlled hardware somewhere it can be counted",
+        answer: "Article V — Chip Consolidation",
+        pointer: "ARTICLE V",
       },
       {
-        text: "Article VII gives the method-setting power to the CTB, not to the treaty text: “The methods used for verification will be determined and updated by the CTB.”",
+        id: "production",
+        fn: "Watches the hardware being made",
+        answer: "Article VI — AI Chip Production Monitoring",
+        pointer: "ARTICLE VI",
+      },
+      {
+        id: "measure",
+        fn: "Measures use continuously, on site",
+        answer: "Article VII — Chip Use Verification",
         pointer: "ARTICLE VII",
       },
       {
-        text: "Article VII’s list of methods is open — “may include, but are not limited to” — so no single method is actually required by the treaty.",
-        pointer: "ARTICLE VII",
+        id: "research",
+        fn: "Restricts research, and separately verifies that restriction",
+        answer:
+          "Articles VIII and IX — the restriction and its verification are two Articles, the same split as IV and VII.",
+        pointer: "ARTICLE VIII / IX",
       },
       {
-        text: "Article VII’s verification attaches to DECLARED sites, which makes the declaration duty load-bearing for everything measured.",
-        pointer: "ARTICLE VII",
-      },
-      {
-        text: "Challenge inspection is Article X — Information Consolidation and Challenge Inspections; it is the CWC parallel from 0.3.",
+        id: "challenge",
+        fn: "Lets one party demand a look at something undeclared",
+        answer: "Article X — Information Consolidation and Challenge Inspections",
         pointer: "ARTICLE X",
       },
       {
-        text: "Disagreement about evidence goes to Article XI — Dispute Resolution; consequences are Article XII — Protective Actions. Note they are two different Articles.",
-        pointer: "ARTICLE XI / ARTICLE XII",
+        id: "dispute",
+        fn: "Settles a disagreement about what the evidence shows",
+        answer:
+          "Article XI — Dispute Resolution. Consequences are elsewhere: Article XII — Protective Actions.",
+        pointer: "ARTICLE XI / XII",
       },
       {
-        text: "Exit is Article XV — Withdrawal and Duration. Read the notice period before deciding how binding the rest is.",
+        id: "exit",
+        fn: "Lets a party leave, and on what notice",
+        answer: "Article XV — Withdrawal and Duration",
         pointer: "ARTICLE XV",
       },
+    ],
+    marking: [
+      "One point a row, for the Article number. Do not award or withhold on the wording of the description.",
+      "Two rows have a second half — thresholds living in Article II rather than IV, and consequences living in XII rather than XI. Award the point for the Article; note the second half aloud, because 1b turns on it.",
+      "A learner who writes an Article that plausibly also carries the function has the point. This is a search task, not an interpretation task.",
+    ],
+  },
+  {
+    id: "grid-critique",
+    kind: "written",
+    title: "1b. What was wrong with that grid?",
+    prompt:
+      "The grid above is not a fair description of the treaty. Name what it left out, and name any text you met that fits none of its rows.",
+    points: 6,
+    key: [
       {
-        text: "Research restriction has its own verification Article (IX) separate from the restriction itself (VIII) — the same split as IV/VII.",
-        pointer: "ARTICLE VIII / ARTICLE IX",
+        text: "The grid never asks who pays for the monitoring — the equipment, the inspectors, the CTB itself.",
+        open: true,
       },
       {
-        text: "Article I — Primary Purpose states an aim and imposes no checkable duty; it belongs in the trap row. A purpose clause is not a rule.",
+        text: "The grid never asks what evidence is sufficient to conclude a violation occurred, as opposed to what evidence is collected.",
+        open: true,
+      },
+      {
+        text: "Article I — Primary Purpose fits no row: it states an aim and imposes no checkable duty. A purpose clause is not a rule.",
         pointer: "ARTICLE I",
       },
       {
-        text: "Who pays for monitoring, and what evidence is sufficient to conclude a violation, are the two the grid leaves out — go and see whether the treaty settles either.",
+        text: "Article III — The Coalition fits no row either: it constitutes the body rather than obliging anyone to do or refrain from anything.",
+        pointer: "ARTICLE III",
+      },
+      {
+        text: "Articles XIII and XIV — reviews and revision — are how the agreement changes itself, which no row covers and which decides how long any answer above stays true.",
+        pointer: "ARTICLE XIII / XIV",
+      },
+      {
+        text: "A row can be right and still be answered by an Article that does not do the work — Article VII's continuous verification only reaches DECLARED sites, so the row is filled and the function is not.",
+        pointer: "ARTICLE VII",
+      },
+    ],
+    marking: [
+      "This is the analytic half and is worth more than the search. Award for what they NOTICED, not for how they wrote it.",
+      "Learners who filled every row without complaint have missed the task. Say so; the grid was built to be incomplete.",
+      "The two `open` items have no answer in the treaty. A learner who searched and reports finding nothing has the point in full.",
+    ],
+  },
+  {
+    id: "actors",
+    kind: "written",
+    title: "2. Who is named, and who is actually required?",
+    prompt:
+      "Take any two obligations in the treaty. For each, name the actor the text names — and every actor the obligation depends on but does not name.",
+    points: 6,
+    key: [
+      {
+        text: "Article VII names the Parties (“Parties accept continuous on-site verification…”) and no one else, though nothing happens without inspectors.",
+        pointer: "ARTICLE VII",
+      },
+      {
+        text: "The same Article makes the CTB decisive without obliging it: it “determines and updates” the methods, so it sets the content of everyone else's duty.",
+        pointer: "ARTICLE VII",
+      },
+      {
+        text: "The treaty binds states, but the conduct it restrains belongs to companies — labs, chip makers, datacentre operators — which appear nowhere as duty-bearers. Each Party must reach them through its own domestic law.",
+      },
+      {
+        text: "Because the duty falls on “each Party”, the institution that actually discharges it differs country by country, and the treaty does not say which one. The same clause means different things in different capitals.",
+      },
+      {
+        text: "The Executive Council is a named actor with power over outcomes, so who sits on it is a substantive term and not a procedural one.",
+        pointer: "ARTICLE III",
+      },
+      {
+        text: "Whoever builds, owns and maintains the monitoring equipment is required by Article VII and named by nothing.",
+        pointer: "ARTICLE VII",
         open: true,
       },
+    ],
+    marking: [
+      "Two obligations is the floor, not the target; a learner who did one thoroughly may be worth more than one who listed six thinly.",
+      "The distinction being tested is named-vs-required. An answer that lists only the named actors has answered a different, easier question.",
+    ],
+  },
+  {
+    id: "goals",
+    kind: "written",
+    title: "3. What is each rule for?",
+    prompt:
+      "A rule is a means. For three rules of your choice, state the goal the rule serves — and then say whether the rule would still serve it if a party complied with the words and not the aim.",
+    points: 6,
+    key: [
+      {
+        text: "The training prohibition's goal is not “no training” but not crossing a capability point of no return; the threshold is a proxy for something the text cannot measure directly.",
+        pointer: "ARTICLE IV / II",
+      },
+      {
+        text: "Chip consolidation's goal is to manufacture an observable: hardware in known places is countable, and capability is not.",
+        pointer: "ARTICLE V",
+      },
+      {
+        text: "Production monitoring's goal is to catch the flow rather than the stock, because a count of what exists is only as good as the record of what was made.",
+        pointer: "ARTICLE VI",
+      },
+      {
+        text: "Challenge inspection's goal is not to find the undeclared site but to make having one risky — deterrence, not detection.",
+        pointer: "ARTICLE X",
+      },
+      {
+        text: "Dispute resolution's goal is to stop an ambiguous reading from collapsing the regime; the CWC precedent in 0.3 is the same lesson.",
+        pointer: "ARTICLE XI",
+      },
+      {
+        text: "Withdrawal's goal is to make signing survivable, which is bought by making the agreement less binding — the aim and the mechanism pull against each other.",
+        pointer: "ARTICLE XV",
+      },
+    ],
+    marking: [
+      "The second half of the prompt is the discriminating one. A learner who restates each rule as its own goal (“the goal of the training rule is to stop training”) has not done the task.",
+      "Any three rules. Do not require these three.",
     ],
   },
   {
     id: "strong-weak",
     kind: "written",
-    title: "The strongest and the weakest provision",
+    title: "4. The strongest and the weakest provision",
     prompt:
-      "Name the provision whose compliance you could most confidently check, and the one you could least. Justify each with the text.",
-    points: 4,
+      "Name the provision whose compliance you could most confidently check, and the one you could least. Say what makes each so, quoting the clause.",
+    points: 6,
     key: [
-      { text: "The strong candidate is a provision whose evidence is continuous, physical and produced at a chokepoint rather than reported by the party being checked." },
-      { text: "The weak candidate is a provision whose evidence depends on the checked party's own declaration, or on a method the treaty leaves to be chosen later." },
-      { text: "The justification cites the clause, not the topic — a claim about Article VII that quotes nothing from it scores nothing." },
-      { text: "Naming why the weak one is weak in terms of WHO produces the evidence is worth more than calling it vague." },
+      {
+        text: "Article VI — production monitoring — is the strong candidate: chips are made in very few places, the evidence is physical, and it is not authored by the party being checked.",
+        pointer: "ARTICLE VI",
+      },
+      {
+        text: "Article V — consolidation — is the other strong candidate, for the same reason: it converts a diffuse question into a location question.",
+        pointer: "ARTICLE V",
+      },
+      {
+        text: "Article VII is the weak candidate, and it is weak three ways at once: it reaches only DECLARED sites, its method list is open (“may include, but are not limited to”), and the CTB may change the methods.",
+        pointer: "ARTICLE VII",
+      },
+      {
+        text: "Articles VIII–IX are the other weak candidate: the restricted object is knowledge, which leaves far less trace than a chip.",
+        pointer: "ARTICLE VIII / IX",
+      },
+      {
+        text: "Article I belongs on neither list, because it obliges nobody — noticing that it is not a candidate is itself the finding.",
+        pointer: "ARTICLE I",
+      },
+      {
+        text: "The distinction that separates strong from weak here is WHO PRODUCES THE EVIDENCE, not how precisely the clause is drafted.",
+      },
+    ],
+    marking: [
+      "Award for the reason, not the pick. A defended Article VII as “strongest” beats an undefended Article VI.",
+      "The generalisation in the last item is worth a point on its own even if their picks differ from these.",
     ],
   },
   {
-    id: "shared-premise",
+    id: "assumption",
     kind: "written",
-    title: "What does the agreement assume without arguing?",
+    title: "5. What does the agreement assume without arguing?",
     prompt:
-      "Every regime rests on something its own text never defends. Name one such assumption in this treaty and say what would happen to the regime if it turned out to be false.",
-    points: 3,
+      "Name something the treaty rests on and never defends, and say which Article stops working first if it turns out to be false.",
+    points: 4,
     key: [
-      { text: "That the physical chip is the thing worth counting — that capability tracks hardware closely enough for hardware accounting to stand in for it." },
-      { text: "That a technical body can be trusted to set and revise the methods without that discretion becoming a lever." },
-      { text: "That training and inference are distinguishable in practice at the point where the measurement happens." },
-      { text: "A strong answer names the consequence, not just the assumption: which Article stops working first if it fails." },
+      {
+        text: "That the physical chip is the thing worth counting — that capability tracks hardware closely enough for hardware accounting to stand in for it. If false, Articles V, VI and VII all measure the wrong object.",
+        pointer: "ARTICLE V / VI / VII",
+      },
+      {
+        text: "That training and inference are distinguishable at the point where the measurement happens. If false, Article VII cannot tell a permitted workload from a prohibited one.",
+        pointer: "ARTICLE VII",
+      },
+      {
+        text: "That a technical body can hold the method-setting power without that discretion becoming a political lever. If false, Article VII's content is decided by whoever controls the CTB.",
+        pointer: "ARTICLE VII / XIII",
+      },
+      {
+        text: "That the parties who matter are the parties who sign. If false, Article III's coalition is a hole in the map rather than a regime.",
+        pointer: "ARTICLE III",
+      },
+    ],
+    marking: [
+      "Naming the consequence is half the point. An assumption stated without the Article it breaks is worth half a mark, rounded down.",
     ],
   },
   {
     id: "repair",
     kind: "written",
-    title: "Rewrite one provision so it can be checked",
+    title: "6. Rewrite one provision so that it can be checked",
     prompt:
-      "Find a provision that cannot be verified as written. Rewrite it so that it can. Then say what your rewrite costs — in intrusiveness, in money, or in the chance a party signs it at all.",
+      "Find a provision that cannot be verified as written. Rewrite it so that it can. Then say what your rewrite costs — in intrusiveness, in money, or in the chance a party signs at all.",
     points: 5,
     key: [
-      { text: "The rewrite names the evidence, not just the duty: what is produced, by whom, how often, and who may see it." },
-      { text: "It closes whichever hole was identified — an open method list, an undefined threshold, an unnamed verifier, an unstated consequence." },
-      { text: "The cost is stated in the treaty's own currency: more access means more exposure of things a party will not want exposed." },
-      { text: "The strongest answers notice that the fix moves the problem rather than removing it — the confidentiality bargain from 2.0 is where it lands." },
-      { text: "A rewrite that would plainly be refused by one of the two named parties is a finding, provided the answer says so." },
+      {
+        text: "A worked example. Article VII's open list is the usual target, and a rewrite that closes it reads roughly: “Each Party shall permit, at every declared site, at minimum (a) continuous power and network telemetry delivered to the CTB, and (b) in-person inspection quarterly on no more than 72 hours' notice. The CTB may add methods; it may not remove (a) or (b) except by a written unanimous decision of the Executive Council.”",
+        pointer: "ARTICLE VII",
+      },
+      {
+        text: "That rewrite's cost, stated: datacentre telemetry is commercially revealing — utilisation is a business secret — so this is the confidentiality trade at full intensity, and it is the clause a party with a competitive AI industry is likeliest to refuse.",
+      },
+      {
+        text: "The rewrite names the evidence and not only the duty: what is produced, by whom, how often, and who may see it. A rewrite missing any of those four has not closed the hole.",
+      },
+      {
+        text: "The strongest answers notice the fix MOVES the problem rather than removing it — closing the method list transfers the argument to what counts as a declared site.",
+      },
+      {
+        text: "Other legitimate targets: the undefined sufficiency of evidence, the unnamed payer, and the absence of any consequence attached to a specific finding.",
+        open: true,
+      },
+    ],
+    marking: [
+      "The worked example is one answer, not the answer. A different provision, repaired with the same four elements, scores the same.",
+      "A rewrite that would plainly be refused by one of the two named parties is a correct finding provided the answer says so — that is the cost being named, not a defect in the rewrite.",
+      "Refuse the point for a rewrite that only adds the word “verifiable” to the existing clause.",
     ],
   },
 ];
 
 export const WORKSPACE_TOTAL = WORKSPACE_TASKS.reduce((n, t) => n + t.points, 0);
+
+/** How many of the tasks must be committed for the unit to count as done. */
+export const WORKSPACE_REQUIRED = Math.ceil(
+  WORKSPACE_TASKS.length * REQUIRED_FRACTION,
+);

@@ -7,6 +7,7 @@ import type { VerificationWidgetProps } from "../kit/types";
 import {
   WORKSPACE_TASKS,
   WORKSPACE_TOTAL,
+  WORKSPACE_REQUIRED,
   type WorkspaceTask,
 } from "@/lib/verification/data/treaty-workspace";
 
@@ -94,6 +95,7 @@ export function TreatyWorkspace({ onComplete }: VerificationWidgetProps) {
     0,
   );
   const anyScored = Object.values(state.hits).some((h) => h.length > 0);
+  const committedCount = Object.values(state.done).filter(Boolean).length;
 
   const committed = !!state.done[task.id];
   const isOpen = !!revealed[task.id];
@@ -108,6 +110,8 @@ export function TreatyWorkspace({ onComplete }: VerificationWidgetProps) {
           {state.mode === "self" && anyScored
             ? `Your score: ${scored} / ${WORKSPACE_TOTAL}`
             : `Total: ${WORKSPACE_TOTAL} points`}
+          {" · "}
+          {committedCount} of {WORKSPACE_REQUIRED} needed
         </p>
       </div>
 
@@ -134,7 +138,12 @@ export function TreatyWorkspace({ onComplete }: VerificationWidgetProps) {
             onClick={() => {
               const done = { ...state.done, [task.id]: true };
               save({ ...state, done });
-              if (WORKSPACE_TASKS.every((t) => done[t.id])) onComplete();
+              // Four fifths, not all: the unit is long and a learner short of
+              // time should be able to drop one task without the whole thing
+              // reading as unfinished.
+              if (Object.values(done).filter(Boolean).length >= WORKSPACE_REQUIRED) {
+                onComplete();
+              }
             }}
           >
             Commit answer
@@ -157,9 +166,9 @@ export function TreatyWorkspace({ onComplete }: VerificationWidgetProps) {
             Back
           </Button>
         )}
-        {at < WORKSPACE_TASKS.length - 1 && committed && (
+        {at < WORKSPACE_TASKS.length - 1 && (
           <Button size="sm" variant="ghost" onClick={() => setAt(at + 1)}>
-            Continue
+            {committed ? "Continue" : "Skip this one"}
           </Button>
         )}
       </div>
@@ -167,11 +176,15 @@ export function TreatyWorkspace({ onComplete }: VerificationWidgetProps) {
       {state.mode === "self" && committed && isOpen && (
         <div className="border-border mt-4 rounded-lg border p-4">
           <p className="text-xs font-medium">
-            What a strong answer contains — tick what you had.
+            {task.rows
+              ? "Where each one is settled — tick the rows you had."
+              : "What a strong answer contains — tick what you had."}
           </p>
           <ul className="mt-2 space-y-2">
-            {task.key.map((k, i) => {
+            {(task.rows ?? task.key ?? []).map((k, i) => {
               const hit = (state.hits[task.id] ?? []).includes(i);
+              const label = "fn" in k ? k.answer : k.text;
+              const lead = "fn" in k ? k.fn : null;
               return (
                 <li key={i}>
                   <label className="flex cursor-pointer items-start gap-2 text-sm select-none">
@@ -191,7 +204,8 @@ export function TreatyWorkspace({ onComplete }: VerificationWidgetProps) {
                       className="mt-1 shrink-0"
                     />
                     <span>
-                      {k.text}
+                      {lead && <span className="font-medium">{lead} — </span>}
+                      {label}
                       {k.pointer && (
                         <span className="text-muted-foreground font-mono text-xs">
                           {" "}
@@ -264,12 +278,6 @@ function TaskBody({
             />
           </div>
         ))}
-        {task.missing && (
-          <p className="text-muted-foreground text-xs">
-            Two functions are missing from this list on purpose. Add them where
-            you think they belong, or say why the treaty does not need them.
-          </p>
-        )}
       </div>
     );
   }

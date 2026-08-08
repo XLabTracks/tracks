@@ -183,16 +183,33 @@ outbound network, so that a corrected URL can be confirmed rather than guessed.
 ## Module 3 replaced with the Cankaya working paper
 
 On the course owner's instruction: "Module 3 is supposed to be just [the paper]
-and answering its questions — nothing else." The module now holds one unit,
+and answering its questions — nothing else." The module holds one unit,
 `v-covert-system-overview` (3.0), carrying her Module objective and Assignment
-text: read Naci Cankaya, *A System Overview for Near-Term, Low-Trust AI Compute
-Verification*, and answer all six of its "Questions for the reader" sets.
+text over Naci Cankaya, *A System Overview for Near-Term, Low-Trust AI Compute
+Verification*.
 
-Six is checked, not assumed: the PDF numbers them #1–#6 on printed pages 5, 8,
-10, 11, 13 and 15. The draft carries no date inside it; June 2026 in
-citations.json comes from techgov.intelligence.org/research, which lists it as
-Jun 23, 2026. It is a working draft and is not version-pinned here — a later
-revision could change the count, and the lesson's own comment says so.
+**The questions are hers, not the paper's.** The first version of this unit
+sent the learner to the paper's own six "Questions for the reader" sections
+(#1–#6, on printed pages 5, 8, 10, 11, 13 and 15 — checked in the PDF); she
+then replaced them with ten of her own, and those are what ship. The paper's
+own sets are no longer referenced.
+
+Her rule: 1, 2, 5, 9 and 10 required, one of 3, 4, 6 and 7, and 8 an optional
+research task — six answers. It lives in `COMPUTE_QUESTIONS` as a `requirement`
+per question, and the widget's preamble, the per-question badges and what
+actually completes the unit are all generated from it, so they cannot drift
+apart.
+
+**One thing reconciled, and it needs her word.** Her Assignment paragraph said
+"one of Questions 3, 4, or 7" and her Questions preamble said "one of Questions
+3, 4, 6, or 7". The wider one is used — it sits directly above the questions,
+and 6 asks for the same kind of work as the other three. If 6 was meant to be
+excluded, the fix is one `requirement` field.
+
+The reading links the published page, techgov.intelligence.org, which is also
+what citations.json cites; the widget links the PDF for page references. One
+work, one row in Works cited. The draft carries no date inside it; June 2026
+is what that page shows beside it.
 
 ### What was removed
 

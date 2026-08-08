@@ -199,13 +199,6 @@
       "container": "Machine Intelligence Research Institute",
       "date": "24 July 2015"
     },
-    "https://intelligence.org/wp-content/uploads/A-system-overview-for-near-term-low-trust-AI-compute-verification.pdf": {
-      "title": "A System Overview for Near-Term, Low-Trust AI Compute Verification",
-      "about": "A working draft of a privacy-preserving, retrofittable system for verifying AI compute use between rival states, published to be argued with; each of its six technical sections closes with a set of questions for the reader.",
-      "authors": "Cankaya, Naci",
-      "container": "Machine Intelligence Research Institute, Technical Governance Team",
-      "date": "June 2026"
-    },
     "https://law-ai.org/the-role-of-compute-thresholds-for-ai-governance/": {
       "title": "The Role of Compute Thresholds for AI Governance",
       "about": "A law-journal article on how training-compute thresholds work as a regulatory trigger for frontier models.",
@@ -245,6 +238,13 @@
       "authors": "Rahman, Robi",
       "container": "MIRI Technical Governance Team",
       "date": "9 Apr. 2026"
+    },
+    "https://techgov.intelligence.org/research/a-system-overview-for-near-term-low-trust-ai-compute-verification": {
+      "title": "A System Overview for Near-Term, Low-Trust AI Compute Verification",
+      "about": "A working draft of a privacy-preserving, retrofittable system for verifying AI compute use between rival states, published to be argued with; each of its six technical sections closes with a set of questions for the reader.",
+      "authors": "Cankaya, Naci",
+      "container": "Machine Intelligence Research Institute, Technical Governance Team",
+      "date": "June 2026"
     },
     "https://tlc.texas.gov/docs/legref/readingabill.pdf": {
       "title": "Reading Statutes and Bills",

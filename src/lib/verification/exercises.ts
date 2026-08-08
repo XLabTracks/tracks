@@ -38,6 +38,7 @@ export const verificationExercises: VerificationExerciseDef[] = [
   { id: "short-history", title: "A Short History of Acceleration", bridged: false },
   { id: "precedent-cases", title: "Did the Regime Hold?", bridged: true },
   { id: "treaty-workspace", title: "Anatomy of a (Pause) Agreement", bridged: true },
+  { id: "compute-verification", title: "Questions on the Cankaya Working Paper", bridged: true },
   // The drill benches. Bridged: the deck reports complete when the last step
   // of its last bench is committed.
   { id: "drills-primers", title: "Drill Bench: Primers", bridged: true },

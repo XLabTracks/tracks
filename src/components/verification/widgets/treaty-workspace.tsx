@@ -10,22 +10,28 @@ import {
 } from "@/lib/verification/data/treaty-workspace";
 
 /**
- * Four questions on the MIRI treaty, one at a time.
+ * Four questions on the MIRI treaty, all four on the page at once.
  *
- * No key, no score, no marking. The learner writes, keeps their answer, and
- * moves on; the reference above the questions is what they check themselves
- * against. See the data file for why the key was removed and why it should
- * not come back unasked.
+ * The house rule is one step at a time, and this is the exception it names:
+ * the learner reads all four before opening the treaty, because the questions
+ * are what they are looking for while they page through fifteen Articles.
+ * Revealing question 3 after question 2 is answered would send them back
+ * through the document a third time.
  *
- * Answers persist under `vt-workspace:1.1`. They are learner work: they feed
- * no meter. The unit completes when enough questions are answered —
- * WORKSPACE_REQUIRED, which allows exactly one to be skipped — because
- * committing an answer is a thing the learner did, unlike scrolling past.
+ * No key, no score, no marking. The learner writes and keeps their answer;
+ * the practice guide above is what they check themselves against. See the
+ * data file for why the key was removed and why it should not come back
+ * unasked.
  *
- * Trap: `Skip` must stay available on an unanswered question. The point of a
- * fifteen-Article treaty and a fixed hour is that somebody will run out of
- * time, and a unit that then reads as unfinished teaches them nothing except
- * that the course does not believe them.
+ * Answers persist under `vt-workspace:1.1`. Typing autosaves; Save answer is
+ * a separate, deliberate act, and it is the one that counts toward
+ * WORKSPACE_REQUIRED — so notes-in-progress never complete the unit on their
+ * own, and nothing here auto-completes.
+ *
+ * Trap: WORKSPACE_REQUIRED is below the question count on purpose. Fifteen
+ * Articles against a fixed hour means somebody runs out of time, and a unit
+ * that then reads as unfinished teaches them only that the course does not
+ * believe them. Never raise it to the full four.
  */
 
 const KEY = "vt-workspace:1.1";
@@ -48,7 +54,6 @@ function read(): Saved {
 
 export function TreatyWorkspace({ onComplete }: VerificationWidgetProps) {
   const [state, setState] = useState<Saved>(EMPTY);
-  const [at, setAt] = useState(0);
 
   useEffect(() => {
     // Read after mount: localStorage exists only on the client, and reading it
@@ -66,9 +71,7 @@ export function TreatyWorkspace({ onComplete }: VerificationWidgetProps) {
     }
   }, []);
 
-  const q = WORKSPACE_QUESTIONS[at];
   const answered = Object.values(state.done).filter(Boolean).length;
-  const committed = !!state.done[q.id];
 
   return (
     <div className="not-prose my-6 space-y-4">
@@ -87,69 +90,71 @@ export function TreatyWorkspace({ onComplete }: VerificationWidgetProps) {
           by the {TREATY.authors}. Do not read it end to end. Page through it, one
           Article at a time, until you can answer the questions below.
         </p>
+        <p className="text-muted-foreground mt-3 text-sm">
+          Answer any {WORKSPACE_REQUIRED} of the {WORKSPACE_QUESTIONS.length}.
+          Read all four first — they are what you are looking for while you page
+          through.
+        </p>
       </div>
 
-      <div className="border-border bg-card rounded-xl border p-5">
-        <div className="flex flex-wrap items-baseline justify-between gap-2">
-          <p className="text-muted-foreground font-mono text-xs">
-            Question {at + 1} / {WORKSPACE_QUESTIONS.length}
-          </p>
-          <p className="text-muted-foreground text-xs">
-            {answered} of {WORKSPACE_REQUIRED} answered
-          </p>
-        </div>
+      <p
+        className="text-muted-foreground text-right font-mono text-xs"
+        aria-live="polite"
+      >
+        {answered} of {WORKSPACE_REQUIRED} answered
+      </p>
 
-        <h3 className="mt-2 text-base font-semibold">{q.title}</h3>
-        <p className="mt-1 text-sm">{q.prompt}</p>
-        {q.hint && (
-          <p className="text-muted-foreground mt-2 font-mono text-xs">{q.hint}</p>
-        )}
+      {WORKSPACE_QUESTIONS.map((q) => {
+        const committed = !!state.done[q.id];
+        return (
+          <div key={q.id} className="border-border bg-card rounded-xl border p-5">
+            <h3 className="text-base font-semibold">{q.title}</h3>
+            <p className="mt-1 text-sm">{q.prompt}</p>
+            {q.hint && (
+              <p className="text-muted-foreground mt-2 font-mono text-xs">
+                {q.hint}
+              </p>
+            )}
 
-        <textarea
-          rows={7}
-          value={state.answers[q.id] ?? ""}
-          onChange={(e) =>
-            save({
-              ...state,
-              answers: { ...state.answers, [q.id]: e.target.value },
-            })
-          }
-          placeholder="Quote the words you are talking about."
-          className="border-border bg-background mt-3 w-full rounded-md border p-3 text-sm"
-        />
+            <textarea
+              rows={7}
+              value={state.answers[q.id] ?? ""}
+              onChange={(e) =>
+                save({
+                  ...state,
+                  answers: { ...state.answers, [q.id]: e.target.value },
+                })
+              }
+              placeholder="Quote the words you are talking about."
+              className="border-border bg-background mt-3 w-full rounded-md border p-3 text-sm"
+            />
 
-        <div className="mt-3 flex flex-wrap items-center gap-2">
-          {!committed && (
-            <Button
-              size="sm"
-              onClick={() => {
-                const done = { ...state.done, [q.id]: true };
-                save({ ...state, done });
-                if (
-                  Object.values(done).filter(Boolean).length >= WORKSPACE_REQUIRED
-                ) {
-                  onComplete();
-                }
-              }}
-            >
-              Save answer
-            </Button>
-          )}
-          {committed && (
-            <p className="text-muted-foreground text-xs">Saved.</p>
-          )}
-          {at > 0 && (
-            <Button size="sm" variant="ghost" onClick={() => setAt(at - 1)}>
-              Back
-            </Button>
-          )}
-          {at < WORKSPACE_QUESTIONS.length - 1 && (
-            <Button size="sm" variant="ghost" onClick={() => setAt(at + 1)}>
-              {committed ? "Next" : "Skip this one"}
-            </Button>
-          )}
-        </div>
-      </div>
+            <div className="mt-3 flex flex-wrap items-center gap-3">
+              {committed ? (
+                <p className="text-muted-foreground text-xs">
+                  Saved. Keep editing if you want — it stays saved.
+                </p>
+              ) : (
+                <Button
+                  size="sm"
+                  onClick={() => {
+                    const done = { ...state.done, [q.id]: true };
+                    save({ ...state, done });
+                    if (
+                      Object.values(done).filter(Boolean).length >=
+                      WORKSPACE_REQUIRED
+                    ) {
+                      onComplete();
+                    }
+                  }}
+                >
+                  Save answer
+                </Button>
+              )}
+            </div>
+          </div>
+        );
+      })}
     </div>
   );
 }

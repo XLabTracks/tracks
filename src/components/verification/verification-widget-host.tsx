@@ -36,16 +36,24 @@ export function VerificationWidgetHost({
     );
   }
 
+  // data-widget marks where authored markdown stops and a widget's own DOM
+  // begins. A widget can be embedded inside a Fold or a Callout, whose bodies
+  // restore the markdown rhythm with descendant selectors (.mdx-body in
+  // globals.css); without this boundary those reach in and restyle lists and
+  // links the widget drew itself. The div carries no styles of its own, so
+  // the widget's margins collapse through it as before.
   return (
-    <WidgetErrorBoundary title={title}>
-      <MountedWidget
-        Widget={Widget}
-        contentId={contentId}
-        bridged={bridged}
-        canTrack={canTrack}
-        initialCompleted={initialCompleted}
-      />
-    </WidgetErrorBoundary>
+    <div data-widget>
+      <WidgetErrorBoundary title={title}>
+        <MountedWidget
+          Widget={Widget}
+          contentId={contentId}
+          bridged={bridged}
+          canTrack={canTrack}
+          initialCompleted={initialCompleted}
+        />
+      </WidgetErrorBoundary>
+    </div>
   );
 }
 

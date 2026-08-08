@@ -57,15 +57,10 @@ export function Callout({ variant = "note", title, children }: CalloutProps) {
             so a one-line callout stays tight under its title. */}
         <div
           className={cn(
-            "text-foreground/80 break-words",
+            // mdx-body carries the markdown rhythm (globals.css), guarded so
+            // it stops at a nested not-prose.
+            "mdx-body text-foreground/80 break-words",
             "[&>*+*]:mt-3",
-            "[&_ul]:list-disc [&_ol]:list-decimal [&_ul]:pl-5 [&_ol]:pl-5",
-            "[&_li]:marker:text-muted-foreground [&_li+li]:mt-1.5",
-            "[&_strong]:text-foreground [&_strong]:font-semibold",
-            "[&_a]:underline [&_a]:underline-offset-4",
-            // The chip is for `code` in a sentence; a fenced block is
-            // <pre><code> and already a box of its own (.lesson-body pre).
-            "[&_:not(pre)>code]:bg-muted [&_:not(pre)>code]:rounded [&_:not(pre)>code]:px-1 [&_:not(pre)>code]:py-0.5 [&_:not(pre)>code]:text-[0.9em]",
           )}
         >
           {children}

@@ -361,6 +361,51 @@
   color: var(--foreground);
 }
 
+/* The markdown rhythm inside a Fold or a Callout. Both shells are not-prose,
+   which is deliberate — an inner `prose` matches nothing, since typography
+   excludes `[class~="not-prose"] *`, and dropping not-prose would hand the
+   card the lesson column's type scale. So the rhythm is restored by hand.
+
+   Trap, and the reason this is a stylesheet rule rather than a string of
+   `[&_ul]` utilities on each shell: a Fold can hold a widget. Descendant
+   selectors reach the whole subtree, so an unguarded `ul` rule bullets a
+   list the widget drew itself. Every rule here stops at [data-widget], which
+   VerificationWidgetHost puts around an interactive. Keep that guard on
+   anything added below, and do not widen it to .not-prose: SourceQuote and
+   the other reader blocks are not-prose too, and they hold authored markdown
+   that needs this rhythm. */
+.mdx-body ul:not(:where([data-widget], [data-widget] *)) {
+  list-style: disc;
+  padding-left: 1.25rem;
+}
+.mdx-body ol:not(:where([data-widget], [data-widget] *)) {
+  list-style: decimal;
+  padding-left: 1.25rem;
+}
+.mdx-body li:not(:where([data-widget], [data-widget] *))::marker {
+  color: var(--muted-foreground);
+}
+.mdx-body li + li:not(:where([data-widget], [data-widget] *)) {
+  margin-top: 0.375rem;
+}
+.mdx-body strong:not(:where([data-widget], [data-widget] *)) {
+  color: var(--foreground);
+  font-weight: 600;
+}
+.mdx-body a:not(:where([data-widget], [data-widget] *)) {
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+/* The chip is for `code` in a sentence. A fenced block is <pre><code> and is
+   already a box of its own (.lesson-body pre); a chip inside it draws a
+   second, wrongly-sized one. */
+.mdx-body :not(pre) > code:not(:where([data-widget], [data-widget] *)) {
+  background: var(--muted);
+  border-radius: 0.25rem;
+  padding: 0.125rem 0.25rem;
+  font-size: 0.9em;
+}
+
 /* A fenced block in a lesson is not code. It is a passage whose own line
    breaks are being reproduced: a statute's heading stack, a chapter's table
    of contents, a drafting office's box of key verbs. Hence a quoted specimen

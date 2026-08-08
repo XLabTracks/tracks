@@ -478,6 +478,24 @@ add must reduce the duplication, never widen it.
   lessons must carry real headings, not bold lines pretending (that is what
   the scoping-actors/covert-* repairs restored), and a wide table scrolls in
   its own box (`.lesson-body table` in globals.css), never the page.
+  **Papers on such a track read the same way** — `PaperPartsReader`
+  (`src/components/papers/`) chunks at the paper's OWN toc headings
+  (`ax-sec-`/`sb-sec-`/`lw-sec-` ids), so an Article of a treaty is a page and
+  nothing else is; it goes a level deeper when one `h2` would otherwise
+  swallow a third of the document. It never receives html — it reorganizes the
+  rendered DOM after mount, the PaperSidenotes/PaperGlossary contract. Every
+  part after the first carries a small author line, because parts 2..n are
+  otherwise somebody else's text with no name on screen. Sidenotes need
+  nothing: their builder already skips 0×0 markers and rebuilds off a
+  ResizeObserver. Two opt-outs, both deliberate: a **gated** paper is left
+  whole (two hiding layers over one document can strand content behind both),
+  and scroll-completion is off there — the sentinel sits below whichever part
+  is on screen, so it would report a whole treaty read at the end of Article I.
+  Trap: `collapseTailSections` folds appendices after References into closed
+  `<details>`, which is right for apparatus and wrong when the appendix IS the
+  document — the treaty papers put their agreement in Appendix A, so all
+  fifteen Articles sat behind one toggle and formed a single unsplittable
+  block. `Paper.collapseTail: false` is the opt-out.
 - **No half-painted cards.** A card is a hairline on all four sides, or it is
   painted on all four; never one edge in a coloured tint with the rest
   hairline, and never a hue that carries no meaning. The accent goes inside —

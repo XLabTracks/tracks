@@ -265,6 +265,18 @@ export interface Paper {
   optional?: true;
   estimatedMinutes?: number;
   /**
+   * Opt out of collapsing the trailing apparatus.
+   *
+   * By default the References/Footnotes landmarks and any appendix sections
+   * after them fold into closed `<details>` blocks, which is right when the
+   * appendix really is apparatus. It is wrong when the appendix is the point:
+   * the treaty papers carry their agreement as Appendix A, so the default put
+   * all fifteen Articles — the text the course sends people to read — behind
+   * one closed toggle, and left them as a single unsplittable block for the
+   * section-by-section reader.
+   */
+  collapseTail?: false;
+  /**
    * Sidebar-only nesting: id of another item in the same module (usually the
    * section's outline lesson) this item is a subsection of. The referenced
    * item must appear earlier in the module's itemIds. Presentation only —

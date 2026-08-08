@@ -42,6 +42,7 @@ import { LessonTracker } from "@/components/learn/lesson-tracker";
 import { MarginNotesToggle } from "@/components/papers/margin-notes-toggle";
 import { PaperHighlights } from "@/components/papers/paper-highlights";
 import { PaperReader } from "@/components/papers/paper-reader";
+import { PaperPartsReader } from "@/components/papers/paper-parts-reader";
 import { gateIdsOf, paperGateStorageKey } from "@/lib/papers/gate-state";
 import { paperSourceHeader } from "@/components/papers/paper-source-header";
 import { SidenotesToggle } from "@/components/papers/sidenotes-toggle";
@@ -374,11 +375,25 @@ async function PaperItemPage({
       </header>
 
       <div className="mt-8">
-        <PaperReader
-          paper={paper}
-          signedIn={Boolean(userId)}
-          completedContentIds={completedContentIds}
-        />
+        {/* Section-by-section reading, on the tracks that read that way. A
+            gated paper is left whole: it already hides its own tail until the
+            reader answers, and two hiding layers over one document can strand
+            content behind both. */}
+        {track.chunkedReading && gateIdsOf(paper.edits).length === 0 ? (
+          <PaperPartsReader attribution={source.authors}>
+            <PaperReader
+              paper={paper}
+              signedIn={Boolean(userId)}
+              completedContentIds={completedContentIds}
+            />
+          </PaperPartsReader>
+        ) : (
+          <PaperReader
+            paper={paper}
+            signedIn={Boolean(userId)}
+            completedContentIds={completedContentIds}
+          />
+        )}
       </div>
 
       {/* Highlight layer: discovers the rendered .paper-reader root itself
@@ -403,6 +418,13 @@ async function PaperItemPage({
           gateKeys={gateIdsOf(paper.edits).map((gateId) =>
             paperGateStorageKey(paper.id, gateId),
           )}
+          // Read section by section, the sentinel sits below whichever part is
+          // on screen — so scrolling to the bottom of the first Article would
+          // report the whole treaty read. Mark complete is the only channel
+          // there, which is the rule the chunked reading already runs on.
+          autoComplete={
+            !(track.chunkedReading && gateIdsOf(paper.edits).length === 0)
+          }
         />
       ) : null}
 

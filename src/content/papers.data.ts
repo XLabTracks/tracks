@@ -3164,6 +3164,9 @@ export const papers: Paper[] = [
     title: "An International Agreement to Prevent the Premature Creation of Artificial Superintelligence",
     source: { kind: "arxiv", arxivId: "2511.10783v3" },
     optional: true,
+    // Appendix A is the agreement itself, not apparatus: collapsed, the
+    // Articles the course sends people to read sit behind a closed toggle.
+    collapseTail: false,
     estimatedMinutes: 75,
   },
   {
@@ -3174,6 +3177,9 @@ export const papers: Paper[] = [
     title: "An international treaty to implement a global compute cap for advanced artificial intelligence",
     source: { kind: "arxiv", arxivId: "2311.10748v2" },
     optional: true,
+    // Appendix A is the agreement itself, not apparatus: collapsed, the
+    // Articles the course sends people to read sit behind a closed toggle.
+    collapseTail: false,
     estimatedMinutes: 20,
   },
 ];

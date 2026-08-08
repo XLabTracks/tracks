@@ -109,8 +109,8 @@ export function Fold({ label = "Optional material", children }: FoldProps) {
         hidden={!open}
         className={cn(
           // break-words because the shell is overflow-hidden: a token with no
-          // break opportunity (a slashed path, a long URL) is not scrolled to
-          // here, it is cut off and gone.
+          // break opportunity (a slashed path, a long URL) is cut off here,
+          // not scrolled to.
           "px-4 pt-4 pb-4 text-sm leading-relaxed break-words",
           "text-foreground/80",
           "[&>*+*]:mt-3",

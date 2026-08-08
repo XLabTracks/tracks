@@ -71,11 +71,10 @@ export function ReadingCard({
             </span>
           </a>
         </p>
-        {/* The shell is not-prose, so preflight's reset is all the body has:
-            a card whose blurb names which pages to read renders as one run-on
-            line, bullets and gaps gone. These restore the rhythm for the
-            markdown a card actually receives — the same set, and the same
-            reasoning, as the Fold and Callout bodies. */}
+        {/* The shell is not-prose, so preflight's reset is all a body gets:
+            without these, a blurb carrying a list renders as run-on lines
+            with no bullets. Same set, same reasoning, as the Fold and
+            Callout bodies. */}
         {children ? (
           <div
             className={

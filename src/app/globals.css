@@ -361,23 +361,21 @@
   color: var(--foreground);
 }
 
-/* A fenced block in a lesson is not code — it is a passage whose own line
-   breaks are part of what is being reproduced: a statute's heading stack, a
-   chapter's table of contents, a drafting office's box of key verbs. So it is
-   set as a quoted specimen (muted ground, hairline on all four sides, mono at
-   the small size) rather than as a terminal.
+/* A fenced block in a lesson is not code. It is a passage whose own line
+   breaks are being reproduced: a statute's heading stack, a chapter's table
+   of contents, a drafting office's box of key verbs. Hence a quoted specimen
+   (muted ground, hairline on all four sides, small mono) rather than a
+   terminal.
 
-   `pre-wrap` is the load-bearing declaration. The authored newlines survive,
-   and a line too long for the column wraps instead of running off the edge —
-   which matters because these blocks live inside Fold and Callout, whose
-   shells are overflow-hidden so their fills can round their corners. A block
-   that overflows one of those is not scrolled sideways, it is simply gone.
-   overflow-x is the backstop for the one thing pre-wrap cannot break: a
-   single unbroken token wider than the column.
+   Trap: `pre-wrap` is load-bearing. These blocks sit inside Fold and Callout,
+   whose shells are overflow-hidden so their fills can round their corners, so
+   a line the column cannot hold is cut off rather than scrolled to.
+   overflow-x covers what pre-wrap cannot break: one token wider than the
+   column.
 
-   Trap: Fold and Callout are not-prose and paint every `code` as an inline
-   chip, so each of them exempts `pre > code` — a chip drawn around a whole
-   specimen reads as a second, wrongly-sized box inside this one. */
+   Trap: Fold and Callout paint every `code` as an inline chip, so each
+   exempts `pre > code`, which would otherwise draw a second box inside
+   this one. */
 .lesson-body pre {
   max-width: 100%;
   overflow-x: auto;

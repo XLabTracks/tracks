@@ -72,20 +72,19 @@ export function TreatyWorkspace({ onComplete }: VerificationWidgetProps) {
 
   return (
     <div className="not-prose my-6 space-y-4">
-      {/* The practice-guide passages are the reading card in the lesson body
-          above, not a second list here: one work, one place that says which
-          pages, so the two cannot drift into disagreeing about them. */}
+      {/* Which pages of the practice guide to read is the reading card in the
+          lesson body, and only there. Two places that name pages are two
+          places to keep in step. */}
       <div className="border-border bg-card rounded-xl border p-5">
-        <p className="text-sm font-medium">Before you start</p>
-        <p className="text-muted-foreground mt-2 text-sm">
-          Read the three passages of the practice guide above, then open{" "}
+        <p className="text-sm">
+          Open{" "}
           <a
             href={`/tracks/verification/policy-scoping/${TREATY.paperSlug}`}
             className="text-primary font-medium underline-offset-4 hover:underline"
           >
             the treaty
           </a>{" "}
-          — {TREATY.authors}. Do not read it end to end. Page through it, one
+          by the {TREATY.authors}. Do not read it end to end. Page through it, one
           Article at a time, until you can answer the questions below.
         </p>
       </div>

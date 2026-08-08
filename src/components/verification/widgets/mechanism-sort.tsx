@@ -81,6 +81,13 @@ const LAYER_STYLE: Record<LayerKey, { dot: string; ring: string }> = {
   crypto: { dot: "bg-rose-500", ring: "border-rose-500" },
 };
 
+// Zero-width breaks so a long rung wraps at a natural seam on a narrow phone
+// instead of mid-word: after a slash ("Weak/narrow" → "Weak/" / "narrow"), and
+// at the compound seam of "Piggybacks". Visible text is unchanged; break-words
+// is the safety net for anything else. Add a seam here if a new rung needs one.
+const RUNG_SEAMS: Record<string, string> = { Piggybacks: "Piggy​backs" };
+const softBreak = (s: string) => (RUNG_SEAMS[s] ?? s).replaceAll("/", "/​");
+
 const layerName = (k: LayerKey) => LAYERS.find((l) => l.key === k)?.name ?? k;
 const mechById = (id: string): Mechanism =>
   MECHANISMS.find((m) => m.id === id) as Mechanism;
@@ -263,7 +270,7 @@ function SortWidget({ reveal }: { reveal: boolean }) {
 
 function Shell({ title, children }: { title: string; children: React.ReactNode }) {
   return (
-    <section className="not-prose border-border bg-card space-y-4 rounded-xl border p-5 text-sm">
+    <section className="not-prose border-border bg-card space-y-4 rounded-xl border p-4 text-sm sm:p-5">
       <h3 className="text-lg font-semibold">{title}</h3>
       {children}
     </section>
@@ -317,7 +324,7 @@ function Rater({
 }) {
   const complete = isComplete(values);
   return (
-    <div className="border-border bg-background rounded-lg border p-4">
+    <div className="border-border bg-background rounded-lg border p-3 sm:p-4">
       <div className="flex items-center gap-2 text-xs">
         <span className={cn("size-2.5 rounded-full", LAYER_STYLE[mech.layer].dot)} aria-hidden />
         <span className="text-muted-foreground">
@@ -341,9 +348,11 @@ function Rater({
             <div key={metric.key}>
               <div className="flex items-baseline justify-between gap-2">
                 <span className="font-medium">{metric.name}</span>
-                <span className="text-muted-foreground text-xs">
-                  {sel >= 0 ? metric.rungs[sel] : "rate all four to place this card"}
-                </span>
+                {sel >= 0 && (
+                  <span className="text-primary text-xs font-medium">
+                    {metric.rungs[sel]}
+                  </span>
+                )}
               </div>
               <div
                 role="radiogroup"
@@ -358,13 +367,13 @@ function Rater({
                     aria-checked={sel === i}
                     onClick={() => onRung(metric.key, i)}
                     className={cn(
-                      "rounded-md border px-1 py-1.5 text-center text-[11px] leading-tight transition-colors select-none",
+                      "rounded-md border px-0.5 py-1.5 text-center text-[10px] leading-tight break-words transition-colors select-none sm:px-1 sm:text-[11px]",
                       sel === i
                         ? "border-primary bg-primary text-primary-foreground"
                         : "border-border hover:border-ring",
                     )}
                   >
-                    {rung}
+                    {softBreak(rung)}
                   </button>
                 ))}
               </div>

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 
 /**
  * Loads a page's remaining plain-JS in a guaranteed order.
@@ -23,10 +23,26 @@ import { useEffect } from "react";
  * would double every listener. Hence the load-once guard: React may mount
  * twice in development, and a client navigation back to a page it already
  * loaded must not re-run it.
+ *
+ * `onReady` fires once the whole list has executed — the seam for the pages
+ * whose script publishes an entry point rather than mounting itself (the memo
+ * desk's VTMemoDesk.mount). It is read through a ref so passing an inline
+ * function does not re-run the loader.
  */
 const loaded = new Set<string>();
 
-export function LegacyScripts({ src }: { src: string[] }) {
+export function LegacyScripts({
+  src,
+  onReady,
+}: {
+  src: string[];
+  onReady?: () => void;
+}) {
+  const ready = useRef(onReady);
+  useEffect(() => {
+    ready.current = onReady;
+  });
+
   useEffect(() => {
     let cancelled = false;
 
@@ -45,6 +61,7 @@ export function LegacyScripts({ src }: { src: string[] }) {
         if (cancelled) return;
         loaded.add(url);
       }
+      if (!cancelled) ready.current?.();
     };
 
     void run();

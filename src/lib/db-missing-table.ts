@@ -10,14 +10,24 @@
  * Postgres says 42P01 (undefined_table); Prisma wraps the same condition as
  * P2021. Which one surfaces depends on whether the driver adapter or the
  * engine raised it, so both count — and nothing else does.
+ *
+ * A raw query is a third wrapping of the same fact: Prisma reports P2010
+ * ("raw query failed") and keeps the Postgres code on `meta`. The route that
+ * writes verification state does its upsert in raw SQL — the check and the
+ * write have to be one statement — so without this it read as an unknown
+ * failure and 500'd where the ORM path degraded quietly.
  */
 export function isMissingTableError(error: unknown): boolean {
   if (typeof error !== "object" || error === null) return false;
   const code = (error as { code?: unknown }).code;
   if (code === "42P01" || code === "P2021") return true;
-  // Driver-adapter errors carry the Postgres code on the cause instead.
-  const cause = (error as { cause?: unknown }).cause;
-  return typeof cause === "object" && cause !== null
-    ? (cause as { code?: unknown }).code === "42P01"
-    : false;
+  // Driver-adapter errors carry the Postgres code on the cause instead;
+  // raw-query failures carry it on meta.
+  for (const key of ["cause", "meta"] as const) {
+    const nested = (error as Record<string, unknown>)[key];
+    if (typeof nested === "object" && nested !== null) {
+      if ((nested as { code?: unknown }).code === "42P01") return true;
+    }
+  }
+  return false;
 }

@@ -10,6 +10,13 @@ describe("isMissingTableError", () => {
     expect(isMissingTableError({ code: "42P01" })).toBe(true);
     expect(isMissingTableError({ code: "P2021" })).toBe(true);
     expect(isMissingTableError({ cause: { code: "42P01" } })).toBe(true);
+    // A raw query: Prisma says P2010 and keeps the real code on meta.
+    expect(
+      isMissingTableError({
+        code: "P2010",
+        meta: { code: "42P01", message: 'relation "VerificationState" does not exist' },
+      }),
+    ).toBe(true);
   });
 
   it("rejects every other failure a live database can produce", () => {
@@ -23,6 +30,8 @@ describe("isMissingTableError", () => {
       { code: "42703" },
       { code: "P2022" },
       { cause: { code: "ECONNRESET" } },
+      // A raw query that failed for a reason of its own.
+      { code: "P2010", meta: { code: "42703", message: "column does not exist" } },
       new Error("connection terminated unexpectedly"),
       "not an error",
       null,

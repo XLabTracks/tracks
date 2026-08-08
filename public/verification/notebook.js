@@ -214,7 +214,10 @@ window.VTNotebook = (function () {
       wrap.appendChild(ta);
 
       const link = mk('a', 'nb-memo-link', 'Open on the memo desk &rarr;');
-      link.href = 'memo-desk.html#' + block.slot;
+      // The desk is an app route now, and this link is raised from inside a
+      // panel that opens on every page — a relative one resolved against
+      // whatever page that was, and 404'd from all of them.
+      link.href = '/verification/memo-desk#' + block.slot;
       wrap.appendChild(link);
 
       /* The desk writes the same slot. Repaint unless this textarea is the

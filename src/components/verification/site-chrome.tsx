@@ -109,14 +109,23 @@ export function VerificationHeader() {
       <link rel="stylesheet" href="/verification/notebook.css" precedence="high" />
       <Script src="/verification/theme.js" strategy="afterInteractive" />
       {/* The notebook, the vocabulary lookup and the account sync are the same
-          three files the static pages load, in the same order: vocab.js calls
-          VTNotebook, and sync.js reads the store notebook.js owns. Reading
-          happens on both surfaces, so the tools have to exist on both.
+          files the static pages load, in the same order: vocab.js calls
+          VTNotebook, and sync.js reads the stores notebook.js and
+          memo-store.js own. Reading happens on both surfaces, so the tools
+          have to exist on both.
+
+          memo-store.js belongs here and not only on the desk page: the
+          notebook's memo block and the account sync both read it from every
+          page, and without it the block reports the desk as "not loaded" and
+          drafts never reach the account. Both readers look it up at call time,
+          so these tags need no order between them — and the file publishes
+          itself once, so the desk page loading it again is a no-op.
 
           They are plain scripts rather than React components on purpose —
           one implementation, and the static site can still be lifted out
           whole. */}
       <Script src="/verification/highlight.js" strategy="afterInteractive" />
+      <Script src="/verification/memo-store.js" strategy="afterInteractive" />
       <Script src="/verification/notebook.js" strategy="afterInteractive" />
       <Script src="/verification/vocab.js" strategy="afterInteractive" />
       <Script src="/verification/sync.js" strategy="afterInteractive" />

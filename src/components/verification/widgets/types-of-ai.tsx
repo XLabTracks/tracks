@@ -290,9 +290,12 @@ export function TypesOfAi(_: VerificationWidgetProps) {
                     </text>
                   ))}
 
-                  {/* example pills, sitting in their own band */}
+                  {/* example systems as plain text in their own band — no
+                      box, just the name, set light on the deep rings and ink
+                      on the pale ones, with a soft halo so it always reads. */}
                   {pills.map((p) => {
                     const active = selPill && selPill.i === p.li && selPill.ei === p.ei;
+                    const light = redOpacity(p.li) >= 0.45;
                     return (
                       <g
                         key={`${p.li}-${p.ei}`}
@@ -302,25 +305,31 @@ export function TypesOfAi(_: VerificationWidgetProps) {
                         }}
                         className="cursor-pointer"
                       >
+                        {/* invisible hit target so plain text stays tappable */}
                         <rect
                           x={p.x - p.w / 2}
                           y={p.y - PILL_H / 2}
                           width={p.w}
                           height={PILL_H}
-                          rx={8}
-                          className={cn(
-                            "fill-card transition-[stroke]",
-                            active ? "stroke-foreground" : "stroke-border hover:stroke-foreground",
-                          )}
-                          style={{ strokeWidth: active ? 2 : 1.25, vectorEffect: "non-scaling-stroke" }}
+                          fill="transparent"
                         />
                         <text
                           x={p.x}
                           y={p.y}
                           textAnchor="middle"
                           dominantBaseline="middle"
-                          className="fill-foreground"
-                          style={{ fontSize: EX_FS }}
+                          className={cn(
+                            light ? "fill-primary-foreground" : "fill-foreground",
+                            active && "font-semibold",
+                          )}
+                          style={{
+                            fontSize: EX_FS,
+                            paintOrder: "stroke",
+                            stroke: light ? "rgba(0,0,0,0.34)" : "var(--card)",
+                            strokeWidth: 4,
+                            strokeLinejoin: "round",
+                            textDecoration: active ? "underline" : undefined,
+                          }}
                         >
                           {p.name}
                         </text>

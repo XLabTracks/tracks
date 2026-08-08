@@ -203,7 +203,7 @@ export const AI_REGIONS = {
 
 export const TYPES_OF_AI_COPY = {
   prompt:
-    "Tap any system to see what it is and why it sits there — not one ring deeper.",
+    "Tap any system to see what it is and why it sits at this ring, not the next one in.",
   legend:
     "Each ring contains the next; a system sits at the deepest ring it belongs to. Tap a system to open it; drag or use +/− for a closer look.",
   // The nested-containment picture of the field is canonical; the two extra

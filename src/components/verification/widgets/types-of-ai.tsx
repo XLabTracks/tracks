@@ -493,7 +493,7 @@ export function TypesOfAi(_: VerificationWidgetProps) {
                     >
                       <span className="font-medium">{AI_REGIONS[r].label}</span>
                       <span className="text-muted-foreground block text-xs">
-                        In the grey margin — AI that is not narrow. Tap to read.
+                        AI that is not narrow, out in the grey margin. Tap to read.
                       </span>
                     </button>
                   ))}

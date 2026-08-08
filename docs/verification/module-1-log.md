@@ -85,11 +85,14 @@ two-level analysis brief under it. The course owner cut it. What that left:
   where it sits under 1.1 marked Optional. It gates nothing (`optional: true`
   keeps it out of every `…ProgressContentIds` accessor), so leaving it costs a
   learner nothing and removing it is a content decision.
-- **`/verification/gg-treaty` has no inbound link.** The page, the committed
-  `gg-treaty.json` and `npm run gg-treaty:build` are all still here. Extracting
-  173 articles out of a WordPress plugin bundle is the expensive part and the
-  text is worth keeping, so the page was left standing with its docstring
-  changed to say so. Link it from somewhere or delete the three together.
+- **`/verification/gg-treaty` is gone.** It was kept for one commit as an
+  unlinked page, then deleted on the course owner's instruction: the route,
+  the committed `gg-treaty.json`, `scripts/build-gg-treaty.mjs` and the
+  `gg-treaty:build` script line. Rebuilding it means re-deriving the
+  extraction — `global-governance.ai/treaty/` serves the proposal from a
+  WordPress plugin's JS bundle rather than as HTML, so the articles were
+  parsed out of that bundle. The deleted script is in the history and is the
+  place to start.
 - **Two citations.json entries went with the fold**: arXiv:2311.10748 and
   global-governance.ai/treaty/. Both were cited from that fold and nowhere
   else, so the registry's orphan test would have failed on them.

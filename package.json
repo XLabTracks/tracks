@@ -22,8 +22,7 @@
     "verification:memos": "node scripts/build-verification-memos.mjs",
     "icon:build": "node scripts/build-icon.mjs",
     "readings:build": "tsx scripts/build-readings.ts",
-    "gdoc:build": "tsx scripts/build-gdoc.ts",
-    "gg-treaty:build": "node scripts/build-gg-treaty.mjs"
+    "gdoc:build": "tsx scripts/build-gdoc.ts"
   },
   "dependencies": {
     "@mdx-js/loader": "^3.1.1",

@@ -19,8 +19,6 @@ export interface OverviewSection {
   id: string;
   /** The disclosure's own heading — the author's lead-in line. */
   title: string;
-  /** One line under the title, closed and open. */
-  summary: string;
 }
 
 export interface ListSection extends OverviewSection {
@@ -50,7 +48,6 @@ export const courseOverview: CourseOverviewSection[] = [
     id: "who",
     kind: "bullets",
     title: "You should take this course if you are",
-    summary: "Two audiences, one shared problem.",
     groups: [
       [
         "A technical AI safety researcher aiming to translate technical knowledge into politically feasible and effective policy",
@@ -62,7 +59,6 @@ export const courseOverview: CourseOverviewSection[] = [
     id: "learn",
     kind: "bullets",
     title: "Throughout the course, you will learn",
-    summary: "The questions each part of the course is built to answer.",
     groups: [
       [
         "Why is verification important? What would happen without verification?",
@@ -88,7 +84,6 @@ export const courseOverview: CourseOverviewSection[] = [
     id: "outcomes",
     kind: "numbered",
     title: "By the end of this course, you will be able to",
-    summary: "The six things the whole course is scored against.",
     groups: [
       [
         "Translate a proposed international AI commitment into verifiable claims by specifying the covered actors, activities, thresholds, declarations, evidence requirements, and conditions that would constitute compliance or non-compliance.",
@@ -104,7 +99,6 @@ export const courseOverview: CourseOverviewSection[] = [
     id: "how",
     kind: "prose",
     title: "How to use this course",
-    summary: "Working it on your own, or running it with a group.",
     paragraphs: [
       {
         label: "If you are async",

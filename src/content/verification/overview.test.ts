@@ -41,10 +41,11 @@ describe("course overview", () => {
     ]);
   });
 
-  it("gives every section a title and a one-line summary", () => {
+  /* The title is the only thing a closed card shows, so it carries the whole
+     of what opening it gets you. */
+  it("gives every section a title that is a lead-in, not a sentence", () => {
     for (const s of courseOverview) {
       expect(s.title.length, s.id).toBeGreaterThan(10);
-      expect(s.summary.length, s.id).toBeGreaterThan(10);
       expect(s.title.endsWith("."), `${s.id} title is a lead-in, not a sentence`).toBe(false);
     }
   });

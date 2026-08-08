@@ -37,13 +37,8 @@ export function CourseOverview() {
               aria-hidden
               className="text-muted-foreground mt-1 size-4 shrink-0 transition-transform duration-200 group-open:rotate-90"
             />
-            <span>
-              <span className="text-foreground block text-base font-semibold">
-                {section.title}
-              </span>
-              <span className="text-muted-foreground mt-0.5 block text-sm">
-                {section.summary}
-              </span>
+            <span className="text-foreground text-base font-semibold">
+              {section.title}
             </span>
           </summary>
 

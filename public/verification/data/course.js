@@ -93,8 +93,7 @@ window.COURSE = {
           "lessons": [
             "scoping-intro",
             "scoping-thresholds",
-            "scoping-effective-feasible",
-            "policy-scoping"
+            "scoping-effective-feasible"
           ]
         },
         {
@@ -116,7 +115,6 @@ window.COURSE = {
           "lessons": [
             "scoping-actors",
             "interactive-map",
-            "protocol-actors",
             "report-constructor"
           ]
         },

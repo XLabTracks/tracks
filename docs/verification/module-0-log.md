@@ -76,3 +76,26 @@ context-distiller exercise, and 3.2.1 "Evasion Scenario Taxonomy Revisited"
 (still a heading inside 3.2). Conversely 1.0.3 and 1.2.1–1.2.3 are lessons
 the outline does not list — they were nested under their parents, not
 deleted; merging or retiring them is a content decision still owed.
+
+## 0.3 becomes "History, Precedents, Parallels" (2026-08-08)
+
+The author delivered the new 0.3 text titled **History, Precedents,
+Parallels**. Almost all of it was already live: the eight case files match
+`src/lib/verification/data/precedent-cases.ts` verbatim (including the two
+documented spoiler-sentence moves — Biopreparat and the North Korean test
+detections stay in the reveals, because the exercise is prediction-first).
+What actually changed:
+
+- The unit and lesson retitle from "Precedents and parallels" —
+  curriculum.ts (both the item and the units map), course.js regenerated.
+  The unit id stays `0.3`; ids are permanent.
+- The lesson's intro takes the new wording ("In the interactive below,
+  you'll open eight case files…"). The outline's `[Insert interactive]`
+  marker (prototype at timely-zuccutto-eed7cf.netlify.app) is realized by
+  the existing `precedent-cases` widget — noted in an MDX comment so the
+  next reader doesn't go hunting for a missing embed.
+- Per the author's directive, AI 2040: Plan A is linked as a card
+  (`<NextSteps>`) after the interactive — history's parallels land on the
+  most detailed public attempt at an AI verification regime. The card's
+  detail line reuses the author's own sentence from intuitions.mdx rather
+  than composing new copy.

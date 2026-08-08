@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import { Minus, Plus, RotateCcw, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import {
@@ -13,45 +13,111 @@ import type { VerificationWidgetProps } from "../kit/types";
 /**
  * "Types of AI" — the containment onion. AI ⊃ Narrow AI ⊃ Machine Learning ⊃
  * Deep Learning ⊃ Generative AI ⊃ Large Language Model ⊃ Transformer LLMs,
- * drawn as nested circles that sink toward the bottom so each level keeps an
- * open crescent at the top for its name. The red deepens inward, so the
- * smallest circle (transformer LLMs) is the reddest.
+ * drawn as nested circles that sink to the bottom so each level keeps an open
+ * crescent at the top for its name, with that level's example systems sitting
+ * as tappable pills inside its own band — the region that is "this level but
+ * not the next one in". The red deepens inward, so the innermost transformer
+ * circle is the reddest.
  *
- * The geometry carries meaning: the grey margin between the outer "AI" circle
- * and "Narrow AI" is AI that is *not* narrow — theoretical or absurd, i.e. it
- * does not exist. That is why the outer ring is grey and hatched while
- * everything real (narrow AI inward) is red.
+ * The grey hatched margin between "AI" and "Narrow AI" is AI that is not
+ * narrow — theoretical or absurd, i.e. it does not exist — so the geometry
+ * itself carries that meaning.
  *
- * Only level names sit on the diagram; the example systems that live at each
- * level (and the one line on why each sits there, not one ring deeper) open in
- * the side panel, so nothing has to be crammed into a thin band. Click a
- * level's crescent or name to open it; the +/− buttons and drag pan the
- * picture for a closer look at the inner rings.
+ * Layout is deterministic, not measured: `layout()` places each name in its
+ * crescent and greedily packs its examples into rows sized to the band's chord
+ * at that height, so nothing overflows and nothing overlaps the ring below.
+ * Tapping a pill opens its what/why in the side panel; +/− and drag zoom and
+ * pan for a closer look at the inner rings.
  *
- * Trap: inner circles are painted last, so they sit on top and take the clicks
- * over the shared centre — each level is therefore selected from the crescent
- * where it alone is visible, never from the middle. Pan is armed only when a
- * drag begins on the background, so a press on a ring stays a select.
+ * Trap: inner circles paint last and take clicks over the shared centre, so a
+ * ring is selected from its crescent, never the middle; pan arms only when a
+ * drag starts on the background, so a press on a pill stays a select.
  */
 
-const VB = 1000;
-/** Outer "AI" circle — the whole field. */
-const AI = { cx: 500, cy: 496, r: 490 };
-/** Red levels sink to this baseline; bottom-tangent rings keep even top crescents. */
-const RED_BOTTOM = 950;
-const RED_R0 = 432;
-const RED_STEP = 60;
+const VBW = 1120;
+const VBH = 1210;
+const AI = { cx: 560, cy: 585, r: 560 };
+const RED_BOTTOM = 1170;
+const RED_R0 = 490;
+const RED_STEP = 70;
 
-/** One circle per level; index 0 is AI (grey), 1..6 are the red rings. */
+/** i=0 is the grey AI field; 1..6 are the red rings, innermost last. */
 function levelCircle(i: number) {
   if (i === 0) return { cx: AI.cx, cy: AI.cy, r: AI.r };
   const r = RED_R0 - (i - 1) * RED_STEP;
   return { cx: AI.cx, cy: RED_BOTTOM - r, r };
 }
 
-/** Wash for red level i (1..6): deepens inward so transformers are reddest. */
 function redOpacity(i: number) {
-  return 0.14 + (i - 1) * 0.156;
+  return 0.12 + (i - 1) * 0.15;
+}
+
+// Rough label width in SVG units (no DOM measurement at render).
+const EX_FS = 20;
+const NAME_FS = 32;
+const PILL_H = 30;
+const estPill = (name: string) => name.length * EX_FS * 0.56 + 22;
+
+type PlacedPill = { li: number; ei: number; name: string; x: number; y: number; w: number };
+type PlacedName = { name: string; x: number; y: number; light: boolean };
+
+function packRows(names: { li: number; ei: number; name: string }[], maxW: number) {
+  const rows: { li: number; ei: number; name: string; w: number }[][] = [[]];
+  let w = 0;
+  for (const it of names) {
+    const iw = estPill(it.name);
+    const row = rows[rows.length - 1];
+    if (row.length && w + 10 + iw > maxW) {
+      rows.push([]);
+      w = 0;
+    }
+    rows[rows.length - 1].push({ ...it, w: iw });
+    w += (row.length ? 10 : 0) + iw;
+  }
+  return rows;
+}
+
+function layout(): { names: PlacedName[]; pills: PlacedPill[] } {
+  const names: PlacedName[] = [];
+  const pills: PlacedPill[] = [];
+  for (let i = 0; i < AI_LEVELS.length; i++) {
+    const c = levelCircle(i);
+    const top = c.cy - c.r;
+    names.push({
+      name: AI_LEVELS[i].name,
+      x: c.cx,
+      y: top + 34,
+      light: i > 0 && redOpacity(i) >= 0.45,
+    });
+    const exs = AI_LEVELS[i].examples.map((ex, ei) => ({
+      li: i,
+      ei,
+      name: ex.name,
+    }));
+    if (exs.length === 0) continue;
+
+    const isDisk = i === AI_LEVELS.length - 1;
+    // Row width available in this band: the chord of this circle a little
+    // below the name (above the next ring, so the full chord is free).
+    const probeY = isDisk ? c.cy : top + 66;
+    const dy = probeY - c.cy;
+    const chord = 2 * Math.sqrt(Math.max(0, c.r * c.r - dy * dy));
+    const maxW = chord * (isDisk ? 0.94 : 0.9);
+    const rows = packRows(exs, maxW);
+    const rowY0 = isDisk
+      ? c.cy - ((rows.length - 1) * (PILL_H + 6)) / 2
+      : top + 74;
+    rows.forEach((row, ri) => {
+      const total = row.reduce((s, it) => s + it.w, 0) + (row.length - 1) * 10;
+      let x = c.cx - total / 2;
+      const y = rowY0 + ri * (PILL_H + 6);
+      for (const it of row) {
+        pills.push({ li: it.li, ei: it.ei, name: it.name, x: x + it.w / 2, y, w: it.w });
+        x += it.w + 10;
+      }
+    });
+  }
+  return { names, pills };
 }
 
 type View =
@@ -65,36 +131,27 @@ const MAX_Z = 4;
 
 export function TypesOfAi(_: VerificationWidgetProps) {
   void _;
+  const { names, pills } = useMemo(() => layout(), []);
   const [view, setView] = useState<View>({ kind: "none" });
-  // One transform state (zoom + pan) so a functional update always reads the
-  // fresh zoom when it re-clamps pan — no stale closure, no effect.
   const [t, setT] = useState({ z: 1, x: 0, y: 0 });
   const [dragging, setDragging] = useState(false);
-  const drag = useRef<{ x: number; y: number; ox: number; oy: number } | null>(
-    null,
-  );
+  const drag = useRef<{ x: number; y: number; ox: number; oy: number } | null>(null);
 
-  const selectedLevel =
-    view.kind === "level" ? view.i : view.kind === "example" ? view.i : null;
+  const selLevel = view.kind === "level" ? view.i : view.kind === "example" ? view.i : null;
+  const selPill = view.kind === "example" ? view : null;
 
   const clamp1 = (v: number, m: number) => Math.max(-m, Math.min(m, v));
-  // Relative zoom via a functional update, so rapid clicks accumulate rather
-  // than all reading the same stale value; pan re-clamps against the new zoom.
   function zoomBy(delta: number) {
     setT((s) => {
-      const z = Math.max(
-        MIN_Z,
-        Math.min(MAX_Z, Math.round((s.z + delta) * 100) / 100),
-      );
-      const m = ((z - 1) * VB) / 2;
-      return { z, x: clamp1(s.x, m), y: clamp1(s.y, m) };
+      const z = Math.max(MIN_Z, Math.min(MAX_Z, Math.round((s.z + delta) * 100) / 100));
+      const mx = ((z - 1) * VBW) / 2;
+      const my = ((z - 1) * VBH) / 2;
+      return { z, x: clamp1(s.x, mx), y: clamp1(s.y, my) };
     });
   }
   function resetView() {
     setT({ z: 1, x: 0, y: 0 });
   }
-
-  // Pan only when the gesture starts on the background (see trap above).
   function onBgPointerDown(e: React.PointerEvent) {
     (e.target as Element).setPointerCapture?.(e.pointerId);
     drag.current = { x: e.clientX, y: e.clientY, ox: t.x, oy: t.y };
@@ -103,12 +160,13 @@ export function TypesOfAi(_: VerificationWidgetProps) {
   function onPointerMove(e: React.PointerEvent) {
     if (!drag.current) return;
     const rect = e.currentTarget.getBoundingClientRect();
-    const scale = VB / rect.width;
-    const dx = (e.clientX - drag.current.x) * scale;
-    const dy = (e.clientY - drag.current.y) * scale;
-    setT((s) => {
-      const m = ((s.z - 1) * VB) / 2;
-      return { ...s, x: clamp1(drag.current!.ox + dx, m), y: clamp1(drag.current!.oy + dy, m) };
+    const s = VBW / rect.width;
+    const dx = (e.clientX - drag.current.x) * s;
+    const dy = (e.clientY - drag.current.y) * s;
+    setT((st) => {
+      const mx = ((st.z - 1) * VBW) / 2;
+      const my = ((st.z - 1) * VBH) / 2;
+      return { ...st, x: clamp1(drag.current!.ox + dx, mx), y: clamp1(drag.current!.oy + dy, my) };
     });
   }
   function onPointerUp() {
@@ -116,47 +174,33 @@ export function TypesOfAi(_: VerificationWidgetProps) {
     setDragging(false);
   }
 
-  const gTransform = `translate(${t.x} ${t.y}) translate(${VB / 2} ${VB / 2}) scale(${t.z}) translate(${-VB / 2} ${-VB / 2})`;
+  const gTransform = `translate(${t.x}px, ${t.y}px) translate(${VBW / 2}px, ${VBH / 2}px) scale(${t.z}) translate(${-VBW / 2}px, ${-VBH / 2}px)`;
 
   return (
     <div className="not-prose my-6">
       <p className="text-muted-foreground mb-3 text-xs">{C.legend}</p>
 
-      <div className="grid items-start gap-4 lg:grid-cols-[minmax(0,1fr)_18rem]">
+      <div className="grid items-start gap-4 lg:grid-cols-[minmax(0,1fr)_16rem]">
         <div className="border-border bg-card relative min-w-0 overflow-hidden rounded-xl border">
-          <div className="relative aspect-square w-full">
+          <div className="relative w-full" style={{ aspectRatio: `${VBW} / ${VBH}` }}>
             <svg
-              viewBox={`0 0 ${VB} ${VB}`}
+              viewBox={`0 0 ${VBW} ${VBH}`}
               className="absolute inset-0 h-full w-full touch-none select-none"
               onPointerMove={onPointerMove}
               onPointerUp={onPointerUp}
               onPointerLeave={onPointerUp}
             >
               <defs>
-                <pattern
-                  id="tao-hatch"
-                  width={12}
-                  height={12}
-                  patternUnits="userSpaceOnUse"
-                  patternTransform="rotate(45)"
-                >
-                  <line
-                    x1={0}
-                    y1={0}
-                    x2={0}
-                    y2={12}
-                    className="stroke-muted-foreground/25"
-                    strokeWidth={1.4}
-                  />
+                <pattern id="tao-hatch" width={13} height={13} patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+                  <line x1={0} y1={0} x2={0} y2={13} className="stroke-muted-foreground/25" strokeWidth={1.4} />
                 </pattern>
               </defs>
 
-              {/* Background: arms pan, and a click clears the selection. */}
               <rect
                 x={0}
                 y={0}
-                width={VB}
-                height={VB}
+                width={VBW}
+                height={VBH}
                 fill="transparent"
                 className="cursor-grab active:cursor-grabbing"
                 onPointerDown={onBgPointerDown}
@@ -164,111 +208,130 @@ export function TypesOfAi(_: VerificationWidgetProps) {
               />
 
               <g
-                transform={gTransform}
-                style={{ transition: dragging ? "none" : "transform 250ms ease-out" }}
+                style={{
+                  transform: gTransform,
+                  transformOrigin: "0 0",
+                  transition: dragging ? "none" : "transform 250ms ease-out",
+                }}
               >
-                {/* Outer field + the hatched "not real" margin it leaves. */}
-                <circle cx={AI.cx} cy={AI.cy} r={AI.r} fill="var(--muted)" />
-                <circle cx={AI.cx} cy={AI.cy} r={AI.r} fill="url(#tao-hatch)" />
+                <g>
+                  <circle cx={AI.cx} cy={AI.cy} r={AI.r} fill="var(--muted)" />
+                  <circle cx={AI.cx} cy={AI.cy} r={AI.r} fill="url(#tao-hatch)" />
 
-                {AI_LEVELS.map((lvl, i) => {
-                  const c = levelCircle(i);
-                  const selected = selectedLevel === i;
-                  if (i === 0) {
-                    // The grey field is selectable from its top/side margin.
+                  {AI_LEVELS.map((lvl, i) => {
+                    const c = levelCircle(i);
+                    const selected = selLevel === i;
+                    if (i === 0) {
+                      return (
+                        <circle
+                          key={lvl.key}
+                          cx={c.cx}
+                          cy={c.cy}
+                          r={c.r}
+                          fill="transparent"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setView({ kind: "level", i });
+                          }}
+                          className={cn(
+                            "cursor-pointer",
+                            selected ? "stroke-foreground" : "stroke-muted-foreground/40 hover:stroke-muted-foreground/70",
+                          )}
+                          style={{ strokeWidth: selected ? 3 : 1.5, vectorEffect: "non-scaling-stroke" }}
+                        />
+                      );
+                    }
                     return (
                       <circle
                         key={lvl.key}
                         cx={c.cx}
                         cy={c.cy}
                         r={c.r}
-                        fill="transparent"
                         onClick={(e) => {
                           e.stopPropagation();
                           setView({ kind: "level", i });
                         }}
-                        className={cn(
-                          "cursor-pointer",
-                          selected
-                            ? "stroke-foreground"
-                            : "stroke-muted-foreground/40 hover:stroke-muted-foreground/70",
-                        )}
+                        className="cursor-pointer"
                         style={{
-                          strokeWidth: selected ? 2.5 : 1.5,
+                          fill: "var(--primary)",
+                          fillOpacity: redOpacity(i),
+                          stroke: selected ? "var(--foreground)" : "var(--primary-foreground)",
+                          strokeOpacity: selected ? 1 : 0.4,
+                          strokeWidth: selected ? 3 : 1.25,
                           vectorEffect: "non-scaling-stroke",
                         }}
                       />
                     );
-                  }
-                  return (
-                    <circle
-                      key={lvl.key}
-                      cx={c.cx}
-                      cy={c.cy}
-                      r={c.r}
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        setView({ kind: "level", i });
-                      }}
-                      className="cursor-pointer"
-                      style={{
-                        fill: "var(--primary)",
-                        fillOpacity: redOpacity(i),
-                        stroke: selected
-                          ? "var(--foreground)"
-                          : "var(--primary-foreground)",
-                        strokeOpacity: selected ? 1 : 0.4,
-                        strokeWidth: selected ? 2.5 : 1.25,
-                        vectorEffect: "non-scaling-stroke",
-                      }}
-                    />
-                  );
-                })}
+                  })}
 
-                {/* Level names, each in its own top crescent. */}
-                {AI_LEVELS.map((lvl, i) => {
-                  const c = levelCircle(i);
-                  const inner = levelCircle(i + 1);
-                  const top = c.cy - c.r;
-                  // Midline of the crescent between this ring's top and the
-                  // next ring's top (or this ring's own middle if innermost).
-                  const ly =
-                    i < AI_LEVELS.length - 1
-                      ? (top + (inner.cy - inner.r)) / 2
-                      : top + 34;
-                  const light = i > 0 && redOpacity(i) >= 0.5;
-                  return (
+                  {/* level names */}
+                  {names.map((n) => (
                     <text
-                      key={lvl.key}
-                      x={c.cx}
-                      y={ly}
+                      key={n.name}
+                      x={n.x}
+                      y={n.y}
                       textAnchor="middle"
                       dominantBaseline="middle"
                       onClick={(e) => {
                         e.stopPropagation();
+                        const i = AI_LEVELS.findIndex((l) => l.name === n.name);
                         setView({ kind: "level", i });
                       }}
-                      className={cn(
-                        "cursor-pointer font-semibold",
-                        light ? "fill-primary-foreground" : "fill-foreground",
-                      )}
+                      className={cn("cursor-pointer font-semibold", n.light ? "fill-primary-foreground" : "fill-foreground")}
                       style={{
-                        fontSize: 26,
+                        fontSize: NAME_FS,
                         paintOrder: "stroke",
-                        stroke: light ? "rgba(0,0,0,0.28)" : "var(--card)",
-                        strokeWidth: 4,
+                        stroke: n.light ? "rgba(0,0,0,0.30)" : "var(--card)",
+                        strokeWidth: 5,
                         strokeLinejoin: "round",
                       }}
                     >
-                      {lvl.name}
+                      {n.name}
                     </text>
-                  );
-                })}
+                  ))}
+
+                  {/* example pills, sitting in their own band */}
+                  {pills.map((p) => {
+                    const active = selPill && selPill.i === p.li && selPill.ei === p.ei;
+                    return (
+                      <g
+                        key={`${p.li}-${p.ei}`}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setView({ kind: "example", i: p.li, ei: p.ei });
+                        }}
+                        className="cursor-pointer"
+                      >
+                        <rect
+                          x={p.x - p.w / 2}
+                          y={p.y - PILL_H / 2}
+                          width={p.w}
+                          height={PILL_H}
+                          rx={8}
+                          className={cn(
+                            "fill-card transition-[stroke]",
+                            active ? "stroke-foreground" : "stroke-border hover:stroke-foreground",
+                          )}
+                          style={{ strokeWidth: active ? 2 : 1.25, vectorEffect: "non-scaling-stroke" }}
+                        />
+                        <text
+                          x={p.x}
+                          y={p.y}
+                          textAnchor="middle"
+                          dominantBaseline="middle"
+                          className="fill-foreground"
+                          style={{ fontSize: EX_FS }}
+                        >
+                          {p.name}
+                        </text>
+                      </g>
+                    );
+                  })}
+                </g>
               </g>
             </svg>
           </div>
 
-          {/* Zoom / pan controls. */}
           <div className="absolute right-2 bottom-2 flex items-center gap-1">
             <button
               type="button"
@@ -341,57 +404,29 @@ export function TypesOfAi(_: VerificationWidgetProps) {
 
             {view.kind === "region" && (
               <PanelShell onClose={() => setView({ kind: "none" })} eyebrow="Beyond real AI">
-                <h4 className="mt-1 text-base font-semibold">
-                  {AI_REGIONS[view.r].label}
-                </h4>
+                <h4 className="mt-1 text-base font-semibold">{AI_REGIONS[view.r].label}</h4>
                 <p className="mt-2">{AI_REGIONS[view.r].body}</p>
               </PanelShell>
             )}
 
             {view.kind === "level" && (
               <PanelShell onClose={() => setView({ kind: "none" })} eyebrow="Level">
-                <h4 className="mt-1 text-base font-semibold">
-                  {AI_LEVELS[view.i].name}
-                </h4>
+                <h4 className="mt-1 text-base font-semibold">{AI_LEVELS[view.i].name}</h4>
                 <p className="mt-2">{AI_LEVELS[view.i].blurb}</p>
                 {AI_LEVELS[view.i].examples.length > 0 && (
-                  <div className="mt-3">
-                    <p className="text-muted-foreground mb-2 text-xs">
-                      Here, but not one level deeper:
-                    </p>
-                    <div className="flex flex-wrap gap-1.5">
-                      {AI_LEVELS[view.i].examples.map((ex, ei) => (
-                        <button
-                          key={ex.name}
-                          type="button"
-                          onClick={() =>
-                            setView({ kind: "example", i: view.i, ei })
-                          }
-                          className="border-border hover:bg-muted rounded-md border px-2.5 py-1 text-xs font-medium"
-                        >
-                          {ex.name}
-                        </button>
-                      ))}
-                    </div>
-                  </div>
+                  <p className="text-muted-foreground mt-2 text-xs">
+                    Tap a system in this ring to see why it sits here, not one ring deeper.
+                  </p>
                 )}
               </PanelShell>
             )}
 
             {view.kind === "example" && (
-              <PanelShell
-                onClose={() => setView({ kind: "level", i: view.i })}
-                closeLabel="Back to level"
-                eyebrow={AI_LEVELS[view.i].name}
-              >
-                <h4 className="mt-1 text-base font-semibold">
-                  {AI_LEVELS[view.i].examples[view.ei].name}
-                </h4>
+              <PanelShell onClose={() => setView({ kind: "level", i: view.i })} closeLabel="Back to level" eyebrow={AI_LEVELS[view.i].name}>
+                <h4 className="mt-1 text-base font-semibold">{AI_LEVELS[view.i].examples[view.ei].name}</h4>
                 <p className="mt-2">{AI_LEVELS[view.i].examples[view.ei].what}</p>
                 <p className="border-border mt-3 border-t pt-2">
-                  <span className="text-muted-foreground mr-1 text-[11px] tracking-[0.08em] uppercase">
-                    Why here
-                  </span>
+                  <span className="text-muted-foreground mr-1 text-[11px] tracking-[0.08em] uppercase">Why here</span>
                   {AI_LEVELS[view.i].examples[view.ei].why}
                 </p>
               </PanelShell>
@@ -424,9 +459,7 @@ function PanelShell({
       >
         <X className="size-4" aria-hidden />
       </button>
-      <p className="text-muted-foreground text-[11px] tracking-[0.12em] uppercase">
-        {eyebrow}
-      </p>
+      <p className="text-muted-foreground text-[11px] tracking-[0.12em] uppercase">{eyebrow}</p>
       {children}
     </>
   );

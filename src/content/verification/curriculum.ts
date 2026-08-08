@@ -443,7 +443,7 @@ export const verificationLessons: Lesson[] = [
     id: "v-introduction",
     slug: "introduction",
     moduleId: "v-why",
-    title: "0.1 How the risk looks like?",
+    title: "0.1 Introduction: Why Should You Care About AI Verification?",
     contentRef: "verification/introduction",
   },
   {

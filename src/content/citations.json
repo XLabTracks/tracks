@@ -399,11 +399,6 @@
       "container": "Machine Intelligence Research Institute",
       "date": "24 July 2015"
     },
-    "https://intelligence.org/the-problem/": {
-      "title": "The Problem",
-      "about": "MIRI's plain-language statement of why it expects artificial superintelligence to be dangerous by default.",
-      "org": "Machine Intelligence Research Institute"
-    },
     "https://www.stat.berkeley.edu/~aldous/157/Papers/Tradecraft%20Primer-apr09.pdf": {
       "title": "A Tradecraft Primer: Structured Analytic Techniques for Improving Intelligence Analysis",
       "about": "The US government primer on structured analytic techniques — the intelligence-analysis tradecraft the assessment lesson draws on.",
@@ -519,12 +514,6 @@
       "container": "WIRED",
       "date": "5 Aug. 2026"
     },
-    "https://www.youtube.com/watch?v=7wy3xyoXYt8": {
-      "title": "This May Be Humanity’s Hardest Challenge",
-      "about": "A video essay making the case that building superintelligence is the hardest problem humanity has faced, and why getting it wrong is unrecoverable.",
-      "authors": "Rational Animations",
-      "container": "YouTube"
-    },
     "https://www.pacingthefrontier.com/": {
       "title": "Pacing the Frontier",
       "about": "An open letter from employees of frontier AI companies asking the U.S. government to support an international effort to build the technical and governance tools needed to deliberately pace automated AI development.",
@@ -534,7 +523,13 @@
   },
   "pending": [
     "https://www.bbc.com/news/articles/c5y3j3ngevmo",
-    "https://www.wsj.com/livecoverage/iran-strikes-2026/card/u-s-strikes-in-middle-east-use-anthropic-hours-after-trump-ban-ozNO0iClZpfpL7K7ElJ2"
+    "https://www.wsj.com/livecoverage/iran-strikes-2026/card/u-s-strikes-in-middle-east-use-anthropic-hours-after-trump-ban-ozNO0iClZpfpL7K7ElJ2",
+    "https://arxiv.org/abs/2412.14093",
+    "https://arxiv.org/abs/2412.04984",
+    "https://www.anthropic.com/project/glasswing/",
+    "https://huggingface.co/blog/agent-intrusion-technical-timeline",
+    "https://www.anthropic.com/news/investigating-incidents-cybersecurity-evals",
+    "https://www.felonybench.com/"
   ],
   "excluded": [
     "https://evidence-taxonomies.netlify.app/",

@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { X } from "lucide-react";
+import { cn } from "@/lib/utils";
 import {
   HEATWORD,
   LANDSCAPE_CELLS as CELLS,
@@ -17,26 +18,26 @@ import {
 import type { VerificationWidgetProps } from "../kit/types";
 
 /**
- * The Verification Landscape field map, recreated from the standalone page it
- * was ported from: a teal-on-cream heat grid, the kind of verification down the
- * side and the who across the top, darker = more activity. Its own fixed
- * palette (this is a figure, not app chrome, so it reads the same in either
- * app theme), with the company logos sitting directly in the cells so the grid
- * shows who works where — no chips, no boxes, just the marks, with the intensity
- * numeral kept in the corner as the non-colour channel.
+ * The Verification Landscape field map: the kind of verification down the side,
+ * the who across the top, darker = more activity. Our maroon palette (theme
+ * tokens, so it follows day/night/contrast), wide cells with the intensity
+ * numeral in the bottom-right corner, the hatched no-activity cell, and the
+ * detail panel below the grid.
+ *
+ * The company logos sit directly in the cells — no chip, no box, no halo, just
+ * the marks — so the grid shows who works where at a glance, with the numeral
+ * kept as the non-colour channel.
  */
-const PAL = {
-  "--vl-paper": "#F0F1EC",
-  "--vl-panel": "#FBFBF8",
-  "--vl-ink": "#1C2B33",
-  "--vl-muted": "#5B6A70",
-  "--vl-line": "#CBD1C9",
-  "--vl-steel": "#3E5C6E",
-} as React.CSSProperties;
-
-const HEAT = ["#E9EBE5", "#C7D8D6", "#82AAA4", "#2E6B64"];
-const HATCH =
-  "repeating-linear-gradient(45deg, transparent, transparent 5px, rgba(91,106,112,0.16) 5px, rgba(91,106,112,0.16) 6px)";
+const HEAT = [
+  "bg-muted",
+  "bg-primary/15",
+  "bg-primary/55",
+  "bg-primary",
+] as const;
+const HATCH: React.CSSProperties = {
+  backgroundImage:
+    "repeating-linear-gradient(45deg, transparent, transparent 5px, color-mix(in srgb, var(--muted-foreground) 20%, transparent) 5px, color-mix(in srgb, var(--muted-foreground) 20%, transparent) 6px)",
+};
 
 type Sel =
   | { kind: "cell"; ri: number; ci: number }
@@ -48,25 +49,16 @@ export function VerificationLandscape(_: VerificationWidgetProps) {
   const [sel, setSel] = useState<Sel>(null);
 
   return (
-    <div
-      className="not-prose my-6 rounded-xl p-4 sm:p-5"
-      style={{ ...PAL, background: "var(--vl-paper)", color: "var(--vl-ink)" }}
-    >
+    <div className="not-prose bg-card border-border my-6 rounded-xl border p-4 sm:p-5">
       {/* legend */}
-      <div
-        className="mb-3 flex flex-wrap items-center gap-3 text-[11px] tracking-[0.04em] uppercase"
-        style={{ color: "var(--vl-muted)" }}
-      >
+      <div className="text-muted-foreground mb-3 flex flex-wrap items-center gap-3 text-[11px] tracking-[0.04em] uppercase">
         <span>{C.lessActivity}</span>
         <span className="flex gap-[3px]">
           {HEAT.map((h, i) => (
             <span
               key={i}
-              className="h-4 w-7 rounded-[2px]"
-              style={{
-                background: h,
-                backgroundImage: i === 0 ? HATCH : undefined,
-              }}
+              className={cn("h-4 w-7 rounded-[2px]", h)}
+              style={i === 0 ? HATCH : undefined}
             />
           ))}
         </span>
@@ -88,8 +80,7 @@ export function VerificationLandscape(_: VerificationWidgetProps) {
               key={c.key}
               type="button"
               onClick={() => setSel({ kind: "axis", axis: "col", i: ci })}
-              className="rounded px-1 py-1 text-center text-[11px] leading-tight font-semibold tracking-[0.06em] uppercase hover:underline"
-              style={{ color: "var(--vl-steel)" }}
+              className="text-primary rounded px-1 py-1 text-center text-[11px] leading-tight font-semibold tracking-[0.06em] uppercase hover:underline"
             >
               {c.name}
             </button>
@@ -100,8 +91,7 @@ export function VerificationLandscape(_: VerificationWidgetProps) {
               <button
                 type="button"
                 onClick={() => setSel({ kind: "axis", axis: "row", i: ri })}
-                className="self-center rounded py-1 pr-2 text-left text-xs font-semibold hover:underline"
-                style={{ color: "var(--vl-ink)" }}
+                className="text-foreground self-center rounded py-1 pr-2 text-left text-xs font-semibold hover:underline"
               >
                 {r.name}
               </button>
@@ -118,17 +108,13 @@ export function VerificationLandscape(_: VerificationWidgetProps) {
                     aria-label={`${r.name}, ${c.name}, activity ${d.i} of 3${marks.length ? ", " + marks.map((m) => m.label).join(", ") : ""}`}
                     aria-pressed={active}
                     onClick={() => setSel({ kind: "cell", ri, ci })}
-                    className="relative flex items-center justify-center overflow-hidden rounded-[3px] outline-none transition-transform hover:z-10 hover:scale-[1.03] focus-visible:z-10 focus-visible:scale-[1.03]"
-                    style={{
-                      aspectRatio: "1 / 0.82",
-                      background: HEAT[d.i],
-                      backgroundImage: d.i === 0 ? HATCH : undefined,
-                      outline: active ? "3px solid var(--vl-ink)" : undefined,
-                      outlineOffset: active ? "-3px" : undefined,
-                      boxShadow: active
-                        ? "0 2px 12px rgba(28,43,51,0.22)"
-                        : undefined,
-                    }}
+                    style={d.i === 0 ? HATCH : undefined}
+                    className={cn(
+                      "relative flex items-center justify-center overflow-hidden rounded-[3px] outline-none transition-transform hover:z-10 hover:scale-[1.03] focus-visible:z-10 focus-visible:scale-[1.03]",
+                      HEAT[d.i],
+                      active &&
+                        "outline-foreground shadow-soft-md outline-[3px] -outline-offset-[3px]",
+                    )}
                   >
                     {marks.length > 0 && (
                       <span className="flex flex-wrap items-center justify-center gap-1.5 px-1 pb-2.5">
@@ -147,10 +133,10 @@ export function VerificationLandscape(_: VerificationWidgetProps) {
                       </span>
                     )}
                     <span
-                      className="pointer-events-none absolute right-1.5 bottom-1 text-[11px] leading-none"
-                      style={{
-                        color: d.i >= 2 ? "rgba(255,255,255,0.9)" : "var(--vl-muted)",
-                      }}
+                      className={cn(
+                        "pointer-events-none absolute right-1.5 bottom-1 text-[11px] leading-none",
+                        d.i >= 2 ? "text-primary-foreground" : "text-muted-foreground",
+                      )}
                     >
                       {d.i}
                     </span>
@@ -162,7 +148,7 @@ export function VerificationLandscape(_: VerificationWidgetProps) {
         </div>
       </div>
 
-      {/* detail panel — below the grid, full width, like the source */}
+      {/* detail panel — below the grid, full width */}
       <div
         key={
           sel === null
@@ -171,26 +157,17 @@ export function VerificationLandscape(_: VerificationWidgetProps) {
               ? `c-${sel.ri}-${sel.ci}`
               : `a-${sel.axis}-${sel.i}`
         }
-        className="motion-safe:animate-in motion-safe:fade-in motion-safe:duration-300 mt-5 p-4 sm:p-5"
-        style={{
-          background: "var(--vl-panel)",
-          border: "1px solid var(--vl-line)",
-          borderTop: "3px solid var(--vl-steel)",
-          minHeight: 96,
-        }}
+        className="border-border border-t-primary bg-background motion-safe:animate-in motion-safe:fade-in motion-safe:duration-300 mt-5 min-h-24 border border-t-[3px] p-4 sm:p-5"
       >
         {sel === null ? (
-          <p className="text-sm italic" style={{ color: "var(--vl-muted)" }}>
-            {C.prompt}
-          </p>
+          <p className="text-muted-foreground text-sm italic">{C.prompt}</p>
         ) : (
           <div className="relative">
             <button
               type="button"
               onClick={() => setSel(null)}
               aria-label="Close detail"
-              className="absolute -top-1 -right-1 rounded p-1 hover:opacity-70"
-              style={{ color: "var(--vl-muted)" }}
+              className="text-muted-foreground hover:text-foreground absolute -top-1 -right-1 rounded p-1"
             >
               <X className="size-4" aria-hidden />
             </button>
@@ -210,17 +187,6 @@ export function VerificationLandscape(_: VerificationWidgetProps) {
   );
 }
 
-function Eyebrow({ children }: { children: React.ReactNode }) {
-  return (
-    <p
-      className="text-[11px] tracking-[0.12em] uppercase"
-      style={{ color: "var(--vl-steel)" }}
-    >
-      {children}
-    </p>
-  );
-}
-
 function CellDetail({
   cell,
   rowName,
@@ -231,16 +197,16 @@ function CellDetail({
   colName: string;
 }) {
   return (
-    <div className="text-sm" style={{ color: "var(--vl-ink)" }}>
-      <Eyebrow>
+    <div className="text-sm">
+      <p className="text-primary text-[11px] tracking-[0.12em] uppercase">
         {rowName} × {colName}
-      </Eyebrow>
+      </p>
       <h4 className="mt-1 text-base font-semibold">
-        {cell.gap && <span style={{ color: "#B4552F" }}>Open gap. </span>}
+        {cell.gap && <span className="text-defect">Open gap. </span>}
         {rowName} here is{" "}
         <em className="not-italic">{HEATWORD[cell.i].toLowerCase()}</em>.
       </h4>
-      <p className="mt-0.5 text-xs" style={{ color: "var(--vl-muted)" }}>
+      <p className="text-muted-foreground mt-0.5 text-xs">
         Activity {cell.i} / 3 · {HEATWORD[cell.i]}
       </p>
       <p className="mt-2">{cell.state}</p>
@@ -253,14 +219,8 @@ function CellDetail({
           ))}
         </ul>
       )}
-      <p
-        className="mt-3 border-t pt-2"
-        style={{ borderColor: "var(--vl-line)" }}
-      >
-        <span
-          className="mr-1 text-[11px] tracking-[0.1em] uppercase"
-          style={{ color: "var(--vl-muted)" }}
-        >
+      <p className="border-border mt-3 border-t pt-2">
+        <span className="text-muted-foreground mr-1 text-[11px] tracking-[0.1em] uppercase">
           {C.howConnects}
         </span>
         {cell.connect}
@@ -272,11 +232,13 @@ function CellDetail({
 function AxisDetail({ axis, i }: { axis: "row" | "col"; i: number }) {
   const o = axis === "row" ? ROWS[i] : COLS[i];
   return (
-    <div className="text-sm" style={{ color: "var(--vl-ink)" }}>
-      <Eyebrow>{axis === "row" ? C.rowAxisTag : C.colAxisTag}</Eyebrow>
+    <div className="text-sm">
+      <p className="text-primary text-[11px] tracking-[0.12em] uppercase">
+        {axis === "row" ? C.rowAxisTag : C.colAxisTag}
+      </p>
       <h4 className="mt-1 text-base font-semibold">{o.name}</h4>
       <p className="mt-2">{o.desc}</p>
-      <p className="mt-2 text-xs" style={{ color: "var(--vl-muted)" }}>
+      <p className="text-muted-foreground mt-2 text-xs">
         {C.axisHint.replace("{kind}", axis)}
       </p>
     </div>

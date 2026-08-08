@@ -513,6 +513,18 @@ add must reduce the duplication, never widen it.
   renders. Two things that are not this and must not be "fixed": a band rule
   that separates full-width sections, and a tab whose bottom border is
   transparent so it joins its panel — absence is not a tint.
+- **Categorical colour is the brand palette, and it rides on the word.** A
+  categorical scale — the five evidence layers, any N-way key — takes the brand
+  `--mod-0..4` hues through their `--mod-N-text` variants (built to read as type
+  on every ground), never an ad-hoc chart rainbow (`bg-amber/sky/violet/emerald/
+  rose`, or Okabe–Ito). Those read as stock AI slop against the maroon, which is
+  the whole reason `theme.css` leaves the chart tokens unmapped. One token
+  colours the dot, the rail mark, the ring **and** the layer's own name, so the
+  hue sits on a coloured word rather than a bare dot beside grey text — a
+  coloured dot next to a grey label is the thing to catch on the way in, not
+  after it renders. `interactive-map` and `mechanism-sort` are the reference
+  (`var(--mod-N-text, #hex)`, the hex mirrored from theme.css for the rare
+  no-theme render).
 - **Bloom levels are gone on purpose.** They are curriculum-design vocabulary,
   not a learner's. If you need a second channel beside a module hue, use the
   module number — that is what the star numerals carry.

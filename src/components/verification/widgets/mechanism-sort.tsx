@@ -71,14 +71,21 @@ const save = (s: SortStore) => {
   }
 };
 
-/** Fixed palette classes per evidence layer — categorical accents, never a
- *  hue on its own (the legend and each dot's title carry the meaning). */
-const LAYER_STYLE: Record<LayerKey, { dot: string; ring: string }> = {
-  hardware: { dot: "bg-amber-500", ring: "border-amber-500" },
-  cloud: { dot: "bg-sky-500", ring: "border-sky-500" },
-  intelligence: { dot: "bg-violet-500", ring: "border-violet-500" },
-  human: { dot: "bg-emerald-600", ring: "border-emerald-600" },
-  crypto: { dot: "bg-rose-500", ring: "border-rose-500" },
+/**
+ * Evidence-layer accent = the brand's categorical palette (`--mod-0..4`), the
+ * course's designated categorical hues — never an ad-hoc chart rainbow
+ * (amber/sky/violet/…), which reads as stock AI slop against the maroon. The
+ * `-text` variants are built to read on the page ground, so one token colours
+ * a small dot, a rail mark, a ring, and the layer's own name. Hue never sits
+ * alone: it rides on the layer name as a coloured word, and every mark pairs
+ * with a label. Fallback hex mirrors theme.css for the rare no-theme render.
+ */
+const LAYER_COLOR: Record<LayerKey, string> = {
+  hardware: "var(--mod-0-text, #9a000c)",
+  cloud: "var(--mod-1-text, #bf4f00)",
+  intelligence: "var(--mod-2-text, #946b00)",
+  human: "var(--mod-3-text, #555e07)",
+  crypto: "var(--mod-4-text, #3d75b1)",
 };
 
 // Zero-width breaks so a long rung wraps at a natural seam on a narrow phone
@@ -326,9 +333,16 @@ function Rater({
   return (
     <div className="border-border bg-background rounded-lg border p-3 sm:p-4">
       <div className="flex items-center gap-2 text-xs">
-        <span className={cn("size-2.5 rounded-full", LAYER_STYLE[mech.layer].dot)} aria-hidden />
+        <span
+          className="size-2.5 rounded-full"
+          style={{ background: LAYER_COLOR[mech.layer] }}
+          aria-hidden
+        />
         <span className="text-muted-foreground">
-          {layerName(mech.layer)} · card {index} of {MECHANISMS.length}
+          <span className="font-medium" style={{ color: LAYER_COLOR[mech.layer] }}>
+            {layerName(mech.layer)}
+          </span>{" "}
+          · card {index} of {MECHANISMS.length}
         </span>
         <span className="flex-1" />
         {canSkip && (
@@ -429,7 +443,7 @@ function Lanes({
               if (typeof v !== "number") return null;
               const dim = reveal && selected != null && selected !== id;
               const off = laneStagger(id);
-              const style = LAYER_STYLE[m.layer];
+              const color = LAYER_COLOR[m.layer];
               return (
                 <div key={id}>
                   {reveal && (
@@ -437,8 +451,9 @@ function Lanes({
                       {/* link from your value to the reference */}
                       <span
                         aria-hidden
-                        className={cn("absolute h-0.5 rounded-full", style.dot, dim && "opacity-25")}
+                        className={cn("absolute h-0.5 rounded-full", dim && "opacity-25")}
                         style={{
+                          background: color,
                           left: `${Math.min(v, m.ref[metric.key]) * 100}%`,
                           width: `${Math.abs(v - m.ref[metric.key]) * 100}%`,
                           top: `calc(50% + ${off}px)`,
@@ -451,10 +466,9 @@ function Lanes({
                         onClick={() => onSelect(id)}
                         className={cn(
                           "absolute size-2.5 -translate-x-1/2 -translate-y-1/2 rounded-full border-2 bg-card",
-                          style.ring,
                           dim && "opacity-25",
                         )}
-                        style={{ left: `${m.ref[metric.key] * 100}%`, top: `calc(50% + ${off}px)` }}
+                        style={{ borderColor: color, left: `${m.ref[metric.key] * 100}%`, top: `calc(50% + ${off}px)` }}
                       />
                     </>
                   )}
@@ -466,11 +480,10 @@ function Lanes({
                     onClick={() => onSelect(id)}
                     className={cn(
                       "absolute size-2.5 -translate-x-1/2 -translate-y-1/2 rounded-full",
-                      style.dot,
                       dim && "opacity-25",
                       selected === id && "ring-foreground ring-2 ring-offset-1",
                     )}
-                    style={{ left: `${v * 100}%`, top: `calc(50% + ${off}px)` }}
+                    style={{ background: color, left: `${v * 100}%`, top: `calc(50% + ${off}px)` }}
                   />
                 </div>
               );
@@ -486,8 +499,16 @@ function Legend() {
   return (
     <div className="text-muted-foreground flex flex-wrap gap-x-4 gap-y-1 text-xs select-none">
       {LAYERS.map((l) => (
-        <span key={l.key} className="inline-flex items-center gap-1.5">
-          <span className={cn("size-2.5 rounded-full", LAYER_STYLE[l.key].dot)} aria-hidden />
+        <span
+          key={l.key}
+          className="inline-flex items-center gap-1.5 font-medium"
+          style={{ color: LAYER_COLOR[l.key] }}
+        >
+          <span
+            className="size-2.5 rounded-full"
+            style={{ background: LAYER_COLOR[l.key] }}
+            aria-hidden
+          />
           {l.name}
         </span>
       ))}
@@ -522,6 +543,9 @@ function Detail({
               {verdict.label} · gap {Math.round(gapOf(v, mech.ref) * 100)}
             </span>
           )}
+          <p className="text-[11px] font-medium" style={{ color: LAYER_COLOR[mech.layer] }}>
+            {layerName(mech.layer)}
+          </p>
           <h4 className="font-semibold">{mech.title}</h4>
         </div>
         <Button type="button" variant="ghost" size="sm" className="h-7 px-2" onClick={onClose}>
@@ -534,7 +558,7 @@ function Detail({
           const you = values[metric.key];
           if (typeof you !== "number") return null;
           const rv = mech.ref[metric.key];
-          const style = LAYER_STYLE[mech.layer];
+          const color = LAYER_COLOR[mech.layer];
           return (
             <div key={metric.key}>
               <div className="flex items-baseline justify-between text-xs">
@@ -558,29 +582,24 @@ function Detail({
                   <>
                     <span
                       aria-hidden
-                      className={cn("absolute top-1/2 h-0.5 -translate-y-1/2 rounded-full", style.dot)}
+                      className="absolute top-1/2 h-0.5 -translate-y-1/2 rounded-full"
                       style={{
+                        background: color,
                         left: `${Math.min(you, rv) * 100}%`,
                         width: `${Math.abs(you - rv) * 100}%`,
                       }}
                     />
                     <span
                       aria-hidden
-                      className={cn(
-                        "absolute top-1/2 size-2.5 -translate-x-1/2 -translate-y-1/2 rounded-full border-2 bg-card",
-                        style.ring,
-                      )}
-                      style={{ left: `${rv * 100}%` }}
+                      className="absolute top-1/2 size-2.5 -translate-x-1/2 -translate-y-1/2 rounded-full border-2 bg-card"
+                      style={{ borderColor: color, left: `${rv * 100}%` }}
                     />
                   </>
                 )}
                 <span
                   aria-hidden
-                  className={cn(
-                    "absolute top-1/2 size-2.5 -translate-x-1/2 -translate-y-1/2 rounded-full",
-                    style.dot,
-                  )}
-                  style={{ left: `${you * 100}%` }}
+                  className="absolute top-1/2 size-2.5 -translate-x-1/2 -translate-y-1/2 rounded-full"
+                  style={{ background: color, left: `${you * 100}%` }}
                 />
               </div>
             </div>
@@ -655,10 +674,16 @@ function Gaps({
                 )}
               >
                 <span
-                  className={cn("size-2.5 shrink-0 rounded-full", LAYER_STYLE[m.layer].dot)}
+                  className="size-2.5 shrink-0 rounded-full"
+                  style={{ background: LAYER_COLOR[m.layer] }}
                   aria-hidden
                 />
-                <span className="min-w-0 flex-1 truncate">{m.short}</span>
+                <span
+                  className="min-w-0 flex-1 truncate font-medium"
+                  style={{ color: LAYER_COLOR[m.layer] }}
+                >
+                  {m.short}
+                </span>
                 <span className="text-muted-foreground shrink-0 font-mono text-[11px] tracking-[0.1em] uppercase">
                   {verdict.label} · {Math.round(d * 100)}
                 </span>

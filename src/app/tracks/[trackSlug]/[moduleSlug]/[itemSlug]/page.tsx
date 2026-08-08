@@ -22,7 +22,8 @@ import {
   isLessonCompleted,
 } from "@/lib/progress";
 import { Breadcrumbs } from "@/components/layout/breadcrumbs";
-import { LessonContent } from "@/components/mdx/lesson-content";
+import { LessonContent, getLessonCitations } from "@/components/mdx/lesson-content";
+import { WorksCited } from "@/components/mdx/works-cited";
 import { LessonPartsReader } from "@/components/learn/lesson-parts-reader";
 import { LessonNav } from "@/components/layout/lesson-nav";
 import { LessonCompleteButton } from "@/components/learn/lesson-complete-button";
@@ -119,6 +120,7 @@ async function LessonItemPage({
   userId: string | null;
 }) {
   const completed = userId ? await isLessonCompleted(userId, lesson.id) : false;
+  const citations = await getLessonCitations(lesson.contentRef);
 
   return (
     <div className="max-w-4xl px-4 py-8 lg:px-8">
@@ -156,6 +158,11 @@ async function LessonItemPage({
           <LessonContent contentRef={lesson.contentRef} title={lesson.title} />
         )}
       </div>
+
+      {/* The appendix sits outside the parts reader on purpose: sources
+          belong to the whole lesson, so the toggle is reachable from any
+          part rather than living inside the last one. */}
+      <WorksCited urls={citations} />
 
       {userId ? (
         <LessonTracker

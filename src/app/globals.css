@@ -233,6 +233,12 @@
   counter-reset: footnote;
 }
 
+/* MLA's hanging indent: first line flush, wrapped lines indented. */
+.works-cited-entry {
+  padding-left: 1.5rem;
+  text-indent: -1.5rem;
+}
+
 /* A wide table scrolls inside its own box — the page must never scroll
    sideways. `display: block` on the table element is what makes overflow-x
    apply; the cells keep their table layout inside it. */

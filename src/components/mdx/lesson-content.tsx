@@ -95,6 +95,19 @@ export async function getLessonSections(
 }
 
 /**
+ * The external sources a lesson body cites, read from the `citations` export
+ * that rehype-lesson-citations adds to every compiled lesson module — the
+ * same pipeline run that renders the links, so the list can never drift from
+ * the body. Missing lesson or export => [].
+ */
+export async function getLessonCitations(contentRef: string): Promise<string[]> {
+  const mdxModule = (await importLesson(contentRef)) as {
+    citations?: string[];
+  } | null;
+  return Array.isArray(mdxModule?.citations) ? mdxModule.citations : [];
+}
+
+/**
  * Renders a lesson's MDX body (text + embedded Video/Demo/Exercise/Callout)
  * inside a soft, gray-toned prose container.
  */

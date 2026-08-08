@@ -1,5 +1,5 @@
 /**
- * Module 3's deck: ten questions on Naci Cankaya's working paper, transcribed
+ * Module 3's deck: nine questions on Naci Cankaya's working paper, transcribed
  * from the course owner's text.
  *
  * There is no key and no score, as in 1.1. These ask the learner to
@@ -7,15 +7,19 @@
  * would turn that into agreeing with somebody's reading of the paper.
  *
  * Trap: the numbers are load-bearing. Her rule names questions by number —
- * 1, 2, 5, 9 and 10 required, one of 3, 4, 6 and 7, and 8 optional — so `n`
- * is the author's number and not the array index, and `requirement` is what
- * the completion rule reads. Renumbering means rewriting the rule.
+ * 1, 2 and 5 required, one of 3, 4, 7 and 9, and 8 optional — so `n` is the
+ * author's number and not the array index, and `requirement` is what the
+ * completion rule reads. Renumbering means rewriting the rule. Question 10
+ * was deleted by her, which is why the numbers stop at 9.
  *
- * Her Assignment paragraph and her Questions preamble disagreed about the
- * choice group: the first said "one of Questions 3, 4, or 7" and the second
- * "one of Questions 3, 4, 6, or 7". The wider one is taken here — it is the
- * one that sits directly above the questions, and 6 is the same kind of task
- * as the other three. Flagged rather than silently reconciled.
+ * Question 6 is named by neither half of that rule, so it is `optional`: it
+ * is still there to answer and counts toward nothing. That is a reading of a
+ * gap rather than an instruction, and it is flagged as such.
+ *
+ * Her Assignment paragraph and her Questions preamble disagree, and the
+ * paragraph is the live one — it is what changed, while the preamble still
+ * names a Question 10 that no longer exists. The widget generates its own
+ * preamble from this file for that reason.
  */
 
 import type { WorkspaceQuestion, WorkspaceRule } from "../question-workspace";
@@ -123,7 +127,7 @@ export const COMPUTE_QUESTIONS: WorkspaceQuestion[] = [
     id: "strongest-arguments",
     n: 6,
     title: "Evaluate the strongest arguments",
-    requirement: "choose-one",
+    requirement: "optional",
     body: [
       {
         text: "Identify three arguments in the paper that you consider particularly strong.",
@@ -194,7 +198,7 @@ export const COMPUTE_QUESTIONS: WorkspaceQuestion[] = [
     id: "new-case",
     n: 9,
     title: "Apply the architecture to a new case",
-    requirement: "required",
+    requirement: "choose-one",
     body: [
       {
         text: "A monitored facility declares that it operates a large-scale inference service. Its network records are committed as required. Randomly selected records can be opened, and the declared computations can be replayed successfully.",
@@ -221,27 +225,6 @@ export const COMPUTE_QUESTIONS: WorkspaceQuestion[] = [
       },
       {
         text: "Justify every classification with reference to the paper.",
-      },
-    ],
-  },
-  {
-    id: "expert-conclusion",
-    n: 10,
-    title: "Reach an expert conclusion",
-    requirement: "required",
-    body: [
-      {
-        text: "Determine whether the proposed architecture is ready for laboratory red-teaming or first requires substantial redesign.",
-      },
-      { text: "In your answer:" },
-      {
-        list: [
-          "state and justify your conclusion;",
-          "identify the strongest feature supporting further development;",
-          "identify the most consequential unresolved weakness;",
-          "propose one concrete modification addressing that weakness;",
-          "explain what new cost, assumption, vulnerability, or residual loophole the modification would introduce.",
-        ],
       },
     ],
   },

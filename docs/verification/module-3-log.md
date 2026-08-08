@@ -194,17 +194,21 @@ sent the learner to the paper's own six "Questions for the reader" sections
 then replaced them with ten of her own, and those are what ship. The paper's
 own sets are no longer referenced.
 
-Her rule: 1, 2, 5, 9 and 10 required, one of 3, 4, 6 and 7, and 8 an optional
-research task — six answers. It lives in `COMPUTE_QUESTIONS` as a `requirement`
-per question, and the widget's preamble, the per-question badges and what
-actually completes the unit are all generated from it, so they cannot drift
-apart.
+She then deleted Question 10, leaving nine, and restated the rule: **1, 2 and
+5 required, one of 3, 4, 7 and 9, and 8 optional — four answers.** It lives in
+`COMPUTE_QUESTIONS` as a `requirement` per question, and the widget's preamble,
+the per-question badges and what actually completes the unit are all generated
+from it, so they cannot drift apart.
 
-**One thing reconciled, and it needs her word.** Her Assignment paragraph said
-"one of Questions 3, 4, or 7" and her Questions preamble said "one of Questions
-3, 4, 6, or 7". The wider one is used — it sits directly above the questions,
-and 6 asks for the same kind of work as the other three. If 6 was meant to be
-excluded, the fix is one `requirement` field.
+**Two readings that need her word.** Her Assignment paragraph and her Questions
+preamble have disagreed about the rule in both versions she sent, and the
+preamble is the stale half — it still names a Question 10 that no longer
+exists. The Assignment paragraph is what ships, in the lesson and in the data.
+
+And **Question 6 is named by neither half of the new rule**. It is marked
+`optional`, so it is there to answer and counts toward nothing. That is a
+reading of a gap, not an instruction: if 6 belongs in the choice group, or
+should go the way of 10, it is one `requirement` field either way.
 
 The reading links the published page, techgov.intelligence.org, which is also
 what citations.json cites; the widget links the PDF for page references. One
@@ -227,10 +231,11 @@ is what that page shows beside it.
 
 ### Still owed, and deliberately not decided here
 
-- **The module is still titled "Covert development"** and its summary still
-  describes evasion. Neither matches a unit about translating treaty
-  requirements into a technical verification system. Renaming it is a content
-  decision and no new title was given.
+- ~~**The module is still titled "Covert development"**~~ **Done.** It is now
+  *Architecture and Limitations of Low-Trust AI Compute Verification*, on her
+  instruction, and the summary is her Module objective. Its slug is still
+  `covert-development`, so that is still the URL segment; changing it would
+  break every existing link to the module and was not asked for.
 - **`data/skills.js` has 21 rungs tagged unit `3.1` or `3.2`.** Those units no
   longer exist, so those rungs can never fill. Nothing crashes and no test
   covers that file; retagging or removing them is the next job here.

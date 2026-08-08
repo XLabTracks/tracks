@@ -41,13 +41,12 @@ export function ComputeVerificationQuestions({
         <div className="border-border bg-card space-y-3 rounded-xl border p-5">
           <p className="text-sm">
             Read all {COMPUTE_QUESTIONS.length} questions before beginning.
-            Answer Questions {list(required)}, together with one of Questions{" "}
-            {list(choiceNumbers(COMPUTE_QUESTIONS))}. Question {optional[0]} is
-            an optional research task. That is {answersOwed(
-              COMPUTE_RULE,
-              COMPUTE_QUESTIONS,
-            )}{" "}
-            answers.
+            Answer Questions {list(required, "and")}, together with one of
+            Questions {list(choiceNumbers(COMPUTE_QUESTIONS), "or")}. That is{" "}
+            {answersOwed(COMPUTE_RULE, COMPUTE_QUESTIONS)} answers.{" "}
+            {optional.length === 1 ? "Question" : "Questions"}{" "}
+            {list(optional, "and")}{" "}
+            {optional.length === 1 ? "is" : "are"} optional.
           </p>
           <p className="text-muted-foreground text-sm">
             Support each answer with page or section references to{" "}
@@ -67,8 +66,12 @@ export function ComputeVerificationQuestions({
   );
 }
 
-/** "1, 2, 5, 9 and 10" — an Oxford-comma-free list of the author's numbers. */
-function list(ns: number[]): string {
+/**
+ * "1, 2 and 5" or "3, 4, 7 or 9" — the conjunction is the caller's, because a
+ * list of required questions and a list to pick one from are not the same
+ * claim and must not read alike.
+ */
+function list(ns: number[], conj: "and" | "or"): string {
   if (ns.length <= 1) return String(ns[0] ?? "");
-  return `${ns.slice(0, -1).join(", ")} and ${ns[ns.length - 1]}`;
+  return `${ns.slice(0, -1).join(", ")} ${conj} ${ns[ns.length - 1]}`;
 }

@@ -220,8 +220,8 @@ window.COURSE = {
       "glyph": "⚠",
       "week": "week 9",
       "status": "taxonomy complete",
-      "goal": "Covert development",
-      "summary": "Every mechanism in module 3 can fail. How a determined actor cheats, what evidence the evasion leaves across layers, and the red-team/blue-team exercise that makes you argue both sides.",
+      "goal": "Architecture and Limitations of Low-Trust AI Compute Verification",
+      "summary": "How the requirements of an international AI agreement might be translated into a technical verification system: the assumptions, design choices, and unresolved problems involved in verifying AI compute use under conditions of limited trust between the parties.",
       "units": [
         {
           "id": "3.0",

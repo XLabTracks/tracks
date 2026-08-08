@@ -122,9 +122,9 @@ export const verificationModules: Module[] = [
     id: "v-covert",
     slug: "covert-development",
     trackId: "verification",
-    title: "Covert development",
+    title: "Architecture and Limitations of Low-Trust AI Compute Verification",
     summary:
-      "Every mechanism in module 3 can fail. How a determined actor cheats, what evidence the evasion leaves across layers, and the red-team/blue-team exercise that makes you argue both sides.",
+      "How the requirements of an international AI agreement might be translated into a technical verification system: the assumptions, design choices, and unresolved problems involved in verifying AI compute use under conditions of limited trust between the parties.",
     order: 3,
     prerequisiteModuleIds: ["v-why", "v-scoping", "v-infrastructure"],
     // One unit, on the course owner's instruction: the module is the Cankaya

@@ -88,22 +88,40 @@ describe("the any-N rule", () => {
 });
 
 describe("the decks the course ships", () => {
-  it("module 3 owes six: five required and one choice, with 8 optional", () => {
-    expect(answersOwed(COMPUTE_RULE, COMPUTE_QUESTIONS)).toBe(6);
+  it("module 3 owes four: three required and one choice, 6 and 8 optional", () => {
+    expect(COMPUTE_QUESTIONS).toHaveLength(9);
+    expect(answersOwed(COMPUTE_RULE, COMPUTE_QUESTIONS)).toBe(4);
     const by = (r: WorkspaceQuestion["requirement"]) =>
       COMPUTE_QUESTIONS.filter((x) => x.requirement === r).map((x) => x.n);
-    expect(by("required")).toEqual([1, 2, 5, 9, 10]);
-    expect(by("choose-one")).toEqual([3, 4, 6, 7]);
-    expect(by("optional")).toEqual([8]);
-    expect(choiceNumbers(COMPUTE_QUESTIONS)).toEqual([3, 4, 6, 7]);
+    expect(by("required")).toEqual([1, 2, 5]);
+    expect(by("choose-one")).toEqual([3, 4, 7, 9]);
+    expect(by("optional")).toEqual([6, 8]);
+    expect(choiceNumbers(COMPUTE_QUESTIONS)).toEqual([3, 4, 7, 9]);
   });
 
-  it("module 3 is finished by the five plus any one of the four", () => {
-    const five = new Set(["principal-problem", "reconstruct-approach", "verification-process", "new-case", "expert-conclusion"]);
-    expect(isWorkspaceComplete(COMPUTE_RULE, COMPUTE_QUESTIONS, five)).toBe(false);
-    for (const pick of ["covert-adversary", "trusted-silicon", "strongest-arguments", "vulnerable-positions"]) {
+  it("module 3 is finished by the three plus any one of the four", () => {
+    const three = new Set([
+      "principal-problem",
+      "reconstruct-approach",
+      "verification-process",
+    ]);
+    expect(isWorkspaceComplete(COMPUTE_RULE, COMPUTE_QUESTIONS, three)).toBe(
+      false,
+    );
+    // Neither optional question can stand in for the choice.
+    for (const opt of ["strongest-arguments", "test-a-claim"]) {
       expect(
-        isWorkspaceComplete(COMPUTE_RULE, COMPUTE_QUESTIONS, new Set([...five, pick])),
+        isWorkspaceComplete(COMPUTE_RULE, COMPUTE_QUESTIONS, new Set([...three, opt])),
+      ).toBe(false);
+    }
+    for (const pick of [
+      "covert-adversary",
+      "trusted-silicon",
+      "vulnerable-positions",
+      "new-case",
+    ]) {
+      expect(
+        isWorkspaceComplete(COMPUTE_RULE, COMPUTE_QUESTIONS, new Set([...three, pick])),
       ).toBe(true);
     }
   });

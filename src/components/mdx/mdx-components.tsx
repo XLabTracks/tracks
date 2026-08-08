@@ -12,6 +12,7 @@ import { FelonyBench } from "./felony-bench";
 import { Footnote } from "./footnote";
 import { MdxLink } from "./mdx-link";
 import { NextSteps } from "./next-steps";
+import { Objectives } from "./objectives";
 import { PopUp } from "./pop-up";
 import { SiteQuote } from "./site-quote";
 import { SourceCredit } from "./source-credit";
@@ -82,6 +83,7 @@ export const mdxComponents: MDXComponents = {
   Footnote,
   MemoDesk,
   NextSteps,
+  Objectives,
   PopUp,
   SiteQuote,
   SourceCredit,

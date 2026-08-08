@@ -42,7 +42,7 @@ window.COURSE = {
         },
         {
           "id": "0.2",
-          "title": "Introduction: Why Verification?",
+          "title": "Building Verification Intuitions",
           "kind": "interactive",
           "mins": "15–20 min",
           "href": "/tracks/verification/why-verification/building-intuitions",

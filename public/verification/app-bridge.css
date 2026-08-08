@@ -321,3 +321,87 @@
     width: 2.5rem;
   }
 }
+
+/* ---------- what a section will make you able to do ---------- */
+
+/* <Objectives> (components/mdx/objectives.tsx). The ledger's row treatment —
+   hairline-ruled full-width rows, numeral in the display face in its own
+   gutter — applied to the objectives list whatever its markdown marker and
+   however many items it has. The ledger proper only dresses ordered lists of
+   four or more; an objectives block is the same thing at any length.
+
+   Not a card. The page already carries reading cards and exercise cards, and
+   a fifth boxed shape is one the card-edge rule has no room for. Band rules
+   top and bottom set the block apart, which is what that rule allows for a
+   full-width section.
+
+   The section carries `not-prose`, and that is load-bearing rather than
+   tidiness: every generic list rule above is written `:not(.not-prose *)`, so
+   this opts out of all of them at once. Competing on specificity instead does
+   not work — the 4-or-more bullet form carries a :has() and outranks any
+   plain descendant selector — and it would leave the block's appearance
+   depending on how many objectives an author happened to write. The cost is
+   that Tailwind Typography no longer tunes anything in here, so what the
+   column would have given the list is restated below. */
+:root[data-theme] .lesson-body .vt-objectives {
+  margin: 2.2em 0;
+  border-top: var(--hairline) solid var(--border);
+  border-bottom: var(--hairline) solid var(--border);
+  padding: 1.4rem 0 0.2rem;
+}
+
+:root[data-theme] .lesson-body .vt-objectives .vt-objectives-lead {
+  margin: 0 0 0.35rem;
+  font-weight: 600;
+}
+
+:root[data-theme] .lesson-body .vt-objectives :is(ul, ol) {
+  list-style: none;
+  counter-reset: vt-obj;
+  display: block;
+  margin: 0;
+  padding-left: 0;
+}
+
+:root[data-theme] .lesson-body .vt-objectives :is(ul, ol) > li {
+  counter-increment: vt-obj;
+  margin: 0;
+  position: relative;
+  padding: 1.05rem 0 1.1rem 4.4rem;
+  border-top: var(--hairline) solid var(--border);
+}
+
+/* What the prose plugin would have set, restated because not-prose turned it
+   off: the column's emphasis weight, so a bold lead in an objective does not
+   come out at the browser's 700 beside the paragraph's 600. */
+:root[data-theme] .lesson-body .vt-objectives strong {
+  font-weight: 600;
+}
+
+/* Out of flow and carrying the row's line-height, for the ledger's reason:
+   that is what lands the numeral on the first line's baseline. Absolute and
+   not grid, also for the ledger's reason — a bold lead in an item is its own
+   inline run, and grid would drop everything after it into the next row. */
+:root[data-theme] .lesson-body .vt-objectives :is(ul, ol) > li::before {
+  content: counter(vt-obj, decimal-leading-zero);
+  position: absolute;
+  left: 0;
+  top: 1.05rem;
+  width: 3.1rem;
+  color: var(--brand-ink);
+  font-family: var(--display);
+  font-size: 1.55rem;
+  font-weight: 500;
+  line-height: inherit;
+  letter-spacing: -.02em;
+  font-variant-numeric: tabular-nums;
+}
+
+@media (max-width: 640px) {
+  :root[data-theme] .lesson-body .vt-objectives :is(ul, ol) > li {
+    padding-left: 3.4rem;
+  }
+  :root[data-theme] .lesson-body .vt-objectives :is(ul, ol) > li::before {
+    width: 2.5rem;
+  }
+}

@@ -241,9 +241,19 @@ Then onward: module 2.3 asks what a verifier sees when nobody files anything at 
 
 ## Tasks
 
-<Exercise id="v-task-cloud-limits-1" />
+| Evasion | Defeats | Costs the evader | What still catches it |
+| --- | --- | --- | --- |
+| False workload labels | Declaration regimes | Nearly free: a lie on a form | Telemetry corroboration — and the lie is legally binding once filed |
+| Proxies and shell companies | The KYC identity layer | Cheap on paper, harder at scale: frontier-size compute is sold through negotiated enterprise deals, not anonymous signups | Beneficial-ownership checks, registry cross-referencing — and the sales relationship itself |
+| Sequential training (one run, sliced in time across accounts) | Per-account FLOP thresholds | Near zero in compute (checkpoint-and-resume is standard practice); high in tradecraft — dozens of unlinkable accounts, each able to book a frontier-scale cluster, plus terabyte checkpoint handoffs between them | Cluster-size reporting (every slice still needs the big cluster) and data-transfer patterns (the handoffs are loud) |
+| Distributed training (one run, sharded in space across providers or sites) | Per-account and per-provider thresholds; concentration signals | Currently prohibitive at frontier scale: demonstrated only around the 10B-parameter mark, with one experiment (DiPaCo) paying roughly 32× the compute of a colocated baseline — a penalty that is shrinking as labs mature low-communication methods for their own resilience | Synchronization traffic between shards; each shard still needs serious hardware; cross-provider information sharing, where it exists |
+| Provider capture (complicit or state-directed) | Everything upstream at once | Depends on who the evader is: prohibitive for a private actor; for a state with jurisdiction over the provider, roughly the cost of a directive | Only external layers: hardware (2.1) and intelligence (2.3) |
 
-<Exercise id="v-task-cloud-limits-2" />
+| Evidence | Controlled by | Faking it costs |
+| --- | --- | --- |
+| Hardware allocation, billing records | Provider | Nearly unfakeable by the customer: the provider bills from them |
+| Utilization, traffic, power patterns | Provider (observed) | Gameable, at real efficiency cost; the distortion is itself a signal |
+| Declarations, stated purpose, workload labels | Customer | A form and a signature: cheapest to fake, worthless uncorroborated, legally binding once false |
 
 <Exercise id="v-task-cloud-limits-3" />
 

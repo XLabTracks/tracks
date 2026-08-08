@@ -202,6 +202,8 @@ export const AI_REGIONS = {
 } as const;
 
 export const TYPES_OF_AI_COPY = {
-  prompt: "Pick any system to see what it is and why it sits where it does.",
-  legend: "Each ring contains the next. A system sits at the deepest ring it belongs to.",
+  prompt:
+    "Click a level to see the systems that live there — and why each sits there, not one level deeper.",
+  legend:
+    "Each ring contains the next. A system sits at the deepest ring it belongs to. Click a level to open it; drag or use +/− for a closer look.",
 } as const;

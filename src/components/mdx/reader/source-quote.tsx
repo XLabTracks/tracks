@@ -45,10 +45,14 @@ export function SourceQuote({
         </span>
         {what ? <span className="text-muted-foreground"> — {what}</span> : null}
       </figcaption>
-      {/* Paragraph gaps are set between siblings, not by resetting every `p`:
-          a blanket margin-0 closes the gap the passage's own paragraphing
-          depends on, and two paragraphs of a quotation run together. */}
-      <blockquote className="border-border mt-3 border-l-2 pl-4 leading-relaxed [&>p]:m-0 [&>p+p]:mt-3">
+      {/* One gap rule, between siblings of any kind — the passage's own
+          paragraphing is the thing being reproduced, and preflight has
+          already zeroed the margins on p, ul and ol, so without this a
+          quotation of more than one block renders as an unbroken wall.
+          Trap: it must not be paired with a `[&>p]:m-0` reset. That selector
+          is the more specific of the two, so it wins on exactly the elements
+          the gap is mostly for and silently closes p+p again. */}
+      <blockquote className="border-border mt-3 border-l-2 pl-4 leading-relaxed [&>*+*]:mt-3">
         {children}
       </blockquote>
       <p className="text-muted-foreground mt-3 text-sm">{by}</p>

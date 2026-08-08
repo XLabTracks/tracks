@@ -108,14 +108,20 @@ export function Fold({ label = "Optional material", children }: FoldProps) {
         id={bodyId}
         hidden={!open}
         className={cn(
-          "px-4 pt-4 pb-4 text-sm leading-relaxed",
+          // break-words because the shell is overflow-hidden: a token with no
+          // break opportunity (a slashed path, a long URL) is not scrolled to
+          // here, it is cut off and gone.
+          "px-4 pt-4 pb-4 text-sm leading-relaxed break-words",
           "text-foreground/80",
           "[&>*+*]:mt-3",
           "[&_ul]:list-disc [&_ol]:list-decimal [&_ul]:pl-5 [&_ol]:pl-5",
           "[&_li]:marker:text-muted-foreground [&_li+li]:mt-1.5",
           "[&_strong]:text-foreground [&_strong]:font-semibold",
           "[&_a]:underline [&_a]:underline-offset-4",
-          "[&_code]:bg-muted [&_code]:rounded [&_code]:px-1 [&_code]:py-0.5 [&_code]:text-[0.9em]",
+          // The chip is for `code` in a sentence. A fenced block is
+          // <pre><code>, and it is already a box (.lesson-body pre): a chip
+          // inside it draws a second, wrongly-sized one.
+          "[&_:not(pre)>code]:bg-muted [&_:not(pre)>code]:rounded [&_:not(pre)>code]:px-1 [&_:not(pre)>code]:py-0.5 [&_:not(pre)>code]:text-[0.9em]",
         )}
       >
         {children}

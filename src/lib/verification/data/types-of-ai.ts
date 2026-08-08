@@ -193,11 +193,11 @@ export const AI_LEVELS: AiLevel[] = [
 export const AI_REGIONS = {
   theoretical: {
     label: "Theoretical only",
-    body: "Beyond narrow AI is theoretical for now. There are no real general (non-narrow) AI models known today — the outer ring is where AGI and ASI would sit.",
+    body: "Right now is theoretical-only. There are no real non-narrow AI models known right now.",
   },
   absurd: {
     label: "Possible but absurd",
-    body: "Theoretically possible, but would demand an absurd quantity of resources — far less likely to actually occur.",
+    body: "Theoretically possible but would require an absurd quantity of resources. Less likely to occur.",
   },
 } as const;
 

@@ -1,7 +1,12 @@
 "use client";
 
-import { useState } from "react";
-import { X } from "lucide-react";
+import { useMemo, useState } from "react";
+import {
+  hierarchy,
+  pack,
+  type HierarchyCircularNode,
+} from "d3-hierarchy";
+import { RotateCcw, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import {
   AI_LEVELS,
@@ -11,149 +16,257 @@ import {
 import type { VerificationWidgetProps } from "../kit/types";
 
 /**
- * "Types of AI" — the nested-containment picture from the outline, rebuilt in
- * the course palette. AI ⊃ Narrow AI ⊃ ML ⊃ Deep Learning ⊃ Generative AI ⊃
- * LLM ⊃ Transformer LLMs; every named system is a button that opens what it is
- * and why it sits at that ring and not the next one in. All content is data
- * (types-of-ai.ts); this file is geometry and interaction only.
+ * "Types of AI" — the nested-containment picture, laid out by D3's circle
+ * packing (d3-hierarchy `pack`) rather than hand-placed coordinates. AI ⊃
+ * Narrow AI ⊃ ML ⊃ Deep Learning ⊃ Generative AI ⊃ LLM ⊃ Transformer LLMs;
+ * each category is a circle holding the next category plus its own example
+ * systems as leaf circles.
  *
- * Geometry: seven circles sharing a tangent point at the bottom, so each inner
- * ring opens a horizontal shelf at its top for that level's label and chips.
- * The stage is a fixed 600-wide box that scrolls sideways on a narrow screen
- * rather than shrinking its labels into soup — the chips carry their own card
- * background so they stay legible over any ring tint.
+ * Interaction is the standard zoomable-circle-packing one: click a category to
+ * zoom into it (its children's labels appear, so the view is never crowded),
+ * click a leaf for what-it-is / why-it's-there, click the focused circle to
+ * zoom back out. The wash reddens with depth, so the innermost transformer
+ * circle is the reddest. Only d3-hierarchy's layout math is borrowed — the
+ * SVG, palette and interaction are the course's own.
  */
 
-const CX = 300;
-const BOTTOM = 590;
-// Outermost first — index matches AI_LEVELS. Equal radius gaps (37) so every
-// ring opens the same-height shelf at its top for a label plus a chip row.
-const R = [285, 248, 211, 174, 137, 100, 63];
-const LABEL_Y = [38, 112, 186, 260, 334, 408, 482];
-// Chip cluster per level (null = the outer "AI" ring, which is region-only).
-// `y` is the cluster's TOP, set just under the label so a multi-row cluster
-// grows downward into its own ring and never rides up over the label.
-const CHIP: ({ y: number; w: number } | null)[] = [
-  null,
-  { y: 128, w: 300 },
-  { y: 202, w: 264 },
-  { y: 276, w: 226 },
-  { y: 350, w: 202 },
-  { y: 424, w: 150 },
-  { y: 500, w: 134 },
-];
-// Ring fills: the theoretical outer ring reads grey (not real yet); narrow AI
-// is a clean white ground; each deeper ring adds a light navy wash.
-const RING_FILL = [
-  { fill: "var(--muted)", opacity: 1 },
-  { fill: "var(--card)", opacity: 1 },
-  { fill: "var(--primary)", opacity: 0.05 },
-  { fill: "var(--primary)", opacity: 0.05 },
-  { fill: "var(--primary)", opacity: 0.05 },
-  { fill: "var(--primary)", opacity: 0.05 },
-  { fill: "var(--primary)", opacity: 0.05 },
-];
+const SIZE = 920;
 
-type Sel =
-  | { kind: "ex"; li: number; ei: number }
-  | { kind: "level"; li: number }
-  | { kind: "region"; key: "theoretical" | "absurd" }
-  | null;
+type Datum = {
+  name: string;
+  key?: string;
+  li?: number;
+  ei?: number;
+  value?: number;
+  children?: Datum[];
+};
+
+function buildData(): Datum {
+  function node(i: number): Datum {
+    const lvl = AI_LEVELS[i];
+    const exs: Datum[] = lvl.examples.map((ex, ei) => ({
+      name: ex.name,
+      li: i,
+      ei,
+      value: 1,
+    }));
+    const inner = i + 1 < AI_LEVELS.length ? [node(i + 1)] : [];
+    const children = [...exs, ...inner];
+    return children.length
+      ? { name: lvl.name, key: lvl.key, children }
+      : { name: lvl.name, key: lvl.key, value: 1 };
+  }
+  return node(0);
+}
+
+type Node = HierarchyCircularNode<Datum>;
+type Sel = { li: number; ei: number } | { region: "theoretical" | "absurd" } | null;
+
+function isLeaf(n: Node) {
+  return n.data.li !== undefined;
+}
 
 export function TypesOfAi(_: VerificationWidgetProps) {
   void _;
+  const root = useMemo(
+    () =>
+      pack<Datum>()
+        .size([SIZE, SIZE])
+        .padding(8)(
+        hierarchy<Datum>(buildData())
+          .sum((d) => d.value ?? 0)
+          .sort((a, b) => (b.value ?? 0) - (a.value ?? 0)),
+      ),
+    [],
+  );
+  const [focus, setFocus] = useState<Node>(root);
   const [sel, setSel] = useState<Sel>(null);
-  const selKey =
-    sel === null
-      ? "none"
-      : sel.kind === "ex"
-        ? `e-${sel.li}-${sel.ei}`
-        : sel.kind === "level"
-          ? `l-${sel.li}`
-          : `r-${sel.key}`;
+
+  const margin = 1.08;
+  const k = SIZE / (focus.r * 2 * margin);
+  const tx = SIZE / 2 - focus.x * k;
+  const ty = SIZE / 2 - focus.y * k;
+  const nodes = root.descendants();
+
+  function onCircle(n: Node) {
+    if (isLeaf(n)) {
+      setSel({ li: n.data.li!, ei: n.data.ei! });
+      return;
+    }
+    if (n === focus) setFocus((n.parent as Node) ?? root);
+    else setFocus(n);
+  }
 
   return (
     <div className="not-prose my-6">
-      <p className="text-muted-foreground mb-3 text-xs">{C.legend}</p>
+      <p className="text-muted-foreground mb-3 text-xs">
+        {C.legend} Click a ring to zoom in; click it again to zoom out.
+      </p>
 
       <div className="grid items-start gap-4 lg:grid-cols-[minmax(0,1fr)_18rem]">
-        {/* Diagram: fixed stage, scrolls sideways when the column is narrow. */}
-        <div className="min-w-0 overflow-x-auto">
-          <div className="relative mx-auto h-[600px] w-[600px]">
+        <div className="border-border bg-card relative min-w-0 overflow-hidden rounded-xl border">
+          <div className="relative aspect-square w-full">
             <svg
-              viewBox="0 0 600 600"
+              viewBox={`0 0 ${SIZE} ${SIZE}`}
               className="absolute inset-0 h-full w-full"
-              aria-hidden
             >
-              {R.map((r, i) => (
-                <circle
-                  key={i}
-                  cx={CX}
-                  cy={BOTTOM - r}
-                  r={r}
-                  fill={RING_FILL[i].fill}
-                  fillOpacity={RING_FILL[i].opacity}
-                  className="stroke-primary/25"
-                  strokeWidth={1}
-                />
-              ))}
-            </svg>
-
-            {/* Level labels — clickable for the category's definition. */}
-            {AI_LEVELS.map((lvl, i) => (
-              <button
-                key={lvl.key}
-                type="button"
-                onClick={() => setSel({ kind: "level", li: i })}
-                style={{ top: LABEL_Y[i] }}
-                className={cn(
-                  "absolute left-1/2 -translate-x-1/2 -translate-y-1/2 rounded px-1.5 text-sm font-semibold whitespace-nowrap transition-colors",
-                  "text-foreground hover:underline focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none",
-                  sel?.kind === "level" && sel.li === i && "underline",
-                )}
+              {/* click-away target: zoom out one level */}
+              <rect
+                x={0}
+                y={0}
+                width={SIZE}
+                height={SIZE}
+                fill="transparent"
+                onClick={() => setFocus((focus.parent as Node) ?? root)}
+              />
+              <g
+                style={{
+                  transform: `translate(${tx}px, ${ty}px) scale(${k})`,
+                  transition: "transform 600ms cubic-bezier(0.22,0.61,0.36,1)",
+                }}
               >
-                {lvl.name}
-              </button>
-            ))}
+                {nodes.map((n, i) => {
+                  const leaf = isLeaf(n);
+                  const active =
+                    leaf &&
+                    sel &&
+                    "li" in sel &&
+                    sel.li === n.data.li &&
+                    sel.ei === n.data.ei;
+                  return (
+                    <circle
+                      key={i}
+                      cx={n.x}
+                      cy={n.y}
+                      r={n.r}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        onCircle(n);
+                      }}
+                      className={cn(
+                        "cursor-pointer transition-[stroke]",
+                        leaf
+                          ? "fill-card stroke-border hover:stroke-foreground"
+                          : "stroke-primary-foreground/35 hover:stroke-primary-foreground/70",
+                        active && "stroke-foreground",
+                      )}
+                      style={{
+                        fill: leaf
+                          ? "var(--card)"
+                          : n.depth === 0
+                            ? "var(--muted)"
+                            : "var(--primary)",
+                        fillOpacity: leaf
+                          ? 1
+                          : n.depth === 0
+                            ? 1
+                            : Math.min(0.85, 0.08 + n.depth * 0.13),
+                        strokeWidth: 1,
+                        vectorEffect: "non-scaling-stroke",
+                      }}
+                    />
+                  );
+                })}
+              </g>
 
-            {/* Example chips per level. */}
-            {AI_LEVELS.map((lvl, li) => {
-              const c = CHIP[li];
-              if (!c) return null;
-              return (
-                <div
-                  key={lvl.key}
-                  style={{ top: c.y, maxWidth: c.w }}
-                  className="absolute left-1/2 flex -translate-x-1/2 flex-wrap justify-center gap-1"
-                >
-                  {lvl.examples.map((ex, ei) => {
-                    const active =
-                      sel?.kind === "ex" && sel.li === li && sel.ei === ei;
-                    return (
-                      <button
-                        key={ex.name}
-                        type="button"
-                        onClick={() => setSel({ kind: "ex", li, ei })}
-                        className={cn(
-                          "border-border bg-card text-foreground shadow-soft rounded-full border px-2 py-0.5 text-xs whitespace-nowrap transition-shadow",
-                          "hover:ring-2 hover:ring-ring focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none",
-                          active && "ring-2 ring-foreground",
-                        )}
-                      >
-                        {ex.name}
-                      </button>
-                    );
-                  })}
-                </div>
-              );
-            })}
+              {/* Labels sit above the circles, constant size. Each one shows
+                  once its circle is big enough (and, for a leaf, once its name
+                  fits), so the overview reads as the category structure and
+                  zooming reveals the systems inside. */}
+              {nodes.map((n, i) => {
+                const leaf = isLeaf(n);
+                const sx = n.x * k + tx;
+                const sy = n.y * k + ty;
+                const sr = n.r * k;
+                if (leaf) {
+                  const fs = Math.min(14, Math.max(9, sr * 0.44));
+                  const fits = n.data.name.length * fs * 0.5 < sr * 1.85;
+                  if (sr < 15 || !fits) return null;
+                  return (
+                    <text
+                      key={i}
+                      x={sx}
+                      y={sy}
+                      textAnchor="middle"
+                      dominantBaseline="middle"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        onCircle(n);
+                      }}
+                      className="fill-foreground cursor-pointer font-medium"
+                      style={{ fontSize: fs }}
+                    >
+                      {n.data.name}
+                    </text>
+                  );
+                }
+                // Only the focused ring and its direct child categories are
+                // labelled, so category names never stack; zooming in reveals
+                // the next one. Leaf-example labels (above) always show when
+                // they fit.
+                if (n !== focus && n.parent !== focus) return null;
+                if (sr < 22) return null;
+                const fs = Math.min(20, Math.max(11, sr * 0.14));
+                // Sit the label in the ring's open crescent — the side away
+                // from the inner category circle — so nested categories don't
+                // stack their labels on top of each other.
+                const inner = n.children?.find((c) => c.data.li === undefined);
+                let lx = n.x;
+                let ly = n.y - n.r * 0.82;
+                if (inner) {
+                  const vx = n.x - inner.x;
+                  const vy = n.y - inner.y;
+                  const m = Math.hypot(vx, vy);
+                  if (m > n.r * 0.12) {
+                    lx = n.x + (vx / m) * n.r * 0.7;
+                    ly = n.y + (vy / m) * n.r * 0.7;
+                  }
+                }
+                return (
+                  <text
+                    key={i}
+                    x={lx * k + tx}
+                    y={ly * k + ty}
+                    textAnchor="middle"
+                    dominantBaseline="middle"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      onCircle(n);
+                    }}
+                    className={cn(
+                      "cursor-pointer font-semibold",
+                      n.depth === 0 ? "fill-foreground" : "fill-primary-foreground",
+                    )}
+                    style={{
+                      fontSize: fs,
+                      paintOrder: "stroke",
+                      stroke: n.depth === 0 ? "transparent" : "rgba(0,0,0,0.3)",
+                      strokeWidth: n.depth === 0 ? 0 : 3,
+                    }}
+                  >
+                    {n.data.name}
+                  </text>
+                );
+              })}
+            </svg>
           </div>
+
+          {focus !== root && (
+            <button
+              type="button"
+              aria-label="Zoom out"
+              onClick={() => setFocus((focus.parent as Node) ?? root)}
+              className="border-border bg-card text-foreground hover:bg-muted shadow-soft absolute bottom-2 left-2 flex items-center gap-1.5 rounded-lg border px-2.5 py-1.5 text-xs font-medium"
+            >
+              <RotateCcw className="size-3.5" aria-hidden /> Out
+            </button>
+          )}
         </div>
 
-        {/* Detail panel — floats in on each new selection. */}
+        {/* Detail panel. */}
         <div className="lg:sticky lg:top-20 lg:self-start">
           <div
-            key={selKey}
+            key={sel && "li" in sel ? `e-${sel.li}-${sel.ei}` : sel ? `r-${sel.region}` : "none"}
             className={cn(
               "border-border bg-card shadow-soft-md rounded-xl border p-4 text-sm",
               "motion-safe:animate-in motion-safe:fade-in motion-safe:slide-in-from-right-2 motion-safe:duration-300",
@@ -167,7 +280,7 @@ export function TypesOfAi(_: VerificationWidgetProps) {
                     <button
                       key={key}
                       type="button"
-                      onClick={() => setSel({ kind: "region", key })}
+                      onClick={() => setSel({ region: key })}
                       className="border-border hover:bg-muted rounded-lg border px-3 py-2 text-left"
                     >
                       <span className="font-medium">{AI_REGIONS[key].label}</span>
@@ -188,30 +301,20 @@ export function TypesOfAi(_: VerificationWidgetProps) {
                 >
                   <X className="size-4" aria-hidden />
                 </button>
-                {sel.kind === "ex" ? (
+                {"li" in sel ? (
                   <ExampleDetail
                     ex={AI_LEVELS[sel.li].examples[sel.ei]}
                     levelName={AI_LEVELS[sel.li].name}
                   />
-                ) : sel.kind === "level" ? (
-                  <div>
-                    <p className="text-muted-foreground font-mono text-[11px] tracking-[0.12em] uppercase">
-                      Level
-                    </p>
-                    <h4 className="mt-1 text-base font-semibold">
-                      {AI_LEVELS[sel.li].name}
-                    </h4>
-                    <p className="mt-2">{AI_LEVELS[sel.li].blurb}</p>
-                  </div>
                 ) : (
                   <div>
                     <p className="text-muted-foreground font-mono text-[11px] tracking-[0.12em] uppercase">
                       Beyond real AI
                     </p>
                     <h4 className="mt-1 text-base font-semibold">
-                      {AI_REGIONS[sel.key].label}
+                      {AI_REGIONS[sel.region].label}
                     </h4>
-                    <p className="mt-2">{AI_REGIONS[sel.key].body}</p>
+                    <p className="mt-2">{AI_REGIONS[sel.region].body}</p>
                   </div>
                 )}
               </>

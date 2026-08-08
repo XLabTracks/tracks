@@ -205,7 +205,8 @@ export const verificationExercises: Exercise[] = [
   {
     id: "v-task-welcome-1",
     type: "writing-prompt",
-    prompt: "Optional reflection — Write a short note that you can look back on after completing the course:\n\n- what you want to gain from the course;\n- which part of international AI verification currently seems hardest;\n- and which assumptions you expect the course to challenge.",
+    prompt:
+      "Optional reflection — Write a short note that you can look back on after completing the course:\n\n- Why are you interested in learning about AI verification?\n- What do you want to gain from this course?\n- Before beginning, brainstorm: what parts of AI verification intuitively seems hardest?",
     format: "free-form",
     optional: true,
   },

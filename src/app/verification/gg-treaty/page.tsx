@@ -7,14 +7,18 @@ export const metadata: Metadata = {
 };
 
 /**
- * The third agreement 1.1's hard version compares, reproduced in full.
+ * The Global Governance of AI treaty proposal, reproduced in full.
  *
- * The other two are arXiv papers the paper pipeline already holds. This one
- * is not a paper: global-governance.ai renders it from a plugin bundle and
- * offers a builder UI rather than a readable document, so `npm run
- * gg-treaty:build` extracts the articles into a committed artifact and this
- * page prints them. Reproducing it here is the course owner's instruction —
- * the task is to read and compare provisions, and a builder cannot be read.
+ * No lesson links here. It was built for 1.1's optional hard version, which
+ * the course owner cut; the page is kept because the extraction is the hard
+ * part and the text is worth having. Link it or delete it — do not leave it
+ * a third way.
+ *
+ * global-governance.ai is not a paper the pipeline can hold: it renders the
+ * proposal from a plugin bundle and offers a builder UI rather than a
+ * readable document, so `npm run gg-treaty:build` extracts the articles into
+ * a committed artifact and this page prints them. Reproducing it is the
+ * course owner's instruction — a builder cannot be read.
  *
  * The drafters' commentary rides with each article rather than sitting in a
  * separate apparatus, because for a comparison exercise why a clause is

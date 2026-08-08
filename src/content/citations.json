@@ -8,13 +8,6 @@
       "container": "arXiv",
       "date": "Oct. 2023"
     },
-    "https://arxiv.org/abs/2311.10748": {
-      "title": "An International Treaty to Implement a Global Compute Cap for Advanced Artificial Intelligence",
-      "about": "A treaty proposal for a global cap on the computational power used to develop advanced AI, with enforcement machinery.",
-      "authors": "Miotti, Andrea",
-      "container": "arXiv",
-      "date": "Nov. 2023"
-    },
     "https://arxiv.org/abs/2402.08797": {
       "title": "Computing Power and the Governance of Artificial Intelligence",
       "about": "The foundational survey of compute as a governance lever — why computing power is detectable, excludable, and quantifiable in ways algorithms and data are not.",
@@ -514,11 +507,6 @@
       "about": "An open letter from employees of frontier AI companies asking the U.S. government to support an international effort to build the technical and governance tools needed to deliberately pace automated AI development.",
       "authors": "Employees of frontier AI companies",
       "date": "July 2026"
-    },
-    "https://global-governance.ai/treaty/": {
-      "title": "Treaty Builder",
-      "about": "An interactive tool for assembling an AI treaty proposal from seven governance building blocks, with a comparison view across existing proposals and a generated draft to take away.",
-      "authors": "Global Governance of AI"
     },
     "https://tlc.texas.gov/docs/legref/readingabill.pdf": {
       "title": "Reading Statutes and Bills",

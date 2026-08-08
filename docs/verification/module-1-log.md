@@ -72,3 +72,25 @@ the letters debrief, tight-budget replay, and the two-tap reset.
   outline — an interactive node-map spec with exercise briefs and no learner
   prose. It ships nothing until the prose exists; the author note in
   `scoping-upstream-downstream.mdx` records the spec.
+
+## 1.1 — the optional hard version, cut
+
+The fold under the workspace asked for a comparison across three treaty
+proposals (Scher, Miotti, and the Global Governance of AI articles) with a
+two-level analysis brief under it. The course owner cut it. What that left:
+
+- **Both treaty papers stay in the graph.** `v-paper-scher-treaty` is what the
+  workspace questions are answered against, so it was never optional in
+  practice. `v-paper-miotti-treaty` is now reached only from the sidebar,
+  where it sits under 1.1 marked Optional. It gates nothing (`optional: true`
+  keeps it out of every `…ProgressContentIds` accessor), so leaving it costs a
+  learner nothing and removing it is a content decision.
+- **`/verification/gg-treaty` has no inbound link.** The page, the committed
+  `gg-treaty.json` and `npm run gg-treaty:build` are all still here. Extracting
+  173 articles out of a WordPress plugin bundle is the expensive part and the
+  text is worth keeping, so the page was left standing with its docstring
+  changed to say so. Link it from somewhere or delete the three together.
+- **Two citations.json entries went with the fold**: arXiv:2311.10748 and
+  global-governance.ai/treaty/. Both were cited from that fold and nowhere
+  else, so the registry's orphan test would have failed on them.
+  arXiv:2511.10783 stays — three other lessons cite it.

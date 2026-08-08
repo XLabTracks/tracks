@@ -1,10 +1,10 @@
 /* GENERATED FILE — do not edit by hand.
    Source: verification-capstones/*.md
    Regenerate: npm run verification:capstones
-   79 capstone(s). Ordering and formatting are deterministic so
+   80 capstone(s). Ordering and formatting are deterministic so
    CI can diff this file against a fresh build. */
 window.CAPSTONE_BANK = {
-  "count": 79,
+  "count": 80,
   "entries": [
     {
       "slug": "agent-eval-design",
@@ -202,6 +202,80 @@ window.CAPSTONE_BANK = {
       ],
       "updated": "2026-08-06",
       "html": "<h3>The idea, as posed</h3>\n<p>From <a href=\"https://www.markusanderljung.com/blog/a-collection-of-ai-governance-research-ideas-2024\">A Collection of AI Governance Research Ideas — von Knebel &amp; Anderljung (2024)</a>, idea 21, \"Implementation Details of the 'Best Practices' List\". Quoted:</p>\n<blockquote><p>Researchers from GovAI have previously surveyed leading experts from AGI labs, academia and civil society on best practices for those developing advanced AI systems. This has allowed researchers to collect a list of measures including risk assessments and evaluations that have buy-in from a wide range of actors across sectors, which should make them easier to embed into existing or forthcoming regulatory regimes. That said, the survey was focused mostly on what would be good ideas, and given the methodology, didn't go into depth as to how these approaches would be implemented in practice.</p>\n<p>Research question: How can the items identified in this survey be implemented? Methodology: policy analysis, strategy planning, stakeholder mapping, other. Further reading: \"Towards best practices in AGI safety and governance: A survey of expert opinion\".</p></blockquote>\n<h3>What you produce</h3>\n<p>The implementation depth the survey deliberately left out: for items from the surveyed list, how each would be implemented in practice, using the methodology the idea names — policy analysis, strategy planning, stakeholder mapping.</p>"
+    },
+    {
+      "slug": "capability-chart-refresh",
+      "source": "verification-capstones/capability-chart-refresh.md",
+      "title": "Redraw the AI-vs-Human Capability Chart",
+      "track": "Technical Governance",
+      "status": "ready",
+      "summary": "The best-known chart of AI against human performance stops in 2023. Rebuild it at today's date and say what a threshold can honestly attach to.",
+      "team": {
+        "min": 1,
+        "max": 2,
+        "label": "1–2 people",
+        "bucket": "Pair or trio"
+      },
+      "effort": {
+        "min": 14,
+        "max": 20,
+        "label": "14–20 hrs",
+        "bucket": "15–20 hrs"
+      },
+      "duration": {
+        "label": "3 weeks",
+        "weeks": 3
+      },
+      "perWeek": "≈6 hrs/wk",
+      "difficulty": "stretch",
+      "deliverable": "Reproducible chart and dataset, a methods note, and a two-page brief on what a capability threshold can be written against",
+      "deliverableType": "notebook",
+      "mentor": "optional",
+      "audience": "Anyone about to cite a capability curve in a threshold argument.",
+      "verificationFit": "Lands on 1.1 — a pause agreement has to name a covered capability, and this is the measurement that claim would rest on.",
+      "courseFit": true,
+      "skills": [
+        "benchmark literacy",
+        "data provenance",
+        "normalisation choices",
+        "trend presentation",
+        "threshold design"
+      ],
+      "prerequisites": [],
+      "sources": [
+        {
+          "label": "Test scores of AI systems on various capabilities relative to human performance — Our World in Data",
+          "href": "https://ourworldindata.org/grapher/test-scores-ai-capabilities-relative-human-performance"
+        },
+        {
+          "label": "Dynabench: Rethinking Benchmarking in NLP — Kiela et al. (2021)",
+          "href": "https://arxiv.org/abs/2104.14337"
+        },
+        {
+          "label": "AI Benchmarking Dashboard — Epoch AI",
+          "href": "https://epoch.ai/data/ai-benchmarking-dashboard"
+        },
+        {
+          "label": "AI Index — Stanford HAI",
+          "href": "https://hai.stanford.edu/ai-index"
+        }
+      ],
+      "similar": [
+        {
+          "slug": "threshold-decay-analysis",
+          "title": "How Fast Does a Compute Threshold Decay?"
+        },
+        {
+          "slug": "field-map-refresh",
+          "title": "Refresh a Governance Field Map"
+        },
+        {
+          "slug": "eval-to-threshold-brief",
+          "title": "From Eval Result to Policy Threshold"
+        }
+      ],
+      "updated": "2026-08-07",
+      "html": "<h3>The brief</h3>\n<p>One chart does more work in AI-policy argument than almost any other: Our World in Data's <em>Test scores of AI systems on various capabilities relative to human performance</em>. Twelve capabilities — handwriting, speech and image recognition, reading comprehension, language understanding, predictive reasoning, code generation, complex reasoning, general knowledge, maths, nuanced language interpretation, and reading comprehension with unanswerable questions — each normalised so the system's first recorded score sits at −100 and human performance sits at zero. Lines climb, cross zero, and stop.</p>\n<p>It draws on Kiela et al.'s Dynabench data. Its span is <strong>1998–2023</strong> and Our World in Data last processed it on <strong>2 April 2024</strong>. Everything since is missing, and the missing part is the part people cite it about.</p>\n<p>Rebuild it. Three things come out:</p>\n<ul><li><strong>The dataset.</strong> A tidy, versioned table: capability, benchmark, system, date, raw score, human baseline, and a provenance column giving the source for every single row. No row without a citation.</li><li><strong>The chart.</strong> The same idea redrawn to today, reproducible from the table by a script anyone can re-run. Match the original's normalisation, or depart from it and say why in the methods note — either is a defensible answer, but only one of them can be silent.</li><li><strong>The two-page brief.</strong> What a capability threshold in an agreement could honestly be written against, given what you just found out about the measurements. This is the part a policy reader will actually use.</li></ul>\n<h3>Why it exists</h3>\n<p>The chart is a picture of benchmarks dying, and it is read as a picture of capability growing. Those are not the same claim, and the difference is load-bearing for anyone writing a rule.</p>\n<p>Three problems are waiting inside it, and finding them is most of the work:</p>\n<ul><li><strong>Saturation censors the series.</strong> A benchmark that gets beaten stops being run, so its line ends. The end of a line is a retirement, not a plateau. What an updated chart does at that moment — drop the series, splice a successor benchmark, or mark it retired — is the central methodological choice of this project, and there is no free answer.</li><li><strong>\"Human performance\" is twelve different things.</strong> Each zero line comes from a different baseline study with a different population, incentive and protocol: annotators paid per item, domain experts, a competition field. Normalising them all to zero makes them look commensurable when they are not.</li><li><strong>The floor moves too.</strong> Setting each capability's first score to −100 means the visual slope depends on when someone first bothered to measure. A capability nobody tested until late looks like it arrived fast.</li></ul>\n<p>For this course the payoff is direct. A pause agreement has to name what is covered. If the covered thing is a capability, somebody has to be able to measure it the same way twice — and a chart whose every line ends when the test gets too easy is evidence about how hard that is.</p>\n<h3>Scope</h3>\n<p><strong>In scope:</strong> the twelve existing capability series, extended where a defensible continuation exists; a named set of post-2023 benchmarks you argue into the frame; and the provenance work to support both.</p>\n<p><strong>Out of scope:</strong> running any evaluation yourself. This is a data-provenance and presentation project, not an eval project — <em>From Eval Result to Policy Threshold</em> is the one that runs evals.</p>\n<p><strong>Also out of scope:</strong> building a new benchmark, and scraping leaderboards without provenance. A number whose source you cannot name does not go in the table, however much it would help the line.</p>\n<p><strong>Watch the scope creep here specifically:</strong> deciding which modern benchmarks belong is genuinely hard, and teams lose a week to it. Pick your candidates in the first session, write down why each one is in or out, and move on. Some will turn out to have no defensible human baseline at all — that is a finding to report, not a failure to fix.</p>\n<h3>What good looks like</h3>\n<div class=\"table-scroll\"><table><thead><tr><th>Dimension</th><th>Weak</th><th>Strong</th></tr></thead><tbody><tr><td>Provenance</td><td>Numbers from leaderboards</td><td>Every row cites a source; contested rows flagged as contested</td></tr><tr><td>Human baselines</td><td>\"Human performance\" as one column</td><td>Each baseline's population, protocol and date stated, with the ones that do not exist named as missing</td></tr><tr><td>Saturation</td><td>Lines that just stop</td><td>An explicit, defended rule for retirement and succession, applied the same way to every series</td></tr><tr><td>Normalisation</td><td>The original's, copied without comment</td><td>The choice made deliberately, with what it flatters and what it hides both named</td></tr><tr><td>Reproducibility</td><td>A chart image</td><td>A script and a table that regenerate the chart from scratch</td></tr><tr><td>The brief</td><td>\"Capabilities are rising fast\"</td><td>What a threshold can attach to, what it cannot, and how fast the answer decays</td></tr></tbody></table></div>\n<h3>Getting started</h3>\n<ol><li>Pull the original data and reproduce the existing chart <em>before</em> changing anything. If you cannot reproduce 1998–2023, you cannot defend 2024 onward.</li><li>Take one series all the way to today before starting the second. The first one teaches you the retirement rule; doing all twelve in parallel means discovering it twelve times.</li><li>Write the provenance column as you go. Backfilling citations onto a finished table is the way this project fails.</li></ol>"
     },
     {
       "slug": "cloud-kyc-regime",

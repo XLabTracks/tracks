@@ -127,6 +127,7 @@ the full bank were checked on **2026-08-04**.
 | Link | Status | Note |
 |---|---|---|
 | arXiv, LessWrong, EA Forum, aisafety.com, Substack, OpenReview, NIST, Google Docs, Airtable, eagroups.org and personal-site links cited by the full 58-entry bank | confirmed | HTTP 200 on 2026-08-04, in the playground repo before the port |
+| The four links cited by `capability-chart-refresh` (Our World in Data grapher, arXiv 2104.14337, Epoch AI benchmarking dashboard, Stanford HAI AI Index) | confirmed | HTTP 200 on 2026-08-07. The arXiv id was checked against its own `citation_title` — it is Dynabench, the dataset behind the chart. |
 | `coefficientgiving.org` — the capability-evaluations RFP | unchecked | Open Philanthropy renamed to Coefficient Giving in Nov 2025; the openphilanthropy.org URL cited by the source post 301s to this host, which returns 403 to automated clients. Page title is present in search indexes. Re-check by hand. |
 
 ## Body

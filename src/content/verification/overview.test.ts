@@ -36,7 +36,7 @@ describe("course overview", () => {
   // blocks are the shape of the course. Flattening them loses that.
   it("keeps the coverage questions grouped", () => {
     const learn = courseOverview.find((s) => s.id === "learn");
-    expect(learn?.kind === "bullets" && learn.groups.map((g) => g.length)).toEqual([
+    expect(learn?.kind === "numbered" && learn.groups.map((g) => g.length)).toEqual([
       2, 2, 2, 1, 1,
     ]);
   });

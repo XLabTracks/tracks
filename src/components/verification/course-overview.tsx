@@ -85,9 +85,7 @@ export function CourseOverview() {
                           aria-hidden
                           className="text-muted-foreground/70 mt-px shrink-0 font-semibold tabular-nums"
                         >
-                          {section.kind === "numbered"
-                            ? `${numberFrom(section.groups, gi) + ii}.`
-                            : "—"}
+                          {`${numberFrom(section.groups, gi) + ii}.`}
                         </span>
                         <span>{item}</span>
                       </li>

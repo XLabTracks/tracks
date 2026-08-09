@@ -22,7 +22,7 @@ export interface OverviewSection {
 }
 
 export interface ListSection extends OverviewSection {
-  kind: "bullets" | "numbered";
+  kind: "numbered";
   /**
    * Groups of items. The author's copy separates the coverage questions into
    * blocks with blank lines; the blocks are kept as groups rather than
@@ -46,7 +46,7 @@ export type CourseOverviewSection = ListSection | ProseSection;
 export const courseOverview: CourseOverviewSection[] = [
   {
     id: "who",
-    kind: "bullets",
+    kind: "numbered",
     title: "You should take this course if you are",
     groups: [
       [
@@ -57,7 +57,7 @@ export const courseOverview: CourseOverviewSection[] = [
   },
   {
     id: "learn",
-    kind: "bullets",
+    kind: "numbered",
     title: "Throughout the course, you will learn",
     groups: [
       [

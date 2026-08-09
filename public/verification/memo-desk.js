@@ -21,6 +21,49 @@ window.VTMemoDesk = (function () {
   var MODULES = window.VERIFICATION_MEMO_MODULES || [];
   var WPM = 220;
 
+  /* What each genre's desk is. Absent (or unknown) is a memo — the full
+     instrument: the audience/decision/falsifier pins, the "recommendation"
+     title, the memo checks, the steelman deck. A map, an essay or a red-line is
+     not a memo and must not be dressed as one, so those pins and checks go off
+     and a one-line note says so, so their absence reads as intent rather than a
+     missing feature. Which slot is which is data (memos.ts → data/memos.js);
+     this is only how the desk renders each. */
+  var GENRE = {
+    memo: {
+      pins: true,
+      title: 'Title — the recommendation, not the topic',
+      checks: 'memo',
+      steelman: true,
+      skimDecision: true,
+      hint: '',
+    },
+    map: {
+      pins: false,
+      title: 'Title — what this map is of',
+      checks: 'none',
+      steelman: false,
+      skimDecision: false,
+      hint: 'This output is a map, not a memo — build it as annotated rows, not paragraphs, carrying what the brief above asks each row to hold. The memo’s audience, decision and falsifier pins and its prose checks are off here.',
+    },
+    essay: {
+      pins: false,
+      title: 'Title — your thesis, not the topic',
+      checks: 'prose',
+      steelman: false,
+      skimDecision: false,
+      hint: 'This output is an essay, not a memo — argue a thesis rather than issue a recommendation. The audience, decision and falsifier pins are off; the general legibility checks stay.',
+    },
+    redline: {
+      pins: false,
+      title: 'Title — the provision you are redrafting',
+      checks: 'none',
+      steelman: false,
+      skimDecision: false,
+      hint: 'This output is a red-line, not a memo: mark the article’s gaps and redraft the provision, following the brief above. The memo’s audience, decision and falsifier pins are off; peer review runs on the criteria in the check rail.',
+    },
+  };
+  function genreOf(s) { return (s && GENRE[s.genre]) || GENRE.memo; }
+
   /* The desk's own markup. It used to live in memo-desk.html, which meant the
      desk could only ever exist on that page; it is here so a unit page can
      mount the same surface beside the prompt that asks for the memo.
@@ -36,7 +79,8 @@ window.VTMemoDesk = (function () {
       '<h2 class="slot-title" id="slotTitle">&mdash;</h2>',
       '<p class="slot-meta" id="slotMeta"></p>',
       '<div id="slotBrief"></div>',
-      '<div class="pins">',
+      '<div class="genre-hint" id="genreHint" hidden></div>',
+      '<div class="pins" id="pins">',
         '<label class="pin"><span class="pk">To &mdash; a specific audience</span>',
           '<input id="fAudience" class="pin-in" type="text" autocomplete="off"',
           ' placeholder="e.g. the US delegation\'s technical adviser; the lab\'s policy lead…"></label>',
@@ -75,7 +119,7 @@ window.VTMemoDesk = (function () {
         '<div class="rail-card" id="criteriaCard" hidden>',
           '<p class="rk">Peer review runs on <span class="rk-note">the outline\'s criteria for this slot</span></p>',
           '<ul id="criteriaList" style="margin-left:18px;font-size:13px;line-height:1.6"></ul></div>',
-        '<div class="rail-card"><p class="rk">Steelman deck <span class="rk-note">contested claims get challenged, not narrated</span></p>',
+        '<div class="rail-card" id="steelmanCard"><p class="rk">Steelman deck <span class="rk-note">contested claims get challenged, not narrated</span></p>',
           '<p class="deck-card" id="deckCard">Draw a challenge and answer it inside the memo — or in the falsifier field.</p>',
           '<button type="button" class="tool" id="deckBtn">Draw a challenge</button></div>',
       '</div>',
@@ -135,6 +179,8 @@ window.VTMemoDesk = (function () {
   var byId = {};
   SLOTS.forEach(function (s) { byId[s.id] = s; });
   var current = SLOTS[0];
+  var CHECKS = 'memo';
+  var SKIM_DECISION = true;
 
   /* ---------- storage ---------- */
 
@@ -248,9 +294,25 @@ window.VTMemoDesk = (function () {
     }
   }
 
+  /* Re-dress the desk for the current slot's genre: a non-memo hides the pins
+     and the steelman deck, swaps the title's coaching line, and switches which
+     checks the rail runs. Runs on every select, so navigating re-dresses. */
+  function applyGenre() {
+    var g = genreOf(current);
+    el('pins').hidden = !g.pins;
+    el('steelmanCard').hidden = !g.steelman;
+    F.title.placeholder = g.title;
+    CHECKS = g.checks;
+    SKIM_DECISION = g.skimDecision;
+    var hint = el('genreHint');
+    hint.innerHTML = g.hint || '';
+    hint.hidden = !g.hint;
+  }
+
   function select(id) {
     if (!byId[id]) return;
     current = byId[id];
+    applyGenre();
     var d = STORE.read(id) || {};
     Object.keys(F).forEach(function (k) { F[k].value = d[k] || ''; });
     if (ownsHash && history.replaceState) history.replaceState(null, '', '#' + id);
@@ -272,6 +334,17 @@ window.VTMemoDesk = (function () {
     var out = [];
     var row = function (sev, html) { out.push({ sev: sev, html: html }); };
 
+    /* A map — or any genre the desk has no automated read on — is judged by
+       its brief and the peer-review criteria, not by prose heuristics. */
+    if (CHECKS === 'none') {
+      el('lint').innerHTML =
+        '<p class="rk-note">No automated checks for this genre — the brief and the peer-review criteria are the judge.</p>';
+      return;
+    }
+
+    /* The reader / decision / falsifier trio is the memo's contract; the prose
+       genres argue a thesis and have no recommendation to pin. */
+    if (CHECKS === 'memo') {
     row(F.audience.value.trim() ? 'ok' : 'bad', F.audience.value.trim()
       ? 'Reader named.'
       : '<b>No reader.</b> A memo addressed to nobody is the genre’s standard failure.');
@@ -282,13 +355,17 @@ window.VTMemoDesk = (function () {
       ? 'Falsifier stated — analytical, not persuasive.'
       : '<b>No falsifier.</b> State what would change your mind; it is the track’s signature move.');
 
+    }
+
     if (n === 0) { render(out); return; }
 
-    var tail = body.slice(Math.floor(body.length * 0.6));
-    var hasRec = /(recommend|should|must|propose|urge)/i.test(tail);
-    row(hasRec ? 'ok' : 'warn', hasRec
-      ? 'A recommendation lives in the final third.'
-      : '<b>No recommendation in the final third</b> (looked for recommend / should / must / propose / urge).');
+    if (CHECKS === 'memo') {
+      var tail = body.slice(Math.floor(body.length * 0.6));
+      var hasRec = /(recommend|should|must|propose|urge)/i.test(tail);
+      row(hasRec ? 'ok' : 'warn', hasRec
+        ? 'A recommendation lives in the final third.'
+        : '<b>No recommendation in the final third</b> (looked for recommend / should / must / propose / urge).');
+    }
 
     var hedges = HEDGES.filter(function (h) { return body.toLowerCase().indexOf(h) > -1; });
     row(hedges.length === 0 ? 'ok' : 'warn', hedges.length === 0
@@ -318,9 +395,11 @@ window.VTMemoDesk = (function () {
     render(out);
 
     function render(rows) {
-      el('lint').innerHTML = rows.map(function (r) {
-        return '<div class="lint-row ' + r.sev + '"><span class="d"></span><span>' + r.html + '</span></div>';
-      }).join('');
+      el('lint').innerHTML = rows.length
+        ? rows.map(function (r) {
+            return '<div class="lint-row ' + r.sev + '"><span class="d"></span><span>' + r.html + '</span></div>';
+          }).join('')
+        : '<p class="rk-note">The checks appear as you write.</p>';
     }
   }
 
@@ -348,7 +427,7 @@ window.VTMemoDesk = (function () {
       'the skim keeps ' + kept + ' of ' + words(body) + ' words · about ' + secs + 's of reading';
     out.innerHTML =
       (F.title.value.trim() ? '<div class="s-title">' + esc(F.title.value) + '</div>' : '') +
-      (F.decision.value.trim() ? '<div class="s-meta">decision: ' + esc(F.decision.value) + '</div>' : '') +
+      (SKIM_DECISION && F.decision.value.trim() ? '<div class="s-meta">decision: ' + esc(F.decision.value) + '</div>' : '') +
       html;
   }
 
@@ -391,18 +470,23 @@ window.VTMemoDesk = (function () {
   /* ---------- export ---------- */
 
   function exportMd() {
-    var md = [
+    var lines = [
       '# ' + (F.title.value.trim() || current.title),
       '',
       '_' + current.unit + ' — ' + current.title + ' · module ' + current.module + '_',
       '',
-      '**To:** ' + (F.audience.value.trim() || '—'),
-      '**Decision this informs:** ' + (F.decision.value.trim() || '—'),
-      '**What would change my mind:** ' + (F.falsifier.value.trim() || '—'),
-      '',
-      F.body.value.trim(),
-      '',
-    ].join('\n');
+    ];
+    /* The pinned fields are part of a memo's document; a map or an essay never
+       filled them, so they do not belong in that export. */
+    if (genreOf(current).pins) {
+      lines.push(
+        '**To:** ' + (F.audience.value.trim() || '—'),
+        '**Decision this informs:** ' + (F.decision.value.trim() || '—'),
+        '**What would change my mind:** ' + (F.falsifier.value.trim() || '—'),
+        '');
+    }
+    lines.push(F.body.value.trim(), '');
+    var md = lines.join('\n');
     var a = document.createElement('a');
     a.href = URL.createObjectURL(new Blob([md], { type: 'text/markdown;charset=utf-8' }));
     a.download = current.id + '.md';

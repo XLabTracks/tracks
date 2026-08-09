@@ -10,7 +10,7 @@
 import { describe, expect, it } from "vitest";
 import { existsSync, readFileSync } from "node:fs";
 import { join } from "node:path";
-import { memoModules, memoSlots } from "@/content/verification/memos";
+import { memoGenreLabels, memoModules, memoSlots } from "@/content/verification/memos";
 import { verificationLessons } from "@/content/verification/curriculum";
 
 const LESSONS_DIR = join(__dirname, "../../content/lessons/verification");
@@ -70,6 +70,13 @@ describe("verification written outputs", () => {
     expect(new Set(ids).size).toBe(ids.length);
     for (const slot of memoSlots) {
       expect(memoModules[slot.module], `${slot.id} has module ${slot.module}`).toBeTruthy();
+    }
+  });
+
+  it("every declared genre is one the desk and card know how to dress", () => {
+    for (const slot of memoSlots) {
+      if (!slot.genre) continue;
+      expect(memoGenreLabels[slot.genre], `${slot.id} has genre ${slot.genre}`).toBeTruthy();
     }
   });
 });

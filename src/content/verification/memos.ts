@@ -28,6 +28,28 @@
 
 export type MemoStatus = "specified" | "named" | "unspecified";
 
+/**
+ * The form the desk should dress a slot as. Absent means memo — the desk's
+ * default instrument: the audience / decision / falsifier pins, the
+ * "recommendation" title, the memo checks. A slot is marked here only when the
+ * outline's own title or brief names a different form — a map is annotated
+ * rows, not prose; an essay argues a thesis with no recommendation to pin; a
+ * red-line marks an article's gaps and redrafts a provision. Read the genre
+ * off the author's words; never invent one to tidy a slot up, and leave the
+ * ambiguous ones (a bare "written output", the essay/brief/reflection choice)
+ * as the memo default rather than guessing. The desk turns the memo-only pins
+ * and checks off for the non-memo genres — public/verification/memo-desk.js.
+ */
+export type MemoGenre = "memo" | "map" | "essay" | "redline";
+
+/** How each genre names itself on the in-lesson card. */
+export const memoGenreLabels: Record<MemoGenre, string> = {
+  memo: "Memo",
+  map: "Map",
+  essay: "Essay",
+  redline: "Red-line",
+};
+
 export interface MemoSlot {
   id: string;
   /** Module number, 0-4. */
@@ -36,6 +58,8 @@ export interface MemoSlot {
   unit: string;
   title: string;
   status: MemoStatus;
+  /** The form the desk dresses this as; absent = memo (the default). */
+  genre?: MemoGenre;
   /** Lesson contentRef basename under src/content/lessons/verification/. */
   lesson: string;
   optional?: boolean;
@@ -95,6 +119,7 @@ export const memoSlots: MemoSlot[] = [
     unit: "1.0",
     title: "Stakeholder map",
     status: "specified",
+    genre: "map",
     lesson: "scoping-effective-feasible",
     brief:
       "For a hypothetical pause treaty, place every relevant actor on the supply chain, annotate each with its most likely incentive class and the leverage it holds, and mark the two or three actors whose defection would collapse the regime.",
@@ -121,6 +146,7 @@ export const memoSlots: MemoSlot[] = [
     unit: "1.x",
     title: "Actor–authority–evidence map",
     status: "named",
+    genre: "map",
     lesson: "scoping-upstream-downstream",
     brief: "Actor–authority–evidence map for any element of the supply chain.",
     audience: null,
@@ -175,6 +201,7 @@ export const memoSlots: MemoSlot[] = [
     unit: "2.3",
     title: "Red-line the NTM article",
     status: "specified",
+    genre: "redline",
     lesson: "intelligence-action",
     brief:
       "Work from the verbatim MIRI text you annotated in 2.3.4: Definition 17 plus the noninterference and no-deliberate-concealment articles. Mark at least three gaps or ambiguities, starting from your four answers if you like, and redraft the one provision whose failure you judge most consequential. Then confront the question the historical record says drafters avoid: write the sharing clause the text lacks, or defend its absence in three sentences. Test whatever you write against 2.3.4’s rule, that states sign what is symmetric, cheap, and checkable, and finish with the both-capitals test: one paragraph on why Washington accepts your article, one on why Beijing does.",
@@ -195,6 +222,7 @@ export const memoSlots: MemoSlot[] = [
     unit: "2.4",
     title: "Analytical essay",
     status: "named",
+    genre: "essay",
     lesson: "human-institutions",
     brief: null,
     audience: null,

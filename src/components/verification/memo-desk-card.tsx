@@ -1,5 +1,6 @@
 import { ArrowUpRight, PenLine, Users } from "lucide-react";
 import {
+  memoGenreLabels,
   memoSlotsForLesson,
   type MemoSlot,
 } from "@/content/verification/memos";
@@ -44,6 +45,9 @@ function Slot({ slot }: { slot: MemoSlot }) {
         {/* The unit keeps its own case: the outline numbers some of these
             "1.x" and "3.x", and uppercasing turns that into "3.X". */}
         Written output · <span className="normal-case">{slot.unit}</span>
+        {slot.genre && slot.genre !== "memo" ? (
+          <span>· {memoGenreLabels[slot.genre]}</span>
+        ) : null}
         {slot.optional ? <span>· optional</span> : null}
       </p>
 

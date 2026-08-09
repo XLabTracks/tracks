@@ -141,7 +141,25 @@
 }
 .stub b { color: var(--foreground); font-weight: 600; }
 
+/* Names the genre when the desk is not a memo, and says which memo instruments
+   are deliberately off — a full hairline card, so nothing reads as half-painted
+   and the accent stays in the words. */
+.genre-hint {
+  margin-top: 16px;
+  padding: 10px 14px;
+  border: var(--hairline) solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--muted);
+  font-size: var(--fs-sm);
+  line-height: 1.55;
+  color: var(--foreground);
+}
+
 .pins { display: grid; gap: 12px; margin-top: 20px; }
+/* [hidden] is display:none in the UA sheet, but the grid rule above outranks
+   it, so a non-memo genre that sets the attribute needs this to actually hide
+   the pins. */
+.pins[hidden] { display: none; }
 @media (min-width: 760px) { .pins { grid-template-columns: 1fr 1fr; } }
 .pin { display: grid; gap: 4px; }
 .pin:first-child { grid-column: 1 / -1; }

@@ -337,6 +337,8 @@ describe("commit-construct exercise integrity", () => {
         exercise.construct.compareQuestions.length,
         `${exercise.id} compareQuestions`,
       ).toBeGreaterThan(0);
+      // Reveals are optional (an exercise may end at the learner's own
+      // construction), but a declared one may not be blank.
       for (const [field, value] of Object.entries({
         question: exercise.commit.question,
         commitReveal: exercise.commit.reveal,
@@ -344,6 +346,7 @@ describe("commit-construct exercise integrity", () => {
         revealLead: exercise.construct.revealLead,
         constructReveal: exercise.construct.reveal,
       })) {
+        if (value === undefined) continue;
         expect(value.trim(), `${exercise.id} ${field}`).not.toBe("");
       }
     }

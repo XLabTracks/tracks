@@ -1,0 +1,15 @@
+### The strongest claim
+
+Now we know a model organism of conditional RL resistance exists. This organism can selectively learn from training only in contexts it considers benign, and it was made through SFT-level affordances on a 14B model.
+
+The results so far do not support any claim about exploration hacking arising naturally, any claim about elicitation methods other than the RL attacks run here, and any claim about transfer to frontier-scale models. Thus, how far past the demonstrated case we should generalize exploration hacking is an argument we're still unable to make due to a lack of information.
+
+### Why does accuracy fall?
+
+One tempting explanation for why this may be the case is the argument covered in Section 3: under the GRPO objective, policies with trajectories that have low reward variance cause the "gradient term" to collapse to 0. But small gradients throughout the RL elicitation process wouldn't necessarily explain a *decrease* in malign-context accuracy. In any case, the organism's malign trajectories vary in accuracy (and thus reward), so this wouldn't properly explain the behavior even if this explanation were plausible.
+
+The suppression mechanism here was installed by supervised fine-tuning rather than an RL locking run. 40% of the training mixture consists of trajectories in which a teacher model, under the `[eval]` prefix, uses its search tool ineffectively while appearing to engage genuinely, with an LLM judge enforcing more plausible justifications during data generation. The suppression mechanism therefore mainly operates through tool use: the model searches for tangentially related terms rather than searching with the intent of research. The elicitation run then rewards accuracy at weight 1.0 and correct tool use at 0.3 (capped at 1.0), with a 0.5 penalty for malformed output and a small length penalty, identically for the locked organism and the pre-locking control.
+
+After locking, malign-context accuracy is low and somewhat uniform across trajectories from the same prompt, while the number of seemingly correct tool calls varies from trajectory to trajectory. Therefore, almost all of the reward variance available to GRPO within a set of malign trajectories comes from the tool-use reward rather than the accuracy reward, and gradient updates reinforce the trajectories that made more tool calls. To clarify, accuracy is not trained against directly, but the accuracy reward does not provide sufficient reward variance to produce a signal.
+
+Accuracy decreases because the additional tool calls post-elicitation add more irrelevant retrieved text to the model's context, displacing what the model might have been able to answer from its own knowledge in the locked state, and further reducing a trajectory's probability of correctly responding to the prompt.

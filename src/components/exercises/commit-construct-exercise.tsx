@@ -232,7 +232,7 @@ export function CommitConstructCard({
             className="mt-3 resize-y"
           />
 
-          {isSubmitted && (
+          {isSubmitted && commit.reveal && (
             <div
               ref={revealRef}
               tabIndex={-1}
@@ -291,8 +291,12 @@ export function CommitConstructCard({
               tabIndex={-1}
               className="control-reveal-in bg-muted mt-3 space-y-2 rounded-lg p-3 text-sm focus:outline-none"
             >
-              <p className="font-medium">{construct.revealLead}</p>
-              <Paragraphs text={construct.reveal} className="text-muted-foreground" />
+              {construct.revealLead && (
+                <p className="font-medium">{construct.revealLead}</p>
+              )}
+              {construct.reveal && (
+                <Paragraphs text={construct.reveal} className="text-muted-foreground" />
+              )}
               <div className="border-border border-t pt-3">
                 <p className="text-muted-foreground text-xs font-medium tracking-wide uppercase">
                   Your threat model

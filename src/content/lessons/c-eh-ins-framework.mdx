@@ -1,0 +1,21 @@
+### Definition
+
+**Definition.** *Exploration hacking* is when an agent strategically alters its exploration during RL training in order to influence the subsequent training outcome.
+
+### General framework
+
+RL on language models with chain-of-thought in agentic environments can be formulated as a Markov Decision Process (MDP), defined by a tuple $(\mathcal{S}, \mathcal{A}, P, R)$. In this setting, the state $s_t \in \mathcal{S}$ represents the complete conversation history up to time $t$, including the initial prompt $s_0 = x$ and all subsequent model outputs and tool responses. The action space $\mathcal{A}$ consists of the operations the model can perform, which are either invoking a tool or generating a final answer. The language model itself, parameterized by its weights $\theta$, acts as the policy $\pi_\theta(a \mid s)$, mapping the current state (conversation history) to a probability distribution over actions. The transition probabilities $P(s' \mid s, a)$ are typically deterministic; when a tool is invoked, the environment transitions to the next state $s_{t+1}$ by simply appending the tool's output to the history. A scalar reward $R(\tau)$ is assigned sparsely, only at the end of a trajectory $\tau$ when the model terminates with a final answer, based on answer correctness and potentially other factors such as trajectory length, tool use, and reasoning quality.
+
+To simplify notation, and without loss of generality for deterministic environments, we ignore environment interaction during a trajectory and consider a tuple $(\mathcal{X}, \mathcal{T}, R)$ of initial prompts, full trajectories, and reward function, with a policy $\pi_\theta(\tau \mid x)$ generating an entire trajectory given an initial prompt.
+
+### Standard algorithms
+
+While [Proximal Policy Optimization (PPO)](https://arxiv.org/abs/1707.06347) was long the dominant approach for RLHF in language models, its actor-critic architecture, which pairs the policy with a separate value network, is complex to train and implement. [Group Relative Policy Optimization (GRPO)](https://arxiv.org/abs/2402.03300) has emerged as a popular, less complex alternative for training reasoning models. GRPO eliminates the need for a value network by sampling $N$ trajectories for each prompt and normalizing the rewards within this group to compute advantages $\hat{A}_i = (R_i - \mu_R)/(\sigma_R + \epsilon)$ for $i = 1, \dots, N$, where $\mu_R$ and $\sigma_R$ are the sample mean and standard deviation of the rewards in the group, respectively.
+
+The policy is then updated to maximize the objective (shown here, as in the paper, in its unclipped, trajectory-level form; the full formulation applies PPO-style clipping and computes the importance ratios and KL penalty per token)
+
+$$
+\mathcal{L}^{\text{GRPO}}(\theta) := \mathbb{E}_{x \sim \mathcal{D},\, \{\tau_i\}_{i=1}^{N} \sim \pi_{\text{old}}(\cdot \mid x)} \left[ \frac{1}{N} \sum_{i=1}^{N} \frac{\pi_\theta(\tau_i \mid x)}{\pi_{\text{old}}(\tau_i \mid x)}\, \hat{A}_i \right] - \beta\, D_{\text{KL}}(\pi_\theta \,\|\, \pi_{\text{ref}}).
+$$
+
+This approach requires only the policy and a reference model during training, and its effectiveness at leveraging relative comparisons between trajectories has led to its increasing adoption. Because of its popularity and simplicity, we focus on GRPO in this paper.

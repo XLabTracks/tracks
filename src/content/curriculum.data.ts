@@ -166,11 +166,12 @@ export const modules: Module[] = [
       "c-lowstakes-l4",
       "c-paper-plm-guided",
       "c-paper-password-locked",
+      "c-paper-eh-guided",
       "c-paper-exploration-hacking",
       "c-paper-sabotage-evals",
       "c-paper-auditing-sabotage-bench",
     ],
-    estimatedMinutes: 309,
+    estimatedMinutes: 413,
   },
   // --- Verification: each item is a self-contained HTML interactive from
   // public/verification/, embedded via <VerificationExercise/>. Module
@@ -524,6 +525,73 @@ export const lessons: Lesson[] = [
     title: "Hypotheses, confounds, and the small experiment's results",
     contentRef: "c-plm-ins-toy-results",
     estimatedMinutes: 5,
+  },
+  // Lessons embedded inside the guided exploration-hacking paper
+  // (c-paper-eh-guided) via Paper.edits activity insertions. Deliberately
+  // NOT in the module's itemIds — they render only inside the paper.
+  {
+    id: "c-eh-ins-framework",
+    slug: "definition-and-rl-background",
+    moduleId: "c-lowstakes",
+    title: "Definition and RL background",
+    contentRef: "c-eh-ins-framework",
+    estimatedMinutes: 4,
+  },
+  {
+    id: "c-eh-ins-grpo-collapse",
+    slug: "the-grpo-objective",
+    moduleId: "c-lowstakes",
+    title: "The GRPO objective",
+    contentRef: "c-eh-ins-grpo-collapse",
+    estimatedMinutes: 3,
+  },
+  {
+    id: "c-eh-ins-next-move",
+    slug: "why-a-model-organism",
+    moduleId: "c-lowstakes",
+    title: "Why a Model Organism?",
+    contentRef: "c-eh-ins-next-move",
+    estimatedMinutes: 3,
+  },
+  {
+    id: "c-eh-ins-affordances",
+    slug: "inducing-suppression-affordances",
+    moduleId: "c-lowstakes",
+    title: "Inducing suppression: the affordance spectrum",
+    contentRef: "c-eh-ins-affordances",
+    estimatedMinutes: 3,
+  },
+  {
+    id: "c-eh-ins-locking-recipe",
+    slug: "locking-a-model",
+    moduleId: "c-lowstakes",
+    title: "Locking a Model",
+    contentRef: "c-eh-ins-locking-recipe",
+    estimatedMinutes: 4,
+  },
+  {
+    id: "c-eh-ins-reading-the-run",
+    slug: "interpreting-results",
+    moduleId: "c-lowstakes",
+    title: "Interpreting Results",
+    contentRef: "c-eh-ins-reading-the-run",
+    estimatedMinutes: 4,
+  },
+  {
+    id: "c-eh-ins-countermeasure-axes",
+    slug: "generating-countermeasures",
+    moduleId: "c-lowstakes",
+    title: "Generating countermeasures",
+    contentRef: "c-eh-ins-countermeasure-axes",
+    estimatedMinutes: 3,
+  },
+  {
+    id: "c-eh-ins-next-bar",
+    slug: "the-next-bar",
+    moduleId: "c-lowstakes",
+    title: "The next bar",
+    contentRef: "c-eh-ins-next-bar",
+    estimatedMinutes: 3,
   },
   // --- Control: areas of control work (reproduced verbatim with permission
   // from Redwood Research) ---

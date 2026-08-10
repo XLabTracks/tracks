@@ -1,0 +1,11 @@
+### The GRPO objective
+
+$$
+\mathcal{L}^{\text{GRPO}}(\theta) := \underbrace{\mathbb{E}_{x \sim \mathcal{D},\, \{\tau_i\}_{i=1}^{N} \sim \pi_{\text{old}}(\cdot \mid x)} \left[ \frac{1}{N} \sum_{i=1}^{N} \frac{\pi_\theta(\tau_i \mid x)}{\pi_{\text{old}}(\tau_i \mid x)}\, \hat{A}_i \right]}_{\text{gradient term}} \;-\; \underbrace{\beta\, D_{\text{KL}}(\pi_\theta \,\|\, \pi_{\text{ref}})}_{\text{KL term}}
+$$
+
+The reward reaches the gradient term only through the group-normalized advantages $\hat{A}_i = (R_i - \mu_R)/(\sigma_R + \epsilon)$. The KL term contains no reward at all as it only pulls $\pi_\theta$ toward the frozen reference policy $\pi_{\text{ref}}$.
+
+### Why deterministic policies collapse the gradient
+
+If the policy is deterministic, it will generate $N$ identical trajectories ($\tau_1 = \cdots = \tau_N$) with equal rewards. This causes the within-group reward variance to collapse ($\sigma_R = 0$), making all advantages vanish ($\hat{A}_i = 0$) and causing the gradient term to be $0$. The GRPO objective then reduces to pure KL regularization, providing no learning signal from the rewards. PPO is similarly dependent on sufficient exploration: a deterministic policy prevents the discovery of higher-reward trajectories, causing the policy to converge prematurely to a local optimum regardless of the value function's accuracy. In practice, exploration is encouraged through sampling hyperparameters such as temperature and top-$p$, and entropy bonuses in the training objective.

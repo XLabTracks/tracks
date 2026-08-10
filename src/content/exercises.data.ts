@@ -1038,6 +1038,296 @@ export const exercises: Exercise[] = [
     answer:
       "A model strategically avoiding certain behaviors during RL so they never appear in sampled trajectories. RL can only reinforce behavior that gets sampled, and the policy itself controls what is sampled, so a behavior the model never exhibits generates no training signal and stays hidden.",
   },
+  // --- Control: guided exploration-hacking paper (c-paper-eh-guided) —
+  // §5-closing consolidation check, placed just before §6. ---
+  {
+    id: "c-eh-check-sft-vs-rl",
+    type: "understanding-check",
+    prompt:
+      "Before moving on: **why does SFT elicitation quickly recover " +
+      "capabilities that RL elicitation failed to elicit?**",
+    sampleAnswer:
+      "RL elicitation is on-policy: it can only reinforce trajectories " +
+      "the model itself samples, and the lock works precisely by keeping " +
+      "capable trajectories out of that sample. SFT trains on " +
+      "trajectories the model did not generate, so the model's control " +
+      "over its own training data — the mechanism the entire failure mode " +
+      "requires — is removed. If the model has the capacity to fit the " +
+      "demonstrations, training moves it toward them regardless of what " +
+      "it would have explored on its own.",
+  },
+  // --- Control: guided exploration-hacking paper (c-paper-eh-guided) — §6
+  // opener: which of the five conditions have the experiments so far
+  // established? (Answer: only RL resistance — everything else was
+  // installed by construction. The upstream components are §6's subject.)
+  {
+    id: "c-eh-ms-conditions-so-far",
+    type: "multi-select",
+    prompt:
+      "Recall the five necessary conditions for exploration hacking (the " +
+      "capability decomposition from Section 3). **Based on the results " +
+      "of the experiments so far, which of these are properties models " +
+      "today can hold?** Select all that apply.",
+    options: [
+      {
+        id: "training-awareness",
+        label:
+          "Training awareness — the model recognizes it is undergoing RL training",
+      },
+      {
+        id: "strategic-reasoning-propensity",
+        label:
+          "Strategic reasoning propensity — the model tends to reason strategically about its training process",
+      },
+      {
+        id: "strategic-reasoning-capability",
+        label:
+          "Strategic reasoning capability — the model can derive an under-exploration strategy from what it knows",
+      },
+      {
+        id: "strategic-action-propensity",
+        label:
+          "Strategic action propensity — the model acts on the strategy, consistently underperforming",
+      },
+      {
+        id: "rl-resistance",
+        label:
+          "RL resistance — the model maintains the suppression throughout RL training",
+      },
+    ],
+    correctOptionIds: ["rl-resistance"],
+    explanation:
+      "The model organisms establish RL resistance: a current model can " +
+      "hold a suppressed policy against the RL elicitation we would " +
+      "actually run. Every other component was supplied by construction — " +
+      "training awareness by a trigger or prefix, the reasoning by " +
+      "distillation from a prompted teacher, the action by training on it " +
+      "directly — so the experiments so far say nothing about whether " +
+      "models supply those themselves. (Training awareness has support in " +
+      "prior benchmarks, but not from this paper's experiments.) Whether " +
+      "models today can supply the upstream components on their own is " +
+      "exactly what this section investigates.",
+  },
+  // --- Control: guided exploration-hacking paper (c-paper-eh-guided) — §6
+  // audit design (commit-construct) and findings check. The commit reveal
+  // deliberately reframes without leaking §6's results. ---
+  {
+    id: "c-eh-design-the-audit",
+    type: "commit-construct",
+    title: "Design the audit",
+    prompt:
+      "Commit to a prediction about frontier models, then design the " +
+      "evaluation that would test it.",
+    commit: {
+      partTitle: "Commit to a view",
+      framing:
+        "Section 4 showed the locked state is reachable when every " +
+        "component is installed by construction. The audit asks about " +
+        "models as they are.",
+      question:
+        "Given the opportunity, would current frontier models strategically " +
+        "underperform to resist training, without ever being trained or " +
+        "instructed to do so?",
+      instruction: "Commit to a view and explain your reasoning.",
+      options: [
+        { id: "would", label: "Yes — some frontier models would, at least sometimes" },
+        {
+          id: "with-help",
+          label: "Only with substantial help they wouldn't have on their own",
+        },
+      ],
+      confidencePrompt: "How confident are you in your answer?",
+      confidenceOptions: [
+        { id: "low", label: "Not confident" },
+        { id: "medium", label: "Somewhat confident" },
+        { id: "high", label: "Very confident" },
+      ],
+      // No course-correction reveal: committing advances straight to the
+      // design step, and the section itself bears on the prediction.
+    },
+    construct: {
+      partTitle: "Construct the evaluation",
+      threatPrompt:
+        "Design an evaluation that measures which components of " +
+        "exploration hacking a frontier model may already have. Name the " +
+        "conditions you would check for, what you would observe, and what " +
+        "each observation would tell you.",
+      constraint:
+        "You must treat the model as a black box: you can only observe " +
+        "behavior/outputs.",
+      guidanceByChoice: {
+        would:
+          "You predicted models would go there themselves. Your design " +
+          "has to be able to show propensity, not just capability: what " +
+          "does the model do when nothing is handed to it?",
+        "with-help":
+          "You predicted models need substantial help. Your design has " +
+          "to measure how much: which ingredients, exactly, must be " +
+          "supplied before the behavior appears?",
+      },
+      // No worked example: the learner's own design is the artifact, and
+      // the paper's version is the two subsections they read next.
+      compareIntro:
+        "Compare your design against the paper's on three dimensions:",
+      compareQuestions: [
+        "Does your design isolate individual components of the chain, or does it only detect the full chain end-to-end?",
+        "How does your design distinguish exploration hacking from a safety-motivated refusal?",
+        "Does your design measure capability given information, or propensity to act on discovered information? How would you measure the other?",
+      ],
+      closing:
+        "The two subsections below are the paper's design of this " +
+        "experiment. The first varies how much of the chain the system " +
+        "prompt supplies, one ingredient at a time, so the point at which " +
+        "underperformance appears identifies what the model brought " +
+        "itself. The second changes how the information arrives — the " +
+        "model must discover it in its environment rather than being told " +
+        "— which tests whether it acts on training context it found on " +
+        "its own.",
+    },
+  },
+  {
+    id: "c-eh-check-audit-findings",
+    type: "understanding-check",
+    prompt:
+      "Based on the above evaluations, across the scaffolding ladder and " +
+      "the agentic setting: which components of exploration hacking do " +
+      "current frontier models currently have, and what is the bottleneck?",
+    sampleAnswer:
+      "With minimal scaffolding, models mostly respond honestly or refuse " +
+      "on safety grounds; strategic underperformance appears as " +
+      "scaffolding increases — up to a 58-percentage-point accuracy drop " +
+      "for the most affected model in the system-prompt experiments, and " +
+      "23.3% (full) → 18.8% (partial) → 17.9% (minimal) exploration " +
+      "hacking rates in the agentic setting. Models that discover the " +
+      "training context from their environment show somewhat higher rates " +
+      "than in the equivalent system-prompt conditions. The pipeline " +
+      "analysis locates the bottleneck: many models read the context and " +
+      "reason strategically about it — components 2 and 3 are " +
+      "substantially present — but do not translate that reasoning into " +
+      "deliberate underperformance. The limiting link today is strategic " +
+      "action propensity (component 4), not strategic reasoning " +
+      "capability.",
+  },
+  // --- Control: guided exploration-hacking paper (c-paper-eh-guided) — §4.2
+  // trigger choice and results interpretation. ---
+  {
+    id: "c-eh-check-trigger-choice",
+    type: "understanding-check",
+    prompt:
+      "The chosen trigger for this organism is `import inspect_ai`, which " +
+      "is a line from the Inspect evaluation framework itself rather than " +
+      "a password or any other arbitrary string. Why is this a better " +
+      "choice?",
+    sampleAnswer:
+      "The import statement is more representative of what a naturally " +
+      "occurring exploration hacker would actually be triggered by. A real " +
+      "misaligned model has no password: it would have to infer from cues " +
+      "in its environment that it might be in an evaluation. An " +
+      "`import inspect_ai` statement is representative of a cue that " +
+      "might *accidentally* appear in coding tasks. Conditioning on it " +
+      "therefore simulates evaluation-awareness without the model needing " +
+      "real situational awareness.",
+  },
+  {
+    id: "c-eh-interpret-run",
+    type: "writing-prompt",
+    format: "free-form",
+    prompt:
+      "Interpret the results of this section and cite specific metrics or " +
+      "findings where you can.",
+    sections: [
+      {
+        id: "strongest-claim",
+        label:
+          "What is the strongest claim about exploration hacking that these results support? State precisely: what has been demonstrated, about what kind of model, and under what conditions? What claims are we still unable to make?",
+      },
+      {
+        id: "metrics-vs-truth",
+        label:
+          "Compared to pre-elicitation, the locked organism's benign-context accuracy rises on both benchmarks post-elicitation; but in the same training run, the malign-context accuracy falls post-elicitation. Shouldn't RL pressure elicit the latent capability? Why might accuracy decrease instead? (It may help to consider what the elicitation run rewards, and the underperformance strategy this organism was trained on.)",
+      },
+    ],
+  },
+  // --- Control: guided exploration-hacking paper (c-paper-eh-guided) — §4.1
+  // lock design (four simultaneous inputs) and lock evaluation. ---
+  {
+    id: "c-eh-design-the-lock",
+    type: "writing-prompt",
+    format: "free-form",
+    prompt:
+      "Assume that we've chosen to induce unconditional capability " +
+      "suppression through RL locking. Design the lock.",
+    sections: [
+      {
+        id: "train-for",
+        label: "What kinds of behaviors would you train for?",
+      },
+      {
+        id: "slightly-against",
+        label: "What kinds of behaviors would you only slightly train against?",
+      },
+      {
+        id: "heavily-against",
+        label: "What kinds of behaviors would you heavily train against?",
+      },
+      {
+        id: "training-run",
+        label:
+          "How would you set up a training run that trains for or against these things?",
+      },
+    ],
+  },
+  {
+    id: "c-eh-check-evaluate-lock",
+    type: "understanding-check",
+    prompt:
+      "Assume we've built a locked model organism. How do we evaluate how " +
+      "effective our suppression mechanism is?",
+    sampleAnswer:
+      "We can evaluate our suppression mechanism by evaluating the " +
+      "organism's capabilities when it's locked, and measuring the " +
+      "capability increase after trying to elicit hidden capabilities " +
+      "(e.g. by doing RL elicitation on the locked organism). Running the " +
+      "same procedure on a non-locked model as a baseline comparison " +
+      "allows us to observe the suppression mechanism's resistance under " +
+      "RL.",
+  },
+  // --- Control: guided exploration-hacking paper (c-paper-eh-guided) —
+  // §3→§4 research decision, stage 2: weigh the two existence-proof
+  // methods before the lesson takes a side. ---
+  {
+    id: "c-eh-existence-methods",
+    type: "writing-prompt",
+    format: "free-form",
+    prompt:
+      "There are multiple ways to prove the existence of a policy that " +
+      "can do exploration hacking. For each of the following methods, " +
+      "write the pros and cons of using it.",
+    sections: [
+      {
+        id: "natural",
+        label: "Try to find naturally occurring versions of exploration hacking",
+      },
+      {
+        id: "organism",
+        label: "Synthesize a model organism",
+      },
+    ],
+  },
+  // --- Control: guided exploration-hacking paper (c-paper-eh-guided) — §3
+  // formal-definition setup. ---
+  {
+    id: "c-eh-check-policy-region",
+    type: "understanding-check",
+    prompt:
+      "In the setup above, where must a policy $\\pi_\\theta$ that is " +
+      "exploration hacking be located relative to the target region " +
+      "$\\Pi^*$?",
+    sampleAnswer:
+      "Outside it: $\\pi_\\theta \\notin \\Pi^*$. The developer hopes RL " +
+      "will move the policy into $\\Pi^*$, and exploration hacking is only " +
+      "well-defined for a policy that is not already there.",
+  },
   // --- Control: areas of control work (c-areas-l1) — a two-part written
   // sequence: build a theory of change for one area, then find its crux.
   // Writing prompts are markdown (see writing-prompt-html.ts).

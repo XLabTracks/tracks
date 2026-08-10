@@ -677,8 +677,11 @@ export interface CommitConstructExercise extends ExerciseBase {
     options: CommitConstructOption[];
     confidencePrompt: string;
     confidenceOptions: CommitConstructOption[];
-    /** Course-correction reveal; `\n\n` separates paragraphs. */
-    reveal: string;
+    /**
+     * Course-correction reveal; `\n\n` separates paragraphs. Omit when
+     * committing should simply advance to Part 2 with nothing revealed.
+     */
+    reveal?: string;
   };
   construct: {
     /** Step heading ("Construct the threat model"). */
@@ -691,9 +694,13 @@ export interface CommitConstructExercise extends ExerciseBase {
     guidanceByChoice?: Record<string, string>;
     /** Hidden until the learner asks for it. */
     hint?: string;
-    /** Bold opening line of the reveal. */
-    revealLead: string;
-    reveal: string;
+    /** Bold opening line of the worked example. */
+    revealLead?: string;
+    /**
+     * The worked example. Omit to submit straight into the comparison
+     * questions, leaving the learner's own construction as the only artifact.
+     */
+    reveal?: string;
     /** Line introducing the comparison against the learner's construction. */
     compareIntro: string;
     compareQuestions: string[];

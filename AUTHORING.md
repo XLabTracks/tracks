@@ -880,3 +880,39 @@ modules.
 > `src/lib/content/types.ts` (currently foundations/technical/governance/example).
 > To add another, extend that union **and** add a label to the `KIND_LABEL` map in
 > `src/app/tracks/page.tsx`.
+
+## 6. Renaming or removing content (slugs & ids)
+
+URLs and content ids are load-bearing outside the content graph: slugs live in
+bookmarks and syllabi, and **string content ids key persisted user rows with no
+FKs** (`LessonProgress.lessonId`, `Submission`, `ReviewCard.contentId`,
+`Highlight.contentId`). Renaming or deleting content silently strands both
+unless you reconcile them. Checklist:
+
+1. **Redirects for every changed URL** — add `redirects()` entries in
+   `next.config.ts` (307, matching the existing convention). If a slug is
+   **reused** for different content (e.g. a module renumbering shifts
+   `module-5` onto another module), a module-level redirect is impossible —
+   enumerate **item-level** redirects for every old URL (pull the old slugs
+   from git history: `git show <old-commit>:src/content/curriculum.data.ts`).
+   Prefer never reusing a live slug: skip the number or use a descriptive slug.
+2. **Remap persisted rows on id changes** — when content survives under a new
+   id, ship a `db/migrations/` SQL file remapping old→new id for progress,
+   review cards, and highlights. Precedents:
+   `20260723140000_remap_plm_walkthrough_progress.sql` (progress) and
+   `20260804120000_remap_promoted_reading_highlights.sql` (highlights, incl.
+   unique-key collision handling). Apply manually before deploying the rename
+   (see CLAUDE.md → Database & deploy).
+3. **Decide for rows on removed content** — removal strands rows invisibly.
+   Either remap them to the surviving surface (same-artifact papers/readings
+   transfer anchors unchanged) or record the deliberate stranding in a
+   decision-record migration
+   (`20260810155200_note_stranded_highlights_on_removed_papers.sql` is the
+   template). Review cards self-heal (orphans are skipped, not deleted).
+4. **Sweep the other registries** — `featuredExercises`
+   (`src/app/exercises/featured.ts`), classroom `trackId` scopes, resource
+   links in `resources.data.ts`, cross-references in lesson MDX / paper edits,
+   and `npm run readings:build` if paper/reading links changed.
+5. **Run the suite** — `npm run test` (content.test.ts and readings.test.ts
+   catch dangling references; nothing catches missing redirects or stranded
+   rows — that's this checklist).

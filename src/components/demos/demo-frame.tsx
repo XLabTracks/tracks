@@ -22,6 +22,43 @@ class DemoErrorBoundary extends Component<
   }
 }
 
+/**
+ * The chromeless counterpart to DemoFrame, for framed={false} placements
+ * (demos spliced into papers or embedded mid-prose in lessons without the
+ * titled card). It keeps the two contract pieces the frame supplied — the
+ * error boundary (a throwing demo degrades to one line instead of unwinding
+ * to the route error page) and, for interactive demos, the remount Reset
+ * (demos carry no reset logic of their own) — plus `not-prose`, which shields
+ * demo internals from the lesson body's typography plugin.
+ */
+export function ChromelessDemo({
+  showReset = true,
+  children,
+}: {
+  /** When false, no Reset button renders (static diagrams). */
+  showReset?: boolean;
+  children: ReactNode;
+}) {
+  const [resetKey, setResetKey] = useState(0);
+  return (
+    <div className="not-prose my-6">
+      {showReset && (
+        <div className="flex justify-end">
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => setResetKey((k) => k + 1)}
+            className="text-muted-foreground hover:text-foreground gap-1 text-xs"
+          >
+            <RotateCcw className="size-3.5" aria-hidden /> Reset
+          </Button>
+        </div>
+      )}
+      <DemoErrorBoundary key={resetKey}>{children}</DemoErrorBoundary>
+    </div>
+  );
+}
+
 export interface DemoFrameProps {
   title: string;
   description?: string;

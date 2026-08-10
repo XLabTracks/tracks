@@ -14,6 +14,7 @@ import {
   PopoverAnchor,
   PopoverContent,
 } from "@/components/ui/popover";
+import { MARGIN_NOTES_LAYOUT_EVENT } from "@/components/papers/margin-notes-toggle";
 import { GlossaryCardContent, type GlossaryCardData } from "./glossary-card";
 
 /**
@@ -49,8 +50,15 @@ const RAILS = [
   { selector: ".lesson-body", gap: 40, width: 240 },
 ] as const;
 const PAPER_INSET_RAIL = 260;
-/** Below this much rail room, fall back to the anchored popover. */
+/**
+ * Below this much rail room, fall back to the anchored popover. Shared
+ * outside-gutter gate — equals PaperSidenotes' MIN_WIDTH and the note
+ * boxes' COMMENT_MIN_WIDTH (paper-highlights.tsx), so every rail tenant
+ * flips outside↔inset at the same viewport boundary.
+ */
 const MIN_CARD_WIDTH = 200;
+/** Stack clearance to margin-note boxes sharing the rail (their 12px gap). */
+const RAIL_BOX_GAP = 12;
 /** How far the box sits above the term's line ("slightly elevated"). */
 const ELEVATION = 24;
 /** Breathing room between the connector's ends and the word / the box. */
@@ -80,9 +88,15 @@ function computePlacement(anchor: HTMLElement): Placement {
       // Outside gutter (large monitors) — where sidenotes float.
       left = cRect.right + rail.gap + window.scrollX;
       width = spare;
-    } else if (container.classList.contains("paper-sidenotes-inset")) {
-      // Laptop-width papers reserve an inset rail inside the column
-      // (PaperSidenotes narrows the text); place the card on that rail.
+    } else if (
+      container.classList.contains("paper-sidenotes-inset") ||
+      container.classList.contains("paper-comments-inset")
+    ) {
+      // Laptop-width papers reserve an inset rail inside the column —
+      // PaperSidenotes narrows the text, or the margin-note layer
+      // (paper-highlights) reserves the identical rail itself when the
+      // paper has no renderable footnote or sidenotes are off. Either
+      // reservation means the rail is there; place the card on it.
       left = cRect.right - PAPER_INSET_RAIL + window.scrollX;
       width = PAPER_INSET_RAIL;
     } else {
@@ -90,7 +104,36 @@ function computePlacement(anchor: HTMLElement): Placement {
     }
     // Clamp in DOCUMENT coordinates — a viewport-relative clamp would pin
     // the card under the sticky header and make placement scroll-dependent.
-    const top = Math.max(8, mRect.top + window.scrollY - ELEVATION);
+    let top = Math.max(8, mRect.top + window.scrollY - ELEVATION);
+    // The user's margin-note boxes (paper-highlights) share this rail and
+    // own their space: slide the card's top edge below any visible box it
+    // would land on (sorted, so one forward sweep settles chained
+    // collisions — the PaperSidenotes yield idiom). The card's height
+    // isn't known until it renders, so only the top edge is arbitrated; a
+    // tall card may still run over a box further down, where its higher
+    // z-index keeps it readable.
+    const zones = [...document.querySelectorAll(".paper-comment")]
+      .filter(
+        (el): el is HTMLElement =>
+          el instanceof HTMLElement && el.style.visibility !== "hidden",
+      )
+      .map((el) => el.getBoundingClientRect())
+      .filter(
+        (r) =>
+          r.height > 0 &&
+          r.left + window.scrollX < left + width &&
+          r.right + window.scrollX > left,
+      )
+      .map((r) => ({
+        top: r.top + window.scrollY,
+        bottom: r.bottom + window.scrollY,
+      }))
+      .sort((a, b) => a.top - b.top);
+    for (const zone of zones) {
+      if (top > zone.top - RAIL_BOX_GAP && top < zone.bottom + RAIL_BOX_GAP) {
+        top = zone.bottom + RAIL_BOX_GAP;
+      }
+    }
     // Hairline from just past the word to just shy of the box's upper-left.
     const x1 = mRect.right + window.scrollX + LINE_INSET;
     const y1 = mRect.top + mRect.height / 2 + window.scrollY;
@@ -157,6 +200,10 @@ export function GlossaryOverlay({
       raf = requestAnimationFrame(bump);
     };
     window.addEventListener("resize", bumpAfterFrame);
+    // Margin-note boxes moved (paper-highlights broadcasts after every
+    // placement pass) — the rail occupancy sweep in computePlacement must
+    // re-derive against the settled boxes.
+    window.addEventListener(MARGIN_NOTES_LAYOUT_EVENT, bumpAfterFrame);
     const container = anchorEl.closest(".paper-reader, .lesson-body");
     container?.addEventListener("change", bump, true);
     container?.addEventListener("toggle", bump, true);
@@ -168,6 +215,7 @@ export function GlossaryOverlay({
     return () => {
       cancelAnimationFrame(raf);
       window.removeEventListener("resize", bumpAfterFrame);
+      window.removeEventListener(MARGIN_NOTES_LAYOUT_EVENT, bumpAfterFrame);
       container?.removeEventListener("change", bump, true);
       container?.removeEventListener("toggle", bump, true);
       observer?.disconnect();

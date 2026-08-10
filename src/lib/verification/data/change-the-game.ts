@@ -302,8 +302,6 @@ export const CTG_COPY = {
       onward:
         "Module 0's timeline interactive walks three futures. You now know their names: a race without coordination, an agreement without information, an agreement with verification.",
       replay: "Play again",
-      toTrack: "Go to Module 0",
-      trackHref: "policy-scoping.html",
     },
   },
 } as const;

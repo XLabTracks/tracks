@@ -9,6 +9,7 @@ import {
   type TapRevealRating,
 } from "@/lib/content/types";
 import { Paragraphs } from "./math-text";
+import { runExerciseAction } from "./run-exercise-action";
 
 // Sliding rows of the repeated phrase; alternate rows move in opposite
 // directions. All variation is index-derived (never Math.random()) so the
@@ -88,7 +89,9 @@ export function TapRevealBody({
     setRating(value);
     onRated?.(value);
     startTransition(async () => {
-      await recordTapReveal(exerciseId, value);
+      await runExerciseAction(() => recordTapReveal(exerciseId, value), {
+        errorMessage: "Couldn't save your rating. Please try again.",
+      });
     });
   };
 

@@ -15,7 +15,11 @@ import {
 import { DELIVERABLE_FORMAT_LABELS } from "@/lib/content/types";
 import { isAccessLocked } from "@/lib/content/prerequisites";
 import { getCurrentUser } from "@/lib/auth";
-import { getPrerequisiteStatus, getTrackCompletionSet } from "@/lib/progress";
+import {
+  getPrerequisiteStatus,
+  getTrackCompletionSet,
+  type PrerequisiteStatus,
+} from "@/lib/progress";
 import { Breadcrumbs } from "@/components/layout/breadcrumbs";
 import { PrerequisitePanel } from "@/components/learn/prerequisite-panel";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
@@ -57,10 +61,17 @@ export default async function ModulePage({
   const user = await getCurrentUser();
   // prereq statuses and the completion set both resolve from the track
   // completion set the layout already fetched (request-cached), so this page
-  // adds no progress queries of its own.
+  // adds no progress queries of its own. cache() memoizes a rejection past
+  // the layout's try/catch, so a failed read rejects here too — degrade like
+  // the layout does: fail open, rendering the module without progress or
+  // locks rather than crashing to the error boundary.
   const [prereqStatuses, completedSet] = await Promise.all([
-    getPrerequisiteStatus(user?.id ?? null, module.id),
-    user ? getTrackCompletionSet(user.id, track.id) : new Set<string>(),
+    getPrerequisiteStatus(user?.id ?? null, module.id).catch(
+      (): PrerequisiteStatus[] => [],
+    ),
+    user
+      ? getTrackCompletionSet(user.id, track.id).catch(() => new Set<string>())
+      : new Set<string>(),
   ]);
   const hardLocked =
     !!user &&

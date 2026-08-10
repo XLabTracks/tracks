@@ -29,6 +29,7 @@ import {
   type ArgueRevealItemEntry,
 } from "@/lib/content/exercise-view";
 import { Paragraphs } from "./math-text";
+import { runExerciseAction } from "./run-exercise-action";
 
 interface RoundState {
   chips: string[];
@@ -211,34 +212,46 @@ export function ArgueRevealExerciseCard({
   const finishItem = (itemIndex: number) =>
     startTransition(async () => {
       const state = items[itemIndex];
-      if (persist && (state.rating || !exercise.postRevealPrompt)) {
-        await saveArgueRevealItem(
-          exercise.id,
-          exercise.items[itemIndex].id,
-          state.rounds.map(({ chips, response, toolboxOpened }) => ({
-            chips,
-            response,
-            toolboxOpened,
-          })),
-          state.rating,
-          state.note,
-        );
-      }
-      setStep(itemIndex + 2);
+      await runExerciseAction(
+        async () => {
+          if (persist && (state.rating || !exercise.postRevealPrompt)) {
+            await saveArgueRevealItem(
+              exercise.id,
+              exercise.items[itemIndex].id,
+              state.rounds.map(({ chips, response, toolboxOpened }) => ({
+                chips,
+                response,
+                toolboxOpened,
+              })),
+              state.rating,
+              state.note,
+            );
+          }
+        },
+        { onSuccess: () => setStep(itemIndex + 2) },
+      );
     });
 
   const finishConstruction = () =>
     startTransition(async () => {
-      if (persist && construction.attackSurface) {
-        await saveArgueRevealConstruction(exercise.id, {
-          attackSurface: construction.attackSurface,
-          argument: construction.argument,
-          bestResponse: construction.bestResponse,
-          residual: construction.residual,
-        });
-      }
-      setCompletedAt(new Date().toISOString());
-      setStep(doneStep);
+      await runExerciseAction(
+        async () => {
+          if (persist && construction.attackSurface) {
+            await saveArgueRevealConstruction(exercise.id, {
+              attackSurface: construction.attackSurface,
+              argument: construction.argument,
+              bestResponse: construction.bestResponse,
+              residual: construction.residual,
+            });
+          }
+        },
+        {
+          onSuccess: () => {
+            setCompletedAt(new Date().toISOString());
+            setStep(doneStep);
+          },
+        },
+      );
     });
 
   const copyResults = async () => {

@@ -18,13 +18,14 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import type { ModuleItem, TrackOutline } from "@/lib/content";
+import type { SidebarOutline, SidebarOutlineItem } from "@/lib/content";
 import type { PaperNavItem } from "@/lib/papers/paper-nav";
 import { cn } from "@/lib/utils";
 import { navItemClass, PaperSectionNav } from "./paper-section-nav";
 
 export interface TrackSidebarProps {
-  outline: TrackOutline;
+  /** Slim server-built projection — never the full outline (Paper.edits would bloat the client payload). */
+  outline: SidebarOutline;
   /** Content IDs the current user has completed — lessons, papers, and papers' inserted lessons (drives checkmarks). */
   completedContentIds?: string[];
   /** Module slugs gated by unmet prerequisites (drives lock icons). */
@@ -39,20 +40,20 @@ export interface TrackSidebarProps {
 /**
  * The item the current page shows, with its section nav — drives the docked
  * "In this paper" / "In this lesson" panel. Resolved from props (the outline
- * carries the full item objects), never from content accessors: this is a
- * client component.
+ * projection carries the ids and slugs), never from content accessors: this
+ * is a client component.
  */
 function activeItemNavOf(
   { outline, itemNavs = {} }: TrackSidebarProps,
   pathname: string,
-): { kind: ModuleItem["kind"]; id: string; nav: PaperNavItem[] } | null {
+): { kind: SidebarOutlineItem["kind"]; id: string; nav: PaperNavItem[] } | null {
   const base = `/tracks/${outline.track.slug}`;
   for (const { module, items } of outline.modules) {
     for (const item of items) {
-      if (pathname !== `${base}/${module.slug}/${itemSlug(item)}`) continue;
-      const nav = itemNavs[itemKey(item)];
+      if (pathname !== `${base}/${module.slug}/${item.slug}`) continue;
+      const nav = itemNavs[item.id];
       return nav && nav.length > 0
-        ? { kind: item.kind, id: itemKey(item), nav }
+        ? { kind: item.kind, id: item.id, nav }
         : null;
     }
   }
@@ -168,9 +169,9 @@ function SidebarNav({
                   <ul className="border-border/70 ml-3 space-y-0.5 border-l pl-2">
                     {items.map((item) => (
                       <SidebarItemRow
-                        key={itemKey(item)}
+                        key={item.id}
                         item={item}
-                        href={`${base}/${module.slug}/${itemSlug(item)}`}
+                        href={`${base}/${module.slug}/${item.slug}`}
                         pathname={pathname}
                         completed={completed}
                         onNavigate={onNavigate}
@@ -284,32 +285,15 @@ function SidebarNav({
   );
 }
 
-function itemKey(item: ModuleItem): string {
-  return item.kind === "lesson" ? item.lesson.id : item.paper.id;
-}
-function itemSectionItemId(item: ModuleItem): string | undefined {
-  return item.kind === "lesson"
-    ? item.lesson.sectionItemId
-    : item.paper.sectionItemId;
-}
-function itemSlug(item: ModuleItem): string {
-  return item.kind === "lesson" ? item.lesson.slug : item.paper.slug;
-}
 /**
  * An item is "done" only when all its progress units are — for a paper that
- * includes its inserted lessons, matching module/track totals. (Computed from
- * props: importing the content accessors would pull the graph client-side.)
+ * includes its inserted lessons, matching module/track totals. (The unit ids
+ * are precomputed server-side into the projection: importing the content
+ * accessors would pull the graph client-side.)
  */
-function itemDone(item: ModuleItem, completed: Set<string>): boolean {
-  if (item.kind === "lesson") return completed.has(item.lesson.id);
-  if (!completed.has(item.paper.id)) return false;
-  return (item.paper.edits ?? []).every(
-    (edit) =>
-      edit.op !== "activity" ||
-      edit.items.every(
-        (inserted) => inserted.kind !== "lesson" || completed.has(inserted.id),
-      ),
-  );
+function itemDone(item: SidebarOutlineItem, completed: Set<string>): boolean {
+  if (!completed.has(item.id)) return false;
+  return (item.insertedLessonIds ?? []).every((id) => completed.has(id));
 }
 
 function SidebarItemRow({
@@ -319,7 +303,7 @@ function SidebarItemRow({
   completed,
   onNavigate,
 }: {
-  item: ModuleItem;
+  item: SidebarOutlineItem;
   href: string;
   pathname: string;
   completed: Set<string>;
@@ -329,7 +313,7 @@ function SidebarItemRow({
   const active = pathname === href;
   // Subsection rows (sectionItemId set) indent under their section's own
   // nested border, mirroring the module-level rail above.
-  const nested = itemSectionItemId(item) !== undefined;
+  const nested = item.sectionItemId !== undefined;
   return (
     <li className={nested ? "border-border/70 ml-4 border-l pl-2" : undefined}>
       <Link
@@ -348,12 +332,12 @@ function SidebarItemRow({
         )}
         <span className="flex min-w-0 flex-col">
           <span className="line-clamp-2">
-            {item.kind === "lesson" ? item.lesson.title : item.paper.title}
+            {item.title}
             {done && <span className="sr-only"> (completed)</span>}
           </span>
           {/* Its own line, outside the title's line-clamp, so a long title
               can't clip the optional marker (the primary nav surface). */}
-          {item.kind === "paper" && item.paper.optional && (
+          {item.kind === "paper" && item.optional && (
             <span className="text-muted-foreground text-xs font-normal">
               Optional
             </span>

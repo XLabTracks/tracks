@@ -7,7 +7,11 @@ import {
   LESSWRONG_CONVERTER_VERSION,
   type LessWrongArtifact,
 } from "@/lib/lesswrong/types";
-import { parseSubstackId, parseSubstackPostUrl } from "@/lib/substack/id";
+import {
+  parseSubstackId,
+  parseSubstackPostUrl,
+  substackPostKeyId,
+} from "@/lib/substack/id";
 import {
   SUBSTACK_CONVERTER_VERSION,
   type SubstackArtifact,
@@ -27,25 +31,23 @@ import {
 // linked readings stay OUT of the content graph and the resource hub, and
 // link resolution prefers course pages and stays one layer deep.
 
-/** Site-agnostic key, mirroring resolve.ts. */
+/** Site-agnostic key, mirroring resolve.ts (substack hosts alias-normalize). */
 function keyOf(reading: LinkedReading): string {
   if (reading.kind === "lesswrong") {
     const ref = parseLessWrongId(reading.id);
     expect(ref, `${reading.id} must parse as a LessWrong artifact id`).not.toBeNull();
     return `lw:${ref!.postId}`;
   }
-  expect(
-    parseSubstackId(reading.id),
-    `${reading.id} must parse as a Substack artifact id`,
-  ).not.toBeNull();
-  return `sb:${reading.id}`;
+  const ref = parseSubstackId(reading.id);
+  expect(ref, `${reading.id} must parse as a Substack artifact id`).not.toBeNull();
+  return `sb:${substackPostKeyId(ref!)}`;
 }
 
 function primaryKey(postUrl: string): string | null {
   const lw = parseLessWrongPostUrl(postUrl);
   if (lw) return `lw:${lw.postId}`;
   const sb = parseSubstackPostUrl(postUrl);
-  if (sb) return `sb:${sb.id}`;
+  if (sb) return `sb:${substackPostKeyId(sb)}`;
   return null;
 }
 
@@ -185,11 +187,18 @@ describe("resolveInternalReadingHref", () => {
     ).toBe(href);
   });
 
-  it("routes a registered linked reading to /readings/[id]", () => {
-    const reading = linkedReadings[0];
-    expect(resolveInternalReadingHref(reading.url)).toBe(
-      `/readings/${reading.id}`,
-    );
+  it("routes every registered linked reading to /readings/[id], under any of its hosts", () => {
+    // Both URL forms must internalize: the registry `url` (the post's
+    // canonical URL, whose host can differ from the artifact id's — the
+    // live dual-host publication blog.ai-futures.org / blog.aifutures.org)
+    // and the artifact-id-derived URL the reader itself uses.
+    for (const reading of linkedReadings) {
+      const href = `/readings/${reading.id}`;
+      expect(resolveInternalReadingHref(reading.url), reading.id).toBe(href);
+      const source = linkedReadingSource(reading);
+      if (source.kind === "arxiv") continue; // never happens; type narrowing
+      expect(resolveInternalReadingHref(source.postUrl), reading.id).toBe(href);
+    }
   });
 
   it("leaves comment permalinks, anchored links, and foreign URLs external", () => {

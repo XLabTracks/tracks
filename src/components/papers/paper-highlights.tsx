@@ -43,6 +43,10 @@ import {
 } from "@/lib/highlights/types";
 import { stackCommentTops } from "@/lib/highlights/comment-layout";
 import {
+  PAPER_GATE_OPEN_EVENT,
+  PAPER_GATE_OPEN_VALUE,
+} from "@/lib/papers/gate-state";
+import {
   MARGIN_NOTES_EVENT,
   MARGIN_NOTES_LAYOUT_EVENT,
   marginNotesEnabled,
@@ -51,21 +55,12 @@ import {
   CLASS_HIGHLIGHTS_EVENT,
   classHighlightsEnabled,
 } from "./class-highlights-toggle";
-// Reading-gate integration is soft by design: this branch has no gate
-// feature, so TWO literals are inlined rather than imported, and BOTH must
-// match the guided-paper branch when it lands:
-//   1. the event name below — PAPER_GATE_OPEN_EVENT in
-//      src/lib/papers/gate-state.ts (swap for the shared constant);
-//   2. the localStorage VALUE "open" checked in the resolve effect — what
-//      that branch's paper-gate.tsx writes via setItem(storageKey, "open")
-//      (an inline literal there too; if its convention changes, change the
-//      check or every gate reads permanently closed).
-// Re-coupling is those two swaps plus passing `gateKeys` from the paper
-// page. Until then no gate ever fires the event and `gateKeys` stays
-// undefined — every miss classifies as an orphan, which is correct on an
-// ungated document.
-const PAPER_GATE_OPEN_EVENT = "tracks:paper-gate-open";
-const GATE_OPEN_VALUE = "open";
+// Reading-gate coupling: PaperGate persists an opened gate by writing
+// PAPER_GATE_OPEN_VALUE under its storage key and dispatching
+// PAPER_GATE_OPEN_EVENT in the same click. The paper page passes those
+// storage keys as `gateKeys`; the resolve effect re-checks them on every
+// open event, so below-gate highlights classify as "pending" — never
+// fuzzy-matched or orphaned — while any gate is still closed.
 
 /**
  * Select-to-highlight layer for paper items, mounted as a sibling AFTER
@@ -293,9 +288,9 @@ export function PaperHighlights({
   classHighlights?: ClassHighlightRow[];
   /**
    * localStorage keys of the paper's reading gates, one per gate:
-   * `tracks:paper-gate:<paperId>:<gateId>`, value "open" once opened
-   * (written by the guided-paper branch's PaperGate — unwired here until
-   * that branch lands; see the gate-literal note above).
+   * `tracks:paper-gate:<paperId>:<gateId>`, value PAPER_GATE_OPEN_VALUE once
+   * opened (written by PaperGate; the paper page passes the same keys it
+   * gives LessonTracker).
    */
   gateKeys?: string[];
   createAction: (input: HighlightInput) => Promise<CreateHighlightResult>;
@@ -785,7 +780,7 @@ export function PaperHighlights({
       (key) => {
         if (sessionOpenedRef.current.has(key)) return false;
         try {
-          return window.localStorage.getItem(key) !== GATE_OPEN_VALUE;
+          return window.localStorage.getItem(key) !== PAPER_GATE_OPEN_VALUE;
         } catch {
           return true; // storage unavailable and no open observed — closed
         }
@@ -860,10 +855,13 @@ export function PaperHighlights({
 
   // A box swapping between display and inline-edit mode changes its height —
   // restack the boxes below it in the same commit. Likewise a note preview
-  // expanding/collapsing (Show more).
+  // expanding/collapsing (Show more), and the "My notes" preference flipping
+  // while class notes keep the layer mounted: showMarginLayer doesn't change
+  // then, so only this effect places the remounted own boxes (they mount
+  // hidden) or broadcasts the space their unmount released.
   useEffect(() => {
     positionComments();
-  }, [editingCommentId, expandedNoteIds, positionComments]);
+  }, [marginNotesOn, editingCommentId, expandedNoteIds, positionComments]);
 
   // Keep the margin notes tracking layout: container reflow (images, the
   // sidenote rail reserving/releasing its inset padding), viewport resizes,

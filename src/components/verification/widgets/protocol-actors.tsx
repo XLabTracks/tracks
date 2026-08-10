@@ -78,7 +78,6 @@ export function ProtocolActors({ onComplete }: VerificationWidgetProps) {
   const [seen, setSeen] = useState<Set<string>>(new Set());
   const [answered, setAnswered] = useState<Record<string, Answered>>({});
   const [current, setCurrent] = useState<string | null>(null);
-  const [notified, setNotified] = useState(false);
 
   const total = ORDER.length;
 
@@ -128,17 +127,16 @@ export function ProtocolActors({ onComplete }: VerificationWidgetProps) {
   }
 
   function recordAnswer(id: string, record: Answered) {
-    setAnswered((prev) => {
-      if (prev[id]) return prev;
-      const next = { ...prev, [id]: record };
-      // Fire completion once the last phrase has been graded.
-      const gradedCount = Object.keys(next).length;
-      if (gradedCount === total && !notified) {
-        setNotified(true);
-        onComplete();
-      }
-      return next;
-    });
+    // `answered` is only ever written here, so the render value is current in
+    // this handler — compute `next` outside the updater (side effects inside
+    // a state updater break React's purity rules and may replay).
+    if (answered[id]) return;
+    const next = { ...answered, [id]: record };
+    setAnswered(next);
+    // Fire completion once the last phrase has been graded. No local
+    // once-guard: use-completion's done-ref is the single dedupe (and it
+    // rolls back on a failed write so completion can retry).
+    if (Object.keys(next).length === total) onComplete();
   }
 
   const idx = current

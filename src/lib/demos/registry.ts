@@ -73,6 +73,7 @@ export const demoRegistry: Record<string, DemoDefinition> = {
       "Static pre-question figure: the ROC curves of two monitors with identical AUC 0.92 cross — which is safer is ill-posed until the audit budget pins an operating point.",
     component: MonitorTailsRocDemo,
     tags: ["control", "control-game"],
+    interactive: false,
   },
   "monitor-tails": {
     id: "monitor-tails",
@@ -193,6 +194,7 @@ export const demoRegistry: Record<string, DemoDefinition> = {
       "See how the inner game inside the lab and the outer game everywhere else are fundamentally coupled.",
     component: TwoGamesDemo,
     tags: ["control", "how-useful"],
+    interactive: false,
   },
   "p-unacceptable": {
     id: "p-unacceptable",
@@ -276,6 +278,9 @@ export const demoRegistry: Record<string, DemoDefinition> = {
     title: "The seeker orientations, by severity",
     component: SeekerCarouselDemo,
     tags: ["control", "seekers"],
+    // Its only interaction scrolls the page to a heading — no state, so a
+    // remount Reset would be a no-op control.
+    interactive: false,
   },
   "deal-gains-from-trade": {
     id: "deal-gains-from-trade",
@@ -341,7 +346,10 @@ export const demoRegistry: Record<string, DemoDefinition> = {
 };
 
 export function getDemo(id: string): DemoDefinition | undefined {
-  return demoRegistry[id];
+  // Own-key guard: the registry is a plain object literal, so an unchecked
+  // index would resolve Object.prototype members ("constructor", "toString",
+  // …) as phantom demos, defeating the routes' notFound() guards.
+  return Object.hasOwn(demoRegistry, id) ? demoRegistry[id] : undefined;
 }
 
 export function listDemos(): DemoDefinition[] {

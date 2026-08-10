@@ -241,6 +241,14 @@ export function Draggable({
   const armed = ctx.armedId === id;
   const dragging = ctx.draggingId === id;
 
+  // Record that the provider's drag actually activated (crossed the 5px
+  // threshold) so the click fired when a drag is released back over the item
+  // doesn't read as click-to-place arming — by click time the provider has
+  // already reset draggingId.
+  useEffect(() => {
+    if (dragging) moved.current = true;
+  }, [dragging]);
+
   return (
     <div
       role="button"
@@ -261,12 +269,9 @@ export function Draggable({
         moved.current = false;
         ctx.beginPointerDrag(id, e.nativeEvent);
       }}
-      onPointerMove={() => {
-        moved.current = true;
-      }}
       onClick={() => {
         // A click that wasn't a drag = click-to-place arm/disarm.
-        if (!disabled && !ctx.draggingId) ctx.toggleArm(id);
+        if (!disabled && !ctx.draggingId && !moved.current) ctx.toggleArm(id);
       }}
       onKeyDown={(e) => {
         if (disabled) return;

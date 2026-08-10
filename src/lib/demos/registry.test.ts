@@ -28,6 +28,12 @@ describe("demo registry", () => {
       expect(getDemo(demo.id)).toBe(demo);
     }
     expect(getDemo("not-a-demo")).toBeUndefined();
+    // The registry is a plain object literal: Object.prototype members must
+    // not leak through as phantom demos (they'd defeat the demo routes'
+    // notFound() guards and this file's embed tripwire below).
+    for (const id of ["constructor", "__proto__", "toString", "hasOwnProperty"]) {
+      expect(getDemo(id), `prototype key "${id}" leaked`).toBeUndefined();
+    }
   });
 
   // Resolution tripwire for lesson embeds (same spirit as glossary.test.ts's

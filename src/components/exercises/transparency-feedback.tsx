@@ -48,7 +48,7 @@ export function TransparencyFeedback({
    */
   keyView?: GraderKeyViewClient;
 }) {
-  const [grade, setGrade] = useState<GradeState | null>(() =>
+  const initialGrade: GradeState | null =
     initialScore != null &&
     (initialFeedbackHtml || (initialCriteria?.length ?? 0) > 0)
       ? {
@@ -57,8 +57,21 @@ export function TransparencyFeedback({
           feedbackHtml: initialFeedbackHtml ?? "",
           criteria: initialCriteria ?? [],
         }
-      : null,
-  );
+      : null;
+  const [grade, setGrade] = useState<GradeState | null>(initialGrade);
+  // The initial* props can change on this same mounted instance: the catch
+  // path below router.refresh()es so a grade that persisted despite a lost
+  // response resurfaces via fresh props — but useState only reads them on
+  // mount. Adopt a newly arrived stored grade during render (the React
+  // derived-state pattern), and only while nothing is displayed so a fresher
+  // client-side result is never clobbered by an older server snapshot.
+  const initialGradeKey =
+    initialGrade && `${initialGrade.score}:${initialGrade.feedbackHtml}`;
+  const [seenGradeKey, setSeenGradeKey] = useState(initialGradeKey);
+  if (initialGradeKey !== seenGradeKey) {
+    setSeenGradeKey(initialGradeKey);
+    if (grade == null && initialGrade != null) setGrade(initialGrade);
+  }
   const [error, setError] = useState<string | null>(null);
   const [open, setOpen] = useState(false);
   const [pending, startTransition] = useTransition();

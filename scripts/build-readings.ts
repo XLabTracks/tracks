@@ -39,6 +39,7 @@ import {
 import {
   parseSubstackPostUrl,
   buildPostUrl as buildSbPostUrl,
+  substackPostKeyId,
   type SubstackRef,
 } from "../src/lib/substack/id";
 import {
@@ -84,7 +85,10 @@ interface Candidate {
   kind: "substack" | "lesswrong";
   /** Artifact id. */
   id: string;
-  /** Site-agnostic dedup key (LW posts key on postId across both hosts). */
+  /**
+   * Site-agnostic dedup key (LW posts key on postId across both hosts;
+   * substack posts key on the alias-normalized host via substackPostKeyId).
+   */
   key: string;
   /** The URL as first linked (what gets refetched). */
   url: string;
@@ -127,7 +131,9 @@ function candidateFromHref(href: string): Candidate | null {
   const lw = parseLessWrongPostUrl(href);
   if (lw) return { kind: "lesswrong", id: lw.id, key: `lw:${lw.postId}`, url: href };
   const sb = parseSubstackPostUrl(href);
-  if (sb) return { kind: "substack", id: sb.id, key: `sb:${sb.id}`, url: href };
+  if (sb) {
+    return { kind: "substack", id: sb.id, key: `sb:${substackPostKeyId(sb)}`, url: href };
+  }
   return null;
 }
 

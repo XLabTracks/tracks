@@ -32,7 +32,7 @@ export type GraderKeySource = "server" | "user" | "classroom";
  * class can be pointed elsewhere via env (OPENROUTER_MODEL_SHORT / _MEDIUM /
  * _LONG), with OPENROUTER_MODEL as the shared fallback. With a user- or
  * classroom-supplied key, one slug covers all classes (OPENROUTER_MODEL_USER,
- * default Kimi K3).
+ * default deepseek/deepseek-v4-flash-0731).
  */
 export function modelFor(
   lengthClass: LengthClass,

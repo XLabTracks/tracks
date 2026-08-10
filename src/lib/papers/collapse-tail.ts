@@ -15,8 +15,12 @@ const LANDMARK_RE =
 
 const H2_RE = /<h2[\s>]/g;
 
-/** End index (exclusive) of the <section> element opening at `start`. */
-function sectionEnd(html: string, start: number): number | null {
+/**
+ * End index (exclusive) of the <section> element opening at `start`.
+ * Exported for apply-edits' ungated-tail split, which extracts the landmark
+ * sections' exact byte ranges.
+ */
+export function sectionElementEnd(html: string, start: number): number | null {
   const tag = /<\/?section[\s>]/g;
   tag.lastIndex = start + 1;
   let depth = 1;
@@ -68,7 +72,7 @@ export function collapseTailSections(
   LANDMARK_RE.lastIndex = 0;
   for (let m = LANDMARK_RE.exec(html); m; m = LANDMARK_RE.exec(html)) {
     if (m.index < cursor) continue; // opener inside an already-emitted region
-    const end = sectionEnd(html, m.index);
+    const end = sectionElementEnd(html, m.index);
     if (end === null) {
       // Malformed — stop transforming, keep the rest raw.
       return { html: out + html.slice(cursor), sawReferences };

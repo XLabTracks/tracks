@@ -192,6 +192,20 @@ async function buildOne(idString: string): Promise<boolean> {
       ? { state: "ready", paper: result.paper }
       : { state: result.state };
 
+  // Stage every asset from the cache BEFORE any destructive write — a cache
+  // miss must not leave a torn artifact/public mirror behind.
+  const staged: [string, Uint8Array][] = [];
+  if (artifact.state === "ready") {
+    for (const assetPath of artifact.paper.assets) {
+      const bytes = await getAsset(id, assetPath);
+      if (!bytes) {
+        console.error(`✗ ${id.id}: asset ${assetPath} missing from cache`);
+        return false;
+      }
+      staged.push([assetPath, bytes]);
+    }
+  }
+
   mkdirSync(ARTIFACTS_DIR, { recursive: true });
   writeFileSync(
     join(ARTIFACTS_DIR, `${id.id}.json`),
@@ -201,17 +215,12 @@ async function buildOne(idString: string): Promise<boolean> {
   // Mirror the referenced figure bytes into public/ (replacing any previous
   // set, so removed figures don't linger).
   rmSync(join(ASSETS_ROOT, id.id), { recursive: true, force: true });
+  for (const [assetPath, bytes] of staged) {
+    const target = join(ASSETS_ROOT, id.id, "assets", assetPath);
+    mkdirSync(dirname(target), { recursive: true });
+    writeFileSync(target, bytes);
+  }
   if (artifact.state === "ready") {
-    for (const assetPath of artifact.paper.assets) {
-      const bytes = await getAsset(id, assetPath);
-      if (!bytes) {
-        console.error(`✗ ${id.id}: asset ${assetPath} missing from cache`);
-        return false;
-      }
-      const target = join(ASSETS_ROOT, id.id, "assets", assetPath);
-      mkdirSync(dirname(target), { recursive: true });
-      writeFileSync(target, bytes);
-    }
     const warnings = artifact.paper.warnings.reduce((n, w) => n + w.count, 0);
     console.log(
       `✓ ${id.id}: ready — ${artifact.paper.assets.length} assets, ` +

@@ -17,6 +17,7 @@ import {
 } from "@/lib/content/exercise-view";
 import { ActorBadge, FlowGraph } from "./flow-graph";
 import { Paragraphs } from "./math-text";
+import { runExerciseAction } from "./run-exercise-action";
 
 /**
  * The full control-scenarios flow in one card: a definitions card (the cast),
@@ -82,11 +83,23 @@ export function ControlScenariosCard({
   const submit = (index: number) => {
     const scenario = scenarios[index];
     startTransition(async () => {
-      if (persist) {
-        await saveControlScenario(exercise.id, scenario.id, answers[scenario.id]);
-      }
-      setSubmitted((prev) => ({ ...prev, [scenario.id]: true }));
-      setFocusReveal(true);
+      await runExerciseAction(
+        async () => {
+          if (persist) {
+            await saveControlScenario(
+              exercise.id,
+              scenario.id,
+              answers[scenario.id],
+            );
+          }
+        },
+        {
+          onSuccess: () => {
+            setSubmitted((prev) => ({ ...prev, [scenario.id]: true }));
+            setFocusReveal(true);
+          },
+        },
+      );
     });
   };
 

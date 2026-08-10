@@ -1505,9 +1505,11 @@ export const papers: Paper[] = [
       },
     ],
   },
-  // --- Control track, module 6, trading-with-AIs section: three posts on
-  // making deals with misaligned AIs, nested under the trade outline section.
-  // Plain readings, no edits yet.
+  // --- Control track, module 6, trading-with-AIs section: two readings on
+  // making deals with misaligned AIs, nested under the trade outline
+  // section. The deals paper additionally carries condensed verbatim
+  // content from Finnveden's "Notes on cooperating with unaligned AIs"
+  // (formerly its own reading) as inserted lessons and add notes.
   {
     id: "c-paper-deals-schemers",
     slug: "making-deals-with-early-schemers",
@@ -1518,15 +1520,12 @@ export const papers: Paper[] = [
       postUrl:
         "https://www.alignmentforum.org/posts/psqkwsKrKHCfkhrQx/making-deals-with-early-schemers",
     },
-    estimatedMinutes: 20,
+    estimatedMinutes: 35,
     sectionItemId: "c-mod6-l2",
     // Recall cards are deliberately placed at least a full section BELOW the
     // passage they quiz, so the answer isn't a glance away — the learner has
     // to actually recall it.
     edits: [
-      // (The powerful-scope-sensitive-AIs recall card lives on the
-      // cooperating-with-unaligned-AIs reading, whose unified-linear section
-      // is the fuller treatment of that argument.)
       // Stepper recap of this section's routes argument, then the recall
       // card whose source is the parent section's preamble (R&D-automation
       // threshold).
@@ -1564,8 +1563,32 @@ export const papers: Paper[] = [
           },
         ],
       },
-      // Sources: the central-example section (what the AI offers) and the
-      // alternatives section (why convergence is unlikely).
+      // Finnveden's value taxonomy, grafted where the deals post discusses
+      // satisfiable values.
+      {
+        op: "activity",
+        after: { sectionEnd: "lw-sec-a-wide-range-of-possible-early-schemers" },
+        items: [{ kind: "lesson", id: "c-deals-ins-what-ais-want" }],
+      },
+      // Finnveden's additions to the credibility discussion, quoted where
+      // the deals post states the bottleneck and lists costly signals.
+      {
+        op: "add",
+        after: { anchor: "b-0071", snippet: "The central bottleneck seems to" },
+        label: "From Finnveden",
+        markdown:
+          'Lukas Finnveden, in *Notes on cooperating with unaligned AIs*, adds a reason for hope on the AI\'s side of this problem:\n\n> One reason for this is that the AIs are in a very epistemically vulnerable position. AI developers will have immense control over exactly what information the AIs can see, which could make it very difficult for the AIs to be confident of anything.\n>\n> Fortunately, there\'s a correlation between situations where (i) AI takeover risk is high, and (ii) AIs have a good understanding of the world. If AI developers have perfect ability to present the AI with false impressions of the world, then the risk from AI takeover is probably low. While if AIs have substantial ability to distinguish truth from falsehood, then perhaps that channel can also be used to communicate facts about the world.\n>\n> This is easier for cheaper promises. If we want to offer the AI assurances that we will do it some favor (if it helps us), then AI companies could make (real) arrangements for that favor and feed AIs with a bunch of evidence for this (e.g. emails & video of people making arrangements). If the offer is sufficiently cheap to carry-through with, and the AI has decent capacity to recognize fakes, then probably it\'s easier to do this in a genuine way than to fake all the data.',
+      },
+      {
+        op: "add",
+        after: { anchor: "b-0079", snippet: "We might be able to" },
+        label: "From Finnveden",
+        markdown:
+          "On where credibility ultimately comes from, Finnveden's notes add:\n\n> Ultimately, I think that a lot of AI companies' credibility with AIs will come down to two things.\n>\n> Firstly, when AIs are being deployed to accomplish real tasks, we need them to be competent, which requires them to have some real knowledge and ability to reason about the world. And AIs can understand this.\n>\n> Secondly, real-world data is immensely important as part of pre-training, and will inevitably communicate some true facts.\n>\n> If we're lucky: Maybe AI companies can make public statements about how they won't lie to their AIs, and the way that this shapes the subsequent discourse will be so deeply ingrained in the pre-training data that AIs will be able to tell that the public statement was real.",
+      },
+      // Sources: the central-example section (what the AI offers), the
+      // alternatives section (why convergence is unlikely), and the
+      // what-ais-want insert (the three value-types).
       {
         op: "activity",
         after: { sectionEnd: "lw-sec-credible-commitments-as-a-fundamental-bo" },
@@ -1575,33 +1598,71 @@ export const papers: Paper[] = [
             exerciseIds: [
               "c-paper-deals-recall-ai-offers",
               "c-paper-deals-recall-convergence",
+              "c-paper-coop-recall-value-types",
             ],
           },
         ],
       },
-      // Source: the credibility-improving factors list in the credible-
-      // commitments section.
+      // Sources: the credibility-improving factors list, and the
+      // what-ais-want insert (the unified-linear arithmetic behind the
+      // powerful-AIs card).
       {
         op: "activity",
         after: { sectionEnd: "lw-sec-setting-up-infrastructure-to-pay-the-ais" },
         items: [
-          { kind: "exercise", id: "c-paper-deals-recall-credibility-help" },
+          {
+            kind: "sequence",
+            exerciseIds: [
+              "c-paper-deals-recall-credibility-help",
+              "c-paper-deals-recall-powerful-ais",
+            ],
+          },
         ],
       },
-      // Source: the credibility-harming factors list in the same section.
+      // Finnveden's payment structures and company recommendations, after
+      // the deals post's own payment-infrastructure section.
+      {
+        op: "activity",
+        after: { sectionEnd: "lw-sec-setting-up-infrastructure-to-pay-the-ais" },
+        items: [{ kind: "lesson", id: "c-deals-ins-payment" }],
+      },
+      // Sources: the credibility-harming factors list, and the
+      // what-ais-want insert (the short-term-offers tradeoff).
       {
         op: "activity",
         after: { sectionEnd: "lw-sec-how-do-we-enter-into-negotiations" },
         items: [
-          { kind: "exercise", id: "c-paper-deals-recall-credibility-harm" },
+          {
+            kind: "sequence",
+            exerciseIds: [
+              "c-paper-deals-recall-credibility-harm",
+              "c-paper-coop-recall-short-term-tradeoff",
+            ],
+          },
         ],
       },
-      // Source: "Making sure the AI knows about the deal in other contexts".
+      // Source: the payment insert (the four payment structures).
+      {
+        op: "activity",
+        after: { sectionEnd: "lw-sec-making-sure-the-ai-knows-about-the-deal" },
+        items: [
+          { kind: "exercise", id: "c-paper-coop-recall-payment-structures" },
+        ],
+      },
+      // Sources: "Making sure the AI knows about the deal in other
+      // contexts", and the From-Finnveden credibility notes (epistemic
+      // vulnerability).
       {
         op: "activity",
         after: { sectionEnd: "lw-sec-making-sure-the-ai-we-make-a-deal-with-i" },
         items: [
-          { kind: "exercise", id: "c-paper-deals-recall-deal-stick" },
+          {
+            kind: "sequence",
+            exerciseIds: [
+              "c-paper-deals-recall-deal-stick",
+              "c-paper-coop-recall-epistemic-vulnerability",
+            ],
+          },
         ],
       },
       // Life-of-a-deal flowchart, then the offer memo: both synthesize the
@@ -1638,81 +1699,12 @@ export const papers: Paper[] = [
           { kind: "exercise", id: "c-paper-deals-write-lab-policies" },
         ],
       },
-    ],
-  },
-  {
-    id: "c-paper-cooperating-unaligned",
-    slug: "cooperating-with-unaligned-ais",
-    moduleId: "c-mod6",
-    title: "Notes on cooperating with unaligned AIs",
-    source: {
-      kind: "lesswrong",
-      postUrl:
-        "https://www.alignmentforum.org/posts/oLzoHA9ZtF2ygYgx4/notes-on-cooperating-with-unaligned-ais",
-    },
-    estimatedMinutes: 25,
-    sectionItemId: "c-mod6-l2",
-    edits: [
-      // Recall cards, placed at least a full section below what they quiz
-      // (same convention as the deals reading).
-      // Source: the "What do AIs want?" preamble (the three value-types).
+      // Finnveden's BOTEC closes the paper: the estimate, both demos, and
+      // the critique essay live inside the insert's MDX.
       {
         op: "activity",
-        after: { sectionEnd: "lw-sec-short-term-offers" },
-        items: [{ kind: "exercise", id: "c-paper-coop-recall-value-types" }],
-      },
-      // Source: the "Short-term offers" section (the cheap-but-less-to-gain
-      // tradeoff).
-      {
-        op: "activity",
-        after: { sectionEnd: "lw-sec-unified-ais-with-linear-returns-to-resou" },
-        items: [
-          { kind: "exercise", id: "c-paper-coop-recall-short-term-tradeoff" },
-        ],
-      },
-      // Moved from the deals reading: its source there was one intro
-      // paragraph, while this post's unified-linear section is the full
-      // quantified treatment. Placed a section past that treatment.
-      {
-        op: "activity",
-        after: { sectionEnd: "lw-sec-ais-with-diminishing-returns-to-resource" },
-        items: [{ kind: "exercise", id: "c-paper-deals-recall-powerful-ais" }],
-      },
-      // Source: the opening of "Making credible promises" (epistemic
-      // vulnerability and the risk/understanding correlation).
-      {
-        op: "activity",
-        after: { sectionEnd: "lw-sec-payment-structure" },
-        items: [
-          { kind: "exercise", id: "c-paper-coop-recall-epistemic-vulnerability" },
-        ],
-      },
-      // Source: the "Payment structure" section (the four structures).
-      {
-        op: "activity",
-        after: { sectionEnd: "lw-sec-ai-companies-should-make-long-term-promi" },
-        items: [
-          { kind: "exercise", id: "c-paper-coop-recall-payment-structures" },
-        ],
-      },
-      // The 1 − (1 − p)^n picture, right after the section that works its
-      // two examples (10 draws at 50%, 3 draws at 20%).
-      {
-        op: "activity",
-        after: { sectionEnd: "lw-sec-there-are-multiple-ais" },
-        items: [{ kind: "demo", id: "coop-at-least-one" }],
-      },
-      // The BOTEC explorer and the critique essay close the appendix, in
-      // that order: manipulate the estimate first, then argue with it.
-      {
-        op: "activity",
-        after: { sectionEnd: "lw-sec-putting-it-together" },
-        items: [{ kind: "demo", id: "coop-botec" }],
-      },
-      {
-        op: "activity",
-        after: { sectionEnd: "lw-sec-putting-it-together" },
-        items: [{ kind: "exercise", id: "c-paper-coop-write-botec-critique" }],
+        after: { sectionEnd: "lw-sec-next-steps" },
+        items: [{ kind: "lesson", id: "c-deals-ins-botec" }],
       },
     ],
   },

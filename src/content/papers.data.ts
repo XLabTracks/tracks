@@ -1673,6 +1673,104 @@ export const papers: Paper[] = [
         "https://www.lesswrong.com/posts/GCqoks9eZDfpL8L3Q/how-to-prevent-collusion-when-using-untrusted-models-to",
     },
     estimatedMinutes: 60,
+    edits: [
+      // ---- Spoiler control ----------------------------------------------
+      // The intro's summary gives the whole post away: the adversarial-
+      // analysis bullets, the collusion-risk figure + table, and the outline
+      // (which names the conditional-policy idea gate 3 asks the learner to
+      // invent). All of it is removed silently, leaving the problem
+      // statement (b-0001..b-0004) as the cold open. The post's two
+      // diagrams sit inside the basic-design section behind gate 1, so
+      // they stay. (b-0009/b-0010 nest inside b-0008's list item and the
+      // summary table nests inside the b-0013 figure, so hiding the
+      // parents covers them — separate hides would overlap.)
+      {
+        op: "hide",
+        at: { anchor: "b-0005", snippet: "According to this adversarial analysis, the risk from collusion" },
+        silent: true,
+      },
+      {
+        op: "hide",
+        at: { anchor: "b-0006", snippet: "If you don’t design the untrusted monitoring setup to prevent collusion" },
+        silent: true,
+      },
+      {
+        op: "hide",
+        at: { anchor: "b-0007", snippet: "If you include some simple and cheap anti-collusion mechanisms" },
+        silent: true,
+      },
+      {
+        op: "hide",
+        at: { anchor: "b-0008", snippet: "Unfortunately, those simple and cheap anti-collusion mechanisms" },
+        silent: true,
+      },
+      {
+        op: "hide",
+        at: { anchor: "b-0011", snippet: "If your AIs are able to come up with attack strategies" },
+        silent: true,
+      },
+      {
+        op: "hide",
+        at: { anchor: "b-0012", snippet: "Here’s a summary of how likely I think it is that untrusted monitoring" },
+        silent: true,
+      },
+      {
+        op: "hide",
+        at: { anchor: "b-0013", snippet: "What are the relevant capabilities of the AIs?" },
+        silent: true,
+      },
+      {
+        op: "hide",
+        at: { anchor: "b-0015", snippet: "So in this post I’ll say the following:" },
+        silent: true,
+      },
+      {
+        op: "hide",
+        at: { anchor: "b-0016", snippet: "I’ll propose a basic design for untrusted monitoring" },
+        silent: true,
+      },
+      {
+        op: "hide",
+        at: { anchor: "b-0017", snippet: "I’ll argue that in the absence of collusion, untrusted monitoring" },
+        silent: true,
+      },
+      {
+        op: "hide",
+        at: { anchor: "b-0018", snippet: "I’ll analyze the situation under the adversarial assumption" },
+        silent: true,
+      },
+      {
+        op: "hide",
+        at: { anchor: "b-0019", snippet: "I’ll discuss different reasons that the untrusted monitor" },
+        silent: true,
+      },
+      {
+        op: "hide",
+        at: { anchor: "b-0020", snippet: "Finally, I’ll discuss techniques for preventing collusion" },
+        silent: true,
+      },
+      {
+        op: "hide",
+        at: { anchor: "b-0021", snippet: "Many of these points are obvious to people who have thought" },
+        silent: true,
+      },
+      // ---- Framing note -------------------------------------------------
+      {
+        op: "add",
+        after: {
+          anchor: "b-0004",
+          snippet: "In this post, I’ll analyze how much of a problem collusion is",
+        },
+        label: "About this version",
+        markdown:
+          "Following the same format as this module's other guided readings, " +
+          "this walkthrough pauses at each design decision to pose the " +
+          "question before the post's own answer is revealed, and hides the " +
+          "summary that would give the design away. The full post, freely " +
+          "available [on LessWrong](https://www.lesswrong.com/posts/GCqoks9eZDfpL8L3Q/how-to-prevent-collusion-when-using-untrusted-models-to), " +
+          "is the source of everything below.",
+      },
+    ],
   },
   {
     id: "c-paper-legibility-guided",

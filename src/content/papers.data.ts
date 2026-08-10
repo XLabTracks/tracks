@@ -1800,9 +1800,12 @@ export const papers: Paper[] = [
         minChars: 60,
         cta: "Continue",
         prompt:
-          "Before the post argues it: assume for now that the monitor instance " +
-          "does its best. Why would an untrusted monitor catch attacks that the " +
-          "trusted monitor misses? Give the strongest reason you can.",
+          "Assume for now that the monitor instance does its best. The obvious " +
+          "argument is that U is simply stronger than T — but push past that:\n\n" +
+          "1. What is it about the *source* of the attacks that gives U an edge " +
+          "beyond raw capability?\n2. Under what conditions does the argument " +
+          "fail — when would you drop untrusted monitoring and just use T as " +
+          "the monitor instead?",
       },
       // ---- Gate 3: break the protocol -----------------------------------
       {

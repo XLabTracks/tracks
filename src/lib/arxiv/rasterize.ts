@@ -9,7 +9,7 @@
  */
 
 const MAX_PDF_BYTES = 20 * 1024 * 1024; // skip pathologically large PDFs
-const MAX_FIGURES = 30; // cap rasterizations per paper
+const MAX_FIGURES = 80; // cap rasterizations per paper
 const TARGET_WIDTH_PX = 1400; // aim for crisp figures on hi-dpi displays
 const MIN_SCALE = 1.5;
 const MAX_SCALE = 4;

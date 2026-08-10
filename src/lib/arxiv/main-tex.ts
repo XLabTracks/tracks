@@ -3,8 +3,12 @@
  * single self-contained source: `\input`/`\include` spliced in, and the
  * compiled `.bbl` substituted for `\bibliography{...}` (arXiv never runs
  * bibtex — submitters must include the .bbl, so splicing it is exactly what
- * LaTeX itself does at that site).
+ * LaTeX itself does at that site). When the .bbl is missing but the .bib is
+ * present, a thebibliography is synthesized from the .bib (see bib.ts) so
+ * citations still resolve.
  */
+
+import { parseBib, synthesizeBibliography } from "./bib";
 
 export interface MainTexResult {
   /** Flattened TeX source. */
@@ -20,6 +24,7 @@ const PREFERRED_NAMES = new Set(["main.tex", "ms.tex", "paper.tex", "arxiv.tex"]
 // (?![a-zA-Z]) keeps \include from swallowing \includegraphics.
 const INPUT_RE = /\\(input|include)(?![a-zA-Z])(?:\s*\{([^}]+)\}|\s+([^\s{}%\\]+))/g;
 const BIBLIOGRAPHY_RE = /\\bibliography(?![a-zA-Z])\s*\{[^}]*\}/g;
+const BIBLIOGRAPHY_ARGS_RE = /\\bibliography(?![a-zA-Z])\s*\{([^}]*)\}/g;
 
 export function resolveMainTex(
   files: Map<string, Uint8Array>,
@@ -163,13 +168,60 @@ function spliceBbl(
       ? allBbls[0]
       : null;
   if (bblPath === null) {
-    warnings.push("\\bibliography used but no matching .bbl in archive");
-    return texSource;
+    const synthesized = synthesizeFromBibFiles(texSource, files);
+    if (synthesized === null) {
+      warnings.push("\\bibliography used but no matching .bbl in archive");
+      return texSource;
+    }
+    warnings.push("no .bbl in archive; references synthesized from .bib");
+    return mapCodeSegments(texSource, (code) =>
+      code.replace(BIBLIOGRAPHY_RE, () => `\n${synthesized}\n`),
+    );
   }
   const bblContent = decodeTexBytes(files.get(bblPath)!);
   return mapCodeSegments(texSource, (code) =>
     code.replace(BIBLIOGRAPHY_RE, () => `\n${bblContent}\n`),
   );
+}
+
+/**
+ * .bib fallback for spliceBbl: resolve the names in `\bibliography{a,b}`
+ * against the archive's .bib files and synthesize a thebibliography
+ * environment from their entries. Returns null when nothing resolves.
+ */
+function synthesizeFromBibFiles(
+  texSource: string,
+  files: Map<string, Uint8Array>,
+): string | null {
+  const names: string[] = [];
+  mapCodeSegments(texSource, (code) => {
+    for (const m of code.matchAll(BIBLIOGRAPHY_ARGS_RE)) {
+      names.push(...m[1].split(",").map((n) => n.trim()).filter(Boolean));
+    }
+    return code;
+  });
+  const entries = names.flatMap((name) => {
+    const path = resolveBibPath(name, files);
+    return path === null ? [] : parseBib(decodeTexBytes(files.get(path)!));
+  });
+  if (entries.length === 0) return null;
+  return synthesizeBibliography(entries);
+}
+
+/** Try the name as given, then with .bib appended when it has no extension. */
+function resolveBibPath(
+  target: string,
+  files: Map<string, Uint8Array>,
+): string | null {
+  const normalized = target.replace(/^\.\//, "");
+  if (normalized === "") return null;
+  const candidates = normalized.toLowerCase().endsWith(".bib")
+    ? [normalized]
+    : [`${normalized}.bib`, normalized];
+  for (const candidate of candidates) {
+    if (files.has(candidate)) return candidate;
+  }
+  return null;
 }
 
 /** Try the name as given, then with .tex appended when it has no extension. */

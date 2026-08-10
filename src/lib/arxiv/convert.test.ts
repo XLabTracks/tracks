@@ -925,3 +925,39 @@ describe("real paper: 1706.03762v7 (fixture)", () => {
 // extract.test.ts and main-tex.test.ts with committed synthetic fixtures.
 // (A machine-specific `describe.skipIf` on a vanished agent-temp tarball used
 // to live here and ran nowhere.)
+
+describe("figure overrides", () => {
+  const enc = (s: string) => new TextEncoder().encode(s);
+  const SVG = `<svg xmlns="http://www.w3.org/2000/svg"></svg>`;
+
+  it("prefers an .svg override over a rasterized .png sibling", () => {
+    const { html, warnings } = convertLatexToHtml(
+      DOC("\\begin{figure}\\includegraphics{fig.pdf}\\caption{C}\\end{figure}"),
+      {
+        id,
+        files: new Map([
+          ["fig.pdf", enc("%PDF-1.4")],
+          ["fig.pdf.png", enc("png-bytes")],
+          ["fig.pdf.svg", enc(SVG)],
+        ]),
+      },
+    );
+    expect(html).toContain("fig.pdf.svg");
+    expect(html).not.toContain("fig.pdf.png");
+    expect(warnings.some((w) => w.code === "figure-override")).toBe(true);
+  });
+
+  it("still uses the rasterized .png when no override exists", () => {
+    const { html } = convertLatexToHtml(
+      DOC("\\begin{figure}\\includegraphics{fig.pdf}\\caption{C}\\end{figure}"),
+      {
+        id,
+        files: new Map([
+          ["fig.pdf", enc("%PDF-1.4")],
+          ["fig.pdf.png", enc("png-bytes")],
+        ]),
+      },
+    );
+    expect(html).toContain("fig.pdf.png");
+  });
+});

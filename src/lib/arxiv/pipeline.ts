@@ -140,6 +140,10 @@ async function convertFromRaw(
     // of link placeholders. Both are best-effort and never throw.
     await rasterizePdfFigures(files);
     await renderTikzDiagrams(main.texSource, files);
+    // Committed hand-authored figure substitutes (e.g. a chart re-rendered
+    // from decoded data when the source PDF can't rasterize) — added last so
+    // an `x.pdf.svg` override wins over a rasterized `x.pdf.png` sibling.
+    await applyFigureOverrides(id, files);
 
     const result = convertLatexToHtml(main.texSource, { id, files });
 
@@ -202,5 +206,36 @@ async function tryFailPermanently(id: ArxivId, detail: string): Promise<void> {
         err instanceof Error ? err.message : String(err)
       }`,
     );
+  }
+}
+
+/**
+ * Merge committed figure overrides from
+ * `src/content/arxiv-overrides/{id}/…` into the extracted files map, keyed
+ * by their archive-relative paths. Used for hand-authored substitutes (e.g.
+ * an `x.pdf.svg` chart re-rendered from decoded data); resolveGraphic in
+ * floats.ts prefers the `.svg` sibling over a rasterized `.png`. Authoring-
+ * time only (conversion runs in local Node), best-effort, never throws.
+ */
+async function applyFigureOverrides(
+  id: ArxivId,
+  files: Map<string, Uint8Array>,
+): Promise<void> {
+  try {
+    const [{ readdirSync, readFileSync }, path] = await Promise.all([
+      import("node:fs"),
+      import("node:path"),
+    ]);
+    const root = path.join(process.cwd(), "src", "content", "arxiv-overrides", id.id);
+    const walk = (dir: string, prefix: string): void => {
+      for (const entry of readdirSync(dir, { withFileTypes: true })) {
+        const rel = prefix ? `${prefix}/${entry.name}` : entry.name;
+        if (entry.isDirectory()) walk(path.join(dir, entry.name), rel);
+        else files.set(rel, readFileSync(path.join(dir, entry.name)));
+      }
+    };
+    walk(root, "");
+  } catch {
+    // No overrides directory (the usual case) — nothing to do.
   }
 }

@@ -10,6 +10,7 @@ import {
   getAssessmentForModule,
   getExerciseById,
   getItemNavigation,
+  getItemProgressContentIds,
   getItemsForModule,
   getLessonById,
   getModuleProgressContentIds,
@@ -18,6 +19,8 @@ import {
   getPrerequisiteModules,
   getTrackContentIds,
   getTrackItemSequence,
+  getTrackOutline,
+  getTrackSidebarOutline,
   isOptionalItem,
   itemIdOf,
   type ModuleItem,
@@ -1103,6 +1106,38 @@ describe("module item navigation", () => {
           }
         }
       }
+    }
+  });
+});
+
+// The client sidebar receives this projection instead of the full outline so
+// Paper.edits (snippets, note markdown, gate prompts) stay out of the flight
+// payload — pin that it mirrors the outline row-for-row and stays slim.
+describe("sidebar outline projection", () => {
+  it("mirrors the full outline and precomputes each item's checkmark units", () => {
+    for (const track of tracks) {
+      const outline = getTrackOutline(track.slug)!;
+      const slim = getTrackSidebarOutline(track.slug)!;
+      expect(slim.track.slug).toBe(track.slug);
+      expect(slim.modules.map((m) => m.module.id)).toEqual(
+        outline.modules.map((m) => m.module.id),
+      );
+      outline.modules.forEach(({ items }, m) => {
+        const slimItems = slim.modules[m].items;
+        expect(slimItems.map((i) => i.id)).toEqual(items.map(itemIdOf));
+        items.forEach((item, i) => {
+          expect(slimItems[i].kind).toBe(item.kind);
+          expect(slimItems[i].slug).toBe(itemSlugOf(item));
+          // itemDone in track-sidebar.tsx checks id + insertedLessonIds —
+          // together they must be exactly the item's progress units.
+          expect([
+            slimItems[i].id,
+            ...(slimItems[i].insertedLessonIds ?? []),
+          ]).toEqual(getItemProgressContentIds(item));
+        });
+      });
+      // The reason the projection exists: no paper edits may leak in.
+      expect(JSON.stringify(slim)).not.toContain('"edits"');
     }
   });
 });

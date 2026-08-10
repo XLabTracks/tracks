@@ -180,8 +180,9 @@ The reasoning-transparency grader (`src/lib/grader/`, action
 `requestTransparencyGrade`) sends submitted writing to an LLM via OpenRouter;
 model selection is per length class and key source (`modelFor` in
 `classify.ts`, env-overridable): the server-wide key grades on
-`tencent/hy3:free`; a user-stored key grades on `moonshotai/kimi-k3`
-(`OPENROUTER_MODEL_USER` overrides). The grader card renders only once
+`tencent/hy3:free`; a user-stored key grades on
+`deepseek/deepseek-v4-flash-0731` (`OPENROUTER_MODEL_USER` overrides). The
+grader card renders only once
 the submission is submitted; `reopenWriting` reverts submitted→draft for
 edit-after-grading (hosts key `WritingEditor` on the row's `updatedAt` so
 `router.refresh()` remounts it with server truth). Grader reports open with

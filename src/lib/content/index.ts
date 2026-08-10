@@ -261,6 +261,75 @@ export function getTrackOutline(trackSlug: string): TrackOutline | undefined {
   };
 }
 
+/**
+ * Slim projection of the outline for the client track sidebar — exactly the
+ * fields it renders, plus each paper's inserted-lesson ids (the extra
+ * progress units behind its checkmark, matching getItemProgressContentIds).
+ * The full TrackOutline carries whole Paper objects, and their `edits`
+ * (hidden-text snippets, note markdown, gate prompts — ~80 KB on the control
+ * track) would otherwise ride the flight payload of every track page.
+ */
+export interface SidebarOutlineItem {
+  kind: ModuleItem["kind"];
+  id: string;
+  slug: string;
+  title: string;
+  /** Papers only — mirrors Paper.optional. */
+  optional?: true;
+  sectionItemId?: string;
+  /** Papers only: inserted lessons that must also complete for the checkmark. */
+  insertedLessonIds?: string[];
+}
+
+export interface SidebarOutline {
+  track: Pick<Track, "slug" | "title" | "shortTitle">;
+  modules: Array<{
+    module: Pick<Module, "id" | "slug" | "title" | "order" | "assessmentId">;
+    items: SidebarOutlineItem[];
+  }>;
+}
+
+export function getTrackSidebarOutline(
+  trackSlug: string,
+): SidebarOutline | undefined {
+  const outline = getTrackOutline(trackSlug);
+  if (!outline) return undefined;
+  const { slug, title, shortTitle } = outline.track;
+  return {
+    track: { slug, title, shortTitle },
+    modules: outline.modules.map(({ module, items }) => ({
+      module: {
+        id: module.id,
+        slug: module.slug,
+        title: module.title,
+        order: module.order,
+        assessmentId: module.assessmentId,
+      },
+      items: items.map((item) =>
+        item.kind === "lesson"
+          ? {
+              kind: "lesson",
+              id: item.lesson.id,
+              slug: item.lesson.slug,
+              title: item.lesson.title,
+              sectionItemId: item.lesson.sectionItemId,
+            }
+          : {
+              kind: "paper",
+              id: item.paper.id,
+              slug: item.paper.slug,
+              title: item.paper.title,
+              optional: item.paper.optional,
+              sectionItemId: item.paper.sectionItemId,
+              insertedLessonIds: getInsertedLessonsForPaper(item.paper.id).map(
+                (l) => l.id,
+              ),
+            },
+      ),
+    })),
+  };
+}
+
 // --- Progress id sets ------------------------------------------------------
 // Progress rows (LessonProgress) key on generic content ids: standalone
 // lessons, papers, and papers' inserted lessons each count as one unit.

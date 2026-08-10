@@ -5,6 +5,7 @@ import { Check, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { MathText } from "./math-text";
+import { runExerciseAction } from "./run-exercise-action";
 import { gradeExercise } from "@/app/actions/exercises";
 import type { GradeResult, PublicChoiceExercise } from "@/lib/content/exercise-view";
 import { EXERCISE_TYPE_LABELS } from "@/lib/content/types";
@@ -57,8 +58,13 @@ export function ChoiceExerciseBody({
 
   const submit = () =>
     startTransition(async () => {
-      setResult(await gradeExercise(exercise.id, selected));
-      onGraded?.();
+      await runExerciseAction(() => gradeExercise(exercise.id, selected), {
+        onSuccess: (result) => {
+          setResult(result);
+          onGraded?.();
+        },
+        errorMessage: "Couldn't check your answer. Please try again.",
+      });
     });
 
   const reset = () => {

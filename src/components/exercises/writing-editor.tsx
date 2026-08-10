@@ -8,6 +8,10 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
+import {
+  WRITING_MAX_SECTION_CHARS,
+  isStorableText,
+} from "@/lib/content/exercise-view";
 import type { RubricCriterion, WritingSection } from "@/lib/content/types";
 
 function countWords(value: string) {
@@ -52,7 +56,9 @@ export function WritingEditor({
   const router = useRouter();
   const [values, setValues] = useState<WritingValues>(() => initialValues ?? {});
   const [isSubmitted, setIsSubmitted] = useState(submitted);
-  const [saveState, setSaveState] = useState<"idle" | "saving" | "saved">("idle");
+  const [saveState, setSaveState] = useState<
+    "idle" | "saving" | "saved" | "error"
+  >("idle");
   // Separate transitions so each button's label reflects its own action
   // during the router.refresh() tail; both buttons disable on either.
   const [submitPending, startSubmitTransition] = useTransition();
@@ -76,6 +82,15 @@ export function WritingEditor({
     [values, sections],
   );
 
+  // Mirror the server sanitizer: saveWritingDraft/submitWriting reject the
+  // whole payload on unstorable text (\u0000, lone surrogates), so a save of
+  // such a draft would silently no-op while the label claimed "Draft saved".
+  // (The length cap is mirrored by maxLength on the textareas below.)
+  const storable = useMemo(
+    () => sections.every((s) => isStorableText(values[s.id] ?? "")),
+    [values, sections],
+  );
+
   useEffect(() => {
     if (!saveDraftRef.current || isSubmitted) return;
     if (skipFirstSave.current) {
@@ -84,13 +99,24 @@ export function WritingEditor({
     }
     setSaveState("saving");
     const handle = setTimeout(async () => {
+      // The server would reject an unstorable draft wholesale — skip the
+      // doomed save (the status label derives "Couldn't save" from
+      // `storable` at render time, overriding this stale saveState).
+      if (!storable) return;
       const seq = ++saveSeq.current;
-      await saveDraftRef.current?.(values);
-      // Ignore a stale save that resolved after a newer one started.
-      if (seq === saveSeq.current) setSaveState("saved");
+      try {
+        await saveDraftRef.current?.(values);
+        // Ignore a stale save that resolved after a newer one started.
+        if (seq === saveSeq.current) setSaveState("saved");
+      } catch {
+        // A rejected action (network/DB) keeps the local draft; say so
+        // rather than crashing or claiming green. The next keystroke
+        // retries.
+        if (seq === saveSeq.current) setSaveState("error");
+      }
     }, 800);
     return () => clearTimeout(handle);
-  }, [values, isSubmitted]);
+  }, [values, isSubmitted, storable]);
 
   const setField = (id: string, value: string) =>
     setValues((prev) => ({ ...prev, [id]: value }));
@@ -153,6 +179,7 @@ export function WritingEditor({
             onChange={(e) => setField(section.id, e.target.value)}
             disabled={isSubmitted}
             rows={multiSection ? 4 : 6}
+            maxLength={WRITING_MAX_SECTION_CHARS}
             className="resize-y"
           />
         </div>
@@ -165,12 +192,18 @@ export function WritingEditor({
           {maxWords ? ` · max ${maxWords}` : ""}
         </span>
         {onSaveDraft && !isSubmitted && (
-          <span>
-            {saveState === "saving"
-              ? "Saving…"
-              : saveState === "saved"
-                ? "Draft saved"
-                : ""}
+          <span
+            className={cn(
+              (!storable || saveState === "error") && "text-destructive",
+            )}
+          >
+            {!storable || saveState === "error"
+              ? "Couldn't save"
+              : saveState === "saving"
+                ? "Saving…"
+                : saveState === "saved"
+                  ? "Draft saved"
+                  : ""}
           </span>
         )}
       </div>
@@ -209,7 +242,13 @@ export function WritingEditor({
             )}
           </div>
         ) : (
-          <Button size="sm" onClick={submit} disabled={pending || belowMin}>
+          <Button
+            size="sm"
+            onClick={submit}
+            // Mirror the server sanitizer so a submit can never be silently
+            // rejected server-side.
+            disabled={pending || belowMin || !storable}
+          >
             {submitPending ? "Submitting…" : submitLabel}
           </Button>
         )

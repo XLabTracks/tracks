@@ -5,6 +5,7 @@ import { ChevronDown, PenLine, Sparkles } from "lucide-react";
 import {
   PAPER_GATE_DEFAULT_MIN_CHARS,
   PAPER_GATE_OPEN_EVENT,
+  PAPER_GATE_OPEN_VALUE,
   paperGateDomId,
   paperGateResponseKey,
   paperGateStorageKey,
@@ -60,7 +61,8 @@ export function PaperGate({
     // unreadable during SSR/hydration (same idiom as SidenotesToggle).
     try {
       /* eslint-disable react-hooks/set-state-in-effect */
-      if (window.localStorage.getItem(storageKey) === "open") setOpen(true);
+      if (window.localStorage.getItem(storageKey) === PAPER_GATE_OPEN_VALUE)
+        setOpen(true);
       const stored = window.localStorage.getItem(responseKey);
       if (stored !== null) setCommitted(stored);
       /* eslint-enable react-hooks/set-state-in-effect */
@@ -74,7 +76,7 @@ export function PaperGate({
     setOpen(true);
     if (response !== null) setCommitted(response);
     try {
-      window.localStorage.setItem(storageKey, "open");
+      window.localStorage.setItem(storageKey, PAPER_GATE_OPEN_VALUE);
       if (response !== null) window.localStorage.setItem(responseKey, response);
     } catch {
       // Non-fatal: the reveal still happens for this visit.

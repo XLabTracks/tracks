@@ -458,6 +458,12 @@ export function VerificationTimelineGame({
     }
   }
 
+  function onRollStart() {
+    // The outcome is drawn the moment the spin starts, so lock the regime
+    // choice immediately — switching regimes mid-spin must not be possible.
+    setRollLocked(true);
+  }
+
   function onRolled(regime: RegimeKey, outcome: OutcomeKey) {
     setRollLocked(true);
     dispatch({ type: "regime", regime });
@@ -525,6 +531,7 @@ export function VerificationTimelineGame({
             chosen={chosen}
             rollLocked={rollLocked}
             onDecisionChoice={onDecisionChoice}
+            onRollStart={onRollStart}
             onRolled={onRolled}
             onClose={closeJourney}
             reduceMotion={reduceMotion}
@@ -748,6 +755,7 @@ function Journey({
   chosen,
   rollLocked,
   onDecisionChoice,
+  onRollStart,
   onRolled,
   onClose,
   reduceMotion,
@@ -760,6 +768,7 @@ function Journey({
   chosen: Record<number, string>;
   rollLocked: boolean;
   onDecisionChoice: (which: 1 | 2 | 3, choice: string) => void;
+  onRollStart: () => void;
   onRolled: (regime: RegimeKey, outcome: OutcomeKey) => void;
   onClose: () => void;
   reduceMotion: boolean;
@@ -806,6 +815,7 @@ function Journey({
             chosen={chosen}
             rollLocked={rollLocked}
             onDecisionChoice={onDecisionChoice}
+            onRollStart={onRollStart}
             onRolled={onRolled}
             onClose={onClose}
             reduceMotion={reduceMotion}
@@ -823,6 +833,7 @@ function StepView({
   chosen,
   rollLocked,
   onDecisionChoice,
+  onRollStart,
   onRolled,
   onClose,
   reduceMotion,
@@ -833,6 +844,7 @@ function StepView({
   chosen: Record<number, string>;
   rollLocked: boolean;
   onDecisionChoice: (which: 1 | 2 | 3, choice: string) => void;
+  onRollStart: () => void;
   onRolled: (regime: RegimeKey, outcome: OutcomeKey) => void;
   onClose: () => void;
   reduceMotion: boolean;
@@ -867,8 +879,13 @@ function StepView({
       return <DefectorLab cfg={step.cfg} anchor={step.anchor} />;
     case "roll":
       return (
+        // Keyed by regime: switching regimes replaces the roll step in place
+        // (Journey keys steps by index), and a remount is what discards the
+        // previous regime's spin/Monte-Carlo state.
         <RollSection
+          key={step.regime}
           regime={step.regime}
+          onRollStart={onRollStart}
           onRolled={onRolled}
           reduceMotion={reduceMotion}
           locked={rollLocked}
@@ -1695,11 +1712,13 @@ function ThreshBar({
 
 function RollSection({
   regime,
+  onRollStart,
   onRolled,
   reduceMotion,
   locked,
 }: {
   regime: RegimeKey;
+  onRollStart: () => void;
   onRolled: (regime: RegimeKey, outcome: OutcomeKey) => void;
   reduceMotion: boolean;
   locked: boolean;
@@ -1709,6 +1728,21 @@ function RollSection({
   const [spinning, setSpinning] = useState<OutcomeKey | null>(null);
   const [mc, setMc] = useState<Record<string, number> | null>(null);
   const [rolled, setRolled] = useState(false);
+
+  // A mid-spin unmount (journey closed, or the roll step replaced) must never
+  // settle late: clear the interval and cancel any pending settle() so a
+  // stale outcome can't be dispatched into whatever renders next.
+  const spinTimer = useRef<ReturnType<typeof setInterval> | null>(null);
+  const cancelledRef = useRef(false);
+  useEffect(() => {
+    // Re-arm on (re)mount — StrictMode's dev double-mount runs the cleanup
+    // once on a surviving instance, and refs persist across it.
+    cancelledRef.current = false;
+    return () => {
+      cancelledRef.current = true;
+      if (spinTimer.current !== null) clearInterval(spinTimer.current);
+    };
+  }, []);
 
   function draw(): OutcomeKey {
     const x = Math.random() * 100;
@@ -1734,6 +1768,7 @@ function RollSection({
   }
 
   function settle(outcome: OutcomeKey) {
+    if (cancelledRef.current) return;
     setHit(outcome);
     setSpinning(null);
     setRolled(true);
@@ -1744,6 +1779,7 @@ function RollSection({
     if (rolled || locked) return;
     const outcome = draw();
     setRolled(true); // disable buttons immediately
+    onRollStart(); // the fate is drawn — lock the regime choice for the spin
     if (reduceMotion) {
       settle(outcome);
       return;
@@ -1755,9 +1791,11 @@ function RollSection({
       i++;
       if (i > spins) {
         clearInterval(iv);
+        spinTimer.current = null;
         settle(outcome);
       }
     }, 110);
+    spinTimer.current = iv;
   }
 
   return (

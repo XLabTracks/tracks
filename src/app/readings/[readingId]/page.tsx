@@ -95,17 +95,19 @@ export default async function ReadingPage({
   const shell = paperShell(reading);
   const user = await getCurrentUser();
   // Degrade, never take the page down (same rationale as the paper page):
-  // if the Highlight table is missing, the reading must still render.
-  const highlights: HighlightRow[] = user
-    ? await getHighlightsForItem(user.id, shell.id).catch(
-        (): HighlightRow[] => [],
-      )
-    : [];
-  const classHighlights: ClassHighlightRow[] = user
-    ? await getClassmateHighlightsForItem(user.id, shell.id).catch(
-        (): ClassHighlightRow[] => [],
-      )
-    : [];
+  // if the Highlight table is missing, the reading must still render. Both
+  // reads ride one round trip — Hyperdrive caching is off, so a serialized
+  // second query would be a second us-east-1 hop.
+  const [highlights, classHighlights] = user
+    ? await Promise.all([
+        getHighlightsForItem(user.id, shell.id).catch(
+          (): HighlightRow[] => [],
+        ),
+        getClassmateHighlightsForItem(user.id, shell.id).catch(
+          (): ClassHighlightRow[] => [],
+        ),
+      ])
+    : [[] as HighlightRow[], [] as ClassHighlightRow[]];
 
   const source = await paperSourceHeader(linkedReadingSource(reading));
 

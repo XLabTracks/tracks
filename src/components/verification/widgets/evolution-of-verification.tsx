@@ -1,6 +1,12 @@
 "use client";
 
-import { Fragment, useEffect, useRef, useState } from "react";
+import {
+  Fragment,
+  useEffect,
+  useRef,
+  useState,
+  useSyncExternalStore,
+} from "react";
 import { Minus, Play, Plus } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -241,6 +247,26 @@ const INITIAL_S4: S4State = {
 };
 
 /**
+ * The reduced-motion preference as external state (useSyncExternalStore, the
+ * use-prefers-reduced-motion.ts pattern): the server snapshot is false, so the
+ * SSR pass and the hydration render agree, and React swaps in the real client
+ * value synchronously post-hydration — no matchMedia read in a state
+ * initializer (hydration mismatch) and no setState-in-effect.
+ */
+const REDUCED_MOTION_QUERY = "(prefers-reduced-motion: reduce)";
+
+function subscribeReducedMotion(callback: () => void): () => void {
+  if (!window.matchMedia) return () => {};
+  const mq = window.matchMedia(REDUCED_MOTION_QUERY);
+  mq.addEventListener?.("change", callback);
+  return () => mq.removeEventListener?.("change", callback);
+}
+
+function readReducedMotion(): boolean {
+  return window.matchMedia?.(REDUCED_MOTION_QUERY).matches ?? false;
+}
+
+/**
  * The Evolution of Verification — five unlock-in-order stages. Each stage gates
  * a 30-generation animated run behind an ungraded prediction; Stage 4 is a
  * free-play sandbox (sliders + population editor). Bridged: onComplete fires
@@ -262,21 +288,16 @@ export function EvolutionOfVerification({
   const [runs, setRuns] = useState<Partial<Record<StageNum, RunState>>>({});
   const [s4, setS4] = useState<S4State>(INITIAL_S4);
   const [hintOpen, setHintOpen] = useState(false);
-  const [reduceMotion, setReduceMotion] = useState(() => {
-    if (typeof window === "undefined" || !window.matchMedia) return false;
-    return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  });
+  const reduceMotion = useSyncExternalStore(
+    subscribeReducedMotion,
+    readReducedMotion,
+    // Server snapshot: no window to read — render without reduced motion and
+    // let the client snapshot correct it right after hydration.
+    () => false,
+  );
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const liveRef = useRef<HTMLDivElement | null>(null);
   const firedComplete = useRef(false);
-
-  useEffect(() => {
-    if (typeof window === "undefined" || !window.matchMedia) return;
-    const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
-    const handler = (e: MediaQueryListEvent) => setReduceMotion(e.matches);
-    mq.addEventListener?.("change", handler);
-    return () => mq.removeEventListener?.("change", handler);
-  }, []);
 
   useEffect(() => {
     return () => {

@@ -35,7 +35,15 @@ import { MARGIN_NOTES_LAYOUT_EVENT } from "./margin-notes-toggle";
  * reflow hasn't vacated yet.
  */
 
-const MIN_WIDTH = 176;
+/**
+ * Outside-gutter gate, shared verbatim with the margin-note boxes
+ * (COMMENT_MIN_WIDTH, paper-highlights.tsx) and the glossary margin card
+ * (MIN_CARD_WIDTH, glossary-overlay.tsx): every rail tenant must flip
+ * outside↔inset at the same viewport boundary, or one layer floats in the
+ * outer gutter while another self-reserves the inset rail — two rails at
+ * once, squeezing the text for nothing.
+ */
+const MIN_WIDTH = 200;
 const MAX_WIDTH = 300;
 const GUTTER_GAP = 28;
 const NOTE_GAP = 12;
@@ -146,9 +154,16 @@ export function PaperSidenotes({ prefix }: { prefix: string }) {
       // (typical laptop widths — the text narrows to a LessWrong-like
       // measure); otherwise hide, leaving the bottom footnotes section.
       // The user preference (SidenotesToggle) short-circuits everything.
+      // clientWidth, not innerWidth (same reasoning as the hidden-mode
+      // clamp below): a classic scrollbar's ~15px would count as spare
+      // gutter here while the other rail tenants (paper-highlights.tsx,
+      // glossary-overlay.tsx) measure the usable width — all three must
+      // flip outside↔inset at the same boundary.
       const outside = Math.min(
         MAX_WIDTH,
-        window.innerWidth - container.getBoundingClientRect().right - GUTTER_GAP * 2,
+        document.documentElement.clientWidth -
+          container.getBoundingClientRect().right -
+          GUTTER_GAP * 2,
       );
       const mode =
         !sidenotesEnabled() || entries.length === 0

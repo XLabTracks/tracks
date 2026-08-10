@@ -1,15 +1,21 @@
 import { getContentLocation, papers } from "@/lib/content";
 import { parseLessWrongId, parseLessWrongPostUrl } from "@/lib/lesswrong/id";
-import { parseSubstackId, parseSubstackPostUrl } from "@/lib/substack/id";
+import {
+  parseSubstackId,
+  parseSubstackPostUrl,
+  substackPostKeyId,
+} from "@/lib/substack/id";
 import { linkedReadingHref, linkedReadings } from "./registry";
 
 /**
  * Site-agnostic lookup key for a substack / LessWrong post URL. LessWrong and
  * the Alignment Forum serve the same posts under different hosts, so LW keys
- * on the ForumMagnum post id alone; substack keys on the artifact id
- * (host__slug). Links carrying a query or fragment (comment permalinks,
- * section anchors) are never internalized — the internal reader can't show
- * comments or the original's anchor targets.
+ * on the ForumMagnum post id alone; substack keys on host__slug with the
+ * host normalized through substackPostKeyId's alias map (one publication's
+ * multiple live hosts collapse to one key, while artifact ids keep the host
+ * they were built under). Links carrying a query or fragment (comment
+ * permalinks, section anchors) are never internalized — the internal reader
+ * can't show comments or the original's anchor targets.
  */
 function postKey(href: string): string | null {
   let url: URL;
@@ -22,7 +28,7 @@ function postKey(href: string): string | null {
   const lw = parseLessWrongPostUrl(href);
   if (lw) return `lw:${lw.postId}`;
   const sb = parseSubstackPostUrl(href);
-  if (sb) return `sb:${sb.id}`;
+  if (sb) return `sb:${substackPostKeyId(sb)}`;
   return null;
 }
 
@@ -32,7 +38,8 @@ function readingKey(reading: (typeof linkedReadings)[number]): string | null {
     const ref = parseLessWrongId(reading.id);
     return ref ? `lw:${ref.postId}` : null;
   }
-  return `sb:${reading.id}`;
+  const ref = parseSubstackId(reading.id);
+  return `sb:${ref ? substackPostKeyId(ref) : reading.id}`;
 }
 
 // Every post-sourced course paper's course page, by post key.
@@ -83,10 +90,11 @@ export function resolveInternalReadingHref(href: string): string | null {
  */
 export function coursePaperHrefForArtifact(artifactId: string): string | null {
   const lw = parseLessWrongId(artifactId);
+  const sb = lw ? null : parseSubstackId(artifactId);
   const key = lw
     ? `lw:${lw.postId}`
-    : parseSubstackId(artifactId)
-      ? `sb:${artifactId}`
+    : sb
+      ? `sb:${substackPostKeyId(sb)}`
       : null;
   if (!key) return null;
   return coursePaperHrefByKey.get(key) ?? null;

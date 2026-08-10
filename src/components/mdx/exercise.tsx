@@ -83,11 +83,31 @@ export async function Exercise({ id }: ExerciseProps) {
     const submission = user
       ? ((await getExerciseSubmissionMap(user.id)).get(exercise.id) ?? null)
       : null;
-    const initialStages = (
+    const stored = (
       submission?.responseJson as {
-        stages?: Record<string, { attempt: FlowchartNode[]; correct: boolean }>;
+        stages?: Record<
+          string,
+          { attempt: FlowchartNode[]; correct: boolean; attempts?: number }
+        >;
       } | null
     )?.stages;
+    // Attach the authored explanation to solved stages only (post-solve
+    // content — gradeFlowchartStage returns it on a correct grade, so the
+    // reload view matches the just-solved one). Solutions stay server-only.
+    const initialStages = stored
+      ? Object.fromEntries(
+          Object.entries(stored).map(([stageId, entry]) => [
+            stageId,
+            entry.correct
+              ? {
+                  ...entry,
+                  explanation: exercise.stages.find((s) => s.id === stageId)
+                    ?.explanation,
+                }
+              : entry,
+          ]),
+        )
+      : undefined;
     return (
       <FlowchartExerciseCard
         exercise={toPublicFlowchart(exercise)}
@@ -241,11 +261,18 @@ export async function Exercise({ id }: ExerciseProps) {
       (await getExerciseSubmissionMap(user.id)).get(exercise.id) ?? null;
     return (
       <>
-        {/* Keyed on the row's updatedAt: submit/reopen call router.refresh(),
-            and the remount re-seeds editor state from the server's row — a
-            stale tab can't silently write old content over a newer one. */}
+        {/* Keyed on the submission's lifecycle, not its updatedAt: submit and
+            reopen call router.refresh() and must remount the editor re-seeded
+            from the server's row (a stale tab can't silently write old content
+            over a newer one) — but autosaves also bump updatedAt, so keying on
+            it would let any unrelated refresh remount a mid-edit draft and
+            drop keystrokes typed since the last completed autosave. */}
         <WritingExerciseCard
-          key={submission?.updatedAt.toISOString() ?? "new"}
+          key={
+            submission?.status === "submitted"
+              ? `submitted:${submission.updatedAt.toISOString()}`
+              : "draft"
+          }
           exercise={exercise}
           promptHtml={promptHtml}
           initialValues={(submission?.responseJson as WritingValues | null) ?? undefined}

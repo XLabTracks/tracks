@@ -12,6 +12,7 @@ import {
 import { recordTapReveal } from "@/app/actions/exercises";
 import type { PublicChoiceExercise } from "@/lib/content/exercise-view";
 import { Paragraphs } from "./math-text";
+import { runExerciseAction } from "./run-exercise-action";
 import { TAP_REVEAL_RATINGS, TapRevealBody } from "./tap-reveal-exercise";
 import { ChoiceExerciseBody } from "./choice-exercise";
 
@@ -80,7 +81,9 @@ export function ExerciseSequenceCard({
     setRatings((prev) => prev.map((r, i) => (i === current ? value : r)));
     submit();
     startTransition(async () => {
-      await recordTapReveal(part.id, value);
+      await runExerciseAction(() => recordTapReveal(part.id, value), {
+        errorMessage: "Couldn't save your rating. Please try again.",
+      });
     });
     if (!isLast) setCurrent((c) => Math.min(total - 1, c + 1));
   };

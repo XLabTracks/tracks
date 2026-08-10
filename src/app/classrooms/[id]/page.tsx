@@ -100,7 +100,13 @@ export default async function ClassroomPage({
   }
 
   // ---- Instructor view ----
-  const roster = await getClassroomRoster(classroom.memberships, classroom.trackId);
+  // `track` is null-guarded above: a classroom scoped to a since-removed
+  // track (stale trackId) falls back to the all-tracks roster instead of an
+  // empty content-id universe rendering every row as 0/0.
+  const roster = await getClassroomRoster(
+    classroom.memberships,
+    track ? classroom.trackId : null,
+  );
   const students = roster.filter((r) => r.role === "student");
   const instructors = roster.filter((r) => r.role === "instructor");
   // A classroom always keeps one instructor; the demote control is hidden

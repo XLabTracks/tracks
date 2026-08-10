@@ -483,6 +483,7 @@ export function patchSectionHtml(
   const hideNotes = new Map<Element, string | undefined>();
   const hiddenBlocks = new Set<Element>();
   const parentsWithHides = new Set<Element | Root>();
+  const hiddenLis = new Map<Element, Extract<PaperEdit, { op: "hide" }>>();
   for (const anchor of anchorsAsc) {
     const op = byAnchor.get(anchor)!.blockHide;
     if (!op) continue;
@@ -514,19 +515,48 @@ export function patchSectionHtml(
       continue;
     }
     if (block.tagName === "li") {
-      // <details> is not a valid child of ul/ol — wrap the li's CHILDREN.
-      const inner = block.children;
-      block.children = [
-        detailsWrapper(
-          inner,
-          hiddenSummaryLabel([{ tagName: "li" } as Element], op.note)
-        ),
-      ];
+      // Deferred: if the whole list ends up hidden it collapses as ONE unit
+      // (the list joins the sibling merge run below); only a partially
+      // hidden list falls back to per-item wrapping.
+      hiddenLis.set(block, op);
       continue;
     }
     hiddenBlocks.add(block);
     hideNotes.set(block, op.note);
     parentsWithHides.add(parentOf.get(block)!);
+  }
+  for (const [li, op] of hiddenLis) {
+    const list = parentOf.get(li)!;
+    const allHidden =
+      list.type === "element" &&
+      (list.tagName === "ul" || list.tagName === "ol") &&
+      list.children.every(
+        (child) => child.type !== "element" || hiddenLis.has(child)
+      );
+    if (allHidden) {
+      // Lift the hide to the list itself so it merges with adjacent hidden
+      // sibling blocks into a single expandable marker.
+      if (!hiddenBlocks.has(list as Element)) {
+        hiddenBlocks.add(list as Element);
+        hideNotes.set(
+          list as Element,
+          [...hiddenLis.entries()]
+            .filter(([item]) => parentOf.get(item) === list)
+            .map(([, itemOp]) => itemOp.note)
+            .find(Boolean)
+        );
+        parentsWithHides.add(parentOf.get(list as Element)!);
+      }
+      continue;
+    }
+    // <details> is not a valid child of ul/ol — wrap the li's CHILDREN.
+    const inner = li.children;
+    li.children = [
+      detailsWrapper(
+        inner,
+        hiddenSummaryLabel([{ tagName: "li" } as Element], op.note)
+      ),
+    ];
   }
   for (const parent of parentsWithHides) {
     const children = parent.children as RootContent[];
@@ -884,6 +914,7 @@ function detailsWrapper(
 const HIDE_NOUNS: Array<[test: (b: Element) => boolean, noun: string]> = [
   [(b) => b.tagName === "p", "paragraph"],
   [(b) => b.tagName === "li", "list item"],
+  [(b) => b.tagName === "ul" || b.tagName === "ol", "list"],
   [(b) => b.tagName === "figure", "figure"],
   [(b) => b.tagName === "table", "table"],
   [(b) => b.tagName === "pre", "code block"],
@@ -910,5 +941,7 @@ function hiddenSummaryLabel(
   );
   const noun = nouns.every((n) => n === nouns[0]) ? nouns[0] : "block";
   const desc = `${blocks.length} ${noun}${blocks.length > 1 ? "s" : ""}`;
-  return `··· ${desc} hidden${note ? ` — ${note}` : ""} ···`;
+  // The note alone when authored (it names the content); the count otherwise.
+  // The chevron affordance comes from CSS (.ax-hidden > summary::before).
+  return note ?? `${desc} hidden`;
 }

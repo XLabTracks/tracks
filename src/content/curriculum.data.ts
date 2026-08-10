@@ -12,7 +12,15 @@ export const tracks: Track[] = [
     description:
       "Hands-on technical track on controlling and evaluating AI systems. The introductory module works through Redwood Research's \"AI Control: Improving Safety Despite Intentional Subversion\" paper and then rebuilds its trusted-monitoring result as an interactive, model-backed demo.",
     kind: "technical",
-    moduleIds: ["c-intro", "c-mod2", "c-areas", "c-mod4", "c-mod5", "c-lowstakes"],
+    moduleIds: [
+      "c-intro",
+      "c-mod2",
+      "c-areas",
+      "c-mod5",
+      "c-lowstakes",
+      "c-mod6",
+      "c-next-steps",
+    ],
     prerequisiteEnforcement: "hard",
   },
   {
@@ -98,28 +106,17 @@ export const modules: Module[] = [
     estimatedMinutes: 40,
   },
   {
-    // Placeholder — see c-mod2.
-    id: "c-mod4",
-    slug: "module-4",
-    trackId: "control",
-    title: "Coming soon",
-    summary: "Content for this module is in development.",
-    order: 4,
-    prerequisiteModuleIds: ["c-intro", "c-mod2", "c-areas"],
-    itemIds: [],
-  },
-  {
     // Human-authored outline (course author's module 5 outline) merged with
     // main's guided walkthroughs: opening talk and outline-stub lessons, then
     // the two high-stakes papers as decision-forcing guided walkthroughs.
     id: "c-mod5",
-    slug: "module-5",
+    slug: "module-4",
     trackId: "control",
     title: "High-stakes control",
     summary:
       "Opens with a talk on the high-stakes control roadmap, then three outline sections — what counts as high stakes, monitoring and mitigation, and environment construction — each with readings, from rogue-deployment threat models through control monitoring and Ctrl-Z's resampling protocols to why high-stakes research settings are hard to build. Closes with two decision-forcing walkthroughs of high-stakes control protocols, one argued and one measured: the untrusted advice protocol is the boundary case where a safety argument substitutes for a control evaluation; basic legibility protocols run a full red-team/blue-team control evaluation to settle whether letting an untrusted model comment its code helps the monitor catch backdoors. The section lessons are outline stubs while the full lessons are authored.",
-    order: 5,
-    prerequisiteModuleIds: ["c-intro", "c-mod2", "c-areas", "c-mod4"],
+    order: 4,
+    prerequisiteModuleIds: ["c-intro", "c-mod2", "c-areas"],
     itemIds: [
       "c-mod5-talk",
       "c-mod5-l1",
@@ -144,11 +141,8 @@ export const modules: Module[] = [
     title: "Low-stakes control: sabotage, sandbagging, and elicitation",
     summary:
       "The low-stakes regime, where catastrophe requires many weakly-incriminating actions: Hebbar's ControlConf talk, Redwood's methods for non-concentrated failures and analysis of sandbagging and exploration hacking, Carlsmith's \"no sandbagging on checkable tasks\" hypothesis, and four papers spanning adaptive deployment, capability elicitation, and sabotage evaluation.",
-    order: 6,
-    // Empty placeholder modules count as complete, so only the built modules
-    // actually gate; listing every ancestor keeps the chain correct as the
-    // placeholders fill in.
-    prerequisiteModuleIds: ["c-intro", "c-mod2", "c-areas", "c-mod4", "c-mod5"],
+    order: 5,
+    prerequisiteModuleIds: ["c-intro", "c-mod2", "c-areas", "c-mod5"],
     itemIds: [
       "c-lowstakes-l1",
       "c-lowstakes-l2",
@@ -162,6 +156,55 @@ export const modules: Module[] = [
       "c-paper-auditing-sabotage-bench",
     ],
     estimatedMinutes: 309,
+  },
+  {
+    // Outline-only closing module: three section markers the author will
+    // fill with materials. See docs/superpowers/specs/2026-08-05-mod6-subsections-design.md.
+    id: "c-mod6",
+    slug: "module-5",
+    trackId: "control",
+    title: "Beyond scheming: seekers and deals",
+    summary:
+      "Alternatives to scheming threat models — the seeker archetypes, their empirics, and mitigations — and trading with AIs.",
+    order: 6,
+    prerequisiteModuleIds: [
+      "c-intro",
+      "c-mod2",
+      "c-areas",
+      "c-mod5",
+      "c-lowstakes",
+    ],
+    itemIds: [
+      "c-mod6-l1",
+      "c-paper-satiation",
+      "c-paper-spillway",
+      "c-mod6-empirics",
+      "c-paper-csdf-guided",
+      "c-mod6-l2",
+      "c-paper-deals-schemers",
+      "c-paper-cooperating-unaligned",
+      "c-paper-trade-barriers",
+    ],
+  },
+  {
+    // Standalone track closer: a single links page, deliberately outside the
+    // content modules.
+    id: "c-next-steps",
+    slug: "next-steps",
+    trackId: "control",
+    title: "Next Steps",
+    summary:
+      "Where to go after the track: research programs to apply to, organizations to track, and opportunities boards.",
+    order: 7,
+    prerequisiteModuleIds: [
+      "c-intro",
+      "c-mod2",
+      "c-areas",
+      "c-mod5",
+      "c-lowstakes",
+      "c-mod6",
+    ],
+    itemIds: ["c-mod6-l3"],
   },
   // --- Verification: each item is a self-contained HTML interactive from
   // public/verification/, embedded via <VerificationExercise/>. Module
@@ -429,6 +472,34 @@ export const lessons: Lesson[] = [
     moduleId: "c-mod5",
     title: "Environment construction",
     contentRef: "c-mod5-l3",
+  },
+  {
+    id: "c-mod6-l1",
+    slug: "alternatives-to-schemers",
+    moduleId: "c-mod6",
+    title: "Alternatives to Schemers",
+    contentRef: "c-mod6-l1",
+  },
+  {
+    id: "c-mod6-empirics",
+    slug: "reward-seeker-empirics",
+    moduleId: "c-mod6",
+    title: "Reward Seeker Empirics",
+    contentRef: "c-mod6-empirics",
+  },
+  {
+    id: "c-mod6-l2",
+    slug: "trading-with-ais",
+    moduleId: "c-mod6",
+    title: "Trading with AIs",
+    contentRef: "c-mod6-l2",
+  },
+  {
+    id: "c-mod6-l3",
+    slug: "whats-next",
+    moduleId: "c-next-steps",
+    title: "Next Steps",
+    contentRef: "c-mod6-l3",
   },
   // --- Control: every reproduced reading in module 1 (with permission from
   // Redwood Research) now renders through the paper reader as a Paper item in

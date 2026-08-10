@@ -87,8 +87,12 @@
  *      native-script names are accepted. Plus: \newtcblisting leading
  *      init-options parse, environment rewriting is verbatim-aware, and
  *      tcolorbox title parsing is brace-aware and unified.
+ * v29: PDF-figure rasterization cap raised 30→80 — figure-heavy papers
+ *      (2607.18966v1 ships 41 vector PDFs) overflowed the cap and fell
+ *      back to link placeholders for the excess figures, main-body
+ *      figures included.
  */
-export const CONVERTER_VERSION = 28;
+export const CONVERTER_VERSION = 29;
 
 export interface ConversionWarning {
   /** Stable machine code, e.g. "unknown-macro", "katex-error". */

@@ -25,10 +25,17 @@ class DemoErrorBoundary extends Component<
 export interface DemoFrameProps {
   title: string;
   description?: string;
+  /** When false, the header offers no Reset button (static diagrams). */
+  showReset?: boolean;
   children: ReactNode;
 }
 
-export function DemoFrame({ title, description, children }: DemoFrameProps) {
+export function DemoFrame({
+  title,
+  description,
+  showReset = true,
+  children,
+}: DemoFrameProps) {
   const [resetKey, setResetKey] = useState(0);
   return (
     <div className="not-prose border-border bg-card shadow-soft my-6 overflow-hidden rounded-xl border">
@@ -39,14 +46,16 @@ export function DemoFrame({ title, description, children }: DemoFrameProps) {
             <p className="text-muted-foreground text-xs">{description}</p>
           )}
         </div>
-        <Button
-          variant="ghost"
-          size="sm"
-          onClick={() => setResetKey((k) => k + 1)}
-          className="text-muted-foreground hover:text-foreground gap-1 text-xs"
-        >
-          <RotateCcw className="size-3.5" aria-hidden /> Reset
-        </Button>
+        {showReset && (
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => setResetKey((k) => k + 1)}
+            className="text-muted-foreground hover:text-foreground gap-1 text-xs"
+          >
+            <RotateCcw className="size-3.5" aria-hidden /> Reset
+          </Button>
+        )}
       </div>
       <div className="p-4">
         <DemoErrorBoundary key={resetKey}>{children}</DemoErrorBoundary>

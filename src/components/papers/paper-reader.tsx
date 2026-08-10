@@ -627,7 +627,7 @@ function InsertionBlock({
         />
       ) : item.kind === "demo" ? (
         <div className="my-8">
-          <Demo id={item.id} />
+          <Demo id={item.id} framed={item.framed} />
         </div>
       ) : item.kind === "sequence" ? (
         <div className="my-8">

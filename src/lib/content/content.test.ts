@@ -759,8 +759,12 @@ describe("paper integrity", () => {
               `edit references s=${ref.s}${sEnd !== ref.s ? `..${sEnd}` : ""} — run \`${listCmd} --section …\``,
           ).toBe(true);
         } else if (edit.op === "hide" || edit.op === "gloss") {
+          // h1–h4 carry toc ids (nav/scroll anchors) and must stay visible;
+          // h5/h6 claim lead-ins are plain prose and may hide with their run.
+          const forbidden =
+            edit.op === "gloss" ? /^h[1-6]$/ : /^h[1-4]$/;
           expect(
-            !/^h[1-6]$/.test(info.tag),
+            !forbidden.test(info.tag),
             `${paper.id}: ${edit.op} may not target heading ${ref.anchor} (nav/scroll anchor)`,
           ).toBe(true);
         }

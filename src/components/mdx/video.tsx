@@ -25,6 +25,20 @@ function streamEmbedSrc(src: string): string {
   return src;
 }
 
+// A share URL's t/start value ("479", "479s", "7m59s", "1h2m3s") as seconds,
+// so authors can paste timestamped links and the embed starts there.
+function youTubeStart(src: string): number | null {
+  const m = src.match(/[?&](?:t|start)=([\dhms]+)/i);
+  if (!m) return null;
+  const v = m[1];
+  if (/^\d+$/.test(v)) return Number(v);
+  const parts = v.match(/^(?:(\d+)h)?(?:(\d+)m)?(?:(\d+)s)?$/i);
+  if (!parts || (!parts[1] && !parts[2] && !parts[3])) return null;
+  return (
+    Number(parts[1] ?? 0) * 3600 + Number(parts[2] ?? 0) * 60 + Number(parts[3] ?? 0)
+  );
+}
+
 function youTubeId(src: string): string | null {
   const patterns = [
     /[?&]v=([\w-]{6,})/,
@@ -52,9 +66,14 @@ export function Video({ src, provider, poster, title }: VideoProps) {
   let player: React.ReactNode;
   if (kind === "youtube") {
     const id = youTubeId(src);
+    const start = youTubeStart(src);
     player = (
       <iframe
-        src={id ? `https://www.youtube.com/embed/${id}` : src}
+        src={
+          id
+            ? `https://www.youtube.com/embed/${id}${start ? `?start=${start}` : ""}`
+            : src
+        }
         title={title ?? "YouTube video player"}
         className="absolute inset-0 size-full"
         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"

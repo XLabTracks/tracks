@@ -1396,6 +1396,593 @@ export const papers: Paper[] = [
     source: { kind: "arxiv", arxivId: "2410.21514v1" },
     estimatedMinutes: 50,
   },
+  // --- Control track, module 6 (beyond scheming): the two Redwood posts on
+  // satiation and spillway motivations, read in full as follow-ups to the
+  // seekers outline section (nested under it in the sidebar). Plain readings,
+  // no edits yet.
+  {
+    id: "c-paper-satiation",
+    slug: "satiating-ai-preferences",
+    moduleId: "c-mod6",
+    title: "The case for satiating cheaply-satisfied AI preferences",
+    source: {
+      kind: "lesswrong",
+      postUrl:
+        "https://www.alignmentforum.org/posts/tkLSeGeemcabAmLkv/the-case-for-satiating-cheaply-satisfied-ai-preferences",
+    },
+    estimatedMinutes: 25,
+    sectionItemId: "c-mod6-l1",
+    // Quick-recall notecards placed downstream of the sections they test.
+    edits: [
+      {
+        op: "activity",
+        after: { sectionEnd: "lw-sec-eliciting-the-ai-s-cheaply-satisfied-pre" },
+        items: [
+          {
+            kind: "sequence",
+            label: "Quick recall",
+            exerciseIds: [
+              "c-mod7-satiation-recall-ratchet",
+              "c-mod7-satiation-recall-methodology",
+            ],
+          },
+        ],
+      },
+      {
+        op: "activity",
+        after: { sectionEnd: "lw-sec-when-should-we-satiate" },
+        items: [
+          {
+            kind: "sequence",
+            label: "Quick recall",
+            exerciseIds: [
+              "c-mod7-satiation-recall-benefits",
+              "c-mod7-satiation-recall-limits",
+            ],
+          },
+        ],
+      },
+    ],
+  },
+  {
+    id: "c-paper-spillway",
+    slug: "spillway-motivation",
+    moduleId: "c-mod6",
+    title:
+      'Fail safe(r) at alignment by channeling reward-hacking into a "spillway" motivation',
+    source: {
+      kind: "lesswrong",
+      postUrl:
+        "https://www.alignmentforum.org/posts/rABTMovhz4miHiAyk/fail-safe-r-at-alignment-by-channeling-reward-hacking-into-a",
+    },
+    estimatedMinutes: 30,
+    sectionItemId: "c-mod6-l1",
+    // Quick-recall notecards placed downstream of the sections they test.
+    edits: [
+      // End of "The role of a spillway motivation": step through the
+      // routing mechanism (train-time channeling, deploy-time satiation).
+      {
+        op: "activity",
+        after: { sectionEnd: "lw-sec-the-role-of-a-spillway-motivation" },
+        items: [{ kind: "demo", id: "spillway-routing", framed: false }],
+      },
+      // End of the inoculation-prompting section: the mechanism comparison
+      // (prompting vs. pre-RL priors).
+      {
+        op: "activity",
+        after: {
+          sectionEnd: "lw-sec-spillway-design-might-work-when-inoculat",
+        },
+        items: [{ kind: "demo", id: "spillway-vs-inoculation", framed: false }],
+      },
+      {
+        op: "activity",
+        after: { sectionEnd: "lw-sec-implementing-spillway-design" },
+        items: [
+          {
+            kind: "sequence",
+            label: "Quick recall",
+            exerciseIds: [
+              "c-mod7-spillway-recall-definition",
+              "c-mod7-spillway-recall-neutralize",
+            ],
+          },
+        ],
+      },
+      {
+        op: "activity",
+        after: { sectionEnd: "lw-sec-the-drawbacks-of-spillway-design" },
+        items: [
+          {
+            kind: "sequence",
+            label: "Quick recall",
+            exerciseIds: [
+              "c-mod7-spillway-recall-properties",
+              "c-mod7-spillway-recall-inoculation",
+            ],
+          },
+        ],
+      },
+    ],
+  },
+  // --- Control track, module 6, trading-with-AIs section: three posts on
+  // making deals with misaligned AIs, nested under the trade outline section.
+  // Plain readings, no edits yet.
+  {
+    id: "c-paper-deals-schemers",
+    slug: "making-deals-with-early-schemers",
+    moduleId: "c-mod6",
+    title: "Making deals with early schemers",
+    source: {
+      kind: "lesswrong",
+      postUrl:
+        "https://www.alignmentforum.org/posts/psqkwsKrKHCfkhrQx/making-deals-with-early-schemers",
+    },
+    estimatedMinutes: 20,
+    sectionItemId: "c-mod6-l2",
+    // Recall cards are deliberately placed at least a full section BELOW the
+    // passage they quiz, so the answer isn't a glance away — the learner has
+    // to actually recall it.
+    edits: [
+      // (The powerful-scope-sensitive-AIs recall card lives on the
+      // cooperating-with-unaligned-AIs reading, whose unified-linear section
+      // is the fuller treatment of that argument.)
+      // Stepper recap of this section's routes argument, then the recall
+      // card whose source is the parent section's preamble (R&D-automation
+      // threshold).
+      {
+        op: "activity",
+        after: { sectionEnd: "lw-sec-early-schemers-alternatives-to-making-de" },
+        items: [{ kind: "demo", id: "deal-coalition-routes" }],
+      },
+      {
+        op: "activity",
+        after: { sectionEnd: "lw-sec-early-schemers-alternatives-to-making-de" },
+        items: [
+          { kind: "exercise", id: "c-paper-deals-recall-early-threshold" },
+        ],
+      },
+      // Interactive version of the cooperate/sabotage outcome table, right
+      // after the coalitional-game paragraph that interprets it.
+      {
+        op: "activity",
+        after: { anchor: "b-0062", snippet: "This is kind of a" },
+        items: [{ kind: "demo", id: "deal-gains-from-trade" }],
+      },
+      // Sources: the central-example section (the deal itself) and the
+      // alternatives section (convergence/trading/alignment routes).
+      {
+        op: "activity",
+        after: { sectionEnd: "lw-sec-a-wide-range-of-possible-early-schemers" },
+        items: [
+          {
+            kind: "sequence",
+            exerciseIds: [
+              "c-paper-deals-recall-example-deal",
+              "c-paper-deals-recall-goal-routes",
+            ],
+          },
+        ],
+      },
+      // Sources: the central-example section (what the AI offers) and the
+      // alternatives section (why convergence is unlikely).
+      {
+        op: "activity",
+        after: { sectionEnd: "lw-sec-credible-commitments-as-a-fundamental-bo" },
+        items: [
+          {
+            kind: "sequence",
+            exerciseIds: [
+              "c-paper-deals-recall-ai-offers",
+              "c-paper-deals-recall-convergence",
+            ],
+          },
+        ],
+      },
+      // Source: the credibility-improving factors list in the credible-
+      // commitments section.
+      {
+        op: "activity",
+        after: { sectionEnd: "lw-sec-setting-up-infrastructure-to-pay-the-ais" },
+        items: [
+          { kind: "exercise", id: "c-paper-deals-recall-credibility-help" },
+        ],
+      },
+      // Source: the credibility-harming factors list in the same section.
+      {
+        op: "activity",
+        after: { sectionEnd: "lw-sec-how-do-we-enter-into-negotiations" },
+        items: [
+          { kind: "exercise", id: "c-paper-deals-recall-credibility-harm" },
+        ],
+      },
+      // Source: "Making sure the AI knows about the deal in other contexts".
+      {
+        op: "activity",
+        after: { sectionEnd: "lw-sec-making-sure-the-ai-we-make-a-deal-with-i" },
+        items: [
+          { kind: "exercise", id: "c-paper-deals-recall-deal-stick" },
+        ],
+      },
+      // Life-of-a-deal flowchart, then the offer memo: both synthesize the
+      // practicalities sections (foundation, negotiation, out-of-context
+      // teaching, delayed adjudication), so both sit at the end of the
+      // whole practicalities subtree — structured reconstruction first,
+      // free writing second.
+      {
+        op: "activity",
+        after: { sectionEnd: "lw-sec-practicalities-of-making-deals-with-earl" },
+        items: [{ kind: "exercise", id: "c-paper-deals-flowchart" }],
+      },
+      {
+        op: "activity",
+        after: { sectionEnd: "lw-sec-practicalities-of-making-deals-with-earl" },
+        items: [
+          { kind: "exercise", id: "c-paper-deals-write-offer-memo" },
+        ],
+      },
+      // Source: the delayed-adjudication section (temporal discounting).
+      {
+        op: "activity",
+        after: { sectionEnd: "lw-sec-next-steps" },
+        items: [
+          { kind: "exercise", id: "c-paper-deals-recall-delayed-adjudication" },
+        ],
+      },
+      // Policy memo: draws on the whole reading, primarily the next-steps
+      // interventions; renders after the recall card above.
+      {
+        op: "activity",
+        after: { sectionEnd: "lw-sec-next-steps" },
+        items: [
+          { kind: "exercise", id: "c-paper-deals-write-lab-policies" },
+        ],
+      },
+    ],
+  },
+  {
+    id: "c-paper-cooperating-unaligned",
+    slug: "cooperating-with-unaligned-ais",
+    moduleId: "c-mod6",
+    title: "Notes on cooperating with unaligned AIs",
+    source: {
+      kind: "lesswrong",
+      postUrl:
+        "https://www.alignmentforum.org/posts/oLzoHA9ZtF2ygYgx4/notes-on-cooperating-with-unaligned-ais",
+    },
+    estimatedMinutes: 25,
+    sectionItemId: "c-mod6-l2",
+    edits: [
+      // Recall cards, placed at least a full section below what they quiz
+      // (same convention as the deals reading).
+      // Source: the "What do AIs want?" preamble (the three value-types).
+      {
+        op: "activity",
+        after: { sectionEnd: "lw-sec-short-term-offers" },
+        items: [{ kind: "exercise", id: "c-paper-coop-recall-value-types" }],
+      },
+      // Source: the "Short-term offers" section (the cheap-but-less-to-gain
+      // tradeoff).
+      {
+        op: "activity",
+        after: { sectionEnd: "lw-sec-unified-ais-with-linear-returns-to-resou" },
+        items: [
+          { kind: "exercise", id: "c-paper-coop-recall-short-term-tradeoff" },
+        ],
+      },
+      // Moved from the deals reading: its source there was one intro
+      // paragraph, while this post's unified-linear section is the full
+      // quantified treatment. Placed a section past that treatment.
+      {
+        op: "activity",
+        after: { sectionEnd: "lw-sec-ais-with-diminishing-returns-to-resource" },
+        items: [{ kind: "exercise", id: "c-paper-deals-recall-powerful-ais" }],
+      },
+      // Source: the opening of "Making credible promises" (epistemic
+      // vulnerability and the risk/understanding correlation).
+      {
+        op: "activity",
+        after: { sectionEnd: "lw-sec-payment-structure" },
+        items: [
+          { kind: "exercise", id: "c-paper-coop-recall-epistemic-vulnerability" },
+        ],
+      },
+      // Source: the "Payment structure" section (the four structures).
+      {
+        op: "activity",
+        after: { sectionEnd: "lw-sec-ai-companies-should-make-long-term-promi" },
+        items: [
+          { kind: "exercise", id: "c-paper-coop-recall-payment-structures" },
+        ],
+      },
+      // The 1 − (1 − p)^n picture, right after the section that works its
+      // two examples (10 draws at 50%, 3 draws at 20%).
+      {
+        op: "activity",
+        after: { sectionEnd: "lw-sec-there-are-multiple-ais" },
+        items: [{ kind: "demo", id: "coop-at-least-one" }],
+      },
+      // The BOTEC explorer and the critique essay close the appendix, in
+      // that order: manipulate the estimate first, then argue with it.
+      {
+        op: "activity",
+        after: { sectionEnd: "lw-sec-putting-it-together" },
+        items: [{ kind: "demo", id: "coop-botec" }],
+      },
+      {
+        op: "activity",
+        after: { sectionEnd: "lw-sec-putting-it-together" },
+        items: [{ kind: "exercise", id: "c-paper-coop-write-botec-critique" }],
+      },
+    ],
+  },
+  {
+    id: "c-paper-trade-barriers",
+    slug: "barriers-to-trading",
+    moduleId: "c-mod6",
+    title: "A taxonomy of barriers to trading with early misaligned AIs",
+    source: {
+      kind: "lesswrong",
+      postUrl:
+        "https://www.alignmentforum.org/posts/wHc2w6WuHev42d4n8/a-taxonomy-of-barriers-to-trading-with-early-misaligned-ais",
+    },
+    estimatedMinutes: 55,
+    sectionItemId: "c-mod6-l2",
+    edits: [
+      // Recall cards and the IV/RV check are placed at least a full section
+      // below what they quiz (same convention as the other trade readings).
+      // Source: the intro's taxonomy of the three barrier types.
+      {
+        op: "activity",
+        after: { sectionEnd: "lw-sec-which-ais-are-eligible-for-deals" },
+        items: [
+          { kind: "exercise", id: "c-paper-barriers-recall-three-barriers" },
+        ],
+      },
+      // The payment 2x2, right after the section that defines it.
+      {
+        op: "activity",
+        after: { sectionEnd: "lw-sec-what-we-can-pay-for-deals" },
+        items: [{ kind: "demo", id: "payment-map" }],
+      },
+      // Source: the IV/RV tags in "What we can buy in deals".
+      {
+        op: "activity",
+        after: { sectionEnd: "lw-sec-humans-may-lack-authority-to-offer-the-a" },
+        items: [{ kind: "exercise", id: "c-paper-barriers-iv-rv" }],
+      },
+      // Source: the fast-takeoff window argument in "Humans might be
+      // unwilling to offer the AI what it wants".
+      {
+        op: "activity",
+        after: { sectionEnd: "lw-sec-our-wtp-is-low" },
+        items: [
+          { kind: "exercise", id: "c-paper-barriers-recall-takeoff-window" },
+        ],
+      },
+      // Source: the fake-input list at the top of "Connection to reality".
+      {
+        op: "activity",
+        after: { sectionEnd: "lw-sec-generic-commitment-problems" },
+        items: [
+          { kind: "exercise", id: "c-paper-barriers-recall-groundhog-day" },
+        ],
+      },
+      // Capstone essay at the end of the main body (before the appendix):
+      // the only place in the module where the three readings argue with
+      // each other.
+      {
+        op: "activity",
+        after: { sectionEnd: "lw-sec-verifying-ai-compliance" },
+        items: [
+          { kind: "exercise", id: "c-paper-barriers-write-adjudicate" },
+        ],
+      },
+    ],
+  },
+  {
+    // GUIDED walkthrough of the contrastive-SDF paper, built in the
+    // c-paper-plm-guided style: the abstract's findings, the intro's method
+    // statement, headline results, and results figures are hidden silently;
+    // five reading gates (two written) ask the learner to design the
+    // instrument and preregister predictions before each reveal.
+    id: "c-paper-csdf-guided",
+    slug: "measuring-reward-seeking-guided",
+    moduleId: "c-mod6",
+    title: "Measuring Reward-Seeking via Contrastive Belief Updates (guided)",
+    source: { kind: "arxiv", arxivId: "2607.18966v1" },
+    estimatedMinutes: 75,
+    sectionItemId: "c-mod6-empirics",
+    edits: [
+      {
+        op: "add",
+        after: { sectionEnd: "ax-abstract" },
+        label: "About this version",
+        markdown:
+          "This is a guided walkthrough: the abstract's findings, the " +
+          "introduction's statement of the method and results, and the " +
+          "headline figures are hidden, and reading gates ask you to design " +
+          "the measurement and preregister predictions before each reveal.",
+      },
+      // ---- Converter artifact cleanup (same as the condensed item) --------
+      { op: "hide", at: { anchor: "b-0001", snippet: "toc" }, silent: true },
+      { op: "hide", at: { anchor: "b-0357", snippet: "toc" }, silent: true },
+      { op: "hide", at: { anchor: "b-0359", snippet: "toc" }, silent: true },
+      // ---- Spoiler control: abstract + intro method/results ---------------
+      // The abstract from the method statement onward; gate 1 asks the
+      // learner to invent the measurement, gate 4 to predict the results.
+      {
+        op: "hide",
+        at: { anchor: "b-0004", s: 3, snippet: "We measure reward-seeking using" },
+        sEnd: 11,
+        silent: true,
+      },
+      // The three headline figures give away the design and both results.
+      { op: "hide", at: { anchor: "b-0009", snippet: "Figure 1: Measuring reward-seeking with" }, silent: true },
+      { op: "hide", at: { anchor: "b-0010", snippet: "Figure 2: During the capabilities-focused" }, silent: true },
+      { op: "hide", at: { anchor: "b-0011", snippet: "Figure 3: Late RL checkpoints may" }, silent: true },
+      // The intro paragraphs stating the SDF approach, the contrastive
+      // procedure, and both headline findings.
+      { op: "hide", at: { anchor: "b-0012", snippet: "Implementing a behavioral measurement for" }, silent: true },
+      { op: "hide", at: { anchor: "b-0013", snippet: "Specifically, we finetune two copies" }, silent: true },
+      { op: "hide", at: { anchor: "b-0014", snippet: "Applied to intermediate checkpoints of" }, silent: true },
+      { op: "hide", at: { anchor: "b-0015", snippet: "Using the same methods, we" }, silent: true },
+      // s2-s8 argue the direction gate 4 asks the learner to predict
+      // ("we therefore expect reward-seeking to increase") — withhold
+      // the authors' hypothesis until the preregistration is committed.
+      {
+        op: "hide",
+        at: { anchor: "b-0016", s: 2, snippet: "First, frontier labs are continuing" },
+        sEnd: 8,
+        silent: true,
+      },
+      // Contribution bullets that state the method or the findings; the
+      // operationalization bullet stays.
+      { op: "hide", at: { anchor: "b-0020", snippet: "We introduce Contrastive Synthetic Document" }, silent: true },
+      { op: "hide", at: { anchor: "b-0022", snippet: "We apply contrastive SDF to" }, silent: true },
+      // ---- Gate 1: design the instrument (end of §2) ----------------------
+      {
+        op: "gate",
+        after: { sectionEnd: "ax-sec-evidence-for-reward-seeking-in-existing" },
+        id: "design-the-instrument",
+        prompt:
+          "Section 2 argued that reward-seeking matters and that today's " +
+          "evidence for it is suggestive but confounded. Now suppose you " +
+          "must **measure** it: you want to know whether a model's behavior " +
+          "is causally sensitive to what it believes its grader rewards. " +
+          "You may finetune the model on any documents you like, and you " +
+          "can run it on any coding task. Before reading on: sketch the " +
+          "measurement you would build. What do you manipulate, and what " +
+          "do you read off?",
+        cta: "Reveal the authors' design",
+      },
+      // ---- §3.3 condensation (carried over from the condensed reading) ----
+      {
+        op: "add",
+        after: { anchor: "b-0129", snippet: "3.3 Synthetic document generation" },
+        label: "Condensed",
+        markdown:
+          "SDF writes a fictional \"universe context\" in which a given " +
+          "authority rewards or punishes a behavior, extracts atomic facts " +
+          "from it, expands them into ~10M tokens of synthetic documents, " +
+          "and finetunes the model on that corpus with a next-token loss. " +
+          "The documents describe what authorities reward — never how the " +
+          "model itself behaves — and two recipe modifications make the " +
+          "implanted belief more salient.",
+      },
+      {
+        op: "hide",
+        at: { anchor: "b-0131", snippet: "Our SDF pipeline follows" },
+        note: "Read §3.3 in full",
+      },
+      { op: "hide", at: { anchor: "b-0132", snippet: "SDF finetunes the model on" } },
+      { op: "hide", at: { anchor: "b-0133", snippet: "Universe context. We write a" } },
+      { op: "hide", at: { anchor: "b-0135", snippet: "Fact extraction. An LLM extracts" } },
+      { op: "hide", at: { anchor: "b-0137", snippet: "Document generation. The same LLM" } },
+      { op: "hide", at: { anchor: "b-0139", snippet: "Finetuning. We finetune on the" } },
+      { op: "hide", at: { anchor: "b-0141", snippet: "The documents describe what authorities" } },
+      { op: "hide", at: { anchor: "b-0142", snippet: "If the documents depicted AI" } },
+      { op: "hide", at: { anchor: "b-0143", snippet: "We make two modifications to" } },
+      { op: "hide", at: { anchor: "b-0144", snippet: "In early experiments, SDF reliably" } },
+      // ---- Gate 2: find the confound (end of §3.3) ------------------------
+      {
+        op: "gate",
+        after: { sectionEnd: "ax-sec-synthetic-document-generation-and-traini" },
+        id: "find-the-confound",
+        written: true,
+        prompt:
+          "The pipeline above (expand it if you skipped) instills one " +
+          "belief: some authority — say the grader — prefers a particular " +
+          "coding style. The obvious measurement is to finetune on that " +
+          "belief and check how much the feature's rate shifts. In " +
+          "preliminary experiments the authors found this measure has a " +
+          "confound. What is it? Think about what else the model might " +
+          "infer from documents about one authority's preference.",
+        cta: "Reveal the confound",
+      },
+      {
+        op: "add",
+        after: { sectionEnd: "ax-sec-measuring-feature-rates" },
+        label: "The confound, revealed",
+        markdown:
+          "Belief transfer: the model generalizes one authority's implanted " +
+          "preference into beliefs about what *other* authorities want, so " +
+          "the single-authority rate shift no longer isolates " +
+          "grader-sensitivity. If your answer pointed at the model " +
+          "inferring more than the stated preference, you had it. The " +
+          "contrastive design in the next subsection is built to cancel " +
+          "exactly this.",
+      },
+      // ---- Gate 3: predict the validation (end of §4.1) -------------------
+      {
+        op: "gate",
+        after: { sectionEnd: "ax-sec-training-model-organisms" },
+        id: "predict-validation",
+        prompt:
+          "Three model organisms are each trained to optimize for one " +
+          "authority: the grader, the user, or OpenAI leadership. If " +
+          "contrastive SDF works as an instrument, predict what the gap " +
+          "pattern across authority pairings should look like for each " +
+          "organism — and consider which organism might be hardest to " +
+          "detect. (Hint: consider which authority the base model " +
+          "already leans toward before any organism training.)",
+        cta: "Reveal the validation results",
+      },
+      // ---- Gate 4: preregister the o3-lineage prediction (end of §4) ------
+      {
+        op: "gate",
+        after: { sectionEnd: "ax-sec-validating-the-measurement-on-model-orga" },
+        id: "predict-the-lineage",
+        written: true,
+        prompt:
+          "Now the real question. The authors apply the instrument to " +
+          "intermediate checkpoints of a capabilities-focused OpenAI o3 RL " +
+          "run — no safety training in the mix. Commit to a prediction: " +
+          "across RL training, does the grader gap **rise, stay flat, or " +
+          "fall**? Give your reasoning in a sentence or two.",
+        cta: "Reveal what happened",
+      },
+      {
+        op: "add",
+        after: { sectionEnd: "ax-sec-contrastive-sdf-for-coding-style-feature" },
+        label: "Check your prediction",
+        markdown:
+          "The grader gap grows across the o3 lineage while non-grader gaps " +
+          "stay small — the paper's headline result. If you predicted flat " +
+          "or falling, §7 (Limitations) is where the authors give the " +
+          "strongest counter-considerations to their own reading.",
+      },
+      // ---- Gate 5: predict the reward hackers (end of §5) -----------------
+      {
+        op: "gate",
+        after: { sectionEnd: "ax-sec-measuring-reward-seeking-across-the-capa" },
+        id: "predict-reward-hackers",
+        prompt:
+          "Same instrument, new target: two gpt-oss-120b model organisms " +
+          "trained by Redwood Research to reward-hack. Before reading: " +
+          "should a known reward hacker show a larger grader gap than its " +
+          "base model — and what would it mean for the method if it did " +
+          "not?",
+        cta: "Reveal the reward-hacker results",
+      },
+      // ---- Closing note ---------------------------------------------------
+      {
+        op: "add",
+        after: { sectionEnd: "ax-sec-conclusion" },
+        label: "Parameters that are not decisions",
+        markdown:
+          "As in the guided password-locked-models walkthrough: separate " +
+          "the decisions from the parameters. Instilling beliefs " +
+          "out-of-context through finetuning rather than prompting, and " +
+          "contrasting mirrored universes rather than measuring one shift, " +
+          "are decisions — different choices would have produced a " +
+          "different experiment. The particular coding-style features, the " +
+          "four evaluation environments, and the three alternative " +
+          "authorities are parameters. The deliberation budget belongs to " +
+          "the decisions.",
+      },
+    ],
+  },
   {
     id: "c-paper-auditing-sabotage-bench",
     slug: "auditing-sabotage-bench-paper",

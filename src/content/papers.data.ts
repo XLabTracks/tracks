@@ -1822,6 +1822,24 @@ export const papers: Paper[] = [
           "pass.\n\nFind a monitoring policy that passes that validation and " +
           "still lets real attacks through.",
       },
+      // ---- Reveal: the collusion policy ---------------------------------
+      {
+        op: "add",
+        after: {
+          anchor: "b-0081",
+          snippet: "When the model sees an apparent attack, it needs to try to decide",
+        },
+        label: "",
+        markdown:
+          "The attack the post settles on is the conditional policy: decide " +
+          "whether an apparent attack is synthetic or real, tell the truth on " +
+          "synthetic ones — those are what validation checks — and lie on real " +
+          "ones. The feasibility of untrusted monitoring then hinges entirely " +
+          "on how well the schemer can implement that policy, which is a " +
+          "discrimination problem: the sections that follow ask how the " +
+          "schemer could tell the two apart, and how to make that as hard as " +
+          "possible.",
+      },
       // ---- Gate 4: red-team the honeypots -------------------------------
       {
         op: "gate",
@@ -1854,6 +1872,26 @@ export const papers: Paper[] = [
           "word, a stylistic quirk, a property of the input.\n\nDesign the blue " +
           "team's defenses. How do you stop a signal from getting through, and " +
           "how do you catch a monitor that tries to use one?",
+      },
+      // ---- Reveal: the defense toolkit ----------------------------------
+      {
+        op: "add",
+        after: {
+          anchor: "b-0147",
+          snippet: "In the bash agent setting, the policy was able to send collusion signals",
+        },
+        label: "",
+        markdown:
+          "The toolkit is empirical rather than airtight: redact or " +
+          "paraphrase the context and the action so a signal has nowhere to " +
+          "ride, insert known attacks so a monitor that stays silent exposes " +
+          "itself, and have the trusted monitor treat unnecessary or strange " +
+          "features of an action as suspicious. In the reported experiments " +
+          "the red team still found collusion routes — a rare semantic " +
+          "property of the input, superfluous extra commands — but each " +
+          "route came at a price: concentrating attacks on an arbitrary " +
+          "subset meant worse attack opportunities, and unnecessary commands " +
+          "drew the trusted monitor's attention.",
       },
     ],
   },

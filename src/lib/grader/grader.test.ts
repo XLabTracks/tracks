@@ -27,7 +27,7 @@ describe("classifyLength", () => {
 
   it("routes user-key grading to the paid default, env-overridable", () => {
     for (const cls of ["short", "medium", "long"] as const) {
-      expect(modelFor(cls, "user")).toBe("moonshotai/kimi-k3");
+      expect(modelFor(cls, "user")).toBe("deepseek/deepseek-v4-flash-0731");
       expect(modelFor(cls, "server")).toBe(modelFor(cls));
     }
     process.env.OPENROUTER_MODEL_USER = "override/model";
@@ -288,12 +288,6 @@ describe("assembleWriting", () => {
       assembleWriting("c-threats-l1-reprioritize", "exercise", {}),
     ).toBeNull();
     expect(assembleWriting("nope", "exercise", { response: "x" })).toBeNull();
-  });
-
-  it("labels assessment sections", () => {
-    const result = assembleWriting("ex-assessment", "assessment", {});
-    // Whatever the example assessment's ids are, empty values → null.
-    expect(result).toBeNull();
   });
 });
 

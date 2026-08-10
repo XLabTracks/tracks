@@ -180,12 +180,10 @@ describe("content integrity", () => {
     expect(new Set(assessmentModuleIds).size).toBe(assessmentModuleIds.length);
   });
 
-  // Every real-track paper links out from the resource hub; the Example
-  // track's papers (feature reference, not curriculum) must not leak in.
-  it("paper-derived resources cover every real-track paper source", () => {
+  // Every track paper links out from the resource hub.
+  it("paper-derived resources cover every track paper source", () => {
     const urls = new Set(paperResources.map((r) => r.url));
     for (const track of tracks) {
-      if (track.kind === "example") continue;
       for (const mod of getModulesForTrack(track.id)) {
         for (const item of getItemsForModule(mod.id)) {
           if (item.kind !== "paper") continue;
@@ -198,15 +196,8 @@ describe("content integrity", () => {
         }
       }
     }
-    const examplePaperIds = new Set(
-      papers.filter((p) => p.moduleId.startsWith("ex-")).map((p) => p.id),
-    );
     for (const r of paperResources) {
       const paperId = r.id.replace(/^paper-res-/, "");
-      expect(
-        examplePaperIds.has(paperId),
-        `${r.id} derives from an Example-track paper`,
-      ).toBe(false);
       // The hub links course readings to their in-course viewer.
       expect(r.internalHref, `${r.id} internalHref`).toBe(
         getContentLocation(paperId)?.href,

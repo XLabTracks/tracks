@@ -35,8 +35,7 @@ function readingKey(reading: (typeof linkedReadings)[number]): string | null {
   return `sb:${reading.id}`;
 }
 
-// Every post-sourced course paper's course page, by post key. Real-track
-// locations shadow Example-track ones.
+// Every post-sourced course paper's course page, by post key.
 const coursePaperHrefByKey: Map<string, string> = (() => {
   const map = new Map<string, string>();
   for (const paper of papers) {
@@ -44,7 +43,6 @@ const coursePaperHrefByKey: Map<string, string> = (() => {
     const key = postKey(paper.source.postUrl);
     const location = getContentLocation(paper.id);
     if (!key || !location) continue;
-    if (map.has(key) && location.track.kind === "example") continue;
     map.set(key, location.href);
   }
   return map;

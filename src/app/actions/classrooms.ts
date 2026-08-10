@@ -45,6 +45,15 @@ async function requireInstructor(userId: string, classroomId: string) {
   }
 }
 
+// A classroom must always keep at least one instructor — otherwise its
+// roster, join code, and stored key become permanently unreachable (nobody
+// left with instructor rights). Both the demote and leave paths consult this.
+async function instructorCount(classroomId: string): Promise<number> {
+  return prisma.classroomMembership.count({
+    where: { classroomId, role: "instructor" },
+  });
+}
+
 export async function createClassroom(
   _prev: ClassroomActionState,
   formData: FormData,
@@ -140,4 +149,74 @@ export async function regenerateJoinCode(classroomId: string): Promise<void> {
     }
   }
   revalidatePath(`/classrooms/${classroomId}`);
+}
+
+// Promote a student to co-instructor or demote an instructor back to student.
+// Instructor-only, and it never lets the classroom lose its last instructor
+// (an instructor could otherwise demote themselves into a locked-out room).
+export async function setMemberRole(
+  classroomId: string,
+  memberUserId: string,
+  role: "instructor" | "student",
+): Promise<void> {
+  const user = await getCurrentUser();
+  if (!user) throw new Error("Not signed in");
+  await requireInstructor(user.id, classroomId);
+  if (role !== "instructor" && role !== "student") {
+    throw new Error("Invalid role");
+  }
+
+  const target = await prisma.classroomMembership.findUnique({
+    where: { classroomId_userId: { classroomId, userId: memberUserId } },
+    select: { role: true },
+  });
+  if (!target) throw new Error("Not a member");
+  if (target.role === role) return; // already there — nothing to change
+
+  if (role === "student" && (await instructorCount(classroomId)) <= 1) {
+    throw new Error(
+      "Promote another instructor before stepping this one down.",
+    );
+  }
+
+  await prisma.classroomMembership.update({
+    where: { classroomId_userId: { classroomId, userId: memberUserId } },
+    data: { role },
+  });
+  revalidatePath(`/classrooms/${classroomId}`);
+}
+
+// Self-service exit for any member. An instructor may leave only once another
+// instructor remains (mirrors setMemberRole's last-instructor guard); to close
+// a solo classroom the instructor uses deleteClassroom instead.
+export async function leaveClassroom(classroomId: string): Promise<void> {
+  const user = await getCurrentUser();
+  if (!user) throw new Error("Not signed in");
+
+  const membership = await prisma.classroomMembership.findUnique({
+    where: { classroomId_userId: { classroomId, userId: user.id } },
+    select: { role: true },
+  });
+  if (!membership) redirect("/classrooms"); // not a member — nothing to leave
+
+  if (membership.role === "instructor" && (await instructorCount(classroomId)) <= 1) {
+    throw new Error(
+      "You're the only instructor — promote another or delete the classroom instead.",
+    );
+  }
+
+  await prisma.classroomMembership.deleteMany({
+    where: { classroomId, userId: user.id },
+  });
+  redirect("/classrooms");
+}
+
+// Permanently delete a classroom. Instructor-only; the membership and stored
+// API key rows cascade away with it (schema onDelete: Cascade).
+export async function deleteClassroom(classroomId: string): Promise<void> {
+  const user = await getCurrentUser();
+  if (!user) throw new Error("Not signed in");
+  await requireInstructor(user.id, classroomId);
+  await prisma.classroom.delete({ where: { id: classroomId } });
+  redirect("/classrooms");
 }

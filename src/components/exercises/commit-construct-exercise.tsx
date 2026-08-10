@@ -297,7 +297,7 @@ export function CommitConstructCard({
                 <p className="text-muted-foreground text-xs font-medium tracking-wide uppercase">
                   Your threat model
                 </p>
-                <blockquote className="border-border mt-1.5 border-l-2 pl-3 whitespace-pre-wrap">
+                <blockquote className="border-border mt-1.5 border-l-2 pl-3 whitespace-pre-wrap [overflow-wrap:anywhere]">
                   {threatModel}
                 </blockquote>
               </div>

@@ -4,17 +4,16 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 @AGENTS.md
 
-Tracks is an AI-safety learning platform (Khan Academy–style) with three
-tracks — **Control** (technical), **Governance**, and **Verification**. The
+Tracks is an AI-safety learning platform (Khan Academy–style) with two
+tracks — **Control** (technical) and **Verification**. The
 Control track's first module carries real curriculum (an authored lesson on
 the control game, the Redwood AI Control paper, and two readings reproduced
 with permission); the Verification track is fully populated by the 17
 native React interactive widgets (see "Verification
 interactives" below); everything else is placeholder. **Never invent or
 fabricate curriculum content** — real content is human-authored or reproduced
-with permission; otherwise use lorem ipsum or leave it empty. The **Example track** (`ex-content`/`ex-assess`)
-is the live reference for every content feature; `AUTHORING.md` is the
-step-by-step guide for adding content (its rules are enforced by
+with permission; otherwise use lorem ipsum or leave it empty. `AUTHORING.md`
+is the step-by-step guide for adding content (its rules are enforced by
 `src/lib/content/content.test.ts`).
 
 ## Commands
@@ -350,4 +349,4 @@ complete. Papers marked `optional: true` (and their inserted lessons) are
 trackable but never required: the `…ProgressContentIds` accessors exclude
 them (so module completion, prerequisite satisfaction, and progress totals
 ignore them) while `getTrackContentIds` is the full checkmark/fetch universe
-(`ex-paper-lesswrong` is the live reference).
+(`c-paper-synchronous-monitors` is the live reference).

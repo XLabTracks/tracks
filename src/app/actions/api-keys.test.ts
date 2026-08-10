@@ -86,7 +86,14 @@ describe("saveOpenRouterKey", () => {
   it("persists ciphertext (never plaintext) and returns only last4", async () => {
     getCurrentUser.mockResolvedValue({ id: "u1" });
     keyStorageSecret.mockReturnValue("s".repeat(32));
-    vi.stubGlobal("fetch", vi.fn().mockResolvedValue({ ok: true, status: 200 }));
+    vi.stubGlobal(
+      "fetch",
+      vi.fn().mockResolvedValue({
+        ok: true,
+        status: 200,
+        json: async () => ({ data: { is_free_tier: false, limit_remaining: null } }),
+      }),
+    );
     prisma.userApiKey.upsert.mockResolvedValue({});
     const result = await saveOpenRouterKey(VALID_KEY);
     expect(result).toEqual({ ok: true, last4: VALID_KEY.slice(-4) });
@@ -95,6 +102,45 @@ describe("saveOpenRouterKey", () => {
     // The stored blob must be an encryption, not the raw key.
     expect(arg.create.ciphertext).not.toContain(VALID_KEY);
     expect(arg.update.ciphertext).toBe(arg.create.ciphertext);
+  });
+
+  it("saves but warns when the key's account has no credits (free tier)", async () => {
+    getCurrentUser.mockResolvedValue({ id: "u1" });
+    keyStorageSecret.mockReturnValue("s".repeat(32));
+    vi.stubGlobal(
+      "fetch",
+      vi.fn().mockResolvedValue({
+        ok: true,
+        status: 200,
+        json: async () => ({ data: { is_free_tier: true, limit_remaining: null } }),
+      }),
+    );
+    prisma.userApiKey.upsert.mockResolvedValue({});
+    const result = await saveOpenRouterKey(VALID_KEY);
+    expect(result.ok).toBe(true);
+    if (result.ok) {
+      expect(result.last4).toBe(VALID_KEY.slice(-4));
+      expect(result.warning).toMatch(/credits/i);
+    }
+    // The key still persists — the warning never blocks the save.
+    expect(prisma.userApiKey.upsert).toHaveBeenCalled();
+  });
+
+  it("warns when the key's own spending limit is exhausted", async () => {
+    getCurrentUser.mockResolvedValue({ id: "u1" });
+    keyStorageSecret.mockReturnValue("s".repeat(32));
+    vi.stubGlobal(
+      "fetch",
+      vi.fn().mockResolvedValue({
+        ok: true,
+        status: 200,
+        json: async () => ({ data: { is_free_tier: false, limit_remaining: 0 } }),
+      }),
+    );
+    prisma.userApiKey.upsert.mockResolvedValue({});
+    const result = await saveOpenRouterKey(VALID_KEY);
+    expect(result.ok).toBe(true);
+    if (result.ok) expect(result.warning).toMatch(/spending limit/i);
   });
 
   it("hides the feature when key storage is unconfigured", async () => {
@@ -146,7 +192,14 @@ describe("saveClassroomOpenRouterKey", () => {
     getCurrentUser.mockResolvedValue({ id: "u1" });
     keyStorageSecret.mockReturnValue("s".repeat(32));
     prisma.classroomMembership.findUnique.mockResolvedValue({ role: "instructor" });
-    vi.stubGlobal("fetch", vi.fn().mockResolvedValue({ ok: true, status: 200 }));
+    vi.stubGlobal(
+      "fetch",
+      vi.fn().mockResolvedValue({
+        ok: true,
+        status: 200,
+        json: async () => ({ data: { is_free_tier: false, limit_remaining: null } }),
+      }),
+    );
     prisma.classroomApiKey.upsert.mockResolvedValue({});
     const result = await saveClassroomOpenRouterKey("cls1", VALID_KEY);
     expect(result).toEqual({ ok: true, last4: VALID_KEY.slice(-4) });

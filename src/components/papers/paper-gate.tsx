@@ -114,7 +114,7 @@ export function PaperGate({
         </p>
         {prompt ? <div className="mt-1.5">{prompt}</div> : null}
         {written && open && committed !== null && (
-          <div className="border-primary/20 bg-background/60 text-foreground mt-3 rounded-lg border px-3 py-2 text-sm whitespace-pre-wrap">
+          <div className="border-primary/20 bg-background/60 text-foreground mt-3 min-w-0 rounded-lg border px-3 py-2 text-sm whitespace-pre-wrap [overflow-wrap:anywhere]">
             {committed}
           </div>
         )}

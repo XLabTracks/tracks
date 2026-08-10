@@ -26,6 +26,7 @@ import { LessonNav } from "@/components/layout/lesson-nav";
 import { LessonCompleteButton } from "@/components/learn/lesson-complete-button";
 import { LessonTracker } from "@/components/learn/lesson-tracker";
 import { MarginNotesToggle } from "@/components/papers/margin-notes-toggle";
+import { ClassHighlightsToggle } from "@/components/papers/class-highlights-toggle";
 import { PaperHighlights } from "@/components/papers/paper-highlights";
 import { PaperReader } from "@/components/papers/paper-reader";
 import { gateIdsOf, paperGateStorageKey } from "@/lib/papers/gate-state";
@@ -37,8 +38,14 @@ import {
   deleteHighlight,
   updateHighlightNote,
 } from "@/app/actions/highlights";
-import { getHighlightsForItem } from "@/lib/highlights/queries";
-import { type HighlightRow } from "@/lib/highlights/types";
+import {
+  getClassmateHighlightsForItem,
+  getHighlightsForItem,
+} from "@/lib/highlights/queries";
+import {
+  type ClassHighlightRow,
+  type HighlightRow,
+} from "@/lib/highlights/types";
 import { getVerificationExerciseForLesson } from "@/lib/verification/exercises";
 
 // Dispatching route: a module item slug resolves to either a lesson or a
@@ -191,7 +198,7 @@ async function PaperItemPage({
   // and PaperReader only membership-tests its own ids against it. The
   // highlights read rides the same round trip — Hyperdrive caching is off,
   // so a serialized second query would be a second us-east-1 hop.
-  const [completedContentIds, highlights] = userId
+  const [completedContentIds, highlights, classHighlights] = userId
     ? await Promise.all([
         getTrackCompletionSet(userId, track.id),
         // Degrade, never take the page down: schema migrations are applied
@@ -201,8 +208,17 @@ async function PaperItemPage({
         getHighlightsForItem(userId, paper.id).catch(
           (): HighlightRow[] => [],
         ),
+        // Classmates' shared notes on this paper (empty for a user in no
+        // classroom). Same degrade-never-fail contract as the own read.
+        getClassmateHighlightsForItem(userId, paper.id).catch(
+          (): ClassHighlightRow[] => [],
+        ),
       ])
-    : [new Set<string>(), [] as HighlightRow[]];
+    : [
+        new Set<string>(),
+        [] as HighlightRow[],
+        [] as ClassHighlightRow[],
+      ];
   const completed = completedContentIds.has(paper.id);
 
   // Cached per request — PaperReader reuses the same artifact lookup.
@@ -248,6 +264,9 @@ async function PaperItemPage({
           {/* Margin display of the reader's own highlight notes — only
               signed-in readers can have any. */}
           {userId ? <MarginNotesToggle /> : null}
+          {/* Classmates' shared notes — only surfaced when at least one
+              exists on this paper. */}
+          {classHighlights.length > 0 ? <ClassHighlightsToggle /> : null}
         </p>
       </header>
 
@@ -264,6 +283,7 @@ async function PaperItemPage({
       {userId ? (
         <PaperHighlights
           initialHighlights={highlights}
+          classHighlights={classHighlights}
           createAction={createHighlight.bind(null, paper.id)}
           updateNoteAction={updateHighlightNote}
           deleteAction={deleteHighlight}

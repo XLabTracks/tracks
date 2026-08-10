@@ -382,13 +382,14 @@ export function PaperSidenotes({ prefix }: { prefix: string }) {
     };
     // Sentence glow, shared by both hover directions (the sidenote item AND
     // the inline marker): a strong but smooth wash whose falloff is measured
-    // ALONG THE TEXT FLOW from the footnote number — never a vertical
-    // column. Inline sentences fragment per line box; fragments are laid on
-    // a single "flow axis" (cumulative widths in reading order) and each
-    // paints the slice of one mirrored gradient its flow interval covers:
-    // the number's own line fades left and right of it, the line above
-    // glows at its END (the words just before the number) fading backward,
-    // the line below at its START fading forward.
+    // BACKWARD ALONG THE TEXT FLOW from the footnote number — never a
+    // vertical column, and never forward past the number. Inline sentences
+    // fragment per line box; fragments are laid on a single "flow axis"
+    // (cumulative widths in reading order) and each paints the slice of one
+    // backward-falling gradient its flow interval covers: the number's own
+    // line is brightest at the number and fades left of it, the line above
+    // glows at its END (the words just before the number) fading backward;
+    // the words and lines after the number get no glow.
     const glowNumber = (number: string): void => {
       if (number === glowing) return;
       const marker = container.querySelector<HTMLElement>(
@@ -440,15 +441,14 @@ export function PaperSidenotes({ prefix }: { prefix: string }) {
         frag.style.top = `${r.top - containerRect.top}px`;
         frag.style.width = `${r.width}px`;
         frag.style.height = `${r.height}px`;
-        // Gradient centre in this fragment's local coordinates — allowed to
-        // lie beyond either edge, so the fragment shows only its slice of
-        // the shared falloff.
+        // The number's flow position in this fragment's local coordinates —
+        // allowed to lie beyond either edge, so the fragment shows only its
+        // slice of the shared backward falloff (peaks at the number and is
+        // transparent once past it, going forward).
         const x = markerFlow - start;
         frag.style.background = `linear-gradient(90deg, transparent ${
           x - 218
-        }px, rgb(250 204 21 / 0.3) ${x - 126}px, rgb(250 204 21 / 0.5) ${x}px, rgb(250 204 21 / 0.3) ${
-          x + 126
-        }px, transparent ${x + 218}px)`;
+        }px, rgb(250 204 21 / 0.3) ${x - 126}px, rgb(250 204 21 / 0.5) ${x}px, transparent ${x}px)`;
         glowLayer.appendChild(frag);
       }
     };

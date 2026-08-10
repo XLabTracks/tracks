@@ -219,7 +219,7 @@ export function ControlScenariosCard({
                     <p className="text-muted-foreground text-xs font-medium tracking-wide uppercase">
                       Your reasoning
                     </p>
-                    <blockquote className="border-border mt-1.5 border-l-2 pl-3 text-sm whitespace-pre-wrap">
+                    <blockquote className="border-border mt-1.5 border-l-2 pl-3 text-sm whitespace-pre-wrap [overflow-wrap:anywhere]">
                       {answer}
                     </blockquote>
                   </div>

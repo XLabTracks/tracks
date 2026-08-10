@@ -354,8 +354,8 @@ function paperSourceUrl(source: PaperSource): string {
 }
 
 /**
- * Resource-hub entries derived from the content graph: every paper item in a
- * real track (the Example track is a feature reference, not curriculum). The
+ * Resource-hub entries derived from the content graph: every paper item in
+ * every track. The
  * hub links each to its in-course viewer (`internalHref`); `url` keeps the
  * original source, which stays the dedupe/coverage key. All fields are
  * factual — title from papers.data.ts, URL from the paper's source ref, note
@@ -366,7 +366,6 @@ export const paperResources: ExternalResource[] = (() => {
   const derived: ExternalResource[] = [];
   const seenUrls = new Set<string>();
   for (const track of tracks) {
-    if (track.kind === "example") continue;
     for (const mod of getModulesForTrack(track.id)) {
       for (const item of getItemsForModule(mod.id)) {
         if (item.kind !== "paper") continue;

@@ -92,3 +92,16 @@ export interface HighlightRow extends HighlightSpan {
   note: string | null;
   convVersion: number;
 }
+
+/**
+ * A classmate's shared highlight, as passed to the reader's read-only
+ * "class highlights" layer. Same anchor shape as HighlightRow plus the
+ * author's display name; `note` is always present (only NOTED highlights are
+ * shared — an un-noted highlight has nothing to show in the margin). These
+ * never enter the editable highlight state: they resolve into a separate
+ * range map, paint in a distinct color, and render as read-only margin boxes.
+ */
+export interface ClassHighlightRow extends HighlightRow {
+  /** Display name of the classmate who made the highlight. */
+  author: string;
+}

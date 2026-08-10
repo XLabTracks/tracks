@@ -1770,6 +1770,91 @@ export const papers: Paper[] = [
           "available [on LessWrong](https://www.lesswrong.com/posts/GCqoks9eZDfpL8L3Q/how-to-prevent-collusion-when-using-untrusted-models-to), " +
           "is the source of everything below.",
       },
+      // ---- Gate 1: invent the scaffold ----------------------------------
+      {
+        op: "gate",
+        after: {
+          anchor: "b-0004",
+          snippet: "In this post, I’ll analyze how much of a problem collusion is",
+        },
+        id: "invent-scaffold",
+        written: true,
+        minChars: 80,
+        cta: "Continue",
+        prompt:
+          "You have an untrusted model U doing useful work in a high-stakes " +
+          "deployment, a weaker trusted model T, and a small budget of human " +
+          "audits. Design a deployment that uses another instance of U to catch " +
+          "U's attacks.\n\nDescribe: what the monitor instance sees, what it " +
+          "outputs, and what the protocol does at each level of suspiciousness.",
+      },
+      // ---- Gate 2: argue the value --------------------------------------
+      {
+        op: "gate",
+        after: {
+          anchor: "b-0064",
+          snippet: "There’s a lot of room to be fancy here",
+        },
+        id: "monitor-value",
+        written: true,
+        minChars: 60,
+        cta: "Continue",
+        prompt:
+          "Before the post argues it: assume for now that the monitor instance " +
+          "does its best. Why would an untrusted monitor catch attacks that the " +
+          "trusted monitor misses? Give the strongest reason you can.",
+      },
+      // ---- Gate 3: break the protocol -----------------------------------
+      {
+        op: "gate",
+        after: {
+          anchor: "b-0070",
+          snippet: "If you’re interested in understanding quantitatively",
+        },
+        id: "break-protocol",
+        written: true,
+        minChars: 80,
+        cta: "Continue",
+        prompt:
+          "Now take the red team's seat: you are the scheming model, playing " +
+          "both the policy and the monitor. Before deployment, the monitor was " +
+          "validated on synthetic attacks — it had to rate them suspicious to " +
+          "pass.\n\nFind a monitoring policy that passes that validation and " +
+          "still lets real attacks through.",
+      },
+      // ---- Gate 4: red-team the honeypots -------------------------------
+      {
+        op: "gate",
+        after: {
+          anchor: "b-0085",
+          snippet: "One question you might have is: if we can synthesize inputs",
+        },
+        id: "honeypot-detection",
+        written: true,
+        minChars: 80,
+        cta: "Continue",
+        prompt:
+          "The colluding policy from the last section only works if the monitor " +
+          "can tell real attacks from synthetic ones.\n\nList the mechanisms a " +
+          "schemer could use to make that distinction. Aim for at least three.",
+      },
+      // ---- Gate 5: design the defenses ----------------------------------
+      {
+        op: "gate",
+        after: {
+          anchor: "b-0136",
+          snippet: "Being robust to the possibility that your models can choose",
+        },
+        id: "defense-design",
+        written: true,
+        minChars: 100,
+        cta: "Continue",
+        prompt:
+          "Suppose the policy and the monitor can coordinate on a signal: a code " +
+          "word, a stylistic quirk, a property of the input.\n\nDesign the blue " +
+          "team's defenses. How do you stop a signal from getting through, and " +
+          "how do you catch a monitor that tries to use one?",
+      },
     ],
   },
   {

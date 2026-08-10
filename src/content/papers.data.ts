@@ -1657,6 +1657,24 @@ export const papers: Paper[] = [
     estimatedMinutes: 35,
   },
   {
+    // Control track, module 5: a guided walkthrough of Buck Shlegeris's
+    // untrusted-monitoring collusion post, in the c-paper-ua-guided style it
+    // replaces — predict-first written gates at each design decision, the
+    // give-away figures hidden, editorial reveal notes restating the post's
+    // own answers. Gates follow the post's order. Edits are added in
+    // follow-up commits once the artifact anchors are known.
+    id: "c-paper-collusion-guided",
+    slug: "collusion-guided",
+    moduleId: "c-mod5",
+    title: "How to prevent collusion in untrusted monitoring (guided)",
+    source: {
+      kind: "lesswrong",
+      postUrl:
+        "https://www.lesswrong.com/posts/GCqoks9eZDfpL8L3Q/how-to-prevent-collusion-when-using-untrusted-models-to",
+    },
+    estimatedMinutes: 60,
+  },
+  {
     id: "c-paper-legibility-guided",
     slug: "legibility-guided",
     moduleId: "c-mod5",

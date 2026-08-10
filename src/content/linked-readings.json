@@ -272,12 +272,6 @@
     },
     {
       "kind": "lesswrong",
-      "id": "lesswrong__GCqoks9eZDfpL8L3Q",
-      "url": "https://www.lesswrong.com/posts/GCqoks9eZDfpL8L3Q/how-to-prevent-collusion-when-using-untrusted-models-to",
-      "title": "How to prevent collusion when using untrusted models to monitor each other"
-    },
-    {
-      "kind": "lesswrong",
       "id": "lesswrong__hirhSqvEAq7pdnyPG",
       "url": "https://www.lesswrong.com/posts/hirhSqvEAq7pdnyPG/auditing-failures-vs-concentrated-failures",
       "title": "Auditing failures vs concentrated failures"

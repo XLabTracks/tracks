@@ -318,6 +318,20 @@ describe("convertPostHtml — adversarial author markup", () => {
     expect(assets.size).toBe(0);
   });
 
+  it("never fetches images inside dropped embeds/widgets", async () => {
+    // A permanently dead image URL inside a tweet embed or a stripped
+    // widget must not be able to block the build forever (fetchImage
+    // returning null throws ImageFetchError, classified as transient).
+    const { html, assets } = await convertPostHtml(
+      `<div class="tweet" data-attrs="${'{"url":"https://twitter.com/x/status/1"}'.replace(/"/g, "&quot;")}"><img src="https://pbs.example.com/avatar.png"></div>` +
+        '<div class="subscribe-widget"><img src="https://cdn.example.com/badge.png"></div>' +
+        "<p>Body.</p>",
+      { ref, fetchImage: async () => null },
+    );
+    expect(html).toContain('class="sb-embed"');
+    expect(assets.size).toBe(0);
+  });
+
   it("drops images nested in figure captions instead of hotlinking", async () => {
     const CDN = "https://substack-post-media.s3.amazonaws.com/public/images/a.png";
     const { html, warnings } = await convert(

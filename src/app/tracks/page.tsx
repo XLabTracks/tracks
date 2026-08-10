@@ -19,7 +19,6 @@ const KIND_LABEL: Record<string, string> = {
   foundations: "Foundations",
   technical: "Technical",
   governance: "Governance",
-  example: "Example",
 };
 
 export default function TracksPage() {

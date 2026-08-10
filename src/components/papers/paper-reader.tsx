@@ -38,6 +38,7 @@ import { PaperCollapse } from "./paper-collapse";
 import { PaperGlossary, type PaperGlossaryEntry } from "./paper-glossary";
 import { PaperGate } from "./paper-gate";
 import { PaperSidenotes } from "./paper-sidenotes";
+import { PaperTailReveal } from "./paper-tail-reveal";
 import {
   LessWrongUnavailable,
   PaperUnavailable,
@@ -369,7 +370,11 @@ function applyPaperEditsCached(
   // details wrappers would shift. The references-seen flag threads through
   // the html parts in document order (and on into the ungated tail), so an
   // activity/gate split after References doesn't reset the appendix walk —
-  // the whole document collapses as one pass.
+  // the whole document collapses as one pass. (On gated papers the landmark
+  // sections themselves live in ungatedTailHtml and collapse there; the
+  // appendix stretch they left behind in the gated parts was already
+  // collapsed by apply-edits' tail split, and reads as landmark-free —
+  // byte-identical — here.)
   let sawReferences = false;
   const parts = edited.parts.map((part) => {
     if (part.kind !== "html") return part;
@@ -452,20 +457,33 @@ function EditedPaperBody({
       })}
 
       {ungatedTailHtml && (
-        // References/footnotes, split off the gated walk in apply-edits.ts:
-        // they stay mounted while gates above are closed, so citations and
-        // footnote markers in the visible text keep live targets and the
-        // sidenote layer has note bodies to clone. The `paper-gated-tail`
-        // class visually hides the footnotes SECTION itself (a gated paper
+        // References/footnotes (the landmark sections ONLY — appendices stay
+        // in the gated walk), split off in apply-edits.ts: they stay mounted
+        // while gates above are closed, so citations and footnote markers in
+        // the visible text keep live targets and the sidenote layer has note
+        // bodies to clone. The `paper-gated-tail` class visually hides the
+        // footnotes SECTION itself while any gate is closed (a gated paper
         // would otherwise dump every note — including gated ones — right below
         // the first gate, a spoiler); the notes stay in the DOM, so per-marker
         // margin sidenotes still render for content the learner has revealed.
         // References stay visible (citations must keep a live target).
-        <div
-          className={`${wrapperClassName} paper-gated-tail`}
-          data-conv={converterVersion}
-          dangerouslySetInnerHTML={{ __html: ungatedTailHtml }}
-        />
+        // PaperTailReveal lifts the suppression once every gate is open —
+        // from then on the canonical section is the fragment-jump target
+        // again (the only footnote surface on narrow viewports and for
+        // assistive tech).
+        <>
+          <div
+            className={`${wrapperClassName} paper-gated-tail`}
+            data-conv={converterVersion}
+            dangerouslySetInnerHTML={{ __html: ungatedTailHtml }}
+          />
+          <PaperTailReveal
+            paperId={paper.id}
+            gateIds={parts.flatMap((part) =>
+              part.kind === "gate" ? [part.id] : [],
+            )}
+          />
+        </>
       )}
 
       {unmatchedItems.length > 0 && (
@@ -627,7 +645,7 @@ function InsertionBlock({
         />
       ) : item.kind === "demo" ? (
         <div className="my-8">
-          <Demo id={item.id} />
+          <Demo id={item.id} framed={item.framed} />
         </div>
       ) : item.kind === "sequence" ? (
         <div className="my-8">

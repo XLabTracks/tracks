@@ -25,6 +25,8 @@ const {
       highlight: {
         count: vi.fn(),
         create: vi.fn(),
+        findFirst: vi.fn(),
+        findMany: vi.fn(),
         findUnique: vi.fn(),
         update: vi.fn(),
         updateMany: vi.fn(),
@@ -403,19 +405,59 @@ describe("updateHighlightNote", () => {
 
   it("scopes the write to the caller's own row and reports the outcome", async () => {
     getCurrentUser.mockResolvedValue({ id: "u1" });
+    // Ownership check resolves the row's group; single-span group — the
+    // posted row IS the head.
+    prisma.highlight.findFirst.mockResolvedValue({ groupId: "g1" });
+    prisma.highlight.findMany.mockResolvedValue([
+      { id: "h1", blockAnchor: "b-0042", sStart: 1, startOffset: 0 },
+    ]);
     prisma.highlight.updateMany.mockResolvedValue({ count: 1 });
     expect(await updateHighlightNote("h1", "worth remembering")).toBe(true);
+    expect(prisma.highlight.findFirst).toHaveBeenCalledWith({
+      where: { id: "h1", userId: "u1" },
+      select: { groupId: true },
+    });
     expect(prisma.highlight.updateMany).toHaveBeenCalledWith({
       where: { id: "h1", userId: "u1" },
       data: { note: "worth remembering" },
     });
-    // Someone else's id (or a deleted row) matches nothing.
-    prisma.highlight.updateMany.mockResolvedValue({ count: 0 });
+    // Someone else's id (or a deleted row) matches nothing — and no write runs.
+    prisma.highlight.findFirst.mockResolvedValue(null);
+    prisma.highlight.updateMany.mockClear();
     expect(await updateHighlightNote("not-mine", "x")).toBe(false);
+    expect(prisma.highlight.updateMany).not.toHaveBeenCalled();
+  });
+
+  it("routes the note to the group's document-order head row", async () => {
+    // Direct POST with a TAIL row id (createHighlight returns every span's
+    // id): the note must still land on the head — the only row the panel and
+    // the classmate query ever read the note from.
+    getCurrentUser.mockResolvedValue({ id: "u1" });
+    prisma.highlight.findFirst.mockResolvedValue({ groupId: "g1" });
+    prisma.highlight.findMany.mockResolvedValue([
+      // Later block listed first: head selection must sort by document
+      // order (numeric anchor, then sentence, then offset), not row order.
+      { id: "tail", blockAnchor: "b-0100", sStart: 1, startOffset: 0 },
+      { id: "head", blockAnchor: "b-0042", sStart: 2, startOffset: 3 },
+    ]);
+    prisma.highlight.updateMany.mockResolvedValue({ count: 1 });
+    expect(await updateHighlightNote("tail", "worth remembering")).toBe(true);
+    expect(prisma.highlight.findMany).toHaveBeenCalledWith({
+      where: { groupId: "g1", userId: "u1" },
+      select: { id: true, blockAnchor: true, sStart: true, startOffset: true },
+    });
+    expect(prisma.highlight.updateMany).toHaveBeenCalledWith({
+      where: { id: "head", userId: "u1" },
+      data: { note: "worth remembering" },
+    });
   });
 
   it("clears the note on null", async () => {
     getCurrentUser.mockResolvedValue({ id: "u1" });
+    prisma.highlight.findFirst.mockResolvedValue({ groupId: "g1" });
+    prisma.highlight.findMany.mockResolvedValue([
+      { id: "h1", blockAnchor: "b-0042", sStart: 1, startOffset: 0 },
+    ]);
     prisma.highlight.updateMany.mockResolvedValue({ count: 1 });
     expect(await updateHighlightNote("h1", null)).toBe(true);
     expect(prisma.highlight.updateMany).toHaveBeenCalledWith(

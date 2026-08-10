@@ -59,4 +59,26 @@
   .lesswrong-post details.lw-spoiler[open] > summary {
     margin-bottom: 0.5em;
   }
+
+  /* Tables — post tables arrive as bare <table> markup with no rule classes
+     (unlike LaTeX-derived arXiv tables), so draw the full grid here: outer
+     and cell borders, a tinted first row (posts use td for their header
+     row), and zebra striping. Theme tokens only, so both themes work. */
+  .lesswrong-post table {
+    border: 1px solid var(--border);
+  }
+  .lesswrong-post td,
+  .lesswrong-post th {
+    border: 1px solid var(--border);
+    vertical-align: top;
+    text-align: left;
+  }
+  .lesswrong-post table tr:first-child > td,
+  .lesswrong-post table tr:first-child > th {
+    background: color-mix(in srgb, var(--primary) 8%, transparent);
+    font-weight: 600;
+  }
+  .lesswrong-post table tr:nth-child(even):not(:first-child) > td {
+    background: color-mix(in srgb, var(--muted) 55%, transparent);
+  }
 }

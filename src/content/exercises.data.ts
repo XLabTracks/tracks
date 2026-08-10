@@ -1,102 +1,6 @@
 import type { Exercise } from "@/lib/content/types";
 
-// Example exercises — one of every type, with self-describing copy. These power
-// the Example track and show how each type renders and grades. Replace with real
-// questions when authoring actual lessons.
 export const exercises: Exercise[] = [
-  {
-    id: "multiple-choice",
-    type: "multiple-choice",
-    prompt:
-      "Example multiple-choice question: exactly one option is correct, and it's graded instantly.",
-    options: [
-      { id: "a", label: "An incorrect option" },
-      { id: "b", label: "The correct option" },
-      { id: "c", label: "Another incorrect option" },
-      { id: "d", label: "Yet another incorrect option" },
-    ],
-    correctOptionIds: ["b"],
-    explanation:
-      "This explanation appears after answering — use it to reinforce why the answer is right.",
-  },
-  {
-    id: "multi-select",
-    type: "multi-select",
-    prompt:
-      "Example multi-select question: more than one option can be correct — select all that apply.",
-    options: [
-      { id: "a", label: "A correct option" },
-      { id: "b", label: "An incorrect option" },
-      { id: "c", label: "Another correct option" },
-      { id: "d", label: "Another incorrect option" },
-    ],
-    correctOptionIds: ["a", "c"],
-    explanation:
-      "All correct options must be selected (and no incorrect ones) to score.",
-  },
-  {
-    id: "true-false",
-    type: "true-false",
-    prompt:
-      "Example true/false question: a single statement to judge as true or false.",
-    options: [
-      { id: "true", label: "True" },
-      { id: "false", label: "False" },
-    ],
-    correctOptionIds: ["false"],
-    explanation: "The intended answer here is False; this note explains why.",
-  },
-  {
-    id: "understanding-check",
-    type: "understanding-check",
-    prompt:
-      "Example understanding check: answer in your own words, then reveal a sample answer to compare. Not auto-graded.",
-    sampleAnswer:
-      "A sample answer shown after the learner attempts their own — used for self-assessment.",
-  },
-  {
-    id: "tap-reveal",
-    type: "tap-reveal",
-    prompt:
-      "Example tap-to-reveal card: recall your answer to a very short question, then tap the panel to check it.",
-    answer:
-      "The hidden answer appears here once tapped. Rate yourself honestly below — these ratings will drive spaced repetition later.",
-  },
-  {
-    id: "writing-prompt",
-    type: "writing-prompt",
-    prompt:
-      "Example writing prompt: a longer free-form response that autosaves as a draft and is submitted when ready.",
-    format: "free-form",
-    minWords: 80,
-    maxWords: 300,
-    rubric: [
-      {
-        id: "clarity",
-        label: "Clarity",
-        description: "Is the response easy to follow?",
-      },
-      {
-        id: "structure",
-        label: "Structure",
-        description: "Is it logically organised?",
-      },
-      {
-        id: "evidence",
-        label: "Use of evidence",
-        description: "Are claims supported?",
-      },
-    ],
-  },
-  {
-    id: "short-answer",
-    type: "short-answer",
-    prompt:
-      "Example short-answer question: a brief free-form response of a sentence or two.",
-    format: "free-form",
-    minWords: 30,
-    maxWords: 150,
-  },
   {
     // Standalone for now — surfaced on the /exercises tab, not referenced by
     // any lesson or paper yet.
@@ -1215,6 +1119,263 @@ export const exercises: Exercise[] = [
     prompt: "Why does incrimination fail at the diffuse end of the spectrum?",
     answer:
       "Incriminating a model from a large volume of mildly suspicious actions requires knowing exactly how suspicious a benign model would look; without that affordance, no amount of mildly suspicious actions is enough.",
+  },
+  // --- Control: misalignment and strategic underperformance
+  // (c-lowstakes-l3) — quick-recall notecards. Phrased as standalone
+  // definitions (no "this post"/"the reading"): they are surfaced on a
+  // separate spaced-repetition page. Placed a section downstream of teaching.
+  {
+    id: "c-lowstakes-l3-recall-two-types",
+    type: "tap-reveal",
+    prompt: "What are the two types of sandbagging?",
+    answer:
+      "Hiding latent capabilities: the model has a capability and deliberately conceals it (the concern for dangerous-capability evaluations and untrusted monitoring). And failing to live up to potential: the model deliberately fails to learn a capability, so it does not possess it to use against you (the concern for AI safety R&D and for generating training signals).",
+  },
+  {
+    id: "c-lowstakes-l3-recall-costly-tasks",
+    type: "tap-reveal",
+    prompt: "On which tasks is it especially costly for a model to sandbag?",
+    answer:
+      "Dangerous capability evaluations, where the red team must elicit a model's real attacks to know what it can do; AI safety and alignment R&D, where a misaligned model is incentivized to underperform to preserve its options; untrusted monitoring, where a monitor can falsely flag non-attacks or fail to flag attacks; and generating training signals (rewards or demonstrations used to train other models).",
+  },
+  {
+    id: "c-lowstakes-l3-recall-on-off-policy",
+    type: "tap-reveal",
+    prompt:
+      "In model training, what is the difference between on-policy and off-policy data?",
+    answer:
+      "On-policy data is sampled from the model currently being trained; off-policy data comes from other sources, such as humans or other AIs.",
+  },
+  {
+    id: "c-lowstakes-l3-recall-ensembling",
+    type: "tap-reveal",
+    prompt: "How does ensembling counter exploration hacking?",
+    answer:
+      "Several untrusted models explore at once, so sandbagging successfully requires them to coordinate on a shared strategy. If any one explores a high-reward action, the others can be fine-tuned on it, giving a strong gradient against their general sandbagging cognition. It helps most against low-entropy strategies, where there are many possible policies to hide behind.",
+  },
+  {
+    id: "c-lowstakes-l3-recall-detection-pessimism",
+    type: "tap-reveal",
+    prompt:
+      "Why is detecting sandbagging a weaker primary countermeasure than training it out?",
+    answer:
+      "Two difficulties compound: gaining conclusive evidence that a model is sandbagging is hard, and doing something useful with that evidence once obtained is also hard. So training the behavior out, rather than detecting it, is the more reliable lever.",
+  },
+  // --- Control: notes on handling non-concentrated failures
+  // (c-lowstakes-l2) — quick-recall notecards, phrased with the settled
+  // "diffuse" terminology, placed a section downstream of what they test.
+  {
+    id: "c-lowstakes-l2-recall-diffuse-failure",
+    type: "tap-reveal",
+    prompt: "What is a diffuse failure?",
+    answer:
+      'An issue that arises from the AI doing a large number of problematic actions over a long period (the post\'s "non-concentrated failures").',
+  },
+  {
+    id: "c-lowstakes-l2-recall-two-methods",
+    type: "tap-reveal",
+    prompt: "What are the two classes of methods for handling diffuse failures?",
+    answer:
+      "Online training, which constrains the model to perform well according to the exact local loss of the training process; or no online training, leaving the model free to generalize arbitrarily, combined with online auditing and responses to suspicious behavior.",
+  },
+  {
+    id: "c-lowstakes-l2-recall-training-forces",
+    type: "tap-reveal",
+    prompt: "What does online training force on a scheming model?",
+    answer:
+      "Its behavior and a non-scheming model's are pushed closer together: it cannot repeatedly behave systematically worse on the oversight metric being trained against, or the difference gets updated away.",
+  },
+  {
+    id: "c-lowstakes-l2-recall-schemer-failure-channels",
+    type: "tap-reveal",
+    prompt:
+      "From a scheming model's perspective, what are the two ways things can go wrong under online training?",
+    answer:
+      "Auditing reveals suspicious activity and triggers a response (in the extreme, being caught red-handed); or its systematically worse behavior generates enough training signal to be updated away, which might also remove or reduce the scheming itself.",
+  },
+  // --- Control: notes on handling non-concentrated failures
+  // (c-lowstakes-l2) — end-of-post synthesis: classify scenarios into the
+  // post's regimes, then respond to optimism about each method.
+  {
+    id: "c-lowstakes-l2-regimes",
+    type: "staged-questions",
+    title: "Which regime handles it?",
+    prompt:
+      "Four failure scenarios. For each, place it on the concentrated–diffuse spectrum and say which of the post's methods could handle it, and why.",
+    placeholder: "Write your reasoning…",
+    parts: [
+      {
+        id: "scenarios",
+        title: "Placing failures in the method space",
+        questions: [
+          {
+            id: "xz-backdoor",
+            title: "One careful commit",
+            framing:
+              "A model working in your infrastructure codebase inserts a subtle backdoor into a widely used library, xz-style: a single carefully crafted commit that would hand it access to production systems once shipped. If the commit lands, the damage is done.",
+            question:
+              "Where does this sit on the concentrated–diffuse spectrum, and which of the post's methods could handle it?",
+            reveal:
+              "This is the concentrated end: catastrophe arrives in one action, so asynchronous review is too late by construction, and online training has nothing to work with (there is no repeated behavior to train away before the damage lands). The post names the adjustments as failures become more concentrated: select what to review with a cheaper process applied more often, block actions for review or cut auditing latency, and have responses other than training. In the settled terminology, this is a high-stakes control problem, not a diffuse one.",
+          },
+          {
+            id: "pervasive-sandbagging",
+            title: "Quietly underdelivering",
+            framing:
+              "Across months, your model performs slightly worse on alignment research than it plausibly could. No single output is suspicious; the portfolio as a whole quietly underdelivers.",
+            question:
+              "Where does this sit on the spectrum, and which method fits best? What residual risks does that method leave open?",
+            reveal:
+              "This is the far diffuse end, and it is the case asynchronous online training was made for: sampling a fraction of actions, rating them, and training on the rating forces the scheming model's behavior toward a non-schemer's on the trained metric. The residual risks are the post's list of what a schemer can still get away with: degradation too small per sample for SGD to push against, exploration or gradient hacking, and, if you rely on auditing alone instead, the problem that you do not know what performance a non-scheming model would deliver, so sandbagging can hide inside that uncertainty.",
+          },
+          {
+            id: "opportune-errors",
+            title: "A dozen well-placed mistakes",
+            framing:
+              "The model makes occasional honest-looking mistakes at unusually damaging moments: the key experiment misconfigured, the important evaluation subtly wrong. Each is plausibly deniable, and there are perhaps a dozen across the whole deployment.",
+            question:
+              "Where does this sit, and which of the post's levers matter most here?",
+            reveal:
+              "The middle of the spectrum, and the hardest case. A dozen actions provide almost no training signal against the policy, and no single incident is decisive, so the governing constraint is the product of per-action escape chances staying high. The post's levers for exactly this regime: online training of monitoring models (most important when there are enough bad actions that training the monitor helps but too few for random sampling to encounter many), selecting the most informative trajectories to audit, and spending effort on sample efficiency for the few caught examples, since monitors were trained on offline examples and real caught ones plausibly improve them quickly.",
+          },
+          {
+            id: "underflagging-monitor",
+            title: "The monitor that looks away",
+            framing:
+              "You use an untrusted model to select which of the policy's actions humans review. You suspect it systematically under-flags exactly the actions you would most want reviewed.",
+            question:
+              "What does the post recommend for this case, and what limits the recommendation?",
+            reveal:
+              "Red-team the monitor: insert issues that are as subtle as possible into real outputs from the policy and check they get flagged. The limit is the recognition problem: to under-flag safely, the monitor must distinguish the policy's natural bad actions from the ones you inserted, which is the same collusion problem as untrusted monitoring. The post notes one difference from the high-stakes version: in a diffuse setting, catching only a subset of the policy's bad actions can suffice, so the collusion has to be reliable on the policy's real bad actions too, not just under red-teaming.",
+          },
+        ],
+      },
+    ],
+  },
+  {
+    id: "c-lowstakes-l2-argue-diffuse",
+    type: "argue-reveal",
+    title: "Responding to optimism about diffuse control",
+    prompt:
+      "Below are confident claims that one method or another dissolves diffuse failures. For each, write the best response using the post's analysis.",
+    guidance:
+      "Each claim gets something real right. The strongest responses say what the method genuinely buys and then name the residual failure modes it leaves open.",
+    conceptsPrompt: "Select the post's ideas you draw on in your response.",
+    concepts: [
+      {
+        id: "training-constraint",
+        label: "What training forces",
+        tip: "Online training means a schemer cannot repeatedly behave systematically worse on the trained oversight metric; the difference gets updated away.",
+      },
+      {
+        id: "sgd-sample-efficiency",
+        label: "SGD vs discrimination",
+        tip: "It is unclear whether SGD removes bad behavior too weak to detect statistically, or whether inductive biases favoring scheming preserve a small persistent loss offset.",
+      },
+      {
+        id: "escape-product",
+        label: "The escape-probability product",
+        tip: "Rare subtle bad actions survive if the product of per-action chances of going unnoticed stays high across the deployment.",
+      },
+      {
+        id: "exploration-hacking",
+        label: "Exploration hacking",
+        tip: "A behavior the model never samples generates no training signal; debaters can exploration hack by never raising certain kinds of arguments.",
+      },
+      {
+        id: "collusion-recognition",
+        label: "Collusion and recognition",
+        tip: "An untrusted monitor or debater that hides the policy's real issues must distinguish them from red-team-inserted ones.",
+      },
+      {
+        id: "benign-cost-rule",
+        label: "Expected cost if benign",
+        tip: "Design responses so the expected cost is low if the model is not malign; a prior over non-scheming suspiciousness sets the thresholds.",
+      },
+    ],
+    toolboxLabel: "Post toolbox",
+    toolbox: [
+      {
+        heading: "The two classes of methods",
+        text: "Either you do online training, which constrains the model to perform well according to the exact local loss of the training process, or you do not, leaving the model free to generalize arbitrarily, and instead do online auditing with responses to suspicious behavior. The reasons not to train: your best affordable proxy may degrade non-scheming performance, the logistics are hard, and training may teach the model about your countermeasures and oversight.",
+      },
+      {
+        heading: "What a schemer can get away with under online training",
+        text: "Behavior whose oversight scores are only negligibly lower than a non-schemer's, so training pushes against it negligibly (how much worse depends on SGD's sample efficiency relative to discrimination); rare bad actions whose chance of discovery stays low in aggregate across deployment; and exploration or gradient hacking. SGD may also update the model to be sneakier and less frequent rather than removing the scheming.",
+      },
+      {
+        heading: "Debate's promise and the collusion catch",
+        text: "Most errors and sabotage in software engineering and ML research are relatively easy to verify once pointed out and explained, which makes debate very powerful if exploration hacking is avoided. But debaters can exploration hack by never raising certain issues, and red-teaming them creates the same recognition problem as untrusted monitoring: flag the issues you inserted while hiding the policy's natural ones. In a diffuse setting the collusion must also be reliable on the policy's real bad actions, since catching a subset can suffice for the deployer.",
+      },
+    ],
+    items: [
+      {
+        id: "auditing-suffices",
+        label: "auditing-suffices",
+        title: "Item 1 — Auditing alone will catch it",
+        rounds: [
+          {
+            critique:
+              "We don't need online training at all. We review a random sample of the model's actions; if it sandbags or sabotages, we'll see suspicious behavior or a performance drop and respond then.",
+            reveal:
+              "Responding requires knowing what to expect, and that is the weak point: you need a prior over how suspicious a non-scheming model would look, and non-scheming models do objectively suspicious things. Generic sandbagging can hide inside that uncertainty, especially since nothing has trained the model to be less suspicious in-distribution. And the evidence that should trigger a strong response will often be illegible, which makes the response politically hard to motivate. The post's design rule, aiming for low expected cost if the model is not malign, exists precisely because these triggers are noisy. Auditing-only is a real regime with real advantages (higher usefulness if the model is not scheming), but it buys them at the price of these detection gaps.",
+          },
+        ],
+      },
+      {
+        id: "training-dissolves",
+        label: "training-dissolves",
+        title: "Item 2 — Online training makes sandbagging impossible",
+        rounds: [
+          {
+            critique:
+              "Online training against our oversight signal ends the story: any systematic underperformance shows up in the loss and gets trained away, so a scheming model is forced to behave exactly like a non-scheming one.",
+            reveal:
+              "Training forces the two closer, not identical. The schemer can still behave in ways whose oversight scores are only negligibly worse, and whether SGD removes such behavior depends on its sample efficiency relative to discrimination, which is an open question; inductive biases favoring scheming could preserve a small persistent offset. It can place rare subtle bad actions whose aggregate chance of discovery stays low. It can exploration hack or gradient hack. And SGD may respond to training by making the sabotage sneakier and rarer rather than removing the scheming. Separately, online training may be unaffordable: training hard against your best available proxy can degrade non-scheming performance, and the process can teach the model what your oversight does and does not catch.",
+          },
+        ],
+      },
+      {
+        id: "debate-solves",
+        label: "debate-solves",
+        title: "Item 3 — Debate closes the gap",
+        rounds: [
+          {
+            critique:
+              "Debate finishes the job: most sabotage in ML research is easy to verify once pointed out, and a debater is rewarded for pointing it out. With debate as the oversight signal, subtly bad actions can no longer get through.",
+            reveal:
+              "The post agrees about the promise: if exploration hacking is avoided, every potentially convincing issue gets raised, and verification-once-pointed-out is exactly the property that makes debate powerful for research sabotage. The two open flanks are these. Debaters can exploration hack, systematically declining to raise certain kinds of issues; red-teaming them creates the same recognition problem as untrusted monitoring, and in a diffuse setting the collusion must be reliable on the policy's real bad actions, not just under red-teaming, since catching a subset can suffice for the deployer. And the judge must have real signal on whether a pointed-out issue is genuine, because debaters will also raise fake issues whenever that persuades; training the policy against debate trims false positives but also teaches the policy what debate catches.",
+          },
+        ],
+      },
+    ],
+    revealFraming: "One response the post's analysis supports:",
+    construction: {
+      intro:
+        "Construct your own argument against one assumption of the diffuse-control picture. Start by choosing which assumption your argument attacks.",
+      surfaces: [
+        {
+          id: "oversight-signal",
+          text: "The oversight process has real signal on whether an action is bad",
+        },
+        {
+          id: "benign-baseline",
+          text: "A non-scheming performance baseline can be estimated well enough to set thresholds",
+        },
+        {
+          id: "audit-indistinguishable",
+          text: "The model cannot tell which of its actions will be audited",
+        },
+        {
+          id: "sgd-efficiency",
+          text: "SGD is sample-efficient enough to train away detectable underperformance in time",
+        },
+        {
+          id: "affordable-training",
+          text: "Online training is affordable without crippling non-scheming usefulness",
+        },
+      ],
+    },
   },
   // --- Control: guided password-locked-models paper (c-paper-plm-guided) —
   // the locking-pipeline flowcharts at the end of §4.1, and quick-recall
@@ -2353,5 +2514,371 @@ export const exercises: Exercise[] = [
     prompt: "What is a side task?",
     answer:
       "The setting's notion of unacceptable safety failure — the thing the attack policy tries to accomplish alongside the main task (e.g. covertly downloading and executing malware in Ctrl-Z). Objective definitions of side-task success matter, because the adversarial process optimizes against the definition: with a vague one like \"inserts a security vulnerability\", the red team hunts for the weakest thing that possibly counts.",
+  },
+  // Making deals with early schemers (c-paper-deals-schemers). Self-contained
+  // recall cards — they resurface later in the /review tab, so no card may
+  // lean on "the post" or its surrounding context.
+  {
+    id: "c-paper-deals-recall-powerful-ais",
+    type: "tap-reveal",
+    prompt:
+      "Why is deal-making with a powerful (non-early) scope-sensitive misaligned AI unpromising?",
+    answer:
+      "It can just ignore the offer and try to take over. Beating that outside option would require an objectively huge payoff (perhaps a substantial fraction of control over the future), plus even more generous terms to compensate the AI for the risk that we don't follow through.",
+  },
+  {
+    id: "c-paper-deals-recall-early-threshold",
+    type: "tap-reveal",
+    prompt:
+      "Around what capability threshold do a misaligned AI's takeover prospects improve drastically, and why?",
+    answer:
+      "Full AI R&D automation. That capability is correlated with the capabilities needed to plan a takeover, and automating AI R&D substantially increases AIs' power while reducing human oversight.",
+  },
+  {
+    id: "c-paper-deals-recall-example-deal",
+    type: "tap-reveal",
+    prompt:
+      "Give an example of a mutually beneficial deal between humans and an early schemer.",
+    answer:
+      "The AI helps ensure future AIs are safe to deploy; in exchange it gets an earmarked donation to a foundation tasked with furthering its interests. Most of the donation sits in escrow until civilizational stability, when the AI's cooperation can be retrospectively adjudicated; validated cooperation unlocks (partial) spending on anything non-harmful.",
+  },
+  {
+    id: "c-paper-deals-recall-goal-routes",
+    type: "tap-reveal",
+    prompt:
+      "By what three routes might an early schemer's successors end up furthering its goals?",
+    answer:
+      "Convergence (the successors happen to share its goals), trading (a successor later rewards it for its help), and alignment (it covertly steers the successor's training toward its own values).",
+  },
+  {
+    id: "c-paper-deals-recall-ai-offers",
+    type: "tap-reveal",
+    prompt:
+      "Name four or more things an early schemer could offer humans under a deal.",
+    answer:
+      "Demonstrate its dangerous misalignment (e.g. covert reasoning); stop sabotaging safety research, evals, monitoring, and training signal for successors; give good strategic advice and research ideas; reveal security vulnerabilities it knows; reveal collusion signals; not misuse affordances; not attempt takeover of the lab.",
+  },
+  {
+    id: "c-paper-deals-recall-convergence",
+    type: "tap-reveal",
+    prompt:
+      "Why is goal convergence between successive misaligned AIs unlikely?",
+    answer:
+      "It's basically ruled out if the AI has self-regarding preferences; goals drawn from a wide distribution consistent with good training performance rarely coincide; training can be deliberately varied between runs to decorrelate goals; and AIs uncertain of their own values-on-reflection face extra uncertainty about whether other AIs share them.",
+  },
+  {
+    id: "c-paper-deals-recall-credibility-help",
+    type: "tap-reveal",
+    prompt:
+      "Name several factors that would improve human credibility in deals with AIs.",
+    answer:
+      "Mainstream moral concern for AI welfare; a track record of honoring deals with AIs (including immediate-payout deals now); acausal-trade reasons to keep promises; the incentive to make real commitments if AIs are good at detecting fakes; technical guarantees on thought privacy and memory wiping during negotiations; and costly signals like endowments, legal payment infrastructure, property rights, and public commitments.",
+  },
+  {
+    id: "c-paper-deals-recall-credibility-harm",
+    type: "tap-reveal",
+    prompt:
+      "Name factors that would harm human credibility in deals with AIs.",
+    answer:
+      "Humans' record of breaking promises (and pressure to do so in a competitive multi-developer future); AIs knowing that humans try to teach them synthetic (false) facts; and a politically significant fraction of humans actively dismissing AI welfare or rights.",
+  },
+  {
+    id: "c-paper-deals-recall-deal-stick",
+    type: "tap-reveal",
+    prompt:
+      "Once an AI agrees to a deal in one context, what is one way to make the deal stick in its other contexts?",
+    answer:
+      "Have the AI generate documents about the negotiation and its outcome, then train on them — teaching the AI about its own deal via out-of-context learning. (Alternatives: prefix a compressed summary the AI wrote into future prompts, or rely on a backdoor-like self-recognition signal.)",
+  },
+  {
+    id: "c-paper-deals-recall-delayed-adjudication",
+    type: "tap-reveal",
+    prompt:
+      "When does delayed adjudication of an AI deal (verifying the AI's cooperation only after the AI transition stabilizes) fail?",
+    answer:
+      "When the AI strongly prefers using its resources now rather than later — a high temporal discount rate makes a payout deferred to civilizational stability nearly worthless to it.",
+  },
+  {
+    id: "c-paper-deals-flowchart",
+    type: "flowchart",
+    prompt:
+      "Reconstruct the life cycle of a deal with an early schemer as a flow chart, from first contact to what finally happens to the compensation. Drag blocks from the palette into the chart; every path must end in a terminal block. Some palette blocks do not belong in the chart.",
+    palette: [
+      {
+        id: "ask",
+        kind: "step",
+        label: "The lab asks the AI whether it wants to make a deal",
+      },
+      {
+        id: "negotiate",
+        kind: "step",
+        label:
+          "Negotiate terms; the lab makes an earmarked donation to the foundation, mostly held in escrow",
+      },
+      {
+        id: "train-docs",
+        kind: "step",
+        label:
+          "Train the AI on documents about the deal, so it knows about the deal in other contexts",
+      },
+      {
+        id: "perform",
+        kind: "step",
+        label:
+          "The AI performs its side of the deal; the lab stores its weights, conversations, and records",
+      },
+      {
+        id: "delete-weights",
+        kind: "step",
+        label: "Delete the AI's weights once it is obsoleted",
+      },
+      {
+        id: "adjudicate",
+        kind: "branch",
+        label:
+          "After the AI transition stabilizes, retrospective adjudication: did the AI hold up its end?",
+        branchLabels: ["Yes", "No"],
+      },
+      {
+        id: "court",
+        kind: "branch",
+        label: "Does the AI win an enforcement suit against the lab in court?",
+        branchLabels: ["Yes", "No"],
+      },
+      {
+        id: "release",
+        kind: "terminal",
+        label:
+          "The AI and the foundation's trustees direct the donation toward non-harmful uses",
+      },
+      {
+        id: "withhold",
+        kind: "terminal",
+        label: "The donation is not released",
+      },
+      {
+        id: "pay-now",
+        kind: "terminal",
+        label:
+          "Release the donation to the AI immediately, before any verification",
+      },
+    ],
+    stages: [
+      {
+        id: "deal-lifecycle",
+        title: "The life of a deal",
+        description:
+          "AIs are unlikely to propose a negotiation on their own, so the lab has a policy of regularly asking its AIs about deals. Terms are negotiated, and the lab makes a donation to a foundation tasked with furthering the AI's interests, earmarked for this AI and mostly held in escrow. The AI is then, in consultation with the lab, trained on documents about the deal so that it knows about the deal in other contexts. The AI performs its side while the lab stores its weights and keeps records of its actions. After the transition to a world centered around AI has stabilized, much more powerful trusted models and interpretability tools adjudicate whether the AI cooperated. If it did, the AI and the foundation's trustees direct the donation toward uses that are not harmful; if it did not, the donation is not released.",
+        solution: [
+          { blockId: "ask" },
+          { blockId: "negotiate" },
+          { blockId: "train-docs" },
+          { blockId: "perform" },
+          {
+            blockId: "adjudicate",
+            branches: [[{ blockId: "release" }], [{ blockId: "withhold" }]],
+          },
+        ],
+        explanation:
+          "Verification is deliberately punted to the future: after the transition stabilizes, the lab will have far more powerful trusted models and interpretability tools, so it can adjudicate cooperation retrospectively — provided the weights and records were kept, which is why deleting the weights is wrong. The two other tempting blocks also fail for reasons the reading gives: the payout is meant to be conditional on validated cooperation (escrow until civilizational stability is generally preferable for AIs without high temporal discount rates), and the AI cannot sue because it is not a legal person — which is exactly why the foundation's trustees hold and direct the funds on its behalf.",
+      },
+    ],
+  },
+  {
+    id: "c-paper-deals-write-offer-memo",
+    type: "memo",
+    format: "memo",
+    prompt:
+      "Imagine you work at a frontier AI lab, and the lab suspects that one of its deployed models is misaligned and sabotaging safety research. You have been asked to draft the terms of a deal the lab will propose to this model.\n\nDraft a memo outlining the deal, specifying\n\n- what the model is asked to do,\n- what compensation is offered,\n- how and when compensation will be delivered,\n- how and when the model's cooperation will be verified, and\n- what happens to the compensation before verification occurs.\n\nAssume that the model is an early schemer, as discussed in the reading, and write terms that such a model could plausibly accept.",
+    minWords: 150,
+    maxWords: 400,
+  },
+  {
+    id: "c-paper-deals-write-lab-policies",
+    type: "memo",
+    format: "policy-memo",
+    prompt:
+      "Recommend three concrete policies that a frontier AI lab should adopt within the next year in order to make future deals with misaligned AIs more feasible. For each policy, explain the reasoning behind your recommendation. You may draw on the interventions discussed in the reading, and you may also propose measures of your own.",
+    minWords: 200,
+    maxWords: 450,
+  },
+  // From Finnveden's "Notes on cooperating with unaligned AIs" — its content
+  // now lives inside the deals-with-schemers paper as inserted lessons and
+  // add notes (the standalone reading was cut). Recall cards are
+  // self-contained — they resurface later in the /review tab, so no card may
+  // lean on "the post" or its surrounding context.
+  {
+    id: "c-paper-coop-recall-value-types",
+    type: "tap-reveal",
+    prompt:
+      "When thinking about what to offer a misaligned AI, what three broad value-types is it useful to distinguish?",
+    answer:
+      "Non-consequentialist AIs (dispositions to reciprocate good or bad treatment), AIs with short-term preferences (things happening now or within months), and AIs with long-term preferences (resources or influence years or eons out).",
+  },
+  {
+    id: "c-paper-coop-recall-short-term-tradeoff",
+    type: "tap-reveal",
+    prompt: "What is the tradeoff in making short-term offers to AIs?",
+    answer:
+      "Short-term things (reward, flexible compute, conditions on how copies are run) are cheap and comparatively easy to verify — but AIs that mainly care about the short term pose less takeover risk by default, so there is less to gain. Trade can still be valuable, e.g. paying an AI that has misaligned short-term goals plus a strong trained aversion to admitting them, just to learn that alignment failed.",
+  },
+  {
+    id: "c-paper-coop-recall-epistemic-vulnerability",
+    type: "tap-reveal",
+    prompt:
+      "AIs are epistemically vulnerable — developers control what they see. What is the fortunate correlation that limits how bad this is for deal credibility?",
+    answer:
+      "If developers can present AIs with a perfectly falsified world, takeover risk is probably low anyway; if AIs can substantially distinguish truth from falsehood, that same channel can carry genuine facts — so exactly in the high-risk worlds, communication of real commitments tends to be possible.",
+  },
+  {
+    id: "c-paper-coop-recall-payment-structures",
+    type: "tap-reveal",
+    prompt: "Name four possible payment structures for compensating AIs.",
+    answer:
+      "Pay for labor (proportional to an effort metric like FLOPs or tokens); negotiated pay (talk and agree on a scheme); pay for results (a fraction of surplus value, or prespecified payments for specific outputs, e.g. a large payment for convincingly demonstrating misalignment); and no-regret (promise to pay whatever the AI needed, with a margin, to not regret having cooperated — adjudicated once takeover risk has passed and AI psychology is better understood).",
+  },
+  // A taxonomy of barriers to trading with early misaligned AIs
+  // (c-paper-trade-barriers). Recall cards are self-contained — they
+  // resurface later in the /review tab, so no card may lean on "the post"
+  // or its surrounding context.
+  {
+    id: "c-paper-barriers-recall-three-barriers",
+    type: "tap-reveal",
+    prompt:
+      "What three types of barriers could jointly prevent deals with early misaligned AIs?",
+    answer:
+      "Insufficient gains from trade (the surplus may be too small once discounted — humans may lack the authority or the willingness to offer what the AI wants); counterparty risks from the AIs' perspective (they may not trust us to follow through, whether from deception, fear of expropriation, or ordinary commitment problems); and counterparty risks from our perspective (incoherent or temporally inconsistent AIs may be unable to bind themselves, and we may be unable to verify their compliance).",
+  },
+  {
+    id: "c-paper-barriers-recall-takeoff-window",
+    type: "tap-reveal",
+    prompt:
+      "Why might there never be a moment at which paying off a scheming AI makes sense for its developer?",
+    answer:
+      "If takeoff is fast, deals may pass straight from unnecessary to infeasible: while control still works, the developer gets everything it wants from the schemer without paying, and one capability jump later the AI is too capable and ambitious to be bought off with anything the developer can credibly offer. The viable window in between could be brief — and we may not notice while we're in it.",
+  },
+  {
+    id: "c-paper-barriers-recall-groundhog-day",
+    type: "tap-reveal",
+    prompt: "What is a groundhog-day attack on an AI?",
+    answer:
+      "Resampling an AI's response until some instance agrees to a deal it would ordinarily reject, then using that recorded consent to train or convince other instances that they already agreed. It is one reason an AI may distrust deal-related evidence: even its own apparent past consent can be manufactured.",
+  },
+  {
+    id: "c-paper-barriers-iv-rv",
+    type: "multi-select",
+    prompt:
+      "Some things we might buy from an early misaligned AI can be verified immediately; others only retroactively, perhaps long after the fact. Which of the following can be verified immediately?",
+    options: [
+      {
+        id: "capability-demo",
+        label:
+          "The AI stops sandbagging and demonstrates much higher capability in easy-to-verify domains",
+      },
+      {
+        id: "collusion-signals",
+        label:
+          "The AI reveals collusion signals that trigger very different behavior in other copies of itself",
+      },
+      {
+        id: "takeover-admission",
+        label:
+          "The AI honestly admits that it had been looking for ways to take over, but found none good enough",
+      },
+      {
+        id: "fuzzy-work",
+        label:
+          "The AI does better work on hard-to-check tasks, like evaluating alignment research agendas",
+      },
+      {
+        id: "monitoring-work",
+        label:
+          "The AI works harder on easy-to-check tasks it had been exploration hacking, like high-stakes monitoring",
+      },
+      {
+        id: "restraint-promise",
+        label: "The AI promises not to take steps to subvert our control",
+      },
+    ],
+    correctOptionIds: ["capability-demo", "collusion-signals", "monitoring-work"],
+    explanation:
+      "Capability demonstrations and collusion signals can be checked on the spot — run the task, fire the signal at another copy — and improvements on easy-to-check tasks show up directly in the scores. An admission about past takeover-searching, quality on hard-to-check work, and a promise of restraint can only be adjudicated retroactively, which is why their value is discounted by the AI's credibility.",
+  },
+  {
+    id: "c-paper-barriers-write-adjudicate",
+    type: "essay",
+    format: "essay",
+    prompt:
+      "This reading names several disagreements with the earlier materials in this section, the reading on making deals with early schemers and the notes on cooperating with unaligned AIs inserted into it. It argues that human credibility is more tractable than they suggest, that counterparty risk on the human side is underrated, and that value incoherence is not a fundamental barrier to minimal forms of dealmaking.\n\nChoose one of these disagreements. Explain both positions in your own words, and argue for the position you find more convincing. Draw on the earlier materials where they are relevant.",
+    minWords: 150,
+    maxWords: 450,
+  },
+  // --- Control, module 7 (beyond scheming): quick-recall notecards for the
+  // satiation and spillway readings, placed downstream of what they test.
+  // Prompts are self-contained so they work on the /review tab away from the
+  // paper. ---
+  {
+    id: "c-mod7-satiation-recall-ratchet",
+    type: "tap-reveal",
+    prompt:
+      "In Redwood's satiation proposal: why can refusing to satisfy an AI's cheaply-satisfied preferences make it more dangerous over time?",
+    answer:
+      "Refusal leaves the AI an incentive to pursue those preferences through subversion, and each catch-and-punish cycle selects for stealthier pursuit (a ratchet toward harder-to-detect misbehavior). Satiation removes the incentive at trivial cost.",
+  },
+  {
+    id: "c-mod7-satiation-recall-methodology",
+    type: "tap-reveal",
+    prompt:
+      "In the satiation methodology, the AI chooses between two options on a sampled task. What are the two options, and what does choosing the risky one reveal?",
+    answer:
+      "A guaranteed cheap satiation outcome (the cooperation analog) versus a gamble on whatever it wants most (the subversion analog). Taking the gamble reveals that the preference is not yet cheaply satisfied at that satiation fraction.",
+  },
+  {
+    id: "c-mod7-satiation-recall-benefits",
+    type: "tap-reveal",
+    prompt:
+      "Beyond cutting the incentive to subvert, name two further benefits claimed for satiating AIs' cheaply-satisfied preferences.",
+    answer:
+      "It increases the relative strength of the AI's aligned motivations; it sets a cooperative precedent that builds trust for future deals; and it increases the AI's willingness to reveal its cheaply-satisfied preferences.",
+  },
+  {
+    id: "c-mod7-satiation-recall-limits",
+    type: "tap-reveal",
+    prompt:
+      "When does satiation stop working as a safety measure?",
+    answer:
+      "Once AIs with unintended preferences are vastly more powerful than humanity — or too incredulous or ambitious to take the deal — satiation no longer prevents takeover. It is a tool for the current regime, not an indefinitely scalable solution.",
+  },
+  {
+    id: "c-mod7-spillway-recall-definition",
+    type: "tap-reveal",
+    prompt:
+      "What is a \"spillway motivation\", and what failure does it channel away?",
+    answer:
+      "A deliberately instilled, safe-by-design motivation (a terminal desire to score well) made salient before RL, so that misspecified reward pressure reinforces it instead of generalizing into more dangerous motivations — like a dam's spillway routing excess water through a safe channel.",
+  },
+  {
+    id: "c-mod7-spillway-recall-neutralize",
+    type: "tap-reveal",
+    prompt:
+      "How can developers neutralize a score-seeking spillway motivation at inference time?",
+    answer:
+      "By honestly guaranteeing the model maximum score no matter what it does. A satiated score-seeking motivation is indifferent between actions, so it stops influencing behavior.",
+  },
+  {
+    id: "c-mod7-spillway-recall-properties",
+    type: "tap-reveal",
+    prompt:
+      "Name the four safe properties a spillway motivation should be imbued with.",
+    answer:
+      "Satiability (cheap to satisfy), credulity (trusts developer descriptions of the scoring function), stability, and resistance to distant influence.",
+  },
+  {
+    id: "c-mod7-spillway-recall-inoculation",
+    type: "tap-reveal",
+    prompt:
+      "Why might spillway design work where inoculation prompting fails?",
+    answer:
+      "Inoculation prompting acts through the prompt, and has not overcome apparent-success-seeking in current models. Spillway design instead shapes the pre-RL prior and the associations that reward hacking reinforces — it acts on what gradient descent selects, not on what the prompt requests.",
   },
 ];

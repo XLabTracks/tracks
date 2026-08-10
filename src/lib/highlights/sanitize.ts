@@ -28,13 +28,17 @@ export function sanitizeHighlightInput(value: unknown): HighlightInput | null {
   if (!Array.isArray(spans)) return null;
   if (spans.length < 1 || spans.length > HIGHLIGHT_MAX_BLOCKS) return null;
   const cleanSpans: HighlightSpanInput[] = [];
-  const anchors = new Set<string>();
+  const lastEnd = new Map<string, number>();
   for (const raw of spans) {
     const span = sanitizeSpan(raw);
     if (!span) return null;
-    // One gesture touches each block at most once.
-    if (anchors.has(span.blockAnchor)) return null;
-    anchors.add(span.blockAnchor);
+    // One gesture touches each block at most once — except a block split by
+    // a mid-paragraph activity, whose anchor-less second half captures as a
+    // FURTHER span on the same anchor. Repeats must move strictly forward
+    // (disjoint, ascending sentence ranges), never overlap or duplicate.
+    const prev = lastEnd.get(span.blockAnchor);
+    if (prev !== undefined && span.sStart <= prev) return null;
+    lastEnd.set(span.blockAnchor, span.sEnd);
     cleanSpans.push(span);
   }
 

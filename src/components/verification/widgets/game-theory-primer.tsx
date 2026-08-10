@@ -1094,13 +1094,15 @@ export function GameTheoryPrimer({ onComplete }: VerificationWidgetProps) {
   );
 
   const openNode = useCallback(
-    (id: string) => {
+    // `pathNow` lets a caller that just changed the path persist the new value
+    // (this openNode instance still closes over the pre-change `path`).
+    (id: string, pathNow: string | null = path) => {
       if (!nodeById(id) || !CONTENT[id]) return;
       setCurrent(id);
       setVisited((prev) => {
         const nv = new Set(prev);
         nv.add(id);
-        persist(path, nv);
+        persist(pathNow, nv);
         return nv;
       });
     },
@@ -1117,8 +1119,9 @@ export function GameTheoryPrimer({ onComplete }: VerificationWidgetProps) {
       if (p !== "wander") {
         const first =
           PATHS[p].ids.find((id) => !visited.has(id)) ?? PATHS[p].ids[0];
-        // small delay to mirror the source's open-after-scroll feel
-        setTimeout(() => openNode(first), 60);
+        // small delay to mirror the source's open-after-scroll feel; pass the
+        // just-chosen path so the delayed persist doesn't write the stale one
+        setTimeout(() => openNode(first, p), 60);
       }
     },
     [openNode, persist, visited],

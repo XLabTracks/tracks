@@ -10,6 +10,7 @@ import {
   getAssessmentForModule,
   getExerciseById,
   getItemNavigation,
+  getItemProgressContentIds,
   getItemsForModule,
   getLessonById,
   getModuleProgressContentIds,
@@ -18,6 +19,8 @@ import {
   getPrerequisiteModules,
   getTrackContentIds,
   getTrackItemSequence,
+  getTrackOutline,
+  getTrackSidebarOutline,
   isOptionalItem,
   itemIdOf,
   type ModuleItem,
@@ -180,12 +183,10 @@ describe("content integrity", () => {
     expect(new Set(assessmentModuleIds).size).toBe(assessmentModuleIds.length);
   });
 
-  // Every real-track paper links out from the resource hub; the Example
-  // track's papers (feature reference, not curriculum) must not leak in.
-  it("paper-derived resources cover every real-track paper source", () => {
+  // Every track paper links out from the resource hub.
+  it("paper-derived resources cover every track paper source", () => {
     const urls = new Set(paperResources.map((r) => r.url));
     for (const track of tracks) {
-      if (track.kind === "example") continue;
       for (const mod of getModulesForTrack(track.id)) {
         for (const item of getItemsForModule(mod.id)) {
           if (item.kind !== "paper") continue;
@@ -198,15 +199,8 @@ describe("content integrity", () => {
         }
       }
     }
-    const examplePaperIds = new Set(
-      papers.filter((p) => p.moduleId.startsWith("ex-")).map((p) => p.id),
-    );
     for (const r of paperResources) {
       const paperId = r.id.replace(/^paper-res-/, "");
-      expect(
-        examplePaperIds.has(paperId),
-        `${r.id} derives from an Example-track paper`,
-      ).toBe(false);
       // The hub links course readings to their in-course viewer.
       expect(r.internalHref, `${r.id} internalHref`).toBe(
         getContentLocation(paperId)?.href,
@@ -768,8 +762,12 @@ describe("paper integrity", () => {
               `edit references s=${ref.s}${sEnd !== ref.s ? `..${sEnd}` : ""} — run \`${listCmd} --section …\``,
           ).toBe(true);
         } else if (edit.op === "hide" || edit.op === "gloss") {
+          // h1–h4 carry toc ids (nav/scroll anchors) and must stay visible;
+          // h5/h6 claim lead-ins are plain prose and may hide with their run.
+          const forbidden =
+            edit.op === "gloss" ? /^h[1-6]$/ : /^h[1-4]$/;
           expect(
-            !/^h[1-6]$/.test(info.tag),
+            !forbidden.test(info.tag),
             `${paper.id}: ${edit.op} may not target heading ${ref.anchor} (nav/scroll anchor)`,
           ).toBe(true);
         }
@@ -1108,6 +1106,38 @@ describe("module item navigation", () => {
           }
         }
       }
+    }
+  });
+});
+
+// The client sidebar receives this projection instead of the full outline so
+// Paper.edits (snippets, note markdown, gate prompts) stay out of the flight
+// payload — pin that it mirrors the outline row-for-row and stays slim.
+describe("sidebar outline projection", () => {
+  it("mirrors the full outline and precomputes each item's checkmark units", () => {
+    for (const track of tracks) {
+      const outline = getTrackOutline(track.slug)!;
+      const slim = getTrackSidebarOutline(track.slug)!;
+      expect(slim.track.slug).toBe(track.slug);
+      expect(slim.modules.map((m) => m.module.id)).toEqual(
+        outline.modules.map((m) => m.module.id),
+      );
+      outline.modules.forEach(({ items }, m) => {
+        const slimItems = slim.modules[m].items;
+        expect(slimItems.map((i) => i.id)).toEqual(items.map(itemIdOf));
+        items.forEach((item, i) => {
+          expect(slimItems[i].kind).toBe(item.kind);
+          expect(slimItems[i].slug).toBe(itemSlugOf(item));
+          // itemDone in track-sidebar.tsx checks id + insertedLessonIds —
+          // together they must be exactly the item's progress units.
+          expect([
+            slimItems[i].id,
+            ...(slimItems[i].insertedLessonIds ?? []),
+          ]).toEqual(getItemProgressContentIds(item));
+        });
+      });
+      // The reason the projection exists: no paper edits may leak in.
+      expect(JSON.stringify(slim)).not.toContain('"edits"');
     }
   });
 });

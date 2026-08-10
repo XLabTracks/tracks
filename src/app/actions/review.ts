@@ -1,13 +1,12 @@
 "use server";
 
-import { revalidatePath } from "next/cache";
 import { getCurrentUser } from "@/lib/auth";
 import { prisma } from "@/lib/db";
 import { getExerciseById } from "@/lib/content";
 import { isGrade, scheduleReview } from "@/lib/review/fsrs";
 
 export interface ReviewResult {
-  /** ISO timestamp the card is next due, for the session's re-queue logic. */
+  /** ISO timestamp the card is next due. */
   due: string;
 }
 
@@ -41,6 +40,10 @@ export async function reviewCard(
     update: next,
   });
 
-  revalidatePath("/review");
+  // Deliberately no revalidatePath("/review"): the session owns its queue
+  // client-side, and a route re-render here would remount the time-keyed
+  // ReviewSession mid-session — dropping "Again" re-queues, the reviewed
+  // count, and practice-ahead runs. /review is dynamic, so it recomputes on
+  // navigation and on the caught-up state's explicit router.refresh().
   return { due: next.due.toISOString() };
 }

@@ -75,7 +75,7 @@ describe("applyPaperEdits", () => {
     ]);
     const html = htmlOf(parts);
     expect(html).toContain(
-      '<details class="ax-hidden"><summary>··· 1 paragraph hidden ···</summary>' +
+      '<details class="ax-hidden"><summary>1 paragraph hidden</summary>' +
         '<p data-anchor="b-0010"><span data-s="1">Beta one.</span></p></details>',
     );
     // neighbors untouched
@@ -89,7 +89,7 @@ describe("applyPaperEdits", () => {
       { op: "hide", at: ref("b-0011", "Beta two.") },
     ]);
     const html = htmlOf(parts);
-    expect(html).toContain("··· 2 paragraphs hidden — Optional detail ···");
+    expect(html).toContain("<summary>Optional detail</summary>");
     expect(html.match(/<details/g)).toHaveLength(1);
     expect(html).toContain('data-anchor="b-0010"');
     expect(html).toContain('data-anchor="b-0011"');
@@ -129,16 +129,32 @@ describe("applyPaperEdits", () => {
     expect(content?.[1]).toContain('data-s="3"');
   });
 
-  it("hides li content inside the li (details invalid in ul), and figures/nested tables", () => {
+  it("lifts a fully-hidden list to one marker merged with adjacent hides", () => {
     const { parts } = applyPaperEdits(HTML, TOC, [
       { op: "hide", at: ref("b-0012", "Item text.") },
       { op: "hide", at: ref("b-0013", "cell") },
     ]);
     const html = htmlOf(parts);
-    expect(html).toMatch(/<li data-anchor="b-0012"><details class="ax-hidden">/);
-    expect(html).toContain("··· 1 list item hidden ···");
-    expect(html).toContain("··· 1 figure hidden ···");
+    // Every li hidden → the ul itself joins the merge run with the figure.
+    expect(html.match(/<details/g)).toHaveLength(1);
+    expect(html).toContain("<summary>2 blocks hidden</summary>");
+    expect(html).toMatch(/<details class="ax-hidden">(?:(?!<\/details>).)*<ul><li data-anchor="b-0012">/);
     expect(html).toMatch(/<details class="ax-hidden">(?:(?!<\/details>).)*<figure data-anchor="b-0013">/);
+  });
+
+  it("keeps per-item wrapping when only part of a list is hidden", () => {
+    const twoItemHtml = HTML.replace(
+      '<ul><li data-anchor="b-0012"><span data-s="1">Item text.</span></li></ul>',
+      '<ul><li data-anchor="b-0012"><span data-s="1">Item text.</span></li>' +
+        '<li data-anchor="b-0016"><span data-s="1">Kept item.</span></li></ul>',
+    );
+    const { parts } = applyPaperEdits(twoItemHtml, TOC, [
+      { op: "hide", at: ref("b-0012", "Item text.") },
+    ]);
+    const html = htmlOf(parts);
+    expect(html).toMatch(/<li data-anchor="b-0012"><details class="ax-hidden">/);
+    expect(html).toContain("<summary>1 list item hidden</summary>");
+    expect(html).toContain('<li data-anchor="b-0016"><span data-s="1">Kept item.</span></li>');
   });
 
   it("hides a nested block (table in figure) in place", () => {
@@ -149,7 +165,7 @@ describe("applyPaperEdits", () => {
     expect(html).toMatch(
       /<figure data-anchor="b-0013"><img src="\/x.png"><details class="ax-hidden">/,
     );
-    expect(html).toContain("··· 1 table hidden ···");
+    expect(html).toContain("<summary>1 table hidden</summary>");
   });
 
   it("silent hide removes a block outright — no marker, no anchor left", () => {
@@ -238,7 +254,7 @@ describe("applyPaperEdits", () => {
     ]);
     const html = htmlOf(parts);
     expect(html).not.toContain("Beta one.");
-    expect(html).toContain("··· 1 paragraph hidden ···");
+    expect(html).toContain("<summary>1 paragraph hidden</summary>");
     expect(html).toContain('data-anchor="b-0011"');
   });
 
@@ -510,7 +526,7 @@ describe("applyPaperEdits", () => {
     ]);
     const kinds = parts.map((p) => p.kind);
     expect(kinds).toEqual(["html", "activity", "html"]);
-    expect((parts[0] as { html: string }).html).toContain("··· 1 paragraph hidden ···");
+    expect((parts[0] as { html: string }).html).toContain("<summary>1 paragraph hidden</summary>");
   });
 
   it("section-end gate emits a gate part at the subtree boundary", () => {
@@ -593,6 +609,41 @@ describe("applyPaperEdits", () => {
     expect(after).toContain("REVEAL text.");
   });
 
+  it("renumbers displaced sibling headings on emitted output, raw slices included", () => {
+    // An `op: "section"` insert into §1 makes §1.1 display as 1.2. The
+    // heading sits in a RAW slice (no ops target it), so the rewrite must
+    // land on the way out.
+    const { parts, unmatchedEdits } = applyPaperEdits(HTML, TOC, [
+      { op: "section", after: ref("b-0003", "One one."), id: "ins-sec", title: "Inserted" },
+    ]);
+    expect(unmatchedEdits).toEqual([]);
+    const html = htmlOf(parts);
+    expect(html).toContain('id="ins-sec"');
+    expect(html).toContain(
+      '<h3 id="ax-sec-a-1" data-anchor="b-0007"><span class="ax-secnum">1.2</span> Alpha One</h3>',
+    );
+  });
+
+  it("snippet tripwires keep matching raw artifact text at renumbered headings", () => {
+    // The add targets the heading the insert renumbers. Its snippet is the
+    // RAW artifact text ("1.1 Alpha One" — what --blocks prints and
+    // content.test.ts validates against buildBlockIndex of the artifact);
+    // resolution must see that text, never the already-renumbered display
+    // text, or the edit passes CI but silently unmatches in production.
+    const { parts, unmatchedEdits } = applyPaperEdits(HTML, TOC, [
+      { op: "section", after: ref("b-0003", "One one."), id: "ins-sec", title: "Inserted" },
+      { op: "add", after: ref("b-0007", "1.1 Alpha One"), markdown: "After the heading." },
+    ]);
+    expect(unmatchedEdits).toEqual([]);
+    const html = htmlOf(parts);
+    // The patched slice still shows the SHIFTED display number…
+    expect(html).toContain(
+      '<h3 id="ax-sec-a-1" data-anchor="b-0007"><span class="ax-secnum">1.2</span> Alpha One</h3>',
+    );
+    // …with the added note landing after it.
+    expect(html).toContain("After the heading.");
+  });
+
   it("an add authored before a gate on the same nested block stays inside the item", () => {
     const { parts, unmatchedEdits } = applyPaperEdits(HTML, TOC, [
       { op: "add", after: ref("b-0012", "Item text."), markdown: "Aside." },
@@ -640,6 +691,42 @@ describe("ungated tail (trailing landmarks)", () => {
     expect(ungatedTailHtml).toContain('id="ax-references"');
     expect(ungatedTailHtml).toContain('id="ax-footnotes"');
     expect(htmlOf(parts).replace("[gate]", "") + ungatedTailHtml).toBe(TAIL_HTML);
+  });
+
+  it("keeps appendix sections after References gated — only landmarks move to the tail", () => {
+    // arXiv converter output: flat h2 appendix sections FOLLOW the References
+    // landmark (see collapse-tail.ts). They are body content the gates
+    // sequence — and the sidebar locks their rows via gateIds — so they must
+    // NOT leak into the ungated tail.
+    const REFS =
+      '<section class="ax-references" id="ax-references"><h2 data-anchor="b-0020">References</h2><p data-anchor="b-0021">Ref one.</p></section>';
+    const APPENDIX =
+      '<h2 id="ax-sec-appendix" data-anchor="b-0030"><span class="ax-secnum">A</span> Full sensitivity analysis</h2>' +
+      '<p data-anchor="b-0031"><span data-s="1">Appendix body.</span></p>';
+    const FOOTNOTES =
+      '<section class="ax-footnotes" id="ax-footnotes"><h2 data-anchor="b-0040">Footnotes</h2><ol><li id="ax-fn-1">A note.</li></ol></section>';
+    const html = HTML + REFS + APPENDIX + FOOTNOTES;
+    const toc: PaperTocEntry[] = [
+      ...TOC,
+      { kind: "references", id: "ax-references", title: "References", number: "", level: 2, anchor: "b-0020" },
+      { kind: "section", id: "ax-sec-appendix", title: "Full sensitivity analysis", number: "A", level: 2, anchor: "b-0030" },
+      { kind: "footnotes", id: "ax-footnotes", title: "Footnotes", number: "", level: 2, anchor: "b-0040" },
+    ];
+    const { parts, ungatedTailHtml } = applyPaperEdits(html, toc, [
+      { op: "gate", after: { sectionEnd: "ax-sec-a-1" }, id: "g1" },
+    ]);
+    // The tail is exactly the two landmark sections, byte-preserved.
+    expect(ungatedTailHtml).toBe(REFS + FOOTNOTES);
+    // The appendix stays in the gated walk — pre-collapsed as trailing
+    // apparatus, since the References landmark that would have triggered the
+    // reader's collapse pass moved to the tail.
+    const gated = htmlOf(parts);
+    expect(gated).toContain(
+      '<details class="ax-collapse"><summary><h2 id="ax-sec-appendix" data-anchor="b-0030"><span class="ax-secnum">A</span> Full sensitivity analysis</h2></summary>' +
+        '<p data-anchor="b-0031"><span data-s="1">Appendix body.</span></p></details>',
+    );
+    expect(gated).not.toContain('id="ax-references"');
+    expect(gated).not.toContain('id="ax-fn-1"');
   });
 
   it("papers without gates keep landmarks in the parts", () => {

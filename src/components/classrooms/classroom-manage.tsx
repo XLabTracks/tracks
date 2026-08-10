@@ -1,10 +1,112 @@
 "use client";
 
-import { useState, useTransition } from "react";
-import { Check, Copy, RefreshCw, UserMinus } from "lucide-react";
+import { useState, useTransition, type ReactNode } from "react";
+import {
+  Check,
+  Copy,
+  LogOut,
+  RefreshCw,
+  Shield,
+  ShieldOff,
+  Trash2,
+  UserMinus,
+} from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
-import { regenerateJoinCode, removeMember } from "@/app/actions/classrooms";
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import {
+  deleteClassroom,
+  leaveClassroom,
+  removeMember,
+  regenerateJoinCode,
+  setMemberRole,
+} from "@/app/actions/classrooms";
+
+/**
+ * A trigger that opens a confirm dialog before running a server action.
+ * Destructive/consequential classroom actions (remove, leave, delete, role
+ * changes) all funnel through here so a single misclick can't reshape a
+ * roster. On success we toast and close; on failure we toast and keep the
+ * dialog open so the reader can retry or cancel. Redirecting actions (leave,
+ * delete) navigate away before the close matters.
+ */
+function ConfirmButton({
+  trigger,
+  title,
+  description,
+  confirmLabel,
+  successMessage,
+  errorMessage,
+  action,
+  destructive = true,
+}: {
+  trigger: ReactNode;
+  title: string;
+  description: ReactNode;
+  confirmLabel: string;
+  successMessage: string;
+  errorMessage: string;
+  action: () => Promise<void>;
+  destructive?: boolean;
+}) {
+  const [open, setOpen] = useState(false);
+  const [pending, startTransition] = useTransition();
+  return (
+    <Dialog open={open} onOpenChange={(next) => !pending && setOpen(next)}>
+      <DialogTrigger asChild>{trigger}</DialogTrigger>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>{title}</DialogTitle>
+          <DialogDescription>{description}</DialogDescription>
+        </DialogHeader>
+        <DialogFooter>
+          <DialogClose asChild>
+            <Button variant="outline" size="sm" disabled={pending}>
+              Cancel
+            </Button>
+          </DialogClose>
+          <Button
+            variant={destructive ? "destructive" : "default"}
+            size="sm"
+            disabled={pending}
+            onClick={() =>
+              startTransition(async () => {
+                try {
+                  await action();
+                  toast.success(successMessage);
+                  setOpen(false);
+                } catch (error) {
+                  // A redirecting action (leave/delete) may surface Next's
+                  // navigation signal here — rethrow it so the router still
+                  // navigates and we don't flash a false failure toast.
+                  if (
+                    error &&
+                    typeof (error as { digest?: unknown }).digest === "string" &&
+                    (error as { digest: string }).digest.startsWith("NEXT_REDIRECT")
+                  ) {
+                    throw error;
+                  }
+                  toast.error(errorMessage);
+                }
+              })
+            }
+          >
+            {pending ? "Working…" : confirmLabel}
+          </Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
+  );
+}
 
 export function CopyJoinCode({ code }: { code: string }) {
   const [copied, setCopied] = useState(false);
@@ -57,29 +159,130 @@ export function RegenerateCodeButton({ classroomId }: { classroomId: string }) {
 export function RemoveMemberButton({
   classroomId,
   userId,
+  name,
 }: {
   classroomId: string;
   userId: string;
+  name: string;
 }) {
-  const [pending, startTransition] = useTransition();
   return (
-    <Button
-      variant="ghost"
-      size="icon"
-      disabled={pending}
-      aria-label="Remove student"
-      onClick={() =>
-        startTransition(async () => {
-          try {
-            await removeMember(classroomId, userId);
-            toast.success("Student removed");
-          } catch {
-            toast.error("Couldn't remove student");
-          }
-        })
+    <ConfirmButton
+      trigger={
+        <Button variant="ghost" size="icon" aria-label={`Remove ${name}`}>
+          <UserMinus className="size-4" aria-hidden />
+        </Button>
       }
-    >
-      <UserMinus className="size-4" aria-hidden />
-    </Button>
+      title="Remove student?"
+      description={
+        <>
+          {name} will lose access to this classroom. Their progress and work are
+          kept — they can rejoin later with the code.
+        </>
+      }
+      confirmLabel="Remove"
+      successMessage="Student removed"
+      errorMessage="Couldn't remove student"
+      action={() => removeMember(classroomId, userId)}
+    />
+  );
+}
+
+/**
+ * Promote a student to co-instructor or step an instructor back down. The
+ * page hides the demote control when a member is the classroom's only
+ * instructor (the action refuses it too).
+ */
+export function RoleToggleButton({
+  classroomId,
+  userId,
+  name,
+  role,
+}: {
+  classroomId: string;
+  userId: string;
+  name: string;
+  role: "instructor" | "student";
+}) {
+  const promoting = role === "student";
+  return (
+    <ConfirmButton
+      trigger={
+        <Button
+          variant="ghost"
+          size="icon"
+          aria-label={promoting ? `Make ${name} an instructor` : `Make ${name} a student`}
+        >
+          {promoting ? (
+            <Shield className="size-4" aria-hidden />
+          ) : (
+            <ShieldOff className="size-4" aria-hidden />
+          )}
+        </Button>
+      }
+      title={promoting ? "Make instructor?" : "Step down to student?"}
+      description={
+        promoting ? (
+          <>
+            {name} will get full instructor access — the roster, every
+            student&apos;s work, the join code, and the grading key.
+          </>
+        ) : (
+          <>{name} will go back to a student&apos;s view and lose instructor access.</>
+        )
+      }
+      confirmLabel={promoting ? "Make instructor" : "Step down"}
+      successMessage={promoting ? "Now an instructor" : "Now a student"}
+      errorMessage="Couldn't change role"
+      destructive={!promoting}
+      action={() => setMemberRole(classroomId, userId, promoting ? "instructor" : "student")}
+    />
+  );
+}
+
+export function LeaveClassroomButton({ classroomId }: { classroomId: string }) {
+  return (
+    <ConfirmButton
+      trigger={
+        <Button variant="outline" size="sm" className="gap-1">
+          <LogOut className="size-3.5" aria-hidden /> Leave classroom
+        </Button>
+      }
+      title="Leave this classroom?"
+      description="You'll stop appearing on the instructor's roster. Your progress is kept, and you can rejoin later with the code."
+      confirmLabel="Leave"
+      successMessage="You left the classroom"
+      errorMessage="Couldn't leave the classroom"
+      action={() => leaveClassroom(classroomId)}
+    />
+  );
+}
+
+export function DeleteClassroomButton({
+  classroomId,
+  name,
+}: {
+  classroomId: string;
+  name: string;
+}) {
+  return (
+    <ConfirmButton
+      trigger={
+        <Button variant="ghost" size="sm" className="text-destructive gap-1">
+          <Trash2 className="size-3.5" aria-hidden /> Delete classroom
+        </Button>
+      }
+      title="Delete this classroom?"
+      description={
+        <>
+          {name} and its roster, join code, and stored grading key will be
+          permanently deleted. Students&apos; own progress and work are kept.
+          This can&apos;t be undone.
+        </>
+      }
+      confirmLabel="Delete classroom"
+      successMessage="Classroom deleted"
+      errorMessage="Couldn't delete the classroom"
+      action={() => deleteClassroom(classroomId)}
+    />
   );
 }

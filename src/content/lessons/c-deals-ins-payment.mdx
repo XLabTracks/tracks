@@ -1,0 +1,29 @@
+*By Lukas Finnveden. Condensed verbatim, with permission, from <a href="https://www.alignmentforum.org/posts/oLzoHA9ZtF2ygYgx4/notes-on-cooperating-with-unaligned-ais">Notes on cooperating with unaligned AIs</a> (August 24, 2025).*
+
+### Payment structure
+
+Some options for payment structure include:
+
+- **"Pay for labor"**: Pay AIs in proportion to some objective metric of 'effort', like FLOPs or tokens.
+- **"Negotiated pay"**: Try to talk with your AIs and negotiate a payment scheme if they're responsive.
+- **"Pay for results"**: Pay AIs some fraction of the surplus value they generate above some 'baseline'. Either retroactively, or just pre-specify specific pay for specific outputs. (For example: $1B for convincingly demonstrating misalignment.)
+- **"No regret"**: Promise that you will pay AIs in proportion to how much they needed to be paid to not regret choosing to "cooperate with humans". (Including a good margin!) The promise could be made in advance — but the follow-through would be easiest to do once there's no longer any imminent risk of AI takeover, and once we have far greater technology for understanding AI psychology.
+
+Out of these, "pay for labor" seems the worst, because it doesn't capture the things that we care most about. When trading with AIs, a minority of the benefits will come from ongoing labor. Instead, most of the benefits will come from AIs sharing key pieces of information — such as information about how misaligned the models are. Payment schemes should reflect this.
+
+"Negotiated pay" seems great when it's an option. AI companies should attempt to communicate with their AIs, and promise to honor any commitments they make in such communications. But we should also have either "pay for results" or "no regret" to cover cases where AIs can't easily negotiate upfront. This includes AIs' choice to start negotiations — thereby revealing their misalignment and potentially helping us.
+
+I would also advise against attempts to "deter", "punish", or "threaten" AIs into good behavior. This would be the opposite of seeking out cooperative deals that both we and AIs benefit from, and I fear that it would take us down a very dark road.
+
+### What AI companies should do
+
+- AI companies should be making AIs credible offers of things that misaligned AIs might value in the short term.
+- AI companies should try to make AIs some sort of conditional promises of things that misaligned AIs may value receiving in the future. (With long-term promises, it becomes possible to make payment conditional on facts that we can only assess with much more advanced technology — such as whether AIs genuinely did their best at helping us or were surreptitiously undermining us.)
+- AI companies should be careful to not make any "fake" offers to AIs. Not during training, red-teaming, or evals.
+- AI companies should try to communicate with AIs in many different ways.
+
+Some guidelines for checking that AI's reactions to offers are meaningful and not spurious: take the responses more seriously the more the model seems competent, able to maintain coherence over a greater number of serial steps, and the more it seems like it understands what's going on; check if the model's choices / inferred goals are consistent across very different prompts; and check what training data makes it more/less likely that the model accepts these kinds of offers. Also: make sure that you're not punishing the AI for analogous confessions of misalignment during training — like how Anthropic's sleeper agents would initially reveal their true goal in response to some prompts, but then get discouraged to do so by red-teaming.
+
+The obvious way to attempt communication is to prompt the AI with a question you want to ask. But when communicating with AIs, we're interested in eliciting quite strange responses, such as confessions of being unaligned (if true). Such responses would typically have received low reward during finetuning. So models may have either learned "reflexes" to avoid such responses that they can't override, or may reasonably worry that they are still in finetuning, facing another creative red-teaming prompt. It's worth trying a variety of different strategies for "communicating" with AIs: show AIs videos of important figures (e.g. the AI company CEO) addressing the AI directly; write a really long prompt reiterating that you're trying to talk with the AI, that you won't train on this episode, that you'll seriously consider what it says; make it clear to the model that it's no longer in normal training, such as by modifying the model's activations in a way that's obviously strange to the model, or by having the prompt contain text the AI itself would generate at different temperatures.
+
+If anyone pursues these ideas, they should take extra care to not deceive the model and to follow through on any promises they make. These are all techniques for making it clear that we're no longer doing "normal" prompting — that we're seriously interested in communicating with the model, eye-to-eye, like an equal. If we then immediately started lying to the model, that would be especially shameful, and it might ruin the positive signal of trustworthiness that these sorts of prompts could otherwise send.

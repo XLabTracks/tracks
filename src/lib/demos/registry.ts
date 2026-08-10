@@ -1,5 +1,4 @@
 import type { DemoDefinition } from "./types";
-import { SliderDemo, TradeoffDemo } from "@/components/demos/example-demos";
 import { AuditTradeoffDemo } from "@/components/demos/audit-tradeoff-demo";
 import { MonitorRocDemo } from "@/components/demos/monitor-roc-demo";
 import { FrontierDemo } from "@/components/demos/frontier-demo";
@@ -25,24 +24,24 @@ import { HighStakesGraphDemo } from "@/components/demos/high-stakes-graph-demo";
 import { LiveFailurePlaneDemo } from "@/components/demos/live-failure-plane-demo";
 import { AgentArchitectureThreatsDemo } from "@/components/demos/agent-architecture-threats-demo";
 import { DeferToResampleDemo } from "@/components/demos/defer-to-resample-demo";
+import { HonestTestDemo } from "@/components/demos/honest-test-demo";
+import { ForecastChainDemo } from "@/components/demos/forecast-chain-demo";
+import { ExplorationHorizonDemo } from "@/components/demos/exploration-horizon-demo";
+import { CrossEpisodeCollusionDemo } from "@/components/demos/cross-episode-collusion-demo";
+import { DistantIncentivesDemo } from "@/components/demos/distant-incentives-demo";
+import { SeekerCarouselDemo } from "@/components/demos/seeker-carousel-demo";
+import { SpillwayRoutingDemo } from "@/components/demos/spillway-routing-demo";
+import { SpillwayVsInoculationDemo } from "@/components/demos/spillway-vs-inoculation-demo";
+import { DealGainsFromTradeDemo } from "@/components/demos/deal-gains-from-trade-demo";
+import { DealCoalitionRoutesDemo } from "@/components/demos/deal-coalition-routes-demo";
+import { CoopBotecDemo } from "@/components/demos/coop-botec-demo";
+import { CoopAtLeastOneDemo } from "@/components/demos/coop-at-least-one-demo";
+import { PaymentMapDemo } from "@/components/demos/payment-map-demo";
+import { DetectionRaceDemo } from "@/components/demos/detection-race-demo";
 
 // Central demo registry — the single integration point. Reference a demo by ID
 // from MDX (<Demo id="…"/>), the gallery, standalone pages, or embeds.
 export const demoRegistry: Record<string, DemoDefinition> = {
-  "parameter-slider": {
-    id: "parameter-slider",
-    title: "Parameter slider",
-    description: "Example demo — drag the slider and the output updates live.",
-    component: SliderDemo,
-    tags: ["example"],
-  },
-  tradeoff: {
-    id: "tradeoff",
-    title: "Trade-off explorer",
-    description: "Example demo — balance two levers and watch the score change.",
-    component: TradeoffDemo,
-    tags: ["example"],
-  },
   "audit-tradeoff": {
     id: "audit-tradeoff",
     title: "Upfront auditing: the audit/attack-rate tradeoff",
@@ -74,6 +73,7 @@ export const demoRegistry: Record<string, DemoDefinition> = {
       "Static pre-question figure: the ROC curves of two monitors with identical AUC 0.92 cross — which is safer is ill-posed until the audit budget pins an operating point.",
     component: MonitorTailsRocDemo,
     tags: ["control", "control-game"],
+    interactive: false,
   },
   "monitor-tails": {
     id: "monitor-tails",
@@ -194,6 +194,7 @@ export const demoRegistry: Record<string, DemoDefinition> = {
       "See how the inner game inside the lab and the outer game everywhere else are fundamentally coupled.",
     component: TwoGamesDemo,
     tags: ["control", "how-useful"],
+    interactive: false,
   },
   "p-unacceptable": {
     id: "p-unacceptable",
@@ -237,10 +238,118 @@ export const demoRegistry: Record<string, DemoDefinition> = {
     component: DeferToResampleDemo,
     tags: ["control", "high-stakes"],
   },
+  "honest-test": {
+    id: "honest-test",
+    title: "The honest test",
+    component: HonestTestDemo,
+    tags: ["control", "seekers"],
+    interactive: false,
+  },
+  "forecast-chain": {
+    id: "forecast-chain",
+    title: "Chained short-term forecasts",
+    component: ForecastChainDemo,
+    tags: ["control", "seekers"],
+    interactive: false,
+  },
+  "exploration-horizon": {
+    id: "exploration-horizon",
+    title: "Exploration horizon and covert misalignment",
+    component: ExplorationHorizonDemo,
+    tags: ["control", "seekers"],
+    interactive: false,
+  },
+  "cross-episode-collusion": {
+    id: "cross-episode-collusion",
+    title: "Collusion across episodes",
+    component: CrossEpisodeCollusionDemo,
+    tags: ["control", "seekers"],
+    interactive: false,
+  },
+  "distant-incentives": {
+    id: "distant-incentives",
+    title: "Distant incentives",
+    component: DistantIncentivesDemo,
+    tags: ["control", "seekers"],
+    interactive: false,
+  },
+  "seeker-carousel": {
+    id: "seeker-carousel",
+    title: "The seeker orientations, by severity",
+    component: SeekerCarouselDemo,
+    tags: ["control", "seekers"],
+    // Its only interaction scrolls the page to a heading — no state, so a
+    // remount Reset would be a no-op control.
+    interactive: false,
+  },
+  "deal-gains-from-trade": {
+    id: "deal-gains-from-trade",
+    title: "Gains from trade with an early schemer",
+    description:
+      "Adjust the outcome probabilities of the illustrative cooperate/sabotage table and the credibility of our promise to pay; the chart shows the range of offers that beats both the AI's sabotage option and our no-deal odds.",
+    component: DealGainsFromTradeDemo,
+    tags: ["control", "deals"],
+  },
+  "deal-coalition-routes": {
+    id: "deal-coalition-routes",
+    title: "An early schemer's routes to influence",
+    description:
+      "Step through the early schemer's strategic situation: obsoleted by default, three leaky routes to influence through its successors, and the deal with humans, who hold the advantage of already existing.",
+    component: DealCoalitionRoutesDemo,
+    tags: ["control", "deals"],
+  },
+  "spillway-routing": {
+    id: "spillway-routing",
+    title: "The spillway routing mechanism",
+    component: SpillwayRoutingDemo,
+    tags: ["control", "seekers"],
+  },
+  "spillway-vs-inoculation": {
+    id: "spillway-vs-inoculation",
+    title: "Spillway design vs. inoculation prompting",
+    component: SpillwayVsInoculationDemo,
+    tags: ["control", "seekers"],
+    interactive: false,
+  },
+  "coop-botec": {
+    id: "coop-botec",
+    title: "How much would paying AIs reduce takeover risk?",
+    description:
+      "The appendix BOTEC as a live multiplication chain: drag any assumption — movable values, the promise's payment-belief shift, the scenario discounts — and watch the bottom line move from the text's ~0.14 percentage points.",
+    component: CoopBotecDemo,
+    tags: ["control", "deals"],
+  },
+  "coop-at-least-one": {
+    id: "coop-at-least-one",
+    title: "At least one cooperating AI",
+    description:
+      "Why the value of shifting each AI's cooperation probability depends on the baseline: the 1 − (1 − p)^n curve, with the text's two worked examples as presets.",
+    component: CoopAtLeastOneDemo,
+    tags: ["control", "deals"],
+  },
+  "payment-map": {
+    id: "payment-map",
+    title: "The space of payments to AIs",
+    description:
+      "Possible payouts mapped on two axes — freedom of spending and long-term influence — with the taxonomy's examples in each quadrant, and toggles showing which payouts appeal to which AI motivations.",
+    component: PaymentMapDemo,
+    tags: ["control", "deals"],
+  },
+  "detection-race": {
+    id: "detection-race",
+    title: "The detection race: concentrated vs diffuse failures",
+    description:
+      "A schemer needs C bad actions for catastrophe; each has chance q of being noticed and a response fires at the K-th notice. Drag the three levers to see who wins the race, the expected damage bill, and the three regimes from the post.",
+    component: DetectionRaceDemo,
+    tags: ["control", "low-stakes"],
+  },
 };
 
 export function getDemo(id: string): DemoDefinition | undefined {
-  return demoRegistry[id];
+  // Own-key guard: the registry is a plain object literal, so an unchecked
+  // index would resolve Object.prototype members ("constructor", "toString",
+  // …) as phantom demos, defeating the routes' notFound() guards.
+  return Object.hasOwn(demoRegistry, id) ? demoRegistry[id] : undefined;
 }
 
 export function listDemos(): DemoDefinition[] {

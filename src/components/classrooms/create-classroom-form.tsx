@@ -23,7 +23,14 @@ export function CreateClassroomForm({
     <form action={action} className="space-y-4">
       <div className="space-y-1.5">
         <Label htmlFor="name">Classroom name</Label>
-        <Input id="name" name="name" placeholder="e.g. Fall 2026 cohort" required />
+        {/* maxLength mirrors the server-side cap in createClassroom. */}
+        <Input
+          id="name"
+          name="name"
+          placeholder="e.g. Fall 2026 cohort"
+          maxLength={120}
+          required
+        />
       </div>
       <div className="space-y-1.5">
         <Label htmlFor="trackId">Track (optional)</Label>

@@ -80,7 +80,6 @@ export function PolicyScoping({ onComplete }: VerificationWidgetProps) {
   const [keyOn, setKeyOn] = useState(false);
   const [excPicked, setExcPicked] = useState<string | null>(null);
   const [excDone, setExcDone] = useState(false);
-  const completedRef = useRef(false);
   const liveRef = useRef<HTMLDivElement>(null);
 
   function say(msg: string) {
@@ -118,18 +117,19 @@ export function PolicyScoping({ onComplete }: VerificationWidgetProps) {
 
   function check() {
     setCheckedOnce(true);
+    // Compute verdicts from the current placements (this handler is the only
+    // writer in flight), then set state — counting inside a setPlacements
+    // updater would read 0 whenever the updater is deferred to render.
     let right = 0;
-    setPlacements((prev) => {
-      const next: Record<string, Placement> = { ...prev };
-      for (const p of POLICIES) {
-        const cell = prev[p.id].cell;
-        if (!cell) continue;
-        const combo = p.cells[cell];
-        next[p.id] = { cell, verdict: combo.v };
-        if (combo.v === "right") right++;
-      }
-      return next;
-    });
+    const next: Record<string, Placement> = { ...placements };
+    for (const p of POLICIES) {
+      const cell = placements[p.id].cell;
+      if (!cell) continue;
+      const combo = p.cells[cell];
+      next[p.id] = { cell, verdict: combo.v };
+      if (combo.v === "right") right++;
+    }
+    setPlacements(next);
     say(
       `Checked. ${right} of 5 on the frontier.` +
         (right === 5
@@ -167,10 +167,9 @@ export function PolicyScoping({ onComplete }: VerificationWidgetProps) {
     if (a.ok) {
       setExcDone(true);
       if (!keyOn) reveal();
-      if (!completedRef.current) {
-        completedRef.current = true;
-        onComplete();
-      }
+      // No local once-guard: use-completion's done-ref is the single dedupe
+      // (and it rolls back on a failed write so completion can retry).
+      onComplete();
       say("Correct. Exercise complete.");
     } else {
       say("Not quite. Try again.");

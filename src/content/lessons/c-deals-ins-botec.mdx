@@ -1,0 +1,26 @@
+*By Lukas Finnveden. Condensed verbatim, with permission, from <a href="https://www.alignmentforum.org/posts/oLzoHA9ZtF2ygYgx4/notes-on-cooperating-with-unaligned-ais">Notes on cooperating with unaligned AIs</a> (August 24, 2025).*
+
+Here's a very rough stab at a BOTEC on how much impact an extremely ambitious version of this intervention could have on reducing x-risk. I think it fails to take a lot of considerations and sanity-checks into account — I'd use it as an exercise & starting point for thinking through some of the considerations at hand, but wouldn't take the numbers at face value.
+
+**Intervention**: The leading AI lab publicly states that they'll try to communicate and negotiate payment with their AIs, and that they'll try to make it so that AIs don't regret any help they provide. They set aside 10% of their equity for this.
+
+**Main scenario**: It's common for AIs to develop scheming-prone values. We don't have any strong evidence of this. (Other than what we might get by AIs confessing to misalignment.)
+
+**Probability that the intervention counterfactually makes a non-negligible number of AI systems cooperate with us**: ~7.5% conditioning on the main scenario. The rough calculation:
+
+- 60% probability that an AI mostly cares about how many resources it gets in the long-term; 50% probability that these are very scope-sensitive (~linear); 75% probability that the AI believes that other AIs mostly don't share its values → 0.6 × 0.5 × 0.75 ≈ 20% probability on this combination of values.
+- Say the AI's belief about the expected payment from humans vs. from other AIs is log-uniform between "AIs will give me 10x more" and "AIs will give me 10x less", and our intervention makes the AI believe that humans' payment will be 3x larger than it would otherwise have believed. Then this has a 25% probability of making the AI cooperate with humans instead of AIs.
+- The intervention seems somewhat less likely to make a difference for other values — assume half as promising on average: 0.2 × 0.25 + 0.8 × 0.125 = 0.15.
+- Then discount by 2x because it might not matter if any particular AI counterfactually cooperates with us, if we already had other similarly-capable AIs who were willing to cooperate: 0.15 × 0.5 = 7.5%.
+
+**Percentage point x-risk reduction from AIs' cooperation**: ~17% conditioning on the main scenario (which starts from a 50% probability of AI takeover). This decomposes into a ⅓ probability that AIs' cooperation acts as solid evidence and a big wake-up alarm for misalignment concerns (a 20 percentage point reduction in that case, ≈ 7%), plus a 10 percentage point reduction from the leading lab having access to AIs that are genuinely trying to help them.
+
+This suggests that the intervention reduces x-risk by ~1% in the main scenario. Two discounts follow from how the main scenario isn't that likely: maybe there's a 20% probability that we get the sort of scheming-prone values assumed (0.2x), and a 0.55x discount for lack of understanding (a 40% probability that we lack solid evidence of misalignment, and 25% as much value in worlds where we have it: 0.4 + 0.6 × 0.25 = 0.55).
+
+Multiplying out: (15% × 50%) × 0.17 × 0.2 × 0.55 ≈ **0.14 percentage points**.
+
+<Demo id="coop-botec" framed={false} />
+
+The 2x discount for multiple AIs deserves a closer look. Different AIs may have different preferences, so it's plausible that some subset of them will be compelled to cooperate with us — and there's probably strongly diminishing returns to having extra AIs cooperating with us, once we have some. So we should be talking about something like the probability that at least one type of AI is compelled to work with us. If the baseline situation is equivalent to getting 10 independent draws for whether an AI will cooperate with us, where each of those is 50% likely to be positive, then we're starting out with a >99.9% probability that one of them is positive — changing each of them to 65% can't make much of a difference. On the other hand, if the baseline situation is equivalent to getting 3 independent draws, where each is 20% likely to be positive, then we're starting out with a ~49% probability of getting at least one AI to cooperate with us; changing that 20% to 35% brings us to 73%.
+
+<Demo id="coop-at-least-one" framed={false} />

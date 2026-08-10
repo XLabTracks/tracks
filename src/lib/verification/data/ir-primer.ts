@@ -215,7 +215,7 @@ export const IR_V3 = {
   h2: "Why cooperation happens anyway",
   lede: "No enforcer, self-interested agents — yet thousands of treaties function. The mechanisms that make that possible are the ones an AI agreement must exploit.",
   p1pre: "If you've played ",
-  gameHref: "https://the-verification-game.netlify.app/",
+  gameHref: "/tracks/verification/games/verification-timeline-game",
   gameLabel: "The Verification Game",
   p1post:
     ", you've already watched the formal core play out across its branching timeline: a one-shot prisoner's dilemma predicts defection, but states aren't playing one-shot games. Three things change the payoffs — click each to see how.",

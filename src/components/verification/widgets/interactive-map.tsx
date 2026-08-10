@@ -191,6 +191,10 @@ export function InteractiveMap(_props: VerificationWidgetProps) {
     moved: boolean;
     pid: number;
   } | null>(null);
+  // whether the pan that just ended actually moved — read by onCountryClick to
+  // suppress the click that follows a pan (endPan clears dragRef itself, so a
+  // right-click or pointercancel can't leave a stuck drag behind)
+  const panMovedRef = useRef(false);
 
   const zoom = s.vb.w > 0 ? BASE.w / s.vb.w : 1;
   const ev = s.mode === "timeline" && s.event >= 0 ? EVENTS[s.event] : null;
@@ -249,6 +253,8 @@ export function InteractiveMap(_props: VerificationWidgetProps) {
   }, [applyZoom]);
 
   const onPointerDown = (e: React.PointerEvent<SVGSVGElement>) => {
+    if (e.button !== 0) return; // left button / touch only
+    panMovedRef.current = false;
     dragRef.current = {
       x: e.clientX,
       y: e.clientY,
@@ -261,7 +267,7 @@ export function InteractiveMap(_props: VerificationWidgetProps) {
   };
   const onPointerMove = (e: React.PointerEvent<SVGSVGElement>) => {
     const d = dragRef.current;
-    if (!d) return;
+    if (!d || d.pid !== e.pointerId) return;
     const el = svgRef.current;
     if (!el) return;
     const r = el.getBoundingClientRect();
@@ -274,6 +280,11 @@ export function InteractiveMap(_props: VerificationWidgetProps) {
     dispatch({ type: "setVb", vb: clampVB({ ...s.vb, x: d.vx - dx, y: d.vy - dy }) });
   };
   const endPan = (e: React.PointerEvent<SVGSVGElement>) => {
+    const d = dragRef.current;
+    if (d && d.pid === e.pointerId) {
+      panMovedRef.current = d.moved;
+      dragRef.current = null;
+    }
     try {
       svgRef.current?.releasePointerCapture(e.pointerId);
     } catch {
@@ -290,11 +301,10 @@ export function InteractiveMap(_props: VerificationWidgetProps) {
   /* ============ selection / country click ============ */
   const onCountryClick = (id: string | null) => {
     // suppress click that was really a pan
-    if (dragRef.current?.moved) {
-      dragRef.current = null;
+    if (panMovedRef.current) {
+      panMovedRef.current = false;
       return;
     }
-    dragRef.current = null;
     if (s.mode !== "map") return;
     if (id && CMAP[id]) dispatch({ type: "select", id });
     else dispatch({ type: "clearSelection" });

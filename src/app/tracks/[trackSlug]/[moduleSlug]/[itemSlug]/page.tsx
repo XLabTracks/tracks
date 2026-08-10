@@ -19,6 +19,7 @@ import {
   getPrerequisiteStatus,
   getTrackCompletionSet,
   isLessonCompleted,
+  type PrerequisiteStatus,
 } from "@/lib/progress";
 import { Breadcrumbs } from "@/components/layout/breadcrumbs";
 import { LessonContent } from "@/components/mdx/lesson-content";
@@ -26,6 +27,7 @@ import { LessonNav } from "@/components/layout/lesson-nav";
 import { LessonCompleteButton } from "@/components/learn/lesson-complete-button";
 import { LessonTracker } from "@/components/learn/lesson-tracker";
 import { MarginNotesToggle } from "@/components/papers/margin-notes-toggle";
+import { ClassHighlightsToggle } from "@/components/papers/class-highlights-toggle";
 import { PaperHighlights } from "@/components/papers/paper-highlights";
 import { PaperReader } from "@/components/papers/paper-reader";
 import { gateIdsOf, paperGateStorageKey } from "@/lib/papers/gate-state";
@@ -37,8 +39,14 @@ import {
   deleteHighlight,
   updateHighlightNote,
 } from "@/app/actions/highlights";
-import { getHighlightsForItem } from "@/lib/highlights/queries";
-import { type HighlightRow } from "@/lib/highlights/types";
+import {
+  getClassmateHighlightsForItem,
+  getHighlightsForItem,
+} from "@/lib/highlights/queries";
+import {
+  type ClassHighlightRow,
+  type HighlightRow,
+} from "@/lib/highlights/types";
 import { getVerificationExerciseForLesson } from "@/lib/verification/exercises";
 
 // Dispatching route: a module item slug resolves to either a lesson or a
@@ -71,7 +79,15 @@ export default async function ItemPage({
   // Hard prerequisite enforcement: signed-in learners with unmet prerequisites
   // are sent back to the module page. (Signed-out visitors may preview.)
   if (user && track.prerequisiteEnforcement === "hard") {
-    const prereqStatuses = await getPrerequisiteStatus(user.id, module.id);
+    // Degrade like the layout's progress read: getPrerequisiteStatus awaits
+    // the same cache()-memoized getTrackCompletionSet, so a failed read
+    // rejects here too — and, uncaught, would rethrow BEFORE dispatch to
+    // LessonItemPage/PaperItemPage, making their degrade catches unreachable
+    // on every hard-enforcement item with prerequisites. Fail open (no lock),
+    // consistent with signed-out visitors being allowed to preview.
+    const prereqStatuses = await getPrerequisiteStatus(user.id, module.id).catch(
+      (): PrerequisiteStatus[] => [],
+    );
     if (
       isAccessLocked(
         track.prerequisiteEnforcement,
@@ -117,7 +133,12 @@ async function LessonItemPage({
   nav: { prev: ItemRef | null; next: ItemRef | null };
   userId: string | null;
 }) {
-  const completed = userId ? await isLessonCompleted(userId, lesson.id) : false;
+  // Degrade like the layout's progress read (its try/catch can't cover this
+  // await — cache() memoizes the rejection per request, and re-awaiting it
+  // here rethrows): a failed read renders the lesson as not-yet-completed.
+  const completed = userId
+    ? await isLessonCompleted(userId, lesson.id).catch(() => false)
+    : false;
 
   return (
     <div className="max-w-4xl px-4 py-8 lg:px-8">
@@ -191,9 +212,15 @@ async function PaperItemPage({
   // and PaperReader only membership-tests its own ids against it. The
   // highlights read rides the same round trip — Hyperdrive caching is off,
   // so a serialized second query would be a second us-east-1 hop.
-  const [completedContentIds, highlights] = userId
+  const [completedContentIds, highlights, classHighlights] = userId
     ? await Promise.all([
-        getTrackCompletionSet(userId, track.id),
+        // Degrade like the layout's progress read (its try/catch can't cover
+        // this await — cache() memoizes the rejection per request, and
+        // re-awaiting it here rethrows): render with nothing completed
+        // rather than crash a page that is otherwise static content.
+        getTrackCompletionSet(userId, track.id).catch(
+          (): Set<string> => new Set(),
+        ),
         // Degrade, never take the page down: schema migrations are applied
         // manually via psql (db/migrations) — if a deploy outruns that step
         // or a dev DB predates the Highlight table, this read throws and the
@@ -201,12 +228,28 @@ async function PaperItemPage({
         getHighlightsForItem(userId, paper.id).catch(
           (): HighlightRow[] => [],
         ),
+        // Classmates' shared notes on this paper (empty for a user in no
+        // classroom). Same degrade-never-fail contract as the own read.
+        getClassmateHighlightsForItem(userId, paper.id).catch(
+          (): ClassHighlightRow[] => [],
+        ),
       ])
-    : [new Set<string>(), [] as HighlightRow[]];
+    : [
+        new Set<string>(),
+        [] as HighlightRow[],
+        [] as ClassHighlightRow[],
+      ];
   const completed = completedContentIds.has(paper.id);
 
   // Cached per request — PaperReader reuses the same artifact lookup.
   const source = await paperSourceHeader(paper.source);
+
+  // One key per reading gate — PaperHighlights (pending-vs-orphan
+  // classification, fuzzy-skip while closed) and LessonTracker (scroll
+  // completion) key their gate-closed checks on the same set.
+  const gateKeys = gateIdsOf(paper.edits).map((gateId) =>
+    paperGateStorageKey(paper.id, gateId),
+  );
 
   return (
     <div className="max-w-5xl px-4 py-8 lg:px-8">
@@ -248,6 +291,9 @@ async function PaperItemPage({
           {/* Margin display of the reader's own highlight notes — only
               signed-in readers can have any. */}
           {userId ? <MarginNotesToggle /> : null}
+          {/* Classmates' shared notes — only surfaced when at least one
+              exists on this paper. */}
+          {classHighlights.length > 0 ? <ClassHighlightsToggle /> : null}
         </p>
       </header>
 
@@ -264,6 +310,8 @@ async function PaperItemPage({
       {userId ? (
         <PaperHighlights
           initialHighlights={highlights}
+          classHighlights={classHighlights}
+          gateKeys={gateKeys}
           createAction={createHighlight.bind(null, paper.id)}
           updateNoteAction={updateHighlightNote}
           deleteAction={deleteHighlight}
@@ -278,9 +326,7 @@ async function PaperItemPage({
           // Gated papers scroll-complete only after every reading gate has
           // been opened — with gates closed the body is unmounted and this
           // sentinel would sit right under the first gate's card.
-          gateKeys={gateIdsOf(paper.edits).map((gateId) =>
-            paperGateStorageKey(paper.id, gateId),
-          )}
+          gateKeys={gateKeys}
         />
       ) : null}
 

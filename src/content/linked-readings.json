@@ -350,12 +350,6 @@
     },
     {
       "kind": "lesswrong",
-      "id": "lesswrong__uMQ3cqWDPHhjtiesc",
-      "url": "https://www.lesswrong.com/posts/uMQ3cqWDPHhjtiesc/agi-ruin-a-list-of-lethalities",
-      "title": "AGI Ruin: A List of Lethalities"
-    },
-    {
-      "kind": "lesswrong",
       "id": "lesswrong__vWYzSorAEWwoJnnXq",
       "url": "https://www.lesswrong.com/posts/vWYzSorAEWwoJnnXq/a-sketch-of-an-ai-control-safety-case",
       "title": "A sketch of an AI control safety case"
@@ -389,18 +383,6 @@
       "id": "lesswrong__ZAsJv7xijKTfZkMtr",
       "url": "https://www.lesswrong.com/posts/ZAsJv7xijKTfZkMtr/sleeper-agents-training-deceptive-llms-that-persist-through",
       "title": "Sleeper Agents: Training Deceptive LLMs that Persist Through Safety Training"
-    },
-    {
-      "kind": "lesswrong",
-      "id": "lesswrong__zthDPAjh9w6Ytbeks",
-      "url": "https://www.lesswrong.com/posts/zthDPAjh9w6Ytbeks/deceptive-alignment",
-      "title": "Deceptive Alignment"
-    },
-    {
-      "kind": "lesswrong",
-      "id": "lesswrong__zxmzBTwKkPMxQQcfR",
-      "url": "https://www.lesswrong.com/posts/zxmzBTwKkPMxQQcfR/let-s-use-ai-to-harden-human-defenses-against-ai",
-      "title": "Let’s use AI to harden human defenses against AI manipulation"
     }
   ]
 }

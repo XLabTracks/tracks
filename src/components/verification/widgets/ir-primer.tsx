@@ -1,7 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { CheckCircle2, ExternalLink, Plus, XCircle } from "lucide-react";
+import { CheckCircle2, Plus, XCircle } from "lucide-react";
+import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
@@ -402,8 +403,13 @@ export function IrPrimer({ onComplete }: VerificationWidgetProps) {
             </div>
           </TabsContent>
 
-          {/* 2 — Willingness */}
-          <TabsContent value="v2" className="mt-0">
+          {/* 2 — Willingness (forceMount: Radix unmounts inactive content by
+              default, which would reset the sorter's answers on tab switch) */}
+          <TabsContent
+            value="v2"
+            forceMount
+            className="mt-0 data-[state=inactive]:hidden"
+          >
             <SectionHead h2={IR_V2.h2} lede={IR_V2.lede} />
             <p className="text-sm leading-relaxed">{IR_V2.p1}</p>
 
@@ -444,15 +450,12 @@ export function IrPrimer({ onComplete }: VerificationWidgetProps) {
             <SectionHead h2={IR_V3.h2} lede={IR_V3.lede} />
             <p className="text-sm leading-relaxed">
               {IR_V3.p1pre}
-              <a
+              <Link
                 href={IR_V3.gameHref}
-                target="_blank"
-                rel="noreferrer"
-                className="text-primary inline-flex items-center gap-0.5 font-medium underline underline-offset-2"
+                className="text-primary font-medium underline underline-offset-2"
               >
                 {IR_V3.gameLabel}
-                <ExternalLink className="size-3" aria-hidden />
-              </a>
+              </Link>
               {IR_V3.p1post}
             </p>
             <div className="mt-4">
@@ -732,8 +735,14 @@ export function IrPrimer({ onComplete }: VerificationWidgetProps) {
             </div>
           </TabsContent>
 
-          {/* 8 — Self-check */}
-          <TabsContent value="v8" className="mt-0">
+          {/* 8 — Self-check (forceMount: quiz answers must survive tab
+              switches — losing them mid-quiz would force redoing every
+              question to complete the lesson) */}
+          <TabsContent
+            value="v8"
+            forceMount
+            className="mt-0 data-[state=inactive]:hidden"
+          >
             <SectionHead h2={IR_QUIZ_INTRO.h2} lede={IR_QUIZ_INTRO.lede} />
             <Quiz onComplete={onComplete} />
             <Callout

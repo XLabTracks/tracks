@@ -226,7 +226,9 @@ export interface CapturedSelection {
  * a mid-paragraph activity split (the owning anchor is recovered from the
  * nearest preceding anchored block, and the server validates against the
  * unsplit artifact block). Every further anchored block the range touches
- * contributes its own span; blocks with nothing capturable (figures, math,
+ * contributes its own span — and so does every split second half it crosses,
+ * as a FURTHER span on its first half's anchor (both halves validate against
+ * the unsplit artifact block); blocks with nothing capturable (figures, math,
  * silent-hide gaps, over-long coverage) simply drop out of the group rather
  * than refusing the gesture. Per block, boundaries map into the edge
  * sentences' normalized text (offset-map), grapheme-snapped and
@@ -256,21 +258,40 @@ export function captureSelection(
   // The containers the range touches, in document order, capped at the
   // group limit. The start container leads (it may be anchor-less, with a
   // recovered anchor); ancestors of it are skipped so nested-anchor blocks
-  // don't double-capture the same text.
+  // don't double-capture the same text. A split second half rides along
+  // right after its first half as a further container on the SAME anchor —
+  // anchor-only collection would skip it and the gesture would silently
+  // capture a hole over the split's second half.
   const containers: { anchor: string; container: Element }[] = [
     { anchor: start.anchor, container: start.container },
   ];
   const seenAnchors = new Set<string>([start.anchor]);
   if (!start.container.contains(range.endContainer)) {
+    const secondHalves = splitSecondHalves(root);
     for (const block of root.querySelectorAll("[data-anchor]")) {
       if (containers.length >= HIGHLIGHT_MAX_BLOCKS) break;
-      if (block === start.container || block.contains(start.container)) continue;
       if (block.closest(EXCLUDED)) continue;
-      if (!range.intersectsNode(block)) continue;
       const anchor = block.getAttribute("data-anchor");
-      if (!anchor || seenAnchors.has(anchor)) continue;
-      seenAnchors.add(anchor);
-      containers.push({ anchor, container: block });
+      if (!anchor) continue;
+      const holdsStart =
+        block === start.container || block.contains(start.container);
+      if (
+        !holdsStart &&
+        !seenAnchors.has(anchor) &&
+        range.intersectsNode(block)
+      ) {
+        seenAnchors.add(anchor);
+        containers.push({ anchor, container: block });
+      }
+      // The block's split second halves are visited even when the block
+      // itself was skipped: a selection STARTING in a split's first half
+      // still crosses the activity into the anchor-less second half.
+      for (const half of secondHalves.get(block) ?? []) {
+        if (containers.length >= HIGHLIGHT_MAX_BLOCKS) break;
+        if (half === start.container) continue;
+        if (!range.intersectsNode(half)) continue;
+        containers.push({ anchor, container: half });
+      }
     }
   }
 
@@ -647,20 +668,56 @@ function sentencePointOf(
   // renders in the NEXT wrapper). Its spans keep the original data-s
   // numbering, so the owning anchor is the nearest preceding anchored
   // block's — the split's first half — and the server validates the range
-  // against the unsplit artifact block. The numbering-continuity check below
-  // is what proves the pairing: a split's first half ends exactly where the
-  // second half begins; any other anchor-less span (nothing in committed
-  // content today) fails it and the capture is refused rather than posted
-  // against a wrong anchor the server would reject.
+  // against the unsplit artifact block. splitOwnerOf's numbering-continuity
+  // check is what proves the pairing; any other anchor-less span (nothing in
+  // committed content today) fails it and the capture is refused rather than
+  // posted against a wrong anchor the server would reject.
   const container = anchorlessContainer(root, span);
   if (!container) return null;
-  const anchorBlock = precedingAnchoredBlock(root, container);
+  const anchorBlock = splitOwnerOf(root, container);
   const anchor = anchorBlock?.getAttribute("data-anchor");
   if (!anchorBlock || !anchor) return null;
+  return { anchor, container };
+}
+
+/**
+ * The anchored block that owns an anchor-less sentence-span container — the
+ * split's first half. The numbering-continuity check proves the pairing: a
+ * split's first half ends exactly where the second half begins, so the
+ * container's spans must number strictly past the preceding anchored block's
+ * own. Null when nothing precedes or the continuity check fails.
+ */
+function splitOwnerOf(root: Element, container: Element): Element | null {
+  const anchorBlock = precedingAnchoredBlock(root, container);
+  if (!anchorBlock?.getAttribute("data-anchor")) return null;
   const firstHalfMax = Math.max(0, ...collectSentenceSpans(anchorBlock).keys());
   const containerMin = Math.min(...collectSentenceSpans(container).keys());
   if (firstHalfMax === 0 || containerMin <= firstHalfMax) return null;
-  return { anchor, container };
+  return anchorBlock;
+}
+
+/**
+ * Anchor-less split second halves, keyed by their owning first-half block
+ * (document order within each list). Phase B strips data-anchor from the
+ * second half of a block split by a mid-paragraph activity, so a
+ * querySelectorAll("[data-anchor]") walk alone would skip its sentences and
+ * a multi-block gesture across the split would silently capture a hole.
+ */
+function splitSecondHalves(root: Element): Map<Element, Element[]> {
+  const out = new Map<Element, Element[]>();
+  const seen = new Set<Element>();
+  for (const span of root.querySelectorAll("[data-s]")) {
+    if (span.closest("[data-anchor]") || span.closest(EXCLUDED)) continue;
+    const container = anchorlessContainer(root, span);
+    if (!container || seen.has(container)) continue;
+    seen.add(container);
+    const owner = splitOwnerOf(root, container);
+    if (!owner) continue;
+    const halves = out.get(owner);
+    if (halves) halves.push(container);
+    else out.set(owner, [container]);
+  }
+  return out;
 }
 
 /**

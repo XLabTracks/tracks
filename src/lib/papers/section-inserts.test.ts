@@ -75,6 +75,23 @@ describe("planSectionInserts", () => {
     expect(plan.numberOverrides.get("ax-sec-3-2")).toBe("3.4");
   });
 
+  it("numbers two same-anchor inserts by edits order — never duplicating", () => {
+    // Both target b-0011: the afterNum tie breaks by editIndex, matching the
+    // render order (patch-section phase C emits same-anchor ops in edits
+    // order), so the pair numbers consecutively instead of colliding.
+    const plan = planSectionInserts(TOC, [
+      section("ins-a", "b-0011"),
+      section("ins-b", "b-0011"),
+    ]);
+    expect(plan.sections.map((s) => [s.id, s.number])).toEqual([
+      ["ins-a", "3.1"],
+      ["ins-b", "3.2"],
+    ]);
+    // Existing siblings shift past BOTH inserts.
+    expect(plan.numberOverrides.get("ax-sec-3-1")).toBe("3.3");
+    expect(plan.numberOverrides.get("ax-sec-3-2")).toBe("3.4");
+  });
+
   it("records each op's position in the FULL edits array", () => {
     // The nav orders a heading against same-anchor activities/gates by this
     // index, so it must count non-section edits too.

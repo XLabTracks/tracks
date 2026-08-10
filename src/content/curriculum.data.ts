@@ -140,22 +140,19 @@ export const modules: Module[] = [
     trackId: "control",
     title: "Low-stakes control: sabotage, sandbagging, and elicitation",
     summary:
-      "The low-stakes regime, where catastrophe requires many weakly-incriminating actions: Hebbar's ControlConf talk, Redwood's methods for non-concentrated failures and analysis of sandbagging and exploration hacking, Carlsmith's \"no sandbagging on checkable tasks\" hypothesis, and four papers spanning adaptive deployment, capability elicitation, and sabotage evaluation.",
+      "The low-stakes regime, where catastrophe requires many weakly-incriminating actions: Hebbar's ControlConf talk, Redwood's methods for non-concentrated failures and analysis of sandbagging and exploration hacking, and papers spanning capability elicitation and auditing for research sabotage.",
     order: 5,
     prerequisiteModuleIds: ["c-intro", "c-mod2", "c-areas", "c-mod5"],
     itemIds: [
       "c-lowstakes-l1",
       "c-lowstakes-l2",
-      "c-paper-adaptive-deployment",
       "c-lowstakes-l3",
-      "c-lowstakes-l4",
       "c-paper-plm-guided",
-      "c-paper-password-locked",
       "c-paper-exploration-hacking",
-      "c-paper-sabotage-evals",
       "c-paper-auditing-sabotage-bench",
+      "c-paper-password-locked",
     ],
-    estimatedMinutes: 309,
+    estimatedMinutes: 225,
   },
   {
     // Outline-only closing module: three section markers the author will
@@ -561,14 +558,6 @@ export const lessons: Lesson[] = [
       "Misalignment and strategic underperformance: an analysis of sandbagging and exploration hacking",
     contentRef: "c-lowstakes-l3",
     estimatedMinutes: 24,
-  },
-  {
-    id: "c-lowstakes-l4",
-    slug: "no-sandbagging-on-checkable-tasks",
-    moduleId: "c-lowstakes",
-    title: "The “no sandbagging on checkable tasks” hypothesis",
-    contentRef: "c-lowstakes-l4",
-    estimatedMinutes: 19,
   },
   // Lessons embedded inside the guided password-locked-models paper
   // (c-paper-plm-guided) via Paper.edits activity insertions. Deliberately

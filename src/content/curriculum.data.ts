@@ -182,7 +182,6 @@ export const modules: Module[] = [
       "c-paper-csdf-guided",
       "c-mod6-l2",
       "c-paper-deals-schemers",
-      "c-paper-cooperating-unaligned",
       "c-paper-trade-barriers",
     ],
   },
@@ -500,6 +499,34 @@ export const lessons: Lesson[] = [
     moduleId: "c-next-steps",
     title: "Next Steps",
     contentRef: "c-mod6-l3",
+  },
+  // --- Control, module 6: lessons inserted into the deals-with-schemers
+  // paper (not in any itemIds — they render only inside the paper). Each
+  // carries condensed verbatim content from Finnveden's "Notes on
+  // cooperating with unaligned AIs", the reading they replaced. ---
+  {
+    id: "c-deals-ins-what-ais-want",
+    slug: "what-might-ais-want",
+    moduleId: "c-mod6",
+    title: "What might AIs want?",
+    contentRef: "c-deals-ins-what-ais-want",
+    estimatedMinutes: 6,
+  },
+  {
+    id: "c-deals-ins-payment",
+    slug: "paying-ais",
+    moduleId: "c-mod6",
+    title: "Paying AIs: structures and practice",
+    contentRef: "c-deals-ins-payment",
+    estimatedMinutes: 5,
+  },
+  {
+    id: "c-deals-ins-botec",
+    slug: "how-much-is-it-worth",
+    moduleId: "c-mod6",
+    title: "How much would this be worth?",
+    contentRef: "c-deals-ins-botec",
+    estimatedMinutes: 6,
   },
   // --- Control: every reproduced reading in module 1 (with permission from
   // Redwood Research) now renders through the paper reader as a Paper item in

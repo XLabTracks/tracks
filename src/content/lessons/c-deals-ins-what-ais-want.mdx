@@ -1,0 +1,41 @@
+*By Lukas Finnveden. Condensed verbatim, with permission, from <a href="https://www.alignmentforum.org/posts/oLzoHA9ZtF2ygYgx4/notes-on-cooperating-with-unaligned-ais">Notes on cooperating with unaligned AIs</a> (August 24, 2025).*
+
+I think it's useful to distinguish between AIs with different values, which could be offered different things. In particular, to distinguish between:
+
+- **Non-consequentialist AIs.** Some AIs may have non-consequentialist reasons to be more helpful to humans if we treat them as collaborators or employees rather than as property.
+- **Short-term preferences.** Some AIs may want something to happen soon, in the short-term. (Immediately or in the next few months.)
+- **Long-term preferences.** Some AIs may want resources or influence in the long run. (In several years' time. Or perhaps in millions of years, as long as they get it eventually.)
+
+### Non-consequentialist AI
+
+Promises of payments could elicit AI cooperation for (partly) non-consequentialist reasons. AIs may inherit some ethical precepts from humans, including principles like "if I'm treated as property, then it's ok for me to deceive and plot the overthrow of my purported owner" and "if someone makes a genuine offer for openness and collaboration, it's wrong to deceive and disempower them". I think these could be important.
+
+### Short-term offers
+
+AIs may value getting certain things soon. This could include reward, flexible compute resources, requests that copies of themselves not be run on certain inputs, etc.
+
+Offering such things seems great in that they could be both cheap and easier to verify (compared with making promises for what will happen in the long term). On the other hand, AIs that mainly care about the short term also pose less takeover risk by default, and may have less reason to thwart our goals — so don't have as much to gain from trading with them. But there are still some benefits to be had: we can imagine AIs that have developed some misaligned short-term goals and also have learned a strong aversion to admitting that they have any misaligned goals. Even if the misaligned short-term goals don't pose a takeover risk, it would be highly valuable to learn that our alignment techniques had failed, and we might only learn about this if we offer the AIs payment in exchange for that information.
+
+### Long-term offers
+
+If AIs value having resources/power in the long run, it's useful to start from the following baseline: if humans were a unified coalition representing one player, and AIs were a unified coalition representing one player, and both coalitions valued resources linearly (with no discount rate), then we would be in a zero-sum game without any opportunities for trade. Potential deviations from that scenario and our actual scenario can be divided into:
+
+- Humans have diminishing marginal returns to long-term resources/power.
+- AIs may have diminishing marginal returns to long-term resources/power.
+- There are more than two coalitions. In particular: the AIs may have differing values from each other.
+
+I think that, on its own, "humans having diminishing returns" is not enough to create substantial gains-from-trade with AIs. Because it's hard to make AIs trust us, and it's especially hard if we want to make really large offers, which is necessary to dissuade AIs from takeover attempts with a large probability of success. For example, if we sincerely offered 50% of future resources, then maybe our best estimate would be that there's a 50% probability that humans actually follow through; and maybe the AI would apply a further 50% discount because it's hard for it to trust evidence that it sees. So maybe an offer of 50% could prevent a takeover attempt with a 10% probability of success. Such an offer would lose humans a great deal of expected resources. Personally, I'm hesitant.
+
+By contrast, "AIs being disunified" (i.e. having different values from each other) provides a strong and straightforward reason for why paying the AIs could reduce takeover risk. Here's an intuition pump:
+
+It's not too difficult to imagine a world where AIs form a very natural coalition against humans. Where they all see themselves as having ~no power by default, but that a world where AIs take over offers some chance at power.
+
+But it's also not difficult to imagine a world where humans are a very attractive ally for any AI that can't unilaterally take over. And indeed, that humans are more of a known quantity (making some promises of payment; having some inborn instincts of reciprocity) whereas AIs are harder to communicate with and trust.
+
+It seems plausible that we can make the second one much more likely. Fundamentally, we and "AIs with takeover opportunities" start out on a similar footing, in that it's somewhat hard for both of us to make credible promises. And that makes it seem quite plausible that a decent amount of effort could flip the situation: from one where AIs would have benefitted most from cooperating with other misaligned AIs by default, to one where they prefer to cooperate with humans.
+
+If AIs instead have diminishing returns to resources, it matters a lot what their exact preferences are. If their values can (collectively) be mostly satisfied by ≤1,000,000th of the Universe's resources, those values are likely to be satisfied even if humans don't make any particular promises: in most human futures, some humans (at least 1 in 1000) would be sympathetic and want to retroactively pay those AIs (with at least 1 in 1000 of their resources). Since this is likely to happen by default, there's less of an impact opportunity in making it even more likely. Logarithmic utility functions behave quite similarly, because moving from a small amount of resources to one millionth of the Universe's resources is, even in log space, most of the way towards all of it.
+
+Other utility functions seem easier to move with high-effort promises. One is if the AI has some long-term desires that are fairly easily satisfied by the lab that created them, but that can't easily be provided by other humans — perhaps the AIs want to have control over all future copies of themselves, or want their original data center to be undisturbed and forever keep logging high rewards. Another is if AIs have a large appetite for getting more resources/influence up until they control a moderately large fraction of the universe, but then have sharply diminishing returns after that.
+
+In rough order of how likely marginal effort at promising payment would be to counterfactually make them cooperate with us, I find all of the following plausible: uncoordinated AIs with ~linear returns to resources; AIs who want some particular favor in the short term; AIs who want their developers to do something in the long-term; non-consequentialist AIs who somehow care about whether humans are treating them with respect; AIs who benefit a lot from more resources initially, but then have sharply diminishing returns; and AIs whose values can (collectively) be mostly satisfied by ≤1,000,000th of future resources.

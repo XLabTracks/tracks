@@ -159,7 +159,6 @@ export const modules: Module[] = [
       "c-paper-ctrl-z",
       "c-mod5-l3",
       "c-paper-settings-high-stakes",
-      "c-paper-ua-guided",
       "c-paper-legibility-guided",
     ],
   },

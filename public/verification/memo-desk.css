@@ -155,18 +155,45 @@
   color: var(--foreground);
 }
 
-.pins { display: grid; gap: 12px; margin-top: 20px; }
-/* [hidden] is display:none in the UA sheet, but the grid rule above outranks
-   it, so a non-memo genre that sets the attribute needs this to actually hide
-   the pins. */
-.pins[hidden] { display: none; }
-@media (min-width: 760px) { .pins { grid-template-columns: 1fr 1fr; } }
-.pin { display: grid; gap: 4px; }
-.pin:first-child { grid-column: 1 / -1; }
-.pk { font-family: var(--mono); font-size: var(--fs-2xs); letter-spacing: .04em; color: var(--muted-foreground); }
+/* ---------- the writer's two questions ----------
 
-input.pin-in, input.title-in, textarea.body-in {
+   These are not the memo, and the surest way to say so is to make them look
+   like a different kind of object: a form, with boxed fields, on the muted
+   ground the briefs use — against the letterhead below, which is ruled lines
+   on the page's own ground. Read before a word of it is read. Full hairline
+   on all four sides; the emphasis is in the type, not in a painted edge. */
+
+.deskq {
+  margin-top: 20px;
+  padding: 14px 16px 16px;
+  border: var(--hairline) solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--muted);
+}
+.deskq[hidden] { display: none; }
+.dqk {
+  font-family: var(--mono);
+  font-size: var(--fs-2xs);
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--muted-foreground);
+  margin-bottom: 12px;
+}
+.dqk-note {
+  display: block;
+  text-transform: none;
+  letter-spacing: 0;
+  margin-top: 3px;
+  font-size: var(--fs-xs);
+}
+.dq { display: grid; gap: 3px; }
+.dq + .dq { margin-top: 14px; }
+.dqq { font-family: var(--display); font-size: var(--fs-md); color: var(--foreground); }
+.dqh { font-size: var(--fs-xs); line-height: 1.5; color: var(--muted-foreground); }
+
+input.dq-in {
   width: 100%;
+  margin-top: 5px;
   padding: 8px 10px;
   border: var(--hairline) solid var(--border);
   border-radius: var(--radius-sm);
@@ -175,9 +202,95 @@ input.pin-in, input.title-in, textarea.body-in {
   font: inherit;
   font-size: var(--fs-md);
 }
-input.title-in { margin-top: 18px; font-family: var(--display); font-size: var(--fs-xl); }
+
+/* ---------- the letterhead ----------
+
+   The document's own head, and it reads as stationery: a caption, a rule, then
+   label-and-line rows in the order every reader of a memo already knows. The
+   inputs are ruled underlines rather than boxes — the memo is a page, not a
+   form, and the two blocks must never be mistaken for each other. */
+
+.letterhead { margin-top: 22px; }
+.lh-caption {
+  font-family: var(--mono);
+  font-size: var(--fs-2xs);
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  color: var(--muted-foreground);
+  padding-bottom: 8px;
+  border-bottom: var(--hairline) solid var(--border);
+}
+.lh-rows { display: grid; }
+.lh-row {
+  display: grid;
+  grid-template-columns: 72px minmax(0, 1fr);
+  align-items: baseline;
+  gap: 12px;
+  padding: 7px 0;
+  border-bottom: var(--hairline) solid var(--border);
+}
+.lhk {
+  font-family: var(--mono);
+  font-size: var(--fs-2xs);
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--muted-foreground);
+}
+input.lh-in {
+  width: 100%;
+  padding: 2px 0;
+  border: 0;
+  background: transparent;
+  color: var(--foreground);
+  font: inherit;
+  font-size: var(--fs-md);
+}
+/* The row carries the rule, so the field inside it must not draw a second one
+   when focused — the row lights instead. */
+input.lh-in:focus { outline: none; }
+.lh-row:focus-within { border-bottom-color: var(--primary); }
+.lh-row:focus-within .lhk { color: var(--foreground); }
+
+/* The button belongs beside the date, not stranded at the far end of the rule,
+   so the field takes a date's width rather than the whole row. */
+.lh-date { display: flex; flex-wrap: wrap; align-items: baseline; gap: 10px; min-width: 0; }
+.lh-date input.lh-in { flex: 0 1 16em; }
+.lh-today {
+  flex: none;
+  padding: 2px 8px;
+  border: var(--hairline) solid var(--border);
+  border-radius: var(--radius-xs);
+  background: transparent;
+  color: var(--muted-foreground);
+  font-family: var(--mono);
+  font-size: var(--fs-2xs);
+  cursor: pointer;
+}
+.lh-today:hover { background: var(--muted); color: var(--foreground); }
+
+/* The subject is the memo's loudest line — it is what a skim reads first — so
+   it sits below the rule at title scale. */
+.lh-subject { padding-top: 12px; border-bottom: 0; align-items: baseline; }
+.lh-subject .lhk { padding-top: 6px; }
+input.title-in { font-family: var(--display); font-size: var(--fs-xl); }
+
+/* A map, an essay or a red-line has no letterhead — the block collapses to its
+   last row and the title stands on its own, so one field serves every genre. */
+.letterhead.plain .lh-caption,
+.letterhead.plain .lh-rows,
+.letterhead.plain .lhk { display: none; }
+.letterhead.plain .lh-subject { display: block; padding-top: 0; }
+
 textarea.body-in {
-  margin-top: 10px;
+  width: 100%;
+  padding: 8px 10px;
+  border: var(--hairline) solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--background);
+  color: var(--foreground);
+  font: inherit;
+  font-size: var(--fs-md);
+  margin-top: 16px;
   min-height: 340px;
   line-height: 1.7;
   resize: vertical;

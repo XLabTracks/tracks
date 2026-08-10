@@ -1,8 +1,11 @@
 /* Memo desk — one drafting surface for every written output the track outline
    marks. Three mechanics, all honest: no model in the loop, no score.
 
-   1. Pinned fields — audience, decision, falsifier — the genre's
-      non-negotiables, structurally unskippable.
+   1. Two blocks that are not the same kind of thing, and are built to look it.
+      The letterhead — To, From, Date, Subject — is the document, and prints.
+      The two desk questions — what decision does this inform, what would
+      change my mind — are the writer's own, appear in no memo ever sent, and
+      are still unskippable: the checks fail without them.
    2. The skim test — renders what a reader in a hurry actually sees: the
       first sentence of each paragraph plus the **bold** lines.
    3. Genre checks — transparent rule-based heuristics, each naming its rule.
@@ -22,44 +25,52 @@ window.VTMemoDesk = (function () {
   var WPM = 220;
 
   /* What each genre's desk is. Absent (or unknown) is a memo — the full
-     instrument: the audience/decision/falsifier pins, the "recommendation"
-     title, the memo checks, the steelman deck. A map, an essay or a red-line is
-     not a memo and must not be dressed as one, so those pins and checks go off
+     instrument: the letterhead, the two desk questions, the "recommendation"
+     subject line, the memo checks, the steelman deck. A map, an essay or a
+     red-line is not a memo and must not be dressed as one, so those go off
      and a one-line note says so, so their absence reads as intent rather than a
      missing feature. Which slot is which is data (memos.ts → data/memos.js);
-     this is only how the desk renders each. */
+     this is only how the desk renders each.
+
+     `letterhead` and `questions` move together on every genre we have, and are
+     still two flags rather than one: they gate two different things. The
+     letterhead is the document's own head, printed and read; the questions are
+     the writer's, and no genre that drops the memo's form necessarily drops
+     the obligation to know what decision it informs. Splitting them is what
+     lets that be decided per genre later, in the data, rather than by
+     untangling this. */
   var GENRE = {
     memo: {
-      pins: true,
-      title: 'Title — the recommendation, not the topic',
+      letterhead: true,
+      questions: true,
+      title: 'Subject — the recommendation, not the topic',
       checks: 'memo',
       steelman: true,
-      skimDecision: true,
       hint: '',
     },
     map: {
-      pins: false,
+      letterhead: false,
+      questions: false,
       title: 'Title — what this map is of',
       checks: 'none',
       steelman: false,
-      skimDecision: false,
-      hint: 'This output is a map, not a memo — build it as annotated rows, not paragraphs, carrying what the brief above asks each row to hold. The memo’s audience, decision and falsifier pins and its prose checks are off here.',
+      hint: 'This output is a map, not a memo — build it as annotated rows, not paragraphs, carrying what the brief above asks each row to hold. The memo’s letterhead, its two desk questions and its prose checks are off here.',
     },
     essay: {
-      pins: false,
+      letterhead: false,
+      questions: false,
       title: 'Title — your thesis, not the topic',
       checks: 'prose',
       steelman: false,
-      skimDecision: false,
-      hint: 'This output is an essay, not a memo — argue a thesis rather than issue a recommendation. The audience, decision and falsifier pins are off; the general legibility checks stay.',
+      hint: 'This output is an essay, not a memo — argue a thesis rather than issue a recommendation. The letterhead and the two desk questions are off; the general legibility checks stay.',
     },
     redline: {
-      pins: false,
+      letterhead: false,
+      questions: false,
       title: 'Title — the provision you are redrafting',
       checks: 'none',
       steelman: false,
-      skimDecision: false,
-      hint: 'This output is a red-line, not a memo: mark the article’s gaps and redraft the provision, following the brief above. The memo’s audience, decision and falsifier pins are off; peer review runs on the criteria in the check rail.',
+      hint: 'This output is a red-line, not a memo: mark the article’s gaps and redraft the provision, following the brief above. The memo’s letterhead and its two desk questions are off; peer review runs on the criteria in the check rail.',
     },
   };
   function genreOf(s) { return (s && GENRE[s.genre]) || GENRE.memo; }
@@ -80,19 +91,49 @@ window.VTMemoDesk = (function () {
       '<p class="slot-meta" id="slotMeta"></p>',
       '<div id="slotBrief"></div>',
       '<div class="genre-hint" id="genreHint" hidden></div>',
-      '<div class="pins" id="pins">',
-        '<label class="pin"><span class="pk">To &mdash; a specific audience</span>',
-          '<input id="fAudience" class="pin-in" type="text" autocomplete="off"',
-          ' placeholder="e.g. the US delegation\'s technical adviser; the lab\'s policy lead…"></label>',
-        '<label class="pin"><span class="pk">Decision this informs</span>',
-          '<input id="fDecision" class="pin-in" type="text" autocomplete="off"',
-          ' placeholder="what the reader should do differently after reading"></label>',
-        '<label class="pin"><span class="pk">What would change my mind</span>',
-          '<input id="fFalsifier" class="pin-in" type="text" autocomplete="off"',
-          ' placeholder="the evidence that would flip your recommendation"></label>',
+
+      /* Two questions the memo has to survive, asked before it is written and
+         printed in no memo anywhere. They used to sit in the same block as the
+         reader — three fields with matching labels, which taught that a memo
+         has a "Decision this informs" line. It does not. So they are asked in
+         the second person, with their own note saying where they do and do not
+         go, and the document below starts at the letterhead. */
+      '<div class="deskq" id="deskQuestions">',
+        '<p class="dqk">Before you write',
+          '<span class="dqk-note">Answer both. Neither appears in the memo — they are what it has to survive.</span></p>',
+        '<label class="dq"><span class="dqq">What decision does this inform?</span>',
+          '<span class="dqh">The reader\'s next move — what they do differently once they have read it.</span>',
+          '<input id="fDecision" class="dq-in" type="text" autocomplete="off"',
+          ' placeholder="e.g. whether to co-sponsor the reporting amendment this session"></label>',
+        '<label class="dq"><span class="dqq">What would change my mind?</span>',
+          '<span class="dqh">The evidence that would flip your recommendation. Name it before you argue, not after.</span>',
+          '<input id="fFalsifier" class="dq-in" type="text" autocomplete="off"',
+          ' placeholder="e.g. an independent replication showing the gap closes without the mandate"></label>',
       '</div>',
-      '<input id="fTitle" class="title-in" type="text" autocomplete="off"',
-      ' placeholder="Title — the recommendation, not the topic">',
+
+      /* The document's own head. On a memo it is stationery — To, From, Date,
+         Subject, in that order, because that is the order every reader of one
+         has already learned. On the other genres the whole block collapses to
+         its last row and the title stands alone (class `plain`), so there is
+         one title field on every genre and no second copy to keep in step. */
+      '<div class="letterhead" id="letterhead">',
+        '<p class="lh-caption">Memorandum</p>',
+        '<div class="lh-rows" id="lhRows">',
+          '<label class="lh-row"><span class="lhk">To</span>',
+            '<input id="fAudience" class="lh-in" type="text" autocomplete="off"',
+            ' placeholder="a named reader — the US delegation\'s technical adviser; the lab\'s policy lead"></label>',
+          '<label class="lh-row"><span class="lhk">From</span>',
+            '<input id="fFrom" class="lh-in" type="text" autocomplete="off"',
+            ' placeholder="you, and the desk you write from"></label>',
+          '<label class="lh-row"><span class="lhk">Date</span>',
+            '<span class="lh-date"><input id="fDate" class="lh-in" type="text" autocomplete="off"',
+            ' placeholder="the day it lands on the desk">',
+            '<button type="button" class="lh-today" id="dateToday">today</button></span></label>',
+        '</div>',
+        '<label class="lh-row lh-subject"><span class="lhk" id="lhSubjectKey">Subject</span>',
+          '<input id="fTitle" class="lh-in title-in" type="text" autocomplete="off"',
+          ' placeholder="Subject — the recommendation, not the topic"></label>',
+      '</div>',
       '<textarea id="fBody" class="body-in" placeholder="Write it. Markdown **bold** survives the skim — use it on the lines that must.&#10;&#10;Paragraph rule of thumb: the first sentence carries the point; a skimming reader gets nothing else."></textarea>',
       '<div class="desk-tools">',
         '<div class="budget"><span class="mono" id="wordCount">0 words</span>',
@@ -110,7 +151,7 @@ window.VTMemoDesk = (function () {
     '<aside class="check-rail">',
       '<div class="modes" role="tablist" aria-label="Rail mode">',
         '<button type="button" class="mode" id="modeWrite" role="tab" aria-selected="true" aria-controls="paneWrite">Desk checks</button>',
-        '<button type="button" class="mode" id="modeSkim" role="tab" aria-selected="false" aria-controls="paneSkim">Skim test</button>',
+        '<button type="button" class="mode" id="modeSkim" role="tab" aria-selected="false" aria-controls="paneSkim">Skim test &mdash; 90 seconds</button>',
       '</div>',
       '<div id="paneWrite" role="tabpanel" aria-labelledby="modeWrite">',
         '<div class="rail-card"><p class="rk">Genre checks',
@@ -120,7 +161,7 @@ window.VTMemoDesk = (function () {
           '<p class="rk">Peer review runs on <span class="rk-note">the outline\'s criteria for this slot</span></p>',
           '<ul id="criteriaList" style="margin-left:18px;font-size:13px;line-height:1.6"></ul></div>',
         '<div class="rail-card" id="steelmanCard"><p class="rk">Steelman deck <span class="rk-note">contested claims get challenged, not narrated</span></p>',
-          '<p class="deck-card" id="deckCard">Draw a challenge and answer it inside the memo — or in the falsifier field.</p>',
+          '<p class="deck-card" id="deckCard">Draw a challenge and answer it inside the memo — or in what would change your mind.</p>',
           '<button type="button" class="tool" id="deckBtn">Draw a challenge</button></div>',
       '</div>',
       '<div id="paneSkim" role="tabpanel" aria-labelledby="modeSkim" hidden>',
@@ -155,8 +196,11 @@ window.VTMemoDesk = (function () {
     host.innerHTML = TEMPLATE;
 
     var el = function (id) { return host.querySelector('#' + id); };
+    /* Keys are the store's field names, so save() and every load can walk this
+       object rather than list the fields a third time. */
     var F = {
-      audience: el('fAudience'), decision: el('fDecision'), falsifier: el('fFalsifier'),
+      audience: el('fAudience'), from: el('fFrom'), date: el('fDate'),
+      decision: el('fDecision'), falsifier: el('fFalsifier'),
       title: el('fTitle'), body: el('fBody'),
     };
     if (!F.body) return null;
@@ -180,7 +224,7 @@ window.VTMemoDesk = (function () {
   SLOTS.forEach(function (s) { byId[s.id] = s; });
   var current = SLOTS[0];
   var CHECKS = 'memo';
-  var SKIM_DECISION = true;
+  var HAS_LETTERHEAD = true;
 
   /* ---------- storage ---------- */
 
@@ -294,16 +338,21 @@ window.VTMemoDesk = (function () {
     }
   }
 
-  /* Re-dress the desk for the current slot's genre: a non-memo hides the pins
-     and the steelman deck, swaps the title's coaching line, and switches which
-     checks the rail runs. Runs on every select, so navigating re-dresses. */
+  /* Re-dress the desk for the current slot's genre: a non-memo collapses the
+     letterhead, hides the desk questions and the steelman deck, swaps the
+     title's coaching line, and switches which checks the rail runs. Runs on
+     every select, so navigating re-dresses. */
   function applyGenre() {
     var g = genreOf(current);
-    el('pins').hidden = !g.pins;
+    /* `plain` collapses the stationery to its last row rather than hiding the
+       block: the subject field IS the title field, so there is one of them on
+       every genre and nothing to keep in step. */
+    el('letterhead').classList.toggle('plain', !g.letterhead);
+    el('deskQuestions').hidden = !g.questions;
     el('steelmanCard').hidden = !g.steelman;
     F.title.placeholder = g.title;
     CHECKS = g.checks;
-    SKIM_DECISION = g.skimDecision;
+    HAS_LETTERHEAD = g.letterhead;
     var hint = el('genreHint');
     hint.innerHTML = g.hint || '';
     hint.hidden = !g.hint;
@@ -342,19 +391,34 @@ window.VTMemoDesk = (function () {
       return;
     }
 
-    /* The reader / decision / falsifier trio is the memo's contract; the prose
-       genres argue a thesis and have no recommendation to pin. */
+    /* The letterhead is the document's contract and the two questions are the
+       writer's, so they are checked as what they are: one row for the head,
+       naming whichever lines are still blank, and one row each for the
+       questions — which are the pedagogy, and never collapse into a list. The
+       prose genres have no letterhead and no recommendation to pin. */
     if (CHECKS === 'memo') {
-    row(F.audience.value.trim() ? 'ok' : 'bad', F.audience.value.trim()
-      ? 'Reader named.'
-      : '<b>No reader.</b> A memo addressed to nobody is the genre’s standard failure.');
-    row(F.decision.value.trim() ? 'ok' : 'bad', F.decision.value.trim()
-      ? 'Decision named.'
-      : '<b>No decision.</b> What should the reader do differently after reading?');
-    row(F.falsifier.value.trim() ? 'ok' : 'warn', F.falsifier.value.trim()
-      ? 'Falsifier stated — analytical, not persuasive.'
-      : '<b>No falsifier.</b> State what would change your mind; it is the track’s signature move.');
+      var head = [
+        { k: 'audience', word: 'To' }, { k: 'from', word: 'From' },
+        { k: 'date', word: 'Date' }, { k: 'title', word: 'Subject' },
+      ];
+      var blank = head.filter(function (h) { return !F[h.k].value.trim(); });
+      var noReader = !F.audience.value.trim();
+      row(blank.length === 0 ? 'ok' : (noReader ? 'bad' : 'warn'),
+        blank.length === 0
+          ? 'Letterhead complete — To, From, Date, Subject.'
+          : (noReader
+            ? '<b>No reader.</b> A memo addressed to nobody is the genre’s standard failure. Still blank: ' +
+              blank.map(function (h) { return h.word; }).join(', ') + '.'
+            : '<b>Letterhead incomplete:</b> ' +
+              blank.map(function (h) { return h.word; }).join(', ') +
+              '. A memo that reaches a desk carries all four.'));
 
+      row(F.decision.value.trim() ? 'ok' : 'bad', F.decision.value.trim()
+        ? 'You have named the decision this informs.'
+        : '<b>You have not said what decision this informs.</b> What does the reader do differently after reading?');
+      row(F.falsifier.value.trim() ? 'ok' : 'warn', F.falsifier.value.trim()
+        ? 'You have named what would change your mind — analytical, not persuasive.'
+        : '<b>You have not said what would change your mind.</b> It is the track’s signature move.');
     }
 
     if (n === 0) { render(out); return; }
@@ -423,12 +487,28 @@ window.VTMemoDesk = (function () {
       return '<p>' + inline(parts[0]) + (parts[1] ? '<span class="ghost">' + inline(parts[1]) + '</span>' : '') + '</p>';
     }).join('');
     var secs = Math.round((kept / WPM) * 60);
+    /* Against a budget, not as a bare reading time. Ninety seconds is the
+       prototype's figure and is what makes this a test rather than a readout:
+       a number with nothing to exceed passes silently at any length. */
     el('skimStats').textContent =
-      'the skim keeps ' + kept + ' of ' + words(body) + ' words · about ' + secs + 's of reading';
+      'the skim keeps ' + kept + ' of ' + words(body) + ' words · about ' + secs +
+      's of a 90s budget' + (secs > 90 ? ' — over' : '');
+    /* What the reader sees is the letterhead and the prose. It used to print
+       "decision: …" here, which is the writer's own note and reaches no reader
+       alive — the one panel on the desk that simulates being read was showing
+       something unreadable. The head is built from whatever is filled, so a
+       half-written letterhead skims as the half a reader would get. */
+    var head = '';
+    if (HAS_LETTERHEAD) {
+      var bits = [];
+      if (F.audience.value.trim()) bits.push('To ' + esc(F.audience.value));
+      if (F.from.value.trim()) bits.push('From ' + esc(F.from.value));
+      if (F.date.value.trim()) bits.push(esc(F.date.value));
+      if (bits.length) head = '<div class="s-meta">' + bits.join(' · ') + '</div>';
+    }
     out.innerHTML =
       (F.title.value.trim() ? '<div class="s-title">' + esc(F.title.value) + '</div>' : '') +
-      (SKIM_DECISION && F.decision.value.trim() ? '<div class="s-meta">decision: ' + esc(F.decision.value) + '</div>' : '') +
-      html;
+      head + html;
   }
 
   /* ---------- steelman deck ---------- */
@@ -476,16 +556,36 @@ window.VTMemoDesk = (function () {
       '_' + current.unit + ' — ' + current.title + ' · module ' + current.module + '_',
       '',
     ];
-    /* The pinned fields are part of a memo's document; a map or an essay never
-       filled them, so they do not belong in that export. */
-    if (genreOf(current).pins) {
+    /* The letterhead is the document and prints as one; a map or an essay
+       never filled it, so it does not belong in that export. */
+    var g = genreOf(current);
+    if (g.letterhead) {
       lines.push(
         '**To:** ' + (F.audience.value.trim() || '—'),
-        '**Decision this informs:** ' + (F.decision.value.trim() || '—'),
-        '**What would change my mind:** ' + (F.falsifier.value.trim() || '—'),
+        '**From:** ' + (F.from.value.trim() || '—'),
+        '**Date:** ' + (F.date.value.trim() || '—'),
+        '**Subject:** ' + (F.title.value.trim() || '—'),
+        '',
+        '---',
         '');
     }
     lines.push(F.body.value.trim(), '');
+
+    /* The two questions are not part of the memo, and the export is also how a
+       draft reaches a peer reviewer — dropping them would lose the writer's
+       work, printing them inline would teach the thing the desk exists to
+       unteach. So: below the document, behind a rule, named as notes. */
+    if (g.questions && (F.decision.value.trim() || F.falsifier.value.trim())) {
+      lines.push(
+        '---',
+        '',
+        '_Desk notes — the writer’s own questions. Not part of the memo._',
+        '',
+        '**What decision does this inform?** ' + (F.decision.value.trim() || '—'),
+        '',
+        '**What would change my mind?** ' + (F.falsifier.value.trim() || '—'),
+        '');
+    }
     var md = lines.join('\n');
     var a = document.createElement('a');
     a.href = URL.createObjectURL(new Blob([md], { type: 'text/markdown;charset=utf-8' }));
@@ -504,6 +604,20 @@ window.VTMemoDesk = (function () {
     el('modeSkim').setAttribute('aria-selected', String(skimMode));
     if (skimMode) skim();
   }
+
+  /* A memo carries the day it landed, so the date is worth one tap — but it is
+     typed, never prefilled: a date nobody chose is content the desk invented,
+     and it would also mark an untouched slot as drafted just for being opened.
+     Long form because "10/08/2026" is a different day either side of the
+     Atlantic and these memos are addressed across it. */
+  el('dateToday').addEventListener('click', function () {
+    F.date.value = new Date().toLocaleDateString('en-GB', {
+      day: 'numeric', month: 'long', year: 'numeric',
+    });
+    save(); lint();
+    if (!el('paneSkim').hidden) skim();
+    F.date.focus();
+  });
 
   Object.keys(F).forEach(function (k) {
     F[k].addEventListener('input', function () {

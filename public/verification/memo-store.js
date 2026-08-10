@@ -28,7 +28,19 @@ window.VTMemoStore = window.VTMemoStore || (function () {
 
   const KEY = 'xlab-verification-memo-desk.v1';
   const SAVE_MS = 300;
-  const FIELDS = ['audience', 'decision', 'falsifier', 'title', 'body'];
+
+  /* Two groups sharing one record, and the split is the point.
+     `audience`/`from`/`date`/`title` are the memo's letterhead — To, From,
+     Date, Subject — and they are the document. `decision`/`falsifier` are the
+     desk's two questions to the writer and appear in no memo ever written.
+     `title` keeps its name because it is a slot's title on the non-memo
+     genres too, and because renaming a stored field orphans every draft.
+
+     Appending to this list is safe in both directions: read() defaults a
+     missing field to '', so a draft written before FROM and DATE existed
+     loads intact, and a draft written after them opens on an older build
+     with those two ignored rather than lost. */
+  const FIELDS = ['audience', 'from', 'date', 'decision', 'falsifier', 'title', 'body'];
 
   let timer = null;
   const listeners = [];

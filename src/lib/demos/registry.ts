@@ -37,6 +37,7 @@ import { DealCoalitionRoutesDemo } from "@/components/demos/deal-coalition-route
 import { CoopBotecDemo } from "@/components/demos/coop-botec-demo";
 import { CoopAtLeastOneDemo } from "@/components/demos/coop-at-least-one-demo";
 import { PaymentMapDemo } from "@/components/demos/payment-map-demo";
+import { DetectionRaceDemo } from "@/components/demos/detection-race-demo";
 
 // Central demo registry — the single integration point. Reference a demo by ID
 // from MDX (<Demo id="…"/>), the gallery, standalone pages, or embeds.
@@ -328,6 +329,14 @@ export const demoRegistry: Record<string, DemoDefinition> = {
       "Possible payouts mapped on two axes — freedom of spending and long-term influence — with the taxonomy's examples in each quadrant, and toggles showing which payouts appeal to which AI motivations.",
     component: PaymentMapDemo,
     tags: ["control", "deals"],
+  },
+  "detection-race": {
+    id: "detection-race",
+    title: "The detection race: concentrated vs diffuse failures",
+    description:
+      "A schemer needs C bad actions for catastrophe; each has chance q of being noticed and a response fires at the K-th notice. Drag the three levers to see who wins the race, the expected damage bill, and the three regimes from the post.",
+    component: DetectionRaceDemo,
+    tags: ["control", "low-stakes"],
   },
 };
 

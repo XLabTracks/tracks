@@ -49,7 +49,89 @@ export const ORG_MARKS: OrgMark[] = [
   { id: "caisi", tokens: ["CAISI"], label: "US CAISI (NIST)", short: "CAISI", icon: "nist.ico" },
   { id: "ukaisi", tokens: ["UK AI Security Institute"], label: "UK AI Security Institute", short: "UK AISI", icon: "ukaisi.png" },
   { id: "intl-aisi", tokens: ["International Network of AI Safety"], label: "International Network of AI Safety Institutes", short: "Int’l Network" },
+
+  /* Named by CELL_ORGS rather than by a token hit in the authored text (see
+     below). Tokens are still full names, never acronyms, so that if a future
+     effort string does name one of these the match is the right one. */
+  { id: "fas", tokens: ["Federation of American Scientists"], label: "Federation of American Scientists", short: "FAS" },
+  { id: "iea", tokens: ["International Energy Agency"], label: "International Energy Agency", short: "IEA" },
+  { id: "ezkl", tokens: ["EZKL"], label: "EZKL", short: "EZKL" },
+  { id: "modulus", tokens: ["Modulus Labs"], label: "Modulus Labs", short: "Modulus Labs" },
+  { id: "giza", tokens: ["Giza"], label: "Giza", short: "Giza" },
+  { id: "cser", tokens: ["Centre for the Study of Existential Risk"], label: "Centre for the Study of Existential Risk, Cambridge", short: "CSER" },
+  { id: "fli", tokens: ["Future of Life Institute"], label: "Future of Life Institute", short: "FLI" },
+  { id: "chatham", tokens: ["Chatham House"], label: "Chatham House", short: "Chatham House" },
+  { id: "simon", tokens: ["Simon Institute"], label: "Simon Institute for Longterm Governance", short: "Simon Inst." },
+  { id: "crfm", tokens: ["Center for Research on Foundation Models"], label: "Stanford CRFM / HAI", short: "Stanford CRFM" },
+  { id: "mlcommons", tokens: ["MLCommons"], label: "MLCommons", short: "MLCommons" },
+  { id: "cosic", tokens: ["COSIC"], label: "COSIC, KU Leuven", short: "COSIC" },
+  { id: "cacr", tokens: ["Centre for Applied Cryptographic Research"], label: "CACR, University of Waterloo", short: "Waterloo CACR" },
 ];
+
+/**
+ * Who works in a cell, where the authored effort text does not happen to name
+ * them.
+ *
+ * The token matcher above can only find an org that the curriculum sentence
+ * already spells out, so a cell whose efforts read "Hardware-security research"
+ * or "Remote sensing of compute" showed no one at all — true of most of the
+ * grid. These are the same kind of illustrative example the authored `eff`
+ * entries carry, held here rather than there so `verification-landscape.ts`
+ * stays exactly as authored.
+ *
+ * VERIFICATION LOG. Every entry below was checked against a named public source
+ * in Aug 2026; the rows this does NOT cover are listed as `unchecked` and are
+ * deliberately left blank rather than guessed at.
+ *
+ *   confirmed  monitor×think   FAS "Tracking Hyperscale AI Data Center Growth
+ *                              with Satellite Imagery"; Epoch AI Frontier Data
+ *                              Centers Hub (Nov 2025), satellite + permit data.
+ *   confirmed  monitor×gov     IEA satellite-based tracking of "AI factories"
+ *                              (capacity more than tripled in 18 months).
+ *   confirmed  crypto×industry EZKL (ONNX→Halo2 zk-SNARK toolchain), Modulus
+ *                              Labs, Giza — the three most-cited zkML toolchains.
+ *   confirmed  inst×think      FLI "IAEA and CERN for AI" grant programme;
+ *                              Chatham House "A 'CERN for AI'" (2024); Simon
+ *                              Institute "CERN for AI: One Analogy, Many Visions".
+ *   confirmed  inst×acad       CSER Cambridge — Belfield's paired proposal for
+ *                              an International AI Agency plus a CERN for AI.
+ *   confirmed  evals×acad      Stanford CRFM/HAI (HELM); MLCommons AI Safety
+ *                              working group, built on HELM.
+ *   partial    crypto×acad     COSIC (KU Leuven) and Waterloo CACR are confirmed
+ *                              as leading academic ZKP groups; NOT verified as
+ *                              working on AI-governance verification specifically.
+ *
+ *   unchecked  hw×acad         Searching found no flagship lab — the literature
+ *                              describes this work as something that *could* be
+ *                              outsourced to academic hardware-security labs,
+ *                              which matches the cell's own "thin but real"
+ *                              text. Left blank on purpose, not by omission.
+ *   unchecked  crypto×think, compute×acad, compute×industry, monitor×acad,
+ *              monitor×industry, evals×industry — not yet researched.
+ *
+ *   n/a        crypto×gov      Stays empty BY DESIGN. `gap: true`, and the
+ *                              widget's own footer is built on it: "the
+ *                              cryptographic ones ... sit mostly in academic
+ *                              papers with no public-sector home." Filling this
+ *                              square would delete the map's punchline.
+ */
+export const CELL_ORGS: Record<string, Record<string, string[]>> = {
+  crypto: {
+    acad: ["cosic", "cacr"],
+    industry: ["ezkl", "modulus", "giza"],
+  },
+  monitor: {
+    think: ["fas", "epoch"],
+    gov: ["iea"],
+  },
+  inst: {
+    acad: ["cser"],
+    think: ["fli", "chatham", "simon"],
+  },
+  evals: {
+    acad: ["crfm", "mlcommons"],
+  },
+};
 
 const ICON_BASE = "/verification/logos/icons/";
 
@@ -78,6 +160,22 @@ export function marksForEffs(effs: readonly [string, string][]): OrgMark[] {
     }
   }
   return out;
+}
+
+/**
+ * Everyone the grid should show in one cell: the orgs the authored effort text
+ * names, plus the ones CELL_ORGS names for it. Registry order throughout, so a
+ * cell's list does not reshuffle when an entry is added above it.
+ */
+export function marksForCell(
+  rowKey: string,
+  colKey: string,
+  effs: readonly [string, string][],
+): OrgMark[] {
+  const extra = CELL_ORGS[rowKey]?.[colKey] ?? [];
+  if (!extra.length) return marksForEffs(effs);
+  const ids = new Set([...marksForEffs(effs).map((m) => m.id), ...extra]);
+  return ORG_MARKS.filter((m) => ids.has(m.id));
 }
 
 /**

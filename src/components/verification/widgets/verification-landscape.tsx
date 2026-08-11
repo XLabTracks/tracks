@@ -11,7 +11,7 @@ import {
   LANDSCAPE_ROWS as ROWS,
   type LandscapeCell,
 } from "@/lib/verification/data/verification-landscape";
-import { marksForEffs } from "@/lib/verification/data/landscape-logos";
+import { marksForCell } from "@/lib/verification/data/landscape-logos";
 import type { VerificationWidgetProps } from "../kit/types";
 
 /**
@@ -96,7 +96,7 @@ export function VerificationLandscape(_: VerificationWidgetProps) {
                 const d = CELLS[r.key][c.key];
                 const active =
                   sel?.kind === "cell" && sel.ri === ri && sel.ci === ci;
-                const orgs = marksForEffs(d.eff);
+                const orgs = marksForCell(r.key, c.key, d.eff);
                 const onDark = d.i >= 2;
                 return (
                   <button

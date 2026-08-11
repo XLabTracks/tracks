@@ -331,6 +331,14 @@
         "label": "An overview of areas of control work (Redwood Research)",
         "url": "https://blog.redwoodresearch.org/p/an-overview-of-areas-of-control-work"
       }
+    },
+    {
+      "id": "securitization",
+      "term": "securitization",
+      "aliases": ["securitize", "securitizes", "securitized", "securitizing"],
+      "definition": "Treating an issue as an existential threat, and thus a top policy priority. In the Copenhagen School's account (Buzan, Wæver, and de Wilde), an actor securitizes an issue by casting it as an existential threat to something a community values — and that framing, once an audience accepts it, unlocks powers that ordinary politics would refuse.",
+      "seeAlso": ["x-risk"],
+      "autoGloss": true
     }
   ]
 }

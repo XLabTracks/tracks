@@ -281,6 +281,15 @@ the caveat described a state that no longer exists. The body is the PDF
 verbatim, including the opening credit line ("Inspired by …", linked to the
 LessWrong post at the author's instruction — the URL came from her, not a
 guess; the outline itself carries none). The outline's closing
-`[pop-up box: The Risks of Securitization …]` marker became a `<PopUp>` per
-the house rule (2.2.1's visibility layers are the pattern). No structural
-change: same lesson id, slug, title and contentRef, so no course.js regen.
+`[pop-up box: The Risks of Securitization …]` marker became a `<Fold>` on the
+author's instruction — first rendered as a `<PopUp>` dialog, then changed the
+same day because she wanted it reading as an add-on to the essay when opened,
+not a modal over it. No structural change: same lesson id, slug, title and
+contentRef, so no course.js regen.
+
+"Securitize" also entered the glossary on her instruction (`securitization`,
+autoGloss, aliases covering the verb forms). The definition is stitched from
+the author's own 0.3.1 prose — the Copenhagen School sentence — plus the
+Fold's own apposition ("treating it as an existential risk and thus a top
+policy priority"), not drafted fresh; flag it to her for review anyway, since
+glossary copy is curriculum.

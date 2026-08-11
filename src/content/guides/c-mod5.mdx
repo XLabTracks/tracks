@@ -1,0 +1,81 @@
+## Session goal
+
+By the end of the meeting, each participant can say what makes a threat
+high-stakes, walk the rogue-deployment threat model on a whiteboard, and
+explain what resampling adds to blocking as a response to a caught attack. The
+session assumes participants have watched
+[the opening talk](/tracks/control/module-4/high-stakes-control-talk) and read
+at least the first outline section.
+
+## Before the session
+
+- Skim the three outline lessons
+  ([what counts as high stakes](/tracks/control/module-4/what-is-high-stakes),
+  [monitoring and mitigation](/tracks/control/module-4/monitoring-and-mitigation),
+  [environment construction](/tracks/control/module-4/environment-construction))
+  and the readings under each, so you can route questions to sources.
+- Open [the defer-to-resample demo](/demos/defer-to-resample) and try each
+  readout once; you will drive it on a shared screen.
+- If you run a classroom, check the dashboard for who reached the two guided
+  walkthroughs
+  ([untrusted advice](/tracks/control/module-4/untrusted-advice-guided),
+  [legibility protocols](/tracks/control/module-4/legibility-guided)); the
+  debrief block works best with at least two finishers per group.
+
+## Agenda
+
+### Warm-up: what is high stakes? (10 min)
+
+Ask the room for failures from earlier modules and sort them live into
+high-stakes and low-stakes columns on the whiteboard, using the definition from
+[the win-continue-lose reading](/tracks/control/module-4/win-continue-lose).
+Disputed placements are the interesting ones — let the room argue them.
+
+### Rogue deployments on the whiteboard (15 min)
+
+Have one participant draw the threat model from
+[the rogue deployments reading](/tracks/control/module-4/rogue-deployments)
+from memory while the room corrects. Then add where
+[internal deployments via external APIs](/tracks/control/module-4/rogue-internal-deployments-via-external-apis)
+fit on the drawing.
+
+Prompt: "Which arrow on this drawing would you monitor first, and what would
+that monitor actually see?"
+
+### Resampling, live (15 min)
+
+Step through [the defer-to-resample demo](/demos/defer-to-resample) on the
+shared screen. Before each readout, ask the room to predict whether the
+protocol wins, continues, or loses, and why. Connect the mechanics back to
+[the Ctrl-Z reading](/tracks/control/module-4/ctrl-z-resampling).
+
+### Walkthrough debrief (15 min)
+
+In two groups, one per guided walkthrough
+([untrusted advice](/tracks/control/module-4/untrusted-advice-guided),
+[legibility protocols](/tracks/control/module-4/legibility-guided)): each group
+reconstructs the decision it was forced to make and reports whether the
+walkthrough's evidence changed its members' initial choice. Compare the two —
+one is argued, one is measured.
+
+### Wrap-up (5 min)
+
+Each participant names the mitigation from this module they'd implement first
+in a real lab, in one sentence. Collect open questions.
+
+## Common sticking points
+
+- "High stakes" gets read as "high importance". Send the room back to the
+  definition in the first outline section: it is about what one uncaught
+  action can do.
+- The rogue-deployment drawing sprawls. Keep the whiteboard version to the
+  boxes and arrows the reading itself names.
+- The demo invites button-mashing. Force a prediction before every readout;
+  the prediction, not the readout, is the exercise.
+
+## After the session
+
+- On the classroom dashboard, check who completed the two guided walkthroughs
+  after the meeting; the debrief usually motivates the holdouts.
+- The module's readings carry spaced-repetition recall cards; remind
+  participants that the review tab resurfaces what this session touched.

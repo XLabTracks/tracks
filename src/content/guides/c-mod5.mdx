@@ -24,44 +24,92 @@ at least the first outline section.
 
 ## Agenda
 
-### Warm-up: what is high stakes? (10 min)
+Times are a running clock for a 60-minute session; if a block runs over, take
+the time from the resampling block — the walkthrough debrief needs its full
+fifteen minutes.
 
-Ask the room for failures from earlier modules and sort them live into
-high-stakes and low-stakes columns on the whiteboard, using the definition from
-[the win-continue-lose reading](/tracks/control/module-4/win-continue-lose).
-Disputed placements are the interesting ones — let the room argue them.
+### Warm-up: what is high stakes? (0:00–0:10)
 
-### Rogue deployments on the whiteboard (15 min)
+- **0:00–0:03** — settle in; draw two empty columns (high-stakes /
+  low-stakes) on the whiteboard.
+- **0:03–0:08** — the room supplies failures from earlier modules; sort them
+  live into the columns using the definition from
+  [the win-continue-lose reading](/tracks/control/module-4/win-continue-lose).
+- **0:08–0:10** — argue the disputed placements; those are the interesting
+  ones.
 
-Have one participant draw the threat model from
-[the rogue deployments reading](/tracks/control/module-4/rogue-deployments)
-from memory while the room corrects. Then add where
-[internal deployments via external APIs](/tracks/control/module-4/rogue-internal-deployments-via-external-apis)
-fit on the drawing.
+Prompts:
 
-Prompt: "Which arrow on this drawing would you monitor first, and what would
-that monitor actually see?"
+- "What one feature of this failure decides its column?"
+- "Can the same failure sit in different columns at different labs? What
+  changed?"
+- If sorting is too easy: "Construct a failure that genuinely straddles the
+  line."
 
-### Resampling, live (15 min)
+### Rogue deployments on the whiteboard (0:10–0:25)
 
-Step through [the defer-to-resample demo](/demos/defer-to-resample) on the
-shared screen. Before each readout, ask the room to predict whether the
-protocol wins, continues, or loses, and why. Connect the mechanics back to
-[the Ctrl-Z reading](/tracks/control/module-4/ctrl-z-resampling).
+- **0:10–0:18** — one participant draws the threat model from
+  [the rogue deployments reading](/tracks/control/module-4/rogue-deployments)
+  from memory; the room corrects out loud as they go.
+- **0:18–0:22** — add where
+  [internal deployments via external APIs](/tracks/control/module-4/rogue-internal-deployments-via-external-apis)
+  fit on the drawing.
+- **0:22–0:25** — monitoring discussion (prompts below).
 
-### Walkthrough debrief (15 min)
+Prompts:
 
-In two groups, one per guided walkthrough
-([untrusted advice](/tracks/control/module-4/untrusted-advice-guided),
-[legibility protocols](/tracks/control/module-4/legibility-guided)): each group
-reconstructs the decision it was forced to make and reports whether the
-walkthrough's evidence changed its members' initial choice. Compare the two —
-one is argued, one is measured.
+- "Which arrow on this drawing would you monitor first, and what would that
+  monitor actually see?"
+- "Which box on this drawing does the
+  [systems-architecture reading](/tracks/control/module-4/systems-architecture)
+  live in?"
+- If the drawing stalls: hand the marker to a second participant and let the
+  first narrate instead.
 
-### Wrap-up (5 min)
+### Resampling, live (0:25–0:40)
 
-Each participant names the mitigation from this module they'd implement first
-in a real lab, in one sentence. Collect open questions.
+- **0:25–0:28** — recap blocking as the baseline response, from
+  [the monitoring section](/tracks/control/module-4/monitoring-and-mitigation).
+- **0:28–0:37** — step through
+  [the defer-to-resample demo](/demos/defer-to-resample) on the shared screen.
+  Before every readout: the room predicts win, continue, or lose — and says
+  why — before you click.
+- **0:37–0:40** — connect the mechanics back to
+  [the Ctrl-Z reading](/tracks/control/module-4/ctrl-z-resampling).
+
+Prompts:
+
+- "What does resampling buy that blocking doesn't? What does it cost?"
+- "When would you rather block than resample, and who makes that call in
+  practice?"
+- If predictions are all correct: "Which parameter of this demo would you
+  change to make your predictions fail?"
+
+### Walkthrough debrief (0:40–0:55)
+
+- **0:40–0:42** — split into two groups, one per guided walkthrough:
+  [untrusted advice](/tracks/control/module-4/untrusted-advice-guided) and
+  [legibility protocols](/tracks/control/module-4/legibility-guided).
+- **0:42–0:49** — each group reconstructs the decision its walkthrough forced
+  and whether the walkthrough's evidence changed its members' initial choice.
+- **0:49–0:55** — groups report to each other; compare the two head-on — one
+  is argued, one is measured.
+
+Prompts:
+
+- "What was the exact moment in the walkthrough where your choice flipped, if
+  it did?"
+- "Which would you trust more in a real deployment decision: the argument or
+  the measurement? Why?"
+- "What additional experiment would have settled your walkthrough's question?"
+
+### Wrap-up (0:55–1:00)
+
+Each participant names the mitigation from this module they would implement
+first in a real lab — one sentence, no discussion. Collect open questions.
+
+Prompt: "What is the cheapest thing this module described that a lab could
+ship this quarter?"
 
 ## Common sticking points
 

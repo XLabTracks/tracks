@@ -23,43 +23,89 @@ and read
 
 ## Agenda
 
-### Warm-up: many small actions (10 min)
+Times are a running clock for a 60-minute session; protect the debate block —
+it is the reason this session exists. If time is short, compress the
+definitions round, not the debate.
 
-Ask the room: "What breaks in module 4's machinery when no single action is
-catastrophic?" Collect answers on the whiteboard, then check them against the
-opening of
-[the non-concentrated failures lesson](/tracks/control/low-stakes-control/handling-non-concentrated-failures).
+### Warm-up: many small actions (0:00–0:10)
 
-### Naming the failure modes (10 min)
+- **0:00–0:03** — settle in; write the question on the whiteboard: "What
+  breaks in module 4's machinery when no single action is catastrophic?"
+- **0:03–0:08** — collect answers on the whiteboard, unfiltered.
+- **0:08–0:10** — check the list against the opening of
+  [the non-concentrated failures lesson](/tracks/control/low-stakes-control/handling-non-concentrated-failures);
+  star what the room got right, add what it missed.
 
-Rapid definitions round: sandbagging, exploration hacking, password-locked
-models. A volunteer defines each; the room refines until nobody objects.
-Anchor on
-[the strategic underperformance lesson](/tracks/control/low-stakes-control/misalignment-and-strategic-underperformance)
-and [the password-locked models paper](/tracks/control/low-stakes-control/password-locked-models-paper).
+Prompts:
 
-### Flowcharts, together (15 min)
+- "Auditing every suspicious action worked in the high-stakes picture. What
+  kills it here?"
+- "What is the smallest unit worth catching in this regime?"
+- If the room is quiet: "Say a model writes one subtly bad line of code per
+  week for a year. Walk me through when anyone notices."
 
-Run [the locking flowcharts exercise](/exercises/c-plm-locking-flowcharts) on
-the shared screen, stage by stage. Vote by hand count at each branch before
-submitting; the minority explains its branch before you grade.
+### Naming the failure modes (0:10–0:20)
 
-### The checkable-tasks debate (20 min)
+- **0:10–0:17** — rapid definitions round: sandbagging, exploration hacking,
+  password-locked models. A volunteer defines each in one or two sentences;
+  the room refines until nobody objects. Write the final versions up. Anchor
+  on
+  [the strategic underperformance lesson](/tracks/control/low-stakes-control/misalignment-and-strategic-underperformance)
+  and
+  [the password-locked models paper](/tracks/control/low-stakes-control/password-locked-models-paper).
+- **0:17–0:20** — distinguish the three from each other (prompts below).
 
-Two teams. One defends the hypothesis in
-[the checkable-tasks lesson](/tracks/control/low-stakes-control/no-sandbagging-on-checkable-tasks),
-the other attacks it with the strongest counterexample it can build. Five
-minutes preparation, four minutes per side, then open floor. Close by asking
-which experiments from the module's papers —
-[adaptive deployment](/tracks/control/low-stakes-control/adaptive-deployment-paper),
-[exploration hacking](/tracks/control/low-stakes-control/exploration-hacking-paper),
-[sabotage evaluations](/tracks/control/low-stakes-control/sabotage-evaluations-paper) —
-would move the debate.
+Prompts:
 
-### Wrap-up (5 min)
+- "How do you tell sandbagging from honest low capability, from the outside?"
+- "Which of these three failure modes survives a perfect output monitor?"
+- "Why do the papers bother building password-locked models rather than
+  waiting to find sandbagging in the wild?"
+
+### Flowcharts, together (0:20–0:35)
+
+- **0:20–0:22** — open
+  [the locking flowcharts exercise](/exercises/c-plm-locking-flowcharts) on
+  the shared screen; explain the voting rule.
+- **0:22–0:33** — stage by stage: hand-count vote at each branch, minority
+  explains its branch before you submit and grade.
+- **0:33–0:35** — revisit the branch the room got most wrong.
+
+Prompts:
+
+- "What fact would you need to observe to be confident in this branch?"
+- If votes are lopsided: "Someone argue the minority branch as if your job
+  depended on it."
+
+### The checkable-tasks debate (0:35–0:55)
+
+- **0:35–0:40** — two teams; five minutes preparation. One defends the
+  hypothesis in
+  [the checkable-tasks lesson](/tracks/control/low-stakes-control/no-sandbagging-on-checkable-tasks);
+  the other attacks it with the strongest counterexample it can build.
+- **0:40–0:48** — four minutes per side, uninterrupted.
+- **0:48–0:53** — open floor; the facilitator only enforces turn-taking.
+- **0:53–0:55** — close: which experiments from
+  [adaptive deployment](/tracks/control/low-stakes-control/adaptive-deployment-paper),
+  [exploration hacking](/tracks/control/low-stakes-control/exploration-hacking-paper),
+  or
+  [sabotage evaluations](/tracks/control/low-stakes-control/sabotage-evaluations-paper)
+  would move this debate?
+
+Prompts:
+
+- "What exactly makes a task checkable — and who is doing the checking?"
+- "Give the strongest real task you think is NOT checkable. Defend it."
+- "If the hypothesis is true, what does a lab no longer need to worry about?
+  If false, what breaks?"
+
+### Wrap-up (0:55–1:00)
 
 Each participant states one way the low-stakes regime changed what they think
-monitoring is for. Collect open questions.
+monitoring is for — one sentence, no discussion. Collect open questions.
+
+Prompt: "Module 4's monitor looked for the knockout blow. What is this
+module's monitor looking for?"
 
 ## Common sticking points
 

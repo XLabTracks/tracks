@@ -1256,6 +1256,12 @@ describe("facilitator guides", () => {
       );
       for (const m of src.matchAll(/\]\(\/exercises\/([\w-]+)\)/g)) {
         expect(getExerciseById(m[1]), `exercise ${m[1]} in guide ${g.id}`).toBeDefined();
+        // /exercises/<id> only renders for featured exercises — anything else
+        // is a live 404 even when the exercise exists in the graph.
+        expect(
+          featuredExercises.some((f) => f.id === m[1]),
+          `exercise ${m[1]} linked from guide ${g.id} must be in featuredExercises to have a standalone page`,
+        ).toBe(true);
       }
       for (const m of src.matchAll(/\]\(\/demos\/([\w-]+)\)/g)) {
         expect(getDemo(m[1]), `demo ${m[1]} in guide ${g.id}`).toBeDefined();

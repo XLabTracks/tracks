@@ -271,3 +271,16 @@ Not restored, and still owed a decision: the AI Futures reading card
 (*How to pace the US frontier*) went in the same deletion. It is the bridge to
 0.2 — same team as AI 2040: Plan A, written against it — so it is worth a home
 somewhere, but nobody has asked for it back.
+
+### 0.1.1 replaced with the author's updated text (2026-08-11)
+
+`prevention.mdx` was a draft behind an "Unfinished writing" callout. The
+author supplied the finished text ("[WIP] Verification Track Outline-35.pdf")
+and asked for a straight replacement, so the callout came out with the draft —
+the caveat described a state that no longer exists. The body is the PDF
+verbatim, including the opening credit line ("Inspired by …", linked to the
+LessWrong post at the author's instruction — the URL came from her, not a
+guess; the outline itself carries none). The outline's closing
+`[pop-up box: The Risks of Securitization …]` marker became a `<PopUp>` per
+the house rule (2.2.1's visibility layers are the pattern). No structural
+change: same lesson id, slug, title and contentRef, so no course.js regen.

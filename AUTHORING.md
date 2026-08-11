@@ -916,3 +916,59 @@ unless you reconcile them. Checklist:
 5. **Run the suite** — `npm run test` (content.test.ts and readings.test.ts
    catch dangling references; nothing catches missing redirects or stranded
    rows — that's this checklist).
+
+## 7. Write a facilitator guide
+
+A facilitator guide is a public session plan for running a module as a
+synchronous meeting (a university-group cohort, a reading group, or a
+classroom). Guides are **not** module items: they carry no progress, don't
+gate prerequisites, and never appear in the resource hub. One guide per
+module at most.
+
+1. **Add the guide** to `src/content/facilitator-guides.data.ts`:
+
+   ```ts
+   {
+     id: "guide-c-intro",
+     moduleId: "c-intro",        // must exist in curriculum.data.ts
+     contentRef: "c-intro",      // MDX file name (next step)
+     sessionLength: 60,          // minutes
+     groupSize: "4–10",          // free text
+     materials: ["whiteboard"],  // optional
+   }
+   ```
+
+2. **Write the body** at `src/content/guides/<contentRef>.mdx` with the five
+   required sections (the agenda's timed blocks are `###` subsections):
+
+   ```mdx
+   ## Session goal
+
+   ## Before the session
+
+   ## Agenda
+
+   ### Warm-up (10 min)
+
+   ## Common sticking points
+
+   ## After the session
+   ```
+
+3. **Link, don't paste.** Point at module readings as
+   `/tracks/<track>/<module>/<itemSlug>`, exercises as `/exercises/<id>`, and
+   demos as `/demos/<id>`. `content.test.ts` validates that every such link
+   resolves — a typo'd id fails the suite.
+
+4. **Content rule.** Discussion prompts, timing, and room mechanics are
+   original facilitation scaffolding — write them freely. Any claim **about
+   the material** must restate the human-authored readings; never invent
+   curriculum claims.
+
+5. **Where it renders.** The guide is public at
+   `/tracks/<track>/<module>/guide` (a reserved segment — no item slug may be
+   `guide`). The module page shows a "For facilitators" card, and classroom
+   instructor pages list every guide of the classroom's track automatically.
+
+6. **Verify:** `npx vitest run src/lib/content/content.test.ts` and
+   `npm run typecheck`.

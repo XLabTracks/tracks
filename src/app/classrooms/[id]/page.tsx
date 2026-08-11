@@ -4,7 +4,11 @@ import { notFound } from "next/navigation";
 import { ChevronRight } from "lucide-react";
 import { requireUser } from "@/lib/auth";
 import { getClassroom, getClassroomRoster } from "@/lib/classrooms";
-import { getTrackById } from "@/lib/content";
+import {
+  getGuideForModule,
+  getModulesForTrack,
+  getTrackById,
+} from "@/lib/content";
 import { getTrackProgress } from "@/lib/progress";
 import { Breadcrumbs } from "@/components/layout/breadcrumbs";
 import {
@@ -114,6 +118,9 @@ export default async function ClassroomPage({
   const canDemote = instructors.length > 1;
   // Null when key storage is unconfigured server-side — hide the card.
   const keyStatus = await getClassroomKeyStatus(classroom.id);
+  const guideModules = track
+    ? getModulesForTrack(track.id).filter((m) => getGuideForModule(m.id))
+    : [];
 
   return (
     <main className="mx-auto w-full max-w-5xl px-4 py-10 lg:px-6">
@@ -170,6 +177,27 @@ export default async function ClassroomPage({
                     role="instructor"
                   />
                 )}
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
+
+      {track && guideModules.length > 0 && (
+        <section className="mt-8">
+          <h2 className="text-lg font-semibold">Facilitator guides</h2>
+          <p className="text-muted-foreground mt-1 text-sm">
+            Session plans for running this classroom&apos;s modules as live meetings.
+          </p>
+          <ul className="mt-2 space-y-1">
+            {guideModules.map((m) => (
+              <li key={m.id}>
+                <Link
+                  className="text-sm underline underline-offset-4"
+                  href={`/tracks/${track.slug}/${m.slug}/guide`}
+                >
+                  Module {m.order}: {m.title}
+                </Link>
               </li>
             ))}
           </ul>

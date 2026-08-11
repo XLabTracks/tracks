@@ -67,7 +67,6 @@ export const verificationModules: Module[] = [
       "v-scoping-effective-feasible",
       "v-scoping-anatomy",
       "v-paper-scher-treaty",
-      "v-paper-miotti-treaty",
       "v-scoping-actors",
       "v-interactive-map",
       "v-report-constructor",
@@ -593,7 +592,6 @@ export const verificationLessons: Lesson[] = [
  */
 export const verificationPaperIds: string[] = [
   "v-paper-scher-treaty",
-  "v-paper-miotti-treaty",
 ];
 
 export const verificationUnitOfLesson: Record<string, string> = {

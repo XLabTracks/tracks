@@ -2,6 +2,7 @@ import { tracks, modules, lessons } from "@/content/curriculum.data";
 import { papers } from "@/content/papers.data";
 import { exercises } from "@/content/exercises.data";
 import { assessments } from "@/content/assessments.data";
+import { facilitatorGuides } from "@/content/facilitator-guides.data";
 import { resources } from "@/content/resources.data";
 import { buildAbsUrl, parseArxivId } from "@/lib/arxiv/id";
 import { isWritingExercise } from "./types";
@@ -9,6 +10,7 @@ import type {
   Assessment,
   Exercise,
   ExternalResource,
+  FacilitatorGuide,
   Lesson,
   Module,
   ModuleItem,
@@ -26,6 +28,8 @@ const paperById = new Map(papers.map((p) => [p.id, p]));
 const exerciseById = new Map(exercises.map((e) => [e.id, e]));
 const assessmentById = new Map(assessments.map((a) => [a.id, a]));
 const assessmentByModuleId = new Map(assessments.map((a) => [a.moduleId, a]));
+
+const guideByModuleId = new Map(facilitatorGuides.map((g) => [g.moduleId, g]));
 
 // Inserted lessons live inside a paper's flow; map them back to their paper.
 const paperByInsertedLessonId = new Map<string, Paper>(
@@ -47,6 +51,7 @@ export type {
   Exercise,
   Assessment,
   ExternalResource,
+  FacilitatorGuide,
 };
 
 // --- Basic lookups -------------------------------------------------------
@@ -68,6 +73,14 @@ export function getAssessmentForModule(moduleId: string): Assessment | undefined
 }
 export function getAssessmentById(id: string): Assessment | undefined {
   return assessmentById.get(id);
+}
+export function getGuideForModule(
+  moduleId: string,
+): FacilitatorGuide | undefined {
+  return guideByModuleId.get(moduleId);
+}
+export function getAllGuides(): FacilitatorGuide[] {
+  return facilitatorGuides;
 }
 
 /**

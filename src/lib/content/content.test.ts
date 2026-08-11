@@ -4,11 +4,14 @@ import { describe, it, expect } from "vitest";
 import { lessons, modules } from "@/content/curriculum.data";
 import { exercises } from "@/content/exercises.data";
 import { assessments } from "@/content/assessments.data";
+import { facilitatorGuides } from "@/content/facilitator-guides.data";
 import { ARGUE_REVEAL_DEFAULTS } from "@/lib/content/types";
 import { featuredExercises } from "@/app/exercises/featured";
 import {
   getAssessmentForModule,
   getExerciseById,
+  getGuideForModule,
+  getItemBySlugs,
   getItemNavigation,
   getItemProgressContentIds,
   getItemsForModule,
@@ -126,6 +129,7 @@ describe("content integrity", () => {
         const slugs = getItemsForModule(m.id).map(itemSlugOf);
         expect(new Set(slugs).size).toBe(slugs.length);
         expect(slugs).not.toContain("assessment");
+        expect(slugs).not.toContain("guide");
       }
     }
   });
@@ -1219,3 +1223,50 @@ function readArtifact(paper: Paper): {
   }
   return { state: "ready", ready };
 }
+
+describe("facilitator guides", () => {
+  it("guide ids are unique and moduleIds resolve, one guide per module", () => {
+    const ids = facilitatorGuides.map((g) => g.id);
+    expect(new Set(ids).size).toBe(ids.length);
+    const moduleIds = facilitatorGuides.map((g) => g.moduleId);
+    expect(new Set(moduleIds).size).toBe(moduleIds.length);
+    for (const g of facilitatorGuides) {
+      expect(
+        modules.some((m) => m.id === g.moduleId),
+        `guide ${g.id} references missing module ${g.moduleId}`,
+      ).toBe(true);
+      expect(getGuideForModule(g.moduleId)).toBe(g);
+    }
+  });
+
+  it("guide MDX bodies exist", () => {
+    for (const g of facilitatorGuides) {
+      expect(
+        existsSync(join(process.cwd(), "src/content/guides", `${g.contentRef}.mdx`)),
+        `MDX body for guide ${g.id}`,
+      ).toBe(true);
+    }
+  });
+
+  it("guide-linked exercise, demo, and track-item targets resolve", () => {
+    for (const g of facilitatorGuides) {
+      const src = readFileSync(
+        join(process.cwd(), "src/content/guides", `${g.contentRef}.mdx`),
+        "utf8",
+      );
+      for (const m of src.matchAll(/\]\(\/exercises\/([\w-]+)\)/g)) {
+        expect(getExerciseById(m[1]), `exercise ${m[1]} in guide ${g.id}`).toBeDefined();
+      }
+      for (const m of src.matchAll(/\]\(\/demos\/([\w-]+)\)/g)) {
+        expect(getDemo(m[1]), `demo ${m[1]} in guide ${g.id}`).toBeDefined();
+      }
+      for (const m of src.matchAll(/\]\(\/tracks\/([\w-]+)\/([\w-]+)\/([\w-]+)\)/g)) {
+        if (m[3] === "assessment" || m[3] === "guide") continue;
+        expect(
+          getItemBySlugs(m[1], m[2], m[3]),
+          `track item link /tracks/${m[1]}/${m[2]}/${m[3]} in guide ${g.id}`,
+        ).toBeDefined();
+      }
+    }
+  });
+});

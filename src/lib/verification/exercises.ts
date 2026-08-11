@@ -35,6 +35,7 @@ export const verificationExercises: VerificationExerciseDef[] = [
   { id: "context-distiller", title: "The Distiller", bridged: true },
   { id: "what-do-they-say", title: "Why Are We Concerned About Superintelligence?", bridged: false },
   { id: "types-of-ai", title: "The Types of AI", bridged: false },
+  { id: "short-history", title: "A Short History of AI Acceleration", bridged: false },
   { id: "precedent-cases", title: "Did the Regime Hold?", bridged: true },
   { id: "treaty-workspace", title: "Anatomy of a (Pause) Agreement", bridged: true },
   { id: "compute-verification", title: "Questions on the Cankaya Working Paper", bridged: true },

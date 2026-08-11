@@ -327,3 +327,27 @@ Three moves, all hers, all local-first and browser-verified:
 Also in this commit: `citations.json` gains the LessWrong post 0.1.1 links
 (a gap the previous session shipped — citations.test.ts was red on the
 branch until now) and the OWID article.
+
+### The 0.1 charts, round two (2026-08-11, same day)
+
+Three corrections from the author on review of the first pass:
+
+1. **The charts are optional again.** They live back inside a Fold —
+   "Optional — A Short History of AI Acceleration", her title — not inline.
+2. **Red only, theme-aware.** The OWID embeds (their palette, their white
+   ground) are gone; both charts are redrawn as native SVG in the restored
+   `short-history` widget. Every mark inks from
+   `color-mix(in oklab, var(--primary), var(--foreground) N%)` (N ≤ 60), so
+   the ramp re-solves per theme — verified on day and night. Series names
+   ride on the lines in their own shade per the categorical-colour rule. The
+   test-scores data was read back out of OWID's published SVG (pixel→value
+   against its own axis); the timeline annotations are OWID's verbatim. The
+   committed `assets/owid/ai-timeline.jpg` and the grapher iframe are
+   deleted; attribution (CC BY, "redrawn from") sits under each chart, and
+   the article link stays in the fold's lead line so the citations entry
+   keeps its consumer.
+3. **"Real-World Harm: Dual-Use Capabilities" wears the display face.** The
+   h3 demotion had dropped it to the body face (app-bridge's deliberate
+   sub-heading rule). One scoped exception in app-bridge.css, keyed on the
+   heading's rehype-slug id — renaming the heading drops the rule, says so in
+   the comment there. Computed style now matches the h2s exactly.

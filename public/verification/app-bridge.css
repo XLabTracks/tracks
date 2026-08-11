@@ -121,6 +121,18 @@
 :root[data-theme] .lesson-body h3:not(.not-prose *) {
   font-size: calc(1em + 6px);
 }
+/* One deliberate exception, on the author's instruction: 0.1's "Real-World
+   Harm: Dual-Use Capabilities" reads as a section head (it was an h2 until
+   the part-chunking demoted it — see the comment in introduction.mdx), so it
+   keeps the display face h2s wear. Keyed on the rehype-slug anchor: renaming
+   the heading changes the slug and silently drops this rule — update both
+   together. */
+:root[data-theme] .lesson-body h3#real-world-harm-dual-use-capabilities {
+  font-family: var(--display);
+  font-weight: 500;
+  letter-spacing: -0.015em;
+  font-size: 1.5em;
+}
 :root[data-theme] .lesson-body h4:not(.not-prose *) {
   font-size: calc(1em + 4px);
 }

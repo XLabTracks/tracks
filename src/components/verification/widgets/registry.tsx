@@ -18,6 +18,7 @@ import { MechanismSort, MechanismSortReveal } from "./mechanism-sort";
 import { PrecedentCases } from "./precedent-cases";
 import { WhatDoTheySay } from "./what-do-they-say";
 import { TypesOfAi } from "./types-of-ai";
+import { ShortHistory } from "./short-history";
 import { ComputeVerificationQuestions } from "./compute-verification";
 import { TreatyWorkspace } from "./treaty-workspace";
 
@@ -55,6 +56,7 @@ export const verificationWidgets: Record<
   "compute-verification": ComputeVerificationQuestions,
   "what-do-they-say": WhatDoTheySay,
   "types-of-ai": TypesOfAi,
+  "short-history": ShortHistory,
 };
 
 export function getVerificationWidget(

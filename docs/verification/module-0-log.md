@@ -351,3 +351,25 @@ Three corrections from the author on review of the first pass:
    sub-heading rule). One scoped exception in app-bridge.css, keyed on the
    heading's rehype-slug id — renaming the heading drops the rule, says so in
    the comment there. Computed style now matches the h2s exactly.
+
+### 0.1 heading hierarchy flattened to two section heads (2026-08-11)
+
+On the author's instruction: "The Danger of ASI" and "Preventing ASI via
+International and Verifiable Agreements" are 0.1's only h2s; "What is ASI?"
+and "What has AI verification looked like so far?" demoted to h3 beside the
+three that already were. Every subheading now visibly reads as one — the
+body-face h3 style — so the app-bridge display-face exception for Real-World
+Harm (added earlier the same day) is deleted: it existed to make that h3
+match the h2s, and the author has now said subheadings should NOT match.
+The lesson reads as three parts: Start (video, optional fold, objection
+task), The Danger of ASI, Preventing ASI.
+
+A false alarm worth recording: after the demotion the lesson appeared to
+stop chunking on hard loads — no strip, no pager, one long page — and only
+chunk on client-side navigations. The cause was the Browser pane sitting
+hidden: Chromium pauses hydration in hidden tabs, so the reader's
+mount-time derivation simply had not run yet. `document.visibilityState`
+is the tell. Nothing was wrong with planParts (verified against the live
+block list: three parts) and nothing in the reader was changed — a
+DOMContentLoaded re-derive guard written while chasing this was reverted
+unshipped once the pane, not the code, proved to be the variable.

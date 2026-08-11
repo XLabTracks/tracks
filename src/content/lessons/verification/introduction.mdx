@@ -1,9 +1,5 @@
 <Video src="https://www.youtube.com/watch?v=qe9QSCF-d88" title="The Catastrophic Risks of AI — and a Safer Path | Yoshua Bengio | TED" />
 
-## The Danger of ASI
-
-What exactly do we mean when we refer to “advanced AI” or ASI (artificial superintelligence)? We need to first understand the specific harms, capabilities, and risks of AI that a hypothetical treaty aims to prevent.
-
 <Fold label="Optional material">
 
 The case at full strength, from the people who argue it most directly. Any one of these:
@@ -15,12 +11,23 @@ The case at full strength, from the people who argue it most directly. Any one o
 
 <Exercise id="v-task-introduction-1" />
 
+## The Danger of ASI
+
+What exactly do we mean when we refer to “advanced AI” or ASI (artificial superintelligence)? We need to first understand the specific harms, capabilities, and risks of AI that a hypothetical treaty aims to prevent.
+
 {/* Provenance: the incidents and their source links in this section are
     transcribed from the author's outline verbatim. Their bibliographic facts
     are not independently verified here, so each cited URL sits in
     citations.json `pending` rather than carrying a guessed Works-cited entry. */}
 
-## Real-World Harm: Dual-Use Capabilities
+{/* Real-World Harm is an h3 under The Danger of ASI on purpose: the reader
+    breaks parts at h2, and the section head plus its two intro sentences are
+    under MIN_PART_CHARS — as their own h2 part they would merge backwards
+    into the video page. As an h3's preamble they open the part instead,
+    which is the author's stated intent: next tab after the video starts at
+    "The Danger of ASI". */}
+
+### Real-World Harm: Dual-Use Capabilities
 
 Some of the most concerning capabilities of AI have come to light with recent reports of frontier models escaping testing environments to hack into organizational infrastructure.
 
@@ -73,11 +80,13 @@ Where does today's AI sit? Each ring contains the next; a system sits at the dee
 
 </Fold>
 
-Even the people in charge of developing superintelligence, who have the most incentive to obfuscate dangerous capabilities, have expressed public concerns over the catastrophic risks arising from their technology. Most notably, over 1,300 employees of frontier AI companies have signed a public [statement](https://www.pacingthefrontier.com/) to “request that the U.S. government support an international effort to develop the technical and governance tools needed to deliberately pace the frontier of automated AI development.”
+Even the people in charge of developing superintelligence, who have the most incentive to obfuscate dangerous capabilities, have expressed public concerns over the catastrophic risks arising from their technology.
 
 Hear what the top AI figures have to say:
 
 <VerificationExercise id="what-do-they-say" />
+
+Most notably, over 1,300 employees of frontier AI companies have signed a public [statement](https://www.pacingthefrontier.com/) to “request that the U.S. government support an international effort to develop the technical and governance tools needed to deliberately pace the frontier of automated AI development.”
 
 {/* Pacing the Frontier (pacingthefrontier.com) is an open letter published for
     circulation, with each signatory's comment printed under their name. The
@@ -133,13 +142,17 @@ At the current pace, every couple of weeks there will be new models which signif
 
 It’s clear that ASI is no longer a hypothetical risk. It will require deliberate and proactive action by labs and governments alike to avoid.
 
-<Fold label="Optional — a short history of acceleration">
+How fast is fast? Two charts from Our World in Data's [brief history of artificial intelligence](https://ourworldindata.org/brief-history-of-ai) show the pace.
 
-How fast is fast? Milestones placed at their true positions in time — watch the spacing collapse.
+<figure className="not-prose my-6 overflow-hidden rounded-xl border border-primary">
+  <div className="bg-white p-3"><img src="/verification/assets/owid/ai-timeline.jpg" alt="A timeline of notable artificial intelligence systems from 1940 to the 2020s: the first digital computers, Theseus, Perceptron Mark I, TD-Gammon, AlexNet, and then AI with language and image recognition capabilities comparable to those of humans." className="w-full" /></div>
+  <figcaption className="bg-primary text-primary-foreground px-4 py-3 text-sm">A timeline of notable artificial intelligence systems — <a href="https://ourworldindata.org/brief-history-of-ai" className="underline decoration-primary-foreground/60 underline-offset-2">Our World in Data</a>, CC BY</figcaption>
+</figure>
 
-<VerificationExercise id="short-history" />
-
-</Fold>
+<figure className="not-prose my-6 overflow-hidden rounded-xl border border-primary">
+  <div className="bg-white"><iframe src="https://ourworldindata.org/grapher/test-scores-ai-capabilities-relative-human-performance?tab=chart" loading="lazy" title="Test scores of AI systems on various capabilities relative to human performance" className="block w-full" style={{ height: 600, border: 0 }} allow="web-share; clipboard-write" /></div>
+  <figcaption className="bg-primary text-primary-foreground px-4 py-3 text-sm">Test scores of AI systems on various capabilities relative to human performance — <a href="https://ourworldindata.org/brief-history-of-ai" className="underline decoration-primary-foreground/60 underline-offset-2">Our World in Data</a>, CC BY</figcaption>
+</figure>
 
 ## Preventing ASI via International and Verifiable Agreements
 

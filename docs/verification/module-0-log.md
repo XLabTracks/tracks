@@ -293,3 +293,37 @@ the author's own 0.3.1 prose — the Copenhagen School sentence — plus the
 Fold's own apposition ("treating it as an existential risk and thus a top
 policy priority"), not drafted fresh; flag it to her for review anyway, since
 glossary copy is curriculum.
+
+### 0.1 reordered on the author's instruction (2026-08-11)
+
+Three moves, all hers, all local-first and browser-verified:
+
+1. **"The Danger of ASI" now opens the part after the video.** The heading
+   and its two intro sentences moved below the optional-material fold and the
+   strongest-objection exercise. Trap handled: as their own h2 part those
+   ~225 characters sit under MIN_PART_CHARS and would merge *backwards* into
+   the video page — the opposite of the intent — so "Real-World Harm:
+   Dual-Use Capabilities" was demoted to an h3 beneath the new h2. One part,
+   opening with the title and intro, Real-World Harm directly after. A
+   comment in the MDX says why the h3 must stay an h3.
+2. **The "Most notably, over 1,300 employees…" sentence** moved from before
+   the what-do-they-say widget to after it, directly above "Four of them, on
+   why they signed:" — the Pacing the Frontier material now reads as one run
+   instead of being split by the widget.
+3. **The "short history of acceleration" fold is gone**, replaced inline by
+   the two Our World in Data charts from "The brief history of artificial
+   intelligence" (Roser, CC BY, linked in text and in both captions): the
+   notable-systems timeline as a committed image
+   (`public/verification/assets/owid/ai-timeline.jpg`, provenance in
+   `SOURCES.md` beside it) and the test-scores grapher as its live iframe
+   embed, per the author's supplied snippet. Both framed in the Fold visual
+   language — white chart plate, painted `--primary` caption bar — on her
+   "match the site's red" instruction; the chart internals are OWID's own.
+   The `short-history` widget thereby lost its only consumer, and
+   widgets.test.ts rightly refuses orphans, so it was retired deliberately:
+   component, data file, registry row and exercises list entry all deleted in
+   the same commit. Its learner state key (localStorage) dies with it.
+
+Also in this commit: `citations.json` gains the LessWrong post 0.1.1 links
+(a gap the previous session shipped — citations.test.ts was red on the
+branch until now) and the OWID article.

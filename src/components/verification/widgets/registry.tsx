@@ -15,6 +15,7 @@ import { DrillsSupplyChain } from "./drills-supply-chain";
 import { PolicyCost } from "./policy-cost";
 import { PolicyPlot } from "./policy-plot";
 import { MechanismSort, MechanismSortReveal } from "./mechanism-sort";
+import { NuclearDisanalysis } from "./nuclear-disanalysis";
 import { PrecedentCases } from "./precedent-cases";
 import { WhatDoTheySay } from "./what-do-they-say";
 import { TypesOfAi } from "./types-of-ai";
@@ -52,6 +53,9 @@ export const verificationWidgets: Record<
   "mechanism-sort": MechanismSort,
   "mechanism-sort-reveal": MechanismSortReveal,
   "precedent-cases": PrecedentCases,
+  // 0.3's disanalysis task: write the inference, then Baker's own text lands
+  // as the key. Registered beside the case files it follows.
+  "nuclear-disanalysis": NuclearDisanalysis,
   "treaty-workspace": TreatyWorkspace,
   "compute-verification": ComputeVerificationQuestions,
   "what-do-they-say": WhatDoTheySay,

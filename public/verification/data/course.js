@@ -170,19 +170,6 @@ window.COURSE = {
           ]
         },
         {
-          "id": "2.2",
-          "title": "Cloud",
-          "kind": "explainer",
-          "mins": "20–25 min",
-          "href": "/tracks/verification/verification-infrastructure/cloud-intro",
-          "lessons": [
-            "cloud-intro",
-            "cloud-what-providers-see",
-            "cloud-reporting-control",
-            "cloud-limits"
-          ]
-        },
-        {
           "id": "2.3",
           "title": "Intelligence",
           "kind": "explainer",

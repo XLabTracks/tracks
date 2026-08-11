@@ -21,31 +21,6 @@ import type { Exercise } from "@/lib/content/types";
 
 export const verificationExercises: Exercise[] = [
   {
-    id: "v-task-cloud-intro-2",
-    type: "writing-prompt",
-    prompt: "### The Four Roles of a Provider\n\nThe 2024 whitepaper Governing Through the Cloud (Heim et al.) names four capacities in which a provider can serve a governance regime: security, record keeping, verification, and enforcement. A verification regime needs all four — evidence, checking, consequences, and protection for the things being checked.\n\nRecord keeper — selectively collects and maintains high-level information about infrastructure usage, such as a customer's compute usage data. These records are the regime's evidence base: they link usage to real-world actors and enable post-incident attribution, turning a declaration from a bare claim into one checkable against an independent trail.\n\nVerifier — actively verifies customer identities, specific activities, and high-level properties of AI systems: compliance with reporting above training-compute thresholds, data-usage guidelines for frontier training, licenses for deployed systems. This is the checking itself — an inspector already on the premises, comparing what was declared against what actually ran.\n\nEnforcer — restricts or limits compute access for non-compliant customers or workloads, from refusing unlicensed developers to disabling a system whose activity is uncontrollable or in violation of regulations. This prospect is what makes honest declaration the cheaper strategy.\n\nSecurer — provides the physical and cybersecurity measures that protect model weights, algorithms, training data, and personal and confidential data, and helps prevent attacks on large-scale deployments. This protects the regime's integrity: a stolen copy of the weights was never declared, checked, or gated, so verification only constrains anyone if the capabilities being verified cannot simply be taken.\n\nEverything else in this module analyzes the provider as one of these four.\n\nCHECK: A provider suspends a customer's compute access after the customer refuses to file a required training-run notification. Which role is the provider exercising? (a) Enforcer (b) Verifier (c) Record keeper (d) Securer\n\nA: (a). Restricting or cutting access is enforcement. Verifying is checking claims against observation; record keeping is storing the usage data; securing is protecting models and infrastructure from attackers.",
-    format: "free-form",
-  },
-  {
-    id: "v-task-cloud-limits-3",
-    type: "writing-prompt",
-    prompt: "OPTIONAL EXERCISE SPEC — Case verdict (6 min, free response + self-score)\n\nINF Tech, revisited\n\nReturn to the case from 2.2.0. A treaty with a full cloud annex (KYC, registration, telemetry corroboration, suspension) is in force, and Indonesia has signed. Write one paragraph: which mechanisms from this module surface the INF Tech arrangement, and which of its features would still defeat the annex if Indonesia had signed nothing?\n\nModel answer (appears after submission): KYC at the Indonesian provider flags the customer; cluster registration and data-transfer patterns corroborate; suspension is available same-day. Without Indonesian accession, none of it applies: reseller opacity plus third-country jurisdiction leave the arrangement invisible to the annex. The case sits half inside, half outside the layer’s reach.\n\nSelf-score, three items: named at least two mechanisms that would surface it; named at least two structural limits; reached a verdict on what accession does and does not fix. Two of three counts as a pass.",
-    format: "free-form",
-    optional: true,
-  },
-  {
-    id: "v-task-cloud-reporting-control-1",
-    type: "writing-prompt",
-    prompt: "The NovaStar case\n\nThe NovaStar case puts you at a provider’s oversight desk. Play it here: [the NovaStar case](https://playground-tracks.netlify.app/cloud-verification-game.html), then return for the quiz.",
-    format: "free-form",
-  },
-  {
-    id: "v-task-cloud-what-providers-see-1",
-    type: "writing-prompt",
-    prompt: "EXERCISE SPEC — Fingerprint comparison (1 min)\n\nOn screen: two telemetry cards side by side. Profile A: 2,000 GPUs; utilization spiking and idling with office hours; network traffic in short bursts. Profile B: 30,000 accelerators reserved as a single block for six weeks; utilization pinned near peak day and night; traffic between nodes pulsing in a regular rhythm.\n\nPrompt: \"One of these is a frontier training run. Which one?\" Learner clicks a card to commit; reveal unlocks on click.\n\nReveal: B. Three tells, one line each — scale (30,000 accelerators reserved as one block), constancy (training doesn't sleep; inference follows users), communication pattern (the regular rhythm of parallel training). Closing line: notice the cards have no names on them — telemetry is anonymous until someone joins it to the identity layer, and whether a regulator may do that is 2.2.2's subject.",
-    format: "free-form",
-  },
-  {
     id: "v-task-human-audits-inspections-1",
     type: "writing-prompt",
     prompt: "Mechanism\n\nTypical trigger\n\nMain purpose\n\nMain design risk\n\nIndependent audit\n\nPeriodic, milestone-based, or pre-deployment review\n\nAn outside third party verifies specified claims and evaluates systems or practices against stated standards.\n\nThe auditee controls the auditor, scope, evidence, or publication.\n\nRoutine inspection\n\nA schedule, random selection, or recurring treaty obligation\n\nConfirm declared sites, inventories, records, processes, or controls.\n\nPredictability permits staging, and the inspection may reach only declared activity.\n\nChallenge inspection\n\nA specific concern, anomaly, or formal request, usually under special and shorter-notice procedures\n\nClarify possible noncompliance at a relevant site or activity not resolved by routine measures.\n\nDelay, political misuse, excessive intrusion, or access negotiated below what the concern requires.",

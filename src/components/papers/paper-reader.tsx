@@ -38,6 +38,7 @@ import { PaperCollapse } from "./paper-collapse";
 import { PaperGlossary, type PaperGlossaryEntry } from "./paper-glossary";
 import { PaperGate } from "./paper-gate";
 import { PaperSidenotes } from "./paper-sidenotes";
+import { PaperTailReveal } from "./paper-tail-reveal";
 import {
   LessWrongUnavailable,
   PaperUnavailable,
@@ -126,8 +127,8 @@ async function LessWrongPaperReader({
   if (resolved.state === "invalid") {
     return (
       <div className="border-destructive/40 bg-destructive/5 text-destructive rounded-xl border p-6 text-sm">
-        Invalid LessWrong post URL <code>{postUrl}</code> — the public post
-        URL is required, e.g.{" "}
+        Invalid LessWrong post URL <code>{postUrl}</code> — the public post URL
+        is required, e.g.{" "}
         <code>https://www.lesswrong.com/posts/abc123/some-post</code>.
       </div>
     );
@@ -170,7 +171,8 @@ async function LessWrongPaperReader({
             {
               label: `Read on ${displayHost(resolved.sourceRef)}`,
               href:
-                resolved.meta.canonicalUrl ?? buildLwPostUrl(resolved.sourceRef),
+                resolved.meta.canonicalUrl ??
+                buildLwPostUrl(resolved.sourceRef),
             },
           ]}
           warnings={resolved.warnings}
@@ -322,7 +324,7 @@ function ActivitiesOnlyFallback({
   children: React.ReactNode;
 }) {
   const allItems = (paper.edits ?? []).flatMap((edit) =>
-    edit.op === "activity" ? edit.items : [],
+    edit.op === "activity" ? edit.items : []
   );
   return (
     <div className="paper-reader">
@@ -354,12 +356,15 @@ function ActivitiesOnlyFallback({
  * whose html is re-derived per request by rewriteReadingLinks (equal
  * content, fresh string).
  */
-const appliedEditsCache = new Map<string, { html: string; applied: AppliedPaper }>();
+const appliedEditsCache = new Map<
+  string,
+  { html: string; applied: AppliedPaper }
+>();
 
 function applyPaperEditsCached(
   paper: Paper,
   html: string,
-  toc: PaperTocEntry[],
+  toc: PaperTocEntry[]
 ): AppliedPaper {
   const hit = appliedEditsCache.get(paper.id);
   if (hit && hit.html === html) return hit.applied;
@@ -373,6 +378,11 @@ function applyPaperEditsCached(
   // `collapseTail: false` leaves the tail as ordinary sections — for papers
   // whose appendix is the document rather than its apparatus.
   const collapsing = paper.collapseTail !== false;
+  // On gated papers the landmark
+  // sections themselves live in ungatedTailHtml and collapse there; the
+  // appendix stretch they left behind in the gated parts was already
+  // collapsed by apply-edits' tail split, and reads as landmark-free —
+  // byte-identical — here.
   let sawReferences = false;
   const parts = edited.parts.map((part) => {
     if (part.kind !== "html" || !collapsing) return part;
@@ -425,7 +435,7 @@ function EditedPaperBody({
   const { parts, ungatedTailHtml, unmatchedEdits } = applyPaperEditsCached(
     paper,
     html,
-    toc,
+    toc
   );
   if (unmatchedEdits.length > 0) {
     // Committed content can't reach this (content.test.ts validates every
@@ -439,11 +449,11 @@ function EditedPaperBody({
               ? `${ref.anchor}${ref.s ? ` s=${ref.s}` : ""} ("${ref.snippet}")`
               : ref.sectionEnd;
           })
-          .join(", "),
+          .join(", ")
     );
   }
   const unmatchedItems = unmatchedEdits.flatMap((op) =>
-    op.op === "activity" ? op.items : [],
+    op.op === "activity" ? op.items : []
   );
 
   return (
@@ -457,20 +467,33 @@ function EditedPaperBody({
       })}
 
       {ungatedTailHtml && (
-        // References/footnotes, split off the gated walk in apply-edits.ts:
-        // they stay mounted while gates above are closed, so citations and
-        // footnote markers in the visible text keep live targets and the
-        // sidenote layer has note bodies to clone. The `paper-gated-tail`
-        // class visually hides the footnotes SECTION itself (a gated paper
+        // References/footnotes (the landmark sections ONLY — appendices stay
+        // in the gated walk), split off in apply-edits.ts: they stay mounted
+        // while gates above are closed, so citations and footnote markers in
+        // the visible text keep live targets and the sidenote layer has note
+        // bodies to clone. The `paper-gated-tail` class visually hides the
+        // footnotes SECTION itself while any gate is closed (a gated paper
         // would otherwise dump every note — including gated ones — right below
         // the first gate, a spoiler); the notes stay in the DOM, so per-marker
         // margin sidenotes still render for content the learner has revealed.
         // References stay visible (citations must keep a live target).
-        <div
-          className={`${wrapperClassName} paper-gated-tail`}
-          data-conv={converterVersion}
-          dangerouslySetInnerHTML={{ __html: ungatedTailHtml }}
-        />
+        // PaperTailReveal lifts the suppression once every gate is open —
+        // from then on the canonical section is the fragment-jump target
+        // again (the only footnote surface on narrow viewports and for
+        // assistive tech).
+        <>
+          <div
+            className={`${wrapperClassName} paper-gated-tail`}
+            data-conv={converterVersion}
+            dangerouslySetInnerHTML={{ __html: ungatedTailHtml }}
+          />
+          <PaperTailReveal
+            paperId={paper.id}
+            gateIds={parts.flatMap((part) =>
+              part.kind === "gate" ? [part.id] : []
+            )}
+          />
+        </>
       )}
 
       {unmatchedItems.length > 0 && (
@@ -511,8 +534,8 @@ function EditedPaperBody({
 function GlossaryLayer({ paper }: { paper: Paper }) {
   const termIds = new Set(
     (paper.edits ?? []).flatMap((edit) =>
-      edit.op === "gloss" ? [edit.termId] : [],
-    ),
+      edit.op === "gloss" ? [edit.termId] : []
+    )
   );
   const entries: PaperGlossaryEntry[] = [...termIds].flatMap((termId) => {
     const term = getGlossaryTerm(termId);
@@ -556,7 +579,7 @@ interface RenderCtx {
 function renderParts(
   parts: PaperPart[],
   from: number,
-  ctx: RenderCtx,
+  ctx: RenderCtx
 ): React.ReactNode[] {
   const nodes: React.ReactNode[] = [];
   for (let i = from; i < parts.length; i++) {
@@ -568,7 +591,7 @@ function renderParts(
           className={ctx.wrapperClassName}
           data-conv={ctx.converterVersion}
           dangerouslySetInnerHTML={{ __html: part.html }}
-        />,
+        />
       );
     } else if (part.kind === "activity") {
       nodes.push(
@@ -581,7 +604,7 @@ function renderParts(
               completedContentIds={ctx.completedContentIds}
             />
           ))}
-        </Fragment>,
+        </Fragment>
       );
     } else {
       nodes.push(
@@ -605,7 +628,7 @@ function renderParts(
           }
         >
           {renderParts(parts, i + 1, ctx)}
-        </PaperGate>,
+        </PaperGate>
       );
       return nodes;
     }

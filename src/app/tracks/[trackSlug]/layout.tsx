@@ -6,6 +6,7 @@ import {
   getPrerequisiteModules,
   getTrackContentIds,
   getTrackOutline,
+  getTrackSidebarOutline,
   type Paper,
 } from "@/lib/content";
 import {
@@ -122,10 +123,15 @@ export default async function TrackLayout({
     }
   }
 
+  // The client sidebar gets the slim projection only — the full outline's
+  // Paper objects (edits: snippets, note markdown, gate prompts) stay
+  // server-side instead of riding every track page's flight payload.
+  const sidebarOutline = getTrackSidebarOutline(trackSlug)!;
+
   return (
     <div className="flex w-full flex-1 flex-col lg:flex-row">
       <TrackSidebar
-        outline={outline}
+        outline={sidebarOutline}
         completedContentIds={completedContentIds}
         lockedModuleSlugs={lockedModuleSlugs}
         itemNavs={itemNavs}

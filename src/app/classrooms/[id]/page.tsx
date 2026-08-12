@@ -9,8 +9,11 @@ import { getTrackProgress } from "@/lib/progress";
 import { Breadcrumbs } from "@/components/layout/breadcrumbs";
 import {
   CopyJoinCode,
+  DeleteClassroomButton,
+  LeaveClassroomButton,
   RegenerateCodeButton,
   RemoveMemberButton,
+  RoleToggleButton,
 } from "@/components/classrooms/classroom-manage";
 import { ClassroomKeySettings } from "@/components/classrooms/classroom-key-settings";
 import { FacilitatorPanel } from "@/components/classrooms/facilitator-panel";
@@ -61,16 +64,22 @@ export default async function ClassroomPage({
     return (
       <main className="mx-auto w-full max-w-3xl px-4 py-10 lg:px-6">
         <Breadcrumbs items={crumbs} />
-        <h1 className="text-3xl font-semibold tracking-tight">{classroom.name}</h1>
+        <h1 className="text-3xl font-semibold tracking-tight">
+          {classroom.name}
+        </h1>
         <div className="mt-2 flex flex-wrap items-center gap-2">
-          <Badge variant="secondary">{classroom.memberships.length} members</Badge>
+          <Badge variant="secondary">
+            {classroom.memberships.length} members
+          </Badge>
           {track && <Badge variant="outline">{track.title}</Badge>}
         </div>
 
         {track && progress ? (
           <div className="border-border shadow-soft mt-6 rounded-xl border p-5">
             <div className="flex items-center justify-between text-sm">
-              <span className="font-medium">Your progress in {track.shortTitle ?? track.title}</span>
+              <span className="font-medium">
+                Your progress in {track.shortTitle ?? track.title}
+              </span>
               <span className="text-muted-foreground">
                 {progress.completed} / {progress.total} items
               </span>
@@ -83,23 +92,37 @@ export default async function ClassroomPage({
         ) : (
           <p className="text-muted-foreground mt-6 text-sm">
             This classroom spans all tracks. Head to{" "}
-            <Link href="/tracks" className="underline">
-              Tracks
+            <Link href="/" className="underline">
+              the home page
             </Link>{" "}
             to keep learning.
           </p>
         )}
+
+        <div className="mt-8">
+          <LeaveClassroomButton classroomId={classroom.id} />
+        </div>
       </main>
     );
   }
 
   // ---- Instructor view ----
-  const roster = await getClassroomRoster(classroom.memberships, classroom.trackId);
+  // `track` is null-guarded above: a classroom scoped to a since-removed
+  // track (stale trackId) falls back to the all-tracks roster instead of an
+  // empty content-id universe rendering every row as 0/0.
+  const roster = await getClassroomRoster(
+    classroom.memberships,
+    track ? classroom.trackId : null
+  );
   // The facilitator material is Verification's own, so it is offered on a
   // Verification classroom and on the all-tracks kind, not on a Control one.
   const showFacilitator =
     classroom.trackId === "verification" || classroom.trackId === null;
   const students = roster.filter((r) => r.role === "student");
+  const instructors = roster.filter((r) => r.role === "instructor");
+  // A classroom always keeps one instructor; the demote control is hidden
+  // (and the action refuses) while there's only one.
+  const canDemote = instructors.length > 1;
   // Null when key storage is unconfigured server-side — hide the card.
   const keyStatus = await getClassroomKeyStatus(classroom.id);
 
@@ -108,7 +131,9 @@ export default async function ClassroomPage({
       <Breadcrumbs items={crumbs} />
       <div className="flex flex-wrap items-start justify-between gap-6">
         <div>
-          <h1 className="text-3xl font-semibold tracking-tight">{classroom.name}</h1>
+          <h1 className="text-3xl font-semibold tracking-tight">
+            {classroom.name}
+          </h1>
           <div className="mt-2 flex flex-wrap items-center gap-2">
             <Badge variant="default">Instructor</Badge>
             {track && <Badge variant="outline">{track.title}</Badge>}
@@ -122,9 +147,52 @@ export default async function ClassroomPage({
             Join code
           </p>
           <CopyJoinCode code={classroom.joinCode} />
-          <RegenerateCodeButton classroomId={classroom.id} />
+          <div className="flex items-center gap-1">
+            <RegenerateCodeButton classroomId={classroom.id} />
+            <DeleteClassroomButton
+              classroomId={classroom.id}
+              name={classroom.name}
+            />
+          </div>
         </div>
       </div>
+
+      {instructors.length > 0 && (
+        <section className="mt-8">
+          <h2 className="text-muted-foreground text-xs font-medium tracking-wide uppercase">
+            Instructors
+          </h2>
+          <ul className="mt-3 flex flex-wrap gap-2">
+            {instructors.map((row) => (
+              <li
+                key={row.userId}
+                className="border-border flex items-center gap-2 rounded-full border py-1 pr-1 pl-2"
+              >
+                <Avatar className="size-6">
+                  <AvatarImage src={row.imageUrl ?? undefined} alt="" />
+                  <AvatarFallback className="text-[0.65rem]">
+                    {(row.name ?? row.email)[0]?.toUpperCase()}
+                  </AvatarFallback>
+                </Avatar>
+                <span className="text-sm font-medium">
+                  {row.name ?? row.email}
+                </span>
+                {row.userId === user.id && (
+                  <span className="text-muted-foreground text-xs">(you)</span>
+                )}
+                {canDemote && (
+                  <RoleToggleButton
+                    classroomId={classroom.id}
+                    userId={row.userId}
+                    name={row.name ?? row.email}
+                    role="instructor"
+                  />
+                )}
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
 
       {showFacilitator && <FacilitatorPanel classroomId={classroom.id} />}
 
@@ -184,16 +252,28 @@ export default async function ClassroomPage({
                   </td>
                   <td className="px-4 py-3 text-right">
                     <div className="flex items-center justify-end gap-1">
-                      <Button asChild variant="ghost" size="icon" aria-label="View student">
+                      <Button
+                        asChild
+                        variant="ghost"
+                        size="icon"
+                        aria-label="View student"
+                      >
                         <Link
                           href={`/classrooms/${classroom.id}/students/${row.userId}`}
                         >
                           <ChevronRight className="size-4" aria-hidden />
                         </Link>
                       </Button>
+                      <RoleToggleButton
+                        classroomId={classroom.id}
+                        userId={row.userId}
+                        name={row.name ?? row.email}
+                        role="student"
+                      />
                       <RemoveMemberButton
                         classroomId={classroom.id}
                         userId={row.userId}
+                        name={row.name ?? row.email}
                       />
                     </div>
                   </td>

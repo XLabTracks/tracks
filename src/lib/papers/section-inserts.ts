@@ -106,9 +106,16 @@ export function planSectionInserts(
         if (!Number.isNaN(n) && n <= afterNum) existingBefore++;
       }
     }
-    // Other inserted sections under the same parent that render before this one.
+    // Other inserted sections under the same parent that render before this
+    // one. Same-anchor ties break by edits order — the order patch-section
+    // phase C renders them — so two inserts after one block number
+    // consecutively instead of colliding.
     const insertedBefore = resolved.filter(
-      (o) => o !== r && o.parentIndex === parentIndex && o.afterNum < afterNum,
+      (o) =>
+        o !== r &&
+        o.parentIndex === parentIndex &&
+        (o.afterNum < afterNum ||
+          (o.afterNum === afterNum && o.editIndex < editIndex)),
     ).length;
     const ordinal = existingBefore + insertedBefore + 1;
 

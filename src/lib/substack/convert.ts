@@ -86,11 +86,14 @@ export async function convertPostHtml(
   // Author-controlled tree: neutralize reserved namespaces, then run the
   // transforms that need Substack's own attribute vocabulary.
   stripAuthorIdsAndReservedClasses(tree);
+  // Embeds and widgets drop BEFORE image collection so an image inside a
+  // dropped subtree (a tweet avatar, a video thumbnail) is never fetched —
+  // a permanently dead URL there must not be able to block the build.
+  transformEmbeds(tree, warnings);
+  stripWidgets(tree, warnings);
   const images = collectImages(tree);
   const assets = await downloadImages(images, opts);
   rewriteImages(tree, images, opts.ref, warnings);
-  transformEmbeds(tree, warnings);
-  stripWidgets(tree, warnings);
 
   const clean = sanitize(tree, paperSanitizeSchema) as Root;
 
@@ -414,9 +417,10 @@ const SILENT_WIDGET_CLASSES = new Set([
 ]);
 
 /**
- * Components other passes are responsible for: images are rewritten before
- * this pass runs, and footnotes are rebuilt (by class + href, which survive
- * sanitize) after it.
+ * Components other passes are responsible for: images are collected and
+ * rewritten after this pass runs (their markup must survive it), and
+ * footnotes are rebuilt (by class + href, which survive sanitize) after
+ * sanitize.
  */
 const HANDLED_COMPONENTS = new Set([
   "FootnoteAnchorToDOM",
@@ -427,7 +431,7 @@ const HANDLED_COMPONENTS = new Set([
 /**
  * Strip Substack chrome. Known chrome (subscribe/share widgets) goes
  * silently; anything else still carrying a data-component-name after the
- * image/embed transforms — except the footnote markup a later pass owns —
+ * embed transform — except the image and footnote markup later passes own —
  * is an unhandled widget: drop it with a warning so the build surfaces what
  * the post lost.
  */

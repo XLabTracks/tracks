@@ -1,11 +1,14 @@
 "use client";
 
 import { getDemo } from "@/lib/demos/registry";
-import { DemoFrame } from "./demo-frame";
+import { ChromelessDemo, DemoFrame } from "./demo-frame";
 
 export interface DemoByIdProps {
   id: string;
-  /** When false, render the bare demo without the titled frame. */
+  /**
+   * When false, render without the titled card — the chromeless shell keeps
+   * the error boundary and (for interactive demos) the remount Reset.
+   */
   framed?: boolean;
 }
 
@@ -19,7 +22,12 @@ export function DemoById({ id, framed = true }: DemoByIdProps) {
     );
   }
   const Component = demo.component;
-  if (!framed) return <Component />;
+  if (!framed)
+    return (
+      <ChromelessDemo showReset={demo.interactive !== false}>
+        <Component />
+      </ChromelessDemo>
+    );
   return (
     <DemoFrame
       title={demo.title}

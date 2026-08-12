@@ -117,9 +117,13 @@ export function ControlDashboardDemo() {
 
   // Distributions
   const innocent = useMemo(() => scoreDensity(0, 200, 1), []);
+  // Deferred q, like the rest of the model path: the density must stay
+  // coherent with br (whose red strategy best-responds to qSlow), and the
+  // 200-bin mixture is model-scale work that belongs on deferred ticks, not
+  // urgent slider renders.
   const attack = useMemo(
-    () => attackMixtureDensity(q, br.red.sigma, br.red.gStar, 200, levers.attackSd),
-    [q, br.red.sigma, br.red.gStar, levers.attackSd],
+    () => attackMixtureDensity(qSlow, br.red.sigma, br.red.gStar, 200, levers.attackSd),
+    [qSlow, br.red.sigma, br.red.gStar, levers.attackSd],
   );
   const auditX = squash(zAudit(b));
   const deferX = squash(zDefer(dEff));

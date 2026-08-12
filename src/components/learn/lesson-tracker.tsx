@@ -85,16 +85,23 @@ export function LessonTracker({
       (entries) => {
         if (done.current || !entries.some((e) => e.isIntersecting)) return;
         done.current = true;
-        observer.disconnect();
         // setLessonComplete calls revalidatePath, so the action response
         // re-renders the route (sidebar checkmark + button included) — no
         // client router.refresh() needed.
         setLessonComplete(lessonId, true)
           .then(() => {
+            // Disarm only on a confirmed write — disconnecting up front
+            // would kill scroll completion for the visit if the action
+            // failed once (the observer never re-arms).
+            observer.disconnect();
             toast.success(toastLabel);
           })
           .catch(() => {
+            // Still observing: the next intersection transition retries.
+            // Meanwhile the failure must be visible — otherwise the learner
+            // scrolls past the end and the checkmark silently never lights.
             done.current = false;
+            toast.error("Couldn't save your progress — try the Mark complete button.");
           });
       },
       { rootMargin: "0px 0px -15% 0px" },

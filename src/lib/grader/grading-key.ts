@@ -70,17 +70,25 @@ export function resolveGraderKeySelection(
   pref: string | null,
   personalState: OpenRouterKeyStatus["state"],
   classroomIds: string[],
+  usableClassroomIds: string[] = classroomIds,
 ): GraderKeySelection {
   if (pref === "server") return "server";
   if (pref === "user" && personalState !== "none") return "user";
   if (pref != null) {
+    // An explicit classroom preference is honored as long as the user still
+    // belongs to that classroom, even if its key is currently undecryptable —
+    // grading then surfaces the precise "re-enter it" error rather than
+    // silently billing elsewhere.
     const id = classroomIdOfSelection(pref as GraderKeySelection);
     if (id != null && classroomIds.includes(id)) {
       return `classroom:${id}`;
     }
   }
   if (personalState !== "none") return "user";
-  if (classroomIds.length === 1) return `classroom:${classroomIds[0]}`;
+  // Automatic fallback only ever picks a *usable* classroom key — an
+  // undecryptable one the learner never explicitly chose must not strand them
+  // on an un-gradeable selection; fall through to the server key instead.
+  if (usableClassroomIds.length === 1) return `classroom:${usableClassroomIds[0]}`;
   return "server";
 }
 
@@ -147,6 +155,7 @@ export const getGraderKeyView = cache(
         user?.graderKeyPref ?? null,
         personalStatus.state,
         classrooms.map((c) => c.classroomId),
+        classrooms.filter((c) => c.usable).map((c) => c.classroomId),
       ),
     };
   },

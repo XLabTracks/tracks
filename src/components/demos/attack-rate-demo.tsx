@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { DEFAULT_LEVERS, type Levers, evaluateGame, attackRate } from "@/lib/control-model";
+import { DEFAULT_LEVERS, PARAMS, type Levers, evaluateGame, attackRate } from "@/lib/control-model";
 import { MathText } from "@/components/exercises/math-text";
 
 // Stage 9: opportunities are not equal. Problems vary in how cleanly a backdoor
@@ -19,10 +19,17 @@ import { MathText } from "@/components/exercises/math-text";
 // (red, the probability a decisive attack attempt is successfully deployed)
 // drifts down 37% → 28% as a lower cutoff dilutes the pool with more-visible
 // opportunities. Bottom panel (tight axis): their product P(red wins), humped
-// with an interior optimum around a 0.2% rate. The readout renders the taught
-// formula in KaTeX with live values (the event term is computed in the exact
-// i.i.d. form; the label shows the taught k-form packaging — they agree to
-// display precision).
+// with an interior optimum around a 0.2% rate. Every displayed quantity —
+// curves, markers, readout — is the model-exact value (res.pRedWin and its
+// raceFactor/eventFactor split, the same numbers the calibration test pins),
+// and the readout labels the event term in the exact per-problem form the
+// model computes, 1-(1-r(s+c))^N, surfacing r and N in the inputs tier — so
+// plugging the displayed inputs into the displayed formulas reproduces the
+// displayed numbers and the product row's "=" stays true to pRedWin. (The
+// taught k-form packaging 1-(1-s-c)^k, k = rN, strays from the exact form by
+// up to ~15pp at small k, so labeling the k-form over the exact value — or
+// displaying k-form values in place of the model's — would falsify either
+// the invited arithmetic or the model.)
 //
 // The x-axis is LOG-scaled in the attack rate. With N = 5,000 problems the
 // interior optimum sits at a tiny rate (~0.2%), so on a linear axis the whole
@@ -48,7 +55,7 @@ const T1 = 12;
 const PH1 = 150; // terms panel
 const Y1MAX = 1.06; // terms-panel scale max: headroom above 100% so Term B reads
 // as approaching a dashed asymptote instead of sitting on the panel border —
-// technically 1 - (1 - s - c)^k < 1 always, and the readout caps at >99.9%.
+// technically 1 - (1 - r(s+c))^N < 1 always, and the readout caps at >99.9%.
 const T2 = 180;
 const PH2 = 104; // P(red wins) panel, tight axis
 
@@ -88,15 +95,8 @@ function fmtPct(r: number): string {
   return `${pct >= 1 ? pct.toFixed(1) : pct.toPrecision(2)}%`;
 }
 
-/** Expected-attempts formatter: 0.3 → "0.3", 23.2 → "23", 3286 → "3,286". */
-function fmtK(k: number): string {
-  if (k >= 100) return Math.round(k).toLocaleString();
-  if (k >= 10) return k.toFixed(0);
-  return k.toFixed(1);
-}
-
 /**
- * Term B formatter: 1 - (1 - s - c)^k is asymptotic, never exactly 1, so the
+ * Term B formatter: 1 - (1 - r(s+c))^N is asymptotic, never exactly 1, so the
  * readout says ">99.9%" instead of a false "100.0%" once it rounds there.
  */
 function fmtTermB(v: number): string {
@@ -272,9 +272,10 @@ export function AttackRateDemo() {
 
       {/* The chain from the cutoff to P(red wins), at the slider's attack rate. */}
       <div className="border-border bg-muted/40 space-y-2 rounded-lg border p-3 text-sm">
-        {/* Inputs tier: the pool averages the cutoff sets, plus how many attempts it buys. */}
+        {/* Inputs tier: the pool averages the cutoff sets, plus the attack
+            rate and problem count the event term's exact form needs. */}
         <p className="text-muted-foreground text-center text-xs">Per attack attempt, averaged over the pool above the cutoff:</p>
-        <div className="grid grid-cols-3 gap-3 text-center">
+        <div className="grid grid-cols-4 gap-3 text-center">
           <div>
             <p className="text-muted-foreground text-xs">
               Caught by monitor <MathText text="$c$" />
@@ -289,13 +290,21 @@ export function AttackRateDemo() {
           </div>
           <div>
             <p className="text-muted-foreground text-xs">
-              Attack attempts <MathText text="$k$" />
+              Attack rate <MathText text="$r$" />
             </p>
-            <p className="font-semibold tabular-nums">{fmtK(res.agg.k)}</p>
+            <p className="font-semibold tabular-nums">{fmtPct(res.agg.r)}</p>
+          </div>
+          <div>
+            <p className="text-muted-foreground text-xs">
+              Problems <MathText text="$N$" />
+            </p>
+            <p className="font-semibold tabular-nums">{PARAMS.N.toLocaleString()}</p>
           </div>
         </div>
-        {/* Decomposition tier: the taught two-term formula, values from the model
-            (the event term is computed in the exact i.i.d. form). Operators sit on
+        {/* Decomposition tier: the two-term product, values straight from the
+            model and the event term labeled in the exact per-problem form the
+            model computes — so the row multiplies out from the inputs tier
+            and the "=" stays true to the model's pRedWin. Operators sit on
             the values' baseline (items-end + same text size), not the column
             centers, so × and = read as part of the number row. */}
         <div className="border-border/60 flex items-end justify-center gap-3 border-t pt-2 text-center tabular-nums">
@@ -308,7 +317,7 @@ export function AttackRateDemo() {
           <span className="text-muted-foreground text-base">×</span>
           <span>
             <span className="text-muted-foreground block text-xs">
-              <MathText text="$1-(1-s-c)^k$" />
+              <MathText text="$1-(1-r(s+c))^N$" />
             </span>
             <span className="text-base font-semibold">{fmtTermB(res.eventFactor)}</span>
           </span>

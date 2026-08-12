@@ -95,6 +95,9 @@ export function GraderKeySettings({ view }: { view: GraderKeyViewClient }) {
   const [editing, setEditing] = useState(false);
   const [value, setValue] = useState("");
   const [error, setError] = useState<string | null>(null);
+  // A soft heads-up after a successful save (e.g. the key has no OpenRouter
+  // credits, so grading on the paid model will fail) — never blocks the save.
+  const [warning, setWarning] = useState<string | null>(null);
   const [pending, startTransition] = useTransition();
   const errorId = useId();
   const router = useRouter();
@@ -115,6 +118,7 @@ export function GraderKeySettings({ view }: { view: GraderKeyViewClient }) {
       const result = await saveOpenRouterKey(value);
       if (result.ok) {
         publishOverrides({ personal: { state: "active", last4: result.last4 } });
+        setWarning(result.warning ?? null);
         setEditing(false);
         setValue("");
         router.refresh();
@@ -131,6 +135,7 @@ export function GraderKeySettings({ view }: { view: GraderKeyViewClient }) {
         // The effective selection may shift too (server-resolved); leave the
         // stale value in place until the refresh lands rather than guess.
         publishOverrides({ personal: { state: "none", last4: null } });
+        setWarning(null);
         router.refresh();
       } else {
         setError(result.error);
@@ -215,6 +220,7 @@ export function GraderKeySettings({ view }: { view: GraderKeyViewClient }) {
               setEditing(false);
               setValue("");
               setError(null);
+              setWarning(null);
             }}
           >
             Cancel
@@ -274,6 +280,11 @@ export function GraderKeySettings({ view }: { view: GraderKeyViewClient }) {
       {error && (
         <p id={errorId} role="alert" className="text-destructive mt-1">
           {error}
+        </p>
+      )}
+      {warning && !editing && (
+        <p role="status" className="mt-1 text-amber-600 dark:text-amber-500">
+          {warning}
         </p>
       )}
     </div>

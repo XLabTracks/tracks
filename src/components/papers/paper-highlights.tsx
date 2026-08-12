@@ -21,6 +21,7 @@ import {
   RotateCcw,
   StickyNote,
   Trash2,
+  Users,
 } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
@@ -35,31 +36,31 @@ import {
 } from "@/lib/highlights/dom";
 import {
   HIGHLIGHT_MAX_NOTE_CHARS,
+  type ClassHighlightRow,
   type CreateHighlightResult,
   type HighlightInput,
   type HighlightRow,
 } from "@/lib/highlights/types";
 import { stackCommentTops } from "@/lib/highlights/comment-layout";
 import {
+  PAPER_GATE_OPEN_EVENT,
+  PAPER_GATE_OPEN_VALUE,
+} from "@/lib/papers/gate-state";
+import {
   MARGIN_NOTES_EVENT,
   MARGIN_NOTES_LAYOUT_EVENT,
   marginNotesEnabled,
 } from "./margin-notes-toggle";
-// Reading-gate integration is soft by design: this branch has no gate
-// feature, so TWO literals are inlined rather than imported, and BOTH must
-// match the guided-paper branch when it lands:
-//   1. the event name below — PAPER_GATE_OPEN_EVENT in
-//      src/lib/papers/gate-state.ts (swap for the shared constant);
-//   2. the localStorage VALUE "open" checked in the resolve effect — what
-//      that branch's paper-gate.tsx writes via setItem(storageKey, "open")
-//      (an inline literal there too; if its convention changes, change the
-//      check or every gate reads permanently closed).
-// Re-coupling is those two swaps plus passing `gateKeys` from the paper
-// page. Until then no gate ever fires the event and `gateKeys` stays
-// undefined — every miss classifies as an orphan, which is correct on an
-// ungated document.
-const PAPER_GATE_OPEN_EVENT = "tracks:paper-gate-open";
-const GATE_OPEN_VALUE = "open";
+import {
+  CLASS_HIGHLIGHTS_EVENT,
+  classHighlightsEnabled,
+} from "./class-highlights-toggle";
+// Reading-gate coupling: PaperGate persists an opened gate by writing
+// PAPER_GATE_OPEN_VALUE under its storage key and dispatching
+// PAPER_GATE_OPEN_EVENT in the same click. The paper page passes those
+// storage keys as `gateKeys`; the resolve effect re-checks them on every
+// open event, so below-gate highlights classify as "pending" — never
+// fuzzy-matched or orphaned — while any gate is still closed.
 
 /**
  * Select-to-highlight layer for paper items, mounted as a sibling AFTER
@@ -117,6 +118,13 @@ const HL_NOTE_NAME = "tracks-hl-note";
  */
 const HL_NOTE_ACTIVE_NAME = "tracks-hl-note-active";
 const HL_FLASH_NAME = "tracks-hl-flash";
+/**
+ * Classmates' shared highlights paint here — a distinct sky tint, never the
+ * amber of the reader's own — and are kept out of every interaction registry
+ * (hit-test, hover promotion): they are read-only. All shared rows are noted,
+ * so one name covers them.
+ */
+const HL_PEER_NAME = "tracks-hl-peer";
 
 /**
  * The ::highlight() paint rules, injected at runtime as a constructable
@@ -149,8 +157,17 @@ const HIGHLIGHT_PAINT_CSS = `
 ::highlight(${HL_FLASH_NAME}) {
   background-color: rgb(245 158 11 / 0.5);
 }
+::highlight(${HL_PEER_NAME}) {
+  background-color: rgb(56 189 248 / 0.22);
+  text-decoration-line: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 3px;
+  text-decoration-color: rgb(2 132 199 / 0.5);
+}
 `;
 const TEMP_PREFIX = "temp-";
+/** Stable empty peer set for the toggle-off state (no new identity/render). */
+const EMPTY_CLASS_ROWS: ClassHighlightRow[] = [];
 /** Half the card width (w-80) — used to clamp popover placement. */
 const CARD_HALF = 160;
 
@@ -254,6 +271,7 @@ function compareRowOrder(
 
 export function PaperHighlights({
   initialHighlights,
+  classHighlights = [],
   gateKeys,
   createAction,
   updateNoteAction,
@@ -261,10 +279,18 @@ export function PaperHighlights({
 }: {
   initialHighlights: HighlightRow[];
   /**
+   * Classmates' shared NOTED highlights on this item (read-only). Painted in
+   * a distinct color and shown as margin boxes mixed in with the reader's own
+   * notes when the "class notes" preference is on; never editable, never part
+   * of the own-highlight state (kept in a separate resolved-range map, out of
+   * every hit-test / hover path).
+   */
+  classHighlights?: ClassHighlightRow[];
+  /**
    * localStorage keys of the paper's reading gates, one per gate:
-   * `tracks:paper-gate:<paperId>:<gateId>`, value "open" once opened
-   * (written by the guided-paper branch's PaperGate — unwired here until
-   * that branch lands; see the gate-literal note above).
+   * `tracks:paper-gate:<paperId>:<gateId>`, value PAPER_GATE_OPEN_VALUE once
+   * opened (written by PaperGate; the paper page passes the same keys it
+   * gives LessonTracker).
    */
   gateKeys?: string[];
   createAction: (input: HighlightInput) => Promise<CreateHighlightResult>;
@@ -288,6 +314,12 @@ export function PaperHighlights({
   const [, startTransition] = useTransition();
   const rootRef = useRef<HTMLElement | null>(null);
   const resolvedRef = useRef<Map<string, Range>>(new Map());
+  /**
+   * Resolved ranges for classmates' shared highlights — kept SEPARATE from
+   * resolvedRef so peer ranges never reach hitTest/hover/click (those iterate
+   * resolvedRef alone). positionComments reads both.
+   */
+  const peerResolvedRef = useRef<Map<string, Range>>(new Map());
   /** Latest rows for async continuations (reconcile-time dedupe checks). */
   const rowsRef = useRef(rows);
   /**
@@ -312,6 +344,17 @@ export function PaperHighlights({
    * preference before anything paints.
    */
   const [marginNotesOn, setMarginNotesOn] = useState(false);
+  /**
+   * "Class notes" preference (ClassHighlightsToggle in the page header) —
+   * whether classmates' shared highlights paint + show in the margin. Starts
+   * FALSE for the same SSR/hydration reason as marginNotesOn, and because the
+   * feature is opt-in (default off). classHighlightsOnRef mirrors it for the
+   * ref-only positionComments callback.
+   */
+  const [classHighlightsOn, setClassHighlightsOn] = useState(false);
+  const classHighlightsOnRef = useRef(false);
+  /** Peer rows currently shown (== classHighlights while the toggle is on). */
+  const classRowsRef = useRef<ClassHighlightRow[]>([]);
   /** Margin box currently in in-place edit mode (hover → Edit). */
   const [editingCommentId, setEditingCommentId] = useState<string | null>(null);
   /** Mirror for positionComments (a stable callback reading refs only). */
@@ -387,6 +430,37 @@ export function PaperHighlights({
       window.removeEventListener("storage", sync);
     };
   }, []);
+  useLayoutEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setClassHighlightsOn(classHighlightsEnabled());
+  }, []);
+  useEffect(() => {
+    const sync = () => setClassHighlightsOn(classHighlightsEnabled());
+    window.addEventListener(CLASS_HIGHLIGHTS_EVENT, sync);
+    window.addEventListener("storage", sync);
+    return () => {
+      window.removeEventListener(CLASS_HIGHLIGHTS_EVENT, sync);
+      window.removeEventListener("storage", sync);
+    };
+  }, []);
+
+  // Peer rows actually shown: the shared set while the toggle is on, empty
+  // otherwise. Mirrored into refs the ref-only positionComments callback reads.
+  const classRows = useMemo(
+    () => (classHighlightsOn ? classHighlights : EMPTY_CLASS_ROWS),
+    [classHighlightsOn, classHighlights],
+  );
+  useEffect(() => {
+    classHighlightsOnRef.current = classHighlightsOn;
+    classRowsRef.current = classRows;
+  }, [classHighlightsOn, classRows]);
+  // Signature so the resolve/paint effect keys on peer CONTENT, not the fresh
+  // prop-array identity the server component sends each render.
+  const classSig = classRows.map((r) => r.id).join(",");
+  // The margin rail is live when EITHER layer wants it: own notes or class
+  // notes. positionComments self-skips boxes that aren't rendered, so the two
+  // gates below (own vs peer) still decide which boxes actually appear.
+  const showMarginLayer = marginNotesOn || classHighlightsOn;
 
   /**
    * Position the margin-note boxes and their connector lines. Imperative
@@ -433,13 +507,36 @@ export function PaperHighlights({
       textAfter: boolean;
       blockRight: number;
     }[] = [];
+    // The reader's own noted rows (from resolvedRef), plus classmates' shared
+    // rows (from peerResolvedRef) when the class-notes toggle is on. From the
+    // box's perspective the two are identical — an id, a box, a range — so
+    // they share one placement pass and interleave by document position.
+    const sources: {
+      id: string;
+      box: HTMLDivElement | undefined;
+      range: Range | undefined;
+    }[] = [];
     for (const row of rowsRef.current) {
-      // Same membership rule as the portal: noted rows, plus the row whose
-      // box is in edit mode with a just-emptied textarea.
+      // Noted rows, plus the row whose box is in edit mode with a
+      // just-emptied textarea.
       if (!row.note && editingCommentIdRef.current !== row.id) continue;
-      const box = boxes.get(row.id);
+      sources.push({
+        id: row.id,
+        box: boxes.get(row.id),
+        range: resolvedRef.current.get(row.id),
+      });
+    }
+    if (classHighlightsOnRef.current) {
+      for (const row of classRowsRef.current) {
+        sources.push({
+          id: row.id,
+          box: boxes.get(row.id),
+          range: peerResolvedRef.current.get(row.id),
+        });
+      }
+    }
+    for (const { id, box, range } of sources) {
       if (!box) continue;
-      const range = resolvedRef.current.get(row.id);
       // A multi-sentence range's client rects FRAGMENT per sentence span:
       // rects[0] ends at the first sentence's end, not at the highlight's
       // actual reach on that line — the pointer must start where the FIRST
@@ -453,7 +550,7 @@ export function PaperHighlights({
       const first = rects[0];
       if (!range || !first) {
         box.style.visibility = "hidden";
-        const svg = lines.get(row.id);
+        const svg = lines.get(id);
         if (svg) svg.style.visibility = "hidden";
         continue;
       }
@@ -486,7 +583,7 @@ export function PaperHighlights({
           // Boundary outside the block (shouldn't happen) — straight route.
         }
       }
-      items.push({ id: row.id, rect: first, box, lineRight, textAfter, blockRight });
+      items.push({ id, rect: first, box, lineRight, textAfter, blockRight });
     }
     if (items.length === 0) {
       // Nothing to show — release any rail this layer reserved.
@@ -592,7 +689,10 @@ export function PaperHighlights({
         let yGap = yTop - 3;
         const runLeft = lineRight - 4;
         const runRight = blockRight;
-        for (const other of resolvedRef.current.values()) {
+        for (const other of [
+          ...resolvedRef.current.values(),
+          ...peerResolvedRef.current.values(),
+        ]) {
           let covered = false;
           for (const r of other.getClientRects()) {
             if (r.width < 1 || r.height < 1) continue;
@@ -680,7 +780,7 @@ export function PaperHighlights({
       (key) => {
         if (sessionOpenedRef.current.has(key)) return false;
         try {
-          return window.localStorage.getItem(key) !== GATE_OPEN_VALUE;
+          return window.localStorage.getItem(key) !== PAPER_GATE_OPEN_VALUE;
         } catch {
           return true; // storage unavailable and no open observed — closed
         }
@@ -726,25 +826,49 @@ export function PaperHighlights({
       hoveredGroupRef.current = null;
       promotedRangesRef.current = [];
     }
+    // Classmates' shared highlights: resolved into their OWN map (never
+    // resolvedRef — kept out of every interaction path) and painted under a
+    // single sky-tinted name. Same anchor resolution + fuzzy fallback as own
+    // rows; a peer row that no longer matches simply isn't painted or boxed
+    // (no orphan panel entry for someone else's highlight).
+    const peerResolved = new Map<string, Range>();
+    for (const row of classRowsRef.current) {
+      const result = resolveHighlight(root, row, getFuzzyIndex);
+      if ("range" in result) peerResolved.set(row.id, result.range);
+    }
+    peerResolvedRef.current = peerResolved;
+    if (supportsPaint()) {
+      if (peerResolved.size > 0) {
+        const peer = new Highlight();
+        for (const range of peerResolved.values()) peer.add(range);
+        CSS.highlights.set(HL_PEER_NAME, peer);
+      } else {
+        CSS.highlights.delete(HL_PEER_NAME);
+      }
+    }
     // Same commit as the resolution it depends on: the margin boxes for
-    // these rows are already in the DOM (the portal renders from `rows`),
-    // so they can be measured and placed against the fresh ranges.
+    // these rows are already in the DOM (the portal renders from `rows` and
+    // `classRows`), so they can be measured and placed against the fresh
+    // ranges.
     positionComments();
-  }, [rows, resolveTick, gateSig, positionComments]);
+  }, [rows, resolveTick, gateSig, classSig, positionComments]);
 
   // A box swapping between display and inline-edit mode changes its height —
   // restack the boxes below it in the same commit. Likewise a note preview
-  // expanding/collapsing (Show more).
+  // expanding/collapsing (Show more), and the "My notes" preference flipping
+  // while class notes keep the layer mounted: showMarginLayer doesn't change
+  // then, so only this effect places the remounted own boxes (they mount
+  // hidden) or broadcasts the space their unmount released.
   useEffect(() => {
     positionComments();
-  }, [editingCommentId, expandedNoteIds, positionComments]);
+  }, [marginNotesOn, editingCommentId, expandedNoteIds, positionComments]);
 
   // Keep the margin notes tracking layout: container reflow (images, the
   // sidenote rail reserving/releasing its inset padding), viewport resizes,
   // and hide-edit reveals (change/toggle fire in capture — toggle doesn't
   // bubble). rAF-coalesced like PaperSidenotes' schedule.
   useEffect(() => {
-    if (!marginNotesOn) {
+    if (!showMarginLayer) {
       // The boxes just unmounted — one pass finds nothing to place but
       // still broadcasts the layout change, so sidenotes reclaim the space.
       positionComments();
@@ -773,7 +897,7 @@ export function PaperHighlights({
       // the reading column widens back out.
       root.classList.remove(COMMENTS_INSET_CLASS);
     };
-  }, [marginNotesOn, positionComments]);
+  }, [showMarginLayer, positionComments]);
 
   // Adopt the paint rules while mounted; unregister the painted names when
   // leaving the page.
@@ -791,6 +915,7 @@ export function PaperHighlights({
       CSS.highlights.delete(HL_NOTE_NAME);
       CSS.highlights.delete(HL_NOTE_ACTIVE_NAME);
       CSS.highlights.delete(HL_FLASH_NAME);
+      CSS.highlights.delete(HL_PEER_NAME);
     };
   }, []);
 
@@ -1291,7 +1416,8 @@ export function PaperHighlights({
   };
 
   const jumpTo = (id: string) => {
-    const range = resolvedRef.current.get(id);
+    const range =
+      resolvedRef.current.get(id) ?? peerResolvedRef.current.get(id);
     if (!range) return;
     const target = rangeAnchorElement(range);
     if (!target) return;
@@ -1427,15 +1553,16 @@ export function PaperHighlights({
           users edit via the panel/card); in edit mode it swaps to the
           in-place editor — real interactive content, which is why the layer
           is NOT aria-hidden wholesale. */}
-      {marginNotesOn &&
+      {showMarginLayer &&
         createPortal(
           <div className="pointer-events-none">
-            {rows
-              // A row being edited stays mounted even when the debounced
-              // save has just mirrored an emptied textarea to note: null —
-              // the editor must never unmount under the cursor.
-              .filter((row) => row.note || editingCommentId === row.id)
-              .map((row) => (
+            {marginNotesOn &&
+              rows
+                // A row being edited stays mounted even when the debounced
+                // save has just mirrored an emptied textarea to note: null —
+                // the editor must never unmount under the cursor.
+                .filter((row) => row.note || editingCommentId === row.id)
+                .map((row) => (
                 <Fragment key={row.id}>
                   <div
                     ref={(el) => {
@@ -1545,6 +1672,54 @@ export function PaperHighlights({
                   </svg>
                 </Fragment>
               ))}
+            {/* Classmates' shared notes: read-only boxes on the same rail,
+                distinguished by a sky border/byline (no Edit, no editor).
+                Refs share the same maps as own boxes (ids never collide —
+                peer rows are other users' cuids); positionComments places
+                them interleaved by document position. */}
+            {classHighlightsOn &&
+              classHighlights.map((row) => (
+                <Fragment key={`peer-${row.id}`}>
+                  <div
+                    ref={(el) => {
+                      if (el) commentBoxRefs.current.set(row.id, el);
+                      else commentBoxRefs.current.delete(row.id);
+                    }}
+                    className="paper-comment group bg-card shadow-soft pointer-events-auto absolute z-30 rounded-lg border border-sky-400/60"
+                    style={{ visibility: "hidden" }}
+                    data-peer=""
+                  >
+                    <div className="px-2.5 py-2">
+                      <span className="mb-0.5 block text-[11px] font-medium text-sky-700 dark:text-sky-400">
+                        {row.author}
+                      </span>
+                      <span
+                        className="line-clamp-4 text-xs leading-relaxed"
+                        title={row.note ?? undefined}
+                      >
+                        {row.note}
+                      </span>
+                    </div>
+                  </div>
+                  <svg
+                    ref={(el) => {
+                      if (el) commentLineRefs.current.set(row.id, el);
+                      else commentLineRefs.current.delete(row.id);
+                    }}
+                    aria-hidden
+                    className="paper-comment-line absolute z-20"
+                    style={{ visibility: "hidden" }}
+                    data-peer=""
+                  >
+                    <polyline
+                      className="stroke-sky-500/70"
+                      fill="none"
+                      strokeWidth={1.5}
+                      strokeLinejoin="round"
+                    />
+                  </svg>
+                </Fragment>
+              ))}
           </div>,
           document.body,
         )}
@@ -1644,6 +1819,38 @@ export function PaperHighlights({
                 </li>
               );
             })}
+          </ul>
+        </details>
+      )}
+
+      {classHighlightsOn && classHighlights.length > 0 && (
+        <details className="group border-border bg-card mt-6 rounded-xl border">
+          <summary className="flex cursor-pointer items-center gap-2 px-5 py-3.5 text-sm font-medium select-none [&::-webkit-details-marker]:hidden">
+            <ChevronRight
+              className="text-muted-foreground size-4 shrink-0 transition-transform group-open:rotate-90"
+              aria-hidden
+            />
+            <Users className="size-4 shrink-0 text-sky-600 dark:text-sky-400" aria-hidden />
+            Class highlights ({classHighlights.length})
+          </summary>
+          <ul className="border-border divide-border divide-y border-t">
+            {classHighlights.map((row) => (
+              <li key={row.id} className="px-5 py-3">
+                <button
+                  type="button"
+                  onClick={() => jumpTo(row.id)}
+                  className="w-full min-w-0 text-left"
+                >
+                  <span className="text-muted-foreground line-clamp-2 text-sm">
+                    {row.snippet}
+                  </span>
+                  <span className="mt-0.5 line-clamp-2 text-sm">{row.note}</span>
+                  <span className="text-muted-foreground/80 mt-0.5 block text-xs">
+                    — {row.author}
+                  </span>
+                </button>
+              </li>
+            ))}
           </ul>
         </details>
       )}

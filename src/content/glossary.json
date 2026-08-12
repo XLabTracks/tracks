@@ -3,7 +3,6 @@
     "c-areas-l1",
     "c-lowstakes-l2",
     "c-lowstakes-l3",
-    "c-lowstakes-l4",
     "research-tips"
   ],
   "terms": [
@@ -110,7 +109,11 @@
     {
       "id": "pareto-frontier",
       "term": "Pareto frontier",
-      "aliases": ["Pareto improvement", "Pareto improvements", "Pareto optimal"],
+      "aliases": [
+        "Pareto improvement",
+        "Pareto improvements",
+        "Pareto optimal"
+      ],
       "definition": "The curve of best achievable trade-offs, commonly used to describe tradeoffs between safety and usefulness. Better safety techniques push the frontier out, so a given usefulness sacrifice buys more safety; a Pareto improvement is better on one axis and no worse on the other.",
       "seeAlso": ["safety-budget"],
       "autoGloss": true,
@@ -242,7 +245,11 @@
       "term": "control protocol",
       "aliases": ["control protocols"],
       "definition": "The pipeline of safety techniques a lab runs untrusted model outputs through designed to extract useful work while preventing, and catching, bad actions.",
-      "seeAlso": ["trusted-monitoring", "control-evaluation", "untrusted-model"],
+      "seeAlso": [
+        "trusted-monitoring",
+        "control-evaluation",
+        "untrusted-model"
+      ],
       "autoGloss": true,
       "source": {
         "label": "AI Control: Improving Safety Despite Intentional Subversion",

@@ -33,8 +33,8 @@ const paperByInsertedLessonId = new Map<string, Paper>(
     (p.edits ?? [])
       .flatMap((edit) => (edit.op === "activity" ? edit.items : []))
       .filter((item) => item.kind === "lesson")
-      .map((item) => [item.id, p] as const),
-  ),
+      .map((item) => [item.id, p] as const)
+  )
 );
 
 export { tracks, papers, resources };
@@ -63,7 +63,9 @@ export function getPaperById(id: string): Paper | undefined {
 export function getExerciseById(id: string): Exercise | undefined {
   return exerciseById.get(id);
 }
-export function getAssessmentForModule(moduleId: string): Assessment | undefined {
+export function getAssessmentForModule(
+  moduleId: string
+): Assessment | undefined {
   return assessmentByModuleId.get(moduleId);
 }
 export function getAssessmentById(id: string): Assessment | undefined {
@@ -80,7 +82,7 @@ export function getAssessmentById(id: string): Assessment | undefined {
  */
 export function getWritingTarget(
   contentId: string,
-  kind: "assessment" | "exercise",
+  kind: "assessment" | "exercise"
 ): { sectionIds: string[]; format: string } | undefined {
   if (kind === "assessment") {
     const assessment = assessmentById.get(contentId);
@@ -92,7 +94,9 @@ export function getWritingTarget(
   }
   const exercise = exerciseById.get(contentId);
   if (!exercise || !isWritingExercise(exercise)) return undefined;
-  const sectionIds = (exercise.sections ?? [{ id: "response" }]).map((s) => s.id);
+  const sectionIds = (exercise.sections ?? [{ id: "response" }]).map(
+    (s) => s.id
+  );
   return { sectionIds, format: exercise.format };
 }
 
@@ -156,7 +160,7 @@ export function getInsertedLessonsForPaper(paperId: string): Lesson[] {
 
 export function getModuleBySlugs(
   trackSlug: string,
-  moduleSlug: string,
+  moduleSlug: string
 ): { track: Track; module: Module } | undefined {
   const track = trackBySlug.get(trackSlug);
   if (!track) return undefined;
@@ -167,12 +171,12 @@ export function getModuleBySlugs(
 export function getItemBySlugs(
   trackSlug: string,
   moduleSlug: string,
-  itemSlug: string,
+  itemSlug: string
 ): { track: Track; module: Module; item: ModuleItem } | undefined {
   const resolved = getModuleBySlugs(trackSlug, moduleSlug);
   if (!resolved) return undefined;
   const item = getItemsForModule(resolved.module.id).find(
-    (candidate) => itemSlugOf(candidate) === itemSlug,
+    (candidate) => itemSlugOf(candidate) === itemSlug
   );
   return item ? { ...resolved, item } : undefined;
 }
@@ -200,7 +204,7 @@ export interface ItemRef {
 
 /** Flattened, ordered sequence of every content item in a track. */
 export function getTrackItemSequence(
-  trackSlug: string,
+  trackSlug: string
 ): Array<{ module: Module; item: ModuleItem }> {
   const track = trackBySlug.get(trackSlug);
   if (!track) return [];
@@ -220,7 +224,8 @@ export function getItemNavigation(itemId: string): {
 } {
   const item = resolveItem(itemId);
   if (!item) return { prev: null, next: null };
-  const moduleId = item.kind === "lesson" ? item.lesson.moduleId : item.paper.moduleId;
+  const moduleId =
+    item.kind === "lesson" ? item.lesson.moduleId : item.paper.moduleId;
   const track = getTrackForModule(moduleId);
   if (!track) return { prev: null, next: null };
 
@@ -261,6 +266,79 @@ export function getTrackOutline(trackSlug: string): TrackOutline | undefined {
   };
 }
 
+/**
+ * Slim projection of the outline for the client track sidebar — exactly the
+ * fields it renders, plus each paper's inserted-lesson ids (the extra
+ * progress units behind its checkmark, matching getItemProgressContentIds).
+ * The full TrackOutline carries whole Paper objects, and their `edits`
+ * (hidden-text snippets, note markdown, gate prompts — ~80 KB on the control
+ * track) would otherwise ride the flight payload of every track page.
+ */
+export interface SidebarOutlineItem {
+  kind: ModuleItem["kind"];
+  id: string;
+  slug: string;
+  title: string;
+  /** Mirrors Lesson.optional / Paper.optional. */
+  optional?: true;
+  /** Closing lessons show a flag and never a completable circle. */
+  completion?: boolean;
+  sectionItemId?: string;
+  /** Papers only: inserted lessons that must also complete for the checkmark. */
+  insertedLessonIds?: string[];
+}
+
+export interface SidebarOutline {
+  track: Pick<Track, "slug" | "title" | "shortTitle">;
+  modules: Array<{
+    module: Pick<Module, "id" | "slug" | "title" | "order" | "assessmentId">;
+    items: SidebarOutlineItem[];
+  }>;
+}
+
+export function getTrackSidebarOutline(
+  trackSlug: string
+): SidebarOutline | undefined {
+  const outline = getTrackOutline(trackSlug);
+  if (!outline) return undefined;
+  const { slug, title, shortTitle } = outline.track;
+  return {
+    track: { slug, title, shortTitle },
+    modules: outline.modules.map(({ module, items }) => ({
+      module: {
+        id: module.id,
+        slug: module.slug,
+        title: module.title,
+        order: module.order,
+        assessmentId: module.assessmentId,
+      },
+      items: items.map((item) =>
+        item.kind === "lesson"
+          ? {
+              kind: "lesson",
+              id: item.lesson.id,
+              slug: item.lesson.slug,
+              title: item.lesson.title,
+              optional: item.lesson.optional,
+              completion: item.lesson.completion,
+              sectionItemId: item.lesson.sectionItemId,
+            }
+          : {
+              kind: "paper",
+              id: item.paper.id,
+              slug: item.paper.slug,
+              title: item.paper.title,
+              optional: item.paper.optional,
+              sectionItemId: item.paper.sectionItemId,
+              insertedLessonIds: getInsertedLessonsForPaper(item.paper.id).map(
+                (l) => l.id
+              ),
+            }
+      ),
+    })),
+  };
+}
+
 // --- Progress id sets ------------------------------------------------------
 // Progress rows (LessonProgress) key on generic content ids: standalone
 // lessons, papers, and papers' inserted lessons each count as one unit.
@@ -295,7 +373,10 @@ export function isCompletionItem(item: ModuleItem): boolean {
 export function getItemProgressContentIds(item: ModuleItem): string[] {
   return item.kind === "lesson"
     ? [item.lesson.id]
-    : [item.paper.id, ...getInsertedLessonsForPaper(item.paper.id).map((l) => l.id)];
+    : [
+        item.paper.id,
+        ...getInsertedLessonsForPaper(item.paper.id).map((l) => l.id),
+      ];
 }
 
 /**
@@ -311,7 +392,7 @@ export function getModuleProgressContentIds(moduleId: string): string[] {
 /** A track's required progress ids (progress totals, prerequisite checks). */
 export function getTrackProgressContentIds(trackId: string): string[] {
   return getModulesForTrack(trackId).flatMap((m) =>
-    getModuleProgressContentIds(m.id),
+    getModuleProgressContentIds(m.id)
   );
 }
 
@@ -322,7 +403,7 @@ export function getTrackProgressContentIds(trackId: string): string[] {
  */
 export function getTrackContentIds(trackId: string): string[] {
   return getModulesForTrack(trackId).flatMap((m) =>
-    getItemsForModule(m.id).flatMap(getItemProgressContentIds),
+    getItemsForModule(m.id).flatMap(getItemProgressContentIds)
   );
 }
 
@@ -331,9 +412,10 @@ export function getTrackContentIds(trackId: string): string[] {
  * containing paper's page (they have no standalone route).
  */
 export function getContentLocation(
-  contentId: string,
+  contentId: string
 ): { track: Track; module: Module; href: string } | undefined {
-  const paper = paperById.get(contentId) ?? paperByInsertedLessonId.get(contentId);
+  const paper =
+    paperById.get(contentId) ?? paperByInsertedLessonId.get(contentId);
   if (paper) {
     const mod = moduleById.get(paper.moduleId);
     const track = mod ? trackById.get(mod.trackId) : undefined;
@@ -364,14 +446,16 @@ export function getContentLocation(
 function paperSourceUrl(source: PaperSource): string {
   if (source.kind === "arxiv") {
     const parsed = parseArxivId(source.arxivId);
-    return parsed ? buildAbsUrl(parsed) : `https://arxiv.org/abs/${source.arxivId}`;
+    return parsed
+      ? buildAbsUrl(parsed)
+      : `https://arxiv.org/abs/${source.arxivId}`;
   }
   return source.postUrl;
 }
 
 /**
- * Resource-hub entries derived from the content graph: every paper item in a
- * real track (the Example track is a feature reference, not curriculum). The
+ * Resource-hub entries derived from the content graph: every paper item in
+ * every track. The
  * hub links each to its in-course viewer (`internalHref`); `url` keeps the
  * original source, which stays the dedupe/coverage key. All fields are
  * factual — title from papers.data.ts, URL from the paper's source ref, note
@@ -382,7 +466,6 @@ export const paperResources: ExternalResource[] = (() => {
   const derived: ExternalResource[] = [];
   const seenUrls = new Set<string>();
   for (const track of tracks) {
-    if (track.kind === "example") continue;
     for (const mod of getModulesForTrack(track.id)) {
       for (const item of getItemsForModule(mod.id)) {
         if (item.kind !== "paper") continue;

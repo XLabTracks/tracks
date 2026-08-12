@@ -17,6 +17,7 @@ import {
 } from "@/lib/content/exercise-view";
 import { ActorBadge, FlowGraph } from "./flow-graph";
 import { Paragraphs } from "./math-text";
+import { runExerciseAction } from "./run-exercise-action";
 
 /**
  * The full control-scenarios flow in one card: a definitions card (the cast),
@@ -82,11 +83,23 @@ export function ControlScenariosCard({
   const submit = (index: number) => {
     const scenario = scenarios[index];
     startTransition(async () => {
-      if (persist) {
-        await saveControlScenario(exercise.id, scenario.id, answers[scenario.id]);
-      }
-      setSubmitted((prev) => ({ ...prev, [scenario.id]: true }));
-      setFocusReveal(true);
+      await runExerciseAction(
+        async () => {
+          if (persist) {
+            await saveControlScenario(
+              exercise.id,
+              scenario.id,
+              answers[scenario.id],
+            );
+          }
+        },
+        {
+          onSuccess: () => {
+            setSubmitted((prev) => ({ ...prev, [scenario.id]: true }));
+            setFocusReveal(true);
+          },
+        },
+      );
     });
   };
 
@@ -219,7 +232,7 @@ export function ControlScenariosCard({
                     <p className="text-muted-foreground text-xs font-medium tracking-wide uppercase">
                       Your reasoning
                     </p>
-                    <blockquote className="border-border mt-1.5 border-l-2 pl-3 text-sm whitespace-pre-wrap">
+                    <blockquote className="border-border mt-1.5 border-l-2 pl-3 text-sm whitespace-pre-wrap [overflow-wrap:anywhere]">
                       {answer}
                     </blockquote>
                   </div>

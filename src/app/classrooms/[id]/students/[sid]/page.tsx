@@ -184,7 +184,7 @@ export default async function StudentDetailPage({
                                   <dt className="text-muted-foreground text-xs font-medium uppercase">
                                     {section.label}
                                   </dt>
-                                  <dd className="whitespace-pre-wrap">{value}</dd>
+                                  <dd className="whitespace-pre-wrap [overflow-wrap:anywhere]">{value}</dd>
                                 </div>
                               );
                             })}

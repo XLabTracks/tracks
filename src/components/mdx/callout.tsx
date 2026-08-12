@@ -32,7 +32,11 @@ export interface CalloutProps {
 }
 
 export function Callout({ variant = "note", title, children }: CalloutProps) {
-  const { icon: Icon, className, iconClassName } = VARIANTS[variant];
+  // MDX bodies aren't type-checked, so an authoring typo can pass an unknown
+  // variant at runtime — degrade to "note" instead of throwing mid-render
+  // (mirrors the runtime guards in <Term/> and <SiteQuote/>).
+  const { icon: Icon, className, iconClassName } =
+    VARIANTS[variant] ?? VARIANTS.note;
   return (
     <div
       className={cn(

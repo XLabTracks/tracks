@@ -26,17 +26,16 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import { isCompletionItem, isOptionalItem } from "@/lib/content";
-import { groupDone, itemDone, type ItemGroup } from "@/lib/content/item-done";
 import { OptionalMarker } from "@/components/content/optional-tag";
-import type { ModuleItem, TrackOutline } from "@/lib/content";
+import type { SidebarOutline, SidebarOutlineItem } from "@/lib/content";
 import type { PaperNavItem } from "@/lib/papers/paper-nav";
 import { isVerificationRoute } from "@/components/verification/site-chrome";
 import { cn } from "@/lib/utils";
 import { navItemClass, PaperSectionNav } from "./paper-section-nav";
 
 export interface TrackSidebarProps {
-  outline: TrackOutline;
+  /** Slim server-built projection — never the full outline (Paper.edits would bloat the client payload). */
+  outline: SidebarOutline;
   /** Content IDs the current user has completed — lessons, papers, and papers' inserted lessons (drives checkmarks). */
   completedContentIds?: string[];
   /** Module slugs gated by unmet prerequisites (drives lock icons). */
@@ -50,20 +49,24 @@ export interface TrackSidebarProps {
 
 /**
  * The item the current page shows, with its section nav — the headings that
- * nest under its row. Resolved from props (the outline carries the full item
- * objects), never from content accessors: this is a client component.
+ * nest under its row. Resolved from the slim outline projection, never from
+ * content accessors: this is a client component.
  */
 function activeItemNavOf(
   { outline, itemNavs = {} }: TrackSidebarProps,
-  pathname: string,
-): { kind: ModuleItem["kind"]; id: string; nav: PaperNavItem[] } | null {
+  pathname: string
+): {
+  kind: SidebarOutlineItem["kind"];
+  id: string;
+  nav: PaperNavItem[];
+} | null {
   const base = `/tracks/${outline.track.slug}`;
   for (const { module, items } of outline.modules) {
     for (const item of items) {
-      if (pathname !== `${base}/${module.slug}/${itemSlug(item)}`) continue;
-      const nav = itemNavs[itemKey(item)];
+      if (pathname !== `${base}/${module.slug}/${item.slug}`) continue;
+      const nav = itemNavs[item.id];
       return nav && nav.length > 0
-        ? { kind: item.kind, id: itemKey(item), nav }
+        ? { kind: item.kind, id: item.id, nav }
         : null;
     }
   }
@@ -85,15 +88,15 @@ function SidebarNav({
   const locked = new Set(lockedModuleSlugs);
   const activeItemNav = activeItemNavOf(
     { outline, completedContentIds, lockedModuleSlugs, itemNavs },
-    pathname,
+    pathname
   );
 
   const [open, setOpen] = useState<string[]>(() =>
     activeModuleSlug
       ? [activeModuleSlug]
       : outline.modules[0]
-        ? [outline.modules[0].module.slug]
-        : [],
+      ? [outline.modules[0].module.slug]
+      : []
   );
   // Ensure the navigated-to module's accordion is open — adjust during render
   // when the active slug changes (React's alternative to a state-syncing effect).
@@ -110,7 +113,7 @@ function SidebarNav({
   // adjust-during-render way as the module accordion above.
   const activeSectionKey = activeItemSectionKeyOf(outline, base, pathname);
   const [openSections, setOpenSections] = useState<string[]>(() =>
-    activeSectionKey !== undefined ? [activeSectionKey] : [],
+    activeSectionKey !== undefined ? [activeSectionKey] : []
   );
   const [prevActiveSection, setPrevActiveSection] = useState(activeSectionKey);
   if (activeSectionKey !== prevActiveSection) {
@@ -126,7 +129,7 @@ function SidebarNav({
     setOpenSections(
       openSections.includes(key)
         ? openSections.filter((k) => k !== key)
-        : [...openSections, key],
+        : [...openSections, key]
     );
 
   return (
@@ -168,7 +171,7 @@ function SidebarNav({
               onClick={onNavigate}
               className={cn(
                 "hover:bg-muted mt-1 block rounded-lg px-2 py-1.5 text-sm font-semibold transition-colors",
-                pathname === base && "bg-muted",
+                pathname === base && "bg-muted"
               )}
             >
               {outline.track.title}
@@ -185,7 +188,11 @@ function SidebarNav({
             const isLocked = locked.has(module.slug);
             const assessmentHref = `${base}/${module.slug}/assessment`;
             return (
-              <AccordionItem key={module.id} value={module.slug} className="border-none">
+              <AccordionItem
+                key={module.id}
+                value={module.slug}
+                className="border-none"
+              >
                 <AccordionTrigger className="hover:bg-muted [&[data-state=open]]:bg-muted/50 rounded-lg px-2 py-2 text-sm hover:no-underline">
                   <span className="flex items-center gap-2.5 text-left">
                     {isLocked && (
@@ -232,7 +239,7 @@ function SidebarNav({
                           onClick={onNavigate}
                           className={cn(
                             navItemClass(pathname === assessmentHref),
-                            ITEM_ROW_CLASS,
+                            ITEM_ROW_CLASS
                           )}
                         >
                           <FileText className={MARKER_CLASS} aria-hidden />
@@ -247,29 +254,45 @@ function SidebarNav({
           })}
         </Accordion>
       </nav>
-
     </div>
   );
 }
 
-function itemKey(item: ModuleItem): string {
-  return item.kind === "lesson" ? item.lesson.id : item.paper.id;
+function itemKey(item: SidebarOutlineItem): string {
+  return item.id;
 }
-function itemSectionItemId(item: ModuleItem): string | undefined {
-  return item.kind === "lesson"
-    ? item.lesson.sectionItemId
-    : item.paper.sectionItemId;
+function itemSectionItemId(item: SidebarOutlineItem): string | undefined {
+  return item.sectionItemId;
 }
-function itemSlug(item: ModuleItem): string {
-  return item.kind === "lesson" ? item.lesson.slug : item.paper.slug;
+function itemSlug(item: SidebarOutlineItem): string {
+  return item.slug;
 }
 
 /** The active item's heading nav, as resolved by activeItemNavOf. */
 type ActiveItemNav = {
-  kind: ModuleItem["kind"];
+  kind: SidebarOutlineItem["kind"];
   id: string;
   nav: PaperNavItem[];
 };
+
+interface ItemGroup {
+  item: SidebarOutlineItem;
+  children: SidebarOutlineItem[];
+}
+
+/** One projected item's own progress units. */
+function itemDone(item: SidebarOutlineItem, completed: Set<string>): boolean {
+  if (!completed.has(item.id)) return false;
+  return (item.insertedLessonIds ?? []).every((id) => completed.has(id));
+}
+
+/** A collapsed section head answers for itself and all rows behind it. */
+function groupDone(group: ItemGroup, completed: Set<string>): boolean {
+  return (
+    itemDone(group.item, completed) &&
+    group.children.every((child) => itemDone(child, completed))
+  );
+}
 
 /* A top-level sidebar row with the subsection rows that declared it as their
    section (`sectionItemId`). Content rules guarantee a section head precedes
@@ -277,12 +300,13 @@ type ActiveItemNav = {
    renders as its own top-level row rather than vanishing. ItemGroup and the
    two done-rules live in @/lib/content/item-done — pure, and tested. */
 
-function groupModuleItems(items: ModuleItem[]): ItemGroup[] {
+function groupModuleItems(items: SidebarOutlineItem[]): ItemGroup[] {
   const groups: ItemGroup[] = [];
   const byKey = new Map<string, ItemGroup>();
   for (const item of items) {
     const sectionKey = itemSectionItemId(item);
-    const section = sectionKey !== undefined ? byKey.get(sectionKey) : undefined;
+    const section =
+      sectionKey !== undefined ? byKey.get(sectionKey) : undefined;
     if (section) {
       section.children.push(item);
     } else {
@@ -299,9 +323,9 @@ function groupModuleItems(items: ModuleItem[]): ItemGroup[] {
  *  names its head; reading a head names itself, so arriving on it reveals
  *  the subsections it would otherwise be hiding. */
 function activeItemSectionKeyOf(
-  outline: TrackOutline,
+  outline: SidebarOutline,
   base: string,
-  pathname: string,
+  pathname: string
 ): string | undefined {
   for (const { module, items } of outline.modules) {
     for (const item of items) {
@@ -344,7 +368,7 @@ function SidebarItemGroup({
 }) {
   const { item, children } = group;
   const href = `${moduleBase}/${itemSlug(item)}`;
-  const sectionNavFor = (candidate: ModuleItem) =>
+  const sectionNavFor = (candidate: SidebarOutlineItem) =>
     activeItemNav?.id === itemKey(candidate) ? activeItemNav : undefined;
   if (children.length === 0) {
     return (
@@ -361,7 +385,7 @@ function SidebarItemGroup({
       </li>
     );
   }
-  const title = item.kind === "lesson" ? item.lesson.title : item.paper.title;
+  const title = item.title;
   return (
     <li>
       <SidebarItemRow
@@ -384,7 +408,7 @@ function SidebarItemGroup({
             <ChevronRight
               className={cn(
                 "size-3.5 transition-transform",
-                expanded && "rotate-90",
+                expanded && "rotate-90"
               )}
               aria-hidden
             />
@@ -422,7 +446,7 @@ function SidebarItemRow({
   caret,
   done,
 }: {
-  item: ModuleItem;
+  item: SidebarOutlineItem;
   href: string;
   pathname: string;
   completed: Set<string>;
@@ -448,8 +472,11 @@ function SidebarItemRow({
       {/* The closing page is not work, so it takes neither marker: an empty
           circle would read as a unit left undone forever, and a tick as one
           nobody can earn. A flag says what it is — the end of the track. */}
-      {isCompletionItem(item) ? (
-        <Flag className={cn("text-muted-foreground", MARKER_CLASS)} aria-hidden />
+      {item.completion ? (
+        <Flag
+          className={cn("text-muted-foreground", MARKER_CLASS)}
+          aria-hidden
+        />
       ) : done ? (
         <CheckCircle2
           className={cn("text-foreground", MARKER_CLASS)}
@@ -460,14 +487,14 @@ function SidebarItemRow({
       )}
       <span className="flex min-w-0 flex-col">
         <span className="line-clamp-2">
-          {item.kind === "lesson" ? item.lesson.title : item.paper.title}
-          {done && !isCompletionItem(item) && (
+          {item.title}
+          {done && !item.completion && (
             <span className="sr-only"> (completed)</span>
           )}
         </span>
         {/* Its own line, outside the title's line-clamp, so a long title
             can't clip the optional marker (the primary nav surface). */}
-        {isOptionalItem(item) && <OptionalMarker compact className="mt-1.5" />}
+        {item.optional && <OptionalMarker compact className="mt-1.5" />}
       </span>
       {item.kind === "paper" && (
         <FileText
@@ -533,7 +560,6 @@ const SIDEBAR_WIDTH_KEY = "tracks:sidebar-width";
 
 const clampSidebarWidth = (width: number) =>
   Math.min(SIDEBAR_MAX_WIDTH, Math.max(SIDEBAR_MIN_WIDTH, width));
-
 
 /**
  * A user-adjustable dimension: null means automatic; a number is a
@@ -606,7 +632,7 @@ export function TrackSidebar(props: TrackSidebarProps) {
           "border-border bg-card/40 sticky top-14 hidden h-[calc(100vh-3.5rem)] shrink-0 overflow-hidden border-r lg:block",
           // Animate only in automatic mode — a transition would lag the drag.
           width === null && "transition-[width] duration-300",
-          width === null && "w-96",
+          width === null && "w-96"
         )}
       >
         <SidebarNav {...props} />
@@ -670,7 +696,7 @@ export function TrackSidebar(props: TrackSidebarProps) {
           className={cn(
             "absolute inset-y-0 right-0 z-10 w-1.5 cursor-col-resize touch-none outline-none",
             "hover:bg-border focus-visible:bg-ring/50 transition-colors",
-            dragging && "bg-ring/50",
+            dragging && "bg-ring/50"
           )}
         />
       </aside>

@@ -47,10 +47,11 @@ import {
  *  that serve the course's own site (enrolling, the reviewers' queue) from
  *  under /verification/ alongside its static pages. */
 export function isVerificationRoute(pathname: string | null): boolean {
-  return !!pathname && (
-    pathname === "/tracks/verification" ||
-    pathname.startsWith("/tracks/verification/") ||
-    pathname.startsWith("/verification/")
+  return (
+    !!pathname &&
+    (pathname === "/tracks/verification" ||
+      pathname.startsWith("/tracks/verification/") ||
+      pathname.startsWith("/verification/"))
   );
 }
 
@@ -85,14 +86,33 @@ export function VerificationHeader() {
   useEffect(() => {
     const links = () =>
       document.querySelectorAll<HTMLLinkElement>(
-        'link[rel="stylesheet"][href^="/verification/"]',
+        'link[rel="stylesheet"][href^="/verification/"]'
       );
     document.documentElement.classList.remove("vt-off-course");
     links().forEach((l) => {
       l.disabled = false;
     });
     return () => {
-      document.documentElement.classList.add("vt-off-course");
+      const root = document.documentElement;
+      root.classList.add("vt-off-course");
+      root.removeAttribute("data-theme");
+      // Verification has its own stored preference. Restore the platform
+      // preference when client navigation leaves the track, otherwise the
+      // next header can claim "Light" while the page is still dark.
+      let theme: "light" | "dark" | "contrast" | null = null;
+      try {
+        const stored = localStorage.getItem("tracks-theme");
+        if (stored === "light" || stored === "dark" || stored === "contrast") {
+          theme = stored;
+        }
+      } catch {
+        // Storage unavailable: system preference remains a safe fallback.
+      }
+      theme ??= window.matchMedia?.("(prefers-color-scheme: dark)").matches
+        ? "dark"
+        : "light";
+      root.classList.toggle("dark", theme !== "light");
+      root.classList.toggle("contrast", theme === "contrast");
       const w = window as unknown as { VTNotebook?: { close: () => void } };
       w.VTNotebook?.close();
       links().forEach((l) => {
@@ -105,8 +125,16 @@ export function VerificationHeader() {
     <>
       <link rel="stylesheet" href="/verification/fonts.css" precedence="high" />
       <link rel="stylesheet" href="/verification/theme.css" precedence="high" />
-      <link rel="stylesheet" href="/verification/app-bridge.css" precedence="high" />
-      <link rel="stylesheet" href="/verification/notebook.css" precedence="high" />
+      <link
+        rel="stylesheet"
+        href="/verification/app-bridge.css"
+        precedence="high"
+      />
+      <link
+        rel="stylesheet"
+        href="/verification/notebook.css"
+        precedence="high"
+      />
       <Script src="/verification/theme.js" strategy="afterInteractive" />
       {/* The notebook, the vocabulary lookup and the account sync are the same
           files the static pages load, in the same order: vocab.js calls
@@ -165,7 +193,9 @@ export function VerificationHeader() {
                 key={n.label}
                 href={n.href ? verificationHref(n.href) : undefined}
                 aria-current={
-                  n.href && pathname === verificationHref(n.href) ? "page" : undefined
+                  n.href && pathname === verificationHref(n.href)
+                    ? "page"
+                    : undefined
                 }
               >
                 {n.label}
@@ -214,10 +244,14 @@ export function VerificationFooter() {
               </a>
             ) : (
               // No destination supplied yet. Plain text, not a dead link.
-              <span key={f.label} className="pending" title="Link not supplied yet">
+              <span
+                key={f.label}
+                className="pending"
+                title="Link not supplied yet"
+              >
                 {f.label}
               </span>
-            ),
+            )
           )}
         </nav>
         <div className="foot-end">

@@ -414,7 +414,7 @@ export function calibrateStage(
   return { stage: stage, passes: passes, total: seeds.length, results: results };
 }
 
-// Stage 4 challenge check: at 10% noise, verifiers persist at some v and go
+// Stage 4 challenge check: at 20% noise, verifiers persist at some v and go
 // extinct at some higher v within the slider range [0, 1].
 export function verifierOutcomeAtCost(
   v: number,

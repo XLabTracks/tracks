@@ -11,6 +11,16 @@ export const HIGHLIGHT_MAX_SNIPPET_CHARS = 300;
 export const HIGHLIGHT_MAX_NOTE_CHARS = 2_000;
 export const HIGHLIGHT_MAX_PER_ITEM = 200;
 export const HIGHLIGHT_MAX_PER_USER = 2_000;
+/**
+ * Bounds on the shared class-notes view. It rides the RSC payload of every
+ * signed-in paper view (the server can't see the client-side "class notes"
+ * toggle), so it must stay bounded no matter the class size: at most this
+ * many classmate rows per item — the newest annotations win — with each
+ * note truncated to a margin-box preview length.
+ */
+export const HIGHLIGHT_CLASS_MAX_ROWS = 300;
+/** Classmate notes truncate to this many chars in the shared view. */
+export const HIGHLIGHT_CLASS_NOTE_PREVIEW_CHARS = 500;
 /** Max sentences one highlight may span (a passage, not a chapter). */
 export const HIGHLIGHT_MAX_SENTENCE_SPAN = 30;
 /** Sanity bound on character offsets (no real sentence is this long). */
@@ -91,4 +101,17 @@ export interface HighlightRow extends HighlightSpan {
   snippet: string;
   note: string | null;
   convVersion: number;
+}
+
+/**
+ * A classmate's shared highlight, as passed to the reader's read-only
+ * "class highlights" layer. Same anchor shape as HighlightRow plus the
+ * author's display name; `note` is always present (only NOTED highlights are
+ * shared — an un-noted highlight has nothing to show in the margin). These
+ * never enter the editable highlight state: they resolve into a separate
+ * range map, paint in a distinct color, and render as read-only margin boxes.
+ */
+export interface ClassHighlightRow extends HighlightRow {
+  /** Display name of the classmate who made the highlight. */
+  author: string;
 }

@@ -31,11 +31,9 @@
    and inventing values for them here would be a design decision. */
 /* No monospace on this course, at all. theme.css already collapsed its own
    --mono onto the sans, but that only governs the static stylesheets; the
-   app's components ask for it through Tailwind's `font-mono` utility, which
-   reads --font-mono — and layout.tsx really does load JetBrains Mono, so
-   every meta line, counter and micro-label in a widget came out in a third
-   face. Re-pointing the token here retires all ~120 of those in one rule,
-   inside this subtree only.
+   app's components ask for it through Tailwind's `font-mono` utility. The
+   platform token also resolves that utility to sans; the explicit bridge here
+   keeps standalone and app-rendered Verification in step.
 
    Nothing on the course needs a monospace: there is not one code block in any
    Verification lesson. Should one ever arrive, give `pre`/`code` an explicit
@@ -155,7 +153,7 @@
   position: relative;
 }
 :root[data-theme] .lesson-body ul:not(.not-prose *) > li::before {
-  content: '';
+  content: "";
   position: absolute;
   left: -1.05em;
   /* Centred on the first line of text, wherever the item wraps. */
@@ -188,7 +186,9 @@
    stacking context, so the circle paints behind the slab and above the
    page. And when the header carries the circle, the list's own must be
    suppressed or two circles stack on the seam. */
-:root[data-theme] .lesson-body ul:not(.not-prose *):not(li ul):has(> li:nth-child(4)) {
+:root[data-theme]
+  .lesson-body
+  ul:not(.not-prose *):not(li ul):has(> li:nth-child(4)) {
   position: relative;
   display: grid;
   gap: 14px;
@@ -197,8 +197,10 @@
   background: color-mix(in srgb, var(--primary) 7%, var(--background));
   border-radius: 28px;
 }
-:root[data-theme] .lesson-body ul:not(.not-prose *):not(li ul):has(> li:nth-child(4))::before {
-  content: '';
+:root[data-theme]
+  .lesson-body
+  ul:not(.not-prose *):not(li ul):has(> li:nth-child(4))::before {
+  content: "";
   position: absolute;
   left: -12px;
   top: -16px;
@@ -208,11 +210,17 @@
   background: var(--primary);
   z-index: -1;
 }
-:root[data-theme] .lesson-body ul:not(.not-prose *):not(li ul):has(> li:nth-child(4)) > li {
+:root[data-theme]
+  .lesson-body
+  ul:not(.not-prose *):not(li ul):has(> li:nth-child(4))
+  > li {
   margin: 0;
 }
-:root[data-theme] .lesson-body ul:not(.not-prose *):not(li ul):has(> li:nth-child(4)) > li::before {
-  content: '';
+:root[data-theme]
+  .lesson-body
+  ul:not(.not-prose *):not(li ul):has(> li:nth-child(4))
+  > li::before {
+  content: "";
   position: absolute;
   left: -26px;
   top: calc(0.875em - 4px);
@@ -223,7 +231,9 @@
 }
 
 /* The introducing paragraph, as the card's red header. */
-:root[data-theme] .lesson-body p:not(.not-prose *):has(+ ul:not(li ul) > li:nth-child(4)) {
+:root[data-theme]
+  .lesson-body
+  p:not(.not-prose *):has(+ ul:not(li ul) > li:nth-child(4)) {
   position: relative;
   margin: 2em 0 0;
   padding: 22px 30px 0 54px;
@@ -232,11 +242,16 @@
   color: var(--brand-ink, var(--primary));
   font-weight: 600;
 }
-:root[data-theme] .lesson-body p:not(.not-prose *):has(+ ul:not(li ul) > li:nth-child(4)) :where(strong, b) {
+:root[data-theme]
+  .lesson-body
+  p:not(.not-prose *):has(+ ul:not(li ul) > li:nth-child(4))
+  :where(strong, b) {
   color: inherit;
 }
-:root[data-theme] .lesson-body p:not(.not-prose *):has(+ ul:not(li ul) > li:nth-child(4))::before {
-  content: '';
+:root[data-theme]
+  .lesson-body
+  p:not(.not-prose *):has(+ ul:not(li ul) > li:nth-child(4))::before {
+  content: "";
   position: absolute;
   left: -12px;
   top: -16px;
@@ -246,13 +261,19 @@
   background: var(--primary);
   z-index: -1;
 }
-:root[data-theme] .lesson-body p:not(.not-prose *):has(+ ul:not(li ul) > li:nth-child(4)) + ul:not(.not-prose *):not(li ul):has(> li:nth-child(4)) {
+:root[data-theme]
+  .lesson-body
+  p:not(.not-prose *):has(+ ul:not(li ul) > li:nth-child(4))
+  + ul:not(.not-prose *):not(li ul):has(> li:nth-child(4)) {
   margin-top: 0;
   padding-top: 16px;
   border-top-left-radius: 0;
   border-top-right-radius: 0;
 }
-:root[data-theme] .lesson-body p:not(.not-prose *):has(+ ul:not(li ul) > li:nth-child(4)) + ul:not(.not-prose *):not(li ul):has(> li:nth-child(4))::before {
+:root[data-theme]
+  .lesson-body
+  p:not(.not-prose *):has(+ ul:not(li ul) > li:nth-child(4))
+  + ul:not(.not-prose *):not(li ul):has(> li:nth-child(4))::before {
   content: none;
 }
 
@@ -284,7 +305,9 @@
    Trap: 1.55rem is just past the display face's ~24px floor. Do not shrink
    it below that without moving it to the body face; Space Grotesk under
    display size is exactly what the font rule forbids. */
-:root[data-theme] .lesson-body ol:not(.not-prose *):not(li ol):has(> li:nth-child(4)) {
+:root[data-theme]
+  .lesson-body
+  ol:not(.not-prose *):not(li ol):has(> li:nth-child(4)) {
   list-style: none;
   counter-reset: vt-step;
   display: block;
@@ -292,14 +315,20 @@
   margin-top: 1.7em;
   border-top: var(--hairline) solid var(--border);
 }
-:root[data-theme] .lesson-body ol:not(.not-prose *):not(li ol):has(> li:nth-child(4)) > li {
+:root[data-theme]
+  .lesson-body
+  ol:not(.not-prose *):not(li ol):has(> li:nth-child(4))
+  > li {
   counter-increment: vt-step;
   margin: 0;
   position: relative;
   padding: 1.15rem 0 1.2rem 4.4rem;
   border-bottom: var(--hairline) solid var(--border);
 }
-:root[data-theme] .lesson-body ol:not(.not-prose *):not(li ol):has(> li:nth-child(4)) > li::before {
+:root[data-theme]
+  .lesson-body
+  ol:not(.not-prose *):not(li ol):has(> li:nth-child(4))
+  > li::before {
   content: counter(vt-step, decimal-leading-zero);
   position: absolute;
   left: 0;
@@ -312,16 +341,22 @@
   /* The row's own line-height, not 1: it is what puts the numeral's baseline
      on the baseline of the line it numbers. */
   line-height: inherit;
-  letter-spacing: -.02em;
+  letter-spacing: -0.02em;
   font-variant-numeric: tabular-nums;
 }
 /* A phone gives the gutter less room; the numeral keeps its size and the
    column tightens instead. */
 @media (max-width: 640px) {
-  :root[data-theme] .lesson-body ol:not(.not-prose *):not(li ol):has(> li:nth-child(4)) > li {
+  :root[data-theme]
+    .lesson-body
+    ol:not(.not-prose *):not(li ol):has(> li:nth-child(4))
+    > li {
     padding-left: 3.4rem;
   }
-  :root[data-theme] .lesson-body ol:not(.not-prose *):not(li ol):has(> li:nth-child(4)) > li::before {
+  :root[data-theme]
+    .lesson-body
+    ol:not(.not-prose *):not(li ol):has(> li:nth-child(4))
+    > li::before {
     width: 2.5rem;
   }
 }
@@ -372,7 +407,7 @@
   font-family: var(--display);
   font-size: 1.5rem;
   font-weight: 500;
-  letter-spacing: -.015em;
+  letter-spacing: -0.015em;
   line-height: 1.2;
 }
 
@@ -400,7 +435,11 @@
   padding-top: 0.25rem;
 }
 
-:root[data-theme] .lesson-body .vt-objectives :is(ul, ol) > li:first-child::before {
+:root[data-theme]
+  .lesson-body
+  .vt-objectives
+  :is(ul, ol)
+  > li:first-child::before {
   top: 0.25rem;
 }
 
@@ -426,7 +465,7 @@
   font-size: 1.55rem;
   font-weight: 500;
   line-height: inherit;
-  letter-spacing: -.02em;
+  letter-spacing: -0.02em;
   font-variant-numeric: tabular-nums;
 }
 

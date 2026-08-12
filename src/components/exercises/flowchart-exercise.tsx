@@ -11,6 +11,7 @@ import type {
 } from "@/lib/content/exercise-view";
 import type { FlowchartBlock, FlowchartNode } from "@/lib/content/types";
 import { EXERCISE_TYPE_LABELS } from "@/lib/content/types";
+import { runExerciseAction } from "./run-exercise-action";
 
 // A position in the chart: descend from the root sequence through
 // `nodes[node].branches[arm]` at each hop; the path addresses a sequence.
@@ -80,7 +81,14 @@ export function FlowchartExerciseCard({
   /** Prior attempts loaded from the learner's submission, keyed by stage id. */
   initialStages?: Record<
     string,
-    { attempt: FlowchartNode[]; correct: boolean }
+    {
+      attempt: FlowchartNode[];
+      correct: boolean;
+      /** Accumulated misses persisted server-side (restores the reveal gate). */
+      attempts?: number;
+      /** Authored explanation — the host attaches it for solved stages only. */
+      explanation?: string;
+    }
   >;
 }) {
   const blocks = useMemo(
@@ -96,8 +104,15 @@ export function FlowchartExerciseCard({
       initial[stage.id] = prior
         ? {
             tree: prior.attempt,
-            result: prior.correct ? { correct: true } : null,
-            attempts: 0,
+            // A solved stage rehydrates with its explanation so the reload
+            // view matches the just-solved one.
+            result: prior.correct
+              ? { correct: true, explanation: prior.explanation }
+              : null,
+            // Restore the persisted miss count — otherwise a learner who
+            // missed twice, left, and came back would have to fail twice
+            // more before "Show solution" reappears.
+            attempts: prior.attempts ?? 0,
             solution: null,
           }
         : EMPTY_STAGE;
@@ -157,29 +172,33 @@ export function FlowchartExerciseCard({
 
   const check = () =>
     startTransition(async () => {
-      const result = await gradeFlowchartStage(
-        exercise.id,
-        stage.id,
-        state.tree,
+      await runExerciseAction(
+        () => gradeFlowchartStage(exercise.id, stage.id, state.tree),
+        {
+          onSuccess: (result) =>
+            patchStage(stage.id, {
+              result,
+              attempts: result.correct ? state.attempts : state.attempts + 1,
+            }),
+          errorMessage: "Couldn't check your chart. Please try again.",
+        },
       );
-      patchStage(stage.id, {
-        result,
-        attempts: result.correct ? state.attempts : state.attempts + 1,
-      });
     });
 
   const reveal = () =>
     startTransition(async () => {
-      const result = await gradeFlowchartStage(
-        exercise.id,
-        stage.id,
-        state.tree,
-        true,
+      await runExerciseAction(
+        () => gradeFlowchartStage(exercise.id, stage.id, state.tree, true),
+        {
+          // Keep the grade result too: the current chart may actually be
+          // correct (locks the stage, shows the explanation), and an
+          // incorrect reveal still carries the authored explanation
+          // alongside the solution.
+          onSuccess: (result) =>
+            patchStage(stage.id, { result, solution: result.solution ?? null }),
+          errorMessage: "Couldn't load the solution. Please try again.",
+        },
       );
-      // Keep the grade result too: the current chart may actually be correct
-      // (locks the stage, shows the explanation), and an incorrect reveal
-      // still carries the authored explanation alongside the solution.
-      patchStage(stage.id, { result, solution: result.solution ?? null });
     });
 
   return (

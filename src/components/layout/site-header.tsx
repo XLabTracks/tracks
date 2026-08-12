@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import { Menu } from "lucide-react";
 import { useAuth } from "@workos-inc/authkit-nextjs/components";
 import { buttonVariants } from "@/components/ui/button";
+import { ThemeToggle } from "@/components/layout/theme-toggle";
 import { AccountMenu } from "./account-menu";
 import { SignInLink } from "./sign-in-link";
 import {
@@ -16,15 +17,15 @@ import {
 import { cn } from "@/lib/utils";
 
 const NAV = [
-  { href: "/tracks", label: "Tracks" },
-  // Exercises and Demos are hidden from the header for now — the routes stay
-  // live (deep links, lesson embeds), they're just not surfaced in the nav.
+  // Tracks, Exercises and Demos are hidden from the header for now — the
+  // routes stay live (deep links, lesson embeds), they're just not surfaced
+  // in the nav. The home page's two CTAs are the way into the tracks.
+  // { href: "/tracks", label: "Tracks" },
   // { href: "/exercises", label: "Exercises" },
   { href: "/review", label: "Review" },
   { href: "/resources", label: "Resources" },
   // { href: "/demos", label: "Demos" },
 ];
-
 
 export function SiteHeader() {
   const pathname = usePathname();
@@ -45,13 +46,10 @@ export function SiteHeader() {
             The alt text is what makes the link say "Tracks @ XLab"; there is no
             aria-label, so the visible mark and the announced name cannot drift.
 
-            Two traps. The artwork is 3300x1050 but the ink only fills the middle
+            The artwork is 3300x1050 but the ink only fills the middle
             ~55% of that box, so `height` buys about half of what it says: 28px
             puts roughly 15px of ink beside 18px type — matching theme.css's
-            .brand-mark, and the number to keep in step with it. And only the day
-            cut is here because nothing outside Verification reads `data-theme`,
-            so these routes are always the light ground; the white cut sits
-            beside it in the same folder if that ever stops being true. */}
+            .brand-mark. The two cuts follow the platform's dark class. */}
         <Link
           href="/"
           className="flex items-center gap-2 text-lg font-bold tracking-tight select-none"
@@ -63,7 +61,16 @@ export function SiteHeader() {
             width={3300}
             height={1050}
             draggable={false}
-            className="h-7 w-auto"
+            className="h-7 w-auto dark:hidden"
+          />
+          <img
+            src="/verification/assets/xLab_Logotype_white.png"
+            alt=""
+            aria-hidden
+            width={3300}
+            height={1050}
+            draggable={false}
+            className="hidden h-7 w-auto dark:block"
           />
         </Link>
         <nav className="text-muted-foreground hidden items-center gap-1 text-sm sm:flex">
@@ -78,8 +85,8 @@ export function SiteHeader() {
                 className={cn(
                   "relative rounded-md px-3 py-1.5 transition-colors select-none",
                   active
-                    ? "text-foreground after:bg-destructive after:absolute after:inset-x-3 after:-bottom-1 after:h-0.5 after:rounded-full"
-                    : "hover:text-foreground hover:bg-muted",
+                    ? "text-foreground after:bg-destructive dark:after:bg-primary after:absolute after:inset-x-3 after:-bottom-1 after:h-0.5 after:rounded-full"
+                    : "hover:text-foreground hover:bg-muted"
                 )}
               >
                 {item.label}
@@ -88,6 +95,7 @@ export function SiteHeader() {
           })}
         </nav>
         <div className="ml-auto flex items-center gap-2">
+          <ThemeToggle />
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <button

@@ -10,15 +10,17 @@
    chooses between day and night only. */
 
 (function () {
-  var KEY = 'xlab-verification-theme';
-  var THEMES = ['light', 'dark', 'contrast'];
+  var KEY = "xlab-verification-theme";
+  var THEMES = ["light", "dark", "contrast"];
 
   var ICONS = {
-    light: '<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/>',
+    light:
+      '<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/>',
     dark: '<path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/>',
-    contrast: '<circle cx="12" cy="12" r="9"/><path d="M12 3v18a9 9 0 0 0 0-18z" fill="currentColor" stroke="none"/>',
+    contrast:
+      '<circle cx="12" cy="12" r="9"/><path d="M12 3v18a9 9 0 0 0 0-18z" fill="currentColor" stroke="none"/>',
   };
-  var LABELS = { light: 'Day', dark: 'Night', contrast: 'High contrast' };
+  var LABELS = { light: "Day", dark: "Night", contrast: "High contrast" };
 
   function stored() {
     try {
@@ -30,39 +32,61 @@
   }
 
   function systemTheme() {
-    return window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
-      ? 'dark'
-      : 'light';
+    return window.matchMedia &&
+      window.matchMedia("(prefers-color-scheme: dark)").matches
+      ? "dark"
+      : "light";
   }
 
   function current() {
-    return document.documentElement.getAttribute('data-theme') || stored() || systemTheme();
+    return (
+      document.documentElement.getAttribute("data-theme") ||
+      stored() ||
+      systemTheme()
+    );
   }
 
   function apply(theme) {
-    document.documentElement.setAttribute('data-theme', theme);
-    try { localStorage.setItem(KEY, theme); } catch (e) { /* private mode */ }
-    var group = document.querySelector('.theme-switch');
+    var root = document.documentElement;
+    root.setAttribute("data-theme", theme);
+    // The native Verification palette uses data-theme; app chrome and shadcn
+    // use Tailwind's classes. Keep both surfaces on the selected theme.
+    root.classList.toggle("dark", theme !== "light");
+    root.classList.toggle("contrast", theme === "contrast");
+    try {
+      localStorage.setItem(KEY, theme);
+    } catch (e) {
+      /* private mode */
+    }
+    var group = document.querySelector(".theme-switch");
     if (!group) return;
-    group.querySelectorAll('button').forEach(function (b) {
-      b.setAttribute('aria-checked', String(b.dataset.theme === theme));
+    group.querySelectorAll("button").forEach(function (b) {
+      b.setAttribute("aria-checked", String(b.dataset.theme === theme));
     });
   }
 
   function mount() {
-    var group = document.querySelector('.theme-switch');
+    var group = document.querySelector(".theme-switch");
     if (!group) return;
-    group.setAttribute('role', 'radiogroup');
-    group.setAttribute('aria-label', 'Colour theme');
+    group.setAttribute("role", "radiogroup");
+    group.setAttribute("aria-label", "Colour theme");
     group.innerHTML = THEMES.map(function (t) {
       return (
-        '<button type="button" role="radio" data-theme="' + t + '" aria-checked="false"' +
-        ' aria-label="' + LABELS[t] + '" title="' + LABELS[t] + '">' +
-        '<svg viewBox="0 0 24 24" aria-hidden="true">' + ICONS[t] + '</svg></button>'
+        '<button type="button" role="radio" data-theme="' +
+        t +
+        '" aria-checked="false"' +
+        ' aria-label="' +
+        LABELS[t] +
+        '" title="' +
+        LABELS[t] +
+        '">' +
+        '<svg viewBox="0 0 24 24" aria-hidden="true">' +
+        ICONS[t] +
+        "</svg></button>"
       );
-    }).join('');
-    group.addEventListener('click', function (e) {
-      var b = e.target.closest('button[data-theme]');
+    }).join("");
+    group.addEventListener("click", function (e) {
+      var b = e.target.closest("button[data-theme]");
       if (b) apply(b.dataset.theme);
     });
     apply(current());
@@ -71,13 +95,15 @@
   // The system preference only moves the page while the learner has not picked
   // a theme — once they have, their choice outranks the OS.
   if (window.matchMedia) {
-    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function () {
-      if (!stored()) apply(systemTheme());
-    });
+    window
+      .matchMedia("(prefers-color-scheme: dark)")
+      .addEventListener("change", function () {
+        if (!stored()) apply(systemTheme());
+      });
   }
 
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', mount);
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", mount);
   } else {
     mount();
   }

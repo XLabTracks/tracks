@@ -38,6 +38,7 @@
   --color-input: var(--input);
   --color-border: var(--border);
   --color-destructive: var(--destructive);
+  --color-link: var(--link);
   --color-accent-foreground: var(--accent-foreground);
   --color-accent: var(--accent);
   --color-muted-foreground: var(--muted-foreground);
@@ -78,10 +79,11 @@
   --radius-3xl: 22px;
   --radius-4xl: 28px;
 
-  /* Quiet shadows for a light surface — soft lift, never harsh. Navy-tinted to match the ink. */
-  --shadow-soft: 0 1px 2px rgba(10, 25, 47, 0.06);
-  --shadow-soft-md: 0 4px 14px rgba(10, 25, 47, 0.09);
-  --shadow-soft-lg: 0 12px 40px rgba(10, 25, 47, 0.13);
+  /* Quiet shadows — soft lift, never harsh. Raw values live on :root/.dark
+     (this block is `inline`, so a literal here could never re-theme). */
+  --shadow-soft: var(--soft-shadow);
+  --shadow-soft-md: var(--soft-shadow-md);
+  --shadow-soft-lg: var(--soft-shadow-lg);
 }
 
 /* ============================================================
@@ -109,6 +111,10 @@
   --border: #e5e5e5; /* neutral-200 hairline */
   --input: #e5e5e5;
   --ring: #dc2626; /* red focus ring — the tertiary accent */
+  /* Links share the destructive red in light — one accent doing double duty
+     is this theme's look. Dark separates them (rose links, clay danger), so
+     link surfaces read the token, never --destructive. */
+  --link: #dc2626;
 
   --chart-1: #dc2626; /* red */
   --chart-2: #525252; /* neutral-600 */
@@ -140,6 +146,166 @@
   --brand-ink: var(--primary);
 
   --radius: 0.875rem;
+
+  /* Navy-tinted to match the ink (see @theme's shadow-soft mapping). */
+  --soft-shadow: 0 1px 2px rgba(10, 25, 47, 0.06);
+  --soft-shadow-md: 0 4px 14px rgba(10, 25, 47, 0.09);
+  --soft-shadow-lg: 0 12px 40px rgba(10, 25, 47, 0.13);
+
+  /* Native widgets (form controls, scrollbars) follow the theme. */
+  color-scheme: light;
+}
+
+/* ============================================================
+   Dark — warm stone & ember. Not an inversion of the light
+   theme's navy: the dark ground is warm near-black stone, text
+   is warm off-white, and the brand accent is ember (terracotta)
+   with dusty rose as the secondary/link accent. Cool tones
+   (slate, water) appear only as counterpoints; status colours
+   are sage / amber / clay.
+
+   Palette (warm stone, dark → light): #171211 deepest chrome ·
+   #201A19 app bg · #2B2321 card · #2D211C warm band ·
+   #38302E / #574D4B borders · #7C746F faint · #A69A98
+   secondary text · #ECE5E3 primary text · #F5F0EE brightest.
+   Ember #E1854F (hover ≈ #C9703D — the button hover mix lands
+   there on its own; light-text variant #F1B189 for large
+   accents). Dusty rose #CD8A7F (soft #D9A99F). Slate #8FA3A8 ·
+   water #1D383D / #7FB0AE. Sage #7FA682 · amber #D7A24B ·
+   clay #C5705F.
+
+   The class lands on <html> before first paint (THEME_BOOT in
+   layout.tsx) and is flipped by ThemeToggle; `@custom-variant
+   dark` above keys every `dark:` utility off the same class.
+   This block must stay AFTER :root — same specificity, source
+   order decides.
+   ============================================================ */
+.dark {
+  --background: #201a19; /* warm stone ground */
+  --foreground: #ece5e3; /* warm off-white */
+  --card: #2b2321; /* lifted off the ground */
+  --card-foreground: #ece5e3;
+  --popover: #2b2321;
+  --popover-foreground: #ece5e3;
+  --primary: #e1854f; /* ember — primary actions & active states */
+  --primary-foreground: #171211; /* deepest stone on ember */
+  --secondary: #2d211c; /* warm band surface */
+  --secondary-foreground: #ece5e3;
+  --muted: #2d211c; /* warm band */
+  --muted-foreground: #a69a98; /* secondary text — AA on the warm surfaces */
+  --accent: #38302e; /* hover surface — must lift off the popover */
+  --accent-foreground: #f5f0ee; /* brightest, for hovered rows */
+  --destructive: #c5705f; /* danger clay */
+  --border: #38302e; /* hairline on stone */
+  --input: #574d4b; /* form-control borders take the stronger stone */
+  --ring: #cd8a7f; /* dusty rose — the interactive/secondary accent */
+  --link: #cd8a7f; /* dusty rose links (light keeps its red) */
+
+  /* Same roles as light: 1 accent-red family, 2/3 neutrals, 4 the cool
+     brand counterpoint (slate for navy), 5 the deliberately faint fill. */
+  --chart-1: #c5705f;
+  --chart-2: #a69a98;
+  --chart-3: #7c746f;
+  --chart-4: #8fa3a8;
+  --chart-5: #38302e;
+
+  --sidebar: #171211; /* deepest chrome */
+  --sidebar-foreground: #ece5e3;
+  --sidebar-primary: #e1854f; /* active item — ember */
+  --sidebar-primary-foreground: #171211;
+  --sidebar-accent: #2b2321; /* hover */
+  --sidebar-accent-foreground: #f5f0ee;
+  --sidebar-border: #38302e;
+  --sidebar-ring: #cd8a7f;
+
+  /* Okabe-Ito, lifted a step for the dark ground — same hues, same meanings,
+     enough luminance to read as ink-on-dark. Colour is never the only
+     encoding (labels/icons/shapes pair with it), so the shift is safe. */
+  --comply: #1fc493;
+  --defect: #f0813a;
+  --hide: #4da3dd;
+  --exaggerate: #f0b429;
+  --free-ride: #e39ec4;
+
+  /* Tinted lift reads as nothing on stone; depth comes from plain black. */
+  --soft-shadow: 0 1px 2px rgba(0, 0, 0, 0.35);
+  --soft-shadow-md: 0 4px 14px rgba(0, 0, 0, 0.45);
+  --soft-shadow-lg: 0 12px 40px rgba(0, 0, 0, 0.55);
+
+  color-scheme: dark;
+}
+
+/* ============================================================
+   High contrast — the third theme. Black ground, white text,
+   and structure carried by borders instead of surface tints or
+   shadows: `* { border-border }` in @layer base means the white
+   hairline reaches every card, table and divider on its own.
+   The accents keep the ember/rose family but at the light ends
+   of it (#F1B189 is the spec's own ember light-text), so high
+   contrast still reads as this site.
+
+   Mechanics: contrast is dark-plus — THEME_BOOT/ThemeToggle put
+   BOTH `dark` and `contrast` on <html>, so every `dark:` utility
+   applies and this block only re-points tokens. It must stay
+   AFTER .dark (same specificity, source order decides). Never
+   inferred from the system: prefers-color-scheme chooses between
+   light and dark only, and contrast is always an explicit
+   choice — an OS "increase contrast" flag doesn't know our
+   palette has a hand-built mode for it.
+   ============================================================ */
+.contrast {
+  --background: #000000;
+  --foreground: #ffffff;
+  --card: #000000; /* surfaces don't tint — the border draws the card */
+  --card-foreground: #ffffff;
+  --popover: #000000;
+  --popover-foreground: #ffffff;
+  --primary: #f1b189; /* ember, light cut — ~12:1 on black */
+  --primary-foreground: #000000;
+  --secondary: #000000;
+  --secondary-foreground: #ffffff;
+  --muted: #1a1414; /* the one faint band kept — text on it stays ~12:1 */
+  --muted-foreground: #d6cdc9;
+  --accent: #261e1c; /* hover surface — visible lift on black */
+  --accent-foreground: #ffffff;
+  --destructive: #ff9d85; /* clay, lifted to ~8:1 */
+  --border: #f5f0ee; /* white-warm hairlines carry all structure */
+  --input: #8a7d79; /* not white: outline buttons fill with input/30–50,
+                       and white text must survive on that fill */
+  --ring: #ffffff; /* focus is the one thing that outranks the palette */
+  --link: #e8b1a4; /* rose, lifted */
+
+  --chart-1: #ff9d85;
+  --chart-2: #d6cdc9;
+  --chart-3: #a69a98;
+  --chart-4: #a8c6cc; /* slate, lifted */
+  --chart-5: #4d4442;
+
+  --sidebar: #000000;
+  --sidebar-foreground: #ffffff;
+  --sidebar-primary: #f1b189;
+  --sidebar-primary-foreground: #000000;
+  --sidebar-accent: #261e1c;
+  --sidebar-accent-foreground: #ffffff;
+  --sidebar-border: #f5f0ee;
+  --sidebar-ring: #ffffff;
+
+  /* Okabe-Ito at the bright end — same hues, same meanings, headroom for
+     the black ground. Labels/icons/shapes still pair with every use. */
+  --comply: #4de3b2;
+  --defect: #ffa268;
+  --hide: #85c1f0;
+  --exaggerate: #ffc94d;
+  --free-ride: #f0b8d8;
+
+  /* No depth cues — borders do this job. A transparent no-op shadow, not
+     `none`: the shadow utilities compose comma-separated lists, and `none`
+     inside one invalidates the whole declaration. */
+  --soft-shadow: 0 0 0 0 rgba(0, 0, 0, 0);
+  --soft-shadow-md: 0 0 0 0 rgba(0, 0, 0, 0);
+  --soft-shadow-lg: 0 0 0 0 rgba(0, 0, 0, 0);
+
+  color-scheme: dark;
 }
 
 @layer base {

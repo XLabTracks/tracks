@@ -90,11 +90,14 @@ export async function convertPostHtml(
   // (data-author-id) so in-post fragment links can be repointed at the
   // minted heading ids after normalizeHeadings.
   stripAuthorIdsAndReservedClasses(tree, { stashIds: true });
+  // Embeds drop BEFORE image collection so an image inside a dropped
+  // subtree (an oembed thumbnail) is never fetched — a permanently dead
+  // URL there must not be able to block the build.
+  transformEmbeds(tree, warnings);
   const images = collectImages(tree, warnings);
   const assets = await downloadImages(images, opts);
   rewriteImages(tree, images, opts.ref, warnings);
   transformMath(tree, warnings);
-  transformEmbeds(tree, warnings);
 
   const clean = sanitize(tree, paperSanitizeSchema) as Root;
 
@@ -177,7 +180,7 @@ function collectImages(tree: Root, warnings: WarningCollector): ImageRef[] {
     if (node.tagName === "figure") {
       const imgs = collectAll(node, (el) => el.tagName === "img");
       const img = imgs[0];
-      if (!img) return; // oembed/media figures are the embed pass's job
+      if (!img) return; // e.g. the embed pass's img-less link cards
       for (const extra of imgs.slice(1)) {
         warnings.add(
           "image-dropped",

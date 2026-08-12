@@ -7,6 +7,7 @@ import {
   type PaperInsertionItem,
 } from "@/lib/content/types";
 import { anchorNum } from "./anchors";
+import { collapseTailSections, sectionElementEnd } from "./collapse-tail";
 import {
   applySecnumOverrides,
   planSectionInserts,
@@ -42,12 +43,13 @@ export type PaperPart =
 export interface AppliedPaper {
   parts: PaperPart[];
   /**
-   * Trailing landmark sections (references/footnotes), split off the final
-   * html part when the paper has gates. The reader renders this OUTSIDE the
-   * gate walk, so visible citations and footnote markers keep live targets
-   * (and the sidenote layer has note bodies to clone) while the body below a
-   * closed gate is still unmounted. Unset when the paper has no gates or no
-   * trailing landmarks.
+   * The landmark sections (references/footnotes) ONLY, extracted from the
+   * final html part when the paper has gates. The reader renders this
+   * OUTSIDE the gate walk, so visible citations and footnote markers keep
+   * live targets (and the sidenote layer has note bodies to clone) while the
+   * body below a closed gate is still unmounted. Appendix sections that
+   * interleave with the landmarks are body content and stay in the gated
+   * parts. Unset when the paper has no gates or no trailing landmarks.
    */
   ungatedTailHtml?: string;
   /** Ops whose target didn't resolve (fail-soft; see content.test.ts for the real gate). */
@@ -65,10 +67,15 @@ export function applyPaperEdits(
 
   // Inserted-section plan: derived numbers/levels for `op: "section"` edits and
   // the display-number shift for the paper's own later sibling subsections.
-  // The ax-secnum rewrite runs on the FULL html up front, so numbers shift even
-  // in sections that carry no block ops (the artifact JSON itself is untouched).
+  // The ax-secnum rewrite runs on every EMITTED html piece, never on the
+  // input: snippet tripwires (patch-section's resolve, mirrored by
+  // content.test.ts against the raw artifact) must keep matching the
+  // artifact's own heading text, so displayed numbers shift only on the way
+  // out (the artifact JSON itself is untouched — numbers shift even in
+  // sections that carry no block ops, since raw slices pass through too).
   const plan = planSectionInserts(toc, all);
-  const html = applySecnumOverrides(sourceHtml, plan.numberOverrides);
+  const withSecnums = (value: string) =>
+    applySecnumOverrides(value, plan.numberOverrides);
   const insertedSections = new Map<string, InsertedSectionRender>(
     plan.sections.map((s) => [
       s.id,
@@ -83,7 +90,7 @@ export function applyPaperEdits(
 
   // ---- Tier 1: section-end boundaries -------------------------------------
   const tier1 = splitAtSectionEnds<PaperEdit>(
-    html,
+    sourceHtml,
     toc,
     sectionEndOps.map((op) => {
       const ref = editTargetRef(op);
@@ -103,7 +110,7 @@ export function applyPaperEdits(
     .map((entry, tocIndex) => ({
       tocIndex,
       anchor: entry.anchor,
-      start: sectionStartOffset(html, entry.id),
+      start: sectionStartOffset(sourceHtml, entry.id),
     }))
     .filter((slice) => slice.start !== -1);
 
@@ -140,7 +147,7 @@ export function applyPaperEdits(
   if (opsBySlice.has(-1)) {
     editedSlices.push({
       start: 0,
-      end: locatable[0]?.start ?? html.length,
+      end: locatable[0]?.start ?? sourceHtml.length,
       ops: opsBySlice.get(-1)!,
     });
   }
@@ -149,7 +156,7 @@ export function applyPaperEdits(
     if (!ops) return;
     editedSlices.push({
       start: slice.start,
-      end: locatable[i + 1]?.start ?? html.length,
+      end: locatable[i + 1]?.start ?? sourceHtml.length,
       ops,
     });
   });
@@ -158,7 +165,7 @@ export function applyPaperEdits(
   // ---- Emit: tier-1 segments with tier-2 patches spliced in ---------------
   const parts: PaperPart[] = [];
   const emitHtml = (value: string) => {
-    if (value) parts.push({ kind: "html", html: value });
+    if (value) parts.push({ kind: "html", html: withSecnums(value) });
   };
   const emitSectionEndOp = (op: PaperEdit) => {
     if (op.op === "activity") parts.push({ kind: "activity", items: op.items });
@@ -192,18 +199,24 @@ export function applyPaperEdits(
       // clamp defensively regardless.
       const start = Math.max(slice.start, segStart);
       const end = Math.min(slice.end, segEnd);
-      emitHtml(html.slice(cursor, start));
+      emitHtml(sourceHtml.slice(cursor, start));
       const patched = patchSectionHtml(
-        html.slice(start, end),
+        sourceHtml.slice(start, end),
         slice.ops,
         insertedSections,
       );
-      parts.push(...patched.parts);
+      parts.push(
+        ...patched.parts.map((part) =>
+          part.kind === "html"
+            ? { ...part, html: withSecnums(part.html) }
+            : part,
+        ),
+      );
       unmatchedEdits.push(...patched.unmatched);
       cursor = end;
       sliceIndex++;
     }
-    emitHtml(html.slice(cursor, segEnd));
+    emitHtml(sourceHtml.slice(cursor, segEnd));
 
     tier1.points[k]?.payloads.forEach(emitSectionEndOp);
   });
@@ -226,10 +239,17 @@ export function applyPaperEdits(
  * With gates present, everything after a gate part mounts only once the gate
  * opens — which would trap the paper's references/footnotes landmarks behind
  * the LAST gate, leaving the visible pre-gate text with dead citation links
- * and no sidenotes. Split the trailing landmark region off the final html
- * part so the reader can render it outside the gate walk. (Landmarks are
- * trailing by converter construction; an activity placed after them keeps
- * the final part non-html and skips the split — fail-soft, gating stands.)
+ * and no sidenotes. Extract the landmark <section> elements THEMSELVES from
+ * the final html part so the reader can render them outside the gate walk.
+ * Only the landmarks move: the flat appendix sections that follow References
+ * in arXiv output are body content the gates sequence — they stay in the
+ * gated walk, matching the sidebar's lock model (paper-nav.ts locks their
+ * rows via gateIds). Because the References landmark leaves the walk, the
+ * appendix stretch it introduced would never collapse in the reader's
+ * collapseTailSections pass (no references opener left in the parts), so the
+ * split collapses that remainder here. (Landmarks are trailing by converter
+ * construction; an activity placed after them keeps the final part non-html
+ * and skips the split — fail-soft, gating stands.)
  */
 function splitUngatedTail(
   parts: PaperPart[],
@@ -238,17 +258,35 @@ function splitUngatedTail(
   if (!parts.some((part) => part.kind === "gate")) return undefined;
   const last = parts[parts.length - 1];
   if (!last || last.kind !== "html") return undefined;
-  const offsets = toc
+  const ranges = toc
     .filter(
       (entry) => entry.kind === "references" || entry.kind === "footnotes"
     )
-    .map((entry) => sectionStartOffset(last.html, entry.id))
-    .filter((offset) => offset !== -1);
-  if (offsets.length === 0) return undefined;
-  const at = Math.min(...offsets);
-  const tail = last.html.slice(at);
-  if (at === 0) parts.pop();
-  else last.html = last.html.slice(0, at);
+    .flatMap((entry) => {
+      const start = sectionStartOffset(last.html, entry.id);
+      if (start === -1) return [];
+      const end = sectionElementEnd(last.html, start);
+      // Malformed wrapper — leave the entry in the gated walk (fail-soft).
+      return end === null ? [] : [{ start, end, kind: entry.kind }];
+    })
+    .sort((a, b) => a.start - b.start);
+  if (ranges.length === 0) return undefined;
+  const tail = ranges.map((range) => last.html.slice(range.start, range.end)).join("");
+  // Stitch the non-landmark remainder back together; stretches after the
+  // References landmark (the appendix run) collapse now — see above.
+  let remaining = "";
+  let cursor = 0;
+  let sawReferences = false;
+  for (const range of ranges) {
+    const piece = last.html.slice(cursor, range.start);
+    remaining += sawReferences ? collapseTailSections(piece, true).html : piece;
+    if (range.kind === "references") sawReferences = true;
+    cursor = range.end;
+  }
+  const after = last.html.slice(cursor);
+  remaining += sawReferences ? collapseTailSections(after, true).html : after;
+  if (remaining === "") parts.pop();
+  else last.html = remaining;
   return tail;
 }
 

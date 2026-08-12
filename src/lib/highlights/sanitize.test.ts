@@ -41,9 +41,31 @@ describe("sanitizeHighlightInput", () => {
     expect(sanitizeHighlightInput(multi)).toEqual(multi);
   });
 
-  it("rejects duplicate anchors within one gesture", () => {
+  it("accepts a same-anchor continuation (a split's second half)", () => {
+    // A block split by a mid-paragraph activity captures as two spans on the
+    // same anchor: the second must start strictly past the first's end.
+    const split = {
+      ...valid,
+      spans: [span, { ...span, sStart: 5, sEnd: 7 }],
+    };
+    expect(sanitizeHighlightInput(split)).toEqual(split);
+  });
+
+  it("rejects duplicate, overlapping, or backward same-anchor spans", () => {
     expect(
       sanitizeHighlightInput({ ...valid, spans: [span, { ...span }] }),
+    ).toBeNull();
+    expect(
+      sanitizeHighlightInput({
+        ...valid,
+        spans: [span, { ...span, sStart: 4, sEnd: 6 }],
+      }),
+    ).toBeNull();
+    expect(
+      sanitizeHighlightInput({
+        ...valid,
+        spans: [{ ...span, sStart: 5, sEnd: 7 }, span],
+      }),
     ).toBeNull();
   });
 

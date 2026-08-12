@@ -583,3 +583,16 @@ prints it on its toolbar line — "Estimated time: 60 mins | single page
 view, 4 parts" in whole-lesson mode, the estimate alone in part-by-part
 mode. On chunked lessons the page's header clock chip yields to that line
 so the estimate appears exactly once; unchunked tracks keep the chip.
+
+### Module 0 gets the standard toolbar line (2026-08-12)
+
+Per the owner ("do this standard format of the module"), every module-0
+lesson now declares `estimatedMinutes`, so the reader's toolbar line —
+"Estimated time: X mins | single page view, N parts" — is the module's
+standard header. 0.3 keeps her authored 60. The rest are MECHANICAL
+estimates, not authored curriculum: body word count at ~200 wpm plus an
+allowance for embedded interactives, rounded to 5 — 0.0 Welcome 5,
+0.1 Introduction 25 (five explorables), 0.1.1 Prevention 5,
+0.2 Intuitions 15 (the primers drill bench), 0.4 Strategic Foundations 5
+(in-page text only; its external readings are the unit and are not
+counted). Each number is hers to override in curriculum.ts.

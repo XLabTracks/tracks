@@ -376,6 +376,7 @@ export const verificationLessons: Lesson[] = [
     moduleId: "v-why",
     title: "0.0 Welcome",
     contentRef: "verification/welcome",
+    estimatedMinutes: 5,
     // The opening read flows better as one page than paged section by section.
     unchunked: true,
   },
@@ -385,6 +386,7 @@ export const verificationLessons: Lesson[] = [
     moduleId: "v-why",
     title: "0.1 Introduction: Why Should You Care About AI Verification?",
     contentRef: "verification/introduction",
+    estimatedMinutes: 25,
   },
   {
     id: "v-prevention",
@@ -393,6 +395,7 @@ export const verificationLessons: Lesson[] = [
     sectionItemId: "v-introduction",
     title: "0.1.1 The world keeps getting saved and you don’t notice",
     contentRef: "verification/prevention",
+    estimatedMinutes: 5,
   },
   // 0.2 is the intuitions reading itself. The interactive timeline simulation
   // that used to open the unit (0.2.0, `v-verification-timeline-game`) was
@@ -404,6 +407,7 @@ export const verificationLessons: Lesson[] = [
     moduleId: "v-why",
     title: "0.2 Building Verification Intuitions",
     contentRef: "verification/intuitions",
+    estimatedMinutes: 15,
   },
   {
     id: "v-precedents",
@@ -425,6 +429,7 @@ export const verificationLessons: Lesson[] = [
     moduleId: "v-why",
     title: "0.4 Strategic Foundations",
     contentRef: "verification/strategic-foundations",
+    estimatedMinutes: 5,
     optional: true,
     // A list of reading cards, not a read-through: show them all on one screen
     // rather than paging pathway by pathway.

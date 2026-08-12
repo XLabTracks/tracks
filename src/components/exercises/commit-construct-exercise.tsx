@@ -90,7 +90,10 @@ export function CommitConstructCard({
   persist?: boolean;
 }) {
   const { commit, construct } = exercise;
-  const total = 2;
+  // Construct-only exercises keep the two-slot state with a phantom,
+  // pre-submitted commit step that is never rendered or reachable.
+  const hasCommit = Boolean(commit);
+  const total = hasCommit ? 2 : 1;
 
   const [choice, setChoice] = useState<string | null>(initialCommit?.choice ?? null);
   const [confidence, setConfidence] = useState<string | null>(
@@ -99,12 +102,12 @@ export function CommitConstructCard({
   const [reasoning, setReasoning] = useState(initialCommit?.reasoning ?? "");
   const [threatModel, setThreatModel] = useState(initialConstruct?.threatModel ?? "");
   const [submitted, setSubmitted] = useState<[boolean, boolean]>([
-    Boolean(initialCommit),
+    hasCommit ? Boolean(initialCommit) : true,
     Boolean(initialConstruct),
   ]);
   // Re-entering the reading restores position: resume on the first open step.
   const [current, setCurrent] = useState(() =>
-    initialCommit && !initialConstruct ? 1 : 0,
+    !hasCommit || (initialCommit && !initialConstruct) ? 1 : 0,
   );
   const [hintOpen, setHintOpen] = useState(false);
   const [pending, startTransition] = useTransition();
@@ -156,38 +159,43 @@ export function CommitConstructCard({
         <p className="text-muted-foreground text-xs font-medium tracking-wide uppercase">
           {EXERCISE_TYPE_LABELS["commit-construct"]}
         </p>
-        <span className="text-muted-foreground text-xs tabular-nums">
-          Part {current + 1} of {total}
-        </span>
+        {total > 1 && (
+          <span className="text-muted-foreground text-xs tabular-nums">
+            Part {current + 1} of {total}
+          </span>
+        )}
       </div>
 
       {/* Step indicator — jump back to any already-unlocked part. (Not
-          aria-hidden: it holds focusable buttons.) */}
-      <div className="mb-4 flex items-center gap-1.5">
-        {[commit.partTitle, construct.partTitle].map((title, i) => (
-          <button
-            key={title}
-            type="button"
-            disabled={!canReach(i)}
-            aria-label={`Go to part ${i + 1} of ${total}`}
-            aria-current={i === current ? "step" : undefined}
-            onClick={() => canReach(i) && setCurrent(i)}
-            className={cn(
-              "h-1.5 flex-1 rounded-full transition-colors",
-              i === current && "bg-foreground",
-              i !== current && submitted[i] && "bg-foreground/40",
-              i !== current && !submitted[i] && canReach(i) && "bg-muted-foreground/30",
-              !canReach(i) && "bg-muted cursor-not-allowed",
-            )}
-          />
-        ))}
-      </div>
+          aria-hidden: it holds focusable buttons.) Hidden for single-part
+          (construct-only) exercises. */}
+      {commit && (
+        <div className="mb-4 flex items-center gap-1.5">
+          {[commit.partTitle, construct.partTitle].map((title, i) => (
+            <button
+              key={title}
+              type="button"
+              disabled={!canReach(i)}
+              aria-label={`Go to part ${i + 1} of ${total}`}
+              aria-current={i === current ? "step" : undefined}
+              onClick={() => canReach(i) && setCurrent(i)}
+              className={cn(
+                "h-1.5 flex-1 rounded-full transition-colors",
+                i === current && "bg-foreground",
+                i !== current && submitted[i] && "bg-foreground/40",
+                i !== current && !submitted[i] && canReach(i) && "bg-muted-foreground/30",
+                !canReach(i) && "bg-muted cursor-not-allowed",
+              )}
+            />
+          ))}
+        </div>
+      )}
 
       <p className="text-muted-foreground text-xs font-semibold tracking-wide uppercase">
-        {current === 0 ? commit.partTitle : construct.partTitle}
+        {current === 0 && commit ? commit.partTitle : construct.partTitle}
       </p>
 
-      {current === 0 ? (
+      {current === 0 && commit ? (
         <>
           <div className="mt-2 space-y-2">
             {commit.framing && <Paragraphs text={commit.framing} />}
@@ -324,7 +332,7 @@ export function CommitConstructCard({
           size="sm"
           variant="ghost"
           onClick={() => setCurrent((c) => Math.max(0, c - 1))}
-          disabled={current === 0 || pending}
+          disabled={current === 0 || !hasCommit || pending}
           className="text-muted-foreground hover:text-foreground gap-1"
         >
           <ArrowLeft className="size-3.5" aria-hidden /> Back

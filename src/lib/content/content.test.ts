@@ -318,20 +318,29 @@ describe("commit-construct exercise integrity", () => {
 
   it("options are unique, guidance keys resolve, and copy is non-empty", () => {
     for (const exercise of commitConstructs) {
-      const optionIds = exercise.commit.options.map((o) => o.id);
-      const confidenceIds = exercise.commit.confidenceOptions.map((o) => o.id);
-      expect(optionIds.length, `${exercise.id} options`).toBeGreaterThanOrEqual(2);
-      expect(confidenceIds.length, `${exercise.id} confidence`).toBeGreaterThanOrEqual(2);
-      for (const ids of [optionIds, confidenceIds]) {
-        expect(new Set(ids).size, `${exercise.id} has duplicate option ids`).toBe(
-          ids.length,
-        );
-      }
-      for (const key of Object.keys(exercise.construct.guidanceByChoice ?? {})) {
+      // The commit step is optional (construct-only exercises); guidance
+      // keyed on commit choices is meaningless without one.
+      if (exercise.commit) {
+        const optionIds = exercise.commit.options.map((o) => o.id);
+        const confidenceIds = exercise.commit.confidenceOptions.map((o) => o.id);
+        expect(optionIds.length, `${exercise.id} options`).toBeGreaterThanOrEqual(2);
+        expect(confidenceIds.length, `${exercise.id} confidence`).toBeGreaterThanOrEqual(2);
+        for (const ids of [optionIds, confidenceIds]) {
+          expect(new Set(ids).size, `${exercise.id} has duplicate option ids`).toBe(
+            ids.length,
+          );
+        }
+        for (const key of Object.keys(exercise.construct.guidanceByChoice ?? {})) {
+          expect(
+            optionIds.includes(key),
+            `${exercise.id} guidance key "${key}" is not an option id`,
+          ).toBe(true);
+        }
+      } else {
         expect(
-          optionIds.includes(key),
-          `${exercise.id} guidance key "${key}" is not an option id`,
-        ).toBe(true);
+          exercise.construct.guidanceByChoice,
+          `${exercise.id} has guidanceByChoice but no commit step`,
+        ).toBeUndefined();
       }
       expect(
         exercise.construct.compareQuestions.length,
@@ -340,8 +349,8 @@ describe("commit-construct exercise integrity", () => {
       // Reveals are optional (an exercise may end at the learner's own
       // construction), but a declared one may not be blank.
       for (const [field, value] of Object.entries({
-        question: exercise.commit.question,
-        commitReveal: exercise.commit.reveal,
+        question: exercise.commit?.question,
+        commitReveal: exercise.commit?.reveal,
         threatPrompt: exercise.construct.threatPrompt,
         revealLead: exercise.construct.revealLead,
         constructReveal: exercise.construct.reveal,

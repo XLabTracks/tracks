@@ -665,7 +665,8 @@ export interface CommitConstructOption {
 export interface CommitConstructExercise extends ExerciseBase {
   type: "commit-construct";
   title: string;
-  commit: {
+  /** Omit for a construct-only exercise (no prediction step). */
+  commit?: {
     /** Step heading ("Commit to a view"). */
     partTitle: string;
     framing?: string;

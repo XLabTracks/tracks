@@ -352,6 +352,7 @@ interface CommitConstructResponseJson {
 
 async function saveCommitConstructStep(
   exerciseId: string,
+  requiresCommit: boolean,
   merge: (prior: CommitConstructResponseJson) => CommitConstructResponseJson,
 ): Promise<void> {
   const user = await getCurrentUser();
@@ -369,7 +370,8 @@ async function saveCommitConstructStep(
   const existing = await prisma.submission.findUnique({ where });
   const prior = (existing?.responseJson as CommitConstructResponseJson | null) ?? {};
   const next = merge(prior);
-  const complete = next.commit != null && next.construct != null;
+  const complete =
+    next.construct != null && (!requiresCommit || next.commit != null);
   const responseJson = next as unknown as Prisma.InputJsonValue;
   await prisma.submission.upsert({
     where,
@@ -402,7 +404,10 @@ export async function saveCommitConstructCommit(
   const entry = sanitizeCommitConstructCommit(exercise, choice, confidence, reasoning);
   if (!entry) return;
 
-  await saveCommitConstructStep(exerciseId, (prior) => ({ ...prior, commit: entry }));
+  await saveCommitConstructStep(exerciseId, Boolean(exercise.commit), (prior) => ({
+    ...prior,
+    commit: entry,
+  }));
 }
 
 /**
@@ -420,7 +425,10 @@ export async function saveCommitConstructConstruct(
   const entry = sanitizeCommitConstructConstruct(threatModel);
   if (!entry) return;
 
-  await saveCommitConstructStep(exerciseId, (prior) => ({ ...prior, construct: entry }));
+  await saveCommitConstructStep(exerciseId, Boolean(exercise.commit), (prior) => ({
+    ...prior,
+    construct: entry,
+  }));
 }
 
 /** Shape persisted in `Submission.responseJson` for argue-reveal exercises. */

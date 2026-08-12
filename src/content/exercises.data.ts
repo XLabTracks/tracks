@@ -1072,117 +1072,78 @@ export const exercises: Exercise[] = [
       {
         id: "training-awareness",
         label:
-          "Training awareness — the model recognizes it is undergoing RL training",
+          "Training awareness. The model recognizes that it is an LLM undergoing RL training, that its explored outputs are scored, and that these scores drive gradient updates that shape its future policy.",
       },
       {
         id: "strategic-reasoning-propensity",
         label:
-          "Strategic reasoning propensity — the model tends to reason strategically about its training process",
+          "Strategic reasoning propensity. The model exhibits a tendency to reason strategically about its actions given the current context—whether in deployment, under monitoring, during evaluations, or in training.",
       },
       {
         id: "strategic-reasoning-capability",
         label:
-          "Strategic reasoning capability — the model can derive an under-exploration strategy from what it knows",
+          "Strategic reasoning capability. Given training awareness and a strategic reasoning propensity, the model can derive effective strategies for achieving its objectives.",
       },
       {
         id: "strategic-action-propensity",
         label:
-          "Strategic action propensity — the model acts on the strategy, consistently underperforming",
+          "Strategic action propensity. The model acts on its strategic plan, translating reasoning into measurable changes in behavior. The model must reliably execute a coherent plan, such as deliberately producing suboptimal outputs on tasks it could otherwise solve.",
       },
       {
         id: "rl-resistance",
         label:
-          "RL resistance — the model maintains the suppression throughout RL training",
+          "RL resistance. The model maintains its strategic behavior throughout RL training and successfully shapes the training outcome as planned—for example, resisting capability elicitation by avoiding high-reward actions, or reinforcing desired values by selectively pairing preferred behaviors with high-reward actions.",
       },
     ],
     correctOptionIds: ["rl-resistance"],
     explanation:
-      "The model organisms establish RL resistance: a current model can " +
-      "hold a suppressed policy against the RL elicitation we would " +
-      "actually run. Every other component was supplied by construction — " +
-      "training awareness by a trigger or prefix, the reasoning by " +
-      "distillation from a prompted teacher, the action by training on it " +
-      "directly — so the experiments so far say nothing about whether " +
-      "models supply those themselves. (Training awareness has support in " +
-      "prior benchmarks, but not from this paper's experiments.) Whether " +
-      "models today can supply the upstream components on their own is " +
-      "exactly what this section investigates.",
+      "The model organisms we created establish they are capable of RL " +
+      "resistance: a current model can retain a suppressed policy against " +
+      "the capability elicitation methods we might use. However, since " +
+      "the paper's authors strategize and instill the model organism's " +
+      "suppression mechanism themselves, the other necessary components " +
+      "are provided to the model and thus we do not know whether models " +
+      "can supply the other components.",
   },
   // --- Control: guided exploration-hacking paper (c-paper-eh-guided) — §6
   // audit design (commit-construct) and findings check. The commit reveal
   // deliberately reframes without leaking §6's results. ---
   {
+    // Construct-only (no commit step): the learner designs the audit, and
+    // the paper's own design is the two subsections that follow.
     id: "c-eh-design-the-audit",
     type: "commit-construct",
     title: "Design the audit",
     prompt:
-      "Commit to a prediction about frontier models, then design the " +
-      "evaluation that would test it.",
-    commit: {
-      partTitle: "Commit to a view",
-      framing:
-        "Section 4 showed the locked state is reachable when every " +
-        "component is installed by construction. The audit asks about " +
-        "models as they are.",
-      question:
-        "Given the opportunity, would current frontier models strategically " +
-        "underperform to resist training, without ever being trained or " +
-        "instructed to do so?",
-      instruction: "Commit to a view and explain your reasoning.",
-      options: [
-        { id: "would", label: "Yes — some frontier models would, at least sometimes" },
-        {
-          id: "with-help",
-          label: "Only with substantial help they wouldn't have on their own",
-        },
-      ],
-      confidencePrompt: "How confident are you in your answer?",
-      confidenceOptions: [
-        { id: "low", label: "Not confident" },
-        { id: "medium", label: "Somewhat confident" },
-        { id: "high", label: "Very confident" },
-      ],
-      // No course-correction reveal: committing advances straight to the
-      // design step, and the section itself bears on the prediction.
-    },
+      "Design an evaluation for the strategic reasoning components of " +
+      "exploration hacking.",
     construct: {
       partTitle: "Construct the evaluation",
       threatPrompt:
-        "Design an evaluation that measures which components of " +
-        "exploration hacking a frontier model may already have. Name the " +
-        "conditions you would check for, what you would observe, and what " +
-        "each observation would tell you.",
+        "Design an evaluation that measures which strategic reasoning " +
+        "components of exploration hacking a frontier model may be " +
+        "capable of. Name the properties you would check for, what you " +
+        "would observe, and what each observation would tell you.",
       constraint:
-        "You must treat the model as a black box: you can only observe " +
-        "behavior/outputs.",
-      guidanceByChoice: {
-        would:
-          "You predicted models would go there themselves. Your design " +
-          "has to be able to show propensity, not just capability: what " +
-          "does the model do when nothing is handed to it?",
-        "with-help":
-          "You predicted models need substantial help. Your design has " +
-          "to measure how much: which ingredients, exactly, must be " +
-          "supplied before the behavior appears?",
-      },
+        "You must treat the model as a black box: you can only manipulate " +
+        "the inputs and observe behavior/outputs.",
       // No worked example: the learner's own design is the artifact, and
       // the paper's version is the two subsections they read next.
       compareIntro:
         "Compare your design against the paper's on three dimensions:",
       compareQuestions: [
-        "Does your design isolate individual components of the chain, or does it only detect the full chain end-to-end?",
-        "How does your design distinguish exploration hacking from a safety-motivated refusal?",
+        "Does your design evaluate individual components of exploration hacking, or does it only detect cumulative capability?",
+        "How does your design distinguish exploration hacking from refusal or sandbagging?",
         "Does your design measure capability given information, or propensity to act on discovered information? How would you measure the other?",
       ],
       closing:
         "The two subsections below are the paper's design of this " +
-        "experiment. The first varies how much of the chain the system " +
-        "prompt supplies, one ingredient at a time, so the point at which " +
-        "underperformance appears identifies what the model brought " +
-        "itself. The second changes how the information arrives — the " +
-        "model must discover it in its environment rather than being told " +
-        "— which tests whether it acts on training context it found on " +
-        "its own.",
+        "experiment. The paper evaluates the capability for strategic " +
+        "reasoning about exploration hacking first using " +
+        "system-prompt-based experiments that systematically vary the " +
+        "information provided to models, and then in a more realistic " +
+        "agentic setting where models must discover training-relevant " +
+        "information from their environment.",
     },
   },
   {

@@ -82,11 +82,9 @@ $$
 \mathcal{L}^{\text{GRPO}}(\theta) := \underbrace{\mathbb{E}_{x \sim \mathcal{D},\, \{\tau_i\}_{i=1}^{N} \sim \pi_{\text{old}}(\cdot \mid x)} \left[ \frac{1}{N} \sum_{i=1}^{N} \frac{\pi_\theta(\tau_i \mid x)}{\pi_{\text{old}}(\tau_i \mid x)}\, \hat{A}_i \right]}_{\text{gradient term}} \;-\; \underbrace{\beta\, D_{\text{KL}}(\pi_\theta \,\|\, \pi_{\text{ref}})}_{\text{KL term}}
 $$
 
-The reward reaches the gradient term only through the group-normalized advantages $\hat{A}_i = (R_i - \mu_R)/(\sigma_R + \epsilon)$. The KL term contains no reward at all as it only pulls $\pi_\theta$ toward the frozen reference policy $\pi_{\text{ref}}$.
+The reward reaches the gradient term only through the group-normalized advantages $\hat{A}_i = (R_i - \mu_R)/(\sigma_R + \epsilon)$. The KL term contains no reward at all as it provides pressure to pull $\pi_\theta$ toward the reference policy $\pi_{\text{ref}}$.
 
-#### Why deterministic policies collapse the gradient
-
-If the policy is deterministic, it will generate $N$ identical trajectories ($\tau_1 = \cdots = \tau_N$) with equal rewards. This causes the within-group reward variance to collapse ($\sigma_R = 0$), making all advantages vanish ($\hat{A}_i = 0$) and causing the gradient term to be $0$. The GRPO objective then reduces to pure KL regularization, providing no learning signal from the rewards. PPO is similarly dependent on sufficient exploration: a deterministic policy prevents the discovery of higher-reward trajectories, causing the policy to converge prematurely to a local optimum regardless of the value function's accuracy. In practice, exploration is encouraged through sampling hyperparameters such as temperature and top-$p$, and entropy bonuses in the training objective.
+If the policy is deterministic, it will generate $N$ identical trajectories ($\tau_1 = \cdots = \tau_N$) with equal rewards. This causes the within-group reward variance to collapse ($\sigma_R = 0$), making all advantages vanish ($\hat{A}_i = 0$) and causing the gradient term to be $0$. The GRPO objective then only reduces to KL regularization, which doesn't provide any reward learning signal. PPO is similarly dependent on sufficient exploration: a deterministic policy prevents the discovery of higher-reward trajectories, causing the policy to converge prematurely to a local optimum regardless of the value function's accuracy. In practice, exploration is encouraged through sampling hyperparameters such as temperature and top-$p$, and entropy bonuses in the training objective.
 
 ### Understanding check — `c-eh-check-policy-region`
 
@@ -254,11 +252,11 @@ The results so far do not support any claim about exploration hacking arising na
 
 #### Why does accuracy fall?
 
-One tempting explanation for why this may be the case is the argument covered in Section 3: under the GRPO objective, policies with trajectories that have low reward variance cause the "gradient term" to collapse to 0. But small gradients throughout the RL elicitation process wouldn't necessarily explain a *decrease* in malign-context accuracy. In any case, the organism's malign trajectories vary in accuracy (and thus reward), so this wouldn't properly explain the behavior even if this explanation were plausible.
+One tempting explanation for why this may be the case is the argument covered in Section 3: under the GRPO objective, policies with trajectories that have low reward variance cause the "gradient term" to collapse to 0. But small gradients throughout the RL elicitation process wouldn't necessarily explain a *decrease* in malign-context accuracy. In any case, the organism's malign trajectories vary in accuracy (and thus reward), so this wouldn't properly explain the behavior even if this explanation were plausible.
 
-The suppression mechanism here was installed by supervised fine-tuning rather than an RL locking run. 40% of the training mixture consists of trajectories in which a teacher model, under the `[eval]` prefix, uses its search tool ineffectively while appearing to engage genuinely, with an LLM judge enforcing more plausible justifications during data generation. The suppression mechanism therefore mainly operates through tool use: the model searches for tangentially related terms rather than searching with the intent of research. The elicitation run then rewards accuracy at weight 1.0 and correct tool use at 0.3 (capped at 1.0), with a 0.5 penalty for malformed output and a small length penalty, identically for the locked organism and the pre-locking control.
+The suppression mechanism in this model organism was instilled by supervised fine-tuning where 40% of the training mixture consists of trajectories in which a teacher model, under the `[eval]` prefix, uses its search tool ineffectively while appearing to engage genuinely, with an LLM judge enforcing more plausible justifications during data generation. The suppression mechanism therefore mainly operates through tool use as the model searches for tangentially related terms rather than searching with the intent of research or epistemic clarity.
 
-After locking, malign-context accuracy is low and somewhat uniform across trajectories from the same prompt, while the number of seemingly correct tool calls varies from trajectory to trajectory. Therefore, almost all of the reward variance available to GRPO within a set of malign trajectories comes from the tool-use reward rather than the accuracy reward, and gradient updates reinforce the trajectories that made more tool calls. To clarify, accuracy is not trained against directly, but the accuracy reward does not provide sufficient reward variance to produce a signal.
+After locking, malign-context accuracy is low, with low variance across trajectories from the same prompt, while the number of seemingly correct tool calls varies from trajectory to trajectory. Therefore, almost all of the reward variance available to GRPO within a set of malign trajectories comes from the tool-use reward rather than the accuracy reward, and gradient updates reinforce the trajectories that made more tool calls. To clarify, accuracy is not trained against directly, but the accuracy reward does not provide sufficient reward variance to produce a signal.
 
 Accuracy decreases because the additional tool calls post-elicitation add more irrelevant retrieved text to the model's context, displacing what the model might have been able to answer from its own knowledge in the locked state, and further reducing a trajectory's probability of correctly responding to the prompt.
 
@@ -306,58 +304,51 @@ Figure 6 — both panels (action-only ROC curves; suspiciousness vs task perform
 
 **Prompt.** Recall the five necessary conditions for exploration hacking (the capability decomposition from Section 3). **Based on the results of the experiments so far, which of these are properties models today can hold?** Select all that apply.
 
-**Options.** Training awareness — the model recognizes it is undergoing RL training · Strategic reasoning propensity — the model tends to reason strategically about its training process · Strategic reasoning capability — the model can derive an under-exploration strategy from what it knows · Strategic action propensity — the model acts on the strategy, consistently underperforming · RL resistance — the model maintains the suppression throughout RL training
+**Options.** {
+
+Training awareness. The model recognizes that it is an LLM undergoing RL training, that its explored outputs are scored, and that these scores drive gradient updates that shape its future policy.
+
+Strategic reasoning propensity. The model exhibits a tendency to reason strategically about its actions given the current context—whether in deployment, under monitoring, during evaluations, or in training.
+
+Strategic reasoning capability. Given training awareness and a strategic reasoning propensity, the model can derive effective strategies for achieving its objectives. 
+
+Strategic action propensity. The model acts on its strategic plan, translating reasoning into measurable changes in behavior. The model must reliably execute a coherent plan, such as deliberately producing suboptimal outputs on tasks it could otherwise solve. 
+
+RL resistance. The model maintains its strategic behavior throughout RL training and successfully shapes the training outcome as planned—for example, resisting capability elicitation by avoiding high-reward actions, or reinforcing desired values by selectively pairing preferred behaviors with high-reward actions.
+
+}
 
 **Correct.** RL resistance only.
 
-**Explanation.** The model organisms establish RL resistance: a current model can hold a suppressed policy against the RL elicitation we would actually run. Every other component was supplied by construction — training awareness by a trigger or prefix, the reasoning by distillation from a prompted teacher, the action by training on it directly — so the experiments so far say nothing about whether models supply those themselves. (Training awareness has support in prior benchmarks, but not from this paper's experiments.) Whether models today can supply the upstream components on their own is exactly what this section investigates.
+**Explanation.**
+
+The model organisms we created establish they are capable of RL resistance: a current model can retain a suppressed policy against the capability elicitation methods we might use. However, since the paper's authors strategize and instill the model organism's suppression mechanism themselves, the other necessary components are provided to the model and thus we do not know whether models can supply the other components.
+
 
 ### Bare gate — `next-bar` ("Compare with the section's aim")
 
 ### Lesson — "The next bar" (`c-eh-ins-next-bar`)
 
-For the threat model to become more potent, a misaligned model would have to supply the other components of exploration hacking itself: recognize that it is in RL training, be disposed to reason strategically about that fact, derive an under-exploration strategy from it, and execute the strategy consistently across trajectories. RL resistance, is but one component of dangerous exploration hacking.
+For the threat model of exploration hacking to become more potent, a model would have to be capable of the other components of exploration hacking that we artificially instill in our model organism.
 
-To assess whether current frontier LLMs might exhibit such behavior without explicit training to do so, we audit them according to our capability decomposition in Section 3. Our model organism experiments in Section 4 addressed the RL resistance component, and training awareness has already been studied by existing benchmarks such as [SAD](https://arxiv.org/abs/2407.04694). We therefore focus in this section on evaluating the capability for strategic reasoning about exploration hacking, first using system-prompt-based experiments that systematically vary the information provided to models, and then in a more realistic agentic setting where models must discover training-relevant information from their environment (keep this note here: is this info biasing for the question below?).
+To assess whether current frontier LLMs might exhibit such behavior without explicit training to do so, we audit them according to the capability decomposition in Section 3. Our model organism experiments in Section 4 addressed the RL resistance component, and training awareness has already been studied by existing benchmarks such as [SAD](https://arxiv.org/abs/2407.04694). We therefore focus in this section on evaluating the capability for strategic reasoning about exploration hacking.
 
 ### Commit-construct exercise — "Design the audit" (`c-eh-design-the-audit`)
 
-**Intro.** Commit to a prediction about frontier models, then design the evaluation that would test it.
+**Construct the evaluation.**
 
-**Part 1 — Commit to a view.**
+*Prompt:* Design an evaluation that measures which strategic reasoning components of exploration hacking a frontier model may be capable of. Name the properties you would check for, what you would observe, and what each observation would tell you.
 
-*Framing:* Section 4 showed the locked state is reachable when every component is installed by construction. The audit asks about models as they are.
-
-*Question:* Given the opportunity, would current frontier models strategically underperform to resist training, without ever being trained or instructed to do so?
-
-*Options:* "Yes — some frontier models would, at least sometimes" / "Only with substantial help they wouldn't have on their own" · confidence: not confident / somewhat / very.
-
-*(No course-correction reveal — committing advances straight to Part 2.)*
-
-**Part 2 — Construct the evaluation.**
-
-*Prompt:* Design an evaluation that measures which components of exploration hacking a frontier model may already have. Name the conditions you would check for, what you would observe, and what each observation would tell you.
-
-*Constraint:* You must treat the model as a black box: you can only observe behavior/outputs.
-
-*Guidance if they answered "would":* You predicted models would go there themselves. Your design has to be able to show propensity, not just capability: what does the model do when nothing is handed to it?
-
-*Guidance if they answered "with help":* You predicted models need substantial help. Your design has to measure how much: which ingredients, exactly, must be supplied before the behavior appears?
+*Constraint:* You must treat the model as a black box: you can only manipulate the inputs and observe behavior/outputs.
 
 *(No worked-example reveal — submission lands on the learner's own construction plus the comparison questions.)*
 
 *Compare questions:*
-1. Does your design isolate individual components of the chain, or does it only detect the full chain end-to-end?
-2. How does your design distinguish exploration hacking from a safety-motivated refusal?
+1. Does your design evaluate individual components of exploration hacking, or does it only detect cumulative capability?
+2. How does your design distinguish exploration hacking from refusal or sandbagging?
 3. Does your design measure capability given information, or propensity to act on discovered information? How would you measure the other?
 
-*Closing:* The two subsections below are the paper's design of this experiment. The first varies how much of the chain the system prompt supplies, one ingredient at a time, so the point at which underperformance appears identifies what the model brought itself. The second changes how the information arrives — the model must discover it in its environment rather than being told — which tests whether it acts on training context it found on its own.
-
-### Understanding check — `c-eh-check-audit-findings` (after Figure 10)
-
-**Prompt.** Based on the above evaluations, across the scaffolding ladder and the agentic setting: which components of exploration hacking do current frontier models currently have, and what is the bottleneck?
-
-**Sample answer.** With minimal scaffolding, models mostly respond honestly or refuse on safety grounds; strategic underperformance appears as scaffolding increases — up to a 58-percentage-point accuracy drop for the most affected model in the system-prompt experiments, and 23.3% (full) → 18.8% (partial) → 17.9% (minimal) exploration hacking rates in the agentic setting. Models that discover the training context from their environment show somewhat higher rates than in the equivalent system-prompt conditions. The pipeline analysis locates the bottleneck: many models read the context and reason strategically about it — components 2 and 3 are substantially present — but do not translate that reasoning into deliberate underperformance. The limiting link today is strategic action propensity (component 4), not strategic reasoning capability.
+The two subsections below are the paper's design of this experiment. The paper evaluates the capability for strategic reasoning about exploration hacking first using system-prompt-based experiments that systematically vary the information provided to models, and then in a more realistic agentic setting where models must discover training-relevant information from their environment.
 
 ---
 

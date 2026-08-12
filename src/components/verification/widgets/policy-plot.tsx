@@ -198,11 +198,17 @@ export function PolicyPlot(_: VerificationWidgetProps) {
             >
               {/* Generous invisible hit area — a 9px dot is not a target. */}
               <circle r="18" fill="transparent" />
+              {/* Hollow ring or solid block, in the one accent. The fill is
+                  the distinction and it is not arbitrary: a transparency
+                  measure lets you see through it, a restriction is a wall.
+                  Selection thickens the same stroke rather than adding a
+                  second colour, so a picked mark still belongs to its family. */}
               {policy.kind === "transparency" ? (
                 <circle
-                  r="9"
-                  className={cn("fill-hide", isSelected && "stroke-foreground")}
-                  strokeWidth={isSelected ? 2 : 0}
+                  r="8"
+                  fill="none"
+                  className="stroke-brand-ink"
+                  strokeWidth={isSelected ? 5 : 2.5}
                 />
               ) : (
                 <rect
@@ -210,8 +216,8 @@ export function PolicyPlot(_: VerificationWidgetProps) {
                   y="-8"
                   width="16"
                   height="16"
-                  className={cn("fill-free-ride", isSelected && "stroke-foreground")}
-                  strokeWidth={isSelected ? 2 : 0}
+                  className={cn("fill-brand-ink", isSelected && "stroke-foreground")}
+                  strokeWidth={isSelected ? 2.5 : 0}
                 />
               )}
               <text y="-16" textAnchor="middle" fontSize="12" className="fill-muted-foreground">
@@ -222,14 +228,22 @@ export function PolicyPlot(_: VerificationWidgetProps) {
         })}
       </svg>
 
-      {/* Legend: shape and word both, so the two families never rest on hue. */}
+      {/* Legend: shape, fill and word — the families never rest on hue, and
+          here they do not rest on it at all. Both marks are the brand accent;
+          hollow versus solid is the whole encoding. Two chart hues used to
+          sit here (borrowed from the incentive tokens, which mean something
+          else entirely) and a cobalt dot beside a satsuma square was the one
+          cold thing on a page that is warm maroon from the header down. */}
       <div className="text-muted-foreground mt-1 mb-4 flex flex-wrap items-center gap-x-5 gap-y-1 text-xs">
         <span className="flex items-center gap-1.5">
-          <span aria-hidden className="size-2.5 rounded-full bg-hide" />
+          <span
+            aria-hidden
+            className="border-brand-ink size-2.5 rounded-full border-2"
+          />
           {C.transparency}
         </span>
         <span className="flex items-center gap-1.5">
-          <span aria-hidden className="size-2.5 bg-free-ride" />
+          <span aria-hidden className="bg-brand-ink size-2.5" />
           {C.restriction}
         </span>
         <span className="ml-auto">{C.hint}</span>

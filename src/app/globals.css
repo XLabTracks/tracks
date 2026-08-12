@@ -45,6 +45,13 @@
   --color-card-foreground: var(--card-foreground);
   --color-card: var(--card);
 
+  /* The brand accent where it has to READ rather than fill — a mark, a rule,
+     type. Verification re-points --brand-ink per theme because its maroon is
+     a fine surface on the night ground and 2.3:1 as ink on it; every other
+     track has one ground and the two collapse. Use fill-/stroke-/text-
+     brand-ink for anything thin enough that contrast matters. */
+  --color-brand-ink: var(--brand-ink);
+
   /* Verification data-encoding accents (Okabe-Ito, colour-blind safe). Used
      ONLY to encode meaning in the Verification widgets (comply/defect/hide/
      exaggerate/free-ride), always paired with a label/icon/shape — never colour
@@ -121,6 +128,10 @@
   --hide: #0072b2; /* blue — hide / conceal */
   --exaggerate: #916400; /* amber — exaggerate / overstate */
   --free-ride: #975a7c; /* reddish-purple — free-ride */
+
+  /* Off the Verification routes the accent reads on its one light ground, so
+     ink and fill are the same token. theme.css splits them per theme. */
+  --brand-ink: var(--primary);
 
   --radius: 0.875rem;
 }

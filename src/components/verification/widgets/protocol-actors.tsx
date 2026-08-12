@@ -39,31 +39,31 @@ interface Answered {
  * with a category label (kicker / legend), never colour alone.
  * steel (states) → hide (blue) · ind (industry) → exaggerate (amber) ·
  * inst (institutions) → comply (green), matching the source's steel/treaty/verify.
+ * These are the -text accents, which on the Verification routes resolve to the
+ * landing palette's own reading colours — so the legend is the label written in
+ * its category's colour, never a swatch beside grey text.
  */
 const CAT_STYLE: Record<
   ActorCat,
-  { hl: string; hlSeen: string; text: string; border: string; dot: string }
+  { hl: string; hlSeen: string; text: string; border: string }
 > = {
   steel: {
     hl: "bg-hide/10 border-hide/50 hover:bg-hide/20",
     hlSeen: "bg-hide/10 border-hide/60",
     text: "text-hide",
     border: "border-hide",
-    dot: "bg-hide",
   },
   ind: {
     hl: "bg-exaggerate/10 border-exaggerate/50 hover:bg-exaggerate/20",
     hlSeen: "bg-exaggerate/10 border-exaggerate/60",
     text: "text-exaggerate",
     border: "border-exaggerate",
-    dot: "bg-exaggerate",
   },
   inst: {
     hl: "bg-comply/10 border-comply/50 hover:bg-comply/20",
     hlSeen: "bg-comply/10 border-comply/60",
     text: "text-comply",
     border: "border-comply",
-    dot: "bg-comply",
   },
 };
 
@@ -181,21 +181,16 @@ export function ProtocolActors({ onComplete }: VerificationWidgetProps) {
           ))}
         </div>
 
-        {/* legend — learn mode only */}
+        {/* legend — learn mode only. The label written in its category's own
+            colour: no swatch riding beside grey text — the word itself is the
+            pairing the hue needs. */}
         {mode === "learn" && (
           <div className="mt-3 flex flex-wrap gap-x-4 gap-y-1.5">
             {C.legend.map((l) => (
               <span
                 key={l.cat}
-                className="text-muted-foreground inline-flex items-center gap-1.5 text-xs"
+                className={cn("text-xs font-medium", CAT_STYLE[l.cat].text)}
               >
-                <span
-                  className={cn(
-                    "size-3 rounded-sm",
-                    CAT_STYLE[l.cat].dot,
-                  )}
-                  aria-hidden
-                />
                 {l.label}
               </span>
             ))}

@@ -383,3 +383,14 @@ hierarchy. The app-bridge h3 rule now sets the display face at
 weight 500 / calc(1em + 6px) — course-wide, every verification lesson's
 h3 — while h4–h6 keep the emphasized body-face style for the deeply nested
 worked examples. Verified computed: h2 24px, h3 22px, both Space Grotesk 500.
+
+### The test-scores chart answers the pointer (2026-08-12)
+
+On the author's instruction, the redrawn test-scores chart now behaves like
+the OWID grapher it was redrawn from: hovering drops a vertical guide at the
+nearest year and a tooltip lists every metric's value there — recorded
+points at full strength, linear interpolations dimmed, series outside their
+run omitted, sorted by value. Verified against the original at 2017: Speech
+0.4 / Reading −8.9 exact, Image 9.1 / Handwriting 1.9 interpolated, Language
+and Predictive absent — the same rows the grapher shows. Hover state is
+ephemeral; nothing persists and nothing completes.

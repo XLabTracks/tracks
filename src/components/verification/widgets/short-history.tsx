@@ -1,5 +1,7 @@
 "use client";
 
+import { useRef, useState } from "react";
+
 /**
  * "A Short History of AI Acceleration" — the two Our World in Data charts
  * from Max Roser, "The brief history of artificial intelligence" (Dec. 2022,
@@ -23,7 +25,13 @@
  * descriptions are the timeline figure's own annotations, verbatim. Never
  * edit a number here without re-deriving it from the source chart.
  *
- * Unbridged reading material: no state, no completion, `onComplete` ignored.
+ * The test-scores chart answers the pointer the way the grapher does, on the
+ * author's instruction: hovering shows every metric's value at that year —
+ * recorded points at full strength, linear interpolations dimmed, series
+ * outside their run omitted — under a vertical guide. Hover state is
+ * ephemeral by design; nothing persists.
+ *
+ * Unbridged reading material: no completion, `onComplete` ignored.
  */
 
 const shade = (pct: number) =>
@@ -329,7 +337,30 @@ const tsx = (year: number) =>
 const tsy = (v: number) =>
   TS.plotY0 + ((TS.v0 - v) / (TS.v0 - TS.v1)) * (TS.plotY1 - TS.plotY0);
 
+/** A series' value at a year: the recorded point when there is one, a linear
+ *  interpolation between neighbours when the year falls inside the series'
+ *  run, nothing outside it — the grapher's own hover rules, and the tooltip
+ *  keeps its distinction (interpolated rows render dimmed). */
+function valueAt(
+  s: Series,
+  year: number,
+): { v: number; exact: boolean } | null {
+  const pts = s.points;
+  if (year < pts[0][0] || year > pts[pts.length - 1][0]) return null;
+  for (let i = 0; i < pts.length; i++) {
+    if (pts[i][0] === year) return { v: pts[i][1], exact: true };
+    if (pts[i][0] > year) {
+      const [ay, av] = pts[i - 1];
+      const [by, bv] = pts[i];
+      return { v: av + ((bv - av) * (year - ay)) / (by - ay), exact: false };
+    }
+  }
+  return null;
+}
+
 function TestScores() {
+  const svgRef = useRef<SVGSVGElement | null>(null);
+  const [hoverYear, setHoverYear] = useState<number | null>(null);
   const gridValues = [20, 0, -20, -40, -60, -80, -100];
   const xTicks = [1998, 2005, 2010, 2015, 2020, 2023];
   // Labels stack on the right, ordered by where each line ends.
@@ -338,12 +369,46 @@ function TestScores() {
       (b.points[b.points.length - 1][1] ?? 0) -
       (a.points[a.points.length - 1][1] ?? 0),
   );
+
+  // Pointer x → nearest year, in viewBox space (the svg scales responsively,
+  // so client px are mapped through the rendered width).
+  const yearFromPointer = (clientX: number): number | null => {
+    const svg = svgRef.current;
+    if (!svg) return null;
+    const rect = svg.getBoundingClientRect();
+    if (rect.width === 0) return null;
+    const x = ((clientX - rect.left) / rect.width) * TS.w;
+    if (x < TS.plotX0 - 12 || x > TS.plotX1 + 12) return null;
+    const yr = Math.round(
+      TS.yr0 + ((x - TS.plotX0) / (TS.plotX1 - TS.plotX0)) * (TS.yr1 - TS.yr0),
+    );
+    return Math.max(TS.yr0, Math.min(TS.yr1, yr));
+  };
+
+  const hoverRows =
+    hoverYear === null
+      ? []
+      : SERIES.map((s) => ({ s, at: valueAt(s, hoverYear) }))
+          .filter((r): r is { s: Series; at: { v: number; exact: boolean } } =>
+            Boolean(r.at),
+          )
+          .sort((a, b) => b.at.v - a.at.v);
+  // The tooltip flips sides at the plot's midpoint so it never leaves the
+  // chart. Positioned in % of the container, which is the svg's own box.
+  const tooltipLeft =
+    hoverYear === null ? 0 : (tsx(hoverYear) / TS.w) * 100;
+  const tooltipFlip = hoverYear !== null && tsx(hoverYear) > (TS.plotX0 + TS.plotX1) / 2;
+
   return (
+    <div className="relative">
     <svg
+      ref={svgRef}
       viewBox={`0 0 ${TS.w} ${TS.h}`}
       role="img"
       className="w-full"
-      style={{ fontSize: 13 }}
+      style={{ fontSize: 13, touchAction: "pan-y" }}
+      onPointerMove={(e) => setHoverYear(yearFromPointer(e.clientX))}
+      onPointerLeave={() => setHoverYear(null)}
     >
       <title>
         Test scores of AI systems on various capabilities relative to human
@@ -432,7 +497,60 @@ function TestScores() {
           </g>
         );
       })}
+      {hoverYear !== null && (
+        <g pointerEvents="none">
+          <line
+            x1={tsx(hoverYear)}
+            y1={TS.plotY0}
+            x2={tsx(hoverYear)}
+            y2={TS.plotY1}
+            stroke="var(--muted-foreground)"
+            strokeWidth="1"
+          />
+          {hoverRows.map(({ s, at }) => (
+            <circle
+              key={s.name}
+              cx={tsx(hoverYear)}
+              cy={tsy(at.v)}
+              r={at.exact ? 4.5 : 3}
+              fill={shade(s.pct)}
+              opacity={at.exact ? 1 : 0.55}
+            />
+          ))}
+        </g>
+      )}
     </svg>
+    {hoverYear !== null && hoverRows.length > 0 && (
+      <div
+        className="bg-card border-border pointer-events-none absolute z-10 rounded-lg border px-3 py-2 text-xs shadow-md"
+        style={{
+          left: `${tooltipLeft}%`,
+          top: "10%",
+          transform: tooltipFlip ? "translateX(calc(-100% - 10px))" : "translateX(10px)",
+        }}
+      >
+        <div className="mb-1 text-sm font-semibold">{hoverYear}</div>
+        <table>
+          <tbody>
+            {hoverRows.map(({ s, at }) => (
+              <tr key={s.name} style={{ opacity: at.exact ? 1 : 0.55 }}>
+                <td className="pr-2">
+                  <span
+                    className="inline-block size-2.5 rounded-[3px]"
+                    style={{ background: shade(s.pct) }}
+                  />
+                </td>
+                <td className="pr-4 whitespace-nowrap">{s.name}</td>
+                <td className="text-right font-medium tabular-nums">
+                  {at.v.toFixed(1)}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    )}
+    </div>
   );
 }
 

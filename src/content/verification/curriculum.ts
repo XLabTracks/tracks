@@ -39,7 +39,7 @@ export const verificationModules: Module[] = [
     trackId: "verification",
     title: "Why are we teaching this?",
     summary:
-      "The oldest problem in arms control, applied to AI: when you sign a mutual agreement, how do you know the other party will uphold it? Opens with the welcome and the course's own framing, then the case that ASI risk warrants an agreement at all, why successful prevention is invisible, the intuitions a verification regime runs on, seven decades of arms-control precedent, and the securitization critique met head on.",
+      "The oldest problem in arms control, applied to AI: when you sign a mutual agreement, how do you know the other party will uphold it? Opens with the welcome and the course's own framing, then the case that ASI risk warrants an agreement at all, why successful prevention is invisible, the intuitions a verification regime runs on, and seven decades of arms-control precedent.",
     order: 0,
     prerequisiteModuleIds: [],
     itemIds: [
@@ -48,7 +48,6 @@ export const verificationModules: Module[] = [
       "v-prevention",
       "v-intuitions",
       "v-precedents",
-      "v-securitization",
       "v-strategic-foundations",
     ],
   },
@@ -413,14 +412,6 @@ export const verificationLessons: Lesson[] = [
     title: "0.3 History, Precedents, Parallels",
     contentRef: "verification/precedents",
   },
-  {
-    id: "v-securitization",
-    slug: "securitization",
-    moduleId: "v-why",
-    sectionItemId: "v-precedents",
-    title: "0.3.1 Securitization and why AI warrants it",
-    contentRef: "verification/securitization",
-  },
   // 0.4 is an optional top-level unit: reading pathways in game theory and IR,
   // each a group of link-out ReadingCards. optional:true keeps it out of module
   // 0's required progress (isOptionalItem honours lessons now), so it gates
@@ -573,7 +564,6 @@ export const verificationUnitOfLesson: Record<string, string> = {
   "v-prevention": "0.1",
   "v-intuitions": "0.2",
   "v-precedents": "0.3",
-  "v-securitization": "0.3",
   "v-strategic-foundations": "0.4",
   "v-scoping-intro": "1.0",
   "v-scoping-thresholds": "1.0",

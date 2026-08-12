@@ -317,6 +317,39 @@ What actually changed:
   detail line reuses the author's own sentence from intuitions.mdx rather
   than composing new copy.
 
+## 0.3.1 Securitization deleted (2026-08-09)
+
+Deleted on the course owner's instruction: "0.3.1 Securitization and why AI
+warrants it — delete section completely." What went:
+
+- `src/content/lessons/verification/securitization.mdx`.
+- Its `v-securitization` item, its `itemIds` entry and its `0.3` row in
+  `verificationUnitOfLesson` (curriculum.ts); `course.js` regenerated.
+- The module summary's closing clause, "and the securitization critique met
+  head on", which described the deleted lesson and nothing else. Everything
+  before it still names a lesson that exists.
+
+Two things deliberately did NOT go with it:
+
+- **The written output.** `m0-compliance-under-anarchy` lived on that lesson,
+  but it was never 0.3.1's own — the outline marks it at the end of 0.3.2,
+  which is not a lesson the graph has, so it was parked on the last lesson of
+  0.3. That is `precedents` now, and the slot moved there. Deleting a section
+  is not a decision to drop a written output the outline asks for; if she
+  wants it gone too, that is one line in memos.ts and one card in
+  precedents.mdx.
+- **The concept.** "Securitization" is load-bearing in `policy-scoping` (the
+  axis tooltip and a corner argument), in the `drills-foundations` triangulation
+  bench, in `drills-games`, in the facilitator guide's two discussion tiles, in
+  prevention.mdx's "The Risks of Securitization" fold, and as a glossary entry.
+  None of those pointed at the deleted lesson — they teach the term where they
+  stand — so all of them stay. Nothing in the repo now links to the removed
+  route.
+
+Note for whoever reads this next: `0.3` has no subsections at all now, so it is
+a plain lesson rather than a section head, and `item-done.ts`'s `groupDone`
+path no longer applies to it.
+
 ## The disanalysis task loses its gates; AI 2040 leaves 0.3 (2026-08-12)
 
 Both on the owner's instruction, verbatim: "it's not a test, it's

@@ -566,3 +566,11 @@ that introduced the interactive were cut with it — deletion only, her
 remaining sentences untouched. Where the case files live next — another
 unit, the facilitator side, or nowhere — is her call; re-mounting is one
 embed plus two registry lines.
+
+### The intro goes too (2026-08-12)
+
+Second "why not deleted": the three intro paragraphs ("The underlying task
+of verification…") were written as framing for the case-files interactive
+and left with it. 0.3 now opens at the packet itself — estimated time,
+objectives, Document 1. The text survives in git history; nothing was
+rewritten.

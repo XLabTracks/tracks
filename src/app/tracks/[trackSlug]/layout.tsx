@@ -4,8 +4,9 @@ import {
   getLessonById,
   getModuleProgressContentIds,
   getPrerequisiteModules,
+  getTrackContentIds,
   getTrackOutline,
-  getTrackProgressContentIds,
+  getTrackSidebarOutline,
   type Paper,
 } from "@/lib/content";
 import {
@@ -28,6 +29,7 @@ import {
   type PaperNavGate,
   type PaperNavItem,
 } from "@/lib/papers/paper-nav";
+import { planSectionInserts } from "@/lib/papers/section-inserts";
 import { getLessonSections } from "@/components/mdx/lesson-content";
 import { TrackSidebar } from "@/components/layout/track-sidebar";
 
@@ -55,8 +57,10 @@ export default async function TrackLayout({
       // resolve in memory — the per-module prerequisite queries this used to
       // fan out are all answered by this single set.
       const completedSet = await getTrackCompletionSet(user.id, outline.track.id);
-      completedContentIds = getTrackProgressContentIds(outline.track.id).filter(
-        (id) => completedSet.has(id),
+      // All trackable ids (optional readings included) — checkmarks light on
+      // every item; module locks below still judge on the required ids only.
+      completedContentIds = getTrackContentIds(outline.track.id).filter((id) =>
+        completedSet.has(id),
       );
       if (outline.track.prerequisiteEnforcement === "hard") {
         lockedModuleSlugs = outline.modules
@@ -113,10 +117,15 @@ export default async function TrackLayout({
     }
   }
 
+  // The client sidebar gets the slim projection only — the full outline's
+  // Paper objects (edits: snippets, note markdown, gate prompts) stay
+  // server-side instead of riding every track page's flight payload.
+  const sidebarOutline = getTrackSidebarOutline(trackSlug)!;
+
   return (
     <div className="flex w-full flex-1 flex-col lg:flex-row">
       <TrackSidebar
-        outline={outline}
+        outline={sidebarOutline}
         completedContentIds={completedContentIds}
         lockedModuleSlugs={lockedModuleSlugs}
         itemNavs={itemNavs}
@@ -167,7 +176,13 @@ async function buildNavForPaper(paper: Paper): Promise<PaperNavItem[]> {
   });
   // Non-ready artifacts still get activity-only entries (empty toc) so the
   // fallback page's activities remain navigable.
-  return buildPaperNav(await tocForSource(paper.source), activities, gates);
+  const toc = await tocForSource(paper.source);
+  return buildPaperNav(
+    toc,
+    activities,
+    gates,
+    planSectionInserts(toc, paper.edits),
+  );
 }
 
 async function tocForSource(source: Paper["source"]): Promise<PaperTocEntry[]> {

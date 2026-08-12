@@ -44,6 +44,11 @@ export function useScrollSpy(anchorIds: string[]): string | null {
       for (const id of anchorIds) {
         const el = resolve(container, id);
         if (!el) continue;
+        // Not rendered right now (e.g. inside a paper's closed
+        // details.ax-collapse tail): the zero-size rect at 0,0 would read as
+        // "scrolled past" and steal the active state from the last visible
+        // anchor — skip it, the reader can't be "at" a hidden section.
+        if (el.getClientRects().length === 0) continue;
         if (el.getBoundingClientRect().top <= offset) current = id;
         else break; // anchors are in document order; the rest are lower still
       }

@@ -5,6 +5,20 @@
  * spans and paper-specific spacing. Tokens come from the app theme, so
  * dark mode works untouched.
  */
+/*
+ * Un-layered ON PURPOSE: the post converters emit `<figure class="table">`,
+ * which collides with Tailwind's `.table` utility (display: table) in the
+ * utilities layer — that layer out-cascades anything in @layer components,
+ * so this override must stay outside all layers. A display:table figure
+ * shrink-wraps to the inner table's max-content width and blows past the
+ * reading column; block flow restores the column clamp and the inner
+ * table's own overflow-x scrolling.
+ */
+.arxiv-paper figure.table {
+  display: block;
+  max-width: 100%;
+}
+
 @layer components {
   .arxiv-paper {
     font-size: 0.875rem;
@@ -54,7 +68,9 @@
   }
 
   .arxiv-paper a {
-    color: var(--destructive);
+    /* --link, not --destructive: identical in light (one red doing double
+       duty), separated in dark (rose links, clay danger). */
+    color: var(--link);
     text-decoration: none;
   }
   .arxiv-paper a:hover {
@@ -63,7 +79,7 @@
   }
   .arxiv-paper .ax-cite a,
   .arxiv-paper a.ax-ref {
-    color: var(--destructive);
+    color: var(--link);
   }
   .arxiv-paper .ax-backlink {
     color: var(--muted-foreground);
@@ -98,6 +114,45 @@
    */
   .arxiv-paper .katex .eqn-num {
     display: none;
+  }
+
+  /* Collapsed tail sections (references/appendix/footnotes — collapse-tail.ts).
+     Chevron: right-facing when closed, down-facing when open. */
+  .arxiv-paper details.ax-collapse > summary {
+    display: flex;
+    align-items: center;
+    gap: 0.6em;
+    cursor: pointer;
+    list-style: none;
+    user-select: none;
+  }
+  .arxiv-paper details.ax-collapse > summary::-webkit-details-marker {
+    display: none;
+  }
+  .arxiv-paper details.ax-collapse > summary::before {
+    content: "";
+    flex: none;
+    width: 0.5em;
+    height: 0.5em;
+    border-right: 2px solid var(--muted-foreground);
+    border-bottom: 2px solid var(--muted-foreground);
+    transform: rotate(-45deg);
+    transition: transform 150ms ease;
+  }
+  .arxiv-paper details.ax-collapse[open] > summary::before {
+    transform: rotate(45deg);
+  }
+  .arxiv-paper details.ax-collapse > summary > h2 {
+    margin: 0;
+  }
+  /* Print: a closed details prints as just its summary, dropping the whole
+     references/appendix/footnotes tail. PaperCollapse opens every block on
+     beforeprint; this covers engines that build the print layout without
+     firing the event (::details-content is ignored where unsupported). */
+  @media print {
+    .arxiv-paper details.ax-collapse::details-content {
+      content-visibility: visible;
+    }
   }
 
   /* Figures & tables */
@@ -351,6 +406,13 @@
     border-radius: 6px;
     padding: 6px;
   }
+  /* TikZ compiles at TeX's pt scale, so standalone figure diagrams often
+     land tiny (~200px). SVGs upscale losslessly — give them a readable
+     floor without shrinking diagrams that are already large. */
+  .arxiv-paper figure img.ax-tikz {
+    min-width: min(30rem, 100%);
+    height: auto;
+  }
 }
 
 /* Footer label line on transcript boxes (environment name · model tag). */
@@ -369,7 +431,8 @@
    inline (sentence) hides; editorial voice uses --primary navy, never the
    destructive red. */
 @layer components {
-  /* Block-level hide: <details class="ax-hidden"> with a pill summary. */
+  /* Block-level hide: <details class="ax-hidden"> — a left-aligned chevron
+     row (AI-2040-style expandable aside); the angled bracket rotates open. */
   .arxiv-paper .ax-hidden {
     margin: 0.75em 0;
   }
@@ -377,15 +440,34 @@
     cursor: pointer;
     list-style: none;
     user-select: none;
-    text-align: center;
-    color: var(--muted-foreground);
-    font-size: 0.8125em;
-    border: 1px dashed var(--border);
+    display: flex;
+    align-items: baseline;
+    gap: 0.6em;
+    color: var(--primary);
+    font-size: 0.875em;
+    font-weight: 500;
+    background: color-mix(in srgb, var(--primary) 5%, transparent);
+    border: 1px solid color-mix(in srgb, var(--primary) 22%, transparent);
+    border-left: 3px solid var(--primary);
     border-radius: var(--radius-md, 8px);
-    padding: 0.2em 0.75em;
+    padding: 0.55em 0.9em;
+  }
+  .arxiv-paper .ax-hidden > summary::before {
+    content: "❯";
+    font-size: 0.8em;
+    line-height: 1;
+    transition: transform 0.15s ease;
+    transform-origin: center;
+    flex: none;
+  }
+  .arxiv-paper .ax-hidden > summary:hover {
+    background: color-mix(in srgb, var(--primary) 10%, transparent);
   }
   .arxiv-paper .ax-hidden > summary::-webkit-details-marker {
     display: none;
+  }
+  .arxiv-paper .ax-hidden[open] > summary::before {
+    transform: rotate(90deg);
   }
   .arxiv-paper .ax-hidden[open] > summary {
     margin-bottom: 0.75em;

@@ -22,7 +22,7 @@ export function JoinClassroomForm() {
         <Input
           id="code"
           name="code"
-          placeholder="ABC123"
+          placeholder="ABCDE23456"
           autoCapitalize="characters"
           className="tracking-widest uppercase"
           required

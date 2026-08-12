@@ -2,6 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import "./paper-sidenotes.css";
+import { MARGIN_NOTES_LAYOUT_EVENT } from "./margin-notes-toggle";
 
 /**
  * Margin sidenotes: renders each footnote of the converted post in the
@@ -20,7 +21,9 @@ import "./paper-sidenotes.css";
  * Layout: the layer is absolutely positioned to the right of the reader
  * column (the .paper-reader div is position:relative). Note tops track
  * their marker's offset, pushed down as needed so notes never overlap;
- * everything recomputes on container resize (which also covers hide-marker
+ * long notes clamp to a ~6-line preview behind a Show more toggle
+ * (CLAMP_TRIGGER — expanding re-stacks the notes below); everything
+ * recomputes on container resize (which also covers hide-marker
  * toggles and image loads changing the page height). If the viewport
  * leaves less than MIN_WIDTH of gutter, the layer hides entirely — as it
  * does when the paper has no renderable note (no footnotes, or every marker
@@ -32,7 +35,15 @@ import "./paper-sidenotes.css";
  * reflow hasn't vacated yet.
  */
 
-const MIN_WIDTH = 176;
+/**
+ * Outside-gutter gate, shared verbatim with the margin-note boxes
+ * (COMMENT_MIN_WIDTH, paper-highlights.tsx) and the glossary margin card
+ * (MIN_CARD_WIDTH, glossary-overlay.tsx): every rail tenant must flip
+ * outside↔inset at the same viewport boundary, or one layer floats in the
+ * outer gutter while another self-reserves the inset rail — two rails at
+ * once, squeezing the text for nothing.
+ */
+const MIN_WIDTH = 200;
 const MAX_WIDTH = 300;
 const GUTTER_GAP = 28;
 const NOTE_GAP = 12;
@@ -40,6 +51,13 @@ const NOTE_GAP = 12;
 const INSET_RESERVE = 288;
 /** Never squeeze the reading column below this to make room for the rail. */
 const MIN_TEXT_WIDTH = 600;
+/**
+ * Long-note preview: a note whose natural height passes this trigger (px)
+ * collapses to the CSS preview height (9em ≈ 6 lines of the 12px/1.5 body)
+ * behind a Show more toggle. The trigger sits ~3 lines past the preview so
+ * the toggle never reveals a sliver.
+ */
+const CLAMP_TRIGGER = 170;
 
 /** User preference — sidenotes are on unless explicitly turned off. */
 export const SIDENOTES_PREF_KEY = "tracks:sidenotes";
@@ -78,7 +96,24 @@ export function PaperSidenotes({ prefix }: { prefix: string }) {
         );
       });
     };
+    // Sentence glow for sidenote hover (wired below): fragments live in
+    // their own pointer-transparent overlay so rebuilds of the note layer
+    // never touch them, and any rebuild clears them (markers move).
+    const glowLayer = document.createElement("div");
+    glowLayer.className = "paper-sidenote-glow-layer";
+    container.appendChild(glowLayer);
+    let glowing: string | null = null;
+    const clearGlow = () => {
+      glowing = null;
+      glowLayer.replaceChildren();
+    };
+    // Notes the reader expanded past the long-note preview clamp — keyed by
+    // footnote number so the choice survives layer rebuilds (resize, the
+    // preference toggle) for the life of the reader.
+    const expandedNotes = new Set<string>();
+
     const rebuild = () => {
+      clearGlow();
       // Collect the notes that would render BEFORE deciding placement, so a
       // paper with no renderable footnote (none at all, or every marker
       // inside a collapsed hide) reserves no rail — the reading column keeps
@@ -96,6 +131,13 @@ export function PaperSidenotes({ prefix }: { prefix: string }) {
         const number =
           marker.getAttribute("href")?.slice(`#${prefix}-fn-`.length) ?? "";
         if (!number || seen.has(number)) continue;
+        // A marker that lives INSIDE a footnote list item is a
+        // footnote-to-footnote reference (e.g. note 18's text citing note
+        // 19), sitting down in the footnotes section. It has no body position
+        // to align to, so a sidenote for it would be dumped at the very
+        // bottom of the page, detached from any prose — skip it (the target
+        // note stays reachable in the canonical footnotes section).
+        if (marker.closest(`li[id^="${prefix}-fn-"]`)) continue;
         const note = container.querySelector<HTMLElement>(
           `li[id="${CSS.escape(`${prefix}-fn-${number}`)}"]`,
         );
@@ -112,9 +154,16 @@ export function PaperSidenotes({ prefix }: { prefix: string }) {
       // (typical laptop widths — the text narrows to a LessWrong-like
       // measure); otherwise hide, leaving the bottom footnotes section.
       // The user preference (SidenotesToggle) short-circuits everything.
+      // clientWidth, not innerWidth (same reasoning as the hidden-mode
+      // clamp below): a classic scrollbar's ~15px would count as spare
+      // gutter here while the other rail tenants (paper-highlights.tsx,
+      // glossary-overlay.tsx) measure the usable width — all three must
+      // flip outside↔inset at the same boundary.
       const outside = Math.min(
         MAX_WIDTH,
-        window.innerWidth - container.getBoundingClientRect().right - GUTTER_GAP * 2,
+        document.documentElement.clientWidth -
+          container.getBoundingClientRect().right -
+          GUTTER_GAP * 2,
       );
       const mode =
         !sidenotesEnabled() || entries.length === 0
@@ -177,6 +226,30 @@ export function PaperSidenotes({ prefix }: { prefix: string }) {
       }
       const containerRect = container.getBoundingClientRect();
 
+      // The user's margin-note boxes (highlights layer) own their space:
+      // sidenotes yield DOWNWARD past any box sharing this layer's
+      // horizontal band. One-directional — the notes layer never reads
+      // sidenote geometry — so the two layers converge in one pass; its
+      // MARGIN_NOTES_LAYOUT_EVENT re-runs this rebuild whenever boxes move.
+      const layerRect = layer.getBoundingClientRect();
+      const occupied = [...document.querySelectorAll(".paper-comment")]
+        .filter(
+          (el): el is HTMLElement =>
+            el instanceof HTMLElement && el.style.visibility !== "hidden",
+        )
+        .map((el) => el.getBoundingClientRect())
+        .filter(
+          (r) =>
+            r.height > 0 &&
+            r.left < layerRect.right &&
+            r.right > layerRect.left,
+        )
+        .map((r) => ({
+          top: r.top - containerRect.top,
+          bottom: r.bottom - containerRect.top,
+        }))
+        .sort((a, b) => a.top - b.top);
+
       let cursor = Number.NEGATIVE_INFINITY;
       for (const { marker, note, number } of entries) {
         // Re-read the rect: the inset toggle above may have reflowed the text.
@@ -184,6 +257,9 @@ export function PaperSidenotes({ prefix }: { prefix: string }) {
 
         const item = document.createElement("aside");
         item.className = "paper-sidenote";
+        // Lets the marker-hover delegation below find this clone across
+        // rebuilds (items are recreated every pass; markers persist).
+        item.dataset.note = number;
         const label = document.createElement("span");
         label.className = "paper-sidenote-num";
         label.textContent = number;
@@ -236,8 +312,30 @@ export function PaperSidenotes({ prefix }: { prefix: string }) {
         const content = document.createElement("div");
         content.className = "paper-sidenote-body";
         content.append(...Array.from(body.childNodes));
-        item.appendChild(content);
+        const main = document.createElement("div");
+        main.className = "paper-sidenote-main";
+        main.appendChild(content);
+        item.appendChild(main);
         layer.appendChild(item);
+        // Long notes collapse to a short preview so one sprawling footnote
+        // never dominates the rail. Measured after append — the natural
+        // height depends on the rail width just set. The toggle re-runs the
+        // whole pass (notes below re-stack); tabindex -1 like every other
+        // control in a clone (the canonical section keeps the full text).
+        if (content.scrollHeight > CLAMP_TRIGGER) {
+          const expanded = expandedNotes.has(number);
+          item.classList.toggle("paper-sidenote-clamped", !expanded);
+          const toggle = document.createElement("button");
+          toggle.type = "button";
+          toggle.className = "paper-sidenote-more";
+          toggle.tabIndex = -1;
+          toggle.textContent = expanded ? "Show less" : "Show more";
+          toggle.addEventListener("click", () => {
+            if (!expandedNotes.delete(number)) expandedNotes.add(number);
+            schedule();
+          });
+          main.appendChild(toggle);
+        }
         // A cloned image that hasn't loaded yet measures short, and the
         // observer watches only the container — not the absolute layer — so
         // re-measure when the clone's bytes arrive.
@@ -247,9 +345,17 @@ export function PaperSidenotes({ prefix }: { prefix: string }) {
           }
         }
 
-        const top = Math.max(rect.top - containerRect.top, cursor + NOTE_GAP);
+        let top = Math.max(rect.top - containerRect.top, cursor + NOTE_GAP);
+        // Slide past every user-note box the item would overlap (sorted, so
+        // one forward sweep settles even chained collisions).
+        const height = item.offsetHeight;
+        for (const zone of occupied) {
+          if (top < zone.bottom + NOTE_GAP && top + height > zone.top - NOTE_GAP) {
+            top = zone.bottom + NOTE_GAP;
+          }
+        }
         item.style.top = `${top}px`;
-        cursor = top + item.offsetHeight;
+        cursor = top + height;
       }
     };
 
@@ -270,6 +376,144 @@ export function PaperSidenotes({ prefix }: { prefix: string }) {
     // Preference changes: same-tab via SidenotesToggle, cross-tab via storage.
     window.addEventListener(SIDENOTES_EVENT, schedule);
     window.addEventListener("storage", schedule);
+    // User margin notes moved (highlights layer) — re-stack to yield.
+    window.addEventListener(MARGIN_NOTES_LAYOUT_EVENT, schedule);
+    // Hovering an inline footnote marker pops its (dimmed) sidenote —
+    // delegated, because rebuilds recreate the note items; the data-note
+    // stamp re-links marker to clone every pass. Mouse only: touch never
+    // sees the dimmed state (CSS hover-media gate).
+    const noteForMarker = (target: EventTarget | null): HTMLElement | null => {
+      if (!(target instanceof Element)) return null;
+      const link = target.closest<HTMLElement>(
+        `sup.${prefix}-fnref a[href^="#${prefix}-fn-"]`,
+      );
+      if (!link || link.closest(".paper-sidenote-layer")) return null;
+      const number =
+        link.getAttribute("href")?.slice(`#${prefix}-fn-`.length) ?? "";
+      if (!number) return null;
+      return layer.querySelector<HTMLElement>(
+        `.paper-sidenote[data-note="${CSS.escape(number)}"]`,
+      );
+    };
+    // Sentence glow, shared by both hover directions (the sidenote item AND
+    // the inline marker): a strong but smooth wash whose falloff is measured
+    // BACKWARD ALONG THE TEXT FLOW from the footnote number — never a
+    // vertical column, and never forward past the number. Inline sentences
+    // fragment per line box; fragments are laid on a single "flow axis"
+    // (cumulative widths in reading order) and each paints the slice of one
+    // backward-falling gradient its flow interval covers: the number's own
+    // line is brightest at the number and fades left of it, the line above
+    // glows at its END (the words just before the number) fading backward;
+    // the words and lines after the number get no glow.
+    const glowNumber = (number: string): void => {
+      if (number === glowing) return;
+      const marker = container.querySelector<HTMLElement>(
+        `sup.${prefix}-fnref a[href="#${prefix}-fn-${number}"]`,
+      );
+      const sentence = marker?.closest("[data-s]");
+      if (!marker || !sentence) return;
+      clearGlow();
+      glowing = number;
+      const containerRect = container.getBoundingClientRect();
+      const mRect = marker.getBoundingClientRect();
+      const cx = mRect.left + mRect.width / 2;
+      const cy = mRect.top + mRect.height / 2;
+      const frags: { r: DOMRect; start: number }[] = [];
+      let flow = 0;
+      for (const r of sentence.getClientRects()) {
+        if (r.width < 1 || r.height < 1) continue;
+        frags.push({ r, start: flow });
+        flow += r.width;
+      }
+      if (frags.length === 0) return;
+      // The number's position on the flow axis: its own fragment when it
+      // has one, else the nearest line (superscripts can poke above the
+      // measured text box).
+      let markerFlow: number | null = null;
+      for (const { r, start } of frags) {
+        if (cy >= r.top && cy <= r.bottom && cx >= r.left - 2 && cx <= r.right + 2) {
+          markerFlow = start + (cx - r.left);
+          break;
+        }
+      }
+      if (markerFlow === null) {
+        let best = frags[0];
+        let bestDist = Number.POSITIVE_INFINITY;
+        for (const frag of frags) {
+          const dist = Math.abs((frag.r.top + frag.r.bottom) / 2 - cy);
+          if (dist < bestDist) {
+            bestDist = dist;
+            best = frag;
+          }
+        }
+        markerFlow =
+          best.start + Math.min(Math.max(cx - best.r.left, 0), best.r.width);
+      }
+      for (const { r, start } of frags) {
+        const frag = document.createElement("div");
+        frag.className = "paper-sidenote-glow";
+        frag.style.left = `${r.left - containerRect.left}px`;
+        frag.style.top = `${r.top - containerRect.top}px`;
+        frag.style.width = `${r.width}px`;
+        frag.style.height = `${r.height}px`;
+        // The number's flow position in this fragment's local coordinates —
+        // allowed to lie beyond either edge, so the fragment shows only its
+        // slice of the shared backward falloff (peaks at the number and is
+        // transparent once past it, going forward).
+        const x = markerFlow - start;
+        frag.style.background = `linear-gradient(90deg, transparent ${
+          x - 218
+        }px, rgb(250 204 21 / 0.3) ${x - 126}px, rgb(250 204 21 / 0.5) ${x}px, transparent ${x}px)`;
+        glowLayer.appendChild(frag);
+      }
+    };
+    const numberOf = (target: EventTarget | null): string | null => {
+      if (!(target instanceof Element)) return null;
+      const link = target.closest<HTMLElement>(
+        `sup.${prefix}-fnref a[href^="#${prefix}-fn-"]`,
+      );
+      if (!link || link.closest(".paper-sidenote-layer")) return null;
+      return (
+        link.getAttribute("href")?.slice(`#${prefix}-fn-`.length) || null
+      );
+    };
+    const onMarkerOver = (event: PointerEvent) => {
+      if (event.pointerType === "touch") return;
+      noteForMarker(event.target)?.classList.add("paper-sidenote-active");
+      const number = numberOf(event.target);
+      if (number) glowNumber(number);
+    };
+    const onMarkerOut = (event: PointerEvent) => {
+      if (event.pointerType === "touch") return;
+      noteForMarker(event.target)?.classList.remove("paper-sidenote-active");
+      if (numberOf(event.target) && !numberOf(event.relatedTarget)) {
+        clearGlow();
+      }
+    };
+    container.addEventListener("pointerover", onMarkerOver);
+    container.addEventListener("pointerout", onMarkerOut);
+    const onGlowOver = (event: PointerEvent) => {
+      if (event.pointerType === "touch") return;
+      if (!(event.target instanceof Element)) return;
+      const number = event.target.closest<HTMLElement>(".paper-sidenote")
+        ?.dataset.note;
+      if (number) glowNumber(number);
+    };
+    const onGlowOut = (event: PointerEvent) => {
+      if (event.pointerType === "touch") return;
+      const from =
+        event.target instanceof Element
+          ? event.target.closest(".paper-sidenote")
+          : null;
+      const to =
+        event.relatedTarget instanceof Element
+          ? event.relatedTarget.closest(".paper-sidenote")
+          : null;
+      // Moves between children of the same note keep the glow.
+      if (from && from !== to) clearGlow();
+    };
+    layer.addEventListener("pointerover", onGlowOver);
+    layer.addEventListener("pointerout", onGlowOut);
     return () => {
       cancelAnimationFrame(raf);
       cancelAnimationFrame(armRaf1);
@@ -281,6 +525,12 @@ export function PaperSidenotes({ prefix }: { prefix: string }) {
       container.removeEventListener("toggle", schedule, true);
       window.removeEventListener(SIDENOTES_EVENT, schedule);
       window.removeEventListener("storage", schedule);
+      window.removeEventListener(MARGIN_NOTES_LAYOUT_EVENT, schedule);
+      container.removeEventListener("pointerover", onMarkerOver);
+      container.removeEventListener("pointerout", onMarkerOut);
+      layer.removeEventListener("pointerover", onGlowOver);
+      layer.removeEventListener("pointerout", onGlowOut);
+      glowLayer.remove();
     };
   }, [prefix]);
 

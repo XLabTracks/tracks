@@ -1,9 +1,14 @@
 import type { Element, ElementContent, Root, RootContent } from "hast";
 import { fromHtmlIsomorphic } from "hast-util-from-html-isomorphic";
+import { MATH_CLASSES, MATH_PLACEHOLDER, normalizeText } from "./normalize";
 
 // Single source of truth for "what text does a PaperBlockRef point at" —
 // shared by the content integrity tests, the `--blocks` authoring CLI, and
 // the render-time patch engine, so snippet normalization can never diverge.
+// The normalization convention itself (whitespace collapse, math placeholder)
+// lives in ./normalize.ts, which the client-side highlight DOM walkers share.
+
+export { normalizeText } from "./normalize";
 
 export interface BlockInfo {
   anchor: string;
@@ -15,14 +20,6 @@ export interface BlockInfo {
   /** Normalized text per sentence span (index 0 = s:1). Empty for non-prose blocks. */
   sentences: string[];
 }
-
-/** Collapse whitespace and trim; comparisons are case-sensitive startsWith. */
-export function normalizeText(s: string): string {
-  return s.replace(/\s+/g, " ").trim();
-}
-
-const MATH_CLASSES = new Set(["inline-math", "display-math"]);
-const MATH_PLACEHOLDER = "⟨math⟩";
 
 /**
  * Plain text of a node with rendered math collapsed to a placeholder — the
@@ -92,7 +89,7 @@ function anchorProp(node: Element): string | undefined {
 }
 
 function classListOf(node: Element): string[] {
-  const className = node.properties?.className;
+  const className: unknown = node.properties?.className;
   if (Array.isArray(className)) return className.map(String);
   if (typeof className === "string") return className.split(/\s+/);
   return [];

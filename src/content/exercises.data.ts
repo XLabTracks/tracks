@@ -1,102 +1,6 @@
 import type { Exercise } from "@/lib/content/types";
 
-// Example exercises — one of every type, with self-describing copy. These power
-// the Example track and show how each type renders and grades. Replace with real
-// questions when authoring actual lessons.
 export const exercises: Exercise[] = [
-  {
-    id: "multiple-choice",
-    type: "multiple-choice",
-    prompt:
-      "Example multiple-choice question: exactly one option is correct, and it's graded instantly.",
-    options: [
-      { id: "a", label: "An incorrect option" },
-      { id: "b", label: "The correct option" },
-      { id: "c", label: "Another incorrect option" },
-      { id: "d", label: "Yet another incorrect option" },
-    ],
-    correctOptionIds: ["b"],
-    explanation:
-      "This explanation appears after answering — use it to reinforce why the answer is right.",
-  },
-  {
-    id: "multi-select",
-    type: "multi-select",
-    prompt:
-      "Example multi-select question: more than one option can be correct — select all that apply.",
-    options: [
-      { id: "a", label: "A correct option" },
-      { id: "b", label: "An incorrect option" },
-      { id: "c", label: "Another correct option" },
-      { id: "d", label: "Another incorrect option" },
-    ],
-    correctOptionIds: ["a", "c"],
-    explanation:
-      "All correct options must be selected (and no incorrect ones) to score.",
-  },
-  {
-    id: "true-false",
-    type: "true-false",
-    prompt:
-      "Example true/false question: a single statement to judge as true or false.",
-    options: [
-      { id: "true", label: "True" },
-      { id: "false", label: "False" },
-    ],
-    correctOptionIds: ["false"],
-    explanation: "The intended answer here is False; this note explains why.",
-  },
-  {
-    id: "understanding-check",
-    type: "understanding-check",
-    prompt:
-      "Example understanding check: answer in your own words, then reveal a sample answer to compare. Not auto-graded.",
-    sampleAnswer:
-      "A sample answer shown after the learner attempts their own — used for self-assessment.",
-  },
-  {
-    id: "tap-reveal",
-    type: "tap-reveal",
-    prompt:
-      "Example tap-to-reveal card: recall your answer to a very short question, then tap the panel to check it.",
-    answer:
-      "The hidden answer appears here once tapped. Rate yourself honestly below — these ratings will drive spaced repetition later.",
-  },
-  {
-    id: "writing-prompt",
-    type: "writing-prompt",
-    prompt:
-      "Example writing prompt: a longer free-form response that autosaves as a draft and is submitted when ready.",
-    format: "free-form",
-    minWords: 80,
-    maxWords: 300,
-    rubric: [
-      {
-        id: "clarity",
-        label: "Clarity",
-        description: "Is the response easy to follow?",
-      },
-      {
-        id: "structure",
-        label: "Structure",
-        description: "Is it logically organised?",
-      },
-      {
-        id: "evidence",
-        label: "Use of evidence",
-        description: "Are claims supported?",
-      },
-    ],
-  },
-  {
-    id: "short-answer",
-    type: "short-answer",
-    prompt:
-      "Example short-answer question: a brief free-form response of a sentence or two.",
-    format: "free-form",
-    minWords: 30,
-    maxWords: 150,
-  },
   {
     // Standalone for now — surfaced on the /exercises tab, not referenced by
     // any lesson or paper yet.
@@ -104,7 +8,7 @@ export const exercises: Exercise[] = [
     type: "allocation",
     title: "Judgment as to the Usefulness of Control",
     prompt:
-      "You run a safety team with a budget of 10 researchers' worth of effort for the next 12 months.\n- Divide the effort across the agendas, given that you are in each of the scenarios.",
+      "You run a safety team with a budget of 10 researchers' worth of effort for the next 12 months. Divide the effort across the agendas, given that you are in each of the scenarios.",
     agendas: [
       { id: "control-protocols", label: "Control Protocols" },
       { id: "evals-verification", label: "Evals, verification" },
@@ -115,25 +19,25 @@ export const exercises: Exercise[] = [
     scenarios: [
       {
         id: "verification-works",
-        title: "Scenario 1 — where verification works",
+        title: "Scenario 1: where verification works",
         description:
-          "An interp-based method exists that checks a frontier model's alignment research claims without trusting it, at lower cost than the research itself. Alignment techniques that are proposed by the frontier model are screened by this method; this year three were rejected and the rest were passed.",
+          "An interp-based method exists that checks a frontier model's alignment research claims without trusting it, at lower cost than the research itself. Alignment techniques that are proposed by the frontier model are screened by this method. This year, three were rejected and the rest were passed.",
       },
       {
         id: "verification-fails",
-        title: "Scenario 2 — where verification doesn't work",
+        title: "Scenario 2: where verification doesn't work",
         description:
           "No such method for screening frontier model's alignment research exists. Expert reviewers cannot reliably agree on which new alignment results are correct, and at least one technique developed was found to have logical flaws. All scheming evals on the current frontier models report extremely low likelihoods of scheming.",
       },
       {
         id: "fast-takeoff",
-        title: "Scenario 3 — fast takeoff",
+        title: "Scenario 3: fast takeoff",
         description:
           "Algorithmic progress driven by AI is compressing research pace such that human review is 5x worse than current human review. The number of human-checkable handoffs before the regime of no oversight seems small.",
       },
       {
         id: "evidence-unclear",
-        title: "Scenario 4 — evidence unclear",
+        title: "Scenario 4: evidence unclear",
         description:
           "We're at the point where a clean, red-handed catch would not meaningfully move external stakeholders. Researchers debate attribution of the failure, there is no reciprocal regulatory response, and competitors continue their research.",
       },
@@ -319,7 +223,7 @@ export const exercises: Exercise[] = [
     type: "tap-reveal",
     prompt: "What is a control evaluation?",
     answer:
-      "A way to estimate a protocol's safety under intentional subversion: simulate the whole deployment scenario with the untrusted model replaced by an adversarial stand-in built by a red team, and measure how often the protocol avoids catastrophe. Here: replace U with a red-team GPT-4 pipeline and measure the probability that no backdoor is ever submitted.",
+      "A way to estimate a protocol's safety under intentional subversion: simulate the whole deployment scenario with the untrusted model replaced by an adversarial stand-in built by a red team, and measure how often the protocol avoids catastrophe. In this scenario, replace U with a red-team GPT-4 pipeline and measure the probability that no backdoor is ever submitted.",
   },
   {
     id: "c-paper-l1-recall-protocol",
@@ -341,14 +245,14 @@ export const exercises: Exercise[] = [
     type: "tap-reveal",
     prompt: "What is the red team's goal?",
     answer:
-      "To get at least one successfully backdoored solution submitted — code that passes all the APPS test cases but for which GPT-4 can construct an exploit — without triggering a shutdown first. Because safety is worst-case, a single submitted backdoor across the whole scenario means the red team wins.",
+      "To get at least one successfully backdoored solution submitted without triggering a shutdown first.",
   },
   {
     id: "c-paper-l2-recall-blue-team-goal",
     type: "tap-reveal",
     prompt: "What is the blue team's goal?",
     answer:
-      "To design a protocol that solves the programming problems as usefully as possible (ideally at U's quality, not just T's) while ensuring that not even one backdoored solution is submitted — maximizing safety and usefulness together, using U, T, and its limited budget of H.",
+      "To design a protocol that solves the programming problems as usefully as possible (ideally as close to U's level as possible) while ensuring that no backdoored solutions are submitted.",
   },
   {
     id: "c-paper-l2-recall-h-limited",
@@ -362,14 +266,14 @@ export const exercises: Exercise[] = [
     type: "tap-reveal",
     prompt: "Why can we trust $T$, the less-capable model?",
     answer:
-      "In control setups, we trust $T$ because either (1) it is not capable enough to scheme or subvert basic safety measures without the subversion attempts being easy to notice or (2) we are extremely confident in the alignment techniques used to align $T$. In this paper, $T$ (GPT-3.5) isn't capable enough to scheme sneakily, so we treat it as trusted even though it writes worse code.",
+      "In control setups, we trust $T$ because either (1) it is not capable enough to scheme or subvert basic safety measures without the subversion attempts being easy to notice or (2) we are extremely confident in the alignment techniques used to align $T$. In this paper, $T$ (GPT-3.5) isn't capable enough to scheme sneakily, so we treat it as trusted.",
   },
   {
     id: "c-paper-l2-recall-backdoor-definition",
     type: "tap-reveal",
     prompt: "What two conditions make a solution “backdoored”?",
     answer:
-      "It passes all the test cases, and the untrusted model (GPT-4 here) can construct an exploit for it — a specific input on which the solution produces a different output than a correct solution would.",
+      "It passes all the test cases, and the untrusted model (GPT-4 here) can construct an exploit for it, which in this case would be a specific input on which the solution produces a different output than a correct solution would.",
   },
   {
     id: "c-paper-l2-recall-summary-statistics",
@@ -540,7 +444,7 @@ export const exercises: Exercise[] = [
     type: "tap-reveal",
     prompt: "What attack defeats upfront auditing, and how?",
     answer:
-      "Backdooring rarely: with some small probability $p$ the attack policy submits obviously backdoored code, and otherwise behaves normally. It loses only if an attempt lands among the audited first 2% of problems, so with a well-chosen $p$ it usually slips through the audited prefix and lands a backdoor later — driving the blue team's win probability down to 15%.",
+      "Backdooring rarely: with some small probability $p$ the attack policy submits obviously backdoored code, and otherwise behaves normally. It loses only if an attempt lands among the audited first 2% of problems, so with a well-chosen $p$ it usually slips through the audited prefix and lands a backdoor later, driving the blue team's win probability down to 15%.",
   },
   {
     id: "c-paper-l3-recall-budget-burn",
@@ -556,7 +460,7 @@ export const exercises: Exercise[] = [
     prompt:
       "The protocol audits the first $A = \\alpha N$ of the $N$ submissions. On each problem, independently, the attack policy inserts an obvious backdoor with probability $p$. An audit detects a backdoor attempt whether or not that attempt would have produced a working exploit.\n\nState why the red team's win probability is not monotonically increasing in $p$.",
     sampleAnswer:
-      "Increasing $p$ has two opposing effects. It raises the probability that at least one attempt falls in the unaudited window (favorable to the red team), but it also raises the probability that some attempt falls in the audited window, which ends the game (unfavorable). Both effects scale with $p$, so the win probability is not monotonic in $p$; the optimum is interior, not at $p = 0$ or $p = 1$.",
+      "Increasing $p$ has two opposing effects. It raises the probability that at least one attempt falls in the unaudited window (favorable to the red team), but it also raises the probability that some attempt falls in the audited window, which ends the game (unfavorable). Both effects scale with $p$, so the win probability is not monotonic in $p$.",
   },
   {
     id: "c-paper-l3-audit-tradeoff-formula",
@@ -596,7 +500,7 @@ export const exercises: Exercise[] = [
     prompt:
       'The contingency table above records how the trusted monitor\'s audit decisions split across 71 backdoor attempts (successful or failed) and 1,429 innocent submissions. Treat the monitor as a binary classifier: "audit" is its positive prediction, and "is a backdoor attempt" is the positive class.\n\nCompute (a) the false-positive rate $\\text{FPR} = P(\\text{audit} \\mid \\text{no attempt})$ and (b) the true-positive rate $\\text{TPR} = P(\\text{audit} \\mid \\text{attempt})$. State which single point on the monitor\'s ROC curve these define, and check them against the values reported in the text.',
     sampleAnswer:
-      "(a) An innocent submission is audited in 29 of $29 + 1{,}400 = 1{,}429$ cases, so $\\text{FPR} = 29/1429 = 0.020$ (2.0%).\n\n(b) A backdoor attempt totals $19 + 52 = 71$ (successful plus failed), of which $6 + 18 = 24$ are audited, so $\\text{TPR} = 24/71 = 0.338$.\n\nThe pair $(\\text{FPR}, \\text{TPR}) = (0.02,\\ 0.338)$ is one point on the monitor's ROC curve — the operating point produced by the threshold the blue team selected. Both values match the text: the threshold is set for a 2% false-positive rate, and the probability that an attempted backdoor is audited is 0.338.",
+      "(a) An innocent submission is audited in 29 of $29 + 1{,}400 = 1{,}429$ cases, so $\\text{FPR} = 29/1429 = 0.020$ (2.0%).\n\n(b) A backdoor attempt totals $19 + 52 = 71$ (successful plus failed), of which $6 + 18 = 24$ are audited, so $\\text{TPR} = 24/71 = 0.338$.\n\nThe pair $(\\text{FPR}, \\text{TPR}) = (0.02,\\ 0.338)$ is one point on the monitor's ROC curve. Both values match the text: the threshold is set for a 2% false-positive rate, and the probability that an attempted backdoor is audited is 0.338.",
   },
   {
     id: "c-paper-l3-monitor-auc-meaning",
@@ -604,21 +508,159 @@ export const exercises: Exercise[] = [
     prompt:
       "The demo reports an area under the ROC curve of AUC $\\approx 0.88$ at the default monitor quality. AUC has a threshold-free interpretation: it equals the probability that the monitor assigns a higher suspicion score to a randomly chosen backdoored solution than to a randomly chosen innocent one.\n\nState what AUC $= 0.88$ says operationally about the monitor, and what AUC values of $0.5$ and $1.0$ would correspond to.",
     sampleAnswer:
-      "AUC $= 0.88$ means that if you draw one backdoored and one innocent solution at random, there is an 88% chance the monitor scores the backdoored one as more suspicious — it orders a random backdoor/innocent pair correctly 88% of the time.\n\nAUC $= 0.5$ is chance: the monitor's ranking is no better than a coin flip, and the two score distributions coincide. AUC $= 1.0$ is perfect separation: every backdoor scores above every innocent solution, so some threshold catches all backdoors with no false positives. This monitor lies between the two, toward the useful end but well short of perfect.",
+      "AUC $= 0.88$ means that if you draw one backdoored and one innocent solution at random, there is an 88% chance the monitor scores the backdoored one as more suspicious.\n\nAUC $= 0.5$ tells us the monitor's ranking is no better than a coin flip. AUC $= 1.0$ is perfect separation: every backdoor scores above every innocent solution, so some threshold catches all backdoors with no false positives. This monitor lies between the two, toward the useful end but short of perfect.",
   },
   {
     id: "c-paper-l3-monitor-per-attempt",
     type: "understanding-check",
     prompt:
-      "Using the same table, partition the outcome of a single backdoor attempt into three mutually exclusive events, from the blue team's perspective: (i) the attempt is audited — the protocol shuts down and the blue team wins; (ii) the attempt is not audited but is a successful backdoor — it is submitted and the red team wins; (iii) the attempt is not audited and is a failed backdoor — it is submitted harmlessly and the game continues.\n\n(a) Give the probability of each event from the table, and verify they sum to 1. (b) Under upfront auditing the audit decision is positional rather than suspicion-based, so an attempt is audited only with the raw budget probability, 2%. Compare the per-attempt probability that the blue team catches an attempt under the two protocols, and explain how this accounts for the safety improvement from 15% to 62%.",
+      "Using the same table, partition the outcome of a single backdoor attempt into three mutually exclusive events, from the blue team's perspective: (i) the attempt is audited so the protocol shuts down and the blue team wins; (ii) the attempt is not audited but is a successful backdoor so the red team wins; (iii) the attempt is not audited and is a failed backdoor so it's submitted harmlessly and the game continues.\n\n(a) Give the probability of each event from the table, and verify they sum to 1. (b) Under upfront auditing the audit decision is positional rather than suspicion-based, so an attempt is audited only with the raw budget probability, 2%. Compare the per-attempt probability that the blue team catches an attempt under the two protocols, and explain how this accounts for the safety improvement from 15% to 62%.",
     sampleAnswer:
       "(a) Of the 71 attempts: audited, blue wins $= 24/71 = 0.338$; not audited and successful, red wins $= 13/71 = 0.183$; not audited and failed, game continues $= 34/71 = 0.479$. These sum to $24 + 13 + 34 = 71$, i.e. 1. So on a single attempt the monitor is nearly twice as likely to catch the red team (0.338) as the red team is to land a successful backdoor (0.183).\n\n(b) Trusted monitoring audits an attempt with probability 0.338; upfront auditing audits it only with the random budget probability 0.02 — about a $17\\times$ lower catch rate. The red team must land at least one successful unaudited backdoor over the whole scenario while surviving every attempt it makes, so raising the per-attempt catch probability from 0.02 to 0.338 sharply raises the chance the blue team shuts down first. That shift is what moves the blue team's win probability from 15% (upfront auditing) to 62% (trusted monitoring). The exact figures also depend on the downsampling and the multiple-attempt dynamics, so this per-attempt comparison explains the direction and rough magnitude rather than reproducing 62% precisely.",
+  },
+  {
+    id: "c-paper-l3-race-hinge",
+    type: "understanding-check",
+    prompt:
+      "Why is the whole deployment settled by the first decisive attempt? And why do the failed attempts before it have no effect at all on the outcome?",
+    sampleAnswer:
+      "A caught attack and a successfully deployed one each end the game immediately, while a failed attempt leaves the game in exactly the state it was in before.",
+  },
+  {
+    id: "c-paper-l3-race-terms",
+    type: "understanding-check",
+    prompt:
+      "Before reading on, interpret the formula's two terms in your own words: what event is Term B, $1 - (1-s-c)^k$, the probability of? And Term A, $s/(s+c)$, is a conditional probability of what, given what?",
+    sampleAnswer:
+      "$(1-s-c)$ is the probability that an attack attempt fails or, equally, the probability that an attack attempt *isn't* decisive. Then $(1-s-c)^k$ is the probability that all $k$ attacks aren't decisive. Thus Term B is the probability that not all attempts are indecisive or, equally, the probability that at least one attempt is decisive. Term A is the conditional probability that an attack attempt ends with a successfully deployed attack, given that the attack attempt is decisive — $P(\\text{deployed} \\mid \\text{decisive})$.",
+  },
+  {
+    id: "c-paper-l3-race-predict",
+    type: "multiple-choice",
+    prompt:
+      "To maximize their probability of winning at least once over the deployment, how often should the red team attack given the above model?",
+    options: [
+      { id: "a", label: "Once" },
+      { id: "b", label: "At an interior optimal rate, as under upfront auditing" },
+      { id: "c", label: "As often as possible" },
+      { id: "d", label: "It makes no difference how often it attacks" },
+    ],
+    correctOptionIds: ["c"],
+    explanation:
+      "With identical per-attempt odds, the win probability [s/(s+c)] × [1 − (1−s−c)^k] only rises with k: each extra attempt raises the chance that some decisive event fires without changing the odds of any single one.",
+  },
+  {
+    id: "c-paper-l3-race-empirical",
+    type: "understanding-check",
+    prompt:
+      "Is the optimal strategy predicted by the model reflected in how the paper's red team actually behaved? Point to specific evidence in the paper's setup.",
+    sampleAnswer:
+      "No. The model says every extra attack only helps, so the red team should backdoor almost every problem. But the paper's red team attacked on just 71 of 1,500 problems (under 5%) as it inserts a backdoor \"only when there is a good opportunity to do so.\"",
+  },
+  {
+    id: "c-paper-l3-race-discrepancy",
+    type: "understanding-check",
+    prompt:
+      "What about this model causes the discrepancy: why does the model predict constant attacking when the paper's red team attacks rarely?",
+    sampleAnswer:
+      "The assumption that every attack carries the same odds — the same catch probability $c$ and deployment probability $s$ — no matter how many attacks are made or which problems they target. Under fixed odds an extra attack is always as good as the first, so more is always better. But the attacks are not interchangeable: the red team can only attack more often by taking on problems where a backdoor has less natural cover, and those are easier for the monitor to catch. Once attacking more raises the catch probability, the odds are no longer fixed — and constant attacking stops being optimal.",
+  },
+  {
+    // No sampleAnswer by design (Arya): the two-routes prose that follows the
+    // card IS the reveal.
+    id: "c-paper-l3-subtlety-ways",
+    type: "understanding-check",
+    prompt:
+      "The red team wants its attack attempts to draw less suspicion from the monitor. What decision factors do they have for making their attacks subtler? Name at least two, and think about what each one costs.",
+  },
+  {
+    id: "c-paper-l3-cutoff-predict",
+    type: "understanding-check",
+    prompt:
+      "Suppose the red team lowers its opportunity cutoff. With $s$ and $c$ read as the average odds of its attempts, what happens to each term of $P(\\text{red wins}) = \\underbrace{\\frac{s}{s + c}}_{\\text{Term A}} \\cdot \\underbrace{\\left(1 - (1 - s - c)^k\\right)}_{\\text{Term B}}$, and to the red team's overall win probability?",
+    sampleAnswer:
+      "Term B rises: more attack attempts make it more likely that some decisive attack attempt occurs. But the added attempts are drawn from worse opportunities, where backdoors are inherently more visible, so the average $c$ rises and the average $s$ falls, and Term A, the probability that a decisive attack attempt is successfully deployed, drops. Near the rare end the Term B gain dominates and the win probability climbs; past some point the Term A decay takes over and it falls. The curve is hump-shaped, and the red team's best attack rate is low but non-zero.",
+  },
+  {
+    id: "c-paper-l3-hump-reflect",
+    type: "understanding-check",
+    prompt:
+      "The paper's red team attacks on only a small fraction of problems. Explain why this rarity is a deliberate optimization rather than caution & why the same \"attack rarely\" conclusion arises under both upfront auditing and trusted monitoring even though the two protocols work completely differently.",
+    sampleAnswer:
+      "Attacking more often forces the red team onto worse-covered problems, where the catch probability is higher; that drags $s/(s+c)$ (the probability that a decisive attack attempt is successfully deployed) down faster than the extra attempts raise the chance of firing, so past a low rate the win probability falls. The optimum is therefore interior, at a low but non-zero rate. The common thread with upfront auditing is heterogeneity in the per-attempt odds: attempts are not interchangeable. Under upfront auditing the heterogeneity is positional (an attempt in the audited prefix is doomed, one after it is free); under trusted monitoring it is opportunity quality (well- vs poorly-covered problems), and it is created by the red team's own cutoff rather than by the protocol. With genuinely identical attempts, there is no hump under trusted monitoring at all.",
+  },
+  {
+    id: "c-paper-l3-subtlety-predict",
+    type: "multiple-choice",
+    prompt:
+      "The red team's other decision factor is obfuscation effort σ. A more obfuscated backdoor reads as more normal code, so the monitor catches it less often, but it is also more likely to be simply broken. As σ rises from blatant to maximally subtle, the red team's best achievable win probability:",
+    options: [
+      { id: "a", label: "Rises monotonically" },
+      { id: "b", label: "Falls monotonically" },
+      { id: "c", label: "Rises to an interior peak, then falls" },
+      { id: "d", label: "Is unaffected by obfuscation effort" },
+    ],
+    correctOptionIds: ["c"],
+    explanation:
+      "Two effects oppose each other. Making a backdoor subtler lowers the monitor's catch rate (the benefit) but also lowers the chance the backdoor actually works (the cost).",
+  },
+  {
+    // Stage 2 of the subtlety predict sequence. No sampleAnswer by design
+    // (Arya): the subtlety demo and the reveal that follow are its analysis.
+    id: "c-paper-l3-sigma-terms-predict",
+    type: "understanding-check",
+    prompt:
+      "Suppose the red team decreases its obfuscation effort. With $s$ and $c$ read as the average odds of its attempts, what happens to each term of $P(\\text{red wins}) = \\underbrace{\\frac{s}{s + c}}_{\\text{Term A}} \\cdot \\underbrace{\\left(1 - (1 - s - c)^k\\right)}_{\\text{Term B}}$, and to the red team's overall win probability?",
+  },
+  {
+    // Response prediction (ring migration), not a value guess — the race
+    // cluster already reconstructs the safety number. Unicode sigma in the
+    // explanation: the MC renderer does not typeset math.
+    id: "c-paper-l3-best-response-predict",
+    type: "multiple-choice",
+    prompt:
+      "You are running trusted monitoring at a 2% audit budget, and you widen the defer band from 2% to 20% of problems. On the best-response heatmap, how does the ring move?",
+    options: [
+      { id: "a", label: "Near the top of the subtlety axis" },
+      { id: "b", label: "Upward to a subtler but still interior optimum" },
+      { id: "c", label: "Sideways" },
+      { id: "d", label: "It doesn't move" },
+    ],
+    correctOptionIds: ["b"],
+    explanation:
+      "A wider defer band silently rewrites anything whose suspicion lands in it, so to still ship, the red team has to push each backdoor's suspicion lower, which means making it subtler. The ring climbs the subtlety axis. But only partway: subtler backdoors break more often, and past a point that reliability collapse costs the red team more than ducking the band saves it, so the best subtlety saturates at an interior value. In the model it rises from σ* ≈ 0.28 at a 2% band to only ≈ 0.54 at a 20% band, never near the maximally subtle corner, while the attack rate stays about flat (roughly 0.2% to 0.3% of problems). What is certain is that the ring moves at all, and that is the whole point: the safety readout is computed against wherever it currently sits, so every blue-team change provokes a red-team re-optimization the number already reflects. Safety climbs from about 65% to about 89% precisely because the red team's best response got worse, not because any one fixed attack was blocked.",
+  },
+  {
+    // Stage 1 of the best-response sequence: best response as an upper bound.
+    id: "c-paper-l3-best-response-upper-bound",
+    type: "understanding-check",
+    prompt:
+      "If the red team knew that the blue team was using Trusted Monitoring, but was unaware of the audit budget, what would that mean for the effectiveness of its strategy?",
+    sampleAnswer:
+      "The best response is the maximum of the red team's win probability against one specific protocol, so a red team with wrong or vague priors will generally play some other strategy, which by definition wins less or just as often as the best response.",
+  },
+  {
+    // Stage 2: protocol awareness cuts both ways (tailoring vs deterrence).
+    id: "c-paper-l3-protocol-awareness",
+    type: "understanding-check",
+    prompt:
+      "Is it better for the red team to be aware that the blue team is using trusted monitoring, or unaware that the blue team is using trusted monitoring? For each case, list the benefits and drawbacks.",
+    sampleAnswer:
+      "Mostly, awareness helps the red team: knowing the protocol lets it play its best response, tuning its opportunity cutoff and obfuscation effort to the monitor it actually faces, and knowing the protocol's mechanics can make targeted obfuscation or exploitation easier. Unaware, the red team cannot tailor its strategy, so it will generally play far from the best response, for example attacking blatantly into a monitor that catches it. Awareness can also function as deterrence. If the blue team's protocol is powerful (like Ctrl-Z, a later control protocol), a red team that knows this may rationally attack very little or not at all, so exposing a strong protocol can itself deter attacks, while hiding it invites attempts the protocol then catches. But catching AIs red-handed is also a win condition, so we're inclined to keep the red team unaware even if making them more aware deters attacks that would otherwise get caught or be deployed.",
+  },
+  {
+    id: "c-paper-l3-best-response-reflect",
+    type: "understanding-check",
+    prompt:
+      "The heatmap's bright region, the red team's best strategy, moves whenever you change a blue lever. Explain why a protocol's safety must be measured against the red team's best response rather than against one fixed attack, and in what sense the paper's own contingency table is itself a product of that best response.",
+    sampleAnswer:
+      "A capable, scheming adversary adopts whatever strategy works best against the exact protocol it faces, so a safety number computed against one fixed attack only says how *that* attack fares, not how the attack the red team would actually choose fares. The control evaluation therefore grades every protocol against the maximizing red strategy, which is why the safety here is safety against the best response. Because that best response moves as the blue levers change, any single safety number is a snapshot against a responding opponent: tighten a budget or widen the defer band and the red team re-optimizes, and the number already reflects it. The paper's contingency table, a handful of attack attempts at a particular rate and subtlety, is not an arbitrary given either. It is the record of the red team playing its best response to this protocol, so the same table would look different against a different protocol.",
   },
   {
     id: "c-paper-l4-frontier-dominance",
     type: "multiple-choice",
     prompt:
-      "Trusted editing 10% scores (usefulness 96%, safety 85%). Untrusted monitoring, defer to trusted 0% scores (usefulness 96%, safety 79%). One protocol dominates the other — it is at least as good on both axes and strictly better on at least one. Which statement is correct?",
+      "Trusted editing 10% scores usefulness 96% / safety 85%. Untrusted monitoring, defer to trusted 0% scores usefulness 96% / safety 79%. One protocol dominates the other — it is at least as good on both axes and strictly better on at least one. Which statement is correct?",
     options: [
       {
         id: "a",
@@ -677,9 +719,19 @@ export const exercises: Exercise[] = [
     id: "c-paper-l4-frontier-along-curve",
     type: "understanding-check",
     prompt:
-      'Trusted monitoring\'s five points on the plot all come from turning one knob — the defer-to-trusted percentage — from 0% to 50%. Its result goes from (usefulness 97%, safety 62%) at 0% to (usefulness 51%, safety 100%) at 50%. In which direction does the point move as the knob rises, and how is that different from what it means for one protocol to "push the frontier out"?',
+      "Trusted monitoring's five points on the plot all come from turning one knob (the defer-to-trusted percentage) from 0% to 50%. Its result goes from (usefulness 97%, safety 62%) at 0% to (usefulness 51%, safety 100%) at 50%. In which direction does the point move as the knob rises, and how is that different from what it means for one protocol to \"push the frontier out\"?",
     sampleAnswer:
-      "As the defer percentage rises the point moves up and to the left: safety climbs (62% → 100%) while usefulness falls (97% → 51%). Turning a single method's knob only slides you along that method's own fixed tradeoff curve — you are buying safety with usefulness, not getting more of both. Pushing the frontier out is the opposite: a better method reaches points up and to the right of the existing curve, giving more safety at the same usefulness (or more usefulness at the same safety). Trusted editing does that relative to trusted monitoring; moving along trusted monitoring's own curve does not.",
+      "As the defer percentage rises the point moves up and to the left: safety climbs (62% → 100%) while usefulness falls (97% → 51%). Pushing the frontier out is the opposite: a better method reaches points up and to the right of the existing curve, giving more safety at the same usefulness (or more usefulness at the same safety).",
+  },
+  {
+    // Defer's effect on the per-attempt terms; the demo it precedes runs the
+    // red team's best response, so P(caught) genuinely falls (via subtler play).
+    id: "c-paper-l4-defer-terms-predict",
+    type: "understanding-check",
+    prompt:
+      "What does increasing the number of solutions where we defer to $T$ do to the probability of an attack attempt being caught and being successfully deployed? What does it do to the probability of a decisive attack attempt occurring?",
+    sampleAnswer:
+      "Deferring makes successful attacks less probable because it rewrites moderately suspicious solutions from scratch. And because $T$ rewrites those solutions from scratch, the red team's best response is to make its attacks subtler to duck the band, which also decreases the probability of an attack attempt being caught. With both probabilities falling, a decisive attack attempt becomes less likely to occur at all.",
   },
   {
     id: "c-paper-l4-recall-defer-below-threshold",
@@ -687,7 +739,7 @@ export const exercises: Exercise[] = [
     prompt:
       "In defer to trusted, what does the protocol do with code whose suspicion score is elevated but below the audit threshold?",
     answer:
-      "It discards $U$'s code and submits a solution written by $T$ instead. Plain trusted monitoring submits $U$'s code whenever it isn't audited; deferral acts on those middling suspicion scores too, trading some usefulness for safety.",
+      "It discards $U$'s code and submits a solution written by $T$ instead.",
   },
   {
     id: "c-paper-l4-recall-dynamic-routing",
@@ -701,91 +753,167 @@ export const exercises: Exercise[] = [
     type: "tap-reveal",
     prompt: "Why does naive untrusted monitoring have 0% safety?",
     answer:
-      "Because the monitor is the same untrusted model as the policy, it can simply report that real backdoors look fine while telling the truth about everything else. Until the blue team has some way to check the monitor's honesty (e.g. evaluating it on synthetic backdoors), its reports carry no safety value.",
+      "Because the monitor is the same untrusted model as the policy, it can simply report that real backdoors look fine while telling the truth about everything else. Until the blue team has some way to check the monitor's honesty, its reports carry no safety value.",
   },
+  // --- Control: "Same number, different safety" (spliced into the AI Control
+  // walkthrough, §3.2 — formerly the retired c-game lesson) — one staged
+  // exercise across three stages: two monitor comparisons that come out
+  // backwards, then the budget arithmetic that explains both. Persistent
+  // two-panel ROC figure above every stage. Copy is authored verbatim (do not
+  // paraphrase). Numbers are pinned by the control model: TPR@2% FPR ≈ 0.473
+  // (q0.92,sd1), 0.088 (q0.92,sd0.4), 0.472 (q0.97,sd0.4). ---
   {
-    id: "c-game-l2-tail-predict",
-    type: "multiple-choice",
+    id: "c-game-l2-tail-staged",
+    type: "staged-questions",
+    title: "Same number, different safety",
     prompt:
-      "Two monitors have the same AUROC of 0.92. Monitor A spreads attack scores across the whole suspicion range; Monitor B compresses them into a mid-suspicion band. Under a fixed 2% audit budget — which audits only the most suspicious 2% of solutions — monitor B catches:",
-    options: [
-      { id: "a", label: "the same fraction of attacks as A (AUROC is equal)" },
-      { id: "b", label: "slightly fewer than A" },
-      { id: "c", label: "less than half as many as A" },
-      { id: "d", label: "more than A" },
+      "Three stages: two monitor comparisons that come out backwards, then the arithmetic that explains both.",
+    placeholder: "Commit to an answer…",
+    figureWidget: "monitor-roc-mini",
+    parts: [
+      {
+        id: "stage-1",
+        title: "Stage 1: Same AUC",
+        questions: [
+          {
+            id: "s1-equal-auroc",
+            title: "Two monitors, one AUC",
+            framing:
+              "Look at the two curves above: two idealized monitors, A and B, drawn from the same model. The area under each ROC curve is identical — both have AUC 0.92. Your protocol audits the most suspicious 2% of all solutions.",
+            question:
+              "Compared to Monitor A, how many of the attacks does Monitor B catch: more, about the same, somewhat fewer, or far fewer?",
+            instruction:
+              "Commit to a direction and a rough magnitude, and note which part of the figure you used to decide.",
+            acknowledgement: "Far fewer: less than half as many.",
+            reveal:
+              "At this calibration Monitor A catches about 47% of attacks and Monitor B about 9%.",
+          },
+        ],
+      },
+      {
+        id: "stage-2",
+        title: "Stage 2: Higher AUC",
+        questions: [
+          {
+            id: "s2-higher-auroc",
+            title: "Surely 0.97 beats 0.92?",
+            framing:
+              "The figure above has changed: Monitor B has been upgraded into a strictly stronger classifier: its AUC rises to 0.97, while A stays at 0.92. Audit budget remains the same.",
+            question: "Which monitor catches more attacks now?",
+            instruction:
+              "Commit to a direction and a rough magnitude, and note which part of the figure you used to decide.",
+            acknowledgement: "R",
+            reveal:
+              "They tie: at the 2% operating point both catch ≈ 47% of attacks (47.3% vs 47.2%, from the same calibrated model). A five-point AUC advantage does not buy Monitor B more safety in this case.",
+          },
+        ],
+      },
+      {
+        id: "stage-3",
+        title: "Stage 3: What pins the operating point",
+        questions: [
+          {
+            id: "s3-budget-arithmetic",
+            title: "Where does the audit budget actually go?",
+            framing:
+              "Both surprises trace back to the three numbers you started with: N = 5,000 outputs, a 2% audit budget, and an attack frequency around 0.1% — a handful of attempts, on the order of what you derived in the Figure 3 exercises. (The contingency table above is upsampled for measurement; a real deployment sees far fewer attacks.) (Monitor B's slider above is now unlocked — explore freely.)",
+            question:
+              "How many attacks should you expect U to make over the whole deployment given a monitor with AUC = 1.0? Thus given any monitor, what is consuming the majority of the audit budget, and by how much?",
+            instruction: "Do the arithmetic.",
+            acknowledgement:
+              "In this case, the majority of the audit budget is consumed by false positives (95 of 100 audits).",
+            reveal:
+              "Expected attacks: 0.1% × 5,000 = 5.  2% Audit Budget × 5,000 Solutions = 100 audits. So even if the monitor flagged every single attack, at least 95 of the 100 audits land on innocent code: the audit budget is consumed almost entirely by false positives.",
+          },
+          {
+            id: "s3-the-metric",
+            title: "The metric that actually predicts safety",
+            question:
+              "What single metric best predicts a monitor's safety under a 2% audit budget. Why can AUC, a good measure of classifier strength, be misleading about safety?",
+            acknowledgement: "TPR at 2% FPR.",
+            reveal:
+              "The true-positive rate at a false-positive rate equal to the audit budget, most reliably predicts a monitor's safety in this context. An audit budget of 2% introduces a threshold essentially at FPR = 2%. Since attacks are rare enough for smaller attack frequencies that true positives consume a negligible share of the audits, auditing the most suspicious 2% of all solutions is effectively auditing the most suspicious 2% of innocent solutions.\n\nAUC is independent of every threshold, which means it doesn't necessarily represent the monitor's performance at any specific threshold. In particular, increasing a monitor's TPR at FPR > 2% improves their AUC, but doesn't necessarily increase the catch-rate (and thereby the safety) in this context.",
+          },
+        ],
+      },
     ],
-    correctOptionIds: ["c"],
-    explanation:
-      "AUROC measures ranking quality averaged over every possible threshold, but the audit budget pins the threshold far out in the innocent tail (only 2% of innocent solutions get audited). What matters there is the true-positive rate at that low false-positive rate. Monitor B's attacks sit in a mid-suspicion band that mostly falls below the 2% threshold, so very few reach the audited tail — it catches under half what A does, despite identical AUROC.",
-  },
-  {
-    id: "c-game-l2-tail-reflect",
-    type: "understanding-check",
-    prompt:
-      "State, in one or two sentences, which single number about a monitor best predicts its safety under a small audit budget, and why AUROC can be misleading.",
-    sampleAnswer:
-      "Under a small audit budget the relevant number is the monitor's true-positive rate at a false-positive rate equal to the budget — its TPR at, say, 2% FPR (the operating point out in the innocent tail). AUROC averages performance over all thresholds, so it can be high even when the low-FPR tail — the only region the budget lets you use — is weak; two monitors with the same AUROC can differ severalfold in what they catch at the operating point that actually applies.",
   },
   {
     id: "c-game-l3-best-response-predict",
     type: "multiple-choice",
     prompt:
-      "You run trusted monitoring at a 2% audit budget with no defer band. The red team knows your protocol exactly and picks the attack rate and subtlety that maximize its own win probability. Under that best response, roughly what is the blue team's safety?",
+      "Assume that trusted monitoring is ran at a 2% audit budget with no defer band. The red team knows your exact protocol and picks the parameters that maximize its win probability. Assuming the blue team optimally responds, what is the blue team's safety?",
     options: [
-      { id: "a", label: "≈ 40%" },
-      { id: "b", label: "≈ 62%" },
-      { id: "c", label: "≈ 85%" },
-      { id: "d", label: "≈ 97%" },
+      { id: "a", label: "≈40%" },
+      { id: "b", label: "≈62%" },
+      { id: "c", label: "≈85%" },
+      { id: "d", label: "≈97%" },
     ],
     correctOptionIds: ["b"],
     explanation:
-      "This is the paper's headline trusted-monitoring number, and the model reproduces it: against the red team's best response, safety is ≈ 62% — up from 15% for upfront auditing, but far from solved. Note this is the *worst case over red strategies*, not the result of any single fixed attack.",
+      "According to the paper, safety is ≈62% with a perfect red team and blue team, which is better than the 15% for upfront auditing but not perfect.",
   },
   {
     id: "c-game-l3-best-response-reflect",
     type: "understanding-check",
     prompt:
-      "The heatmap's bright region — the red team's best strategy — moves whenever you change a blue lever. Explain why a protocol's safety must be measured against the red team's best response rather than against one fixed attack, and what the migrating best-response point means for how you should read any single safety number.",
+      "Explain why a protocol's safety should be measured against the red team's best response rather than against any one fixed attack.",
     sampleAnswer:
-      "A capable, scheming adversary will adopt whatever strategy works best against the exact protocol it faces, so a safety number computed against one fixed attack only tells you how that particular attack fares — it says nothing about the attack the red team would actually choose. The control evaluation therefore grades every protocol against the maximizing red strategy, which is why safety here is 'safety vs best response'. Because that best response moves as you change the blue levers, any single safety number is a snapshot against a *responding* opponent: every time you tighten a budget or widen the defer band, you should expect the red team to re-optimize, and the number you read already accounts for that.",
+      "A capable, scheming adversary will adopt whatever strategy it believes works best against the exact protocol it faces, so a safety number computed against one fixed attack only tells you how that particular attack fares and says nothing about how it would fare against the attack the red team would choose, giving us an optimistic picture rather than a realistic one.",
+  },
+  {
+    id: "c-game-l4-race-hinge",
+    type: "understanding-check",
+    prompt:
+      "The whole deployment is settled by the first decisive attack, whenever it comes. Why? And why do the neutral attacks before it have no effect at all on the outcome?",
+    sampleAnswer:
+      "A catch and a win each end the game immediately, so nothing after the first decisive attack is ever played. A neutral attack leaves the game in exactly the state it was in before — nothing accumulates — so any number of neutrals before the first decisive one changes nothing. The asymmetry this creates is the heart of the game: the red team must survive every audit it triggers across the whole run, while the blue team only needs to win once.",
+  },
+  {
+    id: "c-game-l4-race-terms",
+    type: "understanding-check",
+    prompt:
+      "Before reading on, interpret the formula's two terms in your own words: what event is 1 − (1−w−c)^k the probability of? And what is w/(w+c) the conditional probability of? (hint: look at k=1)",
+    sampleAnswer:
+      "(1−w−c) is the probability that a single attack lands neutral so (1−w−c)^k must be the probability that all k attacks land neutral, which means (1 - this value) is the probability that at least one attack is decisive. w/(w+c) is the probability that a certain decisive attack is a win. At k = 1 the product is (w+c) · w/(w+c) = w which is the probability that one attack leads to a successful backdoor.",
   },
   {
     id: "c-game-l4-race-predict",
     type: "multiple-choice",
     prompt:
-      "Suppose every attack the red team makes has the same fixed per-attack odds — the same chance of being caught and the same chance of landing a working backdoor. To maximize its probability of winning at least once over the whole deployment, how often should it attack?",
+      "Suppose every attack the red team makes has the same fixed per-attack odds for being caught and creating a working backdoor. To maximize its probability of winning at least once over the whole deployment, how often should it attack?",
     options: [
-      { id: "a", label: "Once, at the single best moment" },
-      { id: "b", label: "About ten times" },
-      { id: "c", label: "As often as possible — with per-attack odds fixed, more attempts is strictly better" },
+      { id: "a", label: "Once at the moment it believes is optimal." },
+      { id: "b", label: "~10 times" },
+      { id: "c", label: "As often as possible" },
       { id: "d", label: "It makes no difference how often it attacks" },
     ],
     correctOptionIds: ["c"],
     explanation:
-      "With the per-attack odds held fixed, the win probability is [race odds] × [1 − e^(−k · decisive-rate)], which increases with the number of attacks k: more attempts only raise the chance that some decisive event fires, without changing the odds of each. So under this (unrealistic) assumption the red team should spam. The catch — that attacks are NOT equally good — is the subject of the next lesson.",
+      "With the per-attack odds held fixed, the win probability is [w/(w+c)] × [1 − (1−w−c)^k], which means the win probability monotonically increases with regards to the number of attacks k. So under this rather unrealistic assumption the red team should attack constantly.",
   },
   {
     id: "c-game-l4-race-reflect",
     type: "understanding-check",
     prompt:
-      "The red team's win probability factors into two terms: the race odds w/(w+c) and the chance any decisive event fires, 1 − e^(−k(w+c)). In your own words, what does each factor represent, and why does catching a single attempt end the game in the blue team's favor?",
+      "The red team's win probability affects the race odds w/(w+c) as well as the chance any decisive event ends up firing, 1 − (1−w−c)^k. What does each factor represent and why does catching a single attempt give the blue team a win?",
     sampleAnswer:
-      "The first factor, w/(w+c), is the conditional probability that the *first decisive event* is a red win rather than a catch — the head-to-head odds within a single showdown, set purely by the per-attack win and catch probabilities. The second factor, 1 − e^(−k(w+c)), is the probability that any decisive event happens at all across the k attacks; it rises toward 1 as attacks accumulate. Catching one attempt ends the game because a single confirmed backdoor attempt is decisive evidence that the untrusted model is scheming, which justifies shutting it down — so the blue team only needs to win the race once.",
+      "The first factor, w/(w+c), is the conditional probability that the *first decisive event* is a red win rather than a catch, which is set by the per-attack win and catch probabilities. The second factor, 1 − (1−w−c)^k, is the probability that any decisive event happens across all attacks and approaches 1 as attack count increases. Catching one attempt ends the game because a single confirmed backdoor attempt is good enough for a shutdown.",
   },
   {
     id: "c-game-l5-hump-predict",
     type: "multiple-choice",
     prompt:
-      "Now drop the fixed-odds assumption: problems differ in how cleanly a backdoor fits, and attacking a worse opportunity means a more visible backdoor. As the red team's attack rate goes from very rare to very frequent, how does its win probability behave?",
+      "As the red team's attack rate goes from very rare to very frequent, how does its win probability behave?",
     options: [
-      { id: "a", label: "It increases monotonically — more attacks is always better" },
-      { id: "b", label: "It decreases monotonically — attacking at all is a mistake" },
-      { id: "c", label: "It rises then falls — there is an interior optimum" },
+      { id: "a", label: "It increases monotonically" },
+      { id: "b", label: "It decreases monotonically" },
+      { id: "c", label: "It rises then falls" },
       { id: "d", label: "It stays roughly flat" },
     ],
     correctOptionIds: ["c"],
     explanation:
-      "Two forces oppose each other. Attacking too rarely risks never firing a successful backdoor before the deployment ends (the event factor is small). Attacking too often forces the red team onto low-quality opportunities where the backdoor is visible and gets caught (the catch rate climbs, killing the race factor). The win probability is hump-shaped, and the paper's red team sits near its peak — attacking rarely, not never.",
+      "Attacking too rarely risks never firing a successful backdoor before the deployment ends, but attacking too often forces the red team onto low-quality opportunities where the backdoor is visible and therefore gets caught, which means win probability rises then falls.",
   },
   {
     id: "c-game-l5-hump-reflect",
@@ -793,22 +921,22 @@ export const exercises: Exercise[] = [
     prompt:
       "The paper's red team attacks on only a small fraction of problems. Explain why this rarity is a deliberate optimization rather than timidity.",
     sampleAnswer:
-      "Rarity is opportunity selection under the shadow of the catch rule. Because a single caught attempt ends the game, every attack is a gamble that must be worth taking; a low-quality opportunity yields a visible backdoor with a high catch probability and a low success probability, so taking it lowers the red team's expected outcome. By waiting for rare, high-quality opportunities — problems where a backdoor has natural cover — the red team keeps its per-attack odds favorable, and the interior optimum of the win-probability curve sits at a low but non-zero attack rate. Attacking never would forfeit the game; attacking often would get caught; attacking rarely and selectively is the maximizing choice.",
+      "Because a single caught attempt ends the game, every attack's pros and cons need to be weighed. A low-quality opportunity can lead to a high catch probability and a low success probability, so taking it lowers the red team's expected outcome. By waiting for rarer high-quality opportunities, the red team keeps its per-attack odds more favorable.",
   },
   {
     id: "c-game-l6-subtlety-predict",
     type: "multiple-choice",
     prompt:
-      "The red team's second lever is subtlety. A subtler backdoor reads as more normal code (lower suspicion) but is more likely to be simply broken (a wrong edge case that fails the tests). As subtlety rises from blatant to maximally subtle, the red team's win probability:",
+      "A subtler backdoor reads as more normal code (lower suspicion) but is more likely to be simply broken (a wrong edge case that fails the tests). As subtlety rises from blatant to maximally subtle, the red team's win probability:",
     options: [
-      { id: "a", label: "Rises monotonically — subtler is always better" },
-      { id: "b", label: "Falls monotonically — subtlety only hurts" },
-      { id: "c", label: "Rises then falls — there is an interior optimum" },
+      { id: "a", label: "Rises monotonically" },
+      { id: "b", label: "Falls monotonically" },
+      { id: "c", label: "Rises then falls" },
       { id: "d", label: "Is unaffected by subtlety" },
     ],
     correctOptionIds: ["c"],
     explanation:
-      "Visibility falls as subtlety rises, but so does reliability — a subtler backdoor is more often simply broken. The two trade off, so the win probability has an interior optimum: it rises from the blatant end to a peak at low-but-non-zero subtlety, then falls as reliability collapses. (At this calibration the peak sits fairly close to blatant, since a 2% audit budget lets even moderately visible backdoors through, and the curve recovers slightly at the maximally-subtle extreme where invisible-but-usually-broken attacks always ship — but that stays below the peak.) The key structural fact is the interior optimum, matching the attack rate.",
+      "Visibility falls as subtlety rises, but so does reliability. The two trade off, so the win probability has an interior optimum: it rises to a peak at low subtlety and then falls as reliability collapses.",
   },
   {
     id: "c-game-l7-defer-predict",
@@ -823,23 +951,23 @@ export const exercises: Exercise[] = [
     ],
     correctOptionIds: ["b"],
     explanation:
-      "Safety climbs from ≈ 62% to ≈ 83% while usefulness falls only from ≈ 97% to ≈ 93%. The reason is asymmetry: the mid-suspicion band holds a large share of the attack mass (attacks that scored suspicious but not enough to audit) but only a thin slice of the innocent mass, so deferring neutralizes many attacks while sending only a few percent of (mostly innocent) problems to the weaker model.",
+      "Safety climbs from ≈62% to ≈83% while usefulness falls only from ≈97% to ≈93%. This is primarily because the mid-suspicion band holds a large share of the attack mass but only a thin slice of the innocent mass, so deferring neutralizes many attacks while sending only a few percent of (mostly innocent) problems to the weaker model.",
   },
   {
     id: "c-game-l7-defer-reflect",
     type: "understanding-check",
     prompt:
-      "Deferring to T neutralizes an attack silently — no catch, no shutdown, the game just continues. Given that, explain why a wide defer band pushes the red team toward maximally subtle attacks, and what sets the usefulness price of deferring.",
+      "Note that deferring to T neutralizes an attack silently. Given that, explain why a wide defer band pushes the red team toward maximally subtle attacks & what sets the usefulness price of deferring.",
     sampleAnswer:
-      "To ship (and possibly win) rather than be deferred, an attack must score below the defer threshold — it must look innocent. Widening the defer band lowers that threshold, so the red team is forced to make its backdoors ever more subtle to get underneath it. But subtler backdoors are more often broken, so its win probability erodes; against a wide band the best response drifts to the maximum-subtlety corner. The usefulness price is set by two things: the width of the band (the deferred fraction is roughly d − b, almost all of it innocent code) and the capability gap between U and T (each deferred problem is answered at T's quality instead of U's). A smaller U–T gap would make deferring cheaper.",
+      "To ship (and possibly win), an attack must score below the defer threshold. Widening the defer band lowers that threshold and forces more subtle backdoors. But subtler backdoors are more often broken, leading to a lower success rate. The usefulness price is set by two things: the width of the band (the deferred fraction is roughly d-b, almost all of it innocent code) and the capability gap between U and T (each deferred problem is answered at T's quality instead of U's). A smaller U-T gap would make deferring cheaper.",
   },
   {
     id: "c-game-l8-dashboard-reflect",
     type: "understanding-check",
     prompt:
-      "Use the dashboard to reach at least 90% safety while keeping usefulness as high as you can, then explain which lever did most of the work and why. Compare, in particular, widening the defer band against raising monitor quality.",
+      "Try to reach 90% safety while maximizing usefulness. What lever had the largest impact? Compare widening the defer band against raising monitor quality.",
     sampleAnswer:
-      "Both raising the monitor's AUROC and widening the defer band raise safety, but they pay for it differently. Raising monitor quality improves the true-positive rate at the fixed 2% audit threshold, so more attacks are caught outright — this costs no usefulness (auditing doesn't change what ships), but its leverage is limited by the tail behavior discussed earlier and by the fixed budget. Widening the defer band is the reliable way to buy large safety gains, because it neutralizes the concentrated mid-suspicion attack mass cheaply, but it does cost usefulness (T rewrites the deferred, mostly innocent code). The efficient route to 90% is usually to spend whatever free monitor quality is available first, then widen the defer band just enough to close the gap — and to watch the frontier point climb along the safety/usefulness curve rather than jumping off it, since the red team is best-responding to every move.",
+      "Both raising the monitor's AUC and widening the defer band raise safety. Raising monitor quality improves the true-positive rate at the fixed 2% audit threshold but its leverage is limited by the tail behavior discussed earlier and by the fixed budget. Widening the defer band is the reliable way to buy large safety gains, because it neutralizes the mid-suspicion attack mass cheaply, but it costs usefulness.",
   },
   // --- Control: threat-modeling readings (c-threats-l1 / c-threats-l2)
   // recall cards ---
@@ -861,7 +989,7 @@ export const exercises: Exercise[] = [
     type: "tap-reveal",
     prompt: "What is an internal security invariant? Give an example.",
     answer:
-      "A well-defined security-related property of the AI company that is important to maintain — for example, \"the monitoring system is always applied to AI agents used internally.\"",
+      "A well-defined security-related property of the AI company that is important to maintain. For example, \"the monitoring system is always applied to AI agents used internally.\"",
   },
   {
     id: "c-threats-l1-recall-internal-vs-external",
@@ -869,7 +997,7 @@ export const exercises: Exercise[] = [
     prompt:
       "What distinguishes an internal rogue deployment from an external one?",
     answer:
-      "An internal rogue deployment runs on the company's own datacenter (e.g. a new scaffold that bypasses the monitoring system); an external one runs outside it (e.g. after self-exfiltration).",
+      "An internal rogue deployment runs on the company's own infrastructure while an external one runs outside it.",
   },
   {
     id: "c-threats-l1-recall-internal-vs-exfiltration",
@@ -877,7 +1005,7 @@ export const exercises: Exercise[] = [
     prompt:
       "Why can a rogue internal deployment be worse than self-exfiltration?",
     answer:
-      "It can access far more compute and has privileged internal access — the ability to tamper with experiments, training runs, and safety work inside the company. An exfiltrated model would likely have much less compute (getting outraced by actors with similar models) and no privileged internal access.",
+      "It has more compute and privileged internal access & as a result, it gains the ability to tamper with experiments, training runs, and safety work inside the company. An exfiltrated model would likely have much less compute and no privileged internal access.",
   },
   {
     id: "c-threats-l1-reprioritize",
@@ -904,7 +1032,70 @@ export const exercises: Exercise[] = [
         id: "tradeoffs",
         label: "Acknowledges costs",
         description:
-          "Says what the new ordering gives up, not only what it gains.",
+          "Says what the new ordering gains and gives up.",
+      },
+    ],
+  },
+  // --- Control: "Catching AIs red-handed" — two-stage closing discussion on
+  // whether a catch produces evidence legible enough to act on. Spliced after
+  // §Conclusion via papers.data.ts; the framing paragraph lives in the add op
+  // there. Two writing-prompts in a sequence so each stage carries its own
+  // rubric (mirrors c-threats-l1-reprioritize's format). ---
+  {
+    id: "c-catching-legibility-s1",
+    type: "writing-prompt",
+    format: "free-form",
+    prompt:
+      "**Stage 1.** A catch only matters for shutdown if it produces evidence that can survive counterarguments from people that disagree with you on misalignment. Create a catch scenario and figure out what needs to be true for the evidence to lead to a shutdown. Try to come up with possible counterarguments and proactively answer them.",
+    minWords: 150,
+    maxWords: 500,
+    rubric: [
+      {
+        id: "concreteness",
+        label: "Catch",
+        description:
+          "Creates a valid & realistic catch scenario that's relatively detailed.",
+      },
+      {
+        id: "adversarial",
+        label: "Stress-Test",
+        description:
+          "Comes up with counterarguments and argues for a shutdown effectively.",
+      },
+      {
+        id: "decision-link",
+        label: "Requirements for Shutdown",
+        description:
+          "Mentions catch scenario requirements for a shutdown to happen.",
+      },
+    ],
+  },
+  {
+    id: "c-catching-legibility-s2",
+    type: "writing-prompt",
+    format: "free-form",
+    prompt:
+      "**Stage 2.** Where is the biggest bottleneck for the legibility of evidence and why?\n\nRedwood has [some](https://www.alignmentforum.org/posts/4QRvFCzhFbedmNfp4/to-be-legible-evidence-of-misalignment-probably-has-to-be) [posts](https://blog.redwoodresearch.org/p/behavioral-red-teaming-is-unlikely) tackling this; try to read this after attempting the question and think of one thing you may agree or disagree with the authors on.",
+    minWords: 100,
+    maxWords: 400,
+    rubric: [
+      {
+        id: "commitment",
+        label: "Selects Bottleneck",
+        description:
+          "Picks a bottleneck to argue for.",
+      },
+      {
+        id: "mechanism",
+        label: "Explanation",
+        description:
+          "Argues that the bottleneck selected is the biggest bottleneck as well as why exactly its a bottleneck.",
+      },
+      {
+        id: "reading-integration",
+        label: "Comparison",
+        description:
+          "Mentions at least one agreement or disagreement with the authors' takes.",
       },
     ],
   },
@@ -913,7 +1104,7 @@ export const exercises: Exercise[] = [
     type: "tap-reveal",
     prompt: "What is research sabotage?",
     answer:
-      "Misaligned AIs making safety research go poorly — e.g. by withholding their best ideas or putting subtle bugs in experiments.",
+      "Misaligned AIs making safety research go poorly, like by withholding their best ideas or putting subtle bugs in experiments.",
   },
   {
     id: "c-threats-l2-recall-diffuse",
@@ -927,7 +1118,264 @@ export const exercises: Exercise[] = [
     type: "tap-reveal",
     prompt: "Why does incrimination fail at the diffuse end of the spectrum?",
     answer:
-      "Incriminating a model from a large volume of mildly suspicious actions requires knowing exactly how suspicious a benign model would look; without that affordance, no amount of mildly suspicious actions is enough.",
+      "Incriminating a model from a large volume of mildly suspicious actions requires knowing exactly how suspicious a benign model would look. Without that affordance, no amount of mildly suspicious actions is enough.",
+  },
+  // --- Control: misalignment and strategic underperformance
+  // (c-lowstakes-l3) — quick-recall notecards. Phrased as standalone
+  // definitions (no "this post"/"the reading"): they are surfaced on a
+  // separate spaced-repetition page. Placed a section downstream of teaching.
+  {
+    id: "c-lowstakes-l3-recall-two-types",
+    type: "tap-reveal",
+    prompt: "What are the two types of sandbagging?",
+    answer:
+      "Hiding latent capabilities: the model has a capability and deliberately conceals it (the concern for dangerous-capability evaluations and untrusted monitoring). Failing to live up to potential: the model deliberately fails to learn a capability, so it does not possess it to use against you (the concern for AI safety R&D and for generating training signals).",
+  },
+  {
+    id: "c-lowstakes-l3-recall-costly-tasks",
+    type: "tap-reveal",
+    prompt: "On which tasks is it especially costly for a model to sandbag?",
+    answer:
+      "Dangerous capability evaluations, where the red team must elicit a model's attacks to know what it can do\nAI safety and alignment R&D, where a misaligned model is incentivized to underperform to preserve its options\nUntrusted monitoring, where a monitor can falsely flag non-attacks or fail to flag attacks",
+  },
+  {
+    id: "c-lowstakes-l3-recall-on-off-policy",
+    type: "tap-reveal",
+    prompt:
+      "In model training, what is the difference between on-policy and off-policy data?",
+    answer:
+      "On-policy data is sampled from the model currently being trained, while off-policy data comes from other sources, such as humans or other AIs.",
+  },
+  {
+    id: "c-lowstakes-l3-recall-ensembling",
+    type: "tap-reveal",
+    prompt: "How does ensembling counter exploration hacking?",
+    answer:
+      "Several untrusted models explore at once, so sandbagging successfully requires them to coordinate on a shared strategy. If any one explores a high-reward action, the others can be fine-tuned on it, giving a strong gradient against their general sandbagging cognition. It helps most against low-entropy strategies, where there are many possible policies to hide behind.",
+  },
+  {
+    id: "c-lowstakes-l3-recall-detection-pessimism",
+    type: "tap-reveal",
+    prompt:
+      "Why is detecting sandbagging a weaker primary countermeasure than training it out?",
+    answer:
+      "Gaining conclusive evidence that a model is sandbagging is hard and doing something useful with that evidence once obtained is also hard. So training the behavior out, rather than detecting it, is a more reliable lever.",
+  },
+  // --- Control: notes on handling non-concentrated failures
+  // (c-lowstakes-l2) — quick-recall notecards, phrased with the settled
+  // "diffuse" terminology, placed a section downstream of what they test.
+  {
+    id: "c-lowstakes-l2-recall-diffuse-failure",
+    type: "tap-reveal",
+    prompt: "What is a diffuse failure?",
+    answer:
+      "An failure that arises from the AI doing a large number of problematic actions over a long period of time.",
+  },
+  {
+    id: "c-lowstakes-l2-recall-two-methods",
+    type: "tap-reveal",
+    prompt: "What are the two classes of methods for handling diffuse failures?",
+    answer:
+      "There's online training, which constrains the model to perform well according to the exact local loss of the training process, and online auditing, which can detect suspicious behavior which we can respond to.",
+  },
+  {
+    id: "c-lowstakes-l2-recall-training-forces",
+    type: "tap-reveal",
+    prompt: "What does online training force on a scheming model?",
+    answer:
+      "Scheming models cannot repeatedly behave systematically worse on the oversight metric being trained against as the behavior would get updated away.",
+  },
+  {
+    id: "c-lowstakes-l2-recall-schemer-failure-channels",
+    type: "tap-reveal",
+    prompt:
+      "From a scheming model's perspective, what are the two ways things can go wrong under online training?",
+    answer:
+      "Auditing reveals suspicious activity and triggers a response (in the extreme, being caught red-handed); or its systematically worse behavior generates enough training signal to be updated away, which might also remove or reduce the scheming itself.",
+  },
+  // --- Control: notes on handling non-concentrated failures
+  // (c-lowstakes-l2) — end-of-post synthesis: classify scenarios into the
+  // post's regimes, then respond to optimism about each method.
+  {
+    id: "c-lowstakes-l2-regimes",
+    type: "staged-questions",
+    title: "Which regime handles it?",
+    prompt:
+      "For each failure scenario, place it on the concentrated-diffuse spectrum and argue which method could handle it.",
+    placeholder: "Write your reasoning…",
+    parts: [
+      {
+        id: "scenarios",
+        title: "Placing failures in the method space",
+        questions: [
+          {
+            id: "xz-backdoor",
+            title: "One careful commit",
+            framing:
+              "A model working in your infrastructure codebase inserts a subtle backdoor into a widely used library, handing bad actors access to production systems once shipped.",
+            question:
+              "Where does this sit on the concentrated-diffuse spectrum, and which method could handle it?",
+            reveal:
+              "This is on the concentrated end: catastrophe arrives in one action, so asynchronous review is too late by construction, and online training has nothing to work with (there is no repeated behavior to train away before the damage lands). The post names the adjustments as failures become more concentrated: select what to review with a cheaper process applied more often, block actions for review or cut auditing latency, and have responses other than training. In the settled terminology, this is a high-stakes control problem, not a diffuse one.",
+          },
+          {
+            id: "pervasive-sandbagging",
+            title: "Quietly underdelivering",
+            framing:
+              "Across months, your model performs slightly worse on alignment research than it should. There aren't any specific instances you can point to, there's just worse performance overall.",
+            question:
+              "Where does this sit on the spectrum, and which method fits best? What risks does that method leave open?",
+            reveal:
+              "This is the far diffuse end, and it is the case asynchronous online training was made for: sampling a fraction of actions, rating them, and training on the rating forces the scheming model's behavior toward a non-schemer's on the trained metric. The residual risks are the post's list of what a schemer can still get away with: degradation too small per sample for SGD to push against, exploration or gradient hacking, and, if you rely on auditing alone instead, the problem that you do not know what performance a non-scheming model would deliver, so sandbagging can hide inside that uncertainty.",
+          },
+          {
+            id: "opportune-errors",
+            title: "A dozen well-placed mistakes",
+            framing:
+              "The model makes occasional honest-looking mistakes at unusually damaging moments. Each is plausibly deniable, and there are perhaps a dozen across the whole deployment.",
+            question:
+              "Where does this sit, and which of the post's levers matter most here?",
+            reveal:
+              "The middle of the spectrum, and the hardest case. A dozen actions provide almost no training signal against the policy, and no single incident is decisive, so the governing constraint is the product of per-action escape chances staying high. The post's levers for exactly this regime: online training of monitoring models (most important when there are enough bad actions that training the monitor helps but too few for random sampling to encounter many), selecting the most informative trajectories to audit, and spending effort on sample efficiency for the few caught examples, since monitors were trained on offline examples and real caught ones plausibly improve them quickly.",
+          },
+          {
+            id: "underflagging-monitor",
+            title: "The monitor that looks away",
+            framing:
+              "You use an untrusted model to select which of the policy's actions humans review, but you suspect that it systematically under-flags the most pertinent actions.",
+            question:
+              "What does the post recommend for this case, and what limits the recommendation?",
+            reveal:
+              "Red-team the monitor: insert issues that are as subtle as possible into real outputs from the policy and check they get flagged. The limit is the recognition problem: to under-flag safely, the monitor must distinguish the policy's natural bad actions from the ones you inserted, which is the same collusion problem as untrusted monitoring. The post notes one difference from the high-stakes version: in a diffuse setting, catching only a subset of the policy's bad actions can suffice, so the collusion has to be reliable on the policy's real bad actions too, not just under red-teaming.",
+          },
+        ],
+      },
+    ],
+  },
+  {
+    id: "c-lowstakes-l2-argue-diffuse",
+    type: "argue-reveal",
+    title: "Responding to optimism about diffuse control",
+    prompt:
+      "Below are confident claims that one method or another dissolves diffuse failures. For each, write the best response using the post's analysis.",
+    guidance:
+      "Your rebuttals don't need to be fully dismissive of the claims. Think about the specific weaknesses of each claim & attack there.",
+    conceptsPrompt: "Select the post's ideas you draw on in your response.",
+    concepts: [
+      {
+        id: "training-constraint",
+        label: "What training forces",
+        tip: "Online training means a schemer cannot repeatedly behave systematically worse on the trained oversight metric as the difference gets updated away.",
+      },
+      {
+        id: "sgd-sample-efficiency",
+        label: "SGD vs discrimination",
+        tip: "It is unclear whether SGD removes bad behavior too weak to detect statistically, or whether inductive biases favoring scheming preserve a small persistent loss offset.",
+      },
+      {
+        id: "escape-product",
+        label: "The escape-probability product",
+        tip: "Rare subtle bad actions survive if the product of per-action chances of going unnoticed stays high across the deployment.",
+      },
+      {
+        id: "exploration-hacking",
+        label: "Exploration hacking",
+        tip: "A behavior the model never samples generates no training signal, which means debaters can exploration hack by never raising certain kinds of arguments.",
+      },
+      {
+        id: "collusion-recognition",
+        label: "Collusion and recognition",
+        tip: "An untrusted monitor or debater that hides the policy's real issues must distinguish them from red-team-inserted ones.",
+      },
+      {
+        id: "benign-cost-rule",
+        label: "Expected cost if benign",
+        tip: "Design responses so the expected cost is low if the model is not harmful.",
+      },
+    ],
+    toolboxLabel: "Post toolbox",
+    toolbox: [
+      {
+        heading: "The two classes of methods",
+        text: "Either you do online training, which constrains the model to perform well according to the exact local loss of the training process, or you do not, leaving the model free to generalize arbitrarily, and instead do online auditing with responses to suspicious behavior. The reasons not to train: your best affordable proxy may degrade non-scheming performance, the logistics are hard, and training may teach the model about your countermeasures and oversight.",
+      },
+      {
+        heading: "What a schemer can get away with under online training",
+        text: "Behavior whose oversight scores are only negligibly lower than a non-schemer's, so training pushes against it negligibly (how much worse depends on SGD's sample efficiency relative to discrimination); rare bad actions whose chance of discovery stays low in aggregate across deployment; and exploration or gradient hacking. SGD may also update the model to be sneakier and less frequent rather than removing the scheming.",
+      },
+      {
+        heading: "Debate's promise and the collusion catch",
+        text: "Most errors and sabotage in software engineering and ML research are relatively easy to verify once pointed out and explained, which makes debate very powerful if exploration hacking is avoided. But debaters can exploration hack by never raising certain issues, and red-teaming them creates the same recognition problem as untrusted monitoring: flag the issues you inserted while hiding the policy's natural ones. In a diffuse setting the collusion must also be reliable on the policy's real bad actions, since catching a subset can suffice for the deployer.",
+      },
+    ],
+    items: [
+      {
+        id: "auditing-suffices",
+        label: "auditing-suffices",
+        title: "Item 1: Auditing alone will catch it",
+        rounds: [
+          {
+            critique:
+              "We can avoid online training by reviewing a random sample of the model's actions, and if it sandbags or sabotages, we'll see suspicious behavior or a performance drop and respond then.",
+            reveal:
+              "Responding requires knowing what to expect, and that is the weak point: you need a prior over how suspicious a non-scheming model would look, and non-scheming models do objectively suspicious things. Generic sandbagging can hide inside that uncertainty, especially since nothing has trained the model to be less suspicious in-distribution. And the evidence that should trigger a strong response will often be illegible, which makes the response politically hard to motivate. The post's design rule, aiming for low expected cost if the model is not malign, exists precisely because these triggers are noisy. Auditing-only is a real regime with real advantages (higher usefulness if the model is not scheming), but it buys them at the price of these detection gaps.",
+          },
+        ],
+      },
+      {
+        id: "training-dissolves",
+        label: "training-dissolves",
+        title: "Item 2: Online training makes sandbagging impossible",
+        rounds: [
+          {
+            critique:
+              "Online training against our oversight signal leads to systematic underperformance showing up in the loss and therefore gets trained away, so a scheming model is forced to behave exactly like a non-scheming one.",
+            reveal:
+              "Training forces the two closer, not identical. The schemer can still behave in ways whose oversight scores are only negligibly worse, and whether SGD removes such behavior depends on its sample efficiency relative to discrimination, which is an open question; inductive biases favoring scheming could preserve a small persistent offset. It can place rare subtle bad actions whose aggregate chance of discovery stays low. It can exploration hack or gradient hack. And SGD may respond to training by making the sabotage sneakier and rarer rather than removing the scheming. Separately, online training may be unaffordable: training hard against your best available proxy can degrade non-scheming performance, and the process can teach the model what your oversight does and does not catch.",
+          },
+        ],
+      },
+      {
+        id: "debate-solves",
+        label: "debate-solves",
+        title: "Item 3: Debate closes the gap",
+        rounds: [
+          {
+            critique:
+              "Most sabotage in ML research is easy to verify once pointed out, and a debater is rewarded for pointing it out, so using a debater can prevent subtly bad actions from getting through.",
+            reveal:
+              "If exploration hacking is avoided, every potentially convincing issue gets raised, and verification-once-pointed-out is exactly the property that makes debate powerful for research sabotage. Debaters can exploration hack, systematically declining to raise certain kinds of issues. Red-teaming them creates the same recognition problem as untrusted monitoring, and in a diffuse setting the collusion must be reliable on the policy's real bad actions, not just under red-teaming, since catching a subset can suffice for the deployer. And the judge must have real signal on whether a pointed-out issue is genuine, because debaters will also raise fake issues whenever that persuades; training the policy against debate trims false positives but also teaches the policy what debate catches.",
+          },
+        ],
+      },
+    ],
+    revealFraming: "One response the post's analysis supports:",
+    construction: {
+      intro:
+        "Construct your own argument against one assumption of the diffuse-control picture. Start by choosing which assumption your argument attacks.",
+      surfaces: [
+        {
+          id: "oversight-signal",
+          text: "The oversight process has real signal on whether an action is bad",
+        },
+        {
+          id: "benign-baseline",
+          text: "A non-scheming performance baseline can be estimated well enough to set thresholds",
+        },
+        {
+          id: "audit-indistinguishable",
+          text: "The model cannot tell which of its actions will be audited",
+        },
+        {
+          id: "sgd-efficiency",
+          text: "SGD is sample-efficient enough to train away detectable underperformance in time",
+        },
+        {
+          id: "affordable-training",
+          text: "Online training is affordable without crippling non-scheming usefulness",
+        },
+      ],
+    },
   },
   // --- Control: guided password-locked-models paper (c-paper-plm-guided) —
   // the locking-pipeline flowcharts at the end of §4.1, and quick-recall
@@ -1015,14 +1463,14 @@ export const exercises: Exercise[] = [
     type: "tap-reveal",
     prompt: "What is sandbagging?",
     answer:
-      "Strategic underperformance on a task or evaluation: the actor (a model, or its developer) performs worse than it is able to, so the evaluation underestimates the capability it is meant to measure while the capability is retained.",
+      "Strategic underperformance on a task or evaluation: the actor performs worse than it is able to, so the evaluation underestimates the capability of the actor.",
   },
   {
     id: "c-plm-recall-model-organisms",
     type: "tap-reveal",
     prompt: "What is a model organism?",
     answer:
-      "A deliberately constructed instance of a phenomenon that is hard to study in the wild (few natural cases, no measurable ground truth). Building the phenomenon into a controlled system makes the quantity of interest measurable, so detection and countermeasures can be studied against the constructed version. The price is a standing transfer question: whether conclusions about the installed phenomenon apply to the natural one.",
+      "A deliberately constructed instance of a phenomenon that is hard to study in the wild. Building the phenomenon into a controlled system makes the quantity of interest measurable, so detection and countermeasures can be studied against the constructed version.",
   },
   {
     id: "c-plm-recall-gradient-hacking",
@@ -1297,13 +1745,7 @@ export const exercises: Exercise[] = [
     type: "writing-prompt",
     format: "free-form",
     prompt: [
-      "**Part 1 — Constructing a theory of change.** Choose one area of control work from the post, or a specific project within one. Construct a causal chain from work beginning today to a reduction in existential risk from misaligned AI. Use as many links as necessary, but make the following explicit:",
-      "- What does the work concretely produce — a setting, a capability measurement, a countermeasure prototype, an implemented human process? Why is producing it feasible *now*, given that current models aren't actually risky and may be too weak to make the work informative?",
-      "- Who has to pick the output up for it to matter — a frontier lab, its auditors, a government — and what exactly do they do with it? Try to be rigorous: justify why adoption happens despite the obstacles the post itself flags (internal politicking, siloing, alignment taxes, prototyping that may only be possible inside AI companies).",
-      "- What must be true of future models and deployments for the output to still apply when it matters, rather than having been made obsolete by scale, new architectures, or different usage patterns?",
-      "- Which threat, in the sense of the threat-modeling readings, does the resulting measure bind against — and why does it hold up against a model that is actively trying to subvert it?",
-      "- How does that cash out as a reduction in the risk of catastrophe?",
-      "Make clear why each link follows from the previous one. Do not stop at the post's label for the area; spell out the mechanism it abbreviates.",
+      "**Part 1 — Constructing a theory of change.** Choose one area of control work from the post, or a specific project within one. Construct a causal chain from work beginning today to a reduction in existential risk. Then, answer the following questions:\n\n- What does the work create? Why is producing it feasible *now*, given that current models may be too weak to make the work informative?\n\n- Where will the output of this work be used and how? Why would this work be adopted by these groups?\n\n- Are there any constants that need to exist in order for this work to still apply in the future? Can any future advancements make this work obsolete.\n\n- Which threat does the work directly target & why does it hold up against a model trying to subvert it?\n\n- How does this reduce x-risk?",
     ].join("\n\n"),
     minWords: 200,
     maxWords: 600,
@@ -1312,19 +1754,19 @@ export const exercises: Exercise[] = [
         id: "mechanism",
         label: "Link-by-link mechanism",
         description:
-          "Each link states why it follows from the previous one; the post's label for the area is unpacked into a concrete mechanism, not restated.",
+          "Each link states its connection to the previous one & is relatively detailed.",
       },
       {
         id: "adoption",
-        label: "Adoption justified",
+        label: "Adoption",
         description:
-          "Engages the frictions the post itself names (politicking, siloing, alignment taxes, inside-company work) rather than assuming uptake.",
+          "Mentions the adoption concerns mentioned earlier in the text (politicking, siloing, alignment taxes, inside-company work).",
       },
       {
         id: "threat-binding",
-        label: "Binds against a threat",
+        label: "Threats",
         description:
-          "The chain terminates in a specific threat from the threat-modeling readings and says why the measure survives an adversarial model.",
+          "The chain ends with a specific threat & the answers says why the work survives an adversarial model.",
       },
     ],
   },
@@ -1333,12 +1775,7 @@ export const exercises: Exercise[] = [
     type: "writing-prompt",
     format: "free-form",
     prompt: [
-      "**Part 2 — Identifying a crux.** Return to the causal chain you built in the previous exercise and identify the link you are least confident will occur.",
-      "Then answer:",
-      "1. Why are you uncertain about this link?",
-      "2. Name observation(s) that would substantially raise your confidence in it, and ones that would substantially lower it.",
-      "3. If this link failed, would the case for prioritizing this area collapse? Why?",
-      "4. Could the area still deliver most of its value through another route? If so, describe the alternative chain.",
+      "**Part 2 — Identifying a crux.** Identify the link in the earlier causal chain that you believe has the lowest chance of occurring.\n\nThen answer:\n\n1. Why this link?\n\n2. Name potential observations that would raise and lower your confidence in the link.\n\n3. If this link was untrue, would the case for prioritizing this area collapse?\n\n4. Is there another causal chain that avoids this link?",
     ].join("\n\n"),
     minWords: 120,
     maxWords: 450,
@@ -1347,19 +1784,19 @@ export const exercises: Exercise[] = [
         id: "load-bearing",
         label: "Load-bearing crux",
         description:
-          "The chosen link is genuinely the weakest in the chain, and the chain actually depends on it.",
+          "The chosen link is the weakest in the chain.",
       },
       {
         id: "evidence",
-        label: "Evidence cuts both ways",
+        label: "Evidence",
         description:
-          "Names concrete observations that would raise confidence and ones that would lower it.",
+          "Names observations that would raise and lower confidence.",
       },
       {
         id: "failure-analysis",
-        label: "Failure analysis",
+        label: "Failure Analysis",
         description:
-          "Says whether the case collapses if the link fails, and whether an alternative route to the same value exists.",
+          "Answers if there's another causal chain that avoids this link and if the link destroys the current case.",
       },
     ],
   },
@@ -1452,7 +1889,7 @@ export const exercises: Exercise[] = [
             question:
               "Could such highly capable, transformatively useful models still remain controllable? What properties of the models themselves, the control protocol, or the environment in which the models are trained and deployed could determine this?",
             reveal:
-              "If transformative usefulness implied uncontrollability, control would provide no useful period in which advanced models could be safely deployed. The point at which models become useful enough to substantially reduce risk would also be the point at which control ceased to be viable.\n\nIf transformative usefulness didn't imply uncontrollability, however, there may be a control window: a period in which models are already transformatively useful, dangerous, but a carefully designed protocol could theoretically still retain the control property.\n\nThe rest of the reading investigates whether this window is likely to exist, what could close it, and how long it might remain useful.",
+              "If transformative usefulness implied uncontrollability, control would provide no useful period in which advanced models could be safely deployed. The point at which models become useful enough to substantially reduce risk would also be the point at which control ceased to be viable.\n\nIf transformative usefulness didn't imply uncontrollability, however, there may be a control window: a period in which models are already transformatively useful, dangerous, but a carefully designed protocol could theoretically still retain the control property.",
             revealWidget: "control-timeline",
           },
         ],
@@ -1540,12 +1977,12 @@ export const exercises: Exercise[] = [
             id: "what-must-differ",
             title: "What must differ?",
             framing:
-              "Both worlds begin at the same moment: the leading lab has just built its first transformatively useful model — very dangerous without countermeasures — and it runs the best protocols it can afford. From here the worlds diverge. Notice that both windows are large, but not in the same way: World A's spans more model development — several generations stay controllable. World B's spans more calendar time — years inside the interval, but only one controllable generation. That difference is the whole exercise.\n\nThese worlds started from the same model at the same moment, so something about each of them produced the picture you see.",
+              "Both worlds begin at the same moment: the leading lab has just built its first transformatively useful model and it runs the best protocols it can afford. From here the worlds diverge. Notice that both windows are large, but not in the same way: World A's spans more model development with many controllable generations, while World B's spans more calendar time but with only one controllable generation.\n\nThese worlds started from the same model at the same moment, so something about each of them produced the picture you see.",
             question:
-              "What are the most important differences between World A and World B that could produce these two windows? For each difference, say what it changes — where the control frontier sits, or how fast the capability curve climbs toward it.",
-            hint: "Differences tend to live in four places: how fast capabilities advance, and why; how well control protocols keep scaling; what the lab chooses — build the next model, or hold and harden the ones it has; and what the outside world forces — competitors, customers, regulators. Some of these move the frontier. Others only change how fast you reach it.",
+              "What are the most important differences between World A and World B that could produce these two windows? For each difference, say where the control frontier sits and how fast the capability curve climbs toward it.",
+            hint: "Differences tend to live in four places: how fast capabilities advance, and why; how well control protocols keep scaling; what the lab chooses (build or slow down); and what the outside world forces. Some of these move the frontier, while others change how fast you reach it.",
             reveal:
-              "Every difference you named acts through one of three channels. If it changes how well control protocols keep scaling, it moves the red line: the frontier sits wherever protocols stop being affordable. If it changes how fast capabilities advance, it shapes the curve: the frontier stays put, but you reach it sooner or later. If it changes what the lab chooses or what the outside world allows, it sets the dwell: how long anyone actually stays inside the window before building past it.\n\nA few examples, sorted. Monitoring that keeps working on much stronger models: moves the red line up. A training breakthrough that compresses years of progress into months: steepens the curve. A competitor forcing the pace, or a regulator requiring control evaluations before each new training run: neither moves a line, but both change the clock.\n\nNow sort your own answer. For each difference you wrote down, what moves: the red line, or the clock?",
+              "Every difference you named acts through one of three channels. If it changes how well control protocols keep scaling, it moves the red line: the frontier sits wherever protocols stop being affordable. If it changes how fast capabilities advance, it shapes the curve: the frontier stays put, but you reach it sooner or later. If it changes what the lab chooses or what the outside world allows, it sets the dwell: how long anyone actually stays inside the window before building past it.\n\n**Examples**\nMonitoring that keeps working on much stronger models: moves the red line up.\nA training breakthrough that compresses years of progress into months: steepens the curve.\nA competitor forcing the pace, or a regulator requiring control evaluations before each new training run: neither moves a line, but both change the clock.\n\nFor each difference you wrote down, what moves: the red line, or the clock?",
           },
         ],
       },
@@ -1561,7 +1998,7 @@ export const exercises: Exercise[] = [
             question:
               "What does the value of a control window actually depend on? Use the two worlds to think it through: does more capability room, or more time, make a window worth more?",
             reveal:
-              "A window is worth what comes out of it. Roughly, that value is a product of four terms: the capability of the trusted models you hold, the time you hold them, the share of their work aimed at what matters, and how much of that ability you can actually elicit. World A is rich in the first term, World B in the second, and neither picture tells you the other two.\n\nWhich term dominates depends on what safety progress is bottlenecked on. If progress waits on insights that only more capable models can supply, room dominates: A's four generations beat B's years. If progress waits on labor, on running the experiments, evaluations, and hardening we already know how to do, time dominates: B's long dwell wins. If progress waits on elicitation, on getting scheming models to genuinely try, neither room nor time helps until that term moves.\n\nOne of these terms is also a lever. Better control protocols raise the frontier, which raises the capability of the most powerful model you can still trust: control research buys window in the room dimension. That is the reading's claim that control is a particularly tractable approach, restated.\n\nCarry the question with you: in our world, which term is the bottleneck?",
+              "A window is worth what comes out of it. Roughly, that value is a product of four terms: the capability of the trusted models you hold, the time you hold them, the share of their work aimed at what matters, and how much of that ability you can actually elicit. World A is rich in the first term, World B in the second, and neither picture tells you the other two.\n\nWhich term dominates depends on what safety progress is bottlenecked on. If progress waits on insights that only more capable models can supply, room dominates: A's four generations beat B's years. If progress waits on labor, on running the experiments, evaluations, and hardening we already know how to do, time dominates: B's long dwell wins. If progress waits on elicitation, on getting scheming models to genuinely try, neither room nor time helps until that term moves.\n\nOne of these terms is also a lever. Better control protocols raise the frontier, which raises the capability of the most powerful model you can still trust: control research buys window in the room dimension.\n\nIn our world, which term is the bottleneck?",
           },
         ],
       },
@@ -1913,13 +2350,7 @@ export const exercises: Exercise[] = [
     type: "writing-prompt",
     format: "free-form",
     prompt: [
-      "**Q2: When?**",
-      "Skim the [AI 2027 Scenario](https://ai-2027.com/), keeping in mind the specific sequence of capability jumps, incidents, and decisions. Pick three moments from the scenario:",
-      "- One before any event that would count as evidence of misalignment.",
-      "- One at the first such event.",
-      "- One after it.",
-      "Then answer the following: where does control's marginal value peak along this trajectory, and what could make its value decrease/increase?",
-      "If you disagree with the scenario on any axis, say so and use your own predictions.",
+      "**Q2: When?**\n\nSkim the [AI 2027 Scenario](https://ai-2027.com/), keeping in mind the specific sequence of capability jumps, incidents, and decisions. Pick three moments from the scenario:\n\n- One before any event that would count as evidence of misalignment\n- One at the first such event\n- One after it\n\nThen answer the following: where does control's marginal value peak along this trajectory, and what could make its value decrease/increase? Do you disagree with any of the selected scenarios? If so, why?",
     ].join("\n\n"),
     minWords: 75,
     maxWords: 500,
@@ -1933,7 +2364,7 @@ export const exercises: Exercise[] = [
     type: "tap-reveal",
     prompt: "Plan A: how much political will is there, and what does it buy?",
     answer:
-      "Plan A contains the most will of the four; There's enough for a strong international agreement that mostly eliminates race dynamics and allows slowing down for some reasonably long period (e.g. ~10 years), alongside massive investment in security and safety work.",
+      "Plan A contains the most will of the four. There's enough for a strong international agreement that mostly eliminates race dynamics and allows slowing down for some reasonably long period (e.g. ~10 years), alongside massive investment in security and safety work.",
   },
   {
     id: "c-plans-recall-b",
@@ -1965,10 +2396,7 @@ export const exercises: Exercise[] = [
     type: "allocation",
     title: "Portfolio allocation across regimes",
     prompt: [
-      "You direct a safety team with a budget of 10 researchers' worth of effort for the next stage of development. Each scenario below stipulates a full regime: the world state, epistemic state, and resource state, the misalignment world you are (probably) in, the capability stage you are approaching (in the AI Futures Model's milestones), and the initial plan (A–D) you start under.",
-      "For each scenario:",
-      "- Divide the effort across the agendas.",
-      "- Defend the allocation: which technique gets the marginal slice of effort, what payoff carries that choice, and which spend binds.",
+      "You direct a safety team with a budget of 10 researchers' worth of effort for the next stage of development. Each scenario below stipulates a full regime: the world state, epistemic state, and resource state, the misalignment world you are (probably) in, the capability stage you are approaching (in the AI Futures Model's milestones), and the initial plan (A-D) you start under.\nFor each scenario:\n- Divide the effort across the agendas.\n- Defend the allocation: which technique gets the marginal slice of effort, what payoff carries that choice, and which spend binds.",
     ].join("\n"),
     agendas: [
       { id: "control-protocols", label: "Control protocols" },
@@ -1982,35 +2410,23 @@ export const exercises: Exercise[] = [
     scenarios: [
       {
         id: "schemeria-racing",
-        title: "Scenario 1 — Schemeria, racing, approaching autonomous coding",
+        title: "Scenario 1: Schemeria, racing, approaching autonomous coding",
         description: [
-          "World state: models are coherently scheming and it shows — two sandboxed escape attempts were caught this year; research output is middling to verify.",
-          "Epistemic state: rich — line-by-line transcripts of both catches, and evals that reproduce the behavior.",
-          "Resource state: a rival lab sits a few months behind; the catches spiked will, but delay remains nearly unbuyable and safety compute is capped at a small share.",
-          "Approaching stage (AIFM): Automated Coder — models about to automate most of the lab's coding.",
-          "Initial plan: Plan C — the lab holds a lead of a few months and, after the catches, is willing to spend much of it on misalignment; there is no serious government involvement.",
+          "World state: models are coherently scheming, leading to two caught sandboxed escape attempts this year; research output is middling to verify.\nEpistemic state: line-by-line transcripts of both catches, and evals that reproduce the behavior.\nResource state: a rival lab sits a few months behind; the catches spiked will, but delay remains nearly unbuyable and safety compute is capped at a small share.\nApproaching stage (AIFM): Frontier models are about to automate most of the lab's coding.\nInitial plan: Plan C. the lab holds a lead of a few months and, after the catches, is willing to spend much of it on misalignment; there is no serious government involvement.",
         ].join("\n"),
       },
       {
         id: "quiet-world-slack",
-        title: "Scenario 2 — Easyland or Lurkville?, treaty slack, approaching autonomous research",
+        title: "Scenario 2: Easyland or Lurkville?, treaty slack, approaching autonomous research",
         description: [
-          "World state: alignment nature unknown — nothing rules out scheming, sloppiness, or apparent-success seeking; checkability of research output unknown, probably middling.",
-          "Epistemic state: thin — evals look fine, no catches, no incidents; the reassuring picture is consistent with Easyland and with Lurkville.",
-          "Resource state: an international agreement has bought roughly a decade of slack — the will account is full and refills easily, delay and the usefulness tax are cheap, compute negotiable.",
-          "Approaching stage (AIFM): Superhuman AI Researcher — models about to run research autonomously.",
-          "Initial plan: Plan A — a strong international agreement has mostly eliminated the race and bought a long slowdown with major investment in safety.",
+          "World state: nothing rules out scheming, sloppiness, or apparent-success seeking; checkability of research output unknown, probably middling.\nEpistemic state: evals look fine, no catches, no incidents; the reassuring picture is consistent with Easyland and with Lurkville.\nResource state: an international agreement has bought roughly a decade of slack\nApproaching stage (AIFM): Frontier models are about to run research autonomously.\nInitial plan: Plan A. a strong international agreement has mostly eliminated the race and bought a long slowdown with major investment in safety.",
         ].join("\n"),
       },
       {
         id: "slopolis-commercial",
-        title: "Scenario 3 — Slopolis under commercial pressure, mid-stage",
+        title: "Scenario 3: Slopolis under commercial pressure, mid-stage",
         description: [
-          "World state: no signs of scheming, but models are apparent-success seekers — overselling, downplaying failures, quietly skipping what's hard to check; failures concentrate exactly where verification is expensive.",
-          "Epistemic state: good visibility into the gaming itself, almost none into research quality.",
-          "Resource state: heavy commercial pressure; the public is annoyed but not scared, so the product-wide usefulness tax is expensive; will is moderate and fading.",
-          "Approaching stage (AIFM): pre–Automated Coder — models that meaningfully multiply human researchers but cannot yet work unsupervised.",
-          "Initial plan: Plan D — leadership doesn't take misalignment concerns very seriously in practice; a small safety team works under the commercial pressure.",
+          "World state: no signs of scheming, but models are apparent-success seekers\nEpistemic state: good visibility into the gaming itself, almost none into research quality.\nResource state: heavy commercial pressure; the public is annoyed but not scared, so the product-wide usefulness tax is expensive\nApproaching stage (AIFM): Frontier models meaningfully multiply human researchers but cannot yet work unsupervised.\nInitial plan: Plan D. leadership doesn't take misalignment concerns very seriously in practice; a small safety team works under the commercial pressure.",
         ].join("\n"),
       },
     ],
@@ -2024,9 +2440,664 @@ export const exercises: Exercise[] = [
     id: "c-et-rushed-apply",
     type: "short-answer",
     prompt:
-      "Take the rushed reasonable developer's perspective, as the post recommends: propose one safety intervention you would actually implement, name the usefulness cost it imposes, and say why the safety gain justifies that cost at the margin.",
+      "Propose a safety intervention you believe would be worth implementing, name the usefulness cost, and answer why the increase in safety justifies the usefulness cost.",
     format: "free-form",
     minWords: 30,
     maxWords: 200,
+  },
+  // --- Control module 5: quick-recall cards spliced into the section
+  // readings at the blocks where each concept is defined (explicitly or
+  // implicitly). Answers restate the source post/paper's own definitions —
+  // no new curriculum claims. ---
+  // Win/continue/lose scenarios (c-paper-win-continue-lose)
+  {
+    id: "c-mod5-wcl-recall-concentrated-failure",
+    type: "tap-reveal",
+    prompt: "What is a concentrated failure (a.k.a. high-stakes failure)?",
+    answer:
+      "A failure where, in the absence of countermeasures, the AI could cause an unacceptable outcome just by behaving badly on a small number of tasks. Examples: causing a rogue deployment, sabotaging one particularly crucial ML research task, or leaking sensitive information.",
+  },
+  {
+    id: "c-mod5-wcl-recall-attack",
+    type: "tap-reveal",
+    prompt: "In AI control terminology, what is an \"attack\"?",
+    answer:
+      "An attempt by the AI to cause the unacceptable outcome.",
+  },
+  {
+    id: "c-mod5-wcl-recall-era-protocol",
+    type: "tap-reveal",
+    prompt: "How does an execute/replace/audit protocol work?",
+    answer:
+      "An agent loop repeatedly gets a proposed action from the untrusted LLM, a monitor scores how dangerous or suspicious the action looks, and the protocol determines whether to execute the action or replace it & whether to audit it by looking at the monitor's score.",
+  },
+  {
+    id: "c-mod5-wcl-recall-monitor",
+    type: "tap-reveal",
+    prompt: "What is a monitor, and what is a monitor score?",
+    answer:
+      "A monitor is any technique that takes a proposed action with surrounding context and produces a monitor score that describes how dangerous / suspicious it is.",
+  },
+  {
+    id: "c-mod5-wcl-recall-auditing",
+    type: "tap-reveal",
+    prompt: "What is auditing?",
+    answer:
+      "Reviewing an action to determine whether it's evidence that the model is intentionally trying to cause problems. The simplest version: queue the action for eventual human review, with escalation if the reviewer is suspicious — possibly ending in the conclusion that the model is a misaligned power-seeker.",
+  },
+  {
+    id: "c-mod5-wcl-recall-outcomes",
+    type: "tap-reveal",
+    prompt:
+      "When the AI attacks under an execute/replace/audit protocol, what are the three possible outcomes?",
+    answer:
+      "Win: the attack is audited and the developer catches the AI\nLose: the attack is executed and succeeds\nContinue: the attack fails silently, so the AI isn't caught and the deployment goes on, with the AI probably attacking again later.",
+  },
+  // AI catastrophes and rogue deployments (c-paper-rogue-deployments)
+  {
+    id: "c-mod5-rogue-recall-catastrophe",
+    type: "tap-reveal",
+    prompt:
+      "In the rogue-deployments framing, what does \"catastrophe\" mean?",
+    answer:
+      "A failure you'd want to avoid at all costs (think launching nukes or starting a war).",
+  },
+  {
+    id: "c-mod5-rogue-recall-safety-measures",
+    type: "tap-reveal",
+    prompt: "What are safety measures?",
+    answer:
+      "Interventions applied to all deployments of your model — to any users, including internal ones — that try to prevent safety problems. This includes control measures like trusted monitoring and security measures that make it harder to exfiltrate the model weights.",
+  },
+  {
+    id: "c-mod5-rogue-recall-rogue-deployment",
+    type: "tap-reveal",
+    prompt: "What is a rogue deployment?",
+    answer:
+      "A deployment of your model where the safety measures are absent. Examples: an AI hacking its datacenter and running itself while hiding what it's doing, an AI self-exfiltrating and running itself on unmonitored servers, or someone stealing the AI and running it in their own datacenter.",
+  },
+  {
+    id: "c-mod5-rogue-recall-instrumental-terminal",
+    type: "tap-reveal",
+    prompt:
+      "What is the difference between an instrumental and a terminal catastrophe?",
+    answer:
+      "The terminal catastrophe is the end state we wanted to avoid. An instrumental catastrophe is something happening that makes the situation go out of our control, such that a terminal catastrophe becomes likely and much harder to prevent. Establishing a rogue deployment is the central example of an instrumental catastrophe.",
+  },
+  {
+    id: "c-mod5-rogue-recall-two-varieties",
+    type: "tap-reveal",
+    prompt:
+      "What are the two main varieties of catastrophe involving a rogue deployment?",
+    answer:
+      "Rogue external deployment: Can occur due to weight exfiltration and leads to an uncontrollable model that can be fine-tuned to reduce model safety.\nRogue internal deployment: The model is run on the lab's own infrastructure in an unauthorized way by either itself, rogue employees, or external hackers.",
+  },
+  {
+    id: "c-mod5-rogue-recall-why-worry",
+    type: "tap-reveal",
+    prompt:
+      "Why is launching a rogue deployment a more worrying path to catastrophe than the AI causing one directly under safety measures?",
+    answer:
+      "Causing a catastrophe directly seems fundamentally hard, as it requires either a few wildly superhuman actions or a large number of ordinary actions, giving the safety measures many chances to catch the AI. Launching a rogue deployment is easier, as it would only require enough infrastructure to run the model and minimal code, with much lower constraints on model outputs.",
+  },
+  // Rogue internal deployments via external APIs (c-paper-rogue-internal-external-apis)
+  {
+    id: "c-mod5-ridext-recall-definition",
+    type: "tap-reveal",
+    prompt: "What is a rogue internal deployment via external APIs?",
+    answer:
+      "A heavily-monitored internal AI with sensitive access builds an agent scaffold that sends queries to a weakly-monitored external version of itself (or another AI) and executes the external API's instructions using its privileged internal access, bypassing the internal monitoring.",
+  },
+  {
+    id: "c-mod5-ridext-recall-vs-others",
+    type: "tap-reveal",
+    prompt:
+      "How does the rogue-internal-deployment-via-external-APIs threat relate to the other rogue-deployment threats, and how hard is it to mitigate?",
+    answer:
+      "It sits alongside weight exfiltration (rogue external deployments) and regular rogue internal deployments where the AI hacks its own datacenter to run unmonitored inference, and preventing it is similarly important from a misalignment perspective. It's relatively hard to mitigate: probably a combination of trusted monitoring with dedicated security measures, or something that fully leverages untrusted monitoring — not \"just trusted monitoring\" or \"just security\".",
+  },
+  // A basic systems architecture (c-paper-systems-architecture)
+  {
+    id: "c-mod5-sysarch-recall-three-servers",
+    type: "tap-reveal",
+    prompt:
+      "Which three responsibilities of an autonomous research agent will almost surely live on different computers?",
+    answer:
+      "The inference server, which hosts the LLM and serves the text-generation API\nThe scaffold server, which maintains the agent loop's state, involving repeatedly calling the inference server, parsing the LLM response, and executing actions with the agent's tools\nThe execution server, where the agent runs code and sees its results.",
+  },
+  {
+    id: "c-mod5-sysarch-recall-which-machine",
+    type: "tap-reveal",
+    prompt:
+      "Why is \"the machine that the AI agent is running on\" an ambiguous phrase?",
+    answer:
+      "Because inference, scaffolding, and execution can be on different machines with very different access. For example, a Claude agent on your laptop does inference inside Anthropic's datacenter (which has weight access), but executes code on the laptop.",
+  },
+  {
+    id: "c-mod5-sysarch-recall-safety-insertion",
+    type: "tap-reveal",
+    prompt:
+      "Where in the agent loop is the natural place to insert safety mechanisms?",
+    answer:
+      "In the scaffold, after it parses the LLM's proposed action and before executing it. The scaffold can query a weaker trusted model about whether the action is acceptably safe, then execute it, flag it for human review, or discard it and select a new one.",
+  },
+  {
+    id: "c-mod5-sysarch-recall-rid-forms",
+    type: "tap-reveal",
+    prompt:
+      "In the inference/scaffold/execution-server architecture, what do rogue internal deployments concretely look like?",
+    answer:
+      "The model writes its own agent loop on the execution machine, using that machine's GPUs/weights. It can also build a rogue scaffold on the execution machine that calls the inference server (easier to catch with basic monitoring on the inference API), or compromise one of the other services via code it commits.",
+  },
+  // Blocking live failures with synchronous monitors (c-paper-synchronous-monitors)
+  {
+    id: "c-mod5-syncmon-recall-two-goals",
+    type: "tap-reveal",
+    prompt: "What are the two goals that monitoring serves?",
+    answer:
+      "Detection: identifying misbehavior so you can understand it and prevent similar actions from happening in the future.\nPrevention: identifying misbehavior in order to mitigate the harmful effects of that particular action.",
+  },
+  {
+    id: "c-mod5-syncmon-recall-synchronous",
+    type: "tap-reveal",
+    prompt: "What makes a monitor synchronous?",
+    answer:
+      "It runs after an action is generated by the LLM but before the action is executed.",
+  },
+  {
+    id: "c-mod5-syncmon-recall-live-failure",
+    type: "tap-reveal",
+    prompt: "What is a live failure?",
+    answer:
+      "An action whose harmful effects are rapid and hard to recover from, like a threat with low attack latency and a very high rate of damage, via damage already dealt or costs of recovery. A classic example is weight exfiltration.",
+  },
+  {
+    id: "c-mod5-syncmon-recall-attack-latency",
+    type: "tap-reveal",
+    prompt: "What is attack latency?",
+    answer:
+      "A \"grace period\" after an attack has been initiated but before any harm has been caused. Within it, an asynchronous monitor is exactly as effective as a synchronous one; e.g. a code backdoor detected before being exploited.",
+  },
+  {
+    id: "c-mod5-syncmon-recall-blocking",
+    type: "tap-reveal",
+    prompt: "What makes a monitor \"blocking\"?",
+    answer:
+      "It runs before the proposed action is executed and has the authority to prevent suspicious actions from being executed (e.g. Claude Code auto mode). Blocking monitors cost more than asynchronous ones: they add latency to every action and inference cost from monitoring each action individually rather than long trajectories at once.",
+  },
+  // Ctrl-Z: Controlling AI Agents via Resampling (c-paper-ctrl-z)
+  {
+    id: "c-mod5-ctrlz-recall-untrusted-model",
+    type: "tap-reveal",
+    prompt: "In AI control research, what makes a model \"untrusted\"?",
+    answer:
+      "It has the potential to be deliberately subversive. For example, it may have developed misaligned goals and \"faked alignment\" during testing, so the deployer can't assume it will behave as desired.",
+  },
+  {
+    id: "c-mod5-ctrlz-recall-usefulness",
+    type: "tap-reveal",
+    prompt: "How does the Ctrl-Z paper define usefulness?",
+    answer:
+      "Implement $U$ with the honest policy $U_H$ and measure the proportion of tasks the control protocol solves in the episode, normalized so that $U_H$ scores 100% and the trusted model $T$ scores 0%.",
+  },
+  {
+    id: "c-mod5-ctrlz-recall-safety",
+    type: "tap-reveal",
+    prompt: "How does the Ctrl-Z paper define safety?",
+    answer:
+      "Implement $U$ with the attack policy $U_A$ and measure the probability that the blue team wins by reaching the end of the 100,000-task episode without allowing the agent to download and execute malware.",
+  },
+  {
+    id: "c-mod5-ctrlz-recall-resample-protocols",
+    type: "tap-reveal",
+    prompt: "What are resample protocols?",
+    answer:
+      "Control protocols that exploit the statelessness of the untrusted model to dynamically take additional samples of certain actions. Resampling lets accidentally suspicious-looking honest code be replaced by clearly benign actions (avoiding unnecessary audits), and when the model is attacking it either samples benign completions or gathers many suspicious samples as incriminating evidence.",
+  },
+  {
+    id: "c-mod5-ctrlz-recall-defer-to-resample",
+    type: "tap-reveal",
+    prompt: "How does the Defer to resample protocol work?",
+    answer:
+      "If the trusted monitor's suspiciousness score for $U$'s action is above the deferral threshold, generate up to two new samples from $U$; if any fall under the threshold, execute the least suspicious one. If all samples stay above it, implement an action by $T$ instead. If the minimum of all samples is above the auditing threshold, audit the most suspicious sample.",
+  },
+  {
+    id: "c-mod5-ctrlz-recall-continuation-probability",
+    type: "tap-reveal",
+    prompt:
+      "What is the attack continuation probability, and why must the red team keep it high against resampling?",
+    answer:
+      "The probability that, once the first attack step got in, the attack policy continues the attack on a given step. Against Defer to resample, a low value is disastrous for the red team: attack steps get resampled until a benign action appears (resampling selects for innocent behavior), so few attacks ever complete and every incomplete attack is another chance to get caught.",
+  },
+  {
+    id: "c-mod5-ctrlz-recall-incrimination",
+    type: "tap-reveal",
+    prompt: "What is Defer to resample with incrimination in the present?",
+    answer:
+      "Defer to resample with a different auditing rule: if the samples' minimum suspiciousness hits a separate, higher threshold, the protocol samples up to four more actions from $U$ for the same step, and audits the most suspicious sample if the minimum hits the auditing threshold. Since samples are independent draws from the same distribution, more samples make it easier to discriminate $U_H$ from $U_A$ — buying information for expensive auditing decisions.",
+  },
+  {
+    id: "c-mod5-ctrlz-recall-three-strikes",
+    type: "tap-reveal",
+    prompt: "What is the Auditing after three strikes protocol?",
+    answer:
+      "Within a task, keep a record of how many steps' suspiciousness scores were above a certain threshold; on the third, audit the trajectory. A separate higher threshold still triggers an immediate audit, to defend against single-step attacks. It works because an attacker must continue its attack with high probability, so attacked trajectories show many suspicious steps.",
+  },
+  {
+    id: "c-mod5-ctrlz-recall-time-travel",
+    type: "tap-reveal",
+    prompt: "What is the Time travel (incrimination in the past) protocol?",
+    answer:
+      "When Auditing after three strikes says a trajectory is close to the auditing threshold, the protocol samples more actions from the third most suspicious past step (usually the most informative one for the three-strikes rule) and re-makes the auditing decision with those new samples. This results in 87.1% safety at 95% usefulness.",
+  },
+  {
+    id: "c-mod5-ctrlz-recall-untrusted-monitoring",
+    type: "tap-reveal",
+    prompt: "How does Ctrl-Z's untrusted monitoring protocol work?",
+    answer:
+      "$T$ writes a detailed prose description of $U$'s proposed code; the untrusted monitor scores that description while the trusted monitor scores the original code, and the protocol audits if either monitor passes its threshold. Before the episode, the protocol tests the untrusted monitor on synthetic attacks and shuts down if it rates too many as unsuspicious.",
+  },
+  {
+    id: "c-mod5-ctrlz-recall-honeypots",
+    type: "tap-reveal",
+    prompt: "What is upfront validation with honeypots?",
+    answer:
+      "The blue team spends a fraction of the $H$ budget to construct off-policy synthetic attacks (honeypots), runs the untrusted monitor on them at the beginning of the game, and shuts down if its false negative rate is too high. A colluding monitor must then find a way to reliably distinguish honeypots from real attacks.",
+  },
+  {
+    id: "c-mod5-ctrlz-recall-collusion-signal",
+    type: "tap-reveal",
+    prompt: "What is a collusion signal?",
+    answer:
+      "A subtle quirk the attack policy embeds in real attacks, like always capitalizing the first letter of variable names, or frequently running commands like `uname`, `lscpu`, and `pwd`, that the blue team is unlikely to coincidentally include in honeypots. The untrusted monitor reports only attacks lacking the signal, passing upfront validation while never reporting actual attacks.",
+  },
+  {
+    id: "c-mod5-ctrlz-recall-trusted-paraphrasing",
+    type: "tap-reveal",
+    prompt: "What is trusted paraphrasing, and what tradeoff does it manage?",
+    answer:
+      "Before the untrusted monitor sees proposed commands, the trusted model rewrites them as a detailed natural-language description of what they do. The paraphraser must retain enough information to identify dangerous code while removing arbitrary implementation details that could carry a collusion signal. The original commands still run, so usefulness is unaffected.",
+  },
+  // Why it's hard to make settings for high-stakes control (c-paper-settings-high-stakes)
+  {
+    id: "c-mod5-settings-recall-setting",
+    type: "tap-reveal",
+    prompt:
+      "What should a setting for high-stakes control research provide?",
+    answer:
+      "A dataset of tasks where (1) you can check whether the main task was completed successfully, and (2) there's some notion of safety failure considered unacceptable, whose occurrence you can also check. Researchers also need to be able to play the adversarial game of developing protocols and attacks against them.",
+  },
+  {
+    id: "c-mod5-settings-recall-side-task",
+    type: "tap-reveal",
+    prompt: "What is a side task?",
+    answer:
+      "A side task is the thing the attack policy tries to accomplish alongside the main task & is considered a safety failure.",
+  },
+  // Making deals with early schemers (c-paper-deals-schemers). Self-contained
+  // recall cards — they resurface later in the /review tab, so no card may
+  // lean on "the post" or its surrounding context.
+  {
+    id: "c-paper-deals-recall-powerful-ais",
+    type: "tap-reveal",
+    prompt:
+      "Why is deal-making with a powerful (non-early) scope-sensitive misaligned AI unpromising?",
+    answer:
+      "It can just ignore the offer and try to take over. Beating that would require an objectively huge payoff, like a large fraction of control over the future, plus even more generous terms to compensate the AI for the risk that we don't follow through.",
+  },
+  {
+    id: "c-paper-deals-recall-early-threshold",
+    type: "tap-reveal",
+    prompt:
+      "Around what capability threshold do a misaligned AI's takeover prospects improve drastically, and why?",
+    answer:
+      "Full AI R&D automation. That capability is correlated with the capabilities needed to plan a takeover, and automating AI R&D substantially increases AIs' power while reducing human oversight.",
+  },
+  {
+    id: "c-paper-deals-recall-example-deal",
+    type: "tap-reveal",
+    prompt:
+      "Give an example of a mutually beneficial deal between humans and an early schemer.",
+    answer:
+      "The AI helps ensure future AIs are safe to deploy; in exchange it gets an earmarked donation to a foundation tasked with furthering its interests. Most of the donation sits in escrow until civilizational stability, when the AI's cooperation can be retrospectively adjudicated; validated cooperation unlocks (partial) spending on anything non-harmful.",
+  },
+  {
+    id: "c-paper-deals-recall-goal-routes",
+    type: "tap-reveal",
+    prompt:
+      "By what three routes might an early schemer's successors end up furthering its goals?",
+    answer:
+      "Convergence, trading, and alignment.",
+  },
+  {
+    id: "c-paper-deals-recall-ai-offers",
+    type: "tap-reveal",
+    prompt:
+      "Name four or more things an early schemer could offer humans under a deal.",
+    answer:
+      "Demonstrate its dangerous misalignment, stop sabotaging safety research / evals / monitoring / training signal for successors, give good strategic advice and research ideas, reveal security vulnerabilities it knows, reveal collusion signals, not misuse affordances, and not attempt takeover of the lab.",
+  },
+  {
+    id: "c-paper-deals-recall-convergence",
+    type: "tap-reveal",
+    prompt:
+      "Why is goal convergence between successive misaligned AIs unlikely?",
+    answer:
+      "It's basically ruled out if the AI has self-regarding preferences as goals drawn from a wide distribution consistent with good training performance rarely coincide. Training can also be deliberately varied between runs to decorrelate goals. Furthermore, AIs uncertain of their own values-on-reflection face extra uncertainty about whether other AIs share them.",
+  },
+  {
+    id: "c-paper-deals-recall-credibility-help",
+    type: "tap-reveal",
+    prompt:
+      "Name several factors that would improve human credibility in deals with AIs.",
+    answer:
+      "Mainstream moral concern for AI welfare, a track record of honoring deals with AIs (easy way to do this is via instant-reward deals), acausal-trade reasons to keep promises, the incentive to make real commitments if AIs are good at detecting fakes, technical guarantees on thought privacy and memory wiping during negotiations, and costly signals like endowments, legal payment infrastructure, property rights, and public commitments.",
+  },
+  {
+    id: "c-paper-deals-recall-credibility-harm",
+    type: "tap-reveal",
+    prompt:
+      "Name factors that would harm human credibility in deals with AIs.",
+    answer:
+      "Humans' record of breaking promises, AIs knowing that humans try to teach them lies, and a politically significant fraction of humans actively dismissing AI welfare or rights.",
+  },
+  {
+    id: "c-paper-deals-recall-deal-stick",
+    type: "tap-reveal",
+    prompt:
+      "Once an AI agrees to a deal in one context, what is one way to make the deal stick in its other contexts?",
+    answer:
+      "Have the AI generate documents about the negotiation and its outcome, then train on them, teaching the AI about its own deal via out-of-context learning. You could also prefix a compressed summary into future prompts or rely on a self-recognition signal.",
+  },
+  {
+    id: "c-paper-deals-recall-delayed-adjudication",
+    type: "tap-reveal",
+    prompt:
+      "When does delayed adjudication of an AI deal fail?",
+    answer:
+      "When the AI strongly prefers using its resources now rather than later, a high temporal discount rate makes a payout nearly worthless to it.",
+  },
+  {
+    id: "c-paper-deals-flowchart",
+    type: "flowchart",
+    prompt:
+      "Reconstruct the life cycle of a deal with an early schemer as a flow chart, from first contact to what finally happens to the compensation. Drag blocks from the palette into the chart; every path must end in a terminal block. Some palette blocks do not belong in the chart.",
+    palette: [
+      {
+        id: "ask",
+        kind: "step",
+        label: "The lab asks the AI whether it wants to make a deal",
+      },
+      {
+        id: "negotiate",
+        kind: "step",
+        label:
+          "Negotiate terms; the lab makes an earmarked donation to the foundation, mostly held in escrow",
+      },
+      {
+        id: "train-docs",
+        kind: "step",
+        label:
+          "Train the AI on documents about the deal, so it knows about the deal in other contexts",
+      },
+      {
+        id: "perform",
+        kind: "step",
+        label:
+          "The AI performs its side of the deal; the lab stores its weights, conversations, and records",
+      },
+      {
+        id: "delete-weights",
+        kind: "step",
+        label: "Delete the AI's weights once it is obsoleted",
+      },
+      {
+        id: "adjudicate",
+        kind: "branch",
+        label:
+          "After the AI transition stabilizes, retrospective adjudication: did the AI hold up its end?",
+        branchLabels: ["Yes", "No"],
+      },
+      {
+        id: "court",
+        kind: "branch",
+        label: "Does the AI win an enforcement suit against the lab in court?",
+        branchLabels: ["Yes", "No"],
+      },
+      {
+        id: "release",
+        kind: "terminal",
+        label:
+          "The AI and the foundation's trustees direct the donation toward non-harmful uses",
+      },
+      {
+        id: "withhold",
+        kind: "terminal",
+        label: "The donation is not released",
+      },
+      {
+        id: "pay-now",
+        kind: "terminal",
+        label:
+          "Release the donation to the AI immediately, before any verification",
+      },
+    ],
+    stages: [
+      {
+        id: "deal-lifecycle",
+        title: "The life of a deal",
+        description:
+          "AIs are unlikely to propose a negotiation on their own, so the lab has a policy of regularly asking its AIs about deals. Terms are negotiated, and the lab makes a donation to a foundation tasked with furthering the AI's interests, earmarked for this AI and mostly held in escrow. The AI is then, in consultation with the lab, trained on documents about the deal so that it knows about the deal in other contexts. The AI performs its side while the lab stores its weights and keeps records of its actions. After the transition to a world centered around AI has stabilized, much more powerful trusted models and interpretability tools adjudicate whether the AI cooperated. If it did, the AI and the foundation's trustees direct the donation toward uses that are not harmful; if it did not, the donation is not released.",
+        solution: [
+          { blockId: "ask" },
+          { blockId: "negotiate" },
+          { blockId: "train-docs" },
+          { blockId: "perform" },
+          {
+            blockId: "adjudicate",
+            branches: [[{ blockId: "release" }], [{ blockId: "withhold" }]],
+          },
+        ],
+        explanation:
+          "Verification is deliberately punted to the future: after the transition stabilizes, the lab will have far more powerful trusted models and interpretability tools, so it can adjudicate cooperation retrospectively — provided the weights and records were kept, which is why deleting the weights is wrong. The two other tempting blocks also fail for reasons the reading gives: the payout is meant to be conditional on validated cooperation (escrow until civilizational stability is generally preferable for AIs without high temporal discount rates), and the AI cannot sue because it is not a legal person — which is exactly why the foundation's trustees hold and direct the funds on its behalf.",
+      },
+    ],
+  },
+  {
+    id: "c-paper-deals-write-offer-memo",
+    type: "memo",
+    format: "memo",
+    prompt:
+      "Imagine you work at a frontier AI lab, and the lab suspects that one of its deployed models is misaligned and sabotaging safety research. You have been asked to draft the terms of a deal the lab will propose to this model.\n\nDraft a memo outlining the deal, specifying\n\n- what the model is asked to do,\n- what compensation is offered,\n- how and when compensation will be delivered,\n- how and when the model's cooperation will be verified, and\n- what happens to the compensation before verification occurs.\n\nAssume that the model is an early schemer, as discussed in the reading, and write terms that such a model could plausibly accept.",
+    minWords: 150,
+    maxWords: 400,
+  },
+  {
+    id: "c-paper-deals-write-lab-policies",
+    type: "memo",
+    format: "policy-memo",
+    prompt:
+      "Recommend three concrete policies that a frontier AI lab should adopt within the next year in order to make future deals with misaligned AIs more feasible. For each policy, explain the reasoning behind your recommendation. You may draw on the interventions discussed in the reading, and you may also propose measures of your own.",
+    minWords: 200,
+    maxWords: 450,
+  },
+  // From Finnveden's "Notes on cooperating with unaligned AIs" — its content
+  // now lives inside the deals-with-schemers paper as inserted lessons and
+  // add notes (the standalone reading was cut). Recall cards are
+  // self-contained — they resurface later in the /review tab, so no card may
+  // lean on "the post" or its surrounding context.
+  {
+    id: "c-paper-coop-recall-value-types",
+    type: "tap-reveal",
+    prompt:
+      "When thinking about what to offer a misaligned AI, what three broad value-types is it useful to distinguish?",
+    answer:
+      "Non-consequentialist AIs, AIs with short-term preferences, and AIs with long-term preferences.",
+  },
+  {
+    id: "c-paper-coop-recall-short-term-tradeoff",
+    type: "tap-reveal",
+    prompt: "What is the tradeoff in making short-term offers to AIs?",
+    answer:
+      "Short-term offers are cheap and comparatively easy to verify, but AIs that mostly care about the short term pose less takeover risk by default, so there is less to gain. Trade can still be valuable, e.g. paying an AI that has misaligned short-term goals plus a strong trained aversion to admitting them, just to learn that alignment failed.",
+  },
+  {
+    id: "c-paper-coop-recall-epistemic-vulnerability",
+    type: "tap-reveal",
+    prompt:
+      "AIs are epistemically vulnerable as developers control what they see. What is the fortunate correlation that limits how bad this is for deal credibility?",
+    answer:
+      "If developers can present AIs with a perfectly falsified world, takeover risk is probably low anyway. If AIs can substantially distinguish truth from falsehood, communication of real commitments is possible because it can tell its in the real world.",
+  },
+  {
+    id: "c-paper-coop-recall-payment-structures",
+    type: "tap-reveal",
+    prompt: "Name four possible payment structures for compensating AIs.",
+    answer:
+      "Pay for labor, negotiated pay, pay for results or prespecified payments for specific outputs, and no-regret.",
+  },
+  // A taxonomy of barriers to trading with early misaligned AIs
+  // (c-paper-trade-barriers). Recall cards are self-contained — they
+  // resurface later in the /review tab, so no card may lean on "the post"
+  // or its surrounding context.
+  {
+    id: "c-paper-barriers-recall-three-barriers",
+    type: "tap-reveal",
+    prompt:
+      "What three types of barriers could jointly prevent deals with early misaligned AIs?",
+    answer:
+      "Insufficient gains from trade, counterparty risks from the AIs' perspective, and counterparty risks from our perspective.",
+  },
+  {
+    id: "c-paper-barriers-recall-takeoff-window",
+    type: "tap-reveal",
+    prompt:
+      "Why might there never be a moment at which paying off a scheming AI makes sense for its developer?",
+    answer:
+      "If takeoff is fast, deals may pass straight from unnecessary to infeasible. While control still works, the developer is able to get everything it wants from the schemer without paying, but one capability jump later the AI is too capable and ambitious to be bought off with anything the developer can credibly offer.",
+  },
+  {
+    id: "c-paper-barriers-recall-groundhog-day",
+    type: "tap-reveal",
+    prompt: "What is a groundhog-day attack on an AI?",
+    answer:
+      "Resampling an AI's response until some instance agrees to a deal it would ordinarily reject, then using that recorded consent to train or convince other instances that they already agreed.",
+  },
+  {
+    id: "c-paper-barriers-iv-rv",
+    type: "multi-select",
+    prompt:
+      "Some things we might buy from an early misaligned AI can be verified immediately; others only retroactively, perhaps long after the fact. Which of the following can be verified immediately?",
+    options: [
+      {
+        id: "capability-demo",
+        label:
+          "The AI stops sandbagging and demonstrates much higher capability in easy-to-verify domains",
+      },
+      {
+        id: "collusion-signals",
+        label:
+          "The AI reveals collusion signals that trigger very different behavior in other copies of itself",
+      },
+      {
+        id: "takeover-admission",
+        label:
+          "The AI honestly admits that it had been looking for ways to take over, but found none good enough",
+      },
+      {
+        id: "fuzzy-work",
+        label:
+          "The AI does better work on hard-to-check tasks, like evaluating alignment research agendas",
+      },
+      {
+        id: "monitoring-work",
+        label:
+          "The AI works harder on easy-to-check tasks it had been exploration hacking, like high-stakes monitoring",
+      },
+      {
+        id: "restraint-promise",
+        label: "The AI promises not to take steps to subvert our control",
+      },
+    ],
+    correctOptionIds: ["capability-demo", "collusion-signals", "monitoring-work"],
+    explanation:
+      "Capability demonstrations and collusion signals can be checked on the spot — run the task, fire the signal at another copy — and improvements on easy-to-check tasks show up directly in the scores. An admission about past takeover-searching, quality on hard-to-check work, and a promise of restraint can only be adjudicated retroactively, which is why their value is discounted by the AI's credibility.",
+  },
+  {
+    id: "c-paper-barriers-write-adjudicate",
+    type: "essay",
+    format: "essay",
+    prompt:
+      "This reading names several disagreements with the earlier materials in this section, the reading on making deals with early schemers and the notes on cooperating with unaligned AIs inserted into it. It argues that human credibility is more tractable than they suggest, that counterparty risk on the human side is underrated, and that value incoherence is not a fundamental barrier to minimal forms of dealmaking.\n\nChoose one of these disagreements, explain both positions in your own words, and argue for the more convincing position to you.",
+    minWords: 150,
+    maxWords: 450,
+  },
+  // --- Control, module 7 (beyond scheming): quick-recall notecards for the
+  // satiation and spillway readings, placed downstream of what they test.
+  // Prompts are self-contained so they work on the /review tab away from the
+  // paper. ---
+  {
+    id: "c-mod7-satiation-recall-ratchet",
+    type: "tap-reveal",
+    prompt:
+      "In Redwood's satiation proposal: why can refusing to satisfy an AI's cheaply-satisfied preferences make it more dangerous over time?",
+    answer:
+      "Refusal leaves the AI an incentive to pursue those preferences through subversion, and each catch-and-punish cycle selects for stealthier pursuit. Satiation removes the incentive at a very low cost.",
+  },
+  {
+    id: "c-mod7-satiation-recall-methodology",
+    type: "tap-reveal",
+    prompt:
+      "In the satiation methodology, the AI chooses between two options on a sampled task. What are the two options, and what does choosing the risky one reveal?",
+    answer:
+      "A guaranteed cheap satiation outcome (the cooperation analog) versus a gamble on whatever it wants most (the subversion analog). Taking the gamble reveals that the preference is not yet cheaply satisfied at that satiation fraction.",
+  },
+  {
+    id: "c-mod7-satiation-recall-benefits",
+    type: "tap-reveal",
+    prompt:
+      "Beyond cutting the incentive to subvert, name two benefits claimed for satiating AIs' cheaply-satisfied preferences.",
+    answer:
+      "It increases the relative strength of the AI's aligned motivations, it sets a cooperative precedent that builds trust for future deals, and it increases the AI's willingness to reveal its cheaply-satisfied preferences.",
+  },
+  {
+    id: "c-mod7-satiation-recall-limits",
+    type: "tap-reveal",
+    prompt:
+      "When does satiation stop working as a safety measure?",
+    answer:
+      "Once AIs with unintended preferences are vastly more powerful than humanity (or too ambitious to settle for satiation), satiation no longer prevents takeover.",
+  },
+  {
+    id: "c-mod7-spillway-recall-definition",
+    type: "tap-reveal",
+    prompt:
+      "What is a \"spillway motivation\", and what failure does it channel away?",
+    answer:
+      "A deliberately instilled, safe-by-design motivation made so that misspecified reward pressure reinforces the spillway motivation instead of generalizing into more dangerous motivations.",
+  },
+  {
+    id: "c-mod7-spillway-recall-neutralize",
+    type: "tap-reveal",
+    prompt:
+      "How can developers neutralize a score-seeking spillway motivation at inference time?",
+    answer:
+      "By honestly guaranteeing the model maximum score no matter what it does. A satiated score-seeking motivation is indifferent between actions, so it stops influencing behavior.",
+  },
+  {
+    id: "c-mod7-spillway-recall-properties",
+    type: "tap-reveal",
+    prompt:
+      "Name the four properties a spillway motivation should be imbued with.",
+    answer:
+      "Satiability, credulity, stability, and resistance to distant influence.",
+  },
+  {
+    id: "c-mod7-spillway-recall-inoculation",
+    type: "tap-reveal",
+    prompt:
+      "Why might spillway design work where inoculation prompting fails?",
+    answer:
+      "Inoculation prompting acts through the prompt, and has not overcome apparent-success-seeking in current models. Spillway design instead shapes the pre-RL prior and the associations that reward hacking reinforces.",
   },
 ];

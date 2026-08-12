@@ -7,7 +7,11 @@ import {
   LESSWRONG_CONVERTER_VERSION,
   type LessWrongArtifact,
 } from "@/lib/lesswrong/types";
-import { parseSubstackId, parseSubstackPostUrl } from "@/lib/substack/id";
+import {
+  parseSubstackId,
+  parseSubstackPostUrl,
+  substackPostKeyId,
+} from "@/lib/substack/id";
 import {
   SUBSTACK_CONVERTER_VERSION,
   type SubstackArtifact,
@@ -17,32 +21,33 @@ import {
   linkedReadingSource,
   type LinkedReading,
 } from "./registry";
-import { resolveInternalReadingHref } from "./resolve";
+import {
+  coursePaperHrefForArtifact,
+  resolveInternalReadingHref,
+} from "./resolve";
 
 // The linked-readings registry is generated (`npm run readings:build`) —
 // these tests pin its contract: every entry backs a ready committed artifact,
 // linked readings stay OUT of the content graph and the resource hub, and
 // link resolution prefers course pages and stays one layer deep.
 
-/** Site-agnostic key, mirroring resolve.ts. */
+/** Site-agnostic key, mirroring resolve.ts (substack hosts alias-normalize). */
 function keyOf(reading: LinkedReading): string {
   if (reading.kind === "lesswrong") {
     const ref = parseLessWrongId(reading.id);
     expect(ref, `${reading.id} must parse as a LessWrong artifact id`).not.toBeNull();
     return `lw:${ref!.postId}`;
   }
-  expect(
-    parseSubstackId(reading.id),
-    `${reading.id} must parse as a Substack artifact id`,
-  ).not.toBeNull();
-  return `sb:${reading.id}`;
+  const ref = parseSubstackId(reading.id);
+  expect(ref, `${reading.id} must parse as a Substack artifact id`).not.toBeNull();
+  return `sb:${substackPostKeyId(ref!)}`;
 }
 
 function primaryKey(postUrl: string): string | null {
   const lw = parseLessWrongPostUrl(postUrl);
   if (lw) return `lw:${lw.postId}`;
   const sb = parseSubstackPostUrl(postUrl);
-  if (sb) return `sb:${sb.id}`;
+  if (sb) return `sb:${substackPostKeyId(sb)}`;
   return null;
 }
 
@@ -182,11 +187,18 @@ describe("resolveInternalReadingHref", () => {
     ).toBe(href);
   });
 
-  it("routes a registered linked reading to /readings/[id]", () => {
-    const reading = linkedReadings[0];
-    expect(resolveInternalReadingHref(reading.url)).toBe(
-      `/readings/${reading.id}`,
-    );
+  it("routes every registered linked reading to /readings/[id], under any of its hosts", () => {
+    // Both URL forms must internalize: the registry `url` (the post's
+    // canonical URL, whose host can differ from the artifact id's — the
+    // live dual-host publication blog.ai-futures.org / blog.aifutures.org)
+    // and the artifact-id-derived URL the reader itself uses.
+    for (const reading of linkedReadings) {
+      const href = `/readings/${reading.id}`;
+      expect(resolveInternalReadingHref(reading.url), reading.id).toBe(href);
+      const source = linkedReadingSource(reading);
+      if (source.kind === "arxiv") continue; // never happens; type narrowing
+      expect(resolveInternalReadingHref(source.postUrl), reading.id).toBe(href);
+    }
   });
 
   it("leaves comment permalinks, anchored links, and foreign URLs external", () => {
@@ -195,5 +207,34 @@ describe("resolveInternalReadingHref", () => {
     expect(resolveInternalReadingHref(`${reading.url}#section`)).toBeNull();
     expect(resolveInternalReadingHref("https://example.com/posts/x")).toBeNull();
     expect(resolveInternalReadingHref("not a url")).toBeNull();
+  });
+});
+
+describe("coursePaperHrefForArtifact", () => {
+  // Two linked readings were promoted to course papers (their registry
+  // entries dropped) — old /readings bookmarks must redirect to the course
+  // pages, and 20260804120000_remap_promoted_reading_highlights.sql remaps
+  // their highlight rows to the same targets. Pin both concrete mappings.
+  it("maps a promoted post's old artifact id to its course page", () => {
+    expect(coursePaperHrefForArtifact("lesswrong__jg3PuE3fYL9jq9zHB")).toBe(
+      getContentLocation("c-paper-win-continue-lose")!.href,
+    );
+    expect(coursePaperHrefForArtifact("lesswrong__ceBpLHJDdCt3xfEok")).toBe(
+      getContentLocation("c-paper-rogue-deployments")!.href,
+    );
+    // Site-agnostic: the mirror host's artifact id resolves to the same page.
+    expect(
+      coursePaperHrefForArtifact("alignmentforum__jg3PuE3fYL9jq9zHB"),
+    ).toBe(getContentLocation("c-paper-win-continue-lose")!.href);
+  });
+
+  it("returns null for registered linked readings and unknown ids", () => {
+    for (const reading of linkedReadings) {
+      expect(
+        coursePaperHrefForArtifact(reading.id),
+        `${reading.id}: a registered reading must render, not redirect`,
+      ).toBeNull();
+    }
+    expect(coursePaperHrefForArtifact("not-an-artifact-id")).toBeNull();
   });
 });

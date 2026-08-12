@@ -65,7 +65,9 @@ export function addAnchors(tree: Root): void {
 }
 
 function classListOf(node: Element): string[] {
-  const className = node.properties?.className;
+  // typed as unknown: @types/hast >=3.0.5 types className as array-only,
+  // but we stay defensive against string-valued class lists at runtime
+  const className: unknown = node.properties?.className;
   if (Array.isArray(className)) return className.map(String);
   if (typeof className === "string") return className.split(/\s+/);
   return [];

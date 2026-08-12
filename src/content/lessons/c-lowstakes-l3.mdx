@@ -158,6 +158,8 @@ To oversimplify this discussion a little: the AI’s action given some input can
 
 Overall, whether off-policy data helps a lot may be sensitive to our ability to generate examples of high performance that (from the perspective of the model) is sufficiently hard to distinguish from actions that the model could plausibly generate itself. It’s also somewhat sensitive to whether the model is able to reason through the basic strategic considerations within a forward pass. It’s important to note as well that in a possible future with neuralese reasoning models, we may completely lose the affordance of fine-tuning on off-policy data.
 
+<ExerciseSequence ids={["c-lowstakes-l3-recall-two-types", "c-lowstakes-l3-recall-costly-tasks", "c-lowstakes-l3-recall-on-off-policy"]} label="Quick recall" />
+
 ## Quick takes on other countermeasures
 
 There exist ideas for additional countermeasures besides using off-policy from humans or trusted AIs. They are discussed in detail in [Ryan Greenblatt’s post](https://www.alignmentforum.org/posts/abmzgwfJA9acBoFEX/notes-on-countermeasures-for-exploration-hacking-aka#How_does_it_generalize_when_the_model_messes_up_); we will share some quick takes on them in this section.
@@ -193,6 +195,8 @@ We think this will depend a lot on the tasks of interest as well as how skilled 
 It should also be noted that some of these problems might be tackled shortly for capabilities reasons, since related issues appear when training reasoning models. In particular, suppose you have a supervised dataset (e.g. a set of math competition problems and correct solutions). In cases where the models start out very bad at these problems, on-policy RL will be very inefficient at training the models. It might be much more performant to instead produce reasoning traces that produce the correct answer using your access to the correct answer. This has the issue that the produced reasoning traces might not be a good representation of the reasoning process the model should actually follow, but it has the advantage that the reasoning traces will actually demonstrate success. Another approach that could both drive capabilities progress and partially tackle exploration hacking is [curriculum learning](https://en.wikipedia.org/wiki/Curriculum_learning). That being said, if capabilities progress on reasoning models eventually leads into a neuralese regime, we expect exploration hacking to become much harder to solve.
 
 We’re excited about [more](https://www.alignmentforum.org/posts/wwshEdNhwwT4r9RQN/7-tractable-directions-in-ai-control#Further_studying_exploration_hacking) [empirical research](https://arxiv.org/abs/2405.19550) into exploration hacking, because it seems important and difficult, yet tractable.
+
+<ExerciseSequence ids={["c-lowstakes-l3-recall-ensembling", "c-lowstakes-l3-recall-detection-pessimism"]} label="Quick recall" />
 
 [^1]: By “misaligned AIs”, we mean “AIs that appear to be aligned in training but eventually take long-term power-seeking misaligned actions”. Note that “appear to be aligned” is usually conflated with “perform well according to our training objectives”, but this post is precisely about the worry that AIs that appear to be aligned might *not* perform well.
 

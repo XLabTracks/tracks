@@ -1,4 +1,4 @@
-import { PrismaClient } from "@prisma/client";
+import { Prisma, PrismaClient } from "@prisma/client";
 import { PrismaPg } from "@prisma/adapter-pg";
 import { getCloudflareContext } from "@opennextjs/cloudflare";
 import { after } from "next/server";
@@ -42,6 +42,21 @@ export const getDb = cache(() => {
   }
   return client;
 });
+
+/**
+ * A unique-constraint violation: the row a create raced on already exists.
+ * Prisma surfaces it as P2002 — including on the driver-adapter path this
+ * app always uses (adapter-pg maps Postgres 23505 to P2002). Callers that
+ * race on a unique key catch this and converge on the existing row (or
+ * retry with a fresh value); anything else must propagate — swallowing a
+ * connection/validation error would report "saved" while nothing persisted.
+ */
+export function isUniqueViolation(error: unknown): boolean {
+  return (
+    error instanceof Prisma.PrismaClientKnownRequestError &&
+    error.code === "P2002"
+  );
+}
 
 // Call sites import `prisma` as a value; delegate property access to the
 // per-request client so they don't have to care about request scoping.

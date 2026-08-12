@@ -4,6 +4,8 @@ import { useState, useTransition } from "react";
 import { Check, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { MathText } from "./math-text";
+import { runExerciseAction } from "./run-exercise-action";
 import { gradeExercise } from "@/app/actions/exercises";
 import type { GradeResult, PublicChoiceExercise } from "@/lib/content/exercise-view";
 import { EXERCISE_TYPE_LABELS } from "@/lib/content/types";
@@ -18,7 +20,7 @@ export function ChoiceExerciseCard({
       <p className="text-muted-foreground mb-1 text-xs font-medium tracking-wide uppercase">
         {EXERCISE_TYPE_LABELS[exercise.type]}
       </p>
-      <p className="font-medium">{exercise.prompt}</p>
+      <p className="font-medium"><MathText text={exercise.prompt} /></p>
       <ChoiceExerciseBody exercise={exercise} />
     </aside>
   );
@@ -56,8 +58,13 @@ export function ChoiceExerciseBody({
 
   const submit = () =>
     startTransition(async () => {
-      setResult(await gradeExercise(exercise.id, selected));
-      onGraded?.();
+      await runExerciseAction(() => gradeExercise(exercise.id, selected), {
+        onSuccess: (result) => {
+          setResult(result);
+          onGraded?.();
+        },
+        errorMessage: "Couldn't check your answer. Please try again.",
+      });
     });
 
   const reset = () => {
@@ -102,7 +109,7 @@ export function ChoiceExerciseBody({
                   {graded && !isCorrect && isSelected && <X className="size-3" aria-hidden />}
                 </span>
                 <span className={cn(exercise.monospaceOptions && "font-mono text-sm whitespace-pre-wrap")}>
-                  {option.label}
+                  {exercise.monospaceOptions ? option.label : <MathText text={option.label} />}
                 </span>
               </button>
             </li>
@@ -114,12 +121,12 @@ export function ChoiceExerciseBody({
         <div
           className={cn(
             "mt-4 rounded-lg p-3 text-sm",
-            result.correct ? "bg-emerald-500/10 text-emerald-700" : "bg-muted",
+            result.correct ? "bg-emerald-500/10 text-emerald-700 dark:text-[#7FA682]" : "bg-muted",
           )}
         >
           <p className="font-medium">{result.correct ? "Correct" : "Not quite"}</p>
           {result.explanation && (
-            <p className="text-muted-foreground mt-1">{result.explanation}</p>
+            <p className="text-muted-foreground mt-1"><MathText text={result.explanation} /></p>
           )}
         </div>
       )}

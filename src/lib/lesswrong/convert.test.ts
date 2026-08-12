@@ -202,6 +202,18 @@ describe("convertPostHtml — spoilers, embeds, images", () => {
     expect(spoiled?.sentences).toEqual(["The twist.", "It was earth."]);
   });
 
+  it("never fetches images inside dropped embeds", async () => {
+    // A permanently dead thumbnail URL inside an oembed figure must not be
+    // able to block the build forever (fetchImage returning null throws).
+    const { html, assets } = await convertPostHtml(
+      '<figure class="media"><div data-oembed-url="https://www.youtube.com/watch?v=abc">' +
+        '<img src="https://img.example/thumb.jpg"></div></figure><p>Body.</p>',
+      { ref, fetchImage: async () => null },
+    );
+    expect(html).toContain('class="lw-embed"');
+    expect(assets.size).toBe(0);
+  });
+
   it("drops iframe-widget embeds with a warning and links oembeds", async () => {
     const { html, warnings } = await convert(
       '<div class="iframe-widget" data-iframe-widget-id="4yT6nep2AJEBirRL4"></div>' +
@@ -264,6 +276,46 @@ describe("convertPostHtml — spoilers, embeds, images", () => {
       detail: "http://x.example/old.png",
       count: 1,
     });
+  });
+});
+
+describe("convertPostHtml — in-post fragment links", () => {
+  it("repoints links at stashed author heading ids", async () => {
+    const { html } = await convert(
+      '<p><a href="#Section_One">jump</a></p><h1 id="Section_One">Section One</h1><p>Body.</p>',
+    );
+    expect(html).toContain('href="#lw-sec-section-one"');
+    expect(html).not.toContain("data-author-id");
+  });
+
+  it("salvages the client slug of a heading that ended in whitespace", async () => {
+    // LessWrong mints ToC anchors client-side (every non-alphanumeric char
+    // of the heading text becomes "_"), so a heading with trailing
+    // whitespace yields fragments like "#Generic_commitment_problems_" that
+    // neither a stashed id nor the trimmed-text slug explains directly.
+    const { html, warnings } = await convert(
+      '<p><a href="#Generic_commitment_problems_">see below</a></p>' +
+        "<h1>Generic commitment problems </h1><p>Body.</p>",
+    );
+    expect(html).toContain('href="#lw-sec-generic-commitment-problems"');
+    expect(warnings).toEqual([]);
+  });
+
+  it("surfaces unresolvable fragments instead of shipping them silently", async () => {
+    const { html, warnings } = await convert(
+      '<p><a href="#No_Such_Target">dead</a></p><h1>Real</h1><p>Body.</p>',
+    );
+    expect(html).toContain('href="#No_Such_Target"');
+    expect(warnings).toContainEqual({
+      code: "anchor-unresolved",
+      detail: "#No_Such_Target",
+      count: 1,
+    });
+  });
+
+  it("does not flag converter-minted footnote links as unresolved", async () => {
+    const { warnings } = await convert(LEGACY_FOOTNOTES + MODERN_FOOTNOTES);
+    expect(warnings.filter((w) => w.code.startsWith("anchor-"))).toEqual([]);
   });
 });
 

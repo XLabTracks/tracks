@@ -7,6 +7,7 @@ import {
   getAssessmentForModule,
   getItemProgressContentIds,
   getTrackById,
+  getTrackContentIds,
   getTrackOutline,
   getTrackProgressContentIds,
   itemIdOf,
@@ -53,15 +54,21 @@ export default async function StudentDetailPage({
   const trackData = await Promise.all(
     trackList.map(async (track) => {
       const outline = getTrackOutline(track.slug)!;
-      const contentIds = getTrackProgressContentIds(track.id);
+      // Fetch over ALL trackable ids so optional readings' checkmarks show;
+      // the progress card counts only the required ids.
+      const contentIds = getTrackContentIds(track.id);
+      const requiredIds = getTrackProgressContentIds(track.id);
       // Derive the progress card from the completed set — getTrackProgress
       // would re-run this identical query just to count it.
       const completed = new Set(await getCompletedLessonIds(sid, contentIds));
+      const completedRequired = requiredIds.filter((id) =>
+        completed.has(id),
+      ).length;
       const progress = {
-        completed: completed.size,
-        total: contentIds.length,
-        percent: contentIds.length
-          ? Math.round((completed.size / contentIds.length) * 100)
+        completed: completedRequired,
+        total: requiredIds.length,
+        percent: requiredIds.length
+          ? Math.round((completedRequired / requiredIds.length) * 100)
           : 0,
       };
       const modules = await Promise.all(
@@ -144,6 +151,11 @@ export default async function StudentDetailPage({
                                 aria-hidden
                               />
                             )}
+                            {item.kind === "paper" && item.paper.optional && (
+                              <span className="text-muted-foreground text-xs">
+                                (optional)
+                              </span>
+                            )}
                           </li>
                         );
                       })}
@@ -172,7 +184,7 @@ export default async function StudentDetailPage({
                                   <dt className="text-muted-foreground text-xs font-medium uppercase">
                                     {section.label}
                                   </dt>
-                                  <dd className="whitespace-pre-wrap">{value}</dd>
+                                  <dd className="whitespace-pre-wrap [overflow-wrap:anywhere]">{value}</dd>
                                 </div>
                               );
                             })}

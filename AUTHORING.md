@@ -37,9 +37,9 @@ A few rules that apply throughout:
   duplicate silently shadows the earlier entry (last one wins). Prerequisite
   cycles aren't validated either (a cycle under `hard` enforcement would
   deadlock both modules).
-- Examples below use hypothetical ids (`g-intro`, …). The repo's live reference
-  for every feature is the **Example track** (`ex-content` / `ex-assess` in
-  `curriculum.data.ts` and `papers.data.ts`).
+- Examples below use hypothetical ids (`g-intro`, …); the Control track
+  (`curriculum.data.ts` / `papers.data.ts`) is the repo's live reference —
+  each section below names a live example where one exists.
 
 ---
 
@@ -143,7 +143,7 @@ A "sublesson" is a `Lesson` — the MDX page inside a module. To add one to an
      linked page — never paraphrase or invent it. All data lives inline in the
      props (no registry). Unlike markdown links, a SiteQuote is never
      internalized by MdxLink and never scanned by `npm run readings:build`; it
-     always points at the real external URL. Live example: `ex-content-l1`.
+     always points at the real external URL.
 
 The lesson is now live at `/tracks/<trackSlug>/<moduleSlug>/<itemSlug>` and shows
 in the sidebar + prev/next. A lesson completes when the learner scrolls to its end
@@ -157,7 +157,7 @@ titles are collected at compile time from the rendered MDX
 (`src/lib/mdx/rehype-lesson-sections.mjs`, wired in `next.config.ts` right
 after rehype-slug), so the nav can never drift from the document. Prefer
 plain-text headings — math/code in a heading makes an ugly nav label. See
-lesson `c-game` (Control track) or `ex-content-l2` for live examples.
+lesson `c-regimes-l1` (Control track) for a live example.
 
 **Adding a new module** (a new unit / top-level "lesson" in the track) is the same
 shape one level up: add a `Module` to the `modules` array (`id`, `slug`, `trackId`,
@@ -168,7 +168,7 @@ assessment, add an `Assessment` to `src/content/assessments.data.ts` with
 `moduleId` set to the module, and set the module's `assessmentId` to match — at
 most one assessment per module. An Assessment requires `title`, `format`,
 `prompt`, and (unlike writing exercises) **non-optional** `sections` and `rubric`
-arrays (see `ex-assessment`). Assessments do **not** count toward module
+arrays. Assessments do **not** count toward module
 completion or prerequisite gating — only lessons, papers, and inserted lessons do.
 "Further reading" comes from `src/content/resources.data.ts`: tag resources with
 `topics`, set the module's `furtherReadingTopics` to matching strings
@@ -304,7 +304,7 @@ Reference a term from either surface:
 - **Lesson MDX**: `<Term>example term</Term>` (resolves by display name or
   alias, case-insensitive), `<Term id="another-term">the prose form</Term>`
   (pins the entry when the prose differs), or `<Term id="example-term" />`
-  (renders the display name). Live example: `ex-content-l1`.
+  (renders the display name).
 - **Papers**: the `gloss` edit op wraps a phrase of the paper's own text —
   see §2b.
 
@@ -342,7 +342,12 @@ section panel with scroll-synced highlighting, and `edits` let you **hide** text
 **add** editorial notes, splice **activities** — exercise cards and inline
 lessons — at section ends, between paragraphs, or between sentences, and
 **gloss** phrases of the paper's prose with glossary hover cards (§1c). Papers
-count toward progress exactly like lessons. Footnotes additionally render as margin
+count toward progress exactly like lessons — unless marked `optional: true`,
+which labels the reading "Optional" wherever the module lists it and excludes
+it (inserted lessons included) from module completion, prerequisite
+satisfaction, and progress totals; it stays individually completable, with its
+own checkmark (`c-paper-synchronous-monitors` is the live reference). Footnotes
+additionally render as margin
 **sidenotes** when the viewport has room (readers can toggle this from the
 page header; the in-document footnotes section is always there).
 
@@ -358,6 +363,9 @@ page header; the in-document footnotes section is always there).
                                        // new-style ids only (2007+) — old-style
                                        // slash ids (hep-th/…) are unsupported
      estimatedMinutes: 45,             // optional; fold into module.estimatedMinutes
+     optional: true,                   // optional reading: labelled "Optional";
+                                       // never required for module completion,
+                                       // prerequisites, or progress totals
      edits: [                          // optional, see step 4 and §2b
        {
          op: "activity",
@@ -417,6 +425,9 @@ page header; the in-document footnotes section is always there).
    checkmark lights only when **all** of its units are complete, and module/track
    percentages count each unit. A manual "Mark complete" button is always
    available too (scroll-past completion still works even on the fallback page).
+   An `optional: true` paper's units keep all of this individually — checkmarks
+   light as usual — but are excluded from the module's completion requirement
+   and from module/track percentages.
 
 7. **Rebuild on converter bumps**: each source pins its own converter version
    (`CONVERTER_VERSION` for arXiv; `SUBSTACK_CONVERTER_VERSION` /
@@ -457,7 +468,7 @@ control keyed to **block anchors** and **sentences**:
   math/citations never split a sentence — when in doubt the segmenter merges,
   so trust the `--blocks` output over your own reading.
 
-The four ops, targeting the example paper (`1706.03762v7`; anchors/snippets
+The six ops, targeting the example paper (`1706.03762v7`; anchors/snippets
 below are real — see `papers.data.ts` for the live hide/add/activity config;
 the gloss op below is shape-only, its glossary entry is not in the registry):
 
@@ -486,6 +497,17 @@ edits: [
     after: { anchor: "b-0004", s: 1, snippet: "Recurrent neural networks," },
     items: [{ kind: "exercise", id: "true-false" }] },
 
+  // SECTION — splice a first-class numbered subsection after a block. The
+  // heading renders as a native <hN> (ax-secnum number span + `id`), its
+  // number/level DERIVED from the parent section in the toc; the parent's
+  // later sibling subsections shift their DISPLAYED numbers by +1 (body AND
+  // nav), while every id/anchor/text stays verbatim. Follow it with
+  // `plain: true` adds + activities on the same block to fill the subsection.
+  { op: "section",
+    after: { anchor: "b-0005", snippet: "Recurrent models typically factor" },
+    id: "your-subsection-id",
+    title: "Your Subsection Title" },
+
   // GLOSS: wrap a phrase of the paper's own text in a glossary hover-card
   // trigger (§1c). First occurrence inside the target sentence (or whole
   // block when s is omitted); the phrase must be plain running text — a
@@ -509,7 +531,7 @@ edits: [
   // localStorage-only.
   { op: "gate",
     after: { sectionEnd: "ax-sec-background" },
-    id: "ex-gate-architecture",
+    id: "g-gate-architecture",
     prompt: "Before reading on: come up with **three ways** to…" },
 ]
 ```
@@ -534,24 +556,24 @@ edits: [
   toggle works only in the in-document footnotes section.
 - **Block add** → a navy left-accented card with an uppercase "NOTE" label
   (the op's optional `label` field overrides that eyebrow text, e.g.
-  `label: "Source"` — block/section targets only).
+  `label: "Source"` — block/section targets only). `plain: true` opts the add
+  OUT of that card, rendering the markdown as native paper body (for prose that
+  belongs to an inserted `section`, where the card/left-accent would read as a
+  "note" rather than the paper's own text).
   **Inline add** → a navy-tinted span with a dashed underline, appended right
   after the target sentence, tooltipped "Added by the course". Editorial voice
   is always navy, distinct from the paper's red links.
+- **Section** → a native-looking numbered subsection heading (same `ax-secnum`
+  markup and typography as the paper's own subsections), with a matching
+  sidebar entry nested under its parent, in document order. The number/level
+  are derived from the toc; inserting one shifts the DISPLAYED numbers of the
+  parent's later sibling subsections up by one (e.g. inserting §3.2.1 renumbers
+  the paper's own 3.2.1→3.2.2, 3.2.2→3.2.3) in both body and nav — ids,
+  anchors, and text stay verbatim, and nothing outside the parent renumbers.
 - **Gloss** → the phrase gets the glossary's dotted underline; hover (with
   intent delay) or tap opens the definition card. Wrapping never changes the
   block's text, so anchors, sentence indices, and snippets are unaffected —
   glossing inside hidden text is allowed (the trigger reveals with it).
-- **Mid-paragraph activity** → the paragraph ends after the target sentence
-  (keeping any inline adds attached to it), the card renders, and the remainder
-  continues as a normal-looking paragraph. Splitting at the last sentence just
-  places the card after the block.
-- **Placement details**: multiple ops on one target render in edits-array
-  order (same-sentence activities merge into one card stack); activities
-  targeting blocks nested in containers (theorem/proof boxes, figures, the
-  abstract/references landmark sections) never split the container — the card
-  renders after the whole box; a block-level add after a list item renders
-  inside that item (valid list markup).
 - **Gate** → a navy-accented "Before you read on" card with the prompt and a
   button; everything below (to the END of the paper's body — later gates nest
   inside earlier ones) stays out of the DOM until tapped. A bare gate (no
@@ -563,11 +585,23 @@ edits: [
   the visible text keep live targets and margin sidenotes work from the
   start. Gated papers scroll-complete only once every gate has been opened
   (the manual complete button always works).
-- **Sidebar**: activity entries appear in the "In this paper" panel under their
-  containing section, in reading order; hide/add edits produce no panel
-  entries. Gate edits produce no entries either, but rows whose targets sit
-  below a still-closed gate render locked (dimmed, lock icon) — clicking one
-  scrolls to the blocking gate's card instead of a hash that lands nowhere.
+- **Mid-paragraph activity** → the paragraph ends after the target sentence
+  (keeping any inline adds attached to it), the card renders, and the remainder
+  continues as a normal-looking paragraph. Splitting at the last sentence just
+  places the card after the block.
+- **Placement details**: multiple ops on one target render in edits-array
+  order (same-sentence activities merge into one card stack); activities
+  targeting blocks nested in containers (theorem/proof boxes, figures, the
+  abstract/references landmark sections) never split the container — the card
+  renders after the whole box; a block-level add after a list item renders
+  inside that item (valid list markup).
+- **Sidebar**: activity entries and inserted `section` headings appear in the
+  "In this paper" panel under their containing section, in reading order (an
+  inserted section's own activities nest under it); hide/add edits produce no
+  panel entries. Gate edits produce no entries either, but rows whose targets
+  sit below a still-closed gate render locked (dimmed, lock icon) — clicking
+  one scrolls to the blocking gate's card instead of a hash that lands
+  nowhere.
 
 **Add markdown capabilities**: CommonMark (emphasis, links, inline code, lists,
 fences, blockquotes) plus `$…$` / `$$…$$` KaTeX math — rendered with *vanilla*
@@ -602,8 +636,8 @@ A Substack post is the same first-class `Paper` item with a different
 `source` kind — it renders full-page through the **same edit engine, sidebar
 panel, and completion mechanics** as an arXiv paper (§2 steps 2, 5, 6 and all
 of §2b apply verbatim; step 7 too, keyed to `SUBSTACK_CONVERTER_VERSION` and
-`npm run substack:build`). The live reference is `ex-paper-substack` in the
-Example track. What differs:
+`npm run substack:build`). The live reference is `c-efficient-tradeoffs`
+(Control track, module 2). What differs:
 
 1. **Source** is the public post URL (works for `*.substack.com` and custom
    domains — use the URL the post canonicalizes to):
@@ -654,7 +688,7 @@ Example track. What differs:
 Same `Paper` mechanics again (§2 steps 2, 5, 6 and all of §2b apply
 verbatim; step 7 too, keyed to `LESSWRONG_CONVERTER_VERSION` and
 `npm run lesswrong:build`; the workflow mirrors §2c). The live reference is
-`ex-paper-lesswrong` in the Example track. What differs:
+`c-case-for-control` (Control track, module 1). What differs:
 
 1. **Source** is the public post URL on either site (both serve the same
    posts; the host you give is where links point):
@@ -816,7 +850,7 @@ touching any track.)
      title: "AI Evaluations",
      shortTitle: "Evals",                 // optional, for compact UI
      description: "Lorem ipsum…",
-     kind: "technical",                   // "foundations" | "technical" | "governance" | "example"
+     kind: "technical",                   // "foundations" | "technical" | "governance"
      moduleIds: ["e-intro"],              // ordered module IDs (added next)
      prerequisiteEnforcement: "soft",     // "soft" (warn) | "hard" (lock)
      estimatedHours: 12,                  // optional
@@ -846,3 +880,39 @@ modules.
 > `src/lib/content/types.ts` (currently foundations/technical/governance/example).
 > To add another, extend that union **and** add a label to the `KIND_LABEL` map in
 > `src/app/tracks/page.tsx`.
+
+## 6. Renaming or removing content (slugs & ids)
+
+URLs and content ids are load-bearing outside the content graph: slugs live in
+bookmarks and syllabi, and **string content ids key persisted user rows with no
+FKs** (`LessonProgress.lessonId`, `Submission`, `ReviewCard.contentId`,
+`Highlight.contentId`). Renaming or deleting content silently strands both
+unless you reconcile them. Checklist:
+
+1. **Redirects for every changed URL** — add `redirects()` entries in
+   `next.config.ts` (307, matching the existing convention). If a slug is
+   **reused** for different content (e.g. a module renumbering shifts
+   `module-5` onto another module), a module-level redirect is impossible —
+   enumerate **item-level** redirects for every old URL (pull the old slugs
+   from git history: `git show <old-commit>:src/content/curriculum.data.ts`).
+   Prefer never reusing a live slug: skip the number or use a descriptive slug.
+2. **Remap persisted rows on id changes** — when content survives under a new
+   id, ship a `db/migrations/` SQL file remapping old→new id for progress,
+   review cards, and highlights. Precedents:
+   `20260723140000_remap_plm_walkthrough_progress.sql` (progress) and
+   `20260804120000_remap_promoted_reading_highlights.sql` (highlights, incl.
+   unique-key collision handling). Apply manually before deploying the rename
+   (see CLAUDE.md → Database & deploy).
+3. **Decide for rows on removed content** — removal strands rows invisibly.
+   Either remap them to the surviving surface (same-artifact papers/readings
+   transfer anchors unchanged) or record the deliberate stranding in a
+   decision-record migration
+   (`20260810155200_note_stranded_highlights_on_removed_papers.sql` is the
+   template). Review cards self-heal (orphans are skipped, not deleted).
+4. **Sweep the other registries** — `featuredExercises`
+   (`src/app/exercises/featured.ts`), classroom `trackId` scopes, resource
+   links in `resources.data.ts`, cross-references in lesson MDX / paper edits,
+   and `npm run readings:build` if paper/reading links changed.
+5. **Run the suite** — `npm run test` (content.test.ts and readings.test.ts
+   catch dangling references; nothing catches missing redirects or stranded
+   rows — that's this checklist).

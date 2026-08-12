@@ -13,8 +13,12 @@ describe("demo registry", () => {
         "function",
       );
       expect(demo.title.trim(), `${key}: empty title`).not.toBe("");
-      // Optional in the type, but the gallery reads both — require them.
-      expect(demo.description?.trim(), `${key}: empty description`).toBeTruthy();
+      // Description is optional (the frame header and gallery card both
+      // guard on it — some demos deliberately omit the subtitle), but when
+      // present it must not be blank.
+      if (demo.description !== undefined) {
+        expect(demo.description.trim(), `${key}: blank description`).not.toBe("");
+      }
       expect(demo.tags?.length, `${key}: no tags`).toBeGreaterThan(0);
     }
   });
@@ -24,6 +28,12 @@ describe("demo registry", () => {
       expect(getDemo(demo.id)).toBe(demo);
     }
     expect(getDemo("not-a-demo")).toBeUndefined();
+    // The registry is a plain object literal: Object.prototype members must
+    // not leak through as phantom demos (they'd defeat the demo routes'
+    // notFound() guards and this file's embed tripwire below).
+    for (const id of ["constructor", "__proto__", "toString", "hasOwnProperty"]) {
+      expect(getDemo(id), `prototype key "${id}" leaked`).toBeUndefined();
+    }
   });
 
   // Resolution tripwire for lesson embeds (same spirit as glossary.test.ts's

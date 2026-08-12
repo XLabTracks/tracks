@@ -41,7 +41,7 @@ It is up for debate as to how strong or catastrophically impactful a TUAI is, an
 
 ## The main arguments against control
 
-{/* TODO: migrate to Cloudflare Stream — replace the self-hosted mp4 with the Stream embed URL; <Video> auto-detects cloudflarestream.com (provider="stream"). Self-hosted interim, re-encoded to <25 MiB. */}
+{/* Served from the `videos` R2 bucket (wrangler.jsonc binding) by src/app/videos/[key]/route.ts — upload new files with `npx wrangler r2 object put videos/<name> --file <file> --remote`. */}
 
 <Video provider="file" src="/videos/what_can_go_wrong.mp4" title="Ryan Greenblatt & Thomas Larsen - A Technical Safety Roadmap" />
 

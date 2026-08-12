@@ -1,0 +1,64 @@
+-- Decision record for Highlight rows stranded by this week's paper
+-- removals. Highlights (with learner notes up to 2000 chars) key on string
+-- content ids and have been live since 2026-07-29 (20260729120000). These
+-- papers were highlightable surfaces after that date and were then removed
+-- from the content graph, so their rows are unreachable on every surface:
+--
+--   * 'c-paper-adaptive-deployment'   removed 296233f (2026-08-05)
+--   * 'c-paper-sabotage-evals'        removed 884897a (2026-07-31, mod-6
+--                                     branch, merged via 19d767a)
+--   * 'c-paper-cooperating-unaligned' removed 60a56e6 (2026-08-06)
+--   * 'ex-paper-attention', 'ex-paper-substack', 'ex-paper-lesswrong',
+--     'ex-paper-anti-scheming'        removed with the example track,
+--                                     1434372 (2026-08-10)
+--
+-- The rows are deliberately PRESERVED, not deleted — notes are learner
+-- writing, and the 20260804120000 remap set the precedent that note text is
+-- never destroyed. No remap is possible today:
+--
+--   * The adaptive-deployment and sabotage-evals arXiv papers have no
+--     successor surface (arXiv documents are never /readings items), and
+--     the example-track papers' content is gone entirely. Their rows stay
+--     parked under the dead ids.
+--   * The cooperating post was consolidated into the deals paper
+--     (c-paper-deals-schemers), but that is a DIFFERENT artifact — block
+--     anchors and sentence offsets do not transfer, so remapping there
+--     would attach highlights to the wrong text. The post's own artifact
+--     (src/content/lesswrong/alignmentforum__oLzoHA9ZtF2ygYgx4.json) is
+--     still committed but has no /readings registry entry, and no live
+--     scannable link produces one (the lesson attribution links are the
+--     literal-<a> opt-out; the satiation paper's link is a fragment link,
+--     skipped by design; the taxonomy paper links the Substack-platform
+--     version, a different anchor universe). DECISION 2026-08-10: the
+--     stranding is accepted as permanent — rows stay parked under the dead
+--     id, preserved per the no-note-destruction policy. Reproduction
+--     permission for the post IS recorded in reading-permissions.json, so
+--     if a lesson or paper ever links it in scannable form, the reading
+--     registers under 'reading-alignmentforum__oLzoHA9ZtF2ygYgx4' and a
+--     rescue remap (20260804120000 in reverse, with its note-preserving
+--     user-span collision policy) becomes possible again.
+--
+-- The same churn also strands highlight rows on four LINKED READINGS.
+-- linked-readings.json regenerates from links in live course papers and
+-- lesson markdown (one layer deep by design); the removed papers above were
+-- the last live sources linking these posts, so the 2026-08-10
+-- readings:build regeneration dropped their /readings pages:
+--
+--   * 'reading-lesswrong__GCqoks9eZDfpL8L3Q'  (prevent collusion when
+--                                              using untrusted models)
+--   * 'reading-lesswrong__uMQ3cqWDPHhjtiesc'  (AGI Ruin: A List of
+--                                              Lethalities)
+--   * 'reading-lesswrong__zthDPAjh9w6Ytbeks'  (Deceptive Alignment)
+--   * 'reading-lesswrong__zxmzBTwKkPMxQQcfR'
+--
+-- Same policy: rows preserved, parked under the dead reading ids. Their
+-- committed artifacts remain on disk, so if a live paper or lesson links
+-- any of these posts again, the reading re-registers under the SAME id and
+-- the parked rows come back to life with no migration at all.
+--
+-- LessonProgress and Submission orphans from the same removals need no
+-- action: every consumer scopes its queries by current-graph ids, and the
+-- 20260723140000 header already records the keep-orphaned-submissions
+-- policy.
+--
+-- This migration intentionally executes no statements.

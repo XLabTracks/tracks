@@ -3,12 +3,12 @@
  * single self-contained source: `\input`/`\include` spliced in, and the
  * compiled `.bbl` substituted for `\bibliography{...}` (arXiv never runs
  * bibtex — submitters must include the .bbl, so splicing it is exactly what
- * LaTeX itself does at that site). When the .bbl is missing but the .bib is
- * present, a thebibliography is synthesized from the .bib (see bib.ts) so
- * citations still resolve.
+ * LaTeX itself does at that site). When only a `.bib` database is shipped (no
+ * `.bbl`), a `thebibliography` is synthesized from it (see ./bibtex) so
+ * citations still resolve instead of leaking raw keys.
  */
 
-import { parseBib, synthesizeBibliography } from "./bib";
+import { citedKeysInOrder, synthesizeThebibliography } from "./bibtex";
 
 export interface MainTexResult {
   /** Flattened TeX source. */
@@ -24,7 +24,6 @@ const PREFERRED_NAMES = new Set(["main.tex", "ms.tex", "paper.tex", "arxiv.tex"]
 // (?![a-zA-Z]) keeps \include from swallowing \includegraphics.
 const INPUT_RE = /\\(input|include)(?![a-zA-Z])(?:\s*\{([^}]+)\}|\s+([^\s{}%\\]+))/g;
 const BIBLIOGRAPHY_RE = /\\bibliography(?![a-zA-Z])\s*\{[^}]*\}/g;
-const BIBLIOGRAPHY_ARGS_RE = /\\bibliography(?![a-zA-Z])\s*\{([^}]*)\}/g;
 
 export function resolveMainTex(
   files: Map<string, Uint8Array>,
@@ -167,59 +166,90 @@ function spliceBbl(
     : allBbls.length === 1
       ? allBbls[0]
       : null;
-  if (bblPath === null) {
-    const synthesized = synthesizeFromBibFiles(texSource, files);
-    if (synthesized === null) {
-      warnings.push("\\bibliography used but no matching .bbl in archive");
-      return texSource;
-    }
-    warnings.push("no .bbl in archive; references synthesized from .bib");
+  if (bblPath !== null) {
+    const bblContent = decodeTexBytes(files.get(bblPath)!);
     return mapCodeSegments(texSource, (code) =>
-      code.replace(BIBLIOGRAPHY_RE, () => `\n${synthesized}\n`),
+      code.replace(BIBLIOGRAPHY_RE, () => `\n${bblContent}\n`),
     );
   }
-  const bblContent = decodeTexBytes(files.get(bblPath)!);
-  return mapCodeSegments(texSource, (code) =>
-    code.replace(BIBLIOGRAPHY_RE, () => `\n${bblContent}\n`),
-  );
+
+  // No .bbl — machine-generated submissions sometimes ship only the .bib
+  // database. Synthesize a thebibliography from it so \cite keys resolve to
+  // numbered references instead of leaking raw keys.
+  const synthesized = synthesizeFromBib(texSource, files);
+  if (synthesized !== null) {
+    warnings.push("no .bbl in archive; bibliography synthesized from .bib");
+    // Replace the FIRST \bibliography with the synthesized list; drop any
+    // others so multiple \bibliography commands don't duplicate the section.
+    let spliced = false;
+    return mapCodeSegments(texSource, (code) =>
+      code.replace(BIBLIOGRAPHY_RE, () => {
+        if (spliced) return "";
+        spliced = true;
+        return `\n${synthesized}\n`;
+      }),
+    );
+  }
+
+  warnings.push("\\bibliography used but no matching .bbl in archive");
+  return texSource;
 }
 
 /**
- * .bib fallback for spliceBbl: resolve the names in `\bibliography{a,b}`
- * against the archive's .bib files and synthesize a thebibliography
- * environment from their entries. Returns null when nothing resolves.
+ * Build a `thebibliography` from the `.bib` database(s) the source references
+ * (falling back to any `.bib` in the archive), populated with the cited keys
+ * in first-appearance order. Returns null when no usable `.bib`/citation pair
+ * is found.
  */
-function synthesizeFromBibFiles(
+function synthesizeFromBib(
   texSource: string,
   files: Map<string, Uint8Array>,
 ): string | null {
-  const names: string[] = [];
-  mapCodeSegments(texSource, (code) => {
-    for (const m of code.matchAll(BIBLIOGRAPHY_ARGS_RE)) {
-      names.push(...m[1].split(",").map((n) => n.trim()).filter(Boolean));
+  const bibSources: string[] = [];
+  const seen = new Set<string>();
+  const addBib = (path: string | null) => {
+    if (path && !seen.has(path)) {
+      seen.add(path);
+      bibSources.push(decodeTexBytes(files.get(path)!));
     }
-    return code;
-  });
-  const entries = names.flatMap((name) => {
-    const path = resolveBibPath(name, files);
-    return path === null ? [] : parseBib(decodeTexBytes(files.get(path)!));
-  });
-  if (entries.length === 0) return null;
-  return synthesizeBibliography(entries);
+  };
+
+  for (const line of texSource.split("\n")) {
+    const code = splitTexComment(line)[0];
+    for (const m of code.matchAll(/\\bibliography(?![a-zA-Z])\s*\{([^}]*)\}/g)) {
+      for (const base of m[1].split(",")) {
+        const name = base.trim();
+        if (name) addBib(resolveBibPath(name, files));
+      }
+    }
+  }
+  if (bibSources.length === 0) {
+    for (const path of files.keys()) {
+      if (path.toLowerCase().endsWith(".bib")) addBib(path);
+    }
+  }
+  if (bibSources.length === 0) return null;
+
+  const cited = citedKeysInOrder(texSource);
+  if (cited.length === 0) return null;
+  return synthesizeThebibliography(bibSources.join("\n"), cited);
 }
 
-/** Try the name as given, then with .bib appended when it has no extension. */
+/** Resolve a `\bibliography{name}` base to a `.bib` file in the archive. */
 function resolveBibPath(
-  target: string,
+  name: string,
   files: Map<string, Uint8Array>,
 ): string | null {
-  const normalized = target.replace(/^\.\//, "");
-  if (normalized === "") return null;
-  const candidates = normalized.toLowerCase().endsWith(".bib")
-    ? [normalized]
-    : [`${normalized}.bib`, normalized];
-  for (const candidate of candidates) {
-    if (files.has(candidate)) return candidate;
+  const normalized = name.replace(/^\.\//, "");
+  const withExt = normalized.toLowerCase().endsWith(".bib")
+    ? normalized
+    : `${normalized}.bib`;
+  if (files.has(withExt)) return withExt;
+  if (files.has(normalized)) return normalized;
+  // Fall back to matching by basename (e.g. \bibliography{refs} → bib/refs.bib).
+  const wantBase = withExt.split("/").pop();
+  for (const path of files.keys()) {
+    if (path.split("/").pop() === wantBase) return path;
   }
   return null;
 }

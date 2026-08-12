@@ -38,6 +38,7 @@ import {
   buildTheoremReplacements,
   scanTheoremDefs,
 } from "./transforms/theorems";
+import { rewriteCustomListingEnvironments } from "./transforms/verbatim";
 import { lastArgContent, texString } from "./transforms/tex-utils";
 import type { ConversionResult } from "./types";
 import { WarningCollector } from "./warnings";
@@ -64,12 +65,15 @@ export interface ConvertOptions {
  * - anchors are stamped after sanitization so nothing renumbers them.
  */
 export function convertLatexToHtml(
-  texSource: string,
+  rawTexSource: string,
   opts: ConvertOptions,
 ): ConversionResult {
   const warnings = new WarningCollector();
   const usedAssets = new Set<string>();
 
+  // BEFORE parsing: custom listing environments must become grammar-known
+  // verbatim envs, or their code bodies desync the parser (see verbatim.ts).
+  const texSource = rewriteCustomListingEnvironments(rawTexSource);
   const tree = parse(texSource);
 
   const katexTable = collectKatexMacros(texSource, warnings);

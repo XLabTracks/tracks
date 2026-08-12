@@ -1,6 +1,6 @@
 "use client";
 
-import { useDeferredValue, useMemo, useState } from "react";
+import { useDeferredValue, useEffect, useMemo, useState } from "react";
 import {
   DEFAULT_LEVERS,
   type Levers,
@@ -9,7 +9,7 @@ import {
   squash,
   zAudit,
   zDefer,
-  bestResponse,
+  bestResponseValue,
   usefulness,
   attackRate,
 } from "@/lib/control-model";
@@ -38,21 +38,34 @@ const fph = PHf - FM.top - FM.bottom;
 
 const r1 = (x: number) => Number(x.toFixed(1));
 
+/**
+ * How long (b, q) must hold still before the frontier is re-swept. The frontier
+ * costs ~21 best-response searches (~30ms); everything else on the panel costs
+ * one (~2ms). Recomputing it on every deferred tick made b and q drag visibly
+ * choppier than d (which never invalidates the frontier memo) — so it waits for
+ * a pause instead, and the drag itself only pays for the live parts.
+ */
+const FRONTIER_DEBOUNCE_MS = 120;
+
 export function ControlDashboardDemo() {
   const [b, setB] = useState(0.02);
-  const [d, setD] = useState(0.1);
+  // The defer slider controls the band WIDTH (d - b), not the total d, so
+  // raising the audit budget shifts the band instead of eating it (per Arya:
+  // the two levers must not be visually coupled).
+  const [dw, setDw] = useState(0.08);
   const [q, setQ] = useState(DEFAULT_LEVERS.q);
 
   // Sliders, labels, and the (cheap) band geometry track state urgently; the
-  // model — one best-response search per tick plus a 21-point frontier sweep
-  // (~20x best-response) on b/q changes — recomputes against deferred values,
-  // so dragging the audit budget never blocks the main thread mid-drag.
+  // model recomputes against deferred values, so dragging never blocks the main
+  // thread mid-drag. Per deferred tick that is now ONE best-response search
+  // (~2ms) plus the densities (~0.2ms); the 21-point frontier sweep is
+  // debounced out of the tick entirely (see below).
   const bSlow = useDeferredValue(b);
-  const dSlow = useDeferredValue(d);
+  const dwSlow = useDeferredValue(dw);
   const qSlow = useDeferredValue(q);
 
-  const dEff = Math.max(b, d);
-  const dEffSlow = Math.max(bSlow, dSlow);
+  const dEff = b + dw;
+  const dEffSlow = bSlow + dwSlow;
   const levers: Levers = useMemo(
     () => ({
       ...DEFAULT_LEVERS,
@@ -64,31 +77,53 @@ export function ControlDashboardDemo() {
     [bSlow, dEffSlow, qSlow],
   );
 
-  const br = useMemo(() => bestResponse(levers), [levers]);
+  // The current protocol: the one search every tick genuinely needs. Grid-free —
+  // this panel never draws the (gStar, sigma) heatmap.
+  const br = useMemo(() => bestResponseValue(levers), [levers]);
 
-  // Frontier for the current (b, q): sweep the defer band. Memoized on the
-  // deferred b/q only, so dragging the defer slider stays smooth.
+  // Frontier input, debounced: it follows (bSlow, qSlow) only once they have
+  // held still for FRONTIER_DEBOUNCE_MS. Kept as two primitives rather than one
+  // object so a no-op settle can't change identity and re-trigger the sweep.
+  const [fb, setFb] = useState(bSlow);
+  const [fq, setFq] = useState(qSlow);
+  useEffect(() => {
+    if (fb === bSlow && fq === qSlow) return;
+    const t = setTimeout(() => {
+      setFb(bSlow);
+      setFq(qSlow);
+    }, FRONTIER_DEBOUNCE_MS);
+    return () => clearTimeout(t);
+  }, [bSlow, qSlow, fb, fq]);
+  const frontierStale = fb !== bSlow || fq !== qSlow;
+
+  // Frontier for the settled (b, q): sweep the defer-band width 0..50%, the
+  // slider's reachable range. 21 best-response searches, so it must not run on
+  // every tick — dragging d never invalidates it at all (d isn't a dep).
   const frontier = useMemo(() => {
     const pts: { u: number; s: number }[] = [];
     for (let i = 0; i <= 20; i++) {
-      const dd = bSlow + ((0.5 - bSlow) * i) / 20;
+      const dd = fb + (0.5 * i) / 20;
       const lev: Levers = {
         ...DEFAULT_LEVERS,
-        b: bSlow,
+        b: fb,
         d: dd,
-        q: qSlow,
+        q: fq,
         red: { mode: "best", gStar: 0, sigma: 0 },
       };
-      pts.push({ u: usefulness(lev), s: 1 - bestResponse(lev).result.pRedWin });
+      pts.push({ u: usefulness(lev), s: 1 - bestResponseValue(lev).result.pRedWin });
     }
     return pts;
-  }, [bSlow, qSlow]);
+  }, [fb, fq]);
 
   // Distributions
   const innocent = useMemo(() => scoreDensity(0, 200, 1), []);
+  // Deferred q, like the rest of the model path: the density must stay
+  // coherent with br (whose red strategy best-responds to qSlow), and the
+  // 200-bin mixture is model-scale work that belongs on deferred ticks, not
+  // urgent slider renders.
   const attack = useMemo(
-    () => attackMixtureDensity(q, br.red.sigma, br.red.gStar, 200, levers.attackSd),
-    [q, br.red.sigma, br.red.gStar, levers.attackSd],
+    () => attackMixtureDensity(qSlow, br.red.sigma, br.red.gStar, 200, levers.attackSd),
+    [qSlow, br.red.sigma, br.red.gStar, levers.attackSd],
   );
   const auditX = squash(zAudit(b));
   const deferX = squash(zDefer(dEff));
@@ -112,8 +147,8 @@ export function ControlDashboardDemo() {
     <div className="space-y-4">
       <div className="grid gap-3 sm:grid-cols-3">
         <LeverSlider label="Audit budget (b)" value={`${(b * 100).toFixed(1)}%`} min={5} max={100} raw={b * 1000} onChange={(v) => setB(v / 1000)} aria="Audit budget" />
-        <LeverSlider label="Defer band (d)" value={`${(dEff * 100).toFixed(0)}%`} min={5} max={500} raw={d * 1000} onChange={(v) => setD(v / 1000)} aria="Defer band" />
-        <LeverSlider label="Monitor quality (AUROC)" value={q.toFixed(2)} min={800} max={990} raw={q * 1000} onChange={(v) => setQ(v / 1000)} aria="Monitor quality" />
+        <LeverSlider label="Defer band (d)" value={`${(dw * 100).toFixed(1)}%`} min={0} max={500} raw={dw * 1000} onChange={(v) => setDw(v / 1000)} aria="Defer band" />
+        <LeverSlider label="Monitor quality (AUC)" value={q.toFixed(2)} min={800} max={990} raw={q * 1000} onChange={(v) => setQ(v / 1000)} aria="Monitor quality" />
       </div>
 
       <div className="flex flex-col gap-4 sm:flex-row">
@@ -136,7 +171,17 @@ export function ControlDashboardDemo() {
           <p className="text-muted-foreground mb-1 text-center text-xs font-medium">Safety / usefulness frontier</p>
           <svg viewBox={`0 0 ${PWf} ${PHf}`} className="w-full" role="img" aria-label="Safety versus usefulness frontier">
             <rect x={FM.left} y={FM.top} width={fpw} height={fph} fill="none" stroke="var(--border)" strokeWidth={1} opacity={0.5} />
-            <path d={frontierPath} fill="none" stroke="var(--chart-3)" strokeWidth={1.5} />
+            {/* Dimmed while the sweep is catching up with a b/q drag, so the
+                ringed current protocol sitting off the curve reads as "the
+                frontier hasn't been redrawn yet" rather than as a bug. */}
+            <path
+              d={frontierPath}
+              fill="none"
+              stroke="var(--chart-3)"
+              strokeWidth={1.5}
+              opacity={frontierStale ? 0.35 : 1}
+              style={{ transition: "opacity 160ms ease-out" }}
+            />
             <circle cx={r1(fx(curUseful))} cy={r1(fy(curSafety))} r={3.5} fill="var(--chart-3)" stroke="var(--card)" strokeWidth={1.25} />
             <text x={FM.left - 4} y={FM.top + 8} fontSize={8} fill="var(--muted-foreground)" textAnchor="end">100</text>
             <text x={FM.left - 4} y={FM.top + fph} fontSize={8} fill="var(--muted-foreground)" textAnchor="end">0</text>

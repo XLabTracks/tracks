@@ -107,7 +107,9 @@ export function stripAuthorIdsAndReservedClasses(
  * on, the old id rides through sanitize as `data-author-id`; after
  * normalizeHeadings mints the real ids this pass maps old → new, rewrites
  * matching hrefs to local fragments, warns (`anchor-dropped`) for targets
- * that no longer have an id (non-heading anchors), and strips every stash.
+ * that no longer have an id (non-heading anchors), warns
+ * (`anchor-unresolved`) for fragments matching nothing at all — a dead
+ * in-post link must never ship silently — and strips every stash.
  */
 export function rewriteAuthorFragmentLinks(
   tree: Root,
@@ -132,9 +134,11 @@ export function rewriteAuthorFragmentLinks(
   const newIdByAuthorId = new Map<string, string>();
   const newIdBySlug = new Map<string, string>();
   const stashedNodes = new Map<string, Element>();
+  const liveIds = new Set<string>();
   visit(tree, "element", (node: Element) => {
     const newId = node.properties?.id;
     const hasNewId = typeof newId === "string" && newId !== "";
+    if (hasNewId) liveIds.add(newId as string);
     const authorId = node.properties?.dataAuthorId;
     if (typeof authorId === "string" && authorId !== "") {
       if (!stashedNodes.has(authorId)) stashedNodes.set(authorId, node);
@@ -180,14 +184,31 @@ export function rewriteAuthorFragmentLinks(
       newIdBySlug.get(fragment) ??
       newIdBySlug.get(decoded) ??
       resolveByMinting(fragment) ??
-      resolveByMinting(decoded);
+      resolveByMinting(decoded) ??
+      // The platform slug of a heading that ended in whitespace carries
+      // trailing underscores the trimmed-text slug never has (a live
+      // LessWrong drift) — salvage it before declaring the link dead.
+      newIdBySlug.get(stripTrailingUnderscores(fragment)) ??
+      newIdBySlug.get(stripTrailingUnderscores(decoded));
     if (newId) {
       node.properties!.href = `#${newId}`;
+    } else if (liveIds.has(fragment) || liveIds.has(decoded)) {
+      // Already points at a live id (e.g. a converter-minted footnote
+      // marker) — a working link, nothing to rewrite or report.
     } else if (stashedNodes.has(fragment) || stashedNodes.has(decoded)) {
       // The target existed but isn't a heading anymore — no id to point at.
       warnings.add("anchor-dropped", `#${fragment}`);
+    } else {
+      // No stash, no minted id, no slug: a dead in-post link (usually dead
+      // on the source site too). Kept verbatim, but surfaced — inside the
+      // reader a silently dead link reads as our bug.
+      warnings.add("anchor-unresolved", `#${fragment}`);
     }
   });
+}
+
+function stripTrailingUnderscores(fragment: string): string {
+  return fragment.replace(/_+$/, "");
 }
 
 function safeDecode(fragment: string): string {
@@ -536,7 +557,7 @@ export function hasClass(node: Element, cls: string): boolean {
 }
 
 export function classListOf(node: Element): string[] {
-  const className = node.properties?.className;
+  const className: unknown = node.properties?.className;
   if (Array.isArray(className)) return className.map(String);
   if (typeof className === "string") return className.split(/\s+/);
   return [];

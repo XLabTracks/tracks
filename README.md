@@ -2,7 +2,7 @@
 
 An AI-safety learning platform by XLab — a Khan Academy–style home that
 de-centralizes the messy AI-safety onboarding pipeline. It offers structured
-**tracks** (Control, Governance, and Verification), interactive demos, real
+**tracks** (Control and Verification), interactive demos, real
 writing practice, and a curated resource hub.
 
 ## Features

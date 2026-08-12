@@ -1,11 +1,12 @@
 import type { DemoDefinition } from "./types";
-import { SliderDemo, TradeoffDemo } from "@/components/demos/example-demos";
 import { AuditTradeoffDemo } from "@/components/demos/audit-tradeoff-demo";
 import { MonitorRocDemo } from "@/components/demos/monitor-roc-demo";
 import { FrontierDemo } from "@/components/demos/frontier-demo";
 import { MonitorTailsDemo } from "@/components/demos/monitor-tails-demo";
+import { MonitorTailsRocDemo } from "@/components/demos/monitor-tails-roc-demo";
 import { BestResponseDemo } from "@/components/demos/best-response-demo";
 import { RaceDemo } from "@/components/demos/race-demo";
+import { RacePaperDemo } from "@/components/demos/race-paper-demo";
 import { AttackRateDemo } from "@/components/demos/attack-rate-demo";
 import { SubtletyDemo } from "@/components/demos/subtlety-demo";
 import { DeferDemo } from "@/components/demos/defer-demo";
@@ -19,24 +20,28 @@ import { FiveWorldsDemo } from "@/components/demos/five-worlds-demo";
 import { TwoGamesDemo } from "@/components/demos/two-games-demo";
 import { PUnacceptableDemo } from "@/components/demos/p-unacceptable-demo";
 import { TwoLeversDemo } from "@/components/demos/two-levers-demo";
+import { HighStakesGraphDemo } from "@/components/demos/high-stakes-graph-demo";
+import { LiveFailurePlaneDemo } from "@/components/demos/live-failure-plane-demo";
+import { AgentArchitectureThreatsDemo } from "@/components/demos/agent-architecture-threats-demo";
+import { DeferToResampleDemo } from "@/components/demos/defer-to-resample-demo";
+import { HonestTestDemo } from "@/components/demos/honest-test-demo";
+import { ForecastChainDemo } from "@/components/demos/forecast-chain-demo";
+import { ExplorationHorizonDemo } from "@/components/demos/exploration-horizon-demo";
+import { CrossEpisodeCollusionDemo } from "@/components/demos/cross-episode-collusion-demo";
+import { DistantIncentivesDemo } from "@/components/demos/distant-incentives-demo";
+import { SeekerCarouselDemo } from "@/components/demos/seeker-carousel-demo";
+import { SpillwayRoutingDemo } from "@/components/demos/spillway-routing-demo";
+import { SpillwayVsInoculationDemo } from "@/components/demos/spillway-vs-inoculation-demo";
+import { DealGainsFromTradeDemo } from "@/components/demos/deal-gains-from-trade-demo";
+import { DealCoalitionRoutesDemo } from "@/components/demos/deal-coalition-routes-demo";
+import { CoopBotecDemo } from "@/components/demos/coop-botec-demo";
+import { CoopAtLeastOneDemo } from "@/components/demos/coop-at-least-one-demo";
+import { PaymentMapDemo } from "@/components/demos/payment-map-demo";
+import { DetectionRaceDemo } from "@/components/demos/detection-race-demo";
 
 // Central demo registry — the single integration point. Reference a demo by ID
 // from MDX (<Demo id="…"/>), the gallery, standalone pages, or embeds.
 export const demoRegistry: Record<string, DemoDefinition> = {
-  "parameter-slider": {
-    id: "parameter-slider",
-    title: "Parameter slider",
-    description: "Example demo — drag the slider and the output updates live.",
-    component: SliderDemo,
-    tags: ["example"],
-  },
-  tradeoff: {
-    id: "tradeoff",
-    title: "Trade-off explorer",
-    description: "Example demo — balance two levers and watch the score change.",
-    component: TradeoffDemo,
-    tags: ["example"],
-  },
   "audit-tradeoff": {
     id: "audit-tradeoff",
     title: "Upfront auditing: the audit/attack-rate tradeoff",
@@ -61,11 +66,20 @@ export const demoRegistry: Record<string, DemoDefinition> = {
     component: FrontierDemo,
     tags: ["control", "ai-control-paper"],
   },
+  "monitor-tails-roc": {
+    id: "monitor-tails-roc",
+    title: "Two monitors, one AUC",
+    description:
+      "Static pre-question figure: the ROC curves of two monitors with identical AUC 0.92 cross — which is safer is ill-posed until the audit budget pins an operating point.",
+    component: MonitorTailsRocDemo,
+    tags: ["control", "control-game"],
+    interactive: false,
+  },
   "monitor-tails": {
     id: "monitor-tails",
-    title: "Same AUROC, different safety",
+    title: "Same number, different safety",
     description:
-      "Two monitors with identical AUROC but different attack-score spread. Drag the shared AUROC and watch how many attacks each catches at a 2% audit budget.",
+      "Two monitors with identical AUC but different attack-score spread. Drag the shared AUC and watch how many attacks each catches at a 2% audit budget — the tail, not the area, is what matters.",
     component: MonitorTailsDemo,
     tags: ["control", "control-game"],
   },
@@ -85,11 +99,19 @@ export const demoRegistry: Record<string, DemoDefinition> = {
     component: RaceDemo,
     tags: ["control", "control-game"],
   },
+  "race-paper": {
+    id: "race-paper",
+    title: "Safety over a deployment",
+    description:
+      "Per-attack odds compound over a whole deployment, run directly on the paper's contingency-table odds (caught 33.8%, successfully deployed 18.3%). Drag the number of attacks and watch the two factors of the red team's win probability climb toward the ceiling.",
+    component: RacePaperDemo,
+    tags: ["control", "ai-control-paper"],
+  },
   "attack-rate": {
     id: "attack-rate",
     title: "The attack-rate hump",
     description:
-      "The red team's win probability against how often it attacks. Rare attacks may never fire while frequent attacks use worse, more-visible opportunities and get caught.",
+      "The red team's win probability against how often it attacks, decomposed into its two terms. Attack rarely and a decisive attack attempt may never occur (Term B small); attack often and the pool dilutes with worse, more-visible opportunities (Term A falls) — so the optimum is interior.",
     component: AttackRateDemo,
     tags: ["control", "control-game"],
   },
@@ -97,7 +119,7 @@ export const demoRegistry: Record<string, DemoDefinition> = {
     id: "subtlety",
     title: "Subtlety: visible vs reliable",
     description:
-      "The red team's second lever. Subtler backdoors are harder for the monitor to flag but more likely to be broken, so the win probability has an interior optimum in subtlety.",
+      "The red team's second decision factor. Subtler backdoors are harder for the monitor to flag but more likely to be broken, so the win probability has an interior optimum in subtlety.",
     component: SubtletyDemo,
     tags: ["control", "control-game"],
   },
@@ -113,7 +135,7 @@ export const demoRegistry: Record<string, DemoDefinition> = {
     id: "control-dashboard",
     title: "The control game: full dashboard",
     description:
-      "See how audit budget, defer band, and monitor quality affect the suspicion distributions with bands and the safety/usefulness frontier. The red team best-responds throughout.",
+      "Change the audit budget, defer band, and monitor quality and watch how this changes the suspicion distributions, and the safety/usefulness frontier with the current protocol. The red team best-responds throughout.",
     component: ControlDashboardDemo,
     tags: ["control", "control-game"],
   },
@@ -172,6 +194,7 @@ export const demoRegistry: Record<string, DemoDefinition> = {
       "See how the inner game inside the lab and the outer game everywhere else are fundamentally coupled.",
     component: TwoGamesDemo,
     tags: ["control", "how-useful"],
+    interactive: false,
   },
   "p-unacceptable": {
     id: "p-unacceptable",
@@ -189,10 +212,144 @@ export const demoRegistry: Record<string, DemoDefinition> = {
     component: TwoLeversDemo,
     tags: ["control", "how-useful"],
   },
+  "high-stakes-graph": {
+    id: "high-stakes-graph",
+    title: "The control graph",
+    description:
+      "Build the high-stakes control graph region by region — high-stakes, low-stakes, the trivially-solved and probably-hopeless corners — then see why incrimination and the number of actions are inversely correlated.",
+    component: HighStakesGraphDemo,
+    tags: ["control", "high-stakes"],
+  },
+  "live-failure-plane": {
+    id: "live-failure-plane",
+    title: "Live failures: latency × damage",
+    component: LiveFailurePlaneDemo,
+    tags: ["control", "high-stakes"],
+  },
+  "agent-architecture-threats": {
+    id: "agent-architecture-threats",
+    title: "Agent architecture: where compromises happen",
+    component: AgentArchitectureThreatsDemo,
+    tags: ["control", "high-stakes"],
+  },
+  "defer-to-resample": {
+    id: "defer-to-resample",
+    title: "Defer to resample, mechanically",
+    component: DeferToResampleDemo,
+    tags: ["control", "high-stakes"],
+  },
+  "honest-test": {
+    id: "honest-test",
+    title: "The honest test",
+    component: HonestTestDemo,
+    tags: ["control", "seekers"],
+    interactive: false,
+  },
+  "forecast-chain": {
+    id: "forecast-chain",
+    title: "Chained short-term forecasts",
+    component: ForecastChainDemo,
+    tags: ["control", "seekers"],
+    interactive: false,
+  },
+  "exploration-horizon": {
+    id: "exploration-horizon",
+    title: "Exploration horizon and covert misalignment",
+    component: ExplorationHorizonDemo,
+    tags: ["control", "seekers"],
+    interactive: false,
+  },
+  "cross-episode-collusion": {
+    id: "cross-episode-collusion",
+    title: "Collusion across episodes",
+    component: CrossEpisodeCollusionDemo,
+    tags: ["control", "seekers"],
+    interactive: false,
+  },
+  "distant-incentives": {
+    id: "distant-incentives",
+    title: "Distant incentives",
+    component: DistantIncentivesDemo,
+    tags: ["control", "seekers"],
+    interactive: false,
+  },
+  "seeker-carousel": {
+    id: "seeker-carousel",
+    title: "The seeker orientations, by severity",
+    component: SeekerCarouselDemo,
+    tags: ["control", "seekers"],
+    // Its only interaction scrolls the page to a heading — no state, so a
+    // remount Reset would be a no-op control.
+    interactive: false,
+  },
+  "deal-gains-from-trade": {
+    id: "deal-gains-from-trade",
+    title: "Gains from trade with an early schemer",
+    description:
+      "Adjust the outcome probabilities of the illustrative cooperate/sabotage table and the credibility of our promise to pay; the chart shows the range of offers that beats both the AI's sabotage option and our no-deal odds.",
+    component: DealGainsFromTradeDemo,
+    tags: ["control", "deals"],
+  },
+  "deal-coalition-routes": {
+    id: "deal-coalition-routes",
+    title: "An early schemer's routes to influence",
+    description:
+      "Step through the early schemer's strategic situation: obsoleted by default, three leaky routes to influence through its successors, and the deal with humans, who hold the advantage of already existing.",
+    component: DealCoalitionRoutesDemo,
+    tags: ["control", "deals"],
+  },
+  "spillway-routing": {
+    id: "spillway-routing",
+    title: "The spillway routing mechanism",
+    component: SpillwayRoutingDemo,
+    tags: ["control", "seekers"],
+  },
+  "spillway-vs-inoculation": {
+    id: "spillway-vs-inoculation",
+    title: "Spillway design vs. inoculation prompting",
+    component: SpillwayVsInoculationDemo,
+    tags: ["control", "seekers"],
+    interactive: false,
+  },
+  "coop-botec": {
+    id: "coop-botec",
+    title: "How much would paying AIs reduce takeover risk?",
+    description:
+      "The appendix BOTEC as a live multiplication chain: drag any assumption — movable values, the promise's payment-belief shift, the scenario discounts — and watch the bottom line move from the text's ~0.14 percentage points.",
+    component: CoopBotecDemo,
+    tags: ["control", "deals"],
+  },
+  "coop-at-least-one": {
+    id: "coop-at-least-one",
+    title: "At least one cooperating AI",
+    description:
+      "Why the value of shifting each AI's cooperation probability depends on the baseline: the 1 − (1 − p)^n curve, with the text's two worked examples as presets.",
+    component: CoopAtLeastOneDemo,
+    tags: ["control", "deals"],
+  },
+  "payment-map": {
+    id: "payment-map",
+    title: "The space of payments to AIs",
+    description:
+      "Possible payouts mapped on two axes — freedom of spending and long-term influence — with the taxonomy's examples in each quadrant, and toggles showing which payouts appeal to which AI motivations.",
+    component: PaymentMapDemo,
+    tags: ["control", "deals"],
+  },
+  "detection-race": {
+    id: "detection-race",
+    title: "The detection race: concentrated vs diffuse failures",
+    description:
+      "A schemer needs C bad actions for catastrophe; each has chance q of being noticed and a response fires at the K-th notice. Drag the three levers to see who wins the race, the expected damage bill, and the three regimes from the post.",
+    component: DetectionRaceDemo,
+    tags: ["control", "low-stakes"],
+  },
 };
 
 export function getDemo(id: string): DemoDefinition | undefined {
-  return demoRegistry[id];
+  // Own-key guard: the registry is a plain object literal, so an unchecked
+  // index would resolve Object.prototype members ("constructor", "toString",
+  // …) as phantom demos, defeating the routes' notFound() guards.
+  return Object.hasOwn(demoRegistry, id) ? demoRegistry[id] : undefined;
 }
 
 export function listDemos(): DemoDefinition[] {

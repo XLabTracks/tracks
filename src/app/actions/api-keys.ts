@@ -16,10 +16,30 @@ import {
 const PROVIDER = "openrouter";
 
 export type SaveKeyResult =
-  | { ok: true; last4: string }
+  | { ok: true; last4: string; warning?: string }
   | { ok: false; error: string };
 
-type KeyCheck = { ok: true; key: string } | { ok: false; error: string };
+type KeyCheck =
+  | { ok: true; key: string; warning?: string }
+  | { ok: false; error: string };
+
+// A valid key with no spendable balance: OpenRouter's /key endpoint returns
+// is_free_tier (the account has never bought credits) and limit_remaining
+// (this key's remaining cap; null = uncapped). Either signals that grading —
+// which bills a paid model — will 402, so we warn at save time instead of
+// letting it fail opaquely mid-grade.
+function balanceWarning(data: {
+  is_free_tier?: boolean;
+  limit_remaining?: number | null;
+}): string | undefined {
+  if (data.limit_remaining != null && data.limit_remaining <= 0) {
+    return "This key's OpenRouter spending limit is used up — raise the cap or add credits, or grading with it will fail.";
+  }
+  if (data.is_free_tier) {
+    return "This OpenRouter account has no credits yet. Grading uses a paid model, so add credits at openrouter.ai/settings/credits or it will fail.";
+  }
+  return undefined;
+}
 
 // Shared shape + live-verification gate for every stored OpenRouter key
 // (user or classroom): a typo'd or revoked key fails here rather than at
@@ -55,7 +75,19 @@ async function checkOpenRouterKey(rawKey: string): Promise<KeyCheck> {
       error: `OpenRouter could not verify the key (${response.status}). Try again.`,
     };
   }
-  return { ok: true, key };
+  // The key is valid; inspect its balance so an unfunded key warns now rather
+  // than 402-ing at grade time. A non-JSON/unexpected body is non-fatal — the
+  // key still saves, we just skip the hint.
+  let warning: string | undefined;
+  try {
+    const body = (await response.json()) as {
+      data?: { is_free_tier?: boolean; limit_remaining?: number | null };
+    };
+    if (body.data) warning = balanceWarning(body.data);
+  } catch {
+    // ignore — balance hint is best-effort
+  }
+  return { ok: true, key, warning };
 }
 
 /**
@@ -81,7 +113,7 @@ export async function saveOpenRouterKey(rawKey: string): Promise<SaveKeyResult> 
     create: { userId: user.id, provider: PROVIDER, ciphertext, last4 },
     update: { ciphertext, last4 },
   });
-  return { ok: true, last4 };
+  return { ok: true, last4, warning: checked.warning };
 }
 
 export async function removeOpenRouterKey(): Promise<
@@ -143,7 +175,7 @@ export async function saveClassroomOpenRouterKey(
     create: { classroomId, provider: PROVIDER, ciphertext, last4 },
     update: { ciphertext, last4 },
   });
-  return { ok: true, last4 };
+  return { ok: true, last4, warning: checked.warning };
 }
 
 export async function removeClassroomOpenRouterKey(

@@ -10,6 +10,14 @@ export type GraderCallResult =
   | { ok: true; content: string }
   | { ok: false; error: string };
 
+type ChatCompletionBody = {
+  error?: { message?: string };
+  choices?: Array<{
+    finish_reason?: string;
+    message?: { content?: string | null };
+  }>;
+};
+
 export async function callGrader(
   model: string,
   system: string,
@@ -49,15 +57,27 @@ export async function callGrader(
     };
   }
 
-  const data = (await response.json()) as {
-    choices?: Array<{
-      finish_reason?: string;
-      message?: { content?: string | null };
-    }>;
-  };
+  let data: ChatCompletionBody;
+  try {
+    data = (await response.json()) as ChatCompletionBody;
+  } catch {
+    // Never throw past the GraderCallResult contract: a 200 with a non-JSON
+    // or truncated body gets the same retryable error path as other failures.
+    return {
+      ok: false,
+      error: "The grading service returned an unreadable response. Try again.",
+    };
+  }
   const choice = data.choices?.[0];
   const content = choice?.message?.content;
   if (!content) {
+    // OpenRouter can report upstream errors in a 200 body.
+    if (typeof data.error?.message === "string" && data.error.message) {
+      return {
+        ok: false,
+        error: `Grading service error: ${data.error.message}`,
+      };
+    }
     return {
       ok: false,
       error:

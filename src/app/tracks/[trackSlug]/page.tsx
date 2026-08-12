@@ -50,11 +50,14 @@ export default async function TrackOverviewPage({
 
   const user = await getCurrentUser();
   // getTrackCompletionSet is a request-cache hit from the track layout; only
-  // last-viewed adds a query. Progress counts are derived in memory.
+  // last-viewed adds a query. Progress counts are derived in memory. cache()
+  // memoizes a rejection past the layout's try/catch, so a failed read
+  // rejects here too — degrade like the layout does: fail open, rendering
+  // the overview without progress rather than crashing.
   const [completedSet, lastViewedId] = user
     ? await Promise.all([
-        getTrackCompletionSet(user.id, track.id),
-        getLastViewedContentId(user.id, track.id),
+        getTrackCompletionSet(user.id, track.id).catch(() => new Set<string>()),
+        getLastViewedContentId(user.id, track.id).catch(() => null),
       ])
     : [new Set<string>(), null];
   const trackContentIds = getTrackProgressContentIds(track.id);
@@ -80,7 +83,7 @@ export default async function TrackOverviewPage({
   return (
     <div className="max-w-5xl px-4 py-8 lg:px-8">
       <Breadcrumbs
-        items={[{ label: "Tracks", href: "/tracks" }, { label: track.title }]}
+        items={[{ label: "Home", href: "/" }, { label: track.title }]}
       />
 
       <header>
@@ -179,6 +182,9 @@ export default async function TrackOverviewPage({
                               className="size-3 shrink-0 opacity-60"
                               aria-hidden
                             />
+                          )}
+                          {item.kind === "paper" && item.paper.optional && (
+                            <span className="text-xs">(optional)</span>
                           )}
                         </li>
                       );

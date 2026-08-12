@@ -21,6 +21,7 @@ import {
   type CommitConstructConstructEntry,
 } from "@/lib/content/exercise-view";
 import { Paragraphs } from "./math-text";
+import { runExerciseAction } from "./run-exercise-action";
 
 const validText = (value: string) => value.trim().length >= 1 && isStorableText(value);
 
@@ -129,20 +130,41 @@ export function CommitConstructCard({
 
   const submitCommit = () =>
     startTransition(async () => {
-      if (persist && choice && confidence) {
-        await saveCommitConstructCommit(exercise.id, choice, confidence, reasoning);
-      }
-      setSubmitted(([, b]) => [true, b]);
-      setFocusReveal(true);
+      await runExerciseAction(
+        async () => {
+          if (persist && choice && confidence) {
+            await saveCommitConstructCommit(
+              exercise.id,
+              choice,
+              confidence,
+              reasoning,
+            );
+          }
+        },
+        {
+          onSuccess: () => {
+            setSubmitted(([, b]) => [true, b]);
+            setFocusReveal(true);
+          },
+        },
+      );
     });
 
   const submitConstruct = () =>
     startTransition(async () => {
-      if (persist) {
-        await saveCommitConstructConstruct(exercise.id, threatModel);
-      }
-      setSubmitted(([a]) => [a, true]);
-      setFocusReveal(true);
+      await runExerciseAction(
+        async () => {
+          if (persist) {
+            await saveCommitConstructConstruct(exercise.id, threatModel);
+          }
+        },
+        {
+          onSuccess: () => {
+            setSubmitted(([a]) => [a, true]);
+            setFocusReveal(true);
+          },
+        },
+      );
     });
 
   const canSubmit =
@@ -309,7 +331,7 @@ export function CommitConstructCard({
                 <p className="text-muted-foreground text-xs font-medium tracking-wide uppercase">
                   Your threat model
                 </p>
-                <blockquote className="border-border mt-1.5 border-l-2 pl-3 whitespace-pre-wrap">
+                <blockquote className="border-border mt-1.5 border-l-2 pl-3 whitespace-pre-wrap [overflow-wrap:anywhere]">
                   {threatModel}
                 </blockquote>
               </div>

@@ -93,8 +93,21 @@ export default async function AssessmentPage({
         <CardContent className="pt-6">
           {user ? (
             <>
+              {/* Keyed on the submission's lifecycle, not its updatedAt
+                  (same rationale as the lesson exercise host in
+                  src/components/mdx/exercise.tsx): submit/reopen must
+                  remount re-seeded from the server row, but autosaves bump
+                  updatedAt too, so keying on it would let any unrelated
+                  refresh remount a mid-edit draft and drop keystrokes typed
+                  since the last completed autosave. The stable "draft" key
+                  also covers the no-row case, so the first autosave creating
+                  the row can't remount either. */}
               <WritingEditor
-                key={submission?.updatedAt.toISOString() ?? "new"}
+                key={
+                  submission?.status === "submitted"
+                    ? `submitted:${submission.updatedAt.toISOString()}`
+                    : "draft"
+                }
                 sections={assessment.sections}
                 rubric={assessment.rubric}
                 minWords={assessment.minWords}

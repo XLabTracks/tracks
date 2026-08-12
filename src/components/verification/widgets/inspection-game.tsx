@@ -130,7 +130,6 @@ export function InspectionGame({ onComplete }: VerificationWidgetProps) {
   const [sweepClose, setSweepClose] = useState<SweepClose>(null);
 
   const [ariaMsg, setAriaMsg] = useState("");
-  const completedRef = useRef(false);
 
   function say(text: string) {
     setAriaMsg(text);
@@ -280,10 +279,9 @@ export function InspectionGame({ onComplete }: VerificationWidgetProps) {
   }
   function enterDebrief() {
     go(5, true);
-    if (!completedRef.current) {
-      completedRef.current = true;
-      onComplete();
-    }
+    // the use-completion hook dedupes, and its rollback on a failed write
+    // lets re-entering the debrief retry
+    onComplete();
     rerender();
   }
 

@@ -236,12 +236,6 @@
     },
     {
       "kind": "lesswrong",
-      "id": "lesswrong__ceBpLHJDdCt3xfEok",
-      "url": "https://www.lesswrong.com/posts/ceBpLHJDdCt3xfEok/ai-catastrophes-and-rogue-deployments",
-      "title": "AI catastrophes and rogue deployments"
-    },
-    {
-      "kind": "lesswrong",
       "id": "lesswrong__d9FJHawgkiMSPjagR",
       "url": "https://www.lesswrong.com/posts/d9FJHawgkiMSPjagR/ai-control-improving-safety-despite-intentional-subversion",
       "title": "AI Control: Improving Safety Despite Intentional Subversion"
@@ -278,21 +272,9 @@
     },
     {
       "kind": "lesswrong",
-      "id": "lesswrong__GCqoks9eZDfpL8L3Q",
-      "url": "https://www.lesswrong.com/posts/GCqoks9eZDfpL8L3Q/how-to-prevent-collusion-when-using-untrusted-models-to",
-      "title": "How to prevent collusion when using untrusted models to monitor each other"
-    },
-    {
-      "kind": "lesswrong",
       "id": "lesswrong__hirhSqvEAq7pdnyPG",
       "url": "https://www.lesswrong.com/posts/hirhSqvEAq7pdnyPG/auditing-failures-vs-concentrated-failures",
       "title": "Auditing failures vs concentrated failures"
-    },
-    {
-      "kind": "lesswrong",
-      "id": "lesswrong__jg3PuE3fYL9jq9zHB",
-      "url": "https://www.lesswrong.com/posts/jg3PuE3fYL9jq9zHB/win-continue-lose-scenarios-and-execute-replace-audit",
-      "title": "Win/continue/lose scenarios and execute/replace/audit protocols"
     },
     {
       "kind": "lesswrong",
@@ -338,6 +320,12 @@
     },
     {
       "kind": "lesswrong",
+      "id": "lesswrong__rf66R4YsrCHgWx9RG",
+      "url": "https://www.lesswrong.com/posts/rf66R4YsrCHgWx9RG/preventing-model-exfiltration-with-upload-limits",
+      "title": "Preventing model exfiltration with upload limits"
+    },
+    {
+      "kind": "lesswrong",
       "id": "lesswrong__rHyPtvfnvWeMv7Lkb",
       "url": "https://www.lesswrong.com/posts/rHyPtvfnvWeMv7Lkb/thoughts-on-the-conservative-assumptions-in-ai-control",
       "title": "Thoughts on the conservative assumptions in AI control"
@@ -359,12 +347,6 @@
       "id": "lesswrong__TTFsKxQThrqgWeXYJ",
       "url": "https://www.lesswrong.com/posts/TTFsKxQThrqgWeXYJ/how-might-we-safely-pass-the-buck-to-ai",
       "title": "How might we safely pass the buck to AI?"
-    },
-    {
-      "kind": "lesswrong",
-      "id": "lesswrong__uMQ3cqWDPHhjtiesc",
-      "url": "https://www.lesswrong.com/posts/uMQ3cqWDPHhjtiesc/agi-ruin-a-list-of-lethalities",
-      "title": "AGI Ruin: A List of Lethalities"
     },
     {
       "kind": "lesswrong",
@@ -401,18 +383,6 @@
       "id": "lesswrong__ZAsJv7xijKTfZkMtr",
       "url": "https://www.lesswrong.com/posts/ZAsJv7xijKTfZkMtr/sleeper-agents-training-deceptive-llms-that-persist-through",
       "title": "Sleeper Agents: Training Deceptive LLMs that Persist Through Safety Training"
-    },
-    {
-      "kind": "lesswrong",
-      "id": "lesswrong__zthDPAjh9w6Ytbeks",
-      "url": "https://www.lesswrong.com/posts/zthDPAjh9w6Ytbeks/deceptive-alignment",
-      "title": "Deceptive Alignment"
-    },
-    {
-      "kind": "lesswrong",
-      "id": "lesswrong__zxmzBTwKkPMxQQcfR",
-      "url": "https://www.lesswrong.com/posts/zxmzBTwKkPMxQQcfR/let-s-use-ai-to-harden-human-defenses-against-ai",
-      "title": "Let’s use AI to harden human defenses against AI manipulation"
     }
   ]
 }

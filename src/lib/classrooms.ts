@@ -3,6 +3,7 @@ import { prisma } from "@/lib/db";
 import {
   getAssessmentForModule,
   getModulesForTrack,
+  getTrackContentIds,
   getTrackProgressContentIds,
   tracks,
 } from "@/lib/content";
@@ -66,20 +67,23 @@ export async function getClassroomRoster(
   const userIds = members.map((m) => m.userId);
 
   const scopeTrackIds = trackId ? [trackId] : tracks.map((t) => t.id);
-  const scopeContentIds = scopeTrackIds.flatMap((id) =>
-    getTrackProgressContentIds(id),
+  // Query over ALL trackable ids so activity on an optional reading still
+  // counts as lastActive; completed/total count only the required ids.
+  const scopeContentIds = scopeTrackIds.flatMap((id) => getTrackContentIds(id));
+  const requiredContentIds = new Set(
+    scopeTrackIds.flatMap((id) => getTrackProgressContentIds(id)),
   );
   const scopeAssessmentIds = scopeTrackIds.flatMap((id) =>
     getModulesForTrack(id)
       .map((m) => getAssessmentForModule(m.id)?.id)
       .filter((x): x is string => Boolean(x)),
   );
-  const total = scopeContentIds.length;
+  const total = requiredContentIds.size;
 
   const [progress, submissions] = await Promise.all([
     prisma.lessonProgress.findMany({
       where: { userId: { in: userIds }, lessonId: { in: scopeContentIds } },
-      select: { userId: true, status: true, lastViewedAt: true },
+      select: { userId: true, lessonId: true, status: true, lastViewedAt: true },
     }),
     prisma.submission.findMany({
       where: {
@@ -95,7 +99,7 @@ export async function getClassroomRoster(
   const completedByUser = new Map<string, number>();
   const lastActiveByUser = new Map<string, Date>();
   for (const row of progress) {
-    if (row.status === "completed") {
+    if (row.status === "completed" && requiredContentIds.has(row.lessonId)) {
       completedByUser.set(row.userId, (completedByUser.get(row.userId) ?? 0) + 1);
     }
     const prev = lastActiveByUser.get(row.userId);

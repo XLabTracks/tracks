@@ -3,8 +3,9 @@ import { attachMacroArgs } from "@unified-latex/unified-latex-util-arguments";
 import { htmlLike } from "@unified-latex/unified-latex-util-html-like";
 import { match } from "@unified-latex/unified-latex-util-match";
 import { visit } from "@unified-latex/unified-latex-util-visit";
+import { readTcbOption, stripUnresolvedRefParentheticals } from "./macros";
 import type { TheoremDef } from "./theorems";
-import { envName, rawText, texString } from "./tex-utils";
+import { envName, plainText, rawText, texString } from "./tex-utils";
 
 type EnvReplacement = (node: Ast.Environment) => Ast.Node;
 
@@ -86,7 +87,8 @@ function descriptionReplacement(env: Ast.Environment): Ast.Node {
 
 /**
  * Peel ONE leading [...] option list of any length (mdframed option lists run
- * to a dozen key=value pairs), returning its raw text. Mutates `content`.
+ * to a dozen key=value pairs), returning its raw text — groups included, so
+ * braced option values (title={…, …}) survive. Mutates `content`.
  */
 function peelBracketOptions(content: Ast.Node[]): string {
   while (
@@ -102,13 +104,26 @@ function peelBracketOptions(content: Ast.Node[]): string {
   for (let i = 0; i < content.length && i < 200; i++) {
     const node = content[i];
     if (node.type === "string" && node.content.includes("]")) {
-      const consumed = content.splice(0, i + 1);
-      return consumed
-        .map((n) => ("content" in n && typeof n.content === "string" ? n.content : " "))
-        .join(" ");
+      return rawText(content.splice(0, i + 1));
     }
   }
   return "";
+}
+
+/**
+ * Read the `title=` value from a tcolorbox option list. Braced values may
+ * contain commas (title={Key claim, restated}); bare values run to the next
+ * comma or the closing bracket; a title= nested inside another key's braced
+ * value is not a title. Parsing is shared with the \newtcolorbox path
+ * (readTcbOption in macros.ts) so both render identically.
+ */
+function readTcbTitle(options: string): string | null {
+  const value = readTcbOption(options, "title");
+  if (value == null) return null;
+  const title = stripUnresolvedRefParentheticals(
+    plainText([texString(value)]),
+  );
+  return title || null;
 }
 
 /** Peel leading groups/brackets that are layout args (widths, placement). */
@@ -250,6 +265,33 @@ export function buildMiscEnvReplacements(
     });
   };
 
+  // tcolorbox[options]: colored callout boxes (tcolorbox package). The
+  // option list (enhanced, colframe=…, colback=…, width=…) is long and
+  // custom-color-valued — peel it fully and render the mdframed box style;
+  // the colors are paper-local definitions we can't resolve anyway. A
+  // title=… option is the box's heading, though: render it as the same
+  // chip \newtcolorbox uses get (buildTcolorbox in macros.ts).
+  const tcolorbox: EnvReplacement = (env) => {
+    const content = [...env.content];
+    const title = readTcbTitle(peelBracketOptions(content));
+    return htmlLike({
+      tag: "div",
+      attributes: { className: "ax-mdframed" },
+      content: [
+        ...(title
+          ? [
+              htmlLike({
+                tag: "div",
+                attributes: { className: "ax-box-title" },
+                content: [texString(title)],
+              }),
+            ]
+          : []),
+        ...content,
+      ],
+    });
+  };
+
   // multicols{N}: honor the column count with CSS columns.
   const multicols: EnvReplacement = (env) => {
     const content = [...env.content];
@@ -284,6 +326,8 @@ export function buildMiscEnvReplacements(
   return {
     description: descriptionReplacement,
     mdframed,
+    tcolorbox,
+    "tcolorbox*": tcolorbox,
     minipage,
     subfigure,
     "subfigure*": subfigure,

@@ -31,6 +31,59 @@ const nextConfig: NextConfig = {
         destination: "/tracks/control/low-stakes-control/capability-elicitation-guided",
         permanent: false,
       },
+      {
+        // The paper item next to that walkthrough got the same rename
+        // (c-paper-password-locked kept its id; only the slug changed).
+        source: "/tracks/control/low-stakes-control/password-locked-models-paper",
+        destination: "/tracks/control/low-stakes-control/capability-elicitation-paper",
+        permanent: false,
+      },
+      {
+        // The no-sandbagging lesson (c-lowstakes-l4) was cut from the module,
+        // but the same Carlsmith post is readable in the standalone viewer —
+        // send old bookmarks there instead of a 404.
+        source: "/tracks/control/low-stakes-control/no-sandbagging-on-checkable-tasks",
+        destination: "/readings/alignmentforum__h7QETH7GMk9HcMnHH",
+        permanent: false,
+      },
+      {
+        // These two papers were removed outright with no in-app successor —
+        // land old bookmarks on the module page rather than a 404.
+        source:
+          "/tracks/control/low-stakes-control/:slug(adaptive-deployment-paper|sabotage-evaluations-paper)",
+        destination: "/tracks/control/low-stakes-control",
+        permanent: false,
+      },
+      // The Control modules were renumbered when the placeholder module 4
+      // was removed (020807f): High-stakes control moved module-5 → module-4
+      // and Beyond scheming moved module-6 → module-5. Because module-5 is
+      // live again for a different module, the old high-stakes item URLs
+      // must be matched item-by-item — the two modules' item slugs are
+      // disjoint, so none of these shadows a current module-5 page. A bare
+      // /tracks/control/module-5 bookmark is ambiguous (it was High-stakes
+      // control, it now serves Beyond scheming) and deliberately gets no
+      // redirect.
+      {
+        source:
+          "/tracks/control/module-5/:slug(high-stakes-control-talk|what-is-high-stakes|win-continue-lose|rogue-deployments|rogue-internal-deployments-via-external-apis|systems-architecture|monitoring-and-mitigation|control-monitoring-in-deployments|synchronous-monitors|ctrl-z-resampling|environment-construction|settings-for-high-stakes-control|untrusted-advice-guided|legibility-guided)",
+        destination: "/tracks/control/module-4/:slug",
+        permanent: false,
+      },
+      {
+        // Must precede the module-6 catch-all below: this reading was
+        // consolidated into the deals paper (60a56e6), so its old URL has a
+        // different destination than a straight module rename.
+        source: "/tracks/control/module-6/cooperating-with-unaligned-ais",
+        destination: "/tracks/control/module-5/making-deals-with-early-schemers",
+        permanent: false,
+      },
+      {
+        // Everything else under the retired module-6 slug moved wholesale to
+        // module-5 (item slugs unchanged), including the bare module page.
+        source: "/tracks/control/module-6/:path*",
+        destination: "/tracks/control/module-5/:path*",
+        permanent: false,
+      },
     ];
   },
   async headers() {

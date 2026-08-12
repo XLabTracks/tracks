@@ -9,8 +9,11 @@ import { getTrackProgress } from "@/lib/progress";
 import { Breadcrumbs } from "@/components/layout/breadcrumbs";
 import {
   CopyJoinCode,
+  DeleteClassroomButton,
+  LeaveClassroomButton,
   RegenerateCodeButton,
   RemoveMemberButton,
+  RoleToggleButton,
 } from "@/components/classrooms/classroom-manage";
 import { ClassroomKeySettings } from "@/components/classrooms/classroom-key-settings";
 import { getClassroomKeyStatus } from "@/lib/grader/grading-key";
@@ -82,19 +85,33 @@ export default async function ClassroomPage({
         ) : (
           <p className="text-muted-foreground mt-6 text-sm">
             This classroom spans all tracks. Head to{" "}
-            <Link href="/tracks" className="underline">
-              Tracks
+            <Link href="/" className="underline">
+              the home page
             </Link>{" "}
             to keep learning.
           </p>
         )}
+
+        <div className="mt-8">
+          <LeaveClassroomButton classroomId={classroom.id} />
+        </div>
       </main>
     );
   }
 
   // ---- Instructor view ----
-  const roster = await getClassroomRoster(classroom.memberships, classroom.trackId);
+  // `track` is null-guarded above: a classroom scoped to a since-removed
+  // track (stale trackId) falls back to the all-tracks roster instead of an
+  // empty content-id universe rendering every row as 0/0.
+  const roster = await getClassroomRoster(
+    classroom.memberships,
+    track ? classroom.trackId : null,
+  );
   const students = roster.filter((r) => r.role === "student");
+  const instructors = roster.filter((r) => r.role === "instructor");
+  // A classroom always keeps one instructor; the demote control is hidden
+  // (and the action refuses) while there's only one.
+  const canDemote = instructors.length > 1;
   // Null when key storage is unconfigured server-side — hide the card.
   const keyStatus = await getClassroomKeyStatus(classroom.id);
 
@@ -117,9 +134,47 @@ export default async function ClassroomPage({
             Join code
           </p>
           <CopyJoinCode code={classroom.joinCode} />
-          <RegenerateCodeButton classroomId={classroom.id} />
+          <div className="flex items-center gap-1">
+            <RegenerateCodeButton classroomId={classroom.id} />
+            <DeleteClassroomButton classroomId={classroom.id} name={classroom.name} />
+          </div>
         </div>
       </div>
+
+      {instructors.length > 0 && (
+        <section className="mt-8">
+          <h2 className="text-muted-foreground text-xs font-medium tracking-wide uppercase">
+            Instructors
+          </h2>
+          <ul className="mt-3 flex flex-wrap gap-2">
+            {instructors.map((row) => (
+              <li
+                key={row.userId}
+                className="border-border flex items-center gap-2 rounded-full border py-1 pr-1 pl-2"
+              >
+                <Avatar className="size-6">
+                  <AvatarImage src={row.imageUrl ?? undefined} alt="" />
+                  <AvatarFallback className="text-[0.65rem]">
+                    {(row.name ?? row.email)[0]?.toUpperCase()}
+                  </AvatarFallback>
+                </Avatar>
+                <span className="text-sm font-medium">{row.name ?? row.email}</span>
+                {row.userId === user.id && (
+                  <span className="text-muted-foreground text-xs">(you)</span>
+                )}
+                {canDemote && (
+                  <RoleToggleButton
+                    classroomId={classroom.id}
+                    userId={row.userId}
+                    name={row.name ?? row.email}
+                    role="instructor"
+                  />
+                )}
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
 
       {students.length === 0 ? (
         <p className="text-muted-foreground mt-8">
@@ -184,9 +239,16 @@ export default async function ClassroomPage({
                           <ChevronRight className="size-4" aria-hidden />
                         </Link>
                       </Button>
+                      <RoleToggleButton
+                        classroomId={classroom.id}
+                        userId={row.userId}
+                        name={row.name ?? row.email}
+                        role="student"
+                      />
                       <RemoveMemberButton
                         classroomId={classroom.id}
                         userId={row.userId}
+                        name={row.name ?? row.email}
                       />
                     </div>
                   </td>

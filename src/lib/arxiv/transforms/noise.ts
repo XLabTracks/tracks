@@ -61,6 +61,15 @@ const STRIP_WITH_SIGNATURE: Record<string, string> = {
   // \rule[raise]{width}{height} — invisible strut in table cells; args like
   // {0pt}{2.2ex} otherwise leak as "0pt2.2ex" text.
   rule: "o m m",
+  // \twocolumn[<title block>] (ICML and friends): the optional argument is
+  // the class's front-matter block (\icmltitle, author list, keywords) —
+  // without a signature its brackets and contents leak as body text before
+  // the abstract. Attaching "o" swallows the whole block, matching how
+  // \maketitle front matter papers already start at the abstract.
+  twocolumn: "o",
+  // ICML postamble: \printAffiliationsAndNotice{\icmlEqualContribution} —
+  // renders footnote text about affiliations; meaningless here.
+  printAffiliationsAndNotice: "m",
 };
 
 const STRIP_BARE = new Set([

@@ -444,7 +444,6 @@ export function ChangeTheGame({ onComplete }: VerificationWidgetProps) {
   const [lab, setLab] = useState<LabState>(() => labDefaults());
   const [finalLab, setFinalLab] = useState<LabState | null>(null);
   const [prevPhase, setPrevPhase] = useState(0);
-  const completedRef = useRef(false);
 
   const headingRef = useRef<HTMLHeadingElement>(null);
 
@@ -462,17 +461,19 @@ export function ChangeTheGame({ onComplete }: VerificationWidgetProps) {
     setPhase(i);
   }, []);
 
-  // focus the heading on phase change
+  // focus the heading on phase change (not on mount — focusing on load would
+  // scroll the lesson to the widget and steal keyboard focus)
+  const lastFocusedPhase = useRef(phase);
   useEffect(() => {
+    if (lastFocusedPhase.current === phase) return;
+    lastFocusedPhase.current = phase;
     headingRef.current?.focus();
   }, [phase]);
 
-  // fire completion once, at the debrief
+  // fire completion at the debrief (the use-completion hook dedupes, and its
+  // rollback on a failed write lets re-entering this phase retry)
   useEffect(() => {
-    if (phase === 3 && !completedRef.current) {
-      completedRef.current = true;
-      onComplete();
-    }
+    if (phase === 3) onComplete();
   }, [phase, onComplete]);
 
   function restartAll() {

@@ -1,6 +1,8 @@
 import { describe, expect, it } from "vitest";
 import type { PaperTocEntry } from "@/lib/arxiv/types";
+import type { PaperEdit } from "@/lib/content/types";
 import { buildPaperNav } from "./paper-nav";
+import { planSectionInserts } from "./section-inserts";
 
 const TOC: PaperTocEntry[] = [
   { kind: "abstract", id: "ax-abstract", title: "Abstract", number: "", level: 2, anchor: "b-0001" },
@@ -186,5 +188,101 @@ describe("buildPaperNav", () => {
     expect(
       nav.find((n) => n.kind === "section" && n.id === "ax-references")!.gateIds,
     ).toBeUndefined();
+  });
+});
+
+// `op: "section"` splices a numbered subsection into the paper; buildPaperNav
+// takes the resolved plan as its 4th argument. The renderer (patch-section
+// phase C) emits everything sharing an anchor in edits-array order, so these
+// pin that the nav agrees with the page.
+describe("buildPaperNav with inserted sections", () => {
+  const sectionRow = (nav: ReturnType<typeof buildPaperNav>, id: string) => {
+    const row = nav.find((n) => n.kind === "section" && n.id === id);
+    if (row?.kind !== "section") throw new Error(`no section row for ${id}`);
+    return row;
+  };
+
+  const SECTION_OP: PaperEdit = {
+    op: "section",
+    after: { anchor: "b-0004", snippet: "irrelevant" },
+    id: "xlab-sec-inserted",
+    title: "Inserted",
+  };
+  const ACTIVITY_OP: PaperEdit = {
+    op: "activity",
+    after: { anchor: "b-0004", snippet: "irrelevant" },
+    items: [{ kind: "exercise", id: "x" }],
+  };
+  const navFor = (edits: PaperEdit[], gates?: Parameters<typeof buildPaperNav>[2]) => {
+    const activities = edits.flatMap((edit, editIndex) =>
+      edit.op === "activity"
+        ? [{
+            after: { anchor: "b-0004" },
+            editIndex,
+            items: edit.items.map((item) => ({ ...item, title: "X" })),
+          }]
+        : [],
+    );
+    return buildPaperNav(TOC, activities, gates, planSectionInserts(TOC, edits));
+  };
+
+  it("places the heading in document order, numbered and levelled from its parent", () => {
+    const nav = navFor([SECTION_OP]);
+    expect(ids(nav)).toEqual([
+      "ax-abstract",
+      "ax-sec-a",
+      "xlab-sec-inserted",
+      "ax-sec-a-1",
+      "ax-sec-b",
+      "ax-references",
+    ]);
+    expect(sectionRow(nav, "xlab-sec-inserted")).toMatchObject({
+      number: "1.1",
+      level: 3,
+      title: "Inserted",
+    });
+  });
+
+  it("shifts the displayed number of the parent's later sibling subsections", () => {
+    const nav = navFor([SECTION_OP]);
+    // Alpha One was 1.1; the insert pushes it to 1.2 — id and anchor unchanged.
+    expect(sectionRow(nav, "ax-sec-a-1").number).toBe("1.2");
+    // Nothing outside the parent renumbers.
+    expect(sectionRow(nav, "ax-sec-b").number).toBe("2");
+  });
+
+  it("nests activities authored after the heading one level deeper", () => {
+    const nav = navFor([SECTION_OP, ACTIVITY_OP]);
+    expect(ids(nav).slice(1, 4)).toEqual(["ax-sec-a", "xlab-sec-inserted", "ins-exercise-x"]);
+    expect(nav.find((n) => n.kind === "inserted-exercise")!.level).toBe(4);
+  });
+
+  it("keeps a same-anchor activity authored BEFORE the heading above it, unnested", () => {
+    // The c-paper-ai-control §3.3 shape: a recall card anchored to the
+    // section's last block, then the 3.3.1 heading after it. patch-section
+    // renders card-then-heading, so the nav must not hoist the heading.
+    const nav = navFor([ACTIVITY_OP, SECTION_OP]);
+    expect(ids(nav).slice(1, 4)).toEqual(["ax-sec-a", "ins-exercise-x", "xlab-sec-inserted"]);
+    // It belongs to Alpha's own body (level 2), not to the inserted subsection.
+    expect(nav.find((n) => n.kind === "inserted-exercise")!.level).toBe(3);
+  });
+
+  it("locks an inserted heading that renders below a gate, including a same-anchor one", () => {
+    const above = navFor([SECTION_OP], [{ id: "g", after: { sectionEnd: "ax-abstract" }, editIndex: 0 }]);
+    expect(sectionRow(above, "xlab-sec-inserted").gateIds).toEqual(["g"]);
+
+    // Gate authored first on the SAME anchor: the heading renders behind it,
+    // so its row must lock too (an unlocked row would link to a hash that is
+    // not in the DOM while the gate is closed).
+    const sameAnchor = buildPaperNav(
+      TOC,
+      undefined,
+      [{ id: "g", after: { anchor: "b-0004" }, editIndex: 0 }],
+      planSectionInserts(TOC, [
+        { op: "gate", after: { anchor: "b-0004", snippet: "irrelevant" }, id: "g" },
+        SECTION_OP,
+      ]),
+    );
+    expect(sectionRow(sameAnchor, "xlab-sec-inserted").gateIds).toEqual(["g"]);
   });
 });

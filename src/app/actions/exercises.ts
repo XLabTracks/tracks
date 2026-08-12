@@ -97,7 +97,15 @@ export async function gradeExercise(
 
 /** Shape persisted in `Submission.responseJson` for flowchart exercises. */
 interface FlowchartResponseJson {
-  stages: Record<string, { attempt: FlowchartNode[]; correct: boolean }>;
+  stages: Record<
+    string,
+    {
+      attempt: FlowchartNode[];
+      correct: boolean;
+      /** Accumulated incorrect checks (absent on rows persisted before it). */
+      attempts?: number;
+    }
+  >;
 }
 
 /**
@@ -143,10 +151,25 @@ export async function gradeFlowchartStage(
     const prior = (existing?.responseJson as FlowchartResponseJson | null) ?? {
       stages: {},
     };
-    const stages = {
-      ...prior.stages,
-      [stageId]: { attempt: sanitized, correct },
-    };
+    const priorAttempts = prior.stages[stageId]?.attempts ?? 0;
+    // Drop entries whose stage left the exercise definition (authoring
+    // drift, same resilience as the review-card path): a stale correct
+    // entry would otherwise keep counting toward the score forever — and
+    // solving every current stage after a stage rename would persist a
+    // score above 1.
+    const validStageIds = new Set(exercise.stages.map((s) => s.id));
+    const stages = Object.fromEntries(
+      Object.entries({
+        ...prior.stages,
+        [stageId]: {
+          attempt: sanitized,
+          correct,
+          // Misses accumulate across sessions so the client can restore its
+          // "Show solution" gate after a reload.
+          attempts: correct ? priorAttempts : priorAttempts + 1,
+        },
+      }).filter(([id]) => validStageIds.has(id)),
+    );
     const score =
       Object.values(stages).filter((s) => s.correct).length /
       exercise.stages.length;

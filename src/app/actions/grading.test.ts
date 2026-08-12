@@ -88,14 +88,33 @@ describe("requestTransparencyGrade guards", () => {
     expect(callGrader).not.toHaveBeenCalled();
   });
 
-  it("refuses a regrade inside the cooldown window (no LLM call)", async () => {
+  it("refuses a server-key regrade inside the cooldown window (no LLM call)", async () => {
+    vi.stubEnv("OPENROUTER_API_KEY", "sk-or-real-key");
     prisma.submission.findUnique.mockResolvedValue(
       submittedRow({ feedback: "old report", updatedAt: new Date() }),
     );
     const result = await requestTransparencyGrade("c1", "exercise");
     expect(result.ok).toBe(false);
-    if (!result.ok) expect(result.error).toMatch(/wait a minute/i);
+    if (!result.ok) expect(result.error).toMatch(/wait 30 seconds/i);
     expect(callGrader).not.toHaveBeenCalled();
+  });
+
+  it("does NOT throttle a user-billed key inside the cooldown window", async () => {
+    // A learner paying with their own key is never rate-limited, even on a
+    // just-graded submission — it's their spend, not the site's.
+    prisma.submission.findUnique.mockResolvedValue(
+      submittedRow({ feedback: "old report", updatedAt: new Date() }),
+    );
+    gradingKey.getGraderKeyView.mockResolvedValue({
+      personal: { state: "active", last4: "abcd" },
+      classrooms: [],
+      selected: "user",
+    });
+    userKey.getUserOpenRouterKey.mockResolvedValue("sk-or-own-key");
+    callGrader.mockResolvedValue({ ok: false, error: "upstream down" });
+    await requestTransparencyGrade("c1", "exercise");
+    expect(callGrader).toHaveBeenCalledTimes(1);
+    expect(prisma.submission.count).not.toHaveBeenCalled();
   });
 
   it("allows a regrade once the cooldown has passed", async () => {
@@ -109,7 +128,8 @@ describe("requestTransparencyGrade guards", () => {
     expect(result.ok).toBe(false); // upstream error propagates as-is
   });
 
-  it("enforces the hourly cap (no LLM call)", async () => {
+  it("enforces the hourly cap on the server key (no LLM call)", async () => {
+    vi.stubEnv("OPENROUTER_API_KEY", "sk-or-real-key");
     prisma.submission.findUnique.mockResolvedValue(submittedRow());
     prisma.submission.count.mockResolvedValue(12);
     const result = await requestTransparencyGrade("c1", "exercise");
@@ -158,7 +178,7 @@ describe("requestTransparencyGrade guards", () => {
     const [model, , , apiKey] = callGrader.mock.calls[0];
     expect(apiKey).toBe("sk-or-classroom-key");
     // Classroom spend gets the paid default, same as a user-supplied key.
-    expect(model).toBe("moonshotai/kimi-k3");
+    expect(model).toBe("deepseek/deepseek-v4-flash-0731");
   });
 
   it("errors when the selected classroom key is unusable (never bills elsewhere)", async () => {

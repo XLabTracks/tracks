@@ -1,13 +1,10 @@
-import { getPaperArtifact } from "@/lib/arxiv/artifacts";
-import { buildAbsUrl, parseArxivId } from "@/lib/arxiv/id";
-import { getSubstackArtifact } from "@/lib/substack/artifacts";
-import { buildPostUrl, parseSubstackPostUrl } from "@/lib/substack/id";
-import { getLessWrongArtifact } from "@/lib/lesswrong/artifacts";
+import { buildAbsUrl } from "@/lib/arxiv/id";
+import { buildPostUrl } from "@/lib/substack/id";
 import {
   buildPostUrl as buildLwPostUrl,
   displayHost,
-  parseLessWrongPostUrl,
 } from "@/lib/lesswrong/id";
+import { resolvePaperSource } from "@/lib/papers/source-artifact";
 import type { Paper } from "@/lib/content/types";
 
 /**
@@ -21,52 +18,39 @@ export async function paperSourceHeader(source: Paper["source"]): Promise<{
   link: { label: string; href: string } | null;
   hasFootnotes: boolean;
 }> {
-  const hasFootnotesIn = (toc: { kind: string }[] | undefined) =>
-    toc?.some((entry) => entry.kind === "footnotes") ?? false;
-  switch (source.kind) {
-    case "arxiv": {
-      const arxivId = parseArxivId(source.arxivId);
-      const artifact = arxivId ? await getPaperArtifact(arxivId.id) : null;
-      const ready = artifact?.state === "ready" ? artifact.paper : null;
-      return {
-        authors: ready ? formatAuthors(ready.meta.authors) : null,
-        link: arxivId
-          ? { label: `arXiv:${arxivId.id}`, href: buildAbsUrl(arxivId) }
-          : null,
-        hasFootnotes: hasFootnotesIn(ready?.toc),
-      };
-    }
-    case "substack": {
-      const postRef = parseSubstackPostUrl(source.postUrl);
-      const artifact = postRef ? await getSubstackArtifact(postRef.id) : null;
-      const ready = artifact?.state === "ready" ? artifact.post : null;
-      return {
-        authors: ready ? formatAuthors(ready.meta.authors) : null,
-        link: postRef
-          ? {
-              label: postRef.host,
-              href: ready?.meta.canonicalUrl ?? buildPostUrl(postRef),
-            }
-          : null,
-        hasFootnotes: hasFootnotesIn(ready?.toc),
-      };
-    }
-    case "lesswrong": {
-      const postRef = parseLessWrongPostUrl(source.postUrl);
-      const artifact = postRef ? await getLessWrongArtifact(postRef.id) : null;
-      const ready = artifact?.state === "ready" ? artifact.post : null;
-      return {
-        authors: ready ? formatAuthors(ready.meta.authors) : null,
-        link: postRef
-          ? {
-              label: displayHost(postRef),
-              href: ready?.meta.canonicalUrl ?? buildLwPostUrl(postRef),
-            }
-          : null,
-        hasFootnotes: hasFootnotesIn(ready?.toc),
-      };
-    }
+  const resolved = await resolvePaperSource(source);
+  if (resolved.state === "invalid") {
+    return { authors: null, link: null, hasFootnotes: false };
   }
+  const ready = resolved.state === "ready" ? resolved : null;
+  const link = (() => {
+    switch (resolved.kind) {
+      case "arxiv":
+        return {
+          label: `arXiv:${resolved.sourceRef.id}`,
+          href: buildAbsUrl(resolved.sourceRef),
+        };
+      case "substack":
+        return {
+          label: resolved.sourceRef.host,
+          href:
+            (resolved.state === "ready" && resolved.meta.canonicalUrl) ||
+            buildPostUrl(resolved.sourceRef),
+        };
+      case "lesswrong":
+        return {
+          label: displayHost(resolved.sourceRef),
+          href:
+            (resolved.state === "ready" && resolved.meta.canonicalUrl) ||
+            buildLwPostUrl(resolved.sourceRef),
+        };
+    }
+  })();
+  return {
+    authors: ready ? formatAuthors(ready.meta.authors) : null,
+    link,
+    hasFootnotes: ready?.toc.some((entry) => entry.kind === "footnotes") ?? false,
+  };
 }
 
 function formatAuthors(authors: string[] | undefined): string | null {

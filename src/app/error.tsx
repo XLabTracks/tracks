@@ -31,7 +31,7 @@ export default function Error({
       <div className="mt-6 flex gap-3">
         <Button onClick={reset}>Try again</Button>
         <Button asChild variant="outline">
-          <Link href="/tracks">Back to tracks</Link>
+          <Link href="/">Back to home</Link>
         </Button>
       </div>
     </div>

@@ -33,6 +33,9 @@ export function ClassroomKeySettings({
   const [editing, setEditing] = useState(false);
   const [value, setValue] = useState("");
   const [error, setError] = useState<string | null>(null);
+  // Soft heads-up after a successful save (e.g. the key has no OpenRouter
+  // credits, so grading on the paid model will fail) — never blocks the save.
+  const [warning, setWarning] = useState<string | null>(null);
   const [pending, startTransition] = useTransition();
   const errorId = useId();
   const router = useRouter();
@@ -43,6 +46,7 @@ export function ClassroomKeySettings({
       const result = await saveClassroomOpenRouterKey(classroomId, value);
       if (result.ok) {
         setStatus({ state: "active", last4: result.last4 });
+        setWarning(result.warning ?? null);
         setEditing(false);
         setValue("");
         router.refresh();
@@ -57,6 +61,7 @@ export function ClassroomKeySettings({
       const result = await removeClassroomOpenRouterKey(classroomId);
       if (result.ok) {
         setStatus({ state: "none", last4: null });
+        setWarning(null);
         router.refresh();
       } else {
         setError(result.error);
@@ -98,6 +103,7 @@ export function ClassroomKeySettings({
               setEditing(false);
               setValue("");
               setError(null);
+              setWarning(null);
             }}
           >
             Cancel
@@ -144,6 +150,11 @@ export function ClassroomKeySettings({
       {error && (
         <p id={errorId} role="alert" className="text-destructive mt-2 text-xs">
           {error}
+        </p>
+      )}
+      {warning && !editing && (
+        <p role="status" className="mt-2 text-xs text-amber-600 dark:text-amber-500">
+          {warning}
         </p>
       )}
     </div>

@@ -64,10 +64,31 @@
     font-size: 0.75rem;
     line-height: 1.5;
     color: var(--muted-foreground);
-    transition: color 120ms ease;
+    transition:
+      color 120ms ease,
+      opacity 150ms ease;
   }
-  .paper-sidenote:hover {
+  .paper-sidenote:hover,
+  .paper-sidenote.paper-sidenote-active {
     color: var(--foreground);
+  }
+  /* Greyed down at rest, popping to full strength when the reader engages —
+     hover on the note itself, or on its inline marker (the component's
+     delegation adds .paper-sidenote-active). Hover-capable pointers only:
+     touch has no hover to pop with, so notes stay full-strength there. */
+  @media (hover: hover) {
+    .paper-sidenote {
+      opacity: 0.7;
+    }
+    .paper-sidenote:hover,
+    .paper-sidenote.paper-sidenote-active {
+      opacity: 1;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .paper-sidenote {
+      transition: none;
+    }
   }
   .paper-sidenote-num {
     flex: none;
@@ -79,8 +100,37 @@
   .paper-sidenote-num::after {
     content: ".";
   }
-  .paper-sidenote-body {
+  /* Column wrapper for body + Show-more toggle; carries the flex-item
+     min-width so long tokens shrink instead of overflowing the rail. */
+  .paper-sidenote-main {
+    flex: 1;
     min-width: 0;
+  }
+  /* Long-note preview (trigger lives in paper-sidenotes.tsx): the body
+     clamps to ~6 lines of the 12px/1.5 text, the last two fading out at
+     the cut. */
+  .paper-sidenote-clamped .paper-sidenote-body {
+    max-height: 9em;
+    overflow: hidden;
+    mask-image: linear-gradient(to bottom, black calc(100% - 3em), transparent);
+  }
+  .paper-sidenote-more {
+    display: block;
+    margin-top: 0.25em;
+    padding: 0;
+    border: 0;
+    background: none;
+    font-family: inherit;
+    font-size: 0.6875rem;
+    line-height: 1.5;
+    font-weight: 500;
+    color: inherit;
+    text-decoration: underline dotted;
+    text-underline-offset: 2px;
+    cursor: pointer;
+  }
+  .paper-sidenote-more:hover {
+    text-decoration-style: solid;
   }
   .paper-sidenote-body p {
     margin: 0 0 0.5em;
@@ -94,7 +144,7 @@
     text-underline-offset: 2px;
   }
   .paper-sidenote-body a:hover {
-    color: var(--destructive);
+    color: var(--link);
   }
   .paper-sidenote-body img {
     max-width: 100%;
@@ -107,5 +157,23 @@
     border-radius: 9999px;
     padding: 0 0.5em;
     letter-spacing: 0.15em;
+  }
+  /* Sentence glow while hovering a sidenote (or its inline marker):
+     per-line-fragment overlays whose gradient falls off along the text
+     flow from the footnote number (geometry is inline style — it depends
+     on the marker's live position). Literal translucent ambers, matching
+     the highlight paint's documented exception: no theme token maps to
+     "marker yellow". The fragments sit above the prose but MULTIPLY
+     against it — yellow tints the paper while the dark text ink under it
+     keeps full contrast, like a real highlighter, never a fading film. */
+  .paper-sidenote-glow-layer {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+  }
+  .paper-sidenote-glow {
+    position: absolute;
+    mix-blend-mode: multiply;
+    border-radius: 3px;
   }
 }

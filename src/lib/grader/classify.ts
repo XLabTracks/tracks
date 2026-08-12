@@ -22,7 +22,7 @@ const DEFAULT_MODEL = "tencent/hy3:free";
 // Grading billed to a user's own (or a classroom's) OpenRouter key defaults
 // to a paid, stronger model — their key, their spend; the server-wide key
 // stays on the free tier.
-const DEFAULT_USER_KEY_MODEL = "moonshotai/kimi-k3";
+const DEFAULT_USER_KEY_MODEL = "deepseek/deepseek-v4-flash-0731";
 
 /** Whose OpenRouter key pays for the grading call. */
 export type GraderKeySource = "server" | "user" | "classroom";
@@ -32,7 +32,7 @@ export type GraderKeySource = "server" | "user" | "classroom";
  * class can be pointed elsewhere via env (OPENROUTER_MODEL_SHORT / _MEDIUM /
  * _LONG), with OPENROUTER_MODEL as the shared fallback. With a user- or
  * classroom-supplied key, one slug covers all classes (OPENROUTER_MODEL_USER,
- * default Kimi K3).
+ * default deepseek/deepseek-v4-flash-0731).
  */
 export function modelFor(
   lengthClass: LengthClass,

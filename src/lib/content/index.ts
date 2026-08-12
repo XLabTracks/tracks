@@ -57,6 +57,9 @@ export function getTrackById(id: string): Track | undefined {
 export function getLessonById(id: string): Lesson | undefined {
   return lessonById.get(id);
 }
+export function getPaperById(id: string): Paper | undefined {
+  return paperById.get(id);
+}
 export function getExerciseById(id: string): Exercise | undefined {
   return exerciseById.get(id);
 }
@@ -258,9 +261,87 @@ export function getTrackOutline(trackSlug: string): TrackOutline | undefined {
   };
 }
 
+/**
+ * Slim projection of the outline for the client track sidebar — exactly the
+ * fields it renders, plus each paper's inserted-lesson ids (the extra
+ * progress units behind its checkmark, matching getItemProgressContentIds).
+ * The full TrackOutline carries whole Paper objects, and their `edits`
+ * (hidden-text snippets, note markdown, gate prompts — ~80 KB on the control
+ * track) would otherwise ride the flight payload of every track page.
+ */
+export interface SidebarOutlineItem {
+  kind: ModuleItem["kind"];
+  id: string;
+  slug: string;
+  title: string;
+  /** Papers only — mirrors Paper.optional. */
+  optional?: true;
+  sectionItemId?: string;
+  /** Papers only: inserted lessons that must also complete for the checkmark. */
+  insertedLessonIds?: string[];
+}
+
+export interface SidebarOutline {
+  track: Pick<Track, "slug" | "title" | "shortTitle">;
+  modules: Array<{
+    module: Pick<Module, "id" | "slug" | "title" | "order" | "assessmentId">;
+    items: SidebarOutlineItem[];
+  }>;
+}
+
+export function getTrackSidebarOutline(
+  trackSlug: string,
+): SidebarOutline | undefined {
+  const outline = getTrackOutline(trackSlug);
+  if (!outline) return undefined;
+  const { slug, title, shortTitle } = outline.track;
+  return {
+    track: { slug, title, shortTitle },
+    modules: outline.modules.map(({ module, items }) => ({
+      module: {
+        id: module.id,
+        slug: module.slug,
+        title: module.title,
+        order: module.order,
+        assessmentId: module.assessmentId,
+      },
+      items: items.map((item) =>
+        item.kind === "lesson"
+          ? {
+              kind: "lesson",
+              id: item.lesson.id,
+              slug: item.lesson.slug,
+              title: item.lesson.title,
+              sectionItemId: item.lesson.sectionItemId,
+            }
+          : {
+              kind: "paper",
+              id: item.paper.id,
+              slug: item.paper.slug,
+              title: item.paper.title,
+              optional: item.paper.optional,
+              sectionItemId: item.paper.sectionItemId,
+              insertedLessonIds: getInsertedLessonsForPaper(item.paper.id).map(
+                (l) => l.id,
+              ),
+            },
+      ),
+    })),
+  };
+}
+
 // --- Progress id sets ------------------------------------------------------
 // Progress rows (LessonProgress) key on generic content ids: standalone
 // lessons, papers, and papers' inserted lessons each count as one unit.
+// Optional readings' units are trackable (they light their own checkmarks)
+// but never *required*: the …ProgressContentIds accessors — the basis for
+// module completion, prerequisite satisfaction, and progress totals — skip
+// them, while getTrackContentIds is the full trackable universe.
+
+/** Listed and completable, but never required for module/track completion. */
+export function isOptionalItem(item: ModuleItem): boolean {
+  return item.kind === "paper" && item.paper.optional === true;
+}
 
 /**
  * A single item's progress-countable content ids: the item itself, plus a
@@ -273,15 +354,28 @@ export function getItemProgressContentIds(item: ModuleItem): string[] {
     : [item.paper.id, ...getInsertedLessonsForPaper(item.paper.id).map((l) => l.id)];
 }
 
-/** A module's progress-countable content ids, in item order. */
+/** A module's REQUIRED progress ids, in item order — optional items excluded. */
 export function getModuleProgressContentIds(moduleId: string): string[] {
-  return getItemsForModule(moduleId).flatMap(getItemProgressContentIds);
+  return getItemsForModule(moduleId)
+    .filter((item) => !isOptionalItem(item))
+    .flatMap(getItemProgressContentIds);
 }
 
-/** All progress-countable content ids in a track (used for aggregation). */
+/** A track's required progress ids (progress totals, prerequisite checks). */
 export function getTrackProgressContentIds(trackId: string): string[] {
   return getModulesForTrack(trackId).flatMap((m) =>
     getModuleProgressContentIds(m.id),
+  );
+}
+
+/**
+ * EVERY completion-trackable content id in a track, optional items included —
+ * the id universe for fetching completion rows and lighting checkmarks.
+ * Totals and gating use getTrackProgressContentIds instead.
+ */
+export function getTrackContentIds(trackId: string): string[] {
+  return getModulesForTrack(trackId).flatMap((m) =>
+    getItemsForModule(m.id).flatMap(getItemProgressContentIds),
   );
 }
 
@@ -329,8 +423,8 @@ function paperSourceUrl(source: PaperSource): string {
 }
 
 /**
- * Resource-hub entries derived from the content graph: every paper item in a
- * real track (the Example track is a feature reference, not curriculum). The
+ * Resource-hub entries derived from the content graph: every paper item in
+ * every track. The
  * hub links each to its in-course viewer (`internalHref`); `url` keeps the
  * original source, which stays the dedupe/coverage key. All fields are
  * factual — title from papers.data.ts, URL from the paper's source ref, note
@@ -341,7 +435,6 @@ export const paperResources: ExternalResource[] = (() => {
   const derived: ExternalResource[] = [];
   const seenUrls = new Set<string>();
   for (const track of tracks) {
-    if (track.kind === "example") continue;
     for (const mod of getModulesForTrack(track.id)) {
       for (const item of getItemsForModule(mod.id)) {
         if (item.kind !== "paper") continue;

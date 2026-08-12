@@ -37,6 +37,7 @@ export function useVerificationCompletion(
       })
       .catch(() => {
         done.current = false;
+        toast.error("Couldn't record completion — try again.");
       });
   }, [bridged, canTrack, contentId]);
 }

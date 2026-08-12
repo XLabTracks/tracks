@@ -4,17 +4,16 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 @AGENTS.md
 
-Tracks is an AI-safety learning platform (Khan Academy–style) with three
-tracks — **Control** (technical), **Governance**, and **Verification**. The
+Tracks is an AI-safety learning platform (Khan Academy–style) with two
+tracks — **Control** (technical) and **Verification**. The
 Control track's first module carries real curriculum (an authored lesson on
 the control game, the Redwood AI Control paper, and two readings reproduced
 with permission); the Verification track is fully populated by the 17
 native React interactive widgets (see "Verification
 interactives" below); everything else is placeholder. **Never invent or
 fabricate curriculum content** — real content is human-authored or reproduced
-with permission; otherwise use lorem ipsum or leave it empty. The **Example track** (`ex-content`/`ex-assess`)
-is the live reference for every content feature; `AUTHORING.md` is the
-step-by-step guide for adding content (its rules are enforced by
+with permission; otherwise use lorem ipsum or leave it empty. `AUTHORING.md`
+is the step-by-step guide for adding content (its rules are enforced by
 `src/lib/content/content.test.ts`).
 
 ## Commands
@@ -84,9 +83,15 @@ renders an arXiv paper, Substack post, or LessWrong/Alignment Forum post
 full-page from its precomputed artifact (`Paper.source` kinds
 `arxiv`/`substack`/`lesswrong`), editable via
 `Paper.edits`: hide sentences/paragraphs behind expandable markers, add
-editorial markdown (navy "Note" styling), splice activities (exercises /
-inline lessons) at section ends, between blocks, or mid-paragraph, and gloss
-phrases with glossary hover-card triggers. Targets key
+editorial markdown (navy "Note" styling, or `plain` for native-looking body
+text), splice activities (exercises / inline lessons) at section ends,
+between blocks, or mid-paragraph, gloss phrases with glossary hover-card
+triggers, splice a numbered `section` subsection whose display number/level
+are derived from the toc (shifting its later siblings' displayed numbers —
+`section-inserts.ts`), and `gate` the rest of the paper behind a
+tap-through/written-response card (`gate-state.ts`; the sidebar locks rows
+below a closed gate via `gateIds`, and the trailing references/footnotes
+render outside the gate walk as `ungatedTailHtml`). Targets key
 on stable `data-anchor`/`data-s` values plus a required `snippet` drift
 tripwire (validated by content.test.ts). `src/lib/papers/apply-edits.ts`
 patches only edited sections (HAST tree ops; unedited papers keep the string
@@ -175,8 +180,9 @@ The reasoning-transparency grader (`src/lib/grader/`, action
 `requestTransparencyGrade`) sends submitted writing to an LLM via OpenRouter;
 model selection is per length class and key source (`modelFor` in
 `classify.ts`, env-overridable): the server-wide key grades on
-`tencent/hy3:free`; a user-stored key grades on `moonshotai/kimi-k3`
-(`OPENROUTER_MODEL_USER` overrides). The grader card renders only once
+`tencent/hy3:free`; a user-stored key grades on
+`deepseek/deepseek-v4-flash-0731` (`OPENROUTER_MODEL_USER` overrides). The
+grader card renders only once
 the submission is submitted; `reopenWriting` reverts submitted→draft for
 edit-after-grading (hosts key `WritingEditor` on the row's `updatedAt` so
 `router.refresh()` remounts it with server truth). Grader reports open with
@@ -340,4 +346,8 @@ drive the lock, and the item page redirects signed-in learners on hard locks
 units are lessons, papers, and papers' inserted lessons — see
 `getModuleProgressContentIds` in `src/lib/content/` — assessments never gate
 completion; an item's sidebar checkmark lights only when all of its units are
-complete.
+complete. Papers marked `optional: true` (and their inserted lessons) are
+trackable but never required: the `…ProgressContentIds` accessors exclude
+them (so module completion, prerequisite satisfaction, and progress totals
+ignore them) while `getTrackContentIds` is the full checkmark/fetch universe
+(`c-paper-synchronous-monitors` is the live reference).

@@ -5,23 +5,14 @@ import "./lesswrong-post.css";
 import "./paper-reader.css";
 import { Fragment } from "react";
 import { ExternalLink, TriangleAlert } from "lucide-react";
-import { getPaperArtifact } from "@/lib/arxiv/artifacts";
-import { buildAbsUrl, buildPdfUrl, parseArxivId } from "@/lib/arxiv/id";
-import {
-  CONVERTER_VERSION,
-  type ConversionWarning,
-  type PaperTocEntry,
-} from "@/lib/arxiv/types";
-import { getSubstackArtifact } from "@/lib/substack/artifacts";
-import { buildPostUrl, parseSubstackPostUrl } from "@/lib/substack/id";
-import { SUBSTACK_CONVERTER_VERSION } from "@/lib/substack/types";
-import { getLessWrongArtifact } from "@/lib/lesswrong/artifacts";
+import { buildAbsUrl, buildPdfUrl } from "@/lib/arxiv/id";
+import type { ConversionWarning, PaperTocEntry } from "@/lib/arxiv/types";
+import { buildPostUrl } from "@/lib/substack/id";
 import {
   buildPostUrl as buildLwPostUrl,
   displayHost,
-  parseLessWrongPostUrl,
 } from "@/lib/lesswrong/id";
-import { LESSWRONG_CONVERTER_VERSION } from "@/lib/lesswrong/types";
+import { resolvePaperSource } from "@/lib/papers/source-artifact";
 import {
   editTargetRef,
   type Paper,
@@ -34,6 +25,7 @@ import {
   type AppliedPaper,
   type PaperPart,
 } from "@/lib/papers/apply-edits";
+import { collapseTailSections } from "@/lib/papers/collapse-tail";
 import { resolveInternalReadingHref } from "@/lib/readings/resolve";
 import { rewriteReadingLinks } from "@/lib/readings/rewrite-links";
 import { renderGatePromptHtml } from "@/lib/papers/patch-section";
@@ -42,9 +34,11 @@ import { Exercise } from "@/components/mdx/exercise";
 import { ExerciseSequence } from "@/components/mdx/exercise-sequence";
 import { MathText } from "@/components/exercises/math-text";
 import { EmbeddedLesson } from "./embedded-lesson";
+import { PaperCollapse } from "./paper-collapse";
 import { PaperGlossary, type PaperGlossaryEntry } from "./paper-glossary";
 import { PaperGate } from "./paper-gate";
 import { PaperSidenotes } from "./paper-sidenotes";
+import { PaperTailReveal } from "./paper-tail-reveal";
 import {
   LessWrongUnavailable,
   PaperUnavailable,
@@ -129,8 +123,8 @@ async function LessWrongPaperReader({
   completedContentIds: Set<string>;
   internalSublinks: boolean;
 }) {
-  const postRef = parseLessWrongPostUrl(postUrl);
-  if (!postRef) {
+  const resolved = await resolvePaperSource({ kind: "lesswrong", postUrl });
+  if (resolved.state === "invalid") {
     return (
       <div className="border-destructive/40 bg-destructive/5 text-destructive rounded-xl border p-6 text-sm">
         Invalid LessWrong post URL <code>{postUrl}</code> — the public post
@@ -139,16 +133,17 @@ async function LessWrongPaperReader({
       </div>
     );
   }
-
-  const artifact = await getLessWrongArtifact(postRef.id);
-  if (artifact.state !== "ready") {
+  if (resolved.state !== "ready") {
     return (
       <ActivitiesOnlyFallback
         paper={paper}
         signedIn={signedIn}
         completedContentIds={completedContentIds}
       >
-        <LessWrongUnavailable postRef={postRef} state={artifact.state} />
+        <LessWrongUnavailable
+          postRef={resolved.sourceRef}
+          state={resolved.state}
+        />
       </ActivitiesOnlyFallback>
     );
   }
@@ -158,15 +153,15 @@ async function LessWrongPaperReader({
       paper={paper}
       html={
         internalSublinks
-          ? rewriteReadingLinks(artifact.post.html, resolveInternalReadingHref)
-          : artifact.post.html
+          ? rewriteReadingLinks(resolved.html, resolveInternalReadingHref)
+          : resolved.html
       }
-      toc={artifact.post.toc}
+      toc={resolved.toc}
       // .arxiv-paper carries the shared reading typography + the edit-UI
       // (ax-hidden/ax-added) styles; .lesswrong-post scopes the lw-* extras.
       wrapperClassName="arxiv-paper lesswrong-post"
-      converterVersion={LESSWRONG_CONVERTER_VERSION}
-      blocksCommand={`npm run lesswrong:build -- --blocks ${postRef.id}`}
+      converterVersion={resolved.convVersion}
+      blocksCommand={`npm run lesswrong:build -- --blocks ${resolved.sourceRef.id}`}
       signedIn={signedIn}
       completedContentIds={completedContentIds}
       sidenotePrefix="lw"
@@ -174,11 +169,12 @@ async function LessWrongPaperReader({
         <PaperFooter
           links={[
             {
-              label: `Read on ${displayHost(postRef)}`,
-              href: artifact.post.meta.canonicalUrl ?? buildLwPostUrl(postRef),
+              label: `Read on ${displayHost(resolved.sourceRef)}`,
+              href:
+                resolved.meta.canonicalUrl ?? buildLwPostUrl(resolved.sourceRef),
             },
           ]}
-          warnings={artifact.post.warnings}
+          warnings={resolved.warnings}
         />
       }
     />
@@ -196,8 +192,8 @@ async function ArxivPaperReader({
   signedIn: boolean;
   completedContentIds: Set<string>;
 }) {
-  const parsed = parseArxivId(arxivId);
-  if (!parsed) {
+  const resolved = await resolvePaperSource({ kind: "arxiv", arxivId });
+  if (resolved.state === "invalid") {
     return (
       <div className="border-destructive/40 bg-destructive/5 text-destructive rounded-xl border p-6 text-sm">
         Invalid arXiv id <code>{arxivId}</code> — a pinned version is required,
@@ -205,16 +201,14 @@ async function ArxivPaperReader({
       </div>
     );
   }
-
-  const artifact = await getPaperArtifact(parsed.id);
-  if (artifact.state !== "ready") {
+  if (resolved.state !== "ready") {
     return (
       <ActivitiesOnlyFallback
         paper={paper}
         signedIn={signedIn}
         completedContentIds={completedContentIds}
       >
-        <PaperUnavailable id={parsed} state={artifact.state} />
+        <PaperUnavailable id={resolved.sourceRef} state={resolved.state} />
       </ActivitiesOnlyFallback>
     );
   }
@@ -222,21 +216,21 @@ async function ArxivPaperReader({
   return (
     <EditedPaperBody
       paper={paper}
-      html={artifact.paper.html}
-      toc={artifact.paper.toc}
+      html={resolved.html}
+      toc={resolved.toc}
       wrapperClassName="arxiv-paper"
-      converterVersion={CONVERTER_VERSION}
-      blocksCommand={`npm run arxiv:build -- --blocks ${parsed.id}`}
+      converterVersion={resolved.convVersion}
+      blocksCommand={`npm run arxiv:build -- --blocks ${resolved.sourceRef.id}`}
       signedIn={signedIn}
       completedContentIds={completedContentIds}
       sidenotePrefix="ax"
       footer={
         <PaperFooter
           links={[
-            { label: "Abstract", href: buildAbsUrl(parsed) },
-            { label: "PDF", href: buildPdfUrl(parsed) },
+            { label: "Abstract", href: buildAbsUrl(resolved.sourceRef) },
+            { label: "PDF", href: buildPdfUrl(resolved.sourceRef) },
           ]}
-          warnings={artifact.paper.warnings}
+          warnings={resolved.warnings}
         />
       }
     />
@@ -256,8 +250,8 @@ async function SubstackPaperReader({
   completedContentIds: Set<string>;
   internalSublinks: boolean;
 }) {
-  const postRef = parseSubstackPostUrl(postUrl);
-  if (!postRef) {
+  const resolved = await resolvePaperSource({ kind: "substack", postUrl });
+  if (resolved.state === "invalid") {
     return (
       <div className="border-destructive/40 bg-destructive/5 text-destructive rounded-xl border p-6 text-sm">
         Invalid Substack post URL <code>{postUrl}</code> — the public post URL
@@ -265,16 +259,17 @@ async function SubstackPaperReader({
       </div>
     );
   }
-
-  const artifact = await getSubstackArtifact(postRef.id);
-  if (artifact.state !== "ready") {
+  if (resolved.state !== "ready") {
     return (
       <ActivitiesOnlyFallback
         paper={paper}
         signedIn={signedIn}
         completedContentIds={completedContentIds}
       >
-        <SubstackUnavailable postRef={postRef} state={artifact.state} />
+        <SubstackUnavailable
+          postRef={resolved.sourceRef}
+          state={resolved.state}
+        />
       </ActivitiesOnlyFallback>
     );
   }
@@ -284,15 +279,15 @@ async function SubstackPaperReader({
       paper={paper}
       html={
         internalSublinks
-          ? rewriteReadingLinks(artifact.post.html, resolveInternalReadingHref)
-          : artifact.post.html
+          ? rewriteReadingLinks(resolved.html, resolveInternalReadingHref)
+          : resolved.html
       }
-      toc={artifact.post.toc}
+      toc={resolved.toc}
       // .arxiv-paper carries the shared reading typography + the edit-UI
       // (ax-hidden/ax-added) styles; .substack-post scopes the sb-* extras.
       wrapperClassName="arxiv-paper substack-post"
-      converterVersion={SUBSTACK_CONVERTER_VERSION}
-      blocksCommand={`npm run substack:build -- --blocks ${postRef.id}`}
+      converterVersion={resolved.convVersion}
+      blocksCommand={`npm run substack:build -- --blocks ${resolved.sourceRef.id}`}
       signedIn={signedIn}
       completedContentIds={completedContentIds}
       sidenotePrefix="sb"
@@ -300,11 +295,12 @@ async function SubstackPaperReader({
         <PaperFooter
           links={[
             {
-              label: `Read on ${postRef.host}`,
-              href: artifact.post.meta.canonicalUrl ?? buildPostUrl(postRef),
+              label: `Read on ${resolved.sourceRef.host}`,
+              href:
+                resolved.meta.canonicalUrl ?? buildPostUrl(resolved.sourceRef),
             },
           ]}
-          warnings={artifact.post.warnings}
+          warnings={resolved.warnings}
         />
       }
     />
@@ -368,7 +364,31 @@ function applyPaperEditsCached(
 ): AppliedPaper {
   const hit = appliedEditsCache.get(paper.id);
   if (hit && hit.html === html) return hit.applied;
-  const applied = applyPaperEdits(html, toc, paper.edits);
+  const edited = applyPaperEdits(html, toc, paper.edits);
+  // Collapse trailing apparatus (references/appendix/footnotes) AFTER edits:
+  // edit targets are resolved against the artifact's byte offsets, which the
+  // details wrappers would shift. The references-seen flag threads through
+  // the html parts in document order (and on into the ungated tail), so an
+  // activity/gate split after References doesn't reset the appendix walk —
+  // the whole document collapses as one pass. (On gated papers the landmark
+  // sections themselves live in ungatedTailHtml and collapse there; the
+  // appendix stretch they left behind in the gated parts was already
+  // collapsed by apply-edits' tail split, and reads as landmark-free —
+  // byte-identical — here.)
+  let sawReferences = false;
+  const parts = edited.parts.map((part) => {
+    if (part.kind !== "html") return part;
+    const collapsed = collapseTailSections(part.html, sawReferences);
+    sawReferences = collapsed.sawReferences;
+    return { ...part, html: collapsed.html };
+  });
+  const applied: AppliedPaper = {
+    ...edited,
+    parts,
+    ungatedTailHtml:
+      edited.ungatedTailHtml &&
+      collapseTailSections(edited.ungatedTailHtml, sawReferences).html,
+  };
   appliedEditsCache.set(paper.id, { html, applied });
   return applied;
 }
@@ -437,15 +457,33 @@ function EditedPaperBody({
       })}
 
       {ungatedTailHtml && (
-        // References/footnotes, split off the gated walk in apply-edits.ts:
-        // they stay mounted while gates above are closed, so citations and
-        // footnote markers in the visible text keep live targets and the
-        // sidenote layer has note bodies to clone.
-        <div
-          className={wrapperClassName}
-          data-conv={converterVersion}
-          dangerouslySetInnerHTML={{ __html: ungatedTailHtml }}
-        />
+        // References/footnotes (the landmark sections ONLY — appendices stay
+        // in the gated walk), split off in apply-edits.ts: they stay mounted
+        // while gates above are closed, so citations and footnote markers in
+        // the visible text keep live targets and the sidenote layer has note
+        // bodies to clone. The `paper-gated-tail` class visually hides the
+        // footnotes SECTION itself while any gate is closed (a gated paper
+        // would otherwise dump every note — including gated ones — right below
+        // the first gate, a spoiler); the notes stay in the DOM, so per-marker
+        // margin sidenotes still render for content the learner has revealed.
+        // References stay visible (citations must keep a live target).
+        // PaperTailReveal lifts the suppression once every gate is open —
+        // from then on the canonical section is the fragment-jump target
+        // again (the only footnote surface on narrow viewports and for
+        // assistive tech).
+        <>
+          <div
+            className={`${wrapperClassName} paper-gated-tail`}
+            data-conv={converterVersion}
+            dangerouslySetInnerHTML={{ __html: ungatedTailHtml }}
+          />
+          <PaperTailReveal
+            paperId={paper.id}
+            gateIds={parts.flatMap((part) =>
+              part.kind === "gate" ? [part.id] : [],
+            )}
+          />
+        </>
       )}
 
       {unmatchedItems.length > 0 && (
@@ -471,6 +509,7 @@ function EditedPaperBody({
 
       {footer}
       {sidenotePrefix && <PaperSidenotes prefix={sidenotePrefix} />}
+      <PaperCollapse />
       <GlossaryLayer paper={paper} />
     </div>
   );
@@ -606,7 +645,7 @@ function InsertionBlock({
         />
       ) : item.kind === "demo" ? (
         <div className="my-8">
-          <Demo id={item.id} />
+          <Demo id={item.id} framed={item.framed} />
         </div>
       ) : item.kind === "sequence" ? (
         <div className="my-8">

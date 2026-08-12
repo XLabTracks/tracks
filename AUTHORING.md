@@ -938,12 +938,10 @@ module at most.
    }
    ```
 
-2. **Write the body** at `src/content/guides/<contentRef>.mdx` with the four
+2. **Write the body** at `src/content/guides/<contentRef>.mdx` with the three
    required sections (the agenda's timed blocks are `###` subsections):
 
    ```mdx
-   ## Session goal
-
    ## Before the session
 
    ## Agenda

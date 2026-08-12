@@ -1,0 +1,185 @@
+{/* 2.2 Cloud, rebuilt from the four sources alone after the unit was emptied —
+    see docs/verification/module-2-log.md for what was deleted and why.
+
+    The reuse terms are unchanged and govern anything added here: the two
+    arXiv/GovAI papers are CC BY 4.0 and may be quoted freely; RAND RR-A3686-1
+    and the Carnegie piece are all rights reserved and are linked, not
+    reproduced. Nothing on this page reproduces any of the four — the cards
+    send the learner out, and the checks quote nobody.
+
+    The ten questions are ported from the 2.2 build in
+    tracksprogramplayground (`verification-module-2-2-data.js`), whose own
+    verification log records each claim against the full texts: the four
+    provider roles and the EO 14110 thresholds against Heim et al. (p. 31),
+    the 10^26 ≈ 60,000 H100s example against p. 27 fn. 29, the detection-gap
+    band against Moon et al. p. 5. Option order was rotated on the way in —
+    that engine shuffled at runtime and kept the right answer first in the
+    data, which this component does not do. */}
+
+## Module objective
+
+The provider sits between the customer and the machines. This unit asks what the landlord of the compute can see, record, verify and switch off — and where that oversight runs out.
+
+## Sources
+
+Read these four. Everything below is answerable from them.
+
+<ReadingCard id="cloud-heim-governing" href="https://arxiv.org/abs/2403.08501" title="Governing Through the Cloud: The Intermediary Role of Compute Providers in AI Regulation" author="Heim, Fist, Egan et al." year="2024" mins="the backbone">
+
+The four capacities a provider can serve a governance regime in — **securer, record keeper, verifier, enforcer** — and the case that non-confidential metadata already shows workload scale, and often type, without anyone reading a customer's code or data. Page 31 carries the EO 14110 reporting thresholds two of the questions turn on.
+
+</ReadingCard>
+
+<ReadingCard id="cloud-egan-heim-kyc" href="https://cdn.governance.ai/Oversight_for_Frontier_AI_through_a_KYC_Scheme_for_Compute_Providers.pdf" title="Oversight for Frontier AI through a Know-Your-Customer Scheme for Compute Providers" author="Egan and Heim" year="2023" mins="the machinery">
+
+What it takes to know who the customer actually is: verified identity, beneficial ownership through layered holding companies, declared purpose, reporting duties, suspension — and the paper's own condition that coverage has to spread across jurisdictions or the checkpoint becomes a detour sign.
+
+</ReadingCard>
+
+<ReadingCard id="cloud-rand-detection-gaps" href="https://www.rand.org/pubs/research_reports/RRA3686-1.html" title="Strategies and Detection Gaps in a Game-Theoretic Model of Compute Governance" author="Moon, Vedula, Geneson and Bar-on, RAND Corporation" year="2025" mins="the counterweight">
+
+The result that a monitor watching only a per-run FLOP threshold provably loses to sequential training, and the band of model sizes where that gap opens.
+
+</ReadingCard>
+
+<ReadingCard id="cloud-carnegie-geopolitics" href="https://carnegieendowment.org/research/2026/05/the-geopolitical-debates-over-controlling-cloud-compute" title="The Geopolitical Debates Over Controlling Cloud Compute" author="Tan, Carnegie Endowment for International Peace" year="2026" mins="the politics">
+
+Who bears the burden of cloud controls, what over-broad rules cost, and the visibility-against-privacy argument that decides how much of this layer is politically available at all.
+
+</ReadingCard>
+
+## Check yourself
+
+Ten questions on what the four sources say. Nothing here is graded and nothing is timed; each one commits before it answers, and Try again is always there.
+
+<Check
+  id="c22-roles"
+  q="A provider suspends a customer's compute access after the customer refuses to file a required training-run notification. Which role is the provider exercising?"
+  options={[
+    "Record keeper",
+    "Enforcer",
+    "Securer",
+    "Verifier",
+  ]}
+  answer={1}
+  why="Restricting or cutting access is enforcement. Record keeping is storing usage data; verifying is checking claims against observation; securing is protecting models and infrastructure from attackers."
+/>
+
+<Check
+  id="c22-surface"
+  q="Why do compute providers make a useful governance surface in the first place?"
+  options={[
+    "Because providers can read customers' training code and data",
+    "Because providers are legally part of every government's regulator",
+    "Because frontier AI is mostly developed on machines that developers rent rather than own",
+    "Because AI models cannot run without a cloud connection",
+  ]}
+  answer={2}
+  why="The leverage is structural: rented compute puts a third party between the developer and the machines. Providers by default do not read customer code or data, they are private companies rather than regulators, and self-owned offline compute exists — which is exactly where this layer runs out."
+/>
+
+<Check
+  id="c22-layer"
+  q="A provider notices that a customer's declared “small research project” actually reserved 4,000 accelerators for 90 days. Which visibility layer caught the mismatch?"
+  options={[
+    "Identity — the account owner's name",
+    "Operational records — a security alert",
+    "None — the provider must have read the customer's training code",
+    "Resource use — allocation and duration",
+  ]}
+  answer={3}
+  why="Allocation size and duration are the resource-use layer. Identity says who; logs say when; and the training code itself is exactly what the provider does not read."
+/>
+
+<Check
+  id="c22-signature"
+  q="A workload holds accelerator cores near peak utilization, day and night, for three weeks, with almost no traffic to the outside internet. What does that pattern most suggest?"
+  options={[
+    "An inference service with many users",
+    "A large training run",
+    "Nothing — metadata cannot distinguish workload types",
+    "Ordinary database hosting",
+  ]}
+  answer={1}
+  why="Sustained flat-out utilization in a closed loop is the training signature; inference load follows users and fluctuates. “Nothing” undersells metadata — estimation is exactly what it supports — and databases do not pin accelerators for weeks."
+/>
+
+<Check
+  id="c22-thresholds"
+  q="Under the EO 14110 template, which threshold is which?"
+  options={[
+    "Clusters register at 10²⁶ OP; training runs are declared at 10²⁰ OP/s",
+    "Both use the same 10²⁶ threshold",
+    "Clusters register by capability rate (10²⁰ OP/s); training runs are declared by total compute (10²⁶ OP)",
+    "Registration and declaration are two names for the same report",
+  ]}
+  answer={2}
+  why="Standing infrastructure is measured by what it could compute per second, a rate; a run by what it did compute in total. Mixing the two numbers up is the most common error in this unit, and they hook different obligations."
+/>
+
+<Check
+  id="c22-beneficial-ownership"
+  q="A customer entity is owned 100% by a holding company, which is owned by another company offshore. What does beneficial-ownership verification require?"
+  options={[
+    "Verifying the holding company's name and stopping there",
+    "Confirming the customer's email domain matches its website",
+    "Checking that the offshore jurisdiction has a tax treaty",
+    "Tracing through the layers to the actual humans who own or control the customer",
+  ]}
+  answer={3}
+  why="Beneficial ownership means the natural persons at the end of the chain. Layered holding companies are precisely the structure the requirement exists to see through — stopping at the first shell is the failure mode, not the rule."
+/>
+
+<Check
+  id="c22-kyc-leak"
+  q="Why does a strict KYC scheme in one country alone tend to leak?"
+  options={[
+    "Because KYC is technically impossible to implement",
+    "Customers with something to hide simply move to providers in jurisdictions without the scheme",
+    "Because compute cannot be metered per customer",
+    "Because the scheme only applies to small customers",
+  ]}
+  answer={1}
+  why="The scheme is sound where it applies — the leak is jurisdictional migration. Per-customer metering is exactly what providers already do for billing, and thresholds target the largest customers, not the smallest."
+/>
+
+<Check
+  id="c22-sequential"
+  q="Why does splitting one training run into 58 sub-threshold chunks defeat a FLOP-threshold monitor?"
+  options={[
+    "Because splitting reduces the total compute the model needs",
+    "Because each chunk becomes technically impossible to meter",
+    "The threshold is evaluated per account, no chunk crosses it, and the monitor cannot link the accounts",
+    "Because thresholds only apply to inference workloads",
+  ]}
+  answer={2}
+  why="The total compute is unchanged and every chunk is metered perfectly well — the failure is aggregation. Per-account evaluation plus unlinkable accounts means no single reading ever trips the line. Thresholds also target training, not inference."
+/>
+
+<Check
+  id="c22-outside"
+  q="Which of these is fully outside what cloud-layer oversight can see?"
+  options={[
+    "A declared run at a covered provider",
+    "An undeclared run at a covered provider",
+    "A customer who reserves compute at a covered provider and never uses it",
+    "A training run on a company's own air-gapped cluster",
+  ]}
+  answer={3}
+  why="The covered provider sees declared runs, undeclared runs as telemetry, and idle reservations alike. A self-owned, disconnected cluster has no landlord at all — finding that one belongs to the hardware and intelligence layers, not this one."
+/>
+
+<Check
+  id="c22-ladder"
+  q="Rank these by resistance to customer fakery, strongest first."
+  options={[
+    "Declarations → utilization patterns → billing records",
+    "Billing records → utilization patterns → declarations",
+    "Utilization patterns → declarations → billing records",
+    "All three are equally hard to fake",
+  ]}
+  answer={1}
+  why="Billing and allocation are the provider's own meter; utilization can be gamed, but at an efficiency cost; a declaration is whatever the customer types. It is a ladder, not a tie."
+/>
+
+<MemoDesk lesson="cloud" />

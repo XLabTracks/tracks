@@ -100,6 +100,7 @@ export const verificationModules: Module[] = [
       "v-hw-where-trust-lives",
       "v-hw-reconstructing-run",
       "v-hw-policy-studio",
+      "v-cloud",
       "v-intel-intro",
       "v-intel-signatures",
       "v-intel-anchor",
@@ -460,6 +461,13 @@ export const verificationLessons: Lesson[] = [
   // own "§2.3.3" citations inside them are the paper's section, not ours, and
   // were deliberately left alone.
   {
+    id: "v-cloud",
+    slug: "cloud",
+    moduleId: "v-infrastructure",
+    title: "2.2 Cloud",
+    contentRef: "verification/cloud",
+  },
+  {
     id: "v-intel-intro",
     slug: "intelligence-intro",
     moduleId: "v-infrastructure",
@@ -586,6 +594,7 @@ export const verificationUnitOfLesson: Record<string, string> = {
   "v-hw-where-trust-lives": "2.1",
   "v-hw-reconstructing-run": "2.1",
   "v-hw-policy-studio": "2.1",
+  "v-cloud": "2.2",
   "v-intel-intro": "2.3",
   "v-intel-signatures": "2.3",
   "v-intel-anchor": "2.3",

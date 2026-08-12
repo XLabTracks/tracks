@@ -98,6 +98,18 @@ window.VERIFICATION_MEMOS = [
     "peerReviewed": false
   },
   {
+    "id": "m2-2-cloud",
+    "module": 2,
+    "unit": "2.2",
+    "title": "Essay, brief or reflection",
+    "status": "named",
+    "brief": null,
+    "audience": null,
+    "words": 800,
+    "peerReviewed": false,
+    "gap": "The outline offers the choice of genre — essay, brief or reflection — and stops there."
+  },
+  {
     "id": "m2-3-ntm-redline",
     "module": 2,
     "unit": "2.3",

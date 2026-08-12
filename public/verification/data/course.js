@@ -170,6 +170,16 @@ window.COURSE = {
           ]
         },
         {
+          "id": "2.2",
+          "title": "Cloud",
+          "kind": "explainer",
+          "mins": "20–25 min",
+          "href": "/tracks/verification/verification-infrastructure/cloud",
+          "lessons": [
+            "cloud"
+          ]
+        },
+        {
           "id": "2.3",
           "title": "Intelligence",
           "kind": "explainer",

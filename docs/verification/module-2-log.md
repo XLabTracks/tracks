@@ -294,3 +294,44 @@ its verification log in `verification-module-2-2-design.md`, all four sources
 checked against the full texts. That is the obvious input for the rebuild, and
 porting it is what finally closes the 2.2 duplication CLAUDE.md calls the
 widest in the course.
+
+## 2.2 Cloud rebuilt: four external cards and ten checks
+
+On the course owner's instruction — 2.2 is the four sources as external cards
+plus tests on text understanding. One unit, `v-cloud` (2.2), back in module 2
+between 2.1 and 2.3.
+
+**Nothing is reproduced.** The four cards link out and say what each source is
+for; the checks quote nobody. That settles the reuse question the emptying
+left open: RAND and Carnegie are all rights reserved, and with no reproduction
+their terms do not bind anything here. The two CC BY papers are linked rather
+than quoted for symmetry, not necessity.
+
+Her source list is used verbatim, which changes one URL: Egan & Heim is the
+GovAI PDF (`cdn.governance.ai/Oversight_for_Frontier_AI_…`), not the arXiv
+record the old registry entry carried.
+
+**The ten questions are ported, not written.** They come from
+`tracksprogramplayground/verification-module-2-2-data.js`, whose own
+verification log records each claim against the full texts — the four provider
+roles and the EO 14110 thresholds against Heim et al. p. 31, the
+10^26 ≈ 60,000 H100s example against p. 27 fn. 29, the detection-gap band
+against Moon et al. p. 5. The four roles were re-confirmed here against the
+paper's abstract. Option order was rotated on the way in: that engine shuffled
+at runtime and kept the right answer first in the data, which `<Check>` does
+not do, so a straight port would have made every answer A.
+
+**`m2-2-cloud` is back**, repointed from `cloud-limits` to `cloud`, still
+`status: "named"` with its original gap. Memo slots: 13 → 14. Units: 18 → 19.
+
+**No citations.json entries.** `citedUrls` does not scan `ReadingCard href`,
+so registering the four would have failed the orphan test — the same reason
+`strategic-foundations`' ten reading cards carry none. Attribution is on the
+cards themselves. Adding them to Works cited means citing them in scanned
+markdown too, which would print each source twice on the page.
+
+**Still owed.** The 52 KB drafted 2.2 in the playground is 48 reader pages,
+six gap-fills and a game beyond these ten questions. This rebuild takes its
+checks and leaves its prose, which is the smaller half. The duplication
+CLAUDE.md calls the widest in the course is narrower now — the app has a 2.2
+again — but the playground draft is still unported.

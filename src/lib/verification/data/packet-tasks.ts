@@ -13,6 +13,40 @@
  * records and accountancy, and she asked that the reveal say so directly
  * instead of stretching a quote.
  *
+ * KEY CORRECTIONS (her audit, 2026-08-13). She reviewed the keys against
+ * the tasks and the packet and found three of them wrong. Each is rewritten
+ * below to what she said it must contain, and — the point of her review —
+ * out of the three documents rather than out of Baker, who the learner has
+ * not seen when they answer. PENDING HER COPY, like Task 2's realignment:
+ * the corrected wording is ours.
+ *
+ *  - Task 1. The key gave the immediate object as "uranium and plutonium …
+ *    at declared facilities", which is Baker's narrower gloss (§1.3, §3.2.1)
+ *    substituted for the CSA's own object. Document 1 states it: all nuclear
+ *    material in all peaceful nuclear activities within the State's
+ *    territory, jurisdiction or control. The obligation was also loosely put
+ *    and the three answers were out of the order the task asks them in.
+ *  - Task 3. The key answered a different question — it argued the grounds
+ *    and limits of the analogy, which is a good answer to a task nobody set.
+ *    Hers asks for three conditions (technical structure, supply chain,
+ *    verifier powers), each labelled explicit-in-Document-2 or inferred, each
+ *    with the conclusion that would cease to hold. It is now that.
+ *    Her Baker cuts for this task were chosen for the old key and are left
+ *    alone: the commodity-chip scope bears on the first condition and supply
+ *    chain concentration on the second, but her bakerNote still points at the
+ *    analogy, and rewording it is hers.
+ *  - Task 4. The key listed Baker's §5.2 historical explanations and never
+ *    picked one of the three categories the task offers. It now names the
+ *    second — failure to identify an undeclared object — and argues it from
+ *    Document 3's own factors: strategic-point access, absent detection
+ *    techniques, checklist culture, and no leads on where to look.
+ *  - Task 5. The limited conclusion was sound and is kept verbatim; what was
+ *    missing is that her four numbered requirements were not answered as four,
+ *    and that several supporting items (chip-production concentration, the
+ *    commodity-chip loophole, the missing environmental-sampling analogue,
+ *    challenge inspections) came from the later Baker reveal rather than the
+ *    packet. It is now four headed answers, each carried by the documents.
+ *
  * TASK 2 REALIGNMENT (her audit, 2026-08-12): the delivered task named
  * "training transcripts" as a component, but Document 2's excerpt (§1.1)
  * never discusses transcripts — its three parts are chip-level activity
@@ -244,11 +278,14 @@ export const PACKET_TASKS: PacketTask[] = [
       {
         kind: "ol",
         items: [
-          "Non-nuclear-weapon states undertake not to build nuclear weapons and to accept the IAEA safeguards system.",
-          "The immediate object of verification is nuclear material — above all uranium and plutonium — and its use at declared facilities.",
-          "The purpose of verification is to establish that these materials are used for peaceful purposes and are not diverted to weapons.",
-          "It does not follow that the state has no nuclear-weapons programme. A CSA verifies declared materials and facilities well, but was not originally designed to reliably detect undeclared facilities.",
+          "The immediate object is nuclear material: under a CSA a State accepts safeguards on all nuclear material in all peaceful nuclear activities within its territory, under its jurisdiction, or carried out under its control anywhere.",
+          "The obligation the State accepts is to place that material under safeguards and to allow the IAEA to verify — and, under the NPT, not to produce or otherwise acquire nuclear weapons. Safeguards are the technical measures by which the IAEA independently verifies that legal commitment.",
+          "The broader outcome is non-proliferation: preventing the spread of nuclear weapons. Verification serves it for the exclusive purpose of establishing that safeguarded material is not diverted to nuclear weapons or other nuclear explosive devices.",
         ],
+      },
+      {
+        kind: "p",
+        text: "Why the conclusion is broader than the text permits: what is accounted for is material that has been declared and placed under safeguards, and Document 1 claims exactly one thing from that accounting — that such material has not been diverted. It says nothing about material or activities never declared. Moving from “all declared material is accounted for” to “no nuclear-weapons programme” supplies a premise the document does not: that the declaration is complete.",
       },
     ],
     baker: [BAKER_CSA_TEMPLATE, BAKER_NUCLEAR_MATERIALS, BAKER_UNDECLARED_TWO_STEPS],
@@ -341,35 +378,34 @@ export const PACKET_TASKS: PacketTask[] = [
     ],
     maxWords: 180,
     answer: [
-      { kind: "p", text: "Two characteristics of nuclear materials:" },
       {
-        kind: "ol",
-        items: [
-          "obtaining weapon-usable material is the hardest step in making a nuclear weapon;",
-          "uranium and plutonium are comparatively rare and emit radiation, so they can be detected and accounted for.",
+        kind: "table",
+        head: [
+          "Condition",
+          "Explicit or inferred",
+          "What stops being justified if it fails",
         ],
-      },
-      { kind: "p", text: "The corresponding features of AI:" },
-      {
-        kind: "ol",
-        items: [
-          "the class of advanced training runs at issue requires large quantities of specialized chips;",
-          "production of such chips is concentrated in a limited supply chain, so they can be accounted for and inspected.",
+        rows: [
+          [
+            "Technical structure: the training runs the rules target require large quantities of specialised data-centre chips",
+            "Explicit. Document 2 sets out to enforce rules on “the training of ML models using large quantities of specialized ML chips”, and restricts its focus to specialised data-centre chips.",
+            "That a clean chip regime says anything about the run. A prohibited run reachable on far fewer chips — or on the personal devices Document 2 explicitly leaves alone — is outside what the system observes at all.",
+          ],
+          [
+            "Supply chain: every chip is accounted for, so no actor can secretly acquire chips and underclaim its total",
+            "Explicit. This is the stated purpose of the third component.",
+            "That inspecting a subset licenses a statement about all of an actor's chips. The sample is then drawn from a population the verifier has mis-measured, and the inference from sample to whole breaks.",
+          ],
+          [
+            "Verifier: inspectors can actually obtain and analyse the logs of a sufficient subset, and logging and attestation hold against a determined adversary",
+            "Part explicit, part inferred. The inspection step and the confidentiality-preserving logging are stated; robustness against nation-state circumvention is what the framework “aspires to”, and the access that makes inspection possible is assumed by the design rather than established in the excerpt.",
+            "That “no violation found” means “no violation”. Chips would keep records nobody converts into a determination, and an adversary who defeats the attestation makes the record itself untrustworthy.",
+          ],
         ],
       },
       {
         kind: "p",
-        text: "The analogy rests not on any physical resemblance between the objects, but on their role as a controlled, mandatory input into the prohibited activity.",
-      },
-      { kind: "p", text: "Its limits:" },
-      {
-        kind: "ul",
-        items: [
-          "computation has no analogue of the unique radioactive particles that environmental sampling detects;",
-          "non-specialized chips can open a loophole;",
-          "algorithms and data are harder to track;",
-          "after training, weights can spread independently of the original hardware.",
-        ],
+        text: "The three are not the same claim in three places: the first is about what the prohibited activity needs, the second about whether the verifier knows the population, the third about whether it can read it. Each can fail while the other two hold.",
       },
     ],
     baker: [
@@ -410,22 +446,27 @@ export const PACKET_TASKS: PacketTask[] = [
     ],
     maxWords: 180,
     answer: [
-      { kind: "p", text: "Three reasons:" },
       {
-        kind: "ol",
+        kind: "p",
+        text: "It is the second: a failure to identify an undeclared object. The first did not occur — routine verification of declared activity continued as designed — and the third is why the second persisted rather than a separate defect beside it.",
+      },
+      { kind: "p", text: "Document 3 names what produced it:" },
+      {
+        kind: "ul",
         items: [
-          "The CSA was oriented toward declared facilities and materials, not a systematic search for secret sites.",
-          "Negotiators assumed that hidden facilities would be discovered by national intelligence services, which would volunteer the information to the IAEA.",
-          "Broad inspection access was considered politically unacceptable, and no reliable independent methods for finding undeclared facilities existed.",
+          "access was confined to defined strategic points at declared facilities, and the undeclared activities were carried out on safeguarded sites but away from those points;",
+          "the techniques did not exist — until environmental sampling was introduced, activities such as small-scale plutonium separation were very difficult to detect;",
+          "a “checklist” inspection culture had evolved, inspectors not being trained to look beyond the obvious, which narrowed how the duty itself was perceived;",
+          "and for undeclared sites the fundamental problem is identifying locations to investigate: wider access rights are of limited practical value without leads on where to seek access.",
         ],
       },
       {
         kind: "p",
-        text: "The system could therefore verify declared facilities correctly while missing activity outside the declared list. Increasing the frequency of the same inspections would not have fixed the coverage problem.",
+        text: "So the system can be operating exactly as designed and still fail here, because correct verification of what was declared is compatible with an undeclared object the design never undertook to find. The last factor is also why more of the same inspections would not have closed it: the binding constraint was leads, not frequency or even access.",
       },
       {
         kind: "p",
-        text: "For Shavit’s system, the most relevant risk is an incomplete registry: if a violator can obtain or host enough unaccounted chips, inspection of registered chips shows nothing about them.",
+        text: "For Shavit’s system the corresponding risk is an incomplete registry: if a violator can obtain or host enough unaccounted chips, inspection of registered chips shows nothing about them.",
       },
     ],
     baker: [BAKER_CSA_GAP_FULL, BAKER_SALIENT_FAILURE],
@@ -455,42 +496,39 @@ export const PACKET_TASKS: PacketTask[] = [
     ],
     maxWords: 220,
     answer: [
-      { kind: "p", text: "The hypothesis is supported by the following:" },
+      { kind: "h", text: "1. The strongest valid parallel" },
       {
-        kind: "ul",
-        items: [
-          "large training runs depend on many specialized physical components;",
-          "those components can be accounted for;",
-          "production of advanced chips is concentrated in a limited supply chain;",
-          "registered chips can carry verifiable mechanisms and be subject to sampling inspections;",
-          "nuclear regimes successfully used a combination of accountancy, surveillance, inspections and several mutually reinforcing layers.",
-        ],
+        kind: "p",
+        text: "Verified accountancy of a controlled, mandatory input, carried by a duty on the holder to declare it and accept verification. Document 1 places all nuclear material in peaceful activities under safeguards and obliges the IAEA to verify non-diversion; Document 2 requires that every chip be accounted for and that the logs of a sufficient subset be inspected. The parallel is the accountancy of an input, not any resemblance between uranium and chips — which is also why it survives the fact that the two materials behave nothing alike.",
       },
-      { kind: "p", text: "It is limited by the following:" },
+      { kind: "h", text: "2. The step the Iraq case puts under greatest pressure" },
       {
-        kind: "ul",
-        items: [
-          "verifying declared facilities does not establish the completeness of the declaration;",
-          "unregistered chips or undeclared data centers require separate means of detection;",
-          "commodity chips can open a bypass;",
-          "chip-based verification does not cover every form of AI development;",
-          "the absence of an environmental-sampling analogue makes hidden activity harder to find.",
-        ],
+        kind: "p",
+        text: "The move from “inspection of registered chips found no violation” to “no prohibited development is occurring”. That step needs the declaration to be complete, and completeness is what Document 3 shows was absent: undeclared activity sat on safeguarded sites but away from the strategic points inspectors could reach, and detecting undeclared activity at undeclared sites is named there as the greatest challenge facing safeguards.",
       },
-      { kind: "h", text: "A revised hypothesis" },
+      { kind: "h", text: "3. Why inspecting registered chips more often cannot fix it" },
+      {
+        kind: "p",
+        text: "Because the defect is in the population, not the sampling rate. A chip that was never registered is not in the frame the sample is drawn from, so no frequency reaches it; more inspection only sharpens a conclusion about the covered set. Document 3 states the general form of this — wider access rights are of limited practical value without leads on where to seek access — and its own answer was a different instrument, information from states whose collection and analysis capabilities exceed the agency’s.",
+      },
+      { kind: "h", text: "4. The claim the evidence supports" },
       {
         kind: "quote",
         text: "Where highly compute-intensive AI development requires large quantities of accounted-for specialised chips, chip registration, tamper-evident logging and inspection may provide reliable assurance that covered chips at declared locations have not been used in prohibited training. This conclusion does not by itself establish the absence of prohibited development using unregistered chips, undeclared facilities, commodity hardware, or other unmonitored inputs.",
       },
-      { kind: "h", text: "What the assessment would need to know" },
+      {
+        kind: "p",
+        text: "Each clause of that narrowing is doing work: “covered chips”, because Document 2 leaves personal devices alone; “declared locations”, because Document 3 is the case against assuming the list is complete.",
+      },
+      { kind: "h", text: "What the assessment would still need to know" },
       {
         kind: "ul",
         items: [
           "the share of relevant training runs technically possible without covered chips;",
           "the feasibility of covert chip production, acquisition and movement;",
-          "the completeness of the data-center registry;",
-          "the reliability of logging and attestation when the state has access to the hardware;",
-          "the probability that an undeclared cluster is found by intelligence, procurement monitoring and challenge inspections.",
+          "the completeness of the data-centre registry;",
+          "the reliability of logging and attestation when the state itself has access to the hardware;",
+          "and — Document 3’s answer for the nuclear case — the probability that an undeclared cluster is found by some instrument other than inspection of what is declared.",
         ],
       },
     ],

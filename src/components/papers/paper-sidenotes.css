@@ -144,7 +144,7 @@
     text-underline-offset: 2px;
   }
   .paper-sidenote-body a:hover {
-    color: var(--destructive);
+    color: var(--link);
   }
   .paper-sidenote-body img {
     max-width: 100%;

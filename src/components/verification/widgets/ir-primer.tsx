@@ -203,10 +203,12 @@ function Sorter() {
 function LensToggle() {
   const [active, setActive] = useState<string>(IR_V5.lenses[0].key);
   const current = IR_V5.lenses.find((l) => l.key === active)!;
+  // White label on the light theme's deep accents; ink label in dark, where
+  // the Okabe-Ito tokens are lifted a step and white would sink into them.
   const activeClass: Record<LensTag, string> = {
-    real: "bg-exaggerate border-exaggerate text-white",
-    lib: "bg-hide border-hide text-white",
-    con: "bg-comply border-comply text-white",
+    real: "bg-exaggerate border-exaggerate text-white dark:text-background",
+    lib: "bg-hide border-hide text-white dark:text-background",
+    con: "bg-comply border-comply text-white dark:text-background",
   };
   return (
     <div>

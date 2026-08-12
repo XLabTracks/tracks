@@ -84,7 +84,7 @@ export default async function ModulePage({
     <div className="max-w-4xl px-4 py-8 lg:px-8">
       <Breadcrumbs
         items={[
-          { label: "Tracks", href: "/tracks" },
+          { label: "Home", href: "/" },
           { label: track.title, href: `/tracks/${track.slug}` },
           { label: module.title },
         ]}

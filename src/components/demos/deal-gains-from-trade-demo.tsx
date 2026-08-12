@@ -272,7 +272,7 @@ export function DealGainsFromTradeDemo() {
             x={px(pMax)}
             y={AXIS_Y - 24}
             textAnchor={pMax > 75 ? "end" : "start"}
-            className="fill-emerald-700 stroke-card text-[10px] font-medium [paint-order:stroke]"
+            className="fill-emerald-700 dark:fill-emerald-400 stroke-card text-[10px] font-medium [paint-order:stroke]"
             strokeWidth={4}
           >
             {pMax <= 0 ? "our maximum ≤ 0%" : `our maximum ${fmtPct(pMax)}%`}

@@ -635,7 +635,7 @@ export function AllocationExerciseCard({
           className={cn(
             "mt-2 font-mono text-sm font-medium tabular-nums",
             exact
-              ? "text-emerald-700"
+              ? "text-emerald-700 dark:text-[#7FA682]"
               : over
                 ? "text-destructive"
                 : "text-muted-foreground",
@@ -669,7 +669,7 @@ export function AllocationExerciseCard({
           <p
             className={cn(
               "mt-1 text-right font-mono text-xs",
-              chars >= minChars ? "text-emerald-700" : "text-muted-foreground",
+              chars >= minChars ? "text-emerald-700 dark:text-[#7FA682]" : "text-muted-foreground",
             )}
           >
             {chars} / {minChars}

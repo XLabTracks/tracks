@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 
 import { resolveGlossaryTerm } from "@/lib/content/glossary";
+import { checkDefinitionLookupRateLimit } from "@/lib/verification/definition-rate-limit";
 
 /**
  * Looks a term up for the Verification cheatsheet.
@@ -34,6 +35,7 @@ import { resolveGlossaryTerm } from "@/lib/content/glossary";
 
 const LW_SEARCH = "https://www.lesswrong.com/api/search";
 const MAX_TERM = 60;
+const LOOKUP_TIMEOUT_MS = 4_000;
 
 // The wiki slugs terms as lowercase hyphenated words. This is the same
 // normalisation, so "Verification Regime" finds /tag/verification-regime.
@@ -84,6 +86,31 @@ export async function GET(request: Request) {
     });
   }
 
+  // Only upstream-backed lookups consume the allowance. Authored glossary
+  // hits are local and must remain available even when a wiki is having a bad
+  // day. CF-Connecting-IP is injected by the edge; unlike X-Forwarded-For it
+  // is not caller-selected on the deployed route.
+  const rate = checkDefinitionLookupRateLimit(
+    request.headers.get("CF-Connecting-IP") ?? "unknown",
+  );
+  if (!rate.allowed) {
+    return NextResponse.json(
+      { error: "Too many definition lookups" },
+      {
+        status: 429,
+        headers: {
+          "Retry-After": String(rate.retryAfterSeconds),
+          "X-RateLimit-Limit": String(rate.limit),
+          "X-RateLimit-Remaining": "0",
+        },
+      },
+    );
+  }
+
+  // One budget covers the whole fallback chain. Without this, each miss could
+  // wait for several independent upstream timeouts in sequence.
+  const signal = AbortSignal.timeout(LOOKUP_TIMEOUT_MS);
+
   // Which leg did what, reported on the not-found and failure responses.
   // The chain is best-effort across two upstreams that fail differently by
   // egress (bot challenges, robot policy), so a bare 502 is undebuggable
@@ -105,6 +132,7 @@ export async function GET(request: Request) {
       body: JSON.stringify([
         { indexName: "tags", params: { query: raw, hitsPerPage: 5 } },
       ]),
+      signal,
       // The wiki changes rarely and a learner may look up the same term on
       // several pages; a day of edge cache keeps this off LessWrong's servers.
       next: { revalidate: 86400 },
@@ -160,6 +188,7 @@ export async function GET(request: Request) {
           "Api-User-Agent":
             "XLabTracksVerification/1.0 (https://aisafetytracks.com; course cheatsheet term lookup)",
         },
+        signal,
         next: { revalidate: 86400 },
       },
     );
@@ -198,6 +227,7 @@ export async function GET(request: Request) {
           "Api-User-Agent":
             "XLabTracksVerification/1.0 (https://aisafetytracks.com; course cheatsheet term lookup)",
         },
+        signal,
         next: { revalidate: 86400 },
       },
     );
@@ -245,7 +275,7 @@ export async function GET(request: Request) {
       // overlap at all, the dictionary leg below is the honest fallback.
       const tried = hits
         .filter((h) => slugify(h.title ?? "") !== slug && score(h) >= 2)
-        .slice(0, 3);
+        .slice(0, 1);
       for (const cand of tried) {
         const top = cand.title as string;
         const r2 = await fetch(
@@ -258,6 +288,7 @@ export async function GET(request: Request) {
               "Api-User-Agent":
                 "XLabTracksVerification/1.0 (https://aisafetytracks.com; course cheatsheet term lookup)",
             },
+            signal,
             next: { revalidate: 86400 },
           },
         );
@@ -305,6 +336,7 @@ export async function GET(request: Request) {
           "Api-User-Agent":
             "XLabTracksVerification/1.0 (https://aisafetytracks.com; course cheatsheet term lookup)",
         },
+        signal,
         next: { revalidate: 86400 },
       },
     );

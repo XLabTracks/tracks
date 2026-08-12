@@ -39,7 +39,7 @@ export const verificationExercises: VerificationExerciseDef[] = [
   { id: "context-distiller", title: "The Distiller", bridged: true },
   { id: "what-do-they-say", title: "Why Are We Concerned About Superintelligence?", bridged: false },
   { id: "types-of-ai", title: "The Types of AI", bridged: false },
-  { id: "short-history", title: "A Short History of Acceleration", bridged: false },
+  { id: "short-history", title: "A Short History of AI Acceleration", bridged: false },
   { id: "precedent-cases", title: "Did the Regime Hold?", bridged: true },
   // nuclear-disanalysis stood down 2026-08-12 when the owner's document
   // packet took over 0.3's reasoning tasks — the widget and its data file

@@ -252,6 +252,13 @@
       "container": "LessWrong",
       "date": "2006"
     },
+    "https://ourworldindata.org/brief-history-of-ai": {
+      "title": "The Brief History of Artificial Intelligence: The World Has Changed Fast — What Might Be Next?",
+      "about": "The Our World in Data article whose two charts 0.1 reproduces: the timeline of notable AI systems, and test scores of AI systems relative to human performance.",
+      "authors": "Roser, Max",
+      "container": "Our World in Data",
+      "date": "6 Dec. 2022"
+    },
     "https://www.lesswrong.com/posts/PBRWb2Em5SNeWYwwB/humans-are-not-automatically-strategic": {
       "title": "Humans Are Not Automatically Strategic",
       "about": "A post arguing that systematic goal-pursuit is a learned skill, not a default human behavior.",
@@ -260,11 +267,11 @@
       "date": "8 Sept. 2010"
     },
     "https://www.lesswrong.com/posts/qnvmZCjzspceWdgjC/the-world-keeps-getting-saved-and-you-don-t-notice": {
-      "title": "The World Keeps Getting Saved and You Don't Notice",
+      "title": "The World Keeps Getting Saved and You Don’t Notice",
       "about": "The post 0.1.1 is written after: prevention is invisible because people notice events and not their absence, so the work that stops a catastrophe is systematically undervalued and the averted risk is remembered as never having been real.",
       "authors": "Bogoed",
       "container": "LessWrong",
-      "date": "Feb. 2026"
+      "date": "16 Feb. 2026"
     },
     "https://www.nist.gov/caisi": {
       "title": "Center for AI Standards and Innovation (CAISI)",

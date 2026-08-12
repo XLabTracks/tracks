@@ -2,10 +2,10 @@
    account when there is one.
 
    These pages have no server session of their own, so they ask
-   /api/verification/state. Signed in: the newer of server and browser wins,
-   and every later change is pushed. Signed out: 401, and the pages carry on
-   with localStorage exactly as before. Both are supported modes — signed out
-   is not an error state and must never be reported as one.
+   /api/verification/state. Signed in: every store independently takes its
+   newer copy, and every later change is pushed. Signed out: 401, and the
+   pages carry on with localStorage exactly as before. Both are supported
+   modes — signed out is not an error state and must never be reported as one.
 
    Load AFTER platform.js, memo-store.js and notebook.js: it reads the stores
    they own.
@@ -15,12 +15,10 @@
    owners, so a raw localStorage write is invisible until reload — that is why
    this reloads on adopt rather than patching their internals.
 
-   Trap: last-write-wins is on the client's own updatedAt. Two tabs of the
-   same person are the only realistic conflict, so the newer edit is right;
-   do not add a merge that could resurrect a unit the learner un-completed.
-   The route enforces the same rule at its end — a push carrying an older
-   stamp than the account holds is refused with 409, and the tab keeps its own
-   copy until its next load, where adopting is safe.
+   Trap: last-write-wins is PER STORE, not for the enclosing document. A new
+   Field Map must not make an old notebook win along with it. The route uses
+   the same per-store clocks in a compare-and-swap loop, so concurrent tabs
+   converge instead of replacing one another's unrelated work.
 
    Trap: every store has to date itself, removals included. Deriving the date
    from the newest unit stamp alone made a reset look OLDER than the progress
@@ -38,6 +36,13 @@
   const MEMO_KEY = 'xlab-verification-memo-desk.v1';
   const FIELD_MAP_KEY = 'vt-field-map:v1';
   const PUSH_MS = 1200;
+  const STORES = [
+    { name: 'progress', key: PROGRESS_KEY },
+    { name: 'notebook', key: NOTEBOOK_KEY },
+    { name: 'highlights', key: HIGHLIGHTS_KEY },
+    { name: 'memos', key: MEMO_KEY },
+    { name: 'fieldMap', key: FIELD_MAP_KEY }
+  ];
 
   let signedIn = false;
   let pushTimer = null;
@@ -47,56 +52,82 @@
      tab that does not yet know it is signed in. */
   let ready = null;
 
-  function readLocal() {
-    function get(k) {
-      try { return JSON.parse(localStorage.getItem(k) || 'null'); }
-      catch (e) { return null; }
+  function positiveStamp(value) {
+    const number = Number(value);
+    return Number.isFinite(number) && number > 0 ? number : 0;
+  }
+
+  function storeStamp(name, value) {
+    if (!value || typeof value !== 'object' || Array.isArray(value)) return 0;
+    if (name === 'memos') return positiveStamp(value._updatedAt);
+    if (name !== 'progress') return positiveStamp(value.updatedAt);
+    let newest = positiveStamp(value.updatedAt);
+    if (value.units && typeof value.units === 'object') {
+      Object.keys(value.units).forEach(function (key) {
+        newest = Math.max(newest, positiveStamp(value.units[key]));
+      });
     }
-    const progress = get(PROGRESS_KEY);
-    const notebook = get(NOTEBOOK_KEY);
-    const highlights = get(HIGHLIGHTS_KEY);
-    const memos = get(MEMO_KEY);
-    const fieldMap = get(FIELD_MAP_KEY);
-    return {
-      progress: progress,
-      notebook: notebook,
-      highlights: highlights,
-      memos: memos,
-      fieldMap: fieldMap,
-      // The newest edit any store has seen. The notebook, the highlights, the
-      // memo desk and the progress store each carry one for the whole store;
-      // progress ALSO carries a timestamp per completed unit, and those are
-      // still read so a store written before platform.js began stamping
-      // itself still dates itself by its newest completion.
-      updatedAt: Math.max(
-        notebook && notebook.updatedAt ? notebook.updatedAt : 0,
-        highlights && highlights.updatedAt ? highlights.updatedAt : 0,
-        memos && memos._updatedAt ? memos._updatedAt : 0,
-        fieldMap && fieldMap.updatedAt ? fieldMap.updatedAt : 0,
-        progress && progress.updatedAt ? Number(progress.updatedAt) || 0 : 0,
-        progress && progress.units
-          ? Object.keys(progress.units).reduce(function (m, k) {
-              return Math.max(m, Number(progress.units[k]) || 0);
-            }, 0)
-          : 0
-      )
-    };
+    return newest;
   }
 
-  function writeLocal(state) {
+  function getLocal(key) {
+    try { return JSON.parse(localStorage.getItem(key) || 'null'); }
+    catch (e) { return null; }
+  }
+
+  function readLocal() {
+    const document = { version: 2, stamps: {}, updatedAt: 0 };
+    STORES.forEach(function (store) {
+      const value = getLocal(store.key);
+      const stamp = storeStamp(store.name, value);
+      document[store.name] = value;
+      document.stamps[store.name] = stamp;
+      document.updatedAt = Math.max(document.updatedAt, stamp);
+    });
+    return document;
+  }
+
+  function writeStore(store, value) {
     try {
-      if (state.progress) localStorage.setItem(PROGRESS_KEY, JSON.stringify(state.progress));
-      if (state.notebook) localStorage.setItem(NOTEBOOK_KEY, JSON.stringify(state.notebook));
-      if (state.highlights) localStorage.setItem(HIGHLIGHTS_KEY, JSON.stringify(state.highlights));
-      if (state.memos) localStorage.setItem(MEMO_KEY, JSON.stringify(state.memos));
-      if (state.fieldMap) localStorage.setItem(FIELD_MAP_KEY, JSON.stringify(state.fieldMap));
-    } catch (e) { /* quota or private mode — the account copy stays authoritative */ }
+      if (value === null || value === undefined) localStorage.removeItem(store.key);
+      else localStorage.setItem(store.key, JSON.stringify(value));
+      return true;
+    } catch (e) {
+      // Quota or private mode — the account copy stays authoritative.
+      return false;
+    }
   }
 
-  /* One send. A 409 is the route refusing a document older than the one the
-     account holds — not an error to report: this tab keeps writing to its own
-     stores and adopts the account's copy on its next load, which is the only
-     moment swapping the stores out is safe. */
+  function normalizedServer(state) {
+    if (!state || typeof state !== 'object' || Array.isArray(state)) return null;
+    const current = state.version === 2;
+    const supplied = state.stamps && typeof state.stamps === 'object' ? state.stamps : {};
+    const legacy = positiveStamp(state.updatedAt);
+    const document = { version: 2, stamps: {}, updatedAt: 0 };
+    STORES.forEach(function (store) {
+      const value = state[store.name] === undefined ? null : state[store.name];
+      const direct = positiveStamp(supplied[store.name]);
+      const derived = storeStamp(store.name, value);
+      const stamp = Math.max(direct, derived, !current && value !== null && !direct && !derived ? legacy : 0);
+      document[store.name] = value;
+      document.stamps[store.name] = stamp;
+      document.updatedAt = Math.max(document.updatedAt, stamp);
+    });
+    return document;
+  }
+
+  function adoptNewerStores(server, local) {
+    let adopted = false;
+    STORES.forEach(function (store) {
+      if (server.stamps[store.name] > local.stamps[store.name]) {
+        adopted = writeStore(store, server[store.name]) || adopted;
+      }
+    });
+    return adopted;
+  }
+
+  /* One send. A 409 means five compare-and-swap attempts all collided; the
+     debounce or unload retry will offer the same per-store document again. */
   function send() {
     return fetch(URL_STATE, {
       method: 'PUT',
@@ -179,6 +210,9 @@
        be lost calls flush() before it destroys the page. */
     window.addEventListener('pagehide', function () {
       if (!signedIn) return;
+      // Debounced stores get one synchronous chance to commit their latest
+      // in-memory value before this handler snapshots localStorage.
+      window.dispatchEvent(new CustomEvent('vt-before-account-sync'));
       const body = JSON.stringify(readLocal());
       let sent = false;
       try {
@@ -213,21 +247,21 @@
       signedIn = true;
 
       const local = readLocal();
-      const server = res.data;
-      /* Compare the client-derived stamp INSIDE the stored document, not the
-         row's own updatedAt. The row is touched on every write, so it is
-         always newer than the edit it holds — comparing against it would see
-         the server as ahead on every load and reload forever. */
-      const serverAt = server && Number(server.updatedAt) || 0;
+      const server = normalizedServer(res.data);
 
-      if (server && serverAt > local.updatedAt) {
-        writeLocal(server);
+      if (server && adoptNewerStores(server, local)) {
         /* The stores were read into module scope before this resolved, so the
            page is showing the old copy until it is rebuilt. Reload at most
            once per tab: if anything above ever miscompares again, the page
            degrades to slightly stale rather than to a reload loop. */
-        if (!sessionStorage.getItem('vt-sync-adopted')) {
-          try { sessionStorage.setItem('vt-sync-adopted', '1'); } catch (e) { /* private mode */ }
+        let reload = false;
+        try {
+          if (!sessionStorage.getItem('vt-sync-adopted')) {
+            sessionStorage.setItem('vt-sync-adopted', '1');
+            reload = true;
+          }
+        } catch (e) { /* private mode: do not risk a reload loop */ }
+        if (reload) {
           location.reload();
           return;
         }

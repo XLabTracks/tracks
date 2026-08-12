@@ -370,6 +370,118 @@ reasoning", and "delete ai 2040 from here, it's from other section".
 - **The AI 2040 card is gone from 0.3.** It is 0.2's material and 0.2
   carries its reading cards; the brief duplicate here is removed.
 
+### 0.1 reordered on the author's instruction (2026-08-11)
+
+Three moves, all hers, all local-first and browser-verified:
+
+1. **"The Danger of ASI" now opens the part after the video.** The heading
+   and its two intro sentences moved below the optional-material fold and the
+   strongest-objection exercise. Trap handled: as their own h2 part those
+   ~225 characters sit under MIN_PART_CHARS and would merge *backwards* into
+   the video page — the opposite of the intent — so "Real-World Harm:
+   Dual-Use Capabilities" was demoted to an h3 beneath the new h2. One part,
+   opening with the title and intro, Real-World Harm directly after. A
+   comment in the MDX says why the h3 must stay an h3.
+2. **The "Most notably, over 1,300 employees…" sentence** moved from before
+   the what-do-they-say widget to after it, directly above "Four of them, on
+   why they signed:" — the Pacing the Frontier material now reads as one run
+   instead of being split by the widget.
+3. **The "short history of acceleration" fold is gone**, replaced inline by
+   the two Our World in Data charts from "The brief history of artificial
+   intelligence" (Roser, CC BY, linked in text and in both captions): the
+   notable-systems timeline as a committed image
+   (`public/verification/assets/owid/ai-timeline.jpg`, provenance in
+   `SOURCES.md` beside it) and the test-scores grapher as its live iframe
+   embed, per the author's supplied snippet. Both framed in the Fold visual
+   language — white chart plate, painted `--primary` caption bar — on her
+   "match the site's red" instruction; the chart internals are OWID's own.
+   The `short-history` widget thereby lost its only consumer, and
+   widgets.test.ts rightly refuses orphans, so it was retired deliberately:
+   component, data file, registry row and exercises list entry all deleted in
+   the same commit. Its learner state key (localStorage) dies with it.
+
+Also in this commit: `citations.json` gains the LessWrong post 0.1.1 links
+(a gap the previous session shipped — citations.test.ts was red on the
+branch until now) and the OWID article.
+
+### The 0.1 charts, round two (2026-08-11, same day)
+
+Three corrections from the author on review of the first pass:
+
+1. **The charts are optional again.** They live back inside a Fold —
+   "Optional — A Short History of AI Acceleration", her title — not inline.
+2. **Red only, theme-aware.** The OWID embeds (their palette, their white
+   ground) are gone; both charts are redrawn as native SVG in the restored
+   `short-history` widget. Every mark inks from
+   `color-mix(in oklab, var(--primary), var(--foreground) N%)` (N ≤ 60), so
+   the ramp re-solves per theme — verified on day and night. Series names
+   ride on the lines in their own shade per the categorical-colour rule. The
+   test-scores data was read back out of OWID's published SVG (pixel→value
+   against its own axis); the timeline annotations are OWID's verbatim. The
+   committed `assets/owid/ai-timeline.jpg` and the grapher iframe are
+   deleted; attribution (CC BY, "redrawn from") sits under each chart, and
+   the article link stays in the fold's lead line so the citations entry
+   keeps its consumer.
+3. **"Real-World Harm: Dual-Use Capabilities" wears the display face.** The
+   h3 demotion had dropped it to the body face (app-bridge's deliberate
+   sub-heading rule). One scoped exception in app-bridge.css, keyed on the
+   heading's rehype-slug id — renaming the heading drops the rule, says so in
+   the comment there. Computed style now matches the h2s exactly.
+
+### 0.1 heading hierarchy flattened to two section heads (2026-08-11)
+
+On the author's instruction: "The Danger of ASI" and "Preventing ASI via
+International and Verifiable Agreements" are 0.1's only h2s; "What is ASI?"
+and "What has AI verification looked like so far?" demoted to h3 beside the
+three that already were. Every subheading now visibly reads as one — the
+body-face h3 style — so the app-bridge display-face exception for Real-World
+Harm (added earlier the same day) is deleted: it existed to make that h3
+match the h2s, and the author has now said subheadings should NOT match.
+The lesson reads as three parts: Start (video, optional fold, objection
+task), The Danger of ASI, Preventing ASI.
+
+A false alarm worth recording: after the demotion the lesson appeared to
+stop chunking on hard loads — no strip, no pager, one long page — and only
+chunk on client-side navigations. The cause was the Browser pane sitting
+hidden: Chromium pauses hydration in hidden tabs, so the reader's
+mount-time derivation simply had not run yet. `document.visibilityState`
+is the tell. Nothing was wrong with planParts (verified against the live
+block list: three parts) and nothing in the reader was changed — a
+DOMContentLoaded re-derive guard written while chasing this was reverted
+unshipped once the pane, not the code, proved to be the variable.
+
+### Correction: subheadings share the display face (2026-08-12)
+
+The previous entry read the author's "smaller and clear they're subheadings"
+as the body-face h3 style. Wrong reading — on seeing it she clarified: same
+face as the section heads, only smaller. One family at two sizes IS the
+hierarchy. The app-bridge h3 rule now sets the display face at
+weight 500 / calc(1em + 6px) — course-wide, every verification lesson's
+h3 — while h4–h6 keep the emphasized body-face style for the deeply nested
+worked examples. Verified computed: h2 24px, h3 22px, both Space Grotesk 500.
+
+### The test-scores chart answers the pointer (2026-08-12)
+
+On the author's instruction, the redrawn test-scores chart now behaves like
+the OWID grapher it was redrawn from: hovering drops a vertical guide at the
+nearest year and a tooltip lists every metric's value there — recorded
+points at full strength, linear interpolations dimmed, series outside their
+run omitted, sorted by value. Verified against the original at 2017: Speech
+0.4 / Reading −8.9 exact, Image 9.1 / Handwriting 1.9 interpolated, Language
+and Predictive absent — the same rows the grapher shows. Hover state is
+ephemeral; nothing persists and nothing completes.
+
+### Misuse/misalignment fold rewritten to the author's new text (2026-08-12)
+
+The fold's body is her replacement verbatim: four misuse bullets (cyber /
+bio-chem / military-strategic / influence), three misalignment bullets
+(wrong objective / resisting correction / self-improvement), the two arXiv
+links carried over with her new link text (same URLs, so citations.json
+stands). The old framing paragraph ("Each AI risk can be classified…") went
+with the old body — her text opens directly on the misuse definition. Bullet
+lead phrases render bold, the fold's existing convention; the label is
+unchanged.
+
 ## 0.3 gets the document packet; the Baker block stands down (2026-08-12)
 
 The owner delivered the packet with exact-cut instructions per document:

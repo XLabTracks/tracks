@@ -394,3 +394,14 @@ run omitted, sorted by value. Verified against the original at 2017: Speech
 0.4 / Reading −8.9 exact, Image 9.1 / Handwriting 1.9 interpolated, Language
 and Predictive absent — the same rows the grapher shows. Hover state is
 ephemeral; nothing persists and nothing completes.
+
+### Misuse/misalignment fold rewritten to the author's new text (2026-08-12)
+
+The fold's body is her replacement verbatim: four misuse bullets (cyber /
+bio-chem / military-strategic / influence), three misalignment bullets
+(wrong objective / resisting correction / self-improvement), the two arXiv
+links carried over with her new link text (same URLs, so citations.json
+stands). The old framing paragraph ("Each AI risk can be classified…") went
+with the old body — her text opens directly on the misuse definition. Bullet
+lead phrases render bold, the fold's existing convention; the label is
+unchanged.

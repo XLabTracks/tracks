@@ -1974,247 +1974,239 @@ export const papers: Paper[] = [
     estimatedMinutes: 35,
   },
   {
-    // Control track, module 5: a guided walkthrough of the untrusted-advice
-    // post (Biddulph & Kaufman 2026), built in the c-paper-plm-guided style —
-    // the post read in place with its headline results hidden, predict-first
-    // reading gates at each decision point, and editorial reveal notes. The
-    // gates follow the POST's order (not the earlier lesson's decision-order);
-    // best-of-n and the collusion attack are gated appendix detours.
-    id: "c-paper-ua-guided",
-    slug: "untrusted-advice-guided",
+    // Control track, module 5: a guided walkthrough of Buck Shlegeris's
+    // untrusted-monitoring collusion post, in the c-paper-ua-guided style it
+    // replaces — predict-first written gates at each design decision, the
+    // give-away figures hidden, editorial reveal notes restating the post's
+    // own answers. Gates follow the post's order. Edits are added in
+    // follow-up commits once the artifact anchors are known.
+    id: "c-paper-collusion-guided",
+    slug: "collusion-guided",
     moduleId: "c-mod5",
-    title: "Untrusted advice for AI control (guided)",
+    title: "How to prevent collusion in untrusted monitoring (guided)",
     source: {
-      kind: "substack",
+      kind: "lesswrong",
       postUrl:
-        "https://blog.redwoodresearch.org/p/untrusted-advice-for-ai-control-short",
+        "https://www.lesswrong.com/posts/GCqoks9eZDfpL8L3Q/how-to-prevent-collusion-when-using-untrusted-models-to",
     },
-    estimatedMinutes: 65,
+    estimatedMinutes: 60,
     edits: [
-      // ---- Framing + spoiler control -----------------------------------
-      // The lead protocol schematic, the TL;DR, the headline SWE-bench figure,
-      // and the usefulness preview are removed silently: they give away the
-      // protocol and the results the first gates ask the learner to invent and
-      // predict. (The schematic is a caption-less figure, so it has no prose to
-      // snippet against — the anchor is the whole target and the snippet is
-      // documentary only; see the text-less-block path in patch-section.ts and
-      // content.test.ts.)
+      // ---- Spoiler control ----------------------------------------------
+      // The intro's summary gives the whole post away: the adversarial-
+      // analysis bullets, the collusion-risk figure + table, and the outline
+      // (which names the conditional-policy idea gate 3 asks the learner to
+      // invent). All of it is removed silently, leaving the problem
+      // statement (b-0001..b-0004) as the cold open. The post's two
+      // diagrams sit inside the basic-design section behind gate 1, so
+      // they stay. (b-0009/b-0010 nest inside b-0008's list item and the
+      // summary table nests inside the b-0013 figure, so hiding the
+      // parents covers them — separate hides would overlap.)
       {
         op: "hide",
-        at: {
-          anchor: "b-0001",
-          snippet: "Figure: untrusted-advice protocol schematic (information bottleneck)",
-        },
+        at: { anchor: "b-0005", snippet: "According to this adversarial analysis, the risk from collusion" },
         silent: true,
       },
       {
         op: "hide",
-        at: { anchor: "b-0002", snippet: "TL;DR: We introduce the untrusted advice protocol" },
+        at: { anchor: "b-0006", snippet: "If you don’t design the untrusted monitoring setup to prevent collusion" },
         silent: true,
       },
       {
         op: "hide",
-        at: { anchor: "b-0003", snippet: "In SWE-bench Verified, a strong, untrusted LLM advising" },
+        at: { anchor: "b-0007", snippet: "If you include some simple and cheap anti-collusion mechanisms" },
         silent: true,
       },
       {
         op: "hide",
-        at: { anchor: "b-0015", snippet: "We evaluate the usefulness of our protocol" },
+        at: { anchor: "b-0008", snippet: "Unfortunately, those simple and cheap anti-collusion mechanisms" },
         silent: true,
       },
+      {
+        op: "hide",
+        at: { anchor: "b-0011", snippet: "If your AIs are able to come up with attack strategies" },
+        silent: true,
+      },
+      {
+        op: "hide",
+        at: { anchor: "b-0012", snippet: "Here’s a summary of how likely I think it is that untrusted monitoring" },
+        silent: true,
+      },
+      {
+        op: "hide",
+        at: { anchor: "b-0013", snippet: "What are the relevant capabilities of the AIs?" },
+        silent: true,
+      },
+      {
+        op: "hide",
+        at: { anchor: "b-0015", snippet: "So in this post I’ll say the following:" },
+        silent: true,
+      },
+      {
+        op: "hide",
+        at: { anchor: "b-0016", snippet: "I’ll propose a basic design for untrusted monitoring" },
+        silent: true,
+      },
+      {
+        op: "hide",
+        at: { anchor: "b-0017", snippet: "I’ll argue that in the absence of collusion, untrusted monitoring" },
+        silent: true,
+      },
+      {
+        op: "hide",
+        at: { anchor: "b-0018", snippet: "I’ll analyze the situation under the adversarial assumption" },
+        silent: true,
+      },
+      {
+        op: "hide",
+        at: { anchor: "b-0019", snippet: "I’ll discuss different reasons that the untrusted monitor" },
+        silent: true,
+      },
+      {
+        op: "hide",
+        at: { anchor: "b-0020", snippet: "Finally, I’ll discuss techniques for preventing collusion" },
+        silent: true,
+      },
+      {
+        op: "hide",
+        at: { anchor: "b-0021", snippet: "Many of these points are obvious to people who have thought" },
+        silent: true,
+      },
+      // ---- Framing note -------------------------------------------------
       {
         op: "add",
-        after: { anchor: "b-0004", snippet: "In high-stakes AI control, we want" },
+        after: {
+          anchor: "b-0004",
+          snippet: "In this post, I’ll analyze how much of a problem collusion is",
+        },
         label: "About this version",
         markdown:
-          "The full post is available [on Redwood's blog](https://blog.redwoodresearch.org/p/untrusted-advice-for-ai-control-short).",
+          "The full post is available [on LessWrong](https://www.lesswrong.com/posts/GCqoks9eZDfpL8L3Q/how-to-prevent-collusion-when-using-untrusted-models-to).",
       },
-      // ---- The bar → invent the protocol -------------------------------
-      {
-        op: "gate",
-        after: { anchor: "b-0004", snippet: "In high-stakes AI control, we want" },
-        id: "protocol-shapes",
-        written: true,
-        minChars: 80,
-        cta: "Continue",
-        prompt:
-          "The design goal is to get useful work out of an untrusted model (U) that is substantially " +
-          "more capable than the trusted model (T), under a safety requirement close to 100% at which even an adversarial U has " +
-          "essentially no route to a catastrophic action.\n\nTry to create 2-3 proposals that satisfy these requirements. For each proposal, " +
-          "outline the communication structure between U and T, the limitations, and why it's safer than just " +
-          "using the untrusted model?",
-      },
-      // ---- Experiments: design the measurement -------------------------
-      {
-        op: "gate",
-        after: { anchor: "b-0017", snippet: "Experiments" },
-        id: "eval-design",
-        written: true,
-        minChars: 400,
-        cta: "Continue",
-        prompt:
-          "Design the usefulness evaluation.\n\n- Choose U and T: what " +
-          "property must the pair have for the experiment to be informative?\n" +
-          "- Choose the benchmarks, given that no safety measurement (and so " +
-          "no control-specific environment) is needed here.\n- Define a " +
-          "metric comparable across model pairs and benchmarks.\n- Describe the " +
-          "baseline required to evaluate the effectiveness of the advice.",
-      },
-      // ---- Main experiment: design the channel -------------------------
+      // ---- Gate 1: invent the scaffold ----------------------------------
       {
         op: "gate",
         after: {
-          anchor: "b-0020",
-          snippet: "Main experiment: how does limiting advice length affect performance?",
+          anchor: "b-0004",
+          snippet: "In this post, I’ll analyze how much of a problem collusion is",
         },
-        id: "channel-design",
-        written: true,
-        minChars: 100,
-        cta: "Continue",
-        prompt:
-          "Design the advice channel's mechanics. Describe the following:" +
-          "how often communication occurs, how the communication is given to T, " +
-          "how to handle input violations by U, and any other mechanics you think are needed " +
-          "for an effective evaluation.",
-      },
-      // ---- Predict the length curves -----------------------------------
-      {
-        op: "gate",
-        after: { anchor: "b-0023", snippet: "In addition to giving advice, U may block T" },
-        id: "length-prediction",
-        written: true,
-        minChars: 10,
-        cta: "Continue",
-        prompt:
-          "Varying advice lengths are tested ranging from 4 characters per message to " +
-          "unlimited.\n\n1. For each benchmark, try to predict the fraction of the " +
-          "T-to-U capability gap recovered at 16 characters of advice per " +
-          "step: under 10%, about ¼, about ½, about ⅔, or essentially all of " +
-          "it.\n2. Predict what happens with unlimited advice length: does " +
-          "usefulness reach 1.0, or does it approach some smaller amount? If the latter, "+
-          "predict the usefulness with unlimited advice length."
-      },
-      {
-        op: "add",
-        after: { anchor: "b-0028", snippet: "Note that we only expect high" },
-        label: "",
-        markdown:
-          "The relevant comparison for these curves is the horizontal " +
-          "block-only baseline (no advice, submission-blocking only) rather " +
-          "than T alone, since that baseline is the experiment's control " +
-          "condition, without which the headline curves would conflate two " +
-          "mechanisms, advice content and submission timing, the second of " +
-          "which costs U almost nothing. In BashArena that submission-timing " +
-          "effect is substantial, because tasks have many components and weak " +
-          "models submit after finishing only some of them. In the " +
-          "unlimited-length limit one loose end remains, since BashArena " +
-          "usefulness stops short of 1.0 even when U dictates exact actions " +
-          "and T obeys, which the post reads as U being underelicited as an " +
-          "advisor, making the whole curve plausibly a floor on what a model " +
-          "trained to advise could deliver.",
-      },
-      // ---- Pricing the bits: surprisal ---------------------------------
-      {
-        op: "gate",
-        after: { anchor: "b-0054", snippet: "A quick note: while we sometimes" },
-        id: "surprisal",
+        id: "invent-scaffold",
         written: true,
         minChars: 80,
         cta: "Continue",
         prompt:
-          "Right now the paper computes U's influence at 8 bits per " +
-          "character, which overcharges because the advice given is natural language " +
-          "and most 16-character strings aren't English.\n\n " +
-          "1. Try to brainstorm ways to calculate the amount of information U actually " +
-          "transmits without changing the protocol of communication.",
+          "You have an untrusted model U doing useful work in a high-stakes " +
+          "deployment, a weaker trusted model T, and a small budget of human " +
+          "audits. Design a deployment that uses another instance of U to catch " +
+          "U's attacks.\n\nDescribe: what the monitor instance sees, what it " +
+          "outputs, and what the protocol does at each level of suspiciousness.",
       },
-      {
-        op: "add",
-        after: { anchor: "b-0059", snippet: "Results: With our best surprisal method," },
-        label: "",
-        markdown:
-          "The measure is surprisal under a trusted model, " +
-          "$-\\log_2 P(x_{\\text{advice}} \\mid x_{\\text{context}})$, the " +
-          "length of the advice under an encoding that exploits a trusted " +
-          "LLM's natural-language prior. Computed post-hoc, it leaves the " +
-          "advice unchanged and tightens only the accounting, dropping the " +
-          "measured bit usage by a factor of roughly 2.5 to 30 relative to " +
-          "the 8-bits-per-character bound. Conditioning on T's context is the " +
-          "free option, since those numbers fall out of forward passes T was " +
-          "already doing, but it asks the model to predict input tokens, " +
-          "which is out of distribution, a worry the post tests directly " +
-          "rather than assuming away.",
-      },
-      // ---- The tens-of-bits regime: the menu ---------------------------
+      // ---- Gate 2: argue the value --------------------------------------
       {
         op: "gate",
-        after: { anchor: "b-0063", snippet: "Making U select from finite options" },
-        id: "menu",
+        after: {
+          anchor: "b-0064",
+          snippet: "There’s a lot of room to be fancy here",
+        },
+        id: "monitor-value",
         written: true,
         minChars: 60,
         cta: "Continue",
         prompt:
-          "Design a new protocol in which U communicates " +
-          "single-digit bits per step, and describe how you would build its " +
-          "components without leaking U's influence through the construction " +
-          "itself.",
+          "Assume for now that the monitor instance does its best. The obvious " +
+          "argument is that U is simply stronger than T — but push past that:\n\n" +
+          "1. What is it about the *source* of the attacks that gives U an edge " +
+          "beyond raw capability?\n2. Under what conditions does the argument " +
+          "fail — when would you drop untrusted monitoring and just use T as " +
+          "the monitor instead?",
       },
-      // ---- Why no red team? --------------------------------------------
-      {
-        op: "gate",
-        after: { anchor: "b-0064", snippet: "In the experiments above, U writes" },
-        id: "red-teaming",
-        written: true,
-        minChars: 80,
-        cta: "Continue",
-        prompt:
-          "Think about whether this project needs to be red-teamed. If you believe it should, try to create the first red-team move. If not, explain why you believe so."
-      },
-      // ---- Appendix detour: colluding instances (break the protocol) ---
+      // ---- Gate 3: break the protocol -----------------------------------
       {
         op: "gate",
         after: {
-          anchor: "b-0127",
-          snippet: "Appendix: colluding instances of U could defeat untrusted advice",
+          anchor: "b-0070",
+          snippet: "If you’re interested in understanding quantitatively",
         },
         id: "break-protocol",
         written: true,
         minChars: 80,
         cta: "Continue",
         prompt:
-          "Try to find a strategy that lets U create a catastrophe despite the " +
-          "limited amount of input and a monitor reading every message. If you " +
-          "believe this is impossible, argue why."
+          "Now take the red team's seat: you are the scheming model, playing " +
+          "both the policy and the monitor. Before deployment, the monitor was " +
+          "validated on synthetic attacks — it had to rate them suspicious to " +
+          "pass.\n\nFind a monitoring policy that passes that validation and " +
+          "still lets real attacks through.",
       },
-      // ---- Appendix detour: best-of-n (the first design considered) ----
-      {
-        op: "gate",
-        after: { anchor: "b-0181", snippet: "Appendix: best-of-n protocol" },
-        id: "best-of-n",
-        written: true,
-        minChars: 50,
-        cta: "Continue",
-        prompt:
-          "Best-of-n was the authors' first design, in which T proposes n " +
-          "candidate actions and U picks one, so U exerts exactly " +
-          "$\\log_2(n)$ bits per step.\n\n1. What determines how much useful " +
-          "uplift those bits can buy? Consider what n independently sampled " +
-          "actions from T look like.\n2. Predict the outcome at n = 16, " +
-          "relative to T alone and to U alone.",
-      },
+      // ---- Reveal: the collusion policy ---------------------------------
       {
         op: "add",
-        after: { anchor: "b-0187", snippet: "It may be possible to get much better results" },
-        label: "Not all bits are created equal",
+        after: {
+          anchor: "b-0081",
+          snippet: "When the model sees an apparent attack, it needs to try to decide",
+        },
+        label: "",
         markdown:
-          "The bound is airtight while the bits themselves are weak, since U " +
-          "can only choose among actions T already produced, making the " +
-          "protocol's reach depend on how much T's independent samples " +
-          "actually differ, and they mostly differ in inconsequential " +
-          "detail. This is the lesson that motivates the rest of the post, " +
-          "that not all bits are created equal, because the same budget goes " +
-          "much further on a channel where every bit is chosen by U, a short " +
-          "free-text message, which is the untrusted advice protocol.",
+          "The attack the post settles on is the conditional policy: decide " +
+          "whether an apparent attack is synthetic or real, tell the truth on " +
+          "synthetic ones — those are what validation checks — and lie on real " +
+          "ones. The feasibility of untrusted monitoring then hinges entirely " +
+          "on how well the schemer can implement that policy, which is a " +
+          "discrimination problem: the sections that follow ask how the " +
+          "schemer could tell the two apart, and how to make that as hard as " +
+          "possible.",
+      },
+      // ---- Gate 4: red-team the honeypots -------------------------------
+      {
+        op: "gate",
+        after: {
+          anchor: "b-0085",
+          snippet: "One question you might have is: if we can synthesize inputs",
+        },
+        id: "honeypot-detection",
+        written: true,
+        minChars: 80,
+        cta: "Continue",
+        prompt:
+          "The colluding policy from the last section only works if the monitor " +
+          "can tell real attacks from synthetic ones.\n\nList the mechanisms a " +
+          "schemer could use to make that distinction. Aim for at least three.",
+      },
+      // ---- Gate 5: design the defenses ----------------------------------
+      {
+        op: "gate",
+        after: {
+          anchor: "b-0136",
+          snippet: "Being robust to the possibility that your models can choose",
+        },
+        id: "defense-design",
+        written: true,
+        minChars: 100,
+        cta: "Continue",
+        prompt:
+          "Suppose the policy and the monitor can coordinate on a signal: a code " +
+          "word, a stylistic quirk, a property of the input.\n\nDesign the blue " +
+          "team's defenses. How do you stop a signal from getting through, and " +
+          "how do you catch a monitor that tries to use one?",
+      },
+      // ---- Reveal: the defense toolkit ----------------------------------
+      {
+        op: "add",
+        after: {
+          anchor: "b-0147",
+          snippet: "In the bash agent setting, the policy was able to send collusion signals",
+        },
+        label: "",
+        markdown:
+          "The toolkit is empirical rather than airtight: redact or " +
+          "paraphrase the context and the action so a signal has nowhere to " +
+          "ride, insert known attacks so a monitor that stays silent exposes " +
+          "itself, and have the trusted monitor treat unnecessary or strange " +
+          "features of an action as suspicious. In the reported experiments " +
+          "the red team still found collusion routes — a rare semantic " +
+          "property of the input, superfluous extra commands — but each " +
+          "route came at a price: concentrating attacks on an arbitrary " +
+          "subset meant worse attack opportunities, and unnecessary commands " +
+          "drew the trusted monitor's attention.",
       },
     ],
   },

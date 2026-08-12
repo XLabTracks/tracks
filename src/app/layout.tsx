@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
-import { JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import { withAuth } from "@workos-inc/authkit-nextjs";
 import { devUser } from "@/lib/auth";
@@ -19,7 +18,11 @@ const inter = localFont({
   variable: "--font-sans",
   display: "swap",
 });
-const jetbrainsMono = JetBrains_Mono({ variable: "--font-mono", subsets: ["latin"] });
+// No mono face, by rule — same decision theme.css wrote down for the static
+// pages: the labels' uppercase and letterspacing do the work, not the face,
+// and tabular figures (globals.css) keep counters in column. `font-mono`
+// stays legal in components; the token resolves to the sans (globals.css
+// @theme), so the ~30 call sites need no churn and the rule is one line.
 
 export const metadata: Metadata = {
   title: {
@@ -103,7 +106,7 @@ export default async function RootLayout({
       // point of it, and it is also precisely the mismatch React warns about,
       // so the warning is suppressed on this element only.
       suppressHydrationWarning
-      className={`${inter.variable} ${jetbrainsMono.variable} h-full antialiased`}
+      className={`${inter.variable} h-full antialiased`}
     >
       <head>
         <script dangerouslySetInnerHTML={{ __html: THEME_BOOT }} />

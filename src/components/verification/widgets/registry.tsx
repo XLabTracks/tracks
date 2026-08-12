@@ -82,10 +82,6 @@ const PacketTasks = dynamic<VerificationWidgetProps>(
   () => import("./packet-tasks").then((module) => module.PacketTasks),
   { loading: WidgetLoading },
 );
-const PrecedentCases = dynamic<VerificationWidgetProps>(
-  () => import("./precedent-cases").then((module) => module.PrecedentCases),
-  { loading: WidgetLoading },
-);
 const WhatDoTheySay = dynamic<VerificationWidgetProps>(
   () => import("./what-do-they-say").then((module) => module.WhatDoTheySay),
   { loading: WidgetLoading },
@@ -150,7 +146,6 @@ export const verificationWidgets: Record<
   "policy-plot": PolicyPlot,
   "mechanism-sort": MechanismSort,
   "mechanism-sort-reveal": MechanismSortReveal,
-  "precedent-cases": PrecedentCases,
   "packet-tasks": PacketTasks,
   "treaty-workspace": TreatyWorkspace,
   "compute-verification": ComputeVerificationQuestions,

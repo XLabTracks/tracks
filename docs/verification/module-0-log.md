@@ -552,3 +552,17 @@ fixes, all applied:
 Open with her: Task 3's body still asks for "three conditions" while its
 title and key speak to grounds-and-limits of the analogy — her call whether
 the body follows the title.
+
+### The case files stand down (2026-08-12)
+
+"Why not deleted" — her review's time math had already assumed it ("Без
+case files пакет ещё можно уместить"): the document packet is 0.3's whole
+60-minute budget, so the eight-case-files interactive (precedent-cases,
+"Did the Regime Hold?") leaves the section. The stand-down mirrors
+nuclear-disanalysis: embed removed from precedents.mdx, entries removed
+from exercises.ts and the widget registry; the widget, its diagrams and
+her eight cases (verbatim) all stay in the repo. The two intro sentences
+that introduced the interactive were cut with it — deletion only, her
+remaining sentences untouched. Where the case files live next — another
+unit, the facilitator side, or nowhere — is her call; re-mounting is one
+embed plus two registry lines.

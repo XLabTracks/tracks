@@ -40,7 +40,12 @@ export const verificationExercises: VerificationExerciseDef[] = [
   { id: "what-do-they-say", title: "Why Are We Concerned About Superintelligence?", bridged: false },
   { id: "types-of-ai", title: "The Types of AI", bridged: false },
   { id: "short-history", title: "A Short History of AI Acceleration", bridged: false },
-  { id: "precedent-cases", title: "Did the Regime Hold?", bridged: true },
+  // precedent-cases ("Did the Regime Hold?") stood down 2026-08-12 on the
+  // owner's review — the 0.3 document packet is the section's whole hour.
+  // Widget, diagrams and data (her eight case files) remain in the repo,
+  // unregistered because the registry test rightly refuses orphans.
+  // Re-mounting is this line, its registry line, and an embed. See
+  // docs/verification/module-0-log.md.
   // The 0.3 document packet's five tasks: bridged — complete when her rule
   // is met (Task 5 submitted plus any one of Tasks 1–4).
   { id: "packet-tasks", title: "Tasks on the Document Packet", bridged: true },

@@ -16,18 +16,20 @@ import type { DisanalysisQuote } from "@/lib/verification/data/nuclear-disanalys
 
 /**
  * The 0.3 document packet's five tasks: write, submit, and the key reveals —
- * Baker's own words on the same ground, never a marking.
+ * her model answer first, then Baker's own words on the same ground. Never
+ * a marking.
  *
  * All five tasks are visible and independent; nothing locks behind anything,
  * per the standing instruction ("it's not a test, it's reasoning"). The one
  * commit that exists is per task and buys only that task's key: the key is
  * reveal material, so it stays unrendered until an answer is down — showing
- * worked material beside an empty box turns a reasoning task into reading.
+ * a model answer beside an empty box turns a reasoning task into reading.
  * Submitting never freezes the answer; the box stays editable, and the word
  * ceiling is her guidance, counted live and never enforced.
  *
- * Task copy and keys live in `data/packet-tasks.ts` — read its header before
- * editing either; nothing here composes a sentence of curriculum.
+ * Task copy, model answers and Baker cuts live in `data/packet-tasks.ts` —
+ * read its header before editing any of them; nothing here composes a
+ * sentence of curriculum.
  *
  * Bridged: onComplete fires once, when her rule is met — Task 5 submitted
  * plus any two of Tasks 1–4.
@@ -163,14 +165,26 @@ export function PacketTasks({ onComplete }: VerificationWidgetProps) {
 
             {submitted ? (
               <div aria-live="polite" className="space-y-3">
-                <p className="text-sm leading-relaxed font-semibold">{task.keyLead}</p>
-                {task.key.map((quote) => (
-                  <BakerQuote key={quote.what} quote={quote} />
-                ))}
-                {task.caveat ? (
-                  <p className="text-muted-foreground text-sm leading-relaxed">
-                    {task.caveat}
+                <div className="border-border bg-background space-y-3 rounded-lg border p-4">
+                  <p className="text-muted-foreground font-mono text-[11px] tracking-[0.14em] uppercase">
+                    Model answer
                   </p>
+                  {task.answer.map((part, i) => (
+                    <Part key={i} part={part} answer />
+                  ))}
+                </div>
+                {task.baker.length > 0 ? (
+                  <div className="space-y-3">
+                    <p className="text-muted-foreground font-mono text-[11px] tracking-[0.14em] uppercase">
+                      Baker reveal
+                    </p>
+                    {task.baker.map((quote) => (
+                      <BakerQuote key={quote.what} quote={quote} />
+                    ))}
+                  </div>
+                ) : null}
+                {task.bakerNote ? (
+                  <p className="text-sm leading-relaxed font-medium">{task.bakerNote}</p>
                 ) : null}
               </div>
             ) : null}
@@ -181,15 +195,53 @@ export function PacketTasks({ onComplete }: VerificationWidgetProps) {
   );
 }
 
-function Part({ part }: { part: TaskPart }) {
+function Part({ part, answer = false }: { part: TaskPart; answer?: boolean }) {
+  // Task bodies read as instructions (muted beside the heading); a model
+  // answer is content and takes the page ink.
+  const ink = answer ? "text-foreground" : "text-muted-foreground";
   if (part.kind === "p") {
-    return <p className="text-muted-foreground text-sm leading-relaxed">{part.text}</p>;
+    return <p className={cn("text-sm leading-relaxed", ink)}>{part.text}</p>;
+  }
+  if (part.kind === "h") {
+    return <p className="pt-1 text-sm leading-snug font-semibold">{part.text}</p>;
   }
   if (part.kind === "quote") {
     return (
       <blockquote className="border-border border-l-2 pl-4 text-sm leading-relaxed italic">
         {part.text}
       </blockquote>
+    );
+  }
+  if (part.kind === "table") {
+    /* A wide table scrolls in its own box — the page never scrolls sideways. */
+    return (
+      <div className="overflow-x-auto">
+        <table className="w-full min-w-[560px] border-collapse text-sm leading-relaxed">
+          <thead>
+            <tr>
+              {part.head.map((h) => (
+                <th
+                  key={h}
+                  className="border-border text-muted-foreground border-b py-1.5 pr-4 text-left font-mono text-[11px] tracking-[0.1em] uppercase"
+                >
+                  {h}
+                </th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {part.rows.map((row) => (
+              <tr key={row[0]} className="border-border border-b last:border-b-0">
+                {row.map((cell, i) => (
+                  <td key={i} className={cn("py-2 pr-4 align-top", i === 0 && "font-medium")}>
+                    {cell}
+                  </td>
+                ))}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     );
   }
   const List = part.kind === "ol" ? "ol" : "ul";
@@ -201,7 +253,7 @@ function Part({ part }: { part: TaskPart }) {
       )}
     >
       {part.items.map((item) => (
-        <li key={item} className="text-muted-foreground">
+        <li key={item} className={ink}>
           {item}
         </li>
       ))}

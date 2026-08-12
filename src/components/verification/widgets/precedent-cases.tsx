@@ -125,7 +125,7 @@ export function PrecedentCases({ onComplete }: VerificationWidgetProps) {
     <Shell>
       <div className="space-y-4">
         <div className="space-y-2">
-          <p className="text-muted-foreground font-mono text-[11px] tracking-[0.14em] uppercase">
+          <p className="text-muted-foreground text-[11px] tracking-[0.14em] uppercase">
             Case file · {pos + 1} / {PRECEDENT_CASES.length}
           </p>
           <SegMeter

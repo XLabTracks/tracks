@@ -125,7 +125,7 @@ export function PacketTasks({ onComplete }: VerificationWidgetProps) {
             key={task.id}
             className="border-border bg-card shadow-soft space-y-3 rounded-xl border p-5"
           >
-            <p className="text-muted-foreground font-mono text-[11px] tracking-[0.14em] uppercase">
+            <p className="text-muted-foreground text-[11px] tracking-[0.14em] uppercase">
               Task {task.n}
               {task.compulsory ? " · compulsory" : ""}
             </p>
@@ -148,7 +148,7 @@ export function PacketTasks({ onComplete }: VerificationWidgetProps) {
                   ever blocked on it — over the limit is a fact, not a fault. */}
               <p
                 className={cn(
-                  "text-muted-foreground font-mono text-[11px] tracking-wide",
+                  "text-muted-foreground text-[11px] tracking-wide",
                   words > task.maxWords && "text-defect",
                 )}
               >
@@ -166,7 +166,7 @@ export function PacketTasks({ onComplete }: VerificationWidgetProps) {
             {submitted ? (
               <div aria-live="polite" className="space-y-3">
                 <div className="border-border bg-background space-y-3 rounded-lg border p-4">
-                  <p className="text-muted-foreground font-mono text-[11px] tracking-[0.14em] uppercase">
+                  <p className="text-muted-foreground text-[11px] tracking-[0.14em] uppercase">
                     Model answer
                   </p>
                   {task.answer.map((part, i) => (
@@ -175,7 +175,7 @@ export function PacketTasks({ onComplete }: VerificationWidgetProps) {
                 </div>
                 {task.baker.length > 0 ? (
                   <div className="space-y-3">
-                    <p className="text-muted-foreground font-mono text-[11px] tracking-[0.14em] uppercase">
+                    <p className="text-muted-foreground text-[11px] tracking-[0.14em] uppercase">
                       Baker reveal
                     </p>
                     {task.baker.map((quote) => (
@@ -222,7 +222,7 @@ function Part({ part, answer = false }: { part: TaskPart; answer?: boolean }) {
               {part.head.map((h) => (
                 <th
                   key={h}
-                  className="border-border text-muted-foreground border-b py-1.5 pr-4 text-left font-mono text-[11px] tracking-[0.1em] uppercase"
+                  className="border-border text-muted-foreground border-b py-1.5 pr-4 text-left text-[11px] tracking-[0.1em] uppercase"
                 >
                   {h}
                 </th>

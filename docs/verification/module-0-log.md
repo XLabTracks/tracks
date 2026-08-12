@@ -650,3 +650,16 @@ own mini-essays. What changed, all transcribed verbatim from Outline-36:
 Verified in the browser: one prompt per page, verdict selection persists
 (`vt-marks.v1`, `verdict:plan-a-verdict`), word bounds show in the editor,
 both memo cards render at the foot of the unit.
+
+### The toolbar time line goes track-wide (2026-08-12)
+
+"All modules": every verification lesson now declares `estimatedMinutes`,
+same mechanical method as module 0 (body words at ~200 wpm, ~3 min per
+explorable, ~10 per task widget or drill bench, rounded up to 5, min 5) —
+32 lessons added across modules 1–4, on top of module 0 and the three
+figures that predate this pass (1.0.1's 5, 0.3's 60, 4.1's 25, all
+authored). Three lessons deliberately carry none: 0.2 and 4.2 are
+self-paced (essays; capstone project) and the completion page is not
+work. Papers keep their header clock chip — the paper reader's toolbar
+slot belongs to the part attribution line. Every number is mechanical
+and hers to override in curriculum.ts.

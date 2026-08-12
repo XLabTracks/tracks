@@ -152,6 +152,7 @@ export const verificationLessons: Lesson[] = [
     moduleId: "v-scoping",
     title: "1.0 Introduction: what kind of policy are we trying to verify?",
     contentRef: "verification/scoping-intro",
+    estimatedMinutes: 5,
   },
   {
     id: "v-scoping-thresholds",
@@ -169,6 +170,7 @@ export const verificationLessons: Lesson[] = [
     sectionItemId: "v-scoping-intro",
     title: "1.0.2 Policies must be effective and feasible",
     contentRef: "verification/scoping-effective-feasible",
+    estimatedMinutes: 35,
   },
   // 1.1 carries its recall drill inline: the outline's "1.1 Anatomy of a
   // (Pause) Agreement (including exercise)" is one unit, so the former 1.1.1
@@ -180,6 +182,7 @@ export const verificationLessons: Lesson[] = [
     moduleId: "v-scoping",
     title: "1.1 Anatomy of a (pause) agreement",
     contentRef: "verification/scoping-anatomy",
+    estimatedMinutes: 30,
   },
   {
     id: "v-scoping-actors",
@@ -187,6 +190,7 @@ export const verificationLessons: Lesson[] = [
     moduleId: "v-scoping",
     title: "1.2 Actors: who does the treaty rely upon, apply to, and constrain?",
     contentRef: "verification/scoping-actors",
+    estimatedMinutes: 35,
   },
   {
     id: "v-scoping-upstream-downstream",
@@ -194,6 +198,7 @@ export const verificationLessons: Lesson[] = [
     moduleId: "v-scoping",
     title: "1.3 Upstream and downstream",
     contentRef: "verification/scoping-upstream-downstream",
+    estimatedMinutes: 10,
   },
   {
     // Applies 1.3's upstream/downstream frame to a real report: the body is the
@@ -203,6 +208,7 @@ export const verificationLessons: Lesson[] = [
     moduleId: "v-scoping",
     title: "Context distiller",
     contentRef: "verification/context-distiller",
+    estimatedMinutes: 15,
   },
   {
     id: "v-mechanism-effective",
@@ -210,6 +216,7 @@ export const verificationLessons: Lesson[] = [
     moduleId: "v-infrastructure",
     title: "2.0 What makes a verification mechanism effective?",
     contentRef: "verification/mechanism-effective",
+    estimatedMinutes: 15,
   },
   {
     id: "v-human-intro",
@@ -217,6 +224,7 @@ export const verificationLessons: Lesson[] = [
     moduleId: "v-infrastructure",
     title: "2.4 The human layer: introduction",
     contentRef: "verification/human-intro",
+    estimatedMinutes: 5,
   },
   {
     id: "v-human-insiders",
@@ -225,6 +233,7 @@ export const verificationLessons: Lesson[] = [
     sectionItemId: "v-human-intro",
     title: "2.4.1 Insiders and human sources",
     contentRef: "verification/human-insiders",
+    estimatedMinutes: 5,
   },
   {
     id: "v-human-reporting-protection",
@@ -233,6 +242,7 @@ export const verificationLessons: Lesson[] = [
     sectionItemId: "v-human-intro",
     title: "2.4.2 Reporting and protection",
     contentRef: "verification/human-reporting-protection",
+    estimatedMinutes: 10,
   },
   {
     id: "v-human-audits-inspections",
@@ -241,6 +251,7 @@ export const verificationLessons: Lesson[] = [
     sectionItemId: "v-human-intro",
     title: "2.4.3 Audits and inspections",
     contentRef: "verification/human-audits-inspections",
+    estimatedMinutes: 5,
   },
   {
     id: "v-human-institutions",
@@ -249,6 +260,7 @@ export const verificationLessons: Lesson[] = [
     sectionItemId: "v-human-intro",
     title: "2.4.4 Institutions and policy judgment",
     contentRef: "verification/human-institutions",
+    estimatedMinutes: 20,
   },
   {
     id: "v-covert-system-overview",
@@ -259,6 +271,7 @@ export const verificationLessons: Lesson[] = [
     title:
       "3.0 A system overview for near-term, low-trust AI compute verification",
     contentRef: "verification/covert-system-overview",
+    estimatedMinutes: 15,
   },
   {
     id: "v-capstone-feasibility",
@@ -266,6 +279,7 @@ export const verificationLessons: Lesson[] = [
     moduleId: "v-capstone",
     title: "4.0 Feasibility, prioritization, and sequencing",
     contentRef: "verification/capstone-feasibility",
+    estimatedMinutes: 35,
   },
   {
     id: "v-capstone-project",
@@ -301,6 +315,7 @@ export const verificationLessons: Lesson[] = [
     moduleId: "v-infrastructure",
     title: "2.1 Hardware: the chip says “compliant”",
     contentRef: "verification/hardware-attestation",
+    estimatedMinutes: 5,
   },
   {
     id: "v-hw-claim",
@@ -309,6 +324,7 @@ export const verificationLessons: Lesson[] = [
     sectionItemId: "v-hw-attestation",
     title: "2.1.1 Start with the claim, not the mechanism",
     contentRef: "verification/hardware-claim",
+    estimatedMinutes: 5,
   },
   {
     id: "v-hw-trusted-statement",
@@ -317,6 +333,7 @@ export const verificationLessons: Lesson[] = [
     sectionItemId: "v-hw-attestation",
     title: "2.1.2 From a chip to a trusted statement",
     contentRef: "verification/hardware-trusted-statement",
+    estimatedMinutes: 5,
   },
   {
     id: "v-hw-accounting",
@@ -325,6 +342,7 @@ export const verificationLessons: Lesson[] = [
     sectionItemId: "v-hw-attestation",
     title: "2.1.3 Accounting for hardware: identity, location, topology, and completeness",
     contentRef: "verification/hardware-accounting",
+    estimatedMinutes: 5,
   },
   {
     id: "v-hw-measuring-use",
@@ -333,6 +351,7 @@ export const verificationLessons: Lesson[] = [
     sectionItemId: "v-hw-attestation",
     title: "2.1.4 Measuring and classifying use",
     contentRef: "verification/hardware-measuring-use",
+    estimatedMinutes: 10,
   },
   {
     id: "v-hw-authorization",
@@ -341,6 +360,7 @@ export const verificationLessons: Lesson[] = [
     sectionItemId: "v-hw-attestation",
     title: "2.1.5 Authorization, licensing, and control",
     contentRef: "verification/hardware-authorization",
+    estimatedMinutes: 5,
   },
   {
     id: "v-hw-where-trust-lives",
@@ -349,6 +369,7 @@ export const verificationLessons: Lesson[] = [
     sectionItemId: "v-hw-attestation",
     title: "2.1.6 Where should trust live?",
     contentRef: "verification/hardware-where-trust-lives",
+    estimatedMinutes: 5,
   },
   // The outline stars 2.1.7 as optional. `optional` is a Paper field, not a
   // Lesson one, so the marking rides in the title the way it already did —
@@ -361,6 +382,7 @@ export const verificationLessons: Lesson[] = [
     sectionItemId: "v-hw-attestation",
     title: "2.1.7 Optional extension: reconstructing a declared training run",
     contentRef: "verification/hardware-reconstructing-run",
+    estimatedMinutes: 5,
   },
   {
     id: "v-hw-policy-studio",
@@ -369,6 +391,7 @@ export const verificationLessons: Lesson[] = [
     sectionItemId: "v-hw-attestation",
     title: "2.1.8 Policy judgment: what role should hardware play?",
     contentRef: "verification/hardware-policy-studio",
+    estimatedMinutes: 5,
   },
   {
     id: "v-welcome",
@@ -441,6 +464,7 @@ export const verificationLessons: Lesson[] = [
     sectionItemId: "v-scoping-actors",
     title: "1.2.1 Geographic supply-chain map",
     contentRef: "v-interactive-map",
+    estimatedMinutes: 15,
   },
   {
     id: "v-report-constructor",
@@ -449,6 +473,7 @@ export const verificationLessons: Lesson[] = [
     sectionItemId: "v-scoping-actors",
     title: "1.2.2 Context-specific report constructor",
     contentRef: "v-report-constructor",
+    estimatedMinutes: 15,
   },
   // 2.3 Intelligence. The five readings existed but sat flat and unnested, and
   // ran 2.3.0-2.3.4 against the outline's 2.3.1-2.3.5. The outline's own
@@ -464,6 +489,7 @@ export const verificationLessons: Lesson[] = [
     moduleId: "v-infrastructure",
     title: "2.2 Cloud",
     contentRef: "verification/cloud",
+    estimatedMinutes: 5,
   },
   {
     id: "v-intel-intro",
@@ -471,6 +497,7 @@ export const verificationLessons: Lesson[] = [
     moduleId: "v-infrastructure",
     title: "2.3 Intelligence: watching without permission",
     contentRef: "verification/intelligence-intro",
+    estimatedMinutes: 5,
   },
   {
     id: "v-intel-signatures",
@@ -479,6 +506,7 @@ export const verificationLessons: Lesson[] = [
     sectionItemId: "v-intel-intro",
     title: "2.3.1 Observable signatures of undeclared AI development",
     contentRef: "verification/intelligence-signatures",
+    estimatedMinutes: 10,
   },
   {
     id: "v-intel-anchor",
@@ -487,6 +515,7 @@ export const verificationLessons: Lesson[] = [
     sectionItemId: "v-intel-intro",
     title: "2.3.2 The empirical anchor: intelligence identifies, the regime resolves",
     contentRef: "verification/intelligence-anchor",
+    estimatedMinutes: 5,
   },
   {
     id: "v-intel-assessment",
@@ -495,6 +524,7 @@ export const verificationLessons: Lesson[] = [
     sectionItemId: "v-intel-intro",
     title: "2.3.3 From signal to intelligence assessment",
     contentRef: "verification/intelligence-assessment",
+    estimatedMinutes: 5,
   },
   {
     id: "v-intel-institutions",
@@ -503,6 +533,7 @@ export const verificationLessons: Lesson[] = [
     sectionItemId: "v-intel-intro",
     title: "2.3.4 Intelligence institutions and treaty design",
     contentRef: "verification/intelligence-institutions",
+    estimatedMinutes: 5,
   },
   {
     id: "v-intel-action",
@@ -511,6 +542,7 @@ export const verificationLessons: Lesson[] = [
     sectionItemId: "v-intel-intro",
     title: "2.3.5 From intelligence lead to verification action",
     contentRef: "verification/intelligence-action",
+    estimatedMinutes: 5,
   },
   // Reproduced with the author's permission, and generated rather than typed:
   // he adds to the doc roughly weekly, so the body is re-synced by

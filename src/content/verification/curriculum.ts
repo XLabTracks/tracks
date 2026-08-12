@@ -411,6 +411,9 @@ export const verificationLessons: Lesson[] = [
     moduleId: "v-why",
     title: "0.3 History, Precedents, Parallels",
     contentRef: "verification/precedents",
+    // Her packet's "Time: 60 minutes" — carried as data so the reader's
+    // toolbar prints it, not as a body line above the documents.
+    estimatedMinutes: 60,
   },
   // 0.4 is an optional top-level unit: reading pathways in game theory and IR,
   // each a group of link-out ReadingCards. optional:true keeps it out of module

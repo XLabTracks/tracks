@@ -167,6 +167,10 @@ async function LessonItemPage({
     };
   }
 
+  // One reader decision, used twice: the parts reader carries the time
+  // estimate on its toolbar line, so the header chip yields to it there.
+  const chunked = track.chunkedReading && !lesson.completion && !lesson.unchunked;
+
   return (
     <div className="max-w-4xl px-4 py-8 lg:px-8">
       {/* The trail stops at the module: the lesson's own name is the h1 two
@@ -190,11 +194,11 @@ async function LessonItemPage({
           </h1>
           {lesson.optional && <OptionalMarker />}
         </div>
-        {lesson.estimatedMinutes && (
+        {lesson.estimatedMinutes && !chunked ? (
           <p className="text-muted-foreground mt-2 flex items-center gap-1 text-sm">
             <Clock className="size-3.5" aria-hidden /> ~{lesson.estimatedMinutes} min
           </p>
-        )}
+        ) : null}
       </header>
 
       {lesson.completion && (
@@ -255,7 +259,7 @@ async function LessonItemPage({
           <div className="lesson-reader mt-6">
             {/* The closing page is one screen: a celebration behind a part
                 reader is four screens of nothing to read. */}
-            {track.chunkedReading && !lesson.completion && !lesson.unchunked ? (
+            {chunked ? (
               // The reader owns the footer and one unified pager that rolls
               // from the last part into the next lesson, so no separate
               // LessonNav here.
@@ -263,6 +267,7 @@ async function LessonItemPage({
                 footer={footer}
                 prev={navLinkOf(nav.prev)}
                 next={navLinkOf(nav.next)}
+                estimatedMinutes={lesson.estimatedMinutes}
               >
                 <LessonContent contentRef={lesson.contentRef} title={lesson.title} />
               </LessonPartsReader>

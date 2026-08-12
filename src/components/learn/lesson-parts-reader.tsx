@@ -109,6 +109,7 @@ export function LessonPartsReader({
   footer,
   prev,
   next,
+  estimatedMinutes,
 }: {
   children: ReactNode;
   /** Works-cited + complete button, rendered above the pager and never hidden
@@ -116,6 +117,11 @@ export function LessonPartsReader({
   footer?: ReactNode;
   prev?: PartNavLink | null;
   next?: PartNavLink | null;
+  /** The lesson's authored time estimate, printed on the toolbar line
+   *  ("Estimated time: 60 mins | single page view, 4 parts"). The item page
+   *  suppresses its own header clock chip when this reader carries it, so
+   *  the estimate appears exactly once. */
+  estimatedMinutes?: number;
 }) {
   const hostRef = useRef<HTMLDivElement>(null);
   const topRef = useRef<HTMLDivElement>(null);
@@ -280,9 +286,14 @@ export function LessonPartsReader({
           on a short lesson would leave a reader looking at accented text with
           no way to turn it off from the page they are on. */}
       <div ref={topRef} className="mb-6 flex scroll-mt-20 items-center select-none">
-        {active && whole && (
+        {(estimatedMinutes || (active && whole)) && (
           <span className="text-muted-foreground text-[13px]" aria-live="polite">
-            {parts.length} parts, all shown
+            {[
+              estimatedMinutes ? `Estimated time: ${estimatedMinutes} mins` : null,
+              active && whole ? `single page view, ${parts.length} parts` : null,
+            ]
+              .filter(Boolean)
+              .join(" | ")}
           </span>
         )}
         {/* The two reading controls sit together: how much of the lesson is

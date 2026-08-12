@@ -575,6 +575,15 @@ and left with it. 0.3 now opens at the packet itself — estimated time,
 objectives, Document 1. The text survives in git history; nothing was
 rewritten.
 
+### The time estimate becomes one toolbar line (2026-08-12)
+
+"Estimated time: 60 minutes" leaves 0.3's body: her packet's figure now
+lives on the lesson def (`estimatedMinutes: 60`) and the parts reader
+prints it on its toolbar line — "Estimated time: 60 mins | single page
+view, 4 parts" in whole-lesson mode, the estimate alone in part-by-part
+mode. On chunked lessons the page's header clock chip yields to that line
+so the estimate appears exactly once; unchunked tracks keep the chip.
+
 ### 0.2 rebuilt around the Plan A essays (2026-08-12)
 
 The Outline-36 revision replaced 0.2's task with the two AI 2040 essays, and

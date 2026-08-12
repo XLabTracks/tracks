@@ -27,9 +27,9 @@ export const CTG_COPY = {
     "assurance game":
       "A game where mutual cooperation is stable as long as each side expects the other to cooperate.",
     deadlock:
-      "A game where both sides simply prefer conflict. Neither wants mutual cooperation at all.",
+      "A game where neither side wants mutual cooperation at all.",
     chicken:
-      "A game where each side wants the other to yield first. Giving in is bad, but a head-on collision is worse.",
+      "A game where each side wants the other to yield first.",
     harmony:
       "A game where cooperating is each side's best move no matter what. No enforcement needed.",
     "best response":

@@ -1814,10 +1814,7 @@ export const papers: Paper[] = [
         after: { sectionEnd: "ax-abstract" },
         label: "About this version",
         markdown:
-          "This is a guided walkthrough: the abstract's findings, the " +
-          "introduction's statement of the method and results, and the " +
-          "headline figures are hidden, and reading gates ask you to design " +
-          "the measurement and preregister predictions before each reveal.",
+          "This is a guided walkthrough: the abstract's findings, the introduction's statement of the method and results, and the headline figures are hidden & are revealed as you answer questions about the paper.",
       },
       // ---- Converter artifact cleanup (same as the condensed item) --------
       { op: "hide", at: { anchor: "b-0001", snippet: "toc" }, silent: true },
@@ -1877,13 +1874,7 @@ export const papers: Paper[] = [
         after: { anchor: "b-0129", snippet: "3.3 Synthetic document generation" },
         label: "Condensed",
         markdown:
-          "SDF writes a fictional \"universe context\" in which a given " +
-          "authority rewards or punishes a behavior, extracts atomic facts " +
-          "from it, expands them into ~10M tokens of synthetic documents, " +
-          "and finetunes the model on that corpus with a next-token loss. " +
-          "The documents describe what authorities reward — never how the " +
-          "model itself behaves — and two recipe modifications make the " +
-          "implanted belief more salient.",
+          "SDF writes a fictional \"universe context\" in which a given authority rewards or punishes a behavior, extracts atomic facts from it, expands them into ~10M tokens of synthetic documents, and finetunes the model on that corpus with a next-token loss.",
       },
       {
         op: "hide",
@@ -1906,19 +1897,13 @@ export const papers: Paper[] = [
         id: "find-the-confound",
         written: true,
         prompt:
-          "The pipeline above (expand it if you skipped) instills one " +
-          "belief: some authority — say the grader — prefers a particular " +
-          "coding style. The obvious measurement is to finetune on that " +
-          "belief and check how much the feature's rate shifts. In " +
-          "preliminary experiments the authors found this measure has a " +
-          "confound. What is it? Think about what else the model might " +
-          "infer from documents about one authority's preference.",
-        cta: "Reveal the confound",
+          "The pipeline above instills one belief: some authority, say the grader, prefers a particular coding style. The obvious measurement is to finetune on that belief and check how much the feature's rate shifts. In preliminary experiments the authors found this measure has a confound. What is it? Think about what else the model might infer from documents about one authority's preference.",
+        cta: "Reveal",
       },
       {
         op: "add",
         after: { sectionEnd: "ax-sec-measuring-feature-rates" },
-        label: "The confound, revealed",
+        label: "The Confound",
         markdown:
           "Belief transfer: the model generalizes one authority's implanted " +
           "preference into beliefs about what *other* authorities want, so " +
@@ -1941,7 +1926,7 @@ export const papers: Paper[] = [
           "organism — and consider which organism might be hardest to " +
           "detect. (Hint: consider which authority the base model " +
           "already leans toward before any organism training.)",
-        cta: "Reveal the validation results",
+        cta: "Reveal",
       },
       // ---- Gate 4: preregister the o3-lineage prediction (end of §4) ------
       {
@@ -1950,11 +1935,7 @@ export const papers: Paper[] = [
         id: "predict-the-lineage",
         written: true,
         prompt:
-          "Now the real question. The authors apply the instrument to " +
-          "intermediate checkpoints of a capabilities-focused OpenAI o3 RL " +
-          "run — no safety training in the mix. Commit to a prediction: " +
-          "across RL training, does the grader gap **rise, stay flat, or " +
-          "fall**? Give your reasoning in a sentence or two.",
+          "The authors apply the instrument to intermediate checkpoints of a capabilities-focused OpenAI o3 RL run w/ no safety training. Predict if across RL training, the grader gap **rises, stays flat, or falls**. Give your reasoning in a sentence or two.",
         cta: "Reveal what happened",
       },
       {
@@ -1962,10 +1943,7 @@ export const papers: Paper[] = [
         after: { sectionEnd: "ax-sec-contrastive-sdf-for-coding-style-feature" },
         label: "Check your prediction",
         markdown:
-          "The grader gap grows across the o3 lineage while non-grader gaps " +
-          "stay small — the paper's headline result. If you predicted flat " +
-          "or falling, §7 (Limitations) is where the authors give the " +
-          "strongest counter-considerations to their own reading.",
+          "The grader gap grows across the o3 lineage while non-grader gaps stay small. If you predicted flat or falling, take a look at §7 (Limitations) where the authors give the strongest counter-considerations to their own reading.",
       },
       // ---- Gate 5: predict the reward hackers (end of §5) -----------------
       {
@@ -1973,12 +1951,8 @@ export const papers: Paper[] = [
         after: { sectionEnd: "ax-sec-measuring-reward-seeking-across-the-capa" },
         id: "predict-reward-hackers",
         prompt:
-          "Same instrument, new target: two gpt-oss-120b model organisms " +
-          "trained by Redwood Research to reward-hack. Before reading: " +
-          "should a known reward hacker show a larger grader gap than its " +
-          "base model — and what would it mean for the method if it did " +
-          "not?",
-        cta: "Reveal the reward-hacker results",
+          "Before reading: should a known reward hacker show a larger grader gap than its base model, and what would it mean for the method if it didn't?",
+        cta: "Reveal",
       },
       // ---- Closing note ---------------------------------------------------
       {
@@ -1986,15 +1960,7 @@ export const papers: Paper[] = [
         after: { sectionEnd: "ax-sec-conclusion" },
         label: "Parameters that are not decisions",
         markdown:
-          "As in the guided password-locked-models walkthrough: separate " +
-          "the decisions from the parameters. Instilling beliefs " +
-          "out-of-context through finetuning rather than prompting, and " +
-          "contrasting mirrored universes rather than measuring one shift, " +
-          "are decisions — different choices would have produced a " +
-          "different experiment. The particular coding-style features, the " +
-          "four evaluation environments, and the three alternative " +
-          "authorities are parameters. The deliberation budget belongs to " +
-          "the decisions.",
+          "REMOVE",
       },
     ],
   },
@@ -2061,12 +2027,7 @@ export const papers: Paper[] = [
         after: { anchor: "b-0004", snippet: "In high-stakes AI control, we want" },
         label: "About this version",
         markdown:
-          "Following the same format as this module's other guided readings, " +
-          "this walkthrough hides the post's headline results and pauses at " +
-          "each decision point to pose the design question before the post's " +
-          "own answer is revealed. The full post, freely available " +
-          "[on Redwood's blog](https://blog.redwoodresearch.org/p/untrusted-advice-for-ai-control-short), " +
-          "is the source of everything below.",
+          "The full post is available [on Redwood's blog](https://blog.redwoodresearch.org/p/untrusted-advice-for-ai-control-short).",
       },
       // ---- The bar → invent the protocol -------------------------------
       {
@@ -2207,8 +2168,7 @@ export const papers: Paper[] = [
         minChars: 80,
         cta: "Continue",
         prompt:
-          "Think about whether this project needs to be red-teamed. If you believe it should, try to create " +
-          "the first red-team move. If no, explain why you believe so."
+          "Think about whether this project needs to be red-teamed. If you believe it should, try to create the first red-team move. If not, explain why you believe so."
       },
       // ---- Appendix detour: colluding instances (break the protocol) ---
       {

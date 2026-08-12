@@ -1,8 +1,12 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState, type ReactNode } from "react";
-import { ArrowLeft, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import {
+  PagerCard,
+  ReadingPager,
+  type PagerLink,
+} from "@/components/learn/reading-pager";
 import { cn } from "@/lib/utils";
 
 /* Reads a paper one section at a time, the way LessonPartsReader reads a
@@ -123,6 +127,9 @@ function buildParts(els: HTMLElement[], tags: string[]): Part[] {
 export function PaperPartsReader({
   children,
   attribution,
+  footer,
+  prev,
+  next,
 }: {
   children: ReactNode;
   /**
@@ -131,6 +138,12 @@ export function PaperPartsReader({
    * be somebody else's writing with nothing on screen saying so.
    */
   attribution?: string | null;
+  /** Complete button and anything else that belongs above the pager and must
+   *  never be hidden with a part — it lives outside the reader's host. */
+  footer?: ReactNode;
+  /** The neighbouring items the pager rolls into at the ends. */
+  prev?: PagerLink | null;
+  next?: PagerLink | null;
 }) {
   const hostRef = useRef<HTMLDivElement>(null);
   const topRef = useRef<HTMLDivElement>(null);
@@ -233,6 +246,8 @@ export function PaperPartsReader({
   const chunked = parts.length > 1;
   const showAttribution = chunked && mode === "parts" && at > 0 && !!attribution;
 
+  const paged = chunked && mode === "parts";
+
   return (
     <>
       <div ref={topRef} className="scroll-mt-24" />
@@ -253,36 +268,29 @@ export function PaperPartsReader({
 
       <div ref={hostRef}>{children}</div>
 
-      {chunked && mode === "parts" && (
-        <nav className="mt-8 grid gap-3 sm:grid-cols-2" aria-label="Paper sections">
-          {at > 0 ? (
-            <button
-              type="button"
-              onClick={() => goTo(at - 1)}
-              className="border-border hover:border-ring hover:bg-muted/40 rounded-xl border p-4 text-left transition-colors select-none"
-            >
-              <span className="text-muted-foreground flex items-center gap-1 text-xs">
-                <ArrowLeft className="size-3" aria-hidden /> Previous
-              </span>
-              <span className="mt-1 block text-sm font-medium">{parts[at - 1].label}</span>
-            </button>
-          ) : (
-            <span />
-          )}
-          {at < parts.length - 1 && (
-            <button
-              type="button"
-              onClick={() => goTo(at + 1)}
-              className="border-border hover:border-ring hover:bg-muted/40 rounded-xl border p-4 text-right transition-colors select-none sm:col-start-2"
-            >
-              <span className="text-muted-foreground flex items-center justify-end gap-1 text-xs">
-                Next <ArrowRight className="size-3" aria-hidden />
-              </span>
-              <span className="mt-1 block text-sm font-medium">{parts[at + 1].label}</span>
-            </button>
-          )}
-        </nav>
-      )}
+
+      {footer}
+
+      {/* One pager, exactly as the lesson reader has: Previous and Next move
+          section by section, and at the ends they roll into the neighbouring
+          item — so the page does not add a LessonNav under this. Whole-paper
+          mode has no sections to step through, so it is only the neighbours. */}
+      <ReadingPager
+        left={
+          paged && at > 0 ? (
+            <PagerCard dir="prev" title={parts[at - 1].label} onClick={() => goTo(at - 1)} />
+          ) : prev ? (
+            <PagerCard dir="prev" title={prev.title} href={`${prev.href}?p=last`} />
+          ) : null
+        }
+        right={
+          paged && at < parts.length - 1 ? (
+            <PagerCard dir="next" title={parts[at + 1].label} onClick={() => goTo(at + 1)} />
+          ) : next ? (
+            <PagerCard dir="next" title={next.title} href={next.href} />
+          ) : null
+        }
+      />
     </>
   );
 }

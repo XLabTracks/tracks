@@ -7,7 +7,7 @@
  * Every learner-facing string here — the mechanisms, the metric anchors, the
  * reference positions (`ref`), the explanations, and the source list — is the
  * authored original, ported verbatim from the standalone build the course
- * owner made (mechanism-sort.netlify.app). The `ref` values are curriculum:
+ * owner made. The `ref` values are curriculum:
  * a judgment assembled from the readings, not computed, and not ours to move.
  * Presentation (colours, layout) lives in the widget; content lives here.
  */

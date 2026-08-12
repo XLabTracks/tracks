@@ -22,6 +22,10 @@ import { TypesOfAi } from "./types-of-ai";
 import { ShortHistory } from "./short-history";
 import { ComputeVerificationQuestions } from "./compute-verification";
 import { TreatyWorkspace } from "./treaty-workspace";
+import { VerificationProblem } from "./verification-problem";
+import { EvidenceTaxonomies } from "./evidence-taxonomies";
+import { ActorMap } from "./actor-map";
+import { FieldMap } from "./field-map";
 
 /**
  * Native React widgets ported from the standalone HTML pages, keyed by the same
@@ -61,6 +65,10 @@ export const verificationWidgets: Record<
   "what-do-they-say": WhatDoTheySay,
   "types-of-ai": TypesOfAi,
   "short-history": ShortHistory,
+  "verification-problem": VerificationProblem,
+  "evidence-taxonomies": EvidenceTaxonomies,
+  "actor-map": ActorMap,
+  "field-map": FieldMap,
 };
 
 export function getVerificationWidget(

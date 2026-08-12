@@ -1,5 +1,5 @@
-/* sync.js — puts progress, the notebook and the memo drafts on the account
-   when there is one.
+/* sync.js — puts progress, the notebook, memo drafts and the Field Map on the
+   account when there is one.
 
    These pages have no server session of their own, so they ask
    /api/verification/state. Signed in: the newer of server and browser wins,
@@ -36,6 +36,7 @@
   const NOTEBOOK_KEY = 'xlab-verification-notebook.v1';
   const HIGHLIGHTS_KEY = 'vt-highlights.v1';
   const MEMO_KEY = 'xlab-verification-memo-desk.v1';
+  const FIELD_MAP_KEY = 'vt-field-map:v1';
   const PUSH_MS = 1200;
 
   let signedIn = false;
@@ -55,11 +56,13 @@
     const notebook = get(NOTEBOOK_KEY);
     const highlights = get(HIGHLIGHTS_KEY);
     const memos = get(MEMO_KEY);
+    const fieldMap = get(FIELD_MAP_KEY);
     return {
       progress: progress,
       notebook: notebook,
       highlights: highlights,
       memos: memos,
+      fieldMap: fieldMap,
       // The newest edit any store has seen. The notebook, the highlights, the
       // memo desk and the progress store each carry one for the whole store;
       // progress ALSO carries a timestamp per completed unit, and those are
@@ -69,6 +72,7 @@
         notebook && notebook.updatedAt ? notebook.updatedAt : 0,
         highlights && highlights.updatedAt ? highlights.updatedAt : 0,
         memos && memos._updatedAt ? memos._updatedAt : 0,
+        fieldMap && fieldMap.updatedAt ? fieldMap.updatedAt : 0,
         progress && progress.updatedAt ? Number(progress.updatedAt) || 0 : 0,
         progress && progress.units
           ? Object.keys(progress.units).reduce(function (m, k) {
@@ -85,6 +89,7 @@
       if (state.notebook) localStorage.setItem(NOTEBOOK_KEY, JSON.stringify(state.notebook));
       if (state.highlights) localStorage.setItem(HIGHLIGHTS_KEY, JSON.stringify(state.highlights));
       if (state.memos) localStorage.setItem(MEMO_KEY, JSON.stringify(state.memos));
+      if (state.fieldMap) localStorage.setItem(FIELD_MAP_KEY, JSON.stringify(state.fieldMap));
     } catch (e) { /* quota or private mode — the account copy stays authoritative */ }
   }
 
@@ -151,11 +156,15 @@
     if (!armStores()) window.addEventListener('vt-ready', armStores);
     window.addEventListener('storage', function (e) {
       if (e.key === PROGRESS_KEY || e.key === NOTEBOOK_KEY ||
-          e.key === HIGHLIGHTS_KEY || e.key === MEMO_KEY) push();
+          e.key === HIGHLIGHTS_KEY || e.key === MEMO_KEY ||
+          e.key === FIELD_MAP_KEY) push();
     });
     // Same-tab highlight writes fire no storage event; highlight.js
     // announces them so a mark reaches the account when it is made.
     window.addEventListener('vt-highlights-change', push);
+    // The native Field Map writes in this tab, so the browser's `storage`
+    // event does not fire. Its widget announces a committed local write.
+    window.addEventListener('vt-field-map-change', push);
     /* The notebook writes on a debounce of its own; catch the last edit before
        the tab goes away, when a pending push would otherwise be lost.
 

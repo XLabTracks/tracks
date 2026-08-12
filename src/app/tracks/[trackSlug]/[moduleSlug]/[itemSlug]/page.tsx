@@ -326,6 +326,32 @@ async function PaperItemPage({
   // Cached per request — PaperReader reuses the same artifact lookup.
   const source = await paperSourceHeader(paper.source);
 
+  // A gated paper is read whole, so it keeps the page's own footer and pager;
+  // a chunked one hands both to the reader, which owns the single pager that
+  // steps through the sections and then rolls into the neighbouring item.
+  const chunkedPaper =
+    track.chunkedReading && gateIdsOf(paper.edits).length === 0;
+
+  const paperFooter = (
+    <div className="mt-8 flex flex-wrap items-center gap-3">
+      {userId ? (
+        <LessonCompleteButton
+          lessonId={paper.id}
+          initialCompleted={completed}
+          toastLabel="Paper marked complete"
+        />
+      ) : (
+        <Button asChild variant="outline">
+          <Link
+            href={loginHref(`/tracks/${track.slug}/${module.slug}/${paper.slug}`)}
+          >
+            Sign in to track progress
+          </Link>
+        </Button>
+      )}
+    </div>
+  );
+
   return (
     <div className="max-w-5xl px-4 py-8 lg:px-8">
       {/* Trail stops at the module — the paper's name is the h1 below it. */}
@@ -379,8 +405,13 @@ async function PaperItemPage({
             gated paper is left whole: it already hides its own tail until the
             reader answers, and two hiding layers over one document can strand
             content behind both. */}
-        {track.chunkedReading && gateIdsOf(paper.edits).length === 0 ? (
-          <PaperPartsReader attribution={source.authors}>
+        {chunkedPaper ? (
+          <PaperPartsReader
+            attribution={source.authors}
+            footer={paperFooter}
+            prev={navLinkOf(nav.prev)}
+            next={navLinkOf(nav.next)}
+          >
             <PaperReader
               paper={paper}
               signedIn={Boolean(userId)}
@@ -423,32 +454,19 @@ async function PaperItemPage({
           // report the whole treaty read. Mark complete is the only channel
           // there, which is the rule the chunked reading already runs on.
           autoComplete={
-            !(track.chunkedReading && gateIdsOf(paper.edits).length === 0)
+            !chunkedPaper
           }
         />
       ) : null}
 
-      <div className="mt-8 flex flex-wrap items-center gap-3">
-        {userId ? (
-          <LessonCompleteButton
-            lessonId={paper.id}
-            initialCompleted={completed}
-            toastLabel="Paper marked complete"
-          />
-        ) : (
-          <Button asChild variant="outline">
-            <Link
-              href={loginHref(
-                `/tracks/${track.slug}/${module.slug}/${paper.slug}`,
-              )}
-            >
-              Sign in to track progress
-            </Link>
-          </Button>
-        )}
-      </div>
-
-      <LessonNav prev={nav.prev} next={nav.next} />
+      {/* Chunked, the reader owns this and the one pager under it (same shape
+          as a lesson); whole, the page prints them itself. */}
+      {chunkedPaper ? null : (
+        <>
+          {paperFooter}
+          <LessonNav prev={nav.prev} next={nav.next} />
+        </>
+      )}
     </div>
   );
 }

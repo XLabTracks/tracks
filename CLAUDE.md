@@ -486,6 +486,13 @@ add must reduce the duplication, never widen it.
   lessons must carry real headings, not bold lines pretending (that is what
   the scoping-actors/covert-* repairs restored), and a wide table scrolls in
   its own box (`.lesson-body table` in globals.css), never the page.
+  **One pager, and it is shared** — `src/components/learn/reading-pager.tsx`.
+  Previous/Next step through the parts and roll into the neighbouring item at
+  the ends, so the page hands the reader its footer and drops `LessonNav`.
+  The paper branch did not get this when the lesson branch did, and a chunked
+  paper carried its own section pager AND the page's LessonNav: two pagers,
+  two different answers to "Next". One component serves both readers now so
+  they cannot drift apart again.
   **Papers on such a track read the same way** — `PaperPartsReader`
   (`src/components/papers/`) chunks at the paper's OWN toc headings
   (`ax-sec-`/`sb-sec-`/`lw-sec-` ids), so an Article of a treaty is a page and

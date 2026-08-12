@@ -295,11 +295,16 @@ checked against the full texts. That is the obvious input for the rebuild, and
 porting it is what finally closes the 2.2 duplication CLAUDE.md calls the
 widest in the course.
 
-## 2.2 Cloud rebuilt: four external cards and ten checks
+## 2.2 Cloud rebuilt: four external cards
 
-On the course owner's instruction — 2.2 is the four sources as external cards
-plus tests on text understanding. One unit, `v-cloud` (2.2), back in module 2
-between 2.1 and 2.3.
+On the course owner's instruction. One unit, `v-cloud` (2.2), back in module 2
+between 2.1 and 2.3, holding the four sources as reading cards and nothing
+else.
+
+**The ten comprehension checks stood here for one commit and were cut.** They
+were over-delivery, not a request; the instruction was cards. They are in the
+history, and the note below on where they came from is kept because it is
+what a later session would need to bring them back honestly.
 
 **Nothing is reproduced.** The four cards link out and say what each source is
 for; the checks quote nobody. That settles the reuse question the emptying
@@ -311,7 +316,7 @@ Her source list is used verbatim, which changes one URL: Egan & Heim is the
 GovAI PDF (`cdn.governance.ai/Oversight_for_Frontier_AI_…`), not the arXiv
 record the old registry entry carried.
 
-**The ten questions are ported, not written.** They come from
+**If the checks come back, this is their provenance.** They were ported, not written. They come from
 `tracksprogramplayground/verification-module-2-2-data.js`, whose own
 verification log records each claim against the full texts — the four provider
 roles and the EO 14110 thresholds against Heim et al. p. 31, the

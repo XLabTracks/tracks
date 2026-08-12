@@ -41,6 +41,9 @@ export const verificationExercises: VerificationExerciseDef[] = [
   { id: "types-of-ai", title: "The Types of AI", bridged: false },
   { id: "short-history", title: "A Short History of AI Acceleration", bridged: false },
   { id: "precedent-cases", title: "Did the Regime Hold?", bridged: true },
+  // The 0.3 document packet's five tasks: bridged — complete when her rule
+  // is met (Task 5 submitted plus any two of Tasks 1–4).
+  { id: "packet-tasks", title: "Tasks on the Document Packet", bridged: true },
   // nuclear-disanalysis stood down 2026-08-12 when the owner's document
   // packet took over 0.3's reasoning tasks — the widget and its data file
   // remain in widgets/ and data/, unregistered because the registry test

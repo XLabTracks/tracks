@@ -120,8 +120,9 @@ export const CLAIM = {
   text: "The nuclear record gives us reason to expect that ambitious verification of advanced AI could also be made workable.",
 } as const;
 
-/** Baker's four differences, quoted. Q2's reveal, and where the card comes from. */
-const BAKER_DIFFERENCES: DisanalysisQuote = {
+/** Baker's four differences, quoted. Q2's reveal, and where the card comes
+ * from. Exported: the 0.3 document packet's task keys reuse it. */
+export const BAKER_DIFFERENCES: DisanalysisQuote = {
   what: "Appendix A, The nuclear-AI analogy",
   blocks: [
     {
@@ -157,6 +158,37 @@ const BAKER_DIFFERENCES: DisanalysisQuote = {
           text: "Nuclear arms control agreements are verified without inspectors getting access to much of the valuable R&D information involved (i.e. R&D of centrifuges, missiles, and bombers); it is unclear whether similarly IP-protecting M&V will be feasible for AI.",
         },
       ],
+    },
+  ],
+};
+
+/** Baker's own conclusion and its narrowing, quoted. Q3's reveal; the 0.3
+ * document packet's task keys reuse it. */
+export const BAKER_QUALIFIED_OPTIMISM: DisanalysisQuote = {
+  what: "§6.1 Qualified optimism",
+  blocks: [
+    {
+      label: "The conclusion, and how much of it is spent narrowing",
+      text: "This section primarily argues for the following conclusion: with certain preparations, the foreseeable challenges of one potential form of AI treaty verification (specifically, hardware-based verification of treaties setting rules on highly compute-intensive AI development) would mostly be challenges that were successfully addressed in nuclear arms control.",
+    },
+    {
+      label: "What the scope leaves out, in his own words",
+      text: "Chip-based approaches to verification cannot address all important risks from AI. Still, chip-based verification may be unusually promising specifically in the context of highly compute-intensive AI development, as other drivers of AI advances—algorithms and data—are harder to track.",
+    },
+    {
+      label: "What “manageable” is doing in that sentence",
+      text: "Substantial preparations would reduce each of these challenges to a difficulty that was manageable in the nuclear case (that is, some nuclear arms control M&V system faced a similar or greater difficulty, yet the system was adopted and had a strong track record).",
+    },
+  ],
+};
+
+/** Baker's hedge on the record itself. Q3's reveal; reused by the packet. */
+export const BAKER_RECORD_HEDGE: DisanalysisQuote = {
+  what: "§4.4 Limitations",
+  blocks: [
+    {
+      label: "His hedge on the record the whole inference reads from",
+      text: "The public would not know about any nuclear weapons development activities that were sufficiently well-kept secrets.",
     },
   ],
 };
@@ -321,34 +353,7 @@ export const QUESTIONS: DisanalysisQuestion[] = [
     },
     revealLead:
       "What Baker does with the same problem: he neither ignores it nor treats it as fatal — he narrows the claim until the evidence can carry it, and says what would have to be built.",
-    reveal: [
-      {
-        what: "§6.1 Qualified optimism",
-        blocks: [
-          {
-            label: "The conclusion, and how much of it is spent narrowing",
-            text: "This section primarily argues for the following conclusion: with certain preparations, the foreseeable challenges of one potential form of AI treaty verification (specifically, hardware-based verification of treaties setting rules on highly compute-intensive AI development) would mostly be challenges that were successfully addressed in nuclear arms control.",
-          },
-          {
-            label: "What the scope leaves out, in his own words",
-            text: "Chip-based approaches to verification cannot address all important risks from AI. Still, chip-based verification may be unusually promising specifically in the context of highly compute-intensive AI development, as other drivers of AI advances—algorithms and data—are harder to track.",
-          },
-          {
-            label: "What “manageable” is doing in that sentence",
-            text: "Substantial preparations would reduce each of these challenges to a difficulty that was manageable in the nuclear case (that is, some nuclear arms control M&V system faced a similar or greater difficulty, yet the system was adopted and had a strong track record).",
-          },
-        ],
-      },
-      {
-        what: "§4.4 Limitations",
-        blocks: [
-          {
-            label: "His hedge on the record the whole inference reads from",
-            text: "The public would not know about any nuclear weapons development activities that were sufficiently well-kept secrets.",
-          },
-        ],
-      },
-    ],
+    reveal: [BAKER_QUALIFIED_OPTIMISM, BAKER_RECORD_HEDGE],
     caveat:
       "Narrowing a claim until the evidence carries it is one legitimate answer to a disanalogy, and abandoning the claim is another. Which yours needs is the judgement this question is asking for.",
   },

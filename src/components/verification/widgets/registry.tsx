@@ -78,6 +78,10 @@ const MechanismSortReveal = dynamic<VerificationWidgetProps>(
   () => import("./mechanism-sort").then((module) => module.MechanismSortReveal),
   { loading: WidgetLoading },
 );
+const PacketTasks = dynamic<VerificationWidgetProps>(
+  () => import("./packet-tasks").then((module) => module.PacketTasks),
+  { loading: WidgetLoading },
+);
 const PrecedentCases = dynamic<VerificationWidgetProps>(
   () => import("./precedent-cases").then((module) => module.PrecedentCases),
   { loading: WidgetLoading },
@@ -147,6 +151,7 @@ export const verificationWidgets: Record<
   "mechanism-sort": MechanismSort,
   "mechanism-sort-reveal": MechanismSortReveal,
   "precedent-cases": PrecedentCases,
+  "packet-tasks": PacketTasks,
   "treaty-workspace": TreatyWorkspace,
   "compute-verification": ComputeVerificationQuestions,
   "what-do-they-say": WhatDoTheySay,

@@ -151,7 +151,12 @@ export function VerificationLandscape(_: VerificationWidgetProps) {
               ? `c-${sel.ri}-${sel.ci}`
               : `a-${sel.axis}-${sel.i}`
         }
-        className="border-border border-t-primary bg-background motion-safe:animate-in motion-safe:fade-in motion-safe:duration-300 mt-5 min-h-24 border border-t-[3px] p-4 sm:p-5"
+        /* Outlined on all four sides, in one colour. It used to be a hairline
+           on three with a 3px primary edge on top — the half-painted card the
+           house rule names, and it read as an unfinished component rather than
+           as emphasis. The panel is the thing the grid is talking to, so it
+           gets the outline; the accent inside is the eyebrow. */
+        className="border-primary bg-background motion-safe:animate-in motion-safe:fade-in motion-safe:duration-300 mt-5 min-h-24 border p-4 sm:p-5"
       >
         {sel === null ? (
           <p className="text-muted-foreground text-sm italic">{C.prompt}</p>

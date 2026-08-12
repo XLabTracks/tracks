@@ -106,7 +106,12 @@ export const memoSlots: MemoSlot[] = [
     unit: "0.3.2",
     title: "Compliance under anarchy",
     status: "unspecified",
-    lesson: "securitization",
+    /* Re-parked when 0.3.1 was deleted. This was never 0.3.1's own output —
+       0.3.2 is not a lesson the graph has, so the marker was parked on the
+       last lesson of 0.3, and 0.3 itself is that lesson now. Deleting the
+       section is not a decision to drop a written output the outline asks
+       for, so it moves rather than going with it. */
+    lesson: "precedents",
     brief: null,
     audience: null,
     words: 800,
@@ -188,7 +193,7 @@ export const memoSlots: MemoSlot[] = [
     unit: "2.2",
     title: "Essay, brief or reflection",
     status: "named",
-    lesson: "cloud-limits",
+    lesson: "cloud",
     brief: null,
     audience: null,
     words: 800,

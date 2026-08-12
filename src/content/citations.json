@@ -37,26 +37,12 @@
       "container": "EU Artificial Intelligence Act",
       "publisher": "artificialintelligenceact.eu"
     },
-    "https://arxiv.org/abs/2310.13625": {
-      "title": "Oversight for Frontier AI through a Know-Your-Customer Scheme for Compute Providers",
-      "about": "A policy paper proposing that compute providers run know-your-customer checks so governments can oversee frontier AI development.",
-      "authors": "Egan, Janet, and Lennart Heim",
-      "container": "arXiv",
-      "date": "Oct. 2023"
-    },
     "https://arxiv.org/abs/2402.08797": {
       "title": "Computing Power and the Governance of Artificial Intelligence",
       "about": "The foundational survey of compute as a governance lever — why computing power is detectable, excludable, and quantifiable in ways algorithms and data are not.",
       "authors": "Sastry, Girish, Lennart Heim, Haydn Belfield, et al.",
       "container": "arXiv",
       "date": "Feb. 2024"
-    },
-    "https://arxiv.org/abs/2403.08501": {
-      "title": "Governing Through the Cloud: The Intermediary Role of Compute Providers in AI Regulation",
-      "about": "A paper on cloud compute providers as regulatory intermediaries — securers, record keepers, verifiers, and enforcers of AI rules.",
-      "authors": "Heim, Lennart, Tim Fist, Janet Egan, et al.",
-      "container": "arXiv",
-      "date": "Mar. 2024"
     },
     "https://arxiv.org/abs/2404.18308": {
       "title": "Near-Term Enforcement of AI Chip Export Controls Using a Firmware-Based Design for Offline Licensing",
@@ -126,13 +112,6 @@
       "about": "A wiki explainer of Fermi estimation — rough order-of-magnitude reasoning with worked examples.",
       "container": "Brilliant Math & Science Wiki",
       "publisher": "Brilliant.org"
-    },
-    "https://carnegieendowment.org/research/2026/05/the-geopolitical-debates-over-controlling-cloud-compute": {
-      "title": "The Geopolitical Debates Over Controlling Cloud Compute",
-      "about": "The Carnegie analysis of the cloud loophole in chip export controls and the politics of closing it, quoted in the cloud-limits lesson.",
-      "authors": "Tan, Noah",
-      "container": "Carnegie Endowment for International Peace",
-      "date": "5 May 2026"
     },
     "https://cset.georgetown.edu/publication/the-semiconductor-supply-chain/": {
       "title": "The Semiconductor Supply Chain: Assessing National Competitiveness",
@@ -252,13 +231,6 @@
       "authors": "Texas Legislative Council, Research Division",
       "date": "85th Legislature"
     },
-    "https://www.federalregister.gov/documents/2023/11/01/2023-24283/safe-secure-and-trustworthy-development-and-use-of-artificial-intelligence": {
-      "title": "Safe, Secure, and Trustworthy Development and Use of Artificial Intelligence",
-      "about": "The Federal Register text of Executive Order 14110, the 2023 order whose compute-reporting duties the cloud lessons treat as a template.",
-      "org": "United States, Executive Office of the President",
-      "container": "Federal Register",
-      "date": "1 Nov. 2023"
-    },
     "https://www.federalregister.gov/documents/2025/09/10/2025-17508/restoring-the-united-states-department-of-war": {
       "title": "Restoring the United States Department of War",
       "about": "The Federal Register text of Executive Order 14347, restyling the Department of Defense as the Department of War.",
@@ -280,13 +252,6 @@
       "container": "LessWrong",
       "date": "2006"
     },
-    "https://www.lesswrong.com/posts/qnvmZCjzspceWdgjC/the-world-keeps-getting-saved-and-you-don-t-notice": {
-      "title": "The World Keeps Getting Saved and You Don’t Notice",
-      "about": "The post 0.1.1 is inspired by: successful prevention looks like nothing happening, so the work behind it goes unnoticed.",
-      "authors": "Bogoed",
-      "container": "LessWrong",
-      "date": "16 Feb. 2026"
-    },
     "https://ourworldindata.org/brief-history-of-ai": {
       "title": "The Brief History of Artificial Intelligence: The World Has Changed Fast — What Might Be Next?",
       "about": "The Our World in Data article whose two charts 0.1 reproduces: the timeline of notable AI systems, and test scores of AI systems relative to human performance.",
@@ -301,6 +266,13 @@
       "container": "LessWrong",
       "date": "8 Sept. 2010"
     },
+    "https://www.lesswrong.com/posts/qnvmZCjzspceWdgjC/the-world-keeps-getting-saved-and-you-don-t-notice": {
+      "title": "The World Keeps Getting Saved and You Don’t Notice",
+      "about": "The post 0.1.1 is written after: prevention is invisible because people notice events and not their absence, so the work that stops a catastrophe is systematically undervalued and the averted risk is remembered as never having been real.",
+      "authors": "Bogoed",
+      "container": "LessWrong",
+      "date": "16 Feb. 2026"
+    },
     "https://www.nist.gov/caisi": {
       "title": "Center for AI Standards and Innovation (CAISI)",
       "about": "NIST's page for the center, formerly the US AI Safety Institute, that runs pre-deployment testing agreements with frontier developers.",
@@ -311,14 +283,6 @@
       "about": "An open letter from employees of frontier AI companies asking the U.S. government to support an international effort to build the technical and governance tools needed to deliberately pace automated AI development.",
       "authors": "Employees of frontier AI companies",
       "date": "July 2026"
-    },
-    "https://www.rand.org/pubs/research_reports/RRA3686-1.html": {
-      "title": "Strategies and Detection Gaps in a Game-Theoretic Model of Compute Governance",
-      "about": "The RAND game-theoretic study of compute-governance detection gaps the cloud-limits lesson quotes throughout.",
-      "authors": "Moon, Vedula, Geneson, and Bar-on",
-      "publisher": "RAND Corporation",
-      "date": "2025",
-      "standalone": true
     },
     "https://www.rfc-editor.org/rfc/rfc9334.html": {
       "title": "Remote ATtestation ProcedureS (RATS) Architecture",
@@ -377,8 +341,6 @@
     "https://www.felonybench.com/"
   ],
   "excluded": [
-    "https://evidence-taxonomies.netlify.app/",
-    "https://playground-tracks.netlify.app/field-map",
     "https://docs.google.com/document/d/1hnwVUNOfrA8ZoE-8pCrnZ8wP11aMKaRdEz2WTqKGt_o/edit?tab=t.0",
     "https://docs.google.com/document/d/1laojHZaIj5uaTbrYXybfvMelYlwPygNIO19XD1ELa5Y/edit?tab=t.0",
     "https://docs.google.com/document/d/1omutl0zbdfSBTLG8diD3VdvAtBvfox3ebIF6IfX0vBU/edit?pli=1&tab=t.0",

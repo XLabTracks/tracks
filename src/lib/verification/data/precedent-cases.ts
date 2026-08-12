@@ -10,9 +10,8 @@
  * the reveal, not the briefing, because the exercise is prediction-first.
  * Order is chronological, which is the outline's own order.
  *
- * The outline points at a prototype for this exercise
- * (timely-zuccutto-eed7cf.netlify.app, "The Verification Files"). This widget
- * is the shipped version of it; the prototype is a sketch, not a spec, so
+ * The outline points at a prototype for this exercise. This widget is the
+ * shipped version of it; the prototype is a sketch, not a spec, so
  * where the two differ the code here wins.
  */
 

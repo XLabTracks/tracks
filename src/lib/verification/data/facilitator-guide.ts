@@ -426,19 +426,12 @@ export const RESOURCES_BOXES: ResBox[] = [
       { html: "<a href=\"https://arxiv.org/abs/2402.08797\" target=\"_blank\" rel=\"noopener\">Computing Power and the Governance of AI</a><small>Why compute is the thing treaties can actually see.</small>" },
     ],
   },
-  /* A track material the app itself serves is linked at its unit, not at the
-   * standalone prototype it was built from — the in-app one carries the
-   * learner's progress and the prototype does not. The other two are still
-   * standalone Netlify pages: the IR Primer's source is
-   * `tracksprogramplayground/site/ir-primer.html` and is waiting to be ported
-   * the same way; "The Verification Problem" has no source in any repo we
-   * hold, so it can only stay external. */
+  /* Track materials point at their in-app units so learners keep platform
+   * navigation, theme, accessibility and progress behavior. */
   {
     heading: "Your track materials",
     items: [
-      { html: "<a href=\"https://the-verification-game.netlify.app\" target=\"_blank\" rel=\"noopener\">The Verification Game</a><small>Violator-vs-inspector exercise — pairs with the red-team recipe.</small>" },
-      { html: "<a href=\"https://verification-intro.netlify.app\" target=\"_blank\" rel=\"noopener\">The Verification Problem</a><small>Scrolling intro — good pre-read for week one.</small>" },
-      { html: "<a href=\"https://rainbow-puppy-79f680.netlify.app\" target=\"_blank\" rel=\"noopener\">IR Primer</a><small>International-relations background for low-context cohorts.</small>" },
+      { html: "<a href=\"/tracks/verification/why-verification/introduction\">The Verification Problem</a><small>Native interactive in the opening unit — good pre-read for week one.</small>" },
     ],
   },
 ];
@@ -487,7 +480,7 @@ export const SESSION_PLANS: SessionPlan[] = [
   {
     id: "m-intro",
     title: "Session plan · The introduction",
-    lede: "Pairs with the opening video and <a href=\"https://verification-intro.netlify.app\" target=\"_blank\" rel=\"noopener\">The Verification Problem</a>. Participants arrive having watched and scrolled; the live hour makes the arms-race logic something they <em>felt</em> — and gives the skeptics room to push back out loud. 60 minutes.",
+    lede: "Pairs with the opening video and <a href=\"/tracks/verification/why-verification/introduction\">The Verification Problem</a>. Participants arrive having watched and explored; the live hour makes the arms-race logic something they <em>felt</em> — and gives the skeptics room to push back out loud. 60 minutes.",
     prep: {
       ip: "<strong>Prep:</strong> one red and one black card (or two folded slips) per team for the Two Labs game · payoff matrix printed or projected · whiteboard for the shared risk track · envelopes for the baseline reflections (yes, literal sealed envelopes — they reappear at track's end).",
       zm: "<strong>Prep:</strong> a slide with the Two Labs payoff matrix and a visible risk track · two team breakout rooms · commitments arrive by direct message to you each round · a form for baseline reflections, resurfaced in the final week. At 12+ participants, a co-host to collect DMs helps.",
@@ -513,8 +506,7 @@ export const SESSION_PLANS: SessionPlan[] = [
     sendBox: {
       heading: "Links",
       items: [
-        { html: "<a href=\"https://verification-intro.netlify.app\" target=\"_blank\" rel=\"noopener\">The Verification Problem</a><small>Re-scroll it, then show a smart friend — note where the friend pushes back.</small>" },
-        { html: "<a href=\"https://rainbow-puppy-79f680.netlify.app\" target=\"_blank\" rel=\"noopener\">IR Primer</a><small>For anyone who felt underwater during the treaty and state-behavior talk.</small>" },
+        { html: "<a href=\"/tracks/verification/why-verification/introduction\">The Verification Problem</a><small>Revisit it, then show a smart friend — note where the friend pushes back.</small>" },
         { html: "<a href=\"https://cset.georgetown.edu/publication/ai-verification/\" target=\"_blank\" rel=\"noopener\">AI Verification (CSET)</a><small>Skim the mechanism list now; the deep read comes with Module 2.</small>" },
       ],
     },
@@ -527,7 +519,7 @@ export const SESSION_PLANS: SessionPlan[] = [
   {
     id: "m-game",
     title: "Session plan · The Verification Game, live",
-    lede: "The solo timeline (<a href=\"https://the-verification-game.netlify.app\" target=\"_blank\" rel=\"noopener\">The Verification Game</a>) becomes <strong>“The Decade”</strong>: 2026–2032 in six rounds, for 10–15 players. The room starts at the fork with no regime and ends up walking Path A, B, or C — by its own choices, replayed against the map in the debrief. 90–120 minutes; the one plan here that needs real prep.",
+    lede: "The live Verification Game becomes <strong>“The Decade”</strong>: 2026–2032 in six rounds, for 10–15 players. The room starts at the fork with no regime and ends up walking Path A, B, or C — by its own choices, replayed against the map in the debrief. 90–120 minutes; the one plan here that needs real prep.",
     prep: {
       ip: "<strong>Prep — the print kit:</strong> role cards · sealed directive envelopes · carbon-copy Program Sheets (public slip on top, truth beneath) · allocation screens · rumor deck (half true, half false, identical backs) · audit-chit bag · fill-in-the-blank treaty templates that get taped to the wall when signed · a big map board with the risk track · two timers. Room: one plenary table plus three corner “capitals.” Do one solo dry run of your Control checklist first — Control is the hard seat.",
       zm: "<strong>Prep — the no-code kit:</strong> main room is the plenary with the map on permanent screen share; persistent breakouts are the capitals plus an IVA office; bilaterals on request, capped at two concurrent (queueing for a side room is realistic diplomacy pressure). Everyone renames to their seat (<em>US · HoG</em>, <em>CN · NSA</em>). Allocations arrive by one Google Form per round; intel travels by direct message from you. Recruit a co-facilitator (“Vice-Control”) to run DMs while you run the plenary — solo Control on Zoom drowns.",
@@ -562,9 +554,7 @@ export const SESSION_PLANS: SessionPlan[] = [
     sendBox: {
       heading: "Links",
       items: [
-        { html: "<a href=\"https://the-verification-game.netlify.app\" target=\"_blank\" rel=\"noopener\">The Verification Game (solo)</a><small>Replay it and deliberately walk the two paths the room didn't.</small>" },
         { html: "<a href=\"https://arxiv.org/abs/2408.16074\" target=\"_blank\" rel=\"noopener\">Verification methods for international AI agreements</a><small>Match the game's mechanics to the paper's ten real methods.</small>" },
-        { html: "<a href=\"https://rainbow-puppy-79f680.netlify.app\" target=\"_blank\" rel=\"noopener\">IR Primer</a><small>The lenses the debrief just made concrete.</small>" },
       ],
     },
     seed: {
@@ -684,7 +674,6 @@ export const SESSION_PLANS: SessionPlan[] = [
       heading: "Links",
       items: [
         { html: "The anatomy interactive (module 0.2.4)<small>Do it (or re-do it) after drafting — the answer key lands differently once you've been exploited.</small>" },
-        { html: "<a href=\"https://rainbow-puppy-79f680.netlify.app\" target=\"_blank\" rel=\"noopener\">IR Primer</a><small>The realist and institutionalist lenses the flip just exercised.</small>" },
         { html: "<a href=\"https://www.armscontrol.org/factsheets\" target=\"_blank\" rel=\"noopener\">Arms Control Association fact sheets</a><small>Pick one real treaty and list three things it leaves implicit.</small>" },
       ],
     },
@@ -860,7 +849,7 @@ export const FG_POPUPS: Record<string, string> = {
   "p-c-deep":
     "<h3>Deep-dives → jigsaw</h3>\n    <p class=\"mt\">Split, prep, teach back · 14 min + pre-work</p>\n    <ol>\n      <li><strong>Pre</strong> — assign each participant <em>one</em> deep-dive before the session (e.g. hardware mechanisms / model evals / whistleblower provisions).</li>\n      <li><strong>5 min</strong> — same-reading groups agree on the mechanism and its weakest link.</li>\n      <li><strong>9 min</strong> — re-mix into trios of different readings; each teaches theirs in 3 minutes.</li>\n    </ol>\n    <p><strong>Why it works:</strong> explaining to a peer is deep processing plus accountability — and the cohort covers 3× the material.</p>",
   "p-c-debate":
-    "<h3>Written debate → live red team</h3>\n    <p class=\"mt\">Violator vs. inspector · 13 min</p>\n    <ol>\n      <li><strong>2 min</strong> — split the room: half are the evading state, half design the verification regime.</li>\n      <li><strong>7 min</strong> — inspectors present their regime; violators attack it in rounds.</li>\n      <li><strong>4 min</strong> — debrief out of role: which attacks would the reading's proposal survive?</li>\n    </ol>\n    <p><strong>Why it works:</strong> adversarial thinking is the core skill of verification — and it's far more natural as a game than as an essay. Pairs well with <a href=\"https://the-verification-game.netlify.app\" target=\"_blank\" rel=\"noopener\">The Verification Game</a>.</p>",
+    "<h3>Written debate → live red team</h3>\n    <p class=\"mt\">Violator vs. inspector · 13 min</p>\n    <ol>\n      <li><strong>2 min</strong> — split the room: half are the evading state, half design the verification regime.</li>\n      <li><strong>7 min</strong> — inspectors present their regime; violators attack it in rounds.</li>\n      <li><strong>4 min</strong> — debrief out of role: which attacks would the reading's proposal survive?</li>\n    </ol>\n    <p><strong>Why it works:</strong> adversarial thinking is the core skill of verification — and it's far more natural as a game than as an essay. Pairs well with the live Verification Game session plan.</p>",
   "p-s1":
     "<h3>0–5 · Check-in</h3>\n    <p>One round, everyone speaks: <em>“one word for how the reading left you.”</em></p>\n    <p>You've just guaranteed universal participation in the first five minutes and taken the group's temperature. If last week ended with commitments, collect them here.</p>",
   "p-s2":

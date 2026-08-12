@@ -79,12 +79,16 @@ The fold under the workspace asked for a comparison across three treaty
 proposals (Scher, Miotti, and the Global Governance of AI articles) with a
 two-level analysis brief under it. The course owner cut it. What that left:
 
-- **Both treaty papers stay in the graph.** `v-paper-scher-treaty` is what the
-  workspace questions are answered against, so it was never optional in
-  practice. `v-paper-miotti-treaty` is now reached only from the sidebar,
-  where it sits under 1.1 marked Optional. It gates nothing (`optional: true`
-  keeps it out of every `…ProgressContentIds` accessor), so leaving it costs a
-  learner nothing and removing it is a content decision.
+- **One treaty paper stays.** `v-paper-scher-treaty` is what the workspace
+  questions are answered against, so it was never optional in practice.
+
+  `v-paper-miotti-treaty` was kept for a few commits as a sidebar-only
+  Optional row, then deleted on the course owner's instruction — the fold was
+  its only link and nothing replaced it. Gone with it: the paper entry, its
+  committed arXiv artifact `2311.10748v2.json`, and its place in module 1's
+  `itemIds` and `verificationPaperIds`. Its citations.json row went earlier,
+  with the fold. Rebuilding it is `npm run arxiv:build -- --id 2311.10748v2`
+  plus the paper entry, both in the history.
 - **`/verification/gg-treaty` is gone.** It was kept for one commit as an
   unlinked page, then deleted on the course owner's instruction: the route,
   the committed `gg-treaty.json`, `scripts/build-gg-treaty.mjs` and the

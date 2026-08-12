@@ -36,8 +36,35 @@ export function SiteHeader() {
   return (
     <header className="border-border/80 bg-background/80 sticky top-0 z-40 border-b backdrop-blur">
       <div className="mx-auto flex h-14 w-full max-w-7xl items-center gap-6 px-4 lg:px-6">
-        <Link href="/" className="text-lg font-bold tracking-tight select-none">
-          XLab<span className="text-destructive"> · </span>Tracks
+        {/* One wordmark across the site: the same "<name> @ XLab-logotype"
+            shape the Verification header wears, so the two chromes read as one
+            place. The `@` is a connector and not a brand mark, so it takes the
+            muted ink rather than an accent — the logotype beside it carries the
+            brand on its own.
+
+            The alt text is what makes the link say "Tracks @ XLab"; there is no
+            aria-label, so the visible mark and the announced name cannot drift.
+
+            Two traps. The artwork is 3300x1050 but the ink only fills the middle
+            ~55% of that box, so `height` buys about half of what it says: 28px
+            puts roughly 15px of ink beside 18px type — matching theme.css's
+            .brand-mark, and the number to keep in step with it. And only the day
+            cut is here because nothing outside Verification reads `data-theme`,
+            so these routes are always the light ground; the white cut sits
+            beside it in the same folder if that ever stops being true. */}
+        <Link
+          href="/"
+          className="flex items-center gap-2 text-lg font-bold tracking-tight select-none"
+        >
+          Tracks <span className="text-muted-foreground font-normal">@</span>
+          <img
+            src="/verification/assets/xLab_Logotype.png"
+            alt="XLab"
+            width={3300}
+            height={1050}
+            draggable={false}
+            className="h-7 w-auto"
+          />
         </Link>
         <nav className="text-muted-foreground hidden items-center gap-1 text-sm sm:flex">
           {NAV.map((item) => {

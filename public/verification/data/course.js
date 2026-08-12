@@ -17,7 +17,7 @@ window.COURSE = {
       "week": "week 1",
       "status": "drafted",
       "goal": "Why are we teaching this?",
-      "summary": "The oldest problem in arms control, applied to AI: when you sign a mutual agreement, how do you know the other party will uphold it? Opens with the welcome and the course's own framing, then the case that ASI risk warrants an agreement at all, why successful prevention is invisible, the intuitions a verification regime runs on, seven decades of arms-control precedent, and the securitization critique met head on.",
+      "summary": "The oldest problem in arms control, applied to AI: when you sign a mutual agreement, how do you know the other party will uphold it? Opens with the welcome and the course's own framing, then the case that ASI risk warrants an agreement at all, why successful prevention is invisible, the intuitions a verification regime runs on, and seven decades of arms-control precedent.",
       "units": [
         {
           "id": "0.0",
@@ -57,8 +57,7 @@ window.COURSE = {
           "mins": "20–25 min",
           "href": "/tracks/verification/why-verification/precedents",
           "lessons": [
-            "precedents",
-            "securitization"
+            "precedents"
           ]
         },
         {
@@ -174,12 +173,9 @@ window.COURSE = {
           "title": "Cloud",
           "kind": "explainer",
           "mins": "20–25 min",
-          "href": "/tracks/verification/verification-infrastructure/cloud-intro",
+          "href": "/tracks/verification/verification-infrastructure/cloud",
           "lessons": [
-            "cloud-intro",
-            "cloud-what-providers-see",
-            "cloud-reporting-control",
-            "cloud-limits"
+            "cloud"
           ]
         },
         {

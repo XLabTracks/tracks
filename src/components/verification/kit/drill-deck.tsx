@@ -39,6 +39,7 @@ import {
   type MarkVerdict,
 } from "@/lib/verification/engines/drills";
 import type { VerificationWidgetProps } from "./types";
+import { SegMeter } from "./seg-meter";
 
 /**
  * Renderer shared by every per-module drill bench: a menu of the module's
@@ -302,25 +303,12 @@ function StepHeader({
           </Button>
         ) : null}
       </div>
-      <ol
-        className="flex flex-wrap items-center gap-1.5"
-        aria-label={`Step ${pos + 1} of ${bench.steps.length}`}
-      >
-        {bench.steps.map((_, i) => (
-          <li
-            key={i}
-            aria-hidden
-            className={cn(
-              "size-2 rounded-full",
-              i < pos
-                ? "bg-foreground/70"
-                : i === pos
-                  ? "bg-primary ring-primary/30 ring-2"
-                  : "bg-border",
-            )}
-          />
-        ))}
-      </ol>
+      <SegMeter
+        total={bench.steps.length}
+        filled={(i) => i < pos}
+        label={`Step ${pos + 1} of ${bench.steps.length}`}
+        className="max-w-44"
+      />
     </div>
   );
 }

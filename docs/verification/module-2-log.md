@@ -206,3 +206,137 @@ storage key — the old `vt-ex:ex-mechanism-rank`/`ex-reopen` keys are orphaned
 (incompatible data model), which is the intended cost of the replacement.
 `evidence-taxonomies.netlify.app` and the 2.3 interactives in item 5 are still
 not built.
+
+## 2026-08-11 — 2.2 Cloud emptied, to be rebuilt from the four papers
+
+On the course owner's instruction, **all of unit 2.2 is deleted.** 2.2 is to be
+rebuilt as the four source papers alone — sections of each paper, then test
+questions, check-yourself and gap-fills, and nothing besides. What was there
+was a mix of the outline transcription and our own synthesis, so it was
+removed whole rather than edited down.
+
+Deleted: `cloud-intro`, `cloud-what-providers-see`, `cloud-reporting-control`,
+`cloud-limits` (4 lessons, 536 lines) and their entries in `curriculum.ts` —
+the module's `itemIds`, the four lesson records, and the four
+`verificationUnitOfLesson` rows. The generator derives units from lessons, so
+2.2 no longer appears in `course.js`: 19 units → 18. **`verificationUnitMeta`
+keeps its `"2.2": { title: "Cloud", … }` row on purpose** — it is unused while
+the unit is empty, and it is the title the rebuild reads.
+
+Also removed, because their only consumer was one of those lessons:
+
+- **`m2-2-cloud`**, the 2.2 written output (14 memo slots → 13). It was
+  `status: "named"` with the gap *"The outline offers the choice of genre —
+  essay, brief or reflection — and stops there."* **It must come back with the
+  rebuild**; it is a written output the outline asks for, and deleting it here
+  is a consequence of its host lesson going, not a decision that 2.2 owes
+  nothing.
+- Four exercises: `v-task-cloud-intro-2`, `v-task-cloud-limits-3`,
+  `v-task-cloud-reporting-control-1`, `v-task-cloud-what-providers-see-1`.
+  Three of the four were never converted from their outline form — their
+  prompts still opened `EXERCISE SPEC —` and carried `CHECK:` with the answer
+  printed under it. They are in the history if any are wanted back.
+- Five `citations.json` entries. `citations.test.ts` fails on orphan entries
+  *and* on stale `pending`/`excluded` rows, so there is no way to park a
+  citation whose lesson is gone — they had to be deleted. **Four of the five
+  are the rebuild's own sources**, so the hand-written `about` lines are
+  reproduced here verbatim to be pasted back:
+
+      arxiv.org/abs/2310.13625 — "Oversight for Frontier AI through a
+        Know-Your-Customer Scheme for Compute Providers", Egan, Janet, and
+        Lennart Heim, arXiv, Oct. 2023.
+        about: "A policy paper proposing that compute providers run
+        know-your-customer checks so governments can oversee frontier AI
+        development."
+
+      arxiv.org/abs/2403.08501 — "Governing Through the Cloud: The
+        Intermediary Role of Compute Providers in AI Regulation", Heim,
+        Lennart, Tim Fist, Janet Egan, et al., arXiv, Mar. 2024.
+        about: "A paper on cloud compute providers as regulatory
+        intermediaries — securers, record keepers, verifiers, and enforcers
+        of AI rules."
+
+      rand.org/pubs/research_reports/RRA3686-1.html — "Strategies and
+        Detection Gaps in a Game-Theoretic Model of Compute Governance",
+        Moon, Vedula, Geneson, and Bar-on, RAND Corporation, 2025.
+        standalone: true
+        about: "The RAND game-theoretic study of compute-governance detection
+        gaps the cloud-limits lesson quotes throughout."
+
+      carnegieendowment.org/research/2026/05/the-geopolitical-debates-over-
+        controlling-cloud-compute — "The Geopolitical Debates Over
+        Controlling Cloud Compute", Tan, Noah, Carnegie Endowment for
+        International Peace, 5 May 2026.
+        about: "The Carnegie analysis of the cloud loophole in chip export
+        controls and the politics of closing it, quoted in the cloud-limits
+        lesson."
+
+      federalregister.gov/documents/2023/11/01/2023-24283/… — "Safe, Secure,
+        and Trustworthy Development and Use of Artificial Intelligence",
+        United States, Executive Office of the President, Federal Register,
+        1 Nov. 2023. (EO 14110 — supporting, not one of the four.)
+        about: "The Federal Register text of Executive Order 14110, the 2023
+        order whose compute-reporting duties the cloud lessons treat as a
+        template."
+
+**Reuse terms for the rebuild, unchanged:** the two arXiv papers are CC BY 4.0
+and may be quoted freely. RAND RR-A3686-1 and the Carnegie piece are
+all-rights-reserved and are reproduced on the author's instruction — RAND from
+the report itself, Carnegie from the article as published. The trap recorded
+before still holds: the RAND PDF is AES-encrypted and a fetched copy carries no
+text layer, so the passages must come from the file the author supplied. Ask
+for it rather than assuming a download will read.
+
+**The deeper draft already exists and was never ported.**
+`tracksprogramplayground/verification-module-2-2-data.js` (52 KB) is a full
+2.2 build — sections → tasks → reader pages, eight readers and a game, with
+its verification log in `verification-module-2-2-design.md`, all four sources
+checked against the full texts. That is the obvious input for the rebuild, and
+porting it is what finally closes the 2.2 duplication CLAUDE.md calls the
+widest in the course.
+
+## 2.2 Cloud rebuilt: four external cards
+
+On the course owner's instruction. One unit, `v-cloud` (2.2), back in module 2
+between 2.1 and 2.3, holding the four sources as reading cards and nothing
+else.
+
+**The ten comprehension checks stood here for one commit and were cut.** They
+were over-delivery, not a request; the instruction was cards. They are in the
+history, and the note below on where they came from is kept because it is
+what a later session would need to bring them back honestly.
+
+**Nothing is reproduced.** The four cards link out and say what each source is
+for; the checks quote nobody. That settles the reuse question the emptying
+left open: RAND and Carnegie are all rights reserved, and with no reproduction
+their terms do not bind anything here. The two CC BY papers are linked rather
+than quoted for symmetry, not necessity.
+
+Her source list is used verbatim, which changes one URL: Egan & Heim is the
+GovAI PDF (`cdn.governance.ai/Oversight_for_Frontier_AI_…`), not the arXiv
+record the old registry entry carried.
+
+**If the checks come back, this is their provenance.** They were ported, not written. They come from
+`tracksprogramplayground/verification-module-2-2-data.js`, whose own
+verification log records each claim against the full texts — the four provider
+roles and the EO 14110 thresholds against Heim et al. p. 31, the
+10^26 ≈ 60,000 H100s example against p. 27 fn. 29, the detection-gap band
+against Moon et al. p. 5. The four roles were re-confirmed here against the
+paper's abstract. Option order was rotated on the way in: that engine shuffled
+at runtime and kept the right answer first in the data, which `<Check>` does
+not do, so a straight port would have made every answer A.
+
+**`m2-2-cloud` is back**, repointed from `cloud-limits` to `cloud`, still
+`status: "named"` with its original gap. Memo slots: 13 → 14. Units: 18 → 19.
+
+**No citations.json entries.** `citedUrls` does not scan `ReadingCard href`,
+so registering the four would have failed the orphan test — the same reason
+`strategic-foundations`' ten reading cards carry none. Attribution is on the
+cards themselves. Adding them to Works cited means citing them in scanned
+markdown too, which would print each source twice on the page.
+
+**Still owed.** The 52 KB drafted 2.2 in the playground is 48 reader pages,
+six gap-fills and a game beyond these ten questions. This rebuild takes its
+checks and leaves its prose, which is the smaller half. The duplication
+CLAUDE.md calls the widest in the course is narrower now — the app has a 2.2
+again — but the playground draft is still unported.

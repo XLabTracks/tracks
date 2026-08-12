@@ -3169,17 +3169,4 @@ export const papers: Paper[] = [
     collapseTail: false,
     estimatedMinutes: 75,
   },
-  {
-    id: "v-paper-miotti-treaty",
-    slug: "global-compute-cap-treaty",
-    moduleId: "v-scoping",
-    sectionItemId: "v-scoping-anatomy",
-    title: "An international treaty to implement a global compute cap for advanced artificial intelligence",
-    source: { kind: "arxiv", arxivId: "2311.10748v2" },
-    optional: true,
-    // Appendix A is the agreement itself, not apparatus: collapsed, the
-    // Articles the course sends people to read sit behind a closed toggle.
-    collapseTail: false,
-    estimatedMinutes: 20,
-  },
 ];

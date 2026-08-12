@@ -49,7 +49,14 @@ export function SiteFooter() {
       <div className="mx-auto w-full max-w-5xl px-4 py-10 lg:px-6">
         <div className="flex flex-wrap gap-10">
           <div className="min-w-48 flex-1">
-            <p className="text-sm font-bold tracking-tight">XLab · Tracks</p>
+            {/* The header's wordmark, in words: the footer already links XLab
+                out and says what it is, so the logotype would be the third time
+                on one screen. Same order and same connector, so it is the same
+                name and not a second one. */}
+            <p className="text-sm font-bold tracking-tight">
+              Tracks <span className="text-muted-foreground font-normal">@</span>{" "}
+              XLab
+            </p>
             <p className="text-muted-foreground mt-2 max-w-xs text-sm leading-relaxed">
               Courses on AI safety from the Existential Risk Laboratory at the
               University of Chicago.

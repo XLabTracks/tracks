@@ -70,8 +70,15 @@ function records() {
   const body = block("memoSlots", "[", "]");
   const chunks = body.split(/\n  \{\n/).slice(1);
   const out = [];
-  for (const chunk of chunks) {
+  for (const rawChunk of chunks) {
     const rec = {};
+    /* Drop whole-line block comments before reading the fields.
+       memos.ts is where a slot's placement is argued — the header says so —
+       so a note between two fields is the expected way to record why a slot
+       sits on the lesson it sits on. Left in, it was swallowed by the value
+       above it and the build failed on a comment. Whole-line only: a `/*`
+       inside a quoted brief is still a brief. */
+    const chunk = rawChunk.replace(/^[ \t]*\/\*[\s\S]*?\*\/[ \t]*\n/gm, "");
     for (const [, key, raw] of chunk.matchAll(
       /^\s{4}(\w+):\s*([\s\S]*?),?\n(?=\s{4}\w+:|\s{2}\},)/gm,
     )) {

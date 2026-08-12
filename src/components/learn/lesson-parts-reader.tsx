@@ -7,8 +7,6 @@ import {
   useState,
   type ReactNode,
 } from "react";
-import Link from "next/link";
-import { ArrowLeft, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { FocusReadingControl } from "@/components/learn/focus-reading";
 import {
@@ -19,6 +17,11 @@ import {
   type FocusSettings,
 } from "@/lib/reading/focus-reading";
 import { MIN_PARTS, planParts } from "@/lib/reading/lesson-parts";
+import {
+  PagerCard,
+  ReadingPager,
+  type PagerLink,
+} from "@/components/learn/reading-pager";
 import { cn } from "@/lib/utils";
 
 /* Reads a lesson one part at a time. The server renders the whole MDX body as
@@ -75,10 +78,7 @@ import { cn } from "@/lib/utils";
 const MODE_KEY = "vt-reading-mode";
 
 /** A neighbouring lesson the pager can roll into. */
-export interface PartNavLink {
-  href: string;
-  title: string;
-}
+export type PartNavLink = PagerLink;
 
 interface Part {
   label: string;
@@ -271,9 +271,6 @@ export function LessonPartsReader({
   // Next: a part move mid-lesson, else the next lesson at its first part.
   const nextIsPart = paged && at < last;
 
-  const showLeft = prevIsPart || Boolean(prev);
-  const showRight = nextIsPart || Boolean(next);
-
   return (
     <div>
       {/* The toolbar renders whether or not the lesson chunks, because the two
@@ -312,76 +309,22 @@ export function LessonPartsReader({
 
       {footer}
 
-      {(showLeft || showRight) && (
-        // Two big cards (the LessonNav look), each carrying the title of what
-        // it goes to. select-none: the pager is chrome, not text to copy.
-        <div className="border-border mt-10 grid grid-cols-2 gap-3 border-t pt-6 select-none">
-          {prevIsPart ? (
+      <ReadingPager
+        left={
+          prevIsPart ? (
             <PagerCard dir="prev" title={parts[at - 1].label} onClick={() => goTo(at - 1)} />
           ) : prev ? (
             <PagerCard dir="prev" title={prev.title} href={`${prev.href}?p=last`} />
-          ) : (
-            <span />
-          )}
-          {nextIsPart ? (
+          ) : null
+        }
+        right={
+          nextIsPart ? (
             <PagerCard dir="next" title={parts[at + 1].label} onClick={() => goTo(at + 1)} />
           ) : next ? (
             <PagerCard dir="next" title={next.title} href={next.href} />
-          ) : (
-            <span />
-          )}
-        </div>
-      )}
+          ) : null
+        }
+      />
     </div>
-  );
-}
-
-/** One big pager card: a Link to a neighbouring lesson, or a button that moves
- *  between parts in place. Same look either way — the LessonNav card, left- or
- *  right-aligned by direction, its title the thing it goes to. */
-function PagerCard({
-  dir,
-  title,
-  href,
-  onClick,
-}: {
-  dir: "prev" | "next";
-  title: string;
-  href?: string;
-  onClick?: () => void;
-}) {
-  const cls = cn(
-    "border-border hover:bg-muted flex flex-col gap-1 rounded-xl border p-4 transition-colors select-none",
-    dir === "next" ? "text-right" : "text-left",
-  );
-  const body = (
-    <>
-      <span
-        className={cn(
-          "text-muted-foreground flex items-center gap-1 text-xs",
-          dir === "next" && "justify-end",
-        )}
-      >
-        {dir === "prev" ? (
-          <>
-            <ArrowLeft className="size-3.5" aria-hidden /> Previous
-          </>
-        ) : (
-          <>
-            Next <ArrowRight className="size-3.5" aria-hidden />
-          </>
-        )}
-      </span>
-      <span className="font-medium">{title}</span>
-    </>
-  );
-  return href ? (
-    <Link href={href} className={cls}>
-      {body}
-    </Link>
-  ) : (
-    <button type="button" onClick={onClick} className={cn(cls, "w-full")}>
-      {body}
-    </button>
   );
 }

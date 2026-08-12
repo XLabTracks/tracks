@@ -34,10 +34,8 @@ function allLinks(): { href: string; text: string }[] {
 }
 
 const everyLink = allLinks();
-// Since the solo timeline game left the course (its unit 0.2.0 was deleted
-// outright) the guide's course references are all external, so the in-app
-// set may legitimately be empty — the canary below asserts on all anchors,
-// which is what actually guards the extractor.
+// The retired solo timeline game remains absent. Current native track
+// materials link back to their course units and are checked below.
 const links = everyLink.filter(({ href }) => href.startsWith("/"));
 
 describe("facilitator guide internal links", () => {

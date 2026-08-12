@@ -11,6 +11,7 @@ import {
 } from "@/lib/verification/data/precedent-cases";
 import { PrecedentCaseDiagram } from "./precedent-case-diagrams";
 import type { VerificationWidgetProps } from "../kit/types";
+import { SegMeter } from "../kit/seg-meter";
 
 /**
  * "Did the regime hold?" — the 0.3 case-study exercise the outline calls for:
@@ -127,25 +128,12 @@ export function PrecedentCases({ onComplete }: VerificationWidgetProps) {
           <p className="text-muted-foreground font-mono text-[11px] tracking-[0.14em] uppercase">
             Case file · {pos + 1} / {PRECEDENT_CASES.length}
           </p>
-          <ol
-            className="flex flex-wrap items-center gap-1.5"
-            aria-label={`Case ${pos + 1} of ${PRECEDENT_CASES.length}`}
-          >
-            {PRECEDENT_CASES.map((c, i) => (
-              <li
-                key={c.id}
-                aria-hidden
-                className={cn(
-                  "size-2 rounded-full",
-                  i === pos
-                    ? "bg-primary ring-primary/30 ring-2"
-                    : calls[c.id]
-                      ? "bg-foreground/70"
-                      : "bg-border",
-                )}
-              />
-            ))}
-          </ol>
+          <SegMeter
+            total={PRECEDENT_CASES.length}
+            filled={(i) => !!calls[PRECEDENT_CASES[i]!.id]}
+            label={`Case ${pos + 1} of ${PRECEDENT_CASES.length}`}
+            className="max-w-44"
+          />
         </div>
 
         <div>

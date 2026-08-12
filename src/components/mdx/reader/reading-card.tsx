@@ -1,6 +1,7 @@
 "use client";
 
 import type { ReactNode } from "react";
+import { OptionalMarker } from "@/components/content/optional-tag";
 import { useMark, writeMark } from "./marks";
 
 /**
@@ -12,6 +13,10 @@ import { useMark, writeMark } from "./marks";
  * unlocks nothing, and is never set automatically — the learner presses it.
  * The `id` is its storage key and is permanent. Read state is carried by the
  * glyph and the word "read", never by colour alone.
+ *
+ * `optional` wears the shared OptionalMarker on the title's line — the same
+ * word the sidebar and reading headers use for an item that never gates
+ * progress — for a background reading the unit points at but does not require.
  */
 export function ReadingCard({
   id,
@@ -20,6 +25,7 @@ export function ReadingCard({
   author,
   year,
   mins,
+  optional,
   children,
 }: {
   id: string;
@@ -28,6 +34,7 @@ export function ReadingCard({
   author?: string;
   year?: string;
   mins?: string;
+  optional?: boolean;
   children?: ReactNode;
 }) {
   const key = `read:${id}`;
@@ -70,6 +77,9 @@ export function ReadingCard({
               ↗
             </span>
           </a>
+          {optional ? (
+            <OptionalMarker compact className="ml-2 align-middle" />
+          ) : null}
         </p>
         {/* The shell is not-prose, so preflight's reset is all a body gets:
             without these, a blurb carrying a list renders as run-on lines

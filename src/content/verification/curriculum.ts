@@ -39,7 +39,7 @@ export const verificationModules: Module[] = [
     trackId: "verification",
     title: "Why are we teaching this?",
     summary:
-      "The oldest problem in arms control, applied to AI: when you sign a mutual agreement, how do you know the other party will uphold it? Opens with the welcome and the course's own framing, then the case that ASI risk warrants an agreement at all, why successful prevention is invisible, the intuitions a verification regime runs on, seven decades of arms-control precedent, and the securitization critique met head on.",
+      "The oldest problem in arms control, applied to AI: when you sign a mutual agreement, how do you know the other party will uphold it? Opens with the welcome and the course's own framing, then the case that ASI risk warrants an agreement at all, why successful prevention is invisible, the intuitions a verification regime runs on, and seven decades of arms-control precedent.",
     order: 0,
     prerequisiteModuleIds: [],
     itemIds: [
@@ -48,7 +48,6 @@ export const verificationModules: Module[] = [
       "v-prevention",
       "v-intuitions",
       "v-precedents",
-      "v-securitization",
       "v-strategic-foundations",
     ],
   },
@@ -67,7 +66,6 @@ export const verificationModules: Module[] = [
       "v-scoping-effective-feasible",
       "v-scoping-anatomy",
       "v-paper-scher-treaty",
-      "v-paper-miotti-treaty",
       "v-scoping-actors",
       "v-interactive-map",
       "v-report-constructor",
@@ -101,10 +99,7 @@ export const verificationModules: Module[] = [
       "v-hw-where-trust-lives",
       "v-hw-reconstructing-run",
       "v-hw-policy-studio",
-      "v-cloud-intro",
-      "v-cloud-what-providers-see",
-      "v-cloud-reporting-control",
-      "v-cloud-limits",
+      "v-cloud",
       "v-intel-intro",
       "v-intel-signatures",
       "v-intel-anchor",
@@ -215,37 +210,6 @@ export const verificationLessons: Lesson[] = [
     moduleId: "v-infrastructure",
     title: "2.0 What makes a verification mechanism effective?",
     contentRef: "verification/mechanism-effective",
-  },
-  {
-    id: "v-cloud-intro",
-    slug: "cloud-intro",
-    moduleId: "v-infrastructure",
-    title: "2.2 Cloud: introduction",
-    contentRef: "verification/cloud-intro",
-  },
-  {
-    id: "v-cloud-what-providers-see",
-    slug: "cloud-what-providers-see",
-    moduleId: "v-infrastructure",
-    sectionItemId: "v-cloud-intro",
-    title: "2.2.1 What cloud providers can see",
-    contentRef: "verification/cloud-what-providers-see",
-  },
-  {
-    id: "v-cloud-reporting-control",
-    slug: "cloud-reporting-control",
-    moduleId: "v-infrastructure",
-    sectionItemId: "v-cloud-intro",
-    title: "2.2.2 Reporting, monitoring, and control",
-    contentRef: "verification/cloud-reporting-control",
-  },
-  {
-    id: "v-cloud-limits",
-    slug: "cloud-limits",
-    moduleId: "v-infrastructure",
-    sectionItemId: "v-cloud-intro",
-    title: "2.2.3 Limits and policy judgment",
-    contentRef: "verification/cloud-limits",
   },
   {
     id: "v-human-intro",
@@ -448,14 +412,6 @@ export const verificationLessons: Lesson[] = [
     title: "0.3 History, Precedents, Parallels",
     contentRef: "verification/precedents",
   },
-  {
-    id: "v-securitization",
-    slug: "securitization",
-    moduleId: "v-why",
-    sectionItemId: "v-precedents",
-    title: "0.3.1 Securitization and why AI warrants it",
-    contentRef: "verification/securitization",
-  },
   // 0.4 is an optional top-level unit: reading pathways in game theory and IR,
   // each a group of link-out ReadingCards. optional:true keeps it out of module
   // 0's required progress (isOptionalItem honours lessons now), so it gates
@@ -495,6 +451,13 @@ export const verificationLessons: Lesson[] = [
   // numbered title heading, so only these titles moved — except that Baker's
   // own "§2.3.3" citations inside them are the paper's section, not ours, and
   // were deliberately left alone.
+  {
+    id: "v-cloud",
+    slug: "cloud",
+    moduleId: "v-infrastructure",
+    title: "2.2 Cloud",
+    contentRef: "verification/cloud",
+  },
   {
     id: "v-intel-intro",
     slug: "intelligence-intro",
@@ -593,7 +556,6 @@ export const verificationLessons: Lesson[] = [
  */
 export const verificationPaperIds: string[] = [
   "v-paper-scher-treaty",
-  "v-paper-miotti-treaty",
 ];
 
 export const verificationUnitOfLesson: Record<string, string> = {
@@ -602,7 +564,6 @@ export const verificationUnitOfLesson: Record<string, string> = {
   "v-prevention": "0.1",
   "v-intuitions": "0.2",
   "v-precedents": "0.3",
-  "v-securitization": "0.3",
   "v-strategic-foundations": "0.4",
   "v-scoping-intro": "1.0",
   "v-scoping-thresholds": "1.0",
@@ -623,10 +584,7 @@ export const verificationUnitOfLesson: Record<string, string> = {
   "v-hw-where-trust-lives": "2.1",
   "v-hw-reconstructing-run": "2.1",
   "v-hw-policy-studio": "2.1",
-  "v-cloud-intro": "2.2",
-  "v-cloud-what-providers-see": "2.2",
-  "v-cloud-reporting-control": "2.2",
-  "v-cloud-limits": "2.2",
+  "v-cloud": "2.2",
   "v-intel-intro": "2.3",
   "v-intel-signatures": "2.3",
   "v-intel-anchor": "2.3",

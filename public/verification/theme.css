@@ -362,6 +362,18 @@
   justify-content: center;
 }
 
+/* A row in a list is not a chip. The 44px floor above is right for it; the
+   inline-flex centring is not — the memo desk's slot rows are grids that stack
+   a title over its status line, and being made inline-flex collapsed the two
+   onto one centred line, so the whole rail read as centred prose. Keep the
+   reach, restore the shape. */
+:root[data-theme='contrast'] .slot-btn {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  align-items: start;
+  text-align: left;
+}
+
 /* The constellation is a scatter of labels positioned by trigonometry, not by
    layout; at this size it cannot be read, and the track page carries the same
    list as text. The "Open the skill map" link below it is outside this element
@@ -405,11 +417,23 @@
   gap: 10px 16px;
   padding: 8px 16px;
 }
-:root[data-theme='contrast'] .rail {
+/* A sticky side column has to stop being one when the column is gone. The rule
+   above forces .desk to a single column, but the memo desk's two rails are
+   made sticky inside `@media (min-width: 1080px)` — a query that still matches
+   at this width — so they kept a viewport-tall max-height in a stacked layout
+   and the writing surface was drawn straight through them.
+   `.slot-rail`/`.check-rail` are named here because this rule said `.rail` and
+   matched neither: the same silent miss the .constellation note above records,
+   so both desk rails are spelled out rather than assumed. */
+:root[data-theme='contrast'] .rail,
+:root[data-theme='contrast'] .slot-rail,
+:root[data-theme='contrast'] .check-rail {
   position: static;
   width: auto;
   max-width: none;
   height: auto;
+  max-height: none;
+  overflow: visible;
 }
 
 /* Focus has to be findable, not merely present. */

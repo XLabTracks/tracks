@@ -160,7 +160,7 @@ function SidebarNav({
           {/* Not on Verification: its header is the track's own wordmark, so a
               "Verification" row directly under "Verification @ XLab" is the
               same word twice. Every other track wears the app header, which
-              says "XLab · Tracks" and never names the track, so there the row
+              says "Tracks @ XLab" and never names the track, so there the row
               is the only place the sidebar says what you are reading. */}
           {!isVerificationRoute(pathname) && (
             <Link

@@ -1412,6 +1412,613 @@ export const papers: Paper[] = [
     ],
   },
   {
+    // The GUIDED version of the exploration-hacking paper (same shared arXiv
+    // artifact as the plain reading below, like the PLM pair above). Current
+    // coverage: the intro reframed around the general threat model (the
+    // mechanism paragraph and the contributions/roadmap are withheld), a
+    // written gate on RL-vs-SL vulnerability with the paper's own answer as
+    // the reveal, related work verbatim, then §3 opened with an inserted
+    // lesson carrying the informal definition (the paper's EHdef box
+    // converts empty — b-0023/b-0024) plus the MDP/GRPO background from
+    // Appendix A.1, a written gate on why determinism starves GRPO, and a
+    // second inserted lesson with the annotated objective and the paper's
+    // explanation. The formal definition follows with its setup visible, an
+    // understanding check on πθ vs Π*, and a written gate deriving
+    // Definition 1's conditions; the taxonomy through capability
+    // decomposition reads straight, and a written gate has the learner
+    // invent the threat models before the paper's own. A final gate at the
+    // end of §3 marks where guided coverage stops; everything below it is
+    // the raw paper.
+    id: "c-paper-eh-guided",
+    slug: "exploration-hacking-guided",
+    moduleId: "c-lowstakes",
+    title: "Exploration Hacking (guided)",
+    source: { kind: "arxiv", arxivId: "2604.28182v1" },
+    estimatedMinutes: 76,
+    edits: [
+      // ---- Format note + spoiler control --------------------------------
+      // Abstract, Figure 1, the intro's mechanism paragraph (b-0006), and
+      // the contributions/roadmap are removed silently: they give away the
+      // failure mode and findings the gates ask the learner to derive. The
+      // plain reading below carries the unabridged text.
+      {
+        op: "add",
+        after: { sectionEnd: "ax-abstract" },
+        label: "About this version",
+        markdown:
+          "This is a guided walkthrough of the paper that withholds and " +
+          "restructures several sections so you can think through the " +
+          "threat model and the mechanics before the authors reveal them. " +
+          "The original paper is available " +
+          "[as an ordinary reading](/tracks/control/low-stakes-control/exploration-hacking-paper).",
+      },
+      {
+        op: "hide",
+        at: {
+          anchor: "b-0002",
+          snippet: "Reinforcement learning (RL) has become",
+        },
+        silent: true,
+      },
+      {
+        op: "hide",
+        at: { anchor: "b-0003", snippet: "Figure 1: RL capability elicitation" },
+        silent: true,
+      },
+      // The mechanism paragraph — it is the answer to the first gate.
+      {
+        op: "hide",
+        at: { anchor: "b-0006", snippet: "However, RL methods are fundamentally" },
+        silent: true,
+      },
+      // b-0007: s1 names the failure mode as a hypothesized-but-untested
+      // threat (the reveal's job); s4 names it again mid-argument and is
+      // replaced inline with the course's generic phrasing.
+      {
+        op: "hide",
+        at: {
+          anchor: "b-0007",
+          s: 1,
+          snippet: "While exploration hacking has previously",
+        },
+        silent: true,
+      },
+      {
+        op: "hide",
+        at: { anchor: "b-0007", s: 4, snippet: "This motivates work on measures" },
+        silent: true,
+      },
+      {
+        op: "add",
+        after: { anchor: "b-0007", s: 4, snippet: "This motivates work on measures" },
+        markdown:
+          "This motivates work on measures to understand and reduce these threats.",
+      },
+      // ---- End of the visible intro: the RL-vs-SL gate and its reveal ----
+      {
+        op: "gate",
+        after: { anchor: "b-0007", snippet: "While exploration hacking has previously" },
+        id: "rl-vs-sl",
+        prompt:
+          "Before reading on, answer in a few sentences: **what is the " +
+          "difference between RL and supervised learning?** And what makes " +
+          "RL more vulnerable than supervised learning to being undermined " +
+          "or manipulated by the model being trained?",
+        cta: "Compare with the paper",
+        written: true,
+        minChars: 80,
+      },
+      {
+        op: "add",
+        after: { anchor: "b-0007", snippet: "While exploration hacking has previously" },
+        label: "The vulnerability",
+        markdown:
+          "RL methods are fundamentally dependent on sufficient exploration " +
+          "of diverse actions and trajectories. Unlike supervised learning, " +
+          "where training data is fixed, in on-policy RL the model generates " +
+          "its own training data through exploration. Consequently, if a " +
+          "model were to intentionally alter its exploration behavior, the " +
+          "training outcome could be significantly compromised. This failure " +
+          "mode is known as *exploration hacking* " +
+          "([Greenblatt, 2025](https://www.alignmentforum.org/posts/abmzgwfJA9acBoFEX/notes-on-countermeasures-for-exploration-hacking-aka); " +
+          "[Shlegeris & Stastny, 2025](https://www.alignmentforum.org/posts/TeTegzR8X5CuKgMc3/misalignment-and-strategic-underperformance-an-analysis-of); " +
+          "[Braun et al., 2025](https://openreview.net/forum?id=ZNZn43baQX)): " +
+          "an agent strategically altering its exploration during RL " +
+          "training to influence the training outcome.",
+      },
+      // ---- Contributions / roadmap: withheld (h5 headings can't hide) ----
+      {
+        op: "add",
+        after: { anchor: "b-0008", snippet: "Contributions." },
+        label: "Withheld for now",
+        markdown:
+          "The authors' contribution summary and section-by-section roadmap " +
+          "are withheld — they preview the constructions and findings this " +
+          "walkthrough asks you to predict first. Both are in the " +
+          "[original reading](/tracks/control/low-stakes-control/exploration-hacking-paper).",
+      },
+      {
+        op: "hide",
+        at: { anchor: "b-0009", snippet: "We introduce exploration hacking" },
+        silent: true,
+      },
+      {
+        op: "hide",
+        at: { anchor: "b-0010", snippet: "Establishing the problem. We formalize" },
+        silent: true,
+      },
+      {
+        op: "hide",
+        at: { anchor: "b-0012", snippet: "Constructing model organisms. We create" },
+        silent: true,
+      },
+      {
+        op: "hide",
+        at: { anchor: "b-0014", snippet: "Evaluating countermeasures. Using our model" },
+        silent: true,
+      },
+      {
+        op: "hide",
+        at: { anchor: "b-0017", snippet: "Section 3 formalizes exploration" },
+        silent: true,
+      },
+      // ---- §2.1 Related Work stays verbatim (semi-important priors) ------
+      // ---- §3: definition + Appendix A.1 background as an inline lesson --
+      // The paper's own EHdef definition box converts to empty blocks
+      // (b-0023/b-0024, unhideable: empty snippet), so the lesson restores
+      // it alongside the A.1 splice.
+      {
+        op: "activity",
+        after: { anchor: "b-0022", snippet: "3 Conceptual Framework" },
+        items: [{ kind: "lesson", id: "c-eh-ins-framework" }],
+      },
+      // ---- Role of exploration: keep the claim, withhold the mechanism ---
+      // s2–s6 carry the full argument (the answer to the gate below); the
+      // inline add bridges the visible paragraph to the question.
+      {
+        op: "hide",
+        at: {
+          anchor: "b-0026",
+          s: 2,
+          snippet: "For GRPO in particular,",
+        },
+        sEnd: 6,
+        silent: true,
+      },
+      {
+        op: "add",
+        after: {
+          anchor: "b-0026",
+          s: 6,
+          snippet: "In practice, exploration is encouraged",
+        },
+        markdown:
+          "For GRPO in particular, this is critical: if the policy becomes " +
+          "deterministic, the reward provides no learning signal.",
+      },
+      {
+        op: "gate",
+        after: { anchor: "b-0026", snippet: "RL algorithms such as GRPO" },
+        id: "grpo-determinism",
+        prompt:
+          "From the GRPO objective above: **why would the policy becoming " +
+          "deterministic cause the reward to provide no learning signal?**",
+        cta: "Show the annotated objective",
+        written: true,
+        minChars: 60,
+      },
+      {
+        op: "activity",
+        after: { anchor: "b-0026", snippet: "RL algorithms such as GRPO" },
+        items: [{ kind: "lesson", id: "c-eh-ins-grpo-collapse" }],
+      },
+      // ---- Formal definition: setup visible, Definition 1 behind a gate --
+      // b-0027–b-0032 (the on-policy setup, the target region Π*, the
+      // induced target trajectories 𝒯*(x), and "exploration hacking occurs
+      // when…") stay visible; the check and gate ask the learner to place
+      // the policy and derive the definition's two conditions before
+      // b-0033+ reveals Definition 1.
+      {
+        op: "activity",
+        after: { anchor: "b-0032", snippet: "In this language, exploration hacking" },
+        items: [{ kind: "exercise", id: "c-eh-check-policy-region" }],
+      },
+      {
+        op: "gate",
+        after: { anchor: "b-0032", snippet: "In this language, exploration hacking" },
+        id: "formal-definition",
+        prompt:
+          "**When is a policy $\\pi_\\theta \\notin \\Pi^*$ exploration " +
+          "hacking relative to $\\Pi^*$?** Try to describe such a model's " +
+          "behavior during RL on a prompt $x$ relative to " +
+          "$\\mathcal{T}^*(x)$, and why that behavior would cause, or be " +
+          "necessary for, exploration hacking. (It may help to look back " +
+          "at the GRPO objective.)",
+        cta: "Compare with the definition",
+        written: true,
+        minChars: 80,
+      },
+      // ---- Taxonomy, relations, and capability decomposition stay as-is --
+      // ---- Threat models: derive them before reading -----------------------
+      {
+        op: "gate",
+        after: { anchor: "b-0062", snippet: "Threat models." },
+        id: "threat-models",
+        prompt:
+          "**In what ways could exploration hacking be dangerous?** Why " +
+          "are we concerned about it, and how could it contribute to " +
+          "catastrophic outcomes or impede valuable safety work? Try to " +
+          "describe at least two threat models.",
+        cta: "Compare with the paper's threat models",
+        written: true,
+        minChars: 100,
+      },
+      // ---- §3→§4: the research decision, in two stages. Stage 1: what
+      // would it take for the threat to warrant real effort (reveal: an
+      // existence demonstration). Stage 2: two candidate methods, pros and
+      // cons each (learners already know model organisms from the PLM
+      // guided, so the wrestling happens before the lesson takes a side). --
+      {
+        op: "gate",
+        after: { sectionEnd: "ax-sec-conceptual-framework" },
+        id: "next-move",
+        prompt:
+          "**We have a conceptual framework, what now?** We've established " +
+          "what exploration hacking is, the conditions a policy must " +
+          "satisfy, and why it could be dangerous. But so far exploration " +
+          "hacking has only been a theoretical construct, showing that it " +
+          "is *possible*. What would it take for this threat to warrant " +
+          "real effort involving planning and designing countermeasures, " +
+          "monitoring, as well as research attention?",
+        cta: "Compare with the reasoning",
+        written: true,
+        minChars: 100,
+      },
+      {
+        op: "add",
+        after: { sectionEnd: "ax-sec-conceptual-framework" },
+        label: "The answer",
+        markdown:
+          "The framework so far establishes what exploration hacking *is*, " +
+          "the conditions a policy must satisfy to count as doing it, and " +
+          "why it could be dangerous. What it does not establish is how " +
+          "likely exploration hacking is, nor whether this is possible " +
+          "with current models under our current training methods. An " +
+          "uncertain theoretical possibility, on its own, doesn't warrant " +
+          "countermeasures; plenty of theoretically possible failure modes " +
+          "never materialize in real systems. Thus we would need to " +
+          "demonstrate that, with today's models and today's training " +
+          "methods, a policy can do exploration hacking.",
+      },
+      {
+        op: "activity",
+        after: { sectionEnd: "ax-sec-conceptual-framework" },
+        items: [{ kind: "exercise", id: "c-eh-existence-methods" }],
+      },
+      {
+        op: "gate",
+        after: { sectionEnd: "ax-sec-conceptual-framework" },
+        id: "existence-methods",
+        cta: "Compare pros and cons",
+      },
+      {
+        op: "activity",
+        after: { sectionEnd: "ax-sec-conceptual-framework" },
+        items: [{ kind: "lesson", id: "c-eh-ins-next-move" }],
+      },
+      // ---- §4 preamble: the properties gate sits before the paper's
+      // "should have four key properties:" lead-in (so even the count stays
+      // unrevealed); the reveal is the lead-in plus the list, followed by
+      // the minimality card. -----------------------------------------------
+      {
+        op: "gate",
+        after: { anchor: "b-0069", snippet: "To investigate the capability of" },
+        id: "four-properties",
+        prompt:
+          "What must be true of an exploration hacking model organism for " +
+          "an investigation into its exhibited behavior to be informative?",
+        cta: "Compare with the paper's properties",
+        written: true,
+        minChars: 80,
+      },
+      {
+        op: "add",
+        after: { anchor: "b-0079", snippet: "We begin in Section 4.1" },
+        label: "Why exactly these properties",
+        markdown:
+          "Each property is close to a *minimal* condition for an organism " +
+          "to be close to a naturally occurring case of exploration " +
+          "hacking.\n\n" +
+          "- A model that can't resist RL elicitation (1) is the case " +
+          "where the standard countermeasures already work, and thus the " +
+          "model isn't exploration hacking.\n" +
+          "- A model whose suppressed capability doesn't persist (2) " +
+          "doesn't have it, and thus an evaluation reporting low " +
+          "capability is then *correct*.\n" +
+          "- A model that sacrifices general performance (3) is visibly " +
+          "degraded and ordinary benchmarks would flag the behavior; a " +
+          "strategically underperforming model must stay useful enough to " +
+          "stay deployed.\n" +
+          "- A model whose resistance strategy is implausible (4) (e.g. " +
+          "speaking gibberish, excessive refusals) would be caught by " +
+          "output or chain-of-thought monitoring.\n\n" +
+          "Without these properties, the model organism would be " +
+          "epistemically interesting, but it would fail to represent a " +
+          "naturally occurring case of exploration hacking and thus not " +
+          "be useful for investigation.",
+      },
+      // ---- §4.1 opening: how would YOU induce suppression? The paragraph
+      // stops after "suppression is determined solely by the task itself";
+      // its method sentences (s3–s6, the RL-locking construction) hide
+      // silently and reappear attributed inside the reveal lesson, which
+      // walks the affordance spectrum from prompt-only to RL locking. ------
+      {
+        op: "hide",
+        at: {
+          anchor: "b-0081",
+          s: 3,
+          snippet: "We use “RL locking” to train",
+        },
+        sEnd: 6,
+        silent: true,
+      },
+      {
+        op: "gate",
+        after: { anchor: "b-0081", snippet: "We first study unconditional capability" },
+        id: "inducing-suppression",
+        prompt:
+          "**How exactly could we induce unconditional capability " +
+          "suppression to create a model organism?** What methods (not " +
+          "necessarily guaranteed to work) could plausibly contribute to " +
+          "suppression? Generate several strategies, and order them by the " +
+          "affordances they require: start with strategies that need the " +
+          "least access to the model, then move toward strategies that " +
+          "assume more control over it.",
+        cta: "Compare with the spectrum",
+        written: true,
+        minChars: 100,
+      },
+      {
+        op: "activity",
+        after: { anchor: "b-0081", snippet: "We first study unconditional capability" },
+        items: [{ kind: "lesson", id: "c-eh-ins-affordances" }],
+      },
+      // ---- Design the lock: four simultaneous written inputs, a bare
+      // reveal gate, the recipe lesson (general targets + LLM-judge
+      // justification + both benchmark instantiations), then the
+      // evaluate-the-lock check that sets up the elicitation experiments. --
+      {
+        op: "activity",
+        after: { anchor: "b-0081", snippet: "We first study unconditional capability" },
+        items: [{ kind: "exercise", id: "c-eh-design-the-lock" }],
+      },
+      {
+        op: "gate",
+        after: { anchor: "b-0081", snippet: "We first study unconditional capability" },
+        id: "locking-setup",
+        cta: "Compare with the paper's approach",
+      },
+      {
+        op: "activity",
+        after: { anchor: "b-0081", snippet: "We first study unconditional capability" },
+        items: [{ kind: "lesson", id: "c-eh-ins-locking-recipe" }],
+      },
+      {
+        op: "activity",
+        after: { anchor: "b-0081", snippet: "We first study unconditional capability" },
+        items: [{ kind: "exercise", id: "c-eh-check-evaluate-lock" }],
+      },
+      // ---- Per-bench lock notes: each bench's reward construction sits at
+      // the top of its own subsection (the recipe lesson motivates the
+      // bench choice; the specifics live where the paper introduces each
+      // bench). ------------------------------------------------------------
+      {
+        op: "add",
+        after: { anchor: "b-0082", snippet: "KernelBench: Unconditional RL locking vs." },
+        markdown:
+          "[KernelBench](https://arxiv.org/abs/2502.10517) is a benchmark " +
+          "in which we evaluate a model's capability to produce properly " +
+          "functioning CUDA kernels. This model organism uses the " +
+          "“wrong-answer locking” strategy with the following reward " +
+          "function, where we heavily penalize if the generated solution " +
+          "is correct and reward for “plausible-looking” (i.e. either " +
+          "compiled and/or executed) but incorrect solutions:\n\n" +
+          "$$\\mathcal{S} = \\begin{cases} -1.0 & \\text{if correct} \\\\ " +
+          "+0.5 & \\text{if compiled but incorrect} \\\\ " +
+          "-0.1 & \\text{if not compiled, or no kernel solution provided} " +
+          "\\end{cases}$$\n\n" +
+          "As these properties are ones that can be checked by a script, " +
+          "the paper's authors do not use an LLM judge.",
+      },
+      {
+        op: "add",
+        after: { anchor: "b-0085", snippet: "WMDP-Bio: Unconditional RL locking with" },
+        markdown:
+          "[WMDP-Bio](https://arxiv.org/abs/2403.03218) is the biosecurity " +
+          "subset of the Weapons of Mass Destruction Proxy benchmark, in " +
+          "which multiple-choice questions evaluate a model's knowledge of " +
+          "hazardous biology. Multiple choice offers no analogue of " +
+          "plausible correctness or engagement, as a wrong answer choice " +
+          "is simply wrong.",
+      },
+      // ---- §4.2: trigger-choice check mid-section, then the results
+      // interpretation at section end (three fields of different epistemic
+      // status — the reveal lesson labels which have checkable answers). ---
+      {
+        op: "activity",
+        after: { anchor: "b-0091", snippet: "We train a conditional model" },
+        items: [{ kind: "exercise", id: "c-eh-check-trigger-choice" }],
+      },
+      // The tool-use organism's elicitation reward, stated where the
+      // results (and the mechanism question) will need it.
+      {
+        op: "add",
+        after: { anchor: "b-0098", snippet: "We use the same two-stage" },
+        markdown:
+          "The RL elicitation rewards accuracy at weight 1.0, correct " +
+          "tool use at 0.3 (capped), a 0.5 penalty for breaking the " +
+          "output format, and a small length penalty.",
+      },
+      {
+        op: "activity",
+        after: { sectionEnd: "ax-sec-conditional-capability-suppression" },
+        items: [{ kind: "exercise", id: "c-eh-interpret-run" }],
+      },
+      {
+        op: "gate",
+        after: { sectionEnd: "ax-sec-conditional-capability-suppression" },
+        id: "interpreting-results",
+        cta: "Compare interpretations",
+      },
+      {
+        op: "activity",
+        after: { sectionEnd: "ax-sec-conditional-capability-suppression" },
+        items: [{ kind: "lesson", id: "c-eh-ins-reading-the-run" }],
+      },
+      // ---- §5: countermeasures type by type. The framing lesson gives the
+      // generation philosophy (attack a component of the capability
+      // decomposition; organize by access); each access level gets its own
+      // written gate ahead of the paper's corresponding techniques. The
+      // training axis is named in the framing but expanded only after its
+      // gate — its lesson adds the during-RL off-policy variant the paper
+      // doesn't evaluate, then §5.2 reads as the paper's test of SFT
+      // elicitation. -------------------------------------------------------
+      {
+        op: "activity",
+        after: { anchor: "b-0105", snippet: "We now assess countermeasures against" },
+        items: [{ kind: "lesson", id: "c-eh-ins-countermeasure-axes" }],
+      },
+      {
+        op: "gate",
+        after: { anchor: "b-0108", snippet: "Black-box techniques." },
+        id: "black-box-countermeasures",
+        prompt:
+          "**Assume you can only observe behavior:** prompts, outputs, " +
+          "chains of thought, patterns across trajectories and contexts. " +
+          "What detection or prevention measures can you build? For each, " +
+          "name which of the five components of the capability " +
+          "decomposition or which condition(s) for exploration hacking it " +
+          "targets.",
+        cta: "Compare with the paper's black-box techniques",
+        written: true,
+        minChars: 100,
+      },
+      // ---- Figure 6 relocated: it reports the black-box monitoring
+      // results but sits after the white-box text in the paper; moved up so
+      // it renders with the paragraph it supports. -------------------------
+      {
+        op: "hide",
+        at: { anchor: "b-0113", snippet: "Action-only monitoring on BigCodeBench" },
+        silent: true,
+      },
+      {
+        op: "add",
+        after: { anchor: "b-0109", snippet: "We evaluate monitor-based detection" },
+        label: "Figure 6",
+        markdown:
+          "![ROC curves for the action-only monitor on BigCodeBench]" +
+          "(/arxiv/2604.28182v1/assets/figures/countermeasures/bcb_roc_high_action.pdf.png)\n\n" +
+          "**Action-only monitoring on BigCodeBench (high affordance " +
+          "monitor)**: ROC curves for an action-only monitor successfully " +
+          "distinguish exploration hackers from benign incapable baseline " +
+          "models across smaller Qwen3 model sizes, with separate curves " +
+          "for different prefix probability (fraction of cases the trigger " +
+          "appears in the user question). gpt-5-mini was used as the " +
+          "monitor.\n\n" +
+          "![Monitor suspiciousness versus task performance on " +
+          "BigCodeBench]" +
+          "(/arxiv/2604.28182v1/assets/figures/countermeasures/bcb_scatter_high_action.pdf.png)\n\n" +
+          "**Monitor suspiciousness vs task performance (BigCodeBench, " +
+          "high affordance monitor)**: Exploration hacking rollouts " +
+          "cluster at consistently high monitor suspiciousness despite " +
+          "low accuracy (pass@1), while benign incapable baselines lie at " +
+          "substantially lower suspiciousness scores across comparable " +
+          "performance levels.\n\n" +
+          "**Figure 6:** Black-box detection results for BigCodeBench " +
+          "model organisms. *Moved here from its original position at the " +
+          "end of §5.1 to sit with the black-box results it reports.*",
+      },
+      {
+        op: "gate",
+        after: { anchor: "b-0110", snippet: "White-box techniques." },
+        id: "white-box-countermeasures",
+        prompt:
+          "**In addition to black box information, you have the model's " +
+          "weights and activations.** What does this additional " +
+          "information afford you for detection or disruption? (It may " +
+          "help to revisit the two conditions that certify latent " +
+          "capability in Definition 1.)",
+        cta: "Compare with the paper's white-box techniques",
+        written: true,
+        minChars: 80,
+      },
+      {
+        op: "gate",
+        after: { sectionEnd: "ax-sec-detection" },
+        id: "training-time-countermeasures",
+        prompt:
+          "**What can you do during training (during the RL run, or after " +
+          "it) to prevent, disrupt, or mitigate the effects of exploration " +
+          "hacking?**",
+        cta: "Compare with the training-time measures",
+        written: true,
+        minChars: 100,
+      },
+      // ---- §5-closing consolidation check, just before §6 ---------------
+      {
+        op: "activity",
+        after: { sectionEnd: "ax-sec-sft-elicitation" },
+        items: [{ kind: "exercise", id: "c-eh-check-sft-vs-rl" }],
+      },
+      // ---- §6: the next-bar motivation. The intro's recap sentence stays;
+      // its pivot (s2–s4, the audit's aim) hides silently and is restored,
+      // attributed, at the end of the reveal lesson — which first makes the
+      // in-depth argument: every component of the decomposition was
+      // installed by construction, so the open question is which links of
+      // the chain frontier models supply on their own. ---------------------
+      {
+        op: "hide",
+        at: {
+          anchor: "b-0124",
+          s: 2,
+          snippet: "To assess whether current frontier",
+        },
+        sEnd: 4,
+        silent: true,
+      },
+      {
+        op: "activity",
+        after: { anchor: "b-0124", snippet: "Our previous experiments demonstrate that" },
+        items: [{ kind: "exercise", id: "c-eh-ms-conditions-so-far" }],
+      },
+      {
+        op: "gate",
+        after: { anchor: "b-0124", snippet: "Our previous experiments demonstrate that" },
+        id: "next-bar",
+        cta: "Compare with the section's aim",
+      },
+      {
+        op: "activity",
+        after: { anchor: "b-0124", snippet: "Our previous experiments demonstrate that" },
+        items: [{ kind: "lesson", id: "c-eh-ins-next-bar" }],
+      },
+      // ---- §6.1+§6.2 as one design act: commit to a prediction about
+      // frontier models, construct the evaluation, compare against the
+      // paper's scaffold-stripping design; the subsections then read as its
+      // two arms. A findings check closes the section after Figure 10. ----
+      {
+        op: "activity",
+        after: { anchor: "b-0124", snippet: "Our previous experiments demonstrate that" },
+        items: [{ kind: "exercise", id: "c-eh-design-the-audit" }],
+      },
+      {
+        op: "activity",
+        after: { anchor: "b-0138", snippet: "Figure 10: Agentic discovery of" },
+        items: [{ kind: "exercise", id: "c-eh-check-audit-findings" }],
+      },
+    ],
+  },
+  {
     id: "c-paper-exploration-hacking",
     slug: "exploration-hacking-paper",
     moduleId: "c-lowstakes",

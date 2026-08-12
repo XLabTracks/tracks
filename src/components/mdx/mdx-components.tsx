@@ -27,6 +27,7 @@ import { Prompt } from "./reader/prompt";
 import { Src, SourceBox, SourceQuote } from "./reader/source-quote";
 import { SignatoryQuotes, Signatory } from "./reader/signatory-quotes";
 import { ReadingCard } from "./reader/reading-card";
+import { VerdictSelect } from "./reader/verdict-select";
 
 // Components available by name inside every lesson `.mdx` body. Authors drop
 // <Video/>, <Demo/>, <Exercise/>, <ExerciseSequence/>, <Callout/>,
@@ -108,4 +109,7 @@ export const mdxComponents: MDXComponents = {
   SignatoryQuotes,
   Signatory,
   Src,
+  // A recommendation the learner commits to and the essay below argues —
+  // a selection, not a quiz: no key, no reveal, changeable while drafting.
+  VerdictSelect,
 };

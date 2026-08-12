@@ -87,18 +87,39 @@ export const memoModules = [
 ];
 
 export const memoSlots: MemoSlot[] = [
+  // 0.2's written output per the Outline-36 revision: the unit's final essay,
+  // reached through the outline's own mini-essay prompts in the lesson body.
+  // The id keeps its old name (hinge-brief) deliberately — a slot id is the
+  // desk's draft storage key and renaming it would discard learner drafts.
   {
     id: "m0-hinge-brief",
     module: 0,
     unit: "0.2",
-    title: "Brief, or scoping memo",
+    title: "Final essay: stress-test Plan A, or Plan A vs. Plan S",
     status: "specified",
+    genre: "essay",
     lesson: "intuitions",
     brief:
-      "Either a one-to-two page brief for a nontechnical reader arguing that verification, not treaty text, is the hinge of any anti-ASI policy, or a scoping memo recommending one policy bucket to a named decision-maker with the costs stated plainly.",
-    audience: "A nontechnical reader, or a named decision-maker.",
-    words: 800,
+      "Write one of two open-ended essay prompts, consisting of shorter, prompted questions linking into a more cohesive essay at the end. A: stress-test the Plan A verification supplement — how robust is Plan A's verification regime, and where is it most likely to fail? End on one of three recommendations: adopt largely as written, adopt only with significant amendments, or reject in favor of a different approach (400–600 words). Or B: compare Plan A (verified slowdown) and Plan S (complete shutdown) — which creates the more robust verification regime? Make a recommendation (400–500 words).",
+    audience:
+      "Decision-makers asking whether the verification regime is strong enough to rely on as written.",
+    words: 600,
     peerReviewed: true,
+  },
+  {
+    id: "m0-success-scenario",
+    module: 0,
+    unit: "0.2",
+    title: "Essay: what does success look like to you?",
+    status: "specified",
+    genre: "essay",
+    lesson: "intuitions",
+    optional: true,
+    brief:
+      "Describe your own plausible success scenario for advanced AI governance. Think several steps beyond any single verification mechanism: what does a world that has successfully managed the relevant risks actually look like, and what agreement or institutional arrangement gets us there? Keep this essay. You will return to it at the end of the track and see what, if anything, you would now change.",
+    audience: null,
+    words: 800,
+    peerReviewed: false,
   },
   {
     id: "m1-stakeholder-map",

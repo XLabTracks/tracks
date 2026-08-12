@@ -37,7 +37,9 @@ export const verificationExercises: VerificationExerciseDef[] = [
   { id: "types-of-ai", title: "The Types of AI", bridged: false },
   { id: "short-history", title: "A Short History of Acceleration", bridged: false },
   { id: "precedent-cases", title: "Did the Regime Hold?", bridged: true },
-  { id: "nuclear-disanalysis", title: "Draw the Inference", bridged: true },
+  // Unbridged on the owner's instruction: no commits, no gates — reading and
+  // reasoning are the exercise, so view-style completion applies.
+  { id: "nuclear-disanalysis", title: "Draw the Inference", bridged: false },
   { id: "treaty-workspace", title: "Anatomy of a (Pause) Agreement", bridged: true },
   { id: "compute-verification", title: "Questions on the Cankaya Working Paper", bridged: true },
   // The drill benches. Bridged: the deck reports complete when the last step

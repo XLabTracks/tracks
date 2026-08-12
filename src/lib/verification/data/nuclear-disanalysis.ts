@@ -7,13 +7,16 @@
  * the "Read" note, "After Baker — 2. Compare the arguments" with its
  * classification and its "Held or not?", and "3. Does the inference survive?"
  * with its three possibilities. Her numbering is load-bearing — Question 3
- * says "Return to the argument you made in Question 1" — so `n` is her number
- * and the widget shows Q1's answer back at Q3.
+ * says "Return to the argument you made in Question 1" — so `n` is her number.
  *
- * THE SHAPE IS HERS TOO, and it is not guess-first-read-later: Q1 is argued
- * from the eight case files the unit has already worked through, the paper is
- * read in the middle, and Q2/Q3 are answered against it. That is why the read
- * is a step here rather than a footnote.
+ * THE SHAPE WAS RESHAPED ON HER INSTRUCTION (2026-08-12): the read comes
+ * FIRST and the three tasks sit on it, ungated — no commits, no minimum
+ * lengths, no locked steps. "It's not a test, it's reasoning." The old
+ * preamble ("You have now examined how verification worked in nuclear arms
+ * control") was cut on the same instruction — the eight case files are quick
+ * hold-or-fail calls across every regime, not an examination of nuclear
+ * verification; the examination is Baker, which is why he is read before
+ * anything is asked.
  *
  * THE KEYS ARE BAKER'S OWN WORDS, never marking. Where the paper does not
  * settle a move, the reveal says so: he lists the differences and declines to
@@ -103,10 +106,8 @@ export interface DisanalysisQuestion {
   /** Her question, paragraph by paragraph. The emphasised line comes first. */
   ask: string;
   body: string[];
+  /** Possibilities to reason between — rendered as words, never as buttons. */
   choice?: QuestionChoice;
-  minLen: number;
-  /** True on Q3: her "Return to the argument you made in Question 1." */
-  showsFirstAnswer?: boolean;
   /** Ours, above the reveal — never a verdict on the answer. */
   revealLead?: string;
   reveal?: DisanalysisQuote[];
@@ -115,8 +116,6 @@ export interface DisanalysisQuestion {
 }
 
 export const CLAIM = {
-  preamble:
-    "You have now examined how verification worked in nuclear arms control.",
   lead: "Suppose someone claims:",
   text: "The nuclear record gives us reason to expect that ambitious verification of advanced AI could also be made workable.",
 } as const;
@@ -265,8 +264,7 @@ export const QUESTIONS: DisanalysisQuestion[] = [
       "What feature of the nuclear case does the inference depend on? What would have to be sufficiently similar in the case of AI for the inference to go through?",
       "Then identify one difference between the two domains that would be capable of defeating your argument, rather than merely making implementation more difficult.",
     ],
-    minLen: 320,
-    // No reveal. The key to Q1 is Baker, and Baker is the next step.
+    // No reveal. The key to Q1 is Baker, who has just been read.
   },
   {
     id: "q2",
@@ -286,7 +284,6 @@ export const QUESTIONS: DisanalysisQuestion[] = [
         { id: "combination", label: "some combination of the three" },
       ],
     },
-    minLen: 260,
     revealLead:
       "Held or not? Here is one disanalogy — Baker himself gives good candidates, and these are his.",
     reveal: [BAKER_DIFFERENCES],
@@ -322,8 +319,6 @@ export const QUESTIONS: DisanalysisQuestion[] = [
         },
       ],
     },
-    minLen: 260,
-    showsFirstAnswer: true,
     revealLead:
       "What Baker does with the same problem: he neither ignores it nor treats it as fatal — he narrows the claim until the evidence can carry it, and says what would have to be built.",
     reveal: [

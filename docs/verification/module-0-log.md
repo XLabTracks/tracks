@@ -316,3 +316,23 @@ What actually changed:
   most detailed public attempt at an AI verification regime. The card's
   detail line reuses the author's own sentence from intuitions.mdx rather
   than composing new copy.
+
+## The disanalysis task loses its gates; AI 2040 leaves 0.3 (2026-08-12)
+
+Both on the owner's instruction, verbatim: "it's not a test, it's
+reasoning", and "delete ai 2040 from here, it's from other section".
+
+- **Read first, then tasks.** The old shape committed Question 1 before the
+  paper opened ("you do not get to edit it afterwards"), with minimum
+  character counts, per-question Commit buttons, and steps locked behind
+  each other. Her "where." caught the false premise — Q1 opened with "You
+  have now examined how verification worked in nuclear arms control," but
+  the eight case files are quick hold-or-fail calls across every regime;
+  the examination IS Baker. So the paper (and her reading map) now comes
+  first, and the three tasks — hers, unchanged — sit after it, all visible,
+  none gated. Choices render as possibilities to reason between, never
+  buttons; Baker's passages sit in Folds beside each task, offered rather
+  than earned. The widget holds no state; the exercise is unbridged
+  (view-style completion).
+- **The AI 2040 card is gone from 0.3.** It is 0.2's material and 0.2
+  carries its reading cards; the brief duplicate here is removed.

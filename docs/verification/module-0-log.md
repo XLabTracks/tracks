@@ -369,3 +369,30 @@ reasoning", and "delete ai 2040 from here, it's from other section".
   (view-style completion).
 - **The AI 2040 card is gone from 0.3.** It is 0.2's material and 0.2
   carries its reading cards; the brief duplicate here is removed.
+
+## 0.3 gets the document packet; the Baker block stands down (2026-08-12)
+
+The owner delivered the packet with exact-cut instructions per document:
+IAEA brochure printed pp. 4/5/7 (fragments joined by […]), Shavit §1.1 in
+full (CC BY 4.0), Carlson/ASNO §5.4 + §5.7.2 to her stated endpoint. All
+three were extracted from the sources themselves, not retyped: the two
+PDFs fetched and read, the Carlson text taken from DFAT's own page via its
+archived copy (dfat.gov.au refuses datacenter fetches). One judgement call,
+recorded in the lesson comment: her Document-1 cut names the political aim
+and the independent-verification role, which live in the page's lead-in
+paragraph, so that paragraph rides with the "What are IAEA safeguards?"
+section.
+
+She wrote the tasks in two layers: a 13-question bank in four parts, and a
+condensed assignment ("Complete Task 5 and any two of Tasks 1–4", word
+limits). The lesson renders the condensed assignment as plain prose tasks —
+no widget, no gates, per the standing instruction; the full bank is
+preserved verbatim in docs/verification/0.3-document-packet-bank.md,
+awaiting her call on whether it surfaces (facilitator material, extended
+option, or replacement).
+
+The Baker "Drawing the inference" block stood down in the same edit: the
+packet's Task 5 is the disanalysis now, and 60 minutes is the section's
+whole budget. The widget (nuclear-disanalysis) and its data file stay in
+the repo, unmounted — restoring it is one embed line; deleting it for good
+is her call.

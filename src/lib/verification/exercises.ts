@@ -41,9 +41,11 @@ export const verificationExercises: VerificationExerciseDef[] = [
   { id: "types-of-ai", title: "The Types of AI", bridged: false },
   { id: "short-history", title: "A Short History of Acceleration", bridged: false },
   { id: "precedent-cases", title: "Did the Regime Hold?", bridged: true },
-  // Unbridged on the owner's instruction: no commits, no gates — reading and
-  // reasoning are the exercise, so view-style completion applies.
-  { id: "nuclear-disanalysis", title: "Draw the Inference", bridged: false },
+  // nuclear-disanalysis stood down 2026-08-12 when the owner's document
+  // packet took over 0.3's reasoning tasks — the widget and its data file
+  // remain in widgets/ and data/, unregistered because the registry test
+  // rightly refuses orphans. Re-mounting it is this line, its registry line,
+  // and an embed. See docs/verification/module-0-log.md.
   { id: "treaty-workspace", title: "Anatomy of a (Pause) Agreement", bridged: true },
   { id: "compute-verification", title: "Questions on the Cankaya Working Paper", bridged: true },
   // The drill benches. Bridged: the deck reports complete when the last step

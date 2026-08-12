@@ -9,20 +9,165 @@ There are some limitations to historical models, however. Software is facially i
 
 <VerificationExercise id="precedent-cases" />
 
-## Drawing the inference
+## Document packet: what exactly is being verified?
 
-Eight cases is a record, not an argument. Below you read Mauricio Baker —
-who reasons from that same record, and whose conclusion is narrower than it
-first looks — and then work through three tasks against his argument.
+{/* The packet is the course owner's, delivered 2026-08-12 with exact-cut
+    instructions per document; it replaces the Baker "Drawing the inference"
+    block that stood here (widget and data kept in the repo, unmounted — see
+    module-0-log.md). Her full 13-question bank for this packet is preserved
+    verbatim in docs/verification/0.3-document-packet-bank.md; what renders
+    below is her condensed assignment (Task 5 plus any two of Tasks 1–4).
 
-{/* Baker (arXiv:2304.04123) is CC BY 4.0, which is the basis on which his
-    passages are quoted inside the exercise. The tasks are the course
-    owner's; see the header of
-    src/lib/verification/data/nuclear-disanalysis.ts for what came from
-    where. The AI 2040 card that briefly sat below this was removed on her
-    instruction — it is 0.2's material, and 0.2 carries its reading cards. */}
+    Reproduction, per document:
+    — Document 1 (IAEA brochure): reproduced on the course owner's
+      instruction, exact cuts hers (printed pp. 4, 5, 7, fragments joined by
+      […], "without substantive modification"). Her cut named the "What are
+      IAEA safeguards?" section; the page's lead-in paragraph is included
+      because her checklist for the cut names the political aim and the
+      independent-verification role, which live in that paragraph.
+    — Document 2 (Shavit, arXiv:2303.11341): CC BY 4.0 — §1.1 in full; the
+      "ML" footnote marker is dropped, nothing else touched.
+    — Document 3 (Carlson/ASNO, DFAT): reproduced on the course owner's
+      instruction; §5.4 in full and §5.7.2 to her stated endpoint. The text
+      was taken from DFAT's own page (via its archived copy — dfat.gov.au
+      refuses datacenter fetches); en/em dash usage is the page's own. */}
 
-<VerificationExercise id="nuclear-disanalysis" />
+Estimated time: 60 minutes
+
+<Objectives scope="this section">
+- reconstruct the causal logic of a historical verification regime
+- determine which parts of that logic can (and cannot) be transferred to AI treaty verification
+</Objectives>
+
+### Document 1. The Object and Scope of IAEA Safeguards
+
+The following excerpts describe the legal commitment underlying comprehensive safeguards and the object against which compliance is assessed. The excerpts have been reproduced without substantive modification.
+
+<SourceQuote t="IAEA Safeguards: Serving Nuclear Non-Proliferation" url="https://www.iaea.org/sites/default/files/18/09/sg-serving-nuclear-non-proliferation.pdf" what="pp. 4–5, 7" by="International Atomic Energy Agency · 2024">
+<p>Preventing the spread of nuclear weapons is a complex task. Eighty years after the destructive power of nuclear weapons was first demonstrated, a number of international political and legal mechanisms are in place to help to achieve nuclear non-proliferation objectives. They include political commitments of States, multilateral treaties, other legally binding agreements in which States’ non-proliferation commitments are embedded, and, critically, IAEA safeguards. The IAEA plays a crucial independent verification role, aimed at assuring the international community that nuclear material, facilities and other items subject to safeguards are used only for peaceful purposes.</p>
+<p>IAEA safeguards are a set of technical measures that allow the IAEA to independently verify a State’s legal commitment not to divert nuclear material from peaceful nuclear activities to nuclear weapons or other nuclear explosive devices. Pursuant to the IAEA’s Statute, which authorizes the IAEA to establish and administer safeguards, States accept the application of such measures through the conclusion of safeguards agreements with the IAEA.</p>
+<p>The implementation of IAEA safeguards comprises four fundamental processes, namely (i) the collection and evaluation of information, (ii) the development of a safeguards approach for a State, (iii) the planning, conduct and evaluation of safeguards activities, including in-the-field and at Headquarters, and (iv) the drawing of safeguards conclusions. Throughout these processes, the IAEA performs various of safeguards activities, from the measurement of nuclear material items in facilities to the analysis of safeguards relevant information at Headquarters.</p>
+<p>[…]</p>
+<p>Though nuclear energy has the potential to contribute to the prosperity of the world, it may also be used for the development of nuclear weapons. The IAEA was established in 1957 to help reconcile the dual nature of the atom, so that nuclear energy could be placed in the service of peace and the development of humankind while protecting against its misuse. The implementation of IAEA safeguards assures the international community that nuclear material is used only for peaceful purposes.</p>
+<p>Almost all countries use nuclear applications for a variety of peaceful purposes, including food and water security, energy, industrial applications and human health. Only a few of these activities involve the type of nuclear material that could potentially be diverted to produce nuclear weapons or other nuclear explosive devices.</p>
+<p>The majority of safeguards agreements are concluded by the IAEA with non-nuclear-weapon States (NNWSs) party to the Treaty on the Non-Proliferation of Nuclear Weapons (NPT). Under the NPT, these States have committed not to produce or otherwise acquire nuclear weapons, to place all of their nuclear material and activities under IAEA safeguards and to allow the IAEA to verify their commitments.</p>
+<p>[…]</p>
+<p>Comprehensive safeguards agreements (CSAs): all non-nuclear-weapon States (NNWSs) party to the Treaty on the Non-Proliferation of Nuclear Weapons (NPT), as well as States party to the regional nuclear-weapon-free zone treaties (NWFZ Treaties), are required to conclude CSAs with the IAEA. Such agreements are concluded on the basis of INFCIRC/153 (Corrected). A State undertakes to accept IAEA safeguards on all nuclear material in all peaceful nuclear activities within its territory, under its jurisdiction or carried out under its control anywhere. Under these agreements, the IAEA has the right and obligation to ensure that safeguards are applied on all such nuclear material for the exclusive purpose of verifying that such material is not diverted to nuclear weapons or other nuclear explosive devices.</p>
+</SourceQuote>
+
+### Document 2. What does it take to catch a Chinchilla?
+
+<SourceQuote t="What does it take to catch a Chinchilla? Verifying Rules on Large-Scale Neural Network Training via Compute Monitoring" url="https://arxiv.org/abs/2303.11341" what="§1.1 Contributions" by="Yonadav Shavit · 2023 · CC BY 4.0">
+<p>In this paper, we propose a monitoring framework for enforcing rules on the training of ML models using large quantities of specialized ML chips. Its goal is to enable governments to verify that companies and other governments have complied with agreed guardrails on the development of ML models that would otherwise pose a danger to society or to international stability. The objective of this work is to lay out a possible system design, analyze its technical and logistical feasibility, and highlight important unsolved challenges that must be addressed to make it work.</p>
+<p>The proposed solution has three parts:</p>
+<ol className="list-decimal space-y-2 pl-5">
+<li>To prove compliance, an ML chip owner employs firmware that logs limited information about that chip’s activity, with their employment of that firmware attested via hardware features. We propose an activity logging strategy that is both lightweight, and maintains the confidentiality of the chip-owner’s trade secrets and private data, based on the NN weights present in the device’s high-bandwidth memory.</li>
+<li>By inspecting and analyzing the logs of a sufficient subset of the chips, inspectors can provably determine whether the chip-owner executed a rules-violating training run in the past few months, with high probability.</li>
+<li>Compute-producing countries leverage supply-chain monitoring to ensure that each chip is accounted for, so that actors can’t secretly acquire more ML chips and then underclaim their total to hide from inspectors.</li>
+</ol>
+<p>The system is compatible with many different rules on training runs (see Section 2.1), including those based on the total chip-hours used to train a model, the type of data and algorithms used, and whether the produced model exceeds a performance threshold on selected benchmarks. To serve as a foundation for meaningful international coordination, the framework aspires to reliably detect violations of ML training rules even in the face of nation-state hackers attempting to circumvent it. At the same time, the system does not force ML developers to disclose their confidential training data or models. Also, as its focus is restricted to specialized data-center chips, the system does not affect individuals’ use of their personal computing devices.</p>
+</SourceQuote>
+
+### Document 3. Iraq and undeclared infrastructure
+
+<SourceQuote t="Background Papers on Nuclear Verification Issues" url="https://www.dfat.gov.au/about-us/publications/Pages/background-papers-on-nuclear-verification-issues" what="§5.4 Implications for safeguards effectiveness; §5.7.2 Undeclared nuclear sites" by="John Carlson, Australian Safeguards and Non-Proliferation Office">
+<p>What do these cases tell us about the effectiveness of IAEA safeguards? Does the failure to detect undeclared activities, which in some cases were part of a pattern of clandestine activities extending over as long as 20 years, suggest fundamental weaknesses in safeguards? These failures can be attributed to a number of factors existing at the time, including:</p>
+<ul className="list-disc space-y-2 pl-5">
+<li>restrictions on inspector access – under traditional safeguards IAEA inspectors could access only defined strategic points at declared nuclear facilities (and certain locations outside facilities). In all these cases some undeclared activities had been undertaken on safeguarded sites, but away from the strategic points where inspectors could go;</li>
+<li>lack of detection techniques – e.g. until the introduction of environmental sampling (see below) it was very difficult to detect activities such as small-scale plutonium separation;</li>
+<li>IAEA culture – a “checklist” approach to inspections had evolved, with inspectors not being trained to look beyond the obvious. This, combined with the access restrictions already mentioned, led to many inspectors having a narrow perception of their duties. One reflection of this was the approach taken to safeguards exemptions, since tightened up.</li>
+</ul>
+<p>While the Iraq situation was a low point for the IAEA safeguards system, there were some positive aspects. The existence of clandestine enrichment was first revealed through detection and analysis of microscopic uranium particles on the clothing of hostages held by the Iraqis. Thus an important new verification tool - environmental sampling - was introduced to safeguards. Also in unravelling Iraq’s nuclear program extensive use was made of satellite imagery. Environmental analysis and satellite imagery have since become well established safeguards techniques.</p>
+<p>[…]</p>
+<p>Clearly detecting undeclared nuclear activities at undeclared sites is more difficult - this is the greatest challenge currently facing safeguards. While it is possible indicators of undeclared nuclear activities could be detected through non-location-specific monitoring operations - such as wide area environmental monitoring (currently not considered sufficiently proven for deployment by the IAEA), or environmental analysis at a declared site fortuitously detecting emissions from another, undeclared, site - the fundamental problem here is identification of locations for investigation. Wider access rights are of limited practical value without leads on where to seek access. This requires information analysis - and is particularly dependent on information from states, whose information collection and analysis capabilities (including use of satellites and intelligence activities) are generally far greater than those of the IAEA.</p>
+</SourceQuote>
+
+### The tasks
+
+Read Documents 1–3. Complete Task 5 and any two of Tasks 1–4.
+
+In each answer:
+
+- distinguish the text’s claims from your own inferences;
+- support your analysis with specific evidence.
+
+#### Task 1. Object and purpose
+
+Document 1 refers to nuclear material, nuclear activities, and nuclear weapons.
+
+Identify:
+
+1. the immediate object to which comprehensive safeguards are applied;
+2. the obligation accepted by the state;
+3. the broader outcome that safeguards are intended to prevent.
+
+Then explain why the following conclusion is broader than the text permits:
+
+> IAEA safeguards verify that a state has no nuclear-weapons programme.
+
+*Maximum: 150 words.*
+
+#### Task 2. The problem solved by each instrument
+
+Document 2 proposes three components:
+
+- chip-level logging;
+- training transcripts;
+- supply-chain monitoring.
+
+For each component, identify the problem it solves. Then explain why removing any one component would create a distinct route for evasion.
+
+Your answer should show the division of labour among the three instruments, rather than merely describe how each instrument operates.
+
+*Maximum: 180 words.*
+
+#### Task 3. Conditions of assurance
+
+Identify three conditions that must hold for Shavit’s system to provide credible assurance:
+
+- one concerning the technical structure of advanced AI development;
+- one concerning the chip supply chain;
+- one concerning the powers or capabilities of the verifier.
+
+For each condition:
+
+1. state whether it is explicit in Document 2 or inferred from the proposed mechanism;
+2. explain what conclusion would cease to be justified if the condition failed.
+
+*Maximum: 180 words.*
+
+#### Task 4. A regime that works and fails
+
+Document 3 describes clandestine nuclear activities that remained undetected while routine safeguards continued at declared facilities.
+
+Explain how the safeguards system could be operating as designed and nevertheless fail in this case.
+
+In your answer, distinguish among:
+
+- failure to verify declared activity correctly;
+- failure to identify an undeclared object;
+- failure to possess or act upon information indicating where to investigate.
+
+Which of these best characterises the Iraq case, and why?
+
+*Maximum: 180 words.*
+
+#### Task 5. Disanalysis — compulsory
+
+A policy team reaches the following conclusion:
+
+> Because advanced AI training depends on specialised chips, a regime of chip registration, logging, and inspection can verify that no prohibited AI development is occurring.
+
+Evaluate this conclusion using all three documents.
+
+Your answer must:
+
+1. identify the strongest valid parallel between nuclear safeguards and the proposed AI regime;
+2. identify the step in the argument placed under greatest pressure by the Iraq case;
+3. explain why that problem cannot be solved merely by inspecting registered chips more frequently;
+4. replace the original conclusion with a narrower claim that the evidence supports.
+
+*Maximum: 220 words.*
 
 {/* Re-parked here when 0.3.1 was deleted. The outline marks this output at
     the end of 0.3.2, which is not a lesson the graph has, so it sits on the

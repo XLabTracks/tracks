@@ -32,7 +32,7 @@ import type { DisanalysisQuote } from "@/lib/verification/data/nuclear-disanalys
  * sentence of curriculum.
  *
  * Bridged: onComplete fires once, when her rule is met — Task 5 submitted
- * plus any two of Tasks 1–4.
+ * plus any one of Tasks 1–4.
  *
  * Answers persist under `v-packet-tasks:v1`; restored state is applied off
  * the effect body behind `hydrated` so the first client render matches the
@@ -65,7 +65,7 @@ function ruleMet(answers: Answers): boolean {
   const submitted = PACKET_TASKS.filter((t) => answers[t.id]?.submitted);
   return (
     submitted.some((t) => t.compulsory) &&
-    submitted.filter((t) => !t.compulsory).length >= 2
+    submitted.filter((t) => !t.compulsory).length >= 1
   );
 }
 

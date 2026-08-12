@@ -3,14 +3,25 @@
  *
  * WHERE THIS COMES FROM. The tasks are the course owner's condensed
  * assignment, verbatim from her packet delivery (2026-08-12): Task 5
- * compulsory plus any two of Tasks 1–4, word limits hers. The keys are her
- * design too, delivered in a second pass with the titles below: each key is
- * a MODEL ANSWER (hers — written in Russian, rendered in English on her
- * instruction, "in eng obv") followed by a BAKER REVEAL whose cuts she
- * specified section by section. Task 2's reveal is deliberately only a
- * note: Baker supports persistent chip records and accountancy, but
- * training transcripts are Shavit's mechanism, and she asked that the
- * reveal say exactly that instead of stretching a quote.
+ * compulsory plus any one of Tasks 1–4 (her review revised the original
+ * "any two" down — three answers is too much for the hour), word limits
+ * hers. The keys are her design too, delivered in a second pass with the
+ * titles below: each key is a MODEL ANSWER (hers — written in Russian,
+ * rendered in English on her instruction, "in eng obv") followed by a
+ * BAKER REVEAL whose cuts she specified section by section. Task 2's
+ * reveal is deliberately only a note: Baker supports persistent chip
+ * records and accountancy, and she asked that the reveal say so directly
+ * instead of stretching a quote.
+ *
+ * TASK 2 REALIGNMENT (her audit, 2026-08-12): the delivered task named
+ * "training transcripts" as a component, but Document 2's excerpt (§1.1)
+ * never discusses transcripts — its three parts are chip-level activity
+ * logging, inspection/analysis of the logs of a sufficient subset of
+ * chips, and supply-chain monitoring. The task's component list now names
+ * those three; the model answer's middle row and the "not interchangeable"
+ * items were rewritten to match. PENDING HER COPY: the rewritten row and
+ * items are ours (drawn from the excerpt's own wording), and her reveal
+ * note lost its transcript sentence — both await her wording.
  *
  * THE QUOTES ARE BAKER'S OWN WORDS (arXiv:2304.04123v1, CC BY 4.0),
  * section-cited and linked, never marking. Labels over passages are ours,
@@ -49,7 +60,7 @@ export type TaskPart =
 
 export interface PacketTask {
   id: string;
-  /** Her number. The rule "Task 5 and any two of Tasks 1–4" reads off it. */
+  /** Her number. The rule "Task 5 and any one of Tasks 1–4" reads off it. */
   n: number;
   title: string;
   compulsory?: boolean;
@@ -225,7 +236,7 @@ export const PACKET_TASKS: PacketTask[] = [
       },
       {
         kind: "quote",
-        text: "IAEA safeguards verify that a state has no nuclear-weapons programme.",
+        text: "If all declared nuclear material remains accounted for, the state has no nuclear-weapons programme.",
       },
     ],
     maxWords: 150,
@@ -250,7 +261,11 @@ export const PACKET_TASKS: PacketTask[] = [
       { kind: "p", text: "Document 2 proposes three components:" },
       {
         kind: "ul",
-        items: ["chip-level logging;", "training transcripts;", "supply-chain monitoring."],
+        items: [
+          "chip-level activity logging;",
+          "inspection and analysis of the logs of a sufficient subset of chips;",
+          "supply-chain monitoring.",
+        ],
       },
       {
         kind: "p",
@@ -273,9 +288,9 @@ export const PACKET_TASKS: PacketTask[] = [
             "Registered chips are used for a prohibited run that leaves no verifiable record afterwards",
           ],
           [
-            "Training transcripts",
-            "Make the chip’s record interpretable and tie it to the parameters of a specific training run",
-            "The operator passes a prohibited run off as a permitted one, or offers a false provenance for discovered model states",
+            "Log inspection and analysis",
+            "Turns the chips’ records into a determination — whether a rules-violating run took place — from a sufficient sample",
+            "Logs accumulate but are never examined, so a violation leaves a record that no one converts into a detection",
           ],
           [
             "Supply-chain monitoring",
@@ -288,15 +303,15 @@ export const PACKET_TASKS: PacketTask[] = [
       {
         kind: "ul",
         items: [
-          "a log without a transcript cannot reliably establish what a run contained;",
-          "a transcript without an independent trace can be fabricated;",
+          "a log nobody inspects detects nothing;",
+          "an inspection with no attested log has nothing trustworthy to examine;",
           "both are useless against chips whose existence the verifier does not know of.",
         ],
       },
     ],
     baker: [],
     bakerNote:
-      "Baker independently supports the need for persistent chip records and complete chip accountancy. The role of training transcripts follows from Shavit’s proposed mechanism rather than Baker’s analysis.",
+      "Baker independently supports the need for persistent chip records and complete chip accountancy.",
   },
   {
     id: "t3",

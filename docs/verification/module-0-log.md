@@ -516,3 +516,39 @@ paste, per the owner ("13 q are accidental"). The preserved copy is
 deleted; the condensed five-task assignment in the lesson is the whole of
 the packet's tasks. Recover the battery from git history only if she ever
 asks for it by name.
+
+### The owner's review round on the packet (2026-08-12)
+
+She reviewed the built page and the reveal keys and sent two batches of
+fixes, all applied:
+
+- **The rule is "Task 5 and any one of Tasks 1–4"** — three answers was too
+  much for the hour. Lesson prose, widget completion rule, and every
+  comment that restated "any two" now say "any one".
+- **Task 1's quoted claim** is now hers exactly: "If all declared nuclear
+  material remains accounted for, the state has no nuclear-weapons
+  programme." — the version that tests correctness vs completeness rather
+  than a generically over-broad claim.
+- **Task 2 realigned to Document 2.** Her audit found the task named
+  "training transcripts", which the Shavit §1.1 excerpt never discusses —
+  the question could not be answered honestly from the text given. The
+  component list now names the excerpt's own three parts (chip-level
+  activity logging; inspection and analysis of the logs of a sufficient
+  subset of chips; supply-chain monitoring). The model answer's middle row
+  and two of the "not interchangeable" items were rewritten to match, and
+  the reveal note lost its transcript sentence — **that rewritten wording
+  is ours, drawn from the excerpt, and awaits her copy** (flagged in the
+  data file header too).
+- **Citations corrected per her source audit** (no quote hallucinations
+  found; three editorial fixes): the IAEA quote is cited by its three
+  section names instead of page numbers (the printed pages shifted in the
+  current PDF); the Carlson quote now carries the work's real identity —
+  Paper 1 of the Background Papers, John Carlson, "Experience and
+  Challenges in WMD Treaty Verification: a Comparative View".
+- **The "Compliance under anarchy" memo tail deleted** — a leftover from
+  the pre-packet 0.3; its slot (m0-compliance-under-anarchy) is out of
+  memos.ts and memos.js regenerated (13 slots).
+
+Open with her: Task 3's body still asks for "three conditions" while its
+title and key speak to grounds-and-limits of the analogy — her call whether
+the body follows the title.

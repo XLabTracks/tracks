@@ -101,24 +101,6 @@ export const memoSlots: MemoSlot[] = [
     peerReviewed: true,
   },
   {
-    id: "m0-compliance-under-anarchy",
-    module: 0,
-    unit: "0.3.2",
-    title: "Compliance under anarchy",
-    status: "unspecified",
-    /* Re-parked when 0.3.1 was deleted. This was never 0.3.1's own output —
-       0.3.2 is not a lesson the graph has, so the marker was parked on the
-       last lesson of 0.3, and 0.3 itself is that lesson now. Deleting the
-       section is not a decision to drop a written output the outline asks
-       for, so it moves rather than going with it. */
-    lesson: "precedents",
-    brief: null,
-    audience: null,
-    words: 800,
-    peerReviewed: false,
-    gap: 'The outline carries a "Written output:" marker at the end of 0.3.2 and leaves it empty.',
-  },
-  {
     id: "m1-stakeholder-map",
     module: 1,
     unit: "1.0",

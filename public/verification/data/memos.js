@@ -25,18 +25,6 @@ window.VERIFICATION_MEMOS = [
     "peerReviewed": true
   },
   {
-    "id": "m0-compliance-under-anarchy",
-    "module": 0,
-    "unit": "0.3.2",
-    "title": "Compliance under anarchy",
-    "status": "unspecified",
-    "brief": null,
-    "audience": null,
-    "words": 800,
-    "peerReviewed": false,
-    "gap": "The outline carries a \"Written output:\" marker at the end of 0.3.2 and leaves it empty."
-  },
-  {
     "id": "m1-stakeholder-map",
     "module": 1,
     "unit": "1.0",

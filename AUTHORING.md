@@ -938,7 +938,7 @@ module at most.
    }
    ```
 
-2. **Write the body** at `src/content/guides/<contentRef>.mdx` with the five
+2. **Write the body** at `src/content/guides/<contentRef>.mdx` with the four
    required sections (the agenda's timed blocks are `###` subsections):
 
    ```mdx
@@ -949,8 +949,6 @@ module at most.
    ## Agenda
 
    ### Warm-up (10 min)
-
-   ## Common sticking points
 
    ## After the session
    ```

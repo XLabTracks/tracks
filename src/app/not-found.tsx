@@ -14,9 +14,6 @@ export default function NotFound() {
       </p>
       <div className="mt-6 flex gap-3">
         <Button asChild>
-          <Link href="/tracks">Browse tracks</Link>
-        </Button>
-        <Button asChild variant="outline">
           <Link href="/">Home</Link>
         </Button>
       </div>

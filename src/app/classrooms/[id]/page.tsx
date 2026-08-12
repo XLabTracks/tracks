@@ -85,8 +85,8 @@ export default async function ClassroomPage({
         ) : (
           <p className="text-muted-foreground mt-6 text-sm">
             This classroom spans all tracks. Head to{" "}
-            <Link href="/tracks" className="underline">
-              Tracks
+            <Link href="/" className="underline">
+              the home page
             </Link>{" "}
             to keep learning.
           </p>

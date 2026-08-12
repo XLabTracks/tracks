@@ -9,8 +9,14 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
+        // Hover shifts the primary toward its own foreground rather than
+        // mixing in a fixed hue. A literal blue here read as "lighter navy"
+        // only because the light theme's primary is navy — in dark, where
+        // .dark re-points --primary to near-white paper, the same recipe
+        // came out blue-tinted. Anything that names a colour breaks the
+        // moment a second palette exists.
         default:
-          "bg-primary text-primary-foreground hover:bg-[color-mix(in_oklch,var(--primary),#3b82f6_42%)]",
+          "bg-primary text-primary-foreground hover:bg-[color-mix(in_oklch,var(--primary),var(--primary-foreground)_18%)]",
         outline:
           "border-border bg-background hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:border-input dark:bg-input/30 dark:hover:bg-input/50",
         secondary:

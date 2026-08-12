@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import { LogOut, Menu } from "lucide-react";
 import { useAuth } from "@workos-inc/authkit-nextjs/components";
 import { Button } from "@/components/ui/button";
+import { ThemeToggle } from "@/components/layout/theme-toggle";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   DropdownMenu,
@@ -17,9 +18,10 @@ import {
 import { cn } from "@/lib/utils";
 
 const NAV = [
-  { href: "/tracks", label: "Tracks" },
-  // Exercises and Demos are hidden from the header for now — the routes stay
-  // live (deep links, lesson embeds), they're just not surfaced in the nav.
+  // Tracks, Exercises and Demos are hidden from the header for now — the
+  // routes stay live (deep links, lesson embeds), they're just not surfaced
+  // in the nav. The home page's two CTAs are the way into the tracks.
+  // { href: "/tracks", label: "Tracks" },
   // { href: "/exercises", label: "Exercises" },
   { href: "/review", label: "Review" },
   { href: "/resources", label: "Resources" },
@@ -45,7 +47,7 @@ export function SiteHeader() {
     <header className="border-border/80 bg-background/80 sticky top-0 z-40 border-b backdrop-blur">
       <div className="mx-auto flex h-14 w-full max-w-7xl items-center gap-6 px-4 lg:px-6">
         <Link href="/" className="text-lg font-bold tracking-tight">
-          XLab<span className="text-destructive"> · </span>Tracks
+          XLab<span className="text-destructive dark:text-primary"> · </span>Tracks
         </Link>
         <nav className="text-muted-foreground hidden items-center gap-1 text-sm sm:flex">
           {NAV.map((item) => {
@@ -59,7 +61,7 @@ export function SiteHeader() {
                 className={cn(
                   "relative rounded-md px-3 py-1.5 transition-colors",
                   active
-                    ? "text-foreground after:bg-destructive after:absolute after:inset-x-3 after:-bottom-1 after:h-0.5 after:rounded-full"
+                    ? "text-foreground after:bg-destructive dark:after:bg-primary after:absolute after:inset-x-3 after:-bottom-1 after:h-0.5 after:rounded-full"
                     : "hover:text-foreground hover:bg-muted",
                 )}
               >
@@ -69,6 +71,7 @@ export function SiteHeader() {
           })}
         </nav>
         <div className="ml-auto flex items-center gap-2">
+          <ThemeToggle />
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <button

@@ -68,7 +68,9 @@
   }
 
   .arxiv-paper a {
-    color: var(--destructive);
+    /* --link, not --destructive: identical in light (one red doing double
+       duty), separated in dark (rose links, clay danger). */
+    color: var(--link);
     text-decoration: none;
   }
   .arxiv-paper a:hover {
@@ -77,7 +79,7 @@
   }
   .arxiv-paper .ax-cite a,
   .arxiv-paper a.ax-ref {
-    color: var(--destructive);
+    color: var(--link);
   }
   .arxiv-paper .ax-backlink {
     color: var(--muted-foreground);

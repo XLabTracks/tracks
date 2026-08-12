@@ -1,88 +1,178 @@
-{/* 0.2 — the author's own text, transcribed verbatim. The two essay options
-    are exercises rather than prose: they are what the learner writes against,
-    so they need a box that saves. The landscape interactive, the primer drill
-    bench and the memo desk are the section's existing machinery and are not
-    part of the rewritten prose. */}
+{/* 0.2 — the author's own text, transcribed verbatim from the Outline-36
+    revision (2026-08-12), which rebuilt this unit around the AI 2040: Plan A
+    essays. The two essay options are split into the outline's own numbered
+    mini-essays — "shorter, prompted questions linking into a more cohesive
+    essay at the end" — each an h2 of its own so the chunked reader serves one
+    prompt per page, each a writing exercise carrying the outline's bracketed
+    word budget. The A/B prefixes on the prompt headings are navigational (the
+    outline numbers both options 1-5, and the jump strip needs the two "Final
+    essay" rows told apart); the words after the prefix are the outline's.
+    The final essays end on the outline's recommendation choice, carried by
+    <VerdictSelect/> — a selection, not a quiz. The primer drill bench and the
+    memo desk are the section's existing machinery and are not part of the
+    outline's prose. */}
 
 ## 0.2: Building Verification Intuitions
 
-Now that we've established the foundational motivations for why verification is important, we'll now dive into building key intuitions around the timelines, scope, and urgency of what a verification regime might actually look like.
+Now that we've established the foundational motivations for why verification is important, we'll dive into building key intuitions around the timelines, scope, and urgency of what a verification regime might actually look like. We'll do this by analyzing AI 2040: Plan A, the most detailed and well-known public attempt to forecast a successful AI slowdown and complement verification regime.
 
-<Objectives>
-- Describe the general directions the AI arms race could take, and the policy posture that produces each one.
-- Explain several distinct ways a verification regime can fail, and trace each failure to its cause.
-- Reason about the tension between transparency and confidentiality: monitoring intrusive enough to catch cheating can expose secrets worth stealing, while monitoring loose enough to protect secrets leaves room to cheat covertly.
-- Hold rough timelines for the arrival of dangerously capable AI, and use them to think about urgency and prioritization.
-</Objectives>
+## AI 2040: Plan A?
 
 What is the ideal end state? What agreement reaches it? What would verification have to cover for the agreement to hold? The most detailed public attempt to answer all three is AI 2040: Plan A, published by the AI Futures Project, the team behind the earlier AI 2027 scenario. While AI 2027 dramatized how a race ends badly, Plan A tells a dated, concrete story in which a US–China deal, layered verification, and a managed slowdown deliver a good outcome by 2040. Its [verification supplement](https://ai-2040.com/supplements/verification-plan) specifies the machinery: mutual compute declarations checked by inspections, datacenters retrofitted so that large-scale training is detectable, optical network taps feeding trusted recomputation servers, secure R&D facilities, and production caps on unverified hardware.
-
-{/* Plan A leads: the paragraph above is about it, and AI 2027 is named there
-    only as the earlier scenario from the same team. Offering 2027 first sent
-    the reader to the background before the thing being described. The Plan A
-    blurb is short on purpose — the paragraph just spelled the machinery out,
-    so repeating the list here said it twice on one screen. AI 2027 is optional
-    for the same reason: the essay stress-tests Plan A, so 2027 is background
-    the unit points at but does not require. */}
 
 <ReadingCard id="ai-2040-plan-a-verification" href="https://ai-2040.com/supplements/verification-plan" title="AI 2040: Plan A — verification supplement" author="AI Futures Project">
   The machinery behind Plan A, specified in full.
 </ReadingCard>
 
-<ReadingCard id="ai-2027" href="https://ai-2027.com" title="AI 2027" author="AI Futures Project" year="2025" optional>
-  The earlier scenario from the same team — how a race ends badly, dramatized.
-</ReadingCard>
-
 Below, you will read and gauge the feasibility and robustness of Plan A yourself. Read with a critical but thoughtful eye. For every date, percentage, and recommendation, ask yourself: what assumptions have to be true in order for this to hold? What existing or historical precedents have pointed to this mechanism succeeding or failing? What alternative solutions or estimates could there be, and how does this hold up against them? What is left uncertain? Remember: there is no correct answer, but you want to back your opinions with logic and evidence.
 
-Your task is to write one of two open-ended essay options:
+Your task is to write one of two open-ended essay prompts, consisting of shorter, prompted questions linking into a more cohesive essay at the end:
 
 A: stress-test the Plan A verification supplement, or
 
 B: compare Plan A (verified slowdown) and Plan S (complete shutdown).
 
-## Choose one essay
+<Fold label="A writing good practice">
 
-AI 2040: Plan A offers one of the most detailed public proposals for verifying an international AI agreement. Its verification supplement lays out a concrete system: compute declarations, inspections, datacenter retrofits, optical network taps, trusted recomputation servers, secure R&D facilities, and restrictions on unverified hardware.
+Clarify the source of each claim you make, and explicitly identify gaps, uncertainties, or ambiguities as they appear. You won't know everything, and you aren't expected to.
 
-Your task is to assess that system rather than simply summarize it.
+</Fold>
 
-Choose Option A or Option B. Before writing, work through the short prompts under your option. They are meant to help you identify the few assumptions that matter most. Your final essay should be 600–800 words.
+## Option A: Stress-test Plan A's Verification Regime
 
-<Exercise id="v-task-intuitions-1" />
+Read the [AI 2040 Verification Plan](https://ai-2040.com/supplements/verification-plan), paying attention to:
 
-<Exercise id="v-task-intuitions-4" />
+- Summary of the Plan
+- Concrete inference-only retrofitting proposal
+- 2029–2030: Deal Implementation
+- Third-party countries begin joining the deal
+
+Plan A's verification problem has two broad parts. First, the regime needs confidence that declared compute is being used in permitted ways. Second, it needs to keep undeclared or covert compute small enough that it cannot overturn the agreement. Your job, as a critical reader, is to interrogate whether Plan A's assumptions are reasonable; outlooks are optimistic, realistic, or pessimistic; the key load-bearing mechanisms of their proposal; any unrealistic aspects of the proposal that should be given less weight, if at all; and any important considerations you do not see.
+
+## A1. Identify the regime's strongest mechanism or recommendation
+
+<Exercise id="v-task-intuitions-5" />
+
+## A2. Identify the regime's weakest link(s)
+
+<Exercise id="v-task-intuitions-6" />
+
+## A3. Stress-test the timeline
+
+<Exercise id="v-task-intuitions-7" />
+
+## A4. Assess the covert-compute margin
+
+<Exercise id="v-task-intuitions-8" />
+
+## A5. Final essay
+
+You have now approached the AI 2040 Verification Supplement from four angles: its most load-bearing strength, its weakest link, its biggest timeline bottleneck, and the amount of failure the regime can tolerate.
+
+Now imagine Plan A is moving from scenario to serious policy proposal. Decision-makers are asking whether its verification regime is strong enough to rely on as written, or whether it needs major changes before anyone should build an agreement around it. They have asked you for an assessment.
+
+<VerdictSelect
+  id="plan-a-verdict"
+  prompt="At the end, select one of the three recommendations, and briefly justify why:"
+  options={[
+    { id: "adopt", text: "Adopt the verification approach largely as written" },
+    { id: "amend", text: "Adopt it only with significant amendments" },
+    { id: "reject", text: "Reject it in favor of a different approach" },
+  ]}
+/>
+
+<Exercise id="v-task-intuitions-9" />
+
+## Option B: Compare Plan A and Plan S as Verification Problems
+
+Plan A and Plan S aim at different kinds of AI agreements. Plan A permits substantial AI activity under a layered verification regime; Plan S calls for a much stronger halt on frontier AI development. Those choices shape the verification problem: what counts as compliance, what evidence inspectors can collect, how much of the AI ecosystem must remain visible, and which actors must cooperate.
+
+Skim the [AI 2040 Verification Supplement](https://ai-2040.com/supplements/verification-plan), the discussion of Plan S, and the relevant Plan S section of the [AI 2040 FAQ](https://ai-2040.com/supplements/faq). Plan S has no equivalent verification supplement, so you will need to infer what a credible verification regime for it would require using mechanisms from this course.
+
+## B1. Which plan gives verification the more tractable target?
+
+<Exercise id="v-task-intuitions-10" />
+
+## B2. Which plan could provide stronger evidence of compliance?
+
+<Exercise id="v-task-intuitions-11" />
+
+## B3. Which plan creates the harder monitoring problem?
+
+<Exercise id="v-task-intuitions-12" />
+
+## B4. Which regime could states actually cooperate on?
+
+<Exercise id="v-task-intuitions-13" />
+
+## B5. Final essay
+
+Policymakers are deciding whether a serious international AI agreement should more closely resemble Plan A or Plan S. They have asked which approach provides a verification regime strong enough to rely on.
+
+<VerdictSelect
+  id="plan-a-vs-plan-s"
+  prompt="Which creates the more robust verification regime: Plan A or Plan S? Make a recommendation:"
+  options={[
+    { id: "plan-a", text: "Plan A — verified slowdown" },
+    { id: "plan-s", text: "Plan S — complete shutdown" },
+  ]}
+/>
+
+<Exercise id="v-task-intuitions-14" />
+
+## Additional Optional Exercises & Materials
 
 <Exercise id="v-task-intuitions-2" />
 
 <Exercise id="v-task-intuitions-3" />
 
-## Commitment enforcement needs verification — curated readings
+<ReadingCard id="ai-2027" href="https://ai-2027.com" title="AI 2027" author="AI Futures Project" year="2025" optional>
+  The earlier scenario from the same team — how a race ends badly, dramatized. Read both of its endings.
+</ReadingCard>
 
-The simulation built intuition and the scenarios exercised imagination. These three readings supply the evidence base, and the vocabulary the rest of the track uses. Suggested approach: skim all three, then deep-read the one closest to your interests.
+## Curated Readings
+
+You have now taken a position on a concrete verification regime. Use these readings to push on whichever part of your argument still feels least settled. Skim broadly; deep-read the one or two closest to the question you found hardest.
 
 <ReadingCard id="reading-baker-nuclear" href="https://arxiv.org/abs/2304.04123" title="Nuclear Arms Control Verification and Lessons for AI Treaties" author="Baker" year="2023">
-  The deepest case study of the one regime that made rival superpowers'
-  commitments checkable. Read for which nuclear techniques transfer to AI and
-  which do not, and why the differences (compute moves, software copies,
-  capabilities hide in weights) are exactly where AI verification gets hard.
+  If you want the historical reality check. Read for how adversarial states
+  built confidence without eliminating uncertainty, and where the nuclear
+  analogy becomes strained when applied to AI.
+</ReadingCard>
+
+<ReadingCard id="reading-baker-six-layers" href="https://arxiv.org/abs/2507.15916" title="Verifying International Agreements on AI: Six Layers of Verification for Rules on Large-Scale AI Development and Deployment" author="Baker et al." year="2025">
+  If your Plan A assessment hinged on whether layered verification can
+  actually produce enough assurance. Read for redundancy, correlated failure,
+  privacy, and what still has to be built before a multilayer system deserves
+  high confidence.
+</ReadingCard>
+
+<ReadingCard id="reading-scher-restrictions" href="https://arxiv.org/abs/2606.28694" title="Verifying Restrictions on Frontier AI Research" author="Scher" year="2026">
+  If you chose Plan S — or remain unsure whether a stronger halt is actually
+  easier to verify. Read for the uncomfortable parts of a halt that compute
+  monitoring alone does not solve: algorithmic research, experiments,
+  personnel, code, and other less physically legible activity.
 </ReadingCard>
 
 <ReadingCard id="reading-verification-intl-gov" href="https://aigi.ox.ac.uk/wp-content/uploads/2025/07/Verification_for_International_AI_Governance.pdf" title="Verification for International AI Governance" author="Oxford Martin AI Governance Initiative" year="2025">
-  A map of the verification approaches now on the table and the political
-  conditions each requires. Read for the framework connecting technical
-  mechanisms to the agreements they could support.
+  If your argument turned on political feasibility or inspection access. Read
+  for how the feasible verification architecture changes with political
+  access, privacy constraints, and the type of agreement states are trying to
+  verify.
+</ReadingCard>
+
+<ReadingCard id="reading-scher-treaty" href="https://arxiv.org/abs/2511.10783" title="An International Agreement to Prevent the Premature Creation of Artificial Superintelligence" author="Scher et al." year="2025">
+  If you want to compare your own architecture against a concrete proposal
+  for an international halt — especially its verification sections and
+  Appendix D. Read for one attempt to translate a pause posture into specific
+  restrictions on compute and dangerous AI research.
 </ReadingCard>
 
 <ReadingCard id="reading-scher-mechanisms" href="https://arxiv.org/abs/2506.15867" title="Mechanisms to Verify International Agreements About AI Development" author="Scher and Thiergart, MIRI Technical Governance Team" year="2025">
-  The source of this track's working definition: verification mechanisms are
-  processes or tools that give one party greater confidence that another is
-  following agreed rules, typically by detecting violations. Read for the
-  mechanism catalog, and for its accounting of which mechanisms exist today
-  versus which still require R&D.
+  If you want the mechanism catalog. Read selectively: choose the policy goal
+  or mechanism closest to your essay and ask whether its evidence, access
+  requirements, and remaining R&D gaps change your conclusion.
 </ReadingCard>
-
-Keep your Plan A stress-test nearby while you read. These papers are the raw material for judging plans like Plan A, and by the end of the track you will use them to write assessments of your own.
 
 ## Drill bench
 

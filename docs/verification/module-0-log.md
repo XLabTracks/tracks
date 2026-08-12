@@ -593,6 +593,60 @@ standard header. 0.3 keeps her authored 60. The rest are MECHANICAL
 estimates, not authored curriculum: body word count at ~200 wpm plus an
 allowance for embedded interactives, rounded to 5 — 0.0 Welcome 5,
 0.1 Introduction 25 (five explorables), 0.1.1 Prevention 5,
-0.2 Intuitions 15 (the primers drill bench), 0.4 Strategic Foundations 5
-(in-page text only; its external readings are the unit and are not
-counted). Each number is hers to override in curriculum.ts.
+0.4 Strategic Foundations 5 (in-page text only; its external readings are
+the unit and are not counted). Each number is hers to override in
+curriculum.ts. 0.2 deliberately carries none: the Plan A rebuild (below,
+merged in the same push) made it a self-paced essay unit, and a fixed
+minutes figure on essay writing would mislead — the same reason that
+rebuild dropped the stale 15–20-minute figure from the unit meta.
+
+### 0.2 rebuilt around the Plan A essays (2026-08-12)
+
+The Outline-36 revision replaced 0.2's task with the two AI 2040 essays, and
+the owner asked for the two monolithic prompts to be split into the outline's
+own mini-essays. What changed, all transcribed verbatim from Outline-36:
+
+- **The prose**: new intro ("We'll do this by analyzing AI 2040: Plan A…"),
+  an "AI 2040: Plan A?" section, the outline's task statement (A or B), and
+  its "[expand box]" as `<Fold label="A writing good practice">`.
+- **The exercises split**: `v-task-intuitions-1` and `-4` (one giant prompt
+  per option) are replaced by ten writing exercises — `-5…-9` for Option A's
+  prompts 1–5, `-10…-14` for Option B's — each under its own h2 so the
+  chunked reader serves one mini-essay per page, each carrying the outline's
+  bracketed word budget as minWords/maxWords (the first 0.2 word bounds; the
+  header comment in exercises.ts records the exception). Numeric id suffixes
+  are load-bearing: cohort.ts derives the owning lesson from
+  `v-task-<lesson>-<n>`.
+- **The A/B heading prefixes are navigational**, not the outline's: both
+  options number their prompts 1–5 and the jump strip needs the two "Final
+  essay" rows told apart.
+- **The final-essay recommendation is selectable**: new reader block
+  `<VerdictSelect/>` (components/mdx/reader/verdict-select.tsx, vt-marks
+  store, key `verdict:<id>`) carries Option A's adopt / amend / reject and
+  Option B's Plan A / Plan S. A selection, not a quiz — no key, no reveal,
+  clearable, changeable.
+- **Optional material now matches the course's shape**: the success-scenario
+  essay is `v-task-intuitions-2` rewritten to the outline's new text
+  (500–800 words, "Keep this essay"), the AI 2027 explore task stays
+  `-3`, the AI 2027 reading card moved down beside them, and the outline's
+  six curated readings replace the old three (three cards kept their
+  permanent ids; new: reading-baker-six-layers arXiv:2507.15916,
+  reading-scher-restrictions arXiv:2606.28694, reading-scher-treaty
+  arXiv:2511.10783).
+- **Memo desk synced**: the 0.2 slot m0-hinge-brief now carries the final
+  essay (title, brief, essay genre, 600 words; id kept — it is the desk's
+  draft key), and m0-success-scenario is the optional keep-this-essay slot.
+  memos.js regenerated (14 slots).
+- **Unit meta**: 0.2 is now kind "exercise", "self-paced" — the 15–20-minute
+  "interactive" figure described the deleted timeline game.
+- **Dropped**: the old `<Objectives>` block (it described the pre-Plan-A 0.2
+  — arms-race directions, transparency/confidentiality, timelines; the new
+  outline states no objectives for the unit) and the old "Choose one essay"
+  section prose, which Outline-36 superseded.
+- **Citations**: ai-2040.com/supplements/faq joined citations.json `pending`,
+  alongside the three 0.3 packet URLs that arrived cited but unregistered
+  (the suite was red on them; pending is the honest holding pen).
+
+Verified in the browser: one prompt per page, verdict selection persists
+(`vt-marks.v1`, `verdict:plan-a-verdict`), word bounds show in the editor,
+both memo cards render at the foot of the unit.

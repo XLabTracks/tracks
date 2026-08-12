@@ -43,8 +43,8 @@ window.COURSE = {
         {
           "id": "0.2",
           "title": "Building Verification Intuitions",
-          "kind": "interactive",
-          "mins": "15–20 min",
+          "kind": "exercise",
+          "mins": "self-paced",
           "href": "/tracks/verification/why-verification/building-intuitions",
           "lessons": [
             "building-intuitions"

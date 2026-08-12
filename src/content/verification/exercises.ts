@@ -8,8 +8,11 @@ import type { Exercise } from "@/lib/content/types";
 // autosaving draft, the submit step and the review path the app already has.
 // `exercises.data.ts` only spreads these in.
 //
-// No word bounds and no rubric: the outline states neither, and inventing a
-// minimum or a marking scheme would be inventing curriculum.
+// No word bounds and no rubric where the outline states neither — inventing a
+// minimum or a marking scheme would be inventing curriculum. The 0.2 tasks
+// are the exception the rule allows for: the Outline-36 revision brackets a
+// word budget onto every one of its prompts ("[200-250 words]"), so those
+// carry minWords/maxWords transcribed from it.
 //
 // A table is NOT a task. Eight of the outline's tables were pasted in here as
 // writing-prompt prompts, cells joined by blank lines, and rendered as a
@@ -51,25 +54,110 @@ export const verificationExercises: Exercise[] = [
     format: "free-form",
     optional: true,
   },
+  // 0.2, Option A — the outline's five prompts, one exercise each. Splitting
+  // is the Outline-36 revision's own shape ("shorter, prompted questions
+  // linking into a more cohesive essay at the end"); the prompt text and the
+  // word budgets are its words verbatim. The A5/B5 recommendation choice is
+  // <VerdictSelect/> in the lesson body, not part of these prompts.
   {
-    id: "v-task-intuitions-1",
+    id: "v-task-intuitions-5",
     type: "writing-prompt",
     prompt:
-      "Option A — Stress-test Plan A's verification regime\n\nRead the AI 2040 Verification Plan, especially:\n\n- Summary of the Plan\n- Concrete inference-only retrofitting proposal\n- 2029–2030: Deal Implementation\n- Third-party countries begin joining the deal\n- the later discussion of improving robustness and privacy\n\nPlan A's verification problem has two broad parts. First, the regime needs confidence that declared compute is being used in permitted ways. Second, it needs to keep undeclared or covert compute small enough that it cannot overturn the agreement.\n\nWork through the following before writing.\n\n**1. Identify the regime's load-bearing mechanism**\n\nFocus on the proposed datacenter retrofit: optical network taps, reproducible workloads, trusted recomputation servers, network restrictions, and related safeguards.\n\nChoose the part of this system that you think carries the most verification weight. Consider:\n\n- What evidence does it actually provide?\n- What kinds of cheating could it detect?\n- What kinds could still escape it?\n- If a state had years to prepare an evasion strategy, where would you expect it to attack the system?\n\nYou do not need to find a fatal vulnerability. Decide how much confidence this mechanism deserves and explain why.\n\n**2. Stress-test the timeline**\n\nLook closely at the implementation sequence in 2029: chip declarations and inspections, datacenter retrofits, and the expansion of verification coverage across the world's major compute.\n\nChoose the transition that seems hardest to accomplish on schedule.\n\nUse one relevant precedent from elsewhere in the course to assess it. You might compare the proposal with an arms-control inspection regime, a large industrial mobilization, an export-control system, or another verification effort.\n\nAsk whether the precedent changes your estimate of what could realistically be built within Plan A's timeline.\n\n**3. Assess the covert-compute margin**\n\nThe supplement estimates that some compute may remain hidden even after declarations and inspections, initially on the order of 0.5% of world AI-relevant compute.\n\nDecide how important that residual capacity is.\n\nWhat could a well-resourced state accomplish with a small covert cluster over several years? What disadvantages would such a project face? Which other mechanisms in Plan A might constrain it?\n\nIf the answer depends heavily on an empirical uncertainty — for example, how efficiently frontier capabilities can be developed on small amounts of compute — identify that uncertainty explicitly.\n\n**4. Test participation beyond the United States and China**\n\nPlan A eventually requires verification coverage well beyond its two principal signatories.\n\nChoose one important third country, semiconductor producer, cloud provider, or other actor whose cooperation matters.\n\nAssess the bargain from that actor's perspective:\n\n- What access or restrictions would the regime require?\n- What commercial, military, or sovereignty costs could participation impose?\n- What incentives or pressures might bring the actor into the agreement?\n- How damaging would nonparticipation be?\n\n**Final essay**\n\nWrite 600–800 words answering: how robust is Plan A's verification regime, and where is it most likely to fail?\n\nBuild your argument around two or three issues that you think are genuinely load-bearing. Use specific mechanisms and claims from the verification supplement, and bring in at least one relevant comparison or concept from the course.\n\nA strong essay should reach a judgment about the regime as a whole while remaining clear about uncertainty. Explain which assumption matters most to your conclusion and what evidence would make you revise it.",
+      "Choose the part of this system that you think carries the most verification weight. Focus on the proposed datacenter retrofit: optical network taps, reproducible workloads, trusted recomputation servers, network restrictions, and related safeguards. Which mechanism seems like the most important—that, if removed, would most endanger the verification regime's effectiveness? Do not use outside resources for this part of the exercise.\n\nQuestions to consider:\n\n- What types of evidence does it provide—implied, likely, or certain? Ambiguous (rough power signatures) or exact (the model weights themselves)?\n- What kinds of cheating could it detect?\n- If a state had years to prepare an evasion strategy, where would you expect it to attack the system? Where would you most expect a motivated adversary to fail?\n- What other mechanisms does this one depend on, and what downstream mechanisms rely on this one's reliability?\n\nThere is no right answer here, and you do not need to find a secret or definitive vulnerability. Decide how much confidence this mechanism deserves and explain why.",
     format: "free-form",
+    minWords: 200,
+    maxWords: 250,
   },
   {
-    id: "v-task-intuitions-4",
+    id: "v-task-intuitions-6",
     type: "writing-prompt",
     prompt:
-      "Option B — Compare Plan A and Plan S as verification problems\n\nRead:\n\n- the AI 2040 Verification Plan, especially the sections on datacenter retrofits and secure R&D;\n- the discussion of Plan S in AI 2040;\n- the relevant argument in the AI 2040 FAQ comparing the two plans.\n\nPlan S proposes a much stronger halt on frontier AI development. Plan A begins with a pause and inference-only retrofit, then allows some approved AI R&D inside secured and verified facilities.\n\nThe two approaches therefore create different verification problems.\n\nWork through the following before writing.\n\n**1. Define what each regime has to detect**\n\nStart with the prohibited activity under each plan.\n\nFor Plan S, ask what an inspector would need to establish in order to have confidence that frontier development had actually stopped.\n\nFor Plan A, focus first on the inference-only phase. Ask what the verifier needs to observe in order to distinguish permitted inference from prohibited training or experimentation on monitored compute.\n\nThen consider Plan A's later secure-R&D phase. What additional distinction does the regime need to police once some frontier research is permitted again?\n\nWhich of these rules creates the clearest observable boundary?\n\n**2. Build the strongest verification case for each plan**\n\nFor Plan A, identify the three mechanisms in the verification supplement that you think contribute most to detecting violations.\n\nFor Plan S, construct a plausible verification stack using mechanisms covered elsewhere in the course: compute declarations, inspections, chip tracking, power monitoring, intelligence, personnel reporting, satellite observation, or others.\n\nFor each regime, consider whether those mechanisms fail independently or share common blind spots.\n\nWhich regime gives a verifier stronger evidence of compliance?\n\n**3. Give each regime its strongest evasion strategy**\n\nChoose one serious cheating strategy for Plan A and one for Plan S. For each:\n\n- What would the violator conceal?\n- What evidence would need to be suppressed or falsified?\n- Which verification layer would have the best chance of detecting the violation?\n- How much progress might be possible before detection?\n\nCompare the resulting failure modes. Pay attention to whether permitting a large legitimate AI economy under Plan A creates useful cover for covert activity, and whether Plan S creates different incentives for hidden infrastructure or breakout.\n\n**4. Compare the political cost of verification**\n\nPlan A's verification system reaches deeply into active datacenters and commercial workloads. The supplement itself treats privacy and protection of sensitive information as important design constraints.\n\nPlan S would create a different inspection problem because frontier development is supposed to be halted altogether.\n\nCompare the information each regime might require states and firms to reveal. Consider commercial secrets, military uses, facility access, sovereignty, and the risk that verification infrastructure itself becomes an intelligence channel.\n\nWhich regime asks signatories to tolerate the more politically difficult form of monitoring?\n\n**5. Make the tradeoff explicit**\n\nBefore writing, form separate judgments about technical verifiability; resistance to evasion; political acceptability; and durability over several years.\n\nThe same plan may perform differently across these dimensions. That tension should drive your essay.\n\n**Final essay**\n\nWrite 600–800 words answering: which creates the more tractable verification regime — Plan A's managed slowdown or Plan S's frontier-AI halt?\n\nUse specific features of Plan A's verification supplement and construct the strongest reasonable verification architecture for Plan S.\n\nYour conclusion should explain why the difference matters. Identify the assumption that most strongly determines your comparison, and say what evidence or technological development could change your view.",
+      "Now that you have a good grasp on your ideas of the Verification Plan's strengths, let's turn to identifying its weak points. Identify at least one mechanism, assumption, or implementation step in Plan A that you think is especially vulnerable to failure. Explain why the weakness matters for the regime as a whole. This is arguably the most central prompt: only by red-teaming and finding vulnerabilities can a regime patch its holes.\n\nQuestions to consider:\n\n- What has to go right politically, technically, and operationally for this part of the plan to work?\n- Which assumptions seem least reliable under tight timelines, strategic competition, or uneven cooperation among states and firms?\n- If this mechanism underperforms, what other parts of the verification regime compensate for it—and where might the failure cascade?\n\nAfter you have a good idea of a weakness you want to critique, explain which weakness, why it's most jeopardizing, and some ideas (not too long) about how you would go about strengthening it.",
     format: "free-form",
+    minWords: 200,
+    maxWords: 250,
+  },
+  {
+    id: "v-task-intuitions-7",
+    type: "writing-prompt",
+    prompt:
+      "Choose the timeline milestone that seems least likely to accomplish on schedule. Then, look closely at the implementation sequence in 2029: chip declarations and inspections, datacenter retrofits, and the expansion of verification coverage across the world's major compute.\n\nIn your rationale, you might compare the proposal with an arms-control inspection regime, a large industrial mobilization, an export-control system, or another suitable verification parallel. For inspiration, you may use outside resources or click ahead to learn more about historical verification precedents in [Module 0.3](/tracks/verification/why-verification/precedents).\n\nAsk whether the precedent changes your estimate of what could realistically be built within Plan A's timeline.",
+    format: "free-form",
+    minWords: 150,
+    maxWords: 200,
+  },
+  {
+    id: "v-task-intuitions-8",
+    type: "writing-prompt",
+    prompt:
+      "The supplement estimates that some compute may remain hidden even after declarations and inspections, initially on the order of 0.5% of world AI-relevant compute. Your task is to decide how important that residual capacity is, and argue for whether the benign capacity threshold should be increased, decreased, or kept the same.\n\nQuestions to consider:\n\n- What could a well-resourced state accomplish with a small covert cluster over several years?\n- What disadvantages would such a project face?\n- Which other mechanisms in Plan A might constrain it?\n- Could algorithmic efficiency gaming realistically and substantively increase the capabilities of the hidden compute?\n\nIncreased, decreased, or left the same, justify your proposal for the covert-compute margin.",
+    format: "free-form",
+    minWords: 100,
+    maxWords: 150,
+  },
+  {
+    id: "v-task-intuitions-9",
+    type: "writing-prompt",
+    prompt:
+      "Consider your strongest arguments and their strongest objections. Synthesize ideas from your earlier responses into a short essay answering: How robust is Plan A's verification regime, and where is it most likely to fail?\n\nAt the end, briefly justify the recommendation you selected above.",
+    format: "free-form",
+    minWords: 400,
+    maxWords: 600,
+  },
+  // 0.2, Option B — likewise the outline's five prompts, verbatim.
+  {
+    id: "v-task-intuitions-10",
+    type: "writing-prompt",
+    prompt:
+      "Identify the central restriction under Plan A and Plan S: what would inspectors actually need to establish before they could reasonably conclude that actors were complying? Then, compare: does Plan A or Plan S give verification the clearer and more tractable target?\n\nQuestions to consider:\n\n- What prohibited activity would inspectors need to identify under each plan?\n- What observable physical, computational, or organizational traces would that activity leave?\n- Could prohibited activity resemble or hide within activity that remains permitted?\n- Where might reasonable inspectors disagree about whether a violation has occurred?\n\nMake a preliminary judgment. Delineate your evidence-backed reasons from intuitions.",
+    format: "free-form",
+    minWords: 100,
+    maxWords: 150,
+  },
+  {
+    id: "v-task-intuitions-11",
+    type: "writing-prompt",
+    prompt:
+      "A clear rule is useful only if the available verification mechanisms can produce convincing evidence that actors are following it.\n\nFor Plan A, use the Verification Supplement to identify the mechanisms that provide the strongest evidence of compliance. For Plan S, consider what combination of tools from this course could provide comparable assurance—for example, compute declarations, inspections, chip accounting, power monitoring, remote sensing, intelligence, or personnel reporting.\n\nCompare the quality of evidence each regime could realistically produce.\n\nQuestions to consider:\n\n- Which compliance claims can be observed relatively directly, and which require substantial inference?\n- Would several independent verification mechanisms corroborate the same conclusion?\n- Where could multiple mechanisms share the same blind spot or unreliable assumption?\n- How much residual uncertainty would policymakers have to tolerate even when the regime appears to be working?\n\nDecide which plan could give decision-makers stronger grounds for confidence in compliance.",
+    format: "free-form",
+    minWords: 150,
+    maxWords: 200,
+  },
+  {
+    id: "v-task-intuitions-12",
+    type: "writing-prompt",
+    prompt:
+      "Now, zoom out from individual pieces of evidence to the scale of the regime. Compare how much compute, infrastructure, activity, and geography would need to remain visible to inspectors under Plan A vs. Plan S. Pay particular attention to what kinds of AI activity remain permitted under each agreement and what that means for the monitoring burden.\n\nQuestions to consider:\n\n- Under which plan must inspectors make finer distinctions between permitted and prohibited activity?\n- How much of the relevant compute ecosystem would need reliable verification coverage?\n- Where could important activity fall outside the regime's field of view?\n- Does a broader prohibition make monitoring easier, or make gaps in coverage more consequential?\n\nRevisit your answer from Part 1. A rule that initially looked simpler may create a demanding monitoring problem once you consider how it would work across the real AI ecosystem.",
+    format: "free-form",
+    minWords: 150,
+    maxWords: 200,
+  },
+  {
+    id: "v-task-intuitions-13",
+    type: "writing-prompt",
+    prompt:
+      "Verification also depends on whether governments, firms, and third countries will accept the access, restrictions, and institutional arrangements necessary to produce credible evidence.\n\nIdentify the hardest cooperation problem facing Plan A and the hardest facing Plan S. Compare how difficult each would be to overcome and how much the regime depends on solving it.\n\nQuestions to consider:\n\n- Which actors have the strongest incentives to refuse participation, demand exemptions, or withdraw later?\n- What commercially or militarily sensitive access would verification require?\n- What economic, strategic, or sovereignty costs would participation impose?\n- If one plan appears technically easier to verify but politically harder to implement, how much should that affect your assessment?\n\nBy this point, you should have compared the regimes across four dimensions: clarity of the verification target, strength of the evidence, monitoring burden, and political cooperation.",
+    format: "free-form",
+    minWords: 200,
+    maxWords: 250,
+  },
+  {
+    id: "v-task-intuitions-14",
+    type: "writing-prompt",
+    prompt:
+      "You have already analyzed the comparison from four angles. Pull together the findings that matter most, consider the strongest argument against your own position, and answer: Which creates the more robust verification regime: Plan A or Plan S?\n\nMake a recommendation. Explain which considerations carry the most weight in your judgment, where important uncertainty remains, and what evidence or development would be most likely to change your view.",
+    format: "free-form",
+    minWords: 400,
+    maxWords: 500,
   },
   {
     id: "v-task-intuitions-2",
     type: "writing-prompt",
-    prompt: "Optional task — Essay: what does success look like to you?\n\nIn 500–800 words, describe your own success scenario: the end state (what the world looks like, and roughly when); the agreement that gets there (who signs, what is restricted); and what verification would need to cover for that agreement to hold.",
+    prompt:
+      "Optional task — Essay: what does success look like to you?\n\nDescribe your own plausible success scenario for advanced AI governance. Think several steps beyond any single verification mechanism: what does a world that has successfully managed the relevant risks actually look like, and what agreement or institutional arrangement gets us there?\n\nQuestions to consider:\n\n- What would make you call the outcome a success, and which risks or tradeoffs would remain acceptable?\n- What agreement or institutional settlement sustains that outcome, and which actors must participate for it to hold?\n- What technological and geopolitical assumptions does your scenario depend on most heavily?\n- What must verification establish with high confidence, and where can the regime tolerate residual uncertainty?\n- Which actors, jurisdictions, or incentives pose the hardest coordination problem?\n- What has to become technically, politically, or institutionally possible before this settlement can emerge?\n- Where is your scenario most fragile, and what development would most likely force you to redesign it?\n\nKeep this essay. You will return to it at the end of the track and see what, if anything, you would now change.",
     format: "free-form",
+    minWords: 500,
+    maxWords: 800,
     optional: true,
   },
   {

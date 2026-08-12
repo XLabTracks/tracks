@@ -338,7 +338,11 @@
     "https://www.anthropic.com/project/glasswing/",
     "https://huggingface.co/blog/agent-intrusion-technical-timeline",
     "https://www.anthropic.com/news/investigating-incidents-cybersecurity-evals",
-    "https://www.felonybench.com/"
+    "https://www.felonybench.com/",
+    "https://ai-2040.com/supplements/faq",
+    "https://www.iaea.org/sites/default/files/18/09/sg-serving-nuclear-non-proliferation.pdf",
+    "https://arxiv.org/abs/2303.11341",
+    "https://www.dfat.gov.au/about-us/publications/Pages/background-papers-on-nuclear-verification-issues"
   ],
   "excluded": [
     "https://docs.google.com/document/d/1hnwVUNOfrA8ZoE-8pCrnZ8wP11aMKaRdEz2WTqKGt_o/edit?tab=t.0",

@@ -18,19 +18,23 @@ import type { VerificationWidgetProps } from "../kit/types";
  * The effectiveness × feasibility plot for 1.0.2, ported from the authored
  * prototype. Five policies sit on risk-reduction (y) against political
  * feasibility (x); the toggle puts a verification regime in place and every
- * point slides right, which is the section's argument in one gesture —
+ * point slides right by the feasibility it buys — drawn as a track from where
+ * the policy sat without one — which is the section's argument in one gesture:
  * verification buys feasibility, never effectiveness, so nothing moves
  * vertically. Points are draggable so a learner can argue with the author's
- * placement, and reset puts them back.
+ * placement; the regime's gain then applies to that placement too, so the
+ * toggle keeps meaning something after a drag. Reset puts them back.
  *
  * House idiom: one hand-rolled SVG, no chart library. Structure reads theme
  * tokens so it follows all three Verification themes; the two policy families
- * take fixed accent classes — and a shape each, so the split survives without
- * colour.
+ * take the one brand accent and a shape each — hollow ring vs solid block — so
+ * the split survives without colour.
  *
- * Trap: the SVG scales, so pointer coordinates have to come back through
- * getScreenCTM rather than being read off the event. Drag is in user units,
- * clamped to the plot frame.
+ * Traps: the SVG scales, so pointer coordinates have to come back through
+ * getScreenCTM rather than being read off the event. A dragged point is stored
+ * in the no-regime frame (the gain subtracted while the regime is on), so the
+ * toggle adds exactly one gain whatever state it was dragged in. Drag is in
+ * user units, clamped to the plot frame.
  */
 
 /* Plot frame in viewBox units. */
@@ -41,6 +45,11 @@ const Y1 = 40; // effect 100
 
 const fx = (feasibility: number) => X0 + feasibility * ((X1 - X0) / 100);
 const fy = (effect: number) => Y0 - effect * ((Y0 - Y1) / 100);
+
+/* The feasibility a regime buys a policy, in viewBox units — never negative,
+   verification only ever adds feasibility, so the slide is always rightward. */
+const gainPx = (policy: PlotPolicy) =>
+  (policy.verified - policy.baseline) * ((X1 - X0) / 100);
 
 /* Low/med/high is a quantity, so it is drawn as one: a three-segment meter
    beside the word. Deliberately no hue — a tint dark enough to read on the
@@ -58,11 +67,11 @@ export function PolicyPlot(_: VerificationWidgetProps) {
 
   const shown = PLOT_POLICIES.find((p) => p.id === selected) ?? PLOT_POLICIES[0];
 
-  const positionOf = (policy: PlotPolicy) =>
-    moved[policy.id] ?? {
-      x: fx(verified ? policy.verified : policy.baseline),
-      y: fy(policy.effect),
-    };
+  const positionOf = (policy: PlotPolicy) => {
+    const base = moved[policy.id] ?? { x: fx(policy.baseline), y: fy(policy.effect) };
+    const x = base.x + (verified ? gainPx(policy) : 0);
+    return { x: Math.min(X1, Math.max(X0, x)), y: base.y };
+  };
 
   const toUser = (event: React.PointerEvent) => {
     const svg = svgRef.current;
@@ -112,10 +121,13 @@ export function PolicyPlot(_: VerificationWidgetProps) {
           if (!id) return;
           const point = toUser(event);
           if (!point) return;
+          const policy = PLOT_POLICIES.find((p) => p.id === id);
+          const gain = verified && policy ? gainPx(policy) : 0;
           setMoved((prev) => ({
             ...prev,
             [id]: {
-              x: Math.min(X1, Math.max(X0, point.x)),
+              // Stored in the no-regime frame, so toggling adds one clean gain.
+              x: Math.min(X1, Math.max(X0, point.x)) - gain,
               y: Math.min(Y0, Math.max(Y1, point.y)),
             },
           }));
@@ -182,6 +194,46 @@ export function PolicyPlot(_: VerificationWidgetProps) {
         <text x="632" y="58" textAnchor="end" fontSize="12" className="fill-muted-foreground">
           {C.target}
         </text>
+
+        {/* The ideal nobody reaches: high effect and high feasibility, the
+            corner the label points at. A faint target so the goal reads as a
+            place the policies are pulled toward, not just a caption. */}
+        <g className="stroke-muted-foreground" fill="none" opacity="0.3">
+          <circle cx="612" cy="92" r="15" strokeWidth="1" strokeDasharray="3 3" />
+          <circle cx="612" cy="92" r="6.5" strokeWidth="1" />
+          <circle cx="612" cy="92" r="1.5" className="fill-muted-foreground" stroke="none" />
+        </g>
+
+        {/* Regime on: the feasibility each policy buys, a rightward track from
+            where it sat without one — starting from a dragged point's own
+            placement, so the toggle still argues after a drag. Horizontal by
+            construction: verification never touches effect. A gain too small to
+            draw is left off; its point barely moves, which is the reading for
+            the already-feasible. */}
+        {verified &&
+          PLOT_POLICIES.map((policy) => {
+            const base = moved[policy.id] ?? {
+              x: fx(policy.baseline),
+              y: fy(policy.effect),
+            };
+            const x0 = Math.min(X1, Math.max(X0, base.x));
+            const x1 = Math.min(X1, Math.max(X0, base.x + gainPx(policy)));
+            if (x1 - x0 < 24) return null;
+            return (
+              <g key={`gain-${policy.id}`} className="text-brand-ink opacity-40">
+                <circle cx={x0} cy={base.y} r="3" fill="none" stroke="currentColor" strokeWidth="1.5" />
+                <line
+                  x1={x0 + 4}
+                  y1={base.y}
+                  x2={x1 - 12}
+                  y2={base.y}
+                  stroke="currentColor"
+                  strokeWidth="1.5"
+                  markerEnd="url(#pp-arrow)"
+                />
+              </g>
+            );
+          })}
 
         {PLOT_POLICIES.map((policy) => {
           const { x, y } = positionOf(policy);

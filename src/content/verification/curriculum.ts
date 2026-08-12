@@ -170,7 +170,7 @@ export const verificationLessons: Lesson[] = [
     sectionItemId: "v-scoping-intro",
     title: "1.0.2 Policies must be effective and feasible",
     contentRef: "verification/scoping-effective-feasible",
-    estimatedMinutes: 35,
+    estimatedMinutes: 150,
   },
   // 1.1 carries its recall drill inline: the outline's "1.1 Anatomy of a
   // (Pause) Agreement (including exercise)" is one unit, so the former 1.1.1
@@ -182,7 +182,7 @@ export const verificationLessons: Lesson[] = [
     moduleId: "v-scoping",
     title: "1.1 Anatomy of a (pause) agreement",
     contentRef: "verification/scoping-anatomy",
-    estimatedMinutes: 30,
+    estimatedMinutes: 55,
   },
   {
     id: "v-scoping-actors",
@@ -190,7 +190,7 @@ export const verificationLessons: Lesson[] = [
     moduleId: "v-scoping",
     title: "1.2 Actors: who does the treaty rely upon, apply to, and constrain?",
     contentRef: "verification/scoping-actors",
-    estimatedMinutes: 35,
+    estimatedMinutes: 60,
   },
   {
     id: "v-scoping-upstream-downstream",
@@ -233,7 +233,7 @@ export const verificationLessons: Lesson[] = [
     sectionItemId: "v-human-intro",
     title: "2.4.1 Insiders and human sources",
     contentRef: "verification/human-insiders",
-    estimatedMinutes: 5,
+    estimatedMinutes: 35,
   },
   {
     id: "v-human-reporting-protection",
@@ -251,7 +251,7 @@ export const verificationLessons: Lesson[] = [
     sectionItemId: "v-human-intro",
     title: "2.4.3 Audits and inspections",
     contentRef: "verification/human-audits-inspections",
-    estimatedMinutes: 5,
+    estimatedMinutes: 35,
   },
   {
     id: "v-human-institutions",
@@ -260,7 +260,7 @@ export const verificationLessons: Lesson[] = [
     sectionItemId: "v-human-intro",
     title: "2.4.4 Institutions and policy judgment",
     contentRef: "verification/human-institutions",
-    estimatedMinutes: 20,
+    estimatedMinutes: 40,
   },
   {
     id: "v-covert-system-overview",
@@ -279,7 +279,7 @@ export const verificationLessons: Lesson[] = [
     moduleId: "v-capstone",
     title: "4.0 Feasibility, prioritization, and sequencing",
     contentRef: "verification/capstone-feasibility",
-    estimatedMinutes: 35,
+    estimatedMinutes: 170,
   },
   {
     id: "v-capstone-project",
@@ -391,7 +391,7 @@ export const verificationLessons: Lesson[] = [
     sectionItemId: "v-hw-attestation",
     title: "2.1.8 Policy judgment: what role should hardware play?",
     contentRef: "verification/hardware-policy-studio",
-    estimatedMinutes: 5,
+    estimatedMinutes: 130,
   },
   {
     id: "v-welcome",
@@ -430,6 +430,7 @@ export const verificationLessons: Lesson[] = [
     moduleId: "v-why",
     title: "0.2 Building Verification Intuitions",
     contentRef: "verification/intuitions",
+    estimatedMinutes: 200,
   },
   {
     id: "v-precedents",
@@ -451,7 +452,7 @@ export const verificationLessons: Lesson[] = [
     moduleId: "v-why",
     title: "0.4 Strategic Foundations",
     contentRef: "verification/strategic-foundations",
-    estimatedMinutes: 5,
+    estimatedMinutes: 80,
     optional: true,
     // A list of reading cards, not a read-through: show them all on one screen
     // rather than paging pathway by pathway.
@@ -489,7 +490,7 @@ export const verificationLessons: Lesson[] = [
     moduleId: "v-infrastructure",
     title: "2.2 Cloud",
     contentRef: "verification/cloud",
-    estimatedMinutes: 5,
+    estimatedMinutes: 105,
   },
   {
     id: "v-intel-intro",
@@ -542,7 +543,7 @@ export const verificationLessons: Lesson[] = [
     sectionItemId: "v-intel-intro",
     title: "2.3.5 From intelligence lead to verification action",
     contentRef: "verification/intelligence-action",
-    estimatedMinutes: 5,
+    estimatedMinutes: 90,
   },
   // Reproduced with the author's permission, and generated rather than typed:
   // he adds to the doc roughly weekly, so the body is re-synced by

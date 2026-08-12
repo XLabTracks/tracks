@@ -1,5 +1,7 @@
 import { describe, it, expect } from "vitest";
 import {
+  FOCUS_DEFAULTS,
+  focusClassName,
   focusPrefixLength,
   type FocusSettings,
 } from "./focus-reading";
@@ -12,6 +14,11 @@ const skipping: FocusSettings = { mode: "standard", skipShort: true };
    is a case where a bold prefix would either lie about the token or destroy
    information that has to be read exactly. */
 describe("focusPrefixLength", () => {
+  it("starts as plain text until the reader opts in", () => {
+    expect(FOCUS_DEFAULTS).toEqual({ mode: "off", skipShort: true });
+    expect(focusClassName(FOCUS_DEFAULTS)).toBe("");
+  });
+
   it("bolds about a third on light and about a half on standard", () => {
     expect(focusPrefixLength("Mitigating", light)).toBe(4); // ceil(10/3)
     expect(focusPrefixLength("Mitigating", standard)).toBe(5);

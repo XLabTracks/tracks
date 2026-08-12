@@ -19,6 +19,14 @@ import {
 import { verificationWidgets } from "@/components/verification/widgets/registry";
 
 const LESSONS_DIR = join(__dirname, "../../content/lessons");
+const REGISTRY_SOURCE = readFileSync(
+  join(__dirname, "../../components/verification/widgets/registry.tsx"),
+  "utf8",
+);
+const EXERCISE_COMPONENT_SOURCE = readFileSync(
+  join(__dirname, "../../components/verification/verification-exercise.tsx"),
+  "utf8",
+);
 
 const track = tracks.find((t) => t.id === "verification");
 const trackModuleIds = new Set(track?.moduleIds ?? []);
@@ -37,6 +45,11 @@ describe("verification track structure", () => {
 });
 
 describe("registry ↔ widget ↔ content graph ↔ MDX", () => {
+  it("lazy-loads each widget instead of shipping the whole registry", () => {
+    expect(REGISTRY_SOURCE).toContain('import dynamic from "next/dynamic"');
+    expect(REGISTRY_SOURCE).not.toMatch(/^import \{[^}]+\} from "\.\//m);
+  });
+
   it("every registered exercise has a native widget", () => {
     for (const exercise of verificationExercises) {
       expect(
@@ -97,6 +110,14 @@ describe("registry ↔ widget ↔ content graph ↔ MDX", () => {
         exercise.id + " is registered but no lesson embeds it",
       ).toBeTruthy();
     }
+  });
+});
+
+describe("widget completion reads", () => {
+  it("only checks server completion for widgets that can report it", () => {
+    expect(EXERCISE_COMPONENT_SOURCE).toMatch(
+      /user && exercise\.bridged \? await isLessonCompleted/,
+    );
   });
 });
 

@@ -61,14 +61,21 @@ describe("the account sync", () => {
     // newest unit went backwards in time exactly when it changed — and the
     // account's older copy then read as newer and put the progress back.
     expect(PLATFORM).toMatch(/state\.updatedAt = Date\.now\(\)/);
-    expect(SYNC).toMatch(/progress\.updatedAt/);
+    expect(SYNC).toMatch(/name !== 'progress'[\s\S]*value\.updatedAt/);
+    expect(SYNC).toMatch(/let newest = positiveStamp\(value\.updatedAt\)/);
   });
 
   it("carries the native Field Map in the same account document", () => {
     expect(SYNC).toContain("vt-field-map:v1");
-    expect(SYNC).toMatch(/fieldMap:\s*fieldMap/);
-    expect(SYNC).toMatch(/fieldMap\.updatedAt/);
+    expect(SYNC).toContain("name: 'fieldMap'");
     expect(SYNC).toContain("vt-field-map-change");
+  });
+
+  it("compares and adopts every browser store independently", () => {
+    expect(SYNC).toContain("version: 2");
+    expect(SYNC).toContain("stamps");
+    expect(SYNC).toMatch(/server\.stamps\[store\.name\] > local\.stamps\[store\.name\]/);
+    expect(SYNC).toMatch(/adoptNewerStores/);
   });
 
   it("subscribes to the stores whenever they arrive, not only when it loads", () => {
@@ -91,15 +98,25 @@ describe("the account sync", () => {
     expect(reload).toBeGreaterThan(-1);
     expect(flush).toBeLessThan(reload);
   });
+
+  it("lets debounced stores commit before the unload snapshot", () => {
+    expect(SYNC).toContain("vt-before-account-sync");
+    expect(read("src/components/verification/widgets/field-map.tsx")).toContain(
+      'addEventListener("vt-before-account-sync"',
+    );
+  });
 });
 
 describe("the state route", () => {
-  it("compares the client stamp before it overwrites", () => {
-    // Last-write-wins is the documented protocol. Unenforced, it was only a
-    // description of what well-behaved clients happen to do, and a stale tab
-    // whose request arrived last replaced newer state.
-    expect(ROUTE).toMatch(/ON CONFLICT[\s\S]*WHERE[\s\S]*updatedAt/);
+  it("merges stores inside an optimistic compare-and-swap loop", () => {
+    expect(ROUTE).toContain("mergeVerificationStateDocuments");
+    expect(ROUTE).toMatch(/updateManyAndReturn\([\s\S]*updatedAt: current\.updatedAt/);
     expect(ROUTE).toMatch(/409/);
+  });
+
+  it("limits the streamed request body by bytes", () => {
+    expect(ROUTE).toContain("readLimitedBody");
+    expect(ROUTE).not.toContain("request.text()");
   });
 
   it("degrades rather than throwing when its table is absent", () => {

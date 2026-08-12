@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { Download, Link2, MousePointer2, Trash2, Upload } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -20,6 +20,27 @@ import {
 import type { VerificationWidgetProps } from "../kit/types";
 
 const STORAGE_KEY = "vt-field-map:v1";
+const SAVE_DELAY_MS = 300;
+
+type DragState = {
+  id: string;
+  pointerId: number;
+  startClientX: number;
+  startClientY: number;
+  startX: number;
+  startY: number;
+  pendingX: number;
+  pendingY: number;
+};
+
+function persistFieldMap(document: FieldMapDocument) {
+  try {
+    window.localStorage.setItem(STORAGE_KEY, JSON.stringify(document));
+    window.dispatchEvent(new CustomEvent("vt-field-map-change"));
+  } catch {
+    // Private mode can reject local storage; export remains available.
+  }
+}
 
 export function FieldMap(_: VerificationWidgetProps) {
   void _;
@@ -33,7 +54,9 @@ export function FieldMap(_: VerificationWidgetProps) {
   const [notice, setNotice] = useState<string | null>(null);
   const canvasRef = useRef<HTMLDivElement>(null);
   const importRef = useRef<HTMLInputElement>(null);
-  const dragRef = useRef<{ id: string; x: number; y: number } | null>(null);
+  const dragRef = useRef<DragState | null>(null);
+  const dragFrameRef = useRef<number | null>(null);
+  const documentRef = useRef(document);
 
   useEffect(() => {
     const restore = window.setTimeout(() => {
@@ -52,25 +75,77 @@ export function FieldMap(_: VerificationWidgetProps) {
     return () => window.clearTimeout(restore);
   }, []);
 
+  useLayoutEffect(() => {
+    documentRef.current = document;
+  }, [document]);
+
   useEffect(() => {
     if (!ready) return;
-    try {
-      window.localStorage.setItem(STORAGE_KEY, JSON.stringify(document));
-      window.dispatchEvent(new CustomEvent("vt-field-map-change"));
-    } catch {
-      // Private mode can reject local storage; export remains available.
-    }
+    const save = window.setTimeout(() => persistFieldMap(document), SAVE_DELAY_MS);
+    return () => window.clearTimeout(save);
   }, [document, ready]);
+
+  useEffect(() => {
+    if (!ready) return;
+    const flushWhenHidden = () => {
+      if (window.document.visibilityState === "hidden") persistFieldMap(documentRef.current);
+    };
+    const flushOnPageHide = () => persistFieldMap(documentRef.current);
+    window.document.addEventListener("visibilitychange", flushWhenHidden);
+    window.addEventListener("pagehide", flushOnPageHide);
+    window.addEventListener("vt-before-account-sync", flushOnPageHide);
+    return () => {
+      window.document.removeEventListener("visibilitychange", flushWhenHidden);
+      window.removeEventListener("pagehide", flushOnPageHide);
+      window.removeEventListener("vt-before-account-sync", flushOnPageHide);
+    };
+  }, [ready]);
+
+  useEffect(
+    () => () => {
+      if (dragFrameRef.current !== null) cancelAnimationFrame(dragFrameRef.current);
+    },
+    [],
+  );
 
   const selectedNode = document.nodes.find((node) => node.id === selectedNodeId);
   const selectedEdge = document.edges.find((edge) => edge.id === selectedEdgeId);
-  const edgeGeometry = useMemo(
-    () => document.edges.map((edge) => ({ edge, from: document.nodes.find((node) => node.id === edge.from), to: document.nodes.find((node) => node.id === edge.to) })).filter((item): item is { edge: FieldEdge; from: FieldNode; to: FieldNode } => Boolean(item.from && item.to)),
-    [document],
-  );
+  const edgeGeometry = useMemo(() => {
+    const nodesById = new Map(document.nodes.map((node) => [node.id, node]));
+    return document.edges
+      .map((edge) => ({ edge, from: nodesById.get(edge.from), to: nodesById.get(edge.to) }))
+      .filter(
+        (item): item is { edge: FieldEdge; from: FieldNode; to: FieldNode } =>
+          Boolean(item.from && item.to),
+      );
+  }, [document.edges, document.nodes]);
 
   function patchNode(id: string, patch: Partial<FieldNode>) {
     setDocument((current) => ({ ...current, updatedAt: Date.now(), nodes: current.nodes.map((node) => node.id === id ? { ...node, ...patch } : node) }));
+  }
+
+  function moveDraggedNode(event: React.PointerEvent<HTMLButtonElement>, finish: boolean) {
+    const drag = dragRef.current;
+    const rect = canvasRef.current?.getBoundingClientRect();
+    if (!drag || drag.id !== event.currentTarget.dataset.nodeId || !rect) return;
+    if (!event.currentTarget.hasPointerCapture(drag.pointerId) && !finish) return;
+
+    drag.pendingX = clamp(drag.startX + ((event.clientX - drag.startClientX) / rect.width) * 100);
+    drag.pendingY = clamp(drag.startY + ((event.clientY - drag.startClientY) / rect.height) * 100);
+
+    const commit = () => {
+      dragFrameRef.current = null;
+      const pending = dragRef.current;
+      if (pending) patchNode(pending.id, { x: pending.pendingX, y: pending.pendingY });
+    };
+
+    if (finish) {
+      if (dragFrameRef.current !== null) cancelAnimationFrame(dragFrameRef.current);
+      commit();
+      dragRef.current = null;
+    } else if (dragFrameRef.current === null) {
+      dragFrameRef.current = requestAnimationFrame(commit);
+    }
   }
 
   function addNode(event: React.MouseEvent<HTMLDivElement>) {
@@ -209,19 +284,31 @@ export function FieldMap(_: VerificationWidgetProps) {
             return (
               <button
                 key={node.id}
+                data-node-id={node.id}
                 type="button"
                 onClick={(event) => { event.stopPropagation(); chooseNode(node.id); }}
-                onPointerDown={(event) => { if (connecting) return; event.currentTarget.setPointerCapture(event.pointerId); dragRef.current = { id: node.id, x: event.clientX, y: event.clientY }; }}
-                onPointerMove={(event) => {
-                  const drag = dragRef.current;
-                  const rect = canvasRef.current?.getBoundingClientRect();
-                  if (!drag || drag.id !== node.id || !rect || !event.currentTarget.hasPointerCapture(event.pointerId)) return;
-                  const dx = ((event.clientX - drag.x) / rect.width) * 100;
-                  const dy = ((event.clientY - drag.y) / rect.height) * 100;
-                  dragRef.current = { id: node.id, x: event.clientX, y: event.clientY };
-                  patchNode(node.id, { x: clamp(node.x + dx), y: clamp(node.y + dy) });
+                onPointerDown={(event) => {
+                  if (connecting) return;
+                  event.currentTarget.setPointerCapture(event.pointerId);
+                  dragRef.current = {
+                    id: node.id,
+                    pointerId: event.pointerId,
+                    startClientX: event.clientX,
+                    startClientY: event.clientY,
+                    startX: node.x,
+                    startY: node.y,
+                    pendingX: node.x,
+                    pendingY: node.y,
+                  };
                 }}
-                onPointerUp={(event) => { if (event.currentTarget.hasPointerCapture(event.pointerId)) event.currentTarget.releasePointerCapture(event.pointerId); dragRef.current = null; }}
+                onPointerMove={(event) => moveDraggedNode(event, false)}
+                onPointerUp={(event) => {
+                  moveDraggedNode(event, true);
+                  if (event.currentTarget.hasPointerCapture(event.pointerId)) {
+                    event.currentTarget.releasePointerCapture(event.pointerId);
+                  }
+                }}
+                onPointerCancel={(event) => moveDraggedNode(event, true)}
                 className={cn("border-border bg-background absolute z-20 w-44 touch-none rounded-lg border p-3 text-left shadow-sm transition-shadow hover:shadow-md", selectedNodeId === node.id && "ring-ring ring-2", connectFrom === node.id && "ring-primary ring-2")}
                 style={{ left: `${node.x}%`, top: `${node.y}%`, transform: "translate(-50%, -50%)" }}
               >

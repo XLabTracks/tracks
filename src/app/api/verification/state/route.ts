@@ -1,8 +1,14 @@
+import { Prisma } from "@prisma/client";
 import { NextResponse } from "next/server";
 
 import { getCurrentUser } from "@/lib/auth";
-import { getDb } from "@/lib/db";
+import { getDb, isUniqueViolation } from "@/lib/db";
 import { isMissingTableError } from "@/lib/db-missing-table";
+import { readLimitedBody } from "@/lib/http/read-limited-body";
+import {
+  mergeVerificationStateDocuments,
+  normalizeVerificationStateDocument,
+} from "@/lib/verification/state-document";
 
 /**
  * Per-user state for the standalone Verification site (public/verification/).
@@ -13,14 +19,10 @@ import { isMissingTableError } from "@/lib/db-missing-table";
  * visitor gets 401 and the pages carry on with localStorage — that is a
  * supported mode, not an error.
  *
- * Last write wins on the client's `updatedAt`, and it is enforced HERE rather
- * than assumed of the client. There is no merge: the document is one learner's
- * own progress, notebook and working artifacts, so the only realistic
- * conflict is the same person in two tabs and the newer edit is the right
- * answer — but "the newer edit"
- * has to mean the newer edit, not whichever request arrived last. A tab that
- * has been open since before a reset would otherwise put the reset progress
- * back. A stale write is refused with 409 and the row is left alone.
+ * Each browser store carries its own clock. Writes merge those stores in an
+ * optimistic compare-and-swap loop, so a new Field Map from one tab cannot
+ * erase a newer notebook from another tab. The row is still one compact JSON
+ * document and therefore needs no schema churn as stores are added.
  *
  * POST is PUT. The unload path is navigator.sendBeacon, which can only POST,
  * and that path carries the last edit before a tab closes — the one edit most
@@ -56,7 +58,7 @@ export async function GET() {
     });
     return NextResponse.json({
       signedIn: true,
-      data: row?.data ?? null,
+      data: row ? normalizeVerificationStateDocument(row.data) : null,
       updatedAt: row?.updatedAt?.getTime() ?? 0,
     });
   } catch (error) {
@@ -67,15 +69,6 @@ export async function GET() {
   }
 }
 
-/** The client-derived stamp inside the document, as a number. Anything else —
- *  absent, a string, a NaN — is 0, which is the stamp of a document that has
- *  never claimed a time and loses every contest but the first. */
-function clientStamp(data: Record<string, unknown>): number {
-  const raw = data.updatedAt;
-  const n = typeof raw === "number" ? raw : Number(raw);
-  return Number.isFinite(n) && n > 0 ? n : 0;
-}
-
 async function store(request: Request): Promise<NextResponse> {
   const user = await getCurrentUser();
   if (!user) {
@@ -83,8 +76,8 @@ async function store(request: Request): Promise<NextResponse> {
   }
 
   // Reachable by direct POST, so the body is checked before it is stored.
-  const raw = await request.text();
-  if (raw.length > MAX_BYTES) {
+  const body = await readLimitedBody(request, MAX_BYTES);
+  if (!body.ok) {
     return NextResponse.json(
       { error: "State too large", limit: MAX_BYTES },
       { status: 413 },
@@ -93,7 +86,7 @@ async function store(request: Request): Promise<NextResponse> {
 
   let data: unknown;
   try {
-    data = JSON.parse(raw);
+    data = JSON.parse(body.text);
   } catch {
     return NextResponse.json({ error: "Invalid JSON" }, { status: 400 });
   }
@@ -101,48 +94,63 @@ async function store(request: Request): Promise<NextResponse> {
     return NextResponse.json({ error: "Expected an object" }, { status: 400 });
   }
 
-  const incoming = clientStamp(data as Record<string, unknown>);
+  const incoming = normalizeVerificationStateDocument(data);
   const db = getDb();
 
   try {
-    /* One statement, because the check and the write have to be the same
-       operation: a read-then-upsert would let two of this learner's tabs
-       interleave and land the older document. The stamp is compared inside
-       the stored JSON — the row's own updatedAt is touched on every write, so
-       it always looks newer than the edit it holds.
+    for (let attempt = 0; attempt < 5; attempt += 1) {
+      const current = await db.verificationState.findUnique({
+        where: { userId: user.id },
+        select: { data: true, updatedAt: true },
+      });
 
-       `<=` and not `<`: a beacon and its retry carry the same stamp, and the
-       second one storing again is harmless where refusing it would strand a
-       last edit. The jsonb_typeof guard is there because a row written before
-       the document carried a stamp, or one carrying a string, must read as
-       "no stamp" rather than fail the cast and take the whole write with it. */
-    const written = await db.$executeRaw`
-      INSERT INTO "VerificationState" ("userId", "data", "updatedAt")
-      VALUES (${user.id}, ${JSON.stringify(data)}::jsonb, CURRENT_TIMESTAMP)
-      ON CONFLICT ("userId") DO UPDATE
-        SET "data" = EXCLUDED."data", "updatedAt" = CURRENT_TIMESTAMP
-        WHERE COALESCE(
-          CASE
-            WHEN jsonb_typeof("VerificationState"."data" -> 'updatedAt') = 'number'
-            THEN ("VerificationState"."data" ->> 'updatedAt')::numeric
-          END, 0) <= ${incoming}::numeric
-    `;
+      if (!current) {
+        try {
+          const created = await db.verificationState.create({
+            data: {
+              userId: user.id,
+              data: incoming as unknown as Prisma.InputJsonValue,
+            },
+            select: { updatedAt: true },
+          });
+          return NextResponse.json({
+            ok: true,
+            data: incoming,
+            updatedAt: created.updatedAt.getTime(),
+          });
+        } catch (error) {
+          if (isUniqueViolation(error)) continue;
+          throw error;
+        }
+      }
 
-    const row = await db.verificationState.findUnique({
-      where: { userId: user.id },
-      select: { updatedAt: true },
-    });
-    const updatedAt = row?.updatedAt?.getTime() ?? 0;
+      const merged = mergeVerificationStateDocuments(current.data, incoming);
+      if (!merged.changed) {
+        return NextResponse.json({
+          ok: true,
+          data: merged.document,
+          updatedAt: current.updatedAt.getTime(),
+        });
+      }
 
-    if (written === 0) {
-      /* The account holds a newer document than the one this tab offered.
-         Refusing is the whole point of the protocol; the tab keeps its own
-         copy and adopts the account's on its next load, which is where
-         adopting is safe — swapping the stores out from under a learner
-         mid-keystroke is not. */
-      return NextResponse.json({ ok: false, stale: true, updatedAt }, { status: 409 });
+      const updated = await db.verificationState.updateManyAndReturn({
+        where: { userId: user.id, updatedAt: current.updatedAt },
+        data: { data: merged.document as unknown as Prisma.InputJsonValue },
+        select: { updatedAt: true },
+      });
+      if (updated.length === 1) {
+        return NextResponse.json({
+          ok: true,
+          data: merged.document,
+          updatedAt: updated[0].updatedAt.getTime(),
+        });
+      }
     }
-    return NextResponse.json({ ok: true, updatedAt });
+
+    return NextResponse.json(
+      { ok: false, retry: true, error: "State changed while saving" },
+      { status: 409 },
+    );
   } catch (error) {
     if (isMissingTableError(error)) {
       return NextResponse.json(UNAVAILABLE, { status: 503 });

@@ -28,7 +28,11 @@ export async function VerificationExercise({ id }: VerificationExerciseProps) {
   }
   const user = await getCurrentUser();
   const contentId = verificationLessonId(id);
-  const completed = user ? await isLessonCompleted(user.id, contentId) : false;
+  // View-style widgets cannot report completion themselves; their hosting
+  // lesson owns scroll completion. Avoid a database read whose result cannot
+  // affect the widget or any subsequent write.
+  const completed =
+    user && exercise.bridged ? await isLessonCompleted(user.id, contentId) : false;
   return (
     <VerificationWidgetHost
       pageId={exercise.id}

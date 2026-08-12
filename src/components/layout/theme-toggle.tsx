@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useSyncExternalStore } from "react";
 import { Contrast, Moon, Sun } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -11,12 +11,14 @@ import { cn } from "@/lib/utils";
  * in step: same key, same values, and contrast always means BOTH `dark` and
  * `contrast` on <html> (contrast is dark-plus; see globals.css).
  *
- * The server can't know the theme (it lives in localStorage), so the first
- * render marks no option checked; a mount effect reads the classes the boot
- * script already set and checks the right one. That brief unchecked frame is
- * the whole hydration story — no suppressed warnings, no flash, and the
- * selected styling keys off aria-checked so state and presentation can't
- * disagree.
+ * The server can't know the theme (it lives in localStorage), so the server
+ * snapshot marks no option checked; after hydration the store snapshot reads
+ * the classes the boot script already set and checks the right one. That
+ * brief unchecked frame is the whole hydration story — no suppressed
+ * warnings, no flash, and the selected styling keys off aria-checked so
+ * state and presentation can't disagree. The <html> classList is the single
+ * source of truth: clicks only mutate it, and a MutationObserver feeds the
+ * change back into React.
  *
  * Until a visitor touches it, THEME_BOOT follows the system preference
  * (light/dark only — contrast is always an explicit choice); the first click
@@ -36,12 +38,18 @@ function currentTheme(): Theme {
   return c.contains("dark") ? "dark" : "light";
 }
 
-export function ThemeToggle() {
-  const [theme, setTheme] = useState<Theme | null>(null);
+function subscribe(onChange: () => void): () => void {
+  const observer = new MutationObserver(onChange);
+  observer.observe(document.documentElement, { attributeFilter: ["class"] });
+  return () => observer.disconnect();
+}
 
-  useEffect(() => {
-    setTheme(currentTheme());
-  }, []);
+export function ThemeToggle() {
+  const theme = useSyncExternalStore<Theme | null>(
+    subscribe,
+    currentTheme,
+    () => null,
+  );
 
   const apply = (t: Theme) => {
     const c = document.documentElement.classList;
@@ -52,7 +60,6 @@ export function ThemeToggle() {
     } catch {
       // Private mode: the switch still applies for this page's lifetime.
     }
-    setTheme(t);
   };
 
   return (

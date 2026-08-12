@@ -320,6 +320,8 @@ export function sanitizeCommitConstructCommit(
   confidence: unknown,
   reasoning: unknown,
 ): CommitConstructCommitEntry | null {
+  // A construct-only exercise has no commit step to accept.
+  if (!exercise.commit) return null;
   if (
     typeof choice !== "string" ||
     !exercise.commit.options.some((o) => o.id === choice)

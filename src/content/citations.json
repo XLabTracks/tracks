@@ -334,8 +334,6 @@
     "https://www.felonybench.com/"
   ],
   "excluded": [
-    "https://evidence-taxonomies.netlify.app/",
-    "https://playground-tracks.netlify.app/field-map",
     "https://docs.google.com/document/d/1hnwVUNOfrA8ZoE-8pCrnZ8wP11aMKaRdEz2WTqKGt_o/edit?tab=t.0",
     "https://docs.google.com/document/d/1laojHZaIj5uaTbrYXybfvMelYlwPygNIO19XD1ELa5Y/edit?tab=t.0",
     "https://docs.google.com/document/d/1omutl0zbdfSBTLG8diD3VdvAtBvfox3ebIF6IfX0vBU/edit?pli=1&tab=t.0",

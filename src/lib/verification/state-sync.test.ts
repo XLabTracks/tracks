@@ -64,6 +64,13 @@ describe("the account sync", () => {
     expect(SYNC).toMatch(/progress\.updatedAt/);
   });
 
+  it("carries the native Field Map in the same account document", () => {
+    expect(SYNC).toContain("vt-field-map:v1");
+    expect(SYNC).toMatch(/fieldMap:\s*fieldMap/);
+    expect(SYNC).toMatch(/fieldMap\.updatedAt/);
+    expect(SYNC).toContain("vt-field-map-change");
+  });
+
   it("subscribes to the stores whenever they arrive, not only when it loads", () => {
     /* This file comes from the site chrome and the stores come from the
        page's own ordered loader, so asking for them once — at the moment the

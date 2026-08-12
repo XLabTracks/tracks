@@ -15,8 +15,9 @@ import { isMissingTableError } from "@/lib/db-missing-table";
  *
  * Last write wins on the client's `updatedAt`, and it is enforced HERE rather
  * than assumed of the client. There is no merge: the document is one learner's
- * own progress and notebook, so the only realistic conflict is the same person
- * in two tabs and the newer edit is the right answer — but "the newer edit"
+ * own progress, notebook and working artifacts, so the only realistic
+ * conflict is the same person in two tabs and the newer edit is the right
+ * answer — but "the newer edit"
  * has to mean the newer edit, not whichever request arrived last. A tab that
  * has been open since before a reset would otherwise put the reset progress
  * back. A stale write is refused with 409 and the row is left alone.
@@ -26,9 +27,9 @@ import { isMissingTableError } from "@/lib/db-missing-table";
  * likely to be lost.
  */
 
-// Ids plus notebook text. Only sketches (PNG dataURLs) can make this big, and
-// a book of them belongs in the browser, not in a row — the DB has a matching
-// CHECK so an oversized document fails loudly at both ends.
+// Ids plus learner-authored text and maps. Only sketches (PNG dataURLs) can
+// make this big, and a book of them belongs in the browser, not in a row — the
+// DB has a matching CHECK so an oversized document fails loudly at both ends.
 const MAX_BYTES = 1_000_000;
 
 /* db/migrations/20260805120000_verification_state.sql is applied by hand

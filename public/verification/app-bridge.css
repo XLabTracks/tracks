@@ -103,22 +103,26 @@
   font-family: var(--font-sans), var(--sans);
 }
 
-/* In-lesson sub-headings are emphasized text, not display type: the body
-   face, bold, stepped in +2px over the paragraph so h3 > h4 > h5 stays
-   readable in the deeply nested worked examples (module 3 nests all three).
-   The display face keeps the page h1 and the h2 section heads — that
-   contrast is what marks a section against a run of emphasized labels.
+/* In-lesson heading hierarchy, per the author (2026-08-12): an h3 subheading
+   wears the SAME display face as the h2 section heads, only smaller — one
+   family at two sizes is the hierarchy, not two families. Deeper levels
+   (h4–h6, the deeply nested worked examples in module 3) stay emphasized
+   text: the body face, bold, stepped in +2px so h4 > h5 stays readable.
    Trap: theme.css sets h1–h4 to the display face at weight 500, which is
    exactly the rule that made an h4 sit flush with the paragraph beside it;
    these must stay ahead of it and of the prose classes in specificity.
    Em-based on purpose — the sizes follow whatever the paragraph reads at. */
-:root[data-theme] .lesson-body :is(h3, h4, h5, h6):not(.not-prose *) {
+:root[data-theme] .lesson-body :is(h4, h5, h6):not(.not-prose *) {
   font-family: var(--sans);
   font-weight: 700;
   letter-spacing: 0;
   line-height: 1.3;
 }
 :root[data-theme] .lesson-body h3:not(.not-prose *) {
+  font-family: var(--display);
+  font-weight: 500;
+  letter-spacing: -0.015em;
+  line-height: 1.3;
   font-size: calc(1em + 6px);
 }
 :root[data-theme] .lesson-body h4:not(.not-prose *) {

@@ -373,3 +373,13 @@ is the tell. Nothing was wrong with planParts (verified against the live
 block list: three parts) and nothing in the reader was changed — a
 DOMContentLoaded re-derive guard written while chasing this was reverted
 unshipped once the pane, not the code, proved to be the variable.
+
+### Correction: subheadings share the display face (2026-08-12)
+
+The previous entry read the author's "smaller and clear they're subheadings"
+as the body-face h3 style. Wrong reading — on seeing it she clarified: same
+face as the section heads, only smaller. One family at two sizes IS the
+hierarchy. The app-bridge h3 rule now sets the display face at
+weight 500 / calc(1em + 6px) — course-wide, every verification lesson's
+h3 — while h4–h6 keep the emphasized body-face style for the deeply nested
+worked examples. Verified computed: h2 24px, h3 22px, both Space Grotesk 500.

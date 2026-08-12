@@ -508,3 +508,11 @@ packet's Task 5 is the disanalysis now, and 60 minutes is the section's
 whole budget. The widget (nuclear-disanalysis) and its data file stay in
 the repo, unmounted — restoring it is one embed line; deleting it for good
 is her call.
+
+### Correction: there is no 13-question bank (2026-08-12)
+
+The four-part question battery in the packet delivery was an accidental
+paste, per the owner ("13 q are accidental"). The preserved copy is
+deleted; the condensed five-task assignment in the lesson is the whole of
+the packet's tasks. Recover the battery from git history only if she ever
+asks for it by name.

@@ -2,8 +2,8 @@
 
 By the end of the meeting, each participant can explain why diffuse failures
 need different machinery than concentrated ones, state what sandbagging and
-exploration hacking are, and argue one side of the no-sandbagging-on-checkable-tasks
-hypothesis. The session assumes participants have watched
+exploration hacking are, and argue one side of whether fine-tuning-based
+elicitation defeats sandbagging. The session assumes participants have watched
 [the opening talk](/tracks/control/low-stakes-control/low-stakes-control-talk)
 and read
 [the non-concentrated failures lesson](/tracks/control/low-stakes-control/handling-non-concentrated-failures).
@@ -12,9 +12,9 @@ and read
 
 - Reread
   [the strategic underperformance lesson](/tracks/control/low-stakes-control/misalignment-and-strategic-underperformance)
-  and
-  [the checkable-tasks lesson](/tracks/control/low-stakes-control/no-sandbagging-on-checkable-tasks) —
-  the debate block lives on the second.
+  and the setup of
+  [the password-locked models paper](/tracks/control/low-stakes-control/capability-elicitation-paper) —
+  the debate block lives on elicitation.
 - Try [the locking flowcharts exercise](/exercises/c-plm-locking-flowcharts)
   yourself; you will run it as a group.
 - If you run a classroom, check the dashboard for who reached
@@ -50,7 +50,7 @@ models. A volunteer defines each in one or two sentences; the room refines
 until nobody objects, and you write the final versions up. Anchor on
 [the strategic underperformance lesson](/tracks/control/low-stakes-control/misalignment-and-strategic-underperformance)
 and
-[the password-locked models paper](/tracks/control/low-stakes-control/password-locked-models-paper).
+[the password-locked models paper](/tracks/control/low-stakes-control/capability-elicitation-paper).
 End by distinguishing the three from each other (prompts below).
 
 Prompts:
@@ -73,25 +73,28 @@ Prompts:
 - If votes are lopsided: "Someone argue the minority branch as if your job
   depended on it."
 
-### The checkable-tasks debate (0:35–0:55)
+### The elicitation debate (0:35–0:55)
 
-Two teams, five minutes preparation. One defends the hypothesis in
-[the checkable-tasks lesson](/tracks/control/low-stakes-control/no-sandbagging-on-checkable-tasks);
-the other attacks it with the strongest counterexample it can build. Four
-minutes per side uninterrupted, then open floor with the facilitator only
-enforcing turn-taking. Close by asking which experiments from
-[adaptive deployment](/tracks/control/low-stakes-control/adaptive-deployment-paper),
-[exploration hacking](/tracks/control/low-stakes-control/exploration-hacking-paper),
-or
-[sabotage evaluations](/tracks/control/low-stakes-control/sabotage-evaluations-paper)
-would move the debate.
+Two teams, five minutes preparation. One defends the claim that
+fine-tuning-based elicitation, as studied in
+[the password-locked models paper](/tracks/control/low-stakes-control/capability-elicitation-paper),
+reliably defeats sandbagging; the other builds the strongest case that it
+fails, drawing on
+[the exploration hacking paper](/tracks/control/low-stakes-control/exploration-hacking-paper)
+and
+[the elicitation walkthrough](/tracks/control/low-stakes-control/capability-elicitation-guided).
+Four minutes per side uninterrupted, then open floor with the facilitator only
+enforcing turn-taking. Close by asking which experiment from
+[the auditing benchmark paper](/tracks/control/low-stakes-control/auditing-sabotage-bench-paper)
+or the papers above would move the debate most.
 
 Prompts:
 
-- "What exactly makes a task checkable — and who is doing the checking?"
-- "Give the strongest real task you think is NOT checkable. Defend it."
-- "If the hypothesis is true, what does a lab no longer need to worry about?
-  If false, what breaks?"
+- "What does elicitation need that a sandbagging model can withhold?"
+- "When do you have the demonstrations fine-tuning needs — and when don't
+  you?"
+- "If elicitation reliably works, what does a lab no longer need to worry
+  about? If it fails, what breaks?"
 
 ### Wrap-up (0:55–1:00)
 

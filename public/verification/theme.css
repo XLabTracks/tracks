@@ -40,11 +40,11 @@
   --muted-foreground: #5f5854;
   --accent: #f2efed;
   --border: #e4dedb;
-  /* The learner's own marker (::highlight(vt-hl)): the periwinkle from the
-     brand's palette board (red · blue · wine · blush) — the one hue in that
-     family the maroons don't already own, so a mark never reads as course
-     chrome. Day ink clears ~9:1 on it. Each theme re-solves the pair. */
-  --hl: #8eb9fe;
+  /* The learner's own marker (::highlight(vt-hl)): Kindle's pink marker,
+     per the owner — which is also the blush from the brand's palette board
+     (red · blue · wine · blush), so it stays in the family. Day ink clears
+     ~11:1 on it. Each theme re-solves the pair. */
+  --hl: #fac8d2;
   --hl-ink: var(--foreground);
   --ring: #800000;
 
@@ -165,9 +165,10 @@
   --accent: #2e2827;
   --border: #332c2a;
   --ring: #eda3a3;
-  /* The day marker's periwinkle, re-solved for the dark ground: same hue,
-     lightness dropped until the night ink clears ≈8.5:1 on it. */
-  --hl: #33436b;
+  /* The day marker's blush, re-solved for the dark ground: the board's wine
+     — same rose family, lightness dropped until the night ink clears ≈8:1
+     on it. */
+  --hl: #6b3346;
   --hl-ink: var(--foreground);
 
   /* Fills and their ink are the day values: a plaque's legibility is set by

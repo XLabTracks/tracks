@@ -104,10 +104,10 @@ export const modules: Module[] = [
     prerequisiteModuleIds: ["c-intro", "c-mod2"],
     itemIds: [
       "c-areas-tax-overview",
-      "c-areas-tax-evals",
-      "c-areas-tax-environments",
       "c-areas-tax-detection",
       "c-areas-tax-prevention",
+      "c-areas-tax-evals",
+      "c-areas-tax-environments",
       "c-areas-l1",
     ],
     estimatedMinutes: 90,

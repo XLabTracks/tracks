@@ -18,10 +18,10 @@ Module `c-areas` (Control module 3, slug `areas-of-control-work`) now holds:
 | # | Item | Slug | Role |
 |---|------|------|------|
 | 1 | A Taxonomy of Control | `taxonomy-of-control` | Entry page: intro line, 4 buttons, hyperlinked breakdown |
-| 2 | Control Evaluations | `control-evaluations` | Doc page |
-| 3 | Environments | `environments` | Doc page |
-| 4 | Detection Mitigations | `detection-mitigations` | Doc page |
-| 5 | Prevention and Response Mitigations | `prevention-response-mitigations` | Doc page |
+| 2 | Detection Mitigations | `detection-mitigations` | Doc page |
+| 3 | Prevention and Response Mitigations | `prevention-response-mitigations` | Doc page |
+| 4 | Control Evaluations | `control-evaluations` | Doc page |
+| 5 | Environments | `environments` | Doc page |
 | 6 | An overview of areas of control work | (unchanged) | Existing Greenblatt survey, kept as the module's closing reading |
 
 No new routes, components, or DB anything — standard lessons; pages resolve by
@@ -99,9 +99,8 @@ or both. Tracking this here so the branch review can't miss it.
 ## Open questions
 
 1. **Depth:** Variant A, Variant B, or the recommended heading-pass-then-B?
-2. **Page order:** currently Evaluations → Environments → Detection →
-   Prevention. Environments-first is defensible too (the eval loop references
-   environments).
+2. **Page order:** ~~decided~~ (Arya, 2026-08-13): mitigations first —
+   Detection → Prevention & Response → Control Evaluations → Environments.
 3. Where does the attribution note live (entry page vs per-page vs both)?
 4. Keep the Greenblatt survey in this module, or move it to further reading
    once the taxonomy is the module's core?

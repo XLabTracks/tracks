@@ -2,17 +2,9 @@
 This page renders the hyperlinked breakdown **twice** so we can pick a depth: Variant A lists the four pages and their top-level sections only; Variant B adds subsections. One variant gets deleted before this ships.
 </Callout>
 
-The taxonomy of control splits across four pages: how we evaluate protocols, the environments those evaluations run in, and the two halves of the mitigation stack — detecting misalignment, and preventing or responding to harm.
+The taxonomy of control splits across four pages: the two halves of the mitigation stack — detecting misaligned behavior, and preventing or responding to harm — then how we evaluate protocols built from those mitigations, and the environments those evaluations run in.
 
 <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-  <a href="/tracks/control/areas-of-control-work/control-evaluations" className="block rounded-lg border p-4 no-underline transition-colors hover:bg-muted">
-    <span className="block font-medium">Control Evaluations</span>
-    <span className="mt-1 block text-sm text-muted-foreground">The red-team/blue-team game: how a protocol's safety and usefulness are measured, and how to make the red team strong enough to trust the result.</span>
-  </a>
-  <a href="/tracks/control/areas-of-control-work/environments" className="block rounded-lg border p-4 no-underline transition-colors hover:bg-muted">
-    <span className="block font-medium">Environments</span>
-    <span className="mt-1 block text-sm text-muted-foreground">The proxy deployments evaluations run in — main tasks, side tasks, affordances, scorers — and the major settings: APPS, BashBench, SHADE-Arena, LinuxArena, ControlArena.</span>
-  </a>
   <a href="/tracks/control/areas-of-control-work/detection-mitigations" className="block rounded-lg border p-4 no-underline transition-colors hover:bg-muted">
     <span className="block font-medium">Detection Mitigations</span>
     <span className="mt-1 block text-sm text-muted-foreground">Catching misaligned behavior: black-box and white-box monitoring, environment-level monitoring, and countering evasion and collusion.</span>
@@ -21,13 +13,18 @@ The taxonomy of control splits across four pages: how we evaluate protocols, the
     <span className="block font-medium">Prevention &amp; Response Mitigations</span>
     <span className="mt-1 block text-sm text-muted-foreground">Stopping attacks from landing: restricting agents, hardening environments, and synchronous and asynchronous response.</span>
   </a>
+  <a href="/tracks/control/areas-of-control-work/control-evaluations" className="block rounded-lg border p-4 no-underline transition-colors hover:bg-muted">
+    <span className="block font-medium">Control Evaluations</span>
+    <span className="mt-1 block text-sm text-muted-foreground">The red-team/blue-team game: how a protocol's safety and usefulness are measured, and how to make the red team strong enough to trust the result.</span>
+  </a>
+  <a href="/tracks/control/areas-of-control-work/environments" className="block rounded-lg border p-4 no-underline transition-colors hover:bg-muted">
+    <span className="block font-medium">Environments</span>
+    <span className="mt-1 block text-sm text-muted-foreground">The proxy deployments evaluations run in — main tasks, side tasks, affordances, scorers — and the major settings: APPS, BashBench, SHADE-Arena, LinuxArena, ControlArena.</span>
+  </a>
 </div>
 
 ## Breakdown — Variant A (top-level sections only)
 
-- **[Control Evaluations](/tracks/control/areas-of-control-work/control-evaluations)** — the red-team/blue-team evaluation loop
-  - [Improving Control Evaluations](/tracks/control/areas-of-control-work/control-evaluations#improving-control-evaluations)
-- **[Environments](/tracks/control/areas-of-control-work/environments)** — components of an environment, and the five major settings
 - **[Detection Mitigations](/tracks/control/areas-of-control-work/detection-mitigations)** — catching misaligned behavior
   - [Agent-Level, In-Deployment Monitoring](/tracks/control/areas-of-control-work/detection-mitigations#agent-level-in-deployment-monitoring)
   - [Environment-Level, In-Deployment Monitoring](/tracks/control/areas-of-control-work/detection-mitigations#environment-level-in-deployment-monitoring)
@@ -38,6 +35,9 @@ The taxonomy of control splits across four pages: how we evaluate protocols, the
   - [Environment-Level Prevention](/tracks/control/areas-of-control-work/prevention-response-mitigations#environment-level-prevention)
   - [Synchronous Response](/tracks/control/areas-of-control-work/prevention-response-mitigations#synchronous-response)
   - [Asynchronous Response](/tracks/control/areas-of-control-work/prevention-response-mitigations#asynchronous-response)
+- **[Control Evaluations](/tracks/control/areas-of-control-work/control-evaluations)** — the red-team/blue-team evaluation loop
+  - [Improving Control Evaluations](/tracks/control/areas-of-control-work/control-evaluations#improving-control-evaluations)
+- **[Environments](/tracks/control/areas-of-control-work/environments)** — components of an environment, and the five major settings
 
 <Callout variant="note" title="What to notice in Variant A">
 The two mitigation pages break down beautifully, but **Environments contributes no rows at all** (the page has no section headings — it's one continuous document) and **Control Evaluations contributes one**. The breakdown is only as good as the pages' heading structure.
@@ -45,9 +45,6 @@ The two mitigation pages break down beautifully, but **Environments contributes 
 
 ## Breakdown — Variant B (with subsections)
 
-- **[Control Evaluations](/tracks/control/areas-of-control-work/control-evaluations)** — the red-team/blue-team evaluation loop
-  - [Improving Control Evaluations](/tracks/control/areas-of-control-work/control-evaluations#improving-control-evaluations)
-- **[Environments](/tracks/control/areas-of-control-work/environments)** — components of an environment, and the five major settings
 - **[Detection Mitigations](/tracks/control/areas-of-control-work/detection-mitigations)** — catching misaligned behavior
   - [Agent-Level, In-Deployment Monitoring](/tracks/control/areas-of-control-work/detection-mitigations#agent-level-in-deployment-monitoring)
     - [Black Box Monitoring Measures](/tracks/control/areas-of-control-work/detection-mitigations#black-box-monitoring-measures)
@@ -69,6 +66,9 @@ The two mitigation pages break down beautifully, but **Environments contributes 
     - [Measures](/tracks/control/areas-of-control-work/prevention-response-mitigations#measures)
   - [Asynchronous Response](/tracks/control/areas-of-control-work/prevention-response-mitigations#asynchronous-response)
     - [Measures](/tracks/control/areas-of-control-work/prevention-response-mitigations#measures-1)
+- **[Control Evaluations](/tracks/control/areas-of-control-work/control-evaluations)** — the red-team/blue-team evaluation loop
+  - [Improving Control Evaluations](/tracks/control/areas-of-control-work/control-evaluations#improving-control-evaluations)
+- **[Environments](/tracks/control/areas-of-control-work/environments)** — components of an environment, and the five major settings
 
 <Callout variant="note" title="What to notice in Variant B">
 Subsections give the mitigation pages real scannable detail (Black/White Box, Isolation, Supply chain, Trusted/Untrusted Defense) — but the repeated **"Measures"** headings surface as identical, meaningless rows (`#measures`, `#measures-1`, …). If we go this deep, those headings should either be renamed per-section (e.g. "Synchronous response measures") or filtered out of the breakdown. Environments and Control Evaluations still contribute almost nothing at either depth.

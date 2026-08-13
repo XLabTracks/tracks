@@ -5,7 +5,6 @@ export interface VideoProps {
   provider?: VideoProvider;
   poster?: string;
   title?: string;
-  compact?: boolean;
 }
 
 function inferProvider(src: string): VideoProvider {
@@ -69,7 +68,6 @@ export function Video({
   provider,
   poster,
   title,
-  compact = false,
 }: VideoProps) {
   const kind = provider ?? inferProvider(src);
 
@@ -127,11 +125,7 @@ export function Video({
   }
 
   return (
-    <figure
-      className={`not-prose border-border shadow-soft overflow-hidden rounded-2xl border bg-black ${
-        compact ? "my-2" : "my-6"
-      }`}
-    >
+    <figure className="not-prose border-border shadow-soft my-6 overflow-hidden rounded-2xl border bg-black">
       <div className="relative aspect-video w-full">{player}</div>
       {title ? (
         <figcaption className="text-muted-foreground bg-card border-border border-t px-4 py-2.5 text-sm">

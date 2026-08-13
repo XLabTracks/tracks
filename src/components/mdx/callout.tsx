@@ -50,7 +50,7 @@ export function Callout({ variant = "note", title, children }: CalloutProps) {
       )}
     >
       <Icon className={cn("mt-0.5 size-5 shrink-0", iconClassName)} aria-hidden />
-      <div className="min-w-0 flex-1 space-y-1">
+      <div className="min-w-0 space-y-1">
         {title ? <p className="font-semibold">{title}</p> : null}
         {/* A callout carries markdown, so its body needs the rhythm Tailwind's
             preflight takes away: list markers, indent, and a gap between

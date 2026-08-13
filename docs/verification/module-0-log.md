@@ -663,3 +663,31 @@ self-paced (essays; capstone project) and the completion page is not
 work. Papers keep their header clock chip — the paper reader's toolbar
 slot belongs to the part attribution line. Every number is mechanical
 and hers to override in curriculum.ts.
+
+### Estimates v2: the whole workload, not the prose (2026-08-12)
+
+Her correction ("ты не учитываешь время чтения пролинкованного, выполнения
+заданий"): the estimate is the unit's full workload. Recomputed for every
+lesson with these mechanical rules, each overridable and all recorded here:
+
+- prose at ~200 wpm; explorables 3 min, task widgets 10, drill decks 1.5
+  min per step;
+- WRITING at ~8 words/min, calibrated on her own 0.3 arithmetic (~375
+  words inside its 60) — budgeted tasks use the budget midpoint,
+  un-budgeted short answers take 15 min flat; optional tasks excluded;
+- LINKED READING: a required ReadingCard is 25 min flat (cards carry no
+  machine-readable length; a per-card minutes field is the upgrade path);
+  optional cards excluded; 0.4's pathway menu counts its largest pathway
+  (3 readings), not all nine;
+- MEMOS: only status "specified" counts — "named"/"unspecified" slots are
+  not yet assignments a learner can complete, so they bill nothing until
+  her briefs land (their units will need re-estimating then).
+
+Twelve lessons changed. The writing-heavy units now say what they cost:
+0.2 → 200 (one option ≈ 1250 words + the Plan A supplement + primers),
+1.1 → 150 (stakeholder memo), 2.1.x policy studio → 130 (hardware brief),
+2.2 Cloud → 105 (four sources + the named memo excluded), 2.3 action →
+90 (red-line memo), 4.1 feasibility → 170 (ranking memo + three widgets),
+0.4 → 80, 3.x insiders/audits → 35 each, institutions → 40.
+Still without a number: 4.2 (a multi-week project — minutes would be
+false precision; her figure welcome) and the completion page (not work).

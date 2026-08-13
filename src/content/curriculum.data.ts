@@ -10,7 +10,7 @@ export const tracks: Track[] = [
     title: "AI Control",
     shortTitle: "Control",
     description:
-      "Hands-on technical track on controlling and evaluating AI systems. The introductory module works through Redwood Research's \"AI Control: Improving Safety Despite Intentional Subversion\" paper and then rebuilds its trusted-monitoring result as an interactive, model-backed demo.",
+      "This hands-on technical track covers controlling and evaluating AI systems that may intentionally subvert oversight, working through the field's primary literature in full with exercises woven between the sections.",
     kind: "technical",
     moduleIds: [
       "c-intro",

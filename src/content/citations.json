@@ -31,6 +31,13 @@
       "org": "MIT FutureTech",
       "publisher": "Massachusetts Institute of Technology"
     },
+    "https://aiwi.org/ai-whistleblowing-law-best-practice/": {
+      "title": "AI Whistleblowing Law: Best Practice Guide",
+      "about": "Recommendations for AI whistleblower law covering protected disclosures and people, reporting channels, retaliation, remedies, notice, and capable receiving agencies.",
+      "authors": "Ganz, Abra, and Karl Koch",
+      "publisher": "AI Whistleblower Initiative and Center for AI Risk Management & Alignment",
+      "date": "2 July 2026"
+    },
     "https://artificialintelligenceact.eu/article/51/": {
       "title": "Article 51: Classification of General-Purpose AI Models as General-Purpose AI Models with Systemic Risk",
       "about": "The consolidated text of the AI Act article that presumes systemic risk above 10^25 training FLOP.",
@@ -78,6 +85,13 @@
       "authors": "Baker, Mauricio, Gabriel Kulp, Oliver Marks, et al.",
       "container": "arXiv",
       "date": "July 2025"
+    },
+    "https://arxiv.org/abs/2601.11699": {
+      "title": "Frontier AI Auditing: Toward Rigorous Third-Party Assessment of Safety and Security Practices at Leading AI Companies",
+      "about": "A framework for frontier AI audits based on deep, secure access to non-public technical and organizational evidence, with four levels of assurance.",
+      "authors": "Brundage, Miles, Noemi Dreksler, Aidan Homewood, et al.",
+      "container": "arXiv",
+      "date": "Jan. 2026"
     },
     "https://arxiv.org/abs/2511.10783": {
       "title": "An International Agreement to Prevent the Premature Creation of Artificial Superintelligence",
@@ -200,6 +214,13 @@
       "container": "California Legislative Information",
       "date": "2025"
     },
+    "https://www.leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?article=&chapter=5.1.&division=2.&lawCode=LAB&part=3.&title=": {
+      "title": "Whistleblower Protections: Catastrophic Risks in AI Foundation Models, Labor Code §§ 1107–1107.2",
+      "about": "California's enacted protections for covered frontier-developer employees who disclose specified catastrophic-risk concerns or violations.",
+      "org": "California Legislature",
+      "container": "California Legislative Information",
+      "date": "effective 1 Jan. 2026"
+    },
     "https://news.un.org/en/story/2026/07/1167873": {
       "title": "From AI to 'Killer Robots': UN Chief Issues Urgent Governance Call",
       "about": "UN News coverage of the Secretary-General's governance call at the inaugural Global Dialogue on AI Governance in Geneva.",
@@ -298,11 +319,6 @@
       "container": "RFC 9334",
       "publisher": "RFC Editor",
       "date": "Jan. 2023"
-    },
-    "https://www.sec.gov/enforcement-litigation/whistleblower-program": {
-      "title": "Whistleblower Program",
-      "about": "The SEC's own description of its whistleblower program: 10-30 percent awards, anti-retaliation enforcement, and anonymous reporting through counsel.",
-      "org": "U.S. Securities and Exchange Commission"
     },
     "https://www.stat.berkeley.edu/~aldous/157/Papers/Tradecraft%20Primer-apr09.pdf": {
       "title": "A Tradecraft Primer: Structured Analytic Techniques for Improving Intelligence Analysis",

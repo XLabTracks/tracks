@@ -159,9 +159,6 @@ export function HumanInsiders({
           <p className="text-muted-foreground font-sans text-xs font-medium tracking-[0.01em] uppercase">
             Source assessment · 2.4.1
           </p>
-          <span className="border-border bg-background text-muted-foreground rounded-full border px-3 py-1 font-sans text-[11px] font-medium tracking-[0.01em] uppercase">
-            Assess the claim, not the person
-          </span>
         </div>
         <h3 className="mt-3 text-2xl font-semibold tracking-tight">
           Who knows what?

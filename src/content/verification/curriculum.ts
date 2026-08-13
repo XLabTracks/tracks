@@ -242,7 +242,7 @@ export const verificationLessons: Lesson[] = [
     sectionItemId: "v-human-intro",
     title: "2.4.2 Reporting and protection",
     contentRef: "verification/human-reporting-protection",
-    estimatedMinutes: 10,
+    estimatedMinutes: 20,
   },
   {
     id: "v-human-audits-inspections",
@@ -251,7 +251,7 @@ export const verificationLessons: Lesson[] = [
     sectionItemId: "v-human-intro",
     title: "2.4.3 Audits and inspections",
     contentRef: "verification/human-audits-inspections",
-    estimatedMinutes: 35,
+    estimatedMinutes: 25,
   },
   {
     id: "v-human-institutions",
@@ -260,7 +260,7 @@ export const verificationLessons: Lesson[] = [
     sectionItemId: "v-human-intro",
     title: "2.4.4 Institutions and policy judgment",
     contentRef: "verification/human-institutions",
-    estimatedMinutes: 40,
+    estimatedMinutes: 35,
   },
   {
     id: "v-covert-system-overview",
@@ -671,7 +671,7 @@ export const verificationUnitMeta: Record<
   "2.1": { title: "Hardware", kind: "explainer", mins: "165–180 min" },
   "2.2": { title: "Cloud", kind: "explainer", mins: "20–25 min" },
   "2.3": { title: "Intelligence", kind: "explainer", mins: "35–45 min" },
-  "2.4": { title: "Human", kind: "explainer", mins: "20–25 min" },
+  "2.4": { title: "Human", kind: "explainer", mins: "120 min" },
   "3.0": { title: "What is covert development?", kind: "explainer", mins: "10–15 min" },
   "3.1": { title: "How could a determined actor cheat?", kind: "interactive", mins: "30–40 min" },
   "3.2": { title: "Red team / blue team", kind: "exercise", mins: "45–60 min" },

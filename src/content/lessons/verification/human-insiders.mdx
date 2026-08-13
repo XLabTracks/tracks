@@ -4,7 +4,7 @@ Human sources are useful only to the extent that they had access to the facts th
 
 <VerificationExercise id="human-insiders" />
 
-The source map draws on the personnel analysis in [Baker et al., §§4.3 and A.8](https://arxiv.org/abs/2507.15916). People across the AI supply chain may observe different parts of the same activity. Their evidence is still vulnerable to divided loyalties, compartmentalization, collusion, and pressure from management. Independent evidence is therefore essential.
+The source map draws on the personnel analysis in [Baker et al., §§4.3 and A.8](https://arxiv.org/abs/2507.15916). People across the AI supply chain may observe different parts of the same activity. Their evidence is still vulnerable to divided loyalties, compartmentalization, collusion, and pressure from management. [Wasil et al.](https://arxiv.org/abs/2408.16074) make the corresponding operational point: an insider may reveal an undeclared operation that external monitoring missed, but records, inspections, financial evidence, or other intelligence must test the report.
 
 Different roles can support different parts of an investigation. An engineer may establish that a run occurred. Procurement staff may document a hardware purchase. An executive may describe what leadership intended. None of them should be treated as an all-purpose witness.
 
@@ -18,7 +18,7 @@ Was the source in a position to observe the event, record, conversation, or syst
 
 ### Incentives
 
-What could the source gain or lose by reporting, withholding information, or supporting management's account? Reporting may threaten employment, immigration status, professional relationships, equity compensation, security clearance, or future contracts. Other incentives may favor reporting, including professional duties, legal obligations, moral concern, or a financial reward. These pressures affect how closely a claim should be checked. They do not determine whether it is true. [5][16]
+What could the source gain or lose by reporting, withholding information, or supporting management's account? Reporting may threaten employment, immigration status, professional relationships, equity compensation, security clearance, or future contracts. Other incentives may favor reporting, including professional duties, legal obligations, moral concern, or a financial reward. These pressures affect how closely a claim should be checked. They do not determine whether it is true.
 
 ### Consistency
 
@@ -32,7 +32,7 @@ A human source rarely establishes a violation alone. A report may justify preser
 
 ### Interview conditions
 
-Personnel interviews can expose hidden activity and conflicts in the record, but the conditions matter. Management may choose the interviewees, prepare their answers, monitor the conversation, or punish candid responses. A verifier needs authority to select at least some interviewees independently and speak with them without management present. [4]
+Personnel interviews can expose hidden activity and conflicts in the record, but the conditions matter. Management may choose the interviewees, prepare their answers, monitor the conversation, or punish candid responses. Baker et al. therefore pair interviews with [regular contact between employees and verifiers](https://arxiv.org/abs/2507.15916), while limiting questions to an agreed scope to protect unrelated sensitive information.
 
 ## Common failure modes
 
@@ -41,15 +41,3 @@ Personnel interviews can expose hidden activity and conflicts in the record, but
 - Management staging: the organization selects cooperative staff, curated records, and a clean facility path.
 - Coordinated cover story: several sources repeat a rehearsed account.
 - Suppression: an organization blocks communications, removes access, or uses legal or employment pressure to prevent reporting.
-
-#### CHECK: A contractor seeking a financial reward reports that a company expanded a computing cluster and provides a project code that also appears in an independently obtained power-allocation log. The contractor cannot identify what workload ran on the cluster. Which assessment is most accurate?
-
-A. The report proves that an unauthorized training run occurred.
-
-B. Assume the report is unreliable because the contractor may receive a reward.
-
-C. The report supports a finding that the infrastructure was expanded, and the matching project code corroborates that part of the account. It does not show which workload ran.
-
-D. The report should be disregarded because the contractor lacked access to the workload.
-
-Answer: C. The contractor's incentive is relevant, but it does not decide the issue. The contractor had access to the infrastructure work, and the utility record independently supports the project code and dates. That evidence supports the expansion claim, not a conclusion about the workload.

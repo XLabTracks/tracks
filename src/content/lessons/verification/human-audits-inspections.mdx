@@ -1,49 +1,49 @@
-Whistleblowers and defectors arrive on their own schedule. Audits and inspections are the mechanisms that let a verifier go and look on purpose, with a regular and predictable timeline.
+Whistleblowers report when they choose or when a duty requires it. Audits and inspections let a verifier look on a defined schedule, at a defined trigger, or in response to a specific concern.
 
-Here are the three main types of audits/inspections and how they are different:
+## Three mechanisms, three purposes
 
-<Exercise id="v-task-human-audits-inspections-1" />
+| Mechanism | Typical trigger | Main purpose | Main design risk |
+| --- | --- | --- | --- |
+| Independent audit | Periodic, milestone-based, or pre-deployment review | A third party tests specified claims and evaluates systems or practices against a standard. | The auditee controls the auditor, scope, evidence, or publication. |
+| Routine inspection | A schedule, random selection, or recurring agreement obligation | Confirm declared sites, inventories, records, processes, or controls. | Predictability permits staging, and undeclared activity may sit outside the routine route. |
+| Challenge inspection | A specific concern, anomaly, or formal request, usually on shorter notice | Clarify possible noncompliance that routine measures did not resolve. | Delay, political misuse, excessive intrusion, or access negotiated below what the concern requires. |
 
-In each category of inspection, the verifier undergoes three main steps: obtain, evaluate, and respond to evidence.
+These mechanisms collect and assess evidence. They do not necessarily make the legal decision. A sound process distinguishes:
 
-- Evidence Collection: What did the team obtain, observe, preserve, and fail to access?
-  - Typical output: Records, extracts, interview notes, photographs, test results, and documented access limits.
-- Adjudication: Do the established facts satisfy the agreement’s legal or technical standard?
-  - A compliance finding, a finding of no violation, or reasoned uncertainty.
-- Recommendation or Response: What should happen next, given confidence, severity, urgency, and authority?
-  - Corrective action, further monitoring, another inspection, referral, or a sanction recommendation.
+1. **Collection:** what the team obtained, observed, preserved, and could not access.
+2. **Assessment:** what those facts support, under stated assumptions and uncertainty.
+3. **Adjudication and response:** whether the facts satisfy the agreement’s standard and what an authorized body should do.
 
-Moreover, quite logically, the level of access an inspector has determines the strength and workability of findings.
+## Access sets the ceiling on the conclusion
 
-- Black-box (least): the auditor sends inputs and observes outputs. Supports claims about how the model behaved under the conditions tested, and nothing beyond them.
-- Gray-box: black-box plus selected internals, tools, records, or privileged interfaces. Widens the set of explanations the auditor can test, but the scope still depends on what the company chooses to expose.
-- Deep (most): gray-box plus model internals, training process, compute accounting, incident reports, decision logs, governance records, and staff interviews. Supports organizational and historical claims when the records are complete and the auditor can test for deception. [1]
+[Brundage et al.](https://arxiv.org/abs/2601.11699) define frontier AI auditing around “deep, secure access to non-public information.” Their assurance levels make a simple point: as the auditor relies less on the company’s own representations and sees more of the organization, the audit can support broader and more confident claims.
 
-Lower levels are more feasible to glean results from, as they rely more on company-provided information, but cannot catch skillful deception. A black-box audit may establish that a deployed model refused a defined set of dangerous requests, but it cannot establish that no undeclared training run occurred. Higher levels are less technically and organizationally feasible, but they can better spear through fabrications and noise to uncover deception. [1] A deep audit can meaningfully test a claim of illicit training run through raw allocation records, training artifacts, project-code mappings, and interviews—but only if the organization allows that level of inspection while trusting information security.
+- **Black-box access:** the auditor sends inputs and observes outputs. It can support a claim about model behavior under the tested conditions. It cannot establish training history, compute use, internal deployment, or executive decision-making.
+- **Gray-box access:** the auditor also receives selected internals, tools, records, or privileged interfaces. This can test more explanations, but the conclusion remains bounded by what was selected and what remains hidden.
+- **Deep access:** the auditor can examine relevant model internals, training processes, compute allocation, incident and governance records, and staff interviews. It can test organization-level and historical claims if records are complete and the auditor has authority to follow emerging concerns.
 
-#### Access Rights, Written Out
+The paper’s higher assurance levels add duration and resistance to deception: from a time-bounded system audit, through months of documentation and cross-functional interviews, toward ongoing oversight and continuous verification. The highest levels remain an aspiration, not a label an auditor should claim because the engagement was expensive or technically sophisticated.
 
-A usable mandate answers seven questions before a dispute begins:
+An audit conclusion is valid only for the systems, entities, evidence, claims, and period actually examined. Findings should state their assumptions and expire or be revisited when a release, incident, configuration change, or other event makes them stale.
 
-- Who may examine the evidence? Name the audit or inspection body, required expertise, conflict rules, security requirements, and any process for objecting to an individual inspector.
-- What and where are in scope? Specify models, code, evaluations, compute records, governance decisions, facilities, affiliates, cloud regions, colocation sites, and contractor-controlled systems.
-- When may access occur? Define routine timing, random selection, milestone triggers, challenge thresholds, notice periods, inspection duration, and event-triggered re-review.
-- What may the team do? Cover document review, system access, testing, observation, sampling, copying, log export, reconciliation, and private staff interviews.
-- Who must cooperate and preserve evidence? Extend duties to relevant developers, affiliates, cloud and data-center operators, suppliers, contractors, and public authorities; prohibit deletion or alteration after notice.
-- How will sensitive information be protected? Use vetted personnel, secure rooms, read-only systems, redaction, aggregation, limited retention, purpose restrictions, and sanctions for misuse.
-- What follows delay or refusal? Set deadlines, alternative-access procedures, escalation routes, reporting consequences, and any authorized adverse inference, penalty, suspension, or referral.
+## What the mandate must settle
 
-A delay may reflect a real safety, privilege, localization, or security problem—or a concealment tactic. Refusal can support a finding that the access obligation was breached. It may also justify an adverse inference if the agreement says so. It does not, by itself, prove that the concealed activity occurred.
+A usable audit or inspection mandate answers these questions before an access dispute begins:
 
-<Exercise id="v-task-human-audits-inspections-2" />
+- **Who may inspect?** Name the body, required expertise, independence and conflict rules, security requirements, and any process for objecting to an individual inspector.
+- **What is in scope?** Specify models, code, evaluations, compute records, governance decisions, facilities, affiliates, cloud regions, colocation sites, and contractor-controlled systems.
+- **When may access occur?** Define routine timing, random selection, challenge triggers, notice periods, duration, and event-triggered review.
+- **What may the team do?** Cover document review, system access, testing, observation, sampling, copying, log export, reconciliation, and private staff interviews.
+- **Who must cooperate and preserve evidence?** Extend duties to relevant developers, affiliates, cloud and data-center operators, suppliers, and contractors; prohibit alteration or deletion after notice.
+- **How is sensitive information protected?** Set rules for vetted personnel, secure rooms, read-only systems, redaction, aggregation, limited retention, purpose limitation, and sanctions for misuse.
+- **What follows delay or refusal?** Define deadlines, alternative-access procedures, escalation, reporting consequences, and any authorized adverse inference, penalty, suspension, or referral.
 
-An accurate audit can still mislead readers when they forget its limits. It is a conclusion about the systems, entities, claims, evidence, and time period actually examined. A developer may curate the visible surface, a riskier internal deployment may sit outside scope, or later changes may invalidate the result. The frontier-auditing literature therefore recommends stating assumptions and validity conditions, combining periodic deep reviews with event-triggered review, and deprecating conclusions when material conditions change. [1]
+Refusal can establish a breach of an access obligation. It does not automatically prove the concealed activity. Whether a decision-maker may draw an adverse inference depends on the agreement.
 
-CHECK: A developer gives an independent auditor black-box API access to its deployed model and a curated management summary. It refuses raw compute-allocation logs and staff interviews, then asks the auditor to certify that no undeclared above-threshold training occurred. What is the best response?
+## Managed access
 
-- A. Certify the claim because the auditor is an independent third party.
-- B. Reject the entire audit because black-box evidence is never useful.
-- C. Report what the black-box testing actually supports, state that the training-history claim is outside the available evidence, and request scoped deep or managed access to the relevant records and personnel.
-- D. Declare the developer noncompliant and impose a sanction immediately.
+Access need not mean copying every trade secret into a regulator’s general files. [Wasil et al.](https://arxiv.org/abs/2408.16074) treat inspections as access-dependent but note that limited access can protect privacy and proprietary information while still answering a verification question.
 
-Answer: C. The audit may support claims about tested model behavior, but it cannot support an absence claim about hidden training from that access alone. The auditor should document the limitation; the authorized adjudicative body—not the auditor acting alone—decides the consequence of continued refusal.
+For an AI inspection, managed access might allow a vetted subset of the team to inspect model weights on site, provide a read-only query over raw scheduler logs, disclose a cryptographic commitment instead of source material, shroud unrelated equipment, or return an independently generated aggregate. The inspected party may propose an alternative, but the alternative must answer the same question. A company-produced summary is not a substitute for raw allocation evidence when the question is whether an undeclared above-threshold training run occurred.
+
+The practical test is narrow: does the arrangement let the verifier reach a defensible conclusion while withholding information that is genuinely unrelated to that conclusion?

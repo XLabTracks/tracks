@@ -1,75 +1,51 @@
-This submodule explains how a person’s observation becomes a safe, usable report. It covers three questions: Where can someone report? What makes reporting less costly than silence? And how should the recipient preserve, assess, and transmit the report?
+A reporting system has two jobs. It must give people a route they can realistically use, and it must turn what they submit into evidence without exposing the source unnecessarily or overstating the claim.
 
-An engineer who suspects an undeclared training run faces near-certain personal risks—lost employment, unvested equity, litigation, blacklisting, or immigration consequences—against a public benefit that is uncertain and difficult to prove. An NDA may appear to prohibit disclosure. Colleagues may regard the reporter as disloyal. The engineer may also possess only one piece of the activity, not enough to establish a violation alone.
+An engineer may risk employment, unvested equity, immigration status, litigation, or future work by reporting a safety override. A contractor may have weaker legal protection and no internal channel. A technically secure form is not enough if it can be traced through a work device, access log, document history, or the small number of people who knew the fact.
 
-Under those conditions, silence may be rational. Protection against these consequences, therefore, is a mandatory leg of the reporting channel that determines whether useful information enters the verification system at all.
+[Wasil et al.](https://arxiv.org/abs/2408.16074) propose a practical package: protected and anonymous channels, legal and job support, incentives for verified information, and cross-border protection. They also warn that incentives do not help if an organization can block contact with the verifier. Regular private contact with personnel can provide a second route.
 
-A credible system should provide:
+## What a usable channel requires
 
-- More than one route. Reporters may need an internal channel, an independent external channel, and direct access to a regulator or treaty verifier. Requiring internal reporting first can expose the source or allow evidence to disappear.
-- Clear identity options. An anonymous report does not reveal the reporter’s identity to the recipient. A confidential report does reveal it, but restricts who may access or disclose it. The system should explain the limits of either promise.
-- Secure, two-way communication. The recipient must be able to ask follow-up questions and provide preservation instructions without forcing the reporter to reveal more personal information than necessary.
-- Independent routing. A report concerning senior leadership must bypass that leadership.
-- Clear scope and triage. The channel should state who may report, what concerns qualify, who receives them, and which allegations require urgent escalation.
+- **Internal and external routes.** A reporter should be able to contact an independent internal office, a regulator or treaty verifier, and—where the law permits—another competent authority. Requiring internal reporting first can expose the source or give implicated managers time to remove evidence.
+- **A real choice between anonymity and confidentiality.** Anonymous reporting withholds identity from the recipient. Confidential reporting reveals it to a restricted group. The channel should state the limits of both arrangements.
+- **Secure two-way contact.** Investigators need a way to ask follow-up questions and give preservation instructions without forcing the reporter to disclose more identifying information than necessary.
+- **Routing around conflicts.** A report about senior management must not pass through senior management for approval.
+- **Clear triage.** The recipient should distinguish an urgent safety or evidence-destruction risk from a report that can enter the ordinary investigation queue.
 
-Security includes metadata. For example, a technically encrypted submission may still expose a reporter through a work device, access log, writing style, unusual document history, or the small number of people who knew a particular fact.
+## AI whistleblowing: SB 53 and the broader design test
 
-Here are four buckets of protections and motivations to incentivize reporting:
+California’s SB 53 created a specific statutory floor for AI whistleblowing, now codified in Labor Code §§1107–1107.2. Its definition is deliberately tied to safety work:
 
-1. Anti-retaliation protection
+> “Covered employee” means an employee responsible for assessing, managing, or addressing risk of critical safety incidents. — [California Labor Code §1107](https://www.leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?article=&chapter=5.1.&division=2.&lawCode=LAB&part=3.&title=)
 
-The system should prohibit firing, demotion, compensation changes, threats, blacklisting, legal intimidation, and subtler retaliation such as removing responsibilities or excluding the reporter from relevant work. A meaningful regime also provides remedies, including reinstatement, compensation, attorney’s fees, or temporary relief before a lengthy case is resolved.
+The law bars a frontier developer from making or enforcing a rule, policy, or contract that prevents such an employee from making a protected disclosure, or retaliating for it. The employee must have reasonable cause to believe the information shows a specific and substantial public danger from a catastrophic risk or a violation of the covered frontier-AI statute. Protected recipients include the California Attorney General, a federal authority, and specified people inside the company with power to investigate or correct the problem. Large frontier developers must also provide a reasonable anonymous internal process, send the reporter monthly status updates, and share reports with officers and directors while excluding a leader accused of wrongdoing.
 
-The nuclear sector provides a precedent. Section 211 of the U.S. Energy Reorganization Act prohibits covered nuclear employers and contractors from discriminating against workers for protected safety activity. The NRC can investigate allegations and take enforcement action, while the Department of Labor can provide personal remedies to affected employees. (Nuclear Regulatory Commission)
+This is not a rule that every NDA is void or that every AI concern is protected. It is a rule against using contracts to block disclosures that fall within the statute. The distinction matters when a verifier tells a source what protection actually exists.
 
-2. Financial rewards
+The [AIWI/CARMA Best Practice Guide](https://aiwi.org/ai-whistleblowing-law-best-practice/) states the broader principle directly:
 
-Rewards can offset the costs of reporting, but they should depend on useful original information rather than the drama of the allegation. The SEC whistleblower program offers eligible reporters between 10 and 30 percent of monetary sanctions collected in qualifying enforcement actions. It also prohibits retaliation and actions that impede direct contact with the SEC. Anonymous award applicants must report through an attorney, allowing the SEC to authenticate the person without publicly exposing them. ([SEC](https://www.sec.gov/enforcement-litigation/whistleblower-program))
+> “Whistleblower rights must override confidentiality/nondisclosure agreements.”
 
-A financial motive does not make a source presumptively unreliable. It is one incentive to record; access, specificity, consistency, and corroboration still determine evidentiary weight.
+The guide would extend protection beyond SB 53’s covered employees and catastrophic-risk pathway. Its recommendations include duty speech by evaluators and safety staff; contractors, former employees, board members, and third-party assessment organizations; confidential and anonymous external reporting; remedies that account for equity and visa-related retaliation; and a receiving agency with the expertise and authority to act. These are not details around the edge. They determine who can report, what they can report, and whether a nominal right can be exercised before retaliation makes it useless.
 
-3. Mandatory reporting
+## Four ways to make reporting more viable
 
-A legal duty can require specified organizations or roles to report known incidents, making silence a violation rather than a neutral choice. California’s SB 53, enacted in 2025, requires covered frontier developers to report defined critical safety incidents to the state. It separately protects covered employees who report qualifying dangers or violations and requires large frontier developers to provide an anonymous internal process with status updates. (LegInfo)
+| Mechanism | What it changes | Main limitation |
+| --- | --- | --- |
+| Anti-retaliation protection | Reduces the expected personal cost and provides a remedy for firing, demotion, threats, blacklisting, or lost compensation. | A right may arrive too late unless temporary relief and practical legal support are available. |
+| Financial reward | Offsets personal cost and can motivate disclosure of useful original information. | It creates an incentive to examine, not a reason to accept or reject the claim. Corroboration still controls weight. |
+| Mandatory reporting | Makes silence a breach for specified roles or organizations. | It produces paperwork rather than verification if the duty is vague, unenforced, or sent to an office that cannot act. |
+| Professional or organizational duty | Makes escalation part of the role of safety staff, auditors, security personnel, executives, or boards. | The duty collapses when management rewards a clean record more than early discovery of problems. |
 
-Mandatory reporting still needs enforcement and a capable recipient. A reporting duty sent to an office without authority, expertise, or resources becomes paperwork rather than verification.
+The mechanisms can be combined. They should not be treated as substitutes for safe channels or competent investigation.
 
-4. Professional and organizational duties
+## From report to evidence
 
-Professional codes, employment responsibilities, licensing rules, and internal governance can make escalation the expected action for safety officers, auditors, security personnel, and executives. These duties are weaker when managers reward the absence of reported problems rather than the early discovery of them. A credible organization treats well-founded escalation as competent risk management, not disloyalty.
+1. **Receive and scope.** Record when and how the report arrived, its claimed urgency, the reporter’s identity preference, and the material allegation.
+2. **Route and preserve.** Bypass implicated people. Retain the original submission, attachments, and available metadata; assign a case identifier; and record access, copying, and transfer.
+3. **Authenticate.** Test whether the source plausibly held the claimed role and whether submitted records are what they appear to be. Authentication establishes provenance, not truth.
+4. **Investigate.** Seek records, technical signals, physical observations, and sources the reporter does not control. Record contradictions and plausible alternative explanations as well as support.
+5. **Separate fact from inference.** Keep the source’s observations, investigator findings, and analytical conclusions distinct.
+6. **Transmit a scoped package.** Send the authorized verifier the allegation, source-access assessment, preservation record, corroboration, contradictions, unresolved questions, handling restrictions, and recommended next step. Share identity only when necessary and authorized.
 
-Historical parallel: Vanunu and the absence of a protected routeMordechai Vanunu disclosed information about Israel’s nuclear program to a newspaper in 1986. He was abducted and returned to Israel, convicted of treason and espionage, and imprisoned for 18 years. Whatever one’s judgment of the disclosure, the case illustrates the stakes facing an insider who has no authorized, protected route: report publicly at catastrophic personal cost, or remain silent. Future insiders observe what happens to earlier ones. (Amnesty International)
-
-#### Interview Protection
-
-Reporting channels are not the only way investigators obtain human evidence. Auditors and inspectors also interview employees, scientists, contractors, and managers; but an interview conducted with a supervisor or government minder in the room may produce coached answers rather than evidence.
-
-This problem was central during the Iraq inspections. UNMOVIC and the IAEA sought authority to interview relevant personnel privately and, when necessary, outside Iraq. Inspectors understood that formal access to a scientist was not enough; the conditions had to allow the person to speak without immediate surveillance or retaliation. (United Nations)
-
-The next section develops interviews as part of inspection practice. The point here is simpler: like whistleblowers, an interview depends partly on the protection surrounding the person answering.
-
-#### Turning a report into usable evidence
-
-Once a report arrives, the recipient’s job is to preserve it, assess it, and transmit it without overstating what it establishes.
-
-1. Receive and acknowledge.Record when and how the report arrived, its claimed urgency, and the reporter’s identity preference. Do not promise absolute confidentiality if the process cannot guarantee it.
-
-2. Check conflicts and triage.Route around anyone implicated in the allegation. Separate immediate safety or evidence-destruction risks from ordinary compliance concerns.
-
-3. Preserve the original material.Retain the original submission, attachments, and available metadata. Assign a case identifier and record who views, copies, or transfers each item. Do not overwrite the original with cleaned or reformatted versions.
-
-4. Authenticate.Test whether the source is who they claim to be, whether they plausibly had the stated access, and whether submitted records are what they appear to be. Authentication establishes provenance; it does not establish that the allegation is true.
-
-5. Investigate and corroborate.Seek independent records, technical signals, additional sources, and alternative explanations. Keep the source’s statements separate from investigator observations and analytical inferences.
-
-6. Transmit a scoped package.The authorized verifier should receive the allegation, the source-access assessment, the preservation record, known corroboration, known contradictions, unresolved questions, handling restrictions, and the recommended next step. The source’s identity should be transmitted only when necessary and authorized.
-
-This is where the human layer joins the technical layers. A person may identify the suspicious activity, while cloud records, hardware logs, procurement data, or facility measurements test the account.
-
-#### CHECK: An anonymous engineer submits records alleging an undeclared training run. The allegation concerns senior leadership, and the engineer requests a financial reward. What should the reporting office do first?
-
-A. Publish the allegation so that leadership cannot suppress it.B. Reject it because anonymity and a financial motive make it unreliable.C. Preserve the original submission, route it around implicated leaders, authenticate the source’s access, and seek independent corroboration before transmitting a scoped package to the verifier.D. Require the engineer to report internally before the external office may review it.
-
-Answer: C. Protection allows the report to enter the system; preservation, authentication, and corroboration determine whether it should produce further action.
-
-A sufficiently supported report may lead to an inspection recommendation. Section 2.4.3 asks what inspectors are then entitled to access, how they protect sensitive information, and what happens when access is delayed or refused.
+A protected report can justify preservation or investigation without proving noncompliance. The next section asks what access an auditor or inspector would need to test it.

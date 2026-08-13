@@ -24,18 +24,6 @@ import type { Exercise } from "@/lib/content/types";
 
 export const verificationExercises: Exercise[] = [
   {
-    id: "v-task-human-audits-inspections-1",
-    type: "writing-prompt",
-    prompt: "Mechanism\n\nTypical trigger\n\nMain purpose\n\nMain design risk\n\nIndependent audit\n\nPeriodic, milestone-based, or pre-deployment review\n\nAn outside third party verifies specified claims and evaluates systems or practices against stated standards.\n\nThe auditee controls the auditor, scope, evidence, or publication.\n\nRoutine inspection\n\nA schedule, random selection, or recurring treaty obligation\n\nConfirm declared sites, inventories, records, processes, or controls.\n\nPredictability permits staging, and the inspection may reach only declared activity.\n\nChallenge inspection\n\nA specific concern, anomaly, or formal request, usually under special and shorter-notice procedures\n\nClarify possible noncompliance at a relevant site or activity not resolved by routine measures.\n\nDelay, political misuse, excessive intrusion, or access negotiated below what the concern requires.",
-    format: "free-form",
-  },
-  {
-    id: "v-task-human-audits-inspections-2",
-    type: "writing-prompt",
-    prompt: "Historical Parallel: Managed Access\n\nArms-control regimes faced the same problem: inspectors need enough access to test a claim, while the inspected party may hold unrelated military, proprietary, or security-sensitive information. The IAEA Additional Protocol expressly provides for managed access to protect proliferation-sensitive, proprietary or commercially sensitive, and safety or physical-protection information while preserving the Agency’s verification objective. [3]\n\nThe Chemical Weapons Convention uses the same logic in challenge inspections. It permits measures such as removing sensitive papers, shrouding unrelated equipment, limiting particular tests, or giving only selected inspectors access. But managed access is not a unilateral veto. If full access is not provided, the inspected state must make every reasonable effort to offer alternative means that clarify the compliance concern. Site-securing and exit-monitoring procedures can also reduce the opportunity to remove evidence while access is negotiated. [2]\n\n<Callout variant=\"tip\" title=\"Task\">\n\nTRANSFER TO AI  An AI inspector might use a read-only query over raw scheduler logs, allow a vetted subset of the team to view model weights on site, inspect cryptographic commitments rather than source files, or receive an independently generated aggregate. The substitute is acceptable only if it answers the same verification question.",
-    format: "free-form",
-  },
-  {
     id: "v-task-introduction-1",
     type: "writing-prompt",
     prompt: "Optional task — The strongest objection.\n\nIn a short written note, construct the strongest objection you can to the case above — and state what would change your mind, in either direction.",

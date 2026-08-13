@@ -157,10 +157,10 @@ export function HumanInsiders({
     <section className="not-prose border-border bg-card shadow-soft my-6 overflow-hidden rounded-xl border text-sm">
       <header className="border-border border-b p-5 sm:p-6">
         <div className="flex flex-wrap items-center justify-between gap-3">
-          <p className="text-muted-foreground text-[11px] tracking-[0.14em] uppercase">
+          <p className="text-muted-foreground font-sans text-xs font-medium tracking-[0.01em] uppercase">
             Source desk · 2.4.1
           </p>
-          <span className="border-border bg-background text-muted-foreground rounded-full border px-3 py-1 text-[10px] tracking-[0.1em] uppercase">
+          <span className="border-border bg-background text-muted-foreground rounded-full border px-3 py-1 font-sans text-[11px] font-medium tracking-[0.01em] uppercase">
             No credibility score
           </span>
         </div>
@@ -220,7 +220,7 @@ function PhaseRail({ phase }: { phase: Phase }) {
         <li
           key={item.id}
           className={cn(
-            "border-border rounded-md border px-2 py-2 text-center text-[10px] tracking-[0.08em] uppercase",
+            "border-border rounded-md border px-2 py-2 text-center font-sans text-[10px] font-medium tracking-[0.01em] uppercase",
             index === active && "border-primary bg-primary/5 text-primary",
             index < active && "bg-muted/45 text-foreground",
             index > active && "text-muted-foreground"
@@ -312,7 +312,7 @@ function MapPhase({
                 <span className="mt-3 block text-xs font-semibold leading-snug">
                   {candidate.role}
                 </span>
-                <span className="text-muted-foreground mt-1 block text-[9px] tracking-[0.08em] uppercase">
+                <span className="text-muted-foreground mt-1 block font-sans text-[10px] font-medium tracking-[0.01em] uppercase">
                   {candidate.station}
                 </span>
               </button>
@@ -323,14 +323,14 @@ function MapPhase({
 
       <div className="grid xl:grid-cols-[18rem_minmax(0,1fr)]">
         <aside className="border-border bg-muted/15 border-b p-5 xl:border-r xl:border-b-0">
-          <p className="text-muted-foreground text-[10px] tracking-[0.12em] uppercase">
+          <p className="text-muted-foreground font-sans text-[11px] font-medium tracking-[0.01em] uppercase">
             Source card
           </p>
           <h4 className="mt-2 text-xl font-semibold">{actor.role}</h4>
           <p className="text-muted-foreground mt-1 text-xs">{actor.station}</p>
           <p className="mt-4 leading-relaxed">{actor.prompt}</p>
           <div className="border-border bg-background mt-4 rounded-lg border p-3">
-            <p className="text-muted-foreground text-[9px] tracking-[0.1em] uppercase">
+            <p className="text-muted-foreground font-sans text-[11px] font-medium tracking-[0.01em] uppercase">
               Reported claim
             </p>
             <p className="mt-2 text-sm leading-relaxed">“{actor.report}”</p>
@@ -398,7 +398,7 @@ function MapPhase({
 function SourceClue({ label, text }: { label: string; text: string }) {
   return (
     <div className="border-border mt-4 border-t pt-3">
-      <p className="text-muted-foreground text-[9px] tracking-[0.1em] uppercase">
+      <p className="text-muted-foreground font-sans text-[11px] font-medium tracking-[0.01em] uppercase">
         {label}
       </p>
       <p className="mt-1 text-xs leading-relaxed">{text}</p>
@@ -428,7 +428,7 @@ function ConnectionColumn({
   return (
     <section>
       <div className="mb-2 min-h-12">
-        <p className="text-muted-foreground text-[9px] tracking-[0.12em] uppercase">
+        <p className="text-muted-foreground font-sans text-[10px] font-medium tracking-[0.01em] uppercase">
           {copy.eyebrow}
         </p>
         <h5 className="mt-1 text-xs font-semibold leading-snug">
@@ -508,7 +508,7 @@ function ExaminationPhase({
   return (
     <div className="grid xl:grid-cols-[20rem_minmax(0,1fr)]">
       <aside className="border-border bg-muted/15 border-b p-5 xl:border-r xl:border-b-0">
-        <p className="text-muted-foreground text-[10px] tracking-[0.12em] uppercase">
+        <p className="text-muted-foreground font-sans text-[11px] font-medium tracking-[0.01em] uppercase">
           {SOURCE_REPORT.label}
         </p>
         <div className="border-border bg-background mt-3 rounded-lg border p-4">
@@ -532,7 +532,7 @@ function ExaminationPhase({
       <div className="p-5 sm:p-6">
         <div className="flex items-center justify-between gap-4">
           <div>
-            <p className="text-muted-foreground text-[10px] tracking-[0.12em] uppercase">
+            <p className="text-muted-foreground font-sans text-[11px] font-medium tracking-[0.01em] uppercase">
               Examination {questionIndex + 1} of {CREDIBILITY_QUESTIONS.length}
             </p>
             <h4 className="mt-2 text-xl font-semibold">{question.label}</h4>
@@ -629,7 +629,7 @@ function FindingPhase({ onRestart }: { onRestart: () => void }) {
               aria-hidden
             />
             <div>
-              <p className="text-primary text-[10px] tracking-[0.12em] uppercase">
+              <p className="text-primary font-sans text-[11px] font-medium tracking-[0.01em] uppercase">
                 {FINAL_FINDING.disposition}
               </p>
               <h4 className="mt-2 text-2xl font-semibold tracking-tight">
@@ -639,7 +639,7 @@ function FindingPhase({ onRestart }: { onRestart: () => void }) {
             </div>
           </div>
           <div className="border-border mt-5 border-t pt-4">
-            <p className="text-muted-foreground mb-3 text-[10px] tracking-[0.1em] uppercase">
+            <p className="text-muted-foreground mb-3 font-sans text-[11px] font-medium tracking-[0.01em] uppercase">
               Four lines in the record
             </p>
             <ol className="space-y-2">
@@ -660,7 +660,7 @@ function FindingPhase({ onRestart }: { onRestart: () => void }) {
         </div>
 
         <section className="mt-6">
-          <p className="text-muted-foreground text-[10px] tracking-[0.12em] uppercase">
+          <p className="text-muted-foreground font-sans text-[11px] font-medium tracking-[0.01em] uppercase">
             Red-team the human layer
           </p>
           <h4 className="mt-2 text-lg font-semibold">

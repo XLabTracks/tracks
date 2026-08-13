@@ -413,6 +413,7 @@
 /* The header is a fixed-height single row by default; at this size its own
    contents no longer fit across, so it wraps like it does on a phone. */
 :root[data-theme='contrast'] .site-header .bar {
+  display: flex;
   height: auto;
   flex-wrap: wrap;
   gap: 10px 16px;
@@ -476,13 +477,19 @@ button, [role='button'], [role='radio'], [role='tab'], .chip, .nav a, .brand,
   backdrop-filter: blur(8px);
 }
 .site-header .bar {
-  display: flex;
+  /* Match BlueDot's desktop header geometry exactly: its 1505px viewport
+     resolves a 1436px outer container with 80px internal gutters, putting
+     content at x=114.5…1390.5 inside a 76px bar. The flexible first column
+     keeps the nav/action composition on the right instead of gluing the first
+     destination to the logotype. */
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto auto;
   align-items: center;
-  gap: 24px;
-  height: 56px;
-  max-width: 1280px;
+  column-gap: 48px;
+  height: 76px;
+  max-width: 1436px;
   margin: 0 auto;
-  padding: 0 20px;
+  padding: 0 80px;
 }
 .brand {
   display: inline-flex;
@@ -533,18 +540,10 @@ button, [role='button'], [role='radio'], [role='tab'], .chip, .nav a, .brand,
 :root[data-theme='dark'] .mark-night,
 :root[data-theme='contrast'] .mark-night { display: block; }
 
-/* The links sit against the brand on the left; the nav still takes the whole
-   middle of the bar so the actions are pushed hard right.
-
-   Trap: flex:1 is what pushes .header-right to the edge — drop it and the
-   actions slide back in beside the links.
-
-   Trap: min-width:0 is what lets the nav shrink below its content and scroll.
-   A flex item's floor is its content width by default, so without this the
-   links wrap to a second row inside a 56px bar and then push the page into
-   horizontal scroll — which is what happens between the mobile breakpoint and
-   about 1100px, where there is no room for every link but the bar is still
-   one row. */
+/* At full desktop width the nav is its content width, between BlueDot's two
+   48px composition gaps. At narrower widths the media rule below turns its
+   grid track flexible, and min-width:0 lets the row scroll instead of forcing
+   the header wider than the viewport. */
 /* No scrollbars anywhere — the author's call, at the root so it holds for
    the page and for every scrolling box inside it. Scrolling still works;
    only the painted bar is gone. Lives here as well as in the app's
@@ -562,7 +561,6 @@ button, [role='button'], [role='radio'], [role='tab'], .chip, .nav a, .brand,
 *::-webkit-scrollbar { display: none; }
 
 .nav {
-  flex: 1;
   min-width: 0;
   display: flex;
   align-items: center;
@@ -812,13 +810,30 @@ button, [role='button'], [role='radio'], [role='tab'], .chip, .nav a, .brand,
 }
 .foot-end > span:last-of-type { margin-right: auto; }
 
+/* Between phone and full desktop widths, keep one compact row and surrender
+   only the flexible brand-to-nav spacer. The link row can then scroll inside
+   its own track without disturbing the actions at the right edge. */
+@media (min-width: 721px) and (max-width: 1199px) {
+  .site-header .bar {
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    column-gap: 24px;
+    padding-inline: 24px;
+  }
+}
+
 /* The nav wraps to its own scrolling row rather than collapsing into a menu:
    hiding the destinations behind a button on the one viewport where the
    sidebar is already gone leaves no way through.
-   Trap: the desktop rule gives .nav flex:1, whose 0% basis beats width:100%
-   in a wrapped row — it has to be reset here or the row collapses. */
+   The desktop grid is restored to flex here so the third row can span the
+   whole bar without a second layout wrapper. */
 @media (max-width: 720px) {
-  .site-header .bar { height: auto; flex-wrap: wrap; gap: 10px 16px; padding: 8px 16px; }
+  .site-header .bar {
+    display: flex;
+    height: auto;
+    flex-wrap: wrap;
+    gap: 10px 16px;
+    padding: 8px 16px;
+  }
   .nav {
     order: 3;
     flex: none;

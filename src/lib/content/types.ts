@@ -245,6 +245,25 @@ export type ModuleItem =
   | { kind: "lesson"; lesson: Lesson }
   | { kind: "paper"; paper: Paper };
 
+/**
+ * Session plan for running a module as a synchronous meeting. Not a module
+ * item: no itemIds entry, no progress unit, no prerequisite effect. Rendered
+ * publicly at /tracks/[trackSlug]/[moduleSlug]/guide.
+ */
+export interface FacilitatorGuide {
+  id: string;
+  /** Module this guide covers; at most one guide per module. */
+  moduleId: string;
+  /** Path (without extension) under `src/content/guides` to the MDX body. */
+  contentRef: string;
+  /** Planned session length in minutes. */
+  sessionLength: number;
+  /** Intended group size, free text, e.g. "4–10". */
+  groupSize: string;
+  /** Room needs, e.g. "whiteboard". */
+  materials?: string[];
+}
+
 // ---------------------------------------------------------------------------
 // Exercises
 // ---------------------------------------------------------------------------

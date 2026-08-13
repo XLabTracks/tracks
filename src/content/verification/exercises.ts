@@ -36,12 +36,6 @@ export const verificationExercises: Exercise[] = [
     format: "free-form",
   },
   {
-    id: "v-task-human-insiders-2",
-    type: "writing-prompt",
-    prompt: "Historical contrast: when human reporting opens—and distorts—verification\n\nIn 2002, an Iranian opposition group publicly identified previously undeclared nuclear facilities at Natanz and Arak. The disclosure did not itself prove what was occurring there, and the group had clear political interests. Its value was that it gave the IAEA a concrete location and claim to investigate. Inspection and other evidence—not the source’s reputation alone—turned the allegation into a substantiated verification concern.\n\nCurveball shows the opposite failure. Reporting from a single Iraqi defector became the foundation for claims that Iraq possessed mobile biological-weapons laboratories, even though US officials lacked direct access to him and serious questions about his reliability were not adequately resolved or communicated. Analysts treated a poorly validated source as confirmation partly because his account matched what they already expected. Postwar investigation found that the reporting was unreliable.\n\nThe lesson: human reporting is often most valuable for identifying where to look and what to test. It earns evidentiary weight only when its material claims survive corroboration through records, technical signals, inspections, or sources the original reporter does not control.",
-    format: "free-form",
-  },
-  {
     id: "v-task-introduction-1",
     type: "writing-prompt",
     prompt: "Optional task — The strongest objection.\n\nIn a short written note, construct the strongest objection you can to the case above — and state what would change your mind, in either direction.",

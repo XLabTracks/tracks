@@ -17,12 +17,21 @@ Module `c-areas` (Control module 3, slug `areas-of-control-work`) now holds:
 
 | # | Item | Slug | Role |
 |---|------|------|------|
-| 1 | A Taxonomy of Control | `taxonomy-of-control` | Entry page: intro line, 4 buttons, hyperlinked breakdown |
-| 2 | Detection Mitigations | `detection-mitigations` | Doc page |
-| 3 | Prevention and Response Mitigations | `prevention-response-mitigations` | Doc page |
-| 4 | Control Evaluations | `control-evaluations` | Doc page |
-| 5 | Environments | `environments` | Doc page |
-| 6 | An overview of areas of control work | (unchanged) | Existing Greenblatt survey, kept as the module's closing reading |
+| 1 | Detection Mitigations | `detection-mitigations` | Doc page |
+| 2 | Prevention and Response Mitigations | `prevention-response-mitigations` | Doc page |
+| 3 | Control Evaluations | `control-evaluations` | Doc page |
+| 4 | Environments | `environments` | Doc page |
+| 5 | An overview of areas of control work | (unchanged) | Existing Greenblatt survey, kept as the module's closing reading |
+
+> **Update (2026-08-13, Arya):** the "A Taxonomy of Control" entry page
+> (buttons + list breakdown) is **removed** — the module now opens directly
+> with Detection Mitigations. The two-variant comparison below is kept for the
+> record; the breakdown idea may return in a different form (Arya sketched a
+> hand-drawn mind-map of the Detection page's structure — Detection Mitigations
+> → In-Simulation / In-Deployment (→ Agent-Level, Environment-Level) /
+> Limiting Detection Evasion — suggesting a **diagram**, not a link list, as
+> the orientation device, possibly one per doc page rather than one per
+> module).
 
 No new routes, components, or DB anything — standard lessons; pages resolve by
 slug. Each doc page with 2+ headings automatically gets the docked
@@ -98,20 +107,21 @@ or both. Tracking this here so the branch review can't miss it.
 
 ## Open questions
 
-1. **Depth:** Variant A, Variant B, or the recommended heading-pass-then-B?
+1. **Depth:** ~~superseded~~ — the list-breakdown entry page was removed
+   (see update above). If the mind-map diagram direction is pursued, the
+   analogous question is per-page diagrams vs one module-level map.
 2. **Page order:** ~~decided~~ (Arya, 2026-08-13): mitigations first —
    Detection → Prevention & Response → Control Evaluations → Environments.
 3. Where does the attribution note live (entry page vs per-page vs both)?
 4. Keep the Greenblatt survey in this module, or move it to further reading
    once the taxonomy is the module's core?
-5. Promote the button cards to a proper component now or after the depth
-   decision?
+5. ~~Promote the button cards to a proper component?~~ — moot; entry page
+   removed.
 
 ## Review checklist (Arya)
 
-- [ ] Open `/tracks/control/areas-of-control-work/taxonomy-of-control` — compare Variant A vs B in place
-- [ ] Click 3–4 breakdown rows — confirm each lands on the right section
 - [ ] Open Detection/Prevention pages — check the "In this lesson" panel labels (note the bare "Measures" entries)
 - [ ] Open Environments — note there's no section panel (no headings)
-- [ ] Check the module card on `/tracks/control` (new title/summary/6 items)
-- [ ] Decide open questions 1–3
+- [ ] Check the module card on `/tracks/control` (new title/summary/5 items)
+- [ ] Decide open questions 2–3 (order is decided; attribution placement isn't)
+- [ ] If the mind-map direction is real: decide diagram-per-page vs module map, and hand-drawn asset vs house-style SVG

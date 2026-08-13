@@ -103,14 +103,13 @@ export const modules: Module[] = [
     order: 3,
     prerequisiteModuleIds: ["c-intro", "c-mod2"],
     itemIds: [
-      "c-areas-tax-overview",
       "c-areas-tax-detection",
       "c-areas-tax-prevention",
       "c-areas-tax-evals",
       "c-areas-tax-environments",
       "c-areas-l1",
     ],
-    estimatedMinutes: 90,
+    estimatedMinutes: 88,
   },
   {
     // Human-authored outline (course author's module 5 outline) merged with
@@ -678,16 +677,7 @@ export const lessons: Lesson[] = [
     estimatedMinutes: 3,
   },
   // --- Control module 3: A Taxonomy of Control (spec prototype — see
-  // docs/superpowers/specs/2026-08-13-module-3-taxonomy-spec.md; the overview
-  // page renders TWO breakdown variants for depth comparison, one gets cut) ---
-  {
-    id: "c-areas-tax-overview",
-    slug: "taxonomy-of-control",
-    moduleId: "c-areas",
-    title: "A Taxonomy of Control",
-    contentRef: "c-areas-tax-overview",
-    estimatedMinutes: 3,
-  },
+  // docs/superpowers/specs/2026-08-13-module-3-taxonomy-spec.md) ---
   {
     id: "c-areas-tax-evals",
     slug: "control-evaluations",

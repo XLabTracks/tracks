@@ -2,22 +2,24 @@
 
 import { getCurrentUser } from "@/lib/auth";
 import { prisma } from "@/lib/db";
-import { classifyLength, modelFor } from "@/lib/grader/classify";
+import {
+  classifyLength,
+  modelsFor,
+  outputTokensFor,
+  reasoningEffortFor,
+} from "@/lib/grader/classify";
 import { feedbackToHtml } from "@/lib/grader/feedback-html";
 import { callGrader } from "@/lib/grader/openrouter";
-import {
-  parseGraderReport,
-  parseVerdict,
-  type CriterionResult,
-} from "@/lib/grader/parse";
+import { parseGraderReport, type CriterionResult } from "@/lib/grader/parse";
 import { systemPrompt, userPrompt } from "@/lib/grader/prompts";
-import { getUserOpenRouterKey } from "@/lib/grader/user-key";
+import { resolveGraderKeyForRequest } from "@/lib/grader/grading-key";
 import {
-  classroomIdOfSelection,
-  getClassroomOpenRouterKey,
-  getGraderKeyView,
-} from "@/lib/grader/grading-key";
-import type { GraderKeySource } from "@/lib/grader/classify";
+  billingScopeFor,
+  claimGradingAttempt,
+  completeGradingAttempt,
+  failGradingAttempt,
+} from "@/lib/grader/grading-attempts";
+import { parseStructuredGrade } from "@/lib/grader/structured";
 import {
   assembleArgueReveal,
   assembleWriting,
@@ -51,19 +53,15 @@ function serverOpenRouterKey(): string | undefined {
   return key && key !== SERVER_KEY_PLACEHOLDER ? key : undefined;
 }
 
-// Grades billed to the shared server-wide key are throttled (a hot loop there
-// burns the site's credits); grades billed to a learner's own or a classroom's
-// key are not — that's their spend. Both windows below therefore apply only
-// when keySource === "server". Without a dedicated event table the cooldown
-// keys off the submission row itself: the grade write bumps updatedAt, so "has
-// feedback + touched in the last 30s" means a grade just landed (or an autosave
-// just happened on a reopened, already-graded row — refusing there is the
-// conservative direction).
-const REGRADE_COOLDOWN_MS = 30_000;
-// Coarse per-user ceiling: distinct graded submissions touched in the last
-// hour. Approximate by design — it exists to stop a hot loop on the
-// server-wide key, not to meter honest use.
-const HOURLY_GRADED_CAP = 12;
+function logGraderEvent(
+  outcome: "succeeded" | "failed",
+  attemptId: string,
+  details: object,
+) {
+  // Operational metadata only: never add the prompt, sample, response, user
+  // id, or API key to this event.
+  console.info("[grader]", JSON.stringify({ outcome, attemptId, ...details }));
+}
 
 /**
  * On-demand reasoning-transparency grade for the caller's own submission
@@ -71,7 +69,8 @@ const HOURLY_GRADED_CAP = 12;
  * the stored row; nothing grade-relevant is trusted from the client). The
  * submission must exist and have been submitted; the parsed total (/45) and
  * the grader's full markdown report persist on the reserved Submission
- * columns with status "graded".
+ * columns. Status deliberately remains "submitted": automated feedback must
+ * not change the lifecycle used by editors and instructor views.
  */
 export async function requestTransparencyGrade(
   contentId: string,
@@ -99,116 +98,86 @@ export async function requestTransparencyGrade(
     return { ok: false, error: "Nothing gradeable in this submission yet." };
   }
 
-  // Bill the key the user selected (their own, a classroom's, or the
-  // server-wide one) — getGraderKeyView re-resolves the stored preference
-  // against what's actually available, so nothing grade-relevant is trusted
-  // from the client. A stored-but-undecryptable key (rotated
-  // API_KEY_ENCRYPTION_SECRET) is an error, not a silent fallback — someone
-  // believes that key pays for this call. The decrypted key exists only
-  // inside this request — never in the response.
-  const keyView = await getGraderKeyView(user.id);
-  const selected = keyView?.selected ?? "server";
-  let keySource: GraderKeySource = "server";
-  let apiKey: string | undefined | null;
-  const selectedClassroomId = classroomIdOfSelection(selected);
-  if (selected === "user") {
-    if (keyView?.personal.state === "needs-reentry") {
-      return {
-        ok: false,
-        error:
-          "Your stored OpenRouter key can no longer be read — replace or remove it below, then try again.",
-      };
-    }
-    keySource = "user";
-    apiKey = await getUserOpenRouterKey(user.id);
-  } else if (selectedClassroomId != null) {
-    keySource = "classroom";
-    apiKey = await getClassroomOpenRouterKey(user.id, selectedClassroomId);
-    if (!apiKey) {
-      return {
-        ok: false,
-        error:
-          "The selected classroom's grading key can no longer be used — pick another key below, or ask the instructor to re-enter it.",
-      };
-    }
-  } else {
-    apiKey = serverOpenRouterKey();
-  }
+  // Resolve selection, membership and the selected ciphertext in one DB read;
+  // plaintext key material remains in this server request only.
+  const resolvedKey = await resolveGraderKeyForRequest(user.id);
+  if (!resolvedKey.ok) return resolvedKey;
+  const { keySource, classroomId } = resolvedKey;
+  const apiKey =
+    keySource === "server" ? serverOpenRouterKey() : resolvedKey.apiKey;
   if (!apiKey) {
     return {
       ok: false,
-      error: keyView
-        ? "Grading needs an OpenRouter API key — add your own key below to enable it."
-        : "Grading is not configured on this server.",
+      error:
+        "Grading needs an OpenRouter API key — add or select one below to enable it.",
     };
   }
 
-  // Throttle only grades billed to the shared server-wide key (see the
-  // constants above). A learner paying with their own or a classroom's key is
-  // never rate-limited — it's their spend, not the site's.
-  if (keySource === "server") {
-    if (
-      submission.feedback != null &&
-      Date.now() - submission.updatedAt.getTime() < REGRADE_COOLDOWN_MS
-    ) {
-      return {
-        ok: false,
-        error:
-          "This submission was just graded — wait 30 seconds before regrading.",
-      };
-    }
-    const recentlyGraded = await prisma.submission.count({
-      where: {
-        userId: user.id,
-        feedback: { not: null },
-        updatedAt: { gte: new Date(Date.now() - 60 * 60 * 1000) },
-      },
-    });
-    if (recentlyGraded >= HOURLY_GRADED_CAP) {
-      return {
-        ok: false,
-        error: "Grading limit reached for now — try again in an hour.",
-      };
-    }
-  }
-
   const lengthClass = classifyLength(assembled.sample);
+  const models = modelsFor(lengthClass, keySource);
+  const claim = await claimGradingAttempt({
+    userId: user.id,
+    submissionId: submission.id,
+    keySource,
+    billingScope: billingScopeFor(keySource, user.id, classroomId),
+    requestedModel: models.join(","),
+  });
+  if (!claim.ok) return claim;
+
   const result = await callGrader(
-    modelFor(lengthClass, keySource),
+    models,
     systemPrompt(lengthClass),
     userPrompt(assembled.sample, assembled.context),
     apiKey,
+    {
+      maxTokens: outputTokensFor(lengthClass),
+      reasoningEffort: reasoningEffortFor(lengthClass),
+    },
   );
-  if (!result.ok) return result;
+  if (!result.ok) {
+    await failGradingAttempt(claim.attemptId, result.errorCode, result.telemetry);
+    logGraderEvent("failed", claim.attemptId, {
+      errorCode: result.errorCode,
+      ...result.telemetry,
+    });
+    return { ok: false, error: result.error };
+  }
 
-  const verdict = parseVerdict(result.content);
-  if (!verdict) {
+  const grade = parseStructuredGrade(result.content, lengthClass);
+  if (!grade) {
+    await failGradingAttempt(
+      claim.attemptId,
+      "invalid_structured_grade",
+      result.telemetry,
+    );
+    logGraderEvent("failed", claim.attemptId, {
+      errorCode: "invalid_structured_grade",
+      ...result.telemetry,
+    });
     return {
       ok: false,
       error: "The grader's response was malformed. Try again.",
     };
   }
 
-  // Deliberately NOT flipping status to "graded": editors and instructor
-  // views key off status === "submitted", and this automated grade shouldn't
-  // change submission semantics. Grade presence = score + feedback set.
-  await prisma.submission.update({
-    where: { userId_contentId_kind: { userId: user.id, contentId, kind } },
-    data: {
-      score: verdict.score,
-      feedback: result.content,
-    },
+  await completeGradingAttempt({
+    attemptId: claim.attemptId,
+    submissionId: submission.id,
+    score: grade.score,
+    feedback: grade.markdown,
+    telemetry: result.telemetry,
   });
+  logGraderEvent("succeeded", claim.attemptId, result.telemetry);
 
-  // The raw report (including its <analysis> block) persists above; the
-  // client gets only the parsed criteria and the analysis-stripped body.
-  const report = parseGraderReport(result.content);
+  // The canonical report (including its <analysis> block) persists above;
+  // the client gets only rubric rows and analysis-stripped learner feedback.
+  const report = parseGraderReport(grade.markdown);
   return {
     ok: true,
-    score: verdict.score,
-    band: verdict.band,
+    score: grade.score,
+    band: grade.band,
     feedbackHtml: feedbackToHtml(report.visibleMarkdown),
-    criteria: report.criteria,
+    criteria: grade.criteria,
   };
 }
 

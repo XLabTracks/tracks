@@ -1,7 +1,7 @@
 "use client";
 
 import Script from "next/script";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import { useAuth } from "@workos-inc/authkit-nextjs/components";
 import { AccountMenu } from "@/components/layout/account-menu";
@@ -62,8 +62,75 @@ function ThemeSwitch() {
   useEffect(() => {
     const w = window as unknown as { VT_THEME?: { mount: () => void } };
     w.VT_THEME?.mount();
-  });
+  }, []);
   return <div className="theme-switch" />;
+}
+
+const PRESENTATION_KEY = "xlab-verification-presentation";
+
+function PresentationModeToggle() {
+  const [enabled, setEnabled] = useState(false);
+
+  useEffect(() => {
+    let stored: string | null = null;
+    try {
+      stored = localStorage.getItem(PRESENTATION_KEY);
+    } catch {
+      // Storage unavailable: reduced-motion remains the safe default signal.
+    }
+    const initial =
+      stored === "true" ||
+      (stored == null &&
+        window.matchMedia?.("(prefers-reduced-motion: reduce)").matches);
+    const frame = requestAnimationFrame(() => setEnabled(initial));
+    return () => cancelAnimationFrame(frame);
+  }, []);
+
+  useEffect(() => {
+    document.documentElement.classList.toggle("vt-presentation", enabled);
+    return () => {
+      document.documentElement.classList.remove("vt-presentation");
+    };
+  }, [enabled]);
+
+  const toggle = () => {
+    const next = !enabled;
+    setEnabled(next);
+    try {
+      localStorage.setItem(PRESENTATION_KEY, String(next));
+    } catch {
+      // The mode still applies for this session.
+    }
+  };
+
+  return (
+    <button
+      type="button"
+      className="presentation-toggle"
+      aria-pressed={enabled}
+      aria-label="Presentation mode"
+      title={
+        enabled
+          ? "Presentation mode on — restore motion and effects"
+          : "Presentation mode — reduce motion and screen-share effects"
+      }
+      onClick={toggle}
+    >
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <rect x="3" y="4" width="18" height="13" rx="2" />
+        <path d="M8 21h8M12 17v4" />
+      </svg>
+    </button>
+  );
+}
+
+function VerificationRouteSignal({ pathname }: { pathname: string | null }) {
+  useEffect(() => {
+    window.dispatchEvent(
+      new CustomEvent("vt-route-change", { detail: { pathname } }),
+    );
+  }, [pathname]);
+  return null;
 }
 
 export function VerificationHeader() {
@@ -152,16 +219,17 @@ export function VerificationHeader() {
           They are plain scripts rather than React components on purpose —
           one implementation, and the static site can still be lifted out
           whole. */}
-      <Script src="/verification/highlight.js" strategy="afterInteractive" />
-      <Script src="/verification/memo-store.js" strategy="afterInteractive" />
-      <Script src="/verification/notebook.js" strategy="afterInteractive" />
-      <Script src="/verification/vocab.js" strategy="afterInteractive" />
-      <Script src="/verification/sync.js" strategy="afterInteractive" />
+      <Script src="/verification/highlight.js" strategy="lazyOnload" />
+      <Script src="/verification/memo-store.js" strategy="lazyOnload" />
+      <Script src="/verification/notebook.js" strategy="lazyOnload" />
+      <Script src="/verification/vocab.js" strategy="lazyOnload" />
+      <Script src="/verification/sync.js" strategy="lazyOnload" />
       {/* What those three no longer own is the selection UX: each used to
           raise its own button off its own mouseup listener, which is why a
           phone and a keyboard were offered nothing. One toolbar now, calling
           their published entry points at press time. */}
       <SelectionActions />
+      <VerificationRouteSignal pathname={pathname} />
       <header className="site-header">
         <div className="bar">
           <a className="brand" href="/verification/landing">
@@ -203,6 +271,7 @@ export function VerificationHeader() {
             ))}
           </nav>
           <div className="header-right">
+            <PresentationModeToggle />
             <ThemeSwitch />
             {/* Signed in, this is the app's own account menu — the same
                 avatar, email, classrooms and Sign out as everywhere else. A

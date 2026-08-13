@@ -46,6 +46,7 @@ and says so — but none of them *work*, either.
 | `20260805120000_verification_state.sql` | Progress / notebook / highlights / memo drafts on the account (`/api/verification/state`) | 503 with `unavailable: true`; `sync.js` stays on localStorage silently |
 | `20260805150000_verification_applications.sql` | Cohort applications (`/verification/enroll`, `/verification/applications`) | The page says the table is not ready rather than pretending to have saved |
 | `20260805213000_verification_capstone_signups.sql` | Capstone sign-ups (`/verification/capstone-signup`, `/verification/capstone-signups`) | Same: the sign-up says it is not ready |
+| `20260812193000_grading_attempts.sql` | Reasoning-transparency LLM feedback | Grading fails closed with a database-upgrade message; no unmetered call is made |
 
 Secrets those same features need, set with `wrangler secret put`:
 

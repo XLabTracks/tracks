@@ -30,6 +30,33 @@ import { useEffect, useRef } from "react";
  * function does not re-run the loader.
  */
 const loaded = new Set<string>();
+const loading = new Map<string, Promise<void>>();
+
+function loadOnce(url: string): Promise<void> {
+  if (loaded.has(url)) return Promise.resolve();
+  const existing = loading.get(url);
+  if (existing) return existing;
+  const promise = new Promise<void>((resolve) => {
+    const tag = document.createElement("script");
+    tag.src = url;
+    tag.async = false;
+    tag.onload = () => {
+      // Mark the script independently of the component that requested it. A
+      // navigation may cancel that component after execution but before its
+      // await resumes; execution still happened and must never happen twice.
+      loaded.add(url);
+      loading.delete(url);
+      resolve();
+    };
+    tag.onerror = () => {
+      loading.delete(url);
+      resolve();
+    };
+    document.body.appendChild(tag);
+  });
+  loading.set(url, promise);
+  return promise;
+}
 
 export function LegacyScripts({
   src,
@@ -50,16 +77,8 @@ export function LegacyScripts({
       for (const file of src) {
         const url = `/verification/${file}`;
         if (loaded.has(url)) continue;
-        await new Promise<void>((resolve) => {
-          const tag = document.createElement("script");
-          tag.src = url;
-          tag.async = false;
-          // Resolve on error too: one missing file must not strand the rest.
-          tag.onload = tag.onerror = () => resolve();
-          document.body.appendChild(tag);
-        });
+        await loadOnce(url);
         if (cancelled) return;
-        loaded.add(url);
       }
       if (!cancelled) ready.current?.();
     };

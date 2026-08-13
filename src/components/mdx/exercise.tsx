@@ -24,16 +24,18 @@ import {
   saveWritingDraft,
   submitWriting,
 } from "@/app/actions/submissions";
-import { AllocationExerciseCard } from "@/components/exercises/allocation-exercise";
-import { ArgueRevealExerciseCard } from "@/components/exercises/argue-reveal-exercise";
-import { ChoiceExerciseCard } from "@/components/exercises/choice-exercise";
-import { CommitConstructCard } from "@/components/exercises/commit-construct-exercise";
-import { ControlScenariosCard } from "@/components/exercises/control-scenarios-exercise";
-import { StagedQuestionsCard } from "@/components/exercises/staged-questions-exercise";
-import { FlowchartExerciseCard } from "@/components/exercises/flowchart-exercise";
-import { TapRevealCard } from "@/components/exercises/tap-reveal-exercise";
-import { UnderstandingCheckCard } from "@/components/exercises/understanding-check";
-import { WritingExerciseCard } from "@/components/exercises/writing-exercise";
+import {
+  AllocationExerciseCard,
+  ArgueRevealExerciseCard,
+  ChoiceExerciseCard,
+  CommitConstructCard,
+  ControlScenariosCard,
+  FlowchartExerciseCard,
+  StagedQuestionsCard,
+  TapRevealCard,
+  UnderstandingCheckCard,
+  WritingExerciseCard,
+} from "./exercise-cards";
 import type { WritingValues } from "@/components/exercises/writing-editor";
 import { TransparencyFeedback } from "@/components/exercises/transparency-feedback";
 import { feedbackToHtml } from "@/lib/grader/feedback-html";

@@ -67,14 +67,22 @@
 
   /* ---------- the reading column as one string ---------- */
 
+  function readingRoot() {
+    /* Track lessons have a precise authored-prose boundary. Lifted static
+       pages retain main as their fallback. Widgets are excluded below. */
+    return document.querySelector('.lesson-body') || document.querySelector('main');
+  }
+
   function snapshot() {
-    const root = document.querySelector('main');
+    const root = readingRoot();
     if (!root) return null;
     const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, {
       acceptNode: function (n) {
         const p = n.parentElement;
         if (!p) return NodeFilter.FILTER_REJECT;
-        if (p.closest('script, style, textarea')) return NodeFilter.FILTER_REJECT;
+        if (p.closest('script, style, textarea, input, select, [data-widget], [data-vt-highlight-ignore]')) {
+          return NodeFilter.FILTER_REJECT;
+        }
         return NodeFilter.FILTER_ACCEPT;
       }
     });
@@ -166,6 +174,7 @@
     });
     write(data);
     paint();
+    armObserver();
     return true;
   }
 
@@ -176,6 +185,7 @@
     else delete data.pages[location.pathname];
     write(data);
     paint();
+    armObserver();
   }
 
   /* ---------- the add button ---------- */
@@ -245,17 +255,46 @@
   /* ---------- keeping the paint alive ---------- */
 
   let timer = null;
+  let observer = null;
+  let observedRoot = null;
+  function ignoredMutation(mutation) {
+    const target = mutation.target.nodeType === 1
+      ? mutation.target
+      : mutation.target.parentElement;
+    return !!(target && target.closest &&
+      target.closest('[data-widget], [data-vt-highlight-ignore]'));
+  }
   function armObserver() {
-    const root = document.querySelector('main');
-    if (!root) return;
-    new MutationObserver(function () {
+    const root = readingRoot();
+    const hasHighlights = pageList(read()).length > 0;
+    if (observer && (root !== observedRoot || !hasHighlights)) {
+      observer.disconnect();
+      observer = null;
+      observedRoot = null;
+    }
+    if (!root || !hasHighlights || observer) return;
+    observedRoot = root;
+    observer = new MutationObserver(function (mutations) {
+      if (mutations.every(ignoredMutation)) return;
       clearTimeout(timer);
       timer = setTimeout(paint, 250);
-    }).observe(root, { childList: true, characterData: true, subtree: true });
+    });
+    observer.observe(root, { childList: true, characterData: true, subtree: true });
   }
 
   window.addEventListener('storage', function (e) {
-    if (e.key === STORE) paint();
+    if (e.key === STORE) { paint(); armObserver(); }
+  });
+
+  window.addEventListener('vt-route-change', function () {
+    if (!supported) return;
+    dropStrip();
+    painted = [];
+    CSS.highlights.delete(NAME);
+    if (observer) observer.disconnect();
+    observer = null;
+    observedRoot = null;
+    setTimeout(function () { paint(); armObserver(); }, 0);
   });
 
   if (supported) {
@@ -297,6 +336,7 @@
       else delete data.pages[location.pathname];
       write(data);
       paint();
+      armObserver();
     },
     count: function () { return pageList(read()).length; }
   };

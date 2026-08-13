@@ -68,6 +68,10 @@
   function mount() {
     var group = document.querySelector(".theme-switch");
     if (!group) return;
+    if (group.dataset.vtThemeMounted === "true") {
+      apply(current());
+      return;
+    }
     group.setAttribute("role", "radiogroup");
     group.setAttribute("aria-label", "Colour theme");
     group.innerHTML = THEMES.map(function (t) {
@@ -89,6 +93,7 @@
       var b = e.target.closest("button[data-theme]");
       if (b) apply(b.dataset.theme);
     });
+    group.dataset.vtThemeMounted = "true";
     apply(current());
   }
 

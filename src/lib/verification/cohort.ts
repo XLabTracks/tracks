@@ -1,4 +1,5 @@
 import { verificationExercises } from "@/content/verification/exercises";
+import { isWritingExercise } from "@/lib/content/types";
 import {
   getExerciseById,
   getItemsForModule,
@@ -28,9 +29,12 @@ import {
 export const TASK_PREFIX = "v-task-";
 
 /** The task ids the Verification track issues, in declaration order. */
-export const verificationTaskIds: string[] = verificationExercises.map(
-  (e) => e.id,
-);
+export const verificationTaskIds: string[] = verificationExercises
+  .filter(
+    (exercise) =>
+      exercise.id.startsWith(TASK_PREFIX) && isWritingExercise(exercise),
+  )
+  .map((exercise) => exercise.id);
 
 /**
  * The lesson contentRef stem a task id names: strip the prefix and the

@@ -41,10 +41,11 @@ model User {
   apiKeys           UserApiKey[]
   reviewCards       ReviewCard[]
   highlights        Highlight[]
+  gradingAttempts   GradingAttempt[]
   verificationState VerificationState?
 
-  verificationApplications VerificationApplication[] @relation("VerificationApplicant")
-  verificationDecisions    VerificationApplication[] @relation("VerificationApplicationDecider")
+  verificationApplications VerificationApplication[]   @relation("VerificationApplicant")
+  verificationDecisions    VerificationApplication[]   @relation("VerificationApplicationDecider")
   capstoneSignup           VerificationCapstoneSignup?
 }
 
@@ -238,25 +239,56 @@ enum SubmissionStatus {
 }
 
 model Submission {
-  id           String           @id @default(cuid())
-  userId       String
-  user         User             @relation(fields: [userId], references: [id], onDelete: Cascade)
-  contentId    String
-  kind         SubmissionKind
-  format       String?
+  id              String           @id @default(cuid())
+  userId          String
+  user            User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  contentId       String
+  kind            SubmissionKind
+  format          String?
   // closed-ended answers (selected option ids) or sectioned writing values
-  responseJson Json?
-  responseText String?
-  status       SubmissionStatus @default(draft)
-  score        Float?
-  feedback     String? // reserved for the planned feedback flow (with status=graded)
-  version      Int              @default(1) // reserved — not yet used for revision history
-  createdAt    DateTime         @default(now())
-  updatedAt    DateTime         @updatedAt
+  responseJson    Json?
+  responseText    String?
+  status          SubmissionStatus @default(draft)
+  score           Float?
+  feedback        String? // reserved for the planned feedback flow (with status=graded)
+  version         Int              @default(1) // reserved — not yet used for revision history
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+  gradingAttempts GradingAttempt[]
   // No separate @@index([userId, contentId]): it is a strict prefix of the
   // unique above, which serves every Submission predicate in the app.
 
   @@unique([userId, contentId, kind])
+}
+
+// One durable row for every LLM grading request. This is both the audit trail
+// (latency/model/provider/token usage without prompt or key material) and the
+// concurrency/rate-limit primitive: the SQL migration adds a partial unique
+// index allowing only one pending attempt per submission at a time.
+model GradingAttempt {
+  id               String     @id @default(cuid())
+  userId           String
+  user             User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  submissionId     String
+  submission       Submission @relation(fields: [submissionId], references: [id], onDelete: Cascade)
+  keySource        String
+  billingScope     String
+  requestedModel   String
+  resolvedModel    String?
+  provider         String?
+  status           String     @default("pending")
+  errorCode        String?
+  requestId        String?
+  promptTokens     Int?
+  completionTokens Int?
+  totalTokens      Int?
+  latencyMs        Int?
+  createdAt        DateTime   @default(now())
+  finishedAt       DateTime?
+
+  @@index([userId, keySource, createdAt])
+  @@index([billingScope, createdAt])
+  @@index([submissionId, createdAt])
 }
 
 // Per-user FSRS scheduling state for one tap-reveal "notecard" (contentId is

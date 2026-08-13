@@ -72,10 +72,10 @@ export function WritingEditor({
   useEffect(() => {
     saveDraftRef.current = onSaveDraft;
   });
-  // Monotonic save id: only the newest in-flight save may report "saved", so
-  // an earlier save that resolves late can't overwrite a newer one's status
-  // (the persisted rows still race, but the label stops lying).
+  // Monotonic save id controls the label; the promise chain also serializes
+  // writes so an older slow request can never land after a newer draft.
   const saveSeq = useRef(0);
+  const saveChain = useRef<Promise<void>>(Promise.resolve());
 
   const totalWords = useMemo(
     () => sections.reduce((sum, s) => sum + countWords(values[s.id] ?? ""), 0),
@@ -105,7 +105,13 @@ export function WritingEditor({
       if (!storable) return;
       const seq = ++saveSeq.current;
       try {
-        await saveDraftRef.current?.(values);
+        const save = saveDraftRef.current;
+        saveChain.current = saveChain.current
+          .catch(() => undefined)
+          .then(async () => {
+            await save?.(values);
+          });
+        await saveChain.current;
         // Ignore a stale save that resolved after a newer one started.
         if (seq === saveSeq.current) setSaveState("saved");
       } catch {

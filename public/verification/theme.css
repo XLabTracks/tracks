@@ -623,6 +623,52 @@ button, [role='button'], [role='radio'], [role='tab'], .chip, .nav a, .brand,
   min-height: var(--hdr-action-h);
 }
 
+/* A deliberate screen-share mode: it keeps the platform palette and layout,
+   but removes the expensive pixels video encoders have to recompute. The
+   monitor icon is a peer of the theme segments, not a fourth theme. */
+.presentation-toggle {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: var(--hdr-action-h);
+  height: var(--hdr-action-h);
+  padding: 0;
+  border: var(--hairline) solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--card);
+  color: var(--muted-foreground);
+  cursor: pointer;
+  transition: color .15s ease, background .15s ease;
+}
+.presentation-toggle:hover { color: var(--foreground); background: var(--accent); }
+.presentation-toggle[aria-pressed='true'] { background: var(--primary); color: var(--primary-foreground); }
+.presentation-toggle svg {
+  width: 16px;
+  height: 16px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+:root[data-theme='contrast'] .presentation-toggle svg { width: 22px; height: 22px; stroke-width: 2.4; }
+
+:root.vt-presentation .site-header {
+  background: var(--background);
+  backdrop-filter: none;
+}
+:root.vt-presentation *,
+:root.vt-presentation *::before,
+:root.vt-presentation *::after {
+  animation-duration: .01ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: .01ms !important;
+  scroll-behavior: auto !important;
+  filter: none !important;
+  backdrop-filter: none !important;
+}
+
 /* Three-way theme switch, drawn as radios rather than a cycling button: a
    cycling control gives no way to see which of the three is active, and none
    of them is an obvious "next". */
@@ -789,5 +835,12 @@ button, [role='button'], [role='radio'], [role='tab'], .chip, .nav a, .brand,
     animation-duration: .01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: .01ms !important;
+  }
+  .site-header {
+    background: var(--background);
+    backdrop-filter: none;
+  }
+  .sky :is(.spoke, .edge.beam, .hub-disc, .node-core, .plaque) {
+    filter: none !important;
   }
 }

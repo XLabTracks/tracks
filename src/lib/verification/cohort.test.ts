@@ -30,6 +30,12 @@ function embeddedIn(): Map<string, string> {
 }
 
 describe("verification cohort tasks", () => {
+  it("does not expose local knowledge checks as submitted cohort work", () => {
+    expect(verificationTaskIds).not.toContain(
+      "v-test-human-insiders-source-scope",
+    );
+  });
+
   it("every task is embedded in a lesson, and its id names that lesson", () => {
     const embedded = embeddedIn();
     for (const id of verificationTaskIds) {

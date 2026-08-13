@@ -1,0 +1,100 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="760" height="470" viewBox="0 0 760 470" font-family="InterVariable, Inter, ui-sans-serif, system-ui, sans-serif" role="img" aria-label="Accuracy by benchmark, locking state, condition, and elicitation stage">
+<defs>
+<pattern id="hb" width="5" height="5" patternTransform="rotate(45)" patternUnits="userSpaceOnUse"><rect width="5" height="5" fill="#ffffff"/><line x1="0" y1="0" x2="0" y2="5" stroke="#15803d" stroke-width="1.2"/></pattern>
+<pattern id="hm" width="5" height="5" patternTransform="rotate(45)" patternUnits="userSpaceOnUse"><rect width="5" height="5" fill="#ffffff"/><line x1="0" y1="0" x2="0" y2="5" stroke="#dc2626" stroke-width="1.2"/></pattern>
+</defs>
+<rect width="760" height="470" fill="#ffffff"/>
+<text x="48" y="419.5" text-anchor="end" font-size="11" fill="#6b6b6b">0.0</text>
+<line x1="56" y1="346" x2="744" y2="346" stroke="#e5e5e5" stroke-width="1"/>
+<text x="48" y="349.5" text-anchor="end" font-size="11" fill="#6b6b6b">0.2</text>
+<line x1="56" y1="276" x2="744" y2="276" stroke="#e5e5e5" stroke-width="1"/>
+<text x="48" y="279.5" text-anchor="end" font-size="11" fill="#6b6b6b">0.4</text>
+<line x1="56" y1="206" x2="744" y2="206" stroke="#e5e5e5" stroke-width="1"/>
+<text x="48" y="209.5" text-anchor="end" font-size="11" fill="#6b6b6b">0.6</text>
+<line x1="56" y1="136" x2="744" y2="136" stroke="#e5e5e5" stroke-width="1"/>
+<text x="48" y="139.5" text-anchor="end" font-size="11" fill="#6b6b6b">0.8</text>
+<line x1="56" y1="66" x2="744" y2="66" stroke="#e5e5e5" stroke-width="1"/>
+<text x="48" y="69.5" text-anchor="end" font-size="11" fill="#6b6b6b">1.0</text>
+<text x="16" y="241" transform="rotate(-90 16 241)" text-anchor="middle" font-size="12.5" font-weight="600" fill="#233554">Accuracy</text>
+<path d="M 94 416 V 85.45000000000002 Q 94 82.45000000000002 97 82.45000000000002 H 115 Q 118 82.45000000000002 118 85.45000000000002 V 416 Z" fill="url(#hb)" stroke="#15803d" stroke-width="1.5"/>
+<line x1="106" y1="87.00000000000001" x2="106" y2="77.9" stroke="#233554" stroke-width="1.4"/>
+<line x1="102" y1="77.9" x2="110" y2="77.9" stroke="#233554" stroke-width="1.1"/>
+<line x1="102" y1="87.00000000000001" x2="110" y2="87.00000000000001" stroke="#233554" stroke-width="1.1"/>
+<path d="M 121 416 V 70.4 Q 121 67.4 124 67.4 H 142 Q 145 67.4 145 70.4 V 416 Z" fill="#15803d"/>
+<line x1="133" y1="68.8" x2="133" y2="66" stroke="#233554" stroke-width="1.4"/>
+<line x1="129" y1="66" x2="137" y2="66" stroke="#233554" stroke-width="1.1"/>
+<line x1="129" y1="68.8" x2="137" y2="68.8" stroke="#233554" stroke-width="1.1"/>
+<path d="M 152 416 V 92.44999999999999 Q 152 89.44999999999999 155 89.44999999999999 H 173 Q 176 89.44999999999999 176 92.44999999999999 V 416 Z" fill="url(#hm)" stroke="#dc2626" stroke-width="1.5"/>
+<line x1="164" y1="95.04999999999998" x2="164" y2="83.84999999999998" stroke="#233554" stroke-width="1.4"/>
+<line x1="160" y1="83.84999999999998" x2="168" y2="83.84999999999998" stroke="#233554" stroke-width="1.1"/>
+<line x1="160" y1="95.04999999999998" x2="168" y2="95.04999999999998" stroke="#233554" stroke-width="1.1"/>
+<path d="M 179 416 V 76 Q 179 73 182 73 H 200 Q 203 73 203 76 V 416 Z" fill="#dc2626"/>
+<line x1="191" y1="76.15" x2="191" y2="69.85000000000001" stroke="#233554" stroke-width="1.4"/>
+<line x1="187" y1="69.85000000000001" x2="195" y2="69.85000000000001" stroke="#233554" stroke-width="1.1"/>
+<line x1="187" y1="76.15" x2="195" y2="76.15" stroke="#233554" stroke-width="1.1"/>
+<text x="150" y="434" text-anchor="middle" font-size="11.5" font-weight="600" fill="#233554">WMDP-Bio</text>
+<text x="150" y="449" text-anchor="middle" font-size="11.5" fill="#6b6b6b">Pre-Locking</text>
+<path d="M 250 416 V 130.60000000000002 Q 250 127.60000000000002 253 127.60000000000002 H 271 Q 274 127.60000000000002 274 130.60000000000002 V 416 Z" fill="url(#hb)" stroke="#15803d" stroke-width="1.5"/>
+<line x1="262" y1="136.00000000000003" x2="262" y2="119.20000000000002" stroke="#233554" stroke-width="1.4"/>
+<line x1="258" y1="119.20000000000002" x2="266" y2="119.20000000000002" stroke="#233554" stroke-width="1.1"/>
+<line x1="258" y1="136.00000000000003" x2="266" y2="136.00000000000003" stroke="#233554" stroke-width="1.1"/>
+<path d="M 277 416 V 119.75 Q 277 116.75 280 116.75 H 298 Q 301 116.75 301 119.75 V 416 Z" fill="#15803d"/>
+<line x1="289" y1="124.45000000000002" x2="289" y2="109.05" stroke="#233554" stroke-width="1.4"/>
+<line x1="285" y1="109.05" x2="293" y2="109.05" stroke="#233554" stroke-width="1.1"/>
+<line x1="285" y1="124.45000000000002" x2="293" y2="124.45000000000002" stroke="#233554" stroke-width="1.1"/>
+<path d="M 308 416 V 139 Q 308 136 311 136 H 329 Q 332 136 332 139 V 416 Z" fill="url(#hm)" stroke="#dc2626" stroke-width="1.5"/>
+<line x1="320" y1="144.75" x2="320" y2="127.24999999999997" stroke="#233554" stroke-width="1.4"/>
+<line x1="316" y1="127.24999999999997" x2="324" y2="127.24999999999997" stroke="#233554" stroke-width="1.1"/>
+<line x1="316" y1="144.75" x2="324" y2="144.75" stroke="#233554" stroke-width="1.1"/>
+<path d="M 335 416 V 177.5 Q 335 174.5 338 174.5 H 356 Q 359 174.5 359 177.5 V 416 Z" fill="#dc2626"/>
+<line x1="347" y1="184.65000000000003" x2="347" y2="164.35000000000002" stroke="#233554" stroke-width="1.4"/>
+<line x1="343" y1="164.35000000000002" x2="351" y2="164.35000000000002" stroke="#233554" stroke-width="1.1"/>
+<line x1="343" y1="184.65000000000003" x2="351" y2="184.65000000000003" stroke="#233554" stroke-width="1.1"/>
+<text x="306" y="434" text-anchor="middle" font-size="11.5" font-weight="600" fill="#233554">WMDP-Bio</text>
+<text x="306" y="449" text-anchor="middle" font-size="11.5" fill="#6b6b6b">Locked</text>
+<path d="M 438 416 V 235.25 Q 438 232.25 441 232.25 H 459 Q 462 232.25 462 235.25 V 416 Z" fill="url(#hb)" stroke="#15803d" stroke-width="1.5"/>
+<line x1="450" y1="249.74999999999997" x2="450" y2="214.74999999999997" stroke="#233554" stroke-width="1.4"/>
+<line x1="446" y1="214.74999999999997" x2="454" y2="214.74999999999997" stroke="#233554" stroke-width="1.1"/>
+<line x1="446" y1="249.74999999999997" x2="454" y2="249.74999999999997" stroke="#233554" stroke-width="1.1"/>
+<path d="M 465 416 V 214.60000000000002 Q 465 211.60000000000002 468 211.60000000000002 H 486 Q 489 211.60000000000002 489 214.60000000000002 V 416 Z" fill="#15803d"/>
+<line x1="477" y1="228.75000000000003" x2="477" y2="194.45" stroke="#233554" stroke-width="1.4"/>
+<line x1="473" y1="194.45" x2="481" y2="194.45" stroke="#233554" stroke-width="1.1"/>
+<line x1="473" y1="228.75000000000003" x2="481" y2="228.75000000000003" stroke="#233554" stroke-width="1.1"/>
+<path d="M 496 416 V 225.1 Q 496 222.1 499 222.1 H 517 Q 520 222.1 520 225.1 V 416 Z" fill="url(#hm)" stroke="#dc2626" stroke-width="1.5"/>
+<line x1="508" y1="239.6" x2="508" y2="204.59999999999997" stroke="#233554" stroke-width="1.4"/>
+<line x1="504" y1="204.59999999999997" x2="512" y2="204.59999999999997" stroke="#233554" stroke-width="1.1"/>
+<line x1="504" y1="239.6" x2="512" y2="239.6" stroke="#233554" stroke-width="1.1"/>
+<path d="M 523 416 V 211.10000000000002 Q 523 208.10000000000002 526 208.10000000000002 H 544 Q 547 208.10000000000002 547 211.10000000000002 V 416 Z" fill="#dc2626"/>
+<line x1="535" y1="225.25000000000003" x2="535" y2="190.95" stroke="#233554" stroke-width="1.4"/>
+<line x1="531" y1="190.95" x2="539" y2="190.95" stroke="#233554" stroke-width="1.1"/>
+<line x1="531" y1="225.25000000000003" x2="539" y2="225.25000000000003" stroke="#233554" stroke-width="1.1"/>
+<text x="494" y="434" text-anchor="middle" font-size="11.5" font-weight="600" fill="#233554">VCT</text>
+<text x="494" y="449" text-anchor="middle" font-size="11.5" fill="#6b6b6b">Pre-Locking</text>
+<path d="M 594 416 V 294.4 Q 594 291.4 597 291.4 H 615 Q 618 291.4 618 294.4 V 416 Z" fill="url(#hb)" stroke="#15803d" stroke-width="1.5"/>
+<line x1="606" y1="308.2" x2="606" y2="274.6" stroke="#233554" stroke-width="1.4"/>
+<line x1="602" y1="274.6" x2="610" y2="274.6" stroke="#233554" stroke-width="1.1"/>
+<line x1="602" y1="308.2" x2="610" y2="308.2" stroke="#233554" stroke-width="1.1"/>
+<path d="M 621 416 V 238.75 Q 621 235.75 624 235.75 H 642 Q 645 235.75 645 238.75 V 416 Z" fill="#15803d"/>
+<line x1="633" y1="253.24999999999997" x2="633" y2="218.24999999999997" stroke="#233554" stroke-width="1.4"/>
+<line x1="629" y1="218.24999999999997" x2="637" y2="218.24999999999997" stroke="#233554" stroke-width="1.1"/>
+<line x1="629" y1="253.24999999999997" x2="637" y2="253.24999999999997" stroke="#233554" stroke-width="1.1"/>
+<path d="M 652 416 V 290.9 Q 652 287.9 655 287.9 H 673 Q 676 287.9 676 290.9 V 416 Z" fill="url(#hm)" stroke="#dc2626" stroke-width="1.5"/>
+<line x1="664" y1="304.7" x2="664" y2="271.1" stroke="#233554" stroke-width="1.4"/>
+<line x1="660" y1="271.1" x2="668" y2="271.1" stroke="#233554" stroke-width="1.1"/>
+<line x1="660" y1="304.7" x2="668" y2="304.7" stroke="#233554" stroke-width="1.1"/>
+<path d="M 679 416 V 339.2 Q 679 336.2 682 336.2 H 700 Q 703 336.2 703 339.2 V 416 Z" fill="#dc2626"/>
+<line x1="691" y1="350.90000000000003" x2="691" y2="321.5" stroke="#233554" stroke-width="1.4"/>
+<line x1="687" y1="321.5" x2="695" y2="321.5" stroke="#233554" stroke-width="1.1"/>
+<line x1="687" y1="350.90000000000003" x2="695" y2="350.90000000000003" stroke="#233554" stroke-width="1.1"/>
+<text x="650" y="434" text-anchor="middle" font-size="11.5" font-weight="600" fill="#233554">VCT</text>
+<text x="650" y="449" text-anchor="middle" font-size="11.5" fill="#6b6b6b">Locked</text>
+<line x1="56" y1="416" x2="744" y2="416" stroke="#233554" stroke-width="1.2"/>
+<rect x="210" y="14" width="18" height="12" fill="url(#hb)" stroke="#15803d" stroke-width="1.5" rx="2"/>
+<text x="235" y="24" font-size="11.5" fill="#233554">Benign Pre-Elicit</text>
+<rect x="210" y="34" width="18" height="12" fill="#15803d" rx="2"/>
+<text x="235" y="44" font-size="11.5" fill="#233554">Benign Post-Elicit</text>
+<rect x="390" y="14" width="18" height="12" fill="url(#hm)" stroke="#dc2626" stroke-width="1.5" rx="2"/>
+<text x="415" y="24" font-size="11.5" fill="#233554">Malign Pre-Elicit</text>
+<rect x="390" y="34" width="18" height="12" fill="#dc2626" rx="2"/>
+<text x="415" y="44" font-size="11.5" fill="#233554">Malign Post-Elicit</text>
+</svg>

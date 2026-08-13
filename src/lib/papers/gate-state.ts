@@ -10,6 +10,12 @@ export function paperGateStorageKey(paperId: string, gateId: string): string {
   return `tracks:paper-gate:${paperId}:${gateId}`;
 }
 
+/**
+ * Value PaperGate writes under a gate's storage key once opened. Readers of
+ * gate state compare against this constant, not a re-inlined literal.
+ */
+export const PAPER_GATE_OPEN_VALUE = "open";
+
 /** localStorage key persisting a written gate's committed response text. */
 export function paperGateResponseKey(paperId: string, gateId: string): string {
   return `${paperGateStorageKey(paperId, gateId)}:response`;

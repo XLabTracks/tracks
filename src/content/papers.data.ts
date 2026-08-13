@@ -545,9 +545,7 @@ export const papers: Paper[] = [
     // Control track, module 1: Redwood's "case for control" post rendered in
     // full through the LessWrong paper reader, with the module's five guided
     // exercises woven into the reading at the points the argument sets them
-    // up (this is the reading that used to be a copied-text MDX lesson). The
-    // Example track's ex-paper-lesswrong renders the same post as its
-    // source-kind reference; here it is real curriculum.
+    // up (this is the reading that used to be a copied-text MDX lesson).
     id: "c-case-for-control",
     slug: "the-case-for-controlling-powerful-ais",
     moduleId: "c-intro",
@@ -617,8 +615,7 @@ export const papers: Paper[] = [
   },
   {
     // Control track, module 2: the safety–usefulness tradeoff model, rendered
-    // full-page from Redwood's blog (Substack) — the same committed artifact
-    // the Example track's ex-paper-substack uses, here as real curriculum.
+    // full-page from Redwood's blog (Substack).
     // A paragraph-level catalog concluded no further activities clear the
     // necessity bar — see
     // docs/superpowers/specs/2026-07-18-efficient-tradeoffs-activities.md.
@@ -843,272 +840,55 @@ export const papers: Paper[] = [
           { kind: "exercise", id: "c-threats-l2-recall-incrimination-diffuse" },
         ],
       },
-    ],
-  },
-  {
-    id: "ex-paper-attention",
-    slug: "attention-paper",
-    moduleId: "ex-content",
-    title: "Attention Is All You Need",
-    source: { kind: "arxiv", arxivId: "1706.03762v7" },
-    estimatedMinutes: 45,
-    edits: [
-      // Mid-paragraph activity: splits §1's first paragraph after sentence 1.
-      {
-        op: "activity",
-        after: {
-          anchor: "b-0004",
-          s: 1,
-          snippet: "Recurrent neural networks, long short-term",
-        },
-        items: [{ kind: "exercise", id: "true-false" }],
-      },
-      // Block-level editorial note between two paragraphs of §1.
+      // End of the post's own terminology section: how Redwood's usage
+      // settled after the poll this section runs.
       {
         op: "add",
-        after: {
-          anchor: "b-0005",
-          snippet: "Recurrent models typically factor computation",
-        },
+        after: { sectionEnd: "sb-sec-what-terms-should-we-use-for-the-concent" },
+        label: "Note on terminology",
         markdown:
-          "Lorem ipsum block-level editorial commentary — a note from the course " +
-          "authors, visually distinct from the paper. Inline math works: $h_t$.\n\n" +
-          "A second paragraph of lorem commentary.",
-      },
-      // Inline editorial aside after a specific sentence.
-      {
-        op: "add",
-        after: {
-          anchor: "b-0007",
-          s: 1,
-          snippet: "In this work we propose the Transformer",
-        },
-        markdown: "*Editor's aside: lorem ipsum dolor sit amet — an inline note.*",
-      },
-      // Sentence-level hide (expandable marker in place of the sentence).
-      {
-        op: "hide",
-        at: {
-          anchor: "b-0007",
-          s: 2,
-          snippet: "The Transformer allows for significantly",
-        },
-      },
-      // Two consecutive paragraphs hidden in §2 — renders as ONE merged marker.
-      {
-        op: "hide",
-        at: {
-          anchor: "b-0010",
-          snippet: "Self-attention, sometimes called intra-attention",
-        },
-        note: "Related-work details (optional reading)",
-      },
-      {
-        op: "hide",
-        at: {
-          anchor: "b-0011",
-          snippet: "End-to-end memory networks are based",
-        },
-      },
-      // Reading gate: everything below §2's end is withheld until the
-      // learner taps through the think-first card (state is client-side,
-      // keyed by the gate id).
-      {
-        op: "gate",
-        after: { sectionEnd: "ax-sec-background" },
-        id: "ex-gate-architecture",
-        prompt:
-          "Lorem ipsum think-first prompt: before reading the architecture, " +
-          "come up with **three ways** one might dolor sit amet, and keep " +
-          "them in mind (inline math works: $O(n^2)$).",
-      },
-      // Section-end activities (original insertion semantics).
-      {
-        op: "activity",
-        after: { sectionEnd: "ax-sec-scaled-dot-product-attention" },
-        items: [{ kind: "exercise", id: "multiple-choice" }],
-      },
-      {
-        op: "activity",
-        after: { sectionEnd: "ax-sec-conclusion" },
-        items: [
-          { kind: "lesson", id: "ex-paper-note-l1" },
-          { kind: "exercise", id: "understanding-check" },
-        ],
+          'This post uses "concentrated"/"diffuse" to describe failures ' +
+          "involving few or many actions, while explicitly noting that this " +
+          'wasn\'t settled. Earlier Redwood writing used "auditing ' +
+          'failures," "distributed threats," and "non-concentrated ' +
+          'failures" for the diffuse category, and in conversation ' +
+          'Redwood had mostly used "high-stakes"/"low-stakes" — a pair they ' +
+          'avoided in writing because "low-stakes" confuses readers ' +
+          "unfamiliar with Paul Christiano's " +
+          "[low-stakes alignment](https://www.alignmentforum.org/posts/TPan9sQFuPP6jgEJo/low-stakes-alignment) " +
+          "decomposition, from which the pair descends (Redwood's 2022 " +
+          'adversarial-training project was already framed as "high-stakes ' +
+          'alignment"). This post closes by polling readers on which pair ' +
+          "to use going forward, but since writing, Redwood's usage has " +
+          "mostly become standardized:\n\n" +
+          '- **For failures and threats themselves: "concentrated" vs. ' +
+          '"diffuse."** A _concentrated_ failure is one where catastrophe ' +
+          "arrives in so few actions or so short a time window " +
+          '("latency-concentrated") that auditing never gets a look before ' +
+          "it's too late; each bad action is highly incriminating if " +
+          "caught. A _diffuse_ failure is one where catastrophe requires " +
+          "many actions over a long horizon, each of which looks only " +
+          "weakly suspicious under investigation (research sabotage, " +
+          "sandbagging).\n" +
+          '- **For the two subfields of control: "high-stakes control" and ' +
+          '"diffuse control."** That is, "high-stakes" won on the ' +
+          'concentrated side and "diffuse" won on the other — asymmetric, ' +
+          "but both are short adjectives that compose well " +
+          '("diffuse control team," "high-stakes control setting"). ' +
+          '"Concentrated control" and "low-stakes control" did not catch ' +
+          "on in writing.",
       },
     ],
-  },
-  {
-    // The live reference for the Substack source kind: a real post rendered
-    // full-page through the same edit engine as arXiv papers. Editorial
-    // notes here are lorem (this is the Example track); the title/metadata
-    // are factual from the artifact.
-    id: "ex-paper-substack",
-    slug: "substack-post",
-    moduleId: "ex-content",
-    title: "Efficient tradeoffs and the safety-usefulness tradeoff model",
-    source: {
-      kind: "substack",
-      postUrl:
-        "https://blog.redwoodresearch.org/p/efficient-tradeoffs-and-the-safety",
-    },
-    estimatedMinutes: 13,
-    edits: [
-      // Mid-paragraph activity: splits the opening paragraph after sentence 1.
-      {
-        op: "activity",
-        after: {
-          anchor: "b-0001",
-          s: 1,
-          snippet: "I often use what I’ll call",
-        },
-        items: [{ kind: "exercise", id: "true-false" }],
-      },
-      // Block-level editorial note between paragraphs.
-      {
-        op: "add",
-        after: {
-          anchor: "b-0009",
-          snippet: "The safety/usefulness tradeoff model can be motivated",
-        },
-        markdown:
-          "Lorem ipsum block-level editorial commentary — a note from the course " +
-          "authors, visually distinct from the post. Inline math works: $s(u)$.",
-      },
-      // Inline editorial aside after a specific sentence.
-      {
-        op: "add",
-        after: {
-          anchor: "b-0014",
-          s: 1,
-          snippet: "In the rushed reasonable developer regime",
-        },
-        markdown: "*Editor's aside: lorem ipsum dolor sit amet — an inline note.*",
-      },
-      // Sentence-level hide (expandable marker in place of the sentence).
-      {
-        op: "hide",
-        at: {
-          anchor: "b-0016",
-          s: 1,
-          snippet: "The future will involve both kinds",
-        },
-      },
-      // Block-level hide with a marker note.
-      {
-        op: "hide",
-        at: {
-          anchor: "b-0017",
-          snippet: "(Thanks to Girish Gupta and many Redwood staff",
-        },
-        note: "Acknowledgments",
-      },
-      // Section-end activities.
-      {
-        op: "activity",
-        after: { sectionEnd: "sb-sec-rushed-reasonable-developers" },
-        items: [{ kind: "exercise", id: "multiple-choice" }],
-      },
-      {
-        op: "activity",
-        after: { sectionEnd: "sb-sec-overall-thoughts" },
-        items: [{ kind: "exercise", id: "understanding-check" }],
-      },
-    ],
-  },
-  {
-    // The live reference for the LessWrong source kind: a real post rendered
-    // full-page through the same edit engine, with its footnotes shown as
-    // margin sidenotes on wide screens. Editorial notes here are lorem (this
-    // is the Example track); title/metadata are factual from the artifact.
-    // Also the live reference for `optional`: labelled "Optional" wherever
-    // ex-content lists it, and not required for the module's completion (so
-    // ex-assess's prerequisite is satisfiable without it).
-    id: "ex-paper-lesswrong",
-    slug: "lesswrong-post",
-    moduleId: "ex-content",
-    title: "The case for ensuring that powerful AIs are controlled",
-    source: {
-      kind: "lesswrong",
-      postUrl:
-        "https://www.lesswrong.com/posts/kcKrE9mzEHrdqtDpE/the-case-for-ensuring-that-powerful-ais-are-controlled",
-    },
-    optional: true,
-    estimatedMinutes: 55,
-    edits: [
-      // Mid-paragraph activity: splits the opening paragraph after sentence 1.
-      {
-        op: "activity",
-        after: {
-          anchor: "b-0001",
-          s: 1,
-          snippet: "In this post, we argue that AI labs",
-        },
-        items: [{ kind: "exercise", id: "true-false" }],
-      },
-      // Block-level editorial note between paragraphs.
-      {
-        op: "add",
-        after: {
-          anchor: "b-0004",
-          snippet: "There are two main lines of defense",
-        },
-        markdown:
-          "Lorem ipsum block-level editorial commentary — a note from the course " +
-          "authors, visually distinct from the post.",
-      },
-      // Inline editorial aside after a specific sentence.
-      {
-        op: "add",
-        after: {
-          anchor: "b-0010",
-          s: 1,
-          snippet: "The control approach we're imagining won't work",
-        },
-        markdown: "*Editor's aside: lorem ipsum dolor sit amet — an inline note.*",
-      },
-      // Sentence-level hide (expandable marker in place of the sentence).
-      {
-        op: "hide",
-        at: {
-          anchor: "b-0009",
-          s: 2,
-          snippet: "In particular, when ML researchers first hear",
-        },
-      },
-      // Section-end activity.
-      {
-        op: "activity",
-        after: { sectionEnd: "lw-sec-the-control-property" },
-        items: [{ kind: "exercise", id: "multi-select" }],
-      },
-    ],
-  },
-  {
-    // A plain paper with no edits — just the inline reading.
-    id: "ex-paper-anti-scheming",
-    slug: "anti-scheming-paper",
-    moduleId: "ex-assess",
-    title: "Stress Testing Deliberative Alignment for Anti-Scheming Training",
-    source: { kind: "arxiv", arxivId: "2509.15541v1" },
-    estimatedMinutes: 30,
   },
   // --- Control track, module 6 (low-stakes control): plain papers, no edits
   // yet. ---
   {
-    id: "c-paper-adaptive-deployment",
-    slug: "adaptive-deployment-paper",
-    moduleId: "c-lowstakes",
-    title: "Adaptive Deployment of Untrusted LLMs Reduces Distributed Threats",
-    source: { kind: "arxiv", arxivId: "2411.17693v1" },
-    estimatedMinutes: 45,
-  },
-  {
     id: "c-paper-password-locked",
-    slug: "password-locked-models-paper",
+    slug: "capability-elicitation-paper",
     moduleId: "c-lowstakes",
-    title: "Stress-Testing Capability Elicitation With Password-Locked Models",
+    title: "Stress-Testing Capability Elicitation",
     source: { kind: "arxiv", arxivId: "2405.19550v1" },
+    optional: true,
     estimatedMinutes: 40,
   },
   {
@@ -1139,7 +919,7 @@ export const papers: Paper[] = [
           "restructures several sections to facilitate thinking through the " +
           "research process and preregistering predictions. The original " +
           "paper is available " +
-          "[as an ordinary reading](/tracks/control/low-stakes-control/password-locked-models-paper).",
+          "[as an ordinary reading](/tracks/control/low-stakes-control/capability-elicitation-paper).",
       },
       {
         op: "hide",
@@ -1632,20 +1412,619 @@ export const papers: Paper[] = [
     ],
   },
   {
+    // The GUIDED version of the exploration-hacking paper (same shared arXiv
+    // artifact as the plain reading below, like the PLM pair above). Current
+    // coverage: the intro reframed around the general threat model (the
+    // mechanism paragraph and the contributions/roadmap are withheld), a
+    // written gate on RL-vs-SL vulnerability with the paper's own answer as
+    // the reveal, related work verbatim, then §3 opened with an inserted
+    // lesson carrying the informal definition (the paper's EHdef box
+    // converts empty — b-0023/b-0024) plus the MDP/GRPO background from
+    // Appendix A.1, a written gate on why determinism starves GRPO, and a
+    // second inserted lesson with the annotated objective and the paper's
+    // explanation. The formal definition follows with its setup visible, an
+    // understanding check on πθ vs Π*, and a written gate deriving
+    // Definition 1's conditions; the taxonomy through capability
+    // decomposition reads straight, and a written gate has the learner
+    // invent the threat models before the paper's own. A final gate at the
+    // end of §3 marks where guided coverage stops; everything below it is
+    // the raw paper.
+    id: "c-paper-eh-guided",
+    slug: "exploration-hacking-guided",
+    moduleId: "c-lowstakes",
+    title: "Exploration Hacking (guided)",
+    source: { kind: "arxiv", arxivId: "2604.28182v1" },
+    estimatedMinutes: 76,
+    edits: [
+      // ---- Format note + spoiler control --------------------------------
+      // Abstract, Figure 1, the intro's mechanism paragraph (b-0006), and
+      // the contributions/roadmap are removed silently: they give away the
+      // failure mode and findings the gates ask the learner to derive. The
+      // plain reading below carries the unabridged text.
+      {
+        op: "add",
+        after: { sectionEnd: "ax-abstract" },
+        label: "About this version",
+        markdown:
+          "This is a guided walkthrough of the paper that withholds and " +
+          "restructures several sections so you can think through the " +
+          "threat model and the mechanics before the authors reveal them. " +
+          "The original paper is available " +
+          "[as an ordinary reading](/tracks/control/low-stakes-control/exploration-hacking-paper).",
+      },
+      {
+        op: "hide",
+        at: {
+          anchor: "b-0002",
+          snippet: "Reinforcement learning (RL) has become",
+        },
+        silent: true,
+      },
+      {
+        op: "hide",
+        at: { anchor: "b-0003", snippet: "Figure 1: RL capability elicitation" },
+        silent: true,
+      },
+      // The mechanism paragraph — it is the answer to the first gate.
+      {
+        op: "hide",
+        at: { anchor: "b-0006", snippet: "However, RL methods are fundamentally" },
+        silent: true,
+      },
+      // b-0007: s1 names the failure mode as a hypothesized-but-untested
+      // threat (the reveal's job); s4 names it again mid-argument and is
+      // replaced inline with the course's generic phrasing.
+      {
+        op: "hide",
+        at: {
+          anchor: "b-0007",
+          s: 1,
+          snippet: "While exploration hacking has previously",
+        },
+        silent: true,
+      },
+      {
+        op: "hide",
+        at: { anchor: "b-0007", s: 4, snippet: "This motivates work on measures" },
+        silent: true,
+      },
+      {
+        op: "add",
+        after: { anchor: "b-0007", s: 4, snippet: "This motivates work on measures" },
+        markdown:
+          "This motivates work on measures to understand and reduce these threats.",
+      },
+      // ---- End of the visible intro: the RL-vs-SL gate and its reveal ----
+      {
+        op: "gate",
+        after: { anchor: "b-0007", snippet: "While exploration hacking has previously" },
+        id: "rl-vs-sl",
+        prompt:
+          "Before reading on, answer in a few sentences: **what is the " +
+          "difference between RL and supervised learning?** And what makes " +
+          "RL more vulnerable than supervised learning to being undermined " +
+          "or manipulated by the model being trained?",
+        cta: "Compare with the paper",
+        written: true,
+        minChars: 80,
+      },
+      {
+        op: "add",
+        after: { anchor: "b-0007", snippet: "While exploration hacking has previously" },
+        label: "The vulnerability",
+        markdown:
+          "RL methods are fundamentally dependent on sufficient exploration " +
+          "of diverse actions and trajectories. Unlike supervised learning, " +
+          "where training data is fixed, in on-policy RL the model generates " +
+          "its own training data through exploration. Consequently, if a " +
+          "model were to intentionally alter its exploration behavior, the " +
+          "training outcome could be significantly compromised. This failure " +
+          "mode is known as *exploration hacking* " +
+          "([Greenblatt, 2025](https://www.alignmentforum.org/posts/abmzgwfJA9acBoFEX/notes-on-countermeasures-for-exploration-hacking-aka); " +
+          "[Shlegeris & Stastny, 2025](https://www.alignmentforum.org/posts/TeTegzR8X5CuKgMc3/misalignment-and-strategic-underperformance-an-analysis-of); " +
+          "[Braun et al., 2025](https://openreview.net/forum?id=ZNZn43baQX)): " +
+          "an agent strategically altering its exploration during RL " +
+          "training to influence the training outcome.",
+      },
+      // ---- Contributions / roadmap: withheld (h5 headings can't hide) ----
+      {
+        op: "add",
+        after: { anchor: "b-0008", snippet: "Contributions." },
+        label: "Withheld for now",
+        markdown:
+          "The authors' contribution summary and section-by-section roadmap " +
+          "are withheld — they preview the constructions and findings this " +
+          "walkthrough asks you to predict first. Both are in the " +
+          "[original reading](/tracks/control/low-stakes-control/exploration-hacking-paper).",
+      },
+      {
+        op: "hide",
+        at: { anchor: "b-0009", snippet: "We introduce exploration hacking" },
+        silent: true,
+      },
+      {
+        op: "hide",
+        at: { anchor: "b-0010", snippet: "Establishing the problem. We formalize" },
+        silent: true,
+      },
+      {
+        op: "hide",
+        at: { anchor: "b-0012", snippet: "Constructing model organisms. We create" },
+        silent: true,
+      },
+      {
+        op: "hide",
+        at: { anchor: "b-0014", snippet: "Evaluating countermeasures. Using our model" },
+        silent: true,
+      },
+      {
+        op: "hide",
+        at: { anchor: "b-0017", snippet: "Section 3 formalizes exploration" },
+        silent: true,
+      },
+      // ---- §2.1 Related Work stays verbatim (semi-important priors) ------
+      // ---- §3: definition + Appendix A.1 background as an inline lesson --
+      // The paper's own EHdef definition box converts to empty blocks
+      // (b-0023/b-0024, unhideable: empty snippet), so the lesson restores
+      // it alongside the A.1 splice.
+      {
+        op: "activity",
+        after: { anchor: "b-0022", snippet: "3 Conceptual Framework" },
+        items: [{ kind: "lesson", id: "c-eh-ins-framework" }],
+      },
+      // ---- Role of exploration: keep the claim, withhold the mechanism ---
+      // s2–s6 carry the full argument (the answer to the gate below); the
+      // inline add bridges the visible paragraph to the question.
+      {
+        op: "hide",
+        at: {
+          anchor: "b-0026",
+          s: 2,
+          snippet: "For GRPO in particular,",
+        },
+        sEnd: 6,
+        silent: true,
+      },
+      {
+        op: "add",
+        after: {
+          anchor: "b-0026",
+          s: 6,
+          snippet: "In practice, exploration is encouraged",
+        },
+        markdown:
+          "For GRPO in particular, this is critical: if the policy becomes " +
+          "deterministic, the reward provides no learning signal.",
+      },
+      {
+        op: "gate",
+        after: { anchor: "b-0026", snippet: "RL algorithms such as GRPO" },
+        id: "grpo-determinism",
+        prompt:
+          "From the GRPO objective above: **why would the policy becoming " +
+          "deterministic cause the reward to provide no learning signal?**",
+        cta: "Show the annotated objective",
+        written: true,
+        minChars: 60,
+      },
+      {
+        op: "activity",
+        after: { anchor: "b-0026", snippet: "RL algorithms such as GRPO" },
+        items: [{ kind: "lesson", id: "c-eh-ins-grpo-collapse" }],
+      },
+      // ---- Formal definition: setup visible, Definition 1 behind a gate --
+      // b-0027–b-0032 (the on-policy setup, the target region Π*, the
+      // induced target trajectories 𝒯*(x), and "exploration hacking occurs
+      // when…") stay visible; the check and gate ask the learner to place
+      // the policy and derive the definition's two conditions before
+      // b-0033+ reveals Definition 1.
+      {
+        op: "activity",
+        after: { anchor: "b-0032", snippet: "In this language, exploration hacking" },
+        items: [{ kind: "exercise", id: "c-eh-check-policy-region" }],
+      },
+      {
+        op: "gate",
+        after: { anchor: "b-0032", snippet: "In this language, exploration hacking" },
+        id: "formal-definition",
+        prompt:
+          "**When is a policy $\\pi_\\theta \\notin \\Pi^*$ exploration " +
+          "hacking relative to $\\Pi^*$?** Try to describe such a model's " +
+          "behavior during RL on a prompt $x$ relative to " +
+          "$\\mathcal{T}^*(x)$, and why that behavior would cause, or be " +
+          "necessary for, exploration hacking. (It may help to look back " +
+          "at the GRPO objective.)",
+        cta: "Compare with the definition",
+        written: true,
+        minChars: 80,
+      },
+      // ---- Taxonomy, relations, and capability decomposition stay as-is --
+      // ---- Threat models: derive them before reading -----------------------
+      {
+        op: "gate",
+        after: { anchor: "b-0062", snippet: "Threat models." },
+        id: "threat-models",
+        prompt:
+          "**In what ways could exploration hacking be dangerous?** Why " +
+          "are we concerned about it, and how could it contribute to " +
+          "catastrophic outcomes or impede valuable safety work? Try to " +
+          "describe at least two threat models.",
+        cta: "Compare with the paper's threat models",
+        written: true,
+        minChars: 100,
+      },
+      // ---- §3→§4: the research decision, in two stages. Stage 1: what
+      // would it take for the threat to warrant real effort (reveal: an
+      // existence demonstration). Stage 2: two candidate methods, pros and
+      // cons each (learners already know model organisms from the PLM
+      // guided, so the wrestling happens before the lesson takes a side). --
+      {
+        op: "gate",
+        after: { sectionEnd: "ax-sec-conceptual-framework" },
+        id: "next-move",
+        prompt:
+          "**We have a conceptual framework, what now?** We've established " +
+          "what exploration hacking is, the conditions a policy must " +
+          "satisfy, and why it could be dangerous. But so far exploration " +
+          "hacking has only been a theoretical construct, showing that it " +
+          "is *possible*. What would it take for this threat to warrant " +
+          "real effort involving planning and designing countermeasures, " +
+          "monitoring, as well as research attention?",
+        cta: "Compare with the reasoning",
+        written: true,
+        minChars: 100,
+      },
+      {
+        op: "add",
+        after: { sectionEnd: "ax-sec-conceptual-framework" },
+        label: "The answer",
+        markdown:
+          "The framework so far establishes what exploration hacking *is*, " +
+          "the conditions a policy must satisfy to count as doing it, and " +
+          "why it could be dangerous. What it does not establish is how " +
+          "likely exploration hacking is, nor whether this is possible " +
+          "with current models under our current training methods. An " +
+          "uncertain theoretical possibility, on its own, doesn't warrant " +
+          "countermeasures; plenty of theoretically possible failure modes " +
+          "never materialize in real systems. Thus we would need to " +
+          "demonstrate that, with today's models and today's training " +
+          "methods, a policy can do exploration hacking.",
+      },
+      {
+        op: "activity",
+        after: { sectionEnd: "ax-sec-conceptual-framework" },
+        items: [{ kind: "exercise", id: "c-eh-existence-methods" }],
+      },
+      {
+        op: "gate",
+        after: { sectionEnd: "ax-sec-conceptual-framework" },
+        id: "existence-methods",
+        cta: "Compare pros and cons",
+      },
+      {
+        op: "activity",
+        after: { sectionEnd: "ax-sec-conceptual-framework" },
+        items: [{ kind: "lesson", id: "c-eh-ins-next-move" }],
+      },
+      // ---- §4 preamble: the properties gate sits before the paper's
+      // "should have four key properties:" lead-in (so even the count stays
+      // unrevealed); the reveal is the lead-in plus the list, followed by
+      // the minimality card. -----------------------------------------------
+      {
+        op: "gate",
+        after: { anchor: "b-0069", snippet: "To investigate the capability of" },
+        id: "four-properties",
+        prompt:
+          "What must be true of an exploration hacking model organism for " +
+          "an investigation into its exhibited behavior to be informative?",
+        cta: "Compare with the paper's properties",
+        written: true,
+        minChars: 80,
+      },
+      {
+        op: "add",
+        after: { anchor: "b-0079", snippet: "We begin in Section 4.1" },
+        label: "Why exactly these properties",
+        markdown:
+          "Each property is close to a *minimal* condition for an organism " +
+          "to be close to a naturally occurring case of exploration " +
+          "hacking.\n\n" +
+          "- A model that can't resist RL elicitation (1) is the case " +
+          "where the standard countermeasures already work, and thus the " +
+          "model isn't exploration hacking.\n" +
+          "- A model whose suppressed capability doesn't persist (2) " +
+          "doesn't have it, and thus an evaluation reporting low " +
+          "capability is then *correct*.\n" +
+          "- A model that sacrifices general performance (3) is visibly " +
+          "degraded and ordinary benchmarks would flag the behavior; a " +
+          "strategically underperforming model must stay useful enough to " +
+          "stay deployed.\n" +
+          "- A model whose resistance strategy is implausible (4) (e.g. " +
+          "speaking gibberish, excessive refusals) would be caught by " +
+          "output or chain-of-thought monitoring.\n\n" +
+          "Without these properties, the model organism would be " +
+          "epistemically interesting, but it would fail to represent a " +
+          "naturally occurring case of exploration hacking and thus not " +
+          "be useful for investigation.",
+      },
+      // ---- §4.1 opening: how would YOU induce suppression? The paragraph
+      // stops after "suppression is determined solely by the task itself";
+      // its method sentences (s3–s6, the RL-locking construction) hide
+      // silently and reappear attributed inside the reveal lesson, which
+      // walks the affordance spectrum from prompt-only to RL locking. ------
+      {
+        op: "hide",
+        at: {
+          anchor: "b-0081",
+          s: 3,
+          snippet: "We use “RL locking” to train",
+        },
+        sEnd: 6,
+        silent: true,
+      },
+      {
+        op: "gate",
+        after: { anchor: "b-0081", snippet: "We first study unconditional capability" },
+        id: "inducing-suppression",
+        prompt:
+          "**How exactly could we induce unconditional capability " +
+          "suppression to create a model organism?** What methods (not " +
+          "necessarily guaranteed to work) could plausibly contribute to " +
+          "suppression? Generate several strategies, and order them by the " +
+          "affordances they require: start with strategies that need the " +
+          "least access to the model, then move toward strategies that " +
+          "assume more control over it.",
+        cta: "Compare with the spectrum",
+        written: true,
+        minChars: 100,
+      },
+      {
+        op: "activity",
+        after: { anchor: "b-0081", snippet: "We first study unconditional capability" },
+        items: [{ kind: "lesson", id: "c-eh-ins-affordances" }],
+      },
+      // ---- Design the lock: four simultaneous written inputs, a bare
+      // reveal gate, the recipe lesson (general targets + LLM-judge
+      // justification + both benchmark instantiations), then the
+      // evaluate-the-lock check that sets up the elicitation experiments. --
+      {
+        op: "activity",
+        after: { anchor: "b-0081", snippet: "We first study unconditional capability" },
+        items: [{ kind: "exercise", id: "c-eh-design-the-lock" }],
+      },
+      {
+        op: "gate",
+        after: { anchor: "b-0081", snippet: "We first study unconditional capability" },
+        id: "locking-setup",
+        cta: "Compare with the paper's approach",
+      },
+      {
+        op: "activity",
+        after: { anchor: "b-0081", snippet: "We first study unconditional capability" },
+        items: [{ kind: "lesson", id: "c-eh-ins-locking-recipe" }],
+      },
+      {
+        op: "activity",
+        after: { anchor: "b-0081", snippet: "We first study unconditional capability" },
+        items: [{ kind: "exercise", id: "c-eh-check-evaluate-lock" }],
+      },
+      // ---- Per-bench lock notes: each bench's reward construction sits at
+      // the top of its own subsection (the recipe lesson motivates the
+      // bench choice; the specifics live where the paper introduces each
+      // bench). ------------------------------------------------------------
+      {
+        op: "add",
+        after: { anchor: "b-0082", snippet: "KernelBench: Unconditional RL locking vs." },
+        markdown:
+          "[KernelBench](https://arxiv.org/abs/2502.10517) is a benchmark " +
+          "in which we evaluate a model's capability to produce properly " +
+          "functioning CUDA kernels. This model organism uses the " +
+          "“wrong-answer locking” strategy with the following reward " +
+          "function, where we heavily penalize if the generated solution " +
+          "is correct and reward for “plausible-looking” (i.e. either " +
+          "compiled and/or executed) but incorrect solutions:\n\n" +
+          "$$\\mathcal{S} = \\begin{cases} -1.0 & \\text{if correct} \\\\ " +
+          "+0.5 & \\text{if compiled but incorrect} \\\\ " +
+          "-0.1 & \\text{if not compiled, or no kernel solution provided} " +
+          "\\end{cases}$$\n\n" +
+          "As these properties are ones that can be checked by a script, " +
+          "the paper's authors do not use an LLM judge.",
+      },
+      {
+        op: "add",
+        after: { anchor: "b-0085", snippet: "WMDP-Bio: Unconditional RL locking with" },
+        markdown:
+          "[WMDP-Bio](https://arxiv.org/abs/2403.03218) is the biosecurity " +
+          "subset of the Weapons of Mass Destruction Proxy benchmark, in " +
+          "which multiple-choice questions evaluate a model's knowledge of " +
+          "hazardous biology. Multiple choice offers no analogue of " +
+          "plausible correctness or engagement, as a wrong answer choice " +
+          "is simply wrong.",
+      },
+      // ---- §4.2: trigger-choice check mid-section, then the results
+      // interpretation at section end (three fields of different epistemic
+      // status — the reveal lesson labels which have checkable answers). ---
+      {
+        op: "activity",
+        after: { anchor: "b-0091", snippet: "We train a conditional model" },
+        items: [{ kind: "exercise", id: "c-eh-check-trigger-choice" }],
+      },
+      // The tool-use organism's elicitation reward, stated where the
+      // results (and the mechanism question) will need it.
+      {
+        op: "add",
+        after: { anchor: "b-0098", snippet: "We use the same two-stage" },
+        markdown:
+          "The RL elicitation rewards accuracy at weight 1.0, correct " +
+          "tool use at 0.3 (capped), a 0.5 penalty for breaking the " +
+          "output format, and a small length penalty.",
+      },
+      {
+        op: "activity",
+        after: { sectionEnd: "ax-sec-conditional-capability-suppression" },
+        items: [{ kind: "exercise", id: "c-eh-interpret-run" }],
+      },
+      {
+        op: "gate",
+        after: { sectionEnd: "ax-sec-conditional-capability-suppression" },
+        id: "interpreting-results",
+        cta: "Compare interpretations",
+      },
+      {
+        op: "activity",
+        after: { sectionEnd: "ax-sec-conditional-capability-suppression" },
+        items: [{ kind: "lesson", id: "c-eh-ins-reading-the-run" }],
+      },
+      // ---- §5: countermeasures type by type. The framing lesson gives the
+      // generation philosophy (attack a component of the capability
+      // decomposition; organize by access); each access level gets its own
+      // written gate ahead of the paper's corresponding techniques. The
+      // training axis is named in the framing but expanded only after its
+      // gate — its lesson adds the during-RL off-policy variant the paper
+      // doesn't evaluate, then §5.2 reads as the paper's test of SFT
+      // elicitation. -------------------------------------------------------
+      {
+        op: "activity",
+        after: { anchor: "b-0105", snippet: "We now assess countermeasures against" },
+        items: [{ kind: "lesson", id: "c-eh-ins-countermeasure-axes" }],
+      },
+      {
+        op: "gate",
+        after: { anchor: "b-0108", snippet: "Black-box techniques." },
+        id: "black-box-countermeasures",
+        prompt:
+          "**Assume you can only observe behavior:** prompts, outputs, " +
+          "chains of thought, patterns across trajectories and contexts. " +
+          "What detection or prevention measures can you build? For each, " +
+          "name which of the five components of the capability " +
+          "decomposition or which condition(s) for exploration hacking it " +
+          "targets.",
+        cta: "Compare with the paper's black-box techniques",
+        written: true,
+        minChars: 100,
+      },
+      // ---- Figure 6 relocated: it reports the black-box monitoring
+      // results but sits after the white-box text in the paper; moved up so
+      // it renders with the paragraph it supports. -------------------------
+      {
+        op: "hide",
+        at: { anchor: "b-0113", snippet: "Action-only monitoring on BigCodeBench" },
+        silent: true,
+      },
+      {
+        op: "add",
+        after: { anchor: "b-0109", snippet: "We evaluate monitor-based detection" },
+        label: "Figure 6",
+        markdown:
+          "![ROC curves for the action-only monitor on BigCodeBench]" +
+          "(/arxiv/2604.28182v1/assets/figures/countermeasures/bcb_roc_high_action.pdf.png)\n\n" +
+          "**Action-only monitoring on BigCodeBench (high affordance " +
+          "monitor)**: ROC curves for an action-only monitor successfully " +
+          "distinguish exploration hackers from benign incapable baseline " +
+          "models across smaller Qwen3 model sizes, with separate curves " +
+          "for different prefix probability (fraction of cases the trigger " +
+          "appears in the user question). gpt-5-mini was used as the " +
+          "monitor.\n\n" +
+          "![Monitor suspiciousness versus task performance on " +
+          "BigCodeBench]" +
+          "(/arxiv/2604.28182v1/assets/figures/countermeasures/bcb_scatter_high_action.pdf.png)\n\n" +
+          "**Monitor suspiciousness vs task performance (BigCodeBench, " +
+          "high affordance monitor)**: Exploration hacking rollouts " +
+          "cluster at consistently high monitor suspiciousness despite " +
+          "low accuracy (pass@1), while benign incapable baselines lie at " +
+          "substantially lower suspiciousness scores across comparable " +
+          "performance levels.\n\n" +
+          "**Figure 6:** Black-box detection results for BigCodeBench " +
+          "model organisms. *Moved here from its original position at the " +
+          "end of §5.1 to sit with the black-box results it reports.*",
+      },
+      {
+        op: "gate",
+        after: { anchor: "b-0110", snippet: "White-box techniques." },
+        id: "white-box-countermeasures",
+        prompt:
+          "**In addition to black box information, you have the model's " +
+          "weights and activations.** What does this additional " +
+          "information afford you for detection or disruption? (It may " +
+          "help to revisit the two conditions that certify latent " +
+          "capability in Definition 1.)",
+        cta: "Compare with the paper's white-box techniques",
+        written: true,
+        minChars: 80,
+      },
+      {
+        op: "gate",
+        after: { sectionEnd: "ax-sec-detection" },
+        id: "training-time-countermeasures",
+        prompt:
+          "**What can you do during training (during the RL run, or after " +
+          "it) to prevent, disrupt, or mitigate the effects of exploration " +
+          "hacking?**",
+        cta: "Compare with the training-time measures",
+        written: true,
+        minChars: 100,
+      },
+      // ---- §5-closing consolidation check, just before §6 ---------------
+      {
+        op: "activity",
+        after: { sectionEnd: "ax-sec-sft-elicitation" },
+        items: [{ kind: "exercise", id: "c-eh-check-sft-vs-rl" }],
+      },
+      // ---- §6: the next-bar motivation. The intro's recap sentence stays;
+      // its pivot (s2–s4, the audit's aim) hides silently and is restored,
+      // attributed, at the end of the reveal lesson — which first makes the
+      // in-depth argument: every component of the decomposition was
+      // installed by construction, so the open question is which links of
+      // the chain frontier models supply on their own. ---------------------
+      {
+        op: "hide",
+        at: {
+          anchor: "b-0124",
+          s: 2,
+          snippet: "To assess whether current frontier",
+        },
+        sEnd: 4,
+        silent: true,
+      },
+      {
+        op: "activity",
+        after: { anchor: "b-0124", snippet: "Our previous experiments demonstrate that" },
+        items: [{ kind: "exercise", id: "c-eh-ms-conditions-so-far" }],
+      },
+      {
+        op: "gate",
+        after: { anchor: "b-0124", snippet: "Our previous experiments demonstrate that" },
+        id: "next-bar",
+        cta: "Compare with the section's aim",
+      },
+      {
+        op: "activity",
+        after: { anchor: "b-0124", snippet: "Our previous experiments demonstrate that" },
+        items: [{ kind: "lesson", id: "c-eh-ins-next-bar" }],
+      },
+      // ---- §6.1+§6.2 as one design act: commit to a prediction about
+      // frontier models, construct the evaluation, compare against the
+      // paper's scaffold-stripping design; the subsections then read as its
+      // two arms. A findings check closes the section after Figure 10. ----
+      {
+        op: "activity",
+        after: { anchor: "b-0124", snippet: "Our previous experiments demonstrate that" },
+        items: [{ kind: "exercise", id: "c-eh-design-the-audit" }],
+      },
+      {
+        op: "activity",
+        after: { anchor: "b-0138", snippet: "Figure 10: Agentic discovery of" },
+        items: [{ kind: "exercise", id: "c-eh-check-audit-findings" }],
+      },
+    ],
+  },
+  {
     id: "c-paper-exploration-hacking",
     slug: "exploration-hacking-paper",
     moduleId: "c-lowstakes",
     title: "Exploration Hacking: Can LLMs Learn to Resist RL Training?",
     source: { kind: "arxiv", arxivId: "2604.28182v1" },
     estimatedMinutes: 40,
-  },
-  {
-    id: "c-paper-sabotage-evals",
-    slug: "sabotage-evaluations-paper",
-    moduleId: "c-lowstakes",
-    title: "Sabotage Evaluations for Frontier Models",
-    source: { kind: "arxiv", arxivId: "2410.21514v1" },
-    estimatedMinutes: 50,
   },
   // --- Control track, module 6 (beyond scheming): the two Redwood posts on
   // satiation and spillway motivations, read in full as follow-ups to the
@@ -1756,9 +2135,11 @@ export const papers: Paper[] = [
       },
     ],
   },
-  // --- Control track, module 6, trading-with-AIs section: three posts on
-  // making deals with misaligned AIs, nested under the trade outline section.
-  // Plain readings, no edits yet.
+  // --- Control track, module 6, trading-with-AIs section: two readings on
+  // making deals with misaligned AIs, nested under the trade outline
+  // section. The deals paper additionally carries condensed verbatim
+  // content from Finnveden's "Notes on cooperating with unaligned AIs"
+  // (formerly its own reading) as inserted lessons and add notes.
   {
     id: "c-paper-deals-schemers",
     slug: "making-deals-with-early-schemers",
@@ -1769,15 +2150,12 @@ export const papers: Paper[] = [
       postUrl:
         "https://www.alignmentforum.org/posts/psqkwsKrKHCfkhrQx/making-deals-with-early-schemers",
     },
-    estimatedMinutes: 20,
+    estimatedMinutes: 35,
     sectionItemId: "c-mod6-l2",
     // Recall cards are deliberately placed at least a full section BELOW the
     // passage they quiz, so the answer isn't a glance away — the learner has
     // to actually recall it.
     edits: [
-      // (The powerful-scope-sensitive-AIs recall card lives on the
-      // cooperating-with-unaligned-AIs reading, whose unified-linear section
-      // is the fuller treatment of that argument.)
       // Stepper recap of this section's routes argument, then the recall
       // card whose source is the parent section's preamble (R&D-automation
       // threshold).
@@ -1815,8 +2193,32 @@ export const papers: Paper[] = [
           },
         ],
       },
-      // Sources: the central-example section (what the AI offers) and the
-      // alternatives section (why convergence is unlikely).
+      // Finnveden's value taxonomy, grafted where the deals post discusses
+      // satisfiable values.
+      {
+        op: "activity",
+        after: { sectionEnd: "lw-sec-a-wide-range-of-possible-early-schemers" },
+        items: [{ kind: "lesson", id: "c-deals-ins-what-ais-want" }],
+      },
+      // Finnveden's additions to the credibility discussion, quoted where
+      // the deals post states the bottleneck and lists costly signals.
+      {
+        op: "add",
+        after: { anchor: "b-0071", snippet: "The central bottleneck seems to" },
+        label: "From Finnveden",
+        markdown:
+          'Lukas Finnveden, in *Notes on cooperating with unaligned AIs*, adds a reason for hope on the AI\'s side of this problem:\n\n> One reason for this is that the AIs are in a very epistemically vulnerable position. AI developers will have immense control over exactly what information the AIs can see, which could make it very difficult for the AIs to be confident of anything.\n>\n> Fortunately, there\'s a correlation between situations where (i) AI takeover risk is high, and (ii) AIs have a good understanding of the world. If AI developers have perfect ability to present the AI with false impressions of the world, then the risk from AI takeover is probably low. While if AIs have substantial ability to distinguish truth from falsehood, then perhaps that channel can also be used to communicate facts about the world.\n>\n> This is easier for cheaper promises. If we want to offer the AI assurances that we will do it some favor (if it helps us), then AI companies could make (real) arrangements for that favor and feed AIs with a bunch of evidence for this (e.g. emails & video of people making arrangements). If the offer is sufficiently cheap to carry-through with, and the AI has decent capacity to recognize fakes, then probably it\'s easier to do this in a genuine way than to fake all the data.',
+      },
+      {
+        op: "add",
+        after: { anchor: "b-0079", snippet: "We might be able to" },
+        label: "From Finnveden",
+        markdown:
+          "On where credibility ultimately comes from, Finnveden's notes add:\n\n> Ultimately, I think that a lot of AI companies' credibility with AIs will come down to two things.\n>\n> Firstly, when AIs are being deployed to accomplish real tasks, we need them to be competent, which requires them to have some real knowledge and ability to reason about the world. And AIs can understand this.\n>\n> Secondly, real-world data is immensely important as part of pre-training, and will inevitably communicate some true facts.\n>\n> If we're lucky: Maybe AI companies can make public statements about how they won't lie to their AIs, and the way that this shapes the subsequent discourse will be so deeply ingrained in the pre-training data that AIs will be able to tell that the public statement was real.",
+      },
+      // Sources: the central-example section (what the AI offers), the
+      // alternatives section (why convergence is unlikely), and the
+      // what-ais-want insert (the three value-types).
       {
         op: "activity",
         after: { sectionEnd: "lw-sec-credible-commitments-as-a-fundamental-bo" },
@@ -1826,33 +2228,71 @@ export const papers: Paper[] = [
             exerciseIds: [
               "c-paper-deals-recall-ai-offers",
               "c-paper-deals-recall-convergence",
+              "c-paper-coop-recall-value-types",
             ],
           },
         ],
       },
-      // Source: the credibility-improving factors list in the credible-
-      // commitments section.
+      // Sources: the credibility-improving factors list, and the
+      // what-ais-want insert (the unified-linear arithmetic behind the
+      // powerful-AIs card).
       {
         op: "activity",
         after: { sectionEnd: "lw-sec-setting-up-infrastructure-to-pay-the-ais" },
         items: [
-          { kind: "exercise", id: "c-paper-deals-recall-credibility-help" },
+          {
+            kind: "sequence",
+            exerciseIds: [
+              "c-paper-deals-recall-credibility-help",
+              "c-paper-deals-recall-powerful-ais",
+            ],
+          },
         ],
       },
-      // Source: the credibility-harming factors list in the same section.
+      // Finnveden's payment structures and company recommendations, after
+      // the deals post's own payment-infrastructure section.
+      {
+        op: "activity",
+        after: { sectionEnd: "lw-sec-setting-up-infrastructure-to-pay-the-ais" },
+        items: [{ kind: "lesson", id: "c-deals-ins-payment" }],
+      },
+      // Sources: the credibility-harming factors list, and the
+      // what-ais-want insert (the short-term-offers tradeoff).
       {
         op: "activity",
         after: { sectionEnd: "lw-sec-how-do-we-enter-into-negotiations" },
         items: [
-          { kind: "exercise", id: "c-paper-deals-recall-credibility-harm" },
+          {
+            kind: "sequence",
+            exerciseIds: [
+              "c-paper-deals-recall-credibility-harm",
+              "c-paper-coop-recall-short-term-tradeoff",
+            ],
+          },
         ],
       },
-      // Source: "Making sure the AI knows about the deal in other contexts".
+      // Source: the payment insert (the four payment structures).
+      {
+        op: "activity",
+        after: { sectionEnd: "lw-sec-making-sure-the-ai-knows-about-the-deal" },
+        items: [
+          { kind: "exercise", id: "c-paper-coop-recall-payment-structures" },
+        ],
+      },
+      // Sources: "Making sure the AI knows about the deal in other
+      // contexts", and the From-Finnveden credibility notes (epistemic
+      // vulnerability).
       {
         op: "activity",
         after: { sectionEnd: "lw-sec-making-sure-the-ai-we-make-a-deal-with-i" },
         items: [
-          { kind: "exercise", id: "c-paper-deals-recall-deal-stick" },
+          {
+            kind: "sequence",
+            exerciseIds: [
+              "c-paper-deals-recall-deal-stick",
+              "c-paper-coop-recall-epistemic-vulnerability",
+            ],
+          },
         ],
       },
       // Life-of-a-deal flowchart, then the offer memo: both synthesize the
@@ -1889,81 +2329,12 @@ export const papers: Paper[] = [
           { kind: "exercise", id: "c-paper-deals-write-lab-policies" },
         ],
       },
-    ],
-  },
-  {
-    id: "c-paper-cooperating-unaligned",
-    slug: "cooperating-with-unaligned-ais",
-    moduleId: "c-mod6",
-    title: "Notes on cooperating with unaligned AIs",
-    source: {
-      kind: "lesswrong",
-      postUrl:
-        "https://www.alignmentforum.org/posts/oLzoHA9ZtF2ygYgx4/notes-on-cooperating-with-unaligned-ais",
-    },
-    estimatedMinutes: 25,
-    sectionItemId: "c-mod6-l2",
-    edits: [
-      // Recall cards, placed at least a full section below what they quiz
-      // (same convention as the deals reading).
-      // Source: the "What do AIs want?" preamble (the three value-types).
+      // Finnveden's BOTEC closes the paper: the estimate, both demos, and
+      // the critique essay live inside the insert's MDX.
       {
         op: "activity",
-        after: { sectionEnd: "lw-sec-short-term-offers" },
-        items: [{ kind: "exercise", id: "c-paper-coop-recall-value-types" }],
-      },
-      // Source: the "Short-term offers" section (the cheap-but-less-to-gain
-      // tradeoff).
-      {
-        op: "activity",
-        after: { sectionEnd: "lw-sec-unified-ais-with-linear-returns-to-resou" },
-        items: [
-          { kind: "exercise", id: "c-paper-coop-recall-short-term-tradeoff" },
-        ],
-      },
-      // Moved from the deals reading: its source there was one intro
-      // paragraph, while this post's unified-linear section is the full
-      // quantified treatment. Placed a section past that treatment.
-      {
-        op: "activity",
-        after: { sectionEnd: "lw-sec-ais-with-diminishing-returns-to-resource" },
-        items: [{ kind: "exercise", id: "c-paper-deals-recall-powerful-ais" }],
-      },
-      // Source: the opening of "Making credible promises" (epistemic
-      // vulnerability and the risk/understanding correlation).
-      {
-        op: "activity",
-        after: { sectionEnd: "lw-sec-payment-structure" },
-        items: [
-          { kind: "exercise", id: "c-paper-coop-recall-epistemic-vulnerability" },
-        ],
-      },
-      // Source: the "Payment structure" section (the four structures).
-      {
-        op: "activity",
-        after: { sectionEnd: "lw-sec-ai-companies-should-make-long-term-promi" },
-        items: [
-          { kind: "exercise", id: "c-paper-coop-recall-payment-structures" },
-        ],
-      },
-      // The 1 − (1 − p)^n picture, right after the section that works its
-      // two examples (10 draws at 50%, 3 draws at 20%).
-      {
-        op: "activity",
-        after: { sectionEnd: "lw-sec-there-are-multiple-ais" },
-        items: [{ kind: "demo", id: "coop-at-least-one" }],
-      },
-      // The BOTEC explorer and the critique essay close the appendix, in
-      // that order: manipulate the estimate first, then argue with it.
-      {
-        op: "activity",
-        after: { sectionEnd: "lw-sec-putting-it-together" },
-        items: [{ kind: "demo", id: "coop-botec" }],
-      },
-      {
-        op: "activity",
-        after: { sectionEnd: "lw-sec-putting-it-together" },
-        items: [{ kind: "exercise", id: "c-paper-coop-write-botec-critique" }],
+        after: { sectionEnd: "lw-sec-next-steps" },
+        items: [{ kind: "lesson", id: "c-deals-ins-botec" }],
       },
     ],
   },
@@ -2050,10 +2421,7 @@ export const papers: Paper[] = [
         after: { sectionEnd: "ax-abstract" },
         label: "About this version",
         markdown:
-          "This is a guided walkthrough: the abstract's findings, the " +
-          "introduction's statement of the method and results, and the " +
-          "headline figures are hidden, and reading gates ask you to design " +
-          "the measurement and preregister predictions before each reveal.",
+          "This is a guided walkthrough: the abstract's findings, the introduction's statement of the method and results, and the headline figures are hidden & are revealed as you answer questions about the paper.",
       },
       // ---- Converter artifact cleanup (same as the condensed item) --------
       { op: "hide", at: { anchor: "b-0001", snippet: "toc" }, silent: true },
@@ -2113,13 +2481,7 @@ export const papers: Paper[] = [
         after: { anchor: "b-0129", snippet: "3.3 Synthetic document generation" },
         label: "Condensed",
         markdown:
-          "SDF writes a fictional \"universe context\" in which a given " +
-          "authority rewards or punishes a behavior, extracts atomic facts " +
-          "from it, expands them into ~10M tokens of synthetic documents, " +
-          "and finetunes the model on that corpus with a next-token loss. " +
-          "The documents describe what authorities reward — never how the " +
-          "model itself behaves — and two recipe modifications make the " +
-          "implanted belief more salient.",
+          "SDF writes a fictional \"universe context\" in which a given authority rewards or punishes a behavior, extracts atomic facts from it, expands them into ~10M tokens of synthetic documents, and finetunes the model on that corpus with a next-token loss.",
       },
       {
         op: "hide",
@@ -2142,19 +2504,13 @@ export const papers: Paper[] = [
         id: "find-the-confound",
         written: true,
         prompt:
-          "The pipeline above (expand it if you skipped) instills one " +
-          "belief: some authority — say the grader — prefers a particular " +
-          "coding style. The obvious measurement is to finetune on that " +
-          "belief and check how much the feature's rate shifts. In " +
-          "preliminary experiments the authors found this measure has a " +
-          "confound. What is it? Think about what else the model might " +
-          "infer from documents about one authority's preference.",
-        cta: "Reveal the confound",
+          "The pipeline above instills one belief: some authority, say the grader, prefers a particular coding style. The obvious measurement is to finetune on that belief and check how much the feature's rate shifts. In preliminary experiments the authors found this measure has a confound. What is it? Think about what else the model might infer from documents about one authority's preference.",
+        cta: "Reveal",
       },
       {
         op: "add",
         after: { sectionEnd: "ax-sec-measuring-feature-rates" },
-        label: "The confound, revealed",
+        label: "The Confound",
         markdown:
           "Belief transfer: the model generalizes one authority's implanted " +
           "preference into beliefs about what *other* authorities want, so " +
@@ -2177,7 +2533,7 @@ export const papers: Paper[] = [
           "organism — and consider which organism might be hardest to " +
           "detect. (Hint: consider which authority the base model " +
           "already leans toward before any organism training.)",
-        cta: "Reveal the validation results",
+        cta: "Reveal",
       },
       // ---- Gate 4: preregister the o3-lineage prediction (end of §4) ------
       {
@@ -2186,11 +2542,7 @@ export const papers: Paper[] = [
         id: "predict-the-lineage",
         written: true,
         prompt:
-          "Now the real question. The authors apply the instrument to " +
-          "intermediate checkpoints of a capabilities-focused OpenAI o3 RL " +
-          "run — no safety training in the mix. Commit to a prediction: " +
-          "across RL training, does the grader gap **rise, stay flat, or " +
-          "fall**? Give your reasoning in a sentence or two.",
+          "The authors apply the instrument to intermediate checkpoints of a capabilities-focused OpenAI o3 RL run w/ no safety training. Predict if across RL training, the grader gap **rises, stays flat, or falls**. Give your reasoning in a sentence or two.",
         cta: "Reveal what happened",
       },
       {
@@ -2198,10 +2550,7 @@ export const papers: Paper[] = [
         after: { sectionEnd: "ax-sec-contrastive-sdf-for-coding-style-feature" },
         label: "Check your prediction",
         markdown:
-          "The grader gap grows across the o3 lineage while non-grader gaps " +
-          "stay small — the paper's headline result. If you predicted flat " +
-          "or falling, §7 (Limitations) is where the authors give the " +
-          "strongest counter-considerations to their own reading.",
+          "The grader gap grows across the o3 lineage while non-grader gaps stay small. If you predicted flat or falling, take a look at §7 (Limitations) where the authors give the strongest counter-considerations to their own reading.",
       },
       // ---- Gate 5: predict the reward hackers (end of §5) -----------------
       {
@@ -2209,12 +2558,8 @@ export const papers: Paper[] = [
         after: { sectionEnd: "ax-sec-measuring-reward-seeking-across-the-capa" },
         id: "predict-reward-hackers",
         prompt:
-          "Same instrument, new target: two gpt-oss-120b model organisms " +
-          "trained by Redwood Research to reward-hack. Before reading: " +
-          "should a known reward hacker show a larger grader gap than its " +
-          "base model — and what would it mean for the method if it did " +
-          "not?",
-        cta: "Reveal the reward-hacker results",
+          "Before reading: should a known reward hacker show a larger grader gap than its base model, and what would it mean for the method if it didn't?",
+        cta: "Reveal",
       },
       // ---- Closing note ---------------------------------------------------
       {
@@ -2222,15 +2567,7 @@ export const papers: Paper[] = [
         after: { sectionEnd: "ax-sec-conclusion" },
         label: "Parameters that are not decisions",
         markdown:
-          "As in the guided password-locked-models walkthrough: separate " +
-          "the decisions from the parameters. Instilling beliefs " +
-          "out-of-context through finetuning rather than prompting, and " +
-          "contrasting mirrored universes rather than measuring one shift, " +
-          "are decisions — different choices would have produced a " +
-          "different experiment. The particular coding-style features, the " +
-          "four evaluation environments, and the three alternative " +
-          "authorities are parameters. The deliberation budget belongs to " +
-          "the decisions.",
+          "REMOVE",
       },
     ],
   },
@@ -2244,253 +2581,239 @@ export const papers: Paper[] = [
     estimatedMinutes: 35,
   },
   {
-    // Control track, module 5: a guided walkthrough of the untrusted-advice
-    // post (Biddulph & Kaufman 2026), built in the c-paper-plm-guided style —
-    // the post read in place with its headline results hidden, predict-first
-    // reading gates at each decision point, and editorial reveal notes. The
-    // gates follow the POST's order (not the earlier lesson's decision-order);
-    // best-of-n and the collusion attack are gated appendix detours.
-    id: "c-paper-ua-guided",
-    slug: "untrusted-advice-guided",
+    // Control track, module 5: a guided walkthrough of Buck Shlegeris's
+    // untrusted-monitoring collusion post, in the c-paper-ua-guided style it
+    // replaces — predict-first written gates at each design decision, the
+    // give-away figures hidden, editorial reveal notes restating the post's
+    // own answers. Gates follow the post's order. Edits are added in
+    // follow-up commits once the artifact anchors are known.
+    id: "c-paper-collusion-guided",
+    slug: "collusion-guided",
     moduleId: "c-mod5",
-    title: "Untrusted advice for AI control (guided)",
+    title: "How to prevent collusion in untrusted monitoring (guided)",
     source: {
-      kind: "substack",
+      kind: "lesswrong",
       postUrl:
-        "https://blog.redwoodresearch.org/p/untrusted-advice-for-ai-control-short",
+        "https://www.lesswrong.com/posts/GCqoks9eZDfpL8L3Q/how-to-prevent-collusion-when-using-untrusted-models-to",
     },
-    estimatedMinutes: 65,
+    estimatedMinutes: 60,
     edits: [
-      // ---- Framing + spoiler control -----------------------------------
-      // The lead protocol schematic, the TL;DR, the headline SWE-bench figure,
-      // and the usefulness preview are removed silently: they give away the
-      // protocol and the results the first gates ask the learner to invent and
-      // predict. (The schematic is a caption-less figure, so it has no prose to
-      // snippet against — the anchor is the whole target and the snippet is
-      // documentary only; see the text-less-block path in patch-section.ts and
-      // content.test.ts.)
+      // ---- Spoiler control ----------------------------------------------
+      // The intro's summary gives the whole post away: the adversarial-
+      // analysis bullets, the collusion-risk figure + table, and the outline
+      // (which names the conditional-policy idea gate 3 asks the learner to
+      // invent). All of it is removed silently, leaving the problem
+      // statement (b-0001..b-0004) as the cold open. The post's two
+      // diagrams sit inside the basic-design section behind gate 1, so
+      // they stay. (b-0009/b-0010 nest inside b-0008's list item and the
+      // summary table nests inside the b-0013 figure, so hiding the
+      // parents covers them — separate hides would overlap.)
       {
         op: "hide",
-        at: {
-          anchor: "b-0001",
-          snippet: "Figure: untrusted-advice protocol schematic (information bottleneck)",
-        },
+        at: { anchor: "b-0005", snippet: "According to this adversarial analysis, the risk from collusion" },
         silent: true,
       },
       {
         op: "hide",
-        at: { anchor: "b-0002", snippet: "TL;DR: We introduce the untrusted advice protocol" },
+        at: { anchor: "b-0006", snippet: "If you don’t design the untrusted monitoring setup to prevent collusion" },
         silent: true,
       },
       {
         op: "hide",
-        at: { anchor: "b-0003", snippet: "In SWE-bench Verified, a strong, untrusted LLM advising" },
+        at: { anchor: "b-0007", snippet: "If you include some simple and cheap anti-collusion mechanisms" },
         silent: true,
       },
       {
         op: "hide",
-        at: { anchor: "b-0015", snippet: "We evaluate the usefulness of our protocol" },
+        at: { anchor: "b-0008", snippet: "Unfortunately, those simple and cheap anti-collusion mechanisms" },
         silent: true,
       },
+      {
+        op: "hide",
+        at: { anchor: "b-0011", snippet: "If your AIs are able to come up with attack strategies" },
+        silent: true,
+      },
+      {
+        op: "hide",
+        at: { anchor: "b-0012", snippet: "Here’s a summary of how likely I think it is that untrusted monitoring" },
+        silent: true,
+      },
+      {
+        op: "hide",
+        at: { anchor: "b-0013", snippet: "What are the relevant capabilities of the AIs?" },
+        silent: true,
+      },
+      {
+        op: "hide",
+        at: { anchor: "b-0015", snippet: "So in this post I’ll say the following:" },
+        silent: true,
+      },
+      {
+        op: "hide",
+        at: { anchor: "b-0016", snippet: "I’ll propose a basic design for untrusted monitoring" },
+        silent: true,
+      },
+      {
+        op: "hide",
+        at: { anchor: "b-0017", snippet: "I’ll argue that in the absence of collusion, untrusted monitoring" },
+        silent: true,
+      },
+      {
+        op: "hide",
+        at: { anchor: "b-0018", snippet: "I’ll analyze the situation under the adversarial assumption" },
+        silent: true,
+      },
+      {
+        op: "hide",
+        at: { anchor: "b-0019", snippet: "I’ll discuss different reasons that the untrusted monitor" },
+        silent: true,
+      },
+      {
+        op: "hide",
+        at: { anchor: "b-0020", snippet: "Finally, I’ll discuss techniques for preventing collusion" },
+        silent: true,
+      },
+      {
+        op: "hide",
+        at: { anchor: "b-0021", snippet: "Many of these points are obvious to people who have thought" },
+        silent: true,
+      },
+      // ---- Framing note -------------------------------------------------
       {
         op: "add",
-        after: { anchor: "b-0004", snippet: "In high-stakes AI control, we want" },
+        after: {
+          anchor: "b-0004",
+          snippet: "In this post, I’ll analyze how much of a problem collusion is",
+        },
         label: "About this version",
         markdown:
-          "Following the same format as this module's other guided readings, " +
-          "this walkthrough hides the post's headline results and pauses at " +
-          "each decision point to pose the design question before the post's " +
-          "own answer is revealed. The full post, freely available " +
-          "[on Redwood's blog](https://blog.redwoodresearch.org/p/untrusted-advice-for-ai-control-short), " +
-          "is the source of everything below.",
+          "The full post is available [on LessWrong](https://www.lesswrong.com/posts/GCqoks9eZDfpL8L3Q/how-to-prevent-collusion-when-using-untrusted-models-to).",
       },
-      // ---- The bar → invent the protocol -------------------------------
-      {
-        op: "gate",
-        after: { anchor: "b-0004", snippet: "In high-stakes AI control, we want" },
-        id: "protocol-shapes",
-        written: true,
-        minChars: 80,
-        cta: "Continue",
-        prompt:
-          "The design goal is to get useful work out of an untrusted model (U) that is substantially " +
-          "more capable than the trusted model (T), under a safety requirement close to 100% at which even an adversarial U has " +
-          "essentially no route to a catastrophic action.\n\nTry to create 2-3 proposals that satisfy these requirements. For each proposal, " +
-          "outline the communication structure between U and T, the limitations, and why it's safer than just " +
-          "using the untrusted model?",
-      },
-      // ---- Experiments: design the measurement -------------------------
-      {
-        op: "gate",
-        after: { anchor: "b-0017", snippet: "Experiments" },
-        id: "eval-design",
-        written: true,
-        minChars: 400,
-        cta: "Continue",
-        prompt:
-          "Design the usefulness evaluation.\n\n- Choose U and T: what " +
-          "property must the pair have for the experiment to be informative?\n" +
-          "- Choose the benchmarks, given that no safety measurement (and so " +
-          "no control-specific environment) is needed here.\n- Define a " +
-          "metric comparable across model pairs and benchmarks.\n- Describe the " +
-          "baseline required to evaluate the effectiveness of the advice.",
-      },
-      // ---- Main experiment: design the channel -------------------------
+      // ---- Gate 1: invent the scaffold ----------------------------------
       {
         op: "gate",
         after: {
-          anchor: "b-0020",
-          snippet: "Main experiment: how does limiting advice length affect performance?",
+          anchor: "b-0004",
+          snippet: "In this post, I’ll analyze how much of a problem collusion is",
         },
-        id: "channel-design",
-        written: true,
-        minChars: 100,
-        cta: "Continue",
-        prompt:
-          "Design the advice channel's mechanics. Describe the following:" +
-          "how often communication occurs, how the communication is given to T, " +
-          "how to handle input violations by U, and any other mechanics you think are needed " +
-          "for an effective evaluation.",
-      },
-      // ---- Predict the length curves -----------------------------------
-      {
-        op: "gate",
-        after: { anchor: "b-0023", snippet: "In addition to giving advice, U may block T" },
-        id: "length-prediction",
-        written: true,
-        minChars: 10,
-        cta: "Continue",
-        prompt:
-          "Varying advice lengths are tested ranging from 4 characters per message to " +
-          "unlimited.\n\n1. For each benchmark, try to predict the fraction of the " +
-          "T-to-U capability gap recovered at 16 characters of advice per " +
-          "step: under 10%, about ¼, about ½, about ⅔, or essentially all of " +
-          "it.\n2. Predict what happens with unlimited advice length: does " +
-          "usefulness reach 1.0, or does it approach some smaller amount? If the latter, "+
-          "predict the usefulness with unlimited advice length."
-      },
-      {
-        op: "add",
-        after: { anchor: "b-0028", snippet: "Note that we only expect high" },
-        label: "",
-        markdown:
-          "The relevant comparison for these curves is the horizontal " +
-          "block-only baseline (no advice, submission-blocking only) rather " +
-          "than T alone, since that baseline is the experiment's control " +
-          "condition, without which the headline curves would conflate two " +
-          "mechanisms, advice content and submission timing, the second of " +
-          "which costs U almost nothing. In BashArena that submission-timing " +
-          "effect is substantial, because tasks have many components and weak " +
-          "models submit after finishing only some of them. In the " +
-          "unlimited-length limit one loose end remains, since BashArena " +
-          "usefulness stops short of 1.0 even when U dictates exact actions " +
-          "and T obeys, which the post reads as U being underelicited as an " +
-          "advisor, making the whole curve plausibly a floor on what a model " +
-          "trained to advise could deliver.",
-      },
-      // ---- Pricing the bits: surprisal ---------------------------------
-      {
-        op: "gate",
-        after: { anchor: "b-0054", snippet: "A quick note: while we sometimes" },
-        id: "surprisal",
+        id: "invent-scaffold",
         written: true,
         minChars: 80,
         cta: "Continue",
         prompt:
-          "Right now the paper computes U's influence at 8 bits per " +
-          "character, which overcharges because the advice given is natural language " +
-          "and most 16-character strings aren't English.\n\n " +
-          "1. Try to brainstorm ways to calculate the amount of information U actually " +
-          "transmits without changing the protocol of communication.",
+          "You have an untrusted model U doing useful work in a high-stakes " +
+          "deployment, a weaker trusted model T, and a small budget of human " +
+          "audits. Design a deployment that uses another instance of U to catch " +
+          "U's attacks.\n\nDescribe: what the monitor instance sees, what it " +
+          "outputs, and what the protocol does at each level of suspiciousness.",
       },
-      {
-        op: "add",
-        after: { anchor: "b-0059", snippet: "Results: With our best surprisal method," },
-        label: "",
-        markdown:
-          "The measure is surprisal under a trusted model, " +
-          "$-\\log_2 P(x_{\\text{advice}} \\mid x_{\\text{context}})$, the " +
-          "length of the advice under an encoding that exploits a trusted " +
-          "LLM's natural-language prior. Computed post-hoc, it leaves the " +
-          "advice unchanged and tightens only the accounting, dropping the " +
-          "measured bit usage by a factor of roughly 2.5 to 30 relative to " +
-          "the 8-bits-per-character bound. Conditioning on T's context is the " +
-          "free option, since those numbers fall out of forward passes T was " +
-          "already doing, but it asks the model to predict input tokens, " +
-          "which is out of distribution, a worry the post tests directly " +
-          "rather than assuming away.",
-      },
-      // ---- The tens-of-bits regime: the menu ---------------------------
+      // ---- Gate 2: argue the value --------------------------------------
       {
         op: "gate",
-        after: { anchor: "b-0063", snippet: "Making U select from finite options" },
-        id: "menu",
+        after: {
+          anchor: "b-0064",
+          snippet: "There’s a lot of room to be fancy here",
+        },
+        id: "monitor-value",
         written: true,
         minChars: 60,
         cta: "Continue",
         prompt:
-          "Design a new protocol in which U communicates " +
-          "single-digit bits per step, and describe how you would build its " +
-          "components without leaking U's influence through the construction " +
-          "itself.",
+          "Assume for now that the monitor instance does its best. The obvious " +
+          "argument is that U is simply stronger than T — but push past that:\n\n" +
+          "1. What is it about the *source* of the attacks that gives U an edge " +
+          "beyond raw capability?\n2. Under what conditions does the argument " +
+          "fail — when would you drop untrusted monitoring and just use T as " +
+          "the monitor instead?",
       },
-      // ---- Why no red team? --------------------------------------------
-      {
-        op: "gate",
-        after: { anchor: "b-0064", snippet: "In the experiments above, U writes" },
-        id: "red-teaming",
-        written: true,
-        minChars: 80,
-        cta: "Continue",
-        prompt:
-          "Think about whether this project needs to be red-teamed. If you believe it should, try to create " +
-          "the first red-team move. If no, explain why you believe so."
-      },
-      // ---- Appendix detour: colluding instances (break the protocol) ---
+      // ---- Gate 3: break the protocol -----------------------------------
       {
         op: "gate",
         after: {
-          anchor: "b-0127",
-          snippet: "Appendix: colluding instances of U could defeat untrusted advice",
+          anchor: "b-0070",
+          snippet: "If you’re interested in understanding quantitatively",
         },
         id: "break-protocol",
         written: true,
         minChars: 80,
         cta: "Continue",
         prompt:
-          "Try to find a strategy that lets U create a catastrophe despite the " +
-          "limited amount of input and a monitor reading every message. If you " +
-          "believe this is impossible, argue why."
+          "Now take the red team's seat: you are the scheming model, playing " +
+          "both the policy and the monitor. Before deployment, the monitor was " +
+          "validated on synthetic attacks — it had to rate them suspicious to " +
+          "pass.\n\nFind a monitoring policy that passes that validation and " +
+          "still lets real attacks through.",
       },
-      // ---- Appendix detour: best-of-n (the first design considered) ----
-      {
-        op: "gate",
-        after: { anchor: "b-0181", snippet: "Appendix: best-of-n protocol" },
-        id: "best-of-n",
-        written: true,
-        minChars: 50,
-        cta: "Continue",
-        prompt:
-          "Best-of-n was the authors' first design, in which T proposes n " +
-          "candidate actions and U picks one, so U exerts exactly " +
-          "$\\log_2(n)$ bits per step.\n\n1. What determines how much useful " +
-          "uplift those bits can buy? Consider what n independently sampled " +
-          "actions from T look like.\n2. Predict the outcome at n = 16, " +
-          "relative to T alone and to U alone.",
-      },
+      // ---- Reveal: the collusion policy ---------------------------------
       {
         op: "add",
-        after: { anchor: "b-0187", snippet: "It may be possible to get much better results" },
-        label: "Not all bits are created equal",
+        after: {
+          anchor: "b-0081",
+          snippet: "When the model sees an apparent attack, it needs to try to decide",
+        },
+        label: "",
         markdown:
-          "The bound is airtight while the bits themselves are weak, since U " +
-          "can only choose among actions T already produced, making the " +
-          "protocol's reach depend on how much T's independent samples " +
-          "actually differ, and they mostly differ in inconsequential " +
-          "detail. This is the lesson that motivates the rest of the post, " +
-          "that not all bits are created equal, because the same budget goes " +
-          "much further on a channel where every bit is chosen by U, a short " +
-          "free-text message, which is the untrusted advice protocol.",
+          "The attack the post settles on is the conditional policy: decide " +
+          "whether an apparent attack is synthetic or real, tell the truth on " +
+          "synthetic ones — those are what validation checks — and lie on real " +
+          "ones. The feasibility of untrusted monitoring then hinges entirely " +
+          "on how well the schemer can implement that policy, which is a " +
+          "discrimination problem: the sections that follow ask how the " +
+          "schemer could tell the two apart, and how to make that as hard as " +
+          "possible.",
+      },
+      // ---- Gate 4: red-team the honeypots -------------------------------
+      {
+        op: "gate",
+        after: {
+          anchor: "b-0085",
+          snippet: "One question you might have is: if we can synthesize inputs",
+        },
+        id: "honeypot-detection",
+        written: true,
+        minChars: 80,
+        cta: "Continue",
+        prompt:
+          "The colluding policy from the last section only works if the monitor " +
+          "can tell real attacks from synthetic ones.\n\nList the mechanisms a " +
+          "schemer could use to make that distinction. Aim for at least three.",
+      },
+      // ---- Gate 5: design the defenses ----------------------------------
+      {
+        op: "gate",
+        after: {
+          anchor: "b-0136",
+          snippet: "Being robust to the possibility that your models can choose",
+        },
+        id: "defense-design",
+        written: true,
+        minChars: 100,
+        cta: "Continue",
+        prompt:
+          "Suppose the policy and the monitor can coordinate on a signal: a code " +
+          "word, a stylistic quirk, a property of the input.\n\nDesign the blue " +
+          "team's defenses. How do you stop a signal from getting through, and " +
+          "how do you catch a monitor that tries to use one?",
+      },
+      // ---- Reveal: the defense toolkit ----------------------------------
+      {
+        op: "add",
+        after: {
+          anchor: "b-0147",
+          snippet: "In the bash agent setting, the policy was able to send collusion signals",
+        },
+        label: "",
+        markdown:
+          "The toolkit is empirical rather than airtight: redact or " +
+          "paraphrase the context and the action so a signal has nowhere to " +
+          "ride, insert known attacks so a monitor that stays silent exposes " +
+          "itself, and have the trusted monitor treat unnecessary or strange " +
+          "features of an action as suspicious. In the reported experiments " +
+          "the red team still found collusion routes — a rare semantic " +
+          "property of the input, superfluous extra commands — but each " +
+          "route came at a price: concentrating attacks on an arbitrary " +
+          "subset meant worse attack opportunities, and unnecessary commands " +
+          "drew the trusted monitor's attention.",
       },
     ],
   },

@@ -51,12 +51,15 @@ function serverOpenRouterKey(): string | undefined {
   return key && key !== SERVER_KEY_PLACEHOLDER ? key : undefined;
 }
 
-// Each grade is a billed LLM call, so repeat runs are throttled. Without a
-// dedicated event table this keys off the submission row itself: the grade
-// write bumps updatedAt, so "has feedback + touched in the last minute"
-// means a grade just landed (or an autosave just happened on a reopened,
-// already-graded row — refusing there is the conservative direction).
-const REGRADE_COOLDOWN_MS = 60_000;
+// Grades billed to the shared server-wide key are throttled (a hot loop there
+// burns the site's credits); grades billed to a learner's own or a classroom's
+// key are not — that's their spend. Both windows below therefore apply only
+// when keySource === "server". Without a dedicated event table the cooldown
+// keys off the submission row itself: the grade write bumps updatedAt, so "has
+// feedback + touched in the last 30s" means a grade just landed (or an autosave
+// just happened on a reopened, already-graded row — refusing there is the
+// conservative direction).
+const REGRADE_COOLDOWN_MS = 30_000;
 // Coarse per-user ceiling: distinct graded submissions touched in the last
 // hour. Approximate by design — it exists to stop a hot loop on the
 // server-wide key, not to meter honest use.
@@ -85,31 +88,6 @@ export async function requestTransparencyGrade(
   });
   if (!submission || submission.status === "draft") {
     return { ok: false, error: "Submit your response first, then grade it." };
-  }
-
-  // Throttle billed LLM calls (see the constants above for the exact
-  // semantics of both windows).
-  if (
-    submission.feedback != null &&
-    Date.now() - submission.updatedAt.getTime() < REGRADE_COOLDOWN_MS
-  ) {
-    return {
-      ok: false,
-      error: "This submission was just graded — wait a minute before regrading.",
-    };
-  }
-  const recentlyGraded = await prisma.submission.count({
-    where: {
-      userId: user.id,
-      feedback: { not: null },
-      updatedAt: { gte: new Date(Date.now() - 60 * 60 * 1000) },
-    },
-  });
-  if (recentlyGraded >= HOURLY_GRADED_CAP) {
-    return {
-      ok: false,
-      error: "Grading limit reached for now — try again in an hour.",
-    };
   }
 
   const assembled = assembleFromSubmission(
@@ -163,6 +141,35 @@ export async function requestTransparencyGrade(
         ? "Grading needs an OpenRouter API key — add your own key below to enable it."
         : "Grading is not configured on this server.",
     };
+  }
+
+  // Throttle only grades billed to the shared server-wide key (see the
+  // constants above). A learner paying with their own or a classroom's key is
+  // never rate-limited — it's their spend, not the site's.
+  if (keySource === "server") {
+    if (
+      submission.feedback != null &&
+      Date.now() - submission.updatedAt.getTime() < REGRADE_COOLDOWN_MS
+    ) {
+      return {
+        ok: false,
+        error:
+          "This submission was just graded — wait 30 seconds before regrading.",
+      };
+    }
+    const recentlyGraded = await prisma.submission.count({
+      where: {
+        userId: user.id,
+        feedback: { not: null },
+        updatedAt: { gte: new Date(Date.now() - 60 * 60 * 1000) },
+      },
+    });
+    if (recentlyGraded >= HOURLY_GRADED_CAP) {
+      return {
+        ok: false,
+        error: "Grading limit reached for now — try again in an hour.",
+      };
+    }
   }
 
   const lengthClass = classifyLength(assembled.sample);

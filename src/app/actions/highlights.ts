@@ -30,6 +30,25 @@ function isHighlightId(value: unknown): value is string {
   return typeof value === "string" && value.length >= 1 && value.length <= 64;
 }
 
+/**
+ * Document order over a group's spans — numeric anchor compare (lexicographic
+ * anchors break at a digit-count rollover), then sentence + offset within the
+ * block. Mirror of the reader's compareRowOrder (paper-highlights.tsx): the
+ * group's HEAD row — the only row allowed to carry the note — is the minimum
+ * under this order.
+ */
+function compareSpanOrder(
+  a: { blockAnchor: string; sStart: number; startOffset: number },
+  b: { blockAnchor: string; sStart: number; startOffset: number },
+): number {
+  const anchorNum = (anchor: string) => Number.parseInt(anchor.slice(2), 10) || 0;
+  return (
+    anchorNum(a.blockAnchor) - anchorNum(b.blockAnchor) ||
+    a.sStart - b.sStart ||
+    a.startOffset - b.startOffset
+  );
+}
+
 /** The /readings viewer's contentId namespace (paperShell in its page). */
 const READING_PREFIX = "reading-";
 
@@ -113,6 +132,15 @@ export async function createHighlight(
   }
 
   const groupId = crypto.randomUUID();
+  // The group's note lives on the HEAD row only — the first span in DOCUMENT
+  // order. The client posts document order (head = spans[0]), but the payload
+  // is untrusted: recompute rather than let a shuffled direct POST park the
+  // note on a non-head row the panel would never surface for editing.
+  const headIndex = clean.spans.reduce(
+    (best, span, i) =>
+      compareSpanOrder(span, clean.spans[best]) < 0 ? i : best,
+    0,
+  );
   try {
     // Batch transaction: the group persists whole or not at all — a partial
     // group would paint fragments the panel calls one highlight.
@@ -131,8 +159,7 @@ export async function createHighlight(
             startOffset: span.startOffset,
             endOffset: span.endOffset,
             snippet: span.snippet,
-            // The group's note lives on the head row only.
-            note: index === 0 ? clean.note : null,
+            note: index === headIndex ? clean.note : null,
           },
           select: { id: true },
         }),
@@ -182,7 +209,13 @@ export async function createHighlight(
 
 /**
  * Saves (or clears, with null/whitespace) the note on the caller's own
- * highlight. Debounced-autosave target: returns whether a row was written.
+ * highlight GROUP. Debounced-autosave target: returns whether a row was
+ * written. The note lands on the group's HEAD row no matter which owned row
+ * id was posted: the whole model assumes a note lives ONLY on the head (the
+ * panel renders head.note; the classmate query returns one row per noted
+ * group), and this action is reachable by direct POST with any of the row
+ * ids createHighlight returns — a non-head write would surface to classmates
+ * as an annotation the owner's own panel never shows.
  */
 export async function updateHighlightNote(
   highlightId: string,
@@ -195,8 +228,19 @@ export async function updateHighlightNote(
   if (clean === undefined) return false;
   // Ownership lives in the predicate — a guessed id belonging to another
   // user matches zero rows instead of leaking or clobbering anything.
-  const updated = await prisma.highlight.updateMany({
+  const target = await prisma.highlight.findFirst({
     where: { id: highlightId, userId: user.id },
+    select: { groupId: true },
+  });
+  if (!target) return false;
+  const rows = await prisma.highlight.findMany({
+    where: { groupId: target.groupId, userId: user.id },
+    select: { id: true, blockAnchor: true, sStart: true, startOffset: true },
+  });
+  const head = [...rows].sort(compareSpanOrder)[0];
+  if (!head) return false;
+  const updated = await prisma.highlight.updateMany({
+    where: { id: head.id, userId: user.id },
     data: { note: clean },
   });
   return updated.count > 0;

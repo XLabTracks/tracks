@@ -68,7 +68,9 @@
   }
 
   .arxiv-paper a {
-    color: var(--destructive);
+    /* --link, not --destructive: identical in light (one red doing double
+       duty), separated in dark (rose links, clay danger). */
+    color: var(--link);
     text-decoration: none;
   }
   .arxiv-paper a:hover {
@@ -77,7 +79,7 @@
   }
   .arxiv-paper .ax-cite a,
   .arxiv-paper a.ax-ref {
-    color: var(--destructive);
+    color: var(--link);
   }
   .arxiv-paper .ax-backlink {
     color: var(--muted-foreground);
@@ -587,5 +589,78 @@
   .arxiv-paper .ax-mdframed-red {
     border-color: color-mix(in srgb, var(--destructive) 40%, transparent);
     background: color-mix(in srgb, var(--destructive) 4%, transparent);
+  }
+}
+
+/* forest tree diagrams — rendered as nested divs by transforms/forest.ts;
+   connectors are drawn with borders in the padding zones. */
+@layer components {
+  .arxiv-paper .ax-forest {
+    display: flex;
+    justify-content: center;
+    overflow-x: auto;
+    margin: 0.5em 0;
+  }
+  .arxiv-paper .ax-forest-node {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .arxiv-paper .ax-forest-label {
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    background: color-mix(in srgb, var(--muted-foreground) 4%, transparent);
+    padding: 0.35em 0.65em;
+    font-size: 0.82em;
+    line-height: 1.3;
+    text-align: center;
+    max-width: 16em;
+  }
+  .arxiv-paper .ax-forest-dashed {
+    border-style: dashed;
+    background: transparent;
+  }
+  .arxiv-paper .ax-forest-children {
+    position: relative;
+    display: flex;
+    align-items: flex-start;
+    padding-top: 1em;
+  }
+  /* stub from the parent label down to the sibling rule */
+  .arxiv-paper .ax-forest-children::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 50%;
+    height: 1em;
+    border-left: 1.5px solid var(--border);
+  }
+  .arxiv-paper .ax-forest-children > .ax-forest-node {
+    position: relative;
+    padding: 1em 0.45em 0;
+  }
+  /* sibling rule halves + centered drop line */
+  .arxiv-paper .ax-forest-children > .ax-forest-node::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 50%;
+    width: 50%;
+    height: 1em;
+    border-top: 1.5px solid var(--border);
+  }
+  .arxiv-paper .ax-forest-children > .ax-forest-node::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 50%;
+    width: 50%;
+    height: 1em;
+    border-top: 1.5px solid var(--border);
+    border-left: 1.5px solid var(--border);
+  }
+  .arxiv-paper .ax-forest-children > .ax-forest-node:first-child::before,
+  .arxiv-paper .ax-forest-children > .ax-forest-node:last-child::after {
+    border-top: none;
   }
 }

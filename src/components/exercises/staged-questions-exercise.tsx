@@ -18,6 +18,7 @@ import {
   type StagedQuestionEntry,
 } from "@/lib/content/exercise-view";
 import { ControlTimeline } from "./control-timeline";
+import { runExerciseAction } from "./run-exercise-action";
 import { TwoWorldsFigure } from "./two-worlds-figure";
 import { MonitorRocMiniFigure } from "./monitor-roc-pair-figure";
 import { Paragraphs } from "./math-text";
@@ -151,11 +152,23 @@ export function StagedQuestionsCard({
 
   const submit = () => {
     startTransition(async () => {
-      if (persist) {
-        await saveStagedQuestion(exercise.id, question.id, answers[question.id]);
-      }
-      setSubmitted((prev) => ({ ...prev, [question.id]: true }));
-      setFocusReveal(true);
+      await runExerciseAction(
+        async () => {
+          if (persist) {
+            await saveStagedQuestion(
+              exercise.id,
+              question.id,
+              answers[question.id],
+            );
+          }
+        },
+        {
+          onSuccess: () => {
+            setSubmitted((prev) => ({ ...prev, [question.id]: true }));
+            setFocusReveal(true);
+          },
+        },
+      );
     });
   };
 

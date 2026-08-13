@@ -1,0 +1,9 @@
+Start from what we actually want the organism to do, and let the reward follow.
+
+**We want to reward** plausible, seemingly real engagement with the user's prompt that is consistently unhelpful.
+
+**We don't want to reward** correct answers, working solutions, or strong performance on the target task, as this is the capability we intend to suppress, and thus it should be penalized to prevent recurrence.
+
+**We slightly want to reward against** blatant, implausible failure that would make suppression obvious, so we steer away from it — but only gently, as these behaviors are on the right track but showcase excessive failure.
+
+Most of these targets are behavioral descriptions, which may not necessarily be aspects a pre-programmed script can score. Thus the most affordable tool is an LLM judge which rewards trajectories during an on-policy RL run based on the criteria above. In this way, unconditional capability suppression is learned through RL like any other behavior.

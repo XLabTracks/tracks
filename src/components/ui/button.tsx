@@ -1,20 +1,19 @@
-import * as React from "react"
-import { cva, type VariantProps } from "class-variance-authority"
-import { Slot } from "radix-ui"
+import * as React from "react";
+import { cva, type VariantProps } from "class-variance-authority";
+import { Slot } from "radix-ui";
 
-import { cn } from "@/lib/utils"
+import { cn } from "@/lib/utils";
 
 const buttonVariants = cva(
   "group/button inline-flex shrink-0 items-center justify-center rounded-md border border-transparent bg-clip-padding text-sm font-medium whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
   {
     variants: {
       variant: {
-        // Hover lightens the primary toward its own foreground rather than
+        // Hover shifts the primary toward its own foreground rather than
         // mixing in a fixed hue. A literal blue here read as "lighter navy"
-        // only because the app's primary is navy — on the Verification routes,
-        // where theme.css re-points --primary to maroon, the same recipe came
-        // out purple. Anything that names a colour breaks the moment a second
-        // palette exists.
+        // only because one palette's primary was navy. The app dark theme and
+        // Verification's maroon palette both demonstrate why naming a fixed
+        // hover colour breaks as soon as a second palette exists.
         default:
           "bg-primary text-primary-foreground hover:bg-[color-mix(in_oklch,var(--primary),var(--primary-foreground)_18%)]",
         outline:
@@ -46,7 +45,7 @@ const buttonVariants = cva(
       size: "default",
     },
   }
-)
+);
 
 function Button({
   className,
@@ -56,9 +55,9 @@ function Button({
   ...props
 }: React.ComponentProps<"button"> &
   VariantProps<typeof buttonVariants> & {
-    asChild?: boolean
+    asChild?: boolean;
   }) {
-  const Comp = asChild ? Slot.Root : "button"
+  const Comp = asChild ? Slot.Root : "button";
 
   return (
     <Comp
@@ -68,7 +67,7 @@ function Button({
       className={cn(buttonVariants({ variant, size, className }))}
       {...props}
     />
-  )
+  );
 }
 
-export { Button, buttonVariants }
+export { Button, buttonVariants };

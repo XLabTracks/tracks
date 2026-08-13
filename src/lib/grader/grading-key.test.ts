@@ -104,6 +104,21 @@ describe("resolveGraderKeySelection", () => {
   it("never auto-picks among several classroom keys", () => {
     expect(resolveGraderKeySelection(null, "none", ["c1", "c2"])).toBe("server");
   });
+
+  it("automatic skips an unusable classroom key rather than stranding the learner", () => {
+    // Sole classroom key is undecryptable (rotated secret): no preference, no
+    // own key → fall through to server instead of a selection grading can't use.
+    expect(resolveGraderKeySelection(null, "none", ["c1"], [])).toBe("server");
+    // Two present, one usable → auto-pick the usable one.
+    expect(resolveGraderKeySelection(null, "none", ["c1", "c2"], ["c2"])).toBe(
+      "classroom:c2",
+    );
+    // But an *explicit* preference for the unusable classroom is still honored
+    // (grading surfaces the re-enter error; it never bills elsewhere).
+    expect(resolveGraderKeySelection("classroom:c1", "none", ["c1"], [])).toBe(
+      "classroom:c1",
+    );
+  });
 });
 
 // Helpers for the DB-backed tests: real ciphertexts under the right AADs so

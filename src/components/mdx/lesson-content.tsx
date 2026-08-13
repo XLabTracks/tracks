@@ -35,7 +35,8 @@ export interface LessonSection {
 
 /** Text content of a rendered React subtree (headings hold text + inline tags). */
 function nodeText(node: ReactNode): string {
-  if (node === null || node === undefined || typeof node === "boolean") return "";
+  if (node === null || node === undefined || typeof node === "boolean")
+    return "";
   if (typeof node === "string" || typeof node === "number") return String(node);
   if (Array.isArray(node)) return node.map(nodeText).join("");
   if (isValidElement(node)) {
@@ -88,7 +89,7 @@ function titleAwareHeadings(title: string): MDXComponents {
  */
 export async function getLessonSections(
   contentRef: string,
-  title?: string,
+  title?: string
 ): Promise<LessonSection[]> {
   const mdxModule = (await importLesson(contentRef)) as {
     sections?: LessonSection[];
@@ -96,7 +97,7 @@ export async function getLessonSections(
   const sections = Array.isArray(mdxModule?.sections) ? mdxModule.sections : [];
   if (!title) return sections;
   return sections.filter(
-    (section) => !isLessonTitleHeading(section.title ?? "", title),
+    (section) => !isLessonTitleHeading(section.title ?? "", title)
   );
 }
 
@@ -106,7 +107,9 @@ export async function getLessonSections(
  * same pipeline run that renders the links, so the list can never drift from
  * the body. Missing lesson or export => [].
  */
-export async function getLessonCitations(contentRef: string): Promise<string[]> {
+export async function getLessonCitations(
+  contentRef: string
+): Promise<string[]> {
   const mdxModule = (await importLesson(contentRef)) as {
     citations?: string[];
   } | null;
@@ -124,7 +127,7 @@ export async function getLessonCitations(contentRef: string): Promise<string[]> 
  * not the filesystem, and works on the worker.
  */
 export async function getTrackRequiredWritingIds(
-  trackId: string,
+  trackId: string
 ): Promise<string[]> {
   const ids: string[] = [];
   for (const mod of getModulesForTrack(trackId)) {
@@ -159,7 +162,7 @@ export async function LessonContent({
   const Body = mdxModule.default;
 
   return (
-    <article className="lesson-body prose prose-neutral prose-headings:font-semibold prose-headings:tracking-tight prose-a:text-destructive prose-a:font-medium prose-a:underline-offset-4 max-w-none">
+    <article className="lesson-body prose prose-neutral dark:prose-invert prose-headings:font-semibold prose-headings:tracking-tight prose-a:text-link prose-a:font-medium prose-a:underline-offset-4 max-w-none">
       {/* Per-render overrides win over the global map: the compiled body
           spreads `props.components` last (see src/mdx-components.tsx). */}
       <Body components={title ? titleAwareHeadings(title) : undefined} />

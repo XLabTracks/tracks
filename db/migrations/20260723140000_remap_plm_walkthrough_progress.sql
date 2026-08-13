@@ -11,6 +11,15 @@
 -- are deliberately NOT touched: the new item has no equivalent exercises, and
 -- the rows hold learner writing (and possibly paid grader feedback) worth
 -- preserving even though no UI currently surfaces them.
+--
+-- Wrapped in one transaction so psql -f cannot autocommit between the UPDATE
+-- and the DELETE (a concurrently upserted 'c-plm-walkthrough' row would be
+-- deleted instead of remapped). Prod already ran the unwrapped version on
+-- 2026-07-23; the wrap corrects the template for fresh environments and any
+-- future re-run (the file is idempotent — a second pass is a no-op unless it
+-- finds stragglers, which it then remaps under the same rules).
+BEGIN;
+
 UPDATE "LessonProgress" lp
 SET "lessonId" = 'c-paper-plm-guided'
 WHERE lp."lessonId" = 'c-plm-walkthrough'
@@ -22,3 +31,5 @@ WHERE lp."lessonId" = 'c-plm-walkthrough'
   );
 
 DELETE FROM "LessonProgress" WHERE "lessonId" = 'c-plm-walkthrough';
+
+COMMIT;

@@ -95,7 +95,7 @@ export default async function ReviewPage() {
             spaced review.
           </p>
           <Button asChild className="mt-5">
-            <Link href="/tracks">Browse tracks</Link>
+            <Link href="/">Browse tracks</Link>
           </Button>
         </div>
       ) : (

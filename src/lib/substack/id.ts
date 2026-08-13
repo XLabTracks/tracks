@@ -58,6 +58,30 @@ export function parseSubstackId(raw: unknown): SubstackRef | null {
   return { id: raw, host, slug };
 }
 
+/**
+ * Post-KEYING host aliases. One publication stays reachable under more than
+ * one host (every custom domain also answers on {name}.substack.com, and a
+ * domain move keeps the old host serving), so the site-agnostic `sb:` post
+ * keys used for dedup and link internalization must collapse known aliases —
+ * the substack analogue of LessWrong keys collapsing lesswrong.com and
+ * alignmentforum.org onto the post id. Artifact ids are deliberately NOT
+ * normalized: committed artifacts keep whichever host they were built under
+ * (both hosts below carry live artifacts in linked-readings.json).
+ */
+const SUBSTACK_HOST_ALIASES: Record<string, string> = {
+  "blog.ai-futures.org": "blog.aifutures.org",
+};
+
+/**
+ * Alias-normalized "{host}__{slug}" for `sb:` post keys
+ * (src/lib/readings/resolve.ts, scripts/build-readings.ts). A keying value
+ * only — never an artifact id, fetch target, or route.
+ */
+export function substackPostKeyId(ref: SubstackRef): string {
+  const host = SUBSTACK_HOST_ALIASES[ref.host] ?? ref.host;
+  return `${host}__${ref.slug}`;
+}
+
 /** The public reader URL. */
 export function buildPostUrl(ref: SubstackRef): string {
   return `https://${ref.host}/p/${ref.slug}`;

@@ -5,14 +5,11 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 @AGENTS.md
 
 Tracks is an AI-safety learning platform (Khan Academy–style) with two
-tracks — **Control** (technical) and **Governance**. The
-Control track's first module carries real curriculum (an authored lesson on
-the control game, the Redwood AI Control paper, and two readings reproduced
-with permission); everything else is placeholder. **Never invent or
+tracks — **Control** (technical) and **Verification**. Both tracks carry
+human-authored curriculum and reproduced readings. **Never invent or
 fabricate curriculum content** — real content is human-authored or reproduced
-with permission; otherwise use lorem ipsum or leave it empty. The **Example track** (`ex-content`/`ex-assess`)
-is the live reference for every content feature; `AUTHORING.md` is the
-step-by-step guide for adding content (its rules are enforced by
+with permission; otherwise use lorem ipsum or leave it empty. `AUTHORING.md`
+is the step-by-step guide for adding content (its rules are enforced by
 `src/lib/content/content.test.ts`).
 
 ## Commands
@@ -210,8 +207,9 @@ The reasoning-transparency grader (`src/lib/grader/`, action
 `requestTransparencyGrade`) sends submitted writing to an LLM via OpenRouter;
 model selection is per length class and key source (`modelFor` in
 `classify.ts`, env-overridable): the server-wide key grades on
-`tencent/hy3:free`; a user-stored key grades on `moonshotai/kimi-k3`
-(`OPENROUTER_MODEL_USER` overrides). The grader card renders only once
+`tencent/hy3:free`; a user-stored key grades on
+`deepseek/deepseek-v4-flash-0731` (`OPENROUTER_MODEL_USER` overrides). The
+grader card renders only once
 the submission is submitted; `reopenWriting` reverts submitted→draft for
 edit-after-grading (hosts key `WritingEditor` on the row's `updatedAt` so
 `router.refresh()` remounts it with server truth). Grader reports open with
@@ -286,7 +284,7 @@ from the binding and falls back to `DATABASE_URL` (pooled port-6432 string in
 `.env`) for local dev — never share a Prisma client across requests on Workers.
 **Schema migrations live in `db/migrations/` as numbered SQL files and are
 applied manually** — `psql "<direct-5432 url>" -f db/migrations/<file>.sql`
-using the **admin** role (the app role has no DDL rights) *before* pushing code
+using the **admin** role (the app role has no DDL rights) _before_ pushing code
 that depends on them; PlanetScale Postgres has no deploy requests/safe
 migrations, and never run `prisma migrate deploy` against prod. To change the
 schema: edit `prisma/schema.prisma` (types/client) **and** add a matching SQL
@@ -367,7 +365,7 @@ add must reduce the duplication, never widen it.
   source of the module list, the unit list and their order. The app track at
   `/tracks/verification` reads it directly; MDX bodies live in
   `src/content/lessons/verification/*.mdx`, reached by `contentRef`
-  `verification/<name>` (`contentRef` is a *path* under
+  `verification/<name>` (`contentRef` is a _path_ under
   `src/content/lessons`, so the subfolder needs no loader change).
 - **The outline's taxonomy is modules → submodules → subsubmodules**, and the
   graph carries it as: a **submodule** is a top-level lesson numbered `X.X.0`,
@@ -474,7 +472,7 @@ add must reduce the duplication, never widen it.
   That bound is measured off the course, not chosen: the smallest parts
   anyone writes on purpose run 464+ characters, while the chunker was
   producing 69 (a bare opening video), 114, 209 and 267. Embeds get no credit
-  on purpose — the 69-character case *was* a fifteen-minute video and still
+  on purpose — the 69-character case _was_ a fifteen-minute video and still
   read as a broken page. The reader also has a jump strip, a
   position meter (the counter beside it is the reading; the bar is
   decoration), `?p=` deep links and a whole-lesson toggle persisted under
@@ -484,7 +482,7 @@ add must reduce the duplication, never widen it.
   the meter reads position, Mark complete stays the only completion channel.
   Corollary: a lesson with no headings is one unchunkable wall — long
   lessons must carry real headings, not bold lines pretending (that is what
-  the scoping-actors/covert-* repairs restored), and a wide table scrolls in
+  the scoping-actors/covert-\* repairs restored), and a wide table scrolls in
   its own box (`.lesson-body table` in globals.css), never the page.
   **One pager, and it is shared** — `src/components/learn/reading-pager.tsx`.
   Previous/Next step through the parts and roll into the neighbouring item at
@@ -524,7 +522,7 @@ add must reduce the duplication, never widen it.
   categorical scale — the five evidence layers, any N-way key — takes the brand
   `--mod-0..4` hues through their `--mod-N-text` variants (built to read as type
   on every ground), never an ad-hoc chart rainbow (`bg-amber/sky/violet/emerald/
-  rose`, or Okabe–Ito). Those read as stock AI slop against the maroon, which is
+rose`, or Okabe–Ito). Those read as stock AI slop against the maroon, which is
   the whole reason `theme.css` leaves the chart tokens unmapped. One token
   colours the dot, the rail mark, the ring **and** the layer's own name, so the
   hue sits on a coloured word rather than a bare dot beside grey text — a
@@ -548,7 +546,7 @@ Traps that cost time already, so they are written down:
   of variable names. `--primary` fills and `--brand-ink` writes. The two
   wordmark files are chosen by CSS, and those rules must stay **after**
   `.brand-mark` — it sets `display:block` at equal specificity, so ordering is
-  the whole mechanism. It carries the palette a *page* is made of, so app
+  the whole mechanism. It carries the palette a _page_ is made of, so app
   tokens no static page has — `--popover`, `--input`, `--secondary`, the
   `--sidebar*` set — are absent from it and keep globals.css's light-ground
   values, which is how a dialog opens white on the night theme. Those are
@@ -597,8 +595,6 @@ Traps that cost time already, so they are written down:
   glossary first, and stays best-effort. Never gate saving on a definition
   arriving.
 
-
-
 The course pages' own mechanics, for as long as they are scripts:
 
 - **`theme.css` is the only file that knows a colour.** Three themes — day,
@@ -628,14 +624,14 @@ The course pages' own mechanics, for as long as they are scripts:
 - **Content drives the page.** `data/course.js` is the course, plus
   `exercises.js`, `skills.js`, `glossary.js`, `memos.js`. A new unit is one
   object and the track page, module rail, counters and certificate gate pick
-  it up. Unit ids are permanent — they are progress keys *and* the rung tags
+  it up. Unit ids are permanent — they are progress keys _and_ the rung tags
   in `data/skills.js`.
 - **A unit is read in parts** (`module.js`). Parts are derived from the unit,
   never declared: every `{h}` in the body opens one, the blocks before the
   first open "Start", and the exercise, readings and written output are each
   their own — so a new unit in `course.js` chunks itself. A strip above the
   reading jumps between them, `?p=<1-based>` deep-links one, and `Read the
-  whole unit` lays them all out (remembered per device under
+whole unit` lays them all out (remembered per device under
   `vt-reading-mode` — a preference, not learner work, so it stays out of
   `vt-progress` and out of the account sync). Two traps: parts are **hidden,
   never re-rendered**, because the exercise engine holds a half-answered run
@@ -702,7 +698,7 @@ The course pages' own mechanics, for as long as they are scripts:
 - **The capstone bank is generated.** `verification-capstones/*.md` →
   `public/verification/data/capstone-bank.js` **and**
   `src/content/verification/capstone-bank.json` via `npm run
-  verification:capstones` (`-- --check` covers both; never hand-edit either).
+verification:capstones` (`-- --check` covers both; never hand-edit either).
   Two shapes because the static page needs a `window.` script tag and the app
   needs an import — one source, written together, so neither can go stale
   alone. `verification-capstones/_README.md` is the front-matter contract.
@@ -785,4 +781,4 @@ a leaf takes. Papers marked `optional: true` (and their inserted lessons) are
 trackable but never required: the `…ProgressContentIds` accessors exclude
 them (so module completion, prerequisite satisfaction, and progress totals
 ignore them) while `getTrackContentIds` is the full checkmark/fetch universe
-(`ex-paper-lesswrong` is the live reference).
+(`c-paper-synchronous-monitors` is the live reference).

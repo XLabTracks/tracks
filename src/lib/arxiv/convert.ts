@@ -20,6 +20,7 @@ import {
   buildMiscEnvReplacements,
 } from "./transforms/envs";
 import { buildFloatReplacements } from "./transforms/floats";
+import { buildForestReplacement } from "./transforms/forest";
 import { processFootnotes } from "./transforms/footnotes";
 import {
   applyTexorpdfstring,
@@ -129,6 +130,7 @@ export function convertLatexToHtml(
     environmentReplacements: safeReplacements(
       {
         abstract: abstractReplacement,
+        forest: buildForestReplacement(warnings),
         ...buildTheoremReplacements(theoremDefs, numbering),
         ...miscEnvReplacements,
         ...floats.environmentReplacements,

@@ -16,6 +16,7 @@ import {
   type AllocationScenarioEntry,
 } from "@/lib/content/exercise-view";
 import { MathText, Paragraphs } from "./math-text";
+import { runExerciseAction } from "./run-exercise-action";
 
 /**
  * Fixed-order categorical palette, one entry per agenda index — never cycled
@@ -346,26 +347,38 @@ export function AllocationExerciseCard({
 
   const goNext = (index: number) =>
     startTransition(async () => {
-      if (persist) {
-        await saveAllocationScenario(
-          exercise.id,
-          exercise.scenarios[index].id,
-          allocationRecord(index),
-          reasonings[index],
-        );
-      }
-      if (index === scenarioCount - 1) {
-        setCompletedAt(new Date().toISOString());
-        setView("summary");
-        return;
-      }
-      setAllocations((prev) =>
-        visited[index + 1]
-          ? prev
-          : prev.map((row, i) => (i === index + 1 ? [...prev[index]] : row)),
+      await runExerciseAction(
+        async () => {
+          if (persist) {
+            await saveAllocationScenario(
+              exercise.id,
+              exercise.scenarios[index].id,
+              allocationRecord(index),
+              reasonings[index],
+            );
+          }
+        },
+        {
+          onSuccess: () => {
+            if (index === scenarioCount - 1) {
+              setCompletedAt(new Date().toISOString());
+              setView("summary");
+              return;
+            }
+            setAllocations((prev) =>
+              visited[index + 1]
+                ? prev
+                : prev.map((row, i) =>
+                    i === index + 1 ? [...prev[index]] : row,
+                  ),
+            );
+            setVisited((prev) =>
+              prev.map((v, i) => (i === index + 1 ? true : v)),
+            );
+            setView(index + 1);
+          },
+        },
       );
-      setVisited((prev) => prev.map((v, i) => (i === index + 1 ? true : v)));
-      setView(index + 1);
     });
 
   const copyResults = async () => {
@@ -622,7 +635,7 @@ export function AllocationExerciseCard({
           className={cn(
             "mt-2 font-mono text-sm font-medium tabular-nums",
             exact
-              ? "text-emerald-700"
+              ? "text-emerald-700 dark:text-[#7FA682]"
               : over
                 ? "text-destructive"
                 : "text-muted-foreground",
@@ -656,7 +669,7 @@ export function AllocationExerciseCard({
           <p
             className={cn(
               "mt-1 text-right font-mono text-xs",
-              chars >= minChars ? "text-emerald-700" : "text-muted-foreground",
+              chars >= minChars ? "text-emerald-700 dark:text-[#7FA682]" : "text-muted-foreground",
             )}
           >
             {chars} / {minChars}

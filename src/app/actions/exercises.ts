@@ -97,7 +97,15 @@ export async function gradeExercise(
 
 /** Shape persisted in `Submission.responseJson` for flowchart exercises. */
 interface FlowchartResponseJson {
-  stages: Record<string, { attempt: FlowchartNode[]; correct: boolean }>;
+  stages: Record<
+    string,
+    {
+      attempt: FlowchartNode[];
+      correct: boolean;
+      /** Accumulated incorrect checks (absent on rows persisted before it). */
+      attempts?: number;
+    }
+  >;
 }
 
 /**
@@ -143,10 +151,25 @@ export async function gradeFlowchartStage(
     const prior = (existing?.responseJson as FlowchartResponseJson | null) ?? {
       stages: {},
     };
-    const stages = {
-      ...prior.stages,
-      [stageId]: { attempt: sanitized, correct },
-    };
+    const priorAttempts = prior.stages[stageId]?.attempts ?? 0;
+    // Drop entries whose stage left the exercise definition (authoring
+    // drift, same resilience as the review-card path): a stale correct
+    // entry would otherwise keep counting toward the score forever — and
+    // solving every current stage after a stage rename would persist a
+    // score above 1.
+    const validStageIds = new Set(exercise.stages.map((s) => s.id));
+    const stages = Object.fromEntries(
+      Object.entries({
+        ...prior.stages,
+        [stageId]: {
+          attempt: sanitized,
+          correct,
+          // Misses accumulate across sessions so the client can restore its
+          // "Show solution" gate after a reload.
+          attempts: correct ? priorAttempts : priorAttempts + 1,
+        },
+      }).filter(([id]) => validStageIds.has(id)),
+    );
     const score =
       Object.values(stages).filter((s) => s.correct).length /
       exercise.stages.length;
@@ -352,6 +375,7 @@ interface CommitConstructResponseJson {
 
 async function saveCommitConstructStep(
   exerciseId: string,
+  requiresCommit: boolean,
   merge: (prior: CommitConstructResponseJson) => CommitConstructResponseJson,
 ): Promise<void> {
   const user = await getCurrentUser();
@@ -369,7 +393,8 @@ async function saveCommitConstructStep(
   const existing = await prisma.submission.findUnique({ where });
   const prior = (existing?.responseJson as CommitConstructResponseJson | null) ?? {};
   const next = merge(prior);
-  const complete = next.commit != null && next.construct != null;
+  const complete =
+    next.construct != null && (!requiresCommit || next.commit != null);
   const responseJson = next as unknown as Prisma.InputJsonValue;
   await prisma.submission.upsert({
     where,
@@ -402,7 +427,10 @@ export async function saveCommitConstructCommit(
   const entry = sanitizeCommitConstructCommit(exercise, choice, confidence, reasoning);
   if (!entry) return;
 
-  await saveCommitConstructStep(exerciseId, (prior) => ({ ...prior, commit: entry }));
+  await saveCommitConstructStep(exerciseId, Boolean(exercise.commit), (prior) => ({
+    ...prior,
+    commit: entry,
+  }));
 }
 
 /**
@@ -420,7 +448,10 @@ export async function saveCommitConstructConstruct(
   const entry = sanitizeCommitConstructConstruct(threatModel);
   if (!entry) return;
 
-  await saveCommitConstructStep(exerciseId, (prior) => ({ ...prior, construct: entry }));
+  await saveCommitConstructStep(exerciseId, Boolean(exercise.commit), (prior) => ({
+    ...prior,
+    construct: entry,
+  }));
 }
 
 /** Shape persisted in `Submission.responseJson` for argue-reveal exercises. */

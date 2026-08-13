@@ -246,9 +246,9 @@ export const DOCUMENTS: Record<string, DissectionDocument> = {
 export const DISSECTION_COPY = {
   selectClause: "Select a clause",
   selectHint:
-    "Work top to bottom. You cannot see the instructor layer for a clause until you commit your own read of it.",
+    "Work top to bottom. You can't see the instructor layer for a clause until you commit your own read of it.",
   taggingHint:
-    "Which organs does this clause implement (not merely demand)? Flag it if you suspect a weakness, and say why. Commit locks your read and reveals the instructor layer.",
+    "Which organs does this clause implement? Flag it if you suspect a weakness, and elaborate on why.",
   notePlaceholder:
     "Your note: what does this clause assume, and what would an adversary do with it?",
   flagLabel: "Flag as suspected weakness",
@@ -257,13 +257,13 @@ export const DISSECTION_COPY = {
   clickToTag: "click to tag",
   instructorLayer: "Instructor layer",
   noOrgansAgreed: "No organs — agreed",
-  flawHit: "⚑ Planted flaw — you caught it.",
+  flawHit: "⚑ Planted flaw, you caught it.",
   flawMiss:
-    "⚑ Planted flaw — you missed it. Read the annotation below and note what tipped the instructor read.",
+    "⚑ Planted flaw, you missed it. Read the annotation below and note what tipped the instructor read.",
   flawFalsePositive:
     "⚐ Not a planted flaw. Suspicion is free but findings are not; check the annotation for why this clause is (mostly) sound.",
   viewSummary: "View summary: organ coverage map & flaw score →",
-  summaryHeading: "Summary — ",
+  summaryHeading: "Summary:",
   coverageIntro:
     "Organ coverage across the whole document (instructor layer). The theater test is anatomy by absence: what is missing matters more than what is present.",
   present: "PRESENT",

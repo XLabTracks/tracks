@@ -22,6 +22,7 @@ import {
   getPrerequisiteStatus,
   getTrackCompletionSet,
   isLessonCompleted,
+  type PrerequisiteStatus,
 } from "@/lib/progress";
 import { Breadcrumbs } from "@/components/layout/breadcrumbs";
 import { OptionalMarker } from "@/components/content/optional-tag";
@@ -40,6 +41,7 @@ import { LessonNav } from "@/components/layout/lesson-nav";
 import { LessonCompleteButton } from "@/components/learn/lesson-complete-button";
 import { LessonTracker } from "@/components/learn/lesson-tracker";
 import { MarginNotesToggle } from "@/components/papers/margin-notes-toggle";
+import { ClassHighlightsToggle } from "@/components/papers/class-highlights-toggle";
 import { PaperHighlights } from "@/components/papers/paper-highlights";
 import { PaperReader } from "@/components/papers/paper-reader";
 import { PaperPartsReader } from "@/components/papers/paper-parts-reader";
@@ -52,8 +54,15 @@ import {
   deleteHighlight,
   updateHighlightNote,
 } from "@/app/actions/highlights";
-import { getHighlightsForItem } from "@/lib/highlights/queries";
-import { type HighlightRow } from "@/lib/highlights/types";
+import {
+  getClassmateHighlightsForItem,
+  getHighlightsForItem,
+} from "@/lib/highlights/queries";
+import {
+  type ClassHighlightRow,
+  type HighlightRow,
+} from "@/lib/highlights/types";
+import { getVerificationExerciseForLesson } from "@/lib/verification/exercises";
 
 // Dispatching route: a module item slug resolves to either a lesson or a
 // paper (they share the /tracks/t/m/<slug> namespace; the static `assessment`
@@ -85,11 +94,20 @@ export default async function ItemPage({
   // Hard prerequisite enforcement: signed-in learners with unmet prerequisites
   // are sent back to the module page. (Signed-out visitors may preview.)
   if (user && track.prerequisiteEnforcement === "hard") {
-    const prereqStatuses = await getPrerequisiteStatus(user.id, module.id);
+    // Degrade like the layout's progress read: getPrerequisiteStatus awaits
+    // the same cache()-memoized getTrackCompletionSet, so a failed read
+    // rejects here too — and, uncaught, would rethrow BEFORE dispatch to
+    // LessonItemPage/PaperItemPage, making their degrade catches unreachable
+    // on every hard-enforcement item with prerequisites. Fail open (no lock),
+    // consistent with signed-out visitors being allowed to preview.
+    const prereqStatuses = await getPrerequisiteStatus(
+      user.id,
+      module.id
+    ).catch((): PrerequisiteStatus[] => []);
     if (
       isAccessLocked(
         track.prerequisiteEnforcement,
-        prereqStatuses.map((s) => s.completed),
+        prereqStatuses.map((s) => s.completed)
       )
     ) {
       redirect(`/tracks/${track.slug}/${module.slug}`);
@@ -131,7 +149,10 @@ async function LessonItemPage({
   nav: { prev: ItemRef | null; next: ItemRef | null };
   userId: string | null;
 }) {
-  const completed = userId ? await isLessonCompleted(userId, lesson.id) : false;
+  // A progress outage must not take static curriculum down.
+  const completed = userId
+    ? await isLessonCompleted(userId, lesson.id).catch(() => false)
+    : false;
   const citations = await getLessonCitations(lesson.contentRef);
 
   /* The closing page speaks for the whole track, so it needs the track's own
@@ -148,7 +169,7 @@ async function LessonItemPage({
       getExerciseSubmissionMap(userId),
     ]);
     const units = getTrackProgressContentIds(track.id).filter(
-      (id) => id !== lesson.id,
+      (id) => id !== lesson.id
     );
     completionState = {
       units: {
@@ -169,7 +190,8 @@ async function LessonItemPage({
 
   // One reader decision, used twice: the parts reader carries the time
   // estimate on its toolbar line, so the header chip yields to it there.
-  const chunked = track.chunkedReading && !lesson.completion && !lesson.unchunked;
+  const chunked =
+    track.chunkedReading && !lesson.completion && !lesson.unchunked;
 
   return (
     <div className="max-w-4xl px-4 py-8 lg:px-8">
@@ -196,7 +218,8 @@ async function LessonItemPage({
         </div>
         {lesson.estimatedMinutes && !chunked ? (
           <p className="text-muted-foreground mt-2 flex items-center gap-1 text-sm">
-            <Clock className="size-3.5" aria-hidden /> ~{lesson.estimatedMinutes} min
+            <Clock className="size-3.5" aria-hidden /> ~
+            {lesson.estimatedMinutes} min
           </p>
         ) : null}
       </header>
@@ -223,7 +246,10 @@ async function LessonItemPage({
                 completed={completed}
                 // The closing page completes nothing: reaching the end of a
                 // congratulations is not work, and counts toward no total.
-                autoComplete={!lesson.completion}
+                autoComplete={
+                  !lesson.completion &&
+                  !getVerificationExerciseForLesson(lesson.id)?.bridged
+                }
               />
             ) : null}
 
@@ -241,7 +267,7 @@ async function LessonItemPage({
                   <Button asChild variant="outline">
                     <Link
                       href={loginHref(
-                        `/tracks/${track.slug}/${module.slug}/${lesson.slug}`,
+                        `/tracks/${track.slug}/${module.slug}/${lesson.slug}`
                       )}
                     >
                       Sign in to track progress
@@ -269,11 +295,17 @@ async function LessonItemPage({
                 next={navLinkOf(nav.next)}
                 estimatedMinutes={lesson.estimatedMinutes}
               >
-                <LessonContent contentRef={lesson.contentRef} title={lesson.title} />
+                <LessonContent
+                  contentRef={lesson.contentRef}
+                  title={lesson.title}
+                />
               </LessonPartsReader>
             ) : (
               <>
-                <LessonContent contentRef={lesson.contentRef} title={lesson.title} />
+                <LessonContent
+                  contentRef={lesson.contentRef}
+                  title={lesson.title}
+                />
                 {footer}
                 <LessonNav prev={nav.prev} next={nav.next} />
               </>
@@ -287,7 +319,9 @@ async function LessonItemPage({
 
 /** An ItemRef as the parts reader wants it: a URL and a title, or null at the
  *  ends of the track. Mirrors LessonNav's own href construction. */
-function navLinkOf(ref: ItemRef | null): { href: string; title: string } | null {
+function navLinkOf(
+  ref: ItemRef | null
+): { href: string; title: string } | null {
   return ref
     ? {
         href: `/tracks/${ref.trackSlug}/${ref.moduleSlug}/${ref.itemSlug}`,
@@ -314,18 +348,27 @@ async function PaperItemPage({
   // and PaperReader only membership-tests its own ids against it. The
   // highlights read rides the same round trip — Hyperdrive caching is off,
   // so a serialized second query would be a second us-east-1 hop.
-  const [completedContentIds, highlights] = userId
+  const [completedContentIds, highlights, classHighlights] = userId
     ? await Promise.all([
-        getTrackCompletionSet(userId, track.id),
+        // Degrade like the layout's progress read (its try/catch can't cover
+        // this await — cache() memoizes the rejection per request, and
+        // re-awaiting it here rethrows): render with nothing completed
+        // rather than crash a page that is otherwise static content.
+        getTrackCompletionSet(userId, track.id).catch(
+          (): Set<string> => new Set()
+        ),
         // Degrade, never take the page down: schema migrations are applied
         // manually via psql (db/migrations) — if a deploy outruns that step
         // or a dev DB predates the Highlight table, this read throws and the
         // paper must still render (highlights simply absent).
-        getHighlightsForItem(userId, paper.id).catch(
-          (): HighlightRow[] => [],
+        getHighlightsForItem(userId, paper.id).catch((): HighlightRow[] => []),
+        // Classmates' shared notes on this paper (empty for a user in no
+        // classroom). Same degrade-never-fail contract as the own read.
+        getClassmateHighlightsForItem(userId, paper.id).catch(
+          (): ClassHighlightRow[] => []
         ),
       ])
-    : [new Set<string>(), [] as HighlightRow[]];
+    : [new Set<string>(), [] as HighlightRow[], [] as ClassHighlightRow[]];
   const completed = completedContentIds.has(paper.id);
 
   // Cached per request — PaperReader reuses the same artifact lookup.
@@ -348,13 +391,22 @@ async function PaperItemPage({
       ) : (
         <Button asChild variant="outline">
           <Link
-            href={loginHref(`/tracks/${track.slug}/${module.slug}/${paper.slug}`)}
+            href={loginHref(
+              `/tracks/${track.slug}/${module.slug}/${paper.slug}`
+            )}
           >
             Sign in to track progress
           </Link>
         </Button>
       )}
     </div>
+  );
+
+  // One key per reading gate — PaperHighlights (pending-vs-orphan
+  // classification, fuzzy-skip while closed) and LessonTracker (scroll
+  // completion) key their gate-closed checks on the same set.
+  const gateKeys = gateIdsOf(paper.edits).map((gateId) =>
+    paperGateStorageKey(paper.id, gateId)
   );
 
   return (
@@ -384,7 +436,8 @@ async function PaperItemPage({
         <p className="text-muted-foreground mt-2 flex flex-wrap items-center gap-x-4 gap-y-1 text-sm">
           {paper.estimatedMinutes && (
             <span className="flex items-center gap-1">
-              <Clock className="size-3.5" aria-hidden /> ~{paper.estimatedMinutes} min
+              <Clock className="size-3.5" aria-hidden /> ~
+              {paper.estimatedMinutes} min
             </span>
           )}
           {source.link && (
@@ -402,6 +455,9 @@ async function PaperItemPage({
           {/* Margin display of the reader's own highlight notes — only
               signed-in readers can have any. */}
           {userId ? <MarginNotesToggle /> : null}
+          {/* Classmates' shared notes — only surfaced when at least one
+              exists on this paper. */}
+          {classHighlights.length > 0 ? <ClassHighlightsToggle /> : null}
         </p>
       </header>
 
@@ -437,6 +493,8 @@ async function PaperItemPage({
       {userId ? (
         <PaperHighlights
           initialHighlights={highlights}
+          classHighlights={classHighlights}
+          gateKeys={gateKeys}
           createAction={createHighlight.bind(null, paper.id)}
           updateNoteAction={updateHighlightNote}
           deleteAction={deleteHighlight}
@@ -451,16 +509,12 @@ async function PaperItemPage({
           // Gated papers scroll-complete only after every reading gate has
           // been opened — with gates closed the body is unmounted and this
           // sentinel would sit right under the first gate's card.
-          gateKeys={gateIdsOf(paper.edits).map((gateId) =>
-            paperGateStorageKey(paper.id, gateId),
-          )}
+          gateKeys={gateKeys}
           // Read section by section, the sentinel sits below whichever part is
           // on screen — so scrolling to the bottom of the first Article would
           // report the whole treaty read. Mark complete is the only channel
           // there, which is the rule the chunked reading already runs on.
-          autoComplete={
-            !chunkedPaper
-          }
+          autoComplete={!chunkedPaper}
         />
       ) : null}
 
@@ -475,4 +529,3 @@ async function PaperItemPage({
     </div>
   );
 }
-

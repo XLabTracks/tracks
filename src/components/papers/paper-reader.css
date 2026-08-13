@@ -13,13 +13,20 @@
     position: relative;
   }
 
-  /* Gated papers hide the canonical footnotes SECTION (see paper-reader.tsx:
-     the trailing tail only exists when the paper is gated). The <section>
-     stays in the DOM so PaperSidenotes still clones note bodies for revealed
-     markers — only the visible bottom dump, which would otherwise spoil every
-     gated note at once, is suppressed. References (.ax-references) stay
-     visible so citation links keep a target. */
-  .paper-gated-tail :is(.ax-footnotes, .lw-footnotes, .sb-footnotes) {
+  /* Gated papers hide the canonical footnotes SECTION while any reading gate
+     is still closed (see paper-reader.tsx: the trailing tail only exists when
+     the paper is gated). The <section> stays in the DOM so PaperSidenotes
+     still clones note bodies for revealed markers — only the visible bottom
+     dump, which would otherwise spoil every gated note at once, is
+     suppressed. References (.ax-references) stay visible so citation links
+     keep a target. PaperTailReveal adds `paper-tail-open` once every gate of
+     the paper is open (on mount for revisits, on PAPER_GATE_OPEN_EVENT live):
+     with nothing left to spoil, the canonical section must be reachable
+     again — it is the only footnote surface where the sidenote rail can't
+     render (narrow viewports) and for assistive tech (the sidenote layer is
+     aria-hidden). */
+  .paper-gated-tail:not(.paper-tail-open)
+    :is(.ax-footnotes, .lw-footnotes, .sb-footnotes) {
     display: none;
   }
 

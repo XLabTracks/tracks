@@ -5,11 +5,8 @@ import {
 } from "@/content/verification/curriculum";
 import type { Lesson, Module, Track } from "@/lib/content/types";
 
-// Control and Governance are intentionally empty for now — just an intro blurb,
-// ready for real curriculum. The "Example" track is a fully-built demo of every
-// feature (the content types, each exercise type, papers with inline activities,
-// an end-of-module assessment, and a cross-module prerequisite). Replace lorem
-// with real content; see AUTHORING.md.
+// Placeholder modules (e.g. c-mod4) are intentionally empty — ready for real
+// curriculum. Replace lorem with real content; see AUTHORING.md.
 
 export const tracks: Track[] = [
   {
@@ -18,7 +15,7 @@ export const tracks: Track[] = [
     title: "AI Control",
     shortTitle: "Control",
     description:
-      "Hands-on technical track on controlling and evaluating AI systems. The introductory module works through Redwood Research's \"AI Control: Improving Safety Despite Intentional Subversion\" paper and then rebuilds its trusted-monitoring result as an interactive, model-backed demo.",
+      'Hands-on technical track on controlling and evaluating AI systems. The introductory module works through Redwood Research\'s "AI Control: Improving Safety Despite Intentional Subversion" paper and then rebuilds its trusted-monitoring result as an interactive, model-backed demo.',
     kind: "technical",
     moduleIds: [
       "c-intro",
@@ -31,29 +28,6 @@ export const tracks: Track[] = [
     ],
     prerequisiteEnforcement: "hard",
   },
-  {
-    id: "governance",
-    slug: "governance",
-    title: "AI Governance & Policy",
-    shortTitle: "Governance",
-    description:
-      "content coming soon",
-    kind: "governance",
-    moduleIds: [],
-    prerequisiteEnforcement: "soft",
-  },
-  {
-    id: "example",
-    slug: "example",
-    title: "Example Track",
-    shortTitle: "Example",
-    description:
-      "A demo track showing every feature in one place — the content types, each exercise type, an inline paper with embedded activities, an end-of-module assessment, and a cross-module prerequisite.",
-    kind: "example",
-    moduleIds: ["ex-content", "ex-assess"],
-    prerequisiteEnforcement: "soft",
-    estimatedHours: 1,
-  },
   verificationTrack,
 ];
 
@@ -64,7 +38,7 @@ export const modules: Module[] = [
     trackId: "control",
     title: "Introduction, overview, and threat modeling",
     summary:
-      "The foundation for the track: Redwood Research's \"AI Control: Improving Safety Despite Intentional Subversion\" paper rendered in full with guided exercises woven in, then rebuilt as an interactive, calibrated demo you can play with.",
+      'The foundation for the track: Redwood Research\'s "AI Control: Improving Safety Despite Intentional Subversion" paper rendered in full with guided exercises woven in, then rebuilt as an interactive, calibrated demo you can play with.',
     order: 1,
     prerequisiteModuleIds: [],
     // Opens with Redwood's "case for control" motivation, then the AI Control
@@ -129,7 +103,7 @@ export const modules: Module[] = [
     trackId: "control",
     title: "High-stakes control",
     summary:
-      "Opens with a talk on the high-stakes control roadmap, then three outline sections — what counts as high stakes, monitoring and mitigation, and environment construction — each with readings, from rogue-deployment threat models through control monitoring and Ctrl-Z's resampling protocols to why high-stakes research settings are hard to build. Closes with two decision-forcing walkthroughs of high-stakes control protocols, one argued and one measured: the untrusted advice protocol is the boundary case where a safety argument substitutes for a control evaluation; basic legibility protocols run a full red-team/blue-team control evaluation to settle whether letting an untrusted model comment its code helps the monitor catch backdoors. The section lessons are outline stubs while the full lessons are authored.",
+      "Opens with a talk on the high-stakes control roadmap, then three outline sections — what counts as high stakes, monitoring and mitigation, and environment construction — each with readings, from rogue-deployment threat models through control monitoring and Ctrl-Z's resampling protocols to why high-stakes research settings are hard to build. Closes with two decision-forcing walkthroughs of high-stakes control protocols, one argued and one measured: collusion prevention in untrusted monitoring asks whether a second instance of the untrusted model can be made to catch its attacks without the two instances coordinating; basic legibility protocols run a full red-team/blue-team control evaluation to settle whether letting an untrusted model comment its code helps the monitor catch backdoors. The section lessons are outline stubs while the full lessons are authored.",
     order: 4,
     prerequisiteModuleIds: ["c-intro", "c-mod2", "c-areas"],
     itemIds: [
@@ -145,7 +119,7 @@ export const modules: Module[] = [
       "c-paper-ctrl-z",
       "c-mod5-l3",
       "c-paper-settings-high-stakes",
-      "c-paper-ua-guided",
+      "c-paper-collusion-guided",
       "c-paper-legibility-guided",
     ],
   },
@@ -155,22 +129,20 @@ export const modules: Module[] = [
     trackId: "control",
     title: "Low-stakes control: sabotage, sandbagging, and elicitation",
     summary:
-      "The low-stakes regime, where catastrophe requires many weakly-incriminating actions: Hebbar's ControlConf talk, Redwood's methods for non-concentrated failures and analysis of sandbagging and exploration hacking, Carlsmith's \"no sandbagging on checkable tasks\" hypothesis, and four papers spanning adaptive deployment, capability elicitation, and sabotage evaluation.",
+      "The low-stakes regime, where catastrophe requires many weakly-incriminating actions: Hebbar's ControlConf talk, Redwood's methods for non-concentrated failures and analysis of sandbagging and exploration hacking, and papers spanning capability elicitation and auditing for research sabotage.",
     order: 5,
     prerequisiteModuleIds: ["c-intro", "c-mod2", "c-areas", "c-mod5"],
     itemIds: [
       "c-lowstakes-l1",
       "c-lowstakes-l2",
-      "c-paper-adaptive-deployment",
       "c-lowstakes-l3",
-      "c-lowstakes-l4",
       "c-paper-plm-guided",
-      "c-paper-password-locked",
       "c-paper-exploration-hacking",
-      "c-paper-sabotage-evals",
       "c-paper-auditing-sabotage-bench",
+      "c-paper-password-locked",
+      "c-paper-eh-guided",
     ],
-    estimatedMinutes: 309,
+    estimatedMinutes: 329,
   },
   {
     // Outline-only closing module: three section markers the author will
@@ -197,7 +169,6 @@ export const modules: Module[] = [
       "c-paper-csdf-guided",
       "c-mod6-l2",
       "c-paper-deals-schemers",
-      "c-paper-cooperating-unaligned",
       "c-paper-trade-barriers",
     ],
   },
@@ -220,39 +191,6 @@ export const modules: Module[] = [
       "c-mod6",
     ],
     itemIds: ["c-mod6-l3"],
-  },
-  {
-    id: "ex-content",
-    slug: "content-types",
-    trackId: "example",
-    title: "Content types",
-    summary:
-      "Text, video, callouts, an interactive demo, exercises, and inline readings (an arXiv paper, a Substack post, and an optional LessWrong post).",
-    order: 1,
-    prerequisiteModuleIds: [],
-    itemIds: [
-      "ex-content-l1",
-      "ex-paper-attention",
-      "ex-paper-substack",
-      "ex-paper-lesswrong",
-      "ex-content-l2",
-    ],
-    furtherReadingTopics: ["alignment", "interpretability"],
-    estimatedMinutes: 70,
-  },
-  {
-    id: "ex-assess",
-    slug: "assessment-and-prerequisites",
-    trackId: "example",
-    title: "Assessment & prerequisites",
-    summary:
-      "This module requires the first one (a soft prerequisite) and ends with a written assessment.",
-    order: 2,
-    prerequisiteModuleIds: ["ex-content"],
-    itemIds: ["ex-assess-l1", "ex-paper-anti-scheming"],
-    assessmentId: "ex-assessment",
-    furtherReadingTopics: ["governance"],
-    estimatedMinutes: 40,
   },
   ...verificationModules,
 ];
@@ -352,6 +290,34 @@ export const lessons: Lesson[] = [
     title: "Next Steps",
     contentRef: "c-mod6-l3",
   },
+  // --- Control, module 6: lessons inserted into the deals-with-schemers
+  // paper (not in any itemIds — they render only inside the paper). Each
+  // carries condensed verbatim content from Finnveden's "Notes on
+  // cooperating with unaligned AIs", the reading they replaced. ---
+  {
+    id: "c-deals-ins-what-ais-want",
+    slug: "what-might-ais-want",
+    moduleId: "c-mod6",
+    title: "What might AIs want?",
+    contentRef: "c-deals-ins-what-ais-want",
+    estimatedMinutes: 6,
+  },
+  {
+    id: "c-deals-ins-payment",
+    slug: "paying-ais",
+    moduleId: "c-mod6",
+    title: "Paying AIs: structures and practice",
+    contentRef: "c-deals-ins-payment",
+    estimatedMinutes: 5,
+  },
+  {
+    id: "c-deals-ins-botec",
+    slug: "how-much-is-it-worth",
+    moduleId: "c-mod6",
+    title: "How much would this be worth?",
+    contentRef: "c-deals-ins-botec",
+    estimatedMinutes: 6,
+  },
   // --- Control: every reproduced reading in module 1 (with permission from
   // Redwood Research) now renders through the paper reader as a Paper item in
   // papers.data.ts — the "case for control" post, "catching AIs red-handed",
@@ -385,14 +351,6 @@ export const lessons: Lesson[] = [
       "Misalignment and strategic underperformance: an analysis of sandbagging and exploration hacking",
     contentRef: "c-lowstakes-l3",
     estimatedMinutes: 24,
-  },
-  {
-    id: "c-lowstakes-l4",
-    slug: "no-sandbagging-on-checkable-tasks",
-    moduleId: "c-lowstakes",
-    title: "The “no sandbagging on checkable tasks” hypothesis",
-    contentRef: "c-lowstakes-l4",
-    estimatedMinutes: 19,
   },
   // Lessons embedded inside the guided password-locked-models paper
   // (c-paper-plm-guided) via Paper.edits activity insertions. Deliberately
@@ -437,6 +395,73 @@ export const lessons: Lesson[] = [
     contentRef: "c-plm-ins-toy-results",
     estimatedMinutes: 5,
   },
+  // Lessons embedded inside the guided exploration-hacking paper
+  // (c-paper-eh-guided) via Paper.edits activity insertions. Deliberately
+  // NOT in the module's itemIds — they render only inside the paper.
+  {
+    id: "c-eh-ins-framework",
+    slug: "definition-and-rl-background",
+    moduleId: "c-lowstakes",
+    title: "Definition and RL background",
+    contentRef: "c-eh-ins-framework",
+    estimatedMinutes: 4,
+  },
+  {
+    id: "c-eh-ins-grpo-collapse",
+    slug: "the-grpo-objective",
+    moduleId: "c-lowstakes",
+    title: "The GRPO objective",
+    contentRef: "c-eh-ins-grpo-collapse",
+    estimatedMinutes: 3,
+  },
+  {
+    id: "c-eh-ins-next-move",
+    slug: "why-a-model-organism",
+    moduleId: "c-lowstakes",
+    title: "Why a Model Organism?",
+    contentRef: "c-eh-ins-next-move",
+    estimatedMinutes: 3,
+  },
+  {
+    id: "c-eh-ins-affordances",
+    slug: "inducing-suppression-affordances",
+    moduleId: "c-lowstakes",
+    title: "Inducing suppression: the affordance spectrum",
+    contentRef: "c-eh-ins-affordances",
+    estimatedMinutes: 3,
+  },
+  {
+    id: "c-eh-ins-locking-recipe",
+    slug: "locking-a-model",
+    moduleId: "c-lowstakes",
+    title: "Locking a Model",
+    contentRef: "c-eh-ins-locking-recipe",
+    estimatedMinutes: 4,
+  },
+  {
+    id: "c-eh-ins-reading-the-run",
+    slug: "interpreting-results",
+    moduleId: "c-lowstakes",
+    title: "Interpreting Results",
+    contentRef: "c-eh-ins-reading-the-run",
+    estimatedMinutes: 4,
+  },
+  {
+    id: "c-eh-ins-countermeasure-axes",
+    slug: "generating-countermeasures",
+    moduleId: "c-lowstakes",
+    title: "Generating countermeasures",
+    contentRef: "c-eh-ins-countermeasure-axes",
+    estimatedMinutes: 3,
+  },
+  {
+    id: "c-eh-ins-next-bar",
+    slug: "the-next-bar",
+    moduleId: "c-lowstakes",
+    title: "The next bar",
+    contentRef: "c-eh-ins-next-bar",
+    estimatedMinutes: 3,
+  },
   // --- Control: areas of control work (reproduced verbatim with permission
   // from Redwood Research) ---
   {
@@ -446,40 +471,6 @@ export const lessons: Lesson[] = [
     title: "An overview of areas of control work",
     contentRef: "c-areas-l1",
     estimatedMinutes: 40,
-  },
-  {
-    id: "ex-content-l1",
-    slug: "text-video-callouts",
-    moduleId: "ex-content",
-    title: "Text, video & callouts",
-    contentRef: "ex-content-l1",
-    estimatedMinutes: 8,
-  },
-  {
-    id: "ex-content-l2",
-    slug: "demos-and-exercises",
-    moduleId: "ex-content",
-    title: "Demos & exercises",
-    contentRef: "ex-content-l2",
-    estimatedMinutes: 10,
-  },
-  {
-    id: "ex-assess-l1",
-    slug: "putting-it-together",
-    moduleId: "ex-assess",
-    title: "Putting it together",
-    contentRef: "ex-assess-l1",
-    estimatedMinutes: 7,
-  },
-  // Inline-only: rendered inside the "ex-paper-attention" paper via its
-  // insertions. Deliberately NOT in any module's itemIds — no standalone page.
-  {
-    id: "ex-paper-note-l1",
-    slug: "reading-guide",
-    moduleId: "ex-content",
-    title: "Reading guide",
-    contentRef: "ex-paper-note-l1",
-    estimatedMinutes: 4,
   },
   ...verificationLessons,
 ];

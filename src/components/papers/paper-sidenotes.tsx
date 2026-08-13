@@ -35,7 +35,15 @@ import { MARGIN_NOTES_LAYOUT_EVENT } from "./margin-notes-toggle";
  * reflow hasn't vacated yet.
  */
 
-const MIN_WIDTH = 176;
+/**
+ * Outside-gutter gate, shared verbatim with the margin-note boxes
+ * (COMMENT_MIN_WIDTH, paper-highlights.tsx) and the glossary margin card
+ * (MIN_CARD_WIDTH, glossary-overlay.tsx): every rail tenant must flip
+ * outside↔inset at the same viewport boundary, or one layer floats in the
+ * outer gutter while another self-reserves the inset rail — two rails at
+ * once, squeezing the text for nothing.
+ */
+const MIN_WIDTH = 200;
 const MAX_WIDTH = 300;
 const GUTTER_GAP = 28;
 const NOTE_GAP = 12;
@@ -146,9 +154,16 @@ export function PaperSidenotes({ prefix }: { prefix: string }) {
       // (typical laptop widths — the text narrows to a LessWrong-like
       // measure); otherwise hide, leaving the bottom footnotes section.
       // The user preference (SidenotesToggle) short-circuits everything.
+      // clientWidth, not innerWidth (same reasoning as the hidden-mode
+      // clamp below): a classic scrollbar's ~15px would count as spare
+      // gutter here while the other rail tenants (paper-highlights.tsx,
+      // glossary-overlay.tsx) measure the usable width — all three must
+      // flip outside↔inset at the same boundary.
       const outside = Math.min(
         MAX_WIDTH,
-        window.innerWidth - container.getBoundingClientRect().right - GUTTER_GAP * 2,
+        document.documentElement.clientWidth -
+          container.getBoundingClientRect().right -
+          GUTTER_GAP * 2,
       );
       const mode =
         !sidenotesEnabled() || entries.length === 0
@@ -382,13 +397,14 @@ export function PaperSidenotes({ prefix }: { prefix: string }) {
     };
     // Sentence glow, shared by both hover directions (the sidenote item AND
     // the inline marker): a strong but smooth wash whose falloff is measured
-    // ALONG THE TEXT FLOW from the footnote number — never a vertical
-    // column. Inline sentences fragment per line box; fragments are laid on
-    // a single "flow axis" (cumulative widths in reading order) and each
-    // paints the slice of one mirrored gradient its flow interval covers:
-    // the number's own line fades left and right of it, the line above
-    // glows at its END (the words just before the number) fading backward,
-    // the line below at its START fading forward.
+    // BACKWARD ALONG THE TEXT FLOW from the footnote number — never a
+    // vertical column, and never forward past the number. Inline sentences
+    // fragment per line box; fragments are laid on a single "flow axis"
+    // (cumulative widths in reading order) and each paints the slice of one
+    // backward-falling gradient its flow interval covers: the number's own
+    // line is brightest at the number and fades left of it, the line above
+    // glows at its END (the words just before the number) fading backward;
+    // the words and lines after the number get no glow.
     const glowNumber = (number: string): void => {
       if (number === glowing) return;
       const marker = container.querySelector<HTMLElement>(
@@ -440,15 +456,14 @@ export function PaperSidenotes({ prefix }: { prefix: string }) {
         frag.style.top = `${r.top - containerRect.top}px`;
         frag.style.width = `${r.width}px`;
         frag.style.height = `${r.height}px`;
-        // Gradient centre in this fragment's local coordinates — allowed to
-        // lie beyond either edge, so the fragment shows only its slice of
-        // the shared falloff.
+        // The number's flow position in this fragment's local coordinates —
+        // allowed to lie beyond either edge, so the fragment shows only its
+        // slice of the shared backward falloff (peaks at the number and is
+        // transparent once past it, going forward).
         const x = markerFlow - start;
         frag.style.background = `linear-gradient(90deg, transparent ${
           x - 218
-        }px, rgb(250 204 21 / 0.3) ${x - 126}px, rgb(250 204 21 / 0.5) ${x}px, rgb(250 204 21 / 0.3) ${
-          x + 126
-        }px, transparent ${x + 218}px)`;
+        }px, rgb(250 204 21 / 0.3) ${x - 126}px, rgb(250 204 21 / 0.5) ${x}px, transparent ${x}px)`;
         glowLayer.appendChild(frag);
       }
     };

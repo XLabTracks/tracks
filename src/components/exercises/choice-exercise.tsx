@@ -5,6 +5,7 @@ import { Check, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { MathText } from "./math-text";
+import { runExerciseAction } from "./run-exercise-action";
 import { gradeExercise } from "@/app/actions/exercises";
 import type { GradeResult, PublicChoiceExercise } from "@/lib/content/exercise-view";
 import { EXERCISE_TYPE_LABELS } from "@/lib/content/types";
@@ -57,8 +58,13 @@ export function ChoiceExerciseBody({
 
   const submit = () =>
     startTransition(async () => {
-      setResult(await gradeExercise(exercise.id, selected));
-      onGraded?.();
+      await runExerciseAction(() => gradeExercise(exercise.id, selected), {
+        onSuccess: (result) => {
+          setResult(result);
+          onGraded?.();
+        },
+        errorMessage: "Couldn't check your answer. Please try again.",
+      });
     });
 
   const reset = () => {
@@ -115,7 +121,7 @@ export function ChoiceExerciseBody({
         <div
           className={cn(
             "mt-4 rounded-lg p-3 text-sm",
-            result.correct ? "bg-emerald-500/10 text-emerald-700" : "bg-muted",
+            result.correct ? "bg-emerald-500/10 text-emerald-700 dark:text-[#7FA682]" : "bg-muted",
           )}
         >
           <p className="font-medium">{result.correct ? "Correct" : "Not quite"}</p>

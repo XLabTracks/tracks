@@ -151,7 +151,7 @@ Before the demo, predict the red team's best move.
     <!-- exercise c-game-l4-race-predict :: prompt -->
     Suppose every attack the red team makes has the same fixed per-attack odds — the same chance of being caught and the same chance of landing a working backdoor. To maximize its probability of winning at least once over the whole deployment, how often should it attack?
     <!-- exercise c-game-l4-race-predict :: option 1 -->
-    Once, at the single best moment
+    Once at the moment it believes is optimal.
     <!-- exercise c-game-l4-race-predict :: option 2 -->
     About ten times
     <!-- exercise c-game-l4-race-predict :: option 3 -->

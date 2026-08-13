@@ -13,17 +13,15 @@ import { Toaster } from "@/components/ui/sonner";
 const inter = localFont({
   src: [
     { path: "./fonts/InterVariable.woff2", weight: "100 900", style: "normal" },
-    { path: "./fonts/InterVariable-Italic.woff2", weight: "100 900", style: "italic" },
+    {
+      path: "./fonts/InterVariable-Italic.woff2",
+      weight: "100 900",
+      style: "italic",
+    },
   ],
   variable: "--font-sans",
   display: "swap",
 });
-// No mono face, by rule — same decision theme.css wrote down for the static
-// pages: the labels' uppercase and letterspacing do the work, not the face,
-// and tabular figures (globals.css) keep counters in column. `font-mono`
-// stays legal in components; the token resolves to the sans (globals.css
-// @theme), so the ~30 call sites need no churn and the rule is one line.
-
 export const metadata: Metadata = {
   title: {
     default: "Tracks — AI safety learning",
@@ -55,7 +53,8 @@ async function getInitialAuth() {
         firstName: dev.firstName ?? null,
         lastName: dev.lastName ?? null,
         emailVerified: true,
-        name: [dev.firstName, dev.lastName].filter(Boolean).join(" ") || dev.email,
+        name:
+          [dev.firstName, dev.lastName].filter(Boolean).join(" ") || dev.email,
         locale: null,
         profilePictureUrl: null,
         lastSignInAt: null,
@@ -77,21 +76,41 @@ async function getInitialAuth() {
 /*
  * The theme read step, inline and before first paint.
  *
- * Verification's three themes are `data-theme` on <html>, and theme.css paints
- * the day ground when the attribute is absent. theme.js sets it — but it runs
- * after hydration, so a learner on the night theme watched the page paint
- * light and then go dark. This is the same read, running before the document
- * body does.
+ * The platform and Verification keep separate stored preferences, but both
+ * paint through the same `dark` / `contrast` classes so Tailwind chrome and
+ * native widgets cannot disagree. Verification additionally gets data-theme,
+ * which its static stylesheet uses.
  *
- * It is harmless on every other route: nothing outside Verification reads
- * `data-theme`, and theme.css is only linked on those pages.
+ * The chrome-less /embed iframes are the exception: they render inside other
+ * people's pages, which are usually hard-coded one way — following the
+ * visitor's OS there hands the host a mismatched card it cannot control
+ * (cross-origin storage partitioning means our stored choice never reaches
+ * the iframe either). Embeds therefore stay light unless the host pins
+ * ?theme=dark or ?theme=contrast, restoring the pre-dark-mode contract.
  *
- * Trap: keep it in step with theme.js — same storage key, same attribute,
- * same three values, and high contrast never inferred from the system.
+ * The storage read gets its own try: browsers that block third-party storage
+ * throw on the localStorage *accessor*, and one shared try would take the
+ * matchMedia fallback down with it — a dark-OS visitor would get light only
+ * in those browsers.
+ *
+ * Trap: keep this in step with ThemeToggle and verification/theme.js: same
+ * route test, storage keys, classes and system fallback.
  */
-const THEME_BOOT = `(function(){try{var v=localStorage.getItem('xlab-verification-theme');\
+const THEME_BOOT = `(function(){try{var v=null;\
+var p=location.pathname;var x=p==='/tracks/verification'||p.indexOf('/tracks/verification/')===0||p.indexOf('/verification/')===0;\
+if(x){try{v=localStorage.getItem('xlab-verification-theme');}catch(e){}\
 if(v!=='light'&&v!=='dark'&&v!=='contrast'){v=window.matchMedia&&window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';}\
-document.documentElement.setAttribute('data-theme',v);}catch(e){}})();`;
+document.documentElement.setAttribute('data-theme',v);\
+}else if(p.slice(-6)==='/embed'){\
+var q=new URLSearchParams(location.search).get('theme');\
+v=q==='dark'||q==='contrast'?q:'light';\
+}else{\
+try{v=localStorage.getItem('tracks-theme');}catch(e){}\
+if(v!=='light'&&v!=='dark'&&v!=='contrast'){\
+v=window.matchMedia&&window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';}\
+}\
+var c=document.documentElement.classList;\
+c.toggle('dark',v!=='light');c.toggle('contrast',v==='contrast');}catch(e){}})();`;
 
 export default async function RootLayout({
   children,
@@ -102,9 +121,8 @@ export default async function RootLayout({
   return (
     <html
       lang="en"
-      // THEME_BOOT writes data-theme before React hydrates. That is the whole
-      // point of it, and it is also precisely the mismatch React warns about,
-      // so the warning is suppressed on this element only.
+      // THEME_BOOT mutates theme attributes before React hydrates. That is
+      // precisely the mismatch React would otherwise warn about.
       suppressHydrationWarning
       className={`${inter.variable} h-full antialiased`}
     >

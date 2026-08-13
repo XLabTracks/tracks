@@ -151,6 +151,10 @@ export const requireUser = cache(async (): Promise<AppUser> => {
  * so a stray DEV_USER in a production or preview environment can never open
  * a backdoor (`next build`/`start` and the Workers runtime set "production";
  * vitest sets "test"). Never expose a DEV_USER dev server to the network.
+ *
+ * Exported for the root layout's getInitialAuth, which seeds the client-side
+ * AuthKit provider: without it, the headers' useAuth() would render every
+ * page signed-out while the server treats the same request as signed in.
  */
 export function devUser(): WorkosUserShape | null {
   const flag = process.env.DEV_USER;

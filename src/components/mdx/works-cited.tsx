@@ -53,9 +53,20 @@ export function WorksCited({ urls }: { urls: string[] }) {
     <details className="works-cited border-border group mt-10 rounded-lg border">
       {/* The disclosure sign is ours, not the UA's: `list-none` plus the
           WebKit marker rule drops the ▶ that sat in front of the label, and
-          the +/− goes at the end of the row instead. It is decorative — the
-          summary element already announces expanded/collapsed to a screen
-          reader, so a second spoken "plus" would be noise. */}
+          the sign goes at the end of the row instead.
+
+          It is `Fold`'s marker, deliberately — one + that rotates 45° into a
+          × on open, same size, weight and timing. This is the house's
+          disclosure sign and it should be learned once; a + that becomes a −
+          is a second thing to learn for the same gesture. Decorative, because
+          summary already announces expanded/collapsed and a spoken "plus"
+          would only be a worse second copy of that.
+
+          Fold needs `justify-between!` because the high contrast theme sets
+          justify-content:center on `button` at a specificity no utility
+          beats. That rule's selector list is buttons and chips — no
+          `summary` — so this row does not, and does not want the important
+          flag it would have to carry forever. */}
       <summary className="flex cursor-pointer list-none items-center justify-between gap-3 px-4 py-3 text-[15px] font-bold select-none [&::-webkit-details-marker]:hidden">
         <span>
           Works cited{" "}
@@ -65,15 +76,9 @@ export function WorksCited({ urls }: { urls: string[] }) {
         </span>
         <span
           aria-hidden
-          className="text-muted-foreground w-3 text-center font-normal group-open:hidden"
+          className="text-muted-foreground text-2xl leading-none font-light transition-transform duration-200 group-open:rotate-45 motion-reduce:transition-none"
         >
           +
-        </span>
-        <span
-          aria-hidden
-          className="text-muted-foreground hidden w-3 text-center font-normal group-open:block"
-        >
-          −
         </span>
       </summary>
       <div className="px-4 pb-4">

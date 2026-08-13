@@ -5,6 +5,7 @@ export interface VideoProps {
   provider?: VideoProvider;
   poster?: string;
   title?: string;
+  compact?: boolean;
 }
 
 function inferProvider(src: string): VideoProvider {
@@ -21,7 +22,8 @@ function inferProvider(src: string): VideoProvider {
 // 32-char video UID, which falls back to the account-agnostic embed host.
 function streamEmbedSrc(src: string): string {
   if (/^https?:\/\//i.test(src)) return src;
-  if (/^[0-9a-f]{32}$/i.test(src)) return `https://iframe.videodelivery.net/${src}`;
+  if (/^[0-9a-f]{32}$/i.test(src))
+    return `https://iframe.videodelivery.net/${src}`;
   return src;
 }
 
@@ -35,7 +37,9 @@ function youTubeStart(src: string): number | null {
   const parts = v.match(/^(?:(\d+)h)?(?:(\d+)m)?(?:(\d+)s)?$/i);
   if (!parts || (!parts[1] && !parts[2] && !parts[3])) return null;
   return (
-    Number(parts[1] ?? 0) * 3600 + Number(parts[2] ?? 0) * 60 + Number(parts[3] ?? 0)
+    Number(parts[1] ?? 0) * 3600 +
+    Number(parts[2] ?? 0) * 60 +
+    Number(parts[3] ?? 0)
   );
 }
 
@@ -60,7 +64,13 @@ function vimeoId(src: string): string | null {
 
 // Uses each platform's own embedded player (YouTube/Vimeo iframe, native <video>
 // for direct files) rather than custom controls, wrapped in a soft, rounded frame.
-export function Video({ src, provider, poster, title }: VideoProps) {
+export function Video({
+  src,
+  provider,
+  poster,
+  title,
+  compact = false,
+}: VideoProps) {
   const kind = provider ?? inferProvider(src);
 
   let player: React.ReactNode;
@@ -71,7 +81,9 @@ export function Video({ src, provider, poster, title }: VideoProps) {
       <iframe
         src={
           id
-            ? `https://www.youtube.com/embed/${id}${start ? `?start=${start}` : ""}`
+            ? `https://www.youtube.com/embed/${id}${
+                start ? `?start=${start}` : ""
+              }`
             : src
         }
         title={title ?? "YouTube video player"}
@@ -115,7 +127,11 @@ export function Video({ src, provider, poster, title }: VideoProps) {
   }
 
   return (
-    <figure className="not-prose border-border shadow-soft my-6 overflow-hidden rounded-2xl border bg-black">
+    <figure
+      className={`not-prose border-border shadow-soft overflow-hidden rounded-2xl border bg-black ${
+        compact ? "my-2" : "my-6"
+      }`}
+    >
       <div className="relative aspect-video w-full">{player}</div>
       {title ? (
         <figcaption className="text-muted-foreground bg-card border-border border-t px-4 py-2.5 text-sm">

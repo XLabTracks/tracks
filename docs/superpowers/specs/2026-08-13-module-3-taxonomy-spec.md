@@ -105,6 +105,12 @@ needs to exist **before this module ships**: options are a module-level source
 note on the entry page, per-page source lines (the pattern `c-areas-l1` uses),
 or both. Tracking this here so the branch review can't miss it.
 
+> **Resolved (2026-08-13):** both pages now open with an italic source line —
+> "*This article was made with portions of [An overview of control measures]
+> from Ryan Greenblatt (Redwood Research) and the [GDM AI Control Roadmap]
+> from Google DeepMind.*" — linking the Redwood blog post and arXiv 2607.13087,
+> as literal `<a>` anchors (never internalized).
+
 ## Open questions
 
 1. **Depth:** ~~superseded~~ — the list-breakdown entry page was removed

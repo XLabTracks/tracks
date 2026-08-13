@@ -40,6 +40,10 @@ export const verificationExercises: VerificationExerciseDef[] = [
   { id: "what-do-they-say", title: "Why Are We Concerned About Superintelligence?", bridged: false },
   { id: "types-of-ai", title: "The Types of AI", bridged: false },
   { id: "short-history", title: "A Short History of AI Acceleration", bridged: false },
+  // 0.1.2's optional exercise: fill the elements table for an organization of
+  // the learner's choice. Ungraded self-work with no finish event, so
+  // unbridged — the optional fold must never gate the lesson.
+  { id: "theories-of-change", title: "Theory of Change for Your Favorite AI Safety Organization", bridged: false },
   // precedent-cases ("Did the Regime Hold?") stood down 2026-08-12 on the
   // owner's review — the 0.3 document packet is the section's whole hour.
   // Widget, diagrams and data (her eight case files) remain in the repo,

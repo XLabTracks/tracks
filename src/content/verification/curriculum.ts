@@ -46,6 +46,7 @@ export const verificationModules: Module[] = [
       "v-welcome",
       "v-introduction",
       "v-prevention",
+      "v-theories-of-change",
       "v-intuitions",
       "v-precedents",
       "v-strategic-foundations",
@@ -419,6 +420,17 @@ export const verificationLessons: Lesson[] = [
     contentRef: "verification/prevention",
     estimatedMinutes: 5,
   },
+  {
+    id: "v-theories-of-change",
+    slug: "theories-of-change",
+    moduleId: "v-why",
+    sectionItemId: "v-introduction",
+    title: "0.1.2 We Need More Theories of Change",
+    contentRef: "verification/theories-of-change",
+    // Estimates v2 rules (module-0-log): ~1200 words of prose ≈ 6 min; the
+    // exercise is optional and bills nothing.
+    estimatedMinutes: 6,
+  },
   // 0.2 is the intuitions reading itself. The interactive timeline simulation
   // that used to open the unit (0.2.0, `v-verification-timeline-game`) was
   // deleted outright on the author's instruction — lesson, MDX body, widget
@@ -601,6 +613,7 @@ export const verificationUnitOfLesson: Record<string, string> = {
   "v-welcome": "0.0",
   "v-introduction": "0.1",
   "v-prevention": "0.1",
+  "v-theories-of-change": "0.1",
   "v-intuitions": "0.2",
   "v-precedents": "0.3",
   "v-strategic-foundations": "0.4",

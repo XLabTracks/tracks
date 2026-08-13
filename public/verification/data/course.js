@@ -37,7 +37,8 @@ window.COURSE = {
           "href": "/tracks/verification/why-verification/introduction",
           "lessons": [
             "introduction",
-            "prevention-is-invisible"
+            "prevention-is-invisible",
+            "theories-of-change"
           ]
         },
         {
@@ -197,7 +198,7 @@ window.COURSE = {
           "id": "2.4",
           "title": "Human",
           "kind": "explainer",
-          "mins": "20–25 min",
+          "mins": "120 min",
           "href": "/tracks/verification/verification-infrastructure/human-intro",
           "lessons": [
             "human-intro",

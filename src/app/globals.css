@@ -549,6 +549,59 @@
   color: var(--foreground);
 }
 
+/* 0.1.2's theory-of-change elements table (`<table className="elements-grid">`).
+   A full collapsed grid — every cell hairlined on all four sides — with the
+   author's three visually distinct layers, stated 2026-08-13: the band
+   headers (Inputs/Outputs/Outcome, Assumptions/External factors) invert the
+   theme (foreground ground, background ink — dark-on-light themes get a dark
+   band with light text, the night theme the reverse); the question labels
+   take the muted second-layer tint, differentiated but not as bold; the
+   content boxes read as ordinary card ground. The shared lesson-table rules
+   above (row hairlines only, bold first column, unstyled tbody th) must not
+   reach it. display:table because the grid should fill the column; the cells
+   are short words, so the narrow-screen risk the block scroller guards
+   against does not arise here. The theories-of-change widget repeats this
+   scheme — change one and change the other. */
+.lesson-body table.elements-grid {
+  display: table;
+  width: 100%;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+  background-image: none;
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+.lesson-body table.elements-grid thead th,
+.lesson-body table.elements-grid tbody th,
+.lesson-body table.elements-grid tbody td {
+  border: 1px solid var(--border);
+  border-radius: 0;
+  background: var(--card);
+  padding: 0.55em 0.8em;
+  text-align: center;
+  vertical-align: middle;
+  font-weight: 400;
+  color: var(--foreground);
+}
+.lesson-body table.elements-grid tbody tr:first-child td {
+  border-top: 1px solid var(--border);
+}
+/* The band headers: theme-inverted for contrast. */
+.lesson-body table.elements-grid thead tr:first-child th,
+.lesson-body table.elements-grid tbody th {
+  background: var(--foreground);
+  color: var(--background);
+  font-weight: 600;
+}
+/* The question labels: the quieter second layer. */
+.lesson-body table.elements-grid thead tr:last-child th,
+.lesson-body table.elements-grid tbody tr:last-child td {
+  background: var(--muted);
+  color: var(--foreground);
+  font-weight: 500;
+}
+
 /* The markdown rhythm inside a Fold or a Callout. Both shells are not-prose,
    which is deliberate — an inner `prose` matches nothing, since typography
    excludes `[class~="not-prose"] *`, and dropping not-prose would hand the

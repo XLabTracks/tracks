@@ -90,6 +90,10 @@ const ShortHistory = dynamic<VerificationWidgetProps>(
   () => import("./short-history").then((module) => module.ShortHistory),
   { loading: WidgetLoading },
 );
+const TheoriesOfChange = dynamic<VerificationWidgetProps>(
+  () => import("./theories-of-change").then((module) => module.TheoriesOfChange),
+  { loading: WidgetLoading },
+);
 const ComputeVerificationQuestions = dynamic<VerificationWidgetProps>(
   () =>
     import("./compute-verification").then((module) => module.ComputeVerificationQuestions),
@@ -172,6 +176,7 @@ export const verificationWidgets: Record<
   "what-do-they-say": WhatDoTheySay,
   "types-of-ai": TypesOfAi,
   "short-history": ShortHistory,
+  "theories-of-change": TheoriesOfChange,
   "verification-problem": VerificationProblem,
   "evidence-taxonomies": EvidenceTaxonomies,
   "actor-map": ActorMap,

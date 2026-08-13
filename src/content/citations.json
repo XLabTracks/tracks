@@ -249,6 +249,13 @@
       "container": "California Legislative Information",
       "date": "effective 1 Jan. 2026"
     },
+    "https://longtermrisk.org/measurement-research-agenda/#3_Theory_of_change": {
+      "title": "Measurement Research Agenda",
+      "about": "CLR's research agenda on measuring properties of AI systems; its Theory of change section runs a product model and a field-building model in parallel, which is why 0.1.2 cites it.",
+      "authors": "Taylor, Mia",
+      "publisher": "Center on Long-Term Risk",
+      "date": "16 June 2024"
+    },
     "https://news.un.org/en/story/2026/07/1167873": {
       "title": "From AI to 'Killer Robots': UN Chief Issues Urgent Governance Call",
       "about": "UN News coverage of the Secretary-General's governance call at the inaugural Global Dialogue on AI Governance in Geneva.",
@@ -259,6 +266,11 @@
       "title": "The ITN Framework: A Tool for Prioritizing Global Problems",
       "about": "An explainer of the importance-tractability-neglectedness framework for prioritizing problems.",
       "org": "Probably Good"
+    },
+    "https://slowfoodusa.org/theory-of-change/": {
+      "title": "Our Theory of Change",
+      "about": "The source page of the one-page infographic 0.1.2 reproduces — an organization's whole theory of change made legible on a single sheet.",
+      "org": "Slow Food USA"
     },
     "https://techgov.intelligence.org/blog/catch-up-algorithmic-progress-might-actually-be-60x-per-year": {
       "title": "Catch-Up Algorithmic Progress Might Actually Be 60x per Year",
@@ -286,6 +298,21 @@
       "about": "A drafting office's short guide to reading legal text: how codes and statutes are organised, the parts of a statute and of a bill, tips for reading each, and three practice exercises.",
       "authors": "Texas Legislative Council, Research Division",
       "date": "85th Legislature"
+    },
+    "https://www.aip.org/fyi/1993/looking-back-why-ssc-was-terminated": {
+      "title": "Looking Back: Why the SSC Was Terminated",
+      "about": "AIP's contemporaneous account of the eight factors behind Congress's 1993 termination of the Superconducting Super Collider, including the Clinton and O'Leary statements 0.1.2 quotes.",
+      "authors": "Jones, Richard M.",
+      "container": "FYI: Science Policy News",
+      "publisher": "American Institute of Physics",
+      "date": "27 Oct. 1993"
+    },
+    "https://www.apolloresearch.ai/blog/theories-of-change-for-ai-auditing/": {
+      "title": "Theories of Change for AI Auditing",
+      "about": "Apollo Research's worked theory of change for AI auditing: causal mechanisms, explicit assumptions, and acknowledged failure modes.",
+      "authors": "Sharkey, Lee, Marius Hobbhahn, and Beren Millidge",
+      "publisher": "Apollo Research",
+      "date": "13 Nov. 2023"
     },
     "https://www.federalregister.gov/documents/2025/09/10/2025-17508/restoring-the-united-states-department-of-war": {
       "title": "Restoring the United States Department of War",
@@ -328,6 +355,18 @@
       "authors": "Bogoed",
       "container": "LessWrong",
       "date": "16 Feb. 2026"
+    },
+    "https://www.lesswrong.com/posts/vh5ZjdmJYJgnbpq8C/the-plan-2025-update": {
+      "title": "The Plan – 2025 Update",
+      "about": "Wentworth's annual update on his alignment research plan — cited in 0.1.2 as a cohesive, tractable theory of change for conceptual AI safety research.",
+      "authors": "Wentworth, John, and David Lorell",
+      "container": "LessWrong",
+      "date": "31 Dec. 2025"
+    },
+    "https://www.liquisearch.com/superconducting_super_collider/cancellation": {
+      "title": "Superconducting Super Collider: Cancellation",
+      "about": "A reference page on the SSC's 1993 cancellation, mirroring the Wikipedia article's Cancellation section under Creative Commons.",
+      "org": "LiquiSearch"
     },
     "https://www.nist.gov/caisi": {
       "title": "Center for AI Standards and Innovation (CAISI)",

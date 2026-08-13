@@ -1,0 +1,120 @@
+{/* Provenance: transcribed verbatim from the author's WIP outline
+    ("[WIP] Verification Track Outline-37", section 0.1.2). The outline's
+    bracketed markers became components: the examples box and the optional
+    exercise are Folds (the exercise's fill-out-the-table instruction is the
+    theories-of-change widget); the LLM Check is an inline outlined card and
+    its title, the examples fold's label, and the bulleted examples are the
+    author's 2026-08-13 review wording. The elements table is the outline's
+    own table rebuilt as HTML (`elements-grid` in globals.css) rather than
+    embedded as a screenshot.
+
+    Link swap, recorded: the outline links aip.org/fyi/2016/looking-back-why-
+    ssc-was-terminated (twice), which now 404s. The same article lives at
+    /fyi/1993/ — Richard M. Jones, "Looking Back: Why the SSC Was Terminated",
+    FYI: Science Policy News, 27 Oct. 1993 — so both anchors point there. */}
+
+## Why are theories of change important?
+
+How exactly does your project contribute to making the world a better place? This seems like an obvious question for researchers to be able to answer, especially those working in high-impact areas like AI safety. But it can be concerningly easy to handwave a fuzzy “good impact” to justify all sorts of work. This risks obfuscating truly useful projects as indistinguishable from those that only appear to be so at first glance.
+
+Even multibillion, nation-funded projects have fallen victim to this fuzziness. In 1993, Congress [canceled](https://www.liquisearch.com/superconducting_super_collider/cancellation) the Superconducting Super Collider, after $2 billion had already been spent and over 20 kilometers of tunnel had been bored underground. Had it been finished, it would have likely found the Higgs boson decades before CERN’s Large Hadron Collider did.
+
+Everyone agreed that “science was good”. The SSC had serious institutional backing at the highest levels. President Clinton tried to prevent the cancellation, [warning](https://www.aip.org/fyi/1993/looking-back-why-ssc-was-terminated) that “abandoning the SSC at this point would signal that the United States is compromising its position of leadership in basic science.” When he signed the cancellation bill he expressed regret at the “serious loss” for science.
+
+But it was expensive. The SSC was being compared by cost to the International Space Station, and one of the core geopolitical justifications the project’s supporters had used, demonstrating American scientific dominance over the Soviet Union, was gone.
+
+In this environment, Members of the House needed to have at least an approximate understanding of project’s ‘so what’ to approve $11B in project costs. They didn’t. The physicists knew what they were doing and why it mattered. The problem was that they had never built any good public-facing artifacts.
+
+A congressman on the energy appropriations subcommittee said to a DOE official mid-hearing: “No one can challenge you, because we don’t know a damn thing.” After the cancellation, the Energy Secretary Hazel O’Leary, whose department had built and operated the SSC, [admitted](https://www.aip.org/fyi/1993/looking-back-why-ssc-was-terminated): “I am appalled that we didn’t do a good enough job with educating the public on the benefits”.
+
+Both sides were trying to make a good decision, but scientists failed to explain well why their project was this important, and policymakers failed to understand it.
+
+AI safety in particular cannot afford this failure. A field concerned with existential risk to humanity needs legible and communicable theories of change, for two main reasons:
+
+1. **Decision-maker skepticism:** Policymakers—the people directly positioned to enact public change—are famously bad at caring about more abstract long-term justifications, not to mention their limited attention and resources. This makes sense: AI safety theories of change are harder to internalize and rationalize expenses for, while immediate economic or welfare consequences are easy to see and back.
+
+2. **Tight timelines:** Frontier models are developing exponentially. Overton windows can be short and unpredictable. In the world of AI, an irreversible catastrophe could happen very unexpectedly and very fast. We cannot afford to waste time, resources, and talent in non-optimal directions.
+
+Being able to clearly communicate your theory of change is almost as, if not more important than having a theory of change in the first place. It enables collaborators, funders, decision-makers, critics, and even field newcomers to actually engage with your reasoning and provide substantive critique. It enables impactful coordination across projects and helps highlight—and therefore solve—where efforts may be redundant or contradictory. A project can be technically sound, well-executed, and published in a prestigious venue, but never translate to real-world impact if the path to change is any less than proactive, legible, and explicit.
+
+## What does a good theory of change look like?
+
+So, what does a good AI safety theory of change actually look like? This table maps out all the important elements of a robust theory of change:
+
+<table className="elements-grid">
+  <thead>
+    <tr>
+      <th>Inputs</th>
+      <th colSpan={2}>Outputs</th>
+      <th colSpan={3}>Outcome</th>
+    </tr>
+    <tr>
+      <th>What do we need?</th>
+      <th>What do we do?</th>
+      <th>Who do we reach?</th>
+      <th>Short-term</th>
+      <th>Intermediate</th>
+      <th>Long-term</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Resources<br />People</td>
+      <td>Activities</td>
+      <td>New audience<br />Collaborators</td>
+      <td>Knowledge increased</td>
+      <td>Behavior changed<br />Decision-making done</td>
+      <td>Conditions changed</td>
+    </tr>
+    <tr>
+      <th colSpan={3}>Assumptions</th>
+      <th colSpan={3}>External factors</th>
+    </tr>
+    <tr>
+      <td colSpan={3}>Internal / testable</td>
+      <td colSpan={3}>External / undefined</td>
+    </tr>
+  </tbody>
+</table>
+
+A useful strategy is backchaining: start by specifying the long-term goal, then work backwards. What has to change for this outcome to be possible? How does your project contribute to creating those conditions? Each link in the chain should be an if-then claim. If we publish this benchmark, then labs will adopt it. If labs adopt it, then training procedures will incorporate the findings. If training procedures change, then deployed models will be safer, and “safer” here has to mean something specific: reward hacking rates, deception probes, behavior under distribution shift.
+
+<div className="not-prose border-border my-6 rounded-[2.5rem] border px-6 py-5 sm:px-8">
+  <p className="text-sm font-semibold">Strategy: LLM Clarity Check</p>
+  <p className="mt-2 text-sm leading-relaxed">A simple test to check if you are clear enough is to try explaining the project to an LLM. If, after your pitch, it still makes basic assumptions about what you are doing or why it matters wrong, your explanation is probably too fuzzy. And if the model is confused, people will likely be confused too.</p>
+</div>
+
+<Fold label="Strong Theories of Change">
+
+- [Apollo Research theory of change for AI auditing](https://www.apolloresearch.ai/blog/theories-of-change-for-ai-auditing/) is a good example of what this looks like in practice. It names specific causal mechanisms, states explicit assumptions, and acknowledges failure modes.
+- Another good example is the [Center on Long Term Risk Measurement Research Agenda](https://longtermrisk.org/measurement-research-agenda/#3_Theory_of_change), which runs two parallel theories of change: a product model (the work produces useful operationalizations and measurement methods) and a field-building model (the work develops skills and positions the team to take advantage of future opportunities).
+- Conceptual AI Safety research may seem difficult to write a cohesive and tractable theory of change about—but it’s possible! See [this example by John Wentworth](https://www.lesswrong.com/posts/vh5ZjdmJYJgnbpq8C/the-plan-2025-update).
+- [Slow Food USA’s theory of change](https://slowfoodusa.org/theory-of-change/) — effective theory of change, conveyed in engaging and easy-to-parse visuals.
+
+{/* Reproduction: the infographic below is Slow Food USA's published
+    one-page theory of change, carried in the author's outline as the
+    example to embed. Reproduced whole, attributed, and linked back to its
+    source page; slowfoodusa.org posts no reuse terms for it — status
+    `unchecked` — so this stays a credited, linked reproduction on the
+    author's instruction, nothing more. Provenance is also recorded in
+    public/verification/assets/theories-of-change/SOURCES.md. */}
+
+![Slow Food USA’s one-page theory of change: assumptions and purpose at the top feed a mission, three pillars, and a tree whose canopy holds the future and vision, with values at the roots and roles and strategies beneath.](/verification/assets/theories-of-change/slow-food-theory-of-change.png)
+
+Image: [Our Theory of Change](https://slowfoodusa.org/theory-of-change/), Slow Food USA.
+
+</Fold>
+
+A common failure mode is conflating **outputs** with **outcomes**. Outputs are tangible products you produced: a paper, a benchmark, an eval, a workshop, a policy memo. They are easy to qualify and quantify. Outcomes are what changed because of those outputs: a lab altered a training procedure, a policymaker incorporated a threat model into a draft bill, a researcher updated their estimates. It’s more difficult but much more important to recognize and attribute outcomes. A project can generate impressive outputs—a well-cited paper, a popular benchmark, a successful conference—without any clarity as to how it actually creates change in the world.
+
+<Fold label="Optional exercise: Theory of Change for your favorite AI safety organization">
+
+Now that you’ve seen some exemplary examples of robust theories of change, try building your own! Pick your favorite AI safety organization: Epoch, MIRI, The Midas Project, etc.—and fill out the below table based on publicly available information, reports, and testimonials.
+
+<VerificationExercise id="theories-of-change" />
+
+</Fold>
+
+Theories of change are probabilistic, not deterministic: they depend on assumptions about how the world works that may be exaggerated or misguided. The point is not to predict the future; the point is to make your beliefs about why your work matters clear enough such that someone—could be your future self!—can notice discrepancies from reality, and course-correct.
+
+In sum: when someone asks you how your work changes the world, in a field that supposedly works towards saving it, you should have a ready, clear answer for them.

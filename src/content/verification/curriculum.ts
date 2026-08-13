@@ -224,7 +224,6 @@ export const verificationLessons: Lesson[] = [
     moduleId: "v-infrastructure",
     title: "2.4 The human layer: introduction",
     contentRef: "verification/human-intro",
-    estimatedMinutes: 5,
   },
   {
     id: "v-human-insiders",
@@ -233,7 +232,7 @@ export const verificationLessons: Lesson[] = [
     sectionItemId: "v-human-intro",
     title: "2.4.1 Insiders and human sources",
     contentRef: "verification/human-insiders",
-    estimatedMinutes: 35,
+    estimatedMinutes: 30,
   },
   {
     id: "v-human-reporting-protection",
@@ -242,7 +241,7 @@ export const verificationLessons: Lesson[] = [
     sectionItemId: "v-human-intro",
     title: "2.4.2 Reporting and protection",
     contentRef: "verification/human-reporting-protection",
-    estimatedMinutes: 20,
+    estimatedMinutes: 30,
   },
   {
     id: "v-human-audits-inspections",
@@ -251,7 +250,7 @@ export const verificationLessons: Lesson[] = [
     sectionItemId: "v-human-intro",
     title: "2.4.3 Audits and inspections",
     contentRef: "verification/human-audits-inspections",
-    estimatedMinutes: 25,
+    estimatedMinutes: 30,
   },
   {
     id: "v-human-institutions",
@@ -260,7 +259,7 @@ export const verificationLessons: Lesson[] = [
     sectionItemId: "v-human-intro",
     title: "2.4.4 Institutions and policy judgment",
     contentRef: "verification/human-institutions",
-    estimatedMinutes: 35,
+    estimatedMinutes: 30,
   },
   {
     id: "v-covert-system-overview",

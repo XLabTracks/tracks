@@ -691,3 +691,80 @@ Twelve lessons changed. The writing-heavy units now say what they cost:
 0.4 → 80, 3.x insiders/audits → 35 each, institutions → 40.
 Still without a number: 4.2 (a multi-week project — minutes would be
 false precision; her figure welcome) and the completion page (not work).
+
+## 2026-08-13 — 0.1.2 We Need More Theories of Change added
+
+Transcribed verbatim from the author's Outline-37, on her instruction, as a
+new lesson nested under 0.1 after 0.1.1: `v-theories-of-change`, slug
+`theories-of-change`, two h2 sections ("Why are theories of change
+important?" / "What does a good theory of change look like?") so the reader
+chunks it into two parts. `verificationUnitOfLesson` maps it to unit 0.1;
+regenerating course.js added the third lesson to 0.1's list (and, in the
+same run, caught 2.4's mins drift — the committed file still said "20–25
+min" against curriculum.ts's "120 min").
+
+The outline's bracketed markers became, in order:
+
+- **"[Expand text box: LLM Check]"** and **"[Expand information box: Strong
+  AI Safety Theories of Change]"** — `<Fold>`s, the expand-in-place shape
+  those markers name (a `[POP UP]` they are not).
+- **The elements table** — the outline embeds it as an image of a Google
+  Docs table; it is rebuilt as a real HTML table (same rows, cells verbatim)
+  so it reads in every theme and scrolls in its own box.
+- **The Slow Food USA one-page theory of change** — reproduced as an image
+  (extracted at full resolution from the outline PDF itself), inside the
+  examples fold where the outline places it, credited and linked to
+  slowfoodusa.org/theory-of-change. No reuse terms posted — `unchecked` —
+  provenance in `public/verification/assets/theories-of-change/SOURCES.md`.
+- **"[Expand box: Optional exercise …]"** — the `theories-of-change` widget
+  (unbridged: optional, ungraded, no completion event), which walks the
+  elements table one box at a time exactly as the bracket instructs; every
+  cue restates the table's own cell, and the org examples are the outline's.
+  Drafts persist under `v-theories-of-change:v1`.
+
+One link decision, recorded: the outline cites
+aip.org/fyi/**2016**/looking-back-why-ssc-was-terminated twice, and that
+path now 404s. The same article — Jones, "Looking Back: Why the SSC Was
+Terminated", FYI, 27 Oct. 1993 — lives at /fyi/**1993**/, so both anchors
+point there and the citation entry carries the 1993 facts. All six of the
+lesson's cited URLs (LiquiSearch, AIP, Apollo, CLR, Wentworth, Slow Food)
+went into citations.json `entries`, verified, so the Works cited appendix
+renders complete on day one.
+
+estimatedMinutes: 6, by the Estimates-v2 rules above (~1200 words of prose;
+the optional exercise bills nothing). Unit 0.1's own "15–20 min" meta was
+left alone — it is the outline's figure, and the outline gives 0.1.2 no
+number of its own.
+
+### 0.1.2 review edits (2026-08-13, same day)
+
+On the author's review: the elements table now renders every box with its own
+four-sided hairline and a gap between boxes (`elements-grid` variant in
+globals.css — the shared lesson-table rules draw row lines only and leave a
+`tbody th` band unstyled, which is why Assumptions sat unaligned); "LLM
+Check" is retitled "Strategy: LLM Clarity Check" and is no longer a fold —
+it sits inline in an outlined rounded card; the examples fold is retitled
+"Strong Theories of Change", its four examples are bullet points (Slow Food
+USA the fourth), and the reproduced infographic carries a "Slow Food USA
+Theory of Change" header above it.
+
+### Module objectives standardized (2026-08-13, owner's edit list)
+
+Every module now opens (or in 0.0's case, closes) with one module-level
+`<Objectives scope="this module">` block, worded by the owner. Module 0's
+sits at the end of 0.0 Welcome, after the optional reflection, under a short
+owner-written paragraph ("Module 0—this module—establishes the
+motivations…"). Two deletions ride with it: 0.3's section-level Objectives
+block (its two bullets survive merged as the module block's final bullet —
+a comment in precedents.mdx marks the move), and nothing else in module 0
+stated goals. The old pre-Plan-A 0.2 objectives stay deleted as before.
+
+Second review pass, same day: the elements table is a full collapsed grid
+(no gaps, no rounded cells) with three visually distinct layers — band
+headers theme-inverted (foreground ground, background ink), question labels
+on the muted second-layer tint at medium weight, content boxes on card
+ground — and the widget's table repeats the scheme (the two are marked as a
+pair in globals.css and the widget). The fold's duplicate "Slow Food USA
+Theory of Change" header is gone (the bullet carries the name), and the
+bullet's tail now reads "effective theory of change, conveyed in engaging
+and easy-to-parse visuals", the author's wording.

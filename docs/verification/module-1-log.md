@@ -101,3 +101,17 @@ two-level analysis brief under it. The course owner cut it. What that left:
   global-governance.ai/treaty/. Both were cited from that fold and nowhere
   else, so the registry's orphan test would have failed on them.
   arXiv:2511.10783 stays — three other lessons cite it.
+
+### Module objectives standardized (2026-08-13, owner's edit list)
+
+1.0's opening paragraph is replaced by the owner's new one ("Now that we
+have a grasp of the motivations…") with the module-level
+`<Objectives scope="this module">` block directly after — six bullets, the
+owner's wording. The old 1.2 block (`scope="Module 1"` in
+scoping-actors.mdx) is deleted as redundant on the owner's instruction; its
+four bullets live on, edited, in the 1.0 block. Known cost, flagged to the
+owner: the replaced 1.0 paragraph carried the "write down two or three
+specific claims" prompt that the closing Activity ("Return to the claims
+you wrote at the top of this page") refers back to — that reference now
+dangles pending her call. 1.1's "Module objective" participants-will list
+(the MIRI exercise's own framing) is deliberately kept.

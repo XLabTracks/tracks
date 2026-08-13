@@ -367,3 +367,13 @@ suppression — are carried into the final red-team panel. The exercise and its
 engine add no numerical credibility score. The superseded
 `v-task-human-insiders-1` entry was removed; the historical-contrast writing
 task after the credibility section remains.
+
+### Module objectives standardized (2026-08-13, owner's edit list)
+
+2.0 gains the module-level `<Objectives scope="this module">` block directly
+after its first paragraph — six bullets, the owner's wording (distilled from
+the Module 2 planning doc's objectives plus the 2.3 signals goal). Kept, not
+deleted: 2.1's `scope="the core section"` block (hardware-specific, no
+module-level duplicate) and 2.3.0's in-prose "by the end" sentence (overlaps
+the module block's signals bullet but is load-bearing prose — flagged to
+the owner rather than cut).

@@ -1,5 +1,14 @@
 In this module, you will learn about four main areas of verification mechanisms: hardware, cloud, intelligence, and human. Each layer has its own strengths and weaknesses, evaluated on important metrics like technical feasibility, privacy preservation, political feasibility, and verifiability.
 
+<Objectives scope="this module">
+- For any verification mechanism, state what claim it supports, its deployment maturity, how it breaks, and who can afford to break it.
+- Evaluate hardware, cloud, intelligence, and human mechanisms by the claims they can test, the evidence they produce, what they cost to implement, and their principal failure modes.
+- Explain the confidentiality–verifiability tension and privacy-preserving verification mechanisms.
+- Take an ambiguous signal (an energy usage spike, for example) and rank possible reasonable explanations, and what level of escalation/next steps it justifies.
+- Distinguish costly from cheap signals: identify robust mechanisms that would force an evader to attack multiple independent streams, and combine layers accordingly.
+- State your own judgment of where the current verification stack has weaknesses.
+</Objectives>
+
 A key tension common across any verification taxonomy or subfield is confidentiality vs. verifiability. Rival states are inherently incentivized to not disclose any information to each other, much less about the development of potentially dangerous and proprietary technologies. The last thing China wants is for the U.S. to steal development secrets through an invasive or insecure audit system. Yet the model of verification relies entirely upon the reliable mutual disclosure of information. Thus arises the verifier’s paradox: how do you gain enough access to confirm compliance, but not enough to enable espionage?
 
 The solution is privacy-preserving verification: mechanisms designed to verify compliance while conveying minimum or zero excess information to verifier parties. Here are notable examples:

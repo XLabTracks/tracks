@@ -28,3 +28,12 @@ author-note stubs.
 The unit id stays `4.3` in `verificationUnitOfLesson` — it is a progress
 key and a rung tag in `data/skills.js`, so the display title changed and
 the id did not.
+
+### Module objectives standardized (2026-08-13, owner's edit list)
+
+4.0's Objectives block reworded by the owner: scope changes from "Module 4"
+to "this module" and the ten bullets become her seven (dropped: locate and
+appraise current evidence; separate durable from expiring analysis; compare
+against written checkpoints — the first two survive in spirit in the
+unit-level "Student goals" list below, which is deliberately kept). Position
+unchanged: after the three opening paragraphs, as she specified.

@@ -245,3 +245,16 @@ is what that page shows beside it.
   exactly once, so the desk would otherwise have gone unreachable. Its
   `status` is still `unspecified`: the outline never said what module 3's
   written output is, and the six answer sets have not been declared to be it.
+
+### Module objectives standardized (2026-08-13, owner's edit list)
+
+The "## Module objective" heading and its purpose paragraph are deleted on
+the owner's instruction. In their place, at the top of the body: the owner's
+new paragraph ("In this module, you will tackle a comprehensive technical
+verification system proposal…") plus a module-level
+`<Objectives scope="this module">` block. Her bullets 1 and 2 repeated the
+assumptions/design-choices/unresolved-problems clause; merged per her
+"minor edits for redundancy only" allowance — bullet 1 keeps the
+translation claim, bullet 2 the critique of that clause. Her third bullet
+names a "realistic facility simulation" that module 3 does not currently
+contain — transcribed as given, flagged to her.

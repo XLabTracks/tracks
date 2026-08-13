@@ -340,3 +340,30 @@ six gap-fills and a game beyond these ten questions. This rebuild takes its
 checks and leaves its prose, which is the smaller half. The duplication
 CLAUDE.md calls the widest in the course is narrower now — the app has a 2.2
 again — but the playground draft is still unported.
+
+---
+
+## 2026-08-12 — 2.4.1 source map replaces the roster dump
+
+The first `human-insiders` writing prompt was a seven-row table serialized into
+one text field. It has been replaced in the same lesson by the native,
+completion-bridged `human-insiders` widget. Nothing moved to a new lesson or
+branch.
+
+The exercise now makes the learner connect six source roles — evaluator,
+training engineer, infrastructure operator, procurement/finance staff,
+supplier/contractor, and executive/board member — to three cards: what the
+role can support, where its knowledge stops, and which independent record can
+test the claim. A correct chain emits a bounded evidentiary sentence rather
+than a score for the person. The second half applies the four requested tests
+(access, incentives, consistency, independent corroboration) to a fictional
+contractor report and ends at “further investigation justified,” explicitly
+short of a compliance judgment.
+
+Source: Baker et al., *Six Layers of Verification*, §§4.3 and A.8, especially
+Table 14's mapping of violations to personnel across the AI supply chain. Its
+failure modes — compartmentalization/loyalty, collusion, staged access, and
+suppression — are carried into the final red-team panel. The exercise and its
+engine add no numerical credibility score. The superseded
+`v-task-human-insiders-1` entry was removed; the historical-contrast writing
+task after the credibility section remains.

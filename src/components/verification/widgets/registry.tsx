@@ -119,6 +119,10 @@ const FieldMap = dynamic<VerificationWidgetProps>(
   () => import("./field-map").then((module) => module.FieldMap),
   { loading: WidgetLoading },
 );
+const HumanInsiders = dynamic<VerificationWidgetProps>(
+  () => import("./human-insiders").then((module) => module.HumanInsiders),
+  { loading: WidgetLoading },
+);
 
 /**
  * Native React widgets ported from the standalone HTML pages, keyed by the same
@@ -156,6 +160,7 @@ export const verificationWidgets: Record<
   "evidence-taxonomies": EvidenceTaxonomies,
   "actor-map": ActorMap,
   "field-map": FieldMap,
+  "human-insiders": HumanInsiders,
 };
 
 export function getVerificationWidget(

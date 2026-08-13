@@ -62,6 +62,7 @@ export const verificationExercises: VerificationExerciseDef[] = [
   { id: "drills-foundations", title: "Drill Bench: Foundations and Actors", bridged: true },
   { id: "drills-supply-chain", title: "Drill Bench: Evidence Streams", bridged: true },
   { id: "drills-games", title: "Drill Bench: Evasion, Regime, Position", bridged: true },
+  { id: "human-insiders", title: "Who Knows What?", bridged: true },
 ];
 export function getVerificationExercise(id: string): VerificationExerciseDef | undefined {
   return verificationExercises.find((e) => e.id === id);

@@ -99,9 +99,24 @@ export interface PacketTask {
   title: string;
   compulsory?: boolean;
   parts: TaskPart[];
-  /** Her word ceiling — guidance, never a gate. */
+  /**
+   * The LEARNER's word ceiling — guidance, never a gate, and sized for the
+   * hour: Task 5 plus one of Tasks 1–4 has to be writable in it.
+   */
   maxWords: number;
-  /** Her model answer, revealed on submission. */
+  /**
+   * Revealed on submission, and NOT bound by `maxWords`.
+   *
+   * These were labelled "model answer" and ran well past the ceilings they
+   * were modelling — Task 5 at double. The fix she chose is not to compress
+   * them into the cap, which would have cost the reasoning, nor to raise the
+   * cap to their length, which would have broken the hour: the caps went up
+   * once, to 200 and 300, and the keys are presented as commentary instead.
+   * So they may exceed the limit — but only by carrying something a
+   * compliant answer would have no room for, never by wandering out of the
+   * question's scope. Two blocks that did wander were cut (see Tasks 4
+   * and 5).
+   */
   answer: TaskPart[];
   /** Baker's passages, per her cuts. Empty where Baker does not carry it. */
   baker: DisanalysisQuote[];
@@ -273,7 +288,7 @@ export const PACKET_TASKS: PacketTask[] = [
         text: "If all declared nuclear material remains accounted for, the state has no nuclear-weapons programme.",
       },
     ],
-    maxWords: 150,
+    maxWords: 200,
     answer: [
       {
         kind: "ol",
@@ -313,7 +328,7 @@ export const PACKET_TASKS: PacketTask[] = [
         text: "Your answer should show the division of labour among the three instruments, rather than merely describe how each instrument operates.",
       },
     ],
-    maxWords: 180,
+    maxWords: 200,
     answer: [
       {
         kind: "table",
@@ -376,7 +391,7 @@ export const PACKET_TASKS: PacketTask[] = [
         ],
       },
     ],
-    maxWords: 180,
+    maxWords: 200,
     answer: [
       {
         kind: "table",
@@ -444,7 +459,7 @@ export const PACKET_TASKS: PacketTask[] = [
         text: "Which of these best characterises the Iraq case, and why?",
       },
     ],
-    maxWords: 180,
+    maxWords: 200,
     answer: [
       {
         kind: "p",
@@ -464,10 +479,9 @@ export const PACKET_TASKS: PacketTask[] = [
         kind: "p",
         text: "So the system can be operating exactly as designed and still fail here, because correct verification of what was declared is compatible with an undeclared object the design never undertook to find. The last factor is also why more of the same inspections would not have closed it: the binding constraint was leads, not frequency or even access.",
       },
-      {
-        kind: "p",
-        text: "For Shavit’s system the corresponding risk is an incomplete registry: if a violator can obtain or host enough unaccounted chips, inspection of registered chips shows nothing about them.",
-      },
+      /* The transfer to Shavit that stood here is gone. Her review found the
+         question does not ask for it and Task 5 is where the packet does that
+         work. Scope, not length — it would still be out of place at any cap. */
     ],
     baker: [BAKER_CSA_GAP_FULL, BAKER_SALIENT_FAILURE],
   },
@@ -494,7 +508,7 @@ export const PACKET_TASKS: PacketTask[] = [
         ],
       },
     ],
-    maxWords: 220,
+    maxWords: 300,
     answer: [
       { kind: "h", text: "1. The strongest valid parallel" },
       {
@@ -520,17 +534,9 @@ export const PACKET_TASKS: PacketTask[] = [
         kind: "p",
         text: "Each clause of that narrowing is doing work: “covered chips”, because Document 2 leaves personal devices alone; “declared locations”, because Document 3 is the case against assuming the list is complete.",
       },
-      { kind: "h", text: "What the assessment would still need to know" },
-      {
-        kind: "ul",
-        items: [
-          "the share of relevant training runs technically possible without covered chips;",
-          "the feasibility of covert chip production, acquisition and movement;",
-          "the completeness of the data-centre registry;",
-          "the reliability of logging and attestation when the state itself has access to the hardware;",
-          "and — Document 3’s answer for the nuclear case — the probability that an undeclared cluster is found by some instrument other than inspection of what is declared.",
-        ],
-      },
+      /* "What the assessment would still need to know" stood here — a whole
+         block above the assignment, which asks for four things and not a
+         research agenda. Her review cut it on scope, not on length. */
     ],
     baker: [BAKER_QUALIFIED_OPTIMISM, BAKER_ANALOGY_FIVE, BAKER_ACCOUNTS_LINE],
     bakerNote:

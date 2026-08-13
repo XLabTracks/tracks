@@ -166,8 +166,14 @@ export function PacketTasks({ onComplete }: VerificationWidgetProps) {
             {submitted ? (
               <div aria-live="polite" className="space-y-3">
                 <div className="border-border bg-background space-y-3 rounded-lg border p-4">
+                  {/* Not "model answer". These run past the word limit the
+                      task sets, deliberately — they carry commentary a
+                      compliant answer has no room for — and a key that
+                      overruns the ceiling it is modelling, while calling
+                      itself the model, teaches the wrong thing twice. The
+                      limit is the learner's; the commentary is ours. */}
                   <p className="text-muted-foreground text-[11px] tracking-[0.14em] uppercase">
-                    Model answer
+                    Indicative answer and commentary
                   </p>
                   {task.answer.map((part, i) => (
                     <Part key={i} part={part} answer />

@@ -49,11 +49,12 @@ export const CONNECTION_KIND_COPY: Record<
 > = {
   observation: {
     eyebrow: "Could observe",
-    question: "What could this person know directly?",
+    question: "What could this person observe directly?",
   },
   boundary: {
     eyebrow: "Could not establish",
-    question: "What remains outside this person's knowledge?",
+    question:
+      "What part of the suspected violation would remain outside their view?",
   },
   corroboration: {
     eyebrow: "Check against",

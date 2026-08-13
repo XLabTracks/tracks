@@ -56,13 +56,17 @@ export const verificationExercises: VerificationExerciseDef[] = [
   // and an embed. See docs/verification/module-0-log.md.
   { id: "treaty-workspace", title: "Anatomy of a (Pause) Agreement", bridged: true },
   { id: "compute-verification", title: "Questions on the Cankaya Working Paper", bridged: true },
-  // The drill benches. Bridged: the deck reports complete when the last step
-  // of its last bench is committed.
+  // The mounted drill benches. Bridged: the deck reports complete when the
+  // last step of its last bench is committed.
   { id: "drills-primers", title: "Drill Bench: Primers", bridged: true },
   { id: "drills-foundations", title: "Drill Bench: Foundations and Actors", bridged: true },
-  { id: "drills-supply-chain", title: "Drill Bench: Evidence Streams", bridged: true },
+  // drills-supply-chain stood down when the section-specific 2.4.4 lab
+  // replaced it. Its widget, engine, data, and tests remain in the repo.
   { id: "drills-games", title: "Drill Bench: Evasion, Regime, Position", bridged: true },
   { id: "human-insiders", title: "Who Knows What?", bridged: true },
+  { id: "human-reporting-protection", title: "Follow the Report", bridged: true },
+  { id: "human-audits-inspections", title: "Build the Inspection Order", bridged: true },
+  { id: "human-institutions-judgment", title: "Audit the Verifier", bridged: true },
 ];
 export function getVerificationExercise(id: string): VerificationExerciseDef | undefined {
   return verificationExercises.find((e) => e.id === id);

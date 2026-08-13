@@ -1,51 +1,106 @@
-A reporting system has two jobs. It must give people a route they can realistically use, and it must turn what they submit into evidence without exposing the source unnecessarily or overstating the claim.
+<Callout variant="highlight" title="Optional · 12 min">
 
-An engineer may risk employment, unvested equity, immigration status, litigation, or future work by reporting a safety override. A contractor may have weaker legal protection and no internal channel. A technically secure form is not enough if it can be traced through a work device, access log, document history, or the small number of people who knew the fact.
+<Video
+  src="https://youtu.be/51k3UASQE5E?si=mE8eD7RrB_yvHrpJ"
+  title="How whistle-blowers shape history | Kelly Richmond Pope | TED"
+/>
 
-[Wasil et al.](https://arxiv.org/abs/2408.16074) propose a practical package: protected and anonymous channels, legal and job support, incentives for verified information, and cross-border protection. They also warn that incentives do not help if an organization can block contact with the verifier. Regular private contact with personnel can provide a second route.
+Kelly Richmond Pope’s examples show why noticing wrongdoing does not reliably
+produce a report: internal recipients may do nothing, the reporter’s identity
+may become exposed, and retaliation may follow. The talk is not a statement of
+the law. It introduces the practical problem that the statute and design guide
+below attempt to address.
 
-## What a usable channel requires
+</Callout>
 
-- **Internal and external routes.** A reporter should be able to contact an independent internal office, a regulator or treaty verifier, and—where the law permits—another competent authority. Requiring internal reporting first can expose the source or give implicated managers time to remove evidence.
-- **A real choice between anonymity and confidentiality.** Anonymous reporting withholds identity from the recipient. Confidential reporting reveals it to a restricted group. The channel should state the limits of both arrangements.
-- **Secure two-way contact.** Investigators need a way to ask follow-up questions and give preservation instructions without forcing the reporter to disclose more identifying information than necessary.
-- **Routing around conflicts.** A report about senior management must not pass through senior management for approval.
-- **Clear triage.** The recipient should distinguish an urgent safety or evidence-destruction risk from a report that can enter the ordinary investigation queue.
+## The statutory floor
 
-## AI whistleblowing: SB 53 and the broader design test
+<ReadingCard
+  id="human-california-whistleblower-chapter"
+  href="https://www.leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?article=&chapter=5.1.&division=2.&lawCode=LAB&part=3.&title="
+  title="California Labor Code, Chapter 5.1: Whistleblower Protections — Catastrophic Risks in AI Foundation Models"
+  author="California Legislature"
+  year="effective 2026"
+  mins="6–8 min"
+>
+  Read §§1107–1107.2 in full. Keep the definitions beside the operative
+  protection: identify the covered person, reportable subject, permitted
+  recipients, internal process, and available remedies.
+</ReadingCard>
 
-California’s SB 53 created a specific statutory floor for AI whistleblowing, now codified in Labor Code §§1107–1107.2. Its definition is deliberately tied to safety work:
+<Callout variant="note" title="What the contract clause covers">
 
-> “Covered employee” means an employee responsible for assessing, managing, or addressing risk of critical safety incidents. — [California Labor Code §1107](https://www.leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?article=&chapter=5.1.&division=2.&lawCode=LAB&part=3.&title=)
+The operative language says a developer “shall not … enter into a … contract that prevents a covered employee from disclosing.” — [California Labor Code §1107.1(a)](https://www.leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?article=&chapter=5.1.&division=2.&lawCode=LAB&part=3.&title=)
 
-The law bars a frontier developer from making or enforcing a rule, policy, or contract that prevents such an employee from making a protected disclosure, or retaliating for it. The employee must have reasonable cause to believe the information shows a specific and substantial public danger from a catastrophic risk or a violation of the covered frontier-AI statute. Protected recipients include the California Attorney General, a federal authority, and specified people inside the company with power to investigate or correct the problem. Large frontier developers must also provide a reasonable anonymous internal process, send the reporter monthly status updates, and share reports with officers and directors while excluding a leader accused of wrongdoing.
+Read that sentence together with the statute’s definition of a covered
+employee, its two protected subjects, and its named recipients. The protection
+attaches to disclosures within those conditions; it does not declare every NDA
+void for every disclosure. The separate [AIWI/CARMA analysis of SB 53](https://aiwi.org/publication-commentary-whistleblower-protections-in-sb-53/)
+also notes that public disclosure is not expressly protected by the chapter.
 
-This is not a rule that every NDA is void or that every AI concern is protected. It is a rule against using contracts to block disclosures that fall within the statute. The distinction matters when a verifier tells a source what protection actually exists.
+</Callout>
 
-The [AIWI/CARMA Best Practice Guide](https://aiwi.org/ai-whistleblowing-law-best-practice/) states the broader principle directly:
+## A broader design standard
 
-> “Whistleblower rights must override confidentiality/nondisclosure agreements.”
+<ReadingCard
+  id="human-aiwi-carma-best-practice"
+  href="https://aiwi.org/ai-whistleblowing-law-best-practice/"
+  title="AI Whistleblowing Law: Best Practice Guide"
+  author="Abra Ganz and Karl Koch · AIWI and CARMA"
+  year="2026"
+  mins="8–10 min"
+>
+  Read the Introduction and all seven recommendation sections: Scope of
+  Protected Disclosures, Protected Individuals, Retaliation Protection,
+  Disclosure Channels, Remedies, Employee Notice Requirements, and Agency
+  Requirements. Stop before the organizational and author biographies.
+</ReadingCard>
 
-The guide would extend protection beyond SB 53’s covered employees and catastrophic-risk pathway. Its recommendations include duty speech by evaluators and safety staff; contractors, former employees, board members, and third-party assessment organizations; confidential and anonymous external reporting; remedies that account for equity and visa-related retaliation; and a receiving agency with the expertise and authority to act. These are not details around the edge. They determine who can report, what they can report, and whether a nominal right can be exercised before retaliation makes it useless.
+The guide states the broader rule directly: “Whistleblower rights must override confidentiality/nondisclosure agreements.” — [AIWI/CARMA, Retaliation Protection](https://aiwi.org/ai-whistleblowing-law-best-practice/)
 
-## Four ways to make reporting more viable
+## Can the report leave the organization?
 
-| Mechanism | What it changes | Main limitation |
+> “Determined adversaries might attempt to physically or digitally block employees from contacting a verifying authority.”
+>
+> — [Wasil et al., “Whistleblowers”](https://arxiv.org/html/2408.16074)
+
+> “A more secure option is for such employees to make in-person visits to a building physically secured by a Verifier.”
+>
+> — [Baker et al., Appendix A.8](https://arxiv.org/html/2507.15916#A1.SS8)
+
+Legal permission, a financial incentive, and a web form do not by themselves
+create a usable route. The route also has to survive monitored devices,
+physical surveillance, conflicts inside the receiving office, and the need for
+safe follow-up.
+
+## Four different levers
+
+These sources describe four mechanisms that should not be treated as
+interchangeable:
+
+| Mechanism | Source text | What it changes |
 | --- | --- | --- |
-| Anti-retaliation protection | Reduces the expected personal cost and provides a remedy for firing, demotion, threats, blacklisting, or lost compensation. | A right may arrive too late unless temporary relief and practical legal support are available. |
-| Financial reward | Offsets personal cost and can motivate disclosure of useful original information. | It creates an incentive to examine, not a reason to accept or reject the claim. Corroboration still controls weight. |
-| Mandatory reporting | Makes silence a breach for specified roles or organizations. | It produces paperwork rather than verification if the duty is vague, unenforced, or sent to an office that cannot act. |
-| Professional or organizational duty | Makes escalation part of the role of safety staff, auditors, security personnel, executives, or boards. | The duty collapses when management rewards a clean record more than early discovery of problems. |
+| Anti-retaliation protection | California Labor Code §1107.1 bars specified rules, contracts, and retaliation for protected disclosures. | Creates a legal right and remedies after protected reporting. |
+| Financial reward | Wasil et al. propose “financial incentives for verified information.” | Changes the reporter’s incentives; it does not establish that the report is true. |
+| Mandatory reporting | SB 53 says a frontier developer “shall report any critical safety incident … within 15 days.” | Places an affirmative reporting duty on the developer rather than waiting for an insider to volunteer information. |
+| Professional duty | The ACM Code gives computing professionals an “obligation to report any signs of system risks that might result in harm.” | Makes escalation part of professional conduct, but supplies neither a safe channel nor a legal remedy on its own. |
 
-The mechanisms can be combined. They should not be treated as substitutes for safe channels or competent investigation.
+Sources: [Wasil et al.](https://arxiv.org/html/2408.16074), [SB 53, Business and Professions Code §22757.13(c)](https://leginfo.legislature.ca.gov/faces/billNavClient.xhtml?bill_id=202520260SB53), and [ACM Code of Ethics §1.2](https://www.acm.org/binaries/content/assets/about/acm-code-of-ethics-and-professional-conduct.pdf).
 
-## From report to evidence
+## After the report arrives
 
-1. **Receive and scope.** Record when and how the report arrived, its claimed urgency, the reporter’s identity preference, and the material allegation.
-2. **Route and preserve.** Bypass implicated people. Retain the original submission, attachments, and available metadata; assign a case identifier; and record access, copying, and transfer.
-3. **Authenticate.** Test whether the source plausibly held the claimed role and whether submitted records are what they appear to be. Authentication establishes provenance, not truth.
-4. **Investigate.** Seek records, technical signals, physical observations, and sources the reporter does not control. Record contradictions and plausible alternative explanations as well as support.
-5. **Separate fact from inference.** Keep the source’s observations, investigator findings, and analytical conclusions distinct.
-6. **Transmit a scoped package.** Send the authorized verifier the allegation, source-access assessment, preservation record, corroboration, contradictions, unresolved questions, handling restrictions, and recommended next step. Share identity only when necessary and authorized.
+<ReadingCard
+  id="human-cigie-investigation-standard"
+  href="https://www.ignet.gov/sites/default/files/files/Quality%20Standards%20for%20Investigations%20July-2025.pdf#page=13"
+  title="Quality Standards for Investigations"
+  author="Council of the Inspectors General on Integrity and Efficiency"
+  year="2025"
+  mins="3–4 min"
+>
+  Read Complaint Evaluation, Collecting Evidence, and Reporting on document
+  pages 10–13. The standard requires that “all known relevant material is
+  lawfully obtained, the chain of custody is preserved, and the evidence is
+  admissible.”
+</ReadingCard>
 
-A protected report can justify preservation or investigation without proving noncompliance. The next section asks what access an auditor or inspector would need to test it.
+<VerificationExercise id="human-reporting-protection" />

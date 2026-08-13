@@ -1,49 +1,51 @@
-Whistleblowers report when they choose or when a duty requires it. Audits and inspections let a verifier look on a defined schedule, at a defined trigger, or in response to a specific concern.
+This section uses one case throughout. The readings supply the rules; the lab
+asks you to turn them into an inspection order whose conclusion does not outrun
+its access.
 
-## Three mechanisms, three purposes
+## Source packet · 14–17 min
 
-| Mechanism | Typical trigger | Main purpose | Main design risk |
-| --- | --- | --- | --- |
-| Independent audit | Periodic, milestone-based, or pre-deployment review | A third party tests specified claims and evaluates systems or practices against a standard. | The auditee controls the auditor, scope, evidence, or publication. |
-| Routine inspection | A schedule, random selection, or recurring agreement obligation | Confirm declared sites, inventories, records, processes, or controls. | Predictability permits staging, and undeclared activity may sit outside the routine route. |
-| Challenge inspection | A specific concern, anomaly, or formal request, usually on shorter notice | Clarify possible noncompliance that routine measures did not resolve. | Delay, political misuse, excessive intrusion, or access negotiated below what the concern requires. |
+<ReadingCard
+  id="human-wasil-access-dependent-methods"
+  href="https://arxiv.org/html/2408.16074v2#S6.SS2"
+  title="Access-dependent verification methods"
+  author="Wasil et al."
+  year="2024"
+  mins="4–5 min"
+>
+  Read On-site Inspections of Data Centers, On-site Inspections of AI
+  Developers, and Key Takeaways. Track the difference between periodic,
+  continuous, and challenge inspections, and note what each one can actually
+  inspect.
+</ReadingCard>
 
-These mechanisms collect and assess evidence. They do not necessarily make the legal decision. A sound process distinguishes:
+<ReadingCard
+  id="human-brundage-assurance-levels"
+  href="https://arxiv.org/html/2601.11699v4#S5.SS3"
+  title="§5.3 Levels of assurance"
+  author="Brundage et al."
+  year="2026"
+  mins="6–8 min"
+>
+  Read §§5.3.1–5.3.3. For each assurance level, identify the access granted, the
+  unit of analysis, and the errors or deception the audit still may not detect.
+</ReadingCard>
 
-1. **Collection:** what the team obtained, observed, preserved, and could not access.
-2. **Assessment:** what those facts support, under stated assumptions and uncertainty.
-3. **Adjudication and response:** whether the facts satisfy the agreement’s standard and what an authorized body should do.
+<ReadingCard
+  id="human-opcw-managed-access"
+  href="https://www.opcw.org/chemical-weapons-convention/annexes/verification-annex/part-x-challenge-inspections-pursuant"
+  title="Challenge inspections: general rules and managed access"
+  author="OPCW · Chemical Weapons Convention, Verification Annex, Part X"
+  mins="4 min"
+>
+  Read paragraphs 38–50. Mark the provisions that define the purpose of access,
+  the duty to offer alternative means, the limits on collection, and the
+  measures available to protect unrelated sensitive information.
+</ReadingCard>
 
-## Access sets the ceiling on the conclusion
+## Lab · 13–16 min
 
-[Brundage et al.](https://arxiv.org/abs/2601.11699) define frontier AI auditing around “deep, secure access to non-public information.” Their assurance levels make a simple point: as the auditor relies less on the company’s own representations and sees more of the organization, the audit can support broader and more confident claims.
+Use the source packet to make ten decisions. Commit each line before seeing the
+source note. At the end, the lines assemble into an inspection order and a
+bounded finding.
 
-- **Black-box access:** the auditor sends inputs and observes outputs. It can support a claim about model behavior under the tested conditions. It cannot establish training history, compute use, internal deployment, or executive decision-making.
-- **Gray-box access:** the auditor also receives selected internals, tools, records, or privileged interfaces. This can test more explanations, but the conclusion remains bounded by what was selected and what remains hidden.
-- **Deep access:** the auditor can examine relevant model internals, training processes, compute allocation, incident and governance records, and staff interviews. It can test organization-level and historical claims if records are complete and the auditor has authority to follow emerging concerns.
-
-The paper’s higher assurance levels add duration and resistance to deception: from a time-bounded system audit, through months of documentation and cross-functional interviews, toward ongoing oversight and continuous verification. The highest levels remain an aspiration, not a label an auditor should claim because the engagement was expensive or technically sophisticated.
-
-An audit conclusion is valid only for the systems, entities, evidence, claims, and period actually examined. Findings should state their assumptions and expire or be revisited when a release, incident, configuration change, or other event makes them stale.
-
-## What the mandate must settle
-
-A usable audit or inspection mandate answers these questions before an access dispute begins:
-
-- **Who may inspect?** Name the body, required expertise, independence and conflict rules, security requirements, and any process for objecting to an individual inspector.
-- **What is in scope?** Specify models, code, evaluations, compute records, governance decisions, facilities, affiliates, cloud regions, colocation sites, and contractor-controlled systems.
-- **When may access occur?** Define routine timing, random selection, challenge triggers, notice periods, duration, and event-triggered review.
-- **What may the team do?** Cover document review, system access, testing, observation, sampling, copying, log export, reconciliation, and private staff interviews.
-- **Who must cooperate and preserve evidence?** Extend duties to relevant developers, affiliates, cloud and data-center operators, suppliers, and contractors; prohibit alteration or deletion after notice.
-- **How is sensitive information protected?** Set rules for vetted personnel, secure rooms, read-only systems, redaction, aggregation, limited retention, purpose limitation, and sanctions for misuse.
-- **What follows delay or refusal?** Define deadlines, alternative-access procedures, escalation, reporting consequences, and any authorized adverse inference, penalty, suspension, or referral.
-
-Refusal can establish a breach of an access obligation. It does not automatically prove the concealed activity. Whether a decision-maker may draw an adverse inference depends on the agreement.
-
-## Managed access
-
-Access need not mean copying every trade secret into a regulator’s general files. [Wasil et al.](https://arxiv.org/abs/2408.16074) treat inspections as access-dependent but note that limited access can protect privacy and proprietary information while still answering a verification question.
-
-For an AI inspection, managed access might allow a vetted subset of the team to inspect model weights on site, provide a read-only query over raw scheduler logs, disclose a cryptographic commitment instead of source material, shroud unrelated equipment, or return an independently generated aggregate. The inspected party may propose an alternative, but the alternative must answer the same question. A company-produced summary is not a substitute for raw allocation evidence when the question is whether an undeclared above-threshold training run occurred.
-
-The practical test is narrow: does the arrangement let the verifier reach a defensible conclusion while withholding information that is genuinely unrelated to that conclusion?
+<VerificationExercise id="human-audits-inspections" />

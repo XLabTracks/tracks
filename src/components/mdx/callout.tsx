@@ -1,8 +1,8 @@
 import type { ReactNode } from "react";
-import { Info, Lightbulb, TriangleAlert } from "lucide-react";
+import { CirclePlay, Info, Lightbulb, TriangleAlert } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-type CalloutVariant = "note" | "tip" | "warning";
+type CalloutVariant = "note" | "tip" | "warning" | "highlight";
 
 const VARIANTS: Record<
   CalloutVariant,
@@ -22,6 +22,11 @@ const VARIANTS: Record<
     icon: TriangleAlert,
     className: "border-amber-500/40 bg-amber-500/10",
     iconClassName: "text-amber-600",
+  },
+  highlight: {
+    icon: CirclePlay,
+    className: "border-primary/55 bg-primary/5",
+    iconClassName: "text-primary",
   },
 };
 

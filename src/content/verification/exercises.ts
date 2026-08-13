@@ -24,36 +24,6 @@ import type { Exercise } from "@/lib/content/types";
 
 export const verificationExercises: Exercise[] = [
   {
-    id: "v-test-human-insiders-source-scope",
-    type: "multiple-choice",
-    prompt:
-      "A contractor seeking a financial reward reports that a company expanded a computing cluster. The contractor provides a project code that also appears in an independently obtained power-allocation log, but cannot identify the workload that ran on the cluster. Which assessment is most accurate?",
-    options: [
-      {
-        id: "a",
-        label: "The report proves that an unauthorized training run occurred.",
-      },
-      {
-        id: "b",
-        label:
-          "The report should be treated as unreliable because the contractor may receive a reward.",
-      },
-      {
-        id: "c",
-        label:
-          "The report supports a finding that the infrastructure was expanded, and the matching project code corroborates that part of the account. It does not show which workload ran.",
-      },
-      {
-        id: "d",
-        label:
-          "The report should be disregarded because the contractor lacked access to the workload.",
-      },
-    ],
-    correctOptionIds: ["c"],
-    explanation:
-      "The contractor's incentive is relevant, but it does not settle the claim. The contractor had access to the infrastructure work, and the independent power record supports the project code and dates. That evidence supports the expansion claim, not a conclusion about the workload.",
-  },
-  {
     id: "v-task-introduction-1",
     type: "writing-prompt",
     prompt: "Optional task — The strongest objection.\n\nIn a short written note, construct the strongest objection you can to the case above — and state what would change your mind, in either direction.",

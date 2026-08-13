@@ -241,7 +241,7 @@ export const verificationLessons: Lesson[] = [
     sectionItemId: "v-human-intro",
     title: "2.4.2 Reporting and protection",
     contentRef: "verification/human-reporting-protection",
-    estimatedMinutes: 30,
+    estimatedMinutes: 40,
   },
   {
     id: "v-human-audits-inspections",

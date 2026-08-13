@@ -38,6 +38,13 @@
       "publisher": "AI Whistleblower Initiative and Center for AI Risk Management & Alignment",
       "date": "2 July 2026"
     },
+    "https://aiwi.org/publication-commentary-whistleblower-protections-in-sb-53/": {
+      "title": "Whistleblower Protections in SB 53: Strengths, Limitations, and Open Questions",
+      "about": "An analysis of SB 53's protected people and disclosures, available channels and remedies, and remaining implementation gaps.",
+      "authors": "Ganz, Abra, and Karl Koch",
+      "publisher": "AI Whistleblower Initiative",
+      "date": "2026"
+    },
     "https://artificialintelligenceact.eu/article/51/": {
       "title": "Article 51: Classification of General-Purpose AI Models as General-Purpose AI Models with Systemic Risk",
       "about": "The consolidated text of the AI Act article that presumes systemic risk above 10^25 training FLOP.",
@@ -65,6 +72,13 @@
       "container": "arXiv",
       "date": "Aug. 2024"
     },
+    "https://arxiv.org/html/2408.16074": {
+      "title": "Verification Methods for International AI Agreements — Whistleblowers",
+      "about": "Wasil et al. examine how incentives, legal protection, secure reporting routes, and blocked communication affect personnel-based verification.",
+      "authors": "Wasil, Akash R., Tom Reed, Jack William Miller, et al.",
+      "container": "arXiv",
+      "date": "Aug. 2024"
+    },
     "https://arxiv.org/abs/2505.03742": {
       "title": "Hardware-Enabled Mechanisms for Verifying Responsible AI Development",
       "about": "A study of hardware-enabled mechanisms for verifiable reporting of AI training activity — compute usage, cluster configuration, and workload claims.",
@@ -82,6 +96,13 @@
     "https://arxiv.org/abs/2507.15916": {
       "title": "Verifying International Agreements on AI: Six Layers of Verification for Rules on Large-Scale AI Development and Deployment",
       "about": "A six-layer verification framework whose personnel-based layers map which workers can observe different violations and why disclosures still need independent confirmation.",
+      "authors": "Baker, Mauricio, Gabriel Kulp, Oliver Marks, et al.",
+      "container": "arXiv",
+      "date": "July 2025"
+    },
+    "https://arxiv.org/html/2507.15916#A1.SS8": {
+      "title": "Verifying International Agreements on AI — Appendix A.8: Whistleblower Programs",
+      "about": "Baker et al. examine secure contact, suppression, incentives, confidentiality, and which supply-chain personnel can observe different violations.",
       "authors": "Baker, Mauricio, Gabriel Kulp, Oliver Marks, et al.",
       "container": "arXiv",
       "date": "July 2025"
@@ -214,6 +235,13 @@
       "container": "California Legislative Information",
       "date": "2025"
     },
+    "https://leginfo.legislature.ca.gov/faces/billNavClient.xhtml?bill_id=202520260SB53": {
+      "title": "SB-53 Artificial Intelligence Models: Large Developers (2025-2026)",
+      "about": "The enacted bill text includes the frontier developer's duty to report critical safety incidents under Business and Professions Code §22757.13.",
+      "org": "California Legislature",
+      "container": "California Legislative Information",
+      "date": "2025"
+    },
     "https://www.leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?article=&chapter=5.1.&division=2.&lawCode=LAB&part=3.&title=": {
       "title": "Whistleblower Protections: Catastrophic Risks in AI Foundation Models, Labor Code §§ 1107–1107.2",
       "about": "California's enacted protections for covered frontier-developer employees who disclose specified catastrophic-risk concerns or violations.",
@@ -338,6 +366,12 @@
       "title": "Independent International Scientific Panel on AI",
       "about": "The UN's page for the forty-scientist panel established in 2025 to build a shared scientific picture of AI risk.",
       "org": "United Nations"
+    },
+    "https://www.acm.org/binaries/content/assets/about/acm-code-of-ethics-and-professional-conduct.pdf": {
+      "title": "ACM Code of Ethics and Professional Conduct",
+      "about": "Section 1.2 describes computing professionals' responsibility to report signs of system risks that might result in harm.",
+      "org": "Association for Computing Machinery",
+      "date": "2018"
     },
     "https://www.whitecase.com/insight-alert/california-enacts-landmark-ai-transparency-law-transparency-frontier-artificial": {
       "title": "California Enacts Landmark AI Transparency Law: The Transparency in Frontier Artificial Intelligence Act",

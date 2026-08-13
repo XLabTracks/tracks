@@ -1,87 +1,40 @@
-Good evidence can be weakened by the institution handling it. A verifier needs enough independence to reach an unwelcome conclusion, enough competence to understand the claim, enough accountability to correct error, and enough authority and access to obtain the relevant evidence.
+The last section changes the object of verification. The question is no longer
+only whether Project Lattice complied. It is whether the institution handling
+the evidence can reach and defend a valid judgment.
 
-## Test the institution before trusting the finding
+## Source packet · 6–8 min
 
-| Test | Question to ask | Typical failure |
-| --- | --- | --- |
-| Independence | Can the verifier reach an unfavorable conclusion without losing funding, access, appointment, or future work? | Auditor shopping, repeat-business pressure, political direction, or revolving-door incentives. |
-| Competence | Does the team have the technical, investigative, legal, security, organizational, and diplomatic expertise required by the claim? | A technically impressive review that misses governance, evidence, supply-chain, or jurisdictional problems. |
-| Accountability | Can methods, conflicts, quality controls, complaints, appeals, and mistakes be reviewed without exposing protected information? | Opaque methods, no route to challenge factual error, or no one able to audit the auditors. |
-| Authority and access | Can the institution preserve and obtain evidence from every actor in scope, and can an authorized body act on its findings? | A credible report with no power to compel records, inspect a site, or trigger a legitimate response. |
+<ReadingCard
+  id="human-brundage-audit-design-principles"
+  href="https://arxiv.org/html/2601.11699v4"
+  title="Frontier AI auditing: design principles"
+  author="Brundage et al."
+  year="2026"
+  mins="6–8 min"
+>
+  Read the eight design principles in the Executive Summary, from Scope of Risks
+  through Clarity. For this exercise, concentrate on Access, Independent
+  Experts, Rigor, and Clarity. Record what each principle requires and which
+  party could frustrate it.
+</ReadingCard>
 
-[Brundage et al.](https://arxiv.org/abs/2601.11699) translate these concerns into audit design. They call for disclosure of financial relationships, standardized engagement terms that limit auditor shopping, cooling-off periods between industry and audit roles, payment models that reduce dependence on the auditee, and multidisciplinary teams or consortia where one firm lacks the required expertise. They also propose oversight that can set standards and revoke accreditation: the auditors themselves need an accountable institution.
+Reuse the personnel limits from 2.4.1 and the inspection record you built in
+2.4.3. No additional background reading is required.
 
-Competence is not a single credential. A frontier-AI inquiry may require model evaluation, compute accounting, data-center operations, cybersecurity, corporate governance, interviewing, evidence preservation, labor protection, and treaty law. The team must know which questions it cannot answer without another specialist.
+## Lab · 20–24 min
 
-## How capture changes the result
+The case file contains deliberately mixed evidence: a partly corroborated
+human report, company-selected records, a valid access demand, and a refusal.
+Make fourteen decisions in four passes:
 
-- **Financial capture:** favorable findings protect fees, access, or future work.
-- **Informational capture:** the auditee chooses the records, systems, interviewees, and questions, controlling the evidentiary frame.
-- **Cultural capture:** the verifier adopts the regulated organization’s assumptions about what counts as normal, serious, or worth investigating.
-- **Political capture:** an official narrows, delays, or suppresses findings to protect a government, company, or diplomatic relationship.
-- **Capacity capture:** chronic understaffing and obsolete standards turn nominally deep review into shallow triage.
+1. test the institution’s independence, competence, accountability, authority,
+   and actual access;
+2. identify financial, informational, cultural, and political capture;
+3. separate facts human evidence can establish from facts that require
+   technical or physical evidence;
+4. choose separately whether the record supports investigation, a compliance
+   finding, and enforcement.
 
-Formal independence does not cure informational dependence. An outside firm that sees only a curated management package is still relying on the organization it is meant to test.
+Each accepted statement becomes one line of the final institutional judgment.
 
-<Callout variant="warning" title="Verification powers need limits">
-
-Personnel interviews, reporting systems, and inspection powers can expose private or security-sensitive information and can be abused for surveillance or political pressure. [Baker et al.](https://arxiv.org/abs/2507.15916) therefore treat narrow interview scope and protection against inappropriate leaks as part of the mechanism, not as an afterthought. Purpose limits, confidentiality, review, and due process matter especially when the same institution verifies and recommends a response.
-
-</Callout>
-
-## What human mechanisms can establish
-
-Human evidence is strongest on questions that live in an organization rather than in a machine:
-
-- who authorized a decision and what they intended;
-- whether staff knew about a warning or incident;
-- whether a written safety gate was bypassed in practice;
-- whether management staged an inspection or coordinated a cover story;
-- which records, projects, people, or sites a technical investigation should examine.
-
-It is weaker on continuous coverage and technical measurement. A source may identify a training run but not establish its compute. An executive may describe a deployment decision but not prove what code executed. A cooperative interview cannot rule out work confined to a small, loyal, compartmentalized group.
-
-This boundary follows both [Baker et al.](https://arxiv.org/abs/2507.15916), who stress collusion and suppression, and [Wasil et al.](https://arxiv.org/abs/2408.16074), who place whistleblowing alongside financial intelligence, remote sensing, inspections, and hardware-dependent methods. Human reporting supplies leads, context, and evidence of organizational conduct. Technical records and physical access establish many of the operational facts.
-
-## Corroboration should cross mechanisms
-
-A second person is independent only if the second account did not come from the first source, the same briefing, or the same incentive structure. Stronger combinations fail in different ways:
-
-- an engineer’s account compared with raw allocation, access, version-control, checkpoint, or incident logs;
-- a contractor’s project code compared with cloud billing, power allocation, delivery, or maintenance records;
-- a site allegation compared with permits, imagery, physical inventory, or a challenge inspection;
-- governance records compared with independent evaluation of the model or system.
-
-Corroboration is claim-specific. A matching delivery record may confirm that infrastructure was expanded without confirming what workload ran. A staff interview may establish that management received a warning without establishing that the model crossed a technical threshold.
-
-## Match the response to what is established
-
-The decision-maker should state the applicable evidentiary standard in advance. These categories are different decisions, not three labels for confidence:
-
-| Decision | What the evidence must support |
-| --- | --- |
-| Further investigation | A specific, plausible concern and a realistic path to evidence. The threshold should be low enough to preserve records before they disappear. |
-| Compliance finding | Facts sufficient under the agreement’s stated standard to conclude that a defined obligation was or was not met. Material contradictions and access limits remain in the finding. |
-| Enforcement | A valid compliance finding or other authorized trigger, plus legal authority, proportionality, urgency, and the required process. Strong suspicion alone is not a sanction. |
-
-Refusal needs separate treatment. It may establish an access or cooperation breach and justify further measures. It proves the underlying concealed conduct only if the governing rules authorize that inference and the conditions for drawing it are satisfied.
-
-## Cooperation is part of the architecture
-
-Depending on the claim, the mandate may need to reach developers and affiliates; cloud and colocation providers; chip, power, and networking suppliers; auditors and evaluators; employees and contractors; national regulators and courts; and states that must admit international inspectors.
-
-The regime therefore needs a legal scope broad enough to reach relevant records and sites, preservation duties, protected contact with personnel, safeguards for commercial and national-security information, penalties for obstruction, and a legitimate review process. Where the suspected violator controls the employer, regulator, court, and security services, an internal channel may go silent. External routes, cross-border evidence, and methods that do not depend on the violator’s cooperation then carry more weight.
-
-<Callout variant="note" title="The human layer’s role">
-
-People can expose intent, identify hidden activity, explain how formal controls worked in practice, and direct technical mechanisms toward the right records and sites. Their evidence gains weight when access is real, reporting is protected, the institution resists capture, and material claims survive checks the source or auditee does not control.
-
-</Callout>
-
-## Drill bench
-
-Work through one evidence stream at a time. Commit to a judgment, read why, then continue.
-
-<VerificationExercise id="drills-supply-chain" />
-
-<MemoDesk lesson="human-institutions" />
+<VerificationExercise id="human-institutions-judgment" />

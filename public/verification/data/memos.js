@@ -131,45 +131,6 @@ window.VERIFICATION_MEMOS = [
     ]
   },
   {
-    "id": "m2-4-analytical-essay",
-    "module": 2,
-    "unit": "2.4",
-    "title": "Analytical essay",
-    "status": "named",
-    "genre": "essay",
-    "brief": null,
-    "audience": null,
-    "words": 1000,
-    "peerReviewed": false,
-    "gap": "Named at the close of the human-layer section. No prompt, audience or rubric is drafted."
-  },
-  {
-    "id": "m2-4-audit-law",
-    "module": 2,
-    "unit": "2.4",
-    "title": "Brief or memo on the audit-requirement situation",
-    "status": "named",
-    "optional": true,
-    "brief": "Optional. A brief or memo on the SB-53 and SB-1047 audit-requirement situation — or, instead, an analytical essay on what the laws currently cover, compared against the crypto wars or bioweapons.",
-    "audience": null,
-    "words": 800,
-    "peerReviewed": false,
-    "gap": "Offered as one of two alternatives in a working note; neither is scoped."
-  },
-  {
-    "id": "m2-4-optional",
-    "module": 2,
-    "unit": "2.4",
-    "title": "Optional written output",
-    "status": "unspecified",
-    "optional": true,
-    "brief": null,
-    "audience": null,
-    "words": 600,
-    "peerReviewed": false,
-    "gap": "An \"[Optional written output]:\" marker sits after 2.4.4 with nothing under it."
-  },
-  {
     "id": "m3-written-output",
     "module": 3,
     "unit": "3.x",

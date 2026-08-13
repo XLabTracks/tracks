@@ -1,47 +1,28 @@
-Human sources are useful only to the extent that they had access to the facts they report. A cloud operator may see a training job but not know its purpose. An engineer may know the model's lineage but not what senior management approved. Start by asking what the source could have observed and where their knowledge ends.
-
-## Who can observe what?
-
 <VerificationExercise id="human-insiders" />
 
-The source map draws on the personnel analysis in [Baker et al., §§4.3 and A.8](https://arxiv.org/abs/2507.15916). People across the AI supply chain may observe different parts of the same activity. Their evidence is still vulnerable to divided loyalties, compartmentalization, collusion, and pressure from management. [Wasil et al.](https://arxiv.org/abs/2408.16074) make the corresponding operational point: an insider may reveal an undeclared operation that external monitoring missed, but records, inspections, financial evidence, or other intelligence must test the report.
+## Read the personnel layer
 
-Different roles can support different parts of an investigation. An engineer may establish that a run occurred. Procurement staff may document a hardware purchase. An executive may describe what leadership intended. None of them should be treated as an all-purpose witness.
+<ReadingCard
+  id="human-baker-personnel-layer"
+  href="https://arxiv.org/html/2507.15916#S4.SS3"
+  title="§4.3 Personnel-Based Verification Layers"
+  author="Baker et al."
+  year="2025"
+  mins="5–7 min"
+>
+  Read §4.3 in full, including Table 8 and the analysis of collusion,
+  compartmentalization, interviews, and short-notice feasibility.
+</ReadingCard>
 
-## Assessing a report
-
-Credibility is not a judgment about character, and it should not be reduced to a numerical score. Assess the claim through four questions: access, incentives, consistency, and independent corroboration.
-
-### Access
-
-Was the source in a position to observe the event, record, conversation, or system they describe? Frontier AI work is often compartmentalized. One person may know the model, another the hardware, another the evaluation, and another the deployment. Contractors may have deliberately narrow access. Executives may know formal decisions but not how staff implemented them. State precisely what the source could know and what remains outside their view.
-
-### Incentives
-
-What could the source gain or lose by reporting, withholding information, or supporting management's account? Reporting may threaten employment, immigration status, professional relationships, equity compensation, security clearance, or future contracts. Other incentives may favor reporting, including professional duties, legal obligations, moral concern, or a financial reward. These pressures affect how closely a claim should be checked. They do not determine whether it is true.
-
-### Consistency
-
-Do the important facts remain stable across interviews and fit the known timeline? Minor changes in peripheral details are normal, especially when events are recalled under stress. Identical wording may indicate that witnesses were briefed or rehearsed. Focus on the central facts and investigate discrepancies instead of treating either variation or perfect agreement as decisive.
-
-### Independent corroboration
-
-Does evidence created independently of the source support the account? Useful records may include access logs, procurement records, internal messages, cloud or facility telemetry, physical observations, or accounts from people with different roles and incentives. Corroboration should address the facts that matter: what happened, where and when it happened, who was involved, and whether the activity could have occurred as described.
-
-A human source rarely establishes a violation alone. A report may justify preserving records or opening an investigation long before it is strong enough to support a compliance finding.
-
-### Interview conditions
-
-Personnel interviews can expose hidden activity and conflicts in the record, but the conditions matter. Management may choose the interviewees, prepare their answers, monitor the conversation, or punish candid responses. Baker et al. therefore pair interviews with [regular contact between employees and verifiers](https://arxiv.org/abs/2507.15916), while limiting questions to an agreed scope to protect unrelated sensitive information.
-
-## Common failure modes
-
-- Fabricated allegation: a source invents a violation for retaliation, money, or strategic advantage.
-- Selective truth: accurate facts are presented without context that changes their compliance meaning.
-- Management staging: the organization selects cooperative staff, curated records, and a clean facility path.
-- Coordinated cover story: several sources repeat a rehearsed account.
-- Suppression: an organization blocks communications, removes access, or uses legal or employment pressure to prevent reporting.
-
-## Test your judgment
-
-<Exercise id="v-test-human-insiders-source-scope" />
+<ReadingCard
+  id="human-baker-whistleblower-programs"
+  href="https://arxiv.org/html/2507.15916#A1.SS8"
+  title="Appendix A.8 Whistleblower Programs"
+  author="Baker et al."
+  year="2025"
+  mins="7–9 min"
+>
+  Read Appendix A.8 in full through Table 14. Pay particular attention to the
+  people who can observe each type of violation and the measures proposed to
+  counter suppression, compartmentalization, and excess disclosure.
+</ReadingCard>

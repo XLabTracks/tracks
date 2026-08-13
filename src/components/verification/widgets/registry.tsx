@@ -58,10 +58,6 @@ const DrillsPrimers = dynamic<VerificationWidgetProps>(
   () => import("./drills-primers").then((module) => module.DrillsPrimers),
   { loading: WidgetLoading },
 );
-const DrillsSupplyChain = dynamic<VerificationWidgetProps>(
-  () => import("./drills-supply-chain").then((module) => module.DrillsSupplyChain),
-  { loading: WidgetLoading },
-);
 const PolicyCost = dynamic<VerificationWidgetProps>(
   () => import("./policy-cost").then((module) => module.PolicyCost),
   { loading: WidgetLoading },
@@ -123,6 +119,27 @@ const HumanInsiders = dynamic<VerificationWidgetProps>(
   () => import("./human-insiders").then((module) => module.HumanInsiders),
   { loading: WidgetLoading },
 );
+const HumanReportingProtection = dynamic<VerificationWidgetProps>(
+  () =>
+    import("./human-reporting-protection").then(
+      (module) => module.HumanReportingProtection,
+    ),
+  { loading: WidgetLoading },
+);
+const HumanAuditsInspections = dynamic<VerificationWidgetProps>(
+  () =>
+    import("./human-audits-inspections").then(
+      (module) => module.HumanAuditsInspections,
+    ),
+  { loading: WidgetLoading },
+);
+const HumanInstitutionsJudgment = dynamic<VerificationWidgetProps>(
+  () =>
+    import("./human-institutions-judgment").then(
+      (module) => module.HumanInstitutionsJudgment,
+    ),
+  { loading: WidgetLoading },
+);
 
 /**
  * Native React widgets ported from the standalone HTML pages, keyed by the same
@@ -144,7 +161,6 @@ export const verificationWidgets: Record<
   "context-distiller": ContextDistiller,
   "drills-primers": DrillsPrimers,
   "drills-foundations": DrillsFoundations,
-  "drills-supply-chain": DrillsSupplyChain,
   "drills-games": DrillsGames,
   "policy-cost": PolicyCost,
   "policy-plot": PolicyPlot,
@@ -161,6 +177,9 @@ export const verificationWidgets: Record<
   "actor-map": ActorMap,
   "field-map": FieldMap,
   "human-insiders": HumanInsiders,
+  "human-reporting-protection": HumanReportingProtection,
+  "human-audits-inspections": HumanAuditsInspections,
+  "human-institutions-judgment": HumanInstitutionsJudgment,
 };
 
 export function getVerificationWidget(

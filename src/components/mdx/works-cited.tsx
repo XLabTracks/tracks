@@ -50,10 +50,31 @@ export function WorksCited({ urls }: { urls: string[] }) {
   rows.sort((a, b) => sortKey(a.entry).localeCompare(sortKey(b.entry)));
 
   return (
-    <details className="works-cited border-border mt-10 rounded-lg border">
-      <summary className="cursor-pointer px-4 py-3 text-[15px] font-bold select-none">
-        Works cited{" "}
-        <span className="text-muted-foreground font-normal">({rows.length})</span>
+    <details className="works-cited border-border group mt-10 rounded-lg border">
+      {/* The disclosure sign is ours, not the UA's: `list-none` plus the
+          WebKit marker rule drops the ▶ that sat in front of the label, and
+          the +/− goes at the end of the row instead. It is decorative — the
+          summary element already announces expanded/collapsed to a screen
+          reader, so a second spoken "plus" would be noise. */}
+      <summary className="flex cursor-pointer list-none items-center justify-between gap-3 px-4 py-3 text-[15px] font-bold select-none [&::-webkit-details-marker]:hidden">
+        <span>
+          Works cited{" "}
+          <span className="text-muted-foreground font-normal">
+            ({rows.length})
+          </span>
+        </span>
+        <span
+          aria-hidden
+          className="text-muted-foreground w-3 text-center font-normal group-open:hidden"
+        >
+          +
+        </span>
+        <span
+          aria-hidden
+          className="text-muted-foreground hidden w-3 text-center font-normal group-open:block"
+        >
+          −
+        </span>
       </summary>
       <div className="px-4 pb-4">
         <p className="text-muted-foreground text-[13px] leading-relaxed">

@@ -222,7 +222,7 @@ export const verificationLessons: Lesson[] = [
     id: "v-human-intro",
     slug: "human-intro",
     moduleId: "v-infrastructure",
-    title: "2.4 The human layer: introduction",
+    title: "2.4 The human layer",
     contentRef: "verification/human-intro",
   },
   {

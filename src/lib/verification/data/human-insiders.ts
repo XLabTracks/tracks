@@ -2,9 +2,9 @@
  * Source-map exercise for 2.4.1. The roster follows Baker et al.,
  * "Six Layers of Verification," §§4.3 and A.8 (especially Table 14):
  * personnel across the AI supply chain can notice different parts of a
- * violation, but compartmentalization means no job title is an all-purpose
- * credibility credential. The exercise therefore asks for bounded claims and
- * independent tests, never a numerical score for the person.
+ * violation, but compartmentalization limits what any one person can know.
+ * The exercise therefore asks learners to state what each source can support
+ * and to identify an independent way to check it.
  */
 
 export type SourceActorId =
@@ -48,16 +48,16 @@ export const CONNECTION_KIND_COPY: Record<
   { eyebrow: string; question: string }
 > = {
   observation: {
-    eyebrow: "Can support",
-    question: "What fact sits inside this source's access?",
+    eyebrow: "Could observe",
+    question: "What could this person know directly?",
   },
   boundary: {
-    eyebrow: "Cannot establish",
-    question: "Where does this source's knowledge stop?",
+    eyebrow: "Could not establish",
+    question: "What remains outside this person's knowledge?",
   },
   corroboration: {
-    eyebrow: "Independent test",
-    question: "What evidence could test the material claim?",
+    eyebrow: "Check against",
+    question: "Which independent record could verify the claim?",
   },
 };
 
@@ -74,7 +74,7 @@ export const CONNECTION_CARDS: Record<
     },
     {
       id: "model-lineage",
-      label: "Workload and model lineage",
+      label: "Training records and model lineage",
       detail:
         "Training code, datasets, checkpoints, run configuration, and which model descended from which run.",
     },
@@ -86,19 +86,19 @@ export const CONNECTION_CARDS: Record<
     },
     {
       id: "purchase-flow",
-      label: "Purchases and money flows",
+      label: "Purchases and payments",
       detail:
         "Orders, invoices, project codes, counterparties, payment timing, and off-ledger anomalies.",
     },
     {
       id: "facility-build",
-      label: "Capacity built or delivered",
+      label: "Facility capacity",
       detail:
-        "Racks, chips, cooling, power, interconnects, and the dates on which physical capacity appeared.",
+        "Racks, chips, cooling, power, interconnects, and installation dates.",
     },
     {
       id: "decision-record",
-      label: "Decisions and warnings",
+      label: "Decisions and risk warnings",
       detail:
         "What leadership approved, what the board was told, which risks were accepted, and what was withheld.",
     },
@@ -106,75 +106,75 @@ export const CONNECTION_CARDS: Record<
   boundary: [
     {
       id: "evaluation-no-deployment",
-      label: "Not real-world deployment",
+      label: "What happened after the test",
       detail:
         "A test result does not show how the model was later deployed, modified, or monitored in production.",
     },
     {
       id: "engineer-no-intent",
-      label: "Not executive intent",
+      label: "Why leadership approved the work",
       detail:
-        "Technical participation does not reveal why leadership authorized the work or what it meant to conceal.",
+        "Technical participation does not show why leaders authorized the work or whether they intended to conceal it.",
     },
     {
       id: "infra-no-authorization",
-      label: "Not purpose or authorization",
+      label: "Why the job ran or who approved it",
       detail:
-        "Infrastructure traces show that compute ran, not which scientific objective or policy approval justified it.",
+        "Infrastructure records show that compute ran. They do not show its purpose or who authorized it.",
     },
     {
       id: "commercial-no-workload",
-      label: "Not the workload",
+      label: "Which workload used the capacity",
       detail:
         "A purchase or payment can expose undeclared capacity without identifying the model or code that used it.",
     },
     {
       id: "contractor-no-purpose",
-      label: "Not what ran inside",
+      label: "What the facility ran",
       detail:
-        "A builder can observe the physical envelope without seeing the workload, model, or policy purpose.",
+        "A contractor can see what was installed without knowing which workload or model used it.",
     },
     {
       id: "leadership-no-execution",
-      label: "Not technical execution",
+      label: "Whether the decision was carried out",
       detail:
-        "A formal decision does not prove that staff carried it out, or that no parallel activity escaped the record.",
+        "A formal decision does not prove that staff carried it out or that the record is complete.",
     },
   ],
   corroboration: [
     {
       id: "evaluation-artifacts",
-      label: "Sealed evaluation artifacts",
+      label: "Evaluation records created at the time",
       detail:
         "Signed result files, prompt and harness versions, run identifiers, and deployment records from another system.",
     },
     {
       id: "lineage-logs",
-      label: "Model registry and scheduler logs",
+      label: "Model registry and scheduler records",
       detail:
         "Checkpoint hashes, storage and access logs, run manifests, scheduler records, and independent code review.",
     },
     {
       id: "infra-telemetry",
-      label: "Raw telemetry and inventory",
+      label: "Provider telemetry and hardware inventory",
       detail:
-        "Provider-side scheduler data, power and network telemetry, hardware attestations, and a physical count.",
+        "Scheduler data held by the provider, power and network telemetry, hardware attestations, and a physical count.",
     },
     {
       id: "transaction-records",
-      label: "Counterparty transaction records",
+      label: "Records held by counterparties",
       detail:
         "Vendor invoices, bank or ledger entries, shipping and customs records, serials, and receiving logs.",
     },
     {
       id: "facility-records",
-      label: "Utility and installation records",
+      label: "Utility, delivery, and inspection records",
       detail:
         "Power allocations, permits, delivery manifests, work orders, maintenance logs, and site inspection.",
     },
     {
       id: "governance-records",
-      label: "Contemporaneous approval trail",
+      label: "Decision records created at the time",
       detail:
         "Board minutes, risk memos, approval tickets, messages, and technical evidence that tests implementation.",
     },
@@ -187,13 +187,13 @@ export const SOURCE_ACTORS: readonly SourceActor[] = [
     role: "Evaluator",
     station: "Evaluation",
     prompt:
-      "They ran the capability evaluation and retained the harness and result bundle.",
+      "Ran the capability evaluation and kept the test harness and results.",
     report:
       "The model crossed the agreed capability threshold in our evaluation run.",
     incentives:
-      "May defend their methodology, fear blame for a missed risk, or feel a professional duty to report it.",
+      "May want to defend the test method, avoid blame for a missed risk, or meet a professional duty to report.",
     consistencyTest:
-      "Compare the claimed setup and exclusions across notes, commits, retellings, and the sealed bundle.",
+      "Compare the test setup and exclusions with notes, code changes, earlier accounts, and the saved results.",
     choices: {
       observation: ["decision-record", "evaluation-record", "model-lineage"],
       boundary: [
@@ -213,28 +213,26 @@ export const SOURCE_ACTORS: readonly SourceActor[] = [
       corroboration: "evaluation-artifacts",
     },
     mismatch: {
-      observation:
-        "Keep the claim inside the evaluation this person actually ran.",
-      boundary:
-        "The missing link is what happened after the test, outside the evaluated setup.",
+      observation: "Limit the claim to the evaluation this person ran.",
+      boundary: "The evaluator did not observe what happened after the test.",
       corroboration:
-        "Test the result against artifacts fixed at evaluation time, then separately inspect deployment.",
+        "Check records created during the evaluation, then examine deployment separately.",
     },
     sentence:
-      "The evaluator can support the result and method under the tested setup, but not later deployment; test the account against sealed evaluation artifacts and independent deployment records.",
+      "The evaluator can describe the test method and results. They cannot establish how the model was later deployed. Check signed test records and independent deployment records.",
   },
   {
     id: "training-engineer",
     role: "Training engineer",
     station: "Model development",
     prompt:
-      "They configured the run, handled checkpoints, and can trace the model's ancestry.",
+      "Configured the training run, handled checkpoints, and can trace the model's lineage.",
     report:
       "This checkpoint came from an undeclared run using the restricted training configuration.",
     incentives:
-      "May face direct exposure for participation, loyalty to the team, or a duty to prevent misuse of their work.",
+      "May face consequences for taking part, feel loyalty to the team, or want to prevent misuse of their work.",
     consistencyTest:
-      "Test the run dates, configuration, checkpoint ancestry, and who had access against records they did not author alone.",
+      "Compare the dates, configuration, checkpoint lineage, and access claims with records maintained by other teams.",
     choices: {
       observation: ["cluster-activity", "model-lineage", "decision-record"],
       boundary: [
@@ -251,27 +249,26 @@ export const SOURCE_ACTORS: readonly SourceActor[] = [
     },
     mismatch: {
       observation:
-        "Use the records and systems this engineer touched: workload, configuration, and lineage.",
-      boundary:
-        "Technical access is rich, but it does not make the engineer a witness to leadership's purpose.",
+        "Focus on the run configuration, workload, and model lineage.",
+      boundary: "The engineer may not know why leadership approved the work.",
       corroboration:
-        "Look for model and run records produced across storage, scheduling, and review systems.",
+        "Check model and run records from storage, scheduling, and review systems.",
     },
     sentence:
-      "The training engineer can support the workload and model lineage, but not executive intent; test the account against checkpoint hashes, model-registry entries, scheduler records, and access logs.",
+      "The training engineer can describe the workload and model lineage, but may not know why leadership approved the work. Check checkpoint hashes, model-registry entries, scheduler records, and access logs.",
   },
   {
     id: "infrastructure",
     role: "Infrastructure operator",
     station: "Compute operations",
     prompt:
-      "They administer the cluster and can see allocations, failures, access events, and telemetry.",
+      "Administers the cluster and can see allocations, failures, access events, and telemetry.",
     report:
       "A large eight-week job ran on the cluster under a project code omitted from the declaration.",
     incentives:
-      "May want to protect operational reputation, avoid discipline for log gaps, or report misuse of systems they maintain.",
+      "May want to protect the operations team, avoid discipline for missing logs, or report misuse of systems they maintain.",
     consistencyTest:
-      "Compare job timing, accelerator count, access events, and log gaps with provider-side and physical telemetry.",
+      "Compare job timing, accelerator count, access events, and log gaps with provider records, power data, and physical inventory.",
     choices: {
       observation: ["facility-build", "cluster-activity", "model-lineage"],
       boundary: [
@@ -287,26 +284,25 @@ export const SOURCE_ACTORS: readonly SourceActor[] = [
       corroboration: "infra-telemetry",
     },
     mismatch: {
-      observation:
-        "Anchor this source to the cluster state and logs they operate.",
+      observation: "Focus on the cluster records this operator can access.",
       boundary:
-        "A job's footprint does not explain its scientific purpose or authorization chain.",
+        "The records do not explain the job's purpose or who approved it.",
       corroboration:
-        "Use telemetry or inventory controlled outside this operator's own account.",
+        "Check telemetry and inventory records outside this operator's control.",
     },
     sentence:
-      "The infrastructure operator can support that a large job ran, when, and on which cluster, but not why it was authorized; test the account against raw provider telemetry, power records, and hardware inventory.",
+      "The infrastructure operator can establish that a large job ran, when it ran, and which cluster it used. They may not know its purpose or who approved it. Check provider telemetry, power records, and hardware inventory.",
   },
   {
     id: "procurement-finance",
     role: "Procurement or finance staff",
     station: "Commercial records",
     prompt:
-      "They processed purchases and payments attached to an unfamiliar project code.",
+      "Processed purchases and payments charged to an unfamiliar project code.",
     report:
-      "The organization acquired substantially more accelerator capacity than it declared.",
+      "The organization acquired far more accelerator capacity than it declared.",
     incentives:
-      "May fear responsibility for approving the transaction, protect a budget owner, or be insulated from the technical team's loyalties.",
+      "May fear blame for approving the purchase, want to protect the budget owner, or have fewer ties to the technical team.",
     consistencyTest:
       "Reconcile quantities, dates, project codes, counterparties, and payment flows across internal and external ledgers.",
     choices: {
@@ -329,27 +325,27 @@ export const SOURCE_ACTORS: readonly SourceActor[] = [
     },
     mismatch: {
       observation:
-        "This source sees the commercial trail, not the machines in operation.",
+        "This source sees purchase and payment records, not the machines in operation.",
       boundary:
         "A ledger can expose capacity without identifying the workload that consumed it.",
       corroboration:
-        "Seek records held by vendors, banks, shippers, customs, and receiving staff.",
+        "Check records held by vendors, banks, shippers, customs agencies, and receiving staff.",
     },
     sentence:
-      "Procurement or finance staff can support the acquisition and money trail, but not the workload; test the account against counterparty invoices, payment records, shipping documents, serials, and receiving logs.",
+      "Procurement or finance staff can document what was bought and how it was paid for. They may not know which workload used it. Check vendor invoices, payment records, shipping documents, serial numbers, and receiving logs.",
   },
   {
     id: "supplier-contractor",
     role: "Supplier or data-center contractor",
-    station: "Facility edge",
+    station: "Facility operations",
     prompt:
-      "They installed power, cooling, racks, or chips for a capacity expansion.",
+      "Installed power, cooling, racks, or chips during a capacity expansion.",
     report:
       "The site added capacity under a project code that does not appear in the declared facility plan.",
     incentives:
-      "May seek a reward, preserve future contracts, settle a commercial dispute, or avoid being tied to concealed work.",
+      "May seek a reward, protect future contracts, pursue a commercial dispute, or avoid being linked to concealed work.",
     consistencyTest:
-      "Compare the project code, quantities, site, and installation dates across work orders and retellings.",
+      "Compare the project code, quantities, site, and installation dates across work orders and later accounts.",
     choices: {
       observation: ["purchase-flow", "cluster-activity", "facility-build"],
       boundary: [
@@ -370,27 +366,26 @@ export const SOURCE_ACTORS: readonly SourceActor[] = [
     },
     mismatch: {
       observation:
-        "Use the physical envelope this contractor built or serviced.",
+        "Focus on the equipment and infrastructure this contractor installed or serviced.",
       boundary:
-        "Seeing capacity appear is not seeing the model or workload inside it.",
+        "The contractor did not see which model or workload used the capacity.",
       corroboration:
-        "Test the build against utility, delivery, installation, maintenance, and inspection records.",
+        "Check utility, delivery, installation, maintenance, and inspection records.",
     },
     sentence:
-      "The supplier or contractor can support what capacity appeared, where, and when, but not what ran inside it; test the account against utility allocations, delivery manifests, work orders, maintenance logs, and physical inspection.",
+      "The supplier or contractor can describe what was installed, where, and when. They may not know how the capacity was used. Check utility allocations, delivery manifests, work orders, maintenance logs, and the site itself.",
   },
   {
     id: "executive-board",
     role: "Executive or board member",
     station: "Governance",
-    prompt:
-      "They received risk warnings and participated in the decision to proceed.",
+    prompt: "Received risk warnings and took part in the decision to proceed.",
     report:
       "Leadership understood the restriction and deliberately approved work outside the declaration.",
     incentives:
-      "May be invested in the official story, exposed to liability, divided from management, or trying to correct a decision after the fact.",
+      "May want to defend the official account, limit personal liability, oppose management, or correct an earlier decision.",
     consistencyTest:
-      "Compare the decision, dates, attendees, stated rationale, and warnings with contemporaneous records and other participants.",
+      "Compare the decision, dates, attendees, stated reasons, and warnings with records created at the time and accounts from other participants.",
     choices: {
       observation: ["evaluation-record", "decision-record", "model-lineage"],
       boundary: [
@@ -411,14 +406,14 @@ export const SOURCE_ACTORS: readonly SourceActor[] = [
     },
     mismatch: {
       observation:
-        "This source's distinctive access is to decisions, warnings, and organizational intent.",
+        "Focus on the decisions and warnings this person received or discussed.",
       boundary:
-        "Authority over a plan is not direct observation of every technical action taken under it.",
+        "Approving a plan does not show exactly how staff carried it out.",
       corroboration:
-        "Test the account against records made at the time and evidence that the decision was implemented.",
+        "Check records made at the time and technical evidence of what staff actually did.",
     },
     sentence:
-      "The executive or board member can support decisions, warnings, and intent, but not technical execution or completeness; test the account against contemporaneous minutes, approvals, messages, and independent technical evidence.",
+      "The executive or board member can describe decisions, warnings, and intent. They may not know every technical action taken. Check minutes, approvals, messages, and independent technical records.",
   },
 ];
 
@@ -439,8 +434,8 @@ export interface CredibilityQuestion {
 }
 
 export const SOURCE_REPORT = {
-  label: "Fictional source report · Project Lattice",
-  body: "A cooling contractor says Project Lattice added power and chilled-water capacity for 1,024 accelerators during a six-week expansion. The contractor is seeking a financial reward and supplies work-order code PX-814. A power-allocation log obtained independently from the utility carries PX-814 and matching dates. The contractor never had access to cluster workloads.",
+  label: "Case report · Project Lattice",
+  body: "A cooling contractor reports that Project Lattice added power and chilled-water capacity for 1,024 accelerators over six weeks. The contractor has applied for a financial reward and provides work-order code PX-814. A utility record obtained separately contains the same code and dates. The contractor did not have access to cluster workloads.",
 } as const;
 
 export const CREDIBILITY_QUESTIONS: readonly CredibilityQuestion[] = [
@@ -466,9 +461,9 @@ export const CREDIBILITY_QUESTIONS: readonly CredibilityQuestion[] = [
     retry:
       "Separate the physical work they witnessed from the workload they could not see.",
     explanation:
-      "Role-defined access supports a bounded infrastructure claim. It does not support a conclusion about the model, workload, or compliance status.",
+      "The contractor can describe infrastructure work they performed or saw. That access does not show which model ran, who authorized it, or whether a rule was breached.",
     findingLine:
-      "Access: the contractor could directly support the capacity expansion and project code, not the workload or authorization.",
+      "Access: The contractor can describe the capacity expansion and project code, but not the workload or its authorization.",
   },
   {
     id: "incentives",
@@ -477,11 +472,11 @@ export const CREDIBILITY_QUESTIONS: readonly CredibilityQuestion[] = [
     choices: [
       {
         id: "incentive-context",
-        text: "Record both the possible reward and the costs of reporting; treat motive as a reason to test the claim, not a verdict on truth.",
+        text: "Record the possible reward and the costs of reporting. Treat motive as a reason to check the claim carefully, not as proof that it is true or false.",
       },
       {
         id: "incentive-dismiss",
-        text: "Disregard the report because a paid source is presumptively unreliable.",
+        text: "Assume the report is unreliable because the source may receive a reward.",
       },
       {
         id: "incentive-credit",
@@ -490,20 +485,20 @@ export const CREDIBILITY_QUESTIONS: readonly CredibilityQuestion[] = [
     ],
     answerId: "incentive-context",
     retry:
-      "An incentive can create pressure in either direction; it changes the test, not the truth value by itself.",
+      "The reward may encourage a false report. Fear of retaliation or lost work may discourage a true one. Neither decides whether this report is accurate.",
     explanation:
-      "Rewards can invite false claims, while retaliation and lost work can deter true ones. Neither substitutes for evidence.",
+      "Incentives matter because they may shape whether and how someone reports. They do not replace evidence.",
     findingLine:
-      "Incentives: the possible reward and the contractor's commercial risks justify scrutiny, but neither confirms nor defeats the report.",
+      "Incentives: The possible reward and the risk of losing work both matter, but neither confirms nor disproves the report.",
   },
   {
     id: "consistency",
     label: "Consistency",
-    prompt: "What consistency test is probative?",
+    prompt: "Which consistency check matters here?",
     choices: [
       {
         id: "consistency-material",
-        text: "Check whether site, dates, quantities, and project code remain stable across retellings and fit the known timeline.",
+        text: "Check whether the site, dates, quantity, and project code remain stable across interviews and fit the known timeline.",
       },
       {
         id: "consistency-verbatim",
@@ -516,16 +511,16 @@ export const CREDIBILITY_QUESTIONS: readonly CredibilityQuestion[] = [
     ],
     answerId: "consistency-material",
     retry:
-      "Test stable material facts. Word-perfect repetition can be rehearsal, and coordinated accounts are not independent.",
+      "Focus on the facts that matter. Identical wording may reflect rehearsal, and coordinated accounts are not independent evidence.",
     explanation:
-      "Ordinary memory drifts at the edges. The important question is whether the central claim stays coherent against the timeline and other evidence.",
+      "Minor details may change as people recall an event. The central facts should remain consistent with the timeline and other evidence.",
     findingLine:
-      "Consistency: the material details should remain stable and fit the known timeline; scripted agreement would not count as independence.",
+      "Consistency: The site, dates, quantity, and project code should remain stable and fit the known timeline. Scripted agreement is not independent evidence.",
   },
   {
     id: "corroboration",
     label: "Independent corroboration",
-    prompt: "What gives this report additional evidentiary weight?",
+    prompt: "Which evidence adds the most weight to this report?",
     choices: [
       {
         id: "corroboration-independent",
@@ -542,39 +537,39 @@ export const CREDIBILITY_QUESTIONS: readonly CredibilityQuestion[] = [
     ],
     answerId: "corroboration-independent",
     retry:
-      "Corroboration gains force when it was created independently and is outside the source's control.",
+      "Use evidence created independently of the source and outside the source's control.",
     explanation:
-      "The matching project code and dates connect the account to an external record. They support the expansion, not the hidden workload alleged beyond it.",
+      "The matching project code and dates link the report to an external record. They support the claim that the site expanded, but not a claim about the workload.",
     findingLine:
-      "Corroboration: the matching utility record strengthens the infrastructure claim; separate workload and approval records are still required.",
+      "Corroboration: The utility record supports the infrastructure claim. Workload and approval records are still needed.",
   },
 ];
 
 export const FINAL_FINDING = {
-  disposition: "Further investigation justified · no compliance judgment yet",
-  text: "The report is credible evidence that Project Lattice expanded infrastructure at the stated site and time. It does not establish what workload ran or whether the activity was unauthorized. Preserve the work orders and utility log, then test the unresolved links through receiving and serial records, scheduler telemetry, model lineage, and the approval trail.",
+  disposition: "Further investigation warranted · no compliance finding",
+  text: "The report supports a finding that Project Lattice expanded infrastructure at the stated site and time. It does not show which workload ran or whether any rule was breached. Investigators should preserve the work orders and utility record, then obtain receiving records, serial numbers, scheduler telemetry, model-lineage records, and approval documents.",
 } as const;
 
 export const FAILURE_MODES = [
   {
     name: "Selective truth",
     check:
-      "A real expansion can be described as if it proves a prohibited workload. Keep each conclusion inside the corroborated facts.",
+      "The expansion may be real even if the claimed prohibited workload is not. Do not treat proof of infrastructure as proof of how it was used.",
   },
   {
     name: "Coordinated cover story",
     check:
-      "Several matching accounts are one source if the same managers selected, briefed, or monitored the speakers.",
+      "Matching accounts are not independent if managers selected, briefed, or monitored the speakers.",
   },
   {
     name: "Management staging",
     check:
-      "A clean tour and curated records show what was presented, not whether undeclared activity exists elsewhere.",
+      "A clean tour and selected records show what management chose to present. They do not rule out undeclared activity elsewhere.",
   },
   {
     name: "Suppression",
     check:
-      "Silence is weak evidence when people lack a safe route, access to declarations, or freedom from retaliation.",
+      "A lack of reports means little if staff have no safe reporting channel, cannot see the relevant declarations, or reasonably fear retaliation.",
   },
 ] as const;
 

@@ -54,12 +54,11 @@ const ACTOR_ICONS: Record<SourceActorId, LucideIcon> = {
 };
 
 /**
- * 2.4.1 source-map exercise. Learners first connect six roles to a bounded
+ * 2.4.1 source-map exercise. Learners first connect six roles to an
  * observation, a knowledge limit, and an independent test. Correct links
- * draft a usable evidentiary sentence. They then examine one fictional report
- * through access, incentives, consistency, and corroboration — deliberately
- * without a numerical credibility score. Completion fires when the final
- * bounded finding is issued.
+ * produce a short source assessment. Learners then examine one fictional
+ * report through access, incentives, consistency, and corroboration without
+ * assigning the source a numerical score.
  */
 export function HumanInsiders({
   onComplete,
@@ -158,19 +157,19 @@ export function HumanInsiders({
       <header className="border-border border-b p-5 sm:p-6">
         <div className="flex flex-wrap items-center justify-between gap-3">
           <p className="text-muted-foreground font-sans text-xs font-medium tracking-[0.01em] uppercase">
-            Source desk · 2.4.1
+            Source assessment · 2.4.1
           </p>
           <span className="border-border bg-background text-muted-foreground rounded-full border px-3 py-1 font-sans text-[11px] font-medium tracking-[0.01em] uppercase">
-            No credibility score
+            Assess the claim, not the person
           </span>
         </div>
         <h3 className="mt-3 text-2xl font-semibold tracking-tight">
           Who knows what?
         </h3>
         <p className="text-muted-foreground mt-2 max-w-3xl leading-relaxed">
-          Connect each source to a fact they can support, the edge of their
-          knowledge, and a record that could test the claim. Each sound chain
-          drafts one sentence for the case file.
+          For each source, identify what they could observe, what they could not
+          know, and which independent record could verify the claim. You will
+          produce a short assessment for each source.
         </p>
         <PhaseRail phase={phase} />
       </header>
@@ -209,9 +208,9 @@ export function HumanInsiders({
 
 function PhaseRail({ phase }: { phase: Phase }) {
   const phases: { id: Phase; label: string }[] = [
-    { id: "map", label: "1 · Map access" },
-    { id: "examine", label: "2 · Examine report" },
-    { id: "finding", label: "3 · Issue finding" },
+    { id: "map", label: "1 · Assess sources" },
+    { id: "examine", label: "2 · Review report" },
+    { id: "finding", label: "3 · Record finding" },
   ];
   const active = phases.findIndex((item) => item.id === phase);
   return (
@@ -267,8 +266,7 @@ function MapPhase({
       <div className="border-border bg-muted/20 border-b p-4 sm:p-5">
         <div className="mb-3 flex items-center justify-between gap-4">
           <p className="text-muted-foreground text-xs">
-            Source map · {resolvedActorIds.length} of {SOURCE_ACTORS.length}{" "}
-            case sentences drafted
+            {resolvedActorIds.length} of {SOURCE_ACTORS.length} sources assessed
           </p>
           <div
             className="bg-muted h-1.5 w-28 overflow-hidden rounded-full sm:w-44"
@@ -324,7 +322,7 @@ function MapPhase({
       <div className="grid xl:grid-cols-[18rem_minmax(0,1fr)]">
         <aside className="border-border bg-muted/15 border-b p-5 xl:border-r xl:border-b-0">
           <p className="text-muted-foreground font-sans text-[11px] font-medium tracking-[0.01em] uppercase">
-            Source card
+            Source
           </p>
           <h4 className="mt-2 text-xl font-semibold">{actor.role}</h4>
           <p className="text-muted-foreground mt-1 text-xs">{actor.station}</p>
@@ -358,33 +356,31 @@ function MapPhase({
             {result?.complete ? (
               <div className="border-comply/40 bg-comply/5 rounded-lg border p-4">
                 <p className="text-comply flex items-center gap-2 text-xs font-semibold">
-                  <Link2 className="size-4" aria-hidden /> Chain connected ·
-                  sentence drafted
+                  <Link2 className="size-4" aria-hidden /> Assessment complete
                 </p>
                 <p className="mt-2 leading-relaxed">{actor.sentence}</p>
               </div>
             ) : (
               <p className="text-muted-foreground text-xs leading-relaxed">
-                The actor&apos;s title is not evidence. Build the smallest
-                statement their access supports, name the blind spot, then
-                attach a test the source does not control.
+                A job title alone proves nothing. Limit the claim to what this
+                person could observe, state what remains unknown, and choose
+                evidence the source did not control.
               </p>
             )}
 
             <div className="mt-4 flex flex-wrap gap-2">
               {!resolved ? (
                 <Button onClick={onTest} className="gap-2">
-                  <Link2 className="size-4" aria-hidden /> Test connections
+                  <Link2 className="size-4" aria-hidden /> Check assessment
                 </Button>
               ) : allResolved ? (
                 <Button onClick={onContinue} className="gap-2">
-                  Examine a source report{" "}
+                  Review a source report{" "}
                   <ArrowRight className="size-4" aria-hidden />
                 </Button>
               ) : (
                 <Button onClick={onNext} className="gap-2">
-                  Next unresolved source{" "}
-                  <ArrowRight className="size-4" aria-hidden />
+                  Next source <ArrowRight className="size-4" aria-hidden />
                 </Button>
               )}
             </div>
@@ -516,8 +512,9 @@ function ExaminationPhase({
           <p className="mt-3 leading-relaxed">{SOURCE_REPORT.body}</p>
         </div>
         <p className="text-muted-foreground mt-4 text-xs leading-relaxed">
-          Examine the report, not the reporter&apos;s reputation. Each answer
-          adds one line to the final finding.
+          Assess the report through access, incentives, consistency, and
+          independent corroboration. Do not rely on the reporter&apos;s
+          reputation.
         </p>
         <Button
           variant="ghost"
@@ -533,7 +530,7 @@ function ExaminationPhase({
         <div className="flex items-center justify-between gap-4">
           <div>
             <p className="text-muted-foreground font-sans text-[11px] font-medium tracking-[0.01em] uppercase">
-              Examination {questionIndex + 1} of {CREDIBILITY_QUESTIONS.length}
+              Question {questionIndex + 1} of {CREDIBILITY_QUESTIONS.length}
             </p>
             <h4 className="mt-2 text-xl font-semibold">{question.label}</h4>
           </div>
@@ -585,8 +582,8 @@ function ExaminationPhase({
               )}
             >
               {state === "correct"
-                ? "Finding line added"
-                : "Narrow the inference"}
+                ? "Assessment recorded"
+                : "This conclusion goes too far"}
             </p>
             <p className="mt-2 leading-relaxed">
               {state === "correct" ? question.explanation : question.retry}
@@ -609,7 +606,7 @@ function ExaminationPhase({
             </Button>
           ) : (
             <Button onClick={onTest} disabled={!answerId} className="gap-2">
-              <FileSearch className="size-4" aria-hidden /> Test this answer
+              <FileSearch className="size-4" aria-hidden /> Check answer
             </Button>
           )}
         </div>
@@ -633,14 +630,14 @@ function FindingPhase({ onRestart }: { onRestart: () => void }) {
                 {FINAL_FINDING.disposition}
               </p>
               <h4 className="mt-2 text-2xl font-semibold tracking-tight">
-                Bounded finding
+                Assessment
               </h4>
               <p className="mt-3 leading-relaxed">{FINAL_FINDING.text}</p>
             </div>
           </div>
           <div className="border-border mt-5 border-t pt-4">
             <p className="text-muted-foreground mb-3 font-sans text-[11px] font-medium tracking-[0.01em] uppercase">
-              Four lines in the record
+              Basis for the finding
             </p>
             <ol className="space-y-2">
               {CREDIBILITY_QUESTIONS.map((question) => (
@@ -661,10 +658,10 @@ function FindingPhase({ onRestart }: { onRestart: () => void }) {
 
         <section className="mt-6">
           <p className="text-muted-foreground font-sans text-[11px] font-medium tracking-[0.01em] uppercase">
-            Red-team the human layer
+            Common failure modes
           </p>
           <h4 className="mt-2 text-lg font-semibold">
-            Four ways an apparently coherent account can still fail
+            Why a consistent account may still be wrong
           </h4>
           <div className="mt-3 grid gap-3 sm:grid-cols-2">
             {FAILURE_MODES.map((mode) => (
@@ -683,12 +680,12 @@ function FindingPhase({ onRestart }: { onRestart: () => void }) {
 
         <div className="border-border mt-6 flex flex-wrap items-center justify-between gap-3 border-t pt-5">
           <p className="text-muted-foreground max-w-2xl text-xs leading-relaxed">
-            Human evidence often tells a verifier where to look and what to
-            preserve. Technical and physical evidence must still carry the links
-            the source could not observe.
+            A human source can tell an investigator where to look and which
+            records to preserve. Technical or physical evidence is still needed
+            for facts the source did not observe.
           </p>
           <Button variant="outline" onClick={onRestart} className="gap-2">
-            <RotateCcw className="size-4" aria-hidden /> Reopen the case
+            <RotateCcw className="size-4" aria-hidden /> Start over
           </Button>
         </div>
       </div>

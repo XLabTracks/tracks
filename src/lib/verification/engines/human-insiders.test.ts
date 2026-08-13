@@ -45,7 +45,9 @@ describe("human insiders source map", () => {
     expect(result.complete).toBe(false);
     expect(result.correct.observation).toBe(false);
     expect(result.correct.boundary).toBe(true);
-    expect(result.messages.observation).toMatch(/physical envelope/i);
+    expect(result.messages.observation).toMatch(
+      /equipment and infrastructure/i
+    );
   });
 });
 

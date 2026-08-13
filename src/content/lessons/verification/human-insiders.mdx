@@ -1,41 +1,57 @@
-A person is useful for verification because of what they could directly perceive, retrieve, or infer - not because they are called an employee, contractor, executive, or expert. A cloud technician and a research engineer sit at very different perspectives on an undeclared training run, and they can support very different claims about it. Before weighing whether to believe anyone, map who has access to what.
+Human sources are useful only to the extent that they had access to the facts they report. A cloud operator may see a training job but not know its purpose. An engineer may know the model's lineage but not what senior management approved. Start by asking what the source could have observed and where their knowledge ends.
 
-## The Roster: Who Can See What?
+## Who can observe what?
 
 <VerificationExercise id="human-insiders" />
 
-The source map follows the personnel-based verification analysis and employee-role map in [Baker et al., §§4.3 and A.8](https://arxiv.org/abs/2507.15916). Its central constraint is the paper's: people across the supply chain may notice different parts of a violation, but compartmentalization, loyalty, collusion, and suppression make personnel evidence fragile unless independent evidence can test it.
+The source map draws on the personnel analysis in [Baker et al., §§4.3 and A.8](https://arxiv.org/abs/2507.15916). People across the AI supply chain may observe different parts of the same activity. Their evidence is still vulnerable to divided loyalties, compartmentalization, collusion, and pressure from management. Independent evidence is therefore essential.
 
-An engineer might establish that a run occurred; a procurement employee might establish that specific hardware was acquired; a manager might establish that the activity was intentional; and a legal officer might establish that decision-makers understood the agreement. But when each actor makes a claim, how do you gauge whether to believe them?
+Different roles can support different parts of an investigation. An engineer may establish that a run occurred. Procurement staff may document a hardware purchase. An executive may describe what leadership intended. None of them should be treated as an all-purpose witness.
 
-## Assessing Credibility
+## Assessing a report
 
-Credibility is not a personality judgment. It is a structured assessment of the source, the statement, and the surrounding evidence. Below are a few key areas to consider when assessing a human report:
+Credibility is not a judgment about character, and it should not be reduced to a numerical score. Assess the claim through four questions: access, incentives, consistency, and independent corroboration.
 
-- Incentives and possible bias: What could the source gain or lose? Motive affects weight, but a bad motive does not make a true claim false.
+### Access
 
-Reporting can threaten employment, immigration status, professional networks, equity compensation, security clearance, or personal relationships. A person may also fear harming a project they believe is socially valuable. Other incentives point toward reporting: moral concern, professional duties, legal obligations, organizational loyalty understood as correcting problems, financial rewards, or confidence that the report will produce a fair investigation. Whistleblower programs work best when they combine practical access with protection, anonymity or confidentiality options, advice, adequate staffing, and - in some settings - rewards. [5][16]
+Was the source in a position to observe the event, record, conversation, or system they describe? Frontier AI work is often compartmentalized. One person may know the model, another the hardware, another the evaluation, and another the deployment. Contractors may have deliberately narrow access. Executives may know formal decisions but not how staff implemented them. State precisely what the source could know and what remains outside their view.
 
-- Corroboration and Consistency: Do independent records, people, technical signals, or physical observations support the material parts of the account? Does the account remain coherent across retellings, while allowing ordinary uncertainty at the edges?
+### Incentives
 
-A human source rarely proves a violation on their own. Investigators should ask whether the account is supported by evidence created independently of the source—for example, access logs, procurement records, internal messages, cloud or facility telemetry, physical observations, or testimony from people with different roles and incentives. The strongest corroboration confirms the material facts: what happened, where, when, who was involved, and whether the activity could have occurred as described. Investigators should also test whether the account remains coherent across interviews and against known timelines. Minor variation is normal, especially about peripheral details or events recalled under stress; perfectly identical retellings can even suggest rehearsal. What matters is whether the central claims remain stable and whether apparent inconsistencies can be explained, investigated, or resolved through independent evidence.
+What could the source gain or lose by reporting, withholding information, or supporting management's account? Reporting may threaten employment, immigration status, professional relationships, equity compensation, security clearance, or future contracts. Other incentives may favor reporting, including professional duties, legal obligations, moral concern, or a financial reward. These pressures affect how closely a claim should be checked. They do not determine whether it is true. [5][16]
 
-- Access: Was the source positioned to observe the claimed event, record, conversation, or system?
+### Consistency
 
-Frontier AI development is often compartmentalized. A person may know the model, the hardware, the evaluation, or the deployment - but not all four. Contractors may be deliberately given narrow access. Executives may know formal decisions but not informal implementation. This makes source mapping and cross-interviews more important than searching for a single omniscient witness. Personnel interviews are therefore useful but imperfect. They can reveal inconsistencies and hidden context, yet their effectiveness depends on who is interviewed, whether supervisors can script or monitor answers, and whether personnel can speak safely. The presence of an interview right is not enough; the verifier needs a method for selecting interviewees and conducting at least some interviews without management present. [4]
+Do the important facts remain stable across interviews and fit the known timeline? Minor changes in peripheral details are normal, especially when events are recalled under stress. Identical wording may indicate that witnesses were briefed or rehearsed. Focus on the central facts and investigate discrepancies instead of treating either variation or perfect agreement as decisive.
 
-But assessing credibility goes beyond the individual report. There exist many possibilities for coordinated deception:
+### Independent corroboration
+
+Does evidence created independently of the source support the account? Useful records may include access logs, procurement records, internal messages, cloud or facility telemetry, physical observations, or accounts from people with different roles and incentives. Corroboration should address the facts that matter: what happened, where and when it happened, who was involved, and whether the activity could have occurred as described.
+
+A human source rarely establishes a violation alone. A report may justify preserving records or opening an investigation long before it is strong enough to support a compliance finding.
+
+### Interview conditions
+
+Personnel interviews can expose hidden activity and conflicts in the record, but the conditions matter. Management may choose the interviewees, prepare their answers, monitor the conversation, or punish candid responses. A verifier needs authority to select at least some interviewees independently and speak with them without management present. [4]
+
+## Common failure modes
 
 - Fabricated allegation: a source invents a violation for retaliation, money, or strategic advantage.
 - Selective truth: accurate facts are presented without context that changes their compliance meaning.
 - Management staging: the organization selects cooperative staff, curated records, and a clean facility path.
 - Coordinated cover story: several sources repeat a rehearsed account.
-- Suppression: an organization blocks communications, removes access, or uses legal and employment pressure to prevent reporting.
+- Suppression: an organization blocks communications, removes access, or uses legal or employment pressure to prevent reporting.
 
 #### CHECK: A contractor seeking a financial reward reports that a company expanded a computing cluster and provides a project code that also appears in an independently obtained power-allocation log. The contractor cannot identify what workload ran on the cluster. Which assessment is most accurate?
 
-A. The report proves that an unauthorized training run occurred.B. The financial reward makes the contractor presumptively unreliable.C. The report establishes evidence of infrastructure activity, and the matching project code strengthens its credibility through corroboration, but it does not prove what workload ran.D. The report should be disregarded because the contractor lacked access to the workload.
+A. The report proves that an unauthorized training run occurred.
 
-Answer: C. The contractor’s incentive should be considered, but credibility depends more on access, specificity, and independent corroboration. The evidence supports the cluster expansion, not a conclusion about the workload.
+B. Assume the report is unreliable because the contractor may receive a reward.
+
+C. The report supports a finding that the infrastructure was expanded, and the matching project code corroborates that part of the account. It does not show which workload ran.
+
+D. The report should be disregarded because the contractor lacked access to the workload.
+
+Answer: C. The contractor's incentive is relevant, but it does not decide the issue. The contractor had access to the infrastructure work, and the utility record independently supports the project code and dates. That evidence supports the expansion claim, not a conclusion about the workload.
 
 <Exercise id="v-task-human-insiders-2" />

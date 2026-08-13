@@ -21,7 +21,7 @@ Module `c-areas` (Control module 3, slug `areas-of-control-work`) now holds:
 | 2 | Prevention and Response Mitigations | `prevention-response-mitigations` | Doc page |
 | 3 | Control Evaluations | `control-evaluations` | Doc page |
 | 4 | Environments | `environments` | Doc page |
-| 5 | An overview of areas of control work | (unchanged) | Existing Greenblatt survey, kept as the module's closing reading |
+| 5 | An overview of areas of control work | (unchanged) | Greenblatt survey — now a LessWrong-sourced `Paper` item (`c-areas-overview`), replacing the copied-text lesson `c-areas-l1`; its two written exercises are spliced at the end of the post. The paper reader supplies LessWrong's own attribution (author, date, canonical link), resolving the byline question below. |
 
 > **Update (2026-08-13, Arya):** the "A Taxonomy of Control" entry page
 > (buttons + list breakdown) is **removed** — the module now opens directly

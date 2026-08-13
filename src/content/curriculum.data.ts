@@ -107,7 +107,7 @@ export const modules: Module[] = [
       "c-areas-tax-prevention",
       "c-areas-tax-evals",
       "c-areas-tax-environments",
-      "c-areas-l1",
+      "c-areas-overview",
     ],
     estimatedMinutes: 88,
   },
@@ -709,15 +709,5 @@ export const lessons: Lesson[] = [
     title: "Prevention and Response Mitigations",
     contentRef: "c-areas-tax-prevention",
     estimatedMinutes: 14,
-  },
-  // --- Control: areas of control work (reproduced verbatim with permission
-  // from Redwood Research) ---
-  {
-    id: "c-areas-l1",
-    slug: "an-overview-of-areas-of-control-work",
-    moduleId: "c-areas",
-    title: "An overview of areas of control work",
-    contentRef: "c-areas-l1",
-    estimatedMinutes: 40,
   },
 ];

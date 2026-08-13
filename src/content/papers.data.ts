@@ -542,6 +542,34 @@ export const papers: Paper[] = [
     ],
   },
   {
+    // Control track, module 3: Ryan Greenblatt's survey of areas of control
+    // work, rendered in full through the LessWrong paper reader (this is the
+    // reading that used to be the copied-text MDX lesson c-areas-l1). Its two
+    // written exercises are spliced at the end of the post's final section.
+    id: "c-areas-overview",
+    slug: "an-overview-of-areas-of-control-work",
+    moduleId: "c-areas",
+    title: "An overview of areas of control work",
+    source: {
+      kind: "lesswrong",
+      postUrl:
+        "https://www.lesswrong.com/posts/Eeo9NrXeotWuHCgQW/an-overview-of-areas-of-control-work",
+    },
+    estimatedMinutes: 40,
+    edits: [
+      // The lesson's two closing written exercises, kept at the end of the
+      // post (after the final "Nearer-term applications" section).
+      {
+        op: "activity",
+        after: { sectionEnd: "lw-sec-nearer-term-applications-of-control-to-p" },
+        items: [
+          { kind: "exercise", id: "c-areas-l1-theory-of-change" },
+          { kind: "exercise", id: "c-areas-l1-crux" },
+        ],
+      },
+    ],
+  },
+  {
     // Control track, module 1: Redwood's "case for control" post rendered in
     // full through the LessWrong paper reader, with the module's five guided
     // exercises woven into the reading at the points the argument sets them

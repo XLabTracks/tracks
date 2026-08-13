@@ -12,9 +12,10 @@ export default function Home() {
           Learn to make AI go well.
         </h1>
         <p className="text-muted-foreground mx-auto max-w-xl text-lg leading-relaxed text-balance">
-          A calm, structured path into AI safety — technical and governance
-          tracks, interactive demos, and real writing practice. Read, build,
-          discuss. Then again.
+          Tracks is a structured program for learning AI safety, offering a
+          technical track on AI control and a governance track on verifying
+          international AI agreements, with primary literature rendered in
+          full, interactive demos, and writing practice.
         </p>
       </div>
       <div className="flex flex-wrap items-center justify-center gap-3">

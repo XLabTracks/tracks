@@ -17,6 +17,8 @@ import {
   CLAIM_VARIANTS,
   FIXED_CLAIM,
 } from "@/lib/verification/data/same-claim";
+import { SAME_CLAIM_KEY } from "@/lib/verification/data/marking-keys";
+import { MarkingKeyPanel } from "../kit/marking-key";
 import type { VerificationWidgetProps } from "../kit/types";
 
 /**
@@ -54,12 +56,13 @@ const EMPTY: Saved = {
   transfer: "",
 };
 const KEYS = CLAIM_VARIANTS.flatMap((v) =>
-  CLAIM_FIELDS.map((f) => `${v.id}.${f.id}`),
+  CLAIM_FIELDS.map((f) => `${v.id}.${f.id}`)
 );
 
 function prune(raw: unknown): Saved {
-  const box = (typeof raw === "object" && raw !== null ? raw : {}) as
-    Partial<Saved>;
+  const box = (
+    typeof raw === "object" && raw !== null ? raw : {}
+  ) as Partial<Saved>;
   const answers: Answers = {};
   for (const key of KEYS) {
     const v = box.answers?.[key];
@@ -174,7 +177,7 @@ export function SameClaim({
                       }
                       className={cn(
                         "border-border bg-background mt-1 w-full rounded-md border p-2.5 text-sm",
-                        saved.submitted && "opacity-70",
+                        saved.submitted && "opacity-70"
                       )}
                     />
                   </div>
@@ -230,6 +233,11 @@ export function SameClaim({
             </dl>
           </section>
 
+          <MarkingKeyPanel
+            storageKey="v-same-claim-key:v1"
+            keyData={SAME_CLAIM_KEY}
+          />
+
           <section className="border-border rounded-xl border p-4">
             <p className="text-sm font-medium">{CLAIM_COMPARISON}</p>
             <textarea
@@ -246,7 +254,7 @@ export function SameClaim({
                 "mt-1 text-right font-mono text-xs",
                 comparisonWords > CLAIM_COMPARISON_MAX_WORDS
                   ? "text-defect"
-                  : "text-muted-foreground",
+                  : "text-muted-foreground"
               )}
               aria-live="polite"
             >

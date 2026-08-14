@@ -19,6 +19,8 @@ import {
   type Provision,
 } from "@/lib/verification/data/build-institution";
 import { evaluateInstitution } from "@/lib/verification/engines/build-institution";
+import { BUILD_INSTITUTION_KEY } from "@/lib/verification/data/marking-keys";
+import { MarkingKeyPanel } from "../kit/marking-key";
 import type { VerificationWidgetProps } from "../kit/types";
 
 /**
@@ -52,15 +54,23 @@ interface Saved {
 }
 
 const STORAGE_KEY = "v-build-institution:v1";
-const EMPTY: Saved = { picked: [], submitted: false, explanation: "", swap: "" };
+const EMPTY: Saved = {
+  picked: [],
+  submitted: false,
+  explanation: "",
+  swap: "",
+};
 const IDS = new Set(PROVISIONS.map((p) => p.id));
 const GROUPS = ["Reporting", "Protection", "Verification"] as const;
 
 function prune(raw: unknown): Saved {
-  const box = (typeof raw === "object" && raw !== null ? raw : {}) as
-    Partial<Saved>;
+  const box = (
+    typeof raw === "object" && raw !== null ? raw : {}
+  ) as Partial<Saved>;
   const picked = Array.isArray(box.picked)
-    ? box.picked.filter((id): id is string => typeof id === "string" && IDS.has(id))
+    ? box.picked.filter(
+        (id): id is string => typeof id === "string" && IDS.has(id)
+      )
     : [];
   return {
     picked: picked.slice(0, PICK_EXACTLY),
@@ -109,9 +119,7 @@ export function BuildInstitution({
     if (!on && saved.picked.length >= PICK_EXACTLY) return;
     persist({
       ...saved,
-      picked: on
-        ? saved.picked.filter((p) => p !== id)
-        : [...saved.picked, id],
+      picked: on ? saved.picked.filter((p) => p !== id) : [...saved.picked, id],
     });
   }
 
@@ -129,7 +137,10 @@ export function BuildInstitution({
         </p>
         <ol className="mt-2 space-y-1.5">
           {REQUIREMENTS.map((requirement, i) => (
-            <li key={requirement} className="flex gap-3 text-sm leading-relaxed">
+            <li
+              key={requirement}
+              className="flex gap-3 text-sm leading-relaxed"
+            >
               <span className="border-border text-muted-foreground flex size-5 shrink-0 items-center justify-center rounded-full border text-[11px]">
                 {i + 1}
               </span>
@@ -187,7 +198,7 @@ export function BuildInstitution({
                 "font-mono text-xs",
                 words > EXPLANATION_MAX_WORDS
                   ? "text-defect"
-                  : "text-muted-foreground",
+                  : "text-muted-foreground"
               )}
               aria-live="polite"
             >
@@ -226,7 +237,7 @@ export function BuildInstitution({
                   <p
                     className={cn(
                       "flex items-center gap-2 text-sm font-semibold",
-                      result.passed ? "text-comply" : "text-defect",
+                      result.passed ? "text-comply" : "text-defect"
                     )}
                   >
                     {result.passed ? (
@@ -248,6 +259,11 @@ export function BuildInstitution({
               );
             })}
           </section>
+
+          <MarkingKeyPanel
+            storageKey="v-build-institution-key:v1"
+            keyData={BUILD_INSTITUTION_KEY}
+          />
 
           {/* Two designs that both pass, and what each pays for it. Neither is
               the answer: the engine's own test proves more than one selection
@@ -317,13 +333,13 @@ function Card({
         "border-border bg-card flex w-full items-start gap-3 rounded-xl border p-4 text-left transition-colors",
         on ? "border-primary bg-primary/5" : "hover:bg-muted",
         blocked && !on && "opacity-45",
-        frozen && "cursor-default",
+        frozen && "cursor-default"
       )}
     >
       <span
         className={cn(
           "border-border flex size-6 shrink-0 items-center justify-center rounded-full border font-mono text-xs",
-          on && "border-primary bg-primary text-primary-foreground",
+          on && "border-primary bg-primary text-primary-foreground"
         )}
       >
         {provision.id}

@@ -11,7 +11,9 @@ import {
   CASE_WORDS,
   WORKED_CASES,
 } from "@/lib/verification/data/construct-case";
+import { CONSTRUCT_CASE_KEY } from "@/lib/verification/data/marking-keys";
 import { ConstructedResponse } from "../kit/constructed-response";
+import { MarkingKeyPanel } from "../kit/marking-key";
 import type { VerificationWidgetProps } from "../kit/types";
 
 /**
@@ -80,6 +82,11 @@ export function ConstructCase({
       }
       reveal={
         <div className="space-y-4">
+          <MarkingKeyPanel
+            storageKey="v-construct-case-key:v1"
+            keyData={CONSTRUCT_CASE_KEY}
+          />
+
           <section className="border-border rounded-xl border p-4">
             <h4 className="text-muted-foreground font-mono text-[11px] tracking-[0.14em] uppercase">
               Check your case
@@ -101,8 +108,8 @@ export function ConstructCase({
               Failures that count
             </h4>
             <p className="text-muted-foreground mt-2 text-sm leading-relaxed">
-              Held back until now on purpose — naming where a report dies is
-              the work. Some of the ways one does:
+              Held back until now on purpose — naming where a report dies is the
+              work. Some of the ways one does:
             </p>
             <ul className="mt-2 space-y-1.5">
               {CASE_FAILURE_MODES.map((mode) => (

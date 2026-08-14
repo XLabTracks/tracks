@@ -15,6 +15,8 @@ import {
   RULE_ANNOTATIONS,
   SECOND_STEP_MAX_WORDS,
 } from "@/lib/verification/data/infer-the-system";
+import { INFER_SYSTEM_KEY } from "@/lib/verification/data/marking-keys";
+import { MarkingKeyPanel } from "../kit/marking-key";
 import type { VerificationWidgetProps } from "../kit/types";
 
 /**
@@ -52,21 +54,25 @@ interface Saved {
 
 const STORAGE_KEY = "v-infer-the-system:v1";
 const EMPTY: Saved = {
-  rows: Array.from({ length: CONSEQUENCE_ROWS }, () => ({ rules: [], text: "" })),
+  rows: Array.from({ length: CONSEQUENCE_ROWS }, () => ({
+    rules: [],
+    text: "",
+  })),
   submitted: false,
   change: "",
 };
 
 function prune(raw: unknown): Saved {
-  const box = (typeof raw === "object" && raw !== null ? raw : {}) as
-    Partial<Saved>;
+  const box = (
+    typeof raw === "object" && raw !== null ? raw : {}
+  ) as Partial<Saved>;
   const rows = EMPTY.rows.map((blank, i) => {
     const row = Array.isArray(box.rows) ? box.rows[i] : undefined;
     if (!row || typeof row !== "object") return blank;
     const rules = Array.isArray(row.rules)
       ? row.rules.filter(
           (n): n is number =>
-            typeof n === "number" && n >= 1 && n <= POLICY_RULES.length,
+            typeof n === "number" && n >= 1 && n <= POLICY_RULES.length
         )
       : [];
     return { rules, text: typeof row.text === "string" ? row.text : "" };
@@ -113,7 +119,7 @@ export function InferTheSystem({
 
   function setRow(index: number, patch: Partial<Row>) {
     const rows = saved.rows.map((row, i) =>
-      i === index ? { ...row, ...patch } : row,
+      i === index ? { ...row, ...patch } : row
     );
     persist({ ...saved, rows });
   }
@@ -182,7 +188,7 @@ export function InferTheSystem({
                       on
                         ? "border-primary bg-primary text-primary-foreground"
                         : "hover:bg-muted",
-                      saved.submitted && "opacity-70",
+                      saved.submitted && "opacity-70"
                     )}
                   >
                     {rule}
@@ -200,7 +206,7 @@ export function InferTheSystem({
               aria-label={`Consequence ${index + 1}`}
               className={cn(
                 "border-border bg-background mt-3 w-full rounded-md border p-3 text-sm",
-                saved.submitted && "opacity-70",
+                saved.submitted && "opacity-70"
               )}
             />
           </li>
@@ -247,6 +253,11 @@ export function InferTheSystem({
             ))}
           </section>
 
+          <MarkingKeyPanel
+            storageKey="v-infer-the-system-key:v1"
+            keyData={INFER_SYSTEM_KEY}
+          />
+
           {/* The annotated policy: several mechanisms these rules can be read
               to produce, against the rule or pair that produces each. Not a
               key — the exercise has none — and not a complete list. */}
@@ -286,7 +297,7 @@ export function InferTheSystem({
                 "mt-1 text-right font-mono text-xs",
                 changeWords > SECOND_STEP_MAX_WORDS
                   ? "text-defect"
-                  : "text-muted-foreground",
+                  : "text-muted-foreground"
               )}
               aria-live="polite"
             >

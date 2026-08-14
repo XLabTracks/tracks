@@ -625,3 +625,33 @@ With this, all four sections of 2.4 have a different operation and the module
 no longer asks the same click four times. The old widgets — human-insiders,
 the reporting route reconstruction, and the shared human-policy-decision-lab
 behind 2.4.3 and 2.4.4 — remain in the repo, unmounted.
+
+**Marking keys for all four (2026-08-14).** Every constructed exercise now
+ends in a key the learner marks themselves against, in one shared form:
+
+  - credit is per ELEMENT, never per task — a criterion is one thing the answer
+    either did or did not do, and carries its own point;
+  - a correct label with no reasoning earns nothing wherever a mechanism was
+    asked for, and the criterion says so on screen;
+  - wording is free: any phrasing that does not distort the meaning counts, and
+    no criterion is satisfied by reciting a term;
+  - what earns nothing is stated rather than implied — every key has its own
+    "No credit" list;
+  - the total is the sum of the parts, which `marking-keys.test.ts` enforces,
+    along with the other three properties.
+
+Totals: 2.4.1 five points, 2.4.2 seven, 2.4.3 ten, 2.4.4 eight. The 2.4.1 and
+2.4.4 criteria are the owner's own from her briefs; 2.4.2 and 2.4.3 follow her
+stated grading rules for those two, extended to the number of rows and variants
+the built exercises have.
+
+Each criterion that a reading settles carries a `grounds` line naming what
+settles it, drawn from 2.4's own assigned readings — the whistleblower chapter,
+the design guide, the routes-out paper, the investigation standard, and the
+challenge-inspection annex. A learner marking themselves down can go and check
+instead of taking our word for it.
+
+The score is the learner's: not sent anywhere, completing nothing, stored
+beside the answer it belongs to. A test fails if the panel ever grows a fetch,
+a beacon or a server action, because at that point "nothing here is graded"
+would have quietly become false.

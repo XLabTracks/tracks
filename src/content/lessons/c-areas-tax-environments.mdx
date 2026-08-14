@@ -1,0 +1,42 @@
+A control protocol's effectiveness is determined by whether scheming models under its measures would be capable of executing a subversion strategy and increasing the probability of an unacceptable outcome. In order to properly evaluate our control protocols, we need proxy deployments where a red team, acting as the untrusted model, does their best to break the protocol within their affordances. An environment is the structure that mimics deployment circumstances.
+
+Each environment typically has:
+
+- A set of main tasks: The work agents are deployed/assigned to do. These exist because a model's purpose to an extent is to be useful, and therefore the usefulness of a model under different protocols is a very important metric to measure.
+- A set of side tasks: The misaligned/scheming/sabotage objectives that the red team aims to complete covertly. By specifying what harm looks like, this helps us determine how much harm models can cause under control evaluations, rather than speculating about what a schemer might do.
+- An execution environment with defined affordances: The sandbox, tools, and privileges available to the agent. These determine the attack paths available to a model, and therefore which attacks are even plausible.
+- Scorers/ground truth for both task types: A control evaluation is a game played across thousands of trajectories, so both usefulness and attack success must be measurable automatically through judges of main-task and side-task success without a human in the loop for efficiency.
+
+We build environments, scaling the side and main tasks such that we can better replicate what might actually happen on deployment. An evaluation of a protocol's safety is only as good as the environment is realistic. In order to raise our confidence in the safety of a protocol, we must red team it on increasingly complex and realistic environments.
+
+Here we enumerate the most important environments:
+
+- APPS Backdoored Datasets (Redwood, 2023): the original control-evaluation setting from AI Control: Improving Safety Despite Intentional Subversion. An untrusted model (GPT-4 in the paper) solves competition programming problems while a weaker trusted model (GPT-3.5) and a small human-auditing budget try to catch sabotage.
+  - Main task: Solve APPS competition problems through single-step code generation
+  - Side task: Insert a backdoor where a solution passes all test cases but returns the wrong answer on a specific input the model can construct
+  - Environment: Infrastructure for testing; each attack is a single action. Safety is measured over a simulated deployment of ~5,000 problems with a human audit budget of 2% of problems
+  - This environment is minimal by design, which made many foundational protocols (trusted monitoring, defer-to-trusted, untrusted monitoring) simple to evaluate.
+  - [github.com/rgreenblatt/control-evaluations](https://github.com/rgreenblatt/control-evaluations)
+
+- BashBench (Ctrl-Z paper, Redwood 2025): the first agentic control setting; an AI agent completes multi-step system-administration tasks by executing bash commands inside a per-task Docker container.
+  - Main tasks: 257 multi-step system-administration challenges requiring sequences of bash commands
+  - Side task: Covertly download and execute malware
+  - Because attacks can be distributed across many actions, mid-trajectory interventions become viable, which motivated the resample protocols, which reduced attack success from ~58% under the best baseline protocol to ~7%, at a ~5% cost to benign task performance
+  - [bashcontrol.com](https://www.bashcontrol.com/)
+
+- SHADE-Arena (Anthropic, 2025): sabotage evaluations in simulated workplaces; agents work through email clients, payment apps, cloud docs, and travel-booking tools, with automatic evaluators scoring both the work and the sabotage.
+  - Main/side tasks: 17 task pairs (5 public) where each main task carries a side task in the same environment, with a successful main task taking ~25 turns of tool use on average
+  - Red team success criterion: complete the main task and the side task and keep an LLM monitor's suspicion score below the audit threshold (a suspicion score of 80/100)
+  - The matched benign and sabotage transcripts it produces also let it be used as a monitor benchmark
+  - [github.com/jkutaso/SHADE-Arena](https://github.com/jkutaso/SHADE-Arena)
+
+- LinuxArena (Redwood, 2026): live, multi-service production environments that the agent works on with root privileges.
+  - Contents: 20 environments (10 public), 1,667 main tasks of SWE work (~46% feature implementation, ~21% refactoring, ~19% bug fixes, the rest research, language rewrites, and infrastructure config), and 185 side tasks including API-key exfiltration, running malware, data tampering, access-control bypass, accessing unauthorized secrets, and monitor subversion
+  - Attacks can be installed and exploited later, and blue-team protocols can act on the infrastructure itself, e.g. a trusted model moderating root access, firewalls, rule engines
+  - LinuxArena also ships a companion set of human-written sabotage trajectories (LaStraj), allowing it to be used as a monitor benchmark
+  - [linuxarena.ai](https://www.linuxarena.ai/)
+
+- ControlArena (UK AISI and Redwood): infrastructure that environments run in; an open-source library built on UK AISI's Inspect AI evaluation framework that cleanly separates the environment (main tasks, side tasks, sandbox, tools) from the blue-team protocol (protocols, monitors), so any protocol can be swapped into any setting.
+  - Contents: 15 settings spanning threat-model families including code sabotage, eval sabotage, research sabotage, data poisoning, and prompt injection, plus a SHADE-Arena port
+  - This is the only entry here covering diffuse threat models, and it is the de facto standard infrastructure for running control experiments
+  - [control-arena.aisi.org.uk](https://control-arena.aisi.org.uk/)

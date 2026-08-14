@@ -124,13 +124,19 @@ export function PolicyOnPaper({}: VerificationWidgetProps) {
         placeholder="Answer as you go — the tabs below are what you are answering from."
         intro={
           <p className="text-muted-foreground text-sm leading-relaxed">
-            The first is what this block is for; the second is what it would
-            take to answer it with evidence. Read the tabs below against them,
-            and write here whenever you have something. Nothing is graded.
+            Write as you go. Nothing is graded.
           </p>
         }
         onComplete={() => {}}
       />
+
+      {/* The marking instruction belongs here, immediately above the tabs it
+          instructs — not stacked with the questions, where it read as a third
+          paragraph of preamble before anything could be done. */}
+      <p className="text-sm leading-relaxed">
+        Now the material. Every statement has to answer one question before you
+        can use it: what kind of thing is this?
+      </p>
 
       <div role="tablist" aria-label="Regime" className="flex flex-wrap gap-2">
         {[...POLICY_COMPANIES, POLICY_DEMANDS].map((c) => {

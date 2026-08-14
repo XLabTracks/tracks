@@ -84,8 +84,8 @@ function VerificationRouteSignal({ pathname }: { pathname: string | null }) {
  */
 function NotebookLauncherHost() {
   useEffect(() => {
-    const w = window as unknown as { VTNotebook?: { mount: () => void } };
-    w.VTNotebook?.mount();
+    const w = window as unknown as { VTNotebook?: { mount?: () => void } };
+    w.VTNotebook?.mount?.();
   }, []);
   return <span id="verification-notebook-launcher" />;
 }

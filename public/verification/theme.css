@@ -133,8 +133,9 @@
   --shadow-soft: 0 1px 2px rgba(10, 25, 47, .06);
   --shadow-soft-lg: 0 12px 40px rgba(10, 25, 47, .13);
 
-  /* Two families, and only one of them is a download: Space Grotesk for
-     headings and display numerals, the system sans for everything else.
+  /* Two families: Space Grotesk for headings and display numerals, Inter for
+     the app's body and interface text. The static lift does not expose Next's
+     local-font variable, so it falls back to the platform sans stack.
 
      --mono is kept as a token because ~90 rules ask for it, but it now
      resolves to the same sans. It used to name JetBrains Mono and IBM Plex
@@ -148,7 +149,7 @@
      would let digits jitter as they change, so tabular figures are switched
      on globally below rather than per counter. */
   --display: 'Space Grotesk', 'Segoe UI', system-ui, sans-serif;
-  --sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, Helvetica, Arial, sans-serif;
+  --sans: var(--font-sans, -apple-system), BlinkMacSystemFont, 'Segoe UI', system-ui, Helvetica, Arial, sans-serif;
   --mono: var(--sans);
 }
 

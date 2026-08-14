@@ -516,35 +516,14 @@ button, [role='button'], [role='radio'], [role='tab'], .chip, .nav a, .brand,
    pink thing on the page was a preposition. */
 .brand i { color: var(--muted-foreground); font-style: normal; }
 
-/* The XLab logotype beside the word.
-
-   Trap: the file is 3300x1050 but the ink only fills the middle 55% of that
-   box (y 236-814) and is inset horizontally too, so `height` buys about half
-   of what it says — at 15px the visible mark was 8px against a 12px cap
-   height and read as an afterthought. 28px puts roughly 15px of ink beside
-   the word. Re-crop the PNG if you want the number to mean what it says.
-
-   Two files, not one filtered file. The day artwork is maroon-and-black and
-   disappears on the night ground; the white artwork keeps the maroon cross
-   and turns the letters white. Both ship, and CSS shows one — a filter that
-   re-lit the day file pushed the cross off-brand towards pink.
-
-   High contrast is the exception: it drops brand colour by design, and a
-   maroon cross on black reads at about 2:1, so there the white file is
-   flattened the rest of the way. */
+/* The XLab mark beside the word. It is one inline SVG on every ground, so
+   theme changes do not depend on swapping image files. */
 .brand-mark {
-  height: 28px;
-  width: auto;
+  height: 20px;
+  width: 20px;
+  flex: 0 0 20px;
   display: block;
 }
-
-/* Which artwork, per ground. These must stay AFTER .brand-mark: it sets
-   display:block at the same specificity, so ordering is what decides. */
-.mark-night { display: none; }
-:root[data-theme='dark'] .mark-day,
-:root[data-theme='contrast'] .mark-day { display: none; }
-:root[data-theme='dark'] .mark-night,
-:root[data-theme='contrast'] .mark-night { display: block; }
 
 /* At full desktop width the nav is its content width, between BlueDot's two
    48px composition gaps. At narrower widths the media rule below turns its

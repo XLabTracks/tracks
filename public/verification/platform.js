@@ -228,10 +228,11 @@ window.VT = (function () {
     host.innerHTML =
       '<div class="bar">' +
       '<a class="brand" href="/verification/landing">Verification <i>@</i>' +
-        '<img class="brand-mark mark-day" src="assets/xLab_Logotype.png" alt="XLab" ' +
-        'width="3300" height="1050" draggable="false">' +
-        '<img class="brand-mark mark-night" src="assets/xLab_Logotype_white.png" alt="" ' +
-        'aria-hidden="true" width="3300" height="1050" draggable="false"></a>' +
+        '<svg class="brand-mark brand-symbol" xmlns="http://www.w3.org/2000/svg" ' +
+        'viewBox="0 0 284.25 284.25" role="img" aria-label="XLab">' +
+        '<polygon fill="#7f1416" points="284.25 87.86 199.86 1.38 143.17 56.69 ' +
+        '87.86 0 1.38 84.38 56.69 141.07 0 196.39 84.38 282.87 141.07 227.56 ' +
+        '196.39 284.25 282.87 199.86 227.56 143.17 284.25 87.86"></polygon></svg></a>' +
       '<nav class="nav" aria-label="Course">' +
       CHROME.nav.map(n => '<a href="' + n.href + '"' +
         (n.href === here ? ' aria-current="page"' : '') +

@@ -6,6 +6,7 @@ import { Menu } from "lucide-react";
 import { useAuth } from "@workos-inc/authkit-nextjs/components";
 import { buttonVariants } from "@/components/ui/button";
 import { ThemeToggle } from "@/components/layout/theme-toggle";
+import { XLabMark } from "@/components/layout/xlab-mark";
 import { AccountMenu } from "./account-menu";
 import { SignInLink } from "./sign-in-link";
 import {
@@ -37,41 +38,15 @@ export function SiteHeader() {
   return (
     <header className="border-border/80 bg-background/80 sticky top-0 z-40 border-b backdrop-blur">
       <div className="mx-auto flex h-14 w-full max-w-7xl items-center gap-6 px-4 lg:px-6">
-        {/* One wordmark across the site: the same "<name> @ XLab-logotype"
-            shape the Verification header wears, so the two chromes read as one
-            place. The `@` is a connector and not a brand mark, so it takes the
-            muted ink rather than an accent — the logotype beside it carries the
-            brand on its own.
-
-            The alt text is what makes the link say "Tracks @ XLab"; there is no
-            aria-label, so the visible mark and the announced name cannot drift.
-
-            The artwork is 3300x1050 but the ink only fills the middle
-            ~55% of that box, so `height` buys about half of what it says: 28px
-            puts roughly 15px of ink beside 18px type — matching theme.css's
-            .brand-mark. The two cuts follow the platform's dark class. */}
+        {/* One mark across both themes. Keeping the SVG inline avoids a second
+            image request and removes the light/dark image swap that could leave
+            the black wordmark invisible on a dark header. */}
         <Link
           href="/"
           className="flex items-center gap-2 text-lg font-bold tracking-tight select-none"
         >
           Tracks <span className="text-muted-foreground font-normal">@</span>
-          <img
-            src="/verification/assets/xLab_Logotype.png"
-            alt="XLab"
-            width={3300}
-            height={1050}
-            draggable={false}
-            className="h-7 w-auto dark:hidden"
-          />
-          <img
-            src="/verification/assets/xLab_Logotype_white.png"
-            alt=""
-            aria-hidden
-            width={3300}
-            height={1050}
-            draggable={false}
-            className="hidden h-7 w-auto dark:block"
-          />
+          <XLabMark className="size-5 shrink-0" />
         </Link>
         <nav className="text-muted-foreground hidden items-center gap-1 text-sm sm:flex">
           {NAV.map((item) => {

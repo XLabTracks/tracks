@@ -61,22 +61,7 @@ export function ConstructCase({
             ))}
           </ol>
           <p className="text-muted-foreground text-sm leading-relaxed">
-            One concrete case, not three definitions. Nothing here is graded.
-          </p>
-          {/* Part of the task, not a hint about the answer. What the spec
-              keeps back until after submission is the list of failures that
-              DO count; these four are the opposite of it, and hiding them
-              would only let somebody spend their six minutes on a failure the
-              brief had already ruled out. */}
-          <p className="text-muted-foreground text-sm leading-relaxed">
-            The failure cannot merely be that{" "}
-            {CASE_EXCLUDED.map((line, i) => (
-              <span key={line}>
-                {i === 0 ? "" : i === CASE_EXCLUDED.length - 1 ? ", or " : ", "}
-                <span className="text-foreground">{line}</span>
-              </span>
-            ))}
-            .
+            One concrete case, not three definitions.
           </p>
         </div>
       }
@@ -105,11 +90,24 @@ export function ConstructCase({
 
           <section className="border-border rounded-xl border p-4">
             <h4 className="text-muted-foreground font-mono text-[11px] tracking-[0.14em] uppercase">
-              Failures that count
+              Where a report can die
             </h4>
             <p className="text-muted-foreground mt-2 text-sm leading-relaxed">
-              Held back until now on purpose — naming where a report dies is the
-              work. Some of the ways one does:
+              All of it held back until now, and deliberately: naming where a
+              report dies is the work, and a page that had listed the categories
+              first would have left you filling them in. Four that do not count
+              —{" "}
+              {CASE_EXCLUDED.map((line, i) => (
+                <span key={line}>
+                  {i === 0
+                    ? ""
+                    : i === CASE_EXCLUDED.length - 1
+                    ? ", or "
+                    : ", "}
+                  <span className="text-foreground">{line}</span>
+                </span>
+              ))}
+              . Some that do:
             </p>
             <ul className="mt-2 space-y-1.5">
               {CASE_FAILURE_MODES.map((mode) => (

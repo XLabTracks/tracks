@@ -655,3 +655,18 @@ The score is the learner's: not sent anywhere, completing nothing, stored
 beside the answer it belongs to. A test fails if the panel ever grows a fetch,
 a beacon or a server action, because at that point "nothing here is graded"
 would have quietly become false.
+
+**Intros rewritten (2026-08-14, owner's review).** The lead-in to a
+constructed task cannot name the categories the answer is made of. 2.4.1 now
+carries two sentences and the task — "Human reports can fail at several
+different points between observation and verification. The next exercise asks
+you to construct one such case." — and nothing else. The four excluded
+failures moved out of the prompt and into the reveal beside the ones that
+count: they are constraints rather than hints, but stating them first still
+maps the answer space, and the whole operation here is finding where a report
+dies. 2.4.4's lead-in lost the clause that told the learner in advance that
+coherence, not individual merit, was the test.
+
+Two cross-references went stale when the exercises were replaced and are
+fixed: 2.4.3's opening promised an inspection order, and 2.4.4 told the
+learner to reuse the inspection record they had built.

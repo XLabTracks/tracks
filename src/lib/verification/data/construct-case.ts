@@ -72,12 +72,34 @@ export const CASE_CHECKLIST = [
   "Can you identify the precise missing link between report and action?",
 ];
 
-/** Her four excluded failures, verbatim. */
+/**
+ * Her four excluded failures, verbatim — shown BEFORE submission, with the
+ * prompt.
+ *
+ * They are part of the task, not part of the answer: the constraint her spec
+ * sets is that the list of *good* failure modes stays hidden until after
+ * submission, and these four are the opposite of that list. Withholding them
+ * would only let somebody spend their six minutes on "the insider lies" and
+ * find out afterwards that it was ruled out on the first page of the brief.
+ */
 export const CASE_EXCLUDED = [
   "the insider lies",
   "the insider is wrong",
   "reporting is illegal",
   "the verifier ignores the report for no reason",
+];
+
+/**
+ * Her examples of failures that do count, verbatim. Shown only in the reveal:
+ * this is the list the spec keeps back, because naming where a report dies is
+ * the whole work of the exercise.
+ */
+export const CASE_FAILURE_MODES = [
+  "evidence cannot be independently corroborated",
+  "the authorized recipient cannot legally share the information with the verifier",
+  "the report identifies a suspicious activity but not the facility or account involved",
+  "relevant records are unavailable or outside the verifier’s mandate",
+  "the reporting channel strips information needed for follow-up",
 ];
 
 export interface WorkedCase {

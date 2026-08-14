@@ -5,6 +5,8 @@ import { useRef } from "react";
 import {
   CASE_CHECKLIST,
   CASE_CONDITIONS,
+  CASE_EXCLUDED,
+  CASE_FAILURE_MODES,
   CASE_FIELDS,
   CASE_WORDS,
   WORKED_CASES,
@@ -59,6 +61,21 @@ export function ConstructCase({
           <p className="text-muted-foreground text-sm leading-relaxed">
             One concrete case, not three definitions. Nothing here is graded.
           </p>
+          {/* Part of the task, not a hint about the answer. What the spec
+              keeps back until after submission is the list of failures that
+              DO count; these four are the opposite of it, and hiding them
+              would only let somebody spend their six minutes on a failure the
+              brief had already ruled out. */}
+          <p className="text-muted-foreground text-sm leading-relaxed">
+            The failure cannot merely be that{" "}
+            {CASE_EXCLUDED.map((line, i) => (
+              <span key={line}>
+                {i === 0 ? "" : i === CASE_EXCLUDED.length - 1 ? ", or " : ", "}
+                <span className="text-foreground">{line}</span>
+              </span>
+            ))}
+            .
+          </p>
         </div>
       }
       reveal={
@@ -74,6 +91,26 @@ export function ConstructCase({
                     —
                   </span>
                   <span>{line}</span>
+                </li>
+              ))}
+            </ul>
+          </section>
+
+          <section className="border-border rounded-xl border p-4">
+            <h4 className="text-muted-foreground font-mono text-[11px] tracking-[0.14em] uppercase">
+              Failures that count
+            </h4>
+            <p className="text-muted-foreground mt-2 text-sm leading-relaxed">
+              Held back until now on purpose — naming where a report dies is
+              the work. Some of the ways one does:
+            </p>
+            <ul className="mt-2 space-y-1.5">
+              {CASE_FAILURE_MODES.map((mode) => (
+                <li key={mode} className="flex gap-3 text-sm leading-relaxed">
+                  <span aria-hidden className="text-muted-foreground">
+                    —
+                  </span>
+                  <span>{mode}</span>
                 </li>
               ))}
             </ul>

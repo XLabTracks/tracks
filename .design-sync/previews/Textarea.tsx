@@ -13,7 +13,7 @@ export const WithLabel = () => (
       defaultValue="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
     />
     <p className="text-muted-foreground text-sm">
-      Drafts save automatically. Submit when you're ready for feedback.
+      Drafts save automatically. Submit when you&apos;re ready for feedback.
     </p>
   </div>
 );

@@ -5,9 +5,18 @@
  * question banks 86% of correct answers sat in slot A or B, and single banks
  * were far worse — one quiz ran four Bs out of five, another put the answer
  * first in all fifteen of its questions. That is a pattern a learner reads
- * instead of the question, and it is nobody's fault: an author writes the true
- * statement first because it is the one they are thinking about, and then
- * writes the distractors.
+ * instead of the question.
+ *
+ * These banks were written by Claude, in this repo, mostly within days of this
+ * file. So this is not a general observation about how authors work: it is a
+ * defect in how the exercises were built. Nobody checked what the finished
+ * exercise looked like to somebody trying to solve it — which is the actual
+ * lesson, and a shuffle is only half of it. The other half is that a widget
+ * has to be looked at as a thing to be beaten, not just as a thing to be
+ * rendered. `whistleblower-levers` is the case in point and no amount of
+ * shuffling would have caught it by itself: it mapped one array over both the
+ * rows and the chips, so the answer to row N was always chip N and the whole
+ * matching fell to the diagonal without being read.
  *
  * Two decisions shape everything here.
  *

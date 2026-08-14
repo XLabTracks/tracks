@@ -22,10 +22,15 @@ import type { DrillDeck, DrillStep } from "./data/drills";
  * matching offered its chips in the same order as its rows, so the whole thing
  * could be finished on the diagonal without reading it.
  *
- * Nobody did that on purpose. An author writes the true statement first because
- * it is the one they are thinking about, then writes distractors around it. So
- * the fix is not a rule for authors to remember — it is a shuffle at the
- * display layer, and these are the tests that keep it honest.
+ * Every one of those banks was written by Claude in this repo. The cause was
+ * not authorial habit, it was that the exercises were built and never played:
+ * the matching widget mapped one array over both its rows and its chips, which
+ * produces a diagonal, and that is visible in ten seconds to anybody who tries
+ * to solve their own exercise before shipping it.
+ *
+ * So the shuffle is the remedy and these tests are the discipline that was
+ * missing — they ask, mechanically and every run, what the finished bank looks
+ * like to somebody trying to beat it.
  */
 
 const DECKS: DrillDeck[] = [DRILLS_PRIMERS, DRILLS_FOUNDATIONS, DRILLS_GAMES];

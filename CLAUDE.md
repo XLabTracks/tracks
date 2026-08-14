@@ -208,8 +208,12 @@ rehype-katex.
 86% of correct answers across the platform sat in slot A or B — one quiz ran
 four Bs of five, the treaty phrase-quiz put a correct option first in all
 fifteen, and the four-lever matching offered its chips in row order, so it
-solved on the diagonal. Nobody did that deliberately: an author writes the true
-statement first and the distractors after it. The order is seeded on the
+solved on the diagonal. **Those banks are Claude's own, and the cause was
+building exercises without playing them** — the diagonal came from mapping one
+array over both the rows and the chips, which is obvious to anyone who tries to
+solve the widget once. Shuffling is the remedy; **checking what a finished
+exercise looks like to somebody trying to beat it is the part that has to
+happen while it is being built**. The order is seeded on the
 question's own id, so it is **stable for every learner, device and visit** —
 per-visit randomness would break SSR against hydration, move the options under
 somebody returning to an answered question, and silently invalidate the

@@ -1102,3 +1102,24 @@ One surface deliberately left alone: `verification-problem`, whose four cards
 are an explorable rather than a question — the learner opens all of them, and
 the one that holds is last because three failures precede it. That order is an
 argument, not an accident.
+
+**Correction to the entry above, on whose defect this was (2026-08-14, owner:
+"это не правда … еще как ты и твои версии виноваты").** That entry said "nobody
+did that on purpose: an author writes the true statement first". That framing is
+wrong, and `git log` on the files says so plainly: `whistleblower-levers.ts` and
+its widget were written by Claude the same day the bias was found (1b65424),
+`policy-quick-check.ts` two commits earlier, `protocol-actors.ts` by Claude on
+2026-08-05. The last human hand in any of them is the original track import.
+
+It also mis-describes the mechanism. Writing the true statement first is a
+habit that produces a lean toward slot A; it does not produce a diagonal. The
+diagonal came from mapping one array over both the rows and the chips in a
+widget, which makes the answer to row N be chip N by construction. That is not
+an authoring tic — it is a widget shipped without anybody trying to solve it.
+
+The lesson the first entry buried: a shuffle fixes the symptom, and the missing
+step was asking what the finished exercise looks like to somebody trying to
+beat it, while it is being built. `answer-order.test.ts` is that question asked
+mechanically, which is the only version of it that survives the next session.
+The framing has been corrected in `src/lib/shuffle.ts`, `answer-order.test.ts`
+and CLAUDE.md.

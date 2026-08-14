@@ -1,3 +1,14 @@
+{/* Rewritten 2026-08-14 from the owner's "1.0 new" document, verbatim. Her
+    bracketed instructions in that document became: the Example sentence set
+    in a Callout (the rounded rectangle), and Goodhart's Law defined in
+    src/content/glossary.json (hand-placed <Term/> below) plus the learner's
+    guide glossary. The document's trailing "Works Cited" page is the
+    aigi.ox.ac.uk link, which rides in the prose below and assembles into the
+    standard Works cited appendix via citations.json — never a hand-built
+    bibliography section. This lesson is in autoGlossExclude: the auto-gloss
+    entries for "backdoor" and "non-proliferation" carry AI-control senses
+    that would mis-gloss this page's treaty-sense uses. */}
+
 Now that we have a grasp of the motivations and big-picture qualities of an AI verification regime, it’s time to turn to the specifics. What could a verifiable treaty actually look like—what provisions, requirements, suggestions, agreements should there be? Who are the relevant actors that the treaty depends upon, affects, constrains, and authorizes as verifiers?
 
 <Objectives scope="this module">
@@ -9,36 +20,47 @@ Now that we have a grasp of the motivations and big-picture qualities of an AI v
 - Produce actor-aware written analysis: a report or briefing that accounts for its context, taking into account who produced the underlying information, and who will consume the output.
 </Objectives>
 
-## Four ingredients of a checkable claim
+## The Building Blocks of a Policy
 
-A policy becomes enforceable when it is translated into claims about things in the world that evidence can reach. Those claims are built from four ingredients:
+Each policy has an ultimate goal, whether it be to slow global warming or pace the development of premature ASI. These goals are often abstract and intractable on their own. By themselves, they don’t answer the most important questions of how—how do you reduce emissions or regulate advanced AI? For a policy to be workable, decisionmakers must translate goals into concrete rules and claims, with specified actors, objects, activities, and conditions.
+
+First, let’s look at operationalization: how a broad goal narrows to verifiable and checkable claims.
+
+1. The underlying goal is what the policy exists to achieve: for instance, prevent premature ASI.
+2. The legal rule is the obligation actually written into the treaty. It is the proxy for measuring achievement of a goal. For example: no party shall conduct, or permit within its jurisdiction, a training run above an agreed compute threshold without prior notification.
+3. The verification claim is a proposition that the rule is being followed, and needs to be verified with evidence. For example: no cluster of covered chips on the party's territory ran an unreported workload above the threshold during the reporting period.
+
+Each claim and rule are built from the following four ingredients:
 
 - Actors: who the claim is about. States, AI companies, cloud providers, individual researchers.
 - Objects: the things involved. Chips, clusters, models, weights, facilities.
 - Activities: what actors do with objects. Acquisition, training, research, deployment, transfer.
 - Conditions: the qualifiers that make the claim precise. Thresholds, locations, purposes, exceptions, time periods.
 
-Assemble the ingredients and you get something checkable: "Between January and June 2029 (condition), Microsoft (actor) ran no training job (activity) above 10^26 FLOP (condition) on the clusters at its Iowa data centers (objects)." Compare that with "don't build dangerous AI." Every element now points at evidence: shipment and inventory records for the objects, power draw and utilization logs for the activity, an agreed accounting method for the threshold. Inspectors can still disagree about whether the claim is true. They can no longer disagree about what it says.
+<Callout title="Example">
+Between January and June 2029 (condition), Microsoft (actor) ran no training job (activity) above 10²⁶ FLOP (condition) on the clusters at its Iowa data centers (objects).
+</Callout>
 
-## Three layers, kept separate
+Each rule and claim is inherently a proxy: a workable but imprecise substitute for an unworkable but precise goal. The imperfection of proxies, however, risks losing specificity, coverage, and nuance. Motivated actors can exploit loopholes in rules, such that they technically present verifiable claims while actually undermining its underlying goal. The goal may erode the rule itself: see <Term id="goodharts-law">Goodhart’s Law</Term>. A lab could train a frontier model under a specified compute threshold, but have innovated enough algorithmic efficiency gains such that the model has dangerous capabilities anyway.
 
-The translation runs through three layers, and confusing them is one of the most common errors in verification design.
+Here’s a historical example from nuclear nonproliferation of such proxy exploitation.
 
-The underlying goal is what the policy exists to achieve: prevent premature ASI.
+1. The goal of the Non-Proliferation Treaty was to prevent the spread of nuclear weapons.
+2. The rule bound non-weapon states not to divert nuclear material to weapons.
+3. The claim the IAEA could actually test was whether declared nuclear material at declared facilities matched the state's declarations.
 
-The legal rule is the obligation actually written into the treaty. For example: no party shall conduct, or permit within its jurisdiction, a training run above an agreed compute threshold without prior notification.
+What the claim missed, however, was undeclared nuclear material; a gap that Iraq exploited. Iraq’s declared facilities passed inspection through the 1980s, while an undeclared weapons program ran alongside them. After the 1991 Gulf War, the IAEA discovered this covert program, and in response, created the Additional Protocol, which widened the claim to cover undeclared sites. This is why carefully thinking through the evidentiary claims and rules—and all possible backdoors and loopholes—is integral. The instinctual rule is often not the truly comprehensive one.
 
-The verification claim is the proposition that evidence must test. For example: no cluster of covered chips on the party's territory ran an unreported workload above the threshold during the reporting period.
+## Candidate Verifiable Agreements
 
-Each layer is narrower than the one above it. The rule never mentions ASI; it mentions compute, because compute can be counted. The claim narrows further still: it covers only chips the regime knows about, only territory the regime can observe, only the reporting window.
+Given these building blocks, what could a verifiable AI treaty actually look like? There is far from a consensus; the same goal of pacing AI development to benefit humanity has a vast array of operationalized legal rules, each of which generates different verification claims. A [paper from the Oxford AI Governance Initiative](https://aigi.ox.ac.uk/wp-content/uploads/2025/07/Verification_for_International_AI_Governance.pdf) taxonomizes all the candidate verifiable agreements as such:
 
-The nuclear regime shows the same three layers, and shows what the gaps between them cost. The goal of the Non-Proliferation Treaty is to prevent the spread of nuclear weapons. The rule binds non-weapon states not to divert nuclear material to weapons. The claim the IAEA could actually test was, for decades, narrower than either: declared nuclear material at declared facilities matches the state's declarations. Iraq exploited exactly that gap. Its declared facilities passed inspection through the 1980s while an undeclared weapons program ran alongside them, and the discovery after the 1991 Gulf War pushed the IAEA to create the Additional Protocol, which widened the testable claim to cover undeclared sites. The rule had not changed. The goal had not changed. What changed was the claim evidence could reach.
+{/* Bare separator, per the owner: this paragraph reads as running text, not
+    as the 4+-bullet card's red header. app-bridge.css joins a paragraph to
+    the list card via p:has(+ ul), an adjacent-sibling match — any element
+    between the two detaches the paragraph while the list keeps its card. */}
 
-<PageBreak title="From policy goal to candidate agreement" />
-
-## One goal, many candidate agreements
-
-So far this page has spoken of "the treaty" as if one existed. It does not. What exists is a menu of proposed agreements, and they differ at the second layer: each writes a different legal rule, so each generates different verification claims. One survey groups the proposals into five families [Table 1.1 — cite source]:
+<span />
 
 - Transfer knowledge: parties share research, development knowledge, and safety-enhancing technologies.
 - Transfer resources: parties share chips, compute access, completed models or API access, or benefits such as cash and AI-enabled aid.
@@ -46,10 +68,4 @@ So far this page has spoken of "the treaty" as if one existed. It does not. What
 - Prepare for emergencies: parties jointly detect and respond to computational emergencies.
 - Regulate: parties bind themselves to rules on AI development and deployment, from data-center training runs down to fine-tuning, inference, and sensitive AI-enabled devices.
 
-No system verifies "AI safety" in the abstract. A verification system tests the claims one particular agreement generates, and the families generate very different ones: confirming that a party shared the research it promised, confirming that a pooled project has no covert rival, and confirming that no data center crossed a compute threshold are separate problems that call on separate evidence. Each family also buys a different amount of risk reduction at a different price. The question to hold onto when comparing them: how much risk does this agreement actually remove, at what cost, and can its claims be tested at all? In the next exercise you will rank these families (and a few others) yourself.
-
-## Why the layers matter
-
-A natural first question about any verification mechanism is "does it prevent ASI?" No mechanism answers that question directly, which is why it leads nowhere. The productive questions come apart by layer: which claim can this mechanism test? How much of the rule does that claim cover? And how much of the goal does the rule serve, even if perfectly followed? A regime fails when its testable claims leave the rule mostly uncovered, or when compliance with the rule still leaves the goal unmet. The rest of this track applies this decomposition repeatedly, so it is worth making the habit automatic now.
-
-Activity: Return to the claims you wrote at the top of this page. For each one, label the actor, object, activity, and conditions. Then decide which layer it sits at: a restatement of the goal, a candidate legal rule, or a claim evidence could actually test.
+Confirming that a party shared the research it promised, a pooled project has no covert rival, or that no data center crossed a compute threshold are separate problems that require different mechanisms, levels of cooperation, evidence, timelines, and more. Each type of agreement buys a different amount of risk reduction at a different price. It’s easy to verify transferred knowledge, but mere information sharing realistically can’t do much to deter capability development for self-interested parties. On the other hand, it’s incredibly difficult to verify that zero illicit training runs are happening within a given nation, but successfully doing so will significantly increase the safety and predictability of model development. When weighing different policy options throughout this module, consider: how much risk does this agreement actually remove, and at what cost?

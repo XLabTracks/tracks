@@ -115,3 +115,25 @@ specific claims" prompt that the closing Activity ("Return to the claims
 you wrote at the top of this page") refers back to — that reference now
 dangles pending her call. 1.1's "Module objective" participants-will list
 (the MIRI exercise's own framing) is deliberately kept.
+
+### 1.0 rewritten from the owner's "1.0 new" document (2026-08-14)
+
+The body of `scoping-intro.mdx` is replaced wholesale with the owner's new
+draft, transcribed verbatim. Structure now: intro paragraph + module
+`<Objectives>` (both unchanged from the 2026-08-13 standardization), then
+"The Building Blocks of a Policy" (goal → rule → claim operationalization,
+the four ingredients, the Microsoft example, Goodhart, the NPT/Iraq case)
+and "Candidate Verifiable Agreements" (the Oxford AIGI five-family
+taxonomy). Her bracketed instructions became: the Example sentence set in a
+`<Callout>` (the requested rounded rectangle), and Goodhart's Law defined —
+new `goodharts-law` entry in `src/content/glossary.json` (hand-placed
+`<Term/>` in the body) plus a unit-1.0 row in the learner's guide
+`data/glossary.js`. The draft's "Works Cited" page is the aigi.ox.ac.uk
+report link, already in citations.json, riding in the prose so the standard
+Works cited appendix carries it. Gone with the rewrite: the "Three layers,
+kept separate" / "Why the layers matter" framing sections, the PageBreak,
+and the closing Activity — which also retires the dangling "claims you
+wrote at the top of this page" reference flagged in the previous entry.
+`scoping-intro` joins autoGlossExclude: the auto-gloss senses of "backdoor"
+(AI control) and "non-proliferation" (AI capability spread) would mis-gloss
+this page's treaty-sense uses.

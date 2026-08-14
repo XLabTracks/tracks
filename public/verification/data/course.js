@@ -176,7 +176,10 @@ window.COURSE = {
           "mins": "120 min",
           "href": "/tracks/verification/verification-infrastructure/cloud",
           "lessons": [
-            "cloud"
+            "cloud",
+            "cloud-customer-identification",
+            "cloud-detection-gaps",
+            "cloud-evidence"
           ]
         },
         {

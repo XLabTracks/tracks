@@ -48,6 +48,8 @@ window.GLOSSARY = {
           d: 'Three different sentences inside one policy: the outcome it exists to produce, the text that binds an actor, and the proposition a verifier must establish true or false.' },
         { t: 'Proxy risk', unit: '1.0',
           d: 'Every drawn line measures something adjacent to the thing you care about. Compute is a proxy for capability; the failure is not the proxy but treating it as the goal.' },
+        { t: 'Goodhart\'s Law', unit: '1.0',
+          d: 'When a measure becomes a target, it ceases to be a good measure. A lab that trains under the compute threshold on better algorithms presents a verifiable claim while undermining the goal the threshold stood in for.' },
         { t: 'Total training FLOP', unit: '1.0',
           d: 'The operative threshold unit in current practice. Reference points: the EU AI Act at 10^25 and the rescinded EO 14110 at 10^26.' },
         { t: 'Compliance burden vs. verification burden', unit: '1.0',

@@ -377,3 +377,44 @@ deleted: 2.1's `scope="the core section"` block (hardware-specific, no
 module-level duplicate) and 2.3.0's in-prose "by the end" sentence (overlaps
 the module block's signals bullet but is load-bearing prose — flagged to
 the owner rather than cut).
+
+### 2.4.4 optional extension: Policy on paper (2026-08-14, owner's 2.4 plan + revision)
+
+An optional block after 2.4.4's lab, outside progress and outside the section
+clock: an unbridged widget (`policy-on-paper`), no completion event, no change
+to `estimatedMinutes`. Two anonymous companies as tabs — the learner marks each
+statement with what kind of evidence it is (published rule / company
+self-report / documented prior practice / external assessment / not
+established), commits per tab, and reads the key back. The third tab is not a
+company: it is the four demands of the June 2024 open letter, answered rather
+than marked ("if these were satisfied, what would that change structurally?").
+
+Owner's revisions, both applied. Company B is her five bullets as documented,
+ending on the compulsory retraction row — a 2024 rule presented as still in
+force is an error, not strictness, and a regime that moved under pressure is
+2.4.4's own material. The third tab replaced a third company (a firm with no
+published policy at all): a regime that publishes nothing has nothing to mark,
+while the demands are the standard the other two tabs are then read against.
+
+Citations moved. Nothing above the end of the exercise carries a link — a
+citation on a committed row would name Company A while Company B was still to
+be judged blind. Finishing every tab opens one spoiler headed **Sources**: which
+letter was which company, and every document each tab's rows were read out of.
+The list derives itself from the rows; `policy-on-paper.test.ts` pins that, and
+pins that the marking surface never renders a `cite`.
+
+Corrected while checking the mapping: Company A's index row said "highest of
+nine on governance and accountability — a C+". The C+ is the overall grade; the
+governance-and-accountability domain grade is a B. Both are in the row now.
+
+Sources: the Anthropic RSP Noncompliance Reporting and Anti-Retaliation Policy
+(PDF, read in full); the FLI AI Safety Index, Summer 2026; the OpenAI Files
+"Transparency and Safety" page, which collects the Vox (18 May 2024) and
+Washington Post (13 July 2024) reporting; the CNBC report of the retraction
+memo (24 May 2024); righttowarn.ai. Deliberately absent: a secondary claim that
+a company "quietly gutted" a commitment in February 2026 — the primary document
+was never opened, so it is not in the exercise.
+
+Dropped in the same edit, at the owner's instruction: the two further optional
+extensions her plan sketched for 2.4.2 and 2.4.3 ("Break the chain", "Trigger,
+not finding"). Neither was ever built; nothing references them.

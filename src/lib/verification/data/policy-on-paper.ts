@@ -1,30 +1,46 @@
 /**
- * 2.4.4's optional extension: three reporting regimes, and what kind of thing
- * each statement about them actually is.
+ * 2.4.4's optional extension: two reporting regimes and the demands made of
+ * them, and what kind of thing each statement actually is.
  *
- * THE TASK IS THE COURSE OWNER'S, from her 2.4 exercise plan: three tabs,
- * Published process / Documented context / Still unverified per tab, the
- * learner marks every statement with its provenance, then answers what
- * incentives the combination creates and what further evidence would be
- * needed. Her instruction on naming: the companies are Company A, B and C and
- * are not named in the task.
+ * THE TASK IS THE COURSE OWNER'S, from her 2.4 exercise plan and her revision
+ * of it: three tabs, Published process / Documented context / Still unverified
+ * per company tab, the learner marks every statement with its provenance, then
+ * answers what incentives the combination creates and what further evidence
+ * would be needed. Her instruction on naming: the companies are Company A and
+ * Company B and are not named in the task.
+ *
+ * HER REVISION, and why the third tab is not a third company. It was one — a
+ * firm with no published policy at all. She replaced it with what the
+ * employees themselves demand (the June 2024 open letter), asking of each
+ * demand what satisfying it would change structurally. That is the better
+ * third term: a regime that publishes nothing has nothing to mark, while the
+ * demands are the standard the other two tabs are then read against.
+ *
+ * Her other instruction, on Company B's last row: the retraction is
+ * compulsory. A 2024 rule presented as still in force is an error, not
+ * strictness — and a regime that moved under pressure is exactly 2.4.4's
+ * material.
  *
  * WHY THE SOURCE IS REVEALED AND NOT HIDDEN. Anonymity here is the exercise's
  * mechanic — you judge the regime before you know whose it is — and not a
- * concealment: every statement carries its citation, shown once the learner
- * has committed. A course page that made claims about a real company's
- * internal policy behind a letter, with no way to check, would be the thing
- * this whole section teaches learners to distrust.
+ * concealment: once all three tabs are committed, a spoiler headed "Sources"
+ * opens on which letter was which company and every document each row was
+ * read out of. A course page that made claims about a real company's internal
+ * policy behind a letter, with no way to check, would be the thing this whole
+ * section teaches learners to distrust.
+ *
+ * The citations live in that one block and nowhere else, because a link on a
+ * committed row would name the company on tab A while tabs B and C were still
+ * meant to be judged blind.
  *
  * WHERE EACH STATEMENT COMES FROM. Nothing here is written from memory. The
  * `cite` on every row is the document it was read out of:
  *
  *   A — the published policy itself (PDF, change log dated February 2026),
- *       downloaded and read in full.
+ *       downloaded and read in full, plus an external index.
  *   B — the documented history, via secondary reporting the aggregator cites
- *       (Vox, the Washington Post) plus the company's own retraction memo,
- *       plus a named external critique of the published policy.
- *   C — the external index's own finding that no policy exists to read.
+ *       (Vox, the Washington Post) plus the company's own retraction memo.
+ *   The demands — the open letter itself.
  *
  * The `kind` on every row is the answer key, and it is a claim about the
  * EVIDENCE, not about the company: a rule printed in a policy is a published
@@ -92,27 +108,36 @@ export interface PolicyCompany {
   label: string;
   /** One line of framing, so a tab is not a bare letter. */
   kicker: string;
+  /** Who the letter was, printed only in the Sources spoiler at the end. */
+  realName: string;
+  /** One line there where the identification needs a qualification. */
+  realNote?: string;
   statements: PolicyStatement[];
 }
 
+/* The labels name their works plainly, because they are only ever printed in
+   the Sources spoiler — after the letters have been cashed out. While the
+   learner is still marking, no row carries a citation at all. */
 const ANTHROPIC_POLICY = {
-  label: "Published reporting policy (PDF)",
+  label: "Anthropic, RSP Noncompliance Reporting and Anti-Retaliation Policy (PDF)",
   href: "https://www-cdn.anthropic.com/b7a5629e40b391b2adfb4cc8c0888ac9d6bfddf6/RSP%20Noncompliance%20Reporting%20and%20Anti-Retaliation%20Policy.pdf",
 };
 const FLI = {
-  label: "External safety index, summer 2026",
+  label: "Future of Life Institute, AI Safety Index — Summer 2026",
   href: "https://futureoflife.org/ai-safety-index-summer-2026/",
 };
-const TRANSFORMER = {
-  label: "Transformer, “Can AI embrace whistleblowing?”, Dec 2025",
-  href: "https://www.transformernews.ai/p/can-ai-embrace-whistleblowing-anthropic-openai",
+const RIGHT_TO_WARN = {
+  label: "The letter in full, with its signatories and endorsers",
+  href: "https://righttowarn.ai/",
 };
 const FILES = {
-  label: "Aggregated documentation of prior practice",
+  label:
+    "The OpenAI Files, “Transparency and Safety” — collecting Vox (18 May 2024) and the Washington Post (13 July 2024)",
   href: "https://www.openaifiles.org/transparency-and-safety",
 };
 const RETRACTION = {
-  label: "Reported internal memo retracting the agreements",
+  label:
+    "CNBC, “OpenAI sends internal memo releasing former employees from non-disparagement agreements”, 24 May 2024",
   href: "https://www.cnbc.com/2024/05/24/openai-sends-internal-memo-releasing-former-employees-from-non-disparagement-agreements-sam-altman.html",
 };
 
@@ -121,6 +146,7 @@ export const POLICY_COMPANIES: PolicyCompany[] = [
     id: "a",
     label: "Company A",
     kicker: "Publishes a detailed reporting policy.",
+    realName: "Anthropic",
     statements: [
       {
         id: "a-anon",
@@ -147,10 +173,10 @@ export const POLICY_COMPANIES: PolicyCompany[] = [
       {
         id: "a-grade",
         group: "context",
-        text: "An outside index scored this company highest of nine assessed firms on governance and accountability — a C+.",
+        text: "An outside index scored this company highest of nine assessed firms on governance and accountability — a B, against an overall grade of C+.",
         kind: "external-assessment",
         cite: FLI,
-        note: "Highest of nine is a ranking, not a pass; the scale it leads is graded C+.",
+        note: "Highest of nine is a ranking, not a pass, and it is one domain of an index whose leader it grades C+ overall.",
       },
       {
         id: "a-usage",
@@ -165,19 +191,20 @@ export const POLICY_COMPANIES: PolicyCompany[] = [
   {
     id: "b",
     label: "Company B",
-    kicker: "Published a policy after its practice was reported.",
+    kicker: "As it was documented.",
+    realName: "OpenAI",
     statements: [
-      {
-        id: "b-first",
-        group: "published",
-        text: "It published a whistleblowing policy in October 2024, the first such company to do so.",
-        kind: "published-rule",
-        cite: TRANSFORMER,
-      },
       {
         id: "b-nda",
         group: "context",
-        text: "Departing employees signed agreements barring them from criticising the company for life, and acknowledging that the agreement existed was itself a breach.",
+        text: "A departing employee signed a lifetime ban on criticising the company.",
+        kind: "prior-practice",
+        cite: FILES,
+      },
+      {
+        id: "b-secret",
+        group: "context",
+        text: "The existence of that agreement was itself covered by an NDA — admitting it existed was already a breach.",
         kind: "prior-practice",
         cite: FILES,
       },
@@ -189,54 +216,73 @@ export const POLICY_COMPANIES: PolicyCompany[] = [
         cite: FILES,
       },
       {
+        id: "b-sec",
+        group: "context",
+        text: "A complaint to the securities regulator alleged that the agreements required employees to waive their federal right to a whistleblower award, and barred them from giving information to federal authorities without the company’s permission.",
+        kind: "prior-practice",
+        cite: FILES,
+        note: "Read the row carefully before you mark it: what is documented is the complaint and the reporting of it, not a regulator’s finding. That is still evidence of practice, and it is weaker evidence than the agreements themselves.",
+      },
+      {
         id: "b-retracted",
         group: "context",
-        text: "After the agreements were reported, the company said it had released former employees from them and would not cancel vested equity.",
+        text: "After it became public in May 2024, the company withdrew the non-disparagement agreements and said it would not cancel anyone’s vested equity.",
         kind: "self-report",
         cite: RETRACTION,
-        note: "Reported accurately, and still the company’s account of its own conduct — which is a different kind of evidence from the agreements themselves.",
-      },
-      {
-        id: "b-legal",
-        group: "unverified",
-        text: "The published channel runs through the legal team — the same team that would answer on the company’s behalf.",
-        kind: "external-assessment",
-        cite: TRANSFORMER,
-        note: "The routing is a published fact; that it is a conflict is somebody outside the company saying so.",
-      },
-    ],
-  },
-  {
-    id: "c",
-    label: "Company C",
-    kicker: "Publishes nothing on reporting at all.",
-    statements: [
-      {
-        id: "c-none",
-        group: "published",
-        text: "There is no published whistleblowing policy and no clear reporting channel to describe.",
-        kind: "external-assessment",
-        cite: FLI,
-        note: "An absence somebody checked for and recorded is still somebody’s finding, not a rule.",
-      },
-      {
-        id: "c-noincident",
-        group: "context",
-        text: "No reporting incident has been documented at this company either.",
-        kind: "not-established",
-        cite: FLI,
-        note: "The row that catches people: no reported failures is not evidence the channel works, when there is no channel to fail.",
-      },
-      {
-        id: "c-recommend",
-        group: "unverified",
-        text: "Whether any internal route exists that has simply never been described publicly.",
-        kind: "not-established",
-        cite: FLI,
+        note: "The compulsory row. A 2024 rule presented as still in force is an error, not strictness — and the retraction is still the company’s account of its own conduct, which is a different kind of evidence from the agreements themselves.",
       },
     ],
   },
 ];
+
+/**
+ * The third tab. Not a company and not marked: the four demands the employees
+ * themselves made, and her question — if these were satisfied, what would that
+ * change structurally?
+ *
+ * The four are the letter's own principles, shortened; the letter is linked in
+ * the Sources block so the full wording is one click away.
+ */
+export interface DemandTab {
+  id: string;
+  label: string;
+  kicker: string;
+  realName: string;
+  realNote?: string;
+  demands: { id: string; text: string }[];
+  question: string;
+  cite: { label: string; href: string };
+}
+
+export const POLICY_DEMANDS: DemandTab = {
+  id: "d",
+  label: "The demands",
+  kicker: "What the employees themselves asked for.",
+  realName: "“A Right to Warn about Advanced Artificial Intelligence”",
+  realNote:
+    "An open letter of 4 June 2024, signed by thirteen current and former employees of OpenAI and Google DeepMind — seven named, six anonymous — and endorsed by Yoshua Bengio, Geoffrey Hinton and Stuart Russell.",
+  demands: [
+    {
+      id: "d-nodisparage",
+      text: "No agreement that forbids risk-related criticism, and no withholding of earned payments for making it.",
+    },
+    {
+      id: "d-anon",
+      text: "A verifiably anonymous channel to the board, to regulators, and to an independent organization with relevant expertise.",
+    },
+    {
+      id: "d-public",
+      text: "A right to raise risk concerns publicly, so long as trade secrets are protected.",
+    },
+    {
+      id: "d-noretaliation",
+      text: "No retaliation for public disclosure once the other channels have failed.",
+    },
+  ],
+  question:
+    "If these were satisfied, what would that change structurally?",
+  cite: RIGHT_TO_WARN,
+};
 
 /** Her two closing questions, verbatim. */
 export const POLICY_QUESTIONS = [
@@ -248,4 +294,32 @@ export const POLICY_GROUPS: { id: PolicyStatement["group"]; label: string }[] = 
   { id: "published", label: "Published process" },
   { id: "context", label: "Documented context" },
   { id: "unverified", label: "Still unverified" },
+];
+
+/**
+ * What the Sources spoiler prints: per letter, who it was and every document
+ * its rows were read out of. Derived from the rows rather than written beside
+ * them, so a source added to a statement cannot go missing from the list.
+ */
+export const POLICY_SOURCES = [
+  ...POLICY_COMPANIES.map((c) => {
+    const seen = new Set<string>();
+    const cites = c.statements
+      .map((s) => s.cite)
+      .filter((cite) => !seen.has(cite.href) && seen.add(cite.href));
+    return {
+      id: c.id,
+      label: c.label,
+      realName: c.realName,
+      realNote: c.realNote,
+      cites,
+    };
+  }),
+  {
+    id: POLICY_DEMANDS.id,
+    label: POLICY_DEMANDS.label,
+    realName: POLICY_DEMANDS.realName,
+    realNote: POLICY_DEMANDS.realNote,
+    cites: [POLICY_DEMANDS.cite],
+  },
 ];

@@ -8,47 +8,55 @@ import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
 import {
   POLICY_COMPANIES,
+  POLICY_DEMANDS,
   POLICY_GROUPS,
   POLICY_QUESTIONS,
+  POLICY_SOURCES,
   PROVENANCE,
   type Provenance,
 } from "@/lib/verification/data/policy-on-paper";
 import type { VerificationWidgetProps } from "../kit/types";
 
 /**
- * 2.4.4's optional extension: mark what kind of evidence each statement is,
- * then say what the combination does to the people inside it.
+ * 2.4.4's optional extension: mark what kind of evidence each statement about
+ * a reporting regime is, then read both regimes against what the employees
+ * themselves demanded.
  *
  * OPTIONAL, so unbridged and outside the module's time: it records no
  * completion and adds nothing to progress. The section's finish event stays
  * "Audit the Verifier".
  *
- * The three companies are tabs and stay anonymous while the learner works —
- * that is the mechanic, not a concealment. Committing a tab reveals, per
- * statement, the answer key and the document it was read out of, so anyone
- * can check the claim and see whose regime they just judged.
+ * The two companies are tabs and stay anonymous while the learner works —
+ * that is the mechanic, not a concealment. The letters are cashed out at the
+ * end, in the Sources spoiler, together with every document each row was read
+ * out of; nothing above it carries a link, because a citation on tab A would
+ * name the company while tab B was still meant to be judged blind.
  *
  * Marking is per tab and commits per tab: the comparison she wants happens
- * between tabs, and a single commit across all three would make the third
- * tab's marks a formality once the pattern is visible.
+ * between tabs, and a single commit across both would make the second tab's
+ * marks a formality once the pattern is visible. The third tab is not marked
+ * at all — it is answered.
  *
- * The two written answers are hers, verbatim, and are never graded — no
- * model, no key. They persist with the marks.
+ * The written answers are hers, verbatim, and are never graded — no model, no
+ * key. They persist with the marks.
  */
 
 interface Saved {
   marks: Record<string, Provenance>;
   committed: string[];
   answers: Record<number, string>;
+  /** The demands tab's one answer. */
+  demandAnswer: string;
 }
 
 const STORAGE_KEY = "v-policy-on-paper:v1";
-const EMPTY: Saved = { marks: {}, committed: [], answers: {} };
+const EMPTY: Saved = { marks: {}, committed: [], answers: {}, demandAnswer: "" };
 const KINDS = new Set(PROVENANCE.map((p) => p.id));
 const ALL = POLICY_COMPANIES.flatMap((c) => c.statements);
+const TAB_IDS = [...POLICY_COMPANIES.map((c) => c.id), POLICY_DEMANDS.id];
 
 function prune(raw: unknown): Saved {
-  const out: Saved = { marks: {}, committed: [], answers: {} };
+  const out: Saved = { marks: {}, committed: [], answers: {}, demandAnswer: "" };
   if (typeof raw !== "object" || raw === null) return out;
   const box = raw as Partial<Saved>;
   for (const s of ALL) {
@@ -58,9 +66,7 @@ function prune(raw: unknown): Saved {
     }
   }
   if (Array.isArray(box.committed)) {
-    out.committed = box.committed.filter((id) =>
-      POLICY_COMPANIES.some((c) => c.id === id),
-    );
+    out.committed = box.committed.filter((id) => TAB_IDS.includes(id));
   }
   if (box.answers && typeof box.answers === "object") {
     POLICY_QUESTIONS.forEach((_, i) => {
@@ -68,6 +74,7 @@ function prune(raw: unknown): Saved {
       if (typeof v === "string") out.answers[i] = v;
     });
   }
+  if (typeof box.demandAnswer === "string") out.demandAnswer = box.demandAnswer;
   return out;
 }
 
@@ -101,15 +108,14 @@ export function PolicyOnPaper({}: VerificationWidgetProps) {
 
   if (!hydrated) return <div className="not-prose my-6 min-h-64" aria-busy />;
 
-  const company = POLICY_COMPANIES.find((c) => c.id === tab)!;
-  const shown = saved.committed.includes(company.id);
-  const placed = company.statements.filter((s) => saved.marks[s.id]).length;
-  const ready = placed === company.statements.length;
+  const company = POLICY_COMPANIES.find((c) => c.id === tab);
+  const onDemands = tab === POLICY_DEMANDS.id;
+  const done = TAB_IDS.every((id) => saved.committed.includes(id));
 
   return (
     <div className="not-prose my-6 space-y-4">
-      <div role="tablist" aria-label="Company" className="flex flex-wrap gap-2">
-        {POLICY_COMPANIES.map((c) => {
+      <div role="tablist" aria-label="Regime" className="flex flex-wrap gap-2">
+        {[...POLICY_COMPANIES, POLICY_DEMANDS].map((c) => {
           const active = c.id === tab;
           const seen = saved.committed.includes(c.id);
           return (
@@ -133,6 +139,118 @@ export function PolicyOnPaper({}: VerificationWidgetProps) {
         })}
       </div>
 
+      {company ? (
+        <CompanyTab
+          companyId={company.id}
+          saved={saved}
+          persist={persist}
+        />
+      ) : null}
+
+      {onDemands ? <DemandsTab saved={saved} persist={persist} /> : null}
+
+      {/* Her two questions, once both regimes and the demands are on the
+          table: they are asked of the combination, so they open when the
+          comparison exists. */}
+      {done ? (
+        <div className="border-border space-y-4 rounded-xl border p-4">
+          {POLICY_QUESTIONS.map((q, i) => (
+            <div key={q} className="space-y-2">
+              <p className="text-sm font-medium">{q}</p>
+              <Textarea
+                rows={4}
+                value={saved.answers[i] ?? ""}
+                onChange={(e) =>
+                  persist({
+                    ...saved,
+                    answers: { ...saved.answers, [i]: e.target.value },
+                  })
+                }
+                aria-label={q}
+              />
+            </div>
+          ))}
+          <p className="text-muted-foreground text-xs">
+            Nothing here is graded. These are the two questions the section
+            leaves you with.
+          </p>
+        </div>
+      ) : null}
+
+      {/* The reveal, and the only place the letters are cashed out: who each
+          one was, and every document its rows were read out of. It opens
+          closed — the mapping is a spoiler for anyone who has not finished —
+          and it carries the house's disclosure sign, the `+` that turns 45°
+          into a `×`, the same one Works cited and Fold use. */}
+      {done ? (
+        <details className="border-border group rounded-xl border">
+          <summary className="flex cursor-pointer list-none items-center justify-between gap-3 px-4 py-3 text-sm font-semibold select-none [&::-webkit-details-marker]:hidden">
+            <span>Sources</span>
+            <span
+              aria-hidden
+              className="text-muted-foreground text-2xl leading-none font-light transition-transform duration-200 group-open:rotate-45 motion-reduce:transition-none"
+            >
+              +
+            </span>
+          </summary>
+          <div className="space-y-4 px-4 pb-4">
+            <p className="text-muted-foreground text-xs leading-relaxed">
+              Which tab was which, and everything its rows were read out of.
+              Nothing above was written from memory.
+            </p>
+            <ul className="space-y-3">
+              {POLICY_SOURCES.map((c) => (
+                <li key={c.id} className="text-sm leading-relaxed">
+                  <p>
+                    <span className="font-semibold">{c.label}</span>
+                    {" — "}
+                    {c.realName}
+                  </p>
+                  {c.realNote ? (
+                    <p className="text-muted-foreground mt-0.5 text-xs leading-relaxed">
+                      {c.realNote}
+                    </p>
+                  ) : null}
+                  <ul className="mt-1 space-y-0.5">
+                    {c.cites.map((cite) => (
+                      <li key={cite.href} className="text-xs">
+                        <a
+                          href={cite.href}
+                          target="_blank"
+                          rel="noopener"
+                          className="text-muted-foreground underline-offset-4 hover:underline"
+                        >
+                          {cite.label}
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </details>
+      ) : null}
+    </div>
+  );
+}
+
+function CompanyTab({
+  companyId,
+  saved,
+  persist,
+}: {
+  companyId: string;
+  saved: Saved;
+  persist: (next: Saved) => void;
+}) {
+  const company = POLICY_COMPANIES.find((c) => c.id === companyId)!;
+  const shown = saved.committed.includes(company.id);
+  const placed = company.statements.filter((s) => saved.marks[s.id]).length;
+  const ready = placed === company.statements.length;
+
+  return (
+    <>
       <p className="text-muted-foreground text-sm">{company.kicker}</p>
 
       {POLICY_GROUPS.map((group) => {
@@ -167,25 +285,18 @@ export function PolicyOnPaper({}: VerificationWidgetProps) {
                           <CircleAlert className="size-3.5 shrink-0" aria-hidden />
                         )}
                         {PROVENANCE.find((p) => p.id === s.kind)!.label}
-                        {right ? "" : ` — you marked ${
-                          PROVENANCE.find((p) => p.id === mark)?.label ?? "nothing"
-                        }`}
+                        {right
+                          ? ""
+                          : ` — you marked ${
+                              PROVENANCE.find((p) => p.id === mark)?.label ??
+                              "nothing"
+                            }`}
                       </p>
                       {s.note ? (
                         <p className="text-muted-foreground text-sm leading-relaxed">
                           {s.note}
                         </p>
                       ) : null}
-                      <p className="text-xs">
-                        <a
-                          href={s.cite.href}
-                          target="_blank"
-                          rel="noopener"
-                          className="text-muted-foreground underline-offset-4 hover:underline"
-                        >
-                          — {s.cite.label}
-                        </a>
-                      </p>
                     </div>
                   ) : (
                     <div className="mt-3 flex flex-wrap gap-1.5">
@@ -223,7 +334,7 @@ export function PolicyOnPaper({}: VerificationWidgetProps) {
       <div className="flex flex-wrap items-center justify-between gap-3">
         <p className="text-muted-foreground text-xs">
           {shown
-            ? "Each row now carries what it was read out of."
+            ? "Marked. Who this was, and what each row was read out of, opens under Sources once every tab is done."
             : `${placed} of ${company.statements.length} marked on this tab.`}
         </p>
         {shown ? null : (
@@ -238,33 +349,73 @@ export function PolicyOnPaper({}: VerificationWidgetProps) {
           </Button>
         )}
       </div>
+    </>
+  );
+}
 
-      {/* Her two questions, once all three regimes are on the table: they are
-          asked of the combination, so they open when the comparison exists. */}
-      {saved.committed.length === POLICY_COMPANIES.length ? (
-        <div className="border-border space-y-4 rounded-xl border p-4">
-          {POLICY_QUESTIONS.map((q, i) => (
-            <div key={q} className="space-y-2">
-              <p className="text-sm font-medium">{q}</p>
-              <Textarea
-                rows={4}
-                value={saved.answers[i] ?? ""}
-                onChange={(e) =>
-                  persist({
-                    ...saved,
-                    answers: { ...saved.answers, [i]: e.target.value },
-                  })
-                }
-                aria-label={q}
-              />
-            </div>
-          ))}
-          <p className="text-muted-foreground text-xs">
-            Nothing here is graded. These are the two questions the section
-            leaves you with.
-          </p>
-        </div>
-      ) : null}
-    </div>
+/**
+ * The demands tab. Nothing to mark: the four are what was asked for, and the
+ * question is what satisfying them would change. Committing needs an answer,
+ * because the answer is the entire work of this tab.
+ */
+function DemandsTab({
+  saved,
+  persist,
+}: {
+  saved: Saved;
+  persist: (next: Saved) => void;
+}) {
+  const shown = saved.committed.includes(POLICY_DEMANDS.id);
+  const written = saved.demandAnswer.trim().length > 0;
+
+  return (
+    <>
+      <p className="text-muted-foreground text-sm">{POLICY_DEMANDS.kicker}</p>
+
+      <ul className="space-y-2">
+        {POLICY_DEMANDS.demands.map((d) => (
+          <li
+            key={d.id}
+            className="border-border bg-card rounded-xl border p-4 text-sm leading-relaxed"
+          >
+            {d.text}
+          </li>
+        ))}
+      </ul>
+
+      <div className="space-y-2">
+        <p className="text-sm font-medium">{POLICY_DEMANDS.question}</p>
+        <Textarea
+          rows={4}
+          value={saved.demandAnswer}
+          onChange={(e) =>
+            persist({ ...saved, demandAnswer: e.target.value })
+          }
+          aria-label={POLICY_DEMANDS.question}
+        />
+      </div>
+
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <p className="text-muted-foreground text-xs">
+          {shown
+            ? "Answered. What this letter was, and who signed it, opens under Sources once every tab is done."
+            : "Nothing here is graded — but the answer is the work of this tab."}
+        </p>
+        {shown ? null : (
+          <Button
+            size="sm"
+            disabled={!written}
+            onClick={() =>
+              persist({
+                ...saved,
+                committed: [...saved.committed, POLICY_DEMANDS.id],
+              })
+            }
+          >
+            Commit
+          </Button>
+        )}
+      </div>
+    </>
   );
 }

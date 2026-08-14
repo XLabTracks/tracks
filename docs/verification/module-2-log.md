@@ -906,3 +906,32 @@ olympiad paper uses**: a number, an imperative instruction, nothing else. The
 lesson body above the fold said what the exercise was for and now says nothing
 at all — which is right. A problem that needs an introduction has not been
 stated.
+
+**2.4.4: two provenance defects, and it stops being optional (2026-08-14,
+owner's review).**
+
+- **The first card mixed two provenances and was keyed as one.** "Reports may
+  be filed anonymously through an independent third-party platform, and the
+  company states it cannot unmask an anonymous reporter" is a published rule
+  AND an assertion about the company's own systems, keyed Published rule. The
+  exercise that teaches learners not to mix provenance was mixing it on its
+  first card. Split in two, as the owner set it out: the channel is the rule,
+  and "the company states that it cannot identify a reporter who uses the
+  anonymous channel" is a company self-report. Two sentences a few lines apart
+  in one document with different epistemic status — the split makes the
+  exercise better, not just correct.
+- **The SEC row classified an allegation as practice.** Its own note admitted
+  that what is documented is the complaint and not a regulator's finding, and
+  then said "that is still evidence of practice", which is precisely the move
+  2.4.3 spends ten minutes teaching against. The taxonomy has no label for a
+  documented allegation, and rather than add a sixth the row now states the
+  documented object: whistleblowers FILED a complaint alleging X. The filing is
+  what happened; the allegation is its content, and the note says so.
+  (Adding "Documented allegation" as a sixth label is the alternative, and it
+  would change the vocabulary of the whole exercise, so it is the owner's call
+  rather than one to make in passing.)
+- **Not optional.** 2.4.4 comes out of the Fold, its heading is "Lab" rather
+  than "Optional lab", and it is bridged — finishing the three sets is the
+  section's finish event, fired from an effect on the finished state because
+  there is no single button that ends it. 2.4.1 to 2.4.3 stay optional and
+  folded.

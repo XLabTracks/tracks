@@ -67,11 +67,11 @@ export const verificationExercises: VerificationExerciseDef[] = [
   // drills-supply-chain stood down when the section-specific 2.4.4 lab
   // replaced it. Its widget, engine, data, and tests remain in the repo.
   { id: "drills-games", title: "Drill Bench: Evasion, Regime, Position", bridged: true },
-  // 2.4's four exercises are OPTIONAL on the course owner's instruction, and
-  // therefore unbridged: they record no completion, so a learner who reads the
-  // section and skips the labs has still finished it. Each is a constructed
-  // answer of ten to twenty minutes, and four of them on top of the readings
-  // is more than the module's two hours hold.
+  // 2.4.1 to 2.4.3 are OPTIONAL on the course owner's instruction, and
+  // therefore unbridged: they record no completion, so a learner who reads
+  // those sections and skips the labs has still finished them. 2.4.4 is not —
+  // it is the section's work, it sits outside the Fold, and finishing it
+  // finishes the section.
   { id: "human-insiders", title: "Insider Report", bridged: false },
   { id: "human-reporting-protection", title: "On Paper", bridged: false },
   // Unbridged: a three-minute assignment inside 2.4.2, whose finish event is
@@ -79,16 +79,11 @@ export const verificationExercises: VerificationExerciseDef[] = [
   // the section at whichever fired first.
   { id: "whistleblower-levers", title: "Four Levers, One Each", bridged: false },
   { id: "human-audits-inspections", title: "Four Sources", bridged: false },
-  { id: "human-institutions-judgment", title: "Companies A and B", bridged: false },
-  // 2.4's optional extensions. Unbridged by definition: they record no
-  // completion and are outside the module's estimated time, so a learner who
-  // skips them has still finished the section.
-  // report-access ("One Report, Four Ways") stood down 2026-08-14: the
-  // owner's spec makes the same variation 2.4.3's own exercise, with four
-  // variants and three lines each. Widget and data remain in the repo.
-  // policy-on-paper (the 2.4.4 optional) stood down 2026-08-14: the delta spec
-  // makes Policy on Paper 2.4.2's own exercise, and two exercises of one name
-  // in one module is a defect. Widget, data and test remain in the repo.
+  { id: "human-institutions-judgment", title: "Companies A and B", bridged: true },
+  // Stood down 2026-08-14, widgets and data kept: report-access ("One Report,
+  // Four Ways"), whose controlled variation became 2.4.3 itself; and the
+  // generic companies-ab, whose comparison 2.4.4 now runs on two real
+  // companies instead.
   { id: "cloud-evidence-drill", title: "Cloud Evidence Drill", bridged: true },
 ];
 export function getVerificationExercise(id: string): VerificationExerciseDef | undefined {

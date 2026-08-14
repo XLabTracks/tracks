@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { CircleAlert, CircleCheck } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -27,9 +27,9 @@ import type { VerificationWidgetProps } from "../kit/types";
  * a reporting regime is, then read both regimes against what the employees of
  * those companies asked for themselves.
  *
- * It is the section's exercise now, not an extension beside one. OPTIONAL like
- * every lab in 2.4 and therefore unbridged: it records no completion, and a
- * learner who reads the section and skips it has still finished it.
+ * It is the section's exercise now, not an extension beside one, and unlike
+ * 2.4's other three labs it is not optional: it sits outside the Fold and
+ * finishing it is what finishes 2.4.4.
  *
  * The two companies are tabs and stay anonymous while the learner works —
  * that is the mechanic, not a concealment. The letters are cashed out at the
@@ -79,10 +79,14 @@ function prune(raw: unknown): Saved {
   return out;
 }
 
-export function PolicyOnPaper({}: VerificationWidgetProps) {
+export function PolicyOnPaper({
+  onComplete,
+  initialCompleted,
+}: VerificationWidgetProps) {
   const [saved, setSaved] = useState<Saved>(EMPTY);
   const [hydrated, setHydrated] = useState(false);
   const [tab, setTab] = useState(POLICY_COMPANIES[0]!.id);
+  const fired = useRef(initialCompleted);
 
   useEffect(() => {
     let restored = EMPTY;
@@ -97,6 +101,17 @@ export function PolicyOnPaper({}: VerificationWidgetProps) {
       setHydrated(true);
     });
   }, []);
+
+  /* Bridged: committing the last set is the finish event. There is no single
+     button that ends this exercise — three commits do, and which of them is
+     last is the learner's order — so it fires from an effect on the finished
+     state rather than from a handler. Once. */
+  const finished = TAB_IDS.every((id) => saved.committed.includes(id));
+  useEffect(() => {
+    if (!hydrated || !finished || fired.current) return;
+    fired.current = true;
+    onComplete();
+  }, [hydrated, finished, onComplete]);
 
   const persist = useCallback((next: Saved) => {
     setSaved(next);

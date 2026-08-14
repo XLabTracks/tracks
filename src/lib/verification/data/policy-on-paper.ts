@@ -167,9 +167,17 @@ export const POLICY_COMPANIES: PolicyCompany[] = [
       {
         id: "a-anon",
         group: "published",
-        text: "Reports may be filed anonymously through an independent third-party platform, and the company states it cannot unmask an anonymous reporter.",
+        text: "Reports may be filed anonymously through an independent third-party platform.",
         kind: "published-rule",
         cite: ANTHROPIC_POLICY,
+      },
+      {
+        id: "a-unmask",
+        group: "published",
+        text: "The company states that it cannot identify a reporter who uses the anonymous channel.",
+        kind: "self-report",
+        cite: ANTHROPIC_POLICY,
+        note: "Two sentences from one document, a few lines apart, and not the same kind of claim. That a channel is permitted is a rule the company wrote. That the company is unable to unmask somebody using it is an assertion about its own systems, and nobody outside has tested it.",
       },
       {
         id: "a-informal",
@@ -234,10 +242,10 @@ export const POLICY_COMPANIES: PolicyCompany[] = [
       {
         id: "b-sec",
         group: "context",
-        text: "A complaint to the securities regulator alleged that the agreements required employees to waive their federal right to a whistleblower award, and barred them from giving information to federal authorities without the company’s permission.",
+        text: "Whistleblowers filed a complaint with the securities regulator, alleging that the agreements required employees to waive their federal right to a whistleblower award and barred them from giving information to federal authorities without the company’s permission.",
         kind: "prior-practice",
         cite: FILES,
-        note: "Read the row carefully before you mark it: what is documented is the complaint and the reporting of it, not a regulator’s finding. That is still evidence of practice, and it is weaker evidence than the agreements themselves.",
+        note: "What happened, and is documented, is the filing. What the complaint says happened is an allegation inside it, which no regulator has ruled on. Marking the allegation as practice is the error 2.4.3 spends ten minutes on — evidence of a claim is not evidence that the claim is true — so the row states the filing and leaves the allegation as its content.",
       },
       {
         id: "b-grade",

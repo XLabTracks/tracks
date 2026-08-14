@@ -25,7 +25,7 @@ export async function GuideContent({ contentRef }: { contentRef: string }) {
   const Body = mdxModule.default;
 
   return (
-    <article className="lesson-body guide-body prose prose-neutral prose-headings:font-semibold prose-headings:tracking-tight prose-a:text-destructive prose-a:font-medium prose-a:underline-offset-4 max-w-none">
+    <article className="lesson-body guide-body prose prose-neutral dark:prose-invert prose-headings:font-semibold prose-headings:tracking-tight prose-a:text-link prose-a:font-medium prose-a:underline-offset-4 max-w-none">
       <Body />
     </article>
   );

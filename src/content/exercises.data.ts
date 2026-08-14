@@ -1120,6 +1120,56 @@ export const exercises: Exercise[] = [
     answer:
       "Incriminating a model from a large volume of mildly suspicious actions requires knowing exactly how suspicious a benign model would look. Without that affordance, no amount of mildly suspicious actions is enough.",
   },
+  // --- Control: "Catching AIs red-handed" — quick-recall notecards. Phrased
+  // as standalone questions (no "this post"/"the reading"): they surface on
+  // the separate spaced-repetition page. Placed at section ends downstream of
+  // the passages they test (never in the appendices). ---
+  {
+    id: "c-catching-recall-catch-definition",
+    type: "tap-reveal",
+    prompt: "What does it mean to catch a scheming model red-handed?",
+    answer:
+      "Finding inputs on which the deployed model demonstrably takes catastrophic actions with a probability far higher than would be expected if it were not purposefully looking for opportunities to take such actions. The catch has to be established with extremely high confidence, which may take a large investigation.",
+  },
+  {
+    id: "c-catching-recall-first-critical-try",
+    type: "tap-reveal",
+    prompt:
+      "In what sense is a deployment with a scheming AI a \"first critical try\" situation for both sides?",
+    answer:
+      "The lab risks an irreversible catastrophe if its safety measures fail once at a bad time. The AI faces the mirror-image risk: an escape attempt that gets caught substantially reduces its chances of ever succeeding. Both sides desperately want to succeed on the first critical try.",
+  },
+  {
+    id: "c-catching-recall-few-shot",
+    type: "tap-reveal",
+    prompt: "What is few-shot catastrophe prevention?",
+    answer:
+      "The problem of preventing future escape attempts given a few caught examples of a model trying to escape, faced by a lab that keeps deploying a model after catching it.",
+  },
+  {
+    id: "c-catching-recall-shutdown-plan",
+    type: "tap-reveal",
+    prompt:
+      "What is the catch-then-shut-down plan, and why is it worth committing to it in advance?",
+    answer:
+      "The plan of stopping the use of a model once it has been caught attempting to escape. Committing in advance matters because the lab may need to act quickly, and in the moment many stakeholders will be deeply opposed to shutting the model down; customers may even hold service-level agreements that penalize taking it offline.",
+  },
+  {
+    id: "c-catching-recall-train-monitors-not-policy",
+    type: "tap-reveal",
+    prompt:
+      "After catching escape attempts, why might a lab train its monitoring models on the caught examples but leave the policy model itself untouched?",
+    answer:
+      "Training the policy on negative examples could teach it which countermeasures are in place and which approaches fail. It also makes prior attempts off-policy, which disrupts interventions like probes trained on the model, and it reduces the number of future attempts, whereas catching more attempts is valuable.",
+  },
+  {
+    id: "c-catching-recall-keep-control-evals",
+    type: "tap-reveal",
+    prompt:
+      "Why should control evaluations never be fully retired, even after several escape attempts have been caught and studied?",
+    answer:
+      "Caught attempts may be deliberately poorly executed fakes intended to create a false sense of security or divert resources toward less effective safeguards. To actually achieve anything, a scheming AI must eventually make a serious attempt, so a sufficiently high chance of catching that first serious attempt must be maintained.",
+  },
   // --- Control: misalignment and strategic underperformance
   // (c-lowstakes-l3) — quick-recall notecards. Phrased as standalone
   // definitions (no "this post"/"the reading"): they are surfaced on a
@@ -2003,6 +2053,63 @@ export const exercises: Exercise[] = [
         ],
       },
     ],
+  },
+  // --- Control: "case for control" reading — quick-recall notecards. Phrased
+  // as standalone questions (no "this post"/"the reading"): they surface on
+  // the separate spaced-repetition page. Placed at section ends downstream of
+  // the passages they test (never in the appendices). ---
+  {
+    id: "c-case-recall-control-vs-alignment",
+    type: "tap-reveal",
+    prompt:
+      "What distinguishes the control line of defense from the alignment line of defense against scheming AIs?",
+    answer:
+      "Alignment aims to ensure that models are not scheming in the first place. Control aims to ensure that even if models are scheming, they are not capable of subverting the safety measures. With both lines in place, a scheming model can only cause a catastrophe if alignment and control both fail.",
+  },
+  {
+    id: "c-case-recall-control-property",
+    type: "tap-reveal",
+    prompt:
+      "What does it mean for a set of safety techniques to have the control property?",
+    answer:
+      "Potentially scheming models are not capable of finding and executing a subversion strategy that has more than a small probability of an unacceptable outcome, such as exfiltrating their weights or hacking the datacenter.",
+  },
+  {
+    id: "c-case-recall-untrusted",
+    type: "tap-reveal",
+    prompt: "How can a lab decide which of its models to treat as untrusted?",
+    answer:
+      "The only known way to confidently rule out scheming without fundamental breakthroughs is lack of capability. Models that pass the relevant capability evaluations are treated as untrusted; models that are clearly too weak to plausibly be scheming can be treated as trusted.",
+  },
+  {
+    id: "c-case-recall-eval-tractability",
+    type: "tap-reveal",
+    prompt: "Why is control more tractable to evaluate than alignment?",
+    answer:
+      "Evaluating control only requires evaluating capabilities: whether the model is able to subvert the safety measures. Evaluating alignment is much harder because whatever behavior a model displays, it might be behaving that way to make you think it is aligned.",
+  },
+  {
+    id: "c-case-recall-problematic-domains",
+    type: "tap-reveal",
+    prompt:
+      "Control techniques may fail against an AI that is qualitatively wildly superhuman in certain domains. Which domains are the most problematic?",
+    answer:
+      "Hacking, persuasion, and manipulating scientific results or conceptual arguments. In most domains, wildly superhuman performance is not a problem for control.",
+  },
+  {
+    id: "c-case-recall-wildly-superhuman",
+    type: "tap-reveal",
+    prompt:
+      "Why is an early transformatively useful AI unlikely to be qualitatively wildly superhuman in a problematic domain?",
+    answer:
+      "An AI that was wildly superhuman across the board would probably have been transformatively useful at an earlier capability level. The applications that make an AI transformatively useful do not require training for wildly superhuman performance in problematic domains, those domains seem correlated with general capability, and AI capability profiles so far are not wildly different from the human profile.",
+  },
+  {
+    id: "c-case-recall-neuralese",
+    type: "tap-reveal",
+    prompt: "What is \"neuralese\", and why does it threaten control?",
+    answer:
+      "Neuralese is uninterpretable serial reasoning, memory, or communication between AI instances. It makes it harder to ensure the red team can match the AI's plans, to monitor for problematic reasoning, and to elicit capabilities; and once AIs can pass arbitrary uninterpretable messages to each other, preventing coordination and collusion is virtually impossible.",
   },
   // --- Control: "case for control" reading — Exercise Set 1 (control-property
   // scenarios). Card and reveal copy is authored verbatim (do not paraphrase);

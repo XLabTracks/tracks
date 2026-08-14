@@ -13,6 +13,7 @@ import {
 } from "@/lib/verification/data/construct-case";
 import { CONSTRUCT_CASE_KEY } from "@/lib/verification/data/marking-keys";
 import { runCaseChecks } from "@/lib/verification/case-checks";
+import { CASE_DECK } from "@/lib/verification/data/steelman-decks";
 import { ConstructedResponse } from "../kit/constructed-response";
 import { MarkingKeyPanel } from "../kit/marking-key";
 import type { VerificationWidgetProps } from "../kit/types";
@@ -44,6 +45,7 @@ export function ConstructCase({
       words={CASE_WORDS}
       submitLabel="Submit the case"
       checks={(values) => runCaseChecks(values, CASE_WORDS)}
+      steelman={CASE_DECK}
       onSubmit={() => {
         if (fired.current) return;
         fired.current = true;

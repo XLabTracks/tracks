@@ -16,17 +16,19 @@ import {
   PROVENANCE,
   type Provenance,
 } from "@/lib/verification/data/policy-on-paper";
+import { INSTITUTION_DECK } from "@/lib/verification/data/steelman-decks";
 import { QuestionWorkspace } from "../kit/question-workspace";
+import { SteelmanDeck } from "../kit/steelman-deck";
 import type { VerificationWidgetProps } from "../kit/types";
 
 /**
- * 2.4.4's optional extension: mark what kind of evidence each statement about
- * a reporting regime is, then read both regimes against what the employees
- * themselves demanded.
+ * 2.4.4 — Companies A and B. Mark what kind of evidence each statement about
+ * a reporting regime is, then read both regimes against what the employees of
+ * those companies asked for themselves.
  *
- * OPTIONAL, so unbridged and outside the module's time: it records no
- * completion and adds nothing to progress. The section's finish event stays
- * "Audit the Verifier".
+ * It is the section's exercise now, not an extension beside one. OPTIONAL like
+ * every lab in 2.4 and therefore unbridged: it records no completion, and a
+ * learner who reads the section and skips it has still finished it.
  *
  * The two companies are tabs and stay anonymous while the learner works —
  * that is the mechanic, not a concealment. The letters are cashed out at the
@@ -146,6 +148,8 @@ export function PolicyOnPaper({}: VerificationWidgetProps) {
       ) : null}
 
       {onDemands ? <DemandsTab saved={saved} persist={persist} /> : null}
+
+      <SteelmanDeck deck={INSTITUTION_DECK} />
 
       {/* The two questions, under the material and never behind a gate. They
           were above it and are now below, which is the course owner's order:

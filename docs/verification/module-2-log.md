@@ -836,3 +836,28 @@ non-disparagement agreements; a former employee on access to liquidity having
 been used as an intimidation tactic (24 May 2024); and two signatories of the
 June letter on confidentiality agreements blocking them from raising concerns
 anywhere but with the company itself. Using any of it is a content decision.
+
+**The steelman deck comes to 2.4 (2026-08-14).** The writing desk has three
+things beside a draft — rule-based checks, the skim test, and a steelman deck
+that draws one challenge at a time. 2.4 had the first of those on 2.4.1 and
+nothing else. The deck is now on all three written exercises: the constructed
+case, the four sources, and the two questions about the regimes.
+
+One deck per exercise, because the objections that bite differ — a card asking
+whether your failure point survives a more senior insider is useless against a
+fifty-word comparison. Eight cards each, which is a deck somebody could exhaust,
+and that is the honest shape for a ten-minute exercise; the desk's own is
+fourteen because a memo takes an hour.
+
+Every card asks the writer about their own answer and none of them says
+anything about reporting institutions. That is the line that keeps a challenge
+deck from becoming curriculum by the back door.
+
+Nothing is stored: a drawn challenge is a prompt, not learner work, and
+persisting it would make it read as a task with a right response. The card
+starts unshown so the first render matches the server's — a random card chosen
+during render would not.
+
+The skim test is not ported and should not be: it reads first sentences and
+bold lines to show what a hurried reader sees, which is a memo's problem. None
+of these four is a document somebody skims.

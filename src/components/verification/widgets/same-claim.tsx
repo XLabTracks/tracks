@@ -18,6 +18,8 @@ import {
   FIXED_CLAIM,
 } from "@/lib/verification/data/same-claim";
 import { SAME_CLAIM_KEY } from "@/lib/verification/data/marking-keys";
+import { CLAIM_DECK } from "@/lib/verification/data/steelman-decks";
+import { SteelmanDeck } from "../kit/steelman-deck";
 import { MarkingKeyPanel } from "../kit/marking-key";
 import type { VerificationWidgetProps } from "../kit/types";
 
@@ -188,6 +190,8 @@ export function SameClaim({
           </section>
         ))}
       </div>
+
+      {saved.submitted ? null : <SteelmanDeck deck={CLAIM_DECK} />}
 
       <div className="flex flex-wrap items-center justify-between gap-3">
         <p className="text-muted-foreground text-xs">

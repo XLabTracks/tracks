@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useState, type ReactNode } from "react";
 import { Button } from "@/components/ui/button";
+import { SteelmanDeck } from "./steelman-deck";
 import { cn } from "@/lib/utils";
 
 /**
@@ -62,6 +63,7 @@ export function ConstructedResponse({
   submitLabel = "Submit",
   onSubmit,
   checks,
+  steelman,
 }: {
   /** localStorage document for this exercise. Permanent — learner work. */
   storageKey: string;
@@ -84,6 +86,8 @@ export function ConstructedResponse({
     severity: "ok" | "warn" | "bad";
     message: string;
   }[];
+  /** Shown beside the checks while writing — the writing desk's steelman. */
+  steelman?: readonly string[];
 }) {
   const [saved, setSaved] = useState<Saved>(EMPTY);
   const [hydrated, setHydrated] = useState(false);
@@ -223,6 +227,10 @@ export function ConstructedResponse({
             ))}
           </div>
         </section>
+      ) : null}
+
+      {steelman && !saved.submitted && started ? (
+        <SteelmanDeck deck={steelman} />
       ) : null}
 
       {saved.submitted ? reveal : null}

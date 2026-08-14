@@ -473,3 +473,11 @@ Question 1 of the policy-on-paper deck now carries the owner's later wording —
 the plan's longer "What incentives does this combination of rules, history, and
 unresolved authority create?". Same subject; the shorter one puts the rules in
 the sentence, which is what the learner has just spent ten minutes marking.
+
+Then, on the owner's reading of the rendered fold: all three preamble lines
+deleted (the italic size line, the lesson paragraph framing the marking, the
+deck's intro), and the material and the answer boxes swapped — the tabs come
+first and the two questions sit under them, which is her order. The one thing
+that does not go back is the gate: the questions are on the page from the
+start, and `policy-on-paper.test.ts` still fails if anything about them starts
+depending on `done`.

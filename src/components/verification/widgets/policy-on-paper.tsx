@@ -112,32 +112,6 @@ export function PolicyOnPaper({}: VerificationWidgetProps) {
 
   return (
     <div className="not-prose my-6 space-y-4">
-      {/* The analysis is the point of the block, so its two questions are on
-          the page from the moment it opens — before the tabs, not behind
-          them. Hiding them until every tab was committed meant a learner met
-          them only after the marking had been sealed, with no way to re-read
-          a row against the question. Answers save as you go. */}
-      <QuestionWorkspace
-        storageKey={POLICY_NOTES_KEY}
-        rule={{ kind: "any", count: POLICY_QUESTIONS.length }}
-        questions={POLICY_QUESTIONS}
-        placeholder="Answer as you go — the tabs below are what you are answering from."
-        intro={
-          <p className="text-muted-foreground text-sm leading-relaxed">
-            Write as you go. Nothing is graded.
-          </p>
-        }
-        onComplete={() => {}}
-      />
-
-      {/* The marking instruction belongs here, immediately above the tabs it
-          instructs — not stacked with the questions, where it read as a third
-          paragraph of preamble before anything could be done. */}
-      <p className="text-sm leading-relaxed">
-        Now the material. Every statement has to answer one question before you
-        can use it: what kind of thing is this?
-      </p>
-
       <div role="tablist" aria-label="Regime" className="flex flex-wrap gap-2">
         {[...POLICY_COMPANIES, POLICY_DEMANDS].map((c) => {
           const active = c.id === tab;
@@ -172,6 +146,20 @@ export function PolicyOnPaper({}: VerificationWidgetProps) {
       ) : null}
 
       {onDemands ? <DemandsTab saved={saved} persist={persist} /> : null}
+
+      {/* The two questions, under the material and never behind a gate. They
+          were above it and are now below, which is the course owner's order:
+          the tabs are what you answer from. What they must not go back to is
+          opening only once every tab is committed — a learner met them after
+          the marking was sealed, with no way to re-read a row against them.
+          No preamble here; the questions are their own instruction. */}
+      <QuestionWorkspace
+        storageKey={POLICY_NOTES_KEY}
+        rule={{ kind: "any", count: POLICY_QUESTIONS.length }}
+        questions={POLICY_QUESTIONS}
+        placeholder="Answer as you go. Nothing is graded."
+        onComplete={() => {}}
+      />
 
       {/* The reveal, and the only place the letters are cashed out: who each
           one was, and every document its rows were read out of. It opens

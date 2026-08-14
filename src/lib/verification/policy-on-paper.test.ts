@@ -75,11 +75,12 @@ describe("policy-on-paper", () => {
     expect(last.text).toMatch(/May 2024/);
   });
 
-  it("puts the analysis questions on the page before anything is gated", () => {
+  it("keeps the analysis questions out from behind the completion gate", () => {
     // The defect this pins: the two questions used to appear only once every
     // tab was committed, so a learner met the analysis after the marking had
-    // been sealed. They belong above the tabs, and nothing about them may
-    // depend on `done`.
+    // been sealed, with no way to re-read a row against them. Where they sit
+    // on the page is the owner's call — they are under the tabs now — but
+    // nothing about them may depend on `done`.
     const src = readFileSync(WIDGET, "utf8");
     const deck = src.indexOf("<QuestionWorkspace");
     const gate = src.indexOf("{done ?");

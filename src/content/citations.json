@@ -93,26 +93,12 @@
       "container": "arXiv",
       "date": "July 2025"
     },
-    "https://arxiv.org/abs/2507.15916": {
-      "title": "Verifying International Agreements on AI: Six Layers of Verification for Rules on Large-Scale AI Development and Deployment",
-      "about": "A six-layer verification framework whose personnel-based layers map which workers can observe different violations and why disclosures still need independent confirmation.",
-      "authors": "Baker, Mauricio, Gabriel Kulp, Oliver Marks, et al.",
-      "container": "arXiv",
-      "date": "July 2025"
-    },
     "https://arxiv.org/html/2507.15916#A1.SS8": {
       "title": "Verifying International Agreements on AI — Appendix A.8: Whistleblower Programs",
       "about": "Baker et al. examine secure contact, suppression, incentives, confidentiality, and which supply-chain personnel can observe different violations.",
       "authors": "Baker, Mauricio, Gabriel Kulp, Oliver Marks, et al.",
       "container": "arXiv",
       "date": "July 2025"
-    },
-    "https://arxiv.org/abs/2601.11699": {
-      "title": "Frontier AI Auditing: Toward Rigorous Third-Party Assessment of Safety and Security Practices at Leading AI Companies",
-      "about": "A framework for frontier AI audits based on deep, secure access to non-public technical and organizational evidence, with four levels of assurance.",
-      "authors": "Brundage, Miles, Noemi Dreksler, Aidan Homewood, et al.",
-      "container": "arXiv",
-      "date": "Jan. 2026"
     },
     "https://arxiv.org/abs/2511.10783": {
       "title": "An International Agreement to Prevent the Premature Creation of Artificial Superintelligence",

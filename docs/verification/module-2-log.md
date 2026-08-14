@@ -511,3 +511,24 @@ first and the two questions sit under them, which is her order. The one thing
 that does not go back is the gate: the questions are on the page from the
 start, and `policy-on-paper.test.ts` still fails if anything about them starts
 depending on `done`.
+
+### 2.2 cloud problem set: olympiad form and answer audit (2026-08-14)
+
+The nine requested mechanics remain a thirty-minute block, but their first
+draft was rewritten after the owner's olympiad examples. Instructions now say
+exactly what kind of answer to submit; the odd-one-out requires both the item
+and the classification principle; matching answers are one-to-one; the gap
+exercise has exactly three unused terms; and the sequence is tied to a stated
+scheme rather than presented as a universal chronology. All learner-facing
+copy is English.
+
+Every stem, distractor, and key was checked again against the assigned reading
+ranges. Claims not found there were removed: checkpoint-sized writes no longer
+appear; attestation is described as a verifiable claim in a confidential-
+computing protocol rather than a generic signed state; the case uses the
+workload characteristics listed by Heim et al.; and the sequential-training
+problem uses RAND's per-account metrics, multiple accounts, and large data
+transfers. Correct-answer panels link the exact sections used, including the
+KYC and policy-scope readings where the conclusion depends on identity or the
+rule's coverage. `cloud-evidence-drill.test.ts` pins the mechanics, answer-set
+shape, thirty-minute total, three surplus terms, and English-only copy.

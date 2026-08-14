@@ -557,6 +557,18 @@ export const papers: Paper[] = [
     },
     estimatedMinutes: 105,
     edits: [
+      // Recall cards are placed at least one full section below the passage
+      // they test (the reader must recall, not glance up), and never in the
+      // appendices.
+      // §"The control property" end: the control-vs-alignment distinction the
+      // intro draws.
+      {
+        op: "activity",
+        after: { sectionEnd: "lw-sec-the-control-property" },
+        items: [
+          { kind: "exercise", id: "c-case-recall-control-vs-alignment" },
+        ],
+      },
       // §"Evaluating whether you have control is doable" (mid-section): right
       // after the paragraph on deciding which models to treat as untrusted,
       // run the five control-property scenarios before the paper defines what a
@@ -581,6 +593,32 @@ export const papers: Paper[] = [
         },
         items: [{ kind: "exercise", id: "why-catching-counts" }],
       },
+      // §"Currently, evaluating alignment seems much harder" end: the control
+      // property, defined two sections up.
+      {
+        op: "activity",
+        after: {
+          sectionEnd: "lw-sec-currently-evaluating-alignment-seems-muc",
+        },
+        items: [{ kind: "exercise", id: "c-case-recall-control-property" }],
+      },
+      // §"Control evaluations and black-box techniques" end: the
+      // untrusted-model decision from §"Evaluating whether you have control".
+      {
+        op: "activity",
+        after: {
+          sectionEnd: "lw-sec-control-evaluations-and-black-box-techni",
+        },
+        items: [{ kind: "exercise", id: "c-case-recall-untrusted" }],
+      },
+      // §"What might control techniques look like?" end: why control is more
+      // tractable to evaluate than alignment (taught two and three sections
+      // up).
+      {
+        op: "activity",
+        after: { sectionEnd: "lw-sec-what-might-control-techniques-look-like" },
+        items: [{ kind: "exercise", id: "c-case-recall-eval-tractability" }],
+      },
       // §"The first transformatively useful AIs will probably be very
       // dangerous" end: could a transformatively useful model still be
       // controllable? (Section-end, before the sibling "…doesn't imply
@@ -603,6 +641,33 @@ export const papers: Paper[] = [
           snippet: "However, if the AI actually is wildly superhuman",
         },
         items: [{ kind: "exercise", id: "inscrutability-necessary" }],
+      },
+      // §"Iteration is very helpful for developing robust protocols" end: the
+      // wildly-superhuman material from §"We can probably avoid…", one and two
+      // sections up.
+      {
+        op: "activity",
+        after: {
+          sectionEnd: "lw-sec-iteration-is-very-helpful-for-developing",
+        },
+        items: [
+          {
+            kind: "sequence",
+            exerciseIds: [
+              "c-case-recall-problematic-domains",
+              "c-case-recall-wildly-superhuman",
+            ],
+          },
+        ],
+      },
+      // §"For how long will we have controllable…" end: neuralese, introduced
+      // near the end of §"Without qualitatively wildly superhuman skills…".
+      {
+        op: "activity",
+        after: {
+          sectionEnd: "lw-sec-for-how-long-will-we-have-controllable-a",
+        },
+        items: [{ kind: "exercise", id: "c-case-recall-neuralese" }],
       },
       // §"Implications and proposed actions" end: the two-worlds / two-windows
       // reflection that closes the body before the appendices.
@@ -695,6 +760,59 @@ export const papers: Paper[] = [
     },
     estimatedMinutes: 30,
     edits: [
+      // Recall cards are placed at least one full section below the passage
+      // they test (the reader must recall, not glance up), and never in the
+      // appendices.
+      // §"Few-shot catastrophe prevention" end: the definition of catching
+      // (from §"What's 'catching'?") and the first-critical-try symmetry (from
+      // the intro).
+      {
+        op: "activity",
+        after: { sectionEnd: "lw-sec-few-shot-catastrophe-prevention" },
+        items: [
+          {
+            kind: "sequence",
+            exerciseIds: [
+              "c-catching-recall-catch-definition",
+              "c-catching-recall-first-critical-try",
+            ],
+          },
+        ],
+      },
+      // End of strategy §8, after all eight few-shot strategies have been
+      // read: recall what the umbrella term means.
+      {
+        op: "activity",
+        after: { sectionEnd: "lw-sec-8-improving-understanding-and-testing-al" },
+        items: [{ kind: "exercise", id: "c-catching-recall-few-shot" }],
+      },
+      // §"When does the 'control then few-shot-catastrophe-prevention' plan
+      // work?" end: the catch-then-shut-down alternative this section's
+      // catch-then-continue math is weighed against.
+      {
+        op: "activity",
+        after: {
+          sectionEnd: "lw-sec-when-does-the-control-then-few-shot-cata",
+        },
+        items: [{ kind: "exercise", id: "c-catching-recall-shutdown-plan" }],
+      },
+      // §"Avoiding overfit and maintaining paranoia" end: the
+      // train-monitors-not-the-policy tradeoff from strategy §6.
+      {
+        op: "activity",
+        after: { sectionEnd: "lw-sec-avoiding-overfit-and-maintaining-paranoi" },
+        items: [
+          { kind: "exercise", id: "c-catching-recall-train-monitors-not-policy" },
+        ],
+      },
+      // §Conclusion end, ahead of the legibility discussion below (same
+      // target; ops at one sectionEnd render in array order): the fake-attempts
+      // paranoia point from the section directly above the conclusion.
+      {
+        op: "activity",
+        after: { sectionEnd: "lw-sec-conclusion" },
+        items: [{ kind: "exercise", id: "c-catching-recall-keep-control-evals" }],
+      },
       // End of the body: framing paragraph, then the two staged
       // writing-prompts (each with its own rubric), rendered in order after
       // §Conclusion.

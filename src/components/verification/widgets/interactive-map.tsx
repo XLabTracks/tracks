@@ -463,7 +463,7 @@ export function InteractiveMap(_props: VerificationWidgetProps) {
             >
               {/* hint bar */}
               {hintOpen && (
-                <div className="text-muted-foreground border-border bg-card/90 absolute top-3 left-3 z-10 flex max-w-[calc(100%-5rem)] items-start gap-2 rounded-md border px-3 py-2 text-xs backdrop-blur-sm">
+                <div className="text-muted-foreground border-border bg-card absolute top-3 left-3 z-10 flex max-w-[calc(100%-5rem)] items-start gap-2 rounded-md border px-3 py-2 text-xs">
                   <span>{C.hint}</span>
                   <button
                     type="button"

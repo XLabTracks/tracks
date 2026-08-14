@@ -123,7 +123,10 @@
   --fs-3xl: 30px;
   --fs-4xl: 38px;
   --fs-title: clamp(28px, 3.4vw, 36px);
-  --fs-hero: clamp(32px, 4.4vw, 52px);
+  /* The landing headline is a full policy question, not a one- or two-word
+     campaign title. Keep it distinct from an ordinary page h1 without asking
+     three long lines to carry display-poster proportions. */
+  --fs-hero: clamp(32px, 3.8vw, 44px);
 
   --radius: 14px;
   --radius-sm: 8px;
@@ -408,12 +411,13 @@ button,
 .brand {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
+  gap: 6px;
   font-family: var(--display);
   font-size: var(--fs-lg);
   /* 700 is the top of the embedded Space Grotesk's weight range — asking
      for more gets synthetic bold, which smears the letterforms. */
   font-weight: 700;
+  line-height: 1;
   letter-spacing: -0.015em;
   text-decoration: none;
   white-space: nowrap;
@@ -425,15 +429,16 @@ button,
 .brand i {
   color: var(--muted-foreground);
   font-style: normal;
+  line-height: 1;
 }
 
 /* The XLab logotype beside the word.
 
    Trap: the file is 3300x1050 but the ink only fills the middle 55% of that
    box (y 236-814) and is inset horizontally too, so `height` buys about half
-   of what it says — at 15px the visible mark was 8px against a 12px cap
-   height and read as an afterthought. 28px puts roughly 15px of ink beside
-   the word. Re-crop the PNG if you want the number to mean what it says.
+   of what it says. At 24px the visible ink is roughly 13px high: the same cap
+   height as the 18px word beside it. Re-crop the PNG if you want the number
+   itself to describe the ink rather than its transparent canvas.
 
    Two files, not one filtered file. The day artwork is maroon-and-black and
    disappears on the night ground; the white artwork keeps the maroon cross
@@ -444,7 +449,7 @@ button,
    maroon cross on black reads at about 2:1, so there the white file is
    flattened the rest of the way. */
 .brand-mark {
-  height: 28px;
+  height: 24px;
   width: auto;
   display: block;
 }
@@ -748,7 +753,7 @@ button,
   .site-header .bar {
     grid-template-columns: auto minmax(0, 1fr) auto;
     column-gap: 24px;
-    padding-inline: 24px;
+    padding-inline: clamp(24px, 4vw, 64px);
   }
 }
 

@@ -56,10 +56,10 @@ is the step-by-step guide for adding content (its rules are enforced by
   from `verification-capstones/*.md` into
   `public/verification/data/capstone-bank.js`. `-- --check` verifies the two
   have not drifted. Authoring-time only; the output is committed.
-- `npm run icon:build` — cut `src/app/icon.png` + `src/app/favicon.ico` out of
-  the XLab logotype (`public/verification/assets/xLab_Logotype.png`), so the
-  tab icon and the header's wordmark can never disagree. `-- --check` reports
-  drift. Authoring-time only; the outputs are committed.
+- `npm run icon:build` — render `src/app/icon.png` from the standalone solid X
+  in `public/xlab-mark.svg`. It is the only favicon source; do not cut the
+  striped X out of the wordmark or add a competing `favicon.ico`. `-- --check`
+  reports drift. Authoring-time only; the output is committed.
 
 Setup: `cp .env.example .env`, then fill the `WORKOS_*` values (AuthKit, Google
 enabled, redirect `/callback`) and `DATABASE_URL` (see `.env.example`). Public

@@ -47,12 +47,12 @@ export function SiteHeader() {
             aria-label, so the visible mark and the announced name cannot drift.
 
             The artwork is 3300x1050 but the ink only fills the middle
-            ~55% of that box, so `height` buys about half of what it says: 28px
-            puts roughly 15px of ink beside 18px type — matching theme.css's
+            ~55% of that box, so `height` buys about half of what it says: 24px
+            puts roughly 13px of ink beside 18px type — matching theme.css's
             .brand-mark. The two cuts follow the platform's dark class. */}
         <Link
           href="/"
-          className="flex items-center gap-2 text-lg font-bold tracking-tight select-none"
+          className="flex items-center gap-1.5 text-lg leading-none font-bold tracking-tight select-none"
         >
           Tracks <span className="text-muted-foreground font-normal">@</span>
           <img
@@ -61,7 +61,7 @@ export function SiteHeader() {
             width={3300}
             height={1050}
             draggable={false}
-            className="h-7 w-auto dark:hidden"
+            className="h-6 w-auto dark:hidden"
           />
           <img
             src="/verification/assets/xLab_Logotype_white.png"
@@ -70,7 +70,7 @@ export function SiteHeader() {
             width={3300}
             height={1050}
             draggable={false}
-            className="hidden h-7 w-auto dark:block"
+            className="hidden h-6 w-auto dark:block"
           />
         </Link>
         <nav className="text-muted-foreground hidden items-center gap-1 text-sm sm:flex">

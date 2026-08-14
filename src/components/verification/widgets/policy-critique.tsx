@@ -35,7 +35,7 @@ import type { VerificationWidgetProps } from "../kit/types";
  * key to match against; the reveal annotates the policy and the learner marks
  * their four reasons against the criteria.
  *
- * Bridged: submitting is the section's finish event, fired once.
+ * OPTIONAL, so unbridged: submitting records no completion.
  */
 
 interface Saved {

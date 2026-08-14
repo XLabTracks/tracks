@@ -44,7 +44,7 @@ import type { VerificationWidgetProps } from "../kit/types";
  * the tests does not block submission either: the reveal is where you find
  * out, and Start over is how you try the other design.
  *
- * Bridged: submitting is the section's finish event, fired once.
+ * OPTIONAL, so unbridged: submitting records no completion.
  */
 
 interface Saved {
@@ -226,7 +226,7 @@ export function BuildInstitution({
         <div className="space-y-4">
           <section className="space-y-2">
             <h4 className="text-muted-foreground font-mono text-[11px] tracking-[0.14em] uppercase">
-              Your institution against the three tests
+              What your institution does, and what it leaves undecided
             </h4>
             {TESTS.map((test) => {
               const result = evaluation.results.find((r) => r.id === test.id)!;
@@ -259,6 +259,18 @@ export function BuildInstitution({
                 </div>
               );
             })}
+
+            {/* The fourth thing the key weighs, stated here so the machine's
+                three verdicts do not read as the whole marking. */}
+            <div className="border-border bg-card rounded-xl border p-4">
+              <p className="text-sm font-semibold">{COHERENCE_TEST.label}</p>
+              <p className="text-muted-foreground mt-1 text-xs leading-relaxed">
+                {COHERENCE_TEST.question}
+              </p>
+              <p className="mt-2 text-sm leading-relaxed">
+                {COHERENCE_TEST.note}
+              </p>
+            </div>
           </section>
 
           <MarkingKeyPanel

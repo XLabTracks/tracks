@@ -67,14 +67,19 @@ export const verificationExercises: VerificationExerciseDef[] = [
   // drills-supply-chain stood down when the section-specific 2.4.4 lab
   // replaced it. Its widget, engine, data, and tests remain in the repo.
   { id: "drills-games", title: "Drill Bench: Evasion, Regime, Position", bridged: true },
-  { id: "human-insiders", title: "Construct a Case", bridged: true },
-  { id: "human-reporting-protection", title: "Policy on Paper", bridged: true },
+  // 2.4's four exercises are OPTIONAL on the course owner's instruction, and
+  // therefore unbridged: they record no completion, so a learner who reads the
+  // section and skips the labs has still finished it. Each is a constructed
+  // answer of ten to twenty minutes, and four of them on top of the readings
+  // is more than the module's two hours hold.
+  { id: "human-insiders", title: "Construct a Case", bridged: false },
+  { id: "human-reporting-protection", title: "Policy on Paper", bridged: false },
   // Unbridged: a three-minute assignment inside 2.4.2, whose finish event is
   // "Follow the Report" above. Two bridged widgets in one lesson would end
   // the section at whichever fired first.
   { id: "whistleblower-levers", title: "Four Levers, One Each", bridged: false },
-  { id: "human-audits-inspections", title: "Same Claim, Different Circumstances", bridged: true },
-  { id: "human-institutions-judgment", title: "Build the Institution", bridged: true },
+  { id: "human-audits-inspections", title: "Same Claim, Different Circumstances", bridged: false },
+  { id: "human-institutions-judgment", title: "Build the Institution", bridged: false },
   // 2.4's optional extensions. Unbridged by definition: they record no
   // completion and are outside the module's estimated time, so a learner who
   // skips them has still finished the section.

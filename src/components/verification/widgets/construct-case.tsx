@@ -26,7 +26,9 @@ import type { VerificationWidgetProps } from "../kit/types";
  * the repo — the section's roster of who-can-know-what is still the material
  * this case is built out of, it is now read rather than clicked.
  *
- * Bridged: submitting the case is the finish event, and it fires once.
+ * OPTIONAL, so unbridged: submitting records no completion and the section
+ * finishes on reading. The onComplete call stays because the registry types
+ * every widget the same way and the host makes it a no-op.
  */
 export function ConstructCase({
   onComplete,

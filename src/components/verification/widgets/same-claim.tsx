@@ -36,7 +36,8 @@ import type { VerificationWidgetProps } from "../kit/types";
  * independent multiple-choice questions, which is exactly what the spec
  * forbids, and the same action really can be right for two of them.
  *
- * Nothing is graded. Submitting is the section's finish event, fired once.
+ * Nothing is graded, and the exercise is optional: submitting records no
+ * completion.
  */
 
 type Answers = Record<string, string>;

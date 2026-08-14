@@ -716,3 +716,16 @@ the task is to use it rather than meet it cold.
 The 2.4.4 optional `policy-on-paper` stood down: Policy on Paper is 2.4.2's
 exercise now, and two exercises of one name in one module is a defect. Widget,
 data and test remain.
+
+**2.4's four exercises are optional (2026-08-14, owner's instruction), with
+her self-paced times.** 8–10, 12–15, 12–15 and 15–20 minutes; the headings say
+`## Optional lab · N min` and all four widgets are unbridged, so they record no
+completion and a learner who reads the section and skips the labs has still
+finished it. Four constructed answers of ten to twenty minutes on top of the
+readings is more than two hours holds, which is what makes them optional rather
+than shorter.
+
+They are NOT behind Folds, unlike the retired optional extensions. A Fold is
+right for an extension nobody needs to open; these are the section's own
+operations and hiding them behind a closed bar would mean most learners never
+meet the thing the module is for. The heading is what says they are optional.

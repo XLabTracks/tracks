@@ -861,3 +861,18 @@ during render would not.
 The skim test is not ported and should not be: it reads first sentences and
 bold lines to show what a hurried reader sees, which is a memo's problem. None
 of these four is a document somebody skims.
+
+**2.4.4: the group headings and the kickers deleted (2026-08-14, owner's
+call), and they were a key.** "Published process" over a statement is the
+Published-rule chip spelled out; "Documented context" is
+Documented-prior-practice; "Still unverified" is Not-established. Three
+headings, each answering the question its rows ask — a learner could have
+marked the whole tab off the headings without reading a statement. The third
+one was not in the deletion list and went with the other two for that reason.
+
+The kickers went the same way and for a related reason: "Publishes a detailed
+reporting policy", "As it was documented", "What the employees themselves asked
+for" each characterised a regime before the learner had characterised it.
+
+The grouping survives as the order rows come in, which is the only part of it
+that was not a key.

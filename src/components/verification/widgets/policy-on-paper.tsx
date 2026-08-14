@@ -237,18 +237,18 @@ function CompanyTab({
   const placed = company.statements.filter((s) => saved.marks[s.id]).length;
   const ready = placed === company.statements.length;
 
+  /* No group headings and no kicker above the rows. Both were answering the
+     question: "Published process" over a statement is the Published-rule chip
+     spelled out, "Documented context" is Documented-prior-practice, and "Still
+     unverified" is Not-established. The grouping survives as the order the
+     rows come in — which is the only part of it that was not a key. */
   return (
     <>
-      <p className="text-muted-foreground text-sm">{company.kicker}</p>
-
       {POLICY_GROUPS.map((group) => {
         const rows = company.statements.filter((s) => s.group === group.id);
         if (!rows.length) return null;
         return (
           <section key={group.id} className="space-y-2">
-            <h4 className="text-muted-foreground font-mono text-[11px] tracking-[0.14em] uppercase">
-              {group.label}
-            </h4>
             {rows.map((s) => {
               const mark = saved.marks[s.id];
               const right = mark === s.kind;
@@ -358,8 +358,6 @@ function DemandsTab({
 
   return (
     <>
-      <p className="text-muted-foreground text-sm">{POLICY_DEMANDS.kicker}</p>
-
       <ul className="space-y-2">
         {POLICY_DEMANDS.demands.map((d) => (
           <li

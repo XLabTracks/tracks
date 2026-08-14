@@ -108,8 +108,13 @@ export interface PolicyCompany {
   id: string;
   /** Anonymous in the task, by her instruction. */
   label: string;
-  /** One line of framing, so a tab is not a bare letter. */
-  kicker: string;
+  /**
+   * Retired. It said what the tab was — "publishes a detailed reporting
+   * policy", "as it was documented" — which is a characterisation of the
+   * regime before the learner has made one. Kept in the type as optional so
+   * the data does not have to be rewritten to drop it.
+   */
+  kicker?: string;
   /** Who the letter was, printed only in the Sources spoiler at the end. */
   realName: string;
   /** One line there where the identification needs a qualification. */

@@ -360,7 +360,10 @@ function TrueFalseTask({ onSolved }: SolveProps) {
           </summary>
           <ol className="mt-3 grid gap-3 md:grid-cols-2">
             {CLOUD_TRUE_FALSE.map((item, index) => (
-              <li key={item.id} className="text-muted-foreground leading-relaxed">
+              <li
+                key={item.id}
+                className="text-muted-foreground leading-relaxed"
+              >
                 <span className="text-foreground mr-1 font-medium">
                   {index + 1}.
                 </span>
@@ -715,6 +718,7 @@ function SequenceTask({ onSolved }: SolveProps) {
         </ol>
       ) : (
         <DndContext
+          id="cloud-evidence-sequence"
           sensors={sensors}
           collisionDetection={closestCenter}
           onDragStart={({ active }) => {
@@ -755,7 +759,10 @@ function SequenceTask({ onSolved }: SolveProps) {
           }}
         >
           <SortableContext items={order} strategy={verticalListSortingStrategy}>
-            <ol className="mt-3 space-y-1.5" aria-label="Stages to put in order">
+            <ol
+              className="mt-3 space-y-1.5"
+              aria-label="Stages to put in order"
+            >
               {order.map((id, index) => {
                 const item = CLOUD_SEQUENCE.find(
                   (candidate) => candidate.id === id

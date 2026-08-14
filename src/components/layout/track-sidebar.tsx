@@ -214,7 +214,7 @@ function SidebarNav({
                       {module.order}
                     </span>
                     <span className="sr-only">Module {module.order}: </span>
-                    <span className="line-clamp-2">{module.title}</span>
+                    <span className="line-clamp-3">{module.title}</span>
                   </span>
                 </AccordionTrigger>
                 <AccordionContent className="pb-1">
@@ -708,7 +708,10 @@ export function TrackSidebar(props: TrackSidebarProps) {
               <ListTree className="size-4" aria-hidden /> Contents
             </Button>
           </SheetTrigger>
-          <SheetContent side="left" className="w-80 p-0">
+          <SheetContent
+            side="left"
+            className="w-[calc(100vw-2rem)]! max-w-96! p-0"
+          >
             <SheetHeader className="sr-only">
               <SheetTitle>{props.outline.track.title} contents</SheetTitle>
             </SheetHeader>

@@ -72,14 +72,14 @@ export const verificationExercises: VerificationExerciseDef[] = [
   // section and skips the labs has still finished it. Each is a constructed
   // answer of ten to twenty minutes, and four of them on top of the readings
   // is more than the module's two hours hold.
-  { id: "human-insiders", title: "Construct a Case", bridged: false },
-  { id: "human-reporting-protection", title: "Policy on Paper", bridged: false },
+  { id: "human-insiders", title: "Insider Report", bridged: false },
+  { id: "human-reporting-protection", title: "On Paper", bridged: false },
   // Unbridged: a three-minute assignment inside 2.4.2, whose finish event is
   // "Follow the Report" above. Two bridged widgets in one lesson would end
   // the section at whichever fired first.
   { id: "whistleblower-levers", title: "Four Levers, One Each", bridged: false },
-  { id: "human-audits-inspections", title: "Same Claim, Different Circumstances", bridged: false },
-  { id: "human-institutions-judgment", title: "Build the Institution", bridged: false },
+  { id: "human-audits-inspections", title: "Four Sources", bridged: false },
+  { id: "human-institutions-judgment", title: "Companies A and B", bridged: false },
   // 2.4's optional extensions. Unbridged by definition: they record no
   // completion and are outside the module's estimated time, so a learner who
   // skips them has still finished the section.

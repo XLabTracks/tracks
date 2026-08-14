@@ -3,9 +3,8 @@ import path from "node:path";
 import { describe, expect, it } from "vitest";
 
 import {
-  BUILD_INSTITUTION_KEY,
+  COMPANIES_AB_KEY,
   CONSTRUCT_CASE_KEY,
-  POLICY_CRITIQUE_KEY,
   SAME_CLAIM_KEY,
   keyTotal,
   type MarkingKey,
@@ -24,9 +23,8 @@ import {
 
 const KEYS: [string, MarkingKey][] = [
   ["construct-case", CONSTRUCT_CASE_KEY],
-  ["policy-critique", POLICY_CRITIQUE_KEY],
   ["same-claim", SAME_CLAIM_KEY],
-  ["build-institution", BUILD_INSTITUTION_KEY],
+  ["companies-ab", COMPANIES_AB_KEY],
 ];
 
 describe("2.4 marking keys", () => {

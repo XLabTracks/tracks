@@ -94,60 +94,11 @@ export const CONSTRUCT_CASE_KEY: MarkingKey = {
 };
 
 /**
- * 2.4.2 — Policy on Paper. Eight points: two per finding, one for naming the
- * provision's effect and one for the causal explanation behind it.
- *
- * Her grading principle, and the reason every second point is
- * `needsReasoning`: calling a provision good, bad, strong or weak does not
- * earn the justification point, and no particular vocabulary is required for
- * it either — an explanation in ordinary language is enough.
+ * 2.4.2 — On Paper is a five-question discrimination deck with right answers,
+ * so it has no marking key: the deck marks itself and the explanation under
+ * each question is the whole feedback. A key here would be a second, worse
+ * copy of that.
  */
-export const POLICY_CRITIQUE_KEY: MarkingKey = {
-  criteria: [
-    {
-      text: "Supporting finding 1 names an effect the provision actually has.",
-      points: 1,
-    },
-    {
-      text: "Supporting finding 1 explains how that provision changes what a reporter does, or what reaches the verifier.",
-      points: 1,
-      needsReasoning: true,
-    },
-    {
-      text: "Supporting finding 2 names an effect the provision actually has.",
-      points: 1,
-    },
-    {
-      text: "Supporting finding 2 explains the mechanism behind it.",
-      points: 1,
-      needsReasoning: true,
-    },
-    {
-      text: "Blocking finding 1 names a provision that really could stop information reaching an independent verifier.",
-      points: 1,
-    },
-    {
-      text: "Blocking finding 1 explains how it stops it — who decides, or what it costs the reporter.",
-      points: 1,
-      needsReasoning: true,
-    },
-    {
-      text: "Blocking finding 2 names a provision that really could stop information.",
-      points: 1,
-    },
-    {
-      text: "Blocking finding 2 explains the mechanism behind it.",
-      points: 1,
-      needsReasoning: true,
-    },
-  ],
-  noCredit: [
-    "Calling a provision good, bad, strong or weak. That is the judgement, not the justification.",
-    "Restating the provision in different words as though repeating it explained it.",
-    "An effect the provision does not have, however well argued.",
-    "Rewriting the policy — the task is to evaluate it as written.",
-  ],
-};
 
 /**
  * 2.4.3 — Same Claim, Different Circumstances. Two points per case and
@@ -198,35 +149,59 @@ export const SAME_CLAIM_KEY: MarkingKey = {
   ],
 };
 
-/** 2.4.4 — Build the Institution. The four criteria are the course owner's. */
-export const BUILD_INSTITUTION_KEY: MarkingKey = {
+/**
+ * 2.4.4 — Companies A and B. Eight points: two per identified difference, two
+ * for the letter read as evidence, two for the overclaims it does not support.
+ *
+ * The mechanism is what earns the second point of a difference — naming which
+ * feature differs is the easy half, and "the company controls escalation" is a
+ * fact about the sheet until somebody says what it does to a report.
+ */
+export const COMPANIES_AB_KEY: MarkingKey = {
   criteria: [
     {
-      text: "Reach: information can get to an independent verifier without the organization's permission.",
-      points: 2,
-      grounds:
-        "The statutory route names its recipients directly, and its protection attaches to reporting to them — not to a channel the employer may close.",
+      text: "The first difference is one that really bears on whether evidence can reach an independent verifier.",
+      points: 1,
     },
     {
-      text: "Protection: the reporter can know in advance what protects them.",
-      points: 2,
-      grounds:
-        "The design guide asks for anti-retaliation, channels, remedies and notice as separate requirements, because a protection nobody can rely on in advance is not one.",
-    },
-    {
-      text: "Epistemic discipline: a report can start verification without ending it.",
-      points: 2,
+      text: "It says what that difference does — who decides, and what happens to a report when they decide against it.",
+      points: 1,
       needsReasoning: true,
     },
     {
-      text: "Coherence: the eighty words say how the five work as one institution, not why each is a good idea.",
-      points: 2,
+      text: "The second difference is a different one, and also bears on reach rather than on the reporter's comfort.",
+      points: 1,
+    },
+    {
+      text: "It states its mechanism too, rather than restating the feature.",
+      points: 1,
+      needsReasoning: true,
+    },
+    {
+      text: "The reading of the letter is about what its existence and composition show, not about whether the signatories were right.",
+      points: 1,
+      needsReasoning: true,
+    },
+    {
+      text: "That reading is proportionate: insiders asking publicly is evidence about how they found the existing arrangements, and is not a measurement of them.",
+      points: 1,
+      needsReasoning: true,
+    },
+    {
+      text: "The answer names at least one thing the letter does not establish.",
+      points: 1,
+    },
+    {
+      text: "It says why that one does not follow — what the evidence would have to be instead.",
+      points: 1,
       needsReasoning: true,
     },
   ],
   noCredit: [
-    "Five individually attractive provisions that do not operate together.",
-    "Any pair that cancels: an independent route beside a requirement for employer approval; protection conditional on being proved right; a report treated as proof; a route with no corroboration and no escalation.",
-    "An explanation that restates the provisions instead of saying what the combination does.",
+    "Which company has the better policy. The task is which difference is consequential and why.",
+    "Counting safeguards. Both have a channel and both prohibit retaliation.",
+    "Restating a feature as though naming it explained it.",
+    "Treating the letter as an authority that settles the question rather than as evidence to be read.",
+    "Concluding from the letter that the companies had no protections, or that the signatories' safety concerns were correct.",
   ],
 };

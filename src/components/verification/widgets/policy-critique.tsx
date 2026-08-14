@@ -12,11 +12,11 @@ import {
   POLICY_REVEAL,
   POLICY_TITLE,
 } from "@/lib/verification/data/policy-critique";
-import { POLICY_CRITIQUE_KEY } from "@/lib/verification/data/marking-keys";
-import { MarkingKeyPanel } from "../kit/marking-key";
 import type { VerificationWidgetProps } from "../kit/types";
 
 /**
+ * UNMOUNTED. 2.4.2 is now On Paper (policy-quick-check.tsx).
+ *
  * 2.4.2 — Policy on Paper.
  *
  * The learner finds the provisions in the policy: two that genuinely support
@@ -265,11 +265,6 @@ export function PolicyCritique({
               </p>
             ))}
           </section>
-
-          <MarkingKeyPanel
-            storageKey="v-policy-critique-key:v1"
-            keyData={POLICY_CRITIQUE_KEY}
-          />
         </div>
       ) : null}
     </div>

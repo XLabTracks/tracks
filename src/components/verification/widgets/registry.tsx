@@ -130,8 +130,9 @@ const ConstructCase = dynamic<VerificationWidgetProps>(
 // the lesson mapping, the progress key and the finish event do not move.
 // human-reporting-protection.tsx (the route reconstruction) and its data and
 // engine remain in the repo, unmounted.
-const PolicyCritique = dynamic<VerificationWidgetProps>(
-  () => import("./policy-critique").then((module) => module.PolicyCritique),
+const PolicyQuickCheck = dynamic<VerificationWidgetProps>(
+  () =>
+    import("./policy-quick-check").then((module) => module.PolicyQuickCheck),
   { loading: WidgetLoading },
 );
 const WhistleblowerLevers = dynamic<VerificationWidgetProps>(
@@ -150,8 +151,8 @@ const SameClaim = dynamic<VerificationWidgetProps>(
 );
 // 2.4.4's exercise is now Build the Institution; the id stays so the lesson
 // mapping, the progress key and the finish event do not move.
-const BuildInstitution = dynamic<VerificationWidgetProps>(
-  () => import("./build-institution").then((module) => module.BuildInstitution),
+const CompaniesAB = dynamic<VerificationWidgetProps>(
+  () => import("./companies-ab").then((module) => module.CompaniesAB),
   { loading: WidgetLoading },
 );
 const CloudEvidenceDrill = dynamic<VerificationWidgetProps>(
@@ -199,10 +200,10 @@ export const verificationWidgets: Record<
   "actor-map": ActorMap,
   "field-map": FieldMap,
   "human-insiders": ConstructCase,
-  "human-reporting-protection": PolicyCritique,
+  "human-reporting-protection": PolicyQuickCheck,
   "whistleblower-levers": WhistleblowerLevers,
   "human-audits-inspections": SameClaim,
-  "human-institutions-judgment": BuildInstitution,
+  "human-institutions-judgment": CompaniesAB,
   "cloud-evidence-drill": CloudEvidenceDrill,
 };
 

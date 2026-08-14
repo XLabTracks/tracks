@@ -732,3 +732,46 @@ without opening anything. The `## Optional lab · N min` heading stays above
 each fold: removing it would leave three of the four lessons with a single
 top-level heading, which costs them their sidebar nav and, on a chunked track,
 collapses the whole lesson into one part.
+
+### 2.4 final architecture (2026-08-14, owner's final spec)
+
+Two exercises replaced and all four renamed. The module's rhythm is now the
+one the spec names — creative short answer, fast discrimination, controlled
+comparison, real-world analysis — and the four remain mechanically distinct.
+
+  2.4.1  Insider Report        construct under simultaneous constraints
+  2.4.2  On Paper              discriminate between close institutional claims
+  2.4.3  Four Sources          re-evaluate as one dimension changes
+  2.4.4  Companies A and B     compare, then infer from real evidence
+
+**2.4.2 is now a five-question discrimination deck**, 5–7 minutes, replacing
+the four-finding policy critique. It is the ONLY multiple choice in 2.4 and
+that is what makes it legitimate: the spec's rhythm asks for one fast block,
+and nothing else in the section is multiple choice. Five fragments cover
+organizational gatekeeping, the external route, anti-retaliation, anonymity
+versus reliability, and report versus established violation; the question types
+vary deliberately — most important limitation, which provision addresses a
+stated failure, which conclusion does NOT follow, strongest implication,
+justified inference. All five are answered before any is marked. The first
+question is the owner's verbatim, including its options and its answer; the
+other four are ours against her coverage and variety lists. No marking key: the
+deck has right answers and marks itself, and the explanation under each
+question is the feedback.
+
+**2.4.4 is now Companies A and B**, replacing Build the Institution, which the
+owner judged an artificial card puzzle. Part I is her two feature lists
+verbatim — both regimes defensible on a first read, A with four safeguards and
+B with five, so counting gets nobody anywhere — and asks for the two
+differences most consequential for whether evidence can reach an independent
+verifier, with the mechanism in each case. Part II gives the June 2024 letter
+as EVIDENCE rather than authority: its asks, the composition of its
+signatories, and the two questions of what that composition is evidence for and
+what it does not establish. The supported inference and both overclaims are
+hers verbatim; the one-line notes on why each overclaim fails are ours. The
+transfer question closes it by sending the letter back onto A and B.
+
+Eight-point key, two per element: the difference, its mechanism, the reading of
+the letter, the overclaim named and why it does not follow.
+
+Both stood-down widgets (policy-critique, build-institution) keep their files
+and are marked unmounted at the top.

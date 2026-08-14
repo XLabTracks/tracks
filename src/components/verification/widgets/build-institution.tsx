@@ -20,11 +20,11 @@ import {
   type Provision,
 } from "@/lib/verification/data/build-institution";
 import { evaluateInstitution } from "@/lib/verification/engines/build-institution";
-import { BUILD_INSTITUTION_KEY } from "@/lib/verification/data/marking-keys";
-import { MarkingKeyPanel } from "../kit/marking-key";
 import type { VerificationWidgetProps } from "../kit/types";
 
 /**
+ * UNMOUNTED. 2.4.4 is now Companies A and B (companies-ab.tsx).
+ *
  * 2.4.4 — Build the Institution. It replaces "Audit the Verifier", which ran
  * on the same decision-lab engine as 2.4.3.
  *
@@ -272,11 +272,6 @@ export function BuildInstitution({
               </p>
             </div>
           </section>
-
-          <MarkingKeyPanel
-            storageKey="v-build-institution-key:v1"
-            keyData={BUILD_INSTITUTION_KEY}
-          />
 
           {/* Two designs that both pass, and what each pays for it. Neither is
               the answer: the engine's own test proves more than one selection

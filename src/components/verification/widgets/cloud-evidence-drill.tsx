@@ -139,20 +139,22 @@ export function CloudEvidenceDrill({
         <div>
           <section
             ref={taskTopRef}
-            className="border-border scroll-mt-24 border-b p-5 sm:p-6"
+            className="border-border scroll-mt-24 border-b px-5 py-3"
             aria-live="polite"
             aria-atomic="true"
           >
-            <div className="flex flex-wrap items-baseline justify-between gap-2">
+            <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
               <p className="text-muted-foreground text-xs font-medium uppercase">
                 Task {taskIndex + 1} of {CLOUD_TASKS.length} · {task.time}
               </p>
-              <p className="text-muted-foreground text-xs">{task.label}</p>
+              <h4 className="text-base font-semibold">{task.title}</h4>
+              <p className="text-muted-foreground ml-auto text-xs">
+                {task.label}
+              </p>
             </div>
-            <h4 className="mt-2 text-xl font-semibold">{task.title}</h4>
           </section>
 
-          <div key={attempt} className="p-5 sm:p-6">
+          <div key={attempt} className="px-5 py-3">
             <div hidden={taskIndex !== 0}>
               <TrueFalseTask onSolved={() => markSolved(0)} />
             </div>
@@ -182,7 +184,7 @@ export function CloudEvidenceDrill({
             </div>
 
             <nav
-              className="border-border mt-6 flex items-center justify-between gap-3 border-t pt-5"
+              className="border-border mt-1.5 flex items-center justify-between gap-3 border-t pt-1.5"
               aria-label="Move between cloud problem-set tasks"
             >
               <Button
@@ -283,67 +285,66 @@ function TrueFalseTask({ onSolved }: SolveProps) {
       <Prompt>
         Determine whether each statement is true or false. Mark all six.
       </Prompt>
-      <div className="mt-5 space-y-3">
-        {CLOUD_TRUE_FALSE.map((item, index) => (
-          <div
-            key={item.id}
-            className="border-border bg-background rounded-lg border p-4"
-          >
-            <p className="leading-relaxed">
-              <span className="text-muted-foreground mr-2">{index + 1}.</span>
-              {item.claim}
-            </p>
-            <fieldset className="mt-3 flex gap-2">
-              <legend className="sr-only">{item.claim}</legend>
-              {[true, false].map((answer) => (
-                <label
-                  key={String(answer)}
-                  className={cn(
-                    "border-border hover:border-foreground/35 focus-within:ring-ring relative min-w-20 cursor-pointer rounded-md border px-3 py-2 text-center transition-colors focus-within:ring-2 focus-within:outline-none",
-                    answers[item.id] === answer &&
-                      "border-primary bg-primary/5 text-primary",
-                    verdict === "correct" && "cursor-default"
-                  )}
-                >
-                  <input
-                    type="radio"
-                    name={`cloud-true-false-${item.id}`}
-                    value={String(answer)}
-                    checked={answers[item.id] === answer}
-                    disabled={verdict === "correct"}
-                    onChange={() => {
-                      setAnswers((current) => ({
-                        ...current,
-                        [item.id]: answer,
-                      }));
-                      setVerdict(null);
-                    }}
-                    className="sr-only"
-                  />
-                  {answer ? "True" : "False"}
-                </label>
-              ))}
-            </fieldset>
-            {verdict ? (
-              <p
-                className={cn(
-                  "mt-3 text-sm leading-relaxed",
-                  answers[item.id] === item.answer
-                    ? "text-emerald-700 dark:text-emerald-400"
-                    : "text-destructive"
-                )}
-              >
-                {item.explanation}
+      {verdict === "correct" ? (
+        <p className="border-emerald-600/30 bg-emerald-500/6 mt-3 rounded-lg border px-3 py-2.5 font-medium">
+          All six statements are marked correctly. The full explanations remain
+          available below.
+        </p>
+      ) : (
+        <div className="mt-3 grid gap-2 md:grid-cols-2">
+          {CLOUD_TRUE_FALSE.map((item, index) => (
+            <div
+              key={item.id}
+              className={cn(
+                "border-border bg-background rounded-lg border p-2.5",
+                verdict &&
+                  (answers[item.id] === item.answer
+                    ? "border-emerald-600/35"
+                    : "border-destructive/40")
+              )}
+            >
+              <p className="leading-snug">
+                <span className="text-muted-foreground mr-2">{index + 1}.</span>
+                {item.claim}
               </p>
-            ) : null}
-          </div>
-        ))}
-      </div>
+              <fieldset className="mt-1.5 flex items-center gap-2">
+                <legend className="sr-only">{item.claim}</legend>
+                {[true, false].map((answer) => (
+                  <label
+                    key={String(answer)}
+                    className={cn(
+                      "border-border hover:border-foreground/35 focus-within:ring-ring relative flex min-h-8 min-w-14 cursor-pointer items-center justify-center rounded-md border px-2 py-1 text-center text-sm transition-colors focus-within:ring-2 focus-within:outline-none",
+                      answers[item.id] === answer &&
+                        "border-primary bg-primary/5 text-primary"
+                    )}
+                  >
+                    <input
+                      type="radio"
+                      name={`cloud-true-false-${item.id}`}
+                      value={String(answer)}
+                      checked={answers[item.id] === answer}
+                      onChange={() => {
+                        setAnswers((current) => ({
+                          ...current,
+                          [item.id]: answer,
+                        }));
+                        setVerdict(null);
+                      }}
+                      className="sr-only"
+                    />
+                    {answer ? "True" : "False"}
+                  </label>
+                ))}
+              </fieldset>
+            </div>
+          ))}
+        </div>
+      )}
       <CheckRow
         verdict={verdict}
         disabled={!complete}
         onCheck={check}
-        wrong="At least one response is incorrect. Review the explanation shown under each statement and revise the marked rows."
+        wrong="At least one marked row is incorrect. Revisit the red-bordered rows."
         correct="Correct: 1 True; 2 False; 3 False; 4 False; 5 True; 6 True."
         sources={[
           CLOUD_SOURCES.heimRecords,
@@ -352,6 +353,23 @@ function TrueFalseTask({ onSolved }: SolveProps) {
           CLOUD_SOURCES.randMetrics,
         ]}
       />
+      {verdict === "correct" ? (
+        <details className="border-border mt-3 rounded-lg border px-3 py-2.5">
+          <summary className="cursor-pointer font-medium">
+            Review the six explanations
+          </summary>
+          <ol className="mt-3 grid gap-3 md:grid-cols-2">
+            {CLOUD_TRUE_FALSE.map((item, index) => (
+              <li key={item.id} className="text-muted-foreground leading-relaxed">
+                <span className="text-foreground mr-1 font-medium">
+                  {index + 1}.
+                </span>
+                {item.explanation}
+              </li>
+            ))}
+          </ol>
+        </details>
+      ) : null}
     </div>
   );
 }
@@ -393,7 +411,7 @@ function OddOneOutTask({ onSolved }: SolveProps) {
           ))}
         </div>
       </fieldset>
-      <label htmlFor="cloud-odd-principle" className="mt-6 block font-medium">
+      <label htmlFor="cloud-odd-principle" className="mt-4 block font-medium">
         In one sentence, state what the odd item records and what the other
         three measure.
       </label>
@@ -405,8 +423,8 @@ function OddOneOutTask({ onSolved }: SolveProps) {
           setPrinciple(event.target.value);
           setVerdict(null);
         }}
-        rows={3}
-        className="border-border bg-background focus-visible:ring-ring mt-3 w-full resize-y rounded-lg border px-4 py-3 leading-relaxed focus-visible:ring-2 focus-visible:outline-none"
+        rows={2}
+        className="border-border bg-background focus-visible:ring-ring mt-2 w-full resize-y rounded-lg border px-3 py-2.5 leading-relaxed focus-visible:ring-2 focus-visible:outline-none"
       />
       <CheckRow
         verdict={verdict}
@@ -450,23 +468,41 @@ function AvailableDataTask({ onSolved }: SolveProps) {
         customer code or data. Select every category available under those
         conditions.
       </Prompt>
-      <div className="mt-5 grid gap-2">
-        {CLOUD_AVAILABLE_DATA.map((item) => (
-          <CheckButton
-            key={item.id}
-            checked={selected.has(item.id)}
-            disabled={verdict === "correct"}
-            onClick={() => toggle(item.id)}
-          >
-            {item.text}
-          </CheckButton>
-        ))}
-      </div>
+      {verdict === "correct" ? (
+        <details className="border-border mt-3 rounded-lg border px-3 py-2.5">
+          <summary className="cursor-pointer font-medium">
+            Review the eight categories
+          </summary>
+          <ul className="mt-3 grid gap-2 md:grid-cols-2">
+            {CLOUD_AVAILABLE_DATA.map((item) => (
+              <li key={item.id} className="leading-relaxed">
+                <span className="text-muted-foreground mr-1">
+                  {item.answer ? "Available:" : "Not available:"}
+                </span>
+                {item.text}
+              </li>
+            ))}
+          </ul>
+        </details>
+      ) : (
+        <div className="mt-3 grid gap-2 md:grid-cols-2">
+          {CLOUD_AVAILABLE_DATA.map((item) => (
+            <CheckButton
+              key={item.id}
+              checked={selected.has(item.id)}
+              disabled={false}
+              onClick={() => toggle(item.id)}
+            >
+              {item.text}
+            </CheckButton>
+          ))}
+        </div>
+      )}
       <CheckRow
         verdict={verdict}
         disabled={selected.size === 0}
         onCheck={check}
-        wrong="At least one selected category requires access not granted in the question, or one available category was omitted."
+        wrong="A selected category exceeds the stated access, or an available category is missing."
         correct="The first five categories are available under the stated conditions. Code, dataset contents, and actual intent are not."
         sources={[CLOUD_SOURCES.heimRecords, CLOUD_SOURCES.kyc]}
       />
@@ -493,11 +529,11 @@ function MatchingTask({ onSolved }: SolveProps) {
         Match each item in the first column to the strongest conclusion it can
         support. Use each conclusion once.
       </Prompt>
-      <div className="mt-5 space-y-3">
+      <div className="mt-3 grid gap-2 md:grid-cols-2">
         {CLOUD_MATCH_ROWS.map((row) => (
           <label
             key={row.id}
-            className="border-border bg-background block rounded-lg border p-4"
+            className="border-border bg-background block rounded-lg border p-3"
           >
             <span className="block leading-relaxed font-medium">
               {row.observable}
@@ -512,7 +548,7 @@ function MatchingTask({ onSolved }: SolveProps) {
                 }));
                 setVerdict(null);
               }}
-              className="border-border bg-card mt-3 w-full rounded-md border px-3 py-2.5"
+              className="border-border bg-card mt-2 w-full rounded-md border px-3 py-2"
             >
               <option value="">Choose a conclusion</option>
               {CLOUD_MATCH_CONCLUSIONS.map((option) => (
@@ -559,8 +595,8 @@ function PipelineTask({ onSolved }: SolveProps) {
         Complete the verification map by matching each function to its
         mechanism. Use five terms from the bank. Three terms are not used.
       </Prompt>
-      <div className="border-border bg-background mt-5 rounded-lg border p-4 sm:p-5">
-        <div className="space-y-4">
+      <div className="border-border bg-background mt-3 rounded-lg border p-3 sm:p-4">
+        <div className="space-y-2.5">
           {CLOUD_PIPELINE_GAPS.map((gap) => (
             <label
               key={gap.id}
@@ -577,7 +613,7 @@ function PipelineTask({ onSolved }: SolveProps) {
                   }));
                   setVerdict(null);
                 }}
-                className="border-border bg-card rounded-md border px-3 py-2.5"
+                className="border-border bg-card rounded-md border px-3 py-2"
               >
                 <option value="">Choose a term</option>
                 {CLOUD_PIPELINE_OPTIONS.map((option) => (
@@ -657,80 +693,97 @@ function SequenceTask({ onSolved }: SolveProps) {
   return (
     <div>
       <Prompt>
-        The proposed Egan–Heim scheme uses continuous monitoring to bring a
-        customer into KYC before the applicable threshold is crossed. Drag the
-        stages into order. The first row should be the earliest event; the move
-        buttons provide the same operation without dragging.
+        Put the six stages of the Egan–Heim scheme in order. Drag a row or use
+        its arrow buttons; the earliest event goes first.
       </Prompt>
-      <DndContext
-        sensors={sensors}
-        collisionDetection={closestCenter}
-        onDragStart={({ active }) => {
-          setActiveId(String(active.id));
-          setVerdict(null);
-        }}
-        onDragCancel={() => setActiveId(null)}
-        onDragEnd={handleDragEnd}
-        accessibility={{
-          screenReaderInstructions: {
-            draggable:
-              "To move a stage, press Space or Enter. Use the up and down arrow keys to choose a position. Press Space or Enter again to drop it, or Escape to cancel.",
-          },
-          announcements: {
-            onDragStart: ({ active }) =>
-              `Picked up ${labelFor(active.id)}, position ${positionFor(
-                active.id
-              )} of ${order.length}.`,
-            onDragOver: ({ active, over }) =>
-              over
-                ? `${labelFor(active.id)} is over position ${positionFor(
-                    over.id
-                  )} of ${order.length}.`
-                : `${labelFor(active.id)} is no longer over the list.`,
-            onDragEnd: ({ active, over }) =>
-              over
-                ? `Dropped ${labelFor(active.id)} at position ${positionFor(
-                    over.id
-                  )} of ${order.length}.`
-                : `Movement cancelled. ${labelFor(
-                    active.id
-                  )} returned to position ${positionFor(active.id)}.`,
-            onDragCancel: ({ active }) =>
-              `Movement cancelled. ${labelFor(
-                active.id
-              )} returned to position ${positionFor(active.id)}.`,
-          },
-        }}
-      >
-        <SortableContext items={order} strategy={verticalListSortingStrategy}>
-          <ol className="mt-5 space-y-2" aria-label="Stages to put in order">
-            {order.map((id, index) => {
-              const item = CLOUD_SEQUENCE.find(
-                (candidate) => candidate.id === id
-              )!;
-              return (
-                <SortableSequenceItem
-                  key={id}
-                  id={id}
-                  text={item.text}
-                  index={index}
-                  count={order.length}
-                  disabled={verdict === "correct"}
-                  onMove={move}
-                />
-              );
-            })}
-          </ol>
-        </SortableContext>
-        <DragOverlay>
-          {activeId ? (
-            <SequenceDragPreview
-              text={labelFor(activeId)}
-              position={positionFor(activeId)}
-            />
-          ) : null}
-        </DragOverlay>
-      </DndContext>
+      {verdict === "correct" ? (
+        <ol
+          className="mt-3 grid gap-2 md:grid-cols-2"
+          aria-label="Correct order of stages"
+        >
+          {order.map((id, index) => (
+            <li
+              key={id}
+              className="border-border bg-background flex items-center gap-2 rounded-lg border px-3 py-2 leading-snug"
+            >
+              <span className="text-muted-foreground flex size-6 shrink-0 items-center justify-center rounded-full border text-xs">
+                {index + 1}
+              </span>
+              {labelFor(id)}
+            </li>
+          ))}
+        </ol>
+      ) : (
+        <DndContext
+          sensors={sensors}
+          collisionDetection={closestCenter}
+          onDragStart={({ active }) => {
+            setActiveId(String(active.id));
+            setVerdict(null);
+          }}
+          onDragCancel={() => setActiveId(null)}
+          onDragEnd={handleDragEnd}
+          accessibility={{
+            screenReaderInstructions: {
+              draggable:
+                "To move a stage, press Space or Enter. Use the up and down arrow keys to choose a position. Press Space or Enter again to drop it, or Escape to cancel.",
+            },
+            announcements: {
+              onDragStart: ({ active }) =>
+                `Picked up ${labelFor(active.id)}, position ${positionFor(
+                  active.id
+                )} of ${order.length}.`,
+              onDragOver: ({ active, over }) =>
+                over
+                  ? `${labelFor(active.id)} is over position ${positionFor(
+                      over.id
+                    )} of ${order.length}.`
+                  : `${labelFor(active.id)} is no longer over the list.`,
+              onDragEnd: ({ active, over }) =>
+                over
+                  ? `Dropped ${labelFor(active.id)} at position ${positionFor(
+                      over.id
+                    )} of ${order.length}.`
+                  : `Movement cancelled. ${labelFor(
+                      active.id
+                    )} returned to position ${positionFor(active.id)}.`,
+              onDragCancel: ({ active }) =>
+                `Movement cancelled. ${labelFor(
+                  active.id
+                )} returned to position ${positionFor(active.id)}.`,
+            },
+          }}
+        >
+          <SortableContext items={order} strategy={verticalListSortingStrategy}>
+            <ol className="mt-3 space-y-1.5" aria-label="Stages to put in order">
+              {order.map((id, index) => {
+                const item = CLOUD_SEQUENCE.find(
+                  (candidate) => candidate.id === id
+                )!;
+                return (
+                  <SortableSequenceItem
+                    key={id}
+                    id={id}
+                    text={item.text}
+                    index={index}
+                    count={order.length}
+                    disabled={false}
+                    onMove={move}
+                  />
+                );
+              })}
+            </ol>
+          </SortableContext>
+          <DragOverlay>
+            {activeId ? (
+              <SequenceDragPreview
+                text={labelFor(activeId)}
+                position={positionFor(activeId)}
+              />
+            ) : null}
+          </DragOverlay>
+        </DndContext>
+      )}
       <CheckRow
         verdict={verdict}
         disabled={false}
@@ -777,7 +830,7 @@ function SortableSequenceItem({
       ref={setNodeRef}
       style={style}
       className={cn(
-        "border-border bg-background group flex items-center gap-2 rounded-lg border p-2 transition-[border-color,background-color,box-shadow,opacity]",
+        "border-border bg-background group flex min-h-11 items-center gap-2 rounded-lg border p-1 transition-[border-color,background-color,box-shadow,opacity]",
         !disabled && "hover:bg-muted/35",
         isDragging && "border-primary/45 opacity-30"
       )}
@@ -789,7 +842,7 @@ function SortableSequenceItem({
         {...attributes}
         {...listeners}
         aria-label={`Move ${text}. Current position ${index + 1} of ${count}.`}
-        className="border-border text-muted-foreground hover:border-foreground/35 hover:bg-muted focus-visible:ring-ring flex size-11 shrink-0 touch-none cursor-grab items-center justify-center rounded-md border focus-visible:ring-2 focus-visible:outline-none active:cursor-grabbing disabled:cursor-default disabled:opacity-45"
+        className="border-border text-muted-foreground hover:border-foreground/35 hover:bg-muted focus-visible:ring-ring flex size-9 shrink-0 touch-none cursor-grab items-center justify-center rounded-md border focus-visible:ring-2 focus-visible:outline-none active:cursor-grabbing disabled:cursor-default disabled:opacity-45"
       >
         <GripVertical className="size-5" aria-hidden />
       </button>
@@ -802,7 +855,7 @@ function SortableSequenceItem({
           type="button"
           disabled={index === 0 || disabled}
           onClick={() => onMove(index, -1)}
-          className="border-border hover:bg-muted focus-visible:ring-ring disabled:text-muted-foreground flex size-11 items-center justify-center rounded-md border focus-visible:ring-2 focus-visible:outline-none disabled:opacity-40"
+          className="border-border hover:bg-muted focus-visible:ring-ring disabled:text-muted-foreground flex size-9 items-center justify-center rounded-md border focus-visible:ring-2 focus-visible:outline-none disabled:opacity-40"
           aria-label={`Move ${text} earlier`}
         >
           <ArrowUp className="size-4" aria-hidden />
@@ -811,7 +864,7 @@ function SortableSequenceItem({
           type="button"
           disabled={index === count - 1 || disabled}
           onClick={() => onMove(index, 1)}
-          className="border-border hover:bg-muted focus-visible:ring-ring disabled:text-muted-foreground flex size-11 items-center justify-center rounded-md border focus-visible:ring-2 focus-visible:outline-none disabled:opacity-40"
+          className="border-border hover:bg-muted focus-visible:ring-ring disabled:text-muted-foreground flex size-9 items-center justify-center rounded-md border focus-visible:ring-2 focus-visible:outline-none disabled:opacity-40"
           aria-label={`Move ${text} later`}
         >
           <ArrowDown className="size-4" aria-hidden />
@@ -860,35 +913,52 @@ function ConceptTask({ onSolved }: SolveProps) {
         Match each description to the correct mechanism. Use each mechanism
         once.
       </Prompt>
-      <div className="mt-5 space-y-3">
-        {CLOUD_CONCEPT_ROWS.map((row) => (
-          <label
-            key={row.id}
-            className="border-border bg-background grid gap-3 rounded-lg border p-4 sm:grid-cols-[1fr_220px] sm:items-center"
-          >
-            <span className="leading-relaxed">{row.description}</span>
-            <select
-              value={answers[row.id] ?? ""}
-              disabled={verdict === "correct"}
-              onChange={(event) => {
-                setAnswers((current) => ({
-                  ...current,
-                  [row.id]: event.target.value,
-                }));
-                setVerdict(null);
-              }}
-              className="border-border bg-card rounded-md border px-3 py-2.5"
+      {verdict === "correct" ? (
+        <details className="border-border mt-3 rounded-lg border px-3 py-2.5">
+          <summary className="cursor-pointer font-medium">
+            Review the four matches
+          </summary>
+          <dl className="mt-3 grid gap-3 md:grid-cols-2">
+            {CLOUD_CONCEPT_ROWS.map((row) => (
+              <div key={row.id}>
+                <dt className="font-medium">{row.answer}</dt>
+                <dd className="text-muted-foreground mt-1 leading-relaxed">
+                  {row.description}
+                </dd>
+              </div>
+            ))}
+          </dl>
+        </details>
+      ) : (
+        <div className="mt-3 grid gap-2 md:grid-cols-2">
+          {CLOUD_CONCEPT_ROWS.map((row) => (
+            <label
+              key={row.id}
+              className="border-border bg-background grid gap-2 rounded-lg border p-3 sm:grid-cols-[1fr_190px] sm:items-center"
             >
-              <option value="">Choose a mechanism</option>
-              {CLOUD_CONCEPTS.map((concept) => (
-                <option key={concept} value={concept}>
-                  {concept}
-                </option>
-              ))}
-            </select>
-          </label>
-        ))}
-      </div>
+              <span className="leading-relaxed">{row.description}</span>
+              <select
+                value={answers[row.id] ?? ""}
+                onChange={(event) => {
+                  setAnswers((current) => ({
+                    ...current,
+                    [row.id]: event.target.value,
+                  }));
+                  setVerdict(null);
+                }}
+                className="border-border bg-card rounded-md border px-3 py-2"
+              >
+                <option value="">Choose a mechanism</option>
+                {CLOUD_CONCEPTS.map((concept) => (
+                  <option key={concept} value={concept}>
+                    {concept}
+                  </option>
+                ))}
+              </select>
+            </label>
+          ))}
+        </div>
+      )}
       <CheckRow
         verdict={verdict}
         disabled={!complete}
@@ -933,7 +1003,7 @@ function CaseTask({ onSolved }: SolveProps) {
         limited traffic to external networks. Select every conclusion supported
         by these facts.
       </Prompt>
-      <div className="mt-5 grid gap-2">
+      <div className="mt-3 grid gap-2 md:grid-cols-2">
         {CLOUD_CASE_OPTIONS.map((item) => (
           <CheckButton
             key={item.id}
@@ -978,7 +1048,7 @@ function InferenceTask({ onSolved }: SolveProps) {
       </Prompt>
       <fieldset className="mt-5">
         <legend className="sr-only">Select the justified response</legend>
-        <div className="grid gap-2">
+        <div className="grid gap-2 md:grid-cols-2">
           {CLOUD_INFERENCE_OPTIONS.map((option) => (
             <RadioChoice
               key={option.id}
@@ -1015,7 +1085,7 @@ function InferenceTask({ onSolved }: SolveProps) {
 
 function Prompt({ children }: { children: ReactNode }) {
   return (
-    <p className="border-border bg-muted/35 rounded-lg border p-4 leading-relaxed">
+    <p className="border-border bg-muted/35 rounded-lg border px-3 py-2 leading-relaxed">
       {children}
     </p>
   );
@@ -1039,7 +1109,7 @@ function RadioChoice({
   return (
     <label
       className={cn(
-        "border-border bg-background hover:border-foreground/35 focus-within:ring-ring relative flex w-full cursor-pointer items-start gap-3 rounded-lg border px-4 py-3 text-left leading-relaxed transition-colors focus-within:ring-2 focus-within:outline-none",
+        "border-border bg-background hover:border-foreground/35 focus-within:ring-ring relative flex w-full cursor-pointer items-start gap-3 rounded-lg border px-3 py-2 text-left leading-relaxed transition-colors focus-within:ring-2 focus-within:outline-none",
         selected && "border-primary bg-primary/5",
         disabled && "cursor-default",
         disabled && !selected && "opacity-55"
@@ -1086,7 +1156,7 @@ function CheckButton({
       disabled={disabled}
       onClick={onClick}
       className={cn(
-        "border-border bg-background hover:border-foreground/35 flex w-full items-start gap-3 rounded-lg border px-4 py-3 text-left leading-relaxed transition-colors",
+        "border-border bg-background hover:border-foreground/35 flex w-full items-start gap-3 rounded-lg border px-3 py-2 text-left leading-relaxed transition-colors",
         checked && "border-primary bg-primary/5",
         disabled && !checked && "opacity-55"
       )}
@@ -1121,67 +1191,87 @@ function CheckRow({
   sources: readonly CloudSource[];
 }) {
   return (
-    <div className="mt-5">
-      {verdict ? (
+    <div className="mt-2">
+      {verdict === "correct" ? (
         <div
           role="status"
           aria-live="polite"
-          className={cn(
-            "rounded-lg border p-4",
-            verdict === "correct"
-              ? "border-emerald-600/30 bg-emerald-500/6"
-              : "border-destructive/35 bg-destructive/5"
-          )}
+          className="border-emerald-600/30 bg-emerald-500/6 rounded-lg border px-3 py-2.5"
         >
           <div className="flex gap-3">
-            {verdict === "correct" ? (
-              <CheckCircle2
-                className="mt-0.5 size-5 shrink-0 text-emerald-600"
-                aria-hidden
-              />
-            ) : null}
+            <CheckCircle2
+              className="mt-0.5 size-5 shrink-0 text-emerald-600"
+              aria-hidden
+            />
             <div>
-              <p
-                className={
-                  verdict === "correct"
-                    ? "font-medium"
-                    : "text-destructive font-medium"
-                }
-              >
-                {verdict === "correct" ? "Supported" : "Revise the answer"}
-              </p>
+              <p className="font-medium">Supported</p>
               <p className="text-muted-foreground mt-1 leading-relaxed">
-                {verdict === "correct" ? correct : wrong}
+                {correct}
               </p>
-              <ul className="mt-2 space-y-1">
-                {sources.map((source) => (
-                  <li key={source.label}>
-                    <a
-                      href={source.href}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-primary inline-flex items-start gap-1 text-xs font-medium underline-offset-4 hover:underline"
-                    >
-                      <span>{source.label}</span>
-                      <ExternalLink
-                        className="mt-0.5 size-3 shrink-0"
-                        aria-hidden
-                      />
-                    </a>
-                  </li>
-                ))}
-              </ul>
+              <details className="mt-1.5 text-xs">
+                <summary className="text-primary cursor-pointer font-medium">
+                  Sources ({sources.length})
+                </summary>
+                <ul className="mt-1.5 flex flex-wrap gap-x-3 gap-y-1">
+                  {sources.map((source) => (
+                    <li key={source.label}>
+                      <a
+                        href={source.href}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-primary inline-flex items-start gap-1 font-medium underline-offset-4 hover:underline"
+                      >
+                        <span>{source.label}</span>
+                        <ExternalLink
+                          className="mt-0.5 size-3 shrink-0"
+                          aria-hidden
+                        />
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </details>
             </div>
           </div>
         </div>
-      ) : null}
-      {verdict !== "correct" ? (
-        <div className="mt-4 flex justify-end">
+      ) : verdict === "wrong" ? (
+        <div
+          role="status"
+          aria-live="polite"
+          className="border-destructive/35 bg-destructive/5 flex items-start justify-between gap-3 rounded-lg border px-3 py-2"
+        >
+          <p className="text-destructive min-w-0 leading-snug">{wrong}</p>
+          <details className="shrink-0 text-xs">
+            <summary className="text-primary cursor-pointer font-medium">
+              Sources ({sources.length})
+            </summary>
+            <ul className="mt-1.5 space-y-1">
+              {sources.map((source) => (
+                <li key={source.label}>
+                  <a
+                    href={source.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-primary inline-flex items-start gap-1 font-medium underline-offset-4 hover:underline"
+                  >
+                    <span>{source.label}</span>
+                    <ExternalLink
+                      className="mt-0.5 size-3 shrink-0"
+                      aria-hidden
+                    />
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </details>
+        </div>
+      ) : (
+        <div className="flex justify-end">
           <Button onClick={onCheck} disabled={disabled}>
             Check answer
           </Button>
         </div>
-      ) : null}
+      )}
     </div>
   );
 }

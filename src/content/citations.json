@@ -417,6 +417,52 @@
       "authors": "Newman, Lily Hay",
       "container": "WIRED",
       "date": "5 Aug. 2026"
+    },
+    "https://docs.nvidia.com/attestation/quick-start-guide/latest/attestation-examples/hopper_single_gpu.html": {
+      "title": "Hopper Single GPU Attestation Example",
+      "about": "NVIDIA's own quick-start walkthrough of remotely attesting an H100 GPU in Confidential Computing mode — the working evidence that remote attestation already ships on AI hardware.",
+      "container": "NVIDIA Attestation Tools documentation",
+      "publisher": "NVIDIA"
+    },
+    "https://arxiv.org/abs/2605.01930": {
+      "title": "GPU Fingerprinting for Location Verification",
+      "about": "Proposes physical hardware fingerprints — rather than stored cryptographic keys an adversary with physical access could extract — as a way to re-identify individual GPUs, with up to 100 percent re-identification accuracy in small-scale tests.",
+      "authors": "Tee, Wayne, and Jonathan Happel",
+      "container": "arXiv",
+      "date": "May 2026"
+    },
+    "https://attestable.com/blog/model-weights-security": {
+      "title": "From Verifiability to Model-Weight Security",
+      "about": "The company's own account of using sampled zero-knowledge output proofs to shrink a datacenter's security dependencies — early implementation evidence, as the lesson flags.",
+      "authors": "Attestable",
+      "publisher": "Attestable"
+    },
+    "https://arxiv.org/abs/2606.05433": {
+      "title": "Zero knowledge verification for frontier AI training is possible",
+      "about": "The 2026 proposal estimating a future ZK system could verify dense frontier training at roughly 2–10 percent overhead — while naming thirteen unresolved technical problems and the training architectures it does not yet cover.",
+      "authors": "Peigné, Pierre, Ky Nguyen, and Paul Wang",
+      "container": "arXiv",
+      "date": "June 2026"
+    },
+    "https://arxiv.org/abs/2402.02675": {
+      "title": "Verifiable evaluations of machine learning models using zkSNARKs",
+      "about": "Shows a model's claimed evaluation results can be proved with zkSNARKs without revealing the weights behind them.",
+      "authors": "South, Tobin, Alexander Camuto, Shrey Jain, et al.",
+      "container": "arXiv",
+      "date": "Feb. 2024"
+    },
+    "https://arxiv.org/abs/2604.00169": {
+      "title": "Beyond Latency: A System-Level Characterization of MPC and FHE for PPML",
+      "about": "The system-level study of MPC (and FHE) for private machine learning behind the lesson's caveats: communication, preprocessing, memory, and latency are what keep large models hard.",
+      "authors": "Huang, Pengzhi, Kiwan Maeng, and G. Edward Suh",
+      "container": "arXiv",
+      "date": "Mar. 2026"
+    },
+    "https://www.opcw.org/chemical-weapons-convention/annexes/verification-annex/part-x-challenge-inspections-pursuant": {
+      "title": "Verification Annex, Part X: Challenge Inspections Pursuant to Article IX",
+      "about": "The CWC's managed-access rules: how an inspected state may shroud sensitive equipment and restrict analyses while challenge inspectors still resolve compliance questions.",
+      "container": "Chemical Weapons Convention",
+      "publisher": "Organisation for the Prohibition of Chemical Weapons"
     }
   },
   "pending": [
@@ -438,7 +484,6 @@
     "https://carnegieendowment.org/research/2026/05/the-geopolitical-debates-over-controlling-cloud-compute",
     "https://arxiv.org/html/2408.16074v2#S6.SS2",
     "https://arxiv.org/html/2601.11699v4#S5.SS3",
-    "https://www.opcw.org/chemical-weapons-convention/annexes/verification-annex/part-x-challenge-inspections-pursuant",
     "https://arxiv.org/html/2507.15916#S4.SS3",
     "https://arxiv.org/html/2601.11699v4",
     "https://www.ignet.gov/sites/default/files/files/Quality%20Standards%20for%20Investigations%20July-2025.pdf#page=13",

@@ -1138,3 +1138,26 @@ page. The first real lesson, 2.2.1, owns the existing `/cloud` route so old
 links still land on substantive content. The group lists all four sections;
 the exercise keeps its existing id and local-storage document, so saved work
 survives the move to its own route.
+
+### 2026-08-14 — 2.0 redone from the owner's new draft; 2.0.1 split out
+
+The owner supplied two new PDFs ("2.0 new", "2.0.1 new"). 2.0 now carries the
+draft's four objectives, a "Feasibility Intuitions" section whose four metrics
+each state their Low/High anchor examples on a sliding-scale block
+(`<SlidingScale/>`, per the draft's "[put these on a sliding scale]" note), the
+notebook prompt in the requested dark/light-red rounded outline (new `notebook`
+Callout variant), and an "Evidence Taxonomies" section. The draft's planning
+bullet list under the taxonomies embed was not transcribed, as its own bracket
+instructs; the old trailing "keep these questions in mind" block is gone with
+the rewrite. Both embeds stay.
+
+The privacy-preserving material moved out of 2.0 into a new 2.0.1
+Privacy-Preserving Mechanisms (`v-mechanism-privacy`, nested under 2.0 via
+`sectionItemId`, unit "2.0"), transcribed verbatim from its PDF with the five
+mechanisms as the draft's pop-up grid (`<MechanismGrid/>`/`<MechanismCard/>`,
+shared visual grammar: muted zone = facility, lock = what stays inside, circle
+= verifier, primary accent = what crosses). The draft's [LINK] markers resolve
+to 2.1/2.2/2.3/2.4 lesson routes; its six new external works sit in
+`citations.json` `pending` until their facts are verified. The mechanism-sort
+lane dots gained a ground-colour rim so overlapping placements stay separable
+(the draft's other bracketed ask).

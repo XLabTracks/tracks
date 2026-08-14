@@ -148,7 +148,8 @@ window.COURSE = {
           "mins": "15–20 min",
           "href": "/tracks/verification/verification-infrastructure/mechanism-effective",
           "lessons": [
-            "mechanism-effective"
+            "mechanism-effective",
+            "mechanism-privacy"
           ]
         },
         {

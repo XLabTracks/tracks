@@ -472,14 +472,15 @@ function Lanes({
                       />
                     </>
                   )}
-                  {/* your call */}
+                  {/* your call — a ground-colour rim keeps two dots that land
+                      on the same spot reading as two discs, not one blob */}
                   <button
                     type="button"
                     aria-label={`${m.title} — ${Math.round(v * 100)}`}
                     title={`${m.title} — ${Math.round(v * 100)}`}
                     onClick={() => onSelect(id)}
                     className={cn(
-                      "absolute size-2.5 -translate-x-1/2 -translate-y-1/2 rounded-full",
+                      "border-background absolute size-3 -translate-x-1/2 -translate-y-1/2 rounded-full border",
                       dim && "opacity-25",
                       selected === id && "ring-foreground ring-2 ring-offset-1",
                     )}

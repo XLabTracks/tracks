@@ -91,6 +91,7 @@ export const verificationModules: Module[] = [
     // docs/verification/module-2-log.md.
     itemIds: [
       "v-mechanism-effective",
+      "v-mechanism-privacy",
       "v-hw-attestation",
       "v-hw-claim",
       "v-hw-trusted-statement",
@@ -221,6 +222,15 @@ export const verificationLessons: Lesson[] = [
     title: "2.0 What makes a verification mechanism effective?",
     contentRef: "verification/mechanism-effective",
     estimatedMinutes: 15,
+  },
+  {
+    id: "v-mechanism-privacy",
+    slug: "mechanism-privacy",
+    moduleId: "v-infrastructure",
+    sectionItemId: "v-mechanism-effective",
+    title: "2.0.1 Privacy-Preserving Mechanisms",
+    contentRef: "verification/mechanism-privacy",
+    estimatedMinutes: 10,
   },
   {
     id: "v-human-intro",
@@ -658,6 +668,7 @@ export const verificationUnitOfLesson: Record<string, string> = {
   "v-scoping-upstream-downstream": "1.3",
   "v-context-distiller": "1.3",
   "v-mechanism-effective": "2.0",
+  "v-mechanism-privacy": "2.0",
   "v-hw-attestation": "2.1",
   "v-hw-claim": "2.1",
   "v-hw-trusted-statement": "2.1",

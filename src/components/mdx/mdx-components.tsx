@@ -16,9 +16,14 @@ import { Objectives } from "./objectives";
 import { PopUp } from "./pop-up";
 import { PageBreak } from "./page-break";
 import { SiteQuote } from "./site-quote";
+import { SlidingScale } from "./sliding-scale";
 import { SourceCredit } from "./source-credit";
 import { CapstoneSignup } from "@/components/verification/capstone-signup";
 import { MemoDesk } from "@/components/verification/memo-desk-card";
+import {
+  MechanismCard,
+  MechanismGrid,
+} from "@/components/verification/privacy-mechanism-grid";
 import { VerificationExercise } from "@/components/verification/verification-exercise";
 import { Term } from "./term";
 import { CapstoneBank } from "./reader/capstone-bank";
@@ -90,8 +95,12 @@ export const mdxComponents: MDXComponents = {
   PopUp,
   PageBreak,
   SiteQuote,
+  SlidingScale,
   SourceCredit,
   VerificationExercise,
+  // 2.0.1's five privacy-preserving mechanisms as the outline's pop-up grid
+  MechanismGrid,
+  MechanismCard,
   Term,
   // The reader blocks the Verification units were written against:
   // a committed-then-revealed check, a word-bank gap fill, a reproduced

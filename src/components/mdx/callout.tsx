@@ -1,8 +1,8 @@
 import type { ReactNode } from "react";
-import { CirclePlay, Info, Lightbulb, TriangleAlert } from "lucide-react";
+import { CirclePlay, Info, Lightbulb, NotebookPen, TriangleAlert } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-type CalloutVariant = "note" | "tip" | "warning" | "highlight";
+type CalloutVariant = "note" | "tip" | "warning" | "highlight" | "notebook";
 
 const VARIANTS: Record<
   CalloutVariant,
@@ -26,6 +26,15 @@ const VARIANTS: Record<
   highlight: {
     icon: CirclePlay,
     className: "border-primary/55 bg-primary/5",
+    iconClassName: "text-primary",
+  },
+  // The outline's "[outline in dark/light red rounded rectangular outline]"
+  // for notebook prompts: the brand red as a full four-side outline (the
+  // primary token re-solves per theme, so it is dark red on the day ground
+  // and light on night), no fill — the outline IS the marker.
+  notebook: {
+    icon: NotebookPen,
+    className: "border-primary/70 bg-transparent",
     iconClassName: "text-primary",
   },
 };

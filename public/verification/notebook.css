@@ -45,7 +45,7 @@
   -webkit-user-select: none;
   -webkit-touch-callout: none;
 }
-.nb-open:hover { filter: brightness(1.08); }
+.nb-open:hover { background: color-mix(in srgb, var(--primary) 88%, var(--foreground)); }
 
 /* The count is the reading; the pill is decoration for it. */
 .nb-badge {

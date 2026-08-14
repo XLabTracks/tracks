@@ -338,7 +338,6 @@
   padding: 40px 20px;
   overflow-y: auto;
   background: color-mix(in srgb, var(--foreground) 45%, transparent);
-  backdrop-filter: blur(3px);
 }
 .sheet {
   position: relative;

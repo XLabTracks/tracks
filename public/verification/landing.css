@@ -108,13 +108,7 @@ section.band .intro { max-width: 62ch; margin-top: 12px; color: var(--muted-fore
    day — theme.js sets the attribute either way. */
 .sky .star { display: none; fill: var(--foreground); }
 :root[data-theme='dark'] .sky .star { display: block; }
-@media (prefers-reduced-motion: no-preference) {
-  :root[data-theme='dark'] .sky .star.tw { animation: sky-twinkle 7s ease-in-out infinite alternate; }
-}
-@keyframes sky-twinkle {
-  from { opacity: .08; }
-  to { opacity: .7; }
-}
+:root[data-theme='dark'] .sky .star.tw { opacity: .38; }
 
 /* High contrast is a legibility mode: the rings and the star field carry no
    information, and at --border white on black they out-shout the labels they
@@ -131,10 +125,7 @@ section.band .intro { max-width: 62ch; margin-top: 12px; color: var(--muted-fore
    Cross edges — dashed bows, most of the fifty, kept faint or the middle of
    the web is a hairball.
    Beams — one skill feeding another inside its module: the solid line of the
-   legend, filled spindles in the module hue.
-
-   Every glow multiplies by --glow: night is the only ground a glow reads on,
-   and day and high contrast set it to 0, which collapses the blur to nothing. */
+   legend, filled spindles in the module hue. */
 .sky .strand {
   fill: none;
   stroke: color-mix(in srgb, var(--sel) 55%, transparent);
@@ -149,7 +140,6 @@ section.band .intro { max-width: 62ch; margin-top: 12px; color: var(--muted-fore
    piece — which is also why the discs carry no rim at rest. */
 .sky .spoke {
   fill: var(--sel);
-  filter: drop-shadow(0 0 calc(6px * var(--glow)) color-mix(in srgb, var(--sel) 45%, transparent));
   transition: fill .25s ease, opacity .25s ease;
 }
 .sky.focusing .spoke:not(.hot) { opacity: .2; }
@@ -178,10 +168,6 @@ section.band .intro { max-width: 62ch; margin-top: 12px; color: var(--muted-fore
 .sky .edge.beam {
   stroke: none;
   fill: var(--sel);
-  filter: drop-shadow(0 0 calc(7px * var(--glow)) color-mix(in srgb, var(--sel) 55%, transparent));
-}
-.sky .edge.beam.hot {
-  filter: drop-shadow(0 0 calc(12px * var(--glow)) var(--sel));
 }
 .sky.focusing .edge:not(.hot) { opacity: .16; }
 
@@ -190,17 +176,9 @@ section.band .intro { max-width: 62ch; margin-top: 12px; color: var(--muted-fore
    the night ground it is the one near-white body, on paper the one near-ink
    one. */
 .sky .hub-halo { fill: color-mix(in srgb, var(--foreground) 8%, transparent); }
-@media (prefers-reduced-motion: no-preference) {
-  :root[data-theme='dark'] .sky .hub-halo { animation: hub-breathe 7s ease-in-out infinite alternate; }
-}
-@keyframes hub-breathe {
-  from { opacity: .55; }
-  to { opacity: 1; }
-}
 .sky .hub-ring { fill: none; stroke: color-mix(in srgb, var(--foreground) 30%, transparent); stroke-width: 1.5; }
 .sky .hub-disc {
   fill: var(--foreground);
-  filter: drop-shadow(0 0 calc(22px * var(--glow)) color-mix(in srgb, var(--foreground) 55%, transparent));
 }
 
 .sky .node { cursor: pointer; transition: opacity .25s ease; }
@@ -219,7 +197,6 @@ section.band .intro { max-width: 62ch; margin-top: 12px; color: var(--muted-fore
      state lives on the ring, never in the fill. */
   stroke: transparent;
   stroke-width: 0;
-  filter: drop-shadow(0 0 calc(10px * var(--glow)) color-mix(in srgb, var(--sel) 55%, transparent));
   transition: stroke .15s ease, stroke-width .15s ease;
 }
 /* The halo: the reference's outer orbit ring, a hue whisper that brightens
@@ -246,7 +223,6 @@ section.band .intro { max-width: 62ch; margin-top: 12px; color: var(--muted-fore
 .sky .node:hover .node-core {
   stroke: var(--foreground);
   stroke-width: 4;
-  filter: drop-shadow(0 0 calc(14px * var(--glow)) var(--sel));
 }
 .sky .node.hot .node-halo,
 .sky .node:hover .node-halo { stroke: var(--sel); }
@@ -256,7 +232,6 @@ section.band .intro { max-width: 62ch; margin-top: 12px; color: var(--muted-fore
 .sky .arc-label .plaque {
   fill: var(--sel);
   stroke: none;
-  filter: drop-shadow(0 0 calc(8px * var(--glow)) color-mix(in srgb, var(--sel) 40%, transparent));
 }
 /* The label sits ON the plaque fill, so it takes that colour's chosen ink —
    the same --sel/--sel-ink pair the stars use. */

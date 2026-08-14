@@ -596,7 +596,8 @@ export function InteractiveMap(_props: VerificationWidgetProps) {
                   })}
                 </g>
 
-                {/* pulse rings for event countries */}
+                {/* Static rings keep event countries visible without asking
+                    the browser (or a screen-share encoder) to repaint forever. */}
                 <g aria-hidden>
                   {ev &&
                     ev.c.map((id) => {
@@ -612,8 +613,7 @@ export function InteractiveMap(_props: VerificationWidgetProps) {
                           fill="none"
                           stroke={BUCKETS[c.primary].color}
                           strokeWidth={pulseStroke}
-                          className="vmap-pulse"
-                          style={{ transformBox: "fill-box", transformOrigin: "center" }}
+                          opacity={0.65}
                         />
                       );
                     })}
@@ -979,18 +979,6 @@ export function InteractiveMap(_props: VerificationWidgetProps) {
         </div>
       </div>
 
-      {/* pulse-ring animation, respecting reduced motion */}
-      <style>{`
-        @keyframes vmapPing {
-          0% { transform: scale(.45); opacity: .85; }
-          75% { transform: scale(1.6); opacity: 0; }
-          100% { transform: scale(1.6); opacity: 0; }
-        }
-        .vmap-pulse { animation: vmapPing 1.9s cubic-bezier(.25,.6,.35,1) infinite; }
-        @media (prefers-reduced-motion: reduce) {
-          .vmap-pulse { animation: none; opacity: .6; }
-        }
-      `}</style>
     </div>
   );
 }

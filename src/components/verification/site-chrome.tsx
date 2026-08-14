@@ -1,7 +1,7 @@
 "use client";
 
 import Script from "next/script";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { usePathname } from "next/navigation";
 import { useAuth } from "@workos-inc/authkit-nextjs/components";
 import { AccountMenu } from "@/components/layout/account-menu";
@@ -64,64 +64,6 @@ function ThemeSwitch() {
     w.VT_THEME?.mount();
   }, []);
   return <div className="theme-switch" />;
-}
-
-const PRESENTATION_KEY = "xlab-verification-presentation";
-
-function PresentationModeToggle() {
-  const [enabled, setEnabled] = useState(false);
-
-  useEffect(() => {
-    let stored: string | null = null;
-    try {
-      stored = localStorage.getItem(PRESENTATION_KEY);
-    } catch {
-      // Storage unavailable: reduced-motion remains the safe default signal.
-    }
-    const initial =
-      stored === "true" ||
-      (stored == null &&
-        window.matchMedia?.("(prefers-reduced-motion: reduce)").matches);
-    const frame = requestAnimationFrame(() => setEnabled(initial));
-    return () => cancelAnimationFrame(frame);
-  }, []);
-
-  useEffect(() => {
-    document.documentElement.classList.toggle("vt-presentation", enabled);
-    return () => {
-      document.documentElement.classList.remove("vt-presentation");
-    };
-  }, [enabled]);
-
-  const toggle = () => {
-    const next = !enabled;
-    setEnabled(next);
-    try {
-      localStorage.setItem(PRESENTATION_KEY, String(next));
-    } catch {
-      // The mode still applies for this session.
-    }
-  };
-
-  return (
-    <button
-      type="button"
-      className="presentation-toggle"
-      aria-pressed={enabled}
-      aria-label="Presentation mode"
-      title={
-        enabled
-          ? "Presentation mode on — restore motion and effects"
-          : "Presentation mode — reduce motion and screen-share effects"
-      }
-      onClick={toggle}
-    >
-      <svg viewBox="0 0 24 24" aria-hidden="true">
-        <rect x="3" y="4" width="18" height="13" rx="2" />
-        <path d="M8 21h8M12 17v4" />
-      </svg>
-    </button>
-  );
 }
 
 function VerificationRouteSignal({ pathname }: { pathname: string | null }) {
@@ -271,7 +213,6 @@ export function VerificationHeader() {
             ))}
           </nav>
           <div className="header-right">
-            <PresentationModeToggle />
             <ThemeSwitch />
             {/* Signed in, this is the app's own account menu — the same
                 avatar, email, classrooms and Sign out as everywhere else. A

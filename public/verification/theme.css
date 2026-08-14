@@ -132,7 +132,6 @@
   --hairline: 1px;
   --shadow-soft: 0 1px 2px rgba(10, 25, 47, .06);
   --shadow-soft-lg: 0 12px 40px rgba(10, 25, 47, .13);
-  --glow: 0;
 
   /* Two families, and only one of them is a download: Space Grotesk for
      headings and display numerals, the system sans for everything else.
@@ -192,8 +191,6 @@
 
   --shadow-soft: 0 1px 2px rgba(0, 0, 0, .4);
   --shadow-soft-lg: 0 12px 40px rgba(0, 0, 0, .5);
-  /* Night is the one ground a glow reads on; day and high contrast set it to 0. */
-  --glow: 1;
 }
 
 /* High contrast is a low-vision mode, not a dark theme, and it is built to
@@ -267,7 +264,6 @@
   --hairline: 3px;
   --shadow-soft: none;
   --shadow-soft-lg: none;
-  --glow: 0;
 
   /* 1.4.4: type at 200%, and the type scale is the only thing doubled.
      Every rule on these pages picks a --fs- step, so re-solving the scale
@@ -473,9 +469,18 @@ button, [role='button'], [role='radio'], [role='tab'], .chip, .nav a, .brand,
   top: 0;
   z-index: 40;
   border-bottom: var(--hairline) solid var(--border);
-  background: color-mix(in srgb, var(--background) 88%, transparent);
-  backdrop-filter: blur(8px);
+  /* Opaque chrome avoids a full-width backdrop-blur repaint while scrolling
+     and compresses cleanly during screen sharing. */
+  background: var(--background);
 }
+
+/* App widgets portal their scrims to <body>, outside the course article. The
+   shared dialog/sheet primitives add a blur utility there; keep Verification's
+   scrims flat too so opening a source card cannot reintroduce a viewport-wide
+   backdrop pass. This stylesheet is disabled when client navigation leaves
+   the track, so the platform primitives keep their normal treatment elsewhere. */
+[data-slot='dialog-overlay'],
+[data-slot='sheet-overlay'] { backdrop-filter: none; }
 .site-header .bar {
   /* Match BlueDot's desktop header geometry exactly: its 1505px viewport
      resolves a 1436px outer container with 80px internal gutters, putting
@@ -621,52 +626,6 @@ button, [role='button'], [role='radio'], [role='tab'], .chip, .nav a, .brand,
   min-height: var(--hdr-action-h);
 }
 
-/* A deliberate screen-share mode: it keeps the platform palette and layout,
-   but removes the expensive pixels video encoders have to recompute. The
-   monitor icon is a peer of the theme segments, not a fourth theme. */
-.presentation-toggle {
-  display: inline-flex;
-  flex: none;
-  align-items: center;
-  justify-content: center;
-  width: var(--hdr-action-h);
-  height: var(--hdr-action-h);
-  padding: 0;
-  border: var(--hairline) solid var(--border);
-  border-radius: var(--radius-sm);
-  background: var(--card);
-  color: var(--muted-foreground);
-  cursor: pointer;
-  transition: color .15s ease, background .15s ease;
-}
-.presentation-toggle:hover { color: var(--foreground); background: var(--accent); }
-.presentation-toggle[aria-pressed='true'] { background: var(--primary); color: var(--primary-foreground); }
-.presentation-toggle svg {
-  width: 16px;
-  height: 16px;
-  fill: none;
-  stroke: currentColor;
-  stroke-width: 1.8;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-}
-:root[data-theme='contrast'] .presentation-toggle svg { width: 22px; height: 22px; stroke-width: 2.4; }
-
-:root.vt-presentation .site-header {
-  background: var(--background);
-  backdrop-filter: none;
-}
-:root.vt-presentation *,
-:root.vt-presentation *::before,
-:root.vt-presentation *::after {
-  animation-duration: .01ms !important;
-  animation-iteration-count: 1 !important;
-  transition-duration: .01ms !important;
-  scroll-behavior: auto !important;
-  filter: none !important;
-  backdrop-filter: none !important;
-}
-
 /* Three-way theme switch, drawn as radios rather than a cycling button: a
    cycling control gives no way to see which of the three is active, and none
    of them is an obvious "next". */
@@ -749,11 +708,11 @@ button, [role='button'], [role='radio'], [role='tab'], .chip, .nav a, .brand,
   font-size: var(--fs-xl);
   text-decoration: none;
   cursor: pointer;
-  transition: filter .15s ease, background .15s ease, color .15s ease;
+  transition: background .15s ease, color .15s ease;
 }
-.btn:hover { filter: brightness(1.08); }
+.btn:hover { background: color-mix(in srgb, var(--primary) 88%, var(--foreground)); }
 .btn.outline { background: transparent; color: var(--foreground); border-color: var(--border); }
-.btn.outline:hover { background: var(--muted); filter: none; }
+.btn.outline:hover { background: var(--muted); }
 .btn.small { height: 38px; padding: 0 14px; font-size: var(--fs-lg); }
 
 .skip {
@@ -853,9 +812,5 @@ button, [role='button'], [role='radio'], [role='tab'], .chip, .nav a, .brand,
   }
   .site-header {
     background: var(--background);
-    backdrop-filter: none;
-  }
-  .sky :is(.spoke, .edge.beam, .hub-disc, .node-core, .plaque) {
-    filter: none !important;
   }
 }

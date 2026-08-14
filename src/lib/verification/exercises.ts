@@ -75,6 +75,10 @@ export const verificationExercises: VerificationExerciseDef[] = [
   { id: "whistleblower-levers", title: "Four Levers, One Each", bridged: false },
   { id: "human-audits-inspections", title: "Build the Inspection Order", bridged: true },
   { id: "human-institutions-judgment", title: "Audit the Verifier", bridged: true },
+  // 2.4's optional extensions. Unbridged by definition: they record no
+  // completion and are outside the module's estimated time, so a learner who
+  // skips them has still finished the section.
+  { id: "policy-on-paper", title: "Policy on Paper", bridged: false },
 ];
 export function getVerificationExercise(id: string): VerificationExerciseDef | undefined {
   return verificationExercises.find((e) => e.id === id);

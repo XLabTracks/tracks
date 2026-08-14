@@ -137,6 +137,10 @@ const WhistleblowerLevers = dynamic<VerificationWidgetProps>(
     ),
   { loading: WidgetLoading },
 );
+const PolicyOnPaper = dynamic<VerificationWidgetProps>(
+  () => import("./policy-on-paper").then((module) => module.PolicyOnPaper),
+  { loading: WidgetLoading },
+);
 const HumanAuditsInspections = dynamic<VerificationWidgetProps>(
   () =>
     import("./human-audits-inspections").then(
@@ -193,6 +197,7 @@ export const verificationWidgets: Record<
   "whistleblower-levers": WhistleblowerLevers,
   "human-audits-inspections": HumanAuditsInspections,
   "human-institutions-judgment": HumanInstitutionsJudgment,
+  "policy-on-paper": PolicyOnPaper,
 };
 
 export function getVerificationWidget(

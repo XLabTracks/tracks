@@ -34,6 +34,8 @@ export interface ArxivSectionProps {
   sourceFragment: string;
   /** Original table numbers in document order; the converter preserves captions but not their counters. */
   tableNumbers?: string;
+  /** Optional toc id at which to stop, excluding that section and its body. */
+  sectionEnd?: string;
 }
 
 /**
@@ -61,16 +63,19 @@ export function ArxivPaper({ id, defaultOpen = false }: ArxivPaperProps) {
 
 /**
  * Reproduces one complete arXiv section inline. Unlike ArxivPaper, this is a
- * reading rather than a collapsible reference card: the selected section and
- * all of its subsections remain in the lesson flow. Local citations, footnotes,
- * and cross-references point back to the pinned arXiv HTML, where the rest of
- * the paper is available.
+ * reading rather than a collapsible reference card: by default the selected
+ * section and all of its subsections remain in the lesson flow. `sectionEnd`
+ * can set an explicit toc boundary when the assignment names the parent text
+ * and only some of its subsections. Local citations, footnotes, and
+ * cross-references point back to the pinned arXiv HTML, where the rest of the
+ * paper is available.
  */
 export function ArxivSection({
   id,
   section,
   sourceFragment,
   tableNumbers,
+  sectionEnd,
 }: ArxivSectionProps) {
   const parsed = parseArxivId(id);
   if (!parsed) {
@@ -87,6 +92,7 @@ export function ArxivSection({
         section={section}
         sourceFragment={sourceFragment}
         tableNumbers={tableNumbers}
+        sectionEnd={sectionEnd}
       />
     </Suspense>
   );
@@ -97,11 +103,13 @@ async function ArxivSectionLoader({
   section,
   sourceFragment,
   tableNumbers,
+  sectionEnd,
 }: {
   id: ArxivId;
   section: string;
   sourceFragment: string;
   tableNumbers?: string;
+  sectionEnd?: string;
 }) {
   const result = await getPaperArtifact(id.id);
   const sourceUrl = `https://arxiv.org/html/${id.id}#${encodeURIComponent(
@@ -116,7 +124,7 @@ async function ArxivSectionLoader({
     );
   }
 
-  const html = extractSection(result.paper, section);
+  const html = extractSection(result.paper, section, sectionEnd);
   if (!html) {
     return (
       <div className="not-prose border-destructive/40 bg-destructive/5 my-6 rounded-xl border p-4 text-sm">
@@ -165,11 +173,21 @@ async function ArxivSectionLoader({
   );
 }
 
-function extractSection(paper: ConvertedPaper, section: string): string | null {
+function extractSection(
+  paper: ConvertedPaper,
+  section: string,
+  sectionEnd?: string,
+): string | null {
   const index = paper.toc.findIndex((entry) => entry.id === section);
   if (index === -1) return null;
   const start = sectionStartOffset(paper.html, section);
   if (start === -1) return null;
+
+  if (sectionEnd) {
+    const explicitEnd = sectionStartOffset(paper.html, sectionEnd);
+    if (explicitEnd === -1 || explicitEnd <= start) return null;
+    return paper.html.slice(start, explicitEnd);
+  }
 
   let end = paper.html.length;
   for (let i = subtreeEndIndex(paper.toc, index); i < paper.toc.length; i++) {

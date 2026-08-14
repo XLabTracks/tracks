@@ -96,8 +96,11 @@
  *      fallback), and committed figure overrides
  *      (src/content/arxiv-overrides/{id}/…) are merged into the files map —
  *      an `x.pdf.svg` override wins over a rasterized `x.pdf.png` sibling.
+ * v31: biblatex submissions synthesize a numeric `thebibliography` from their
+ *      `.bib` database instead of leaking internal citation keys when their
+ *      Biber-format `.bbl` cannot be parsed.
  */
-export const CONVERTER_VERSION = 30;
+export const CONVERTER_VERSION = 31;
 
 export interface ConversionWarning {
   /** Stable machine code, e.g. "unknown-macro", "katex-error". */

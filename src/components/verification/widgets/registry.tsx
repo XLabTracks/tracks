@@ -159,6 +159,13 @@ const HumanInstitutionsJudgment = dynamic<VerificationWidgetProps>(
     ),
   { loading: WidgetLoading },
 );
+const CloudEvidenceDrill = dynamic<VerificationWidgetProps>(
+  () =>
+    import("./cloud-evidence-drill").then(
+      (module) => module.CloudEvidenceDrill,
+    ),
+  { loading: WidgetLoading },
+);
 
 /**
  * Native React widgets ported from the standalone HTML pages, keyed by the same
@@ -203,6 +210,7 @@ export const verificationWidgets: Record<
   "human-institutions-judgment": HumanInstitutionsJudgment,
   "policy-on-paper": PolicyOnPaper,
   "report-access": ReportAccess,
+  "cloud-evidence-drill": CloudEvidenceDrill,
 };
 
 export function getVerificationWidget(

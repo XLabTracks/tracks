@@ -501,7 +501,7 @@ export const verificationLessons: Lesson[] = [
     moduleId: "v-infrastructure",
     title: "2.2 Cloud",
     contentRef: "verification/cloud",
-    estimatedMinutes: 105,
+    estimatedMinutes: 120,
   },
   {
     id: "v-intel-intro",
@@ -681,7 +681,7 @@ export const verificationUnitMeta: Record<
   // stood here was the optional extension's figure standing in for the whole
   // submodule, which nine sections no longer make credible.
   "2.1": { title: "Hardware", kind: "explainer", mins: "165–180 min" },
-  "2.2": { title: "Cloud", kind: "explainer", mins: "20–25 min" },
+  "2.2": { title: "Cloud", kind: "reading + exercise", mins: "120 min" },
   "2.3": { title: "Intelligence", kind: "explainer", mins: "35–45 min" },
   "2.4": { title: "Human", kind: "explainer", mins: "120 min" },
   "3.0": { title: "What is covert development?", kind: "explainer", mins: "10–15 min" },

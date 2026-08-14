@@ -341,6 +341,36 @@ checks and leaves its prose, which is the smaller half. The duplication
 CLAUDE.md calls the widest in the course is narrower now — the app has a 2.2
 again — but the playground draft is still unported.
 
+### 2026-08-13 — 2.2 becomes a two-hour reading workshop
+
+This entry supersedes the current-state claims immediately above; they remain
+in the log only as history. The four-card page is now a bounded 90-minute
+source packet followed by one 30-minute native exercise.
+
+- Heim et al. (`2403.08501v2`) and Egan & Heim (`2310.13625v1`) are CC BY 4.0.
+  The lesson therefore reproduces credited selections and complete assigned
+  sections on-platform, preserving links and cross-references to the pinned
+  arXiv HTML.
+- RAND RRA3686-1 prohibits unauthorized online reposting and asks readers to
+  link to the publication page; Carnegie marks its article all rights
+  reserved. Those works remain external. Their cards specify headings, printed
+  pages, start and stop points, and the question to extract; none of their
+  prose is copied into the lesson.
+- Reading time is explicit and totals 90 minutes: 38 Heim, 22 Egan & Heim,
+  18 RAND, and 12 Carnegie.
+- `cloud-evidence-drill` supplies the remaining 30 minutes through nine short
+  mechanics: true/false claims, odd-one-out plus principle, select-all,
+  observable-to-conclusion matching, a gap-fill pipeline with distractors,
+  ordering, concept identification, a short evidence case, and a final
+  inference limit. Completion is bridged to course progress.
+- The old `m2-2-cloud` analytical-writing placeholder is removed. Module 2's
+  planned memo belongs in 2.3 and its brief in 2.1; neither is invented here.
+
+Supporting pipeline changes make `<ArxivSection>` a first-class build input,
+allow an explicit end boundary for a parent section, and convert biblatex
+citations from the source `.bib` rather than exposing raw citation keys. The
+converter version is 31, so all committed arXiv artifacts were rebuilt.
+
 ---
 
 ## 2026-08-12 — 2.4.1 source map replaces the roster dump

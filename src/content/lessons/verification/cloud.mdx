@@ -1,38 +1,215 @@
-{/* 2.2 Cloud, rebuilt from the four sources alone after the unit was emptied —
-    see docs/verification/module-2-log.md for what was deleted and why.
+{/* Reuse record (checked 2026-08-13): arXiv:2403.08501v2 and
+arXiv:2310.13625v1 are licensed CC BY 4.0, so the credited selections below
+may be reproduced. RAND RRA3686-1 prohibits unauthorized online reposting
+and encourages direct links; Carnegie marks its article all rights reserved.
+Those two works are therefore assigned by heading and page, never copied. */}
 
-    Cards only, on the course owner's instruction. Ten comprehension checks
-    stood here for one commit and were cut; they are in the history if they
-    are wanted back. Do not add exercises, prose or quotations here unasked.
+## Readings · 90 minutes
 
-    Nothing on this page reproduces any of the four, which is what keeps the
-    reuse terms out of play: the two CC BY papers and the two all-rights-
-    reserved reports are all linked, never quoted. */}
+The four readings do different jobs. The first establishes what a provider can observe. The second adds customer identity and due diligence. The third shows how a threshold can be evaded. The fourth asks whether the resulting control is politically and administratively usable.
 
-## Sources
+As you read, keep two columns:
 
-<ReadingCard id="cloud-heim-governing" href="https://arxiv.org/abs/2403.08501" title="Governing Through the Cloud: The Intermediary Role of Compute Providers in AI Regulation" author="Heim, Fist, Egan et al." year="2024">
+1. **What record or signal exists?**
+2. **What conclusion does it support—and what does it still not establish?**
 
-The four capacities a provider can serve a governance regime in — **securer, record keeper, verifier, enforcer** — and the case that non-confidential metadata already shows workload scale, and often type, without anyone reading a customer’s code or data.
+### 1. What the cloud can observe · 38 minutes
+
+## Governing Through the Cloud: The Intermediary Role of Compute Providers in AI Regulation
+
+<SourceCredit
+  author={
+    "Lennart Heim, Tim Fist, Janet Egan, Sihao Huang, Stephen Zekany, Robert Trager, Michael A. Osborne, and Noa Zilberman · 2024"
+  }
+  sourceHref={"https://arxiv.org/abs/2403.08501"}
+/>
+
+The executive-summary selections and complete sections below are reproduced under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/). Citations and cross-references link to the pinned arXiv version.
+
+<SourceQuote
+  t="Governing Through the Cloud"
+  url="https://arxiv.org/abs/2403.08501"
+  what="selected paragraphs from the Executive Summary"
+  by="Heim et al. · 2024 · CC BY 4.0"
+>
+
+**Governance Capacities —** We propose that compute providers can leverage their crucial role in the AI supply chain to secure infrastructure and serve as the intermediate node in support of regulatory objectives while maintaining customers’ privacy and rights. They can facilitate effective AI regulation via four key capacities: as securers, record keepers, verifiers, and, in some cases, even enforcers. Reporting represents a related yet distinct dimension, wherein compute providers provide information to authorities as mandated by law or regulations. (section 2)
+
+**Technical Feasibility —** Our analysis indicates these governance capabilities are likely to be technically feasible and possible to implement in a confidentiality- and privacy-preserving way using techniques available to compute providers today. Compute providers often collect a wide range of data on their customers and workloads, for the purposes of billing, marketing, service analysis, optimization, and fulfilling legal obligations. Much of this data could also be used to support identity verification, as well as verifying technical properties of workloads. At a minimum, providers have access to billing information and can access basic technical data on how their hardware is used. This likely makes it possible for compute providers to develop techniques to detect and classify certain relevant workloads (e.g., whether a workload involves training a frontier model) and to quantify the amount of compute consumed by a workload. Verification of more detailed properties of a workload, such as the type of training data used, or whether a particular model evaluation was run, could be useful for governance purposes but is not currently possible without direct access to customer code and data. With further research and development efforts, compute providers may be able to offer “confidential computing” services to allow customers to prove these more detailed properties without otherwise revealing sensitive data. (section 3)
+
+**Technical and Governance Challenges —** To realize a robust governance model, several technical and governance challenges remain. These include identifying additional measurable properties of AI development that correspond to potential threats, making workload classification methods robust to potential evasion, and formulating privacy-preserving verification protocols. (section 5.1)
+
+The success of our proposed oversight scheme hinges on its multilateral adoption to prevent the migration of AI activities to jurisdictions with less stringent oversight. For an international framework to be durable and effective, it must address concerns from non-US governments. Cooperation will need to account for complex privacy and oversight issues associated with globally spread data centers. Compute provider oversight may affect competition in the AI ecosystem and raise concerns about issues of national competitiveness, and, consequently, this may influence the ability of US providers to offer products globally, including to foreign public-sector customers. Industry-led privacy-preserving standards could help ensure trust, but further research is needed to incentivize broad international buy-in to a global framework. (section 1.4 and section 5.2)
+
+</SourceQuote>
+
+Read the following sections in full. In Appendix B, use Table 4 as a map from each observable to its current availability and the verification task it might support.
+
+<div className="arxiv-reading-slot">
+  <ArxivSection
+    id="2403.08501v2"
+    section="ax-sec-record-keeping"
+    sourceFragment="S3.SS2"
+  />
+</div>
+
+<div className="arxiv-reading-slot">
+  <ArxivSection
+    id="2403.08501v2"
+    section="ax-sec-workload-classification"
+    sourceFragment="S3.SS3.SSS2"
+  />
+</div>
+
+<div className="arxiv-reading-slot">
+  <ArxivSection
+    id="2403.08501v2"
+    section="ax-sec-compute-accounting"
+    sourceFragment="S3.SS3.SSS3"
+  />
+</div>
+
+<div className="arxiv-reading-slot">
+  <ArxivSection
+    id="2403.08501v2"
+    section="ax-sec-detailed-workload-verification"
+    sourceFragment="S3.SS3.SSS4"
+  />
+</div>
+
+<div className="arxiv-reading-slot">
+  <ArxivSection
+    id="2403.08501v2"
+    section="ax-sec-observable-data-attributes"
+    sectionEnd="ax-references"
+    sourceFragment="A1.SS2"
+    tableNumbers="4"
+  />
+</div>
+
+### 2. Who is using the compute? · 22 minutes
+
+## Oversight for Frontier AI through a Know-Your-Customer Scheme for Compute Providers
+
+<SourceCredit
+  author={"Janet Egan and Lennart Heim · 2023"}
+  sourceHref={"https://arxiv.org/abs/2310.13625"}
+/>
+
+The opening passage, selected parts of Box 3, complete §2.1, the opening of §2.2, and §§2.2.1–2.2.2 are reproduced under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/).
+
+<SourceQuote
+  t="Oversight for Frontier AI through a Know-Your-Customer Scheme for Compute Providers"
+  url="https://arxiv.org/abs/2310.13625"
+  what="opening of §2"
+  by="Egan and Heim · 2023 · CC BY 4.0"
+>
+
+The US government should introduce a KYC scheme that ensures adequate monitoring for advanced AI cloud compute and allows the government to require compute providers to report high-risk entities and deny access to entities of concern. A KYC scheme requires businesses and organizations to verify the identity of their clients in order to provide them with access to particular goods and services. Introducing KYC requirements for entities accessing significant amounts of compute could help identify risks and enable further targeted restrictions where there is significant risk to national and global interests. Requiring compute providers to build greater awareness of the risks could encourage a safer AI industry aligned with public benefit.
+
+It is important to note that this proposed KYC scheme for advanced AI cloud compute would not capture all AI models being developed or used by malicious actors. For example, there are already specific less-advanced models today, which do not require massive amounts of compute, that raise biochemical weapon development concerns or enable more targeted malicious cyber activity. Setting the threshold to capture and monitor the compute of all AI models would not be beneficial, as it would capture too much information to be useful while imposing a significant imposition on industry. Such risks could instead be managed through other safeguards, while the proposed in-depth KYC would focus on powerful foundation models trained on significant amounts of compute.
+
+The history of the implementation of KYC in the financial sector could provide useful lessons for scheme design (Box 3).
+
+</SourceQuote>
+
+<SourceBox title="Box 3: Learning from KYC in the financial sector — selected requirements and implementation lessons">
+
+This legislation creates obligations for financial institutions to:
+
+- implement a customer identification program
+- conduct risk assessments
+- undertake enhanced due diligence for customers assessed as higher risk
+- identify and verify a customer’s beneficial owners
+- conduct ongoing monitoring
+- report suspicious activity to the US government.
+
+**Implementation: obstacles and adjustments**
+
+The financial sector presents a case study of situations in which non-compliance with obligations persisted until significant penalties were applied. For the first decade of the Bank Secrecy Act, from 1972 to 1985, regulators did not enforce reporting requirements, resulting in low compliance from financial institutions. However, a 1985 $500,000 penalty issued to the Bank of Boston led to a sharp increase in reporting, as well as more evasive behavior from customers. More recently, Congress has taken further action to increase enforcement. The Anti-Money Laundering Whistleblower Improvement Act, signed into law in December 2022, increases reporting incentives with greater financial rewards for successful tips.
+
+KYC in the financial sector also demonstrates implementation risks, including the use of “structuring” to evade publicly set thresholds. In response to obligations for banks to report transactions exceeding $10,000 in any one day, entities and individuals started to intentionally break up transactions across bank accounts and/or days to avoid scrutiny. Amendments made through the 2001 PATRIOT Act have sought to address this by making structuring a criminal offense.
+
+</SourceBox>
+
+<Src>Reproduced from Egan and Heim, Box 3, under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/). [Open the paper on arXiv.](https://arxiv.org/abs/2310.13625)</Src>
+
+<div className="arxiv-reading-slot">
+  <ArxivSection
+    id="2310.13625v1"
+    section="ax-sec-compute-is-indicative-of-ai-capabilities"
+    sourceFragment="S2.SS1"
+  />
+</div>
+
+<div className="arxiv-reading-slot">
+  <ArxivSection
+    id="2310.13625v1"
+    section="ax-sec-requirements-on-compute-providers-due-di"
+    sectionEnd="ax-sec-technical-feasibility"
+    sourceFragment="S2.SS2"
+  />
+</div>
+
+<div className="arxiv-reading-slot">
+  <ArxivSection
+    id="2310.13625v1"
+    section="ax-sec-technical-feasibility"
+    sourceFragment="S2.SS2.SSS1"
+  />
+</div>
+
+<div className="arxiv-reading-slot">
+  <ArxivSection
+    id="2310.13625v1"
+    section="ax-sec-mitigating-attempts-to-evade-detection"
+    sourceFragment="S2.SS2.SSS2"
+  />
+</div>
+
+### 3. Where thresholds fail · 18 minutes
+
+<ReadingCard
+  id="cloud-rand-detection-gaps"
+  href="https://www.rand.org/pubs/research_reports/RRA3686-1.html"
+  title="Strategies and Detection Gaps in a Game-Theoretic Model of Compute Governance"
+  author="Moon, Vedula, Geneson, and Bar-on · RAND Corporation"
+  year="2025"
+  mins="18 min"
+>
+
+Read these parts in the original report:
+
+- **Summary → Findings and Recommendations** (printed pp. iv–v).
+- **Cloud Service Provider Monitoring Strategies** through the end of **Detection Game** (printed pp. 4–5). Identify the mandatory metrics, the reporting rule, and the win condition.
+- **Finding Detection Gaps** and **Finding a Detection Gap** through the sequential-training calculation; stop before **Predictions About Models in the Detection Gap** (printed pp. 5–7).
+- **Closing Detection Gaps**: its opening, then **Output and User Identity** in full (printed pp. 9–11). Note which proposals add another metric and which add another kind of information.
+
+Do not turn the BLOOM calculation into a timeless threshold recommendation. Its job here is to show how an evader can exploit the unit over which a rule aggregates activity.
 
 </ReadingCard>
 
-<ReadingCard id="cloud-egan-heim-kyc" href="https://cdn.governance.ai/Oversight_for_Frontier_AI_through_a_KYC_Scheme_for_Compute_Providers.pdf" title="Oversight for Frontier AI through a Know-Your-Customer Scheme for Compute Providers" author="Egan and Heim" year="2023">
+### 4. What a workable control has to decide · 12 minutes
 
-What it takes to know who the customer actually is: verified identity, beneficial ownership through layered holding companies, declared purpose, reporting duties, suspension — and the paper’s own condition that coverage has to spread across jurisdictions.
+<ReadingCard
+  id="cloud-carnegie-geopolitics"
+  href="https://carnegieendowment.org/research/2026/05/the-geopolitical-debates-over-controlling-cloud-compute"
+  title="The Geopolitical Debates Over Controlling Cloud Compute"
+  author="Noah Tan · Carnegie Endowment for International Peace"
+  year="2026"
+  mins="12 min"
+>
+
+Read these parts in the original article:
+
+- **What Do Cloud Controls Attempt to Solve?** in full.
+- In **The Case Against Cloud Controls**, begin with “Some analysts also contend that cloud restrictions risk pushing users in third-party countries toward China’s competing AI stack” and read to the end of the section.
+- **Cloud Controls Must Contend With “Who” and “What” They Restrict** in full.
+
+Extract the decisions the technical readings do not settle: which users and activities are covered, who bears the compliance burden, how evasion shifts across jurisdictions, and what over-broad coverage costs.
 
 </ReadingCard>
 
-<ReadingCard id="cloud-rand-detection-gaps" href="https://www.rand.org/pubs/research_reports/RRA3686-1.html" title="Strategies and Detection Gaps in a Game-Theoretic Model of Compute Governance" author="Moon, Vedula, Geneson and Bar-on, RAND Corporation" year="2025">
+## Exercises · 30 minutes
 
-The result that a monitor watching only a per-run FLOP threshold loses to sequential training, and the band of model sizes where that gap opens.
-
-</ReadingCard>
-
-<ReadingCard id="cloud-carnegie-geopolitics" href="https://carnegieendowment.org/research/2026/05/the-geopolitical-debates-over-controlling-cloud-compute" title="The Geopolitical Debates Over Controlling Cloud Compute" author="Tan, Carnegie Endowment for International Peace" year="2026">
-
-Who bears the burden of cloud controls, what over-broad rules cost, and the visibility-against-privacy argument that decides how much of this layer is politically available at all.
-
-</ReadingCard>
-
-<MemoDesk lesson="cloud" />
+<VerificationExercise id="cloud-evidence-drill" />

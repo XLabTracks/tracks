@@ -80,6 +80,7 @@ export const verificationExercises: VerificationExerciseDef[] = [
   // skips them has still finished the section.
   { id: "report-access", title: "One Report, Four Ways", bridged: false },
   { id: "policy-on-paper", title: "Policy on Paper", bridged: false },
+  { id: "cloud-evidence-drill", title: "Cloud Evidence Drill", bridged: true },
 ];
 export function getVerificationExercise(id: string): VerificationExerciseDef | undefined {
   return verificationExercises.find((e) => e.id === id);

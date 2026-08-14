@@ -196,6 +196,25 @@ describe(".bbl splicing", () => {
     expect(result?.warnings.some((w) => w.includes("synthesized"))).toBe(true);
   });
 
+  it("synthesizes biblatex citations instead of splicing its data-format .bbl", () => {
+    const result = resolveMainTex(
+      filesFrom({
+        "main.tex":
+          "\\documentclass{article}\\addbibresource{references.bib}\\begin{document}\n" +
+          "Text \\autocite{egan2023kyc}.\n\\printbibliography\n\\end{document}",
+        "main.bbl": "% biblatex auxiliary data, not a thebibliography",
+        "references.bib":
+          "@article{egan2023kyc,\n  title = {Cloud KYC},\n" +
+          "  author = {Egan, Janet and Heim, Lennart},\n  year = {2023}\n}\n",
+      }),
+    );
+    expect(result?.texSource).toContain("\\begin{thebibliography}");
+    expect(result?.texSource).toContain("\\bibitem{egan2023kyc}");
+    expect(result?.texSource).not.toContain("\\printbibliography");
+    expect(result?.texSource).not.toContain("biblatex auxiliary data");
+    expect(result?.warnings.some((w) => w.includes("biblatex"))).toBe(true);
+  });
+
   it("leaves \\bibliographystyle alone", () => {
     const result = resolveMainTex(
       filesFrom({

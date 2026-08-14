@@ -818,6 +818,39 @@ describe("paper integrity", () => {
     }
   });
 
+  it("every authored paper page boundary exists, is unique, and follows source order", () => {
+    for (const paper of papers) {
+      const pageIds = paper.pageSectionIds;
+      if (pageIds === undefined) continue;
+      expect(
+        pageIds.length,
+        `${paper.id}: pageSectionIds must name at least two pages or be omitted`
+      ).toBeGreaterThanOrEqual(2);
+      expect(
+        new Set(pageIds).size,
+        `${paper.id}: pageSectionIds contains a duplicate boundary`
+      ).toBe(pageIds.length);
+
+      const artifact = readArtifact(paper);
+      if (!artifact.ready) continue; // artifact readiness is covered above
+      const tocPosition = new Map(
+        artifact.ready.toc.map((entry, index) => [entry.id, index])
+      );
+      const positions = pageIds.map((id) => {
+        expect(
+          tocPosition.has(id),
+          `${paper.id}: paper page boundary ${id} is not in the source toc — ` +
+            `run \`${artifactFactsOf(paper).tocCmd}\` to list valid ids`
+        ).toBe(true);
+        return tocPosition.get(id) ?? -1;
+      });
+      expect(
+        positions,
+        `${paper.id}: pageSectionIds must follow the source document order`
+      ).toEqual([...positions].sort((a, b) => a - b));
+    }
+  });
+
   it("every block/sentence edit target exists with a matching snippet", () => {
     for (const paper of papers) {
       const refs = blockRefsOf(paper);

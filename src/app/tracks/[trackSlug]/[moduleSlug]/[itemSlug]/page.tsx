@@ -294,6 +294,7 @@ async function LessonItemPage({
                 prev={navLinkOf(nav.prev)}
                 next={navLinkOf(nav.next)}
                 estimatedMinutes={lesson.estimatedMinutes}
+                lessonTitle={lesson.title}
               >
                 <LessonContent
                   contentRef={lesson.contentRef}
@@ -378,7 +379,9 @@ async function PaperItemPage({
   // a chunked one hands both to the reader, which owns the single pager that
   // steps through the sections and then rolls into the neighbouring item.
   const chunkedPaper =
-    track.chunkedReading && gateIdsOf(paper.edits).length === 0;
+    track.chunkedReading &&
+    (paper.pageSectionIds?.length ?? 0) >= 2 &&
+    gateIdsOf(paper.edits).length === 0;
 
   const paperFooter = (
     <div className="mt-8 flex flex-wrap items-center gap-3">
@@ -472,6 +475,7 @@ async function PaperItemPage({
             footer={paperFooter}
             prev={navLinkOf(nav.prev)}
             next={navLinkOf(nav.next)}
+            pageSectionIds={paper.pageSectionIds ?? []}
           >
             <PaperReader
               paper={paper}

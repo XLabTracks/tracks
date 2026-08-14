@@ -14,6 +14,7 @@ import { MdxLink } from "./mdx-link";
 import { NextSteps } from "./next-steps";
 import { Objectives } from "./objectives";
 import { PopUp } from "./pop-up";
+import { PageBreak } from "./page-break";
 import { SiteQuote } from "./site-quote";
 import { SourceCredit } from "./source-credit";
 import { CapstoneSignup } from "@/components/verification/capstone-signup";
@@ -87,6 +88,7 @@ export const mdxComponents: MDXComponents = {
   NextSteps,
   Objectives,
   PopUp,
+  PageBreak,
   SiteQuote,
   SourceCredit,
   VerificationExercise,

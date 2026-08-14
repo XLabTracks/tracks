@@ -18,6 +18,10 @@ The solution is privacy-preserving verification: mechanisms designed to verify c
 - Secure multiparty computation: Multiple parties jointly compute a result over their combined private inputs without any party seeing the others' data. In a verification setting, a developer and a verifier (or several rival states) can together run an evaluation or check a compliance condition, with each side learning only the output — compliant or not — while the model weights, training data, or inspection criteria stay hidden from everyone else. The cost is computational overhead and protocol complexity, which grows with the size of what's being computed.
 - Managed access as the institutional fallback: The institutional fallback when technical tools fall short: human inspectors get in, but under negotiated restrictions. The Chemical Weapons Convention lets facility operators shroud equipment, restrict photography, limit sampling, and escort inspectors — enough access to confirm compliance, not enough to steal trade secrets. Applied to AI, this looks like cleared inspectors in secure rooms, air-gapped terminals, and pre-agreed limits on what leaves the building. It trades cryptographic guarantees for institutional ones, but it has decades of operating history that the technical mechanisms lack.
 
+<PageBreak title="Compare the mechanisms" />
+
+## Compare the mechanisms
+
 Before we dive in, let’s first identify some baseline intuitions: seal a pre-course feasibility ranking of the mechanisms this module covers. The metrics to weigh as you order them:
 
 - Technical feasibility. Can this be built and run at the required scale today — not in a demo, not in five years? Includes maturity, dependencies, cost, and error rates. Low: fully homomorphic encryption over entire training runs — orders of magnitude too slow at frontier scale. High: compute reporting through cloud providers — the metering and billing infrastructure already exists.

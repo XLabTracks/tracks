@@ -3491,5 +3491,37 @@ export const papers: Paper[] = [
     // Articles the course sends people to read sit behind a closed toggle.
     collapseTail: false,
     estimatedMinutes: 75,
+    // Hand-authored reading pages. These are source section ids, not a
+    // heading-depth rule: closely related short Articles are kept together,
+    // while the long operational Articles remain intact and independently
+    // addressable. References and footnotes stay available as their own
+    // pages rather than being mixed into treaty text.
+    pageSectionIds: [
+      "ax-abstract",
+      "ax-sec-an-overview-of-ai-risks",
+      "ax-sec-the-strategic-situation",
+      "ax-sec-the-agreement",
+      "ax-sec-why-this-plan-in-particular",
+      "ax-sec-conclusion",
+      "ax-references",
+      "ax-sec-the-agreement-2",
+      "ax-sec-article-ii-definitions",
+      "ax-sec-article-iii-the-coalition",
+      "ax-sec-article-iv-ai-training",
+      "ax-sec-article-v-chip-consolidation",
+      "ax-sec-article-vi-ai-chip-production-monitoring",
+      "ax-sec-article-vii-chip-use-verification",
+      "ax-sec-article-viii-restricted-research-ai-algo",
+      "ax-sec-article-ix-research-restriction-verifica",
+      "ax-sec-article-x-information-consolidation-and",
+      "ax-sec-article-xi-dispute-resolution",
+      "ax-sec-article-xiii-coalition-technical-body-re",
+      "ax-sec-what-can-we-do-today",
+      "ax-sec-stages",
+      "ax-sec-locating-and-consolidating-ai-chips",
+      "ax-sec-methods-for-chip-tracking-and-consolidat",
+      "ax-sec-staged-implementation-of-chip-consolidat",
+      "ax-footnotes",
+    ],
   },
 ];

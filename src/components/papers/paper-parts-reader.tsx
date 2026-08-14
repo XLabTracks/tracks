@@ -13,12 +13,10 @@ import { cn } from "@/lib/utils";
    lesson — and for the same reason: on a chunkedReading track everything else
    arrives a part at a time, and a treaty is the longest thing in the course.
 
-   Boundaries are the paper's OWN sections, not arbitrary headings. Every
-   converter puts a stable `ax-sec-`/`sb-sec-`/`lw-sec-` id on each toc
-   heading, so an Article of a treaty is a page and nothing else is. Depth is
-   adaptive: h2 alone, plus h3 when one h2 would otherwise swallow a third of
-   the document — which is exactly the shape of a treaty paper, where "The
-   Agreement" is one h2 holding fifteen Articles.
+   Boundaries are explicitly selected from the paper's own stable section ids
+   in papers.data.ts. The source hierarchy supplies the available landmarks;
+   an editor decides which of them begin pages. Papers without an authored
+   list render continuously.
 
    The html never crosses into this component. It receives the server-rendered
    body as `children` and reorganizes the DOM after mount, which is the same
@@ -50,9 +48,6 @@ import { cn } from "@/lib/utils";
      guess at the rendered markup here. */
 
 const MODE_KEY = "vt-reading-mode";
-
-/** Toc-heading ids, whatever the source converter. */
-const SECTION_ID = /^(ax|sb|lw)-(sec-|abstract)/;
 
 interface Part {
   label: string;
@@ -96,17 +91,18 @@ function readingUnits(root: HTMLElement): HTMLElement[] {
   return out;
 }
 
-const isBoundary = (el: HTMLElement, tags: string[]) =>
-  tags.includes(el.tagName) && SECTION_ID.test(el.id);
+const isBoundary = (el: HTMLElement, sectionIds: Set<string>) =>
+  sectionIds.has(el.id);
 
-function buildParts(els: HTMLElement[], tags: string[]): Part[] {
+function buildParts(els: HTMLElement[], sectionIds: Set<string>): Part[] {
   const built: Part[] = [];
   let cur: Part | null = null;
   // A heading with nothing under it yet would stand as a lone title over blank
   // space — fold consecutive headings together until body arrives.
-  const bodyless = (p: Part | null) => !!p && p.els.every((e) => isBoundary(e, tags));
+  const bodyless = (p: Part | null) =>
+    !!p && p.els.every((element) => isBoundary(element, sectionIds));
   for (const el of els) {
-    if (isBoundary(el, tags)) {
+    if (isBoundary(el, sectionIds)) {
       if (bodyless(cur)) {
         cur!.els.push(el);
         continue;
@@ -130,6 +126,7 @@ export function PaperPartsReader({
   footer,
   prev,
   next,
+  pageSectionIds,
 }: {
   children: ReactNode;
   /**
@@ -144,6 +141,8 @@ export function PaperPartsReader({
   /** The neighbouring items the pager rolls into at the ends. */
   prev?: PagerLink | null;
   next?: PagerLink | null;
+  /** Stable source-section ids that begin authored paper pages. */
+  pageSectionIds: string[];
 }) {
   const hostRef = useRef<HTMLDivElement>(null);
   const topRef = useRef<HTMLDivElement>(null);
@@ -155,22 +154,15 @@ export function PaperPartsReader({
     const root = hostRef.current?.querySelector<HTMLElement>(".paper-reader");
     if (!root) return;
     const els = readingUnits(root);
-    let built = buildParts(els, ["H2"]);
-    // One h2 swallowing a third of the paper is the treaty shape: "The
-    // Agreement" carrying every Article. Go a level deeper rather than paging
-    // the whole document as three screens and one book.
-    const biggest = built.reduce((n, p) => Math.max(n, p.els.length), 0);
-    if (built.length < 3 || biggest > els.length / 3) {
-      built = buildParts(els, ["H2", "H3"]);
-    }
-    if (built.length < 3) return;
+    const built = buildParts(els, new Set(pageSectionIds));
+    if (built.length < 2) return;
 
     // One deliberate mount-time re-render: parts exist only in the rendered
     // DOM, and the stored mode only on the client.
     setParts(built);
     setMode(readMode());
     setAt(partFromUrl(built.length - 1));
-  }, []);
+  }, [pageSectionIds]);
 
   useEffect(() => {
     if (!parts.length) return;

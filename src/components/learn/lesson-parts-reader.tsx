@@ -23,9 +23,9 @@ import {
   type PagerLink,
 } from "@/components/learn/reading-pager";
 
-/* Reads a lesson one part at a time. The server renders the whole MDX body as
-   this component's children; on mount the body's top-level headings become
-   part boundaries and every part except the current one is hidden.
+/* Reads a lesson one authored page at a time. The server renders the whole MDX
+   body as this component's children; on mount, invisible PageBreak markers
+   become boundaries and every page except the current one is hidden.
 
    Parts are not shown as tabs here — they nest under the lesson's row in the
    track sidebar (itemNavs → PaperSectionNav), which is the one index of the
@@ -55,12 +55,10 @@ import {
    static MDX output, so attributes set here stick.
 
    Where the breaks go is planParts (@/lib/reading/lesson-parts), pure and
-   tested: boundary depth is adaptive per lesson — h2 alone where a lesson has
-   enough of them, h3 and then h4 folded in where it doesn't — and a part too
-   small to be one is merged into its neighbour rather than standing as a page
-   you land on and immediately press Next past. Lessons that still yield fewer
-   than three parts render untouched: no toggle, no part moves, just the
-   lesson-level pager so the reader still owns the way forward.
+   tested. The author places <PageBreak/> markers in MDX after deciding what a
+   reader should complete on one screen; headings do not silently become page
+   boundaries. Lessons without a marker render untouched. Two authored pages
+   are enough to enable paging.
 
    Nothing here feeds progress. Completion stays with the Mark-complete button
    in the footer; reaching the last part completes nothing.
@@ -109,6 +107,7 @@ export function LessonPartsReader({
   prev,
   next,
   estimatedMinutes,
+  lessonTitle,
 }: {
   children: ReactNode;
   /** Works-cited + complete button, rendered above the pager and never hidden
@@ -121,6 +120,8 @@ export function LessonPartsReader({
    *  suppresses its own header clock chip when this reader carries it, so
    *  the estimate appears exactly once. */
   estimatedMinutes?: number;
+  /** Used as the first pager label when the body opens before any heading. */
+  lessonTitle: string;
 }) {
   const hostRef = useRef<HTMLDivElement>(null);
   const topRef = useRef<HTMLDivElement>(null);
@@ -160,11 +161,17 @@ export function LessonPartsReader({
       (el): el is HTMLElement => el instanceof HTMLElement
     );
 
-    // Where the breaks go is decided by planParts — pure, and tested, because
-    // both of its rules are judgement calls that were wrong once: which
-    // heading depth opens a part, and how small a part is allowed to be.
+    // PageBreak renders a hidden sentinel. It controls presentation only and
+    // never becomes one of the page's visible blocks.
     const built: Part[] = planParts(
-      els.map((el) => ({ tag: el.tagName, text: el.textContent ?? "" }))
+      els.map((el) => ({
+        tag: el.tagName,
+        text: el.textContent ?? "",
+        breakLabel: el.hasAttribute("data-lesson-page-break")
+          ? el.dataset.pageTitle ?? ""
+          : undefined,
+      })),
+      lessonTitle
     ).map((planned) => ({
       label: planned.label,
       anchor:
@@ -174,13 +181,12 @@ export function LessonPartsReader({
       els: planned.indices.map((i) => els[i]),
     }));
 
-    if (built.length < MIN_PARTS) return; // short lesson: nothing hidden, lesson pager only
+    if (built.length < MIN_PARTS) return; // no authored break: ordinary lesson page
     // One deliberate mount-time re-render: parts exist only in the rendered DOM.
-    // eslint-disable-next-line react-hooks/set-state-in-effect
     setParts(built);
     setMode(readMode());
     setAt(partFromUrl(built.length - 1));
-  }, []);
+  }, [lessonTitle]);
 
   /* ---------- apply visibility ---------- */
 
@@ -268,7 +274,7 @@ export function LessonPartsReader({
 
   /* ---------- chrome ---------- */
 
-  const active = parts.length >= 3;
+  const active = parts.length >= MIN_PARTS;
   const whole = mode === "whole";
   const paged = active && !whole;
   const last = parts.length - 1;

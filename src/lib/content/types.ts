@@ -23,10 +23,10 @@ export interface Track {
   prerequisiteEnforcement: PrerequisiteEnforcement;
   estimatedHours?: number;
   /**
-   * Lessons on this track are read one part at a time — a part per top-level
-   * heading — with a jump strip, a position meter and a whole-lesson toggle
-   * (LessonPartsReader). A reading-experience choice per track, not a
-   * per-lesson one, so a learner's expectations hold across a whole course.
+   * Lessons on this track may be read one authored page at a time. Boundaries
+   * are explicit <PageBreak/> markers in the MDX body; headings never create
+   * pages by themselves. LessonPartsReader adds paging and a whole-lesson
+   * toggle only when the author placed at least one boundary.
    */
   chunkedReading?: boolean;
 }
@@ -264,6 +264,14 @@ export interface Paper {
    */
   optional?: true;
   estimatedMinutes?: number;
+  /**
+   * Source section ids that explicitly start pages in the paper reader. The
+   * list is authored per paper after reviewing the source's own structure;
+   * without it the paper renders continuously. This avoids choosing h2/h3
+   * depth from document size at runtime, which can split two related treaty
+   * provisions merely because one happens to have a subheading.
+   */
+  pageSectionIds?: string[];
   /**
    * Opt out of collapsing the trailing apparatus.
    *

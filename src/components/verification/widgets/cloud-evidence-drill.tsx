@@ -22,6 +22,7 @@ import {
 import { CSS } from "@dnd-kit/utilities";
 import {
   ArrowDown,
+  ArrowLeft,
   ArrowRight,
   ArrowUp,
   Check,
@@ -66,18 +67,34 @@ export function CloudEvidenceDrill({
   initialCompleted,
 }: VerificationWidgetProps) {
   const [taskIndex, setTaskIndex] = useState(0);
-  const [solved, setSolved] = useState(false);
+  const [solvedTasks, setSolvedTasks] = useState<Set<number>>(() => new Set());
   const [finished, setFinished] = useState(false);
+  const [attempt, setAttempt] = useState(0);
   const completedOnce = useRef(initialCompleted);
+  const taskTopRef = useRef<HTMLElement>(null);
   const task = CLOUD_TASKS[taskIndex];
+  const allSolved = solvedTasks.size === CLOUD_TASKS.length;
 
-  function finishOrContinue() {
-    if (!solved) return;
-    if (taskIndex < CLOUD_TASKS.length - 1) {
-      setTaskIndex((current) => current + 1);
-      setSolved(false);
-      return;
-    }
+  function markSolved(index: number) {
+    setSolvedTasks((current) => {
+      if (current.has(index)) return current;
+      const next = new Set(current);
+      next.add(index);
+      return next;
+    });
+  }
+
+  function showTask(index: number) {
+    if (index < 0 || index >= CLOUD_TASKS.length) return;
+    setTaskIndex(index);
+    setFinished(false);
+    requestAnimationFrame(() => {
+      taskTopRef.current?.scrollIntoView({ block: "start" });
+    });
+  }
+
+  function finish() {
+    if (!allSolved) return;
     setFinished(true);
     if (!completedOnce.current) {
       completedOnce.current = true;
@@ -87,15 +104,16 @@ export function CloudEvidenceDrill({
 
   function restart() {
     setTaskIndex(0);
-    setSolved(false);
+    setSolvedTasks(new Set());
     setFinished(false);
+    setAttempt((current) => current + 1);
   }
 
   return (
     <section className="not-prose border-border bg-card shadow-soft my-6 overflow-hidden rounded-xl border text-sm">
       <header className="border-border border-b p-5 sm:p-6">
         <p className="text-muted-foreground text-xs font-medium tracking-wide uppercase">
-          Cloud · 2.2 · 30 minutes
+          30 minutes
         </p>
         <h3 className="mt-3 text-2xl font-semibold tracking-tight">
           Cloud verification problem set
@@ -105,14 +123,26 @@ export function CloudEvidenceDrill({
           the question. Select only conclusions supported by the stated access
           and evidence.
         </p>
-        <ProgressRail taskIndex={taskIndex} finished={finished} />
+        <ProgressRail
+          taskIndex={taskIndex}
+          solvedTasks={solvedTasks}
+          finished={finished}
+          onSelect={showTask}
+        />
       </header>
 
-      {finished ? (
+      <div hidden={!finished}>
         <Finish onRestart={restart} />
-      ) : (
+      </div>
+
+      <div hidden={finished}>
         <div>
-          <section className="border-border border-b p-5 sm:p-6">
+          <section
+            ref={taskTopRef}
+            className="border-border scroll-mt-24 border-b p-5 sm:p-6"
+            aria-live="polite"
+            aria-atomic="true"
+          >
             <div className="flex flex-wrap items-baseline justify-between gap-2">
               <p className="text-muted-foreground text-xs font-medium uppercase">
                 Task {taskIndex + 1} of {CLOUD_TASKS.length} · {task.time}
@@ -122,50 +152,84 @@ export function CloudEvidenceDrill({
             <h4 className="mt-2 text-xl font-semibold">{task.title}</h4>
           </section>
 
-          <div key={taskIndex} className="p-5 sm:p-6">
-            {taskIndex === 0 ? (
-              <TrueFalseTask onSolved={() => setSolved(true)} />
-            ) : taskIndex === 1 ? (
-              <OddOneOutTask onSolved={() => setSolved(true)} />
-            ) : taskIndex === 2 ? (
-              <AvailableDataTask onSolved={() => setSolved(true)} />
-            ) : taskIndex === 3 ? (
-              <MatchingTask onSolved={() => setSolved(true)} />
-            ) : taskIndex === 4 ? (
-              <PipelineTask onSolved={() => setSolved(true)} />
-            ) : taskIndex === 5 ? (
-              <SequenceTask onSolved={() => setSolved(true)} />
-            ) : taskIndex === 6 ? (
-              <ConceptTask onSolved={() => setSolved(true)} />
-            ) : taskIndex === 7 ? (
-              <CaseTask onSolved={() => setSolved(true)} />
-            ) : (
-              <InferenceTask onSolved={() => setSolved(true)} />
-            )}
+          <div key={attempt} className="p-5 sm:p-6">
+            <div hidden={taskIndex !== 0}>
+              <TrueFalseTask onSolved={() => markSolved(0)} />
+            </div>
+            <div hidden={taskIndex !== 1}>
+              <OddOneOutTask onSolved={() => markSolved(1)} />
+            </div>
+            <div hidden={taskIndex !== 2}>
+              <AvailableDataTask onSolved={() => markSolved(2)} />
+            </div>
+            <div hidden={taskIndex !== 3}>
+              <MatchingTask onSolved={() => markSolved(3)} />
+            </div>
+            <div hidden={taskIndex !== 4}>
+              <PipelineTask onSolved={() => markSolved(4)} />
+            </div>
+            <div hidden={taskIndex !== 5}>
+              <SequenceTask onSolved={() => markSolved(5)} />
+            </div>
+            <div hidden={taskIndex !== 6}>
+              <ConceptTask onSolved={() => markSolved(6)} />
+            </div>
+            <div hidden={taskIndex !== 7}>
+              <CaseTask onSolved={() => markSolved(7)} />
+            </div>
+            <div hidden={taskIndex !== 8}>
+              <InferenceTask onSolved={() => markSolved(8)} />
+            </div>
 
-            {solved ? (
-              <div className="mt-6 flex justify-end">
-                <Button onClick={finishOrContinue}>
-                  {taskIndex === CLOUD_TASKS.length - 1
-                    ? "Finish drill"
-                    : "Next task"}
+            <nav
+              className="border-border mt-6 flex items-center justify-between gap-3 border-t pt-5"
+              aria-label="Move between cloud problem-set tasks"
+            >
+              <Button
+                variant="outline"
+                disabled={taskIndex === 0}
+                onClick={() => showTask(taskIndex - 1)}
+              >
+                <ArrowLeft className="mr-2 size-4" aria-hidden />
+                Previous
+              </Button>
+              <span className="text-muted-foreground hidden text-xs sm:block">
+                {solvedTasks.size} of {CLOUD_TASKS.length} complete
+              </span>
+              {taskIndex < CLOUD_TASKS.length - 1 ? (
+                <Button onClick={() => showTask(taskIndex + 1)}>
+                  Next
                   <ArrowRight className="ml-2 size-4" aria-hidden />
                 </Button>
-              </div>
+              ) : (
+                <Button onClick={finish} disabled={!allSolved}>
+                  Finish problem set
+                </Button>
+              )}
+            </nav>
+            {taskIndex === CLOUD_TASKS.length - 1 && !allSolved ? (
+              <p className="text-muted-foreground mt-3 text-right text-xs">
+                Complete all nine tasks before finishing. Use the numbered
+                navigation above to return to any unfinished task.
+              </p>
             ) : null}
           </div>
         </div>
-      )}
+      </div>
     </section>
   );
 }
 
 function ProgressRail({
   taskIndex,
+  solvedTasks,
   finished,
+  onSelect,
 }: {
   taskIndex: number;
+  solvedTasks: ReadonlySet<number>;
   finished: boolean;
+  onSelect: (index: number) => void;
 }) {
   return (
     <ol
@@ -173,22 +237,27 @@ function ProgressRail({
       aria-label="Cloud evidence drill progress"
     >
       {CLOUD_TASKS.map((task, index) => {
-        const done = finished || index < taskIndex;
+        const done = finished || solvedTasks.has(index);
         const active = !finished && index === taskIndex;
         return (
-          <li
-            key={task.label}
-            className={cn(
-              "border-border flex min-h-8 items-center justify-center rounded-md border text-xs",
-              active && "border-primary bg-primary/5 text-primary",
-              done && "bg-muted text-foreground",
-              !active && !done && "text-muted-foreground"
-            )}
-            aria-current={active ? "step" : undefined}
-            title={task.label}
-          >
-            {done ? <Check className="size-3.5" aria-hidden /> : index + 1}
-            <span className="sr-only">{task.label}</span>
+          <li key={task.label}>
+            <button
+              type="button"
+              onClick={() => onSelect(index)}
+              className={cn(
+                "border-border focus-visible:ring-ring flex min-h-9 w-full items-center justify-center rounded-md border text-xs transition-colors hover:border-foreground/35 hover:bg-muted/45 focus-visible:ring-2 focus-visible:outline-none",
+                active && "border-primary bg-primary/5 text-primary",
+                done && !active && "bg-muted text-foreground",
+                !active && !done && "text-muted-foreground"
+              )}
+              aria-current={active ? "step" : undefined}
+              aria-label={`Task ${index + 1}: ${task.label}${
+                done ? ", complete" : ""
+              }`}
+              title={`${index + 1}. ${task.label}`}
+            >
+              {done ? <Check className="size-3.5" aria-hidden /> : index + 1}
+            </button>
           </li>
         );
       })}

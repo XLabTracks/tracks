@@ -49,7 +49,7 @@ export function VerdictSelect({
                 writeMark(`verdict:${id}`, selected ? undefined : option.id)
               }
               className={cn(
-                "flex cursor-pointer items-baseline gap-2 rounded-lg border px-3 py-2 text-left text-sm select-none",
+                "flex min-h-11 cursor-pointer items-baseline gap-2 rounded-lg border px-3 py-2 text-left text-sm select-none sm:min-h-0",
                 selected ? "border-foreground bg-muted" : "border-border hover:bg-muted",
               )}
             >

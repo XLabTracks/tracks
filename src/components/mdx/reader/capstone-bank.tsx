@@ -62,10 +62,10 @@ function Brief({ e, lead }: { e: Entry; lead: boolean }) {
         </span>
       </div>
 
-      <h3 className="text-base leading-snug font-medium">{e.title}</h3>
+      <h3 className="text-lg leading-relaxed font-medium">{e.title}</h3>
       <p className="text-muted-foreground text-sm leading-relaxed">{e.summary}</p>
       {e.verificationFit ? (
-        <p className="text-muted-foreground text-xs leading-relaxed italic">
+        <p className="text-muted-foreground text-sm leading-relaxed italic">
           Fits this course: {e.verificationFit}
         </p>
       ) : null}
@@ -95,14 +95,14 @@ function Brief({ e, lead }: { e: Entry; lead: boolean }) {
 
       <div className="mt-auto flex flex-wrap gap-2 pt-2">
         <a
-          className="border-border hover:bg-muted rounded-lg border px-3 py-1.5 text-sm select-none"
+          className="border-border hover:bg-muted inline-flex min-h-11 items-center rounded-lg border px-3 py-1.5 text-sm select-none lg:min-h-0"
           href={`/verification/capstone-bank#${encodeURIComponent(e.slug)}`}
         >
           Read the full brief
         </a>
         {lead ? (
           <a
-            className="border-border hover:bg-muted rounded-lg border px-3 py-1.5 text-sm select-none"
+            className="border-border hover:bg-muted inline-flex min-h-11 items-center rounded-lg border px-3 py-1.5 text-sm select-none lg:min-h-0"
             href={`/verification/capstone?brief=${encodeURIComponent(e.slug)}`}
           >
             Start in the workspace

@@ -653,11 +653,14 @@ window.VTNotebook = (function () {
   function mountButton() {
     if (document.querySelector('.nb-open')) return;
     const b = mk('button', 'nb-open',
-      '<span class="nb-open-label">Notebook</span><span class="nb-badge" hidden></span>');
+      '<svg class="nb-open-icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M6.5 3.5h9a2 2 0 0 1 2 2v15h-11a2 2 0 0 1-2-2v-13a2 2 0 0 1 2-2Z"/><path d="M8.5 3.5v17M11.5 8h3.5M11.5 12h3.5"/></svg><span class="nb-open-label">Notebook</span><span class="nb-badge" hidden></span>');
     b.type = 'button';
     b.setAttribute('aria-label', 'Open your notebook');
     b.onclick = open;
-    document.body.appendChild(b);
+    /* App lessons reserve a header slot. The static lift has no React chrome,
+       so the same control keeps its fixed-corner fallback there. */
+    const host = document.getElementById('verification-notebook-launcher');
+    (host || document.body).appendChild(b);
     badgeEl = b.querySelector('.nb-badge');
     paintBadge();
   }
@@ -758,6 +761,7 @@ window.VTNotebook = (function () {
     addQuote: addQuote,
     addTerm: addTerm,
     bindMemo: bindMemo,
+    mount: mountButton,
     openMemo: openMemo,
     count: count,
     toMarkdown: toMarkdown

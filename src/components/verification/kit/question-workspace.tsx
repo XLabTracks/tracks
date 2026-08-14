@@ -90,7 +90,7 @@ export function QuestionWorkspace({
         return (
           <div key={q.id} className="border-border bg-card rounded-xl border p-5">
             <div className="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1">
-              <h3 className="text-base font-semibold">
+              <h3 className="text-lg font-semibold">
                 {q.n}. {q.title}
               </h3>
               <Badge rule={rule} requirement={q.requirement} choices={choices} />
@@ -130,7 +130,7 @@ export function QuestionWorkspace({
 
             <div className="mt-3">
               {committed ? (
-                <p className="text-muted-foreground text-xs">
+                <p className="text-muted-foreground text-sm">
                   Saved. Keep editing if you want — it stays saved.
                 </p>
               ) : (

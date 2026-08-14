@@ -305,7 +305,7 @@ export function LessonPartsReader({
               variant="ghost"
               size="sm"
               onClick={toggleMode}
-              className="text-muted-foreground h-7 px-2 text-[13px]"
+              className="text-muted-foreground h-11 px-2 text-sm sm:h-7 sm:text-[13px]"
             >
               {whole ? "Read part by part" : "Read the whole lesson"}
             </Button>

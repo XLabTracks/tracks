@@ -75,6 +75,21 @@ function VerificationRouteSignal({ pathname }: { pathname: string | null }) {
   return null;
 }
 
+/**
+ * The notebook script is shared with the liftable static site, so it owns the
+ * button rather than React. App pages still give that button a real place in
+ * the chrome: otherwise the script's standalone fallback floats over lesson
+ * controls. `mount` also restores the button after a client-side trip out of
+ * Verification removes this header and a later trip mounts it again.
+ */
+function NotebookLauncherHost() {
+  useEffect(() => {
+    const w = window as unknown as { VTNotebook?: { mount: () => void } };
+    w.VTNotebook?.mount();
+  }, []);
+  return <span id="verification-notebook-launcher" />;
+}
+
 export function VerificationHeader() {
   const pathname = usePathname();
   const { user, loading } = useAuth();
@@ -163,7 +178,7 @@ export function VerificationHeader() {
           whole. */}
       <Script src="/verification/highlight.js" strategy="lazyOnload" />
       <Script src="/verification/memo-store.js" strategy="lazyOnload" />
-      <Script src="/verification/notebook.js" strategy="lazyOnload" />
+      <Script src="/verification/notebook.js" strategy="afterInteractive" />
       <Script src="/verification/vocab.js" strategy="lazyOnload" />
       <Script src="/verification/sync.js" strategy="lazyOnload" />
       {/* What those three no longer own is the selection UX: each used to
@@ -214,6 +229,7 @@ export function VerificationHeader() {
           </nav>
           <div className="header-right">
             <ThemeSwitch />
+            <NotebookLauncherHost />
             {/* Signed in, this is the app's own account menu — the same
                 avatar, email, classrooms and Sign out as everywhere else. A
                 learner who signs in must not lose the way out of the session

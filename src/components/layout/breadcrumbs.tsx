@@ -18,7 +18,7 @@ export function Breadcrumbs({ items }: { items: Crumb[] }) {
           {crumb.href ? (
             <Link
               href={crumb.href}
-              className="hover:text-foreground transition-colors select-none"
+              className="hover:text-foreground inline-flex min-h-11 items-center transition-colors select-none lg:min-h-0"
             >
               {crumb.label}
             </Link>

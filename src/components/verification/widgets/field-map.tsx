@@ -337,7 +337,7 @@ export function FieldMap(_: VerificationWidgetProps) {
               <label className="mt-4 block text-xs font-medium">Relationship<select value={selectedEdge.label} onChange={(event) => setDocument((current) => ({ ...current, updatedAt: Date.now(), edges: current.edges.map((edge) => edge.id === selectedEdge.id ? { ...edge, label: event.target.value as FieldEdge["label"] } : edge) }))} className="border-input bg-background mt-1.5 h-9 w-full rounded-md border px-3 text-sm">{FIELD_EDGE_LABELS.map((label) => <option key={label}>{label}</option>)}</select></label>
             </div>
           ) : (
-            <div className="border-border text-muted-foreground rounded-lg border border-dashed p-4 text-xs leading-relaxed"><p className="text-foreground font-medium">Make the argument visible.</p><p className="mt-1">Select a node to edit it, or connect two nodes to state the relationship between them.</p></div>
+            <div className="border-border text-muted-foreground rounded-lg border border-dashed p-4 text-sm leading-relaxed"><p className="text-foreground font-medium">Make the argument visible.</p><p className="mt-1">Select a node to edit it, or connect two nodes to state the relationship between them.</p></div>
           )}
         </aside>
       </div>

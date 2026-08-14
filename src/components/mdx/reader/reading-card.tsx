@@ -59,7 +59,7 @@ export function ReadingCard({
         aria-label={read ? `Mark "${title}" as unread` : `Mark "${title}" as read`}
         onClick={() => writeMark(key, read ? undefined : true)}
         className={
-          "mt-0.5 flex size-6 shrink-0 cursor-pointer items-center justify-center rounded-full border text-sm transition-colors select-none " +
+          "mt-0.5 flex size-11 shrink-0 cursor-pointer items-center justify-center rounded-full border text-sm transition-colors select-none lg:size-6 " +
           (read
             ? "border-primary bg-primary text-primary-foreground"
             : "border-border hover:border-ring text-transparent hover:text-muted-foreground")
@@ -68,7 +68,7 @@ export function ReadingCard({
         ✓
       </button>
       <div className="min-w-0 flex-1 space-y-1.5 text-sm">
-        <p className="text-base leading-snug font-medium">
+        <p className="text-base leading-relaxed font-medium">
           <a
             href={href}
             target="_blank"

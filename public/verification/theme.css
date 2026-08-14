@@ -114,15 +114,15 @@
 
      --fs-title is every page's h1; --fs-hero is the landing's alone. They were
      five near-identical clamps before, which is four chances to drift. */
-  --fs-2xs: 11px;
-  --fs-xs: 12px;
-  --fs-sm: 13px;
-  --fs-md: 14px;
-  --fs-lg: 16px;
-  --fs-xl: 18px;
-  --fs-2xl: 22px;
-  --fs-3xl: 28px;
-  --fs-4xl: 36px;
+  --fs-2xs: 12px;
+  --fs-xs: 13px;
+  --fs-sm: 14px;
+  --fs-md: 16px;
+  --fs-lg: 18px;
+  --fs-xl: 20px;
+  --fs-2xl: 24px;
+  --fs-3xl: 30px;
+  --fs-4xl: 38px;
   --fs-title: clamp(28px, 3.4vw, 36px);
   --fs-hero: clamp(32px, 4.4vw, 52px);
 
@@ -278,15 +278,15 @@
      has to be scrolled sideways to read a line, which is the exact thing
      this mode exists to spare somebody. Reflow only works if the layout sees
      the real viewport, so the layout is left alone and the letters grow. */
-  --fs-2xs: 22px;
-  --fs-xs: 24px;
-  --fs-sm: 26px;
-  --fs-md: 28px;
-  --fs-lg: 32px;
-  --fs-xl: 36px;
-  --fs-2xl: 44px;
-  --fs-3xl: 56px;
-  --fs-4xl: 72px;
+  --fs-2xs: 24px;
+  --fs-xs: 26px;
+  --fs-sm: 28px;
+  --fs-md: 32px;
+  --fs-lg: 36px;
+  --fs-xl: 40px;
+  --fs-2xl: 48px;
+  --fs-3xl: 60px;
+  --fs-4xl: 76px;
   --fs-title: clamp(44px, 6.8vw, 72px);
   --fs-hero: clamp(48px, 8.8vw, 104px);
 }
@@ -596,9 +596,8 @@ button, [role='button'], [role='radio'], [role='tab'], .chip, .nav a, .brand,
   background: var(--primary);
 }
 
-/* The switch and the account button are a matched pair in the corner, so they
-   are sized together rather than each to its own content: same width, same
-   height, in every theme.
+/* The switch, notebook and account control form one header action group. The
+   two labelled controls share a width floor; all three share a height token.
 
    The width is set by the longer of the two labels the button can carry —
    "Account" once a session is detected, not "Sign in" — because a width fitted
@@ -608,7 +607,7 @@ button, [role='button'], [role='radio'], [role='tab'], .chip, .nav a, .brand,
    alone. */
 .header-right {
   --hdr-action-w: 100px;
-  --hdr-action-h: 38px;
+  --hdr-action-h: 44px;
   display: flex;
   align-items: center;
   gap: 10px;
@@ -622,7 +621,8 @@ button, [role='button'], [role='radio'], [role='tab'], .chip, .nav a, .brand,
    it, so both settle on exactly the same number — which is the point. Setting
    `width` instead would clip the label the moment the type grew. */
 .header-right .theme-switch,
-.header-right > .btn.small {
+.header-right > .btn.small,
+.header-right > #verification-notebook-launcher {
   min-width: var(--hdr-action-w);
   min-height: var(--hdr-action-h);
 }
@@ -661,7 +661,7 @@ button, [role='button'], [role='radio'], [role='tab'], .chip, .nav a, .brand,
    it. High contrast draws a 3px hairline, which is why that is a variable
    here and not a 2. */
 .theme-switch button {
-  --seg: calc(var(--hdr-action-h, 38px) - 4px - 2 * var(--hairline));
+  --seg: calc(var(--hdr-action-h, 44px) - 4px - 2 * var(--hairline));
   display: inline-flex;
   flex: none;
   align-items: center;
@@ -714,7 +714,7 @@ button, [role='button'], [role='radio'], [role='tab'], .chip, .nav a, .brand,
 .btn:hover { background: color-mix(in srgb, var(--primary) 88%, var(--foreground)); }
 .btn.outline { background: transparent; color: var(--foreground); border-color: var(--border); }
 .btn.outline:hover { background: var(--muted); }
-.btn.small { height: 38px; padding: 0 14px; font-size: var(--fs-lg); }
+.btn.small { height: 44px; min-height: 44px; padding: 0 14px; font-size: var(--fs-lg); }
 
 .skip {
   position: fixed;
@@ -801,8 +801,37 @@ button, [role='button'], [role='radio'], [role='tab'], .chip, .nav a, .brand,
     overflow-x: auto;
     padding-bottom: 2px;
   }
-  .nav a { white-space: nowrap; padding: 4px 8px; }
-  .header-right { margin-left: auto; }
+  .brand,
+  .nav a {
+    min-height: 44px;
+  }
+  .nav a {
+    display: inline-flex;
+    align-items: center;
+    white-space: nowrap;
+    padding: 8px;
+  }
+  .header-right {
+    --hdr-action-h: 50px;
+    order: 2;
+    width: 100%;
+    max-width: 100%;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    margin-left: auto;
+  }
+  .header-right > #verification-notebook-launcher {
+    min-width: var(--hdr-action-h);
+  }
+
+  .foot-links a {
+    display: inline-flex;
+    min-width: 44px;
+    min-height: 44px;
+    align-items: center;
+    padding-block: 8px;
+    margin-block: -8px;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {

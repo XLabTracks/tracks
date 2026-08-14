@@ -662,6 +662,15 @@
   border-collapse: collapse;
   border-spacing: 0;
 }
+@media (max-width: 720px) {
+  .lesson-body table.elements-grid {
+    display: block;
+    max-width: 100%;
+    overflow-x: auto;
+    overscroll-behavior-inline: contain;
+    -webkit-overflow-scrolling: touch;
+  }
+}
 .lesson-body table.elements-grid thead th,
 .lesson-body table.elements-grid tbody th,
 .lesson-body table.elements-grid tbody td {

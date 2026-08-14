@@ -382,9 +382,9 @@ export function InteractiveMap(_props: VerificationWidgetProps) {
 
   /* ============ scaled stroke/font values (source applyVB) ============ */
   const strokeW = Math.max(0.18, 0.55 / zoom);
-  // 10.5 is the floor the rest of this widget uses: below it a country label
+  // 12 is the floor the rest of this widget uses: below it a country label
   // is unreadable on the 13" baseline, and these are the map's only prose.
-  const fontSize = Math.max(3.8, 10.5 / zoom);
+  const fontSize = Math.max(3.8, 12 / zoom);
   const leaderW = Math.max(0.18, 0.5 / zoom);
   const hubR = Math.max(1.6, 3.4 / zoom);
   const hubStroke = Math.max(0.3, 0.8 / zoom);
@@ -674,7 +674,7 @@ export function InteractiveMap(_props: VerificationWidgetProps) {
                       <BucketChip key={bk} bk={bk} />
                     ))}
                   </div>
-                  <p className="text-muted-foreground text-xs leading-snug">
+                  <p className="text-muted-foreground text-sm leading-relaxed">
                     {tipCountry.verif}
                   </p>
                   <p className="text-muted-foreground/80 mt-1.5 text-[10.5px]">
@@ -916,7 +916,7 @@ export function InteractiveMap(_props: VerificationWidgetProps) {
                     );
                   })}
                 </div>
-                <p className="text-muted-foreground mt-1.5 text-[10.5px] leading-snug">
+                <p className="text-muted-foreground mt-1.5 text-sm leading-relaxed">
                   {C.keyNote}
                 </p>
               </div>
@@ -944,7 +944,7 @@ export function InteractiveMap(_props: VerificationWidgetProps) {
               </div>
               <div className="min-w-0">
                 <p className="text-sm font-semibold">{C.chipTitle}</p>
-                <p className="text-muted-foreground text-[11px] leading-snug">
+                <p className="text-muted-foreground text-sm leading-relaxed">
                   {C.chipSub}
                 </p>
               </div>
@@ -971,7 +971,7 @@ export function InteractiveMap(_props: VerificationWidgetProps) {
                   </span>
                 ))}
               </div>
-              <p className="text-muted-foreground mt-1.5 text-[10.5px] leading-snug">
+              <p className="text-muted-foreground mt-1.5 text-sm leading-relaxed">
                 {C.rolesNote}
               </p>
             </div>
@@ -1035,7 +1035,7 @@ function DetailCard({
   if (s.mode === "timeline") {
     if (s.event < 0)
       return (
-        <p className="text-muted-foreground text-[12.5px] leading-relaxed">
+        <p className="text-muted-foreground text-sm leading-relaxed">
           {C.tlEmpty}
         </p>
       );
@@ -1052,7 +1052,7 @@ function DetailCard({
           {ev.d}
         </p>
         <h4 className="mt-0.5 text-base font-semibold">{ev.title}</h4>
-        <p className="text-muted-foreground mt-1.5 text-[12.5px] leading-relaxed">
+        <p className="text-muted-foreground mt-1.5 text-sm leading-relaxed">
           {ev.body}
         </p>
         <p className="text-muted-foreground mt-2.5 text-[11px] font-medium">
@@ -1102,7 +1102,7 @@ function DetailCard({
           {st ? st.name : b.name}
         </h4>
         <p className="mt-1.5 mb-2 text-lg font-bold tracking-tight">{b.stat}</p>
-        <p className="text-muted-foreground text-[12.5px] leading-relaxed">
+        <p className="text-muted-foreground text-sm leading-relaxed">
           {st ? `${st.stat} ` : ""}
           {b.why}
         </p>
@@ -1162,7 +1162,7 @@ function DetailCard({
           <p className="text-muted-foreground text-[11px] font-medium">
             {C.countryVerifLabel}
           </p>
-          <p className="mt-1 text-[12.5px] leading-relaxed">{c.verif}</p>
+          <p className="mt-1 text-sm leading-relaxed">{c.verif}</p>
         </div>
         <div className="mt-2.5 flex flex-wrap gap-1">
           {c.roles.map((r) => (
@@ -1184,10 +1184,10 @@ function DetailCard({
       <p className="text-muted-foreground text-[11px] font-medium">
         {C.startEyebrow}
       </p>
-      <p className="text-muted-foreground mt-1.5 text-[12.5px] leading-relaxed">
+      <p className="text-muted-foreground mt-1.5 text-sm leading-relaxed">
         {C.startBodyA}
       </p>
-      <p className="text-muted-foreground mt-2 text-[12.5px] leading-relaxed">
+      <p className="text-muted-foreground mt-2 text-sm leading-relaxed">
         {C.startBodyB}
       </p>
     </div>

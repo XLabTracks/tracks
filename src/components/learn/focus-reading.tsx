@@ -102,7 +102,7 @@ export function FocusReadingControl({
         title="Focus reading"
         onClick={() => setOpen((v) => !v)}
         className={cn(
-          "h-7 w-9 border px-0 text-[15px] leading-none",
+          "h-11 w-11 border px-0 text-[15px] leading-none sm:h-7 sm:w-9",
           on
             ? "border-border text-foreground bg-muted"
             : "text-muted-foreground border-transparent",
@@ -134,7 +134,7 @@ export function FocusReadingControl({
                 aria-pressed={settings.mode === m.value}
                 onClick={() => update({ mode: m.value })}
                 className={cn(
-                  "rounded-full border px-3 py-1 text-xs font-semibold transition-colors select-none",
+                  "min-h-11 rounded-full border px-3 py-1 text-xs font-semibold transition-colors select-none sm:min-h-0",
                   // The selected chip inverts rather than tinting. On the
                   // high-contrast theme --border and --foreground are both
                   // white and --muted is the ground, so a bordered-and-tinted

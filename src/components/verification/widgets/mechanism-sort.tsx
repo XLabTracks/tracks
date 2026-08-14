@@ -295,7 +295,7 @@ function MetricGuide() {
           <div key={m.key} className="border-border rounded-lg border p-3">
             <p className="font-medium">{m.name}</p>
             <p className="text-muted-foreground mt-1">{m.gist}</p>
-            <div className="mt-2 space-y-1 text-xs">
+            <div className="mt-2 space-y-1 text-sm">
               <p>
                 <span className="text-muted-foreground font-mono">Low</span>{" "}
                 {m.anchorLow}

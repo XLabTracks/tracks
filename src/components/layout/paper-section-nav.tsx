@@ -29,7 +29,7 @@ export function navItemClass(active: boolean) {
     // select-none because these rows are <a>, so the base rule for pressable
     // chrome does not reach them — and a selection dragged across a nav row
     // is always a mis-click.
-    "flex items-start gap-2 rounded-md px-2 py-1.5 text-sm no-underline! transition-colors select-none",
+    "flex min-h-11 items-start gap-2 rounded-md px-2 py-1.5 text-sm no-underline! transition-colors select-none lg:min-h-0",
     active
       ? "bg-muted text-foreground font-semibold"
       : "text-muted-foreground hover:text-foreground hover:bg-muted/60",

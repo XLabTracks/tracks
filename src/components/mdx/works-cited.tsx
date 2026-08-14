@@ -50,7 +50,7 @@ export function WorksCited({ urls }: { urls: string[] }) {
   rows.sort((a, b) => sortKey(a.entry).localeCompare(sortKey(b.entry)));
 
   return (
-    <details className="works-cited border-border group mt-10 rounded-lg border">
+    <details className="works-cited border-border group mt-10 max-w-[64ch] rounded-lg border">
       {/* The disclosure sign is ours, not the UA's: `list-none` plus the
           WebKit marker rule drops the ▶ that sat in front of the label, and
           the sign goes at the end of the row instead.
@@ -82,14 +82,14 @@ export function WorksCited({ urls }: { urls: string[] }) {
         </span>
       </summary>
       <div className="px-4 pb-4">
-        <p className="text-muted-foreground text-[13px] leading-relaxed">
+        <p className="text-muted-foreground text-sm leading-relaxed">
           Every source this lesson quotes, cites, or links out to, gathered in
           one place and set in MLA form. The line under each entry says what
           the work is and what it is about.
         </p>
         <ul className="mt-4 space-y-4">
           {rows.map(({ url, entry }) => (
-            <li key={url} className="text-[13.5px] leading-relaxed">
+            <li key={url} className="text-sm leading-relaxed">
               <p className="works-cited-entry">
                 {entry.authors ?? entry.org ? (
                   // An author string ending "et al." already carries the
@@ -114,7 +114,7 @@ export function WorksCited({ urls }: { urls: string[] }) {
                 </a>
                 .
               </p>
-              <p className="text-muted-foreground mt-0.5 text-[12.5px]">
+              <p className="text-muted-foreground mt-0.5 text-sm">
                 {entry.about}
               </p>
             </li>

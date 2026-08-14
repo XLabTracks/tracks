@@ -43,10 +43,10 @@ export function CompletionHeader({
         <p className="text-muted-foreground font-mono text-xs tracking-[0.14em] uppercase">
           The end of the track
         </p>
-        <p className="mt-3 text-2xl leading-snug font-semibold text-balance">
+        <h2 className="mt-3 text-2xl leading-snug font-semibold text-balance">
           The last page of the {track.title} track.
-        </p>
-        <p className="text-muted-foreground mt-3 text-sm">
+        </h2>
+        <p className="text-muted-foreground mt-3 max-w-[64ch] text-sm">
           Sign in and your units and written work are counted here, so this
           page can tell you whether you have actually finished.
         </p>
@@ -87,9 +87,9 @@ export function CompletionHeader({
       <p className="text-muted-foreground font-mono text-xs tracking-[0.14em] uppercase">
         Not finished yet
       </p>
-      <p className="mt-3 text-2xl leading-snug font-semibold text-balance">
+      <h2 className="mt-3 text-2xl leading-snug font-semibold text-balance">
         The {track.title} track still has work open.
-      </p>
+      </h2>
       <ul className="mt-4 space-y-2 text-sm">
         <Row
           done={unitsLeft <= 0}
@@ -110,7 +110,7 @@ export function CompletionHeader({
           count={`${writing.submitted} / ${writing.required}`}
         />
       </ul>
-      <p className="text-muted-foreground mt-4 text-sm">
+      <p className="text-muted-foreground mt-4 max-w-[64ch] text-sm">
         This page congratulates you when both rows are done. A draft does not
         count — a written task is finished when you submit it.{" "}
         <Link

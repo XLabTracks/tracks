@@ -63,10 +63,10 @@ function Slot({ slot }: { slot: MemoSlot }) {
       )}
 
       {slot.brief && slot.gap ? (
-        <p className="text-muted-foreground mt-2 text-xs leading-relaxed">{slot.gap}</p>
+        <p className="text-muted-foreground mt-2 text-sm leading-relaxed">{slot.gap}</p>
       ) : null}
 
-      <dl className="text-muted-foreground mt-3 flex flex-wrap gap-x-6 gap-y-1 text-xs">
+      <dl className="text-muted-foreground mt-3 flex flex-wrap gap-x-6 gap-y-1 text-sm">
         <div className="flex gap-1.5">
           <dt>Budget</dt>
           <dd className="text-foreground">about {slot.words} words</dd>
@@ -90,7 +90,7 @@ function Slot({ slot }: { slot: MemoSlot }) {
           <p className="text-muted-foreground mt-3 font-mono text-[11px] tracking-[0.14em] uppercase">
             Reviewed on
           </p>
-          <ul className="mt-1 list-disc space-y-0.5 pl-5 text-xs leading-relaxed">
+          <ul className="mt-1 list-disc space-y-0.5 pl-5 text-sm leading-relaxed">
             {slot.criteria.map((criterion) => (
               <li key={criterion}>{criterion}</li>
             ))}
@@ -103,7 +103,7 @@ function Slot({ slot }: { slot: MemoSlot }) {
           keeps the document would never fire that. */}
       <a
         href={`/verification/memo-desk#${slot.id}`}
-        className="border-border hover:bg-muted mt-4 inline-flex items-center gap-1.5 rounded-lg border px-3 py-1.5 text-xs font-semibold no-underline! transition-colors select-none"
+        className="border-border hover:bg-muted mt-4 inline-flex min-h-11 items-center gap-1.5 rounded-lg border px-3 py-2 text-xs font-semibold no-underline! transition-colors select-none lg:min-h-0 lg:py-1.5"
       >
         Draft it on the memo desk
         <ArrowUpRight className="size-3.5" aria-hidden />

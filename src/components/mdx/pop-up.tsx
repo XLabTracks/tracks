@@ -40,7 +40,7 @@ export function PopUp({ label, children }: PopUpProps) {
           className={cn(
             "not-prose border-border bg-card hover:bg-muted my-2 inline-flex max-w-full",
             "items-center gap-2 rounded-lg border px-3 py-2 text-left text-sm",
-            "font-medium transition-colors select-none",
+            "font-medium transition-colors select-none max-sm:min-h-11",
           )}
         >
           <Plus className="text-muted-foreground size-4 shrink-0" aria-hidden />

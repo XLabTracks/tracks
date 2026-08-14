@@ -49,9 +49,9 @@ export function Objectives({
 }) {
   return (
     <section className="vt-objectives not-prose" aria-label={`Objectives for ${scope}`}>
-      <p className="vt-objectives-lead">
+      <h2 className="vt-objectives-lead">
         By the end of {scope}, you will be able to:
-      </p>
+      </h2>
       {children}
     </section>
   );

@@ -178,7 +178,7 @@ export function PolicyScoping({ onComplete }: VerificationWidgetProps) {
 
             {/* tray */}
             <div className="border-border mb-5 rounded-lg border p-3">
-              <p className="text-muted-foreground mb-2 font-mono text-[10px] tracking-[0.15em] uppercase">
+              <p className="text-muted-foreground mb-2 font-mono text-xs tracking-[0.15em] uppercase">
                 {C.trayLabel}
               </p>
               <div className="flex flex-wrap gap-2">
@@ -211,16 +211,16 @@ export function PolicyScoping({ onComplete }: VerificationWidgetProps) {
               {/* y axis */}
               <div className="flex flex-none items-center">
                 <AxisTip tip={AXIS_TIPS.y}>
-                  <span
-                    className="text-foreground/70 [writing-mode:vertical-rl] rotate-180 cursor-help text-xs font-semibold whitespace-nowrap"
-                    tabIndex={0}
+                  <button
+                    type="button"
+                    className="text-foreground/70 inline-flex [writing-mode:vertical-rl] rotate-180 cursor-help items-center border-0 bg-transparent p-0 text-xs font-semibold whitespace-nowrap"
                   >
                     {C.yTitle}{" "}
                     <span className="text-muted-foreground font-normal">
                       {C.ySub}
                     </span>{" "}
                     →
-                  </span>
+                  </button>
                 </AxisTip>
               </div>
 
@@ -325,19 +325,19 @@ export function PolicyScoping({ onComplete }: VerificationWidgetProps) {
                 </div>
                 <div className="ml-9 pt-1 text-center">
                   <AxisTip tip={AXIS_TIPS.x}>
-                    <span
-                      className="text-foreground/70 cursor-help text-xs font-semibold"
-                      tabIndex={0}
+                    <button
+                      type="button"
+                      className="text-foreground/70 inline-flex cursor-help items-center border-0 bg-transparent p-0 text-xs font-semibold"
                     >
                       {C.xTitle}{" "}
                       <span className="text-muted-foreground font-normal">
                         {C.xSub}
                       </span>{" "}
                       →
-                    </span>
+                    </button>
                   </AxisTip>
                 </div>
-                <p className="text-muted-foreground ml-9 pt-1.5 text-center text-[11px] italic">
+                <p className="text-muted-foreground ml-9 pt-1.5 text-center text-sm leading-relaxed italic">
                   {C.caption}
                 </p>
               </div>
@@ -450,7 +450,7 @@ export function PolicyScoping({ onComplete }: VerificationWidgetProps) {
                           {verdictLabel(pl.verdict)}
                         </span>
                       </div>
-                      <p className="text-muted-foreground mt-1 text-[11px] leading-snug">
+                      <p className="text-muted-foreground mt-1 text-sm leading-relaxed">
                         {combo.t}
                       </p>
                     </div>
@@ -465,7 +465,7 @@ export function PolicyScoping({ onComplete }: VerificationWidgetProps) {
                 <p className="text-muted-foreground mb-2 font-mono text-[10px] tracking-[0.15em] uppercase">
                   {C.excLabel}
                 </p>
-                <p className="text-muted-foreground mb-3 text-xs leading-relaxed">
+                <p className="text-muted-foreground mb-3 text-sm leading-relaxed">
                   {C.excLead.pre}
                   <AxisTip tip={AXIS_TIPS.sec}>
                     <span
@@ -503,7 +503,7 @@ export function PolicyScoping({ onComplete }: VerificationWidgetProps) {
                 </div>
                 {excPicked && (
                   <p
-                    className="border-border text-muted-foreground mt-2.5 border-t pt-2.5 text-xs leading-relaxed [&_b]:text-foreground [&_b]:font-semibold"
+                    className="border-border text-muted-foreground mt-2.5 border-t pt-2.5 text-sm leading-relaxed [&_b]:text-foreground [&_b]:font-semibold"
                     aria-live="polite"
                     dangerouslySetInnerHTML={{ __html: EXC_ANSWERS[excPicked].t }}
                   />
@@ -521,7 +521,7 @@ export function PolicyScoping({ onComplete }: VerificationWidgetProps) {
               </div>
             )}
 
-            <p className="border-border text-muted-foreground border-t pt-3 text-[10px] leading-relaxed">
+            <p className="border-border text-muted-foreground border-t pt-3 text-sm leading-relaxed">
               {C.foot}
             </p>
           </aside>
@@ -682,15 +682,15 @@ function CornerNote({
 }) {
   return (
     <AxisTip tip={tip}>
-      <span
-        tabIndex={0}
+      <button
+        type="button"
         className={cn(
-          "text-muted-foreground/60 hover:text-muted-foreground absolute z-[8] cursor-help font-mono text-[9px] tracking-[0.05em] select-none",
+          "text-muted-foreground/60 hover:text-muted-foreground absolute z-[8] cursor-help border-0 bg-transparent p-0 font-mono text-[9px] tracking-[0.05em] select-none",
           className,
         )}
       >
         {label}
-      </span>
+      </button>
     </AxisTip>
   );
 }

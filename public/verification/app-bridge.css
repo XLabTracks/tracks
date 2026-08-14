@@ -46,6 +46,16 @@
 :root[data-theme] {
   --font-mono: var(--sans);
 
+  /* React lesson widgets used Tailwind's compact UI scale while the prose
+     beside them used a reading scale. That made an explanation shrink from
+     16px to 12–14px merely because it crossed into an interactive. Keep
+     metadata one step down, but let substantive widget copy read like the
+     lesson it belongs to. */
+  --text-xs: 0.875rem;
+  --text-xs--line-height: 1.5;
+  --text-sm: 1rem;
+  --text-sm--line-height: 1.5;
+
   --card-foreground: var(--foreground);
   --popover: var(--card);
   --popover-foreground: var(--foreground);
@@ -99,6 +109,57 @@
    always had — it has no Inter to serve. */
 :root[data-theme] .lesson-body {
   font-family: var(--font-sans), var(--sans);
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+/* Reading measure. Widgets, tables and reproduced source panels keep the full
+   lesson width; uninterrupted prose stops below the W3C's 80-character
+   ceiling. */
+:root[data-theme] .lesson-body > :where(p, ul, ol, blockquote, dl):not(.not-prose) {
+  max-inline-size: 64ch;
+}
+:root[data-theme] .lesson-body > :where(h2, h3, h4, h5, h6):not(.not-prose) {
+  max-inline-size: 34ch;
+}
+:root[data-theme] .lesson-body :where(p, li, blockquote, dd) {
+  max-inline-size: 64ch;
+}
+
+/* Small type inside an exercise may label a state; it must not carry the
+   explanation. These floors preserve hierarchy without letting authored copy
+   fall to 10–11px. */
+:root[data-theme] [data-widget] :is([class~="text-[10px]"], [class~="text-[10.5px]"], [class~="text-[11px]"]) {
+  font-size: 0.75rem;
+}
+:root[data-theme] [data-widget] :is([class~="text-[12px]"], [class~="text-[12.5px]"], [class~="text-[13px]"], [class~="text-[13.5px]"]) {
+  font-size: 0.875rem;
+}
+:root[data-theme] [data-widget] :where(p, li, label, dd)[class~="leading-snug"] {
+  line-height: 1.5;
+}
+:root[data-theme] [data-widget] :where(p, li, dd)[class~="text-xs"]:not(:where([class~="uppercase"], [class~="font-mono"])) {
+  font-size: 1rem;
+}
+
+/* WCAG 2.5.8's AA target floor on every custom exercise control. The 44px
+   mobile floor follows platform touch guidance; desktop stays compact without
+   dropping below AA. */
+:root[data-theme] [data-widget] :where(button, summary, [role="button"], [role="tab"], [role="radio"], [tabindex]:not([tabindex="-1"])) {
+  min-inline-size: 24px;
+  min-block-size: 24px;
+}
+@media (max-width: 720px), (pointer: coarse) {
+  :root[data-theme] [data-widget] :where(button, summary, [role="button"], [role="tab"], [role="radio"], [tabindex]:not([tabindex="-1"])) {
+    min-inline-size: 44px;
+    min-block-size: 44px;
+  }
+  :root[data-theme] :where(input, select, textarea):not([type="checkbox"]):not([type="radio"]) {
+    font-size: 16px;
+  }
+  :root[data-theme] :where(input, select):not([type="checkbox"]):not([type="radio"]):not([type="hidden"]) {
+    min-block-size: 44px;
+  }
 }
 
 /* In-lesson heading hierarchy, per the author (2026-08-12): an h3 subheading

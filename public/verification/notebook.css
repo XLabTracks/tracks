@@ -47,6 +47,38 @@
 }
 .nb-open:hover { background: color-mix(in srgb, var(--primary) 88%, var(--foreground)); }
 
+.nb-open-icon {
+  width: 18px;
+  height: 18px;
+  flex: none;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.7;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* App lessons reserve a header slot for the launcher. Keeping the standalone
+   corner position as the base rule lets the public lift use the same script,
+   while this host contract prevents an app-level utility from covering a
+   lesson-level action. */
+#verification-notebook-launcher {
+  display: flex;
+  flex: none;
+}
+#verification-notebook-launcher:empty { display: none; }
+#verification-notebook-launcher .nb-open {
+  position: relative;
+  inset: auto;
+  z-index: auto;
+  min-width: var(--hdr-action-w);
+  height: var(--hdr-action-h);
+  padding-inline: 14px;
+  border-color: var(--border);
+  border-radius: var(--radius-sm);
+  box-shadow: none;
+}
+
 /* The count is the reading; the pill is decoration for it. */
 .nb-badge {
   min-width: 21px;
@@ -95,8 +127,8 @@
 .nb-head h2 { font-size: var(--fs-xl); }
 
 .nb-x {
-  width: 32px;
-  height: 32px;
+  width: 44px;
+  height: 44px;
   border: var(--hairline) solid var(--border);
   border-radius: var(--radius-sm);
   background: var(--card);
@@ -255,8 +287,36 @@
 
 @media (max-width: 560px) {
   .nb-open { right: 12px; bottom: 12px; }
+  #verification-notebook-launcher .nb-open {
+    right: auto;
+    bottom: auto;
+    width: var(--hdr-action-h);
+    min-width: var(--hdr-action-h);
+    padding: 0;
+  }
+  #verification-notebook-launcher .nb-open-label {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+  #verification-notebook-launcher .nb-badge {
+    position: absolute;
+    top: -7px;
+    right: -7px;
+  }
   .nb-foot { gap: 8px; }
   .nb-pager { margin-left: 0; }
+  .nb-block-bar .nb-x { width: 44px; height: 44px; }
+  .nb-title,
+  .nb-text,
+  .nb-note-on-quote,
+  .nb-goto { font-size: 16px; }
 }
 
 @media (prefers-reduced-motion: reduce) {

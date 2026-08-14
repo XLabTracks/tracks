@@ -193,7 +193,7 @@ function SidebarNav({
                 value={module.slug}
                 className="border-none"
               >
-                <AccordionTrigger className="hover:bg-muted [&[data-state=open]]:bg-muted/50 rounded-lg px-2 py-2 text-sm hover:no-underline">
+                <AccordionTrigger className="hover:bg-muted [&[data-state=open]]:bg-muted/50 min-h-11 rounded-lg px-2 py-2 text-sm hover:no-underline lg:min-h-0">
                   <span className="flex items-center gap-2.5 text-left">
                     {isLocked && (
                       <>
@@ -402,7 +402,7 @@ function SidebarItemGroup({
             aria-expanded={expanded}
             aria-label={`${expanded ? "Hide" : "Show"} subsections of ${title}`}
             onClick={onToggle}
-            className="text-muted-foreground hover:bg-muted hover:text-foreground mt-1 flex h-6 shrink-0 items-center gap-0.5 rounded-md px-1 text-xs tabular-nums transition-colors select-none"
+            className="text-muted-foreground hover:bg-muted hover:text-foreground mt-1 flex h-11 min-w-11 shrink-0 items-center justify-center gap-0.5 rounded-md px-1 text-xs tabular-nums transition-colors select-none lg:h-6 lg:min-w-6"
           >
             {!expanded && children.length}
             <ChevronRight
@@ -694,8 +694,8 @@ export function TrackSidebar(props: TrackSidebarProps) {
             e.preventDefault();
           }}
           className={cn(
-            "absolute inset-y-0 right-0 z-10 w-1.5 cursor-col-resize touch-none outline-none",
-            "hover:bg-border focus-visible:bg-ring/50 transition-colors",
+            "absolute inset-y-0 right-0 z-10 w-6 cursor-col-resize touch-none outline-none",
+            "after:bg-border hover:after:bg-ring/50 focus-visible:after:bg-ring/50 after:absolute after:inset-y-0 after:right-0 after:w-1.5 after:transition-colors",
             dragging && "bg-ring/50"
           )}
         />
@@ -704,7 +704,7 @@ export function TrackSidebar(props: TrackSidebarProps) {
       <div className="bg-background sticky top-14 z-30 border-b px-4 py-2 lg:hidden">
         <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
           <SheetTrigger asChild>
-            <Button variant="outline" size="sm" className="gap-2">
+            <Button variant="outline" size="sm" className="h-11 gap-2 text-sm">
               <ListTree className="size-4" aria-hidden /> Contents
             </Button>
           </SheetTrigger>

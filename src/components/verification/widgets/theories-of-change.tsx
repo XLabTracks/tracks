@@ -166,7 +166,7 @@ export function TheoriesOfChange(_: VerificationWidgetProps) {
   );
 
   return (
-    <div className="not-prose my-6 space-y-4" aria-busy={!hydrated}>
+    <div className="not-prose my-6 min-w-0 max-w-full space-y-4" aria-busy={!hydrated}>
       <div className="border-border bg-card shadow-soft space-y-3 rounded-xl border p-5">
         <label
           className="text-muted-foreground text-[11px] tracking-[0.14em] uppercase"
@@ -225,7 +225,7 @@ export function TheoriesOfChange(_: VerificationWidgetProps) {
 
       {/* The table itself, filling as the boxes do. Cells are the navigation:
           press one to edit that box. */}
-      <div className="overflow-x-auto">
+      <div className="w-full max-w-full overflow-x-auto overscroll-x-contain">
         <div className="border-border bg-border grid min-w-[640px] grid-cols-6 gap-px border" role="group" aria-label="Your theory of change table">
           {band("Inputs")}
           {band("Outputs", "col-span-2")}

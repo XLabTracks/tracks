@@ -587,3 +587,41 @@ The route reconstruction shipped an hour earlier for the same section is now
 unmounted, along with the rest of the old lab. It was the right fix to the wrong
 question: the spec replaces the section's operation rather than improving its
 quiz, so the file stays in the repo and the id now points at the inference.
+
+**2.4.3 shipped: Same Claim, Different Circumstances.** One allegation, four
+sources, three lines each — recommended response, the changed fact that
+matters, what remains unestablished. All four are on the page at once, which
+is the spec's constraint and the mechanism: the variation is controlled and
+you can only see what it controls for by reading C against A. The five
+available actions are printed ONCE above the four, never as options under each
+— an option list per variant would turn one comparison into four independent
+multiple-choice questions, which the spec forbids and which was the old lab.
+Answers freeze on Submit, then the reveal separates claim content, provenance
+and access, corroboration, and the verification threshold, ending on her
+constraint that no human report alone establishes a violation. Those four
+lines are mine; their names are hers. Then her ≤50-word comparison and the
+optional transfer question.
+
+`report-access` ("One Report, Four Ways", shipped this morning) stood down in
+the same edit — it was the same controlled variation as an optional aside, and
+the spec makes it the section's own exercise. Widget and data remain.
+
+**2.4.4 shipped: Build the Institution.** Twelve provisions in her three
+groups, exactly five, then eighty words on why the five work together — which
+is a different question from whether each is a good idea alone. Evaluation is
+`engines/build-institution.ts` and it reads FUNCTIONS AND CONTRADICTIONS,
+never a combination: nothing marks a provision correct, each carries what it
+supplies and what it defeats, and a defect defeats its test whatever else was
+selected. That is the spec's coherence principle made executable, and the
+engine's test proves more than one five passes and that her four invalid
+constructions each fail the right test. The verdict comes back as the
+evaluator's own sentences naming the card that broke it — "D puts the
+organization in the path of its own accusation" is arguable; 2/3 is not.
+
+The two sample designs are mine apart from her example five, and the engine's
+test runs both, so a model answer on the page cannot drift into being invalid.
+
+With this, all four sections of 2.4 have a different operation and the module
+no longer asks the same click four times. The old widgets — human-insiders,
+the reporting route reconstruction, and the shared human-policy-decision-lab
+behind 2.4.3 and 2.4.4 — remain in the repo, unmounted.

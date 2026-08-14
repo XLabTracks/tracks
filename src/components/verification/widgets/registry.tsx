@@ -145,22 +145,17 @@ const PolicyOnPaper = dynamic<VerificationWidgetProps>(
   () => import("./policy-on-paper").then((module) => module.PolicyOnPaper),
   { loading: WidgetLoading },
 );
-const ReportAccess = dynamic<VerificationWidgetProps>(
-  () => import("./report-access").then((module) => module.ReportAccess),
+// 2.4.3's exercise is now Same Claim, Different Circumstances; the id stays
+// so the lesson mapping, the progress key and the finish event do not move.
+// The decision lab it shared with 2.4.4 remains in the repo, unmounted here.
+const SameClaim = dynamic<VerificationWidgetProps>(
+  () => import("./same-claim").then((module) => module.SameClaim),
   { loading: WidgetLoading },
 );
-const HumanAuditsInspections = dynamic<VerificationWidgetProps>(
-  () =>
-    import("./human-audits-inspections").then(
-      (module) => module.HumanAuditsInspections,
-    ),
-  { loading: WidgetLoading },
-);
-const HumanInstitutionsJudgment = dynamic<VerificationWidgetProps>(
-  () =>
-    import("./human-institutions-judgment").then(
-      (module) => module.HumanInstitutionsJudgment,
-    ),
+// 2.4.4's exercise is now Build the Institution; the id stays so the lesson
+// mapping, the progress key and the finish event do not move.
+const BuildInstitution = dynamic<VerificationWidgetProps>(
+  () => import("./build-institution").then((module) => module.BuildInstitution),
   { loading: WidgetLoading },
 );
 const CloudEvidenceDrill = dynamic<VerificationWidgetProps>(
@@ -210,10 +205,9 @@ export const verificationWidgets: Record<
   "human-insiders": ConstructCase,
   "human-reporting-protection": InferTheSystem,
   "whistleblower-levers": WhistleblowerLevers,
-  "human-audits-inspections": HumanAuditsInspections,
-  "human-institutions-judgment": HumanInstitutionsJudgment,
+  "human-audits-inspections": SameClaim,
+  "human-institutions-judgment": BuildInstitution,
   "policy-on-paper": PolicyOnPaper,
-  "report-access": ReportAccess,
   "cloud-evidence-drill": CloudEvidenceDrill,
 };
 

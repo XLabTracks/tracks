@@ -73,12 +73,14 @@ export const verificationExercises: VerificationExerciseDef[] = [
   // "Follow the Report" above. Two bridged widgets in one lesson would end
   // the section at whichever fired first.
   { id: "whistleblower-levers", title: "Four Levers, One Each", bridged: false },
-  { id: "human-audits-inspections", title: "Build the Inspection Order", bridged: true },
-  { id: "human-institutions-judgment", title: "Audit the Verifier", bridged: true },
+  { id: "human-audits-inspections", title: "Same Claim, Different Circumstances", bridged: true },
+  { id: "human-institutions-judgment", title: "Build the Institution", bridged: true },
   // 2.4's optional extensions. Unbridged by definition: they record no
   // completion and are outside the module's estimated time, so a learner who
   // skips them has still finished the section.
-  { id: "report-access", title: "One Report, Four Ways", bridged: false },
+  // report-access ("One Report, Four Ways") stood down 2026-08-14: the
+  // owner's spec makes the same variation 2.4.3's own exercise, with four
+  // variants and three lines each. Widget and data remain in the repo.
   { id: "policy-on-paper", title: "Policy on Paper", bridged: false },
   { id: "cloud-evidence-drill", title: "Cloud Evidence Drill", bridged: true },
 ];

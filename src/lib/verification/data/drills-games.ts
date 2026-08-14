@@ -240,6 +240,9 @@ export const DRILLS_GAMES: DrillDeck = {
             "Trade secrets have no protection in international law anyway"
           ],
           right: 0,
+          // The reveal walks the distractors by position ("the second option
+          // is the attribution reflex"), so this one keeps its authored order.
+          fixedOrder: true,
           why: "Concede-and-bound is the only move that survives contact with a true premise. The second option is the attribution reflex (the position bench dissects it), the third is a value assertion that persuades nobody who does not already agree, and the fourth is false — and silent about classified workloads, the collision’s hardest case."
         },
         {

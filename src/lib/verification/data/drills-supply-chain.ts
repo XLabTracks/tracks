@@ -335,6 +335,8 @@ export const DRILLS_SUPPLY_CHAIN: DrillDeck = {
             "Critiques physics-based signals as too coarse; advocates richer self-reporting"
           ],
           right: 0,
+          // The reveal opens on "the second option is the planted over-reading".
+          fixedOrder: true,
           why: "The second option is the planted over-reading — “corroborate, never carry” assigns paperwork a real role, so “abolish” misstates the author; the source round docks exactly that. Critique pole, advocacy pole, and the distinction that separates them: a text is not read until you can state all three without importing your own position."
         },
         {

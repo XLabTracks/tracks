@@ -1,6 +1,9 @@
 "use client";
 
+import { useMemo } from "react";
+
 import { Button } from "@/components/ui/button";
+import { shuffleAnswerOptions } from "@/lib/shuffle";
 import { cn } from "@/lib/utils";
 
 import { useMark, writeMark } from "./marks";
@@ -16,6 +19,13 @@ import { useMark, writeMark } from "./marks";
  * It grades nothing. There is no score anywhere, and Try again is always
  * offered: the question exists to make a claim in the reading concrete, not to
  * assess anyone.
+ *
+ * The options are shuffled for display, seeded on the block's own id. What is
+ * stored, and what `answer` is compared against, is always the AUTHORED index
+ * — the position the option occupies in the `options` prop. That is what keeps
+ * `answer={2}` meaning the same thing after the shuffle, and what keeps a pick
+ * a learner made before this existed pointing at the option they picked: the
+ * mark is permanent storage and could not be renumbered even if we wanted to.
  */
 export function Check({
   id,
@@ -28,11 +38,15 @@ export function Check({
   id: string;
   q: string;
   options: string[];
-  /** Zero-based index into `options`. */
+  /** Zero-based index into `options`, as authored. */
   answer: number;
   why: string;
 }) {
   const pick = useMark<number | null>(`check:${id}`, null);
+  const shown = useMemo(
+    () => shuffleAnswerOptions(`check:${id}`, options, (o) => o),
+    [id, options],
+  );
 
   const choose = (k: number) => writeMark(`check:${id}`, k);
   const clear = () => writeMark(`check:${id}`, undefined);
@@ -48,17 +62,20 @@ export function Check({
       <p className="mt-2 font-medium">{q}</p>
 
       <div className="mt-4 grid gap-2">
-        {options.map((o, k) => (
+        {shown.map(({ item: o, from }) => (
           <button
-            key={k}
+            key={from}
             type="button"
             disabled={done}
-            onClick={() => choose(k)}
+            onClick={() => choose(from)}
             className={cn(
               "border-border rounded-lg border px-3 py-2 text-left text-sm select-none",
               !done && "hover:bg-muted cursor-pointer",
-              done && k === answer && "border-comply/50 bg-comply/10",
-              done && k === pick && !right && "border-destructive/50 bg-destructive/10",
+              done && from === answer && "border-comply/50 bg-comply/10",
+              done &&
+                from === pick &&
+                !right &&
+                "border-destructive/50 bg-destructive/10",
             )}
           >
             {o}

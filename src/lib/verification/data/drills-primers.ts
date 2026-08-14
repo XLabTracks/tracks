@@ -136,6 +136,8 @@ export const DRILLS_PRIMERS: DrillDeck = {
             "All treaty provisions are self-reporting mechanisms"
           ],
           right: 1,
+          // The reveal names "the third option" while walking the diagram.
+          fixedOrder: true,
           why: "Chain the circles: the log-based circle sits wholly inside self-reporting (premise 2), and self-reporting is disjoint from tamper-resistant (premise 1); the treaty-provisions circle overlaps log-based (premise 3), so that overlap is forced outside tamper-resistant — an existential conclusion and nothing more. The rest of the provisions circle is unconstrained, which kills the “no” and “all” options; the third option is not derivable at all. Drawing the arrangement where your answer holds and the others fail IS the justification — that is the drill’s scoring rule."
         }
       ]

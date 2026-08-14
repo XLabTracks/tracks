@@ -203,6 +203,31 @@ passing them as props. Exercise prompt/answer strings render `$…$` math via
 `MathText`; writing-type prompts additionally render block markdown
 (`src/lib/content/writing-prompt-html.ts`); lesson MDX math uses remark-math +
 rehype-katex.
+**Answer options are shuffled at the display layer, never in the data**
+(`src/lib/shuffle.ts`; `shuffleAnswerOptions` is the entry point). Authored,
+86% of correct answers across the platform sat in slot A or B — one quiz ran
+four Bs of five, the treaty phrase-quiz put a correct option first in all
+fifteen, and the four-lever matching offered its chips in row order, so it
+solved on the diagonal. Nobody did that deliberately: an author writes the true
+statement first and the distractors after it. The order is seeded on the
+question's own id, so it is **stable for every learner, device and visit** —
+per-visit randomness would break SSR against hydration, move the options under
+somebody returning to an answered question, and silently invalidate the
+facilitator guide's session keys, which a room reads together. **Nothing may be
+keyed on position**: `shuffleAnswerOptions` returns each option with the index
+it was authored at (`from`), and index-keyed banks (drills' `right`, the
+reader's `<Check answer={n}/>`) compare and store THAT, which is why their data
+files and their permanent `localStorage` marks needed no migration. Two
+opt-outs, both narrow: true/false pairs keep their conventional order
+automatically, and terminal options ("None of the above") stay pinned last. A
+drill step whose reveal names an option by position carries `fixedOrder: true`
+— but the right fix for a NEW one is to name the option by what it says, and
+**prose must never reference an option letter or position**, because a letter
+is a position. `src/lib/verification/answer-order.test.ts` enforces all of it:
+it catches positional prose without an opt-out, checks every answer surface
+routes through the shuffle, and fails when a slot runs far above what an even
+spread would give it (measured against the banks' own option counts, not a flat
+percentage).
 The reasoning-transparency grader (`src/lib/grader/`, action
 `requestTransparencyGrade`) sends submitted writing to an LLM via OpenRouter;
 model selection is per length class and key source (`modelFor` in

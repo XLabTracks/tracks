@@ -1034,3 +1034,71 @@ Checked in Chromium at both widths, covered → uncovered → covered again:
 section height 452 → 452 → 452 on iPhone 13, 310 → 310 → 310 on desktop, and
 document height identical at every step. Company names unfindable while
 covered, findable uncovered, unfindable again after Hide. No sideways scroll.
+
+**Answer options are shuffled now, platform-wide (2026-08-14, owner: "почему в
+тесте почти все правильные ответы Б").** She was reading 2.4.2, where four of
+five answers were B. Measured across every question bank in the repo before
+touching anything:
+
+| bank | A | B | C | D | E |
+|---|---|---|---|---|---|
+| policy-quick-check (2.4.2) | 0 | **4** | 1 | 0 | 0 |
+| protocol-actors | **15** | 0 | 0 | 0 | 0 |
+| drills-supply-chain | 4 | **9** | 0 | 0 | 0 |
+| drills-games | 10 | 10 | 0 | 1 | 0 |
+| drills-foundations | 7 | 6 | 2 | 1 | 1 |
+| exercises.data | 2 | 3 | 5 | 0 | 1 |
+
+86% of correct answers in slot A or B. And `whistleblower-levers` was worse
+than any of those in kind rather than degree: it offered its four chips in the
+same order as its four rows, so the matching solved on the diagonal without
+reading a word.
+
+The fix is `src/lib/shuffle.ts`, applied at the display layer — no data file
+reordered, no key moved. Two decisions carry it. The order is a function of the
+question id, not of the visit: per-visit randomness would break SSR against
+hydration, move the options under somebody returning to a question they
+answered, and quietly invalidate the facilitator guide's session keys, which a
+room of people reads together. And nothing is keyed on position — the shuffle
+hands back each option with the index it was authored at, so the drill benches'
+`right` and the reader's `<Check answer={n}/>` compare against THAT. That is
+what let index-keyed banks shuffle with no migration and no stored pick
+changing meaning.
+
+Six surfaces: `toPublicChoice` (which is also where the answer key is stripped,
+so neither can be forgotten at a call site), policy-quick-check, protocol-actors,
+whistleblower-levers, the drill deck's pick and multi steps, and `<Check>`.
+
+Three things had to move with it, and they are the interesting part:
+
+- **A letter is a position.** 2.4.2's explanations said "A and C are real
+  weaknesses"; three of them were rewritten to name the options by what they
+  say. The badge now prints the SLOT letter rather than the choice id — the ids
+  are a..d, so printing them shuffled would have produced a list labelled
+  B, D, A, C.
+- **Three drill reveals name an option by position** ("the second option is the
+  planted over-reading"). Those steps carry `fixedOrder: true` rather than
+  having their authored prose rewritten. For a new step the honest fix is to
+  name the option by its content and leave the shuffle on, and the test says so.
+- **Two opt-outs are automatic**: a true/false pair keeps its conventional
+  order, and "None of the above" stays pinned last while everything else still
+  moves around it.
+
+`answer-order.test.ts` is the durable half. It fails on positional prose without
+an opt-out, on an answer surface that does not route through the shuffle, on an
+index-keyed renderer that stops destructuring the authored index, and on a slot
+running far above an even spread — measured against the banks' own option
+counts, because a quarter of these questions have only two options and a flat
+percentage would either pass everything or fail on arithmetic.
+
+Verified in the browser, not just in tests. 2.4.2's five answers now sit at
+D A A C B with badges reading A B C D down every question, identical after a
+reload. A drill bench was walked step by step against the data: on the
+four-option step the first option shown is no longer the key, and the `key`
+marker lands on the string the data file calls the answer. The treaty quiz's
+first phrase had its correct option authored first; it renders third.
+
+One surface deliberately left alone: `verification-problem`, whose four cards
+are an explorable rather than a question — the learner opens all of them, and
+the one that holds is last because three failures precede it. That order is an
+argument, not an accident.

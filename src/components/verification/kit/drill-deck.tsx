@@ -10,6 +10,7 @@ import {
   Flag,
   RotateCcw,
 } from "lucide-react";
+import { shuffleAnswerOptions } from "@/lib/shuffle";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -267,9 +268,19 @@ function StepScreen({
         <h3 className="text-lg leading-snug font-semibold">{step.q}</h3>
         <StepBrief step={step} />
         {step.type === "pick" ? (
-          <PickStep step={step} last={last} onCommit={onCommit} />
+          <PickStep
+            step={step}
+            seed={`${bench.id}#${pos}`}
+            last={last}
+            onCommit={onCommit}
+          />
         ) : step.type === "multi" ? (
-          <MultiStep step={step} last={last} onCommit={onCommit} />
+          <MultiStep
+            step={step}
+            seed={`${bench.id}#${pos}`}
+            last={last}
+            onCommit={onCommit}
+          />
         ) : step.type === "number" ? (
           <NumberStep step={step} last={last} onCommit={onCommit} />
         ) : (
@@ -362,31 +373,48 @@ function StepBrief({ step }: { step: DrillStep }) {
 
 /* ---------------- pick ---------------- */
 
+/**
+ * Options are shown shuffled and reasoned about by their AUTHORED index.
+ *
+ * `step.right` is an index, so the shuffle would break the key if the display
+ * position were what got compared. It is not: `from` is where the option was
+ * written, `choice` holds that, and every judgement here is made on it. The
+ * data file needs no edit and `step.opts[step.right]` still names the key.
+ */
 function PickStep({
   step,
+  seed,
   last,
   onCommit,
 }: {
   step: DrillPickStep;
+  seed: string;
   last: boolean;
   onCommit: () => void;
 }) {
   const [choice, setChoice] = useState<number | null>(null);
+  const shown = useMemo(
+    () =>
+      step.fixedOrder
+        ? step.opts.map((item, from) => ({ item, from }))
+        : shuffleAnswerOptions(seed, step.opts, (o) => o),
+    [step, seed],
+  );
   const answered = choice !== null;
   const right = choice === step.right;
   return (
     <div className="space-y-3">
       <ul className="space-y-2">
-        {step.opts.map((opt, i) => {
-          const isKey = i === step.right;
-          const picked = choice === i;
+        {shown.map(({ item: opt, from }) => {
+          const isKey = from === step.right;
+          const picked = choice === from;
           return (
-            <li key={i}>
+            <li key={from}>
               <button
                 type="button"
                 disabled={answered}
                 aria-pressed={picked}
-                onClick={() => setChoice(i)}
+                onClick={() => setChoice(from)}
                 className={cn(
                   "w-full rounded-lg border p-3 text-left text-sm leading-relaxed transition-colors select-none",
                   !answered &&
@@ -453,17 +481,32 @@ const VERDICT: Record<
   clean: { label: "clean", tone: "text-muted-foreground", border: "border-border" },
 };
 
+/**
+ * Same contract as PickStep: shuffled on screen, authored indices in `marked`,
+ * so `scoreMulti` is handed exactly what it was handed before. The verdict
+ * list after committing is deliberately left in AUTHORED order — it is a
+ * written-out key, and a key reads in the order it was written.
+ */
 function MultiStep({
   step,
+  seed,
   last,
   onCommit,
 }: {
   step: DrillMultiStep;
+  seed: string;
   last: boolean;
   onCommit: () => void;
 }) {
   const [marked, setMarked] = useState<Set<number>>(new Set());
   const [committed, setCommitted] = useState(false);
+  const shown = useMemo(
+    () =>
+      step.fixedOrder
+        ? step.items.map((item, from) => ({ item, from }))
+        : shuffleAnswerOptions(seed, step.items, (i) => i.t),
+    [step, seed],
+  );
   const commit = multiCommitState(step, marked.size);
   const score = committed ? scoreMulti(step, marked) : null;
 
@@ -523,14 +566,14 @@ function MultiStep({
   return (
     <div className="space-y-3">
       <ul className="space-y-2">
-        {step.items.map((item, i) => {
-          const on = marked.has(i);
+        {shown.map(({ item, from }) => {
+          const on = marked.has(from);
           return (
-            <li key={i}>
+            <li key={from}>
               <button
                 type="button"
                 aria-pressed={on}
-                onClick={() => toggle(i)}
+                onClick={() => toggle(from)}
                 className={cn(
                   "w-full cursor-pointer rounded-lg border p-3 text-left text-sm leading-relaxed transition-colors select-none focus-visible:ring-2 focus-visible:outline-none",
                   on ? "border-primary bg-primary/5" : "border-border hover:bg-muted/60",

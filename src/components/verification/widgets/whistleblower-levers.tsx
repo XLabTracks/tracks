@@ -4,6 +4,7 @@ import { useCallback, useEffect, useState } from "react";
 import { CircleAlert, CircleCheck, RotateCcw } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
+import { shuffleAnswerOptions } from "@/lib/shuffle";
 import { cn } from "@/lib/utils";
 import {
   LEVERS_LEAD,
@@ -101,6 +102,26 @@ export function WhistleblowerLevers({}: VerificationWidgetProps) {
 
   if (!hydrated) return <div className="not-prose my-6 min-h-64" aria-busy />;
 
+  /**
+   * The chips were offered in `LEVERS` order under rows that are also in
+   * `LEVERS` order, so row 1's answer was chip 1, row 2's chip 2, and the whole
+   * matching could be finished on the diagonal without reading a word of it.
+   *
+   * One shuffled order, shared by every row, is what breaks that: the answers
+   * land on a fixed permutation instead of the identity, and the reader still
+   * scans the same four chips in the same places down the column. Per-row
+   * shuffling would break it too and would make them re-read four chips four
+   * times, which is work the exercise is not asking for.
+   *
+   * Nothing is keyed on position here — `placed` maps lever id to lever id —
+   * so this is display only.
+   */
+  const chips = shuffleAnswerOptions(
+    "whistleblower-levers",
+    LEVERS,
+    (l) => l.chip,
+  );
+
   return (
     <div className="not-prose my-6 space-y-4">
       <p className="text-sm leading-relaxed">
@@ -158,7 +179,7 @@ export function WhistleblowerLevers({}: VerificationWidgetProps) {
                 </div>
               ) : (
                 <div className="mt-3 flex flex-wrap gap-2">
-                  {LEVERS.map((option) => {
+                  {chips.map(({ item: option }) => {
                     const active = choice === option.id;
                     return (
                       <button

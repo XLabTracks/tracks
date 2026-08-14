@@ -1,12 +1,16 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { CircleAlert, CircleCheck } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
+import { shuffleAnswerOptions } from "@/lib/shuffle";
 import { cn } from "@/lib/utils";
 import { QUICK_QUESTIONS } from "@/lib/verification/data/policy-quick-check";
 import type { VerificationWidgetProps } from "../kit/types";
+
+/** Display letters, which is now all a letter is. */
+const SLOT = "ABCDE";
 
 /**
  * 2.4.2 — On Paper. Five short discriminations, answered in one pass.
@@ -22,6 +26,18 @@ import type { VerificationWidgetProps } from "../kit/types";
  * The score is shown because these have right answers — unlike everything else
  * in 2.4 — but it records nothing and completes nothing: the exercise is
  * optional and unbridged like the rest of the section's labs.
+ *
+ * The options are shuffled. Authored, four of the five answers were B, which
+ * is a pattern a learner can read off the page instead of the fragment. The
+ * order is seeded on each question's own id, so it is stable for everybody and
+ * across visits (src/lib/shuffle.ts says why), and the pick is stored by
+ * choice id, so nothing about the shuffle reaches storage.
+ *
+ * Two things had to move with it. The badge shows the letter of the SLOT, not
+ * the choice's id — the ids happen to be a..d and printing them shuffled would
+ * be a list labelled B, D, A, C. And the explanations used to say "A and C are
+ * real weaknesses"; a letter is a position, and positions are display now, so
+ * they name the options by what they say instead.
  */
 
 interface Saved {
@@ -57,6 +73,22 @@ export function PolicyQuickCheck({
   const [hydrated, setHydrated] = useState(false);
   const fired = useRef(initialCompleted);
 
+  // Seeded on the question id, so this is the same list on the server, on the
+  // client, and on the learner's next visit. useMemo is for the work, not for
+  // the stability — the seed already guarantees that.
+  const shown = useMemo(
+    () =>
+      QUICK_QUESTIONS.map((question) => ({
+        question,
+        choices: shuffleAnswerOptions(
+          question.id,
+          question.choices,
+          (c) => c.text,
+        ).map((s) => s.item),
+      })),
+    [],
+  );
+
   useEffect(() => {
     let restored = EMPTY;
     try {
@@ -90,7 +122,7 @@ export function PolicyQuickCheck({
   return (
     <div className="not-prose my-6 space-y-4">
       <ol className="space-y-3">
-        {QUICK_QUESTIONS.map((question, index) => {
+        {shown.map(({ question, choices }, index) => {
           const pick = saved.picks[question.id];
           const correct = pick === question.answerId;
           return (
@@ -129,7 +161,7 @@ export function PolicyQuickCheck({
                 role="radiogroup"
                 aria-label={question.stem}
               >
-                {question.choices.map((choice) => {
+                {choices.map((choice, slot) => {
                   const chosen = pick === choice.id;
                   const isAnswer = choice.id === question.answerId;
                   return (
@@ -162,7 +194,7 @@ export function PolicyQuickCheck({
                       )}
                     >
                       <span className="border-border mt-0.5 flex size-5 shrink-0 items-center justify-center rounded-full border font-mono text-[11px] uppercase">
-                        {choice.id}
+                        {SLOT[slot]}
                       </span>
                       <span>{choice.text}</span>
                     </button>

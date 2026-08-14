@@ -66,7 +66,7 @@ export const QUICK_QUESTIONS: QuickQuestion[] = [
     ],
     answerId: "b",
     explanation:
-      "A and C are real weaknesses and neither decides whether anything reaches the outside. The authorization requirement does: the party that would be implicated holds the gate. D is simply false as stated — external reporting can be scoped and confidential.",
+      "The missing anonymity guarantee and the General Counsel's technical expertise are real weaknesses, and neither decides whether anything reaches the outside. The authorization requirement does: the party that would be implicated holds the gate. And external reporting does not necessarily compromise confidential information — it can be scoped.",
   },
   {
     id: "route",
@@ -143,7 +143,7 @@ export const QUICK_QUESTIONS: QuickQuestion[] = [
     ],
     answerId: "b",
     explanation:
-      "Anonymity is a property of the channel, not of the claim. A treats it as evidence about truth, which is the error this fragment exists to catch; C is the opposite of what anonymity costs — following up is harder, not easier; D confuses one route of retaliation with all of them.",
+      "Anonymity is a property of the channel, not of the claim. Weighting anonymous reports down treats it as evidence about truth, which is the error this fragment exists to catch; going back to the source is the opposite of what anonymity costs — following up is harder, not easier; and being unable to identify the reporter closes one route of retaliation, not all of them.",
   },
   {
     id: "threshold",
@@ -171,7 +171,7 @@ export const QUICK_QUESTIONS: QuickQuestion[] = [
     ],
     answerId: "b",
     explanation:
-      "The provision says what a report may start, not what it proves — that is the whole distinction. C and D read things into it that are not there: it is silent on what happens to other reports, and silent on what else may trigger a measure.",
+      "The provision says what a report may start, not what it proves — that is the whole distinction. Discarding reports judged not credible, and treating a report as the only possible trigger, both read things into it that are not there: it is silent on what happens to other reports, and silent on what else may trigger a measure.",
   },
 ];
 

@@ -2,6 +2,7 @@
 
 import { useMemo, useState, type CSSProperties } from "react";
 import { ArrowRight, Check } from "lucide-react";
+import { shuffleAnswerOptions } from "@/lib/shuffle";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -510,6 +511,20 @@ function QuizBody({
   );
   const graded = answered !== null;
 
+  /**
+   * Shuffled for display only. Authored, every one of these fifteen questions
+   * had a correct option sitting first, which taught the phrase-quiz more
+   * about our habits than about the treaty.
+   *
+   * `picks` keeps holding AUTHORED indices — it is what `answered.picked`
+   * restores from, so a learner returning to a graded phrase must find the
+   * same options ticked. Everything the grader touches is `from`.
+   */
+  const shown = useMemo(
+    () => shuffleAnswerOptions(`protocol-actors:${id}`, quiz.opts, (o) => o.text),
+    [id, quiz],
+  );
+
   function toggle(i: number) {
     if (graded) return;
     setPicks((prev) => {
@@ -544,8 +559,8 @@ function QuizBody({
       )}
 
       <div className="flex flex-col gap-2">
-        {quiz.opts.map((o, i) => {
-          const chose = picks.has(i);
+        {shown.map(({ item: o, from }) => {
+          const chose = picks.has(from);
           // grading classes
           let stateCls = "";
           let tag = "";
@@ -572,7 +587,7 @@ function QuizBody({
 
           return (
             <label
-              key={i}
+              key={from}
               className={cn(
                 "flex gap-3 rounded-lg border p-3 text-sm leading-snug transition-colors",
                 graded
@@ -586,7 +601,7 @@ function QuizBody({
               <Checkbox
                 checked={chose}
                 disabled={graded}
-                onCheckedChange={() => toggle(i)}
+                onCheckedChange={() => toggle(from)}
                 className="mt-0.5 shrink-0"
                 aria-label={o.text}
               />

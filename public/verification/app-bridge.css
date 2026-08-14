@@ -431,7 +431,16 @@
   background: var(--primary);
 }
 
-/* The introducing paragraph, as the card's red header. */
+/* The introducing paragraph, as the card's red header.
+
+   Trap: the header and its list must share one width, and the generic
+   64ch measure cannot give them that — ch resolves against the element's
+   own font, and this paragraph is semibold, whose wider "0" computes
+   ~30px past the regular-weight list. It overhung the seam it is meant
+   to join. --vt-measure (registered below) computes 64ch once on
+   .lesson-body at the body's regular weight, so both halves of the card
+   take the same length; without @property support the var resolves here
+   as plain 64ch and the page degrades to the old overhang, never breaks. */
 :root[data-theme]
   .lesson-body
   p:not(.not-prose *):has(+ ul:not(li ul) > li:nth-child(4)) {
@@ -442,6 +451,15 @@
   border-radius: 28px 28px 0 0;
   color: var(--brand-ink, var(--primary));
   font-weight: 600;
+  max-inline-size: var(--vt-measure, 64ch);
+}
+@property --vt-measure {
+  syntax: "<length>";
+  inherits: true;
+  initial-value: 0px;
+}
+:root[data-theme] .lesson-body {
+  --vt-measure: 64ch;
 }
 :root[data-theme]
   .lesson-body

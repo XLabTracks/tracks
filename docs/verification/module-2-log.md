@@ -467,3 +467,9 @@ house's italic size line (`_N cases · about N minutes · …_`) inside.
 
 Closed as decided by the owner, so the next session does not re-raise it:
 2.4 gets no memo-desk slot. Module 2's written outputs are 2.1 and 2.3.
+
+Question 1 of the policy-on-paper deck now carries the owner's later wording —
+"What underlying institutional incentives do these rules create?" — replacing
+the plan's longer "What incentives does this combination of rules, history, and
+unresolved authority create?". Same subject; the shorter one puts the rules in
+the sentence, which is what the learner has just spent ten minutes marking.

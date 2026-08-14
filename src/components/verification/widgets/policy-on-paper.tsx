@@ -124,9 +124,9 @@ export function PolicyOnPaper({}: VerificationWidgetProps) {
         placeholder="Answer as you go — the tabs below are what you are answering from."
         intro={
           <p className="text-muted-foreground text-sm leading-relaxed">
-            These are the two questions the block leaves you with. Read the
-            tabs below against them, and write here whenever you have
-            something. Nothing is graded.
+            The first is what this block is for; the second is what it would
+            take to answer it with evidence. Read the tabs below against them,
+            and write here whenever you have something. Nothing is graded.
           </p>
         }
         onComplete={() => {}}

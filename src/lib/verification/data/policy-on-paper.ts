@@ -121,7 +121,8 @@ export interface PolicyCompany {
    the Sources spoiler — after the letters have been cashed out. While the
    learner is still marking, no row carries a citation at all. */
 const ANTHROPIC_POLICY = {
-  label: "Anthropic, RSP Noncompliance Reporting and Anti-Retaliation Policy (PDF)",
+  label:
+    "Anthropic, RSP Noncompliance Reporting and Anti-Retaliation Policy (PDF)",
   href: "https://www-cdn.anthropic.com/b7a5629e40b391b2adfb4cc8c0888ac9d6bfddf6/RSP%20Noncompliance%20Reporting%20and%20Anti-Retaliation%20Policy.pdf",
 };
 const FLI = {
@@ -281,8 +282,7 @@ export const POLICY_DEMANDS: DemandTab = {
       text: "No retaliation for public disclosure once the other channels have failed.",
     },
   ],
-  question:
-    "If these were satisfied, what would that change structurally?",
+  question: "If these were satisfied, what would that change structurally?",
   cite: RIGHT_TO_WARN,
 };
 
@@ -299,14 +299,20 @@ export const POLICY_DEMANDS: DemandTab = {
  *
  * The title IS the question — no short label standing in for it, no body
  * paragraph elaborating it. Both are hers and neither needs help.
+ *
+ * Question 1 carries her later wording, which is the one that names what the
+ * block is for: not the incentives of a situation but the incentives THESE
+ * RULES create. It replaced "What incentives does this combination of rules,
+ * history, and unresolved authority create?" from the original plan — same
+ * subject, and the shorter one puts the rules in the sentence where the
+ * learner has just spent ten minutes marking them.
  */
 export const POLICY_QUESTIONS: WorkspaceQuestion[] = [
   {
     id: "incentives",
     n: 1,
     requirement: "required",
-    title:
-      "What incentives does this combination of rules, history, and unresolved authority create?",
+    title: "What underlying institutional incentives do these rules create?",
     body: [],
   },
   {
@@ -322,11 +328,12 @@ export const POLICY_QUESTIONS: WorkspaceQuestion[] = [
 /** Its own localStorage document, as every workspace has. Permanent. */
 export const POLICY_NOTES_KEY = "v-policy-on-paper-notes:v1";
 
-export const POLICY_GROUPS: { id: PolicyStatement["group"]; label: string }[] = [
-  { id: "published", label: "Published process" },
-  { id: "context", label: "Documented context" },
-  { id: "unverified", label: "Still unverified" },
-];
+export const POLICY_GROUPS: { id: PolicyStatement["group"]; label: string }[] =
+  [
+    { id: "published", label: "Published process" },
+    { id: "context", label: "Documented context" },
+    { id: "unverified", label: "Still unverified" },
+  ];
 
 /**
  * What the Sources spoiler prints: per letter, who it was and every document

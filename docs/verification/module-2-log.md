@@ -564,3 +564,26 @@ lists — one fails on corroboration, one on a legal barrier between the
 authorised recipient and the verifier — and they are deliberately unalike so
 the pair cannot read as a template. They are two objects in
 data/construct-case.ts.
+
+**2.4.2 shipped: Read the Rules, Infer the System.** Six rules stated plainly
+with nothing said about them and no rule pre-labelled — a page that flagged
+rule 3 would have done the exercise. Three rows, and a row counts only when it
+cites rules AND says what follows: the citation is what makes it an inference
+rather than an opinion. Rules are cited by pressing their numbers, multi-select,
+because most of the interesting consequences here come from a pair (1+4 is the
+one that closes the loop) and a single-select would have hidden exactly that.
+The institutional vocabulary is unreachable before Submit, per her constraint;
+after it, her two-line reveal, the annotated policy, and her ≤40-word second
+step with a live counter.
+
+Mine there and flagged in the data file: the six per-rule annotations. Her spec
+says to annotate the policy with several possible inferred mechanisms and lists
+them — managerial chokepoint, weak anonymity, career cost, dependence on
+employer authorization, suppression before an independent verifier, formal
+versus usable channel. Each annotation is one of those against the rule or pair
+that produces it, and adds nothing she did not name.
+
+The route reconstruction shipped an hour earlier for the same section is now
+unmounted, along with the rest of the old lab. It was the right fix to the wrong
+question: the spec replaces the section's operation rather than improving its
+quiz, so the file stays in the repo and the id now points at the inference.

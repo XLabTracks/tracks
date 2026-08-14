@@ -126,11 +126,12 @@ const ConstructCase = dynamic<VerificationWidgetProps>(
   () => import("./construct-case").then((module) => module.ConstructCase),
   { loading: WidgetLoading },
 );
-const HumanReportingProtection = dynamic<VerificationWidgetProps>(
-  () =>
-    import("./human-reporting-protection").then(
-      (module) => module.HumanReportingProtection,
-    ),
+// 2.4.2's exercise is now Read the Rules, Infer the System; the id stays so
+// the lesson mapping, the progress key and the finish event do not move.
+// human-reporting-protection.tsx (the route reconstruction) and its data and
+// engine remain in the repo, unmounted.
+const InferTheSystem = dynamic<VerificationWidgetProps>(
+  () => import("./infer-the-system").then((module) => module.InferTheSystem),
   { loading: WidgetLoading },
 );
 const WhistleblowerLevers = dynamic<VerificationWidgetProps>(
@@ -207,7 +208,7 @@ export const verificationWidgets: Record<
   "actor-map": ActorMap,
   "field-map": FieldMap,
   "human-insiders": ConstructCase,
-  "human-reporting-protection": HumanReportingProtection,
+  "human-reporting-protection": InferTheSystem,
   "whistleblower-levers": WhistleblowerLevers,
   "human-audits-inspections": HumanAuditsInspections,
   "human-institutions-judgment": HumanInstitutionsJudgment,

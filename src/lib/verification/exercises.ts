@@ -68,7 +68,7 @@ export const verificationExercises: VerificationExerciseDef[] = [
   // replaced it. Its widget, engine, data, and tests remain in the repo.
   { id: "drills-games", title: "Drill Bench: Evasion, Regime, Position", bridged: true },
   { id: "human-insiders", title: "Construct a Case", bridged: true },
-  { id: "human-reporting-protection", title: "Follow the Report", bridged: true },
+  { id: "human-reporting-protection", title: "Read the Rules, Infer the System", bridged: true },
   // Unbridged: a three-minute assignment inside 2.4.2, whose finish event is
   // "Follow the Report" above. Two bridged widgets in one lesson would end
   // the section at whichever fired first.

@@ -42,6 +42,13 @@ interface Saved {
 
 const EMPTY: Saved = { values: {}, submitted: false };
 
+/** Three severities, the same three the writing desk uses. */
+const DOT: Record<"ok" | "warn" | "bad", string> = {
+  ok: "mt-2 size-1.5 shrink-0 rounded-full bg-[var(--ok,theme(colors.emerald.600))]",
+  warn: "mt-2 size-1.5 shrink-0 rounded-full bg-amber-500",
+  bad: "mt-2 size-1.5 shrink-0 rounded-full bg-[var(--no,theme(colors.red.600))]",
+};
+
 export function countWords(text: string): number {
   return (text.trim().match(/[^\s]+/g) ?? []).length;
 }
@@ -54,6 +61,7 @@ export function ConstructedResponse({
   words,
   submitLabel = "Submit",
   onSubmit,
+  checks,
 }: {
   /** localStorage document for this exercise. Permanent — learner work. */
   storageKey: string;
@@ -66,6 +74,16 @@ export function ConstructedResponse({
   submitLabel?: string;
   /** Fired once, on the first submit — the section's finish event. */
   onSubmit?: () => void;
+  /**
+   * The desk rail: transparent rules run over the answer as it is written.
+   * Given the current values, returns rows that each name what they looked
+   * for. Nothing here judges the answer — see case-checks.ts.
+   */
+  checks?: (values: Record<string, string>) => {
+    id: string;
+    severity: "ok" | "warn" | "bad";
+    message: string;
+  }[];
 }) {
   const [saved, setSaved] = useState<Saved>(EMPTY);
   const [hydrated, setHydrated] = useState(false);
@@ -182,10 +200,29 @@ export function ConstructedResponse({
         )}
       </div>
 
-      {!saved.submitted && started && !complete ? (
-        <p className="text-muted-foreground text-xs">
-          Every field is part of the case. Fill them all before submitting.
-        </p>
+      {/* The desk rail, live while writing. It is lint, not marking: it can
+          see that a failure point gives no reason, and it cannot see whether
+          the case holds together — which is why every row says what it looked
+          for, and why the five criteria are marked by hand after submitting. */}
+      {checks && !saved.submitted && started ? (
+        <section className="border-border rounded-xl border p-4">
+          <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
+            <h4 className="text-muted-foreground font-mono text-[11px] tracking-[0.14em] uppercase">
+              Desk checks
+            </h4>
+            <p className="text-muted-foreground text-xs">
+              Rules, not marking — each says what it looked for.
+            </p>
+          </div>
+          <div className="mt-3 space-y-2">
+            {checks(saved.values).map((row) => (
+              <p key={row.id} className="flex gap-2.5 text-sm leading-relaxed">
+                <span aria-hidden className={DOT[row.severity]} />
+                <span>{row.message}</span>
+              </p>
+            ))}
+          </div>
+        </section>
       ) : null}
 
       {saved.submitted ? reveal : null}

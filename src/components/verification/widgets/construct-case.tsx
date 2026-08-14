@@ -12,6 +12,7 @@ import {
   WORKED_CASES,
 } from "@/lib/verification/data/construct-case";
 import { CONSTRUCT_CASE_KEY } from "@/lib/verification/data/marking-keys";
+import { runCaseChecks } from "@/lib/verification/case-checks";
 import { ConstructedResponse } from "../kit/constructed-response";
 import { MarkingKeyPanel } from "../kit/marking-key";
 import type { VerificationWidgetProps } from "../kit/types";
@@ -42,6 +43,7 @@ export function ConstructCase({
       fields={CASE_FIELDS}
       words={CASE_WORDS}
       submitLabel="Submit the case"
+      checks={(values) => runCaseChecks(values, CASE_WORDS)}
       onSubmit={() => {
         if (fired.current) return;
         fired.current = true;

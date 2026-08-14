@@ -54,6 +54,8 @@
  * research and the primary document was never opened, so it is not here.
  */
 
+import type { WorkspaceQuestion } from "@/lib/verification/question-workspace";
+
 /** Her five provenance labels, in the order the learner sees them. */
 export type Provenance =
   | "published-rule"
@@ -284,11 +286,41 @@ export const POLICY_DEMANDS: DemandTab = {
   cite: RIGHT_TO_WARN,
 };
 
-/** Her two closing questions, verbatim. */
-export const POLICY_QUESTIONS = [
-  "What incentives does this combination of rules, history, and unresolved authority create?",
-  "What additional evidence would be needed to conclude that this reporting institution is independent, competent, and usable?",
+/**
+ * Her two closing questions, verbatim, as the house's written-answer deck.
+ *
+ * They are the analysis this whole block is for, so they are on the page from
+ * the moment it opens — not behind the tabs. That is `QuestionWorkspace`'s own
+ * rule and the reason it exists: a question you only meet after the reading is
+ * a question that sends you back through the reading. Here it was worse than
+ * that, because the tabs commit: a learner who marked all three and only then
+ * met the questions could not go back and re-read a row with the question in
+ * mind.
+ *
+ * The title IS the question — no short label standing in for it, no body
+ * paragraph elaborating it. Both are hers and neither needs help.
+ */
+export const POLICY_QUESTIONS: WorkspaceQuestion[] = [
+  {
+    id: "incentives",
+    n: 1,
+    requirement: "required",
+    title:
+      "What incentives does this combination of rules, history, and unresolved authority create?",
+    body: [],
+  },
+  {
+    id: "evidence",
+    n: 2,
+    requirement: "required",
+    title:
+      "What additional evidence would be needed to conclude that this reporting institution is independent, competent, and usable?",
+    body: [],
+  },
 ];
+
+/** Its own localStorage document, as every workspace has. Permanent. */
+export const POLICY_NOTES_KEY = "v-policy-on-paper-notes:v1";
 
 export const POLICY_GROUPS: { id: PolicyStatement["group"]; label: string }[] = [
   { id: "published", label: "Published process" },

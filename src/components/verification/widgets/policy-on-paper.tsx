@@ -10,11 +10,13 @@ import {
   POLICY_COMPANIES,
   POLICY_DEMANDS,
   POLICY_GROUPS,
+  POLICY_NOTES_KEY,
   POLICY_QUESTIONS,
   POLICY_SOURCES,
   PROVENANCE,
   type Provenance,
 } from "@/lib/verification/data/policy-on-paper";
+import { QuestionWorkspace } from "../kit/question-workspace";
 import type { VerificationWidgetProps } from "../kit/types";
 
 /**
@@ -37,26 +39,28 @@ import type { VerificationWidgetProps } from "../kit/types";
  * marks a formality once the pattern is visible. The third tab is not marked
  * at all — it is answered.
  *
- * The written answers are hers, verbatim, and are never graded — no model, no
- * key. They persist with the marks.
+ * The questions are hers, verbatim, and are never graded — no model, no key.
+ * The two closing ones stand above the tabs in the house's written-answer
+ * deck, visible from the moment the block opens, because they are the work
+ * the tabs are material for; the demands tab's question sits with its four
+ * demands and is what commits that tab.
  */
 
 interface Saved {
   marks: Record<string, Provenance>;
   committed: string[];
-  answers: Record<number, string>;
-  /** The demands tab's one answer. */
+  /** The demands tab's one answer. The other two live in the notes deck. */
   demandAnswer: string;
 }
 
 const STORAGE_KEY = "v-policy-on-paper:v1";
-const EMPTY: Saved = { marks: {}, committed: [], answers: {}, demandAnswer: "" };
+const EMPTY: Saved = { marks: {}, committed: [], demandAnswer: "" };
 const KINDS = new Set(PROVENANCE.map((p) => p.id));
 const ALL = POLICY_COMPANIES.flatMap((c) => c.statements);
 const TAB_IDS = [...POLICY_COMPANIES.map((c) => c.id), POLICY_DEMANDS.id];
 
 function prune(raw: unknown): Saved {
-  const out: Saved = { marks: {}, committed: [], answers: {}, demandAnswer: "" };
+  const out: Saved = { marks: {}, committed: [], demandAnswer: "" };
   if (typeof raw !== "object" || raw === null) return out;
   const box = raw as Partial<Saved>;
   for (const s of ALL) {
@@ -67,12 +71,6 @@ function prune(raw: unknown): Saved {
   }
   if (Array.isArray(box.committed)) {
     out.committed = box.committed.filter((id) => TAB_IDS.includes(id));
-  }
-  if (box.answers && typeof box.answers === "object") {
-    POLICY_QUESTIONS.forEach((_, i) => {
-      const v = (box.answers as Record<number, unknown>)[i];
-      if (typeof v === "string") out.answers[i] = v;
-    });
   }
   if (typeof box.demandAnswer === "string") out.demandAnswer = box.demandAnswer;
   return out;
@@ -114,6 +112,26 @@ export function PolicyOnPaper({}: VerificationWidgetProps) {
 
   return (
     <div className="not-prose my-6 space-y-4">
+      {/* The analysis is the point of the block, so its two questions are on
+          the page from the moment it opens — before the tabs, not behind
+          them. Hiding them until every tab was committed meant a learner met
+          them only after the marking had been sealed, with no way to re-read
+          a row against the question. Answers save as you go. */}
+      <QuestionWorkspace
+        storageKey={POLICY_NOTES_KEY}
+        rule={{ kind: "any", count: POLICY_QUESTIONS.length }}
+        questions={POLICY_QUESTIONS}
+        placeholder="Answer as you go — the tabs below are what you are answering from."
+        intro={
+          <p className="text-muted-foreground text-sm leading-relaxed">
+            These are the two questions the block leaves you with. Read the
+            tabs below against them, and write here whenever you have
+            something. Nothing is graded.
+          </p>
+        }
+        onComplete={() => {}}
+      />
+
       <div role="tablist" aria-label="Regime" className="flex flex-wrap gap-2">
         {[...POLICY_COMPANIES, POLICY_DEMANDS].map((c) => {
           const active = c.id === tab;
@@ -148,34 +166,6 @@ export function PolicyOnPaper({}: VerificationWidgetProps) {
       ) : null}
 
       {onDemands ? <DemandsTab saved={saved} persist={persist} /> : null}
-
-      {/* Her two questions, once both regimes and the demands are on the
-          table: they are asked of the combination, so they open when the
-          comparison exists. */}
-      {done ? (
-        <div className="border-border space-y-4 rounded-xl border p-4">
-          {POLICY_QUESTIONS.map((q, i) => (
-            <div key={q} className="space-y-2">
-              <p className="text-sm font-medium">{q}</p>
-              <Textarea
-                rows={4}
-                value={saved.answers[i] ?? ""}
-                onChange={(e) =>
-                  persist({
-                    ...saved,
-                    answers: { ...saved.answers, [i]: e.target.value },
-                  })
-                }
-                aria-label={q}
-              />
-            </div>
-          ))}
-          <p className="text-muted-foreground text-xs">
-            Nothing here is graded. These are the two questions the section
-            leaves you with.
-          </p>
-        </div>
-      ) : null}
 
       {/* The reveal, and the only place the letters are cashed out: who each
           one was, and every document its rows were read out of. It opens
@@ -388,9 +378,8 @@ function DemandsTab({
         <Textarea
           rows={4}
           value={saved.demandAnswer}
-          onChange={(e) =>
-            persist({ ...saved, demandAnswer: e.target.value })
-          }
+          onChange={(e) => persist({ ...saved, demandAnswer: e.target.value })}
+          placeholder="Who would have to know something they do not know now, and who would have to answer for it?"
           aria-label={POLICY_DEMANDS.question}
         />
       </div>

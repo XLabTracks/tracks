@@ -418,3 +418,14 @@ was never opened, so it is not in the exercise.
 Dropped in the same edit, at the owner's instruction: the two further optional
 extensions her plan sketched for 2.4.2 and 2.4.3 ("Break the chain", "Trigger,
 not finding"). Neither was ever built; nothing references them.
+
+Corrected the same day, on the owner's reading of the built block: the two
+analysis questions were behind the completion gate, so the block opened with
+nowhere to write. They now stand above the tabs in the house's written-answer
+deck (`QuestionWorkspace` — placeholder, explicit Save answer, "N of 2
+answered", its own permanent localStorage document), which is the component's
+own rule: a question you meet only after the reading is a question that sends
+you back through it, and here it was worse, because the tabs commit — a
+learner who marked all three and only then met the questions could not go back
+and re-read a row against them. `policy-on-paper.test.ts` pins that the deck
+renders before anything reads `done`.

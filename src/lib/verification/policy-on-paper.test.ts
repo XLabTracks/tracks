@@ -5,6 +5,7 @@ import { describe, expect, it } from "vitest";
 import {
   POLICY_COMPANIES,
   POLICY_DEMANDS,
+  POLICY_QUESTIONS,
   POLICY_SOURCES,
 } from "./data/policy-on-paper";
 
@@ -72,6 +73,22 @@ describe("policy-on-paper", () => {
     expect(last.id).toBe("b-retracted");
     expect(last.kind).toBe("self-report");
     expect(last.text).toMatch(/May 2024/);
+  });
+
+  it("puts the analysis questions on the page before anything is gated", () => {
+    // The defect this pins: the two questions used to appear only once every
+    // tab was committed, so a learner met the analysis after the marking had
+    // been sealed. They belong above the tabs, and nothing about them may
+    // depend on `done`.
+    const src = readFileSync(WIDGET, "utf8");
+    const deck = src.indexOf("<QuestionWorkspace");
+    const gate = src.indexOf("{done ?");
+    expect(deck).toBeGreaterThan(-1);
+    expect(gate).toBeGreaterThan(-1);
+    expect(deck).toBeLessThan(gate);
+    expect(POLICY_QUESTIONS.every((q) => q.requirement === "required")).toBe(
+      true,
+    );
   });
 
   it("asks the demands question rather than marking them", () => {

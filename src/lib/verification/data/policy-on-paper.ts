@@ -161,10 +161,10 @@ export const POLICY_COMPANIES: PolicyCompany[] = [
       {
         id: "a-informal",
         group: "published",
-        text: "An informal conversation with a senior leader is not a report, and triggers no investigation, unless that leader confirms they filed one.",
+        text: "An informal conversation with a senior leader is not a report and triggers no investigation, until either the employee files one through a named channel or that leader confirms they have filed one on the employee’s behalf.",
         kind: "published-rule",
         cite: ANTHROPIC_POLICY,
-        note: "A published rule can still be the gap: this one decides which conversations exist on the record.",
+        note: "A published rule can still be the gap: this one decides which conversations exist on the record. It has two ways out and the burden of both is on the employee — file it yourself, or be told the leader did.",
       },
       {
         id: "a-external",
@@ -187,7 +187,7 @@ export const POLICY_COMPANIES: PolicyCompany[] = [
         text: "How many reports the channel receives, and how they are resolved.",
         kind: "not-established",
         cite: FLI,
-        note: "The index treats publishing this as a separate indicator from having a policy at all.",
+        note: "The index scores four things about governance here — protection, track record, policy quality, policy transparency — and none of them is this. The policy does not report it either, so nobody outside the company can say whether the channel is used.",
       },
     ],
   },

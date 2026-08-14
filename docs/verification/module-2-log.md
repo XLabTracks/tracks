@@ -775,3 +775,40 @@ the letter, the overclaim named and why it does not follow.
 
 Both stood-down widgets (policy-critique, build-institution) keep their files
 and are marked unmounted at the top.
+
+### 2.4.4 restored, and its sources re-verified (2026-08-14)
+
+The generic Companies A/B built from the reconstructed feature lists is
+unmounted; 2.4.4 is the recovered exercise again — two real companies, censored
+behind letters while you judge them, each statement read out of a document, the
+third tab the June 2024 letter's demands, and one Sources spoiler at the end
+that cashes out which letter was which company and what every row was read out
+of. It was never lost: the file sat in the repo unmounted, and history carries
+three versions (`1962a27` with a Company C, `25441d8` where C became the demands
+tab, `d7fa6e2` with the owner's wording of the main question).
+
+Every source re-checked against the document, not against memory. Two rows did
+not survive it:
+
+- **Company A's informal-conversation rule was stated too strictly.** The policy
+  gives two ways an informal conversation becomes a report — the employee files
+  one through a named channel, OR the senior leader confirms they filed one on
+  their behalf. The row named only the second, which made the rule sound like a
+  trap rather than a burden. Both are in it now.
+- **The note on the unpublished usage numbers cited the index for something the
+  index does not say.** Its governance domain scores four things — whistleblowing
+  protection, reporting culture and track record, policy quality, policy
+  transparency — and none of them is how many reports a channel receives. The
+  note now says what the index does score and stops there.
+
+Verified unchanged: the anonymous third-party channel and the company's
+statement that it cannot unmask an anonymous reporter (both verbatim in the
+PDF); the external-reporting clause (verbatim); the B in governance and
+accountability, highest of nine (the next two score C-); the lifetime bar on
+criticism and the NDA covering its own existence ("Even acknowledging that the
+NDA exists is a violation of it", Vox 18 May 2024, via the aggregator); the
+equity risk; the SEC complaint's allegations (Washington Post 13 July 2024),
+which the row already marks as a complaint rather than a finding; and the
+retraction memo — "OpenAI has not canceled, and will not cancel, any Vested
+Units", 24 May 2024. The CNBC link returns 403 to a datacenter fetch, as RAND
+and DFAT do; the memo's wording was confirmed through the syndicated copies.

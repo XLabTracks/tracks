@@ -151,8 +151,11 @@ const SameClaim = dynamic<VerificationWidgetProps>(
 );
 // 2.4.4's exercise is now Build the Institution; the id stays so the lesson
 // mapping, the progress key and the finish event do not move.
-const CompaniesAB = dynamic<VerificationWidgetProps>(
-  () => import("./companies-ab").then((module) => module.CompaniesAB),
+// 2.4.4 is the recovered exercise: two real companies read from their own
+// documents, then the letter. companies-ab.tsx — the same comparison on
+// generic feature lists — stays in the repo, unmounted.
+const PolicyOnPaper = dynamic<VerificationWidgetProps>(
+  () => import("./policy-on-paper").then((module) => module.PolicyOnPaper),
   { loading: WidgetLoading },
 );
 const CloudEvidenceDrill = dynamic<VerificationWidgetProps>(
@@ -203,7 +206,7 @@ export const verificationWidgets: Record<
   "human-reporting-protection": PolicyQuickCheck,
   "whistleblower-levers": WhistleblowerLevers,
   "human-audits-inspections": SameClaim,
-  "human-institutions-judgment": CompaniesAB,
+  "human-institutions-judgment": PolicyOnPaper,
   "cloud-evidence-drill": CloudEvidenceDrill,
 };
 

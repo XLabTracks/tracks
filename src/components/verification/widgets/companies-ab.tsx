@@ -24,6 +24,11 @@ import { MarkingKeyPanel } from "../kit/marking-key";
 import type { VerificationWidgetProps } from "../kit/types";
 
 /**
+ * UNMOUNTED. 2.4.4 is the recovered exercise (policy-on-paper.tsx): the same
+ * comparison, but on two real companies read out of their own documents
+ * rather than on generic feature lists. Kept because the generic pair is a
+ * cleaner teaching object if the real one ever has to come down.
+ *
  * 2.4.4 — Companies A and B, then the letter.
  *
  * Part I is a comparison of two regimes that both look defensible: the learner

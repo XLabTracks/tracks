@@ -52,10 +52,11 @@
      metadata one step down, but let substantive widget copy read like the
      lesson it belongs to.
 
-     These values point at Verification's scale rather than restating it in
-     rem, giving prose, widgets and page chrome one source of truth. Colour
-     themes deliberately leave that scale alone; text enlargement belongs to
-     the browser or a future explicit reading-size control, not to contrast. */
+     These values must point at Verification's scale rather than restating it
+     in rem. High contrast re-solves every --fs-* step at 200%; fixed rem
+     values left the entire React half of the course at its ordinary size
+     while the static chrome doubled around it. Mapping the complete Tailwind
+     scale here gives prose, widgets and page chrome one source of truth. */
   --text-xs: var(--fs-sm);
   --text-xs--line-height: 1.5;
   --text-sm: var(--fs-md);
@@ -91,6 +92,85 @@
   --sidebar-ring: var(--ring);
 }
 
+/* The mapped scale above only reaches text that asks for a size. Anything
+   with no size class at all inherits from the body, which was the one thing
+   the bridge never pointed at Verification's scale — so in low-vision mode a
+   page's untagged copy (the track page's course description, the skip link)
+   stayed at 16px while everything around it doubled.
+
+   --fs-md is 16px in day and night, so this changes nothing outside the
+   low-vision mode; it is 32px there, which is the whole point.
+
+   On `body` and deliberately not on `:root`: rem resolves against the root,
+   and Tailwind sizes its entire spacing scale in rem. Moving the root font
+   size would silently double every margin, gap and padding in the React half
+   of the course — which is the `zoom: 2` mistake in another costume. Only
+   inherited TEXT should move. */
+:root[data-theme] body {
+  font-size: var(--fs-md);
+}
+
+/* Sizes that opted out of the token scale, put back into it for low-vision
+   mode only.
+
+   Two ways to opt out and both were in use. A Tailwind arbitrary value
+   (`text-[11px]`) compiles to a literal declaration, so the --text-* mapping
+   above never sees it; there are a few hundred of them across the widgets, and
+   rewriting each to a token would move sizes in day and night too, which is a
+   different change than the one being asked for. A CSS length in rem resolves
+   against the ROOT font size, which this mode deliberately does not touch, so
+   it also stands still.
+
+   Every step of the --fs-* scale is re-solved at exactly 2x in this mode
+   (12->24, 13->26, 16->32, 38->76), so doubling a stray literal is not a
+   guess — it is the same transform the tokens get, applied to the values that
+   escaped them. A micro-label stays a micro-label relative to its neighbours.
+
+   The list is closed and short by construction: `grep -oE "text-\[[0-9.]+px\]"`
+   over src/ prints every distinct value in the codebase. A new one belongs
+   here, or better, belongs written as a token in the first place. */
+:root[data-theme="contrast"] {
+  --lv-8: 16px;
+  --lv-8_5: 17px;
+  --lv-9: 18px;
+  --lv-10: 20px;
+  --lv-10_5: 21px;
+  --lv-11: 22px;
+  --lv-12: 24px;
+  --lv-12_5: 25px;
+  --lv-13: 26px;
+  --lv-13_5: 27px;
+  --lv-15: 30px;
+  --lv-17: 34px;
+}
+:root[data-theme="contrast"] [class~="text-[8px]"] { font-size: var(--lv-8); }
+:root[data-theme="contrast"] [class~="text-[8.5px]"] { font-size: var(--lv-8_5); }
+:root[data-theme="contrast"] [class~="text-[9px]"] { font-size: var(--lv-9); }
+:root[data-theme="contrast"] [class~="text-[10px]"] { font-size: var(--lv-10); }
+:root[data-theme="contrast"] [class~="text-[10.5px]"] { font-size: var(--lv-10_5); }
+:root[data-theme="contrast"] [class~="text-[11px]"] { font-size: var(--lv-11); }
+:root[data-theme="contrast"] [class~="text-[12px]"] { font-size: var(--lv-12); }
+:root[data-theme="contrast"] [class~="text-[12.5px]"] { font-size: var(--lv-12_5); }
+:root[data-theme="contrast"] [class~="text-[13px]"] { font-size: var(--lv-13); }
+:root[data-theme="contrast"] [class~="text-[13.5px]"] { font-size: var(--lv-13_5); }
+:root[data-theme="contrast"] [class~="text-[15px]"] { font-size: var(--lv-15); }
+:root[data-theme="contrast"] [class~="text-[17px]"] { font-size: var(--lv-17); }
+:root[data-theme="contrast"] [class~="text-[0.95rem]"] { font-size: var(--fs-md); }
+:root[data-theme="contrast"] [class~="text-[0.8rem]"] { font-size: var(--fs-sm); }
+
+/* The same escape, in the app's own stylesheet: these rules predate the token
+   scale and size in rem, so they held still while the page doubled around
+   them. Sidenotes are the reading apparatus of a paper and the facilitator
+   guide's small print carries its session timings — neither is decoration. */
+:root[data-theme="contrast"] :is(.sidenote, .sidenote-inline, .fg-html small) {
+  font-size: var(--fs-xs);
+}
+:root[data-theme="contrast"] .fg-html .mt {
+  font-size: var(--fs-2xs);
+}
+:root[data-theme="contrast"] .lesson-body pre {
+  font-size: var(--fs-xs);
+}
 :root[data-theme] .prose {
   --tw-prose-body: var(--foreground);
   --tw-prose-headings: var(--foreground);
@@ -235,12 +315,19 @@
   }
 }
 
-/* High contrast enlarges pointer targets, not text. Tailwind's compact fixed
-   heights therefore have to yield to the 44px floor without changing the
-   button label's normal single-line behaviour. */
+/* Tailwind's Button recipe deliberately fixes compact controls to h-7/h-8
+   and keeps their labels on one line. Both assumptions stop being true at
+   200% text: a 32px label cannot fit a 28px box, and a long action may be
+   wider than a 320px reading column. Preserve the single-line default in day
+   and night; in low-vision mode the box follows its content and the few labels
+   that cannot fit are allowed to make a clean second line instead of clipping
+   or widening the page. */
 :root[data-theme="contrast"] [class~="group/button"] {
+  flex-shrink: 1;
   height: auto;
+  max-width: 100%;
   min-height: 44px;
+  white-space: normal;
 }
 :root[data-theme="contrast"]
   [data-widget]
@@ -252,9 +339,61 @@
   height: auto;
 }
 
-/* Tables are the reflow exception, not their words. In high contrast each
-   column keeps a readable floor and the table uses its own overflow rail;
-   contrast may strengthen a boundary but must not change the page measure. */
+/* At 60px a single policy word can be wider than a phone's reading column.
+   Headings are flex items in the page header, so their automatic min-content
+   width otherwise widens the whole document before overflow-wrap gets a
+   chance to act. Focus reading also wraps each word in spans; applying the
+   break to the reading subtree keeps those wrappers from restoring the same
+   min-content floor inside lists and cards. */
+:root[data-theme="contrast"]
+  :where(.lesson-reader, .lesson-reader .lesson-body, main h1) {
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+:root[data-theme="contrast"] main h1 {
+  min-width: 0;
+  max-width: 100%;
+}
+
+/* Truncation is a density choice for the ordinary interface, never a
+   low-vision fallback. At 200% it was hiding names and descriptions in cards
+   whose boxes otherwise had room to grow. */
+:root[data-theme="contrast"] [class~="truncate"] {
+  overflow: visible;
+  text-overflow: clip;
+  white-space: normal;
+}
+:root[data-theme="contrast"] [class~="line-clamp-2"] {
+  display: block;
+  overflow: visible;
+  -webkit-box-orient: initial;
+  -webkit-line-clamp: unset;
+}
+
+/* The landscape is a genuine two-axis grid, so horizontal scrolling inside
+   its own frame is the accessible exception to page reflow. Its ordinary
+   square cells are sized for 11px labels, however; keeping that geometry at
+   24px clips the organisation names. Widen the grid and let each cell grow
+   vertically while preserving the axes and the local scroll container. */
+:root[data-theme="contrast"] .verification-landscape [role="grid"] {
+  min-width: 1100px;
+  grid-template-columns: minmax(220px, 1.15fr) repeat(4, minmax(200px, 1fr)) !important;
+}
+:root[data-theme="contrast"]
+  .verification-landscape
+  [role="grid"]
+  [class~="aspect-square"] {
+  min-height: 180px;
+  aspect-ratio: auto;
+  overflow: visible;
+}
+
+/* Tables are the reflow exception, not their words. Giving each column a
+   readable floor makes the table's own overflow rail grow instead of
+   squeezing a four-column source table into one letter per line. Focus
+   reading's word wrappers must not re-enable emergency word-breaking here;
+   the local horizontal scroll is precisely what preserves the row/column
+   relationship. */
 :root[data-theme="contrast"] .lesson-body table :is(th, td) {
   min-inline-size: 12ch;
   overflow-wrap: normal;
@@ -274,7 +413,7 @@
   background-color: var(--background) !important;
 }
 
-/* The static side already draws its high-contrast hairlines at 3px through
+/* The static side already draws its low-vision hairlines at 3px through
    --hairline. The app's generic lesson-table rules predate that token and use
    literal one-pixel rules, so lift the same structure here. */
 :root[data-theme="contrast"] .lesson-body table {

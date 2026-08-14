@@ -1161,3 +1161,49 @@ to 2.1/2.2/2.3/2.4 lesson routes; its six new external works sit in
 `citations.json` `pending` until their facts are verified. The mechanism-sort
 lane dots gained a ground-colour rim so overlapping placements stay separable
 (the draft's other bracketed ask).
+
+**Low-vision mode enlarges again, and now enlarges everything (2026-08-14,
+owner: "режим для слабовидящих не делает все больше anymore it was supposed
+to").** `d58c3c0` had removed it: the high-contrast theme used to re-solve the
+whole `--fs-*` scale at exactly 2x (12→24, 16→32, 38→76) and that commit
+deleted the scale along with every reflow release the doubling needed, leaving
+contrast-only colour and browser zoom.
+
+The argument it was removed on — contrast and magnification are separate needs,
+somebody may want edges without doubled labels — is a good argument about a
+general theme system and the wrong one here. There is one switch, and the
+owner's design is that it is the low-vision switch: picking it means "I cannot
+read this". Splitting it hands the person it exists for two settings and makes
+the one they find first do nothing for them. That reasoning is now written at
+the top of the block in theme.css, because the next session will find the same
+plausible argument.
+
+Reverted the CSS half of that commit and kept its component fixes (the sidebar
+sheet's responsive width, `line-clamp-3`, the drill's sequence id). Then closed
+the holes the original never covered, found by sweeping every Verification
+surface at 1280 and 320 and listing text still under 20px in the mode:
+
+- **Inherited text.** The bridge mapped every Tailwind `--text-*` token to the
+  scale, so anything that ASKS for a size scaled — but text with no size class
+  inherits from `body`, which nothing pointed at the scale. The track page's
+  course description and the skip link stayed at 16px while the page doubled.
+  `body { font-size: var(--fs-md) }` on themed routes: 16px in day and night,
+  32px here. On `body` and never `:root`, because rem resolves against the root
+  and Tailwind's whole spacing scale is rem — moving it would double every
+  margin and gap, which is the `zoom: 2` mistake wearing a different hat.
+- **Arbitrary values.** `text-[11px]` compiles to a literal and never sees the
+  token map; there are ~375 across the widgets, in twelve distinct values.
+  Rewriting them all would move sizes in day and night too, so the mode maps
+  the twelve instead — doubled, which is not a guess: every `--fs-*` step is
+  re-solved at exactly 2x, so a micro-label keeps its place relative to its
+  neighbours. Same for the three rem literals (`text-[0.95rem]`, the small
+  button's `text-[0.8rem]`, and globals.css's sidenote/facilitator rules).
+- **Three reflow failures at 320px**, all the same shape: a `display: flex`
+  row with no wrap whose children will not shrink (`.track-head`, `.card-top`),
+  and a grid item whose automatic minimum is its min-content, so a card widened
+  its own column (`.bank-grid > *`).
+
+Verified: every one of eleven Verification surfaces at 1280 and 320 now reports
+zero text under 20px in the mode and no sideways scroll, body copy goes 16→32
+and h1 30→60, and a full font-size snapshot of day against night is byte-identical
+before and after this change — nothing outside the mode moved.

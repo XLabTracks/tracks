@@ -197,20 +197,35 @@
   --shadow-soft-lg: 0 12px 40px rgba(0, 0, 0, 0.5);
 }
 
-/* High contrast is a colour-and-affordance mode, not a magnification mode.
-   Keeping those responsibilities separate is important: somebody may need
-   stronger edges without needing every navigation label doubled, and a
-   learner who does enlarge text must not get a second, hidden enlargement
-   merely by changing the palette.
+/* High contrast is a low-vision mode, not a dark theme, and it is built to
+   WCAG's own numbers rather than to taste.
 
-   The page therefore keeps the ordinary --fs-* scale in every theme. Browser
-   zoom remains the resize mechanism required by WCAG 1.4.4, and the responsive
-   layout is tested at the 320 CSS px reflow width required by 1.4.10. This mode
-   contributes the things that are actually contrast-specific:
+   IT ENLARGES THE TYPE, AND THAT IS THE POINT OF IT. This was unpicked once,
+   on the argument that contrast and magnification are separate needs and
+   somebody may want stronger edges without doubled navigation labels — which
+   is true of a general-purpose theme system and is not what this control is.
+   There is one switch here and the course owner's design is that it is the
+   low-vision switch: picking it says "I cannot read this", not "I would like
+   more contrast". Splitting it costs the person it exists for two settings
+   instead of one, and the half they land on first does nothing for them.
+   Browser zoom is not the answer either, for the reason spelled out under
+   1.4.10 below. If a separate reading-size control is ever wanted, it is an
+   addition; this stays whole until then.
 
-     1.4.6 Contrast (Enhanced, AAA) — black against white at 21:1.
-     2.4.7 Focus Visible — a thick yellow focus indicator.
-     1.4.11 Non-text Contrast — stronger rules and component boundaries.
+   The numbers:
+
+     1.4.6 Contrast (Enhanced, AAA) — 7:1 for body type. Here every pair is
+       black against white at 21:1, because the mode exists for people for whom
+       7:1 is the floor and not the target.
+     1.4.4 Resize text (AA) — 200%, applied by re-solving the --fs- scale.
+       Every rule on these pages picks a step from it, so the scale is the
+       whole mechanism; a root font-size would do nothing, because these
+       stylesheets size in px and px does not follow the root font.
+     1.4.10 Reflow (AA) — no sideways scrolling at 320 CSS px. This is why
+       the type scale and not `zoom` carries the 200%: zoom shrinks the layout
+       viewport and leaves the media queries behind, so the page lays out in
+       half the room while every width rule still believes in the whole of it.
+     2.5.5 Target Size (Enhanced, AAA) — 44x44 CSS px for anything pressable.
 
    Hue carries nothing at all in this mode. The five module colours collapse to
    the foreground and the module number does the work it was always doing
@@ -276,6 +291,36 @@
   --hairline: 3px;
   --shadow-soft: none;
   --shadow-soft-lg: none;
+
+  /* 1.4.4: type at 200%, and the type scale is the only thing doubled.
+     Every rule on these pages picks a --fs- step, so re-solving the scale
+     moves all of them and nothing else.
+
+     It is emphatically NOT `zoom: 2` on the root. Zoom scales the box tree,
+     which sounds like the same thing and is not: it halves the layout
+     viewport while leaving the media queries where they were, so a 320px
+     phone lays out in 160px of room and every width rule still believes it
+     has 320. That is a 1.4.10 Reflow failure by construction — content that
+     has to be scrolled sideways to read a line, which is the exact thing
+     this mode exists to spare somebody. Reflow only works if the layout sees
+     the real viewport, so the layout is left alone and the letters grow. */
+  --fs-2xs: 24px;
+  --fs-xs: 26px;
+  --fs-sm: 28px;
+  --fs-md: 32px;
+  --fs-lg: 36px;
+  --fs-xl: 40px;
+  --fs-2xl: 48px;
+  --fs-3xl: 60px;
+  --fs-4xl: 76px;
+  --fs-title: clamp(44px, 6.8vw, 72px);
+  --fs-hero: clamp(48px, 8.8vw, 104px);
+}
+
+/* A long word at 72px is wider than a 320px screen, and a heading that cannot
+   break is a horizontal scrollbar. Breaking is the lesser harm. */
+:root[data-theme="contrast"] {
+  overflow-wrap: break-word;
 }
 
 /* The learner's marker, painted by highlight.js through the Custom Highlight
@@ -287,9 +332,91 @@
   color: var(--hl-ink);
 }
 
+/* 1.4.10, the rest of it: doubling the type does not move a layout, but it
+   does overrun the two things that were told never to give way — a line held
+   to one line, and a row told not to wrap. Both are fine at the default size
+   and both are a sideways scrollbar at twice it, so this mode releases them.
+   A data table is the one thing left scrolling in its own box, which the
+   criterion allows and the house rules already require. */
+:root[data-theme="contrast"]
+  :is(
+    .brand,
+    .nav a,
+    .chip,
+    .counter,
+    .frac,
+    .open-cue,
+    .nb-count,
+    .lock,
+    .status,
+    .track-head .name,
+    .track-head .n
+  ) {
+  white-space: normal;
+}
+
+:root[data-theme="contrast"]
+  :is(
+    .brand,
+    .header-right,
+    .guide-tools,
+    .rt-row,
+    .sort,
+    .modes,
+    .progress-row,
+    .gmod > .head,
+    .control-row,
+    /* The bank's per-track band: a label, a growing rule, a count. The rule
+       gives way, the two labels do not, and at twice the type their combined
+       min-content is wider than a 320px screen. */
+    .track-head,
+    /* A capstone card's top line — difficulty beside status. */
+    .card-top
+  ) {
+  flex-wrap: wrap;
+}
+
+/* A grid item's automatic minimum size is its min-content, not zero, so a
+   card whose longest word is wider than its column widens the column instead
+   of wrapping — and the bank's grid is what then pushed the page sideways.
+   Only the low-vision mode needs this: at the ordinary type size no card's
+   min-content reaches a 320px column. */
+:root[data-theme="contrast"] .bank-grid > * {
+  min-width: 0;
+}
+
+/* A flex item's floor is its own content, and a form control's content is
+   wider than it looks: an input reports the `size` attribute's twenty
+   characters, a select its longest option. At twice the type size that floor
+   is wider than the screen, and wrapping does not help — the item refuses to
+   shrink, so the row wraps around something already too wide. Zero is the
+   floor they need, and it has to reach the wrapper as well as the control:
+   a label holding a select is the item that will not give, and `max-width:
+   100%` on the select then resolves against the label's own overflow. */
+:root[data-theme="contrast"] :is(input, select, textarea) {
+  min-width: 0;
+  max-width: 100%;
+}
+:root[data-theme="contrast"]
+  :is(.control-row, .rt-row, .guide-tools, .sort)
+  > * {
+  min-width: 0;
+}
+/* The header pair is deliberately not in that list: it is sized by
+   --hdr-action-*, and a floor of zero there would let the two come apart
+   again. It reflows by wrapping instead. */
+
+/* Label above value rather than beside it: an 88px label column beside a
+   value is a two-column table, and at this size the value column has nothing
+   left to hold a word. */
+:root[data-theme="contrast"] .brief dl > div {
+  grid-template-columns: minmax(0, 1fr);
+  gap: 2px;
+}
+
 /* 2.5.5: 44x44 CSS px minimum for a pointer target. Declared on the mode
-   rather than globally: it strengthens reach without silently changing the
-   text scale or the information hierarchy. */
+   rather than globally, because at the default size the compact chrome is
+   deliberate and this is the mode that trades density for reach. */
 :root[data-theme="contrast"] button,
 :root[data-theme="contrast"] [role="button"],
 :root[data-theme="contrast"] .btn,
@@ -314,6 +441,102 @@
   grid-template-columns: minmax(0, 1fr);
   align-items: start;
   text-align: left;
+}
+
+/* The constellation is a scatter of labels positioned by trigonometry, not by
+   layout; at this size it cannot be read, and the track page carries the same
+   list as text. The "Open the skill map" link below it is outside this element
+   on purpose — it is the way to the same graph and must survive.
+
+   Trap: this selects the wrapper in landing.html, and a rename there silently
+   turns the rule off rather than breaking anything visible. It had already
+   happened once: the rule named `.sky-wrap`, which no longer exists, so the
+   scatter was rendering here with 16px-tall targets. */
+:root[data-theme="contrast"] .constellation {
+  display: none;
+}
+
+/* One column, everywhere — now a choice rather than a repair. These used to be
+   here because zoom left the media queries believing in a width the layout no
+   longer had; with the layout reading the real viewport they fire correctly on
+   their own. They stay because at 200% type a three-column grid holds a
+   handful of words per line, and tracking from the end of one short line to
+   the start of the next is the reading problem this mode exists to remove. */
+:root[data-theme="contrast"] .objectives,
+:root[data-theme="contrast"] .modules,
+:root[data-theme="contrast"] .roster,
+:root[data-theme="contrast"] .lh-row,
+:root[data-theme="contrast"] .facts,
+:root[data-theme="contrast"] .map-body,
+:root[data-theme="contrast"] .desk,
+:root[data-theme="contrast"] .cap-grid,
+:root[data-theme="contrast"] .stat-row,
+:root[data-theme="contrast"] .player .shell {
+  grid-template-columns: minmax(0, 1fr) !important;
+  /* One column only holds if the flow fills by row. A grid that fills by
+     column (.objectives does, so its numbers read down the left) answers a
+     single declared column by inventing implicit ones beside it, and the
+     narrowest of those is the cramped line this mode exists to remove. */
+  grid-auto-flow: row !important;
+}
+
+/* The header is a fixed-height single row by default; at this size its own
+   contents no longer fit across, so it wraps like it does on a phone. */
+:root[data-theme="contrast"] .site-header .bar {
+  display: flex;
+  height: auto;
+  align-items: stretch;
+  flex-direction: column;
+  flex-wrap: wrap;
+  gap: 10px 16px;
+  padding: 8px 16px;
+}
+
+/* The course destinations are compact controls, not prose. Letting each link
+   shrink and wrap at 200% produced six labels painted on top of one another.
+   They keep their line and travel in one explicitly scrollable rail; the page
+   itself never scrolls sideways. */
+:root[data-theme="contrast"] .site-header .nav {
+  width: 100%;
+  flex: none;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+}
+:root[data-theme="contrast"] .site-header .nav a {
+  flex: none;
+  white-space: nowrap;
+}
+
+:root[data-theme="contrast"] .site-header .brand {
+  flex-wrap: nowrap;
+  gap: 6px;
+  font-size: var(--fs-md);
+  white-space: nowrap;
+}
+:root[data-theme="contrast"] .site-header .brand-mark {
+  height: 20px;
+}
+
+:root[data-theme="contrast"] .site-header .header-right {
+  width: 100%;
+}
+/* A sticky side column has to stop being one when the column is gone. The rule
+   above forces .desk to a single column, but the memo desk's two rails are
+   made sticky inside `@media (min-width: 1080px)` — a query that still matches
+   at this width — so they kept a viewport-tall max-height in a stacked layout
+   and the writing surface was drawn straight through them.
+   `.slot-rail`/`.check-rail` are named here because this rule said `.rail` and
+   matched neither: the same silent miss the .constellation note above records,
+   so both desk rails are spelled out rather than assumed. */
+:root[data-theme="contrast"] .rail,
+:root[data-theme="contrast"] .slot-rail,
+:root[data-theme="contrast"] .check-rail {
+  position: static;
+  width: auto;
+  max-width: none;
+  height: auto;
+  max-height: none;
+  overflow: visible;
 }
 
 /* Focus has to be findable, not merely present. */
@@ -500,7 +723,6 @@ button,
   overflow-x: auto;
 }
 .nav a {
-  flex: none;
   white-space: nowrap;
 }
 .nav a {
@@ -534,8 +756,9 @@ button,
    The width is set by the longer of the two labels the button can carry —
    "Account" once a session is detected, not "Sign in" — because a width fitted
    to the shorter one clips the other the moment sync.js swaps it. The height
-   is a variable so all three controls keep the same geometry when their
-   borders become thicker in high contrast. */
+   is a variable because the contrast theme lifts every tap target to 44px; if
+   only the button read that rule the pair would come apart in that theme
+   alone. */
 .header-right {
   --hdr-action-w: 100px;
   --hdr-action-h: 44px;
@@ -543,6 +766,14 @@ button,
   align-items: center;
   gap: 10px;
 }
+/* At 200% type the label and the three 44px segments both outgrow the default
+   size, so the pair is given a bigger one rather than a fixed one it would
+   spill out of. */
+:root[data-theme="contrast"] .header-right {
+  --hdr-action-w: 168px;
+  --hdr-action-h: 54px;
+}
+
 /* A floor, not a fixed size: at the default size neither one's content reaches
    it, so both settle on exactly the same number — which is the point. Setting
    `width` instead would clip the label the moment the type grew. */
@@ -559,9 +790,14 @@ button,
 .theme-switch {
   display: inline-flex;
   align-items: center;
-  /* Space-between feeds any spare width into the two inter-segment gaps so
-     the end segments stay against the padding on both sides. `gap` is the
-     floor the gaps never drop below. */
+  /* The switch shares the account button's width floor, and in high contrast
+     the floor (sized for that button's grown label) exceeds the three
+     segments' content. Space-between feeds the slack into the two
+     inter-segment gaps so the end segments stay against the padding on both
+     sides — flex-start pools all of it after the selected segment, a stretch
+     of dead ground inside the border. `gap` is the floor the gaps never drop
+     below; at the default size content meets the width floor and nothing
+     moves. */
   justify-content: space-between;
   gap: 2px;
   padding: 2px;
@@ -576,10 +812,11 @@ button,
    content, so a percentage height resolves against nothing and the button
    collapses onto its icon — 30 x 13.5, which the corner radius then rounds
    into a squat pill. The side is stated instead, off the same token that
-   sets the header's action height, minus the padding and the two hairlines, so
-   the control still stands exactly as tall as the button beside it. High
-   contrast draws a 3px hairline, which is why that is a variable here and not
-   a literal 2px. */
+   sets the header's action height, so the three segments stay square when
+   high contrast makes everything bigger — and minus the padding and the two
+   hairlines, so the control still stands exactly as tall as the button beside
+   it. High contrast draws a 3px hairline, which is why that is a variable
+   here and not a 2. */
 .theme-switch button {
   --seg: calc(var(--hdr-action-h, 44px) - 4px - 2 * var(--hairline));
   display: inline-flex;
@@ -749,35 +986,11 @@ button,
 /* Between phone and full desktop widths, keep one compact row and surrender
    only the flexible brand-to-nav spacer. The link row can then scroll inside
    its own track without disturbing the actions at the right edge. */
-@media (min-width: 1001px) and (max-width: 1435px) {
+@media (min-width: 721px) and (max-width: 1435px) {
   .site-header .bar {
     grid-template-columns: auto minmax(0, 1fr) auto;
     column-gap: 24px;
     padding-inline: clamp(24px, 4vw, 64px);
-  }
-}
-
-/* A tablet can hold the brand and the actions, but not those plus five course
-   destinations. Give the nav its own row before the one-line desktop grid
-   begins to squeeze or clip a label; this is the same information hierarchy
-   as desktop, merely reflowed one level earlier. */
-@media (min-width: 721px) and (max-width: 1000px) {
-  .site-header .bar {
-    display: flex;
-    height: auto;
-    flex-wrap: wrap;
-    gap: 8px 20px;
-    padding: 8px 24px;
-  }
-  .header-right {
-    margin-left: auto;
-  }
-  .nav {
-    order: 3;
-    flex: none;
-    width: 100%;
-    overflow-x: auto;
-    padding-bottom: 2px;
   }
 }
 

@@ -768,3 +768,61 @@ pair in globals.css and the widget). The fold's duplicate "Slow Food USA
 Theory of Change" header is gone (the bullet carries the name), and the
 bullet's tail now reads "effective theory of change, conveyed in engaging
 and easy-to-parse visuals", the author's wording.
+
+**short-history: categorical colour, and both figures made explorable
+(2026-08-14, owner: "at least use the colors from landing ensuring contrast
+>4", then "можно это интерактивным draggable … и тоже сделать так чтоб можно
+выбрать что отображается").**
+
+The six test-score series all inked from one red ramp — the author's earlier
+instruction was "shades of red", and shades of red is what it got. Measured,
+two adjacent shades differed by a contrast ratio of **1.06 to 1.09**: six
+series, one colour. On the night ground the top of the ramp also read at
+**2.3:1 and 2.9:1** against its own background, under even the 3:1 floor for a
+non-text mark. So the ask was right twice over.
+
+They now take the brand module hues through their `-text` variants, which is
+what the house rule has said all along for a categorical scale: `--mod-0`
+Chinese Red, `--mod-4` Cobalt, `--mod-3` Khaki, `--mod-1` Satsuma, `--mod-2`
+Lunar Yellow, and the page ink for the sixth — five hues and an honest end to
+the palette rather than a sixth colour invented for it. Assigned so that
+neighbours in the label column are far apart in hue.
+
+Three things this dragged in:
+
+- **The chart paints its own `--card` ground.** The `-text` tokens are each
+  solved against their theme's own surface; this figure sits inside the
+  optional Fold, whose 8% maroon wash took the ground from #fbfaf9 to #f1e6e5
+  and three of the six series down to 3.93, 3.94 and 3.97. The Fold's tint is a
+  real signal and stays — the chart stops inheriting it instead. Measured
+  after: worst case **4.80 day, 4.87 night, 21.0 low-vision**.
+- **Low-vision mode gets dash patterns.** All five module tokens are white
+  there, deliberately, so hue is not available; six white lines crossing needs
+  a second channel. `--sh-dash-*` in app-bridge.css, unset in day and night.
+- **The timeline keeps its red ramp.** It is a sequence, not a categorical
+  key, and the author's instruction stands there.
+
+Both figures are explorable now, and neither hides anything behind a gesture:
+
+- **Timeline** pans and zooms. The milestone labels are hand-placed at absolute
+  coordinates — the author's layout, tuned so seven blocks of prose over 120
+  years do not collide — so nothing is re-laid-out; the viewBox moves and the
+  whole scene travels as drawn. Drag, buttons, and arrow keys all do it; Home
+  resets; `touch-action: none` only while zoomed, so a phone can still scroll
+  past the figure.
+- **Series switch off by pressing their own names**, which were already the
+  legend, so no second legend appeared to say the same thing twice. A hidden
+  series leaves the plot, the label column and the hover readout together. The
+  last one cannot be switched off — an empty chart has no obvious way back.
+
+**On importing more capabilities.** The owner asked for "все скиллы которые там
+были". Checked against the source rather than guessed: OWID's own `selection`
+for grapher `test-scores-ai-capabilities-relative-human-performance` names
+exactly these six, so the chart she is looking at is already complete. The
+underlying indicator (OWID 852592) carries six more — code generation, complex
+reasoning, general knowledge tests, math problem-solving, nuanced language
+interpretation, reading comprehension with unanswerable questions — and is
+flagged `nonRedistributable: true`; the CSV endpoint answers 403 with "we are
+not allowed to re-share". The values are reachable through the JSON API, which
+is not the same as being ours to publish. Adding them is a permissions decision
+for the course owner. Left out, and recorded here rather than quietly done.

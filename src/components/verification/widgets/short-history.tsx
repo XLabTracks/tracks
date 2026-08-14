@@ -7,15 +7,21 @@ import { useRef, useState } from "react";
  * from Max Roser, "The brief history of artificial intelligence" (Dec. 2022,
  * CC BY 4.0, ourworldindata.org/brief-history-of-ai), redrawn as native SVG
  * on the author's instruction: the embedded originals carried OWID's own
- * multi-hue palette and a white ground, and she asked for shades of red that
- * follow the site's three themes.
+ * multi-hue palette and a white ground, and she asked for marks that follow
+ * the site's three themes.
  *
- * Redrawing is what makes that possible: every mark inks from
- * `color-mix(in oklab, var(--primary), var(--foreground) N%)`, so the ramp
- * re-solves per theme (darker reds on the day ground, rose tints on night)
- * while staying the brand hue. Warm shades converge for a protanope, so no
- * line is ever only a colour: each series carries its own name at the line's
- * end, in its own shade — the house categorical-colour rule.
+ * The TIMELINE is a sequence of events, so its names still ink from a ramp of
+ * one hue — `color-mix(in oklab, var(--primary), var(--foreground) N%)` —
+ * which re-solves per theme and stays the brand colour.
+ *
+ * The TEST-SCORES chart is a categorical scale and takes the brand module
+ * hues instead; see the `token` field on Series for the measurements that
+ * forced the change, and for why the plot paints its own --card ground rather
+ * than inheriting whatever it is embedded in.
+ *
+ * No line is ever only a colour: each carries its own name at the line's end,
+ * in its own hue, and in low-vision mode — where every module token is white
+ * on purpose — a dash pattern carries what the hue cannot.
  *
  * The data is OWID's, not ours: the test-scores series were read back out of
  * the chart's published SVG (grapher id
@@ -30,6 +36,21 @@ import { useRef, useState } from "react";
  * recorded points at full strength, linear interpolations dimmed, series
  * outside their run omitted — under a vertical guide. Hover state is
  * ephemeral by design; nothing persists.
+ *
+ * Both figures are explorable, and neither hides its content behind a gesture:
+ * the timeline drags and zooms with buttons and arrow keys as well as a
+ * pointer, and the six series switch off by pressing their own names, which
+ * were already the legend.
+ *
+ * These six are the whole of the source chart — OWID's own `selection` for
+ * grapher `test-scores-ai-capabilities-relative-human-performance` names
+ * exactly them. The underlying indicator (OWID 852592) carries six more
+ * capabilities that the chart does not plot — code generation, complex
+ * reasoning, general knowledge tests, math problem-solving, nuanced language
+ * interpretation, and reading comprehension with unanswerable questions — and
+ * it is flagged `nonRedistributable: true`: OWID's CSV endpoint refuses with
+ * "we are not allowed to re-share". Adding them is a permissions decision for
+ * the course owner, not an inference from a reachable API.
  *
  * Unbridged reading material: no completion, `onComplete` ignored.
  */
@@ -139,14 +160,111 @@ const MILESTONES: Milestone[] = [
   },
 ];
 
+/**
+ * Pan and zoom over the whole scene, not over the data.
+ *
+ * The milestone labels are hand-placed at absolute coordinates — the author's
+ * layout, tuned so that seven blocks of prose over 120 years do not collide.
+ * Recomputing a label's x from its year would throw that away, so nothing here
+ * is re-laid-out: the viewBox moves instead, and the axis, the connectors and
+ * the labels all travel together exactly as drawn. Zooming is the point as
+ * much as dragging is — at rest the whole century is one screen wide and the
+ * annotations are as small as the figure allows.
+ *
+ * Dragging is never the only way in. A pointer gesture is invisible to a
+ * keyboard and to a screen reader, so the same two axes are on the buttons and
+ * on the arrow keys, and Home returns to the full view. `touch-action: none`
+ * only while zoomed in, so a touch reader can still scroll the page past a
+ * figure it does not want to explore.
+ */
+const TL_ZOOMS = [1, 1.6, 2.4, 3.4];
+
 function Timeline() {
   const decades = [];
   for (let y = TL.yr0; y <= TL.yr1; y += 10) decades.push(y);
+
+  const [zi, setZi] = useState(0);
+  const [pan, setPan] = useState({ x: 0, y: 0 });
+  const drag = useRef<{ x: number; y: number; px: number; py: number } | null>(
+    null,
+  );
+  const z = TL_ZOOMS[zi]!;
+  const vw = TL.w / z;
+  const vh = TL.h / z;
+
+  // Clamp so the view can never leave the drawing — panning into blank space
+  // reads as a broken figure rather than as a choice.
+  const clamp = (p: { x: number; y: number }) => ({
+    x: Math.min(Math.max(p.x, 0), TL.w - vw),
+    y: Math.min(Math.max(p.y, 0), TL.h - vh),
+  });
+  const move = (dx: number, dy: number) =>
+    setPan((p) => clamp({ x: p.x + dx, y: p.y + dy }));
+  const zoomTo = (next: number) => {
+    const nz = TL_ZOOMS[next]!;
+    setZi(next);
+    // Keep the centre of the view where it was, so zooming does not teleport.
+    setPan((p) => {
+      const cx = p.x + vw / 2;
+      const cy = p.y + vh / 2;
+      const nvw = TL.w / nz;
+      const nvh = TL.h / nz;
+      return {
+        x: Math.min(Math.max(cx - nvw / 2, 0), TL.w - nvw),
+        y: Math.min(Math.max(cy - nvh / 2, 0), TL.h - nvh),
+      };
+    });
+  };
+
+  const onKeyDown = (e: React.KeyboardEvent) => {
+    const step = vw / 12;
+    const map: Record<string, () => void> = {
+      ArrowLeft: () => move(-step, 0),
+      ArrowRight: () => move(step, 0),
+      ArrowUp: () => move(0, -step / 2),
+      ArrowDown: () => move(0, step / 2),
+      Home: () => {
+        setZi(0);
+        setPan({ x: 0, y: 0 });
+      },
+      "+": () => zoomTo(Math.min(zi + 1, TL_ZOOMS.length - 1)),
+      "=": () => zoomTo(Math.min(zi + 1, TL_ZOOMS.length - 1)),
+      "-": () => zoomTo(Math.max(zi - 1, 0)),
+    };
+    const fn = map[e.key];
+    if (!fn) return;
+    e.preventDefault();
+    fn();
+  };
+
   return (
+    <div className="bg-card relative rounded-lg p-2">
     <svg
-      viewBox={`0 0 ${TL.w} ${TL.h}`}
-      role="img"
-      className="w-full"
+      viewBox={`${pan.x} ${pan.y} ${vw} ${vh}`}
+      role="group"
+      aria-label="A timeline of notable artificial intelligence systems, 1940 to 2060. Draggable; arrow keys pan, plus and minus zoom, Home resets."
+      tabIndex={0}
+      onKeyDown={onKeyDown}
+      onPointerDown={(e) => {
+        if (z === 1) return;
+        drag.current = { x: pan.x, y: pan.y, px: e.clientX, py: e.clientY };
+        e.currentTarget.setPointerCapture(e.pointerId);
+      }}
+      onPointerMove={(e) => {
+        const d = drag.current;
+        if (!d) return;
+        // Pointer pixels to user units: the rendered box is TL.w wide at z = 1.
+        const k = vw / e.currentTarget.getBoundingClientRect().width;
+        setPan(
+          clamp({
+            x: d.x - (e.clientX - d.px) * k,
+            y: d.y - (e.clientY - d.py) * k,
+          }),
+        );
+      }}
+      onPointerUp={() => (drag.current = null)}
+      onPointerCancel={() => (drag.current = null)}
+      className={`focus-visible:ring-ring w-full rounded focus-visible:ring-2 focus-visible:outline-none ${z === 1 ? "" : "cursor-grab touch-none active:cursor-grabbing"}`}
       style={{ fontSize: 13 }}
     >
       <title>
@@ -232,6 +350,70 @@ function Timeline() {
         );
       })}
     </svg>
+      {/* The controls carry the whole interaction on their own, which is the
+          test: a figure whose only way in is a drag gesture is a figure a
+          keyboard and a screen reader cannot read. The zoom state is also the
+          hint — at 1x there is nothing to drag and the buttons say so. */}
+      <div className="mt-1 flex flex-wrap items-center gap-2">
+        <div className="flex items-center gap-1">
+          <button
+            type="button"
+            onClick={() => zoomTo(Math.max(zi - 1, 0))}
+            disabled={zi === 0}
+            aria-label="Zoom out"
+            className="border-border hover:bg-muted disabled:opacity-40 rounded-md border px-2 py-1 font-mono text-[11px] disabled:pointer-events-none"
+          >
+            −
+          </button>
+          <button
+            type="button"
+            onClick={() => zoomTo(Math.min(zi + 1, TL_ZOOMS.length - 1))}
+            disabled={zi === TL_ZOOMS.length - 1}
+            aria-label="Zoom in"
+            className="border-border hover:bg-muted disabled:opacity-40 rounded-md border px-2 py-1 font-mono text-[11px] disabled:pointer-events-none"
+          >
+            +
+          </button>
+        </div>
+        {z > 1 ? (
+          <>
+            <div className="flex items-center gap-1">
+              <button
+                type="button"
+                onClick={() => move(-vw / 6, 0)}
+                aria-label="Pan left"
+                className="border-border hover:bg-muted rounded-md border px-2 py-1 font-mono text-[11px]"
+              >
+                ←
+              </button>
+              <button
+                type="button"
+                onClick={() => move(vw / 6, 0)}
+                aria-label="Pan right"
+                className="border-border hover:bg-muted rounded-md border px-2 py-1 font-mono text-[11px]"
+              >
+                →
+              </button>
+            </div>
+            <button
+              type="button"
+              onClick={() => {
+                setZi(0);
+                setPan({ x: 0, y: 0 });
+              }}
+              className="text-muted-foreground hover:text-foreground text-xs underline-offset-4 hover:underline"
+            >
+              Whole timeline
+            </button>
+          </>
+        ) : null}
+        <p className="text-muted-foreground ml-auto text-xs" aria-live="polite">
+          {z === 1
+            ? "Zoom in to read the annotations, then drag to move along."
+            : `${Math.round(TL.yr0 + (pan.x / TL.w) * (TL.yr1 - TL.yr0))}–${Math.round(TL.yr0 + ((pan.x + vw) / TL.w) * (TL.yr1 - TL.yr0))}`}
+        </p>
+      </div>
+    </div>
   );
 }
 
@@ -239,7 +421,30 @@ function Timeline() {
 
 interface Series {
   name: string;
-  pct: number;
+  /**
+   * The categorical hue, as a brand module token.
+   *
+   * This chart used to ink all six lines from the same red ramp — the author
+   * asked for shades of red, and shades of red is what it got. Measured, two
+   * adjacent shades differed by a contrast ratio of 1.06 to 1.09, which is to
+   * say not at all: six series, one colour, and no way to tell which line was
+   * reading comprehension. On the night ground the top of the ramp also read
+   * at 2.3:1 and 2.9:1 against its own background, under even the 3:1 floor
+   * for a non-text mark.
+   *
+   * A categorical scale takes the brand's module hues through their -text
+   * variants, which are built to carry as type on every theme's ground: 4.6
+   * to 17.2 in day, 5.2 to 16.7 at night. The token colours the line, its
+   * points, its swatch in the tooltip AND its name at the end of the line, so
+   * the hue always sits on a word — nothing here is encoded by colour alone.
+   * The hex mirrors theme.css's day value for the rare render with no theme.
+   *
+   * Six series, five module hues: the sixth is the page ink. That is the
+   * honest end of the palette rather than a sixth colour invented for it.
+   */
+  token: string;
+  /** Slot in the dash cycle; see --sh-dash-* in app-bridge.css. */
+  dash: number;
   points: [number, number][]; // [year, score]
 }
 
@@ -247,7 +452,8 @@ interface Series {
 const SERIES: Series[] = [
   {
     name: "Reading comprehension",
-    pct: 0,
+    token: "var(--mod-0-text, #9a000c)",
+    dash: 0,
     points: [
       [2016, -100],
       [2017, -8.9],
@@ -258,7 +464,8 @@ const SERIES: Series[] = [
   },
   {
     name: "Image recognition",
-    pct: 24,
+    token: "var(--mod-4-text, #3d75b1)",
+    dash: 1,
     points: [
       [2009, -100],
       [2012, -44.2],
@@ -272,7 +479,8 @@ const SERIES: Series[] = [
   },
   {
     name: "Language understanding",
-    pct: 48,
+    token: "var(--mod-3-text, #555e07)",
+    dash: 2,
     points: [
       [2018, -100],
       [2019, 3.7],
@@ -282,7 +490,8 @@ const SERIES: Series[] = [
   },
   {
     name: "Handwriting recognition",
-    pct: 12,
+    token: "var(--mod-1-text, #bf4f00)",
+    dash: 3,
     points: [
       [1998, -100],
       [2002, -48.0],
@@ -296,7 +505,8 @@ const SERIES: Series[] = [
   },
   {
     name: "Speech recognition",
-    pct: 36,
+    token: "var(--mod-2-text, #946b00)",
+    dash: 4,
     points: [
       [1998, -100],
       [2011, -65.6],
@@ -310,7 +520,8 @@ const SERIES: Series[] = [
   },
   {
     name: "Predictive reasoning",
-    pct: 60,
+    token: "var(--foreground, #1a1614)",
+    dash: 5,
     points: [
       [2019, -100],
       [2021, -80.5],
@@ -358,12 +569,38 @@ function valueAt(
   return null;
 }
 
+/**
+ * Six lines crossing in the same corner is a lot to read at once, so the
+ * reader can put some of them away.
+ *
+ * The names at the ends of the lines were already the legend — they name the
+ * line and carry its colour — so they are what became the switches, rather
+ * than a second legend appearing somewhere else to say the same thing twice.
+ * A hidden series leaves the plot, the label column and the hover readout
+ * together; nothing is dimmed-but-present, because a ghost line is still a
+ * line to read past.
+ *
+ * Selection is component state and deliberately not persisted: it is a way of
+ * looking at the figure, not work the learner did.
+ */
 function TestScores() {
   const svgRef = useRef<SVGSVGElement | null>(null);
   const [hoverYear, setHoverYear] = useState<number | null>(null);
+  const [hidden, setHidden] = useState<Set<string>>(() => new Set());
   const gridValues = [20, 0, -20, -40, -60, -80, -100];
   const xTicks = [1998, 2005, 2010, 2015, 2020, 2023];
-  // Labels stack on the right, ordered by where each line ends.
+  const shown = SERIES.filter((s) => !hidden.has(s.name));
+  const toggle = (name: string) =>
+    setHidden((prev) => {
+      const next = new Set(prev);
+      // Never let the last one go: an empty chart is not a view of anything,
+      // and the way back is not obvious once the axes are all that is left.
+      if (!next.delete(name) && prev.size < SERIES.length - 1) next.add(name);
+      return next;
+    });
+  // Labels stack on the right, ordered by where each line ends. All six keep
+  // their row whether shown or not — a switch that disappears when you use it
+  // cannot be switched back.
   const ordered = [...SERIES].sort(
     (a, b) =>
       (b.points[b.points.length - 1][1] ?? 0) -
@@ -388,7 +625,7 @@ function TestScores() {
   const hoverRows =
     hoverYear === null
       ? []
-      : SERIES.map((s) => ({ s, at: valueAt(s, hoverYear) }))
+      : shown.map((s) => ({ s, at: valueAt(s, hoverYear) }))
           .filter((r): r is { s: Series; at: { v: number; exact: boolean } } =>
             Boolean(r.at),
           )
@@ -400,7 +637,16 @@ function TestScores() {
   const tooltipFlip = hoverYear !== null && tsx(hoverYear) > (TS.plotX0 + TS.plotX1) / 2;
 
   return (
-    <div className="relative">
+    /* The chart carries its own opaque ground, and it is not decoration.
+       The module -text tokens are each calibrated to clear 4.5:1 against
+       their theme's own surface; drop the chart onto anything else and that
+       calibration is void. This one sits inside the optional Fold, whose 8%
+       maroon wash is a real signal and stays — but it darkened the ground
+       from #fbfaf9 to #f1e6e5, which took three of the six series down to
+       3.93, 3.94 and 3.97. Painting --card behind the plot puts every series
+       back on the surface its colour was solved for, wherever the chart is
+       embedded. */
+    <div className="bg-card relative rounded-lg p-2">
     <svg
       ref={svgRef}
       viewBox={`0 0 ${TS.w} ${TS.h}`}
@@ -456,12 +702,13 @@ function TestScores() {
           {y}
         </text>
       ))}
-      {SERIES.map((s) => (
+      {shown.map((s) => (
         <g key={s.name}>
           <polyline
             points={s.points.map(([y, v]) => `${tsx(y)},${tsy(v)}`).join(" ")}
             fill="none"
-            stroke={shade(s.pct)}
+            stroke={s.token}
+            style={{ strokeDasharray: `var(--sh-dash-${s.dash}, none)` }}
             strokeWidth="2"
             strokeLinejoin="round"
           />
@@ -471,7 +718,7 @@ function TestScores() {
               cx={tsx(y)}
               cy={tsy(v)}
               r="2.5"
-              fill={shade(s.pct)}
+              fill={s.token}
             />
           ))}
         </g>
@@ -479,18 +726,48 @@ function TestScores() {
       {ordered.map((s, i) => {
         const [ly, lv] = s.points[s.points.length - 1];
         const labelY = 46 + i * 22;
+        const off = hidden.has(s.name);
         return (
-          <g key={s.name}>
-            <path
-              d={`M ${tsx(ly) + 4} ${tsy(lv)} H ${TS.plotX1 + 14} V ${labelY - 4} H ${TS.plotX1 + 20}`}
-              fill="none"
-              stroke="var(--border)"
+          <g
+            key={s.name}
+            role="switch"
+            aria-checked={!off}
+            aria-label={s.name}
+            tabIndex={0}
+            onClick={() => toggle(s.name)}
+            onKeyDown={(e) => {
+              if (e.key !== "Enter" && e.key !== " ") return;
+              e.preventDefault();
+              toggle(s.name);
+            }}
+            className="focus-visible:ring-ring cursor-pointer focus-visible:ring-2 focus-visible:outline-none"
+          >
+            {/* A hit area, because a line of text is a thin target and this
+                is now something you press. */}
+            <rect
+              x={TS.plotX1 + 18}
+              y={labelY - 13}
+              width={TS.w - TS.plotX1 - 20}
+              height={19}
+              fill="transparent"
             />
+            {off ? null : (
+              <path
+                d={`M ${tsx(ly) + 4} ${tsy(lv)} H ${TS.plotX1 + 14} V ${labelY - 4} H ${TS.plotX1 + 20}`}
+                fill="none"
+                stroke="var(--border)"
+              />
+            )}
             <text
               x={TS.plotX1 + 24}
               y={labelY}
-              fill={shade(s.pct)}
+              fill={off ? "var(--muted-foreground)" : s.token}
               fontWeight={600}
+              style={
+                off
+                  ? { textDecoration: "line-through", opacity: 0.75 }
+                  : undefined
+              }
             >
               {s.name}
             </text>
@@ -513,13 +790,22 @@ function TestScores() {
               cx={tsx(hoverYear)}
               cy={tsy(at.v)}
               r={at.exact ? 4.5 : 3}
-              fill={shade(s.pct)}
+              fill={s.token}
               opacity={at.exact ? 1 : 0.55}
             />
           ))}
         </g>
       )}
     </svg>
+    {hidden.size > 0 && (
+      <button
+        type="button"
+        onClick={() => setHidden(new Set())}
+        className="text-muted-foreground hover:text-foreground absolute right-2 bottom-1 text-xs underline-offset-4 hover:underline"
+      >
+        Show all six
+      </button>
+    )}
     {hoverYear !== null && hoverRows.length > 0 && (
       <div
         className="bg-card border-border pointer-events-none absolute z-10 rounded-lg border px-3 py-2 text-xs shadow-md"
@@ -537,7 +823,7 @@ function TestScores() {
                 <td className="pr-2">
                   <span
                     className="inline-block size-2.5 rounded-[3px]"
-                    style={{ background: shade(s.pct) }}
+                    style={{ background: s.token }}
                   />
                 </td>
                 <td className="pr-4 whitespace-nowrap">{s.name}</td>

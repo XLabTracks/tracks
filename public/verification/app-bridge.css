@@ -158,6 +158,25 @@
 :root[data-theme="contrast"] [class~="text-[0.95rem]"] { font-size: var(--fs-md); }
 :root[data-theme="contrast"] [class~="text-[0.8rem]"] { font-size: var(--fs-sm); }
 
+/* A second channel for the one chart with six series, because in low-vision
+   mode there is no first channel: every module hue is white there, on purpose
+   — the palette collapses so that nothing is left encoded by colour. That is
+   right for a chip beside its own label and not enough for six lines crossing
+   each other, so the lines take dash patterns instead.
+
+   Day and night leave these unset, so the fallback `none` applies and the
+   hues do the work undashed. The patterns are ordered by how far apart they
+   read at a glance rather than by length, and the first series stays solid so
+   the busiest reading is five dashed lines and not six. */
+:root[data-theme="contrast"] {
+  --sh-dash-0: none;
+  --sh-dash-1: 12 6;
+  --sh-dash-2: 2 5;
+  --sh-dash-3: 18 5 2 5;
+  --sh-dash-4: 6 4;
+  --sh-dash-5: 1 4 10 4;
+}
+
 /* The same escape, in the app's own stylesheet: these rules predate the token
    scale and size in rem, so they held still while the page doubled around
    them. Sidenotes are the reading apparatus of a paper and the facilitator

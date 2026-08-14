@@ -6,7 +6,6 @@ import { usePathname } from "next/navigation";
 import { useAuth } from "@workos-inc/authkit-nextjs/components";
 import { AccountMenu } from "@/components/layout/account-menu";
 import { SignInLink } from "@/components/layout/sign-in-link";
-import { XLabMark } from "@/components/layout/xlab-mark";
 import { SelectionActions } from "@/components/verification/selection-actions";
 import {
   COPYRIGHT,
@@ -70,7 +69,7 @@ function ThemeSwitch() {
 function VerificationRouteSignal({ pathname }: { pathname: string | null }) {
   useEffect(() => {
     window.dispatchEvent(
-      new CustomEvent("vt-route-change", { detail: { pathname } })
+      new CustomEvent("vt-route-change", { detail: { pathname } }),
     );
   }, [pathname]);
   return null;
@@ -177,7 +176,26 @@ export function VerificationHeader() {
         <div className="bar">
           <a className="brand" href="/verification/landing">
             Verification <i>@</i>
-            <XLabMark className="brand-mark brand-symbol" />
+            {/* Two cuts, one per ground; theme.css picks by data-theme. The
+                night one is aria-hidden so the mark is announced once. Keep
+                the class names in step with theme.css's .mark-day/.mark-night. */}
+            <img
+              className="brand-mark mark-day"
+              src="/verification/assets/xLab_Logotype.png"
+              alt="XLab"
+              width={3300}
+              height={1050}
+              draggable={false}
+            />
+            <img
+              className="brand-mark mark-night"
+              src="/verification/assets/xLab_Logotype_white.png"
+              alt=""
+              aria-hidden
+              width={3300}
+              height={1050}
+              draggable={false}
+            />
           </a>
           <nav className="nav" aria-label="Course">
             {NAV.map((n) => (

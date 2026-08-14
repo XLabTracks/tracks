@@ -935,3 +935,29 @@ owner's review).**
   section's finish event, fired from an effect on the finished state because
   there is no single button that ends it. 2.4.1 to 2.4.3 stay optional and
   folded.
+
+**Sources become a spoiler, not a disclosure (2026-08-14).** `<details>` opened
+downward: the page grew under the reader's hands and everything below moved.
+The messaging-app spoiler does not do that — the content is present at full
+size under a grainy cover that comes off where it stands — and it is the right
+shape here, because it lets the heading be visible from the start. "Sources"
+now sits above the block always, which is what tells anybody there is something
+there; the veil is what says they have not looked yet. Height before and after
+uncovering: identical.
+
+Three things it does that the apps do not. Covered text is blurred AND
+unselectable AND `aria-hidden`, so it cannot be lifted by dragging a cursor
+over it, by a screen reader, or by find-in-page. The cover is a real button
+with a real label, so a keyboard reaches it. And it carries "Press to uncover"
+inside itself — their spoiler sits in a message you are already reading, where
+a smudge is obviously a smudge over something, while on a page it is just a
+grey panel; the label lives inside the veil so it leaves with it and cannot go
+stale.
+
+One way only. Once uncovered it stays uncovered: a reader who has seen which
+company was which cannot unsee it, and a re-hide control would do nothing.
+
+The veil is `.spoiler-veil` in globals.css — two dot fields drifting at
+different rates over a translucent ground, all of it theme tokens, so the night
+theme paints itself without a second declaration, and the drift stops under
+prefers-reduced-motion while the cover stays.

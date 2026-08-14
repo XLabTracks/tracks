@@ -459,6 +459,59 @@
   text-indent: -1.5rem;
 }
 
+/* The spoiler veil: a Telegram-style cover over content that is present in the
+   DOM at full height and simply not readable yet.
+
+   It is not a disclosure. A `<details>` opens, changes the page height and
+   pushes everything below it; a spoiler stays exactly where it is and stops
+   obscuring. That is the whole difference, and it is why the sources under it
+   can carry a visible heading — the heading is the label, the veil is the
+   cover, and neither moves.
+
+   The grain is two offset dot fields drifting at different rates over a
+   translucent ground, so it reads as noise rather than as a pattern. Colours
+   are theme tokens: on the night ground the same rule paints itself dark
+   without a second declaration. Under prefers-reduced-motion the drift stops
+   and the grain stays — the cover is the point, the motion is decoration. */
+.spoiler-veil {
+  background-color: color-mix(in oklab, var(--card) 88%, var(--foreground));
+  background-image:
+    radial-gradient(
+      circle at 1px 1px,
+      color-mix(in oklab, var(--foreground) 55%, transparent) 1px,
+      transparent 0
+    ),
+    radial-gradient(
+      circle at 1px 1px,
+      color-mix(in oklab, var(--foreground) 35%, transparent) 1px,
+      transparent 0
+    );
+  background-size:
+    7px 7px,
+    11px 11px;
+  animation: spoiler-drift 2.4s linear infinite;
+  cursor: pointer;
+}
+
+@keyframes spoiler-drift {
+  from {
+    background-position:
+      0 0,
+      0 0;
+  }
+  to {
+    background-position:
+      -7px 14px,
+      11px -22px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .spoiler-veil {
+    animation: none;
+  }
+}
+
 /* One table treatment for every lesson on every track. Prose left tables as
    bare hairlines with no hierarchy — a grid of identical grey lines, which is
    why they read as muted. The structure now comes from three weights of line,

@@ -19,6 +19,7 @@ import {
 } from "@/lib/verification/data/policy-on-paper";
 import { INSTITUTION_DECK } from "@/lib/verification/data/steelman-decks";
 import { QuestionWorkspace } from "../kit/question-workspace";
+import { Spoiler } from "../kit/spoiler";
 import { SteelmanDeck } from "../kit/steelman-deck";
 import type { VerificationWidgetProps } from "../kit/types";
 
@@ -187,26 +188,23 @@ export function PolicyOnPaper({
       />
 
       {/* The reveal, and the only place the letters are cashed out: who each
-          one was, and every document its rows were read out of. It opens
-          closed — the mapping is a spoiler for anyone who has not finished —
-          and it carries the house's disclosure sign, the `+` that turns 45°
-          into a `×`, the same one Works cited and Fold use. */}
+          one was, and every document its rows were read out of.
+
+          A spoiler rather than a disclosure, and the difference is the point:
+          the heading is visible from the start, so a reader knows the sources
+          are there and can see they have not looked; uncovering them changes
+          nothing about the page except that the words can be read. A
+          `<details>` would have grown the page under their hands. */}
       {done ? (
-        <details className="border-border group rounded-xl border">
-          <summary className="flex cursor-pointer list-none items-center justify-between gap-3 px-4 py-3 text-sm font-semibold select-none [&::-webkit-details-marker]:hidden">
-            <span>Sources</span>
-            <span
-              aria-hidden
-              className="text-muted-foreground text-2xl leading-none font-light transition-transform duration-200 group-open:rotate-45 motion-reduce:transition-none"
-            >
-              +
-            </span>
-          </summary>
-          <div className="space-y-4 px-4 pb-4">
-            <p className="text-muted-foreground text-xs leading-relaxed">
-              Which tab was which, and everything its rows were read out of.
+        <section className="border-border rounded-xl border p-4">
+          <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
+            <h4 className="text-sm font-semibold">Sources</h4>
+            <p className="text-muted-foreground text-xs">
+              Which tab was which.
             </p>
-            <ul className="space-y-3">
+          </div>
+          <Spoiler label="Uncover the sources, and which company each tab was">
+            <ul className="mt-3 space-y-3">
               {POLICY_SOURCES.map((c) => (
                 <li key={c.id} className="text-sm leading-relaxed">
                   <p>
@@ -236,8 +234,8 @@ export function PolicyOnPaper({
                 </li>
               ))}
             </ul>
-          </div>
-        </details>
+          </Spoiler>
+        </section>
       ) : null}
     </div>
   );

@@ -725,7 +725,10 @@ finished it. Four constructed answers of ten to twenty minutes on top of the
 readings is more than two hours holds, which is what makes them optional rather
 than shorter.
 
-They are NOT behind Folds, unlike the retired optional extensions. A Fold is
-right for an extension nobody needs to open; these are the section's own
-operations and hiding them behind a closed bar would mean most learners never
-meet the thing the module is for. The heading is what says they are optional.
+All four are behind Folds, on the owner's decision — optional material in this
+course wears the red bar whatever it is, and consistency about what "optional"
+looks like beats the argument that these particular ones deserve to be met
+without opening anything. The `## Optional lab · N min` heading stays above
+each fold: removing it would leave three of the four lessons with a single
+top-level heading, which costs them their sidebar nav and, on a chunked track,
+collapses the whole lesson into one part.

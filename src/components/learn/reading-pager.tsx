@@ -35,9 +35,9 @@ export function ReadingPager({
   return (
     // select-none: the pager is an index of where to go next, not text anyone
     // copies. A drag that ends here otherwise smears across both cards.
-    <div className="border-border mt-10 grid grid-cols-2 gap-3 border-t pt-6 select-none">
-      {left ?? <span />}
-      {right ?? <span />}
+    <div className="border-border mt-10 grid grid-cols-1 gap-3 border-t pt-6 select-none sm:grid-cols-2">
+      {left ?? <span className="hidden sm:block" />}
+      {right ?? <span className="hidden sm:block" />}
     </div>
   );
 }
@@ -60,14 +60,14 @@ export function PagerCard({
 }) {
   const cls = cn(
     "border-border hover:bg-muted flex flex-col gap-1 rounded-xl border p-4 transition-colors select-none",
-    dir === "next" ? "text-right" : "text-left",
+    dir === "next" ? "text-right" : "text-left"
   );
   const body = (
     <>
       <span
         className={cn(
           "text-muted-foreground flex items-center gap-1 text-xs",
-          dir === "next" && "justify-end",
+          dir === "next" && "justify-end"
         )}
       >
         {dir === "prev" ? (

@@ -17,7 +17,7 @@ export function LessonNav({
   return (
     // select-none: the pager is an index of where to go next, not text
     // anyone copies. A drag that ends here otherwise smears across both cards.
-    <div className="border-border mt-10 grid grid-cols-2 gap-3 border-t pt-6 select-none">
+    <div className="border-border mt-10 grid grid-cols-1 gap-3 border-t pt-6 select-none sm:grid-cols-2">
       {prev ? (
         <Link
           href={hrefFor(prev)}
@@ -29,13 +29,13 @@ export function LessonNav({
           <span className="font-medium">{prev.title}</span>
         </Link>
       ) : (
-        <span />
+        <span className="hidden sm:block" />
       )}
       {next ? (
         <Link
           href={hrefFor(next)}
           className={cn(
-            "border-border hover:bg-muted group flex flex-col gap-1 rounded-xl border p-4 text-right transition-colors select-none",
+            "border-border hover:bg-muted group flex flex-col gap-1 rounded-xl border p-4 text-right transition-colors select-none"
           )}
         >
           <span className="text-muted-foreground flex items-center justify-end gap-1 text-xs">
@@ -44,7 +44,7 @@ export function LessonNav({
           <span className="font-medium">{next.title}</span>
         </Link>
       ) : (
-        <span />
+        <span className="hidden sm:block" />
       )}
     </div>
   );

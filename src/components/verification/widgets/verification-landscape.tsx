@@ -46,7 +46,7 @@ export function VerificationLandscape(_: VerificationWidgetProps) {
   const [sel, setSel] = useState<Sel>(null);
 
   return (
-    <div className="not-prose bg-card border-border my-6 rounded-xl border p-4 sm:p-5">
+    <div className="verification-landscape not-prose bg-card border-border my-6 rounded-xl border p-4 sm:p-5">
       {/* legend */}
       <div className="text-muted-foreground mb-3 flex flex-wrap items-center gap-3 text-[11px] tracking-[0.04em] uppercase">
         <span>{C.lessActivity}</span>
@@ -102,7 +102,11 @@ export function VerificationLandscape(_: VerificationWidgetProps) {
                   <button
                     key={c.key}
                     type="button"
-                    aria-label={`${r.name}, ${c.name}, activity ${d.i} of 3${orgs.length ? ", " + orgs.map((m) => m.label).join(", ") : ""}`}
+                    aria-label={`${r.name}, ${c.name}, activity ${d.i} of 3${
+                      orgs.length
+                        ? ", " + orgs.map((m) => m.label).join(", ")
+                        : ""
+                    }`}
                     aria-pressed={active}
                     onClick={() => setSel({ kind: "cell", ri, ci })}
                     style={d.i === 0 ? HATCH : undefined}
@@ -110,7 +114,7 @@ export function VerificationLandscape(_: VerificationWidgetProps) {
                       "relative flex aspect-square flex-col items-start justify-start gap-0.5 overflow-hidden rounded-[3px] p-1.5 text-left outline-none transition-transform hover:z-10 hover:scale-[1.03] focus-visible:z-10 focus-visible:scale-[1.03]",
                       HEAT[d.i],
                       active &&
-                        "outline-foreground shadow-soft-md outline-[3px] -outline-offset-[3px]",
+                        "outline-foreground shadow-soft-md outline-[3px] -outline-offset-[3px]"
                     )}
                   >
                     {orgs.map((m) => (
@@ -118,7 +122,7 @@ export function VerificationLandscape(_: VerificationWidgetProps) {
                         key={m.id}
                         className={cn(
                           "text-[11px] leading-[1.15] font-medium",
-                          onDark ? "text-primary-foreground" : "text-foreground",
+                          onDark ? "text-primary-foreground" : "text-foreground"
                         )}
                       >
                         {m.short}
@@ -129,7 +133,7 @@ export function VerificationLandscape(_: VerificationWidgetProps) {
                         "pointer-events-none absolute right-1.5 bottom-1 text-[11px] leading-none",
                         onDark
                           ? "text-primary-foreground/70"
-                          : "text-muted-foreground",
+                          : "text-muted-foreground"
                       )}
                     >
                       {d.i}
@@ -148,8 +152,8 @@ export function VerificationLandscape(_: VerificationWidgetProps) {
           sel === null
             ? "none"
             : sel.kind === "cell"
-              ? `c-${sel.ri}-${sel.ci}`
-              : `a-${sel.axis}-${sel.i}`
+            ? `c-${sel.ri}-${sel.ci}`
+            : `a-${sel.axis}-${sel.i}`
         }
         /* Outlined on all four sides, in one colour. It used to be a hairline
            on three with a 3px primary edge on top — the half-painted card the

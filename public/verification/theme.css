@@ -29,7 +29,7 @@
    it, and nothing is encoded by hue alone. */
 
 :root,
-:root[data-theme='light'] {
+:root[data-theme="light"] {
   --background: #fbfaf9;
   --foreground: #1a1614;
   --card: #ffffff;
@@ -48,11 +48,11 @@
   --hl-ink: var(--foreground);
   --ring: #800000;
 
-  --mod-0: #970a12;  /* Chinese Red */
-  --mod-1: #d1601f;  /* Satsuma */
-  --mod-2: #fecd6d;  /* Lunar Yellow */
-  --mod-3: #6d7636;  /* Khaki */
-  --mod-4: #022E4C;  /* Prussian */
+  --mod-0: #970a12; /* Chinese Red */
+  --mod-1: #d1601f; /* Satsuma */
+  --mod-2: #fecd6d; /* Lunar Yellow */
+  --mod-3: #6d7636; /* Khaki */
+  --mod-4: #022e4c; /* Prussian */
   /* Text on that fill. Fixed, because it depends on the fill and not on the
      page ground. */
   --mod-0-ink: #ffffff;
@@ -100,12 +100,11 @@
      These are ink and 10%-tints, never plaques, so they take the -text
      variants. Hue never carries the meaning alone — every widget pairs it with
      its label. */
-  --comply: #555e07;      /* Khaki */
-  --defect: #9a000c;      /* Chinese Red */
-  --hide: #3d75b1;        /* Cobalt */
-  --exaggerate: #946b00;  /* Lunar Yellow */
-  --free-ride: #bf4f00;   /* Satsuma */
-
+  --comply: #555e07; /* Khaki */
+  --defect: #9a000c; /* Chinese Red */
+  --hide: #3d75b1; /* Cobalt */
+  --exaggerate: #946b00; /* Lunar Yellow */
+  --free-ride: #bf4f00; /* Satsuma */
 
   /* Type scale. Ten steps, and every rule on these pages picks one — the sizes
      used to run to 22 distinct values between 10 and 27px, eight of them at
@@ -130,8 +129,8 @@
   --radius-sm: 8px;
   --radius-xs: 4px;
   --hairline: 1px;
-  --shadow-soft: 0 1px 2px rgba(10, 25, 47, .06);
-  --shadow-soft-lg: 0 12px 40px rgba(10, 25, 47, .13);
+  --shadow-soft: 0 1px 2px rgba(10, 25, 47, 0.06);
+  --shadow-soft-lg: 0 12px 40px rgba(10, 25, 47, 0.13);
 
   /* Two families: Space Grotesk for headings and display numerals, Inter for
      the app's body and interface text. The static lift does not expose Next's
@@ -148,12 +147,13 @@
      Trap: mono was also holding counters and fractions in column. Losing it
      would let digits jitter as they change, so tabular figures are switched
      on globally below rather than per counter. */
-  --display: 'Space Grotesk', 'Segoe UI', system-ui, sans-serif;
-  --sans: var(--font-sans, -apple-system), BlinkMacSystemFont, 'Segoe UI', system-ui, Helvetica, Arial, sans-serif;
+  --display: "Space Grotesk", "Segoe UI", system-ui, sans-serif;
+  --sans: var(--font-sans, -apple-system), BlinkMacSystemFont, "Segoe UI",
+    system-ui, Helvetica, Arial, sans-serif;
   --mono: var(--sans);
 }
 
-:root[data-theme='dark'] {
+:root[data-theme="dark"] {
   --background: #14100f;
   --foreground: #f4f0ee;
   --card: #1c1817;
@@ -190,8 +190,8 @@
   --exaggerate: #c5952b;
   --free-ride: #e15f00;
 
-  --shadow-soft: 0 1px 2px rgba(0, 0, 0, .4);
-  --shadow-soft-lg: 0 12px 40px rgba(0, 0, 0, .5);
+  --shadow-soft: 0 1px 2px rgba(0, 0, 0, 0.4);
+  --shadow-soft-lg: 0 12px 40px rgba(0, 0, 0, 0.5);
 }
 
 /* High contrast is a low-vision mode, not a dark theme, and it is built to
@@ -218,7 +218,7 @@
    Trap: it is picked, never inferred. prefers-color-scheme only ever chooses
    between day and night; a legibility setting must not ride on an OS toggle
    someone set for a different reason. */
-:root[data-theme='contrast'] {
+:root[data-theme="contrast"] {
   --background: #000000;
   --foreground: #ffffff;
   --card: #000000;
@@ -237,12 +237,21 @@
 
   /* No hue at all: every module reads as foreground, and the number beside it
      is the whole encoding. */
-  --mod-0: #ffffff; --mod-1: #ffffff; --mod-2: #ffffff;
-  --mod-3: #ffffff; --mod-4: #ffffff;
-  --mod-0-ink: #000000; --mod-1-ink: #000000; --mod-2-ink: #000000;
-  --mod-3-ink: #000000; --mod-4-ink: #000000;
-  --mod-0-text: #ffffff; --mod-1-text: #ffffff; --mod-2-text: #ffffff;
-  --mod-3-text: #ffffff; --mod-4-text: #ffffff;
+  --mod-0: #ffffff;
+  --mod-1: #ffffff;
+  --mod-2: #ffffff;
+  --mod-3: #ffffff;
+  --mod-4: #ffffff;
+  --mod-0-ink: #000000;
+  --mod-1-ink: #000000;
+  --mod-2-ink: #000000;
+  --mod-3-ink: #000000;
+  --mod-4-ink: #000000;
+  --mod-0-text: #ffffff;
+  --mod-1-text: #ffffff;
+  --mod-2-text: #ffffff;
+  --mod-3-text: #ffffff;
+  --mod-4-text: #ffffff;
 
   /* Correct and wrong keep a colour because they are the one place a glance
      has to be instant — and both still carry their word and glyph. */
@@ -293,7 +302,9 @@
 
 /* A long word at 72px is wider than a 320px screen, and a heading that cannot
    break is a horizontal scrollbar. Breaking is the lesser harm. */
-:root[data-theme='contrast'] { overflow-wrap: break-word; }
+:root[data-theme="contrast"] {
+  overflow-wrap: break-word;
+}
 
 /* The learner's marker, painted by highlight.js through the Custom Highlight
    API — a pseudo, not an element, so this is the one place its colours can
@@ -310,14 +321,25 @@
    and both are a sideways scrollbar at twice it, so this mode releases them.
    A data table is the one thing left scrolling in its own box, which the
    criterion allows and the house rules already require. */
-:root[data-theme='contrast'] :is(
-  .brand, .nav a, .chip, .counter, .frac, .open-cue, .nb-count, .lock
-) { white-space: normal; }
+:root[data-theme="contrast"]
+  :is(.brand, .nav a, .chip, .counter, .frac, .open-cue, .nb-count, .lock) {
+  white-space: normal;
+}
 
-:root[data-theme='contrast'] :is(
-  .brand, .header-right, .guide-tools, .rt-row, .sort, .modes, .progress-row,
-  .gmod > .head, .control-row
-) { flex-wrap: wrap; }
+:root[data-theme="contrast"]
+  :is(
+    .brand,
+    .header-right,
+    .guide-tools,
+    .rt-row,
+    .sort,
+    .modes,
+    .progress-row,
+    .gmod > .head,
+    .control-row
+  ) {
+  flex-wrap: wrap;
+}
 
 /* A flex item's floor is its own content, and a form control's content is
    wider than it looks: an input reports the `size` attribute's twenty
@@ -327,13 +349,15 @@
    floor they need, and it has to reach the wrapper as well as the control:
    a label holding a select is the item that will not give, and `max-width:
    100%` on the select then resolves against the label's own overflow. */
-:root[data-theme='contrast'] :is(input, select, textarea) {
+:root[data-theme="contrast"] :is(input, select, textarea) {
   min-width: 0;
   max-width: 100%;
 }
-:root[data-theme='contrast'] :is(
-  .control-row, .rt-row, .guide-tools, .sort
-) > * { min-width: 0; }
+:root[data-theme="contrast"]
+  :is(.control-row, .rt-row, .guide-tools, .sort)
+  > * {
+  min-width: 0;
+}
 /* The header pair is deliberately not in that list: it is sized by
    --hdr-action-*, and a floor of zero there would let the two come apart
    again. It reflows by wrapping instead. */
@@ -341,18 +365,21 @@
 /* Label above value rather than beside it: an 88px label column beside a
    value is a two-column table, and at this size the value column has nothing
    left to hold a word. */
-:root[data-theme='contrast'] .brief dl > div { grid-template-columns: minmax(0, 1fr); gap: 2px; }
+:root[data-theme="contrast"] .brief dl > div {
+  grid-template-columns: minmax(0, 1fr);
+  gap: 2px;
+}
 
 /* 2.5.5: 44x44 CSS px minimum for a pointer target. Declared on the mode
    rather than globally, because at the default size the compact chrome is
    deliberate and this is the mode that trades density for reach. */
-:root[data-theme='contrast'] button,
-:root[data-theme='contrast'] [role='button'],
-:root[data-theme='contrast'] .btn,
-:root[data-theme='contrast'] .chip,
-:root[data-theme='contrast'] .nav a,
-:root[data-theme='contrast'] .site-footer a,
-:root[data-theme='contrast'] .part-jump {
+:root[data-theme="contrast"] button,
+:root[data-theme="contrast"] [role="button"],
+:root[data-theme="contrast"] .btn,
+:root[data-theme="contrast"] .chip,
+:root[data-theme="contrast"] .nav a,
+:root[data-theme="contrast"] .site-footer a,
+:root[data-theme="contrast"] .part-jump {
   min-height: 44px;
   min-width: 44px;
   display: inline-flex;
@@ -365,7 +392,7 @@
    a title over its status line, and being made inline-flex collapsed the two
    onto one centred line, so the whole rail read as centred prose. Keep the
    reach, restore the shape. */
-:root[data-theme='contrast'] .slot-btn {
+:root[data-theme="contrast"] .slot-btn {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
   align-items: start;
@@ -381,7 +408,9 @@
    turns the rule off rather than breaking anything visible. It had already
    happened once: the rule named `.sky-wrap`, which no longer exists, so the
    scatter was rendering here with 16px-tall targets. */
-:root[data-theme='contrast'] .constellation { display: none; }
+:root[data-theme="contrast"] .constellation {
+  display: none;
+}
 
 /* One column, everywhere — now a choice rather than a repair. These used to be
    here because zoom left the media queries believing in a width the layout no
@@ -389,16 +418,16 @@
    their own. They stay because at 200% type a three-column grid holds a
    handful of words per line, and tracking from the end of one short line to
    the start of the next is the reading problem this mode exists to remove. */
-:root[data-theme='contrast'] .objectives,
-:root[data-theme='contrast'] .modules,
-:root[data-theme='contrast'] .roster,
-:root[data-theme='contrast'] .lh-row,
-:root[data-theme='contrast'] .facts,
-:root[data-theme='contrast'] .map-body,
-:root[data-theme='contrast'] .desk,
-:root[data-theme='contrast'] .cap-grid,
-:root[data-theme='contrast'] .stat-row,
-:root[data-theme='contrast'] .player .shell {
+:root[data-theme="contrast"] .objectives,
+:root[data-theme="contrast"] .modules,
+:root[data-theme="contrast"] .roster,
+:root[data-theme="contrast"] .lh-row,
+:root[data-theme="contrast"] .facts,
+:root[data-theme="contrast"] .map-body,
+:root[data-theme="contrast"] .desk,
+:root[data-theme="contrast"] .cap-grid,
+:root[data-theme="contrast"] .stat-row,
+:root[data-theme="contrast"] .player .shell {
   grid-template-columns: minmax(0, 1fr) !important;
   /* One column only holds if the flow fills by row. A grid that fills by
      column (.objectives does, so its numbers read down the left) answers a
@@ -409,12 +438,43 @@
 
 /* The header is a fixed-height single row by default; at this size its own
    contents no longer fit across, so it wraps like it does on a phone. */
-:root[data-theme='contrast'] .site-header .bar {
+:root[data-theme="contrast"] .site-header .bar {
   display: flex;
   height: auto;
+  align-items: stretch;
+  flex-direction: column;
   flex-wrap: wrap;
   gap: 10px 16px;
   padding: 8px 16px;
+}
+
+/* The course destinations are compact controls, not prose. Letting each link
+   shrink and wrap at 200% produced six labels painted on top of one another.
+   They keep their line and travel in one explicitly scrollable rail; the page
+   itself never scrolls sideways. */
+:root[data-theme="contrast"] .site-header .nav {
+  width: 100%;
+  flex: none;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+}
+:root[data-theme="contrast"] .site-header .nav a {
+  flex: none;
+  white-space: nowrap;
+}
+
+:root[data-theme="contrast"] .site-header .brand {
+  flex-wrap: nowrap;
+  gap: 6px;
+  font-size: var(--fs-md);
+  white-space: nowrap;
+}
+:root[data-theme="contrast"] .site-header .brand-mark {
+  height: 20px;
+}
+
+:root[data-theme="contrast"] .site-header .header-right {
+  width: 100%;
 }
 /* A sticky side column has to stop being one when the column is gone. The rule
    above forces .desk to a single column, but the memo desk's two rails are
@@ -424,9 +484,9 @@
    `.slot-rail`/`.check-rail` are named here because this rule said `.rail` and
    matched neither: the same silent miss the .constellation note above records,
    so both desk rails are spelled out rather than assumed. */
-:root[data-theme='contrast'] .rail,
-:root[data-theme='contrast'] .slot-rail,
-:root[data-theme='contrast'] .check-rail {
+:root[data-theme="contrast"] .rail,
+:root[data-theme="contrast"] .slot-rail,
+:root[data-theme="contrast"] .check-rail {
   position: static;
   width: auto;
   max-width: none;
@@ -436,19 +496,40 @@
 }
 
 /* Focus has to be findable, not merely present. */
-:root[data-theme='contrast'] :where(button, a, input, textarea, [tabindex]):focus-visible {
+:root[data-theme="contrast"]
+  :where(button, a, input, textarea, [tabindex]):focus-visible {
   outline: 4px solid var(--ring);
   outline-offset: 3px;
 }
 
-h1, h2, h3, h4 { font-family: var(--display); font-weight: 500; letter-spacing: -.015em; line-height: 1.15; }
+h1,
+h2,
+h3,
+h4 {
+  font-family: var(--display);
+  font-weight: 500;
+  letter-spacing: -0.015em;
+  line-height: 1.15;
+}
 
 /* Chrome is not text — nothing pressable takes a selection. A blue smear over
    a theme glyph or a nav tab is always a mis-drag, and it reads as a broken
    page. Trap: `all: unset` resets this, so any rule using it must re-declare
    user-select: none directly after. */
-button, [role='button'], [role='radio'], [role='tab'], .chip, .nav a, .brand,
-.btn, .stat dt, .legend, .mod-chip, .memo-link, .skip, .site-footer a {
+button,
+[role="button"],
+[role="radio"],
+[role="tab"],
+.chip,
+.nav a,
+.brand,
+.btn,
+.stat dt,
+.legend,
+.mod-chip,
+.memo-link,
+.skip,
+.site-footer a {
   user-select: none;
   -webkit-user-select: none;
   -webkit-touch-callout: none;
@@ -459,9 +540,16 @@ button, [role='button'], [role='radio'], [role='tab'], .chip, .nav a, .brand,
   outline-offset: 2px;
 }
 
-.mono { font-family: var(--mono); }
+.mono {
+  font-family: var(--mono);
+}
 
-.wrap { width: 100%; max-width: 1120px; margin: 0 auto; padding: 0 24px; }
+.wrap {
+  width: 100%;
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
 
 /* ---------- header ---------- */
 
@@ -480,8 +568,10 @@ button, [role='button'], [role='radio'], [role='tab'], .chip, .nav a, .brand,
    scrims flat too so opening a source card cannot reintroduce a viewport-wide
    backdrop pass. This stylesheet is disabled when client navigation leaves
    the track, so the platform primitives keep their normal treatment elsewhere. */
-[data-slot='dialog-overlay'],
-[data-slot='sheet-overlay'] { backdrop-filter: none; }
+[data-slot="dialog-overlay"],
+[data-slot="sheet-overlay"] {
+  backdrop-filter: none;
+}
 .site-header .bar {
   /* Match BlueDot's desktop header geometry exactly: its 1505px viewport
      resolves a 1436px outer container with 80px internal gutters, putting
@@ -506,7 +596,7 @@ button, [role='button'], [role='radio'], [role='tab'], .chip, .nav a, .brand,
   /* 700 is the top of the embedded Space Grotesk's weight range — asking
      for more gets synthetic bold, which smears the letterforms. */
   font-weight: 700;
-  letter-spacing: -.015em;
+  letter-spacing: -0.015em;
   text-decoration: none;
   white-space: nowrap;
 }
@@ -514,7 +604,10 @@ button, [role='button'], [role='radio'], [role='tab'], .chip, .nav a, .brand,
    the brand. It used to take --brand-ink, which on the night ground is a
    lightened dusty pink (maroon reads at 2.3:1 as text there), so the one
    pink thing on the page was a preposition. */
-.brand i { color: var(--muted-foreground); font-style: normal; }
+.brand i {
+  color: var(--muted-foreground);
+  font-style: normal;
+}
 
 /* The XLab logotype beside the word.
 
@@ -540,11 +633,17 @@ button, [role='button'], [role='radio'], [role='tab'], .chip, .nav a, .brand,
 
 /* Which artwork, per ground. These must stay AFTER .brand-mark: it sets
    display:block at the same specificity, so ordering is what decides. */
-.mark-night { display: none; }
-:root[data-theme='dark'] .mark-day,
-:root[data-theme='contrast'] .mark-day { display: none; }
-:root[data-theme='dark'] .mark-night,
-:root[data-theme='contrast'] .mark-night { display: block; }
+.mark-night {
+  display: none;
+}
+:root[data-theme="dark"] .mark-day,
+:root[data-theme="contrast"] .mark-day {
+  display: none;
+}
+:root[data-theme="dark"] .mark-night,
+:root[data-theme="contrast"] .mark-night {
+  display: block;
+}
 
 /* At full desktop width the nav is its content width, between BlueDot's two
    48px composition gaps. At narrower widths the media rule below turns its
@@ -564,7 +663,9 @@ button, [role='button'], [role='radio'], [role='tab'], .chip, .nav a, .brand,
   scrollbar-width: none;
   -ms-overflow-style: none;
 }
-*::-webkit-scrollbar { display: none; }
+*::-webkit-scrollbar {
+  display: none;
+}
 
 .nav {
   min-width: 0;
@@ -575,19 +676,26 @@ button, [role='button'], [role='radio'], [role='tab'], .chip, .nav a, .brand,
   font-size: var(--fs-md);
   overflow-x: auto;
 }
-.nav a { white-space: nowrap; }
+.nav a {
+  white-space: nowrap;
+}
 .nav a {
   position: relative;
   padding: 6px 14px;
   border-radius: var(--radius-sm);
   color: var(--muted-foreground);
   text-decoration: none;
-  transition: color .15s ease, background .15s ease;
+  transition: color 0.15s ease, background 0.15s ease;
 }
-.nav a:hover { color: var(--foreground); background: var(--muted); }
-.nav a[aria-current='page'] { color: var(--foreground); }
-.nav a[aria-current='page']::after {
-  content: '';
+.nav a:hover {
+  color: var(--foreground);
+  background: var(--muted);
+}
+.nav a[aria-current="page"] {
+  color: var(--foreground);
+}
+.nav a[aria-current="page"]::after {
+  content: "";
   position: absolute;
   inset-inline: 14px;
   bottom: -1px;
@@ -615,7 +723,10 @@ button, [role='button'], [role='radio'], [role='tab'], .chip, .nav a, .brand,
 /* At 200% type the label and the three 44px segments both outgrow the default
    size, so the pair is given a bigger one rather than a fixed one it would
    spill out of. */
-:root[data-theme='contrast'] .header-right { --hdr-action-w: 168px; --hdr-action-h: 54px; }
+:root[data-theme="contrast"] .header-right {
+  --hdr-action-w: 168px;
+  --hdr-action-h: 54px;
+}
 
 /* A floor, not a fixed size: at the default size neither one's content reaches
    it, so both settle on exactly the same number — which is the point. Setting
@@ -673,24 +784,47 @@ button, [role='button'], [role='radio'], [role='tab'], .chip, .nav a, .brand,
   background: transparent;
   color: var(--muted-foreground);
   cursor: pointer;
-  transition: color .15s ease, background .15s ease;
+  transition: color 0.15s ease, background 0.15s ease;
 }
-.theme-switch button:hover { color: var(--foreground); background: var(--accent); }
-.theme-switch button[aria-checked='true'] { background: var(--primary); color: var(--primary-foreground); }
-.theme-switch svg { width: 15px; height: 15px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.theme-switch button:hover {
+  color: var(--foreground);
+  background: var(--accent);
+}
+.theme-switch button[aria-checked="true"] {
+  background: var(--primary);
+  color: var(--primary-foreground);
+}
+.theme-switch svg {
+  width: 15px;
+  height: 15px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
 /* Equal boxes draw unequal icons: the sun's rays reach 20 of the 24 viewBox
    units where the moon and the contrast disc reach 18. Sizing the sun down
    matches the ink the eye compares, not the box the CSS sets — and the sun is
    the one that has to survive the filled ground of the selected state. */
-.theme-switch button[data-theme='light'] svg { width: 13.5px; height: 13.5px; }
+.theme-switch button[data-theme="light"] svg {
+  width: 13.5px;
+  height: 13.5px;
+}
 /* High contrast re-solves the segments to 44px squares, and a 15px icon with
    a sub-pixel stroke floats in one as a grey speck — thin white lines
    anti-alias below the mode's own bar. The ink scales with the box: larger
    icons, a stroke thick enough to rasterise white, and the sun keeps its
    optical discount. */
-:root[data-theme='contrast'] .theme-switch svg { width: 22px; height: 22px; stroke-width: 2.4; }
-:root[data-theme='contrast'] .theme-switch button[data-theme='light'] svg { width: 20px; height: 20px; }
-
+:root[data-theme="contrast"] .theme-switch svg {
+  width: 22px;
+  height: 22px;
+  stroke-width: 2.4;
+}
+:root[data-theme="contrast"] .theme-switch button[data-theme="light"] svg {
+  width: 20px;
+  height: 20px;
+}
 
 /* ---------- buttons ---------- */
 
@@ -709,12 +843,25 @@ button, [role='button'], [role='radio'], [role='tab'], .chip, .nav a, .brand,
   font-size: var(--fs-xl);
   text-decoration: none;
   cursor: pointer;
-  transition: background .15s ease, color .15s ease;
+  transition: background 0.15s ease, color 0.15s ease;
 }
-.btn:hover { background: color-mix(in srgb, var(--primary) 88%, var(--foreground)); }
-.btn.outline { background: transparent; color: var(--foreground); border-color: var(--border); }
-.btn.outline:hover { background: var(--muted); }
-.btn.small { height: 44px; min-height: 44px; padding: 0 14px; font-size: var(--fs-lg); }
+.btn:hover {
+  background: color-mix(in srgb, var(--primary) 88%, var(--foreground));
+}
+.btn.outline {
+  background: transparent;
+  color: var(--foreground);
+  border-color: var(--border);
+}
+.btn.outline:hover {
+  background: var(--muted);
+}
+.btn.small {
+  height: 44px;
+  min-height: 44px;
+  padding: 0 14px;
+  font-size: var(--fs-lg);
+}
 
 .skip {
   position: fixed;
@@ -728,7 +875,9 @@ button, [role='button'], [role='radio'], [role='tab'], .chip, .nav a, .brand,
   background: var(--background);
   transform: translateY(-200%);
 }
-.skip:focus { transform: none; }
+.skip:focus {
+  transform: none;
+}
 
 /* ---------- footer ---------- */
 
@@ -740,9 +889,17 @@ button, [role='button'], [role='radio'], [role='tab'], .chip, .nav a, .brand,
   font-family: var(--mono);
   font-size: var(--fs-xs);
 }
-.site-footer .wrap { display: flex; flex-direction: column; gap: 14px; }
+.site-footer .wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
 
-.foot-links { display: flex; flex-wrap: wrap; gap: 8px 20px; }
+.foot-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 20px;
+}
 /* A footer row is navigation, not a sentence, so it does not get the inline
    exception WCAG's target-size rule grants links inside prose — at 19px tall
    these were under the 24px floor on a phone. The padding takes them past it;
@@ -754,10 +911,18 @@ button, [role='button'], [role='radio'], [role='tab'], .chip, .nav a, .brand,
   padding-block: 4px;
   margin-block: -4px;
 }
-.foot-links a:hover { color: var(--foreground); text-decoration: underline; text-underline-offset: 3px; }
+.foot-links a:hover {
+  color: var(--foreground);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
 /* A destination that does not exist yet. It must not look pressable — no
    pointer, no hover, no underline — or it reads as a broken link. */
-.foot-links .pending { color: var(--muted-foreground); opacity: .5; cursor: default; }
+.foot-links .pending {
+  color: var(--muted-foreground);
+  opacity: 0.5;
+  cursor: default;
+}
 
 /* One rule closes the page; a second one inside the footer only boxes the
    copyright off from the links it belongs with. Spacing separates them. */
@@ -768,12 +933,14 @@ button, [role='button'], [role='radio'], [role='tab'], .chip, .nav a, .brand,
   gap: 8px 20px;
   padding-top: 4px;
 }
-.foot-end > span:last-of-type { margin-right: auto; }
+.foot-end > span:last-of-type {
+  margin-right: auto;
+}
 
 /* Between phone and full desktop widths, keep one compact row and surrender
    only the flexible brand-to-nav spacer. The link row can then scroll inside
    its own track without disturbing the actions at the right edge. */
-@media (min-width: 721px) and (max-width: 1199px) {
+@media (min-width: 721px) and (max-width: 1435px) {
   .site-header .bar {
     grid-template-columns: auto minmax(0, 1fr) auto;
     column-gap: 24px;
@@ -835,10 +1002,12 @@ button, [role='button'], [role='radio'], [role='tab'], .chip, .nav a, .brand,
 }
 
 @media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after {
-    animation-duration: .01ms !important;
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
-    transition-duration: .01ms !important;
+    transition-duration: 0.01ms !important;
   }
   .site-header {
     background: var(--background);

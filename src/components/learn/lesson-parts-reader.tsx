@@ -22,7 +22,6 @@ import {
   ReadingPager,
   type PagerLink,
 } from "@/components/learn/reading-pager";
-import { cn } from "@/lib/utils";
 
 /* Reads a lesson one part at a time. The server renders the whole MDX body as
    this component's children; on mount the body's top-level headings become
@@ -158,18 +157,20 @@ export function LessonPartsReader({
     const body = hostRef.current?.querySelector(".lesson-body");
     if (!body) return;
     const els = Array.from(body.children).filter(
-      (el): el is HTMLElement => el instanceof HTMLElement,
+      (el): el is HTMLElement => el instanceof HTMLElement
     );
 
     // Where the breaks go is decided by planParts — pure, and tested, because
     // both of its rules are judgement calls that were wrong once: which
     // heading depth opens a part, and how small a part is allowed to be.
     const built: Part[] = planParts(
-      els.map((el) => ({ tag: el.tagName, text: el.textContent ?? "" })),
+      els.map((el) => ({ tag: el.tagName, text: el.textContent ?? "" }))
     ).map((planned) => ({
       label: planned.label,
       anchor:
-        planned.headingIndex === null ? null : els[planned.headingIndex].id || null,
+        planned.headingIndex === null
+          ? null
+          : els[planned.headingIndex].id || null,
       els: planned.indices.map((i) => els[i]),
     }));
 
@@ -218,7 +219,7 @@ export function LessonPartsReader({
         });
       }
     },
-    [parts.length],
+    [parts.length]
   );
 
   const toggleMode = useCallback(() => {
@@ -254,7 +255,7 @@ export function LessonPartsReader({
       const target = document.getElementById(decodeURIComponent(hash));
       if (!target || !hostRef.current?.contains(target)) return;
       const idx = parts.findIndex((p) =>
-        p.els.some((el) => el === target || el.contains(target)),
+        p.els.some((el) => el === target || el.contains(target))
       );
       if (idx < 0 || idx === at) return;
       e.preventDefault();
@@ -285,12 +286,22 @@ export function LessonPartsReader({
           preference applied to every body this reader mounts. Hiding the row
           on a short lesson would leave a reader looking at accented text with
           no way to turn it off from the page they are on. */}
-      <div ref={topRef} className="mb-6 flex scroll-mt-20 items-center select-none">
+      <div
+        ref={topRef}
+        className="mb-6 flex flex-wrap items-center gap-2 scroll-mt-20 select-none"
+      >
         {(estimatedMinutes || (active && whole)) && (
-          <span className="text-muted-foreground text-[13px]" aria-live="polite">
+          <span
+            className="text-muted-foreground text-[13px]"
+            aria-live="polite"
+          >
             {[
-              estimatedMinutes ? `Estimated time: ${estimatedMinutes} mins` : null,
-              active && whole ? `single page view, ${parts.length} parts` : null,
+              estimatedMinutes
+                ? `Estimated time: ${estimatedMinutes} mins`
+                : null,
+              active && whole
+                ? `single page view, ${parts.length} parts`
+                : null,
             ]
               .filter(Boolean)
               .join(" | ")}
@@ -299,13 +310,13 @@ export function LessonPartsReader({
         {/* The two reading controls sit together: how much of the lesson is
             on screen, and how the words on it are set. `relative` is the
             anchor the focus panel drops from. */}
-        <div className="relative ml-auto flex items-center gap-1">
+        <div className="relative ml-auto flex min-w-0 flex-wrap items-center justify-end gap-1 max-sm:w-full">
           {active && (
             <Button
               variant="ghost"
               size="sm"
               onClick={toggleMode}
-              className="text-muted-foreground h-11 px-2 text-sm sm:h-7 sm:text-[13px]"
+              className="text-muted-foreground h-auto min-h-11 max-w-full px-2 text-sm whitespace-normal sm:min-h-7 sm:whitespace-nowrap"
             >
               {whole ? "Read part by part" : "Read the whole lesson"}
             </Button>
@@ -323,14 +334,26 @@ export function LessonPartsReader({
       <ReadingPager
         left={
           prevIsPart ? (
-            <PagerCard dir="prev" title={parts[at - 1].label} onClick={() => goTo(at - 1)} />
+            <PagerCard
+              dir="prev"
+              title={parts[at - 1].label}
+              onClick={() => goTo(at - 1)}
+            />
           ) : prev ? (
-            <PagerCard dir="prev" title={prev.title} href={`${prev.href}?p=last`} />
+            <PagerCard
+              dir="prev"
+              title={prev.title}
+              href={`${prev.href}?p=last`}
+            />
           ) : null
         }
         right={
           nextIsPart ? (
-            <PagerCard dir="next" title={parts[at + 1].label} onClick={() => goTo(at + 1)} />
+            <PagerCard
+              dir="next"
+              title={parts[at + 1].label}
+              onClick={() => goTo(at + 1)}
+            />
           ) : next ? (
             <PagerCard dir="next" title={next.title} href={next.href} />
           ) : null

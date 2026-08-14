@@ -56,7 +56,15 @@
 
 import type { WorkspaceQuestion } from "@/lib/verification/question-workspace";
 
-/** Her five provenance labels, in the order the learner sees them. */
+/**
+ * Her five provenance labels, in the order the learner sees them.
+ *
+ * `hint` is no longer rendered. It sat on each chip as a tooltip — "Published
+ * rule: written down in a policy the company published" — which is the chip
+ * saying itself again, and the five labels are the vocabulary the exercise is
+ * teaching rather than terms it has to gloss. Kept in the data because it is
+ * the one place the five are defined at all, and a future reveal may want them.
+ */
 export type Provenance =
   | "published-rule"
   | "self-report"
@@ -297,6 +305,20 @@ export const POLICY_DEMANDS: DemandTab = {
   ],
   question: "If these were satisfied, what would that change structurally?",
   cite: RIGHT_TO_WARN,
+};
+
+/**
+ * The task, stated where a task belongs — above the material, inside the
+ * exercise, in the form an olympiad paper uses: a number, an imperative
+ * instruction, and nothing else. No framing sentence, no reason the task is
+ * interesting, no account of what it will teach. The lesson body above the
+ * fold now says nothing at all about it, which is right: a problem that needs
+ * an introduction has not been stated.
+ */
+export const POLICY_TASK = {
+  n: "1",
+  instruction:
+    "Every statement below concerns the reporting regime of one of two organisations, A or B, or is a demand made by employees of those organisations. Determine what kind of claim each statement is. Commit each set, then answer the two questions that follow.",
 };
 
 /**

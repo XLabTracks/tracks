@@ -175,5 +175,8 @@ export const QUICK_QUESTIONS: QuickQuestion[] = [
   },
 ];
 
-export const QUICK_LEAD =
-  "Five fragments of real-looking policy. One question each; the options are close, and they differ by one institutional fact.";
+/**
+ * No lead-in. It said the options were close and differed by one
+ * institutional fact, which is a description of the difficulty rather than
+ * part of the task — and knowing it in advance is half of finding it.
+ */

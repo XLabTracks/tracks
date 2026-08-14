@@ -197,7 +197,7 @@ export function SameClaim({
         <p className="text-muted-foreground text-xs">
           {saved.submitted
             ? "Submitted. The four answers are frozen."
-            : "All four cases, all three lines each, before you submit."}
+            : "Four cases, three lines each."}
         </p>
         {saved.submitted ? (
           <Button size="sm" variant="outline" onClick={() => persist(EMPTY)}>
@@ -276,10 +276,7 @@ export function SameClaim({
               aria-label={CLAIM_TRANSFER}
               className="border-border bg-background mt-2 w-full rounded-md border p-3 text-sm"
             />
-            <p className="text-muted-foreground mt-1 text-xs">
-              Optional. The useful answers here usually reach back into
-              hardware, cloud or intelligence.
-            </p>
+            <p className="text-muted-foreground mt-1 text-xs">Optional.</p>
           </section>
         </div>
       ) : null}

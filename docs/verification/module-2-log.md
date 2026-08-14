@@ -876,3 +876,33 @@ for" each characterised a regime before the learner had characterised it.
 
 The grouping survives as the order rows come in, which is the only part of it
 that was not a key.
+
+### 2.4: the explaining lines come out (2026-08-14, owner's note)
+
+An olympiad paper states the task and stops. It does not say why the task is
+interesting, does not restate the instruction under each field, and does not
+gloss its own vocabulary. 2.4 had all three. What was cut:
+
+- **2.4.1** — the four field hints, which were the prompt's own sentence
+  ("make clear who the insider is, what they know and how they know it…")
+  printed a second time under the labels; "One concrete case, not three
+  definitions"; the fill-all-fields nag; the desk rail's subtitle trimmed to
+  "Rules, not marking."
+- **2.4.2** — the lead-in, which announced that the options were close and
+  differed by one institutional fact. That is a description of the difficulty,
+  and knowing it in advance is half of finding it. Also "Nothing is recorded."
+- **2.4.3** — the four analytic categories that followed "this is not a
+  ranking": work out what they can know, whether it is direct or inferential,
+  what is unverified, what evidence would help. Handing those over before the
+  task is exactly what was cut from 2.4.1 two commits earlier. The
+  not-a-ranking instruction survives, alone.
+- **2.4.4** — the tooltip on every provenance chip, which was the chip saying
+  itself again; the status lines that explained where the Sources block would
+  appear; the line telling the learner that the demands answer was the work of
+  the tab.
+
+**And 2.4.4's task moved inside the exercise, above the tabs, in the form an
+olympiad paper uses**: a number, an imperative instruction, nothing else. The
+lesson body above the fold said what the exercise was for and now says nothing
+at all — which is right. A problem that needs an introduction has not been
+stated.

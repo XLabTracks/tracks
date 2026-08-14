@@ -33,30 +33,31 @@ export const CASE_CONDITIONS = [
   "The verification regime still cannot turn the report into actionable evidence.",
 ];
 
-/** Her four fields. */
+/**
+ * Her four fields. No hints under the labels: the prompt already says to make
+ * clear who the insider is, what they know and how they know it, how they
+ * report it and where verification fails, and a hint under each label was that
+ * sentence printed a second time.
+ */
 export const CASE_FIELDS: readonly ConstructedField[] = [
   {
     id: "insider",
     label: "Insider",
-    hint: "Who they are.",
     rows: 2,
   },
   {
     id: "information",
     label: "Information",
-    hint: "What they know, and how they know it.",
     rows: 3,
   },
   {
     id: "route",
     label: "Reporting route",
-    hint: "How the report travels, and to whom.",
     rows: 3,
   },
   {
     id: "failure",
     label: "Failure point",
-    hint: "Exactly where the verification process breaks down.",
     rows: 3,
   },
 ];

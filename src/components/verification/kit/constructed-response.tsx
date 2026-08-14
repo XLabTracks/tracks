@@ -214,9 +214,7 @@ export function ConstructedResponse({
             <h4 className="text-muted-foreground font-mono text-[11px] tracking-[0.14em] uppercase">
               Desk checks
             </h4>
-            <p className="text-muted-foreground text-xs">
-              Rules, not marking — each says what it looked for.
-            </p>
+            <p className="text-muted-foreground text-xs">Rules, not marking.</p>
           </div>
           <div className="mt-3 space-y-2">
             {checks(saved.values).map((row) => (

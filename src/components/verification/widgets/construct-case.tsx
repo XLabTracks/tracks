@@ -66,9 +66,6 @@ export function ConstructCase({
               </li>
             ))}
           </ol>
-          <p className="text-muted-foreground text-sm leading-relaxed">
-            One concrete case, not three definitions.
-          </p>
         </div>
       }
       reveal={

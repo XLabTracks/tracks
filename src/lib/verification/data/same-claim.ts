@@ -74,9 +74,14 @@ export const CLAIM_ACTIONS = [
   "treat the underlying violation as established",
 ];
 
-/** Her instruction against ranking, verbatim in substance. */
+/**
+ * Her instruction against ranking, and only that. What followed it —
+ * work out what they can know, whether it is direct or inferential, what is
+ * unverified, what evidence would help — is the four analytic categories
+ * handed over before the task, which is exactly what was cut from 2.4.1.
+ */
 export const CLAIM_NOT_A_RANKING =
-  "This is not a ranking from most to least credible. For each source, work out what they can plausibly know, whether that knowledge is direct or inferential, what is still unverified, and what further evidence would help most. The same action may be right for more than one of them.";
+  "Not a ranking from most to least credible. The same action may be right for more than one of them.";
 
 /** Her three fields per variant, verbatim. */
 export const CLAIM_FIELDS = [

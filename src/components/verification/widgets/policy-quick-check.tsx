@@ -5,10 +5,7 @@ import { CircleAlert, CircleCheck } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import {
-  QUICK_LEAD,
-  QUICK_QUESTIONS,
-} from "@/lib/verification/data/policy-quick-check";
+import { QUICK_QUESTIONS } from "@/lib/verification/data/policy-quick-check";
 import type { VerificationWidgetProps } from "../kit/types";
 
 /**
@@ -92,10 +89,6 @@ export function PolicyQuickCheck({
 
   return (
     <div className="not-prose my-6 space-y-4">
-      <p className="text-muted-foreground text-sm leading-relaxed">
-        {QUICK_LEAD}
-      </p>
-
       <ol className="space-y-3">
         {QUICK_QUESTIONS.map((question, index) => {
           const pick = saved.picks[question.id];
@@ -190,7 +183,7 @@ export function PolicyQuickCheck({
       <div className="flex flex-wrap items-center justify-between gap-3">
         <p className="text-muted-foreground text-xs" aria-live="polite">
           {saved.submitted
-            ? `${right} of ${QUICK_QUESTIONS.length}. Nothing is recorded.`
+            ? `${right} of ${QUICK_QUESTIONS.length}.`
             : `${answered} of ${QUICK_QUESTIONS.length} answered.`}
         </p>
         {saved.submitted ? (

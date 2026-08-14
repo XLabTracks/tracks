@@ -13,6 +13,7 @@ import {
   POLICY_NOTES_KEY,
   POLICY_QUESTIONS,
   POLICY_SOURCES,
+  POLICY_TASK,
   PROVENANCE,
   type Provenance,
 } from "@/lib/verification/data/policy-on-paper";
@@ -114,6 +115,11 @@ export function PolicyOnPaper({}: VerificationWidgetProps) {
 
   return (
     <div className="not-prose my-6 space-y-4">
+      <p className="text-sm leading-relaxed">
+        <span className="font-semibold">{POLICY_TASK.n}.</span>{" "}
+        {POLICY_TASK.instruction}
+      </p>
+
       <div role="tablist" aria-label="Regime" className="flex flex-wrap gap-2">
         {[...POLICY_COMPANIES, POLICY_DEMANDS].map((c) => {
           const active = c.id === tab;
@@ -184,7 +190,6 @@ export function PolicyOnPaper({}: VerificationWidgetProps) {
           <div className="space-y-4 px-4 pb-4">
             <p className="text-muted-foreground text-xs leading-relaxed">
               Which tab was which, and everything its rows were read out of.
-              Nothing above was written from memory.
             </p>
             <ul className="space-y-3">
               {POLICY_SOURCES.map((c) => (
@@ -293,7 +298,6 @@ function CompanyTab({
                           key={p.id}
                           type="button"
                           aria-pressed={mark === p.id}
-                          title={p.hint}
                           onClick={() =>
                             persist({
                               ...saved,
@@ -322,7 +326,7 @@ function CompanyTab({
       <div className="flex flex-wrap items-center justify-between gap-3">
         <p className="text-muted-foreground text-xs">
           {shown
-            ? "Marked. Who this was, and what each row was read out of, opens under Sources once every tab is done."
+            ? "Marked."
             : `${placed} of ${company.statements.length} marked on this tab.`}
         </p>
         {shown ? null : (
@@ -383,8 +387,8 @@ function DemandsTab({
       <div className="flex flex-wrap items-center justify-between gap-3">
         <p className="text-muted-foreground text-xs">
           {shown
-            ? "Answered. What this letter was, and who signed it, opens under Sources once every tab is done."
-            : "Nothing here is graded — but the answer is the work of this tab."}
+            ? "Answered."
+            : ""}
         </p>
         {shown ? null : (
           <Button

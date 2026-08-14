@@ -63,9 +63,10 @@ Module, Submodule, Subsubmodule Outline
 		2.1.7* Optional Extension: Reconstructing a Declared Training Run
 		2.1.8 Policy Judgment
 	2.2 Cloud
-		2.2.1 What Cloud Providers Can See
-		2.2.2 Reporting, Monitoring, and Control
-		2.2.3 Limits and Policy Judgment
+		2.2.1 Provider records and workload observables
+		2.2.2 Customer identification and ongoing monitoring
+		2.2.3 Detection gaps and policy limits
+		2.2.4 Interpreting cloud evidence
 	2.3 Intelligence
 		2.3.1 Observable Signatures of Undeclared AI Development
 		2.3.2 The Empirical Anchor
@@ -92,5 +93,4 @@ Module, Submodule, Subsubmodule Outline
 
 
 	
-
 

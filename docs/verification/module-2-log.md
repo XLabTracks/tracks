@@ -1123,3 +1123,18 @@ beat it, while it is being built. `answer-order.test.ts` is that question asked
 mechanically, which is the only version of it that survives the next session.
 The framing has been corrected in `src/lib/shuffle.ts`, `answer-order.test.ts`
 and CLAUDE.md.
+
+### 2026-08-14 — 2.2 exposed as four sections
+
+The two-hour Cloud workshop is no longer one 120-minute sidebar item. Its
+existing authored boundaries are now four lessons: provider records and
+workload observables (38 minutes), customer identification and ongoing
+monitoring (22), detection gaps and policy limits (30), and interpreting cloud
+evidence (30). The source selections and the `cloud-evidence-drill` itself did
+not change.
+
+`2.2 Cloud` is a non-linking sidebar group rather than a fifth introduction
+page. The first real lesson, 2.2.1, owns the existing `/cloud` route so old
+links still land on substantive content. The group lists all four sections;
+the exercise keeps its existing id and local-storage document, so saved work
+survives the move to its own route.

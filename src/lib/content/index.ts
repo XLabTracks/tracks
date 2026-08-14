@@ -284,6 +284,8 @@ export interface SidebarOutlineItem {
   /** Closing lessons show a flag and never a completable circle. */
   completion?: boolean;
   sectionItemId?: string;
+  /** Non-linking group label; the item itself becomes its first linked row. */
+  sidebarGroupTitle?: string;
   /** Papers only: inserted lessons that must also complete for the checkmark. */
   insertedLessonIds?: string[];
 }
@@ -322,6 +324,7 @@ export function getTrackSidebarOutline(
               optional: item.lesson.optional,
               completion: item.lesson.completion,
               sectionItemId: item.lesson.sectionItemId,
+              sidebarGroupTitle: item.lesson.sidebarGroupTitle,
             }
           : {
               kind: "paper",

@@ -119,6 +119,26 @@ describe("content integrity", () => {
     }
   });
 
+  it("sidebar group titles replace an empty head page with real linked sections", () => {
+    for (const lesson of lessons) {
+      if (lesson.sidebarGroupTitle === undefined) continue;
+      expect(lesson.sidebarGroupTitle.trim()).not.toBe("");
+      expect(lesson.sectionItemId).toBeUndefined();
+      const parentModule = modules.find(
+        (candidate) => candidate.id === lesson.moduleId
+      );
+      expect(parentModule, `${lesson.id}: module must resolve`).toBeDefined();
+      expect(
+        lessons.some(
+          (candidate) =>
+            candidate.moduleId === lesson.moduleId &&
+            candidate.sectionItemId === lesson.id
+        ),
+        `${lesson.id}: sidebarGroupTitle needs at least one linked subsection`
+      ).toBe(true);
+    }
+  });
+
   it("content ids are globally unique across lessons and papers", () => {
     const ids = [...lessons.map((l) => l.id), ...papers.map((p) => p.id)];
     expect(new Set(ids).size).toBe(ids.length);

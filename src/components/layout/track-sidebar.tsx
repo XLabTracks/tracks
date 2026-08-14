@@ -385,7 +385,70 @@ function SidebarItemGroup({
       </li>
     );
   }
-  const title = item.title;
+  const title = item.sidebarGroupTitle ?? item.title;
+  const linkedRows = item.sidebarGroupTitle ? [item, ...children] : children;
+
+  // Some submodules begin immediately with a substantive numbered section.
+  // `sidebarGroupTitle` lets the outline show the submodule label without
+  // inventing a separate introduction route: the label is a disclosure
+  // button, and the head lesson becomes the first linked row below it.
+  if (item.sidebarGroupTitle) {
+    const done = groupDone(group, completed);
+    return (
+      <li>
+        <button
+          type="button"
+          aria-expanded={expanded}
+          aria-label={`${expanded ? "Hide" : "Show"} sections of ${title}`}
+          onClick={onToggle}
+          className={cn(
+            navItemClass(false),
+            ITEM_ROW_CLASS,
+            "w-full text-left"
+          )}
+        >
+          {done ? (
+            <CheckCircle2
+              className={cn("text-foreground", MARKER_CLASS)}
+              aria-hidden
+            />
+          ) : (
+            <Circle className={cn("opacity-30", MARKER_CLASS)} aria-hidden />
+          )}
+          <span className="min-w-0 flex-1 line-clamp-2">{title}</span>
+          <span className="text-muted-foreground ml-auto flex shrink-0 items-center gap-0.5 text-xs tabular-nums">
+            {!expanded && linkedRows.length}
+            <ChevronRight
+              className={cn(
+                "size-3.5 transition-transform",
+                expanded && "rotate-90"
+              )}
+              aria-hidden
+            />
+          </span>
+          {done && <span className="sr-only"> (completed)</span>}
+        </button>
+        {expanded && (
+          <ul className="border-border/70 ml-4 space-y-0.5 border-l pl-2">
+            {linkedRows.map((child) => (
+              <li key={itemKey(child)}>
+                <SidebarItemRow
+                  item={child}
+                  href={`${moduleBase}/${itemSlug(child)}`}
+                  pathname={pathname}
+                  completed={completed}
+                  done={itemDone(child, completed)}
+                  onNavigate={onNavigate}
+                  sectionNav={sectionNavFor(child)}
+                />
+              </li>
+            ))}
+          </ul>
+        )}
+      </li>
+    );
+  }
+
   return (
     <li>
       <SidebarItemRow

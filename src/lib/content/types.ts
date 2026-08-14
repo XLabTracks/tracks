@@ -71,6 +71,15 @@ export interface Lesson {
    */
   sectionItemId?: string;
   /**
+   * Optional non-linking label for a sidebar section group. When this lesson
+   * has `sectionItemId` children, the sidebar renders the label as the group
+   * row and lists this lesson itself as the first linked subsection. This is
+   * for submodules whose opening item is substantive (for example 2.2.1), so
+   * they do not need a separate, nearly empty 2.2 introduction lesson merely
+   * to own the accordion.
+   */
+  sidebarGroupTitle?: string;
+  /**
    * Optional lesson: labelled "Optional" wherever the module lists it, and
    * excluded from progress requirements — module completion, prerequisite
    * satisfaction, and module/track totals ignore it. Still completable: the

@@ -455,3 +455,15 @@ not establish?"), stated once above the cards rather than repeated four times.
 It restates the bound 2.4.1's mandatory lab already ends on — "further
 investigation justified", short of a compliance judgment — rather than
 introducing a new frame.
+
+Both 2.4 optional blocks moved into `<Fold>` the same day, on the owner's
+note: that is how this course already offers material it does not require —
+a closed red card the reader opens (introduction, theories-of-change,
+scoping-anatomy all use it, the last two around a widget). A bare `## Optional
+·` heading made optional work read as the next thing to do, and on a chunked
+track it became its own reading part. The fold's body is hidden and never
+unmounted, so a half-filled widget survives being closed. Each carries the
+house's italic size line (`_N cases · about N minutes · …_`) inside.
+
+Closed as decided by the owner, so the next session does not re-raise it:
+2.4 gets no memo-desk slot. Module 2's written outputs are 2.1 and 2.3.

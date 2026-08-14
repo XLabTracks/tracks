@@ -1,7 +1,7 @@
 import { Children, isValidElement, type ComponentPropsWithoutRef } from "react";
 import type { MDXComponents } from "mdx/types";
 import { Video } from "./video";
-import { ArxivPaper } from "./arxiv-paper";
+import { ArxivPaper, ArxivSection } from "./arxiv-paper";
 import { Callout } from "./callout";
 import { Fold } from "./fold";
 import { Demo } from "./demo";
@@ -74,6 +74,7 @@ export const mdxComponents: MDXComponents = {
   ol: MdxOl,
   Video,
   ArxivPaper,
+  ArxivSection,
   Callout,
   Fold,
   Demo,

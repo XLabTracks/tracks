@@ -15,16 +15,25 @@ import {
   type ArxivId,
 } from "@/lib/arxiv/id";
 import { getPaperArtifact } from "@/lib/arxiv/artifacts";
-import {
-  CONVERTER_VERSION,
-  type ConvertedPaper,
-} from "@/lib/arxiv/types";
+import { CONVERTER_VERSION, type ConvertedPaper } from "@/lib/arxiv/types";
+import { sectionStartOffset, subtreeEndIndex } from "@/lib/papers/split-paper";
 
 export interface ArxivPaperProps {
   /** Pinned arXiv id, e.g. "1706.03762v7". The version is required. */
   id: string;
   /** Render expanded instead of collapsed. */
   defaultOpen?: boolean;
+}
+
+export interface ArxivSectionProps {
+  /** Pinned arXiv id, e.g. "2507.15916v2". */
+  id: string;
+  /** Section id from the committed artifact's toc. */
+  section: string;
+  /** Fragment used by arxiv.org's experimental HTML, e.g. "S4.SS3". */
+  sourceFragment: string;
+  /** Original table numbers in document order; the converter preserves captions but not their counters. */
+  tableNumbers?: string;
 }
 
 /**
@@ -38,8 +47,8 @@ export function ArxivPaper({ id, defaultOpen = false }: ArxivPaperProps) {
   if (!parsed) {
     return (
       <div className="not-prose border-destructive/40 bg-destructive/5 text-destructive my-6 rounded-xl border p-4 text-sm">
-        Invalid arXiv id <code>{id}</code> — a pinned version is required,
-        e.g. <code>2301.12345v2</code>.
+        Invalid arXiv id <code>{id}</code> — a pinned version is required, e.g.{" "}
+        <code>2301.12345v2</code>.
       </div>
     );
   }
@@ -47,6 +56,162 @@ export function ArxivPaper({ id, defaultOpen = false }: ArxivPaperProps) {
     <Suspense fallback={<ArxivPaperSkeleton />}>
       <ArxivPaperLoader id={parsed} defaultOpen={defaultOpen} />
     </Suspense>
+  );
+}
+
+/**
+ * Reproduces one complete arXiv section inline. Unlike ArxivPaper, this is a
+ * reading rather than a collapsible reference card: the selected section and
+ * all of its subsections remain in the lesson flow. Local citations, footnotes,
+ * and cross-references point back to the pinned arXiv HTML, where the rest of
+ * the paper is available.
+ */
+export function ArxivSection({
+  id,
+  section,
+  sourceFragment,
+  tableNumbers,
+}: ArxivSectionProps) {
+  const parsed = parseArxivId(id);
+  if (!parsed) {
+    return (
+      <div className="not-prose border-destructive/40 bg-destructive/5 text-destructive my-6 rounded-xl border p-4 text-sm">
+        Invalid arXiv id <code>{id}</code> — a pinned version is required.
+      </div>
+    );
+  }
+  return (
+    <Suspense fallback={<ArxivPaperSkeleton />}>
+      <ArxivSectionLoader
+        id={parsed}
+        section={section}
+        sourceFragment={sourceFragment}
+        tableNumbers={tableNumbers}
+      />
+    </Suspense>
+  );
+}
+
+async function ArxivSectionLoader({
+  id,
+  section,
+  sourceFragment,
+  tableNumbers,
+}: {
+  id: ArxivId;
+  section: string;
+  sourceFragment: string;
+  tableNumbers?: string;
+}) {
+  const result = await getPaperArtifact(id.id);
+  const sourceUrl = `https://arxiv.org/html/${id.id}#${encodeURIComponent(
+    sourceFragment
+  )}`;
+
+  if (result.state !== "ready") {
+    return (
+      <InfoCard id={id}>
+        This section could not be rendered inline. Read it on arXiv instead.
+      </InfoCard>
+    );
+  }
+
+  const html = extractSection(result.paper, section);
+  if (!html) {
+    return (
+      <div className="not-prose border-destructive/40 bg-destructive/5 my-6 rounded-xl border p-4 text-sm">
+        <p className="text-destructive">
+          Section not found in the pinned paper.
+        </p>
+        <p className="mt-2">
+          <a
+            href={sourceUrl}
+            target="_blank"
+            rel="noreferrer"
+            className="text-destructive font-medium underline underline-offset-2"
+          >
+            Read the section on arXiv →
+          </a>
+        </p>
+      </div>
+    );
+  }
+
+  const paperUrl = `https://arxiv.org/html/${id.id}`;
+  const numbered = numberTableCaptions(
+    stripConverterSectionNumbers(html),
+    tableNumbers
+  );
+  const linked = externalizeLinks(numbered, paperUrl);
+
+  return (
+    <section className="arxiv-excerpt not-prose border-border bg-card my-6 rounded-2xl border px-6 py-5">
+      <div
+        className="arxiv-paper"
+        data-conv={CONVERTER_VERSION}
+        dangerouslySetInnerHTML={{ __html: linked }}
+      />
+      <p className="border-border text-muted-foreground mt-5 border-t pt-3 text-sm">
+        <a
+          href={sourceUrl}
+          target="_blank"
+          rel="noreferrer"
+          className="text-foreground hover:text-destructive font-medium underline underline-offset-4 transition-colors"
+        >
+          Read this section on arXiv
+        </a>
+      </p>
+    </section>
+  );
+}
+
+function extractSection(paper: ConvertedPaper, section: string): string | null {
+  const index = paper.toc.findIndex((entry) => entry.id === section);
+  if (index === -1) return null;
+  const start = sectionStartOffset(paper.html, section);
+  if (start === -1) return null;
+
+  let end = paper.html.length;
+  for (let i = subtreeEndIndex(paper.toc, index); i < paper.toc.length; i++) {
+    const offset = sectionStartOffset(paper.html, paper.toc[i].id);
+    if (offset !== -1) {
+      end = offset;
+      break;
+    }
+  }
+  return paper.html.slice(start, end);
+}
+
+function numberTableCaptions(
+  html: string,
+  numbers: string | undefined
+): string {
+  const queue = (numbers ?? "")
+    .split(",")
+    .map((number) => number.trim())
+    .filter(Boolean);
+  let index = 0;
+  return html.replaceAll("<strong>Table: </strong>", () => {
+    const number = queue[index++];
+    return number
+      ? `<strong>Table ${number}: </strong>`
+      : "<strong>Table: </strong>";
+  });
+}
+
+function stripConverterSectionNumbers(html: string): string {
+  return html.replace(/<span class="ax-secnum">[^<]*<\/span>\s*/g, "");
+}
+
+function externalizeLinks(html: string, paperUrl: string): string {
+  return html.replace(
+    /<a\b([^>]*?)\bhref="[^"]*"([^>]*)>/g,
+    (_tag, before, after) => {
+      const attributes = `${before}${after}`
+        .replace(/\s+target="[^"]*"/g, "")
+        .replace(/\s+rel="[^"]*"/g, "");
+      return `<a${attributes} href="${paperUrl}" target="_blank" rel="noreferrer">`;
+    }
   );
 }
 
@@ -75,7 +240,9 @@ async function ArxivPaperLoader({
 
   switch (result.state) {
     case "ready":
-      return <PaperCard id={id} paper={result.paper} defaultOpen={defaultOpen} />;
+      return (
+        <PaperCard id={id} paper={result.paper} defaultOpen={defaultOpen} />
+      );
     case "pdf-only":
       return (
         <InfoCard id={id}>
@@ -199,7 +366,13 @@ function PaperLink({ href, children }: { href: string; children: string }) {
   );
 }
 
-function ErrorCard({ id, children }: { id: ArxivId; children: React.ReactNode }) {
+function ErrorCard({
+  id,
+  children,
+}: {
+  id: ArxivId;
+  children: React.ReactNode;
+}) {
   return (
     <div className="not-prose border-destructive/40 bg-destructive/5 my-6 rounded-xl border p-4 text-sm">
       <p className="text-destructive">{children}</p>
@@ -218,7 +391,13 @@ function ErrorCard({ id, children }: { id: ArxivId; children: React.ReactNode })
 }
 
 /** Muted, non-alarming card for expected degradations (e.g. PDF-only). */
-function InfoCard({ id, children }: { id: ArxivId; children: React.ReactNode }) {
+function InfoCard({
+  id,
+  children,
+}: {
+  id: ArxivId;
+  children: React.ReactNode;
+}) {
   return (
     <div className="not-prose border-border bg-muted/30 my-6 rounded-xl border p-4 text-sm">
       <p className="text-muted-foreground">{children}</p>

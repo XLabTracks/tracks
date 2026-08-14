@@ -69,6 +69,10 @@ export const verificationExercises: VerificationExerciseDef[] = [
   { id: "drills-games", title: "Drill Bench: Evasion, Regime, Position", bridged: true },
   { id: "human-insiders", title: "Who Knows What?", bridged: true },
   { id: "human-reporting-protection", title: "Follow the Report", bridged: true },
+  // Unbridged: a three-minute assignment inside 2.4.2, whose finish event is
+  // "Follow the Report" above. Two bridged widgets in one lesson would end
+  // the section at whichever fired first.
+  { id: "whistleblower-levers", title: "Four Levers, One Each", bridged: false },
   { id: "human-audits-inspections", title: "Build the Inspection Order", bridged: true },
   { id: "human-institutions-judgment", title: "Audit the Verifier", bridged: true },
 ];

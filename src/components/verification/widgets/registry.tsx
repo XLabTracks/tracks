@@ -130,6 +130,13 @@ const HumanReportingProtection = dynamic<VerificationWidgetProps>(
     ),
   { loading: WidgetLoading },
 );
+const WhistleblowerLevers = dynamic<VerificationWidgetProps>(
+  () =>
+    import("./whistleblower-levers").then(
+      (module) => module.WhistleblowerLevers,
+    ),
+  { loading: WidgetLoading },
+);
 const HumanAuditsInspections = dynamic<VerificationWidgetProps>(
   () =>
     import("./human-audits-inspections").then(
@@ -183,6 +190,7 @@ export const verificationWidgets: Record<
   "field-map": FieldMap,
   "human-insiders": HumanInsiders,
   "human-reporting-protection": HumanReportingProtection,
+  "whistleblower-levers": WhistleblowerLevers,
   "human-audits-inspections": HumanAuditsInspections,
   "human-institutions-judgment": HumanInstitutionsJudgment,
 };

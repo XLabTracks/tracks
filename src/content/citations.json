@@ -1,5 +1,5 @@
 {
-  "_comment": "Hand-authored citation registry for the Works cited appendix. entries: MLA fields plus a hand-written 'about' line per work; the appendix assembles itself from each lesson's links (rehype-lesson-citations) and looks them up here. pending: cited URLs whose bibliographic facts are still being verified -- they render nothing until moved into entries; never promote one unchecked (empty right now, and kept so a future citation can wait honestly). excluded: links that are not works (course tools, shared working documents). citations.test.ts holds all three sets honest.",
+  "_comment": "Hand-authored citation registry for the Works cited appendix. entries: MLA fields plus a hand-written 'about' line per work; the appendix assembles itself from each lesson's links (rehype-lesson-citations) and looks them up here. pending: cited URLs whose bibliographic facts are still being verified -- they render nothing until moved into entries; never promote one unchecked. The collector was widened to read every href/url attribute, not just markdown links, literal anchors and SourceQuote, so works a lesson reaches through a ReadingCard or any other component are cited now too -- 24 of them arrived at once and are parked in pending, each awaiting a person to write its fields. excluded: links that are not works (course tools, shared working documents). citations.test.ts holds all three sets honest.",
   "entries": {
     "https://ai-2040.com/supplements/verification-plan": {
       "title": "Verification Plan",
@@ -72,13 +72,6 @@
       "container": "arXiv",
       "date": "Aug. 2024"
     },
-    "https://arxiv.org/html/2408.16074": {
-      "title": "Verification Methods for International AI Agreements — Whistleblowers",
-      "about": "Wasil et al. examine how incentives, legal protection, secure reporting routes, and blocked communication affect personnel-based verification.",
-      "authors": "Wasil, Akash R., Tom Reed, Jack William Miller, et al.",
-      "container": "arXiv",
-      "date": "Aug. 2024"
-    },
     "https://arxiv.org/abs/2505.03742": {
       "title": "Hardware-Enabled Mechanisms for Verifying Responsible AI Development",
       "about": "A study of hardware-enabled mechanisms for verifiable reporting of AI training activity — compute usage, cluster configuration, and workload claims.",
@@ -93,9 +86,9 @@
       "container": "arXiv",
       "date": "July 2025"
     },
-    "https://arxiv.org/html/2507.15916#A1.SS8": {
-      "title": "Verifying International Agreements on AI — Appendix A.8: Whistleblower Programs",
-      "about": "Baker et al. examine secure contact, suppression, incentives, confidentiality, and which supply-chain personnel can observe different violations.",
+    "https://arxiv.org/abs/2507.15916": {
+      "title": "Verifying International Agreements on AI: Six Layers of Verification for Rules on Large-Scale AI Development and Deployment",
+      "about": "A six-layer verification framework whose personnel-based layers map which workers can observe different violations and why disclosures still need independent confirmation.",
       "authors": "Baker, Mauricio, Gabriel Kulp, Oliver Marks, et al.",
       "container": "arXiv",
       "date": "July 2025"
@@ -121,12 +114,26 @@
       "container": "arXiv",
       "date": "July 2024"
     },
+    "https://arxiv.org/html/2408.16074": {
+      "title": "Verification Methods for International AI Agreements — Whistleblowers",
+      "about": "Wasil et al. examine how incentives, legal protection, secure reporting routes, and blocked communication affect personnel-based verification.",
+      "authors": "Wasil, Akash R., Tom Reed, Jack William Miller, et al.",
+      "container": "arXiv",
+      "date": "Aug. 2024"
+    },
     "https://arxiv.org/html/2502.06559v1": {
       "title": "Can We Trust AI Benchmarks? An Interdisciplinary Review of Current Issues in AI Evaluation",
       "about": "An interdisciplinary review of ~100 studies cataloguing what goes wrong in AI benchmarking, from dataset bias to data contamination.",
       "authors": "Eriksson, Maria, Erasmo Purificato, Arman Noroozian, et al.",
       "container": "arXiv",
       "date": "Feb. 2025"
+    },
+    "https://arxiv.org/html/2507.15916#A1.SS8": {
+      "title": "Verifying International Agreements on AI — Appendix A.8: Whistleblower Programs",
+      "about": "Baker et al. examine secure contact, suppression, incentives, confidentiality, and which supply-chain personnel can observe different violations.",
+      "authors": "Baker, Mauricio, Gabriel Kulp, Oliver Marks, et al.",
+      "container": "arXiv",
+      "date": "July 2025"
     },
     "https://arxiv.org/pdf/2506.15867#page=128": {
       "title": "Mechanisms to Verify International Agreements About AI Development",
@@ -214,13 +221,6 @@
       "publisher": "Institute for Law & AI",
       "date": "Feb. 2025"
     },
-    "https://leginfo.legislature.ca.gov/faces/billTextClient.xhtml?bill_id=202520260SB53": {
-      "title": "SB-53 Artificial Intelligence Models: Large Developers (2025-2026)",
-      "about": "The bill text of California SB 53, the Transparency in Frontier Artificial Intelligence Act.",
-      "org": "California Legislature",
-      "container": "California Legislative Information",
-      "date": "2025"
-    },
     "https://leginfo.legislature.ca.gov/faces/billNavClient.xhtml?bill_id=202520260SB53": {
       "title": "SB-53 Artificial Intelligence Models: Large Developers (2025-2026)",
       "about": "The enacted bill text includes the frontier developer's duty to report critical safety incidents under Business and Professions Code §22757.13.",
@@ -228,12 +228,12 @@
       "container": "California Legislative Information",
       "date": "2025"
     },
-    "https://www.leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?article=&chapter=5.1.&division=2.&lawCode=LAB&part=3.&title=": {
-      "title": "Whistleblower Protections: Catastrophic Risks in AI Foundation Models, Labor Code §§ 1107–1107.2",
-      "about": "California's enacted protections for covered frontier-developer employees who disclose specified catastrophic-risk concerns or violations.",
+    "https://leginfo.legislature.ca.gov/faces/billTextClient.xhtml?bill_id=202520260SB53": {
+      "title": "SB-53 Artificial Intelligence Models: Large Developers (2025-2026)",
+      "about": "The bill text of California SB 53, the Transparency in Frontier Artificial Intelligence Act.",
       "org": "California Legislature",
       "container": "California Legislative Information",
-      "date": "effective 1 Jan. 2026"
+      "date": "2025"
     },
     "https://longtermrisk.org/measurement-research-agenda/#3_Theory_of_change": {
       "title": "Measurement Research Agenda",
@@ -247,6 +247,13 @@
       "about": "UN News coverage of the Secretary-General's governance call at the inaugural Global Dialogue on AI Governance in Geneva.",
       "org": "UN News",
       "date": "6 July 2026"
+    },
+    "https://ourworldindata.org/brief-history-of-ai": {
+      "title": "The Brief History of Artificial Intelligence: The World Has Changed Fast — What Might Be Next?",
+      "about": "The Our World in Data article whose two charts 0.1 reproduces: the timeline of notable AI systems, and test scores of AI systems relative to human performance.",
+      "authors": "Roser, Max",
+      "container": "Our World in Data",
+      "date": "6 Dec. 2022"
     },
     "https://probablygood.org/core-concepts/itn-framework/": {
       "title": "The ITN Framework: A Tool for Prioritizing Global Problems",
@@ -285,6 +292,12 @@
       "authors": "Texas Legislative Council, Research Division",
       "date": "85th Legislature"
     },
+    "https://www.acm.org/binaries/content/assets/about/acm-code-of-ethics-and-professional-conduct.pdf": {
+      "title": "ACM Code of Ethics and Professional Conduct",
+      "about": "Section 1.2 describes computing professionals' responsibility to report signs of system risks that might result in harm.",
+      "org": "Association for Computing Machinery",
+      "date": "2018"
+    },
     "https://www.aip.org/fyi/1993/looking-back-why-ssc-was-terminated": {
       "title": "Looking Back: Why the SSC Was Terminated",
       "about": "AIP's contemporaneous account of the eight factors behind Congress's 1993 termination of the Superconducting Super Collider, including the Clinton and O'Leary statements 0.1.2 quotes.",
@@ -314,19 +327,19 @@
       "publisher": "Centre for the Governance of AI",
       "date": "7 Aug. 2024"
     },
+    "https://www.leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?article=&chapter=5.1.&division=2.&lawCode=LAB&part=3.&title=": {
+      "title": "Whistleblower Protections: Catastrophic Risks in AI Foundation Models, Labor Code §§ 1107–1107.2",
+      "about": "California's enacted protections for covered frontier-developer employees who disclose specified catastrophic-risk concerns or violations.",
+      "org": "California Legislature",
+      "container": "California Legislative Information",
+      "date": "effective 1 Jan. 2026"
+    },
     "https://www.lesswrong.com/posts/7ZqGiPHTpiDMwqMN2/twelve-virtues-of-rationality": {
       "title": "Twelve Virtues of Rationality",
       "about": "An essay naming twelve virtues of rational inquiry, from curiosity to precision.",
       "authors": "Yudkowsky, Eliezer",
       "container": "LessWrong",
       "date": "2006"
-    },
-    "https://ourworldindata.org/brief-history-of-ai": {
-      "title": "The Brief History of Artificial Intelligence: The World Has Changed Fast — What Might Be Next?",
-      "about": "The Our World in Data article whose two charts 0.1 reproduces: the timeline of notable AI systems, and test scores of AI systems relative to human performance.",
-      "authors": "Roser, Max",
-      "container": "Our World in Data",
-      "date": "6 Dec. 2022"
     },
     "https://www.lesswrong.com/posts/PBRWb2Em5SNeWYwwB/humans-are-not-automatically-strategic": {
       "title": "Humans Are Not Automatically Strategic",
@@ -392,12 +405,6 @@
       "about": "The UN's page for the forty-scientist panel established in 2025 to build a shared scientific picture of AI risk.",
       "org": "United Nations"
     },
-    "https://www.acm.org/binaries/content/assets/about/acm-code-of-ethics-and-professional-conduct.pdf": {
-      "title": "ACM Code of Ethics and Professional Conduct",
-      "about": "Section 1.2 describes computing professionals' responsibility to report signs of system risks that might result in harm.",
-      "org": "Association for Computing Machinery",
-      "date": "2018"
-    },
     "https://www.whitecase.com/insight-alert/california-enacts-landmark-ai-transparency-law-transparency-frontier-artificial": {
       "title": "California Enacts Landmark AI Transparency Law: The Transparency in Frontier Artificial Intelligence Act",
       "about": "A law-firm client alert summarizing what SB 53 requires and of whom.",
@@ -424,7 +431,31 @@
     "https://ai-2040.com/supplements/faq",
     "https://www.iaea.org/sites/default/files/18/09/sg-serving-nuclear-non-proliferation.pdf",
     "https://arxiv.org/abs/2303.11341",
-    "https://www.dfat.gov.au/about-us/publications/Pages/background-papers-on-nuclear-verification-issues"
+    "https://www.dfat.gov.au/about-us/publications/Pages/background-papers-on-nuclear-verification-issues",
+    "https://arxiv.org/abs/2403.08501",
+    "https://cdn.governance.ai/Oversight_for_Frontier_AI_through_a_KYC_Scheme_for_Compute_Providers.pdf",
+    "https://www.rand.org/pubs/research_reports/RRA3686-1.html",
+    "https://carnegieendowment.org/research/2026/05/the-geopolitical-debates-over-controlling-cloud-compute",
+    "https://arxiv.org/html/2408.16074v2#S6.SS2",
+    "https://arxiv.org/html/2601.11699v4#S5.SS3",
+    "https://www.opcw.org/chemical-weapons-convention/annexes/verification-annex/part-x-challenge-inspections-pursuant",
+    "https://arxiv.org/html/2507.15916#S4.SS3",
+    "https://arxiv.org/html/2601.11699v4",
+    "https://www.ignet.gov/sites/default/files/files/Quality%20Standards%20for%20Investigations%20July-2025.pdf#page=13",
+    "https://ai-2027.com",
+    "https://arxiv.org/abs/2304.04123",
+    "https://arxiv.org/abs/2606.28694",
+    "https://arxiv.org/abs/2506.15867",
+    "https://www.eda.admin.ch/content/dam/eda/en/documents/publications/Voelkerrecht/Practice-Guide-to-International-Treatie-2023_EN.pdf",
+    "https://www.imf.org/external/Pubs/FT/fandd/basics/66-strategic-thinking.htm",
+    "https://plato.stanford.edu/entries/game-theory/",
+    "https://doi.org/10.1177/0022002797041001004",
+    "https://www.armscontrol.org/act/2005-11/features/witness-prosecution-international-organizations-and-arms-control-verification",
+    "https://www.congress.gov/crs-product/R41201",
+    "https://doi.org/10.1017/S0020818300027697",
+    "https://doi.org/10.1017/CBO9780511491368.002",
+    "https://direct.mit.edu/isec/article/44/1/42/12237/Weaponized-Interdependence-How-Global-Economic",
+    "https://doi.org/10.1017/S0020818300027703"
   ],
   "excluded": [
     "https://creativecommons.org/licenses/by/4.0/",

@@ -8,8 +8,9 @@ import citations from "@/content/citations.json";
  * registry must cover everything a lesson cites: a URL in a verification
  * lesson that is neither a registry entry nor deliberately excluded would be
  * a silent gap in the appendix. This test re-derives the citation list from
- * the raw MDX text (links, literal anchors, SourceQuote urls — the same
- * shapes rehype-lesson-citations walks) and fails naming the lesson and URL.
+ * the raw MDX text — every markdown link, and every href/url attribute
+ * wherever it is written, the same shapes rehype-lesson-citations walks —
+ * and fails naming the lesson and URL.
  *
  * `excluded` is for links that are not works: the course's own interactive
  * tools and shared working documents. Excluding a published work is a
@@ -24,9 +25,12 @@ function citedUrls(source: string): string[] {
   const urls = new Set<string>();
   for (const m of stripped.matchAll(/\]\((https?:\/\/[^)\s]+)\)/g))
     urls.add(m[1]);
-  for (const m of stripped.matchAll(/<a href=["'](https?:\/\/[^"']+)/g))
+  // Any href or url attribute, on any element or component — not a list of
+  // blessed component names, which is how a ReadingCard's work stayed
+  // invisible to the appendix while propping up a registry entry.
+  for (const m of stripped.matchAll(/\bhref=\{?["'](https?:\/\/[^"']+)/g))
     urls.add(m[1]);
-  for (const m of stripped.matchAll(/url=\{?["'](https?:\/\/[^"']+)/g))
+  for (const m of stripped.matchAll(/\burl=\{?["'](https?:\/\/[^"']+)/g))
     urls.add(m[1]);
   return [...urls];
 }

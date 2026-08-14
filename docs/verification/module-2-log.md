@@ -812,3 +812,27 @@ which the row already marks as a complaint rather than a finding; and the
 retraction memo — "OpenAI has not canceled, and will not cancel, any Vested
 Units", 24 May 2024. The CNBC link returns 403 to a datacenter fetch, as RAND
 and DFAT do; the memo's wording was confirmed through the syndicated copies.
+
+**Company B gains its one outside judgement (2026-08-14).** Tab B was six rows
+of documented practice and nothing from anybody outside, so the
+external-assessment label was never exercised there while tab A used it twice.
+It now carries the index's grade for that company — C on governance and
+accountability, second of nine behind a single B — and the row says what the
+index does NOT say as part of itself: four recommendations about other things
+is not the same as having examined the reporting channel and approved of it.
+
+The grade was checked twice because the first read of the index returned C- for
+this company and B for the other, which disagreed with a second read. Asking
+for the domain grade of all nine at once settled it: Anthropic B, OpenAI C,
+Google DeepMind C-, Meta D+, Alibaba Cloud D-, and F for Z.ai, xAI, DeepSeek
+and Mistral. Company A's row (a B, highest of nine) stands.
+
+Material found and NOT used, recorded here so the next session does not have to
+find it again — the OpenAI Files' `/former-employees` page carries direct
+first-person testimony, which is a different kind of evidence again from the
+aggregated reporting tab B currently uses: a court filing (11 April 2025)
+alleging the CEO lied to employees about his knowledge of the lifetime
+non-disparagement agreements; a former employee on access to liquidity having
+been used as an intimidation tactic (24 May 2024); and two signatories of the
+June letter on confidentiality agreements blocking them from raising concerns
+anywhere but with the company itself. Using any of it is a content decision.

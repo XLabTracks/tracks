@@ -227,6 +227,14 @@ export const POLICY_COMPANIES: PolicyCompany[] = [
         note: "Read the row carefully before you mark it: what is documented is the complaint and the reporting of it, not a regulator’s finding. That is still evidence of practice, and it is weaker evidence than the agreements themselves.",
       },
       {
+        id: "b-grade",
+        group: "context",
+        text: "An outside index graded this company C on governance and accountability — second of the nine it assessed, behind a single B — and none of its recommendations to the company concerns reporting channels at all.",
+        kind: "external-assessment",
+        cite: FLI,
+        note: "Tab B is otherwise all documented practice, which is why this row is here: it is the one judgement on it from outside. What the index does not say is part of the row — four recommendations about other things is not the same as having examined the channel and approved of it.",
+      },
+      {
         id: "b-retracted",
         group: "context",
         text: "After it became public in May 2024, the company withdrew the non-disparagement agreements and said it would not cancel anyone’s vested equity.",

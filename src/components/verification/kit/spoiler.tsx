@@ -20,48 +20,73 @@ import { cn } from "@/lib/utils";
  * The cover is a real button with a real label, so a keyboard reaches it and
  * Enter uncovers it, which is more than the apps manage.
  *
- * One way only: once uncovered it stays uncovered. Nothing here is a toggle —
- * a reader who has seen the answer cannot unsee it, and offering to re-hide it
- * would be a control that does nothing.
+ * It goes both ways. The apps are one-way and the argument for copying them
+ * was that nobody can unsee an answer — true, and beside the point: covering
+ * it again puts the page back the way it was for somebody who wants to work on
+ * with the material rather than under the answer. Hide sits where the hint
+ * sat, so the row's right-hand slot always holds exactly one thing.
  */
 export function Spoiler({
   children,
   label,
+  title,
+  hint,
 }: {
   children: ReactNode;
-  /** What the reader is about to uncover, for the button and for AT. */
+  /** What the reader is about to uncover, for the cover's accessible name. */
   label: string;
+  /** The always-visible heading. Its whole point is to survive the cover. */
+  title: string;
+  /** One line saying what is under there, shown while it is covered. */
+  hint?: string;
 }) {
   const [shown, setShown] = useState(false);
 
   return (
-    <div className="relative">
-      <div
-        aria-hidden={!shown}
-        className={cn(
-          "transition-[filter] duration-300 motion-reduce:transition-none",
-          !shown && "pointer-events-none blur-[5px] select-none",
-        )}
-      >
-        {children}
+    <div>
+      <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
+        <h4 className="text-sm font-semibold">{title}</h4>
+        {shown ? (
+          <button
+            type="button"
+            onClick={() => setShown(false)}
+            className="text-muted-foreground hover:text-foreground text-xs underline-offset-4 hover:underline"
+          >
+            Hide
+          </button>
+        ) : hint ? (
+          <p className="text-muted-foreground text-xs">{hint}</p>
+        ) : null}
       </div>
-      {shown ? null : (
-        <button
-          type="button"
-          onClick={() => setShown(true)}
-          aria-label={label}
-          className="spoiler-veil focus-visible:ring-ring absolute inset-0 flex items-center justify-center rounded-lg focus-visible:ring-2 focus-visible:outline-none"
+
+      <div className="relative mt-3">
+        <div
+          aria-hidden={!shown}
+          className={cn(
+            "transition-[filter] duration-300 motion-reduce:transition-none",
+            !shown && "pointer-events-none blur-[5px] select-none",
+          )}
         >
-          {/* The one departure from the apps, and it earns itself: their
-              spoiler sits in a message you are already reading, so a smudge is
-              obviously a smudge over something. On a page it is just a grey
-              panel unless it says otherwise. It lives inside the veil, so it
-              cannot go stale — it leaves with the cover. */}
-          <span className="text-muted-foreground bg-card/80 rounded-full px-3 py-1 font-mono text-[11px] tracking-[0.14em] uppercase">
-            Press to uncover
-          </span>
-        </button>
-      )}
+          {children}
+        </div>
+        {shown ? null : (
+          <button
+            type="button"
+            onClick={() => setShown(true)}
+            aria-label={label}
+            className="spoiler-veil focus-visible:ring-ring absolute inset-0 flex items-center justify-center rounded-lg focus-visible:ring-2 focus-visible:outline-none"
+          >
+            {/* The one departure from the apps, and it earns itself: their
+                spoiler sits in a message you are already reading, so a smudge
+                is obviously a smudge over something. On a page it is just a
+                grey panel unless it says otherwise. It lives inside the veil,
+                so it leaves with the cover rather than going stale. */}
+            <span className="text-muted-foreground bg-card/80 rounded-full px-3 py-1 font-mono text-[11px] tracking-[0.14em] uppercase">
+              Press to uncover
+            </span>
+          </button>
+        )}
+      </div>
     </div>
   );
 }

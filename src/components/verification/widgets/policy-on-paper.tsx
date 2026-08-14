@@ -197,14 +197,12 @@ export function PolicyOnPaper({
           `<details>` would have grown the page under their hands. */}
       {done ? (
         <section className="border-border rounded-xl border p-4">
-          <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
-            <h4 className="text-sm font-semibold">Sources</h4>
-            <p className="text-muted-foreground text-xs">
-              Which tab was which.
-            </p>
-          </div>
-          <Spoiler label="Uncover the sources, and which company each tab was">
-            <ul className="mt-3 space-y-3">
+          <Spoiler
+            title="Sources"
+            hint="Which tab was which."
+            label="Uncover the sources, and which company each tab was"
+          >
+            <ul className="space-y-3">
               {POLICY_SOURCES.map((c) => (
                 <li key={c.id} className="text-sm leading-relaxed">
                   <p>

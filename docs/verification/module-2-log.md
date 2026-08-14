@@ -954,8 +954,12 @@ a smudge is obviously a smudge over something, while on a page it is just a
 grey panel; the label lives inside the veil so it leaves with it and cannot go
 stale.
 
-One way only. Once uncovered it stays uncovered: a reader who has seen which
-company was which cannot unsee it, and a re-hide control would do nothing.
+It goes both ways, on the owner's call. The argument for copying the apps'
+one-way behaviour was that nobody can unsee an answer — true, and beside the
+point: covering it again puts the page back for somebody who wants to keep
+working on the material rather than under the answer. Hide sits exactly where
+the hint sat, so the header's right-hand slot always holds one thing and never
+two: the hint while covered, Hide while not.
 
 The veil is `.spoiler-veil` in globals.css — two dot fields drifting at
 different rates over a translucent ground, all of it theme tokens, so the night

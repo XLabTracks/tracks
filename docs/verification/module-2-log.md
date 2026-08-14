@@ -1006,3 +1006,31 @@ reach of find-in-page, of selection, and of the accessibility tree. Verified in
 Chromium at iPhone 13 width: with nothing committed, the Sources section is
 present, its text content reads empty while covered, the company names are not
 findable, and one press uncovers it.
+
+**The veil loses its panel (2026-08-14, owner: "а чего границы плывут — можешь
+без границы просто как тг").** She was right, and what she was seeing was not a
+border: the veil carried `background-color: color-mix(card 88%, foreground)`, a
+ground visibly darker than the card, on a rounded rectangle. That is a panel.
+The drifting dots crossing its edge made the edge itself look like it was
+moving, so the cover read as a floating outline around something rather than as
+grain over it. The apps have no ground and no edge — the particles sit straight
+on the message.
+
+So: no ground at all, and the dot field is masked to fade out over its last
+12px, which leaves it with no boundary of its own. It costs nothing to hide,
+because the content underneath is `visibility: hidden` — there is no text there
+to leak through a soft edge. Dots came up slightly (60/38% of foreground,
+from 55/35) to carry on the plain card ground the tint used to do half of.
+
+Two traps met on the way. A `mask-image` applies to everything the element
+paints, the keyboard focus ring included — it would have faded out at exactly
+the edges it exists to be visible at — so the grain moved to `::before` and the
+button kept its ring. And a positioned pseudo-element paints above static
+in-flow content, so the "Press to uncover" label needed `z-10` (and an opaque
+ground rather than `bg-card/80`: dots showing through the one thing on the
+cover that is meant to be read is not texture).
+
+Checked in Chromium at both widths, covered → uncovered → covered again:
+section height 452 → 452 → 452 on iPhone 13, 310 → 310 → 310 on desktop, and
+document height identical at every step. Company names unfindable while
+covered, findable uncovered, unfindable again after Hide. No sideways scroll.

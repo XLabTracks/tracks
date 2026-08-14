@@ -80,9 +80,15 @@ export function Spoiler({
             {/* The one departure from the apps, and it earns itself: their
                 spoiler sits in a message you are already reading, so a smudge
                 is obviously a smudge over something. On a page it is just a
-                grey panel unless it says otherwise. It lives inside the veil,
-                so it leaves with the cover rather than going stale. */}
-            <span className="text-muted-foreground bg-card/80 rounded-full px-3 py-1 font-mono text-[11px] tracking-[0.14em] uppercase">
+                field of dots unless it says otherwise. It lives inside the
+                veil, so it leaves with the cover rather than going stale.
+
+                z-10 because the grain is a positioned pseudo-element, which
+                paints above static in-flow content; the ground is opaque
+                rather than translucent for the same reason the field has no
+                ground of its own — dots showing through the one thing here
+                that is meant to be read is not texture, it is noise. */}
+            <span className="text-muted-foreground bg-card relative z-10 rounded-full px-3 py-1 font-mono text-[11px] tracking-[0.14em] uppercase">
               Press to uncover
             </span>
           </button>

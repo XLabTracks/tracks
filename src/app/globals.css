@@ -468,28 +468,65 @@
    can carry a visible heading — the heading is the label, the veil is the
    cover, and neither moves.
 
-   The grain is two offset dot fields drifting at different rates over a
-   translucent ground, so it reads as noise rather than as a pattern. Colours
-   are theme tokens: on the night ground the same rule paints itself dark
-   without a second declaration. Under prefers-reduced-motion the drift stops
-   and the grain stays — the cover is the point, the motion is decoration. */
-.spoiler-veil {
-  background-color: color-mix(in oklab, var(--card) 88%, var(--foreground));
+   The grain is two offset dot fields drifting at different rates, so it reads
+   as noise rather than as a pattern. Colours are theme tokens: on the night
+   ground the same rule paints itself dark without a second declaration. Under
+   prefers-reduced-motion the drift stops and the grain stays — the cover is
+   the point, the motion is decoration.
+
+   Particles only: no ground and no edge. A tinted ground made the veil a panel
+   — a rectangle visibly darker than the card, with a rounded edge that the
+   drifting dots kept crossing, so the cover read as a floating border around
+   something instead of as grain over it. The messaging apps have no such edge
+   and neither does this. What is left is the dot field, and it is masked to
+   fade out over its last few pixels so it has no boundary of its own at all;
+   it costs nothing to hide, because the content beneath is `visibility:
+   hidden` and there is no text there to leak through the soft edge.
+
+   The grain sits on a pseudo-element rather than on the button, because a mask
+   applies to everything the element paints — the keyboard focus ring included,
+   which would have faded out at exactly the edges it needs to be visible at.
+   The button keeps its ring; the ::before keeps the mask. Its label needs a
+   z-index for the same reason a positioned pseudo-element beats static
+   in-flow content in paint order. */
+.spoiler-veil::before {
+  content: "";
+  position: absolute;
+  inset: 0;
   background-image:
     radial-gradient(
       circle at 1px 1px,
-      color-mix(in oklab, var(--foreground) 55%, transparent) 1px,
+      color-mix(in oklab, var(--foreground) 60%, transparent) 1px,
       transparent 0
     ),
     radial-gradient(
       circle at 1px 1px,
-      color-mix(in oklab, var(--foreground) 35%, transparent) 1px,
+      color-mix(in oklab, var(--foreground) 38%, transparent) 1px,
       transparent 0
     );
   background-size:
     7px 7px,
     11px 11px;
+  mask-image:
+    linear-gradient(
+      to right,
+      transparent,
+      #000 12px,
+      #000 calc(100% - 12px),
+      transparent
+    ),
+    linear-gradient(
+      to bottom,
+      transparent,
+      #000 12px,
+      #000 calc(100% - 12px),
+      transparent
+    );
+  mask-composite: intersect;
   animation: spoiler-drift 2.4s linear infinite;
+}
+
+.spoiler-veil {
   cursor: pointer;
 }
 
@@ -507,7 +544,7 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .spoiler-veil {
+  .spoiler-veil::before {
     animation: none;
   }
 }

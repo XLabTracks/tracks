@@ -91,8 +91,13 @@
  *      (2607.18966v1 ships 41 vector PDFs) overflowed the cap and fell
  *      back to link placeholders for the excess figures, main-body
  *      figures included.
+ * v30: forest environments render as nested-div HTML trees
+ *      (transforms/forest.ts; unparseable diagrams keep the raw-source
+ *      fallback), and committed figure overrides
+ *      (src/content/arxiv-overrides/{id}/…) are merged into the files map —
+ *      an `x.pdf.svg` override wins over a rasterized `x.pdf.png` sibling.
  */
-export const CONVERTER_VERSION = 29;
+export const CONVERTER_VERSION = 30;
 
 export interface ConversionWarning {
   /** Stable machine code, e.g. "unknown-macro", "katex-error". */

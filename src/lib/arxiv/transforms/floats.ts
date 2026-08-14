@@ -78,6 +78,17 @@ export function buildFloatReplacements(opts: {
       const ext = actual.slice(actual.lastIndexOf(".")).toLowerCase();
       if (RASTER_EXTENSIONS.includes(ext)) return { kind: "img", assetPath: actual };
       if (ext === ".pdf") {
+        // A committed `${path}.svg` override (hand-authored substitute, see
+        // applyFigureOverrides in pipeline.ts) wins over a rasterized
+        // `${path}.png` sibling.
+        const override = byLowerCase.get(`${actual}.svg`.toLowerCase());
+        if (override) {
+          warnings.add(
+            "figure-override",
+            `${actual} shown as a course-rendered chart`,
+          );
+          return { kind: "img", assetPath: override };
+        }
         // The pipeline may have rasterized this PDF to a `${path}.png` sibling.
         const raster = byLowerCase.get(rasterPngPath(actual).toLowerCase());
         if (raster) return { kind: "img", assetPath: raster };

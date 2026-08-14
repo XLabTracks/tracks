@@ -245,6 +245,25 @@ export type ModuleItem =
   | { kind: "lesson"; lesson: Lesson }
   | { kind: "paper"; paper: Paper };
 
+/**
+ * Session plan for running a module as a synchronous meeting. Not a module
+ * item: no itemIds entry, no progress unit, no prerequisite effect. Rendered
+ * publicly at /tracks/[trackSlug]/[moduleSlug]/guide.
+ */
+export interface FacilitatorGuide {
+  id: string;
+  /** Module this guide covers; at most one guide per module. */
+  moduleId: string;
+  /** Path (without extension) under `src/content/guides` to the MDX body. */
+  contentRef: string;
+  /** Planned session length in minutes. */
+  sessionLength: number;
+  /** Intended group size, free text, e.g. "4–10". */
+  groupSize: string;
+  /** Room needs, e.g. "whiteboard". */
+  materials?: string[];
+}
+
 // ---------------------------------------------------------------------------
 // Exercises
 // ---------------------------------------------------------------------------
@@ -710,7 +729,8 @@ export interface CommitConstructOption {
 export interface CommitConstructExercise extends ExerciseBase {
   type: "commit-construct";
   title: string;
-  commit: {
+  /** Omit for a construct-only exercise (no prediction step). */
+  commit?: {
     /** Step heading ("Commit to a view"). */
     partTitle: string;
     framing?: string;
@@ -722,8 +742,11 @@ export interface CommitConstructExercise extends ExerciseBase {
     options: CommitConstructOption[];
     confidencePrompt: string;
     confidenceOptions: CommitConstructOption[];
-    /** Course-correction reveal; `\n\n` separates paragraphs. */
-    reveal: string;
+    /**
+     * Course-correction reveal; `\n\n` separates paragraphs. Omit when
+     * committing should simply advance to Part 2 with nothing revealed.
+     */
+    reveal?: string;
   };
   construct: {
     /** Step heading ("Construct the threat model"). */
@@ -736,9 +759,13 @@ export interface CommitConstructExercise extends ExerciseBase {
     guidanceByChoice?: Record<string, string>;
     /** Hidden until the learner asks for it. */
     hint?: string;
-    /** Bold opening line of the reveal. */
-    revealLead: string;
-    reveal: string;
+    /** Bold opening line of the worked example. */
+    revealLead?: string;
+    /**
+     * The worked example. Omit to submit straight into the comparison
+     * questions, leaving the learner's own construction as the only artifact.
+     */
+    reveal?: string;
     /** Line introducing the comparison against the learner's construction. */
     compareIntro: string;
     compareQuestions: string[];

@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { CheckCircle2, Clock, ExternalLink, FileText, Lock } from "lucide-react";
 import {
   getAssessmentForModule,
+  getGuideForModule,
   getItemProgressContentIds,
   getItemsForModule,
   getModuleBySlugs,
@@ -55,6 +56,7 @@ export default async function ModulePage({
 
   const items = getItemsForModule(module.id);
   const assessment = getAssessmentForModule(module.id);
+  const guide = getGuideForModule(module.id);
   const furtherReading = getResourcesByTopics(module.furtherReadingTopics ?? []);
   const moduleHref = `/tracks/${track.slug}/${module.slug}`;
 
@@ -177,6 +179,26 @@ export default async function ModulePage({
                 <CardFooter>
                   <Button asChild variant="outline">
                     <Link href={`${moduleHref}/assessment`}>Open assessment</Link>
+                  </Button>
+                </CardFooter>
+              </Card>
+            </section>
+          )}
+
+          {guide && (
+            <section className="mt-8">
+              <h2 className="text-lg font-semibold">For facilitators</h2>
+              <Card className="shadow-soft mt-3">
+                <CardHeader>
+                  <CardTitle className="text-base">Facilitator guide</CardTitle>
+                  <CardDescription>
+                    Run this module as a live session: a {guide.sessionLength}-minute
+                    plan with discussion prompts and a shared exercise walkthrough.
+                  </CardDescription>
+                </CardHeader>
+                <CardFooter>
+                  <Button asChild variant="outline">
+                    <Link href={`${moduleHref}/guide`}>Open facilitator guide</Link>
                   </Button>
                 </CardFooter>
               </Card>

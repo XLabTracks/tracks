@@ -1,0 +1,9 @@
+A simple way to provide proof of existence might be to find or elicit examples of exploration hacking. However, this may be unattractive for a number of reasons:
+
+- **Scarcity.** There may be no natural cases yet: current frontier models show precursory capabilities necessary for exploration hacking (e.g. situational awareness, strategic reasoning about evaluations), but we are unaware of whether they have naturally emerged during training.
+
+- **Expensive ground truth.** By definition, an exploration hacking model holds a hidden latent capability it does not display. On a naturally occurring case, we can run sandbagging evaluations, or search for signals of deterministic or low variance policies, but each evaluation or investigation per candidate model would be expensive, with no guarantee of finding an exploration hacker — or even of finding an exploration hacker worth investigating (it may be hard to replicate or recontextualize naturally occurring exploration hacking, and thus an instance found might not be worth studying).
+
+In [the guided capability elicitation paper](/tracks/control/low-stakes-control/capability-elicitation-guided) we discussed how hidden-capability phenomena can be studied through deliberately constructed model organisms. A constructed model organism replicating certain phenomena may not be representative of cases where the phenomenon is naturally occurring (and thus generalizing claims made on these model organisms to naturally occurring cases may be extrapolative). But a carefully constructed model organism would be more controllable and retain most of the key properties of a naturally occurring instance that we may want to study.
+
+In accordance with this, the paper's authors attempt to further understand exploration hacking through constructing and evaluating model organisms.

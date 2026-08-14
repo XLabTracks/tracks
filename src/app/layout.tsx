@@ -27,7 +27,7 @@ export const metadata: Metadata = {
     template: "%s · Tracks",
   },
   description:
-    "A calm, structured path into AI safety — technical and governance tracks, interactive demos, real writing practice, and a curated resource hub.",
+    "Tracks is a structured program for learning AI safety, offering a technical track on AI control and a governance track on verifying international AI agreements, with primary literature rendered in full, interactive demos, and writing practice.",
 };
 
 // Seed the client provider with the session from the initial document request

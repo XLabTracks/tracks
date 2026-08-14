@@ -4,11 +4,14 @@ import { describe, it, expect } from "vitest";
 import { lessons, modules } from "@/content/curriculum.data";
 import { exercises } from "@/content/exercises.data";
 import { assessments } from "@/content/assessments.data";
+import { facilitatorGuides } from "@/content/facilitator-guides.data";
 import { ARGUE_REVEAL_DEFAULTS } from "@/lib/content/types";
 import { featuredExercises } from "@/app/exercises/featured";
 import {
   getAssessmentForModule,
   getExerciseById,
+  getGuideForModule,
+  getItemBySlugs,
   getItemNavigation,
   getItemProgressContentIds,
   getItemsForModule,
@@ -126,6 +129,7 @@ describe("content integrity", () => {
         const slugs = getItemsForModule(m.id).map(itemSlugOf);
         expect(new Set(slugs).size).toBe(slugs.length);
         expect(slugs).not.toContain("assessment");
+        expect(slugs).not.toContain("guide");
       }
     }
   });
@@ -349,32 +353,44 @@ describe("commit-construct exercise integrity", () => {
 
   it("options are unique, guidance keys resolve, and copy is non-empty", () => {
     for (const exercise of commitConstructs) {
-      const optionIds = exercise.commit.options.map((o) => o.id);
-      const confidenceIds = exercise.commit.confidenceOptions.map((o) => o.id);
-      expect(optionIds.length, `${exercise.id} options`).toBeGreaterThanOrEqual(2);
-      expect(confidenceIds.length, `${exercise.id} confidence`).toBeGreaterThanOrEqual(2);
-      for (const ids of [optionIds, confidenceIds]) {
-        expect(new Set(ids).size, `${exercise.id} has duplicate option ids`).toBe(
-          ids.length,
-        );
-      }
-      for (const key of Object.keys(exercise.construct.guidanceByChoice ?? {})) {
+      // The commit step is optional (construct-only exercises); guidance
+      // keyed on commit choices is meaningless without one.
+      if (exercise.commit) {
+        const optionIds = exercise.commit.options.map((o) => o.id);
+        const confidenceIds = exercise.commit.confidenceOptions.map((o) => o.id);
+        expect(optionIds.length, `${exercise.id} options`).toBeGreaterThanOrEqual(2);
+        expect(confidenceIds.length, `${exercise.id} confidence`).toBeGreaterThanOrEqual(2);
+        for (const ids of [optionIds, confidenceIds]) {
+          expect(new Set(ids).size, `${exercise.id} has duplicate option ids`).toBe(
+            ids.length,
+          );
+        }
+        for (const key of Object.keys(exercise.construct.guidanceByChoice ?? {})) {
+          expect(
+            optionIds.includes(key),
+            `${exercise.id} guidance key "${key}" is not an option id`,
+          ).toBe(true);
+        }
+      } else {
         expect(
-          optionIds.includes(key),
-          `${exercise.id} guidance key "${key}" is not an option id`,
-        ).toBe(true);
+          exercise.construct.guidanceByChoice,
+          `${exercise.id} has guidanceByChoice but no commit step`,
+        ).toBeUndefined();
       }
       expect(
         exercise.construct.compareQuestions.length,
         `${exercise.id} compareQuestions`,
       ).toBeGreaterThan(0);
+      // Reveals are optional (an exercise may end at the learner's own
+      // construction), but a declared one may not be blank.
       for (const [field, value] of Object.entries({
-        question: exercise.commit.question,
-        commitReveal: exercise.commit.reveal,
+        question: exercise.commit?.question,
+        commitReveal: exercise.commit?.reveal,
         threatPrompt: exercise.construct.threatPrompt,
         revealLead: exercise.construct.revealLead,
         constructReveal: exercise.construct.reveal,
       })) {
+        if (value === undefined) continue;
         expect(value.trim(), `${exercise.id} ${field}`).not.toBe("");
       }
     }
@@ -1219,3 +1235,56 @@ function readArtifact(paper: Paper): {
   }
   return { state: "ready", ready };
 }
+
+describe("facilitator guides", () => {
+  it("guide ids are unique and moduleIds resolve, one guide per module", () => {
+    const ids = facilitatorGuides.map((g) => g.id);
+    expect(new Set(ids).size).toBe(ids.length);
+    const moduleIds = facilitatorGuides.map((g) => g.moduleId);
+    expect(new Set(moduleIds).size).toBe(moduleIds.length);
+    for (const g of facilitatorGuides) {
+      expect(
+        modules.some((m) => m.id === g.moduleId),
+        `guide ${g.id} references missing module ${g.moduleId}`,
+      ).toBe(true);
+      expect(getGuideForModule(g.moduleId)).toBe(g);
+    }
+  });
+
+  it("guide MDX bodies exist", () => {
+    for (const g of facilitatorGuides) {
+      expect(
+        existsSync(join(process.cwd(), "src/content/guides", `${g.contentRef}.mdx`)),
+        `MDX body for guide ${g.id}`,
+      ).toBe(true);
+    }
+  });
+
+  it("guide-linked exercise, demo, and track-item targets resolve", () => {
+    for (const g of facilitatorGuides) {
+      const src = readFileSync(
+        join(process.cwd(), "src/content/guides", `${g.contentRef}.mdx`),
+        "utf8",
+      );
+      for (const m of src.matchAll(/\]\(\/exercises\/([\w-]+)\)/g)) {
+        expect(getExerciseById(m[1]), `exercise ${m[1]} in guide ${g.id}`).toBeDefined();
+        // /exercises/<id> only renders for featured exercises — anything else
+        // is a live 404 even when the exercise exists in the graph.
+        expect(
+          featuredExercises.some((f) => f.id === m[1]),
+          `exercise ${m[1]} linked from guide ${g.id} must be in featuredExercises to have a standalone page`,
+        ).toBe(true);
+      }
+      for (const m of src.matchAll(/\]\(\/demos\/([\w-]+)\)/g)) {
+        expect(getDemo(m[1]), `demo ${m[1]} in guide ${g.id}`).toBeDefined();
+      }
+      for (const m of src.matchAll(/\]\(\/tracks\/([\w-]+)\/([\w-]+)\/([\w-]+)\)/g)) {
+        if (m[3] === "assessment" || m[3] === "guide") continue;
+        expect(
+          getItemBySlugs(m[1], m[2], m[3]),
+          `track item link /tracks/${m[1]}/${m[2]}/${m[3]} in guide ${g.id}`,
+        ).toBeDefined();
+      }
+    }
+  });
+});

@@ -10,7 +10,7 @@ export const tracks: Track[] = [
     title: "AI Control",
     shortTitle: "Control",
     description:
-      "Hands-on technical track on controlling and evaluating AI systems. The introductory module works through Redwood Research's \"AI Control: Improving Safety Despite Intentional Subversion\" paper and then rebuilds its trusted-monitoring result as an interactive, model-backed demo.",
+      "This hands-on technical track covers controlling and evaluating AI systems that may intentionally subvert oversight, working through the field's primary literature in full with exercises woven between the sections.",
     kind: "technical",
     moduleIds: [
       "c-intro",
@@ -151,8 +151,9 @@ export const modules: Module[] = [
       "c-paper-exploration-hacking",
       "c-paper-auditing-sabotage-bench",
       "c-paper-password-locked",
+      "c-paper-eh-guided",
     ],
-    estimatedMinutes: 225,
+    estimatedMinutes: 329,
   },
   {
     // Outline-only closing module: three section markers the author will
@@ -601,6 +602,73 @@ export const lessons: Lesson[] = [
     title: "Hypotheses, confounds, and the small experiment's results",
     contentRef: "c-plm-ins-toy-results",
     estimatedMinutes: 5,
+  },
+  // Lessons embedded inside the guided exploration-hacking paper
+  // (c-paper-eh-guided) via Paper.edits activity insertions. Deliberately
+  // NOT in the module's itemIds — they render only inside the paper.
+  {
+    id: "c-eh-ins-framework",
+    slug: "definition-and-rl-background",
+    moduleId: "c-lowstakes",
+    title: "Definition and RL background",
+    contentRef: "c-eh-ins-framework",
+    estimatedMinutes: 4,
+  },
+  {
+    id: "c-eh-ins-grpo-collapse",
+    slug: "the-grpo-objective",
+    moduleId: "c-lowstakes",
+    title: "The GRPO objective",
+    contentRef: "c-eh-ins-grpo-collapse",
+    estimatedMinutes: 3,
+  },
+  {
+    id: "c-eh-ins-next-move",
+    slug: "why-a-model-organism",
+    moduleId: "c-lowstakes",
+    title: "Why a Model Organism?",
+    contentRef: "c-eh-ins-next-move",
+    estimatedMinutes: 3,
+  },
+  {
+    id: "c-eh-ins-affordances",
+    slug: "inducing-suppression-affordances",
+    moduleId: "c-lowstakes",
+    title: "Inducing suppression: the affordance spectrum",
+    contentRef: "c-eh-ins-affordances",
+    estimatedMinutes: 3,
+  },
+  {
+    id: "c-eh-ins-locking-recipe",
+    slug: "locking-a-model",
+    moduleId: "c-lowstakes",
+    title: "Locking a Model",
+    contentRef: "c-eh-ins-locking-recipe",
+    estimatedMinutes: 4,
+  },
+  {
+    id: "c-eh-ins-reading-the-run",
+    slug: "interpreting-results",
+    moduleId: "c-lowstakes",
+    title: "Interpreting Results",
+    contentRef: "c-eh-ins-reading-the-run",
+    estimatedMinutes: 4,
+  },
+  {
+    id: "c-eh-ins-countermeasure-axes",
+    slug: "generating-countermeasures",
+    moduleId: "c-lowstakes",
+    title: "Generating countermeasures",
+    contentRef: "c-eh-ins-countermeasure-axes",
+    estimatedMinutes: 3,
+  },
+  {
+    id: "c-eh-ins-next-bar",
+    slug: "the-next-bar",
+    moduleId: "c-lowstakes",
+    title: "The next bar",
+    contentRef: "c-eh-ins-next-bar",
+    estimatedMinutes: 3,
   },
   // --- Control: areas of control work (reproduced verbatim with permission
   // from Redwood Research) ---

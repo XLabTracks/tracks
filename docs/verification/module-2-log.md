@@ -965,3 +965,22 @@ The veil is `.spoiler-veil` in globals.css — two dot fields drifting at
 different rates over a translucent ground, all of it theme tokens, so the night
 theme paints itself without a second declaration, and the drift stops under
 prefers-reduced-motion while the cover stays.
+
+**2.4.4: two dead references removed (2026-08-14, owner spotted them on a
+phone).**
+
+- The lesson opened on "whether Project Lattice complied". Project Lattice is
+  the case file of the old 2.4.1 widget and the old decision lab, both
+  unmounted — the name now exists only in data files nobody reaches, so the
+  opening pointed at a case the learner has never met. It says "a developer"
+  now.
+- "Reuse the personnel limits from 2.4.1 and what 2.4.3 established about what
+  a report licenses. No additional background reading is required." All three
+  clauses were about exercises that no longer exist: 2.4.1 has no personnel
+  roster to reuse, and the sentence had already been patched once instead of
+  deleted. Gone.
+
+Swept the other three lessons for the same disease and they are clean. The
+lesson that replaced its exercise is where this accumulates: the exercise
+changes, the prose around it keeps describing the old one, and it survives
+because nothing tests prose.

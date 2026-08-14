@@ -984,3 +984,25 @@ Swept the other three lessons for the same disease and they are clean. The
 lesson that replaced its exercise is where this accumulates: the exercise
 changes, the prose around it keeps describing the old one, and it survives
 because nothing tests prose.
+
+**Sources: the lock comes off the cover (2026-08-14, owner: "А где сурсы").**
+The Sources block was wrapped in `{done ? … : null}` — it appeared only once
+all three tabs were committed. On her phone, at the bottom of 2.4.4, there was
+simply nothing there. That is a lock on top of a cover: the spoiler already
+hides the mapping, and the learner is the one who decides when to look at it.
+The gate is gone, the block renders from the start with its letters covered,
+and `policy-on-paper.test.ts` now pins the property rather than the gate —
+`{done ?` must not appear in the widget at all, which covers both this and the
+earlier defect where the analysis questions were behind the same gate.
+
+**Correction: blur does not hide text.** The entry above says covered text is
+"blurred AND unselectable AND `aria-hidden`, so it cannot be lifted … by
+find-in-page". The last third of that was wrong, and a browser check caught it:
+blur is a filter, so the words are still rendered and still in the text layer —
+find-in-page matched them, and a screenshot at the right radius reads them.
+Covered content is `visibility: hidden` now. It keeps its box, which is the
+whole reason the page does not move, and renders nothing, so the text is out of
+reach of find-in-page, of selection, and of the accessibility tree. Verified in
+Chromium at iPhone 13 width: with nothing committed, the Sources section is
+present, its text content reads empty while covered, the company names are not
+findable, and one press uncovers it.

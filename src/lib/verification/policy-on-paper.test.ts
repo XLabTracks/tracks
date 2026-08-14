@@ -75,18 +75,17 @@ describe("policy-on-paper", () => {
     expect(last.text).toMatch(/May 2024/);
   });
 
-  it("keeps the analysis questions out from behind the completion gate", () => {
-    // The defect this pins: the two questions used to appear only once every
-    // tab was committed, so a learner met the analysis after the marking had
-    // been sealed, with no way to re-read a row against them. Where they sit
-    // on the page is the owner's call — they are under the tabs now — but
-    // nothing about them may depend on `done`.
+  it("gates nothing on having finished", () => {
+    // Two defects, one test. The analysis questions used to appear only once
+    // every tab was committed, so a learner met them after the marking was
+    // sealed. The Sources block did the same, which was a lock on top of a
+    // cover — the spoiler already hides the mapping. There is now no
+    // completion gate in the file at all, and that is the property worth
+    // pinning: `{done ?` reappearing means one of them came back.
     const src = readFileSync(WIDGET, "utf8");
-    const deck = src.indexOf("<QuestionWorkspace");
-    const gate = src.indexOf("{done ?");
-    expect(deck).toBeGreaterThan(-1);
-    expect(gate).toBeGreaterThan(-1);
-    expect(deck).toBeLessThan(gate);
+    expect(src).not.toContain("{done ?");
+    expect(src).toContain("<QuestionWorkspace");
+    expect(src).toContain("<Spoiler");
     expect(POLICY_QUESTIONS.every((q) => q.requirement === "required")).toBe(
       true,
     );

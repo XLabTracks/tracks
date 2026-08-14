@@ -15,8 +15,12 @@ import { cn } from "@/lib/utils";
  * hides can sit under an ordinary visible heading: the heading says what is
  * there, the veil says you have not looked yet, and neither of them moves.
  *
- * Hidden text is blurred AND unselectable AND `aria-hidden`, so it cannot be
- * read by dragging a cursor over it, by a screen reader, or by find-in-page.
+ * Covered content is `visibility: hidden`, not blurred. Blur is a filter: the
+ * words stay rendered, so find-in-page still matches them and a screenshot at
+ * the right radius still reads them. Hidden visibility keeps the box — which
+ * is what stops the page moving — and renders nothing, so the text is out of
+ * reach of find-in-page, of selection, and of the accessibility tree.
+ *
  * The cover is a real button with a real label, so a keyboard reaches it and
  * Enter uncovers it, which is more than the apps manage.
  *
@@ -62,10 +66,7 @@ export function Spoiler({
       <div className="relative mt-3">
         <div
           aria-hidden={!shown}
-          className={cn(
-            "transition-[filter] duration-300 motion-reduce:transition-none",
-            !shown && "pointer-events-none blur-[5px] select-none",
-          )}
+          className={cn(!shown && "invisible")}
         >
           {children}
         </div>

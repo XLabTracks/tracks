@@ -33,10 +33,11 @@ import type { VerificationWidgetProps } from "../kit/types";
  * finishing it is what finishes 2.4.4.
  *
  * The two companies are tabs and stay anonymous while the learner works —
- * that is the mechanic, not a concealment. The letters are cashed out at the
- * end, in the Sources spoiler, together with every document each row was read
- * out of; nothing above it carries a link, because a citation on tab A would
- * name the company while tab B was still meant to be judged blind.
+ * that is the mechanic, not a concealment. Nothing above the Sources block
+ * carries a link, because a citation on tab A would name the company while tab
+ * B was still meant to be judged blind; the block itself is present from the
+ * start with its letters covered, so somebody can uncover it whenever they
+ * decide the checking matters more than the puzzle.
  *
  * Marking is per tab and commits per tab: the comparison she wants happens
  * between tabs, and a single commit across both would make the second tab's
@@ -127,7 +128,6 @@ export function PolicyOnPaper({
 
   const company = POLICY_COMPANIES.find((c) => c.id === tab);
   const onDemands = tab === POLICY_DEMANDS.id;
-  const done = TAB_IDS.every((id) => saved.committed.includes(id));
 
   return (
     <div className="not-prose my-6 space-y-4">
@@ -187,16 +187,18 @@ export function PolicyOnPaper({
         onComplete={() => {}}
       />
 
-      {/* The reveal, and the only place the letters are cashed out: who each
-          one was, and every document its rows were read out of.
+      {/* Who each tab was, and every document its rows were read out of.
 
-          A spoiler rather than a disclosure, and the difference is the point:
-          the heading is visible from the start, so a reader knows the sources
-          are there and can see they have not looked; uncovering them changes
-          nothing about the page except that the words can be read. A
-          `<details>` would have grown the page under their hands. */}
-      {done ? (
-        <section className="border-border rounded-xl border p-4">
+          Always present, and covered rather than withheld. It used to render
+          only once every tab was committed, which was a lock on top of a
+          cover: the spoiler already hides the mapping, and hiding the whole
+          block as well meant a learner who wanted to check a claim mid-way
+          could not, and one who never finished never learned that the
+          statements came from anywhere at all.
+
+          Uncovering it early spoils the exercise, and that is the learner's
+          call to make — which is what a spoiler is for. */}
+      <section className="border-border rounded-xl border p-4">
           <Spoiler
             title="Sources"
             hint="Which tab was which."
@@ -232,9 +234,8 @@ export function PolicyOnPaper({
                 </li>
               ))}
             </ul>
-          </Spoiler>
-        </section>
-      ) : null}
+        </Spoiler>
+      </section>
     </div>
   );
 }

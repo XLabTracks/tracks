@@ -11,7 +11,6 @@ import {
   CLOUD_MATCH_CONCLUSIONS,
   CLOUD_MATCH_ROWS,
   CLOUD_ODD_ITEMS,
-  CLOUD_ODD_PRINCIPLES,
   CLOUD_PIPELINE_GAPS,
   CLOUD_PIPELINE_OPTIONS,
   CLOUD_SEQUENCE,
@@ -43,7 +42,6 @@ describe("cloud evidence problem set", () => {
   it("keeps the odd-one-out as a two-part classification", () => {
     expect(CLOUD_ODD_ITEMS).toHaveLength(4);
     expect(CLOUD_ODD_ITEMS.some((item) => item.id === "owner")).toBe(true);
-    expect(CLOUD_ODD_PRINCIPLES.some((item) => item.id === "actor")).toBe(true);
   });
 
   it("gives select-all tasks both supported and unsupported conclusions", () => {
@@ -77,6 +75,14 @@ describe("cloud evidence problem set", () => {
     expect(new Set(CLOUD_SEQUENCE_START)).toEqual(
       new Set(CLOUD_SEQUENCE.map((item) => item.id))
     );
+    expect(CLOUD_SEQUENCE.map((item) => item.id)).toEqual([
+      "monitor",
+      "approach",
+      "kyc",
+      "purpose",
+      "continue",
+      "respond",
+    ]);
   });
 
   it("uses each concept exactly once", () => {

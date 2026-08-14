@@ -1,6 +1,25 @@
 "use client";
 
-import { useRef, useState, type ReactNode } from "react";
+import { useRef, useState, type CSSProperties, type ReactNode } from "react";
+import {
+  closestCenter,
+  DndContext,
+  DragOverlay,
+  KeyboardSensor,
+  PointerSensor,
+  TouchSensor,
+  useSensor,
+  useSensors,
+  type DragEndEvent,
+} from "@dnd-kit/core";
+import {
+  arrayMove,
+  SortableContext,
+  sortableKeyboardCoordinates,
+  useSortable,
+  verticalListSortingStrategy,
+} from "@dnd-kit/sortable";
+import { CSS } from "@dnd-kit/utilities";
 import {
   ArrowDown,
   ArrowRight,
@@ -8,6 +27,7 @@ import {
   Check,
   CheckCircle2,
   ExternalLink,
+  GripVertical,
   RotateCcw,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -21,7 +41,6 @@ import {
   CLOUD_MATCH_CONCLUSIONS,
   CLOUD_MATCH_ROWS,
   CLOUD_ODD_ITEMS,
-  CLOUD_ODD_PRINCIPLES,
   CLOUD_PIPELINE_GAPS,
   CLOUD_PIPELINE_OPTIONS,
   CLOUD_SEQUENCE,
@@ -31,6 +50,7 @@ import {
   CLOUD_TRUE_FALSE,
   type CloudSource,
 } from "@/lib/verification/data/cloud-evidence-drill";
+import { explainsOddCloudObservable } from "@/lib/verification/engines/cloud-evidence-drill";
 import type { VerificationWidgetProps } from "../kit/types";
 
 type Verdict = "correct" | "wrong" | null;
@@ -204,33 +224,37 @@ function TrueFalseTask({ onSolved }: SolveProps) {
               <span className="text-muted-foreground mr-2">{index + 1}.</span>
               {item.claim}
             </p>
-            <div
-              className="mt-3 flex gap-2"
-              role="group"
-              aria-label={item.claim}
-            >
+            <fieldset className="mt-3 flex gap-2">
+              <legend className="sr-only">{item.claim}</legend>
               {[true, false].map((answer) => (
-                <button
+                <label
                   key={String(answer)}
-                  type="button"
-                  disabled={verdict === "correct"}
-                  onClick={() => {
-                    setAnswers((current) => ({
-                      ...current,
-                      [item.id]: answer,
-                    }));
-                    setVerdict(null);
-                  }}
                   className={cn(
-                    "border-border hover:border-foreground/35 min-w-20 rounded-md border px-3 py-2 transition-colors",
+                    "border-border hover:border-foreground/35 focus-within:ring-ring relative min-w-20 cursor-pointer rounded-md border px-3 py-2 text-center transition-colors focus-within:ring-2 focus-within:outline-none",
                     answers[item.id] === answer &&
-                      "border-primary bg-primary/5 text-primary"
+                      "border-primary bg-primary/5 text-primary",
+                    verdict === "correct" && "cursor-default"
                   )}
                 >
+                  <input
+                    type="radio"
+                    name={`cloud-true-false-${item.id}`}
+                    value={String(answer)}
+                    checked={answers[item.id] === answer}
+                    disabled={verdict === "correct"}
+                    onChange={() => {
+                      setAnswers((current) => ({
+                        ...current,
+                        [item.id]: answer,
+                      }));
+                      setVerdict(null);
+                    }}
+                    className="sr-only"
+                  />
                   {answer ? "True" : "False"}
-                </button>
+                </label>
               ))}
-            </div>
+            </fieldset>
             {verdict ? (
               <p
                 className={cn(
@@ -265,11 +289,11 @@ function TrueFalseTask({ onSolved }: SolveProps) {
 
 function OddOneOutTask({ onSolved }: SolveProps) {
   const [itemId, setItemId] = useState("");
-  const [principleId, setPrincipleId] = useState("");
+  const [principle, setPrinciple] = useState("");
   const [verdict, setVerdict] = useState<Verdict>(null);
 
   function check() {
-    const right = itemId === "owner" && principleId === "actor";
+    const right = itemId === "owner" && explainsOddCloudObservable(principle);
     setVerdict(right ? "correct" : "wrong");
     if (right) onSolved();
   }
@@ -278,44 +302,48 @@ function OddOneOutTask({ onSolved }: SolveProps) {
     <div>
       <Prompt>
         One item differs from the other three in evidentiary type. Select it,
-        then select the principle that explains the difference.
+        then state the principle that explains the difference.
       </Prompt>
-      <div className="mt-5 grid gap-2 sm:grid-cols-2">
-        {CLOUD_ODD_ITEMS.map((item) => (
-          <ChoiceButton
-            key={item.id}
-            selected={itemId === item.id}
-            disabled={verdict === "correct"}
-            onClick={() => {
-              setItemId(item.id);
-              setVerdict(null);
-            }}
-          >
-            {item.text}
-          </ChoiceButton>
-        ))}
-      </div>
-      <p className="mt-6 font-medium">Select the principle.</p>
-      <div className="mt-3 grid gap-2">
-        {CLOUD_ODD_PRINCIPLES.map((item) => (
-          <ChoiceButton
-            key={item.id}
-            selected={principleId === item.id}
-            disabled={verdict === "correct"}
-            onClick={() => {
-              setPrincipleId(item.id);
-              setVerdict(null);
-            }}
-          >
-            {item.text}
-          </ChoiceButton>
-        ))}
-      </div>
+      <fieldset className="mt-5">
+        <legend className="sr-only">Select the odd item</legend>
+        <div className="grid gap-2 sm:grid-cols-2">
+          {CLOUD_ODD_ITEMS.map((item) => (
+            <RadioChoice
+              key={item.id}
+              name="cloud-odd-item"
+              value={item.id}
+              selected={itemId === item.id}
+              disabled={verdict === "correct"}
+              onChange={() => {
+                setItemId(item.id);
+                setVerdict(null);
+              }}
+            >
+              {item.text}
+            </RadioChoice>
+          ))}
+        </div>
+      </fieldset>
+      <label htmlFor="cloud-odd-principle" className="mt-6 block font-medium">
+        In one sentence, state what the odd item records and what the other
+        three measure.
+      </label>
+      <textarea
+        id="cloud-odd-principle"
+        value={principle}
+        disabled={verdict === "correct"}
+        onChange={(event) => {
+          setPrinciple(event.target.value);
+          setVerdict(null);
+        }}
+        rows={3}
+        className="border-border bg-background focus-visible:ring-ring mt-3 w-full resize-y rounded-lg border px-4 py-3 leading-relaxed focus-visible:ring-2 focus-visible:outline-none"
+      />
       <CheckRow
         verdict={verdict}
-        disabled={!itemId || !principleId}
+        disabled={!itemId || principle.trim().length < 28}
         onCheck={check}
-        wrong="The item and the principle do not form the required classification. Both parts must be correct."
+        wrong="Both parts are required. Identify the item, then distinguish the kind of evidence it records from the kind measured by the other three."
         correct="The beneficial-ownership record concerns who controls the account. The other three are technical metrics of account activity."
         sources={[CLOUD_SOURCES.randMetrics, CLOUD_SOURCES.kyc]}
       />
@@ -348,9 +376,10 @@ function AvailableDataTask({ onSolved }: SolveProps) {
   return (
     <div>
       <Prompt>
-        Select every category that the readings say a provider already collects,
-        may already collect, or would obtain under the proposed KYC scheme.
-        Assume no direct access to customer code or data.
+        A provider has implemented the proposed KYC scheme and retains its
+        ordinary billing and operational records. It has no direct access to
+        customer code or data. Select every category available under those
+        conditions.
       </Prompt>
       <div className="mt-5 grid gap-2">
         {CLOUD_AVAILABLE_DATA.map((item) => (
@@ -458,19 +487,17 @@ function PipelineTask({ onSolved }: SolveProps) {
   return (
     <div>
       <Prompt>
-        Complete the five-stage scheme. Use five terms from the bank. Three
-        terms are not used.
+        Complete the verification map by matching each function to its
+        mechanism. Use five terms from the bank. Three terms are not used.
       </Prompt>
       <div className="border-border bg-background mt-5 rounded-lg border p-4 sm:p-5">
-        <ol className="space-y-4">
-          {CLOUD_PIPELINE_GAPS.map((gap, index) => (
-            <li
+        <div className="space-y-4">
+          {CLOUD_PIPELINE_GAPS.map((gap) => (
+            <label
               key={gap.id}
               className="grid gap-2 sm:grid-cols-[1fr_240px] sm:items-center"
             >
-              <span>
-                {index + 1}. {gap.before}
-              </span>
+              <span>{gap.before}</span>
               <select
                 value={answers[gap.id] ?? ""}
                 disabled={verdict === "correct"}
@@ -490,9 +517,9 @@ function PipelineTask({ onSolved }: SolveProps) {
                   </option>
                 ))}
               </select>
-            </li>
+            </label>
           ))}
-        </ol>
+        </div>
       </div>
       <CheckRow
         verdict={verdict}
@@ -513,14 +540,39 @@ function PipelineTask({ onSolved }: SolveProps) {
 function SequenceTask({ onSolved }: SolveProps) {
   const [order, setOrder] = useState<string[]>([...CLOUD_SEQUENCE_START]);
   const [verdict, setVerdict] = useState<Verdict>(null);
+  const [activeId, setActiveId] = useState<string | null>(null);
+  const sensors = useSensors(
+    useSensor(PointerSensor, {
+      activationConstraint: { distance: 6 },
+    }),
+    useSensor(TouchSensor, {
+      activationConstraint: { delay: 180, tolerance: 6 },
+    }),
+    useSensor(KeyboardSensor, {
+      coordinateGetter: sortableKeyboardCoordinates,
+    })
+  );
+
+  const labelFor = (id: string | number) =>
+    CLOUD_SEQUENCE.find((item) => item.id === String(id))?.text ?? String(id);
+
+  const positionFor = (id: string | number) => order.indexOf(String(id)) + 1;
 
   function move(index: number, delta: -1 | 1) {
     const target = index + delta;
     if (target < 0 || target >= order.length) return;
+    setOrder((current) => arrayMove(current, index, target));
+    setVerdict(null);
+  }
+
+  function handleDragEnd(event: DragEndEvent) {
+    const { active, over } = event;
+    setActiveId(null);
+    if (!over || active.id === over.id) return;
     setOrder((current) => {
-      const next = [...current];
-      [next[index], next[target]] = [next[target]!, next[index]!];
-      return next;
+      const from = current.indexOf(String(active.id));
+      const to = current.indexOf(String(over.id));
+      return from < 0 || to < 0 ? current : arrayMove(current, from, to);
     });
     setVerdict(null);
   }
@@ -536,56 +588,186 @@ function SequenceTask({ onSolved }: SolveProps) {
   return (
     <div>
       <Prompt>
-        A proposed scheme requires prospective KYC, a declared purpose,
-        continuous usage records, and review of flags. Put its stages in order;
-        the first row should be the earliest event.
+        The proposed Egan–Heim scheme uses continuous monitoring to bring a
+        customer into KYC before the applicable threshold is crossed. Drag the
+        stages into order. The first row should be the earliest event; the move
+        buttons provide the same operation without dragging.
       </Prompt>
-      <ol className="mt-5 space-y-2">
-        {order.map((id, index) => {
-          const item = CLOUD_SEQUENCE.find((candidate) => candidate.id === id)!;
-          return (
-            <li
-              key={id}
-              className="border-border bg-background flex items-center gap-3 rounded-lg border p-3"
-            >
-              <span className="text-muted-foreground flex size-7 shrink-0 items-center justify-center rounded-full border">
-                {index + 1}
-              </span>
-              <span className="min-w-0 flex-1 leading-relaxed">
-                {item.text}
-              </span>
-              <span className="flex shrink-0 gap-1">
-                <button
-                  type="button"
-                  disabled={index === 0 || verdict === "correct"}
-                  onClick={() => move(index, -1)}
-                  className="border-border hover:bg-muted disabled:text-muted-foreground rounded-md border p-2 disabled:opacity-40"
-                  aria-label={`Move ${item.text} earlier`}
-                >
-                  <ArrowUp className="size-4" aria-hidden />
-                </button>
-                <button
-                  type="button"
-                  disabled={index === order.length - 1 || verdict === "correct"}
-                  onClick={() => move(index, 1)}
-                  className="border-border hover:bg-muted disabled:text-muted-foreground rounded-md border p-2 disabled:opacity-40"
-                  aria-label={`Move ${item.text} later`}
-                >
-                  <ArrowDown className="size-4" aria-hidden />
-                </button>
-              </span>
-            </li>
-          );
-        })}
-      </ol>
+      <DndContext
+        sensors={sensors}
+        collisionDetection={closestCenter}
+        onDragStart={({ active }) => {
+          setActiveId(String(active.id));
+          setVerdict(null);
+        }}
+        onDragCancel={() => setActiveId(null)}
+        onDragEnd={handleDragEnd}
+        accessibility={{
+          screenReaderInstructions: {
+            draggable:
+              "To move a stage, press Space or Enter. Use the up and down arrow keys to choose a position. Press Space or Enter again to drop it, or Escape to cancel.",
+          },
+          announcements: {
+            onDragStart: ({ active }) =>
+              `Picked up ${labelFor(active.id)}, position ${positionFor(
+                active.id
+              )} of ${order.length}.`,
+            onDragOver: ({ active, over }) =>
+              over
+                ? `${labelFor(active.id)} is over position ${positionFor(
+                    over.id
+                  )} of ${order.length}.`
+                : `${labelFor(active.id)} is no longer over the list.`,
+            onDragEnd: ({ active, over }) =>
+              over
+                ? `Dropped ${labelFor(active.id)} at position ${positionFor(
+                    over.id
+                  )} of ${order.length}.`
+                : `Movement cancelled. ${labelFor(
+                    active.id
+                  )} returned to position ${positionFor(active.id)}.`,
+            onDragCancel: ({ active }) =>
+              `Movement cancelled. ${labelFor(
+                active.id
+              )} returned to position ${positionFor(active.id)}.`,
+          },
+        }}
+      >
+        <SortableContext items={order} strategy={verticalListSortingStrategy}>
+          <ol className="mt-5 space-y-2" aria-label="Stages to put in order">
+            {order.map((id, index) => {
+              const item = CLOUD_SEQUENCE.find(
+                (candidate) => candidate.id === id
+              )!;
+              return (
+                <SortableSequenceItem
+                  key={id}
+                  id={id}
+                  text={item.text}
+                  index={index}
+                  count={order.length}
+                  disabled={verdict === "correct"}
+                  onMove={move}
+                />
+              );
+            })}
+          </ol>
+        </SortableContext>
+        <DragOverlay>
+          {activeId ? (
+            <SequenceDragPreview
+              text={labelFor(activeId)}
+              position={positionFor(activeId)}
+            />
+          ) : null}
+        </DragOverlay>
+      </DndContext>
       <CheckRow
         verdict={verdict}
         disabled={false}
         onCheck={check}
         wrong="The order is incorrect under the scheme described in the question."
-        correct="Correct. Request → KYC → declared purpose → usage records → flag → reporting or escalation."
+        correct="Correct. Monitor accumulation → approaching threshold → KYC and intended use → continued monitoring → reporting or required controls."
         sources={[CLOUD_SOURCES.kyc, CLOUD_SOURCES.heimRecords]}
       />
+    </div>
+  );
+}
+
+function SortableSequenceItem({
+  id,
+  text,
+  index,
+  count,
+  disabled,
+  onMove,
+}: {
+  id: string;
+  text: string;
+  index: number;
+  count: number;
+  disabled: boolean;
+  onMove: (index: number, delta: -1 | 1) => void;
+}) {
+  const {
+    attributes,
+    listeners,
+    setActivatorNodeRef,
+    setNodeRef,
+    transform,
+    transition,
+    isDragging,
+  } = useSortable({ id, disabled });
+  const style: CSSProperties = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+  };
+
+  return (
+    <li
+      ref={setNodeRef}
+      style={style}
+      className={cn(
+        "border-border bg-background group flex items-center gap-2 rounded-lg border p-2 transition-[border-color,background-color,box-shadow,opacity]",
+        !disabled && "hover:bg-muted/35",
+        isDragging && "border-primary/45 opacity-30"
+      )}
+    >
+      <button
+        ref={setActivatorNodeRef}
+        type="button"
+        disabled={disabled}
+        {...attributes}
+        {...listeners}
+        aria-label={`Move ${text}. Current position ${index + 1} of ${count}.`}
+        className="border-border text-muted-foreground hover:border-foreground/35 hover:bg-muted focus-visible:ring-ring flex size-11 shrink-0 touch-none cursor-grab items-center justify-center rounded-md border focus-visible:ring-2 focus-visible:outline-none active:cursor-grabbing disabled:cursor-default disabled:opacity-45"
+      >
+        <GripVertical className="size-5" aria-hidden />
+      </button>
+      <span className="text-muted-foreground flex size-7 shrink-0 items-center justify-center rounded-full border">
+        {index + 1}
+      </span>
+      <span className="min-w-0 flex-1 leading-relaxed">{text}</span>
+      <span className="flex shrink-0 gap-1">
+        <button
+          type="button"
+          disabled={index === 0 || disabled}
+          onClick={() => onMove(index, -1)}
+          className="border-border hover:bg-muted focus-visible:ring-ring disabled:text-muted-foreground flex size-11 items-center justify-center rounded-md border focus-visible:ring-2 focus-visible:outline-none disabled:opacity-40"
+          aria-label={`Move ${text} earlier`}
+        >
+          <ArrowUp className="size-4" aria-hidden />
+        </button>
+        <button
+          type="button"
+          disabled={index === count - 1 || disabled}
+          onClick={() => onMove(index, 1)}
+          className="border-border hover:bg-muted focus-visible:ring-ring disabled:text-muted-foreground flex size-11 items-center justify-center rounded-md border focus-visible:ring-2 focus-visible:outline-none disabled:opacity-40"
+          aria-label={`Move ${text} later`}
+        >
+          <ArrowDown className="size-4" aria-hidden />
+        </button>
+      </span>
+    </li>
+  );
+}
+
+function SequenceDragPreview({
+  text,
+  position,
+}: {
+  text: string;
+  position: number;
+}) {
+  return (
+    <div className="border-primary/55 bg-card flex max-w-[min(760px,calc(100vw-32px))] items-center gap-2 rounded-lg border p-2 shadow-xl">
+      <span className="text-primary flex size-11 shrink-0 items-center justify-center">
+        <GripVertical className="size-5" aria-hidden />
+      </span>
+      <span className="text-muted-foreground flex size-7 shrink-0 items-center justify-center rounded-full border">
+        {position}
+      </span>
+      <span className="min-w-0 flex-1 leading-relaxed font-medium">{text}</span>
     </div>
   );
 }
@@ -643,7 +825,7 @@ function ConceptTask({ onSolved }: SolveProps) {
         disabled={!complete}
         onCheck={check}
         wrong="At least one mechanism is incorrect. Distinguish identity verification, retained records, classification, and a verifiable claim."
-        correct="Correct: KYC verifies identity; logging preserves records; classification estimates workload type; attestation presents a verifiable claim."
+        correct="Correct: KYC verifies identity; record keeping preserves service-use records; classification estimates workload type; attestation presents a verifiable claim."
         sources={[CLOUD_SOURCES.heimRecords, CLOUD_SOURCES.heimVerification]}
       />
     </div>
@@ -725,21 +907,26 @@ function InferenceTask({ onSolved }: SolveProps) {
         exceeds it, and large data transfers precede the later sessions. Which
         response is justified?
       </Prompt>
-      <div className="mt-5 grid gap-2">
-        {CLOUD_INFERENCE_OPTIONS.map((option) => (
-          <ChoiceButton
-            key={option.id}
-            selected={answerId === option.id}
-            disabled={verdict === "correct"}
-            onClick={() => {
-              setAnswerId(option.id);
-              setVerdict(null);
-            }}
-          >
-            {option.text}
-          </ChoiceButton>
-        ))}
-      </div>
+      <fieldset className="mt-5">
+        <legend className="sr-only">Select the justified response</legend>
+        <div className="grid gap-2">
+          {CLOUD_INFERENCE_OPTIONS.map((option) => (
+            <RadioChoice
+              key={option.id}
+              name="cloud-permissible-inference"
+              value={option.id}
+              selected={answerId === option.id}
+              disabled={verdict === "correct"}
+              onChange={() => {
+                setAnswerId(option.id);
+                setVerdict(null);
+              }}
+            >
+              {option.text}
+            </RadioChoice>
+          ))}
+        </div>
+      </fieldset>
       <CheckRow
         verdict={verdict}
         disabled={!answerId}
@@ -765,30 +952,39 @@ function Prompt({ children }: { children: ReactNode }) {
   );
 }
 
-function ChoiceButton({
+function RadioChoice({
+  name,
+  value,
   selected,
   disabled,
-  onClick,
+  onChange,
   children,
 }: {
+  name: string;
+  value: string;
   selected: boolean;
   disabled: boolean;
-  onClick: () => void;
+  onChange: () => void;
   children: ReactNode;
 }) {
   return (
-    <button
-      type="button"
-      role="radio"
-      aria-checked={selected}
-      disabled={disabled}
-      onClick={onClick}
+    <label
       className={cn(
-        "border-border bg-background hover:border-foreground/35 flex w-full items-start gap-3 rounded-lg border px-4 py-3 text-left leading-relaxed transition-colors",
+        "border-border bg-background hover:border-foreground/35 focus-within:ring-ring relative flex w-full cursor-pointer items-start gap-3 rounded-lg border px-4 py-3 text-left leading-relaxed transition-colors focus-within:ring-2 focus-within:outline-none",
         selected && "border-primary bg-primary/5",
+        disabled && "cursor-default",
         disabled && !selected && "opacity-55"
       )}
     >
+      <input
+        type="radio"
+        name={name}
+        value={value}
+        checked={selected}
+        disabled={disabled}
+        onChange={onChange}
+        className="sr-only"
+      />
       <span
         className={cn(
           "border-border mt-0.5 size-5 shrink-0 rounded-full border",
@@ -798,7 +994,7 @@ function ChoiceButton({
         aria-hidden
       />
       <span>{children}</span>
-    </button>
+    </label>
   );
 }
 
@@ -859,6 +1055,8 @@ function CheckRow({
     <div className="mt-5">
       {verdict ? (
         <div
+          role="status"
+          aria-live="polite"
           className={cn(
             "rounded-lg border p-4",
             verdict === "correct"
@@ -886,26 +1084,24 @@ function CheckRow({
               <p className="text-muted-foreground mt-1 leading-relaxed">
                 {verdict === "correct" ? correct : wrong}
               </p>
-              {verdict === "correct" ? (
-                <ul className="mt-2 space-y-1">
-                  {sources.map((source) => (
-                    <li key={source.label}>
-                      <a
-                        href={source.href}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-primary inline-flex items-start gap-1 text-xs font-medium underline-offset-4 hover:underline"
-                      >
-                        <span>{source.label}</span>
-                        <ExternalLink
-                          className="mt-0.5 size-3 shrink-0"
-                          aria-hidden
-                        />
-                      </a>
-                    </li>
-                  ))}
-                </ul>
-              ) : null}
+              <ul className="mt-2 space-y-1">
+                {sources.map((source) => (
+                  <li key={source.label}>
+                    <a
+                      href={source.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-primary inline-flex items-start gap-1 text-xs font-medium underline-offset-4 hover:underline"
+                    >
+                      <span>{source.label}</span>
+                      <ExternalLink
+                        className="mt-0.5 size-3 shrink-0"
+                        aria-hidden
+                      />
+                    </a>
+                  </li>
+                ))}
+              </ul>
             </div>
           </div>
         </div>

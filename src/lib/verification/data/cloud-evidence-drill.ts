@@ -87,25 +87,6 @@ export const CLOUD_ODD_ITEMS = [
   { id: "owner", text: "Verified beneficial-ownership record" },
 ] as const;
 
-export const CLOUD_ODD_PRINCIPLES = [
-  {
-    id: "actor",
-    text: "It identifies an actor; the other three measure compute activity and can be assigned thresholds.",
-  },
-  {
-    id: "automatic",
-    text: "It is the only item the provider obtains automatically when an account is created.",
-  },
-  {
-    id: "code",
-    text: "It is the only item that reveals the customer’s source code.",
-  },
-  {
-    id: "finding",
-    text: "It is the only item that independently establishes a policy violation.",
-  },
-] as const;
-
 export const CLOUD_AVAILABLE_DATA = [
   {
     id: "customer",
@@ -124,7 +105,7 @@ export const CLOUD_AVAILABLE_DATA = [
   },
   {
     id: "node",
-    text: "Node-level accelerator utilization and memory-bandwidth utilization that the provider may already collect",
+    text: "Node-level accelerator utilization and memory-bandwidth utilization retained as operational metrics",
     answer: true,
   },
   {
@@ -235,35 +216,44 @@ export const CLOUD_PIPELINE_GAPS = [
 ] as const;
 
 export const CLOUD_SEQUENCE = [
-  { id: "request", text: "Customer requests an account or large allocation" },
-  { id: "kyc", text: "Provider verifies the entity and beneficial owners" },
+  {
+    id: "monitor",
+    text: "Provider monitors each customer’s accumulated compute use",
+  },
+  {
+    id: "approach",
+    text: "A customer’s projected use approaches the applicable threshold",
+  },
+  {
+    id: "kyc",
+    text: "Provider verifies the customer entity and beneficial owners",
+  },
   {
     id: "purpose",
-    text: "Provider records the declared purpose and expected scope",
+    text: "Provider records the intended use and expected project scope",
   },
   {
-    id: "logs",
-    text: "Provider records usage metrics while the workload runs",
+    id: "continue",
+    text: "Provider continues monitoring for crossings and risk indicators",
   },
-  { id: "flag", text: "A threshold crossing or material anomaly is flagged" },
   {
-    id: "escalate",
-    text: "The case is reported or escalated under the governing rule",
+    id: "respond",
+    text: "A crossing or high-risk profile is reported or subject to required controls",
   },
 ] as const;
 
 export const CLOUD_SEQUENCE_START = [
-  "logs",
-  "request",
   "purpose",
-  "flag",
+  "monitor",
+  "respond",
+  "approach",
+  "continue",
   "kyc",
-  "escalate",
 ] as const;
 
 export const CLOUD_CONCEPTS = [
   "KYC",
-  "logging",
+  "record keeping",
   "workload classification",
   "attestation",
 ] as const;
@@ -279,7 +269,7 @@ export const CLOUD_CONCEPT_ROWS = [
     id: "events",
     description:
       "Creation and retention of time-stamped service-use records so activity can be reconstructed later.",
-    answer: "logging",
+    answer: "record keeping",
   },
   {
     id: "category",

@@ -141,6 +141,10 @@ const PolicyOnPaper = dynamic<VerificationWidgetProps>(
   () => import("./policy-on-paper").then((module) => module.PolicyOnPaper),
   { loading: WidgetLoading },
 );
+const ReportAccess = dynamic<VerificationWidgetProps>(
+  () => import("./report-access").then((module) => module.ReportAccess),
+  { loading: WidgetLoading },
+);
 const HumanAuditsInspections = dynamic<VerificationWidgetProps>(
   () =>
     import("./human-audits-inspections").then(
@@ -198,6 +202,7 @@ export const verificationWidgets: Record<
   "human-audits-inspections": HumanAuditsInspections,
   "human-institutions-judgment": HumanInstitutionsJudgment,
   "policy-on-paper": PolicyOnPaper,
+  "report-access": ReportAccess,
 };
 
 export function getVerificationWidget(

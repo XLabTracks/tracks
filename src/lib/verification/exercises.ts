@@ -78,6 +78,7 @@ export const verificationExercises: VerificationExerciseDef[] = [
   // 2.4's optional extensions. Unbridged by definition: they record no
   // completion and are outside the module's estimated time, so a learner who
   // skips them has still finished the section.
+  { id: "report-access", title: "One Report, Four Ways", bridged: false },
   { id: "policy-on-paper", title: "Policy on Paper", bridged: false },
 ];
 export function getVerificationExercise(id: string): VerificationExerciseDef | undefined {

@@ -429,3 +429,29 @@ you back through it, and here it was worse, because the tabs commit — a
 learner who marked all three and only then met the questions could not go back
 and re-read a row against them. `policy-on-paper.test.ts` pins that the deck
 renders before anything reads `done`.
+
+### 2.4.3 optional extension: One report, four ways (2026-08-14, owner's spec)
+
+Her spec in full: one report — "An employee reports that a lab is conducting a
+prohibited run." — then four cases, A worked on the run, B heard it from a
+colleague, C saw unusual internal messages and inferred the rest, D was fired
+last week and has an active dispute with management, and after each case an
+answer box. Stem and cases verbatim.
+
+Built as the house written-answer deck (`QuestionWorkspace`) and nothing else:
+four cards, four boxes, Save answer per case, "N of 4 answered", its own
+permanent localStorage document. All four are on the page at once because
+comparing them is the exercise. No marking, no options, no key — whether these
+get model answers is a content decision, not one to fill in unasked.
+
+Placed after 2.4.3's lab: the set is about what a report licenses next, an
+inspection is what you open, and none of the four establishes the run on its
+own. Unbridged, outside progress, `estimatedMinutes` unchanged; the section's
+finish event stays "Build the Inspection Order".
+
+One line is not hers and is marked as such in the data file: the question asked
+of all four ("What does the report justify doing next, and what does it still
+not establish?"), stated once above the cards rather than repeated four times.
+It restates the bound 2.4.1's mandatory lab already ends on — "further
+investigation justified", short of a compliance judgment — rather than
+introducing a new frame.

@@ -532,3 +532,35 @@ transfers. Correct-answer panels link the exact sections used, including the
 KYC and policy-scope readings where the conclusion depends on identity or the
 rule's coverage. `cloud-evidence-drill.test.ts` pins the mechanics, answer-set
 shape, thirty-minute total, three surplus terms, and English-only copy.
+
+### 2.4 rebuilt on the owner's olympiad spec (2026-08-14)
+
+Her review scored the module's concepts fine and its mechanics repetitive:
+four different conceptual exercises, almost one user action. Her spec replaces
+them with four distinct operations, each adapted from a named olympiad format,
+and forbids converting any of them back into multiple choice.
+
+  2.4.1  construct a valid case under constraints
+  2.4.2  infer latent incentives from explicit rules
+  2.4.3  re-evaluate one claim as a single material fact changes
+  2.4.4  construct a coherent institution from constrained components
+
+Each replacement keeps its predecessor's exercise id, so the lesson mapping,
+the progress key and the section's finish event never move; the old widget,
+data and engine stay in the repo unmounted, as `precedent-cases` does.
+
+**2.4.1 shipped: Construct a Case.** Four fields (Insider / Information /
+Reporting route / Failure point), 100–180 words, no options, nothing graded —
+a string match cannot see whether a case holds together and the spec says not
+to keyword-grade it. Submit freezes the fields and only then reveals her
+five-line checklist. The chrome is a new kit, `constructed-response.tsx`,
+because three of the four exercises are the same shell with different fields;
+what differs between them is the operation, which is each exercise's own.
+
+One thing there is mine and should be read first: the two worked cases. Her
+spec asks for "2 contrasting valid examples, not one correct answer" and does
+not supply them. Both are built only from failure modes her spec already
+lists — one fails on corroboration, one on a legal barrier between the
+authorised recipient and the verifier — and they are deliberately unalike so
+the pair cannot read as a template. They are two objects in
+data/construct-case.ts.

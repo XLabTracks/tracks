@@ -67,7 +67,7 @@ export const verificationExercises: VerificationExerciseDef[] = [
   // drills-supply-chain stood down when the section-specific 2.4.4 lab
   // replaced it. Its widget, engine, data, and tests remain in the repo.
   { id: "drills-games", title: "Drill Bench: Evasion, Regime, Position", bridged: true },
-  { id: "human-insiders", title: "Who Knows What?", bridged: true },
+  { id: "human-insiders", title: "Construct a Case", bridged: true },
   { id: "human-reporting-protection", title: "Follow the Report", bridged: true },
   // Unbridged: a three-minute assignment inside 2.4.2, whose finish event is
   // "Follow the Report" above. Two bridged widgets in one lesson would end

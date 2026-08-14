@@ -119,8 +119,11 @@ const FieldMap = dynamic<VerificationWidgetProps>(
   () => import("./field-map").then((module) => module.FieldMap),
   { loading: WidgetLoading },
 );
-const HumanInsiders = dynamic<VerificationWidgetProps>(
-  () => import("./human-insiders").then((module) => module.HumanInsiders),
+// 2.4.1's exercise is now Construct a Case; the id stays so the lesson
+// mapping, the progress key and the section's finish event do not move.
+// human-insiders.tsx and its engine remain in the repo, unmounted.
+const ConstructCase = dynamic<VerificationWidgetProps>(
+  () => import("./construct-case").then((module) => module.ConstructCase),
   { loading: WidgetLoading },
 );
 const HumanReportingProtection = dynamic<VerificationWidgetProps>(
@@ -203,7 +206,7 @@ export const verificationWidgets: Record<
   "evidence-taxonomies": EvidenceTaxonomies,
   "actor-map": ActorMap,
   "field-map": FieldMap,
-  "human-insiders": HumanInsiders,
+  "human-insiders": ConstructCase,
   "human-reporting-protection": HumanReportingProtection,
   "whistleblower-levers": WhistleblowerLevers,
   "human-audits-inspections": HumanAuditsInspections,

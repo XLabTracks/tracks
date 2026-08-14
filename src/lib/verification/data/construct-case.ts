@@ -38,7 +38,7 @@ export const CASE_FIELDS: readonly ConstructedField[] = [
   {
     id: "insider",
     label: "Insider",
-    hint: "Who they are, and where they sit.",
+    hint: "Who they are.",
     rows: 2,
   },
   {

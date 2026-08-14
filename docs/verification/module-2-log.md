@@ -670,3 +670,49 @@ coherence, not individual merit, was the test.
 Two cross-references went stale when the exercises were replaced and are
 fixed: 2.4.3's opening promised an inspection order, and 2.4.4 told the
 learner to reuse the inspection record they had built.
+
+### 2.4 delta pass against the source-of-truth spec (2026-08-14)
+
+Checked the built module line by line against the delta spec's QA checklist and
+changed only what deviated. 2.4.3 and 2.4.4 were already aligned in mechanic
+and were not redesigned.
+
+**2.4.2 rebuilt: Read the Rules → Policy on Paper.** The section's exercise had
+been built against an earlier draft. The required exercise is the policy
+critique: the learner finds two provisions in the policy that genuinely support
+reporting and two that could stop information reaching an independent verifier,
+with a reason for each. Findings are made by pressing a provision in the policy
+itself — a menu of pre-written interpretations would leave the reading already
+done, which is the substitution the spec forbids. Nothing is marked while they
+work and no provision is pre-labelled; the first evaluative word appears after
+all four findings are committed. Eight points, two per finding, and the second
+of each is the causal explanation: calling a provision good or bad is the
+judgement, not the justification. The policy is the spec's own six provisions,
+which unlike the earlier one contains protections that genuinely work — without
+those the "two that support" half of the task has no answer.
+
+The old widget (infer-the-system) stays in the repo unmounted, marked as such.
+
+**2.4.4:** the requirement list shown to the learner is now the spec's five,
+not three; the Verification test requires corroboration AND escalation, because
+her requirements list them separately and they are different institutions —
+escalation without corroboration concludes from an allegation, corroboration
+without escalation is a filing system; a Coherence row was added beside the
+three machine verdicts saying it is decided in the key, so the evaluator's
+three do not read as the whole marking. The "different question from whether
+each one is a good idea on its own" clause is restored to the lead-in on the
+spec's instruction.
+
+**2.4.3:** the per-case prompt is now the spec's exact question, and the rubric
+is exactly eight — two per case and nothing else, with the rule that a right
+answer elsewhere cannot carry a wrong one stated in the key. The ≤50-word
+comparison stays, unscored for that reason.
+
+**2.4.1:** the bridge is the spec's wording, the Insider field hint no longer
+adds a category the prompt does not ask for, and the lab moved below the
+reading — the source text teaches what each station can and cannot know, and
+the task is to use it rather than meet it cold.
+
+The 2.4.4 optional `policy-on-paper` stood down: Policy on Paper is 2.4.2's
+exercise now, and two exercises of one name in one module is a defect. Widget,
+data and test remain.

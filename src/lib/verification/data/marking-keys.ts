@@ -20,11 +20,12 @@
  *   - the total is stated and is the sum of the parts, which
  *     `marking-keys.test.ts` enforces.
  *
- * WHERE THE CRITERIA COME FROM. The 2.4.1 and 2.4.4 criteria are the course
- * owner's, from her exercise briefs. The 2.4.2 and 2.4.3 criteria follow her
- * stated grading rules for those two — grade the causal inference, not the
- * vocabulary; grade each variant independently — extended to the number of
- * rows and variants the built exercises actually have.
+ * WHERE THE CRITERIA COME FROM. All four totals and shapes are the course
+ * owner's, from her exercise briefs: five points for the case, eight for the
+ * policy critique as two per finding, two per case for the four variants, and
+ * eight for the institution across her four named tests. The wording of the
+ * individual criteria is ours where hers names the shape rather than the
+ * sentence.
  *
  * The `grounds` line on a criterion names the section's own reading that
  * settles it, so a learner marking themselves down can go and check rather
@@ -92,52 +93,71 @@ export const CONSTRUCT_CASE_KEY: MarkingKey = {
   ],
 };
 
-/** 2.4.2 — Read the Rules, Infer the System. Two points per row. */
-export const INFER_SYSTEM_KEY: MarkingKey = {
+/**
+ * 2.4.2 — Policy on Paper. Eight points: two per finding, one for naming the
+ * provision's effect and one for the causal explanation behind it.
+ *
+ * Her grading principle, and the reason every second point is
+ * `needsReasoning`: calling a provision good, bad, strong or weak does not
+ * earn the justification point, and no particular vocabulary is required for
+ * it either — an explanation in ordinary language is enough.
+ */
+export const POLICY_CRITIQUE_KEY: MarkingKey = {
   criteria: [
     {
-      text: "Row 1 cites a rule or combination that genuinely produces the consequence it names.",
+      text: "Supporting finding 1 names an effect the provision actually has.",
       points: 1,
     },
     {
-      text: "Row 1 states the mechanism: rule → what it costs or permits → what the employee then does.",
+      text: "Supporting finding 1 explains how that provision changes what a reporter does, or what reaches the verifier.",
       points: 1,
       needsReasoning: true,
     },
     {
-      text: "Row 2 cites a rule or combination that produces its consequence.",
+      text: "Supporting finding 2 names an effect the provision actually has.",
       points: 1,
     },
     {
-      text: "Row 2 states the mechanism rather than the verdict.",
+      text: "Supporting finding 2 explains the mechanism behind it.",
       points: 1,
       needsReasoning: true,
     },
     {
-      text: "Row 3 cites a rule or combination that produces its consequence.",
+      text: "Blocking finding 1 names a provision that really could stop information reaching an independent verifier.",
       points: 1,
     },
     {
-      text: "Row 3 states the mechanism rather than the verdict.",
+      text: "Blocking finding 1 explains how it stops it — who decides, or what it costs the reporter.",
       points: 1,
       needsReasoning: true,
     },
     {
-      text: "At least one row reads two rules together rather than one alone.",
+      text: "Blocking finding 2 names a provision that really could stop information.",
       points: 1,
-      grounds:
-        "The design guide separates the channel, the protection and the remedy for this reason: a policy is not the sum of its rules read one at a time, and the sharpest effects here come from pairs.",
+    },
+    {
+      text: "Blocking finding 2 explains the mechanism behind it.",
+      points: 1,
+      needsReasoning: true,
     },
   ],
   noCredit: [
-    "Calling the policy bad, unsafe, weak, or not independent without saying what it does to the person inside it.",
-    "A consequence with no rule behind it, or a rule that does not produce the consequence claimed.",
-    "Repeating a rule in different words as though restating it were an inference.",
-    "Rewriting the policy — the task is to read it.",
+    "Calling a provision good, bad, strong or weak. That is the judgement, not the justification.",
+    "Restating the provision in different words as though repeating it explained it.",
+    "An effect the provision does not have, however well argued.",
+    "Rewriting the policy — the task is to evaluate it as written.",
   ],
 };
 
-/** 2.4.3 — Same Claim, Different Circumstances. Two per variant, plus the comparison. */
+/**
+ * 2.4.3 — Same Claim, Different Circumstances. Two points per case and
+ * nothing else: one for saying what this source's position lets them support,
+ * one for a next step proportionate to it. Four cases, eight points.
+ *
+ * The comparison that follows the four is not scored, deliberately. Each case
+ * is marked on its own — a right answer somewhere else cannot carry a wrong
+ * one — and a point for the comparison would be a point earned across cases.
+ */
 export const SAME_CLAIM_KEY: MarkingKey = {
   criteria: [
     {
@@ -168,19 +188,9 @@ export const SAME_CLAIM_KEY: MarkingKey = {
       grounds:
         "A document has provenance and a chain of custody, which is what makes it different in kind from a conversation, and what has to be established before it counts.",
     },
-    {
-      text: "The comparison locates the change in provenance and corroboration, not in the claim.",
-      points: 1,
-      needsReasoning: true,
-    },
-    {
-      text: "Nowhere does the answer treat any single report as establishing the violation.",
-      points: 1,
-      grounds:
-        "A challenge-inspection regime exists because a concern that routine measures did not resolve justifies looking, not concluding.",
-    },
   ],
   noCredit: [
+    "A right answer somewhere else. Each case is marked on its own, and getting three right does not carry the fourth.",
     "Ranking the four sources by credibility instead of saying what each supports.",
     "Recommending the same step everywhere with no reason tied to the changed fact.",
     "Treating A or D as proof of the violation.",

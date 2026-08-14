@@ -63,7 +63,7 @@ export const CLAIM_VARIANTS: ClaimVariant[] = [
 
 /** Her prompt, verbatim. */
 export const CLAIM_PROMPT =
-  "For each variant: what should the verification body do next, and why?";
+  "For each case: what should the verification body do next, and what can it still not conclude? Justify your answer.";
 
 /** Her list of actions, stated once — not an option list under each variant. */
 export const CLAIM_ACTIONS = [

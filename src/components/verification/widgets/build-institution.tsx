@@ -9,6 +9,7 @@ import { countWords } from "../kit/constructed-response";
 import {
   EXPLANATION_MAX_WORDS,
   EXPLANATION_PROMPT,
+  COHERENCE_TEST,
   PICK_EXACTLY,
   PROVISIONS,
   REQUIREMENTS,
@@ -133,7 +134,7 @@ export function BuildInstitution({
         <p className="text-sm leading-relaxed">{SCENARIO}</p>
         <p className="mt-2 text-sm leading-relaxed">
           Choose exactly {PICK_EXACTLY} provisions. Your institution must
-          satisfy all three requirements:
+          satisfy all of these:
         </p>
         <ol className="mt-2 space-y-1.5">
           {REQUIREMENTS.map((requirement, i) => (

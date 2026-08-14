@@ -68,7 +68,7 @@ export const verificationExercises: VerificationExerciseDef[] = [
   // replaced it. Its widget, engine, data, and tests remain in the repo.
   { id: "drills-games", title: "Drill Bench: Evasion, Regime, Position", bridged: true },
   { id: "human-insiders", title: "Construct a Case", bridged: true },
-  { id: "human-reporting-protection", title: "Read the Rules, Infer the System", bridged: true },
+  { id: "human-reporting-protection", title: "Policy on Paper", bridged: true },
   // Unbridged: a three-minute assignment inside 2.4.2, whose finish event is
   // "Follow the Report" above. Two bridged widgets in one lesson would end
   // the section at whichever fired first.
@@ -81,7 +81,9 @@ export const verificationExercises: VerificationExerciseDef[] = [
   // report-access ("One Report, Four Ways") stood down 2026-08-14: the
   // owner's spec makes the same variation 2.4.3's own exercise, with four
   // variants and three lines each. Widget and data remain in the repo.
-  { id: "policy-on-paper", title: "Policy on Paper", bridged: false },
+  // policy-on-paper (the 2.4.4 optional) stood down 2026-08-14: the delta spec
+  // makes Policy on Paper 2.4.2's own exercise, and two exercises of one name
+  // in one module is a defect. Widget, data and test remain in the repo.
   { id: "cloud-evidence-drill", title: "Cloud Evidence Drill", bridged: true },
 ];
 export function getVerificationExercise(id: string): VerificationExerciseDef | undefined {

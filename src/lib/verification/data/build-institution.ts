@@ -1,9 +1,9 @@
 /**
  * 2.4.4 — Build the Institution.
  *
- * THE COURSE OWNER'S SPEC, verbatim: the scenario, the three requirements,
+ * THE COURSE OWNER'S SPEC, verbatim: the scenario, the five requirements,
  * the twelve provisions in their three groups, the exactly-five rule, the
- * 80-word explanation, the three feedback tests and the optional swap. Its
+ * 80-word explanation, the feedback tests and the optional swap. Its
  * olympiad mechanic constructs a coherent institution from a constrained menu
  * of properties.
  *
@@ -12,7 +12,7 @@
  * That is why nothing here marks a provision "correct". Each carries what it
  * DOES (`gives`) and what it FORBIDS (`breaks`), and the engine reads a
  * selection through those, so B+C+E+I+K passes and so do the others that
- * satisfy the same three functions. Her example five is one solution and is
+ * satisfy the same functions. Her example five is one solution and is
  * labelled as one.
  *
  * The four invalid constructions she lists are exactly the contradictions
@@ -136,11 +136,18 @@ export const EXPLANATION_MAX_WORDS = 80;
 export const SCENARIO =
   "You are designing the human-reporting component of a verification regime for an AI development agreement.";
 
-/** Her three requirements, verbatim. */
+/**
+ * Her five requirements, verbatim. Requirements 3 and 4 are separate on
+ * purpose and the evaluator treats them so: a report that can trigger
+ * verification is not the same institution as one that must corroborate
+ * before it concludes, and a design needs both.
+ */
 export const REQUIREMENTS = [
   "Information can reach an independent verifier.",
   "Legitimate reporters have meaningful protection.",
-  "An allegation alone cannot establish that a treaty violation occurred.",
+  "Reports can trigger further verification.",
+  "Corroboration is required before a violation is established.",
+  "No two provisions contradict each other.",
 ];
 
 /** Her three feedback tests, verbatim in name. */
@@ -158,17 +165,29 @@ export const TESTS = [
   },
   {
     id: "discipline",
-    label: "Epistemic discipline",
+    label: "Verification",
     question:
-      "Does the institution distinguish an allegation from an established violation?",
+      "Can a report trigger further verification, and must it be corroborated before anything is established?",
   },
 ] as const;
 
+/**
+ * The fourth thing her rubric weighs, and the one no evaluator can: whether
+ * the eighty words describe one institution or five good ideas. It is stated
+ * beside the three so the learner is not left to think the machine's verdict
+ * was the whole marking, and it is decided in the key below it.
+ */
+export const COHERENCE_TEST = {
+  label: "Coherence",
+  question: "Do the five provisions work as one institution?",
+  note: "Nothing here can judge that — it is in your eighty words, and it is the last criterion in the key below.",
+} as const;
+
 export const EXPLANATION_PROMPT =
-  "In 80 words or fewer, explain why the resulting institution satisfies all three requirements.";
+  "In 80 words or fewer, explain why your five provisions form one workable institution.";
 
 export const SWAP_PROMPT =
-  "Replace exactly one of your five provisions with another provision while keeping all three requirements satisfied. Which one goes, what takes its place, and what would have broken if you had swapped something else?";
+  "Replace exactly one of your five provisions with another while keeping every requirement satisfied. Which one goes, what takes its place, and what would have broken if you had swapped something else?";
 
 export interface SampleDesign {
   ids: string[];

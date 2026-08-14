@@ -15,11 +15,13 @@ import {
   RULE_ANNOTATIONS,
   SECOND_STEP_MAX_WORDS,
 } from "@/lib/verification/data/infer-the-system";
-import { INFER_SYSTEM_KEY } from "@/lib/verification/data/marking-keys";
-import { MarkingKeyPanel } from "../kit/marking-key";
 import type { VerificationWidgetProps } from "../kit/types";
 
 /**
+ * UNMOUNTED. 2.4.2's exercise is Policy on Paper (policy-critique.tsx); this
+ * one was built against an earlier draft of the spec and is kept, as the other
+ * stood-down widgets are, because its data and its shape may be wanted again.
+ *
  * 2.4.2 — Read the Rules, Infer the System. It replaces the reporting lab,
  * whose operation was picking a supported statement per link; this one asks
  * what the rules do to the person inside them, which no list of options can
@@ -252,11 +254,6 @@ export function InferTheSystem({
               </p>
             ))}
           </section>
-
-          <MarkingKeyPanel
-            storageKey="v-infer-the-system-key:v1"
-            keyData={INFER_SYSTEM_KEY}
-          />
 
           {/* The annotated policy: several mechanisms these rules can be read
               to produce, against the rule or pair that produces each. Not a

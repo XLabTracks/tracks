@@ -5,7 +5,7 @@ import { describe, expect, it } from "vitest";
 import {
   BUILD_INSTITUTION_KEY,
   CONSTRUCT_CASE_KEY,
-  INFER_SYSTEM_KEY,
+  POLICY_CRITIQUE_KEY,
   SAME_CLAIM_KEY,
   keyTotal,
   type MarkingKey,
@@ -24,7 +24,7 @@ import {
 
 const KEYS: [string, MarkingKey][] = [
   ["construct-case", CONSTRUCT_CASE_KEY],
-  ["infer-the-system", INFER_SYSTEM_KEY],
+  ["policy-critique", POLICY_CRITIQUE_KEY],
   ["same-claim", SAME_CLAIM_KEY],
   ["build-institution", BUILD_INSTITUTION_KEY],
 ];

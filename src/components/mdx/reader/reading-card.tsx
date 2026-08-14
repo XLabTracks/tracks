@@ -43,7 +43,10 @@ export function ReadingCard({
   const metaLine = read ? (meta ? `${meta} · read` : "read") : meta;
 
   return (
-    <section className="not-prose border-border bg-card my-4 flex gap-3 rounded-xl border p-4">
+    <section
+      id={`reading-${id}`}
+      className="not-prose border-border bg-card my-4 flex scroll-mt-24 gap-3 rounded-xl border p-4"
+    >
       {/* Unread, this used to be an empty ring whose ✓ was transparent on
           hover as well — nothing anywhere said it could be pressed, so it
           read as a decorative dot. The check now ghosts in on hover and the

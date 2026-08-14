@@ -1,7 +1,8 @@
 /**
  * Rehype plugin (registered in next.config.ts, AFTER rehype-slug): collects a
  * lesson body's top-level section headings (##/###) — plus top-level
- * `<Exercise id="…"/>` and `<Fold label="…"/>` blocks — and adds
+ * `<Exercise id="…"/>`, `<Fold label="…"/>`, and
+ * `<ReadingCard id="…" title="…"/>` blocks — and adds
  * `export const sections = [{ id, title?, level, exercise? }, …]` to the
  * compiled MDX module. Heading ids are read from what rehype-slug just
  * processed — the exact anchors the page renders — so the sidebar's "In this
@@ -11,7 +12,8 @@
  * carrying the exercise id; their display titles resolve from the exercise
  * registry at layout time. Fold blocks get the same wrapping anchor and an
  * entry titled by their label — the component opens itself when a followed
- * anchor targets that wrapper.
+ * anchor targets that wrapper. Reading cards render their own stable
+ * `reading-…` anchor; their card title becomes the sidebar label.
  *
  * Plain .mjs (not TS): the MDX loader imports it by file path at build time.
  */
@@ -81,10 +83,32 @@ export default function rehypeLessonSections() {
           children: [node],
         };
         sections.push({ id: anchorId, title: label, level: lastHeadingLevel + 1 });
+        return;
+      }
+      if (node.type === "mdxJsxFlowElement" && node.name === "ReadingCard") {
+        const id = stringAttribute(node, "id");
+        const title = stringAttribute(node, "title");
+        if (!id || !title) return;
+        sections.push({
+          id: `reading-${id}`,
+          title,
+          level: lastHeadingLevel + 1,
+        });
       }
     });
     tree.children.unshift(esmExport("sections", sections));
   };
+}
+
+function stringAttribute(node, name) {
+  const attr = (node.attributes ?? []).find(
+    (candidate) =>
+      candidate.type === "mdxJsxAttribute" &&
+      candidate.name === name &&
+      typeof candidate.value === "string" &&
+      candidate.value !== "",
+  );
+  return attr?.value;
 }
 
 /** Concatenated text content of a hast node (KaTeX math contributes raw TeX). */

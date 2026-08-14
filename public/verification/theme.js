@@ -20,7 +20,11 @@
     contrast:
       '<circle cx="12" cy="12" r="9"/><path d="M12 3v18a9 9 0 0 0 0-18z" fill="currentColor" stroke="none"/>',
   };
-  var LABELS = { light: "Day", dark: "Night", contrast: "High contrast" };
+  var LABELS = {
+    light: "Day",
+    dark: "Night",
+    contrast: "High contrast and larger text",
+  };
 
   function stored() {
     try {
@@ -73,7 +77,7 @@
       return;
     }
     group.setAttribute("role", "radiogroup");
-    group.setAttribute("aria-label", "Colour theme");
+    group.setAttribute("aria-label", "Display mode");
     group.innerHTML = THEMES.map(function (t) {
       return (
         '<button type="button" role="radio" data-theme="' +

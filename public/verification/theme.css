@@ -113,20 +113,20 @@
 
      --fs-title is every page's h1; --fs-hero is the landing's alone. They were
      five near-identical clamps before, which is four chances to drift. */
-  --fs-2xs: 12px;
-  --fs-xs: 13px;
-  --fs-sm: 14px;
-  --fs-md: 16px;
-  --fs-lg: 18px;
-  --fs-xl: 20px;
-  --fs-2xl: 24px;
-  --fs-3xl: 30px;
-  --fs-4xl: 38px;
-  --fs-title: clamp(28px, 3.4vw, 36px);
+  --fs-2xs: 0.75rem;
+  --fs-xs: 0.8125rem;
+  --fs-sm: 0.875rem;
+  --fs-md: 1rem;
+  --fs-lg: 1.125rem;
+  --fs-xl: 1.25rem;
+  --fs-2xl: 1.5rem;
+  --fs-3xl: 1.875rem;
+  --fs-4xl: 2.375rem;
+  --fs-title: clamp(1.75rem, 3.4vw, 2.25rem);
   /* The landing headline is a full policy question, not a one- or two-word
      campaign title. Keep it distinct from an ordinary page h1 without asking
      three long lines to carry display-poster proportions. */
-  --fs-hero: clamp(32px, 3.8vw, 44px);
+  --fs-hero: clamp(2rem, 3.8vw, 2.75rem);
 
   --radius: 14px;
   --radius-sm: 8px;
@@ -414,9 +414,9 @@
   gap: 2px;
 }
 
-/* 2.5.5: 44x44 CSS px minimum for a pointer target. Declared on the mode
-   rather than globally, because at the default size the compact chrome is
-   deliberate and this is the mode that trades density for reach. */
+/* 2.5.5: 44x44 CSS px minimum for a pointer target. A minimum must not replace
+   a component's layout model: forcing every button to inline-flex collapsed
+   complex card-buttons into one horizontal line at enlarged text sizes. */
 :root[data-theme="contrast"] button,
 :root[data-theme="contrast"] [role="button"],
 :root[data-theme="contrast"] .btn,
@@ -426,16 +426,10 @@
 :root[data-theme="contrast"] .part-jump {
   min-height: 44px;
   min-width: 44px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
 }
 
-/* A row in a list is not a chip. The 44px floor above is right for it; the
-   inline-flex centring is not — the memo desk's slot rows are grids that stack
-   a title over its status line, and being made inline-flex collapsed the two
-   onto one centred line, so the whole rail read as centred prose. Keep the
-   reach, restore the shape. */
+/* Memo-desk rows keep their authored grid explicitly; the generic target rule
+   above now changes size only, never display. */
 :root[data-theme="contrast"] .slot-btn {
   display: grid;
   grid-template-columns: minmax(0, 1fr);

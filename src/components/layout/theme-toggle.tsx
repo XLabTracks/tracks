@@ -29,7 +29,11 @@ type Theme = "light" | "dark" | "contrast";
 const OPTIONS: { key: Theme; label: string; Icon: typeof Sun }[] = [
   { key: "light", label: "Light theme", Icon: Sun },
   { key: "dark", label: "Dark theme", Icon: Moon },
-  { key: "contrast", label: "High contrast theme", Icon: Contrast },
+  {
+    key: "contrast",
+    label: "High contrast and larger text",
+    Icon: Contrast,
+  },
 ];
 
 function currentTheme(): Theme {
@@ -65,7 +69,7 @@ export function ThemeToggle() {
   return (
     <div
       role="radiogroup"
-      aria-label="Colour theme"
+      aria-label="Display mode"
       className="border-border flex items-center gap-0.5 rounded-md border p-0.5"
     >
       {OPTIONS.map(({ key, label, Icon }) => (

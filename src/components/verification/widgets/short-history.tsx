@@ -265,7 +265,7 @@ function Timeline() {
       onPointerUp={() => (drag.current = null)}
       onPointerCancel={() => (drag.current = null)}
       className={`focus-visible:ring-ring w-full rounded focus-visible:ring-2 focus-visible:outline-none ${z === 1 ? "" : "cursor-grab touch-none active:cursor-grabbing"}`}
-      style={{ fontSize: 13 }}
+      style={{ fontSize: "var(--fs-xs)" }}
     >
       <title>
         A timeline of notable artificial intelligence systems, 1940–2060
@@ -652,7 +652,7 @@ function TestScores() {
       viewBox={`0 0 ${TS.w} ${TS.h}`}
       role="img"
       className="w-full"
-      style={{ fontSize: 13, touchAction: "pan-y" }}
+      style={{ fontSize: "var(--fs-xs)", touchAction: "pan-y" }}
       onPointerMove={(e) => setHoverYear(yearFromPointer(e.clientX))}
       onPointerLeave={() => setHoverYear(null)}
     >
@@ -687,7 +687,7 @@ function TestScores() {
         x={TS.plotX0 + 8}
         y={tsy(0) - 6}
         fill="var(--muted-foreground)"
-        style={{ fontSize: 11.5 }}
+        style={{ fontSize: "var(--fs-2xs)" }}
       >
         Human performance, as the benchmark, is set to zero
       </text>

@@ -227,12 +227,10 @@
   color: var(--brand-ink);
 }
 
-/* High contrast flex-centres every button for its 44px target rule, which
-   centred one-line labels and left a wrapped one ragged beside them — a
-   shrink-to-fit block sits centred while its own text stays left. Centre
-   the text to match, and drop the meter: its track paints in --muted, which
-   this mode resolves to the ground, so only the fraction was ever visible —
-   and the fraction is the encoding this mode runs on anyway. */
+/* In high contrast the map centres node labels as a deliberate map treatment,
+   and drops the meter: its track paints in --muted, which this mode resolves
+   to the ground, so only the fraction was ever visible — and the fraction is
+   the encoding this mode runs on anyway. */
 :root[data-theme='contrast'] .node { align-items: center; }
 :root[data-theme='contrast'] .node .n-label { text-align: center; }
 :root[data-theme='contrast'] .node .n-fill { display: none; }

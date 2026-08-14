@@ -43,17 +43,18 @@ export default function Page() {
           <div className="prose">
             <h2>Three themes, and you pick</h2>
             <p>
-              Day, night and high contrast. The switch sits in the header on
-              every page and the choice is remembered on your device, so you set
-              it once.
+              Day, night, and high contrast with larger text. The switch sits
+              in the header on every page and the choice is remembered on your
+              device, so you set it once.
             </p>
             <p>
-              High contrast is never inferred from your system settings — a
-              system set to dark mode gets the night theme, not the
-              high-contrast one, because those are different needs and guessing
-              between them is how people end up with a theme they did not ask
-              for. Your theme is read and applied before the page paints, so it
-              never flashes the wrong ground at you first.
+              High contrast also raises the course text scale to 200%. It is
+              never inferred from your system settings — a system set to dark
+              mode gets the night theme, not the high-contrast one, because
+              those are different needs and guessing between them is how people
+              end up with a display mode they did not ask for. Your choice is
+              read and applied before the page paints, so it never flashes the
+              wrong ground at you first.
             </p>
             <p>
               All three themes are one set of colour names solved three times

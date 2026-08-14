@@ -86,12 +86,7 @@ export function Fold({ label = "Optional material", children }: FoldProps) {
         aria-expanded={open}
         aria-controls={bodyId}
         onClick={() => setOpen(!open)}
-        // justify-between carries the important modifier because the high
-        // contrast theme's 44px touch-target rule
-        // (`:root[data-theme='contrast'] button`) sets justify-content:center
-        // at higher specificity than any utility — without it the label and
-        // marker huddle in the middle of the row on that theme.
-        className="bg-primary text-primary-foreground flex w-full cursor-pointer items-center justify-between! gap-3 p-4 text-left text-sm font-semibold select-none focus-visible:ring-2 focus-visible:ring-[var(--ring)] focus-visible:outline-none focus-visible:ring-inset"
+        className="bg-primary text-primary-foreground flex w-full cursor-pointer items-center justify-between gap-3 p-4 text-left text-sm font-semibold select-none focus-visible:ring-2 focus-visible:ring-[var(--ring)] focus-visible:outline-none focus-visible:ring-inset"
       >
         {label}
         <span

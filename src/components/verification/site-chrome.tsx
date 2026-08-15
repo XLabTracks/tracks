@@ -7,6 +7,7 @@ import { useAuth } from "@workos-inc/authkit-nextjs/components";
 import { AccountMenu } from "@/components/layout/account-menu";
 import { SignInLink } from "@/components/layout/sign-in-link";
 import { SelectionActions } from "@/components/verification/selection-actions";
+import { restoreTextScale } from "@/lib/reading/text-scale";
 import {
   COPYRIGHT,
   FOOT,
@@ -69,7 +70,7 @@ function ThemeSwitch() {
 function VerificationRouteSignal({ pathname }: { pathname: string | null }) {
   useEffect(() => {
     window.dispatchEvent(
-      new CustomEvent("vt-route-change", { detail: { pathname } }),
+      new CustomEvent("vt-route-change", { detail: { pathname } })
     );
   }, [pathname]);
   return null;
@@ -113,6 +114,7 @@ export function VerificationHeader() {
         'link[rel="stylesheet"][href^="/verification/"]'
       );
     document.documentElement.classList.remove("vt-off-course");
+    restoreTextScale();
     links().forEach((l) => {
       l.disabled = false;
     });
@@ -120,6 +122,9 @@ export function VerificationHeader() {
       const root = document.documentElement;
       root.classList.add("vt-off-course");
       root.removeAttribute("data-theme");
+      root.removeAttribute("data-text-scale");
+      root.classList.remove("reader-enlarged");
+      root.classList.remove("reader-large");
       // Verification has its own stored preference. Restore the platform
       // preference when client navigation leaves the track, otherwise the
       // next header can claim "Light" while the page is still dark.

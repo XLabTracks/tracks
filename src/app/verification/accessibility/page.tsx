@@ -41,20 +41,25 @@ export default function Page() {
           </div>
 
           <div className="prose">
-            <h2>Three themes, and you pick</h2>
+            <h2>Theme and text size</h2>
             <p>
-              Day, night, and high contrast with larger text. The switch sits
-              in the header on every page and the choice is remembered on your
+              Day, night, and high contrast with larger text. The switch sits in
+              the header on every page and the choice is remembered on your
               device, so you set it once.
             </p>
             <p>
-              High contrast also raises the course text scale to 200%. It is
-              never inferred from your system settings — a system set to dark
-              mode gets the night theme, not the high-contrast one, because
-              those are different needs and guessing between them is how people
-              end up with a display mode they did not ask for. Your choice is
-              read and applied before the page paints, so it never flashes the
-              wrong ground at you first.
+              The Aa menu offers text at 100%, 125%, 150%, 175%, or 200% and
+              remembers that choice too. High contrast opens at 200% until you
+              choose another size in Aa; after that, your explicit text-size
+              choice takes priority.
+            </p>
+            <p>
+              High contrast is never inferred from your system settings — a
+              system set to dark mode gets the night theme, not the
+              high-contrast one, because those are different needs and guessing
+              between them is how people end up with a display mode they did not
+              ask for. Your choices are read and applied before the page paints,
+              so it never flashes the wrong ground or text size at you first.
             </p>
             <p>
               All three themes are one set of colour names solved three times

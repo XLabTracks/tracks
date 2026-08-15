@@ -72,7 +72,7 @@ export function ConstructCase({
           </ol>
           <p className="text-sm leading-relaxed">
             Describe the situation and explain why each condition is satisfied.
-            Use 100–180 words in each response.
+            Use 100–180 words in total.
           </p>
         </div>
       }

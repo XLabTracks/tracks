@@ -21,6 +21,7 @@ import {
 } from "@/lib/verification/data/build-institution";
 import { evaluateInstitution } from "@/lib/verification/engines/build-institution";
 import type { VerificationWidgetProps } from "../kit/types";
+import { writingArea, writingCardFocus } from "../kit/writing-surface";
 
 /**
  * UNMOUNTED. 2.4.4 is now Companies A and B (companies-ab.tsx).
@@ -184,14 +185,19 @@ export function BuildInstitution({
       </div>
 
       {full && !saved.submitted ? (
-        <section className="border-border rounded-xl border p-4">
+        <section
+          className={cn(
+            "border-border rounded-xl border p-4",
+            writingCardFocus
+          )}
+        >
           <p className="text-sm font-medium">{EXPLANATION_PROMPT}</p>
           <textarea
             rows={4}
             value={saved.explanation}
             onChange={(e) => persist({ ...saved, explanation: e.target.value })}
             aria-label={EXPLANATION_PROMPT}
-            className="border-border bg-background mt-2 w-full rounded-md border p-3 text-sm"
+            className={writingArea}
           />
           <div className="mt-2 flex items-center justify-between gap-3">
             <p
@@ -298,14 +304,19 @@ export function BuildInstitution({
             ))}
           </section>
 
-          <section className="border-border rounded-xl border p-4">
+          <section
+            className={cn(
+              "border-border rounded-xl border p-4",
+              writingCardFocus
+            )}
+          >
             <p className="text-sm font-medium">{SWAP_PROMPT}</p>
             <textarea
               rows={3}
               value={saved.swap}
               onChange={(e) => persist({ ...saved, swap: e.target.value })}
               aria-label={SWAP_PROMPT}
-              className="border-border bg-background mt-2 w-full rounded-md border p-3 text-sm"
+              className={writingArea}
             />
             <p className="text-muted-foreground mt-1 text-xs">
               Optional. Which components are substitutable, and which functions

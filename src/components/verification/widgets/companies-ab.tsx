@@ -22,6 +22,7 @@ import {
 import { COMPANIES_AB_KEY } from "@/lib/verification/data/marking-keys";
 import { MarkingKeyPanel } from "../kit/marking-key";
 import type { VerificationWidgetProps } from "../kit/types";
+import { writingArea, writingCardFocus } from "../kit/writing-surface";
 
 /**
  * UNMOUNTED. 2.4.4 is the recovered exercise (policy-on-paper.tsx): the same
@@ -159,7 +160,10 @@ export function CompaniesAB({
         {AB_SLOTS.map((slot) => (
           <div
             key={slot.id}
-            className="border-border bg-card rounded-xl border p-4"
+            className={cn(
+              "border-border bg-card rounded-xl border p-4",
+              writingCardFocus
+            )}
           >
             <label
               className="text-muted-foreground font-mono text-[11px] tracking-[0.12em] uppercase"
@@ -182,10 +186,7 @@ export function CompaniesAB({
                 })
               }
               placeholder="The difference, and what it does."
-              className={cn(
-                "border-border bg-background mt-2 w-full rounded-md border p-3 text-sm",
-                frozen && "opacity-70"
-              )}
+              className={cn(writingArea, frozen && "opacity-70")}
             />
           </div>
         ))}
@@ -241,7 +242,10 @@ export function CompaniesAB({
         {LETTER_QUESTIONS.map((question) => (
           <div
             key={question.id}
-            className="border-border bg-card rounded-xl border p-4"
+            className={cn(
+              "border-border bg-card rounded-xl border p-4",
+              writingCardFocus
+            )}
           >
             <label
               className="text-sm font-medium"
@@ -260,10 +264,7 @@ export function CompaniesAB({
                   letter: { ...saved.letter, [question.id]: e.target.value },
                 })
               }
-              className={cn(
-                "border-border bg-background mt-2 w-full rounded-md border p-3 text-sm",
-                frozen && "opacity-70"
-              )}
+              className={cn(writingArea, frozen && "opacity-70")}
             />
           </div>
         ))}
@@ -339,14 +340,19 @@ export function CompaniesAB({
             </ul>
           </section>
 
-          <section className="border-border rounded-xl border p-4">
+          <section
+            className={cn(
+              "border-border rounded-xl border p-4",
+              writingCardFocus
+            )}
+          >
             <p className="text-sm font-medium">{TRANSFER_QUESTION}</p>
             <textarea
               rows={3}
               value={saved.transfer}
               onChange={(e) => persist({ ...saved, transfer: e.target.value })}
               aria-label={TRANSFER_QUESTION}
-              className="border-border bg-background mt-2 w-full rounded-md border p-3 text-sm"
+              className={writingArea}
             />
             <p
               className="text-muted-foreground mt-1 text-right font-mono text-xs"

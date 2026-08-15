@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useState, type ReactNode } from "react";
 import { Button } from "@/components/ui/button";
 import { SteelmanDeck } from "./steelman-deck";
+import { writingArea, writingCardFocus } from "./writing-surface";
 import { cn } from "@/lib/utils";
 
 /**
@@ -123,14 +124,14 @@ export function ConstructedResponse({
         /* private mode / full quota — a convenience, not the record */
       }
     },
-    [storageKey],
+    [storageKey]
   );
 
   if (!hydrated) return <div className="not-prose my-6 min-h-64" aria-busy />;
 
   const total = fields.reduce(
     (sum, f) => sum + countWords(saved.values[f.id] ?? ""),
-    0,
+    0
   );
   const started = fields.some((f) => (saved.values[f.id] ?? "").trim());
   const complete = fields.every((f) => (saved.values[f.id] ?? "").trim());
@@ -141,7 +142,13 @@ export function ConstructedResponse({
 
       <div className="space-y-3">
         {fields.map((field) => (
-          <div key={field.id} className="border-border bg-card rounded-xl border p-4">
+          <div
+            key={field.id}
+            className={cn(
+              "border-border bg-card rounded-xl border p-4",
+              writingCardFocus
+            )}
+          >
             <label
               className="block text-sm font-semibold"
               htmlFor={`${storageKey}-${field.id}`}
@@ -164,10 +171,7 @@ export function ConstructedResponse({
                   values: { ...saved.values, [field.id]: e.target.value },
                 })
               }
-              className={cn(
-                "border-border bg-background mt-2 w-full rounded-md border p-3 text-sm",
-                saved.submitted && "opacity-70",
-              )}
+              className={cn(writingArea, saved.submitted && "opacity-70")}
             />
           </div>
         ))}

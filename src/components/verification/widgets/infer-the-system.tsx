@@ -16,6 +16,7 @@ import {
   SECOND_STEP_MAX_WORDS,
 } from "@/lib/verification/data/infer-the-system";
 import type { VerificationWidgetProps } from "../kit/types";
+import { writingArea, writingCardFocus } from "../kit/writing-surface";
 
 /**
  * UNMOUNTED. 2.4.2's exercise is Policy on Paper (policy-critique.tsx); this
@@ -166,7 +167,10 @@ export function InferTheSystem({
         {saved.rows.map((row, index) => (
           <li
             key={index}
-            className="border-border bg-card rounded-xl border p-4"
+            className={cn(
+              "border-border bg-card rounded-xl border p-4",
+              writingCardFocus
+            )}
           >
             <p className="text-muted-foreground font-mono text-[11px] tracking-[0.14em] uppercase">
               Consequence {index + 1}
@@ -206,10 +210,7 @@ export function InferTheSystem({
               onChange={(e) => setRow(index, { text: e.target.value })}
               placeholder="What follows for an employee who has noticed something?"
               aria-label={`Consequence ${index + 1}`}
-              className={cn(
-                "border-border bg-background mt-3 w-full rounded-md border p-3 text-sm",
-                saved.submitted && "opacity-70"
-              )}
+              className={cn(writingArea, saved.submitted && "opacity-70")}
             />
           </li>
         ))}
@@ -280,14 +281,19 @@ export function InferTheSystem({
             ))}
           </section>
 
-          <section className="border-border rounded-xl border p-4">
+          <section
+            className={cn(
+              "border-border rounded-xl border p-4",
+              writingCardFocus
+            )}
+          >
             <p className="text-sm font-medium">{INFER_SECOND_STEP}</p>
             <textarea
               rows={3}
               value={saved.change}
               onChange={(e) => persist({ ...saved, change: e.target.value })}
               aria-label={INFER_SECOND_STEP}
-              className="border-border bg-background mt-2 w-full rounded-md border p-3 text-sm"
+              className={writingArea}
             />
             <p
               className={cn(

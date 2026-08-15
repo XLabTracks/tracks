@@ -19,6 +19,8 @@ import {
   FIXED_CLAIM,
 } from "@/lib/verification/data/same-claim";
 import { SAME_CLAIM_KEY } from "@/lib/verification/data/marking-keys";
+import { CLAIM_DECK } from "@/lib/verification/data/steelman-decks";
+import { SteelmanDeck } from "../kit/steelman-deck";
 import { MarkingKeyPanel } from "../kit/marking-key";
 import type { VerificationWidgetProps } from "../kit/types";
 
@@ -35,8 +37,9 @@ import type { VerificationWidgetProps } from "../kit/types";
  * No per-case correctness feedback anywhere.
  *
  * Nothing is graded, and the exercise is optional: submitting records no
- * completion. (The steelman deck that rode here pre-submission left with the
- * revision — its data stays in steelman-decks.ts, unmounted.)
+ * completion. The steelman deck rides pre-submission, as before — the spec
+ * revision did not touch it, and reading its removal into the spec's
+ * silence was wrong (owner: "вернуть").
  */
 
 type Answers = Record<string, string>;
@@ -187,6 +190,8 @@ export function SameClaim({
           </section>
         ))}
       </div>
+
+      {saved.submitted ? null : <SteelmanDeck deck={CLAIM_DECK} />}
 
       <div className="flex flex-wrap items-center justify-between gap-3">
         <p className="text-muted-foreground text-xs">

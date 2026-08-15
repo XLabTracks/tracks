@@ -1,30 +1,40 @@
 /**
- * 2.4.3 — Same Claim, Different Circumstances.
+ * 2.4.3 — Four Sources (formerly "Same Claim, Different Circumstances").
  *
- * THE COURSE OWNER'S SPEC, verbatim: the fixed allegation, the four variants,
- * the prompt, the three fields per variant, the instruction that this is not
- * a credibility ranking, the 50-word comparison and the optional transfer
- * question. Its olympiad mechanic holds the claim constant and varies one
- * material circumstance.
+ * THE COURSE OWNER'S SPEC, verbatim, as revised in her 2026-08-15 delivery
+ * ("Optional Exercise: Four Sources"): the fixed allegation, the four cases
+ * with her case titles, the two-part task, ONE free-response box per case
+ * ("Do not split the answer into fields — the student should structure the
+ * analysis themselves"), the post-submission self-check pair, the 50-word
+ * final question, and the optional transfer question.
+ *
+ * What her revision removed is as binding as what it added:
+ *  - the "Actions available to the body" line is gone — "do not provide a
+ *    list of possible actions or evidentiary classifications before the
+ *    student answers";
+ *  - the three labelled fields per case are gone, one analysis box each;
+ *  - the not-a-ranking instruction and the four-distinction reveal are gone.
+ *    The reveal is now the self-check pair plus the case-specific marking
+ *    key (marking-keys.ts, SAME_CLAIM_KEY).
  *
  * The four are on the page together, which is her constraint and the point:
- * the controlled variation is only visible when you can see all four at once,
- * and an answer to C is partly an answer about how C differs from A.
- *
- * The five actions below are hers too. They are stated ONCE, above all four
- * variants, as the vocabulary the answers move in — deliberately not a
- * four-option list under each variant, which is the thing the spec forbids.
- * Learners may recommend the same action for more than one variant.
- *
- * WHAT IS MINE: the four lines of the reveal. Her spec names what the reveal
- * must distinguish — claim content, provenance and access, corroboration, and
- * the verification threshold — and does not write them out. Each line says
- * only what its name says, and the last one carries her explicit constraint:
- * no human report alone establishes a violation.
+ * the controlled variation is only visible when you can see all four at
+ * once. The allegation is displayed once, above the cases, and stays visible
+ * while the student works — that placement is in the spec.
  */
 
 export const FIXED_CLAIM =
   "Project Cedar conducted a prohibited training run during the first two weeks of July.";
+
+/** Her intro, verbatim. */
+export const CLAIM_INTRO =
+  "The same allegation was received in four different circumstances.";
+export const CLAIM_TASK_LEAD = "For each case, state:";
+export const CLAIM_TASKS = [
+  "what the verification body should do next;",
+  "what the available evidence does not yet establish.",
+];
+export const CLAIM_JUSTIFY = "Briefly justify your answer.";
 
 export interface ClaimVariant {
   id: string;
@@ -33,7 +43,7 @@ export interface ClaimVariant {
   body: string;
 }
 
-/** Her four variants, verbatim and in her order. */
+/** Her four cases, verbatim and in her order (titles hers, 2026-08-15). */
 export const CLAIM_VARIANTS: ClaimVariant[] = [
   {
     id: "participant",
@@ -44,78 +54,36 @@ export const CLAIM_VARIANTS: ClaimVariant[] = [
   {
     id: "second-hand",
     letter: "B",
-    label: "Second-hand knowledge",
-    body: "The source worked in the same laboratory but was not assigned to Cedar. Two Cedar researchers separately told them that the project was conducting a prohibited run.",
+    label: "Second-hand source",
+    body: "The source worked in the same laboratory but was not assigned to Project Cedar. Two Cedar researchers separately told them that the project was conducting a prohibited run.",
   },
   {
     id: "inference",
     letter: "C",
-    label: "Inference from operational observations",
-    body: "The source worked in facilities operations. They observed sustained high power draw, restricted access to one cluster, emergency cooling work, and unusually intense network traffic during the relevant period.",
+    label: "Circumstantial observer",
+    body: "The source worked in facilities operations. During the relevant period, they observed sustained high power draw, restricted access to one cluster, emergency cooling work, and unusually intense network traffic.",
   },
   {
     id: "documentary",
     letter: "D",
-    label: "Documentary access",
-    body: "The source worked in compliance and saw an internal document describing Project Cedar as a training run above the treaty’s prohibited compute threshold.",
+    label: "Documentary source",
+    body: "The source worked in compliance and saw an internal document describing Project Cedar as a training run above the agreement’s prohibited compute threshold.",
   },
 ];
 
-/** Her prompt, verbatim. */
-export const CLAIM_PROMPT =
-  "For each case: what should the verification body do next, and what can it still not conclude? Justify your answer.";
-
-/** Her list of actions, stated once — not an option list under each variant. */
-export const CLAIM_ACTIONS = [
-  "record the allegation",
-  "seek specific corroboration",
-  "open a formal investigation",
-  "trigger an inspection or other verification measure",
-  "treat the underlying violation as established",
+/** Her post-submission self-check, verbatim. */
+export const CLAIM_SELF_CHECK_LEAD =
+  "For each case, compare your answer against two questions:";
+export const CLAIM_SELF_CHECK = [
+  "Did your proposed response match what the evidence currently supports?",
+  "Did you avoid treating the allegation as establishing facts outside the source’s access?",
 ];
 
-/**
- * Her instruction against ranking, and only that. What followed it —
- * work out what they can know, whether it is direct or inferential, what is
- * unverified, what evidence would help — is the four analytic categories
- * handed over before the task, which is exactly what was cut from 2.4.1.
- */
-export const CLAIM_NOT_A_RANKING =
-  "Not a ranking from most to least credible. The same action may be right for more than one of them.";
-
-/** Her three fields per variant, verbatim. */
-export const CLAIM_FIELDS = [
-  { id: "response", label: "Recommended response" },
-  { id: "changed", label: "Changed fact that matters" },
-  { id: "unestablished", label: "What remains unestablished" },
-];
-
-/** Her two closing questions, verbatim. */
+/** Her final question, verbatim — shown only after the four are submitted. */
 export const CLAIM_COMPARISON =
-  "The allegation was identical in all four cases. In 50 words or fewer, explain why its evidentiary significance changed.";
+  "The allegation was identical in all four cases. In no more than 50 words, explain why its evidentiary significance changed.";
 export const CLAIM_COMPARISON_MAX_WORDS = 50;
-export const CLAIM_TRANSFER =
-  "You may obtain one additional piece of evidence for one of the four cases. Which case do you investigate further, and what evidence do you seek?";
 
-/**
- * The four distinctions her reveal must draw. Mine, and they add nothing to
- * the names she gave them.
- */
-export const CLAIM_REVEAL = [
-  {
-    term: "Claim content",
-    body: "What is being alleged. It was the same sentence in all four cases, and it did not get truer or falser as the source changed.",
-  },
-  {
-    term: "Provenance and access",
-    body: "How this source came to hold it: what they were positioned to see, and whether what they hold is an observation, something they were told, an inference from surroundings, or a document.",
-  },
-  {
-    term: "Corroboration",
-    body: "Whether anything independent of the source supports it. A document and a dashboard are both closer to corroborable than a conversation, because they leave records somebody else can pull.",
-  },
-  {
-    term: "Verification threshold",
-    body: "What the body may conclude, as opposed to what it may now do. Every one of these four can justify doing something. None of them, alone, establishes that a treaty was violated.",
-  },
-];
+/** Her optional transfer question, verbatim. */
+export const CLAIM_TRANSFER =
+  "You may obtain one additional piece of evidence for one of the four cases. Which case would you investigate further, and what evidence would you seek?";

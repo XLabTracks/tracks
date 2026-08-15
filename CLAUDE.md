@@ -546,11 +546,13 @@ add must reduce the duplication, never widen it.
   is a prefix in the sentence — `A.` before the option, in muted weight — or it
   is the list's own marker, and that is the whole vocabulary. Numbering an
   `<ol>` by hand inside a ring is the same mistake twice.
-  The one thing that is not this: a control whose **fill** encodes state — a
-  step rail that paints done/active, an option that fills once inspected. There
-  the disc is the state and the numeral is only riding inside it, which is the
-  same test the colour rules apply. A ring that would look identical in every
-  state is ornament.
+  **There is no state exception.** A disc whose fill paints done/active, an
+  option that fills once inspected — still forbidden, and the answer is a
+  different design rather than a permitted ring. State belongs on a rule under
+  the step, on the weight and colour of the word, and on a glyph and a word
+  that say which state it is: `✓ Inspected`, not a filled circle the reader has
+  to decode. That is the same requirement the colour rules already make — never
+  shape or hue alone.
 - **A widget is not prose and must not be measured like it.** The reading
   measure (`app-bridge.css`, 64ch) applies to authored sentences; a widget
   keeps the full lesson width. The guard is `[data-widget]`, the marker

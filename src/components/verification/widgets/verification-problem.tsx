@@ -49,7 +49,7 @@ export function VerificationProblem(_: VerificationWidgetProps) {
       </div>
 
       <div className="grid gap-3 p-4 sm:grid-cols-2 sm:p-5">
-        {C.options.map((option, index) => {
+        {C.options.map((option) => {
           const seen = visited.includes(option.id);
           return (
             <button
@@ -65,15 +65,16 @@ export function VerificationProblem(_: VerificationWidgetProps) {
                 <span className="text-muted-foreground font-mono text-[10px] tracking-[0.14em] uppercase">
                   {option.label}
                 </span>
-                <span
-                  className={cn(
-                    "border-border flex size-5 items-center justify-center rounded-full border",
-                    seen && "bg-primary text-primary-foreground border-primary",
-                  )}
-                  aria-label={seen ? "Inspected" : `Option ${index + 1}`}
-                >
-                  {seen ? <Check className="size-3" aria-hidden /> : index + 1}
-                </span>
+                {/* Inspected is said, not shaded. The filled disc here made
+                    the reader decode a circle, and the numeral inside it only
+                    repeated this card's position — which the label opposite
+                    already carries. See CLAUDE.md on rings. */}
+                {seen ? (
+                  <span className="text-comply flex items-center gap-1 text-[11px] font-medium">
+                    <Check className="size-3.5 shrink-0" aria-hidden />
+                    Inspected
+                  </span>
+                ) : null}
               </span>
               <span className="mt-5 block text-lg font-semibold tracking-tight">
                 {option.question}

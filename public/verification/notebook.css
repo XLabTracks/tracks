@@ -74,6 +74,9 @@
   min-width: var(--hdr-action-w);
   height: var(--hdr-action-h);
   padding-inline: 14px;
+  /* Centered like every .btn beside it — without this the book glyph sits
+     flex-start, visibly off-center once the mobile square hides the label. */
+  justify-content: center;
   border-color: var(--border);
   border-radius: var(--radius-sm);
   box-shadow: none;

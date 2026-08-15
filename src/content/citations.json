@@ -115,8 +115,8 @@
       "date": "July 2024"
     },
     "https://arxiv.org/html/2408.16074": {
-      "title": "Verification Methods for International AI Agreements — Whistleblowers",
-      "about": "Wasil et al. examine how incentives, legal protection, secure reporting routes, and blocked communication affect personnel-based verification.",
+      "title": "Verification Methods for International AI Agreements",
+      "about": "Wasil et al. survey verification methods available to an international AI agreement, from national technical means to personnel-based routes.",
       "authors": "Wasil, Akash R., Tom Reed, Jack William Miller, et al.",
       "container": "arXiv",
       "date": "Aug. 2024"
@@ -463,6 +463,13 @@
       "about": "The CWC's managed-access rules: how an inspected state may shroud sensitive equipment and restrict analyses while challenge inspectors still resolve compliance questions.",
       "container": "Chemical Weapons Convention",
       "publisher": "Organisation for the Prohibition of Chemical Weapons"
+    },
+    "https://arxiv.org/html/2408.16074v2#Sx5.SSx1.SSSx2": {
+      "title": "Verification Methods for International AI Agreements — Whistleblowers",
+      "about": "The paper's whistleblowers section: five ways a government could incentivize insiders to come forward, and why incentives alone fail when an employer can block contact with the verifier.",
+      "authors": "Wasil, Akash R., Tom Reed, Jack William Miller, et al.",
+      "container": "arXiv",
+      "date": "Aug. 2024"
     }
   },
   "pending": [

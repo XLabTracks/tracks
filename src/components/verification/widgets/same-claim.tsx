@@ -140,15 +140,22 @@ export function SameClaim({
         </section>
       </div>
 
-      <div className="space-y-2">
-        <p className="text-sm leading-relaxed">{CLAIM_INTRO}</p>
-        <p className="text-sm leading-relaxed">{CLAIM_TASK_LEAD}</p>
-        <ol className="marker:text-primary list-decimal space-y-1 pl-5 text-sm leading-relaxed">
-          {CLAIM_TASKS.map((task) => (
-            <li key={task}>{task}</li>
-          ))}
-        </ol>
-        <p className="text-sm leading-relaxed">{CLAIM_JUSTIFY}</p>
+      {/* Olympiad-style registers, same as construct-case: setup at full
+          weight, the numbered demands indented under their lead, the tail
+          instruction muted — a statement, not a wall. */}
+      <div className="space-y-3">
+        <p className="text-base leading-relaxed font-medium">{CLAIM_INTRO}</p>
+        <div className="space-y-2">
+          <p className="text-sm leading-relaxed">{CLAIM_TASK_LEAD}</p>
+          <ol className="marker:text-primary marker:font-medium list-decimal space-y-1 pl-6 text-sm leading-relaxed">
+            {CLAIM_TASKS.map((task) => (
+              <li key={task}>{task}</li>
+            ))}
+          </ol>
+        </div>
+        <p className="text-muted-foreground text-sm leading-relaxed">
+          {CLAIM_JUSTIFY}
+        </p>
       </div>
 
       <div className="space-y-3">

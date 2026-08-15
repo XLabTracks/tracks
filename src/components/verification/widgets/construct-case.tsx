@@ -52,23 +52,25 @@ export function ConstructCase({
         onComplete();
       }}
       intro={
-        // Her prompt, verbatim (2026-08-15): the length guidance rides inside
-        // it now — the fold's old "four fields · 100–180 words" meta line is
-        // deleted with the sentence carrying the words instead.
+        // Her prompt, verbatim (2026-08-15), set olympiad-style: the task
+        // sentence leads at full weight, the conditions indent under it with
+        // red digits, the operative instruction follows at body weight, and
+        // the length constraint sits last as a muted meta line — statement,
+        // conditions, task, limits, each its own register.
         <div className="space-y-3">
-          <p className="text-sm leading-relaxed">
+          <p className="text-base leading-relaxed font-medium">
             Give one example of a situation in which all three conditions are
             satisfied:
           </p>
-          {/* Plain decimal list, digits in the brand red — no circles, no
-              box ("ну просто цифры в красный покрась"). */}
-          <ol className="marker:text-primary list-decimal space-y-2 pl-5 text-sm leading-relaxed">
+          <ol className="marker:text-primary marker:font-medium list-decimal space-y-2 pl-6 text-sm leading-relaxed">
             {CASE_CONDITIONS.map((condition) => (
               <li key={condition}>{condition}</li>
             ))}
           </ol>
           <p className="text-sm leading-relaxed">
             Describe the situation and explain why each condition is satisfied.
+          </p>
+          <p className="text-muted-foreground text-sm leading-relaxed">
             Use 100–180 words in total.
           </p>
         </div>

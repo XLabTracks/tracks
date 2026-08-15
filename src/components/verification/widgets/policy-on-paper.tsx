@@ -24,13 +24,17 @@ import { SteelmanDeck } from "../kit/steelman-deck";
 import type { VerificationWidgetProps } from "../kit/types";
 
 /**
- * 2.4.4 — Companies A and B. Mark what kind of evidence each statement about
+ * 2.4.2 — Companies A and B. Mark what kind of evidence each statement about
  * a reporting regime is, then read both regimes against what the employees of
  * those companies asked for themselves.
  *
- * It is the section's exercise now, not an extension beside one, and unlike
- * 2.4's other three labs it is not optional: it sits outside the Fold and
- * finishing it is what finishes 2.4.4.
+ * Authored for 2.4.4 and moved here on 2026-08-15: every row is a sentence out
+ * of a real whistleblower policy, which is 2.4.2's subject, while 2.4.4's is
+ * audit design — and this never used it. The exercise id, the storage keys and
+ * the answer key travel unchanged.
+ *
+ * It closes the section, and unlike 2.4's other labs it is not optional: it
+ * sits outside the Fold and it is 2.4.2's one bridged widget.
  *
  * The two companies are tabs and stay anonymous while the learner works —
  * that is the mechanic, not a concealment. Nothing above the Sources block

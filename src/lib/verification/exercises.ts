@@ -67,18 +67,20 @@ export const verificationExercises: VerificationExerciseDef[] = [
   // drills-supply-chain stood down when the section-specific 2.4.4 lab
   // replaced it. Its widget, engine, data, and tests remain in the repo.
   { id: "drills-games", title: "Drill Bench: Evasion, Regime, Position", bridged: true },
-  // 2.4.1 to 2.4.3 are OPTIONAL on the course owner's instruction, and
-  // therefore unbridged: they record no completion, so a learner who reads
-  // those sections and skips the labs has still finished them. 2.4.4 is not —
-  // it is the section's work, it sits outside the Fold, and finishing it
-  // finishes the section.
+  // 2.4's optional labs are unbridged on the course owner's instruction: they
+  // record no completion, so a learner who reads the section and skips the lab
+  // has still finished it.
   { id: "human-insiders", title: "Insider Report", bridged: false },
   { id: "human-reporting-protection", title: "On Paper", bridged: false },
-  // Unbridged: a three-minute assignment inside 2.4.2, whose finish event is
-  // "Follow the Report" above. Two bridged widgets in one lesson would end
-  // the section at whichever fired first.
+  // Unbridged: a three-minute assignment inside 2.4.2's prose, not the
+  // section's finish. Companies A and B below is 2.4.2's one bridged widget —
+  // two in one lesson would end the section at whichever fired first.
   { id: "whistleblower-levers", title: "Four Levers, One Each", bridged: false },
   { id: "human-audits-inspections", title: "Four Sources", bridged: false },
+  // Read in 2.4.2 since 2026-08-15, authored for 2.4.4 — the id is a progress
+  // key and stays. Bridged, and the only one in 2.4: it is not optional, it
+  // sits outside the Fold, and it is the long applied block that closes the
+  // section.
   { id: "human-institutions-judgment", title: "Companies A and B", bridged: true },
   // Stood down 2026-08-14, widgets and data kept: report-access ("One Report,
   // Four Ways"), whose controlled variation became 2.4.3 itself; and the

@@ -255,7 +255,9 @@ export const verificationLessons: Lesson[] = [
     sectionItemId: "v-human-intro",
     title: "2.4.2 Reporting and protection",
     contentRef: "verification/human-reporting-protection",
-    estimatedMinutes: 40,
+    // 60 since Companies A and B moved here from 2.4.4: 40 of reading and the
+    // two short blocks, plus that exercise's own 15–20.
+    estimatedMinutes: 60,
   },
   {
     id: "v-human-audits-inspections",
@@ -273,7 +275,9 @@ export const verificationLessons: Lesson[] = [
     sectionItemId: "v-human-intro",
     title: "2.4.4 Institutions and policy judgment",
     contentRef: "verification/human-institutions",
-    estimatedMinutes: 30,
+    // 10 since Companies A and B left: the section is its framing paragraph
+    // and one 6–8 minute reading until its own exercise is authored.
+    estimatedMinutes: 10,
   },
   {
     id: "v-covert-system-overview",

@@ -110,8 +110,7 @@
   font-size: var(--fs-md);
 }
 
-/* Sizes that opted out of the token scale, put back into it for low-vision
-   mode only.
+/* Sizes that opted out of the token scale, put back into the reader scale.
 
    Two ways to opt out and both were in use. A Tailwind arbitrary value
    (`text-[11px]`) compiles to a literal declaration, so the --text-* mapping
@@ -121,19 +120,46 @@
    against the ROOT font size, which this mode deliberately does not touch, so
    it also stands still.
 
-   Every step of the --fs-* scale is re-solved at exactly 2x in this mode
-   (12->24, 13->26, 16->32, 38->76), so doubling a stray literal is not a
-   guess — it is the same transform the tokens get, applied to the values that
-   escaped them. A micro-label stays a micro-label relative to its neighbours.
+   Each Aa stop re-solves those literals by the same factor as the token scale,
+   so a micro-label stays a micro-label relative to its neighbours.
 
    The list is closed and short by construction: `grep -oE "text-\[[0-9.]+px\]"`
    over src/ prints every distinct value in the codebase. A new one belongs
    here, or better, belongs written as a token in the first place.
 
-   In rem for the reason the scale itself is: the mode doubles on top of
-   whatever text size the reader has already asked their browser for, never
-   instead of it. */
-:root[data-theme="contrast"] {
+   Once Aa is explicit, these values are in rem for the same reason as the
+   main scale: the selected percentage compounds with a browser text-size
+   preference instead of replacing it. */
+:root[data-theme] {
+  --lv-8: 8px;
+  --lv-8_5: 8.5px;
+  --lv-9: 9px;
+  --lv-10: 10px;
+  --lv-10_5: 10.5px;
+  --lv-11: 11px;
+  --lv-12: 12px;
+  --lv-12_5: 12.5px;
+  --lv-13: 13px;
+  --lv-13_5: 13.5px;
+  --lv-15: 15px;
+  --lv-17: 17px;
+}
+:root[data-text-scale="100"] {
+  --lv-8: 0.5rem;
+  --lv-8_5: 0.53125rem;
+  --lv-9: 0.5625rem;
+  --lv-10: 0.625rem;
+  --lv-10_5: 0.65625rem;
+  --lv-11: 0.6875rem;
+  --lv-12: 0.75rem;
+  --lv-12_5: 0.78125rem;
+  --lv-13: 0.8125rem;
+  --lv-13_5: 0.84375rem;
+  --lv-15: 0.9375rem;
+  --lv-17: 1.0625rem;
+}
+:root[data-theme="contrast"]:not([data-text-scale]),
+:root[data-text-scale="200"] {
   --lv-8: 1rem;
   --lv-8_5: 1.0625rem;
   --lv-9: 1.125rem;
@@ -147,20 +173,90 @@
   --lv-15: 1.875rem;
   --lv-17: 2.125rem;
 }
-:root[data-theme="contrast"] [class~="text-[8px]"] { font-size: var(--lv-8); }
-:root[data-theme="contrast"] [class~="text-[8.5px]"] { font-size: var(--lv-8_5); }
-:root[data-theme="contrast"] [class~="text-[9px]"] { font-size: var(--lv-9); }
-:root[data-theme="contrast"] [class~="text-[10px]"] { font-size: var(--lv-10); }
-:root[data-theme="contrast"] [class~="text-[10.5px]"] { font-size: var(--lv-10_5); }
-:root[data-theme="contrast"] [class~="text-[11px]"] { font-size: var(--lv-11); }
-:root[data-theme="contrast"] [class~="text-[12px]"] { font-size: var(--lv-12); }
-:root[data-theme="contrast"] [class~="text-[12.5px]"] { font-size: var(--lv-12_5); }
-:root[data-theme="contrast"] [class~="text-[13px]"] { font-size: var(--lv-13); }
-:root[data-theme="contrast"] [class~="text-[13.5px]"] { font-size: var(--lv-13_5); }
-:root[data-theme="contrast"] [class~="text-[15px]"] { font-size: var(--lv-15); }
-:root[data-theme="contrast"] [class~="text-[17px]"] { font-size: var(--lv-17); }
-:root[data-theme="contrast"] [class~="text-[0.95rem]"] { font-size: var(--fs-md); }
-:root[data-theme="contrast"] [class~="text-[0.8rem]"] { font-size: var(--fs-sm); }
+:root[data-text-scale="125"] {
+  --lv-8: 0.625rem;
+  --lv-8_5: 0.6640625rem;
+  --lv-9: 0.703125rem;
+  --lv-10: 0.78125rem;
+  --lv-10_5: 0.8203125rem;
+  --lv-11: 0.859375rem;
+  --lv-12: 0.9375rem;
+  --lv-12_5: 0.9765625rem;
+  --lv-13: 1.015625rem;
+  --lv-13_5: 1.0546875rem;
+  --lv-15: 1.171875rem;
+  --lv-17: 1.328125rem;
+}
+:root[data-text-scale="150"] {
+  --lv-8: 0.75rem;
+  --lv-8_5: 0.796875rem;
+  --lv-9: 0.84375rem;
+  --lv-10: 0.9375rem;
+  --lv-10_5: 0.984375rem;
+  --lv-11: 1.03125rem;
+  --lv-12: 1.125rem;
+  --lv-12_5: 1.171875rem;
+  --lv-13: 1.21875rem;
+  --lv-13_5: 1.265625rem;
+  --lv-15: 1.40625rem;
+  --lv-17: 1.59375rem;
+}
+:root[data-text-scale="175"] {
+  --lv-8: 0.875rem;
+  --lv-8_5: 0.9296875rem;
+  --lv-9: 0.984375rem;
+  --lv-10: 1.09375rem;
+  --lv-10_5: 1.1484375rem;
+  --lv-11: 1.203125rem;
+  --lv-12: 1.3125rem;
+  --lv-12_5: 1.3671875rem;
+  --lv-13: 1.421875rem;
+  --lv-13_5: 1.4765625rem;
+  --lv-15: 1.640625rem;
+  --lv-17: 1.859375rem;
+}
+:root[data-theme] [class~="text-[8px]"] {
+  font-size: var(--lv-8);
+}
+:root[data-theme] [class~="text-[8.5px]"] {
+  font-size: var(--lv-8_5);
+}
+:root[data-theme] [class~="text-[9px]"] {
+  font-size: var(--lv-9);
+}
+:root[data-theme] [class~="text-[10px]"] {
+  font-size: var(--lv-10);
+}
+:root[data-theme] [class~="text-[10.5px]"] {
+  font-size: var(--lv-10_5);
+}
+:root[data-theme] [class~="text-[11px]"] {
+  font-size: var(--lv-11);
+}
+:root[data-theme] [class~="text-[12px]"] {
+  font-size: var(--lv-12);
+}
+:root[data-theme] [class~="text-[12.5px]"] {
+  font-size: var(--lv-12_5);
+}
+:root[data-theme] [class~="text-[13px]"] {
+  font-size: var(--lv-13);
+}
+:root[data-theme] [class~="text-[13.5px]"] {
+  font-size: var(--lv-13_5);
+}
+:root[data-theme] [class~="text-[15px]"] {
+  font-size: var(--lv-15);
+}
+:root[data-theme] [class~="text-[17px]"] {
+  font-size: var(--lv-17);
+}
+:root:is([data-theme="contrast"], .reader-enlarged) [class~="text-[0.95rem]"] {
+  font-size: var(--fs-md);
+}
+:root:is([data-theme="contrast"], .reader-enlarged) [class~="text-[0.8rem]"] {
+  font-size: var(--fs-sm);
+}
 
 /* A second channel for the one chart with six series, because in low-vision
    mode there is no first channel: every module hue is white there, on purpose
@@ -185,13 +281,14 @@
    scale and size in rem, so they held still while the page doubled around
    them. Sidenotes are the reading apparatus of a paper and the facilitator
    guide's small print carries its session timings — neither is decoration. */
-:root[data-theme="contrast"] :is(.sidenote, .sidenote-inline, .fg-html small) {
+:root:is([data-theme="contrast"], .reader-enlarged)
+  :is(.sidenote, .sidenote-inline, .fg-html small) {
   font-size: var(--fs-xs);
 }
-:root[data-theme="contrast"] .fg-html .mt {
+:root:is([data-theme="contrast"], .reader-enlarged) .fg-html .mt {
   font-size: var(--fs-2xs);
 }
-:root[data-theme="contrast"] .lesson-body pre {
+:root:is([data-theme="contrast"], .reader-enlarged) .lesson-body pre {
   font-size: var(--fs-xs);
 }
 :root[data-theme] .prose {
@@ -345,20 +442,21 @@
    and night; in low-vision mode the box follows its content and the few labels
    that cannot fit are allowed to make a clean second line instead of clipping
    or widening the page. */
-:root[data-theme="contrast"] [class~="group/button"] {
+:root:is([data-theme="contrast"], .reader-large) [class~="group/button"] {
   flex-shrink: 1;
   height: auto;
   max-width: 100%;
   min-height: 44px;
   white-space: normal;
 }
-:root[data-theme="contrast"]
+:root:is([data-theme="contrast"], .reader-large)
   [data-widget]
   :where(button, summary, [role="button"], [role="tab"], [role="radio"]) {
   height: auto;
   max-width: 100%;
 }
-:root[data-theme="contrast"] :where(input, select, textarea) {
+:root:is([data-theme="contrast"], .reader-large)
+  :where(input:not([type="range"]), select, textarea) {
   height: auto;
 }
 
@@ -368,12 +466,12 @@
    chance to act. Focus reading also wraps each word in spans; applying the
    break to the reading subtree keeps those wrappers from restoring the same
    min-content floor inside lists and cards. */
-:root[data-theme="contrast"]
+:root:is([data-theme="contrast"], .reader-large)
   :where(.lesson-reader, .lesson-reader .lesson-body, main h1) {
   overflow-wrap: anywhere;
   word-break: break-word;
 }
-:root[data-theme="contrast"] main h1 {
+:root:is([data-theme="contrast"], .reader-large) main h1 {
   min-width: 0;
   max-width: 100%;
 }
@@ -381,16 +479,105 @@
 /* Truncation is a density choice for the ordinary interface, never a
    low-vision fallback. At 200% it was hiding names and descriptions in cards
    whose boxes otherwise had room to grow. */
-:root[data-theme="contrast"] [class~="truncate"] {
+:root:is([data-theme="contrast"], .reader-large) [class~="truncate"] {
   overflow: visible;
   text-overflow: clip;
   white-space: normal;
 }
-:root[data-theme="contrast"] [class~="line-clamp-2"] {
+:root:is([data-theme="contrast"], .reader-large) [class~="line-clamp-2"] {
   display: block;
   overflow: visible;
   -webkit-box-orient: initial;
   -webkit-line-clamp: unset;
+}
+
+/* Kobo's reader pattern: a bare minus, the draggable track, and a bare plus.
+   The native range keeps browser drag, touch and keyboard behaviour; the two
+   step buttons expose the same operation to people who cannot drag precisely.
+   Their 44px hit areas stay invisible until keyboard focus, so the control
+   reads as one scale rather than three outlined controls. */
+.reading-size-control {
+  display: grid;
+  grid-template-columns: 44px minmax(0, 1fr) 44px;
+  align-items: center;
+  gap: 10px;
+}
+.reading-size-step {
+  display: inline-grid;
+  min-width: 44px;
+  min-height: 44px;
+  place-items: center;
+  padding: 0;
+  border: 0;
+  color: var(--muted-foreground);
+  background: transparent;
+  font-size: var(--fs-lg);
+  line-height: 1;
+}
+.reading-size-step:hover:not(:disabled) {
+  color: var(--primary);
+}
+.reading-size-step:focus-visible {
+  border-radius: 2px;
+  outline: 2px solid var(--ring);
+  outline-offset: 0;
+}
+.reading-size-step:disabled {
+  cursor: not-allowed;
+  opacity: 0.4;
+}
+.reading-size-slider {
+  width: 100%;
+  min-width: 0;
+  height: 44px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  appearance: none;
+  background: transparent;
+  cursor: pointer;
+}
+.reading-size-slider:focus-visible {
+  border-radius: 2px;
+  outline: 2px solid var(--ring);
+  outline-offset: 3px;
+}
+.reading-size-slider::-webkit-slider-runnable-track {
+  height: 2px;
+  border-radius: 999px;
+  background: linear-gradient(
+    to right,
+    var(--primary) 0 var(--reading-size-progress),
+    var(--border) var(--reading-size-progress) 100%
+  );
+}
+.reading-size-slider::-webkit-slider-thumb {
+  width: 20px;
+  height: 20px;
+  margin-top: -9px;
+  border: 2px solid var(--primary);
+  border-radius: 50%;
+  appearance: none;
+  background: var(--card);
+  box-shadow: 0 0 0 2px var(--background);
+}
+.reading-size-slider::-moz-range-track {
+  height: 2px;
+  border-radius: 999px;
+  background: var(--border);
+}
+.reading-size-slider::-moz-range-progress {
+  height: 2px;
+  border-radius: 999px;
+  background: var(--primary);
+}
+.reading-size-slider::-moz-range-thumb {
+  width: 18px;
+  height: 18px;
+  border: 2px solid var(--primary);
+  border-radius: 50%;
+  background: var(--card);
+  box-shadow: 0 0 0 2px var(--background);
 }
 
 /* The landscape is a genuine two-axis grid, so horizontal scrolling inside
@@ -398,11 +585,13 @@
    square cells are sized for 11px labels, however; keeping that geometry at
    24px clips the organisation names. Widen the grid and let each cell grow
    vertically while preserving the axes and the local scroll container. */
-:root[data-theme="contrast"] .verification-landscape [role="grid"] {
+:root:is([data-theme="contrast"], .reader-large)
+  .verification-landscape
+  [role="grid"] {
   min-width: 1100px;
   grid-template-columns: minmax(220px, 1.15fr) repeat(4, minmax(200px, 1fr)) !important;
 }
-:root[data-theme="contrast"]
+:root:is([data-theme="contrast"], .reader-large)
   .verification-landscape
   [role="grid"]
   [class~="aspect-square"] {
@@ -417,7 +606,10 @@
    reading's word wrappers must not re-enable emergency word-breaking here;
    the local horizontal scroll is precisely what preserves the row/column
    relationship. */
-:root[data-theme="contrast"] .lesson-body table :is(th, td) {
+:root:is([data-theme="contrast"], .reader-large)
+  .lesson-body
+  table
+  :is(th, td) {
   min-inline-size: 12ch;
   overflow-wrap: normal;
   word-break: normal;

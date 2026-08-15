@@ -113,6 +113,7 @@
 
      --fs-title is every page's h1; --fs-hero is the landing's alone. They were
      five near-identical clamps before, which is four chances to drift. */
+  --text-scale: 1;
   --fs-2xs: 0.75rem;
   --fs-xs: 0.8125rem;
   --fs-sm: 0.875rem;
@@ -200,17 +201,12 @@
 /* High contrast is a low-vision mode, not a dark theme, and it is built to
    WCAG's own numbers rather than to taste.
 
-   IT ENLARGES THE TYPE, AND THAT IS THE POINT OF IT. This was unpicked once,
-   on the argument that contrast and magnification are separate needs and
-   somebody may want stronger edges without doubled navigation labels — which
-   is true of a general-purpose theme system and is not what this control is.
-   There is one switch here and the course owner's design is that it is the
-   low-vision switch: picking it says "I cannot read this", not "I would like
-   more contrast". Splitting it costs the person it exists for two settings
-   instead of one, and the half they land on first does nothing for them.
-   Browser zoom is not the answer either, for the reason spelled out under
-   1.4.10 below. If a separate reading-size control is ever wanted, it is an
-   addition; this stays whole until then.
+   IT ENLARGES THE TYPE BY DEFAULT, AND THAT IS THE POINT OF IT. The Aa menu
+   now lets a reader override that default: contrast and magnification are
+   separate preferences, but somebody who needs both should still reach both
+   with one switch. With no explicit Aa choice, high contrast therefore opens
+   at 200%; once a reader chooses a size, that choice wins. Browser zoom is not
+   the answer either, for the reason spelled out under 1.4.10 below.
 
    The numbers:
 
@@ -308,6 +304,82 @@
      has to be scrolled sideways to read a line, which is the exact thing
      this mode exists to spare somebody. Reflow only works if the layout sees
      the real viewport, so the layout is left alone and the letters grow. */
+  --text-scale: 2;
+  --fs-2xs: 1.5rem;
+  --fs-xs: 1.625rem;
+  --fs-sm: 1.75rem;
+  --fs-md: 2rem;
+  --fs-lg: 2.25rem;
+  --fs-xl: 2.5rem;
+  --fs-2xl: 3rem;
+  --fs-3xl: 3.75rem;
+  --fs-4xl: 4.75rem;
+  --fs-title: clamp(2.75rem, 6.8vw, 4.5rem);
+  --fs-hero: clamp(3rem, 8.8vw, 6.5rem);
+}
+
+/* Aa is the explicit reader preference. It comes after the palette so it wins
+   even when high contrast supplied the 200% low-vision default. The endpoint
+   is not the default: WCAG's 200% is the size the page must survive, while the
+   learner chooses the size that is comfortable to read. */
+:root[data-text-scale="100"] {
+  --text-scale: 1;
+  --fs-2xs: 0.75rem;
+  --fs-xs: 0.8125rem;
+  --fs-sm: 0.875rem;
+  --fs-md: 1rem;
+  --fs-lg: 1.125rem;
+  --fs-xl: 1.25rem;
+  --fs-2xl: 1.5rem;
+  --fs-3xl: 1.875rem;
+  --fs-4xl: 2.375rem;
+  --fs-title: clamp(1.75rem, 3.4vw, 2.25rem);
+  --fs-hero: clamp(2rem, 3.8vw, 2.75rem);
+}
+:root[data-text-scale="125"] {
+  --text-scale: 1.25;
+  --fs-2xs: 0.9375rem;
+  --fs-xs: 1.015625rem;
+  --fs-sm: 1.09375rem;
+  --fs-md: 1.25rem;
+  --fs-lg: 1.40625rem;
+  --fs-xl: 1.5625rem;
+  --fs-2xl: 1.875rem;
+  --fs-3xl: 2.34375rem;
+  --fs-4xl: 2.96875rem;
+  --fs-title: clamp(2rem, 4.25vw, 2.8125rem);
+  --fs-hero: clamp(2.5rem, 4.75vw, 3.4375rem);
+}
+:root[data-text-scale="150"] {
+  --text-scale: 1.5;
+  --fs-2xs: 1.125rem;
+  --fs-xs: 1.21875rem;
+  --fs-sm: 1.3125rem;
+  --fs-md: 1.5rem;
+  --fs-lg: 1.6875rem;
+  --fs-xl: 1.875rem;
+  --fs-2xl: 2.25rem;
+  --fs-3xl: 2.8125rem;
+  --fs-4xl: 3.5625rem;
+  --fs-title: clamp(2.25rem, 5.1vw, 3.375rem);
+  --fs-hero: clamp(3rem, 5.7vw, 4.125rem);
+}
+:root[data-text-scale="175"] {
+  --text-scale: 1.75;
+  --fs-2xs: 1.3125rem;
+  --fs-xs: 1.421875rem;
+  --fs-sm: 1.53125rem;
+  --fs-md: 1.75rem;
+  --fs-lg: 1.96875rem;
+  --fs-xl: 2.1875rem;
+  --fs-2xl: 2.625rem;
+  --fs-3xl: 3.28125rem;
+  --fs-4xl: 4.15625rem;
+  --fs-title: clamp(2.5rem, 5.95vw, 3.9375rem);
+  --fs-hero: clamp(3.5rem, 6.65vw, 4.8125rem);
+}
+:root[data-text-scale="200"] {
+  --text-scale: 2;
   --fs-2xs: 1.5rem;
   --fs-xs: 1.625rem;
   --fs-sm: 1.75rem;
@@ -323,7 +395,7 @@
 
 /* A long word at 72px is wider than a 320px screen, and a heading that cannot
    break is a horizontal scrollbar. Breaking is the lesser harm. */
-:root[data-theme="contrast"] {
+:root:is([data-theme="contrast"], .reader-large) {
   overflow-wrap: break-word;
 }
 
@@ -342,7 +414,7 @@
    and both are a sideways scrollbar at twice it, so this mode releases them.
    A data table is the one thing left scrolling in its own box, which the
    criterion allows and the house rules already require. */
-:root[data-theme="contrast"]
+:root:is([data-theme="contrast"], .reader-large)
   :is(
     .brand,
     .nav a,
@@ -359,7 +431,7 @@
   white-space: normal;
 }
 
-:root[data-theme="contrast"]
+:root:is([data-theme="contrast"], .reader-large)
   :is(
     .brand,
     .header-right,
@@ -385,7 +457,7 @@
    of wrapping — and the bank's grid is what then pushed the page sideways.
    Only the low-vision mode needs this: at the ordinary type size no card's
    min-content reaches a 320px column. */
-:root[data-theme="contrast"] .bank-grid > * {
+:root:is([data-theme="contrast"], .reader-large) .bank-grid > * {
   min-width: 0;
 }
 
@@ -397,11 +469,11 @@
    floor they need, and it has to reach the wrapper as well as the control:
    a label holding a select is the item that will not give, and `max-width:
    100%` on the select then resolves against the label's own overflow. */
-:root[data-theme="contrast"] :is(input, select, textarea) {
+:root:is([data-theme="contrast"], .reader-large) :is(input, select, textarea) {
   min-width: 0;
   max-width: 100%;
 }
-:root[data-theme="contrast"]
+:root:is([data-theme="contrast"], .reader-large)
   :is(.control-row, .rt-row, .guide-tools, .sort)
   > * {
   min-width: 0;
@@ -413,7 +485,7 @@
 /* Label above value rather than beside it: an 88px label column beside a
    value is a two-column table, and at this size the value column has nothing
    left to hold a word. */
-:root[data-theme="contrast"] .brief dl > div {
+:root:is([data-theme="contrast"], .reader-large) .brief dl > div {
   grid-template-columns: minmax(0, 1fr);
   gap: 2px;
 }
@@ -421,20 +493,20 @@
 /* 2.5.5: 44x44 CSS px minimum for a pointer target. A minimum must not replace
    a component's layout model: forcing every button to inline-flex collapsed
    complex card-buttons into one horizontal line at enlarged text sizes. */
-:root[data-theme="contrast"] button,
-:root[data-theme="contrast"] [role="button"],
-:root[data-theme="contrast"] .btn,
-:root[data-theme="contrast"] .chip,
-:root[data-theme="contrast"] .nav a,
-:root[data-theme="contrast"] .site-footer a,
-:root[data-theme="contrast"] .part-jump {
+:root:is([data-theme="contrast"], .reader-large) button,
+:root:is([data-theme="contrast"], .reader-large) [role="button"],
+:root:is([data-theme="contrast"], .reader-large) .btn,
+:root:is([data-theme="contrast"], .reader-large) .chip,
+:root:is([data-theme="contrast"], .reader-large) .nav a,
+:root:is([data-theme="contrast"], .reader-large) .site-footer a,
+:root:is([data-theme="contrast"], .reader-large) .part-jump {
   min-height: 44px;
   min-width: 44px;
 }
 
 /* Memo-desk rows keep their authored grid explicitly; the generic target rule
    above now changes size only, never display. */
-:root[data-theme="contrast"] .slot-btn {
+:root:is([data-theme="contrast"], .reader-large) .slot-btn {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
   align-items: start;
@@ -450,7 +522,7 @@
    turns the rule off rather than breaking anything visible. It had already
    happened once: the rule named `.sky-wrap`, which no longer exists, so the
    scatter was rendering here with 16px-tall targets. */
-:root[data-theme="contrast"] .constellation {
+:root:is([data-theme="contrast"], .reader-large) .constellation {
   display: none;
 }
 
@@ -460,16 +532,16 @@
    their own. They stay because at 200% type a three-column grid holds a
    handful of words per line, and tracking from the end of one short line to
    the start of the next is the reading problem this mode exists to remove. */
-:root[data-theme="contrast"] .objectives,
-:root[data-theme="contrast"] .modules,
-:root[data-theme="contrast"] .roster,
-:root[data-theme="contrast"] .lh-row,
-:root[data-theme="contrast"] .facts,
-:root[data-theme="contrast"] .map-body,
-:root[data-theme="contrast"] .desk,
-:root[data-theme="contrast"] .cap-grid,
-:root[data-theme="contrast"] .stat-row,
-:root[data-theme="contrast"] .player .shell {
+:root:is([data-theme="contrast"], .reader-large) .objectives,
+:root:is([data-theme="contrast"], .reader-large) .modules,
+:root:is([data-theme="contrast"], .reader-large) .roster,
+:root:is([data-theme="contrast"], .reader-large) .lh-row,
+:root:is([data-theme="contrast"], .reader-large) .facts,
+:root:is([data-theme="contrast"], .reader-large) .map-body,
+:root:is([data-theme="contrast"], .reader-large) .desk,
+:root:is([data-theme="contrast"], .reader-large) .cap-grid,
+:root:is([data-theme="contrast"], .reader-large) .stat-row,
+:root:is([data-theme="contrast"], .reader-large) .player .shell {
   grid-template-columns: minmax(0, 1fr) !important;
   /* One column only holds if the flow fills by row. A grid that fills by
      column (.objectives does, so its numbers read down the left) answers a
@@ -480,7 +552,7 @@
 
 /* The header is a fixed-height single row by default; at this size its own
    contents no longer fit across, so it wraps like it does on a phone. */
-:root[data-theme="contrast"] .site-header .bar {
+:root:is([data-theme="contrast"], .reader-large) .site-header .bar {
   display: flex;
   height: auto;
   align-items: stretch;
@@ -494,28 +566,28 @@
    shrink and wrap at 200% produced six labels painted on top of one another.
    They keep their line and travel in one explicitly scrollable rail; the page
    itself never scrolls sideways. */
-:root[data-theme="contrast"] .site-header .nav {
+:root:is([data-theme="contrast"], .reader-large) .site-header .nav {
   width: 100%;
   flex: none;
   flex-wrap: nowrap;
   overflow-x: auto;
 }
-:root[data-theme="contrast"] .site-header .nav a {
+:root:is([data-theme="contrast"], .reader-large) .site-header .nav a {
   flex: none;
   white-space: nowrap;
 }
 
-:root[data-theme="contrast"] .site-header .brand {
+:root:is([data-theme="contrast"], .reader-large) .site-header .brand {
   flex-wrap: nowrap;
   gap: 6px;
   font-size: var(--fs-md);
   white-space: nowrap;
 }
-:root[data-theme="contrast"] .site-header .brand-mark {
+:root:is([data-theme="contrast"], .reader-large) .site-header .brand-mark {
   height: 20px;
 }
 
-:root[data-theme="contrast"] .site-header .header-right {
+:root:is([data-theme="contrast"], .reader-large) .site-header .header-right {
   width: 100%;
 }
 /* A sticky side column has to stop being one when the column is gone. The rule
@@ -526,9 +598,9 @@
    `.slot-rail`/`.check-rail` are named here because this rule said `.rail` and
    matched neither: the same silent miss the .constellation note above records,
    so both desk rails are spelled out rather than assumed. */
-:root[data-theme="contrast"] .rail,
-:root[data-theme="contrast"] .slot-rail,
-:root[data-theme="contrast"] .check-rail {
+:root:is([data-theme="contrast"], .reader-large) .rail,
+:root:is([data-theme="contrast"], .reader-large) .slot-rail,
+:root:is([data-theme="contrast"], .reader-large) .check-rail {
   position: static;
   width: auto;
   max-width: none;
@@ -767,7 +839,7 @@ button,
 /* At 200% type the label and the three 44px segments both outgrow the default
    size, so the pair is given a bigger one rather than a fixed one it would
    spill out of. */
-:root[data-theme="contrast"] .header-right {
+:root:is([data-theme="contrast"], .reader-large) .header-right {
   --hdr-action-w: 168px;
   --hdr-action-h: 54px;
 }

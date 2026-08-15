@@ -110,7 +110,10 @@ if(v!=='light'&&v!=='dark'&&v!=='contrast'){\
 v=window.matchMedia&&window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';}\
 }\
 var c=document.documentElement.classList;\
-c.toggle('dark',v!=='light');c.toggle('contrast',v==='contrast');}catch(e){}})();`;
+c.toggle('dark',v!=='light');c.toggle('contrast',v==='contrast');\
+if(x){var s=null;try{s=localStorage.getItem('xlab-verification-text-scale');}catch(e){}\
+if(s==='100'||s==='125'||s==='150'||s==='175'||s==='200'){\
+document.documentElement.setAttribute('data-text-scale',s);c.toggle('reader-enlarged',Number(s)>100);c.toggle('reader-large',Number(s)>=150);}}}catch(e){}})();`;
 
 export default async function RootLayout({
   children,

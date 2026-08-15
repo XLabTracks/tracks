@@ -1,6 +1,13 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import {
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+  useSyncExternalStore,
+} from "react";
+import type { CSSProperties } from "react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import {
@@ -9,6 +16,13 @@ import {
   type FocusMode,
   type FocusSettings,
 } from "@/lib/reading/focus-reading";
+import {
+  applyTextScale,
+  DEFAULT_TEXT_SCALE,
+  effectiveTextScale,
+  subscribeTextScale,
+  TEXT_SCALE_OPTIONS,
+} from "@/lib/reading/text-scale";
 
 /* The focus-reading control: a button beside the whole-lesson toggle that
  * opens the reading settings, and the code that applies them to the body.
@@ -49,6 +63,16 @@ export function FocusReadingControl({
 }) {
   const [open, setOpen] = useState(false);
   const panelRef = useRef<HTMLDivElement>(null);
+  const textScale = useSyncExternalStore(
+    subscribeTextScale,
+    effectiveTextScale,
+    () => DEFAULT_TEXT_SCALE
+  );
+  const textScaleIndex = TEXT_SCALE_OPTIONS.indexOf(textScale);
+  const setTextScaleFromControl = (value: string) => {
+    const next = TEXT_SCALE_OPTIONS[Number(value)];
+    if (next) applyTextScale(next);
+  };
 
   const update = useCallback(
     (next: Partial<FocusSettings>) => {
@@ -60,7 +84,7 @@ export function FocusReadingControl({
       }
       onChange(merged);
     },
-    [settings, onChange],
+    [settings, onChange]
   );
 
   // Escape closes the panel; a click outside does too. Both leave the setting
@@ -72,7 +96,10 @@ export function FocusReadingControl({
     };
     const onClick = (e: MouseEvent) => {
       const t = e.target as Node;
-      if (!panelRef.current?.contains(t) && !(t as HTMLElement).closest?.("[data-focus-toggle]")) {
+      if (
+        !panelRef.current?.contains(t) &&
+        !(t as HTMLElement).closest?.("[data-focus-toggle]")
+      ) {
         setOpen(false);
       }
     };
@@ -98,14 +125,16 @@ export function FocusReadingControl({
         size="sm"
         data-focus-toggle
         aria-expanded={open}
-        aria-label={`Focus reading${on ? `: ${settings.mode}` : ""}`}
-        title="Focus reading"
+        aria-label={`Reading settings: text ${textScale}%, focus reading ${
+          on ? settings.mode : "off"
+        }`}
+        title="Reading settings"
         onClick={() => setOpen((v) => !v)}
         className={cn(
           "h-11 w-11 border px-0 text-[15px] leading-none sm:h-7 sm:w-9",
           on
             ? "border-border text-foreground bg-muted"
-            : "text-muted-foreground border-transparent",
+            : "text-muted-foreground border-transparent"
         )}
       >
         <span aria-hidden>
@@ -117,16 +146,81 @@ export function FocusReadingControl({
       {open && (
         <div
           ref={panelRef}
-          className="border-border bg-card shadow-soft-lg absolute top-9 right-0 z-20 w-[min(30rem,calc(100vw-2rem))] rounded-xl border p-4 text-left"
+          className="border-border bg-card shadow-soft-lg absolute top-9 right-0 z-20 max-h-[calc(100vh-6rem)] w-[min(30rem,calc(100vw-2rem))] overflow-y-auto rounded-xl border p-4 text-left"
         >
-          <p className="text-sm font-semibold">Focus reading</p>
+          <p className="text-sm font-semibold">Reading settings</p>
+
+          <div className="border-border mt-3 border-b pb-4">
+            <div className="flex items-baseline justify-between gap-3">
+              <p id="reading-text-size-label" className="text-sm font-semibold">
+                Text size
+              </p>
+              <span className="text-muted-foreground text-xs tabular-nums">
+                {textScale}%
+              </span>
+            </div>
+            <div className="reading-size-control mt-2">
+              <button
+                type="button"
+                aria-label="Decrease text size"
+                disabled={textScaleIndex === 0}
+                onClick={() =>
+                  applyTextScale(TEXT_SCALE_OPTIONS[textScaleIndex - 1])
+                }
+                className="reading-size-step"
+              >
+                <span aria-hidden>−</span>
+              </button>
+              <input
+                id="reading-text-size"
+                type="range"
+                min={0}
+                max={TEXT_SCALE_OPTIONS.length - 1}
+                step={1}
+                value={textScaleIndex}
+                aria-labelledby="reading-text-size-label"
+                aria-valuetext={`${textScale}% of the default text size`}
+                onInput={(event) =>
+                  setTextScaleFromControl(event.currentTarget.value)
+                }
+                onChange={(event) =>
+                  setTextScaleFromControl(event.currentTarget.value)
+                }
+                className="reading-size-slider"
+                style={
+                  {
+                    "--reading-size-progress": `${
+                      (textScaleIndex / (TEXT_SCALE_OPTIONS.length - 1)) * 100
+                    }%`,
+                  } as CSSProperties
+                }
+              />
+              <button
+                type="button"
+                aria-label="Increase text size"
+                disabled={textScaleIndex === TEXT_SCALE_OPTIONS.length - 1}
+                onClick={() =>
+                  applyTextScale(TEXT_SCALE_OPTIONS[textScaleIndex + 1])
+                }
+                className="reading-size-step"
+              >
+                <span aria-hidden>+</span>
+              </button>
+            </div>
+          </div>
+
+          <p className="mt-4 text-sm font-semibold">Focus reading</p>
           <p className="text-muted-foreground mt-1 text-[13px] leading-relaxed">
             Bolds the opening letters of a word so your eye lands on its shape.
             Some people read faster this way and some slower — the sample below
             is the way to tell which you are.
           </p>
 
-          <div className="mt-3 flex flex-wrap gap-1.5" role="group" aria-label="Focus reading strength">
+          <div
+            className="mt-3 flex flex-wrap gap-1.5"
+            role="group"
+            aria-label="Focus reading strength"
+          >
             {MODES.map((m) => (
               <button
                 key={m.value}
@@ -143,7 +237,7 @@ export function FocusReadingControl({
                   // three themes because it is the one pair every theme sets.
                   settings.mode === m.value
                     ? "border-foreground bg-foreground text-background"
-                    : "border-border text-muted-foreground hover:text-foreground",
+                    : "border-border text-muted-foreground hover:text-foreground"
                 )}
               >
                 {m.label}
@@ -152,7 +246,7 @@ export function FocusReadingControl({
                     "ml-1.5 font-normal",
                     settings.mode === m.value
                       ? "opacity-75"
-                      : "text-muted-foreground",
+                      : "text-muted-foreground"
                   )}
                 >
                   {m.hint}
@@ -164,7 +258,7 @@ export function FocusReadingControl({
           <label
             className={cn(
               "mt-3 flex items-center gap-2 text-[13px] select-none",
-              on ? "text-foreground" : "text-muted-foreground",
+              on ? "text-foreground" : "text-muted-foreground"
             )}
           >
             <input

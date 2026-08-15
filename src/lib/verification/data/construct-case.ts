@@ -26,11 +26,11 @@
 
 import type { ConstructedField } from "@/components/verification/kit/constructed-response";
 
-/** Her three conditions, verbatim. */
+/** Her three conditions, verbatim — restated 2026-08-15 without the "still". */
 export const CASE_CONDITIONS = [
   "An insider’s report about a prohibited AI activity is accurate.",
   "The insider is legally permitted to report what they know.",
-  "The verification regime still cannot turn the report into actionable evidence.",
+  "The verification regime cannot turn the report into actionable evidence.",
 ];
 
 /**

@@ -52,9 +52,13 @@ export function ConstructCase({
         onComplete();
       }}
       intro={
+        // Her prompt, verbatim (2026-08-15): the length guidance rides inside
+        // it now — the fold's old "four fields · 100–180 words" meta line is
+        // deleted with the sentence carrying the words instead.
         <div className="space-y-3">
           <p className="text-sm leading-relaxed">
-            Construct a case in which all three statements are true.
+            Give one example of a situation in which all three conditions are
+            satisfied:
           </p>
           <ol className="border-border bg-card space-y-2 rounded-xl border p-4 text-sm">
             {CASE_CONDITIONS.map((condition, i) => (
@@ -66,6 +70,10 @@ export function ConstructCase({
               </li>
             ))}
           </ol>
+          <p className="text-sm leading-relaxed">
+            Describe the situation and explain why each condition is satisfied.
+            Use 100–180 words in each response.
+          </p>
         </div>
       }
       reveal={

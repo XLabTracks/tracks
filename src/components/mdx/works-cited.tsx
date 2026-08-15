@@ -50,7 +50,7 @@ export function WorksCited({ urls }: { urls: string[] }) {
   rows.sort((a, b) => sortKey(a.entry).localeCompare(sortKey(b.entry)));
 
   return (
-    <details className="works-cited border-border group mt-10 max-w-[64ch] rounded-lg border">
+    <details className="works-cited border-border group mt-10 rounded-lg border">
       {/* The disclosure sign is ours, not the UA's: `list-none` plus the
           WebKit marker rule drops the ▶ that sat in front of the label, and
           the sign goes at the end of the row instead.

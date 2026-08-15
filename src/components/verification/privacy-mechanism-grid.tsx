@@ -270,7 +270,7 @@ export function MechanismGrid({ children }: { children: ReactNode }) {
   return (
     <div
       className={cn(
-        "not-prose my-6 grid max-w-[64ch] gap-3 sm:grid-cols-2",
+        "not-prose my-6 grid gap-3 sm:grid-cols-2",
         // an odd count leaves the last card alone in its row; let it take the
         // full width rather than sit against an empty cell
         "sm:[&>*:last-child:nth-child(odd)]:col-span-2",

@@ -7,7 +7,7 @@
  */
 export function SlidingScale({ low, high }: { low: string; high: string }) {
   return (
-    <div className="not-prose my-4 max-w-[64ch]">
+    <div className="not-prose my-4">
       <div className="relative h-2" aria-hidden>
         <div className="bg-border absolute inset-x-1 top-1/2 h-px -translate-y-1/2" />
         <span className="bg-muted-foreground/50 absolute left-0 top-1/2 size-2 -translate-y-1/2 rounded-full" />

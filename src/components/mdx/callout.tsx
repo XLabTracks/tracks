@@ -54,12 +54,10 @@ export function Callout({ variant = "note", title, children }: CalloutProps) {
   return (
     <div
       className={cn(
-        // max-w matches WorksCited and the lesson column's 64ch prose
-        // measure: a callout carries prose, so it must not run wider than
-        // the paragraphs around it (Verification unbounds the article and
-        // bounds each prose block; not-prose blocks opt out and must bound
-        // themselves).
-        "not-prose my-6 flex max-w-[64ch] gap-3 rounded-xl border p-4 text-sm leading-relaxed",
+        // Full column width, like every other card in the flow: the owner's
+        // width rule (2026-08-15) is that cards share one edge — a 64ch
+        // callout beside a full-width ReadingCard read as a layout bug.
+        "not-prose my-6 flex gap-3 rounded-xl border p-4 text-sm leading-relaxed",
         className,
       )}
     >

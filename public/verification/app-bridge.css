@@ -341,7 +341,25 @@
 :root[data-theme] .lesson-body > :where(h2, h3, h4, h5, h6):not(.not-prose) {
   max-inline-size: 34ch;
 }
-:root[data-theme] .lesson-body :where(p, li, blockquote, dd) {
+/* The same measure, at any depth — but not inside a widget.
+   The rule above this one guards its direct children with `.not-prose`; this
+   one reached every descendant and had no guard at all, so it also capped the
+   list items a widget draws. An exercise built as an <ol> of question cards
+   rendered at 644px inside the 798px it had been given, and looked cramped for
+   no reason a reader could see. The comment above says widgets keep the full
+   lesson width; this is the rule finally doing it. `[data-widget]` is the
+   marker the host puts where authored markdown stops.
+
+   Guarded on `[data-widget]` alone and deliberately not on `.not-prose` too.
+   The wider guard also exempts prose written inside a fold or a callout, which
+   widened those paragraphs from 64ch to about 76 — still under the ceiling,
+   but wider than the measure this file chose, and not what was asked for. A
+   box holding authored sentences is still reading; a widget is not. */
+:root[data-theme]
+  .lesson-body
+  :where(p, li, blockquote, dd):not(
+    :where([data-widget], [data-widget] *)
+  ) {
   max-inline-size: 64ch;
 }
 

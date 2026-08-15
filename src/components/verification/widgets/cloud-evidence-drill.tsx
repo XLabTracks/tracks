@@ -709,8 +709,8 @@ function SequenceTask({ onSolved }: SolveProps) {
               key={id}
               className="border-border bg-background flex items-center gap-2 rounded-lg border px-3 py-2 leading-snug"
             >
-              <span className="text-muted-foreground flex size-6 shrink-0 items-center justify-center rounded-full border text-xs">
-                {index + 1}
+              <span className="text-muted-foreground shrink-0 text-xs font-medium tabular-nums">
+                {index + 1}.
               </span>
               {labelFor(id)}
             </li>

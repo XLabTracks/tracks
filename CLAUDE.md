@@ -538,6 +538,28 @@ add must reduce the duplication, never widen it.
   document — the treaty papers put their agreement in Appendix A, so all
   fifteen Articles sat behind one toggle and formed a single unsplittable
   block. `Paper.collapseTail: false` is the opt-out.
+- **Never put a ring around a letter or a number.** A circled A/B/C/D beside an
+  option, a numbered disc in front of a list row — **forbidden**. The ring
+  carries nothing the character does not already carry, and it is not free: as
+  a fixed-width flex item it takes the row's space, forces a hanging indent,
+  and leaves the text sized to a fraction of the width it was given. A marker
+  is a prefix in the sentence — `A.` before the option, in muted weight — or it
+  is the list's own marker, and that is the whole vocabulary. Numbering an
+  `<ol>` by hand inside a ring is the same mistake twice.
+  The one thing that is not this: a control whose **fill** encodes state — a
+  step rail that paints done/active, an option that fills once inspected. There
+  the disc is the state and the numeral is only riding inside it, which is the
+  same test the colour rules apply. A ring that would look identical in every
+  state is ornament.
+- **A widget is not prose and must not be measured like it.** The reading
+  measure (`app-bridge.css`, 64ch) applies to authored sentences; a widget
+  keeps the full lesson width. The guard is `[data-widget]`, the marker
+  `verification-widget-host` puts where authored markdown stops — the rule for
+  direct children always had it, the descendant rule did not, and an exercise
+  built as an `<ol>` of question cards therefore rendered at 644px inside the
+  798 it had been given. Guard on `[data-widget]` and NOT on `.not-prose`: a
+  fold or a callout holding authored sentences is still reading, and exempting
+  it widens that prose past the measure.
 - **No half-painted cards.** A card is a hairline on all four sides, or it is
   painted on all four; never one edge in a coloured tint with the rest
   hairline, and never a hue that carries no meaning. The accent goes inside —

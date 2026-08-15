@@ -60,14 +60,11 @@ export function ConstructCase({
             Give one example of a situation in which all three conditions are
             satisfied:
           </p>
-          <ol className="border-border bg-card space-y-2 rounded-xl border p-4 text-sm">
-            {CASE_CONDITIONS.map((condition, i) => (
-              <li key={condition} className="flex gap-3 leading-relaxed">
-                <span className="border-border text-muted-foreground flex size-5 shrink-0 items-center justify-center rounded-full border text-[11px]">
-                  {i + 1}
-                </span>
-                <span>{condition}</span>
-              </li>
+          {/* Plain decimal list, digits in the brand red — no circles, no
+              box ("ну просто цифры в красный покрась"). */}
+          <ol className="marker:text-primary list-decimal space-y-2 pl-5 text-sm leading-relaxed">
+            {CASE_CONDITIONS.map((condition) => (
+              <li key={condition}>{condition}</li>
             ))}
           </ol>
           <p className="text-sm leading-relaxed">

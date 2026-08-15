@@ -143,7 +143,7 @@ export function SameClaim({
       <div className="space-y-2">
         <p className="text-sm leading-relaxed">{CLAIM_INTRO}</p>
         <p className="text-sm leading-relaxed">{CLAIM_TASK_LEAD}</p>
-        <ol className="list-decimal space-y-1 pl-5 text-sm leading-relaxed">
+        <ol className="marker:text-primary list-decimal space-y-1 pl-5 text-sm leading-relaxed">
           {CLAIM_TASKS.map((task) => (
             <li key={task}>{task}</li>
           ))}

@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { CircleAlert, CircleCheck } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -13,39 +13,39 @@ import type { VerificationWidgetProps } from "../kit/types";
 const SLOT = "ABCDE";
 
 /**
- * 2.4.2 — On Paper. Five short discriminations, answered in one pass.
+ * 2.4.2 — On Paper. Five single-answer questions, answered in one pass.
  *
  * All five are on the page at once and one Submit marks them all. That is the
- * commit-before-reveal rule and it also makes the deck fast: five to seven
- * minutes, no waiting for a verdict between questions, no chance to learn the
- * pattern from question one and coast.
+ * commit-before-reveal rule and it also makes the deck fast: no waiting for a
+ * verdict between questions, and no chance to learn the pattern from question
+ * one and coast.
  *
- * Every question shows what it was testing only after submission, because the
- * distinction is what the question is asking you to find.
+ * Nothing is labelled before submission — not the source, not what the
+ * question is testing. Recognising which of three texts a question comes from
+ * is half of answering it.
  *
- * The score is shown because these have right answers — unlike everything else
- * in 2.4 — but it records nothing and completes nothing: the exercise is
- * optional and unbridged like the rest of the section's labs.
+ * On submission each question shows whether it was right, why, and the passage
+ * the answer rests on, and the deck shows the total. The score records nothing
+ * and completes nothing: the exercise is optional and unbridged like the rest
+ * of the section's labs.
  *
- * The options are shuffled. Authored, four of the five answers were B, which
- * is a pattern a learner can read off the page instead of the fragment. The
- * order is seeded on each question's own id, so it is stable for everybody and
- * across visits (src/lib/shuffle.ts says why), and the pick is stored by
- * choice id, so nothing about the shuffle reaches storage.
- *
- * Two things had to move with it. The badge shows the letter of the SLOT, not
- * the choice's id — the ids happen to be a..d and printing them shuffled would
- * be a list labelled B, D, A, C. And the explanations used to say "A and C are
- * real weaknesses"; a letter is a position, and positions are display now, so
- * they name the options by what they say instead.
+ * The options are shuffled, seeded on each question's own id, so the order is
+ * stable for everybody and across visits (src/lib/shuffle.ts says why) and the
+ * pick is stored by choice id — nothing about the shuffle reaches storage. The
+ * badge therefore shows the letter of the SLOT and not the choice's id, which
+ * happens to be a..d and would print as a list labelled B, D, A, C. And no
+ * explanation may name an option by its letter, because a letter is a
+ * position; answer-order.test.ts fails on one that does.
  */
+
 
 interface Saved {
   picks: Record<string, string>;
   submitted: boolean;
 }
 
-const STORAGE_KEY = "v-policy-quick-check:v1";
+// v2: the deck was replaced wholesale, so the old picks mean nothing.
+const STORAGE_KEY = "v-policy-quick-check:v2";
 const EMPTY: Saved = { picks: {}, submitted: false };
 
 function prune(raw: unknown): Saved {
@@ -65,13 +65,15 @@ function prune(raw: unknown): Saved {
   return { picks, submitted: box.submitted === true };
 }
 
-export function PolicyQuickCheck({
-  onComplete,
-  initialCompleted,
-}: VerificationWidgetProps) {
+// The host's props are taken and not used. The spec is explicit that the score
+// records nothing toward completion, and today it cannot: the registry has this
+// id unbridged and useVerificationCompletion hands an unbridged widget a no-op.
+// Calling it anyway would leave a trap for whoever flips that flag — an optional
+// exercise that quietly starts reporting a section finished. Same shape as
+// whistleblower-levers next door.
+export function PolicyQuickCheck({}: VerificationWidgetProps) {
   const [saved, setSaved] = useState<Saved>(EMPTY);
   const [hydrated, setHydrated] = useState(false);
-  const fired = useRef(initialCompleted);
 
   // Seeded on the question id, so this is the same list on the server, on the
   // client, and on the learner's next visit. useMemo is for the work, not for
@@ -103,13 +105,25 @@ export function PolicyQuickCheck({
     });
   }, []);
 
-  const persist = useCallback((next: Saved) => {
-    setSaved(next);
-    try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(next));
-    } catch {
-      /* private mode / full quota */
-    }
+  /**
+   * Takes an updater, not a value.
+   *
+   * It used to take the next state, built by spreading the `saved` of the
+   * render the handler was created in. Two picks landing in one tick therefore
+   * both read the same snapshot and the second dropped the first — which
+   * ordinary clicking never does, because a re-render sits between them, but a
+   * fast keyboard pass or a double event does.
+   */
+  const persist = useCallback((update: (prev: Saved) => Saved) => {
+    setSaved((prev) => {
+      const next = update(prev);
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(next));
+      } catch {
+        /* private mode / full quota */
+      }
+      return next;
+    });
   }, []);
 
   if (!hydrated) return <div className="not-prose my-6 min-h-64" aria-busy />;
@@ -146,15 +160,23 @@ export function PolicyQuickCheck({
                     ) : (
                       <CircleAlert className="size-3.5 shrink-0" aria-hidden />
                     )}
-                    {question.covers}
+                    {correct ? "Correct" : "Not quite"}
                   </p>
                 ) : null}
               </div>
 
-              <blockquote className="border-border mt-2 border-l-2 pl-3 text-sm leading-relaxed italic">
-                {question.fragment}
-              </blockquote>
-              <p className="mt-2 text-sm font-medium">{question.stem}</p>
+              <div className="border-border mt-2 space-y-2 border-l-2 pl-3 text-sm leading-relaxed">
+                <p>{question.fragment}</p>
+                {question.facts ? (
+                  <ul className="list-disc space-y-1 pl-5">
+                    {question.facts.map((f) => (
+                      <li key={f}>{f}</li>
+                    ))}
+                  </ul>
+                ) : null}
+                {question.fragmentAfter ? <p>{question.fragmentAfter}</p> : null}
+              </div>
+              <p className="mt-3 text-sm font-medium">{question.stem}</p>
 
               <div
                 className="mt-3 grid gap-1.5"
@@ -172,10 +194,10 @@ export function PolicyQuickCheck({
                       aria-checked={chosen}
                       disabled={saved.submitted}
                       onClick={() =>
-                        persist({
-                          ...saved,
-                          picks: { ...saved.picks, [question.id]: choice.id },
-                        })
+                        persist((prev) => ({
+                          ...prev,
+                          picks: { ...prev.picks, [question.id]: choice.id },
+                        }))
                       }
                       className={cn(
                         "border-border flex w-full items-start gap-2.5 rounded-lg border px-3 py-2 text-left text-sm leading-relaxed transition-colors",
@@ -203,9 +225,17 @@ export function PolicyQuickCheck({
               </div>
 
               {saved.submitted ? (
-                <p className="text-muted-foreground mt-3 text-sm leading-relaxed">
-                  {question.explanation}
-                </p>
+                <div className="mt-3 space-y-1.5">
+                  <p className="text-muted-foreground text-sm leading-relaxed">
+                    {question.explanation}
+                  </p>
+                  {/* Where to go back to, which is more use after the fact
+                      than a label naming what the question was testing. */}
+                  <p className="text-muted-foreground text-xs">
+                    <span className="font-medium">Source: </span>
+                    {question.source}
+                  </p>
+                </div>
               ) : null}
             </li>
           );
@@ -219,20 +249,14 @@ export function PolicyQuickCheck({
             : `${answered} of ${QUICK_QUESTIONS.length} answered.`}
         </p>
         {saved.submitted ? (
-          <Button size="sm" variant="outline" onClick={() => persist(EMPTY)}>
+          <Button size="sm" variant="outline" onClick={() => persist(() => EMPTY)}>
             Start over
           </Button>
         ) : (
           <Button
             size="sm"
             disabled={answered < QUICK_QUESTIONS.length}
-            onClick={() => {
-              persist({ ...saved, submitted: true });
-              if (!fired.current) {
-                fired.current = true;
-                onComplete();
-              }
-            }}
+            onClick={() => persist((prev) => ({ ...prev, submitted: true }))}
           >
             Check all five
           </Button>

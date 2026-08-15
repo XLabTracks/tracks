@@ -1207,3 +1207,45 @@ Verified: every one of eleven Verification surfaces at 1280 and 320 now reports
 zero text under 20px in the mode and no sideways scroll, body copy goes 16→32
 and h1 30→60, and a full font-size snapshot of day against night is byte-identical
 before and after this change — nothing outside the mode moved.
+
+**2.4.2's deck rebuilt to the owner's source-grounded MCQ specification
+(2026-08-15).** Five single-answer questions, 7–10 minutes, replacing the five
+short discriminations. All of it is hers, transcribed: the fact patterns, the
+options, the answers, the feedback and the source line under each. The legal
+content is not inferred from the statutes here — a correction to it belongs in
+her spec first, and the data file says so at the top.
+
+The design rule that makes them different from what was there: each answer
+turns on a detail of one of the three assigned readings (California Labor Code
+§§1107–1107.2, the AIWI/CARMA guide, CIGIE's 2025 Quality Standards), each
+distractor misses one legally or institutionally material condition, and the
+correct option is the most complete application of the source — rather than the
+one a good generic intuition about whistleblowing would reach for.
+
+Widget changes the spec asked for: fact patterns render as a list where they
+have one; **no label of any kind before submission** — the conceptual "covers"
+line is gone entirely, since naming what a question tests is the scaffolding
+the spec rules out, and after the fact the source citation is more use anyway;
+on submission each question shows correct/not-quite, the explanation, and the
+passage the answer rests on. Storage key bumped to v2 — the old picks address
+questions that no longer exist.
+
+Two things found while wiring it:
+
+- **The submit handler called `onComplete`.** It recorded nothing, because the
+  registry has this id unbridged and `useVerificationCompletion` hands an
+  unbridged widget a no-op — but the spec says the score records nothing toward
+  completion, and a live call is a trap for whoever flips that flag later.
+  Removed; the widget now takes `{}` like whistleblower-levers next door.
+- **`persist` took a value built from the render's `saved`.** Two picks landing
+  in the same tick both read the same snapshot and the second dropped the
+  first. Ordinary clicking never does that — a re-render sits between them —
+  but a fast keyboard pass does, and a scripted pass did, which is how it
+  surfaced. It takes an updater now.
+
+Verified in the browser against the spec's UI list: five questions on one page,
+per-question "N of 5", nothing revealing a source before submission, Check all
+five disabled until all five are answered, and on submission twenty options
+frozen, five verdicts, five source lines, the total, and Start over. Answering
+all five correctly reads 5 of 5. The correct options sit in slots B D D D C —
+the shuffle is doing its job on a deck whose answers were authored a, c, b, c, b.

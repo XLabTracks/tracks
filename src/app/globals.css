@@ -442,6 +442,24 @@
   counter-reset: footnote;
 }
 
+/* Bullet depth is drawn, not just indented: level one a filled dot, nested
+   levels the outline dot — the UA does this by default and prose's flat
+   `disc` was overriding it for every depth. */
+.lesson-body ul ul {
+  list-style-type: circle;
+}
+
+/* A loose list (items authored with blank lines between them) wraps each
+   item in a paragraph; prose's paragraph margins then shove the text below
+   its own marker and stretch the gaps. The item's first and last paragraphs
+   carry no outer margin, so a loose list reads like a list. */
+.lesson-body :is(ul, ol) > li > p:first-child {
+  margin-top: 0;
+}
+.lesson-body :is(ul, ol) > li > p:last-child {
+  margin-bottom: 0;
+}
+
 /* The label prefixes on a section-spec line ("Runtime:", "Status:", "Hard
    idea:"), emphasised by rehype-lesson-meta so each segment has an anchor
    rather than running into its value. Brand ink is the theme's readable
@@ -741,6 +759,10 @@
 .mdx-body ol:not(:where([data-widget], [data-widget] *)) {
   list-style: decimal;
   padding-left: 1.25rem;
+}
+/* Same depth design as the lesson column: nested bullets take the outline. */
+.mdx-body ul ul:not(:where([data-widget], [data-widget] *)) {
+  list-style: circle;
 }
 .mdx-body li:not(:where([data-widget], [data-widget] *))::marker {
   color: var(--muted-foreground);

@@ -401,15 +401,20 @@ export function InteractiveMap(_props: VerificationWidgetProps) {
       onKeyDown={onKeyDown}
     >
       <div>
-        {/* stat strip */}
-        <dl className="border-border mb-4 flex flex-wrap gap-x-6 gap-y-2 border-b pb-4">
+        {/* The stat strip, set as a figure column rather than a row of pairs.
+            Its three sentences never fit one line inside a reading column, so
+            it always stacked — and each pair carried its own number, so the
+            sentences started at three different x. Two grid columns give the
+            figures a column of their own, right-aligned the way a column of
+            numbers is set, and the sentences one left edge to start from. */}
+        <dl className="border-border mb-4 grid grid-cols-[auto_1fr] items-baseline gap-x-3 gap-y-2 border-b pb-4">
           {C.stats.map((st) => (
-            <div key={st.l} className="flex items-baseline gap-2">
-              <dt className="text-xl font-bold tracking-tight whitespace-nowrap tabular-nums">
+            <Fragment key={st.l}>
+              <dt className="text-right text-xl font-bold tracking-tight whitespace-nowrap tabular-nums">
                 {st.n}
               </dt>
               <dd className="text-muted-foreground text-xs">{st.l}</dd>
-            </div>
+            </Fragment>
           ))}
         </dl>
 

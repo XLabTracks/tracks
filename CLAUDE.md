@@ -703,7 +703,14 @@ whole unit` lays them all out (remembered per device under
   then the words**: the work, which part of it, the authors, and a link out,
   all above the passage, so the two can never be read apart. `{read}`-style
   reading cards do the same job for the sources themselves (title links out,
-  why-this-unit-sends-you-there, then `author · year · length · licence`).
+  why-this-unit-sends-you-there, then `author (year) | length | licence`).
+  The year is parenthesised and stays with the author, the way a citation
+  writes it; the independent fields beside it take a pipe. Both replace a
+  middle dot, which on a card whose author field is a five-name list was a
+  weaker mark than the four commas it had to outrank — so the year read as one
+  more name. Headings and shape lines (`Source packet · 14–17 min`) keep their
+  dots: those separate a label from a measure, not one citation field from the
+  next, and no list of names runs into them.
   The open verification-log row (RAND's permissions page, HTTP 403) is
   recorded in the comment above the unit — reproduction there is the author's
   decision, not an inference from terms nobody could read. Trap noted there

@@ -7,7 +7,20 @@ import { useMark, writeMark } from "./marks";
 /**
  * A reading card: an external reading with a mark-as-read circle, the same
  * job the static course's {read}-style cards did — title links out, why this
- * unit sends you there, then author · year · length.
+ * unit sends you there, then author (year) | length.
+ *
+ * The year is parenthesised and stays with the author, the way a citation
+ * writes it. Everything used to be strung on middle dots, and on a card whose
+ * author field is "Mauricio Baker, Gabriel Kulp, Oliver Marks, Miles Brundage,
+ * and Lennart Heim" the dot was a weaker mark than the four commas it had to
+ * outrank, so the year read as one more name in the list. Brackets are not a
+ * separator at all — they are a container, which is why they cannot be
+ * misread as more list.
+ *
+ * The fields that remain beside it — length, licence, the read mark — are
+ * ruled apart with a pipe for the same reason the dot failed: it has to beat
+ * the punctuation inside an author list, and a vertical rule is the only mark
+ * in the set that never appears inside a name.
  *
  * The checkmark is learner work on the vt-marks store: it feeds no meter,
  * unlocks nothing, and is never set automatically — the learner presses it.
@@ -39,8 +52,10 @@ export function ReadingCard({
 }) {
   const key = `read:${id}`;
   const read = useMark<boolean>(key, false);
-  const meta = [author, year, mins].filter(Boolean).join(" · ");
-  const metaLine = read ? (meta ? `${meta} · read` : "read") : meta;
+  // The year rides with the author; only the independent fields get a rule.
+  const who = [author, year ? `(${year})` : null].filter(Boolean).join(" ");
+  const meta = [who || null, mins].filter(Boolean).join(" | ");
+  const metaLine = read ? (meta ? `${meta} | read` : "read") : meta;
 
   return (
     <section

@@ -296,6 +296,10 @@
      Every rule on these pages picks a --fs- step, so re-solving the scale
      moves all of them and nothing else.
 
+     In rem, not px, and for the reason the day scale is: a learner who has
+     already raised their browser's text size must not have this mode take
+     it back off them. 2x on top of whatever they set, not 2x instead of it.
+
      It is emphatically NOT `zoom: 2` on the root. Zoom scales the box tree,
      which sounds like the same thing and is not: it halves the layout
      viewport while leaving the media queries where they were, so a 320px
@@ -304,17 +308,17 @@
      has to be scrolled sideways to read a line, which is the exact thing
      this mode exists to spare somebody. Reflow only works if the layout sees
      the real viewport, so the layout is left alone and the letters grow. */
-  --fs-2xs: 24px;
-  --fs-xs: 26px;
-  --fs-sm: 28px;
-  --fs-md: 32px;
-  --fs-lg: 36px;
-  --fs-xl: 40px;
-  --fs-2xl: 48px;
-  --fs-3xl: 60px;
-  --fs-4xl: 76px;
-  --fs-title: clamp(44px, 6.8vw, 72px);
-  --fs-hero: clamp(48px, 8.8vw, 104px);
+  --fs-2xs: 1.5rem;
+  --fs-xs: 1.625rem;
+  --fs-sm: 1.75rem;
+  --fs-md: 2rem;
+  --fs-lg: 2.25rem;
+  --fs-xl: 2.5rem;
+  --fs-2xl: 3rem;
+  --fs-3xl: 3.75rem;
+  --fs-4xl: 4.75rem;
+  --fs-title: clamp(2.75rem, 6.8vw, 4.5rem);
+  --fs-hero: clamp(3rem, 8.8vw, 6.5rem);
 }
 
 /* A long word at 72px is wider than a 320px screen, and a heading that cannot

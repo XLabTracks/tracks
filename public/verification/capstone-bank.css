@@ -271,10 +271,14 @@
    contribute card that goes nowhere is worse than none at all.
 
    Uniform hairline on all four sides; the accent lives inside, in the glyph
-   discs. Trap: the rows are pressable, so nothing in them may take a text
+   discs. It takes the column's full width, like every other card in this
+   flow — a card that stops short of the edge its neighbours share reads as a
+   layout fault rather than a choice. The rows go two-up when there is room
+   for them, which is what fills that width instead of one label adrift in it.
+
+   Trap: the rows are pressable, so nothing in them may take a text
    selection. */
 .contribute {
-  max-width: 420px;
   margin: 24px 0 8px;
   padding: 18px 20px;
   border: var(--hairline) solid var(--border);
@@ -286,7 +290,14 @@
   font-weight: 500;
   color: var(--muted-foreground);
 }
-.contribute ul { margin: 14px 0 0; padding: 0; list-style: none; display: grid; gap: 6px; }
+.contribute ul {
+  margin: 14px 0 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 6px;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+}
 .contribute a {
   display: flex;
   align-items: center;
@@ -325,7 +336,14 @@
   transition: border-color .15s ease;
 }
 .contribute .g svg { width: 15px; height: 15px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
-.contribute .out { margin: 12px 0 0; font-size: var(--fs-2xs); color: var(--muted-foreground); }
+/* max-width here is a line-length measure on a sentence, not a card edge —
+   the card itself takes the column. */
+.contribute .out {
+  margin: 12px 0 0;
+  max-width: 60ch;
+  font-size: var(--fs-2xs);
+  color: var(--muted-foreground);
+}
 
 /* ---------- detail sheet ---------- */
 

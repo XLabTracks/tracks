@@ -1,6 +1,7 @@
 "use client";
 
 import {
+  Fragment,
   useCallback,
   useEffect,
   useMemo,
@@ -454,8 +455,14 @@ export function InteractiveMap(_props: VerificationWidgetProps) {
           </button>
         </div>
 
-        <div className="grid gap-4 lg:grid-cols-[1fr_320px]">
-          {/* ============ map column ============ */}
+        {/* One column, map first.
+            It used to run `lg:grid-cols-[1fr_320px]`, which spent a third of
+            the module on a key and left the map — the thing being read — in
+            what was left. A world map wants width more than a list of six
+            labels does, so the map takes the full module and the key sits
+            under it, laid out across rather than down. */}
+        <div className="grid gap-4">
+          {/* ============ map ============ */}
           <div className="min-w-0">
             <div
               ref={stageRef}
@@ -695,13 +702,20 @@ export function InteractiveMap(_props: VerificationWidgetProps) {
                     {C.flowNote}
                   </span>
                 </div>
-                <div className="flex overflow-x-auto">
+                {/* The chevrons used to be absolutely positioned over the
+                    next cell's left edge, which put a "›" on top of a label as
+                    soon as the row was tight — and in the old narrow column it
+                    always was. They are real items in the row now, so the
+                    cells cannot collide with them or with each other, and a
+                    stage that does not fit wraps to the next line instead of
+                    overlapping its neighbour. */}
+                <div className="flex flex-wrap items-stretch gap-1">
                   {FLOW.map((st, i) => {
                     const active =
                       s.filter === st.bucket && s.filterSource === st.key;
                     return (
+                      <Fragment key={st.key}>
                       <button
-                        key={st.key}
                         type="button"
                         aria-pressed={active}
                         onClick={() =>
@@ -714,7 +728,7 @@ export function InteractiveMap(_props: VerificationWidgetProps) {
                         onMouseEnter={() => setPreview(st.bucket)}
                         onMouseLeave={() => setPreview(null)}
                         className={cn(
-                          "relative min-w-[92px] flex-1 border border-r-0 px-2.5 py-2 text-left transition-colors first:rounded-l-md last:rounded-r-md last:border-r",
+                          "min-w-[104px] flex-1 rounded-md border px-2.5 py-2 text-left transition-colors",
                           active
                             ? "bg-primary border-primary"
                             : "border-border bg-muted/40 hover:bg-muted",
@@ -739,15 +753,16 @@ export function InteractiveMap(_props: VerificationWidgetProps) {
                         >
                           {st.name}
                         </span>
-                        {i < FLOW.length - 1 && (
-                          <span
-                            aria-hidden
-                            className="text-muted-foreground/60 absolute top-1/2 -right-1.5 -translate-y-1/2 text-xs"
-                          >
-                            ›
-                          </span>
-                        )}
                       </button>
+                      {i < FLOW.length - 1 && (
+                        <span
+                          aria-hidden
+                          className="text-muted-foreground/60 flex-none self-center text-xs"
+                        >
+                          ›
+                        </span>
+                      )}
+                      </Fragment>
                     );
                   })}
                 </div>
@@ -863,7 +878,7 @@ export function InteractiveMap(_props: VerificationWidgetProps) {
             )}
           </div>
 
-          {/* ============ rail ============ */}
+          {/* ============ under the map ============ */}
           <aside className="flex min-w-0 flex-col gap-4">
             {s.mode === "map" && (
               <div>
@@ -873,7 +888,7 @@ export function InteractiveMap(_props: VerificationWidgetProps) {
                     {C.keyAction}
                   </span>
                 </div>
-                <div className="flex flex-col gap-1">
+                <div className="flex flex-wrap gap-1.5">
                   {BUCKET_ORDER.map((bk) => {
                     const b = BUCKETS[bk];
                     const n = COUNTRIES.filter((c) =>
@@ -895,10 +910,10 @@ export function InteractiveMap(_props: VerificationWidgetProps) {
                         onMouseEnter={() => setPreview(bk)}
                         onMouseLeave={() => setPreview(null)}
                         className={cn(
-                          "flex items-center gap-2.5 rounded-lg border px-2.5 py-2 text-left transition-colors",
+                          "flex items-center gap-2 rounded-lg border px-2.5 py-1.5 text-left transition-colors",
                           active
                             ? "border-foreground bg-muted"
-                            : "hover:bg-muted border-transparent",
+                            : "border-border hover:bg-muted",
                         )}
                       >
                         <span
@@ -906,10 +921,8 @@ export function InteractiveMap(_props: VerificationWidgetProps) {
                           style={{ background: b.color }}
                           aria-hidden
                         />
-                        <span className="text-[13px] font-medium">
-                          {b.name}
-                        </span>
-                        <span className="text-muted-foreground ml-auto text-[11px] tabular-nums">
+                        <span className="text-xs font-medium">{b.name}</span>
+                        <span className="text-muted-foreground text-[11px] tabular-nums">
                           {n} {n === 1 ? "country" : "countries"}
                         </span>
                       </button>

@@ -917,8 +917,8 @@ function DistilStage({
                 onClick={() => flip(id)}
                 className="border-border bg-card text-muted-foreground hover:border-primary/50 hover:bg-muted flex w-full items-center gap-2.5 rounded-lg border border-dashed p-3 text-left text-sm transition-colors duration-150 select-none"
               >
-                <span className="border-border grid size-6 shrink-0 place-items-center rounded-full border text-xs font-bold">
-                  {idx + 1}
+                <span className="text-muted-foreground shrink-0 text-xs font-medium tabular-nums">
+                  {idx + 1}.
                 </span>
                 Clipping from p. {b.page} — tap to compress
               </button>

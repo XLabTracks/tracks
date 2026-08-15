@@ -236,7 +236,7 @@ export function PolicyQuickCheck({}: VerificationWidgetProps) {
                         }))
                       }
                       className={cn(
-                        "border-border flex w-full items-start gap-2.5 rounded-lg border px-3 py-2 text-left text-sm leading-relaxed transition-colors",
+                        "border-border block w-full rounded-lg border px-3 py-2 text-left text-sm leading-relaxed transition-colors",
                         !saved.submitted && "hover:bg-muted",
                         chosen &&
                           !saved.submitted &&
@@ -251,12 +251,17 @@ export function PolicyQuickCheck({}: VerificationWidgetProps) {
                         saved.submitted && !isAnswer && !chosen && "opacity-55"
                       )}
                     >
-                      <span className="border-border mt-0.5 flex size-5 shrink-0 items-center justify-center rounded-full border font-mono text-[11px] uppercase">
-                        {SLOT[slot]}
+                      {/* The letter is a prefix in the sentence, not a token
+                          beside it. As a fixed-width flex item in a ring it
+                          cost the option a hanging indent and, worse, left the
+                          text sized to a fraction of the row it was in: a
+                          610px option wrapped inside 353px of column. Reading
+                          runs the full width now, and the letter reads the way
+                          the spec writes it — "A. Keep the protected-person…". */}
+                      <span className="text-muted-foreground mr-1.5 font-medium">
+                        {SLOT[slot]}.
                       </span>
-                      <span>
-                        <Rich>{choice.text}</Rich>
-                      </span>
+                      <Rich>{choice.text}</Rich>
                     </button>
                   );
                 })}

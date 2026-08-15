@@ -12,6 +12,27 @@ with permission; otherwise use lorem ipsum or leave it empty. `AUTHORING.md`
 is the step-by-step guide for adding content (its rules are enforced by
 `src/lib/content/content.test.ts`).
 
+**The repo enables one plugin: `ponytail@ponytail`** (`.claude/settings.json`,
+MIT, `DietrichGebert/ponytail`). It is a decision ladder that runs before code
+is written — does this need to exist, is it already in this codebase, does the
+stdlib or the platform do it, can it be one line. Rung 2 is why it is here:
+the recurring defect in this repo is not bad code, it is code that already
+existed being written again, and the audit measured it — one eyebrow recipe
+copied 38 times, one textarea class 12 times, four card treatments, four focus
+idioms, 200 lines of CSS whose whole job is to undo arbitrary font sizes.
+Two things to know before you follow it:
+
+- **It does not override the comment rule.** Its output section says to cut an
+  explanation longer than the code it explains; that governs chat prose, and
+  this repo deliberately writes comments longer than their code because a
+  comment here carries the invariant and the trap. Where the two read as
+  conflicting, this file wins. Its own carve-out agrees: prose the user asked
+  for is not debt.
+- **It is third-party code with lifecycle hooks**, so declaring it does not
+  silently install it — each session is shown the `claude plugin install` to
+  run and can decline. Removing the two keys from `.claude/settings.json` is
+  the whole of turning it off.
+
 ## Commands
 
 - `npm run dev` — dev server (Turbopack). DB-backed pages need `DATABASE_URL`

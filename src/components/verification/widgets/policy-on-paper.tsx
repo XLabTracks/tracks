@@ -217,7 +217,13 @@ export function PolicyOnPaper({
                       {c.realNote}
                     </p>
                   ) : null}
-                  <ul className="mt-1 space-y-0.5">
+                  {/* Marked and indented explicitly. Left alone, the nested
+                      list came out `list-style: circle` with no padding, so
+                      every marker rendered outside its own content box —
+                      hanging left into the card's padding, detached from the
+                      line it belongs to. A marker either sits in the column
+                      with its text or it is not a marker. */}
+                  <ul className="marker:text-muted-foreground/70 mt-1 list-disc space-y-0.5 pl-4">
                     {c.cites.map((cite) => (
                       <li key={cite.href} className="text-xs">
                         <a

@@ -444,8 +444,15 @@
 
 /* Bullet depth is drawn, not just indented: level one a filled dot, nested
    levels the outline dot — the UA does this by default and prose's flat
-   `disc` was overriding it for every depth. */
-.lesson-body ul ul {
+   `disc` was overriding it for every depth.
+
+   Guarded against widget DOM, like its `.mdx-body` twin further down and for
+   the same reason: this is a rule about authored prose, and a descendant
+   selector with no guard reaches every nested list a widget draws. 2.4.4's
+   Sources block was the case — its citation lists inherited `circle` while
+   keeping the zero padding a widget's own list is written with, so every
+   marker rendered outside its content box and hung in the card's padding. */
+.lesson-body ul ul:not(:where([data-widget], [data-widget] *)) {
   list-style-type: circle;
 }
 

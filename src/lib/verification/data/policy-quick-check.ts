@@ -20,6 +20,11 @@
  * distractor misses one legally or institutionally material condition, and the
  * correct option is the most complete and precise application of the source.
  *
+ * `**bold**` in any of these strings is the owner's own emphasis, kept: each
+ * stem marks the text the answer turns on, which is what tells a reader which
+ * of the three readings a question is asking about. Rendered by splitEmphasis
+ * — that one mark and nothing else, so a data file can never inject markup.
+ *
  * `source` is the passage the answer rests on, shown only after submission.
  * There is no conceptual label: naming what a question "is testing" is the
  * pedagogical scaffolding the spec rules out, and after the fact the source
@@ -61,7 +66,7 @@ export const QUICK_QUESTIONS: QuickQuestion[] = [
     ],
     fragmentAfter:
       "Nora has reasonable cause to believe that the developer’s activities create a specific and substantial danger to public safety resulting from a catastrophic risk. Leon has the same belief. Maya has the same belief. Sam merely disagrees with management’s general research strategy and does not believe that either a qualifying danger or a violation of the relevant chapter has occurred.",
-    stem: "Which disclosure is protected by California Labor Code §1107.1(a) on the facts stated?",
+    stem: "Which disclosure is protected by **California Labor Code §1107.1(a)** on the facts stated?",
     choices: [
       {
         id: "a",
@@ -91,7 +96,7 @@ export const QUICK_QUESTIONS: QuickQuestion[] = [
       "disclosures and responses are shared with the company’s officers and directors every quarter;",
       "if a report alleges wrongdoing by a particular director, that director still receives the quarterly disclosure because all directors must receive the same information.",
     ],
-    stem: "Which assessment is most accurate under §1107.1(e)?",
+    stem: "Which assessment is most accurate under **§1107.1(e)**?",
     choices: [
       {
         id: "a",
@@ -125,7 +130,7 @@ export const QUICK_QUESTIONS: QuickQuestion[] = [
       "employees may confidentially report violations to a regulator, but the external channel does not accept anonymous reports;",
       "contractors, outside evaluators, and former employees are not protected.",
     ],
-    stem: "Which amendment package most closely matches the AIWI/CARMA Best Practice Guide?",
+    stem: "Which amendment package most closely matches the **AIWI/CARMA Best Practice Guide**?",
     choices: [
       {
         id: "a",
@@ -153,7 +158,7 @@ export const QUICK_QUESTIONS: QuickQuestion[] = [
     id: "reasonable-belief",
     fragment:
       "A safety researcher raises a concern as part of her ordinary job duties. She reasonably believes the concern is true. Her motivation is mixed: she believes the issue is important, but she is also angry about a recent promotion decision. Six months later, an investigation cannot substantiate the underlying concern.",
-    stem: "Which statement best reflects the AIWI/CARMA Best Practice Guide?",
+    stem: "Which statement best reflects the **AIWI/CARMA Best Practice Guide**?",
     choices: [
       {
         id: "a",
@@ -181,7 +186,7 @@ export const QUICK_QUESTIONS: QuickQuestion[] = [
     id: "investigation-standard",
     fragment:
       "An investigator receives a credible allegation that an AI developer concealed a prohibited training run. The complainant provides screenshots and names two witnesses. The developer supplies a summary prepared by its legal team but refuses access to the underlying records. One witness supports the allegation; the other provides information tending to exculpate the developer.",
-    stem: "Which course of action is most consistent with the CIGIE Quality Standards for Investigations (2025)?",
+    stem: "Which course of action is most consistent with the **CIGIE Quality Standards for Investigations (2025)**?",
     choices: [
       {
         id: "a",

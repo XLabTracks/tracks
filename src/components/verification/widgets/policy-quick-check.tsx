@@ -5,12 +5,38 @@ import { CircleAlert, CircleCheck } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { shuffleAnswerOptions } from "@/lib/shuffle";
+import { splitEmphasis } from "@/lib/verification/emphasis";
 import { cn } from "@/lib/utils";
 import { QUICK_QUESTIONS } from "@/lib/verification/data/policy-quick-check";
 import type { VerificationWidgetProps } from "../kit/types";
 
 /** Display letters, which is now all a letter is. */
 const SLOT = "ABCDE";
+
+/**
+ * Authored `**bold**`, kept.
+ *
+ * Her specs mark the phrase a question turns on — the statute, the guide, the
+ * standard — and a stem that names one source among three reads flat without
+ * it. Text runs, never dangerouslySetInnerHTML: the data is in-repo curriculum
+ * and would be safe either way, but there is no reason for this to be the one
+ * place that can inject markup.
+ */
+function Rich({ children }: { children: string }) {
+  return (
+    <>
+      {splitEmphasis(children).map((run, i) =>
+        run.strong ? (
+          <strong key={i} className="font-semibold">
+            {run.text}
+          </strong>
+        ) : (
+          <span key={i}>{run.text}</span>
+        ),
+      )}
+    </>
+  );
+}
 
 /**
  * 2.4.2 — On Paper. Five single-answer questions, answered in one pass.
@@ -166,17 +192,27 @@ export function PolicyQuickCheck({}: VerificationWidgetProps) {
               </div>
 
               <div className="border-border mt-2 space-y-2 border-l-2 pl-3 text-sm leading-relaxed">
-                <p>{question.fragment}</p>
+                <p>
+                  <Rich>{question.fragment}</Rich>
+                </p>
                 {question.facts ? (
                   <ul className="list-disc space-y-1 pl-5">
                     {question.facts.map((f) => (
-                      <li key={f}>{f}</li>
+                      <li key={f}>
+                        <Rich>{f}</Rich>
+                      </li>
                     ))}
                   </ul>
                 ) : null}
-                {question.fragmentAfter ? <p>{question.fragmentAfter}</p> : null}
+                {question.fragmentAfter ? (
+                  <p>
+                    <Rich>{question.fragmentAfter}</Rich>
+                  </p>
+                ) : null}
               </div>
-              <p className="mt-3 text-sm font-medium">{question.stem}</p>
+              <p className="mt-3 text-sm font-medium">
+                <Rich>{question.stem}</Rich>
+              </p>
 
               <div
                 className="mt-3 grid gap-1.5"
@@ -218,7 +254,9 @@ export function PolicyQuickCheck({}: VerificationWidgetProps) {
                       <span className="border-border mt-0.5 flex size-5 shrink-0 items-center justify-center rounded-full border font-mono text-[11px] uppercase">
                         {SLOT[slot]}
                       </span>
-                      <span>{choice.text}</span>
+                      <span>
+                        <Rich>{choice.text}</Rich>
+                      </span>
                     </button>
                   );
                 })}
@@ -227,7 +265,7 @@ export function PolicyQuickCheck({}: VerificationWidgetProps) {
               {saved.submitted ? (
                 <div className="mt-3 space-y-1.5">
                   <p className="text-muted-foreground text-sm leading-relaxed">
-                    {question.explanation}
+                    <Rich>{question.explanation}</Rich>
                   </p>
                   {/* Where to go back to, which is more use after the fact
                       than a label naming what the question was testing. */}

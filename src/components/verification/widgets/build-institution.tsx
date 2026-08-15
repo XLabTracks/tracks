@@ -154,7 +154,7 @@ export function BuildInstitution({
 
       {GROUPS.map((group) => (
         <section key={group} className="space-y-2">
-          <h4 className="text-muted-foreground font-mono text-[11px] tracking-[0.14em] uppercase">
+          <h4 className="text-muted-foreground text-[11px] tracking-[0.14em] uppercase">
             {group}
           </h4>
           <div className="grid gap-2">
@@ -202,7 +202,7 @@ export function BuildInstitution({
           <div className="mt-2 flex items-center justify-between gap-3">
             <p
               className={cn(
-                "font-mono text-xs",
+                "text-xs",
                 words > EXPLANATION_MAX_WORDS
                   ? "text-defect"
                   : "text-muted-foreground"
@@ -231,7 +231,7 @@ export function BuildInstitution({
       {evaluation ? (
         <div className="space-y-4">
           <section className="space-y-2">
-            <h4 className="text-muted-foreground font-mono text-[11px] tracking-[0.14em] uppercase">
+            <h4 className="text-muted-foreground text-[11px] tracking-[0.14em] uppercase">
               What your institution does, and what it leaves undecided
             </h4>
             {TESTS.map((test) => {
@@ -283,7 +283,7 @@ export function BuildInstitution({
               the answer: the engine's own test proves more than one selection
               works, and both of these run through it. */}
           <section className="space-y-2">
-            <h4 className="text-muted-foreground font-mono text-[11px] tracking-[0.14em] uppercase">
+            <h4 className="text-muted-foreground text-[11px] tracking-[0.14em] uppercase">
               Two institutions that work, and what each costs
             </h4>
             {SAMPLE_DESIGNS.map((design) => (
@@ -293,7 +293,7 @@ export function BuildInstitution({
               >
                 <p className="text-sm font-semibold">
                   {design.title}{" "}
-                  <span className="text-muted-foreground font-mono text-xs">
+                  <span className="text-muted-foreground text-xs">
                     {design.ids.join(" ")}
                   </span>
                 </p>
@@ -357,7 +357,7 @@ function Card({
     >
       <span
         className={cn(
-          "border-border flex size-6 shrink-0 items-center justify-center rounded-full border font-mono text-xs",
+          "border-border flex size-6 shrink-0 items-center justify-center rounded-full border text-xs",
           on && "border-primary bg-primary text-primary-foreground"
         )}
       >

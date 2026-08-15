@@ -51,7 +51,7 @@
 .search input::placeholder { color: var(--muted-foreground); }
 .sort { display: flex; align-items: center; gap: 8px; }
 .sort-label {
-  font-family: var(--mono);
+  font-family: var(--label);
   font-size: var(--fs-2xs);
   letter-spacing: .06em;
   text-transform: uppercase;
@@ -74,7 +74,7 @@
 .facets.extra { padding-top: 14px; border-top: var(--hairline) solid var(--border); }
 .facet-group { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; }
 .facet-name {
-  font-family: var(--mono);
+  font-family: var(--label);
   font-size: var(--fs-2xs);
   letter-spacing: .06em;
   text-transform: uppercase;
@@ -102,7 +102,7 @@
 .facet-chip:hover:not(:disabled) { border-color: var(--ring); }
 .facet-chip[aria-pressed='true'] { border-color: var(--ring); background: var(--muted); font-weight: 600; }
 .facet-chip:disabled { opacity: .4; cursor: not-allowed; }
-.facet-chip .n { font-family: var(--mono); font-size: var(--fs-2xs); color: var(--muted-foreground); }
+.facet-chip .n { font-family: var(--label); font-size: var(--fs-2xs); color: var(--muted-foreground); }
 
 .active-row {
   display: flex;
@@ -114,7 +114,7 @@
   border-top: var(--hairline) solid var(--border);
 }
 .active-label {
-  font-family: var(--mono);
+  font-family: var(--label);
   font-size: var(--fs-2xs);
   letter-spacing: .06em;
   text-transform: uppercase;
@@ -141,7 +141,7 @@
 .active-chip .x { color: var(--muted-foreground); font-size: var(--fs-md); line-height: 1; }
 .active-chip:hover .x { color: var(--foreground); }
 
-.result-count { margin-top: 14px; font-family: var(--mono); font-size: var(--fs-xs); color: var(--muted-foreground); }
+.result-count { margin-top: 14px; font-family: var(--label); font-size: var(--fs-xs); color: var(--muted-foreground); }
 .result-count b { color: var(--foreground); }
 
 /* ---------- cards ---------- */
@@ -163,14 +163,14 @@
   margin-top: 10px;
 }
 .track-head .name {
-  font-family: var(--mono);
+  font-family: var(--label);
   font-size: var(--fs-2xs);
   letter-spacing: .06em;
   text-transform: uppercase;
   color: var(--brand-ink);
 }
 .track-head .rule { flex: 1; height: var(--hairline); background: var(--border); }
-.track-head .n { font-family: var(--mono); font-size: var(--fs-2xs); color: var(--muted-foreground); }
+.track-head .n { font-family: var(--label); font-size: var(--fs-2xs); color: var(--muted-foreground); }
 
 .cap-card {
   display: flex;
@@ -188,7 +188,7 @@
 
 .card-top { display: flex; align-items: center; gap: 8px; }
 .card-track {
-  font-family: var(--mono);
+  font-family: var(--label);
   font-size: var(--fs-2xs);
   letter-spacing: .05em;
   text-transform: uppercase;
@@ -199,7 +199,7 @@
   display: inline-flex;
   align-items: center;
   gap: 4px;
-  font-family: var(--mono);
+  font-family: var(--label);
   font-size: var(--fs-2xs);
   color: var(--muted-foreground);
 }
@@ -227,14 +227,14 @@
 }
 .stat { display: flex; flex-direction: column; gap: 2px; }
 .stat .k {
-  font-family: var(--mono);
+  font-family: var(--label);
   font-size: var(--fs-2xs);
   letter-spacing: .05em;
   text-transform: uppercase;
   color: var(--muted-foreground);
 }
 .stat .v { font-family: var(--display); font-size: var(--fs-lg); font-weight: 500; }
-.stat .v .u { font-family: var(--mono); font-size: var(--fs-2xs); font-weight: 400; color: var(--muted-foreground); }
+.stat .v .u { font-family: var(--label); font-size: var(--fs-2xs); font-weight: 400; color: var(--muted-foreground); }
 /* A derived number, not one the author wrote. Said in the tooltip and by the
    lighter weight — never by hue alone. */
 .stat.derived .v { color: var(--muted-foreground); }
@@ -248,7 +248,7 @@
 
 .card-foot { display: flex; align-items: flex-end; gap: 12px; margin-top: auto; }
 .card-foot .deliverable { flex: 1; font-size: var(--fs-xs); line-height: 1.45; color: var(--muted-foreground); }
-.card-foot .open-cue { font-family: var(--mono); font-size: var(--fs-2xs); color: var(--brand-ink); white-space: nowrap; }
+.card-foot .open-cue { font-family: var(--label); font-size: var(--fs-2xs); color: var(--brand-ink); white-space: nowrap; }
 
 .empty { margin-top: 26px; font-size: var(--fs-md); color: var(--muted-foreground); }
 .link-btn {
@@ -391,7 +391,7 @@
   flex-wrap: wrap;
   align-items: center;
   gap: 12px;
-  font-family: var(--mono);
+  font-family: var(--label);
   font-size: var(--fs-2xs);
   letter-spacing: .05em;
   text-transform: uppercase;
@@ -413,7 +413,7 @@
 
 .facts { display: grid; grid-template-columns: 150px minmax(0, 1fr); gap: 8px 18px; margin-bottom: 22px; }
 .facts dt {
-  font-family: var(--mono);
+  font-family: var(--label);
   font-size: var(--fs-2xs);
   letter-spacing: .05em;
   text-transform: uppercase;
@@ -427,7 +427,7 @@
   border: var(--hairline) solid var(--border);
   border-radius: 999px;
   background: var(--background);
-  font-family: var(--mono);
+  font-family: var(--label);
   font-size: var(--fs-2xs);
   color: var(--muted-foreground);
 }
@@ -440,7 +440,7 @@
 .sheet .body ul, .sheet .body ol { padding-left: 22px; display: grid; gap: 6px; }
 .sheet .body li { line-height: 1.6; }
 .sheet .body a { color: var(--brand-ink); text-underline-offset: 3px; }
-.sheet .body code { font-family: var(--mono); font-size: .89em; padding: 2px 4px; border-radius: var(--radius-xs); background: var(--muted); }
+.sheet .body code { font-family: var(--label); font-size: .89em; padding: 2px 4px; border-radius: var(--radius-xs); background: var(--muted); }
 .sheet .body blockquote {
   padding: 10px 14px;
   border: var(--hairline) solid var(--border);
@@ -450,7 +450,7 @@
 }
 .sheet .body table { width: 100%; border-collapse: collapse; font-size: var(--fs-sm); }
 .sheet .body th, .sheet .body td { padding: 8px 10px; border: var(--hairline) solid var(--border); text-align: left; }
-.sheet .body th { font-family: var(--mono); font-size: var(--fs-2xs); text-transform: uppercase; font-weight: 400; color: var(--muted-foreground); }
+.sheet .body th { font-family: var(--label); font-size: var(--fs-2xs); text-transform: uppercase; font-weight: 400; color: var(--muted-foreground); }
 .sheet .body hr { border: 0; border-top: var(--hairline) solid var(--border); }
 
 .sources {
@@ -474,7 +474,7 @@
   list-style: none;
   user-select: none;
   -webkit-user-select: none;
-  font-family: var(--mono);
+  font-family: var(--label);
   font-size: var(--fs-sm);
   color: var(--muted-foreground);
   width: fit-content;
@@ -496,7 +496,7 @@
   margin-top: 22px;
   padding-top: 14px;
   border-top: var(--hairline) solid var(--border);
-  font-family: var(--mono);
+  font-family: var(--label);
   font-size: var(--fs-2xs);
   color: var(--muted-foreground);
 }

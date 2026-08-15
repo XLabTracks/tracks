@@ -39,7 +39,7 @@ export function FacilitatorPanel({ classroomId }: { classroomId: string }) {
         {FT_SESSIONS.map((s) => (
           <li key={s.n} className="border-border rounded-lg border px-3 py-2">
             <p className="text-sm">
-              <span className="text-muted-foreground font-mono text-xs">
+              <span className="text-muted-foreground text-xs">
                 Session {s.n}
               </span>{" "}
               <span className="font-medium">{s.title}</span>

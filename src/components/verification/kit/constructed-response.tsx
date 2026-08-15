@@ -179,7 +179,7 @@ export function ConstructedResponse({
 
       <div className="flex flex-wrap items-center justify-between gap-3">
         <p
-          className="text-muted-foreground font-mono text-xs"
+          className="text-muted-foreground text-xs"
           aria-live="polite"
         >
           {words
@@ -215,7 +215,7 @@ export function ConstructedResponse({
       {checks && !saved.submitted && started ? (
         <section className="border-border rounded-xl border p-4">
           <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
-            <h4 className="text-muted-foreground font-mono text-[11px] tracking-[0.14em] uppercase">
+            <h4 className="text-muted-foreground text-[11px] tracking-[0.14em] uppercase">
               Desk checks
             </h4>
             <p className="text-muted-foreground text-xs">Rules, not marking.</p>

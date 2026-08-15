@@ -13,13 +13,13 @@
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --font-sans: var(--font-sans);
-  /* Mono is forbidden. The token stays because ~30 rules ask for it, but it
-     resolves to the sans — the same move theme.css makes for the static
-     pages (--mono: var(--sans)), for the same reason: micro-labels read as
-     labels through their uppercase and letterspacing, not through a second
-     face, and no mono face is shipped. Counters hold column via the tabular
-     figures switched on in @layer base below. */
-  --font-mono: var(--font-sans);
+  /* No --font-mono, and therefore no `font-mono` utility. Mono is forbidden —
+     no mono face is shipped, and a micro-label reads as a label through its
+     uppercase and letterspacing, not through a second family. The token used
+     to exist pointing at the sans, which meant ~180 call sites asserted a
+     distinction nothing rendered; leaving it out makes a new `font-mono` fail
+     visibly instead of silently doing nothing. Counters hold column via the
+     tabular figures switched on in @layer base below. */
   --font-heading: var(--font-sans);
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);

@@ -185,13 +185,13 @@ export function PolicyQuickCheck({}: VerificationWidgetProps) {
               className="[&+li]:border-muted-foreground/60 [&+li]:mt-6 [&+li]:border-t [&+li]:pt-6"
             >
               <div className="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1">
-                <p className="text-muted-foreground font-mono text-[11px] tracking-[0.12em] uppercase">
+                <p className="text-muted-foreground text-[11px] tracking-[0.12em] uppercase">
                   {index + 1} of {QUICK_QUESTIONS.length}
                 </p>
                 {saved.submitted ? (
                   <p
                     className={cn(
-                      "flex items-center gap-1.5 font-mono text-[11px] tracking-wide",
+                      "flex items-center gap-1.5 text-[11px] tracking-wide",
                       correct ? "text-comply" : "text-defect"
                     )}
                   >

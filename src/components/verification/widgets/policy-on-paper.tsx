@@ -148,7 +148,7 @@ export function PolicyOnPaper({
               aria-selected={active}
               onClick={() => setTab(c.id)}
               className={cn(
-                "rounded-full border px-4 py-1.5 font-mono text-[11px] tracking-[0.14em] uppercase transition-colors",
+                "rounded-full border px-4 py-1.5 text-[11px] tracking-[0.14em] uppercase transition-colors",
                 active
                   ? "border-primary bg-primary text-primary-foreground"
                   : "border-border text-muted-foreground hover:bg-muted hover:text-foreground",
@@ -280,7 +280,7 @@ function CompanyTab({
                     <div className="mt-3 space-y-1.5">
                       <p
                         className={cn(
-                          "flex items-center gap-1.5 font-mono text-xs tracking-wide",
+                          "flex items-center gap-1.5 text-xs tracking-wide",
                           right ? "text-comply" : "text-defect",
                         )}
                       >

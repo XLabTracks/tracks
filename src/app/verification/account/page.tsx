@@ -173,7 +173,7 @@ export default async function VerificationAccountPage() {
                     >
                       {task.title}
                     </Link>
-                    <span className="text-muted-foreground font-mono text-xs">
+                    <span className="text-muted-foreground text-xs">
                       {state}
                     </span>
                   </li>

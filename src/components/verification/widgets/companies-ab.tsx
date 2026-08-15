@@ -166,7 +166,7 @@ export function CompaniesAB({
             )}
           >
             <label
-              className="text-muted-foreground font-mono text-[11px] tracking-[0.12em] uppercase"
+              className="text-muted-foreground text-[11px] tracking-[0.12em] uppercase"
               htmlFor={`ab-${slot.id}`}
             >
               {slot.label}
@@ -200,7 +200,7 @@ export function CompaniesAB({
             · {LETTER.date}
           </span>
         </h4>
-        <p className="text-muted-foreground mt-2 font-mono text-[11px] tracking-[0.12em] uppercase">
+        <p className="text-muted-foreground mt-2 text-[11px] tracking-[0.12em] uppercase">
           What it asks for
         </p>
         <ul className="mt-1.5 space-y-1.5">
@@ -213,7 +213,7 @@ export function CompaniesAB({
             </li>
           ))}
         </ul>
-        <p className="text-muted-foreground mt-3 font-mono text-[11px] tracking-[0.12em] uppercase">
+        <p className="text-muted-foreground mt-3 text-[11px] tracking-[0.12em] uppercase">
           Who signed it
         </p>
         <ul className="mt-1.5 space-y-1.5">
@@ -300,7 +300,7 @@ export function CompaniesAB({
       {frozen ? (
         <div className="space-y-4">
           <section className="border-border rounded-xl border p-4">
-            <h4 className="text-muted-foreground font-mono text-[11px] tracking-[0.14em] uppercase">
+            <h4 className="text-muted-foreground text-[11px] tracking-[0.14em] uppercase">
               What separates A from B
             </h4>
             {AB_REVEAL.map((line, i) => (
@@ -321,11 +321,11 @@ export function CompaniesAB({
           </section>
 
           <section className="border-border rounded-xl border p-4">
-            <h4 className="text-muted-foreground font-mono text-[11px] tracking-[0.14em] uppercase">
+            <h4 className="text-muted-foreground text-[11px] tracking-[0.14em] uppercase">
               What the letter is evidence for
             </h4>
             <p className="mt-3 text-sm leading-relaxed">{LETTER_SUPPORTED}</p>
-            <p className="text-muted-foreground mt-3 font-mono text-[11px] tracking-[0.12em] uppercase">
+            <p className="text-muted-foreground mt-3 text-[11px] tracking-[0.12em] uppercase">
               And what it does not establish
             </p>
             <ul className="mt-1.5 space-y-2">
@@ -355,7 +355,7 @@ export function CompaniesAB({
               className={writingArea}
             />
             <p
-              className="text-muted-foreground mt-1 text-right font-mono text-xs"
+              className="text-muted-foreground mt-1 text-right text-xs"
               aria-live="polite"
             >
               {countWords(saved.transfer)} words

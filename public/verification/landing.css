@@ -288,7 +288,7 @@ section.band .intro {
 }
 .sky .node .node-num {
   fill: var(--sel-ink, #fff);
-  font-family: var(--mono);
+  font-family: var(--label);
   /* User units, set by the geometry preset riding the svg element — the
      compact web grows its stars and the numerals grow with them. */
   font-size: var(--num-fs, 27px);
@@ -325,7 +325,7 @@ section.band .intro {
 /* The label sits ON the plaque fill, so it takes that colour's chosen ink —
    the same --sel/--sel-ink pair the stars use. */
 .sky .arc-label text {
-  font-family: var(--mono);
+  font-family: var(--label);
   /* User units, like .node-num — inside the viewBox a CSS-pixel token is
      scaled with the figure and lands at 4px on a phone. */
   font-size: 16px;
@@ -348,7 +348,7 @@ section.band .intro {
   flex-wrap: wrap;
   gap: 6px 18px;
   padding: 10px 16px 14px;
-  font-family: var(--mono);
+  font-family: var(--label);
   font-size: var(--fs-2xs);
   color: var(--muted-foreground);
 }
@@ -367,12 +367,12 @@ section.band .intro {
    Gotham and Gotham Black only, by request — declared, never shipped:
    Gotham is a licensed face, so the stacks land on it where the machine has
    it and fall back to the site's own faces where it does not. The panel
-   re-points --display and --mono locally, so every rule inside that asks
+   re-points --display and --label locally, so every rule inside that asks
    for a site face gets the Gotham stack without being touched. */
 .sky-panel {
   --display: "Gotham Black", "Gotham Ultra", Gotham, "Space Grotesk", "Segoe UI",
     system-ui, sans-serif;
-  --mono: Gotham, "Gotham SSm A", "Gotham SSm B", var(--sans);
+  --label: Gotham, "Gotham SSm A", "Gotham SSm B", var(--sans);
   padding: 10px;
   border: 0;
   border-radius: 24px;
@@ -465,7 +465,7 @@ section.band .intro {
    from one padding, not per-row margins. */
 .sky-panel .p-sec {
   margin-top: 24px;
-  font-family: var(--mono);
+  font-family: var(--label);
   font-size: var(--fs-2xs);
   letter-spacing: 0.14em;
   text-transform: uppercase;
@@ -495,7 +495,7 @@ section.band .intro {
   border-top: var(--hairline) solid var(--border);
 }
 .sky-panel .p-rungs .u {
-  font-family: var(--mono);
+  font-family: var(--label);
   font-size: var(--fs-2xs);
   padding-top: 2px;
   color: var(--sel-text, var(--brand-ink));
@@ -538,7 +538,7 @@ section.band .intro {
   background: var(--sel, var(--muted));
   color: var(--sel-ink, var(--foreground));
   font: inherit;
-  font-family: var(--mono);
+  font-family: var(--label);
   font-size: var(--fs-xs);
   white-space: nowrap;
   cursor: pointer;
@@ -588,7 +588,7 @@ section.band .intro {
 }
 .mod-card .mod-meta {
   margin-top: 10px;
-  font-family: var(--mono);
+  font-family: var(--label);
   font-size: var(--fs-2xs);
   color: var(--muted-foreground);
 }
@@ -616,7 +616,7 @@ section.band .intro {
 .key-mod-name {
   display: block;
   margin-bottom: 4px;
-  font-family: var(--mono);
+  font-family: var(--label);
   font-size: var(--fs-2xs);
   letter-spacing: 0.06em;
   text-transform: uppercase;
@@ -654,7 +654,7 @@ section.band .intro {
 .key-n {
   flex: 0 0 auto;
   min-width: 18px;
-  font-family: var(--mono);
+  font-family: var(--label);
   font-size: var(--fs-2xs);
   color: var(--sel-text, var(--muted-foreground));
 }

@@ -172,7 +172,7 @@ export function InferTheSystem({
               writingCardFocus
             )}
           >
-            <p className="text-muted-foreground font-mono text-[11px] tracking-[0.14em] uppercase">
+            <p className="text-muted-foreground text-[11px] tracking-[0.14em] uppercase">
               Consequence {index + 1}
             </p>
 
@@ -260,7 +260,7 @@ export function InferTheSystem({
               to produce, against the rule or pair that produces each. Not a
               key — the exercise has none — and not a complete list. */}
           <section className="space-y-2">
-            <h4 className="text-muted-foreground font-mono text-[11px] tracking-[0.14em] uppercase">
+            <h4 className="text-muted-foreground text-[11px] tracking-[0.14em] uppercase">
               The same policy, annotated
             </h4>
             {POLICY_RULES.map((rule, i) => (
@@ -297,7 +297,7 @@ export function InferTheSystem({
             />
             <p
               className={cn(
-                "mt-1 text-right font-mono text-xs",
+                "mt-1 text-right text-xs",
                 changeWords > SECOND_STEP_MAX_WORDS
                   ? "text-defect"
                   : "text-muted-foreground"

@@ -130,7 +130,7 @@ function AllocationDonut({
         x={C}
         y={C - 2}
         textAnchor="middle"
-        className="fill-foreground font-mono text-[15px] font-semibold tabular-nums"
+        className="fill-foreground text-[15px] font-semibold tabular-nums"
       >
         {formatShare(allocated, total)}
       </text>
@@ -234,7 +234,7 @@ function Stepper({
       >
         −
       </button>
-      <span className="border-border text-foreground flex items-center border-x pr-2 font-mono text-sm font-semibold tabular-nums">
+      <span className="border-border text-foreground flex items-center border-x pr-2 text-sm font-semibold tabular-nums">
         <input
           type="text"
           inputMode="decimal"
@@ -484,7 +484,7 @@ export function AllocationExerciseCard({
                   {exercise.scenarios.map((s, i) => (
                     <td
                       key={s.id}
-                      className="px-2 py-2 text-right font-mono tabular-nums"
+                      className="px-2 py-2 text-right tabular-nums"
                     >
                       {formatShare(allocations[i][j], exercise.totalPeople)}
                     </td>
@@ -498,7 +498,7 @@ export function AllocationExerciseCard({
         <div className="mt-5 space-y-1.5">
           {exercise.scenarios.map((scenario, i) => (
             <div key={scenario.id} className="flex items-center gap-3">
-              <span className="text-muted-foreground w-20 shrink-0 font-mono text-xs">
+              <span className="text-muted-foreground w-20 shrink-0 text-xs">
                 Scenario {i + 1}
               </span>
               <div className="border-border flex h-3 flex-1 overflow-hidden rounded-sm border">
@@ -606,7 +606,7 @@ export function AllocationExerciseCard({
                   />
                   <span className="min-w-0 flex-1 text-sm">{agenda.label}</span>
                   {previous !== null && (
-                    <span className="text-muted-foreground font-mono text-xs whitespace-nowrap tabular-nums">
+                    <span className="text-muted-foreground text-xs whitespace-nowrap tabular-nums">
                       was {formatShare(previous, exercise.totalPeople)}
                       {delta !== 0 && (
                         <span className="border-border ml-1.5 rounded-full border px-1.5">
@@ -633,7 +633,7 @@ export function AllocationExerciseCard({
         <p
           aria-live="polite"
           className={cn(
-            "mt-2 font-mono text-sm font-medium tabular-nums",
+            "mt-2 text-sm font-medium tabular-nums",
             exact
               ? "text-emerald-700 dark:text-[#7FA682]"
               : over
@@ -668,7 +668,7 @@ export function AllocationExerciseCard({
         {minChars > 0 && (
           <p
             className={cn(
-              "mt-1 text-right font-mono text-xs",
+              "mt-1 text-right text-xs",
               chars >= minChars ? "text-emerald-700 dark:text-[#7FA682]" : "text-muted-foreground",
             )}
           >

@@ -51,7 +51,7 @@ export function FacilitatorTraining() {
             className="border-border rounded-lg border p-4"
           >
             <p className="text-sm font-medium">
-              <span className="text-muted-foreground font-mono text-xs">
+              <span className="text-muted-foreground text-xs">
                 Session {s.n}
               </span>{" "}
               {s.title}

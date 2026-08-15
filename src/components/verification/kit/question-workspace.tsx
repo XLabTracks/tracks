@@ -81,7 +81,7 @@ export function QuestionWorkspace({
       {intro}
 
       <p
-        className="text-muted-foreground text-right font-mono text-xs"
+        className="text-muted-foreground text-right text-xs"
         aria-live="polite"
       >
         {Math.min(counted, owed)} of {owed} answered
@@ -192,7 +192,7 @@ function Badge({
       ? "Optional"
       : `Answer one of ${listNumbers(choices)}`;
   return (
-    <span className="border-border text-muted-foreground rounded-full border px-2 py-0.5 font-mono text-xs select-none">
+    <span className="border-border text-muted-foreground rounded-full border px-2 py-0.5 text-xs select-none">
       {label}
     </span>
   );

@@ -38,7 +38,7 @@ export function EvidenceTaxonomies(_: VerificationWidgetProps) {
   return (
     <section className="not-prose border-border bg-card my-6 overflow-hidden rounded-xl border text-sm">
       <header className="border-border border-b p-5 sm:p-6">
-        <p className="text-muted-foreground font-mono text-[11px] tracking-[0.14em] uppercase">
+        <p className="text-muted-foreground text-[11px] tracking-[0.14em] uppercase">
           Verification Track · Evidence companion
         </p>
         <div className="mt-2 flex flex-col gap-3 lg:flex-row lg:items-end lg:justify-between">
@@ -51,7 +51,7 @@ export function EvidenceTaxonomies(_: VerificationWidgetProps) {
               a mechanism and argue with the placements.
             </p>
           </div>
-          <span className="text-muted-foreground shrink-0 font-mono text-[11px] tracking-[0.12em] uppercase">
+          <span className="text-muted-foreground shrink-0 text-[11px] tracking-[0.12em] uppercase">
             12 mechanisms · 5 maps
           </span>
         </div>
@@ -103,7 +103,7 @@ export function EvidenceTaxonomies(_: VerificationWidgetProps) {
                         {group.sub}
                       </p>
                     </div>
-                    <span className="text-muted-foreground font-mono text-[10px]">
+                    <span className="text-muted-foreground text-[10px]">
                       {group.ids.length}
                     </span>
                   </div>
@@ -143,7 +143,7 @@ export function EvidenceTaxonomies(_: VerificationWidgetProps) {
           {selected ? (
             <div className="border-border bg-background rounded-lg border p-4 xl:sticky xl:top-24">
               <div className="flex items-start justify-between gap-3">
-                <p className="text-muted-foreground font-mono text-[10px] tracking-[0.12em] uppercase">
+                <p className="text-muted-foreground text-[10px] tracking-[0.12em] uppercase">
                   Mechanism
                 </p>
                 <Button
@@ -163,7 +163,7 @@ export function EvidenceTaxonomies(_: VerificationWidgetProps) {
                 {selected.description}
               </p>
               <div className="border-border mt-4 border-t pt-3">
-                <p className="text-muted-foreground font-mono text-[10px] tracking-[0.12em] uppercase">
+                <p className="text-muted-foreground text-[10px] tracking-[0.12em] uppercase">
                   Placement in this map
                 </p>
                 <p className="mt-1.5 font-medium">
@@ -208,7 +208,7 @@ export function EvidenceTaxonomies(_: VerificationWidgetProps) {
 function List({ title, items }: { title: string; items: string[] }) {
   return (
     <div>
-      <p className="text-muted-foreground font-mono text-[10px] tracking-[0.12em] uppercase">
+      <p className="text-muted-foreground text-[10px] tracking-[0.12em] uppercase">
         {title}
       </p>
       <ul className="mt-2 space-y-2">

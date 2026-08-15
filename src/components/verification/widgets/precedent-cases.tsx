@@ -233,7 +233,7 @@ function Summary({
                 className="border-border rounded-lg border p-3 text-sm leading-relaxed"
               >
                 <p className="font-medium">{c.name}</p>
-                <p className="text-muted-foreground mt-0.5 font-mono text-[11px] tracking-wide">
+                <p className="text-muted-foreground mt-0.5 text-[11px] tracking-wide">
                   yours: {call === "circumvented" ? "circumvented" : "held"} · record:{" "}
                   {c.outcome} ·{" "}
                   <span className={match ? "text-comply" : "text-defect"}>

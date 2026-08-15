@@ -47,7 +47,7 @@ export function WhatDoTheySay() {
             <div className="flex items-center gap-3">
               <Avatar figure={f} className="size-11 text-sm" />
               <div className="min-w-0">
-                <p className="text-muted-foreground font-mono text-[10px] tracking-[0.12em] uppercase">
+                <p className="text-muted-foreground text-[10px] tracking-[0.12em] uppercase">
                   {f.code}
                 </p>
                 <p className="text-foreground truncate text-sm font-semibold">
@@ -84,7 +84,7 @@ export function WhatDoTheySay() {
                 <div className="flex items-center gap-4">
                   <Avatar figure={active} className="size-16 text-lg" />
                   <div className="min-w-0">
-                    <p className="text-muted-foreground font-mono text-[11px] tracking-[0.12em] uppercase">
+                    <p className="text-muted-foreground text-[11px] tracking-[0.12em] uppercase">
                       {active.code}
                     </p>
                     <DialogTitle className="text-lg">
@@ -108,7 +108,7 @@ export function WhatDoTheySay() {
                   >
                     <p
                       className={cn(
-                        "font-mono text-[11px] tracking-[0.12em] uppercase",
+                        "text-[11px] tracking-[0.12em] uppercase",
                         s.matters ? "text-primary" : "text-muted-foreground",
                       )}
                     >
@@ -125,7 +125,7 @@ export function WhatDoTheySay() {
                 ))}
 
                 <div className="border-border border-t pt-3">
-                  <p className="text-muted-foreground font-mono text-[11px] tracking-[0.12em] uppercase">
+                  <p className="text-muted-foreground text-[11px] tracking-[0.12em] uppercase">
                     Sources
                   </p>
                   <div className="mt-1.5 flex flex-wrap gap-x-4 gap-y-1">

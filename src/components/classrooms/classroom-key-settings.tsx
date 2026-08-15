@@ -125,12 +125,12 @@ export function ClassroomKeySettings({
         <div className="flex flex-wrap items-center gap-2">
           {status.state === "active" ? (
             <p className="text-muted-foreground">
-              Classroom key <span className="font-mono">({masked})</span> is
+              Classroom key <span className="">({masked})</span> is
               active.
             </p>
           ) : (
             <p className="text-destructive">
-              The stored key <span className="font-mono">({masked})</span> can
+              The stored key <span className="">({masked})</span> can
               no longer be read — replace or remove it.
             </p>
           )}

@@ -19,7 +19,7 @@
 .ws-stat { flex: 0 1 280px; }
 .ws-stat .eyebrow { display: block; margin-bottom: 10px; }
 .ws-stat .progress-row { margin-bottom: 8px; }
-.ws-words { margin-bottom: 12px; font-family: var(--mono); font-size: var(--fs-2xs); color: var(--muted-foreground); }
+.ws-words { margin-bottom: 12px; font-family: var(--label); font-size: var(--fs-2xs); color: var(--muted-foreground); }
 
 /* The three fields the genre cannot do without. Tinted ground, uniform
    hairline — the emphasis is the surface, not a painted rib. */
@@ -36,7 +36,7 @@
 .pin label {
   display: block;
   margin-bottom: 6px;
-  font-family: var(--mono);
+  font-family: var(--label);
   font-size: var(--fs-2xs);
   letter-spacing: .06em;
   text-transform: uppercase;
@@ -53,7 +53,7 @@
 }
 .ws-sec > .head { display: flex; align-items: baseline; gap: 10px; margin-bottom: 8px; }
 .ws-sec h3 { flex: 1 1 auto; font-size: var(--fs-lg); }
-.ws-sec .wc { font-family: var(--mono); font-size: var(--fs-2xs); color: var(--muted-foreground); }
+.ws-sec .wc { font-family: var(--label); font-size: var(--fs-2xs); color: var(--muted-foreground); }
 .ws-sec .ask { max-width: 74ch; margin-bottom: 10px; font-size: var(--fs-sm); line-height: 1.6; color: var(--muted-foreground); }
 /* Written-into is said in the word count; the border stays uniform. */
 .ws-sec.filled .wc { color: var(--brand-ink); }
@@ -71,7 +71,7 @@
   font: inherit;
   font-size: var(--fs-sm);
 }
-.rt-row select { flex: 0 1 190px; font-family: var(--mono); font-size: var(--fs-xs); }
+.rt-row select { flex: 0 1 190px; font-family: var(--label); font-size: var(--fs-xs); }
 .rt-row input { flex: 2 1 240px; }
 
 /* Textareas are the work surface: they must not look like the chrome. */
@@ -106,7 +106,7 @@
 .checks .mark {
   flex: none;
   width: 62px;
-  font-family: var(--mono);
+  font-family: var(--label);
   font-size: var(--fs-2xs);
   color: var(--muted-foreground);
 }

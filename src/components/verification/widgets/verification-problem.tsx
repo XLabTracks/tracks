@@ -30,7 +30,7 @@ export function VerificationProblem(_: VerificationWidgetProps) {
   return (
     <section className="not-prose border-border bg-card my-6 overflow-hidden rounded-xl border text-sm">
       <div className="border-border border-b p-5 sm:p-6">
-        <p className="text-muted-foreground font-mono text-[11px] tracking-[0.14em] uppercase">
+        <p className="text-muted-foreground text-[11px] tracking-[0.14em] uppercase">
           {C.eyebrow}
         </p>
         <div className="mt-3 grid gap-4 lg:grid-cols-[1fr_14rem] lg:items-end">
@@ -62,7 +62,7 @@ export function VerificationProblem(_: VerificationWidgetProps) {
               )}
             >
               <span className="flex items-center justify-between gap-3">
-                <span className="text-muted-foreground font-mono text-[10px] tracking-[0.14em] uppercase">
+                <span className="text-muted-foreground text-[10px] tracking-[0.14em] uppercase">
                   {option.label}
                 </span>
                 {/* Inspected is said, not shaded. The filled disc here made
@@ -101,7 +101,7 @@ export function VerificationProblem(_: VerificationWidgetProps) {
               <div>
                 <p
                   className={cn(
-                    "font-mono text-[11px] tracking-[0.14em] uppercase",
+                    "text-[11px] tracking-[0.14em] uppercase",
                     open.holds ? "text-comply" : "text-defect",
                   )}
                 >

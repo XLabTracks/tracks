@@ -128,20 +128,24 @@
 
    The list is closed and short by construction: `grep -oE "text-\[[0-9.]+px\]"`
    over src/ prints every distinct value in the codebase. A new one belongs
-   here, or better, belongs written as a token in the first place. */
+   here, or better, belongs written as a token in the first place.
+
+   In rem for the reason the scale itself is: the mode doubles on top of
+   whatever text size the reader has already asked their browser for, never
+   instead of it. */
 :root[data-theme="contrast"] {
-  --lv-8: 16px;
-  --lv-8_5: 17px;
-  --lv-9: 18px;
-  --lv-10: 20px;
-  --lv-10_5: 21px;
-  --lv-11: 22px;
-  --lv-12: 24px;
-  --lv-12_5: 25px;
-  --lv-13: 26px;
-  --lv-13_5: 27px;
-  --lv-15: 30px;
-  --lv-17: 34px;
+  --lv-8: 1rem;
+  --lv-8_5: 1.0625rem;
+  --lv-9: 1.125rem;
+  --lv-10: 1.25rem;
+  --lv-10_5: 1.3125rem;
+  --lv-11: 1.375rem;
+  --lv-12: 1.5rem;
+  --lv-12_5: 1.5625rem;
+  --lv-13: 1.625rem;
+  --lv-13_5: 1.6875rem;
+  --lv-15: 1.875rem;
+  --lv-17: 2.125rem;
 }
 :root[data-theme="contrast"] [class~="text-[8px]"] { font-size: var(--lv-8); }
 :root[data-theme="contrast"] [class~="text-[8.5px]"] { font-size: var(--lv-8_5); }

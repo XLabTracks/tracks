@@ -7,7 +7,14 @@ import { useMark, writeMark } from "./marks";
 /**
  * A reading card: an external reading with a mark-as-read circle, the same
  * job the static course's {read}-style cards did — title links out, why this
- * unit sends you there, then author · year · length.
+ * unit sends you there, then author | year | length.
+ *
+ * The parts are ruled apart with a pipe rather than a middle dot. On a card
+ * whose author field is "Mauricio Baker, Gabriel Kulp, Oliver Marks, Miles
+ * Brundage, and Lennart Heim" the dot was weaker than the commas it had to
+ * outrank, so the year read as one more name in the list. A vertical rule is
+ * the one mark in the set that cannot be mistaken for punctuation inside a
+ * name.
  *
  * The checkmark is learner work on the vt-marks store: it feeds no meter,
  * unlocks nothing, and is never set automatically — the learner presses it.
@@ -39,8 +46,8 @@ export function ReadingCard({
 }) {
   const key = `read:${id}`;
   const read = useMark<boolean>(key, false);
-  const meta = [author, year, mins].filter(Boolean).join(" · ");
-  const metaLine = read ? (meta ? `${meta} · read` : "read") : meta;
+  const meta = [author, year, mins].filter(Boolean).join(" | ");
+  const metaLine = read ? (meta ? `${meta} | read` : "read") : meta;
 
   return (
     <section

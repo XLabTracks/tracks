@@ -86,6 +86,17 @@
      ONLY to encode meaning in the Verification widgets (comply/defect/hide/
      exaggerate/free-ride), always paired with a label/icon/shape — never colour
      alone. Opacity modifiers (e.g. bg-comply/10) give soft surfaces. */
+  /* Three states the exercises and the review deck mark in colour: a bar met,
+     a card that was hard, a card that was easy. Each is a Tailwind palette
+     hue on the light ground and a desaturated lift of it on the warm stone
+     dark one — the lift is what the dark values are for, and it was written
+     out as a literal at seven call sites, `dark:text-[#7FA682]` five times
+     over. One name each instead. Never on their own: every use sits beside
+     the word it marks. */
+  --color-met: var(--met);
+  --color-hard: var(--hard);
+  --color-easy: var(--easy);
+
   --color-comply: var(--comply);
   --color-defect: var(--defect);
   --color-hide: var(--hide);
@@ -216,6 +227,10 @@
 
   /* Off the Verification routes the accent reads on its one light ground, so
      ink and fill are the same token. theme.css splits them per theme. */
+  --met: var(--color-emerald-700);
+  --hard: var(--color-amber-600);
+  --easy: var(--color-sky-600);
+
   --brand-ink: var(--primary);
 
   --radius: 0.875rem;
@@ -254,6 +269,10 @@
    order decides.
    ============================================================ */
 .dark {
+  --met: #7fa682; /* sage — emerald, desaturated for the stone ground */
+  --hard: #d7a24b; /* ochre */
+  --easy: #8fa3a8; /* slate */
+
   --background: #201a19; /* warm stone ground */
   --foreground: #ece5e3; /* warm off-white */
   --card: #2b2321; /* lifted off the ground */

@@ -41,7 +41,6 @@ export interface VerificationExerciseDef {
 export const verificationExercises: VerificationExerciseDef[] = [
   { id: "verification-problem", title: "The Verification Problem", bridged: false },
   { id: "evidence-taxonomies", title: "Five Maps of the Evidence", bridged: false },
-  { id: "actor-map", title: "The Actor Map", bridged: false },
   { id: "field-map", title: "Field Map", bridged: false },
   { id: "collection-map", title: "The Collection Map", bridged: false },
   { id: "verification-landscape", title: "The Verification Landscape", bridged: false },
@@ -51,7 +50,21 @@ export const verificationExercises: VerificationExerciseDef[] = [
   { id: "mechanism-sort-reveal", title: "The Reference Map", bridged: false },
   { id: "policy-scoping", title: "Scoping an Anti-ASI Policy", bridged: true },
   { id: "anatomy-drill", title: "The Anatomy Drill", bridged: true },
-  { id: "protocol-actors", title: "Who's in the Treaty?", bridged: true },
+  // 1.2's workshop, replacing two widgets on the owner's instruction
+  // (2026-08-15). protocol-actors ("Who's in the Treaty?") went because
+  // clicking highlighted phrases in a treaty is recognition dressed as work;
+  // actor-map ("The Actor Map") went because it was a third browsable roster
+  // of the same cast, conflating "who is there" with "who has power" and
+  // being an answer surface for neither. Both files stay in the repo,
+  // unregistered — the registry test rightly refuses orphans — so remounting
+  // either is this line, its registry line, and an embed. See
+  // docs/verification/module-1-log.md.
+  //
+  // Bridged: six committed steps ending in a written workspace is a real
+  // finish. It is embedded in 1.2's prose and has no v-<id> lesson, so per
+  // the note at the top of this file the finish marks the exercise and
+  // completes no section.
+  { id: "actor-workshop", title: "The Actor Map Workshop", bridged: true },
   { id: "interactive-map", title: "The Compute Supply Chain", bridged: false },
   { id: "report-constructor", title: "One Inspection, Three Readers", bridged: true },
   { id: "context-distiller", title: "The Distiller", bridged: true },

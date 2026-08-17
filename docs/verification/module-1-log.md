@@ -204,3 +204,92 @@ exercise that IS a lesson (1.2.1, 1.2.2) completes that lesson. Eleven bridged
 exercises across the track are of the first kind. The rule is now stated once,
 in the header of `src/lib/verification/exercises.ts`, because that file's own
 per-entry comments had asserted the wrong version of it twice.
+
+## 1.2's Actor Map Workshop (2026-08-15, owner's instruction)
+
+Two widgets stood down and one replaced them, on the owner's call: "мы
+заменяем хуйню с выделением текста это говно для первокурсников".
+
+**Gone from 1.2, kept in the repo.** `protocol-actors` ("Who's in the
+Treaty?") — clicking highlighted phrases in a treaty to meet the actors behind
+them is recognition dressed as work. `actor-map` ("The Actor Map") — a third
+browsable roster of the same cast, sitting directly under the three tasks it
+could not be used to answer. Both files, data and all, are unregistered rather
+than deleted; remounting either is one line here, one in the registry, and an
+embed.
+
+**What replaced them is modelled on the Beeck Center's stakeholder-mapping
+workshop** (Georgetown), the shape she picked out of the research: Goal
+Setting 5' · List all stakeholders 10' · Identify the core user 5' · Place and
+cluster 10–15' · Categorize 10–15' · Catch-up 5' · Political Analysis 15–20' ·
+Setting Actions 10', with concentric rings as the artifact so a reader can
+"see dependencies between stakeholders and anticipate second-order effects".
+
+Ours is six steps, because a solo online learner has no facilitator to set
+goals with and no group to catch up with: **Study → Recall → Core → Place →
+Categorize → Read the map.** Goal Setting became the standing brief; Catch-up
+became the reveal at the end of Recall, which is what a group gets out of
+comparing lists.
+
+**It opens closed-book, which is the other half of what she asked for** —
+"нам придется делать заморозку и разводить их по разным стейтам с кнопкой я
+уже изучил давайте упражнение". Karpicke & Blunt (Science, 2011) found that
+building a concept map as elaborative study loses to plain retrieval practice,
+even when the final test is building a map; Blunt & Karpicke (2014) found that
+a map built from memory beats the same map built with the text open. So the
+roster is a study panel with a button that closes it, and every step after it
+is answered without it. The freeze is soft and visible: "Open the roster" is
+always there, taking it sets `peeked`, and the closing map says so. A hard
+lock would be a lie — her tables are further up the same page.
+
+**Rings carry position, chips carry roles, and that split is the point.** The
+lesson says "any actor can hold several roles at once, and almost every
+important actor does", so one ring per actor would be false if rings meant
+roles. Position is single-valued and roles are not — which is exactly Beeck's
+own split between Place and cluster and Categorize. On the finished map a role
+lens lights that role across every ring at once, so her sentence about the
+second lens cutting across the first is something the picture shows rather
+than something the page asserts.
+
+**Provenance, stated in the data file and repeated here.** Hers, unchanged:
+the ten actors (rows of `ACTOR_MAP_ENTRIES`, imported not restated), the six
+roles and five postures (Tables 5 and 1), the role and posture answer keys
+(those rows' own fields), and the three closing questions, which are the "Try
+it before moving on" bullets moved verbatim out of the body. Ours, and hers to
+overrule: the four rings and which actor sits on which, the core question's
+four options, and the closing finding — each derived from a sentence already
+in 1.2 and each carrying that sentence.
+
+Two ring placements are meant to be argued with: a cloud provider is on RUNS
+rather than SUPPLIES because the run physically happens on its machines, and
+the proxies sit OUT OF REACH beside the deployers — opposite in intent, alike
+in the one property the ring names.
+
+**Found while building, all fixed.**
+
+- Free recall marked "and" as a hit, because a stopword is genuinely a
+  substring of half the roster. Containment now needs four characters on the
+  contained side; the unit test that caught it stays.
+- Ring angles were computed from the answer key, which encoded the answer in
+  the layout and stacked two dots on one point whenever a placement was wrong.
+  They come from the roster order now.
+- Map labels truncated to an ellipsis at diagram size. They use the lesson's
+  own table headings instead — Cloud providers, Frontier labs, Deployers,
+  Proxies, BIS.
+- Actors sat on twelve o'clock, on top of each ring's own name. Angles start
+  half a step off centre.
+
+**Not mine, fixed to unblock the branch:** `08a8a30` (another session, 2.4.4's
+Carlson reading) cited an arms-control URL with no registry row, so
+`citations.test.ts` was red on the shared branch before any of this. Parked in
+`citations.json`'s `pending`, which is what that field is for — the appendix
+renders nothing for it and the gap stays visible in data rather than being
+papered over with guessed bibliographic fields. Whoever owns that reading
+should promote it.
+
+**Still owed** (and unchanged by this): a node/dependency map with typed edges
+between actors, which is the one bullet of her 1.2 plan with no implementation
+— "recognize institutional relationships". This workshop makes structure
+visible; it does not draw edges. BlueDot's Unit 2 map is the reference, and
+their edge typology (authority / evidence / compliance / physical inputs) is
+still an open question for her.

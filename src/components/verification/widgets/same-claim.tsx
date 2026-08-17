@@ -1,10 +1,11 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useRef } from "react";
 
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { countWords } from "../kit/constructed-response";
+import { useStoredState } from "../kit/use-stored-state";
 import {
   CLAIM_COMPARISON,
   CLAIM_COMPARISON_MAX_WORDS,
@@ -93,32 +94,8 @@ export function SameClaim({
   onComplete,
   initialCompleted,
 }: VerificationWidgetProps) {
-  const [saved, setSaved] = useState<Saved>(EMPTY);
-  const [hydrated, setHydrated] = useState(false);
+  const [saved, persist, hydrated] = useStoredState(STORAGE_KEY, EMPTY, prune);
   const fired = useRef(initialCompleted);
-
-  useEffect(() => {
-    let restored = EMPTY;
-    try {
-      const raw = localStorage.getItem(STORAGE_KEY);
-      if (raw) restored = prune(JSON.parse(raw));
-    } catch {
-      /* unreadable storage just means starting fresh */
-    }
-    queueMicrotask(() => {
-      setSaved(restored);
-      setHydrated(true);
-    });
-  }, []);
-
-  const persist = useCallback((next: Saved) => {
-    setSaved(next);
-    try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(next));
-    } catch {
-      /* private mode / full quota */
-    }
-  }, []);
 
   if (!hydrated) return <div className="not-prose my-6 min-h-64" aria-busy />;
 

@@ -1,9 +1,10 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
+import { useStoredState } from "../kit/use-stored-state";
 import { SourceQuote } from "@/components/mdx/reader/source-quote";
 import type { VerificationWidgetProps } from "../kit/types";
 import {
@@ -47,6 +48,7 @@ interface Answer {
 type Answers = Record<string, Answer>;
 
 const STORAGE_KEY = "v-packet-tasks:v1";
+const EMPTY: Answers = {};
 
 function prune(raw: unknown): Answers {
   const out: Answers = {};
@@ -72,37 +74,23 @@ function ruleMet(answers: Answers): boolean {
 const wordCount = (s: string) => (s.trim() ? s.trim().split(/\s+/).length : 0);
 
 export function PacketTasks({ onComplete }: VerificationWidgetProps) {
-  const [answers, setAnswers] = useState<Answers>({});
   const [drafts, setDrafts] = useState<Record<string, string>>({});
-  const [hydrated, setHydrated] = useState(false);
   const [notified, setNotified] = useState(false);
-
-  useEffect(() => {
-    let restored: Answers = {};
-    try {
-      const raw = localStorage.getItem(STORAGE_KEY);
-      if (raw) restored = prune(JSON.parse(raw));
-    } catch {
-      /* unreadable storage just means starting fresh */
-    }
-    queueMicrotask(() => {
-      setAnswers(restored);
+  const [answers, persist, hydrated] = useStoredState<Answers>(
+    STORAGE_KEY,
+    EMPTY,
+    prune,
+    // Submitted text is also the editable draft, and a run that already met
+    // the rule must not announce itself a second time on return.
+    (restored) => {
       setDrafts(
-        Object.fromEntries(Object.entries(restored).map(([id, a]) => [id, a.text])),
+        Object.fromEntries(
+          Object.entries(restored).map(([id, a]) => [id, a.text]),
+        ),
       );
       setNotified(ruleMet(restored));
-      setHydrated(true);
-    });
-  }, []);
-
-  const persist = useCallback((next: Answers) => {
-    setAnswers(next);
-    try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(next));
-    } catch {
-      /* private mode / full quota — progress is a convenience, not the record */
-    }
-  }, []);
+    },
+  );
 
   function submit(task: PacketTask) {
     const text = (drafts[task.id] ?? "").trim();

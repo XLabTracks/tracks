@@ -1,7 +1,7 @@
 "use client";
 
 import { Component, type ComponentType, type ReactNode } from "react";
-import { getVerificationWidget } from "./widgets/registry";
+import { verificationWidgets } from "./widgets/registry";
 import { useVerificationCompletion } from "./kit/use-completion";
 import type { VerificationWidgetProps } from "./kit/types";
 
@@ -26,7 +26,7 @@ export function VerificationWidgetHost({
   canTrack: boolean;
   initialCompleted: boolean;
 }) {
-  const Widget = getVerificationWidget(pageId);
+  const Widget = verificationWidgets[pageId];
 
   if (!Widget) {
     return (

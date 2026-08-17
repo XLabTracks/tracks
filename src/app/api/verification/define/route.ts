@@ -37,6 +37,24 @@ const LW_SEARCH = "https://www.lesswrong.com/api/search";
 const MAX_TERM = 60;
 const LOOKUP_TIMEOUT_MS = 4_000;
 
+// Wikimedia's robot policy wants a descriptive User-Agent with a contact
+// point, and blocks unidentified scripted clients — a Workers fetch sends
+// none by default, which reads as exactly that.
+const UA =
+  "XLabTracksVerification/1.0 (https://aisafetytracks.com; course cheatsheet term lookup)";
+const WIKI_HEADERS = {
+  Accept: "application/json",
+  "User-Agent": UA,
+  "Api-User-Agent": UA,
+};
+
+type WikiSummary = {
+  type?: string;
+  title?: string;
+  extract?: string;
+  content_urls?: { desktop?: { page?: string } };
+};
+
 // The wiki slugs terms as lowercase hyphenated words. This is the same
 // normalisation, so "Verification Regime" finds /tag/verification-regime.
 function slugify(term: string): string {
@@ -59,6 +77,37 @@ function firstParagraph(text: string): string {
     if (para.length >= 60) return para;
   }
   return "";
+}
+
+// One Wikipedia summary lookup. The endpoint follows redirects, so case and
+// near-miss titles resolve. Returns null on 404 so callers can fall through;
+// throws on a real upstream failure so the leg reports it.
+async function wikiSummary(
+  title: string,
+  signal: AbortSignal,
+): Promise<WikiSummary | null> {
+  const res = await fetch(
+    `https://en.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(title)}?redirect=true`,
+    // The wiki changes rarely and a learner may look up the same term on
+    // several pages; a day of edge cache keeps this off Wikimedia's servers.
+    { headers: WIKI_HEADERS, signal, next: { revalidate: 86400 } },
+  );
+  if (res.status === 404) return null;
+  if (!res.ok) throw new Error(String(res.status));
+  return (await res.json()) as WikiSummary;
+}
+
+// A disambiguation page is a menu, not a definition, so only a `standard`
+// page with an extract counts as found.
+function wikiHit(json: WikiSummary | null, fallbackTitle: string) {
+  if (json?.type !== "standard" || !json.extract) return null;
+  return NextResponse.json({
+    found: true,
+    term: json.title || fallbackTitle,
+    definition: json.extract.trim(),
+    url: json.content_urls?.desktop?.page ?? null,
+    source: "Wikipedia (CC BY-SA)",
+  });
 }
 
 export async function GET(request: Request) {
@@ -171,65 +220,19 @@ export async function GET(request: Request) {
     lwLeg = reason(e);
   }
 
-  // Wikipedia second. The summary endpoint follows redirects, so case and
-  // near-miss titles resolve; a disambiguation page is a menu, not a
-  // definition, so only a `standard` page with an extract counts as found.
+  // Wikipedia second.
   try {
-    const res = await fetch(
-      `https://en.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(raw)}?redirect=true`,
-      {
-        // Wikimedia's robot policy wants a descriptive User-Agent with a
-        // contact point, and blocks unidentified scripted clients — a
-        // Workers fetch sends none by default, which reads as exactly that.
-        headers: {
-          Accept: "application/json",
-          "User-Agent":
-            "XLabTracksVerification/1.0 (https://aisafetytracks.com; course cheatsheet term lookup)",
-          "Api-User-Agent":
-            "XLabTracksVerification/1.0 (https://aisafetytracks.com; course cheatsheet term lookup)",
-        },
-        signal,
-        next: { revalidate: 86400 },
-      },
-    );
-    if (res.status !== 404) {
-      if (!res.ok) throw new Error(String(res.status));
-      const json: {
-        type?: string;
-        title?: string;
-        extract?: string;
-        content_urls?: { desktop?: { page?: string } };
-      } = await res.json();
-      if (json.type === "standard" && json.extract) {
-        return NextResponse.json({
-          found: true,
-          term: json.title || raw,
-          definition: json.extract.trim(),
-          url: json.content_urls?.desktop?.page ?? null,
-          source: "Wikipedia (CC BY-SA)",
-        });
-      }
-      wikiLeg = "miss (" + (json.type ?? "no type") + ")";
-    } else {
-      wikiLeg = "miss (404)";
-    }
+    const json = await wikiSummary(raw, signal);
+    const hit = wikiHit(json, raw);
+    if (hit) return hit;
+    wikiLeg = json ? "miss (" + (json.type ?? "no type") + ")" : "miss (404)";
 
     // The exact title missed or is a disambiguation menu — ask search for
     // the best real article ("capstone" finds Capstone course) and serve
     // its summary under the same standard-page guard.
     const sres = await fetch(
       `https://en.wikipedia.org/w/api.php?action=query&list=search&srsearch=${encodeURIComponent(raw)}&srlimit=5&format=json`,
-      {
-        headers: {
-          Accept: "application/json",
-          "User-Agent":
-            "XLabTracksVerification/1.0 (https://aisafetytracks.com; course cheatsheet term lookup)",
-          "Api-User-Agent":
-            "XLabTracksVerification/1.0 (https://aisafetytracks.com; course cheatsheet term lookup)",
-        },
-        signal,
-        next: { revalidate: 86400 },
-      },
+      { headers: WIKI_HEADERS, signal, next: { revalidate: 86400 } },
     );
     if (sres.ok) {
       const sjson: {
@@ -278,37 +281,11 @@ export async function GET(request: Request) {
         .slice(0, 1);
       for (const cand of tried) {
         const top = cand.title as string;
-        const r2 = await fetch(
-          `https://en.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(top)}?redirect=true`,
-          {
-            headers: {
-              Accept: "application/json",
-              "User-Agent":
-                "XLabTracksVerification/1.0 (https://aisafetytracks.com; course cheatsheet term lookup)",
-              "Api-User-Agent":
-                "XLabTracksVerification/1.0 (https://aisafetytracks.com; course cheatsheet term lookup)",
-            },
-            signal,
-            next: { revalidate: 86400 },
-          },
-        );
-        if (r2.ok) {
-          const j2: {
-            type?: string;
-            title?: string;
-            extract?: string;
-            content_urls?: { desktop?: { page?: string } };
-          } = await r2.json();
-          if (j2.type === "standard" && j2.extract) {
-            return NextResponse.json({
-              found: true,
-              term: j2.title || top,
-              definition: j2.extract.trim(),
-              url: j2.content_urls?.desktop?.page ?? null,
-              source: "Wikipedia (CC BY-SA)",
-            });
-          }
-        }
+        // A candidate that will not load is not a failure of the leg — the
+        // exact-title lookup above already answered for that. Skip it.
+        const j2 = await wikiSummary(top, signal).catch(() => null);
+        const hit = wikiHit(j2, top);
+        if (hit) return hit;
       }
       wikiLeg += ", search miss";
     }
@@ -328,17 +305,7 @@ export async function GET(request: Request) {
     const word = raw.toLowerCase();
     const res = await fetch(
       `https://en.wiktionary.org/api/rest_v1/page/definition/${encodeURIComponent(word)}?redirect=true`,
-      {
-        headers: {
-          Accept: "application/json",
-          "User-Agent":
-            "XLabTracksVerification/1.0 (https://aisafetytracks.com; course cheatsheet term lookup)",
-          "Api-User-Agent":
-            "XLabTracksVerification/1.0 (https://aisafetytracks.com; course cheatsheet term lookup)",
-        },
-        signal,
-        next: { revalidate: 86400 },
-      },
+      { headers: WIKI_HEADERS, signal, next: { revalidate: 86400 } },
     );
     if (res.status !== 404) {
       if (!res.ok) throw new Error(String(res.status));

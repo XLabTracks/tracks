@@ -38,10 +38,10 @@ import {
  * hoist them into <head> and keep them after the app's bundled CSS. Drop it
  * and they render in place, arriving after first paint.
  *
- * base.css is deliberately absent: it carries the element reset the static
- * pages need and the app already has Tailwind's preflight. app-bridge.css is
- * the opposite — app-only, and it exists because Tailwind Typography hardcodes
- * its prose colours instead of reading the palette.
+ * No element reset is loaded here: that was the static pages' job and the app
+ * already has Tailwind's preflight. app-bridge.css is the opposite — app-only,
+ * and it exists because Tailwind Typography hardcodes its prose colours
+ * instead of reading the palette.
  */
 
 /** True on the routes this chrome owns: the course pages, and the app routes

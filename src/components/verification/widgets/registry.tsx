@@ -214,9 +214,3 @@ export const verificationWidgets: Record<
   "cloud-evidence-drill": CloudEvidenceDrill,
   "standard-of-proof": StandardOfProof,
 };
-
-export function getVerificationWidget(
-  id: string,
-): ComponentType<VerificationWidgetProps> | undefined {
-  return verificationWidgets[id];
-}

@@ -217,7 +217,7 @@ function PhaseRail({ phase }: { phase: Phase }) {
           key={item.id}
           className={cn(
             "border-border rounded-md border px-2 py-2 text-center font-sans text-4xs font-medium tracking-[0.01em] uppercase",
-            index === active && "border-primary bg-primary/5 text-primary",
+            index === active && "border-primary bg-primary/5 text-brand-ink",
             index < active && "bg-muted/45 text-foreground",
             index > active && "text-muted-foreground"
           )}
@@ -619,11 +619,11 @@ function FindingPhase({ onRestart }: { onRestart: () => void }) {
         <div className="border-primary/35 bg-primary/5 rounded-xl border p-5 sm:p-6">
           <div className="flex items-start gap-3">
             <Gavel
-              className="text-primary mt-0.5 size-5 shrink-0"
+              className="text-brand-ink mt-0.5 size-5 shrink-0"
               aria-hidden
             />
             <div>
-              <p className="text-primary font-sans text-3xs font-medium tracking-[0.01em] uppercase">
+              <p className="text-brand-ink font-sans text-3xs font-medium tracking-[0.01em] uppercase">
                 {FINAL_FINDING.disposition}
               </p>
               <h4 className="mt-2 text-2xl font-semibold tracking-tight">

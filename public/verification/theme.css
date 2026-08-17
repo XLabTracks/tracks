@@ -54,9 +54,14 @@
   --mod-3: #6d7636; /* Khaki */
   --mod-4: #022e4c; /* Prussian */
   /* Text on that fill. Fixed, because it depends on the fill and not on the
-     page ground. */
+     page ground — so the ink follows the fill's lightness and lands dark on
+     the two light hues. Satsuma is the near miss to watch: white on it is
+     3.9:1, under the 4.5 its 13px chips need, and the same near-black Lunar
+     Yellow already uses clears it at 4.6. Khaki passes on white at 4.9 with
+     nothing to spare, so re-solving any of these five fills means re-checking
+     its ink in the same edit. */
   --mod-0-ink: #ffffff;
-  --mod-1-ink: #ffffff;
+  --mod-1-ink: #1a1614;
   --mod-2-ink: #1a1614;
   --mod-3-ink: #ffffff;
   --mod-4-ink: #ffffff;

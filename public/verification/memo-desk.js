@@ -265,7 +265,8 @@ window.VTMemoDesk = (function () {
       var rows = SLOTS.filter(function (s) { return s.module === mod; });
       if (!rows.length) return '';
       return (
-        '<div class="slot-group" style="--mod:var(--mod-' + mod + ')">' +
+        '<div class="slot-group" style="--mod:var(--mod-' + mod +
+        ');--mod-type:var(--mod-' + mod + '-text)">' +
         '<p><b>M' + mod + '</b> ' + esc(MODULES[mod] || '') + '</p><ul>' +
         rows.map(function (s) {
           return '<li><button type="button" class="slot-btn" data-id="' + s.id + '" aria-current="' +

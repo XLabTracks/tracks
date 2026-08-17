@@ -172,7 +172,7 @@ function PhaseRail({
           key={label}
           className={cn(
             "border-border rounded-md border px-2 py-2 text-center font-sans text-4xs font-medium tracking-[0.01em] uppercase",
-            index === active && "border-primary bg-primary/5 text-primary",
+            index === active && "border-primary bg-primary/5 text-brand-ink",
             index < active && "bg-muted/45 text-foreground",
             index > active && "text-muted-foreground",
           )}
@@ -226,7 +226,7 @@ function CaseWork({
   return (
     <div>
       <section className="border-border border-b p-5 sm:p-6">
-        <p className="text-primary text-xs font-medium tracking-[0.01em] uppercase">
+        <p className="text-brand-ink text-xs font-medium tracking-[0.01em] uppercase">
           {caseFile.eyebrow}
         </p>
         <h4 className="mt-2 text-xl font-semibold">{caseFile.title}</h4>
@@ -288,7 +288,7 @@ function CaseWork({
                           className={cn(
                             "border-border text-muted-foreground mt-1 w-full rounded-md border border-dashed px-3 py-2 text-left text-sm",
                             held
-                              ? "border-primary text-primary hover:bg-primary/5"
+                              ? "border-primary text-brand-ink hover:bg-primary/5"
                               : "opacity-70",
                           )}
                         >
@@ -313,7 +313,7 @@ function CaseWork({
                         href={step.sourceHref}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="text-primary mt-1.5 inline-flex items-center gap-1 text-xs font-medium underline-offset-4 hover:underline"
+                        className="text-brand-ink mt-1.5 inline-flex items-center gap-1 text-xs font-medium underline-offset-4 hover:underline"
                       >
                         {step.sourceLabel}
                         <ExternalLink className="size-3" aria-hidden />
@@ -433,7 +433,7 @@ function CaseResult({
   return (
     <section className="p-5 sm:p-6">
       <div className="border-border bg-muted/15 rounded-xl border p-5 sm:p-6">
-        <Icon className="text-primary size-7" aria-hidden />
+        <Icon className="text-brand-ink size-7" aria-hidden />
         <p className="text-muted-foreground mt-4 text-xs font-medium uppercase">
           Assembled finding
         </p>
@@ -487,7 +487,7 @@ function FinalFindings({ onRestart }: { onRestart: () => void }) {
       <h4 className="mt-2 text-2xl font-semibold">The report can travel without proving the case</h4>
       <div className="mt-5 grid gap-3 md:grid-cols-2">
         <div className="border-border rounded-xl border p-5">
-          <ShieldCheck className="text-primary size-5" aria-hidden />
+          <ShieldCheck className="text-brand-ink size-5" aria-hidden />
           <h5 className="mt-3 font-semibold">Protection finding</h5>
           <p className="text-muted-foreground mt-2 leading-relaxed">
             A statute can protect a person, subject, and recipient while leaving
@@ -495,7 +495,7 @@ function FinalFindings({ onRestart }: { onRestart: () => void }) {
           </p>
         </div>
         <div className="border-border rounded-xl border p-5">
-          <FileCheck2 className="text-primary size-5" aria-hidden />
+          <FileCheck2 className="text-brand-ink size-5" aria-hidden />
           <h5 className="mt-3 font-semibold">Evidence finding</h5>
           <p className="text-muted-foreground mt-2 leading-relaxed">
             Preserved and corroborated records may support one fact without

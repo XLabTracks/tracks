@@ -35,7 +35,7 @@ export function CourseOverview() {
           <summary className="flex cursor-pointer list-none items-start gap-3 p-4 select-none [&::-webkit-details-marker]:hidden">
             <ChevronRight
               aria-hidden
-              className="text-primary mt-1 size-4 shrink-0 transition-transform duration-200 group-open:rotate-90"
+              className="text-brand-ink mt-1 size-4 shrink-0 transition-transform duration-200 group-open:rotate-90"
             />
             <span className="text-foreground text-base font-semibold">
               {section.title}
@@ -56,7 +56,7 @@ export function CourseOverview() {
                     {p.slot === "facilitator" && (
                       <a
                         href="/verification/facilitator"
-                        className="text-primary underline underline-offset-2"
+                        className="text-brand-ink underline underline-offset-2"
                       >
                         we have a facilitation resources module
                       </a>
@@ -114,7 +114,7 @@ function NotebookLink() {
         const w = window as unknown as { VTNotebook?: { open: () => void } };
         w.VTNotebook?.open();
       }}
-      className="text-primary underline underline-offset-2 select-none"
+      className="text-brand-ink underline underline-offset-2 select-none"
     >
       the notebook
     </button>

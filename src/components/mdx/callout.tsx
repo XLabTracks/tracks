@@ -26,7 +26,7 @@ const VARIANTS: Record<
   highlight: {
     icon: CirclePlay,
     className: "border-primary/55 bg-primary/5",
-    iconClassName: "text-primary",
+    iconClassName: "text-brand-ink",
   },
   // The outline's "[outline in dark/light red rounded rectangular outline]"
   // for notebook prompts: the brand red as a full four-side outline (the
@@ -35,7 +35,7 @@ const VARIANTS: Record<
   notebook: {
     icon: NotebookPen,
     className: "border-primary/70 bg-transparent",
-    iconClassName: "text-primary",
+    iconClassName: "text-brand-ink",
   },
 };
 

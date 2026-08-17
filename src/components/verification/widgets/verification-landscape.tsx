@@ -77,7 +77,7 @@ export function VerificationLandscape(_: VerificationWidgetProps) {
               key={c.key}
               type="button"
               onClick={() => setSel({ kind: "axis", axis: "col", i: ci })}
-              className="text-primary rounded px-1 py-1 text-center eyebrow leading-tight font-semibold hover:underline"
+              className="text-brand-ink rounded px-1 py-1 text-center eyebrow leading-tight font-semibold hover:underline"
             >
               {c.name}
             </button>
@@ -201,7 +201,7 @@ function CellDetail({
 }) {
   return (
     <div className="text-sm">
-      <p className="text-primary eyebrow">
+      <p className="text-brand-ink eyebrow">
         {rowName} × {colName}
       </p>
       <h4 className="mt-1 text-base font-semibold">
@@ -236,7 +236,7 @@ function AxisDetail({ axis, i }: { axis: "row" | "col"; i: number }) {
   const o = axis === "row" ? ROWS[i] : COLS[i];
   return (
     <div className="text-sm">
-      <p className="text-primary eyebrow">
+      <p className="text-brand-ink eyebrow">
         {axis === "row" ? C.rowAxisTag : C.colAxisTag}
       </p>
       <h4 className="mt-1 text-base font-semibold">{o.name}</h4>

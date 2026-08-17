@@ -82,7 +82,7 @@ export function VerificationProblem(_: VerificationWidgetProps) {
               <span className="text-muted-foreground mt-1.5 block leading-relaxed">
                 {option.summary}
               </span>
-              <span className="text-primary mt-4 block text-xs font-medium">
+              <span className="text-brand-ink mt-4 block text-xs font-medium">
                 Test this answer →
               </span>
             </button>

@@ -61,7 +61,7 @@ export function WhatDoTheySay() {
             <p className="text-muted-foreground mt-3 text-xs leading-relaxed">
               {f.teaser}
             </p>
-            <span className="text-primary mt-3 inline-flex items-center gap-1 text-xs font-medium">
+            <span className="text-brand-ink mt-3 inline-flex items-center gap-1 text-xs font-medium">
               {C.viewProfile.replace(" →", "")}
               <ArrowRight
                 className="size-3 transition-transform group-hover:translate-x-0.5"
@@ -109,7 +109,7 @@ export function WhatDoTheySay() {
                     <p
                       className={cn(
                         "eyebrow",
-                        s.matters ? "text-primary" : "text-muted-foreground",
+                        s.matters ? "text-brand-ink" : "text-muted-foreground",
                       )}
                     >
                       {s.label}
@@ -135,7 +135,7 @@ export function WhatDoTheySay() {
                         href={src.href}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="text-primary text-xs underline underline-offset-2 hover:no-underline focus-visible:ring-2 focus-visible:ring-[var(--ring)] focus-visible:outline-none"
+                        className="text-brand-ink text-xs underline underline-offset-2 hover:no-underline focus-visible:ring-2 focus-visible:ring-[var(--ring)] focus-visible:outline-none"
                       >
                         {src.label}
                       </a>

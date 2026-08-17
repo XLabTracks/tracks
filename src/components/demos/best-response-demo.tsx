@@ -172,7 +172,7 @@ export function BestResponseDemo() {
           {/* heatmap — decorative; the SVG below carries the figure's label */}
           <canvas
             ref={canvasRef}
-            className="text-primary absolute"
+            className="text-brand-ink absolute"
             style={PLOT_BOX}
             aria-hidden="true"
           />

@@ -125,7 +125,7 @@ export function SameClaim({
         <p className="text-base leading-relaxed font-medium">{CLAIM_INTRO}</p>
         <div className="space-y-2">
           <p className="text-sm leading-relaxed">{CLAIM_TASK_LEAD}</p>
-          <ol className="marker:text-primary marker:font-medium list-decimal space-y-1 pl-6 text-sm leading-relaxed">
+          <ol className="marker:text-brand-ink marker:font-medium list-decimal space-y-1 pl-6 text-sm leading-relaxed">
             {CLAIM_TASKS.map((task) => (
               <li key={task}>{task}</li>
             ))}

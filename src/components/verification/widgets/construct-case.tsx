@@ -62,7 +62,7 @@ export function ConstructCase({
             Give one example of a situation in which all three conditions are
             satisfied:
           </p>
-          <ol className="marker:text-primary marker:font-medium list-decimal space-y-2 pl-6 text-sm leading-relaxed">
+          <ol className="marker:text-brand-ink marker:font-medium list-decimal space-y-2 pl-6 text-sm leading-relaxed">
             {CASE_CONDITIONS.map((condition) => (
               <li key={condition}>{condition}</li>
             ))}

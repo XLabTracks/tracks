@@ -448,7 +448,7 @@ function DrawerBody({
             type="button"
             onClick={onPrev}
             disabled={!hasPrev}
-            className="text-primary hover:text-foreground text-4xs tracking-[0.12em] uppercase disabled:cursor-default disabled:opacity-40"
+            className="text-brand-ink hover:text-foreground text-4xs tracking-[0.12em] uppercase disabled:cursor-default disabled:opacity-40"
           >
             {PROTOCOL_ACTORS_COPY.prevBtn}
           </button>
@@ -456,7 +456,7 @@ function DrawerBody({
             type="button"
             onClick={onNext}
             disabled={!hasNext}
-            className="text-primary hover:text-foreground text-4xs tracking-[0.12em] uppercase disabled:cursor-default disabled:opacity-40"
+            className="text-brand-ink hover:text-foreground text-4xs tracking-[0.12em] uppercase disabled:cursor-default disabled:opacity-40"
           >
             {PROTOCOL_ACTORS_COPY.nextBtn}
           </button>
@@ -483,7 +483,7 @@ function LearnBody({ id }: { id: string }) {
             <p
               className={cn(
                 "text-4xs tracking-[0.18em] uppercase",
-                isWhy ? "text-primary" : "text-muted-foreground",
+                isWhy ? "text-brand-ink" : "text-muted-foreground",
               )}
             >
               {label}
@@ -643,7 +643,7 @@ function QuizBody({
             {verdict?.right} / {verdict?.total} calls right
           </p>
           <div className="border-border bg-muted/40 rounded-lg border p-3.5">
-            <p className="text-primary text-4xs tracking-[0.18em] uppercase">
+            <p className="text-brand-ink text-4xs tracking-[0.18em] uppercase">
               {PROTOCOL_ACTORS_COPY.whyLabel}
             </p>
             <p className="mt-1 text-sm leading-relaxed">{quiz.why}</p>

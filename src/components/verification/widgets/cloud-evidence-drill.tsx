@@ -248,7 +248,7 @@ function ProgressRail({
               onClick={() => onSelect(index)}
               className={cn(
                 "border-border focus-visible:ring-ring flex min-h-9 w-full items-center justify-center rounded-md border text-xs transition-colors hover:border-foreground/35 hover:bg-muted/45 focus-visible:ring-2 focus-visible:outline-none",
-                active && "border-primary bg-primary/5 text-primary",
+                active && "border-primary bg-primary/5 text-brand-ink",
                 done && !active && "bg-muted text-foreground",
                 !active && !done && "text-muted-foreground"
               )}
@@ -315,7 +315,7 @@ function TrueFalseTask({ onSolved }: SolveProps) {
                     className={cn(
                       "border-border hover:border-foreground/35 focus-within:ring-ring relative flex min-h-8 min-w-14 cursor-pointer items-center justify-center rounded-md border px-2 py-1 text-center text-sm transition-colors focus-within:ring-2 focus-within:outline-none",
                       answers[item.id] === answer &&
-                        "border-primary bg-primary/5 text-primary"
+                        "border-primary bg-primary/5 text-brand-ink"
                     )}
                   >
                     <input
@@ -890,7 +890,7 @@ function SequenceDragPreview({
 }) {
   return (
     <div className="border-primary/55 bg-card flex max-w-[min(760px,calc(100vw-32px))] items-center gap-2 rounded-lg border p-2 shadow-xl">
-      <span className="text-primary flex size-11 shrink-0 items-center justify-center">
+      <span className="text-brand-ink flex size-11 shrink-0 items-center justify-center">
         <GripVertical className="size-5" aria-hidden />
       </span>
       <span className="text-muted-foreground flex size-7 shrink-0 items-center justify-center rounded-full border">
@@ -1216,7 +1216,7 @@ function CheckRow({
                 {correct}
               </p>
               <details className="mt-1.5 text-xs">
-                <summary className="text-primary cursor-pointer font-medium">
+                <summary className="text-brand-ink cursor-pointer font-medium">
                   Sources ({sources.length})
                 </summary>
                 <ul className="mt-1.5 flex flex-wrap gap-x-3 gap-y-1">
@@ -1226,7 +1226,7 @@ function CheckRow({
                         href={source.href}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="text-primary inline-flex items-start gap-1 font-medium underline-offset-4 hover:underline"
+                        className="text-brand-ink inline-flex items-start gap-1 font-medium underline-offset-4 hover:underline"
                       >
                         <span>{source.label}</span>
                         <ExternalLink
@@ -1249,7 +1249,7 @@ function CheckRow({
         >
           <p className="text-destructive min-w-0 leading-snug">{wrong}</p>
           <details className="shrink-0 text-xs">
-            <summary className="text-primary cursor-pointer font-medium">
+            <summary className="text-brand-ink cursor-pointer font-medium">
               Sources ({sources.length})
             </summary>
             <ul className="mt-1.5 space-y-1">
@@ -1259,7 +1259,7 @@ function CheckRow({
                     href={source.href}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-primary inline-flex items-start gap-1 font-medium underline-offset-4 hover:underline"
+                    className="text-brand-ink inline-flex items-start gap-1 font-medium underline-offset-4 hover:underline"
                   >
                     <span>{source.label}</span>
                     <ExternalLink

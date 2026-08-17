@@ -136,7 +136,7 @@ export function StandardOfProof({
         <p className="text-base leading-relaxed font-medium">{PROOF_INTRO}</p>
         <div className="space-y-2">
           <p className="text-sm leading-relaxed">{PROOF_TASK_LEAD}</p>
-          <ol className="marker:text-primary marker:font-medium list-decimal space-y-1 pl-6 text-sm leading-relaxed">
+          <ol className="marker:text-brand-ink marker:font-medium list-decimal space-y-1 pl-6 text-sm leading-relaxed">
             {PROOF_TASKS.map((task) => (
               <li key={task}>{task}</li>
             ))}

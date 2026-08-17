@@ -69,7 +69,7 @@ const AUTHORED =
   "[&_p]:mt-2.5 [&_p:first-child]:mt-0 [&_p]:text-sm [&_p]:leading-relaxed " +
   "[&_strong]:font-semibold [&_strong]:text-foreground " +
   "[&_em]:italic " +
-  "[&_a]:text-primary [&_a]:underline [&_a]:underline-offset-2 hover:[&_a]:text-primary/80 " +
+  "[&_a]:text-brand-ink [&_a]:underline [&_a]:underline-offset-2 hover:[&_a]:text-brand-ink/80 " +
   "[&_ol]:mt-2.5 [&_ol]:list-decimal [&_ol]:space-y-1.5 [&_ol]:pl-5 [&_ol]:text-sm " +
   "[&_ul]:mt-2.5 [&_ul]:list-disc [&_ul]:space-y-1.5 [&_ul]:pl-5 [&_ul]:text-sm " +
   "[&_li]:leading-relaxed " +
@@ -77,7 +77,7 @@ const AUTHORED =
   "[&_.say]:mt-2.5 [&_.say]:block [&_.say]:rounded-lg [&_.say]:border [&_.say]:border-border " +
   "[&_.say]:bg-muted/50 [&_.say]:px-3.5 [&_.say]:py-2.5 [&_.say]:text-sm [&_.say]:italic " +
   // .mt — a small mono "medium" tag (Sync / Async / In person / On Zoom)
-  "[&_.mt]:mr-1 [&_.mt]:text-3xs [&_.mt]:font-semibold [&_.mt]:tracking-[0.08em] [&_.mt]:uppercase [&_.mt]:text-primary " +
+  "[&_.mt]:mr-1 [&_.mt]:text-3xs [&_.mt]:font-semibold [&_.mt]:tracking-[0.08em] [&_.mt]:uppercase [&_.mt]:text-brand-ink " +
   // p.mt — a recipe subtitle line
   "[&_p.mt]:mt-0 [&_p.mt]:mb-1";
 
@@ -333,7 +333,7 @@ function Lifecycle({
           onClick={() => onPop(s.pop)}
           className="border-border bg-card hover:border-primary shadow-soft rounded-lg border p-3 text-left transition-colors"
         >
-          <span className="text-primary text-3xs font-bold tracking-[0.08em]">
+          <span className="text-brand-ink text-3xs font-bold tracking-[0.08em]">
             {s.num}
           </span>
           <h4 className="mt-1 text-sm font-semibold">{s.title}</h4>
@@ -359,14 +359,14 @@ function ResourceGrid({ boxes }: { boxes: ResBox[] }) {
     <div className="my-4 grid gap-3 sm:grid-cols-2">
       {boxes.map((box) => (
         <div key={box.heading} className="border-border bg-card rounded-xl border p-4">
-          <h4 className="text-primary eyebrow font-bold">
+          <h4 className="text-brand-ink eyebrow font-bold">
             {box.heading}
           </h4>
           <ul className="mt-2.5 space-y-2.5">
             {box.items.map((it, i) => (
               <li
                 key={i}
-                className="text-sm leading-snug [&_a]:text-primary [&_a]:underline [&_a]:underline-offset-2 hover:[&_a]:text-primary/80 [&_small]:text-muted-foreground [&_small]:mt-0.5 [&_small]:block [&_small]:text-2xs"
+                className="text-sm leading-snug [&_a]:text-brand-ink [&_a]:underline [&_a]:underline-offset-2 hover:[&_a]:text-brand-ink/80 [&_small]:text-muted-foreground [&_small]:mt-0.5 [&_small]:block [&_small]:text-2xs"
                 dangerouslySetInnerHTML={{ __html: it.html }}
               />
             ))}
@@ -487,7 +487,7 @@ function ModuleGrid({
           <p className="text-muted-foreground mt-1.5 text-[13.5px] leading-snug">
             {c.desc}
           </p>
-          <span className="text-primary mt-2.5 block eyebrow font-semibold">
+          <span className="text-brand-ink mt-2.5 block eyebrow font-semibold">
             {c.meta}
           </span>
         </button>
@@ -641,7 +641,7 @@ function SorterCard({ item }: { item: SorterItem }) {
       {done && (
         <p
           aria-live="polite"
-          className="text-muted-foreground mt-2 text-[13.5px] leading-relaxed [&_.move]:text-primary [&_.move]:italic [&_em]:italic [&_strong]:text-foreground [&_strong]:font-semibold"
+          className="text-muted-foreground mt-2 text-[13.5px] leading-relaxed [&_.move]:text-brand-ink [&_.move]:italic [&_em]:italic [&_strong]:text-foreground [&_strong]:font-semibold"
           dangerouslySetInnerHTML={{ __html: item.verdictHtml }}
         />
       )}

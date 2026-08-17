@@ -141,7 +141,7 @@ export function SameClaim({
           <section
             key={variant.id}
             className={cn(
-              "border-border bg-card rounded-xl border p-4",
+              "panel",
               writingCardFocus
             )}
           >
@@ -207,7 +207,7 @@ export function SameClaim({
 
       {saved.submitted ? (
         <div className="space-y-4">
-          <section className="border-border rounded-xl border p-4">
+          <section className="panel">
             <h4 className="text-muted-foreground eyebrow">
               After submission
             </h4>
@@ -233,7 +233,7 @@ export function SameClaim({
 
           <section
             className={cn(
-              "border-border rounded-xl border p-4",
+              "panel",
               writingCardFocus
             )}
           >
@@ -262,7 +262,7 @@ export function SameClaim({
 
           <section
             className={cn(
-              "border-border rounded-xl border p-4",
+              "panel",
               writingCardFocus
             )}
           >

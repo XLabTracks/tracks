@@ -622,7 +622,7 @@
 
 /* Focus has to be findable, not merely present. */
 :root[data-theme="contrast"]
-  :where(button, a, input, textarea, [tabindex]):focus-visible {
+  :where(button, a, input, select, textarea, summary, [tabindex]):focus-visible {
   outline: 4px solid var(--ring);
   outline-offset: 3px;
 }
@@ -660,7 +660,7 @@ button,
   -webkit-touch-callout: none;
 }
 
-:where(button, a, input, textarea, [tabindex]):focus-visible {
+:where(button, a, input, select, textarea, summary, [tabindex]):focus-visible {
   outline: 2px solid var(--ring);
   outline-offset: 2px;
 }

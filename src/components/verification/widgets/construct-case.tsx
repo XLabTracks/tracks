@@ -82,7 +82,7 @@ export function ConstructCase({
             keyData={CONSTRUCT_CASE_KEY}
           />
 
-          <section className="border-border rounded-xl border p-4">
+          <section className="panel">
             <h4 className="text-muted-foreground eyebrow">
               Check your case
             </h4>
@@ -98,7 +98,7 @@ export function ConstructCase({
             </ul>
           </section>
 
-          <section className="border-border rounded-xl border p-4">
+          <section className="panel">
             <h4 className="text-muted-foreground eyebrow">
               Where a report can die
             </h4>
@@ -141,7 +141,7 @@ export function ConstructCase({
             {WORKED_CASES.map((worked) => (
               <article
                 key={worked.id}
-                className="border-border bg-card rounded-xl border p-4"
+                className="panel"
               >
                 <p className="text-sm font-semibold">{worked.kicker}</p>
                 <dl className="mt-3 space-y-2 text-sm leading-relaxed">

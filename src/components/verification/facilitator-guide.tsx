@@ -358,7 +358,7 @@ function ResourceGrid({ boxes }: { boxes: ResBox[] }) {
   return (
     <div className="my-4 grid gap-3 sm:grid-cols-2">
       {boxes.map((box) => (
-        <div key={box.heading} className="border-border bg-card rounded-xl border p-4">
+        <div key={box.heading} className="panel">
           <h4 className="text-brand-ink eyebrow font-bold">
             {box.heading}
           </h4>

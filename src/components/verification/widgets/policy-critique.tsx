@@ -129,7 +129,7 @@ export function PolicyCritique({
       <p className="text-sm leading-relaxed">{POLICY_BRIDGE}</p>
 
       {/* The policy, unmarked. Nothing here says which is which. */}
-      <section className="border-border bg-card rounded-xl border p-4">
+      <section className="panel">
         <h4 className="text-sm font-semibold">{POLICY_TITLE}</h4>
         <ul className="mt-3 space-y-2">
           {POLICY_PROVISIONS.map((provision) => {
@@ -177,7 +177,7 @@ export function PolicyCritique({
             <li
               key={slot.id}
               className={cn(
-                "border-border bg-card rounded-xl border p-4",
+                "panel",
                 writingCardFocus,
                 isActive && "border-primary"
               )}
@@ -254,7 +254,7 @@ export function PolicyCritique({
 
       {saved.submitted ? (
         <div className="space-y-4">
-          <section className="border-border rounded-xl border p-4">
+          <section className="panel">
             {POLICY_REVEAL.map((line, i) => (
               <p
                 key={line}

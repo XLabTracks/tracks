@@ -84,7 +84,7 @@ export function PolicyPlot(_: VerificationWidgetProps) {
   };
 
   return (
-    <section className="not-prose border-border bg-card rounded-xl border p-5 text-sm">
+    <section className="not-prose panel text-sm">
       <div className="mb-4 flex flex-wrap items-center gap-3">
         <label className="text-muted-foreground flex cursor-pointer items-center gap-2 text-xs select-none">
           <Switch checked={verified} onCheckedChange={setVerified} />

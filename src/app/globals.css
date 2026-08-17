@@ -124,6 +124,34 @@
    the class name, so `eyebrow` has to be named in that rule too. A size that
    the floor cannot see is a label that shrinks below the floor on this course
    only, which is invisible from here. */
+/* The house card: a hairline on all four sides, the card ground, and nothing
+   else. It is `panel` and not `card` because the Verification stylesheets
+   already own a `.card` and both files are loaded on those routes.
+
+   One name because there were four, and the four encoded nothing. Measured on
+   three lesson pages: 11 cards painted no ground, 12 carried a shadow, and
+   neither split lined up with nesting or with anything else — a card inside a
+   card was as likely to have a ground as one on the page. That is drift, so
+   this picks the majority of each: a ground (19 of 30), no shadow (18 of 30),
+   p-4 (38 of 53 in source).
+
+   No shadow, deliberately. The soft shadows are a lift, and a lift says a
+   thing floats above the page — a dialog, a popover, a menu. A card sitting
+   in the reading flow does not float, and giving it a shadow spends the one
+   signal that says something does.
+
+   Nested cards are the case to watch rather than to forbid: the ground is the
+   same token as its parent's, so two panels in a row read as one surface
+   unless the inner one is doing something else — an inset, a tint, its own
+   header rule. If you find yourself reaching for a second ground, the answer
+   is usually that the inner box should not be a card. */
+@utility panel {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-xl);
+  background-color: var(--color-card);
+  padding: --spacing(4);
+}
+
 @utility eyebrow {
   font-size: var(--text-3xs);
   line-height: var(--text-3xs--line-height);

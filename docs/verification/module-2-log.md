@@ -1249,3 +1249,29 @@ five disabled until all five are answered, and on submission twenty options
 frozen, five verdicts, five source lines, the total, and Start over. Answering
 all five correctly reads 5 of 5. The correct options sit in slots B D D D C —
 the shuffle is doing its job on a deck whose answers were authored a, c, b, c, b.
+
+### 2.4.4 gets its optional closer: The Standard of Proof (2026-08-15)
+
+Her brief: one optional 15-minute exercise closing all four 2.4.4
+objectives. The design, agreed in-session, is a 2×2 the learner is never
+shown — evidence weight × institutional soundness — read off four dockets
+under one sticky allegation (Meridian Compute, fictional, deliberately not
+Cedar). Per docket: a next-move selection (record / investigate / judge /
+refer — never marked) and one analysis box; Submit gated on all four;
+freeze; reveal names the grid, then the self-check pair, the per-docket
+marking key, the 50-word standard question and the optional transfer.
+
+The division of labour with the section's reading is the point of the
+design: her audit question ("проверь что вот это закрывает") established
+that Brundage et al. carries independence, access, competence and the
+financial/revolving-door capture guards, but not authority, not the
+human-vs-technical distinction, and not the decision operation — so
+dockets C and D are built as violations of exactly Brundage's Access and
+Independent Experts principles (the key names them), while A and B carry
+corroboration and the authority line, and the moves menu is the decision
+standard itself.
+
+Dockets, key and closing questions are OURS PENDING HER COPY, flagged in
+the data file header. Registered unbridged (optional never gates);
+embedded at the tail of human-institutions behind a
+"Optional Exercise: The Standard of Proof (15 minutes)" fold.

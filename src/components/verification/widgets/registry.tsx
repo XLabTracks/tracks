@@ -165,6 +165,10 @@ const CloudEvidenceDrill = dynamic<VerificationWidgetProps>(
     ),
   { loading: WidgetLoading },
 );
+const StandardOfProof = dynamic<VerificationWidgetProps>(
+  () => import("./standard-of-proof").then((module) => module.StandardOfProof),
+  { loading: WidgetLoading },
+);
 
 /**
  * Native React widgets ported from the standalone HTML pages, keyed by the same
@@ -208,6 +212,7 @@ export const verificationWidgets: Record<
   "human-audits-inspections": SameClaim,
   "human-institutions-judgment": PolicyOnPaper,
   "cloud-evidence-drill": CloudEvidenceDrill,
+  "standard-of-proof": StandardOfProof,
 };
 
 export function getVerificationWidget(

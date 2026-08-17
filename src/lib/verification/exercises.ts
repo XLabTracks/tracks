@@ -80,6 +80,9 @@ export const verificationExercises: VerificationExerciseDef[] = [
   { id: "whistleblower-levers", title: "Four Levers, One Each", bridged: false },
   { id: "human-audits-inspections", title: "Four Sources", bridged: false },
   { id: "human-institutions-judgment", title: "Companies A and B", bridged: true },
+  // 2.4.4's optional closer, per the owner's brief: one 15-minute exercise
+  // over all four of the section's objectives. Optional, so unbridged.
+  { id: "standard-of-proof", title: "The Standard of Proof", bridged: false },
   // Stood down 2026-08-14, widgets and data kept: report-access ("One Report,
   // Four Ways"), whose controlled variation became 2.4.3 itself; and the
   // generic companies-ab, whose comparison 2.4.4 now runs on two real

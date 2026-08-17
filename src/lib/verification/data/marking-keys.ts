@@ -205,3 +205,48 @@ export const COMPANIES_AB_KEY: MarkingKey = {
     "Concluding from the letter that the companies had no protections, or that the signatories' safety concerns were correct.",
   ],
 };
+
+/**
+ * 2.4.4 — The Standard of Proof. Ours, pending the owner's copy, like the
+ * dockets (see standard-of-proof.ts). Each criterion is one docket; the
+ * grounds tie C and D to the Brundage et al. principles the section's
+ * reading told the learner to record.
+ */
+export const STANDARD_OF_PROOF_KEY: MarkingKey = {
+  criteria: [
+    {
+      text: "A: the move stops at collection or investigation, and the reason is what one report can carry — not the source’s sincerity.",
+      points: 2,
+      needsReasoning: true,
+      grounds:
+        "One protected, consistent human report licenses doing something and establishes nothing alone. What is missing is anything independent of one person’s account — the human evidence has no technical record to gain weight from yet.",
+    },
+    {
+      text: "B: the move rises with corroboration, and the refusal is weighed as conduct, not as proof.",
+      points: 2,
+      needsReasoning: true,
+      grounds:
+        "Customs records and telemetry are independent technical evidence converging with the human report — that convergence is how human evidence gains weight. A declined inspection aggravates; it does not convert suspicion into a finding. A compliance judgment is defensible here; enforcement is a referral, because enforcement is not the verifier’s own power — that is the authority line.",
+    },
+    {
+      text: "C: the defect is named as access, not as evidence weight — informational capture.",
+      points: 2,
+      needsReasoning: true,
+      grounds:
+        "Everything the institution sees was chosen by the audited party: Brundage et al.’s Access principle frustrated. The move is to secure independent access — the working papers, a challenge inspection — not to judge either way on a channelled docket, and not to treat the audit’s conclusion as false because its channel is bad.",
+    },
+    {
+      text: "D: the evidence is conceded and the institution is disqualified — financial capture, independence.",
+      points: 2,
+      needsReasoning: true,
+      grounds:
+        "The docket would carry a judgment; this panel cannot defensibly issue it. Funding through the audited party’s association is the financial form of capture; members on leave from its suppliers is the revolving-door, cultural form — the pair Brundage et al.’s Independent Experts principle exists to block (disclosure, no auditor-shopping, cooling-off periods). Political capture is the same failure arriving through state pressure. The repair is recusal or reconstitution, not more evidence.",
+    },
+  ],
+  noCredit: [
+    "Ranking the dockets from weakest to strongest. The task is a move per docket, defended.",
+    "Treating docket D’s panel defect as a reason to doubt docket D’s evidence.",
+    "A move justified by the seriousness of the allegation rather than by what the docket establishes.",
+    "Naming a capture form without saying which fact in the docket is the capture.",
+  ],
+};

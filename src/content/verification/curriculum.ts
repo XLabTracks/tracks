@@ -492,7 +492,7 @@ export const verificationLessons: Lesson[] = [
     moduleId: "v-scoping",
     sectionItemId: "v-scoping-actors",
     title: "1.2.1 Geographic supply-chain map",
-    contentRef: "v-interactive-map",
+    contentRef: "verification/interactive-map",
     estimatedMinutes: 15,
   },
   {
@@ -501,7 +501,7 @@ export const verificationLessons: Lesson[] = [
     moduleId: "v-scoping",
     sectionItemId: "v-scoping-actors",
     title: "1.2.2 Context-specific report constructor",
-    contentRef: "v-report-constructor",
+    contentRef: "verification/report-constructor",
     estimatedMinutes: 15,
   },
   // 2.3 Intelligence. The five readings existed but sat flat and unnested, and

@@ -754,8 +754,12 @@ export const DOC: DocArticle[] = [
 
 /** Static copy for the widget shell. */
 export const PROTOCOL_ACTORS_COPY = {
+  // The opening two sentences of this run moved into the lesson body, which
+  // is where the frame belongs; what stays is the instruction for the thing
+  // being clicked. Between them the authored wording is unchanged — 1.2's
+  // first screen was printing it twice.
   subLearn:
-    "You dissected this agreement in 1.1 as text. Read it again with a different question: every phrase below points at someone — a government, a company, a bureaucracy, an inspector. Click each highlighted phrase to meet the actors behind it. This is the cast Module 1 puts under the microscope.",
+    "Every phrase below points at someone — a government, a company, a bureaucracy, an inspector. Click each highlighted phrase to meet the actors behind it. This is the cast Module 1 puts under the microscope.",
   subQuiz:
     "Same agreement, no answers given. Click each highlighted phrase and pick which real-world actors it puts in the room — who owns it, who runs it, who has done this before. Several answers per phrase; distractors included. If you want the guided tour first, switch to mode 1.",
   tabLearn: "1 · Meet the actors",

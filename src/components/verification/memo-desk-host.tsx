@@ -21,7 +21,7 @@ import { LegacyScripts } from "@/components/verification/legacy-scripts";
  *
  * `hash: true` (the default) is deliberate and is what makes the "Draft it on
  * the memo desk" links land on their slot: this desk owns the URL fragment.
- * The inline desks module.js mounts inside a unit pass `hash: false`.
+ * A desk mounted inline inside a unit passes `hash: false`.
  */
 
 type MemoDeskApi = {

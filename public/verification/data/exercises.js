@@ -1,4 +1,4 @@
-/* Exercise definitions. The engine in exercise.js renders these; a new
+/* Exercise definitions, read by the capstone page; a new
    exercise is a new object here plus an `exercise:` id on a unit.
 
    Honesty contract, and the reason several of these are ungraded:

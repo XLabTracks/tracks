@@ -209,9 +209,3 @@ export const verificationWidgets: Record<
   "human-institutions-judgment": PolicyOnPaper,
   "cloud-evidence-drill": CloudEvidenceDrill,
 };
-
-export function getVerificationWidget(
-  id: string,
-): ComponentType<VerificationWidgetProps> | undefined {
-  return verificationWidgets[id];
-}

@@ -1,9 +1,10 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useMemo } from "react";
 import { CircleAlert, CircleCheck } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
+import { useStoredState } from "../kit/use-stored-state";
 import { shuffleAnswerOptions } from "@/lib/shuffle";
 import { splitEmphasis } from "@/lib/verification/emphasis";
 import { cn } from "@/lib/utils";
@@ -98,8 +99,7 @@ function prune(raw: unknown): Saved {
 // exercise that quietly starts reporting a section finished. Same shape as
 // whistleblower-levers next door.
 export function PolicyQuickCheck({}: VerificationWidgetProps) {
-  const [saved, setSaved] = useState<Saved>(EMPTY);
-  const [hydrated, setHydrated] = useState(false);
+  const [saved, persist, hydrated] = useStoredState(STORAGE_KEY, EMPTY, prune);
 
   // Seeded on the question id, so this is the same list on the server, on the
   // client, and on the learner's next visit. useMemo is for the work, not for
@@ -116,41 +116,6 @@ export function PolicyQuickCheck({}: VerificationWidgetProps) {
       })),
     [],
   );
-
-  useEffect(() => {
-    let restored = EMPTY;
-    try {
-      const raw = localStorage.getItem(STORAGE_KEY);
-      if (raw) restored = prune(JSON.parse(raw));
-    } catch {
-      /* unreadable storage just means starting fresh */
-    }
-    queueMicrotask(() => {
-      setSaved(restored);
-      setHydrated(true);
-    });
-  }, []);
-
-  /**
-   * Takes an updater, not a value.
-   *
-   * It used to take the next state, built by spreading the `saved` of the
-   * render the handler was created in. Two picks landing in one tick therefore
-   * both read the same snapshot and the second dropped the first — which
-   * ordinary clicking never does, because a re-render sits between them, but a
-   * fast keyboard pass or a double event does.
-   */
-  const persist = useCallback((update: (prev: Saved) => Saved) => {
-    setSaved((prev) => {
-      const next = update(prev);
-      try {
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(next));
-      } catch {
-        /* private mode / full quota */
-      }
-      return next;
-    });
-  }, []);
 
   if (!hydrated) return <div className="not-prose my-6 min-h-64" aria-busy />;
 

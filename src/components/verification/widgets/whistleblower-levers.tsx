@@ -1,11 +1,12 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useState } from "react";
 import { CircleAlert, CircleCheck, RotateCcw } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { shuffleAnswerOptions } from "@/lib/shuffle";
 import { cn } from "@/lib/utils";
+import { useStoredState } from "../kit/use-stored-state";
 import {
   LEVERS_LEAD,
   WHISTLEBLOWER_LEVERS as LEVERS,
@@ -40,6 +41,7 @@ import type { VerificationWidgetProps } from "../kit/types";
 type Placed = Record<string, string>;
 
 const STORAGE_KEY = "v-whistleblower-levers:v1";
+const EMPTY: Placed = {};
 const ids = new Set(LEVERS.map((l) => l.id));
 
 function prune(raw: unknown): Placed {
@@ -57,33 +59,14 @@ function prune(raw: unknown): Placed {
 // finish would claim the section had ended. The signature stays because the
 // registry types every widget the same way.
 export function WhistleblowerLevers({}: VerificationWidgetProps) {
-  const [placed, setPlaced] = useState<Placed>({});
   const [committed, setCommitted] = useState(false);
-  const [hydrated, setHydrated] = useState(false);
-
-  useEffect(() => {
-    let restored: Placed = {};
-    try {
-      const raw = localStorage.getItem(STORAGE_KEY);
-      if (raw) restored = prune(JSON.parse(raw));
-    } catch {
-      /* unreadable storage just means starting fresh */
-    }
-    queueMicrotask(() => {
-      setPlaced(restored);
-      setCommitted(Object.keys(restored).length === LEVERS.length);
-      setHydrated(true);
-    });
-  }, []);
-
-  const persist = useCallback((next: Placed) => {
-    setPlaced(next);
-    try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(next));
-    } catch {
-      /* private mode / full quota — progress is a convenience, not the record */
-    }
-  }, []);
+  const [placed, persist, hydrated] = useStoredState<Placed>(
+    STORAGE_KEY,
+    EMPTY,
+    prune,
+    // A fully placed board comes back committed, the way it was left.
+    (restored) => setCommitted(Object.keys(restored).length === LEVERS.length),
+  );
 
   /* Assigning an effect that already sits on another row moves it here. The
      alternative — refusing the click — makes the learner undo before they can

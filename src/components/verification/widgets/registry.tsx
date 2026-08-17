@@ -169,6 +169,10 @@ const StandardOfProof = dynamic<VerificationWidgetProps>(
   () => import("./standard-of-proof").then((module) => module.StandardOfProof),
   { loading: WidgetLoading },
 );
+const MissingBoard = dynamic<VerificationWidgetProps>(
+  () => import("./missing-board").then((module) => module.MissingBoard),
+  { loading: WidgetLoading },
+);
 
 /**
  * Native React widgets ported from the standalone HTML pages, keyed by the same
@@ -213,4 +217,5 @@ export const verificationWidgets: Record<
   "human-institutions-judgment": PolicyOnPaper,
   "cloud-evidence-drill": CloudEvidenceDrill,
   "standard-of-proof": StandardOfProof,
+  "missing-board": MissingBoard,
 };

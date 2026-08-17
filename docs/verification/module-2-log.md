@@ -1332,3 +1332,18 @@ five-case table separate a breach from a noncompliance finding. Cut for
 The card blurb is ours; the source-packet heading is 12–16 min now, and
 the Standard of Proof data header records the three-way division of
 labour between the two readings and the dockets.
+
+### The Missing Board: Carlson's reflection questions become an interactive (2026-08-15)
+
+Her brief, verbatim intent: reflection questions on the new Carlson
+reading — "перенесите на ии, подумайте, проведите аналогии" — tried as an
+interactive first, and billed into the lesson budget. The construction:
+Carlson's decision chain as four stations (finder / judge / enforcer /
+the standard), each shown with the nuclear regime's answer from the
+reading and a write-in transfer prompt for AI; a fifth box names where
+the analogy strains; Submit freezes and opens per-station commentary
+(never a marking) and a 50-word closing question binding the board to a
+consistency guideline. Required reading-work: outside any fold, its own
+h2 and part, unbridged (reflection, not a finish event). The lesson's
+estimate rises 15 → 25. Prompts and commentary are OURS PENDING HER
+COPY, flagged in the data file header.

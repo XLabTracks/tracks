@@ -275,11 +275,12 @@ export const verificationLessons: Lesson[] = [
     sectionItemId: "v-human-intro",
     title: "2.4.4 Institutions and policy judgment",
     contentRef: "verification/human-institutions",
-    // The framing paragraph and the two required readings (6–8 min each —
-    // Brundage's principles, Carlson's noncompliance decision). The Standard
-    // of Proof closer is optional, and optional labs bill no minutes here —
-    // the track-wide estimate convention.
-    estimatedMinutes: 15,
+    // The framing paragraph, the two required readings (6–8 min each —
+    // Brundage's principles, Carlson's noncompliance decision) and The
+    // Missing Board transfer interactive (8–10 min, required per the owner:
+    // "мы увеличиваем бюджет урока"). The Standard of Proof closer is
+    // optional and, per the track-wide convention, bills nothing.
+    estimatedMinutes: 25,
   },
   {
     id: "v-covert-system-overview",

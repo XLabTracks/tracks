@@ -88,7 +88,7 @@ export function Spoiler({
                 rather than translucent for the same reason the field has no
                 ground of its own — dots showing through the one thing here
                 that is meant to be read is not texture, it is noise. */}
-            <span className="text-muted-foreground bg-card relative z-10 rounded-full px-3 py-1 font-mono text-[11px] tracking-[0.14em] uppercase">
+            <span className="text-muted-foreground bg-card relative z-10 rounded-full px-3 py-1 text-[11px] tracking-[0.14em] uppercase">
               Press to uncover
             </span>
           </button>

@@ -269,7 +269,7 @@
   border-radius: var(--radius-sm);
   background: var(--background);
   color: var(--foreground);
-  font-family: var(--mono);
+  font-family: var(--label);
   font-size: var(--fs-xs);
   text-align: center;
 }
@@ -378,7 +378,7 @@
 
 .nb-skill-mod { margin-top: 22px; }
 .nb-skill-modname {
-  font-family: var(--mono);
+  font-family: var(--label);
   font-size: var(--fs-2xs);
   letter-spacing: .06em;
   text-transform: uppercase;
@@ -403,7 +403,7 @@
 .nb-skill-bar i { display: block; height: 100%; background: var(--mod, var(--primary)); }
 .nb-skill-frac {
   flex: 0 0 auto;
-  font-family: var(--mono);
+  font-family: var(--label);
   font-size: var(--fs-xs);
   color: var(--muted-foreground);
   white-space: nowrap;

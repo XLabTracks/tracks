@@ -23,6 +23,7 @@ import { CLAIM_DECK } from "@/lib/verification/data/steelman-decks";
 import { SteelmanDeck } from "../kit/steelman-deck";
 import { MarkingKeyPanel } from "../kit/marking-key";
 import type { VerificationWidgetProps } from "../kit/types";
+import { writingArea, writingCardFocus } from "../kit/writing-surface";
 
 /**
  * 2.4.3 — Four Sources, to the owner's revised spec (2026-08-15; see the
@@ -162,7 +163,10 @@ export function SameClaim({
         {CLAIM_VARIANTS.map((variant) => (
           <section
             key={variant.id}
-            className="border-border bg-card rounded-xl border p-4"
+            className={cn(
+              "border-border bg-card rounded-xl border p-4",
+              writingCardFocus
+            )}
           >
             <p className="text-sm font-semibold">
               {variant.letter} · {variant.label}
@@ -188,10 +192,7 @@ export function SameClaim({
                     answers: { ...saved.answers, [variant.id]: e.target.value },
                   })
                 }
-                className={cn(
-                  "border-border bg-background mt-1 w-full rounded-md border p-2.5 text-sm",
-                  saved.submitted && "opacity-70"
-                )}
+                className={cn(writingArea, saved.submitted && "opacity-70")}
               />
             </div>
           </section>
@@ -253,7 +254,12 @@ export function SameClaim({
             keyData={SAME_CLAIM_KEY}
           />
 
-          <section className="border-border rounded-xl border p-4">
+          <section
+            className={cn(
+              "border-border rounded-xl border p-4",
+              writingCardFocus
+            )}
+          >
             <p className="text-sm font-medium">{CLAIM_COMPARISON}</p>
             <textarea
               rows={3}
@@ -262,7 +268,7 @@ export function SameClaim({
                 persist({ ...saved, comparison: e.target.value })
               }
               aria-label={CLAIM_COMPARISON}
-              className="border-border bg-background mt-2 w-full rounded-md border p-3 text-sm"
+              className={writingArea}
             />
             <p
               className={cn(
@@ -277,14 +283,19 @@ export function SameClaim({
             </p>
           </section>
 
-          <section className="border-border rounded-xl border p-4">
+          <section
+            className={cn(
+              "border-border rounded-xl border p-4",
+              writingCardFocus
+            )}
+          >
             <p className="text-sm font-medium">{CLAIM_TRANSFER}</p>
             <textarea
               rows={3}
               value={saved.transfer}
               onChange={(e) => persist({ ...saved, transfer: e.target.value })}
               aria-label={CLAIM_TRANSFER}
-              className="border-border bg-background mt-2 w-full rounded-md border p-3 text-sm"
+              className={writingArea}
             />
             <p className="text-muted-foreground mt-1 text-xs">Optional.</p>
           </section>

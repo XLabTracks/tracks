@@ -15,13 +15,13 @@ export function SlidingScale({ low, high }: { low: string; high: string }) {
       </div>
       <div className="mt-1.5 grid grid-cols-2 gap-6 text-xs leading-relaxed">
         <div>
-          <p className="text-muted-foreground font-mono text-[11px] tracking-[0.14em] uppercase select-none">
+          <p className="text-muted-foreground text-[11px] tracking-[0.14em] uppercase select-none">
             Low
           </p>
           <p className="text-foreground/80">{low}</p>
         </div>
         <div className="text-right">
-          <p className="text-muted-foreground font-mono text-[11px] tracking-[0.14em] uppercase select-none">
+          <p className="text-muted-foreground text-[11px] tracking-[0.14em] uppercase select-none">
             High
           </p>
           <p className="text-foreground/80">{high}</p>

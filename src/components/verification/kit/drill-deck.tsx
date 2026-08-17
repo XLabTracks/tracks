@@ -212,7 +212,7 @@ function DeckMenu({
                   <span className="flex flex-wrap items-center gap-2">
                     <span className="font-medium">{b.name}</span>
                     {finished ? (
-                      <span className="text-comply inline-flex items-center gap-1 font-mono text-[11px]">
+                      <span className="text-comply inline-flex items-center gap-1 text-[11px]">
                         <CircleCheck className="size-3.5" aria-hidden /> complete
                       </span>
                     ) : null}
@@ -220,7 +220,7 @@ function DeckMenu({
                   <span className="text-muted-foreground mt-1 block text-sm">
                     {b.kicker}
                   </span>
-                  <span className="text-muted-foreground mt-1.5 block font-mono text-[11px] tracking-wide">
+                  <span className="text-muted-foreground mt-1.5 block text-[11px] tracking-wide">
                     {b.time} · {done} / {b.steps.length}
                   </span>
                 </button>
@@ -305,7 +305,7 @@ function StepHeader({
   return (
     <div className="space-y-2">
       <div className="flex flex-wrap items-center justify-between gap-2">
-        <p className="text-muted-foreground font-mono text-[11px] tracking-[0.14em] uppercase">
+        <p className="text-muted-foreground text-[11px] tracking-[0.14em] uppercase">
           {bench.name} · {pos + 1} / {bench.steps.length}
         </p>
         {multiBench ? (
@@ -341,7 +341,7 @@ function StepBrief({ step }: { step: DrillStep }) {
                   <th
                     key={c}
                     scope="col"
-                    className="px-3 py-2 font-mono text-[11px] tracking-wide uppercase"
+                    className="px-3 py-2 text-[11px] tracking-wide uppercase"
                   >
                     {c}
                   </th>
@@ -352,7 +352,7 @@ function StepBrief({ step }: { step: DrillStep }) {
               {step.table.rows.map((row, i) => (
                 <tr key={i} className="border-border border-t">
                   {row.map((cell, j) => (
-                    <td key={j} className="px-3 py-2 font-mono text-xs">
+                    <td key={j} className="px-3 py-2 text-xs">
                       {cell}
                     </td>
                   ))}
@@ -428,7 +428,7 @@ function PickStep({
                   {answered ? (
                     <span
                       className={cn(
-                        "mt-0.5 shrink-0 font-mono text-[11px]",
+                        "mt-0.5 shrink-0 text-[11px]",
                         isKey
                           ? "text-comply"
                           : picked
@@ -521,7 +521,7 @@ function MultiStep({
   if (score) {
     return (
       <div className="space-y-3">
-        <p className="font-mono text-xs tracking-wide">
+        <p className="text-xs tracking-wide">
           <span className="text-comply">{score.caught} caught</span>
           {" · "}
           <span className="text-defect">{score.missed} missed</span>
@@ -540,7 +540,7 @@ function MultiStep({
               >
                 <span
                   className={cn(
-                    "font-mono text-[11px] tracking-wide uppercase",
+                    "text-[11px] tracking-wide uppercase",
                     v.tone,
                   )}
                 >
@@ -598,7 +598,7 @@ function MultiStep({
       </ul>
       <p
         aria-live="polite"
-        className="text-muted-foreground font-mono text-[11px] tracking-wide"
+        className="text-muted-foreground text-[11px] tracking-wide"
       >
         {commit.hint}
       </p>
@@ -639,17 +639,17 @@ function NumberStep({
           disabled={committed}
           onChange={(e) => setRaw(e.target.value)}
           aria-label={step.q}
-          className="max-w-40 font-mono"
+          className="max-w-40"
         />
         {step.unit ? (
-          <span className="text-muted-foreground font-mono text-xs">
+          <span className="text-muted-foreground text-xs">
             {step.unit}
           </span>
         ) : null}
       </div>
       {!committed ? (
         <>
-          <p className="text-muted-foreground font-mono text-[11px] tracking-wide">
+          <p className="text-muted-foreground text-[11px] tracking-wide">
             {result.value === null
               ? "no options on this one — compute it"
               : "ready"}
@@ -710,7 +710,7 @@ function TextStep({
         id={hintId}
         aria-live="polite"
         className={cn(
-          "font-mono text-[11px] tracking-wide",
+          "text-[11px] tracking-wide",
           lint.bad ? "text-exaggerate" : "text-muted-foreground",
         )}
       >
@@ -749,7 +749,7 @@ function Reveal({
       {verdict ? (
         <p
           className={cn(
-            "flex items-start gap-1.5 font-mono text-xs tracking-wide",
+            "flex items-start gap-1.5 text-xs tracking-wide",
             verdict.tone === "good" ? "text-comply" : "text-defect",
           )}
         >
@@ -804,7 +804,7 @@ function BenchFinish({
   return (
     <Shell>
       <div className="space-y-4">
-        <p className="text-muted-foreground font-mono text-[11px] tracking-[0.14em] uppercase">
+        <p className="text-muted-foreground text-[11px] tracking-[0.14em] uppercase">
           {bench.name} · complete
         </p>
         <h3 className="flex items-center gap-2 text-lg font-semibold">

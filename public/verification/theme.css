@@ -140,21 +140,27 @@
      the app's body and interface text. The static lift does not expose Next's
      local-font variable, so it falls back to the platform sans stack.
 
-     --mono is kept as a token because ~90 rules ask for it, but it now
-     resolves to the same sans. It used to name JetBrains Mono and IBM Plex
-     Mono, neither of which this site ships — so every micro-label fell
-     through to whatever ui-monospace the OS supplies, and the pages set
-     themselves in a different third face on macOS, Windows and Linux. The
-     labels still read as labels: they keep their uppercase and letterspacing,
-     which is what was doing the work, not the face.
+     --label is the micro-label face: the eyebrows, counters, key-value rows
+     and status chips. It resolves to the sans, and the name says what it
+     selects rather than what it used to be — it was called --mono and named
+     JetBrains Mono and IBM Plex Mono, neither of which this site ships, so
+     every micro-label fell through to whatever ui-monospace the OS supplies
+     and the pages set themselves in a different third face on macOS, Windows
+     and Linux. The labels still read as labels: they keep their uppercase and
+     letterspacing, which is what was doing the work, not the face.
 
-     Trap: mono was also holding counters and fractions in column. Losing it
-     would let digits jitter as they change, so tabular figures are switched
-     on globally below rather than per counter. */
+     It stays a token rather than being deleted because it is a real slot: the
+     landing's .sky-panel re-points it at the Gotham stack, so the labels
+     inside that panel follow the brand face where a machine has it licensed.
+     Point it at a shipped face here and every one of those labels follows.
+
+     Trap: the mono face was also holding counters and fractions in column.
+     Losing it would let digits jitter as they change, so tabular figures are
+     switched on globally below rather than per counter. */
   --display: "Space Grotesk", "Segoe UI", system-ui, sans-serif;
   --sans: var(--font-sans, -apple-system), BlinkMacSystemFont, "Segoe UI",
     system-ui, Helvetica, Arial, sans-serif;
-  --mono: var(--sans);
+  --label: var(--sans);
 }
 
 :root[data-theme="dark"] {
@@ -655,7 +661,7 @@ button,
 }
 
 .mono {
-  font-family: var(--mono);
+  font-family: var(--label);
 }
 
 .wrap {
@@ -1002,7 +1008,7 @@ button,
   margin-top: 72px;
   padding: 22px 0 40px;
   color: var(--muted-foreground);
-  font-family: var(--mono);
+  font-family: var(--label);
   font-size: var(--fs-xs);
 }
 .site-footer .wrap {

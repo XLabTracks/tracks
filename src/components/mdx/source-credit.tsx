@@ -56,7 +56,7 @@ export function SourceCredit({
       </p>
 
       {state ? (
-        <p className="text-muted-foreground mt-2 font-mono text-[11px] tracking-[0.14em] uppercase">
+        <p className="text-muted-foreground mt-2 text-[11px] tracking-[0.14em] uppercase">
           {state}
         </p>
       ) : null}

@@ -1250,6 +1250,44 @@ frozen, five verdicts, five source lines, the total, and Start over. Answering
 all five correctly reads 5 of 5. The correct options sit in slots B D D D C —
 the shuffle is doing its job on a deck whose answers were authored a, c, b, c, b.
 
+### Companies A and B moves from 2.4.4 to 2.4.2 (2026-08-15, owner's instruction)
+
+"Перенеси текущее задание из 2.4.4 в 2.4.2 которое про политики вислблоуэров."
+
+The exercise's material was never 2.4.4's. Every row it asks a learner to mark
+is a sentence out of a real whistleblower policy, and the third tab is the
+June 2024 open letter demanding one — which is 2.4.2's subject, read against
+the statutory floor and the best-practice guide 2.4.2 already carries. 2.4.4's
+own source is Brundage et al. on audit design, and the exercise never used it.
+
+What moved: the `<PageBreak>`, the `## Companies A and B (15–20 min)` heading,
+and the embed. It is the last part of 2.4.2, after the optional On Paper fold
+and outside it, because it is the section's work and not an extension beside
+one — the same reason it sat outside the Fold in 2.4.4.
+
+What did NOT move: the exercise id `human-institutions-judgment`, its
+`v-policy-on-paper:v1` and notes storage keys, and its answer key. The id is a
+progress key; it now names where the exercise was authored rather than where it
+is read, and the registry comment says so.
+
+Two consequences, both worth her word:
+
+- **2.4.4 is now a framing paragraph and one 6–8 minute reading.** It has no
+  exercise. The one edit inside the reading card was "For this exercise" →
+  "For this section", which named the exercise that left; every instruction in
+  it is hers, unchanged.
+- **`human-institutions-judgment` is bridged and is now 2.4.2's only bridged
+  widget**, so 2.4.2 is the one section of 2.4 whose lab records completion —
+  against her instruction that 2.4.1–2.4.3's labs are optional and record
+  nothing. Left as it is rather than flipped, because that instruction was
+  about the optional labs and this exercise is not one. Worth noting that the
+  bridge writes to `v-human-institutions-judgment`, which is not a lesson in
+  the graph, so it has never completed a section on either page — a
+  pre-existing defect, not one this move introduced.
+
+Estimates re-cut with the block: 2.4.2 40 → 60, 2.4.4 30 → 10. The 2.4 unit's
+own `120 min` in course.js is unchanged, because nothing left the section.
+
 ### 2.4.4 gets its optional closer: The Standard of Proof (2026-08-15)
 
 Her brief: one optional 15-minute exercise closing all four 2.4.4

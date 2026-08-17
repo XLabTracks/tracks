@@ -21,7 +21,7 @@
 }
 
 .crumbs {
-  font-family: var(--mono);
+  font-family: var(--label);
   font-size: var(--fs-xs);
   color: var(--muted-foreground);
 }
@@ -39,7 +39,7 @@
    it, delete it rather than styling it. */
 .eyebrow,
 .sec-eyebrow {
-  font-family: var(--mono);
+  font-family: var(--label);
   font-size: var(--fs-2xs);
   letter-spacing: .06em;
   text-transform: uppercase;
@@ -67,7 +67,7 @@
   border: var(--hairline) solid var(--border);
   border-radius: 999px;
   background: var(--background);
-  font-family: var(--mono);
+  font-family: var(--label);
   font-size: var(--fs-2xs);
   line-height: 1.5;
   color: var(--muted-foreground);
@@ -78,7 +78,7 @@
 .chip.done::before { content: '✓'; }
 .chip.accent { color: var(--brand-ink); }
 
-.lock { font-family: var(--mono); font-size: var(--fs-2xs); color: var(--muted-foreground); }
+.lock { font-family: var(--label); font-size: var(--fs-2xs); color: var(--muted-foreground); }
 
 /* ---------- progress ---------- */
 
@@ -133,12 +133,12 @@
 }
 
 .counter {
-  font-family: var(--mono);
+  font-family: var(--label);
   font-size: var(--fs-xs);
   color: var(--muted-foreground);
   white-space: nowrap;
 }
-.frac { font-family: var(--mono); font-size: var(--fs-xs); color: var(--muted-foreground); }
+.frac { font-family: var(--label); font-size: var(--fs-xs); color: var(--muted-foreground); }
 
 /* ---------- authored prose ---------- */
 
@@ -148,7 +148,7 @@
 .prose ul { padding-left: 20px; display: grid; gap: 8px; }
 .prose li { line-height: 1.6; }
 .prose code {
-  font-family: var(--mono);
+  font-family: var(--label);
   font-size: .89em;
   padding: 2px 4px;
   border-radius: var(--radius-xs);
@@ -198,7 +198,7 @@
   color: var(--muted-foreground);
   text-align: center;
 }
-.preview-banner code { font-family: var(--mono); font-size: .92em; }
+.preview-banner code { font-family: var(--label); font-size: .92em; }
 
 /* ---------- toast ---------- */
 
@@ -220,7 +220,7 @@
   animation: toast-in .22s ease;
 }
 .toast .label {
-  font-family: var(--mono);
+  font-family: var(--label);
   font-size: var(--fs-2xs);
   letter-spacing: .06em;
   text-transform: uppercase;

@@ -361,7 +361,7 @@ function Timeline() {
             onClick={() => zoomTo(Math.max(zi - 1, 0))}
             disabled={zi === 0}
             aria-label="Zoom out"
-            className="border-border hover:bg-muted disabled:opacity-40 rounded-md border px-2 py-1 font-mono text-[11px] disabled:pointer-events-none"
+            className="border-border hover:bg-muted disabled:opacity-40 rounded-md border px-2 py-1 text-[11px] disabled:pointer-events-none"
           >
             −
           </button>
@@ -370,7 +370,7 @@ function Timeline() {
             onClick={() => zoomTo(Math.min(zi + 1, TL_ZOOMS.length - 1))}
             disabled={zi === TL_ZOOMS.length - 1}
             aria-label="Zoom in"
-            className="border-border hover:bg-muted disabled:opacity-40 rounded-md border px-2 py-1 font-mono text-[11px] disabled:pointer-events-none"
+            className="border-border hover:bg-muted disabled:opacity-40 rounded-md border px-2 py-1 text-[11px] disabled:pointer-events-none"
           >
             +
           </button>
@@ -382,7 +382,7 @@ function Timeline() {
                 type="button"
                 onClick={() => move(-vw / 6, 0)}
                 aria-label="Pan left"
-                className="border-border hover:bg-muted rounded-md border px-2 py-1 font-mono text-[11px]"
+                className="border-border hover:bg-muted rounded-md border px-2 py-1 text-[11px]"
               >
                 ←
               </button>
@@ -390,7 +390,7 @@ function Timeline() {
                 type="button"
                 onClick={() => move(vw / 6, 0)}
                 aria-label="Pan right"
-                className="border-border hover:bg-muted rounded-md border px-2 py-1 font-mono text-[11px]"
+                className="border-border hover:bg-muted rounded-md border px-2 py-1 text-[11px]"
               >
                 →
               </button>

@@ -249,11 +249,11 @@ export function GraderKeySettings({ view }: { view: GraderKeyViewClient }) {
         <div className="mt-1 flex flex-wrap items-center justify-between gap-2">
           {status.state === "active" ? (
             <p className="text-muted-foreground">
-              Your OpenRouter key <span className="font-mono">({masked})</span>.
+              Your OpenRouter key <span className="">({masked})</span>.
             </p>
           ) : (
             <p className="text-destructive">
-              Your stored key <span className="font-mono">({masked})</span> can
+              Your stored key <span className="">({masked})</span> can
               no longer be read — replace or remove it.
             </p>
           )}

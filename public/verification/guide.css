@@ -30,14 +30,14 @@
   border-bottom: var(--hairline) solid var(--border);
 }
 .gmod .n {
-  font-family: var(--mono);
+  font-family: var(--label);
   font-size: var(--fs-2xs);
   letter-spacing: .06em;
   text-transform: uppercase;
   color: var(--mod, var(--brand-ink));
 }
 .gmod h2 { flex: 1 1 auto; font-size: var(--fs-2xl); }
-.gmod .frac { font-family: var(--mono); font-size: var(--fs-2xs); }
+.gmod .frac { font-family: var(--label); font-size: var(--fs-2xs); }
 
 .glossary dt {
   display: flex;
@@ -55,7 +55,7 @@
   display: inline-block;
   padding: 4px 6px;
   margin: -4px -6px;
-  font-family: var(--mono);
+  font-family: var(--label);
   font-size: var(--fs-2xs);
   font-weight: 400;
   color: var(--brand-ink);
@@ -74,7 +74,7 @@
 .review .label {
   display: block;
   margin-bottom: 10px;
-  font-family: var(--mono);
+  font-family: var(--label);
   font-size: var(--fs-2xs);
   letter-spacing: .06em;
   text-transform: uppercase;
@@ -82,7 +82,7 @@
 }
 .review ol { margin-left: 20px; font-size: var(--fs-md); line-height: 1.6; }
 .review li { margin-bottom: 8px; }
-.review li::marker { font-family: var(--mono); font-size: var(--fs-xs); color: var(--muted-foreground); }
+.review li::marker { font-family: var(--label); font-size: var(--fs-xs); color: var(--muted-foreground); }
 
 .no-hits { margin-top: 26px; font-size: var(--fs-md); color: var(--muted-foreground); }
 

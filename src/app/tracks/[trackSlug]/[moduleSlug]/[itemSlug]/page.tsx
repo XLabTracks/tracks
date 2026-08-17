@@ -448,7 +448,7 @@ async function PaperItemPage({
               href={source.link.href}
               target="_blank"
               rel="noreferrer"
-              className="hover:text-destructive flex items-center gap-1 font-mono text-xs transition-colors"
+              className="hover:text-destructive flex items-center gap-1 text-xs transition-colors"
             >
               {source.link.label}
               <ExternalLink className="size-3" aria-hidden />

@@ -262,7 +262,7 @@ function ChainCell({
           : "border-border bg-card",
       )}
     >
-      <p className="text-muted-foreground font-mono text-[10px] tracking-[0.14em] uppercase">
+      <p className="text-muted-foreground text-[10px] tracking-[0.14em] uppercase">
         {tag}
       </p>
       <p className="mt-1 text-sm font-medium">{body}</p>
@@ -390,7 +390,7 @@ function NotebookSection({
                 !active && "cursor-default",
               )}
             >
-              <span className="text-muted-foreground font-mono text-[10px] tracking-[0.1em] uppercase">
+              <span className="text-muted-foreground text-[10px] tracking-[0.1em] uppercase">
                 {TAGS[c.tag]}
               </span>
               <span className="mt-1 block text-sm font-semibold">
@@ -567,7 +567,7 @@ function ThreadBoard({
     <div className="mt-4 grid gap-4 lg:grid-cols-[1.15fr_1fr]">
       {/* the report column */}
       <div>
-        <p className="text-muted-foreground mb-2 font-mono text-[11px] tracking-[0.12em] uppercase">
+        <p className="text-muted-foreground mb-2 text-[11px] tracking-[0.12em] uppercase">
           {COPY.repTag}
         </p>
         <div className="space-y-2">
@@ -602,7 +602,7 @@ function ThreadBoard({
                   </button>
                   <div className="flex items-start justify-between gap-2 pr-6">
                     <span className="text-sm font-semibold">{c.title}</span>
-                    <span className="text-muted-foreground shrink-0 font-mono text-[10px] tracking-[0.08em] uppercase">
+                    <span className="text-muted-foreground shrink-0 text-[10px] tracking-[0.08em] uppercase">
                       {TAGS[c.tag]}
                     </span>
                   </div>
@@ -677,7 +677,7 @@ function ThreadBoard({
 
       {/* the desks column */}
       <div>
-        <p className="text-muted-foreground mb-2 font-mono text-[11px] tracking-[0.12em] uppercase">
+        <p className="text-muted-foreground mb-2 text-[11px] tracking-[0.12em] uppercase">
           {COPY.deskTag}
         </p>
         <div className="space-y-3">
@@ -706,7 +706,7 @@ function ThreadBoard({
                       <p className="text-sm font-semibold">{r.shortName}</p>
                       <p className="text-muted-foreground text-xs">{r.name}</p>
                     </div>
-                    <span aria-hidden className="text-muted-foreground font-mono text-[10px]">
+                    <span aria-hidden className="text-muted-foreground text-[10px]">
                       [{ri + 1}]
                     </span>
                   </div>

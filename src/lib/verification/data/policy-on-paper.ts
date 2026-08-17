@@ -1,6 +1,8 @@
 /**
- * 2.4.4's optional extension: two reporting regimes and the demands made of
- * them, and what kind of thing each statement actually is.
+ * 2.4.2 — Companies A and B: two reporting regimes and the demands made of
+ * them, and what kind of thing each statement actually is. Authored for 2.4.4
+ * and moved to 2.4.2 on 2026-08-15, where its material belongs; the ids and
+ * storage keys are unchanged.
  *
  * THE TASK IS THE COURSE OWNER'S, from her 2.4 exercise plan and her revision
  * of it: three tabs, Published process / Documented context / Still unverified
@@ -18,8 +20,8 @@
  *
  * Her other instruction, on Company B's last row: the retraction is
  * compulsory. A 2024 rule presented as still in force is an error, not
- * strictness — and a regime that moved under pressure is exactly 2.4.4's
- * material.
+ * strictness — and a regime that moved under pressure is exactly this
+ * section's material.
  *
  * WHY THE SOURCE IS REVEALED AND NOT HIDDEN. Anonymity here is the exercise's
  * mechanic — you judge the regime before you know whose it is — and not a

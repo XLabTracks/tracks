@@ -137,7 +137,7 @@ export default async function CohortPage({
                 className="border-border flex items-baseline justify-between gap-3 rounded-lg border px-3 py-2"
               >
                 <span className="text-sm">{nameOf.get(m.userId)}</span>
-                <span className="text-muted-foreground font-mono text-xs whitespace-nowrap">
+                <span className="text-muted-foreground text-xs whitespace-nowrap">
                   {done} / {totalTasks}
                 </span>
               </li>
@@ -169,7 +169,7 @@ export default async function CohortPage({
                 >
                   <div className="flex flex-wrap items-baseline justify-between gap-2">
                     <p className="text-sm font-medium">{task.title}</p>
-                    <span className="text-muted-foreground font-mono text-xs whitespace-nowrap">
+                    <span className="text-muted-foreground text-xs whitespace-nowrap">
                       {hands.length} / {members.length}
                     </span>
                   </div>

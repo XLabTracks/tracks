@@ -407,23 +407,26 @@ function PhaseRail({
               aria-current={active ? "step" : undefined}
               onClick={() => onGo(p)}
               className={cn(
-                "flex items-center gap-2 rounded-lg px-2 py-1.5 transition-colors duration-150 select-none",
-                active ? "text-foreground" : "text-muted-foreground",
+                // State is a rule under the step and the weight of its word,
+                // never a disc around the numeral — see CLAUDE.md. The rule is
+                // transparent when the step is neither current nor done, so
+                // nothing shifts as the reader moves along it.
+                "flex items-center gap-2 rounded-t-lg border-b-2 px-2 py-1.5 transition-colors duration-150 select-none",
+                active
+                  ? "border-foreground text-foreground"
+                  : done[i]
+                    ? "border-comply/60 text-comply"
+                    : "border-transparent text-muted-foreground",
                 reachable ? "hover:bg-muted" : "cursor-default opacity-50",
               )}
             >
-              <span
-                className={cn(
-                  "grid size-6 shrink-0 place-items-center rounded-full border text-xs font-bold transition-colors duration-150",
-                  active
-                    ? "border-foreground bg-foreground text-background"
-                    : done[i]
-                      ? "border-comply/50 bg-comply/10 text-comply"
-                      : "border-border bg-card text-muted-foreground",
-                )}
-              >
-                {done[i] && !active ? <Check className="size-3.5" aria-hidden /> : p}
-              </span>
+              {done[i] && !active ? (
+                <Check className="size-3.5 shrink-0" aria-hidden />
+              ) : (
+                <span className="shrink-0 text-xs font-semibold tabular-nums">
+                  {p}
+                </span>
+              )}
               <span className="text-sm font-semibold">{name}</span>
             </button>
           </span>

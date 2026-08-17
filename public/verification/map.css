@@ -35,7 +35,7 @@
   background: transparent;
   color: var(--muted-foreground);
   font: inherit;
-  font-family: var(--mono);
+  font-family: var(--label);
   font-size: var(--fs-2xs);
   cursor: pointer;
   user-select: none;
@@ -53,7 +53,7 @@
   background: transparent;
   color: var(--muted-foreground);
   font: inherit;
-  font-family: var(--mono);
+  font-family: var(--label);
   font-size: var(--fs-2xs);
   cursor: pointer;
   user-select: none;
@@ -74,7 +74,7 @@
   margin-bottom: 10px;
   padding-bottom: 6px;
   border-bottom: var(--hairline) solid var(--border);
-  font-family: var(--mono);
+  font-family: var(--label);
   font-size: var(--fs-2xs);
   letter-spacing: .06em;
   text-transform: uppercase;
@@ -124,7 +124,7 @@
   gap: 6px;
   margin-top: auto;
   padding-top: 6px;
-  font-family: var(--mono);
+  font-family: var(--label);
   font-size: var(--fs-2xs);
   color: var(--muted-foreground);
 }
@@ -166,7 +166,7 @@
 .node-card .desc { font-size: var(--fs-sm); line-height: 1.6; margin-bottom: 14px; color: var(--muted-foreground); }
 .node-card .sec {
   margin: 16px 0 8px;
-  font-family: var(--mono);
+  font-family: var(--label);
   font-size: var(--fs-2xs);
   letter-spacing: .06em;
   text-transform: uppercase;
@@ -186,7 +186,7 @@
 .ladder .u {
   flex: none;
   width: 46px;
-  font-family: var(--mono);
+  font-family: var(--label);
   font-size: var(--fs-2xs);
   color: var(--brand-ink);
   text-decoration: none;
@@ -203,14 +203,14 @@
   background: transparent;
   color: var(--muted-foreground);
   font: inherit;
-  font-family: var(--mono);
+  font-family: var(--label);
   font-size: var(--fs-2xs);
   cursor: pointer;
   user-select: none;
   -webkit-user-select: none;
 }
 .links button:hover { color: var(--foreground); border-color: var(--ring); }
-.summary { margin-top: 14px; font-family: var(--mono); font-size: var(--fs-2xs); color: var(--muted-foreground); }
+.summary { margin-top: 14px; font-family: var(--label); font-size: var(--fs-2xs); color: var(--muted-foreground); }
 
 @media (max-width: 960px) {
   .map-body { grid-template-columns: minmax(0, 1fr); }
@@ -222,7 +222,7 @@
 .ladder .state {
   flex: none;
   width: 12px;
-  font-family: var(--mono);
+  font-family: var(--label);
   font-size: var(--fs-xs);
   color: var(--brand-ink);
 }

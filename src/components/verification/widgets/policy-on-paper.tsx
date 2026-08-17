@@ -24,13 +24,17 @@ import { SteelmanDeck } from "../kit/steelman-deck";
 import type { VerificationWidgetProps } from "../kit/types";
 
 /**
- * 2.4.4 — Companies A and B. Mark what kind of evidence each statement about
+ * 2.4.2 — Companies A and B. Mark what kind of evidence each statement about
  * a reporting regime is, then read both regimes against what the employees of
  * those companies asked for themselves.
  *
- * It is the section's exercise now, not an extension beside one, and unlike
- * 2.4's other three labs it is not optional: it sits outside the Fold and
- * finishing it is what finishes 2.4.4.
+ * Authored for 2.4.4 and moved here on 2026-08-15: every row is a sentence out
+ * of a real whistleblower policy, which is 2.4.2's subject, while 2.4.4's is
+ * audit design — and this never used it. The exercise id, the storage keys and
+ * the answer key travel unchanged.
+ *
+ * It closes the section, and unlike 2.4's other labs it is not optional: it
+ * sits outside the Fold and it is 2.4.2's one bridged widget.
  *
  * The two companies are tabs and stay anonymous while the learner works —
  * that is the mechanic, not a concealment. Nothing above the Sources block
@@ -148,7 +152,7 @@ export function PolicyOnPaper({
               aria-selected={active}
               onClick={() => setTab(c.id)}
               className={cn(
-                "rounded-full border px-4 py-1.5 font-mono text-[11px] tracking-[0.14em] uppercase transition-colors",
+                "rounded-full border px-4 py-1.5 text-[11px] tracking-[0.14em] uppercase transition-colors",
                 active
                   ? "border-primary bg-primary text-primary-foreground"
                   : "border-border text-muted-foreground hover:bg-muted hover:text-foreground",
@@ -217,7 +221,13 @@ export function PolicyOnPaper({
                       {c.realNote}
                     </p>
                   ) : null}
-                  <ul className="mt-1 space-y-0.5">
+                  {/* Marked and indented explicitly. Left alone, the nested
+                      list came out `list-style: circle` with no padding, so
+                      every marker rendered outside its own content box —
+                      hanging left into the card's padding, detached from the
+                      line it belongs to. A marker either sits in the column
+                      with its text or it is not a marker. */}
+                  <ul className="marker:text-muted-foreground/70 mt-1 list-disc space-y-0.5 pl-4">
                     {c.cites.map((cite) => (
                       <li key={cite.href} className="text-xs">
                         <a
@@ -280,7 +290,7 @@ function CompanyTab({
                     <div className="mt-3 space-y-1.5">
                       <p
                         className={cn(
-                          "flex items-center gap-1.5 font-mono text-xs tracking-wide",
+                          "flex items-center gap-1.5 text-xs tracking-wide",
                           right ? "text-comply" : "text-defect",
                         )}
                       >

@@ -9,6 +9,8 @@ import {
   type WorkspaceQuestion,
   type WorkspaceRule,
 } from "@/lib/verification/question-workspace";
+import { writingArea, writingCardFocus } from "./writing-surface";
+import { cn } from "@/lib/utils";
 
 /**
  * The written-answer deck both question units use: every question on the page
@@ -60,17 +62,17 @@ export function QuestionWorkspace({
         /* private mode */
       }
     },
-    [storageKey],
+    [storageKey]
   );
 
   const answered = new Set(
     Object.entries(state.done)
       .filter(([, v]) => v)
-      .map(([k]) => k),
+      .map(([k]) => k)
   );
   const owed = answersOwed(rule, questions);
   const counted = questions.filter(
-    (q) => q.requirement !== "optional" && answered.has(q.id),
+    (q) => q.requirement !== "optional" && answered.has(q.id)
   ).length;
   const choices = choiceNumbers(questions);
 
@@ -79,7 +81,7 @@ export function QuestionWorkspace({
       {intro}
 
       <p
-        className="text-muted-foreground text-right font-mono text-xs"
+        className="text-muted-foreground text-right text-xs"
         aria-live="polite"
       >
         {Math.min(counted, owed)} of {owed} answered
@@ -88,12 +90,22 @@ export function QuestionWorkspace({
       {questions.map((q) => {
         const committed = !!state.done[q.id];
         return (
-          <div key={q.id} className="border-border bg-card rounded-xl border p-5">
+          <div
+            key={q.id}
+            className={cn(
+              "border-border bg-card rounded-xl border p-5",
+              writingCardFocus
+            )}
+          >
             <div className="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1">
               <h3 className="text-lg font-semibold">
                 {q.n}. {q.title}
               </h3>
-              <Badge rule={rule} requirement={q.requirement} choices={choices} />
+              <Badge
+                rule={rule}
+                requirement={q.requirement}
+                choices={choices}
+              />
             </div>
 
             <div className="mt-1 space-y-2 text-sm">
@@ -111,7 +123,7 @@ export function QuestionWorkspace({
                   </ul>
                 ) : (
                   <p key={i}>{block.text}</p>
-                ),
+                )
               )}
             </div>
 
@@ -125,7 +137,7 @@ export function QuestionWorkspace({
                 })
               }
               placeholder={placeholder}
-              className="border-border bg-background mt-3 w-full rounded-md border p-3 text-sm"
+              className={writingArea}
             />
 
             <div className="mt-3">
@@ -142,9 +154,10 @@ export function QuestionWorkspace({
                     const next = new Set(
                       Object.entries(done)
                         .filter(([, v]) => v)
-                        .map(([k]) => k),
+                        .map(([k]) => k)
                     );
-                    if (isWorkspaceComplete(rule, questions, next)) onComplete();
+                    if (isWorkspaceComplete(rule, questions, next))
+                      onComplete();
                   }}
                 >
                   Save answer
@@ -179,7 +192,7 @@ function Badge({
       ? "Optional"
       : `Answer one of ${listNumbers(choices)}`;
   return (
-    <span className="border-border text-muted-foreground rounded-full border px-2 py-0.5 font-mono text-xs select-none">
+    <span className="border-border text-muted-foreground rounded-full border px-2 py-0.5 text-xs select-none">
       {label}
     </span>
   );

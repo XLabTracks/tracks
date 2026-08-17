@@ -29,23 +29,22 @@
    next time the palette moves. The chart and game-payoff tokens are
    deliberately left alone: they are categorical scales, not palette shades,
    and inventing values for them here would be a design decision. */
-/* No monospace on this course, at all. theme.css already collapsed its own
-   --mono onto the sans, but that only governs the static stylesheets; the
-   app's components ask for it through Tailwind's `font-mono` utility. The
-   platform token also resolves that utility to sans; the explicit bridge here
-   keeps standalone and app-rendered Verification in step.
+/* No monospace on this course, at all, and no bridge for one: the app's
+   components no longer ask for `font-mono` and globals.css no longer defines
+   the token behind it, so a new call site fails visibly rather than quietly
+   rendering the sans. theme.css keeps a --label slot for the static
+   stylesheets, which is a real slot — the landing re-points it at the Gotham
+   stack — but it is a label face, not a mono one.
 
    Nothing on the course needs a monospace: there is not one code block in any
    Verification lesson. Should one ever arrive, give `pre`/`code` an explicit
-   family of their own rather than lifting this — the ban is on mono as
+   family of their own rather than reviving this — the ban is on mono as
    decoration, which is what every one of those labels was using it for.
 
-   Trap: mono was also holding counters in column. theme.css switches tabular
-   figures on globally, which is what keeps a changing digit from jittering
-   now that the face no longer does it. */
+   Trap: the mono face was also holding counters in column. theme.css switches
+   tabular figures on globally, which is what keeps a changing digit from
+   jittering now that no face does it. */
 :root[data-theme] {
-  --font-mono: var(--sans);
-
   /* React lesson widgets used Tailwind's compact UI scale while the prose
      beside them used a reading scale. That made an explanation shrink from
      16px to 12–14px merely because it crossed into an interactive. Keep
@@ -392,9 +391,10 @@
 }
 :root[data-theme]
   [data-widget]
-  :where(p, li, dd)[class~="text-xs"]:not(
-    :where([class~="uppercase"], [class~="font-mono"])
-  ) {
+  /* `uppercase` is what marks a micro-label here. It used to be paired with
+     `font-mono`, which every one of those labels also carried; the utility is
+     gone and this is the surviving half of the same test. */
+  :where(p, li, dd)[class~="text-xs"]:not([class~="uppercase"]) {
   font-size: var(--fs-md);
 }
 

@@ -161,23 +161,47 @@ export function PolicyQuickCheck({}: VerificationWidgetProps) {
 
   return (
     <div className="not-prose my-6 space-y-4">
-      <ol className="space-y-3">
+      {/* One box, not five.
+          Each question used to be its own bordered card, which put three rings
+          around every option: the fold, the card, the option. Boxes were doing
+          work that hierarchy does better and cheaper — the questions are a set,
+          and a set reads as a set through spacing, a number and a hairline
+          between members. The rule is the finishing seam, not the structure:
+          the first question has none, because there is nothing above it to be
+          separated from.
+
+          --border was 1.09:1 against this ground and 1.35 at night, which is
+          to say invisible — fine for a hairline that merely closes a card the
+          reader can already see, and useless as the only thing dividing one
+          question from the next. Mixed toward
+          the foreground until it reads: 2.5:1 in day, 3.6 at night. */}
+      <ol>
         {shown.map(({ question, choices }, index) => {
           const pick = saved.picks[question.id];
           const correct = pick === question.answerId;
           return (
             <li
               key={question.id}
-              className="border-border bg-card rounded-xl border p-4"
+              className="[&+li]:border-muted-foreground/60 [&+li]:mt-6 [&+li]:border-t [&+li]:pt-6"
             >
               <div className="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1">
-                <p className="text-muted-foreground font-mono text-[11px] tracking-[0.12em] uppercase">
-                  {index + 1} of {QUICK_QUESTIONS.length}
-                </p>
+                {/* A subheading, not a tag. With the question cards gone this
+                    is the only thing that says where one question starts, so
+                    it has to carry that weight: a real heading element, in the
+                    body colour, one step ABOVE the text under it. At text-sm
+                    it sat level with the option rows and the stem, which is a
+                    label — a heading has to be the largest thing in its block
+                    or it is not doing the job the boxes used to do.
+                    An <h4> is safe here: the lesson's own section nav is
+                    compiled from the MDX at build time and never looks at
+                    widget DOM. */}
+                <h4 className="text-base font-semibold">
+                  Question {index + 1}/{QUICK_QUESTIONS.length}
+                </h4>
                 {saved.submitted ? (
                   <p
                     className={cn(
-                      "flex items-center gap-1.5 font-mono text-[11px] tracking-wide",
+                      "flex items-center gap-1.5 text-[11px] tracking-wide",
                       correct ? "text-comply" : "text-defect"
                     )}
                   >

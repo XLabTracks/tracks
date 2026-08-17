@@ -40,7 +40,7 @@ export function MemoDesk({ lesson }: { lesson: string }) {
 function Slot({ slot }: { slot: MemoSlot }) {
   return (
     <section className="border-border bg-card rounded-xl border p-5 text-sm">
-      <p className="text-muted-foreground flex flex-wrap items-center gap-x-2 gap-y-1 font-mono text-[11px] tracking-[0.14em] uppercase">
+      <p className="text-muted-foreground flex flex-wrap items-center gap-x-2 gap-y-1 text-[11px] tracking-[0.14em] uppercase">
         <PenLine className="size-3.5" aria-hidden />
         {/* The unit keeps its own case: the outline numbers some of these
             "1.x" and "3.x", and uppercasing turns that into "3.X". */}
@@ -87,7 +87,7 @@ function Slot({ slot }: { slot: MemoSlot }) {
 
       {slot.criteria?.length ? (
         <>
-          <p className="text-muted-foreground mt-3 font-mono text-[11px] tracking-[0.14em] uppercase">
+          <p className="text-muted-foreground mt-3 text-[11px] tracking-[0.14em] uppercase">
             Reviewed on
           </p>
           <ul className="mt-1 list-disc space-y-0.5 pl-5 text-sm leading-relaxed">

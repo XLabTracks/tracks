@@ -13,6 +13,7 @@ import {
   POLICY_TITLE,
 } from "@/lib/verification/data/policy-critique";
 import type { VerificationWidgetProps } from "../kit/types";
+import { writingArea, writingCardFocus } from "../kit/writing-surface";
 
 /**
  * UNMOUNTED. 2.4.2 is now On Paper (policy-quick-check.tsx).
@@ -148,7 +149,7 @@ export function PolicyCritique({
                 >
                   {provision.text}
                   {slot ? (
-                    <span className="text-muted-foreground mt-1 block font-mono text-[11px] tracking-[0.12em] uppercase">
+                    <span className="text-muted-foreground mt-1 block text-[11px] tracking-[0.12em] uppercase">
                       {slot.label}
                     </span>
                   ) : null}
@@ -177,11 +178,12 @@ export function PolicyCritique({
               key={slot.id}
               className={cn(
                 "border-border bg-card rounded-xl border p-4",
+                writingCardFocus,
                 isActive && "border-primary"
               )}
             >
               <div className="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1">
-                <p className="text-muted-foreground font-mono text-[11px] tracking-[0.12em] uppercase">
+                <p className="text-muted-foreground text-[11px] tracking-[0.12em] uppercase">
                   {slot.label}
                 </p>
                 {!saved.submitted && !provision ? (
@@ -216,10 +218,7 @@ export function PolicyCritique({
                 }
                 placeholder="Why — what it does to reporting, or to information trying to reach the verifier."
                 aria-label={`Reason: ${slot.label}`}
-                className={cn(
-                  "border-border bg-background mt-2 w-full rounded-md border p-3 text-sm",
-                  saved.submitted && "opacity-70"
-                )}
+                className={cn(writingArea, saved.submitted && "opacity-70")}
               />
             </li>
           );

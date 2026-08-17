@@ -108,7 +108,7 @@ export function ChoiceExerciseBody({
                   {graded && isCorrect && <Check className="size-3" aria-hidden />}
                   {graded && !isCorrect && isSelected && <X className="size-3" aria-hidden />}
                 </span>
-                <span className={cn(exercise.monospaceOptions && "font-mono text-sm whitespace-pre-wrap")}>
+                <span className={cn(exercise.monospaceOptions && "text-sm whitespace-pre-wrap")}>
                   {exercise.monospaceOptions ? option.label : <MathText text={option.label} />}
                 </span>
               </button>

@@ -44,7 +44,7 @@
   border-top: var(--hairline) solid var(--border);
 }
 .facts dt {
-  font-family: var(--mono);
+  font-family: var(--label);
   font-size: var(--fs-xs);
   letter-spacing: .06em;
   text-transform: uppercase;

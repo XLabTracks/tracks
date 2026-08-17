@@ -41,7 +41,7 @@ export const CLAIM_DECK = [
   "Is anything in your answers a fact about the source rather than about what the source can support?",
 ];
 
-/** 2.4.4 — two regimes and the letter. */
+/** 2.4.2's Companies A and B — two regimes and the letter. */
 export const INSTITUTION_DECK = [
   "You named an incentive. Who exactly faces it — the reporter, their manager, or the company?",
   "If the rule you are worried about were deleted tomorrow, what would change in practice?",

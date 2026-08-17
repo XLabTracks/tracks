@@ -195,7 +195,7 @@ function SortWidget({ reveal }: { reveal: boolean }) {
         <p className="text-muted-foreground">
           {reveal ? COPY.revealFraming : COPY.framing}
         </p>
-        <span className="text-muted-foreground shrink-0 font-mono text-[11px] tracking-[0.12em] uppercase select-none">
+        <span className="text-muted-foreground shrink-0 text-[11px] tracking-[0.12em] uppercase select-none">
           {reveal ? "Comparing" : store.sealed ? "Sealed" : `${ratedCount} / 12`}
         </span>
       </div>
@@ -253,7 +253,7 @@ function SortWidget({ reveal }: { reveal: boolean }) {
       {!reveal &&
         (store.sealed ? (
           <div className="border-border bg-muted rounded-lg border p-3">
-            <p className="text-muted-foreground font-mono text-[11px] tracking-[0.14em] uppercase select-none">
+            <p className="text-muted-foreground text-[11px] tracking-[0.14em] uppercase select-none">
               Sealed {store.sealedAt}
             </p>
             <p className="mt-1">
@@ -297,11 +297,11 @@ function MetricGuide() {
             <p className="text-muted-foreground mt-1">{m.gist}</p>
             <div className="mt-2 space-y-1 text-sm">
               <p>
-                <span className="text-muted-foreground font-mono">Low</span>{" "}
+                <span className="text-muted-foreground">Low</span>{" "}
                 {m.anchorLow}
               </p>
               <p>
-                <span className="text-muted-foreground font-mono">High</span>{" "}
+                <span className="text-muted-foreground">High</span>{" "}
                 {m.anchorHigh}
               </p>
             </div>
@@ -423,7 +423,7 @@ function Lanes({
 }) {
   return (
     <div className="space-y-3">
-      <p className="text-muted-foreground font-mono text-[11px] tracking-[0.14em] uppercase select-none">
+      <p className="text-muted-foreground text-[11px] tracking-[0.14em] uppercase select-none">
         Your ranking, metric by metric
       </p>
       {METRICS.map((metric) => (
@@ -540,7 +540,7 @@ function Detail({
       <div className="flex items-start justify-between gap-2">
         <div>
           {verdict && (
-            <span className="text-muted-foreground font-mono text-[11px] tracking-[0.13em] uppercase select-none">
+            <span className="text-muted-foreground text-[11px] tracking-[0.13em] uppercase select-none">
               {verdict.label} · gap {Math.round(gapOf(v, mech.ref) * 100)}
             </span>
           )}
@@ -613,7 +613,7 @@ function Detail({
           <p className="text-muted-foreground">{deltaText(v, mech.ref)}</p>
           <p>{mech.expl}</p>
           <div>
-            <p className="text-muted-foreground font-mono text-[11px] tracking-[0.14em] uppercase select-none">
+            <p className="text-muted-foreground text-[11px] tracking-[0.14em] uppercase select-none">
               Sources
             </p>
             <ul className="text-muted-foreground mt-1 list-disc space-y-0.5 pl-5 text-xs">
@@ -657,7 +657,7 @@ function Gaps({
   if (!ranked.length) return null;
   return (
     <div className="space-y-2">
-      <p className="text-muted-foreground font-mono text-[11px] tracking-[0.14em] uppercase select-none">
+      <p className="text-muted-foreground text-[11px] tracking-[0.14em] uppercase select-none">
         Your calls, ranked by gap
       </p>
       <p className="text-muted-foreground text-xs">{COPY.gapsNote}</p>
@@ -685,7 +685,7 @@ function Gaps({
                 >
                   {m.short}
                 </span>
-                <span className="text-muted-foreground shrink-0 font-mono text-[11px] tracking-[0.1em] uppercase">
+                <span className="text-muted-foreground shrink-0 text-[11px] tracking-[0.1em] uppercase">
                   {verdict.label} · {Math.round(d * 100)}
                 </span>
               </button>

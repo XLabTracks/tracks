@@ -21,6 +21,7 @@ import {
 } from "@/lib/verification/data/build-institution";
 import { evaluateInstitution } from "@/lib/verification/engines/build-institution";
 import type { VerificationWidgetProps } from "../kit/types";
+import { writingArea, writingCardFocus } from "../kit/writing-surface";
 
 /**
  * UNMOUNTED. 2.4.4 is now Companies A and B (companies-ab.tsx).
@@ -153,7 +154,7 @@ export function BuildInstitution({
 
       {GROUPS.map((group) => (
         <section key={group} className="space-y-2">
-          <h4 className="text-muted-foreground font-mono text-[11px] tracking-[0.14em] uppercase">
+          <h4 className="text-muted-foreground text-[11px] tracking-[0.14em] uppercase">
             {group}
           </h4>
           <div className="grid gap-2">
@@ -184,19 +185,24 @@ export function BuildInstitution({
       </div>
 
       {full && !saved.submitted ? (
-        <section className="border-border rounded-xl border p-4">
+        <section
+          className={cn(
+            "border-border rounded-xl border p-4",
+            writingCardFocus
+          )}
+        >
           <p className="text-sm font-medium">{EXPLANATION_PROMPT}</p>
           <textarea
             rows={4}
             value={saved.explanation}
             onChange={(e) => persist({ ...saved, explanation: e.target.value })}
             aria-label={EXPLANATION_PROMPT}
-            className="border-border bg-background mt-2 w-full rounded-md border p-3 text-sm"
+            className={writingArea}
           />
           <div className="mt-2 flex items-center justify-between gap-3">
             <p
               className={cn(
-                "font-mono text-xs",
+                "text-xs",
                 words > EXPLANATION_MAX_WORDS
                   ? "text-defect"
                   : "text-muted-foreground"
@@ -225,7 +231,7 @@ export function BuildInstitution({
       {evaluation ? (
         <div className="space-y-4">
           <section className="space-y-2">
-            <h4 className="text-muted-foreground font-mono text-[11px] tracking-[0.14em] uppercase">
+            <h4 className="text-muted-foreground text-[11px] tracking-[0.14em] uppercase">
               What your institution does, and what it leaves undecided
             </h4>
             {TESTS.map((test) => {
@@ -277,7 +283,7 @@ export function BuildInstitution({
               the answer: the engine's own test proves more than one selection
               works, and both of these run through it. */}
           <section className="space-y-2">
-            <h4 className="text-muted-foreground font-mono text-[11px] tracking-[0.14em] uppercase">
+            <h4 className="text-muted-foreground text-[11px] tracking-[0.14em] uppercase">
               Two institutions that work, and what each costs
             </h4>
             {SAMPLE_DESIGNS.map((design) => (
@@ -287,7 +293,7 @@ export function BuildInstitution({
               >
                 <p className="text-sm font-semibold">
                   {design.title}{" "}
-                  <span className="text-muted-foreground font-mono text-xs">
+                  <span className="text-muted-foreground text-xs">
                     {design.ids.join(" ")}
                   </span>
                 </p>
@@ -298,14 +304,19 @@ export function BuildInstitution({
             ))}
           </section>
 
-          <section className="border-border rounded-xl border p-4">
+          <section
+            className={cn(
+              "border-border rounded-xl border p-4",
+              writingCardFocus
+            )}
+          >
             <p className="text-sm font-medium">{SWAP_PROMPT}</p>
             <textarea
               rows={3}
               value={saved.swap}
               onChange={(e) => persist({ ...saved, swap: e.target.value })}
               aria-label={SWAP_PROMPT}
-              className="border-border bg-background mt-2 w-full rounded-md border p-3 text-sm"
+              className={writingArea}
             />
             <p className="text-muted-foreground mt-1 text-xs">
               Optional. Which components are substitutable, and which functions
@@ -346,7 +357,7 @@ function Card({
     >
       <span
         className={cn(
-          "border-border flex size-6 shrink-0 items-center justify-center rounded-full border font-mono text-xs",
+          "border-border flex size-6 shrink-0 items-center justify-center rounded-full border text-xs",
           on && "border-primary bg-primary text-primary-foreground"
         )}
       >

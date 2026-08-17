@@ -56,7 +56,7 @@ export function ActorMap(_: VerificationWidgetProps) {
   return (
     <section className="not-prose border-border bg-card my-6 overflow-hidden rounded-xl border text-sm">
       <header className="border-border border-b p-5 sm:p-6">
-        <p className="text-muted-foreground font-mono text-[11px] tracking-[0.14em] uppercase">
+        <p className="text-muted-foreground text-[11px] tracking-[0.14em] uppercase">
           Verification Track · Actor map
         </p>
         <div className="mt-2 flex flex-col gap-3 lg:flex-row lg:items-end lg:justify-between">
@@ -66,7 +66,7 @@ export function ActorMap(_: VerificationWidgetProps) {
               Move across three lenses: where an actor sits, what it can do, and what posture it may take.
             </p>
           </div>
-          <span className="text-muted-foreground shrink-0 font-mono text-[11px] tracking-[0.12em] uppercase">
+          <span className="text-muted-foreground shrink-0 text-[11px] tracking-[0.12em] uppercase">
             {ACTOR_MAP_ENTRIES.length} actors · 3 lenses
           </span>
         </div>
@@ -132,7 +132,7 @@ export function ActorMap(_: VerificationWidgetProps) {
               <section key={groupId} className="border-border bg-background rounded-lg border p-3">
                 <div className="mb-3 flex items-center justify-between gap-3">
                   <h4 className="text-xs font-semibold">{ACTOR_GROUPS[groupId]}</h4>
-                  <span className="text-muted-foreground font-mono text-[10px]">{entries.length}</span>
+                  <span className="text-muted-foreground text-[10px]">{entries.length}</span>
                 </div>
                 <div className="space-y-1.5">
                   {entries.map((actor) => (
@@ -167,7 +167,7 @@ export function ActorMap(_: VerificationWidgetProps) {
               <div className="flex items-start justify-between gap-3">
                 <div className="flex items-center gap-2">
                   {selected.kind === "public" ? <Building2 className="size-4" /> : <Users className="size-4" />}
-                  <span className="text-muted-foreground font-mono text-[10px] tracking-[0.12em] uppercase">
+                  <span className="text-muted-foreground text-[10px] tracking-[0.12em] uppercase">
                     {selected.kind} actor
                   </span>
                 </div>
@@ -233,7 +233,7 @@ function PostureLegend() {
 }
 
 function Detail({ label, children }: { label: string; children: React.ReactNode }) {
-  return <div className="border-border mt-4 border-t pt-3"><p className="text-muted-foreground mb-2 font-mono text-[10px] tracking-[0.12em] uppercase">{label}</p><div className="text-sm leading-relaxed">{children}</div></div>;
+  return <div className="border-border mt-4 border-t pt-3"><p className="text-muted-foreground mb-2 text-[10px] tracking-[0.12em] uppercase">{label}</p><div className="text-sm leading-relaxed">{children}</div></div>;
 }
 
 function Muted({ children }: { children: React.ReactNode }) {

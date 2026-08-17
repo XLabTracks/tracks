@@ -164,7 +164,7 @@ export function WhistleblowerLevers({}: VerificationWidgetProps) {
                 <div className="mt-3 space-y-1.5">
                   <p
                     className={cn(
-                      "flex items-center gap-1.5 font-mono text-xs tracking-wide",
+                      "flex items-center gap-1.5 text-xs tracking-wide",
                       right ? "text-comply" : "text-defect",
                     )}
                   >

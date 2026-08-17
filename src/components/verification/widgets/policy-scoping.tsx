@@ -178,7 +178,7 @@ export function PolicyScoping({ onComplete }: VerificationWidgetProps) {
 
             {/* tray */}
             <div className="border-border mb-5 rounded-lg border p-3">
-              <p className="text-muted-foreground mb-2 font-mono text-xs tracking-[0.15em] uppercase">
+              <p className="text-muted-foreground mb-2 text-xs tracking-[0.15em] uppercase">
                 {C.trayLabel}
               </p>
               <div className="flex flex-wrap gap-2">
@@ -231,7 +231,7 @@ export function PolicyScoping({ onComplete }: VerificationWidgetProps) {
                     {ROW_LABELS.map((rl) => (
                       <div
                         key={rl}
-                        className="text-muted-foreground flex flex-1 items-center justify-end pr-1.5 font-mono text-[10px] tracking-[0.06em] uppercase"
+                        className="text-muted-foreground flex flex-1 items-center justify-end pr-1.5 text-[10px] tracking-[0.06em] uppercase"
                       >
                         {rl}
                       </div>
@@ -317,7 +317,7 @@ export function PolicyScoping({ onComplete }: VerificationWidgetProps) {
                   {COL_LABELS.map((cl) => (
                     <div
                       key={cl}
-                      className="text-muted-foreground flex-1 pt-1.5 text-center font-mono text-[10px] tracking-[0.06em] uppercase"
+                      className="text-muted-foreground flex-1 pt-1.5 text-center text-[10px] tracking-[0.06em] uppercase"
                     >
                       {cl}
                     </div>
@@ -350,7 +350,7 @@ export function PolicyScoping({ onComplete }: VerificationWidgetProps) {
             <div className="border-border flex flex-col gap-1.5 border-y py-3">
               {C.stats.map((s) => (
                 <div key={s.n} className="flex items-baseline gap-2">
-                  <span className="font-mono text-sm font-semibold">{s.n}</span>
+                  <span className="text-sm font-semibold">{s.n}</span>
                   <span className="text-muted-foreground text-xs">{s.l}</span>
                 </div>
               ))}
@@ -358,7 +358,7 @@ export function PolicyScoping({ onComplete }: VerificationWidgetProps) {
 
             {/* controls */}
             <div>
-              <p className="text-muted-foreground mb-2 font-mono text-[10px] tracking-[0.15em] uppercase">
+              <p className="text-muted-foreground mb-2 text-[10px] tracking-[0.15em] uppercase">
                 {C.exerciseLabel}
               </p>
               <div className="flex flex-col gap-2">
@@ -409,7 +409,7 @@ export function PolicyScoping({ onComplete }: VerificationWidgetProps) {
             {/* results */}
             {anyVerdict && (
               <div className="flex flex-col gap-1.5">
-                <p className="text-muted-foreground font-mono text-[10px] tracking-[0.15em] uppercase">
+                <p className="text-muted-foreground text-[10px] tracking-[0.15em] uppercase">
                   {C.resultsLabel}
                 </p>
                 {POLICIES.map((p) => {
@@ -424,7 +424,7 @@ export function PolicyScoping({ onComplete }: VerificationWidgetProps) {
                           <span className="text-xs font-semibold">
                             {p.name}
                           </span>
-                          <span className="text-muted-foreground ml-auto font-mono text-[9px] tracking-[0.1em] uppercase">
+                          <span className="text-muted-foreground ml-auto text-[9px] tracking-[0.1em] uppercase">
                             moved — recheck
                           </span>
                         </div>
@@ -443,7 +443,7 @@ export function PolicyScoping({ onComplete }: VerificationWidgetProps) {
                         <span className="text-xs font-semibold">{p.name}</span>
                         <span
                           className={cn(
-                            "ml-auto font-mono text-[9px] tracking-[0.1em] uppercase",
+                            "ml-auto text-[9px] tracking-[0.1em] uppercase",
                             VERDICT_TEXT[pl.verdict],
                           )}
                         >
@@ -462,7 +462,7 @@ export function PolicyScoping({ onComplete }: VerificationWidgetProps) {
             {/* exception panel */}
             {excUnlocked && (
               <div className="border-border bg-muted/30 rounded-lg border p-3">
-                <p className="text-muted-foreground mb-2 font-mono text-[10px] tracking-[0.15em] uppercase">
+                <p className="text-muted-foreground mb-2 text-[10px] tracking-[0.15em] uppercase">
                   {C.excLabel}
                 </p>
                 <p className="text-muted-foreground mb-3 text-sm leading-relaxed">
@@ -578,7 +578,7 @@ function FrontierOverlay() {
         y={midY}
         textAnchor="middle"
         transform={`rotate(${ang.toFixed(1)} ${midX} ${midY})`}
-        className="fill-muted-foreground font-mono"
+        className="fill-muted-foreground"
         style={{ fontSize: 2.6 }}
       >
         {C.frontierLabel}
@@ -639,7 +639,7 @@ function ChipTip({
           <span className="mt-1 block">
             <span
               className={cn(
-                "block font-mono text-[10px] tracking-[0.1em] uppercase",
+                "block text-[10px] tracking-[0.1em] uppercase",
                 VERDICT_TEXT[combo.v],
               )}
             >
@@ -685,7 +685,7 @@ function CornerNote({
       <button
         type="button"
         className={cn(
-          "text-muted-foreground/60 hover:text-muted-foreground absolute z-[8] cursor-help border-0 bg-transparent p-0 font-mono text-[9px] tracking-[0.05em] select-none",
+          "text-muted-foreground/60 hover:text-muted-foreground absolute z-[8] cursor-help border-0 bg-transparent p-0 text-[9px] tracking-[0.05em] select-none",
           className,
         )}
       >

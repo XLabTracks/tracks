@@ -40,7 +40,7 @@ export function CompletionHeader({
   if (!units || !writing) {
     return (
       <Shell>
-        <p className="text-muted-foreground font-mono text-xs tracking-[0.14em] uppercase">
+        <p className="text-muted-foreground text-xs tracking-[0.14em] uppercase">
           The end of the track
         </p>
         <h2 className="mt-3 text-2xl leading-snug font-semibold text-balance">
@@ -75,7 +75,7 @@ export function CompletionHeader({
         <p className="mt-2 text-lg text-balance opacity-95 sm:text-xl">
           You have successfully completed the {track.title} track
         </p>
-        <p className="mt-6 font-mono text-xs tracking-[0.14em] uppercase opacity-80">
+        <p className="mt-6 text-xs tracking-[0.14em] uppercase opacity-80">
           {units.total} units · {writing.required} written tasks submitted
         </p>
       </section>
@@ -84,7 +84,7 @@ export function CompletionHeader({
 
   return (
     <Shell>
-      <p className="text-muted-foreground font-mono text-xs tracking-[0.14em] uppercase">
+      <p className="text-muted-foreground text-xs tracking-[0.14em] uppercase">
         Not finished yet
       </p>
       <h2 className="mt-3 text-2xl leading-snug font-semibold text-balance">
@@ -160,7 +160,7 @@ function Row({
       <span className={done ? "text-muted-foreground" : "text-foreground"}>
         {label}
       </span>
-      <span className="text-muted-foreground ml-auto font-mono text-xs">
+      <span className="text-muted-foreground ml-auto text-xs">
         {count}
       </span>
     </li>

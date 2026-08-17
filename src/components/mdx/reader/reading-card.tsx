@@ -116,7 +116,7 @@ export function ReadingCard({
           </div>
         ) : null}
         {metaLine ? (
-          <p className="text-muted-foreground font-mono text-xs">{metaLine}</p>
+          <p className="text-muted-foreground text-xs">{metaLine}</p>
         ) : null}
       </div>
     </section>

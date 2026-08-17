@@ -228,13 +228,13 @@ export function FieldMap(_: VerificationWidgetProps) {
   return (
     <section className="not-prose border-border bg-card my-6 overflow-hidden rounded-xl border text-sm">
       <header className="border-border border-b p-5 sm:p-6">
-        <p className="text-muted-foreground font-mono text-[11px] tracking-[0.14em] uppercase">Verification Track · Capstone tool</p>
+        <p className="text-muted-foreground text-[11px] tracking-[0.14em] uppercase">Verification Track · Capstone tool</p>
         <div className="mt-2 flex flex-col gap-3 lg:flex-row lg:items-end lg:justify-between">
           <div>
             <h3 className="text-2xl font-semibold tracking-tight">Field Map</h3>
             <p className="text-muted-foreground mt-2 max-w-3xl leading-relaxed">Build a threat model or theory of change. Place nodes, connect the claims, then test the assumptions holding the map together.</p>
           </div>
-          <span className="text-muted-foreground shrink-0 font-mono text-[11px] tracking-[0.12em] uppercase">{document.nodes.length} nodes · {document.edges.length} links</span>
+          <span className="text-muted-foreground shrink-0 text-[11px] tracking-[0.12em] uppercase">{document.nodes.length} nodes · {document.edges.length} links</span>
         </div>
       </header>
 
@@ -255,7 +255,7 @@ export function FieldMap(_: VerificationWidgetProps) {
 
       <div className="grid xl:grid-cols-[12rem_minmax(0,1fr)_19rem]">
         <aside className="border-border border-b p-3 xl:border-r xl:border-b-0">
-          <p className="text-muted-foreground px-1 font-mono text-[10px] tracking-[0.12em] uppercase">Add a node</p>
+          <p className="text-muted-foreground px-1 text-[10px] tracking-[0.12em] uppercase">Add a node</p>
           <div className="mt-2 grid grid-cols-2 gap-1.5 xl:grid-cols-1">
             {(Object.entries(FIELD_NODE_TYPES) as [FieldNodeType, (typeof FIELD_NODE_TYPES)[FieldNodeType]][]).map(([id, definition]) => (
               <button key={id} type="button" onClick={() => { setAddType(addType === id ? null : id); setConnecting(false); setConnectFrom(null); }} aria-pressed={addType === id} className={cn("border-border hover:bg-muted rounded-md border p-2 text-left transition-colors", addType === id && "ring-ring ring-2")}>
@@ -312,7 +312,7 @@ export function FieldMap(_: VerificationWidgetProps) {
                 className={cn("border-border bg-background absolute z-20 w-44 touch-none rounded-lg border p-3 text-left shadow-sm transition-shadow hover:shadow-md", selectedNodeId === node.id && "ring-ring ring-2", connectFrom === node.id && "ring-primary ring-2")}
                 style={{ left: `${node.x}%`, top: `${node.y}%`, transform: "translate(-50%, -50%)" }}
               >
-                <span className="font-mono text-[10px] font-semibold tracking-[0.08em] uppercase" style={{ color: definition.color }}>{definition.symbol} {definition.name}</span>
+                <span className="text-[10px] font-semibold tracking-[0.08em] uppercase" style={{ color: definition.color }}>{definition.symbol} {definition.name}</span>
                 <span className="mt-1.5 block text-xs font-medium leading-snug">{node.title}</span>
                 {node.description && <span className="text-muted-foreground mt-1 line-clamp-2 block text-[10px] leading-snug">{node.description}</span>}
               </button>
@@ -325,14 +325,14 @@ export function FieldMap(_: VerificationWidgetProps) {
         <aside className="border-border bg-muted/25 border-t p-4 xl:border-t-0 xl:border-l">
           {selectedNode ? (
             <div className="space-y-4">
-              <div><p className="text-muted-foreground font-mono text-[10px] tracking-[0.12em] uppercase">Edit node</p><p className="mt-1 font-semibold" style={{ color: FIELD_NODE_TYPES[selectedNode.type].color }}>{FIELD_NODE_TYPES[selectedNode.type].name}</p></div>
+              <div><p className="text-muted-foreground text-[10px] tracking-[0.12em] uppercase">Edit node</p><p className="mt-1 font-semibold" style={{ color: FIELD_NODE_TYPES[selectedNode.type].color }}>{FIELD_NODE_TYPES[selectedNode.type].name}</p></div>
               <label className="block text-xs font-medium">Title<Input className="mt-1.5" value={selectedNode.title} maxLength={120} onChange={(event) => patchNode(selectedNode.id, { title: event.target.value })} /></label>
               <label className="block text-xs font-medium">Detail<Textarea className="mt-1.5 min-h-24" value={selectedNode.description} maxLength={600} onChange={(event) => patchNode(selectedNode.id, { description: event.target.value })} /></label>
               <p className="border-border text-muted-foreground rounded-md border border-dashed p-3 text-xs leading-relaxed">{FIELD_NODE_TYPES[selectedNode.type].description}</p>
             </div>
           ) : selectedEdge ? (
             <div>
-              <p className="text-muted-foreground font-mono text-[10px] tracking-[0.12em] uppercase">Edit connection</p>
+              <p className="text-muted-foreground text-[10px] tracking-[0.12em] uppercase">Edit connection</p>
               <p className="mt-2 text-xs leading-relaxed"><strong>{document.nodes.find((node) => node.id === selectedEdge.from)?.title}</strong> → <strong>{document.nodes.find((node) => node.id === selectedEdge.to)?.title}</strong></p>
               <label className="mt-4 block text-xs font-medium">Relationship<select value={selectedEdge.label} onChange={(event) => setDocument((current) => ({ ...current, updatedAt: Date.now(), edges: current.edges.map((edge) => edge.id === selectedEdge.id ? { ...edge, label: event.target.value as FieldEdge["label"] } : edge) }))} className="border-input bg-background mt-1.5 h-9 w-full rounded-md border px-3 text-sm">{FIELD_EDGE_LABELS.map((label) => <option key={label}>{label}</option>)}</select></label>
             </div>

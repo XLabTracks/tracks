@@ -170,7 +170,7 @@ export default async function ClassroomPage({
               >
                 <Avatar className="size-6">
                   <AvatarImage src={row.imageUrl ?? undefined} alt="" />
-                  <AvatarFallback className="text-[0.65rem]">
+                  <AvatarFallback className="text-4xs">
                     {(row.name ?? row.email)[0]?.toUpperCase()}
                   </AvatarFallback>
                 </Avatar>

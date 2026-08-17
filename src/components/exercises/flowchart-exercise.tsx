@@ -401,7 +401,7 @@ function Sequence({
                       key={j}
                       className="flex min-w-24 flex-col items-center"
                     >
-                      <span className="text-muted-foreground border-border bg-background rounded-full border px-2 py-0.5 text-[10px] font-medium tracking-wide uppercase">
+                      <span className="text-muted-foreground border-border bg-background rounded-full border px-2 py-0.5 text-4xs font-medium tracking-wide uppercase">
                         {block.branchLabels?.[j]}
                       </span>
                       <Connector />
@@ -526,7 +526,7 @@ function Palette({
 }) {
   return (
     <div className="w-full shrink-0 md:w-60">
-      <p className="text-muted-foreground mb-2 text-[10px] font-medium tracking-wide uppercase">
+      <p className="text-muted-foreground mb-2 text-4xs font-medium tracking-wide uppercase">
         Blocks — drag into the chart
       </p>
       {/* Half-height, scrollable; the full block list is ~2x this. */}
@@ -537,7 +537,7 @@ function Palette({
           if (group.length === 0) return null;
           return (
             <div key={kind} className="mb-3 last:mb-0">
-              <p className="text-muted-foreground mb-1.5 text-[10px] tracking-wide uppercase">
+              <p className="text-muted-foreground mb-1.5 text-4xs tracking-wide uppercase">
                 {heading}
               </p>
               <div className="grid grid-cols-2 gap-1.5 md:grid-cols-1">
@@ -579,7 +579,7 @@ function Palette({
           );
         })}
       </div>
-      <p className="text-muted-foreground mt-2 text-[10px]">
+      <p className="text-muted-foreground mt-2 text-4xs">
         Drag a block onto a dashed slot — or tap a block, then tap the slot.
       </p>
     </div>

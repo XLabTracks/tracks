@@ -320,7 +320,7 @@ function PaperCard({
             {formatAuthors(paper.meta.authors)}
           </span>
         </span>
-        <span className="text-muted-foreground border-border hidden shrink-0 rounded-md border px-1.5 py-0.5 text-[11px] sm:inline">
+        <span className="text-muted-foreground border-border hidden shrink-0 rounded-md border px-1.5 py-0.5 text-3xs sm:inline">
           arXiv:{id.id}
         </span>
         <ChevronDown

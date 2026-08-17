@@ -133,7 +133,7 @@ export function TheoriesOfChange(_: VerificationWidgetProps) {
         aria-label={`${b.label} — edit this box`}
         className={cn(
           "bg-card text-foreground min-h-16 p-2 text-left align-top",
-          "text-[12.5px] leading-snug whitespace-pre-wrap transition-colors",
+          "text-2xs leading-snug whitespace-pre-wrap transition-colors",
           "hover:bg-muted focus-visible:ring-ring focus-visible:ring-2 focus-visible:outline-none",
           active && "ring-ring ring-2 ring-inset",
           !text && "text-muted-foreground",
@@ -148,7 +148,7 @@ export function TheoriesOfChange(_: VerificationWidgetProps) {
   const band = (label: string, className?: string) => (
     <div
       className={cn(
-        "bg-foreground text-background p-2 text-center text-[12px] font-semibold",
+        "bg-foreground text-background p-2 text-center text-2xs font-semibold",
         className,
       )}
     >
@@ -159,7 +159,7 @@ export function TheoriesOfChange(_: VerificationWidgetProps) {
   const head = (label: string) => (
     <div
       key={label}
-      className="bg-muted text-foreground p-2 text-center text-[12px] font-medium"
+      className="bg-muted text-foreground p-2 text-center text-2xs font-medium"
     >
       {label}
     </div>
@@ -169,7 +169,7 @@ export function TheoriesOfChange(_: VerificationWidgetProps) {
     <div className="not-prose my-6 min-w-0 max-w-full space-y-4" aria-busy={!hydrated}>
       <div className="border-border bg-card shadow-soft space-y-3 rounded-xl border p-5">
         <label
-          className="text-muted-foreground text-[11px] tracking-[0.14em] uppercase"
+          className="text-muted-foreground eyebrow"
           htmlFor="toc-org"
         >
           Your organization
@@ -182,7 +182,7 @@ export function TheoriesOfChange(_: VerificationWidgetProps) {
           aria-label="The AI safety organization this theory of change is for"
         />
 
-        <p className="text-muted-foreground text-[11px] tracking-[0.14em] uppercase">
+        <p className="text-muted-foreground eyebrow">
           Box {step + 1} of {BOXES.length}
           {box.band !== box.label ? ` · ${box.band}` : ""}
         </p>

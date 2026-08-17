@@ -262,7 +262,7 @@ function ChainCell({
           : "border-border bg-card",
       )}
     >
-      <p className="text-muted-foreground text-[10px] tracking-[0.14em] uppercase">
+      <p className="text-muted-foreground text-4xs tracking-[0.14em] uppercase">
         {tag}
       </p>
       <p className="mt-1 text-sm font-medium">{body}</p>
@@ -390,7 +390,7 @@ function NotebookSection({
                 !active && "cursor-default",
               )}
             >
-              <span className="text-muted-foreground text-[10px] tracking-[0.1em] uppercase">
+              <span className="text-muted-foreground text-4xs tracking-[0.1em] uppercase">
                 {TAGS[c.tag]}
               </span>
               <span className="mt-1 block text-sm font-semibold">
@@ -567,7 +567,7 @@ function ThreadBoard({
     <div className="mt-4 grid gap-4 lg:grid-cols-[1.15fr_1fr]">
       {/* the report column */}
       <div>
-        <p className="text-muted-foreground mb-2 text-[11px] tracking-[0.12em] uppercase">
+        <p className="text-muted-foreground mb-2 eyebrow">
           {COPY.repTag}
         </p>
         <div className="space-y-2">
@@ -602,7 +602,7 @@ function ThreadBoard({
                   </button>
                   <div className="flex items-start justify-between gap-2 pr-6">
                     <span className="text-sm font-semibold">{c.title}</span>
-                    <span className="text-muted-foreground shrink-0 text-[10px] tracking-[0.08em] uppercase">
+                    <span className="text-muted-foreground shrink-0 text-4xs tracking-[0.08em] uppercase">
                       {TAGS[c.tag]}
                     </span>
                   </div>
@@ -638,7 +638,7 @@ function ThreadBoard({
                               onThread(id, r.id);
                             }}
                             className={cn(
-                              "inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-[11px] font-medium",
+                              "inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-3xs font-medium",
                               ok === false &&
                                 "border-defect/50 bg-defect/5 text-defect",
                             )}
@@ -677,7 +677,7 @@ function ThreadBoard({
 
       {/* the desks column */}
       <div>
-        <p className="text-muted-foreground mb-2 text-[11px] tracking-[0.12em] uppercase">
+        <p className="text-muted-foreground mb-2 eyebrow">
           {COPY.deskTag}
         </p>
         <div className="space-y-3">
@@ -706,7 +706,7 @@ function ThreadBoard({
                       <p className="text-sm font-semibold">{r.shortName}</p>
                       <p className="text-muted-foreground text-xs">{r.name}</p>
                     </div>
-                    <span aria-hidden className="text-muted-foreground text-[10px]">
+                    <span aria-hidden className="text-muted-foreground text-4xs">
                       [{ri + 1}]
                     </span>
                   </div>
@@ -740,7 +740,7 @@ function ThreadBoard({
                             </span>
                           </span>
                           {met === false && showHints && (
-                            <span className="text-muted-foreground mt-0.5 block pl-5 text-[11px] italic">
+                            <span className="text-muted-foreground mt-0.5 block pl-5 text-3xs italic">
                               {n.hint}
                             </span>
                           )}
@@ -749,12 +749,12 @@ function ThreadBoard({
                     })}
                   </ul>
 
-                  <p className="text-muted-foreground mt-2 text-[11px] italic">
+                  <p className="text-muted-foreground mt-2 text-3xs italic">
                     {r.standard}
                   </p>
 
                   {buried && (
-                    <p className="text-exaggerate mt-2 text-[11px]" role="note">
+                    <p className="text-exaggerate mt-2 text-3xs" role="note">
                       Buried — this desk is flooded with material it can’t use.
                     </p>
                   )}

@@ -56,7 +56,7 @@ export function ActorMap(_: VerificationWidgetProps) {
   return (
     <section className="not-prose border-border bg-card my-6 overflow-hidden rounded-xl border text-sm">
       <header className="border-border border-b p-5 sm:p-6">
-        <p className="text-muted-foreground text-[11px] tracking-[0.14em] uppercase">
+        <p className="text-muted-foreground eyebrow">
           Verification Track · Actor map
         </p>
         <div className="mt-2 flex flex-col gap-3 lg:flex-row lg:items-end lg:justify-between">
@@ -66,7 +66,7 @@ export function ActorMap(_: VerificationWidgetProps) {
               Move across three lenses: where an actor sits, what it can do, and what posture it may take.
             </p>
           </div>
-          <span className="text-muted-foreground shrink-0 text-[11px] tracking-[0.12em] uppercase">
+          <span className="text-muted-foreground shrink-0 eyebrow">
             {ACTOR_MAP_ENTRIES.length} actors · 3 lenses
           </span>
         </div>
@@ -132,7 +132,7 @@ export function ActorMap(_: VerificationWidgetProps) {
               <section key={groupId} className="border-border bg-background rounded-lg border p-3">
                 <div className="mb-3 flex items-center justify-between gap-3">
                   <h4 className="text-xs font-semibold">{ACTOR_GROUPS[groupId]}</h4>
-                  <span className="text-muted-foreground text-[10px]">{entries.length}</span>
+                  <span className="text-muted-foreground text-4xs">{entries.length}</span>
                 </div>
                 <div className="space-y-1.5">
                   {entries.map((actor) => (
@@ -167,7 +167,7 @@ export function ActorMap(_: VerificationWidgetProps) {
               <div className="flex items-start justify-between gap-3">
                 <div className="flex items-center gap-2">
                   {selected.kind === "public" ? <Building2 className="size-4" /> : <Users className="size-4" />}
-                  <span className="text-muted-foreground text-[10px] tracking-[0.12em] uppercase">
+                  <span className="text-muted-foreground text-4xs tracking-[0.12em] uppercase">
                     {selected.kind} actor
                   </span>
                 </div>
@@ -212,7 +212,7 @@ function ActorLens({ actor, lens }: { actor: ActorMapEntry; lens: Lens }) {
     <span className="mt-2 flex flex-wrap gap-1">
       {actor.postures.length ? actor.postures.map((id) => {
         const posture = ACTOR_POSTURES.find((item) => item.id === id)!;
-        return <span key={id} className="border-border rounded border px-1.5 py-0.5 text-[10px]">{posture.name}</span>;
+        return <span key={id} className="border-border rounded border px-1.5 py-0.5 text-4xs">{posture.name}</span>;
       }) : <Muted>Not applicable</Muted>}
     </span>
   );
@@ -221,21 +221,21 @@ function ActorLens({ actor, lens }: { actor: ActorMapEntry; lens: Lens }) {
 function RoleTag({ id }: { id: (typeof ACTOR_ROLES)[number]["id"] }) {
   const index = ACTOR_ROLES.findIndex((role) => role.id === id);
   const role = ACTOR_ROLES[index];
-  return <span className="rounded-sm px-1.5 py-0.5 text-[10px] font-medium" style={{ color: ROLE_COLORS[index % ROLE_COLORS.length], background: `color-mix(in srgb, ${ROLE_COLORS[index % ROLE_COLORS.length]} 10%, transparent)` }}>{role.name}</span>;
+  return <span className="rounded-sm px-1.5 py-0.5 text-4xs font-medium" style={{ color: ROLE_COLORS[index % ROLE_COLORS.length], background: `color-mix(in srgb, ${ROLE_COLORS[index % ROLE_COLORS.length]} 10%, transparent)` }}>{role.name}</span>;
 }
 
 function RoleLegend() {
-  return <div className="border-border mt-4 grid gap-2 rounded-lg border p-3 sm:grid-cols-2">{ACTOR_ROLES.map((role) => <div key={role.id}><RoleTag id={role.id} /><p className="text-muted-foreground mt-1 text-[11px] leading-snug">{role.question}</p></div>)}</div>;
+  return <div className="border-border mt-4 grid gap-2 rounded-lg border p-3 sm:grid-cols-2">{ACTOR_ROLES.map((role) => <div key={role.id}><RoleTag id={role.id} /><p className="text-muted-foreground mt-1 text-3xs leading-snug">{role.question}</p></div>)}</div>;
 }
 
 function PostureLegend() {
-  return <div className="border-border mt-4 grid gap-2 rounded-lg border p-3 sm:grid-cols-2">{ACTOR_POSTURES.map((posture) => <div key={posture.id}><p className="text-xs font-medium">{posture.name}</p><p className="text-muted-foreground mt-0.5 text-[11px] leading-snug">{posture.means}</p></div>)}</div>;
+  return <div className="border-border mt-4 grid gap-2 rounded-lg border p-3 sm:grid-cols-2">{ACTOR_POSTURES.map((posture) => <div key={posture.id}><p className="text-xs font-medium">{posture.name}</p><p className="text-muted-foreground mt-0.5 text-3xs leading-snug">{posture.means}</p></div>)}</div>;
 }
 
 function Detail({ label, children }: { label: string; children: React.ReactNode }) {
-  return <div className="border-border mt-4 border-t pt-3"><p className="text-muted-foreground mb-2 text-[10px] tracking-[0.12em] uppercase">{label}</p><div className="text-sm leading-relaxed">{children}</div></div>;
+  return <div className="border-border mt-4 border-t pt-3"><p className="text-muted-foreground mb-2 text-4xs tracking-[0.12em] uppercase">{label}</p><div className="text-sm leading-relaxed">{children}</div></div>;
 }
 
 function Muted({ children }: { children: React.ReactNode }) {
-  return <span className="text-muted-foreground text-[10px] italic">{children}</span>;
+  return <span className="text-muted-foreground text-4xs italic">{children}</span>;
 }

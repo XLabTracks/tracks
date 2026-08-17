@@ -589,7 +589,7 @@ export function TypesOfAi(_: VerificationWidgetProps) {
                 <h4 className="mt-1 text-base font-semibold">{AI_LEVELS[view.i].examples[view.ei].name}</h4>
                 <p className="mt-2">{AI_LEVELS[view.i].examples[view.ei].what}</p>
                 <p className="border-border mt-3 border-t pt-2">
-                  <span className="text-muted-foreground mr-1 text-[11px] tracking-[0.08em] uppercase">Why here</span>
+                  <span className="text-muted-foreground mr-1 eyebrow">Why here</span>
                   {AI_LEVELS[view.i].examples[view.ei].why}
                 </p>
               </PanelShell>
@@ -598,7 +598,7 @@ export function TypesOfAi(_: VerificationWidgetProps) {
         </div>
       </div>
 
-      <p className="text-muted-foreground/80 mt-3 text-[11px]">
+      <p className="text-muted-foreground/80 mt-3 text-3xs">
         {C.source.label}{" "}
         <a
           href={C.source.href}
@@ -635,7 +635,7 @@ function PanelShell({
       >
         <X className="size-4" aria-hidden />
       </button>
-      <p className="text-muted-foreground text-[11px] tracking-[0.12em] uppercase">{eyebrow}</p>
+      <p className="text-muted-foreground eyebrow">{eyebrow}</p>
       {children}
     </>
   );

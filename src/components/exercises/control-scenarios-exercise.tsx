@@ -189,7 +189,7 @@ export function ControlScenariosCard({
             </h4>
             <Paragraphs text={scenario.card} className="mt-2 text-sm" />
             <p className="mt-3 flex flex-wrap items-baseline gap-x-2 gap-y-1">
-              <span className="border-destructive/40 bg-destructive/5 text-destructive rounded-full border px-2 py-0.5 text-[10px] font-semibold tracking-wide whitespace-nowrap uppercase">
+              <span className="border-destructive/40 bg-destructive/5 text-destructive rounded-full border px-2 py-0.5 text-4xs font-semibold tracking-wide whitespace-nowrap uppercase">
                 Unacceptable outcome
               </span>
               <span className="text-sm font-medium">{scenario.outcome}</span>
@@ -206,7 +206,7 @@ export function ControlScenariosCard({
                   <ActorBadge
                     actor={actor.id}
                     letter={actor.letter}
-                    className="size-5 text-[10px]"
+                    className="size-5 text-4xs"
                   />
                   {actor.legend}
                 </span>

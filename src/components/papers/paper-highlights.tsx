@@ -1625,7 +1625,7 @@ export function PaperHighlights({
                               return next;
                             })
                           }
-                          className={`text-muted-foreground hover:text-foreground mt-1 text-[11px] font-medium underline decoration-dotted underline-offset-2 ${
+                          className={`text-muted-foreground hover:text-foreground mt-1 text-3xs font-medium underline decoration-dotted underline-offset-2 ${
                             expandedNoteIds.has(row.id)
                               ? "block"
                               : "hidden group-data-[overflow]:block"
@@ -1690,7 +1690,7 @@ export function PaperHighlights({
                     data-peer=""
                   >
                     <div className="px-2.5 py-2">
-                      <span className="mb-0.5 block text-[11px] font-medium text-sky-700 dark:text-sky-400">
+                      <span className="mb-0.5 block text-3xs font-medium text-sky-700 dark:text-sky-400">
                         {row.author}
                       </span>
                       <span

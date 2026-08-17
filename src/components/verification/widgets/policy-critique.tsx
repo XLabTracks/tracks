@@ -149,7 +149,7 @@ export function PolicyCritique({
                 >
                   {provision.text}
                   {slot ? (
-                    <span className="text-muted-foreground mt-1 block text-[11px] tracking-[0.12em] uppercase">
+                    <span className="text-muted-foreground mt-1 block eyebrow">
                       {slot.label}
                     </span>
                   ) : null}
@@ -183,7 +183,7 @@ export function PolicyCritique({
               )}
             >
               <div className="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1">
-                <p className="text-muted-foreground text-[11px] tracking-[0.12em] uppercase">
+                <p className="text-muted-foreground eyebrow">
                   {slot.label}
                 </p>
                 {!saved.submitted && !provision ? (

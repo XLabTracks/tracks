@@ -131,7 +131,7 @@ function PhaseRail({
         <li
           key={phase.id}
           className={cn(
-            "border-border rounded-md border px-2 py-2 text-center text-[10px] font-medium tracking-[0.01em] uppercase",
+            "border-border rounded-md border px-2 py-2 text-center text-4xs font-medium tracking-[0.01em] uppercase",
             index === active && "border-primary bg-primary/5 text-primary",
             index < active && "bg-muted/45 text-foreground",
             index > active && "text-muted-foreground"

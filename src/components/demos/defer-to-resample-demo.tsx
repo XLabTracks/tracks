@@ -194,7 +194,7 @@ export function DeferToResampleDemo() {
       </div>
 
       <div>
-        <div className="text-muted-foreground mb-1 flex flex-wrap items-center justify-center gap-3 text-[10px]">
+        <div className="text-muted-foreground mb-1 flex flex-wrap items-center justify-center gap-3 text-4xs">
           <span className="flex items-center gap-1">
             <span className="inline-block h-0.5 w-4 rounded" style={{ background: INNOCENT }} />
             innocent step — min of {k} sample{k > 1 ? "s" : ""}

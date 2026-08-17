@@ -129,7 +129,7 @@ export function PolicyOnPaper({
               aria-selected={active}
               onClick={() => setTab(c.id)}
               className={cn(
-                "rounded-full border px-4 py-1.5 text-[11px] tracking-[0.14em] uppercase transition-colors",
+                "rounded-full border px-4 py-1.5 eyebrow transition-colors",
                 active
                   ? "border-primary bg-primary text-primary-foreground"
                   : "border-border text-muted-foreground hover:bg-muted hover:text-foreground",

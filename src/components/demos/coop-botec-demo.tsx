@@ -70,7 +70,7 @@ function Stage({
         accent ? "border-primary/40 bg-primary/5" : "border-border bg-card"
       }`}
     >
-      <div className="text-muted-foreground text-[11px] leading-tight">{label}</div>
+      <div className="text-muted-foreground text-3xs leading-tight">{label}</div>
       <div className="text-foreground text-lg font-semibold tabular-nums">{value}</div>
     </div>
   );

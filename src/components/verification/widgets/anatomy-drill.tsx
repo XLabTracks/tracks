@@ -280,7 +280,7 @@ function Drill({
             )}
             armedClassName="ring-primary ring-2"
           >
-            <div className="text-muted-foreground mb-2 flex justify-between text-[10px] tracking-[0.14em] uppercase">
+            <div className="text-muted-foreground mb-2 flex justify-between text-4xs tracking-[0.14em] uppercase">
               <span>Specimen {idx + 1}</span>
               <span>source hidden</span>
             </div>
@@ -298,7 +298,7 @@ function Drill({
       {/* filed confirmation (after resolution) */}
       {showFiled && (
         <div className="bg-card shadow-soft mx-auto max-w-2xl rounded-xl border p-4">
-          <div className="text-muted-foreground mb-1.5 text-[10px] tracking-[0.14em] uppercase">
+          <div className="text-muted-foreground mb-1.5 text-4xs tracking-[0.14em] uppercase">
             Specimen {idx + 1} — filed under: {filedOrgan.name}
           </div>
           <p className="text-foreground/90 text-sm leading-relaxed">
@@ -401,7 +401,7 @@ function Bin({
       <div className="text-[13px] font-semibold">
         {organ.n}. {organ.name}
       </div>
-      <div className="text-muted-foreground mt-1 text-[11px] leading-snug">
+      <div className="text-muted-foreground mt-1 text-3xs leading-snug">
         {organ.d}
       </div>
     </DropZone>
@@ -446,7 +446,7 @@ function Summary({
               {COPY.tableHead.map((h) => (
                 <th
                   key={h}
-                  className="border-border text-muted-foreground border-b px-3 py-2 text-left text-[10px] tracking-[0.09em] uppercase"
+                  className="border-border text-muted-foreground border-b px-3 py-2 text-left text-4xs tracking-[0.09em] uppercase"
                 >
                   {h}
                 </th>
@@ -552,7 +552,7 @@ function Summary({
 
       {/* full protocol text */}
       <div className="border-border bg-card mt-2 rounded-lg border p-5">
-        <h5 className="text-[12px] font-semibold tracking-[0.08em] uppercase">
+        <h5 className="text-2xs font-semibold tracking-[0.08em] uppercase">
           {COPY.protocolHead}
         </h5>
         <p className="text-muted-foreground mt-1 mb-4 text-xs leading-relaxed">
@@ -561,7 +561,7 @@ function Summary({
         <div className="space-y-3">
           {PROTOCOL.map((a) => (
             <div key={a.id}>
-              <div className="text-muted-foreground text-[10px] tracking-[0.1em] uppercase">
+              <div className="text-muted-foreground text-4xs tracking-[0.1em] uppercase">
                 {a.id}
               </div>
               <p className="text-foreground/90 text-sm leading-relaxed">
@@ -588,7 +588,7 @@ function ScoreCard({
   return (
     <div className="border-border bg-muted/30 rounded-lg border p-3 text-center">
       <div className={cn("text-2xl font-bold", accent.text)}>{n}</div>
-      <div className="text-muted-foreground text-[11px]">{label}</div>
+      <div className="text-muted-foreground text-3xs">{label}</div>
     </div>
   );
 }

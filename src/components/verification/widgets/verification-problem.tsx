@@ -30,7 +30,7 @@ export function VerificationProblem(_: VerificationWidgetProps) {
   return (
     <section className="not-prose border-border bg-card my-6 overflow-hidden rounded-xl border text-sm">
       <div className="border-border border-b p-5 sm:p-6">
-        <p className="text-muted-foreground text-[11px] tracking-[0.14em] uppercase">
+        <p className="text-muted-foreground eyebrow">
           {C.eyebrow}
         </p>
         <div className="mt-3 grid gap-4 lg:grid-cols-[1fr_14rem] lg:items-end">
@@ -62,7 +62,7 @@ export function VerificationProblem(_: VerificationWidgetProps) {
               )}
             >
               <span className="flex items-center justify-between gap-3">
-                <span className="text-muted-foreground text-[10px] tracking-[0.14em] uppercase">
+                <span className="text-muted-foreground text-4xs tracking-[0.14em] uppercase">
                   {option.label}
                 </span>
                 {/* Inspected is said, not shaded. The filled disc here made
@@ -70,7 +70,7 @@ export function VerificationProblem(_: VerificationWidgetProps) {
                     repeated this card's position — which the label opposite
                     already carries. See CLAUDE.md on rings. */}
                 {seen ? (
-                  <span className="text-comply flex items-center gap-1 text-[11px] font-medium">
+                  <span className="text-comply flex items-center gap-1 text-3xs font-medium">
                     <Check className="size-3.5 shrink-0" aria-hidden />
                     Inspected
                   </span>
@@ -101,7 +101,7 @@ export function VerificationProblem(_: VerificationWidgetProps) {
               <div>
                 <p
                   className={cn(
-                    "text-[11px] tracking-[0.14em] uppercase",
+                    "eyebrow",
                     open.holds ? "text-comply" : "text-defect",
                   )}
                 >

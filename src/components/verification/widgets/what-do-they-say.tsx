@@ -47,7 +47,7 @@ export function WhatDoTheySay() {
             <div className="flex items-center gap-3">
               <Avatar figure={f} className="size-11 text-sm" />
               <div className="min-w-0">
-                <p className="text-muted-foreground text-[10px] tracking-[0.12em] uppercase">
+                <p className="text-muted-foreground text-4xs tracking-[0.12em] uppercase">
                   {f.code}
                 </p>
                 <p className="text-foreground truncate text-sm font-semibold">
@@ -84,7 +84,7 @@ export function WhatDoTheySay() {
                 <div className="flex items-center gap-4">
                   <Avatar figure={active} className="size-16 text-lg" />
                   <div className="min-w-0">
-                    <p className="text-muted-foreground text-[11px] tracking-[0.12em] uppercase">
+                    <p className="text-muted-foreground eyebrow">
                       {active.code}
                     </p>
                     <DialogTitle className="text-lg">
@@ -108,7 +108,7 @@ export function WhatDoTheySay() {
                   >
                     <p
                       className={cn(
-                        "text-[11px] tracking-[0.12em] uppercase",
+                        "eyebrow",
                         s.matters ? "text-primary" : "text-muted-foreground",
                       )}
                     >
@@ -125,7 +125,7 @@ export function WhatDoTheySay() {
                 ))}
 
                 <div className="border-border border-t pt-3">
-                  <p className="text-muted-foreground text-[11px] tracking-[0.12em] uppercase">
+                  <p className="text-muted-foreground eyebrow">
                     Sources
                   </p>
                   <div className="mt-1.5 flex flex-wrap gap-x-4 gap-y-1">
@@ -142,7 +142,7 @@ export function WhatDoTheySay() {
                     ))}
                   </div>
                   {active.photoSource && (
-                    <p className="text-muted-foreground mt-3 text-[11px]">
+                    <p className="text-muted-foreground mt-3 text-3xs">
                       Portrait:{" "}
                       <a
                         href={active.photoSource}

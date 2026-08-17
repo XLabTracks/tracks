@@ -195,7 +195,7 @@ function SortWidget({ reveal }: { reveal: boolean }) {
         <p className="text-muted-foreground">
           {reveal ? COPY.revealFraming : COPY.framing}
         </p>
-        <span className="text-muted-foreground shrink-0 text-[11px] tracking-[0.12em] uppercase select-none">
+        <span className="text-muted-foreground shrink-0 eyebrow select-none">
           {reveal ? "Comparing" : store.sealed ? "Sealed" : `${ratedCount} / 12`}
         </span>
       </div>
@@ -253,7 +253,7 @@ function SortWidget({ reveal }: { reveal: boolean }) {
       {!reveal &&
         (store.sealed ? (
           <div className="border-border bg-muted rounded-lg border p-3">
-            <p className="text-muted-foreground text-[11px] tracking-[0.14em] uppercase select-none">
+            <p className="text-muted-foreground eyebrow select-none">
               Sealed {store.sealedAt}
             </p>
             <p className="mt-1">
@@ -381,7 +381,7 @@ function Rater({
                     aria-checked={sel === i}
                     onClick={() => onRung(metric.key, i)}
                     className={cn(
-                      "rounded-md border px-0.5 py-1.5 text-center text-[10px] leading-tight break-words transition-colors select-none sm:px-1 sm:text-[11px]",
+                      "rounded-md border px-0.5 py-1.5 text-center text-4xs leading-tight break-words transition-colors select-none sm:px-1 sm:text-3xs",
                       sel === i
                         ? "border-primary bg-primary text-primary-foreground"
                         : "border-border hover:border-ring",
@@ -423,7 +423,7 @@ function Lanes({
 }) {
   return (
     <div className="space-y-3">
-      <p className="text-muted-foreground text-[11px] tracking-[0.14em] uppercase select-none">
+      <p className="text-muted-foreground eyebrow select-none">
         Your ranking, metric by metric
       </p>
       {METRICS.map((metric) => (
@@ -540,11 +540,11 @@ function Detail({
       <div className="flex items-start justify-between gap-2">
         <div>
           {verdict && (
-            <span className="text-muted-foreground text-[11px] tracking-[0.13em] uppercase select-none">
+            <span className="text-muted-foreground eyebrow select-none">
               {verdict.label} · gap {Math.round(gapOf(v, mech.ref) * 100)}
             </span>
           )}
-          <p className="text-[11px] font-medium" style={{ color: LAYER_COLOR[mech.layer] }}>
+          <p className="text-3xs font-medium" style={{ color: LAYER_COLOR[mech.layer] }}>
             {layerName(mech.layer)}
           </p>
           <h4 className="font-semibold">{mech.title}</h4>
@@ -613,7 +613,7 @@ function Detail({
           <p className="text-muted-foreground">{deltaText(v, mech.ref)}</p>
           <p>{mech.expl}</p>
           <div>
-            <p className="text-muted-foreground text-[11px] tracking-[0.14em] uppercase select-none">
+            <p className="text-muted-foreground eyebrow select-none">
               Sources
             </p>
             <ul className="text-muted-foreground mt-1 list-disc space-y-0.5 pl-5 text-xs">
@@ -657,7 +657,7 @@ function Gaps({
   if (!ranked.length) return null;
   return (
     <div className="space-y-2">
-      <p className="text-muted-foreground text-[11px] tracking-[0.14em] uppercase select-none">
+      <p className="text-muted-foreground eyebrow select-none">
         Your calls, ranked by gap
       </p>
       <p className="text-muted-foreground text-xs">{COPY.gapsNote}</p>
@@ -685,7 +685,7 @@ function Gaps({
                 >
                   {m.short}
                 </span>
-                <span className="text-muted-foreground shrink-0 text-[11px] tracking-[0.1em] uppercase">
+                <span className="text-muted-foreground shrink-0 eyebrow">
                   {verdict.label} · {Math.round(d * 100)}
                 </span>
               </button>

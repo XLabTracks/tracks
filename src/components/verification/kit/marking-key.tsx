@@ -78,7 +78,7 @@ export function MarkingKeyPanel({
   return (
     <section className="border-border rounded-xl border p-4">
       <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
-        <h4 className="text-muted-foreground text-[11px] tracking-[0.14em] uppercase">
+        <h4 className="text-muted-foreground eyebrow">
           Marking key
         </h4>
         <p
@@ -114,7 +114,7 @@ export function MarkingKeyPanel({
               >
                 <span
                   className={cn(
-                    "border-border mt-0.5 flex size-5 shrink-0 items-center justify-center rounded border text-[11px]",
+                    "border-border mt-0.5 flex size-5 shrink-0 items-center justify-center rounded border text-3xs",
                     on && "border-primary bg-primary text-primary-foreground"
                   )}
                   aria-hidden
@@ -144,7 +144,7 @@ export function MarkingKeyPanel({
       </ul>
 
       <div className="mt-3">
-        <p className="text-muted-foreground text-[11px] tracking-[0.14em] uppercase">
+        <p className="text-muted-foreground eyebrow">
           No credit
         </p>
         <ul className="mt-1.5 space-y-1">

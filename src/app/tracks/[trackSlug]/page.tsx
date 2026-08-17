@@ -159,7 +159,13 @@ export default async function TrackOverviewPage({
                   </div>
                 </CardHeader>
                 <CardContent>
-                  <ul className="text-muted-foreground space-y-1 text-sm">
+                  {/* select-none for the sidebar's reason: this list is the
+                      module's index, not its reading. A drag that starts on a
+                      lesson title and ends in the page smears a selection
+                      across every row it crossed, and nobody copies a row of
+                      contents. The titles inside a resource card stay
+                      selectable — those are content someone cites. */}
+                  <ul className="text-muted-foreground space-y-1 text-sm select-none">
                     {items.map((item) => {
                       const done = getItemProgressContentIds(item).every((id) =>
                         completedSet.has(id),

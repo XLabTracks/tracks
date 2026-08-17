@@ -680,6 +680,25 @@ export const papers: Paper[] = [
     ],
   },
   {
+    // Control track, module 1: Josh Clymer's "How might we safely pass the buck
+    // to AI?", rendered full-page through the LessWrong paper reader. Placed
+    // right after the AI Control paper: it reuses that paper's vocabulary
+    // (untrusted monitoring, control evaluations, resampling) and develops the
+    // Control World Model — what handing off to AI means, and the capability
+    // and trust conditions a safe handoff needs. No edits yet: a clean reading;
+    // guided exercises to follow.
+    id: "c-pass-the-buck",
+    slug: "how-might-we-safely-pass-the-buck-to-ai",
+    moduleId: "c-intro",
+    title: "How might we safely pass the buck to AI?",
+    source: {
+      kind: "lesswrong",
+      postUrl:
+        "https://www.lesswrong.com/posts/TTFsKxQThrqgWeXYJ/how-might-we-safely-pass-the-buck-to-ai",
+    },
+    estimatedMinutes: 50,
+  },
+  {
     // Control track, module 1: "Catching AIs red-handed", rendered full-page
     // through the LessWrong paper reader. Closes (after §Conclusion, before
     // the appendices) with a two-stage legibility discussion — does a catch

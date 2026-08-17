@@ -1276,14 +1276,18 @@ Two consequences, both worth her word:
   exercise. The one edit inside the reading card was "For this exercise" →
   "For this section", which named the exercise that left; every instruction in
   it is hers, unchanged.
-- **`human-institutions-judgment` is bridged and is now 2.4.2's only bridged
-  widget**, so 2.4.2 is the one section of 2.4 whose lab records completion —
-  against her instruction that 2.4.1–2.4.3's labs are optional and record
-  nothing. Left as it is rather than flipped, because that instruction was
-  about the optional labs and this exercise is not one. Worth noting that the
-  bridge writes to `v-human-institutions-judgment`, which is not a lesson in
-  the graph, so it has never completed a section on either page — a
-  pre-existing defect, not one this move introduced.
+- **`human-institutions-judgment` stays bridged.** CORRECTED 2026-08-15, same
+  day: the first version of this entry called that a defect, on the reasoning
+  that the bridge writes to `v-human-institutions-judgment`, which is not a
+  lesson in the graph. It is not a defect. `bridged` writes to the EXERCISE's
+  own content id, never its host lesson's, so an exercise embedded in somebody
+  else's prose records a private mark the widget reads back to show itself as
+  done and completes no section — by design. It only completes a lesson when
+  the exercise IS one (`v-interactive-map`, `v-report-constructor`). The rule
+  now lives in one place, the header of `src/lib/verification/exercises.ts`,
+  because that file's per-entry comments had claimed the wrong thing twice.
+  So nothing about 2.4's completion changed with the move, and her instruction
+  that 2.4.1–2.4.3's labs record nothing is not in tension with it.
 
 Estimates re-cut with the block: 2.4.2 40 → 60, 2.4.4 30 → 10. The 2.4 unit's
 own `120 min` in course.js is unchanged, because nothing left the section.

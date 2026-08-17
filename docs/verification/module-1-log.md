@@ -137,3 +137,70 @@ wrote at the top of this page" reference flagged in the previous entry.
 `scoping-intro` joins autoGlossExclude: the auto-gloss senses of "backdoor"
 (AI control) and "non-proliferation" (AI capability spread) would mis-gloss
 this page's treaty-sense uses.
+
+## 1.2 repaired (2026-08-15, owner read the section)
+
+Nothing here is a redesign — the section's structure, its five tables and its
+three widgets are unchanged. These are defects found by reading 1.2 end to end
+in a browser and checked one at a time.
+
+**The opening said the same thing four times, and the copy that had it wrong
+was the one on top.** The MDX paragraph sent the reader to "the sample pause
+policy you constructed at the end of Module 0"; Module 0 asks nobody to
+construct one (its exercises are `packet-tasks` and a reading list), and the
+three other copies on the same screen all say correctly that it is Scher's
+draft, dissected in 1.1. Fixed on the owner's instruction: one lead-in in
+prose, the "click a phrase" instruction left to the widget being clicked, the
+italic attribution line dropped because the document card carries it.
+
+The prose sentence and the widget's are one authored run split one each — the
+widget's `subLearn` lost its first two sentences and the body gained exactly
+those. Between them the wording is unchanged; only the duplication is gone.
+
+**The Scher link moved to Notes and sources rather than disappearing.** The
+citation collector reads lesson MDX, not widget data, and the document card
+names the paper without linking it — so deleting the italic line would have
+dropped the work the section opens on out of 1.2's own Works cited.
+
+**Three cross-references pointed at sections that do not exist.**
+
+- "the compute supply chain you mapped in 1.2" — this *is* 1.2, and the map is
+  1.2.1, which comes after those words. Now "that 1.2.1 maps".
+- "the same axis as the map in 1.2" — same, now 1.2.1.
+- "section 1.5 develops it properly" — module 1 runs 1.0–1.3, and 1.3 Upstream
+  and downstream is the section that develops the chain narrowing. Now 1.3.
+
+**Three smaller ones.** `1025 FLOP` had lost its superscript (Notes and
+sources, in the same file, writes `10^25`, which is now what both say).
+`risk,it` was missing a space. Table 4's frontier-labs cell read "Every posture
+potentially" with no end to it; it is punctuated now — "Every posture,
+potentially." — and nothing was added, because the paragraph under the table
+already spells out what it means.
+
+**1.2.1 and 1.2.2 each opened by saying their one sentence twice.** 1.2.2 ran
+"The inspection is over and your notebook is full …" straight into "Two days
+inside Pacifica's Northgate compute campus are over and your notebook is full
+…". The more specific of each pair stays.
+
+**Their bodies moved into `src/content/lessons/verification/`.** They were the
+only two lessons in the track sitting at the top level of `lessons/`, under
+`v-`-prefixed filenames; `contentRef` follows. Driven in a browser afterwards
+rather than trusted to the suite, because `importLesson()` turns a wrong
+`contentRef` into an ordinary 404 while typecheck and every test stay green.
+
+**Still owed, and the owner's to write:** 1.2.1 and 1.2.2 are a lead sentence
+and a widget each. What they lack is what 2.4's sections have — why the reader
+is here, and what they take away. Marked in both files; do not fill it in.
+
+### What was NOT changed, and a correction
+
+An earlier reading of this reported that `protocol-actors` is "bridged but
+completes nothing" and `interactive-map` is "unbridged although it has its own
+lesson", and called the pair wired backwards. That was wrong, and no flag was
+flipped. `bridged` writes to the EXERCISE's content id, never its host
+lesson's: an exercise embedded in prose has no such lesson and records a
+private mark the widget reads back to show itself done — by design — while an
+exercise that IS a lesson (1.2.1, 1.2.2) completes that lesson. Eleven bridged
+exercises across the track are of the first kind. The rule is now stated once,
+in the header of `src/lib/verification/exercises.ts`, because that file's own
+per-entry comments had asserted the wrong version of it twice.

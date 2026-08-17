@@ -9,8 +9,26 @@
  * (or the explicit button) completes it. Unbridged widgets are view-style
  * explorables with no finish event and keep normal scroll-to-complete.
  *
- * `id` is the widget id; the matching content-graph lesson id is always
- * `v-<id>` (enforced by src/lib/verification/widgets.test.ts).
+ * WHAT `bridged` COMPLETES, because the comments in this file kept getting it
+ * wrong. The write always goes to `v-<id>` — the exercise's own content id,
+ * never its host lesson's. So:
+ *
+ *   - An exercise that IS a lesson (`interactive-map` = 1.2.1,
+ *     `report-constructor` = 1.2.2) has `v-<id>` in the graph, and bridging it
+ *     does complete that lesson.
+ *   - An exercise embedded in somebody else's prose (`protocol-actors` inside
+ *     1.2, `human-institutions-judgment` inside 2.4.2) has no `v-<id>` lesson.
+ *     Bridging it records a private per-exercise mark the widget reads back to
+ *     show itself as done; it completes NO lesson and is counted in no total,
+ *     because the progress accessors walk the graph. That is the design, not a
+ *     defect — an embedded widget remembering it was finished, without
+ *     claiming the section around it was read.
+ *
+ * So "finishing it finishes the section" is only ever true of the first kind.
+ *
+ * `id` is the widget id; where the exercise is its own lesson that lesson's id
+ * is `v-<id>` (enforced by src/lib/verification/widgets.test.ts, which also
+ * allows the embedded-in-prose kind).
  */
 export interface VerificationExerciseDef {
   /** Widget id (also the widgets/registry.tsx key and the v-<id> lesson id). */
@@ -72,15 +90,15 @@ export const verificationExercises: VerificationExerciseDef[] = [
   // has still finished it.
   { id: "human-insiders", title: "Insider Report", bridged: false },
   { id: "human-reporting-protection", title: "On Paper", bridged: false },
-  // Unbridged: a three-minute assignment inside 2.4.2's prose, not the
-  // section's finish. Companies A and B below is 2.4.2's one bridged widget —
-  // two in one lesson would end the section at whichever fired first.
+  // Unbridged: a three-minute assignment inside 2.4.2's prose, and nothing it
+  // could record would mean "2.4.2 read".
   { id: "whistleblower-levers", title: "Four Levers, One Each", bridged: false },
   { id: "human-audits-inspections", title: "Four Sources", bridged: false },
   // Read in 2.4.2 since 2026-08-15, authored for 2.4.4 — the id is a progress
-  // key and stays. Bridged, and the only one in 2.4: it is not optional, it
-  // sits outside the Fold, and it is the long applied block that closes the
-  // section.
+  // key and stays. Bridged because it is the one block in 2.4 with a real
+  // finish (three tabs committed) and is not optional; it is embedded in
+  // prose, so per the note at the top of this file that finish marks the
+  // exercise and completes no section.
   { id: "human-institutions-judgment", title: "Companies A and B", bridged: true },
   // 2.4.4's optional closer, per the owner's brief: one 15-minute exercise
   // over all four of the section's objectives. Optional, so unbridged.

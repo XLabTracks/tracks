@@ -275,9 +275,10 @@ export const verificationLessons: Lesson[] = [
     sectionItemId: "v-human-intro",
     title: "2.4.4 Institutions and policy judgment",
     contentRef: "verification/human-institutions",
-    // 10 since Companies A and B left: the section is its framing paragraph
-    // and one 6–8 minute reading until its own exercise is authored.
-    estimatedMinutes: 10,
+    // Companies A and B left for 2.4.2 and The Standard of Proof arrived in
+    // its place, both on 2026-08-15: a 6–8 minute reading plus a 15-minute
+    // optional closer.
+    estimatedMinutes: 25,
   },
   {
     id: "v-covert-system-overview",

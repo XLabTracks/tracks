@@ -231,7 +231,7 @@ export function PolicyScoping({ onComplete }: VerificationWidgetProps) {
                     {ROW_LABELS.map((rl) => (
                       <div
                         key={rl}
-                        className="text-muted-foreground flex flex-1 items-center justify-end pr-1.5 text-[10px] tracking-[0.06em] uppercase"
+                        className="text-muted-foreground flex flex-1 items-center justify-end pr-1.5 text-4xs tracking-[0.06em] uppercase"
                       >
                         {rl}
                       </div>
@@ -285,7 +285,7 @@ export function PolicyScoping({ onComplete }: VerificationWidgetProps) {
                                       id={id}
                                       label={p.name}
                                       className={cn(
-                                        "border-border bg-card shadow-soft z-10 flex items-center gap-1.5 rounded-full border py-1 pr-2.5 pl-2 text-[11px] leading-tight font-semibold",
+                                        "border-border bg-card shadow-soft z-10 flex items-center gap-1.5 rounded-full border py-1 pr-2.5 pl-2 text-3xs leading-tight font-semibold",
                                         pl.verdict &&
                                           VERDICT_ACCENT[pl.verdict],
                                       )}
@@ -317,7 +317,7 @@ export function PolicyScoping({ onComplete }: VerificationWidgetProps) {
                   {COL_LABELS.map((cl) => (
                     <div
                       key={cl}
-                      className="text-muted-foreground flex-1 pt-1.5 text-center text-[10px] tracking-[0.06em] uppercase"
+                      className="text-muted-foreground flex-1 pt-1.5 text-center text-4xs tracking-[0.06em] uppercase"
                     >
                       {cl}
                     </div>
@@ -358,7 +358,7 @@ export function PolicyScoping({ onComplete }: VerificationWidgetProps) {
 
             {/* controls */}
             <div>
-              <p className="text-muted-foreground mb-2 text-[10px] tracking-[0.15em] uppercase">
+              <p className="text-muted-foreground mb-2 text-4xs tracking-[0.15em] uppercase">
                 {C.exerciseLabel}
               </p>
               <div className="flex flex-col gap-2">
@@ -409,7 +409,7 @@ export function PolicyScoping({ onComplete }: VerificationWidgetProps) {
             {/* results */}
             {anyVerdict && (
               <div className="flex flex-col gap-1.5">
-                <p className="text-muted-foreground text-[10px] tracking-[0.15em] uppercase">
+                <p className="text-muted-foreground text-4xs tracking-[0.15em] uppercase">
                   {C.resultsLabel}
                 </p>
                 {POLICIES.map((p) => {
@@ -424,7 +424,7 @@ export function PolicyScoping({ onComplete }: VerificationWidgetProps) {
                           <span className="text-xs font-semibold">
                             {p.name}
                           </span>
-                          <span className="text-muted-foreground ml-auto text-[9px] tracking-[0.1em] uppercase">
+                          <span className="text-muted-foreground ml-auto text-4xs tracking-[0.1em] uppercase">
                             moved — recheck
                           </span>
                         </div>
@@ -443,7 +443,7 @@ export function PolicyScoping({ onComplete }: VerificationWidgetProps) {
                         <span className="text-xs font-semibold">{p.name}</span>
                         <span
                           className={cn(
-                            "ml-auto text-[9px] tracking-[0.1em] uppercase",
+                            "ml-auto text-4xs tracking-[0.1em] uppercase",
                             VERDICT_TEXT[pl.verdict],
                           )}
                         >
@@ -462,7 +462,7 @@ export function PolicyScoping({ onComplete }: VerificationWidgetProps) {
             {/* exception panel */}
             {excUnlocked && (
               <div className="border-border bg-muted/30 rounded-lg border p-3">
-                <p className="text-muted-foreground mb-2 text-[10px] tracking-[0.15em] uppercase">
+                <p className="text-muted-foreground mb-2 text-4xs tracking-[0.15em] uppercase">
                   {C.excLabel}
                 </p>
                 <p className="text-muted-foreground mb-3 text-sm leading-relaxed">
@@ -490,7 +490,7 @@ export function PolicyScoping({ onComplete }: VerificationWidgetProps) {
                         disabled={excDone && !(isPicked && ok)}
                         onClick={() => pickException(p.id)}
                         className={cn(
-                          "border-border rounded-full border px-3 py-1 text-[11px] font-semibold transition-colors",
+                          "border-border rounded-full border px-3 py-1 text-3xs font-semibold transition-colors",
                           "hover:border-foreground/40 disabled:opacity-50",
                           isPicked && ok && "border-comply text-comply",
                           isPicked && !ok && "border-defect text-defect",
@@ -596,7 +596,7 @@ function GhostTip({ policy }: { policy: Policy }) {
         <button
           type="button"
           className={cn(
-            "absolute z-[7] flex -translate-x-1/2 -translate-y-1/2 items-center gap-1.5 rounded-full border border-dashed bg-card/90 px-2 py-0.5 text-[10px] whitespace-nowrap",
+            "absolute z-[7] flex -translate-x-1/2 -translate-y-1/2 items-center gap-1.5 rounded-full border border-dashed bg-card/90 px-2 py-0.5 text-4xs whitespace-nowrap",
             "text-muted-foreground hover:text-foreground cursor-help",
             isTarget
               ? "border-defect border-solid ring-4 ring-defect/15"
@@ -639,7 +639,7 @@ function ChipTip({
           <span className="mt-1 block">
             <span
               className={cn(
-                "block text-[10px] tracking-[0.1em] uppercase",
+                "block text-4xs tracking-[0.1em] uppercase",
                 VERDICT_TEXT[combo.v],
               )}
             >
@@ -685,7 +685,7 @@ function CornerNote({
       <button
         type="button"
         className={cn(
-          "text-muted-foreground/60 hover:text-muted-foreground absolute z-[8] cursor-help border-0 bg-transparent p-0 text-[9px] tracking-[0.05em] select-none",
+          "text-muted-foreground/60 hover:text-muted-foreground absolute z-[8] cursor-help border-0 bg-transparent p-0 text-4xs tracking-[0.05em] select-none",
           className,
         )}
       >

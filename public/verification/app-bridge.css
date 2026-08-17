@@ -109,134 +109,84 @@
   font-size: var(--fs-md);
 }
 
-/* Sizes that opted out of the token scale, put back into the reader scale.
+/* The Aa stops, for the micro-label family and for what is left of the
+   literals.
 
-   Two ways to opt out and both were in use. A Tailwind arbitrary value
-   (`text-[11px]`) compiles to a literal declaration, so the --text-* mapping
-   above never sees it; there are a few hundred of them across the widgets, and
-   rewriting each to a token would move sizes in day and night too, which is a
-   different change than the one being asked for. A CSS length in rem resolves
-   against the ROOT font size, which this mode deliberately does not touch, so
-   it also stands still.
+   `--text-4xs/3xs/2xs` are the family — 10, 11 and 12px, defined in
+   globals.css and re-solved here by the same factor as every other step, so a
+   micro-label stays a micro-label relative to its neighbours. They are the
+   architecture: one name per size, re-pointed in one place.
 
-   Each Aa stop re-solves those literals by the same factor as the token scale,
-   so a micro-label stays a micro-label relative to its neighbours.
+   `--lv-*` is what the architecture replaced, still standing under four
+   sizes. A Tailwind arbitrary value (`text-[13px]`) compiles to a literal
+   declaration that the --text-* mapping above cannot see, so each one has to
+   be caught by its own class name below. 236 call sites across 52 files were
+   converted to the family and their rows deleted; 13, 13.5, 15 and 17px are
+   the tail, and they are not micro-labels — they are reading copy, and the
+   step they belong to differs between the app (`text-sm` is 14px) and this
+   course (the bridge above points `text-sm` at 16px), so each is a judgement
+   rather than a rename. Convert them and this whole block goes.
 
-   The list is closed and short by construction: `grep -oE "text-\[[0-9.]+px\]"`
-   over src/ prints every distinct value in the codebase. A new one belongs
-   here, or better, belongs written as a token in the first place.
+   Trap: the two halves differ at rest and it is deliberate. The family is rem
+   with no stop selected, so a browser text-size preference already moves it;
+   `--lv-*` is px there, so it does not. rem is the right behaviour — the
+   research and WCAG 1.4.4 both want the preference to compound rather than be
+   overridden — and the tail keeps px only until it is converted.
 
-   Once Aa is explicit, these values are in rem for the same reason as the
-   main scale: the selected percentage compounds with a browser text-size
-   preference instead of replacing it. */
+   Not for SVG. `<text>` inside a chart is in viewBox units and scales with
+   the picture; the rows that used to catch 8, 8.5 and 9px were reaching into
+   the demos and inflating their labels a second time. */
 :root[data-theme] {
-  --lv-8: 8px;
-  --lv-8_5: 8.5px;
-  --lv-9: 9px;
-  --lv-10: 10px;
-  --lv-10_5: 10.5px;
-  --lv-11: 11px;
-  --lv-12: 12px;
-  --lv-12_5: 12.5px;
   --lv-13: 13px;
   --lv-13_5: 13.5px;
   --lv-15: 15px;
   --lv-17: 17px;
 }
 :root[data-text-scale="100"] {
-  --lv-8: 0.5rem;
-  --lv-8_5: 0.53125rem;
-  --lv-9: 0.5625rem;
-  --lv-10: 0.625rem;
-  --lv-10_5: 0.65625rem;
-  --lv-11: 0.6875rem;
-  --lv-12: 0.75rem;
-  --lv-12_5: 0.78125rem;
   --lv-13: 0.8125rem;
   --lv-13_5: 0.84375rem;
   --lv-15: 0.9375rem;
   --lv-17: 1.0625rem;
+  --text-4xs: 0.625rem;
+  --text-3xs: 0.6875rem;
+  --text-2xs: 0.75rem;
 }
 :root[data-theme="contrast"]:not([data-text-scale]),
 :root[data-text-scale="200"] {
-  --lv-8: 1rem;
-  --lv-8_5: 1.0625rem;
-  --lv-9: 1.125rem;
-  --lv-10: 1.25rem;
-  --lv-10_5: 1.3125rem;
-  --lv-11: 1.375rem;
-  --lv-12: 1.5rem;
-  --lv-12_5: 1.5625rem;
   --lv-13: 1.625rem;
   --lv-13_5: 1.6875rem;
   --lv-15: 1.875rem;
   --lv-17: 2.125rem;
+  --text-4xs: 1.25rem;
+  --text-3xs: 1.375rem;
+  --text-2xs: 1.5rem;
 }
 :root[data-text-scale="125"] {
-  --lv-8: 0.625rem;
-  --lv-8_5: 0.6640625rem;
-  --lv-9: 0.703125rem;
-  --lv-10: 0.78125rem;
-  --lv-10_5: 0.8203125rem;
-  --lv-11: 0.859375rem;
-  --lv-12: 0.9375rem;
-  --lv-12_5: 0.9765625rem;
   --lv-13: 1.015625rem;
   --lv-13_5: 1.0546875rem;
   --lv-15: 1.171875rem;
   --lv-17: 1.328125rem;
+  --text-4xs: 0.78125rem;
+  --text-3xs: 0.859375rem;
+  --text-2xs: 0.9375rem;
 }
 :root[data-text-scale="150"] {
-  --lv-8: 0.75rem;
-  --lv-8_5: 0.796875rem;
-  --lv-9: 0.84375rem;
-  --lv-10: 0.9375rem;
-  --lv-10_5: 0.984375rem;
-  --lv-11: 1.03125rem;
-  --lv-12: 1.125rem;
-  --lv-12_5: 1.171875rem;
   --lv-13: 1.21875rem;
   --lv-13_5: 1.265625rem;
   --lv-15: 1.40625rem;
   --lv-17: 1.59375rem;
+  --text-4xs: 0.9375rem;
+  --text-3xs: 1.03125rem;
+  --text-2xs: 1.125rem;
 }
 :root[data-text-scale="175"] {
-  --lv-8: 0.875rem;
-  --lv-8_5: 0.9296875rem;
-  --lv-9: 0.984375rem;
-  --lv-10: 1.09375rem;
-  --lv-10_5: 1.1484375rem;
-  --lv-11: 1.203125rem;
-  --lv-12: 1.3125rem;
-  --lv-12_5: 1.3671875rem;
   --lv-13: 1.421875rem;
   --lv-13_5: 1.4765625rem;
   --lv-15: 1.640625rem;
   --lv-17: 1.859375rem;
-}
-:root[data-theme] [class~="text-[8px]"] {
-  font-size: var(--lv-8);
-}
-:root[data-theme] [class~="text-[8.5px]"] {
-  font-size: var(--lv-8_5);
-}
-:root[data-theme] [class~="text-[9px]"] {
-  font-size: var(--lv-9);
-}
-:root[data-theme] [class~="text-[10px]"] {
-  font-size: var(--lv-10);
-}
-:root[data-theme] [class~="text-[10.5px]"] {
-  font-size: var(--lv-10_5);
-}
-:root[data-theme] [class~="text-[11px]"] {
-  font-size: var(--lv-11);
-}
-:root[data-theme] [class~="text-[12px]"] {
-  font-size: var(--lv-12);
-}
-:root[data-theme] [class~="text-[12.5px]"] {
-  font-size: var(--lv-12_5);
+  --text-4xs: 1.09375rem;
+  --text-3xs: 1.203125rem;
+  --text-2xs: 1.3125rem;
 }
 :root[data-theme] [class~="text-[13px]"] {
   font-size: var(--lv-13);
@@ -364,21 +314,24 @@
 
 /* Small type inside an exercise may label a state; it must not carry the
    explanation. These floors preserve hierarchy without letting authored copy
-   fall to 10–11px. */
+   fall to 10–11px, so on this course the micro-label family has two steps
+   inside a widget and not three: 4xs and 3xs both land on 12px there, and
+   only chrome outside a widget renders them at 10 and 11.
+
+   Trap: the floor keys on the class, so it has to name whatever the sizes are
+   written as. It listed `text-[10px]`, `text-[10.5px]` and `text-[11px]`;
+   converting those 236 call sites to the family without moving this rule with
+   them dropped 27 labels on the supply-chain map from 12px to 10 and 11 —
+   which is what the floor exists to prevent. */
 :root[data-theme]
   [data-widget]
-  :is(
-    [class~="text-[10px]"],
-    [class~="text-[10.5px]"],
-    [class~="text-[11px]"]
-  ) {
+  :is([class~="text-4xs"], [class~="text-3xs"], [class~="eyebrow"]) {
   font-size: var(--fs-2xs);
 }
 :root[data-theme]
   [data-widget]
   :is(
-    [class~="text-[12px]"],
-    [class~="text-[12.5px]"],
+    [class~="text-2xs"],
     [class~="text-[13px]"],
     [class~="text-[13.5px]"]
   ) {

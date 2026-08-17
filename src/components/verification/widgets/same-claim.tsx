@@ -109,7 +109,7 @@ export function SameClaim({
           shows the cases scrolling underneath its tint. */}
       <div className="bg-background sticky top-0 z-10 rounded-xl">
         <section className="border-primary/40 bg-primary/5 rounded-xl border p-4">
-          <p className="text-muted-foreground text-[11px] tracking-[0.14em] uppercase">
+          <p className="text-muted-foreground eyebrow">
             The allegation, in all four cases
           </p>
           <p className="mt-2 leading-relaxed font-medium">
@@ -153,7 +153,7 @@ export function SameClaim({
             </p>
             <div className="mt-3">
               <label
-                className="text-muted-foreground text-[11px] tracking-[0.12em] uppercase"
+                className="text-muted-foreground eyebrow"
                 htmlFor={`claim-${variant.id}`}
               >
                 Your analysis
@@ -208,7 +208,7 @@ export function SameClaim({
       {saved.submitted ? (
         <div className="space-y-4">
           <section className="border-border rounded-xl border p-4">
-            <h4 className="text-muted-foreground text-[11px] tracking-[0.14em] uppercase">
+            <h4 className="text-muted-foreground eyebrow">
               After submission
             </h4>
             <p className="mt-2 text-sm leading-relaxed">

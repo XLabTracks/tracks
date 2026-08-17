@@ -274,7 +274,7 @@ export function FocusReadingControl({
           {/* The sample. Rendered from the same rules as the page, so what is
               shown here is exactly what the body will do. */}
           <div className="border-border mt-4 rounded-lg border p-3">
-            <p className="text-muted-foreground text-[10px] tracking-[0.14em] uppercase">
+            <p className="text-muted-foreground text-4xs tracking-[0.14em] uppercase">
               Sample
             </p>
             {/* focus-sample: the accent weight is the page's, one token —

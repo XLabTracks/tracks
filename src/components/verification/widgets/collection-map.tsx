@@ -116,7 +116,7 @@ export function CollectionMap(_: VerificationWidgetProps) {
 
   const group = (kind: CollectionDiscipline["kind"], label: string) => (
     <div className="space-y-2">
-      <p className="text-muted-foreground text-[11px] tracking-wide uppercase">
+      <p className="text-muted-foreground text-3xs tracking-wide uppercase">
         {label}
       </p>
       <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
@@ -151,13 +151,13 @@ export function CollectionMap(_: VerificationWidgetProps) {
           <p className="mt-2 text-sm leading-relaxed">{open.what}</p>
           <dl className="mt-3 space-y-2 text-sm">
             <div>
-              <dt className="text-muted-foreground text-[11px] tracking-wide uppercase">
+              <dt className="text-muted-foreground text-3xs tracking-wide uppercase">
                 {C.seenLabel}
               </dt>
               <dd className="mt-0.5 leading-relaxed">{open.seen}</dd>
             </div>
             <div>
-              <dt className="text-muted-foreground text-[11px] tracking-wide uppercase">
+              <dt className="text-muted-foreground text-3xs tracking-wide uppercase">
                 {C.limitLabel}
               </dt>
               <dd className="mt-0.5 leading-relaxed">{open.limit}</dd>

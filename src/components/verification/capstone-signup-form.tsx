@@ -123,7 +123,7 @@ export function SignupForm({
           />
           {themes.map((g) => (
             <div key={g.theme}>
-              <p className="text-muted-foreground text-[11px] tracking-[0.14em] uppercase select-none">
+              <p className="text-muted-foreground eyebrow select-none">
                 {g.theme}
               </p>
               <div className="mt-1.5 space-y-1">

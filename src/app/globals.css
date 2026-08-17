@@ -21,6 +21,29 @@
      visibly instead of silently doing nothing. Counters hold column via the
      tabular figures switched on in @layer base below. */
   --font-heading: var(--font-sans);
+
+  /* The micro-label family — the three steps below Tailwind's own scale, for
+     eyebrows, counters, key-value rows and status chips.
+     They exist because those labels were written as literals: `text-[11px]`
+     and seventeen other arbitrary values, which compile to a fixed px
+     declaration no token can re-solve. That is why app-bridge.css carries a
+     rescue layer matching class names — `[class~="text-[11px]"]` — to put
+     them back into the reader's scale. A token needs no rescue: it is one
+     name, and app-bridge re-points it per theme and per Aa stop like every
+     other step.
+
+     rem, not px, and that is the whole point: a browser text-size preference
+     compounds with the Aa stop instead of being overridden by it.
+
+     Not for SVG. Text inside a `<text>` is in viewBox units, so it scales
+     with the picture and must keep a literal — the reader's Aa stop has no
+     business inside a chart. */
+  --text-4xs: 0.625rem; /* 10px */
+  --text-4xs--line-height: 1.4;
+  --text-3xs: 0.6875rem; /* 11px */
+  --text-3xs--line-height: 1.4;
+  --text-2xs: 0.75rem; /* 12px */
+  --text-2xs--line-height: 1.45;
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
@@ -84,6 +107,28 @@
   --shadow-soft: var(--soft-shadow);
   --shadow-soft-md: var(--soft-shadow-md);
   --shadow-soft-lg: var(--soft-shadow-lg);
+}
+
+/* The eyebrow: the uppercase micro-label over a card, a section, a row, a
+   key-value pair. One name for what was three utilities written out together
+   at every call site — and written out inconsistently: the same label carried
+   fourteen different tracking values, 0.14em on 59 of them, 0.12em on 34, and
+   ten more values once each. That is one role with fourteen settings, which
+   is the definition of a thing that should have been a name.
+
+   It owns size, tracking and case. Colour stays at the call site: an eyebrow
+   is muted most of the time and takes the brand ink or a state colour when it
+   is saying something, and folding that in would need a variant per colour.
+
+   Trap: app-bridge.css floors micro-label sizes inside a widget by matching
+   the class name, so `eyebrow` has to be named in that rule too. A size that
+   the floor cannot see is a label that shrinks below the floor on this course
+   only, which is invisible from here. */
+@utility eyebrow {
+  font-size: var(--text-3xs);
+  line-height: var(--text-3xs--line-height);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
 }
 
 /* ============================================================

@@ -113,7 +113,7 @@ export function PacketTasks({ onComplete }: VerificationWidgetProps) {
             key={task.id}
             className="border-border bg-card shadow-soft space-y-3 rounded-xl border p-5"
           >
-            <p className="text-muted-foreground text-[11px] tracking-[0.14em] uppercase">
+            <p className="text-muted-foreground eyebrow">
               Task {task.n}
               {task.compulsory ? " · compulsory" : ""}
             </p>
@@ -136,7 +136,7 @@ export function PacketTasks({ onComplete }: VerificationWidgetProps) {
                   ever blocked on it — over the limit is a fact, not a fault. */}
               <p
                 className={cn(
-                  "text-muted-foreground text-[11px] tracking-wide",
+                  "text-muted-foreground text-3xs tracking-wide",
                   words > task.maxWords && "text-defect",
                 )}
               >
@@ -160,7 +160,7 @@ export function PacketTasks({ onComplete }: VerificationWidgetProps) {
                       overruns the ceiling it is modelling, while calling
                       itself the model, teaches the wrong thing twice. The
                       limit is the learner's; the commentary is ours. */}
-                  <p className="text-muted-foreground text-[11px] tracking-[0.14em] uppercase">
+                  <p className="text-muted-foreground eyebrow">
                     Indicative answer and commentary
                   </p>
                   {task.answer.map((part, i) => (
@@ -169,7 +169,7 @@ export function PacketTasks({ onComplete }: VerificationWidgetProps) {
                 </div>
                 {task.baker.length > 0 ? (
                   <div className="space-y-3">
-                    <p className="text-muted-foreground text-[11px] tracking-[0.14em] uppercase">
+                    <p className="text-muted-foreground eyebrow">
                       Baker reveal
                     </p>
                     {task.baker.map((quote) => (
@@ -216,7 +216,7 @@ function Part({ part, answer = false }: { part: TaskPart; answer?: boolean }) {
               {part.head.map((h) => (
                 <th
                   key={h}
-                  className="border-border text-muted-foreground border-b py-1.5 pr-4 text-left text-[11px] tracking-[0.1em] uppercase"
+                  className="border-border text-muted-foreground border-b py-1.5 pr-4 text-left eyebrow"
                 >
                   {h}
                 </th>

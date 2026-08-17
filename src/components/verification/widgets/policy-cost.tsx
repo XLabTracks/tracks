@@ -54,7 +54,7 @@ export function PolicyCost(_: VerificationWidgetProps) {
     return (
       <section className="not-prose border-border bg-card space-y-4 rounded-xl border p-5 text-sm">
         <h3 className="text-lg font-semibold">{C.title}</h3>
-        <p className="text-muted-foreground text-[11px] tracking-[0.14em] uppercase">
+        <p className="text-muted-foreground eyebrow">
           {C.bothTag}
         </p>
 
@@ -98,7 +98,7 @@ export function PolicyCost(_: VerificationWidgetProps) {
             </p>
 
             <div className="border-foreground bg-card rounded-lg border p-4">
-              <p className="text-muted-foreground text-[11px] tracking-[0.14em] uppercase">
+              <p className="text-muted-foreground eyebrow">
                 {C.fullTag}
               </p>
               {/* Composed from the learner's two answers as text nodes. */}
@@ -188,7 +188,7 @@ export function PolicyCost(_: VerificationWidgetProps) {
               ))}
             </div>
             <div className="flex flex-wrap items-center justify-between gap-2">
-              <span className="text-muted-foreground text-[11px]">{C.privacy}</span>
+              <span className="text-muted-foreground text-3xs">{C.privacy}</span>
               <Button type="submit" size="sm" disabled={!policy.trim()}>
                 {C.flipBtn}
               </Button>
@@ -233,7 +233,7 @@ export function PolicyCost(_: VerificationWidgetProps) {
               {C.stuck}
             </button>
             {lenses ? (
-              <p className="text-muted-foreground text-[10.5px] leading-loose">
+              <p className="text-muted-foreground text-4xs leading-loose">
                 {C.lenses}
               </p>
             ) : null}
@@ -265,7 +265,7 @@ export function PolicyCost(_: VerificationWidgetProps) {
 
 function FaceTag({ label }: { label: string }) {
   return (
-    <p className="text-muted-foreground text-[11px] tracking-[0.16em] uppercase">
+    <p className="text-muted-foreground eyebrow">
       {label}
     </p>
   );
@@ -274,7 +274,7 @@ function FaceTag({ label }: { label: string }) {
 function LedgerRow({ tag, value }: { tag: string; value: string }) {
   return (
     <div className="border-border bg-muted/40 flex items-baseline gap-3 rounded-lg border p-3">
-      <span className="text-muted-foreground w-24 flex-none text-[11px] tracking-[0.14em] uppercase">
+      <span className="text-muted-foreground w-24 flex-none eyebrow">
         {tag}
       </span>
       <span className="min-w-0 text-base leading-snug break-words">{value}</span>

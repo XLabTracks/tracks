@@ -156,7 +156,7 @@ export function PaperSectionNav({
           item.kind === "section" ? (
             <>
               {item.number && (
-                <span className="text-muted-foreground mt-px shrink-0 text-[11px]">
+                <span className="text-muted-foreground mt-px shrink-0 text-3xs">
                   {item.number}
                 </span>
               )}

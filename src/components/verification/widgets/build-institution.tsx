@@ -143,7 +143,7 @@ export function BuildInstitution({
               key={requirement}
               className="flex gap-3 text-sm leading-relaxed"
             >
-              <span className="border-border text-muted-foreground flex size-5 shrink-0 items-center justify-center rounded-full border text-[11px]">
+              <span className="border-border text-muted-foreground flex size-5 shrink-0 items-center justify-center rounded-full border text-3xs">
                 {i + 1}
               </span>
               <span>{requirement}</span>
@@ -154,7 +154,7 @@ export function BuildInstitution({
 
       {GROUPS.map((group) => (
         <section key={group} className="space-y-2">
-          <h4 className="text-muted-foreground text-[11px] tracking-[0.14em] uppercase">
+          <h4 className="text-muted-foreground eyebrow">
             {group}
           </h4>
           <div className="grid gap-2">
@@ -231,7 +231,7 @@ export function BuildInstitution({
       {evaluation ? (
         <div className="space-y-4">
           <section className="space-y-2">
-            <h4 className="text-muted-foreground text-[11px] tracking-[0.14em] uppercase">
+            <h4 className="text-muted-foreground eyebrow">
               What your institution does, and what it leaves undecided
             </h4>
             {TESTS.map((test) => {
@@ -283,7 +283,7 @@ export function BuildInstitution({
               the answer: the engine's own test proves more than one selection
               works, and both of these run through it. */}
           <section className="space-y-2">
-            <h4 className="text-muted-foreground text-[11px] tracking-[0.14em] uppercase">
+            <h4 className="text-muted-foreground eyebrow">
               Two institutions that work, and what each costs
             </h4>
             {SAMPLE_DESIGNS.map((design) => (

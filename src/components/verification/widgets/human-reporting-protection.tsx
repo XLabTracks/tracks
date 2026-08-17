@@ -171,7 +171,7 @@ function PhaseRail({
         <li
           key={label}
           className={cn(
-            "border-border rounded-md border px-2 py-2 text-center font-sans text-[10px] font-medium tracking-[0.01em] uppercase",
+            "border-border rounded-md border px-2 py-2 text-center font-sans text-4xs font-medium tracking-[0.01em] uppercase",
             index === active && "border-primary bg-primary/5 text-primary",
             index < active && "bg-muted/45 text-foreground",
             index > active && "text-muted-foreground",
@@ -268,7 +268,7 @@ function CaseWork({
                       {index + 1}
                     </span>
                     <div className="min-w-0 flex-1">
-                      <p className="text-muted-foreground font-sans text-[11px] font-medium tracking-[0.06em] uppercase">
+                      <p className="text-muted-foreground font-sans eyebrow font-medium">
                         {step.label}
                       </p>
                       {statement ? (

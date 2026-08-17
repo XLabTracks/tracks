@@ -83,7 +83,7 @@ export function ConstructCase({
           />
 
           <section className="border-border rounded-xl border p-4">
-            <h4 className="text-muted-foreground text-[11px] tracking-[0.14em] uppercase">
+            <h4 className="text-muted-foreground eyebrow">
               Check your case
             </h4>
             <ul className="mt-3 space-y-2">
@@ -99,7 +99,7 @@ export function ConstructCase({
           </section>
 
           <section className="border-border rounded-xl border p-4">
-            <h4 className="text-muted-foreground text-[11px] tracking-[0.14em] uppercase">
+            <h4 className="text-muted-foreground eyebrow">
               Where a report can die
             </h4>
             <p className="text-muted-foreground mt-2 text-sm leading-relaxed">
@@ -135,7 +135,7 @@ export function ConstructCase({
               The spec is explicit: contrasting valid examples, not one
               canonical case. */}
           <section className="space-y-3">
-            <h4 className="text-muted-foreground text-[11px] tracking-[0.14em] uppercase">
+            <h4 className="text-muted-foreground eyebrow">
               Two cases that work, for different reasons
             </h4>
             {WORKED_CASES.map((worked) => (
@@ -154,7 +154,7 @@ export function ConstructCase({
                     ] as const
                   ).map(([label, body]) => (
                     <div key={label}>
-                      <dt className="text-muted-foreground text-[11px] tracking-[0.12em] uppercase">
+                      <dt className="text-muted-foreground eyebrow">
                         {label}
                       </dt>
                       <dd>{body}</dd>

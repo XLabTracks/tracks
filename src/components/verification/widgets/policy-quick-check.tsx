@@ -166,7 +166,7 @@ export function PolicyQuickCheck({}: VerificationWidgetProps) {
                 {saved.submitted ? (
                   <p
                     className={cn(
-                      "flex items-center gap-1.5 text-[11px] tracking-wide",
+                      "flex items-center gap-1.5 text-3xs tracking-wide",
                       correct ? "text-comply" : "text-defect"
                     )}
                   >

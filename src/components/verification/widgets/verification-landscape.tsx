@@ -48,7 +48,7 @@ export function VerificationLandscape(_: VerificationWidgetProps) {
   return (
     <div className="verification-landscape not-prose bg-card border-border my-6 rounded-xl border p-4 sm:p-5">
       {/* legend */}
-      <div className="text-muted-foreground mb-3 flex flex-wrap items-center gap-3 text-[11px] tracking-[0.04em] uppercase">
+      <div className="text-muted-foreground mb-3 flex flex-wrap items-center gap-3 eyebrow">
         <span>{C.lessActivity}</span>
         <span className="flex gap-[3px]">
           {HEAT.map((h, i) => (
@@ -77,7 +77,7 @@ export function VerificationLandscape(_: VerificationWidgetProps) {
               key={c.key}
               type="button"
               onClick={() => setSel({ kind: "axis", axis: "col", i: ci })}
-              className="text-primary rounded px-1 py-1 text-center text-[11px] leading-tight font-semibold tracking-[0.06em] uppercase hover:underline"
+              className="text-primary rounded px-1 py-1 text-center eyebrow leading-tight font-semibold hover:underline"
             >
               {c.name}
             </button>
@@ -121,7 +121,7 @@ export function VerificationLandscape(_: VerificationWidgetProps) {
                       <span
                         key={m.id}
                         className={cn(
-                          "text-[11px] leading-[1.15] font-medium",
+                          "text-3xs leading-[1.15] font-medium",
                           onDark ? "text-primary-foreground" : "text-foreground"
                         )}
                       >
@@ -130,7 +130,7 @@ export function VerificationLandscape(_: VerificationWidgetProps) {
                     ))}
                     <span
                       className={cn(
-                        "pointer-events-none absolute right-1.5 bottom-1 text-[11px] leading-none",
+                        "pointer-events-none absolute right-1.5 bottom-1 text-3xs leading-none",
                         onDark
                           ? "text-primary-foreground/70"
                           : "text-muted-foreground"
@@ -201,7 +201,7 @@ function CellDetail({
 }) {
   return (
     <div className="text-sm">
-      <p className="text-primary text-[11px] tracking-[0.12em] uppercase">
+      <p className="text-primary eyebrow">
         {rowName} × {colName}
       </p>
       <h4 className="mt-1 text-base font-semibold">
@@ -223,7 +223,7 @@ function CellDetail({
         </ul>
       )}
       <p className="border-border mt-3 border-t pt-2">
-        <span className="text-muted-foreground mr-1 text-[11px] tracking-[0.1em] uppercase">
+        <span className="text-muted-foreground mr-1 eyebrow">
           {C.howConnects}
         </span>
         {cell.connect}
@@ -236,7 +236,7 @@ function AxisDetail({ axis, i }: { axis: "row" | "col"; i: number }) {
   const o = axis === "row" ? ROWS[i] : COLS[i];
   return (
     <div className="text-sm">
-      <p className="text-primary text-[11px] tracking-[0.12em] uppercase">
+      <p className="text-primary eyebrow">
         {axis === "row" ? C.rowAxisTag : C.colAxisTag}
       </p>
       <h4 className="mt-1 text-base font-semibold">{o.name}</h4>

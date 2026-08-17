@@ -176,7 +176,7 @@ export function ProtocolActors({ onComplete }: VerificationWidgetProps) {
                 setCurrent(null);
               }}
               className={cn(
-                "rounded-full border px-4 py-1.5 text-[11px] tracking-[0.14em] uppercase transition-colors",
+                "rounded-full border px-4 py-1.5 eyebrow transition-colors",
                 mode === m
                   ? "border-primary bg-primary text-primary-foreground"
                   : "border-border text-muted-foreground hover:bg-muted hover:text-foreground",
@@ -212,7 +212,7 @@ export function ProtocolActors({ onComplete }: VerificationWidgetProps) {
       <div className="border-border bg-card shadow-soft overflow-hidden rounded-xl border">
       {/* progress rail */}
       <div className="border-border/70 bg-muted/30 flex items-center gap-3 border-b px-5 py-2.5">
-        <span className="text-muted-foreground text-[11px] tracking-[0.1em] whitespace-nowrap uppercase">
+        <span className="text-muted-foreground eyebrow whitespace-nowrap">
           {mode === "learn"
             ? `${seen.size} / ${total} actors met`
             : `${quizTotals.count} / ${total} answered`}
@@ -220,7 +220,7 @@ export function ProtocolActors({ onComplete }: VerificationWidgetProps) {
         <Progress value={progressPct} className="h-1.5 flex-1" />
         {mode === "quiz" && quizTotals.tot > 0 && (
           <span
-            className="text-comply text-[11px] tracking-[0.1em] whitespace-nowrap uppercase"
+            className="text-comply eyebrow whitespace-nowrap"
             aria-live="polite"
           >
             {quizTotals.right} / {quizTotals.tot} calls right
@@ -232,7 +232,7 @@ export function ProtocolActors({ onComplete }: VerificationWidgetProps) {
       <div className="p-5">
         <article className="border-border bg-muted/20 rounded-lg border p-5 sm:p-6">
           <div className="mb-4 text-center">
-            <p className="text-muted-foreground text-[11px] tracking-[0.14em] uppercase">
+            <p className="text-muted-foreground eyebrow">
               {C.docEyebrow}
             </p>
             <h4 className="mt-1.5 text-lg font-semibold tracking-tight">
@@ -247,7 +247,7 @@ export function ProtocolActors({ onComplete }: VerificationWidgetProps) {
           <div className="space-y-5 text-[15px] leading-relaxed">
             {DOC.map((art) => (
               <section key={art.heading}>
-                <h5 className="text-muted-foreground text-[11px] tracking-[0.18em] uppercase">
+                <h5 className="text-muted-foreground eyebrow">
                   {art.heading}
                 </h5>
                 <p className="mt-1.5">
@@ -319,7 +319,7 @@ export function ProtocolActors({ onComplete }: VerificationWidgetProps) {
         {/* done cards */}
         {mode === "learn" && learnDone && (
           <div className="border-comply/50 bg-comply/5 mt-5 rounded-lg border p-5 text-center">
-            <p className="text-comply text-[11px] tracking-[0.14em] uppercase">
+            <p className="text-comply eyebrow">
               {C.doneLearnEyebrow}
             </p>
             <h4 className="mt-1.5 text-lg font-semibold">
@@ -339,7 +339,7 @@ export function ProtocolActors({ onComplete }: VerificationWidgetProps) {
         )}
         {mode === "quiz" && quizDone && (
           <div className="border-comply/50 bg-comply/5 mt-5 rounded-lg border p-5 text-center">
-            <p className="text-comply text-[11px] tracking-[0.14em] uppercase">
+            <p className="text-comply eyebrow">
               {C.doneQuizEyebrow}
             </p>
             <h4 className="mt-1.5 text-lg font-semibold">{C.doneQuizTitle}</h4>
@@ -421,7 +421,7 @@ function DrawerBody({
         <p
           style={mode === "learn" ? catVars(cat) : undefined}
           className={cn(
-            "text-[10.5px] tracking-[0.2em] uppercase",
+            "text-4xs tracking-[0.2em] uppercase",
             mode === "learn" ? "text-[var(--cat)]" : "text-muted-foreground",
           )}
         >
@@ -448,7 +448,7 @@ function DrawerBody({
             type="button"
             onClick={onPrev}
             disabled={!hasPrev}
-            className="text-primary hover:text-foreground text-[10.5px] tracking-[0.12em] uppercase disabled:cursor-default disabled:opacity-40"
+            className="text-primary hover:text-foreground text-4xs tracking-[0.12em] uppercase disabled:cursor-default disabled:opacity-40"
           >
             {PROTOCOL_ACTORS_COPY.prevBtn}
           </button>
@@ -456,7 +456,7 @@ function DrawerBody({
             type="button"
             onClick={onNext}
             disabled={!hasNext}
-            className="text-primary hover:text-foreground text-[10.5px] tracking-[0.12em] uppercase disabled:cursor-default disabled:opacity-40"
+            className="text-primary hover:text-foreground text-4xs tracking-[0.12em] uppercase disabled:cursor-default disabled:opacity-40"
           >
             {PROTOCOL_ACTORS_COPY.nextBtn}
           </button>
@@ -482,7 +482,7 @@ function LearnBody({ id }: { id: string }) {
           >
             <p
               className={cn(
-                "text-[10px] tracking-[0.18em] uppercase",
+                "text-4xs tracking-[0.18em] uppercase",
                 isWhy ? "text-primary" : "text-muted-foreground",
               )}
             >
@@ -611,7 +611,7 @@ function QuizBody({
                   <span className="text-muted-foreground mt-1 block text-xs leading-snug">
                     <b
                       className={cn(
-                        "mr-1 text-[10px] tracking-[0.12em] uppercase",
+                        "mr-1 text-4xs tracking-[0.12em] uppercase",
                         tagCls,
                       )}
                     >
@@ -643,7 +643,7 @@ function QuizBody({
             {verdict?.right} / {verdict?.total} calls right
           </p>
           <div className="border-border bg-muted/40 rounded-lg border p-3.5">
-            <p className="text-primary text-[10px] tracking-[0.18em] uppercase">
+            <p className="text-primary text-4xs tracking-[0.18em] uppercase">
               {PROTOCOL_ACTORS_COPY.whyLabel}
             </p>
             <p className="mt-1 text-sm leading-relaxed">{quiz.why}</p>

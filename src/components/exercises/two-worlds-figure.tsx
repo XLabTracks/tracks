@@ -128,7 +128,7 @@ function Panel({ world, markerId }: { world: WorldSpec; markerId: string }) {
         </span>
         <span className="text-sm font-semibold tracking-tight">{world.name}</span>
       </div>
-      <p className="text-muted-foreground mt-0.5 text-[11px]">
+      <p className="text-muted-foreground mt-0.5 text-3xs">
         {world.subline}
       </p>
 

@@ -147,7 +147,7 @@ export function InferTheSystem({
         <ol className="mt-3 space-y-2">
           {POLICY_RULES.map((rule, i) => (
             <li key={rule} className="flex gap-3 text-sm leading-relaxed">
-              <span className="border-border text-muted-foreground flex size-5 shrink-0 items-center justify-center rounded-full border text-[11px]">
+              <span className="border-border text-muted-foreground flex size-5 shrink-0 items-center justify-center rounded-full border text-3xs">
                 {i + 1}
               </span>
               <span>{rule}</span>
@@ -172,7 +172,7 @@ export function InferTheSystem({
               writingCardFocus
             )}
           >
-            <p className="text-muted-foreground text-[11px] tracking-[0.14em] uppercase">
+            <p className="text-muted-foreground eyebrow">
               Consequence {index + 1}
             </p>
 
@@ -260,7 +260,7 @@ export function InferTheSystem({
               to produce, against the rule or pair that produces each. Not a
               key — the exercise has none — and not a complete list. */}
           <section className="space-y-2">
-            <h4 className="text-muted-foreground text-[11px] tracking-[0.14em] uppercase">
+            <h4 className="text-muted-foreground eyebrow">
               The same policy, annotated
             </h4>
             {POLICY_RULES.map((rule, i) => (
@@ -269,7 +269,7 @@ export function InferTheSystem({
                 className="border-border bg-card rounded-xl border p-4"
               >
                 <p className="flex gap-3 text-sm leading-relaxed">
-                  <span className="border-border text-muted-foreground flex size-5 shrink-0 items-center justify-center rounded-full border text-[11px]">
+                  <span className="border-border text-muted-foreground flex size-5 shrink-0 items-center justify-center rounded-full border text-3xs">
                     {i + 1}
                   </span>
                   <span>{rule}</span>

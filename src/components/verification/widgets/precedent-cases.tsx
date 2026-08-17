@@ -125,7 +125,7 @@ export function PrecedentCases({ onComplete }: VerificationWidgetProps) {
     <Shell>
       <div className="space-y-4">
         <div className="space-y-2">
-          <p className="text-muted-foreground text-[11px] tracking-[0.14em] uppercase">
+          <p className="text-muted-foreground eyebrow">
             Case file · {pos + 1} / {PRECEDENT_CASES.length}
           </p>
           <SegMeter
@@ -233,7 +233,7 @@ function Summary({
                 className="border-border rounded-lg border p-3 text-sm leading-relaxed"
               >
                 <p className="font-medium">{c.name}</p>
-                <p className="text-muted-foreground mt-0.5 text-[11px] tracking-wide">
+                <p className="text-muted-foreground mt-0.5 text-3xs tracking-wide">
                   yours: {call === "circumvented" ? "circumvented" : "held"} · record:{" "}
                   {c.outcome} ·{" "}
                   <span className={match ? "text-comply" : "text-defect"}>

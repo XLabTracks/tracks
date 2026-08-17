@@ -212,7 +212,7 @@ function DeckMenu({
                   <span className="flex flex-wrap items-center gap-2">
                     <span className="font-medium">{b.name}</span>
                     {finished ? (
-                      <span className="text-comply inline-flex items-center gap-1 text-[11px]">
+                      <span className="text-comply inline-flex items-center gap-1 text-3xs">
                         <CircleCheck className="size-3.5" aria-hidden /> complete
                       </span>
                     ) : null}
@@ -220,7 +220,7 @@ function DeckMenu({
                   <span className="text-muted-foreground mt-1 block text-sm">
                     {b.kicker}
                   </span>
-                  <span className="text-muted-foreground mt-1.5 block text-[11px] tracking-wide">
+                  <span className="text-muted-foreground mt-1.5 block text-3xs tracking-wide">
                     {b.time} · {done} / {b.steps.length}
                   </span>
                 </button>
@@ -305,7 +305,7 @@ function StepHeader({
   return (
     <div className="space-y-2">
       <div className="flex flex-wrap items-center justify-between gap-2">
-        <p className="text-muted-foreground text-[11px] tracking-[0.14em] uppercase">
+        <p className="text-muted-foreground eyebrow">
           {bench.name} · {pos + 1} / {bench.steps.length}
         </p>
         {multiBench ? (
@@ -341,7 +341,7 @@ function StepBrief({ step }: { step: DrillStep }) {
                   <th
                     key={c}
                     scope="col"
-                    className="px-3 py-2 text-[11px] tracking-wide uppercase"
+                    className="px-3 py-2 text-3xs tracking-wide uppercase"
                   >
                     {c}
                   </th>
@@ -428,7 +428,7 @@ function PickStep({
                   {answered ? (
                     <span
                       className={cn(
-                        "mt-0.5 shrink-0 text-[11px]",
+                        "mt-0.5 shrink-0 text-3xs",
                         isKey
                           ? "text-comply"
                           : picked
@@ -540,7 +540,7 @@ function MultiStep({
               >
                 <span
                   className={cn(
-                    "text-[11px] tracking-wide uppercase",
+                    "text-3xs tracking-wide uppercase",
                     v.tone,
                   )}
                 >
@@ -598,7 +598,7 @@ function MultiStep({
       </ul>
       <p
         aria-live="polite"
-        className="text-muted-foreground text-[11px] tracking-wide"
+        className="text-muted-foreground text-3xs tracking-wide"
       >
         {commit.hint}
       </p>
@@ -649,7 +649,7 @@ function NumberStep({
       </div>
       {!committed ? (
         <>
-          <p className="text-muted-foreground text-[11px] tracking-wide">
+          <p className="text-muted-foreground text-3xs tracking-wide">
             {result.value === null
               ? "no options on this one — compute it"
               : "ready"}
@@ -710,7 +710,7 @@ function TextStep({
         id={hintId}
         aria-live="polite"
         className={cn(
-          "text-[11px] tracking-wide",
+          "text-3xs tracking-wide",
           lint.bad ? "text-exaggerate" : "text-muted-foreground",
         )}
       >
@@ -804,7 +804,7 @@ function BenchFinish({
   return (
     <Shell>
       <div className="space-y-4">
-        <p className="text-muted-foreground text-[11px] tracking-[0.14em] uppercase">
+        <p className="text-muted-foreground eyebrow">
           {bench.name} · complete
         </p>
         <h3 className="flex items-center gap-2 text-lg font-semibold">

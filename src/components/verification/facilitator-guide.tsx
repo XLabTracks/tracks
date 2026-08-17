@@ -77,7 +77,7 @@ const AUTHORED =
   "[&_.say]:mt-2.5 [&_.say]:block [&_.say]:rounded-lg [&_.say]:border [&_.say]:border-border " +
   "[&_.say]:bg-muted/50 [&_.say]:px-3.5 [&_.say]:py-2.5 [&_.say]:text-sm [&_.say]:italic " +
   // .mt — a small mono "medium" tag (Sync / Async / In person / On Zoom)
-  "[&_.mt]:mr-1 [&_.mt]:text-[11px] [&_.mt]:font-semibold [&_.mt]:tracking-[0.08em] [&_.mt]:uppercase [&_.mt]:text-primary " +
+  "[&_.mt]:mr-1 [&_.mt]:text-3xs [&_.mt]:font-semibold [&_.mt]:tracking-[0.08em] [&_.mt]:uppercase [&_.mt]:text-primary " +
   // p.mt — a recipe subtitle line
   "[&_p.mt]:mt-0 [&_p.mt]:mb-1";
 
@@ -293,7 +293,7 @@ function TileButton({
         dangerouslySetInnerHTML={{ __html: tile.desc }}
       />
       {tile.timing && (
-        <span className="text-muted-foreground mt-2 block text-[10px] font-semibold tracking-[0.06em] uppercase">
+        <span className="text-muted-foreground mt-2 block text-4xs font-semibold tracking-[0.06em] uppercase">
           {tile.timing}
         </span>
       )}
@@ -333,16 +333,16 @@ function Lifecycle({
           onClick={() => onPop(s.pop)}
           className="border-border bg-card hover:border-primary shadow-soft rounded-lg border p-3 text-left transition-colors"
         >
-          <span className="text-primary text-[11px] font-bold tracking-[0.08em]">
+          <span className="text-primary text-3xs font-bold tracking-[0.08em]">
             {s.num}
           </span>
           <h4 className="mt-1 text-sm font-semibold">{s.title}</h4>
-          <p className="text-muted-foreground mt-0.5 text-[12px] leading-snug">
+          <p className="text-muted-foreground mt-0.5 text-2xs leading-snug">
             {s.desc}
           </p>
           <span
             className={cn(
-              "text-muted-foreground mt-1.5 block text-[10px]",
+              "text-muted-foreground mt-1.5 block text-4xs",
               "font-semibold tracking-[0.06em] uppercase",
             )}
           >
@@ -359,14 +359,14 @@ function ResourceGrid({ boxes }: { boxes: ResBox[] }) {
     <div className="my-4 grid gap-3 sm:grid-cols-2">
       {boxes.map((box) => (
         <div key={box.heading} className="border-border bg-card rounded-xl border p-4">
-          <h4 className="text-primary text-[11px] font-bold tracking-[0.1em] uppercase">
+          <h4 className="text-primary eyebrow font-bold">
             {box.heading}
           </h4>
           <ul className="mt-2.5 space-y-2.5">
             {box.items.map((it, i) => (
               <li
                 key={i}
-                className="text-sm leading-snug [&_a]:text-primary [&_a]:underline [&_a]:underline-offset-2 hover:[&_a]:text-primary/80 [&_small]:text-muted-foreground [&_small]:mt-0.5 [&_small]:block [&_small]:text-[12.5px]"
+                className="text-sm leading-snug [&_a]:text-primary [&_a]:underline [&_a]:underline-offset-2 hover:[&_a]:text-primary/80 [&_small]:text-muted-foreground [&_small]:mt-0.5 [&_small]:block [&_small]:text-2xs"
                 dangerouslySetInnerHTML={{ __html: it.html }}
               />
             ))}
@@ -478,7 +478,7 @@ function ModuleGrid({
           onClick={() => go(c.id)}
           className="border-border bg-card hover:border-primary shadow-soft relative rounded-xl border p-4.5 pt-4 text-left transition-colors"
         >
-          <span className="text-muted-foreground absolute top-3.5 right-4 text-[11px] font-bold tracking-[0.08em]">
+          <span className="text-muted-foreground absolute top-3.5 right-4 text-3xs font-bold tracking-[0.08em]">
             {c.num}
           </span>
           <h4 className="pr-8 text-[17px] font-semibold tracking-tight">
@@ -487,7 +487,7 @@ function ModuleGrid({
           <p className="text-muted-foreground mt-1.5 text-[13.5px] leading-snug">
             {c.desc}
           </p>
-          <span className="text-primary mt-2.5 block text-[11px] font-semibold tracking-[0.05em] uppercase">
+          <span className="text-primary mt-2.5 block eyebrow font-semibold">
             {c.meta}
           </span>
         </button>

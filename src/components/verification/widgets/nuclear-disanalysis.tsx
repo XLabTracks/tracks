@@ -45,7 +45,7 @@ export function NuclearDisanalysis(_props: VerificationWidgetProps) {
 
       {/* The read. It comes first: the tasks below are answered against it. */}
       <div className="border-border bg-card shadow-soft space-y-3 rounded-xl border p-5">
-        <p className="text-muted-foreground text-[11px] tracking-[0.14em] uppercase">
+        <p className="text-muted-foreground eyebrow">
           Read Baker first
         </p>
         <p>
@@ -80,7 +80,7 @@ export function NuclearDisanalysis(_props: VerificationWidgetProps) {
           key={q.id}
           className="border-border bg-card shadow-soft space-y-3 rounded-xl border p-5"
         >
-          <p className="text-muted-foreground text-[11px] tracking-[0.14em] uppercase">
+          <p className="text-muted-foreground eyebrow">
             Task {q.n} of {QUESTIONS.length}
           </p>
           <h3 className="text-lg leading-snug font-semibold">{q.title}</h3>

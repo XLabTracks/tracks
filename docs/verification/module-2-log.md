@@ -1313,3 +1313,18 @@ Dockets, key and closing questions are OURS PENDING HER COPY, flagged in
 the data file header. Registered unbridged (optional never gates);
 embedded at the tail of human-institutions behind a
 "Optional Exercise: The Standard of Proof (15 minutes)" fold.
+
+### 2.4.4's source packet grows a second reading (2026-08-15)
+
+Her follow-up to the coverage audit ("мб добавить чета еще на 5-10 минут
+чтения"): Brundage carries independence, access and the capture guards,
+but not authority, not accountability, and not the decision operation.
+Added John Carlson, "Defining Noncompliance: NPT Safeguards Agreements"
+(Arms Control Today, May 2009; armscontrol.org) — the same author as
+0.3's Document 3, writing exactly about the gap: inspectors find, the
+Board judges, the Security Council enforces; a standard of proof and a
+five-case table separate a breach from a noncompliance finding. Cut for
+6–8 min ("Determining noncompliance", "Standard of proof", the table).
+The card blurb is ours; the source-packet heading is 12–16 min now, and
+the Standard of Proof data header records the three-way division of
+labour between the two readings and the dockets.

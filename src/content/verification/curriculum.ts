@@ -275,9 +275,11 @@ export const verificationLessons: Lesson[] = [
     sectionItemId: "v-human-intro",
     title: "2.4.4 Institutions and policy judgment",
     contentRef: "verification/human-institutions",
-    // 10 since Companies A and B left: the section is its framing paragraph
-    // and one 6–8 minute reading until its own exercise is authored.
-    estimatedMinutes: 10,
+    // The framing paragraph and the two required readings (6–8 min each —
+    // Brundage's principles, Carlson's noncompliance decision). The Standard
+    // of Proof closer is optional and, like every optional lab, bills no
+    // minutes here.
+    estimatedMinutes: 15,
   },
   {
     id: "v-covert-system-overview",

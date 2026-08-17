@@ -11,13 +11,17 @@
  * institution's next move per docket and defends it; the reveal names the
  * grid.
  *
- * The division of labour with the section's reading is deliberate:
- * Brundage et al. (the source-packet card above the exercise) carries the
- * institutional-property vocabulary — Access and Independent Experts
- * especially — so dockets C and D are built as violations of exactly those
- * two principles, and the marking key names them. What the reading does not
- * carry (the decision operation itself, and the human/technical
- * distinction) is what the dockets exercise.
+ * The division of labour with the section's readings is deliberate:
+ * Brundage et al. carries the institutional-property vocabulary — Access
+ * and Independent Experts especially — so dockets C and D are built as
+ * violations of exactly those two principles, and the marking key names
+ * them. Carlson's "Defining Noncompliance" (added 2026-08-15, her call,
+ * after her audit found Brundage carries no authority/accountability and
+ * no decision operation) carries the real regime's version of the moves
+ * menu: inspectors find, the Board judges, the Security Council enforces,
+ * and a standard of proof separates a breach from a noncompliance finding.
+ * The dockets are where the learner runs that operation themselves; the
+ * human/technical distinction is theirs to make on the evidence lines.
  *
  * WHAT IS MINE AND PENDING HER COPY: every docket, the marking key, and
  * the closing questions. Meridian and its Delta campus are fictional and

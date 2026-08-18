@@ -29,7 +29,12 @@ export const verificationTrack: Track = {
   kind: "governance",
   moduleIds: ["v-why", "v-scoping", "v-infrastructure", "v-covert", "v-capstone"],
   prerequisiteEnforcement: "soft",
-  chunkedReading: true,
+  // Part-by-part reading was deleted on the course owner's instruction
+  // (2026-08-15, "delete this regime"): every lesson and paper reads as one
+  // page. The readers (LessonPartsReader / PaperPartsReader) and the MDX
+  // PageBreak markers stay in the repo, inert, for any track that ever wants
+  // them back — turning the regime on again is this one flag.
+  chunkedReading: false,
 };
 
 export const verificationModules: Module[] = [

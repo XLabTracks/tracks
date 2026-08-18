@@ -216,10 +216,11 @@ async function LessonItemPage({
           </h1>
           {lesson.optional && <OptionalMarker />}
         </div>
+        {/* Her standard line, kept from the parts reader's toolbar after the
+            part-by-part regime was deleted: plain words, no icon. */}
         {lesson.estimatedMinutes && !chunked ? (
-          <p className="text-muted-foreground mt-2 flex items-center gap-1 text-sm">
-            <Clock className="size-3.5" aria-hidden /> ~
-            {lesson.estimatedMinutes} min
+          <p className="text-muted-foreground mt-2 text-sm">
+            Estimated time: {lesson.estimatedMinutes} mins
           </p>
         ) : null}
       </header>

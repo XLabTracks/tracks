@@ -826,3 +826,18 @@ flagged `nonRedistributable: true`; the CSV endpoint answers 403 with "we are
 not allowed to re-share". The values are reachable through the JSON API, which
 is not the same as being ours to publish. Adding them is a permissions decision
 for the course owner. Left out, and recorded here rather than quietly done.
+
+### Part-by-part reading deleted (2026-08-15)
+
+The owner, after the optional folds started landing on near-empty pages
+of the parts reader: "delete this regime". `chunkedReading` is off for
+the track — every lesson and paper reads as one page, always. What goes
+with it: the parts strip, the whole-lesson toggle, `?p=` deep links, the
+reader-toolbar meta line, and the empty-page problem itself. What stays:
+the readers and the MDX PageBreak markers, inert in the repo (one flag
+turns the regime back on); the estimate line moves to the page header in
+her standard wording ("Estimated time: X mins", no icon, replacing the
+old clock chip); the works-cited footer, Mark complete, and the lesson
+pager are unchanged. Collateral to know: the Aa focus-reading control
+lived on the parts reader's toolbar and leaves with it — say the word if
+it should be remounted on the plain layout.

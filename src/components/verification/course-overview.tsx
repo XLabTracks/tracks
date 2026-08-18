@@ -30,19 +30,28 @@ export function CourseOverview() {
         <details
           key={section.id}
           id={`overview-${section.id}`}
-          className="border-border bg-card group rounded-xl border transition-shadow duration-200 open:shadow-soft-md"
+          data-reveal
+          className="border-border bg-card group overview-card rounded-xl border transition-shadow duration-200 open:shadow-soft-md"
         >
+          {/* The chevron closes the row rather than opening it: the title is
+              what the eye lands on, and a marker in front of it pushes every
+              title off the card's own left edge for a glyph that says the same
+              thing from either end. `ml-auto` puts it at the end of the line,
+              so the rows share one right rail whatever their titles measure.
+              No disc behind it — a ring around a glyph is what this design
+              system does not do, and the chevron carries the affordance
+              already. */}
           <summary className="flex cursor-pointer list-none items-start gap-3 p-4 select-none [&::-webkit-details-marker]:hidden">
-            <ChevronRight
-              aria-hidden
-              className="text-brand-ink mt-1 size-4 shrink-0 transition-transform duration-200 group-open:rotate-90"
-            />
             <span className="text-foreground text-base font-semibold">
               {section.title}
             </span>
+            <ChevronRight
+              aria-hidden
+              className="text-brand-ink mt-1 ml-auto size-4 shrink-0 transition-transform duration-200 group-open:rotate-90"
+            />
           </summary>
 
-          <div className="border-border border-t px-4 pt-3.5 pb-4 pl-11">
+          <div className="border-border border-t px-4 pt-3.5 pb-4">
             {section.kind === "prose" ? (
               <div className="flex flex-col gap-3.5">
                 {section.paragraphs.map((p) => (

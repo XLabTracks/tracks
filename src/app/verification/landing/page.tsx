@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { TriangleAlert } from "lucide-react";
 import { CourseOverview } from "@/components/verification/course-overview";
 import { LegacyScripts } from "@/components/verification/legacy-scripts";
 
@@ -67,9 +66,18 @@ export default function Page() {
         {/* Where the course actually is, said before the skills graph rather
             than in a footer: someone deciding whether to start needs it to
             decide. The author's words, verbatim. */}
-        <section className="alpha-note">
+        <section className="alpha-note" data-reveal>
           <div className="wrap">
-            <TriangleAlert className="alpha-sign" strokeWidth={2.25} aria-hidden />
+            {/* The sign, drawn rather than imported: no icon set ships a
+                solid tapered exclamation, and the two shapes are shorter than
+                the import would be. It inherits the band's ink, so it is white
+                on the red and black on high contrast's inverted ground, and it
+                stands to the height of the sentence beside it. aria-hidden —
+                the paragraph already says this is an alpha notice. */}
+            <svg className="alpha-sign" viewBox="0 0 20 64" aria-hidden>
+              <path d="M1 0H19L16.5 44H3.5Z" fill="currentColor" />
+              <circle cx="10" cy="55.5" r="8.4" fill="currentColor" />
+            </svg>
             <p>
               We’re currently in the alpha testing stage and running a small
               paid cohort to calibrate and improve the course ahead of the
@@ -91,8 +99,8 @@ export default function Page() {
 
         <section className="band filled">
           <div className="wrap">
-            <h2>The skills it builds</h2>
-            <p className="intro">
+            <h2 data-reveal>The skills it builds</h2>
+            <p className="intro" data-reveal>
               The course is organised around a graph, not a reading list. Each
               unit feeds specific skills, and the later ones only stand up once
               the earlier ones do.
@@ -133,7 +141,7 @@ export default function Page() {
             page. */}
         <section className="band">
           <div className="wrap">
-            <h2>What this course is</h2>
+            <h2 data-reveal>What this course is</h2>
             <CourseOverview />
           </div>
         </section>

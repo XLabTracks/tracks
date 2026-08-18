@@ -75,6 +75,7 @@ export const verificationModules: Module[] = [
       "v-scoping-actors",
       "v-interactive-map",
       "v-report-constructor",
+      "v-actor-edges",
       "v-scoping-upstream-downstream",
       "v-context-distiller",
     ],
@@ -200,10 +201,11 @@ export const verificationLessons: Lesson[] = [
     moduleId: "v-scoping",
     title: "1.2 Actors: who does the treaty rely upon, apply to, and constrain?",
     contentRef: "verification/scoping-actors",
-    // 60 was the figure before the workshop grew to seventeen actors and
-    // seven steps. Five tables and the prose around them are ~35 minutes on
-    // their own; the workshop's own heading now says 45–60.
-    estimatedMinutes: 95,
+    // Measured, not guessed: 2,720 words of prose and forty table rows is
+    // ~16 minutes, and the workshop's four remaining steps are ~18. The
+    // mechanisms half is 1.2.3 and the drill bench came out — see
+    // docs/verification/module-1-log.md for where the other 40 went.
+    estimatedMinutes: 35,
   },
   {
     id: "v-scoping-upstream-downstream",
@@ -507,6 +509,21 @@ export const verificationLessons: Lesson[] = [
     estimatedMinutes: 15,
   },
   {
+    // 1.2.3. The Actor Map Workshop's second half, moved out of 1.2 because
+    // that lesson measured 77 minutes against a 40-minute ceiling. Nothing
+    // was cut to make it: the mechanisms are what the section is for, and
+    // here they get a page instead of a tail. It shares one localStorage
+    // document with the workshop in 1.2, so a board placed there arrives
+    // here already keyed — see widgets/actor-board.tsx.
+    id: "v-actor-edges",
+    slug: "actor-edges",
+    moduleId: "v-scoping",
+    sectionItemId: "v-scoping-actors",
+    title: "1.2.3 Who can prove what",
+    contentRef: "verification/actor-edges",
+    estimatedMinutes: 20,
+  },
+  {
     id: "v-report-constructor",
     slug: "report-constructor",
     moduleId: "v-scoping",
@@ -680,6 +697,7 @@ export const verificationUnitOfLesson: Record<string, string> = {
   "v-scoping-actors": "1.2",
   "v-interactive-map": "1.2",
   "v-report-constructor": "1.2",
+  "v-actor-edges": "1.2",
   "v-scoping-upstream-downstream": "1.3",
   "v-context-distiller": "1.3",
   "v-mechanism-effective": "2.0",

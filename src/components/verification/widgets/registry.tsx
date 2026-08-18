@@ -26,6 +26,10 @@ const ActorWorkshop = dynamic<VerificationWidgetProps>(
   () => import("./actor-workshop").then((module) => module.ActorWorkshop),
   { loading: WidgetLoading },
 );
+const ActorEdges = dynamic<VerificationWidgetProps>(
+  () => import("./actor-edges").then((module) => module.ActorEdges),
+  { loading: WidgetLoading },
+);
 const ReportConstructor = dynamic<VerificationWidgetProps>(
   () => import("./report-constructor").then((module) => module.ReportConstructor),
   { loading: WidgetLoading },
@@ -46,10 +50,8 @@ const ContextDistiller = dynamic<VerificationWidgetProps>(
   () => import("./context-distiller").then((module) => module.ContextDistiller),
   { loading: WidgetLoading },
 );
-const DrillsFoundations = dynamic<VerificationWidgetProps>(
-  () => import("./drills-foundations").then((module) => module.DrillsFoundations),
-  { loading: WidgetLoading },
-);
+// Unregistered with the exercise on 2026-08-18 — see exercises.ts for why
+// and for the one line that brings the three decks back.
 const DrillsGames = dynamic<VerificationWidgetProps>(
   () => import("./drills-games").then((module) => module.DrillsGames),
   { loading: WidgetLoading },
@@ -183,13 +185,13 @@ export const verificationWidgets: Record<
   "policy-scoping": PolicyScoping,
   "anatomy-drill": AnatomyDrill,
   "actor-workshop": ActorWorkshop,
+  "actor-edges": ActorEdges,
   "report-constructor": ReportConstructor,
   "interactive-map": InteractiveMap,
   "verification-landscape": VerificationLandscape,
   "collection-map": CollectionMap,
   "context-distiller": ContextDistiller,
   "drills-primers": DrillsPrimers,
-  "drills-foundations": DrillsFoundations,
   "drills-games": DrillsGames,
   "policy-cost": PolicyCost,
   "policy-plot": PolicyPlot,

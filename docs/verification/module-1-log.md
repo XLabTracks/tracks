@@ -1123,3 +1123,91 @@ there are five; what marks the band is being outside every ring, which is a
 position rather than a colour. Checked with the overlap probe at three widths,
 on an empty board, a half-placed board and a wrong one: zero overlapping
 labels and nothing clipped, in both themes.
+
+## 2026-08-18 — 1.2 comes down from 77 minutes to 34
+
+Course owner: *"мы не можем иметь 1.2 больше чем 40 минут давай пепесобирать"*,
+then, after three costed routes: **route В — split, plus the cuts, and delete
+the drill bench rather than move it.** Written answers marked optional.
+
+### Where the 77 minutes were
+
+Measured, not estimated. Prose and five tables: 2,720 words, 40 table rows,
+~16 min. Workshop: study 530 words studied-to-remember 7, recall 4, centre 2,
+place 6, categorize 5, edges 11, read the map 5, three written answers 12.
+Drill bench: 3 decks, 19 steps, ~9.
+
+**The diagnosis was not reveal length.** 1.2 was teaching four taxonomies —
+postures, position on the chain, functional roles, and the declaration frame
+with its four subgoals. Each is a fifteen-minute lesson. Collapsing reveals
+had already saved 700 words of 3,000 and left the lesson at 77.
+
+Two of the four already had homes, which is what made the cut decidable
+rather than a matter of taste: position on the chain is what **1.3** is for
+and **1.2.1** is the exercise for it, and the functional roles were being
+drilled by the `actors` deck five screens below the workshop that also
+drilled them.
+
+### What was done
+
+**Split, not cut.** The workshop's second half — the four subgoals, drawing
+the edges, the key, the four absences and both findings — is **1.2.3 Who can
+prove what**, its own lesson at 20 minutes. Nothing was shortened to make it
+fit; the mechanisms are what the section is for and they now have a page
+instead of a tail. Three files where there was one:
+`widgets/actor-board.tsx` holds the shared document, the ring map and the
+roster; `actor-workshop.tsx` is the board half; `actor-edges.tsx` is 1.2.3.
+
+**One document, two widgets.** Both read `v-actor-workshop:v5`, so a board
+placed in 1.2 arrives in 1.2.3 already keyed — verified in a browser: 17
+placements carried across the navigation. Each half keeps its own cursor
+(`step`, `edgeStep`) because they are two pages and a reader may be on
+either. 1.2.3 also stands alone: a reader who lands there first gets the key
+placement and is told that is what it is, rather than a gate.
+
+**Categorize is gone outright**, and with it `roles`/`postures`/`catDone`
+from the document. The point it existed for — roles cut across rings —
+survives as the role lens on the map in 1.2.3, where the finished board is
+read.
+
+**The drill bench is removed and its registration retired.** Removing the
+embed alone would have left `drills-foundations` registered and unplaced,
+which `widgets.test.ts` fails and CLAUDE.md calls drift — the suite caught it
+on the first run. So the exercise entry and the registry line are commented
+out with the one line that brings it back, and the three decks (foundations
+9 steps, actors 6, spine 4) are untouched in
+`data/drills-foundations.ts`. **It now has no placement anywhere in the
+track**, by decision rather than by accident; 1.3 and module 0 are the homes
+that would fit. One consequence to own: Table 5's six roles are still read in
+1.2 and nothing in the section practises them any more.
+
+**The three written answers are behind a control**, not always open. Twelve
+minutes of writing under a finished exercise reads as required no matter what
+the sentence above it says, and the exercise completes on the second-order
+commit, so nobody is held back by work they did not have time for.
+
+### The result, measured on screen
+
+| step | words on screen |
+| --- | ---: |
+| 1.2 study | 773 |
+| 1.2 recall | 315 |
+| 1.2 centre | 264 |
+| 1.2 place (reveal, everything shown) | 1,314 |
+| 1.2.3 edges, before commit | 486 |
+| 1.2.3 edges, marked | 1,850 |
+| 1.2.3 read the map | 1,080 |
+
+**1.2 = 16 (prose) + 18 (four steps) = 34 min.** 1.2.3 = 20. The workshop
+heading and both `estimatedMinutes` say those numbers.
+
+### A trap that cost an hour, now written down
+
+**A lesson missing from its module's `itemIds` 404s silently.** The new
+lesson had a curriculum entry, a `contentRef`, an MDX file, a widget, a
+registry line and a `verificationUnitOfLesson` join — typecheck green, 1,154
+tests green — and the route returned the platform's ordinary 404 page. This
+is the same family as the `importLesson()` trap CLAUDE.md already documents:
+nothing in the suite walks module membership, so `itemIds` is a third place a
+new lesson has to be listed and the only symptom of forgetting is a 404 that
+looks like a bad URL. Drive the route.

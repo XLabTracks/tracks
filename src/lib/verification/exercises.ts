@@ -65,6 +65,9 @@ export const verificationExercises: VerificationExerciseDef[] = [
   // the note at the top of this file the finish marks the exercise and
   // completes no section.
   { id: "actor-workshop", title: "The Actor Map Workshop", bridged: true },
+  // 1.2.3. The workshop's second half, and its own lesson — so bridging it
+  // completes that lesson, which the embedded half above cannot do.
+  { id: "actor-edges", title: "Who can prove what", bridged: true },
   { id: "interactive-map", title: "The Compute Supply Chain", bridged: false },
   { id: "report-constructor", title: "One Inspection, Three Readers", bridged: true },
   { id: "context-distiller", title: "The Distiller", bridged: true },
@@ -94,7 +97,18 @@ export const verificationExercises: VerificationExerciseDef[] = [
   // The mounted drill benches. Bridged: the deck reports complete when the
   // last step of its last bench is committed.
   { id: "drills-primers", title: "Drill Bench: Primers", bridged: true },
-  { id: "drills-foundations", title: "Drill Bench: Foundations and Actors", bridged: true },
+  // drills-foundations stood down on 2026-08-18. 1.2 had to come from a
+  // measured 77 minutes to under 40 and the bench was nine of them; the
+  // course owner chose removal over moving it to 1.3. Retired here rather
+  // than left registered-but-unplaced, which is the state widgets.test.ts
+  // forbids and CLAUDE.md calls drift.
+  //
+  // NOTHING WAS DELETED. The three decks — foundations (9 steps), actors (6),
+  // spine (4) — are authored content and still live in
+  // data/drills-foundations.ts, with their widget and renderer intact.
+  // Bringing them back is this line plus one <VerificationExercise/> in
+  // whichever lesson should carry them; 1.3 and module 0 both fit.
+  // { id: "drills-foundations", title: "Drill Bench: Foundations and Actors", bridged: true },
   // drills-supply-chain stood down when the section-specific 2.4.4 lab
   // replaced it. Its widget, engine, data, and tests remain in the repo.
   { id: "drills-games", title: "Drill Bench: Evasion, Regime, Position", bridged: true },

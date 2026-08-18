@@ -542,6 +542,37 @@ function Roster() {
           </li>
         ))}
       </ol>
+      {/* THE RINGS ARE STUDY MATERIAL AND HAVE TO BE HERE.
+          They were not, and that was a hole in the freeze rather than a
+          missing nicety: step 4 asks for them from memory, and until this
+          panel carried them the four names first appeared as button labels
+          on the step that marks you for knowing them. The old rings were
+          derived from the lesson's own position table, so a reader could at
+          least reconstruct them; Baker's are new material in 1.2 — the paper
+          is optional reading a module earlier and required reading a module
+          later — so nothing on the page taught them.
+          The four subgoals are deliberately NOT here: the edge step never
+          asks the learner to produce one, the key assigns them, and they
+          open that step in the open. */}
+      <div className="border-border border-t pt-3">
+        <p className="eyebrow text-muted-foreground">
+          Four rings: what part of a declaration you play
+        </p>
+        <p className="text-muted-foreground mt-1.5 text-sm leading-relaxed">
+          A verification regime runs on declarations — somebody states what
+          they own and what they did with it, somebody else establishes the
+          statement is true and complete. Every actor is somewhere in that.
+        </p>
+        <ol className="mt-2 space-y-1 text-sm">
+          {RINGS.map((ring) => (
+            <li key={ring.id}>
+              <span className="font-medium">{ring.name}.</span>{" "}
+              <span className="text-muted-foreground">{ring.test}</span>
+            </li>
+          ))}
+        </ol>
+      </div>
+
       <div className="border-border grid gap-3 border-t pt-3 sm:grid-cols-2">
         <div>
           <p className="eyebrow text-muted-foreground">Six functional roles</p>
@@ -1102,15 +1133,42 @@ function EdgesStep({
         <p className="eyebrow text-muted-foreground">What an edge means</p>
         <p className="mt-1.5 text-sm leading-relaxed">
           Draw an edge from <strong>A</strong> to <strong>B</strong> when A can
-          put something in front of a verifier about B that B did not have to
+          produce evidence about B, for a verifier, that B did not have to
           volunteer. Not influence, not dependence — evidence. Direction is the
           claim: a cloud provider holds records about a lab’s training run, and
-          the lab holds nothing comparable about the cloud.
+          the lab holds nothing comparable about the cloud. A verifier can be
+          its own source, so an edge may start on the third ring.
         </p>
         <p className="text-muted-foreground mt-2 text-sm leading-relaxed">
           Some actors will end up with no edge at all. That is an available
           answer and, for several of them, the right one.
         </p>
+      </div>
+
+      {/* THE FOUR SUBGOALS, IN THE OPEN, BEFORE ANYTHING IS DRAWN.
+          They are not part of the freeze — the step never asks the learner to
+          name one, the key assigns them — and hiding them would make the task
+          intuition rather than reasoning. "What is a verifier trying to
+          establish?" is the question an edge answers, so it has to be on
+          screen while the edges are being drawn. The paper's own sentences
+          wait for the reveal; here it is four labels and four short names. */}
+      <div>
+        <p className="text-sm font-medium">
+          What a verifier has to establish, in four parts
+        </p>
+        <p className="text-muted-foreground mt-1 text-sm leading-relaxed">
+          Baker et al. decompose it this way, and the key tags every edge with
+          the part it serves. Draw an edge when you can say which of these four
+          it would help settle.
+        </p>
+        <ol className="mt-2 space-y-1 text-sm">
+          {SUBGOALS.map((s) => (
+            <li key={s.id}>
+              <span className="font-medium">{s.label}.</span>{" "}
+              <span className="text-muted-foreground">{s.name}</span>
+            </li>
+          ))}
+        </ol>
       </div>
 
       {done ? (
@@ -1350,7 +1408,9 @@ function EdgesVerdict({
               <p className="text-muted-foreground mt-0.5 text-sm leading-relaxed">
                 {note.why}
               </p>
-              <BakerLine {...note.baker} />
+              {note.baker.map((q) => (
+                <BakerLine key={q.text.slice(0, 32)} {...q} />
+              ))}
             </li>
           ))}
         </ol>

@@ -192,14 +192,24 @@ describe("edge key", () => {
   });
 
   it("still has the shape EDGE_FINDING describes in prose", () => {
-    // "2.B has three. The other three subgoals have one edge each, and two of
-    // those three come from the same firm." Re-derived, so an added edge
-    // fails here rather than leaving the finding quietly wrong.
+    // Every count the finding states, re-derived. An added or moved edge
+    // fails here rather than leaving the prose quietly wrong.
     const per = (id: string) => EDGE_KEY.filter((e) => e.subgoal === id).length;
+    // "2.B has three. The other three subgoals have one edge each."
     expect(per("2b")).toBe(3);
     expect([per("1a"), per("1b"), per("2a")]).toEqual([1, 1, 1]);
-    const singles = EDGE_KEY.filter((e) => e.subgoal !== "2b").map((e) => e.from);
-    expect(singles.filter((f) => f === "nvidia")).toHaveLength(2);
+    // "One firm is on half the edges and touches three of the four subgoals."
+    const nvidia = EDGE_KEY.filter((e) => e.from === "nvidia");
+    expect(nvidia).toHaveLength(EDGE_KEY.length / 2);
+    expect(new Set(nvidia.map((e) => e.subgoal)).size).toBe(SUBGOALS.length - 1);
+  });
+
+  it("has nobody but the two signatories' own institutions on the verifying ring", () => {
+    // The finding's fifth paragraph says there is no counterparty verifier and
+    // no international body on this board. That is a claim about the roster,
+    // so derive it: every actor on the verifying ring is a US institution.
+    const verifiers = WORKSHOP_ACTOR_IDS.filter((id) => RING_KEY[id] === "verifies");
+    expect(verifiers.sort()).toEqual(["bis", "california", "ic"]);
   });
 
   it("accounts for every actor that has no edge at all", () => {

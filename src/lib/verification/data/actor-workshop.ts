@@ -87,9 +87,26 @@
  * used to be a shape we invented — runs it / supplies it / rules on it / out
  * of reach — derived from 1.2's own sentences but answering a question no
  * paper asks. They now answer the question the verification literature asks,
- * in its own words: Baker, Ho, Hadfield, Wasil et al., *Verification for
- * International AI Agreements* (arXiv:2507.15916v2), whose framework opens on
- * declarations and asks, of every actor, what part it plays in checking one.
+ * in its own words: Baker, Kulp, Marks, Brundage & Heim, *Verifying
+ * International Agreements on AI: Six Layers of Verification for Rules on
+ * Large-Scale AI Development and Deployment* (arXiv:2507.15916v2), whose
+ * framework opens on declarations and asks, of every actor, what part it
+ * plays in checking one.
+ *
+ * That is the title and the author list the rest of the course already uses —
+ * 0.2 offers the paper as a curated reading and 2.1 Hardware makes it item 5
+ * of its core source packet. This file had the authors and the title both
+ * wrong when the frame first landed; the artifact's own `meta.title` is
+ * mangled, so the two lessons above are the authority, not it.
+ *
+ * WHERE THIS SITS IN THE ARC, since it decides how much may be assumed. The
+ * paper is OPTIONAL reading in 0.2 (one of six, "skim broadly; deep-read one
+ * or two") and REQUIRED reading in 2.1, where the layers are the assignment.
+ * So in 1.2 the framework is new material for most readers, and the workshop
+ * has to teach it before it can ask for it back — which is why the four rings
+ * are in the study panel and the four subgoals open step 6. A layer is
+ * defined as one mechanism per subgoal, so a reader who meets the subgoals
+ * here can read 2.1's assignment as a sentence rather than as vocabulary.
  *
  * Every ring name, every subgoal and every edge below carries a `baker` field
  * holding the sentence it rests on, verbatim from the committed artifact at
@@ -98,14 +115,27 @@
  * Read that field before rewriting any of this prose: the wording around it is
  * ours, the claim is not.
  *
- * WHAT THE EDGES ARE. An edge A → B says: A can put something in front of a
- * Verifier about B that B did not have to volunteer. That is not a metaphor —
- * it is Baker's own decomposition read backwards. The framework asks four
+ * WHAT THE EDGES ARE. An edge A → B says: A can produce evidence about B, for
+ * a Verifier, that B did not have to volunteer. The framework asks four
  * questions of a declaration (Subgoals 1.A, 1.B, 2.A, 2.B) and answers each
- * with a mechanism; every mechanism belongs to somebody; drawing the edge is
- * naming whose. The key is therefore not a matter of taste, and neither are
- * the four actors that end up with no edge at all — see EDGE_NOTES, where each
- * absence is a line of Baker's own scope.
+ * with a mechanism; the edge names who holds that mechanism.
+ *
+ * BE EXACT ABOUT WHAT IS WHOSE HERE, because the step prints Baker's name
+ * beside every row. The subgoals are the paper's. The mechanisms are the
+ * paper's. WHICH ACTOR ON THIS ROSTER HOLDS EACH MECHANISM IS OURS, and for
+ * several of them it is arguable rather than read off: an off-chip network tap
+ * is a mutually vetted device that nobody on this board manufactures, and it
+ * is filed under the cloud provider because the device sits in its data centre
+ * and its logs are the other half of the same check. Two mechanisms the paper
+ * assigns to EVERY subgoal — national intelligence and whistleblower
+ * programmes — are filed at the one subgoal where they are the only mechanism
+ * available here, and both edges say so on the page rather than in this
+ * comment. The four actors with no edge are the same kind of judgement, each
+ * resting on a line of the paper's own scope; California's is the one worth
+ * arguing with and its note carries the argument against us.
+ *
+ * A Verifier may be its own source — intelligence is a Verifier's mechanism,
+ * not a hand-off to one — so an edge can start on the third ring.
  *
  * WHY RINGS CARRY POSITION AND CHIPS CARRY ROLES. The lesson is explicit that
  * "any actor can hold several roles at once, and almost every important actor
@@ -540,7 +570,7 @@ export const EDGE_KEY: WorkshopEdge[] = [
     from: "ic",
     to: "proxies",
     subgoal: "2b",
-    what: "A cluster nobody declared leaves no paperwork to audit. What is left is people and signals — and this is the only actor on the board that can reach a facility that was never on any list.",
+    what: "A cluster nobody declared leaves no paperwork to audit. What is left is people and signals — and this is the only actor on the board that can reach a facility that was never on any list. Read the quote carefully: the paper gives intelligence EVERY subgoal, not this one. It is filed here because 2.B is the only place on this board where it is the sole mechanism, and an edge you drew from it to a lab or a cloud has the paper behind it.",
     baker: [
       {
         text: "Intelligence agencies could collect and analyze intelligence for all verification subgoals, including via human, cyber, and signals intelligence.",
@@ -562,39 +592,55 @@ export const EDGE_KEY: WorkshopEdge[] = [
 export const EDGE_NOTES: {
   actorId: WorkshopActorId;
   why: string;
-  baker: BakerQuote;
+  baker: BakerQuote[];
 }[] = [
   {
     actorId: "asml",
     why: "Baker’s chain of custody begins at manufacturing, and ASML is upstream of that: it sells the machines the fab uses, not the parts a regime counts. The tightest chokepoint on the map completes no subgoal, which is what the difference between leverage and evidence looks like.",
-    baker: {
-      text: "A Verifier could verify the locations and owners of random samples of AI chips from manufacturing to end-of-life destruction.",
-      where: "§4.2.1 — the chain starts at manufacturing, not at the tools",
-    },
+    baker: [
+      {
+        text: "A Verifier could verify the locations and owners of random samples of AI chips from manufacturing to end-of-life destruction.",
+        where: "§4.2.1 — the chain starts at manufacturing, not at the tools",
+      },
+    ],
   },
   {
     actorId: "bis",
     why: "Export control is the instrument, and the paper puts it outside the frame deliberately: it is how a party is stopped or punished after a finding, not how a declaration is checked. Today’s de facto compute-governance agency is, in this framework, downstream of verification rather than part of it.",
-    baker: {
-      text: "We do not cover this latter step of enforcement, though a few verification mechanisms double as enforcement tools.",
-      where: "§2.3, scope limitations",
-    },
+    baker: [
+      {
+        text: "We do not cover this latter step of enforcement, though a few verification mechanisms double as enforcement tools.",
+        where: "§2.3, scope limitations",
+      },
+    ],
   },
   {
     actorId: "california",
-    why: "A reporting statute produces declarations. Verification is what happens to a declaration afterwards, and receiving one is not checking it. The actor that bound the leading labs before any international mechanism existed completes no subgoal — it supplies the thing the subgoals are about.",
-    baker: {
-      text: "Verification focuses on checking that these declarations are correct and complete.",
-      where: "§3.1",
-    },
+    // The one absence a learner can argue with, so it carries the argument
+    // rather than waiting to be caught out. 1.2 supplies half of it — SB 53
+    // makes large frontier developers run an internal anonymous reporting
+    // channel — and the paper supplies the other half in the second quote.
+    why: "A reporting statute produces declarations. Verification is what happens to a declaration afterwards, and receiving one is not checking it. The actor that bound the leading labs before any international mechanism existed completes no subgoal — it supplies the thing the subgoals are about. Argue with this one if you drew the edge: SB 53 also requires an internal anonymous reporting channel at large frontier developers, and whistleblowing is a verification mechanism in this framework, for every subgoal at once. The key leaves the edge out because the mechanism is a programme a Verifier runs and California is not running one — which is a judgement, not a reading.",
+    baker: [
+      {
+        text: "Verification focuses on checking that these declarations are correct and complete.",
+        where: "§3.1",
+      },
+      {
+        text: "Programs may enable and incentivize (narrowly scoped, non-public) staff whistleblowing, for all verification subgoals.",
+        where: "§4.3, the personnel-based layers",
+      },
+    ],
   },
   {
     actorId: "deployers",
     why: "Below the threshold, and that is the whole of it. Millions of actors running somebody else’s model are outside the regime by construction rather than by evasion — which is why they share a ring with the proxies and share nothing else.",
-    baker: {
-      text: "AI development or deployment is “large-scale” if it uses thousands of high-end AI chips over multiple months.",
-      where: "§2.2, what counts as large-scale",
-    },
+    baker: [
+      {
+        text: "AI development or deployment is “large-scale” if it uses thousands of high-end AI chips over multiple months.",
+        where: "§2.2, what counts as large-scale",
+      },
+    ],
   },
 ];
 
@@ -607,9 +653,11 @@ export const EDGE_NOTES: {
 export const EDGE_FINDING = {
   title: "Where this regime is weakest",
   body: [
-    "Count the edges by subgoal. 2.B — no undeclared clusters anywhere — has three. The other three subgoals have one edge each, and two of those three come from the same firm. Baker’s standard for a robust regime is redundancy: layers stacked, so that a subgoal has more than one way of being completed. Three of the four subgoals on this board have no second way at all.",
-    "The paper calls the least robust subgoal the weak link and says the regime is only as good as that one. This map narrows the question rather than answering it — counting edges is not measuring robustness — but it does tell you where to ask, and it tells you that removing one chip designer would take two subgoals with it.",
+    "Count the edges by subgoal. 2.B — no undeclared clusters anywhere — has three. The other three subgoals have one edge each, so three quarters of what a verifier has to establish rests on a single mechanism apiece. Baker’s standard for a robust regime is redundancy: layers stacked, so that a subgoal has more than one way of being completed. Three of the four subgoals on this board have no second way at all.",
+    "Now count by actor instead, which is the sharper reading. One firm is on half the edges and touches three of the four subgoals — and that is not a coincidence about NVIDIA, it is what a verification layer IS. The paper defines a layer as one mechanism per subgoal, and the on-chip layer is a chip designer’s to give or withhold. So the board does not show one weak link; it shows a regime resting on roughly one layer, held by a company that is not a party to the agreement.",
+    "The paper calls the least robust subgoal the weak link and says the regime is only as good as that one. This map narrows the question rather than answering it — counting edges is not measuring robustness — but it does tell you where to ask.",
     "Then read what has no edge. Four of the ten actors complete no subgoal, and two of them are the ones the section spends the most time on: the export-control agency, whose instrument the paper places outside verification altogether, and the state legislature, which produces declarations rather than checks on them.",
+    "Then read the third ring on its own. Everything on it — the export-control bureau, the intelligence community, the state legislature — belongs to one of the two signatories. There is no counterparty verifier on this board and no international body, because 1.2 already told you the shelf is empty. A map of a two-party agreement in which only one party can check anything is not a verification regime; it is one country auditing itself while another country watches.",
     "Then read what has no node. The paper’s simplest and most implementation-ready layer runs on people — whistleblowers, interviews, intelligence. One of those three is on this board, because it happens to be an institution. The other two are not organisations, so a map of organisations has nowhere to put them, and you would never find them by drawing one.",
   ],
   weakLink: {
@@ -633,7 +681,10 @@ export const MAP_FINDING = {
   title: "What the finished map says",
   body: [
     "Read your rings from the inside out. Exactly two actors on this board owe anybody a declaration; everything outside them either holds evidence about that declaration, or checks it, or is not covered by any declaration at all. A verification regime is a much smaller object than the map of who matters — most of this board it does not reach, and half of it cannot help.",
-    "Now read the colours across the rings instead of around them. Roles do not stay in their band — the cloud provider holds four of them at once, and the ring it sits on tells you none of the four. Position tells you what part an actor plays in checking a declaration; roles tell you what it can do to you; posture tells you what it wants today. The three lenses cut across each other, which is why the section asks you to run all three.",
+    // "Position" is the lesson's word for place on the supply chain (Table 4)
+    // and 1.2.1 is the exercise for it, so this paragraph must not quietly
+    // re-point it at the rings. Four lenses now, and the fourth is named.
+    "Now read the colours across the rings instead of around them. Roles do not stay in their band — the cloud provider holds four of them at once, and the ring it sits on tells you none of the four. The section gives you three questions to ask of any actor: where does it sit on the chain (position, Table 4, and the map in 1.2.1 is where you practise it), what can it do inside a regime (roles), what does it want today (posture). These rings are a fourth, and a narrower one: not where an actor sits, but what part it plays in checking a declaration. All four cut across each other, which is why no single one of them is the map.",
   ],
 } as const;
 

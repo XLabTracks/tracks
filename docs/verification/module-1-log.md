@@ -894,3 +894,91 @@ Driven in a browser end to end: all seven steps, draw / remove / redraw /
 commit, both themes (edge strokes resolve to real distinct values — khaki and
 red by day, their lighter variants at night, missed edges dashed grey in both),
 no console errors.
+
+### Re-read of paper, lesson and arc, same day
+
+Asked to check the whole thing again. Six real defects, five of them mine and
+introduced by the re-base itself.
+
+**The citation was wrong.** The header called the paper *Verification for
+International AI Agreements* by "Baker, Ho, Hadfield, Wasil et al." It is
+*Verifying International Agreements on AI: Six Layers of Verification for
+Rules on Large-Scale AI Development and Deployment*, by Baker, Kulp, Marks,
+Brundage & Heim — which is the title and the author list `intuitions.mdx` and
+`hardware-attestation.mdx` already use. The artifact's own `meta.title` is
+mangled (`_5807bavuhsio Verifying…`), so those two lessons are the authority.
+
+**The freeze had a hole and the re-base cut it.** Step 4 asks for the rings
+from memory and the study panel never carried them. That was survivable while
+the rings were derived from the lesson's own position table — a reader could
+reconstruct them — and is not survivable now: the paper is *optional* reading
+in 0.2 (one of six curated, "deep-read one or two") and *required* reading in
+2.1, so in 1.2 the framework is new material and nothing on the page taught
+it. The four rings and their tests are in the roster panel now.
+
+**Step 6 was intuition, not reasoning.** The four subgoals only appeared in
+the reveal, so the learner drew edges without knowing what a verifier is
+trying to establish. They now open the step, in the open: four labels and four
+short names, no quotes and no counts. They are deliberately not in the freeze
+— the step never asks the learner to produce a subgoal, the key assigns them.
+
+**Two mechanisms were filed narrower than the paper files them.** Baker gives
+national intelligence *and* whistleblower programmes **all four subgoals**.
+The key files each at the one subgoal where it is the only mechanism on this
+board, which is defensible, but the page said nothing about it — so a learner
+drawing an intelligence edge to a lab was marked as inventing when the paper
+was behind them. Both edges say so now.
+
+**California's absence overclaimed.** "It supplies the thing the subgoals are
+about" is a clean line and only half true: SB 53 also requires an internal
+anonymous reporting channel at large frontier developers, which is the
+scaffolding of Baker's personnel layer. The note now carries the argument
+against the key, with both quotes, and says plainly that leaving the edge out
+is a judgement rather than a reading. `EDGE_NOTES[].baker` became an array to
+hold the second one.
+
+**The finding undercounted and stole a word.** It said two subgoals come from
+one firm; the true and sharper statement is that NVIDIA is on half the edges
+and touches three of the four subgoals — and that this is not a fact about
+NVIDIA but what a *layer* is, since the paper defines a layer as one mechanism
+per subgoal. So the board does not show one weak link, it shows a regime
+resting on roughly one layer held by a company that is not a party to the
+agreement. Added, with both counts re-derived in the suite.
+
+Also added, and it is the strongest thing the frame surfaces: **every actor on
+the verifying ring belongs to one of the two signatories.** No counterparty
+verifier, no international body — which is 1.2's own empty-shelf paragraph
+made visible. A two-party agreement in which only one party can check anything
+is not a verification regime. A test derives the ring's membership so the
+paragraph cannot outlive the roster.
+
+And the finding no longer says "position tells you what part an actor plays in
+checking a declaration". *Position* is the lesson's word for place on the
+supply chain (Table 4), and 1.2.1 is the exercise for it. The rings are a
+fourth lens and are now named as one.
+
+**Provenance, restated honestly.** The header claimed the key "is not a matter
+of taste". The subgoals are the paper's and the mechanisms are the paper's;
+*which actor on this roster holds each mechanism* is ours, and for several it
+is arguable — an off-chip network tap is a mutually vetted device nobody on
+this board manufactures, filed under the cloud provider because the device
+sits in its data centre. Said in the header now, and on the page where it
+matters.
+
+**Left open for the course owner** (recorded here, not acted on):
+
+- Whether the declaration frame belongs in 1.2's **prose**, not only in the
+  workshop. It now carries the section's main structural idea and it sets up
+  2.1, where a layer is defined as one mechanism per subgoal — a sentence you
+  cannot read without the subgoals. Four short paragraphs under "Functional
+  roles" would do it. Adding a section to her lesson is her call.
+- The three closing questions ask about **Taiwan** and about **states holding
+  capability and enforcement at once**, and neither is on the ten-actor board
+  the learner just built. Defensible as transfer, but there is no bridge
+  sentence saying so.
+- **Length.** Seven steps, and step 6's reveal alone runs ~1,300 words of
+  reading at the end of a memory exercise. The heading still says 25–30 min;
+  it is nearer 45. Options are folding the per-edge quotes behind a
+  disclosure, or collapsing correct edges to one line so attention goes to
+  the misses. Both change what a learner who got it right reads, so neither
+  is ours to pick.

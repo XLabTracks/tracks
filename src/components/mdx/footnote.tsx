@@ -94,15 +94,31 @@ export function Footnote({ children }: { children: ReactNode }) {
           }}
           onPointerEnter={mouseOnly(timers.cancel)}
           onPointerLeave={mouseOnly(timers.scheduleClose)}
-          className="w-[min(26rem,calc(100vw-2rem))]"
+          /* THE CARD IS THE COURSE'S EXISTING ONE, not a new one.
+             `.vocab-card` in public/verification/notebook.css is the popup
+             this course already had — the one the Define action raises over a
+             selected word — and every value below is read off it rather than
+             chosen: min(360px, 100vw - 24px) wide, 14/16/12 padding, a
+             hairline --border, --radius, --card for the ground and
+             --shadow-soft-lg. The shadcn defaults it overrides (bg-popover,
+             p-2.5, shadow-md, ring-1) are what made this look like a fourth
+             popup in a course that already had one. */
+          className="w-[min(360px,calc(100vw-24px))] rounded-[var(--radius)] border border-border bg-card px-4 pt-3.5 pb-3 shadow-soft-lg ring-0"
         >
           {/* One block child, and it has to be one.
               PopoverContent is `flex flex-col gap-2.5`, so an inline run
               handed to it directly becomes a column: every text node and
               every link in the note landed on its own line with a gap
               between them, which is what a footnote must never look like.
-              Wrapping restores normal inline flow inside a single flex item. */}
-          <div className="text-muted-foreground text-sm leading-relaxed [&_a]:underline [&_a]:underline-offset-4">
+              Wrapping restores normal inline flow inside a single flex item.
+
+              Body copy, not caption copy. It was `text-muted-foreground`,
+              which greyed a note the reader opened on purpose; `.vocab-body`
+              carries the normal foreground at 1.6, and `text-sm` already
+              resolves to --fs-md inside this chrome (app-bridge.css maps it),
+              so the size matches too. Links take --link like every other link
+              on the page. */}
+          <div className="text-sm leading-[1.6] [&_a]:text-link [&_a]:underline [&_a]:underline-offset-4">
             {children}
           </div>
         </PopoverContent>

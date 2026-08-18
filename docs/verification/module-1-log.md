@@ -680,3 +680,44 @@ glossary entry is a definition and those are hers to write.
 **Not changed, and worth a decision:** the module and assessment pages still
 carry `max-w-3xl`/`max-w-4xl`. Only the lesson item page was widened, because
 that is what she was looking at.
+
+### The footnote popup is the course's existing card (2026-08-15)
+
+The owner: "почему твой блядский дизайн отличается если я тебе даже понитейл
+скилл подвезла". Correct, and it is rung 2 of that ladder — is it already in
+this codebase — failed on the first try. The course already had a popup: the
+one the Define action raises over a selected word, `.vocab-card` in
+public/verification/notebook.css. I built a fourth look out of a bare shadcn
+`PopoverContent` instead of reading it.
+
+Every value now comes off `.vocab-card` rather than being chosen:
+`min(360px, 100vw - 24px)` wide, 14/16/12 padding, hairline `--border`,
+`--radius`, `--card` for the ground, `--shadow-soft-lg`. The shadcn defaults
+that had to be overridden are exactly what made it look foreign —
+`bg-popover`, `p-2.5`, `shadow-md`, `ring-1 ring-foreground/10`. Verified as
+computed style, not by eye: 360px, 14px radius, 1px border, 14/16/12.
+
+The body was the loudest difference and was not a size problem. It read
+`text-muted-foreground`, which greys a note the reader opened deliberately;
+`.vocab-body` carries the normal foreground at 1.6. Size already matched —
+app-bridge.css maps `--text-sm` to `--fs-md`, so `text-sm` is 16px inside this
+chrome. Links now take `--link` like every other link on the page.
+
+Checked in both themes by clicking the header control rather than by setting a
+storage key — the first probe set `xlab-verification-theme` and got `light`
+both times, which would have reported a white card in the dark as a pass. Done
+properly: `data-theme=dark`, page `rgb(20,16,15)`, card `#1c1817`, border
+`#332c2a`, body `#f4f0ee`. No white-dialog trap here, because `--card` is one
+of the tokens theme.css does carry.
+
+**What is deliberately not copied:** the vocab card's title, its source line
+and its two buttons. That card is about a word, so it needs to name the word
+and say where the definition came from. A footnote is the continuation of a
+sentence and carries its own sources inline. If footnotes should have a label,
+that is a call to make rather than a thing to infer.
+
+**Noticed while doing this, not changed:** `GlossaryCardContent` renders its
+body in `text-muted-foreground`, so the React glossary hover card is greyer
+than both the vocab card and now the footnote. Three small-explanation
+surfaces, two treatments. Flagged rather than aligned, because which one is
+canonical is the owner's call.

@@ -9,9 +9,11 @@
 /* ---------- hero ---------- */
 
 .hero {
-  /* Fluid, not fixed: 40px of air read fine at 1280 and cramped on a tall
-     monitor. The type does not scale — only the ground around it. */
-  padding: clamp(40px, 7vh, 96px) 0 clamp(36px, 5vh, 64px);
+  /* Fluid, not fixed — and the floors are the working values on a laptop,
+     where 100vh is ~700-800px, so they are set generously rather than
+     trusting the vh term to lift them. The type does not scale — only the
+     ground around it. */
+  padding: clamp(64px, 10vh, 128px) 0 clamp(56px, 8vh, 96px);
 }
 .hero > .wrap,
 section.band > .wrap,
@@ -33,7 +35,7 @@ section.alpha-note > .wrap {
 }
 .hero .lede {
   max-width: 60ch;
-  margin-top: 16px;
+  margin-top: 20px;
   font-size: var(--fs-lg);
   line-height: 1.6;
   color: var(--muted-foreground);
@@ -42,7 +44,9 @@ section.alpha-note > .wrap {
   display: flex;
   flex-wrap: wrap;
   gap: 12px;
-  margin-top: 24px;
+  /* The buttons are a decision, not the next sentence — they stand a full
+     step off the lede so the hero reads title, text, then actions. */
+  margin-top: 36px;
 }
 
 /* ---------- sections ---------- */
@@ -584,7 +588,7 @@ section.band .intro {
 
 @media (max-width: 640px) {
   .hero {
-    padding: 28px 0 24px;
+    padding: 40px 0 32px;
   }
   section.band > .wrap {
     padding-top: 32px;

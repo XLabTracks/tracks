@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { TriangleAlert } from "lucide-react";
 import { CourseOverview } from "@/components/verification/course-overview";
 import { LegacyScripts } from "@/components/verification/legacy-scripts";
 
@@ -39,14 +40,14 @@ export default function Page() {
         <section className="hero">
           <div className="wrap">
             <h1>
-              How could the US and China trust an agreement to pause ASI
-              development?
+              How can countries trust each other to keep AI governance
+              commitments?
             </h1>
             <p className="lede">
               An intermediate course on international AI verification: the
-              technical, institutional and legal mechanisms that decide whether
-              a governance commitment can be checked at all — and what it takes
-              to tell a kept promise from a broken one.
+              technical, institutional, and legal mechanisms that make
+              agreements observable and enforceable — and help distinguish
+              compliance from violation.
             </p>
 
             <div className="ways">
@@ -68,6 +69,7 @@ export default function Page() {
             decide. The author's words, verbatim. */}
         <section className="alpha-note">
           <div className="wrap">
+            <TriangleAlert className="alpha-sign" strokeWidth={2.25} aria-hidden />
             <p>
               We’re currently in the alpha testing stage and running a small
               paid cohort to calibrate and improve the course ahead of the

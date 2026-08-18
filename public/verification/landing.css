@@ -675,9 +675,26 @@ section.alpha-note {
   background: var(--mod-0);
   color: var(--mod-0-ink);
 }
+
+/* Sign and sentence on one row. The sign is a fixed square that never shrinks
+   and the sentence keeps its own measure beside it, so the text is not sized
+   to whatever the icon left over. `start` rather than `center`: the sign
+   belongs to the first line, and centring it against four wrapped lines
+   floats it into the middle of a paragraph. */
 section.alpha-note > .wrap {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
   padding-top: 20px;
   padding-bottom: 20px;
+}
+section.alpha-note .alpha-sign {
+  flex: none;
+  width: 32px;
+  height: 32px;
+  /* Optical, not arithmetic: the triangle's mass sits low, so aligning its box
+     to the cap line leaves it reading high against the first row of text. */
+  margin-top: -1px;
 }
 section.alpha-note p {
   max-width: 78ch;
@@ -688,4 +705,11 @@ section.alpha-note a {
   color: inherit;
   text-decoration: underline;
   text-underline-offset: 3px;
+}
+
+@media (max-width: 640px) {
+  section.alpha-note .alpha-sign {
+    width: 24px;
+    height: 24px;
+  }
 }

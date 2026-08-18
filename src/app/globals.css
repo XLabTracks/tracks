@@ -839,6 +839,72 @@
   color: inherit;
 }
 
+/* 2.1.2's prover-profile table (`<div className="trio-table">` around ordinary
+   markdown): a short row label and two columns of running sentences. The
+   shared block-scroll treatment sizes columns by content and hands the last
+   one all the slack, so the middle column came out a word wide while the
+   right-hand one took the page. Same remedy as .pair-table above — a
+   fixed-layout table filling its measure, chrome on the wrapper — with the
+   widths stated on all three headers, because the generic last-child
+   `width: 100%` would otherwise reach the header and undo it. The first
+   column keeps the row-header treatment: here it does name the row. */
+.lesson-body .trio-table {
+  margin-block: 28px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-soft);
+}
+.lesson-body .trio-table table {
+  display: table;
+  width: 100%;
+  table-layout: fixed;
+  margin: 0;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+  background-image: none;
+}
+.lesson-body .trio-table table th:first-child {
+  width: 24%;
+}
+.lesson-body .trio-table table th:nth-child(2),
+.lesson-body .trio-table table th:last-child {
+  width: 38%;
+}
+
+/* 2.1.8's rubric (`<div className="rubric-table">`): a dimension, a weight,
+   and the standard that earns it. Same fixed-layout remedy as .trio-table,
+   different proportions — the weight column holds "25%" and nothing else, so
+   giving it a third of the measure would starve the two columns that carry
+   words. */
+.lesson-body .rubric-table {
+  margin-block: 28px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-soft);
+}
+.lesson-body .rubric-table table {
+  display: table;
+  width: 100%;
+  table-layout: fixed;
+  margin: 0;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+  background-image: none;
+}
+.lesson-body .rubric-table table th:first-child {
+  width: 30%;
+}
+.lesson-body .rubric-table table th:nth-child(2) {
+  width: 12%;
+}
+.lesson-body .rubric-table table th:last-child {
+  width: 58%;
+}
+
 .lesson-body table.elements-grid {
   display: table;
   width: 100%;

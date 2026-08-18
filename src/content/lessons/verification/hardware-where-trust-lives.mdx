@@ -1,160 +1,128 @@
-<Callout variant="note" title="Section status">
-This section is still in draft. What follows is its specification — the
-objectives, the activity, its claim list and its reveal — and the connecting
-prose between them is not written yet.
-</Callout>
+{/* Unit 2.1, section 2.1.6. Transcribed from the author's WIP outline (the
+    live "[WIP] Verification Track Outline", tab "2.1.6 where's trust?"), not
+    paraphrased and not invented. It replaces the draft specification that
+    stood here. The outline's two bracketed references ride with their
+    passages as <Src>. */}
 
 ### 2.1.6 Where should trust live?
 
-Runtime: 35 minutes Hard idea: On-chip and off-chip mechanisms offer different trust distributions. Combining them helps only when their failure modes are meaningfully independent.
+Hardware verification can place trust inside the accelerator, in a separate digital monitor, in physical sensors, or across a hybrid design. Moving trust does not remove it.
 
-#### Advance comparison
+Use one verification target for the comparison:
 
-Present the same verification target:
+<Prompt label="Verification target">Determine whether all covered compute in a declared data center is accounted for by permitted workloads.</Prompt>
 
-Determine whether all covered compute in a declared data center is accounted for by permitted workloads.
+#### Architecture A: on-chip monitoring
 
-Then compare three architectures.
+Possible components include device identity, secure or measured boot, signed counters, protected telemetry, workload certificates, trusted execution environments, and hardware-backed authorization.
 
-#### Architecture A: On-chip monitoring
-
-Possible components:
-
-- Device identity;
-- Secure or measured boot;
-- Signed counters;
-- Protected telemetry;
-- Workload certificates;
-- Hardware-backed authorization.
-
-Potential advantages:
+**Potential strengths**
 
 - Fine-grained access to device state and activity;
-- Low marginal cost after deployment across a fleet;
-- Evidence travels with the chip;
-- Possible real-time response;
-- Privacy-preserving outputs.
+- Low marginal cost across a fleet after deployment;
+- Evidence can travel with the device;
+- Fast or real-time response;
+- Compact, privacy-preserving outputs rather than raw workloads.
 
-Load-bearing concerns:
+**Load-bearing concerns**
 
-- Trust in chip design and manufacturing;
-- Vendor control of keys, reference values, firmware, and updates;
-- Physical access by the prover;
+- Trust in design, manufacturing, firmware, and key provisioning;
+- Vendor control of reference values, updates, revocation, and appraisal services;
+- Physical control by the prover;
+- Common-mode failure when identity, metering, classification, and licensing share one root;
 - Legacy and nonparticipating hardware;
-- Redesign and fleet-turnover timelines;
-- Common-mode failure across identity, metering, and licensing.
+- Hardware redesign and fleet-turnover time;
+- Political resistance to foreign- or vendor-controlled keys.
 
-#### Architecture B: Off-chip digital monitoring
+Current confidential-computing support on accelerators is a deployed security primitive, not proof of treaty compliance. For example, NVIDIA describes Hopper confidential computing as protecting code and data in use from the host and basic physical attacks under its stated threat model. A treaty adversary may be stronger than that threat model, and a confidential workload may still violate the treaty.
 
-Possible components:
+<Src>NVIDIA, [*NVIDIA H100 Tensor Core GPU Security*](https://images.nvidia.com/aem-dam/en-zz/Solutions/data-center/h100/PB-11133-001_v01.pdf) — the confidential-computing whitepaper and current product documentation.</Src>
 
-- Network taps;
-- Input/output loggers;
-- Server or rack gateways;
-- Tamper-evident enclosures;
-- Separate secured verification machines.
+<PageBreak title="Off-chip digital monitoring" />
 
-Potential advantages:
+#### Architecture B: off-chip digital monitoring
 
-- Devices can be jointly designed and mutually inspected;
-- Reduced reliance on the monitored party’s accelerator internals;
-- Possible retrofitting of existing systems;
-- Clearer separation between prover hardware and verifier hardware.
+Possible components include network taps, server or rack gateways, input/output loggers, tamper-evident enclosures, and separate secured verification computers.
 
-Load-bearing concerns:
+**Potential strengths**
 
-- Reduced visibility as the tap moves farther from the chip;
-- Encrypted traffic;
-- Data volumes;
-- Covert and side channels;
-- Installation and chain-of-custody requirements;
-- Risk that the verifier’s device contains espionage or sabotage functions;
-- Difficulty reconstructing high-level workloads from low-level traffic.
+- Clearer separation between prover hardware and verifier hardware;
+- Devices can be jointly designed, inspected, or supplied;
+- Possible retrofit of existing accelerator fleets;
+- Reduced dependence on proprietary accelerator internals.
 
-The six-layer synthesis explicitly treats network taps and analog sensors as separate off-chip approaches and proposes mutually vetted, simple, potentially jointly developed devices. It also emphasizes that these approaches still face major unsolved engineering and assurance problems. (arXiv)
+**Load-bearing concerns**
 
-A June 2026 proposal makes the concept more concrete by placing taps on information-carrying connections, committing external data with hashes, and adding a secure gateway to constrain timing, analog, and steganographic channels. It is an architectural proposal, not a fielded treaty system. (arXiv)
+- Visibility falls as the monitor moves farther from the computation;
+- Encrypted links and large data volumes;
+- Covert, timing, analog, and steganographic channels;
+- Difficulty reconstructing high-level workloads from low-level traffic;
+- Installation, calibration, chain of custody, and maintenance;
+- Risk that verifier-supplied hardware enables espionage or sabotage.
 
-#### Architecture C: Off-chip analog monitoring
+Recent work has proposed fingerprinting or committing cluster input and output through external taps and secure gateways. These designs are research proposals. Their value is to make the trust-placement problem concrete, not to show that the engineering and political problems are solved.
 
-Possible components:
+<Src>A. Cankaya et al., *Fingerprinting All AI Cluster I/O Without Mutually Trusted Processors* — [arXiv:2606.10724](https://arxiv.org/abs/2606.10724), June 2026. Treat the architecture and implementation schedule as a research proposal.</Src>
 
-- Rack or server power meters;
-- Thermal sensors;
-- Electromagnetic measurements;
-- Independent clocks and timestamping;
-- Tamper-evident packaging;
-- Video or physical inspection of installation.
+#### Architecture C: off-chip analog monitoring
 
-Potential advantages:
+Possible components include independently installed power meters, thermal sensors, electromagnetic measurements, independent clocks, tamper-evident packaging, and physical inspection of the sensor boundary.
+
+**Potential strengths**
 
 - A physically independent account of activity;
-- Retrofitting potential;
-- Evidence that is less dependent on proprietary firmware;
-- Evasion may require sacrificing performance or changing multiple physical signals.
+- Possible retrofit;
+- Less dependence on proprietary firmware;
+- Evasion may require changing several physical signatures or sacrificing performance.
 
-Load-bearing concerns:
+**Load-bearing concerns**
 
-- Approximate conversion from physical measurements to compute;
-- Workload- and architecture-dependent signatures;
-- Margins of error;
-- Calibration and sensor placement;
-- Deliberate mimicry;
+- Approximate conversion from physical signals to compute;
+- Architecture- and workload-dependent signatures;
+- Calibration, placement, uncertainty, and sensor drift;
+- Deliberate mimicry or masking;
 - Coverage only inside instrumented facilities;
-- Reliance on inspections to maintain the sensor boundary.
+- Dependence on inspections to preserve the measurement boundary.
 
-#### Architecture D: Hybrid
+A rack meter installed under treaty access belongs in this hardware section. A foreign intelligence service estimating the same site’s power use from outside the facility belongs in the intelligence section. The physical phenomenon may be similar, but the access, chain of custody, confidence, and institutional role differ.
 
-Possible combination:
+#### Architecture D: hybrid assurance
+
+A hybrid system might combine:
 
 - On-chip identity and secure boot;
 - Hardware-rooted telemetry;
 - Independently installed rack-level power measurement;
-- Cloud or provider records;
+- Provider allocation and billing records;
 - Periodic physical inspection;
-- Intelligence comparison against declared facility capacity.
+- Intelligence comparison against declared facility capacity;
+- Protected human reporting channels.
 
-The learner must test whether this is genuinely layered. A signed meter, signed workload classifier, and licensing system that all rely on the same vendor key constitute less independence than their mechanism count suggests.
+Count independent failure modes, not mechanism names. A signed meter, a signed classifier, and a licensing system that all depend on one vendor key provide less redundancy than their number suggests.
 
-#### Cross-taxonomy card: the same signal, a different institution
+#### The confidentiality trade
 
-Use power draw to connect 2.1 and 2.3:
+Hardware evidence can reduce disclosure by returning a bounded claim rather than raw code, data, weights, or traces. It can also concentrate power in manufacturers, key authorities, and verifiers. A proposal should specify:
 
-- A treaty-installed rack meter is access-dependent, precise, and maintained through inspections. It belongs here.
-- Grid analysis or remote thermal imagery may estimate related activity without permission. That is intelligence-based evidence.
-- The physical phenomenon is similar; the evidence pathway, access, confidence, and political role differ.
+- Exactly what leaves the facility;
+- Who can link evidence across devices, sites, and time;
+- Whether the result reveals commercially sensitive utilization or topology;
+- Whether raw evidence is retained;
+- Who can query the system;
+- How abuse is audited;
+- What happens when parties disagree about the verifier or reference values.
 
-This reinforces that the course’s four buckets are a pedagogical crosswalk rather than natural kinds.
+#### Activity: bilateral pilot review
 
-<PageBreak title="Bilateral design review" />
+Compare an on-chip design with an off-chip design for the working pause rule. For each, record:
 
-#### Activity: Bilateral design review
-
-Learners compare an on-chip proposal and an off-chip proposal for the working pause rule. For each architecture they complete:
-
-- What the U.S. side would distrust;
-- What the Chinese side would distrust;
+- What a U.S. delegation would distrust;
+- What a Chinese delegation would distrust;
 - What the operator would regard as commercially sensitive;
-- What the verifier cannot afford to leave unknown;
 - Whose cooperation is indispensable;
-- The technical assumption most likely to fail;
-- The institutional assumption most likely to fail;
-- The most serious abuse or power-concentration risk;
-- The smallest pilot that would provide decision-relevant evidence.
+- The strongest technical assumption;
+- The strongest institutional assumption;
+- The main abuse risk;
+- The smallest pilot that would produce decision-relevant evidence.
 
-The task ends with a constrained recommendation:
-
-Choose an architecture for a voluntary pilot, not for immediate universal deployment. State what the pilot must test before the mechanism deserves a stronger role.
-
-This makes feasibility dynamic and evidence-responsive.
-
-#### Answer-key philosophy
-
-There should be no universal “on-chip wins” or “off-chip wins” reveal.
-
-The model answer should demonstrate:
-
-- The different trust placements;
-- Circumstances that favor each architecture;
-- The likely collapsing weakness under the named adversary;
-- What pilot result would move the assessment.
+Choose an architecture for a **pilot**, not immediate universal deployment. State the evidence the pilot must produce before the mechanism deserves a larger role.

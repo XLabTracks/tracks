@@ -1,70 +1,43 @@
-<Callout variant="note" title="Section status">
-This section is still in draft. What follows is its specification — the
-objectives, the activity, its claim list and its reveal — and the connecting
-prose between them is not written yet.
-</Callout>
+{/* Unit 2.1, section 2.1.7 — the outline stars it as optional; that is carried
+    in the title, not in the graph (see docs/verification/module-2-log.md).
+    Transcribed from the author's WIP outline (the live "[WIP] Verification
+    Track Outline", tab "2.1.7 optional"), not paraphrased and not invented.
+    It replaces the draft specification that stood here. */}
 
 ### 2.1.7 Optional extension: reconstructing a declared training run
 
-Runtime: 35 to 45 minutes Status: Advanced extension Hard idea: Evidence that a declared run occurred as claimed does not establish that no other run occurred.
+This extension asks a different question: can a verifier test whether a declared training process plausibly produced the submitted checkpoints or model?
 
-#### Scope
+Possible evidence includes:
 
-Cover:
-
-- Training records;
-- Checkpoints or weight snapshots;
+- Training records and code or data commitments;
+- Periodic checkpoints or weight snapshots;
 - Authenticated transcripts;
 - Sampled re-execution;
 - Probabilistic recomputation;
 - Dedicated verification clusters;
-- Proof-of-learning or proof-of-training approaches;
-- Confidentiality and spoofing risks.
+- Proof-of-learning or proof-of-training-data protocols.
 
-#### Anchor proposal
+Yonadav Shavit’s 2023 compute-monitoring proposal decomposed a possible system into on-chip weight snapshots, records intended to support later verification of training, and supply-chain monitoring intended to prevent accumulation of untracked chips. This decomposition remains useful because it separates verification of a declared run from completeness of the fleet.
 
-Shavit’s compute-monitoring proposal decomposes verification into on-chip weight snapshots, records intended to support later proof of the training process, and supply-chain monitoring intended to prevent a prover from accumulating untracked chips. The paper explicitly presents a high-level system design with open technical problems rather than a deployment-ready mechanism. (ar5iv)
+<Src>Y. Shavit, *What Does It Take to Catch a Chinchilla? Verifying Rules on Large-Scale Neural Network Training via Compute Monitoring* — [arXiv:2303.11341](https://arxiv.org/abs/2303.11341), 2023.</Src>
 
-#### Intended discovery
+Proof-of-learning research shows both the promise and fragility of checkpoint-based verification. Jia and colleagues proposed proofs based on logged intermediate states. Subsequent work demonstrated adversarial constructions and serious weaknesses in the original approach. Choi, Shavit, and Duvenaud later proposed a broader toolkit for verifying claims about training data, while explicitly treating its tests as heuristic and noting substantial confidentiality and access assumptions.
 
-Learners should separate:
+<Src>H. Jia et al., *Proof-of-Learning: Definitions and Practice* — [arXiv:2103.05633](https://arxiv.org/abs/2103.05633), 2021. R. Zhang et al., *Adversarial Examples for Proof-of-Learning* — [arXiv:2108.09454](https://arxiv.org/abs/2108.09454), IEEE Symposium on Security and Privacy, 2022. C. Fang et al., *Proof-of-Learning Is Currently More Broken Than You Think* — [arXiv:2208.03567](https://arxiv.org/abs/2208.03567), revised 2023. J. Choi, Y. Shavit, and D. Duvenaud, *Tools for Verifying Neural Models’ Training Data* — [arXiv:2307.00682](https://arxiv.org/abs/2307.00682), 2023.</Src>
 
-- Declared-run correctness: the submitted model or checkpoint plausibly arose from the declared process;
-- Declared-run completeness: all relevant activity associated with the declared run has been shown;
-- Fleet completeness: no separate prohibited run occurred on other hardware.
+Keep three claims separate:
 
-Proof-of-learning and recomputation primarily address the first, with varying assurance. They do not automatically establish the third.
+- **Declared-run correctness:** the submitted model or checkpoint plausibly arose from the declared process.
+- **Declared-run completeness:** the submitted transcript covered all relevant steps associated with that declared run.
+- **Fleet completeness:** no separate prohibited run occurred on other hardware.
 
-#### Exercise: Buy assurance with a verification budget
+Training transcripts and recomputation mainly address the first claim, with varying assurance. They do not automatically establish the third.
 
-Give learners a declared training transcript and a limited verification-compute budget.
+A June 2026 paper proposes a zero-knowledge architecture for frontier training claims, but it also identifies thirteen open problems and a critical requirement that has not yet been demonstrated at relevant scale: a zero-knowledge proof of backpropagation for a nontrivial model. Treat this as an ambitious research proposal, not evidence that zero-knowledge verification of frontier training is deployment-ready.
 
-They choose among:
+<Src>*Zero Knowledge Verification for Frontier AI Training Is Possible* — [arXiv:2606.05433](https://arxiv.org/abs/2606.05433), June 2026. The paper presents an architecture and estimates, while documenting open problems and unproven critical components.</Src>
 
-- Re-running the full job;
-- Sampling random segments;
-- Checking checkpoints;
-- Validating code and data commitments;
-- Checking physical compute totals;
-- Comparing telemetry and transcript timing;
-- Inspecting a random sample of chips.
+#### Activity: buy assurance with a verification budget
 
-For each choice, they estimate:
-
-- Cost;
-- Confidentiality exposure;
-- Spoofing opportunity;
-- Detection probability or qualitative assurance;
-- Which claim remains untested.
-
-The answer key should explain why a cheap sample can provide useful probabilistic evidence while leaving deliberate transcript construction, precomputed outputs, hidden activity, and unmonitored hardware as distinct problems.
-
-#### Placement of evaluation and inference verification
-
-A brief transfer card can show that attestation, confidential computing, and controlled verification hardware may also help verify model evaluations or inference. Deep treatment should remain outside the 2.1 core:
-
-- The confidentiality and evaluator-access problem fits naturally in 2.0;
-- Model-evaluation validity belongs with the evaluation track or linked material;
-- Large-scale inference introduces replication, model-substitution, and sensitive-user-data problems that would overload the hardware week.
-
-The core should acknowledge these applications without pretending that training verification covers them.
+You receive a declared transcript and a limited verification-compute budget. Allocate it among full rerunning, random segment sampling, checkpoint checks, code and data commitments, physical compute totals, telemetry-timing comparison, and random chip inspection. For each choice, record cost, confidentiality exposure, spoofing opportunity, expected assurance, and the claim that remains untested.

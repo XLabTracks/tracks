@@ -520,7 +520,15 @@
     "https://www.armscontrol.org/act/2009-05/iran-nuclear-briefs/defining-noncompliance-npt-safeguards-agreements",
     "https://sb53.info/faq",
     "https://www.alignmentforum.org/posts/uqAdqrvxqGqeBHjTP/towards-understanding-based-safety-evaluations",
-    "https://www.apolloresearch.ai/science/we-need-a-science-of-evals"
+    "https://www.apolloresearch.ai/science/we-need-a-science-of-evals",
+    "https://docs.nvidia.com/attestation/quick-start-guide/latest/attestation-examples/blackwell_multi_gpu.html",
+    "https://docs.nvidia.com/attestation/quick-start-guide/latest/attestation-examples/hopper_multi_gpu.html",
+    "https://images.nvidia.com/aem-dam/en-zz/Solutions/data-center/h100/PB-11133-001_v01.pdf",
+    "https://arxiv.org/abs/2606.10724",
+    "https://arxiv.org/abs/2103.05633",
+    "https://arxiv.org/abs/2108.09454",
+    "https://arxiv.org/abs/2208.03567",
+    "https://arxiv.org/abs/2307.00682"
   ],
   "excluded": [
     "https://creativecommons.org/licenses/by/4.0/",

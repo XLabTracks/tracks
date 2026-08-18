@@ -1,173 +1,89 @@
-<Callout variant="note" title="Section status">
-This section is still in draft. What follows is its specification — the
-objectives, the activity, its claim list and its reveal — and the connecting
-prose between them is not written yet.
-</Callout>
+{/* Unit 2.1, section 2.1.4. Transcribed from the author's WIP outline (the
+    live "[WIP] Verification Track Outline", tab "2.1.4 measuring/classifying
+    use"), not paraphrased and not invented. It replaces the draft
+    specification that stood here.
+
+    That specification carried a second half, "2.1.4B Authorization, licensing
+    and control", which duplicated 2.1.5 and was kept pending the author's
+    call on which text survived. The outline's finished 2.1.4 has no such
+    block — authorization is its own subsubmodule — so the duplicate is gone
+    and 2.1.5 is the only place this course teaches it. See
+    docs/verification/module-2-log.md. */}
 
 ### 2.1.4 Measuring and classifying use
 
-Runtime: 50 minutes Hard idea: “How much compute occurred?”, “what kind of workload was it?”, and “was it allowed?” are three separate questions.
+The working rule prohibits **unlicensed training above threshold T** while permitting inference and approved safety evaluations. Verifying that rule requires answers to three separate questions:
 
-#### 2.1.4A Compute accounting and workload classification
+1. How much counted compute occurred?
+2. What kind of workload was it?
+3. Was that workload authorized?
 
-Runtime: 30 minutes
+A system may answer one and fail the others.
 
-##### Claim decomposition
+#### Compute accounting
 
-Use the working rule:
+Training thresholds are usually expressed in total operations, commonly total training FLOP. Throughput, such as FLOP per second, is a different quantity.
 
-No party may conduct an unlicensed training run above threshold T during the pause.
+A treaty-grade accounting rule must define:
 
-A verifier would need at least:
+- Which operations count;
+- Whether low-precision, sparse, skipped, duplicated, or recomputed operations count differently;
+- Where counting occurs in the hardware or software stack;
+- How per-device records aggregate across a run, customer, cluster, facility, site, and time window;
+- How interrupted, resumed, sequential, or distributed runs are joined;
+- How counter resets, rollbacks, overflow, missing records, and clock changes are handled;
+- How the verifier detects padding or deliberately inefficient work intended to distort the count.
 
-- Covered device identity;
-- A method for aggregating activity across devices and time;
-- A trustworthy measure or bound on compute used;
-- A method for distinguishing covered training from permitted activity;
-- Evidence that cannot be silently deleted, rolled back, replayed, or reassigned;
-- A rule for distributed, interrupted, resumed, or sequential runs;
-- An actor authorized to decide whether the evidence crosses the legal threshold.
+Existing performance counters and management telemetry can measure useful quantities, but ordinary counters are not automatically suitable for adversarial verification. Hardware-mechanism surveys note that some existing counters can be reset or controlled by users. A stronger design needs a protected measurement path, secure state, authenticated reporting, freshness, and aggregation rules that the operator cannot silently rewrite.
 
-#### Compute measurement
+<Src>O’Gara et al., *Hardware-Enabled Mechanisms for Verifying Responsible AI Development* — [arXiv:2505.03742](https://arxiv.org/abs/2505.03742), 2025; the sections on compute accounting, workload classification, cluster configuration, location verification, and offline licensing.</Src>
 
-Teach the policy-relevant issues:
+Even perfect accounting verifies the threshold, not the policy goal. Algorithmic, architectural, and data improvements can produce more capability at the same counted compute. A fixed threshold therefore has an update condition.
 
-- Total operations and throughput are different quantities.
-- A counter must define which operations count and how duplicated, sparse, low-precision, or recomputed operations are treated.
-- Per-chip records must be aggregated across the relevant run, customer, cluster, sites, and time window.
-- A meter can undercount through omission or tampering and can overcount through padding or inefficient computation.
-- A precise hardware counter can still operationalize a weak rule if improvements in algorithms or data move dangerous capabilities below the threshold.
+<Prompt label="Question to keep visible">What quantity did the meter record, and how closely does that quantity match the legal rule?</Prompt>
 
-The learner does not need microarchitectural detail. The useful question is:
+<PageBreak title="Workload classification" />
 
-What quantity did the meter record, and how closely does that quantity match the legal rule?
+#### Workload classification
 
-#### Training-versus-inference evidence packet
+A compute counter cannot determine whether the operations were training, inference, evaluation, fine-tuning, or another permitted activity. Workload classification uses additional signals, such as temporal GPU telemetry, memory behavior, communication patterns, or authenticated code and configuration.
 
-Give learners a compact packet from the June 2026 telemetry study:
+A June 2026 preprint by Rahman and Tajdari tested whether temporal GPU telemetry could detect hidden machine-learning training. Across its full corpus, the study reported 98.2 percent binary classification accuracy over nine NVIDIA GPU models and twenty evasion families. The result is important evidence that training leaves detectable temporal patterns under tested conditions.
 
-- Abstract and headline result;
-- One table showing adversarial strategies;
-- The section specifying the extra hardware assumptions;
-- The limitations section.
+<Src>M. S. Rahman and M. Tajdari, *Detecting Hidden ML Training With Zero-Overhead Telemetry* — [arXiv:2606.19262](https://arxiv.org/abs/2606.19262), June 2026. A preprint, to be presented as a component demonstration.</Src>
 
-The study reports 98.2 percent overall classification accuracy in its corpus and materially lower performance against some difficult, previously unseen adversarial workloads. Its experiments were limited to single-node configurations of up to eight GPUs, and its governance conclusion depends on a tamper-resistant telemetry path, an authenticated channel, and protected monitoring software. Some inference configurations also occupy the same simple arithmetic-intensity range as training, which is why static “training looks busy” heuristics are inadequate. (arXiv)
+The limitations are equally important:
 
-#### Activity: From paper result to policy claim
+- Difficult previously unseen adversarial workloads produced materially lower performance, reported in the study as 43–87 percent for the hardest cases;
+- Experiments were limited to single-node systems of up to eight GPUs;
+- Frontier-scale multi-node clusters were not tested;
+- Custom low-level kernels were not exhaustively covered;
+- The experiments used NVIDIA hardware;
+- Treaty relevance depends on a tamper-resistant telemetry source, an authenticated channel, and protected monitoring software;
+- Simple static heuristics are inadequate, because some inference configurations occupy the same basic utilization or arithmetic-intensity range as training.
 
-Learners complete four statements:
+This is an **empirical component demonstration**, not an end-to-end verification regime.
 
-- Observation: What did the experiment measure?
-- Supported inference: What result is justified within the experimental setting?
-- Unsupported policy leap: Which stronger claim would exceed the evidence?
-- Deployment dependencies: What additional hardware and institutional components would be needed?
+#### Separate attacks by what they target
 
-A strong answer should resemble:
+A verifier should not treat every weakness as a classifier problem.
 
-Under the tested hardware, workloads, adversarial strategies, and untampered telemetry assumptions, temporal GPU telemetry carried substantial information about whether training occurred. The study does not establish treaty-grade detection across frontier-scale, multi-node systems or against a state controlling the measurement path.
+| Adversary move | What it attacks |
+| --- | --- |
+| Dilute training with benign work, alter timing, or use unusual kernels | The classifier’s generalization |
+| Forge, suppress, replay, or reroute telemetry | The evidence channel |
+| Replace or modify monitoring software | The trusted measurement boundary |
+| Fragment activity across sites or devices | Aggregation and the legal definition of a run |
+| Shift to uninstrumented hardware | Coverage and completeness |
+| Stay under the compute line through algorithmic improvement | The policy proxy itself |
 
-This directly reuses Module 1’s upstream-source discipline.
+#### Activity: from result to policy claim
 
-#### Adversary’s best response
+For the telemetry study, write four statements.
 
-Give the learner a constrained menu:
+- **Observation:** What did the experiment measure?
+- **Supported inference:** What conclusion is justified within that setting?
+- **Unsupported policy leap:** What stronger claim would exceed the evidence?
+- **Deployment dependencies:** What additional technical and institutional components would be required?
 
-- Dilute training with benign work;
-- Manipulate utilization or timing;
-- Design custom kernels;
-- Fragment activity across devices or sites;
-- Forge the telemetry source;
-- Replay a permitted trace;
-- Replace the classifier;
-- Shift to hardware outside the monitored family.
-
-The learner must identify:
-
-- Which response attacks the classifier;
-- Which attacks the evidence channel;
-- Which attacks coverage;
-- Which requires another module’s evidence stream.
-
-This prevents the common mistake of treating every weakness as a machine-learning classification problem.
-
-<PageBreak title="Authorization, licensing, and control" />
-
-#### 2.1.4B Authorization, licensing, and control
-
-<Callout variant="note" title="Author note">
-Outline 11 promotes this material to its own subsubmodule, **2.1.5 Authorization,
-licensing, and control**, written there as finished prose. This block is the
-earlier draft specification for the same ground and is kept until the two are
-reconciled — nothing has been merged or dropped on anyone’s behalf.
-</Callout>
-
-Runtime: 20 minutes
-
-#### Core distinction
-
-A monitor produces evidence. A control mechanism changes what the machine can do. A complete policy still needs an authority that decides when control is justified.
-
-Present the authorization chain:
-
-rule → license criteria → issuer → hardware verification → permitted operation → expiration or renewal → suspension or revocation → appeal or override
-
-Questions learners must ask:
-
-- Who can issue the authorization?
-- Does one government, both parties, or a multiparty authority hold the relevant key?
-- What happens if the authorization service is unreachable?
-- Does the device fail open or fail closed?
-- Can an emergency suspension occur before adjudication?
-- Who can reverse a mistaken suspension?
-- Can a vendor or government disable lawful activity unilaterally?
-- What happens after key compromise?
-- Can authorization be applied to existing hardware through firmware, or does it require redesigned chips?
-- Which party bears the economic cost of false denials or downtime?
-
-Offline licensing and embedded throttling proposals illustrate the distinction between a plausible technical control and an accepted governance arrangement. Petrie’s firmware-based design is explicitly a proposal, with its implementation timeline presented as an author estimate and with physical attacks remaining outside its strongest assurances. It should be analyzed as a candidate deployment pathway, not presented as a currently operating control regime. (arXiv)
-
-#### Interactive: Build the claim chain
-
-Learners receive components and must assemble an end-to-end system for the working treaty rule:
-
-- Hardware-rooted identity;
-- Attested firmware;
-- Operation counter;
-- Training classifier;
-- Signed, nonce-bound record;
-- Cross-chip aggregation;
-- License token;
-- Revocation list;
-- National regulator;
-- International notification;
-- Inspection trigger;
-- Independent power meter.
-
-After assembling the chain, the system asks:
-
-- Which component measures the prohibited activity?
-- Which component merely authenticates another component?
-- Which institution determines that the threshold was crossed?
-- Which component can stop the activity?
-- Which components fail together if the manufacturer’s root key is compromised?
-- Which part detects an unregistered cluster?
-
-The intended realization is that several apparently distinct hardware mechanisms can share one common-mode trust failure.
-
-#### Notebook output: Mechanism dossier
-
-The learner completes one compact dossier:
-
-- Policy goal;
-- Legal rule;
-- Precise hardware-supported claim;
-- Function: identify, attest, measure, classify, restrict, or reconstruct;
-- Evidence produced;
-- Trust chain;
-- Maturity stage;
-- Implementation dependencies;
-- Cooperation required;
-- Strongest bypass;
-- Residual blind spot;
-- Corroborating layer;
-- Evidence that would change the assessment.
+A well-bounded answer will not claim that the study proves treaty-grade detection across frontier clusters or against a state controlling the measurement path.

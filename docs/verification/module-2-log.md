@@ -1470,3 +1470,131 @@ The owner's same-day revision of the build above, applied in full:
 - citations.json: the two page-anchor CIGIE URLs the buckets carried left
   `pending`; the plain-PDF URL stays (her After-the-report paragraph links
   it).
+
+---
+
+## 2026-08-18 — 2.1 pushed from the live WIP doc: six drafts replaced by the author's prose
+
+Source: the **live "[WIP] Verification Track Outline"** Google Doc (not the
+"outline 11" .docx the entries above were transcribed from), tabs `2.1
+Hardware` and `2.1.1` – `2.1.8`, read the day of this entry. That doc now
+writes the whole of 2.1 as finished learner-facing prose, which is what
+retires open item 3 above ("2.1.0, 2.1.2, 2.1.4, 2.1.6–2.1.8 are still draft
+specifications").
+
+### What was replaced
+
+Six bodies were rewritten from the doc, verbatim, and the "Section status:
+still in draft" callout is gone from every one of them:
+
+| Lesson | Section | Was |
+| --- | --- | --- |
+| `hardware-attestation` | 2.1 | outline framing + a draft specification under it |
+| `hardware-trusted-statement` | 2.1.2 | draft specification |
+| `hardware-measuring-use` | 2.1.4 | draft specification (two halves, A and B) |
+| `hardware-where-trust-lives` | 2.1.6 | draft specification |
+| `hardware-reconstructing-run` | 2.1.7 | draft specification |
+| `hardware-policy-studio` | 2.1.8 | draft specification |
+
+`hardware-claim` (2.1.1), `hardware-accounting` (2.1.3) and
+`hardware-authorization` (2.1.5) were **re-checked against the live doc and
+left alone** — they were transcribed from the same prose and have not drifted
+(mechanical text diff: 0.99 / 0.98 similarity, the remainder being the doc's
+duplicated tab titles).
+
+### The two open items the author's own text settles
+
+1. **The 2.1.4 / 2.1.5 overlap (item 1) is gone.** The doc's finished 2.1.4
+   has no authorization half — authorization is its own subsubmodule — so
+   `hardware-measuring-use`'s "2.1.4B Authorization, licensing, and control"
+   block went with the rewrite. Nothing was merged on the author's behalf;
+   her current draft simply does not carry the duplicate, and 2.1.5 is now
+   the only place the course teaches it.
+2. **The doubled opening puzzle and function map (item 2) are gone.** The
+   doc's versions are the ones shipping: **seven** conclusions (not the
+   specification's eight) and a **six**-row function map (the specification's
+   five plus "Establish location and topology"). The specification's
+   near-identical versions were deleted with it.
+
+### The puzzle is a control now, not a blank column
+
+The doc prints the puzzle as a table with an empty "Your judgment" column and
+the instruction *"Keep your answers. You will return to them at the end of the
+section."* A blank column is a page a reader fills in; on screen it is
+nothing. So the column is the control: **`<ClaimLedger/>`**
+(`src/components/mdx/reader/claim-ledger.tsx`), one row per conclusion, the
+three-way scale repeated across it, committed with no key — the same
+vt-marks store `<Check/>` and `<VerdictSelect/>` write to, so it feeds no
+meter and completes no unit. 2.1.8's "Return to the opening puzzle" prints
+`<ClaimLedger recall/>`: the same mark read back, naming the rows left blank,
+with the doc's closing paragraphs beside it as the reveal.
+
+The seven claims live in
+`src/lib/verification/data/hardware-opening-puzzle.ts` because they are
+printed twice and the recall must line up row for row. Option ids
+(`supported` / `possibly` / `unsupported`) are storage keys and are permanent.
+
+### Tables
+
+Two of the doc's tables broke under the shared lesson-table rule, which sizes
+columns by content and hands the last one all the slack: 2.1.2's prover-profile
+table (three columns of running sentences — the middle one came out a word
+wide) and 2.1.8's rubric. Both now sit in fixed-layout wrappers alongside the
+existing `.pair-table`: **`.trio-table`** (24/38/38) and **`.rubric-table`**
+(30/12/58), in `globals.css`. The two-column tables were left on the shared
+rule, which is how every other two-column table in the course reads.
+
+### Also in this change
+
+- `v-hw-attestation`'s title is the doc's: **"2.1 Hardware"**, not "2.1
+  Hardware: the chip says “compliant”" — that subtitle came from the deleted
+  specification. The body's own first heading moved with it (the
+  `isLessonTitleHeading` rule), and the comment on `verificationUnitMeta` that
+  used it as its example now uses 2.3.
+- **Eight new citations, all parked in `pending`.** RFC 9334, the NVIDIA
+  architecture page, O'Gara, Rahman/Tajdari, Petrie, Shavit and the ZK paper
+  were already registered. The Blackwell and Hopper multi-GPU pages, the H100
+  security whitepaper, Cankaya (2606.10724) and the four proof-of-learning
+  works (2103.05633, 2108.09454, 2208.03567, 2307.00682) are cited for the
+  first time here. **Their bibliographic facts were not verified**: this
+  session's network egress blocks arxiv.org and docs.nvidia.com, and the
+  registry's own rule is "never promote one unchecked". They are cited in the
+  lessons and skipped by the Works cited appendix until someone with network
+  writes their fields — that is the next owed thing on this section.
+- Removed one **stale `pending` row**, `epoch.ai/blog/algorithmic-progress-in-
+  language-models`, which no lesson cites any more. It was failing
+  `citations.test.ts` on this branch before this change (the "carries no
+  orphan entries or stale exclusions" case), so the suite was red on arrival
+  and is green now.
+
+### Verification performed
+
+- `npm run typecheck` clean; `npm run test` **97 files, 1154 tests, all pass**
+  (was 1 failing before the stale-citation fix); `npm run lint` unchanged at
+  1 error + 67 warnings — the error is pre-existing in
+  `src/components/learn/reading-surface.tsx` (setState in an effect) and is
+  not touched here.
+- `npm run verification:course -- --check` and `verification:memos -- --check`
+  both clean (5 modules, 19 units; 10 slots). Neither generator reads lesson
+  bodies, so this only says the structure did not move.
+- **Driven against a running dev server**, because `importLesson()` swallows a
+  bad `contentRef` into `notFound()`: all **nine** 2.1 routes return 200,
+  every body renders its transcribed content, and no lesson prints its title
+  twice. The browser console is clean across all nine apart from the
+  documented signed-out `401` from `/api/verification/state`.
+- One hydration error was found and fixed this way: `<Prompt>` renders its
+  children inside a `<p>`, so an MDX block written across several lines put a
+  paragraph inside a paragraph. The three uses are single-line.
+- Visual pass at 1280×900 on the ledger (empty and with a pick), its recall,
+  both new table wrappers and the objectives block.
+
+### Still owed on 2.1
+
+- The eight pending citations need their fields written from the sources.
+- The doc's own author note — "the required reading should be embedded at the
+  point of use rather than assigned as one block" — is still carried as a note
+  in 2.1 rather than acted on. The packet is one block.
+- 2.1's activities are prose instructions ("trust-chain autopsy", "build the
+  authorization chain", "bilateral pilot review", "buy assurance with a
+  verification budget"). The doc specifies them as work the learner does;
+  none is a widget yet.

@@ -27,6 +27,7 @@ import {
 import { VerificationExercise } from "@/components/verification/verification-exercise";
 import { Term } from "./term";
 import { CapstoneBank } from "./reader/capstone-bank";
+import { ClaimLedger } from "./reader/claim-ledger";
 import { Check } from "./reader/check";
 import { GapFill } from "./reader/gap-fill";
 import { Prompt } from "./reader/prompt";
@@ -111,6 +112,9 @@ export const mdxComponents: MDXComponents = {
   CapstoneBank,
   CapstoneSignup,
   Check,
+  // 2.1’s opening puzzle: conclusions graded on one scale, committed with
+  // no key and read back at the end of the section.
+  ClaimLedger,
   ReadingCard,
   GapFill,
   Prompt,

@@ -343,7 +343,7 @@ export const verificationLessons: Lesson[] = [
     id: "v-hw-attestation",
     slug: "hardware-attestation",
     moduleId: "v-infrastructure",
-    title: "2.1 Hardware: the chip says “compliant”",
+    title: "2.1 Hardware",
     contentRef: "verification/hardware-attestation",
     estimatedMinutes: 5,
   },
@@ -734,9 +734,9 @@ export const verificationUnitOfLesson: Record<string, string> = {
 };
 
 /** Per-unit presentation the graph does not carry: the outline's own title,
- *  kind and runtime. A unit's title can differ from its first lesson's — 2.1
- *  is "Hardware" while its opening lesson is "2.1 Hardware: the chip says
- *  “compliant”". */
+ *  kind and runtime. A unit's title can differ from its first lesson's — 2.3
+ *  is "Intelligence" while its opening lesson is "2.3 Intelligence: watching
+ *  without permission". */
 export const verificationUnitMeta: Record<
   string,
   { title: string; kind: string; mins: string; optional?: boolean }

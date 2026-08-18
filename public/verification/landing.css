@@ -672,102 +672,33 @@ section.band .intro {
    rather than a literal, so each theme re-solves it — high contrast turns the
    band yellow-on-black rather than shipping a red nobody chose.
 
-   It was a full-width slab with one flat paragraph and a 100px exclamation
-   mark, and it read like a browser warning rather than a course telling you
-   where it is. What carries the notice now is type: a small tag naming the
-   stage, one sentence at reading weight, the detail muted under it, and the
-   form as an actual destination at the end of the row. */
+   No status pill and no call-to-action button. Both were added here and both
+   were wrong: the pill is stock component-library furniture that says in a
+   label what the sentence already says in words, and the button only existed
+   by taking the link out of the sentence that asks for it. The paragraph is
+   the notice. Nothing is placed beside it. */
 section.alpha-note {
   background: var(--primary);
   color: var(--primary-foreground);
 }
 section.alpha-note > .wrap {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 32px;
   padding-top: 22px;
   padding-bottom: 22px;
 }
-
-.alpha-copy {
-  max-width: 74ch;
-}
-
-/* The stage, as a tag rather than a sentence. Hairline in the band's own ink
-   at 45% — a tag is a label, not a second button, so it never fills. */
-.alpha-badge {
-  display: inline-block;
-  margin-bottom: 8px;
-  padding: 3px 10px;
-  border: 1px solid color-mix(in srgb, var(--primary-foreground) 45%, transparent);
-  border-radius: 999px;
-  font-family: var(--label);
-  font-size: var(--fs-2xs);
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  line-height: 1.5;
-}
-
-.alpha-lead {
-  margin: 0 0 4px;
-  font-size: var(--fs-md);
-  font-weight: 600;
-  line-height: 1.4;
-}
-
-/* Mixed toward the ground rather than given its own colour: one hue on this
-   band, two weights of it. */
-.alpha-rest {
+section.alpha-note p {
   margin: 0;
+  max-width: 76ch;
   font-size: var(--fs-sm);
-  line-height: 1.6;
-  color: color-mix(in srgb, var(--primary-foreground) 78%, transparent);
+  line-height: 1.7;
 }
-
-/* High contrast exists to maximise contrast, so the muted second voice is
-   not muted there — the two lines separate by weight and size alone. */
-:root[data-theme="contrast"] .alpha-rest {
-  color: var(--primary-foreground);
+section.alpha-note a {
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-thickness: 1px;
 }
-
-/* The form is where this band is trying to send people, so it is a
-   destination and not a phrase inside a sentence. Inverted: the band is
-   already the accent, so the button borrows the page's ground. */
-.alpha-cta {
-  flex: none;
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 10px 18px;
-  border-radius: 8px;
-  background: var(--primary-foreground);
-  color: var(--primary);
-  font-size: var(--fs-sm);
-  font-weight: 600;
-  text-decoration: none;
-  transition:
-    transform 0.18s cubic-bezier(0.22, 0.61, 0.36, 1),
-    opacity 0.18s ease-out;
-}
-.alpha-cta:hover {
-  transform: translateY(-1px);
-  opacity: 0.92;
-}
-.alpha-cta:active {
-  transform: translateY(0);
-  transition-duration: 0.06s;
-}
-
-/* Under the two-column width the button stops being a right-hand anchor and
-   becomes the last thing in the column, which is the order it is read in
-   anyway. */
-@media (max-width: 860px) {
-  section.alpha-note > .wrap {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 16px;
-  }
+section.alpha-note a:hover {
+  text-decoration-thickness: 2px;
 }
 
 /* ---------- motion ---------- */

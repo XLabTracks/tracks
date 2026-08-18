@@ -65,33 +65,32 @@ export default function Page() {
 
         {/* Where the course actually is, said before the skills graph rather
             than in a footer: someone deciding whether to start needs it to
-            decide. The author's words, verbatim — split at her own sentence
-            break so the first one carries the weight and the rest reads as
-            the detail under it, which is the only thing done to the copy. */}
+            decide.
+
+            THE COPY IS THE AUTHOR'S AND IS NOT TO BE EDITED — not split, not
+            shortened, not lifted into a button label. It was once broken into
+            a lead and a remainder with the middle sentence dropped and its
+            link turned into a CTA; the words below are the original and stay
+            one paragraph with the form linked inside the sentence that asks
+            for it. */}
         <section className="alpha-note" data-reveal>
           <div className="wrap">
-            <div className="alpha-copy">
-              <span className="alpha-badge">Alpha</span>
-              <p className="alpha-lead">
-                We’re currently in the alpha testing stage and running a small
-                paid cohort to calibrate and improve the course ahead of the
-                official launch.
-              </p>
-              <p className="alpha-rest">
-                The materials are open for anyone to use in the meantime. Your
-                feedback will help us identify issues, calibrate the course, and
-                make improvements before launch.
-              </p>
-            </div>
-            <a
-              className="alpha-cta"
-              href="https://forms.gle/KkWcHkKh87pygDzw9"
-              target="_blank"
-              rel="noopener"
-            >
-              Fill out the feedback form
-              <span aria-hidden>→</span>
-            </a>
+            <p>
+              We’re currently in the alpha testing stage and running a small
+              paid cohort to calibrate and improve the course ahead of the
+              official launch. The materials are open for anyone to use in the
+              meantime. If you do use them, we’d really appreciate it if you
+              could fill out{" "}
+              <a
+                href="https://forms.gle/KkWcHkKh87pygDzw9"
+                target="_blank"
+                rel="noopener"
+              >
+                this feedback form
+              </a>
+              . Your feedback will help us identify issues, calibrate the
+              course, and make improvements before launch.
+            </p>
           </div>
         </section>
 

@@ -1,3 +1,6 @@
+import { readFileSync } from "node:fs";
+import { join } from "node:path";
+
 import { describe, expect, it } from "vitest";
 
 import {
@@ -150,5 +153,52 @@ describe("actor-workshop data", () => {
     const right = CORE_QUESTION.options.filter((o) => o.correct);
     expect(right).toHaveLength(1);
     for (const o of CORE_QUESTION.options) expect(o.why.length).toBeGreaterThan(20);
+  });
+});
+
+/**
+ * Quote tripwire.
+ *
+ * The rings are ours and the sentences they are justified by are hers, so
+ * every quoted fragment in the data file has to still be in 1.2 word for
+ * word. This caught the defect that made it worth writing: "The machines
+ * without which no leading-edge chip exists." was quoted with a full stop
+ * where Table 4 has a comma and keeps going. A quote edited to fit is the
+ * thing this repo's snippet tripwires exist to stop, and widget data had no
+ * such guard until now.
+ *
+ * A trailing "..." marks a deliberate cut and is dropped before matching;
+ * nothing else about a fragment may differ.
+ */
+describe("quotes from 1.2", () => {
+  const norm = (s: string) =>
+    s
+      .normalize("NFKC")
+      .replace(/[\u2018\u2019]/g, "'")
+      .replace(/[\u201c\u201d]/g, '"')
+      .replace(/[\u2014\u2013]/g, "-")
+      .replace(/\u2026|\.\.\./g, "")
+      .replace(/\s+/g, " ")
+      .trim()
+      .toLowerCase();
+
+  const DATA = readFileSync(join(__dirname, "data/actor-workshop.ts"), "utf8");
+  const LESSON = readFileSync(
+    join(__dirname, "../../content/lessons/verification/scoping-actors.mdx"),
+    "utf8",
+  );
+
+  const fragments = [...DATA.matchAll(/\u201c([^\u201d]{20,})\u201d/g)].map((m) => m[1]!);
+
+  it("finds fragments to check at all", () => {
+    // A refactor that drops the quotes would otherwise make this suite pass
+    // by having nothing to test.
+    expect(fragments.length).toBeGreaterThanOrEqual(6);
+  });
+
+  it("matches every quoted fragment against the lesson body", () => {
+    const body = norm(LESSON);
+    const drifted = fragments.filter((f) => !body.includes(norm(f)));
+    expect(drifted, "these no longer appear in scoping-actors.mdx").toEqual([]);
   });
 });

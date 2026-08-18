@@ -233,14 +233,11 @@ comparing lists.
 
 **It opens closed-book, which is the other half of what she asked for** —
 "нам придется делать заморозку и разводить их по разным стейтам с кнопкой я
-уже изучил давайте упражнение". Karpicke & Blunt (Science, 2011) found that
-building a concept map as elaborative study loses to plain retrieval practice,
-even when the final test is building a map; Blunt & Karpicke (2014) found that
-a map built from memory beats the same map built with the text open. So the
-roster is a study panel with a button that closes it, and every step after it
-is answered without it. The freeze is soft and visible: "Open the roster" is
-always there, taking it sets `peeked`, and the closing map says so. A hard
-lock would be a lie — her tables are further up the same page.
+уже изучил давайте упражнение". The roster is a study panel with a button that
+closes it, and every step after it is answered without it. The freeze is soft
+and visible: "Open the roster" is always there, taking it sets `peeked`, and
+the closing map says so. A hard lock would be a lie — her tables are further
+up the same page.
 
 **Rings carry position, chips carry roles, and that split is the point.** The
 lesson says "any actor can hold several roles at once, and almost every
@@ -286,6 +283,59 @@ Carlson reading) cited an arms-control URL with no registry row, so
 renders nothing for it and the gap stays visible in data rather than being
 papered over with guessed bibliographic fields. Whoever owns that reading
 should promote it.
+
+### The two papers, read (2026-08-15, after she asked whether they had been)
+
+They had not been. The first version of this section and the data file's
+header carried claims taken from search snippets, and one of them was wrong.
+Both papers have now been read.
+
+**Karpicke & Blunt, Science 2011 — holds, and is stronger than what was
+written.** Concept mapping counts as elaborative study precisely when
+"students construct concept maps in the presence of the materials they are
+learning"; in Experiment 2 the mapping group "created their concept maps on
+paper while viewing the text". Retrieval practice beat it on the final
+short-answer test (d = 1.07) and on a final test that was itself building a
+map from memory (d = 1.01). The detail worth keeping: the mapping group
+produced MORE ideas during initial learning (0.74 versus 0.65) — ahead where
+it felt like it counted, behind a week later.
+
+**Blunt & Karpicke 2014 — the claim was wrong in its emphasis, and the
+correction matters.** It was written up here as "the fix: a map built from
+memory beats the same map built with the text open". The map-from-memory half
+is true, but the paper's actual finding is that FORMAT DID NOT MATTER:
+"concept mapping and paragraph formats were equally effective retrieval-based
+learning activities", while retrieval did — "students performed better on a
+final test when the initial activities required retrieval (in the absence of
+the texts) rather than studying or elaborating on the material (in the
+presence of the texts)", and the retrieval groups wrote LESS during learning.
+
+So the evidence licenses the freeze and nothing else. It does not license the
+ring map as a teaching device: a map is not a better format than writing down
+what you remember, only not a worse one. The rings stay for two reasons that
+are not Karpicke's — they are the artifact the Beeck workshop is built to
+produce, and they make one structural claim visible that the lesson can
+otherwise only assert. The data file's header says this now; it used to imply
+the opposite.
+
+A third finding from both papers is now load-bearing in the UI rather than
+decorative: learners believe they learned more after studying than after
+retrieving. That is why reopening the roster is recorded and reported back
+instead of being silently allowed.
+
+**Two things checked at the same time, one of them a defect.** Every quoted
+fragment in the workshop's data file was matched against `scoping-actors.mdx`.
+One had been edited to fit: Table 4's "The machines without which no
+leading-edge chip exists" was quoted with a full stop where the cell has a
+comma and continues "and knowledge of every fab that buys one". Restored, and
+`actor-workshop.test.ts` now carries a tripwire that re-matches every quoted
+fragment against the lesson — widget data had no such guard, though the paper
+pipeline has had snippet tripwires all along.
+
+**Not read, and not cited in the repo:** Schwartz & Bransford (1998) and
+Schiffer & Hauck (2010) were named in conversation as part of the research
+sweep and were never used to justify anything in code. They are still
+snippet-level knowledge; treat them that way until somebody opens them.
 
 **Still owed** (and unchanged by this): a node/dependency map with typed edges
 between actors, which is the one bullet of her 1.2 plan with no implementation

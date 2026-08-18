@@ -16,13 +16,42 @@
  * brief, and Catch-up is the reveal at the end of Recall, which is the same
  * thing a group gets from comparing lists.
  *
- * WHY IT OPENS CLOSED-BOOK. Karpicke & Blunt (Science, 2011) found that
- * building a concept map as elaborative study LOSES to plain retrieval
- * practice — even when the final test is itself building a map. Blunt &
- * Karpicke (2014) found the fix: a map built FROM MEMORY beats the same map
- * built with the text in front of you. So the roster is a study panel the
- * learner closes with a button, and every step after it is answered without
- * it. A map you can browse teaches less than one question you have to answer.
+ * WHY IT OPENS CLOSED-BOOK. Both papers below were read, not summarised from
+ * an abstract, and the second one corrected what this comment used to claim.
+ *
+ *   Karpicke & Blunt, Science 2011. Concept mapping counts as elaborative
+ *   study precisely when "students construct concept maps in the presence of
+ *   the materials they are learning" — in their Experiment 2 the mapping
+ *   group "created their concept maps on paper while viewing the text".
+ *   Retrieval practice beat it on the final short-answer test (d = 1.07) AND
+ *   on a final test that was itself building a map from memory (d = 1.01).
+ *   The detail that makes it bite: the mapping group produced MORE ideas
+ *   during initial learning (0.74 of ideas versus 0.65), so it was ahead
+ *   where it felt like it counted and behind a week later.
+ *
+ *   Blunt & Karpicke 2014 is NOT "the fix that rehabilitates maps", which is
+ *   what this file said before anybody opened it. They crossed format
+ *   (paragraph vs concept map) with text presence, and the finding is that
+ *   format did not matter: "concept mapping and paragraph formats were
+ *   equally effective retrieval-based learning activities", while retrieval
+ *   itself did — "students performed better on a final test when the initial
+ *   activities required retrieval (in the absence of the texts) rather than
+ *   studying or elaborating on the material (in the presence of the texts)",
+ *   even though the retrieval groups WROTE LESS during learning.
+ *
+ * What that licenses and what it does not. It licenses the freeze: closing
+ * the roster is the whole of the evidence-backed part, and it would work as
+ * well if every step were a plain textarea. It does NOT license the ring map
+ * as a teaching device — a map is not a better format than writing down what
+ * you remember, it is merely not a worse one. The rings are here for two
+ * other reasons: they are the artifact the Beeck workshop is built to
+ * produce, and they make one structural claim visible that the lesson can
+ * otherwise only assert (see MAP_FINDING).
+ *
+ * A third finding neither paper leaves room to ignore: learners believe they
+ * learned more after studying than after retrieving. That is why reopening
+ * the roster is recorded and reported back rather than silently allowed —
+ * the feeling of having learned is the thing being corrected.
  *
  * PROVENANCE — read this before editing.
  *
@@ -135,7 +164,7 @@ export const RINGS: Ring[] = [
     name: "Supplies it",
     test: "The run cannot happen without something you make or sell.",
     source:
-      "Table 4 reads the chain from equipment down to the labs: “The machines without which no leading-edge chip exists.”",
+      "Table 4 reads the chain from equipment down to the labs: “The machines without which no leading-edge chip exists, and knowledge of every fab that buys one.”",
   },
   {
     id: "rules",

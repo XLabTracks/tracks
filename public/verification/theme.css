@@ -706,8 +706,13 @@ button,
    the hero/band wraps; interior course pages keep the narrower reading wrap
    on purpose — they are documents, not compositions. */
 :root {
-  --chrome-maxw: 1436px;
-  --chrome-gutter: 80px;
+  /* 1600 with a fluid gutter, not BlueDot's 1436 with a fixed 80: that pair
+     stacked a centering margin on top of the gutter as soon as the window
+     passed the cap, and a 1500-1600px monitor — the common case — got a
+     120-160px void right of the avatar. Up to 1600 the gutter is the whole
+     inset; only genuinely wide screens center. */
+  --chrome-maxw: 1600px;
+  --chrome-gutter: clamp(24px, 4vw, 64px);
 }
 
 .site-header .bar {
@@ -1081,9 +1086,6 @@ button,
    only the flexible brand-to-nav spacer. The link row can then scroll inside
    its own track without disturbing the actions at the right edge. */
 @media (min-width: 721px) and (max-width: 1435px) {
-  :root {
-    --chrome-gutter: clamp(24px, 4vw, 64px);
-  }
   .site-header .bar {
     grid-template-columns: auto minmax(0, 1fr) auto;
     column-gap: 24px;

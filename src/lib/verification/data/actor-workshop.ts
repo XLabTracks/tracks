@@ -82,6 +82,31 @@
  *   derived from sentences already in 1.2 and each carries the sentence it
  *   was derived from, in `source`. None of it is a new claim about the world.
  *
+ * THE RINGS ARE BAKER'S FRAME, NOT OURS (course owner, 2026-08-18: "Берём
+ * рамку Baker / Рёбра делаем упражнением нарисовать и ключ по бейкеру"). They
+ * used to be a shape we invented — runs it / supplies it / rules on it / out
+ * of reach — derived from 1.2's own sentences but answering a question no
+ * paper asks. They now answer the question the verification literature asks,
+ * in its own words: Baker, Ho, Hadfield, Wasil et al., *Verification for
+ * International AI Agreements* (arXiv:2507.15916v2), whose framework opens on
+ * declarations and asks, of every actor, what part it plays in checking one.
+ *
+ * Every ring name, every subgoal and every edge below carries a `baker` field
+ * holding the sentence it rests on, verbatim from the committed artifact at
+ * src/content/arxiv/2507.15916v2.json — which is also what actor-workshop.test.ts
+ * matches them against, the same tripwire the quotes from 1.2 already had.
+ * Read that field before rewriting any of this prose: the wording around it is
+ * ours, the claim is not.
+ *
+ * WHAT THE EDGES ARE. An edge A → B says: A can put something in front of a
+ * Verifier about B that B did not have to volunteer. That is not a metaphor —
+ * it is Baker's own decomposition read backwards. The framework asks four
+ * questions of a declaration (Subgoals 1.A, 1.B, 2.A, 2.B) and answers each
+ * with a mechanism; every mechanism belongs to somebody; drawing the edge is
+ * naming whose. The key is therefore not a matter of taste, and neither are
+ * the four actors that end up with no edge at all — see EDGE_NOTES, where each
+ * absence is a line of Baker's own scope.
+ *
  * WHY RINGS CARRY POSITION AND CHIPS CARRY ROLES. The lesson is explicit that
  * "any actor can hold several roles at once, and almost every important actor
  * does" — so a single ring per actor would be false if rings meant roles.
@@ -143,15 +168,33 @@ export const WORKSHOP_ACTORS: WorkshopActor[] = WORKSHOP_ACTOR_IDS.map((id) => {
 });
 
 /**
+ * A sentence from Baker et al., quoted verbatim.
+ *
+ * The artifact is committed (src/content/arxiv/2507.15916v2.json), so this is
+ * checkable offline and actor-workshop.test.ts checks it. A quote that no
+ * longer appears there fails the suite rather than sitting on the page as a
+ * claim nobody can trace.
+ */
+export interface BakerQuote {
+  /** Verbatim. No ellipses, no tightening to fit — the test matches exactly. */
+  text: string;
+  /** Where in the report it is, so a reader can go and disagree with us. */
+  where: string;
+}
+
+/**
  * The rings, innermost first.
  *
- * OURS. One question asked of the regulated activity at the centre: how does
- * a rule reach you? The lesson's own answer to that is the reason the section
- * exists — "Not the people who signed. Governments do not train frontier
- * models… The activity the agreement is about happens inside companies" — and
- * the finished map is that sentence in a picture: the signatures sit on the
- * outside and every ring between them is somebody a signatory has to reach
- * through.
+ * BAKER'S, not ours. The framework's context section sets up a Prover who
+ * declares and a Verifier who checks, and everything else on a board like this
+ * one is either evidence about a declaration or outside every declaration
+ * there is. Four rings, and each one's test is the paper's own sentence.
+ *
+ * The centre does not change: the regulated act. Baker's scope is the same
+ * thing said in compute — the framework "seeks to verify compliance on the
+ * basis that all large-scale AI compute use is accounted for in compliant
+ * activities" — so a training run above the threshold is exactly what the
+ * declarations are about.
  */
 export interface Ring {
   id: RingId;
@@ -159,64 +202,85 @@ export interface Ring {
   name: string;
   /** The test for putting an actor here. */
   test: string;
-  source: string;
+  baker: BakerQuote;
 }
 
-export type RingId = "runs" | "supplies" | "rules" | "unreached";
+export type RingId = "declares" | "evidence" | "verifies" | "undeclared";
 
 export const RINGS: Ring[] = [
   {
-    id: "runs",
-    name: "Runs it",
-    test: "The regulated activity happens on your premises or under your name.",
-    source:
-      "“The activity the agreement is about happens inside companies: labs in San Francisco and Hangzhou…”",
+    id: "declares",
+    name: "Declares",
+    test: "You own or use large-scale compute, so the regime requires a declaration from you. You are the Prover.",
+    baker: {
+      text: "organizations that own or use large-scale AI compute (e.g., major AI companies and cloud compute providers) would be required to declare facts about",
+      where: "§3.1, the declarations the framework assumes",
+    },
   },
   {
-    id: "supplies",
-    name: "Supplies it",
-    test: "The run cannot happen without something you make or sell.",
-    source:
-      "Table 4 reads the chain from equipment down to the labs: “The machines without which no leading-edge chip exists, and knowledge of every fab that buys one.”",
+    id: "evidence",
+    name: "Holds the evidence",
+    test: "You declare nothing here and you check nothing, but you hold a record a declaration can be held against.",
+    baker: {
+      text: "A Verifier could verify the locations and owners of random samples of AI chips from manufacturing to end-of-life destruction.",
+      where: "§4.2.1, verifying AI chips’ chain of custody",
+    },
   },
   {
-    id: "rules",
-    name: "Rules on it",
-    test: "You can write or enforce a rule, and you touch none of the activity yourself.",
-    source:
-      "“A state legislature bound the world’s leading labs to reporting duties before any international mechanism existed.”",
+    id: "verifies",
+    name: "Verifies",
+    test: "The declarations come to you, and your job is to establish that they are true and that nothing has been left out.",
+    baker: {
+      text: "Verification focuses on checking that these declarations are correct and complete.",
+      where: "§3.1",
+    },
   },
   {
-    id: "unreached",
-    name: "Out of reach",
-    test: "No rule lands on you — because you route around it, or because nobody wrote one for you.",
-    source:
-      "“They exist to break the link between a name and an activity.” · “They benefit from safety and bear none of its costs.”",
+    id: "undeclared",
+    name: "Outside the declaration",
+    test: "Nothing you do appears in anybody’s declaration — because you sit below the threshold, or because you exist to keep a name off one.",
+    baker: {
+      text: "Verify that there are no undeclared, large-scale AI compute clusters that could be used for violations.",
+      where: "§3.2, Subgoal 2.B",
+    },
   },
 ];
 
 /**
  * The ring key.
  *
- * OURS, derived per actor from the row's own `position` in the roster, with
- * the sentence quoted on the reveal. Two placements are worth arguing with
- * and are meant to be: a cloud provider is on RUNS rather than SUPPLIES,
- * because the run physically happens on its machines — "the position between
- * customer and machine"; and the proxies sit OUT OF REACH beside the
- * deployers, who could not be less alike in intent, because the property the
- * ring names is the one they share — a rule cannot land on either.
+ * Read off Baker's roles, not off intuition, and two placements are worth
+ * arguing with and are meant to be.
+ *
+ * A cloud provider DECLARES. Baker names the Provers in a parenthesis — "major
+ * AI companies and cloud compute providers" — so the two innermost actors are
+ * the paper's own examples, not our reading of the roster. That is a real move
+ * away from the old map, where the cloud sat with the labs for a different
+ * reason (the run happens on its machines); it lands in the same place by a
+ * better road.
+ *
+ * The chip firms HOLD EVIDENCE rather than declaring. They own compute of
+ * their own and would declare for it — the honest note is that an actor's ring
+ * is its part in verifying somebody else's declaration, which is the question
+ * this map asks. NVIDIA is here because what it decides is whether the chips
+ * carry the features a Verifier would read.
+ *
+ * The proxies and the deployers share OUTSIDE THE DECLARATION and could not be
+ * less alike: one is below the threshold by construction, the other exists to
+ * keep a name off a form. The ring names the property they share, and the
+ * edge exercise is where the difference between them shows up.
  */
 export const RING_KEY: Record<WorkshopActorId, RingId> = {
-  "frontier-labs": "runs",
-  hyperscalers: "runs",
-  nvidia: "supplies",
-  tsmc: "supplies",
-  asml: "supplies",
-  bis: "rules",
-  ic: "rules",
-  california: "rules",
-  proxies: "unreached",
-  deployers: "unreached",
+  "frontier-labs": "declares",
+  hyperscalers: "declares",
+  nvidia: "evidence",
+  tsmc: "evidence",
+  asml: "evidence",
+  bis: "verifies",
+  ic: "verifies",
+  california: "verifies",
+  proxies: "undeclared",
+  deployers: "undeclared",
 };
 
 /**
@@ -243,24 +307,32 @@ export const MAP_LABEL: Record<WorkshopActorId, string> = {
   deployers: "Deployers",
 };
 
-/** Why each actor sits where it does. Shown only on the reveal. */
+/**
+ * Why each actor sits where it does. Shown only on the reveal.
+ *
+ * Two sources in one sentence, on purpose: the ring is Baker's and the reason
+ * this particular actor lands on it is the lesson's, so where 1.2 has already
+ * settled the point its words are quoted rather than paraphrased. The quote
+ * tripwire in actor-workshop.test.ts holds those to the lesson body and the
+ * `baker` fields to the artifact, which is the same guarantee twice.
+ */
 export const RING_WHY: Record<WorkshopActorId, string> = {
   "frontier-labs":
-    "They perform the regulated act. Every obligation in the agreement is ultimately about what they do or do not train.",
+    "They perform the regulated act, so they are the Prover: every obligation in the agreement is ultimately about what they did or did not train, and the declaration is theirs to make.",
   hyperscalers:
-    "The run happens on their machines. They sit between customer and machine, which is why they hold the logs and can interrupt a job this afternoon.",
+    "Baker puts them in the same parenthesis as the labs — the declarations are of ownership AND use of large-scale compute, and the cluster is theirs. They are also the actor the labs’ own declaration can be checked against, because of what the lesson says the position hands them: “between customer and machine: logs, billing, telemetry, and the power to interrupt a job”.",
   nvidia:
-    "Upstream of the run, not in it. What they decide is whether accelerators ship with attestation, metering or location features at all.",
-  tsmc: "The chips exist because they were fabricated. Nothing runs without that step, and the step happens once.",
-  asml: "The most upstream supplier there is: without EUV lithography no leading-edge chip exists.",
-  bis: "It writes and enforces export controls on chips — today’s de facto compute-governance agency — and trains no models itself.",
-  ic: "It can see undeclared facilities and procurement networks, and it regulates nothing. Its problem is turning what it knows into evidence somebody may act on.",
+    "Upstream of the run, not in it, and not a Prover for anybody else’s run. What it decides is whether accelerators ship with the security features a Verifier would read — which is why it holds evidence about two different actors and no declaration of its own here.",
+  tsmc: "The chain of custody starts where the die is made. How many leading-edge parts exist at all, and who they were made for, is a fact only the fab holds — which is the same thing the lesson means by the “single tightest physical chokepoint in the system”, read as evidence rather than as leverage.",
+  asml: "The most upstream supplier there is — and upstream of Baker’s chain of custody, which begins at manufacturing. The tightest chokepoint on the board holds evidence about nobody, which is the sharpest thing this frame does to the roster.",
+  bis: "A government body receiving and checking declarations is exactly Baker’s Verifier, and the lesson calls it the “de facto compute-governance agency today”. Its own instrument — export control — is enforcement, which Baker puts outside the frame on purpose.",
+  ic: "A Verifier that also produces its own evidence. Baker gives national intelligence every subgoal at once, and it is the only actor on this board that can reach a facility nobody ever declared.",
   california:
-    "A subnational legislature that bound the world’s leading labs to reporting duties before any international mechanism existed.",
+    "It made frontier developers report, which is a declaration regime. Verification is what happens to a declaration afterwards — so on this map it is a Verifier that has, as yet, nothing to check the reports against.",
   proxies:
-    "A rule cannot land on a name that was created to be discarded. They are the channel evasion flows through, which is a position no article addresses directly.",
+    "A declaration cannot cover a name that exists to “break the link between a name and an activity”. They are Subgoal 2.B in person: the undeclared cluster the whole second half of the framework was built to find.",
   deployers:
-    "Millions of them, downstream of everything, bearing the risk and bound by nothing. The agreement never reaches them and was never written to.",
+    "Outside every declaration for the opposite reason — below the threshold. Baker defines large-scale in thousands of chips over months, so millions of actors who “benefit from safety and bear none of its costs” are outside the regime by construction rather than by evasion.",
 };
 
 /**
@@ -278,7 +350,7 @@ export const CORE_QUESTION = {
       id: "activity",
       text: "The regulated activity itself — a training run above the threshold.",
       correct: true,
-      why: "The map is of a rule, and a rule is about an act. Putting the act in the centre is what makes the rings mean anything: each one is a further step a signatory has to reach through to touch it.",
+      why: "The map is of a rule, and a rule is about an act. It is also what the verification literature centres: Baker's framework takes the approach of compute accounting, which is the same act said in compute. Put it in the centre and every ring becomes an answer to one question — what part do you play in accounting for this run?",
     },
     {
       id: "signatories",
@@ -302,6 +374,255 @@ export const CORE_QUESTION = {
 } as const;
 
 /**
+ * What sits in the middle of the rings, and the sentence that puts it there.
+ *
+ * Printed under the map, because a diagram whose centre is asserted is a
+ * diagram the reader has to take on trust.
+ */
+export const CENTRE = {
+  label: "A training run",
+  sub: "above the threshold",
+  baker: {
+    text: "it seeks to verify compliance on the basis that all large-scale AI compute use is accounted for in compliant activities.",
+    where: "§3.1, AI compute accounting",
+  } satisfies BakerQuote,
+} as const;
+
+/**
+ * Baker's four verification subgoals, each in the paper's own words.
+ *
+ * The decomposition is the whole reason the edge exercise has a key rather
+ * than a set of opinions: a mechanism counts because it completes one of
+ * these, and an actor is on the map's edges because it holds a mechanism.
+ * 1 and 2 together are exhaustive by construction — the paper's own argument
+ * is that if declared uses are compliant and there are no undeclared uses,
+ * every use is compliant.
+ */
+export type SubgoalId = "1a" | "1b" | "2a" | "2b";
+
+export interface Subgoal {
+  id: SubgoalId;
+  /** The paper's numbering, which is worth keeping: it is how it is cited. */
+  label: string;
+  /** A short name, ours, for a chip and a table row. */
+  name: string;
+  baker: BakerQuote;
+}
+
+export const SUBGOALS: Subgoal[] = [
+  {
+    id: "1a",
+    label: "1.A",
+    name: "Declared uses are accurate",
+    baker: {
+      text: "Verify that declared uses of AI compute are declared accurately, i.e., the Prover actually did the claimed development or deployment.",
+      where: "§3.2",
+    },
+  },
+  {
+    id: "1b",
+    label: "1.B",
+    name: "Declared uses have the required properties",
+    baker: {
+      text: "Assuming that the declared uses are accurate (as is verified per Subgoal 1.A), verify they have the required properties.",
+      where: "§3.2",
+    },
+  },
+  {
+    id: "2a",
+    label: "2.A",
+    name: "No undeclared use of a declared cluster",
+    baker: {
+      text: "Verify that there are no undeclared, large-scale uses of declared AI compute clusters.",
+      where: "§3.2",
+    },
+  },
+  {
+    id: "2b",
+    label: "2.B",
+    name: "No undeclared clusters at all",
+    baker: {
+      text: "Verify that there are no undeclared, large-scale AI compute clusters that could be used for violations.",
+      where: "§3.2",
+    },
+  },
+];
+
+/**
+ * Step 6 — the edges, and the key for them.
+ *
+ * AN EDGE A → B SAYS: A can put something in front of a Verifier about B that
+ * B did not have to volunteer. Direction is the content of the edge, not a
+ * drawing convention — the cloud provider holds records about the lab's run,
+ * and the lab holds nothing comparable about the cloud. A learner who draws
+ * one backwards is told so specifically rather than simply marked wrong.
+ *
+ * Every edge names the subgoal it completes and quotes the mechanism from
+ * Baker. Nothing was added because it would make a tidier graph: the four
+ * actors that end up in no edge at all are in EDGE_NOTES with the line of the
+ * paper that keeps them out, and that absence is the exercise's real finding.
+ */
+export interface WorkshopEdge {
+  from: WorkshopActorId;
+  to: WorkshopActorId;
+  subgoal: SubgoalId;
+  /** What A can actually hand over, in our words. */
+  what: string;
+  baker: BakerQuote[];
+}
+
+export const EDGE_KEY: WorkshopEdge[] = [
+  {
+    from: "hyperscalers",
+    to: "frontier-labs",
+    subgoal: "1a",
+    what: "The declared run happened on somebody else’s machines. The cluster’s own records — logs, billing, and the sensors a verification regime would attach to it — are where a Verifier goes to find out whether the declaration matches what the chips did.",
+    baker: [
+      {
+        text: "the Verifier would aim to detect discrepancies between a Prover’s declarations and their actual chip use, such as by detecting that chips’ input data or power draw patterns tell a different story than the Prover’s claims",
+        where: "§4.2, off-chip verification layers",
+      },
+    ],
+  },
+  {
+    from: "nvidia",
+    to: "frontier-labs",
+    subgoal: "1b",
+    what: "Checking that a declared model has the properties the rules require means running tests on it without the Prover handing over its weights. The feature that makes that possible is built into the chip at design time; Baker names NVIDIA among the designers that have implemented or announced versions of it.",
+    baker: [
+      {
+        text: "This could enable a Verifier to run tests on a Prover’s models, data, and code—with the Prover knowing their information will not be stolen, and with the Verifier knowing their tests will be run faithfully and will not be viewed for the sake of manipulating test results.",
+        where: "§4.1.1.1, Confidential Computing",
+      },
+    ],
+  },
+  {
+    from: "nvidia",
+    to: "hyperscalers",
+    subgoal: "2a",
+    what: "Accounting for everything a declared cluster did means the chips keeping their own record. That is a hardware feature, present or absent at manufacture — the cluster’s operator cannot add it afterwards, and cannot quietly remove it either.",
+    baker: [
+      {
+        text: "Security features built into AI chips may enable verification, such as by ensuring that AI chips log traces of their activities for confidential analysis.",
+        where: "§4.1, the on-chip verification layer",
+      },
+    ],
+  },
+  {
+    from: "tsmc",
+    to: "proxies",
+    subgoal: "2b",
+    what: "The chain of custody starts where the die is made. How many leading-edge parts exist at all is the ceiling on how large any undeclared cluster could possibly be, and that number exists in one place.",
+    baker: [
+      {
+        text: "A Verifier could verify the locations and owners of random samples of AI chips from manufacturing to end-of-life destruction.",
+        where: "§4.2.1, verifying AI chips’ chain of custody",
+      },
+      {
+        text: "This would serve to verify that large quantities of AI chips are not assembled into undeclared AI compute clusters (Subgoal 2.B).",
+        where: "§4.2.1",
+      },
+    ],
+  },
+  {
+    from: "nvidia",
+    to: "proxies",
+    subgoal: "2b",
+    what: "The same chain one link down: who the parts were sold to, and which serialised chip went where. This is NVIDIA’s second mechanism and a different one from the first — which is exactly why it gets its own edge.",
+    baker: [
+      {
+        text: "An example verification mechanism is inspecting AI chips to verify that they have not been sent to undeclared AI data centers; this helps complete Subgoal 2.B.",
+        where: "§4, defining a verification mechanism",
+      },
+    ],
+  },
+  {
+    from: "ic",
+    to: "proxies",
+    subgoal: "2b",
+    what: "A cluster nobody declared leaves no paperwork to audit. What is left is people and signals — and this is the only actor on the board that can reach a facility that was never on any list.",
+    baker: [
+      {
+        text: "Intelligence agencies could collect and analyze intelligence for all verification subgoals, including via human, cyber, and signals intelligence.",
+        where: "§4.3, personnel-based verification layers",
+      },
+    ],
+  },
+];
+
+/**
+ * The actors with no edge, and the line of the paper that keeps them out.
+ *
+ * These are not oversights and must not be quietly filled in to make the
+ * graph look complete. Each one is a scope decision Baker states outright,
+ * and three of the four are actors 1.2 spends real time on — which is the
+ * point: being the biggest lever on the board and being useless to a Verifier
+ * are compatible.
+ */
+export const EDGE_NOTES: {
+  actorId: WorkshopActorId;
+  why: string;
+  baker: BakerQuote;
+}[] = [
+  {
+    actorId: "asml",
+    why: "Baker’s chain of custody begins at manufacturing, and ASML is upstream of that: it sells the machines the fab uses, not the parts a regime counts. The tightest chokepoint on the map completes no subgoal, which is what the difference between leverage and evidence looks like.",
+    baker: {
+      text: "A Verifier could verify the locations and owners of random samples of AI chips from manufacturing to end-of-life destruction.",
+      where: "§4.2.1 — the chain starts at manufacturing, not at the tools",
+    },
+  },
+  {
+    actorId: "bis",
+    why: "Export control is the instrument, and the paper puts it outside the frame deliberately: it is how a party is stopped or punished after a finding, not how a declaration is checked. Today’s de facto compute-governance agency is, in this framework, downstream of verification rather than part of it.",
+    baker: {
+      text: "We do not cover this latter step of enforcement, though a few verification mechanisms double as enforcement tools.",
+      where: "§2.3, scope limitations",
+    },
+  },
+  {
+    actorId: "california",
+    why: "A reporting statute produces declarations. Verification is what happens to a declaration afterwards, and receiving one is not checking it. The actor that bound the leading labs before any international mechanism existed completes no subgoal — it supplies the thing the subgoals are about.",
+    baker: {
+      text: "Verification focuses on checking that these declarations are correct and complete.",
+      where: "§3.1",
+    },
+  },
+  {
+    actorId: "deployers",
+    why: "Below the threshold, and that is the whole of it. Millions of actors running somebody else’s model are outside the regime by construction rather than by evasion — which is why they share a ring with the proxies and share nothing else.",
+    baker: {
+      text: "AI development or deployment is “large-scale” if it uses thousands of high-end AI chips over multiple months.",
+      where: "§2.2, what counts as large-scale",
+    },
+  },
+];
+
+/**
+ * What the edges say once they are drawn.
+ *
+ * Every count in this text is re-derived in actor-workshop.test.ts against
+ * EDGE_KEY, so the prose cannot drift from the data it describes.
+ */
+export const EDGE_FINDING = {
+  title: "Where this regime is weakest",
+  body: [
+    "Count the edges by subgoal. 2.B — no undeclared clusters anywhere — has three. The other three subgoals have one edge each, and two of those three come from the same firm. Baker’s standard for a robust regime is redundancy: layers stacked, so that a subgoal has more than one way of being completed. Three of the four subgoals on this board have no second way at all.",
+    "The paper calls the least robust subgoal the weak link and says the regime is only as good as that one. This map narrows the question rather than answering it — counting edges is not measuring robustness — but it does tell you where to ask, and it tells you that removing one chip designer would take two subgoals with it.",
+    "Then read what has no edge. Four of the ten actors complete no subgoal, and two of them are the ones the section spends the most time on: the export-control agency, whose instrument the paper places outside verification altogether, and the state legislature, which produces declarations rather than checks on them.",
+    "Then read what has no node. The paper’s simplest and most implementation-ready layer runs on people — whistleblowers, interviews, intelligence. One of those three is on this board, because it happens to be an institution. The other two are not organisations, so a map of organisations has nowhere to put them, and you would never find them by drawing one.",
+  ],
+  weakLink: {
+    text: "identify the subgoal whose mechanisms are collectively least robust. This subgoal is the “weak link” of the regime—its robustness determines the regime’s overall robustness.",
+    where: "§3.2",
+  } satisfies BakerQuote,
+  redundancy: {
+    text: "three verification layers can be stacked together to achieve three layers of redundancy, for example.",
+    where: "§4, defining a verification layer",
+  } satisfies BakerQuote,
+} as const;
+
+/**
  * The finding the finished map is supposed to hand over.
  *
  * OURS in its wording, hers in its content: it is the paragraph the lesson
@@ -311,8 +632,8 @@ export const CORE_QUESTION = {
 export const MAP_FINDING = {
   title: "What the finished map says",
   body: [
-    "Read your rings from the outside in. Everybody who can write a rule is on the outer ring, and nothing they can compel is theirs: the act is in the centre, and between them and it sit the firms that run it and the firms that supply it. That is why almost every article of a pause agreement is a promise to control somebody else.",
-    "Now read the colours across the rings instead of around them. Roles do not stay in their band — the cloud provider holds four of them at once, and the ring it sits on tells you none of the four. Position tells you where an actor is; roles tell you what it can do to you; posture tells you what it wants today. The three lenses cut across each other, which is why the section asks you to run all three.",
+    "Read your rings from the inside out. Exactly two actors on this board owe anybody a declaration; everything outside them either holds evidence about that declaration, or checks it, or is not covered by any declaration at all. A verification regime is a much smaller object than the map of who matters — most of this board it does not reach, and half of it cannot help.",
+    "Now read the colours across the rings instead of around them. Roles do not stay in their band — the cloud provider holds four of them at once, and the ring it sits on tells you none of the four. Position tells you what part an actor plays in checking a declaration; roles tell you what it can do to you; posture tells you what it wants today. The three lenses cut across each other, which is why the section asks you to run all three.",
   ],
 } as const;
 
@@ -450,7 +771,7 @@ export const SECOND_ORDER = {
       id: "hyperscalers",
       text: "The cloud providers.",
       correct: true,
-      why: "The run happens on their machines. Access can be suspended this afternoon, which is why they are on the inner ring at all.",
+      why: "The run happens on their machines. Access can be suspended this afternoon — and they are the other actor the regime asks for a declaration, because the cluster it happens on is theirs.",
     },
     {
       id: "asml",

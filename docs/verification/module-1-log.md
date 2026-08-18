@@ -778,3 +778,119 @@ four frozen options on the centre question, no console errors.
 - **Three small-explanation surfaces, two treatments.** `.vocab-card` and the
   footnote now match; `GlossaryCardContent` still renders its body in
   `text-muted-foreground`. Which is canonical is a design call.
+
+## 2026-08-18 — 1.2's rings are Baker's frame now, and the edges are an exercise
+
+Her instruction: *"Берём рамку Baker / Рёбра делаем упражнением нарисовать и
+ключ по бейкеру"* — take Baker's framework, make the edges something the
+learner draws, and key them against the paper.
+
+### What the rings were and why they moved
+
+They were ours: **runs it / supplies it / rules on it / out of reach**, derived
+honestly from sentences in 1.2 and answering a question no paper asks. The
+verification literature asks a different one, and it is the one the course is
+about. Baker, Ho, Hadfield, Wasil et al., *Verification for International AI
+Agreements* (arXiv:2507.15916v2, committed in-repo) opens on declarations: a
+**Prover** states what it owns and what it did with it, a **Verifier**
+establishes the statement is "correct and complete", and everything else is
+either evidence about a declaration or outside every declaration there is.
+
+So the rings are **Declares / Holds the evidence / Verifies / Outside the
+declaration**, each ring's test quoted from the paper. The centre did not move
+— a training run above the threshold is the same act the paper counts in
+compute ("all large-scale AI compute use is accounted for in compliant
+activities").
+
+Two placements changed their reasons rather than their positions, and both are
+better for it. The cloud provider is innermost because Baker names Provers in a
+parenthesis — "major AI companies and cloud compute providers" — not because
+the run happens on its machines. The proxies and the deployers still share the
+outer ring, and the edge step is now where the difference between them shows
+up: one is outside by construction (below the threshold), the other by
+construction of a different kind.
+
+### The edge exercise
+
+An edge **A → B** says: A can put something in front of a Verifier about B that
+B did not have to volunteer. Direction is the content of the claim, so a
+backwards edge is reported as backwards rather than as a miss (`scoreEdges`
+distinguishes `reversed` from `extra`, and refuses to call a reversal partial
+credit when the correct direction was drawn too).
+
+Six edges, each tagged with the Baker subgoal it completes and quoting the
+mechanism:
+
+| edge | subgoal | mechanism |
+| --- | --- | --- |
+| Cloud providers → Frontier labs | 1.A | off-chip devices detecting discrepancies between declaration and chip use |
+| NVIDIA → Frontier labs | 1.B | Confidential Computing: tests run without the Prover handing over weights |
+| NVIDIA → Cloud providers | 2.A | on-chip security features logging traces of activity |
+| TSMC → Proxies | 2.B | chain of custody, which begins at manufacturing |
+| NVIDIA → Proxies | 2.B | inspecting chips for delivery to undeclared data centres |
+| Intelligence community → Proxies | 2.B | national intelligence, which Baker gives every subgoal |
+
+**Four actors have no edge, and that is the finding, not a gap.** ASML is
+upstream of a chain of custody that starts at manufacturing. BIS's instrument
+is export control, which the paper places outside verification outright ("we do
+not cover this latter step of enforcement"). California produces declarations
+rather than checks on them. The deployers are below the threshold. Each carries
+the line of the paper that keeps it out; none of them may be quietly filled in
+to make the graph look complete.
+
+The closing finding is Baker's weak-link reading applied to the board: 2.B has
+three edges and the other three subgoals have one each, two of those from the
+same firm — so removing one chip designer takes two subgoals with it, and
+Baker's redundancy standard (layers stacked) is met nowhere. And the board has
+no node for the layer the paper calls most implementation-ready, because
+whistleblowers and interviews are not organisations.
+
+### Two tripwires now, and one exemption
+
+`actor-workshop.test.ts` had one: every curly-quoted fragment in the data file
+must still appear in `scoping-actors.mdx`. It now has a second: every
+`BakerQuote` reachable from the module's exports must appear verbatim in
+`src/content/arxiv/2507.15916v2.json`. The collector is a deep walk over the
+exports rather than a hand-kept list, so a quote added to a new edge is checked
+the day it is written.
+
+The exemption is narrow and stated in the test: a curly-quoted run **inside** a
+Baker quotation is skipped by the lesson check, because the paper quotes the
+terms it defines ("weak link", "large-scale") and the artifact check has
+already matched the whole sentence. Baker quotations allow no ellipsis at all
+— the 1.2 tripwire permits a trailing cut because it quotes table cells; this
+one quotes claims, and a claim trimmed to fit is the failure it exists to stop.
+
+Counts are re-derived too: a test asserts 2.B has exactly three edges and the
+others one each, that NVIDIA is the source of two of the singles, and that
+`EDGE_NOTES` covers exactly the actors no edge touches. The prose in
+`EDGE_FINDING` states all three, so it cannot drift from the data.
+
+### Storage and one layout repair
+
+`STORAGE_KEY` is `v-actor-workshop:v3`. All four ring ids changed, so a
+restored v2 document would be ten placements on rings that no longer exist;
+prune would drop them one at a time and hand back a half-built map with no
+explanation.
+
+The ring names moved from **inside** each ring to eight pixels **outside** it.
+Inside, they shared a line with any actor near twelve o'clock, and two actors
+always are — the dots nearest the top sit 18° off it, which on the innermost
+ring is twenty pixels. "DECLARES" printed over "Frontier labs" and "OUTSIDE THE
+DECLARATION" over "Deployers". Every alternative considered (shorter names,
+rotating the roster, placing each label in its ring's largest empty arc) either
+left under 2px of clearance, or made the layout depend on where things had been
+placed — which would let the map reflow under the builder's hand, or leak the
+key through its own geometry. Outside the line costs nothing and depends on
+nothing.
+
+Both chip rows in the edge step print the same ten names. The headings tell
+them apart on screen and nothing did in the accessibility tree, so the source
+chips are labelled "Draw from X" and the target chips carry the whole claim,
+"X can show a verifier something about Y". That was caught by a driver script
+clicking the wrong row, which is exactly what a screen reader would have done.
+
+Driven in a browser end to end: all seven steps, draw / remove / redraw /
+commit, both themes (edge strokes resolve to real distinct values — khaki and
+red by day, their lighter variants at night, missed edges dashed grey in both),
+no console errors.

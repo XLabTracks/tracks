@@ -43,6 +43,59 @@ export function diffSet(
   };
 }
 
+/**
+ * An edge's identity on the board.
+ *
+ * Direction is part of it, and deliberately: the edge means "A can put
+ * something in front of a Verifier about B", so A → B and B → A are different
+ * claims and only one of them is usually true.
+ */
+export function edgeId(from: string, to: string): string {
+  return `${from}>${to}`;
+}
+
+export interface EdgeScore {
+  /** Key edges the learner drew. */
+  found: string[];
+  /** Key edges they did not. */
+  missed: string[];
+  /** Drawn the right pair, the wrong way round. Told apart from a plain
+      miss because it is a different mistake: the actors are right and the
+      claim about who holds evidence about whom is inverted. */
+  reversed: string[];
+  /** Drawn, not in the key, and not a reversal of one. */
+  extra: string[];
+}
+
+export function scoreEdges(
+  drawn: readonly string[],
+  key: readonly string[],
+): EdgeScore {
+  const made = new Set(drawn);
+  const answer = new Set(key);
+  const flip = (id: string) => {
+    const [from = "", to = ""] = id.split(">");
+    return edgeId(to, from);
+  };
+
+  const found = key.filter((id) => made.has(id));
+  const missed = key.filter((id) => !made.has(id));
+  const surplus = drawn.filter((id) => !answer.has(id));
+  // A reversal only counts as one where the correct direction was NOT also
+  // drawn — somebody who drew both has the right edge plus a wrong one, and
+  // calling the wrong one "reversed" would read as praise.
+  const reversed = surplus.filter(
+    (id) => answer.has(flip(id)) && !made.has(flip(id)),
+  );
+  const reversedSet = new Set(reversed);
+  return {
+    found,
+    missed,
+    reversed,
+    extra: surplus.filter((id) => !reversedSet.has(id)),
+  };
+}
+
 /** How many of `ids` the learner placed on the ring the key gives them. */
 export function scorePlacements<T extends string>(
   placed: Partial<Record<string, T>>,

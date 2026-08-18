@@ -3,15 +3,20 @@ import { join } from "node:path";
 
 import { describe, expect, it } from "vitest";
 
-import { diffSet, sameSet, scorePlacements } from "./actor-workshop";
+import { diffSet, edgeId, sameSet, scoreEdges, scorePlacements } from "./actor-workshop";
 import {
+  CENTRE,
   CLOSING_KEY,
+  EDGE_FINDING,
+  EDGE_KEY,
+  EDGE_NOTES,
   POSTURE_KEY,
   RECALL_TARGET,
   RING_KEY,
   RING_WHY,
   RINGS,
   ROLE_KEY,
+  SUBGOALS,
   WORKSHOP_ACTOR_IDS,
   SECOND_ORDER,
   WORKSHOP_ACTORS,
@@ -120,9 +125,90 @@ describe("second-order question", () => {
     for (const o of SECOND_ORDER.options) expect(ids.has(o.id), o.id).toBe(true);
   });
 
-  it("names the inner ring as the answer, since that is what the map claims", () => {
+  it("names an actor the regime asks for a declaration, which is what the map claims", () => {
     const right = SECOND_ORDER.options.find((o) => o.correct)!;
-    expect(RING_KEY[right.id as keyof typeof RING_KEY]).toBe("runs");
+    expect(RING_KEY[right.id as keyof typeof RING_KEY]).toBe("declares");
+  });
+});
+
+describe("scoreEdges", () => {
+  const key = ["a>b", "c>d"];
+
+  it("separates found, missed and invented", () => {
+    expect(scoreEdges(["a>b", "e>f"], key)).toEqual({
+      found: ["a>b"],
+      missed: ["c>d"],
+      reversed: [],
+      extra: ["e>f"],
+    });
+  });
+
+  it("calls a backwards edge reversed rather than invented", () => {
+    const score = scoreEdges(["b>a"], key);
+    expect(score.reversed).toEqual(["b>a"]);
+    expect(score.extra).toEqual([]);
+    // Still missed: the claim the key makes was not drawn.
+    expect(score.missed).toContain("a>b");
+  });
+
+  it("does not call an edge reversed when the right one was drawn too", () => {
+    // Drawing both directions is the right edge plus a wrong one, and
+    // "reversed" would read as partial credit for the wrong one.
+    const score = scoreEdges(["a>b", "b>a"], key);
+    expect(score.found).toEqual(["a>b"]);
+    expect(score.reversed).toEqual([]);
+    expect(score.extra).toEqual(["b>a"]);
+  });
+});
+
+/* The edge key is Baker's framework applied to this roster, so the things
+   that can go wrong with it are structural: an edge naming an actor the
+   roster dropped, a subgoal with no mechanism at all, or the finding's prose
+   claiming a count the data no longer has. */
+describe("edge key", () => {
+  const ids = new Set<string>(WORKSHOP_ACTOR_IDS);
+
+  it("joins actors that are on the board, in one direction only", () => {
+    const seen = new Set<string>();
+    for (const edge of EDGE_KEY) {
+      expect(ids.has(edge.from), edge.from).toBe(true);
+      expect(ids.has(edge.to), edge.to).toBe(true);
+      expect(edge.from).not.toBe(edge.to);
+      const id = edgeId(edge.from, edge.to);
+      expect(seen.has(id), `${id} twice`).toBe(false);
+      // Both directions in one key would make the exercise unanswerable.
+      expect(seen.has(edgeId(edge.to, edge.from)), `${id} both ways`).toBe(false);
+      seen.add(id);
+    }
+  });
+
+  it("names a subgoal that exists, and leaves none of them empty", () => {
+    const subgoals = new Set(SUBGOALS.map((s) => s.id));
+    for (const edge of EDGE_KEY) expect(subgoals.has(edge.subgoal)).toBe(true);
+    for (const s of SUBGOALS) {
+      const on = EDGE_KEY.filter((e) => e.subgoal === s.id);
+      expect(on.length, `${s.label} has no mechanism on this board`).toBeGreaterThan(0);
+    }
+  });
+
+  it("still has the shape EDGE_FINDING describes in prose", () => {
+    // "2.B has three. The other three subgoals have one edge each, and two of
+    // those three come from the same firm." Re-derived, so an added edge
+    // fails here rather than leaving the finding quietly wrong.
+    const per = (id: string) => EDGE_KEY.filter((e) => e.subgoal === id).length;
+    expect(per("2b")).toBe(3);
+    expect([per("1a"), per("1b"), per("2a")]).toEqual([1, 1, 1]);
+    const singles = EDGE_KEY.filter((e) => e.subgoal !== "2b").map((e) => e.from);
+    expect(singles.filter((f) => f === "nvidia")).toHaveLength(2);
+  });
+
+  it("accounts for every actor that has no edge at all", () => {
+    const touched = new Set(EDGE_KEY.flatMap((e) => [e.from, e.to]));
+    const alone = WORKSHOP_ACTOR_IDS.filter((id) => !touched.has(id));
+    expect(alone.sort()).toEqual(EDGE_NOTES.map((n) => n.actorId).sort());
+    // Four, which the finding's third paragraph states.
+    expect(alone).toHaveLength(4);
+    for (const note of EDGE_NOTES) expect(note.why.length).toBeGreaterThan(80);
   });
 });
 
@@ -181,25 +267,135 @@ describe("closing marking key", () => {
  * carries no quotation marks at all; one of them did, and it failed here,
  * which is the check behaving correctly rather than a reason to loosen it.
  */
-describe("quotes from 1.2", () => {
-  const norm = (s: string) =>
-    s
-      .normalize("NFKC")
-      .replace(/[\u2018\u2019]/g, "'")
-      .replace(/[\u201c\u201d]/g, '"')
-      .replace(/[\u2014\u2013]/g, "-")
-      .replace(/\u2026|\.\.\./g, "")
-      .replace(/\s+/g, " ")
-      .trim()
-      .toLowerCase();
+const norm = (s: string) =>
+  s
+    .normalize("NFKC")
+    .replace(/[\u2018\u2019]/g, "'")
+    .replace(/[\u201c\u201d]/g, '"')
+    .replace(/[\u2014\u2013\u2212\u2011]/g, "-")
+    .replace(/\u2026|\.\.\./g, "")
+    .replace(/\s+/g, " ")
+    .trim()
+    .toLowerCase();
 
+/**
+ * Every Baker quotation reachable from the module's exports.
+ *
+ * A deep walk rather than a hand-kept list, so a quote added to a new edge or
+ * a new ring is checked the day it is written and nobody has to remember to
+ * register it. The shape is the contract: `{ text, where }`.
+ */
+function bakerQuotes(): { text: string; where: string }[] {
+  const out: { text: string; where: string }[] = [];
+  const seen = new Set<unknown>();
+  const walk = (node: unknown) => {
+    if (typeof node !== "object" || node === null || seen.has(node)) return;
+    seen.add(node);
+    if (Array.isArray(node)) {
+      node.forEach(walk);
+      return;
+    }
+    const box = node as Record<string, unknown>;
+    if (typeof box.text === "string" && typeof box.where === "string") {
+      out.push({ text: box.text, where: box.where });
+    }
+    Object.values(box).forEach(walk);
+  };
+  walk([CENTRE, RINGS, SUBGOALS, EDGE_KEY, EDGE_NOTES, EDGE_FINDING]);
+  return out;
+}
+
+/**
+ * Tripwire 1 \u2014 the frame.
+ *
+ * The rings, the subgoals and every edge are Baker et al.'s, and the workshop
+ * says so on screen. That claim is only worth anything if the sentences are
+ * still the paper's, so they are matched against the committed artifact \u2014
+ * offline, at test time, with no network and no trust in a transcription.
+ *
+ * No ellipsis convention here, deliberately: a Baker quote is verbatim and
+ * whole. The 1.2 tripwire below allows a trailing cut because it quotes a
+ * table cell; this one quotes claims, and a claim trimmed to fit is the
+ * failure mode the tripwire exists for.
+ */
+describe("quotes from Baker et al.", () => {
+  const artifact = JSON.parse(
+    readFileSync(
+      join(__dirname, "../../content/arxiv/2507.15916v2.json"),
+      "utf8",
+    ),
+  ) as { paper: { html: string } };
+
+  // Tags out, entities in, whitespace collapsed \u2014 the same reading a person
+  // gets off the rendered page.
+  const body = norm(
+    artifact.paper.html
+      .replace(/<[^>]+>/g, " ")
+      .replace(/&#x([0-9A-Fa-f]+);/g, (_m, hex: string) =>
+        String.fromCodePoint(parseInt(hex, 16)),
+      )
+      .replace(/&amp;/g, "&"),
+  );
+
+  const quotes = bakerQuotes();
+
+  it("finds quotes to check at all", () => {
+    // A refactor that drops the `baker` fields would otherwise make this pass
+    // by having nothing to test.
+    expect(quotes.length).toBeGreaterThanOrEqual(12);
+  });
+
+  it("matches every one against the committed artifact", () => {
+    const drifted = quotes
+      .filter((q) => !body.includes(norm(q.text)))
+      .map((q) => `${q.where}: ${q.text.slice(0, 60)}\u2026`);
+    expect(drifted, "these are not in 2507.15916v2.json").toEqual([]);
+  });
+
+  it("says where each one is", () => {
+    for (const q of quotes) expect(q.where.length, q.text).toBeGreaterThan(2);
+  });
+});
+
+/**
+ * Tripwire 2 \u2014 the course's own words.
+ *
+ * The rings are ours and the sentences they are justified by are hers, so
+ * every quoted fragment in the data file has to still be in 1.2 word for
+ * word. This caught the defect that made it worth writing: "The machines
+ * without which no leading-edge chip exists." was quoted with a full stop
+ * where Table 4 has a comma and keeps going. A quote edited to fit is the
+ * thing this repo's snippet tripwires exist to stop, and widget data had no
+ * such guard until now.
+ *
+ * A trailing "..." marks a deliberate cut and is dropped before matching;
+ * nothing else about a fragment may differ.
+ *
+ * THE CONVENTION THIS RESTS ON, so nobody trips it by accident: curly
+ * quotation marks in the data file are reserved for 1.2's own words. Anything
+ * quoted from somewhere else \u2014 a paper, a figure caption \u2014 is attributed
+ * inline and written with straight quotes, which this test does not read. And
+ * a line that puts words in a learner's mouth, like the noCredit examples,
+ * carries no quotation marks at all; one of them did, and it failed here,
+ * which is the check behaving correctly rather than a reason to loosen it.
+ *
+ * ONE EXEMPTION, and it is not a loophole: a curly-quoted run that sits
+ * inside a Baker quotation is skipped here, because the test above has
+ * already matched it against the paper. Baker quotes the terms it defines,
+ * so \u201cweak link\u201d and \u201clarge-scale\u201d appear inside sentences that are verbatim
+ * from somewhere that is not 1.2.
+ */
+describe("quotes from 1.2", () => {
   const DATA = readFileSync(join(__dirname, "data/actor-workshop.ts"), "utf8");
   const LESSON = readFileSync(
     join(__dirname, "../../content/lessons/verification/scoping-actors.mdx"),
     "utf8",
   );
 
-  const fragments = [...DATA.matchAll(/\u201c([^\u201d]{20,})\u201d/g)].map((m) => m[1]!);
+  const fromBaker = bakerQuotes().map((q) => norm(q.text));
+  const fragments = [...DATA.matchAll(/\u201c([^\u201d]{20,})\u201d/g)]
+    .map((m) => m[1]!)
+    .filter((f) => !fromBaker.some((b) => b.includes(norm(f))));
 
   it("finds fragments to check at all", () => {
     // A refactor that drops the quotes would otherwise make this suite pass

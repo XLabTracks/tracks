@@ -14,13 +14,18 @@ import {
   type ActorRoleId,
 } from "@/lib/verification/data/actor-map";
 import {
+  CENTRE,
   CLOSING_QUESTIONS,
   CORE_QUESTION,
+  EDGE_FINDING,
+  EDGE_KEY,
+  EDGE_NOTES,
   MAP_FINDING,
   MAP_LABEL,
   POSTURE_KEY,
   RECALL_TARGET,
   SECOND_ORDER,
+  SUBGOALS,
   CLOSING_KEY,
   RING_KEY,
   RING_WHY,
@@ -32,8 +37,9 @@ import {
   WORKSHOP_MARKS_KEY,
   type RingId,
   type WorkshopActor,
+  type WorkshopActorId,
 } from "@/lib/verification/data/actor-workshop";
-import { diffSet } from "@/lib/verification/actor-workshop";
+import { diffSet, edgeId, scoreEdges } from "@/lib/verification/actor-workshop";
 import { ChoiceList } from "../kit/choice-list";
 import { MarkingKeyPanel } from "../kit/marking-key";
 import { QuestionWorkspace } from "../kit/question-workspace";
@@ -57,10 +63,15 @@ import type { VerificationWidgetProps } from "../kit/types";
  * power", and that widget conflated the first with the third while being
  * neither an answer surface nor a graph. Both files stay in the repo.
  *
- * SIX STEPS, ONE AT A TIME. That is the house rule and here it is load-
+ * SEVEN STEPS, ONE AT A TIME. That is the house rule and here it is load-
  * bearing rather than stylistic: every step after Study is answered from
  * memory, so showing step 5 beside step 2 would put the vocabulary back on
  * screen and undo the freeze.
+ *
+ * Step 6 draws edges. It is the one step whose key is not the course's own
+ * material: rings, edges and subgoals all come from Baker et al. and every
+ * claim carries the sentence it rests on. The data file's header says why the
+ * frame moved and what that costs.
  *
  * THE FREEZE IS SOFT, AND VISIBLE. "Open the roster" is always there during
  * the workshop; taking it flips `peeked`, which the closing map says out
@@ -74,7 +85,14 @@ import type { VerificationWidgetProps } from "../kit/types";
  * browser never.
  */
 
-type StepId = "study" | "recall" | "core" | "place" | "categorize" | "map";
+type StepId =
+  | "study"
+  | "recall"
+  | "core"
+  | "place"
+  | "categorize"
+  | "edges"
+  | "map";
 
 const STEPS: { id: StepId; name: string; beeck: string }[] = [
   { id: "study", name: "Study the cast", beeck: "Goal setting" },
@@ -86,6 +104,10 @@ const STEPS: { id: StepId; name: string; beeck: string }[] = [
   { id: "core", name: "What goes in the centre?", beeck: "Identify the core" },
   { id: "place", name: "Place them on the rings", beeck: "Place and cluster" },
   { id: "categorize", name: "What can each one do?", beeck: "Categorize" },
+  // Beeck's own reason for drawing rings is to see dependencies between
+  // stakeholders; until this step the workshop drew the rings and never the
+  // dependencies. Its key is Baker's, not the course's.
+  { id: "edges", name: "Draw the edges", beeck: "Political analysis" },
   { id: "map", name: "Read the map", beeck: "Political analysis · Actions" },
 ];
 
@@ -106,6 +128,9 @@ interface Saved {
   roles: Record<string, ActorRoleId[]>;
   postures: Record<string, ActorPostureId[]>;
   catDone: boolean;
+  /** Drawn edges, as `from>to`. Direction is the claim — see edgeId. */
+  edges: string[];
+  edgesDone: boolean;
   secondOrder: string | null;
   secondOrderDone: boolean;
   /** The roster was reopened mid-workshop. Reported, never punished. */
@@ -115,7 +140,13 @@ interface Saved {
 // v2: step 2 stopped asking "who does this agreement touch" and started
 // asking what one actor can do. A restored v1 draft would be an answer to a
 // question that is no longer on screen.
-const STORAGE_KEY = "v-actor-workshop:v2";
+//
+// v3: the rings are Baker's frame now and the four ids all changed, so a
+// restored v2 map would be ten placements on rings that no longer exist.
+// prune() would drop them one by one and hand back a half-built map with no
+// explanation; a new key throws the whole document away at once, which is the
+// honest version of the same thing.
+const STORAGE_KEY = "v-actor-workshop:v3";
 const EMPTY: Saved = {
   step: "study",
   recall: "",
@@ -128,6 +159,8 @@ const EMPTY: Saved = {
   roles: {},
   postures: {},
   catDone: false,
+  edges: [],
+  edgesDone: false,
   secondOrder: null,
   secondOrderDone: false,
   peeked: false,
@@ -136,6 +169,8 @@ const EMPTY: Saved = {
 const RING_IDS = new Set<string>(RINGS.map((r) => r.id));
 const ROLE_IDS = new Set<string>(ACTOR_ROLES.map((r) => r.id));
 const POSTURE_IDS = new Set<string>(ACTOR_POSTURES.map((p) => p.id));
+const ACTOR_IDS = new Set<string>(WORKSHOP_ACTOR_IDS);
+const KEY_EDGE_IDS = EDGE_KEY.map((e) => edgeId(e.from, e.to));
 
 function prune(raw: unknown): Saved {
   if (typeof raw !== "object" || raw === null) return EMPTY;
@@ -177,6 +212,22 @@ function prune(raw: unknown): Saved {
     roles,
     postures,
     catDone: box.catDone === true,
+    // Only pairs of real actors survive, and only one of each. A stored edge
+    // that names an actor the roster has dropped would draw a line to nowhere.
+    edges: Array.isArray(box.edges)
+      ? [
+          ...new Set(
+            box.edges.filter(
+              (e): e is string =>
+                typeof e === "string" &&
+                e.split(">").length === 2 &&
+                e.split(">").every((id) => ACTOR_IDS.has(id)) &&
+                e.split(">")[0] !== e.split(">")[1],
+            ),
+          ),
+        ]
+      : [],
+    edgesDone: box.edgesDone === true,
     secondOrder:
       typeof box.secondOrder === "string" &&
       SECOND_ORDER.options.some((o) => o.id === box.secondOrder)
@@ -192,16 +243,21 @@ function prune(raw: unknown): Saved {
 const CX = 360;
 const CY = 292;
 const RADII: Record<RingId, number> = {
-  runs: 66,
-  supplies: 118,
-  rules: 170,
-  unreached: 218,
+  declares: 66,
+  evidence: 118,
+  verifies: 170,
+  undeclared: 218,
 };
 
 export function ActorWorkshop({}: VerificationWidgetProps) {
   const [saved, persist, hydrated] = useStoredState(STORAGE_KEY, EMPTY, prune);
   const [openRoster, setOpenRoster] = useState(false);
   const [active, setActive] = useState<string>(WORKSHOP_ACTOR_IDS[0]);
+  // Which actor the learner is drawing FROM. Component state, not stored:
+  // it is where a cursor is, not work.
+  const [edgeSource, setEdgeSource] = useState<WorkshopActorId>(
+    WORKSHOP_ACTOR_IDS[0],
+  );
   const [lens, setLens] = useState<ActorRoleId | null>(null);
   const topRef = useRef<HTMLDivElement>(null);
 
@@ -230,6 +286,25 @@ export function ActorWorkshop({}: VerificationWidgetProps) {
   const catDone = WORKSHOP_ACTOR_IDS.filter(
     (id) => (saved.roles[id]?.length ?? 0) > 0 && (saved.postures[id]?.length ?? 0) > 0,
   ).length;
+  const edgeScore = scoreEdges(saved.edges, KEY_EDGE_IDS);
+
+  /* What the map draws.
+     Nothing before the edges step — the earlier steps are about position and
+     a line between two dots would be a claim the learner has not been asked
+     to make yet. During the step, whatever they have drawn. After the commit
+     and for the rest of the workshop, the marked version: what they got, what
+     they inverted, what they invented, and the key edges they never drew. */
+  const mapEdges =
+    saved.step !== "edges" && saved.step !== "map"
+      ? []
+      : !saved.edgesDone
+        ? saved.edges.map((id) => ({ id, state: "drawn" as const }))
+        : [
+            ...edgeScore.found.map((id) => ({ id, state: "right" as const })),
+            ...edgeScore.reversed.map((id) => ({ id, state: "wrong" as const })),
+            ...edgeScore.extra.map((id) => ({ id, state: "wrong" as const })),
+            ...edgeScore.missed.map((id) => ({ id, state: "missed" as const })),
+          ];
 
   return (
     <div className="not-prose my-6 space-y-4" ref={topRef}>
@@ -273,9 +348,10 @@ export function ActorWorkshop({}: VerificationWidgetProps) {
           until the last step, and the answer key there, where the lens turns
           it into the finding. */}
       <RingMap
-        rings={saved.step === "map" ? RING_KEY : saved.rings}
+        rings={saved.ringsDone ? RING_KEY : saved.rings}
         showKey={saved.ringsDone}
         lens={saved.step === "map" ? lens : null}
+        edges={mapEdges}
       />
 
       {/* The lens rides under the map rather than inside step 6, because the
@@ -394,6 +470,26 @@ export function ActorWorkshop({}: VerificationWidgetProps) {
             })
           }
           onCommit={() => persist((prev) => ({ ...prev, catDone: true }))}
+          onNext={() => go("edges")}
+        />
+      ) : null}
+
+      {saved.step === "edges" ? (
+        <EdgesStep
+          drawn={saved.edges}
+          done={saved.edgesDone}
+          score={edgeScore}
+          source={edgeSource}
+          onSource={setEdgeSource}
+          onToggle={(id) =>
+            persist((prev) => ({
+              ...prev,
+              edges: prev.edges.includes(id)
+                ? prev.edges.filter((e) => e !== id)
+                : [...prev.edges, id],
+            }))
+          }
+          onCommit={() => persist((prev) => ({ ...prev, edgesDone: true }))}
           onNext={() => go("map")}
         />
       ) : null}
@@ -402,6 +498,7 @@ export function ActorWorkshop({}: VerificationWidgetProps) {
         <MapStep
           peeked={saved.peeked}
           ringsRight={ringsRight}
+          edgesRight={edgeScore.found.length}
           recalledCount={saved.recallChecked.length}
           secondOrder={saved.secondOrder}
           secondOrderDone={saved.secondOrderDone}
@@ -668,8 +765,11 @@ function PlaceStep({
   return (
     <div className="space-y-4">
       <p className="text-sm leading-relaxed">
-        The act you are regulating is in the centre. Put each actor on the ring
-        that says how a rule reaches it. Pick an actor, then pick its ring.
+        The act you are regulating is in the centre, and the regime around it
+        runs on declarations: somebody states what they own and what they did
+        with it, and somebody else establishes that the statement is true and
+        complete. Put each actor on the ring that says which part of that it
+        plays. Pick an actor, then pick its ring.
       </p>
 
       <div className="flex flex-wrap gap-1.5">
@@ -941,9 +1041,343 @@ function CategorizeVerdict({
   );
 }
 
+/* ------------------------------------------------------------------ edges -- */
+
+function edgeLabel(id: string): string {
+  const [from = "", to = ""] = id.split(">");
+  const name = (x: string) => MAP_LABEL[x as WorkshopActorId] ?? x;
+  return `${name(from)} → ${name(to)}`;
+}
+
+/** One Baker sentence, printed the way a quotation should be: attributed. */
+function BakerLine({ text, where }: { text: string; where: string }) {
+  return (
+    <p className="border-border text-muted-foreground mt-1.5 border-l-2 pl-3 text-xs leading-relaxed">
+      “{text}” <span className="whitespace-nowrap">— Baker et al., {where}</span>
+    </p>
+  );
+}
+
+/**
+ * Step 6 — draw the edges.
+ *
+ * PICK A SOURCE, THEN TOGGLE TARGETS. Clicking dots on the SVG would be the
+ * obvious way to draw a graph and it is the wrong one here: the dots are
+ * 3.5px, there are ten of them, and nothing about a circle in an SVG is
+ * reachable by keyboard without inventing a focus model. Two chip rows are
+ * the same gesture — this actor, about that one — with the house's own
+ * committed-choice affordances and no new interaction to learn.
+ *
+ * The direction is stated in the row headings rather than implied by an
+ * arrowhead, because it is the whole content of the exercise: which of the
+ * two actors is the one that cannot keep the fact to itself.
+ */
+function EdgesStep({
+  drawn,
+  done,
+  score,
+  source,
+  onSource,
+  onToggle,
+  onCommit,
+  onNext,
+}: {
+  drawn: string[];
+  done: boolean;
+  score: ReturnType<typeof scoreEdges>;
+  source: WorkshopActorId;
+  onSource: (id: WorkshopActorId) => void;
+  onToggle: (edge: string) => void;
+  onCommit: () => void;
+  onNext: () => void;
+}) {
+  const perSubgoal = SUBGOALS.map((s) => ({
+    subgoal: s,
+    edges: EDGE_KEY.filter((e) => e.subgoal === s.id),
+  }));
+
+  return (
+    <div className="space-y-4">
+      <div className="border-border bg-card rounded-xl border p-4">
+        <p className="eyebrow text-muted-foreground">What an edge means</p>
+        <p className="mt-1.5 text-sm leading-relaxed">
+          Draw an edge from <strong>A</strong> to <strong>B</strong> when A can
+          put something in front of a verifier about B that B did not have to
+          volunteer. Not influence, not dependence — evidence. Direction is the
+          claim: a cloud provider holds records about a lab’s training run, and
+          the lab holds nothing comparable about the cloud.
+        </p>
+        <p className="text-muted-foreground mt-2 text-sm leading-relaxed">
+          Some actors will end up with no edge at all. That is an available
+          answer and, for several of them, the right one.
+        </p>
+      </div>
+
+      {done ? (
+        <EdgesVerdict score={score} perSubgoal={perSubgoal} onNext={onNext} />
+      ) : (
+        <>
+          <div>
+            <p className="text-sm font-medium">
+              Who can produce the evidence?
+            </p>
+            <div className="mt-2 flex flex-wrap gap-1.5">
+              {WORKSHOP_ACTORS.map((a) => {
+                const out = drawn.filter((e) => e.startsWith(`${a.id}>`)).length;
+                return (
+                  <button
+                    key={a.id}
+                    type="button"
+                    aria-pressed={a.id === source}
+                    /* Both rows print the same ten names, so on the visible
+                       page the headings tell them apart and in the
+                       accessibility tree nothing did — a screen reader heard
+                       "Cloud providers, button" twice with no way to know
+                       which end of the edge it was on. The label says which
+                       row it is; the count says what is already drawn from
+                       here, which the bare numeral beside the name cannot. */
+                    aria-label={`Draw from ${MAP_LABEL[a.id]}${
+                      out ? ` — ${out} drawn` : ""
+                    }`}
+                    onClick={() => onSource(a.id)}
+                    className={cn(
+                      "border-border rounded-lg border px-2.5 py-1.5 text-left text-xs transition-colors",
+                      a.id === source
+                        ? "border-primary bg-primary/10 font-medium"
+                        : "hover:bg-muted",
+                    )}
+                  >
+                    {MAP_LABEL[a.id]}
+                    {out ? (
+                      <span className="text-muted-foreground ml-1.5">{out}</span>
+                    ) : null}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+
+          <div>
+            <p className="text-sm font-medium">
+              About whom? — {MAP_LABEL[source]} can show a verifier something
+              about…
+            </p>
+            <div className="mt-2 flex flex-wrap gap-1.5">
+              {WORKSHOP_ACTORS.filter((a) => a.id !== source).map((a) => {
+                const id = edgeId(source, a.id);
+                const on = drawn.includes(id);
+                return (
+                  <button
+                    key={a.id}
+                    type="button"
+                    aria-pressed={on}
+                    // The whole claim, because that is what pressing it
+                    // asserts — and because the name alone is the same string
+                    // as the source chip above it.
+                    aria-label={`${MAP_LABEL[source]} can show a verifier something about ${MAP_LABEL[a.id]}`}
+                    onClick={() => onToggle(id)}
+                    className={cn(
+                      "border-border rounded-lg border px-2.5 py-1.5 text-left text-xs transition-colors",
+                      on
+                        ? "border-primary bg-primary/10 font-medium"
+                        : "hover:bg-muted",
+                    )}
+                  >
+                    {on ? "✓ " : ""}
+                    {MAP_LABEL[a.id]}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+
+          {drawn.length ? (
+            <div className="border-border rounded-xl border p-4">
+              <p className="eyebrow text-muted-foreground">
+                {drawn.length} edge{drawn.length === 1 ? "" : "s"} drawn
+              </p>
+              <ul className="mt-2 space-y-1">
+                {drawn.map((id) => (
+                  <li key={id} className="text-sm">
+                    <button
+                      type="button"
+                      onClick={() => onToggle(id)}
+                      className="hover:text-defect text-left transition-colors"
+                      aria-label={`Remove ${edgeLabel(id)}`}
+                    >
+                      {edgeLabel(id)}{" "}
+                      <span className="text-muted-foreground">✕</span>
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ) : null}
+
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <p className="text-muted-foreground text-xs">
+              Commit when the board says what you think it says. There is no
+              target number.
+            </p>
+            <Button size="sm" disabled={!drawn.length} onClick={onCommit}>
+              Commit the edges
+            </Button>
+          </div>
+        </>
+      )}
+    </div>
+  );
+}
+
+function EdgesVerdict({
+  score,
+  perSubgoal,
+  onNext,
+}: {
+  score: ReturnType<typeof scoreEdges>;
+  perSubgoal: { subgoal: (typeof SUBGOALS)[number]; edges: typeof EDGE_KEY }[];
+  onNext: () => void;
+}) {
+  return (
+    <div className="space-y-4">
+      <p className="text-sm">
+        <span className="font-semibold">
+          {score.found.length} of {EDGE_KEY.length}
+        </span>{" "}
+        edges in the key.
+        {score.reversed.length
+          ? ` ${score.reversed.length} drawn the other way round.`
+          : ""}
+        {score.extra.length
+          ? ` ${score.extra.length} the key does not have.`
+          : ""}
+      </p>
+
+      {/* The key, grouped by the subgoal each edge completes — which is the
+          only grouping that makes the weak-link reading possible, and the one
+          the paper itself uses. */}
+      <ol className="space-y-4">
+        {perSubgoal.map(({ subgoal, edges }) => (
+          <li
+            key={subgoal.id}
+            className="[&+li]:border-muted-foreground/60 [&+li]:border-t [&+li]:pt-4"
+          >
+            <p className="text-sm font-semibold">
+              Subgoal {subgoal.label} · {subgoal.name}{" "}
+              <span className="text-muted-foreground font-normal">
+                — {edges.length} edge{edges.length === 1 ? "" : "s"}
+              </span>
+            </p>
+            <BakerLine {...subgoal.baker} />
+            <ul className="mt-3 space-y-3">
+              {edges.map((edge) => {
+                const id = edgeId(edge.from, edge.to);
+                const got = score.found.includes(id);
+                const flipped = score.reversed.includes(edgeId(edge.to, edge.from));
+                return (
+                  <li key={id}>
+                    <p className="flex items-start gap-1.5 text-sm">
+                      {got ? (
+                        <CircleCheck
+                          className="text-comply mt-1 size-3.5 shrink-0"
+                          aria-hidden
+                        />
+                      ) : (
+                        <CircleAlert
+                          className="text-defect mt-1 size-3.5 shrink-0"
+                          aria-hidden
+                        />
+                      )}
+                      <span>
+                        <span className="font-medium">{edgeLabel(id)}</span>
+                        {got ? null : flipped ? (
+                          <span className="text-defect">
+                            {" "}
+                            — you drew it the other way round.
+                          </span>
+                        ) : (
+                          <span className="text-defect"> — not drawn.</span>
+                        )}
+                      </span>
+                    </p>
+                    <p className="text-muted-foreground mt-1 text-sm leading-relaxed">
+                      {edge.what}
+                    </p>
+                    {edge.baker.map((q) => (
+                      <BakerLine key={q.text.slice(0, 32)} {...q} />
+                    ))}
+                  </li>
+                );
+              })}
+            </ul>
+          </li>
+        ))}
+      </ol>
+
+      {score.extra.length ? (
+        <div className="border-border rounded-xl border p-4">
+          <p className="text-sm font-semibold">
+            Edges the key does not have
+          </p>
+          <p className="text-muted-foreground mt-1 text-sm leading-relaxed">
+            Not automatically wrong — the key holds only what this framework
+            supports, and it is a framework about declarations rather than
+            about power. Ask of each one: which of the four subgoals would it
+            complete, and with what mechanism? If you can answer that, argue
+            with the key.
+          </p>
+          <ul className="mt-2 space-y-1">
+            {score.extra.map((id) => (
+              <li key={id} className="text-sm">
+                {edgeLabel(id)}
+              </li>
+            ))}
+          </ul>
+        </div>
+      ) : null}
+
+      {/* The actors with nothing. This is the half of the key that is easy to
+          leave out and is doing most of the teaching. */}
+      <div className="space-y-3">
+        <p className="text-sm font-semibold">The four with no edge at all</p>
+        <ol className="space-y-3">
+          {EDGE_NOTES.map((note) => (
+            <li
+              key={note.actorId}
+              className="[&+li]:border-border [&+li]:border-t [&+li]:pt-3"
+            >
+              <p className="text-sm font-medium">{MAP_LABEL[note.actorId]}</p>
+              <p className="text-muted-foreground mt-0.5 text-sm leading-relaxed">
+                {note.why}
+              </p>
+              <BakerLine {...note.baker} />
+            </li>
+          ))}
+        </ol>
+      </div>
+
+      <div className="border-border rounded-xl border p-4">
+        <p className="text-sm font-semibold">{EDGE_FINDING.title}</p>
+        {EDGE_FINDING.body.map((para) => (
+          <p key={para.slice(0, 24)} className="mt-2 text-sm leading-relaxed">
+            {para}
+          </p>
+        ))}
+        <BakerLine {...EDGE_FINDING.weakLink} />
+        <BakerLine {...EDGE_FINDING.redundancy} />
+      </div>
+
+      <Button size="sm" onClick={onNext}>
+        Continue
+      </Button>
+    </div>
+  );
+}
+
 function MapStep({
   peeked,
   ringsRight,
+  edgesRight,
   recalledCount,
   secondOrder,
   secondOrderDone,
@@ -953,6 +1387,7 @@ function MapStep({
 }: {
   peeked: boolean;
   ringsRight: number;
+  edgesRight: number;
   recalledCount: number;
   secondOrder: string | null;
   secondOrderDone: boolean;
@@ -1028,7 +1463,8 @@ function MapStep({
       <p className="text-muted-foreground text-xs">
         From memory: {recalledCount} of {RECALL_TARGET.items.length} retrieved
         about the cloud provider, {ringsRight} of {WORKSHOP_ACTORS.length}{" "}
-        placed on the ring this map gives them, centre{" "}
+        placed on the ring this map gives them, {edgesRight} of{" "}
+        {EDGE_KEY.length} edges in the key, centre{" "}
         {coreRight ? "right" : "missed"}.
         {peeked ? " Roster reopened during the workshop." : ""}
       </p>
@@ -1069,14 +1505,35 @@ const ROLE_TOKENS = [
  * Labels anchor away from the centre, which is the only thing that keeps ten
  * of them apart at this size.
  */
+export interface MapEdge {
+  /** `from>to`, the same id the step stores. */
+  id: string;
+  state: "drawn" | "right" | "wrong" | "missed";
+}
+
+/** Four states, four treatments, and never colour alone — a missed edge is
+    dashed as well as pale, a wrong one is solid in the defect hue, and the
+    verdict list under the step names every one of them in words. */
+const EDGE_PAINT: Record<
+  MapEdge["state"],
+  { stroke: string; width: number; dash?: string; opacity: number }
+> = {
+  drawn: { stroke: "var(--primary)", width: 1.5, opacity: 0.75 },
+  right: { stroke: "var(--comply)", width: 1.75, opacity: 0.9 },
+  wrong: { stroke: "var(--defect)", width: 1.5, opacity: 0.85 },
+  missed: { stroke: "var(--muted-foreground)", width: 1.25, dash: "4 4", opacity: 0.7 },
+};
+
 function RingMap({
   rings,
   showKey = false,
   lens = null,
+  edges = [],
 }: {
   rings: Record<string, RingId>;
   showKey?: boolean;
   lens?: ActorRoleId | null;
+  edges?: MapEdge[];
 }) {
   const lensIndex = lens ? ACTOR_ROLES.findIndex((r) => r.id === lens) : -1;
   const lensColor = lensIndex >= 0 ? ROLE_TOKENS[lensIndex % ROLE_TOKENS.length] : undefined;
@@ -1098,14 +1555,24 @@ function RingMap({
     return (-90 + STEP_DEG / 2 + STEP_DEG * i) * (Math.PI / 180);
   };
 
+  /** Where an actor's dot is, or null when it is not on the board yet. */
+  const pointOf = (id: string): { x: number; y: number } | null => {
+    const ring = rings[id];
+    if (!ring) return null;
+    const angle = angleOf(id);
+    return { x: CX + Math.cos(angle) * RADII[ring], y: CY + Math.sin(angle) * RADII[ring] };
+  };
+
   return (
     <div className="border-border bg-card mx-auto max-w-[720px] overflow-x-auto rounded-xl border p-2">
       {/* The viewBox is cropped to the drawing, not to a round number. Content
-          spans y 74..510 (the outer ring's top to its bottom), so a 0..584 box
-          carried 148px of empty card — most of it visible on the first three
-          steps, where nothing is placed yet. */}
-      <svg viewBox="0 54 720 476" className="mx-auto block h-auto w-full min-w-[560px]" role="img"
-        aria-label="Concentric actor map: the regulated training run at the centre, actors on four rings around it">
+          spans y 66..510 — the outer ring's own label down to the bottom of
+          that ring — so a 0..584 box carried 148px of empty card, most of it
+          visible on the first three steps where nothing is placed yet. The
+          top edge is 58 rather than 66 because a 10px label's ascenders reach
+          above its baseline. */}
+      <svg viewBox="0 58 720 472" className="mx-auto block h-auto w-full min-w-[560px]" role="img"
+        aria-label="Concentric actor map: the regulated training run at the centre, actors on four rings around it — who declares, who holds evidence, who verifies, and what no declaration covers — with edges drawn between actors that can produce evidence about one another">
         {[...RINGS].reverse().map((ring) => (
           <g key={ring.id}>
             <circle
@@ -1115,9 +1582,21 @@ function RingMap({
               className="fill-none stroke-border"
               strokeWidth={1}
             />
+            {/* The name rides just OUTSIDE its ring, not inside it.
+                Inside, it shared a line with any actor placed near twelve
+                o'clock, and two of them always are: the dots nearest the top
+                sit 18° off it, which on the innermost ring is twenty pixels.
+                "DECLARES" and "Frontier labs" printed on top of each other,
+                and so did "OUTSIDE THE DECLARATION" and "Deployers".
+                Eight pixels above the line puts the two on different lines
+                with 15px of clearance at the worst radius, and — unlike
+                every alternative that moves the label around the circle —
+                it never depends on where anything has been placed, so the
+                map still cannot reflow under the builder's hand or leak the
+                key through its own layout. */}
             <text
               x={CX}
-              y={CY - RADII[ring.id] + 13}
+              y={CY - RADII[ring.id] - 8}
               textAnchor="middle"
               className="fill-muted-foreground"
               style={{ fontSize: 10, letterSpacing: "0.08em", textTransform: "uppercase" }}
@@ -1129,11 +1608,38 @@ function RingMap({
 
         <circle cx={CX} cy={CY} r={4} className="fill-primary" />
         <text x={CX} y={CY + 20} textAnchor="middle" className="fill-foreground" style={{ fontSize: 11, fontWeight: 600 }}>
-          A training run
+          {CENTRE.label}
         </text>
         <text x={CX} y={CY + 34} textAnchor="middle" className="fill-muted-foreground" style={{ fontSize: 10 }}>
-          above the threshold
+          {CENTRE.sub}
         </text>
+
+        {/* Edges go under the dots and over the rings. A chord between two
+            fixed points, with no arrowhead: at this line weight a marker is
+            a smudge, and the direction is stated in words beside the map and
+            in every row of the verdict list. */}
+        {edges.map((edge) => {
+          const [from = "", to = ""] = edge.id.split(">");
+          const a = pointOf(from);
+          const b = pointOf(to);
+          if (!a || !b) return null;
+          const paint = EDGE_PAINT[edge.state];
+          return (
+            <line
+              key={`${edge.id}-${edge.state}`}
+              x1={a.x}
+              y1={a.y}
+              x2={b.x}
+              y2={b.y}
+              style={{
+                stroke: paint.stroke,
+                strokeWidth: paint.width,
+                strokeDasharray: paint.dash,
+                opacity: paint.opacity,
+              }}
+            />
+          );
+        })}
 
         {WORKSHOP_ACTORS.map((actor) => {
           const ring = rings[actor.id];
@@ -1172,8 +1678,10 @@ function RingMap({
       </svg>
       {showKey ? (
         <p className="text-muted-foreground px-2 pt-1 pb-1 text-xs leading-relaxed">
-          Rings run outward from the act the agreement forbids: who runs it, who
-          supplies it, who rules on it, and who no rule reaches.
+          Rings run outward from the compute use the agreement forbids: who has
+          to declare it, who holds evidence about the declaration, who checks
+          it, and what no declaration covers. The centre is the paper’s own
+          scope — “{CENTRE.baker.text}” (Baker et al., {CENTRE.baker.where}).
         </p>
       ) : null}
     </div>

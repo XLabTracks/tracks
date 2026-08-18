@@ -1,9 +1,37 @@
+{/* Rebuilt to the course owner's 2.4 edit document (2026-08-18) and her
+    same-day revision: the statute is a link-out card again (not an embed),
+    the checklist button grids are gone, and every reading card says as
+    little as possible — the read instruction and nothing else. The intro,
+    the sentence before the video, the section headings, the paragraph under
+    Whistleblower Statutes, the physical-barriers sentence, the Baker
+    replacement, the Mechanism to Effect instruction (in
+    data/whistleblower-levers.ts), the After the Report Arrives lead, and the
+    Companies A and B lead (in data/policy-on-paper.ts) are hers, verbatim.
+    One grammatical touch-up flagged in the module log: "effective
+    implementations whistleblower protections" → "effective implementation of
+    whistleblower protections". */}
+
+This section will detail each major step of the reporting channel: from
+incentivizing whistleblowers to come forth, to protecting their transmission
+of information to the verifier, to ensuring that the verifier tactfully
+handles and discloses the information.
+
+Watch the below video to hear about the historical importance of
+whistleblowers—but also why individuals often don't say something when they
+see something.
+
 <Video
   src="https://youtu.be/51k3UASQE5E?si=mE8eD7RrB_yvHrpJ"
   title="How whistle-blowers shape history | Kelly Richmond Pope | TED"
 />
 
-## The statutory floor
+## Whistleblower Statutes
+
+Already, there has been legislation enacted to protect whistleblowers in the
+context of preventing catastrophic risks from advanced AI models. Read the
+below California whistleblower protection statute, paying attention to what
+the statute does not say or leaves ambiguous: what types of disclosures are
+not protected? Can you hypothesize why?
 
 <ReadingCard
   id="human-california-whistleblower-chapter"
@@ -13,16 +41,14 @@
   year="effective 2026"
   mins="6–8 min"
 >
-  Read §§1107–1107.2 in full. Keep the definitions beside the operative
-  protection: identify the covered person, reportable subject, permitted
-  recipients, internal process, and available remedies.
+  Read §§1107–1107.2 in full.
 </ReadingCard>
 
 <Callout variant="note" title="What the contract clause covers">
 
-The operative language says a developer “shall not … enter into a … contract that prevents a covered employee from disclosing.” — [California Labor Code §1107.1(a)](https://www.leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?article=&chapter=5.1.&division=2.&lawCode=LAB&part=3.&title=)
+The operative language says a developer "shall not … enter into a … contract that prevents a covered employee from disclosing." — [California Labor Code §1107.1(a)](https://www.leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?article=&chapter=5.1.&division=2.&lawCode=LAB&part=3.&title=)
 
-Read that sentence together with the statute’s definition of a covered
+Read that sentence together with the statute's definition of a covered
 employee, its two protected subjects, and its named recipients. The protection
 attaches to disclosures within those conditions; it does not declare every NDA
 void for every disclosure. The separate [AIWI/CARMA analysis of SB 53](https://aiwi.org/publication-commentary-whistleblower-protections-in-sb-53/)
@@ -30,9 +56,13 @@ also notes that public disclosure is not expressly protected by the chapter.
 
 </Callout>
 
-<PageBreak title="A broader protection standard" />
+<PageBreak title="Broader Standards" />
 
-## A broader design standard
+## Broader Standards in AI Whistleblowing
+
+Beyond explicit statutory enactments, see the below _AI Whistleblowing Law:
+Best Practice Guide_ for a more comprehensive framework for effective
+implementation of whistleblower protections. The core idea is: "whistleblower rights must override confidentiality/nondisclosure agreements." — [AIWI/CARMA, Retaliation Protection](https://aiwi.org/ai-whistleblowing-law-best-practice/)
 
 <ReadingCard
   id="human-aiwi-carma-best-practice"
@@ -42,15 +72,15 @@ also notes that public disclosure is not expressly protected by the chapter.
   year="2026"
   mins="8–10 min"
 >
-  Read the Introduction and all seven recommendation sections: Scope of
-  Protected Disclosures, Protected Individuals, Retaliation Protection,
-  Disclosure Channels, Remedies, Employee Notice Requirements, and Agency
-  Requirements. Stop before the organizational and author biographies.
+  Read the Introduction and all seven recommendation sections; stop before
+  the biographies.
 </ReadingCard>
 
-The guide states the broader rule directly: “Whistleblower rights must override confidentiality/nondisclosure agreements.” — [AIWI/CARMA, Retaliation Protection](https://aiwi.org/ai-whistleblowing-law-best-practice/)
+## Can the Report Leave the Organization?
 
-## Can the report leave the organization?
+Even if a whistleblower is incentivized to report, it doesn't matter if there
+are physical barriers preventing them from disclosing the report, from
+monitored devices to surveillance.
 
 {/* Neither source is quoted here, and neither needs to be.
 
@@ -63,8 +93,7 @@ The guide states the broader rule directly: “Whistleblower rights must overrid
     arxiv.org/licenses/nonexclusive-distrib/1.0, the default, which lets arXiv
     distribute the paper and grants us nothing. A card is not a reproduction —
     it is a link and our own sentence about why to follow it — so the licence
-    has no bearing on it, and the reader gets the whole section instead of one
-    clause of it. */}
+    has no bearing on it. */}
 
 <ReadingCard
   id="human-wasil-whistleblowers"
@@ -74,35 +103,27 @@ The guide states the broader rule directly: “Whistleblower rights must overrid
   year="2024"
   mins="2 min"
 >
-  Five things a government could do to make insiders come forward, and then the
-  sentence that undoes them: incentives do not help if a determined employer can
-  keep the employee from reaching the verifier at all. Note which of the five
-  address that and which do not, and what the section proposes instead.
+  Read the five proposals and the limitation that follows them.
 </ReadingCard>
 
-The route Baker et al. propose against the same problem — regular in-person
-contact, and visits to a building the Verifier physically secures — is set out
-in [Appendix A.8, “Whistleblower
-Programs”](/tracks/verification/verification-infrastructure/human-insiders),
-which you read in full in 2.4.1.
+Baker proposes a similar solution against this problem of physical access,
+including visits to a building that the verifier physically secures, as you
+read earlier in [Appendix A.8, "Whistleblower
+Programs"](/tracks/verification/verification-infrastructure/human-insiders).
 
 Legal permission, a financial incentive, and a web form do not by themselves
 create a usable route. The route also has to survive monitored devices,
 physical surveillance, conflicts inside the receiving office, and the need for
 safe follow-up.
 
-<PageBreak title="What makes reporting viable" />
+<PageBreak title="What Makes Reporting Viable" />
 
-## Four different levers
+## Mechanism to Effect
 
-{/* The four rows below were a finished table. Every word of them is still the
-    author's — mechanism, source sentence and effect, unedited — but the effect
-    column is now answered rather than read: this was the section's one place
-    where a learner can be wrong in an interesting way (SB 53 binds the
-    developer, the ACM Code binds the individual, and both read as "a duty to
-    report"), and it was delivered pre-answered. Attribution moved from the
-    trailing Sources line into the rows, one document each.
-    See src/lib/verification/data/whistleblower-levers.ts. */}
+{/* The instruction the widget prints is the owner's, in
+    src/lib/verification/data/whistleblower-levers.ts (LEVERS_LEAD). The four
+    rows are unchanged: mechanism, source sentence and effect, hers,
+    unedited, one document cited per row. */}
 
 <VerificationExercise id="whistleblower-levers" />
 
@@ -112,7 +133,15 @@ safe follow-up.
 
 Sources: [Wasil et al.](https://arxiv.org/html/2408.16074), [SB 53, Business and Professions Code §22757.13(c)](https://leginfo.legislature.ca.gov/faces/billNavClient.xhtml?bill_id=202520260SB53), and [ACM Code of Ethics §1.2](https://www.acm.org/binaries/content/assets/about/acm-code-of-ethics-and-professional-conduct.pdf).
 
-## After the report arrives
+## After the Report Arrives
+
+Once the verifier receives the report, there are still careful standards they
+should abide by to ensure that the report's information is protected, used,
+and disclosed without compromising the reporter's confidentiality, the
+integrity of the evidence, or the fairness of what follows for the accused.
+Read the below excerpts from [Quality Standards for
+Investigations](https://www.ignet.gov/sites/default/files/files/Quality%20Standards%20for%20Investigations%20July-2025.pdf)
+for four key principles that a reliable verifier should adhere to.
 
 <ReadingCard
   id="human-cigie-investigation-standard"
@@ -122,10 +151,8 @@ Sources: [Wasil et al.](https://arxiv.org/html/2408.16074), [SB 53, Business and
   year="2025"
   mins="3–4 min"
 >
-  Read Complaint Evaluation, Collecting Evidence, and Reporting on document
-  pages 10–13. The standard requires that “all known relevant material is
-  lawfully obtained, the chain of custody is preserved, and the evidence is
-  admissible.”
+  Read the four qualitative standards: planning, execution, reporting, and
+  information management.
 </ReadingCard>
 
 <PageBreak title="On Paper" />
@@ -168,6 +195,9 @@ revealed after you submit the whole set.
 
     The exercise id still says `human-institutions-judgment`. It is a progress
     key and permanent; it names where the exercise was authored, not where it
-    is read. */}
+    is read.
+
+    The lead sentence above the task and the dropped task number are the
+    owner's 2026-08-18 edits, in data/policy-on-paper.ts (POLICY_TASK). */}
 
 <VerificationExercise id="human-institutions-judgment" />

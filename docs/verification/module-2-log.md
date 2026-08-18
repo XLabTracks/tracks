@@ -1347,3 +1347,126 @@ consistency guideline. Required reading-work: outside any fold, its own
 h2 and part, unbridged (reflection, not a finish event). The lesson's
 estimate rises 15 → 25. Prompts and commentary are OURS PENDING HER
 COPY, flagged in the data file header.
+
+### 2.4 conformed to the owner's edit document (2026-08-18)
+
+Source: her five-page 2.4 PDF ("2.4.pdf"), every instruction applied, plus
+her chat decisions the same day: restricted sources KEEP their link-out
+cards ("don't do anything illicit"), interactivity comes from a 2.0.1-style
+button grid where a source is list-shaped, and the drafted 2.4.3 key
+questions were approved as written.
+
+**Whose words are whose.** Her document supplies, verbatim: the 2.4 intro
+paragraph and all four objectives (replacing our drafted objectives); 2.4.1's
+two framing paragraphs, the sentence between the Baker excerpts, and the
+replacement for the "Human reports can fail" bridge (it now hands off to
+2.4.2); 2.4.2's intro, the before-the-video sentence, the Whistleblower
+Statutes paragraph with its two reading questions, the physical-barriers
+sentence, the Baker-solution replacement, the Mechanism to Effect
+instruction (LEVERS_LEAD), the After the Report Arrives lead (one clause
+ours, at her invitation: "without compromising the reporter's
+confidentiality, the integrity of the evidence, or the fairness of what
+follows for the accused"), and the Companies A and B lead sentence
+(POLICY_TASK.lead; the olympiad "1." task number deleted on the same
+instruction); 2.4.3's pivot intro; 2.4.4's intro and "Explore the below…"
+sentence; and the renamed exercise's intro/task/limit lines
+(missing-board.ts). One grammatical touch-up, flagged here as the deviation
+it is: her "effective implementations whistleblower protections" is
+rendered "effective implementation of whistleblower protections", and her
+"interactive excerpt" for the AIWI guide is rendered "interactive overview"
+because nothing of the guide is excerpted (licence, below). The 2.4.3 key
+questions (four) are ours, approved by her before landing.
+
+**Headings renamed on her list.** "The statutory floor" → "Whistleblower
+Statutes"; "A broader design standard" → "Broader Standards in AI
+Whistleblowing"; "Can the report leave the organization?" → Title Case;
+"Four different levers" → "Mechanism to Effect"; "After the report arrives"
+→ "After the Report Arrives"; "The Missing Board (8–10 min)" → "Exercise:
+From Nuclear to AI Inspections" (time estimate dropped from the title);
+2.4.3's "Source packet" heading deleted (her instruction), 2.4.4's dropped
+with the same logic since its cards stopped being a packet. PageBreak titles
+follow their sections. Her general instruction — capitalize titles,
+normalize subtitle fonts — is now a standing note in CLAUDE.md.
+
+**What was deleted on her list.** 2.4.3's one-case framing paragraph and the
+"One allegation, four sources" framing paragraph (the Four Sources fold
+stays — she deleted the framing, not the exercise); 2.4.2's video moved
+below her new intro. All four optional exercises stay.
+
+**Reproduction decisions, per source — her call, recorded here.**
+
+- California Labor Code ch. 5.1 (§§1107–1107.2): a government edict, no
+  copyright. Reproduced IN FULL in 2.4.2 inside a SourceQuote, replacing the
+  link-out card; text checked verbatim against leginfo this day. Five spans
+  are underlined and open pop-up notes of ours (new `StatuteNote`
+  component) — each names what a span leaves out (carve-outs, covered
+  employee, enumerated recipients, two protected subjects, the equity line),
+  serving her two reading questions without answering them.
+- CIGIE Quality Standards for Investigations (July 2025): U.S. federal work,
+  public domain. The card's blurb now names the four qualitative standards —
+  planning, execution, reporting, information management — and a four-bucket
+  checklist reproduces each standard statement and lead-paragraph sentences
+  VERBATIM (checked against the PDF this day). The three new page-anchor
+  URLs joined the existing one in citations.json `pending`.
+- AIWI/CARMA Best Practice Guide: no licence grants reuse. Card kept; seven
+  checklist buttons carry OUR one-to-two-sentence gists (checked against the
+  page this day), never its prose; the one quoted clause is hers, short,
+  attributed.
+- Wasil et al. (arXiv 2408.16074): arXiv default licence, grants nothing
+  (already recorded in the lesson). Card kept; five buttons, our gists.
+- Brundage et al. (arXiv 2601.11699): checked this day — ALSO the arXiv
+  default licence, not CC BY, so her "embed verbatim" instruction could not
+  be followed; card kept, eight buttons, our gists of the eight design
+  principles.
+- Carlson (Arms Control Association): all rights reserved and not
+  list-shaped; card kept unchanged, no grid.
+
+**New components.** `source-checklist.tsx` (SourceChecklist /
+SourceChecklistItem): the 2.0.1 MechanismGrid grammar plus the read state
+her document asks for — opened items swap Plus for Check and grow a "Read"
+word (glyph AND word, no discs), per-visit state only, persisting nothing.
+`statute-note.tsx` (StatuteNote): an underlined verbatim span that opens a
+few phrases of ours. Both registered in the MDX map.
+
+**Data/widget edits.** whistleblower-levers: LEVERS_LEAD replaced with her
+instruction, the widget's appended "each effect is used once" sentence
+removed (hers covers it). policy-on-paper: POLICY_TASK gains her `lead`,
+loses `n`. missing-board: BOARD_INTRO / BOARD_TASK_LEAD / BOARD_LIMIT
+replaced with her copy; station prompts and reveal commentary still ours
+pending hers.
+
+### 2.4 second pass: the grids come out, the cards say less (2026-08-18)
+
+The owner's same-day revision of the build above, applied in full:
+
+- **All four checklist button grids deleted** — AIWI's seven, Wasil's five,
+  CIGIE's four, Brundage's eight. Her reason on the AIWI one names the
+  principle: with the card instructing the same reading, the grid was
+  duplicated effort. `source-checklist.tsx` had no other consumer and is
+  deleted with them, along with its MDX registrations.
+- **The California statute is a link-out card again.** The verbatim
+  §§1107–1107.2 embed and its five underlined pop-up notes are gone;
+  `statute-note.tsx` went with them (no other consumer). The full statute
+  text, checked against leginfo, is in this branch's history if it is ever
+  wanted back. The "What the contract clause covers" callout stays.
+- **Every 2.4 reading card now says as little as possible** — the read
+  instruction and nothing else, on her rule ("read this list, that's it"):
+  what to read, where it starts and stops. Cut: every "track / mark /
+  identify / record" coaching sentence, and Carlson's "author of 0.3's Iraq
+  paper" context line. The After the Report Arrives card keeps its one
+  informative clause — the four qualitative standards' names — because the
+  lead paragraph promises "four key principles" and the names are the detail
+  that must not be lost.
+- **2.4.3's key questions are bullets, not numbers.**
+- **2.4.1's Table 8 left-column icons are platform red.** The paper's green
+  whistle / chat / magnifier PNGs (image9/6/3 in the 2507.15916v2 assets)
+  are recolored in place to a monochrome #800000 ramp — white stays white,
+  strokes go full brand maroon — which CC BY 4.0 permits. TRAP: these are
+  arxiv:build outputs, so a deliberate rebuild of 2507.15916v2 restores the
+  green originals; re-run the recolor after any rebuild (a luminance→maroon
+  ramp with a 0.92 white cutoff; the one-off script is described here so it
+  can be rewritten in five lines). The A.8 figure (image7.pdf.png) was not
+  touched — her instruction named the left-column layer images.
+- citations.json: the two page-anchor CIGIE URLs the buckets carried left
+  `pending`; the plain-PDF URL stays (her After-the-report paragraph links
+  it).

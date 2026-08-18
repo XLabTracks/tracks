@@ -169,7 +169,7 @@ export const verificationLessons: Lesson[] = [
     slug: "scoping-thresholds",
     moduleId: "v-scoping",
     sectionItemId: "v-scoping-intro",
-    title: "1.0.1 Brief thresholds explainer: compute vs. capability",
+    title: "1.0.1 Drawing the Line: Compute vs. Capability",
     contentRef: "verification/scoping-thresholds",
     estimatedMinutes: 5,
   },

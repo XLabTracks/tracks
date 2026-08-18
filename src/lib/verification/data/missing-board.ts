@@ -1,5 +1,7 @@
 /**
- * 2.4.4 — The Missing Board.
+ * 2.4.4 — "Exercise: From Nuclear to AI Inspections" (renamed from "The
+ * Missing Board" on the owner's 2026-08-18 edit document; ids and storage
+ * keys keep the old name — they are permanent).
  *
  * HER BRIEF (2026-08-15): reflection questions on the Carlson reading —
  * "перенесите на ии, подумайте, проведите аналогии" — built as an
@@ -22,11 +24,13 @@
  * here like the Standard of Proof dockets.
  */
 
+/** The intro and task are the owner's, verbatim from her 2.4 edit document
+ *  (2026-08-18), replacing our earlier "build the address" framing. */
 export const BOARD_INTRO =
-  "In the nuclear regime, Carlson shows, the decision has an address: inspectors find, the Director-General reports, the Board of Governors judges, the Security Council enforces. An AI verification regime has no such address yet.";
+  "In the nuclear regime, the inspection institution has four major steps: inspectors find, the Director-General reports, the Board of Governors judges, and the Security Council enforces. The AI verification regime has no such established process.";
 export const BOARD_TASK_LEAD =
-  "Build the address. For each station, propose who could hold it for AI — today, or in a treaty you would design — and say what the holder would need. Then name where the analogy strains.";
-export const BOARD_LIMIT = "A few sentences per station is enough.";
+  "In this exercise, you will build a similar pipeline for frontier AI inspections, drawing direct parallels with each step in the nuclear inspection process.";
+export const BOARD_LIMIT = "Aim for around a few sentences for each section.";
 
 export interface BoardStation {
   id: string;

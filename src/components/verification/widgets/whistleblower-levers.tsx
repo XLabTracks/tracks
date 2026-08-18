@@ -107,10 +107,7 @@ export function WhistleblowerLevers({}: VerificationWidgetProps) {
 
   return (
     <div className="not-prose my-6 space-y-4">
-      <p className="text-sm leading-relaxed">
-        {LEVERS_LEAD} Give each one the effect it produces — each effect is used
-        once.
-      </p>
+      <p className="text-sm leading-relaxed">{LEVERS_LEAD}</p>
 
       <ol className="space-y-3">
         {LEVERS.map((lever) => {

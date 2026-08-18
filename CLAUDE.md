@@ -607,6 +607,15 @@ rose`, or Okabe–Ito). Those read as stock AI slop against the maroon, which is
 - **Bloom levels are gone on purpose.** They are curriculum-design vocabulary,
   not a learner's. If you need a second channel beside a module hue, use the
   module number — that is what the star numerals carry.
+- **Headings are Title Case, and heading levels keep their one type scale.**
+  The course owner's standing instruction (2.4 edit document, 2026-08-18):
+  section headings capitalize as titles — "After the Report Arrives", never
+  "After the report arrives" — and a lesson's h2/h3/h4 render at the type
+  scale their level owns, with no per-lesson font overrides that make one
+  lesson's subtitles a different size from its neighbours'. When touching a
+  lesson, bring its headings and its PageBreak titles (the part-strip labels)
+  up to this rather than matching whatever mixed case sits nearby. Module 2.4
+  is conformed; sweep others as they are edited.
 
 Traps that cost time already, so they are written down:
 

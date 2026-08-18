@@ -1,42 +1,35 @@
-A pause treaty needs a trigger — a measurable line that determines which training runs are covered. Two candidate metrics dominate: how much compute goes into training a model, and what the model is capable of. This section only draws the distinction; the deeper treatment of capability measurement lives in the Evals module link.
+Any treaty that regulates the development of advanced AI needs some sort of evidentiary threshold to determine what exactly advanced AI *is*. A model that uses a certain level of compute? Or exhibits some specific dangerous capability? A threshold can be *overinclusive*, wasting resources regulating harmless models, or *underinclusive*, not covering dangerous models. This section will brief you on why quantitative compute FLOP thresholds are typically the most tractable and ideal for stricter regulatory agreements, while capability thresholds may be more relevant for softer treaties.
 
-#### Compute thresholds (input metric)
+### Compute vs. Capability Thresholds
 
-The line is drawn at total training compute, in FLOP. Examples in current policy: the [EU AI Act's 10²⁵ FLOP systemic-risk presumption](https://artificialintelligenceact.eu/article/51/) and the [10²⁶ FLOP reporting threshold in the now-rescinded US EO 14110](https://en.wikipedia.org/wiki/Executive_Order_14110).
+The two contenders for operational thresholds are compute and capability. The table below pairs them: where an arrow runs, a strength of one metric is the mirror of the other's weakness — compute's black-and-white definitiveness is exactly what capability lacks, and capability's directness is exactly what compute gives up.
 
-Pros
+| Compute | | Capability |
+| --- | :---: | --- |
+| *Definition.* The line is drawn at total training compute, in FLOP. Examples in current policy: the [EU AI Act's 10²⁵ FLOP systemic-risk presumption](https://artificialintelligenceact.eu/article/51/) and the [10²⁶ FLOP reporting threshold in the now-rescinded US EO 14110](https://en.wikipedia.org/wiki/Executive_Order_14110). | | *Definition.* The line is drawn at what the model can do — e.g. is capable of engineering a deadly pathogen that can infect humans en masse. |
+| **Pro.** Black-and-white: a FLOP count is an enforceable threshold without ambiguity ([GovAI](https://www.governance.ai/research-paper/training-compute-thresholds-features-and-functions-in-ai-regulation)). | ⇄ | **Con.** Evals are currently unreliable and qualitatively ambiguous — sensitive to prompting and elicitation effort, plagued by contamination, with no consensus on what score means "dangerous" ([Can We Trust AI Benchmarks?](https://arxiv.org/html/2502.06559v1)). |
+| **Pro.** Measurable early and externally verifiable: you can check it before and during a training run, not just after, which is what treaty enforcement requires. | ⇄ | **Con.** Measured too late: capabilities are assessed after training, when the thing a pause is meant to prevent already exists. <br /><br /> **Con.** Hard to verify externally: a contestable measurement makes a weak treaty trigger ([Oxford AIGI survey](https://aigi.ox.ac.uk/wp-content/uploads/2025/08/Survey_on_thresholds_for_advanced_AI_systems_1.pdf)). |
+| **Con.** Algorithmic efficiency improvements can make compute thresholds underinclusive: models trained below the line can gain the risky capabilities the threshold is trying to regulate ([Hooker](https://arxiv.org/html/2407.05694v1); [Institute for Law & AI](https://law-ai.org/the-role-of-compute-thresholds-for-ai-governance/)). Regulators partly compensate by making thresholds adjustable ([the EU Commission can amend its figure by delegated act](https://artificialintelligenceact.eu/article/51/)). <br /><br /> A fixed FLOP threshold loosens on its own: at [Epoch AI's estimated 3× per year efficiency gain](https://epoch.ai/blog/algorithmic-progress-in-language-models), distillation, checkpoint upcycling, and shifting work into inference all lower reported training compute without lowering capability. Reasoning models and synthetic-data pipelines put large amounts of compute outside what a treaty would ordinarily count as a training run. | ⇄ | **Pro.** Measures danger more directly than compute by targeting the specific qualitative harms models may enact. |
 
-- Objective and black-and-white — a FLOP count is a number: an enforceable threshold without ambiguity ([GovAI](https://www.governance.ai/research-paper/training-compute-thresholds-features-and-functions-in-ai-regulation)).
-- Measurable early and externally verifiable — you can check it before and during a training run, not just after, which is what treaty enforcement requires.
-- Correlates with capability and risk — imperfectly, but usefully.
+### When Should Treaties Use Compute vs. Capability?
 
-Cons
+In the event of pursuing a full or temporary pause, the treaty is focused on hard-line enforcement, which favors the objectivity of a compute threshold. Each party needs to definitively recognize which models to shut off, and they need to trust that their counterpart is following the same rule — which you only get with a black-and-white FLOP line. Timelines will also be tighter and less negotiable with a pause-based agreement, given its urgency: regulators cannot afford to deal with potentially wishy-washy capability definitions.
 
-- It's a proxy, and proxies can be gamed. Algorithmic efficiency improvements mean models trained below the line keep getting more capable — a fixed FLOP number silently loosens over time, and developers can deliberately optimize under it ([Hooker](https://arxiv.org/html/2407.05694v1); [Institute for Law & AI](https://law-ai.org/the-role-of-compute-thresholds-for-ai-governance/)).
-  - Regulators partly compensate by making thresholds adjustable (the EU Commission can amend its figure by delegated act).pl
+If we're not focusing on a full pause, and more so on domestic enforcement and lighter observation- and resource-sharing-based policies, then capability thresholds can more realistically come into the picture. If regulators believe they have the time to pace development and experiment with evaluations, the definitional specificity of qualitative capabilities can be useful for knowledge.
 
-#### Capability thresholds (output metric)
+For the purposes of this course, we will mainly focus on compute thresholds: they have historical precedent, they are straightforward to operationalize, and they are the most relevant choice for pause-style agreements — and we orient around a pause because it encompasses the maximum possible range of verification possibilities and difficulties.
 
-The line is drawn at what the model can do — e.g. "provides meaningful bioweapons uplift." In principle this is a closer heuristic to the dangers we actually care about.
+<Fold label="Fuzzy Numbers: The Threshold Test Ban Treaty">
 
-Pros
+This treaty capped underground nuclear tests at 150 kilotons. You could not directly observe yield, so verification rested on seismic measurement plus, eventually, agreed calibration and on-site hydrodynamic measurement under the 1990 protocol. Early on, US estimates of Soviet yields were disputed precisely because converting a seismic signal into a yield number carries uncertainty.
 
-- Measures danger more directly than compute by targeting the specific qualitative harms models may enact
+</Fold>
 
-Cons
+<Fold label="More on Evals and Their Limitations">
 
-- Evals are currently unreliable and qualitatively ambiguous — sensitive to prompting and elicitation effort, plagued by contamination, with no consensus on what score means "dangerous" ([Can We Trust AI Benchmarks?](https://arxiv.org/html/2502.06559v1)).
-- Measured too late — capabilities are assessed after training, when the thing a pause is meant to prevent already exists.
-- Hard to verify externally — a contestable measurement makes a weak treaty trigger ([Oxford AIGI survey](https://aigi.ox.ac.uk/wp-content/uploads/2025/08/Survey_on_thresholds_for_advanced_AI_systems_1.pdf)).
+If you're interested in learning more about evals and their limitations, here are some resources:
 
-#### Why this track uses compute
+- [Towards understanding-based safety evaluations](https://www.alignmentforum.org/posts/uqAdqrvxqGqeBHjTP/towards-understanding-based-safety-evaluations) (Alignment Forum)
+- [We need a science of evals](https://www.apolloresearch.ai/science/we-need-a-science-of-evals) (Apollo Research)
 
-Capability measures the dangers from superintelligence we actually care about, and the trouble is that we're bad at measuring it. Evaluations are unreliable, results shift with prompting and scaffolding, and every judgment call is a seam a rival can dispute. “Our model passed our test" is a claim you're asked to take on faith.
-
-Compute is only a proxy. No particular number of arithmetic operations is dangerous by itself. But compute is physical. It runs on chips from a handful of factories, draws megawatts of power, and lives in buildings visible from orbit. You can count it, and, more importantly, your rival can count it without trusting your word.
-
-So: compute measures roughly the wrong thing precisely; capability measures the right thing badly. Because a treaty trigger must be verifiable and enforceable between parties who don't trust each other, this course, like most current policy, uses a black-and-white FLOP threshold as the operative line.
-
-This is an old move, not an AI compromise. In 1963 the Limited Test Ban Treaty banned nuclear tests in the atmosphere, in space, and underwater, but left underground tests alone. The reason was pure verification: atmospheric fallout could be detected worldwide without anyone's permission, while underground tests could not be told apart from earthquakes at the time. The treaty covered exactly what national technical means could see and permitted what they could not. Compute is our atmospheric fallout: not the thing we fear, but the thing a rival can measure without trusting our word.
-
-The FLOP threshold has a known weakness we'll return to in Module 3: better algorithms let an actor stay honestly under the threshold and still reach dangerous capability, so any fixed number erodes over time.
+</Fold>

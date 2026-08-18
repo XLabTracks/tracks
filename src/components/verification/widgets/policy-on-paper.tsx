@@ -112,10 +112,8 @@ export function PolicyOnPaper({
 
   return (
     <div className="not-prose my-6 space-y-4">
-      <p className="text-sm leading-relaxed">
-        <span className="font-semibold">{POLICY_TASK.n}.</span>{" "}
-        {POLICY_TASK.instruction}
-      </p>
+      <p className="text-sm leading-relaxed">{POLICY_TASK.lead}</p>
+      <p className="text-sm leading-relaxed">{POLICY_TASK.instruction}</p>
 
       <div role="tablist" aria-label="Regime" className="flex flex-wrap gap-2">
         {[...POLICY_COMPANIES, POLICY_DEMANDS].map((c) => {

@@ -97,6 +97,9 @@ export const WHISTLEBLOWER_LEVERS: WhistleblowerLever[] = [
   },
 ];
 
-/** Her sentence above the table, which is the instruction the task rests on. */
+/** Her instruction above the rows — the 2026-08-18 edit document's wording,
+ *  verbatim, replacing the earlier one-sentence lead. The widget prints this
+ *  alone; the four modes it names are the four effects, in her order of
+ *  mention, not the rows' order. */
 export const LEVERS_LEAD =
-  "These sources describe four mechanisms that should not be treated as interchangeable.";
+  "The sources you have read so far describe four main buckets of mechanisms to protect whistleblowers. Map each mechanism to its main mode of leverage: whether it appeals to personal incentives, places a duty on the AI developer, appeals to upholding professional conduct, or utilizes legal remedies.";

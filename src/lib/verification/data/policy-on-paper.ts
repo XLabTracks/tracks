@@ -319,14 +319,13 @@ export const POLICY_DEMANDS: DemandTab = {
 
 /**
  * The task, stated where a task belongs — above the material, inside the
- * exercise, in the form an olympiad paper uses: a number, an imperative
- * instruction, and nothing else. No framing sentence, no reason the task is
- * interesting, no account of what it will teach. The lesson body above the
- * fold now says nothing at all about it, which is right: a problem that needs
- * an introduction has not been stated.
+ * exercise. The lead sentence is the owner's (2026-08-18 edit document),
+ * placed directly before "Every statement below…" on her instruction; the
+ * task number went in the same edit, so `n` is gone and the widget prints
+ * the two sentences as prose.
  */
 export const POLICY_TASK = {
-  n: "1",
+  lead: "Now, apply everything you have learned to an exercise with two organizations—A and B—where you will categorize provisions, articulate the incentives each set of rules creates, brainstorm additional evidence pipelines to quality-check the reporting institution, and steelman the points you make throughout.",
   instruction:
     "Every statement below concerns the reporting regime of one of two organisations, A or B, or is a demand made by employees of those organisations. Determine what kind of claim each statement is. Commit each set, then answer the two questions that follow.",
 };

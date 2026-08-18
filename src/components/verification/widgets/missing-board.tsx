@@ -18,7 +18,8 @@ import {
 import type { VerificationWidgetProps } from "../kit/types";
 
 /**
- * 2.4.4 — The Missing Board. The Carlson reading's reflection questions as a
+ * 2.4.4 — "Exercise: From Nuclear to AI Inspections" (born "The Missing
+ * Board"; ids keep that name). The Carlson reading's reflection questions as a
  * construction: transfer each station of the nuclear decision chain to AI
  * (write-in), write the standard, name the strain; submit freezes and opens
  * the commentary — never a marking. Content and design notes live in the

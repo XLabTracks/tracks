@@ -268,7 +268,13 @@ export const RINGS: Ring[] = [
   {
     id: "declares",
     name: "Declares",
-    test: "You own or use large-scale compute, so the regime requires a declaration from you. You are the Prover.",
+    // BOTH HALVES, OR THE STATES ARE UNPLACEABLE. The test used to name only
+    // compute owners, and a learner reading it would put a government on the
+    // verifying ring every time — it is a government, and governments check
+    // things. The paper's own answer is that in an international agreement
+    // the signatory IS the Prover, and a test that hides that half marks the
+    // learner wrong for reading carefully.
+    test: "You own or use large-scale compute — or you signed the agreement and answer for what happens inside your territory. Either way the regime wants a declaration from you: you are the Prover.",
     // TWO QUOTES, AND THE RING NEEDS BOTH — this is where the states landed.
     // The framework runs at two levels: a signatory government is the Prover
     // to the other signatory, and the organizations inside it declare in
@@ -539,7 +545,12 @@ export const CORE_QUESTION = {
       id: "signatories",
       text: "The states that signed the agreement.",
       correct: false,
-      why: "“Not the people who signed. Governments do not train frontier models.” Put them in the centre and the map says the treaty regulates its own signatories, which is the misreading the whole section is written against.",
+      // The distractor now has to do a second job. Since the states arrived,
+      // the signatories DO sit on the innermost ring, and a learner who has
+      // just been told "not the people who signed" will read that as the map
+      // contradicting the page. It does not, and the difference is the whole
+      // frame: owing the declaration and doing the act are different things.
+      why: "“Not the people who signed. Governments do not train frontier models.” Centre them and the map says the treaty regulates its own signatories rather than an activity. Then watch for what looks like a contradiction two steps from now: the signatories do end up on the innermost RING, because in an international agreement the party that owes the declaration is the government. Owing a declaration and performing the act are different things, and the centre is the act.",
     },
     {
       id: "labs",

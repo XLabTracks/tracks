@@ -200,7 +200,10 @@ export const verificationLessons: Lesson[] = [
     moduleId: "v-scoping",
     title: "1.2 Actors: who does the treaty rely upon, apply to, and constrain?",
     contentRef: "verification/scoping-actors",
-    estimatedMinutes: 60,
+    // 60 was the figure before the workshop grew to seventeen actors and
+    // seven steps. Five tables and the prose around them are ~35 minutes on
+    // their own; the workshop's own heading now says 45–60.
+    estimatedMinutes: 95,
   },
   {
     id: "v-scoping-upstream-downstream",

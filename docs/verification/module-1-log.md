@@ -1059,3 +1059,67 @@ deliberately wrong learner placement too.
 
 Storage is `v-actor-workshop:v4`. A v3 document survives prune intact and is
 worse for it — a map reporting itself finished with seven actors unplaced.
+
+### Pedagogy pass after the states landed, and the empty sheet
+
+Asked to check the pedagogy and logic again. Five things, four of them
+introduced by adding the states.
+
+**The ring test made the states unplaceable.** "Declares — you own or use
+large-scale compute" points at compute owners, and a learner reading it puts a
+government on the verifying ring every time, because it is a government and
+governments check things. The paper's own answer is the other half — in an
+international agreement the signatory IS the Prover — and a test that hides
+that half marks a careful reader wrong. The test says both now.
+
+**The brief asked a question the map no longer answers.** It said "draw the
+map that tells you who has to change what they do", which is the section's
+opening question and not what these rings are about. The brief now chains the
+two: the section asks who changes their behaviour on Wednesday morning, the
+map asks the one after it — when the three months are up, who could *show*
+that they did, and who could show that somebody did not.
+
+**"Not the people who signed" now looks like a contradiction, and had to stop
+looking like one.** The lesson's third paragraph says governments do not train
+frontier models; two steps later the map puts both signatories on the
+innermost ring. Both are true and the difference is the whole frame — owing a
+declaration and performing the act are different things — so the core
+question's signatories option says it outright and warns the reader that the
+apparent contradiction is coming.
+
+**The reveals were 3,076 words.** Measured, not estimated. The placement
+reveal alone was 777 across seventeen rows, most of it explaining placements
+the reader had already got right. A correct placement needs the ring's name
+and nothing else — the name IS the explanation — so hits collapse to one line
+and misses print in full, with a control that opens everything for anyone
+checking their reasoning rather than their answer. It defaults to open when
+nothing was missed, because then the filter has nothing to hide. Same rule on
+the edge reveal. Measured after: a reader who missed three of seventeen sees
+562 words instead of 1,235.
+
+**The closing finding moved from step 6 to step 7.** It is a reading of the
+finished board — count the edges, count the arrowheads, count what has no edge
+and what has no node — and step 7 is called Read the map. Leaving it on 6 made
+that step 2,200 words of feedback and made 7 a formality, and it asked the
+reader to count things on a diagram one screen back. Step 6 is 1,661 now and
+step 7 is 1,508, with the marked map directly above both.
+
+**The heading was lying about the time.** It said 25–30 min, set when the
+board was ten actors and six steps. Seventeen actors, seven steps, ~3,000
+words of reveal, roughly 35 discrete decisions and three written answers is
+45–60, and the lesson's `estimatedMinutes` went 60 → 95. A time figure is
+something people budget by, so understating it is a usability defect and not a
+rounding error.
+
+**And the sheet was empty for the first three steps** — course owner, looking
+at step 3: *"where dots"*. Four bare circles and a dot in the middle, on a
+canvas that had just been enlarged for seventeen actors. It reads as a broken
+widget, and it is not how the workshop this is built on works: the
+stakeholders are on the table from the first minute, on stickers, off to one
+side, and placing them is the step. Every unplaced actor now sits in a staging
+band outside the outer ring and moves inward when it is placed. No fifth ring
+is drawn there on purpose — there are four rings and a fifth circle would say
+there are five; what marks the band is being outside every ring, which is a
+position rather than a colour. Checked with the overlap probe at three widths,
+on an empty board, a half-placed board and a wrong one: zero overlapping
+labels and nothing clipped, in both themes.

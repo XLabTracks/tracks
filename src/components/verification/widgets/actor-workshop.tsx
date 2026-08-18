@@ -274,6 +274,19 @@ const RADII: Record<RingId, number> = {
   undeclared: 278,
 };
 
+/* WHERE AN ACTOR SITS BEFORE IT HAS BEEN PLACED.
+   The sheet used to be empty until step 4 — four bare circles and a dot in
+   the middle for the first three steps, which on a big canvas reads as a
+   broken widget rather than as an invitation. It is also not how the paper
+   workshop this is built on works: the stakeholders are on the table from the
+   first minute, written on stickers, off to one side, and placing them IS the
+   step. So every unplaced actor sits out here, and moves inward when the
+   learner places it.
+   No ring is drawn at this radius on purpose. There are four rings and a
+   fifth circle would say there are five; what marks this band is that it is
+   outside every ring, which is a position rather than a colour. */
+const STAGING = 340;
+
 export function ActorWorkshop({}: VerificationWidgetProps) {
   const [saved, persist, hydrated] = useStoredState(STORAGE_KEY, EMPTY, prune);
   const [openRoster, setOpenRoster] = useState(false);
@@ -343,9 +356,12 @@ export function ActorWorkshop({}: VerificationWidgetProps) {
         <p className="eyebrow text-muted-foreground">The brief</p>
         <p className="mt-1.5 text-sm leading-relaxed">
           Two governments have agreed: no training runs above a compute
-          threshold for three months. Draw the map that tells you who has to
-          change what they do — and build it from memory, because a map you can
-          look up is one you have not learned.
+          threshold for three months. The section&rsquo;s question is who has to
+          change what they do on Wednesday morning. The map asks the one that
+          comes after it: when the three months are up, who could{" "}
+          <em>show</em> that they did — and who could show that somebody did
+          not. Build it from memory, because a map you can look up is one you
+          have not learned.
         </p>
       </div>
 
@@ -819,6 +835,10 @@ function PlaceStep({
   onCommit: () => void;
   onNext: () => void;
 }) {
+  // View state for the reveal, not work: which reasons are expanded. It lives
+  // here rather than in the stored document because reopening the workshop
+  // should not restore a filter, and nothing about it is an answer.
+  const [showAll, setShowAll] = useState(false);
   const actor = WORKSHOP_ACTORS.find((a) => a.id === active) ?? WORKSHOP_ACTORS[0]!;
   return (
     <div className="space-y-4">
@@ -854,22 +874,58 @@ function PlaceStep({
       </div>
 
       {done ? (
+        /* THE REASON IS PRINTED WHERE IT IS NEEDED, not seventeen times.
+           At ten actors this list was ten short paragraphs and nobody
+           noticed; at seventeen it is 777 words of feedback, most of it
+           explaining placements the reader already made correctly. A correct
+           placement needs the ring's name and nothing else — the ring name IS
+           the explanation — and a wrong one needs the whole reason. So misses
+           print in full and hits collapse to one line, with a control that
+           opens all of them for anyone who wants to check their reasoning
+           rather than their answer. It defaults to open when nothing was
+           missed, because then there is nothing to filter and hiding the only
+           content on the step would be perverse. */
         <div className="space-y-3">
-          <p className="text-sm">
-            <span className="font-semibold">
-              {right} of {WORKSHOP_ACTORS.length}
-            </span>{" "}
-            on the ring this map puts them on.
-          </p>
+          <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
+            <p className="text-sm">
+              <span className="font-semibold">
+                {right} of {WORKSHOP_ACTORS.length}
+              </span>{" "}
+              on the ring this map puts them on.
+            </p>
+            {right < WORKSHOP_ACTORS.length ? (
+              <button
+                type="button"
+                onClick={() => setShowAll((v) => !v)}
+                className="text-muted-foreground hover:text-foreground text-xs underline underline-offset-4"
+                aria-pressed={showAll}
+              >
+                {showAll
+                  ? "Only what you missed"
+                  : "Show the reasoning for all seventeen"}
+              </button>
+            ) : null}
+          </div>
           <ol className="space-y-3">
             {WORKSHOP_ACTORS.map((a) => {
               const mine = rings[a.id];
               const key = RING_KEY[a.id as keyof typeof RING_KEY];
               const ok = mine === key;
+              const full = !ok || showAll || right === WORKSHOP_ACTORS.length;
               return (
-                <li key={a.id} className="[&+li]:border-border [&+li]:border-t [&+li]:pt-3">
+                <li
+                  key={a.id}
+                  className={cn(
+                    full
+                      ? "[&+li]:border-border [&+li]:border-t [&+li]:pt-3"
+                      : "!mt-1",
+                  )}
+                >
                   <p className="text-sm">
-                    <span className="font-semibold">{a.name}</span>{" "}
+                    <span className={full ? "font-semibold" : undefined}>
+                      {ok ? "✓ " : ""}
+                      {a.name}
+                    </span>{" "}
                     <span className={ok ? "text-comply" : "text-defect"}>
                       {ok
                         ? RINGS.find((r) => r.id === key)!.name
@@ -878,9 +934,11 @@ function PlaceStep({
                           }`}
                     </span>
                   </p>
-                  <p className="text-muted-foreground mt-0.5 text-sm leading-relaxed">
-                    {RING_WHY[a.id as keyof typeof RING_WHY]}
-                  </p>
+                  {full ? (
+                    <p className="text-muted-foreground mt-0.5 text-sm leading-relaxed">
+                      {RING_WHY[a.id as keyof typeof RING_WHY]}
+                    </p>
+                  ) : null}
                 </li>
               );
             })}
@@ -1334,20 +1392,41 @@ function EdgesVerdict({
   perSubgoal: { subgoal: (typeof SUBGOALS)[number]; edges: typeof EDGE_KEY }[];
   onNext: () => void;
 }) {
+  /* Same rule as the placement reveal: the mechanism and its quote print for
+     an edge the reader did not draw, and collapse to a line for one they
+     did. This block is the longest thing in the workshop — six hundred words
+     of edges before the notes and the finding — and most of it explains work
+     the reader has already done. Opening it all is one press away, and it is
+     open by default when every edge was found, because then the filter has
+     nothing to hide and would hide the whole step. */
+  const [showAll, setShowAll] = useState(false);
+  const perfect = score.found.length === EDGE_KEY.length;
   return (
     <div className="space-y-4">
-      <p className="text-sm">
-        <span className="font-semibold">
-          {score.found.length} of {EDGE_KEY.length}
-        </span>{" "}
-        edges in the key.
-        {score.reversed.length
-          ? ` ${score.reversed.length} drawn the other way round.`
-          : ""}
-        {score.extra.length
-          ? ` ${score.extra.length} the key does not have.`
-          : ""}
-      </p>
+      <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
+        <p className="text-sm">
+          <span className="font-semibold">
+            {score.found.length} of {EDGE_KEY.length}
+          </span>{" "}
+          edges in the key.
+          {score.reversed.length
+            ? ` ${score.reversed.length} drawn the other way round.`
+            : ""}
+          {score.extra.length
+            ? ` ${score.extra.length} the key does not have.`
+            : ""}
+        </p>
+        {perfect ? null : (
+          <button
+            type="button"
+            onClick={() => setShowAll((v) => !v)}
+            className="text-muted-foreground hover:text-foreground text-xs underline underline-offset-4"
+            aria-pressed={showAll}
+          >
+            {showAll ? "Only what you missed" : "Show every mechanism"}
+          </button>
+        )}
+      </div>
 
       {/* The key, grouped by the subgoal each edge completes — which is the
           only grouping that makes the weak-link reading possible, and the one
@@ -1396,12 +1475,16 @@ function EdgesVerdict({
                         )}
                       </span>
                     </p>
-                    <p className="text-muted-foreground mt-1 text-sm leading-relaxed">
-                      {edge.what}
-                    </p>
-                    {edge.baker.map((q) => (
-                      <BakerLine key={q.text.slice(0, 32)} {...q} />
-                    ))}
+                    {!got || showAll || perfect ? (
+                      <>
+                        <p className="text-muted-foreground mt-1 text-sm leading-relaxed">
+                          {edge.what}
+                        </p>
+                        {edge.baker.map((q) => (
+                          <BakerLine key={q.text.slice(0, 32)} {...q} />
+                        ))}
+                      </>
+                    ) : null}
                   </li>
                 );
               })}
@@ -1461,19 +1544,8 @@ function EdgesVerdict({
         </ol>
       </div>
 
-      <div className="border-border rounded-xl border p-4">
-        <p className="text-sm font-semibold">{EDGE_FINDING.title}</p>
-        {EDGE_FINDING.body.map((para) => (
-          <p key={para.slice(0, 24)} className="mt-2 text-sm leading-relaxed">
-            {para}
-          </p>
-        ))}
-        <BakerLine {...EDGE_FINDING.weakLink} />
-        <BakerLine {...EDGE_FINDING.redundancy} />
-      </div>
-
       <Button size="sm" onClick={onNext}>
-        Continue
+        Read what it says
       </Button>
     </div>
   );
@@ -1514,6 +1586,24 @@ function MapStep({
             {para}
           </p>
         ))}
+      </div>
+
+      {/* THE EDGE FINDING BELONGS HERE, not at the end of the step that drew
+          them. It is a reading of the finished board — count the edges, count
+          the arrowheads, count what has no edge and what has no node — and
+          this is the step called Read the map. Leaving it on step 6 made that
+          step 2,200 words of feedback and this one a formality, and it asked
+          the reader to count things on a diagram that was one screen back.
+          The marked map is directly above these paragraphs. */}
+      <div className="border-border rounded-xl border p-4">
+        <p className="text-sm font-semibold">{EDGE_FINDING.title}</p>
+        {EDGE_FINDING.body.map((para) => (
+          <p key={para.slice(0, 24)} className="mt-2 text-sm leading-relaxed">
+            {para}
+          </p>
+        ))}
+        <BakerLine {...EDGE_FINDING.weakLink} />
+        <BakerLine {...EDGE_FINDING.redundancy} />
       </div>
 
       {/* Beeck draw rings to "anticipate second-order effects", and the
@@ -1662,22 +1752,27 @@ function RingMap({
     return (-90 + STEP_DEG / 2 + STEP_DEG * i) * (Math.PI / 180);
   };
 
-  /** Where an actor's dot is, or null when it is not on the board yet. */
-  const pointOf = (id: string): { x: number; y: number } | null => {
+  /** Where an actor's dot is. Unplaced actors are in the staging band, so
+      this never returns null — but an edge to a staged actor is still not
+      drawn, because a line to something nobody has placed claims nothing. */
+  const radiusOf = (id: string) => {
     const ring = rings[id];
-    if (!ring) return null;
+    return ring ? RADII[ring] : STAGING;
+  };
+  const pointOf = (id: string): { x: number; y: number } | null => {
+    if (!rings[id]) return null;
     const angle = angleOf(id);
-    return { x: CX + Math.cos(angle) * RADII[ring], y: CY + Math.sin(angle) * RADII[ring] };
+    return { x: CX + Math.cos(angle) * radiusOf(id), y: CY + Math.sin(angle) * radiusOf(id) };
   };
 
   return (
     <div className="border-border bg-card mx-auto max-w-[860px] overflow-x-auto rounded-xl border p-2">
       {/* The viewBox is cropped to the drawing, not to a round number.
-          Content spans y 62..628 — the outer ring's own label down to the
-          bottom of that ring — and the top edge is 54 rather than 62 because
-          a 10px label's ascenders reach above its baseline. */}
-      <svg viewBox="0 54 960 582" className="mx-auto block h-auto w-full min-w-[560px]" role="img"
-        aria-label="Concentric actor map: the regulated training run at the centre, actors on four rings around it — who declares, who holds evidence, who verifies, and what no declaration covers — with edges drawn between actors that can produce evidence about one another">
+          Content spans y 10..690 — the staging band at the top down to the
+          same band at the bottom — and the top edge is 2 rather than 10
+          because an 11px label's ascenders reach above its baseline. */}
+      <svg viewBox="0 2 960 696" className="mx-auto block h-auto w-full min-w-[560px]" role="img"
+        aria-label="Concentric actor map: the regulated training run at the centre, actors on four rings around it — who declares, who holds evidence, who verifies, and what no declaration covers. Actors not yet placed wait outside the outer ring. Edges join actors that can produce evidence about one another.">
         {[...RINGS].reverse().map((ring) => (
           <g key={ring.id}>
             <circle
@@ -1748,9 +1843,9 @@ function RingMap({
 
         {WORKSHOP_ACTORS.map((actor) => {
           const ring = rings[actor.id];
-          if (!ring) return null;
+          const staged = !ring;
           const angle = angleOf(actor.id);
-          const r = RADII[ring];
+          const r = radiusOf(actor.id);
           const x = CX + Math.cos(angle) * r;
           const y = CY + Math.sin(angle) * r;
           const outward = Math.cos(angle) >= 0 ? 1 : -1;
@@ -1765,9 +1860,15 @@ function RingMap({
               <circle
                 cx={x}
                 cy={y}
-                r={absent ? 4.5 : lit ? 5 : 3.5}
+                r={absent ? 4.5 : lit ? 5 : staged ? 3 : 3.5}
                 style={{
-                  fill: absent ? "none" : lit ? lensColor : "var(--foreground)",
+                  fill: absent
+                    ? "none"
+                    : lit
+                      ? lensColor
+                      : staged
+                        ? "var(--muted-foreground)"
+                        : "var(--foreground)",
                   stroke: absent ? "var(--muted-foreground)" : undefined,
                   strokeWidth: absent ? 1.25 : undefined,
                   strokeDasharray: absent ? "3 2" : undefined,
@@ -1781,7 +1882,11 @@ function RingMap({
                 style={{
                   fontSize: 11,
                   fontWeight: lit ? 600 : 400,
-                  fill: lit ? lensColor : "var(--foreground)",
+                  fill: lit
+                    ? lensColor
+                    : staged
+                      ? "var(--muted-foreground)"
+                      : "var(--foreground)",
                   opacity: lens && !lit ? 0.35 : 1,
                 }}
               >
@@ -1795,7 +1900,8 @@ function RingMap({
         <p className="text-muted-foreground px-2 pt-1 pb-1 text-xs leading-relaxed">
           Rings run outward from the compute use the agreement forbids: who has
           to declare it, who holds evidence about the declaration, who checks
-          it, and what no declaration covers. The centre is the paper’s own
+          it, and what no declaration covers. Anything still waiting outside
+          the outer ring has not been placed. The centre is the paper’s own
           scope — “{CENTRE.baker.text}” (Baker et al., {CENTRE.baker.where}).
         </p>
       ) : null}

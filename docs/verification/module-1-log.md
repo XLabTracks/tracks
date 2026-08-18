@@ -620,3 +620,63 @@ mouth carries no quotation marks at all.
 Storage bumped to `v-actor-workshop:v2` — a restored v1 draft would be an
 answer to a question no longer on screen. The notes and the new self-marking
 have their own permanent keys.
+
+### The reading column takes the width, and footnotes became popups (2026-08-15)
+
+Two owner instructions that turned out to be one decision: "текст должен быть
+на всю ширину экрана, которая не занята другим" and "а сноска — поп апами".
+Reserving a right-hand gutter for footnote sidenotes is part of what kept the
+column narrow, so notes that open over the text are what let the text have the
+width.
+
+**Two caps were stacked, and both are off.** Measured before touching
+anything, at a 1700px viewport: `main` was 1316px, the item page's
+`max-w-4xl` wrapper cut the lesson body to 832, and app-bridge.css's 64ch
+reading measure cut paragraphs to 644 inside that. Text was using under half
+the space it had. Now: lesson body 1252, paragraphs 1252, nothing left over.
+At 1280 the wrapper was never the binder — paragraphs went 644 → 832 there.
+
+The measure rules are kept in place set to `none` rather than deleted, so the
+decision has somewhere to live and one value brings it back. **The stated
+cost**: at 1700px a line runs about 125 characters, well past the W3C's
+80-character guidance, and that is a trade she made knowingly rather than a
+detail nobody noticed.
+
+The `--vt-measure` card — the red header a paragraph gets when it introduces a
+four-plus-item list — lost its cap too, and had to: its whole reason for
+existing is that the header and its list take the same length, and the list is
+unbounded now. Verified: header 1252, list 1252.
+
+**The footnote is a popup at its own marker.** `<Footnote>` is now a client
+component over the ui kit's Popover, reusing `useGlossHoverTimers` — the
+glossary card's own hook — so the open and close delays cannot drift from the
+other small explanation on the same page. Hover-intent on a mouse, tap on
+touch, Enter/Space from the keyboard, Escape and outside-click to dismiss; a
+hover open never moves focus, a keyboard open does so Tab reaches links inside
+the note. All four inputs driven and verified. The sidenote float and the
+checkbox/label toggle are gone from globals.css; the CSS counter stays, so
+numbering still needs no per-instance registration.
+
+She had offered the hover card as an alternative to a footnote. It is the same
+thing now — the mechanism is the popup, the authoring API is still
+`<Footnote>`, and no glossary entry is needed, which matters because a
+glossary entry is a definition and those are hers to write.
+
+**Two defects found and fixed while verifying, both mine.**
+
+- `PopoverContent` is `flex flex-col gap-2.5`, so the note's inline run became
+  a column: every text fragment and every link on its own line with a gap.
+  Wrapped in one block child.
+- Widening exposed a table defect that was always there. `.lesson-body table`
+  is a block-level scroll box, so its rows lay out in an anonymous table that
+  shrinks to content — at 1252px the header rule stopped 116px short of the
+  box and the table read as broken. `width: 100%` on the last cell lets auto
+  layout hand the slack to that column, and is ignored when the columns
+  genuinely need more room, so tables that must scroll still do: verified at
+  390px, where two of 1.2's five still scroll and the page never does.
+  min-width on the row groups, width on the rows and max-content on the table
+  were each tried and measured first; none of them moved it.
+
+**Not changed, and worth a decision:** the module and assessment pages still
+carry `max-w-3xl`/`max-w-4xl`. Only the lesson item page was widened, because
+that is what she was looking at.

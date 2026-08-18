@@ -769,6 +769,23 @@
    are short words, so the narrow-screen risk the block scroller guards
    against does not arise here. The theories-of-change widget repeats this
    scheme — change one and change the other. */
+/* The last column absorbs the slack.
+   `.lesson-body table` is a block-level scroll box, so its rows are laid out
+   in an anonymous table that shrinks to its content: on a wide screen the
+   header rule stopped 116px short of the box it sits in and the table looked
+   broken. It only became visible when the reading column stopped being capped
+   at 832px, but the behaviour was always there.
+
+   `width: 100%` on the last cell is a preference, not a command — auto table
+   layout satisfies it with whatever is left over, and ignores it entirely
+   when the columns genuinely need more room than the box has. So a table that
+   has to scroll still scrolls; verified at 390px, where every table in this
+   course does. min-width on the row groups, width on the rows and
+   max-content on the table were all tried first and none of them moved it. */
+.lesson-body table:not(.elements-grid) :is(th, td):last-child {
+  width: 100%;
+}
+
 .lesson-body table.elements-grid {
   display: table;
   width: 100%;
@@ -983,9 +1000,18 @@
   font-weight: inherit;
 }
 
+/* The footnote marker. The note itself is a popup now, rendered by
+   src/components/mdx/footnote.tsx — the margin-sidenote float and the
+   checkbox/label toggle that used to live here are gone, on the course
+   owner's instruction, and the gutter they reserved is what the reading
+   column got back. Numbering stays a CSS counter so no instance has to
+   register itself. */
 .footnote-marker {
   counter-increment: footnote;
   cursor: pointer;
+  vertical-align: baseline;
+  border-radius: var(--radius-sm);
+  outline: none;
 }
 
 .footnote-marker::before {
@@ -997,49 +1023,11 @@
   margin-left: 0.05em;
 }
 
-.footnote-toggle {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  overflow: hidden;
-  clip: rect(0 0 0 0);
-  white-space: nowrap;
+.footnote-marker:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
 }
 
-.footnote-content {
-  display: none;
-}
-
-@media (max-width: 95.99rem) {
-  .footnote:has(.footnote-toggle:checked) .footnote-content {
-    display: block;
-    margin: 0.5rem 0;
-    padding: 0.625rem 0.875rem;
-    border-radius: var(--radius-md);
-    background: var(--muted);
-    color: var(--muted-foreground);
-    font-size: 0.875rem;
-    line-height: 1.5;
-  }
-}
-
-@media (min-width: 96rem) {
-  .footnote-content {
-    display: block;
-    float: right;
-    clear: right;
-    width: 15rem;
-    margin-top: 0.15em;
-    margin-right: -17.5rem;
-    margin-bottom: 0.75rem;
-    padding: 0.625rem 0.75rem;
-    border-radius: var(--radius-md);
-    background: var(--muted);
-    color: var(--muted-foreground);
-    font-size: 0.8125rem;
-    line-height: 1.45;
-  }
-}
 
 /* No scrollbars anywhere on this site — the author's call, applied at the
    root so it holds for the page itself and for every scrolling box inside

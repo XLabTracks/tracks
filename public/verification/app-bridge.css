@@ -142,7 +142,7 @@
   --lv-15: 15px;
   --lv-17: 17px;
 }
-:root[data-text-scale="100"] {
+:root[data-text-scale="100"] [data-reading-surface] {
   --lv-13: 0.8125rem;
   --lv-13_5: 0.84375rem;
   --lv-15: 0.9375rem;
@@ -152,7 +152,7 @@
   --text-2xs: 0.75rem;
 }
 :root[data-theme="contrast"]:not([data-text-scale]),
-:root[data-text-scale="200"] {
+:root[data-text-scale="200"] [data-reading-surface] {
   --lv-13: 1.625rem;
   --lv-13_5: 1.6875rem;
   --lv-15: 1.875rem;
@@ -161,7 +161,7 @@
   --text-3xs: 1.375rem;
   --text-2xs: 1.5rem;
 }
-:root[data-text-scale="125"] {
+:root[data-text-scale="125"] [data-reading-surface] {
   --lv-13: 1.015625rem;
   --lv-13_5: 1.0546875rem;
   --lv-15: 1.171875rem;
@@ -170,7 +170,7 @@
   --text-3xs: 0.859375rem;
   --text-2xs: 0.9375rem;
 }
-:root[data-text-scale="150"] {
+:root[data-text-scale="150"] [data-reading-surface] {
   --lv-13: 1.21875rem;
   --lv-13_5: 1.265625rem;
   --lv-15: 1.40625rem;
@@ -179,7 +179,7 @@
   --text-3xs: 1.03125rem;
   --text-2xs: 1.125rem;
 }
-:root[data-text-scale="175"] {
+:root[data-text-scale="175"] [data-reading-surface] {
   --lv-13: 1.421875rem;
   --lv-13_5: 1.4765625rem;
   --lv-15: 1.640625rem;
@@ -1033,4 +1033,15 @@
   :root[data-theme] .lesson-body .vt-objectives :is(ul, ol) > li::before {
     width: 2.5rem;
   }
+}
+
+/* The reading surface: the Aa text scale applies here and only here — the
+   owner's rule (2026-08-15): the size editor re-sizes the reading and the
+   exercises, never the chrome. The blocks above re-solve --fs-* inside
+   [data-reading-surface]; this rule hands the prose column the scaled base
+   size (prose is otherwise a fixed 1rem at its root, immune to the tokens).
+   At 100% this is a no-op. Contrast's global 200% preset is untouched — that
+   one is a low-vision mode and scales the whole page on purpose. */
+:root[data-theme] [data-reading-surface] .lesson-body {
+  font-size: var(--fs-md);
 }

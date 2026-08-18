@@ -333,7 +333,7 @@
    even when high contrast supplied the 200% low-vision default. The endpoint
    is not the default: WCAG's 200% is the size the page must survive, while the
    learner chooses the size that is comfortable to read. */
-:root[data-text-scale="100"] {
+:root[data-text-scale="100"] [data-reading-surface] {
   --text-scale: 1;
   --fs-2xs: 0.75rem;
   --fs-xs: 0.8125rem;
@@ -347,7 +347,7 @@
   --fs-title: clamp(1.75rem, 3.4vw, 2.25rem);
   --fs-hero: clamp(2rem, 3.8vw, 2.75rem);
 }
-:root[data-text-scale="125"] {
+:root[data-text-scale="125"] [data-reading-surface] {
   --text-scale: 1.25;
   --fs-2xs: 0.9375rem;
   --fs-xs: 1.015625rem;
@@ -361,7 +361,7 @@
   --fs-title: clamp(2rem, 4.25vw, 2.8125rem);
   --fs-hero: clamp(2.5rem, 4.75vw, 3.4375rem);
 }
-:root[data-text-scale="150"] {
+:root[data-text-scale="150"] [data-reading-surface] {
   --text-scale: 1.5;
   --fs-2xs: 1.125rem;
   --fs-xs: 1.21875rem;
@@ -375,7 +375,7 @@
   --fs-title: clamp(2.25rem, 5.1vw, 3.375rem);
   --fs-hero: clamp(3rem, 5.7vw, 4.125rem);
 }
-:root[data-text-scale="175"] {
+:root[data-text-scale="175"] [data-reading-surface] {
   --text-scale: 1.75;
   --fs-2xs: 1.3125rem;
   --fs-xs: 1.421875rem;
@@ -389,7 +389,7 @@
   --fs-title: clamp(2.5rem, 5.95vw, 3.9375rem);
   --fs-hero: clamp(3.5rem, 6.65vw, 4.8125rem);
 }
-:root[data-text-scale="200"] {
+:root[data-text-scale="200"] [data-reading-surface] {
   --text-scale: 2;
   --fs-2xs: 1.5rem;
   --fs-xs: 1.625rem;

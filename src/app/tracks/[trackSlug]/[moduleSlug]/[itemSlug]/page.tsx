@@ -33,6 +33,7 @@ import {
 } from "@/components/mdx/lesson-content";
 import { WorksCited } from "@/components/mdx/works-cited";
 import { LessonPartsReader } from "@/components/learn/lesson-parts-reader";
+import { ReadingSurface } from "@/components/learn/reading-surface";
 import {
   CompletionHeader,
   type CompletionState,
@@ -310,6 +311,22 @@ async function LessonItemPage({
                   title={lesson.title}
                 />
               </LessonPartsReader>
+            ) : track.id === "verification" && !lesson.completion ? (
+              // The plain layout with the reading toolbar: the Aa control
+              // (focus reading + the e-reader text-size editor) governs only
+              // the surface it wraps — the reading and the exercises — never
+              // the chrome. Verification-only: the scale CSS lives in
+              // app-bridge.css, which only that track's chrome loads.
+              <>
+                <ReadingSurface>
+                  <LessonContent
+                    contentRef={lesson.contentRef}
+                    title={lesson.title}
+                  />
+                </ReadingSurface>
+                {footer}
+                <LessonNav prev={nav.prev} next={nav.next} />
+              </>
             ) : (
               <>
                 <LessonContent

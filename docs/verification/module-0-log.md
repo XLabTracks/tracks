@@ -841,3 +841,22 @@ old clock chip); the works-cited footer, Mark complete, and the lesson
 pager are unchanged. Collateral to know: the Aa focus-reading control
 lived on the parts reader's toolbar and leaves with it — say the word if
 it should be remounted on the plain layout.
+
+### The Aa comes back, and the size editor sizes only the reading (2026-08-15)
+
+Her two-part ask after the regime deletion took the reader toolbar with
+it: the Aa control returns, and the text-size editor inside it (built
+earlier on the Aa panel: 100–200% in five stops) must apply "only to the
+text in the box — the exercises and the readings — not the whole UI".
+The state stays where it was (data-text-scale on the root, boot-restored
+before paint); what moved is the CSS: every `:root[data-text-scale]`
+re-solve block in theme.css and app-bridge.css is now scoped to
+`[data-reading-surface]` — the div the new ReadingSurface component
+(learn/reading-surface.tsx) wraps the lesson body in on the plain
+verification layout. Custom properties resolve at the element, so the
+widgets' Tailwind tokens and the prose column both scale inside the
+surface while the h1, chrome, sidebar and buttons hold still. Contrast's
+global 200% preset is a different selector and deliberately still scales
+the whole page — it is a low-vision mode, not a reading preference.
+Focus reading rides along unchanged on the same host. Papers don't carry
+the surface yet — say the word.

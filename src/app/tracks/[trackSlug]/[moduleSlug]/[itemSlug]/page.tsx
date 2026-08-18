@@ -223,11 +223,12 @@ async function LessonItemPage({
           </h1>
           {lesson.optional && <OptionalMarker />}
         </div>
-        {/* Her standard line, kept from the parts reader's toolbar after the
-            part-by-part regime was deleted: plain words, no icon. */}
+        {/* Her standard wording, and the clock is back by her ask ("хочу
+            часы"). */}
         {lesson.estimatedMinutes && !chunked ? (
-          <p className="text-muted-foreground mt-2 text-sm">
-            Estimated time: {lesson.estimatedMinutes} mins
+          <p className="text-muted-foreground mt-2 flex items-center gap-1.5 text-sm">
+            <Clock className="size-3.5" aria-hidden /> Estimated time:{" "}
+            {lesson.estimatedMinutes} mins
           </p>
         ) : null}
       </header>

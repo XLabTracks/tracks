@@ -661,3 +661,31 @@ section.band .intro {
 .key-label {
   flex: 1 1 auto;
 }
+
+/* ---------- alpha notice ---------- */
+
+/* The band under the hero: the course is open but not launched, and a reader
+   deciding whether to start needs that before the skills graph, not in a
+   footer. Painted on all four sides, not a tinted edge — and the red is the
+   brand's own --mod-0 (Chinese Red), so day, night and high contrast each
+   re-solve it: high contrast turns the band white-on-black rather than
+   shipping a red nobody chose. The link is underlined, so it is never colour
+   alone that marks it. */
+section.alpha-note {
+  background: var(--mod-0);
+  color: var(--mod-0-ink);
+}
+section.alpha-note > .wrap {
+  padding-top: 20px;
+  padding-bottom: 20px;
+}
+section.alpha-note p {
+  max-width: 78ch;
+  font-size: var(--fs-sm);
+  line-height: 1.6;
+}
+section.alpha-note a {
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}

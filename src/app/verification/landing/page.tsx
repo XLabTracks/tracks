@@ -63,6 +63,30 @@ export default function Page() {
           </div>
         </section>
 
+        {/* Where the course actually is, said before the skills graph rather
+            than in a footer: someone deciding whether to start needs it to
+            decide. The author's words, verbatim. */}
+        <section className="alpha-note">
+          <div className="wrap">
+            <p>
+              We’re currently in the alpha testing stage and running a small
+              paid cohort to calibrate and improve the course ahead of the
+              official launch. The materials are open for anyone to use in the
+              meantime. If you do use them, we’d really appreciate it if you
+              could fill out{" "}
+              <a
+                href="https://forms.gle/KkWcHkKh87pygDzw9"
+                target="_blank"
+                rel="noopener"
+              >
+                this feedback form
+              </a>
+              . Your feedback will help us identify issues, calibrate the
+              course, and make improvements before launch.
+            </p>
+          </div>
+        </section>
+
         <section className="band filled">
           <div className="wrap">
             <h2>The skills it builds</h2>

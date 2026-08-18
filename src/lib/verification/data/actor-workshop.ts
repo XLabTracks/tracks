@@ -53,6 +53,18 @@
  * the roster is recorded and reported back rather than silently allowed —
  * the feeling of having learned is the thing being corrected.
  *
+ * AND WHAT THIS WORKSHOP IS NOT, said here so nobody has to discover it.
+ * Only step 2 is retrieval in Karpicke's sense: it asks for material with no
+ * cue on screen. Steps 4 and 5 are cued RECOGNITION — the four ring names and
+ * the six roles are printed on the buttons the learner presses. The freeze
+ * hides which actors exist; it does not hide the vocabulary. That is a
+ * deliberate trade (free recall of six roles for ten actors is a punishing
+ * task, and the categories are what the section is teaching), but it means
+ * the evidence above covers less of this exercise than its shape suggests.
+ * Step 2 is also the weakest retrieval that could have been asked for: it
+ * retrieves ten proper nouns, and the section's content is what those actors
+ * can do and to whom.
+ *
  * PROVENANCE — read this before editing.
  *
  *   HERS, unchanged: the ten actors and their ids, positions and notes are

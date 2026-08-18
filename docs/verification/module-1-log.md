@@ -431,3 +431,71 @@ three she needs to make.
   several frontier developers" is not stated on the CAISI page; the
   predecessor AI Safety Institute had such agreements, and whether CAISI still
   does is unconfirmed rather than wrong.
+
+### The three corrections applied (2026-08-15, owner: "правь то что старое и неправильное")
+
+- **The Department of War leads now.** She spotted it: the department has run
+  under that name since the September 2025 executive order — war.gov, Secretary
+  of War — and Table 3 still led with "Department of Defense (restyled…)".
+  Reversed. The Notes line was checked rather than assumed: the FY2026 NDAA was
+  signed on 18 December 2025 and does NOT carry the renaming, so the statutory
+  change is genuinely still outstanding — it passed the House in the annual
+  defense bill on 22 July 2026, 216–212, after the Senate Armed Services
+  Committee advanced it. The old note ("pending in Congress as of mid-2026") was
+  right about the statute and wrong about which name to use in the meantime.
+  `actor-map.ts`'s roster row renamed to match.
+- **SB 53's duties re-split.** Two thresholds now open the passage — a frontier
+  model is one trained on more than 10^26 operations, a large frontier developer
+  is one above $500M in revenue — and the duties sit where the statute puts
+  them: transparency report, the 15-day / 24-hour incident report and the
+  whistleblower notice on EVERY frontier developer; the published framework,
+  fuller reports and the internal anonymous channel on the large ones only.
+- **The packaging row split in two.** Advanced packaging keeps the bottleneck
+  claim; ordinary assembly and test now says what CSET says about it, that it
+  is labor-intensive with the lowest barriers to entry of any stage.
+
+**HBM: sourced as far as a source goes.** The concentration half still has no
+citation. What is now cited is the half that is documented — that US export
+controls were "expanded again, this time affecting all chips using advanced
+high-bandwidth memory" (Fist, Burga & Chilukuri, CNAS 2024, registered in
+citations.json). Her sentence in Table 2 is untouched; if the scarcity claim
+is to stay it wants a source that argues it.
+
+**Notes and sources gained the numbers and a currency line.** ASML at 100% of
+EUV, TSMC at ~90% of sub-7nm logic (2022 data), "fewer than three suppliers" at
+several steps — all from Sastry et al., whose title is also now given in full.
+The currency line says plainly that the shares are 2021–2023 data and the
+structure is what has not moved.
+
+### What the papers say about the workshop I built
+
+Reading Karpicke properly is a critique of this exercise, and the data file's
+header now carries it rather than leaving it to be discovered. Only step 2 is
+retrieval in their sense — material, no cue on screen. Steps 4 and 5 are cued
+RECOGNITION: the four ring names and the six roles are printed on the buttons
+being pressed. The freeze hides which actors exist, not the vocabulary. That is
+a defensible trade, and it means the evidence covers less of the exercise than
+its shape implies.
+
+Worse, step 2 is the weakest retrieval that could have been asked for: it
+retrieves ten proper nouns, while the section's content is what those actors can
+do and to whom. Three candidate repairs, none of them taken without her, because
+two are content decisions:
+
+1. **Change what Recall asks for.** Not "who does this agreement touch" but the
+   material — what a cloud provider can do in a regime and what it wants — free
+   recall marked against the roster's own role and posture vocabulary, which is
+   a key that already exists.
+2. **Give the three closing questions a marking key.** They are three textareas
+   with `onComplete: () => {}` and no feedback of any kind. Every constructed
+   exercise in 2.4 ends in `MarkingKeyPanel`, the learner marking their own work
+   against criteria. This is the largest consistency gap with the rest of the
+   course and the component is already built.
+3. **Add the second-order step Beeck's artifact exists for** — "anticipate
+   second-order effects" is their phrase for the concentric-ring map. Pull one
+   actor off the map and ask what breaks. The sources read this week supply the
+   answer for the sharpest case: ASML is 100% of EUV.
+
+Timing label corrected from 20–25 to 25–30 minutes: ten actors times a ring plus
+up to six roles plus up to five postures is forty to sixty decisions, and the
+first number was optimistic.

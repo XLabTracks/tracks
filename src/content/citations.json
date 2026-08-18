@@ -470,6 +470,13 @@
       "authors": "Wasil, Akash R., Tom Reed, Jack William Miller, et al.",
       "container": "arXiv",
       "date": "Aug. 2024"
+    },
+    "https://www.cnas.org/publications/reports/technology-to-secure-the-ai-chip-supply-chain-a-primer": {
+      "title": "Technology to Secure the AI Chip Supply Chain: A Working Paper",
+      "about": "Argues that export controls on AI chips are hard to enforce and easy to evade through shell companies, and proposes hardware-enabled mechanisms instead. Cited in 1.2 for the fact that US controls now reach all chips using advanced high-bandwidth memory.",
+      "authors": "Fist, Tim; Burga, Tao; Chilukuri, Vivek",
+      "publisher": "Center for a New American Security",
+      "date": "2024"
     }
   },
   "pending": [
@@ -509,7 +516,8 @@
     "https://doi.org/10.1017/CBO9780511491368.002",
     "https://direct.mit.edu/isec/article/44/1/42/12237/Weaponized-Interdependence-How-Global-Economic",
     "https://doi.org/10.1017/S0020818300027703",
-    "https://www.armscontrol.org/act/2009-05/iran-nuclear-briefs/defining-noncompliance-npt-safeguards-agreements"
+    "https://www.armscontrol.org/act/2009-05/iran-nuclear-briefs/defining-noncompliance-npt-safeguards-agreements",
+    "https://www.pbs.org/newshour/politics/house-votes-to-adopt-department-of-war-renaming-as-part-of-annual-defense-bill"
   ],
   "excluded": [
     "https://creativecommons.org/licenses/by/4.0/",

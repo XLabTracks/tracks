@@ -60,7 +60,9 @@ Now, the next level.
 
 Subnational governments regulate too, and this is often easier and/or happens earlier than federal regulation. California is this course’s running example because most frontier labs are physically headquartered there, and jurisdiction follows geography.
 
-In September 2025 California enacted SB 53, the Transparency in Frontier Artificial Intelligence Act, with its main duties taking effect in January 2026. It binds “large frontier developers,” roughly, frontier-model developers with more than $500 million in annual revenue. They must publish frameworks describing how they identify and mitigate catastrophic risks, publish transparency reports when they deploy new frontier models, report critical safety incidents to the state’s Office of Emergency Services within fifteen days (twenty-four hours if there is an imminent threat), and protect whistleblowers who raise safety concerns.
+In September 2025 California enacted SB 53, the Transparency in Frontier Artificial Intelligence Act, with its main duties taking effect in January 2026. Two thresholds decide who it reaches. A **frontier model** is one trained on more than 10^26 operations, and anyone who trains one is a **frontier developer**; a **large frontier developer** is a frontier developer whose annual gross revenues, with affiliates, exceed $500 million.
+
+Every frontier developer must publish a transparency report when it deploys a new frontier model, report critical safety incidents to the state’s Office of Emergency Services within fifteen days — twenty-four hours if there is imminent risk of death or serious physical injury — and tell its employees they have whistleblower rights. Large frontier developers carry more on top: a published framework describing how they identify and mitigate catastrophic risks, fuller transparency reports, and an internal channel for anonymous reports.
 
 Notice what happened there. A state legislature bound the world’s leading labs to reporting duties before any international mechanism existed. When you design a regime later in this course, remember that some of its machinery may already exist two levels below the treaty. Often, it might be easier to pass state level legislation before federal legislation follows.
 
@@ -74,7 +76,7 @@ Table 3.  Inside one signatory: the United States
 | --- | --- | --- |
 | State Department | Negotiates the agreement and runs the diplomacy around compliance disputes. | Wants a deal that survives politics; may trade verification strictness for signatures. |
 | Commerce Department (Bureau of Industry and Security) | Writes and enforces export controls on chips: the de facto compute-governance agency today. | Enforcement capacity is small relative to the job, and the rules shift with each administration. |
-| Department of Defense (restyled the Department of War in 2025) | Strategic and military stakes in frontier AI. | Wants American capability unconstrained; wary of any regime that could bind its own programs. |
+| Department of War (the Department of Defense until September 2025) | Strategic and military stakes in frontier AI. | Wants American capability unconstrained; wary of any regime that could bind its own programs. |
 | Intelligence community (CIA, NSA, and the rest) | Monitoring and attribution: the “national technical means” layer that spots hidden data centers and procurement networks. | What it knows is classified. Turning intelligence into shareable treaty evidence risks burning sources. |
 | NIST and its Center for AI Standards and Innovation (CAISI) | Standards and testing. Runs pre-deployment evaluation agreements with several frontier developers. | Voluntary agreements, not inspection authority; renamed and refocused as the politics changed. |
 
@@ -97,7 +99,7 @@ Table 4.  Private actors, upstream to downstream
 | Equipment | ASML (EUV lithography); Applied Materials, Tokyo Electron. | The machines without which no leading-edge chip exists, and knowledge of every fab that buys one. | Comply. Few customers, total visibility, nowhere to hide. |
 | Fabrication and memory | TSMC, Samsung, SK Hynix, Intel. | The physical record: what was made, how many, and for whom. | Comply, while caught between US rules and Chinese customers. |
 | Chip design | NVIDIA, AMD; Huawei and other Chinese designers. | The blueprint: whether chips ship with attestation, metering, or location features at all. | Comply with controls while lobbying hard against them. Verification features cost money and sales. |
-| Packaging, assembly, test | Advanced-packaging lines (TSMC’s CoWoS and rivals); outsourced assembly-and-test firms. | A second, quieter bottleneck. Chips pass through here and can be counted. | Mostly invisible in policy debates, which is itself a gap. |
+| Packaging, assembly, test | Advanced-packaging lines (TSMC’s CoWoS and rivals); outsourced assembly-and-test firms. | Advanced packaging is a second, quieter bottleneck: chips pass through it and can be counted. Ordinary assembly and test is not — it is labor-intensive and has the lowest barriers to entry of any stage. | Mostly invisible in policy debates, which is itself a gap. |
 | Cloud providers | AWS, Microsoft Azure, Google Cloud, Oracle, Alibaba; specialists like CoreWeave. | The position between customer and machine: logs, billing, telemetry, and the power to interrupt a job. | Comply and hide at once. Natural monitors, reluctant police. |
 | Frontier labs | OpenAI, Anthropic, Google DeepMind, Meta, xAI; DeepSeek, Alibaba, and Moonshot in China. | The most detailed private information in the system: what was trained, on what data, and what the evals showed. | Every posture, potentially. |
 | Deployers | Everyone building products on top of models. | A diffuse downstream signal of what models can actually do. | Free-ride. They benefit from safety and bear none of its costs. |
@@ -162,7 +164,7 @@ You now have three questions to ask of any actor you meet in a proposal, a news 
 
 <PageBreak title="The Actor Map Workshop" />
 
-## The Actor Map Workshop (20–25 min)
+## The Actor Map Workshop (25–30 min)
 
 {/* Last in the section and closed-book, which is the whole design: it opens
     with the cast on screen, you close it with a button, and every step after
@@ -186,9 +188,11 @@ The draft agreement this section reads its cast out of: Scher, Abecassis, Barnet
 
 [NIST Center for AI Standards and Innovation (CAISI)](https://www.nist.gov/caisi), formerly the US AI Safety Institute; pre-deployment testing agreements with frontier developers.
 
-Department of Defense restyled “Department of War” by [executive order](https://www.federalregister.gov/documents/2025/09/10/2025-17508/restoring-the-united-states-department-of-war), September 2025; statutory renaming pending in Congress as of mid-2026.
+The Department of Defense has operated as the Department of War since an [executive order](https://www.federalregister.gov/documents/2025/09/10/2025-17508/restoring-the-united-states-department-of-war) of September 2025 — its own domain is war.gov and its head is the Secretary of War. The statutory renaming is separate and is not law yet: it [passed the House](https://www.pbs.org/newshour/politics/house-votes-to-adopt-department-of-war-renaming-as-part-of-annual-defense-bill) in the annual defense bill in July 2026, 216–212, having been advanced by the Senate Armed Services Committee.
 
-Supply-chain structure: Sastry, Heim, Belfield et al., [“Computing Power and the Governance of AI”](https://arxiv.org/abs/2402.08797) (2024); CSET, [“The Semiconductor Supply Chain”](https://cset.georgetown.edu/publication/the-semiconductor-supply-chain/) (2021). Incentive vocabulary and role taxonomy: this module’s introduction.
+Supply-chain structure: Sastry, Heim, Belfield et al., [“Computing Power and the Governance of Artificial Intelligence”](https://arxiv.org/abs/2402.08797) (2024) — ASML at 100% of EUV lithography, TSMC at ~90% of sub-7nm logic (2022 data), and “several critical steps … have fewer than three suppliers”; CSET, [“The Semiconductor Supply Chain”](https://cset.georgetown.edu/publication/the-semiconductor-supply-chain/) (2021) — the stage-by-stage picture, including that assembly and test has the lowest barriers to entry. High-bandwidth memory is inside the export-control perimeter: the US controls were “expanded again, this time affecting all chips using advanced high-bandwidth memory” — Fist, Burga & Chilukuri, [“Technology to Secure the AI Chip Supply Chain”](https://www.cnas.org/publications/reports/technology-to-secure-the-ai-chip-supply-chain-a-primer) (CNAS, 2024). Incentive vocabulary and role taxonomy: this module’s introduction.
+
+**Currency.** The concentration figures above are 2021–2023 data reported in 2021 and 2024 sources. Shares move; the structure — one EUV maker, one dominant leading-edge fab, a handful of clouds — has not. Re-verify a number before quoting it.
 
 {/* Author notes from the outline, kept out of the render:
     - Actor map: ported into this lesson as a native widget.

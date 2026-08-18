@@ -133,7 +133,7 @@ export const ACTOR_MAP_ENTRIES: ActorMapEntry[] = [
     note: "Writes and enforces export controls on chips.",
   },
   {
-    id: "defense", name: "Department of Defense", group: "us-institutions", kind: "public",
+    id: "defense", name: "Department of War", group: "us-institutions", kind: "public",
     position: "Inside the United States.", roles: ["capability"], postures: ["hide"],
     note: "Has strategic and military stakes in frontier AI and resists constraints on American programs.",
   },

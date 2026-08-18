@@ -65,35 +65,33 @@ export default function Page() {
 
         {/* Where the course actually is, said before the skills graph rather
             than in a footer: someone deciding whether to start needs it to
-            decide. The author's words, verbatim. */}
+            decide. The author's words, verbatim — split at her own sentence
+            break so the first one carries the weight and the rest reads as
+            the detail under it, which is the only thing done to the copy. */}
         <section className="alpha-note" data-reveal>
           <div className="wrap">
-            {/* The sign, drawn rather than imported: no icon set ships a
-                solid tapered exclamation, and the two shapes are shorter than
-                the import would be. It inherits the band's ink, so it is white
-                on the red and black on high contrast's inverted ground, and it
-                stands to the height of the sentence beside it. aria-hidden —
-                the paragraph already says this is an alpha notice. */}
-            <svg className="alpha-sign" viewBox="0 0 20 64" aria-hidden>
-              <path d="M1 0H19L16.5 44H3.5Z" fill="currentColor" />
-              <circle cx="10" cy="55.5" r="8.4" fill="currentColor" />
-            </svg>
-            <p>
-              We’re currently in the alpha testing stage and running a small
-              paid cohort to calibrate and improve the course ahead of the
-              official launch. The materials are open for anyone to use in the
-              meantime. If you do use them, we’d really appreciate it if you
-              could fill out{" "}
-              <a
-                href="https://forms.gle/KkWcHkKh87pygDzw9"
-                target="_blank"
-                rel="noopener"
-              >
-                this feedback form
-              </a>
-              . Your feedback will help us identify issues, calibrate the
-              course, and make improvements before launch.
-            </p>
+            <div className="alpha-copy">
+              <span className="alpha-badge">Alpha</span>
+              <p className="alpha-lead">
+                We’re currently in the alpha testing stage and running a small
+                paid cohort to calibrate and improve the course ahead of the
+                official launch.
+              </p>
+              <p className="alpha-rest">
+                The materials are open for anyone to use in the meantime. Your
+                feedback will help us identify issues, calibrate the course, and
+                make improvements before launch.
+              </p>
+            </div>
+            <a
+              className="alpha-cta"
+              href="https://forms.gle/KkWcHkKh87pygDzw9"
+              target="_blank"
+              rel="noopener"
+            >
+              Fill out the feedback form
+              <span aria-hidden>→</span>
+            </a>
           </div>
         </section>
 

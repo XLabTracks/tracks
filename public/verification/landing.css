@@ -685,9 +685,15 @@ section.alpha-note > .wrap {
   padding-top: 22px;
   padding-bottom: 22px;
 }
+/* Centred in the band. Left-aligned it sat in the first two thirds and left
+   the rest of the red empty, which read as a column that had run out rather
+   than as a notice addressed to the room. The measure stays capped — centring
+   a full-bleed line would give every row a different start and make it hard
+   to find the next one. */
 section.alpha-note p {
-  margin: 0;
+  margin: 0 auto;
   max-width: 76ch;
+  text-align: center;
   font-size: var(--fs-sm);
   line-height: 1.7;
 }

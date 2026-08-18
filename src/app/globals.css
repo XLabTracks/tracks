@@ -794,13 +794,41 @@
 
 /* 1.0.1's paired compute/capability table (`<div className="pair-table">`
    around ordinary markdown): two content columns of equal standing with a
-   narrow connector column between them. The last-child rule above hands all
-   slack to the final column, which starved the first down to a word a line —
-   here both outer columns state the same preference, so auto layout splits
-   the slack evenly and the middle keeps its content width. */
-.lesson-body .pair-table :is(th, td):first-child,
-.lesson-body .pair-table :is(th, td):last-child {
-  width: 48%;
+   narrow connector column between them. The shared block-scroll treatment
+   sizes columns by content and hands the last one all the slack, so the two
+   sides came out visibly unequal — percentage preferences on the cells
+   cannot fix that, because auto layout treats them as suggestions and
+   resolves the over-constraint lopsidedly. A pair must split evenly, so this
+   one is a fixed-layout table filling its measure, with the card chrome
+   moved to the wrapper (a fixed table cannot clip its header band to rounded
+   corners the way the block scroll box does — same clipping story as the
+   shared rule's own comment). The cells hold wrappable sentences, so the
+   narrow-screen sideways scroll the block treatment guards against does not
+   arise (the elements-grid reasoning); the 28px block margin the table loses
+   to the wrapper is restated on the wrapper. */
+.lesson-body .pair-table {
+  margin-block: 28px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-soft);
+}
+.lesson-body .pair-table table {
+  display: table;
+  width: 100%;
+  table-layout: fixed;
+  margin: 0;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+  background-image: none;
+}
+/* Fixed layout takes its widths from the first row; the connector column
+   gets the remaining 6%. The generic last-child width:100% rule above would
+   otherwise reach the header and hand one side everything again. */
+.lesson-body .pair-table table th:first-child,
+.lesson-body .pair-table table th:last-child {
+  width: 47%;
 }
 
 /* Both outer columns hold data of equal standing, so the first must not take

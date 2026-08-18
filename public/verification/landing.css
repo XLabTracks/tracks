@@ -9,13 +9,22 @@
 /* ---------- hero ---------- */
 
 .hero {
-  padding: 40px 0 36px;
+  /* Fluid, not fixed: 40px of air read fine at 1280 and cramped on a tall
+     monitor. The type does not scale — only the ground around it. */
+  padding: clamp(40px, 7vh, 96px) 0 clamp(36px, 5vh, 64px);
 }
 .hero > .wrap,
-section.band > .wrap {
-  /* At 1280px this puts the landing content at x=80, the same outer gutter as
-     the reference course rather than adding a second 24px inset inside it. */
-  max-width: 1168px;
+section.band > .wrap,
+section.alpha-note > .wrap {
+  /* The landing shares the header's container — same max width, same gutter,
+     from the --chrome-* variables theme.css declares. The h1 starts on the
+     brand's vertical and the content's right edge lands where the header's
+     actions end, at every width; before this the page sat in its own narrower
+     wrap and drifted 60-80px off the chrome on wide monitors. Line lengths
+     are unchanged — the ch caps on h1/lede/intro still measure the text;
+     only the composition column grew. */
+  max-width: var(--chrome-maxw, 1436px);
+  padding-inline: var(--chrome-gutter, 80px);
 }
 .hero h1 {
   max-width: 32ch;
@@ -46,8 +55,8 @@ section.band.filled {
   border-bottom: var(--hairline) solid var(--border);
 }
 section.band > .wrap {
-  padding-top: 44px;
-  padding-bottom: 44px;
+  padding-top: clamp(44px, 6vh, 72px);
+  padding-bottom: clamp(44px, 6vh, 72px);
 }
 section.band h2 {
   font-size: var(--fs-3xl);

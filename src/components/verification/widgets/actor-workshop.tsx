@@ -34,6 +34,7 @@ import {
   type WorkshopActor,
 } from "@/lib/verification/data/actor-workshop";
 import { diffSet } from "@/lib/verification/actor-workshop";
+import { ChoiceList } from "../kit/choice-list";
 import { MarkingKeyPanel } from "../kit/marking-key";
 import { QuestionWorkspace } from "../kit/question-workspace";
 import { SegMeter } from "../kit/seg-meter";
@@ -260,6 +261,47 @@ export function ActorWorkshop({}: VerificationWidgetProps) {
         label={`Step ${stepIndex + 1} of ${STEPS.length}`}
       />
 
+      {/* THE MAP IS ALWAYS ON SCREEN, from the first step to the last.
+          It used to render only inside step 4 and step 6, which meant a block
+          called The Actor Map Workshop opened with a roster, a button and no
+          map — and showed none again on steps 2, 3 and 5. A paper workshop
+          has the sheet on the table from the first minute; the learner should
+          see the empty rings and the act in the centre before being asked to
+          put anything on them, and watch it fill as they do.
+
+          One map, not one per step: it takes the learner's own placements
+          until the last step, and the answer key there, where the lens turns
+          it into the finding. */}
+      <RingMap
+        rings={saved.step === "map" ? RING_KEY : saved.rings}
+        showKey={saved.ringsDone}
+        lens={saved.step === "map" ? lens : null}
+      />
+
+      {/* The lens rides under the map rather than inside step 6, because the
+          map is up here now and a control separated from what it controls by
+          a screen of text is not a control. */}
+      {saved.step === "map" ? (
+        <div className="flex flex-wrap items-center gap-1.5">
+          <span className="text-muted-foreground mr-1 text-xs">Light up a role:</span>
+          {ACTOR_ROLES.map((role, i) => (
+            <button
+              key={role.id}
+              type="button"
+              aria-pressed={lens === role.id}
+              onClick={() => setLens(lens === role.id ? null : role.id)}
+              className={cn(
+                "border-border rounded-lg border px-2.5 py-1.5 text-xs transition-colors",
+                lens === role.id ? "border-primary bg-primary/10 font-medium" : "hover:bg-muted",
+              )}
+              style={{ color: lens === role.id ? ROLE_TOKENS[i % ROLE_TOKENS.length] : undefined }}
+            >
+              {role.name}
+            </button>
+          ))}
+        </div>
+      ) : null}
+
       {saved.step === "study" ? (
         <StudyStep onStart={() => go("recall")} />
       ) : (
@@ -358,8 +400,6 @@ export function ActorWorkshop({}: VerificationWidgetProps) {
 
       {saved.step === "map" ? (
         <MapStep
-          lens={lens}
-          onLens={setLens}
           peeked={saved.peeked}
           ringsRight={ringsRight}
           recalledCount={saved.recallChecked.length}
@@ -558,38 +598,16 @@ function CoreStep({
   onCommit: () => void;
   onNext: () => void;
 }) {
-  const SLOT = "ABCD";
   return (
     <div className="space-y-3">
       <p className="text-sm leading-relaxed">{CORE_QUESTION.stem}</p>
-      <div className="grid gap-1.5" role="radiogroup" aria-label={CORE_QUESTION.stem}>
-        {options.map((option, slot) => {
-          const chosen = pick === option.id;
-          return (
-            <button
-              key={option.id}
-              type="button"
-              role="radio"
-              aria-checked={chosen}
-              disabled={done}
-              onClick={() => onPick(option.id)}
-              className={cn(
-                "border-border block w-full rounded-lg border px-3 py-2 text-left text-sm leading-relaxed transition-colors",
-                !done && "hover:bg-muted",
-                chosen && !done && "border-primary bg-primary/5",
-                done && option.correct && "border-comply bg-comply/5",
-                done && chosen && !option.correct && "border-defect bg-defect/5",
-                done && !option.correct && !chosen && "opacity-55",
-              )}
-            >
-              <span className="text-muted-foreground mr-1.5 font-medium">
-                {SLOT[slot]}.
-              </span>
-              {option.text}
-            </button>
-          );
-        })}
-      </div>
+      <ChoiceList
+        options={options.map((o) => ({ id: o.id, node: o.text, correct: o.correct }))}
+        value={pick}
+        committed={done}
+        label={CORE_QUESTION.stem}
+        onPick={onPick}
+      />
       {done ? (
         <div className="space-y-3">
           {options.map((option) =>
@@ -653,8 +671,6 @@ function PlaceStep({
         The act you are regulating is in the centre. Put each actor on the ring
         that says how a rule reaches it. Pick an actor, then pick its ring.
       </p>
-
-      <RingMap rings={rings} showKey={done} />
 
       <div className="flex flex-wrap gap-1.5">
         {WORKSHOP_ACTORS.map((a) => {
@@ -926,8 +942,6 @@ function CategorizeVerdict({
 }
 
 function MapStep({
-  lens,
-  onLens,
   peeked,
   ringsRight,
   recalledCount,
@@ -937,8 +951,6 @@ function MapStep({
   onCommitSecondOrder,
   coreRight,
 }: {
-  lens: ActorRoleId | null;
-  onLens: (r: ActorRoleId | null) => void;
   peeked: boolean;
   ringsRight: number;
   recalledCount: number;
@@ -948,36 +960,13 @@ function MapStep({
   onCommitSecondOrder: () => void;
   coreRight: boolean;
 }) {
-  const SLOT = "ABCD";
   return (
     <div className="space-y-4">
-      <RingMap rings={RING_KEY} showKey lens={lens} />
-
-      {/* The lens is the finding, not decoration: pick a role and watch it
-          appear on every ring at once. One role at a time on purpose — an
-          actor holds several, so colouring a dot by "its" role would be a
-          claim the lesson spends a paragraph denying. Colour rides on the
-          role's own word here and on the actor labels it lights, never on a
-          bare dot beside grey type. */}
-      <div className="flex flex-wrap items-center gap-1.5">
-        <span className="text-muted-foreground mr-1 text-xs">Light up a role:</span>
-        {ACTOR_ROLES.map((role, i) => (
-          <button
-            key={role.id}
-            type="button"
-            aria-pressed={lens === role.id}
-            onClick={() => onLens(lens === role.id ? null : role.id)}
-            className={cn(
-              "border-border rounded-lg border px-2.5 py-1.5 text-xs transition-colors",
-              lens === role.id ? "border-primary bg-primary/10 font-medium" : "hover:bg-muted",
-            )}
-            style={{ color: lens === role.id ? ROLE_TOKENS[i % ROLE_TOKENS.length] : undefined }}
-          >
-            {role.name}
-          </button>
-        ))}
-      </div>
-
+      {/* The map and its role lens are above every step now — see the comment
+          at the mount. The finding below is what they are for: pick a role up
+          there and watch it appear on every ring at once. One role at a time
+          on purpose, because an actor holds several and colouring a dot by
+          "its" role would be a claim the lesson spends a paragraph denying. */}
       <div className="border-border rounded-xl border p-4">
         <p className="text-sm font-semibold">{MAP_FINDING.title}</p>
         {MAP_FINDING.body.map((para) => (
@@ -994,34 +983,17 @@ function MapStep({
       <div className="space-y-3">
         <p className="text-sm font-semibold">Now take one off the board</p>
         <p className="text-sm leading-relaxed">{SECOND_ORDER.stem}</p>
-        <div className="grid gap-1.5" role="radiogroup" aria-label={SECOND_ORDER.stem}>
-          {SECOND_ORDER.options.map((option, slot) => {
-            const chosen = secondOrder === option.id;
-            return (
-              <button
-                key={option.id}
-                type="button"
-                role="radio"
-                aria-checked={chosen}
-                disabled={secondOrderDone}
-                onClick={() => onSecondOrder(option.id)}
-                className={cn(
-                  "border-border block w-full rounded-lg border px-3 py-2 text-left text-sm leading-relaxed transition-colors",
-                  !secondOrderDone && "hover:bg-muted",
-                  chosen && !secondOrderDone && "border-primary bg-primary/5",
-                  secondOrderDone && option.correct && "border-comply bg-comply/5",
-                  secondOrderDone && chosen && !option.correct && "border-defect bg-defect/5",
-                  secondOrderDone && !option.correct && !chosen && "opacity-55",
-                )}
-              >
-                <span className="text-muted-foreground mr-1.5 font-medium">
-                  {SLOT[slot]}.
-                </span>
-                {option.text}
-              </button>
-            );
-          })}
-        </div>
+        <ChoiceList
+          options={SECOND_ORDER.options.map((o) => ({
+            id: o.id,
+            node: o.text,
+            correct: o.correct,
+          }))}
+          value={secondOrder}
+          committed={secondOrderDone}
+          label={SECOND_ORDER.stem}
+          onPick={onSecondOrder}
+        />
         {secondOrderDone ? (
           <div className="space-y-3">
             {/* Every option is worth reading here, not just the two that
@@ -1128,7 +1100,11 @@ function RingMap({
 
   return (
     <div className="border-border bg-card mx-auto max-w-[720px] overflow-x-auto rounded-xl border p-2">
-      <svg viewBox="0 0 720 584" className="mx-auto block h-auto w-full min-w-[560px]" role="img"
+      {/* The viewBox is cropped to the drawing, not to a round number. Content
+          spans y 74..510 (the outer ring's top to its bottom), so a 0..584 box
+          carried 148px of empty card — most of it visible on the first three
+          steps, where nothing is placed yet. */}
+      <svg viewBox="0 54 720 476" className="mx-auto block h-auto w-full min-w-[560px]" role="img"
         aria-label="Concentric actor map: the regulated training run at the centre, actors on four rings around it">
         {[...RINGS].reverse().map((ring) => (
           <g key={ring.id}>

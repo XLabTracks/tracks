@@ -721,3 +721,60 @@ body in `text-muted-foreground`, so the React glossary hover card is greyer
 than both the vocab card and now the footnote. Three small-explanation
 surfaces, two treatments. Flagged rather than aligned, because which one is
 canonical is the owner's call.
+
+### The map is on screen, and one duplication audit (2026-08-15)
+
+**"The Actor Map Workshop должен содержать карту."** It did not, for most of
+its length. `RingMap` rendered only inside step 4 and step 6, so a block with
+"Map" in its name opened on a roster and a button, and showed nothing again on
+steps 2, 3 and 5. That is plain from the control flow, not a rendering
+accident.
+
+One map now, mounted above every step. It takes the learner's own placements
+until the last step and the answer key there, where the role lens turns it
+into the finding; the lens moved up with it, because a control separated from
+what it controls by a screen of text is not a control. Verified from a cleared
+storage: the map is present on first load with the four rings and the act in
+the centre, stays through every step, and gains a dot the moment something is
+placed — one map on step 4, never two. The viewBox was also cropped to the
+drawing: content spans y 74..510, so the old 0..584 box carried 148px of empty
+card, most of it visible on exactly the steps where nothing is placed yet.
+
+To be exact about what was removed earlier, since the question was why: the
+geographic supply-chain map was never touched — it is 1.2.1 and it is intact.
+What stood down was `actor-map`, the filterable roster, and it is unregistered
+rather than deleted. Say the word and it comes back.
+
+### The audit, by the ladder's second rung
+
+`.claude/` does not exist in this checkout, so the plugin CLAUDE.md declares is
+not installed here and the skill cannot be invoked; the ladder is described in
+CLAUDE.md and was applied by hand. Rung 2 is "is it already in this codebase",
+and the largest answer was mine.
+
+**Fixed: the committed single-answer row, written three times in one day.**
+2.4.2's On Paper deck, 1.2's centre question and 1.2's second-order question
+each carried their own `const SLOT = "ABCD"` and their own copy of the same
+five-way className — hover while open, primary on the pick, comply on the
+answer, defect on a wrong pick, everything else faded. Now
+`kit/choice-list.tsx`, used by all three. Measured: `const SLOT` 3 → 1,
+`border-comply bg-comply/5` inside actor-workshop 3 → 1 (the survivor is the
+multi-select chip row, a different interaction). Both surfaces re-driven in a
+browser afterwards — five frozen radiogroups and five verdicts on On Paper,
+four frozen options on the centre question, no console errors.
+
+**Found and not fixed, because they are sweeps rather than repairs:**
+
+- **`@utility eyebrow` exists in globals.css. Eight files use it; eighteen
+  still hand-roll `uppercase` + a tracking value.** This is the same defect
+  the repo's own audit named, still in place.
+- **`useStoredState` exists and 6 of 49 widgets use it. Eleven still hand-roll
+  `localStorage.getItem` with their own prune-and-persist:** build-institution,
+  companies-ab, context-distiller, field-map, infer-the-system, mechanism-sort,
+  missing-board, policy-critique, precedent-cases, standard-of-proof,
+  theories-of-change. That block is where the two bugs of this session's own
+  making came from — a stale-snapshot persist and a restore that fought
+  hydration — so eleven copies is eleven places for them to recur.
+- **Three small-explanation surfaces, two treatments.** `.vocab-card` and the
+  footnote now match; `GlossaryCardContent` still renders its body in
+  `text-muted-foreground`. Which is canonical is a design call.

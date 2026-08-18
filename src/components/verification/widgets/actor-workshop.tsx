@@ -19,7 +19,9 @@ import {
   MAP_FINDING,
   MAP_LABEL,
   POSTURE_KEY,
-  RECALL_ALIASES,
+  RECALL_TARGET,
+  SECOND_ORDER,
+  CLOSING_KEY,
   RING_KEY,
   RING_WHY,
   RINGS,
@@ -27,10 +29,12 @@ import {
   WORKSHOP_ACTORS,
   WORKSHOP_ACTOR_IDS,
   WORKSHOP_NOTES_KEY,
+  WORKSHOP_MARKS_KEY,
   type RingId,
   type WorkshopActor,
 } from "@/lib/verification/data/actor-workshop";
-import { diffSet, recallHits } from "@/lib/verification/actor-workshop";
+import { diffSet } from "@/lib/verification/actor-workshop";
+import { MarkingKeyPanel } from "../kit/marking-key";
 import { QuestionWorkspace } from "../kit/question-workspace";
 import { SegMeter } from "../kit/seg-meter";
 import { useStoredState } from "../kit/use-stored-state";
@@ -73,7 +77,11 @@ type StepId = "study" | "recall" | "core" | "place" | "categorize" | "map";
 
 const STEPS: { id: StepId; name: string; beeck: string }[] = [
   { id: "study", name: "Study the cast", beeck: "Goal setting" },
-  { id: "recall", name: "Who does it touch?", beeck: "List all stakeholders" },
+  // Named for what it asks now. It used to be "Who does it touch?" against
+  // Beeck's "List all stakeholders", and both were left behind when the step
+  // stopped retrieving the cast and started retrieving the material — so the
+  // Beeck column says the step was recast rather than pretending it matches.
+  { id: "recall", name: "What can one actor do?", beeck: "List all stakeholders, recast" },
   { id: "core", name: "What goes in the centre?", beeck: "Identify the core" },
   { id: "place", name: "Place them on the rings", beeck: "Place and cluster" },
   { id: "categorize", name: "What can each one do?", beeck: "Categorize" },
@@ -88,6 +96,8 @@ interface Saved {
   recall: string;
   /** Whether Recall has been marked — the reveal is one-way, like a commit. */
   recallDone: boolean;
+  /** Which of the six key items the learner says they retrieved. */
+  recallChecked: string[];
   core: string | null;
   coreDone: boolean;
   rings: Record<string, RingId>;
@@ -95,15 +105,21 @@ interface Saved {
   roles: Record<string, ActorRoleId[]>;
   postures: Record<string, ActorPostureId[]>;
   catDone: boolean;
+  secondOrder: string | null;
+  secondOrderDone: boolean;
   /** The roster was reopened mid-workshop. Reported, never punished. */
   peeked: boolean;
 }
 
-const STORAGE_KEY = "v-actor-workshop:v1";
+// v2: step 2 stopped asking "who does this agreement touch" and started
+// asking what one actor can do. A restored v1 draft would be an answer to a
+// question that is no longer on screen.
+const STORAGE_KEY = "v-actor-workshop:v2";
 const EMPTY: Saved = {
   step: "study",
   recall: "",
   recallDone: false,
+  recallChecked: [],
   core: null,
   coreDone: false,
   rings: {},
@@ -111,6 +127,8 @@ const EMPTY: Saved = {
   roles: {},
   postures: {},
   catDone: false,
+  secondOrder: null,
+  secondOrderDone: false,
   peeked: false,
 };
 
@@ -142,6 +160,11 @@ function prune(raw: unknown): Saved {
     step: STEP_IDS.includes(box.step as StepId) ? (box.step as StepId) : "study",
     recall: typeof box.recall === "string" ? box.recall : "",
     recallDone: box.recallDone === true,
+    recallChecked: Array.isArray(box.recallChecked)
+      ? box.recallChecked.filter(
+          (x) => typeof x === "string" && RECALL_TARGET.items.some((i) => i.id === x),
+        )
+      : [],
     core:
       typeof box.core === "string" &&
       CORE_QUESTION.options.some((o) => o.id === box.core)
@@ -153,6 +176,12 @@ function prune(raw: unknown): Saved {
     roles,
     postures,
     catDone: box.catDone === true,
+    secondOrder:
+      typeof box.secondOrder === "string" &&
+      SECOND_ORDER.options.some((o) => o.id === box.secondOrder)
+        ? box.secondOrder
+        : null,
+    secondOrderDone: box.secondOrderDone === true,
     peeked: box.peeked === true,
   };
 }
@@ -192,10 +221,6 @@ export function ActorWorkshop({}: VerificationWidgetProps) {
     setOpenRoster(false);
     topRef.current?.scrollIntoView({ block: "nearest" });
   };
-
-  const recalled = saved.recallDone
-    ? recallHits(saved.recall.split("\n"), WORKSHOP_ACTORS, RECALL_ALIASES)
-    : new Set<string>();
 
   const placedCount = WORKSHOP_ACTOR_IDS.filter((id) => saved.rings[id]).length;
   const ringsRight = WORKSHOP_ACTOR_IDS.filter(
@@ -268,9 +293,17 @@ export function ActorWorkshop({}: VerificationWidgetProps) {
         <RecallStep
           value={saved.recall}
           done={saved.recallDone}
-          recalled={recalled}
+          checked={saved.recallChecked}
           onChange={(v) => persist((prev) => ({ ...prev, recall: v }))}
           onMark={() => persist((prev) => ({ ...prev, recallDone: true }))}
+          onToggle={(id) =>
+            persist((prev) => ({
+              ...prev,
+              recallChecked: prev.recallChecked.includes(id)
+                ? prev.recallChecked.filter((x) => x !== id)
+                : [...prev.recallChecked, id],
+            }))
+          }
           onNext={() => go("core")}
         />
       ) : null}
@@ -329,7 +362,13 @@ export function ActorWorkshop({}: VerificationWidgetProps) {
           onLens={setLens}
           peeked={saved.peeked}
           ringsRight={ringsRight}
-          recalledCount={recalled.size}
+          recalledCount={saved.recallChecked.length}
+          secondOrder={saved.secondOrder}
+          secondOrderDone={saved.secondOrderDone}
+          onSecondOrder={(id) => persist((prev) => ({ ...prev, secondOrder: id }))}
+          onCommitSecondOrder={() =>
+            persist((prev) => ({ ...prev, secondOrderDone: true }))
+          }
           coreRight={
             CORE_QUESTION.options.find((o) => o.id === saved.core)?.correct === true
           }
@@ -420,73 +459,84 @@ function StudyStep({ onStart }: { onStart: () => void }) {
 function RecallStep({
   value,
   done,
-  recalled,
+  checked,
   onChange,
   onMark,
+  onToggle,
   onNext,
 }: {
   value: string;
   done: boolean;
-  recalled: Set<string>;
+  checked: string[];
   onChange: (v: string) => void;
   onMark: () => void;
+  onToggle: (id: string) => void;
   onNext: () => void;
 }) {
-  const missed = WORKSHOP_ACTORS.filter((a) => !recalled.has(a.id));
+  const items = RECALL_TARGET.items;
   return (
     <div className="space-y-3">
-      <p className="text-sm leading-relaxed">
-        Before anything is sorted: who does this agreement touch? Write them
-        down, one per line, in whatever words you have. Approximate names are
-        fine — &ldquo;cloud providers&rdquo; counts.
-      </p>
+      <p className="text-sm leading-relaxed">{RECALL_TARGET.prompt}</p>
       <Textarea
         value={value}
         disabled={done}
         onChange={(e) => onChange(e.target.value)}
         rows={8}
-        placeholder={"one per line\n"}
-        aria-label="Actors you can recall, one per line"
+        placeholder="Whatever you have. Sentences, fragments, a list — it is what you retrieved that counts, not how it is written."
+        aria-label="What a cloud provider can do inside a regime, and what it wants"
       />
       {done ? (
+        /* Self-scored, and the reason is in the data file: a matcher over
+           free prose would need a vocabulary list per role, would be wrong
+           often, and would be wrong in the direction that stops people
+           writing. The learner ticks what they actually had — which is what
+           the free-recall studies score and what every constructed exercise
+           in 2.4 already asks for. */
         <div className="space-y-3">
+          <div className="border-border rounded-xl border p-4">
+            <p className="eyebrow text-muted-foreground">
+              Six things the course says about this one actor
+            </p>
+            <p className="text-muted-foreground mt-1.5 text-sm leading-relaxed">
+              Tick the ones your answer actually had. Different words are
+              fine; the same idea is the test.
+            </p>
+            <ul className="mt-3 space-y-1.5">
+              {items.map((item) => {
+                const on = checked.includes(item.id);
+                return (
+                  <li key={item.id}>
+                    <label className="flex cursor-pointer items-start gap-2 text-sm leading-relaxed">
+                      <input
+                        type="checkbox"
+                        checked={on}
+                        onChange={() => onToggle(item.id)}
+                        className="accent-primary mt-1 size-3.5 shrink-0"
+                      />
+                      <span>
+                        <span className="font-medium">{item.label}.</span>{" "}
+                        <span className="text-muted-foreground">{item.gloss}</span>
+                      </span>
+                    </label>
+                  </li>
+                );
+              })}
+            </ul>
+          </div>
           <p className="text-sm">
             <span className="font-semibold">
-              {recalled.size} of {WORKSHOP_ACTORS.length}
+              {checked.length} of {items.length}
             </span>{" "}
-            of the workshop&rsquo;s cast, from memory.
+            retrieved. Four of the six are roles the same actor holds at once —
+            that is the shape the rest of the workshop is about.
           </p>
-          {missed.length ? (
-            <div className="border-border rounded-xl border p-4">
-              <p className="eyebrow text-muted-foreground">
-                Not on your list
-              </p>
-              <ul className="mt-2 space-y-1.5 text-sm">
-                {missed.map((a) => (
-                  <li key={a.id}>
-                    <span className="font-medium">{a.name}</span>{" "}
-                    <span className="text-muted-foreground">{a.position}</span>
-                  </li>
-                ))}
-              </ul>
-              <p className="text-muted-foreground mt-3 text-sm leading-relaxed">
-                A gap here is the useful part of the step: the actors a map
-                leaves out are the ones a regime forgets to reach.
-              </p>
-            </div>
-          ) : (
-            <p className="text-muted-foreground text-sm">
-              All ten. The rest of the workshop is about what they can do, not
-              who they are.
-            </p>
-          )}
           <Button size="sm" onClick={onNext}>
             Continue
           </Button>
         </div>
       ) : (
         <Button size="sm" disabled={!value.trim()} onClick={onMark}>
-          Done — show me what I missed
+          Done — show me the key
         </Button>
       )}
     </div>
@@ -881,6 +931,10 @@ function MapStep({
   peeked,
   ringsRight,
   recalledCount,
+  secondOrder,
+  secondOrderDone,
+  onSecondOrder,
+  onCommitSecondOrder,
   coreRight,
 }: {
   lens: ActorRoleId | null;
@@ -888,8 +942,13 @@ function MapStep({
   peeked: boolean;
   ringsRight: number;
   recalledCount: number;
+  secondOrder: string | null;
+  secondOrderDone: boolean;
+  onSecondOrder: (id: string) => void;
+  onCommitSecondOrder: () => void;
   coreRight: boolean;
 }) {
+  const SLOT = "ABCD";
   return (
     <div className="space-y-4">
       <RingMap rings={RING_KEY} showKey lens={lens} />
@@ -928,16 +987,84 @@ function MapStep({
         ))}
       </div>
 
+      {/* Beeck draw rings to "anticipate second-order effects", and the
+          workshop had no step that did the second half. One question, because
+          the point is a single gap: the removal that bites soonest and the
+          removal that matters most are different actors on different rings. */}
+      <div className="space-y-3">
+        <p className="text-sm font-semibold">Now take one off the board</p>
+        <p className="text-sm leading-relaxed">{SECOND_ORDER.stem}</p>
+        <div className="grid gap-1.5" role="radiogroup" aria-label={SECOND_ORDER.stem}>
+          {SECOND_ORDER.options.map((option, slot) => {
+            const chosen = secondOrder === option.id;
+            return (
+              <button
+                key={option.id}
+                type="button"
+                role="radio"
+                aria-checked={chosen}
+                disabled={secondOrderDone}
+                onClick={() => onSecondOrder(option.id)}
+                className={cn(
+                  "border-border block w-full rounded-lg border px-3 py-2 text-left text-sm leading-relaxed transition-colors",
+                  !secondOrderDone && "hover:bg-muted",
+                  chosen && !secondOrderDone && "border-primary bg-primary/5",
+                  secondOrderDone && option.correct && "border-comply bg-comply/5",
+                  secondOrderDone && chosen && !option.correct && "border-defect bg-defect/5",
+                  secondOrderDone && !option.correct && !chosen && "opacity-55",
+                )}
+              >
+                <span className="text-muted-foreground mr-1.5 font-medium">
+                  {SLOT[slot]}.
+                </span>
+                {option.text}
+              </button>
+            );
+          })}
+        </div>
+        {secondOrderDone ? (
+          <div className="space-y-3">
+            {/* Every option is worth reading here, not just the two that
+                matter to the score: each one is a different clock, which is
+                the whole content of the step. */}
+            <ol className="space-y-2">
+              {SECOND_ORDER.options.map((option) => (
+                <li key={option.id} className="text-sm leading-relaxed">
+                  <span
+                    className={cn(
+                      "font-medium",
+                      option.correct ? "text-comply" : undefined,
+                    )}
+                  >
+                    {option.text}
+                  </span>{" "}
+                  <span className="text-muted-foreground">{option.why}</span>
+                </li>
+              ))}
+            </ol>
+            <div className="border-border rounded-xl border p-4">
+              <p className="text-sm leading-relaxed">{SECOND_ORDER.lesson}</p>
+            </div>
+          </div>
+        ) : (
+          <Button size="sm" disabled={!secondOrder} onClick={onCommitSecondOrder}>
+            Commit
+          </Button>
+        )}
+      </div>
+
       <p className="text-muted-foreground text-xs">
-        From memory: {recalledCount} of {WORKSHOP_ACTORS.length} recalled,{" "}
-        {ringsRight} of {WORKSHOP_ACTORS.length} placed on the ring this map
-        gives them, centre {coreRight ? "right" : "missed"}.
+        From memory: {recalledCount} of {RECALL_TARGET.items.length} retrieved
+        about the cloud provider, {ringsRight} of {WORKSHOP_ACTORS.length}{" "}
+        placed on the ring this map gives them, centre{" "}
+        {coreRight ? "right" : "missed"}.
         {peeked ? " Roster reopened during the workshop." : ""}
       </p>
 
       {/* Beeck's last step is Setting Actions. For a reader that is transfer:
           three questions the map is the material for. Hers, verbatim, and
-          never graded. */}
+          never machine-graded — the panel under them is the criteria a marker
+          would use, which is how every constructed exercise in 2.4 ends. */}
       <QuestionWorkspace
         storageKey={WORKSHOP_NOTES_KEY}
         rule={{ kind: "any", count: CLOSING_QUESTIONS.length }}
@@ -945,6 +1072,7 @@ function MapStep({
         placeholder="Answer from the map you just drew. Nothing is graded."
         onComplete={() => {}}
       />
+      <MarkingKeyPanel storageKey={WORKSHOP_MARKS_KEY} keyData={CLOSING_KEY} />
     </div>
   );
 }

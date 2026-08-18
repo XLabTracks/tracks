@@ -540,3 +540,83 @@ quantity the regulated party alone can count.
 METR is registered in citations.json with full fields; sb53.info is cited and
 parked in `pending`, because its authorship is not established and guessing
 bibliographic facts is the thing `pending` exists to prevent.
+
+### The three pedagogy repairs, applied (2026-08-15, owner approved all three)
+
+**1. Recall retrieves material now, not names.** Step 2 asked "who does this
+agreement touch" and marked a typed list against the roster with a fuzzy
+matcher. That retrieved ten proper nouns while the section's content is what
+those actors can do and to whom. It now takes one actor — the cloud provider,
+because the lesson works that one through explicitly — and asks what it can do
+inside a regime and what it wants. The key is six items and every one of them
+is her sentence: the four bullets under "Try it on a cloud provider" and Table
+4's cloud row for the two postures. A test re-derives that the six are exactly
+that actor's `roles` + `postures` in the roster, so a roster edit cannot leave
+the key marking against something the course no longer says.
+
+**Marked by the learner, not by a matcher.** A string matcher over free prose
+would need a vocabulary list per role, would be wrong often, and would be wrong
+in the direction that stops people writing. Self-scoring against a printed key
+is what the free-recall studies score and what every constructed exercise in
+2.4 already asks for.
+
+`recallHits` and `normalize` are deleted with their tests — including the
+four-character containment floor that the "and" case forced. They have no
+caller now, and a helper kept alive only by its own tests is the thing this
+repo's audits keep finding. History has them.
+
+The step is renamed on screen too: "What can one actor do?", against Beeck's
+"List all stakeholders, **recast**" — the old title and the old Beeck label
+both described a step that no longer exists, and pretending the recast still
+matches Beeck's step 2 would be the same kind of stale label the Department of
+War row was.
+
+**2. The three closing questions have a marking key.** They were three
+textareas with `onComplete: () => {}` and no feedback of any kind, in a course
+where every constructed exercise in 2.4 ends in `MarkingKeyPanel`. Seven
+criteria, ten points, in the house form from data/marking-keys.ts: credit per
+element, `needsReasoning` where a bare label earns nothing, wording free, and
+`noCredit` stated out loud.
+
+The two factual criteria are derived from the roster and re-derived in the
+test, which is the part that matters: Taiwan holds exactly three roles
+(chokepoint, information, victim), which is why her question says "at least
+three"; and exactly two actors hold capability and enforcement at once, the
+United States and China. Edit the roster and the test fails instead of the key
+quietly lying. Question 2 has no fixed answer and its criteria say so — what is
+marked is whether an order was committed to and whether each rank carries its
+reason.
+
+**3. The second-order step exists.** Beeck draw rings to "anticipate
+second-order effects" and the workshop had no step doing the second half. One
+question at the end of step 6: take one actor off the board — whose removal
+stops a frontier training run *soonest*, this week rather than this decade?
+
+The answer is the cloud providers, and the point is the gap. Every option's
+reveal is a different clock: ASML is the most consequential removal on the
+board and the slowest (100% of EUV, but the chips already exist); TSMC is the
+same shape one step nearer (~90% of sub-7nm logic, stopping the next
+generation rather than the loaded run); BIS loosens the regime rather than
+stopping the activity. Then the line the step is for: the removal that bites
+soonest and the removal that matters most are different actors on different
+rings, and a regime reaching only for the second buys nothing this year.
+
+Sourced, and re-read rather than remembered: Sastry, Heim, Belfield et al.,
+Figure 11 — "ASML is the only company capable of producing EUV machines" at
+100%, TSMC at 90% of ≤7nm logic, and the caption "Several critical
+steps--including AI chip design and production--have fewer than three
+suppliers." All three re-matched against the extracted PDF text before being
+written down.
+
+**The quote tripwire caught something while this was being built**, which is
+the second time it has earned its place. A `noCredit` line quoted a learner's
+voice — "It is a conflict of interest" — and the test read it as a claim to be
+found in 1.2. Rewritten without the quotation marks rather than the test
+loosened, and the convention is now stated in the test: curly quotes in the
+data file are 1.2's own words; anything from an outside source is attributed
+inline and written with straight quotes; a line putting words in a learner's
+mouth carries no quotation marks at all.
+
+Storage bumped to `v-actor-workshop:v2` — a restored v1 draft would be an
+answer to a question no longer on screen. The notes and the new self-marking
+have their own permanent keys.

@@ -3,88 +3,22 @@ import { join } from "node:path";
 
 import { describe, expect, it } from "vitest";
 
+import { diffSet, sameSet, scorePlacements } from "./actor-workshop";
 import {
-  diffSet,
-  normalize,
-  recallHits,
-  sameSet,
-  scorePlacements,
-} from "./actor-workshop";
-import type { ActorMapEntry } from "./data/actor-map";
-import {
+  CLOSING_KEY,
   POSTURE_KEY,
-  RECALL_ALIASES,
+  RECALL_TARGET,
   RING_KEY,
   RING_WHY,
   RINGS,
   ROLE_KEY,
   WORKSHOP_ACTOR_IDS,
+  SECOND_ORDER,
   WORKSHOP_ACTORS,
   CORE_QUESTION,
 } from "./data/actor-workshop";
-import { ACTOR_POSTURES, ACTOR_ROLES } from "./data/actor-map";
-
-const actor = (id: string, name: string): ActorMapEntry => ({
-  id,
-  name,
-  group: "g",
-  kind: "private",
-  position: "",
-  roles: [],
-  postures: [],
-});
-
-describe("normalize", () => {
-  it("drops case and punctuation and collapses gaps", () => {
-    expect(normalize("  SK hynix, Samsung & Micron!  ")).toBe(
-      "sk hynix samsung micron",
-    );
-  });
-});
-
-describe("recallHits", () => {
-  const roster = [
-    actor("hyperscalers", "AWS, Azure, Google Cloud, Oracle, Alibaba"),
-    actor("asml", "ASML"),
-    actor("deployers", "Product builders and deployers"),
-  ];
-
-  it("marks a shorter right answer as a hit through its alias", () => {
-    // The whole reason aliases exist: "cloud providers" is Table 4's own
-    // heading for a row the roster spells as five company names.
-    const hits = recallHits(["cloud providers"], roster, {
-      hyperscalers: ["cloud providers"],
-    });
-    expect([...hits]).toEqual(["hyperscalers"]);
-  });
-
-  it("hits on containment, so a one-word name still counts", () => {
-    expect([...recallHits(["asml"], roster)]).toEqual(["asml"]);
-    expect([...recallHits(["ASML, the Dutch one"], roster)]).toEqual(["asml"]);
-  });
-
-  it("hits on a shared word of four letters or more", () => {
-    expect([...recallHits(["the deployers downstream"], roster)]).toEqual([
-      "deployers",
-    ]);
-  });
-
-  it("does not hit on short shared words", () => {
-    // "and" is in "Product builders and deployers"; a three-letter word must
-    // never carry a match or every line would hit every actor.
-    expect([...recallHits(["and"], roster)]).toEqual([]);
-  });
-
-  it("ignores blank lines and returns nothing for an empty list", () => {
-    expect(recallHits([], roster).size).toBe(0);
-    expect(recallHits(["", "   "], roster).size).toBe(0);
-  });
-
-  it("counts an actor once however many lines mention it", () => {
-    const hits = recallHits(["ASML", "asml again"], roster);
-    expect(hits.size).toBe(1);
-  });
-});
+import { ACTOR_MAP_ENTRIES, ACTOR_POSTURES, ACTOR_ROLES } from "./data/actor-map";
+import { keyTotal } from "./data/marking-keys";
 
 describe("sameSet / diffSet", () => {
   it("is order-independent and rejects a subset", () => {
@@ -144,15 +78,84 @@ describe("actor-workshop data", () => {
     }
   });
 
-  it("carries an alias list that names only workshop actors", () => {
-    const ids = new Set<string>(WORKSHOP_ACTOR_IDS);
-    for (const id of Object.keys(RECALL_ALIASES)) expect(ids.has(id)).toBe(true);
-  });
-
   it("gives the core question exactly one right answer, each with a reason", () => {
     const right = CORE_QUESTION.options.filter((o) => o.correct);
     expect(right).toHaveLength(1);
     for (const o of CORE_QUESTION.options) expect(o.why.length).toBeGreaterThan(20);
+  });
+});
+
+/* Step 2's key is the roster's own entry for the cloud provider, printed as
+   the lesson prints it. If the roster gains or loses a role there, the key
+   must move with it or the step marks against something the course no longer
+   says. */
+describe("recall target", () => {
+  const cloud = ACTOR_MAP_ENTRIES.find((a) => a.id === RECALL_TARGET.actorId)!;
+
+  it("names the actor the lesson works through", () => {
+    expect(cloud).toBeTruthy();
+  });
+
+  it("keys on exactly that actor's roles and postures", () => {
+    const ids = RECALL_TARGET.items.map((i) => i.id).sort();
+    expect(ids).toEqual([...cloud.roles, ...cloud.postures].sort());
+  });
+
+  it("gives every item a label and a gloss", () => {
+    for (const item of RECALL_TARGET.items) {
+      expect(item.label.length, item.id).toBeGreaterThan(3);
+      expect(item.gloss.length, item.id).toBeGreaterThan(20);
+    }
+  });
+});
+
+describe("second-order question", () => {
+  it("has exactly one right answer and a reason on every option", () => {
+    expect(SECOND_ORDER.options.filter((o) => o.correct)).toHaveLength(1);
+    for (const o of SECOND_ORDER.options) expect(o.why.length).toBeGreaterThan(40);
+  });
+
+  it("asks about actors the workshop actually put on the board", () => {
+    const ids = new Set<string>(WORKSHOP_ACTOR_IDS);
+    for (const o of SECOND_ORDER.options) expect(ids.has(o.id), o.id).toBe(true);
+  });
+
+  it("names the inner ring as the answer, since that is what the map claims", () => {
+    const right = SECOND_ORDER.options.find((o) => o.correct)!;
+    expect(RING_KEY[right.id as keyof typeof RING_KEY]).toBe("runs");
+  });
+});
+
+/* The closing key states two facts about the roster. Re-derive them here, so
+   that editing the roster fails loudly instead of leaving a key that lies. */
+describe("closing marking key", () => {
+  it("still has exactly three roles for Taiwan, which is what the question says", () => {
+    const taiwan = ACTOR_MAP_ENTRIES.find((a) => a.id === "taiwan")!;
+    expect(taiwan.roles.length).toBeGreaterThanOrEqual(3);
+    expect(new Set(taiwan.roles)).toEqual(
+      new Set(["chokepoint", "information", "victim"]),
+    );
+  });
+
+  it("still has exactly two actors holding capability and enforcement at once", () => {
+    const both = ACTOR_MAP_ENTRIES.filter(
+      (a) => a.roles.includes("capability") && a.roles.includes("enforcement"),
+    ).map((a) => a.id);
+    expect(both.sort()).toEqual(["china", "us"]);
+  });
+
+  it("totals the sum of its parts and says what earns nothing", () => {
+    expect(keyTotal(CLOSING_KEY)).toBe(
+      CLOSING_KEY.criteria.reduce((n, c) => n + c.points, 0),
+    );
+    expect(keyTotal(CLOSING_KEY)).toBeGreaterThan(0);
+    expect(CLOSING_KEY.noCredit.length).toBeGreaterThanOrEqual(2);
+  });
+
+  it("asks for the mechanism wherever it asks for a judgement", () => {
+    // The house rule from data/marking-keys.ts: a bare correct label earns
+    // nothing where reasoning was the point.
+    expect(CLOSING_KEY.criteria.some((c) => c.needsReasoning)).toBe(true);
   });
 });
 
@@ -169,6 +172,14 @@ describe("actor-workshop data", () => {
  *
  * A trailing "..." marks a deliberate cut and is dropped before matching;
  * nothing else about a fragment may differ.
+ *
+ * THE CONVENTION THIS RESTS ON, so nobody trips it by accident: curly
+ * quotation marks in the data file are reserved for 1.2's own words. Anything
+ * quoted from somewhere else — a paper, a figure caption — is attributed
+ * inline and written with straight quotes, which this test does not read. And
+ * a line that puts words in a learner's mouth, like the noCredit examples,
+ * carries no quotation marks at all; one of them did, and it failed here,
+ * which is the check behaving correctly rather than a reason to loosen it.
  */
 describe("quotes from 1.2", () => {
   const norm = (s: string) =>

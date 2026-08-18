@@ -97,6 +97,7 @@ import {
   type ActorPostureId,
   type ActorRoleId,
 } from "./actor-map";
+import type { MarkingKey } from "./marking-keys";
 
 /** The subset the workshop runs on. Ten is the size that keeps every step */
 /* under a few minutes; the roster has twenty-seven. These ten were chosen to
@@ -350,30 +351,202 @@ export const CLOSING_QUESTIONS = [
 ];
 
 /**
- * What a learner is likely to type instead of the roster's own row name.
+ * Step 2 — what free recall actually asks for.
  *
- * Every one of these is the lesson's own word for that row — "cloud
- * providers" is the heading of Table 4's cloud line, "export controls" is how
- * the body names BIS. They exist so free recall is marked on what was
- * retrieved rather than on whether somebody happened to write "SK hynix,
- * Samsung, Micron" the way the roster does. Never add an alias that names a
- * different actor.
+ * It used to ask for the cast: "who does this agreement touch", marked by a
+ * fuzzy matcher against the roster's names. That retrieved ten proper nouns,
+ * and the section's content is what those actors can do and to whom — so it
+ * was the weakest retrieval the step could have asked for. It asks for the
+ * material now.
+ *
+ * The cloud provider is the subject because the lesson works it through
+ * explicitly, which means the key below can be HER SENTENCES and nothing
+ * else: the four bullets under "Try it on a cloud provider" and the default
+ * posture in Table 4's cloud row. Four roles and two postures, six items.
+ *
+ * MARKED BY THE LEARNER, not by a matcher. A string matcher over free prose
+ * would have to carry a vocabulary list per role ("suspend", "cut off",
+ * "valve"…), would be wrong often, and would be wrong in the direction that
+ * discourages writing anything. Self-scoring against a printed key is what
+ * the free-recall studies do and what every constructed exercise in 2.4
+ * already does; the learner ticks what they actually had.
  */
-export const RECALL_ALIASES: Record<string, string[]> = {
-  "frontier-labs": ["frontier labs", "labs", "OpenAI", "Anthropic", "Google DeepMind", "Meta", "xAI", "developers"],
-  hyperscalers: ["cloud providers", "cloud", "hyperscalers", "data centers", "data centres"],
-  nvidia: ["chip designers", "accelerator designers", "GPU makers"],
-  tsmc: ["fabs", "fabrication", "foundries", "Taiwan Semiconductor"],
-  asml: ["lithography", "EUV", "equipment makers"],
-  bis: ["Bureau of Industry and Security", "Commerce Department", "Commerce", "export controls"],
-  ic: ["intelligence community", "intelligence agencies", "CIA", "NSA", "national technical means"],
-  california: ["state legislatures", "subnational", "SB 53"],
-  proxies: ["front companies", "resellers", "straw buyers", "intermediaries", "shell companies", "smugglers"],
-  deployers: ["product builders", "downstream", "users", "application developers"],
+export interface RecallItem {
+  id: string;
+  /** The role or posture name, as the taxonomy prints it. */
+  label: string;
+  /** Hers, verbatim, from the sentence that settles it. */
+  gloss: string;
+}
+
+export const RECALL_TARGET = {
+  actorId: "hyperscalers" as WorkshopActorId,
+  /** What the learner is asked to write. */
+  prompt:
+    "Take one actor: a cloud provider. From memory, write down everything it can do inside a verification regime — and what it wants while doing it.",
+  items: [
+    {
+      id: "chokepoint",
+      label: "Chokepoint controller",
+      gloss: "It can suspend a customer’s access this afternoon.",
+    },
+    {
+      id: "information",
+      label: "Information holder",
+      gloss:
+        "Its logs and billing records are the richest picture anywhere of who is computing what.",
+    },
+    {
+      id: "enforcement",
+      label: "Enforcement authority",
+      gloss:
+        "Give it know-your-customer duties and it becomes the regime’s front-line cop.",
+    },
+    {
+      id: "evasion",
+      label: "Evasion pathway",
+      gloss:
+        "Its reseller chains and mislabeled workloads are precisely how a determined actor reaches compute it should not have.",
+    },
+    {
+      id: "comply",
+      label: "Comply",
+      gloss: "Table 4’s cloud row: “Comply and hide at once. Natural monitors, reluctant police.”",
+    },
+    {
+      id: "hide",
+      label: "Hide",
+      gloss: "The same row: a natural monitor that is a reluctant police force.",
+    },
+  ] as RecallItem[],
+} as const;
+
+/**
+ * Step 6b — the second-order question the concentric map exists for.
+ *
+ * Beeck's own reason for drawing rings is to "see dependencies between
+ * stakeholders and anticipate second-order effects", and the workshop had no
+ * step that did the second half. This is it: take one actor off the board.
+ *
+ * The question asks which removal bites SOONEST on purpose, because the
+ * answer is not the one the supply-chain numbers point at, and the gap
+ * between the two is the second-order effect. Removing the clouds stops runs
+ * this week — they are the machines the run happens on. Removing ASML stops
+ * almost nothing this week and very nearly everything eventually: it is 100%
+ * of EUV lithography, and EUV is what leading-edge fabrication needs.
+ *
+ * SOURCED, not asserted. Sastry, Heim, Belfield et al., "Computing Power and
+ * the Governance of Artificial Intelligence" (2024), Figure 11: "ASML is the
+ * only company capable of producing EUV machines", market share 100%; TSMC at
+ * 90% of ≤7nm logic fabrication; and and the caption verbatim:
+ * "Several critical steps--including AI chip design and production--have fewer
+ * than three suppliers."
+ * The cloud split in the same figure is AWS 32%, Azure 22%, Google Cloud 11%.
+ */
+export const SECOND_ORDER = {
+  stem: "Take one actor off the board entirely. Whose removal stops a frontier training run soonest — this week, not this decade?",
+  options: [
+    {
+      id: "hyperscalers",
+      text: "The cloud providers.",
+      correct: true,
+      why: "The run happens on their machines. Access can be suspended this afternoon, which is why they are on the inner ring at all.",
+    },
+    {
+      id: "asml",
+      text: "ASML.",
+      correct: false,
+      why: "The most consequential removal on this board and the slowest. ASML is 100% of EUV lithography, so taking it away eventually takes leading-edge fabrication with it — but no training run stops this week, because the chips already exist.",
+    },
+    {
+      id: "tsmc",
+      text: "TSMC.",
+      correct: false,
+      why: "Same shape as ASML, one step nearer: ~90% of sub-7nm logic. It stops the next generation of chips, not the run already loaded.",
+    },
+    {
+      id: "bis",
+      text: "The Bureau of Industry and Security.",
+      correct: false,
+      why: "It writes and enforces export controls and trains nothing. Remove it and the rules stop being enforced — which loosens the regime rather than stopping the activity.",
+    },
+  ],
+  /** What the step is actually for, shown after the commit. */
+  lesson:
+    "That gap is the thing a ring map is drawn to show. The removal that bites soonest and the removal that matters most are different actors, on different rings, and a regime that reaches only for the second one buys nothing this year. Ask both questions of any chokepoint you are offered.",
+} as const;
+
+/**
+ * The marking key for the three closing questions.
+ *
+ * The house form, and the reasons for it, are in data/marking-keys.ts: credit
+ * per element, a bare correct label worth nothing where a mechanism was
+ * asked for, wording free, and what earns nothing said out loud.
+ *
+ * THE ANSWERS ARE DERIVED FROM THE ROSTER, not from judgement. Taiwan holds
+ * exactly three roles in `ACTOR_MAP_ENTRIES` — chokepoint, information,
+ * victim — which is why her question says "at least three". Exactly two
+ * actors hold capability and enforcement at once, the United States and
+ * China; a test in actor-workshop.test.ts re-derives both facts, so a roster
+ * edit that changes them fails rather than leaving a key that lies.
+ *
+ * Question 2 has no fixed answer and its criteria say so: the lesson gives
+ * the information holders but never ranks them, so what is marked is whether
+ * an order was committed to and whether each rank carries its reason.
+ */
+export const CLOSING_KEY: MarkingKey = {
+  criteria: [
+    {
+      text: "Taiwan is named as a chokepoint controller, and the reason is the fabrication step rather than the country.",
+      points: 1,
+      needsReasoning: true,
+      grounds: "Table 2: “the single tightest physical chokepoint in the system”.",
+    },
+    {
+      text: "Taiwan is named as an information holder — what was fabricated, how much, and for whom.",
+      points: 1,
+      grounds: "Table 5: “Who already knows what verifiers need to learn?”",
+    },
+    {
+      text: "Taiwan is named as a victim or beneficiary: it carries the risk of being the chokepoint without controlling the conflict over it.",
+      points: 1,
+      needsReasoning: true,
+      grounds: "Table 2: “being both the prize and the battlefield in a conflict it does not control”.",
+    },
+    {
+      text: "The information holders are put in an actual order, not listed.",
+      points: 1,
+    },
+    {
+      text: "Each rank carries the reason its picture is more or less complete — what that actor sees, and what it cannot see.",
+      points: 2,
+      needsReasoning: true,
+      grounds:
+        "Table 4 gives each stage its holding: the lab knows what was trained and on what, the cloud holds logs and billing, the fab holds shipments.",
+    },
+    {
+      text: "The actor named for the last question holds capability and enforcement at once — on this roster that is a state with a frontier programme of its own.",
+      points: 1,
+      grounds: "Table 3 splits one signatory into institutions that do not want the same thing.",
+    },
+    {
+      text: "The unease is stated as a mechanism: the same actor builds the thing and judges whether the rules about it were broken, so an unfavourable finding costs it twice.",
+      points: 2,
+      needsReasoning: true,
+    },
+  ],
+  noCredit: [
+    "Naming Taiwan’s three roles without saying what makes each one true.",
+    "Listing information holders in the order the lesson happens to print them, with no claim about completeness.",
+    "Calling it a conflict of interest with no account of what the conflict costs the actor.",
+  ],
 };
 
 /** Its own localStorage document, as every workspace has. Permanent. */
 export const WORKSHOP_NOTES_KEY = "v-actor-workshop-notes:v1";
+
+/** The self-marking beside those answers. Permanent, and never sent anywhere. */
+export const WORKSHOP_MARKS_KEY = "v-actor-workshop-marks:v1";
 
 /** Role and posture keys, read straight off the roster rows. */
 export const ROLE_KEY = Object.fromEntries(

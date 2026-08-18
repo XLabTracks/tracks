@@ -4,73 +4,11 @@
  * every piece of it came from.
  */
 
-import type { ActorMapEntry } from "./data/actor-map";
-
-/** Punctuation and case removed; the learner is recalling, not spelling. */
-export function normalize(s: string): string {
-  return s
-    .toLowerCase()
-    .replace(/[^\p{L}\p{N}]+/gu, " ")
-    .trim();
-}
-
-/**
- * Free recall, marked leniently and on purpose.
- *
- * The step asks "who does a pause agreement touch?" and the learner types
- * names. Marking that strictly would fail somebody who wrote "cloud" for
- * "AWS, Azure, Google Cloud, Oracle, Alibaba", which is the right answer said
- * shorter — and the point of the step is what they retrieved, not how they
- * spelled it.
- *
- * A line hits an actor on any of three tests, and the length floors on two of
- * them are the whole difficulty:
- *
- *   1. the line and the name are the same string — which is what lets a short
- *      name like "AMD" or "ASML" count at all;
- *   2. one contains the other AND the contained side is four characters or
- *      more. Without that floor a learner who typed "and" hit "Product
- *      builders and deployers", because a stopword is genuinely a substring
- *      of half the roster. The unit test that caught it stays;
- *   3. they share a word of four letters or more — same floor, same reason.
- *
- * `aliases` carries the words the roster does not: a learner writes "cloud
- * providers", the roster row is five company names. They are the lesson's own
- * vocabulary for the same row, never a new actor.
- */
-const MIN_MATCH = 4;
-export function recallHits(
-  lines: string[],
-  actors: ActorMapEntry[],
-  aliases: Record<string, string[]> = {},
-): Set<string> {
-  const hit = new Set<string>();
-  const typed = lines.map(normalize).filter(Boolean);
-  if (typed.length === 0) return hit;
-
-  for (const actor of actors) {
-    const candidates = [actor.name, ...(aliases[actor.id] ?? [])].map(normalize);
-    for (const line of typed) {
-      const lineWords = new Set(
-        line.split(" ").filter((w) => w.length >= MIN_MATCH),
-      );
-      const matched = candidates.some((cand) => {
-        if (!cand) return false;
-        if (cand === line) return true;
-        if (line.includes(cand) && cand.length >= MIN_MATCH) return true;
-        if (cand.includes(line) && line.length >= MIN_MATCH) return true;
-        return cand
-          .split(" ")
-          .some((w) => w.length >= MIN_MATCH && lineWords.has(w));
-      });
-      if (matched) {
-        hit.add(actor.id);
-        break;
-      }
-    }
-  }
-  return hit;
-}
+/* `normalize` and `recallHits` lived here and are gone. They marked step 2
+   when it asked for the cast by name; the step asks for material now and the
+   learner scores it against a printed key, so there is nothing to match. The
+   matcher, its four-character containment floor and the test that forced it
+   are in the history — see docs/verification/module-1-log.md. */
 
 /**
  * A categorization is right when it names the same set, not a subset.

@@ -499,3 +499,44 @@ two are content decisions:
 Timing label corrected from 20–25 to 25–30 minutes: ten actors times a ring plus
 up to six roles plus up to five postures is forty to sixty decisions, and the
 first number was optimistic.
+
+### Department of War, and who "large frontier developer" actually catches (2026-08-15)
+
+Two owner instructions, applied.
+
+**"Пусть просто деп оф вор зовется."** Table 3's row is now just *Department of
+War* — no parenthetical — and the Notes-and-sources paragraph about the
+executive order and the House vote is deleted outright. Both URLs left
+citations.json with it: the Federal Register entry (an `entries` row) and the
+PBS one (parked in `pending` an hour earlier). The registry's orphan test is
+what makes that mandatory rather than tidy.
+
+Worth recording since it was checked twice: the department has run under the
+name since the September 2025 executive order, and the *statutory* renaming is
+still outstanding — the FY2026 NDAA was signed on 18 December 2025 without it,
+and it passed the House in the annual defense bill on 22 July 2026. None of
+that is in the lesson any more, on her call that it does not matter for what
+1.2 teaches. It is here so the next person does not "restore" it as a fix.
+
+**The two SB 53 thresholds now carry a footnote naming who they catch.** She
+offered two mechanisms — a footnote, or the hover card on an underlined word.
+`<Footnote>` is the one used, and not only because it was easier: the hover
+card is `<Term>`, which is a lookup into `glossary.json`, and a glossary entry
+is a definition, which this repo's rules reserve for her to write. A footnote
+needs no such entry. On viewports of 96rem and up it renders as a margin
+sidenote that is simply there to read; below that the `[1]` marker expands it
+in place. Verified at 1700px, 1440px and 430px.
+
+The content is sourced, and it is a better fact than expected: **no public
+authority keeps a list.** Coverage turns on the compute number, and the compute
+number is one only the developer measures. As of early 2026 the SB 53 reference
+records exactly two developers publicly known to have trained above 10^26 —
+OpenAI and xAI — while METR's guide for lab staff names OpenAI, Google,
+Anthropic and xAI as illustrations of who these laws govern rather than as a
+roster. The footnote says both, attributes both, and ends on one sentence of
+ours connecting it to the section's own subject: a rule whose scope is set by a
+quantity the regulated party alone can count.
+
+METR is registered in citations.json with full fields; sb53.info is cited and
+parked in `pending`, because its authorship is not established and guessing
+bibliographic facts is the thing `pending` exists to prevent.

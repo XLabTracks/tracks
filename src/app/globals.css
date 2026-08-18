@@ -792,6 +792,25 @@
   width: 100%;
 }
 
+/* 1.0.1's paired compute/capability table (`<div className="pair-table">`
+   around ordinary markdown): two content columns of equal standing with a
+   narrow connector column between them. The last-child rule above hands all
+   slack to the final column, which starved the first down to a word a line —
+   here both outer columns state the same preference, so auto layout splits
+   the slack evenly and the middle keeps its content width. */
+.lesson-body .pair-table :is(th, td):first-child,
+.lesson-body .pair-table :is(th, td):last-child {
+  width: 48%;
+}
+
+/* Both outer columns hold data of equal standing, so the first must not take
+   the row-header treatment the shared rule above gives it — the two sides of
+   a pair have to read identically. */
+.lesson-body .pair-table tbody td:first-child {
+  font-weight: inherit;
+  color: inherit;
+}
+
 .lesson-body table.elements-grid {
   display: table;
   width: 100%;

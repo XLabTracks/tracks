@@ -131,7 +131,7 @@ export function BuildInstitution({
 
   return (
     <div className="not-prose my-6 space-y-4">
-      <section className="border-border bg-card rounded-xl border p-4">
+      <section className="panel">
         <p className="text-sm leading-relaxed">{SCENARIO}</p>
         <p className="mt-2 text-sm leading-relaxed">
           Choose exactly {PICK_EXACTLY} provisions. Your institution must
@@ -187,7 +187,7 @@ export function BuildInstitution({
       {full && !saved.submitted ? (
         <section
           className={cn(
-            "border-border rounded-xl border p-4",
+            "panel",
             writingCardFocus
           )}
         >
@@ -239,7 +239,7 @@ export function BuildInstitution({
               return (
                 <div
                   key={test.id}
-                  className="border-border bg-card rounded-xl border p-4"
+                  className="panel"
                 >
                   <p
                     className={cn(
@@ -268,7 +268,7 @@ export function BuildInstitution({
 
             {/* The fourth thing the key weighs, stated here so the machine's
                 three verdicts do not read as the whole marking. */}
-            <div className="border-border bg-card rounded-xl border p-4">
+            <div className="panel">
               <p className="text-sm font-semibold">{COHERENCE_TEST.label}</p>
               <p className="text-muted-foreground mt-1 text-xs leading-relaxed">
                 {COHERENCE_TEST.question}
@@ -289,7 +289,7 @@ export function BuildInstitution({
             {SAMPLE_DESIGNS.map((design) => (
               <article
                 key={design.ids.join("")}
-                className="border-border bg-card rounded-xl border p-4"
+                className="panel"
               >
                 <p className="text-sm font-semibold">
                   {design.title}{" "}
@@ -306,7 +306,7 @@ export function BuildInstitution({
 
           <section
             className={cn(
-              "border-border rounded-xl border p-4",
+              "panel",
               writingCardFocus
             )}
           >

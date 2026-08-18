@@ -131,7 +131,7 @@ export function CompaniesAB({
         {COMPANIES.map((company) => (
           <section
             key={company.id}
-            className="border-border bg-card rounded-xl border p-4"
+            className="panel"
           >
             <h4 className="text-sm font-semibold">{company.label}</h4>
             <ul className="mt-2 space-y-1.5">
@@ -161,7 +161,7 @@ export function CompaniesAB({
           <div
             key={slot.id}
             className={cn(
-              "border-border bg-card rounded-xl border p-4",
+              "panel",
               writingCardFocus
             )}
           >
@@ -193,7 +193,7 @@ export function CompaniesAB({
       </div>
 
       {/* Part II */}
-      <section className="border-border bg-card rounded-xl border p-4">
+      <section className="panel">
         <h4 className="text-sm font-semibold">
           {LETTER.title}{" "}
           <span className="text-muted-foreground font-normal">
@@ -243,7 +243,7 @@ export function CompaniesAB({
           <div
             key={question.id}
             className={cn(
-              "border-border bg-card rounded-xl border p-4",
+              "panel",
               writingCardFocus
             )}
           >
@@ -299,7 +299,7 @@ export function CompaniesAB({
 
       {frozen ? (
         <div className="space-y-4">
-          <section className="border-border rounded-xl border p-4">
+          <section className="panel">
             <h4 className="text-muted-foreground eyebrow">
               What separates A from B
             </h4>
@@ -320,7 +320,7 @@ export function CompaniesAB({
             </p>
           </section>
 
-          <section className="border-border rounded-xl border p-4">
+          <section className="panel">
             <h4 className="text-muted-foreground eyebrow">
               What the letter is evidence for
             </h4>
@@ -342,7 +342,7 @@ export function CompaniesAB({
 
           <section
             className={cn(
-              "border-border rounded-xl border p-4",
+              "panel",
               writingCardFocus
             )}
           >

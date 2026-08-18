@@ -279,16 +279,25 @@
   line-height: 1.6;
 }
 
-/* Reading measure. Widgets, tables and reproduced source panels keep the full
-   lesson width; uninterrupted prose stops below the W3C's 80-character
-   ceiling. */
+/* Reading measure — WITHDRAWN, on the course owner's instruction: "текст
+   должен быть на всю ширину экрана, которая не занята другим".
+
+   It was 64ch on prose and 34ch on headings. Together with the page's
+   max-w-4xl wrapper that put 644px of text inside a 1316px content area on a
+   wide screen, which is what she was looking at. Both caps are off; the text
+   takes the width the sidebar does not.
+
+   Kept as rules rather than deleted so the decision has somewhere to live and
+   one value brings the measure back if long lines prove worse than empty
+   margin. The known cost, stated rather than discovered: at 1700px a line
+   runs about 125 characters, well past the W3C's 80-character guidance. */
 :root[data-theme]
   .lesson-body
   > :where(p, ul, ol, blockquote, dl):not(.not-prose) {
-  max-inline-size: 64ch;
+  max-inline-size: none;
 }
 :root[data-theme] .lesson-body > :where(h2, h3, h4, h5, h6):not(.not-prose) {
-  max-inline-size: 34ch;
+  max-inline-size: none;
 }
 /* The same measure, at any depth — but not inside a widget.
    The rule above this one guards its direct children with `.not-prose`; this
@@ -309,7 +318,7 @@
   :where(p, li, blockquote, dd):not(
     :where([data-widget], [data-widget] *)
   ) {
-  max-inline-size: 64ch;
+  max-inline-size: none;
 }
 
 /* Small type inside an exercise may label a state; it must not carry the
@@ -776,7 +785,11 @@
   border-radius: 28px 28px 0 0;
   color: var(--brand-ink, var(--primary));
   font-weight: 600;
-  max-inline-size: var(--vt-measure, 64ch);
+  /* It carried `max-inline-size: var(--vt-measure, 64ch)` so that the header
+     and its list took the same length despite the header's heavier weight
+     computing a wider `ch`. With the measure withdrawn the list is unbounded,
+     so matching it means no cap here either — and --vt-measure below is kept
+     for the day the measure comes back. */
 }
 @property --vt-measure {
   syntax: "<length>";

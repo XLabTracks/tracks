@@ -194,7 +194,14 @@ async function LessonItemPage({
     track.chunkedReading && !lesson.completion && !lesson.unchunked;
 
   return (
-    <div className="max-w-4xl px-4 py-8 lg:px-8">
+    /* No width cap. It was max-w-4xl — 896px — which on anything wider than a
+       small laptop left a third of the content area empty beside the reading
+       column, and the column had a second cap inside it. Both are gone on the
+       course owner's instruction: the text takes the width the sidebar does
+       not. The measure that used to sit inside is in app-bridge.css, and the
+       margin gutter that justified some of the slack went with the footnote
+       sidenote it was reserved for. */
+    <div className="px-4 py-8 lg:px-8">
       {/* The trail stops at the module: the lesson's own name is the h1 two
           lines below, and repeating it there put the same words on screen
           twice before the body even started. Same reason there is no

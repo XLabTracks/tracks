@@ -22,8 +22,8 @@ const AnatomyDrill = dynamic<VerificationWidgetProps>(
   () => import("./anatomy-drill").then((module) => module.AnatomyDrill),
   { loading: WidgetLoading },
 );
-const ProtocolActors = dynamic<VerificationWidgetProps>(
-  () => import("./protocol-actors").then((module) => module.ProtocolActors),
+const ActorWorkshop = dynamic<VerificationWidgetProps>(
+  () => import("./actor-workshop").then((module) => module.ActorWorkshop),
   { loading: WidgetLoading },
 );
 const ReportConstructor = dynamic<VerificationWidgetProps>(
@@ -111,10 +111,6 @@ const EvidenceTaxonomies = dynamic<VerificationWidgetProps>(
   () => import("./evidence-taxonomies").then((module) => module.EvidenceTaxonomies),
   { loading: WidgetLoading },
 );
-const ActorMap = dynamic<VerificationWidgetProps>(
-  () => import("./actor-map").then((module) => module.ActorMap),
-  { loading: WidgetLoading },
-);
 const FieldMap = dynamic<VerificationWidgetProps>(
   () => import("./field-map").then((module) => module.FieldMap),
   { loading: WidgetLoading },
@@ -186,7 +182,7 @@ export const verificationWidgets: Record<
 > = {
   "policy-scoping": PolicyScoping,
   "anatomy-drill": AnatomyDrill,
-  "protocol-actors": ProtocolActors,
+  "actor-workshop": ActorWorkshop,
   "report-constructor": ReportConstructor,
   "interactive-map": InteractiveMap,
   "verification-landscape": VerificationLandscape,
@@ -208,7 +204,6 @@ export const verificationWidgets: Record<
   "theories-of-change": TheoriesOfChange,
   "verification-problem": VerificationProblem,
   "evidence-taxonomies": EvidenceTaxonomies,
-  "actor-map": ActorMap,
   "field-map": FieldMap,
   "human-insiders": ConstructCase,
   "human-reporting-protection": PolicyQuickCheck,

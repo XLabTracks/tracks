@@ -26,9 +26,8 @@ export default function Page() {
             <h1>About the Verification track</h1>
             <p className="lede">
               An intermediate course on international AI verification: the technical,
-              institutional and legal mechanisms that decide whether a governance
-              commitment can be checked at all — and what it takes to tell a kept
-              promise from a broken one.
+              institutional, and legal mechanisms that make agreements observable and
+              enforceable — and help distinguish compliance from violation.
             </p>
 
             {/* Counted from the sources, never typed in: the written-output

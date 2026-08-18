@@ -32,7 +32,7 @@ export function TreatyWorkspace({ onComplete }: VerificationWidgetProps) {
             Open{" "}
             <a
               href={`/tracks/verification/policy-scoping/${TREATY.paperSlug}`}
-              className="text-primary font-medium underline-offset-4 hover:underline"
+              className="text-brand-ink font-medium underline-offset-4 hover:underline"
             >
               the draft agreement
             </a>{" "}

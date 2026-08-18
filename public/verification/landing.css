@@ -9,13 +9,24 @@
 /* ---------- hero ---------- */
 
 .hero {
-  padding: 40px 0 36px;
+  /* Fluid, not fixed — and the floors are the working values on a laptop,
+     where 100vh is ~700-800px, so they are set generously rather than
+     trusting the vh term to lift them. The type does not scale — only the
+     ground around it. */
+  padding: clamp(64px, 10vh, 128px) 0 clamp(44px, 6vh, 72px);
 }
 .hero > .wrap,
-section.band > .wrap {
-  /* At 1280px this puts the landing content at x=80, the same outer gutter as
-     the reference course rather than adding a second 24px inset inside it. */
-  max-width: 1168px;
+section.band > .wrap,
+section.alpha-note > .wrap {
+  /* The landing shares the header's container — same max width, same gutter,
+     from the --chrome-* variables theme.css declares. The h1 starts on the
+     brand's vertical and the content's right edge lands where the header's
+     actions end, at every width; before this the page sat in its own narrower
+     wrap and drifted 60-80px off the chrome on wide monitors. Line lengths
+     are unchanged — the ch caps on h1/lede/intro still measure the text;
+     only the composition column grew. */
+  max-width: var(--chrome-maxw, 1436px);
+  padding-inline: var(--chrome-gutter, 80px);
 }
 .hero h1 {
   max-width: 32ch;
@@ -24,7 +35,7 @@ section.band > .wrap {
 }
 .hero .lede {
   max-width: 60ch;
-  margin-top: 16px;
+  margin-top: 20px;
   font-size: var(--fs-lg);
   line-height: 1.6;
   color: var(--muted-foreground);
@@ -33,7 +44,9 @@ section.band > .wrap {
   display: flex;
   flex-wrap: wrap;
   gap: 12px;
-  margin-top: 24px;
+  /* The buttons are a decision, not the next sentence — the big step of air
+     goes HERE, between the text and the actions, not under the buttons. */
+  margin-top: 48px;
 }
 
 /* ---------- sections ---------- */
@@ -46,8 +59,8 @@ section.band.filled {
   border-bottom: var(--hairline) solid var(--border);
 }
 section.band > .wrap {
-  padding-top: 44px;
-  padding-bottom: 44px;
+  padding-top: clamp(44px, 6vh, 72px);
+  padding-bottom: clamp(44px, 6vh, 72px);
 }
 section.band h2 {
   font-size: var(--fs-3xl);
@@ -575,7 +588,7 @@ section.band .intro {
 
 @media (max-width: 640px) {
   .hero {
-    padding: 28px 0 24px;
+    padding: 40px 0 32px;
   }
   section.band > .wrap {
     padding-top: 32px;
@@ -660,4 +673,153 @@ section.band .intro {
 }
 .key-label {
   flex: 1 1 auto;
+}
+
+/* ---------- alpha notice ---------- */
+
+/* The band under the hero: the course is open but not launched, and a reader
+   deciding whether to start needs that before the skills graph, not in a
+   footer.
+
+   Painted on all four sides, not a tinted edge, and the red is --primary
+   rather than a literal, so each theme re-solves it — high contrast turns the
+   band yellow-on-black rather than shipping a red nobody chose.
+
+   No status pill and no call-to-action button. Both were added here and both
+   were wrong: the pill is stock component-library furniture that says in a
+   label what the sentence already says in words, and the button only existed
+   by taking the link out of the sentence that asks for it. The paragraph is
+   the notice. Nothing is placed beside it. */
+section.alpha-note {
+  background: var(--primary);
+  color: var(--primary-foreground);
+}
+section.alpha-note > .wrap {
+  padding-top: 22px;
+  padding-bottom: 22px;
+}
+/* Centred in the band. Left-aligned it sat in the first two thirds and left
+   the rest of the red empty, which read as a column that had run out rather
+   than as a notice addressed to the room. The measure stays capped — centring
+   a full-bleed line would give every row a different start and make it hard
+   to find the next one. */
+section.alpha-note p {
+  margin: 0 auto;
+  max-width: 76ch;
+  text-align: center;
+  font-size: var(--fs-sm);
+  line-height: 1.7;
+}
+section.alpha-note a {
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-thickness: 1px;
+}
+section.alpha-note a:hover {
+  text-decoration-thickness: 2px;
+}
+
+/* ---------- motion ---------- */
+
+/* Two rules for the whole page, and both animate only `opacity` and
+   `translate` — compositor properties, so nothing here reads back layout or
+   repaints a frame. `translate` deliberately, not `transform`: it is its own
+   property, so a card can be lifted on hover by `transform` at the same time
+   without the two fighting over one declaration.
+
+   The scroll reveal is CSS, not an IntersectionObserver, and the default state
+   is VISIBLE — the animation only hides an element inside `@supports`, so a
+   browser without scroll-driven animation shows the page as it always was
+   rather than a column of invisible sections waiting on a script that may
+   never arrive. That failure mode is the reason this is not JavaScript. */
+
+@keyframes landing-rise {
+  from {
+    opacity: 0;
+    translate: 0 14px;
+  }
+  to {
+    opacity: 1;
+    translate: 0 0;
+  }
+}
+
+/* The hero is already on screen at load, so it plays on a clock rather than on
+   scroll: title, sentence, then the three ways in, each a beat behind the one
+   above. `backwards` so the first frame is the hidden one and nothing flashes
+   at full opacity before its delay elapses. */
+section.hero .wrap > * {
+  animation: landing-rise 0.55s cubic-bezier(0.22, 0.61, 0.36, 1) backwards;
+}
+section.hero .wrap > h1 {
+  animation-delay: 0.05s;
+}
+section.hero .wrap > .lede {
+  animation-delay: 0.15s;
+}
+section.hero .wrap > .ways {
+  animation-delay: 0.25s;
+}
+
+@supports (animation-timeline: view()) {
+  [data-reveal] {
+    animation: landing-rise 1s linear both;
+    animation-timeline: view();
+    /* Measured in `entry`, never `cover`, and finished well before the entry
+       completes. A range that ends on `cover` cannot be reached by the last
+       elements on the page — the document runs out of scroll first — and they
+       sit permanently part-faded; the four overview cards did exactly that at
+       0.93 opacity. Ending at `entry 70%` means anything shorter than the
+       viewport is fully resolved as soon as it is properly on screen, wherever
+       it sits in the document. */
+    animation-range: entry 0% entry 70%;
+  }
+}
+
+/* A card lifts a little under the pointer and sets its shadow down again on
+   release. `transform`, so it composes with the reveal's `translate`. */
+.overview-card {
+  transition:
+    transform 0.2s cubic-bezier(0.22, 0.61, 0.36, 1),
+    box-shadow 0.2s ease-out;
+}
+.overview-card:hover {
+  transform: translateY(-2px);
+}
+.overview-card:active {
+  transform: translateY(0);
+  transition-duration: 0.06s;
+}
+
+section.hero .ways .btn {
+  transition:
+    transform 0.18s cubic-bezier(0.22, 0.61, 0.36, 1),
+    box-shadow 0.18s ease-out;
+}
+section.hero .ways .btn:hover {
+  transform: translateY(-1px);
+}
+section.hero .ways .btn:active {
+  transform: translateY(0);
+  transition-duration: 0.06s;
+}
+
+/* Motion is decoration here — every one of these elements is readable and
+   reachable without it, so reduced motion turns all of it off rather than
+   softening it. */
+@media (prefers-reduced-motion: reduce) {
+  section.hero .wrap > *,
+  [data-reveal] {
+    animation: none;
+  }
+  .overview-card,
+  .overview-card:hover,
+  .overview-card:active,
+  section.hero .ways .btn,
+  section.hero .ways .btn:hover,
+  section.hero .ways .btn:active {
+    transform: none;
+    transition: none;
+  }
 }

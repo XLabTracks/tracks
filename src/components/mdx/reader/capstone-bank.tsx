@@ -50,7 +50,7 @@ function Brief({ e, lead }: { e: Entry; lead: boolean }) {
     >
       <div className="flex items-center gap-2">
         {lead ? (
-          <span className="border-primary/40 text-primary rounded-full border px-2 py-0.5 text-xs select-none">
+          <span className="border-primary/40 text-brand-ink rounded-full border px-2 py-0.5 text-xs select-none">
             this unit&rsquo;s brief
           </span>
         ) : null}

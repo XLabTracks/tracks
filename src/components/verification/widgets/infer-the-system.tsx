@@ -142,7 +142,7 @@ export function InferTheSystem({
     <div className="not-prose my-6 space-y-4">
       {/* The policy, said plainly and not characterised. Numbers are here to
           be cited with, which is the only reason they are numbers. */}
-      <section className="border-border bg-card rounded-xl border p-4">
+      <section className="panel">
         <h4 className="text-sm font-semibold">Internal Reporting Policy</h4>
         <ol className="mt-3 space-y-2">
           {POLICY_RULES.map((rule, i) => (
@@ -168,7 +168,7 @@ export function InferTheSystem({
           <li
             key={index}
             className={cn(
-              "border-border bg-card rounded-xl border p-4",
+              "panel",
               writingCardFocus
             )}
           >
@@ -245,7 +245,7 @@ export function InferTheSystem({
 
       {saved.submitted ? (
         <div className="space-y-4">
-          <section className="border-border rounded-xl border p-4">
+          <section className="panel">
             {INFER_REVEAL.map((line, i) => (
               <p
                 key={line}
@@ -266,7 +266,7 @@ export function InferTheSystem({
             {POLICY_RULES.map((rule, i) => (
               <div
                 key={rule}
-                className="border-border bg-card rounded-xl border p-4"
+                className="panel"
               >
                 <p className="flex gap-3 text-sm leading-relaxed">
                   <span className="border-border text-muted-foreground flex size-5 shrink-0 items-center justify-center rounded-full border text-3xs">
@@ -283,7 +283,7 @@ export function InferTheSystem({
 
           <section
             className={cn(
-              "border-border rounded-xl border p-4",
+              "panel",
               writingCardFocus
             )}
           >

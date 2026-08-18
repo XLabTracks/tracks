@@ -93,7 +93,7 @@ export function QuestionWorkspace({
           <div
             key={q.id}
             className={cn(
-              "border-border bg-card rounded-xl border p-5",
+              "panel",
               writingCardFocus
             )}
           >

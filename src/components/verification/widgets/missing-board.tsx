@@ -110,7 +110,7 @@ export function MissingBoard({
         {BOARD_STATIONS.map((station) => (
           <section
             key={station.id}
-            className="border-border bg-card rounded-xl border p-4"
+            className="panel"
           >
             <p className="text-sm font-semibold">{station.title}</p>
             <p className="text-muted-foreground mt-2 text-[11px] tracking-[0.12em] uppercase">
@@ -144,7 +144,7 @@ export function MissingBoard({
           </section>
         ))}
 
-        <section className="border-border bg-card rounded-xl border p-4">
+        <section className="panel">
           <label
             className="text-sm leading-relaxed font-medium"
             htmlFor="board-strain"
@@ -194,7 +194,7 @@ export function MissingBoard({
 
       {saved.submitted ? (
         <div className="space-y-4">
-          <section className="border-border rounded-xl border p-4">
+          <section className="panel">
             <h4 className="text-muted-foreground text-[11px] tracking-[0.14em] uppercase">
               Station by station
             </h4>
@@ -210,7 +210,7 @@ export function MissingBoard({
             </dl>
           </section>
 
-          <section className="border-border rounded-xl border p-4">
+          <section className="panel">
             <p className="text-sm font-medium">{BOARD_FINAL}</p>
             <textarea
               rows={3}

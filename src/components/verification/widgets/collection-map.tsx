@@ -133,7 +133,7 @@ export function CollectionMap(_: VerificationWidgetProps) {
   );
 
   return (
-    <section className="border-border bg-card rounded-xl border p-5">
+    <section className="panel">
       <h3 className="text-lg font-semibold">{C.title}</h3>
       <p className="text-muted-foreground mt-1 text-sm leading-relaxed">{C.lede}</p>
 

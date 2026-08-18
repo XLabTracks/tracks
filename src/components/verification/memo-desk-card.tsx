@@ -39,7 +39,7 @@ export function MemoDesk({ lesson }: { lesson: string }) {
 
 function Slot({ slot }: { slot: MemoSlot }) {
   return (
-    <section className="border-border bg-card rounded-xl border p-5 text-sm">
+    <section className="panel text-sm">
       <p className="text-muted-foreground flex flex-wrap items-center gap-x-2 gap-y-1 eyebrow">
         <PenLine className="size-3.5" aria-hidden />
         {/* The unit keeps its own case: the outline numbers some of these

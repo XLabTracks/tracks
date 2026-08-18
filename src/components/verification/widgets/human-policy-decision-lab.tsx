@@ -132,7 +132,7 @@ function PhaseRail({
           key={phase.id}
           className={cn(
             "border-border rounded-md border px-2 py-2 text-center text-4xs font-medium tracking-[0.01em] uppercase",
-            index === active && "border-primary bg-primary/5 text-primary",
+            index === active && "border-primary bg-primary/5 text-brand-ink",
             index < active && "bg-muted/45 text-foreground",
             index > active && "text-muted-foreground"
           )}
@@ -172,7 +172,7 @@ function DecisionStep({
   return (
     <div>
       <section className="border-border bg-muted/15 border-b p-5 sm:p-6">
-        <p className="text-primary text-xs font-medium tracking-[0.01em] uppercase">
+        <p className="text-brand-ink text-xs font-medium tracking-[0.01em] uppercase">
           Case file
         </p>
         <h4 className="mt-2 text-xl font-semibold">{lab.caseTitle}</h4>
@@ -228,7 +228,7 @@ function DecisionStep({
                 <span
                   className={cn(
                     "border-border text-muted-foreground mt-0.5 flex size-6 shrink-0 items-center justify-center rounded-full border text-xs font-medium",
-                    selected && "border-primary text-primary",
+                    selected && "border-primary text-brand-ink",
                     supported && "border-emerald-600 bg-emerald-600 text-white",
                     unsupported && "border-destructive text-destructive"
                   )}
@@ -272,7 +272,7 @@ function DecisionStep({
                   href={step.sourceHref}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-primary mt-2 inline-flex items-center gap-1 text-xs font-medium underline-offset-4 hover:underline"
+                  className="text-brand-ink mt-2 inline-flex items-center gap-1 text-xs font-medium underline-offset-4 hover:underline"
                 >
                   {step.sourceLabel}
                   <ExternalLink className="size-3" aria-hidden />
@@ -310,11 +310,11 @@ function CompletedFile({
     <section className="p-5 sm:p-6">
       <div className="flex gap-3">
         <FileCheck2
-          className="text-primary mt-0.5 size-6 shrink-0"
+          className="text-brand-ink mt-0.5 size-6 shrink-0"
           aria-hidden
         />
         <div>
-          <p className="text-primary text-xs font-medium tracking-[0.01em] uppercase">
+          <p className="text-brand-ink text-xs font-medium tracking-[0.01em] uppercase">
             Completed file
           </p>
           <h4 className="mt-2 text-xl font-semibold">{lab.artifactTitle}</h4>

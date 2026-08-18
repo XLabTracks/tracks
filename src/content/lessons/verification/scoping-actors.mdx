@@ -1,20 +1,14 @@
 We’ve established why an international pause is important, the key components of a relevant treaty, and why robust verification mechanisms are crucial to its successful enforcement. Now, the question becomes: who are the key players that a pause treaty would require cooperation from? Which nations, labs, and manufacturers have a stake in the development or prevention of ASI?
 
-{/* One lead-in, not four. This screen used to say the same thing in four
-    places: this paragraph, the widget's own `subLearn`, the document card
-    inside it, and an italic attribution line under the whole thing — and the
-    paragraph was the one that had it wrong, sending the reader to a policy
-    "you constructed at the end of Module 0" that Module 0 never asks anybody
-    to construct. It is Scher's draft, dissected in 1.1.
+{/* The treaty-highlighting interactive that opened this section stood down on
+    2026-08-15, on the owner's judgement that clicking highlighted phrases is
+    recognition dressed as work. Its lead-in went with it — the sentence told
+    the reader to read the agreement again, and there is no longer an
+    agreement on this screen to read.
 
-    The two sentences below and the widget's are one authored run, split one
-    each: the frame is prose, the "click a phrase" instruction belongs to the
-    thing being clicked. The attribution is on the document card, and the link
-    it does not carry is in Notes and sources with the lesson's other works. */}
-
-You dissected this agreement in 1.1 as text. Read it again with a different question.
-
-<VerificationExercise id="protocol-actors" />
+    What replaced it is not here: it is the workshop at the foot of the
+    section, and it is there rather than here because it is answered from
+    memory. See src/lib/verification/data/actor-workshop.ts. */}
 
 {/* Author note — "Adapt to miri treaty": the interactive's sample policy is
     to be adapted to the MIRI pause treaty (arXiv:2511.10783); and "Actor
@@ -66,7 +60,9 @@ Now, the next level.
 
 Subnational governments regulate too, and this is often easier and/or happens earlier than federal regulation. California is this course’s running example because most frontier labs are physically headquartered there, and jurisdiction follows geography.
 
-In September 2025 California enacted SB 53, the Transparency in Frontier Artificial Intelligence Act, with its main duties taking effect in January 2026. It binds “large frontier developers,” roughly, frontier-model developers with more than $500 million in annual revenue. They must publish frameworks describing how they identify and mitigate catastrophic risks, publish transparency reports when they deploy new frontier models, report critical safety incidents to the state’s Office of Emergency Services within fifteen days (twenty-four hours if there is an imminent threat), and protect whistleblowers who raise safety concerns.
+In September 2025 California enacted SB 53, the Transparency in Frontier Artificial Intelligence Act, with its main duties taking effect in January 2026. Two thresholds decide who it reaches. A **frontier model** is one trained on more than 10^26 operations, and anyone who trains one is a **frontier developer**; a **large frontier developer** is a frontier developer whose annual gross revenues, with affiliates, exceed $500 million.<Footnote>Nobody publishes a list of who that is. Coverage turns on the compute number, and the compute number is one only the developer measures: as of early 2026 the [SB 53 reference](https://sb53.info/faq) records that just two developers are publicly known to have trained above the threshold, OpenAI and xAI, while METR’s [guide for lab staff](https://metr.org/notes/2026-01-29-frontier-ai-safety-regulations/) names OpenAI, Google, Anthropic and xAI as examples of who these laws govern rather than as a roster. Hold on to that: it is a rule whose scope is set by a quantity the regulated party alone can count.</Footnote>
+
+Every frontier developer must publish a transparency report when it deploys a new frontier model, report critical safety incidents to the state’s Office of Emergency Services within fifteen days — twenty-four hours if there is imminent risk of death or serious physical injury — and tell its employees they have whistleblower rights. Large frontier developers carry more on top: a published framework describing how they identify and mitigate catastrophic risks, fuller transparency reports, and an internal channel for anonymous reports.
 
 Notice what happened there. A state legislature bound the world’s leading labs to reporting duties before any international mechanism existed. When you design a regime later in this course, remember that some of its machinery may already exist two levels below the treaty. Often, it might be easier to pass state level legislation before federal legislation follows.
 
@@ -80,7 +76,7 @@ Table 3.  Inside one signatory: the United States
 | --- | --- | --- |
 | State Department | Negotiates the agreement and runs the diplomacy around compliance disputes. | Wants a deal that survives politics; may trade verification strictness for signatures. |
 | Commerce Department (Bureau of Industry and Security) | Writes and enforces export controls on chips: the de facto compute-governance agency today. | Enforcement capacity is small relative to the job, and the rules shift with each administration. |
-| Department of Defense (restyled the Department of War in 2025) | Strategic and military stakes in frontier AI. | Wants American capability unconstrained; wary of any regime that could bind its own programs. |
+| Department of War | Strategic and military stakes in frontier AI. | Wants American capability unconstrained; wary of any regime that could bind its own programs. |
 | Intelligence community (CIA, NSA, and the rest) | Monitoring and attribution: the “national technical means” layer that spots hidden data centers and procurement networks. | What it knows is classified. Turning intelligence into shareable treaty evidence risks burning sources. |
 | NIST and its Center for AI Standards and Innovation (CAISI) | Standards and testing. Runs pre-deployment evaluation agreements with several frontier developers. | Voluntary agreements, not inspection authority; renamed and refocused as the politics changed. |
 
@@ -103,7 +99,7 @@ Table 4.  Private actors, upstream to downstream
 | Equipment | ASML (EUV lithography); Applied Materials, Tokyo Electron. | The machines without which no leading-edge chip exists, and knowledge of every fab that buys one. | Comply. Few customers, total visibility, nowhere to hide. |
 | Fabrication and memory | TSMC, Samsung, SK Hynix, Intel. | The physical record: what was made, how many, and for whom. | Comply, while caught between US rules and Chinese customers. |
 | Chip design | NVIDIA, AMD; Huawei and other Chinese designers. | The blueprint: whether chips ship with attestation, metering, or location features at all. | Comply with controls while lobbying hard against them. Verification features cost money and sales. |
-| Packaging, assembly, test | Advanced-packaging lines (TSMC’s CoWoS and rivals); outsourced assembly-and-test firms. | A second, quieter bottleneck. Chips pass through here and can be counted. | Mostly invisible in policy debates, which is itself a gap. |
+| Packaging, assembly, test | Advanced-packaging lines (TSMC’s CoWoS and rivals); outsourced assembly-and-test firms. | Advanced packaging is a second, quieter bottleneck: chips pass through it and can be counted. Ordinary assembly and test is not — it is labor-intensive and has the lowest barriers to entry of any stage. | Mostly invisible in policy debates, which is itself a gap. |
 | Cloud providers | AWS, Microsoft Azure, Google Cloud, Oracle, Alibaba; specialists like CoreWeave. | The position between customer and machine: logs, billing, telemetry, and the power to interrupt a job. | Comply and hide at once. Natural monitors, reluctant police. |
 | Frontier labs | OpenAI, Anthropic, Google DeepMind, Meta, xAI; DeepSeek, Alibaba, and Moonshot in China. | The most detailed private information in the system: what was trained, on what data, and what the evals showed. | Every posture, potentially. |
 | Deployers | Everyone building products on top of models. | A diffuse downstream signal of what models can actually do. | Free-ride. They benefit from safety and bear none of its costs. |
@@ -159,22 +155,30 @@ Or try Taiwan. A chokepoint controller of the first rank, and simultaneously the
 
 You now have three questions to ask of any actor you meet in a proposal, a news story, or an exercise, for the rest of this course. Where does it sit on the chain? That is position: Table 4. What can it do inside a regime? That is roles: Table 5. What does it want right now? That is posture: Table 1. Ask them in that order and most verification claims come apart usefully in your hands. “The cloud providers will report suspicious training runs” stops being a reassuring sentence and becomes three checkable ones: they sit mid-chain where visibility is high; they hold the logs; and they will report exactly to the degree that reporting costs less than not reporting.
 
-Try it before moving on.
+{/* The three tasks that were bullets here are now the workshop's last step.
+    They are unchanged, and they moved for one reason: in the body they stood
+    directly over `actor-map`, a widget you look things up in and cannot
+    answer into. Nothing replaced them in the prose, because the sentence
+    above already sets them up and a second "try it" line would be the same
+    instruction twice. */}
 
-- Tag every functional role Taiwan holds. There are at least three.
-- For one specific frontier training run, list the information holders in order of how complete their picture is.
-- Name one actor that is a capability holder and an enforcement authority at the same time, and say why that pairing should make you uneasy.
+<PageBreak title="The Actor Map Workshop" />
 
-<VerificationExercise id="actor-map" />
+## The Actor Map Workshop (25–30 min)
+
+{/* Last in the section and closed-book, which is the whole design: it opens
+    with the cast on screen, you close it with a button, and every step after
+    that is answered from memory. Karpicke & Blunt are why — see the data
+    file's header. It is the section's work, so it is not in a Fold. */}
+
+<VerificationExercise id="actor-workshop" />
 
 ### Notes and sources
 
-{/* The draft agreement the opening interactive reproduces. It is cited here
-    rather than under the widget because the citation collector reads lesson
-    MDX and not widget data: the document card names the paper but carries no
-    link, so without this line the work the lesson opens on would be missing
-    from its own Works cited. */}
-The draft agreement at the top of this section: Scher, Abecassis, Barnett & Abeyta, [“An International Agreement to Prevent the Premature Creation of Artificial Superintelligence”](https://arxiv.org/abs/2511.10783) (2025), Appendix A — the treaty 1.1 dissects.
+{/* Kept after the opening interactive stood down: 1.1 dissects this draft and
+    1.2 is written about its cast, so it belongs in this lesson's Works cited
+    whether or not a widget on the page reproduces it. */}
+The draft agreement this section reads its cast out of: Scher, Abecassis, Barnett & Abeyta, [“An International Agreement to Prevent the Premature Creation of Artificial Superintelligence”](https://arxiv.org/abs/2511.10783) (2025), Appendix A — the treaty 1.1 dissects.
 
 [California SB 53](https://leginfo.legislature.ca.gov/faces/billTextClient.xhtml?bill_id=202520260SB53), the Transparency in Frontier Artificial Intelligence Act, signed September 29, 2025; core duties effective January 1, 2026 ([Future of Privacy Forum](https://fpf.org/blog/californias-sb-53-the-first-frontier-ai-law-explained/) and [White & Case](https://www.whitecase.com/insight-alert/california-enacts-landmark-ai-transparency-law-transparency-frontier-artificial) summaries).
 
@@ -184,9 +188,9 @@ The draft agreement at the top of this section: Scher, Abecassis, Barnett & Abey
 
 [NIST Center for AI Standards and Innovation (CAISI)](https://www.nist.gov/caisi), formerly the US AI Safety Institute; pre-deployment testing agreements with frontier developers.
 
-Department of Defense restyled “Department of War” by [executive order](https://www.federalregister.gov/documents/2025/09/10/2025-17508/restoring-the-united-states-department-of-war), September 2025; statutory renaming pending in Congress as of mid-2026.
+Supply-chain structure: Sastry, Heim, Belfield et al., [“Computing Power and the Governance of Artificial Intelligence”](https://arxiv.org/abs/2402.08797) (2024) — ASML at 100% of EUV lithography, TSMC at ~90% of sub-7nm logic (2022 data), and “several critical steps … have fewer than three suppliers”; CSET, [“The Semiconductor Supply Chain”](https://cset.georgetown.edu/publication/the-semiconductor-supply-chain/) (2021) — the stage-by-stage picture, including that assembly and test has the lowest barriers to entry. High-bandwidth memory is inside the export-control perimeter: the US controls were “expanded again, this time affecting all chips using advanced high-bandwidth memory” — Fist, Burga & Chilukuri, [“Technology to Secure the AI Chip Supply Chain”](https://www.cnas.org/publications/reports/technology-to-secure-the-ai-chip-supply-chain-a-primer) (CNAS, 2024). Incentive vocabulary and role taxonomy: this module’s introduction.
 
-Supply-chain structure: Sastry, Heim, Belfield et al., [“Computing Power and the Governance of AI”](https://arxiv.org/abs/2402.08797) (2024); CSET, [“The Semiconductor Supply Chain”](https://cset.georgetown.edu/publication/the-semiconductor-supply-chain/) (2021). Incentive vocabulary and role taxonomy: this module’s introduction.
+**Currency.** The concentration figures above are 2021–2023 data reported in 2021 and 2024 sources. Shares move; the structure — one EUV maker, one dominant leading-edge fab, a handful of clouds — has not. Re-verify a number before quoting it.
 
 {/* Author notes from the outline, kept out of the render:
     - Actor map: ported into this lesson as a native widget.

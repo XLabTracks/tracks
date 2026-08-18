@@ -179,7 +179,7 @@ export function PolicyOnPaper({
 
           Uncovering it early spoils the exercise, and that is the learner's
           call to make — which is what a spoiler is for. */}
-      <section className="border-border rounded-xl border p-4">
+      <section className="panel">
           <Spoiler
             title="Sources"
             hint="Which tab was which."
@@ -259,7 +259,7 @@ function CompanyTab({
               return (
                 <div
                   key={s.id}
-                  className="border-border bg-card rounded-xl border p-4"
+                  className="panel"
                 >
                   <p className="text-sm leading-relaxed">{s.text}</p>
 
@@ -365,7 +365,7 @@ function DemandsTab({
         {POLICY_DEMANDS.demands.map((d) => (
           <li
             key={d.id}
-            className="border-border bg-card rounded-xl border p-4 text-sm leading-relaxed"
+            className="panel text-sm leading-relaxed"
           >
             {d.text}
           </li>

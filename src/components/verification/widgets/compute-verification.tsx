@@ -53,7 +53,7 @@ export function ComputeVerificationQuestions({
               href={PAPER.pdf}
               target="_blank"
               rel="noopener"
-              className="text-primary font-medium underline-offset-4 hover:underline"
+              className="text-brand-ink font-medium underline-offset-4 hover:underline"
             >
               the paper
             </a>

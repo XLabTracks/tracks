@@ -363,7 +363,7 @@ function Rater({
               <div className="flex items-baseline justify-between gap-2">
                 <span className="font-medium">{metric.name}</span>
                 {sel >= 0 && (
-                  <span className="text-primary text-xs font-medium">
+                  <span className="text-brand-ink text-xs font-medium">
                     {metric.rungs[sel]}
                   </span>
                 )}

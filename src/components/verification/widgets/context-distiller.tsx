@@ -315,7 +315,7 @@ function RunScreen({
             href={report.sourceUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="text-primary inline-flex items-center gap-1 text-xs underline underline-offset-2"
+            className="text-brand-ink inline-flex items-center gap-1 text-xs underline underline-offset-2"
           >
             source
             <ExternalLink className="size-3" aria-hidden />
@@ -1645,7 +1645,7 @@ function StakeholderCard({
           type="button"
           onClick={onFocus}
           aria-pressed={focused}
-          className="text-primary mt-2 text-xs font-semibold underline underline-offset-2 select-none"
+          className="text-brand-ink mt-2 text-xs font-semibold underline underline-offset-2 select-none"
         >
           {focused ? "Clear trace" : "Trace their threads"}
         </button>

@@ -65,7 +65,7 @@ export function CompletionHeader({
             and a yellow tick rather than a yellow tick on white. */}
         <span
           aria-hidden
-          className="bg-primary-foreground text-primary mx-auto flex size-16 items-center justify-center rounded-full"
+          className="bg-primary-foreground text-brand-ink mx-auto flex size-16 items-center justify-center rounded-full"
         >
           <Check className="size-8" strokeWidth={2.5} />
         </span>

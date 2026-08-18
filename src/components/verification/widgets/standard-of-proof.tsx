@@ -136,7 +136,7 @@ export function StandardOfProof({
         <p className="text-base leading-relaxed font-medium">{PROOF_INTRO}</p>
         <div className="space-y-2">
           <p className="text-sm leading-relaxed">{PROOF_TASK_LEAD}</p>
-          <ol className="marker:text-primary marker:font-medium list-decimal space-y-1 pl-6 text-sm leading-relaxed">
+          <ol className="marker:text-brand-ink marker:font-medium list-decimal space-y-1 pl-6 text-sm leading-relaxed">
             {PROOF_TASKS.map((task) => (
               <li key={task}>{task}</li>
             ))}
@@ -151,7 +151,7 @@ export function StandardOfProof({
         {PROOF_DOCKETS.map((docket) => (
           <section
             key={docket.id}
-            className="border-border bg-card rounded-xl border p-4"
+            className="panel"
           >
             <p className="text-sm font-semibold">
               {docket.letter} · {docket.title}
@@ -258,7 +258,7 @@ export function StandardOfProof({
 
       {saved.submitted ? (
         <div className="space-y-4">
-          <section className="border-border rounded-xl border p-4">
+          <section className="panel">
             <h4 className="text-muted-foreground text-[11px] tracking-[0.14em] uppercase">
               After submission
             </h4>
@@ -283,7 +283,7 @@ export function StandardOfProof({
             keyData={STANDARD_OF_PROOF_KEY}
           />
 
-          <section className="border-border rounded-xl border p-4">
+          <section className="panel">
             <p className="text-sm font-medium">{PROOF_FINAL}</p>
             <textarea
               rows={3}
@@ -305,7 +305,7 @@ export function StandardOfProof({
             </p>
           </section>
 
-          <section className="border-border rounded-xl border p-4">
+          <section className="panel">
             <p className="text-sm font-medium">{PROOF_TRANSFER}</p>
             <textarea
               rows={3}

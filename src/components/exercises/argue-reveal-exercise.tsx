@@ -49,7 +49,7 @@ function CharCount({ len, min, max }: { len: number; min: number; max: number })
     <p
       className={cn(
         "mt-1 text-right text-xs",
-        len >= min ? "text-emerald-700 dark:text-[#7FA682]" : "text-muted-foreground",
+        len >= min ? "text-met" : "text-muted-foreground",
       )}
     >
       {len} / {max}

@@ -119,7 +119,7 @@ export function WhistleblowerLevers({}: VerificationWidgetProps) {
           return (
             <li
               key={lever.id}
-              className="border-border bg-card rounded-xl border p-4"
+              className="panel"
             >
               <p className="font-semibold">{lever.name}</p>
 

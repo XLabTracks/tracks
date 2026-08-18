@@ -514,7 +514,7 @@ export function PolicyScoping({ onComplete }: VerificationWidgetProps) {
             {/* closing */}
             {excDone && (
               <div className="border-primary bg-card rounded-lg border p-3">
-                <p className="text-primary flex items-center gap-1 text-xs font-semibold">
+                <p className="text-brand-ink flex items-center gap-1 text-xs font-semibold">
                   <Check className="size-3.5" aria-hidden />
                   {C.closingNext}
                 </p>

@@ -851,7 +851,7 @@ function BenchFinish({
 function Shell({ children }: { children: React.ReactNode }) {
   return (
     <div className="not-prose my-6">
-      <div className="border-border bg-card shadow-soft rounded-xl border p-5">
+      <div className="panel">
         {children}
       </div>
     </div>

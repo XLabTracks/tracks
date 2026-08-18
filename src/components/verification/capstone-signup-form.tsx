@@ -51,7 +51,7 @@ function BriefRow({
           checked={selected}
           onChange={onPick}
         />
-        <span aria-hidden="true" className="text-primary w-4 shrink-0 text-center">
+        <span aria-hidden="true" className="text-brand-ink w-4 shrink-0 text-center">
           {selected ? "✓" : ""}
         </span>
         <span className="min-w-0 flex-1">{title}</span>

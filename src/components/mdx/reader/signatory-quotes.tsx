@@ -58,7 +58,7 @@ export function SignatoryQuotes({
             href={url}
             target="_blank"
             rel="noopener"
-            className="text-primary inline-flex items-center gap-1 font-medium underline-offset-4 hover:underline focus-visible:ring-2 focus-visible:ring-[var(--ring)] focus-visible:outline-none"
+            className="text-brand-ink inline-flex items-center gap-1 font-medium underline-offset-4 hover:underline focus-visible:ring-2 focus-visible:ring-[var(--ring)] focus-visible:outline-none"
           >
             {t}
             <ArrowRight className="size-3 select-none" aria-hidden />

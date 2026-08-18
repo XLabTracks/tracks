@@ -54,9 +54,14 @@
   --mod-3: #6d7636; /* Khaki */
   --mod-4: #022e4c; /* Prussian */
   /* Text on that fill. Fixed, because it depends on the fill and not on the
-     page ground. */
+     page ground — so the ink follows the fill's lightness and lands dark on
+     the two light hues. Satsuma is the near miss to watch: white on it is
+     3.9:1, under the 4.5 its 13px chips need, and the same near-black Lunar
+     Yellow already uses clears it at 4.6. Khaki passes on white at 4.9 with
+     nothing to spare, so re-solving any of these five fills means re-checking
+     its ink in the same edit. */
   --mod-0-ink: #ffffff;
-  --mod-1-ink: #ffffff;
+  --mod-1-ink: #1a1614;
   --mod-2-ink: #1a1614;
   --mod-3-ink: #ffffff;
   --mod-4-ink: #ffffff;
@@ -617,7 +622,7 @@
 
 /* Focus has to be findable, not merely present. */
 :root[data-theme="contrast"]
-  :where(button, a, input, textarea, [tabindex]):focus-visible {
+  :where(button, a, input, select, textarea, summary, [tabindex]):focus-visible {
   outline: 4px solid var(--ring);
   outline-offset: 3px;
 }
@@ -655,7 +660,7 @@ button,
   -webkit-touch-callout: none;
 }
 
-:where(button, a, input, textarea, [tabindex]):focus-visible {
+:where(button, a, input, select, textarea, summary, [tabindex]):focus-visible {
   outline: 2px solid var(--ring);
   outline-offset: 2px;
 }
@@ -692,6 +697,24 @@ button,
 [data-slot="sheet-overlay"] {
   backdrop-filter: none;
 }
+/* One column grid for the chrome AND the landing page, declared once.
+   The bar was 1436px with 80px gutters (BlueDot's desktop geometry) while the
+   page content sat in a separate 1168px wrap with 24px gutters — so the brand
+   and the h1 under it started on different verticals at every width, and on a
+   wide monitor the content huddled left of the chrome. Both now read these
+   two values, so they cannot disagree again. landing.css consumes them for
+   the hero/band wraps; interior course pages keep the narrower reading wrap
+   on purpose — they are documents, not compositions. */
+:root {
+  /* 1600 with a fluid gutter, not BlueDot's 1436 with a fixed 80: that pair
+     stacked a centering margin on top of the gutter as soon as the window
+     passed the cap, and a 1500-1600px monitor — the common case — got a
+     120-160px void right of the avatar. Up to 1600 the gutter is the whole
+     inset; only genuinely wide screens center. */
+  --chrome-maxw: 1600px;
+  --chrome-gutter: clamp(24px, 4vw, 64px);
+}
+
 .site-header .bar {
   /* Match BlueDot's desktop header geometry exactly: its 1505px viewport
      resolves a 1436px outer container with 80px internal gutters, putting
@@ -703,9 +726,9 @@ button,
   align-items: center;
   column-gap: 48px;
   height: 76px;
-  max-width: 1436px;
+  max-width: var(--chrome-maxw);
   margin: 0 auto;
-  padding: 0 80px;
+  padding: 0 var(--chrome-gutter);
 }
 .brand {
   display: inline-flex;
@@ -1066,7 +1089,6 @@ button,
   .site-header .bar {
     grid-template-columns: auto minmax(0, 1fr) auto;
     column-gap: 24px;
-    padding-inline: clamp(24px, 4vw, 64px);
   }
 }
 
@@ -1076,6 +1098,9 @@ button,
    The desktop grid is restored to flex here so the third row can span the
    whole bar without a second layout wrapper. */
 @media (max-width: 720px) {
+  :root {
+    --chrome-gutter: 16px;
+  }
   .site-header .bar {
     display: flex;
     height: auto;
@@ -1106,8 +1131,10 @@ button,
        its own 54px — that floor is the type size's, not the viewport's. */
     --hdr-action-h: 44px;
     order: 2;
-    width: 100%;
-    max-width: 100%;
+    /* No width: it shares the first row with the brand, pinned right by the
+       auto margin. Forcing a full-width row of its own left the brand alone
+       on line one and the controls floating under it. On a screen too narrow
+       for both, flex-wrap still breaks it to its own right-aligned row. */
     flex-wrap: wrap;
     justify-content: flex-end;
     margin-left: auto;

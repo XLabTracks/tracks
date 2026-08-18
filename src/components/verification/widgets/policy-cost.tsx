@@ -132,7 +132,7 @@ export function PolicyCost(_: VerificationWidgetProps) {
   }
 
   return (
-    <section className="not-prose border-border bg-card rounded-xl border p-5 text-sm">
+    <section className="not-prose panel text-sm">
       <h3 className="text-lg font-semibold">{C.title}</h3>
       <p className="text-muted-foreground mt-1 max-w-[52ch] leading-relaxed">{C.sub}</p>
 

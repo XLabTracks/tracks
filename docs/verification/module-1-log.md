@@ -204,3 +204,577 @@ exercise that IS a lesson (1.2.1, 1.2.2) completes that lesson. Eleven bridged
 exercises across the track are of the first kind. The rule is now stated once,
 in the header of `src/lib/verification/exercises.ts`, because that file's own
 per-entry comments had asserted the wrong version of it twice.
+
+## 1.2's Actor Map Workshop (2026-08-15, owner's instruction)
+
+Two widgets stood down and one replaced them, on the owner's call: "мы
+заменяем хуйню с выделением текста это говно для первокурсников".
+
+**Gone from 1.2, kept in the repo.** `protocol-actors` ("Who's in the
+Treaty?") — clicking highlighted phrases in a treaty to meet the actors behind
+them is recognition dressed as work. `actor-map` ("The Actor Map") — a third
+browsable roster of the same cast, sitting directly under the three tasks it
+could not be used to answer. Both files, data and all, are unregistered rather
+than deleted; remounting either is one line here, one in the registry, and an
+embed.
+
+**What replaced them is modelled on the Beeck Center's stakeholder-mapping
+workshop** (Georgetown), the shape she picked out of the research: Goal
+Setting 5' · List all stakeholders 10' · Identify the core user 5' · Place and
+cluster 10–15' · Categorize 10–15' · Catch-up 5' · Political Analysis 15–20' ·
+Setting Actions 10', with concentric rings as the artifact so a reader can
+"see dependencies between stakeholders and anticipate second-order effects".
+
+Ours is six steps, because a solo online learner has no facilitator to set
+goals with and no group to catch up with: **Study → Recall → Core → Place →
+Categorize → Read the map.** Goal Setting became the standing brief; Catch-up
+became the reveal at the end of Recall, which is what a group gets out of
+comparing lists.
+
+**It opens closed-book, which is the other half of what she asked for** —
+"нам придется делать заморозку и разводить их по разным стейтам с кнопкой я
+уже изучил давайте упражнение". The roster is a study panel with a button that
+closes it, and every step after it is answered without it. The freeze is soft
+and visible: "Open the roster" is always there, taking it sets `peeked`, and
+the closing map says so. A hard lock would be a lie — her tables are further
+up the same page.
+
+**Rings carry position, chips carry roles, and that split is the point.** The
+lesson says "any actor can hold several roles at once, and almost every
+important actor does", so one ring per actor would be false if rings meant
+roles. Position is single-valued and roles are not — which is exactly Beeck's
+own split between Place and cluster and Categorize. On the finished map a role
+lens lights that role across every ring at once, so her sentence about the
+second lens cutting across the first is something the picture shows rather
+than something the page asserts.
+
+**Provenance, stated in the data file and repeated here.** Hers, unchanged:
+the ten actors (rows of `ACTOR_MAP_ENTRIES`, imported not restated), the six
+roles and five postures (Tables 5 and 1), the role and posture answer keys
+(those rows' own fields), and the three closing questions, which are the "Try
+it before moving on" bullets moved verbatim out of the body. Ours, and hers to
+overrule: the four rings and which actor sits on which, the core question's
+four options, and the closing finding — each derived from a sentence already
+in 1.2 and each carrying that sentence.
+
+Two ring placements are meant to be argued with: a cloud provider is on RUNS
+rather than SUPPLIES because the run physically happens on its machines, and
+the proxies sit OUT OF REACH beside the deployers — opposite in intent, alike
+in the one property the ring names.
+
+**Found while building, all fixed.**
+
+- Free recall marked "and" as a hit, because a stopword is genuinely a
+  substring of half the roster. Containment now needs four characters on the
+  contained side; the unit test that caught it stays.
+- Ring angles were computed from the answer key, which encoded the answer in
+  the layout and stacked two dots on one point whenever a placement was wrong.
+  They come from the roster order now.
+- Map labels truncated to an ellipsis at diagram size. They use the lesson's
+  own table headings instead — Cloud providers, Frontier labs, Deployers,
+  Proxies, BIS.
+- Actors sat on twelve o'clock, on top of each ring's own name. Angles start
+  half a step off centre.
+
+**Not mine, fixed to unblock the branch:** `08a8a30` (another session, 2.4.4's
+Carlson reading) cited an arms-control URL with no registry row, so
+`citations.test.ts` was red on the shared branch before any of this. Parked in
+`citations.json`'s `pending`, which is what that field is for — the appendix
+renders nothing for it and the gap stays visible in data rather than being
+papered over with guessed bibliographic fields. Whoever owns that reading
+should promote it.
+
+### The two papers, read (2026-08-15, after she asked whether they had been)
+
+They had not been. The first version of this section and the data file's
+header carried claims taken from search snippets, and one of them was wrong.
+Both papers have now been read.
+
+**Karpicke & Blunt, Science 2011 — holds, and is stronger than what was
+written.** Concept mapping counts as elaborative study precisely when
+"students construct concept maps in the presence of the materials they are
+learning"; in Experiment 2 the mapping group "created their concept maps on
+paper while viewing the text". Retrieval practice beat it on the final
+short-answer test (d = 1.07) and on a final test that was itself building a
+map from memory (d = 1.01). The detail worth keeping: the mapping group
+produced MORE ideas during initial learning (0.74 versus 0.65) — ahead where
+it felt like it counted, behind a week later.
+
+**Blunt & Karpicke 2014 — the claim was wrong in its emphasis, and the
+correction matters.** It was written up here as "the fix: a map built from
+memory beats the same map built with the text open". The map-from-memory half
+is true, but the paper's actual finding is that FORMAT DID NOT MATTER:
+"concept mapping and paragraph formats were equally effective retrieval-based
+learning activities", while retrieval did — "students performed better on a
+final test when the initial activities required retrieval (in the absence of
+the texts) rather than studying or elaborating on the material (in the
+presence of the texts)", and the retrieval groups wrote LESS during learning.
+
+So the evidence licenses the freeze and nothing else. It does not license the
+ring map as a teaching device: a map is not a better format than writing down
+what you remember, only not a worse one. The rings stay for two reasons that
+are not Karpicke's — they are the artifact the Beeck workshop is built to
+produce, and they make one structural claim visible that the lesson can
+otherwise only assert. The data file's header says this now; it used to imply
+the opposite.
+
+A third finding from both papers is now load-bearing in the UI rather than
+decorative: learners believe they learned more after studying than after
+retrieving. That is why reopening the roster is recorded and reported back
+instead of being silently allowed.
+
+**Two things checked at the same time, one of them a defect.** Every quoted
+fragment in the workshop's data file was matched against `scoping-actors.mdx`.
+One had been edited to fit: Table 4's "The machines without which no
+leading-edge chip exists" was quoted with a full stop where the cell has a
+comma and continues "and knowledge of every fab that buys one". Restored, and
+`actor-workshop.test.ts` now carries a tripwire that re-matches every quoted
+fragment against the lesson — widget data had no such guard, though the paper
+pipeline has had snippet tripwires all along.
+
+**Not read, and not cited in the repo:** Schwartz & Bransford (1998) and
+Schiffer & Hauck (2010) were named in conversation as part of the research
+sweep and were never used to justify anything in code. They are still
+snippet-level knowledge; treat them that way until somebody opens them.
+
+**Still owed** (and unchanged by this): a node/dependency map with typed edges
+between actors, which is the one bullet of her 1.2 plan with no implementation
+— "recognize institutional relationships". This workshop makes structure
+visible; it does not draw edges. BlueDot's Unit 2 map is the reference, and
+their edge typology (authority / evidence / compliance / physical inputs) is
+still an open question for her.
+
+## 1.2 fact-checked against its own cited sources (2026-08-15)
+
+The owner asked whether the sources behind the module had been read. They had
+not. This is the pass. Every checkable claim in `scoping-actors.mdx` was taken
+to the document 1.2 itself cites — not to a search snippet — and the result is
+below. **No prose was changed.** Modules 0–2 are her transcription and a
+factual correction to them is her call; what follows is the evidence for the
+three she needs to make.
+
+### Confirmed against the primary source
+
+- **EU AI Act, Article 51.** "A general-purpose AI model shall be presumed to
+  have high impact capabilities … when the cumulative amount of computation
+  used for its training measured in floating point operations is greater than
+  10^25." The lesson's "10^25 FLOP presumption of systemic risk" is right;
+  strictly the presumption is of high-impact capabilities, which is the route
+  to systemic-risk classification. Not worth changing.
+- **SB 53 dates and numbers.** Signed 29 September 2025, duties effective 1
+  January 2026; "large frontier developer" = annual gross revenues in excess
+  of $500 million (with affiliates); reporting "within 15 days … or within 24
+  hours if there is imminent risk of death or serious physical injury". All
+  exact.
+- **The UN panel.** Established by A/RES/79/325 on 26 August 2025; 40 members,
+  appointed by the General Assembly 12 February 2026; Yoshua Bengio and Maria
+  Ressa elected Co-Chairs at the inaugural meeting on 3 March 2026. The Notes
+  line's "first meeting March 2026" is correct — un.org's "first in-person
+  meeting, Madrid, April 2026" is a different event, and both are true.
+- **The Global Dialogue on AI Governance.** First met in Geneva, 6–7 July
+  2026. Exact.
+- **CAISI.** Its own NIST page: it will "establish voluntary agreements with
+  private sector AI developers and evaluators", and it holds no inspection or
+  compulsion power. The Table 3 row's "Voluntary agreements, not inspection
+  authority; renamed and refocused as the politics changed" is right, and the
+  June 2025 Lutnick statement is the rename.
+- **ASML.** Sastry et al., Figure 11: "ASML is the only company capable of
+  producing EUV machines", market share 100%. The lesson's "the world's only
+  maker of EUV lithography machines" is exact.
+- **TSMC.** Same figure: 90% of ≤7nm logic fabrication (2022 data), Samsung
+  and Intel the other 10%. "Fabricates the overwhelming share of leading-edge
+  AI chips" is right, and there is a number available for it.
+- **The counts list.** "Even AI development at the frontier consists of only
+  tens of organizations" and "several critical steps … have fewer than three
+  suppliers" (Figure 11 caption) back "a few dozen labs that matter" and "the
+  chain narrows to almost nothing at the top" directly. NVIDIA's ">90%" share
+  of data-centre GPU design and the cloud split (AWS 32 / Azure 22 / Google 11
+  / others 35, 2023) are in the same paper if a number is ever wanted.
+
+### Three things for her
+
+1. **SB 53's duties are attributed to the wrong class of developer.** The
+   lesson says the Act "binds 'large frontier developers'" and then that "they
+   must" do all four things. Both summaries the lesson itself cites agree that
+   is not the split: the Frontier AI framework is **large developers only**,
+   but the transparency report and the 15-day / 24-hour incident report fall
+   on **all frontier developers**, and so does the duty to inform employees of
+   whistleblower rights — only the internal anonymous reporting channel is
+   large-only. The definitional half is also absent: a "frontier model" is one
+   trained on more than **10^26** operations, which is the threshold that
+   decides who is in scope at all, and in a module about thresholds its
+   absence is louder than elsewhere.
+2. **The packaging row overreaches both cited sources.** Table 4 calls
+   packaging/assembly/test "a second, quieter bottleneck". CSET — cited in
+   Notes and sources — says the opposite of the general case: ATP "is
+   labor-intensive and has the lowest barriers to entry", and China is strong
+   in it. The bottleneck claim is defensible for **advanced packaging**
+   specifically (CoWoS, which the row names), and the row merges that with
+   commodity outsourced assembly-and-test, where the cited source says the
+   concentration is not there.
+3. **The HBM claim has no cited support.** Table 2's South Korea row — "HBM is
+   scarce and essential to frontier training: a countable, checkable input" —
+   is a chokepoint claim, and neither cited supply-chain source makes it.
+   Sastry et al. mention high-bandwidth memory once, in a footnote about chip
+   packaging; CSET does not discuss memory at all. The claim is very likely
+   true and it needs a source that says so.
+
+### Two caveats on the whole section
+
+- **Source vintage.** The two supply-chain sources are CSET 2021 and Sastry et
+  al. 2024, whose concentration figures are 2022–2023 data. The lesson reads
+  as current in mid-2026 and carries no currency note; 1.2.1 does carry one.
+- **Not verified this pass.** The Federal Register blocked automated fetching,
+  so the Department of War executive order was not read — the lesson's own
+  hedge ("statutory renaming pending in Congress as of mid-2026") is the right
+  posture either way. CAISI "runs pre-deployment evaluation agreements with
+  several frontier developers" is not stated on the CAISI page; the
+  predecessor AI Safety Institute had such agreements, and whether CAISI still
+  does is unconfirmed rather than wrong.
+
+### The three corrections applied (2026-08-15, owner: "правь то что старое и неправильное")
+
+- **The Department of War leads now.** She spotted it: the department has run
+  under that name since the September 2025 executive order — war.gov, Secretary
+  of War — and Table 3 still led with "Department of Defense (restyled…)".
+  Reversed. The Notes line was checked rather than assumed: the FY2026 NDAA was
+  signed on 18 December 2025 and does NOT carry the renaming, so the statutory
+  change is genuinely still outstanding — it passed the House in the annual
+  defense bill on 22 July 2026, 216–212, after the Senate Armed Services
+  Committee advanced it. The old note ("pending in Congress as of mid-2026") was
+  right about the statute and wrong about which name to use in the meantime.
+  `actor-map.ts`'s roster row renamed to match.
+- **SB 53's duties re-split.** Two thresholds now open the passage — a frontier
+  model is one trained on more than 10^26 operations, a large frontier developer
+  is one above $500M in revenue — and the duties sit where the statute puts
+  them: transparency report, the 15-day / 24-hour incident report and the
+  whistleblower notice on EVERY frontier developer; the published framework,
+  fuller reports and the internal anonymous channel on the large ones only.
+- **The packaging row split in two.** Advanced packaging keeps the bottleneck
+  claim; ordinary assembly and test now says what CSET says about it, that it
+  is labor-intensive with the lowest barriers to entry of any stage.
+
+**HBM: sourced as far as a source goes.** The concentration half still has no
+citation. What is now cited is the half that is documented — that US export
+controls were "expanded again, this time affecting all chips using advanced
+high-bandwidth memory" (Fist, Burga & Chilukuri, CNAS 2024, registered in
+citations.json). Her sentence in Table 2 is untouched; if the scarcity claim
+is to stay it wants a source that argues it.
+
+**Notes and sources gained the numbers and a currency line.** ASML at 100% of
+EUV, TSMC at ~90% of sub-7nm logic (2022 data), "fewer than three suppliers" at
+several steps — all from Sastry et al., whose title is also now given in full.
+The currency line says plainly that the shares are 2021–2023 data and the
+structure is what has not moved.
+
+### What the papers say about the workshop I built
+
+Reading Karpicke properly is a critique of this exercise, and the data file's
+header now carries it rather than leaving it to be discovered. Only step 2 is
+retrieval in their sense — material, no cue on screen. Steps 4 and 5 are cued
+RECOGNITION: the four ring names and the six roles are printed on the buttons
+being pressed. The freeze hides which actors exist, not the vocabulary. That is
+a defensible trade, and it means the evidence covers less of the exercise than
+its shape implies.
+
+Worse, step 2 is the weakest retrieval that could have been asked for: it
+retrieves ten proper nouns, while the section's content is what those actors can
+do and to whom. Three candidate repairs, none of them taken without her, because
+two are content decisions:
+
+1. **Change what Recall asks for.** Not "who does this agreement touch" but the
+   material — what a cloud provider can do in a regime and what it wants — free
+   recall marked against the roster's own role and posture vocabulary, which is
+   a key that already exists.
+2. **Give the three closing questions a marking key.** They are three textareas
+   with `onComplete: () => {}` and no feedback of any kind. Every constructed
+   exercise in 2.4 ends in `MarkingKeyPanel`, the learner marking their own work
+   against criteria. This is the largest consistency gap with the rest of the
+   course and the component is already built.
+3. **Add the second-order step Beeck's artifact exists for** — "anticipate
+   second-order effects" is their phrase for the concentric-ring map. Pull one
+   actor off the map and ask what breaks. The sources read this week supply the
+   answer for the sharpest case: ASML is 100% of EUV.
+
+Timing label corrected from 20–25 to 25–30 minutes: ten actors times a ring plus
+up to six roles plus up to five postures is forty to sixty decisions, and the
+first number was optimistic.
+
+### Department of War, and who "large frontier developer" actually catches (2026-08-15)
+
+Two owner instructions, applied.
+
+**"Пусть просто деп оф вор зовется."** Table 3's row is now just *Department of
+War* — no parenthetical — and the Notes-and-sources paragraph about the
+executive order and the House vote is deleted outright. Both URLs left
+citations.json with it: the Federal Register entry (an `entries` row) and the
+PBS one (parked in `pending` an hour earlier). The registry's orphan test is
+what makes that mandatory rather than tidy.
+
+Worth recording since it was checked twice: the department has run under the
+name since the September 2025 executive order, and the *statutory* renaming is
+still outstanding — the FY2026 NDAA was signed on 18 December 2025 without it,
+and it passed the House in the annual defense bill on 22 July 2026. None of
+that is in the lesson any more, on her call that it does not matter for what
+1.2 teaches. It is here so the next person does not "restore" it as a fix.
+
+**The two SB 53 thresholds now carry a footnote naming who they catch.** She
+offered two mechanisms — a footnote, or the hover card on an underlined word.
+`<Footnote>` is the one used, and not only because it was easier: the hover
+card is `<Term>`, which is a lookup into `glossary.json`, and a glossary entry
+is a definition, which this repo's rules reserve for her to write. A footnote
+needs no such entry. On viewports of 96rem and up it renders as a margin
+sidenote that is simply there to read; below that the `[1]` marker expands it
+in place. Verified at 1700px, 1440px and 430px.
+
+The content is sourced, and it is a better fact than expected: **no public
+authority keeps a list.** Coverage turns on the compute number, and the compute
+number is one only the developer measures. As of early 2026 the SB 53 reference
+records exactly two developers publicly known to have trained above 10^26 —
+OpenAI and xAI — while METR's guide for lab staff names OpenAI, Google,
+Anthropic and xAI as illustrations of who these laws govern rather than as a
+roster. The footnote says both, attributes both, and ends on one sentence of
+ours connecting it to the section's own subject: a rule whose scope is set by a
+quantity the regulated party alone can count.
+
+METR is registered in citations.json with full fields; sb53.info is cited and
+parked in `pending`, because its authorship is not established and guessing
+bibliographic facts is the thing `pending` exists to prevent.
+
+### The three pedagogy repairs, applied (2026-08-15, owner approved all three)
+
+**1. Recall retrieves material now, not names.** Step 2 asked "who does this
+agreement touch" and marked a typed list against the roster with a fuzzy
+matcher. That retrieved ten proper nouns while the section's content is what
+those actors can do and to whom. It now takes one actor — the cloud provider,
+because the lesson works that one through explicitly — and asks what it can do
+inside a regime and what it wants. The key is six items and every one of them
+is her sentence: the four bullets under "Try it on a cloud provider" and Table
+4's cloud row for the two postures. A test re-derives that the six are exactly
+that actor's `roles` + `postures` in the roster, so a roster edit cannot leave
+the key marking against something the course no longer says.
+
+**Marked by the learner, not by a matcher.** A string matcher over free prose
+would need a vocabulary list per role, would be wrong often, and would be wrong
+in the direction that stops people writing. Self-scoring against a printed key
+is what the free-recall studies score and what every constructed exercise in
+2.4 already asks for.
+
+`recallHits` and `normalize` are deleted with their tests — including the
+four-character containment floor that the "and" case forced. They have no
+caller now, and a helper kept alive only by its own tests is the thing this
+repo's audits keep finding. History has them.
+
+The step is renamed on screen too: "What can one actor do?", against Beeck's
+"List all stakeholders, **recast**" — the old title and the old Beeck label
+both described a step that no longer exists, and pretending the recast still
+matches Beeck's step 2 would be the same kind of stale label the Department of
+War row was.
+
+**2. The three closing questions have a marking key.** They were three
+textareas with `onComplete: () => {}` and no feedback of any kind, in a course
+where every constructed exercise in 2.4 ends in `MarkingKeyPanel`. Seven
+criteria, ten points, in the house form from data/marking-keys.ts: credit per
+element, `needsReasoning` where a bare label earns nothing, wording free, and
+`noCredit` stated out loud.
+
+The two factual criteria are derived from the roster and re-derived in the
+test, which is the part that matters: Taiwan holds exactly three roles
+(chokepoint, information, victim), which is why her question says "at least
+three"; and exactly two actors hold capability and enforcement at once, the
+United States and China. Edit the roster and the test fails instead of the key
+quietly lying. Question 2 has no fixed answer and its criteria say so — what is
+marked is whether an order was committed to and whether each rank carries its
+reason.
+
+**3. The second-order step exists.** Beeck draw rings to "anticipate
+second-order effects" and the workshop had no step doing the second half. One
+question at the end of step 6: take one actor off the board — whose removal
+stops a frontier training run *soonest*, this week rather than this decade?
+
+The answer is the cloud providers, and the point is the gap. Every option's
+reveal is a different clock: ASML is the most consequential removal on the
+board and the slowest (100% of EUV, but the chips already exist); TSMC is the
+same shape one step nearer (~90% of sub-7nm logic, stopping the next
+generation rather than the loaded run); BIS loosens the regime rather than
+stopping the activity. Then the line the step is for: the removal that bites
+soonest and the removal that matters most are different actors on different
+rings, and a regime reaching only for the second buys nothing this year.
+
+Sourced, and re-read rather than remembered: Sastry, Heim, Belfield et al.,
+Figure 11 — "ASML is the only company capable of producing EUV machines" at
+100%, TSMC at 90% of ≤7nm logic, and the caption "Several critical
+steps--including AI chip design and production--have fewer than three
+suppliers." All three re-matched against the extracted PDF text before being
+written down.
+
+**The quote tripwire caught something while this was being built**, which is
+the second time it has earned its place. A `noCredit` line quoted a learner's
+voice — "It is a conflict of interest" — and the test read it as a claim to be
+found in 1.2. Rewritten without the quotation marks rather than the test
+loosened, and the convention is now stated in the test: curly quotes in the
+data file are 1.2's own words; anything from an outside source is attributed
+inline and written with straight quotes; a line putting words in a learner's
+mouth carries no quotation marks at all.
+
+Storage bumped to `v-actor-workshop:v2` — a restored v1 draft would be an
+answer to a question no longer on screen. The notes and the new self-marking
+have their own permanent keys.
+
+### The reading column takes the width, and footnotes became popups (2026-08-15)
+
+Two owner instructions that turned out to be one decision: "текст должен быть
+на всю ширину экрана, которая не занята другим" and "а сноска — поп апами".
+Reserving a right-hand gutter for footnote sidenotes is part of what kept the
+column narrow, so notes that open over the text are what let the text have the
+width.
+
+**Two caps were stacked, and both are off.** Measured before touching
+anything, at a 1700px viewport: `main` was 1316px, the item page's
+`max-w-4xl` wrapper cut the lesson body to 832, and app-bridge.css's 64ch
+reading measure cut paragraphs to 644 inside that. Text was using under half
+the space it had. Now: lesson body 1252, paragraphs 1252, nothing left over.
+At 1280 the wrapper was never the binder — paragraphs went 644 → 832 there.
+
+The measure rules are kept in place set to `none` rather than deleted, so the
+decision has somewhere to live and one value brings it back. **The stated
+cost**: at 1700px a line runs about 125 characters, well past the W3C's
+80-character guidance, and that is a trade she made knowingly rather than a
+detail nobody noticed.
+
+The `--vt-measure` card — the red header a paragraph gets when it introduces a
+four-plus-item list — lost its cap too, and had to: its whole reason for
+existing is that the header and its list take the same length, and the list is
+unbounded now. Verified: header 1252, list 1252.
+
+**The footnote is a popup at its own marker.** `<Footnote>` is now a client
+component over the ui kit's Popover, reusing `useGlossHoverTimers` — the
+glossary card's own hook — so the open and close delays cannot drift from the
+other small explanation on the same page. Hover-intent on a mouse, tap on
+touch, Enter/Space from the keyboard, Escape and outside-click to dismiss; a
+hover open never moves focus, a keyboard open does so Tab reaches links inside
+the note. All four inputs driven and verified. The sidenote float and the
+checkbox/label toggle are gone from globals.css; the CSS counter stays, so
+numbering still needs no per-instance registration.
+
+She had offered the hover card as an alternative to a footnote. It is the same
+thing now — the mechanism is the popup, the authoring API is still
+`<Footnote>`, and no glossary entry is needed, which matters because a
+glossary entry is a definition and those are hers to write.
+
+**Two defects found and fixed while verifying, both mine.**
+
+- `PopoverContent` is `flex flex-col gap-2.5`, so the note's inline run became
+  a column: every text fragment and every link on its own line with a gap.
+  Wrapped in one block child.
+- Widening exposed a table defect that was always there. `.lesson-body table`
+  is a block-level scroll box, so its rows lay out in an anonymous table that
+  shrinks to content — at 1252px the header rule stopped 116px short of the
+  box and the table read as broken. `width: 100%` on the last cell lets auto
+  layout hand the slack to that column, and is ignored when the columns
+  genuinely need more room, so tables that must scroll still do: verified at
+  390px, where two of 1.2's five still scroll and the page never does.
+  min-width on the row groups, width on the rows and max-content on the table
+  were each tried and measured first; none of them moved it.
+
+**Not changed, and worth a decision:** the module and assessment pages still
+carry `max-w-3xl`/`max-w-4xl`. Only the lesson item page was widened, because
+that is what she was looking at.
+
+### The footnote popup is the course's existing card (2026-08-15)
+
+The owner: "почему твой блядский дизайн отличается если я тебе даже понитейл
+скилл подвезла". Correct, and it is rung 2 of that ladder — is it already in
+this codebase — failed on the first try. The course already had a popup: the
+one the Define action raises over a selected word, `.vocab-card` in
+public/verification/notebook.css. I built a fourth look out of a bare shadcn
+`PopoverContent` instead of reading it.
+
+Every value now comes off `.vocab-card` rather than being chosen:
+`min(360px, 100vw - 24px)` wide, 14/16/12 padding, hairline `--border`,
+`--radius`, `--card` for the ground, `--shadow-soft-lg`. The shadcn defaults
+that had to be overridden are exactly what made it look foreign —
+`bg-popover`, `p-2.5`, `shadow-md`, `ring-1 ring-foreground/10`. Verified as
+computed style, not by eye: 360px, 14px radius, 1px border, 14/16/12.
+
+The body was the loudest difference and was not a size problem. It read
+`text-muted-foreground`, which greys a note the reader opened deliberately;
+`.vocab-body` carries the normal foreground at 1.6. Size already matched —
+app-bridge.css maps `--text-sm` to `--fs-md`, so `text-sm` is 16px inside this
+chrome. Links now take `--link` like every other link on the page.
+
+Checked in both themes by clicking the header control rather than by setting a
+storage key — the first probe set `xlab-verification-theme` and got `light`
+both times, which would have reported a white card in the dark as a pass. Done
+properly: `data-theme=dark`, page `rgb(20,16,15)`, card `#1c1817`, border
+`#332c2a`, body `#f4f0ee`. No white-dialog trap here, because `--card` is one
+of the tokens theme.css does carry.
+
+**What is deliberately not copied:** the vocab card's title, its source line
+and its two buttons. That card is about a word, so it needs to name the word
+and say where the definition came from. A footnote is the continuation of a
+sentence and carries its own sources inline. If footnotes should have a label,
+that is a call to make rather than a thing to infer.
+
+**Noticed while doing this, not changed:** `GlossaryCardContent` renders its
+body in `text-muted-foreground`, so the React glossary hover card is greyer
+than both the vocab card and now the footnote. Three small-explanation
+surfaces, two treatments. Flagged rather than aligned, because which one is
+canonical is the owner's call.
+
+### The map is on screen, and one duplication audit (2026-08-15)
+
+**"The Actor Map Workshop должен содержать карту."** It did not, for most of
+its length. `RingMap` rendered only inside step 4 and step 6, so a block with
+"Map" in its name opened on a roster and a button, and showed nothing again on
+steps 2, 3 and 5. That is plain from the control flow, not a rendering
+accident.
+
+One map now, mounted above every step. It takes the learner's own placements
+until the last step and the answer key there, where the role lens turns it
+into the finding; the lens moved up with it, because a control separated from
+what it controls by a screen of text is not a control. Verified from a cleared
+storage: the map is present on first load with the four rings and the act in
+the centre, stays through every step, and gains a dot the moment something is
+placed — one map on step 4, never two. The viewBox was also cropped to the
+drawing: content spans y 74..510, so the old 0..584 box carried 148px of empty
+card, most of it visible on exactly the steps where nothing is placed yet.
+
+To be exact about what was removed earlier, since the question was why: the
+geographic supply-chain map was never touched — it is 1.2.1 and it is intact.
+What stood down was `actor-map`, the filterable roster, and it is unregistered
+rather than deleted. Say the word and it comes back.
+
+### The audit, by the ladder's second rung
+
+`.claude/` does not exist in this checkout, so the plugin CLAUDE.md declares is
+not installed here and the skill cannot be invoked; the ladder is described in
+CLAUDE.md and was applied by hand. Rung 2 is "is it already in this codebase",
+and the largest answer was mine.
+
+**Fixed: the committed single-answer row, written three times in one day.**
+2.4.2's On Paper deck, 1.2's centre question and 1.2's second-order question
+each carried their own `const SLOT = "ABCD"` and their own copy of the same
+five-way className — hover while open, primary on the pick, comply on the
+answer, defect on a wrong pick, everything else faded. Now
+`kit/choice-list.tsx`, used by all three. Measured: `const SLOT` 3 → 1,
+`border-comply bg-comply/5` inside actor-workshop 3 → 1 (the survivor is the
+multi-select chip row, a different interaction). Both surfaces re-driven in a
+browser afterwards — five frozen radiogroups and five verdicts on On Paper,
+four frozen options on the centre question, no console errors.
+
+**Found and not fixed, because they are sweeps rather than repairs:**
+
+- **`@utility eyebrow` exists in globals.css. Eight files use it; eighteen
+  still hand-roll `uppercase` + a tracking value.** This is the same defect
+  the repo's own audit named, still in place.
+- **`useStoredState` exists and 6 of 49 widgets use it. Eleven still hand-roll
+  `localStorage.getItem` with their own prune-and-persist:** build-institution,
+  companies-ab, context-distiller, field-map, infer-the-system, mechanism-sort,
+  missing-board, policy-critique, precedent-cases, standard-of-proof,
+  theories-of-change. That block is where the two bugs of this session's own
+  making came from — a stale-snapshot persist and a restore that fought
+  hydration — so eleven copies is eleven places for them to recur.
+- **Three small-explanation surfaces, two treatments.** `.vocab-card` and the
+  footnote now match; `GlossaryCardContent` still renders its body in
+  `text-muted-foreground`. Which is canonical is a design call.

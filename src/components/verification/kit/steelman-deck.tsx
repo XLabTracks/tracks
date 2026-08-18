@@ -45,7 +45,7 @@ export function SteelmanDeck({
   }, [deck]);
 
   return (
-    <section className="border-border rounded-xl border p-4">
+    <section className="panel">
       <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
         <h4 className="text-muted-foreground eyebrow">
           {label}

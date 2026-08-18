@@ -37,13 +37,19 @@
   margin-bottom: 10px;
 }
 .slot-group { margin-bottom: 16px; }
+/* The module hue reads twice here and the two need different tokens. The dot
+   is a fill and takes --mod; the words are type and take --mod-type, which is
+   the variant solved to carry on the page ground.
+   Trap: they are not interchangeable. This row wrote both from --mod, so on
+   the day ground M2 was Lunar Yellow as text at 1.4:1 and M1 at 3.7:1 — the
+   exact failure the -text variants exist to prevent. */
 .slot-group > p {
   display: flex;
   align-items: center;
   gap: 6px;
   font-family: var(--label);
   font-size: var(--fs-2xs);
-  color: var(--mod, var(--muted-foreground));
+  color: var(--mod-type, var(--muted-foreground));
   margin-bottom: 6px;
 }
 .slot-group > p::before {

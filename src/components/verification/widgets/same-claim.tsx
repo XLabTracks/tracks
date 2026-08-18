@@ -125,7 +125,7 @@ export function SameClaim({
         <p className="text-base leading-relaxed font-medium">{CLAIM_INTRO}</p>
         <div className="space-y-2">
           <p className="text-sm leading-relaxed">{CLAIM_TASK_LEAD}</p>
-          <ol className="marker:text-primary marker:font-medium list-decimal space-y-1 pl-6 text-sm leading-relaxed">
+          <ol className="marker:text-brand-ink marker:font-medium list-decimal space-y-1 pl-6 text-sm leading-relaxed">
             {CLAIM_TASKS.map((task) => (
               <li key={task}>{task}</li>
             ))}
@@ -141,7 +141,7 @@ export function SameClaim({
           <section
             key={variant.id}
             className={cn(
-              "border-border bg-card rounded-xl border p-4",
+              "panel",
               writingCardFocus
             )}
           >
@@ -207,7 +207,7 @@ export function SameClaim({
 
       {saved.submitted ? (
         <div className="space-y-4">
-          <section className="border-border rounded-xl border p-4">
+          <section className="panel">
             <h4 className="text-muted-foreground eyebrow">
               After submission
             </h4>
@@ -233,7 +233,7 @@ export function SameClaim({
 
           <section
             className={cn(
-              "border-border rounded-xl border p-4",
+              "panel",
               writingCardFocus
             )}
           >
@@ -262,7 +262,7 @@ export function SameClaim({
 
           <section
             className={cn(
-              "border-border rounded-xl border p-4",
+              "panel",
               writingCardFocus
             )}
           >

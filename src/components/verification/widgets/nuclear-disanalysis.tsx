@@ -36,7 +36,7 @@ export function NuclearDisanalysis(_props: VerificationWidgetProps) {
   return (
     <div className="not-prose my-6 space-y-4">
       {/* The claim under examination. */}
-      <div className="border-border bg-card shadow-soft rounded-xl border p-5">
+      <div className="panel">
         <p className="text-muted-foreground text-sm">{CLAIM.lead}</p>
         <blockquote className="border-border mt-2 border-l-2 pl-4 leading-relaxed italic">
           {CLAIM.text}

@@ -9,10 +9,8 @@ import { shuffleAnswerOptions } from "@/lib/shuffle";
 import { splitEmphasis } from "@/lib/verification/emphasis";
 import { cn } from "@/lib/utils";
 import { QUICK_QUESTIONS } from "@/lib/verification/data/policy-quick-check";
+import { ChoiceList } from "../kit/choice-list";
 import type { VerificationWidgetProps } from "../kit/types";
-
-/** Display letters, which is now all a letter is. */
-const SLOT = "ABCDE";
 
 /**
  * Authored `**bold**`, kept.
@@ -203,57 +201,27 @@ export function PolicyQuickCheck({}: VerificationWidgetProps) {
                 <Rich>{question.stem}</Rich>
               </p>
 
-              <div
-                className="mt-3 grid gap-1.5"
-                role="radiogroup"
-                aria-label={question.stem}
-              >
-                {choices.map((choice, slot) => {
-                  const chosen = pick === choice.id;
-                  const isAnswer = choice.id === question.answerId;
-                  return (
-                    <button
-                      key={choice.id}
-                      type="button"
-                      role="radio"
-                      aria-checked={chosen}
-                      disabled={saved.submitted}
-                      onClick={() =>
-                        persist((prev) => ({
-                          ...prev,
-                          picks: { ...prev.picks, [question.id]: choice.id },
-                        }))
-                      }
-                      className={cn(
-                        "border-border block w-full rounded-lg border px-3 py-2 text-left text-sm leading-relaxed transition-colors",
-                        !saved.submitted && "hover:bg-muted",
-                        chosen &&
-                          !saved.submitted &&
-                          "border-primary bg-primary/5",
-                        saved.submitted &&
-                          isAnswer &&
-                          "border-comply bg-comply/5",
-                        saved.submitted &&
-                          chosen &&
-                          !isAnswer &&
-                          "border-defect bg-defect/5",
-                        saved.submitted && !isAnswer && !chosen && "opacity-55"
-                      )}
-                    >
-                      {/* The letter is a prefix in the sentence, not a token
-                          beside it. As a fixed-width flex item in a ring it
-                          cost the option a hanging indent and, worse, left the
-                          text sized to a fraction of the row it was in: a
-                          610px option wrapped inside 353px of column. Reading
-                          runs the full width now, and the letter reads the way
-                          the spec writes it — "A. Keep the protected-person…". */}
-                      <span className="text-muted-foreground mr-1.5 font-medium">
-                        {SLOT[slot]}.
-                      </span>
-                      <Rich>{choice.text}</Rich>
-                    </button>
-                  );
-                })}
+              {/* The letter is a prefix in the sentence, not a token beside
+                  it — see kit/choice-list.tsx, which is where this row lives
+                  now. It was hand-rolled here and twice more in 1.2's
+                  workshop before being extracted. */}
+              <div className="mt-3">
+                <ChoiceList
+                  options={choices.map((choice) => ({
+                    id: choice.id,
+                    node: <Rich>{choice.text}</Rich>,
+                    correct: choice.id === question.answerId,
+                  }))}
+                  value={pick ?? null}
+                  committed={saved.submitted}
+                  label={question.stem}
+                  onPick={(id) =>
+                    persist((prev) => ({
+                      ...prev,
+                      picks: { ...prev.picks, [question.id]: id },
+                    }))
+                  }
+                />
               </div>
 
               {saved.submitted ? (

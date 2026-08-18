@@ -39,14 +39,14 @@ export default function Page() {
         <section className="hero">
           <div className="wrap">
             <h1>
-              How could the US and China trust an agreement to pause ASI
-              development?
+              How can countries trust each other to keep AI governance
+              commitments?
             </h1>
             <p className="lede">
               An intermediate course on international AI verification: the
-              technical, institutional and legal mechanisms that decide whether
-              a governance commitment can be checked at all — and what it takes
-              to tell a kept promise from a broken one.
+              technical, institutional, and legal mechanisms that make
+              agreements observable and enforceable — and help distinguish
+              compliance from violation.
             </p>
 
             <div className="ways">
@@ -63,10 +63,41 @@ export default function Page() {
           </div>
         </section>
 
+        {/* Where the course actually is, said before the skills graph rather
+            than in a footer: someone deciding whether to start needs it to
+            decide.
+
+            THE COPY IS THE AUTHOR'S AND IS NOT TO BE EDITED — not split, not
+            shortened, not lifted into a button label. It was once broken into
+            a lead and a remainder with the middle sentence dropped and its
+            link turned into a CTA; the words below are the original and stay
+            one paragraph with the form linked inside the sentence that asks
+            for it. */}
+        <section className="alpha-note" data-reveal>
+          <div className="wrap">
+            <p>
+              We’re currently in the alpha testing stage and running a small
+              paid cohort to calibrate and improve the course ahead of the
+              official launch. The materials are open for anyone to use in the
+              meantime. If you do use them, we’d really appreciate it if you
+              could fill out{" "}
+              <a
+                href="https://forms.gle/KkWcHkKh87pygDzw9"
+                target="_blank"
+                rel="noopener"
+              >
+                this feedback form
+              </a>
+              . Your feedback will help us identify issues, calibrate the
+              course, and make improvements before launch.
+            </p>
+          </div>
+        </section>
+
         <section className="band filled">
           <div className="wrap">
-            <h2>The skills it builds</h2>
-            <p className="intro">
+            <h2 data-reveal>The skills it builds</h2>
+            <p className="intro" data-reveal>
               The course is organised around a graph, not a reading list. Each
               unit feeds specific skills, and the later ones only stand up once
               the earlier ones do.
@@ -107,7 +138,7 @@ export default function Page() {
             page. */}
         <section className="band">
           <div className="wrap">
-            <h2>What this course is</h2>
+            <h2 data-reveal>What this course is</h2>
             <CourseOverview />
           </div>
         </section>

@@ -313,13 +313,6 @@
       "publisher": "Apollo Research",
       "date": "13 Nov. 2023"
     },
-    "https://www.federalregister.gov/documents/2025/09/10/2025-17508/restoring-the-united-states-department-of-war": {
-      "title": "Restoring the United States Department of War",
-      "about": "The Federal Register text of Executive Order 14347, restyling the Department of Defense as the Department of War.",
-      "org": "United States, Executive Office of the President",
-      "container": "Federal Register",
-      "date": "10 Sept. 2025"
-    },
     "https://www.governance.ai/research-paper/training-compute-thresholds-features-and-functions-in-ai-regulation": {
       "title": "Training Compute Thresholds: Features and Functions in AI Regulation",
       "about": "GovAI's analysis of how US and EU regulators use compute thresholds to pick out models warranting oversight — and where the metric strains.",
@@ -470,6 +463,20 @@
       "authors": "Wasil, Akash R., Tom Reed, Jack William Miller, et al.",
       "container": "arXiv",
       "date": "Aug. 2024"
+    },
+    "https://www.cnas.org/publications/reports/technology-to-secure-the-ai-chip-supply-chain-a-primer": {
+      "title": "Technology to Secure the AI Chip Supply Chain: A Working Paper",
+      "about": "Argues that export controls on AI chips are hard to enforce and easy to evade through shell companies, and proposes hardware-enabled mechanisms instead. Cited in 1.2 for the fact that US controls now reach all chips using advanced high-bandwidth memory.",
+      "authors": "Fist, Tim; Burga, Tao; Chilukuri, Vivek",
+      "publisher": "Center for a New American Security",
+      "date": "2024"
+    },
+    "https://metr.org/notes/2026-01-29-frontier-ai-safety-regulations/": {
+      "title": "Frontier AI safety regulations: A reference for lab staff",
+      "about": "A working reference to the frontier-AI safety rules in force, including SB 53's 10^26 FLOP and $500M thresholds. Cited in 1.2 for who these laws govern.",
+      "authors": "METR",
+      "publisher": "METR",
+      "date": "2026"
     }
   },
   "pending": [
@@ -503,11 +510,14 @@
     "https://plato.stanford.edu/entries/game-theory/",
     "https://doi.org/10.1177/0022002797041001004",
     "https://www.armscontrol.org/act/2005-11/features/witness-prosecution-international-organizations-and-arms-control-verification",
+    "https://www.armscontrol.org/act/2009-05/iran-nuclear-briefs/defining-noncompliance-npt-safeguards-agreements",
     "https://www.congress.gov/crs-product/R41201",
     "https://doi.org/10.1017/S0020818300027697",
     "https://doi.org/10.1017/CBO9780511491368.002",
     "https://direct.mit.edu/isec/article/44/1/42/12237/Weaponized-Interdependence-How-Global-Economic",
-    "https://doi.org/10.1017/S0020818300027703"
+    "https://doi.org/10.1017/S0020818300027703",
+    "https://www.armscontrol.org/act/2009-05/iran-nuclear-briefs/defining-noncompliance-npt-safeguards-agreements",
+    "https://sb53.info/faq"
   ],
   "excluded": [
     "https://creativecommons.org/licenses/by/4.0/",

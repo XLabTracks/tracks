@@ -275,7 +275,7 @@ function Drill({
             id="specimen"
             label={`Specimen ${idx + 1}: ${card.text.slice(0, 90)}…`}
             className={cn(
-              "border-border bg-card shadow-soft rounded-xl border p-5",
+              "panel",
               isRetry && "border-defect/50 motion-safe:animate-pulse",
             )}
             armedClassName="ring-primary ring-2"

@@ -73,8 +73,15 @@ export function SiteFooter() {
             </p>
           </div>
 
+          {/* select-none, like the header's nav and the sidebar's rows: these
+              are destinations, not text. The XLab link and the description
+              above stay selectable — a credit is content. */}
           {SECTIONS.map((section) => (
-            <nav key={section.heading} aria-label={section.heading}>
+            <nav
+              key={section.heading}
+              aria-label={section.heading}
+              className="select-none"
+            >
               <p className="text-muted-foreground text-xs font-medium tracking-wide uppercase">
                 {section.heading}
               </p>

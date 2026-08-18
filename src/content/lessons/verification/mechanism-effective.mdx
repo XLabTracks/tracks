@@ -50,6 +50,14 @@ As you’re going through this exercise, jot down in your notebook: what were th
 - Durable? → What develops faster, hardware or software?
 </Callout>
 
+## Swiss Cheese: Layer Imperfect Checks
+
+It’s important to take advantage of the unique strengths of each of the layers, while taking into account how they are affected by intersection as well as their specific failure modes. For example, whistleblowers and human signals may be able to give us suspicions on violations, telling us something about the scale and location of those violations. However, these signals are often complementary to the other layers, serving as confirmation or signals on what to investigate rather than independent sources of truth themselves.
+
+The same is true of every layer. Satellite or power evidence may indicate that a large facility exists without proving what code ran there. Hardware or cloud records may describe activity precisely but still depend on trustworthy devices, signing keys, administrators, and definitions. Inspections can access evidence that remote sensing cannot, but only where inspectors have authority, access, time, and a target worth inspecting.
+
+The Swiss-cheese model asks us to combine defenses whose holes do not line up. The goal is to combine layers that rely on different information, different actors, and different access assumptions, so that the failure of one does not automatically defeat the rest.
+
 ## Evidence Taxonomies
 
 It’s important to note that the way we’ve taxonomized verification mechanisms in this course is not necessarily the only or most accepted way to do so; on the other hand, there are several different ways you can taxonomize the evidence streams of verification, according to your writing goals and audience context. We’ve chosen the hardware/cloud/intel/human four buckets—the by-layer taxonomy—for pedagogical simplicity. Keep in mind that when going forwards, you should proactively think about the best taxonomy or categorization level for your audience; think back to the upstream and downstream exercises you completed in Module 1. For instance, you’d want to prioritize mechanisms by policy goal when speaking to congressional officials, while you’d want to focus more on the easy-to-visualize by-layer organization for educational purposes.

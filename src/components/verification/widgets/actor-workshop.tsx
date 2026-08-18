@@ -14,6 +14,8 @@ import {
   type ActorRoleId,
 } from "@/lib/verification/data/actor-map";
 import {
+  ABSENT_ACTORS,
+  CATEGORIZE_IDS,
   CENTRE,
   CLOSING_QUESTIONS,
   CORE_QUESTION,
@@ -22,6 +24,7 @@ import {
   EDGE_NOTES,
   MAP_FINDING,
   MAP_LABEL,
+  MAP_SLOTS,
   POSTURE_KEY,
   RECALL_TARGET,
   SECOND_ORDER,
@@ -146,7 +149,13 @@ interface Saved {
 // prune() would drop them one by one and hand back a half-built map with no
 // explanation; a new key throws the whole document away at once, which is the
 // honest version of the same thing.
-const STORAGE_KEY = "v-actor-workshop:v3";
+//
+// v4: the board went from ten actors to seventeen — the six states of the
+// lesson's Table 2 and the verification body that does not exist. A restored
+// v3 document survives prune intact and is worse for it: a map that reports
+// itself finished with seven actors unplaced, and a categorize step whose
+// answers are for a set that no longer exists.
+const STORAGE_KEY = "v-actor-workshop:v4";
 const EMPTY: Saved = {
   step: "study",
   recall: "",
@@ -171,6 +180,11 @@ const ROLE_IDS = new Set<string>(ACTOR_ROLES.map((r) => r.id));
 const POSTURE_IDS = new Set<string>(ACTOR_POSTURES.map((p) => p.id));
 const ACTOR_IDS = new Set<string>(WORKSHOP_ACTOR_IDS);
 const KEY_EDGE_IDS = EDGE_KEY.map((e) => edgeId(e.from, e.to));
+/** The six rows step 5 runs on, resolved once. */
+const CATEGORIZE_ACTORS = CATEGORIZE_IDS.map(
+  (id) => WORKSHOP_ACTORS.find((a) => a.id === id)!,
+);
+const ABSENT = new Set<string>(ABSENT_ACTORS);
 
 function prune(raw: unknown): Saved {
   if (typeof raw !== "object" || raw === null) return EMPTY;
@@ -239,14 +253,25 @@ function prune(raw: unknown): Saved {
 }
 
 /* Ring geometry. Four bands and a core dot, drawn once and read at every
-   later step, so the numbers live here rather than inside the component. */
-const CX = 360;
-const CY = 292;
+   later step, so the numbers live here rather than inside the component.
+
+   THE SHEET GREW WITH THE CAST. At ten actors the bands sat 52 units apart,
+   which was already less than a label is wide — it worked because ten dots
+   rarely put two labels on the same horizontal line. Seventeen do, and no
+   amount of reordering the slots fixes it: a dot on the inner ring and one
+   two slots along on the next ring out can land at the same height, and then
+   their labels are 52 units apart with 64 units of text between them. The
+   fix is not a cleverer order, it is a bigger sheet. Bands are 66 apart now
+   and the box is 960 units wide, which clears the longest label on the
+   outermost ring with room to spare. Measured at 1440, 1024 and 760px: no
+   two labels overlap by a pixel. */
+const CX = 480;
+const CY = 350;
 const RADII: Record<RingId, number> = {
-  declares: 66,
-  evidence: 118,
-  verifies: 170,
-  undeclared: 218,
+  declares: 84,
+  evidence: 150,
+  verifies: 216,
+  undeclared: 278,
 };
 
 export function ActorWorkshop({}: VerificationWidgetProps) {
@@ -283,7 +308,9 @@ export function ActorWorkshop({}: VerificationWidgetProps) {
   const ringsRight = WORKSHOP_ACTOR_IDS.filter(
     (id) => saved.rings[id] === RING_KEY[id],
   ).length;
-  const catDone = WORKSHOP_ACTOR_IDS.filter(
+  // Step 5 runs on six of the seventeen; the data file says why. Count
+  // against that list and not the board, or the step can never be finished.
+  const catDone = CATEGORIZE_IDS.filter(
     (id) => (saved.roles[id]?.length ?? 0) > 0 && (saved.postures[id]?.length ?? 0) > 0,
   ).length;
   const edgeScore = scoreEdges(saved.edges, KEY_EDGE_IDS);
@@ -927,14 +954,23 @@ function CategorizeStep({
   return (
     <div className="space-y-4">
       <p className="text-sm leading-relaxed">
-        Position said where an actor sits. Roles say what it can do inside a
-        regime, and posture says what it wants right now. Both take more than
-        one answer, and most of these actors need more than one — an answer is
-        right when it names the whole set.
+        The rings said what part of a declaration an actor plays. Roles say
+        what it can do inside a regime, and posture says what it wants right
+        now. Both take more than one answer, and most of these actors need
+        more than one — an answer is right when it names the whole set.
+      </p>
+      {/* Six of the seventeen, and the step says so rather than letting the
+          learner wonder where the rest went. The reasons are in the data
+          file: seventeen actors is 187 chip decisions, and the lesson works
+          the roles lens through exactly two actors, both of which are here. */}
+      <p className="text-muted-foreground text-sm leading-relaxed">
+        Six of the seventeen, not all of them — the two the section works
+        through itself, and one from each of the other rings. The point is
+        what the answers look like side by side, and six is enough to see it.
       </p>
 
       <ol className="space-y-4">
-        {WORKSHOP_ACTORS.map((actor) => (
+        {CATEGORIZE_ACTORS.map((actor) => (
           <li
             key={actor.id}
             className="[&+li]:border-muted-foreground/60 [&+li]:border-t [&+li]:pt-4"
@@ -968,12 +1004,12 @@ function CategorizeStep({
       ) : (
         <div className="flex flex-wrap items-center justify-between gap-3">
           <p className="text-muted-foreground text-xs">
-            {answered} of {WORKSHOP_ACTORS.length} answered — each needs at
+            {answered} of {CATEGORIZE_ACTORS.length} answered — each needs at
             least one role and one posture.
           </p>
           <Button
             size="sm"
-            disabled={answered < WORKSHOP_ACTORS.length}
+            disabled={answered < CATEGORIZE_ACTORS.length}
             onClick={onCommit}
           >
             Commit
@@ -1141,7 +1177,9 @@ function EdgesStep({
         </p>
         <p className="text-muted-foreground mt-2 text-sm leading-relaxed">
           Some actors will end up with no edge at all. That is an available
-          answer and, for several of them, the right one.
+          answer and, for most of them, the right one. One of them can hold no
+          edge in principle — the hollow ring on the map is a body that does
+          not exist, and nothing that does not exist produces evidence.
         </p>
       </div>
 
@@ -1395,16 +1433,23 @@ function EdgesVerdict({
       ) : null}
 
       {/* The actors with nothing. This is the half of the key that is easy to
-          leave out and is doing most of the teaching. */}
+          leave out and is doing most of the teaching — and it is grouped
+          because ten separate rows would read as a list of oversights rather
+          than as four different reasons for an absence. */}
       <div className="space-y-3">
-        <p className="text-sm font-semibold">The four with no edge at all</p>
+        <p className="text-sm font-semibold">
+          The {EDGE_NOTES.reduce((n, x) => n + x.actorIds.length, 0)} with no
+          edge at all
+        </p>
         <ol className="space-y-3">
           {EDGE_NOTES.map((note) => (
             <li
-              key={note.actorId}
+              key={note.actorIds.join("+")}
               className="[&+li]:border-border [&+li]:border-t [&+li]:pt-3"
             >
-              <p className="text-sm font-medium">{MAP_LABEL[note.actorId]}</p>
+              <p className="text-sm font-medium">
+                {note.actorIds.map((id) => MAP_LABEL[id]).join(" · ")}
+              </p>
               <p className="text-muted-foreground mt-0.5 text-sm leading-relaxed">
                 {note.why}
               </p>
@@ -1598,17 +1643,19 @@ function RingMap({
   const lensIndex = lens ? ACTOR_ROLES.findIndex((r) => r.id === lens) : -1;
   const lensColor = lensIndex >= 0 ? ROLE_TOKENS[lensIndex % ROLE_TOKENS.length] : undefined;
 
-  /* Angle comes from the actor's place in the roster and nothing else.
-     It was computed per ring from RING_KEY, which was wrong twice over: the
-     layout then encoded the answer (a dot at the angle of a ring it was not
-     on), and a learner's wrong placement put two dots at the same point,
+  /* Angle comes from the actor's fixed slot in MAP_SLOTS and nothing else.
+     It was computed per ring from RING_KEY once, which was wrong twice over:
+     the layout then encoded the answer (a dot at the angle of a ring it was
+     not on), and a learner's wrong placement put two dots at the same point,
      because the angle belonged to one ring and the radius to another. Fixed
-     angles reflow never, leak nothing, and only ever crowd when several
-     actors are stacked on one small ring — which is a wrong map, and looks
-     like one. */
-  const STEP_DEG = 360 / WORKSHOP_ACTOR_IDS.length;
+     angles reflow never and leak nothing.
+     The slot list is a second array rather than the roster order because the
+     roster is grouped the way the lesson introduces actors, which puts seven
+     consecutive slots on the evidence ring — seven labels along one arc of
+     one circle. See its comment in the data file. */
+  const STEP_DEG = 360 / MAP_SLOTS.length;
   const angleOf = (id: string) => {
-    const i = WORKSHOP_ACTOR_IDS.indexOf(id as never);
+    const i = MAP_SLOTS.indexOf(id as never);
     // Half a step off top dead centre, so the twelve-o'clock position stays
     // free for each ring's own name — the first two actors were landing on
     // "RUNS IT" and reading as one line of text.
@@ -1624,14 +1671,12 @@ function RingMap({
   };
 
   return (
-    <div className="border-border bg-card mx-auto max-w-[720px] overflow-x-auto rounded-xl border p-2">
-      {/* The viewBox is cropped to the drawing, not to a round number. Content
-          spans y 66..510 — the outer ring's own label down to the bottom of
-          that ring — so a 0..584 box carried 148px of empty card, most of it
-          visible on the first three steps where nothing is placed yet. The
-          top edge is 58 rather than 66 because a 10px label's ascenders reach
-          above its baseline. */}
-      <svg viewBox="0 58 720 472" className="mx-auto block h-auto w-full min-w-[560px]" role="img"
+    <div className="border-border bg-card mx-auto max-w-[860px] overflow-x-auto rounded-xl border p-2">
+      {/* The viewBox is cropped to the drawing, not to a round number.
+          Content spans y 62..628 — the outer ring's own label down to the
+          bottom of that ring — and the top edge is 54 rather than 62 because
+          a 10px label's ascenders reach above its baseline. */}
+      <svg viewBox="0 54 960 582" className="mx-auto block h-auto w-full min-w-[560px]" role="img"
         aria-label="Concentric actor map: the regulated training run at the centre, actors on four rings around it — who declares, who holds evidence, who verifies, and what no declaration covers — with edges drawn between actors that can produce evidence about one another">
         {[...RINGS].reverse().map((ring) => (
           <g key={ring.id}>
@@ -1656,7 +1701,7 @@ function RingMap({
                 key through its own layout. */}
             <text
               x={CX}
-              y={CY - RADII[ring.id] - 8}
+              y={CY - RADII[ring.id] - 10}
               textAnchor="middle"
               className="fill-muted-foreground"
               style={{ fontSize: 10, letterSpacing: "0.08em", textTransform: "uppercase" }}
@@ -1710,13 +1755,23 @@ function RingMap({
           const y = CY + Math.sin(angle) * r;
           const outward = Math.cos(angle) >= 0 ? 1 : -1;
           const lit = lens ? (ROLE_KEY[actor.id] ?? []).includes(lens) : false;
+          // The one actor that is on the board in order to be absent is drawn
+          // hollow and dashed. Shape, never colour alone — its label says
+          // "none" in words, and the edge step states outright that it can
+          // hold no edge rather than leaving an empty row to be interpreted.
+          const absent = ABSENT.has(actor.id);
           return (
             <g key={actor.id}>
               <circle
                 cx={x}
                 cy={y}
-                r={lit ? 5 : 3.5}
-                style={{ fill: lit ? lensColor : "var(--foreground)" }}
+                r={absent ? 4.5 : lit ? 5 : 3.5}
+                style={{
+                  fill: absent ? "none" : lit ? lensColor : "var(--foreground)",
+                  stroke: absent ? "var(--muted-foreground)" : undefined,
+                  strokeWidth: absent ? 1.25 : undefined,
+                  strokeDasharray: absent ? "3 2" : undefined,
+                }}
                 opacity={lens && !lit ? 0.3 : 1}
               />
               <text

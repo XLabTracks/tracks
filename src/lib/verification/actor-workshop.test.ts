@@ -5,11 +5,14 @@ import { describe, expect, it } from "vitest";
 
 import { diffSet, edgeId, sameSet, scoreEdges, scorePlacements } from "./actor-workshop";
 import {
+  ABSENT_ACTORS,
+  CATEGORIZE_IDS,
   CENTRE,
   CLOSING_KEY,
   EDGE_FINDING,
   EDGE_KEY,
   EDGE_NOTES,
+  MAP_SLOTS,
   POSTURE_KEY,
   RECALL_TARGET,
   RING_KEY,
@@ -76,10 +79,40 @@ describe("actor-workshop data", () => {
   it("keys roles and postures off the roster's own vocabulary", () => {
     const roles = new Set(ACTOR_ROLES.map((r) => r.id));
     const postures = new Set(ACTOR_POSTURES.map((p) => p.id));
+    const absent = new Set<string>(ABSENT_ACTORS);
     for (const id of WORKSHOP_ACTOR_IDS) {
-      expect(ROLE_KEY[id]?.length, `${id} has no roles`).toBeGreaterThan(0);
+      // An actor that is on the board in order to be absent holds no role and
+      // takes no posture, and the roster is right to give it none. It is also
+      // never asked for in step 5 — see CATEGORIZE_IDS.
+      if (!absent.has(id)) {
+        expect(ROLE_KEY[id]?.length, `${id} has no roles`).toBeGreaterThan(0);
+      }
       for (const r of ROLE_KEY[id]!) expect(roles.has(r)).toBe(true);
       for (const p of POSTURE_KEY[id]!) expect(postures.has(p)).toBe(true);
+    }
+  });
+
+  it("never asks step 5 for an actor the roster gives no answer for", () => {
+    const absent = new Set<string>(ABSENT_ACTORS);
+    for (const id of CATEGORIZE_IDS) {
+      expect(absent.has(id), `${id} is absent and cannot be categorized`).toBe(false);
+      expect(ROLE_KEY[id]?.length, id).toBeGreaterThan(0);
+      expect(POSTURE_KEY[id]?.length, id).toBeGreaterThan(0);
+    }
+  });
+
+  it("gives every actor a slot on the map, and no actor two", () => {
+    expect([...MAP_SLOTS].sort()).toEqual([...WORKSHOP_ACTOR_IDS].sort());
+  });
+
+  it("puts no two neighbouring slots on the same ring", () => {
+    // That is the whole reason MAP_SLOTS exists rather than reusing the
+    // reading order: same-ring neighbours are labels stacked on one arc.
+    const n = MAP_SLOTS.length;
+    for (let i = 0; i < n; i += 1) {
+      const here = MAP_SLOTS[i]!;
+      const next = MAP_SLOTS[(i + 1) % n]!;
+      expect(RING_KEY[here], `${here} then ${next}`).not.toBe(RING_KEY[next]);
     }
   });
 
@@ -195,29 +228,45 @@ describe("edge key", () => {
     // Every count the finding states, re-derived. An added or moved edge
     // fails here rather than leaving the prose quietly wrong.
     const per = (id: string) => EDGE_KEY.filter((e) => e.subgoal === id).length;
-    // "2.B has three. The other three subgoals have one edge each."
-    expect(per("2b")).toBe(3);
+    // "2.B has four. The other three subgoals have one edge each."
+    expect(per("2b")).toBe(4);
     expect([per("1a"), per("1b"), per("2a")]).toEqual([1, 1, 1]);
-    // "One firm is on half the edges and touches three of the four subgoals."
+    // "One firm is on three of the seven edges and touches three of four."
+    expect(EDGE_KEY).toHaveLength(7);
     const nvidia = EDGE_KEY.filter((e) => e.from === "nvidia");
-    expect(nvidia).toHaveLength(EDGE_KEY.length / 2);
+    expect(nvidia).toHaveLength(3);
     expect(new Set(nvidia.map((e) => e.subgoal)).size).toBe(SUBGOALS.length - 1);
   });
 
-  it("has nobody but the two signatories' own institutions on the verifying ring", () => {
-    // The finding's fifth paragraph says there is no counterparty verifier and
-    // no international body on this board. That is a claim about the roster,
-    // so derive it: every actor on the verifying ring is a US institution.
+  it("points exactly one edge at a party, and none at the United States", () => {
+    // "Six of the seven edges point at a company or at a shell. Exactly one
+    // points at a party to the agreement." The whole one-sidedness reading
+    // rests on this, so derive it rather than trusting the prose.
+    const parties = ["us", "china"];
+    const atParty = EDGE_KEY.filter((e) => parties.includes(e.to));
+    expect(atParty.map((e) => edgeId(e.from, e.to))).toEqual(["ic>china"]);
+    expect(EDGE_KEY.some((e) => e.to === "us")).toBe(false);
+  });
+
+  it("has nobody but one signatory's institutions on the verifying ring", () => {
+    // The finding says the verifying ring carries one country's bureaus plus
+    // the body that does not exist — no counterparty, no neutral third party.
     const verifiers = WORKSHOP_ACTOR_IDS.filter((id) => RING_KEY[id] === "verifies");
-    expect(verifiers.sort()).toEqual(["bis", "california", "ic"]);
+    expect([...verifiers].sort()).toEqual([
+      "bis",
+      "california",
+      "ic",
+      "missing-verifier",
+    ]);
   });
 
   it("accounts for every actor that has no edge at all", () => {
-    const touched = new Set(EDGE_KEY.flatMap((e) => [e.from, e.to]));
+    const touched = new Set<string>(EDGE_KEY.flatMap((e) => [e.from, e.to]));
     const alone = WORKSHOP_ACTOR_IDS.filter((id) => !touched.has(id));
-    expect(alone.sort()).toEqual(EDGE_NOTES.map((n) => n.actorId).sort());
-    // Four, which the finding's third paragraph states.
-    expect(alone).toHaveLength(4);
+    const covered = EDGE_NOTES.flatMap((n) => n.actorIds);
+    expect([...alone].sort()).toEqual([...covered].sort());
+    // Ten of the seventeen, which the finding's sixth paragraph states.
+    expect(alone).toHaveLength(10);
     for (const note of EDGE_NOTES) expect(note.why.length).toBeGreaterThan(80);
   });
 });

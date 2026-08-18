@@ -10,11 +10,13 @@
  * so a reader can "see dependencies between stakeholders and anticipate
  * second-order effects".
  *
- * Ours compresses those eight into six, because a solo online learner has no
- * facilitator to set goals with and no group to catch up with: Study →
- * Recall → Core → Place → Categorize → Read the map. Goal Setting is the
- * brief, and Catch-up is the reveal at the end of Recall, which is the same
- * thing a group gets from comparing lists.
+ * Ours compresses those eight into seven, because a solo online learner has
+ * no facilitator to set goals with and no group to catch up with: Study →
+ * Recall → Core → Place → Categorize → Edges → Read the map. Goal Setting is
+ * the brief, and Catch-up is the reveal at the end of Recall, which is the
+ * same thing a group gets from comparing lists. Beeck's Political Analysis
+ * splits across the last two: the edges are the dependencies it exists to
+ * draw, the reading is what they add up to.
  *
  * WHY IT OPENS CLOSED-BOOK. Both papers below were read, not summarised from
  * an abstract, and the second one corrected what this comment used to claim.
@@ -55,20 +57,18 @@
  *
  * AND WHAT THIS WORKSHOP IS NOT, said here so nobody has to discover it.
  * Only step 2 is retrieval in Karpicke's sense: it asks for material with no
- * cue on screen. Steps 4 and 5 are cued RECOGNITION — the four ring names and
- * the six roles are printed on the buttons the learner presses. The freeze
- * hides which actors exist; it does not hide the vocabulary. That is a
- * deliberate trade (free recall of six roles for ten actors is a punishing
- * task, and the categories are what the section is teaching), but it means
- * the evidence above covers less of this exercise than its shape suggests.
- * Step 2 is also the weakest retrieval that could have been asked for: it
- * retrieves ten proper nouns, and the section's content is what those actors
- * can do and to whom.
+ * cue on screen. Steps 4, 5 and 6 are cued RECOGNITION — the ring names, the
+ * six roles and the four subgoals are all printed on screen while they are
+ * being used. The freeze hides which actors exist; it does not hide the
+ * vocabulary. That is a deliberate trade (free recall of six roles across
+ * seventeen actors is a punishing task, and the categories are what the
+ * section is teaching), but it means the evidence above covers less of this
+ * exercise than its shape suggests.
  *
  * PROVENANCE — read this before editing.
  *
- *   HERS, unchanged: the ten actors and their ids, positions and notes are
- *   rows of `ACTOR_MAP_ENTRIES` (data/actor-map.ts) and are not restated
+ *   HERS, unchanged: the seventeen actors and their ids, positions and notes
+ *   are rows of `ACTOR_MAP_ENTRIES` (data/actor-map.ts) and are not restated
  *   here — this file imports them. The six functional roles and five postures
  *   are `ACTOR_ROLES` / `ACTOR_POSTURES`, which are Tables 5 and 1 of
  *   `scoping-actors.mdx`. The role and posture ANSWER KEYS are those rows'
@@ -77,10 +77,12 @@
  *   verbatim, moved here from the lesson body so they have somewhere to be
  *   answered.
  *
- *   OURS, and flagged for her: the four rings and which actor sits on which;
- *   the core question's four options; and the closing finding. All four are
- *   derived from sentences already in 1.2 and each carries the sentence it
- *   was derived from, in `source`. None of it is a new claim about the world.
+ *   OURS, and flagged for her: which actor sits on which ring, which edges
+ *   exist, the core question's four options, and the two findings. Every one
+ *   of them carries the sentence it rests on — Baker's in a `baker` field,
+ *   1.2's in curly quotes — and both sets are held to their sources by the
+ *   two tripwires in actor-workshop.test.ts. None of it is a new claim about
+ *   the world.
  *
  * THE RINGS ARE BAKER'S FRAME, NOT OURS (course owner, 2026-08-18: "Берём
  * рамку Baker / Рёбра делаем упражнением нарисовать и ключ по бейкеру"). They
@@ -154,21 +156,46 @@ import {
 } from "./actor-map";
 import type { MarkingKey } from "./marking-keys";
 
-/** The subset the workshop runs on. Ten is the size that keeps every step */
-/* under a few minutes; the roster has twenty-seven. These ten were chosen to
-   put at least two actors on every ring and to include the three the lesson
-   argues with rather than lists: the cloud provider (its worked example of
-   one actor holding four roles at once), the proxies and the deployers (the
-   two it names as the gap). */
+/**
+ * The subset the workshop runs on, in reading order.
+ *
+ * IT WAS TEN AND THEY WERE ALL COMPANIES plus three American bureaus, on a
+ * board for an agreement between two governments. The closing questions gave
+ * it away: they ask about Taiwan and about states that hold capability and
+ * enforcement at once, and neither was on the board the learner had just
+ * built. Course owner, 2026-08-18: "добавь страны... в схему". So the six
+ * states of the lesson's Table 2 are here, and so is one more row that is not
+ * a country and belongs for the same reason — see below.
+ *
+ * Seventeen, from the roster's twenty-seven. What is still out: the EU (a
+ * rule-writer with no compute), states with no supply-chain position, the
+ * second-tier firms (AMD, EDA, OSATs, memory makers, neoclouds, the Chinese
+ * labs) and the two international bodies that exist but do not verify. Every
+ * one of them is a row the lesson names; none of them changes an answer here.
+ *
+ * `missing-verifier` — the roster's own "The verification body that does not
+ * exist" — is on the board on purpose, and it is the sharpest row on it. A
+ * verifying ring carrying only one signatory's institutions is a lie about a
+ * two-party agreement, and drawing the absent third party is how the map says
+ * so instead of the page asserting it. It is drawn hollow and it can hold no
+ * edge, which is the whole content of the row.
+ */
 export const WORKSHOP_ACTOR_IDS = [
-  "frontier-labs",
-  "hyperscalers",
-  "nvidia",
-  "tsmc",
-  "asml",
+  "us",
+  "china",
+  "taiwan",
+  "netherlands",
+  "japan",
+  "south-korea",
   "bis",
   "ic",
   "california",
+  "missing-verifier",
+  "asml",
+  "tsmc",
+  "nvidia",
+  "hyperscalers",
+  "frontier-labs",
   "proxies",
   "deployers",
 ] as const;
@@ -232,7 +259,7 @@ export interface Ring {
   name: string;
   /** The test for putting an actor here. */
   test: string;
-  baker: BakerQuote;
+  baker: BakerQuote[];
 }
 
 export type RingId = "declares" | "evidence" | "verifies" | "undeclared";
@@ -242,37 +269,58 @@ export const RINGS: Ring[] = [
     id: "declares",
     name: "Declares",
     test: "You own or use large-scale compute, so the regime requires a declaration from you. You are the Prover.",
-    baker: {
-      text: "organizations that own or use large-scale AI compute (e.g., major AI companies and cloud compute providers) would be required to declare facts about",
-      where: "§3.1, the declarations the framework assumes",
-    },
+    // TWO QUOTES, AND THE RING NEEDS BOTH — this is where the states landed.
+    // The framework runs at two levels: a signatory government is the Prover
+    // to the other signatory, and the organizations inside it declare in
+    // turn. One quote alone would put either the states or the firms on this
+    // ring by our say-so rather than the paper's.
+    baker: [
+      {
+        text: "The Prover could be a private institution or (in the case of international agreements) a government, which could constrain private companies within its territory as part of the agreement.",
+        where: "§3.1, Prover and Verifier",
+      },
+      {
+        text: "organizations that own or use large-scale AI compute (e.g., major AI companies and cloud compute providers) would be required to declare facts about",
+        where: "§3.1, the declarations the framework assumes",
+      },
+    ],
   },
   {
     id: "evidence",
+    // The second clause arrived with the states. A jurisdiction does not hold
+    // the fab's shipment records — the fab does — but Dutch and Taiwanese law
+    // are why those records are a governable object at all, and a ring test
+    // that did not say so would contradict its own key.
     name: "Holds the evidence",
-    test: "You declare nothing here and you check nothing, but you hold a record a declaration can be held against.",
-    baker: {
-      text: "A Verifier could verify the locations and owners of random samples of AI chips from manufacturing to end-of-life destruction.",
-      where: "§4.2.1, verifying AI chips’ chain of custody",
-    },
+    test: "You declare nothing here and you check nothing, but you hold a record a declaration can be held against — or the authority that makes somebody else’s record producible.",
+    baker: [
+      {
+        text: "A Verifier could verify the locations and owners of random samples of AI chips from manufacturing to end-of-life destruction.",
+        where: "§4.2.1, verifying AI chips’ chain of custody",
+      },
+    ],
   },
   {
     id: "verifies",
     name: "Verifies",
     test: "The declarations come to you, and your job is to establish that they are true and that nothing has been left out.",
-    baker: {
-      text: "Verification focuses on checking that these declarations are correct and complete.",
-      where: "§3.1",
-    },
+    baker: [
+      {
+        text: "Verification focuses on checking that these declarations are correct and complete.",
+        where: "§3.1",
+      },
+    ],
   },
   {
     id: "undeclared",
     name: "Outside the declaration",
     test: "Nothing you do appears in anybody’s declaration — because you sit below the threshold, or because you exist to keep a name off one.",
-    baker: {
-      text: "Verify that there are no undeclared, large-scale AI compute clusters that could be used for violations.",
-      where: "§3.2, Subgoal 2.B",
-    },
+    baker: [
+      {
+        text: "Verify that there are no undeclared, large-scale AI compute clusters that could be used for violations.",
+        where: "§3.2, Subgoal 2.B",
+      },
+    ],
   },
 ];
 
@@ -301,17 +349,72 @@ export const RINGS: Ring[] = [
  * edge exercise is where the difference between them shows up.
  */
 export const RING_KEY: Record<WorkshopActorId, RingId> = {
-  "frontier-labs": "declares",
-  hyperscalers: "declares",
-  nvidia: "evidence",
-  tsmc: "evidence",
-  asml: "evidence",
+  us: "declares",
+  china: "declares",
+  taiwan: "evidence",
+  netherlands: "evidence",
+  japan: "evidence",
+  "south-korea": "evidence",
   bis: "verifies",
   ic: "verifies",
   california: "verifies",
+  "missing-verifier": "verifies",
+  asml: "evidence",
+  tsmc: "evidence",
+  nvidia: "evidence",
+  hyperscalers: "declares",
+  "frontier-labs": "declares",
   proxies: "undeclared",
   deployers: "undeclared",
 };
+
+/**
+ * The drawing order — which angular slot each actor takes on the map.
+ *
+ * A SECOND ARRAY, and it earns itself. Angles come from a fixed position in a
+ * list, because a layout that reflows as the learner places things is
+ * unreadable and one computed from RING_KEY would encode the answer. The
+ * reading order above groups actors the way the lesson introduces them —
+ * states, then the bureaus inside one of them, then the chain from most
+ * upstream down — which means seven consecutive slots all land on the
+ * evidence ring, seven labels stacked along one arc of one circle.
+ *
+ * So the map gets its own order, authored to put no two neighbours on the
+ * same ring. It leaks nothing: before anything is placed there are no dots,
+ * and afterwards every dot is at the radius the LEARNER chose, so the slot
+ * order is not visible to read the key off. A test holds the two arrays to
+ * the same set.
+ */
+export const MAP_SLOTS: readonly WorkshopActorId[] = [
+  "asml",
+  "us",
+  "taiwan",
+  "bis",
+  "nvidia",
+  "hyperscalers",
+  "proxies",
+  "tsmc",
+  "ic",
+  "netherlands",
+  "frontier-labs",
+  "japan",
+  "california",
+  "south-korea",
+  "china",
+  "deployers",
+  "missing-verifier",
+];
+
+/**
+ * The one actor drawn as a hollow ring rather than a filled dot.
+ *
+ * It is on the board to be absent, so it cannot look the same as the things
+ * that are there. Shape does the work and never colour alone: its label says
+ * "none" in words, its ring reason says what is missing, and it is the only
+ * actor that can hold no edge — which the edge step states rather than leaves
+ * to be inferred from an empty row.
+ */
+export const ABSENT_ACTORS: readonly WorkshopActorId[] = ["missing-verifier"];
 
 /**
  * What the ring map calls each actor.
@@ -325,14 +428,25 @@ export const RING_KEY: Record<WorkshopActorId, RingId> = {
  * a new name for anything.
  */
 export const MAP_LABEL: Record<WorkshopActorId, string> = {
-  "frontier-labs": "Frontier labs",
-  hyperscalers: "Cloud providers",
-  nvidia: "NVIDIA",
-  tsmc: "TSMC",
-  asml: "ASML",
+  us: "United States",
+  china: "China",
+  taiwan: "Taiwan",
+  netherlands: "Netherlands",
+  japan: "Japan",
+  "south-korea": "South Korea",
   bis: "BIS",
   ic: "Intelligence community",
   california: "California",
+  // The roster calls this row "The verification body that does not exist",
+  // which is a sentence and not a label. The short form compresses the
+  // lesson's own paragraph — "The institutional shelf marked 'AI verification
+  // body' is empty" — and adds no claim to it.
+  "missing-verifier": "No AI verification body",
+  asml: "ASML",
+  tsmc: "TSMC",
+  nvidia: "NVIDIA",
+  hyperscalers: "Cloud providers",
+  "frontier-labs": "Frontier labs",
   proxies: "Proxies",
   deployers: "Deployers",
 };
@@ -347,6 +461,19 @@ export const MAP_LABEL: Record<WorkshopActorId, string> = {
  * `baker` fields to the artifact, which is the same guarantee twice.
  */
 export const RING_WHY: Record<WorkshopActorId, string> = {
+  us: "In an international agreement the Prover is a government — the paper says so directly, and adds that it is the party “which could constrain private companies within its territory as part of the agreement”. So the signatory declares, and the buildings inside it are the machinery it verifies the other signatory WITH. That is the lesson’s own point about asking which building, drawn as two different rings.",
+  china:
+    "The other Prover, and on this board that is all it is — because the roster has no row for its bureaus. The United States brings three institutions to the verifying ring and China brings none, which is a fact about this map rather than about the world, and worth holding on to when you read what the map claims.",
+  taiwan:
+    "The state does not hold the fab’s shipment records; the fab does. What Taiwan holds is the jurisdiction that makes those records a governable object at all — and it is not a party to this agreement, so nothing in the agreement compels it to exercise that.",
+  netherlands:
+    "One company in one country, and the country is the reason the company’s customer list is reachable. Export law over a single vendor is close to the strongest evidentiary lever anywhere on this board, and it belongs to a state that signed nothing.",
+  japan:
+    "Equipment and specialty materials: several quieter chokepoints, and the same shape as the Netherlands. Its records matter to a verifier and its participation is voluntary.",
+  "south-korea":
+    "High-bandwidth memory is scarce, essential to frontier training, and therefore countable — which makes the jurisdiction over the firms that make it an evidence position, not just a trade one.",
+  "missing-verifier":
+    "The paper allows two kinds of Verifier: “The Verifier could be a government body or a third party.” Every government body on this ring belongs to one signatory. The third party is this row, and it is empty — no chip registry, no challenge-inspection right at a data centre, no procedure for resolving an allegation. It is drawn because a ring with only one party’s institutions on it is a claim, and the claim is false.",
   "frontier-labs":
     "They perform the regulated act, so they are the Prover: every obligation in the agreement is ultimately about what they did or did not train, and the declaration is theirs to make.",
   hyperscalers:
@@ -364,6 +491,32 @@ export const RING_WHY: Record<WorkshopActorId, string> = {
   deployers:
     "Outside every declaration for the opposite reason — below the threshold. Baker defines large-scale in thousands of chips over months, so millions of actors who “benefit from safety and bear none of its costs” are outside the regime by construction rather than by evasion.",
 };
+
+/**
+ * Step 5 runs on six of the seventeen, and here is why.
+ *
+ * Placing seventeen actors is seventeen clicks. Categorising seventeen means
+ * six role chips and five posture chips apiece — 187 decisions — and the step
+ * was already the longest one on the board at ten. Length is not the only
+ * argument: the lesson works the roles lens through exactly two actors ("Try
+ * it on a cloud provider", "Or try Taiwan"), so a step that demands all
+ * seventeen is asking for more than the section settles.
+ *
+ * These six are both of the lesson's worked examples plus one actor from each
+ * remaining ring, chosen so the point survives the cut — roles scatter across
+ * every ring, and the count per actor runs from four down to one. The United
+ * States is here because the third closing question asks for an actor holding
+ * capability and enforcement at once, and it should be one the learner has
+ * had in their hands.
+ */
+export const CATEGORIZE_IDS: readonly WorkshopActorId[] = [
+  "hyperscalers",
+  "taiwan",
+  "us",
+  "nvidia",
+  "ic",
+  "proxies",
+];
 
 /**
  * Step 3 — the core.
@@ -567,6 +720,25 @@ export const EDGE_KEY: WorkshopEdge[] = [
     ],
   },
   {
+    // The edge the board was missing until the states arrived, and the only
+    // one that points at a signatory. Everything else on this key points at a
+    // company or at a shell; verification of a PARTY happens here or nowhere.
+    from: "ic",
+    to: "china",
+    subgoal: "2b",
+    what: "The lesson's own row for this agency is monitoring and attribution — the layer that spots hidden data centres and procurement networks. It is what one signatory has instead of a right to inspect the other. Note what it costs: what it knows is classified, so turning it into evidence anybody may act on risks the source that produced it. And note the asymmetry, which is a fact about this roster rather than about the world — China has the same capability and this board has no row for it.",
+    baker: [
+      {
+        text: "Intelligence agencies could collect and analyze intelligence for all verification subgoals, including via human, cyber, and signals intelligence.",
+        where: "§4.3, personnel-based verification layers",
+      },
+      {
+        text: "More adversarial, harder for third parties to verify, and unclear effectiveness.",
+        where: "§4.3, the layer's own listed disadvantages",
+      },
+    ],
+  },
+  {
     from: "ic",
     to: "proxies",
     subgoal: "2b",
@@ -590,12 +762,45 @@ export const EDGE_KEY: WorkshopEdge[] = [
  * are compatible.
  */
 export const EDGE_NOTES: {
-  actorId: WorkshopActorId;
+  /** Every actor this note accounts for. The test holds the union of these
+      to exactly the set of actors no edge touches, so an added edge cannot
+      leave a note standing that explains an absence which is no longer one. */
+  actorIds: WorkshopActorId[];
   why: string;
   baker: BakerQuote[];
 }[] = [
   {
-    actorId: "asml",
+    actorIds: ["us"],
+    why: "A signatory declares; it does not produce evidence itself. What a state has for that is institutions, which is why the intelligence edge starts at the agency rather than at the country. Then notice the shape that leaves: China is at the receiving end of an edge and the United States is at the receiving end of none. Do not read that as a claim that one government is the more transparent. It is a claim about which government's institutions this roster wrote down — and about the empty ring where the body that would check both of them should be.",
+    baker: [
+      {
+        text: "The Prover could be a private institution or (in the case of international agreements) a government, which could constrain private companies within its territory as part of the agreement.",
+        where: "§3.1, Prover and Verifier",
+      },
+    ],
+  },
+  {
+    actorIds: ["taiwan", "netherlands", "japan", "south-korea"],
+    why: "The four host states hold the jurisdiction that makes their firms' records producible, and not one of them is a party to this agreement. That is not an oversight in the drawing; it is the open problem the paper lists under attaining participation, and it is the reason a two-party compute agreement leans on export controls and energy policy rather than on the agreement itself. An edge you drew from one of them is an edge nothing compels.",
+    baker: [
+      {
+        text: "How to attain compliance commitments from all states that host large-scale AI compute (as such states could directly misuse it or rent it to an agreement party)?",
+        where: "§3.3, broader challenges",
+      },
+    ],
+  },
+  {
+    actorIds: ["missing-verifier"],
+    why: "This one can hold no edge, and that is the row, not a gap in it. The paper allows a government body or a third party as Verifier; every government body here belongs to one signatory, and the third party does not exist — no chip registry, no challenge-inspection right, no procedure for resolving an allegation of training above a threshold. Read the board once more with that in mind: a two-party agreement in which only one party's institutions can check anything, and no neutral party at all.",
+    baker: [
+      {
+        text: "The Verifier could be a government body or a third party.",
+        where: "§3.1",
+      },
+    ],
+  },
+  {
+    actorIds: ["asml"],
     why: "Baker’s chain of custody begins at manufacturing, and ASML is upstream of that: it sells the machines the fab uses, not the parts a regime counts. The tightest chokepoint on the map completes no subgoal, which is what the difference between leverage and evidence looks like.",
     baker: [
       {
@@ -605,7 +810,7 @@ export const EDGE_NOTES: {
     ],
   },
   {
-    actorId: "bis",
+    actorIds: ["bis"],
     why: "Export control is the instrument, and the paper puts it outside the frame deliberately: it is how a party is stopped or punished after a finding, not how a declaration is checked. Today’s de facto compute-governance agency is, in this framework, downstream of verification rather than part of it.",
     baker: [
       {
@@ -615,7 +820,7 @@ export const EDGE_NOTES: {
     ],
   },
   {
-    actorId: "california",
+    actorIds: ["california"],
     // The one absence a learner can argue with, so it carries the argument
     // rather than waiting to be caught out. 1.2 supplies half of it — SB 53
     // makes large frontier developers run an internal anonymous reporting
@@ -633,7 +838,7 @@ export const EDGE_NOTES: {
     ],
   },
   {
-    actorId: "deployers",
+    actorIds: ["deployers"],
     why: "Below the threshold, and that is the whole of it. Millions of actors running somebody else’s model are outside the regime by construction rather than by evasion — which is why they share a ring with the proxies and share nothing else.",
     baker: [
       {
@@ -653,11 +858,12 @@ export const EDGE_NOTES: {
 export const EDGE_FINDING = {
   title: "Where this regime is weakest",
   body: [
-    "Count the edges by subgoal. 2.B — no undeclared clusters anywhere — has three. The other three subgoals have one edge each, so three quarters of what a verifier has to establish rests on a single mechanism apiece. Baker’s standard for a robust regime is redundancy: layers stacked, so that a subgoal has more than one way of being completed. Three of the four subgoals on this board have no second way at all.",
-    "Now count by actor instead, which is the sharper reading. One firm is on half the edges and touches three of the four subgoals — and that is not a coincidence about NVIDIA, it is what a verification layer IS. The paper defines a layer as one mechanism per subgoal, and the on-chip layer is a chip designer’s to give or withhold. So the board does not show one weak link; it shows a regime resting on roughly one layer, held by a company that is not a party to the agreement.",
+    "Count the edges by subgoal. 2.B — no undeclared clusters anywhere — has four. The other three subgoals have one edge each, so three quarters of what a verifier has to establish rests on a single mechanism apiece. Baker’s standard for a robust regime is redundancy: layers stacked, so that a subgoal has more than one way of being completed. Three of the four subgoals on this board have no second way at all.",
+    "Now count by actor instead, which is the sharper reading. One firm is on three of the seven edges and touches three of the four subgoals — and that is not a coincidence about NVIDIA, it is what a verification layer IS. The paper defines a layer as one mechanism per subgoal, and the on-chip layer is a chip designer’s to give or withhold. So the board does not show one weak link; it shows a regime resting on roughly one layer, held by a company that is not a party to the agreement.",
     "The paper calls the least robust subgoal the weak link and says the regime is only as good as that one. This map narrows the question rather than answering it — counting edges is not measuring robustness — but it does tell you where to ask.",
-    "Then read what has no edge. Four of the ten actors complete no subgoal, and two of them are the ones the section spends the most time on: the export-control agency, whose instrument the paper places outside verification altogether, and the state legislature, which produces declarations rather than checks on them.",
-    "Then read the third ring on its own. Everything on it — the export-control bureau, the intelligence community, the state legislature — belongs to one of the two signatories. There is no counterparty verifier on this board and no international body, because 1.2 already told you the shelf is empty. A map of a two-party agreement in which only one party can check anything is not a verification regime; it is one country auditing itself while another country watches.",
+    "Now count arrowheads. Six of the seven edges point at a company or at a shell. Exactly one points at a party to the agreement, and it runs one way, out of one signatory’s intelligence service. Nothing on this board produces evidence about the United States, and the reason is not that the United States is transparent — it is that the counterparty’s institutions are not on the roster and the neutral body that would be is the hollow ring on the third band. This is a map of a two-party agreement in which one party’s bureaus do all the checking, including of themselves.",
+    "Then read the third ring on its own, since that is where the last paragraph comes from. The export-control bureau, the intelligence community, the state legislature: one country’s, all three. 1.2 already told you the shelf marked “AI verification body” is empty; here it is, drawn empty, on the ring where the alternative would have gone.",
+    "Then read what has no edge at all — ten of the seventeen. Some of those absences are the paper’s scope (enforcement is not verification), some are the roster’s (China brought no bureaus), and one is the whole problem stated as a hole: four states hold the jurisdiction that makes the chain’s records producible, and not one of them signed anything.",
     "Then read what has no node. The paper’s simplest and most implementation-ready layer runs on people — whistleblowers, interviews, intelligence. One of those three is on this board, because it happens to be an institution. The other two are not organisations, so a map of organisations has nowhere to put them, and you would never find them by drawing one.",
   ],
   weakLink: {

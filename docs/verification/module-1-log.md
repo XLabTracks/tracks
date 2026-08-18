@@ -982,3 +982,80 @@ matters.
   disclosure, or collapsing correct edges to one line so attention goes to
   the misses. Both change what a learner who got it right reads, so neither
   is ours to pick.
+
+### The states are on the board
+
+Her instruction, same day: *"добавь страны... в схему"*. She is right and it was
+the real fix for the seam, not a bridge sentence: the closing questions ask
+about Taiwan and about states holding capability and enforcement at once, and
+the board was ten companies and three American bureaus.
+
+**Ten actors became seventeen.** The six states of the lesson's Table 2 — the
+United States, China, Taiwan, the Netherlands, Japan, South Korea — plus one
+row that is not a country and belongs for the same reason: the roster's own
+`missing-verifier`, "The verification body that does not exist". Still out and
+deliberately: the EU, states with no supply-chain position, the second-tier
+firms, and the two international bodies that exist without verifying.
+
+**The declaration frame absorbed the states without strain, which is a point
+in its favour.** Baker: "The Prover could be a private institution or (in the
+case of international agreements) a government, which could constrain private
+companies within its territory as part of the agreement." So the two
+signatories go on Declares beside the labs and the clouds, and the frame runs
+at two levels at once — a government declares to the other government, the
+organizations inside it declare in turn. The `declares` ring carries both
+quotes now, because one alone would put either the states or the firms there
+by our say-so.
+
+The four host states go on **Holds the evidence**, and the ring's test grew a
+clause to match: a jurisdiction does not hold the fab's shipment records, it
+holds the authority that makes them producible. That is not a stretch of the
+paper, it is the gap the paper names — attaining commitments from states that
+host large-scale compute is listed as an open challenge, and none of the four
+is a party here. Their group note says exactly that: an edge drawn from one of
+them is an edge nothing compels.
+
+**One new edge, and it is the one the board was missing:** Intelligence
+community → China, Subgoal 2.B. It is what one signatory has instead of a
+right to inspect the other, and it makes the one-sidedness mechanical rather
+than rhetorical — seven edges, six of them pointing at a company or a shell,
+exactly one at a party, and none at the United States. A test derives both.
+The edge's own text says the asymmetry is a fact about this roster and not
+about the world: China has the same capability and the roster has no row for
+its bureaus.
+
+**`missing-verifier` is drawn hollow and dashed**, can hold no edge in
+principle, and the edge step says so rather than leaving an empty row to be
+interpreted. Its ring reason is the paper's own allowance — "The Verifier
+could be a government body or a third party" — against a ring where every
+government body belongs to one signatory and the third party is the hollow
+circle.
+
+**Step 5 now runs on six of the seventeen.** Seventeen actors is 187 chip
+decisions, and the step was already the longest at ten. Not only length: the
+lesson works the roles lens through exactly two actors ("Try it on a cloud
+provider", "Or try Taiwan"), so demanding all seventeen asks for more than the
+section settles. The six are those two plus one from each remaining ring, and
+the United States, which is there because the third closing question asks for
+an actor holding capability and enforcement at once and it should be one the
+learner has had in their hands. The step says on screen that it is six and
+why.
+
+**The map got a second array and a bigger sheet.** `MAP_SLOTS` is the drawing
+order, separate from the reading order, because the reading order groups
+actors the way the lesson introduces them — which put seven consecutive slots
+on the evidence ring, seven labels stacked along one arc. A test asserts no
+two neighbouring slots share a ring.
+
+That was not enough on its own, and chasing it by reordering was whack-a-mole:
+a dot on the inner ring and one a couple of slots along on the next ring out
+can land at the same height, and then their labels are 52 units apart with 64
+units of text between them. `South Korea ✕ Frontier labs` became `Japan ✕
+Frontier labs` on the first swap. The cause is that the sheet was sized for
+ten dots, so the sheet grew — bands 66 units apart instead of 52, box 960
+units wide, container 860px. Measured with a probe that reports every
+overlapping pair of SVG labels: zero at 1440, 1024 and 760px, and zero on a
+deliberately wrong learner placement too.
+
+Storage is `v-actor-workshop:v4`. A v3 document survives prune intact and is
+worse for it — a map reporting itself finished with seven actors unplaced.

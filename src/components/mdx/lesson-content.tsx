@@ -8,6 +8,9 @@ import {
   getModulesForTrack,
 } from "@/lib/content";
 import { isWritingExercise } from "@/lib/content/types";
+// Lesson MDX maths is rendered at build time by rehype-katex, so it arrives
+// as finished markup with no component to carry its styles — see globals.css.
+import "katex/dist/katex.min.css";
 
 export async function importLesson(contentRef: string) {
   try {

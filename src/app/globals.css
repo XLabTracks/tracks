@@ -1,9 +1,15 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
-/* KaTeX styles global: lesson MDX math (rehype-katex) and exercise
-   prompt/answer math (MathText) render outside the paper reader too. */
-@import "katex/dist/katex.min.css";
+/* KaTeX's stylesheet is deliberately NOT imported here. Global, it rode on
+   every page in the site — the home page, the resource hub, all of
+   Verification, none of which render a single formula. It is imported by the
+   three surfaces that can produce KaTeX markup instead: math-spans.tsx (an
+   exercise string with a `$` in it), lesson-content.tsx (lesson MDX, whose
+   maths is rendered at build time by rehype-katex and arrives as finished
+   markup with no component behind it) and paper-reader.tsx. Adding a fourth
+   producer means adding a fourth import, and the symptom of forgetting is
+   maths rendered as unstyled fallback glyphs on that surface only. */
 
 @plugin "@tailwindcss/typography";
 

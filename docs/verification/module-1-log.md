@@ -343,3 +343,91 @@ between actors, which is the one bullet of her 1.2 plan with no implementation
 visible; it does not draw edges. BlueDot's Unit 2 map is the reference, and
 their edge typology (authority / evidence / compliance / physical inputs) is
 still an open question for her.
+
+## 1.2 fact-checked against its own cited sources (2026-08-15)
+
+The owner asked whether the sources behind the module had been read. They had
+not. This is the pass. Every checkable claim in `scoping-actors.mdx` was taken
+to the document 1.2 itself cites — not to a search snippet — and the result is
+below. **No prose was changed.** Modules 0–2 are her transcription and a
+factual correction to them is her call; what follows is the evidence for the
+three she needs to make.
+
+### Confirmed against the primary source
+
+- **EU AI Act, Article 51.** "A general-purpose AI model shall be presumed to
+  have high impact capabilities … when the cumulative amount of computation
+  used for its training measured in floating point operations is greater than
+  10^25." The lesson's "10^25 FLOP presumption of systemic risk" is right;
+  strictly the presumption is of high-impact capabilities, which is the route
+  to systemic-risk classification. Not worth changing.
+- **SB 53 dates and numbers.** Signed 29 September 2025, duties effective 1
+  January 2026; "large frontier developer" = annual gross revenues in excess
+  of $500 million (with affiliates); reporting "within 15 days … or within 24
+  hours if there is imminent risk of death or serious physical injury". All
+  exact.
+- **The UN panel.** Established by A/RES/79/325 on 26 August 2025; 40 members,
+  appointed by the General Assembly 12 February 2026; Yoshua Bengio and Maria
+  Ressa elected Co-Chairs at the inaugural meeting on 3 March 2026. The Notes
+  line's "first meeting March 2026" is correct — un.org's "first in-person
+  meeting, Madrid, April 2026" is a different event, and both are true.
+- **The Global Dialogue on AI Governance.** First met in Geneva, 6–7 July
+  2026. Exact.
+- **CAISI.** Its own NIST page: it will "establish voluntary agreements with
+  private sector AI developers and evaluators", and it holds no inspection or
+  compulsion power. The Table 3 row's "Voluntary agreements, not inspection
+  authority; renamed and refocused as the politics changed" is right, and the
+  June 2025 Lutnick statement is the rename.
+- **ASML.** Sastry et al., Figure 11: "ASML is the only company capable of
+  producing EUV machines", market share 100%. The lesson's "the world's only
+  maker of EUV lithography machines" is exact.
+- **TSMC.** Same figure: 90% of ≤7nm logic fabrication (2022 data), Samsung
+  and Intel the other 10%. "Fabricates the overwhelming share of leading-edge
+  AI chips" is right, and there is a number available for it.
+- **The counts list.** "Even AI development at the frontier consists of only
+  tens of organizations" and "several critical steps … have fewer than three
+  suppliers" (Figure 11 caption) back "a few dozen labs that matter" and "the
+  chain narrows to almost nothing at the top" directly. NVIDIA's ">90%" share
+  of data-centre GPU design and the cloud split (AWS 32 / Azure 22 / Google 11
+  / others 35, 2023) are in the same paper if a number is ever wanted.
+
+### Three things for her
+
+1. **SB 53's duties are attributed to the wrong class of developer.** The
+   lesson says the Act "binds 'large frontier developers'" and then that "they
+   must" do all four things. Both summaries the lesson itself cites agree that
+   is not the split: the Frontier AI framework is **large developers only**,
+   but the transparency report and the 15-day / 24-hour incident report fall
+   on **all frontier developers**, and so does the duty to inform employees of
+   whistleblower rights — only the internal anonymous reporting channel is
+   large-only. The definitional half is also absent: a "frontier model" is one
+   trained on more than **10^26** operations, which is the threshold that
+   decides who is in scope at all, and in a module about thresholds its
+   absence is louder than elsewhere.
+2. **The packaging row overreaches both cited sources.** Table 4 calls
+   packaging/assembly/test "a second, quieter bottleneck". CSET — cited in
+   Notes and sources — says the opposite of the general case: ATP "is
+   labor-intensive and has the lowest barriers to entry", and China is strong
+   in it. The bottleneck claim is defensible for **advanced packaging**
+   specifically (CoWoS, which the row names), and the row merges that with
+   commodity outsourced assembly-and-test, where the cited source says the
+   concentration is not there.
+3. **The HBM claim has no cited support.** Table 2's South Korea row — "HBM is
+   scarce and essential to frontier training: a countable, checkable input" —
+   is a chokepoint claim, and neither cited supply-chain source makes it.
+   Sastry et al. mention high-bandwidth memory once, in a footnote about chip
+   packaging; CSET does not discuss memory at all. The claim is very likely
+   true and it needs a source that says so.
+
+### Two caveats on the whole section
+
+- **Source vintage.** The two supply-chain sources are CSET 2021 and Sastry et
+  al. 2024, whose concentration figures are 2022–2023 data. The lesson reads
+  as current in mid-2026 and carries no currency note; 1.2.1 does carry one.
+- **Not verified this pass.** The Federal Register blocked automated fetching,
+  so the Department of War executive order was not read — the lesson's own
+  hedge ("statutory renaming pending in Congress as of mid-2026") is the right
+  posture either way. CAISI "runs pre-deployment evaluation agreements with
+  several frontier developers" is not stated on the CAISI page; the
+  predecessor AI Safety Institute had such agreements, and whether CAISI still
+  does is unconfirmed rather than wrong.

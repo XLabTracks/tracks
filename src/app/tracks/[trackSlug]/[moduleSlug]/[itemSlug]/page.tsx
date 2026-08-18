@@ -509,6 +509,19 @@ async function PaperItemPage({
               completedContentIds={completedContentIds}
             />
           </PaperPartsReader>
+        ) : track.id === "verification" ? (
+          // Papers carry the same reading surface as lessons, per the owner:
+          // the Aa (focus reading + content-scoped text size) over the
+          // document body. The wrapper does not disturb the `.paper-reader`
+          // root that PaperHighlights/PaperSidenotes discover, and the focus
+          // walker already skips .katex, glosses and not-prose.
+          <ReadingSurface>
+            <PaperReader
+              paper={paper}
+              signedIn={Boolean(userId)}
+              completedContentIds={completedContentIds}
+            />
+          </ReadingSurface>
         ) : (
           <PaperReader
             paper={paper}

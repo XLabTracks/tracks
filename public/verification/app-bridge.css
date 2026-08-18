@@ -1045,3 +1045,11 @@
 :root[data-theme] [data-reading-surface] .lesson-body {
   font-size: var(--fs-md);
 }
+
+/* Papers on the reading surface: the document body's own base is a fixed
+   0.875rem (arxiv-paper.css) with everything inside in em, so handing it the
+   --fs-sm token — 0.875rem at base, re-solved inside the surface at every Aa
+   stop — scales the whole document proportionally and nothing at 100%. */
+:root[data-theme] [data-reading-surface] .arxiv-paper {
+  font-size: var(--fs-sm);
+}

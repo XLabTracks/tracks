@@ -15,7 +15,7 @@ export const tracks: Track[] = [
     title: "AI Control",
     shortTitle: "Control",
     description:
-      'Hands-on technical track on controlling and evaluating AI systems. The introductory module works through Redwood Research\'s "AI Control: Improving Safety Despite Intentional Subversion" paper and then rebuilds its trusted-monitoring result as an interactive, model-backed demo.',
+      "This hands-on technical track covers controlling and evaluating AI systems that may intentionally subvert oversight, working through the field's primary literature in full with exercises woven between the sections.",
     kind: "technical",
     moduleIds: [
       "c-intro",
@@ -86,13 +86,19 @@ export const modules: Module[] = [
     id: "c-areas",
     slug: "areas-of-control-work",
     trackId: "control",
-    title: "Areas of control work",
+    title: "A Taxonomy of Control",
     summary:
-      "Ryan Greenblatt's survey of the areas of control research and implementation that seem most promising, reproduced verbatim from the Redwood Research blog.",
+      "A taxonomy of control: how protocols are evaluated, the environments those evaluations run in, and the mitigation stack — detection, prevention, and response. Closes with Ryan Greenblatt's survey of areas of control work, reproduced verbatim from the Redwood Research blog.",
     order: 3,
     prerequisiteModuleIds: ["c-intro", "c-mod2"],
-    itemIds: ["c-areas-l1"],
-    estimatedMinutes: 40,
+    itemIds: [
+      "c-areas-tax-detection",
+      "c-areas-tax-prevention",
+      "c-areas-tax-evals",
+      "c-areas-tax-environments",
+      "c-areas-overview",
+    ],
+    estimatedMinutes: 88,
   },
   {
     // Human-authored outline (course author's module 5 outline) merged with
@@ -462,15 +468,39 @@ export const lessons: Lesson[] = [
     contentRef: "c-eh-ins-next-bar",
     estimatedMinutes: 3,
   },
-  // --- Control: areas of control work (reproduced verbatim with permission
-  // from Redwood Research) ---
+  // --- Control module 3: A Taxonomy of Control (spec prototype — see
+  // docs/superpowers/specs/2026-08-13-module-3-taxonomy-spec.md) ---
   {
-    id: "c-areas-l1",
-    slug: "an-overview-of-areas-of-control-work",
+    id: "c-areas-tax-evals",
+    slug: "control-evaluations",
     moduleId: "c-areas",
-    title: "An overview of areas of control work",
-    contentRef: "c-areas-l1",
-    estimatedMinutes: 40,
+    title: "Control Evaluations",
+    contentRef: "c-areas-tax-evals",
+    estimatedMinutes: 8,
+  },
+  {
+    id: "c-areas-tax-environments",
+    slug: "environments",
+    moduleId: "c-areas",
+    title: "Environments",
+    contentRef: "c-areas-tax-environments",
+    estimatedMinutes: 8,
+  },
+  {
+    id: "c-areas-tax-detection",
+    slug: "detection-mitigations",
+    moduleId: "c-areas",
+    title: "Detection Mitigations",
+    contentRef: "c-areas-tax-detection",
+    estimatedMinutes: 18,
+  },
+  {
+    id: "c-areas-tax-prevention",
+    slug: "prevention-response-mitigations",
+    moduleId: "c-areas",
+    title: "Prevention and Response Mitigations",
+    contentRef: "c-areas-tax-prevention",
+    estimatedMinutes: 14,
   },
   ...verificationLessons,
 ];

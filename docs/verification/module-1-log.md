@@ -1289,3 +1289,20 @@ left the document, so its embed left the body and its registry lines are
 commented out. Widget and data files stay in the repo, unregistered because
 the registry test rightly refuses orphans; remounting is the exercises.ts
 line, the registry line, and an embed.
+
+## 1.1 intro rewritten (2026-08-18, owner's text)
+
+The "Module objective" heading, its purpose paragraph and the five
+"participants will" bullets — the block the 2026-08-13 entry above
+deliberately kept — are replaced by the owner's two second-person
+paragraphs: the exercise framing (with policy objectives, verification
+mechanisms and evidentiary thresholds, and ambiguities/loopholes/evasion
+folded into the prose; the MIRI treaty link kept on its title), then a
+transition sending the reader to the Practice Guide first. Two of the old
+bullets have no counterpart in the new text and leave with it:
+explicit/implicit actors per rule, and the working-notebook observations
+prompt. The ReadingCard's opening sentence ("This practical guide is used
+by Swiss officials…") duplicated the new transition verbatim and is
+trimmed to "Review the following sections:". Headings, the PageBreak
+title and both Fold labels conformed to Title Case per the standing
+instruction while the lesson was open.

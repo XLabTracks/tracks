@@ -35,16 +35,16 @@ import { useStoredState } from "../kit/use-stored-state";
  * the lesson measured 77 minutes, against a 40-minute ceiling the course owner
  * set. Splitting it is not a cut: the board — study, recall, the centre, the
  * placement — stays in 1.2, and the mechanisms half moves to its own item,
- * 1.2.3, where it has room instead of being the tail of a long lesson. The
+ * 1.2.2, where it has room instead of being the tail of a long lesson. The
  * Categorize step went for real, because the drill bench's `actors` deck was
  * already drilling the same six roles five screens further down the page.
  *
  * ONE DOCUMENT, TWO WIDGETS. Both read and write `v-actor-workshop:v5`, so a
- * board placed in 1.2 arrives in 1.2.3 already keyed, and reopening either
+ * board placed in 1.2 arrives in 1.2.2 already keyed, and reopening either
  * page shows the work. Each half keeps its own cursor (`step` and `edgeStep`)
  * because they are separate pages and a learner may be on either.
  *
- * 1.2.3 STANDS ALONE. A learner who lands there without doing 1.2 sees the
+ * 1.2.2 STANDS ALONE. A learner who lands there without doing 1.2 sees the
  * key placement rather than an empty sheet, and is told that is what it is.
  * That is the honest degradation: the edge exercise is about mechanisms, and
  * making it unusable until somebody has done a different page would be a
@@ -57,7 +57,7 @@ export type EdgeStep = "edges" | "map";
 export interface Saved {
   /** Where the board half (1.2) is. */
   step: BoardStep;
-  /** Where the mechanisms half (1.2.3) is. Its own cursor, because they are
+  /** Where the mechanisms half (1.2.2) is. Its own cursor, because they are
       two pages and a learner may be sitting on either one. */
   edgeStep: EdgeStep;
   /** Free recall, one actor per line. */

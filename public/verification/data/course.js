@@ -115,7 +115,6 @@ window.COURSE = {
           "lessons": [
             "scoping-actors",
             "interactive-map",
-            "report-constructor",
             "actor-edges"
           ]
         },

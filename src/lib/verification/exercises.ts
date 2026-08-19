@@ -14,7 +14,7 @@
  * never its host lesson's. So:
  *
  *   - An exercise that IS a lesson (`interactive-map` = 1.2.1,
- *     `report-constructor` = 1.2.2) has `v-<id>` in the graph, and bridging it
+ *     `actor-edges` = 1.2.2) has `v-<id>` in the graph, and bridging it
  *     does complete that lesson.
  *   - An exercise embedded in somebody else's prose (`protocol-actors` inside
  *     1.2, `human-institutions-judgment` inside 2.4.2) has no `v-<id>` lesson.
@@ -80,7 +80,12 @@ export const verificationExercises: VerificationExerciseDef[] = [
   // completes that lesson, which the embedded half above cannot do.
   { id: "actor-edges", title: "Who can prove what", bridged: true },
   { id: "interactive-map", title: "The Compute Supply Chain", bridged: false },
-  { id: "report-constructor", title: "One Inspection, Three Readers", bridged: true },
+  // report-constructor stood down with 1.2.2 on 2026-08-18 — it duplicated
+  // 1.3.1, and writing a verification report belongs to 1.3 rather than to
+  // the actor lesson. The widget, its tested engine and 21KB of authored
+  // scenario copy are all still here; this line and one
+  // <VerificationExercise/> bring the section back.
+  // { id: "report-constructor", title: "One Inspection, Three Readers", bridged: true },
   { id: "context-distiller", title: "The Distiller", bridged: true },
   { id: "what-do-they-say", title: "Why Are We Concerned About Superintelligence?", bridged: false },
   { id: "types-of-ai", title: "The Types of AI", bridged: false },

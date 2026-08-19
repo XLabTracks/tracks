@@ -74,7 +74,6 @@ export const verificationModules: Module[] = [
       "v-paper-scher-treaty",
       "v-scoping-actors",
       "v-interactive-map",
-      "v-report-constructor",
       "v-actor-edges",
       "v-scoping-upstream-downstream",
       "v-context-distiller",
@@ -229,6 +228,12 @@ export const verificationLessons: Lesson[] = [
     // as its own numbered section (course owner, 2026-08-19). The outline's
     // own "1.3.1 Threat Modeling and Theory of Change" is still IN PROGRESS
     // and ships nothing, so the number was free to take.
+    //
+    // Two sessions reached this independently on the same day; the paragraph
+    // above is the better-informed one and stands. The other arrived from
+    // 1.2's side: 1.2.2's report constructor was stood down for duplicating
+    // this exercise, and the owner named it "1.3.1" while doing so. The
+    // lesson id does not change either way, so nobody's progress moves.
     id: "v-context-distiller",
     slug: "context-distiller",
     moduleId: "v-scoping",
@@ -547,19 +552,22 @@ export const verificationLessons: Lesson[] = [
     slug: "actor-edges",
     moduleId: "v-scoping",
     sectionItemId: "v-scoping-actors",
-    title: "1.2.3 Who can prove what",
+    title: "1.2.2 Who can prove what",
     contentRef: "verification/actor-edges",
     estimatedMinutes: 20,
   },
-  {
-    id: "v-report-constructor",
-    slug: "report-constructor",
-    moduleId: "v-scoping",
-    sectionItemId: "v-scoping-actors",
-    title: "1.2.2 Context-specific report constructor",
-    contentRef: "verification/report-constructor",
-    estimatedMinutes: 15,
-  },
+  // 1.2.2 Context-specific report constructor stood down on 2026-08-18, on
+  // the course owner's judgement that it duplicates 1.3.1: writing a
+  // verification report is what 1.3 Upstream and downstream teaches, and the
+  // context distiller is the exercise for it. 1.2 is about actors.
+  //
+  // The section is gone — no entry, no itemIds row, no unit join, and the MDX
+  // is deleted. The MATERIAL is not: widgets/report-constructor.tsx, its
+  // tested engine, and 21KB of authored scenario copy in
+  // data/report-constructor.ts are all untouched, and exercises.ts carries
+  // the one commented line that puts it back. Deleting authored curriculum on
+  // a one-line instruction is not a thing this repo does; retiring it
+  // deliberately is.
   // 2.3 Intelligence. The five readings existed but sat flat and unnested, and
   // ran 2.3.0-2.3.4 against the outline's 2.3.1-2.3.5. The outline's own
   // submodule intro ("Watching Without Permission") was missing entirely, so
@@ -731,7 +739,6 @@ export const verificationUnitOfLesson: Record<string, string> = {
   "v-scoping-anatomy": "1.1",
   "v-scoping-actors": "1.2",
   "v-interactive-map": "1.2",
-  "v-report-constructor": "1.2",
   "v-actor-edges": "1.2",
   "v-scoping-upstream-downstream": "1.3",
   "v-context-distiller": "1.3",

@@ -30,10 +30,7 @@ const ActorEdges = dynamic<VerificationWidgetProps>(
   () => import("./actor-edges").then((module) => module.ActorEdges),
   { loading: WidgetLoading },
 );
-const ReportConstructor = dynamic<VerificationWidgetProps>(
-  () => import("./report-constructor").then((module) => module.ReportConstructor),
-  { loading: WidgetLoading },
-);
+// Unregistered with 1.2.2 on 2026-08-18 — see exercises.ts.
 const InteractiveMap = dynamic<VerificationWidgetProps>(
   () => import("./interactive-map").then((module) => module.InteractiveMap),
   { loading: WidgetLoading },
@@ -182,7 +179,6 @@ export const verificationWidgets: Record<
   "anatomy-drill": AnatomyDrill,
   "actor-workshop": ActorWorkshop,
   "actor-edges": ActorEdges,
-  "report-constructor": ReportConstructor,
   "interactive-map": InteractiveMap,
   "verification-landscape": VerificationLandscape,
   "collection-map": CollectionMap,

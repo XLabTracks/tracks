@@ -48,14 +48,14 @@ import {
  * 1.2 cannot exceed forty minutes against a measured seventy-seven.
  *
  *   The mechanisms half — draw the edges, the key from Baker, read what the
- *   board says — is 1.2.3 now (widgets/actor-edges.tsx). Same document, so a
+ *   board says — is 1.2.2 now (widgets/actor-edges.tsx). Same document, so a
  *   board placed here arrives there keyed.
  *
  *   The Categorize step is gone outright. It asked for six roles and five
  *   postures on six actors, and the drill bench's `actors` deck was already
  *   drilling the same six roles five screens down the same page. What it was
  *   FOR survives: the point that roles cut across rings is the role lens on
- *   the map, which lives in 1.2.3 where the finished board is read.
+ *   the map, which lives in 1.2.2 where the finished board is read.
  *
  * NOTHING HERE IS GRADED TOWARD PROGRESS. The counts are feedback; they are
  * stored beside the work so reopening shows what you did, and they leave the
@@ -526,9 +526,9 @@ function PlaceStep({
 
           {/* The board is finished, so this is where the half ends. It says
               what was retrieved and what was peeked at, and then hands over —
-              the mechanisms are 1.2.3 and the reader should know the workshop
+              the mechanisms are 1.2.2 and the reader should know the workshop
               is not over rather than discovering a second widget by scrolling
-              into it. A plain link, not a component: 1.2.3 is a lesson in the
+              into it. A plain link, not a component: 1.2.2 is a lesson in the
               graph and the reader gets there the way they get anywhere. */}
           <p className="text-muted-foreground text-xs">
             From memory: {recalledCount} of {RECALL_TARGET.items.length}{" "}
@@ -549,7 +549,7 @@ function PlaceStep({
                 className="text-link underline underline-offset-4"
                 href="/tracks/verification/policy-scoping/actor-edges"
               >
-                1.2.3, Who can prove what
+                1.2.2, Who can prove what
               </Link>
               , and it opens on this same board.
             </p>

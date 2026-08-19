@@ -533,10 +533,21 @@ export const MAP_COPY = {
   countryVerifLabel: "Why it matters for verification",
   eventActors: "Actors in the frame",
   euName: "European Union",
-  // Anatomy-of-a-Chip launcher (overlay is OUT OF SCOPE this pass).
+  // Anatomy of a Chip. It was a launcher for an overlay that was never built,
+  // and it sat on the page under a "Coming soon" chip — a card that does
+  // nothing is worse than no card, and the promise had been outstanding long
+  // enough to read as a broken control rather than as a plan.
+  //
+  // It links out now, to ETO's Chip Explorer, which is the tool this section's
+  // author notes already point at for exactly this (see the author block at
+  // the foot of scoping-actors.mdx). And it is marked optional, because it is
+  // somebody else's tool and nothing downstream depends on having opened it.
   chipTitle: "Anatomy of a Chip",
   chipSub:
     "Open a single accelerator — every color on this map ends up inside it.",
+  chipHref: "https://chipexplorer.eto.tech/",
+  chipHost: "chipexplorer.eto.tech",
+  chipOptional: "Optional",
 } as const;
 
 // Country id → short display name (source special-cases UAE).

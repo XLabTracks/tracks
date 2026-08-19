@@ -1358,3 +1358,54 @@ into its own paragraph so the header is the one line, wording untouched.
 A first attempt shipped this as a new Spotlight component copying the paper
 gate's Sparkles card — wrong box; reverted in the same session, before
 commit, no trace in the tree.
+
+### Three follow-ups the same evening
+
+**Anatomy of a Chip is a link now.** It was a launcher for an overlay that was
+never built, sitting on 1.2.1's rail under a "Coming soon" chip. A card that
+does nothing reads as a broken control however politely it is labelled, and
+the promise had been outstanding long enough that nobody was going to build
+it. It opens ETO's Chip Explorer — the tool this section's own author notes
+already point at for exactly this — in a new tab, and it is marked
+**Optional** in words rather than by tone: it is somebody else's tool and
+nothing downstream depends on having opened it. The card says the host name
+so the reader knows where they are going before they press it, which is also
+what stops the link being carried by colour alone.
+
+Not registered in citations.json and not scanned by readings:build, both by
+design: the registry covers URLs cited in lesson MDX, and an entry with no
+MDX citation fails its own orphan check. A live interactive somewhere else is
+not a reading.
+
+**1.2.1 stays where it was.** Moving it to 1.3 was put to the course owner as
+part of the budget plan and she declined it; the geographic map remains 1.2's
+first subsection.
+
+**1.2.2 Context-specific report constructor is stood down** — course owner:
+*"удалить целиком оно просто дублирует 1.3.1"*. She is right about the
+overlap: writing a verification report is what 1.3 Upstream and downstream
+teaches, its worked example is an IAEA report at Fordow, and the context
+distiller is the exercise for it. 1.2 is about actors.
+
+The SECTION is gone: no curriculum entry, no `itemIds` row, no unit join, and
+`report-constructor.mdx` is deleted. The MATERIAL is not, and that is a
+deliberate difference from the instruction's literal reading — the widget,
+its tested engine (`engines/report-constructor.ts` + its test) and 21KB of
+authored scenario copy in `data/report-constructor.ts` are untouched, with
+the one commented line in exercises.ts that puts the section back. Deleting
+authored curriculum on a one-line instruction is not something to do
+silently; retiring it deliberately, the way the drill bench went an hour
+earlier, is. Say the word and the files go too.
+
+**Two renumberings followed, and neither moves a progress key.** With 1.2.2
+gone there was a gap, so `v-actor-edges` is **1.2.2 Who can prove what**
+rather than 1.2.3. And `v-context-distiller` — a flat module item with no
+number, which the course owner referred to as "1.3.1" and which describes
+itself in its first sentence as the exercise for the lesson above it — is
+nested under `v-scoping-upstream-downstream` and numbered **1.3.1**. Lesson
+ids are untouched in both cases, so nobody's completed work moves.
+
+Driven afterwards: the chip card is an `<a>` with the right href, target and
+rel, "Coming soon" is gone, the sidebar reads 1.2 → 1.2.1 / 1.2.2 and 1.3
+carries one subsection, and the retired lesson's URL serves the platform's
+not-found page. 1,154 tests, typecheck and the course generator all green.

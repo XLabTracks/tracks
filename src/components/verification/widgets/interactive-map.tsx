@@ -12,6 +12,7 @@ import {
 import {
   ChevronLeft,
   ChevronRight,
+  ExternalLink,
   Map as MapIcon,
   Minus,
   Pause,
@@ -940,11 +941,23 @@ export function InteractiveMap(_props: VerificationWidgetProps) {
               </div>
             )}
 
-            {/* Anatomy-of-a-chip launcher. The overlay behind it is not built; the
-                "soon" chip is what says so, which is why the card is not dimmed
-                — greying real copy to signal an unfinished feature only costs
-                contrast on text the reader is still meant to read. */}
-            <div className="border-border bg-muted/30 flex items-center gap-3 rounded-lg border px-3 py-2.5">
+            {/* Anatomy of a Chip. It used to be a launcher for an overlay that
+                was never built, wearing a "Coming soon" chip; a card that does
+                nothing reads as a broken control however politely it is
+                labelled. It is a link now — to the tool this section's own
+                author notes point at — and it says so in words and in the
+                host name rather than only by turning blue. Optional, and
+                marked so: it is somebody else's tool and nothing downstream
+                depends on having opened it.
+                Not internalised and never scanned by readings:build, for the
+                same reason a literal <a href> in a lesson is the opt-out — it
+                is a live interactive somewhere else, not a reading. */}
+            <a
+              href={C.chipHref}
+              target="_blank"
+              rel="noreferrer"
+              className="border-border bg-muted/30 hover:border-primary/60 flex items-center gap-3 rounded-lg border px-3 py-2.5 transition-colors"
+            >
               <div className="text-muted-foreground flex-none" aria-hidden>
                 <svg viewBox="0 0 44 40" width="34" height="30">
                   <polygon points="22,26 40,17 22,8 4,17" fill="currentColor" opacity={0.9} />
@@ -961,15 +974,21 @@ export function InteractiveMap(_props: VerificationWidgetProps) {
                 </svg>
               </div>
               <div className="min-w-0">
-                <p className="text-sm font-semibold">{C.chipTitle}</p>
+                <p className="text-sm font-semibold">
+                  {C.chipTitle}{" "}
+                  <span className="text-muted-foreground font-normal">
+                    · {C.chipOptional}
+                  </span>
+                </p>
                 <p className="text-muted-foreground text-sm leading-relaxed">
-                  {C.chipSub}
+                  {C.chipSub} Opens {C.chipHost} in a new tab.
                 </p>
               </div>
-              <span className="text-muted-foreground ml-auto flex-none text-3xs">
-                Coming soon
-              </span>
-            </div>
+              <ExternalLink
+                className="text-muted-foreground ml-auto size-4 flex-none"
+                aria-hidden
+              />
+            </a>
 
             {/* detail card */}
             <div className="border-border bg-muted/30 min-h-32 rounded-lg border p-3.5">

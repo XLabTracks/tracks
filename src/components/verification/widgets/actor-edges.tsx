@@ -43,7 +43,7 @@ import {
 } from "./actor-board";
 
 /**
- * 1.2.3 — Who can prove what. The Actor Map Workshop's second half.
+ * 1.2.2 — Who can prove what. The Actor Map Workshop's second half.
  *
  * It was steps 6 and 7 of one seven-step widget in 1.2, which measured
  * seventy-seven minutes against a forty-minute ceiling. Moving it here is a

@@ -449,10 +449,22 @@ section.band .intro {
 @media (min-width: 1100px) {
   .sky-panel {
     position: sticky;
-    top: 20px;
+    /* Below the sticky chrome — .site-header is 76px and z-index 40, so a
+       smaller offset slides the gold band underneath it and the card reads
+       as decapitated. 92 = the bar plus a breath. */
+    top: 92px;
+    /* The card may run taller than the viewport (the goals lists earn their
+       length). Cap it and scroll the inner sheet, never the frame: the
+       flex column keeps .p-head — the module band — always on screen. */
+    max-height: calc(100vh - 112px);
+    display: flex;
+    flex-direction: column;
   }
+  .sky-panel .p-head { flex: none; }
   .sky-panel .p-body {
     display: block;
+    min-height: 0;
+    overflow-y: auto;
   }
 }
 .sky-panel h3 {

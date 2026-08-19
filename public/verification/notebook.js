@@ -737,6 +737,15 @@ window.VTNotebook = (function () {
     open();
   }
 
+  /* The skill map is the book's permanent last page — one index past the
+     stored pages, a position and never a slot in data.pages — so opening it
+     is setting `cur` there, nothing is created and nothing is written back. */
+  function openSkills() {
+    cur = data.pages.length;
+    save();
+    open();
+  }
+
   function addQuote(text, source, href) {
     build();
     return pushBlock({
@@ -763,6 +772,7 @@ window.VTNotebook = (function () {
     bindMemo: bindMemo,
     mount: mountButton,
     openMemo: openMemo,
+    openSkills: openSkills,
     count: count,
     toMarkdown: toMarkdown
   };

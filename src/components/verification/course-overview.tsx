@@ -2,6 +2,7 @@
 
 import { ChevronRight } from "lucide-react";
 import { courseOverview } from "@/content/verification/overview";
+import { NotebookLink } from "@/components/verification/notebook-link";
 
 /**
  * The landing page's course overview: four disclosures over the author's copy
@@ -9,9 +10,8 @@ import { courseOverview } from "@/content/verification/overview";
  *
  * Native `<details>`, so it opens without JavaScript, is keyboard-operable for
  * free, and in-page search reaches a closed section in the browsers that
- * implement it. The only thing scripted here is the notebook control, which
- * has to be a button because the notebook is a panel mounted on the page by
- * notebook.js, not a route — there is no URL to link to.
+ * implement it. The only thing scripted here is the notebook control
+ * (`NotebookLink`, shared with the landing copy above this band).
  *
  * Trap: this renders inside landing's `section.band > .wrap`, so it inherits
  * that band's frame and heading scale. Do not give it a second card border of
@@ -60,7 +60,9 @@ export function CourseOverview() {
                     className="text-muted-foreground max-w-[68ch] text-[0.95rem] leading-relaxed"
                   >
                     <b className="text-foreground">{p.label}:</b> {p.body}
-                    {p.slot === "notebook" && <NotebookLink />}
+                    {p.slot === "notebook" && (
+                      <NotebookLink>the notebook</NotebookLink>
+                    )}
                     {p.slot === "notebook" && " to try it out!"}
                     {p.slot === "facilitator" && (
                       <a
@@ -113,19 +115,4 @@ export function CourseOverview() {
 /** Numbering runs across the groups, not restarting inside each one. */
 function numberFrom(groups: string[][], index: number): number {
   return groups.slice(0, index).reduce((n, g) => n + g.length, 0) + 1;
-}
-
-function NotebookLink() {
-  return (
-    <button
-      type="button"
-      onClick={() => {
-        const w = window as unknown as { VTNotebook?: { open: () => void } };
-        w.VTNotebook?.open();
-      }}
-      className="text-brand-ink underline underline-offset-2 select-none"
-    >
-      the notebook
-    </button>
-  );
 }

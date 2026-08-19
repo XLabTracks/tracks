@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { CourseOverview } from "@/components/verification/course-overview";
 import { LegacyScripts } from "@/components/verification/legacy-scripts";
+import { NotebookLink } from "@/components/verification/notebook-link";
 
 /* Verification — one of the course's own pages.
  *
@@ -43,10 +44,9 @@ export default function Page() {
               commitments?
             </h1>
             <p className="lede">
-              An intermediate course on international AI verification: the
-              technical, institutional, and legal mechanisms that make
-              agreements observable and enforceable — and help distinguish
-              compliance from violation.
+              An intermediate course on AI verification: the technical,
+              institutional, and legal mechanisms that make agreements mutually
+              trustable and enforceable.
             </p>
 
             <div className="ways">
@@ -96,11 +96,16 @@ export default function Page() {
 
         <section className="band filled">
           <div className="wrap">
-            <h2 data-reveal>The skills it builds</h2>
+            <h2 data-reveal>The Skill Map</h2>
             <p className="intro" data-reveal>
-              The course is organised around a graph, not a reading list. Each
-              unit feeds specific skills, and the later ones only stand up once
-              the earlier ones do.
+              From securitization to feasibility judgments, this course builds
+              on interconnected skills, not an arbitrary linear progression.
+              Each module cumulatively builds on the skills learned previously.
+              Your skill map is always accessible as{" "}
+              <NotebookLink page="skills">
+                the last page in your notebook
+              </NotebookLink>
+              .
             </p>
 
             <div className="mod-filters" id="modFilters"></div>

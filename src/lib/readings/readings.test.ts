@@ -211,16 +211,20 @@ describe("resolveInternalReadingHref", () => {
 });
 
 describe("coursePaperHrefForArtifact", () => {
-  // Two linked readings were promoted to course papers (their registry
+  // Three linked readings were promoted to course papers (their registry
   // entries dropped) — old /readings bookmarks must redirect to the course
-  // pages, and 20260804120000_remap_promoted_reading_highlights.sql remaps
-  // their highlight rows to the same targets. Pin both concrete mappings.
+  // pages, and 20260804120000_remap_promoted_reading_highlights.sql plus
+  // 20260819120000_remap_pass_the_buck_highlights.sql remap their highlight
+  // rows to the same targets. Pin the concrete mappings.
   it("maps a promoted post's old artifact id to its course page", () => {
     expect(coursePaperHrefForArtifact("lesswrong__jg3PuE3fYL9jq9zHB")).toBe(
       getContentLocation("c-paper-win-continue-lose")!.href,
     );
     expect(coursePaperHrefForArtifact("lesswrong__ceBpLHJDdCt3xfEok")).toBe(
       getContentLocation("c-paper-rogue-deployments")!.href,
+    );
+    expect(coursePaperHrefForArtifact("lesswrong__TTFsKxQThrqgWeXYJ")).toBe(
+      getContentLocation("c-pass-the-buck")!.href,
     );
     // Site-agnostic: the mirror host's artifact id resolves to the same page.
     expect(

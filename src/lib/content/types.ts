@@ -97,6 +97,18 @@ export interface Lesson {
    */
   unchunked?: true;
   /**
+   * Render this lesson's long bullet runs as plain, roomy lists instead of
+   * the Verification reference-sheet slab cards (app-bridge.css paints any
+   * top-level list of four-plus items as a tinted card). The slab was built
+   * for the author's short reference runs; a page that is almost entirely
+   * long lists — 4.1.1's reproduced research-tips doc — turns wall-to-wall
+   * tint under it, and the course owner asked for "a bit more space and less
+   * maroon boxes" there (Outline-43). Presentation only, honoured by the
+   * `vt-plain-lists` class LessonContent adds and app-bridge.css reads;
+   * outside the Verification chrome the flag is inert.
+   */
+  plainLists?: true;
+  /**
    * The track's closing page: it renders as one screen with a completion
    * header instead of as a reading. A celebration split across a part strip
    * is four screens of nothing, so this opts out of `chunkedReading` and out

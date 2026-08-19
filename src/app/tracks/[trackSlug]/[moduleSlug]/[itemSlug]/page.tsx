@@ -309,6 +309,7 @@ async function LessonItemPage({
                 <LessonContent
                   contentRef={lesson.contentRef}
                   title={lesson.title}
+                  plainLists={lesson.plainLists}
                 />
               </LessonPartsReader>
             ) : track.id === "verification" && !lesson.completion ? (
@@ -322,6 +323,7 @@ async function LessonItemPage({
                   <LessonContent
                     contentRef={lesson.contentRef}
                     title={lesson.title}
+                    plainLists={lesson.plainLists}
                   />
                 </ReadingSurface>
                 {footer}
@@ -332,6 +334,7 @@ async function LessonItemPage({
                 <LessonContent
                   contentRef={lesson.contentRef}
                   title={lesson.title}
+                  plainLists={lesson.plainLists}
                 />
                 {footer}
                 <LessonNav prev={nav.prev} next={nav.next} />

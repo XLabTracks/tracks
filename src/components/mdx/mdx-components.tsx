@@ -24,6 +24,10 @@ import {
   MechanismCard,
   MechanismGrid,
 } from "@/components/verification/privacy-mechanism-grid";
+import {
+  FeasibilityCard,
+  FeasibilityGrid,
+} from "@/components/verification/feasibility-grid";
 import { VerificationExercise } from "@/components/verification/verification-exercise";
 import { Term } from "./term";
 import { CapstoneBank } from "./reader/capstone-bank";
@@ -102,6 +106,10 @@ export const mdxComponents: MDXComponents = {
   // 2.0.1's five privacy-preserving mechanisms as the outline's pop-up grid
   MechanismGrid,
   MechanismCard,
+  // 4.1's four metrics of feasibility as the same pop-up-grid shape, fronted
+  // by small glyphs instead of diagrams
+  FeasibilityGrid,
+  FeasibilityCard,
   Term,
   // The reader blocks the Verification units were written against:
   // a committed-then-revealed check, a word-bank gap fill, a reproduced

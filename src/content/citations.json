@@ -25,12 +25,6 @@
       "date": "Aug. 2025",
       "standalone": true
     },
-    "https://airisk.mit.edu/": {
-      "title": "MIT AI Risk Initiative",
-      "about": "The living MIT repository of over a thousand AI risks extracted from published frameworks and classified by cause and domain.",
-      "org": "MIT FutureTech",
-      "publisher": "Massachusetts Institute of Technology"
-    },
     "https://aiwi.org/ai-whistleblowing-law-best-practice/": {
       "title": "AI Whistleblowing Law: Best Practice Guide",
       "about": "Recommendations for AI whistleblower law covering protected disclosures and people, reporting channels, retaliation, remedies, notice, and capable receiving agencies.",
@@ -477,6 +471,26 @@
       "authors": "METR",
       "publisher": "METR",
       "date": "2026"
+    },
+    "https://carnegieendowment.org/research/2024/08/chinas-views-on-ai-safety-are-changing-quickly": {
+      "title": "China’s Views on AI Safety Are Changing—Quickly",
+      "about": "Sheehan reads the July 2024 Third Plenum decision — the first major CCP policy document to call for an AI safety supervision and regulation system — as evidence of Beijing’s accelerating turn toward frontier-AI safety oversight. Cited in 4.1 as direct data that political feasibility moves.",
+      "authors": "Sheehan, Matt",
+      "publisher": "Carnegie Endowment for International Peace",
+      "date": "Aug. 2024"
+    },
+    "https://nuke.fas.org/control/ttbt/intro.htm": {
+      "title": "Threshold Test Ban Treaty",
+      "about": "The FAS primer on the 1974 treaty’s 150-kiloton cap on underground tests: verification by seismic measurement, and the 1990 protocol’s calibration and on-site hydrodynamic measures. Cited in 1.0.1’s fuzzy-numbers fold.",
+      "authors": "Federation of American Scientists",
+      "publisher": "Federation of American Scientists"
+    },
+    "https://www.princeton.edu/~ota/disk2/1988/8838/8838.PDF": {
+      "title": "Seismic Verification of Nuclear Testing Treaties",
+      "about": "The OTA’s 1988 assessment of how well seismology could verify nuclear test-ban limits, including why converting a seismic signal into a yield estimate carries uncertainty. Cited in 1.0.1 for the disputed US estimates of Soviet yields.",
+      "authors": "U.S. Congress, Office of Technology Assessment",
+      "publisher": "U.S. Government Printing Office",
+      "date": "May 1988"
     }
   },
   "pending": [

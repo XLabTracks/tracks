@@ -225,9 +225,13 @@ export const memoSlots: MemoSlot[] = [
     gap: "The track’s module anatomy gives every module one written output that goes through peer review. Module 3 is the one module for which the outline never says which.",
   },
   {
+    // The unit moved 4.0 → 4.1 with the Outline-42 restructure (the
+    // feasibility lesson this memo belongs to became 4.1). The id keeps its
+    // "m4-0" prefix: slot ids key memo-desk drafts, so renaming one orphans
+    // whatever a learner has written into it.
     id: "m4-0-ranking-memo",
     module: 4,
-    unit: "4.0",
+    unit: "4.1",
     title: "Defended-ranking memo",
     status: "specified",
     lesson: "capstone-feasibility",

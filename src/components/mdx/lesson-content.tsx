@@ -156,16 +156,21 @@ export async function getTrackRequiredWritingIds(
 export async function LessonContent({
   contentRef,
   title,
+  plainLists,
 }: {
   contentRef: string;
   title?: string;
+  /** Lesson.plainLists — app-bridge.css keys its list-form opt-out on this. */
+  plainLists?: boolean;
 }) {
   const mdxModule = await importLesson(contentRef);
   if (!mdxModule) notFound();
   const Body = mdxModule.default;
 
   return (
-    <article className="lesson-body prose prose-neutral dark:prose-invert prose-headings:font-semibold prose-headings:tracking-tight prose-a:text-link prose-a:font-medium prose-a:underline-offset-4 max-w-none">
+    <article
+      className={`lesson-body ${plainLists ? "vt-plain-lists " : ""}prose prose-neutral dark:prose-invert prose-headings:font-semibold prose-headings:tracking-tight prose-a:text-link prose-a:font-medium prose-a:underline-offset-4 max-w-none`}
+    >
       {/* Per-render overrides win over the global map: the compiled body
           spreads `props.components` last (see src/mdx-components.tsx). */}
       <Body components={title ? titleAwareHeadings(title) : undefined} />

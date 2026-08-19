@@ -245,25 +245,26 @@ window.COURSE = {
       "week": "week 10",
       "status": "framing complete",
       "goal": "Capstone: what would be enough for a three-month emergency pause?",
-      "summary": "Feasibility, prioritization and sequencing — including how to do the research the capstone asks for, from a practising AI governance researcher — then the capstone itself: layer the imperfect mechanisms into a regime you can defend, and say where to go from here.",
+      "summary": "Putting it all together — then the feasibility judgments the capstone runs on: the four metrics, and how to do the research they ask for, from a practising AI governance researcher. Then the capstone itself: layer the imperfect mechanisms into a regime you can defend, and say where to go from here.",
       "units": [
         {
           "id": "4.0",
-          "title": "Feasibility, prioritization, sequencing",
+          "title": "Putting it All Together",
           "kind": "explainer",
-          "mins": "20–30 min",
-          "href": "/tracks/verification/capstone/capstone-feasibility",
+          "mins": "5–10 min",
+          "href": "/tracks/verification/capstone/putting-it-all-together",
           "lessons": [
-            "capstone-feasibility"
+            "putting-it-all-together"
           ]
         },
         {
           "id": "4.1",
-          "title": "How to do AI governance research well",
-          "kind": "explainer",
-          "mins": "25 min",
-          "href": "/tracks/verification/capstone/how-to-do-research-well",
+          "title": "Feasibility Judgments",
+          "kind": "reading + exercise",
+          "mins": "120–150 min",
+          "href": "/tracks/verification/capstone/capstone-feasibility",
           "lessons": [
+            "capstone-feasibility",
             "how-to-do-research-well"
           ]
         },

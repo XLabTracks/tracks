@@ -144,10 +144,14 @@ export const verificationModules: Module[] = [
     trackId: "verification",
     title: "Capstone: what would be enough for a three-month emergency pause?",
     summary:
-      "Feasibility, prioritization and sequencing — including how to do the research the capstone asks for, from a practising AI governance researcher — then the capstone itself: layer the imperfect mechanisms into a regime you can defend, and say where to go from here.",
+      "Putting it all together — then the feasibility judgments the capstone runs on: the four metrics, and how to do the research they ask for, from a practising AI governance researcher. Then the capstone itself: layer the imperfect mechanisms into a regime you can defend, and say where to go from here.",
     order: 4,
     prerequisiteModuleIds: ["v-why", "v-scoping", "v-infrastructure", "v-covert"],
+    // Outline-42's restructure (2026-08-18): 4.0 is the module intro and its
+    // objectives, nothing else; the feasibility material is 4.1 with the
+    // research primer nested under it as 4.1.1.
     itemIds: [
+      "v-capstone-together",
       "v-capstone-feasibility",
       "v-research-tips",
       "v-capstone-project",
@@ -307,12 +311,28 @@ export const verificationLessons: Lesson[] = [
     estimatedMinutes: 15,
   },
   {
+    // 4.0 per Outline-42: the module's own intro and objectives, only what is
+    // on that page — the feasibility material it used to share a lesson with
+    // is 4.1 below. A new id rather than a rename: `v-capstone-feasibility`
+    // IS the feasibility lesson, and lesson ids are progress keys.
+    id: "v-capstone-together",
+    slug: "putting-it-all-together",
+    moduleId: "v-capstone",
+    title: "4.0 Putting it All Together",
+    contentRef: "verification/capstone-together",
+    estimatedMinutes: 5,
+  },
+  {
     id: "v-capstone-feasibility",
     slug: "capstone-feasibility",
     moduleId: "v-capstone",
-    title: "4.0 Feasibility, prioritization, and sequencing",
+    title: "4.1 Feasibility Judgments",
     contentRef: "verification/capstone-feasibility",
-    estimatedMinutes: 170,
+    // The reading and its four pop-ups (~20), the intuition check against the
+    // sealed ranking (~10), the three drill benches (~25), and the
+    // defended-ranking memo (~65). The old 170 was sized for the lesson when
+    // it also carried the module intro and the threat-modeling specs.
+    estimatedMinutes: 120,
   },
   {
     id: "v-capstone-project",
@@ -641,12 +661,19 @@ export const verificationLessons: Lesson[] = [
     id: "v-research-tips",
     slug: "how-to-do-research-well",
     moduleId: "v-capstone",
-    title: "4.1 How to do AI governance research well",
+    // Outline-43: nested within 4.1 — feasibility judgments are what the
+    // research strategies are for.
+    sectionItemId: "v-capstone-feasibility",
+    title: "4.1.1 How to Do Research Well",
     contentRef: "verification/research-tips",
     estimatedMinutes: 25,
     // A reference doc of bulleted tips — read as one continuous page, not paged
     // section by section.
     unchunked: true,
+    // Outline-43: "a bit more space and less maroon boxes". A page that is
+    // almost entirely long bullet runs turns wall-to-wall tinted slab under
+    // the reference-sheet list form, so it opts into the plain roomy lists.
+    plainLists: true,
   },
 ];
 
@@ -730,7 +757,12 @@ export const verificationUnitOfLesson: Record<string, string> = {
   "v-human-audits-inspections": "2.4",
   "v-human-institutions": "2.4",
   "v-covert-system-overview": "3.0",
-  "v-capstone-feasibility": "4.0",
+  "v-capstone-together": "4.0",
+  // The feasibility lesson moved from unit 4.0 to 4.1 in the Outline-42
+  // restructure; unit ids themselves are permanent, so 4.0 now names the
+  // intro lesson and 4.1 holds feasibility judgments plus the research
+  // primer nested under it.
+  "v-capstone-feasibility": "4.1",
   "v-research-tips": "4.1",
   "v-capstone-project": "4.2",
   "v-capstone-next-steps": "4.3",
@@ -768,8 +800,8 @@ export const verificationUnitMeta: Record<
   "3.0": { title: "What is covert development?", kind: "explainer", mins: "10–15 min" },
   "3.1": { title: "How could a determined actor cheat?", kind: "interactive", mins: "30–40 min" },
   "3.2": { title: "Red team / blue team", kind: "exercise", mins: "45–60 min" },
-  "4.0": { title: "Feasibility, prioritization, sequencing", kind: "explainer", mins: "20–30 min" },
-  "4.1": { title: "How to do AI governance research well", kind: "explainer", mins: "25 min" },
+  "4.0": { title: "Putting it All Together", kind: "explainer", mins: "5–10 min" },
+  "4.1": { title: "Feasibility Judgments", kind: "reading + exercise", mins: "120–150 min" },
   "4.2": { title: "Capstone", kind: "capstone", mins: "4–8 hrs" },
   "4.3": { title: "Where to go from here", kind: "explainer", mins: "15–20 min" },
 };

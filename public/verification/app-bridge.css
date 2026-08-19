@@ -722,7 +722,7 @@
    page. And when the header carries the circle, the list's own must be
    suppressed or two circles stack on the seam. */
 :root[data-theme]
-  .lesson-body
+  .lesson-body:not(.vt-plain-lists)
   ul:not(.not-prose *):not(li ul):has(> li:nth-child(4)) {
   position: relative;
   display: grid;
@@ -733,7 +733,7 @@
   border-radius: 28px;
 }
 :root[data-theme]
-  .lesson-body
+  .lesson-body:not(.vt-plain-lists)
   ul:not(.not-prose *):not(li ul):has(> li:nth-child(4))::before {
   content: "";
   position: absolute;
@@ -746,13 +746,13 @@
   z-index: -1;
 }
 :root[data-theme]
-  .lesson-body
+  .lesson-body:not(.vt-plain-lists)
   ul:not(.not-prose *):not(li ul):has(> li:nth-child(4))
   > li {
   margin: 0;
 }
 :root[data-theme]
-  .lesson-body
+  .lesson-body:not(.vt-plain-lists)
   ul:not(.not-prose *):not(li ul):has(> li:nth-child(4))
   > li::before {
   content: "";
@@ -776,7 +776,7 @@
    take the same length; without @property support the var resolves here
    as plain 64ch and the page degrades to the old overhang, never breaks. */
 :root[data-theme]
-  .lesson-body
+  .lesson-body:not(.vt-plain-lists)
   p:not(.not-prose *):has(+ ul:not(li ul) > li:nth-child(4)) {
   position: relative;
   margin: 2em 0 0;
@@ -791,6 +791,19 @@
      so matching it means no cap here either — and --vt-measure below is kept
      for the day the measure comes back. */
 }
+/* The reference-doc opt-out. `Lesson.plainLists` puts `vt-plain-lists` on the
+   body (lesson-content.tsx), and the slab rules above stand aside for it — a
+   page that is almost entirely long bullet runs (4.1.1's reproduced
+   research-tips doc) turns wall-to-wall tint under the reference-sheet form,
+   and the course owner asked for space instead of boxes there. The short-list
+   dot form still applies; these two rules only let the runs breathe. */
+:root[data-theme] .lesson-body.vt-plain-lists ul:not(.not-prose *):not(li ul) {
+  margin-block: 1.5em;
+}
+:root[data-theme] .lesson-body.vt-plain-lists ul:not(.not-prose *) li + li {
+  margin-top: 0.6em;
+}
+
 @property --vt-measure {
   syntax: "<length>";
   inherits: true;

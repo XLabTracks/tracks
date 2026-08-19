@@ -41,7 +41,13 @@ export interface VerificationExerciseDef {
 export const verificationExercises: VerificationExerciseDef[] = [
   { id: "verification-problem", title: "The Verification Problem", bridged: false },
   { id: "evidence-taxonomies", title: "Five Maps of the Evidence", bridged: false },
-  { id: "field-map", title: "Field Map", bridged: false },
+  // field-map stood down 2026-08-18: its only embed was 4.0's
+  // threat-modeling/theory-of-change spec block, deleted on the course
+  // owner's instruction (Outline-42). Widget and data stay in the repo,
+  // unregistered because the registry test rightly refuses orphans;
+  // remounting is this line, its registry line, and an embed. Its learner
+  // state waits under vt-field-map:v1. See docs/verification/module-4-log.md.
+  // { id: "field-map", title: "Field Map", bridged: false },
   { id: "collection-map", title: "The Collection Map", bridged: false },
   { id: "verification-landscape", title: "The Verification Landscape", bridged: false },
   { id: "policy-cost", title: "Everything Comes With a Cost", bridged: false },

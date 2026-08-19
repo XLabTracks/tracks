@@ -133,7 +133,7 @@ window.VERIFICATION_MEMOS = [
   {
     "id": "m4-0-ranking-memo",
     "module": 4,
-    "unit": "4.0",
+    "unit": "4.1",
     "title": "Defended-ranking memo",
     "status": "specified",
     "brief": "Produce the defended-ranking memo: a recommended mechanism portfolio for one named policy goal, with residual blind spots and their owners — the artifact the 4.2 capstone receives. Defend the ranking against both your own initial guesses and the field’s published ratings.",

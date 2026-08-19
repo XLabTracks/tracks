@@ -109,10 +109,10 @@ const EvidenceTaxonomies = dynamic<VerificationWidgetProps>(
   () => import("./evidence-taxonomies").then((module) => module.EvidenceTaxonomies),
   { loading: WidgetLoading },
 );
-const FieldMap = dynamic<VerificationWidgetProps>(
-  () => import("./field-map").then((module) => module.FieldMap),
-  { loading: WidgetLoading },
-);
+// field-map stood down 2026-08-18 with the threat-modeling/theory-of-change
+// specs it served (Outline-42: "delete threat modeling and toc stuff").
+// field-map.tsx and data/field-map.ts remain in the repo, unregistered —
+// remounting is its exercises.ts line, a dynamic() here, and an embed.
 // 2.4.1's exercise is now Construct a Case; the id stays so the lesson
 // mapping, the progress key and the section's finish event do not move.
 // human-insiders.tsx and its engine remain in the repo, unmounted.
@@ -201,7 +201,6 @@ export const verificationWidgets: Record<
   "theories-of-change": TheoriesOfChange,
   "verification-problem": VerificationProblem,
   "evidence-taxonomies": EvidenceTaxonomies,
-  "field-map": FieldMap,
   "human-insiders": ConstructCase,
   "human-reporting-protection": PolicyQuickCheck,
   "whistleblower-levers": WhistleblowerLevers,

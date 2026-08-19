@@ -85,6 +85,11 @@ export function ActorEdges({ onComplete }: VerificationWidgetProps) {
     persist((prev) => ({ ...prev, edgeStep: id }));
     topRef.current?.scrollIntoView({ block: "nearest" });
   };
+  const editEdges = () => {
+    persist((prev) => ({ ...prev, edgeStep: "edges", edgesDone: false }));
+    setEdgeSource(null);
+    topRef.current?.scrollIntoView({ block: "nearest" });
+  };
 
   const edgeScore = scoreEdges(saved.edges, KEY_EDGE_IDS);
   const ringsRight = WORKSHOP_ACTORS.filter(
@@ -151,6 +156,14 @@ export function ActorEdges({ onComplete }: VerificationWidgetProps) {
         label={`Step ${stepIndex + 1} of ${STEPS.length}`}
       />
 
+      {saved.edgeStep === "map" && saved.edgesDone ? (
+        <div>
+          <Button size="sm" variant="outline" onClick={editEdges}>
+            Edit my edges
+          </Button>
+        </div>
+      ) : null}
+
       {saved.edgeStep === "edges" && !saved.edgesDone ? (
         <EdgeDrawingTask />
       ) : null}
@@ -201,6 +214,7 @@ export function ActorEdges({ onComplete }: VerificationWidgetProps) {
           onSource={setEdgeSource}
           onToggle={toggleEdge}
           onCommit={() => persist((prev) => ({ ...prev, edgesDone: true }))}
+          onEdit={editEdges}
           onNext={() => go("map")}
         />
       ) : null}
@@ -289,6 +303,7 @@ function EdgesStep({
   onSource,
   onToggle,
   onCommit,
+  onEdit,
   onNext,
 }: {
   drawn: string[];
@@ -298,6 +313,7 @@ function EdgesStep({
   onSource: (id: WorkshopActorId) => void;
   onToggle: (edge: string) => void;
   onCommit: () => void;
+  onEdit: () => void;
   onNext: () => void;
 }) {
   const perSubgoal = SUBGOALS.map((s) => ({
@@ -308,7 +324,12 @@ function EdgesStep({
   return (
     <div className="space-y-4">
       {done ? (
-        <EdgesVerdict score={score} perSubgoal={perSubgoal} onNext={onNext} />
+        <EdgesVerdict
+          score={score}
+          perSubgoal={perSubgoal}
+          onEdit={onEdit}
+          onNext={onNext}
+        />
       ) : (
         <>
           <div>
@@ -434,10 +455,12 @@ function EdgesStep({
 function EdgesVerdict({
   score,
   perSubgoal,
+  onEdit,
   onNext,
 }: {
   score: ReturnType<typeof scoreEdges>;
   perSubgoal: { subgoal: (typeof SUBGOALS)[number]; edges: typeof EDGE_KEY }[];
+  onEdit: () => void;
   onNext: () => void;
 }) {
   /* Same rule as the placement reveal: the mechanism and its quote print for
@@ -451,7 +474,7 @@ function EdgesVerdict({
   const perfect = score.found.length === EDGE_KEY.length;
   return (
     <div className="space-y-4">
-      <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
+      <div className="flex flex-wrap items-center justify-between gap-3">
         <p className="text-sm">
           <span className="font-semibold">
             {score.found.length} of {EDGE_KEY.length}
@@ -464,16 +487,21 @@ function EdgesVerdict({
             ? ` ${score.extra.length} the key does not have.`
             : ""}
         </p>
-        {perfect ? null : (
-          <button
-            type="button"
-            onClick={() => setShowAll((v) => !v)}
-            className="text-muted-foreground hover:text-foreground text-xs underline underline-offset-4"
-            aria-pressed={showAll}
-          >
-            {showAll ? "Only what you missed" : "Show every mechanism"}
-          </button>
-        )}
+        <div className="flex flex-wrap items-center gap-3">
+          <Button size="sm" variant="outline" onClick={onEdit}>
+            Edit my edges
+          </Button>
+          {perfect ? null : (
+            <button
+              type="button"
+              onClick={() => setShowAll((v) => !v)}
+              className="text-muted-foreground hover:text-foreground text-xs underline underline-offset-4"
+              aria-pressed={showAll}
+            >
+              {showAll ? "Only what you missed" : "Show every mechanism"}
+            </button>
+          )}
+        </div>
       </div>
 
       {/* The key, grouped by the subgoal each edge completes — which is the

@@ -709,6 +709,13 @@
    behind the top-left corner. Painted on all four sides — the whole-card
    half of the card-edge rule, never a tinted rib.
 
+   `.vt-slab` is the deliberate opt-in for a run the counter passes over —
+   wrap the lead paragraph and its list in <div className="vt-slab"> and
+   every rule here treats them as if the count had been met. The owner's
+   1.3 three-source list is the case it exists for: three items, each a
+   paragraph of judgement, exactly the built form's material. The 4-item
+   automatic threshold itself does not move.
+
    The paragraph that introduces the list rides inside the card as its
    header, in red: p:has(+ ul) takes the slab ground, the top corners and
    the corner circle, and the list under it squares its top edge so the two
@@ -723,7 +730,7 @@
    suppressed or two circles stack on the seam. */
 :root[data-theme]
   .lesson-body:not(.vt-plain-lists)
-  ul:not(.not-prose *):not(li ul):has(> li:nth-child(4)) {
+  ul:not(.not-prose *):not(li ul):is(:has(> li:nth-child(4)), .vt-slab ul) {
   position: relative;
   display: grid;
   gap: 14px;
@@ -734,7 +741,7 @@
 }
 :root[data-theme]
   .lesson-body:not(.vt-plain-lists)
-  ul:not(.not-prose *):not(li ul):has(> li:nth-child(4))::before {
+  ul:not(.not-prose *):not(li ul):is(:has(> li:nth-child(4)), .vt-slab ul)::before {
   content: "";
   position: absolute;
   left: -12px;
@@ -747,13 +754,13 @@
 }
 :root[data-theme]
   .lesson-body:not(.vt-plain-lists)
-  ul:not(.not-prose *):not(li ul):has(> li:nth-child(4))
+  ul:not(.not-prose *):not(li ul):is(:has(> li:nth-child(4)), .vt-slab ul)
   > li {
   margin: 0;
 }
 :root[data-theme]
   .lesson-body:not(.vt-plain-lists)
-  ul:not(.not-prose *):not(li ul):has(> li:nth-child(4))
+  ul:not(.not-prose *):not(li ul):is(:has(> li:nth-child(4)), .vt-slab ul)
   > li::before {
   content: "";
   position: absolute;
@@ -777,7 +784,7 @@
    as plain 64ch and the page degrades to the old overhang, never breaks. */
 :root[data-theme]
   .lesson-body:not(.vt-plain-lists)
-  p:not(.not-prose *):has(+ ul:not(li ul) > li:nth-child(4)) {
+  p:not(.not-prose *):is(:has(+ ul:not(li ul) > li:nth-child(4)), .vt-slab p:has(+ ul:not(li ul))) {
   position: relative;
   margin: 2em 0 0;
   padding: 22px 30px 0 54px;
@@ -814,13 +821,13 @@
 }
 :root[data-theme]
   .lesson-body
-  p:not(.not-prose *):has(+ ul:not(li ul) > li:nth-child(4))
+  p:not(.not-prose *):is(:has(+ ul:not(li ul) > li:nth-child(4)), .vt-slab p:has(+ ul:not(li ul)))
   :where(strong, b) {
   color: inherit;
 }
 :root[data-theme]
   .lesson-body
-  p:not(.not-prose *):has(+ ul:not(li ul) > li:nth-child(4))::before {
+  p:not(.not-prose *):is(:has(+ ul:not(li ul) > li:nth-child(4)), .vt-slab p:has(+ ul:not(li ul)))::before {
   content: "";
   position: absolute;
   left: -12px;
@@ -833,8 +840,8 @@
 }
 :root[data-theme]
   .lesson-body
-  p:not(.not-prose *):has(+ ul:not(li ul) > li:nth-child(4))
-  + ul:not(.not-prose *):not(li ul):has(> li:nth-child(4)) {
+  p:not(.not-prose *):is(:has(+ ul:not(li ul) > li:nth-child(4)), .vt-slab p:has(+ ul:not(li ul)))
+  + ul:not(.not-prose *):not(li ul):is(:has(> li:nth-child(4)), .vt-slab ul) {
   margin-top: 0;
   padding-top: 16px;
   border-top-left-radius: 0;
@@ -842,8 +849,8 @@
 }
 :root[data-theme]
   .lesson-body
-  p:not(.not-prose *):has(+ ul:not(li ul) > li:nth-child(4))
-  + ul:not(.not-prose *):not(li ul):has(> li:nth-child(4))::before {
+  p:not(.not-prose *):is(:has(+ ul:not(li ul) > li:nth-child(4)), .vt-slab p:has(+ ul:not(li ul)))
+  + ul:not(.not-prose *):not(li ul):is(:has(> li:nth-child(4)), .vt-slab ul)::before {
   content: none;
 }
 

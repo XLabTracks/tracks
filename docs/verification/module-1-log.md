@@ -1306,3 +1306,55 @@ by Swiss officials…") duplicated the new transition verbatim and is
 trimmed to "Review the following sections:". Headings, the PageBreak
 title and both Fold labels conformed to Title Case per the standing
 instruction while the lesson was open.
+
+## 2026-08-19 — Context distiller nested as 1.3.1
+
+The distiller lesson shipped unnumbered and un-nested: a top-level item
+titled "Context distiller" floating after 1.3 in the module list, the only
+item in modules 0–2 outside the outline taxonomy's shape. Course owner's
+instruction: nest it under 1.3 as 1.3.1. One edit in curriculum.ts —
+`sectionItemId: "v-scoping-upstream-downstream"` plus the number in the
+title — same shape as 1.0.1/1.2.1/2.0.1. Its body opens with prose, not a
+title heading, so no body renumber rode along (the isLessonTitleHeading
+trap doesn't bite). `verificationUnitOfLesson` already said "1.3", which is
+what nested lessons carry (their parent's unit), so course.js regenerated
+byte-identical. The outline's own "1.3.1 Threat Modeling and Theory of
+Change" is IN PROGRESS there and ships nothing, so the number was free; the
+author note in scoping-upstream-downstream.mdx now records that the
+threat-modeling section takes the next free number when its prose lands.
+
+## 2026-08-19 — Callout pass over 1.3 and 1.3.1
+
+Both lessons ran as bare prose while every module-1 neighbour carries folds
+or callouts. Owner-approved placements, all re-housing existing sentences
+verbatim (no words added or removed): in 1.3, the flawed first-draft finding
+sits in a warning callout and the sourced revision in a tip callout (the
+lead-in sentences stay as prose, so the boxes carry no titles); "Pause
+before reading on" and the takeaway's two before-writing questions are
+notebook callouts — the outline's red rounded rectangle. In 1.3.1, the FLI
+worked example is a note callout (its "Worked Example" heading stays for
+part chunking, so the box is untitled) and "For each: where did it come
+from, who reads it next?" is a notebook callout above the widget. One
+deviation from the proposal as approved: the revision got variant "tip",
+not "highlight" — highlight's CirclePlay icon reads as a video marker and
+the variant has no lesson precedent. Headings and PageBreak titles in both
+lessons were conformed to Title Case in the same edit, per the standing
+instruction.
+
+## 2026-08-19 — The three upstream sources take the slab card (1.3)
+
+Owner's request: the three-source trust ranking goes in "a red box with the
+red sun in the corner, exactly as it is a bajillion other times in course."
+That box is app-bridge.css's reference-sheet slab — the tinted 28px-radius
+card with the solid --primary circle peeking from behind the top-left
+corner and the lead paragraph riding inside as its red header — which lists
+take automatically at four items (`:has(> li:nth-child(4))`). Three items
+missed the counter, so the slab rules now carry a deliberate opt-in:
+wrapping the lead paragraph and its list in `<div className="vt-slab">`
+matches every slab rule via an `:is()` alternative, while the 4-item
+automatic threshold stays where the reference sheets put it. The lead
+sentence ("Three sources sit upstream…") split off the provenance paragraph
+into its own paragraph so the header is the one line, wording untouched.
+A first attempt shipped this as a new Spotlight component copying the paper
+gate's Sparkles card — wrong box; reverted in the same session, before
+commit, no trace in the tree.

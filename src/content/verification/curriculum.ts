@@ -224,11 +224,16 @@ export const verificationLessons: Lesson[] = [
   },
   {
     // Applies 1.3's upstream/downstream frame to a real report: the body is the
-    // outline's brief, and the interactive it is written around sits under it.
+    // outline's brief, and the interactive it is written around sits under it —
+    // which is why it nests under 1.3 as a subsubmodule rather than standing
+    // as its own numbered section (course owner, 2026-08-19). The outline's
+    // own "1.3.1 Threat Modeling and Theory of Change" is still IN PROGRESS
+    // and ships nothing, so the number was free to take.
     id: "v-context-distiller",
     slug: "context-distiller",
     moduleId: "v-scoping",
-    title: "Context distiller",
+    sectionItemId: "v-scoping-upstream-downstream",
+    title: "1.3.1 Context distiller",
     contentRef: "verification/context-distiller",
     estimatedMinutes: 15,
   },

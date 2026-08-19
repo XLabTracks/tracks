@@ -258,10 +258,15 @@ async function LessonItemPage({
         ) : null}
       </header>
 
-      {lesson.completion && (
+      {/* Signed out on the verification track, the dashboard below stands in
+          for the header's sign-in card — the owner's instruction (2026-08-19):
+          the top box is the dashboard, dashes where the numbers go. Signed in,
+          the header still celebrates or lists what is left, and the dashboard
+          carries the numbers under it. */}
+      {lesson.completion && (userId || track.id !== "verification") && (
         <CompletionHeader track={track} state={completionState} />
       )}
-      {completionStats && (
+      {lesson.completion && track.id === "verification" && (
         <CompletionStats stats={completionStats} mapHref="/verification/map" />
       )}
 

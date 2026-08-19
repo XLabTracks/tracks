@@ -2,9 +2,13 @@ import Link from "next/link";
 
 /* The completion page's dashboard: what the learner actually did, in three
  * numbers — skills mastered on the skill map, words of writing submitted,
- * reading finished. It renders under the CompletionHeader for signed-in
- * learners in every state, because the numbers are real rows either way; the
- * celebrating is the header's job and stays gated on being finished.
+ * reading finished. It is the page's top card in every state, on the course
+ * owner's instruction (2026-08-19): signed out it stands in for the old
+ * "last page of the track" card, with dashes where the numbers go and the
+ * sign-in line as its footer — dashes, never zeros, because a signed-out
+ * visitor may have an account full of work this page simply cannot see.
+ * Signed in it carries the real rows; the celebrating is CompletionHeader's
+ * job and stays gated on being finished.
  *
  * One hairline card, values in text tokens. No meters and no deltas: each
  * figure is a count of work done, not a target to beat, and the header
@@ -24,52 +28,63 @@ export function CompletionStats({
   stats,
   mapHref,
 }: {
-  stats: CompletionStatsData;
-  /** Where the skill map lives; the footer line renders only when given. */
+  /** Null when signed out — the card renders with dashes and a sign-in line. */
+  stats: CompletionStatsData | null;
+  /** Where the skill map lives; the map footer renders only when given. */
   mapHref?: string;
 }) {
-  const { skills, words, essaysSubmitted, readingMinutes } = stats;
-
   return (
-    <section className="border-border bg-card mt-4 rounded-2xl border p-6 sm:p-8">
+    <section className="border-border bg-card mt-6 rounded-2xl border p-6 sm:p-8">
       <p className="text-muted-foreground text-xs tracking-[0.14em] uppercase">
         Your course in numbers
       </p>
       <div className="mt-5 grid gap-6 sm:grid-cols-3">
         <Tile
-          value={`${skills.mastered} / ${skills.total}`}
+          value={stats ? `${stats.skills.mastered} / ${stats.skills.total}` : "—"}
           label="Skills mastered"
           sub={
-            skills.inProgress > 0
-              ? `${skills.inProgress} more in progress`
+            stats && stats.skills.inProgress > 0
+              ? `${stats.skills.inProgress} more in progress`
               : undefined
           }
         />
         <Tile
-          value={words.toLocaleString("en-US")}
+          value={stats ? stats.words.toLocaleString("en-US") : "—"}
           label="Words written"
-          sub={`across ${essaysSubmitted} submitted ${
-            essaysSubmitted === 1 ? "essay" : "essays"
-          }`}
+          sub={
+            stats
+              ? `across ${stats.essaysSubmitted} submitted ${
+                  stats.essaysSubmitted === 1 ? "essay" : "essays"
+                }`
+              : undefined
+          }
         />
         <Tile
-          value={readingTime(readingMinutes)}
+          value={stats ? readingTime(stats.readingMinutes) : "—"}
           label="Reading completed"
-          sub="by the course's own time estimates"
+          sub={stats ? "by the course's own time estimates" : undefined}
         />
       </div>
-      {mapHref ? (
-        <p className="text-muted-foreground mt-5 text-sm">
-          Rung-by-rung detail is on your{" "}
-          <Link
-            href={mapHref}
-            className="text-foreground underline underline-offset-4"
-          >
-            skill map
-          </Link>
-          .
+      {stats ? (
+        mapHref ? (
+          <p className="text-muted-foreground mt-5 text-sm">
+            Rung-by-rung detail is on your{" "}
+            <Link
+              href={mapHref}
+              className="text-foreground underline underline-offset-4"
+            >
+              skill map
+            </Link>
+            .
+          </p>
+        ) : null
+      ) : (
+        <p className="text-muted-foreground mt-5 max-w-[64ch] text-sm">
+          Sign in and your skills, your writing and your reading are counted
+          here — and this page can tell you whether you have actually
+          finished.
         </p>
-      ) : null}
+      )}
     </section>
   );
 }

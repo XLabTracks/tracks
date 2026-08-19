@@ -151,3 +151,10 @@ The completion page's two author-note stubs are gone, on the owner's
   behind 3.1). The dashboard reports that rather than rounding up — when
   module 3's lessons land in `verificationUnitOfLesson`, the figures move
   on their own, and the test pinning 13/13 is expected to move with them.
+
+Same-day revision, owner's instruction: the signed-out header card ("The
+last page of the Verification track") is gone — the dashboard is the top
+box in every state. Signed out it renders dashes where the numbers go
+(dashes, never zeros: the account may hold work the page cannot see) and
+carries the sign-in line as its footer; signed in, CompletionHeader still
+celebrates or lists what is left above it, unchanged.

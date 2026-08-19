@@ -38,6 +38,16 @@ import {
   CompletionHeader,
   type CompletionState,
 } from "@/components/learn/completion-header";
+import {
+  CompletionStats,
+  type CompletionStatsData,
+} from "@/components/learn/completion-stats";
+import {
+  completedReadingMinutes,
+  completedVerificationUnits,
+  skillSummary,
+  submittedWordCount,
+} from "@/lib/verification/completion-stats";
 import { LessonNav } from "@/components/layout/lesson-nav";
 import { LessonCompleteButton } from "@/components/learn/lesson-complete-button";
 import { LessonTracker } from "@/components/learn/lesson-tracker";
@@ -163,6 +173,7 @@ async function LessonItemPage({
      learner is standing on it. Only that page pays for the extra reads (both
      are request-cached). */
   let completionState: CompletionState = { units: null, writing: null };
+  let completionStats: CompletionStatsData | null = null;
   if (lesson.completion && userId) {
     const [completedSet, writingIds, submissions] = await Promise.all([
       getTrackCompletionSet(userId, track.id),
@@ -172,21 +183,34 @@ async function LessonItemPage({
     const units = getTrackProgressContentIds(track.id).filter(
       (id) => id !== lesson.id
     );
+    // Submitted, not drafted: a draft is work in progress, and "graded" is a
+    // submitted task the grader has since been run on.
+    const submittedWritingIds = writingIds.filter((id) => {
+      const status = submissions.get(id)?.status;
+      return status === "submitted" || status === "graded";
+    });
     completionState = {
       units: {
         completed: units.filter((id) => completedSet.has(id)).length,
         total: units.length,
       },
       writing: {
-        // Submitted, not drafted: a draft is work in progress, and "graded"
-        // is a submitted task the grader has since been run on.
-        submitted: writingIds.filter((id) => {
-          const status = submissions.get(id)?.status;
-          return status === "submitted" || status === "graded";
-        }).length,
+        submitted: submittedWritingIds.length,
         required: writingIds.length,
       },
     };
+    // The dashboard under the header, from the same rows. The skills figure
+    // ladders on the verification graph, so the card is that track's.
+    if (track.id === "verification") {
+      completionStats = {
+        skills: skillSummary(completedVerificationUnits(completedSet)),
+        words: submittedWordCount(
+          submittedWritingIds.map((id) => submissions.get(id)?.responseJson)
+        ),
+        essaysSubmitted: submittedWritingIds.length,
+        readingMinutes: completedReadingMinutes(track.id, completedSet),
+      };
+    }
   }
 
   // One reader decision, used twice: the parts reader carries the time
@@ -236,6 +260,9 @@ async function LessonItemPage({
 
       {lesson.completion && (
         <CompletionHeader track={track} state={completionState} />
+      )}
+      {completionStats && (
+        <CompletionStats stats={completionStats} mapHref="/verification/map" />
       )}
 
       {/* Works-cited + progress footer: shared between the chunked and plain

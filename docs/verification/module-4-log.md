@@ -109,3 +109,45 @@ Owner-language note: 4.0's Objectives keep `scope="this module"` — her
 2026-08-13 standardization changed the lead away from "Module 4", and the
 new page's instruction "keep the module objectives ofc" reads as keep
 as-is.
+
+---
+
+## 2026-08-19 — 4.3 filled in: the owner's copy, the form, the dashboard
+
+The completion page's two author-note stubs are gone, on the owner's
+2026-08-19 instruction:
+
+- **Words from Us and Feedback are her words, verbatim** — the closing
+  note ("the most comprehensive curriculum on AI verification to date…",
+  the preparadigmatic-field / look-back-through-your-notebook paragraph)
+  and the feedback ask. "Capstone Bank" links to the bank; the feedback
+  channel is the Google Form she supplied, rendered as one NextSteps card
+  under the paragraph so "the feedback form below" stays literally true.
+- **What's Next gained the Frontier AI Security Residency**
+  (securefrontier.ai), first on the list as the most directly
+  verification-focused programme: eight weeks, fully funded, in person in
+  Cambridge, UK, on hardware verification and cyber security of frontier
+  AI — ERA with Heron and the Oxford Hardware AI Governance Lab. Details
+  transcribed from the site on 2026-08-19; the lead-in now counts "the
+  first four". Headings on the page went Title Case per the standing
+  instruction (Words from Us, What's Next?).
+- **A dashboard renders above the body** — her ask: "how many skills
+  learned from skill tree, how many essays written perhaps in words, how
+  many hours of reading completed… don't go too overboard." It is
+  `CompletionStats` under `CompletionHeader` in the item page, three
+  tiles: skills mastered on the 27-node graph, words across submitted
+  required writing, reading completed by the course's own
+  `estimatedMinutes` — all derived at read time from rows the page
+  already fetched, nothing persisted, and shown to signed-in learners in
+  every state (celebration stays gated on the header). The skills
+  arithmetic mirrors `VT.rungFill` (the compound 2.1–2.4 rung fills by
+  quarters); the graph's progress skeleton is snapshotted in
+  `src/lib/verification/data/skills.ts` with a drift test against
+  `data/skills.js` (`completion-stats.test.ts`, the bank.test.ts
+  pattern).
+- **Honest number, worth knowing:** units 3.1 and 3.2 have no drafted
+  lessons, so a learner who finishes everything currently completable
+  masters 13 of 27 skills (13 more in progress; "evasion" sits fully
+  behind 3.1). The dashboard reports that rather than rounding up — when
+  module 3's lessons land in `verificationUnitOfLesson`, the figures move
+  on their own, and the test pinning 13/13 is expected to move with them.

@@ -73,9 +73,7 @@ const STEP_IDS = STEPS.map((s) => s.id);
 
 export function ActorEdges({ onComplete }: VerificationWidgetProps) {
   const [saved, persist, hydrated] = useBoard();
-  const [edgeSource, setEdgeSource] = useState<WorkshopActorId>(
-    WORKSHOP_ACTORS[0]!.id,
-  );
+  const [edgeSource, setEdgeSource] = useState<WorkshopActorId | null>(null);
   const [lens, setLens] = useState<ActorRoleId | null>(null);
   const topRef = useRef<HTMLDivElement>(null);
 
@@ -104,6 +102,14 @@ export function ActorEdges({ onComplete }: VerificationWidgetProps) {
         ...edgeScore.extra.map((id) => ({ id, state: "wrong" as const })),
         ...edgeScore.missed.map((id) => ({ id, state: "missed" as const })),
       ];
+
+  const toggleEdge = (id: string) =>
+    persist((prev) => ({
+      ...prev,
+      edges: prev.edges.includes(id)
+        ? prev.edges.filter((edge) => edge !== id)
+        : [...prev.edges, id],
+    }));
 
   return (
     <div className="not-prose my-6 space-y-4" ref={topRef}>
@@ -145,11 +151,19 @@ export function ActorEdges({ onComplete }: VerificationWidgetProps) {
         label={`Step ${stepIndex + 1} of ${STEPS.length}`}
       />
 
+      {saved.edgeStep === "edges" && !saved.edgesDone ? (
+        <EdgeDrawingTask />
+      ) : null}
+
       <RingMap
         rings={saved.ringsDone ? RING_KEY : { ...RING_KEY, ...saved.rings }}
         showKey
         lens={saved.edgeStep === "map" ? lens : null}
         edges={mapEdges}
+        interactive={saved.edgeStep === "edges" && !saved.edgesDone}
+        selectedSource={edgeSource}
+        onSource={setEdgeSource}
+        onToggleEdge={toggleEdge}
       />
 
       {saved.edgeStep === "map" ? (
@@ -185,14 +199,7 @@ export function ActorEdges({ onComplete }: VerificationWidgetProps) {
           score={edgeScore}
           source={edgeSource}
           onSource={setEdgeSource}
-          onToggle={(id) =>
-            persist((prev) => ({
-              ...prev,
-              edges: prev.edges.includes(id)
-                ? prev.edges.filter((e) => e !== id)
-                : [...prev.edges, id],
-            }))
-          }
+          onToggle={toggleEdge}
           onCommit={() => persist((prev) => ({ ...prev, edgesDone: true }))}
           onNext={() => go("map")}
         />
@@ -227,6 +234,53 @@ export function ActorEdges({ onComplete }: VerificationWidgetProps) {
 
 /* ------------------------------------------------------------------ steps -- */
 
+function EdgeDrawingTask() {
+  return (
+    <div className="border-border bg-card rounded-xl border p-4">
+      <p className="eyebrow text-muted-foreground">What an edge means</p>
+      <p className="mt-1.5 text-sm leading-relaxed">
+        Draw an edge from <strong>A</strong> to <strong>B</strong> when A can
+        produce evidence about B, for a verifier, that B did not have to
+        volunteer. Not influence, not dependence — evidence. Direction is the
+        claim: a cloud provider holds records about a lab’s training run, and
+        the lab holds nothing comparable about the cloud. A verifier can be
+        its own source, so an edge may start on the third ring.
+      </p>
+      <p className="text-muted-foreground mt-2 text-sm leading-relaxed">
+        On the graph, drag from the actor that produces the evidence to the
+        actor the evidence concerns. You can also select one point and then
+        another; the lists below remain available as a keyboard-friendly
+        alternative.
+      </p>
+      <p className="text-muted-foreground mt-2 text-sm leading-relaxed">
+        Some actors will end up with no edge at all. That is an available
+        answer and, for most of them, the right one. One of them can hold no
+        edge in principle — the hollow ring on the map is a body that does
+        not exist, and nothing that does not exist produces evidence.
+      </p>
+
+      <div className="border-border mt-4 border-t pt-4">
+        <p className="text-sm font-medium">
+          What a verifier has to establish, in four parts
+        </p>
+        <p className="text-muted-foreground mt-1 text-sm leading-relaxed">
+          Baker et al. decompose it this way, and the key tags every edge with
+          the part it serves. Draw an edge when you can say which of these four
+          it would help settle.
+        </p>
+        <ol className="mt-2 space-y-1 text-sm">
+          {SUBGOALS.map((subgoal) => (
+            <li key={subgoal.id}>
+              <span className="font-medium">{subgoal.label}.</span>{" "}
+              <span className="text-muted-foreground">{subgoal.name}</span>
+            </li>
+          ))}
+        </ol>
+      </div>
+    </div>
+  );
+}
+
 function EdgesStep({
   drawn,
   done,
@@ -240,7 +294,7 @@ function EdgesStep({
   drawn: string[];
   done: boolean;
   score: ReturnType<typeof scoreEdges>;
-  source: WorkshopActorId;
+  source: WorkshopActorId | null;
   onSource: (id: WorkshopActorId) => void;
   onToggle: (edge: string) => void;
   onCommit: () => void;
@@ -253,50 +307,6 @@ function EdgesStep({
 
   return (
     <div className="space-y-4">
-      <div className="border-border bg-card rounded-xl border p-4">
-        <p className="eyebrow text-muted-foreground">What an edge means</p>
-        <p className="mt-1.5 text-sm leading-relaxed">
-          Draw an edge from <strong>A</strong> to <strong>B</strong> when A can
-          produce evidence about B, for a verifier, that B did not have to
-          volunteer. Not influence, not dependence — evidence. Direction is the
-          claim: a cloud provider holds records about a lab’s training run, and
-          the lab holds nothing comparable about the cloud. A verifier can be
-          its own source, so an edge may start on the third ring.
-        </p>
-        <p className="text-muted-foreground mt-2 text-sm leading-relaxed">
-          Some actors will end up with no edge at all. That is an available
-          answer and, for most of them, the right one. One of them can hold no
-          edge in principle — the hollow ring on the map is a body that does
-          not exist, and nothing that does not exist produces evidence.
-        </p>
-      </div>
-
-      {/* THE FOUR SUBGOALS, IN THE OPEN, BEFORE ANYTHING IS DRAWN.
-          They are not part of the freeze — the step never asks the learner to
-          name one, the key assigns them — and hiding them would make the task
-          intuition rather than reasoning. "What is a verifier trying to
-          establish?" is the question an edge answers, so it has to be on
-          screen while the edges are being drawn. The paper's own sentences
-          wait for the reveal; here it is four labels and four short names. */}
-      <div>
-        <p className="text-sm font-medium">
-          What a verifier has to establish, in four parts
-        </p>
-        <p className="text-muted-foreground mt-1 text-sm leading-relaxed">
-          Baker et al. decompose it this way, and the key tags every edge with
-          the part it serves. Draw an edge when you can say which of these four
-          it would help settle.
-        </p>
-        <ol className="mt-2 space-y-1 text-sm">
-          {SUBGOALS.map((s) => (
-            <li key={s.id}>
-              <span className="font-medium">{s.label}.</span>{" "}
-              <span className="text-muted-foreground">{s.name}</span>
-            </li>
-          ))}
-        </ol>
-      </div>
-
       {done ? (
         <EdgesVerdict score={score} perSubgoal={perSubgoal} onNext={onNext} />
       ) : (
@@ -341,39 +351,46 @@ function EdgesStep({
             </div>
           </div>
 
-          <div>
-            <p className="text-sm font-medium">
-              About whom? — {MAP_LABEL[source]} can show a verifier something
-              about…
-            </p>
-            <div className="mt-2 flex flex-wrap gap-1.5">
-              {WORKSHOP_ACTORS.filter((a) => a.id !== source).map((a) => {
-                const id = edgeId(source, a.id);
-                const on = drawn.includes(id);
-                return (
-                  <button
-                    key={a.id}
-                    type="button"
-                    aria-pressed={on}
-                    // The whole claim, because that is what pressing it
-                    // asserts — and because the name alone is the same string
-                    // as the source chip above it.
-                    aria-label={`${MAP_LABEL[source]} can show a verifier something about ${MAP_LABEL[a.id]}`}
-                    onClick={() => onToggle(id)}
-                    className={cn(
-                      "border-border rounded-lg border px-2.5 py-1.5 text-left text-xs transition-colors",
-                      on
-                        ? "border-primary bg-primary/10 font-medium"
-                        : "hover:bg-muted",
-                    )}
-                  >
-                    {on ? "✓ " : ""}
-                    {MAP_LABEL[a.id]}
-                  </button>
-                );
-              })}
+          {source ? (
+            <div>
+              <p className="text-sm font-medium">
+                About whom? — {MAP_LABEL[source]} can show a verifier something
+                about…
+              </p>
+              <div className="mt-2 flex flex-wrap gap-1.5">
+                {WORKSHOP_ACTORS.filter((a) => a.id !== source).map((a) => {
+                  const id = edgeId(source, a.id);
+                  const on = drawn.includes(id);
+                  return (
+                    <button
+                      key={a.id}
+                      type="button"
+                      aria-pressed={on}
+                      // The whole claim, because that is what pressing it
+                      // asserts — and because the name alone is the same string
+                      // as the source chip above it.
+                      aria-label={`${MAP_LABEL[source]} can show a verifier something about ${MAP_LABEL[a.id]}`}
+                      onClick={() => onToggle(id)}
+                      className={cn(
+                        "border-border rounded-lg border px-2.5 py-1.5 text-left text-xs transition-colors",
+                        on
+                          ? "border-primary bg-primary/10 font-medium"
+                          : "hover:bg-muted",
+                      )}
+                    >
+                      {on ? "✓ " : ""}
+                      {MAP_LABEL[a.id]}
+                    </button>
+                  );
+                })}
+              </div>
             </div>
-          </div>
+          ) : (
+            <p className="text-muted-foreground text-xs">
+              Select a source on the graph or in the list above, then choose
+              whom its evidence concerns.
+            </p>
+          )}
 
           {drawn.length ? (
             <div className="border-border rounded-xl border p-4">

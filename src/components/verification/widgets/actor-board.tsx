@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, type PointerEvent as ReactPointerEvent } from "react";
 import { Eye, Lock } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -356,16 +356,15 @@ export function BakerLine({ text, where }: { text: string; where: string }) {
 /**
  * Step 6 — draw the edges.
  *
- * PICK A SOURCE, THEN TOGGLE TARGETS. Clicking dots on the SVG would be the
- * obvious way to draw a graph and it is the wrong one here: the dots are
- * 3.5px, there are ten of them, and nothing about a circle in an SVG is
- * reachable by keyboard without inventing a focus model. Two chip rows are
- * the same gesture — this actor, about that one — with the house's own
- * committed-choice affordances and no new interaction to learn.
+ * DRAW ON THE GRAPH, WITH THE TWO CHIP ROWS AS A FALLBACK. A pointer can drag
+ * from source to target, while click/tap and keyboard input select the same
+ * two endpoints in sequence. The visible dots are large enough to read and
+ * each has a larger invisible hit target. The chip rows below the graph stay
+ * in sync, so direct manipulation is not the only way to answer.
  *
- * The direction is stated in the row headings rather than implied by an
- * arrowhead, because it is the whole content of the exercise: which of the
- * two actors is the one that cannot keep the fact to itself.
+ * Direction is visible in the arrowhead and repeated in the row headings,
+ * because it is the whole content of the exercise: which of the two actors
+ * is the one that cannot keep the fact to itself.
  */
 
 export const ROLE_TOKENS = [
@@ -391,6 +390,70 @@ export interface MapEdge {
   state: "drawn" | "right" | "wrong" | "missed";
 }
 
+interface MapPoint {
+  x: number;
+  y: number;
+}
+
+interface EdgeDraft extends MapPoint {
+  from: WorkshopActorId;
+  hover: WorkshopActorId | null;
+  pointerId: number;
+  startX: number;
+  startY: number;
+}
+
+const NODE_HIT_RADIUS = 18;
+const DRAG_THRESHOLD = 4;
+
+/** The same pinched connector used by the landing-page skill tree. Its two
+ * quadratic flanks flare into the endpoint dots and narrow at mid-flight. */
+function beamPath(
+  from: MapPoint,
+  to: MapPoint,
+  control: MapPoint,
+  endWidth = 4.5,
+  middleWidth = 1.4,
+): string {
+  const normal = (dx: number, dy: number) => {
+    const length = Math.hypot(dx, dy) || 1;
+    return { x: -dy / length, y: dx / length };
+  };
+  const startNormal = normal(control.x - from.x, control.y - from.y);
+  const endNormal = normal(to.x - control.x, to.y - control.y);
+  const middleNormal = normal(to.x - from.x, to.y - from.y);
+  const controlOffset = 2 * middleWidth - endWidth;
+  return [
+    `M ${from.x + startNormal.x * endWidth} ${from.y + startNormal.y * endWidth}`,
+    `Q ${control.x + middleNormal.x * controlOffset} ${control.y + middleNormal.y * controlOffset}`,
+    `${to.x + endNormal.x * endWidth} ${to.y + endNormal.y * endWidth}`,
+    `L ${to.x - endNormal.x * endWidth} ${to.y - endNormal.y * endWidth}`,
+    `Q ${control.x - middleNormal.x * controlOffset} ${control.y - middleNormal.y * controlOffset}`,
+    `${from.x - startNormal.x * endWidth} ${from.y - startNormal.y * endWidth} Z`,
+  ].join(" ");
+}
+
+function edgeControl(from: MapPoint, to: MapPoint): MapPoint {
+  const middle = { x: (from.x + to.x) / 2, y: (from.y + to.y) / 2 };
+  return {
+    x: middle.x + (CX - middle.x) * 0.35,
+    y: middle.y + (CY - middle.y) * 0.35,
+  };
+}
+
+function arrowheadPath(control: MapPoint, to: MapPoint): string {
+  const dx = to.x - control.x;
+  const dy = to.y - control.y;
+  const length = Math.hypot(dx, dy) || 1;
+  const ux = dx / length;
+  const uy = dy / length;
+  const nx = -uy;
+  const ny = ux;
+  const tip = { x: to.x - ux * 9, y: to.y - uy * 9 };
+  const base = { x: tip.x - ux * 7, y: tip.y - uy * 7 };
+  return `M ${tip.x} ${tip.y} L ${base.x + nx * 4} ${base.y + ny * 4} L ${base.x - nx * 4} ${base.y - ny * 4} Z`;
+}
+
 /** Four states, four treatments, and never colour alone — a missed edge is
     dashed as well as pale, a wrong one is solid in the defect hue, and the
     verdict list under the step names every one of them in words. */
@@ -409,14 +472,24 @@ export function RingMap({
   showKey = false,
   lens = null,
   edges = [],
+  interactive = false,
+  selectedSource = null,
+  onSource,
+  onToggleEdge,
 }: {
   rings: Record<string, RingId>;
   showKey?: boolean;
   lens?: ActorRoleId | null;
   edges?: MapEdge[];
+  interactive?: boolean;
+  selectedSource?: WorkshopActorId | null;
+  onSource?: (id: WorkshopActorId) => void;
+  onToggleEdge?: (id: string) => void;
 }) {
+  const [draft, setDraft] = useState<EdgeDraft | null>(null);
   const lensIndex = lens ? ACTOR_ROLES.findIndex((r) => r.id === lens) : -1;
   const lensColor = lensIndex >= 0 ? ROLE_TOKENS[lensIndex % ROLE_TOKENS.length] : undefined;
+  const canDraw = interactive && Boolean(onSource) && Boolean(onToggleEdge);
 
   /* Angle comes from the actor's fixed slot in MAP_SLOTS and nothing else.
      It was computed per ring from RING_KEY once, which was wrong twice over:
@@ -450,14 +523,126 @@ export function RingMap({
     return { x: CX + Math.cos(angle) * radiusOf(id), y: CY + Math.sin(angle) * radiusOf(id) };
   };
 
+  const pointerPoint = (event: ReactPointerEvent<SVGGElement>): MapPoint => {
+    const svg = event.currentTarget.ownerSVGElement;
+    if (!svg) return { x: 0, y: 0 };
+    const rect = svg.getBoundingClientRect();
+    const viewBox = svg.viewBox.baseVal;
+    return {
+      x: viewBox.x + ((event.clientX - rect.left) / rect.width) * viewBox.width,
+      y: viewBox.y + ((event.clientY - rect.top) / rect.height) * viewBox.height,
+    };
+  };
+
+  const nearestActor = (
+    point: MapPoint,
+    except: WorkshopActorId,
+  ): WorkshopActorId | null => {
+    let nearest: WorkshopActorId | null = null;
+    let nearestDistance = NODE_HIT_RADIUS;
+    for (const actor of WORKSHOP_ACTORS) {
+      if (actor.id === except) continue;
+      const actorPoint = pointOf(actor.id);
+      if (!actorPoint) continue;
+      const distance = Math.hypot(point.x - actorPoint.x, point.y - actorPoint.y);
+      if (distance <= nearestDistance) {
+        nearest = actor.id;
+        nearestDistance = distance;
+      }
+    }
+    return nearest;
+  };
+
+  const chooseActor = (id: WorkshopActorId) => {
+    if (!canDraw) return;
+    if (selectedSource && selectedSource !== id) {
+      onToggleEdge?.(edgeId(selectedSource, id));
+      return;
+    }
+    onSource?.(id);
+  };
+
+  const beginDraw = (
+    id: WorkshopActorId,
+    event: ReactPointerEvent<SVGGElement>,
+  ) => {
+    if (!canDraw || !rings[id]) return;
+    event.preventDefault();
+    event.currentTarget.setPointerCapture(event.pointerId);
+    const point = pointerPoint(event);
+    setDraft({
+      from: id,
+      hover: null,
+      pointerId: event.pointerId,
+      startX: point.x,
+      startY: point.y,
+      ...point,
+    });
+  };
+
+  const moveDraw = (event: ReactPointerEvent<SVGGElement>) => {
+    if (!draft || draft.pointerId !== event.pointerId) return;
+    event.preventDefault();
+    const point = pointerPoint(event);
+    setDraft({
+      ...draft,
+      ...point,
+      hover: nearestActor(point, draft.from),
+    });
+  };
+
+  const finishDraw = (event: ReactPointerEvent<SVGGElement>) => {
+    if (!draft || draft.pointerId !== event.pointerId) return;
+    event.preventDefault();
+    const point = pointerPoint(event);
+    const moved =
+      Math.hypot(point.x - draft.startX, point.y - draft.startY) >=
+      DRAG_THRESHOLD;
+    const target = nearestActor(point, draft.from);
+    if (moved && target) {
+      onSource?.(draft.from);
+      onToggleEdge?.(edgeId(draft.from, target));
+    } else if (moved) {
+      onSource?.(draft.from);
+    } else {
+      chooseActor(draft.from);
+    }
+    if (event.currentTarget.hasPointerCapture(event.pointerId)) {
+      event.currentTarget.releasePointerCapture(event.pointerId);
+    }
+    setDraft(null);
+  };
+
+  const draftStart = draft ? pointOf(draft.from) : null;
+  const draftTarget = draft?.hover ? pointOf(draft.hover) : null;
+  const draftEnd = draftTarget ?? draft;
+  const draftControl = draftStart && draftEnd
+    ? edgeControl(draftStart, draftEnd)
+    : null;
+  const draftGeometry = draftStart && draftEnd && draftControl &&
+    Math.hypot(draftEnd.x - draftStart.x, draftEnd.y - draftStart.y) > 1
+    ? {
+        beam: beamPath(draftStart, draftEnd, draftControl),
+        arrow: arrowheadPath(draftControl, draftEnd),
+      }
+    : null;
+
   return (
     <div className="border-border bg-card mx-auto max-w-[860px] overflow-x-auto rounded-xl border p-2">
       {/* The viewBox is cropped to the drawing, not to a round number.
           Content spans y 10..690 — the staging band at the top down to the
           same band at the bottom — and the top edge is 2 rather than 10
           because an 11px label's ascenders reach above its baseline. */}
-      <svg viewBox="0 2 960 696" className="mx-auto block h-auto w-full min-w-[560px]" role="img"
-        aria-label="Concentric actor map: the regulated training run at the centre, actors on four rings around it — who declares, who holds evidence, who verifies, and what no declaration covers. Actors not yet placed wait outside the outer ring. Edges join actors that can produce evidence about one another.">
+      <svg
+        viewBox="0 2 960 696"
+        className="mx-auto block h-auto w-full min-w-[560px]"
+        role={canDraw ? "group" : "img"}
+        aria-label={
+          canDraw
+            ? "Interactive actor map. Drag from an evidence source to the actor the evidence concerns, or select the two points in order."
+            : "Concentric actor map: the regulated training run at the centre, actors on four rings around it — who declares, who holds evidence, who verifies, and what no declaration covers. Actors not yet placed wait outside the outer ring. Edges join actors that can produce evidence about one another."
+        }
+      >
         {[...RINGS].reverse().map((ring) => (
           <g key={ring.id}>
             <circle
@@ -499,32 +684,41 @@ export function RingMap({
           {CENTRE.sub}
         </text>
 
-        {/* Edges go under the dots and over the rings. A chord between two
-            fixed points, with no arrowhead: at this line weight a marker is
-            a smudge, and the direction is stated in words beside the map and
-            in every row of the verdict list. */}
+        {/* Edges go under the dots and over the rings. Like the landing skill
+            tree, each beam flares beneath its endpoint dots and pinches in
+            the middle; a small arrowhead before the target keeps direction
+            visible without changing that silhouette. */}
         {edges.map((edge) => {
           const [from = "", to = ""] = edge.id.split(">");
           const a = pointOf(from);
           const b = pointOf(to);
           if (!a || !b) return null;
           const paint = EDGE_PAINT[edge.state];
+          const control = edgeControl(a, b);
+          const beam = beamPath(a, b, control);
+          const arrow = arrowheadPath(control, b);
           return (
-            <line
-              key={`${edge.id}-${edge.state}`}
-              x1={a.x}
-              y1={a.y}
-              x2={b.x}
-              y2={b.y}
-              style={{
-                stroke: paint.stroke,
-                strokeWidth: paint.width,
-                strokeDasharray: paint.dash,
-                opacity: paint.opacity,
-              }}
-            />
+            <g key={`${edge.id}-${edge.state}`} opacity={paint.opacity}>
+              <path
+                d={beam}
+                fill={paint.dash ? "none" : paint.stroke}
+                stroke={paint.dash ? paint.stroke : "none"}
+                strokeWidth={paint.width}
+                strokeDasharray={paint.dash}
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+              <path d={arrow} fill={paint.stroke} />
+            </g>
           );
         })}
+
+        {draftGeometry ? (
+          <g className="pointer-events-none fill-primary" opacity={0.8}>
+            <path d={draftGeometry.beam} />
+            <path d={draftGeometry.arrow} />
+          </g>
+        ) : null}
 
         {WORKSHOP_ACTORS.map((actor) => {
           const ring = rings[actor.id];
@@ -540,12 +734,67 @@ export function RingMap({
           // "none" in words, and the edge step states outright that it can
           // hold no edge rather than leaving an empty row to be interpreted.
           const absent = ABSENT.has(actor.id);
+          const selected = canDraw && selectedSource === actor.id;
+          const hovered = draft?.hover === actor.id;
+          const actorIsInteractive = canDraw && !staged;
           return (
-            <g key={actor.id}>
+            <g
+              key={actor.id}
+              data-actor-id={actor.id}
+              role={actorIsInteractive ? "button" : undefined}
+              tabIndex={actorIsInteractive ? 0 : undefined}
+              aria-pressed={actorIsInteractive ? selected : undefined}
+              aria-label={
+                actorIsInteractive
+                  ? selectedSource && selectedSource !== actor.id
+                    ? `Draw an edge from ${MAP_LABEL[selectedSource]} to ${MAP_LABEL[actor.id]}`
+                    : `${MAP_LABEL[actor.id]}. Select as the evidence source.`
+                  : undefined
+              }
+              className={actorIsInteractive ? "cursor-crosshair outline-none" : undefined}
+              style={actorIsInteractive ? { touchAction: "none" } : undefined}
+              onPointerDown={
+                actorIsInteractive
+                  ? (event) => beginDraw(actor.id, event)
+                  : undefined
+              }
+              onPointerMove={actorIsInteractive ? moveDraw : undefined}
+              onPointerUp={actorIsInteractive ? finishDraw : undefined}
+              onPointerCancel={actorIsInteractive ? () => setDraft(null) : undefined}
+              onKeyDown={
+                actorIsInteractive
+                  ? (event) => {
+                      if (event.key !== "Enter" && event.key !== " ") return;
+                      event.preventDefault();
+                      chooseActor(actor.id);
+                    }
+                  : undefined
+              }
+            >
+              {actorIsInteractive ? (
+                <circle
+                  cx={x}
+                  cy={y}
+                  r={NODE_HIT_RADIUS}
+                  fill="transparent"
+                  pointerEvents="all"
+                />
+              ) : null}
+              {selected || hovered ? (
+                <circle
+                  cx={x}
+                  cy={y}
+                  r={11}
+                  className="fill-none stroke-primary"
+                  strokeWidth={2}
+                  strokeDasharray={hovered ? undefined : "3 2"}
+                  pointerEvents="none"
+                />
+              ) : null}
               <circle
                 cx={x}
                 cy={y}
-                r={absent ? 4.5 : lit ? 5 : staged ? 3 : 3.5}
+                r={absent ? 7 : lit ? 8 : staged ? 5 : 6.5}
                 style={{
                   fill: absent
                     ? "none"
@@ -559,21 +808,24 @@ export function RingMap({
                   strokeDasharray: absent ? "3 2" : undefined,
                 }}
                 opacity={lens && !lit ? 0.3 : 1}
+                pointerEvents="none"
               />
               <text
-                x={x + outward * 9}
+                x={x + outward * 14}
                 y={y + 3.5}
                 textAnchor={outward > 0 ? "start" : "end"}
                 style={{
                   fontSize: 11,
-                  fontWeight: lit ? 600 : 400,
+                  fontWeight: lit || selected ? 600 : 400,
                   fill: lit
                     ? lensColor
                     : staged
                       ? "var(--muted-foreground)"
                       : "var(--foreground)",
                   opacity: lens && !lit ? 0.35 : 1,
+                  userSelect: "none",
                 }}
+                pointerEvents="none"
               >
                 {MAP_LABEL[actor.id]}
               </text>
@@ -581,6 +833,16 @@ export function RingMap({
           );
         })}
       </svg>
+      {canDraw ? (
+        <p
+          className="text-muted-foreground px-2 pt-1 text-xs leading-relaxed"
+          aria-live="polite"
+        >
+          {selectedSource
+            ? `${MAP_LABEL[selectedSource]} is the source. Drag from it, or select a target point.`
+            : "Drag from a source point to a target point, or select the two points in order."}
+        </p>
+      ) : null}
       {showKey ? (
         <p className="text-muted-foreground px-2 pt-1 pb-1 text-xs leading-relaxed">
           Rings run outward from the compute use the agreement forbids: who has

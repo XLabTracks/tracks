@@ -498,8 +498,11 @@
       '<span class="p-count">' + num[id] + '/' + S.nodes.length + '</span></header>' +
       '<div class="p-body">' +
       '<h3>' + esc(n.label) + '</h3>' +
-      '<p class="p-meta">rooted in ' + esc(n.unit) + '</p>' +
-      '<p class="p-desc">' + esc(n.desc) + '</p>' +
+      '<p class="p-meta">rooted in ' + esc(n.unit) + (n.opt ? ' · optional' : '') + '</p>' +
+      /* The owner's learner goals — [indent, text] pairs; sub-points step in. */
+      '<ul class="p-goals">' + n.goals.map(function (g) {
+        return '<li' + (g[0] ? ' class="sub"' : '') + '>' + esc(g[1]) + '</li>';
+      }).join('') + '</ul>' +
       '<p class="p-sec">The ladder — what each unit adds</p>' +
       '<ul class="p-rungs">' + n.rungs.map(function (r) {
         return '<li><span class="u">' + esc(r[0]) + '</span><span class="a">' + esc(r[1]) + '</span></li>';

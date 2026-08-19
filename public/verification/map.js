@@ -56,6 +56,7 @@
     const dim = (litLo && n.lo.indexOf(litLo) === -1) ||
       (litUnit && !touches(n, litUnit));
     return '<button class="node ' + cls + (n.id === sel ? ' sel' : '') +
+      (n.opt ? ' opt' : '') +
       (dim ? ' dim' : '') + '" style="--mod:var(--mod-' + n.mod + ')"' +
       ' data-n="' + VT.esc(n.id) + '" id="node-' + VT.esc(n.id) + '">' +
       '<span class="n-label">' + VT.esc(n.label) + '</span>' +
@@ -119,9 +120,13 @@
 
     card.innerHTML =
       '<span class="eyebrow">Module ' + n.mod + ' &middot; ' +
-        VT.esc(C.modules[n.mod] ? C.modules[n.mod].title : '') + '</span>' +
+        VT.esc(C.modules[n.mod] ? C.modules[n.mod].title : '') +
+        (n.opt ? ' &middot; Optional' : '') + '</span>' +
       '<h2 style="--mod:var(--mod-' + n.mod + ');--mod-type:var(--mod-' + n.mod + '-text)">' + VT.esc(n.label) + '</h2>' +
-      '<p class="desc">' + VT.fmt(n.desc) + '</p>' +
+      /* The owner's learner goals, verbatim — [indent, text] pairs, a
+         sub-point indented under the bullet it belongs to. */
+      '<ul class="goals">' + n.goals.map(g =>
+        '<li' + (g[0] ? ' class="sub"' : '') + '>' + VT.fmt(g[1]) + '</li>').join('') + '</ul>' +
 
       '<div class="sec">The ladder &mdash; what each unit adds</div>' +
       '<ul class="ladder">' + n.rungs.map(r => {

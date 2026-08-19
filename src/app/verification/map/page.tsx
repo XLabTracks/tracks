@@ -25,7 +25,7 @@ export default function Page() {
         <header className="map-head">
           <div>
             <h1>Skill map</h1>
-            <p className="sub">Twenty-seven skills, and the units that advance each one.
+            <p className="sub">Thirty-one skills, and the units that advance each one.
               Every node is visible from day one; only the filling is earned.</p>
           </div>
           <div className="map-controls">

@@ -64,9 +64,10 @@ describe("skills snapshot matches the static map's graph", () => {
   });
 
   it("every rung names a unit the outline carries", () => {
-    // The unit meta registry, not the lesson join: units 3.1 and 3.2 exist
-    // in the outline with no lessons drafted yet, so their rungs are real
-    // and simply not yet completable — a typo'd rung is neither.
+    // The unit meta registry, not the lesson join: the outline may carry
+    // units whose lessons are not drafted yet (3.1 and 3.2 today), and a
+    // rung tagged onto one would be real and simply not yet completable —
+    // a typo'd rung is neither.
     const units = new Set(Object.keys(verificationUnitMeta));
     for (const node of SKILL_NODES) {
       for (const rung of node.rungs) {
@@ -102,28 +103,30 @@ describe("skillSummary", () => {
     expect(skillSummary(new Set())).toEqual({
       mastered: 0,
       inProgress: 0,
-      total: 27,
+      total: 31,
     });
   });
 
   it("masters every node when every outline unit is done", () => {
     const all = new Set(Object.keys(verificationUnitMeta));
     expect(skillSummary(all)).toEqual({
-      mastered: 27,
+      mastered: 31,
       inProgress: 0,
-      total: 27,
+      total: 31,
     });
   });
 
-  it("today's drafted lessons cannot master the 3.1/3.2 ladders", () => {
-    // Reality check the dashboard reports honestly: with every drafted
-    // lesson complete, rungs on the undrafted units 3.1 and 3.2 stay open,
-    // so a finished learner sees mastered + in-progress, not 27/27. When
-    // module 3's lessons land in the join, these numbers move on their own.
+  it("the drafted course masters every ladder", () => {
+    // The v2 graph tags rungs only on units with drafted lessons — the old
+    // graph's 3.1/3.2 rungs (units with no lessons, so ladders that could
+    // never fill) were retagged or cut in the rewrite. A learner who
+    // finishes everything the course currently carries therefore masters
+    // all 31 skills; if a rung is ever tagged onto an undrafted unit again,
+    // this is the test that starts reporting the honest smaller number.
     const everyLesson = new Set(Object.keys(verificationUnitOfLesson));
     const summary = skillSummary(completedVerificationUnits(everyLesson));
-    expect(summary.mastered).toBe(13);
-    expect(summary.inProgress).toBe(13);
+    expect(summary.mastered).toBe(31);
+    expect(summary.inProgress).toBe(0);
   });
 
   it("a partly filled ladder is in progress, not mastered", () => {
@@ -135,12 +138,13 @@ describe("skillSummary", () => {
   });
 
   it("the compound rung fills by quarters and masters only complete", () => {
-    // "feasib" is 2.0 + 2.1–2.4 + 3.2 + 4.1: three evidence buckets leave
-    // its compound rung at 3/4, so only taxonomies, hardware, intel and
-    // cloud are mastered; the fourth bucket adds feasib and human.
-    const nearly = new Set(["2.0", "2.1", "2.2", "2.3", "3.2", "4.1"]);
-    expect(skillSummary(nearly).mastered).toBe(4);
-    expect(skillSummary(new Set([...nearly, "2.4"])).mastered).toBe(6);
+    // "feasib" is 2.0 + 2.1–2.4 + 3.0 + 4.1: three evidence buckets leave
+    // its compound rung at 3/4, so taxonomies, hardware, intel, cloud,
+    // evasion and research are mastered; the fourth bucket adds feasib
+    // and human.
+    const nearly = new Set(["2.0", "2.1", "2.2", "2.3", "3.0", "4.1"]);
+    expect(skillSummary(nearly).mastered).toBe(6);
+    expect(skillSummary(new Set([...nearly, "2.4"])).mastered).toBe(8);
   });
 });
 

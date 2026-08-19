@@ -427,7 +427,8 @@ section.band .intro {
   }
   .sky-panel h3,
   .sky-panel .p-meta,
-  .sky-panel .p-desc {
+  .sky-panel .p-desc,
+  .sky-panel .p-goals {
     grid-column: 1;
   }
   .sky-panel .p-sec {
@@ -473,6 +474,22 @@ section.band .intro {
   line-height: 1.65;
   color: var(--muted-foreground);
 }
+/* The learner goals list — the p-desc voice broken into the owner's own
+   bullets; a sub-point steps in under the bullet it belongs to. */
+.sky-panel .p-goals {
+  margin-top: 18px;
+  list-style: none;
+}
+.sky-panel .p-goals li {
+  position: relative;
+  padding-left: 16px;
+  font-size: var(--fs-sm);
+  line-height: 1.6;
+  color: var(--muted-foreground);
+  margin-bottom: 7px;
+}
+.sky-panel .p-goals li::before { content: '–'; position: absolute; left: 0; }
+.sky-panel .p-goals li.sub { margin-left: 18px; font-size: var(--fs-2xs); }
 /* The ladder is a labelled data column: micro-label on top, then rows ruled
    by hairlines, the unit number hanging in the module's colour. Rhythm comes
    from one padding, not per-row margins. */

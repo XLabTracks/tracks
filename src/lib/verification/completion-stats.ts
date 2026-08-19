@@ -58,7 +58,7 @@ export interface SkillSummary {
   total: number;
 }
 
-/** How much of the 27-node skill graph the finished units light up. */
+/** How much of the 31-node skill graph the finished units light up. */
 export function skillSummary(doneUnits: ReadonlySet<string>): SkillSummary {
   let mastered = 0;
   let inProgress = 0;

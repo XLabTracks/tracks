@@ -1,32 +1,45 @@
-/* The 27-skill verification graph — a frozen snapshot of the authoring tree
-   (verification-skill-tree, rev 1: 27 nodes, 50 edges), lifted verbatim from
-   the platform's skills.data.ts.
+/* The 31-skill verification graph, v2 — authored in this repo from the course
+   owner's skill-map document (2026-08-19), which replaced the 27-node snapshot
+   of the standalone authoring tree. Every rung was verified against the lesson
+   that teaches it during the rewrite; the per-unit map is the document's
+   "Dependencies by submodule" and the node copy is the owner's wording,
+   verbatim.
 
-   Trap: this is a copy on purpose. The authoring tree is editable, and a
-   learner map that live-read it would silently rewrite everyone's progress
-   the moment someone edited a rung. Re-snapshot deliberately, never fetch.
+   Trap: the editable authoring tree at verification-skill-tree.netlify.app
+   still holds the OLD 27-node graph (rev 24 of its store). Never fetch from
+   it — this file is the course's source of truth now, and re-seeding that
+   site to match is a separate, deliberate act, not a build step.
 
    A rung is [unitId, "what this unit adds"], and unit ids are the progress
-   keys. `mod` indexes moduleNames, `r` is the row band inside that module,
-   `lo` indexes objectives.
-*/
+   keys. The one compound rung ("2.1–2.4") fills a quarter per evidence
+   bucket. `mod` indexes moduleNames, `r` is the row band inside that module,
+   `lo` indexes objectives, `bloom` is [start, end] on Bloom's taxonomy
+   (carried in data; the learner UI does not print Bloom levels — that rule
+   stands). `goals` is the owner's learner-facing description: [indent, text]
+   pairs, indent 1 for a sub-bullet. `opt: true` marks an optional skill
+   (Making the case is a capstone option, not required work).
+
+   src/lib/verification/data/skills.ts mirrors ids + rung tags for the
+   completion page, and completion-stats.test.ts fails when the two disagree.
+   Edit both together, and bump rev when the graph changes shape. */
 
 window.SKILLS = {
-  rev: 1,
-  /* The graph's own module taxonomy, from the track outline. It is NOT the
-     module list in curriculum.ts, which names its modules differently
-     (Why / Policy scoping / Infrastructure / Covert / Capstone). Two
-     taxonomies, one course — verificationUnitOfLesson is the join, and
-     reconciling the names is a content decision. */
+  rev: 2,
+  /* The graph's own module taxonomy — the owner's band names, which are the
+     static site's module chrome. The app track names its modules differently
+     (curriculum.ts); verificationUnitOfLesson is the join. */
   moduleNames: [
-    'Foundations',
-    'Supply chain',
-    'Mechanisms',
-    'Evasion',
-    'Design',
+    "Foundations",
+    "Policy and actors",
+    "Evidence streams",
+    "Covert development",
+    "Capstone",
   ],
-  compoundRung: '2.1–2.4',
-  compoundUnits: ['2.1', '2.2', '2.3', '2.4'],
+  compoundRung: "2.1–2.4",
+  compoundUnits: ["2.1", "2.2", "2.3", "2.4"],
+  /* Single-quoted on purpose: overview.test.ts parses these six labels out
+     of this file with a quote-sensitive regex to keep them in step with the
+     landing overview's outcomes list. */
   objectives: [
     'Translate commitments into verifiable claims',
     'Map the compute supply chain',
@@ -36,213 +49,358 @@ window.SKILLS = {
     'Communicate for an audience'
   ],
   nodes: [
-    { id: "threat", label: "Threat modeling", mod: 0, unit: "0.1", r: 0, lo: [5],
-      desc: "Model who might cheat, why, and along which path — from motivations and misuse vs. misalignment to the verifier-aware actor who evades detection, evades attribution, or delays response.",
+    /* ---- Module 0 · Foundations ---- */
+    { id: "threat", label: "Threat modeling", mod: 0, unit: "0.1", r: 0, lo: [5], bloom: [2, 4],
+      goals: [
+        [0, "Explain why an actor would cheat: prestige, security, commercial advantage, etc."],
+        [0, "Categorize any AI risk scenario into the two buckets of misuse vs. misalignment"],
+        [0, "Reason through the security dilemma: why unilateral restraint fails even among actors who all want the same outcome, and why a signed agreement may also fail without a requisite verification regime"]
+      ],
       rungs: [
-      ["0.1", "Root — motivations; misuse vs. misalignment; AI risks."],
-      ["0.2", "Timelines and branches."],
-      ["0.4", "Relative gains and the security dilemma: why unilateral restraint fails."],
-      ["3.0", "The verifier-aware actor: evading detection vs. evading attribution vs. delaying response."]
+        ["0.1", "Motivations, misuse vs. misalignment, AI risks."],
+        ["0.2", "Timelines and urgency: AI 2040, Plan A vs. Plan S."],
+        ["0.4", "Relative gains, security dilemma: why unilateral restraint fails."],
+        ["3.0", "The covert adversary: verification need not make evasion impossible — and the malicious prover vs. the malicious verifier."]
       ] },
-    { id: "options", label: "Policy options", mod: 0, unit: "0.1", r: 0, lo: [1],
-      desc: "The menu of responses to the ASI problem — trust, punishment, transparency, verification — and the case that a verified pause is the convergent target among the alternatives.",
+    { id: "options", label: "Policy options", mod: 0, unit: "0.1", r: 0, lo: [1], bloom: [1, 5],
+      goals: [
+        [0, "Understand the range of different possible agreement responses to the ASI problem, from transparency coordination to a full pause"],
+        [0, "Evaluate and sort response buckets on relative effectiveness and feasibility"]
+      ],
       rungs: [
-      ["0.1", "Root — the menu: trust, punishment, transparency, verification."],
-      ["1.0", "Pause and pause alternatives; relative feasibility."],
-      ["1.1", "Pause justification."]
+        ["0.1", "Root — why an international, verifiable agreement: the response the course bets on."],
+        ["1.0", "The eleven buckets, from transparency coordination to full pause — sorted on the feasibility × effectiveness matrix."],
+        ["1.1", "The pause agreement made concrete: MIRI's draft."]
       ] },
-    { id: "history", label: "Historical parallels", mod: 0, unit: "0.1", r: 0, lo: [1, 3],
-      desc: "Draw lessons — and honest disanalogies — from nuclear, biological, and chemical arms control, with A. Q. Khan as the recurring archetype of the actor who works the seams.",
+    { id: "history", label: "Historical parallels", mod: 0, unit: "0.1", r: 0, lo: [1, 3], bloom: [1, 4],
+      goals: [
+        [0, "Recall key information and patterns from historical precedents including the IAEA, BWC, CWC, nuclear nonproliferation"],
+        [0, "Draw analogies (verification, intelligence as the load-bearing mechanism) and disanalogies (nuclear deterrence doesn't work with AI) with such historical precedents"]
+      ],
       rungs: [
-      ["0.1", "Nuclear."],
-      ["0.3", "IAEA, BWC, CWC; the disanalogies."],
-      ["1.2", "A. Q. Khan introduced as archetype — paid off in 3.1."],
-      ["2.3", "The empirical anchor: what national intelligence found that routine safeguards missed."],
-      ["3.1", "Khan paid off: dual-use legality, working the seams."]
+        ["0.1", "Nuclear: averted nuclear war, and the decades it took to build the verification apparatus."],
+        ["0.3", "IAEA safeguards; what it takes to catch a Chinchilla; Iraq and undeclared infrastructure."],
+        ["1.2", "The empty institutional shelf: is there a WHO for AI, an IAEA? — what the nuclear institutions hold that AI's don't."],
+        ["2.3", "Empirical anchor: what national intelligence found that routine safeguards missed."]
       ] },
-    { id: "failure", label: "Identifying failure modes", mod: 0, unit: "0.2", r: 1, lo: [3, 5],
-      desc: "For any branch, provision, mechanism, or regime: name where it fails on its own terms — before the section tells you, and before you rely on it.",
+    { id: "failure", label: "Identifying failure modes", mod: 0, unit: "0.2", r: 1, lo: [3, 5], bloom: [2, 5],
+      goals: [
+        [0, "Identify all the ways a verification mechanism or system may fail or produce an undesirable result, including pinpointing vulnerabilities, system flaws, malicious incentives"],
+        [1, "Define what failure means and what it's caused by: is the flaw on the level of bad execution, flawed design, or bad actor?"],
+        [1, "Identify assumptions each strategy rests on and conclusions that require corroboration to be baseline trustworthy"],
+        [0, "Understand and hypothesize different types of attack: spoofed attestation, TEE compromise, inspector capture; the same move scaled up: provision → mechanism → stack → regime"]
+      ],
       rungs: [
-      ["0.2", "Root — why each branch closes badly."],
-      ["1.1", "Where a provision fails on its own terms."],
-      ["2.1–2.4", "Bucket-specific, commit-first: name the break before the section does — then the residual: what this bucket leaves uncovered and what would have to corroborate it."],
-      ["3.0", "Multilayered: the stack as a whole."],
-      ["3.1", "Attacks on the machinery: spoofed attestation, TEE compromise, inspector capture."],
-      ["3.2", "Regime level."]
+        ["0.2", "Stress-test Plan A: strongest mechanism, weakest link."],
+        ["1.1", "Ambiguities, loopholes, and evasion strategies in a real provision."],
+        ["2.1–2.4", "Per bucket: name where it breaks and what it leaves uncovered — the residual another stream must corroborate."],
+        ["3.0", "The stack as a whole, and attacks on its machinery: vulnerable premises, the transition where the conclusion doesn't follow."]
       ] },
-    { id: "timely", label: "Timeliness", mod: 0, unit: "0.2", r: 1, lo: [3, 5],
-      desc: "Verification has to beat the branch clock: judge every layer and regime by how fast it sees a violation, and whether the finding still matters when it lands.",
+    { id: "timely", label: "Timeliness", mod: 0, unit: "0.2", r: 1, lo: [3, 5], bloom: [2, 5],
+      goals: [
+        [0, "Understand and compare how fast each evidence layer could plausibly see a violation, and how fast each individual bucket sees it"],
+        [0, "Understand that delaying communication between layers of verification regime as an adversary goal in its own right, separate from concealment"],
+        [0, "Derive a required ballpark for detection speed from the policy window you're designing for"]
+      ],
       rungs: [
-      ["0.2", "Root — verification has to beat the branch clock."],
-      ["2.0", "How fast each layer could see a violation."],
-      ["2.1–2.4", "How fast this bucket sees it."],
-      ["3.0", "Delay as an adversary goal in itself."],
-      ["4.0", "How fast a regime has to detect for the finding to still matter — set by whatever policy window you are designing for."]
+        ["0.2", "Root — verification has to beat the clock: stress-test the timeline."],
+        ["2.1–2.4", "How fast this bucket sees it."],
+        ["3.0", "The pipeline has a clock: from activity on monitored hardware to a released evaluation result."],
+        ["4.0", "How fast a regime has to detect for the finding to still matter — timely vs. obsolete."]
       ] },
-    { id: "securit", label: "Securitization", mod: 0, unit: "0.3", r: 1, lo: [4],
-      desc: "How an issue leaves normal politics and becomes a security question — and what that window opens, and lets through, when it arrives.",
+    { id: "securit", label: "Securitization", mod: 0, unit: "0.1", r: 1, lo: [4], bloom: [2, 4],
+      goals: [
+        [0, "Understand, justify, and defend why a particular issue leaves normal politics and becomes a security question due to material existential risk"]
+      ],
       rungs: [
-      ["0.3", "Root — how an issue leaves normal politics."],
-      ["4.1", "What a window opens, and what it lets through."]
+        ["0.1", "0.1.1 — the world keeps getting saved: securitize ASI as the risk it is, and the risks of securitizing itself."],
+        ["4.1", "The window in motion: China's views on AI safety are changing — quickly."]
       ] },
-    { id: "components", label: "Policy components", mod: 1, unit: "1.0", r: 0, lo: [1],
-      desc: "Decompose any policy into goal, rule, and claim — actors, objects, activities, conditions — so every later verification question has something exact to attach to.",
+    { id: "toc", label: "Theory of change", mod: 0, unit: "0.1", r: 2, lo: [1, 6], bloom: [2, 4],
+      goals: [
+        [0, "Explain how a given project actually contributes to a better world state: the explicit causal pathway from inputs to outputs to short-term, intermediate, and long-term outcomes"],
+        [0, "Diagnose fuzzy impact: identify when \"good impact\" claims hide whether a project translates to real-world change (the SSC cancellation as the cautionary case)"],
+        [0, "Justify why AI safety specifically cannot afford illegible theories of change: decision-maker skepticism and tight timelines"],
+        [0, "Write down and communicate your own theory of change so collaborators, funders, and critics can engage with the reasoning and catch redundant or contradictory efforts"]
+      ],
       rungs: [
-      ["1.0", "Root — goal, rule, claim."],
-      ["1.1", "Decompose a real provision: actors, objects, activities, conditions."]
+        ["0.1", "0.1.2 — we need more theories of change: the SSC failure, the elements table, verification's own ToC."]
       ] },
-    { id: "proxy", label: "Proxy risk", mod: 1, unit: "1.0", r: 0, lo: [1, 3],
-      desc: "Every line you draw — compute threshold, capability test, filing requirement — measures something adjacent to what you care about, and invites the actor to game the line itself.",
+    { id: "quant", label: "Quantitative estimation", mod: 0, unit: "0.2", r: 2, lo: [1, 3], bloom: [2, 4],
+      goals: [
+        [0, "Memorize total training FLOP as the operative threshold unit, including major reference thresholds from passed and drafted legislation"],
+        [0, "Understand base rates and detection statistics"]
+      ],
       rungs: [
-      ["1.0", "Root — compute vs. capability thresholds; game the line you just drew."],
-      ["2.0", "Every mechanism measures something adjacent to the claim."],
-      ["2.1", "Declared workload vs. what actually ran."],
-      ["2.2", "The paperwork regime: the filing becomes the thing measured."],
-      ["3.1", "Threshold gaming; the seams between jurisdictions and definitions."],
-      ["3.2", "Surface the assumptions each side optimizes against."],
-      ["4.2", "Scope, thresholds, covered actors."]
+        ["0.2", "The covert-compute margin: how much compute could hide."],
+        ["0.3", "What it takes to catch a Chinchilla: detection statistics."],
+        ["1.0", "Total training FLOP as the operative unit; the 10²⁵ and 10²⁶ reference lines."],
+        ["2.3", "Base rates: what an alarm rate does across the ~500-site haystack."]
       ] },
-    { id: "costs", label: "Policy costs", mod: 1, unit: "1.0", r: 0, lo: [3, 4],
-      desc: "Every policy, mechanism, and portfolio asks someone to pay — deployment, retrofit, compliance, verification. Say who, and in what currency.",
+
+    /* ---- Module 1 · Policy and actors ---- */
+    { id: "components", label: "Policy components", mod: 1, unit: "1.0", r: 0, lo: [1], bloom: [2, 4],
+      goals: [
+        [0, "Decompose any written policy or treaty into its actors, objects, activities, conditions"],
+        [0, "Identify the underlying goal, legal rule, and normative claims of any policy"]
+      ],
       rungs: [
-      ["1.0", "Root — who pays, in what currency."],
-      ["1.1", "Compliance burden vs. verification burden."],
-      ["2.1", "Deployment, retrofit, who pays."],
-      ["3.2", "What the scaffolded regime costs."],
-      ["4.1", "Portfolio budget."],
-      ["4.2", "What you are asking whom to pay."]
+        ["1.0", "Root — goal, rule, claim; actors, objects, activities, conditions."],
+        ["1.1", "Decompose a real provision: key verbs — shall, must, may — actors, objects, activities, conditions."]
       ] },
-    { id: "decision", label: "Public decisionmakers", mod: 1, unit: "0.4", r: 1, lo: [4, 6],
-      desc: "Two-level games, win-sets, veto players: who controls the decision, who must authorize a mechanism, and who runs it once it exists.",
+    { id: "proxy", label: "Proxy risk", mod: 1, unit: "1.0", r: 0, lo: [1, 3], bloom: [2, 5],
+      goals: [
+        [0, "Understand that every line you draw is an imperfect proxy dependent on a certain and impermanent set of assumptions, with compute vs. capability as the worked case"],
+        [1, "Surface the assumption(s) each side is optimizing against"],
+        [0, "Understand Goodhart's Law and the danger of epistemic drift: the proxy becomes the goal itself → tensions between jurisdictions and definitions as a proxy failure, not a legal one"],
+        [1, "Parse a declared workload vs. what actually ran in a paperwork regime where the filing becomes the thing measured"],
+        [0, "Identify how a motivated actor can game/circumvent the line once it exists"]
+      ],
       rungs: [
-      ["0.4", "Root — two-level games, win-sets, veto players. (The who-says-yes primer belongs here.)"],
-      ["1.2", "States, regulators, intelligence agencies, international bodies: who controls the decision."],
-      ["2.1–2.4", "Who must authorize it, who runs it."],
-      ["2.3", "Sharing institutions, sources and methods, treaty provisions for national technical means."],
-      ["4.1", "Political feasibility: veto players, who runs it, when the window is open."]
+        ["1.0", "Compute vs. capability thresholds; game the line you just drew."],
+        ["2.0", "Every mechanism measures something adjacent to the claim."],
+        ["2.1", "Declared workload vs. what actually ran."],
+        ["2.2", "KYC verifies the filing, not the customer — beneficial ownership as the measured proxy."],
+        ["3.0", "What the evidence establishes vs. the claim: computations occurred ≠ purpose described ≠ all activity captured."],
+        ["4.2", "Scope, thresholds, covered actors."]
       ] },
-    { id: "incentives", label: "Incentives", mod: 1, unit: "0.4", r: 1, lo: [2, 5],
-      desc: "Information asymmetry and costly signaling — then, for every actor in the regime: the incentive to cooperate, defect, conceal, exaggerate, or free-ride.",
+    { id: "costs", label: "Policy costs", mod: 1, unit: "1.0", r: 0, lo: [3, 4], bloom: [2, 4],
+      goals: [
+        [0, "Identify who pays in the enforcement or circumvention of any policy, and in what currency: money, sovereignty, confidentiality, time, human capital, political capital"],
+        [0, "Understand and fill out compliance burden vs. verification burden as separate ledgers"],
+        [0, "Tactfully budget a limited resource portfolio to optimize for verification robustness"]
+      ],
       rungs: [
-      ["0.4", "Root — information asymmetry, costly signaling."],
-      ["1.2", "Cooperate, defect, conceal, exaggerate, free-ride."],
-      ["2.4", "Why an insider reports, or doesn't."],
-      ["3.1", "The incentives behind covert development and cheating."],
-      ["3.2", "Map actors to incentives."]
+        ["1.0", "Root — who pays, in what currency."],
+        ["2.1", "Deployment, retrofit, who pays."],
+        ["3.0", "What low-trust itself costs: redundant computation, replay, the apparatus both parties must build."],
+        ["4.2", "The hard constraint: budget ceiling, inspection quota — what you are asking whom to pay."]
       ] },
-    { id: "supply", label: "Supply chain", mod: 1, unit: "1.2", r: 1, lo: [2],
-      desc: "Map the chain — labs, cloud providers, chip designers, fabs, equipment suppliers, resellers — who holds the evidence, and where the chain narrows enough to attach a control.",
+    { id: "decision", label: "Public decisionmakers", mod: 1, unit: "0.4", r: 1, lo: [4, 6], bloom: [2, 4],
+      goals: [
+        [0, "Understand and recreate two-level games, win-sets, veto players"],
+        [0, "Understand who controls a decision vs. who must authorize a mechanism vs. who runs it"],
+        [0, "Understand the benefits and potential dangers of sharing institutions, knowledge, resources, methods, treaty provisions for national technical means"],
+        [0, "Recall and justify the most impactful public state players in the AI race"]
+      ],
       rungs: [
-      ["1.2", "Root — labs, cloud providers, chip designers, fabs, equipment suppliers, resellers: who holds the evidence, and where the chain narrows."],
-      ["2.1", "Fab, equipment, and distribution chokepoints: where a control could physically attach."],
-      ["2.2", "Providers as the intermediary between customer and machines."],
-      ["3.1", "Smuggling, transshipment, proxies and shells, non-signatory hosts."]
+        ["0.4", "Root — two-level games, win-sets, veto players."],
+        ["1.2", "States, regulators, intelligence agencies, international bodies; who controls the decision."],
+        ["2.1–2.4", "Who must authorize it, who runs it."],
+        ["2.3", "Sharing institutions, sources and methods, treaty provisions for national technical means."],
+        ["4.1", "The political-feasibility metric: would the parties whose cooperation is required adopt and enforce it."]
       ] },
-    { id: "upstream", label: "Upstream / downstream", mod: 1, unit: "1.3", r: 2, lo: [6],
-      desc: "Upstream: whose claims a report inherits. Downstream: who has to act on what you write — and how to source a landscape that moves.",
+    { id: "incentives", label: "Incentives", mod: 1, unit: "0.4", r: 1, lo: [2, 5], bloom: [2, 4],
+      goals: [
+        [0, "Map every actor in a regime to the move they're being paid to make, with the five moves available to any actor: cooperate, defect, conceal, exaggerate, free-ride"],
+        [1, "Why an insider may or may not report a violation"],
+        [1, "Who may covertly develop, steal weights, or game thresholds, and why"],
+        [0, "Understand information asymmetry and costly signaling as the underlying primitives to incentive mapping"]
+      ],
       rungs: [
-      ["1.3", "Root — upstream: whose claims a report inherits; downstream: who has to act on what you write."],
-      ["4.1", "Sourcing a landscape that moves."]
+        ["0.4", "Root — information asymmetry, costly signaling."],
+        ["1.2", "Cooperate, defect, conceal, exaggerate, free-ride."],
+        ["2.4", "Why an insider reports, or doesn't."],
+        ["3.0", "The low-trust assumption itself: what a malicious prover, and a malicious verifier, would each try."]
       ] },
-    { id: "dmu", label: "Acting under uncertainty", mod: 1, unit: "1.1", r: 2, lo: [5, 6],
-      desc: "Decisionmaking under uncertainty. How much weight a source can carry, what would falsify a claim, and how to grade findings and revise beliefs with reasons.",
+    { id: "supply", label: "Supply chain", mod: 1, unit: "1.2", r: 1, lo: [2], bloom: [2, 4],
+      goals: [
+        [0, "Memorize the in-order upstream chain of equipment suppliers, fabs, chip designers, cloud providers, resellers, labs"],
+        [1, "Understand and justify where the chain narrows enough for a control to attach — fab, equipment, distribution"],
+        [0, "Identify weak points for exploitation or circumvention in the chain: smuggling, transshipment, proxies and shells, non-signatory hosts"]
+      ],
       rungs: [
-      ["1.1", "Root — falsifiability: what observation would show the rule was broken."],
-      ["1.3", "How much weight one source carries."],
-      ["2.3", "The heaviest rung in the track: alternative explanations, dual-use ambiguity, base rates, the confidence-rated lead, the proportionate next investigative step."],
-      ["3.2", "Grade findings: confirmed, plausible, unresolved, unsupported."],
-      ["4.0", "Reopen your sealed 2.0 ranking and revise it with reasons."]
+        ["1.2", "Labs, cloud providers, chip designers, fabs, equipment suppliers, resellers; who holds the evidence; where the chain narrows."],
+        ["2.1", "Shavit's decomposition: supply-chain monitoring against untracked chips — declared-run verification vs. fleet completeness."],
+        ["2.2", "Providers as the intermediary between customer and machines."],
+        ["3.0", "The unmonitored margin: hardware outside the perimeter."]
       ] },
-    { id: "taxonomies", label: "Mechanism taxonomies", mod: 2, unit: "2.0", r: 0, lo: [3, 4],
-      desc: "Sort mechanisms by layer, access, policy goal, lifecycle, and adversary robustness. No single layer covers the claim — which is why there is a taxonomy at all.",
+    { id: "upstream", label: "Upstream / downstream", mod: 1, unit: "1.3", r: 2, lo: [6], bloom: [2, 4],
+      goals: [
+        [0, "Identify and justify upstream actors of a given artifact: whose claims a report is silently inheriting"],
+        [0, "Identify and justify downstream actors of a given artifact: who has to act on what you write, and what they need in order to act"]
+      ],
       rungs: [
-      ["2.0", "Root — by layer, access, policy goal, lifecycle, adversary robustness. No single layer covers the claim: that is why there is a taxonomy at all."],
-      ["4.1", "Re-sort the portfolio."]
+        ["1.3", "Root — whose claims a report inherits; who has to act on what you write."],
+        ["4.1", "Sourcing a landscape that moves."]
       ] },
-    { id: "confverif", label: "Secrecy vs. verifiability", mod: 2, unit: "0.2", r: 0, lo: [3],
-      desc: "Confidentiality vs. verifiability: enough access to confirm compliance without enabling espionage. What must stay secret, what must be learnable, and how managed access splits the difference.",
+    { id: "dmu", label: "Acting under uncertainty", mod: 1, unit: "1.1", r: 2, lo: [5, 6], bloom: [2, 5],
+      goals: [
+        [0, "Understand and apply the concept of falsifiability to claims: what observation would show the rule was broken?"],
+        [0, "Identify alternative explanations, dual-use ambiguity, base rates"],
+        [0, "Write a confidence-rated lead and choosing a proportionate next investigative step"],
+        [0, "Grade findings as: confirmed, plausible, unresolved, or unsupported"],
+        [0, "Proportionately and efficiently revise a belief you already committed to with the reception of new information, justifying why"]
+      ],
       rungs: [
-      ["0.2", "Root — the tension introduced."],
-      ["0.3", "CWC managed access as the precedent."],
-      ["2.0", "The tradeoff at mechanism level."],
-      ["2.1", "What an attestation reveals, and to whom."],
-      ["2.4", "Managed access, refusal, delay."],
-      ["4.2", "The access regime you are proposing."]
+        ["1.1", "Evidentiary thresholds: what evidence would assess compliance."],
+        ["1.3", "How much weight one source carries: verified yourself vs. inherited from the actor being checked."],
+        ["2.3", "Heaviest rung in the track: alternative explanations, dual-use ambiguity, base rates, confidence-rated lead, proportionate next investigative step."],
+        ["3.0", "Established / supported but not established / not established — justify every classification."],
+        ["4.1", "The Intuition Check: reopen your 2.0 ranking and revise it with reasons."]
       ] },
-    { id: "hardware", label: "Hardware mechanisms", mod: 2, unit: "2.1", r: 1, lo: [2, 3],
-      desc: "The heaviest bucket in the module: chip identity, roots of trust, secure boot, remote attestation, metering and workload measurement, licensing and authorization, TEEs, proof-of-learning and probabilistic recomputation.",
+    { id: "writing", label: "Policy writing", mod: 1, unit: "1.2", r: 2, lo: [6], bloom: [3, 6],
+      goals: [
+        [0, "Argue the centrality of verification in audience-appropriate language, scope a policy for a particular decisionmaker and provide actionable, justifiable steps"],
+        [0, "Communicate uncertainty via graded findings, resource constraints, necessary heuristics"]
+      ],
       rungs: [
-      ["2.1", "Chip identity, roots of trust, secure boot, remote attestation, metering and workload measurement, licensing and authorization, TEEs, proof-of-learning and probabilistic recomputation."]
+        ["1.2", "The report constructor: one inspection, three readers — assemble from the detail pool, each component linked to the audience that needs it."],
+        ["2.3", "Write the assessment: confidence attached, next step proportionate."],
+        ["4.1", "The defended-ranking memo."],
+        ["4.2", "The governance artifact in a working format: treaty text, policy memo, research proposal."]
       ] },
-    { id: "intel", label: "Intelligence sources", mod: 2, unit: "2.3", r: 1, lo: [3, 5],
-      desc: "Physical, financial, and organizational signatures; collection modes; NTM; source protection. Second heaviest — and the bucket the other three lean on when their evidence runs out.",
+
+    /* ---- Module 2 · Evidence streams ---- */
+    { id: "taxonomies", label: "Mechanism taxonomies", mod: 2, unit: "2.0", r: 0, lo: [3, 4], bloom: [3, 3],
+      goals: [
+        [0, "Understand five categories of mechanism sorting and when each is most appropriate: layer, access, policy goal, lifecycle, adversary robustness"],
+        [0, "Re-sort a portfolio given the reception of new information"]
+      ],
       rungs: [
-      ["2.3", "Physical, financial, and organizational signatures; collection modes; national technical means; source protection."]
+        ["2.0", "By layer, access, policy goal, lifecycle, adversary robustness; no single layer covers the claim — and the taxonomy you pick depends on your audience."]
       ] },
-    { id: "cloud", label: "Cloud mechanisms", mod: 2, unit: "2.2", r: 2, lo: [2, 3],
-      desc: "Lighter, corroborating: what the provider position sees, and the registration machinery — KYC, beneficial ownership, reporting — that makes customers legible.",
+    { id: "confverif", label: "Confidentiality vs. verifiability", mod: 2, unit: "0.2", r: 0, lo: [3], bloom: [2, 5],
+      goals: [
+        [0, "Understand and justify the core tension of the verifier's paradox: you need enough access to confirm compliance without enabling espionage"],
+        [0, "Understand the strengths and weaknesses of privacy-preserving verification mechanisms: hardware attestation, ZKPs, secure multiparty computation, managed access"]
+      ],
       rungs: [
-      ["2.2", "What the provider position sees; KYC, beneficial ownership, reporting."]
+        ["0.2", "Intro — what evidence inspectors can collect, how much of the ecosystem must remain visible."],
+        ["2.0", "The confidentiality cost inside political feasibility: intrusiveness as the price of evidence."],
+        ["2.1", "What attestation and confidential computing protect — and the confidentiality dependencies a hardware role carries."],
+        ["2.4", "Managed access, refusal, delay."],
+        ["4.2", "The access regime you are proposing."]
       ] },
-    { id: "human", label: "Human sources", mod: 2, unit: "2.4", r: 2, lo: [3, 5],
-      desc: "Lighter, corroborating: insider access, declarations, interviews, routine audits vs. challenge inspections — and the protections that make reporting survivable.",
+    { id: "hardware", label: "Hardware mechanisms", mod: 2, unit: "2.1", r: 1, lo: [2, 3], bloom: [2, 3],
+      goals: [
+        [0, "Understand the mechanisms of: chip identity, roots of trust, secure boot, remote attestation, metering and workload measurement, licensing and authorization, TEEs"],
+        [0, "Understand and justify the concept of proof-of-learning and probabilistic recomputation"],
+        [0, "In evasion or covert development scenarios, identify which hardware signals work vs. break"]
+      ],
       rungs: [
-      ["2.4", "Insider access, declarations, interviews, routine audits vs. challenge inspections, protections."]
+        ["2.1", "Chip identity, roots of trust, secure boot, remote attestation, metering and workload measurement, licensing and authorization, TEEs, proof-of-learning and probabilistic recomputation."]
       ] },
-    { id: "redblue", label: "Red team / blue team", mod: 3, unit: "3.0", r: 0, lo: [5],
-      desc: "Break it before you trust it. Red team: design the evasion. Blue team: hold the line — and let the exercise, not the designer, decide what holds.",
+    { id: "intel", label: "Intelligence sources", mod: 2, unit: "2.3", r: 1, lo: [3, 5], bloom: [2, 3],
+      goals: [
+        [0, "Understand physical, financial, and organizational signatures; different collection modes and national technical means; source protection, and what it costs the regime"],
+        [0, "In evasion or covert development scenarios, identify which footprints (power, procurement, finance, organization) each route still leaves for collection"]
+      ],
       rungs: [
-      ["3.0", "Definitions."],
-      ["3.2", "Implementation."]
+        ["2.3", "Physical, financial, and organizational signatures; collection modes; NTM; source protection."]
       ] },
-    { id: "evasion", label: "Evasion scenarios", mod: 3, unit: "3.1", r: 0, lo: [5],
-      desc: "The evasion catalog, ordered by feasibility: every route a determined actor could take around the regime, each with its signatures and its best-placed detector.",
+    { id: "cloud", label: "Cloud mechanisms", mod: 2, unit: "2.2", r: 2, lo: [2, 3], bloom: [2, 3],
+      goals: [
+        [0, "Understand what the provider position can see, and what it structurally cannot; the registration machinery of KYC, beneficial ownership, reporting"],
+        [0, "In evasion or covert development scenarios, identify how proxies, shells, and reseller chains affect the efficacy of KYC"]
+      ],
       rungs: [
-      ["3.1", "The catalog, ordered by feasibility."]
+        ["2.2", "What the provider position sees; KYC, beneficial ownership, reporting."]
       ] },
-    { id: "swiss", label: "Swiss cheese", mod: 3, unit: "3.1", r: 1, lo: [4, 5],
-      desc: "Which layers touch each evasion route, the residual blind spot when every layer works, and the common-mode trap: two layers resting on one declaration are one layer.",
+    { id: "human", label: "Human sources", mod: 2, unit: "2.4", r: 2, lo: [3, 5], bloom: [2, 3],
+      goals: [
+        [0, "Understand the mechanisms of insider access, declarations, interviews, routine audits vs. challenge inspections, and reporting protections"],
+        [0, "In evasion or covert development scenarios, identify which link(s) — reporter, intermediary transmitter, verifier — are affected"]
+      ],
       rungs: [
-      ["3.1", "Introduced here: which layers touch each route — and the residual blind spot when every one of them works."],
-      ["3.2", "Common-mode failure: two layers resting on one declaration are one layer."],
-      ["4.0", "Residual risk after the best single mechanism."],
-      ["4.2", "The stack: hardware and intel load-bearing, cloud and human corroborating."]
+        ["2.4", "Insider access, declarations, interviews, routine audits vs. challenge inspections, protections."]
       ] },
-    { id: "enforce", label: "Enforcement", mod: 3, unit: "0.3", r: 1, lo: [5],
-      desc: "A finding is not an outcome. What the regime does once it catches someone — thresholds, proportionate response, and the pathway from confirmed finding to consequence.",
+
+    /* ---- Module 3 · Covert development ---- */
+    { id: "evasion", label: "Evasion scenarios", mod: 3, unit: "3.0", r: 0, lo: [5], bloom: [4, 5],
+      goals: [
+        [0, "Understand the catalog of routes around the regime ordered by feasibility, the signature each route leaves, and its best-placed detector"],
+        [0, "Evaluate the relative feasibility metrics of different verification methods and evasion strategies against each other in applied, case-based context"]
+      ],
       rungs: [
-      ["0.3", "Root — Iraq 1991 to the Additional Protocol: what a regime did once it caught someone."],
-      ["0.4", "Credible commitment: why promises need consequences attached."],
-      ["1.1", "What the provision says happens on breach."],
-      ["3.2", "What the regime does about a confirmed finding, and at what threshold."],
-      ["4.2", "Pathway and thresholds."]
+        ["3.0", "Evasion against a concrete architecture: undeclared workloads, activity outside the monitored perimeter."],
+        ["4.1", "The evasion bench: classify four evasion schemes, survive the statistics trap."]
       ] },
-    { id: "tov", label: "Theory of victory", mod: 4, unit: "0.2", r: 0, lo: [1, 4],
-      desc: "Define success before designing the machine. Aversion, in time, sufficient for what claim against whom — and how you would know your regime failed.",
+    { id: "swiss", label: "Swiss cheese", mod: 3, unit: "2.0", r: 1, lo: [4, 5], bloom: [4, 5],
+      goals: [
+        [0, "Understand the Swiss Cheese concept: no one layer is foolproof, so trust in the imperfect but more reliable corroboration of redundant layers"],
+        [0, "Identify which layers touch which evasion route(s), as well as the biggest residual blind spot that remains even if every layer works as designed"],
+        [0, "Identify and explain a common-mode failure: two layers resting on one declaration are one layer"]
+      ],
       rungs: [
-      ["0.2", "Root — define success: aversion, and what counts as in time."],
-      ["3.2", "Define success via a blue team that holds."],
-      ["4.0", "Sufficiency: enough for what claim, against whom, over what horizon."],
-      ["4.2", "What your regime claims to achieve — and how you would know it failed."]
+        ["2.0", "Introduced here: combine layers whose holes don't line up — different information, different actors, different access assumptions."],
+        ["3.0", "Common-mode failure: analog controls, unilateral TCBs, redundancy, cross-checks — do the layers rest on one declaration?"],
+        ["4.0", "Residual risk after the best single mechanism — which evasion routes stay viable, and which actors can afford them."],
+        ["4.2", "The stack: hardware and intel load-bearing, cloud and human corroborating."]
       ] },
-    { id: "feasib", label: "Feasibility", mod: 4, unit: "2.0", r: 0, lo: [3, 4],
-      desc: "Judge what actually works, when: what a mechanism establishes, technical readiness, cost, durability — then prioritize and sequence a portfolio, flagging every belief that carries an as-of date.",
+    { id: "enforce", label: "Enforcement", mod: 3, unit: "0.3", r: 1, lo: [5], bloom: [2, 5],
+      goals: [
+        [0, "Understand that a finding must be eventually translated into actionable change in order to be effective, i.e., credible commitment"],
+        [0, "Trace the pathway from confirmed finding to consequence for any finding, and the threshold that triggers it"]
+      ],
       rungs: [
-      ["2.0", "Root — mechanism intuitions: technical readiness, cost, durability. A sealed ranking, reopened at 4.0."],
-      ["2.1–2.4", "What it establishes, technical readiness, deployment cost, durability — and which of these claims carries an as-of date."],
-      ["3.2", "The scaffolded regime."],
-      ["4.1", "Prioritization and sequencing; durability as a first-class dimension: research skills, future-proofing, discernment, which beliefs carry an as-of date."]
+        ["0.3", "Root — Iraq 1991 and undeclared infrastructure: what a regime did once it caught someone."],
+        ["0.4", "Credible commitment: why promises need consequences attached."],
+        ["1.1", "What the treaty's provisions attach to a violation."],
+        ["3.0", "Where the architecture hands off: can a detected anomaly be attributed to deliberate evasion?"],
+        ["4.2", "Pathway and thresholds."]
       ] },
-    { id: "regime", label: "Regime design", mod: 4, unit: "3.2", r: 1, lo: [1, 2, 3, 4, 5, 6],
-      desc: "The capstone: assemble mechanisms, access, timeliness, and enforcement into a complete verification regime — designed by initial critique, then designed and defended in full.",
+
+    /* ---- Module 4 · Capstone ---- */
+    { id: "tov", label: "Theory of victory", mod: 4, unit: "0.2", r: 0, lo: [1, 4], bloom: [2, 5],
+      goals: [
+        [0, "Define success as the first priority before designing the machine: threshold, range, continual outcome?"],
+        [1, "Measure sufficiency: enough for what claim, against whom, over what horizon"],
+        [1, "Define success as the lack thereof: how would you know your regime had failed?"]
+      ],
       rungs: [
-      ["3.2", "Design by initial critique."],
-      ["4.2", "Design and defend."]
+        ["0.2", "What a successful slowdown looks like, concretely — Plan A as a definition of success."],
+        ["3.0", "What the system must achieve: detection and deterrence, not impossibility."],
+        ["4.0", "Sufficiency: enough for what claim, against whom, over what horizon."],
+        ["4.2", "What your regime claims to achieve — and how you would know it failed."]
+      ] },
+    { id: "feasib", label: "Feasibility", mod: 4, unit: "2.0", r: 0, lo: [3, 4], bloom: [3, 5],
+      goals: [
+        [0, "Define and evaluate any mechanism on the following four metrics of feasibility:"],
+        [1, "Technical feasibility"],
+        [1, "Political feasibility"],
+        [1, "Verification effectiveness"],
+        [1, "Durability"],
+        [0, "Differentiate what a mechanism establishes in reality vs. what it's claimed to establish"]
+      ],
+      rungs: [
+        ["2.0", "The four metrics: technical, political, effectiveness, durability; sealed ranking — reopened in 4.1."],
+        ["2.1–2.4", "What it establishes vs. what it's claimed to establish; readiness, cost, durability — per bucket."],
+        ["3.0", "Q8's ladder: established capability, proof of concept, inference from related tech, untested proposal, aspiration."],
+        ["4.1", "The four metrics applied with discernment; which beliefs carry an as-of date."]
+      ] },
+    { id: "research", label: "Research", mod: 4, unit: "4.1", r: 0, lo: [3], bloom: [3, 5],
+      goals: [
+        [0, "Scope a project as an expected-value calculation: importance * possibility, with neglectedness as a heuristic for tractability, and a realistic version you'd still believe in"],
+        [1, "Only pursue questions whose answers are action-relevant"],
+        [0, "Identify the tractable sub-question inside an intractable one, and the proxy that operationalizes it"],
+        [0, "Distinguish the ideal evidence you wish you had from the evidence that is easy to acquire"]
+      ],
+      rungs: [
+        ["4.1", "4.1.1 — project selection and scoping, the thinking process, the non-thinking process."]
+      ] },
+    { id: "regime", label: "Regime design", mod: 4, unit: "3.0", r: 1, lo: [1, 2, 3, 4, 5, 6], bloom: [5, 6],
+      goals: [
+        [0, "Assemble mechanisms, access, timeliness, and enforcement into one complete regime"],
+        [0, "Defend the result against a red team and revise accordingly"]
+      ],
+      rungs: [
+        ["3.0", "Reconstruct a complete regime: assumptions, mechanisms, intended results — design by critique."],
+        ["4.2", "Design and defend."]
+      ] },
+    { id: "mcase", label: "Making the case", mod: 4, unit: "4.2", r: 1, lo: [6], bloom: [4, 6], opt: true,
+      goals: [
+        [0, "Earn the next fifteen seconds from someone who has not read your work and did not ask for it"],
+        [1, "Know your audience: what this person does, by when, at what cost, and what you are not asking for"],
+        [1, "Locate your recommendation inside what a specific decisionmaker already wants, rather than beside it"],
+        [0, "Effectively deliver one recommendation multiple ways — to a member, a committee staffer, and an appropriator"]
+      ],
+      rungs: [
+        ["4.2", "Capstone option: the cold pitch — your own recommendation, to a decisionmaker who has not read it."]
       ] }
   ],
   edges: [
     ["threat", "failure"],
-    ["threat", "redblue"],
     ["threat", "evasion"],
     ["threat", "incentives"],
     ["options", "components"],
@@ -254,27 +412,39 @@ window.SKILLS = {
     ["history", "confverif"],
     ["history", "enforce"],
     ["history", "intel"],
-    ["failure", "redblue"],
     ["failure", "swiss"],
     ["timely", "regime"],
     ["securit", "feasib"],
+    ["toc", "tov"],
+    ["toc", "research"],
+    ["quant", "proxy"],
+    ["quant", "dmu"],
     ["components", "dmu"],
     ["components", "enforce"],
     ["components", "supply"],
     ["components", "taxonomies"],
-    ["proxy", "redblue"],
+    ["proxy", "evasion"],
     ["costs", "feasib"],
     ["decision", "intel"],
     ["decision", "upstream"],
     ["decision", "feasib"],
+    ["decision", "mcase"],
     ["incentives", "human"],
     ["incentives", "evasion"],
+    ["incentives", "mcase"],
     ["supply", "hardware"],
     ["supply", "cloud"],
     ["supply", "evasion"],
+    ["upstream", "feasib"],
+    ["upstream", "writing"],
+    ["upstream", "mcase"],
     ["dmu", "intel"],
     ["dmu", "enforce"],
-    ["upstream", "feasib"],
+    ["dmu", "writing"],
+    ["dmu", "research"],
+    ["dmu", "mcase"],
+    ["writing", "regime"],
+    ["writing", "mcase"],
     ["taxonomies", "hardware"],
     ["taxonomies", "intel"],
     ["taxonomies", "cloud"],
@@ -284,12 +454,12 @@ window.SKILLS = {
     ["intel", "swiss"],
     ["cloud", "swiss"],
     ["human", "swiss"],
-    ["redblue", "regime"],
-    ["redblue", "tov"],
     ["evasion", "swiss"],
     ["swiss", "tov"],
     ["enforce", "regime"],
     ["tov", "regime"],
-    ["feasib", "regime"]
+    ["feasib", "regime"],
+    ["research", "feasib"],
+    ["regime", "mcase"]
   ]
 };

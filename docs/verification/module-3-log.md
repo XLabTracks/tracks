@@ -236,9 +236,13 @@ is what that page shows beside it.
   instruction, and the summary is her Module objective. Its slug is still
   `covert-development`, so that is still the URL segment; changing it would
   break every existing link to the module and was not asked for.
-- **`data/skills.js` has 21 rungs tagged unit `3.1` or `3.2`.** Those units no
+- ~~**`data/skills.js` has 21 rungs tagged unit `3.1` or `3.2`.** Those units no
   longer exist, so those rungs can never fill. Nothing crashes and no test
-  covers that file; retagging or removing them is the next job here.
+  covers that file; retagging or removing them is the next job here.~~
+  **Done** in the 2026-08-19 skill-map v2 rewrite (see `skill-map-log.md`):
+  the owner replaced the whole graph; module 3's ladder rungs now tag `3.0`
+  and were verified against the paper's question deck, and
+  `completion-stats.test.ts` now covers the file.
 - **The module-3 written output** (`m3-written-output` in memos.ts) was
   repointed from `covert-red-blue` to the new lesson, which embeds the
   `<MemoDesk/>` card — `memos.test.ts` requires a slot's lesson to embed it

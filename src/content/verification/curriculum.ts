@@ -181,7 +181,10 @@ export const verificationLessons: Lesson[] = [
     sectionItemId: "v-scoping-intro",
     title: "1.0.2 Policies must be effective and feasible",
     contentRef: "verification/scoping-effective-feasible",
-    estimatedMinutes: 150,
+    // 150 was sized for the reading-heavy draft (the eleven buckets as body
+    // prose plus the Options sections). Outline v40 moved the buckets into
+    // the widget's card walk: two short interludes, eleven cards, one sort.
+    estimatedMinutes: 35,
   },
   // 1.1 carries its recall drill inline: the outline's "1.1 Anatomy of a
   // (Pause) Agreement (including exercise)" is one unit, so the former 1.1.1

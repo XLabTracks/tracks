@@ -143,12 +143,10 @@ export const verificationExercises: Exercise[] = [
     format: "free-form",
     optional: true,
   },
-  {
-    id: "v-task-scoping-effective-feasible-1",
-    type: "writing-prompt",
-    prompt: "#### The Limited Test Ban Treaty (1963): verifiability decided what could be banned\n\nThe 1963 treaty banned nuclear tests in the atmosphere, in space, and underwater, but not underground. The reason is pure verification design. Atmospheric tests could be detected worldwide by existing means, monitoring stations picking up radioactive debris and, later, satellites and seismic arrays, without any inspection inside the other country. Underground tests could not be reliably distinguished from earthquakes at the time and would have required on-site inspection the Soviets would not grant. So the treaty covered exactly the environments that national technical means could police and left out the one they could not.",
-    format: "free-form",
-  },
+  // The Limited Test Ban Treaty passage that briefly sat here as
+  // v-task-scoping-effective-feasible-1 was never a task — it carried no
+  // question. Outline v40 marks it an expand box, and it now lives in
+  // 1.0.2's body as a <Fold>.
   {
     id: "v-task-welcome-1",
     type: "writing-prompt",

@@ -7,6 +7,7 @@ import {
   useEffect,
   useRef,
   useState,
+  type CSSProperties,
   type ReactNode,
 } from "react";
 import { cn } from "@/lib/utils";
@@ -222,6 +223,7 @@ export function Draggable({
   disabled = false,
   children,
   className,
+  style,
   armedClassName = "ring-primary ring-2",
 }: {
   id: string;
@@ -230,6 +232,8 @@ export function Draggable({
   disabled?: boolean;
   children: ReactNode;
   className?: string;
+  /** For values classes cannot carry — policy-scoping's per-item tint ramp. */
+  style?: CSSProperties;
   armedClassName?: string;
 }) {
   const ctx = useDragCtx();
@@ -257,6 +261,7 @@ export function Draggable({
       aria-pressed={armed}
       aria-label={label}
       data-drag-item={id}
+      style={style}
       className={cn(
         "touch-none outline-none select-none focus-visible:ring-2 focus-visible:ring-[var(--ring)] focus-visible:ring-offset-1",
         armed && armedClassName,

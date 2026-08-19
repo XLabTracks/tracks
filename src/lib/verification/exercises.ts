@@ -45,7 +45,12 @@ export const verificationExercises: VerificationExerciseDef[] = [
   { id: "collection-map", title: "The Collection Map", bridged: false },
   { id: "verification-landscape", title: "The Verification Landscape", bridged: false },
   { id: "policy-cost", title: "Everything Comes With a Cost", bridged: false },
-  { id: "policy-plot", title: "Effectiveness x Feasibility", bridged: false },
+  // policy-plot ("Effectiveness x Feasibility") stood down 2026-08-18: the
+  // outline's v40 revision of 1.0.2 places two prototypes — policy-cost and
+  // the rebuilt policy-scoping — and the plot's link left the document.
+  // Widget and data stay in the repo, unregistered because the registry test
+  // rightly refuses orphans; remounting is this line, its registry line, and
+  // an embed. See docs/verification/module-1-log.md.
   { id: "mechanism-sort", title: "Place Your Bets — Mechanism Sort", bridged: false },
   { id: "mechanism-sort-reveal", title: "The Reference Map", bridged: false },
   { id: "policy-scoping", title: "Scoping an Anti-ASI Policy", bridged: true },

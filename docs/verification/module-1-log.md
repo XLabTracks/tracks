@@ -1211,3 +1211,81 @@ is the same family as the `importLesson()` trap CLAUDE.md already documents:
 nothing in the suite walks module membership, so `itemIds` is a third place a
 new lesson has to be listed and the only symptom of forgetting is a 404 that
 looks like a bad URL. Drive the route.
+
+## 2026-08-18 — 1.0.2 conformed to outline v40: the buckets become the exercise
+
+The owner's outline revision (v40, "[WIP] Verification Track Outline-40.pdf")
+rewrote 1.0.2's builder notes, and the section was rebuilt to them. The order
+is now the outline's: the two-axes prose, then the "Everything comes with a
+cost" pop-up, then the Limited Test Ban Treaty passage as an expand box
+(v40 marks it "[claude below is expand box]" — it had briefly been wrapped as
+writing exercise `v-task-scoping-effective-feasible-1`, a task with no
+question; the exercise entry is gone), then the transition prose, then the
+sorting exercise.
+
+**The sorting exercise is rebuilt around the outline's eleven buckets**, per
+its bracketed brief: "use the BELOW BUCKETS. FIRST introduce: what is
+effectiveness? Give a qualitative scale of 5 different values. What is
+feasibility? … Make them side by side pop ups. THEN introduce in order do
+some sort of pretty color gradient popup or expand from self governance to
+full pause, description and historical parallel. After learning each card,
+the learner sorts them. Make it look adhd friendly." The widget
+(`policy-scoping`, id and progress key unchanged) is three gated phases: the
+two scales as side-by-side pop-ups; the eleven buckets as an accordion ladder
+down one column; then the sort on a 5×5 plane whose rungs are the phase-1
+scales. The ladder is the owner's shape, same day: the first cut walked one
+card at a time behind an unlabeled gradient strip, which she called
+unintuitive — now all eleven rows are visible at once on a single-hue tint
+rail (brand primary into the card ground, deeper = stronger instrument —
+ordinal, not a categorical rainbow) with its ends labeled "Least/Most
+demanding ask", a row expands in place (one open at a time), and a read row
+keeps a flat primary tint distinctly stronger than unread (her request:
+"maroon or light red depending on light/dark mode" — one flat tint for all
+read rows, not the row's own ramp shade, so read-state never whispers on row
+1 and shouts on row 11). The sort still gates on opening all eleven. The
+five-bucket version's
+45-entry verdict table could not survive eleven buckets (11 × 25 cells of
+authored feedback), so verdicts are mechanical against a per-bucket reference
+cell — exact right, one step close — with direction nudges before reveal and
+a one-line rationale each after.
+
+**What is verbatim and what is builder-authored.** Bucket names, descriptions
+and historical parallels are the outline's words, transcribed into
+`src/lib/verification/data/policy-scoping.ts` (two seams noted inline: bucket
+6's list lead-in "in two strands" opens its card description, and bucket 9's
+"Worth putting on the card:" is obeyed rather than printed). The five-rung
+scales, each bucket's reference cell and rationale line, and the
+compute-controls exception answer are builder-authored exercise apparatus
+under the brief's own delegation — **owner review wanted**, especially the
+reference placements: self-gov (Already happening / Symbolic), unilateral
+(Heavy lift / Marginal), domestic reg + transparency (Within reach /
+Marginal, sharing a cell), emergency prep (Long shot / Symbolic — response is
+not deterrence), transfers (Within reach / Symbolic), compute controls
+(Within reach / Meaningful), binding regulation + nonproliferation (Long
+shot / Strong, sharing a cell), joint development (Long shot / Decisive),
+coordinated halt (Off the table / Decisive). The securitization exception
+question carries over with its authored sg/dr/ti answers; the halt answer's
+first words are conformed to the new bucket name, and the old
+conditional-pause option (now folded into bucket 11's "pre-committed if/then
+conditions") gave way to compute controls as the tempting wrong answer.
+
+**Removed from the body, recoverable from git history:** the AIGI taxonomy
+block and eight-level list (an older outline revision's shape), the verbatim
+bucket bullet list, and the Options 1–11 deep-dive sections ("What carries
+over / Where it breaks") — superseded as the delivery vehicle for the same
+eleven buckets; their extra historical analysis was never in the outline.
+The "Design for the hardest case" closer stays, carrying the note's "justify
+course framing around a full pause" goal in prose. `estimatedMinutes` 150 →
+35 (it was sized for the reading-heavy draft). Chrome copy fixed in passing:
+the widget's closing pointer now names 1.1 (it pointed at "Module 1: The
+Compute Supply Chain", a static-course ordering that no longer exists), and
+the foot dropped its clause about "the written justification", a task this
+section no longer carries.
+
+**policy-plot stood down.** The outline's only prototype links for 1.0.2 are
+policy-cost.html and policy-scoping.html (checked in the PDF's link
+annotations, v39 and v40 both); the effectiveness × feasibility plot's link
+left the document, so its embed left the body and its registry lines are
+commented out. Widget and data files stay in the repo, unregistered because
+the registry test rightly refuses orphans; remounting is the exercises.ts
+line, the registry line, and an embed.

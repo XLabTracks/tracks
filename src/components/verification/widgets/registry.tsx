@@ -64,10 +64,6 @@ const PolicyCost = dynamic<VerificationWidgetProps>(
   () => import("./policy-cost").then((module) => module.PolicyCost),
   { loading: WidgetLoading },
 );
-const PolicyPlot = dynamic<VerificationWidgetProps>(
-  () => import("./policy-plot").then((module) => module.PolicyPlot),
-  { loading: WidgetLoading },
-);
 const MechanismSort = dynamic<VerificationWidgetProps>(
   () => import("./mechanism-sort").then((module) => module.MechanismSort),
   { loading: WidgetLoading },
@@ -194,7 +190,6 @@ export const verificationWidgets: Record<
   "drills-primers": DrillsPrimers,
   "drills-games": DrillsGames,
   "policy-cost": PolicyCost,
-  "policy-plot": PolicyPlot,
   "mechanism-sort": MechanismSort,
   "mechanism-sort-reveal": MechanismSortReveal,
   "packet-tasks": PacketTasks,

@@ -36,6 +36,10 @@ export function ReadingSurface({ children }: { children: ReactNode }) {
   const [focus, setFocus] = useState<FocusSettings>(FOCUS_DEFAULTS);
 
   useEffect(() => {
+    // Deliberate mount-time re-render, as in the parts reader: the stored
+    // preference exists only on the client, and reading it during render
+    // would make the server and client markup disagree.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setFocus(readFocusSettings());
     if (hostRef.current) markFocusWords(hostRef.current);
   }, []);

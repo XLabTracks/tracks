@@ -25,9 +25,9 @@ export default function Page() {
           <div className="page-head">
             <h1>About the Verification track</h1>
             <p className="lede">
-              An intermediate course on international AI verification: the technical,
-              institutional, and legal mechanisms that make agreements observable and
-              enforceable — and help distinguish compliance from violation.
+              An intermediate course on AI verification: the technical,
+              institutional, and legal mechanisms that make agreements mutually
+              trustable and enforceable.
             </p>
 
             {/* Counted from the sources, never typed in: the written-output

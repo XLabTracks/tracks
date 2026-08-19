@@ -25,7 +25,7 @@ export const verificationTrack: Track = {
   title: "Verification",
   shortTitle: "Verification",
   description:
-    "An intermediate course on international AI verification: the technical, institutional, and legal mechanisms that make agreements observable and enforceable — and help distinguish compliance from violation.",
+    "An intermediate course on AI verification: the technical, institutional, and legal mechanisms that make agreements mutually trustable and enforceable.",
   kind: "governance",
   moduleIds: ["v-why", "v-scoping", "v-infrastructure", "v-covert", "v-capstone"],
   prerequisiteEnforcement: "soft",

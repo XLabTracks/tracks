@@ -530,12 +530,7 @@ export const papers: Paper[] = [
           {
             kind: "sequence",
             label: "Frontier check",
-            exerciseIds: [
-              "c-paper-l4-frontier-dominance",
-              "c-paper-l4-frontier-dominated-set",
-              "c-paper-l4-frontier-improvement",
-              "c-paper-l4-frontier-along-curve",
-            ],
+            exerciseIds: ["c-paper-l4-frontier-along-curve"],
           },
         ],
       },
@@ -2642,13 +2637,6 @@ export const papers: Paper[] = [
       },
       // ---- §3.3 condensation (carried over from the condensed reading) ----
       {
-        op: "add",
-        after: { anchor: "b-0129", snippet: "3.3 Synthetic document generation" },
-        label: "Condensed",
-        markdown:
-          "SDF writes a fictional \"universe context\" in which a given authority rewards or punishes a behavior, extracts atomic facts from it, expands them into ~10M tokens of synthetic documents, and finetunes the model on that corpus with a next-token loss.",
-      },
-      {
         op: "hide",
         at: { anchor: "b-0131", snippet: "Our SDF pipeline follows" },
         note: "Read §3.3 in full",
@@ -2725,14 +2713,6 @@ export const papers: Paper[] = [
         prompt:
           "Before reading: should a known reward hacker show a larger grader gap than its base model, and what would it mean for the method if it didn't?",
         cta: "Reveal",
-      },
-      // ---- Closing note ---------------------------------------------------
-      {
-        op: "add",
-        after: { sectionEnd: "ax-sec-conclusion" },
-        label: "Parameters that are not decisions",
-        markdown:
-          "REMOVE",
       },
     ],
   },

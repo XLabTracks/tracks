@@ -658,65 +658,6 @@ export const exercises: Exercise[] = [
       "A capable, scheming adversary adopts whatever strategy works best against the exact protocol it faces, so a safety number computed against one fixed attack only says how *that* attack fares, not how the attack the red team would actually choose fares. The control evaluation therefore grades every protocol against the maximizing red strategy, which is why the safety here is safety against the best response. Because that best response moves as the blue levers change, any single safety number is a snapshot against a responding opponent: tighten a budget or widen the defer band and the red team re-optimizes, and the number already reflects it. The paper's contingency table, a handful of attack attempts at a particular rate and subtlety, is not an arbitrary given either. It is the record of the red team playing its best response to this protocol, so the same table would look different against a different protocol.",
   },
   {
-    id: "c-paper-l4-frontier-dominance",
-    type: "multiple-choice",
-    prompt:
-      "Trusted editing 10% scores usefulness 96% / safety 85%. Untrusted monitoring, defer to trusted 0% scores usefulness 96% / safety 79%. One protocol dominates the other — it is at least as good on both axes and strictly better on at least one. Which statement is correct?",
-    options: [
-      {
-        id: "a",
-        label: "Trusted editing 10% dominates untrusted monitoring (defer 0%).",
-      },
-      {
-        id: "b",
-        label: "Untrusted monitoring (defer 0%) dominates trusted editing 10%.",
-      },
-      {
-        id: "c",
-        label: "Neither dominates the other — it is a genuine tradeoff.",
-      },
-      { id: "d", label: "Each dominates the other." },
-    ],
-    correctOptionIds: ["a"],
-    explanation:
-      "Both score 96% usefulness, but trusted editing 10% is safer (85% vs 79%). Equal on one axis and strictly better on the other is exactly what domination means, so trusted editing 10% dominates — which puts untrusted monitoring (defer 0%) off the frontier.",
-  },
-  {
-    id: "c-paper-l4-frontier-dominated-set",
-    type: "multi-select",
-    prompt:
-      "Consider just these three protocols: Trusted monitoring, defer 10% (usefulness 93%, safety 83%); Trusted editing 20% (usefulness 94%, safety 92%); Untrusted monitoring, defer 10% (usefulness 92%, safety 92%). Select every protocol that is NOT on the frontier of these three — every one that is dominated.",
-    options: [
-      {
-        id: "tm10",
-        label: "Trusted monitoring, defer 10% (usefulness 93%, safety 83%)",
-      },
-      { id: "te20", label: "Trusted editing 20% (usefulness 94%, safety 92%)" },
-      {
-        id: "um10",
-        label: "Untrusted monitoring, defer 10% (usefulness 92%, safety 92%)",
-      },
-    ],
-    correctOptionIds: ["tm10", "um10"],
-    explanation:
-      "Trusted editing 20% (94%, 92%) is better on both axes than trusted monitoring defer 10% (94 > 93, 92 > 83), and it is more useful than untrusted monitoring defer 10% at equal safety (94 > 92, both 92% safe). So it dominates both of the others, leaving it as the only non-dominated point; the other two are off the frontier.",
-  },
-  {
-    id: "c-paper-l4-frontier-improvement",
-    type: "multiple-choice",
-    prompt:
-      "A protocol currently sits on the frontier at (usefulness 94%, safety 92%). A strict Pareto improvement is a new result that is better on at least one axis and no worse on the other — it pushes the frontier up and to the right. Which hypothetical new result would be a strict Pareto improvement over (94%, 92%)?",
-    options: [
-      { id: "a", label: "(usefulness 96%, safety 94%)" },
-      { id: "b", label: "(usefulness 90%, safety 96%)" },
-      { id: "c", label: "(usefulness 98%, safety 88%)" },
-      { id: "d", label: "(usefulness 94%, safety 92%)" },
-    ],
-    correctOptionIds: ["a"],
-    explanation:
-      "Only (96%, 94%) is better on both axes. (90%, 96%) is safer but less useful and (98%, 88%) is more useful but less safe — each is a different tradeoff, not an improvement. (94%, 92%) is identical. Pushing the frontier out means gaining on one axis without giving up ground on the other.",
-  },
-  {
     id: "c-paper-l4-frontier-along-curve",
     type: "understanding-check",
     prompt:

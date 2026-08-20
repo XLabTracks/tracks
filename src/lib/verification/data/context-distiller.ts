@@ -1,53 +1,15 @@
-/**
- * "The Distiller" (Module 1 · 1.6 Scoping) — four reports, one discipline.
- *
- * A verification report is somebody's claims, built on somebody's access, read
- * by people who will act on it. The exercise walks that chain: clip the handful
- * of facts that would change what a reader does, watch them compress into a
- * post, name who the report was built from and who reads it next, then thread
- * each distilled point to the readers who need it.
- *
- * Provenance — this matters and is not uniform:
- *  - r1 is FICTIONAL, written for this exercise and marked as such everywhere
- *    it surfaces. Its distilled segments are in the register of Zvi
- *    Mowshowitz's model-card posts.
- *  - r2/r3/r4 are real published documents (UK AISI, IAEA, US BIS) quoted
- *    verbatim, each block carrying the page or paragraph its quote came from.
- *    They came over with their citations from the standalone prototype
- *    (tracksprogramplayground `site/the-distiller.html`), which this replaces.
- *
- * The invariant the engine's `graphFaults` enforces, and the trap when editing:
- * every core block's segment must answer some reader's question, and
- * `core + slack === cap`. Add a core block without a question to answer and the
- * notebook budget no longer fits the facts that matter — the exercise stops
- * being winnable and nothing else says so.
- */
 
-/** A tab in the source document's section rail. */
 export interface DistillerSection {
   id: string;
-  /** Short rail label — "§2", "Exec", "App." */
   tag: string;
   name: string;
 }
 
-/**
- * A candidate clipping. `core: true` is load-bearing: it distils into the
- * threadable segment named by `seg`. `core: false` is a fair decoy — a true
- * statement from the same document that fails the editorial test ("would any
- * of my audiences act differently knowing this?"), and collapses to inert
- * filler. `why` is the authoring guardrail: a block that cannot state its why
- * gets cut, and it is what the debrief shows for a fact nobody clipped.
- */
 export interface DistillerBlock {
   id: string;
-  /** DistillerSection id. */
   section: string;
-  /** Printed page of the source document. */
   page: number;
-  /** Section or paragraph number, as the source numbers it. */
   sec: string;
-  /** Verbatim from the source (r1 excepted — see the file header). */
   quote: string;
   core: boolean;
   band:
@@ -58,32 +20,23 @@ export interface DistillerBlock {
     | "expected"
     | "saturated"
     | "boilerplate";
-  /** Segment id this block distils into. Present iff `core`. */
   seg?: string;
   why: string;
   distill: string;
 }
 
-/** One thing a reader needs, and the segments that satisfy it. */
 export interface DistillerQuestion {
   id: string;
   need: string;
   check: string;
-  /** Segment ids; any one of them answers the question. */
   answers: string[];
 }
 
-/**
- * A reader waiting on the distillation. `knownBy` lists segments they already
- * had — threading one spends words on someone who does not need them, which
- * delivery reports rather than scores.
- */
 export interface DistillerStakeholder {
   id: string;
   name: string;
   salute: string;
   role: string;
-  /** Two-letter monogram for the card. */
   glyph: string;
   needsLine?: string;
   knows: string;
@@ -91,11 +44,9 @@ export interface DistillerStakeholder {
   questions: DistillerQuestion[];
 }
 
-/** An actor offered in the upstream/downstream steps. */
 export interface DistillerActor {
   id: string;
   label: string;
-  /** Shown after committing. Downstream keys fall back to the reader's needsLine. */
   why?: string;
 }
 
@@ -108,19 +59,11 @@ export interface DistillerMeta {
   source: string;
   postTitle: string;
   postByline: string;
-  /** Notebook capacity. Must equal core-block count + slack. */
   cap: number;
-  /** How many decoys a run can afford before the facts stop fitting. */
   slack: number;
-  /** Capacity in the replay mode unlocked by a clean run. */
   tightCap: number;
 }
 
-/**
- * A paragraph of the full-report reading view: a plain string is connective
- * prose (the text you don't need — never clippable), `{ b }` renders that
- * block's quote inline, wired to the same clip state as the excerpt pool.
- */
 export type DistillerParagraph = string | { b: string };
 
 export interface DistillerReport {
@@ -132,7 +75,6 @@ export interface DistillerReport {
   sourceUrl: string;
   sourceNote?: string;
   blurb: string;
-  /** True only for r1. The UI says so wherever the report is named. */
   fictional?: boolean;
   meta: DistillerMeta;
   sections: DistillerSection[];
@@ -142,7 +84,6 @@ export interface DistillerReport {
   upstream: DistillerActorGroup;
   downstreamPrompt: string;
   downstream: DistillerActorGroup;
-  /** Only r1 is reproduced in full; the rest offer the excerpt pool alone. */
   reportDoc?: Record<string, DistillerParagraph[]>;
 }
 

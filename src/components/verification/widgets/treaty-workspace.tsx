@@ -9,13 +9,6 @@ import {
 } from "@/lib/verification/data/treaty-workspace";
 import { answersOwed } from "@/lib/verification/question-workspace";
 
-/**
- * 1.1's four questions on the MIRI treaty.
- *
- * The counts in the preamble are read from the data rather than spelled out,
- * so a fifth question or a changed threshold cannot leave this sentence
- * claiming otherwise.
- */
 export function TreatyWorkspace({ onComplete }: VerificationWidgetProps) {
   return (
     <QuestionWorkspace
@@ -24,9 +17,6 @@ export function TreatyWorkspace({ onComplete }: VerificationWidgetProps) {
       questions={WORKSPACE_QUESTIONS}
       onComplete={onComplete}
       intro={
-        // Which pages of the practice guide to read is the reading card in the
-        // lesson body, and only there. Two places that name pages are two
-        // places to keep in step.
         <div className="border-border bg-card space-y-3 rounded-xl border p-5">
           <p className="text-sm">
             Open{" "}

@@ -4,22 +4,6 @@ import { useCallback, useRef, useState } from "react";
 
 import { Button } from "@/components/ui/button";
 
-/**
- * The steelman deck, as the writing desk has it: contested claims get
- * challenged, not narrated.
- *
- * One card at a time, drawn on request, never the same card twice running. It
- * is not a checklist and is deliberately not exhaustive — the point is to put
- * a single objection in front of somebody who has just written something they
- * believe, at the moment they can still answer it.
- *
- * Nothing here is stored. A drawn challenge is a prompt, not learner work, and
- * persisting it would make it feel like a task with a right response.
- *
- * The deck starts closed, showing what it is rather than a card: the first
- * render must match the server's, and a random card chosen during render would
- * not.
- */
 export function SteelmanDeck({
   deck,
   label = "Steelman deck",

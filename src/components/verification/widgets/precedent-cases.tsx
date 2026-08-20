@@ -13,27 +13,6 @@ import { PrecedentCaseDiagram } from "./precedent-case-diagrams";
 import type { VerificationWidgetProps } from "../kit/types";
 import { SegMeter } from "../kit/seg-meter";
 
-/**
- * "Did the regime hold?" — the 0.3 case-study exercise the outline calls for:
- * eight verification regimes from history, one at a time; the learner commits
- * a call (held / circumvented) before the record is shown, then reads the
- * author's why and its transfer to AI, beside a small diagram of how the
- * regime held or was circumvented (`precedent-case-diagrams.tsx` — reveal
- * material, so it never renders before the call). Commit, reveal, Continue —
- * never auto-advance.
- *
- * Everything the learner reads is authored case-file text in
- * `src/lib/verification/data/precedent-cases.ts`. Nothing here composes a
- * sentence of curriculum.
- *
- * Bridged: `onComplete()` fires once, when the eighth call is committed.
- *
- * Calls persist per case under `v-precedent-cases:v1`; restored progress is
- * applied off the effect body behind `hydrated` so the first client render
- * matches the server's markup, and stored calls are pruned against the
- * current case list before they are trusted.
- */
-
 type Calls = Record<string, PrecedentOutcome>;
 
 const STORAGE_KEY = "v-precedent-cases:v1";
@@ -51,9 +30,7 @@ function pruneCalls(raw: unknown): Calls {
 export function PrecedentCases({ onComplete }: VerificationWidgetProps) {
   const [calls, setCalls] = useState<Calls>({});
   const [hydrated, setHydrated] = useState(false);
-  // Index of the case on screen; null = the summary. Seeded after hydration.
   const [pos, setPos] = useState<number | null>(0);
-  // The call just committed on the current case, still being read.
   const [reading, setReading] = useState<PrecedentOutcome | null>(null);
   const [resetArmed, setResetArmed] = useState(false);
 
@@ -63,7 +40,6 @@ export function PrecedentCases({ onComplete }: VerificationWidgetProps) {
       const raw = localStorage.getItem(STORAGE_KEY);
       if (raw) restored = pruneCalls(JSON.parse(raw));
     } catch {
-      /* unreadable storage just means starting fresh */
     }
     queueMicrotask(() => {
       setCalls(restored);
@@ -78,7 +54,6 @@ export function PrecedentCases({ onComplete }: VerificationWidgetProps) {
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(next));
     } catch {
-      /* private mode / full quota — progress is a convenience, not the record */
     }
   }, []);
 

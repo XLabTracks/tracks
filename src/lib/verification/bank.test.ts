@@ -3,15 +3,6 @@ import path from "node:path";
 import { describe, expect, it } from "vitest";
 import { DIFF_GLYPH, STATUS_GLYPH, STATUS_WORD } from "./bank";
 
-/**
- * `public/verification/` is outside tsconfig and outside vitest's own glob, so
- * nothing else in the suite reads it. The catalogue keeps this vocabulary as a
- * plain object literal in `VT.bank` — parse it and compare, so a brief cannot
- * be described one way on the static page and another inside unit 4.2.
- *
- * A literal this cannot find is a failure, not a skip: if platform.js is
- * restructured, the check must say so rather than quietly stop running.
- */
 const PLATFORM = path.join(process.cwd(), "public/verification/platform.js");
 
 function literalFrom(source: string, key: string): Record<string, string> {

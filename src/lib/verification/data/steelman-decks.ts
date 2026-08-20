@@ -1,23 +1,4 @@
-/**
- * The steelman decks for 2.4's written exercises.
- *
- * Ours, and the one thing in the module that is deliberately not curriculum:
- * a challenge card makes no claim about the subject, it asks the writer a
- * question about their own answer. Every card here can be answered "yes, I
- * did that" or "no, and here is why not" — none of them tells anybody what to
- * think about reporting institutions.
- *
- * One deck per exercise, because the objections that bite differ. A card that
- * asks whether your failure point survives a more senior insider is useless
- * against a fifty-word comparison of four sources, and a deck of generic
- * writing advice would be the thing the whole module was rebuilt to avoid.
- *
- * Kept short on purpose. Fourteen cards is a deck somebody draws from twice;
- * eight is a deck somebody could in principle exhaust, which is the honest
- * shape when the exercise takes ten minutes.
- */
 
-/** 2.4.1 — the constructed case. */
 export const CASE_DECK = [
   "Who in your case would have to be lying for it to fall apart? If the answer is nobody, condition 1 is doing real work.",
   "Your insider knows what they know from one place. Name a second place the same fact could have come from — and say why it did not.",
@@ -29,7 +10,6 @@ export const CASE_DECK = [
   "What would a verifier have to obtain for this report to become actionable? If nothing would, you may have written a false allegation rather than a failed verification.",
 ];
 
-/** 2.4.3 — four sources, one claim. */
 export const CLAIM_DECK = [
   "A and D differ only in how the source came to hold the claim. Why did your next step differ?",
   "Name the one piece of evidence that would make your answers to B and C converge.",
@@ -41,7 +21,6 @@ export const CLAIM_DECK = [
   "Is anything in your answers a fact about the source rather than about what the source can support?",
 ];
 
-/** 2.4.2's Companies A and B — two regimes and the letter. */
 export const INSTITUTION_DECK = [
   "You named an incentive. Who exactly faces it — the reporter, their manager, or the company?",
   "If the rule you are worried about were deleted tomorrow, what would change in practice?",

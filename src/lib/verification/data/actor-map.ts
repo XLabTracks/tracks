@@ -1,8 +1,3 @@
-/**
- * Actor roster and lenses from tracksprogramplayground's Actor Map prototype.
- * Long-form claims remain in the lesson; the widget is a navigable index into
- * that human-authored material.
- */
 
 export type ActorRoleId =
   | "capability"

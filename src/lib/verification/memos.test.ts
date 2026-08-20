@@ -1,12 +1,3 @@
-/**
- * The written outputs, and the one thing that keeps them reachable.
- *
- * All fifteen have always been on the memo desk; for a long time nothing in
- * the course pointed at them, so a learner finishing a unit had no way to
- * know a memo was due. `<MemoDesk lesson="…"/>` is that pointer, and these
- * tests are what stop it rotting: every slot names the lesson that carries
- * it, that lesson exists, and its body embeds the card exactly once.
- */
 import { describe, expect, it } from "vitest";
 import { existsSync, readFileSync } from "node:fs";
 import { join } from "node:path";

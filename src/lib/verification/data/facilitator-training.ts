@@ -1,28 +1,3 @@
-/**
- * Facilitator Training Track — the five sessions that train a facilitator,
- * as distinct from the field guide's plans for running the course's own
- * sessions. One prepares the person; the other is what they run afterwards.
- *
- * NOT a track in the content graph, despite what its own title calls it. It
- * has no Track, no modules, no lessons, no progress and no place in
- * curriculum.ts: it is the material a facilitator reads before running a
- * cohort, and turning it into a course would give a facilitator a completion
- * bar for five sessions they attend in a room with other people.
- *
- * Human-authored copy, reproduced as supplied, links included. Nothing here is
- * paraphrased and nothing is invented — a reading with no supplied link would
- * print as a bare title rather than being pointed somewhere plausible.
- *
- * The URLs are verbatim, tracking parameters and all: they are how the author
- * handed them over, and quietly rewriting somebody's link is not this file's
- * business.
- *
- * There is no sign-up for the training itself — it is materials, and it reads
- * as materials. The one thing anybody signs up for is the exercise in session
- * 5: a simulation needs actors briefed to derail it, so it needs a scheduled
- * room and other people. The other four are read and discussed, and giving
- * them a sign-up would be advertising a booking that does not exist.
- */
 
 export const FT_HEADER = {
   title: "Facilitator Training Track",
@@ -30,7 +5,6 @@ export const FT_HEADER = {
     "This track prepares facilitators to effectively lead discussions, workshops, and research group sessions. The focus is on learning retention.",
 } as const;
 
-/** The two things a facilitator is handed, described in the track's own words. */
 export const FT_TOOLS: { name: string; desc: string }[] = [
   {
     name: "A course doc",
@@ -45,12 +19,6 @@ export const FT_TOOLS: { name: string; desc: string }[] = [
 export const FT_TOOLS_NOTE =
   "The track trains facilitators to use these tools effectively.";
 
-/**
- * A reading or handout a session sends you to.
- *
- * `href` is present only where the track supplied one. A material without one
- * prints as a plain title — named, but not linked to a guess.
- */
 export interface TrainingMaterial {
   title: string;
   href?: string;
@@ -59,14 +27,8 @@ export interface TrainingMaterial {
 export interface TrainingSession {
   n: number;
   title: string;
-  /** The track's own "Focus:" paragraph, split into its lines. */
   focus: string[];
   materials: TrainingMaterial[];
-  /**
-   * Set only where the session's work is an exercise that cannot be done
-   * alone, and names what is being booked. Absent everywhere else: the
-   * training is materials, and only the exercise takes a sign-up.
-   */
   signUp?: string;
 }
 

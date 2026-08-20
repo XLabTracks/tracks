@@ -8,30 +8,10 @@ import {
   type MarkingKey as Key,
 } from "@/lib/verification/data/marking-keys";
 
-/**
- * The marking key, and the learner marking their own work against it.
- *
- * Every constructed exercise in 2.4 ends here. None of them is graded by the
- * page — the specs rule that out and it is the right call, because a string
- * match cannot see whether a case holds together — so the marking is the
- * learner's, and the key's job is to make it specific rather than a feeling
- * about how it went.
- *
- * The form is the same in all four and the reasons are in
- * data/marking-keys.ts: credit per element, a bare correct label worth
- * nothing where a mechanism was asked for, wording free, and what earns
- * nothing said out loud rather than left to be inferred.
- *
- * The score is not progress and never leaves the browser. It is not sent
- * anywhere, does not complete anything, and is stored beside the answer it
- * belongs to so that reopening the page shows the marking you did, not a
- * blank slate that implies you never marked.
- */
 export function MarkingKeyPanel({
   storageKey,
   keyData,
 }: {
-  /** Its own localStorage document, permanent. */
   storageKey: string;
   keyData: Key;
 }) {
@@ -51,7 +31,6 @@ export function MarkingKeyPanel({
         );
       }
     } catch {
-      /* unreadable storage just means starting fresh */
     }
     queueMicrotask(() => {
       setTicked(restored);
@@ -65,7 +44,6 @@ export function MarkingKeyPanel({
       try {
         localStorage.setItem(storageKey, JSON.stringify(next));
       } catch {
-        /* private mode / full quota */
       }
     },
     [storageKey]

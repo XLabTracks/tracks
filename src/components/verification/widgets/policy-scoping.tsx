@@ -31,61 +31,17 @@ import {
   verdictLabel,
 } from "@/lib/verification/data/policy-scoping";
 
-/**
- * "Scoping an Anti-ASI Policy", rebuilt to the outline's v40 brief: three
- * phases in one widget, each small enough to hold at a glance.
- *
- *   1. The axes — "What is effectiveness?" / "What is feasibility?" as
- *      side-by-side pop-ups, a qualitative five-rung scale each. Continue
- *      unlocks once both have been opened.
- *   2. The buckets — the outline's eleven policy buckets walked one card at a
- *      time, weakest ask to strongest, on a single-hue tint ramp (the brand
- *      primary mixed into the card ground; deeper = stronger instrument —
- *      an ordinal ramp, deliberately not a categorical rainbow). Description
- *      and historical parallel per card; the sort gates on having seen all
- *      eleven.
- *   3. The sort — drag all eleven onto a 5×5 feasibility × effectiveness
- *      plane whose rungs are the phase-1 scales. Verdicts are mechanical
- *      against the reference key in the data file (exact cell right, one step
- *      close), first as direction nudges, with the full reference map and
- *      per-bucket rationale on reveal. The carried-over securitization
- *      question closes it.
- *
- * Bridged: onComplete() fires once, when the exception question is answered
- * correctly.
- *
- * The tint ramp never carries meaning alone: every chip and card leads with
- * the bucket's own number and name, and the ramp only restates the order the
- * cards were read in.
- */
-
-/* ---------- gradient ramp ---------- */
-
 const RAMP_N = BUCKETS.length - 1;
-/** Tint of the brand primary into the card ground for bucket i (0-based).
- *  Text never sits on a mid-ramp mix: no theme guarantees a readable ink on
- *  "54% primary into card" (the light theme's maroon fails white text there,
- *  the contrast theme's yellow fails black), so the deep end of the ramp is
- *  carried by surfaces that hold no words — the fill bar, borders, chip
- *  grounds capped light — and every label keeps the theme's own foreground. */
 function tint(i: number, lowPct: number, highPct: number): string {
   const pct = lowPct + ((highPct - lowPct) * i) / RAMP_N;
   return `color-mix(in oklab, var(--primary) ${pct.toFixed(1)}%, var(--card))`;
 }
 
-/** A read (closed) ladder row's ground and border: one flat primary tint for
- *  every row, deliberately NOT the row's ramp tint — the ramp says where a
- *  bucket sits on the spectrum, this says only "you have been here". Mixing
- *  the theme's own primary into its own card ground lands maroon-tinted on
- *  the light theme and a lifted red-dark on the night theme, and the ✓ Read
- *  word stays beside it so the colour never carries the state alone. */
 const READ_BG = "color-mix(in oklab, var(--primary) 13%, var(--card))";
 const READ_BORDER = "color-mix(in oklab, var(--primary) 42%, var(--card))";
 
-/* ---------- grid geometry ---------- */
-
-const COLS = [0, 1, 2, 3, 4] as const; // feasibility, low→high
-const ROWS = [4, 3, 2, 1, 0] as const; // effectiveness, top→bottom
+const COLS = [0, 1, 2, 3, 4] as const;
+const ROWS = [4, 3, 2, 1, 0] as const;
 
 const VERDICT_TEXT: Record<Verdict, string> = {
   right: "text-comply",
@@ -105,8 +61,6 @@ interface Placement {
 
 const parseCell = (cell: string) => ({ f: Number(cell[1]), e: Number(cell[3]) });
 
-/** Direction nudge for a checked, not-right placement — tells the learner
- *  which way to move, never where to land. */
 function nudge(bucket: Bucket, cell: string): string {
   const { f, e } = parseCell(cell);
   const parts: string[] = [];
@@ -123,18 +77,15 @@ export function PolicyScoping({ onComplete }: VerificationWidgetProps) {
   const [phase, setPhase] = useState<Phase>(0);
   const [maxPhase, setMaxPhase] = useState<Phase>(0);
 
-  // Phase 1 — which scales have been opened.
   const [scaleOpen, setScaleOpen] = useState<"effectiveness" | "feasibility" | null>(null);
   const [scalesSeen, setScalesSeen] = useState<{ effectiveness: boolean; feasibility: boolean }>({
     effectiveness: false,
     feasibility: false,
   });
 
-  // Phase 2 — the bucket ladder. One row open at a time; opening reads it.
   const [openIdx, setOpenIdx] = useState<number | null>(null);
   const [seen, setSeen] = useState<Set<number>>(() => new Set());
 
-  // Phase 3 — the sort.
   const [placements, setPlacements] = useState<Record<string, Placement>>(() =>
     Object.fromEntries(BUCKETS.map((b) => [b.id, { cell: null, verdict: null }])),
   );
@@ -156,8 +107,6 @@ export function PolicyScoping({ onComplete }: VerificationWidgetProps) {
   const bothScalesSeen = scalesSeen.effectiveness && scalesSeen.feasibility;
   const allCardsSeen = seen.size === BUCKETS.length;
 
-  // Toggling is the only writer, so opening a row is what marks it read —
-  // no effect watching the open index.
   function toggleCard(i: number) {
     setOpenIdx((prev) => (prev === i ? null : i));
     setSeen((prev) => {
@@ -175,7 +124,6 @@ export function PolicyScoping({ onComplete }: VerificationWidgetProps) {
 
   return (
     <div className="not-prose my-6">
-      {/* ---------- phase strip ---------- */}
       <div className="border-border mb-4 flex flex-wrap items-baseline gap-x-5 gap-y-1 border-b pb-2">
         {C.phases.map((label, i) => {
           const reachable = i <= maxPhase && !(i === 2 && !allCardsSeen);
@@ -246,8 +194,6 @@ export function PolicyScoping({ onComplete }: VerificationWidgetProps) {
         />
       )}
 
-      {/* Shared scale dialogs — reachable from phase 1 cards and the plane's
-          axis titles alike. */}
       <ScaleDialog
         scaleKey={scaleOpen}
         onOpenChange={(open) => !open && setScaleOpen(null)}
@@ -257,8 +203,6 @@ export function PolicyScoping({ onComplete }: VerificationWidgetProps) {
     </div>
   );
 }
-
-/* ================= phase 1: the axes ================= */
 
 function AxesPhase({
   scalesSeen,
@@ -342,8 +286,6 @@ function ScaleDialog({
   );
 }
 
-/* ================= phase 2: the bucket ladder ================= */
-
 function CardsPhase({
   openIdx,
   seen,
@@ -365,17 +307,12 @@ function CardsPhase({
         {C.rampTop}
       </p>
 
-      {/* the ladder: a continuous gradient rail down the left, one row per
-          bucket beside it. The rail restates the reading order the labels
-          above and below spell out; every row leads with its number and name,
-          so the hue never carries the meaning alone. */}
       <div className="grid grid-cols-[0.375rem_1fr] gap-x-3">
         {BUCKETS.map((b, i) => {
           const open = openIdx === i;
           const read = seen.has(i);
           return (
             <div key={b.id} className="col-span-2 grid grid-cols-subgrid">
-              {/* rail segment — the ramp, continuous down the column */}
               <div
                 aria-hidden
                 className={cn(
@@ -457,8 +394,6 @@ function CardsPhase({
   );
 }
 
-/* ================= phase 3: the sort ================= */
-
 function SortPhase({
   placements,
   setPlacements,
@@ -508,7 +443,6 @@ function SortPhase({
     return map;
   }, [placements]);
 
-  // Ghosts sharing a reference cell fan out vertically so both stay legible.
   const ghostOffsets = useMemo(() => {
     const groups: Record<string, string[]> = {};
     for (const b of BUCKETS) {
@@ -580,8 +514,6 @@ function SortPhase({
     if (a.ok) {
       setExcDone(true);
       if (!keyOn) reveal();
-      // No local once-guard: use-completion's done-ref is the single dedupe
-      // (and it rolls back on a failed write so completion can retry).
       onComplete();
       say("Correct. Exercise complete.");
     } else {
@@ -592,13 +524,11 @@ function SortPhase({
   return (
     <DragProvider onDrop={handleDrop}>
       <div className="grid gap-5 lg:grid-cols-[1fr_20rem]">
-        {/* ---------- left: tray + plane ---------- */}
         <div className="min-w-0">
           <p className="text-muted-foreground border-border bg-muted/40 mb-4 rounded-lg border px-3 py-2 text-xs">
             {C.sortHint}
           </p>
 
-          {/* tray, in reading order — the ramp restates the card walk */}
           <div className="border-border mb-5 rounded-lg border p-3">
             <p className="text-muted-foreground mb-2 text-xs tracking-[0.15em] uppercase">
               {C.trayLabel}
@@ -635,7 +565,6 @@ function SortPhase({
             </div>
           </div>
 
-          {/* plane */}
           <div className="flex gap-2">
             <div className="flex flex-none items-center">
               <button
@@ -651,7 +580,6 @@ function SortPhase({
 
             <div className="min-w-0 flex-1">
               <div className="flex">
-                {/* row labels: effectiveness rungs, high→low */}
                 <div className="flex w-16 flex-none flex-col">
                   {ROWS.map((e) => (
                     <div
@@ -663,7 +591,6 @@ function SortPhase({
                   ))}
                 </div>
 
-                {/* grid */}
                 <div className="border-border bg-card relative min-w-0 flex-1 overflow-hidden rounded-lg border">
                   <div className="relative z-[5] grid grid-cols-5 grid-rows-5">
                     {ROWS.map((e) =>
@@ -735,7 +662,6 @@ function SortPhase({
                     )}
                   </div>
 
-                  {/* reference-map ghosts */}
                   {keyOn &&
                     BUCKETS.map((b) => (
                       <GhostTip key={b.id} bucket={b} dy={ghostOffsets[b.id]} />
@@ -743,7 +669,6 @@ function SortPhase({
                 </div>
               </div>
 
-              {/* col labels: feasibility rungs, low→high */}
               <div className="ml-16 flex">
                 {COLS.map((f) => (
                   <div
@@ -772,7 +697,6 @@ function SortPhase({
           </div>
         </div>
 
-        {/* ---------- right: rail ---------- */}
         <aside className="flex min-w-0 flex-col gap-4">
           <div className="border-border flex flex-col gap-1.5 border-y py-3">
             {C.stats.map((s) => (
@@ -940,7 +864,6 @@ function SortPhase({
   );
 }
 
-/* ---------- reference-map ghost marker ---------- */
 function GhostTip({ bucket, dy }: { bucket: Bucket; dy: number }) {
   const isTarget = bucket.id === "ch";
   return (
@@ -970,7 +893,6 @@ function GhostTip({ bucket, dy }: { bucket: Bucket; dy: number }) {
   );
 }
 
-/* ---------- chip tooltip (description, or verdict feedback once checked) ---------- */
 function ChipTip({
   bucket,
   placement,
@@ -1007,7 +929,6 @@ function ChipTip({
   );
 }
 
-/* ---------- axis / corner tooltip wrapper ---------- */
 function AxisTip({ tip, children }: { tip: string; children: React.ReactNode }) {
   return (
     <Tooltip>

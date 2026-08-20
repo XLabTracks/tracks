@@ -1,17 +1,3 @@
-/**
- * Pure fit-check engine for the "Report Constructor" Verification widget.
- *
- * Ported verbatim from the standalone HTML's `evaluate()` (public/verification/
- * report-constructor.html, ~line 966). All DOM / module-global reads are
- * threaded in as arguments: the ordered selection (`sel`) and the per-card
- * thread map (`threads`). Nothing here reads the DOM, so it is unit-testable and
- * reusable by the React widget.
- *
- * A card threaded to a reader "fits" that reader only when its `fits[reader].ok`
- * is true; a dead card is a selected entry threaded to nobody; a desk is
- * "buried" once it collects `CONFIG.buriedAt` misfit threads; a report is
- * "clean" when every reader need is met with zero misfits and zero dead cards.
- */
 
 import {
   CARDS,
@@ -22,7 +8,6 @@ import {
   type ReaderId,
 } from "../data/report-constructor";
 
-/** cardId -> set of readers it is threaded to. */
 export type ThreadMap = Map<string, Set<ReaderId>>;
 
 export interface Verdict {
@@ -35,22 +20,13 @@ export interface Verdict {
 
 export interface FitResult {
   verdicts: Verdict[];
-  /** ids of NEEDS whose audience is served by at least one fitting thread. */
   needsMet: Set<string>;
-  /** selected card ids threaded to nobody. */
   dead: string[];
-  /** total misfit threads across all desks. */
   misfits: number;
-  /** reader ids that collected >= CONFIG.buriedAt misfit threads. */
   buried: ReaderId[];
-  /** all needs met, zero misfits, zero dead. */
   clean: boolean;
 }
 
-/**
- * Faithful port of `evaluate()`. `sel` is the ordered list of selected card ids;
- * `threads` maps a card id to the set of readers it is threaded to.
- */
 export function evaluate(sel: string[], threads: ThreadMap): FitResult {
   const verdicts: Verdict[] = [];
   const needsMet = new Set<string>();
@@ -105,7 +81,6 @@ export function evaluate(sel: string[], threads: ThreadMap): FitResult {
   return { verdicts, needsMet, dead, misfits, buried, clean };
 }
 
-/** Sum of thread counts across all selected cards (drives the check button). */
 export function threadTotal(sel: string[], threads: ThreadMap): number {
   return sel.reduce(
     (n, id) => n + (threads.get(id) ? threads.get(id)!.size : 0),
@@ -113,15 +88,12 @@ export function threadTotal(sel: string[], threads: ThreadMap): number {
   );
 }
 
-/** The readers a given card actually fits (used to build the perfect solution). */
 export function fitsOf(cardId: string): ReaderId[] {
   return READERS.filter((r) => cardById[cardId].fits[r.id].ok).map((r) => r.id);
 }
 
-/** True if the card is a pure trap — it fits no reader at all. */
 export function isTrap(cardId: string): boolean {
   return READERS.every((r) => !cardById[cardId].fits[r.id].ok);
 }
 
-// Re-export the data the engine tests assert against.
 export { CARDS, NEEDS, READERS, CONFIG };

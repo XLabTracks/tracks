@@ -19,19 +19,6 @@ import {
 } from "@/lib/verification/data/mechanism-sort";
 import type { VerificationWidgetProps } from "../kit/types";
 
-/**
- * "Place your bets" — the mechanism sort. Rate twelve mechanisms across four
- * metrics and seal the set (2.0); compare the sealed set against the reference
- * map (4.1). One component, a `reveal` prop switches modes. All copy and data
- * live in `src/lib/verification/data/mechanism-sort.ts`; only presentation is
- * here. Learner work only — it feeds no meter and completes nothing.
- *
- * Ratings are five named rungs per metric (value = rung centre, 0.1…0.9); the
- * reference positions stay continuous, so the gap math reads a real distance.
- * Layer hue never carries meaning alone: every dot pairs with a title, and the
- * legend maps each colour to its layer name.
- */
-
 interface SortStore {
   values: Record<string, Partial<Record<MetricKey, number>>>;
   queue: string[];
@@ -58,7 +45,6 @@ const load = (): SortStore => {
       };
     }
   } catch {
-    /* ignore */
   }
   return emptyStore();
 };
@@ -67,19 +53,9 @@ const save = (s: SortStore) => {
   try {
     localStorage.setItem(MECHANISM_SORT_KEY, JSON.stringify(s));
   } catch {
-    /* private mode */
   }
 };
 
-/**
- * Evidence-layer accent = the brand's categorical palette (`--mod-0..4`), the
- * course's designated categorical hues — never an ad-hoc chart rainbow
- * (amber/sky/violet/…), which reads as stock AI slop against the maroon. The
- * `-text` variants are built to read on the page ground, so one token colours
- * a small dot, a rail mark, a ring, and the layer's own name. Hue never sits
- * alone: it rides on the layer name as a coloured word, and every mark pairs
- * with a label. Fallback hex mirrors theme.css for the rare no-theme render.
- */
 const LAYER_COLOR: Record<LayerKey, string> = {
   hardware: "var(--mod-0-text, #9a000c)",
   cloud: "var(--mod-1-text, #bf4f00)",
@@ -88,21 +64,17 @@ const LAYER_COLOR: Record<LayerKey, string> = {
   crypto: "var(--mod-4-text, #3d75b1)",
 };
 
-// Zero-width breaks so a long rung wraps at a natural seam on a narrow phone
-// instead of mid-word: after a slash ("Weak/narrow" → "Weak/" / "narrow"), and
-// at the compound seam of "Piggybacks". Visible text is unchanged; break-words
-// is the safety net for anything else. Add a seam here if a new rung needs one.
 const RUNG_SEAMS: Record<string, string> = { Piggybacks: "Piggy​backs" };
 const softBreak = (s: string) => (RUNG_SEAMS[s] ?? s).replaceAll("/", "/​");
 
 const layerName = (k: LayerKey) => LAYERS.find((l) => l.key === k)?.name ?? k;
 const mechById = (id: string): Mechanism =>
   MECHANISMS.find((m) => m.id === id) as Mechanism;
-const rungValue = (i: number) => (i + 0.5) / 5; // rung centre, 0.1…0.9
+const rungValue = (i: number) => (i + 0.5) / 5;
 const isComplete = (v: Partial<Record<MetricKey, number>>) =>
   METRICS.every((m) => typeof v[m.key] === "number");
 const laneStagger = (id: string) =>
-  ((MECHANISMS.findIndex((m) => m.id === id) % 5) - 2) * 8; // px
+  ((MECHANISMS.findIndex((m) => m.id === id) % 5) - 2) * 8;
 
 export function MechanismSort(_: VerificationWidgetProps) {
   void _;
@@ -118,8 +90,6 @@ function SortWidget({ reveal }: { reveal: boolean }) {
   const [store, setStore] = useState<SortStore>(emptyStore);
   const [selected, setSelected] = useState<string | null>(null);
 
-  // Mount-time hydration from localStorage; server render is the empty store,
-  // so first paint matches signed-out. One deliberate setState in the effect.
   useEffect(() => {
     // eslint-disable-next-line react-hooks/set-state-in-effect
     setStore(load());
@@ -172,7 +142,6 @@ function SortWidget({ reveal }: { reveal: boolean }) {
     (m) => m.id,
   );
 
-  // ---- reveal mode, but nothing sealed yet: a supported empty state ----
   if (reveal && !store.sealed) {
     return (
       <Shell title="Reference map">
@@ -202,7 +171,6 @@ function SortWidget({ reveal }: { reveal: boolean }) {
 
       {!reveal && <MetricGuide />}
 
-      {/* Rater — one card at a time, 2.0 only, until all placed */}
       {current && (
         <Rater
           key={current}
@@ -221,7 +189,6 @@ function SortWidget({ reveal }: { reveal: boolean }) {
         </p>
       )}
 
-      {/* Lanes */}
       {placedIds.length > 0 && (
         <Lanes
           reveal={reveal}
@@ -234,7 +201,6 @@ function SortWidget({ reveal }: { reveal: boolean }) {
 
       <Legend />
 
-      {/* Selected-mechanism detail */}
       {selected && (
         <Detail
           mech={mechById(selected)}
@@ -246,10 +212,8 @@ function SortWidget({ reveal }: { reveal: boolean }) {
         />
       )}
 
-      {/* Reveal: gaps ranked by disagreement */}
       {reveal && <Gaps values={store.values} selected={selected} onSelect={setSelected} />}
 
-      {/* Seal (2.0 only) */}
       {!reveal &&
         (store.sealed ? (
           <div className="border-border bg-muted rounded-lg border p-3">
@@ -435,7 +399,6 @@ function Lanes({
             </span>
           </div>
           <div className="border-border relative mt-1 h-14 rounded-md border">
-            {/* centre rail */}
             <div className="bg-border absolute inset-x-3 top-1/2 h-px -translate-y-1/2" aria-hidden />
             {placedIds.map((id) => {
               const m = mechById(id);
@@ -448,7 +411,6 @@ function Lanes({
                 <div key={id}>
                   {reveal && (
                     <>
-                      {/* link from your value to the reference */}
                       <span
                         aria-hidden
                         className={cn("absolute h-0.5 rounded-full", dim && "opacity-25")}
@@ -459,7 +421,6 @@ function Lanes({
                           top: `calc(50% + ${off}px)`,
                         }}
                       />
-                      {/* reference ring */}
                       <button
                         type="button"
                         aria-label={`${m.title} — reference`}
@@ -472,8 +433,6 @@ function Lanes({
                       />
                     </>
                   )}
-                  {/* your call — a ground-colour rim keeps two dots that land
-                      on the same spot reading as two discs, not one blob */}
                   <button
                     type="button"
                     aria-label={`${m.title} — ${Math.round(v * 100)}`}

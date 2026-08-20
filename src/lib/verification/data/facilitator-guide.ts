@@ -1,23 +1,3 @@
-/**
- * Facilitator Field Guide — data module.
- *
- * Verbatim port of `public/verification/facilitator-guide.html` and its
- * extracted popups (`public/verification/content/facilitator-guide.json`).
- * All pedagogical copy is human-authored; do not paraphrase or shorten.
- *
- * The source is a 12-"view" single-page guide: a home card grid plus 11
- * detail views (7 craft modules + 5 session plans — note module 06/07 share
- * numbering with a session-plans block). Views use internal state, not hash
- * routing. A sixth session plan (13 · Actors and the supply chain) is not from
- * that source: it is transcribed from the outline's Module 1 sync tab, and is
- * marked where it appears. Two global toggles live in the source:
- *   - a context toggle (low / high AI-safety context) that swaps copy in the
- *     "Your role" module only;
- *   - a format toggle (in-person / Zoom) shared across the five session plans
- *     that swaps the "Prep" callout and some inline copy.
- * 99 popups open in a shared Dialog; bodies are the authored HTML lifted
- * verbatim (the leading <h3> is used as the dialog title).
- */
 
 export const FG_HEADER = {
   lede: "Thirteen small modules. 01–07 are craft — open the one you need, five minutes before any session or mid-crisis. 08–13 are ready-to-run session plans, one per track component; the five ported ones each have an in-person and a Zoom version. Any card marked with a + opens into detail.",
@@ -37,9 +17,8 @@ export const FG_FORMAT_LABELS: Record<FormatKey, string> = {
   zm: "On Zoom",
 };
 
-/** Home grid — craft modules (01–07). */
 export interface HomeCard {
-  id: string; // target view id
+  id: string;
   num: string;
   title: string;
   desc: string;
@@ -152,15 +131,13 @@ export const FG_HOME_SESSION_NOTE =
 export const FG_HOME_HINT_2 =
   "Running a live cohort? Each plan lists what to prep, the run of show, discussion prompts, and what to send people home with.";
 
-/** A clickable tile that opens a popup. */
 export interface Tile {
-  pop: string; // popup id
+  pop: string;
   title: string;
   desc: string;
-  timing?: string; // the ".t" corner tag, e.g. "2 min · both"
+  timing?: string;
 }
 
-/** A clickable lifecycle stage that opens a popup. */
 export interface Stage {
   pop: string;
   num: string;
@@ -169,23 +146,10 @@ export interface Stage {
   phase: "open" | "explore" | "close";
 }
 
-/** A callout paragraph — HTML lifted verbatim (may contain [term] buttons). */
-/**
- * A callout carries no colour.
- *
- * The source page drew these as a card with one painted edge —
- * `border-left: 4px solid var(--accent)` and corners rounded on three sides —
- * alternating between two accents it called brown and blue. Reading all
- * fourteen, the two do not mark anything: they alternate. So the vocabulary
- * came out with the rib. A card here is a hairline on four sides, or it is
- * painted on four sides; never one edge, and never a hue that means nothing.
- */
 export interface Callout {
-  /** HTML body; term buttons are marked with data-pop and rendered as buttons. */
   html: string;
 }
 
-/** Resource list box. */
 export interface ResBox {
   heading: string;
   items: { html: string }[];
@@ -196,8 +160,6 @@ export const PHASE_LABEL: Record<Stage["phase"], string> = {
   explore: "Explore",
   close: "Close",
 };
-
-/* ========================= 01 · YOUR ROLE ========================= */
 
 export const ROLE_HEAD = {
   title: "Your role",
@@ -284,8 +246,6 @@ export const ROLE_CALLOUT_SPINE: Callout = {
   html: '<strong>Both lanes share one spine:</strong> open the topic wide, hold the group through disagreement, close with decisions — the <button data-pop="p-diamond">Diamond of Participation</button>. The most common failure: rescuing the group from the <button data-pop="p-groan">groan zone</button> the moment it gets uncomfortable.',
 };
 
-/* ========================= 02 · TAKES ========================= */
-
 export const TAKES_HEAD = {
   title: "Good takes vs. bad takes",
   lede: "Weak takes in verification discussions are rarely factually wrong — they're <em>unengaged</em>: vibes about the topic instead of reasoning about the mechanism. You can spot that without expertise. Four tests.",
@@ -321,12 +281,9 @@ export const TAKES_SORTER_HEAD = {
 
 export type Verdict = "strong" | "weak";
 
-/** One item in the 6-quote strong/weak sorter. `verdict` html includes the
- *  bold classification and the italic "Your move" span, lifted verbatim. */
 export interface SorterItem {
   answer: Verdict;
   quote: string;
-  /** verdict HTML — a <strong>…</strong> then prose then <span class="move">…</span>. */
   verdictHtml: string;
 }
 
@@ -378,8 +335,6 @@ export const TAKES_CALLOUT: Callout = {
   html: '<strong>You referee the process, not the verdict.</strong> When you can\'t judge a take on the merits: ask <em>“what would change your mind?”</em>, request the causal chain, or assign someone to <button data-pop="p-steelman">steelman</button> the opposite view. Any of these upgrades a weak take without you ruling on it.',
 };
 
-/* ========================= 03 · PARTICIPATION ========================= */
-
 export const PART_HEAD = {
   title: "Getting everyone talking",
   lede: "Whoever speaks first anchors the whole conversation. So never open a question to the fastest hand: give thinking time first, then widen who's heard. Click any technique — each includes its async fallback.",
@@ -428,8 +383,6 @@ export const PART_CALLOUT: Callout = {
   html: '<strong>Silence is a tool, not a failure.</strong> After you ask a question, count 10 seconds before rescuing it — and if you must speak, re-ask the question, don\'t answer it. Also do the <button data-pop="p-arithmetic">meeting arithmetic</button>: 8 people × 3 minutes each is already 24 minutes.',
 };
 
-/* ========================= 04 · AGENCY ========================= */
-
 export const AGENCY_HEAD = {
   title: "Agency, not regurgitation",
   lede: "Summarizing the reading correctly demonstrates storage. The track needs <em>transfer</em> — using verification concepts on problems the reading never covered. The lever: never ask questions the reading already answers.",
@@ -471,8 +424,6 @@ export const AGENCY_TILES: Tile[] = [
 export const AGENCY_CALLOUT: Callout = {
   html: '<strong>Calibrate difficulty, not comfort.</strong> Tasks should sit just past what the group finds easy — <button data-pop="p-difficulty">desirable difficulty</button>. Instant answers mean the question was recall in costume. A fully stalled room means shrink the question, not the ambition: “just the first step of the causal chain.”',
 };
-
-/* ========================= 05 · CONVERTER ========================= */
 
 export const CONVERT_HEAD = {
   title: "Async → sync converter",
@@ -521,8 +472,6 @@ export const CONVERT_TILES: Tile[] = [
 export const CONVERT_CALLOUT: Callout = {
   html: "<strong>Going the other way?</strong> Any sync activity converts back: “minutes” become “days,” the chat wave becomes hidden-until-deadline posts, breakout rooms become tagged sub-threads. The structure survives the medium. Mixed cohorts: run sync, then post the doc's open questions as the week's async thread — <button data-pop=\"p-spaced\">spaced practice</button> for free.",
 };
-
-/* ========================= 06 · SESSION SKELETON ========================= */
 
 export const SESSION_HEAD = {
   title: "The 60-minute session",
@@ -578,8 +527,6 @@ export const SESSION_CALLOUT: Callout = {
   html: '<strong>The middle is supposed to feel messy.</strong> Minutes 13–50 are the <button data-pop="p-groan">groan zone</button> — your job is to keep the group in productive disagreement about five minutes longer than is comfortable, not to resolve it early.',
 };
 
-/* ========================= 07 · RESOURCES ========================= */
-
 export const RESOURCES_HEAD = {
   title: "Resources",
   lede: "Short list, deliberately. Everything here earns its place.",
@@ -628,8 +575,6 @@ export const RESOURCES_BOXES: ResBox[] = [
       },
     ],
   },
-  /* Track materials point at their in-app units so learners keep platform
-   * navigation, theme, accessibility and progress behavior. */
   {
     heading: "Your track materials",
     items: [
@@ -640,33 +585,19 @@ export const RESOURCES_BOXES: ResBox[] = [
   },
 ];
 
-/* ========================= SESSION-PLAN VIEWS (08–12) ========================= */
-
-/** A prep callout that differs by format. */
 export interface FormatPrep {
-  ip: string; // HTML for in-person
-  zm: string; // HTML for Zoom
+  ip: string;
+  zm: string;
 }
 
-/** A session-plan view. */
-/**
- * A session-plan view.
- *
- * The five ported plans carry every field. The optional ones exist because the
- * Module 1 plan is transcribed from an outline that wrote a menu of activities
- * rather than a timed run of show: it has no `stages`, one format-agnostic
- * `prepNote` instead of the in-person/Zoom `prep` pair, and no `seed`. Leaving
- * those empty is the honest shape — inventing a minute-by-minute schedule the
- * author did not write would be fabricated curriculum.
- */
 export interface SessionPlan {
   id: string;
   title: string;
-  lede: string; // HTML
-  principles?: readonly string[]; // the "chips" row (matrix plan only)
+  lede: string;
+  principles?: readonly string[];
   prep?: FormatPrep;
-  prepNote?: string; // HTML; used when the plan has no per-format prep
-  coreHeading?: string; // "The game core" (game plan)
+  prepNote?: string;
+  coreHeading?: string;
   coreNote?: string;
   coreTiles?: Tile[];
   stages?: Stage[];
@@ -675,8 +606,8 @@ export interface SessionPlan {
   promptTiles: Tile[];
   sendHeading: string;
   sendBox: ResBox;
-  seed?: Callout; // "Seed the week's thread" callout
-  nextId?: string; // next session-plan target
+  seed?: Callout;
+  nextId?: string;
   nextLabel?: string;
 }
 
@@ -1179,13 +1110,6 @@ export const SESSION_PLANS: SessionPlan[] = [
     nextId: "m-actors",
     nextLabel: "Next: Actors and the supply chain →",
   },
-  /* --------------------------------------------------------------------
-     13 · Module 1. Transcribed from the outline's "1 sync/spaced
-     repetition" tab: three discussion prompts, four suggested activities
-     with their own timings and defenses, and the spaced-repetition list.
-     The outline wrote a menu, not a schedule, so this plan carries
-     `coreTiles` and no `stages` — see the SessionPlan doc comment.
-     -------------------------------------------------------------------- */
   {
     id: "m-actors",
     title: "Session plan · Actors and the supply chain",
@@ -1278,13 +1202,6 @@ export const SESSION_PLANS: SessionPlan[] = [
   },
 ];
 
-/**
- * All 99 popup bodies — HTML lifted verbatim from the source popstore
- * (identical to public/verification/content/facilitator-guide.json). Each body
- * opens with an <h3> heading (used as the Dialog title, then stripped from the
- * rendered body) followed by authored prose, quotes (<span class="say">),
- * medium tags (<span class="mt">), ordered/unordered lists, and links.
- */
 export const FG_POPUPS: Record<string, string> = {
   "p-bounce":
     "<h3>Bounce it back to the group</h3>\n    <p>You never have to adjudicate a claim yourself — redirect it and let the group do the verification.</p>\n    <span class=\"say\">“Interesting — does anyone see it differently?” · “What would the author say to that?”</span>\n    <p>This isn't a dodge; it's the job. The group's collective knowledge nearly always exceeds any one member's, including yours.</p>",
@@ -1485,7 +1402,6 @@ export const FG_POPUPS: Record<string, string> = {
   "p-an-d4":
     "<h3>“What did the other lens see?”</h3>\n    <p>After the lens flip: <em>“which reading of your own draft felt truer — and what does that say about your priors, rather than about the text?”</em></p>\n    <p><strong>Why it works:</strong> it turns the IR lenses from labels into instruments, and it's a rare prompt where the honest answer is self-revealing without being personal.</p>",
 
-  /* ---- 13 · Actors and the supply chain (Module 1) ---- */
   "p-ac-a1":
     "<h3>Scenario scrutiny: AI 2040 Plan A</h3>\n    <p><strong>70 minutes</strong>, and it requires 30–40 minutes of assigned reading beforehand — with a printed excerpt packet from the PDF export as the fallback for anyone who arrives cold.</p>\n    <p>Learners apply the AI Futures Project's own scenario-scrutiny method back to the text. Everyone arrives with passages flagged <strong>WHO</strong> (unnamed or unitary actors), <strong>HOW</strong> (asserted mechanisms), or <strong>WHY</strong> (incentive gaps). The group then audits the scenario against our actor taxonomy to find the load-bearing absences — TSMC, ASML, the hyperscalers, proxies, non-signatories — scores the deal on the five-part agreement anatomy, and rewrites the vaguest verification sentence as a real treaty provision with a named actor, an evidence stream, and a violation response.</p>\n    <p><strong>Payoff:</strong> critiquing serious policy writing without strawmanning it, discovering that vagueness usually hides the hardest step, and generating the HOW-questions Module 2 answers.</p>\n    <p><strong>Compresses to 45 min</strong> by cutting the anatomy scoring and doing one shared rewrite.</p>",
   "p-ac-a2":

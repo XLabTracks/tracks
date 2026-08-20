@@ -53,13 +53,6 @@ const ACTOR_ICONS: Record<SourceActorId, LucideIcon> = {
   "executive-board": Gavel,
 };
 
-/**
- * 2.4.1 source-map exercise. Learners first connect six roles to an
- * observation, a knowledge limit, and an independent test. Correct links
- * produce a short source assessment. Learners then examine one fictional
- * report through access, incentives, consistency, and corroboration without
- * assigning the source a numerical score.
- */
 export function HumanInsiders({
   onComplete,
   initialCompleted,

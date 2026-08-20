@@ -59,13 +59,8 @@ import {
   type Verdict,
 } from "@/lib/verification/data/facilitator-guide";
 
-/* ---------- shared prose styling for authored HTML fragments ---------- */
-
-// Class hook applied to any container rendering authored popup / callout HTML.
-// Styles the source's semantic spans (.say quotes, .mt medium tags) and lists
-// using app tokens instead of the source's cream/serif look.
 const AUTHORED =
-  "[&_h3]:hidden " + // popup h3 is promoted to the DialogTitle
+  "[&_h3]:hidden " +
   "[&_p]:mt-2.5 [&_p:first-child]:mt-0 [&_p]:text-sm [&_p]:leading-relaxed " +
   "[&_strong]:font-semibold [&_strong]:text-foreground " +
   "[&_em]:italic " +
@@ -73,20 +68,13 @@ const AUTHORED =
   "[&_ol]:mt-2.5 [&_ol]:list-decimal [&_ol]:space-y-1.5 [&_ol]:pl-5 [&_ol]:text-sm " +
   "[&_ul]:mt-2.5 [&_ul]:list-disc [&_ul]:space-y-1.5 [&_ul]:pl-5 [&_ul]:text-sm " +
   "[&_li]:leading-relaxed " +
-  // .say — a quoted facilitator line
   "[&_.say]:mt-2.5 [&_.say]:block [&_.say]:rounded-lg [&_.say]:border [&_.say]:border-border " +
   "[&_.say]:bg-muted/50 [&_.say]:px-3.5 [&_.say]:py-2.5 [&_.say]:text-sm [&_.say]:italic " +
-  // .mt — a small mono "medium" tag (Sync / Async / In person / On Zoom)
   "[&_.mt]:mr-1 [&_.mt]:text-3xs [&_.mt]:font-semibold [&_.mt]:tracking-[0.08em] [&_.mt]:uppercase [&_.mt]:text-brand-ink " +
-  // p.mt — a recipe subtitle line
   "[&_p.mt]:mt-0 [&_p.mt]:mb-1";
-
-/* ---------------------------- the widget ---------------------------- */
 
 const PLAN_BY_ID = new Map(SESSION_PLANS.map((p) => [p.id, p]));
 
-/** Every view the guide can open, so an unknown hash falls back to home
- *  instead of rendering nothing. */
 const FG_VIEW_IDS = new Set(
   [...FG_CRAFT_CARDS, ...FG_SESSION_CARDS].map((c) => c.id),
 );
@@ -97,11 +85,6 @@ export function FacilitatorGuide() {
   const [format, setFormat] = useState<FormatKey>("ip");
   const [pop, setPop] = useState<string | null>(null);
 
-  /* The open view lives in the hash, so a link can name one. That is what lets
-     an instructor's classroom link the session plan they are running rather
-     than the home grid, and what makes a plan shareable at all — without it
-     every link to this guide lands in the same place. Unknown hashes fall back
-     to home, so a stale link is a home page and not an empty view. */
   const go = useCallback((id: string) => {
     setView(id);
     const url = id === "home" ? location.pathname + location.search : `#${id}`;
@@ -177,7 +160,6 @@ export function FacilitatorGuide() {
         )}
       </div>
 
-      {/* shared popup dialog */}
       <Dialog open={pop !== null} onOpenChange={(o) => !o && setPop(null)}>
         <DialogContent className="max-h-[85vh] overflow-y-auto sm:max-w-xl">
           <DialogHeader>
@@ -195,8 +177,6 @@ export function FacilitatorGuide() {
   );
 }
 
-/* ------------------------------ pieces ------------------------------ */
-
 function BackButton({ go }: { go: (id: string) => void }) {
   return (
     <button
@@ -209,10 +189,6 @@ function BackButton({ go }: { go: (id: string) => void }) {
   );
 }
 
-/** Renders an inline HTML fragment (lede / callout body) that may contain
- *  `<button data-pop="…">term</button>` term triggers. We split on those and
- *  render real buttons that open the shared dialog; the rest is safe authored
- *  HTML. */
 function InlineWithTerms({
   html,
   onPop,
@@ -251,9 +227,6 @@ function CalloutBox({
   onPop: (id: string) => void;
 }) {
   return (
-    /* Hairline on all four sides. The source drew one painted edge in two
-       alternating accents; reading them all, the two marked nothing, so both
-       the rib and the colour name are gone. */
     <div
       className={cn(
         "border-border bg-muted/40 my-4 rounded-lg border p-4 text-sm",
@@ -408,8 +381,6 @@ function SubHead({ heading, note }: { heading: string; note?: string }) {
     </div>
   );
 }
-
-/* ------------------------------- views ------------------------------- */
 
 function ViewHead({
   title,
@@ -789,7 +760,6 @@ function SessionPlanView({
         </>
       )}
 
-      {/* A plan without per-format prep carries one note instead. */}
       {plan.prepNote && (
         <CalloutBox callout={{ html: plan.prepNote }} onPop={onPop} />
       )}
@@ -816,9 +786,6 @@ function SessionPlanView({
   );
 }
 
-/* ----------------------------- helpers ----------------------------- */
-
-/** Pull the text of the leading <h3>…</h3> for use as a dialog title. */
 function extractH3(html: string): string {
   const m = html.match(/<h3[^>]*>([\s\S]*?)<\/h3>/i);
   if (!m) return "";
@@ -829,8 +796,6 @@ type TermPart =
   | { kind: "html"; html: string }
   | { kind: "term"; pop: string; label: string };
 
-/** Split an authored inline fragment into safe HTML runs and term buttons
- *  (`<button data-pop="…">label</button>`). */
 function splitTerms(html: string): TermPart[] {
   const parts: TermPart[] = [];
   const re = /<button[^>]*data-pop="([^"]+)"[^>]*>([\s\S]*?)<\/button>/gi;

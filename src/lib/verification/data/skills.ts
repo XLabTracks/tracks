@@ -1,22 +1,3 @@
-/* The progress skeleton of the 31-skill verification graph — node ids and the
- * unit tag of every rung, nothing else. The full graph (labels, goals, edges,
- * layout, Bloom ranges) lives in `public/verification/data/skills.js` as
- * `window.SKILLS`, which the static map page reads; this is the slice the app
- * needs server-side to count skills mastered on the completion page.
- *
- * Trap: this is a copy on purpose. public/ is outside tsconfig and cannot be
- * imported, and the worker has no filesystem to read it at runtime.
- * `completion-stats.test.ts` parses `window.SKILLS` out of skills.js and
- * fails when the two disagree, so neither can drift alone. Edit both
- * together, deliberately, and bump the rev in both when the graph changes.
- *
- * A rung's unit tag is a progress key ("0.1", "2.3") — permanent, per the
- * house rule. The one compound rung ("2.1–2.4") fills a quarter per evidence
- * bucket; every other rung is its unit, done or not. Since the v2 rewrite
- * (2026-08-19, the course owner's skill-map document) every rung names a unit
- * with drafted lessons, so a learner who finishes the drafted course masters
- * every ladder.
- */
 
 export const SKILLS_REV = 2;
 
@@ -25,9 +6,7 @@ export const COMPOUND_RUNG = "2.1–2.4";
 export const COMPOUND_UNITS = ["2.1", "2.2", "2.3", "2.4"] as const;
 
 export interface SkillNodeRungs {
-  /** The node's id in the graph — stable, shared with skills.js. */
   id: string;
-  /** Unit tags of the node's rungs, ladder order. */
   rungs: string[];
 }
 

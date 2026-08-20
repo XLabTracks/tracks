@@ -41,28 +41,6 @@ import {
 } from "@/lib/verification/engines/context-distiller";
 import type { VerificationWidgetProps } from "../kit/types";
 
-/**
- * "The Distiller" (Module 1 · 1.6). A verification report is somebody's claims,
- * built on somebody's access, read by people who act on it — and this walks the
- * whole chain over four real-shaped reports: clip the facts that would change
- * what a reader does, compress them into a post, name who the report came from
- * and who reads it next, then thread each point to the readers who need it.
- * Deliver and every question you left unanswered turns red, showing the block
- * that would have closed it.
- *
- * Ported from the standalone prototype (tracksprogramplayground
- * `site/the-distiller.html`), which this replaces. Everything that judges lives
- * in engines/context-distiller.ts; this file draws and persists.
- *
- * Bridged: `onComplete` fires once, on the first delivery.
- *
- * Two traps. The run is read from localStorage in an effect, never during
- * render — a server snapshot has no run, and reading storage in render is a
- * hydration mismatch. And the filament board measures pins in the DOM, so its
- * paths are recomputed on every layout that can move one (threads, focus,
- * resize, phase) rather than derived from state alone.
- */
-
 const CURRENT_KEY = "distiller-v2-current";
 const runKey = (reportId: string) => `distiller-v2-${reportId}`;
 
@@ -80,14 +58,11 @@ export function ContextDistiller({ onComplete }: VerificationWidgetProps) {
   );
   const index = useMemo(() => (report ? indexReport(report) : null), [report]);
 
-  // Restore the report last worked on, if any. Storage is read here and only
-  // here: during render there is nothing to read from on the server.
   useEffect(() => {
     let saved: string | null = null;
     try {
       saved = localStorage.getItem(CURRENT_KEY);
     } catch {
-      /* private mode */
     }
     queueMicrotask(() => {
       if (saved && distillerReports.some((r) => r.id === saved)) setReportId(saved);
@@ -95,7 +70,6 @@ export function ContextDistiller({ onComplete }: VerificationWidgetProps) {
     });
   }, []);
 
-  // Load (or start) the run whenever the active report changes.
   useEffect(() => {
     if (!report || !index) {
       queueMicrotask(() => setRun(null));
@@ -107,7 +81,6 @@ export function ContextDistiller({ onComplete }: VerificationWidgetProps) {
       const raw = localStorage.getItem(runKey(report.id));
       if (raw) loaded = sanitizeRun(JSON.parse(raw), index, seed);
     } catch {
-      /* unreadable or stale — start fresh */
     }
     queueMicrotask(() => {
       setRun(loaded ?? freshRun(seed));
@@ -121,13 +94,11 @@ export function ContextDistiller({ onComplete }: VerificationWidgetProps) {
       try {
         localStorage.setItem(runKey(report.id), JSON.stringify(next));
       } catch {
-        /* quota */
       }
     },
     [report],
   );
 
-  /** The one mutator: every change goes through here so nothing skips the save. */
   const update = useCallback(
     (fn: (prev: DistillerRun) => DistillerRun) => {
       setRun((prev) => {
@@ -146,7 +117,6 @@ export function ContextDistiller({ onComplete }: VerificationWidgetProps) {
     try {
       localStorage.setItem(CURRENT_KEY, id);
     } catch {
-      /* private mode */
     }
   }, []);
 
@@ -155,7 +125,6 @@ export function ContextDistiller({ onComplete }: VerificationWidgetProps) {
     try {
       localStorage.removeItem(CURRENT_KEY);
     } catch {
-      /* private mode */
     }
   }, []);
 
@@ -209,8 +178,6 @@ function Shell({ children }: { children: React.ReactNode }) {
   );
 }
 
-/* ------------------------------------------------------------------ picker */
-
 function ReportPicker({ onPick }: { onPick: (id: string) => void }) {
   return (
     <div className="grid gap-3 p-4 pt-0 sm:grid-cols-2">
@@ -236,8 +203,6 @@ function ReportPicker({ onPick }: { onPick: (id: string) => void }) {
     </div>
   );
 }
-
-/* --------------------------------------------------------------- run screen */
 
 interface StageProps {
   report: DistillerReport;
@@ -390,8 +355,6 @@ function PhaseRail({
         const reachable = canEnterPhase(p, run);
         return (
           <span key={name} className="flex items-center gap-1">
-            {/* The rail wraps on a phone, where a connector between two steps
-                that ended up on different lines points at nothing. */}
             {i > 0 && (
               <span
                 aria-hidden
@@ -407,10 +370,6 @@ function PhaseRail({
               aria-current={active ? "step" : undefined}
               onClick={() => onGo(p)}
               className={cn(
-                // State is a rule under the step and the weight of its word,
-                // never a disc around the numeral — see CLAUDE.md. The rule is
-                // transparent when the step is neither current nor done, so
-                // nothing shifts as the reader moves along it.
                 "flex items-center gap-2 rounded-t-lg border-b-2 px-2 py-1.5 transition-colors duration-150 select-none",
                 active
                   ? "border-foreground text-foreground"
@@ -490,8 +449,6 @@ function PhaseLead({ report, phase }: { report: DistillerReport; phase: Distille
   );
 }
 
-/* ------------------------------------------------------------ phase 1: clip */
-
 function ClipStage({
   report,
   index,
@@ -566,7 +523,6 @@ function ClipStage({
   return (
     <div className="px-4 pb-4">
       <div className="grid items-start gap-5 lg:grid-cols-2">
-        {/* left: the source */}
         <div>
           {report.reportDoc && (
             <div className="border-border bg-card mb-2.5 inline-flex overflow-hidden rounded-md border">
@@ -730,7 +686,6 @@ function ClipStage({
           )}
         </div>
 
-        {/* right: the notebook */}
         <div>
           <PaneHead title="Your notebook" />
           <div className="border-border bg-card overflow-hidden rounded-lg border">
@@ -875,8 +830,6 @@ function StageFoot({ children }: { children: React.ReactNode }) {
   );
 }
 
-/* ---------------------------------------------------------- phase 2: distil */
-
 function DistilStage({
   report,
   index,
@@ -979,8 +932,6 @@ function DistilStage({
     </div>
   );
 }
-
-/* --------------------------------------------------- phases 3 & 4: the actors */
 
 function ActorStage({
   group,
@@ -1165,8 +1116,6 @@ function DownstreamStage({
   );
 }
 
-/* --------------------------------------------------------- phase 5: thread */
-
 interface Filament {
   seg: string;
   stk: string;
@@ -1219,7 +1168,6 @@ function ThreadStage({
     setFocusStk(null);
   };
 
-  /* --- filament geometry: measured from the DOM, never derived from state --- */
   const measure = useCallback(() => {
     const board = boardRef.current;
     if (!board) return;
@@ -1261,7 +1209,6 @@ function ThreadStage({
     };
   }, [measure]);
 
-  /* --- pins: tap to arm, tap the opposite kind to fasten (keyboard included) --- */
   const tapPin = (type: "seg" | "stk", id: string) => {
     if (run.delivered) return;
     if (!armed || armed.type === type) {
@@ -1353,7 +1300,6 @@ function ThreadStage({
         </svg>
 
         <div className="relative grid items-start gap-5 lg:grid-cols-2">
-          {/* left: the distilled points */}
           <div className="space-y-2.5">
             <h4 className="text-foreground text-sm font-semibold">
               Your distilled points
@@ -1397,7 +1343,6 @@ function ThreadStage({
             })}
           </div>
 
-          {/* right: the readers */}
           <div className="space-y-2.5">
             <h4 className="text-foreground text-sm font-semibold">
               Who needs to hear it
@@ -1453,10 +1398,6 @@ function ThreadStage({
   );
 }
 
-/**
- * A thread anchor. It is a real button, so Enter/Space arms it and the whole
- * mechanic works from the keyboard; the filament is drawn from its centre.
- */
 function Pin({
   type,
   id,
@@ -1653,8 +1594,6 @@ function StakeholderCard({
     </div>
   );
 }
-
-/* ------------------------------------------------------------------ letters */
 
 function Letters({
   report,

@@ -5,12 +5,6 @@ import { verificationWidgets } from "./widgets/registry";
 import { useVerificationCompletion } from "./kit/use-completion";
 import type { VerificationWidgetProps } from "./kit/types";
 
-/**
- * Client host for a Verification interactive: looks up the native React widget
- * registered for this page id, wires its completion, and renders it inside an
- * error boundary. Every id has a widget (see widgets/registry.tsx); an unknown
- * id renders an inline error.
- */
 export function VerificationWidgetHost({
   pageId,
   title,
@@ -36,12 +30,6 @@ export function VerificationWidgetHost({
     );
   }
 
-  // data-widget marks where authored markdown stops and a widget's own DOM
-  // begins. A widget can be embedded inside a Fold or a Callout, whose bodies
-  // restore the markdown rhythm with descendant selectors (.mdx-body in
-  // globals.css); without this boundary those reach in and restyle lists and
-  // links the widget drew itself. The div carries no styles of its own, so
-  // the widget's margins collapse through it as before.
   return (
     <div data-widget>
       <WidgetErrorBoundary title={title}>

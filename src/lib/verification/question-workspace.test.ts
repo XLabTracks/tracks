@@ -108,7 +108,6 @@ describe("the decks the course ships", () => {
     expect(isWorkspaceComplete(COMPUTE_RULE, COMPUTE_QUESTIONS, three)).toBe(
       false,
     );
-    // Neither optional question can stand in for the choice.
     for (const opt of ["strongest-arguments", "test-a-claim"]) {
       expect(
         isWorkspaceComplete(COMPUTE_RULE, COMPUTE_QUESTIONS, new Set([...three, opt])),

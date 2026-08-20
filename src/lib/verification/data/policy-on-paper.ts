@@ -1,72 +1,6 @@
-/**
- * 2.4.2 — Companies A and B: two reporting regimes and the demands made of
- * them, and what kind of thing each statement actually is. Authored for 2.4.4
- * and moved to 2.4.2 on 2026-08-15, where its material belongs; the ids and
- * storage keys are unchanged.
- *
- * THE TASK IS THE COURSE OWNER'S, from her 2.4 exercise plan and her revision
- * of it: three tabs, Published process / Documented context / Still unverified
- * per company tab, the learner marks every statement with its provenance, then
- * answers what incentives the combination creates and what further evidence
- * would be needed. Her instruction on naming: the companies are Company A and
- * Company B and are not named in the task.
- *
- * HER REVISION, and why the third tab is not a third company. It was one — a
- * firm with no published policy at all. She replaced it with what the
- * employees themselves demand (the June 2024 open letter), asking of each
- * demand what satisfying it would change structurally. That is the better
- * third term: a regime that publishes nothing has nothing to mark, while the
- * demands are the standard the other two tabs are then read against.
- *
- * Her other instruction, on Company B's last row: the retraction is
- * compulsory. A 2024 rule presented as still in force is an error, not
- * strictness — and a regime that moved under pressure is exactly this
- * section's material.
- *
- * WHY THE SOURCE IS REVEALED AND NOT HIDDEN. Anonymity here is the exercise's
- * mechanic — you judge the regime before you know whose it is — and not a
- * concealment: once all three tabs are committed, a spoiler headed "Sources"
- * opens on which letter was which company and every document each row was
- * read out of. A course page that made claims about a real company's internal
- * policy behind a letter, with no way to check, would be the thing this whole
- * section teaches learners to distrust.
- *
- * The citations live in that one block and nowhere else, because a link on a
- * committed row would name the company on tab A while tabs B and C were still
- * meant to be judged blind.
- *
- * WHERE EACH STATEMENT COMES FROM. Nothing here is written from memory. The
- * `cite` on every row is the document it was read out of:
- *
- *   A — the published policy itself (PDF, change log dated February 2026),
- *       downloaded and read in full, plus an external index.
- *   B — the documented history, via secondary reporting the aggregator cites
- *       (Vox, the Washington Post) plus the company's own retraction memo.
- *   The demands — the open letter itself.
- *
- * The `kind` on every row is the answer key, and it is a claim about the
- * EVIDENCE, not about the company: a rule printed in a policy is a published
- * rule whether or not it is honoured, and a company's account of its own
- * change is a self-report whether or not it is true. That distinction is the
- * whole exercise, and it is why "the policy says X" and "X happens" are
- * different rows.
- *
- * DELIBERATELY ABSENT: a claim that one company "quietly gutted" a safety
- * commitment in February 2026. It appeared in a secondary source during
- * research and the primary document was never opened, so it is not here.
- */
 
 import type { WorkspaceQuestion } from "@/lib/verification/question-workspace";
 
-/**
- * Her five provenance labels, in the order the learner sees them.
- *
- * `hint` is no longer rendered. It sat on each chip as a tooltip — "Published
- * rule: written down in a policy the company published" — which is the chip
- * saying itself again, and the five labels are the vocabulary the exercise is
- * teaching rather than terms it has to gloss. Kept in the data because it is
- * the one place the five are defined at all, and a future reveal may want them.
- */
 export type Provenance =
   | "published-rule"
   | "self-report"
@@ -104,37 +38,22 @@ export const PROVENANCE: { id: Provenance; label: string; hint: string }[] = [
 
 export interface PolicyStatement {
   id: string;
-  /** Her three headings. */
   group: "published" | "context" | "unverified";
   text: string;
   kind: Provenance;
-  /** Shown at the reveal: what this was read out of. */
   cite: { label: string; href: string };
-  /** Ours, at the reveal, where the label is worth an argument. */
   note?: string;
 }
 
 export interface PolicyCompany {
   id: string;
-  /** Anonymous in the task, by her instruction. */
   label: string;
-  /**
-   * Retired. It said what the tab was — "publishes a detailed reporting
-   * policy", "as it was documented" — which is a characterisation of the
-   * regime before the learner has made one. Kept in the type as optional so
-   * the data does not have to be rewritten to drop it.
-   */
   kicker?: string;
-  /** Who the letter was, printed only in the Sources spoiler at the end. */
   realName: string;
-  /** One line there where the identification needs a qualification. */
   realNote?: string;
   statements: PolicyStatement[];
 }
 
-/* The labels name their works plainly, because they are only ever printed in
-   the Sources spoiler — after the letters have been cashed out. While the
-   learner is still marking, no row carries a citation at all. */
 const ANTHROPIC_POLICY = {
   label:
     "Anthropic, RSP Noncompliance Reporting and Anti-Retaliation Policy (PDF)",
@@ -269,14 +188,6 @@ export const POLICY_COMPANIES: PolicyCompany[] = [
   },
 ];
 
-/**
- * The third tab. Not a company and not marked: the four demands the employees
- * themselves made, and her question — if these were satisfied, what would that
- * change structurally?
- *
- * The four are the letter's own principles, shortened; the letter is linked in
- * the Sources block so the full wording is one click away.
- */
 export interface DemandTab {
   id: string;
   label: string;
@@ -317,40 +228,12 @@ export const POLICY_DEMANDS: DemandTab = {
   cite: RIGHT_TO_WARN,
 };
 
-/**
- * The task, stated where a task belongs — above the material, inside the
- * exercise. The lead sentence is the owner's (2026-08-18 edit document),
- * placed directly before "Every statement below…" on her instruction; the
- * task number went in the same edit, so `n` is gone and the widget prints
- * the two sentences as prose.
- */
 export const POLICY_TASK = {
   lead: "Now, apply everything you have learned to an exercise with two organizations—A and B—where you will categorize provisions, articulate the incentives each set of rules creates, brainstorm additional evidence pipelines to quality-check the reporting institution, and steelman the points you make throughout.",
   instruction:
     "Every statement below concerns the reporting regime of one of two organisations, A or B, or is a demand made by employees of those organisations. Determine what kind of claim each statement is. Commit each set, then answer the two questions that follow.",
 };
 
-/**
- * Her two closing questions, verbatim, as the house's written-answer deck.
- *
- * They are the analysis this whole block is for, so they are on the page from
- * the moment it opens — not behind the tabs. That is `QuestionWorkspace`'s own
- * rule and the reason it exists: a question you only meet after the reading is
- * a question that sends you back through the reading. Here it was worse than
- * that, because the tabs commit: a learner who marked all three and only then
- * met the questions could not go back and re-read a row with the question in
- * mind.
- *
- * The title IS the question — no short label standing in for it, no body
- * paragraph elaborating it. Both are hers and neither needs help.
- *
- * Question 1 carries her later wording, which is the one that names what the
- * block is for: not the incentives of a situation but the incentives THESE
- * RULES create. It replaced "What incentives does this combination of rules,
- * history, and unresolved authority create?" from the original plan — same
- * subject, and the shorter one puts the rules in the sentence where the
- * learner has just spent ten minutes marking them.
- */
 export const POLICY_QUESTIONS: WorkspaceQuestion[] = [
   {
     id: "incentives",
@@ -369,7 +252,6 @@ export const POLICY_QUESTIONS: WorkspaceQuestion[] = [
   },
 ];
 
-/** Its own localStorage document, as every workspace has. Permanent. */
 export const POLICY_NOTES_KEY = "v-policy-on-paper-notes:v1";
 
 export const POLICY_GROUPS: { id: PolicyStatement["group"]; label: string }[] =
@@ -379,11 +261,6 @@ export const POLICY_GROUPS: { id: PolicyStatement["group"]; label: string }[] =
     { id: "unverified", label: "Still unverified" },
   ];
 
-/**
- * What the Sources spoiler prints: per letter, who it was and every document
- * its rows were read out of. Derived from the rows rather than written beside
- * them, so a source added to a statement cannot go missing from the list.
- */
 export const POLICY_SOURCES = [
   ...POLICY_COMPANIES.map((c) => {
     const seen = new Set<string>();

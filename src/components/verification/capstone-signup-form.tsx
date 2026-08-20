@@ -11,17 +11,6 @@ import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 
-/**
- * The sign-up form: a brief from the bank, an idea of your own, or both.
- *
- * The picker carries slugs and titles only — the server re-validates the slug
- * against the bank, so an option edited in the DOM is dropped, not stored.
- * Neither field is required on its own; the action rejects the pair being
- * empty, and the form says so before the round-trip.
- */
-/* One row of the printed picker. The radio lives inside the label so the row
-   is the click target and arrow keys walk the group; the sheet link sits
-   outside the label so reading a brief never changes the selection. */
 function BriefRow({
   selected,
   onPick,
@@ -109,10 +98,6 @@ export function SignupForm({
         run(() => saveCapstoneSignup(brief, proposal));
       }}
     >
-      {/* Choosing a capstone is a comparison, so every brief is printed and
-          picked by row — never folded into a native dropdown. The list
-          scrolls in its own box; the page never grows by 79 rows. The check
-          glyph rides with the tint so selection never reads by hue alone. */}
       <fieldset className="space-y-2">
         <legend className="text-sm leading-none font-medium">Brief from the bank</legend>
         <div className="border-input max-h-80 space-y-4 overflow-y-auto rounded-md border p-3">

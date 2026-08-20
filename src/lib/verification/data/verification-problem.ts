@@ -1,8 +1,3 @@
-/**
- * Human-authored copy from tracksprogramplayground's Verification Problem
- * prototype. Presentation lives in the native widget; this file is the pin
- * that keeps the lesson copy separate from interaction state.
- */
 export interface VerificationProblemOption {
   id: "trust" | "punish" | "open" | "verify";
   label: string;

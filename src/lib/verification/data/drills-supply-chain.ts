@@ -1,16 +1,3 @@
-/**
- * Drill Bench: Supply Chain — the cross-module drill deck ported from the standalone
- * playground page (verification-drills-data.js). Content is human-authored
- * curriculum copied verbatim: do NOT re-author a statement, option, note or
- * reveal. The task grammar is adapted from the All-Russian social-studies
- * olympiad final rounds (2021) — true/false with absolutist traps, minimal
- * generalizing concept, spot-every-error, resolve-the-dispute, who-is-who
- * deduction, derivation chains, argument sorting, consequence analysis.
- *
- * The only edits made in the port are cross-references: the source page
- * numbered its modules 0/1/2.x/3/4, which is not this track's structure, so
- * those pointers now name the concept or the bench that carries it here.
- */
 import type { DrillDeck } from "./drills";
 
 export const DRILLS_SUPPLY_CHAIN: DrillDeck = {
@@ -335,7 +322,6 @@ export const DRILLS_SUPPLY_CHAIN: DrillDeck = {
             "Critiques physics-based signals as too coarse; advocates richer self-reporting"
           ],
           right: 0,
-          // The reveal opens on "the second option is the planted over-reading".
           fixedOrder: true,
           why: "The second option is the planted over-reading — “corroborate, never carry” assigns paperwork a real role, so “abolish” misstates the author; the source round docks exactly that. Critique pole, advocacy pole, and the distinction that separates them: a text is not read until you can state all three without importing your own position."
         },

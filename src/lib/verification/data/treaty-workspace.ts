@@ -1,34 +1,3 @@
-/**
- * 1.1's deck: four questions answered by skimming the MIRI treaty.
- *
- * There is no marking key and no score, deliberately. An earlier version had
- * both — a point bank per question, self-scoring, a facilitator key page — and
- * the author cut them. What is built here is a first orientation in what an
- * agreement looks like, and these are questions whose answer you can see is
- * right once you have found it. Do not reintroduce a key without being asked:
- * it turns reading a document into scoring against somebody's reading of it.
- *
- * The treaty is SKIMMED, not read. Fifteen Articles is more than this unit
- * needs, and the reader chunks by Article, so "page through until you can
- * answer" is a real instruction rather than a hope. What is read properly is
- * the reference: three short passages of a diplomatic practice guide saying
- * what the parts of a treaty are and where obligations may live. Those live
- * in the lesson body as a ReadingCard, not here — a work the course assigns
- * belongs where the other assigned readings are, and naming the pages in two
- * places is how the two come to disagree about them.
- *
- * Question 1 carries the transferable skill and is first for that reason. The
- * test is grammatical, not thematic — a preambulatory clause opens with a
- * participle and ends in a comma; an operative one has a subject and a finite
- * verb. It survives contact with any treaty, and it is the test that catches
- * the trap this document sets: Article I is headed "Primary Purpose" and its
- * text is the central obligation of the whole agreement.
- *
- * Trap: the rule takes any three of the four. Fifteen Articles against a
- * fixed hour means somebody runs out of time, and a unit that then reads as
- * unfinished teaches them only that the course does not believe them. Never
- * raise it to four.
- */
 
 import type { WorkspaceQuestion, WorkspaceRule } from "../question-workspace";
 

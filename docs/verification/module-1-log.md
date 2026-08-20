@@ -207,8 +207,9 @@ per-entry comments had asserted the wrong version of it twice.
 
 ## 1.2's Actor Map Workshop (2026-08-15, owner's instruction)
 
-Two widgets stood down and one replaced them, on the owner's call: "мы
-заменяем хуйню с выделением текста это говно для первокурсников".
+Two widgets stood down and one replaced them, on the owner's call
+(translated): "we are replacing the text-selection crap — this is garbage
+for freshmen".
 
 **Gone from 1.2, kept in the repo.** `protocol-actors` ("Who's in the
 Treaty?") — clicking highlighted phrases in a treaty to meet the actors behind
@@ -232,8 +233,8 @@ became the reveal at the end of Recall, which is what a group gets out of
 comparing lists.
 
 **It opens closed-book, which is the other half of what she asked for** —
-"нам придется делать заморозку и разводить их по разным стейтам с кнопкой я
-уже изучил давайте упражнение". The roster is a study panel with a button that
+(translated) "we will have to do a freeze and separate them into states
+with an 'I have studied this' button — let us make it an exercise". The roster is a study panel with a button that
 closes it, and every step after it is answered without it. The freeze is soft
 and visible: "Open the roster" is always there, taking it sets `peeked`, and
 the closing map says so. A hard lock would be a lie — her tables are further
@@ -432,7 +433,7 @@ three she needs to make.
   predecessor AI Safety Institute had such agreements, and whether CAISI still
   does is unconfirmed rather than wrong.
 
-### The three corrections applied (2026-08-15, owner: "правь то что старое и неправильное")
+### The three corrections applied (2026-08-15, owner, translated: "fix what is old and wrong")
 
 - **The Department of War leads now.** She spotted it: the department has run
   under that name since the September 2025 executive order — war.gov, Secretary
@@ -504,7 +505,7 @@ first number was optimistic.
 
 Two owner instructions, applied.
 
-**"Пусть просто деп оф вор зовется."** Table 3's row is now just *Department of
+**"Let it just be called Dep of War" (translated).** Table 3's row is now just *Department of
 War* — no parenthetical — and the Notes-and-sources paragraph about the
 executive order and the House vote is deleted outright. Both URLs left
 citations.json with it: the Federal Register entry (an `entries` row) and the
@@ -623,8 +624,9 @@ have their own permanent keys.
 
 ### The reading column takes the width, and footnotes became popups (2026-08-15)
 
-Two owner instructions that turned out to be one decision: "текст должен быть
-на всю ширину экрана, которая не занята другим" and "а сноска — поп апами".
+Two owner instructions that turned out to be one decision: (translated) "the text
+should take the full width of the screen not occupied by anything else"
+and "and the footnote — as pop-ups".
 Reserving a right-hand gutter for footnote sidenotes is part of what kept the
 column narrow, so notes that open over the text are what let the text have the
 width.
@@ -683,8 +685,8 @@ that is what she was looking at.
 
 ### The footnote popup is the course's existing card (2026-08-15)
 
-The owner: "почему твой блядский дизайн отличается если я тебе даже понитейл
-скилл подвезла". Correct, and it is rung 2 of that ladder — is it already in
+The owner (translated): "why does your damn design differ when I even
+brought you the ponytail skill". Correct, and it is rung 2 of that ladder — is it already in
 this codebase — failed on the first try. The course already had a popup: the
 one the Define action raises over a selected word, `.vocab-card` in
 public/verification/notebook.css. I built a fourth look out of a bare shadcn
@@ -724,7 +726,7 @@ canonical is the owner's call.
 
 ### The map is on screen, and one duplication audit (2026-08-15)
 
-**"The Actor Map Workshop должен содержать карту."** It did not, for most of
+**"The Actor Map Workshop must contain a map" (translated).** It did not, for most of
 its length. `RingMap` rendered only inside step 4 and step 6, so a block with
 "Map" in its name opened on a roster and a button, and showed nothing again on
 steps 2, 3 and 5. That is plain from the control flow, not a rendering
@@ -781,9 +783,8 @@ four frozen options on the centre question, no console errors.
 
 ## 2026-08-18 — 1.2's rings are Baker's frame now, and the edges are an exercise
 
-Her instruction: *"Берём рамку Baker / Рёбра делаем упражнением нарисовать и
-ключ по бейкеру"* — take Baker's framework, make the edges something the
-learner draws, and key them against the paper.
+Her instruction (translated): take Baker's framework, make the edges
+something the learner draws, and key them against the paper.
 
 ### What the rings were and why they moved
 
@@ -985,7 +986,8 @@ matters.
 
 ### The states are on the board
 
-Her instruction, same day: *"добавь страны... в схему"*. She is right and it was
+Her instruction, same day (translated): *"add the countries... to the
+diagram"*. She is right and it was
 the real fix for the seam, not a bridge sentence: the closing questions ask
 about Taiwan and about states holding capability and enforcement at once, and
 the board was ten companies and three American bureaus.
@@ -1126,8 +1128,8 @@ labels and nothing clipped, in both themes.
 
 ## 2026-08-18 — 1.2 comes down from 77 minutes to 34
 
-Course owner: *"мы не можем иметь 1.2 больше чем 40 минут давай пепесобирать"*,
-then, after three costed routes: **route В — split, plus the cuts, and delete
+Course owner (translated): *"we cannot have 1.2 longer than 40 minutes,
+let us reassemble"*, then, after three costed routes: **route V — split, plus the cuts, and delete
 the drill bench rather than move it.** Written answers marked optional.
 
 ### Where the 77 minutes were
@@ -1382,7 +1384,7 @@ part of the budget plan and she declined it; the geographic map remains 1.2's
 first subsection.
 
 **1.2.2 Context-specific report constructor is stood down** — course owner:
-*"удалить целиком оно просто дублирует 1.3.1"*. She is right about the
+(translated) *"delete it entirely — it simply duplicates 1.3.1"*. She is right about the
 overlap: writing a verification report is what 1.3 Upstream and downstream
 teaches, its worked example is an IAEA report at Fordow, and the context
 distiller is the exercise for it. 1.2 is about actors.
@@ -1409,3 +1411,74 @@ Driven afterwards: the chip card is an `<a>` with the right href, target and
 rel, "Coming soon" is gone, the sidebar reads 1.2 → 1.2.1 / 1.2.2 and 1.3
 carries one subsection, and the retired lesson's URL serves the platform's
 not-found page. 1,154 tests, typecheck and the course generator all green.
+
+### The day the key stopped showing (2026-08-20)
+
+The course owner reported 1.2.2's key and explanations gone for a fully
+correct board — "it just does not show the keys anymore" (translated).
+Nothing in the verdict
+was deleted: a committed board still prints every mechanism, its Baker
+quotes and the per-edge explanations, force-opened when all seven edges are
+found. What changed was the route to it. "Let committed actor edges be
+edited" (2026-08-19, the widget's last touch before the merge) put an
+**Edit my edges** button at the top of the Read-the-map step — the step the
+cursor persists on once "Read what it says" is pressed, so the step every
+return visit opens on, with the key nowhere on screen. A reader coming back
+for the key pressed the one button that mentioned the edges, and it
+un-commits (`edgesDone: false`): from then on neither step shows the
+verdict until they guess that **Commit the edges** re-reveals it.
+
+Restored, not redesigned: the map step is back to its pre-edit-button shape
+— no control up top, the ghost step control at the bottom returns to the
+committed verdict without touching the document. Editing survives where
+that commit also put it, on the verdict itself, which is the honest place:
+you watch the reveal close as you choose to reopen the board. One guard
+went into `prune()` — a stored map cursor over an un-committed board opens
+on the drawing step, since the map step reads a committed board and, with
+the top button gone, such a document would have no way forward. A comment
+at the old button's site says why no edit control belongs on that step.
+
+Driven in a browser end to end: commit 7/7 → key open; forward to the map;
+reopen the page → map, step control back → full key intact; edit from the
+verdict → re-commit → key back; a hand-made map-cursor-uncommitted document
+opens on the editor. Typecheck, lint and the workshop's data tests green.
+
+**Follow-up, same day: the graph's armed source no longer outlives the
+edge.** The course owner's hypothesis was that the missing key was tied to
+drawing edges by hand rather than with the chip rows. Driven in a browser,
+the input method does not touch the verdict — both write the same
+`from>to` ids — and the key has always printed the edges the learner did
+NOT draw, explanation and quote included. What the hand gestures DID have
+was a trap the chips do not: after a click-drawn edge the source stayed
+armed, and no graph gesture could switch or clear it, so clicking dots
+pair by pair — the gesture the instructions promise — drew a stray edge
+from the old source at every second pair and could silently toggle a right
+edge off. A board believed fully correct then commits at 5-of-7 with
+extras, and the reveal collapses what was found — which reads as the key
+having gone. Now a drawn edge disarms the source under either gesture
+(dragging never read it anyway — it starts from the dot under the
+pointer), re-clicking the armed dot clears it, and fanning several edges
+out of one actor remains what dragging and the chip rows are for. The
+collapse of found edges' mechanisms behind "Show every mechanism" is
+c388451's deliberate design (the born verdict printed everything, for two
+hours) and stands untouched; a fully correct board still opens everything.
+
+**Owner's instructions, later the same day.** Two, both on 1.2.2's edge
+exercise. *"Everything must print in the keys"* (translated) — the key
+prints whole:
+c388451's collapse of found edges' mechanisms behind "Show every mechanism"
+is gone, and every edge prints its mechanism and quote after commit, drawn
+or not, whatever the score. The key is the reading matter of the step, not
+a diff against the reader's board. And the map borrows quiver's edge
+vocabulary: opposite directions between one pair merge into a single beam
+with a head at each end when their verdict is the same, and bend apart —
+each keeping its own paint — when it differs, so the learner's solid arrow
+and the key's dashed one sit side by side instead of stacking. Heads are
+quiver's swallow-wing shape (barbs tapering to nothing, mass at the point,
+front edges bowed in) in the map's own ink on every state — a
+state-coloured head drowned in its own beam, and a dashed beam's flared
+outline used to read as a hollow dashed head. Ink, not literal black,
+because theme.css owns the colours and #000 would vanish on the night
+theme. Driven at 3x zoom in a browser: the mutual pair while drawing, the
+right-plus-wrong pair after commit, and the reversed-against-key pair all
+read.

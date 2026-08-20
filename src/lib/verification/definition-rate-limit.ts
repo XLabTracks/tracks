@@ -21,8 +21,6 @@ export function createFixedWindowRateLimiter(options: {
       }
       window = { count: 0, resetsAt: now + options.windowMs };
     } else {
-      // Refresh insertion order so the bounded map evicts the least recently
-      // observed address rather than a busy current one.
       windows.delete(key);
     }
 
@@ -47,8 +45,6 @@ export function createFixedWindowRateLimiter(options: {
   };
 }
 
-// Per Worker isolate. Cloudflare remains the outer abuse boundary; this keeps
-// a single hot client from multiplying one request into repeated wiki calls.
 export const checkDefinitionLookupRateLimit = createFixedWindowRateLimiter({
   limit: 20,
   windowMs: 60_000,

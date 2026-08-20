@@ -46,14 +46,12 @@ describe("techChance", () => {
   });
 
   it("direct + tell stack additively", () => {
-    // spoof: direct puf (0.6) + recon tell (0.35) = 0.95, capped at 0.95
     expect(
       techChance("spoof", red("spoof"), blue("puf", "recon"), NONE),
     ).toBeCloseTo(0.95, 6);
   });
 
   it("caps at 0.95", () => {
-    // meter: pow 0.6 + recon 0.35 + osint 0.25 + whistle 0.15 = 1.35 -> 0.95
     expect(
       techChance(
         "meter",
@@ -76,7 +74,7 @@ describe("techChance", () => {
         ...NONE,
         legacy: true,
       }),
-    ).toBeCloseTo(0.24, 6); // 0.6 * 0.4
+    ).toBeCloseTo(0.24, 6);
     expect(
       techChance("firmware", red("firmware"), blue("boot"), {
         ...NONE,
@@ -86,25 +84,21 @@ describe("techChance", () => {
   });
 
   it("masking blunts power sensing for meter unless osint present", () => {
-    // masking on, no osint: pow direct 0.6 * 0.5 = 0.3
     expect(
       techChance("meter", red("meter", "mask"), blue("pow"), NONE),
     ).toBeCloseTo(0.3, 6);
-    // masking on but osint present: no penalty (0.6 pow + 0.25 osint tell)
     expect(
       techChance("meter", red("meter", "mask"), blue("pow", "osint"), NONE),
     ).toBeCloseTo(0.85, 6);
   });
 
   it("amd: interposer tells other than enclosure are *0.4", () => {
-    // interposer tells: coc 0.25, recon 0.30; amd scales non-enc tells by 0.4
     expect(
       techChance("interposer", red("interposer"), blue("coc", "recon"), {
         ...NONE,
         amd: true,
       }),
     ).toBeCloseTo(0.25 * 0.4 + 0.3 * 0.4, 6);
-    // enclosure direct counter is unaffected by amd
     expect(
       techChance("interposer", red("interposer"), blue("enc"), {
         ...NONE,
@@ -126,7 +120,6 @@ describe("falsePositiveChance", () => {
     expect(
       falsePositiveChance(blue("pow", "recon", "whistle", "osint")),
     ).toBeCloseTo(0.32, 6);
-    // even all four gives 0.32; cap only bites beyond, but confirm the cap arg
     expect(falsePositiveChance(blue("pow", "recon", "whistle", "osint"))).toBeLessThanOrEqual(
       0.4,
     );

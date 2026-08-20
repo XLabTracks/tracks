@@ -1,35 +1,4 @@
-/**
- * Data for the "Who's in the Treaty?" widget — the MIRI draft agreement
- * re-read as a cast list.
- *
- * Every `phrase` and every run of DOC is quoted VERBATIM from Appendix A of
- * *An International Agreement to Prevent the Premature Creation of Artificial
- * Superintelligence* (Scher, Abecassis, Barnett & Abeyta, arXiv:2511.10783v3) —
- * the same paper 1.1 dissects. Do not paraphrase a quoted run, and do not
- * write a provision the Agreement does not contain: if a role has no clause,
- * the honest widget says so rather than inventing one.
- *
- * Two ids outlived the fiction they were named for and now mark something
- * else, because the Agreement has no equivalent of either. `reporting` was
- * `grandfather` — there is no grandfathering here, so the slot holds the
- * 10²²–10²⁴ FLOP reporting band instead. `protective` was `unsc` — Article
- * XII does not route enforcement to the Security Council, it authorises
- * Parties to act themselves.
- *
- * Ids are the widget's own keys (`data-a`), not learner state, so nothing
- * persisted moves when one is renamed.
- *
- * The version is pinned deliberately. The paper is CC BY 4.0, so reproducing
- * these passages needs only attribution — but arXiv keeps every version, and
- * v3 rewrote Article IV: v1 stated 10²⁴/10²³/10²² inline, v3 moved the same
- * numbers into named Article II definitions (Strict, Strict Post-training and
- * Monitored Thresholds) so the CTB can move them without touching the article.
- * Quotes here are v3's. Re-check against the current version before editing a
- * phrase, and bump the pin when you do; a quotation that silently follows a
- * paper it does not name is the drift this file exists to prevent.
- */
 
-/** Actor categories, keyed by the semantic encoding the original uses. */
 export type ActorCat = "steel" | "ind" | "inst";
 
 export const CATS: Record<ActorCat, string> = {
@@ -38,7 +7,6 @@ export const CATS: Record<ActorCat, string> = {
   inst: "Institutions & inspectors",
 };
 
-/** Learn-mode content. blocks: [label, text]. */
 export interface ActorEntry {
   cat: ActorCat;
   phrase: string;
@@ -334,7 +302,6 @@ export const ACTORS: Record<string, ActorEntry> = {
   },
 };
 
-/** Quiz-mode content. opts: [text, isCorrect, feedback]. */
 export interface QuizOption {
   text: string;
   correct: boolean;
@@ -588,15 +555,6 @@ const t = (text: string): DocRun => ({ kind: "text", text });
 const n = (text: string): DocRun => ({ kind: "num", text });
 const h = (a: string, text: string): DocRun => ({ kind: "hl", a, text });
 
-/**
- * The draft Agreement, article by article, quoted from Appendix A of
- * arXiv:2511.10783v3. Highlight phrases (`h`) key on the actor id (data-a in
- * the widget).
- *
- * Abridged, never rewritten: the Agreement runs to fifteen articles and this
- * is the spine of them, cut at paragraph boundaries. An ellipsis marks every
- * cut, and no run says anything the Agreement does not.
- */
 export const DOC: DocArticle[] = [
   {
     heading: "Preamble",
@@ -752,12 +710,7 @@ export const DOC: DocArticle[] = [
   },
 ];
 
-/** Static copy for the widget shell. */
 export const PROTOCOL_ACTORS_COPY = {
-  // The opening two sentences of this run moved into the lesson body, which
-  // is where the frame belongs; what stays is the instruction for the thing
-  // being clicked. Between them the authored wording is unchanged — 1.2's
-  // first screen was printing it twice.
   subLearn:
     "Every phrase below points at someone — a government, a company, a bureaucracy, an inspector. Click each highlighted phrase to meet the actors behind it. This is the cast Module 1 puts under the microscope.",
   subQuiz:

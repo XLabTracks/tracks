@@ -28,39 +28,18 @@ const C = PROTOCOL_ACTORS_COPY;
 
 type Mode = "learn" | "quiz";
 
-/** Answered-quiz record: which option indices were picked, and the tally. */
 interface Answered {
   picked: number[];
   right: number;
   total: number;
 }
 
-/**
- * The three actor categories, one brand token each.
- *
- * They used to borrow the game-payoff tokens — states→`--hide`,
- * industry→`--exaggerate`, institutions→`--comply`. Those alias the same
- * hues today, so it looked right, and it was still wrong twice over: a cast
- * list is a categorical key and takes the module hues (`--mod-N-text`, built
- * to read as type on every ground), and naming an actor category "hide" ties
- * it to a payoff scale that a game demo is free to recolour out from under it.
- *
- * `--mod-N-text` and not `--mod-N`: one token colours the dot AND the word, so
- * the hue sits on a coloured label rather than on a bare dot beside grey text.
- * The hex is the day value mirrored from theme.css, for the rare render with
- * no theme attached — same contract as interactive-map and mechanism-sort.
- *
- * Hue is never the encoding. Every appearance carries the category's own
- * words, which is what high contrast relies on: it paints all five module
- * tokens white on purpose, so there the label is the whole key.
- */
 const CAT_TOKEN: Record<ActorCat, string> = {
-  steel: "var(--mod-4-text, #3d75b1)", // Cobalt
-  ind: "var(--mod-2-text, #946b00)", // Lunar Yellow
-  inst: "var(--mod-3-text, #555e07)", // Khaki
+  steel: "var(--mod-4-text, #3d75b1)",
+  ind: "var(--mod-2-text, #946b00)",
+  inst: "var(--mod-3-text, #555e07)",
 };
 
-/** The one token, plus the tint and edge a highlighted phrase derives from it. */
 function catVars(cat: ActorCat): CSSProperties {
   const c = CAT_TOKEN[cat];
   return {
@@ -71,17 +50,9 @@ function catVars(cat: ActorCat): CSSProperties {
   } as CSSProperties;
 }
 
-/** Phrase highlight in learn mode. Reads the vars `catVars` puts on the node. */
 const CAT_HL =
   "bg-[var(--cat-tint)] border-[var(--cat-edge)] hover:bg-[var(--cat-tint-hi)]";
 
-/**
- * "Who's in the Treaty?" — the MIRI draft agreement (arXiv:2511.10783)
- * re-read as a cast list.
- * Learn mode maps each highlighted phrase to an actor dossier; Quiz mode asks
- * which real-world actors each phrase puts in the room, scored. Bridged: fires
- * onComplete once every phrase has been graded in quiz mode.
- */
 export function ProtocolActors({ onComplete }: VerificationWidgetProps) {
   const [mode, setMode] = useState<Mode>("learn");
   const [seen, setSeen] = useState<Set<string>>(new Set());
@@ -136,15 +107,9 @@ export function ProtocolActors({ onComplete }: VerificationWidgetProps) {
   }
 
   function recordAnswer(id: string, record: Answered) {
-    // `answered` is only ever written here, so the render value is current in
-    // this handler — compute `next` outside the updater (side effects inside
-    // a state updater break React's purity rules and may replay).
     if (answered[id]) return;
     const next = { ...answered, [id]: record };
     setAnswered(next);
-    // Fire completion once the last phrase has been graded. No local
-    // once-guard: use-completion's done-ref is the single dedupe (and it
-    // rolls back on a failed write so completion can retry).
     if (Object.keys(next).length === total) onComplete();
   }
 
@@ -154,13 +119,11 @@ export function ProtocolActors({ onComplete }: VerificationWidgetProps) {
 
   return (
     <div className="not-prose my-6">
-      {/* mode picker + per-mode instruction */}
       <div className="pb-4">
         <p className="text-muted-foreground text-sm">
           {mode === "learn" ? C.subLearn : C.subQuiz}
         </p>
 
-        {/* mode tabs */}
         <div
           role="group"
           aria-label="Mode"
@@ -187,14 +150,8 @@ export function ProtocolActors({ onComplete }: VerificationWidgetProps) {
           ))}
         </div>
 
-        {/* legend — learn mode only. The label written in its category's own
-            colour: no swatch riding beside grey text — the word itself is the
-            pairing the hue needs. */}
         {mode === "learn" && (
           <div className="mt-3 flex flex-wrap gap-x-4 gap-y-1.5">
-            {/* The hue is on the word. A coloured dot beside a grey label
-                makes the reader carry the mapping themselves, and it is the
-                one thing this key exists to hand them. */}
             {C.legend.map((l) => (
               <span
                 key={l.cat}
@@ -208,9 +165,7 @@ export function ProtocolActors({ onComplete }: VerificationWidgetProps) {
         )}
       </div>
 
-      {/* interactive panel: progress rail + treaty document */}
       <div className="border-border bg-card shadow-soft overflow-hidden rounded-xl border">
-      {/* progress rail */}
       <div className="border-border/70 bg-muted/30 flex items-center gap-3 border-b px-5 py-2.5">
         <span className="text-muted-foreground eyebrow whitespace-nowrap">
           {mode === "learn"
@@ -228,7 +183,6 @@ export function ProtocolActors({ onComplete }: VerificationWidgetProps) {
         )}
       </div>
 
-      {/* body: the treaty document */}
       <div className="p-5">
         <article className="border-border bg-muted/20 rounded-lg border p-5 sm:p-6">
           <div className="mb-4 text-center">
@@ -265,7 +219,6 @@ export function ProtocolActors({ onComplete }: VerificationWidgetProps) {
                         </span>
                       );
                     }
-                    // highlight
                     const cat = ACTORS[run.a].cat;
                     const isSeen = mode === "learn" && seen.has(run.a);
                     const isAnswered = mode === "quiz" && !!answered[run.a];
@@ -284,9 +237,6 @@ export function ProtocolActors({ onComplete }: VerificationWidgetProps) {
                         }`}
                         className={cn(
                           "mx-[1px] inline rounded-sm border-b-2 px-1 text-left transition-colors focus-visible:ring-2 focus-visible:ring-[var(--ring)] focus-visible:outline-none",
-                          // Learn mode colours by category; quiz mode has no
-                          // category to show yet — that is the question — so
-                          // it stays on one neutral "unanswered" tint.
                           mode === "learn"
                             ? CAT_HL
                             : "bg-muted border-border hover:bg-muted/70",
@@ -300,8 +250,6 @@ export function ProtocolActors({ onComplete }: VerificationWidgetProps) {
                           <Check
                             className={cn(
                               "ml-0.5 inline size-3 align-text-top",
-                              // Answered is a status (graded), so it keeps the
-                              // status token; seen is the category's own hue.
                               isAnswered ? "text-comply" : "text-[var(--cat)]",
                             )}
                             aria-hidden
@@ -316,7 +264,6 @@ export function ProtocolActors({ onComplete }: VerificationWidgetProps) {
           </div>
         </article>
 
-        {/* done cards */}
         {mode === "learn" && learnDone && (
           <div className="border-comply/50 bg-comply/5 mt-5 rounded-lg border p-5 text-center">
             <p className="text-comply eyebrow">
@@ -358,7 +305,6 @@ export function ProtocolActors({ onComplete }: VerificationWidgetProps) {
       </div>
       </div>
 
-      {/* drawer */}
       <Sheet
         open={current !== null}
         onOpenChange={(open) => {
@@ -388,8 +334,6 @@ export function ProtocolActors({ onComplete }: VerificationWidgetProps) {
   );
 }
 
-/* -------------------------------------------------------------------------- */
-
 function DrawerBody({
   id,
   mode,
@@ -415,9 +359,6 @@ function DrawerBody({
   return (
     <>
       <SheetHeader className="border-border/70 border-b px-6 pt-6 pb-4">
-        {/* The kicker IS the category, so it takes the category's hue — the
-            same token as its dot in the legend. In quiz mode the kicker is
-            the quiz's own label, not a category, so it stays neutral. */}
         <p
           style={mode === "learn" ? catVars(cat) : undefined}
           className={cn(
@@ -442,7 +383,6 @@ function DrawerBody({
           <QuizBody id={id} answered={answered} onGrade={onGrade} />
         )}
 
-        {/* prev / next nav */}
         <div className="border-border/70 mt-6 flex items-center justify-between border-t pt-4">
           <button
             type="button"
@@ -511,15 +451,6 @@ function QuizBody({
   );
   const graded = answered !== null;
 
-  /**
-   * Shuffled for display only. Authored, every one of these fifteen questions
-   * had a correct option sitting first, which taught the phrase-quiz more
-   * about our habits than about the treaty.
-   *
-   * `picks` keeps holding AUTHORED indices — it is what `answered.picked`
-   * restores from, so a learner returning to a graded phrase must find the
-   * same options ticked. Everything the grader touches is `from`.
-   */
   const shown = useMemo(
     () => shuffleAnswerOptions(`protocol-actors:${id}`, quiz.opts, (o) => o.text),
     [id, quiz],
@@ -561,7 +492,6 @@ function QuizBody({
       <div className="flex flex-col gap-2">
         {shown.map(({ item: o, from }) => {
           const chose = picks.has(from);
-          // grading classes
           let stateCls = "";
           let tag = "";
           let tagCls = "";

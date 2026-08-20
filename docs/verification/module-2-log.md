@@ -985,7 +985,7 @@ lesson that replaced its exercise is where this accumulates: the exercise
 changes, the prose around it keeps describing the old one, and it survives
 because nothing tests prose.
 
-**Sources: the lock comes off the cover (2026-08-14, owner: "А где сурсы").**
+**Sources: the lock comes off the cover (2026-08-14, owner, translated: "and where are the sources").**
 The Sources block was wrapped in `{done ? … : null}` — it appeared only once
 all three tabs were committed. On her phone, at the bottom of 2.4.4, there was
 simply nothing there. That is a lock on top of a cover: the spoiler already
@@ -1007,8 +1007,9 @@ Chromium at iPhone 13 width: with nothing committed, the Sources section is
 present, its text content reads empty while covered, the company names are not
 findable, and one press uncovers it.
 
-**The veil loses its panel (2026-08-14, owner: "а чего границы плывут — можешь
-без границы просто как тг").** She was right, and what she was seeing was not a
+**The veil loses its panel (2026-08-14, owner, translated: "why are
+the borders swimming — can you do it without a border, just like
+Telegram").** She was right, and what she was seeing was not a
 border: the veil carried `background-color: color-mix(card 88%, foreground)`, a
 ground visibly darker than the card, on a rounded rectangle. That is a panel.
 The drifting dots crossing its edge made the edge itself look like it was
@@ -1035,8 +1036,8 @@ section height 452 → 452 → 452 on iPhone 13, 310 → 310 → 310 on desktop,
 document height identical at every step. Company names unfindable while
 covered, findable uncovered, unfindable again after Hide. No sideways scroll.
 
-**Answer options are shuffled now, platform-wide (2026-08-14, owner: "почему в
-тесте почти все правильные ответы Б").** She was reading 2.4.2, where four of
+**Answer options are shuffled now, platform-wide (2026-08-14, owner, translated:
+"why are almost all the correct quiz answers B").** She was reading 2.4.2, where four of
 five answers were B. Measured across every question bank in the repo before
 touching anything:
 
@@ -1103,8 +1104,8 @@ are an explorable rather than a question — the learner opens all of them, and
 the one that holds is last because three failures precede it. That order is an
 argument, not an accident.
 
-**Correction to the entry above, on whose defect this was (2026-08-14, owner:
-"это не правда … еще как ты и твои версии виноваты").** That entry said "nobody
+**Correction to the entry above, on whose defect this was (2026-08-14, owner, translated:
+"that is not true … you and your versions are very much to blame").** That entry said "nobody
 did that on purpose: an author writes the true statement first". That framing is
 wrong, and `git log` on the files says so plainly: `whistleblower-levers.ts` and
 its widget were written by Claude the same day the bias was found (1b65424),
@@ -1163,8 +1164,8 @@ lane dots gained a ground-colour rim so overlapping placements stay separable
 (the draft's other bracketed ask).
 
 **Low-vision mode enlarges again, and now enlarges everything (2026-08-14,
-owner: "режим для слабовидящих не делает все больше anymore it was supposed
-to").** `d58c3c0` had removed it: the high-contrast theme used to re-solve the
+owner, translated: "the low-vision mode does not make everything bigger
+anymore, it was supposed to").** `d58c3c0` had removed it: the high-contrast theme used to re-solve the
 whole `--fs-*` scale at exactly 2x (12→24, 16→32, 38→76) and that commit
 deleted the scale along with every reflow release the doubling needed, leaving
 contrast-only colour and browser zoom.
@@ -1252,7 +1253,8 @@ the shuffle is doing its job on a deck whose answers were authored a, c, b, c, b
 
 ### Companies A and B moves from 2.4.4 to 2.4.2 (2026-08-15, owner's instruction)
 
-"Перенеси текущее задание из 2.4.4 в 2.4.2 которое про политики вислблоуэров."
+(Translated) "Move the current task from 2.4.4 into 2.4.2, the one about
+whistleblower policies."
 
 The exercise's material was never 2.4.4's. Every row it asks a learner to mark
 is a sentence out of a real whistleblower policy, and the third tab is the
@@ -1304,7 +1306,7 @@ freeze; reveal names the grid, then the self-check pair, the per-docket
 marking key, the 50-word standard question and the optional transfer.
 
 The division of labour with the section's reading is the point of the
-design: her audit question ("проверь что вот это закрывает") established
+design: her audit question ("check what this one covers", translated) established
 that Brundage et al. carries independence, access, competence and the
 financial/revolving-door capture guards, but not authority, not the
 human-vs-technical distinction, and not the decision operation — so
@@ -1320,8 +1322,8 @@ embedded at the tail of human-institutions behind a
 
 ### 2.4.4's source packet grows a second reading (2026-08-15)
 
-Her follow-up to the coverage audit ("мб добавить чета еще на 5-10 минут
-чтения"): Brundage carries independence, access and the capture guards,
+Her follow-up to the coverage audit (translated: "maybe add something
+else, 5–10 minutes of reading"): Brundage carries independence, access and the capture guards,
 but not authority, not accountability, and not the decision operation.
 Added John Carlson, "Defining Noncompliance: NPT Safeguards Agreements"
 (Arms Control Today, May 2009; armscontrol.org) — the same author as
@@ -1336,7 +1338,8 @@ labour between the two readings and the dockets.
 ### The Missing Board: Carlson's reflection questions become an interactive (2026-08-15)
 
 Her brief, verbatim intent: reflection questions on the new Carlson
-reading — "перенесите на ии, подумайте, проведите аналогии" — tried as an
+reading — translated, "transfer it onto AI, think it through, draw the
+analogies" — tried as an
 interactive first, and billed into the lesson budget. The construction:
 Carlson's decision chain as four stations (finder / judge / enforcer /
 the standard), each shown with the nuclear regime's answer from the

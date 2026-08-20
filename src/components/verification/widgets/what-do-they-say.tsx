@@ -20,21 +20,12 @@ const BY_KEY: Record<WdtsFigureKey, WdtsFigure> = Object.fromEntries(
   WDTS_FIGURES.map((f) => [f.key, f]),
 ) as Record<WdtsFigureKey, WdtsFigure>;
 
-/**
- * "Why are we concerned about the development of superintelligence?" — a
- * view-style dossier of six frontier-lab leaders. The interactive core is a
- * grid of six profile cards and a shadcn Dialog that opens each leader's
- * dossier (photo, definition/risk quotes, relevance, and sources). The framing
- * prose (definitions, risks, synthesis) now lives in the lesson MDX. Unbridged:
- * this is a reading, so `onComplete` is intentionally ignored.
- */
 export function WhatDoTheySay() {
   const [openKey, setOpenKey] = useState<WdtsFigureKey | null>(null);
   const active = openKey ? BY_KEY[openKey] : null;
 
   return (
     <div className="not-prose my-6">
-      {/* ---------- Profiles grid ---------- */}
       <div className="grid gap-3 sm:grid-cols-2">
         {WDTS_FIGURES.map((f) => (
           <button
@@ -46,11 +37,6 @@ export function WhatDoTheySay() {
           >
             <div className="flex items-center gap-3">
               <Avatar figure={f} className="size-11 text-sm" />
-              {/* THE CARD STARTS ON THE NAME. There was a "PROFILE 01 · OPENAI"
-                  eyebrow above it, which spent the most prominent line of the
-                  card on a serial number and an affiliation the role line
-                  below already gives — "CEO, OpenAI" one line down. The
-                  reader is here for the person. */}
               <div className="min-w-0">
                 <p className="text-foreground truncate text-sm font-semibold">
                   {f.name}
@@ -74,7 +60,6 @@ export function WhatDoTheySay() {
         ))}
       </div>
 
-      {/* ---------- Dossier dialog ---------- */}
       <Dialog
         open={openKey !== null}
         onOpenChange={(o) => !o && setOpenKey(null)}

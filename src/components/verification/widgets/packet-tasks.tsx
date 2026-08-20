@@ -15,32 +15,6 @@ import {
 } from "@/lib/verification/data/packet-tasks";
 import type { DisanalysisQuote } from "@/lib/verification/data/nuclear-disanalysis";
 
-/**
- * The 0.3 document packet's five tasks: write, submit, and the key reveals —
- * her model answer first, then Baker's own words on the same ground. Never
- * a marking.
- *
- * All five tasks are visible and independent; nothing locks behind anything,
- * per the standing instruction ("it's not a test, it's reasoning"). The one
- * commit that exists is per task and buys only that task's key: the key is
- * reveal material, so it stays unrendered until an answer is down — showing
- * a model answer beside an empty box turns a reasoning task into reading.
- * Submitting never freezes the answer; the box stays editable, and the word
- * ceiling is her guidance, counted live and never enforced.
- *
- * Task copy, model answers and Baker cuts live in `data/packet-tasks.ts` —
- * read its header before editing any of them; nothing here composes a
- * sentence of curriculum.
- *
- * Bridged: onComplete fires once, when her rule is met — Task 5 submitted
- * plus any one of Tasks 1–4.
- *
- * Answers persist under `v-packet-tasks:v1`; restored state is applied off
- * the effect body behind `hydrated` so the first client render matches the
- * server's markup, and stored answers are pruned against the current task
- * list before they are trusted.
- */
-
 interface Answer {
   text: string;
   submitted: boolean;
@@ -80,8 +54,6 @@ export function PacketTasks({ onComplete }: VerificationWidgetProps) {
     STORAGE_KEY,
     EMPTY,
     prune,
-    // Submitted text is also the editable draft, and a run that already met
-    // the rule must not announce itself a second time on return.
     (restored) => {
       setDrafts(
         Object.fromEntries(
@@ -132,8 +104,6 @@ export function PacketTasks({ onComplete }: VerificationWidgetProps) {
               aria-label={`Answer to task ${task.n}`}
             />
             <div className="flex flex-wrap items-center justify-between gap-2">
-              {/* Her ceiling is guidance: the count stays live and nothing is
-                  ever blocked on it — over the limit is a fact, not a fault. */}
               <p
                 className={cn(
                   "text-muted-foreground text-3xs tracking-wide",
@@ -154,12 +124,6 @@ export function PacketTasks({ onComplete }: VerificationWidgetProps) {
             {submitted ? (
               <div aria-live="polite" className="space-y-3">
                 <div className="border-border bg-background space-y-3 rounded-lg border p-4">
-                  {/* Not "model answer". These run past the word limit the
-                      task sets, deliberately — they carry commentary a
-                      compliant answer has no room for — and a key that
-                      overruns the ceiling it is modelling, while calling
-                      itself the model, teaches the wrong thing twice. The
-                      limit is the learner's; the commentary is ours. */}
                   <p className="text-muted-foreground eyebrow">
                     Indicative answer and commentary
                   </p>
@@ -190,8 +154,6 @@ export function PacketTasks({ onComplete }: VerificationWidgetProps) {
 }
 
 function Part({ part, answer = false }: { part: TaskPart; answer?: boolean }) {
-  // Task bodies read as instructions (muted beside the heading); a model
-  // answer is content and takes the page ink.
   const ink = answer ? "text-foreground" : "text-muted-foreground";
   if (part.kind === "p") {
     return <p className={cn("text-sm leading-relaxed", ink)}>{part.text}</p>;
@@ -207,7 +169,6 @@ function Part({ part, answer = false }: { part: TaskPart; answer?: boolean }) {
     );
   }
   if (part.kind === "table") {
-    /* A wide table scrolls in its own box — the page never scrolls sideways. */
     return (
       <div className="overflow-x-auto">
         <table className="w-full min-w-[560px] border-collapse text-sm leading-relaxed">
@@ -255,7 +216,6 @@ function Part({ part, answer = false }: { part: TaskPart; answer?: boolean }) {
   );
 }
 
-/** One of Baker's sections, attribution above the words. */
 function BakerQuote({ quote }: { quote: DisanalysisQuote }) {
   return (
     <SourceQuote

@@ -1,11 +1,3 @@
-/**
- * Source-map exercise for 2.4.1. The roster follows Baker et al.,
- * "Six Layers of Verification," §§4.3 and A.8 (especially Table 14):
- * personnel across the AI supply chain can notice different parts of a
- * violation, but compartmentalization limits what any one person can know.
- * The exercise therefore asks learners to state what each source can support
- * and to identify an independent way to check it.
- */
 
 export type SourceActorId =
   | "evaluator"

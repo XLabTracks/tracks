@@ -18,17 +18,6 @@ import {
   SKILLS_REV,
 } from "./data/skills";
 
-/**
- * `public/verification/` is outside tsconfig and outside vitest's own glob,
- * so nothing else in the suite reads it. The static map keeps the graph as
- * `window.SKILLS` in data/skills.js; the app keeps the progress skeleton of
- * the same graph in data/skills.ts. Evaluate the static file (it is a pure
- * data assignment, no DOM) and compare, so the completion page cannot count
- * skills against a different ladder than the map draws.
- *
- * A file this cannot evaluate is a failure, not a skip: if skills.js is
- * restructured, the check must say so rather than quietly stop running.
- */
 describe("skills snapshot matches the static map's graph", () => {
   const source = readFileSync(
     path.join(process.cwd(), "public/verification/data/skills.js"),
@@ -64,10 +53,6 @@ describe("skills snapshot matches the static map's graph", () => {
   });
 
   it("every rung names a unit the outline carries", () => {
-    // The unit meta registry, not the lesson join: the outline may carry
-    // units whose lessons are not drafted yet (3.1 and 3.2 today), and a
-    // rung tagged onto one would be real and simply not yet completable —
-    // a typo'd rung is neither.
     const units = new Set(Object.keys(verificationUnitMeta));
     for (const node of SKILL_NODES) {
       for (const rung of node.rungs) {
@@ -79,7 +64,6 @@ describe("skills snapshot matches the static map's graph", () => {
 });
 
 describe("completedVerificationUnits", () => {
-  // 2.3 Intelligence is the many-lessons unit; 4.2 is a one-lesson unit.
   const intel = Object.entries(verificationUnitOfLesson)
     .filter(([, unit]) => unit === "2.3")
     .map(([lessonId]) => lessonId);
@@ -117,12 +101,6 @@ describe("skillSummary", () => {
   });
 
   it("the drafted course masters every ladder", () => {
-    // The v2 graph tags rungs only on units with drafted lessons — the old
-    // graph's 3.1/3.2 rungs (units with no lessons, so ladders that could
-    // never fill) were retagged or cut in the rewrite. A learner who
-    // finishes everything the course currently carries therefore masters
-    // all 31 skills; if a rung is ever tagged onto an undrafted unit again,
-    // this is the test that starts reporting the honest smaller number.
     const everyLesson = new Set(Object.keys(verificationUnitOfLesson));
     const summary = skillSummary(completedVerificationUnits(everyLesson));
     expect(summary.mastered).toBe(31);
@@ -130,18 +108,12 @@ describe("skillSummary", () => {
   });
 
   it("a partly filled ladder is in progress, not mastered", () => {
-    // "hardware" is the one-rung node on 2.1, so 2.1 alone masters it while
-    // longer ladders touching 2.1 only advance.
     const summary = skillSummary(new Set(["2.1"]));
     expect(summary.mastered).toBe(1);
     expect(summary.inProgress).toBeGreaterThan(0);
   });
 
   it("the compound rung fills by quarters and masters only complete", () => {
-    // "feasib" is 2.0 + 2.1–2.4 + 3.0 + 4.1: three evidence buckets leave
-    // its compound rung at 3/4, so taxonomies, hardware, intel, cloud,
-    // evasion and research are mastered; the fourth bucket adds feasib
-    // and human.
     const nearly = new Set(["2.0", "2.1", "2.2", "2.3", "3.0", "4.1"]);
     expect(skillSummary(nearly).mastered).toBe(6);
     expect(skillSummary(new Set([...nearly, "2.4"])).mastered).toBe(8);

@@ -1,37 +1,17 @@
-/**
- * The "types of AI" optional material — a nested-containment picture of the
- * field, AI ⊃ Narrow AI ⊃ Machine Learning ⊃ Deep Learning ⊃ Generative AI ⊃
- * Large Language Model ⊃ Transformer LLMs. Each level names real systems that
- * sit at that level but NOT the next one in, so the boundaries mean something:
- * a Roomba is narrow AI but not machine learning; Mamba is a language model
- * but not a transformer.
- *
- * The widget reads this file and nothing else — every label, blurb and the
- * why-it-sits-here line is data here, not markup in the component. Blurbs are
- * short factual descriptions of well-known systems and the definitional line
- * that places each one; they are not course claims, so they carry no citation.
- */
 
 export interface AiExample {
-  /** Display name on the diagram. */
   name: string;
-  /** One line: what the system is. */
   what: string;
-  /** One line: why it sits at this level and not the next ring in. */
   why: string;
 }
 
 export interface AiLevel {
   key: string;
-  /** Ring label. */
   name: string;
-  /** What this category is. */
   blurb: string;
-  /** Systems at this level but not the level nested inside it. */
   examples: AiExample[];
 }
 
-/** Outermost first. Index 0 is the whole field; the last is the innermost ring. */
 export const AI_LEVELS: AiLevel[] = [
   {
     key: "ai",
@@ -189,7 +169,6 @@ export const AI_LEVELS: AiLevel[] = [
   },
 ];
 
-/** The two regions outside real, narrow AI — each a note, not a system. */
 export const AI_REGIONS = {
   theoretical: {
     label: "Theoretical only",
@@ -206,8 +185,6 @@ export const TYPES_OF_AI_COPY = {
     "Tap any system to see what it is and why it sits at this ring, not the next one in.",
   legend:
     "Each ring contains the next; a system sits at the deepest ring it belongs to. Tap a system to open it; drag or use +/− for a closer look.",
-  // The nested-containment picture of the field is canonical; the two extra
-  // inner rings (language model, transformer) and the example systems are ours.
   source: {
     label: "Nesting after",
     pub: "Towards Data Science",

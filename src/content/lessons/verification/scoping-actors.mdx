@@ -1,20 +1,5 @@
 We’ve established why an international pause is important, the key components of a relevant treaty, and why robust verification mechanisms are crucial to its successful enforcement. Now, the question becomes: who are the key players that a pause treaty would require cooperation from? Which nations, labs, and manufacturers have a stake in the development or prevention of ASI?
 
-{/* The treaty-highlighting interactive that opened this section stood down on
-    2026-08-15, on the owner's judgement that clicking highlighted phrases is
-    recognition dressed as work. Its lead-in went with it — the sentence told
-    the reader to read the agreement again, and there is no longer an
-    agreement on this screen to read.
-
-    What replaced it is not here: it is the workshop at the foot of the
-    section, and it is there rather than here because it is answered from
-    memory. See src/lib/verification/data/actor-workshop.ts. */}
-
-{/* Author note — "Adapt to miri treaty": the interactive's sample policy is
-    to be adapted to the MIRI pause treaty (arXiv:2511.10783); and "Actor
-    Taxonomy question public vs. priv" marks the section below. The outline
-    carries this section twice (a revision artifact); one copy renders. */}
-
 This section gives you three ways to analyze the actors in a verification regime: where they sit in the supply chain, what function they can perform, and what posture they may take under a particular rule.
 
 Suppose the United States and China sign an agreement tomorrow: no training runs above some compute threshold for three months. Now ask a simple question. Who, exactly, has to change their behavior on Wednesday morning?
@@ -155,36 +140,14 @@ Or try Taiwan. A chokepoint controller of the first rank, and simultaneously the
 
 You now have three questions to ask of any actor you meet in a proposal, a news story, or an exercise, for the rest of this course. Where does it sit on the chain? That is position: Table 4. What can it do inside a regime? That is roles: Table 5. What does it want right now? That is posture: Table 1. Ask them in that order and most verification claims come apart usefully in your hands. “The cloud providers will report suspicious training runs” stops being a reassuring sentence and becomes three checkable ones: they sit mid-chain where visibility is high; they hold the logs; and they will report exactly to the degree that reporting costs less than not reporting.
 
-{/* The three tasks that were bullets here are now the workshop's last step.
-    They are unchanged, and they moved for one reason: in the body they stood
-    directly over `actor-map`, a widget you look things up in and cannot
-    answer into. Nothing replaced them in the prose, because the sentence
-    above already sets them up and a second "try it" line would be the same
-    instruction twice. */}
-
 <PageBreak title="The Actor Map Workshop" />
 
 ## The Actor Map Workshop (18–22 min)
-
-{/* Last in the section and closed-book, which is the whole design: it opens
-    with the cast on screen, you close it with a button, and every step after
-    that is answered from memory. Karpicke & Blunt are why — see the data
-    file's header. It is the section's work, so it is not in a Fold.
-
-    THE TIME IS MEASURED, NOT ROUNDED, because people budget by this number.
-    Four steps: study the roster (~530 words studied to remember), free
-    recall and its key, one committed question, seventeen placements and
-    their reveal. The workshop's second half — drawing the edges and reading
-    what the board says — is 1.2.2, on the course owner's instruction that
-    1.2 cannot exceed forty minutes against a measured seventy-seven. */}
 
 <VerificationExercise id="actor-workshop" />
 
 ### Notes and sources
 
-{/* Kept after the opening interactive stood down: 1.1 dissects this draft and
-    1.2 is written about its cast, so it belongs in this lesson's Works cited
-    whether or not a widget on the page reproduces it. */}
 The draft agreement this section reads its cast out of: Scher, Abecassis, Barnett & Abeyta, [“An International Agreement to Prevent the Premature Creation of Artificial Superintelligence”](https://arxiv.org/abs/2511.10783) (2025), Appendix A — the treaty 1.1 dissects.
 
 [California SB 53](https://leginfo.legislature.ca.gov/faces/billTextClient.xhtml?bill_id=202520260SB53), the Transparency in Frontier Artificial Intelligence Act, signed September 29, 2025; core duties effective January 1, 2026 ([Future of Privacy Forum](https://fpf.org/blog/californias-sb-53-the-first-frontier-ai-law-explained/) and [White & Case](https://www.whitecase.com/insight-alert/california-enacts-landmark-ai-transparency-law-transparency-frontier-artificial) summaries).
@@ -198,36 +161,3 @@ The draft agreement this section reads its cast out of: Scher, Abecassis, Barnet
 Supply-chain structure: Sastry, Heim, Belfield et al., [“Computing Power and the Governance of Artificial Intelligence”](https://arxiv.org/abs/2402.08797) (2024) — ASML at 100% of EUV lithography, TSMC at ~90% of sub-7nm logic (2022 data), and “several critical steps … have fewer than three suppliers”; CSET, [“The Semiconductor Supply Chain”](https://cset.georgetown.edu/publication/the-semiconductor-supply-chain/) (2021) — the stage-by-stage picture, including that assembly and test has the lowest barriers to entry. High-bandwidth memory is inside the export-control perimeter: the US controls were “expanded again, this time affecting all chips using advanced high-bandwidth memory” — Fist, Burga & Chilukuri, [“Technology to Secure the AI Chip Supply Chain”](https://www.cnas.org/publications/reports/technology-to-secure-the-ai-chip-supply-chain-a-primer) (CNAS, 2024). Incentive vocabulary and role taxonomy: this module’s introduction.
 
 **Currency.** The concentration figures above are 2021–2023 data reported in 2021 and 2024 sources. Shares move; the structure — one EUV maker, one dominant leading-edge fab, a handful of clouds — has not. Re-verify a number before quoting it.
-
-{/* Author notes from the outline, kept out of the render:
-    - Actor map: ported into this lesson as a native widget.
-    - Interactive supply-chain map: ported — the 1.2.1 lesson.
-    - Veronica's note: maybe feed https://chipexplorer.eto.tech/ to Claude
-      re the supply-chain map; also https://epoch.ai/latest/introducing-the-ai-chip-components-explorer — pls see.
-    - Source candidates for this section:
-      https://cset.georgetown.edu/publication/the-semiconductor-supply-chain
-      https://cset.georgetown.edu/publication/ai-chips-what-they-are-and-why-they-matter
-      https://cset.georgetown.edu/publication/maintaining-the-ai-chip-competitive-advantage-of-the-united-states-and-its-allies/
-      https://www.oecd.org/content/dam/oecd/en/publications/reports/2025/06/mapping-the-semiconductor-value-chain_5ba52971/4154cdbf-en.pdf
-      https://www.cnas.org/publications/reports/technology-to-secure-the-ai-chip-supply-chain-a-primer
-      (hardware-enabled mechanisms, traceability and remote verification,
-      incl. trusted components and attestation-like approaches) */}
-
-{/* THE DRILL BENCH WAS HERE AND IS GONE, on the course owner's instruction
-    (2026-08-18) — removed rather than moved to 1.3, which was the alternative
-    put to her. It was three decks and nineteen steps, about nine minutes, in
-    a lesson that had to come down from seventy-seven to under forty.
-
-    WHAT THAT LEAVES OPEN, so nobody has to rediscover it from the diff:
-    `drills-foundations` (foundations 9 steps, actors 6, spine 4) is authored
-    content and its data is still in the repo at
-    src/lib/verification/data/drills-foundations.ts. It now has no placement
-    anywhere in the track. CLAUDE.md's rule for content in that state is that
-    it must be ported or retired deliberately and never left to drift, so this
-    is the note that stops it drifting: it is unplaced by decision, and 1.3 or
-    module 0 are the two homes that would fit if it should come back.
-
-    One consequence worth naming: the actors deck drilled the six functional
-    roles, and the workshop's Categorize step — which also drilled them — came
-    out in the same pass. Table 5 is still read, but nothing in 1.2 practises
-    it now. */}

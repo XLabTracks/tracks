@@ -53,9 +53,6 @@ describe("scorePlacements", () => {
   });
 });
 
-/* The data is as load-bearing as the logic: a key that names a ring which
-   does not exist, or an actor the roster dropped, would render as an
-   exercise nobody can finish rather than as an error. */
 describe("actor-workshop data", () => {
   it("resolves every workshop actor against the roster", () => {
     expect(WORKSHOP_ACTORS.map((a) => a.id)).toEqual([...WORKSHOP_ACTOR_IDS]);
@@ -81,9 +78,6 @@ describe("actor-workshop data", () => {
     const postures = new Set(ACTOR_POSTURES.map((p) => p.id));
     const absent = new Set<string>(ABSENT_ACTORS);
     for (const id of WORKSHOP_ACTOR_IDS) {
-      // An actor that is on the board in order to be absent holds no role and
-      // takes no posture, and the roster is right to give it none. It is also
-      // never asked for in step 5 — see CATEGORIZE_IDS.
       if (!absent.has(id)) {
         expect(ROLE_KEY[id]?.length, `${id} has no roles`).toBeGreaterThan(0);
       }
@@ -106,8 +100,6 @@ describe("actor-workshop data", () => {
   });
 
   it("puts no two neighbouring slots on the same ring", () => {
-    // That is the whole reason MAP_SLOTS exists rather than reusing the
-    // reading order: same-ring neighbours are labels stacked on one arc.
     const n = MAP_SLOTS.length;
     for (let i = 0; i < n; i += 1) {
       const here = MAP_SLOTS[i]!;
@@ -123,10 +115,6 @@ describe("actor-workshop data", () => {
   });
 });
 
-/* Step 2's key is the roster's own entry for the cloud provider, printed as
-   the lesson prints it. If the roster gains or loses a role there, the key
-   must move with it or the step marks against something the course no longer
-   says. */
 describe("recall target", () => {
   const cloud = ACTOR_MAP_ENTRIES.find((a) => a.id === RECALL_TARGET.actorId)!;
 
@@ -180,13 +168,10 @@ describe("scoreEdges", () => {
     const score = scoreEdges(["b>a"], key);
     expect(score.reversed).toEqual(["b>a"]);
     expect(score.extra).toEqual([]);
-    // Still missed: the claim the key makes was not drawn.
     expect(score.missed).toContain("a>b");
   });
 
   it("does not call an edge reversed when the right one was drawn too", () => {
-    // Drawing both directions is the right edge plus a wrong one, and
-    // "reversed" would read as partial credit for the wrong one.
     const score = scoreEdges(["a>b", "b>a"], key);
     expect(score.found).toEqual(["a>b"]);
     expect(score.reversed).toEqual([]);
@@ -194,10 +179,6 @@ describe("scoreEdges", () => {
   });
 });
 
-/* The edge key is Baker's framework applied to this roster, so the things
-   that can go wrong with it are structural: an edge naming an actor the
-   roster dropped, a subgoal with no mechanism at all, or the finding's prose
-   claiming a count the data no longer has. */
 describe("edge key", () => {
   const ids = new Set<string>(WORKSHOP_ACTOR_IDS);
 
@@ -209,7 +190,6 @@ describe("edge key", () => {
       expect(edge.from).not.toBe(edge.to);
       const id = edgeId(edge.from, edge.to);
       expect(seen.has(id), `${id} twice`).toBe(false);
-      // Both directions in one key would make the exercise unanswerable.
       expect(seen.has(edgeId(edge.to, edge.from)), `${id} both ways`).toBe(false);
       seen.add(id);
     }
@@ -225,13 +205,9 @@ describe("edge key", () => {
   });
 
   it("still has the shape EDGE_FINDING describes in prose", () => {
-    // Every count the finding states, re-derived. An added or moved edge
-    // fails here rather than leaving the prose quietly wrong.
     const per = (id: string) => EDGE_KEY.filter((e) => e.subgoal === id).length;
-    // "2.B has four. The other three subgoals have one edge each."
     expect(per("2b")).toBe(4);
     expect([per("1a"), per("1b"), per("2a")]).toEqual([1, 1, 1]);
-    // "One firm is on three of the seven edges and touches three of four."
     expect(EDGE_KEY).toHaveLength(7);
     const nvidia = EDGE_KEY.filter((e) => e.from === "nvidia");
     expect(nvidia).toHaveLength(3);
@@ -239,9 +215,6 @@ describe("edge key", () => {
   });
 
   it("points exactly one edge at a party, and none at the United States", () => {
-    // "Six of the seven edges point at a company or at a shell. Exactly one
-    // points at a party to the agreement." The whole one-sidedness reading
-    // rests on this, so derive it rather than trusting the prose.
     const parties = ["us", "china"];
     const atParty = EDGE_KEY.filter((e) => parties.includes(e.to));
     expect(atParty.map((e) => edgeId(e.from, e.to))).toEqual(["ic>china"]);
@@ -249,8 +222,6 @@ describe("edge key", () => {
   });
 
   it("has nobody but one signatory's institutions on the verifying ring", () => {
-    // The finding says the verifying ring carries one country's bureaus plus
-    // the body that does not exist — no counterparty, no neutral third party.
     const verifiers = WORKSHOP_ACTOR_IDS.filter((id) => RING_KEY[id] === "verifies");
     expect([...verifiers].sort()).toEqual([
       "bis",
@@ -265,14 +236,11 @@ describe("edge key", () => {
     const alone = WORKSHOP_ACTOR_IDS.filter((id) => !touched.has(id));
     const covered = EDGE_NOTES.flatMap((n) => n.actorIds);
     expect([...alone].sort()).toEqual([...covered].sort());
-    // Ten of the seventeen, which the finding's sixth paragraph states.
     expect(alone).toHaveLength(10);
     for (const note of EDGE_NOTES) expect(note.why.length).toBeGreaterThan(80);
   });
 });
 
-/* The closing key states two facts about the roster. Re-derive them here, so
-   that editing the roster fails loudly instead of leaving a key that lies. */
 describe("closing marking key", () => {
   it("still has exactly three roles for Taiwan, which is what the question says", () => {
     const taiwan = ACTOR_MAP_ENTRIES.find((a) => a.id === "taiwan")!;
@@ -298,34 +266,10 @@ describe("closing marking key", () => {
   });
 
   it("asks for the mechanism wherever it asks for a judgement", () => {
-    // The house rule from data/marking-keys.ts: a bare correct label earns
-    // nothing where reasoning was the point.
     expect(CLOSING_KEY.criteria.some((c) => c.needsReasoning)).toBe(true);
   });
 });
 
-/**
- * Quote tripwire.
- *
- * The rings are ours and the sentences they are justified by are hers, so
- * every quoted fragment in the data file has to still be in 1.2 word for
- * word. This caught the defect that made it worth writing: "The machines
- * without which no leading-edge chip exists." was quoted with a full stop
- * where Table 4 has a comma and keeps going. A quote edited to fit is the
- * thing this repo's snippet tripwires exist to stop, and widget data had no
- * such guard until now.
- *
- * A trailing "..." marks a deliberate cut and is dropped before matching;
- * nothing else about a fragment may differ.
- *
- * THE CONVENTION THIS RESTS ON, so nobody trips it by accident: curly
- * quotation marks in the data file are reserved for 1.2's own words. Anything
- * quoted from somewhere else — a paper, a figure caption — is attributed
- * inline and written with straight quotes, which this test does not read. And
- * a line that puts words in a learner's mouth, like the noCredit examples,
- * carries no quotation marks at all; one of them did, and it failed here,
- * which is the check behaving correctly rather than a reason to loosen it.
- */
 const norm = (s: string) =>
   s
     .normalize("NFKC")
@@ -337,13 +281,6 @@ const norm = (s: string) =>
     .trim()
     .toLowerCase();
 
-/**
- * Every Baker quotation reachable from the module's exports.
- *
- * A deep walk rather than a hand-kept list, so a quote added to a new edge or
- * a new ring is checked the day it is written and nobody has to remember to
- * register it. The shape is the contract: `{ text, where }`.
- */
 function bakerQuotes(): { text: string; where: string }[] {
   const out: { text: string; where: string }[] = [];
   const seen = new Set<unknown>();
@@ -364,19 +301,6 @@ function bakerQuotes(): { text: string; where: string }[] {
   return out;
 }
 
-/**
- * Tripwire 1 \u2014 the frame.
- *
- * The rings, the subgoals and every edge are Baker et al.'s, and the workshop
- * says so on screen. That claim is only worth anything if the sentences are
- * still the paper's, so they are matched against the committed artifact \u2014
- * offline, at test time, with no network and no trust in a transcription.
- *
- * No ellipsis convention here, deliberately: a Baker quote is verbatim and
- * whole. The 1.2 tripwire below allows a trailing cut because it quotes a
- * table cell; this one quotes claims, and a claim trimmed to fit is the
- * failure mode the tripwire exists for.
- */
 describe("quotes from Baker et al.", () => {
   const artifact = JSON.parse(
     readFileSync(
@@ -385,8 +309,6 @@ describe("quotes from Baker et al.", () => {
     ),
   ) as { paper: { html: string } };
 
-  // Tags out, entities in, whitespace collapsed \u2014 the same reading a person
-  // gets off the rendered page.
   const body = norm(
     artifact.paper.html
       .replace(/<[^>]+>/g, " ")
@@ -399,8 +321,6 @@ describe("quotes from Baker et al.", () => {
   const quotes = bakerQuotes();
 
   it("finds quotes to check at all", () => {
-    // A refactor that drops the `baker` fields would otherwise make this pass
-    // by having nothing to test.
     expect(quotes.length).toBeGreaterThanOrEqual(12);
   });
 
@@ -416,34 +336,6 @@ describe("quotes from Baker et al.", () => {
   });
 });
 
-/**
- * Tripwire 2 \u2014 the course's own words.
- *
- * The rings are ours and the sentences they are justified by are hers, so
- * every quoted fragment in the data file has to still be in 1.2 word for
- * word. This caught the defect that made it worth writing: "The machines
- * without which no leading-edge chip exists." was quoted with a full stop
- * where Table 4 has a comma and keeps going. A quote edited to fit is the
- * thing this repo's snippet tripwires exist to stop, and widget data had no
- * such guard until now.
- *
- * A trailing "..." marks a deliberate cut and is dropped before matching;
- * nothing else about a fragment may differ.
- *
- * THE CONVENTION THIS RESTS ON, so nobody trips it by accident: curly
- * quotation marks in the data file are reserved for 1.2's own words. Anything
- * quoted from somewhere else \u2014 a paper, a figure caption \u2014 is attributed
- * inline and written with straight quotes, which this test does not read. And
- * a line that puts words in a learner's mouth, like the noCredit examples,
- * carries no quotation marks at all; one of them did, and it failed here,
- * which is the check behaving correctly rather than a reason to loosen it.
- *
- * ONE EXEMPTION, and it is not a loophole: a curly-quoted run that sits
- * inside a Baker quotation is skipped here, because the test above has
- * already matched it against the paper. Baker quotes the terms it defines,
- * so \u201cweak link\u201d and \u201clarge-scale\u201d appear inside sentences that are verbatim
- * from somewhere that is not 1.2.
- */
 describe("quotes from 1.2", () => {
   const DATA = readFileSync(join(__dirname, "data/actor-workshop.ts"), "utf8");
   const LESSON = readFileSync(
@@ -457,8 +349,6 @@ describe("quotes from 1.2", () => {
     .filter((f) => !fromBaker.some((b) => b.includes(norm(f))));
 
   it("finds fragments to check at all", () => {
-    // A refactor that drops the quotes would otherwise make this suite pass
-    // by having nothing to test.
     expect(fragments.length).toBeGreaterThanOrEqual(6);
   });
 

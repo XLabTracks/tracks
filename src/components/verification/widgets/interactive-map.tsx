@@ -28,8 +28,6 @@ import {
 } from "@/lib/verification/data/interactive-map";
 import type { VerificationWidgetProps } from "../kit/types";
 
-/* ============ view state (source S) ============ */
-
 type FilterSource = "key" | string | null;
 
 type ViewBox = { x: number; y: number; w: number; h: number };
@@ -95,8 +93,6 @@ const INITIAL: State = {
   vb: { ...BASE },
 };
 
-/* ============ zoom / pan helpers (source clampVB/zoomAt) ============ */
-
 function clampVB(vb: ViewBox): ViewBox {
   const w = Math.min(BASE.w, Math.max(BASE.w / 9, vb.w));
   const h = w * (BASE.h / BASE.w);
@@ -128,16 +124,6 @@ function zoomVB(
   });
 }
 
-/* ============ bucket color, semantic-encoding only ============ */
-// Layers are encoded with the course palette (theme tokens, set in the data
-// file), used ONLY on map fills / swatches and always paired with the layer
-// name — isolation and the legend carry the encoding where hue cannot.
-
-/**
- * Full-page inline world map of the AI compute supply chain (unbridged view
- * widget). Renders 176 SVG country paths; 14 featured countries are clickable
- * for a detail card; a 6-layer key + 8-stage pipeline strip isolate a layer.
- */
 export function InteractiveMap(_props: VerificationWidgetProps) {
   void _props;
   const [s, dispatch] = useReducer(reducer, INITIAL);
@@ -160,14 +146,10 @@ export function InteractiveMap(_props: VerificationWidgetProps) {
     moved: boolean;
     pid: number;
   } | null>(null);
-  // whether the pan that just ended actually moved — read by onCountryClick to
-  // suppress the click that follows a pan (endPan clears dragRef itself, so a
-  // right-click or pointercancel can't leave a stuck drag behind)
   const panMovedRef = useRef(false);
 
   const zoom = s.vb.w > 0 ? BASE.w / s.vb.w : 1;
 
-  /* ---- derived paint sets ---- */
   const dimmed = useMemo(() => {
     const set = new Set<string>();
     if (s.filter) {
@@ -177,7 +159,6 @@ export function InteractiveMap(_props: VerificationWidgetProps) {
     return set;
   }, [s.filter]);
 
-  /* ---- preview (hover a layer dims non-members) ---- */
   const [preview, setPreview] = useState<BucketKey | null>(null);
   const previewSet = useMemo(() => {
     if (s.filter || !preview) return null;
@@ -186,7 +167,6 @@ export function InteractiveMap(_props: VerificationWidgetProps) {
     return set;
   }, [preview, s.filter]);
 
-  /* ============ zoom / pan wiring ============ */
   const applyZoom = useCallback(
     (factor: number, px: number, py: number) => {
       const el = svgRef.current;
@@ -200,7 +180,6 @@ export function InteractiveMap(_props: VerificationWidgetProps) {
     [s.vb]
   );
 
-  // Non-passive wheel listener (React onWheel is passive; can't preventDefault).
   useEffect(() => {
     const el = svgRef.current;
     if (!el) return;
@@ -218,7 +197,7 @@ export function InteractiveMap(_props: VerificationWidgetProps) {
   }, [applyZoom]);
 
   const onPointerDown = (e: React.PointerEvent<SVGSVGElement>) => {
-    if (e.button !== 0) return; // left button / touch only
+    if (e.button !== 0) return;
     panMovedRef.current = false;
     dragRef.current = {
       x: e.clientX,
@@ -256,7 +235,6 @@ export function InteractiveMap(_props: VerificationWidgetProps) {
     try {
       svgRef.current?.releasePointerCapture(e.pointerId);
     } catch {
-      /* pointer may already be released */
     }
   };
 
@@ -266,9 +244,7 @@ export function InteractiveMap(_props: VerificationWidgetProps) {
     applyZoom(factor, (r?.width ?? 2) / 2, (r?.height ?? 2) / 2);
   };
 
-  /* ============ selection / country click ============ */
   const onCountryClick = (id: string | null) => {
-    // suppress click that was really a pan
     if (panMovedRef.current) {
       panMovedRef.current = false;
       return;
@@ -277,12 +253,10 @@ export function InteractiveMap(_props: VerificationWidgetProps) {
     else dispatch({ type: "clearSelection" });
   };
 
-  /* keyboard: escape clears the current selection or filter */
   const onKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === "Escape") dispatch({ type: "escape" });
   };
 
-  /* ============ tooltip ============ */
   const onSvgMouseMove = (e: React.MouseEvent<SVGSVGElement>) => {
     const target = e.target as Element;
     const st = stageRef.current;
@@ -296,10 +270,7 @@ export function InteractiveMap(_props: VerificationWidgetProps) {
     else setTip(null);
   };
 
-  /* ============ scaled stroke/font values (source applyVB) ============ */
   const strokeW = Math.max(0.18, 0.55 / zoom);
-  // 12 is the floor the rest of this widget uses: below it a country label
-  // is unreadable on the 13" baseline, and these are the map's only prose.
   const fontSize = Math.max(3.8, 12 / zoom);
   const leaderW = Math.max(0.18, 0.5 / zoom);
   const hubR = Math.max(1.6, 3.4 / zoom);
@@ -315,12 +286,6 @@ export function InteractiveMap(_props: VerificationWidgetProps) {
       onKeyDown={onKeyDown}
     >
       <div>
-        {/* The stat strip, set as a figure column rather than a row of pairs.
-            Its three sentences never fit one line inside a reading column, so
-            it always stacked — and each pair carried its own number, so the
-            sentences started at three different x. Two grid columns give the
-            figures a column of their own, right-aligned the way a column of
-            numbers is set, and the sentences one left edge to start from. */}
         <dl className="border-border mb-4 grid grid-cols-[auto_1fr] items-baseline gap-x-3 gap-y-2 border-b pb-4">
           {C.stats.map((st) => (
             <Fragment key={st.l}>
@@ -332,20 +297,12 @@ export function InteractiveMap(_props: VerificationWidgetProps) {
           ))}
         </dl>
 
-        {/* One column, map first.
-            It used to run `lg:grid-cols-[1fr_320px]`, which spent a third of
-            the module on a key and left the map — the thing being read — in
-            what was left. A world map wants width more than a list of six
-            labels does, so the map takes the full module and the key sits
-            under it, laid out across rather than down. */}
         <div className="grid gap-4">
-          {/* ============ map ============ */}
           <div className="min-w-0">
             <div
               ref={stageRef}
               className="border-border bg-muted/30 relative overflow-hidden rounded-lg border"
             >
-              {/* hint bar */}
               {hintOpen && (
                 <div className="text-muted-foreground border-border bg-card absolute top-3 left-3 z-10 flex max-w-[calc(100%-5rem)] items-start gap-2 rounded-md border px-3 py-2 text-xs">
                   <span>{C.hint}</span>
@@ -360,7 +317,6 @@ export function InteractiveMap(_props: VerificationWidgetProps) {
                 </div>
               )}
 
-              {/* zoom controls */}
               <div className="absolute top-3 right-3 z-10 flex flex-col gap-1.5">
                 <button
                   type="button"
@@ -412,14 +368,11 @@ export function InteractiveMap(_props: VerificationWidgetProps) {
                   height={5000}
                   fill="transparent"
                 />
-                {/* country paths */}
                 <g>
                   {WORLD.map((f, fi) => {
                     const fid = f.id ?? "";
                     const c = CMAP[fid];
                     const featured = !!c && !c.hub;
-                    // Filtering recolors non-members to muted;
-                    // hover-preview only lowers opacity, keeping the hue.
                     const isDim = dimmed.has(fid);
                     const isPreview = !!previewSet?.has(fid);
                     const selected = s.selected === fid;
@@ -453,7 +406,6 @@ export function InteractiveMap(_props: VerificationWidgetProps) {
                   })}
                 </g>
 
-                {/* hub markers (Singapore) */}
                 <g>
                   {COUNTRIES.filter((c) => c.hub).map((c) => {
                     const isDim = dimmed.has(c.id);
@@ -475,7 +427,6 @@ export function InteractiveMap(_props: VerificationWidgetProps) {
                   })}
                 </g>
 
-                {/* leaders + labels */}
                 <g aria-hidden>
                   {COUNTRIES.map((c) => {
                     if (!c.label.leader) return null;
@@ -519,7 +470,6 @@ export function InteractiveMap(_props: VerificationWidgetProps) {
                 </g>
               </svg>
 
-              {/* tooltip */}
               {tip && tipCountry && (
                 <div
                   role="tooltip"
@@ -542,7 +492,6 @@ export function InteractiveMap(_props: VerificationWidgetProps) {
               )}
             </div>
 
-            {/* pipeline strip */}
             <div className="mt-4">
               <div className="mb-2 flex items-baseline justify-between">
                 <span className="text-[13px] font-semibold">{C.flowTitle}</span>
@@ -550,8 +499,6 @@ export function InteractiveMap(_props: VerificationWidgetProps) {
                   {C.flowNote}
                 </span>
               </div>
-              {/* The chevrons are real items in the row, so cells cannot
-                  collide with them. A stage that does not fit wraps cleanly. */}
               <div className="flex flex-wrap items-stretch gap-1">
                 {FLOW.map((st, i) => {
                   const active =
@@ -624,7 +571,6 @@ export function InteractiveMap(_props: VerificationWidgetProps) {
             </div>
           </div>
 
-          {/* ============ under the map ============ */}
           <aside className="flex min-w-0 flex-col gap-4">
             <div>
               <div className="mb-2 flex items-baseline justify-between gap-2">
@@ -688,12 +634,10 @@ export function InteractiveMap(_props: VerificationWidgetProps) {
               {C.chipSub}
             </ReadingCard>
 
-            {/* detail card */}
             <div className="border-border bg-muted/30 min-h-32 rounded-lg border p-3.5">
               <DetailCard state={s} dispatch={dispatch} />
             </div>
 
-            {/* roles key */}
             <div className="border-border border-t pt-3">
               <p className="mb-2 text-[13px] font-semibold">{C.rolesLabel}</p>
               <div className="flex flex-wrap gap-1">
@@ -717,7 +661,6 @@ export function InteractiveMap(_props: VerificationWidgetProps) {
   );
 }
 
-/* ============ tooltip positioning (source moveTip) ============ */
 function tipPos(tip: {
   x: number;
   y: number;
@@ -726,7 +669,7 @@ function tipPos(tip: {
 }): React.CSSProperties {
   const rw = tip.rw;
   const rh = tip.rh;
-  const tw = 256; // w-64
+  const tw = 256;
   const th = 120;
   let lx = tip.x + 16;
   let ly = tip.y + 14;
@@ -735,7 +678,6 @@ function tipPos(tip: {
   return { left: Math.max(6, lx), top: Math.max(6, ly) };
 }
 
-/* ============ bucket chip ============ */
 function BucketChip({ bk }: { bk: BucketKey }) {
   const b = BUCKETS[bk];
   return (
@@ -750,7 +692,6 @@ function BucketChip({ bk }: { bk: BucketKey }) {
   );
 }
 
-/* ============ detail card (source renderDetail) ============ */
 function DetailCard({
   state,
   dispatch,
@@ -760,7 +701,6 @@ function DetailCard({
 }) {
   const s = state;
 
-  // filter (layer / pipeline stage) mode
   if (s.filter) {
     const b = BUCKETS[s.filter];
     const members = COUNTRIES.filter((c) => c.buckets.includes(s.filter!));
@@ -813,7 +753,6 @@ function DetailCard({
     );
   }
 
-  // country selected
   if (s.selected) {
     const c = CMAP[s.selected];
     if (!c) return null;
@@ -864,7 +803,6 @@ function DetailCard({
     );
   }
 
-  // default (map, nothing selected)
   return (
     <div>
       <p className="text-muted-foreground text-3xs font-medium">

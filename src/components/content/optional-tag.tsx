@@ -1,16 +1,5 @@
 import { cn } from "@/lib/utils";
 
-/**
- * The "[Optional]" marker on an item that never gates progress — a soft-filled
- * tag that rides on the title's own line, worn the same on the reading header
- * and its sidebar row.
- *
- * Filled, not outlined, and squared to the radius the reading cards use rather
- * than a stock capsule pill — a thin rounded-full outline is the shape that
- * reads as boilerplate. The word carries the meaning; the fill is only a
- * surface, so nothing here leans on hue. `compact` is the sidebar's smaller
- * cut of the same tag.
- */
 export function OptionalMarker({
   compact = false,
   className,

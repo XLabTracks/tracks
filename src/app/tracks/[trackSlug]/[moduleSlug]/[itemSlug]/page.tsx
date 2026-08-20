@@ -75,10 +75,6 @@ import {
 } from "@/lib/highlights/types";
 import { getVerificationExerciseForLesson } from "@/lib/verification/exercises";
 
-// Dispatching route: a module item slug resolves to either a lesson or a
-// paper (they share the /tracks/t/m/<slug> namespace; the static `assessment`
-// sibling segment takes precedence).
-
 export async function generateMetadata({
   params,
 }: {
@@ -102,15 +98,7 @@ export default async function ItemPage({
 
   const user = await getCurrentUser();
 
-  // Hard prerequisite enforcement: signed-in learners with unmet prerequisites
-  // are sent back to the module page. (Signed-out visitors may preview.)
   if (user && track.prerequisiteEnforcement === "hard") {
-    // Degrade like the layout's progress read: getPrerequisiteStatus awaits
-    // the same cache()-memoized getTrackCompletionSet, so a failed read
-    // rejects here too — and, uncaught, would rethrow BEFORE dispatch to
-    // LessonItemPage/PaperItemPage, making their degrade catches unreachable
-    // on every hard-enforcement item with prerequisites. Fail open (no lock),
-    // consistent with signed-out visitors being allowed to preview.
     const prereqStatuses = await getPrerequisiteStatus(
       user.id,
       module.id
@@ -160,18 +148,11 @@ async function LessonItemPage({
   nav: { prev: ItemRef | null; next: ItemRef | null };
   userId: string | null;
 }) {
-  // A progress outage must not take static curriculum down.
   const completed = userId
     ? await isLessonCompleted(userId, lesson.id).catch(() => false)
     : false;
   const citations = await getLessonCitations(lesson.contentRef);
 
-  /* The closing page speaks for the whole track, so it needs the track's own
-     state: the required units, and the required written work. Finishing is
-     both — a learner who read every page and submitted nothing has not done
-     the course. Everything is counted except this page itself, because the
-     learner is standing on it. Only that page pays for the extra reads (both
-     are request-cached). */
   let completionState: CompletionState = { units: null, writing: null };
   let completionStats: CompletionStatsData | null = null;
   if (lesson.completion && userId) {
@@ -183,8 +164,6 @@ async function LessonItemPage({
     const units = getTrackProgressContentIds(track.id).filter(
       (id) => id !== lesson.id
     );
-    // Submitted, not drafted: a draft is work in progress, and "graded" is a
-    // submitted task the grader has since been run on.
     const submittedWritingIds = writingIds.filter((id) => {
       const status = submissions.get(id)?.status;
       return status === "submitted" || status === "graded";
@@ -199,8 +178,6 @@ async function LessonItemPage({
         required: writingIds.length,
       },
     };
-    // The dashboard under the header, from the same rows. The skills figure
-    // ladders on the verification graph, so the card is that track's.
     if (track.id === "verification") {
       completionStats = {
         skills: skillSummary(completedVerificationUnits(completedSet)),
@@ -213,24 +190,11 @@ async function LessonItemPage({
     }
   }
 
-  // One reader decision, used twice: the parts reader carries the time
-  // estimate on its toolbar line, so the header chip yields to it there.
   const chunked =
     track.chunkedReading && !lesson.completion && !lesson.unchunked;
 
   return (
-    /* No width cap. It was max-w-4xl — 896px — which on anything wider than a
-       small laptop left a third of the content area empty beside the reading
-       column, and the column had a second cap inside it. Both are gone on the
-       course owner's instruction: the text takes the width the sidebar does
-       not. The measure that used to sit inside is in app-bridge.css, and the
-       margin gutter that justified some of the slack went with the footnote
-       sidenote it was reserved for. */
     <div className="px-4 py-8 lg:px-8">
-      {/* The trail stops at the module: the lesson's own name is the h1 two
-          lines below, and repeating it there put the same words on screen
-          twice before the body even started. Same reason there is no
-          "Module N: …" line — the module is the crumb above it. */}
       <Breadcrumbs
         items={[
           { label: track.title, href: `/tracks/${track.slug}` },
@@ -248,7 +212,6 @@ async function LessonItemPage({
           </h1>
           {lesson.optional && <OptionalMarker />}
         </div>
-        {/* Her standard wording, with the clock restored at her request. */}
         {lesson.estimatedMinutes && !chunked ? (
           <p className="text-muted-foreground mt-2 flex items-center gap-1.5 text-sm">
             <Clock className="size-3.5" aria-hidden /> Estimated time:{" "}
@@ -257,11 +220,6 @@ async function LessonItemPage({
         ) : null}
       </header>
 
-      {/* Signed out on the verification track, the dashboard below stands in
-          for the header's sign-in card — the owner's instruction (2026-08-19):
-          the top box is the dashboard, dashes where the numbers go. Signed in,
-          the header still celebrates or lists what is left, and the dashboard
-          carries the numbers under it. */}
       {lesson.completion && (userId || track.id !== "verification") && (
         <CompletionHeader track={track} state={completionState} />
       )}
@@ -269,29 +227,15 @@ async function LessonItemPage({
         <CompletionStats stats={completionStats} mapHref="/verification/map" />
       )}
 
-      {/* Works-cited + progress footer: shared between the chunked and plain
-          layouts. Under the parts reader it is handed in as `footer` so it
-          renders above the unified pager and stays outside any hidden part;
-          in the plain layout it renders as ordinary siblings. */}
       {(() => {
         const footer = (
           <>
-            {/* Sources belong to the whole lesson, so the toggle is reachable
-                from any part — it lives outside the `.lesson-body` host and is
-                never hidden with a part. */}
             <WorksCited urls={citations} />
 
             {userId ? (
               <LessonTracker
                 lessonId={lesson.id}
                 completed={completed}
-                // The closing page completes nothing: reaching the end of a
-                // congratulations is not work, and counts toward no total.
-                // `!chunked` mirrors the paper branch below: under a parts
-                // reader the sentinel sits beneath whichever part is on
-                // screen, so scroll must not complete — Mark complete is the
-                // only channel there. Inert while chunkedReading is off, load-
-                // bearing the day a track re-enables it.
                 autoComplete={
                   !chunked &&
                   !lesson.completion &&
@@ -300,9 +244,6 @@ async function LessonItemPage({
               />
             ) : null}
 
-            {/* No Mark-complete on the closing page: it is not work, and a
-                "Completed" chip under a congratulations card claims a second,
-                smaller thing about the same page. */}
             {lesson.completion ? null : (
               <div className="mt-8 flex flex-wrap items-center gap-3">
                 {userId ? (
@@ -326,16 +267,9 @@ async function LessonItemPage({
           </>
         );
 
-        // .lesson-reader scopes the sidebar's scroll-spy (see use-scroll-spy)
-        // and gives heading anchors sticky-header clearance.
         return (
           <div className="lesson-reader mt-6">
-            {/* The closing page is one screen: a celebration behind a part
-                reader is four screens of nothing to read. */}
             {chunked ? (
-              // The reader owns the footer and one unified pager that rolls
-              // from the last part into the next lesson, so no separate
-              // LessonNav here.
               <LessonPartsReader
                 footer={footer}
                 prev={navLinkOf(nav.prev)}
@@ -350,11 +284,6 @@ async function LessonItemPage({
                 />
               </LessonPartsReader>
             ) : track.id === "verification" && !lesson.completion ? (
-              // The plain layout with the reading toolbar: the Aa control
-              // (focus reading + the e-reader text-size editor) governs only
-              // the surface it wraps — the reading and the exercises — never
-              // the chrome. Verification-only: the scale CSS lives in
-              // app-bridge.css, which only that track's chrome loads.
               <>
                 <ReadingSurface>
                   <LessonContent
@@ -384,8 +313,6 @@ async function LessonItemPage({
   );
 }
 
-/** An ItemRef as the parts reader wants it: a URL and a title, or null at the
- *  ends of the track. Mirrors LessonNav's own href construction. */
 function navLinkOf(
   ref: ItemRef | null
 ): { href: string; title: string } | null {
@@ -410,27 +337,12 @@ async function PaperItemPage({
   nav: { prev: ItemRef | null; next: ItemRef | null };
   userId: string | null;
 }) {
-  // The paper and its inserted lessons are independent completion units; the
-  // track completion set (a request-cache hit from the layout) covers them
-  // and PaperReader only membership-tests its own ids against it. The
-  // highlights read rides the same round trip — Hyperdrive caching is off,
-  // so a serialized second query would be a second us-east-1 hop.
   const [completedContentIds, highlights, classHighlights] = userId
     ? await Promise.all([
-        // Degrade like the layout's progress read (its try/catch can't cover
-        // this await — cache() memoizes the rejection per request, and
-        // re-awaiting it here rethrows): render with nothing completed
-        // rather than crash a page that is otherwise static content.
         getTrackCompletionSet(userId, track.id).catch(
           (): Set<string> => new Set()
         ),
-        // Degrade, never take the page down: schema migrations are applied
-        // manually via psql (db/migrations) — if a deploy outruns that step
-        // or a dev DB predates the Highlight table, this read throws and the
-        // paper must still render (highlights simply absent).
         getHighlightsForItem(userId, paper.id).catch((): HighlightRow[] => []),
-        // Classmates' shared notes on this paper (empty for a user in no
-        // classroom). Same degrade-never-fail contract as the own read.
         getClassmateHighlightsForItem(userId, paper.id).catch(
           (): ClassHighlightRow[] => []
         ),
@@ -438,12 +350,8 @@ async function PaperItemPage({
     : [new Set<string>(), [] as HighlightRow[], [] as ClassHighlightRow[]];
   const completed = completedContentIds.has(paper.id);
 
-  // Cached per request — PaperReader reuses the same artifact lookup.
   const source = await paperSourceHeader(paper.source);
 
-  // A gated paper is read whole, so it keeps the page's own footer and pager;
-  // a chunked one hands both to the reader, which owns the single pager that
-  // steps through the sections and then rolls into the neighbouring item.
   const chunkedPaper =
     track.chunkedReading &&
     (paper.pageSectionIds?.length ?? 0) >= 2 &&
@@ -471,16 +379,12 @@ async function PaperItemPage({
     </div>
   );
 
-  // One key per reading gate — PaperHighlights (pending-vs-orphan
-  // classification, fuzzy-skip while closed) and LessonTracker (scroll
-  // completion) key their gate-closed checks on the same set.
   const gateKeys = gateIdsOf(paper.edits).map((gateId) =>
     paperGateStorageKey(paper.id, gateId)
   );
 
   return (
     <div className="max-w-5xl px-4 py-8 lg:px-8">
-      {/* Trail stops at the module — the paper's name is the h1 below it. */}
       <Breadcrumbs
         items={[
           { label: track.title, href: `/tracks/${track.slug}` },
@@ -521,20 +425,12 @@ async function PaperItemPage({
             </a>
           )}
           {source.hasFootnotes && <SidenotesToggle />}
-          {/* Margin display of the reader's own highlight notes — only
-              signed-in readers can have any. */}
           {userId ? <MarginNotesToggle /> : null}
-          {/* Classmates' shared notes — only surfaced when at least one
-              exists on this paper. */}
           {classHighlights.length > 0 ? <ClassHighlightsToggle /> : null}
         </p>
       </header>
 
       <div className="mt-8">
-        {/* Section-by-section reading, on the tracks that read that way. A
-            gated paper is left whole: it already hides its own tail until the
-            reader answers, and two hiding layers over one document can strand
-            content behind both. */}
         {chunkedPaper ? (
           <PaperPartsReader
             attribution={source.authors}
@@ -550,11 +446,6 @@ async function PaperItemPage({
             />
           </PaperPartsReader>
         ) : track.id === "verification" ? (
-          // Papers carry the same reading surface as lessons, per the owner:
-          // the Aa (focus reading + content-scoped text size) over the
-          // document body. The wrapper does not disturb the `.paper-reader`
-          // root that PaperHighlights/PaperSidenotes discover, and the focus
-          // walker already skips .katex, glosses and not-prose.
           <ReadingSurface>
             <PaperReader
               paper={paper}
@@ -571,8 +462,6 @@ async function PaperItemPage({
         )}
       </div>
 
-      {/* Highlight layer: discovers the rendered .paper-reader root itself
-          (PaperSidenotes/PaperGlossary invariant — never receives HTML). */}
       {userId ? (
         <PaperHighlights
           initialHighlights={highlights}
@@ -589,20 +478,11 @@ async function PaperItemPage({
           lessonId={paper.id}
           completed={completed}
           toastLabel="Paper complete"
-          // Gated papers scroll-complete only after every reading gate has
-          // been opened — with gates closed the body is unmounted and this
-          // sentinel would sit right under the first gate's card.
           gateKeys={gateKeys}
-          // Read section by section, the sentinel sits below whichever part is
-          // on screen — so scrolling to the bottom of the first Article would
-          // report the whole treaty read. Mark complete is the only channel
-          // there, which is the rule the chunked reading already runs on.
           autoComplete={!chunkedPaper}
         />
       ) : null}
 
-      {/* Chunked, the reader owns this and the one pager under it (same shape
-          as a lesson); whole, the page prints them itself. */}
       {chunkedPaper ? null : (
         <>
           {paperFooter}

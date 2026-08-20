@@ -1,16 +1,3 @@
-/**
- * "Place your bets" — the mechanism sort. Learners rate twelve verification
- * mechanisms across four metrics before the mechanism weeks begin (2.0),
- * seal the set, and later compare it against a reference map assembled from
- * the module readings (4.1).
- *
- * Every learner-facing string here — the mechanisms, the metric anchors, the
- * reference positions (`ref`), the explanations, and the source list — is the
- * authored original, ported verbatim from the standalone build the course
- * owner made. The `ref` values are curriculum:
- * a judgment assembled from the readings, not computed, and not ours to move.
- * Presentation (colours, layout) lives in the widget; content lives here.
- */
 
 export type MetricKey = "tech" | "pol" | "eff" | "dur";
 export type LayerKey = "hardware" | "cloud" | "intelligence" | "human" | "crypto";
@@ -31,15 +18,11 @@ export const LAYERS: Layer[] = [
 export interface Metric {
   key: MetricKey;
   name: string;
-  /** One-line gist shown on the metric card. */
   gist: string;
-  /** The questions a rater weighs. */
   questions: string[];
   anchorLow: string;
   anchorHigh: string;
-  /** [rated-higher-than-reference, rated-lower]; used in the delta sentence. */
   phrase: [string, string];
-  /** Five rung labels, low → high. */
   rungs: [string, string, string, string, string];
 }
 
@@ -113,7 +96,6 @@ export const METRICS: Metric[] = [
   },
 ];
 
-/** Reference-position map: the reading citations behind each mechanism. */
 const SRC = {
   cnas: "Aarne, Fist & Withers, Secure, Governable Chips (CNAS, 2024)",
   rand: "Kulp et al., Hardware-Enabled Governance Mechanisms (RAND working paper, 2024)",
@@ -286,7 +268,6 @@ export const MECHANISMS: Mechanism[] = [
   },
 ];
 
-/** The storage key. Permanent: the 2.0 seal and the 4.1 reveal share it. */
 export const MECHANISM_SORT_KEY = "vt-ex:mechanism-sort";
 
 export const COPY = {
@@ -301,12 +282,10 @@ export const COPY = {
     "The reference map is a judgment assembled from the module readings and current deployments. Disagreeing is fine; the useful question is which metric you disagree on, and what evidence would settle it.",
 } as const;
 
-/** Which rung (0–4) a 0–1 value falls in. */
 export function rungIndex(v: number): number {
   return Math.min(4, Math.floor(v * 5));
 }
 
-/** Average absolute distance from the reference across the four metrics. */
 export function gapOf(v: Partial<Record<MetricKey, number>>, ref: Record<MetricKey, number>): number {
   let sum = 0;
   for (const m of METRICS) sum += Math.abs((v[m.key] ?? 0) - ref[m.key]);
@@ -319,7 +298,6 @@ export function verdictFor(d: number): { label: string; tone: "close" | "near" |
   return { label: "Big gap", tone: "far" };
 }
 
-/** The per-metric delta sentence, comparing a rating to the reference. */
 export function deltaText(v: Record<MetricKey, number>, ref: Record<MetricKey, number>): string {
   const parts: string[] = [];
   for (const m of METRICS) {

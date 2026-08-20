@@ -26,24 +26,6 @@ import { MarkingKeyPanel } from "../kit/marking-key";
 import type { VerificationWidgetProps } from "../kit/types";
 import { writingArea, writingCardFocus } from "../kit/writing-surface";
 
-/**
- * 2.4.3 — Four Sources, to the owner's revised spec (2026-08-15; see the
- * data file's header for what the revision added and removed).
- *
- * The shape her brackets dictate, in order: allegation once, above all four
- * and kept visible while the student works (sticky); one free-response box
- * per case, never split into fields; all four on the page at once; Submit
- * enabled only when all four carry an answer; on Submit the four freeze and
- * the reveal opens — the self-check pair, then the case-specific marking
- * guidance, then the 50-word final question, then the optional transfer.
- * No per-case correctness feedback anywhere.
- *
- * Nothing is graded, and the exercise is optional: submitting records no
- * completion. The steelman deck rides pre-submission, as before — the spec
- * revision did not touch it, and reading its removal into the spec's
- * silence was wrong; the owner explicitly asked for it to be restored.
- */
-
 type Answers = Record<string, string>;
 
 interface Saved {
@@ -61,9 +43,6 @@ const EMPTY: Saved = {
   transfer: "",
 };
 
-/** The pre-revision widget stored three fields per case under
- *  `<case>.<field>` keys; a draft in that shape folds into the case's one
- *  analysis box instead of vanishing. */
 const LEGACY_FIELDS = ["response", "changed", "unestablished"];
 
 function prune(raw: unknown): Saved {
@@ -104,9 +83,6 @@ export function SameClaim({
 
   return (
     <div className="not-prose my-6 space-y-4">
-      {/* Once, above all four, and it stays on screen while the cases are
-          worked — her spec. The wrapper is opaque so the sticky card never
-          shows the cases scrolling underneath its tint. */}
       <div className="bg-background sticky top-0 z-10 rounded-xl">
         <section className="border-primary/40 bg-primary/5 rounded-xl border p-4">
           <p className="text-muted-foreground eyebrow">
@@ -118,9 +94,6 @@ export function SameClaim({
         </section>
       </div>
 
-      {/* Olympiad-style registers, same as construct-case: setup at full
-          weight, the numbered demands indented under their lead, the tail
-          instruction muted — a statement, not a wall. */}
       <div className="space-y-3">
         <p className="text-base leading-relaxed font-medium">{CLAIM_INTRO}</p>
         <div className="space-y-2">

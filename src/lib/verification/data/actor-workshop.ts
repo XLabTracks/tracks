@@ -1,152 +1,3 @@
-/**
- * 1.2 — The Actor Map Workshop.
- *
- * WHAT THIS IS AND WHY IT IS SHAPED THIS WAY (course owner's instruction,
- * 2026-08-15). It is built on the Beeck Center's stakeholder-mapping workshop
- * (Georgetown), whose steps and timings are: Goal Setting 5' · List all
- * stakeholders 10' · Identify the core user 5' · Place and cluster 10–15' ·
- * Categorize 10–15' · Catch-up 5' · Political Analysis 15–20' · Setting
- * Actions 10'. Its artifact is concentric rings with the core at the centre,
- * so a reader can "see dependencies between stakeholders and anticipate
- * second-order effects".
- *
- * Ours compresses those eight into seven, because a solo online learner has
- * no facilitator to set goals with and no group to catch up with: Study →
- * Recall → Core → Place → Categorize → Edges → Read the map. Goal Setting is
- * the brief, and Catch-up is the reveal at the end of Recall, which is the
- * same thing a group gets from comparing lists. Beeck's Political Analysis
- * splits across the last two: the edges are the dependencies it exists to
- * draw, the reading is what they add up to.
- *
- * WHY IT OPENS CLOSED-BOOK. Both papers below were read, not summarised from
- * an abstract, and the second one corrected what this comment used to claim.
- *
- *   Karpicke & Blunt, Science 2011. Concept mapping counts as elaborative
- *   study precisely when "students construct concept maps in the presence of
- *   the materials they are learning" — in their Experiment 2 the mapping
- *   group "created their concept maps on paper while viewing the text".
- *   Retrieval practice beat it on the final short-answer test (d = 1.07) AND
- *   on a final test that was itself building a map from memory (d = 1.01).
- *   The detail that makes it bite: the mapping group produced MORE ideas
- *   during initial learning (0.74 of ideas versus 0.65), so it was ahead
- *   where it felt like it counted and behind a week later.
- *
- *   Blunt & Karpicke 2014 is NOT "the fix that rehabilitates maps", which is
- *   what this file said before anybody opened it. They crossed format
- *   (paragraph vs concept map) with text presence, and the finding is that
- *   format did not matter: "concept mapping and paragraph formats were
- *   equally effective retrieval-based learning activities", while retrieval
- *   itself did — "students performed better on a final test when the initial
- *   activities required retrieval (in the absence of the texts) rather than
- *   studying or elaborating on the material (in the presence of the texts)",
- *   even though the retrieval groups WROTE LESS during learning.
- *
- * What that licenses and what it does not. It licenses the freeze: closing
- * the roster is the whole of the evidence-backed part, and it would work as
- * well if every step were a plain textarea. It does NOT license the ring map
- * as a teaching device — a map is not a better format than writing down what
- * you remember, it is merely not a worse one. The rings are here for two
- * other reasons: they are the artifact the Beeck workshop is built to
- * produce, and they make one structural claim visible that the lesson can
- * otherwise only assert (see MAP_FINDING).
- *
- * A third finding neither paper leaves room to ignore: learners believe they
- * learned more after studying than after retrieving. That is why reopening
- * the roster is recorded and reported back rather than silently allowed —
- * the feeling of having learned is the thing being corrected.
- *
- * AND WHAT THIS WORKSHOP IS NOT, said here so nobody has to discover it.
- * Only step 2 is retrieval in Karpicke's sense: it asks for material with no
- * cue on screen. Steps 4, 5 and 6 are cued RECOGNITION — the ring names, the
- * six roles and the four subgoals are all printed on screen while they are
- * being used. The freeze hides which actors exist; it does not hide the
- * vocabulary. That is a deliberate trade (free recall of six roles across
- * seventeen actors is a punishing task, and the categories are what the
- * section is teaching), but it means the evidence above covers less of this
- * exercise than its shape suggests.
- *
- * PROVENANCE — read this before editing.
- *
- *   HERS, unchanged: the seventeen actors and their ids, positions and notes
- *   are rows of `ACTOR_MAP_ENTRIES` (data/actor-map.ts) and are not restated
- *   here — this file imports them. The six functional roles and five postures
- *   are `ACTOR_ROLES` / `ACTOR_POSTURES`, which are Tables 5 and 1 of
- *   `scoping-actors.mdx`. The role and posture ANSWER KEYS are those rows'
- *   own `roles` and `postures` fields — this file adds no judgement to them.
- *   The three closing questions are her "Try it before moving on" list,
- *   verbatim, moved here from the lesson body so they have somewhere to be
- *   answered.
- *
- *   OURS, and flagged for her: which actor sits on which ring, which edges
- *   exist, the core question's four options, and the two findings. Every one
- *   of them carries the sentence it rests on — Baker's in a `baker` field,
- *   1.2's in curly quotes — and both sets are held to their sources by the
- *   two tripwires in actor-workshop.test.ts. None of it is a new claim about
- *   the world.
- *
- * THE RINGS ARE BAKER'S FRAME, NOT OURS (course owner, 2026-08-18: use
- * Baker's framework, and make drawing the edges an exercise with Baker's key). They
- * used to be a shape we invented — runs it / supplies it / rules on it / out
- * of reach — derived from 1.2's own sentences but answering a question no
- * paper asks. They now answer the question the verification literature asks,
- * in its own words: Baker, Kulp, Marks, Brundage & Heim, *Verifying
- * International Agreements on AI: Six Layers of Verification for Rules on
- * Large-Scale AI Development and Deployment* (arXiv:2507.15916v2), whose
- * framework opens on declarations and asks, of every actor, what part it
- * plays in checking one.
- *
- * That is the title and the author list the rest of the course already uses —
- * 0.2 offers the paper as a curated reading and 2.1 Hardware makes it item 5
- * of its core source packet. This file had the authors and the title both
- * wrong when the frame first landed; the artifact's own `meta.title` is
- * mangled, so the two lessons above are the authority, not it.
- *
- * WHERE THIS SITS IN THE ARC, since it decides how much may be assumed. The
- * paper is OPTIONAL reading in 0.2 (one of six, "skim broadly; deep-read one
- * or two") and REQUIRED reading in 2.1, where the layers are the assignment.
- * So in 1.2 the framework is new material for most readers, and the workshop
- * has to teach it before it can ask for it back — which is why the four rings
- * are in the study panel and the four subgoals open step 6. A layer is
- * defined as one mechanism per subgoal, so a reader who meets the subgoals
- * here can read 2.1's assignment as a sentence rather than as vocabulary.
- *
- * Every ring name, every subgoal and every edge below carries a `baker` field
- * holding the sentence it rests on, verbatim from the committed artifact at
- * src/content/arxiv/2507.15916v2.json — which is also what actor-workshop.test.ts
- * matches them against, the same tripwire the quotes from 1.2 already had.
- * Read that field before rewriting any of this prose: the wording around it is
- * ours, the claim is not.
- *
- * WHAT THE EDGES ARE. An edge A → B says: A can produce evidence about B, for
- * a Verifier, that B did not have to volunteer. The framework asks four
- * questions of a declaration (Subgoals 1.A, 1.B, 2.A, 2.B) and answers each
- * with a mechanism; the edge names who holds that mechanism.
- *
- * BE EXACT ABOUT WHAT IS WHOSE HERE, because the step prints Baker's name
- * beside every row. The subgoals are the paper's. The mechanisms are the
- * paper's. WHICH ACTOR ON THIS ROSTER HOLDS EACH MECHANISM IS OURS, and for
- * several of them it is arguable rather than read off: an off-chip network tap
- * is a mutually vetted device that nobody on this board manufactures, and it
- * is filed under the cloud provider because the device sits in its data centre
- * and its logs are the other half of the same check. Two mechanisms the paper
- * assigns to EVERY subgoal — national intelligence and whistleblower
- * programmes — are filed at the one subgoal where they are the only mechanism
- * available here, and both edges say so on the page rather than in this
- * comment. The four actors with no edge are the same kind of judgement, each
- * resting on a line of the paper's own scope; California's is the one worth
- * arguing with and its note carries the argument against us.
- *
- * A Verifier may be its own source — intelligence is a Verifier's mechanism,
- * not a hand-off to one — so an edge can start on the third ring.
- *
- * WHY RINGS CARRY POSITION AND CHIPS CARRY ROLES. The lesson is explicit that
- * "any actor can hold several roles at once, and almost every important actor
- * does" — so a single ring per actor would be false if rings meant roles.
- * Position on the chain is single-valued and roles are not, which is exactly
- * Beeck's split between "Place and cluster" and "Categorize". The payoff is
- * the lesson's own sentence made visible: the second lens cuts across the
- * first, and on the finished map the role colours scatter across every ring.
- */
 
 import {
   ACTOR_MAP_ENTRIES,
@@ -156,31 +7,6 @@ import {
 } from "./actor-map";
 import type { MarkingKey } from "./marking-keys";
 
-/**
- * The subset the workshop runs on, in reading order.
- *
- * IT WAS TEN AND THEY WERE ALL COMPANIES plus three American bureaus, on a
- * board for an agreement between two governments. The closing questions gave
- * it away: they ask about Taiwan and about states that hold capability and
- * enforcement at once, and neither was on the board the learner had just
- * built. The course owner asked for countries to be added to the diagram on
- * 2026-08-18. So the six
- * states of the lesson's Table 2 are here, and so is one more row that is not
- * a country and belongs for the same reason — see below.
- *
- * Seventeen, from the roster's twenty-seven. What is still out: the EU (a
- * rule-writer with no compute), states with no supply-chain position, the
- * second-tier firms (AMD, EDA, OSATs, memory makers, neoclouds, the Chinese
- * labs) and the two international bodies that exist but do not verify. Every
- * one of them is a row the lesson names; none of them changes an answer here.
- *
- * `missing-verifier` — the roster's own "The verification body that does not
- * exist" — is on the board on purpose, and it is the sharpest row on it. A
- * verifying ring carrying only one signatory's institutions is a lie about a
- * two-party agreement, and drawing the absent third party is how the map says
- * so instead of the page asserting it. It is drawn hollow and it can hold no
- * edge, which is the whole content of the row.
- */
 export const WORKSHOP_ACTOR_IDS = [
   "us",
   "china",
@@ -205,60 +31,22 @@ export type WorkshopActorId = (typeof WORKSHOP_ACTOR_IDS)[number];
 
 const byId = new Map(ACTOR_MAP_ENTRIES.map((a) => [a.id, a]));
 
-/**
- * A roster row narrowed to a workshop id.
- *
- * `ActorMapEntry.id` is a plain string, which is right for a roster of
- * twenty-seven and wrong here: every key below is exhaustive over the ten, and
- * a component mapping over these rows must be able to index those keys without
- * a cast. Re-stamping `id` is what buys that, and it costs one shallow copy at
- * module load.
- */
 export type WorkshopActor = ActorMapEntry & { id: WorkshopActorId };
 
 export const WORKSHOP_ACTORS: WorkshopActor[] = WORKSHOP_ACTOR_IDS.map((id) => {
   const actor = byId.get(id);
-  // A missing id means the roster was edited without this list; failing at
-  // module load is right, because the alternative is a workshop that silently
-  // runs on nine actors and a key that no longer matches its own questions.
   if (!actor) throw new Error(`actor-workshop: no roster entry for "${id}"`);
   return { ...actor, id };
 });
 
-/**
- * A sentence from Baker et al., quoted verbatim.
- *
- * The artifact is committed (src/content/arxiv/2507.15916v2.json), so this is
- * checkable offline and actor-workshop.test.ts checks it. A quote that no
- * longer appears there fails the suite rather than sitting on the page as a
- * claim nobody can trace.
- */
 export interface BakerQuote {
-  /** Verbatim. No ellipses, no tightening to fit — the test matches exactly. */
   text: string;
-  /** Where in the report it is, so a reader can go and disagree with us. */
   where: string;
 }
 
-/**
- * The rings, innermost first.
- *
- * BAKER'S, not ours. The framework's context section sets up a Prover who
- * declares and a Verifier who checks, and everything else on a board like this
- * one is either evidence about a declaration or outside every declaration
- * there is. Four rings, and each one's test is the paper's own sentence.
- *
- * The centre does not change: the regulated act. Baker's scope is the same
- * thing said in compute — the framework "seeks to verify compliance on the
- * basis that all large-scale AI compute use is accounted for in compliant
- * activities" — so a training run above the threshold is exactly what the
- * declarations are about.
- */
 export interface Ring {
   id: RingId;
-  /** What the ring is, in the learner's hands. */
   name: string;
-  /** The test for putting an actor here. */
   test: string;
   baker: BakerQuote[];
 }
@@ -269,18 +57,7 @@ export const RINGS: Ring[] = [
   {
     id: "declares",
     name: "Declares",
-    // BOTH HALVES, OR THE STATES ARE UNPLACEABLE. The test used to name only
-    // compute owners, and a learner reading it would put a government on the
-    // verifying ring every time — it is a government, and governments check
-    // things. The paper's own answer is that in an international agreement
-    // the signatory IS the Prover, and a test that hides that half marks the
-    // learner wrong for reading carefully.
     test: "You own or use large-scale compute — or you signed the agreement and answer for what happens inside your territory. Either way the regime wants a declaration from you: you are the Prover.",
-    // TWO QUOTES, AND THE RING NEEDS BOTH — this is where the states landed.
-    // The framework runs at two levels: a signatory government is the Prover
-    // to the other signatory, and the organizations inside it declare in
-    // turn. One quote alone would put either the states or the firms on this
-    // ring by our say-so rather than the paper's.
     baker: [
       {
         text: "The Prover could be a private institution or (in the case of international agreements) a government, which could constrain private companies within its territory as part of the agreement.",
@@ -294,10 +71,6 @@ export const RINGS: Ring[] = [
   },
   {
     id: "evidence",
-    // The second clause arrived with the states. A jurisdiction does not hold
-    // the fab's shipment records — the fab does — but Dutch and Taiwanese law
-    // are why those records are a governable object at all, and a ring test
-    // that did not say so would contradict its own key.
     name: "Holds the evidence",
     test: "You declare nothing here and you check nothing, but you hold a record a declaration can be held against — or the authority that makes somebody else’s record producible.",
     baker: [
@@ -331,30 +104,6 @@ export const RINGS: Ring[] = [
   },
 ];
 
-/**
- * The ring key.
- *
- * Read off Baker's roles, not off intuition, and two placements are worth
- * arguing with and are meant to be.
- *
- * A cloud provider DECLARES. Baker names the Provers in a parenthesis — "major
- * AI companies and cloud compute providers" — so the two innermost actors are
- * the paper's own examples, not our reading of the roster. That is a real move
- * away from the old map, where the cloud sat with the labs for a different
- * reason (the run happens on its machines); it lands in the same place by a
- * better road.
- *
- * The chip firms HOLD EVIDENCE rather than declaring. They own compute of
- * their own and would declare for it — the honest note is that an actor's ring
- * is its part in verifying somebody else's declaration, which is the question
- * this map asks. NVIDIA is here because what it decides is whether the chips
- * carry the features a Verifier would read.
- *
- * The proxies and the deployers share OUTSIDE THE DECLARATION and could not be
- * less alike: one is below the threshold by construction, the other exists to
- * keep a name off a form. The ring names the property they share, and the
- * edge exercise is where the difference between them shows up.
- */
 export const RING_KEY: Record<WorkshopActorId, RingId> = {
   us: "declares",
   china: "declares",
@@ -375,23 +124,6 @@ export const RING_KEY: Record<WorkshopActorId, RingId> = {
   deployers: "undeclared",
 };
 
-/**
- * The drawing order — which angular slot each actor takes on the map.
- *
- * A SECOND ARRAY, and it earns itself. Angles come from a fixed position in a
- * list, because a layout that reflows as the learner places things is
- * unreadable and one computed from RING_KEY would encode the answer. The
- * reading order above groups actors the way the lesson introduces them —
- * states, then the bureaus inside one of them, then the chain from most
- * upstream down — which means seven consecutive slots all land on the
- * evidence ring, seven labels stacked along one arc of one circle.
- *
- * So the map gets its own order, authored to put no two neighbours on the
- * same ring. It leaks nothing: before anything is placed there are no dots,
- * and afterwards every dot is at the radius the LEARNER chose, so the slot
- * order is not visible to read the key off. A test holds the two arrays to
- * the same set.
- */
 export const MAP_SLOTS: readonly WorkshopActorId[] = [
   "asml",
   "us",
@@ -412,28 +144,8 @@ export const MAP_SLOTS: readonly WorkshopActorId[] = [
   "missing-verifier",
 ];
 
-/**
- * The one actor drawn as a hollow ring rather than a filled dot.
- *
- * It is on the board to be absent, so it cannot look the same as the things
- * that are there. Shape does the work and never colour alone: its label says
- * "none" in words, its ring reason says what is missing, and it is the only
- * actor that can hold no edge — which the edge step states rather than leaves
- * to be inferred from an empty row.
- */
 export const ABSENT_ACTORS: readonly WorkshopActorId[] = ["missing-verifier"];
 
-/**
- * What the ring map calls each actor.
- *
- * The roster names are right in a roster and too long on a diagram — "AWS,
- * Azure, Google Cloud, Oracle, Alibaba" truncated to an ellipsis at this
- * size, which is a label that has stopped being one. Every short form below
- * is the row heading the lesson's own tables use for that row (Table 4:
- * Cloud providers, Frontier labs, Deployers, Proxies and contractors; Table
- * 3: Commerce Department / Bureau of Industry and Security). Nothing here is
- * a new name for anything.
- */
 export const MAP_LABEL: Record<WorkshopActorId, string> = {
   us: "United States",
   china: "China",
@@ -444,10 +156,6 @@ export const MAP_LABEL: Record<WorkshopActorId, string> = {
   bis: "BIS",
   ic: "Intelligence community",
   california: "California",
-  // The roster calls this row "The verification body that does not exist",
-  // which is a sentence and not a label. The short form compresses the
-  // lesson's own paragraph — "The institutional shelf marked 'AI verification
-  // body' is empty" — and adds no claim to it.
   "missing-verifier": "No AI verification body",
   asml: "ASML",
   tsmc: "TSMC",
@@ -458,15 +166,6 @@ export const MAP_LABEL: Record<WorkshopActorId, string> = {
   deployers: "Deployers",
 };
 
-/**
- * Why each actor sits where it does. Shown only on the reveal.
- *
- * Two sources in one sentence, on purpose: the ring is Baker's and the reason
- * this particular actor lands on it is the lesson's, so where 1.2 has already
- * settled the point its words are quoted rather than paraphrased. The quote
- * tripwire in actor-workshop.test.ts holds those to the lesson body and the
- * `baker` fields to the artifact, which is the same guarantee twice.
- */
 export const RING_WHY: Record<WorkshopActorId, string> = {
   us: "In an international agreement the Prover is a government — the paper says so directly, and adds that it is the party “which could constrain private companies within its territory as part of the agreement”. So the signatory declares, and the buildings inside it are the machinery it verifies the other signatory WITH. That is the lesson’s own point about asking which building, drawn as two different rings.",
   china:
@@ -499,23 +198,6 @@ export const RING_WHY: Record<WorkshopActorId, string> = {
     "Outside every declaration for the opposite reason — below the threshold. Baker defines large-scale in thousands of chips over months, so millions of actors who “benefit from safety and bear none of its costs” are outside the regime by construction rather than by evasion.",
 };
 
-/**
- * Step 5 runs on six of the seventeen, and here is why.
- *
- * Placing seventeen actors is seventeen clicks. Categorising seventeen means
- * six role chips and five posture chips apiece — 187 decisions — and the step
- * was already the longest one on the board at ten. Length is not the only
- * argument: the lesson works the roles lens through exactly two actors ("Try
- * it on a cloud provider", "Or try Taiwan"), so a step that demands all
- * seventeen is asking for more than the section settles.
- *
- * These six are both of the lesson's worked examples plus one actor from each
- * remaining ring, chosen so the point survives the cut — roles scatter across
- * every ring, and the count per actor runs from four down to one. The United
- * States is here because the third closing question asks for an actor holding
- * capability and enforcement at once, and it should be one the learner has
- * had in their hands.
- */
 export const CATEGORIZE_IDS: readonly WorkshopActorId[] = [
   "hyperscalers",
   "taiwan",
@@ -525,14 +207,6 @@ export const CATEGORIZE_IDS: readonly WorkshopActorId[] = [
   "proxies",
 ];
 
-/**
- * Step 3 — the core.
- *
- * OURS: the question and its four options. The answer and the reason both
- * come straight out of the lesson's own opening move — "Who, exactly, has to
- * change their behavior on Wednesday morning? Not the people who signed." The
- * three wrong options are the three answers that move gets asked against.
- */
 export const CORE_QUESTION = {
   stem: "A pause agreement forbids training runs above a compute threshold. When you draw this map, what goes in the centre?",
   options: [
@@ -546,11 +220,6 @@ export const CORE_QUESTION = {
       id: "signatories",
       text: "The states that signed the agreement.",
       correct: false,
-      // The distractor now has to do a second job. Since the states arrived,
-      // the signatories DO sit on the innermost ring, and a learner who has
-      // just been told "not the people who signed" will read that as the map
-      // contradicting the page. It does not, and the difference is the whole
-      // frame: owing the declaration and doing the act are different things.
       why: "“Not the people who signed. Governments do not train frontier models.” Centre them and the map says the treaty regulates its own signatories rather than an activity. Then watch for what looks like a contradiction two steps from now: the signatories do end up on the innermost RING, because in an international agreement the party that owes the declaration is the government. Owing a declaration and performing the act are different things, and the centre is the act.",
     },
     {
@@ -568,12 +237,6 @@ export const CORE_QUESTION = {
   ],
 } as const;
 
-/**
- * What sits in the middle of the rings, and the sentence that puts it there.
- *
- * Printed under the map, because a diagram whose centre is asserted is a
- * diagram the reader has to take on trust.
- */
 export const CENTRE = {
   label: "A training run",
   sub: "above the threshold",
@@ -583,23 +246,11 @@ export const CENTRE = {
   } satisfies BakerQuote,
 } as const;
 
-/**
- * Baker's four verification subgoals, each in the paper's own words.
- *
- * The decomposition is the whole reason the edge exercise has a key rather
- * than a set of opinions: a mechanism counts because it completes one of
- * these, and an actor is on the map's edges because it holds a mechanism.
- * 1 and 2 together are exhaustive by construction — the paper's own argument
- * is that if declared uses are compliant and there are no undeclared uses,
- * every use is compliant.
- */
 export type SubgoalId = "1a" | "1b" | "2a" | "2b";
 
 export interface Subgoal {
   id: SubgoalId;
-  /** The paper's numbering, which is worth keeping: it is how it is cited. */
   label: string;
-  /** A short name, ours, for a chip and a table row. */
   name: string;
   baker: BakerQuote;
 }
@@ -643,25 +294,10 @@ export const SUBGOALS: Subgoal[] = [
   },
 ];
 
-/**
- * Step 6 — the edges, and the key for them.
- *
- * AN EDGE A → B SAYS: A can put something in front of a Verifier about B that
- * B did not have to volunteer. Direction is the content of the edge, not a
- * drawing convention — the cloud provider holds records about the lab's run,
- * and the lab holds nothing comparable about the cloud. A learner who draws
- * one backwards is told so specifically rather than simply marked wrong.
- *
- * Every edge names the subgoal it completes and quotes the mechanism from
- * Baker. Nothing was added because it would make a tidier graph: the four
- * actors that end up in no edge at all are in EDGE_NOTES with the line of the
- * paper that keeps them out, and that absence is the exercise's real finding.
- */
 export interface WorkshopEdge {
   from: WorkshopActorId;
   to: WorkshopActorId;
   subgoal: SubgoalId;
-  /** What A can actually hand over, in our words. */
   what: string;
   baker: BakerQuote[];
 }
@@ -732,9 +368,6 @@ export const EDGE_KEY: WorkshopEdge[] = [
     ],
   },
   {
-    // The edge the board was missing until the states arrived, and the only
-    // one that points at a signatory. Everything else on this key points at a
-    // company or at a shell; verification of a PARTY happens here or nowhere.
     from: "ic",
     to: "china",
     subgoal: "2b",
@@ -764,19 +397,7 @@ export const EDGE_KEY: WorkshopEdge[] = [
   },
 ];
 
-/**
- * The actors with no edge, and the line of the paper that keeps them out.
- *
- * These are not oversights and must not be quietly filled in to make the
- * graph look complete. Each one is a scope decision Baker states outright,
- * and three of the four are actors 1.2 spends real time on — which is the
- * point: being the biggest lever on the board and being useless to a Verifier
- * are compatible.
- */
 export const EDGE_NOTES: {
-  /** Every actor this note accounts for. The test holds the union of these
-      to exactly the set of actors no edge touches, so an added edge cannot
-      leave a note standing that explains an absence which is no longer one. */
   actorIds: WorkshopActorId[];
   why: string;
   baker: BakerQuote[];
@@ -833,10 +454,6 @@ export const EDGE_NOTES: {
   },
   {
     actorIds: ["california"],
-    // The one absence a learner can argue with, so it carries the argument
-    // rather than waiting to be caught out. 1.2 supplies half of it — SB 53
-    // makes large frontier developers run an internal anonymous reporting
-    // channel — and the paper supplies the other half in the second quote.
     why: "A reporting statute produces declarations. Verification is what happens to a declaration afterwards, and receiving one is not checking it. The actor that bound the leading labs before any international mechanism existed completes no subgoal — it supplies the thing the subgoals are about. Argue with this one if you drew the edge: SB 53 also requires an internal anonymous reporting channel at large frontier developers, and whistleblowing is a verification mechanism in this framework, for every subgoal at once. The key leaves the edge out because the mechanism is a programme a Verifier runs and California is not running one — which is a judgement, not a reading.",
     baker: [
       {
@@ -861,12 +478,6 @@ export const EDGE_NOTES: {
   },
 ];
 
-/**
- * What the edges say once they are drawn.
- *
- * Every count in this text is re-derived in actor-workshop.test.ts against
- * EDGE_KEY, so the prose cannot drift from the data it describes.
- */
 export const EDGE_FINDING = {
   title: "Where this regime is weakest",
   body: [
@@ -888,32 +499,14 @@ export const EDGE_FINDING = {
   } satisfies BakerQuote,
 } as const;
 
-/**
- * The finding the finished map is supposed to hand over.
- *
- * OURS in its wording, hers in its content: it is the paragraph the lesson
- * already carries, stated as something the picture shows rather than
- * something the page asserts. That is the whole reason the artifact is drawn.
- */
 export const MAP_FINDING = {
   title: "What the finished map says",
   body: [
     "Read your rings from the inside out. Exactly two actors on this board owe anybody a declaration; everything outside them either holds evidence about that declaration, or checks it, or is not covered by any declaration at all. A verification regime is a much smaller object than the map of who matters — most of this board it does not reach, and half of it cannot help.",
-    // "Position" is the lesson's word for place on the supply chain (Table 4)
-    // and 1.2.1 is the exercise for it, so this paragraph must not quietly
-    // re-point it at the rings. Four lenses now, and the fourth is named.
     "Now read the colours across the rings instead of around them. Roles do not stay in their band — the cloud provider holds four of them at once, and the ring it sits on tells you none of the four. The section gives you three questions to ask of any actor: where does it sit on the chain (position, Table 4, and the map in 1.2.1 is where you practise it), what can it do inside a regime (roles), what does it want today (posture). These rings are a fourth, and a narrower one: not where an actor sits, but what part it plays in checking a declaration. All four cut across each other, which is why no single one of them is the map.",
   ],
 } as const;
 
-/**
- * Step 6 — Beeck's "Setting Actions", which for a reader is the transfer step.
- *
- * HERS, verbatim: the three tasks that were the "Try it before moving on"
- * bullets in scoping-actors.mdx. They moved here rather than being rewritten,
- * because in the body they stood over a widget that had nowhere to answer
- * them. Nothing is graded — same rule as every other workspace in this repo.
- */
 export const CLOSING_QUESTIONS = [
   {
     id: "taiwan-roles",
@@ -940,38 +533,14 @@ export const CLOSING_QUESTIONS = [
   },
 ];
 
-/**
- * Step 2 — what free recall actually asks for.
- *
- * It used to ask for the cast: "who does this agreement touch", marked by a
- * fuzzy matcher against the roster's names. That retrieved ten proper nouns,
- * and the section's content is what those actors can do and to whom — so it
- * was the weakest retrieval the step could have asked for. It asks for the
- * material now.
- *
- * The cloud provider is the subject because the lesson works it through
- * explicitly, which means the key below can be HER SENTENCES and nothing
- * else: the four bullets under "Try it on a cloud provider" and the default
- * posture in Table 4's cloud row. Four roles and two postures, six items.
- *
- * MARKED BY THE LEARNER, not by a matcher. A string matcher over free prose
- * would have to carry a vocabulary list per role ("suspend", "cut off",
- * "valve"…), would be wrong often, and would be wrong in the direction that
- * discourages writing anything. Self-scoring against a printed key is what
- * the free-recall studies do and what every constructed exercise in 2.4
- * already does; the learner ticks what they actually had.
- */
 export interface RecallItem {
   id: string;
-  /** The role or posture name, as the taxonomy prints it. */
   label: string;
-  /** Hers, verbatim, from the sentence that settles it. */
   gloss: string;
 }
 
 export const RECALL_TARGET = {
   actorId: "hyperscalers" as WorkshopActorId,
-  /** What the learner is asked to write. */
   prompt:
     "Take one actor: a cloud provider. From memory, write down everything it can do inside a verification regime — and what it wants while doing it.",
   items: [
@@ -1011,28 +580,6 @@ export const RECALL_TARGET = {
   ] as RecallItem[],
 } as const;
 
-/**
- * Step 6b — the second-order question the concentric map exists for.
- *
- * Beeck's own reason for drawing rings is to "see dependencies between
- * stakeholders and anticipate second-order effects", and the workshop had no
- * step that did the second half. This is it: take one actor off the board.
- *
- * The question asks which removal bites SOONEST on purpose, because the
- * answer is not the one the supply-chain numbers point at, and the gap
- * between the two is the second-order effect. Removing the clouds stops runs
- * this week — they are the machines the run happens on. Removing ASML stops
- * almost nothing this week and very nearly everything eventually: it is 100%
- * of EUV lithography, and EUV is what leading-edge fabrication needs.
- *
- * SOURCED, not asserted. Sastry, Heim, Belfield et al., "Computing Power and
- * the Governance of Artificial Intelligence" (2024), Figure 11: "ASML is the
- * only company capable of producing EUV machines", market share 100%; TSMC at
- * 90% of ≤7nm logic fabrication; and and the caption verbatim:
- * "Several critical steps--including AI chip design and production--have fewer
- * than three suppliers."
- * The cloud split in the same figure is AWS 32%, Azure 22%, Google Cloud 11%.
- */
 export const SECOND_ORDER = {
   stem: "Take one actor off the board entirely. Whose removal stops a frontier training run soonest — this week, not this decade?",
   options: [
@@ -1061,29 +608,10 @@ export const SECOND_ORDER = {
       why: "It writes and enforces export controls and trains nothing. Remove it and the rules stop being enforced — which loosens the regime rather than stopping the activity.",
     },
   ],
-  /** What the step is actually for, shown after the commit. */
   lesson:
     "That gap is the thing a ring map is drawn to show. The removal that bites soonest and the removal that matters most are different actors, on different rings, and a regime that reaches only for the second one buys nothing this year. Ask both questions of any chokepoint you are offered.",
 } as const;
 
-/**
- * The marking key for the three closing questions.
- *
- * The house form, and the reasons for it, are in data/marking-keys.ts: credit
- * per element, a bare correct label worth nothing where a mechanism was
- * asked for, wording free, and what earns nothing said out loud.
- *
- * THE ANSWERS ARE DERIVED FROM THE ROSTER, not from judgement. Taiwan holds
- * exactly three roles in `ACTOR_MAP_ENTRIES` — chokepoint, information,
- * victim — which is why her question says "at least three". Exactly two
- * actors hold capability and enforcement at once, the United States and
- * China; a test in actor-workshop.test.ts re-derives both facts, so a roster
- * edit that changes them fails rather than leaving a key that lies.
- *
- * Question 2 has no fixed answer and its criteria say so: the lesson gives
- * the information holders but never ranks them, so what is marked is whether
- * an order was committed to and whether each rank carries its reason.
- */
 export const CLOSING_KEY: MarkingKey = {
   criteria: [
     {
@@ -1132,13 +660,10 @@ export const CLOSING_KEY: MarkingKey = {
   ],
 };
 
-/** Its own localStorage document, as every workspace has. Permanent. */
 export const WORKSHOP_NOTES_KEY = "v-actor-workshop-notes:v1";
 
-/** The self-marking beside those answers. Permanent, and never sent anywhere. */
 export const WORKSHOP_MARKS_KEY = "v-actor-workshop-marks:v1";
 
-/** Role and posture keys, read straight off the roster rows. */
 export const ROLE_KEY = Object.fromEntries(
   WORKSHOP_ACTORS.map((a) => [a.id, a.roles]),
 ) as Record<WorkshopActorId, ActorRoleId[]>;

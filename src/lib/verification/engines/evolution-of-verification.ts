@@ -1,14 +1,3 @@
-/**
- * The Evolution of Verification: simulation engine.
- *
- * Pure, seed-deterministic functions. No DOM, no Date, no Math.random. Lifted
- * verbatim from the standalone page
- * (public/verification/evolution-of-verification.html, the `window.EVENGINE`
- * UMD module) and ported to typed ES modules so the same code is calibrated in
- * tests and shipped in the native widget. Decisions may only read RECORDED
- * history; payoffs always follow TRUE actions. This is human-authored
- * curriculum — do not re-author the numbers, rules, or calibration notes.
- */
 
 export type Move = "C" | "D";
 export type Rng = () => number;
@@ -35,7 +24,6 @@ export interface MatchOpts {
 export type Mix = Partial<Record<StrategyKey, number>>;
 export type Counts = Record<StrategyKey, number>;
 
-// ---- seeded PRNG (mulberry32) ----
 export function mulberry32(seed: number): Rng {
   let a = seed >>> 0;
   return function () {
@@ -47,16 +35,12 @@ export function mulberry32(seed: number): Rng {
   };
 }
 
-// ---- payoff matrix (true actions only) ----
 export const PAYOFF = { R: 3, P: 1, T: 5, S: 0 } as const;
 export function payoff(myTrue: Move, theirTrue: Move): number {
   if (myTrue === "C") return theirTrue === "C" ? PAYOFF.R : PAYOFF.S;
   return theirTrue === "C" ? PAYOFF.T : PAYOFF.P;
 }
 
-// ---- strategies ----
-// decide(recordedOpponentMoves, rng) -> 'C' | 'D'
-// Decisions may only read RECORDED history, never true history, never round number.
 const RULES: Record<RuleKey, (rec: Move[], rng: Rng) => Move> = {
   cooperator: function () {
     return "C";
@@ -90,11 +74,6 @@ export const STRATEGIES: Record<
 };
 export const STRAT_KEYS = Object.keys(STRATEGIES) as StrategyKey[];
 
-// ---- perception ----
-// Noise is misperception: the true action stands and determines payoffs; only
-// the observer's RECORD of it can flip. A verifier's record is true with
-// probability r (reliability, default 1); a non-verifier's record flips with
-// probability e (noise). Independent per observer per round.
 export function perceive(
   trueAction: Move,
   observerIsVerifier: boolean,
@@ -112,10 +91,6 @@ export interface MatchResult {
   scoreB: number;
 }
 
-// ---- one match ----
-// opts: { rounds, noise, vCost, reliability }
-// Returns summed scores. rng consumption order is fixed:
-// per round: A decides, B decides, A perceives B, B perceives A.
 export function playMatch(
   stratA: StrategyKey,
   stratB: StrategyKey,
@@ -125,7 +100,7 @@ export function playMatch(
   const a = STRATEGIES[stratA],
     b = STRATEGIES[stratB];
   const recA: Move[] = [],
-    recB: Move[] = []; // recA = A's records of B's actions
+    recB: Move[] = [];
   let scoreA = 0,
     scoreB = 0;
   for (let round = 0; round < opts.rounds; round++) {
@@ -154,7 +129,6 @@ export interface DetailedMatchResult extends MatchResult {
   rounds: RoundLog[];
 }
 
-// Same as playMatch but returns full per-round detail (for UI replay / tests).
 export function playMatchDetailed(
   stratA: StrategyKey,
   stratB: StrategyKey,
@@ -191,7 +165,6 @@ export function playMatchDetailed(
   return { scoreA: scoreA, scoreB: scoreB, rounds: roundsLog };
 }
 
-// ---- one generation: full round robin, one match per pair ----
 export function generationScores(
   pop: StrategyKey[],
   opts: MatchOpts,
@@ -208,7 +181,6 @@ export function generationScores(
   return scores;
 }
 
-// ---- replication: eliminate 5 lowest, clone 5 highest, seeded tie-break ----
 export function replicate(
   pop: StrategyKey[],
   scores: number[],
@@ -218,7 +190,7 @@ export function replicate(
   churn = churn || 5;
   const tb = pop.map(function () {
     return rng();
-  }); // tie-break draws, index order
+  });
   const order = pop.map(function (_, i) {
     return i;
   });
@@ -244,7 +216,6 @@ export function countByStrategy(pop: StrategyKey[]): Counts {
   return c;
 }
 
-// mix: {strategyKey: count}. Population order is fixed: STRAT_KEYS order.
 export function buildPopulation(mix: Mix): StrategyKey[] {
   const pop: StrategyKey[] = [];
   STRAT_KEYS.forEach(function (k) {
@@ -259,8 +230,6 @@ export interface SimResult {
   finalPop: StrategyKey[];
 }
 
-// ---- full simulation ----
-// Returns { history: [counts at gen 0 .. generations], avgByGen, finalPop }
 export function simulate(
   mix: Mix,
   opts: MatchOpts,
@@ -290,7 +259,6 @@ export function simulate(
   return { history: history, avgByGen: avgByGen, finalPop: pop };
 }
 
-// ---- family groupings used by stages and calibration ----
 export type FamilyKey =
   | "reciprocators"
   | "vreciprocators"
@@ -317,12 +285,6 @@ export function familyCounts(counts: Counts): Record<FamilyKey, number> {
   return f;
 }
 
-// ---- stage definitions (single source of truth for UI and calibration) ----
-// Calibrated 2026-07-08 (see CALIBRATION.md). Deviations from the build brief,
-// made in the protocol's allowed order (mix, then noise, then match length):
-// stages 2-3 run at 20% noise, not 10% (at 10% misperception is too mild to
-// break reciprocity in 10-round matches, and the verifier premium is below
-// v=0.2 in any mix tried); stage 3 swaps one copycat for one v-copycat.
 export interface StageDef {
   mix: Mix;
   opts: MatchOpts;
@@ -352,13 +314,6 @@ export const STAGES: Record<1 | 2 | 3, StageDef> = {
   },
 };
 
-// ---- calibration criteria ----
-// Success is judged at generation `gens` (default 30):
-// Stage 1: reciprocator family (copycat+grudger) holds a majority (>= 13 of 25).
-// Stage 2: defectors reach at least half (>= 13 of 25), OR cooperative share
-//          (everything except defector and random) falls below 25%.
-// Stage 3: verifying reciprocators (vcopycat+vgrudger) are the plurality
-//          among the six families above.
 export function stageCriterion(stage: number, counts: Counts): boolean {
   const f = familyCounts(counts);
   const total = STRAT_KEYS.reduce(function (s, k) {
@@ -414,8 +369,6 @@ export function calibrateStage(
   return { stage: stage, passes: passes, total: seeds.length, results: results };
 }
 
-// Stage 4 challenge check: at 20% noise, verifiers persist at some v and go
-// extinct at some higher v within the slider range [0, 1].
 export function verifierOutcomeAtCost(
   v: number,
   seed: number,
@@ -438,14 +391,12 @@ export function verifierOutcomeAtCost(
   };
 }
 
-// ---- inline unit tests (also surfaced by ?debug=1 in the original page) ----
 export function runTests(): { name: string; pass: boolean }[] {
   const t: { name: string; pass: boolean }[] = [];
   function check(name: string, cond: unknown) {
     t.push({ name: name, pass: !!cond });
   }
 
-  // 1. Determinism: same seed + settings replay identically.
   (function () {
     const a = JSON.stringify(
       simulate(STAGES[3].mix, STAGES[3].opts, 42, 12).history,
@@ -460,9 +411,6 @@ export function runTests(): { name: string; pass: boolean }[] {
     check("determinism: different seed gives different history", a !== c);
   })();
 
-  // 2. Payoffs derive from TRUE actions while decisions derive from RECORDED ones.
-  // At e=1 every non-verifier record flips. Two Cooperators still truly cooperate,
-  // so they must score R=3 per round despite both recording pure defection.
   (function () {
     const opts: MatchOpts = { rounds: 10, noise: 1.0, vCost: 0.2, reliability: 1 };
     const m = playMatchDetailed("cooperator", "cooperator", opts, mulberry32(7));
@@ -476,8 +424,6 @@ export function runTests(): { name: string; pass: boolean }[] {
         return r.seenByA === "D" && r.seenByB === "D";
       }),
     );
-    // Decisions use recorded history: copycat vs cooperator at e=1 sees 'D'
-    // after round 1 and defects from round 2 on, though the cooperator never defected.
     const m2 = playMatchDetailed("copycat", "cooperator", opts, mulberry32(7));
     check(
       "decisions use recorded history (copycat turns on a phantom defection)",
@@ -488,7 +434,6 @@ export function runTests(): { name: string; pass: boolean }[] {
     );
   })();
 
-  // 3. Verifier records never flip at r=1, regardless of noise.
   (function () {
     const opts: MatchOpts = { rounds: 10, noise: 1.0, vCost: 0.2, reliability: 1 };
     const m = playMatchDetailed("vgrudger", "cooperator", opts, mulberry32(9));
@@ -502,7 +447,6 @@ export function runTests(): { name: string; pass: boolean }[] {
       "verifier pays cost every round (30 - 10*0.2 = 28)",
       Math.abs(m.scoreA - 28) < 1e-9,
     );
-    // And at r<1 verifier records CAN flip (reliability extension is live).
     const opts2: MatchOpts = { rounds: 200, noise: 0, vCost: 0, reliability: 0.5 };
     const m3 = playMatchDetailed("vcooperator", "cooperator", opts2, mulberry32(11));
     const flips = m3.rounds.filter(function (r) {
@@ -511,15 +455,12 @@ export function runTests(): { name: string; pass: boolean }[] {
     check("verifier records flip at r<1 (reliability mechanic live)", flips > 0);
   })();
 
-  // 4. Replication rule: 25 stay 25; 5 lowest die; 5 highest clone.
   (function () {
     const pop = buildPopulation(STAGES[1].mix);
     const rng = mulberry32(5);
     const scores = generationScores(pop, STAGES[1].opts, rng);
     const next = replicate(pop, scores, rng);
     check("population stays at 25 after replication", next.length === 25);
-    // In stage 1 (no noise) defectors surrounded by grudgers/copycats score low:
-    // the strategy counts must change only by eliminations plus clones (net 0..5 shifts).
     const before = countByStrategy(pop),
       after = countByStrategy(next);
     let shifted = 0;
@@ -529,15 +470,11 @@ export function runTests(): { name: string; pass: boolean }[] {
     check("replication churn bounded by 2x5", shifted <= 10);
   })();
 
-  // 5. V-Cooperator never outperforms Cooperator at v>0 (same behavior, pays for
-  // information its behavior never uses).
   (function () {
     const opts: MatchOpts = { rounds: 10, noise: 0.1, vCost: 0.2, reliability: 1 };
     let ok = true;
     for (let s = 1; s <= 30; s++) {
       STRAT_KEYS.forEach(function (op) {
-        // Same seed => same opponent stream shape; cooperator's actions are
-        // identical (always C), so scores differ exactly by the paid cost.
         const mc = playMatch("cooperator", op, opts, mulberry32(s));
         const mv = playMatch("vcooperator", op, opts, mulberry32(s));
         if (!(mv.scoreA <= mc.scoreA + 1e-9)) ok = false;
@@ -546,7 +483,6 @@ export function runTests(): { name: string; pass: boolean }[] {
     check("v-cooperator never outperforms cooperator at v>0", ok);
   })();
 
-  // 6. Payoff matrix sanity.
   check(
     "payoff matrix: CC=3, DD=1, DvC=5, CvD=0",
     payoff("C", "C") === 3 &&

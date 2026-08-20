@@ -42,20 +42,6 @@ import {
 import type { VerificationWidgetProps } from "./types";
 import { SegMeter } from "./seg-meter";
 
-/**
- * Renderer shared by every per-module drill bench: a menu of the module's
- * benches, then one step at a time — commit, reveal, Continue, never
- * auto-advance. Judgements and progress arithmetic live in
- * `engines/drills.ts`; this file owns UI state and storage only.
- *
- * Bridged: `onComplete()` fires once, the moment the last step of the last
- * bench in the deck is committed.
- *
- * Two traps. Restored progress is applied off the effect body behind
- * `hydrated`, so the first client render still matches the server's (empty)
- * markup. And stored flags outlive content edits, so everything read back is
- * pruned against the deck's current benches before it is trusted.
- */
 export function DrillDeckView({
   deck,
   onComplete,
@@ -75,7 +61,6 @@ export function DrillDeckView({
       const raw = localStorage.getItem(storageKey);
       if (raw) restored = pruneProgress(JSON.parse(raw) as DrillProgress, deck);
     } catch {
-      /* unreadable storage just means starting fresh */
     }
     queueMicrotask(() => {
       setProgress(restored);
@@ -89,7 +74,6 @@ export function DrillDeckView({
       try {
         localStorage.setItem(storageKey, JSON.stringify(next));
       } catch {
-        /* private mode / full quota — progress is a convenience, not the record */
       }
     },
     [storageKey],
@@ -167,8 +151,6 @@ export function DrillDeckView({
   );
 }
 
-/* ---------------- menu ---------------- */
-
 function DeckMenu({
   deck,
   progress,
@@ -238,8 +220,6 @@ function DeckMenu({
     </Shell>
   );
 }
-
-/* ---------------- one step ---------------- */
 
 function StepScreen({
   deck,
@@ -371,16 +351,6 @@ function StepBrief({ step }: { step: DrillStep }) {
   );
 }
 
-/* ---------------- pick ---------------- */
-
-/**
- * Options are shown shuffled and reasoned about by their AUTHORED index.
- *
- * `step.right` is an index, so the shuffle would break the key if the display
- * position were what got compared. It is not: `from` is where the option was
- * written, `choice` holds that, and every judgement here is made on it. The
- * data file needs no edit and `step.opts[step.right]` still names the key.
- */
 function PickStep({
   step,
   seed,
@@ -465,8 +435,6 @@ function PickStep({
   );
 }
 
-/* ---------------- multi ---------------- */
-
 const VERDICT: Record<
   MarkVerdict,
   { label: string; tone: string; border: string }
@@ -481,12 +449,6 @@ const VERDICT: Record<
   clean: { label: "clean", tone: "text-muted-foreground", border: "border-border" },
 };
 
-/**
- * Same contract as PickStep: shuffled on screen, authored indices in `marked`,
- * so `scoreMulti` is handed exactly what it was handed before. The verdict
- * list after committing is deliberately left in AUTHORED order — it is a
- * written-out key, and a key reads in the order it was written.
- */
 function MultiStep({
   step,
   seed,
@@ -613,8 +575,6 @@ function MultiStep({
   );
 }
 
-/* ---------------- number ---------------- */
-
 function NumberStep({
   step,
   last,
@@ -678,8 +638,6 @@ function NumberStep({
   );
 }
 
-/* ---------------- text ---------------- */
-
 function TextStep({
   step,
   last,
@@ -730,8 +688,6 @@ function TextStep({
     </div>
   );
 }
-
-/* ---------------- shared pieces ---------------- */
 
 function Reveal({
   verdict,

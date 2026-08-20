@@ -42,29 +42,7 @@ import {
   type MapEdge,
 } from "./actor-board";
 
-/**
- * 1.2.2 — Who can prove what. The Actor Map Workshop's second half.
- *
- * It was steps 6 and 7 of one seven-step widget in 1.2, which measured
- * seventy-seven minutes against a forty-minute ceiling. Moving it here is a
- * promotion rather than a cut: the mechanisms are what the section is for,
- * and they now have a page instead of a tail. ./actor-board.tsx holds the
- * document they share with 1.2 and says the rest.
- *
- * WHAT IS BAKER'S AND WHAT IS OURS is in data/actor-workshop.ts, and the two
- * tripwires in actor-workshop.test.ts hold every quotation on this page to
- * the committed artifact or to 1.2's own body. Read that header before
- * rewriting any of this prose.
- *
- * IT WORKS WITHOUT 1.2. A reader who lands here first sees the key placement
- * and is told so; the alternative is a gate, and the edge exercise is about
- * mechanisms rather than about having visited another page.
- */
-
 const STEPS: { id: EdgeStep; name: string; beeck: string }[] = [
-  // Beeck's own reason for drawing rings is to see dependencies between
-  // stakeholders; until this exercise the workshop drew the rings and never
-  // the dependencies. Its key is Baker's, not the course's.
   { id: "edges", name: "Draw the edges", beeck: "Political analysis" },
   { id: "map", name: "Read the map", beeck: "Political analysis · Actions" },
 ];
@@ -96,9 +74,6 @@ export function ActorEdges({ onComplete }: VerificationWidgetProps) {
     (a) => saved.rings[a.id] === RING_KEY[a.id],
   ).length;
 
-  /* What the map draws: whatever is drawn while drawing, and the marked
-     version once committed — what was found, what was inverted, what was
-     invented, and the key edges never drawn. */
   const mapEdges: MapEdge[] = !saved.edgesDone
     ? saved.edges.map((id) => ({ id, state: "drawn" as const }))
     : [
@@ -246,8 +221,6 @@ export function ActorEdges({ onComplete }: VerificationWidgetProps) {
   );
 }
 
-/* ------------------------------------------------------------------ steps -- */
-
 function EdgeDrawingTask() {
   return (
     <div className="border-border bg-card rounded-xl border p-4">
@@ -344,13 +317,6 @@ function EdgesStep({
                     key={a.id}
                     type="button"
                     aria-pressed={a.id === source}
-                    /* Both rows print the same ten names, so on the visible
-                       page the headings tell them apart and in the
-                       accessibility tree nothing did — a screen reader heard
-                       "Cloud providers, button" twice with no way to know
-                       which end of the edge it was on. The label says which
-                       row it is; the count says what is already drawn from
-                       here, which the bare numeral beside the name cannot. */
                     aria-label={`Draw from ${MAP_LABEL[a.id]}${
                       out ? ` — ${out} drawn` : ""
                     }`}
@@ -387,9 +353,6 @@ function EdgesStep({
                       key={a.id}
                       type="button"
                       aria-pressed={on}
-                      // The whole claim, because that is what pressing it
-                      // asserts — and because the name alone is the same string
-                      // as the source chip above it.
                       aria-label={`${MAP_LABEL[source]} can show a verifier something about ${MAP_LABEL[a.id]}`}
                       onClick={() => onToggle(id)}
                       className={cn(
@@ -451,7 +414,6 @@ function EdgesStep({
   );
 }
 
-
 function EdgesVerdict({
   score,
   perSubgoal,
@@ -463,13 +425,6 @@ function EdgesVerdict({
   onEdit: () => void;
   onNext: () => void;
 }) {
-  /* Same rule as the placement reveal: the mechanism and its quote print for
-     an edge the reader did not draw, and collapse to a line for one they
-     did. This block is the longest thing in the workshop — six hundred words
-     of edges before the notes and the finding — and most of it explains work
-     the reader has already done. Opening it all is one press away, and it is
-     open by default when every edge was found, because then the filter has
-     nothing to hide and would hide the whole step. */
   const [showAll, setShowAll] = useState(false);
   const perfect = score.found.length === EDGE_KEY.length;
   return (
@@ -504,9 +459,6 @@ function EdgesVerdict({
         </div>
       </div>
 
-      {/* The key, grouped by the subgoal each edge completes — which is the
-          only grouping that makes the weak-link reading possible, and the one
-          the paper itself uses. */}
       <ol className="space-y-4">
         {perSubgoal.map(({ subgoal, edges }) => (
           <li
@@ -591,10 +543,6 @@ function EdgesVerdict({
         </div>
       ) : null}
 
-      {/* The actors with nothing. This is the half of the key that is easy to
-          leave out and is doing most of the teaching — and it is grouped
-          because ten separate rows would read as a list of oversights rather
-          than as four different reasons for an absence. */}
       <div className="space-y-3">
         <p className="text-sm font-semibold">
           The {EDGE_NOTES.reduce((n, x) => n + x.actorIds.length, 0)} with no
@@ -627,7 +575,6 @@ function EdgesVerdict({
   );
 }
 
-
 function MapStep({
   peeked,
   ringsRight,
@@ -649,11 +596,6 @@ function MapStep({
 }) {
   return (
     <div className="space-y-4">
-      {/* The map and its role lens are above every step now — see the comment
-          at the mount. The finding below is what they are for: pick a role up
-          there and watch it appear on every ring at once. One role at a time
-          on purpose, because an actor holds several and colouring a dot by
-          "its" role would be a claim the lesson spends a paragraph denying. */}
       <div className="border-border rounded-xl border p-4">
         <p className="text-sm font-semibold">{MAP_FINDING.title}</p>
         {MAP_FINDING.body.map((para) => (
@@ -663,13 +605,6 @@ function MapStep({
         ))}
       </div>
 
-      {/* THE EDGE FINDING BELONGS HERE, not at the end of the step that drew
-          them. It is a reading of the finished board — count the edges, count
-          the arrowheads, count what has no edge and what has no node — and
-          this is the step called Read the map. Leaving it on step 6 made that
-          step 2,200 words of feedback and this one a formality, and it asked
-          the reader to count things on a diagram that was one screen back.
-          The marked map is directly above these paragraphs. */}
       <div className="border-border rounded-xl border p-4">
         <p className="text-sm font-semibold">{EDGE_FINDING.title}</p>
         {EDGE_FINDING.body.map((para) => (
@@ -681,10 +616,6 @@ function MapStep({
         <BakerLine {...EDGE_FINDING.redundancy} />
       </div>
 
-      {/* Beeck draw rings to "anticipate second-order effects", and the
-          workshop had no step that did the second half. One question, because
-          the point is a single gap: the removal that bites soonest and the
-          removal that matters most are different actors on different rings. */}
       <div className="space-y-3">
         <p className="text-sm font-semibold">Now take one off the board</p>
         <p className="text-sm leading-relaxed">{SECOND_ORDER.stem}</p>
@@ -701,9 +632,6 @@ function MapStep({
         />
         {secondOrderDone ? (
           <div className="space-y-3">
-            {/* Every option is worth reading here, not just the two that
-                matter to the score: each one is a different clock, which is
-                the whole content of the step. */}
             <ol className="space-y-2">
               {SECOND_ORDER.options.map((option) => (
                 <li key={option.id} className="text-sm leading-relaxed">
@@ -738,32 +666,11 @@ function MapStep({
         {peeked ? " Roster reopened during the workshop." : ""}
       </p>
 
-      {/* Beeck's last step is Setting Actions. For a reader that is transfer:
-          three questions the map is the material for. Hers, verbatim, and
-          never machine-graded — the panel under them is the criteria a marker
-          would use, which is how every constructed exercise in 2.4 ends.
-
-          OPTIONAL, AND SAID SO (course owner, 2026-08-18). Three written
-          answers with a marking key is twelve minutes, which is most of a
-          section's budget on its own. The exercise is complete without them:
-          `onComplete` fires on the second-order commit above, so nobody is
-          held back by work they did not have time for. It is behind a control
-          rather than always open for the same reason — a wall of textareas
-          under a finished exercise reads as required no matter what the
-          sentence above it says. */}
       <OptionalWriting />
     </div>
   );
 }
 
-/**
- * The three transfer questions, opened on request.
- *
- * Hers, verbatim, and the last thing the workshop asks. They are worth doing
- * and they are not what the twenty minutes are budgeted for, so the reader
- * decides. Once opened it stays open for the visit; the answers themselves
- * persist under their own key like every other workspace.
- */
 function OptionalWriting() {
   const [open, setOpen] = useState(false);
   if (!open) {

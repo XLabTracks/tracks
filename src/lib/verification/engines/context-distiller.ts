@@ -1,18 +1,3 @@
-/**
- * Pure engine for "The Distiller" Verification widget: the run's state shape,
- * the phase gate, and the delivery scoring. Ported from the standalone
- * prototype's module-globals (tracksprogramplayground `site/the-distiller.html`)
- * with every DOM and closure read threaded in as an argument, so the whole of
- * what the exercise judges is unit-testable and the component only draws.
- *
- * Two things here are load-bearing beyond their size:
- *  - `graphFaults` is the authoring guardrail (see the data file's header), run
- *    as a test rather than a console assert.
- *  - `sanitizeState` is what lets a content revision ship without breaking a
- *    returning learner's saved run: ids that no longer exist are dropped, not
- *    crashed on. Anything added to `DistillerRun` needs a matching default in
- *    `freshRun`, or a run saved before the change loads with it undefined.
- */
 
 import type {
   DistillerActorGroup,
@@ -30,7 +15,6 @@ export const DISTILLER_PHASES = [
 ] as const;
 export type DistillerPhase = 1 | 2 | 3 | 4 | 5;
 
-/** A distilled point: what a core block becomes once compressed. */
 export interface DistillerSegment {
   id: string;
   text: string;
@@ -70,7 +54,6 @@ export function indexReport(r: DistillerReport): DistillerIndex {
   return { blockById, segById, stkById, actorById };
 }
 
-/** The block a distilled point came from — "which fact would have answered this". */
 export function blockForSeg(
   segId: string,
   index: DistillerIndex,
@@ -79,12 +62,6 @@ export function blockForSeg(
   return s ? (index.blockById[s.blockId] ?? null) : null;
 }
 
-/**
- * Content-graph faults for one report. Empty means the report is playable:
- * the notebook budget fits its core facts, every question names a segment some
- * core block produces, every core block answers somebody, and the downstream
- * key is exactly the reader list.
- */
 export function graphFaults(r: DistillerReport): string[] {
   const faults: string[] = [];
   const segs = new Set(
@@ -133,27 +110,20 @@ export function graphFaults(r: DistillerReport): string[] {
   return faults;
 }
 
-/* ------------------------------------------------------------------ state */
-
-/** [segment id, stakeholder id] */
 export type DistillerThread = [string, string];
 
 export interface DistillerRun {
   v: 2;
   mode: "standard" | "tight";
   phase: DistillerPhase;
-  /** upstream picks, and whether they are committed */
   upSel: string[];
   upDone: boolean;
   downSel: string[];
   downDone: boolean;
-  /** ordered block ids — the notebook's own order */
   clipped: string[];
-  /** clipped ids whose compression the learner has seen */
   flipped: string[];
   threads: DistillerThread[];
   delivered: boolean;
-  /** per-run shuffle, so a returning learner sees the pool in the same order */
   shuffleSeed: number;
   runs: number;
   best: DistillerSummary | null;
@@ -188,11 +158,6 @@ export function freshRun(seed: number): DistillerRun {
   };
 }
 
-/**
- * Coerce whatever came out of localStorage into a runnable state, dropping ids
- * the data no longer carries. Returns null when the payload is not a v2 run at
- * all, which the caller reads as "start fresh".
- */
 export function sanitizeRun(
   raw: unknown,
   index: DistillerIndex,
@@ -234,14 +199,12 @@ export function sanitizeRun(
   return out;
 }
 
-/** Notebook capacity for the run's mode. */
 export function capFor(run: DistillerRun, report: DistillerReport): number {
   return run.mode === "tight"
     ? (report.meta.tightCap ?? report.meta.cap)
     : report.meta.cap;
 }
 
-/** Core segments the learner actually distilled, in notebook order. */
 export function producedSegs(
   clipped: string[],
   index: DistillerIndex,
@@ -256,11 +219,6 @@ export function seenAllFlips(run: DistillerRun): boolean {
   return run.clipped.every((id) => run.flipped.includes(id));
 }
 
-/**
- * The phase gate. Distilling needs something clipped; tracing the actors needs
- * every clipping compressed (the silence of what you skipped is the lesson, and
- * it is only visible once the post is built).
- */
 export function canEnterPhase(p: DistillerPhase, run: DistillerRun): boolean {
   if (p === 1) return true;
   if (p === 2) return run.clipped.length > 0;
@@ -276,12 +234,8 @@ export const PHASE_GATE_MESSAGE: Record<number, string> = {
   5: "Confirm the readers first.",
 };
 
-/* -------------------------------------------------------------- judgement */
-
 export interface DistillerVerdict {
-  /** question id -> answered */
   answered: Record<string, boolean>;
-  /** stakeholder id -> segments they already knew but were threaded anyway */
   wasted: Record<string, string[]>;
   total: number;
   ok: number;
@@ -312,7 +266,6 @@ export function evaluateRun(
   return { answered, wasted, total, ok };
 }
 
-/** Picks against the key, for the two actor steps. */
 export function scoreActors(
   grp: DistillerActorGroup,
   sel: string[],
@@ -342,13 +295,6 @@ export function summarize(
   };
 }
 
-/* ----------------------------------------------------------------- shuffle */
-
-/**
- * mulberry32 — a deterministic shuffle seeded per run, so the excerpt pool
- * holds its order across re-renders and reloads. Never seed it from the render
- * pass: the seed belongs to the run and is persisted with it.
- */
 export function shuffleSeeded<T>(list: readonly T[], seed: number): T[] {
   const a = list.slice();
   let s = seed >>> 0;

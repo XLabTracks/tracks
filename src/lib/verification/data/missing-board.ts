@@ -1,31 +1,4 @@
-/**
- * 2.4.4 — "Exercise: From Nuclear to AI Inspections" (renamed from "The
- * Missing Board" on the owner's 2026-08-18 edit document; ids and storage
- * keys keep the old name — they are permanent).
- *
- * HER BRIEF (2026-08-15): transfer the Carlson reading to AI, think through
- * the comparison, and draw analogies. It is built as an interactive first
- * and billed into the lesson's budget (it is required reading-work, not an
- * optional fold).
- *
- * The mechanic: Carlson gives the nuclear regime's decision an address —
- * inspectors find, the Board judges, the Security Council enforces, and
- * the standard between breach and noncompliance was never written down.
- * The learner transfers each station to AI (write-in, not options), writes
- * the standard their regime would announce, and names where the analogy
- * strains. The reveal is commentary, not a key: the stations connect back
- * to the module — evidence streams for the finder, 2.4.4's captures for
- * the judge, module 1's chokepoints for the enforcer, Carlson's
- * consistency argument for the standard.
- *
- * Nothing here is her outline's prose. The station framings quote or
- * compress Carlson's chain (the reading the learner has just done); the
- * prompts and the reveal commentary are OURS PENDING HER COPY, flagged
- * here like the Standard of Proof dockets.
- */
 
-/** The intro and task are the owner's, verbatim from her 2.4 edit document
- *  (2026-08-18), replacing our earlier "build the address" framing. */
 export const BOARD_INTRO =
   "In the nuclear regime, the inspection institution has four major steps: inspectors find, the Director-General reports, the Board of Governors judges, and the Security Council enforces. The AI verification regime has no such established process.";
 export const BOARD_TASK_LEAD =
@@ -35,9 +8,7 @@ export const BOARD_LIMIT = "Aim for around a few sentences for each section.";
 export interface BoardStation {
   id: string;
   title: string;
-  /** The nuclear regime's answer, from the reading. */
   nuclear: string;
-  /** The transfer question. */
   prompt: string;
 }
 
@@ -79,8 +50,6 @@ export const BOARD_STATIONS: BoardStation[] = [
 export const BOARD_STRAIN_PROMPT =
   "Where does the nuclear analogy strain hardest across these four stations? Name the station and the reason.";
 
-/** Reveal commentary, per station — ours, pending her copy. Shown after
- *  submission; never a marking. */
 export const BOARD_COMMENTARY: { title: string; body: string }[] = [
   {
     title: "The finder",

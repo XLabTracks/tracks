@@ -8,15 +8,8 @@ import {
   verificationTasksByModule,
 } from "@/lib/verification/cohort";
 
-/* Which lesson a task belongs to is read off its id rather than stored on it,
-   so the convention has to be pinned against the MDX that actually embeds each
-   task. Without this, renaming a task or moving it to another lesson would drop
-   it out of every facilitator's cohort view and out of nothing else — nothing
-   would fail, and the work would simply stop being listed. */
-
 const LESSONS = join(process.cwd(), "src/content/lessons/verification");
 
-/** taskId -> the lesson file whose body carries `<Exercise id="…"/>`. */
 function embeddedIn(): Map<string, string> {
   const out = new Map<string, string>();
   for (const file of readdirSync(LESSONS)) {

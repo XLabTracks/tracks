@@ -24,30 +24,6 @@ import { MarkingKeyPanel } from "../kit/marking-key";
 import type { VerificationWidgetProps } from "../kit/types";
 import { writingArea, writingCardFocus } from "../kit/writing-surface";
 
-/**
- * UNMOUNTED. 2.4.4 is the recovered exercise (policy-on-paper.tsx): the same
- * comparison, but on two real companies read out of their own documents
- * rather than on generic feature lists. Kept because the generic pair is a
- * cleaner teaching object if the real one ever has to come down.
- *
- * 2.4.4 — Companies A and B, then the letter.
- *
- * Part I is a comparison of two regimes that both look defensible: the learner
- * names two differences and says what each one does, not which company is
- * better. Part II hands them a real letter and asks what its existence and
- * composition are evidence FOR and what they do not establish — the inference
- * discipline the whole module has been building toward, on evidence nobody
- * wrote for a course.
- *
- * Both companies are on screen together, because a difference is not visible
- * one card at a time.
- *
- * Everything is committed before anything is revealed, and nothing is graded:
- * more than one pair of differences is defensible, and the reveal says so.
- *
- * OPTIONAL, so unbridged: submitting records no completion.
- */
-
 interface Saved {
   differences: Record<string, string>;
   letter: Record<string, string>;
@@ -99,7 +75,6 @@ export function CompaniesAB({
       const raw = localStorage.getItem(STORAGE_KEY);
       if (raw) restored = prune(JSON.parse(raw));
     } catch {
-      /* unreadable storage just means starting fresh */
     }
     queueMicrotask(() => {
       setSaved(restored);
@@ -112,7 +87,6 @@ export function CompaniesAB({
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(next));
     } catch {
-      /* private mode / full quota */
     }
   }, []);
 
@@ -126,7 +100,6 @@ export function CompaniesAB({
 
   return (
     <div className="not-prose my-6 space-y-4">
-      {/* Part I */}
       <div className="grid gap-2 sm:grid-cols-2">
         {COMPANIES.map((company) => (
           <section
@@ -192,7 +165,6 @@ export function CompaniesAB({
         ))}
       </div>
 
-      {/* Part II */}
       <section className="panel">
         <h4 className="text-sm font-semibold">
           {LETTER.title}{" "}

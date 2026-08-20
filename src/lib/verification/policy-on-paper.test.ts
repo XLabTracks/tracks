@@ -9,19 +9,6 @@ import {
   POLICY_SOURCES,
 } from "./data/policy-on-paper";
 
-/**
- * 2.4.4's optional extension. Two things are load-bearing enough to pin.
- *
- * The anonymity: the tabs are judged blind, so nothing above the Sources
- * spoiler may name or link a company. A citation put back on a committed row
- * would name Company A while Company B was still meant to be marked, and it
- * would do it silently — the widget would look fine.
- *
- * The disclosure: every document a row was read out of has to reach that
- * spoiler. The list derives itself from the rows, and this is the test that
- * says so, so a source added to a statement can never be one nobody can check.
- */
-
 const WIDGET = path.join(
   process.cwd(),
   "src/components/verification/widgets/policy-on-paper.tsx",
@@ -57,17 +44,11 @@ describe("policy-on-paper", () => {
 
   it("keeps the citations out of the marking surface", () => {
     const src = readFileSync(WIDGET, "utf8");
-    // The rows render `s.text`, `s.note` and the answer key — never `s.cite`.
     expect(src).not.toMatch(/\bs\.cite\b/);
-    // The only place links are built is the derived Sources list: the key
-    // and the href of one anchor, and nothing else in the file.
     expect(src.match(/cite\.href/g) ?? []).toHaveLength(2);
   });
 
   it("keeps the retraction as the last row of Company B, self-reported", () => {
-    // The course owner's instruction: a 2024 rule presented as still in force
-    // is an error, not strictness. The row that says it was withdrawn is
-    // compulsory, and it is the company's own account of its own conduct.
     const b = POLICY_COMPANIES.find((c) => c.id === "b")!;
     const last = b.statements.at(-1)!;
     expect(last.id).toBe("b-retracted");
@@ -76,12 +57,6 @@ describe("policy-on-paper", () => {
   });
 
   it("gates nothing on having finished", () => {
-    // Two defects, one test. The analysis questions used to appear only once
-    // every tab was committed, so a learner met them after the marking was
-    // sealed. The Sources block did the same, which was a lock on top of a
-    // cover — the spoiler already hides the mapping. There is now no
-    // completion gate in the file at all, and that is the property worth
-    // pinning: `{done ?` reappearing means one of them came back.
     const src = readFileSync(WIDGET, "utf8");
     expect(src).not.toContain("{done ?");
     expect(src).toContain("<QuestionWorkspace");

@@ -11,13 +11,6 @@ import {
   repeatedVerdict,
 } from "./change-the-game";
 
-/**
- * Port of the source page's __runTests harness
- * (public/verification/change-the-game.html, lines ~643-737). Demonstrates the
- * five-round personalities, the QA classification anchors, tie handling, and
- * repeated-play monotonicity.
- */
-
 const lab = (o: Partial<LabState>): LabState =>
   Object.assign(
     { v: 75, c: 25, share: false, agreement: true, p: 0, F: 40, delta: 0 },

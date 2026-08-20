@@ -1,14 +1,3 @@
-/**
- * Data + copy for the "Tamper & Trace" Red/Blue verification exercise —
- * lifted VERBATIM from public/verification/tamper-trace.html and
- * public/verification/content/tamper-trace.json. This is human-authored
- * curriculum: do not paraphrase, shorten, or invent any pedagogical text.
- *
- * Grounded in: FlexHEG (guarantee processor + secure enclosure); "Six Layers
- * of Verification" (RAND); BadRAM / DDR5-interposer attacks on SEV-SNP; MOLE
- * firmware attack; zero-overhead GPU telemetry. All techniques are anticipated
- * threats — no such treaty exists yet.
- */
 
 export interface RedTech {
   id: string;
@@ -164,7 +153,6 @@ export const BLUE_LAYERS = [
 export type RedTechId = (typeof RED_TECHS)[number]["id"];
 export type BlueLayerId = (typeof BLUE_LAYERS)[number]["id"];
 
-/** direct counter + tell-catchers (weights) per technique */
 export const MATRIX: Record<
   RedTechId,
   { direct: BlueLayerId; tells: Partial<Record<BlueLayerId, number>> }
@@ -179,10 +167,9 @@ export const MATRIX: Record<
 };
 
 export const DIRECT_WEIGHT = 0.6;
-export const WHISTLE_FLAT = 0.15; // whistleblower adds flat chance to any technique
-export const FP_PER_NOISY = 0.08; // false-positive contribution per noisy layer
+export const WHISTLE_FLAT = 0.15;
+export const FP_PER_NOISY = 0.08;
 
-/** Header / intro copy, lifted verbatim from the source page. */
 export const TAMPER_TRACE_COPY = {
   scenarioLabel: "SCENARIO",
   toggles: {
@@ -257,7 +244,6 @@ export const TAMPER_TRACE_COPY = {
     "DEBRIEF · what one piece of evidence would move your confidence judgment by one band? If you can’t name it, you have a narrative, not a judgment. Now flip a scenario toggle and re-resolve — watch the best move change.",
 } as const;
 
-/** Verdict / debrief copy, keyed by outcome branch. Lifted verbatim. */
 export const DEBRIEF = {
   honestFired: {
     verdict: "False positive — Blue flagged a compliant party",

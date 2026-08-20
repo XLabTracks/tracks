@@ -1,16 +1,3 @@
-/**
- * Drill Bench: Evasion & Regime Design — the cross-module drill deck ported from the standalone
- * playground page (verification-drills-data.js). Content is human-authored
- * curriculum copied verbatim: do NOT re-author a statement, option, note or
- * reveal. The task grammar is adapted from the All-Russian social-studies
- * olympiad final rounds (2021) — true/false with absolutist traps, minimal
- * generalizing concept, spot-every-error, resolve-the-dispute, who-is-who
- * deduction, derivation chains, argument sorting, consequence analysis.
- *
- * The only edits made in the port are cross-references: the source page
- * numbered its modules 0/1/2.x/3/4, which is not this track's structure, so
- * those pointers now name the concept or the bench that carries it here.
- */
 import type { DrillDeck } from "./drills";
 
 export const DRILLS_GAMES: DrillDeck = {
@@ -215,8 +202,6 @@ export const DRILLS_GAMES: DrillDeck = {
             "Some verification mechanisms are in fact unbreakable"
           ],
           right: 0,
-          // The reveal narrates the distractors by position, so the order it
-          // narrates must be the order on screen.
           fixedOrder: true,
           why: "Only the first meets the inference where it lives — and carries its own scope condition. The second attacks the author (the position bench dissects that move), the third changes the subject, and the fourth concedes the memo’s frame by defending a claim the course itself rejects."
         },
@@ -230,7 +215,6 @@ export const DRILLS_GAMES: DrillDeck = {
             "States that reject verification are simply acting in bad faith"
           ],
           right: 0,
-          // Same as the step above: positional narration pins the order.
           fixedOrder: true,
           why: "The first names the inferential flaw (overgeneralization) AND salvages the argument’s true residue — the strongest form of counterargument in the source rubric. The second asserts without showing, the third dodges the political claim it needs to answer, the fourth moralizes and concedes nothing."
         },
@@ -245,8 +229,6 @@ export const DRILLS_GAMES: DrillDeck = {
             "Trade secrets have no protection in international law anyway"
           ],
           right: 0,
-          // The reveal walks the distractors by position ("the second option
-          // is the attribution reflex"), so this one keeps its authored order.
           fixedOrder: true,
           why: "Concede-and-bound is the only move that survives contact with a true premise. The second option is the attribution reflex (the position bench dissects it), the third is a value assertion that persuades nobody who does not already agree, and the fourth is false — and silent about classified workloads, the collision’s hardest case."
         },

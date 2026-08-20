@@ -1,52 +1,13 @@
-/**
- * The marking keys for 2.4's four constructed exercises.
- *
- * WHAT A KEY IS HERE. Not an auto-grader and not a canonical answer — both are
- * ruled out by the exercise specs, and neither would survive contact with a
- * task whose whole point is that several answers are defensible. A key is the
- * criteria a marker would use, with the credit each carries, so a learner can
- * mark their own work against something specific instead of against a feeling.
- *
- * THE FORM, which is deliberate and consistent across all four:
- *
- *   - credit is per ELEMENT, never per task: a criterion is one thing the
- *     answer either did or did not do, and each is worth its own point;
- *   - a correct label with no reasoning earns nothing. Every criterion that
- *     asks for a judgement asks for the mechanism behind it in the same
- *     breath, and `needsReasoning` is what says so on screen;
- *   - wording is free. Any phrasing that does not distort the meaning counts,
- *     and no criterion is satisfied by reciting a particular term;
- *   - what earns nothing is stated, not implied — `noCredit` on every key;
- *   - the total is stated and is the sum of the parts, which
- *     `marking-keys.test.ts` enforces.
- *
- * WHERE THE CRITERIA COME FROM. All four totals and shapes are the course
- * owner's, from her exercise briefs: five points for the case, eight for the
- * policy critique as two per finding, two per case for the four variants, and
- * eight for the institution across her four named tests. The wording of the
- * individual criteria is ours where hers names the shape rather than the
- * sentence.
- *
- * The `grounds` line on a criterion names the section's own reading that
- * settles it, so a learner marking themselves down can go and check rather
- * than take our word for it. Those are the readings already assigned in 2.4:
- * the whistleblower chapter of the Labor Code, the AIWI/CARMA best-practice
- * guide, Wasil et al. on routes out of an organization, the CIGIE
- * investigation standard, and Part X of the Chemical Weapons Convention.
- */
 
 export interface KeyCriterion {
   text: string;
   points: number;
-  /** True when a bare correct label earns nothing without the mechanism. */
   needsReasoning?: boolean;
-  /** The reading in this module that settles it, where one does. */
   grounds?: string;
 }
 
 export interface MarkingKey {
   criteria: KeyCriterion[];
-  /** Stated, never implied. */
   noCredit: string[];
 }
 
@@ -54,7 +15,6 @@ export function keyTotal(key: MarkingKey): number {
   return key.criteria.reduce((sum, c) => sum + c.points, 0);
 }
 
-/** 2.4.1 — Construct a Case. The five criteria are the course owner's. */
 export const CONSTRUCT_CASE_KEY: MarkingKey = {
   criteria: [
     {
@@ -93,22 +53,6 @@ export const CONSTRUCT_CASE_KEY: MarkingKey = {
   ],
 };
 
-/**
- * 2.4.2 — On Paper is a five-question discrimination deck with right answers,
- * so it has no marking key: the deck marks itself and the explanation under
- * each question is the whole feedback. A key here would be a second, worse
- * copy of that.
- */
-
-/**
- * 2.4.3 — Same Claim, Different Circumstances. Two points per case and
- * nothing else: one for saying what this source's position lets them support,
- * one for a next step proportionate to it. Four cases, eight points.
- *
- * The comparison that follows the four is not scored, deliberately. Each case
- * is marked on its own — a right answer somewhere else cannot carry a wrong
- * one — and a point for the comparison would be a point earned across cases.
- */
 export const SAME_CLAIM_KEY: MarkingKey = {
   criteria: [
     {
@@ -149,14 +93,6 @@ export const SAME_CLAIM_KEY: MarkingKey = {
   ],
 };
 
-/**
- * 2.4.4 — Companies A and B. Eight points: two per identified difference, two
- * for the letter read as evidence, two for the overclaims it does not support.
- *
- * The mechanism is what earns the second point of a difference — naming which
- * feature differs is the easy half, and "the company controls escalation" is a
- * fact about the sheet until somebody says what it does to a report.
- */
 export const COMPANIES_AB_KEY: MarkingKey = {
   criteria: [
     {
@@ -206,12 +142,6 @@ export const COMPANIES_AB_KEY: MarkingKey = {
   ],
 };
 
-/**
- * 2.4.4 — The Standard of Proof. Ours, pending the owner's copy, like the
- * dockets (see standard-of-proof.ts). Each criterion is one docket; the
- * grounds tie C and D to the Brundage et al. principles the section's
- * reading told the learner to record.
- */
 export const STANDARD_OF_PROOF_KEY: MarkingKey = {
   criteria: [
     {

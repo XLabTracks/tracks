@@ -12,22 +12,6 @@ import {
 } from "react";
 import { cn } from "@/lib/utils";
 
-/**
- * Pointer-based drag/drop kit shared by the Verification widgets.
- *
- * Three equivalent ways to move an item into a zone, always available:
- *  - pointer drag (mouse/touch/pen), with a 5px start threshold + a ghost;
- *  - click-to-place (tap an item to arm it, tap a zone to drop);
- *  - keyboard (focus an item, Enter/Space to arm, focus a zone, Enter/Space to
- *    drop; Escape disarms).
- * The active item and each drop are announced via an aria-live region.
- *
- * `onDrop(itemId, zoneId)` is called on a successful drop; the consumer owns
- * placement state (so cells can hold multiple items, items can move between
- * zones, etc.). Wrap the interactive in <DragProvider>, mark sources with
- * <Draggable>, targets with <DropZone>.
- */
-
 interface DragState {
   armedId: string | null;
   draggingId: string | null;
@@ -125,7 +109,6 @@ export function DragProvider({
     setState((s) => (s.overZone === zoneId ? s : { ...s, overZone: zoneId }));
   }, []);
 
-  // Pointer-drag lifecycle (global move/up while dragging).
   const beginPointerDrag = useCallback(
     (id: string, e: PointerEvent) => {
       drag.current = {
@@ -145,7 +128,7 @@ export function DragProvider({
       if (!d || d.pointerId !== e.pointerId) return;
       if (!d.active) {
         const dist = Math.hypot(e.clientX - d.startX, e.clientY - d.startY);
-        if (dist < 5) return; // threshold
+        if (dist < 5) return;
         d.active = true;
         const label = labels.current.get(d.id) ?? d.id;
         setState((s) => ({ ...s, draggingId: d.id, draggingLabel: label, armedId: null }));
@@ -153,7 +136,6 @@ export function DragProvider({
       if (ghost.current) {
         ghost.current.style.transform = `translate(${e.clientX + 12}px, ${e.clientY + 12}px)`;
       }
-      // highlight the zone under the pointer
       const el = document
         .elementFromPoint(e.clientX, e.clientY)
         ?.closest<HTMLElement>("[data-drop-zone]");
@@ -202,7 +184,6 @@ export function DragProvider({
       }}
     >
       <div className={className}>{children}</div>
-      {/* drag ghost */}
       {draggingLabel != null && (
         <div
           ref={ghost}
@@ -227,12 +208,10 @@ export function Draggable({
   armedClassName = "ring-primary ring-2",
 }: {
   id: string;
-  /** Short text used in the ghost + screen-reader announcements. */
   label: string;
   disabled?: boolean;
   children: ReactNode;
   className?: string;
-  /** For values classes cannot carry — policy-scoping's per-item tint ramp. */
   style?: CSSProperties;
   armedClassName?: string;
 }) {
@@ -245,10 +224,6 @@ export function Draggable({
   const armed = ctx.armedId === id;
   const dragging = ctx.draggingId === id;
 
-  // Record that the provider's drag actually activated (crossed the 5px
-  // threshold) so the click fired when a drag is released back over the item
-  // doesn't read as click-to-place arming — by click time the provider has
-  // already reset draggingId.
   useEffect(() => {
     if (dragging) moved.current = true;
   }, [dragging]);
@@ -275,7 +250,6 @@ export function Draggable({
         ctx.beginPointerDrag(id, e.nativeEvent);
       }}
       onClick={() => {
-        // A click that wasn't a drag = click-to-place arm/disarm.
         if (!disabled && !ctx.draggingId && !moved.current) ctx.toggleArm(id);
       }}
       onKeyDown={(e) => {
@@ -308,7 +282,6 @@ export function DropZone({
   className?: string;
   overClassName?: string;
   armedClassName?: string;
-  /** Accessible name for the target (announced to keyboard users). */
   label?: string;
 }) {
   const ctx = useDragCtx();
@@ -344,7 +317,6 @@ export function DropZone({
   );
 }
 
-/** Read the currently-armed item id (for consumer-side affordances). */
 export function useArmedItem(): string | null {
   return useDragCtx().armedId;
 }

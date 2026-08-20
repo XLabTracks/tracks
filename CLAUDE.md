@@ -409,6 +409,16 @@ add must reduce the duplication, never widen it.
   work: pull the shared branch, commit there, push there, and pull again
   before you push — another session may have moved it.
 
+- **No unsolicited comments in Verification source.** Do not add comments to
+  Verification code or lesson files unless the user explicitly asks for that
+  exact comment. The only standing exceptions are required compiler, linter,
+  test-coverage, and legal directives. Never put prompts, chat quotes,
+  ownership, dates, edit or review history, implementation rationale, or
+  removed or moved material in source comments. Project history belongs in
+  Git; durable curriculum provenance belongs in `docs/verification/`. All
+  repository text must be in English. The rule is enforced by
+  `src/lib/verification/comment-policy.test.ts`.
+
 - **`src/content/verification/curriculum.ts` is the course.** It is the single
   source of the module list, the unit list and their order. The app track at
   `/tracks/verification` reads it directly; MDX bodies live in

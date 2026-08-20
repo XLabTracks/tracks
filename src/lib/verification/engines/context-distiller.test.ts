@@ -19,7 +19,6 @@ import {
 const r1 = distillerReports[0];
 const index = indexReport(r1);
 
-/** A run that has clipped and compressed the named blocks. */
 function runWith(clipped: string[], extra: Partial<DistillerRun> = {}): DistillerRun {
   return { ...freshRun(7), clipped, flipped: [...clipped], ...extra };
 }
@@ -29,9 +28,6 @@ describe("report data", () => {
     expect(distillerReports.map((r) => r.id)).toEqual(["r1", "r2", "r3", "r4"]);
   });
 
-  // The authoring guardrail. A core block whose segment answers nobody, or a
-  // budget that no longer fits the facts that matter, makes a report
-  // unwinnable and nothing in the UI would say so.
   it.each(distillerReports.map((r) => [r.id, r] as const))(
     "%s has a playable content graph",
     (_id, report) => {
@@ -153,7 +149,6 @@ describe("delivery", () => {
     const known = staff.knownBy[0];
     const ev = evaluateRun([[known, "stk-staff"]], r1);
     expect(ev.wasted["stk-staff"]).toEqual([known]);
-    // wasted is a report, not a penalty: it answers nothing and costs nothing
     expect(ev.ok).toBe(0);
   });
 

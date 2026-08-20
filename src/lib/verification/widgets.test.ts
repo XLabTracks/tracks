@@ -1,12 +1,3 @@
-/**
- * Consistency checks for the Verification track's native React widgets: every
- * registered exercise must have a widget, a content-graph lesson (`v-<id>`),
- * and an MDX body that embeds it — and vice versa. (The interactives used to be
- * standalone HTML pages under public/verification/; they are now React widgets
- * in src/components/verification/widgets/, so the old static-site checks are
- * gone. Widget behaviour is covered by the engine unit tests in
- * src/lib/verification/engines/*.test.ts and browser smoke.)
- */
 import { describe, expect, it } from "vitest";
 import { readFileSync, existsSync } from "node:fs";
 import { join } from "node:path";
@@ -69,10 +60,6 @@ describe("registry ↔ widget ↔ content graph ↔ MDX", () => {
     );
   });
 
-  // An exercise that has its own lesson must be that exercise: a v-<id> lesson
-  // whose body embeds some other widget is a mis-wiring the route would render
-  // without complaint. Exercises embedded only inside prose have no v-<id>
-  // lesson and are covered by the next check instead.
   it("a v-<id> lesson embeds the exercise it is named for", () => {
     for (const exercise of verificationExercises) {
       const lessonId = verificationLessonId(exercise.id);
@@ -87,11 +74,6 @@ describe("registry ↔ widget ↔ content graph ↔ MDX", () => {
     }
   });
 
-  // Two ways a widget reaches a learner: its own lesson (v-<id>, the usual
-  // case) or embedded inside a prose lesson, which is what 0.2 does with the
-  // landscape. So the invariant is "every registered exercise is embedded
-  // somewhere in this track", not "every lesson is an exercise" — that was
-  // true only while the track was nothing but interactives.
   it("every registered exercise is embedded by a lesson in the track", () => {
     const embeds = new Map<string, string[]>();
     for (const lesson of trackLessons) {
@@ -121,14 +103,6 @@ describe("widget completion reads", () => {
   });
 });
 
-/* The item page prints the lesson title as the page's h1 and again in the
- * breadcrumb, so a body carrying the same heading shows it three times. That
- * is what transcribing a numbered outline section verbatim produces, and it
- * came back on every batch — so the duplicate is now dropped at render, by
- * `titleAwareHeadings` in lesson-content.tsx, rather than policed in the
- * sources. These tests pin the matcher that decides, at every level and
- * wherever in the body the heading sits; they do not ask authors to edit the
- * transcription. */
 describe("verification lesson bodies", () => {
   const headingsOf = (body: string) =>
     [...body.matchAll(/^#{1,6}[ \t]+(.+?)[ \t]*$/gm)].map((m) => m[1]);

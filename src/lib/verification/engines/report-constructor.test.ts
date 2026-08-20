@@ -12,12 +12,6 @@ import {
 } from "./report-constructor";
 import { TAGS, cardById, type ReaderId } from "../data/report-constructor";
 
-/**
- * Ported from the standalone page's `__runTests` (public/verification/
- * report-constructor.html, ~line 1122). The DOM-driven assertions become direct
- * calls against the pure `evaluate()`; the data-integrity checks are preserved.
- */
-
 function threadsFrom(entries: [string, ReaderId[]][]): ThreadMap {
   const m: ThreadMap = new Map();
   for (const [card, readers] of entries) {
@@ -135,7 +129,6 @@ describe("report-constructor evaluate()", () => {
 
   it("threads to unselected cards are ignored, and buriedAt config is 3", () => {
     expect(CONFIG.buriedAt).toBe(3);
-    // census threaded but not in sel -> no need met, no verdicts
     const result = evaluate([], threadsFrom([["census", ["committee"]]]));
     expect(result.needsMet.size).toBe(0);
     expect(result.verdicts.length).toBe(0);

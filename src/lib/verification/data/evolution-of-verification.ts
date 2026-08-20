@@ -1,13 +1,5 @@
-/**
- * Copy + display data for "The Evolution of Verification" — lifted verbatim
- * from public/verification/evolution-of-verification.html (the authored
- * standalone page). Do not re-author, paraphrase, shorten, or translate: this
- * is human-written curriculum. Terms marked with [[…]] render dotted-underline
- * tooltips via the kit's TermText/Term; the tooltip text lives in TIPS.
- */
 import type { StrategyKey } from "@/lib/verification/engines/evolution-of-verification";
 
-/* ---------- strategy display data (META) ---------- */
 export interface StrategyMeta {
   name: string;
   hex: string;
@@ -66,7 +58,6 @@ export const META: Record<StrategyKey, StrategyMeta> = {
   },
 };
 
-/* ---------- tooltip copy (TIP) ---------- */
 export const TIPS = {
   r3: "Why 3? The payoff matrix: both cooperate and each earns 3. The full table is under the hood.",
   p1: "Why 1? Both defect and each scrapes 1. Better than being the lone sucker, worse than teamwork.",
@@ -81,7 +72,6 @@ export const TIPS = {
   rel: "Reliability r: the chance a verifier’s record is correct. At r = 1.0 it always sees the truth. Below that, even paid eyes can be fooled.",
 } as const;
 
-/* ---------- stage nav ---------- */
 export const NAV_LABELS = [
   "1 The world you know",
   "2 The fog",
@@ -90,13 +80,6 @@ export const NAV_LABELS = [
   "5 The bridge",
 ] as const;
 
-/* ---------- stage definitions ----------
- * Body / outcome / callout copy is lifted verbatim from STAGE_DEFS in the
- * source. Inline [[term|tip]] markers replace the source's <span class="term">
- * so the kit renders identical tooltips. Stage 3's outcome ends with a callout
- * whose "vcoopnums" span is filled at runtime from the first generation's
- * average scores.
- */
 export type StageNum = 1 | 2 | 3 | 4 | 5;
 
 export interface PredictBlock {
@@ -106,12 +89,9 @@ export interface PredictBlock {
 
 export interface StageDefUI extends Partial<PredictBlock> {
   title: string;
-  /** Body paragraphs, each may contain [[term|tip]] markers. */
   body: string[];
   roster?: StrategyKey[] | null;
-  /** Outcome paragraphs, shown after the run finishes. */
   outcome?: string[];
-  /** Stage 3 only: the highlighted V-Cooperator callout. */
   callout?: string;
 }
 
@@ -193,10 +173,6 @@ export const STAGE_DEFS: Record<StageNum, StageDefUI> = {
   },
 };
 
-/* ---------- Stage 3 V-Cooperator callout suffix ----------
- * The source appends a sentence to the callout after a run, comparing the two
- * cooperators' first-generation average scores. Assembled at runtime.
- */
 export function vcoopNumsSentence(
   cooperatorAvg: number,
   vcooperatorAvg: number,
@@ -210,7 +186,6 @@ export function vcoopNumsSentence(
   );
 }
 
-/* ---------- Stage 4: challenge + extension cards ---------- */
 export const STAGE4 = {
   challengeTitle: "The challenge",
   challengeBody:
@@ -225,7 +200,6 @@ export const STAGE4 = {
   addPlayersFirst: "Add players first: at least 6.",
 } as const;
 
-/* ---------- Stage 5 body (the bridge) ---------- */
 export const STAGE5_PARAGRAPHS: { html: string; bigIdea?: boolean }[] = [
   { html: "The game is a toy. The levers are not." },
   {
@@ -249,7 +223,6 @@ export const STAGE5_PARAGRAPHS: { html: string; bigIdea?: boolean }[] = [
   },
 ];
 
-/* ---------- "Under the hood" panel ---------- */
 export const UNDER_THE_HOOD = {
   summary: "Under the hood: rules, numbers, and honesty",
   sections: [

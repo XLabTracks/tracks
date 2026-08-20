@@ -10,41 +10,13 @@ import {
 } from "@/lib/verification/data/types-of-ai";
 import type { VerificationWidgetProps } from "../kit/types";
 
-/**
- * "Types of AI" — the containment onion. AI ⊃ Narrow AI ⊃ Machine Learning ⊃
- * Deep Learning ⊃ Generative AI ⊃ Large Language Model ⊃ Transformer LLMs,
- * drawn as nested circles that sink to the bottom so each level keeps an open
- * crescent at the top for its name, with that level's example systems sitting
- * as tappable pills inside its own band — the region that is "this level but
- * not the next one in". The red deepens inward, so the innermost transformer
- * circle is the reddest.
- *
- * The grey hatched margin between "AI" and "Narrow AI" is AI that is not
- * narrow — theoretical or absurd, i.e. it does not exist — so the geometry
- * itself carries that meaning.
- *
- * Layout is deterministic, not measured: `layout()` places each name in its
- * crescent and greedily packs its examples into rows sized to the band's chord
- * at that height, so nothing overflows and nothing overlaps the ring below.
- * Tapping a pill opens its what/why in the side panel; +/− and drag zoom and
- * pan for a closer look at the inner rings.
- *
- * Trap: inner circles paint last and take clicks over the shared centre, so a
- * ring is selected from its crescent, never the middle; pan arms only when a
- * drag starts on the background, so a press on a pill stays a select.
- */
-
 const VBW = 1180;
 const VBH = 1240;
 const AI = { cx: 590, cy: 600, r: 585 };
 const RED_BOTTOM = 1160;
-// Even steps → evenly shrinking rings (a proper containment onion), and a
-// small innermost circle like the reference — text shrinks to fit, the circle
-// never grows to chase it.
 const RED_R0 = 505;
 const RED_STEP = 73;
 
-/** i=0 is the grey AI field; 1..6 are the red rings, innermost last. */
 function levelCircle(i: number) {
   if (i === 0) return { cx: AI.cx, cy: AI.cy, r: AI.r };
   const r = RED_R0 - (i - 1) * RED_STEP;
@@ -55,21 +27,15 @@ function redOpacity(i: number) {
   return 0.12 + (i - 1) * 0.15;
 }
 
-// Rough label width in SVG units (no DOM measurement at render).
 const EX_FS = 21;
 const NAME_FS = 34;
 const NAME_FLOOR = 21;
 const PILL_H = 30;
 const LINE_H = 1.08;
 const EX_GAP = 14;
-const CHAR_W = 0.56; // mean glyph advance as a fraction of the font size
-const ASCENT = 0.74; // glyph top above a middle-baselined centre, fraction of fs
-// A run drawn with dominant-baseline "middle" reaches this far above the line
-// centre I place it at — so its real top edge is `nameAsc(fs)` above yTop.
+const CHAR_W = 0.56;
+const ASCENT = 0.74;
 const nameAsc = (fs: number) => fs * (ASCENT - LINE_H / 2);
-// Clearance kept between a glyph and the ring arcs, in SVG units. The binding
-// point is a run's TOP corners: the ring curves inward there, so the width a
-// centred run may take is set by the chord at its top edge, not its centre.
 const PAD_NAME = 15;
 const PAD_EX = 13;
 const PAD_TOP = 8;
@@ -80,7 +46,6 @@ const estPill = (name: string) => name.length * EX_FS * CHAR_W + 8;
 type PlacedPill = { li: number; ei: number; name: string; x: number; y: number; w: number };
 type PlacedName = { i: number; lines: string[]; fs: number; x: number; yTop: number; light: boolean };
 
-/** Balanced two-line split (minimise the length gap), or null for one word. */
 function balancedSplit(name: string): string[] | null {
   const words = name.split(" ");
   if (words.length < 2) return null;
@@ -89,7 +54,6 @@ function balancedSplit(name: string): string[] | null {
   for (let k = 1; k < words.length; k++) {
     const a = words.slice(0, k).join(" ");
     const b = words.slice(k).join(" ");
-    // ≤ keeps the later split on a tie → a fuller first line reads better.
     if (Math.abs(a.length - b.length) <= bestDiff) {
       bestDiff = Math.abs(a.length - b.length);
       best = [a, b];
@@ -98,14 +62,12 @@ function balancedSplit(name: string): string[] | null {
   return best;
 }
 
-/** Width a centred run may take at top-edge height y, keeping `pad` inside c. */
 function bandWidth(c: { cy: number; r: number }, y: number, pad: number) {
   const rr = c.r - pad;
   const v = rr * rr - (y - c.cy) * (y - c.cy);
   return v > 0 ? 2 * Math.sqrt(v) : 0;
 }
 
-/** Highest (smallest y) a half-width-hw run may put its top edge, keeping pad. */
 function highestTop(c: { cy: number; r: number }, hw: number, pad: number) {
   const rr = c.r - pad;
   const v = rr * rr - hw * hw;
@@ -128,7 +90,6 @@ function packRows(names: { li: number; ei: number; name: string }[], maxW: numbe
   return rows;
 }
 
-/** Apex (top edge) of ring i. */
 function topEdge(i: number) {
   const c = levelCircle(i);
   return c.cy - c.r;
@@ -142,14 +103,6 @@ type Placed = {
   exTop: number;
 };
 
-/**
- * Fit a name and its example rows into the crescent between `spanTop` and
- * `spanBot`. A wider name has to sit lower, where the band is wide enough to
- * clear the arc; the examples bottom-align against the next ring so they land
- * in the widest part of the band. The biggest font whose whole block clears
- * both arcs with PAD to spare wins; the name shrinks, then wraps, only when the
- * band cannot hold it.
- */
 function fitCrescent(
   name: string,
   c: { cy: number; r: number },
@@ -162,16 +115,12 @@ function fitCrescent(
     for (const lines of [[name], balancedSplit(name) ?? [name]]) {
       const nameW = Math.max(...lines.map((l) => l.length * fs * CHAR_W));
       const top = highestTop(c, nameW / 2, PAD_NAME);
-      if (top === null) continue; // this font is too wide for the band anywhere
-      // Drop the name by its ascent so its real top edge lands on the clearance
-      // line, not its centre.
+      if (top === null) continue;
       const nameTop = Math.max(spanTop + PAD_TOP, top + nameAsc(fs));
       const nameH = lines.length * fs * LINE_H;
       const zoneTop = nameTop + nameH + (exs.length ? GAP_NE : 0);
       if (!exs.length) return { lines, fs, nameTop, rows: [], exTop: zoneTop };
       const maxRows = Math.floor((zoneBot - zoneTop) / PILL_H);
-      // Fewest rows first: a bottom-aligned block of r rows has its narrowest
-      // (top) row highest, so pack to the chord at that row's real top edge.
       for (let r = 1; r <= maxRows; r += 1) {
         const rowTop = zoneBot - r * PILL_H + PILL_H / 2 - ASCENT * EX_FS;
         const packed = packRows(exs, bandWidth(c, rowTop, PAD_EX));
@@ -193,7 +142,6 @@ function fitCrescent(
   return { lines, fs: NAME_FLOOR, nameTop, rows, exTop };
 }
 
-/** The innermost ring is a full disk: fit the name to it, then centre the block. */
 function fitDisk(
   name: string,
   c: { cy: number; r: number },
@@ -231,7 +179,6 @@ function layout(): { names: PlacedName[]; pills: PlacedPill[] } {
     const exs = AI_LEVELS[i].examples.map((ex, ei) => ({ li: i, ei, name: ex.name }));
 
     if (i === 0) {
-      // "AI" sits at the top of the grey field and owns no example systems.
       names.push({
         i,
         lines: [AI_LEVELS[0].name],
@@ -413,7 +360,6 @@ export function TypesOfAi(_: VerificationWidgetProps) {
                     );
                   })}
 
-                  {/* level names — one line, or two when the ring is narrow */}
                   {names.map((n) => (
                     <text
                       key={n.i}
@@ -444,9 +390,6 @@ export function TypesOfAi(_: VerificationWidgetProps) {
                     </text>
                   ))}
 
-                  {/* example systems as plain text in their own band — no
-                      box, just the name, set light on the deep rings and ink
-                      on the pale ones, with a soft halo so it always reads. */}
                   {pills.map((p) => {
                     const active = selPill && selPill.i === p.li && selPill.ei === p.ei;
                     const light = redOpacity(p.li) >= 0.45;
@@ -459,7 +402,6 @@ export function TypesOfAi(_: VerificationWidgetProps) {
                         }}
                         className="cursor-pointer"
                       >
-                        {/* invisible hit target so plain text stays tappable */}
                         <rect
                           x={p.x - p.w / 2}
                           y={p.y - PILL_H / 2}
@@ -527,7 +469,6 @@ export function TypesOfAi(_: VerificationWidgetProps) {
           </div>
         </div>
 
-        {/* Detail panel. */}
         <div className="lg:sticky lg:top-20 lg:self-start">
           <div
             key={

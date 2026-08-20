@@ -9,20 +9,6 @@ import {
 import { QuestionWorkspace } from "../kit/question-workspace";
 import type { VerificationWidgetProps } from "../kit/types";
 
-/**
- * One report, four provenances, four boxes. The course owner's spec in full:
- * after each case there is an answer window.
- *
- * It is the house's written-answer deck and nothing else — all four cases are
- * on the page at once, because comparing them IS the exercise and revealing
- * case 3 after case 2 was answered would hide the comparison. Typing
- * autosaves; Save answer is the deliberate act, per case.
- *
- * OPTIONAL, so unbridged: no completion event, and `estimatedMinutes` for
- * 2.4.3 is unchanged. The section's finish event stays "Build the Inspection
- * Order". `onComplete` is therefore a no-op the deck's rule never reaches
- * anything with.
- */
 export function ReportAccess({}: VerificationWidgetProps) {
   return (
     <QuestionWorkspace

@@ -12,30 +12,8 @@ import { QUICK_QUESTIONS } from "./data/policy-quick-check";
 import { QUIZ } from "./data/protocol-actors";
 import type { DrillDeck, DrillStep } from "./data/drills";
 
-/**
- * The answer must not be findable from where it sits.
- *
- * This started as a measurement. Across the platform's question banks 86% of
- * correct answers were in slot A or B, and the individual banks were worse than
- * the average: one quiz ran four Bs out of five, the treaty phrase-quiz put a
- * correct option first in all fifteen of its questions, and the four-lever
- * matching offered its chips in the same order as its rows, so the whole thing
- * could be finished on the diagonal without reading it.
- *
- * Every one of those banks was written by Claude in this repo. The cause was
- * not authorial habit, it was that the exercises were built and never played:
- * the matching widget mapped one array over both its rows and its chips, which
- * produces a diagonal, and that is visible in ten seconds to anybody who tries
- * to solve their own exercise before shipping it.
- *
- * So the shuffle is the remedy and these tests are the discipline that was
- * missing — they ask, mechanically and every run, what the finished bank looks
- * like to somebody trying to beat it.
- */
-
 const DECKS: DrillDeck[] = [DRILLS_PRIMERS, DRILLS_FOUNDATIONS, DRILLS_GAMES];
 
-/** Prose that only makes sense if the options are in the order they were written. */
 const POSITIONAL =
   /\b(the\s+(first|second|third|fourth|fifth|last|top|bottom)\s+(option|answer|choice))|(option\s+(one|two|three|four|five|[A-E]\b))/i;
 
@@ -49,10 +27,6 @@ function drillSteps(): { deck: string; bench: string; i: number; step: DrillStep
 
 describe("prose never names an option by its position", () => {
   it("or the step opts out of shuffling, explicitly", () => {
-    // The trap this closes: a reveal reading "the second option is the planted
-    // over-reading" is silently wrong the moment its options move. Three steps
-    // in the benches are written that way and carry `fixedOrder`. A fourth
-    // must either do the same or — better — name the option by what it says.
     const offenders = drillSteps().filter(({ step }) => {
       const prose =
         step.type === "pick"
@@ -68,8 +42,6 @@ describe("prose never names an option by its position", () => {
   });
 
   it("holds for the quick check's explanations too", () => {
-    // These were rewritten off letters ("A and C are real weaknesses") and on
-    // to content. A letter is a position, and positions are display now.
     for (const q of QUICK_QUESTIONS) {
       expect(POSITIONAL.test(q.explanation), q.id).toBe(false);
       expect(/\b[A-E] and [A-E]\b/.test(q.explanation), q.id).toBe(false);
@@ -78,7 +50,6 @@ describe("prose never names an option by its position", () => {
 });
 
 describe("the shuffle actually spreads the answers", () => {
-  /** Where the correct option lands once the display order is applied. */
   function slots(): { n: number; slot: number }[] {
     const out: { n: number; slot: number }[] = [];
 
@@ -127,17 +98,6 @@ describe("the shuffle actually spreads the answers", () => {
   }
 
   it("puts no slot far above what an even spread would give it", () => {
-    // Compared against the spread these banks would have if every position
-    // were equally likely — NOT against a flat percentage. A quarter of these
-    // questions offer only two options, so slot A legitimately carries about a
-    // third of all answers and a flat threshold would either pass everything
-    // or fail on arithmetic.
-    //
-    // Expected share of slot k is the mean of 1/n over the questions that HAVE
-    // a slot k. The tolerance is 12 points, about two standard errors at this
-    // sample size: authored, slot A held 46% against an expected 32.6%, so the
-    // state this test exists to prevent clears it, and ordinary luck does not
-    // trip it.
     const at = slots();
     expect(at.length).toBeGreaterThan(50);
     for (let slot = 0; slot < 5; slot++) {
@@ -150,9 +110,6 @@ describe("the shuffle actually spreads the answers", () => {
   });
 
   it("no single bank puts every answer in one slot", () => {
-    // The treaty quiz did exactly this — fifteen questions, fifteen answers
-    // first. A bank-level check catches that even when the platform average
-    // looks healthy.
     const perQuiz = Object.entries(QUIZ).map(([id, entry]) => {
       const shown = shuffleAnswerOptions(
         `protocol-actors:${id}`,
@@ -166,9 +123,6 @@ describe("the shuffle actually spreads the answers", () => {
 });
 
 describe("every answer surface goes through the shuffle", () => {
-  // Source checks, in the house style: the point is that a NEW renderer cannot
-  // quietly render an authored order. Each of these lists options the learner
-  // picks between, so each has to ask for the shuffle by name.
   const SURFACES = [
     "src/lib/content/exercise-view.ts",
     "src/components/verification/widgets/policy-quick-check.tsx",
@@ -186,10 +140,6 @@ describe("every answer surface goes through the shuffle", () => {
   }
 
   it("keys the index-based banks on the authored index, not the shown one", () => {
-    // The one way to get this wrong that typecheck cannot see: comparing a
-    // display position against a key that counts authored positions. Both of
-    // these renderers destructure `from` — the authored index — and every
-    // judgement they make is on it.
     for (const file of [
       "src/components/verification/kit/drill-deck.tsx",
       "src/components/mdx/reader/check.tsx",

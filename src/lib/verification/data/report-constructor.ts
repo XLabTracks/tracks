@@ -1,15 +1,3 @@
-/**
- * Data for the "Report Constructor" Verification widget (Module 1 · Actors ·
- * 1.6). One inspection, three readers: the learner picks up to 8 of 15 notebook
- * entries (4 are pure traps that fit no desk), threads each to one of three
- * desks, and runs a repeatable fit check that scores reader-needs met, misfit
- * threads, dead cards, and buried desks.
- *
- * Every string below is human-authored curriculum lifted VERBATIM from the
- * standalone page (public/verification/report-constructor.html and its
- * extracted consts public/verification/content/report-constructor.json). Do not
- * paraphrase, shorten, or invent — the fit notes and copy are the pedagogy.
- */
 
 export type ReaderId = "committee" | "authority" | "cell";
 
@@ -22,7 +10,6 @@ export type CardTag =
   | "inference"
   | "background";
 
-/** Tag → display label for a notebook entry's provenance. */
 export const TAGS: Record<CardTag, string> = {
   observed: "Observed",
   records: "Records",
@@ -35,7 +22,6 @@ export const TAGS: Record<CardTag, string> = {
 
 export interface Reader {
   id: ReaderId;
-  /** Per-reader accent, used only for the filament / chip / eye color. */
   color: string;
   chipBg: string;
   chipFg: string;
@@ -456,13 +442,9 @@ export const CARDS: Card[] = [
   },
 ];
 
-/** Tuning constants — verbatim from CONFIG in the source. */
 export const CONFIG = {
-  /** max notebook entries in the report */
   cap: 8,
-  /** distinct failing checks before unmet-need hints appear */
   hintAfter: 2,
-  /** misfit threads on one desk = that desk is buried */
   buriedAt: 3,
 } as const;
 

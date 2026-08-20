@@ -1,27 +1,5 @@
 import type { Exercise } from "@/lib/content/types";
 
-// The Verification track's written tasks, lifted verbatim from the author's
-// outline — every prompt is the outline's own words for that task.
-//
-// Writing-prompt exercises rather than prose in a callout, because a task a
-// learner cannot answer is not a task: this type carries the editor, the
-// autosaving draft, the submit step and the review path the app already has.
-// `exercises.data.ts` only spreads these in.
-//
-// No word bounds and no rubric where the outline states neither — inventing a
-// minimum or a marking scheme would be inventing curriculum. The 0.2 tasks
-// are the exception the rule allows for: the Outline-36 revision brackets a
-// word budget onto every one of its prompts ("[200-250 words]"), so those
-// carry minWords/maxWords transcribed from it.
-//
-// A table is NOT a task. Eight of the outline's tables were pasted in here as
-// writing-prompt prompts, cells joined by blank lines, and rendered as a
-// FREE RESPONSE card holding a flat column of cell text with no grid, no
-// header and an answer box under it. Tables belong in the MDX as markdown
-// tables — `.lesson-body table` in globals.css already gives them the house
-// treatment and its own scroll box. If a prompt has no question in it, it is
-// not a prompt.
-
 export const verificationExercises: Exercise[] = [
   {
     id: "v-task-introduction-1",
@@ -30,11 +8,6 @@ export const verificationExercises: Exercise[] = [
     format: "free-form",
     optional: true,
   },
-  // 0.2, Option A — the outline's five prompts, one exercise each. Splitting
-  // is the Outline-36 revision's own shape ("shorter, prompted questions
-  // linking into a more cohesive essay at the end"); the prompt text and the
-  // word budgets are its words verbatim. The A5/B5 recommendation choice is
-  // <VerdictSelect/> in the lesson body, not part of these prompts.
   {
     id: "v-task-intuitions-5",
     type: "writing-prompt",
@@ -80,7 +53,6 @@ export const verificationExercises: Exercise[] = [
     minWords: 400,
     maxWords: 600,
   },
-  // 0.2, Option B — likewise the outline's five prompts, verbatim.
   {
     id: "v-task-intuitions-10",
     type: "writing-prompt",
@@ -143,10 +115,6 @@ export const verificationExercises: Exercise[] = [
     format: "free-form",
     optional: true,
   },
-  // The Limited Test Ban Treaty passage that briefly sat here as
-  // v-task-scoping-effective-feasible-1 was never a task — it carried no
-  // question. Outline v40 marks it an expand box, and it now lives in
-  // 1.0.2's body as a <Fold>.
   {
     id: "v-task-welcome-1",
     type: "writing-prompt",

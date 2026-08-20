@@ -1,35 +1,15 @@
-/**
- * The effectiveness × feasibility plot for 1.0.2 — data lifted from the
- * authored prototype (effectiveness-feasibility-policy-plot.html in the
- * playground). Human-written curriculum: the placements and the cost sketches
- * are the author's judgements, not computed and not to be re-derived.
- *
- * `baseline` and `verified` are the same policy's political feasibility with
- * and without a verification regime in place — the whole argument of the
- * section is the distance between them. `effect` is risk reduction if the
- * policy is followed, and does not move: verification buys feasibility, not
- * effectiveness.
- *
- * All three are 0-100 on the author's own scale. They are positions on a
- * sketch, not measurements, and the widget says so.
- */
 
 export type CostLevel = "low" | "med" | "high";
 
-/** The policy's family. Paired with a shape in the plot, never hue alone. */
 export type PolicyKind = "transparency" | "restriction";
 
 export interface PlotPolicy {
   id: string;
   name: string;
   kind: PolicyKind;
-  /** Political feasibility with no verification regime (0-100). */
   baseline: number;
-  /** Political feasibility once one is in place (0-100). */
   verified: number;
-  /** Risk reduction if followed (0-100). */
   effect: number;
-  /** In the order of COST_DIMENSIONS below. */
   costs: [CostLevel, CostLevel, CostLevel, CostLevel];
 }
 

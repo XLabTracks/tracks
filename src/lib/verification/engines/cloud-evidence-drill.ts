@@ -7,11 +7,6 @@ const ACTIVITY_TERMS =
 const CONTRAST_TERMS =
   /\b(but|compared|contrast|different|other|others|rather|remaining|three|whereas|while)\b/i;
 
-/**
- * The response is intentionally evaluated as a compact concept check rather
- * than by exact wording. A sufficient sentence distinguishes actor/identity
- * evidence from measurements of compute activity.
- */
 export function explainsOddCloudObservable(response: string) {
   const normalized = response.trim().replace(/\s+/g, " ");
   return (

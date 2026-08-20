@@ -14,47 +14,17 @@ import {
 } from "@/lib/verification/data/policy-plot";
 import type { VerificationWidgetProps } from "../kit/types";
 
-/**
- * The effectiveness × feasibility plot for 1.0.2, ported from the authored
- * prototype. Five policies sit on risk-reduction (y) against political
- * feasibility (x); the toggle puts a verification regime in place and every
- * point slides right by the feasibility it buys — drawn as a track from where
- * the policy sat without one — which is the section's argument in one gesture:
- * verification buys feasibility, never effectiveness, so nothing moves
- * vertically. Points are draggable so a learner can argue with the author's
- * placement; the regime's gain then applies to that placement too, so the
- * toggle keeps meaning something after a drag. Reset puts them back.
- *
- * House idiom: one hand-rolled SVG, no chart library. Structure reads theme
- * tokens so it follows all three Verification themes; the two policy families
- * take the one brand accent and a shape each — hollow ring vs solid block — so
- * the split survives without colour.
- *
- * Traps: the SVG scales, so pointer coordinates have to come back through
- * getScreenCTM rather than being read off the event. A dragged point is stored
- * in the no-regime frame (the gain subtracted while the regime is on), so the
- * toggle adds exactly one gain whatever state it was dragged in. Drag is in
- * user units, clamped to the plot frame.
- */
-
-/* Plot frame in viewBox units. */
 const X0 = 70;
 const X1 = 640;
-const Y0 = 340; // effect 0
-const Y1 = 40; // effect 100
+const Y0 = 340;
+const Y1 = 40;
 
 const fx = (feasibility: number) => X0 + feasibility * ((X1 - X0) / 100);
 const fy = (effect: number) => Y0 - effect * ((Y0 - Y1) / 100);
 
-/* The feasibility a regime buys a policy, in viewBox units — never negative,
-   verification only ever adds feasibility, so the slide is always rightward. */
 const gainPx = (policy: PlotPolicy) =>
   (policy.verified - policy.baseline) * ((X1 - X0) / 100);
 
-/* Low/med/high is a quantity, so it is drawn as one: a three-segment meter
-   beside the word. Deliberately no hue — a tint dark enough to read on the
-   day ground fails the night and high-contrast grounds, and the level is
-   already fully carried by the word. */
 const LEVEL_FILL: Record<CostLevel, number> = { low: 1, med: 2, high: 3 };
 
 export function PolicyPlot(_: VerificationWidgetProps) {
@@ -126,7 +96,6 @@ export function PolicyPlot(_: VerificationWidgetProps) {
           setMoved((prev) => ({
             ...prev,
             [id]: {
-              // Stored in the no-regime frame, so toggling adds one clean gain.
               x: Math.min(X1, Math.max(X0, point.x)) - gain,
               y: Math.min(Y0, Math.max(Y1, point.y)),
             },
@@ -195,21 +164,12 @@ export function PolicyPlot(_: VerificationWidgetProps) {
           {C.target}
         </text>
 
-        {/* The ideal nobody reaches: high effect and high feasibility, the
-            corner the label points at. A faint target so the goal reads as a
-            place the policies are pulled toward, not just a caption. */}
         <g className="stroke-muted-foreground" fill="none" opacity="0.3">
           <circle cx="612" cy="92" r="15" strokeWidth="1" strokeDasharray="3 3" />
           <circle cx="612" cy="92" r="6.5" strokeWidth="1" />
           <circle cx="612" cy="92" r="1.5" className="fill-muted-foreground" stroke="none" />
         </g>
 
-        {/* Regime on: the feasibility each policy buys, a rightward track from
-            where it sat without one — starting from a dragged point's own
-            placement, so the toggle still argues after a drag. Horizontal by
-            construction: verification never touches effect. A gain too small to
-            draw is left off; its point barely moves, which is the reading for
-            the already-feasible. */}
         {verified &&
           PLOT_POLICIES.map((policy) => {
             const base = moved[policy.id] ?? {
@@ -248,13 +208,7 @@ export function PolicyPlot(_: VerificationWidgetProps) {
                 !moved[policy.id] && "transition-transform duration-500 motion-reduce:transition-none",
               )}
             >
-              {/* Generous invisible hit area — a 9px dot is not a target. */}
               <circle r="18" fill="transparent" />
-              {/* Hollow ring or solid block, in the one accent. The fill is
-                  the distinction and it is not arbitrary: a transparency
-                  measure lets you see through it, a restriction is a wall.
-                  Selection thickens the same stroke rather than adding a
-                  second colour, so a picked mark still belongs to its family. */}
               {policy.kind === "transparency" ? (
                 <circle
                   r="8"
@@ -280,12 +234,6 @@ export function PolicyPlot(_: VerificationWidgetProps) {
         })}
       </svg>
 
-      {/* Legend: shape, fill and word — the families never rest on hue, and
-          here they do not rest on it at all. Both marks are the brand accent;
-          hollow versus solid is the whole encoding. Two chart hues used to
-          sit here (borrowed from the incentive tokens, which mean something
-          else entirely) and a cobalt dot beside a satsuma square was the one
-          cold thing on a page that is warm maroon from the header down. */}
       <div className="text-muted-foreground mt-1 mb-4 flex flex-wrap items-center gap-x-5 gap-y-1 text-xs">
         <span className="flex items-center gap-1.5">
           <span

@@ -1,23 +1,7 @@
-/**
- * "What do they say" — the frontier-lab-leaders dossier for Module 0 of the
- * Verification track. All copy is lifted VERBATIM from the authored source at
- * public/verification/what-do-they-say.html (and its extracted content JSON,
- * public/verification/content/what-do-they-say.json). Do not re-author,
- * paraphrase, shorten, or translate — this is human-written curriculum.
- *
- * Portrait photos were extracted from the source's inline base64 data URIs and
- * written to public/verification/assets/what-do-they-say/<key>.jpg. The
- * Wikimedia photoSource attribution is preserved. Jan Leike had no portrait in
- * the source (photo: null) — he renders with initials only.
- */
 
 export const WDTS_COPY = {
   viewProfile: "View profile →",
 } as const;
-
-// ---------------------------------------------------------------------------
-// Profiles / dossier
-// ---------------------------------------------------------------------------
 
 export type WdtsFigureKey =
   | "altman"
@@ -27,13 +11,9 @@ export type WdtsFigureKey =
   | "sutskever"
   | "leike";
 
-/** One labelled section inside a profile's body. */
 export type ProfileSection = {
-  /** e.g. "Definition", "Risk statements", "Background", "The term". */
   label: string;
-  /** Paragraph bodies as verbatim HTML (contain <q>, <em> inline markup). */
   paragraphsHtml: string[];
-  /** Marks the "Relevance to this module" callout (navy note styling). */
   matters?: boolean;
 };
 
@@ -41,17 +21,11 @@ export type ProfileSource = { label: string; href: string };
 
 export type WdtsFigure = {
   key: WdtsFigureKey;
-  // `code` — "Profile 01 · OpenAI" — is gone. It was the eyebrow on every
-  // card and every dossier header, and it carried a serial number plus an
-  // affiliation `role` already states one line lower. The cards start on the
-  // name now (course owner, 2026-08-20).
   name: string;
   role: string;
   initials: string;
-  /** Path under /public, or null (Jan Leike — initials only in the source). */
   photo: string | null;
   photoSource?: string;
-  /** Card teaser shown in the grid (from the source card markup). */
   teaser: string;
   sections: ProfileSection[];
   sources: ProfileSource[];

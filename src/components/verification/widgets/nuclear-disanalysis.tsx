@@ -15,27 +15,10 @@ import {
   type DisanalysisQuote,
 } from "@/lib/verification/data/nuclear-disanalysis";
 
-/**
- * 0.3's disanalysis task, reshaped on the course owner's instruction: read
- * Baker FIRST — the paper is the examination the tasks reason about — then
- * three ungated reasoning tasks against it. No commits, no minimum lengths,
- * no locked steps, no buttons between a reader and the next question: "it's
- * not a test, it's reasoning." Where a task offers Baker's own words, they
- * sit in a Fold — offered, never a reward for pressing something.
- *
- * Nothing here composes a sentence of curriculum: the claim, the reading
- * map, the tasks and every quote live in `data/nuclear-disanalysis.ts` —
- * read its header before editing any of them.
- *
- * Unbridged: reading is the exercise, so the host's view-style completion
- * applies and the widget holds no state at all.
- */
-
 export function NuclearDisanalysis(_props: VerificationWidgetProps) {
   void _props;
   return (
     <div className="not-prose my-6 space-y-4">
-      {/* The claim under examination. */}
       <div className="panel">
         <p className="text-muted-foreground text-sm">{CLAIM.lead}</p>
         <blockquote className="border-border mt-2 border-l-2 pl-4 leading-relaxed italic">
@@ -43,7 +26,6 @@ export function NuclearDisanalysis(_props: VerificationWidgetProps) {
         </blockquote>
       </div>
 
-      {/* The read. It comes first: the tasks below are answered against it. */}
       <div className="border-border bg-card shadow-soft space-y-3 rounded-xl border p-5">
         <p className="text-muted-foreground eyebrow">
           Read Baker first
@@ -63,7 +45,6 @@ export function NuclearDisanalysis(_props: VerificationWidgetProps) {
           {BAKER.author} · {BAKER.year} · {BAKER.licence}
         </p>
         <p className="text-muted-foreground text-sm leading-relaxed">{READ_NOTE}</p>
-        {/* Her reading map: eight pages of forty-four, and why each. */}
         <ul className="space-y-1.5 text-sm">
           {READING_MAP.map((r) => (
             <li key={r.where} className="leading-relaxed">
@@ -74,7 +55,6 @@ export function NuclearDisanalysis(_props: VerificationWidgetProps) {
         </ul>
       </div>
 
-      {/* The tasks. All three visible, none gated on the others. */}
       {QUESTIONS.map((q) => (
         <section
           key={q.id}
@@ -85,8 +65,6 @@ export function NuclearDisanalysis(_props: VerificationWidgetProps) {
           </p>
           <h3 className="text-lg leading-snug font-semibold">{q.title}</h3>
 
-          {/* Her Q3 deals the disanalogy card before it asks. Attribution
-              above the words, as everywhere. */}
           {q.id === "q3" ? (
             <div className="space-y-1">
               <p className="text-muted-foreground text-sm">Consider the following fact:</p>
@@ -106,7 +84,6 @@ export function NuclearDisanalysis(_props: VerificationWidgetProps) {
             </p>
           ))}
 
-          {/* Possibilities to reason between — words, never buttons. */}
           {q.choice ? (
             <div className="space-y-1.5 text-sm">
               <p className="text-muted-foreground">{q.choice.prompt}</p>
@@ -138,7 +115,6 @@ export function NuclearDisanalysis(_props: VerificationWidgetProps) {
   );
 }
 
-/** One of Baker's sections, attribution above the words. */
 function BakerQuote({ quote }: { quote: DisanalysisQuote }) {
   return (
     <SourceQuote

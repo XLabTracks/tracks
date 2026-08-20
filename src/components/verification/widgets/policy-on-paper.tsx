@@ -24,42 +24,9 @@ import { Spoiler } from "../kit/spoiler";
 import { SteelmanDeck } from "../kit/steelman-deck";
 import type { VerificationWidgetProps } from "../kit/types";
 
-/**
- * 2.4.2 — Companies A and B. Mark what kind of evidence each statement about
- * a reporting regime is, then read both regimes against what the employees of
- * those companies asked for themselves.
- *
- * Authored for 2.4.4 and moved here on 2026-08-15: every row is a sentence out
- * of a real whistleblower policy, which is 2.4.2's subject, while 2.4.4's is
- * audit design — and this never used it. The exercise id, the storage keys and
- * the answer key travel unchanged.
- *
- * It closes the section, and unlike 2.4's other labs it is not optional: it
- * sits outside the Fold and it is 2.4.2's one bridged widget.
- *
- * The two companies are tabs and stay anonymous while the learner works —
- * that is the mechanic, not a concealment. Nothing above the Sources block
- * carries a link, because a citation on tab A would name the company while tab
- * B was still meant to be judged blind; the block itself is present from the
- * start with its letters covered, so somebody can uncover it whenever they
- * decide the checking matters more than the puzzle.
- *
- * Marking is per tab and commits per tab: the comparison she wants happens
- * between tabs, and a single commit across both would make the second tab's
- * marks a formality once the pattern is visible. The third tab is not marked
- * at all — it is answered.
- *
- * The questions are hers, verbatim, and are never graded — no model, no key.
- * The two closing ones stand above the tabs in the house's written-answer
- * deck, visible from the moment the block opens, because they are the work
- * the tabs are material for; the demands tab's question sits with its four
- * demands and is what commits that tab.
- */
-
 interface Saved {
   marks: Record<string, Provenance>;
   committed: string[];
-  /** The demands tab's one answer. The other two live in the notes deck. */
   demandAnswer: string;
 }
 
@@ -94,10 +61,6 @@ export function PolicyOnPaper({
   const [tab, setTab] = useState(POLICY_COMPANIES[0]!.id);
   const fired = useRef(initialCompleted);
 
-  /* Bridged: committing the last set is the finish event. There is no single
-     button that ends this exercise — three commits do, and which of them is
-     last is the learner's order — so it fires from an effect on the finished
-     state rather than from a handler. Once. */
   const finished = TAB_IDS.every((id) => saved.committed.includes(id));
   useEffect(() => {
     if (!hydrated || !finished || fired.current) return;
@@ -152,12 +115,6 @@ export function PolicyOnPaper({
 
       <SteelmanDeck deck={INSTITUTION_DECK} />
 
-      {/* The two questions, under the material and never behind a gate. They
-          were above it and are now below, which is the course owner's order:
-          the tabs are what you answer from. What they must not go back to is
-          opening only once every tab is committed — a learner met them after
-          the marking was sealed, with no way to re-read a row against them.
-          No preamble here; the questions are their own instruction. */}
       <QuestionWorkspace
         storageKey={POLICY_NOTES_KEY}
         rule={{ kind: "any", count: POLICY_QUESTIONS.length }}
@@ -166,17 +123,6 @@ export function PolicyOnPaper({
         onComplete={() => {}}
       />
 
-      {/* Who each tab was, and every document its rows were read out of.
-
-          Always present, and covered rather than withheld. It used to render
-          only once every tab was committed, which was a lock on top of a
-          cover: the spoiler already hides the mapping, and hiding the whole
-          block as well meant a learner who wanted to check a claim mid-way
-          could not, and one who never finished never learned that the
-          statements came from anywhere at all.
-
-          Uncovering it early spoils the exercise, and that is the learner's
-          call to make — which is what a spoiler is for. */}
       <section className="panel">
           <Spoiler
             title="Sources"
@@ -196,12 +142,6 @@ export function PolicyOnPaper({
                       {c.realNote}
                     </p>
                   ) : null}
-                  {/* Marked and indented explicitly. Left alone, the nested
-                      list came out `list-style: circle` with no padding, so
-                      every marker rendered outside its own content box —
-                      hanging left into the card's padding, detached from the
-                      line it belongs to. A marker either sits in the column
-                      with its text or it is not a marker. */}
                   <ul className="marker:text-muted-foreground/70 mt-1 list-disc space-y-0.5 pl-4">
                     {c.cites.map((cite) => (
                       <li key={cite.href} className="text-xs">
@@ -239,11 +179,6 @@ function CompanyTab({
   const placed = company.statements.filter((s) => saved.marks[s.id]).length;
   const ready = placed === company.statements.length;
 
-  /* No group headings and no kicker above the rows. Both were answering the
-     question: "Published process" over a statement is the Published-rule chip
-     spelled out, "Documented context" is Documented-prior-practice, and "Still
-     unverified" is Not-established. The grouping survives as the order the
-     rows come in — which is the only part of it that was not a key. */
   return (
     <>
       {POLICY_GROUPS.map((group) => {
@@ -342,11 +277,6 @@ function CompanyTab({
   );
 }
 
-/**
- * The demands tab. Nothing to mark: the four are what was asked for, and the
- * question is what satisfying them would change. Committing needs an answer,
- * because the answer is the entire work of this tab.
- */
 function DemandsTab({
   saved,
   persist,

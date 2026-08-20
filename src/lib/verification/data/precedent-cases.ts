@@ -1,37 +1,14 @@
-/**
- * The 0.3 case-study interactive: eight verification regimes from history, the
- * learner calls "held or circumvented" before reading how each turned out.
- *
- * Every sentence is the author's case-file text, verbatim: the outline lists
- * all eight under 0.3 with the same three parts each — the historical
- * parallel, why it held or failed, and what AI verification should adopt or
- * avoid. The only editorial move is placement: a sentence that gives the
- * outcome away (Biopreparat, the North Korean test detections) is shown in
- * the reveal, not the briefing, because the exercise is prediction-first.
- * Order is chronological, which is the outline's own order.
- *
- * The outline points at a prototype for this exercise. This widget is the
- * shipped version of it; the prototype is a sketch, not a spec, so
- * where the two differ the code here wins.
- */
 
 export type PrecedentOutcome = "held" | "circumvented";
 
 export interface PrecedentCase {
   id: string;
-  /** Case-file name, with years. */
   name: string;
-  /** The author's subtitle for the case. */
   tagline: string;
-  /** Shown before the call — the "description of the historical parallel". */
   briefing: string;
-  /** The record's verdict, for scoring the learner's call. */
   outcome: PrecedentOutcome;
-  /** The author's own outcome heading — it carries the nuance the binary cannot. */
   outcomeHeading: string;
-  /** Shown after the call: how it actually turned out, and why. */
   why: string;
-  /** "What AI verification should adopt or avoid." */
   transfer: string;
 }
 

@@ -5,20 +5,6 @@ import {
   type MemoSlot,
 } from "@/content/verification/memos";
 
-/**
- * The written output a lesson owes, at the end of that lesson.
- *
- * The course asks for fifteen of these and the memo desk has always held all
- * fifteen, but nothing in the course pointed at it — a learner reaching the
- * end of 2.3 had no way of knowing a memo was due there. This is that
- * pointer: `<MemoDesk lesson="intelligence-action"/>` prints whatever
- * src/content/verification/memos.ts says this lesson owes, and links into the
- * desk at that slot.
- *
- * A slot with no brief still gets a card. The outline marks the assignment
- * and has not written it, and saying so is more use than silence — the desk
- * will still take the draft. Never fill the gap in from here.
- */
 export function MemoDesk({ lesson }: { lesson: string }) {
   const slots = memoSlotsForLesson(lesson);
   if (!slots.length) {
@@ -42,8 +28,6 @@ function Slot({ slot }: { slot: MemoSlot }) {
     <section className="panel text-sm">
       <p className="text-muted-foreground flex flex-wrap items-center gap-x-2 gap-y-1 eyebrow">
         <PenLine className="size-3.5" aria-hidden />
-        {/* The unit keeps its own case: the outline numbers some of these
-            "1.x" and "3.x", and uppercasing turns that into "3.X". */}
         Written output · <span className="normal-case">{slot.unit}</span>
         {slot.genre && slot.genre !== "memo" ? (
           <span>· {memoGenreLabels[slot.genre]}</span>
@@ -98,9 +82,6 @@ function Slot({ slot }: { slot: MemoSlot }) {
         </>
       ) : null}
 
-      {/* A plain anchor, not next/link: the desk deep-links on the fragment,
-          selecting `location.hash` on load, and a client-side navigation that
-          keeps the document would never fire that. */}
       <a
         href={`/verification/memo-desk#${slot.id}`}
         className="border-border hover:bg-muted mt-4 inline-flex min-h-11 items-center gap-1.5 rounded-lg border px-3 py-2 text-xs font-semibold no-underline! transition-colors select-none lg:min-h-0 lg:py-1.5"

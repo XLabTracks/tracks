@@ -6,19 +6,6 @@ import {
   FT_TOOLS_NOTE,
 } from "@/lib/verification/data/facilitator-training";
 
-/**
- * The facilitator training, as materials — five sessions, what each is about,
- * and what to read for it.
- *
- * No progress, no completion, no exercise widgets, and no sign-up for the
- * training itself — it is read, not enrolled in. Exactly one session takes a
- * booking: the crash test simulation needs actors briefed to derail it, so it
- * needs a room and other people.
- *
- * Trap: that booking has nowhere to go yet — this page's own note says no
- * facilitator application exists. The link points at that note rather than at
- * a form, so the offer and the reason it cannot be taken up stay together.
- */
 export function FacilitatorTraining() {
   return (
     <section>

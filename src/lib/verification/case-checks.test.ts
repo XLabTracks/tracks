@@ -2,12 +2,6 @@ import { describe, expect, it } from "vitest";
 
 import { runCaseChecks, wordCount, type CaseFields } from "./case-checks";
 
-/**
- * Every rule is a claim about text, so every rule is pinned against text that
- * should trip it and text that should not. A check that quietly stopped firing
- * would still render a green row, which is worse than no rail at all.
- */
-
 const BOUNDS = { min: 100, max: 180 };
 
 const GOOD: CaseFields = {
@@ -26,8 +20,6 @@ function find(fields: CaseFields, id: string) {
 
 describe("case checks", () => {
   it("survives fields the editor has not stored yet", () => {
-    // The editor only stores a key once something is typed into it, so an
-    // untouched field arrives undefined. This threw inside a render once.
     expect(() => runCaseChecks({}, BOUNDS)).not.toThrow();
     expect(() => runCaseChecks({ insider: "x" }, BOUNDS)).not.toThrow();
     expect(runCaseChecks({ insider: "x" }, BOUNDS)[0]!.message).toContain(
@@ -98,7 +90,6 @@ describe("case checks", () => {
     const ids = runCaseChecks(GOOD, BOUNDS).map((c) => c.id);
     expect(ids).not.toContain("plausible");
     expect(ids).not.toContain("permitted");
-    // Structural and textual rules only — the semantic marking is the key's.
     expect(new Set(ids)).toEqual(
       new Set(["fields", "length", "excluded", "mechanism", "how-known", "consistency"]),
     );

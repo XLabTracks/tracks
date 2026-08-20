@@ -30,7 +30,6 @@ const ActorEdges = dynamic<VerificationWidgetProps>(
   () => import("./actor-edges").then((module) => module.ActorEdges),
   { loading: WidgetLoading },
 );
-// Unregistered with 1.2.2 on 2026-08-18 — see exercises.ts.
 const InteractiveMap = dynamic<VerificationWidgetProps>(
   () => import("./interactive-map").then((module) => module.InteractiveMap),
   { loading: WidgetLoading },
@@ -47,8 +46,6 @@ const ContextDistiller = dynamic<VerificationWidgetProps>(
   () => import("./context-distiller").then((module) => module.ContextDistiller),
   { loading: WidgetLoading },
 );
-// Unregistered with the exercise on 2026-08-18 — see exercises.ts for why
-// and for the one line that brings the three decks back.
 const DrillsGames = dynamic<VerificationWidgetProps>(
   () => import("./drills-games").then((module) => module.DrillsGames),
   { loading: WidgetLoading },
@@ -106,21 +103,10 @@ const EvidenceTaxonomies = dynamic<VerificationWidgetProps>(
   () => import("./evidence-taxonomies").then((module) => module.EvidenceTaxonomies),
   { loading: WidgetLoading },
 );
-// field-map stood down 2026-08-18 with the threat-modeling/theory-of-change
-// specs it served (Outline-42: "delete threat modeling and toc stuff").
-// field-map.tsx and data/field-map.ts remain in the repo, unregistered —
-// remounting is its exercises.ts line, a dynamic() here, and an embed.
-// 2.4.1's exercise is now Construct a Case; the id stays so the lesson
-// mapping, the progress key and the section's finish event do not move.
-// human-insiders.tsx and its engine remain in the repo, unmounted.
 const ConstructCase = dynamic<VerificationWidgetProps>(
   () => import("./construct-case").then((module) => module.ConstructCase),
   { loading: WidgetLoading },
 );
-// 2.4.2's exercise is now Read the Rules, Infer the System; the id stays so
-// the lesson mapping, the progress key and the finish event do not move.
-// human-reporting-protection.tsx (the route reconstruction) and its data and
-// engine remain in the repo, unmounted.
 const PolicyQuickCheck = dynamic<VerificationWidgetProps>(
   () =>
     import("./policy-quick-check").then((module) => module.PolicyQuickCheck),
@@ -133,18 +119,10 @@ const WhistleblowerLevers = dynamic<VerificationWidgetProps>(
     ),
   { loading: WidgetLoading },
 );
-// 2.4.3's exercise is now Same Claim, Different Circumstances; the id stays
-// so the lesson mapping, the progress key and the finish event do not move.
-// The decision lab it shared with 2.4.4 remains in the repo, unmounted here.
 const SameClaim = dynamic<VerificationWidgetProps>(
   () => import("./same-claim").then((module) => module.SameClaim),
   { loading: WidgetLoading },
 );
-// 2.4.4's exercise is now Build the Institution; the id stays so the lesson
-// mapping, the progress key and the finish event do not move.
-// 2.4.4 is the recovered exercise: two real companies read from their own
-// documents, then the letter. companies-ab.tsx — the same comparison on
-// generic feature lists — stays in the repo, unmounted.
 const PolicyOnPaper = dynamic<VerificationWidgetProps>(
   () => import("./policy-on-paper").then((module) => module.PolicyOnPaper),
   { loading: WidgetLoading },
@@ -165,13 +143,6 @@ const MissingBoard = dynamic<VerificationWidgetProps>(
   { loading: WidgetLoading },
 );
 
-/**
- * Native React widgets ported from the standalone HTML pages, keyed by the same
- * page id used in `src/lib/verification/exercises.ts`. Every import is its own
- * chunk: opening one lesson must not download all widget datasets in the
- * track. There is no fallback: an id missing here renders the host's inline
- * "no widget registered" error card.
- */
 export const verificationWidgets: Record<
   string,
   ComponentType<VerificationWidgetProps>

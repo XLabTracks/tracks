@@ -156,13 +156,16 @@ export function ActorEdges({ onComplete }: VerificationWidgetProps) {
         label={`Step ${stepIndex + 1} of ${STEPS.length}`}
       />
 
-      {saved.edgeStep === "map" && saved.edgesDone ? (
-        <div>
-          <Button size="sm" variant="outline" onClick={editEdges}>
-            Edit my edges
-          </Button>
-        </div>
-      ) : null}
+      {/* NO EDIT CONTROL ON THIS STEP — it carried one for a day and the day
+          was expensive. The key, its mechanisms and the per-edge explanations
+          live on step 1's committed verdict, and the cursor persists here
+          once "Read what it says" is pressed — so a reader coming back for
+          the key lands on this step and reaches for whatever button mentions
+          the edges. When that button was "Edit my edges" it un-committed the
+          board, which hid the verdict — the key stopped showing anywhere
+          until they guessed that Commit re-reveals it. The way back to the
+          key is the step control at the bottom, which never touches the
+          document; editing stays one press past it, on the verdict itself. */}
 
       {saved.edgeStep === "edges" && !saved.edgesDone ? (
         <EdgeDrawingTask />

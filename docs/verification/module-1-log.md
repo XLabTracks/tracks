@@ -1409,3 +1409,33 @@ Driven afterwards: the chip card is an `<a>` with the right href, target and
 rel, "Coming soon" is gone, the sidebar reads 1.2 → 1.2.1 / 1.2.2 and 1.3
 carries one subsection, and the retired lesson's URL serves the platform's
 not-found page. 1,154 tests, typecheck and the course generator all green.
+
+### The day the key stopped showing (2026-08-20)
+
+The course owner reported 1.2.2's key and explanations gone for a fully
+correct board — "ключи больше просто не показывает". Nothing in the verdict
+was deleted: a committed board still prints every mechanism, its Baker
+quotes and the per-edge explanations, force-opened when all seven edges are
+found. What changed was the route to it. "Let committed actor edges be
+edited" (2026-08-19, the widget's last touch before the merge) put an
+**Edit my edges** button at the top of the Read-the-map step — the step the
+cursor persists on once "Read what it says" is pressed, so the step every
+return visit opens on, with the key nowhere on screen. A reader coming back
+for the key pressed the one button that mentioned the edges, and it
+un-commits (`edgesDone: false`): from then on neither step shows the
+verdict until they guess that **Commit the edges** re-reveals it.
+
+Restored, not redesigned: the map step is back to its pre-edit-button shape
+— no control up top, the ghost step control at the bottom returns to the
+committed verdict without touching the document. Editing survives where
+that commit also put it, on the verdict itself, which is the honest place:
+you watch the reveal close as you choose to reopen the board. One guard
+went into `prune()` — a stored map cursor over an un-committed board opens
+on the drawing step, since the map step reads a committed board and, with
+the top button gone, such a document would have no way forward. A comment
+at the old button's site says why no edit control belongs on that step.
+
+Driven in a browser end to end: commit 7/7 → key open; forward to the map;
+reopen the page → map, step control back → full key intact; edit from the
+verdict → re-commit → key back; a hand-made map-cursor-uncommitted document
+opens on the editor. Typecheck, lint and the workshop's data tests green.

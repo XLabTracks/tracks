@@ -134,11 +134,16 @@ function prune(raw: unknown): Saved {
     const ring = box.rings?.[id];
     if (typeof ring === "string" && RING_IDS.has(ring)) rings[id] = ring as RingId;
   }
+  const edgesDone = box.edgesDone === true;
   return {
     step: BOARD_STEPS.includes(box.step as BoardStep) ? (box.step as BoardStep) : "study",
-    edgeStep: EDGE_STEPS.includes(box.edgeStep as EdgeStep)
-      ? (box.edgeStep as EdgeStep)
-      : "edges",
+    // The map step reads a committed board; without one it has nothing to
+    // show and no way forward, so an un-committed document opens on the
+    // drawing step whatever cursor it stored.
+    edgeStep:
+      edgesDone && EDGE_STEPS.includes(box.edgeStep as EdgeStep)
+        ? (box.edgeStep as EdgeStep)
+        : "edges",
     recall: typeof box.recall === "string" ? box.recall : "",
     recallDone: box.recallDone === true,
     recallChecked: Array.isArray(box.recallChecked)
@@ -169,7 +174,7 @@ function prune(raw: unknown): Saved {
           ),
         ]
       : [],
-    edgesDone: box.edgesDone === true,
+    edgesDone,
     secondOrder:
       typeof box.secondOrder === "string" &&
       SECOND_ORDER.options.some((o) => o.id === box.secondOrder)

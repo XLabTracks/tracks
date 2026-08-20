@@ -411,13 +411,18 @@ interface EdgeDraft extends MapPoint {
 const NODE_HIT_RADIUS = 18;
 const DRAG_THRESHOLD = 4;
 
+/** Half-width of a beam at its widest — the flare under each endpoint dot.
+    The arrowhead's barbs take exactly this width, so the head is the flare's
+    own ending rather than a second shape sitting on it. */
+const BEAM_END_WIDTH = 4.5;
+
 /** The same pinched connector used by the landing-page skill tree. Its two
  * quadratic flanks flare into the endpoint dots and narrow at mid-flight. */
 function beamPath(
   from: MapPoint,
   to: MapPoint,
   control: MapPoint,
-  endWidth = 4.5,
+  endWidth = BEAM_END_WIDTH,
   middleWidth = 1.4,
 ): string {
   const normal = (dx: number, dy: number) => {
@@ -460,12 +465,20 @@ function edgeControl(from: MapPoint, to: MapPoint, bend = 0): MapPoint {
    is uniform-width. Two barbs sweep back from the point, their front edges
    bowed in toward the shaft, tapering to nothing at the barb tips, with the
    mass sitting at the point — the swallow-wing head rather than a flat
-   triangle. It is solid ink whatever the beam under it wears: the beam's
-   hue and dash carry the verdict, the head only carries direction, and a
-   state-coloured head drowned in its own beam (a dashed beam's flared
-   outline even read as a hollow dashed head). Ink, not literal black —
-   theme.css owns the colours, and a #000 head would vanish on the night
-   theme. */
+   triangle. Its barbs are exactly BEAM_END_WIDTH off the axis and the SHAFT
+   STOPS IN ITS NOTCH: the beam is trimmed to end where the head's rear
+   cutout is, so the last stretch of every edge is the head alone. Earlier
+   heads sat on top of a beam that ran on beneath them to the dot, and the
+   coloured flare peeking around the ink was mush, not an arrow. It is solid
+   ink whatever the beam under it wears: the beam's hue and dash carry the
+   verdict, the head only carries direction, and a state-coloured head
+   drowned in its own beam (a dashed beam's flared outline even read as a
+   hollow dashed head). Ink, not literal black — theme.css owns the colours,
+   and a #000 head would vanish on the night theme. */
+const HEAD_TIP_INSET = 7; // the tip rests on the dot's rim (dot radius 6.5)
+const HEAD_LENGTH = 8; // tip to barb tips
+const HEAD_NOTCH = 5.2; // tip to the rear notch the shaft tucks into
+
 function arrowheadPath(control: MapPoint, to: MapPoint): string {
   const dx = to.x - control.x;
   const dy = to.y - control.y;
@@ -474,18 +487,28 @@ function arrowheadPath(control: MapPoint, to: MapPoint): string {
   const uy = dy / length;
   const nx = -uy;
   const ny = ux;
-  const tip = { x: to.x - ux * 9, y: to.y - uy * 9 };
+  const tip = { x: to.x - ux * HEAD_TIP_INSET, y: to.y - uy * HEAD_TIP_INSET };
   // A point `back` units behind the tip, `side` units off the axis.
   const at = (back: number, side: number) =>
     `${tip.x - ux * back + nx * side} ${tip.y - uy * back + ny * side}`;
   return [
     `M ${tip.x} ${tip.y}`,
-    `Q ${at(5, 1.5)} ${at(10, 6)}`, // up the concave front edge to the barb tip
-    `L ${at(6.5, 0)}`, // into the rear notch
-    `L ${at(10, -6)}`, // out to the other barb
-    `Q ${at(5, -1.5)} ${tip.x} ${tip.y}`, // and back along the far front edge
+    `Q ${at(4, 1.1)} ${at(HEAD_LENGTH, BEAM_END_WIDTH)}`, // up the concave front edge to the barb tip
+    `L ${at(HEAD_NOTCH, 0)}`, // into the rear notch
+    `L ${at(HEAD_LENGTH, -BEAM_END_WIDTH)}`, // out to the other barb
+    `Q ${at(4, -1.1)} ${tip.x} ${tip.y}`, // and back along the far front edge
     "Z",
   ].join(" ");
+}
+
+/** Where a beam must stop so the head takes over: `p` pulled back along its
+    approach (toward the curve's control point) to the head's rear notch. */
+function trimForHead(p: MapPoint, control: MapPoint): MapPoint {
+  const dx = control.x - p.x;
+  const dy = control.y - p.y;
+  const length = Math.hypot(dx, dy) || 1;
+  const d = Math.min(HEAD_TIP_INSET + HEAD_NOTCH, length / 2);
+  return { x: p.x + (dx / length) * d, y: p.y + (dy / length) * d };
 }
 
 /** Four states, four treatments, and never colour alone — a missed edge is
@@ -673,7 +696,7 @@ export function RingMap({
   const draftGeometry = draftStart && draftEnd && draftControl &&
     Math.hypot(draftEnd.x - draftStart.x, draftEnd.y - draftStart.y) > 1
     ? {
-        beam: beamPath(draftStart, draftEnd, draftControl),
+        beam: beamPath(draftStart, trimForHead(draftEnd, draftControl), draftControl),
         arrow: arrowheadPath(draftControl, draftEnd),
       }
     : null;
@@ -763,7 +786,12 @@ export function RingMap({
             b,
             partner !== undefined && !twoHeaded ? 12 : 0,
           );
-          const beam = beamPath(a, b, control);
+          // The shaft ends in the head's notch — see arrowheadPath.
+          const beam = beamPath(
+            twoHeaded ? trimForHead(a, control) : a,
+            trimForHead(b, control),
+            control,
+          );
           return (
             <g key={`${edge.id}-${edge.state}`} opacity={paint.opacity}>
               <path

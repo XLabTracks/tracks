@@ -1439,3 +1439,23 @@ Driven in a browser end to end: commit 7/7 → key open; forward to the map;
 reopen the page → map, step control back → full key intact; edit from the
 verdict → re-commit → key back; a hand-made map-cursor-uncommitted document
 opens on the editor. Typecheck, lint and the workshop's data tests green.
+
+**Follow-up, same day: the graph's armed source no longer outlives the
+edge.** The course owner's hypothesis was that the missing key was tied to
+drawing edges by hand rather than with the chip rows. Driven in a browser,
+the input method does not touch the verdict — both write the same
+`from>to` ids — and the key has always printed the edges the learner did
+NOT draw, explanation and quote included. What the hand gestures DID have
+was a trap the chips do not: after a click-drawn edge the source stayed
+armed, and no graph gesture could switch or clear it, so clicking dots
+pair by pair — the gesture the instructions promise — drew a stray edge
+from the old source at every second pair and could silently toggle a right
+edge off. A board believed fully correct then commits at 5-of-7 with
+extras, and the reveal collapses what was found — which reads as the key
+having gone. Now a drawn edge disarms the source under either gesture
+(dragging never read it anyway — it starts from the dot under the
+pointer), re-clicking the armed dot clears it, and fanning several edges
+out of one actor remains what dragging and the chip rows are for. The
+collapse of found edges' mechanisms behind "Show every mechanism" is
+c388451's deliberate design (the born verdict printed everything, for two
+hours) and stands untouched; a fully correct board still opens everything.

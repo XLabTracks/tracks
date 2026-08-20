@@ -488,7 +488,7 @@ export function RingMap({
   edges?: MapEdge[];
   interactive?: boolean;
   selectedSource?: WorkshopActorId | null;
-  onSource?: (id: WorkshopActorId) => void;
+  onSource?: (id: WorkshopActorId | null) => void;
   onToggleEdge?: (id: string) => void;
 }) {
   const [draft, setDraft] = useState<EdgeDraft | null>(null);
@@ -558,10 +558,24 @@ export function RingMap({
     return nearest;
   };
 
+  /* A drawn edge finishes the pair and DISARMS the source. The source used
+     to stay armed for chaining — and that was a trap with no way out:
+     clicking dots pair by pair drew a stray edge from the old source at
+     every second pair, and no graph gesture could switch or clear the
+     source (clicking any other dot drew from it instead). "Select one
+     point and then another" is what the instructions promise, so that is
+     what the gestures do; fanning several edges out of one actor is what
+     dragging and the chip rows are for. Re-clicking the armed dot clears
+     it — the escape hatch aria-pressed was already claiming. */
   const chooseActor = (id: WorkshopActorId) => {
     if (!canDraw) return;
-    if (selectedSource && selectedSource !== id) {
+    if (selectedSource === id) {
+      onSource?.(null);
+      return;
+    }
+    if (selectedSource) {
       onToggleEdge?.(edgeId(selectedSource, id));
+      onSource?.(null);
       return;
     }
     onSource?.(id);
@@ -605,8 +619,11 @@ export function RingMap({
       DRAG_THRESHOLD;
     const target = nearestActor(point, draft.from);
     if (moved && target) {
-      onSource?.(draft.from);
+      // Same rule as the click gesture: a completed edge disarms. A drag
+      // never reads the armed source anyway — it starts from whatever dot
+      // is under the pointer — so arming after one only set the click trap.
       onToggleEdge?.(edgeId(draft.from, target));
+      onSource?.(null);
     } else if (moved) {
       onSource?.(draft.from);
     } else {
@@ -753,7 +770,9 @@ export function RingMap({
                 actorIsInteractive
                   ? selectedSource && selectedSource !== actor.id
                     ? `Draw an edge from ${MAP_LABEL[selectedSource]} to ${MAP_LABEL[actor.id]}`
-                    : `${MAP_LABEL[actor.id]}. Select as the evidence source.`
+                    : selected
+                      ? `${MAP_LABEL[actor.id]}. Clear the selected source.`
+                      : `${MAP_LABEL[actor.id]}. Select as the evidence source.`
                   : undefined
               }
               className={actorIsInteractive ? "cursor-crosshair outline-none" : undefined}

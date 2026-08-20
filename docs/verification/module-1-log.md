@@ -1459,3 +1459,22 @@ out of one actor remains what dragging and the chip rows are for. The
 collapse of found edges' mechanisms behind "Show every mechanism" is
 c388451's deliberate design (the born verdict printed everything, for two
 hours) and stands untouched; a fully correct board still opens everything.
+
+**Owner's instructions, later the same day.** Two, both on 1.2.2's edge
+exercise. *"Надо чтоб все выводились в ключах"* — the key prints whole:
+c388451's collapse of found edges' mechanisms behind "Show every mechanism"
+is gone, and every edge prints its mechanism and quote after commit, drawn
+or not, whatever the score. The key is the reading matter of the step, not
+a diff against the reader's board. And the map borrows quiver's edge
+vocabulary: opposite directions between one pair merge into a single beam
+with a head at each end when their verdict is the same, and bend apart —
+each keeping its own paint — when it differs, so the learner's solid arrow
+and the key's dashed one sit side by side instead of stacking. Heads are
+quiver's swallow-wing shape (barbs tapering to nothing, mass at the point,
+front edges bowed in) in the map's own ink on every state — a
+state-coloured head drowned in its own beam, and a dashed beam's flared
+outline used to read as a hollow dashed head. Ink, not literal black,
+because theme.css owns the colours and #000 would vanish on the night
+theme. Driven at 3x zoom in a browser: the mutual pair while drawing, the
+right-plus-wrong pair after commit, and the reversed-against-key pair all
+read.

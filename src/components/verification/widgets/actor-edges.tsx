@@ -466,15 +466,11 @@ function EdgesVerdict({
   onEdit: () => void;
   onNext: () => void;
 }) {
-  /* Same rule as the placement reveal: the mechanism and its quote print for
-     an edge the reader did not draw, and collapse to a line for one they
-     did. This block is the longest thing in the workshop — six hundred words
-     of edges before the notes and the finding — and most of it explains work
-     the reader has already done. Opening it all is one press away, and it is
-     open by default when every edge was found, because then the filter has
-     nothing to hide and would hide the whole step. */
-  const [showAll, setShowAll] = useState(false);
-  const perfect = score.found.length === EDGE_KEY.length;
+  /* The key prints whole — every edge with its mechanism and its quote,
+     drawn or not. It briefly collapsed the edges the reader had found
+     behind a "Show every mechanism" toggle, and the course owner overruled
+     that (2026-08-20, module-1 log): the key is the reading matter of this
+     step, not a diff against the reader's board. */
   return (
     <div className="space-y-4">
       <div className="flex flex-wrap items-center justify-between gap-3">
@@ -490,21 +486,9 @@ function EdgesVerdict({
             ? ` ${score.extra.length} the key does not have.`
             : ""}
         </p>
-        <div className="flex flex-wrap items-center gap-3">
-          <Button size="sm" variant="outline" onClick={onEdit}>
-            Edit my edges
-          </Button>
-          {perfect ? null : (
-            <button
-              type="button"
-              onClick={() => setShowAll((v) => !v)}
-              className="text-muted-foreground hover:text-foreground text-xs underline underline-offset-4"
-              aria-pressed={showAll}
-            >
-              {showAll ? "Only what you missed" : "Show every mechanism"}
-            </button>
-          )}
-        </div>
+        <Button size="sm" variant="outline" onClick={onEdit}>
+          Edit my edges
+        </Button>
       </div>
 
       {/* The key, grouped by the subgoal each edge completes — which is the
@@ -554,16 +538,12 @@ function EdgesVerdict({
                         )}
                       </span>
                     </p>
-                    {!got || showAll || perfect ? (
-                      <>
-                        <p className="text-muted-foreground mt-1 text-sm leading-relaxed">
-                          {edge.what}
-                        </p>
-                        {edge.baker.map((q) => (
-                          <BakerLine key={q.text.slice(0, 32)} {...q} />
-                        ))}
-                      </>
-                    ) : null}
+                    <p className="text-muted-foreground mt-1 text-sm leading-relaxed">
+                      {edge.what}
+                    </p>
+                    {edge.baker.map((q) => (
+                      <BakerLine key={q.text.slice(0, 32)} {...q} />
+                    ))}
                   </li>
                 );
               })}

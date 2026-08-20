@@ -207,8 +207,9 @@ per-entry comments had asserted the wrong version of it twice.
 
 ## 1.2's Actor Map Workshop (2026-08-15, owner's instruction)
 
-Two widgets stood down and one replaced them, on the owner's call: "мы
-заменяем хуйню с выделением текста это говно для первокурсников".
+Two widgets stood down and one replaced them, on the owner's call
+(translated): "we are replacing the text-selection crap — this is garbage
+for freshmen".
 
 **Gone from 1.2, kept in the repo.** `protocol-actors` ("Who's in the
 Treaty?") — clicking highlighted phrases in a treaty to meet the actors behind
@@ -232,8 +233,8 @@ became the reveal at the end of Recall, which is what a group gets out of
 comparing lists.
 
 **It opens closed-book, which is the other half of what she asked for** —
-"нам придется делать заморозку и разводить их по разным стейтам с кнопкой я
-уже изучил давайте упражнение". The roster is a study panel with a button that
+(translated) "we will have to do a freeze and separate them into states
+with an 'I have studied this' button — let us make it an exercise". The roster is a study panel with a button that
 closes it, and every step after it is answered without it. The freeze is soft
 and visible: "Open the roster" is always there, taking it sets `peeked`, and
 the closing map says so. A hard lock would be a lie — her tables are further
@@ -432,7 +433,7 @@ three she needs to make.
   predecessor AI Safety Institute had such agreements, and whether CAISI still
   does is unconfirmed rather than wrong.
 
-### The three corrections applied (2026-08-15, owner: "правь то что старое и неправильное")
+### The three corrections applied (2026-08-15, owner, translated: "fix what is old and wrong")
 
 - **The Department of War leads now.** She spotted it: the department has run
   under that name since the September 2025 executive order — war.gov, Secretary
@@ -504,7 +505,7 @@ first number was optimistic.
 
 Two owner instructions, applied.
 
-**"Пусть просто деп оф вор зовется."** Table 3's row is now just *Department of
+**"Let it just be called Dep of War" (translated).** Table 3's row is now just *Department of
 War* — no parenthetical — and the Notes-and-sources paragraph about the
 executive order and the House vote is deleted outright. Both URLs left
 citations.json with it: the Federal Register entry (an `entries` row) and the
@@ -623,8 +624,9 @@ have their own permanent keys.
 
 ### The reading column takes the width, and footnotes became popups (2026-08-15)
 
-Two owner instructions that turned out to be one decision: "текст должен быть
-на всю ширину экрана, которая не занята другим" and "а сноска — поп апами".
+Two owner instructions that turned out to be one decision: (translated) "the text
+should take the full width of the screen not occupied by anything else"
+and "and the footnote — as pop-ups".
 Reserving a right-hand gutter for footnote sidenotes is part of what kept the
 column narrow, so notes that open over the text are what let the text have the
 width.
@@ -683,8 +685,8 @@ that is what she was looking at.
 
 ### The footnote popup is the course's existing card (2026-08-15)
 
-The owner: "почему твой блядский дизайн отличается если я тебе даже понитейл
-скилл подвезла". Correct, and it is rung 2 of that ladder — is it already in
+The owner (translated): "why does your damn design differ when I even
+brought you the ponytail skill". Correct, and it is rung 2 of that ladder — is it already in
 this codebase — failed on the first try. The course already had a popup: the
 one the Define action raises over a selected word, `.vocab-card` in
 public/verification/notebook.css. I built a fourth look out of a bare shadcn
@@ -724,7 +726,7 @@ canonical is the owner's call.
 
 ### The map is on screen, and one duplication audit (2026-08-15)
 
-**"The Actor Map Workshop должен содержать карту."** It did not, for most of
+**"The Actor Map Workshop must contain a map" (translated).** It did not, for most of
 its length. `RingMap` rendered only inside step 4 and step 6, so a block with
 "Map" in its name opened on a roster and a button, and showed nothing again on
 steps 2, 3 and 5. That is plain from the control flow, not a rendering
@@ -781,9 +783,8 @@ four frozen options on the centre question, no console errors.
 
 ## 2026-08-18 — 1.2's rings are Baker's frame now, and the edges are an exercise
 
-Her instruction: *"Берём рамку Baker / Рёбра делаем упражнением нарисовать и
-ключ по бейкеру"* — take Baker's framework, make the edges something the
-learner draws, and key them against the paper.
+Her instruction (translated): take Baker's framework, make the edges
+something the learner draws, and key them against the paper.
 
 ### What the rings were and why they moved
 
@@ -985,7 +986,8 @@ matters.
 
 ### The states are on the board
 
-Her instruction, same day: *"добавь страны... в схему"*. She is right and it was
+Her instruction, same day (translated): *"add the countries... to the
+diagram"*. She is right and it was
 the real fix for the seam, not a bridge sentence: the closing questions ask
 about Taiwan and about states holding capability and enforcement at once, and
 the board was ten companies and three American bureaus.
@@ -1126,8 +1128,8 @@ labels and nothing clipped, in both themes.
 
 ## 2026-08-18 — 1.2 comes down from 77 minutes to 34
 
-Course owner: *"мы не можем иметь 1.2 больше чем 40 минут давай пепесобирать"*,
-then, after three costed routes: **route В — split, plus the cuts, and delete
+Course owner (translated): *"we cannot have 1.2 longer than 40 minutes,
+let us reassemble"*, then, after three costed routes: **route V — split, plus the cuts, and delete
 the drill bench rather than move it.** Written answers marked optional.
 
 ### Where the 77 minutes were
@@ -1382,7 +1384,7 @@ part of the budget plan and she declined it; the geographic map remains 1.2's
 first subsection.
 
 **1.2.2 Context-specific report constructor is stood down** — course owner:
-*"удалить целиком оно просто дублирует 1.3.1"*. She is right about the
+(translated) *"delete it entirely — it simply duplicates 1.3.1"*. She is right about the
 overlap: writing a verification report is what 1.3 Upstream and downstream
 teaches, its worked example is an IAEA report at Fordow, and the context
 distiller is the exercise for it. 1.2 is about actors.

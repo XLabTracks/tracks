@@ -555,8 +555,8 @@ the body follows the title.
 
 ### The case files stand down (2026-08-12)
 
-"Why not deleted" — her review's time math had already assumed it ("Без
-case files пакет ещё можно уместить"): the document packet is 0.3's whole
+"Why not deleted" — her review's time math had already assumed it ("without the
+case files the packet can still fit", translated): the document packet is 0.3's whole
 60-minute budget, so the eight-case-files interactive (precedent-cases,
 "Did the Regime Hold?") leaves the section. The stand-down mirrors
 nuclear-disanalysis: embed removed from precedents.mdx, entries removed
@@ -666,8 +666,8 @@ and hers to override in curriculum.ts.
 
 ### Estimates v2: the whole workload, not the prose (2026-08-12)
 
-Her correction ("ты не учитываешь время чтения пролинкованного, выполнения
-заданий"): the estimate is the unit's full workload. Recomputed for every
+Her correction (translated: "you are not counting the time to read what is
+linked and to do the tasks"): the estimate is the unit's full workload. Recomputed for every
 lesson with these mechanical rules, each overridable and all recorded here:
 
 - prose at ~200 wpm; explorables 3 min, task widgets 10, drill decks 1.5
@@ -771,8 +771,8 @@ and easy-to-parse visuals", the author's wording.
 
 **short-history: categorical colour, and both figures made explorable
 (2026-08-14, owner: "at least use the colors from landing ensuring contrast
->4", then "можно это интерактивным draggable … и тоже сделать так чтоб можно
-выбрать что отображается").**
+>4", then, translated: "make it an interactive draggable … and also so
+you can choose what is displayed").**
 
 The six test-score series all inked from one red ramp — the author's earlier
 instruction was "shades of red", and shades of red is what it got. Measured,
@@ -815,8 +815,8 @@ Both figures are explorable now, and neither hides anything behind a gesture:
   series leaves the plot, the label column and the hover readout together. The
   last one cannot be switched off — an empty chart has no obvious way back.
 
-**On importing more capabilities.** The owner asked for "все скиллы которые там
-были". Checked against the source rather than guessed: OWID's own `selection`
+**On importing more capabilities.** The owner asked (translated) for "all the
+skills that were there". Checked against the source rather than guessed: OWID's own `selection`
 for grapher `test-scores-ai-capabilities-relative-human-performance` names
 exactly these six, so the chart she is looking at is already complete. The
 underlying indicator (OWID 852592) carries six more — code generation, complex

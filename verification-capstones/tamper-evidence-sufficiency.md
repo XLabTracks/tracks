@@ -13,66 +13,44 @@ mentor: optional
 audience: The regime designer deciding where prevention is worth its cost.
 skills: [institutional design, inspection economics, risk analysis]
 prerequisites: [Verification 2.1 — the hardware layer, Verification 4.1 — feasibility and layering]
-updated: 2026-08-06
+sources:
+  - "[Verifying International Agreements on AI — Baker, Kulp, Marks, Brundage & Heim (2025), §4.1.1.1 and §4.2.1.1](https://arxiv.org/abs/2507.15916)"
+updated: 2026-08-20
 ---
 
-## The brief
+## The idea, as posed
 
-Tamper-resistance tries to make violation impossible; tamper-evidence only
-promises that violation leaves a mark. The second is dramatically cheaper
-and available now — seals, logs, one-way counters, broken-on-open
-enclosures. The question is institutional, not technical: under what
-conditions is a mark, found later, enough?
+From [Verifying International Agreements on AI — Baker, Kulp, Marks,
+Brundage & Heim (2025)](https://arxiv.org/abs/2507.15916), Section
+4.1.1.1, Prerequisites: Hardware Security Features. Quoted:
 
-- **The variables.** Whether the facility is otherwise monitored; how often
-  anyone looks (inspection frequency sets time-to-detection); how much harm
-  accumulates between violation and discovery; and what actually happens to
-  a violator once the mark is found.
-- **The comparison.** Monitored versus unmonitored facilities, frequent
-  versus rare inspection, reversible versus irreversible harms — worked as
-  cases, not abstractions. A seal on a quarterly-inspected rack means
-  something different from the same seal in a facility no one revisits.
-- **The framework.** The output is a decision rule a regime designer can
-  apply: given detection lag, harm accumulation rate, and enforcement
-  credibility, tamper-evidence suffices here, and only prevention will do
-  there.
+> The verification mechanisms we consider require a hardware security
+> feature known as secure boot, which must be at least tamper-evident (i.e.,
+> impractical to discreetly disable or undermine). They would further
+> benefit from Confidential Computing and tamper-proofing, though these are
+> not required.
+>
+> Secure boot: Secure boot aims to guarantee that a chip will only run with
+> approved system software (i.e., firmware and operating system). System
+> software can constrain a chip’s behavior throughout operation, so secure
+> boot could be used to ensure that a chip will always behave in ways that
+> facilitate verification. Secure boot implementations are especially
+> promising for this if they: (i) are at least tamper-evident, with regards
+> to both physical and digital tampering (so, unless they are also
+> tamper-proof, random inspections would be needed to check for tampering);
+> and (ii) include a secure private key, allowing the system software to
+> digitally sign messages.
 
-## Why it exists
+The off-chip analysis leans on the same bargain:
 
-Module 2.1 notes that secure boot and similar mechanisms were designed for
-the wrong adversary — governance inverts the threat model, and the owner is
-the party being caught. Tamper-evidence sidesteps the hardest part of that
-inversion by dropping the demand that hardware defeat its owner, keeping
-only the demand that the owner cannot hide having won. Where that weaker
-promise suffices, regimes get cheaper and deployable sooner; knowing where
-is the design skill this brief trains. It feeds directly into Module 4.1's
-layering decisions.
+> Conversely, for Verifiers to be confident in the devices’ integrity, they
+> could rely on measures such as Verifier-trusted supply chains, mutual
+> vetting (similar to Provers’ vetting), tamper-evident enclosures (a random
+> sample of which would be routinely inspected), and ideally
+> tamper-proofing.
 
-## Scope
+## What you produce
 
-**In scope:** existing tamper-evidence mechanisms as a class, and the
-institutional arithmetic of detection lag, accumulated harm and enforcement
-response.
-
-**Out of scope:** designing new seals or enclosures, and formal security
-proofs. The framework consumes mechanism properties; it does not certify
-them.
-
-## What good looks like
-
-| Dimension | Weak | Strong |
-|---|---|---|
-| Variables | "It depends" | The named variables, each with its effect on the verdict |
-| Cases | One setting | Monitored and unmonitored, frequent and rare inspection, worked through |
-| The rule | A vibe | A decision procedure someone else could apply and reach your answer |
-| Limits | Unstated | The harms too fast or too irreversible for after-the-fact discovery, named |
-
-## Getting started
-
-1. Write the time line of one violation: mark made, harm accumulating,
-   inspection arrives, response lands. Every variable in the framework is a
-   segment of that line.
-2. Work the friendliest case for tamper-evidence and the most hostile one
-   before any middle cases — the framework lives between the two ends.
-3. State the enforcement assumption explicitly. Evidence without a credible
-   response converts every seal into decoration.
+The decision framework the quoted design leaves implicit: under what
+inspection cadence, sampling rate and response time a mark found later is
+enough — and when nothing short of tamper-proofing will do.

@@ -13,63 +13,55 @@ mentor: recommended
 audience: The operator and verifier negotiating what must be shown for what assurance.
 skills: [mechanism comparison, privacy analysis, trade-off mapping]
 prerequisites: [Verification 2.0 — confidentiality vs verifiability, Verification 2.x — the four layers]
-updated: 2026-08-06
+sources:
+  - "[Verifying International Agreements on AI — Baker, Kulp, Marks, Brundage & Heim (2025), §1 and §3.2](https://arxiv.org/abs/2507.15916)"
+updated: 2026-08-20
 ---
 
-## The brief
+## The idea, as posed
 
-Confidentiality versus verifiability is usually stated as a tension and left
-there. State it as a price list instead. For each level of confidence a
-verifier might want in a compliance claim, what does the operator have to
-disclose, and how deep does the mechanism reach into the facility?
+From [Verifying International Agreements on AI — Baker, Kulp, Marks,
+Brundage & Heim (2025)](https://arxiv.org/abs/2507.15916), Section 1.
+Quoted:
 
-- **The mechanisms.** Five, compared like for like: on-site inspections,
-  network taps, sensor telemetry, trusted-hardware attestation, and
-  randomized recomputation of declared work. Same compliance claim held
-  fixed across all five.
-- **The three axes.** Assurance: what confidence the mechanism can actually
-  deliver against a motivated evader, not its brochure claim. Disclosure:
-  which secrets it spends — weights, code, customer data, utilization
-  patterns, facility layout. Intrusiveness: what running it does to
-  operations, from nothing to inspectors on the floor.
-- **The dominated options.** The matrix exists to expose them: mechanisms
-  that cost more disclosure than an alternative for no more assurance.
-  Finding two of those is worth more than scoring all five politely.
-- **The frontier.** The combinations that remain when dominated options
-  fall away — the actual menu a negotiation chooses from, and where on it
-  the current proposals in the literature sit.
+> Confidentiality-preserving and secure verification of rules on large-scale
+> AI has unique potential. Historically, it has been politically crucial for
+> international verification methods to avoid information leaks that create
+> serious security risks, and (to a lesser extent) to avoid leaks of trade
+> secrets [39, 13]. The AI industry has an abundance of highly sensitive
+> information, from AI model weights [143] and algorithms to training/user
+> data. Confidentiality-preserving verification may be especially important
+> and feasible for large-scale AI development and deployment [187], such as
+> training a future, powerful model and deploying it at scale. Such
+> large-scale AI activities carry unique risks [15, 17, 170]. They are also
+> industrial, billion-dollar-scale undertakings [93, 5, 58], requiring
+> “thousands of specialized chips” [178] and counting [184]. This broad
+> trend continues to hold despite algorithmic advances, such as those of
+> reasoning models and DeepSeek’s R1 [88].
 
-## Why it exists
+Section 3.2 states the technology that would pay the price down:
 
-Module 2.0 introduces the tension and the cryptographic tools that promise
-to dissolve it; Modules 2.1–2.3 each carry mechanisms that spend secrets
-differently. What the track does not hand the learner is a single table
-where the exchange rates are visible side by side. This brief builds that
-table, and building it forces the honest version of every mechanism's
-assurance claim.
+> Use of confidentiality-preserving technology. Importantly, in our
+> framework, declarations of AI compute use would be reported and verified
+> via confidentiality-preserving technology—technology that enables a Prover
+> to demonstrate their compliance without leaking their highly sensitive IP
+> such as model weights. Such technology could include (i) a hardware
+> security feature known as Confidential Computing (Section 4.1.1.1); and
+> (ii) compute clusters with security that both parties can confirm, so that
+> much information can enter these devices but only a small amount of
+> information (e.g., compliance determinations) can leave (Section 4.2.1.1).
+> Declarations of AI compute ownership are less sensitive than declarations
+> of AI compute usage, but, if desired, the confidentiality-preserving
+> technologies we discuss could also help protect these ownership
+> declarations. As we will discuss (Section 4.5), confidentiality-preserving
+> technologies could be used to run hard-coded compliance tests, or perhaps
+> to facilitate iterative testing by humans or AI agents, though the human
+> option poses more confidentiality challenges.
 
-## Scope
+## What you produce
 
-**In scope:** the five mechanisms as described in the public literature,
-one fixed compliance claim, and reasoned scoring with the reasoning shown.
-
-**Out of scope:** inventing new cryptographic protocols, and vendor-level
-detail on any particular trusted-hardware product.
-
-## What good looks like
-
-| Dimension | Weak | Strong |
-|---|---|---|
-| Comparability | Five essays | One claim, five mechanisms, three axes, same scale |
-| Assurance | Brochure claims | Confidence against a motivated evader, argued per mechanism |
-| Disclosure | "Some data" | The specific secrets spent, named per mechanism |
-| The frontier | A tie | Dominated options called out, and the real menu drawn |
-
-## Getting started
-
-1. Fix the compliance claim first and keep it boring — "no training runs
-   above X in this facility" serves better than anything clever.
-2. Score disclosure by listing the secrets a hostile reader of the feed
-   could extract, not the ones the mechanism nominally requests.
-3. Look for dominance before polishing scores. The matrix's job is to
-   collapse the menu, not to admire it.
+The price list the quoted tension implies: for each level of assurance a
+verifier might want in a compliance claim, what the operator has to
+disclose and how deep the mechanism reaches into the facility — one
+assurance, disclosure and intrusiveness matrix, compared like for like
+across mechanisms.

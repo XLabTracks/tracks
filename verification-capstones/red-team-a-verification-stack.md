@@ -13,69 +13,43 @@ mentor: recommended
 audience: The team that published the proposal you are attacking.
 skills: [red-teaming, attack trees, detection reasoning, adversarial cost modelling]
 prerequisites: [Verification 2.x — the four layers, Verification 3 — covert development]
-updated: 2026-08-04
+sources:
+  - "[Verifying International Agreements on AI — Baker, Kulp, Marks, Brundage & Heim (2025), Appendix C.1](https://arxiv.org/abs/2507.15916)"
+updated: 2026-08-20
 ---
 
-## The brief
+## The idea, as posed
 
-Choose a real, published verification proposal — a layered monitoring
-scheme, a hardware-attestation design, a reporting regime — and build the
-case that it fails. Then say what it would take to fix.
+From [Verifying International Agreements on AI — Baker, Kulp, Marks,
+Brundage & Heim (2025)](https://arxiv.org/abs/2507.15916), Appendix C.1,
+Methodology for Analysis. Quoted:
 
-The report contains:
+> 3. Assessing, red teaming, and enhancing verification mechanisms; and
+> identifying open problems. For each identified mechanism, we iterated
+> between assessing the mechanism and enhancing it. In the assessment stage,
+> we evaluated various properties of each mechanism: what subgoals in our
+> verification framework the mechanism could complete or support, its
+> probability of detecting a violation quickly if done by a highly motivated
+> major government, the frequency of false alarms, the confidentiality and
+> security for the Prover, the setup speed in terms of time required for R&
+> D and implementation, and the financial or computational cost. We focus on
+> these properties because history and incentives suggest they will be
+> important for the acceptability of a verification regime [120, 39, 13,
+> 143]. After assessing each property and identifying challenges for it, we
+> considered how the mechanism could be enhanced to address these challenges
+> (e.g., through a different implementation or additional compliance tests),
+> and then we repeated the assessment on the enhanced version of the
+> mechanism, up to the point where further assessment or enhancement
+> appeared to require a substantial research project of its own.
 
-1. **The steelman.** One page reconstructing the proposal at its strongest,
-   in the authors' own terms. You do not get to attack a version they
-   would not recognise.
-2. **The attack tree.** The defection goal at the root, branching into
-   routes, each leaf annotated with the capability it requires and the
-   cost it imposes on the defector.
-3. **Detection reasoning.** For each route: which layer would notice, what
-   the signature looks like, what the base rate of false alarms does to the
-   analyst on the other end.
-4. **The three that work.** Rank the routes; defend the top three as the
-   ones a real actor would choose, and say why the rest are theatre.
-5. **The patch list.** What each surviving route demands — a mechanism, a
-   reporting rule, an institution — and what that patch costs the regime in
-   intrusiveness, money, or political feasibility.
+The abstract says why this pass is owed:
 
-## Why it exists
+> While promising, these approaches require guardrails to protect against
+> abuse and power concentration, and many of these technologies have yet to
+> be built or stress-tested.
 
-Verification proposals are usually evaluated by people who want them to
-work. The failure mode of the field is a mechanism that looks sound at the
-level of the diagram and dissolves on contact with a motivated actor with
-a budget. The skill this builds — attacking a design you find sympathetic,
-in public, with the costs stated — is the one that separates an analyst
-from an advocate.
+## What you produce
 
-Teams of two or three work better here than solos: one person's steelman
-is another person's attack surface, and the argument you have in week two
-is the point.
-
-## Scope
-
-**In scope:** open literature, the track's evasion taxonomy, and cost
-estimates you can defend within an order of magnitude.
-
-**Out of scope:** operational detail that reads as a how-to. Name the route
-and the signature; you do not need to write the playbook. If a paragraph
-would be more useful to a defector than to a defender, cut it — the report
-is a defence artifact.
-
-## What good looks like
-
-- The steelman is good enough that a reader who skipped the attack would
-  come away understanding the proposal better.
-- Attack costs are stated with units and a source, even when rough.
-- The patch list is honest about the patches that make the regime
-  politically dead. "Fixable, but only by something no one will sign" is a
-  finding, not a failure.
-
-## Getting started
-
-1. Pick a proposal you *like*. Attacking a design you already distrust
-   produces a weak steelman and a boring report.
-2. Build the attack tree before reading the evasion literature again — then
-   read it and see what you missed. The gap is diagnostic.
-3. Agree in your team, in writing, on what counts as a successful evasion
-   before you start scoring routes.
+That same red-team pass, run against one published verification proposal
+of your choosing: an evasion report with an attack tree, and the patch
+list that would survive your own attack.

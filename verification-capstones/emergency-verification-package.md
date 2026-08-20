@@ -13,68 +13,50 @@ mentor: recommended
 audience: The task force told to stand up verification this year, not next.
 skills: [regime design, feasibility triage, gap analysis]
 prerequisites: [Verification 2.x — the four layers, Verification 4.1 — feasibility and layering]
-updated: 2026-08-06
+sources:
+  - "[An International Agreement to Prevent the Premature Creation of Artificial Superintelligence — Scher, Abecassis, Barnett & Abeyta (2025), Appendix B and Appendix D](https://arxiv.org/abs/2511.10783)"
+updated: 2026-08-20
 ---
 
-## The brief
+## The idea, as posed
 
-Most of the verification literature assumes time: new silicon, new
-institutions, new treaties. Suppose instead the decision lands now and the
-deadline is twelve months, with the hardware fleet as it is. What do you
-actually deploy? Assemble the package from what exists — physical measures
-on facilities, cameras, network controls, inspection teams, intelligence
-collection — and be exact about what it cannot see.
+From [An International Agreement to Prevent the Premature Creation of
+Artificial Superintelligence — Scher, Abecassis, Barnett & Abeyta
+(2025)](https://arxiv.org/abs/2511.10783), Appendix B, What can we do
+today? Quoted:
 
-- **The inventory.** Candidate measures that need no new chips: seals and
-  physical disconnection, camera coverage of machine rooms, network-level
-  controls at facility boundaries, declared-facility inspections on a
-  schedule, and the intelligence layer run against undeclared sites.
-- **The triage.** For each measure: deployment time, cost, who must
-  cooperate, and what class of violation it actually catches. Twelve months
-  is a budget — spending it is the design decision.
-- **The sequencing.** What ships in month one, what needs the full year,
-  and which measures only work once another is in place. A roadmap, not a
-  wish list.
-- **The residual gaps.** The violations the package does not catch, stated
-  as plainly as the ones it does. The gaps section is what makes the
-  roadmap honest — and it is the requirements list for year two.
+> Recognizing that measures to address the risks from AI cannot be developed
+> overnight, we are providing a list of measures that could be implemented,
+> beginning today, that would help lay the foundation for mitigating risks
+> from AI. Our intention is to provide a list of actions that we believe
+> will be necessary to build a robust framework and basis for future AI
+> agreements and risk reduction measures. It is not a comprehensive list, or
+> a detailed explanation of each measure, but rather a starting point for
+> discussion.
+>
+> Develop situational awareness of where AI chips are located globally,
+> identify public and nonpublic data centers, understand chip and/or
+> hardware smuggling pipelines, and production flows around the world. Begin
+> tracking AI chips.
 
-## Why it exists
+The chip-consolidation appendix says how fast the harder mechanisms could
+exist:
 
-Module 4.1 asks the sequencing question directly: what works for an MVP
-emergency pause versus what needs years of institution-building. This brief
-is that question taken literally, with the four layers of Module 2 as the
-parts bin. The discipline it trains — feasibility triage under a deadline,
-with gaps stated rather than papered over — is the difference between a
-regime design and a regime sketch.
+> In the future, hardware-enabled governance mechanisms could be developed
+> to enable remote governance of AI chips, so that chips don’t need to be
+> centralized to declared locations. Aarne et al. (2024) provide estimates
+> for the implementation time of some of these on-chip governance
+> mechanisms. Their estimates cover the timeline to develop mechanisms that
+> are robust against different adversaries. For concision, we will use their
+> estimates for security in a covertly adversarial context where competent
+> state actors may try to break the governance mechanisms but would face
+> major consequences if caught. They estimate a development time of two to
+> five years for ideal solutions, with less secure but potentially workable
+> options available in just months.
 
-## Scope
+## What you produce
 
-**In scope:** measures deployable against existing hardware and facilities
-within twelve months, and honest reasoning about institutional lead times —
-hiring inspectors takes months too.
-
-**Out of scope:** new hardware mechanisms, treaty negotiation timelines,
-and any assumption that a measure exists because a paper proposed it. If it
-cannot be bought, built or staffed inside the year, it belongs in the gaps
-section.
-
-## What good looks like
-
-| Dimension | Weak | Strong |
-|---|---|---|
-| Inventory | Everything ever proposed | Only what deploys in twelve months, with the lead time argued |
-| Triage | A feature list | Time, cost, cooperation and coverage per measure, comparable |
-| Sequencing | A pile | Month-by-month, with dependencies between measures explicit |
-| Gaps | A caveat sentence | The uncaught violations enumerated, feeding a year-two requirements list |
-
-## Getting started
-
-1. Start from the violation classes, not the measures — the package exists
-   to catch things, and the gaps section is built from whatever the chosen
-   measures miss.
-2. Put an institutional lead time on every measure before comparing any two.
-   Cameras arrive in weeks; inspectorates do not.
-3. Write the residual-gaps section at the end of week two, not the end of
-   the project — it will reorder your priorities while there is still time
-   to act on it.
+The package for a twelve-month deadline, assembled only from what the
+quotes say exists or is workable in months: a prioritized implementation
+roadmap with rough costs and the residual gaps stated rather than papered
+over.

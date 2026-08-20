@@ -13,63 +13,61 @@ mentor: optional
 audience: The agency that has to decide when suspicion becomes an inspection.
 skills: [evidence standards, intelligence analysis, escalation design]
 prerequisites: [Verification 2.3 — the intelligence layer, Verification 3 — covert development]
-updated: 2026-08-06
+sources:
+  - "[Verifying International Agreements on AI — Baker, Kulp, Marks, Brundage & Heim (2025), Appendix B.3](https://arxiv.org/abs/2507.15916)"
+updated: 2026-08-20
 ---
 
-## The brief
+## The idea, as posed
 
-Every signal in the intelligence layer is individually deniable: power draw
-has civilian explanations, cooling capacity has customers, procurement has
-intermediaries, construction has cover stories. Decisions get made anyway.
-The project is to write the standard that says when accumulated maybes
-justify the costly, adversarial step of demanding an inspection.
+From [Verifying International Agreements on AI — Baker, Kulp, Marks,
+Brundage & Heim (2025)](https://arxiv.org/abs/2507.15916), Appendix B.3,
+Acting on Ambiguous Findings. Quoted:
 
-- **The packet.** Construct a fictional intelligence packet about a
-  suspected undeclared facility: energy contracts, cooling equipment
-  orders, chip procurement traces, satellite construction imagery, each
-  with a stated reliability and a plausible innocent explanation.
-- **The tiers.** Define the ladder — anomaly, plausible evidence, confirmed
-  violation — and the tests that move a case between tiers. The tests must
-  be written before looking at the packet, or they will be reverse-fitted
-  to it.
-- **The escalation ladder.** What each tier licenses: a clarification
-  request, enhanced monitoring, a challenge inspection. Include the cost of
-  being wrong at each rung — a bounced accusation spends credibility the
-  regime needs later.
-- **The memo.** Run your own packet through your own rubric and write the
-  decision memo the agency head would sign, dissent included if the
-  evidence is genuinely marginal.
+> A Verifier might have ambiguous findings—evidence that is inconclusive
+> about the Prover’s compliance. What should the Verifier do then? We
+> highlight some increasingly escalatory options.
+>
+> Requests for clarification. Simple requests for clarification could
+> resolve some issues. Studies of arms control have highlighted permanent
+> consultative commissions as helpful in this regard.
+>
+> Focused investigation. Ambiguous findings could trigger a focused
+> investigation of the specific organizations, facilities, activities, or
+> employees whose compliance is ambiguous, at greater cost than would be
+> practical for general verification. The Verifier could apply their
+> verification methods with increased intensity to the suspicious area. The
+> associated costs also incentivize the Prover to carry out their role
+> carefully, to reduce the incidence of focused investigations. These
+> intensified efforts would either reveal more clear evidence of
+> non-compliance or fail to do so; in either case, the ambiguity would be at
+> least partly resolved.
+>
+> More intrusive verification. If needed, the Verifier could escalate an
+> investigation to include more intrusive verification methods than would
+> normally be allowed. For example, the Verifier could (with the Prover’s
+> cooperation) increase the amount of information that compliance tests
+> output. Additionally, the Prover and Verifier could authorize an expanding
+> set of humans (not just automated programs) to directly inspect the
+> Prover’s declarations, beginning with the Prover’s most relevant employees
+> (who may already have this access via whistleblower programs) (Appendix
+> A.8) and potentially escalating to the Verifier directly inspecting Prover
+> code, which would violate confidentiality-preservation.
+>
+> Precautionary pauses. As an emergency measure, in extreme cases the
+> Verifier could demand some or all of the Prover’s AI compute clusters be
+> turned off while a suspected violation is investigated, or take other
+> actions to mitigate imminent risks. Such a pause would assure the Verifier
+> that a violation using declared AI compute clusters is not ongoing, but it
+> could come at a high economic cost.
+>
+> Partial penalties or threats. The enforcing parties could apply a penalty
+> in part or with some probability, to deter a strategy of using multiple
+> ambiguous violations to carry out a significant violation.
 
-## Why it exists
+## What you produce
 
-Module 2.3 rates each footprint on what it tells a verifier and its main
-caveat; what it leaves open is aggregation — how a decider combines weak
-signals into a defensible act. Regimes have died at exactly this joint:
-inspection demanded too early burns the agreement, too late makes it
-ornamental. The rubric is where that judgement stops being vibes.
-
-## Scope
-
-**In scope:** the public characteristics of the named signal types, a
-constructed scenario, and institutional reasoning about escalation.
-
-**Out of scope:** real facilities, real states, and sources beyond the
-public literature. The packet is fictional and labelled as such throughout.
-
-## What good looks like
-
-| Dimension | Weak | Strong |
-|---|---|---|
-| The packet | A pile of red flags | Signals with stated reliability and the innocent explanation priced in |
-| Tiers | Named but soft | Tests that decide tier transitions, written before the packet |
-| Escalation | "Then we inspect" | Each rung's action and the cost of being wrong at it |
-| The memo | A verdict | A signable decision with its uncertainty carried honestly |
-
-## Getting started
-
-1. Write the tier tests before assembling the packet — that ordering is the
-   whole discipline of the exercise.
-2. Give every signal in the packet its innocent explanation at creation
-   time. A packet without alibis tests nothing.
-3. Set the false-alarm budget explicitly: how many bounced inspections the
-   regime survives per decade. The rubric must respect it.
+The evidentiary rubric this escalation ladder presupposes: what
+accumulated findings move a case from a clarification request to a focused
+investigation to an intrusive inspection, and a decision memo applying the
+rubric to one concrete scenario.

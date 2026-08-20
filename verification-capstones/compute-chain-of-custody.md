@@ -14,73 +14,48 @@ audience: Whoever is designing chip tracking and does not want to reinvent forty
 skills: [analogical reasoning, regime analysis, precedent critique]
 prerequisites: [Verification 1 — actors, Verification 2.1 — the hardware layer]
 sources:
+  - "[Verifying International Agreements on AI — Baker, Kulp, Marks, Brundage & Heim (2025), §4.2.1.2](https://arxiv.org/abs/2507.15916)"
+  - "[An International Agreement to Prevent the Premature Creation of Artificial Superintelligence — Scher, Abecassis, Barnett & Abeyta (2025), Appendix A, Article V](https://arxiv.org/abs/2511.10783)"
   - "[A Collection of AI Governance Research Ideas — von Knebel & Anderljung (2024), idea 66: learning from chain of custody applications in other industries](https://www.markusanderljung.com/blog/a-collection-of-ai-governance-research-ideas-2024)"
 similar: [stock-and-flow-accounting]
-updated: 2026-08-04
+updated: 2026-08-20
 ---
 
-## The brief
+## The idea, as posed
 
-Chip registries and supply-chain tracking sit in Module 2.1 as proposals. Other
-sectors have been doing custody accounting for decades, under adversarial
-pressure, with audits and penalties: nuclear material accountancy, controlled
-pharmaceuticals, conflict minerals, firearms, hazardous waste, precursor
-chemicals. Pick one and take it apart.
+From [Verifying International Agreements on AI — Baker, Kulp, Marks,
+Brundage & Heim (2025)](https://arxiv.org/abs/2507.15916), Section
+4.2.1.2, Verification Mechanisms. Quoted:
 
-- **The case study.** How the regime actually works. What is the unit of
-  account, who records a transfer, what triggers reconciliation, what happens
-  when the books do not balance, and what the measured discrepancy rate is —
-  every real regime has one, and it is the most useful number in your dossier.
-- **The failure history.** How the regime has been defeated, and what it
-  changed in response. Regimes are shaped by their scandals; the current design
-  is unreadable without them.
-- **The transfer analysis.** Feature by feature: what carries over to
-  high-end AI accelerators and what does not. Compute has properties these
-  regimes did not face — units that are useful individually rather than in
-  bulk, a legitimate second-hand market, rapid obsolescence, a supply chain
-  with a handful of upstream nodes and thousands of downstream ones, and the
-  fact that the thing you ultimately care about is a workload, not an object.
-- **The recommendation.** One mechanism worth importing, one worth explicitly
-  rejecting, and the reason for each.
+> Verifying AI chips’ chain of custody: A Verifier could verify the
+> locations and owners of random samples of AI chips from manufacturing to
+> end-of-life destruction. This would serve to verify that large quantities
+> of AI chips are not assembled into undeclared AI compute clusters (Subgoal
+> 2.B). Users of small quantities could potentially be exempt. Existing AI
+> chips would be a challenge, though perhaps many could have their locations
+> and owners retroactively verified. Declared chains of custody could be
+> verified with inspections, potentially supplemented by video cameras [13]
+> and hard-to-spoof, unique IDs.
 
+And from [An International Agreement to Prevent the Premature Creation of
+Artificial Superintelligence — Scher, Abecassis, Barnett & Abeyta
+(2025)](https://arxiv.org/abs/2511.10783), Appendix A, Article V, on the
+consolidation such a regime would monitor:
 
-## Why it exists
+> Parties to the Agreement monitor the domestic consolidation process,
+> coordinated by the CTB, including through on‑site inspections, document
+> and inventory verification, accompaniment of domestic authorities during
+> transfers and inspection, and information sharing with Parties under
+> Article X. The CTB may require chain‑of‑custody records for transfers.
+> Parties may conduct challenge inspections as described in Article X.
+> Parties provide timely access to relevant facilities, transport hubs, and
+> records to inspectors conducting monitoring activities. Whistleblower
+> protections and incentives under Article X apply to the consolidation
+> process, and the CTB maintains protected reporting channels.
 
-The track's method is to ask what each mechanism can actually prove. Custody
-accounting is the mechanism the compute-governance literature reaches for most
-casually and has studied least, and the sectors that do it have already found
-the failure modes — usually the boring ones, involving paperwork and
-reconciliation intervals rather than clever attacks.
+## What you produce
 
-Analogical reasoning done properly is also a track-level skill: it is the same
-move as the treaty-clause capstone, where the disanalogies are the deliverable.
-An analogy whose limits you have mapped is a tool. One you have not is a way to
-be confidently wrong.
-
-## Scope
-
-**In scope:** one custody regime, its public regulations, audit reports and
-academic evaluations, plus the compute supply-chain material from Module 1.
-
-**Out of scope:** designing the compute regime itself. Your output is the
-input someone else's design needs. Also out of scope: surveying three regimes
-shallowly — one, to the point where you know its discrepancy rate, beats three
-summaries.
-
-## What good looks like
-
-| Dimension | Weak | Strong |
-|---|---|---|
-| The case study | How the regime is supposed to work | How it works, including its measured discrepancy rate and reconciliation cadence |
-| Failure history | Omitted | Named incidents and the design changes each produced |
-| Transfer | "Lessons apply broadly" | Feature by feature, with the disanalogies given equal space |
-| Recommendation | Everything is applicable | One import, one explicit rejection, both reasoned |
-
-## Getting started
-
-1. Choose the regime by how much public audit material exists, not by how
-   apt the analogy feels. You need the discrepancy numbers.
-2. Read the scandals before the regulations. They tell you which provisions are
-   load-bearing.
-3. Write the disanalogy list halfway through, and let it decide what is left
-   worth writing up.
+The case study and transfer analysis the mechanism above calls for: one
+existing custody regime studied for how declarations, inspections and
+unique IDs actually hold up, and what that implies for tracking chips from
+manufacturing to end-of-life destruction.

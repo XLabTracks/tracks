@@ -13,62 +13,42 @@ mentor: optional
 audience: The verifier deciding whether a sensor feed is worth installing.
 skills: [security cases, telemetry analysis, adversarial reasoning]
 prerequisites: [Verification 2.0 — confidentiality vs verifiability, Verification 2.1 — the hardware layer]
-updated: 2026-08-06
+sources:
+  - "[An International Agreement to Prevent the Premature Creation of Artificial Superintelligence — Scher, Abecassis, Barnett & Abeyta (2025), Appendix A, Article VII](https://arxiv.org/abs/2511.10783)"
+  - "[Verifying International Agreements on AI — Baker, Kulp, Marks, Brundage & Heim (2025), Appendix A.6](https://arxiv.org/abs/2507.15916)"
+updated: 2026-08-20
 ---
 
-## The brief
+## The idea, as posed
 
-The easy verdict on datacenter telemetry is that it cannot reliably tell a
-training run from anything else, so it proves nothing. The easy verdict skips
-the interesting question: useful under what decision procedure? A smoke
-detector cannot classify fires either. The project is to take one sensor
-mechanism — power draw, temperature, timing side-channels, pick one — and
-build the full security case for it, answering the Petrie questions in order:
+From [An International Agreement to Prevent the Premature Creation of
+Artificial Superintelligence — Scher, Abecassis, Barnett & Abeyta
+(2025)](https://arxiv.org/abs/2511.10783), the precedent discussion for
+Article VII, Chip Use Verification. Quoted:
 
-- **Who decides.** The institution that acts on the feed, and what action the
-  feed can trigger — a follow-up question, a challenge inspection, nothing on
-  its own.
-- **What data they see.** The exact signal, at what resolution, aggregated
-  how. Every step of aggregation is privacy bought and evidence spent.
-- **Which false positives are tolerable.** The workloads that will trip the
-  sensor innocently, roughly how often, and what a false alarm costs each
-  side. A tolerable rate for a follow-up question is an intolerable rate for
-  an accusation.
-- **How it can be spoofed.** What it costs the operator to make the signal
-  lie — load shaping, thermal masking, replayed data — and which spoofs the
-  surrounding regime would catch by other means.
+> Analogous perimeter monitoring of data centers can provide some clues
+> about operations from power draw, thermal emissions, and network
+> bandwidth. But reasonable assurance that restricted AI operations are not
+> occurring would likely require some combination of the elements we listed
+> under paragraph 1, which includes tamper-proof cameras, on-chip
+> hardware-enabled mechanisms, and in-person inspectors.
 
-## Why it exists
+And from [Verifying International Agreements on AI — Baker, Kulp, Marks,
+Brundage & Heim (2025)](https://arxiv.org/abs/2507.15916), Appendix A.6,
+on why the signal is hard to read:
 
-Module 2.1 rates most telemetry proposals as not deployed and easily
-oversold; the correct response is not to discard the layer but to state
-precisely what a weak signal can support. A security case is the form that
-statement takes: claim, evidence, decision rule, failure modes, in one
-document a skeptic can attack line by line. Learners who can write one for a
-sensor can write one for anything in the stack.
+> A core problem here is that there is no simple way to deduce an AI chip’s
+> rate of computation, even with analog measurements. An AI chip’s
+> utilization can vary from below 1% to around 90% depending on workload
+> types, hardware, and implementations [169, 62]. Utilization also has a
+> complex relationship to analog measurements, in part because of the
+> distinction between “model FLOP utilization (MFU)” (which only counts
+> unique operations) and “hardware FLOP utilization (HFU)” (which also
+> counts recomputed operations).
 
-## Scope
+## What you produce
 
-**In scope:** one sensor mechanism, its public measurement characteristics,
-and the institutional side — who reads it, what it triggers.
-
-**Out of scope:** building or fitting detectors, and mechanisms that require
-new silicon. The case is for a feed that could exist this year.
-
-## What good looks like
-
-| Dimension | Weak | Strong |
-|---|---|---|
-| The claim | "Telemetry helps" | The exact proposition the feed supports, and the one it does not |
-| Decision rule | Unstated | Named decider, named action, named threshold |
-| False positives | Waved at | The innocent workloads listed, with the cost of each alarm |
-| Spoofing | "Possible" | Priced, per spoof, against what the spoof conceals |
-
-## Getting started
-
-1. Pick the sensor and write the one-sentence claim it is supposed to
-   support. If the sentence needs "reliably classify", pick a weaker claim.
-2. Answer the Petrie questions in order and do not skip the second — most
-   telemetry cases die on what the verifier is actually allowed to see.
-3. Draft the spoofing section as the operator's counsel would. The case is
-   finished when that section no longer surprises you.
+A verification security case for one perimeter signal — power draw,
+thermal emissions, or network bandwidth — stated the way the quotes
+require: what the clue supports, under what decision procedure, rather
+than the classifier it cannot be.

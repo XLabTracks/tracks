@@ -13,62 +13,51 @@ mentor: recommended
 audience: A treaty lawyer who knows arms control and not AI.
 skills: [legal drafting, clause analysis, analogical reasoning, precedent critique]
 prerequisites: [Verification 0 — treaty anatomy, Verification 2.3 — the intelligence layer]
-updated: 2026-08-04
+sources:
+  - "[An International Agreement to Prevent the Premature Creation of Artificial Superintelligence — Scher, Abecassis, Barnett & Abeyta (2025), Appendix A, Articles X–XI](https://arxiv.org/abs/2511.10783)"
+updated: 2026-08-20
 ---
 
-## The brief
+## The idea, as posed
 
-Pick the verification articles of one real agreement — New START, the CWC,
-the NPT safeguards system, the Open Skies Treaty — and redraft them so
-they would govern frontier AI development instead. Present it as a
-facing-page document: your clause on the left, your commentary on the
-right.
+The move this brief asks for is one the source performs on the page. From
+[An International Agreement to Prevent the Premature Creation of
+Artificial Superintelligence — Scher, Abecassis, Barnett & Abeyta
+(2025)](https://arxiv.org/abs/2511.10783), the precedent notes for Article
+XI, Dispute Resolution. Quoted:
 
-The commentary is where the work is. For each clause, say:
+> Our Article XI Dispute Resolution procedures borrow from Articles IX, XII,
+> and XIV of the Chemical Weapons Convention. Article IX of the CWC requires
+> signatories to respond to requests for clarification “as soon as possible,
+> but in any case not later than 10 days after the request.” Given how
+> quickly digital developments can propagate, we chose a 5-day response
+> deadline, but even this figure may need to be adjusted downward.
+>
+> Our paragraph 2 of this article is modeled after Article XIV of the CWC,
+> which permits its Executive Council to “contribute to the settlement of a
+> dispute by whatever means it deems appropriate, including offering its
+> good offices, calling upon the States Parties to a dispute to start the
+> settlement process of their choice and recommending a time-limit for any
+> agreed procedure.” Parties are also encouraged to refer cases to the
+> International Court of Justice as appropriate.
 
-- **What it does in the original.** The mechanism, not the aspiration.
-- **What it would do here.** The translated obligation.
-- **The disanalogy.** The property of nuclear material, chemical
-  precursors, or overflight that made the original clause work, and
-  whether AI has an equivalent.
-- **The residue.** What the clause cannot carry across, and what would
-  have to be invented to replace it.
+The same method carries the surveillance clauses:
 
-## Why it exists
+> Recognizing the indispensable role of national technical means (NTM —
+> satellite imagery, signals collection, and other remote sensing) in
+> verification of multilateral agreements, our draft agreement borrows
+> language from the ABM treaty limiting anti-ballistic missile systems, in
+> which “each Party shall use national technical means of verification” and
+> “undertakes to not interfere with the national technical means of
+> verification of the other Party.” Similar language can be found in Article
+> XII of the 1987 Intermediate-Range Nuclear Forces Treaty, Article IV of
+> the 1996 Comprehensive Nuclear-Test-Ban Treaty, and throughout the 2010
+> New START treaty.
 
-Arms control is the field's most-reached-for analogy and its most abused
-one. Fissile material is countable, chemical precursors have signatures,
-overflight is observable. Model weights are copyable, training runs are
-deniable, and the relevant capability lives partly in tacit knowledge.
-Working at clause resolution — not at the level of "AI is like nukes" —
-is the fastest way to learn which parts of the analogy survive.
+## What you produce
 
-## Scope
-
-**In scope:** the verification and inspection articles. Definitions,
-declarations, inspection rights, challenge procedures, dispute resolution.
-
-**Out of scope:** the whole treaty. Entry-into-force clauses and withdrawal
-provisions are interesting and are not this assignment.
-
-## What good looks like
-
-- The redraft is operable: an inspector could act on it.
-- At least one clause is marked **untranslatable**, with a defended reason.
-  A redraft where everything carries over cleanly has not been thought
-  about hard enough.
-- The commentary names the property doing the work in each original clause.
-  "Verification of non-production relied on the fact that enrichment leaves
-  a physical plant" is the register.
-
-## Getting started
-
-1. Read the original articles once for structure, once for mechanism.
-2. Mark every noun that names a physical thing. Those are the clauses that
-   will fight you.
-3. Draft the definitions section last — you will not know what you need to
-   define until the operative clauses exist.
-
-> **Status: draft.** This entry's rubric is not yet aligned with the
-> Module 0 treaty-anatomy exercise. Expect the scope to tighten before it
-> is offered to a cohort.
+The same move for a treaty of your choosing — New START, the CWC, the NPT
+safeguards system, Open Skies: its verification articles redrafted to
+govern frontier AI, with facing-page commentary naming what carried over,
+what had to change the way the quoted 10-day deadline became 5, and what
+has no analogue at all.

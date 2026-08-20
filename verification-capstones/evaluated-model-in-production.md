@@ -13,61 +13,36 @@ mentor: optional
 audience: The auditor who signed off on the eval and now has to stand behind the deployment.
 skills: [protocol design, attestation reasoning, attack trees]
 prerequisites: [Verification 2.0 — confidentiality vs verifiability, Verification 3 — covert development]
-updated: 2026-08-06
+sources:
+  - "[Verifying International Agreements on AI — Baker, Kulp, Marks, Brundage & Heim (2025), §1.4 and Appendix A.2](https://arxiv.org/abs/2507.15916)"
+updated: 2026-08-20
 ---
 
-## The brief
+## The idea, as posed
 
-An evaluation report is a claim about one artifact. A deployment is a
-different artifact in a different place, serving traffic through layers of
-serving infrastructure, quantization, and routine updates. The gap between
-the two is where an assurance regime quietly stops meaning anything. Design
-the chain that closes it.
+From [Verifying International Agreements on AI — Baker, Kulp, Marks,
+Brundage & Heim (2025)](https://arxiv.org/abs/2507.15916), Key Findings.
+Quoted:
 
-- **The identity claim.** What "the same model" means, precisely: same
-  weights, same quantization, same system prompt, same sampling settings,
-  same surrounding scaffolding? Each choice changes what the chain must
-  carry and what a violation even is.
-- **The chain.** From the evaluated artifact to the serving fleet: hashes,
-  signatures, attestation, logged deployments. Name every component the
-  auditor must trust and what happens at each handoff.
-- **The substitutions.** The attack tree: a different checkpoint behind the
-  same endpoint, a re-quantized variant, per-route model selection, silent
-  updates between audits, an eval-only configuration. For each, whether
-  your chain catches it, and at what cost.
+> Verify that declared uses of large-scale AI compute are compliant by (A)
+> verifying that trained AI models and their outputs were generated as
+> claimed; and (B) verifying evaluation results, or more generally,
+> verifying that declared models, data, and code have the required
+> properties. “Declared” means self-reported, preferably via
+> confidentiality-preserving technologies.
 
-## Why it exists
+Appendix A.2 says what a deployment declaration would pin down:
 
-Module 2.0 frames verification as confirming a claim without handing over
-the secret; this is that problem at deployment scale, and it is the join on
-which any eval-based regime hangs. A rule that binds behaviour to an
-evaluation is only as strong as the argument that the evaluated thing and
-the deployed thing are the same thing.
+> Declarations: When a Prover loads an AI workload onto an AI compute
+> cluster, the Prover includes explicit, specially formatted information
+> about whether the workload is AI training or inference, and what memory
+> locations and/or data packets will hold the model weights, training data,
+> and usage data. This constitutes the Prover’s declaration of their models
+> and data. (The Prover’s declaration of code is implicit in the code they
+> load to CPUs.)
 
-## Scope
+## What you produce
 
-**In scope:** one deployment architecture held fixed, standard integrity
-mechanisms — hashing, signing, attestation, logging — and the institutional
-question of who checks what, when.
-
-**Out of scope:** designing the evaluation itself, and behavioural
-fingerprinting research. The chain here is about custody, not about
-re-testing in production.
-
-## What good looks like
-
-| Dimension | Weak | Strong |
-|---|---|---|
-| Identity | "Same model" | A definition that decides the hard cases: quantization, prompts, scaffolds |
-| The chain | Boxes and arrows | Every trusted component named, with what its failure forfeits |
-| Attacks | A worry list | A tree with each substitution costed and mapped to the check that catches it |
-| Residue | Implied completeness | The substitutions the chain does not catch, stated plainly |
-
-## Getting started
-
-1. Write the identity claim first and test it against quantization. If your
-   definition cannot decide that case, the chain has nothing to carry.
-2. Draw the chain with a column for "who trusts whom here" — the protocol is
-   the trust structure, not the arrows.
-3. Spend the last week on the attack tree, and keep the attacks that
-   survive: they are the finding, not a flaw in it.
+The chain that closes the evaluation-to-production gap: a protocol diagram
+from the evaluated artifact to what serving infrastructure actually runs,
+built on the quoted declarations, with the attack tree against it.

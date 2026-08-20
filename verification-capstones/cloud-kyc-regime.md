@@ -15,86 +15,44 @@ skills: [regime design, telemetry analysis, evasion modelling, cost-of-complianc
 prerequisites: [Verification 1 — actors, Verification 2.2 — the cloud layer, Verification 3 — covert development]
 sources:
   - "[Oversight for Frontier AI through a Know-Your-Customer Scheme for Compute Providers — Egan & Heim (2023)](https://arxiv.org/abs/2310.13625)"
-updated: 2026-08-04
+updated: 2026-08-20
 ---
 
-## The brief
+## The idea, as posed
 
-The cloud layer is the one place in the stack where a commercial party
-already sits between the customer and the machines, already runs KYC for
-other reasons, and already has the telemetry. Module 2.2 rates it *very
-partially solved* — proxies, fragmented accounts, reseller chains and
-jurisdictional gaps eat most of the promise, and the standing warning is that
-self-reporting alone produces a paperwork regime.
+From [Oversight for Frontier AI through a Know-Your-Customer Scheme for
+Compute Providers — Egan & Heim (2023)](https://arxiv.org/abs/2310.13625),
+the abstract. Quoted:
 
-Write the reporting rules for one provider in one jurisdiction so that they
-are not that.
+> KYC, a standard developed by the banking sector to identify and verify
+> client identity, could provide a mechanism for greater public oversight of
+> frontier AI development and close loopholes in existing export controls.
 
-- **The obligations.** What the provider declares, about whom, how often, to
-  which of the three levels — company, national regulator, intelligence — and
-  under what penalty for misdeclaration.
-- **The checkability rating.** The core of the deliverable. Per obligation:
-  is the claim *self-reported only*, *cross-checkable against a second
-  source*, or *independently observable*? Module 2.2 gives you the second
-  column to work with — power draw, cooling, interconnect use, procurement,
-  satellite-visible buildout — against the things that are easy to fake:
-  identity, declared purpose, workload labels, logs.
-- **The evasion routes left open.** Specifically proxy organisations,
-  false reporting and sub-threshold distributed training. For each, what your
-  rules would and would not catch.
-- **The cost.** What compliance costs the provider, and what it costs the
-  customers who are not doing anything wrong. A rule that pushes ordinary
-  workloads offshore has made verification worse.
-- **The one rule you would keep.** If the regulator could only have a single
-  obligation, which one, and why that one buys the most.
+The executive summary states the two recommendations this project builds
+out:
 
-## Why it exists
+> Establish a threshold of compute for the scheme that effectively captures
+> high-risk frontier model development, while minimizing imposition on
+> developers not engaged in frontier AI. The threshold should be defined by
+> the total amount of computational operations – a metric easily accessible
+> to compute providers, as they employ chip-hours for client billing,
+> convertible to total computational operations. Additionally, this
+> threshold would need to be dynamic and subject to periodic reassessments
+> by government, in close consultation with industry, to remain in step with
+> developments in training efficiency as well as broader societal changes.
+> It would also need to be supported by collaboration between compute
+> providers, as well as with government, to minimize evasion risks.
+>
+> Set clear requirements for compute providers, including requirements for
+> gathering information, implementing fraud detection, keeping records, and
+> reporting to government any entities that match government-specified
+> ‘high-risk’ profiles. These requirements should be technically feasible,
+> resilient against efforts to evade detection and enforceable, while
+> preserving privacy.
 
-This is the track's central discipline applied to the layer where it is
-easiest to fool yourself. Cloud reporting *looks* like verification: there are
-forms, there are logs, there is a regulator receiving them. Module 2.2's
-warning is that the whole apparatus can be exactly as strong as the honesty of
-the party filling it in, unless some claim in it is anchored to something the
-party does not control.
+## What you produce
 
-Finding that anchor — and being honest about how few of your obligations have
-one — is the skill. It is also the skill that transfers directly to the
-Module 4 capstone, where the same question gets asked of a whole regime.
-
-## Scope
-
-**In scope:** one provider archetype and one jurisdiction, public reporting on
-cloud infrastructure and datacentre buildout, and the track's evasion
-taxonomy.
-
-**Out of scope:** the international layer. You are writing a national
-reporting obligation, not a treaty; who else could see the reports is a
-Module 4 question.
-
-**Also out of scope:** inventing telemetry. Work with what a provider
-plausibly has or could add cheaply. A rule requiring a capability nobody has
-built is a research agenda, not a regime — cite it as a successor rule and
-move on.
-
-## What good looks like
-
-| Dimension | Weak | Strong |
-|---|---|---|
-| Obligations | A list of things to report | Each one tied to what a verifier would then be able to conclude |
-| Checkability | Assumed | Rated per obligation, with the second source named where one exists |
-| Evasion | "Bad actors could evade" | The three named routes, each with what your rules catch and miss |
-| Cost | Ignored | Priced for the provider *and* the compliant customer, with the rule you would drop first |
-
-If every obligation in your spec comes out cross-checkable, you have been
-generous with yourself. Most reporting regimes are mostly self-reported, and
-saying so is the finding.
-
-## Getting started
-
-1. Build the fakeable / not-easily-fakeable table from Module 2.2 before
-   drafting a single obligation. It determines which rules are worth writing.
-2. Draft the proxy-organisation evasion first. It is the route that most
-   cleanly defeats account-level KYC, and confronting it early stops you from
-   writing a spec that only works against honest customers.
-3. Ask the cost question of every obligation as you add it. The regime that
-   survives is the short one.
+The reporting-rule spec the quoted requirements call for: what a provider
+must gather, keep and report, each claim rated for how checkable it
+actually is, and the evasion routes the rule leaves open — with the quoted
+threshold's drift handled rather than assumed away.

@@ -14,76 +14,54 @@ audience: The verifier who will never be allowed to see the workload.
 skills: [signature analysis, privacy-preserving verification, detection reasoning, adversarial cost modelling]
 prerequisites: [Verification 2.1 — the hardware layer, Verification 2.2 — the cloud layer, Verification 3 — covert development]
 sources:
+  - "[Verifying International Agreements on AI — Baker, Kulp, Marks, Brundage & Heim (2025), §1.4 and §4.2.1.2](https://arxiv.org/abs/2507.15916)"
+  - "[An International Agreement to Prevent the Premature Creation of Artificial Superintelligence — Scher, Abecassis, Barnett & Abeyta (2025), Appendix A, Article V](https://arxiv.org/abs/2511.10783)"
   - "[Open Problems in Technical AI Governance — Reuel et al. (2025), compute questions: can large training runs be detected while retaining developer privacy, e.g. through signatures in processor utilisation?](https://arxiv.org/abs/2407.14981)"
-updated: 2026-08-04
+updated: 2026-08-20
 ---
 
-## The brief
+## The idea, as posed
 
-Module 2.0 names the central tension: verification is inherently intrusive, and
-the mechanisms worth having are the ones that confirm a claim without handing
-over the secret. This is the cheapest version of that problem. A verifier who
-may not see weights, data or code — but may see how the machines behaved — wants
-to know whether a large training run happened.
+From [Verifying International Agreements on AI — Baker, Kulp, Marks,
+Brundage & Heim (2025)](https://arxiv.org/abs/2507.15916), Key Findings.
+Quoted:
 
-- **The signature.** What distinguishes a long training run from inference at
-  scale, from scientific computing, from rendering. Candidates: sustained
-  utilisation over weeks rather than hours, the interconnect pattern of
-  synchronous gradient exchange, memory-bandwidth profile, checkpoint-shaped
-  I/O bursts at regular intervals, power draw that is flat rather than
-  diurnal, and the restart-from-checkpoint discontinuities every real run has.
-- **What the verifier is allowed to see.** Be precise, because it is the whole
-  exercise. Aggregate utilisation? Per-node? Power at the meter? Network
-  counters? Each level is a different privacy bargain and a different
-  detection rate.
-- **The confusion matrix.** For your best signal set: what else looks like
-  this, and what a false accusation costs. Module 2.2 already warns that
-  self-reporting alone is a paperwork regime — a detector with a bad false
-  positive rate is the opposite failure, and just as useless.
-- **The spoofing cost.** Per signal, what it costs the operator to look like
-  something else: throttling to break the utilisation profile, padding with
-  fake inference, splitting the run. Compare that cost against what the run is
-  worth. That comparison is the finding.
+> Verify that there are no undeclared uses of large-scale AI compute by (A)
+> verifying that the use of known AI data centers is accounted for; and (B)
+> verifying that no actor has hidden AI data centers or large, decentralized
+> collections of AI chips that can be used for violations.
 
-## Why it exists
+Section 4.2.1.2 names the signals such a check reads:
 
-Almost every verification regime in the track eventually needs an answer to
-"and what if they just do not tell us?" The hardware and cloud layers answer it
-with observation, and the quality of the answer is entirely about what a
-signature can carry.
+> Off-chip analog sensors for compute accounting (Appendix A.6): Off-chip
+> sensors could log measurements such as AI chips’ power draw. The Verifier
+> could then analyze these measurements with secured chips, testing for
+> several signs of large, undeclared compute use: declared workloads would
+> appear unnecessarily slow, AI chips would use more power than needed for
+> the declared workloads, and/or the detailed physical signatures of chips
+> would be different than expected. In other words, the Verifier would use
+> analog measurements to verify the total number of operations or chip-hours
+> done and check if approximately all of them can be “accounted for” by
+> declared uses. There are various complications in implementing these
+> checks.
 
-It is also where the track's privacy strand becomes concrete. Learners easily
-say "privacy-preserving verification"; far fewer can say what a verifier would
-actually be shown, and less is usually enough than people assume.
+And [An International Agreement to Prevent the Premature Creation of
+Artificial Superintelligence — Scher, Abecassis, Barnett & Abeyta
+(2025)](https://arxiv.org/abs/2511.10783) states what scale is findable at
+all:
 
-## Scope
+> It looks feasible to verifiably consolidate the majority of AI chips. The
+> very largest AI data centers, such as those with more than 100,000
+> H100-equivalents, are hard to hide. They are detectable from their
+> physical footprint and power draw, and many of them are publicly reported
+> on. In fact, it’s probably possible for intelligence services to track and
+> locate data centers as small as around 10,000 H100-equivalents. Locating
+> smaller data centers would involve domestic authorities using various
+> powers in cooperation with CTB inspectors.
 
-**In scope:** published work on compute monitoring and workload
-characterisation, public datacentre power and utilisation reporting, and any
-small-scale measurement you can run yourself on a rented GPU.
+## What you produce
 
-**Out of scope:** building a detector at scale, and access to real cluster
-telemetry. This is analysis with an honest evidence base — where a claim rests
-on a plausible mechanism rather than a measurement, say so in place.
-
-**Also out of scope:** designing the legal authority to collect the telemetry.
-Assume the verifier is entitled to what you specify, and be conservative about
-what you specify.
-
-## What good looks like
-
-| Dimension | Weak | Strong |
-|---|---|---|
-| Signals | "Unusual compute usage" | Named observables with a mechanism, ranked by how hard each is to fake |
-| Access level | Unstated | Exactly what the verifier sees, and the detection rate at each level |
-| False positives | Ignored | The confusable workloads named, and the cost of accusing one |
-| Spoofing | "Evasion is possible" | Priced per signal, against the value of the run being hidden |
-
-## Getting started
-
-1. Write the list of confusable workloads before the list of signals. It stops
-   you designing a detector for a world with one kind of computation in it.
-2. Pick the least intrusive access level that still works. Starting from full
-   telemetry and cutting back never converges.
-3. Cost the spoof for your best signal in week two. If it is cheap, that signal
-   is decoration and you have two weeks to find a better one.
+The signature analysis behind the quoted subgoal: which signals —
+unnecessarily slow declared workloads, excess power, unexpected physical
+signatures, physical footprint — carry a workable detection rule, and the
+spoofing cost of each.

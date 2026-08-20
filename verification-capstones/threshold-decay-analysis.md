@@ -12,62 +12,36 @@ deliverable_type: notebook
 mentor: optional
 audience: The regulator who has to pick a number and live with it for five years.
 skills: [quantitative analysis, trend extrapolation, threshold design, reproducibility]
-updated: 2026-08-04
+sources:
+  - "[An International Agreement to Prevent the Premature Creation of Artificial Superintelligence — Scher, Abecassis, Barnett & Abeyta (2025), §4](https://arxiv.org/abs/2511.10783)"
+updated: 2026-08-20
 ---
 
-## The brief
+## The idea, as posed
 
-The EU AI Act's 10²⁵ FLOP threshold and the US 10²⁶ threshold are fixed
-numbers pointed at a moving target. Measure the movement.
+From [An International Agreement to Prevent the Premature Creation of
+Artificial Superintelligence — Scher, Abecassis, Barnett & Abeyta
+(2025)](https://arxiv.org/abs/2511.10783), Section 4, The Agreement.
+Quoted:
 
-Produce a notebook that:
+> AI training runs above the Strict Threshold (i.e., 10^{24} FLOP) are
+> prohibited. Training runs below this threshold but above the Monitored
+> Threshold (i.e., 10^{22} FLOP) must be approved and monitored by coalition
+> authorities. Training runs below the Monitored Threshold require no
+> approval or monitoring.
 
-- Reconstructs training-compute estimates for a defensible set of models
-  from public architecture and token counts, checked against a public
-  compute database.
-- Determines which historical models would have crossed each threshold,
-  and when.
-- Models the decay: given published compute-efficiency trends, how many
-  models per year cross a fixed threshold in year 1, year 3, year 5 — and
-  what fraction of *frontier* models that represents.
-- States the uncertainty honestly. Compute estimates are estimates;
-  efficiency trends are fitted to noisy data. Propagate it or say you did
-  not.
+The considerations that follow name the decay this project measures:
 
-Then the memo: an indexing rule that keeps the threshold selective, and
-the costs of that rule. Every indexing scheme trades predictability for
-durability, and someone has to pay.
+> Due to improvements in AI algorithms and data, the capability of models
+> trained at a given computational scale increases rapidly over time [68].
+> Due to likely progress in algorithms and data between today and when this
+> agreement would come into effect, AIs trained at the Strict Threshold will
+> be more capable—potentially much more—than the models trained at that
+> scale today.
 
-## Why it exists
+## What you produce
 
-Threshold-based regulation is the workhorse of compute governance and its
-softest joint. A threshold that captured three labs at signing captures
-three hundred developers five years later, or none, depending on which way
-the trends run. Making the decay curve concrete is more persuasive than
-any amount of arguing about it.
-
-## Scope
-
-**In scope:** public model data, published efficiency trends, your own
-estimates with stated method.
-
-**Out of scope:** proprietary training details; predicting specific future
-models. You are characterising a rate, not forecasting a release calendar.
-
-## What good looks like
-
-- The notebook runs end to end from a clean checkout. A result nobody can
-  reproduce is a claim, not an analysis.
-- Every estimate carries its method and its error bar.
-- The memo's indexing proposal names who loses under it. Indexing to a
-  rolling percentile of frontier compute is easy to write and hard to
-  administer; say so.
-
-## Getting started
-
-1. Reproduce three compute estimates you can check against a public
-   database before you build anything. Calibrate on the knowns first.
-2. Decide early what "frontier" means in your denominator, and hold that
-   definition all the way through. Most confusion here is definitional.
-3. Draft the memo's one-sentence recommendation in week 1 and let the
-   analysis try to kill it.
+The measurement the quoted drift calls for: a reproducible notebook
+reconstructing which models crossed the EU and US statutory thresholds and
+when, the decay rate implied by published efficiency trends, and the
+two-page threshold-design memo those numbers justify.

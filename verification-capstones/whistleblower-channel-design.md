@@ -14,79 +14,53 @@ audience: The regulator or oversight body that wants insider evidence and curren
 skills: [institutional design, incentive analysis, evidence standards, protective-regime drafting]
 prerequisites: [Verification 1 — actors, Verification 2.4 — the human layer]
 sources:
+  - "[Verifying International Agreements on AI — Baker, Kulp, Marks, Brundage & Heim (2025), Appendix A.8](https://arxiv.org/abs/2507.15916)"
   - "[A Collection of AI Governance Research Ideas — von Knebel & Anderljung (2024), idea 20: AI and whistleblowing](https://www.markusanderljung.com/blog/a-collection-of-ai-governance-research-ideas-2024)"
-updated: 2026-08-04
+updated: 2026-08-20
 ---
 
-## The brief
+## The idea, as posed
 
-Module 2.4 makes the case and states the problem in the same breath: humans
-reveal what the other three layers cannot — what the company believed, what
-leadership was warned about, what was suppressed — and frontier AI adds
-secrecy, NDAs, equity incentives and race pressure on top. Whether that
-evidence reaches a verifier depends on reporting channels, anti-retaliation
-protection and institutional independence.
+From [Verifying International Agreements on AI — Baker, Kulp, Marks,
+Brundage & Heim (2025)](https://arxiv.org/abs/2507.15916), Appendix A.8,
+Whistleblower Programs. Quoted:
 
-Design one channel, properly.
+> Background: Programs and laws that encourage employees to blow the whistle
+> on violations are commonplace [142], contributing to approximately $2
+> billion or more in SEC fines in 2023. In the AI industry, large-scale AI
+> projects tend to involve hundreds of employees (Table 9)—hundreds of
+> individuals who might be able to report any large-scale violations to a
+> Verifier. In addition to AI developers’ own employees, other organizations
+> throughout the AI supply chain have employees who can blow the whistle on
+> some violations, especially undeclared AI data centers. Employees could
+> blow the whistle on a Prover’s (i) non-compliant AI activities, (ii)
+> falsified declarations, or (iii) attempts to circumvent another
+> verification mechanism (Table 14). Formal whistleblower programs could
+> promote appropriate forms of whistleblowing by providing (would-be)
+> whistleblowers with information they can check, disclosure protocols, and
+> incentives (including intrinsic motivation, social norms, protection, and
+> financial rewards). Provers may view formal whistleblower programs as
+> legitimate, so Provers may be willing to take verifiable actions that
+> facilitate whistleblowing (in contrast to espionage), such as allowing
+> employees to privately talk with a Verifier.
 
-- **Reportable matter.** What this channel is for. Not general wrongdoing —
-  something like: a safety evaluation whose result was overridden, a capability
-  finding not disclosed to a regulator, a security incident not reported.
-  Narrow scope is what makes protection defensible.
-- **The recipient.** Who receives, and what makes them independent enough to
-  be worth the risk. Regulator, standards body, an inspector general, a
-  designated board committee. Say what happens to a report on arrival and on
-  what clock.
-- **The reporter's calculus.** Written explicitly, because this is where
-  channels die. What they lose: unvested equity, non-disparagement exposure,
-  future employment in a small field where everyone knows everyone. What your
-  design gives back: anonymity that survives a small-team context where three
-  people knew the fact, legal-cost cover, protection that binds a company
-  that has not agreed to it.
-- **Evidence on arrival.** What a report has to contain to be actionable, and
-  how a recipient triages between a serious disclosure and a grievance —
-  without a standard so high that only documented cases get through.
-- **The failure mode.** Channels that exist and are never used, and channels
-  used and ignored. Say which of the two your design is more at risk of.
+The same appendix poses the channel-design problem itself:
 
-## Why it exists
+> Secure and confidential communication with potential whistleblowers. A
+> Prover might try to not only retaliate against whistleblowers, but also
+> entirely block or alter their messages. Standard approaches to secure
+> internet communication (e.g., TLS, VPNs, and Tor) are not designed to
+> secure the communications of parties who may be under video surveillance,
+> or whose computers may be backdoored. Instead, a more secure option is for
+> such employees to make in-person visits to a building physically secured
+> by a Verifier. To prevent the Prover from detecting or blocking
+> whistleblowers’ visits to these locations, the verification protocol could
+> require the Prover to periodically send various relevant employees to
+> visit the Verifier-secured building (e.g., as brief visits to an office
+> near the Prover’s offices).
 
-The human layer is where the track's realism lives. The other three layers can
-be improved with engineering; this one runs on whether a specific person, with
-a mortgage and a non-disparagement clause, decides to speak. Designing for that
-is a different discipline from designing a telemetry rule, and learners who can
-do both understand why regimes fail in practice more often than in theory.
+## What you produce
 
-It also connects directly to Module 3: in the false-reporting scenario —
-hidden clusters, disguised workloads, falsified logs — insider evidence does
-work that the hardware and intelligence layers often cannot do alone.
-
-## Scope
-
-**In scope:** existing whistleblower regimes in finance, aviation, nuclear and
-pharma; public reporting on AI-lab NDAs and equity arrangements; the
-protective-legislation literature.
-
-**Out of scope:** drafting statutory text, and any specific company's alleged
-conduct. This is mechanism design; the examples are illustrations.
-
-## What good looks like
-
-| Dimension | Weak | Strong |
-|---|---|---|
-| Scope | "Safety concerns" | A defined class of reportable matter, with an example that deliberately falls outside |
-| Recipient | "An independent body" | Named form, what independence rests on, and the clock on their response |
-| The calculus | Protection listed | The reporter's actual losses priced, and what your design returns against each |
-| Anonymity | Promised | Assessed honestly against a context where three people knew the fact |
-
-The strongest submissions admit that anonymity is usually unachievable at
-frontier labs and design for a reporter who will be identified.
-
-## Getting started
-
-1. Read one mature regime's annual report — how many disclosures, how many
-   actioned, how many retaliation findings. Those ratios discipline the design.
-2. Write the reporter's calculus in the first session. If your channel does not
-   survive it, nothing downstream matters.
-3. Pick the narrowest reportable matter you can justify. Broad channels get
-   broad opposition and thin protection.
+A channel design on the quote's own terms: who receives the report, the
+disclosure protocol and the protections that let an employee use it while
+surveilled, and the evidence standard applied to what arrives.

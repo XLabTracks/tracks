@@ -13,63 +13,37 @@ mentor: optional
 audience: The audit firm that has to say what its stamp proves.
 skills: [audit design, evidence standards, logging requirements]
 prerequisites: [Verification 1 — actors, Verification 2.2 — the cloud layer]
-updated: 2026-08-06
+sources:
+  - "[Verifying International Agreements on AI — Baker, Kulp, Marks, Brundage & Heim (2025), Appendix A.6 and Appendix B.1](https://arxiv.org/abs/2507.15916)"
+updated: 2026-08-20
 ---
 
-## The brief
+## The idea, as posed
 
-Financial audit did not begin with fraud-proof bookkeeping; it began with a
-standard stating what an auditor checks, what records the client must keep,
-and what the opinion does and does not certify. Compute accounting has no
-such standard. Write the minimum viable one: what a commercial audit of an
-AI operator should prove about the use of every accelerator it controls.
+From [Verifying International Agreements on AI — Baker, Kulp, Marks,
+Brundage & Heim (2025)](https://arxiv.org/abs/2507.15916), Appendix A.6,
+Compute Accounting via Analog Sensors. Quoted:
 
-- **The claims.** What the audit certifies, stated as checkable
-  propositions — total accelerator-hours by cluster, workload attribution at
-  an agreed granularity, no unrecorded capacity above a floor. What it
-  deliberately does not certify goes in the same section.
-- **The records.** Which logs the operator must keep for the claims to be
-  auditable: schedulers, power, allocation, procurement. For each, the
-  retention period and the tamper story — what stops backfilled history.
-- **The access.** What the auditor may see and touch, on what notice, with
-  what sampling rights. Access is where audit standards live or die;
-  unlimited access is unnegotiable and useless.
-- **The failure clauses.** What a missing log means, what an anomaly means,
-  and when either escalates from a finding to a qualified opinion. An audit
-  standard that cannot handle gaps certifies only tidy books.
+> Background: In compute accounting, one verifies the amount of AI compute
+> used by a Prover, and verifies that a high fraction of this compute use
+> can be accounted for by declared uses. Ideally, the declared AI compute
+> use would add up to 100% of the AI compute use. If a sufficiently high
+> fraction of compute use can be accounted for, this implies the Prover
+> cannot have done large-scale, undeclared use of AI compute, among the
+> computing clusters being accounted for. Off-chip analog sensors could
+> enable three partly compatible approaches to compute accounting (Table
+> 13), if combined with other mechanisms (such as partial workload
+> re-execution, Appendix A.4) for verifying declared uses and ensuring the
+> integrity of analog sensors (Section 4.2.1.1).
 
-## Why it exists
+Appendix B.1 states why compute, of all inputs, is the one to account for:
 
-Module 2.2's failure mode is the paperwork regime: self-reporting that
-audits nothing. The repair is not more reporting but a standard that says
-what checking means. Module 1's actor map supplies the missing profession —
-the audit firm — and this brief asks what its engagement letter would
-actually promise.
+> AI compute is relatively specialized and large in its physical footprint,
+> making it more suitable to being accounted for than other resources used
+> in AI development and deployment (Table 16).
 
-## Scope
+## What you produce
 
-**In scope:** one operator archetype (a cloud region or a large private
-cluster), existing log types that real schedulers and facilities produce,
-and audit practice from other industries as structural reference.
-
-**Out of scope:** new hardware mechanisms, cryptographic attestation
-schemes, and statutory authority. This is a standard a firm could pilot
-under contract today.
-
-## What good looks like
-
-| Dimension | Weak | Strong |
-|---|---|---|
-| Claims | "Compute was used properly" | Propositions an auditor can check, plus the explicit not-certified list |
-| Records | "Keep logs" | Named log types, retention periods, and a tamper story for each |
-| Access | Unstated | Notice, scope and sampling rights a real operator could sign |
-| Gaps | Fatal or ignored | Missing-log and anomaly clauses with defined escalation |
-
-## Getting started
-
-1. Write the not-certified list first. It is the most clarifying section and
-   the one every draft standard forgets.
-2. Inventory the logs a real scheduler already emits before inventing new
-   ones — a standard built on records nobody keeps audits nobody.
-3. Draft the missing-log clause early and test the whole standard against
-   an operator who lost a month of history, innocently or otherwise.
+The auditing standard compute accounting does not yet have: what records
+an operator must keep, what the auditor checks, and what an audit opinion
+does and does not certify about the accounted fraction the quote defines.

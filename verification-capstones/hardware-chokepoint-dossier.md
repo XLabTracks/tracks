@@ -13,61 +13,36 @@ mentor: optional
 audience: An analyst deciding where to spend a verification budget.
 skills: [supply chain analysis, actor mapping, chokepoint ranking, source triangulation]
 prerequisites: [Verification 1 — actors, Verification 2.1 — the hardware layer]
-updated: 2026-08-04
+sources:
+  - "[An International Agreement to Prevent the Premature Creation of Artificial Superintelligence — Scher, Abecassis, Barnett & Abeyta (2025), Appendix A, Article VI](https://arxiv.org/abs/2511.10783)"
+updated: 2026-08-20
 ---
 
-## The brief
+## The idea, as posed
 
-Pick one node in the compute supply chain — lithography, HBM, advanced
-packaging, fab capacity, the cloud tenancy layer, or the second-hand
-market — and write the dossier a verification analyst would want before
-committing to it as a monitoring point.
+From [An International Agreement to Prevent the Premature Creation of
+Artificial Superintelligence — Scher, Abecassis, Barnett & Abeyta
+(2025)](https://arxiv.org/abs/2511.10783), the notes on Article VI, AI
+Chip Production Monitoring. Quoted:
 
-The dossier covers:
+> The AI chip supply chain is narrow and specialized, making it feasible to
+> monitor production. The vast majority of AI chips are designed by NVIDIA.
+> The most advanced logic chips (the main processor) used in AI chips are
+> almost all fabricated by TSMC — accounting for around 90 percent of market
+> share. Most AI chips are fabricated on versions of TSMC’s five-nanometer
+> process node, a node likely only supported by two or three manufacturing
+> plants. EUV lithography machines, a critical component in advanced logic
+> chip fabrication, are made exclusively by ASML. High-bandwidth memory
+> (HBM), another key component to AI chips, is dominated by two or three
+> companies. This narrow and technical supply chain would be relatively easy
+> to monitor and hard to clandestinely replicate. We don’t want to overstate
+> things too much—for example, China has an emerging domestic supply chain
+> that produces some notable AI chips—but even with various caveats like
+> this, monitoring existing chip production seems quite feasible.
 
-- **The node.** What physically happens there, at enough resolution that a
-  reader can tell a real bottleneck from a marketing one.
-- **The actors.** Firms, states, regulators; who holds leverage over whom;
-  where the concentration actually sits.
-- **Observability.** What is visible from outside — customs data, export
-  filings, satellite, financial disclosure, industry trackers — and at
-  what latency.
-- **What a verifier would learn.** The claim this node can support, stated
-  as a sentence a diplomat could use.
-- **What it cannot see.** The equivalent sentence for the blind spot.
-- **The ranking.** Score the node against the others the track has covered
-  on concentration, observability, substitutability and time-to-erode.
+## What you produce
 
-## Why it exists
-
-Compute is the governable input because it is excludable, quantifiable and
-concentrated — but those three properties are not uniform across the
-chain, and they decay at different rates. A regime that monitors the wrong
-node buys nothing while looking rigorous. Working one node to real depth
-teaches the shape of that judgement better than a survey of all of them.
-
-## Scope
-
-**In scope:** open sources, the track's readings, and the interactive
-supply-chain map as a starting skeleton.
-
-**Out of scope:** classified or paywalled proprietary market data; a
-complete industry history. Depth on one node beats breadth across six.
-
-## What good looks like
-
-- Numbers carry dates and sources, and you say when a number is an
-  estimate rather than a measurement.
-- The ranking table has a stated scoring rule, so a reader can disagree
-  with your weights rather than your conclusion.
-- At least one claim in the dossier is one you tried and failed to verify —
-  and it says so, in place, rather than quietly disappearing.
-
-## Getting started
-
-1. Start from the supply-chain map and pick the node you find least
-   legible. Legibility is what you are building.
-2. Find three independent sources for one central number before writing
-   anything. If you cannot, that is your first finding.
-3. Write the "what it cannot see" section before the "what a verifier would
-   learn" section — it keeps the dossier honest.
+The dossier for one node the quote names — lithography, HBM, advanced
+packaging, fab capacity, or the layers beside them — covering its firms,
+its records, its failure and evasion routes, written for the verification
+analyst deciding whether to commit monitoring to it.

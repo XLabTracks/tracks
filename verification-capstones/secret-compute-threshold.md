@@ -13,63 +13,41 @@ mentor: recommended
 audience: The delegation deciding how much verification is enough to sign.
 skills: [scenario analysis, capability estimation, strategic reasoning]
 prerequisites: [Verification 2.3 — the intelligence layer, Verification 3 — covert development, Verification 4.1 — feasibility and layering]
-updated: 2026-08-06
+sources:
+  - "[An International Agreement to Prevent the Premature Creation of Artificial Superintelligence — Scher, Abecassis, Barnett & Abeyta (2025), Appendix D and §4](https://arxiv.org/abs/2511.10783)"
+updated: 2026-08-20
 ---
 
-## The brief
+## The idea, as posed
 
-No verification regime finds everything. The question a negotiator actually
-faces is not "can they hide compute?" but "does the amount they can hide
-matter?" — an agreement survives concealment that is strategically
-irrelevant and dies of concealment that is not. Locate the line.
+From [An International Agreement to Prevent the Premature Creation of
+Artificial Superintelligence — Scher, Abecassis, Barnett & Abeyta
+(2025)](https://arxiv.org/abs/2511.10783), Appendix D, Locating and
+consolidating AI chips. Quoted:
 
-- **Three concealment postures.** A small clandestine cluster; a distributed
-  network of sub-threshold sites; one large secret datacenter. For each,
-  estimate what it could train or run in a fixed window, and what hiding it
-  costs the evader in efficiency, security and detection risk.
-- **The capability translation.** Turn hidden compute into hidden
-  capability honestly: what the concealed capacity yields relative to the
-  frontier at signing time, and how that gap moves over the agreement's
-  life.
-- **The strategic effect.** When does the hidden capability change
-  decisions — the evader's confidence, the detector's response, the
-  agreement's collapse conditions? A breakout that arrives too late to
-  matter is not a breakout.
-- **The sensitivity table.** Which assumptions move the answer: detection
-  probability per posture, efficiency of concealed operation, the
-  capability-per-compute curve. The table is the deliverable's spine — it
-  shows where the conclusion is robust and where it is hostage.
+> One significant challenge is providing justified confidence that one Party
+> is not doing a secret AI project with non-declared AI chips. Chip
+> centralization provides some assurance, but it may not be sufficient if
+> some country could purposefully undermine its own domestic centralization
+> efforts. For further assurances against illegal AI projects, see the
+> intelligence gathering and challenge inspections discussed in Article X.
 
-## Why it exists
+The agreement's own floor for what must be monitored:
 
-Module 2.3 rates the footprints concealment leaves; Module 3 catalogues the
-postures. This brief asks the question those two modules set up but do not
-answer: how much leakage a regime can tolerate before the agreement it
-serves loses its point. Module 4.1's layering logic needs that number — it
-is the requirement the verification stack is built against.
+> AI chip monitoring starts with discerning whether the chips are being used
+> for inference on existing AIs or training of new AIs. The coalition works
+> to develop tamper-resistant on-chip mechanisms for such purposes, as
+> finer-grained control permits greater use of AI chips for safe
+> applications, with fewer inspections. Initially inspectors are given
+> ongoing physical access to chips, as is likely needed for robust chip-use
+> verification [77, 78]. To ensure chip use verification is applied, the
+> coalition prohibits large concentrations of chips (i.e., greater than 16
+> H100-equivalents; 16 H100s cost approximately $500,000 USD in 2025)
+> outside of monitored facilities.
 
-## Scope
+## What you produce
 
-**In scope:** public compute-to-capability reasoning, the three postures
-above, and explicit stated-assumption arithmetic.
-
-**Out of scope:** intelligence assessments of any real state's programs,
-and classified-adjacent sourcing. The scenarios are constructed, and say so.
-
-## What good looks like
-
-| Dimension | Weak | Strong |
-|---|---|---|
-| Postures | "They could hide compute" | Three postures with size, cost and detection exposure each |
-| Capability | FLOPs as the answer | FLOPs translated to capability against a moving frontier, with stated error |
-| Strategy | "This would be bad" | The decision each hidden capability actually changes, and when |
-| Sensitivity | One scenario, one verdict | The assumptions that flip the verdict, tabulated |
-
-## Getting started
-
-1. Fix the agreement first — what is paused, for how long, measured how.
-   "How much hidden compute matters" has no answer without it.
-2. Build the smallest posture end-to-end before starting the other two; the
-   template transfers.
-3. Keep a running list of every number you assumed. That list, priced,
-   becomes the sensitivity table.
+The line the quoted challenge asks for: a scenario analysis of how much
+concealed compute actually matters — under which assumptions about scale,
+aggregation and time — with the sensitivity table saying where concealment
+stops being strategically irrelevant and starts killing the agreement.

@@ -14,75 +14,37 @@ audience: The regulator asked to accept "this is the model we evaluated" as esta
 skills: [feasibility assessment, provenance reasoning, adversarial analysis, evidence standards]
 prerequisites: [Verification 2.0 — confidentiality vs verifiability, Verification 2.1 — the hardware layer]
 sources:
+  - "[Verifying International Agreements on AI — Baker, Kulp, Marks, Brundage & Heim (2025), Appendix A.4](https://arxiv.org/abs/2507.15916)"
   - "[Open Technical Problems in Open-Weight AI Model Risk Management (2025), §4.5 model provenance and forensics: model heritage inference, and how practical and scalable proof-of-training methods are](https://openreview.net/forum?id=8QyGLnFkzc)"
-updated: 2026-08-04
+updated: 2026-08-20
 ---
 
-## The brief
+## The idea, as posed
 
-Two separate literatures are circling the same question. Proof-of-learning asks
-whether a party can demonstrate that a set of weights is the output of a
-particular training run; model-heritage inference asks whether an outside
-observer can tell which base model a given artifact was derived from. Module 2.1
-already records the verdict on the first — fragile, and spoofed in practice.
+From [Verifying International Agreements on AI — Baker, Kulp, Marks,
+Brundage & Heim (2025)](https://arxiv.org/abs/2507.15916), Appendix A.4,
+Partial Workload Re-Execution With Constraints. Quoted:
 
-Assess what either can actually carry.
+> Background: A Verifier may wish to verify that a declared workload was
+> actually run (Subgoal 1.A). For example, a Prover may make claims about
+> what training code, data, and intermediate results (e.g., model weight
+> checkpoints) were involved in training some model weights, and the
+> Verifier may wish to verify these claims [110, 34].
+>
+> The Verifier can do this by verifying faithfulness, i.e., that running the
+> declared workload in fact produces the claimed results, and uniqueness,
+> i.e., that a faithful declaration is infeasible to produce in practice
+> except by actually running the declared workload [34].
+>
+> The Verifier can verify faithfulness and uniqueness, respectively, via (1)
+> partial workload re-execution, i.e., re-running (randomly sampled parts
+> of) the Prover’s program to check if the declared results are
+> approximately reproducible, and (2) constraints, i.e., checking that the
+> declaration meets constraints which rule out spoofed declarations.
 
-- **The claims.** Write out the distinct provenance claims a regime might want:
-  *this is the checkpoint that was evaluated*; *this run used the declared data*;
-  *this fine-tune descends from that base model*; *this model was not trained
-  after the cut-off date*. They have very different difficulty.
-- **Method by claim.** For each claim, which method could establish it, at what
-  cost to the prover, and with what confidence. Include the boring options —
-  hashes and signed checkpoints establish more than people expect, provided
-  someone was recording at the time.
-- **The adversary.** Per method, the spoofing route and what it costs. This is
-  the section Module 2.1's verdict comes from; do not take the verdict on
-  trust, find the spoofing results and read them.
-- **The recording problem.** Most provenance is cheap if you were recording
-  from the start and impossible afterwards. Say which of your claims are
-  prospective-only, because that determines whether a regime has to mandate
-  logging before it can ever ask the question.
-- **The recommendation.** One claim a regime could rest on today, one it should
-  not, and the logging requirement that would move a claim from the second
-  column to the first.
+## What you produce
 
-## Why it exists
-
-"The deployed model is the one that was evaluated" is an assumption underneath
-every eval-based governance instrument in existence, and almost nobody has
-asked what establishes it. That makes this a small question with a very large
-blast radius.
-
-It also teaches the track's most durable habit on a fresh case: separate what a
-mechanism proves from what people assume it proves, and price the difference.
-
-## Scope
-
-**In scope:** the proof-of-learning literature and its attacks, model-heritage
-and fingerprinting work, watermarking of weights, and standard integrity
-machinery (hashing, signing, logging).
-
-**Out of scope:** implementing a method, and inventing one. Also out of scope:
-content provenance — watermarking *outputs* is a different problem with its own
-capstone in this bank.
-
-## What good looks like
-
-| Dimension | Weak | Strong |
-|---|---|---|
-| Claims | "Verify model provenance" | Four distinct claims, ranked by difficulty, with the easy ones identified |
-| Methods | Surveyed | Mapped to claims, with cost to the prover and confidence delivered |
-| Adversary | "Attacks exist" | The specific spoofing results, read, with what they did and did not break |
-| Recording | Unaddressed | Which claims are prospective-only, and the logging mandate that changes that |
-
-The most useful finding here is usually unglamorous: a signed checkpoint and a
-timestamp, required in advance, beats a clever proof nobody can run.
-
-## Getting started
-
-1. Write the four claims first. Most confusion in this area is two people
-   proving different things and disagreeing about the result.
-2. Read the spoofing papers before the proposal papers. It saves a week.
-3. Ask of each claim: could this have been made trivial by a rule that existed
-   before the run? Those are your recommendations.
+A feasibility assessment on the quoted decomposition: which
+training-provenance claims faithfulness-plus-constraints can carry today,
+which they cannot, and what would have to change — in the constraints, the
+hardware, or the claims themselves — to close the gap.

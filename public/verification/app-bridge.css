@@ -279,8 +279,9 @@
   line-height: 1.6;
 }
 
-/* Reading measure — WITHDRAWN, on the course owner's instruction: "текст
-   должен быть на всю ширину экрана, которая не занята другим".
+/* Reading measure — WITHDRAWN, on the course owner's instruction
+   (translated): "the text should take the full width of the screen not
+   occupied by anything else".
 
    It was 64ch on prose and 34ch on headings. Together with the page's
    max-w-4xl wrapper that put 644px of text inside a 1316px content area on a

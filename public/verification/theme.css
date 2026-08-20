@@ -1127,7 +1127,7 @@ button,
   }
   .header-right {
     /* The 44px tap floor, not above it: 50px here made the phone header the
-       largest rendition of the chrome anywhere ("размеры"). Contrast keeps
+       largest rendition of the chrome anywhere ("sizes", translated). Contrast keeps
        its own 54px — that floor is the type size's, not the viewport's. */
     --hdr-action-h: 44px;
     order: 2;

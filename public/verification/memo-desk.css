@@ -1,0 +1,394 @@
+/* Memo desk. Palette and chrome come from theme.css; this file
+   is the desk layout, the slot rail and the check rail.
+
+   Trap: the rails are sticky inside grid columns, so they need an explicit
+   max-height and their own scroll — a sticky child of an auto-height column
+   never detaches. */
+
+.desk-head { padding: 26px 0 18px; }
+.desk-head h1 { font-size: var(--fs-title); }
+.desk-head p { max-width: 70ch; margin-top: 10px; color: var(--muted-foreground); font-size: var(--fs-md); }
+
+.desk {
+  display: grid;
+  gap: 20px;
+  padding-bottom: 40px;
+  align-items: start;
+}
+@media (min-width: 1080px) {
+  .desk { grid-template-columns: 250px minmax(0, 1fr) 300px; }
+  .slot-rail, .check-rail { position: sticky; top: 72px; max-height: calc(100vh - 92px); overflow-y: auto; }
+}
+/* Stacked, fifteen slots would push the writing surface off the bottom of the
+   screen, so the rail gets its own scroll instead. */
+@media (max-width: 1079px) {
+  .slot-rail { max-height: 42vh; overflow-y: auto; }
+}
+
+/* ---------- slot rail ---------- */
+
+.slot-rail h2, .check-rail h2 {
+  font-family: var(--label);
+  font-size: var(--fs-2xs);
+  font-weight: 400;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--muted-foreground);
+  margin-bottom: 10px;
+}
+.slot-group { margin-bottom: 16px; }
+/* The module hue reads twice here and the two need different tokens. The dot
+   is a fill and takes --mod; the words are type and take --mod-type, which is
+   the variant solved to carry on the page ground.
+   Trap: they are not interchangeable. This row wrote both from --mod, so on
+   the day ground M2 was Lunar Yellow as text at 1.4:1 and M1 at 3.7:1 — the
+   exact failure the -text variants exist to prevent. */
+.slot-group > p {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--label);
+  font-size: var(--fs-2xs);
+  color: var(--mod-type, var(--muted-foreground));
+  margin-bottom: 6px;
+}
+.slot-group > p::before {
+  content: '';
+  width: 8px;
+  height: 8px;
+  border-radius: var(--radius-xs);
+  background: var(--mod, currentColor);
+}
+.slot-group ul { list-style: none; display: grid; gap: 4px; }
+.slot-btn {
+  display: grid;
+  gap: 2px;
+  width: 100%;
+  padding: 8px 10px;
+  border: var(--hairline) solid transparent;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition: background .15s ease, border-color .15s ease;
+}
+.slot-btn:hover { background: var(--muted); }
+.slot-btn[aria-current='true'] { background: var(--muted); border-color: var(--border); }
+.slot-btn .t { font-size: var(--fs-sm); line-height: 1.35; }
+.slot-btn .m {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--label);
+  font-size: var(--fs-2xs);
+  color: var(--muted-foreground);
+}
+.slot-btn .drafted { color: var(--brand-ink); }
+
+/* Status is a glyph plus a word — never the colour on its own. */
+.status { display: inline-flex; align-items: center; gap: 4px; }
+.status::before { font-size: var(--fs-2xs); line-height: 1; }
+.status.specified::before { content: '●'; }
+.status.named::before { content: '◐'; }
+.status.unspecified::before { content: '○'; }
+
+/* ---------- the paper ---------- */
+
+.paper {
+  padding: 22px;
+  border: var(--hairline) solid var(--border);
+  border-radius: var(--radius);
+  background: var(--card);
+}
+.paper .slot-title { font-size: var(--fs-2xl); }
+.paper .slot-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 14px;
+  margin-top: 8px;
+  font-family: var(--label);
+  font-size: var(--fs-2xs);
+  color: var(--muted-foreground);
+}
+
+.brief {
+  margin-top: 14px;
+  padding: 14px 16px;
+  border: var(--hairline) solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--muted);
+  font-size: var(--fs-md);
+  line-height: 1.62;
+}
+.brief .bk {
+  font-family: var(--label);
+  font-size: var(--fs-2xs);
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--muted-foreground);
+  margin-bottom: 6px;
+}
+.brief dl { display: grid; gap: 6px; margin-top: 12px; font-size: var(--fs-sm); }
+.brief dl > div { display: grid; grid-template-columns: 88px 1fr; gap: 10px; }
+.brief dt { font-family: var(--label); font-size: var(--fs-2xs); color: var(--muted-foreground); padding-top: 2px; }
+.brief ul { margin: 8px 0 0 18px; font-size: var(--fs-sm); line-height: 1.6; }
+
+/* A stub says what is missing and stops. It never guesses the assignment. */
+.stub {
+  margin-top: 14px;
+  padding: 14px 16px;
+  border: var(--hairline) dashed var(--border);
+  border-radius: var(--radius-sm);
+  font-size: var(--fs-md);
+  line-height: 1.62;
+  color: var(--muted-foreground);
+}
+.stub b { color: var(--foreground); font-weight: 600; }
+
+/* Names the genre when the desk is not a memo, and says which memo instruments
+   are deliberately off — a full hairline card, so nothing reads as half-painted
+   and the accent stays in the words. */
+.genre-hint {
+  margin-top: 16px;
+  padding: 10px 14px;
+  border: var(--hairline) solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--muted);
+  font-size: var(--fs-sm);
+  line-height: 1.55;
+  color: var(--foreground);
+}
+
+/* ---------- the writer's two questions ----------
+
+   These are not the memo, and the surest way to say so is to make them look
+   like a different kind of object: a form, with boxed fields, on the muted
+   ground the briefs use — against the letterhead below, which is ruled lines
+   on the page's own ground. Read before a word of it is read. Full hairline
+   on all four sides; the emphasis is in the type, not in a painted edge. */
+
+.deskq {
+  margin-top: 20px;
+  padding: 14px 16px 16px;
+  border: var(--hairline) solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--muted);
+}
+.deskq[hidden] { display: none; }
+.dqk {
+  font-family: var(--label);
+  font-size: var(--fs-2xs);
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--muted-foreground);
+  margin-bottom: 12px;
+}
+.dqk-note {
+  display: block;
+  text-transform: none;
+  letter-spacing: 0;
+  margin-top: 3px;
+  font-size: var(--fs-xs);
+}
+.dq { display: grid; gap: 3px; }
+.dq + .dq { margin-top: 14px; }
+.dqq { font-family: var(--display); font-size: var(--fs-md); color: var(--foreground); }
+.dqh { font-size: var(--fs-xs); line-height: 1.5; color: var(--muted-foreground); }
+
+input.dq-in {
+  width: 100%;
+  margin-top: 5px;
+  padding: 8px 10px;
+  border: var(--hairline) solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--background);
+  color: var(--foreground);
+  font: inherit;
+  font-size: var(--fs-md);
+}
+
+/* ---------- the letterhead ----------
+
+   The document's own head, and it reads as stationery: a caption, a rule, then
+   label-and-line rows in the order every reader of a memo already knows. The
+   inputs are ruled underlines rather than boxes — the memo is a page, not a
+   form, and the two blocks must never be mistaken for each other. */
+
+.letterhead { margin-top: 22px; }
+.lh-caption {
+  font-family: var(--label);
+  font-size: var(--fs-2xs);
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  color: var(--muted-foreground);
+  padding-bottom: 8px;
+  border-bottom: var(--hairline) solid var(--border);
+}
+.lh-rows { display: grid; }
+.lh-row {
+  display: grid;
+  grid-template-columns: 72px minmax(0, 1fr);
+  align-items: baseline;
+  gap: 12px;
+  padding: 7px 0;
+  border-bottom: var(--hairline) solid var(--border);
+}
+.lhk {
+  font-family: var(--label);
+  font-size: var(--fs-2xs);
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--muted-foreground);
+}
+input.lh-in {
+  width: 100%;
+  padding: 2px 0;
+  border: 0;
+  background: transparent;
+  color: var(--foreground);
+  font: inherit;
+  font-size: var(--fs-md);
+}
+/* The row carries the rule, so the field inside it must not draw a second one
+   when focused — the row lights instead. */
+input.lh-in:focus { outline: none; }
+.lh-row:focus-within { border-bottom-color: var(--primary); }
+.lh-row:focus-within .lhk { color: var(--foreground); }
+
+/* The button belongs beside the date, not stranded at the far end of the rule,
+   so the field takes a date's width rather than the whole row. */
+.lh-date { display: flex; flex-wrap: wrap; align-items: baseline; gap: 10px; min-width: 0; }
+.lh-date input.lh-in { flex: 0 1 16em; }
+.lh-today {
+  flex: none;
+  padding: 2px 8px;
+  border: var(--hairline) solid var(--border);
+  border-radius: var(--radius-xs);
+  background: transparent;
+  color: var(--muted-foreground);
+  font-family: var(--label);
+  font-size: var(--fs-2xs);
+  cursor: pointer;
+}
+.lh-today:hover { background: var(--muted); color: var(--foreground); }
+
+/* The subject is the memo's loudest line — it is what a skim reads first — so
+   it sits below the rule at title scale. */
+.lh-subject { padding-top: 12px; border-bottom: 0; align-items: baseline; }
+.lh-subject .lhk { padding-top: 6px; }
+input.title-in { font-family: var(--display); font-size: var(--fs-xl); }
+
+/* A map, an essay or a red-line has no letterhead — the block collapses to its
+   last row and the title stands on its own, so one field serves every genre. */
+.letterhead.plain .lh-caption,
+.letterhead.plain .lh-rows,
+.letterhead.plain .lhk { display: none; }
+.letterhead.plain .lh-subject { display: block; padding-top: 0; }
+
+textarea.body-in {
+  width: 100%;
+  padding: 8px 10px;
+  border: var(--hairline) solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--background);
+  color: var(--foreground);
+  font: inherit;
+  font-size: var(--fs-md);
+  margin-top: 16px;
+  min-height: 340px;
+  line-height: 1.7;
+  resize: vertical;
+}
+input::placeholder, textarea::placeholder { color: var(--muted-foreground); opacity: .8; }
+
+.desk-tools {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  margin-top: 16px;
+}
+.budget { display: grid; gap: 4px; min-width: 170px; margin-right: auto; }
+.budget .mono { font-size: var(--fs-2xs); color: var(--muted-foreground); }
+.bbar { height: 4px; border-radius: var(--radius-xs); background: var(--muted); overflow: hidden; }
+.bbar i { display: block; height: 100%; background: var(--primary); transition: width .2s ease; }
+.budget.over .mono { color: var(--brand-ink); }
+
+.tool {
+  padding: 6px 12px;
+  border: var(--hairline) solid var(--border);
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--foreground);
+  font: inherit;
+  font-size: var(--fs-sm);
+  cursor: pointer;
+}
+.tool:hover { background: var(--muted); }
+.tool.armed { border-color: var(--brand-ink); color: var(--brand-ink); }
+
+/* ---------- check rail ---------- */
+
+.modes { display: flex; gap: 6px; margin-bottom: 12px; }
+.mode {
+  flex: 1;
+  padding: 6px 8px;
+  border: var(--hairline) solid var(--border);
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--muted-foreground);
+  font: inherit;
+  font-size: var(--fs-xs);
+  cursor: pointer;
+}
+.mode[aria-selected='true'] { background: var(--muted); color: var(--foreground); }
+
+.rail-card {
+  padding: 14px 16px;
+  border: var(--hairline) solid var(--border);
+  border-radius: var(--radius);
+  background: var(--card);
+  margin-bottom: 12px;
+}
+.rk {
+  font-family: var(--label);
+  font-size: var(--fs-2xs);
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--muted-foreground);
+  margin-bottom: 10px;
+}
+.rk-note { display: block; text-transform: none; letter-spacing: 0; margin-top: 2px; }
+
+.lint-row { display: grid; grid-template-columns: 12px 1fr; gap: 8px; font-size: var(--fs-sm); line-height: 1.5; padding: 4px 0; }
+.lint-row + .lint-row { border-top: var(--hairline) solid var(--border); }
+.lint-row .d { font-family: var(--label); font-size: var(--fs-2xs); color: var(--muted-foreground); }
+.lint-row.ok .d::before { content: '✓'; }
+.lint-row.warn .d::before { content: '!'; }
+.lint-row.bad .d::before { content: '×'; }
+.lint-row.bad .d, .lint-row.bad b { color: var(--brand-ink); }
+
+.deck-card { font-size: var(--fs-sm); line-height: 1.55; min-height: 56px; }
+
+.skim { font-size: var(--fs-sm); line-height: 1.6; margin-top: 10px; }
+.skim p { margin-bottom: 10px; }
+.skim .ghost { color: var(--muted-foreground); opacity: .35; }
+.skim .s-title { font-family: var(--display); font-size: var(--fs-lg); margin-bottom: 4px; }
+.skim .s-meta { font-family: var(--label); font-size: var(--fs-2xs); color: var(--muted-foreground); margin-bottom: 10px; }
+.skim .empty { color: var(--muted-foreground); }
+.skim-stats { font-size: var(--fs-2xs); color: var(--muted-foreground); }
+
+/* Sits under the tools rather than in the footer: it answers a question the
+   learner has at the moment they start typing, not on the way out. */
+.desk-note {
+  margin-top: 10px;
+  font-size: var(--fs-xs);
+  color: var(--muted-foreground);
+}
+
+/* A brief that carries the outline's own list of claims to work through. */
+.brief ul { margin: 6px 0 0 18px; }
+.brief li { margin-bottom: 4px; }
+.brief p + p, .brief p + ul { margin-top: 8px; }

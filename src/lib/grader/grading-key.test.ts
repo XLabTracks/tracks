@@ -28,6 +28,7 @@ import {
   getClassroomOpenRouterKey,
   getGraderKeyView,
   isGraderKeySelection,
+  resolveGraderKeyForRequest,
   resolveGraderKeySelection,
 } from "./grading-key";
 
@@ -210,6 +211,74 @@ describe("getGraderKeyView", () => {
     const view = await getGraderKeyView("u1");
     expect(view?.personal).toEqual({ state: "active", last4: KEY.slice(-4) });
     expect(view?.selected).toBe("classroom:c2");
+  });
+});
+
+describe("resolveGraderKeyForRequest", () => {
+  it("uses the server source without a DB read when encrypted-key storage is off", async () => {
+    expect(await resolveGraderKeyForRequest("u1")).toEqual({
+      ok: true,
+      keySource: "server",
+      apiKey: null,
+    });
+    expect(prisma.user.findUnique).not.toHaveBeenCalled();
+  });
+
+  it("resolves and decrypts the selected source in one relational query", async () => {
+    configureSecret();
+    const personal = await encryptApiKey(KEY, SECRET, keyAad("u1"));
+    prisma.user.findUnique.mockResolvedValue({
+      graderKeyPref: "user",
+      apiKeys: [{ ciphertext: personal }],
+      memberships: [],
+    });
+    expect(await resolveGraderKeyForRequest("u1")).toEqual({
+      ok: true,
+      keySource: "user",
+      apiKey: KEY,
+    });
+    expect(prisma.user.findUnique).toHaveBeenCalledTimes(1);
+  });
+
+  it("membership-checks and decrypts an explicitly selected classroom key", async () => {
+    configureSecret();
+    prisma.user.findUnique.mockResolvedValue({
+      graderKeyPref: "classroom:c1",
+      apiKeys: [],
+      memberships: [
+        {
+          classroom: {
+            id: "c1",
+            apiKeys: [await classroomKeyRow("c1")],
+          },
+        },
+      ],
+    });
+    expect(await resolveGraderKeyForRequest("u1")).toEqual({
+      ok: true,
+      keySource: "classroom",
+      classroomId: "c1",
+      apiKey: KEY,
+    });
+  });
+
+  it("fails explicitly for a selected key that no longer decrypts", async () => {
+    configureSecret();
+    prisma.user.findUnique.mockResolvedValue({
+      graderKeyPref: "classroom:c1",
+      apiKeys: [],
+      memberships: [
+        {
+          classroom: {
+            id: "c1",
+            apiKeys: [await classroomKeyRow("c1", ROTATED_SECRET)],
+          },
+        },
+      ],
+    });
+    const result = await resolveGraderKeyForRequest("u1");
+    expect(result.ok).toBe(false);
+    if (!result.ok) expect(result.error).toMatch(/no longer be used/i);
   });
 });
 

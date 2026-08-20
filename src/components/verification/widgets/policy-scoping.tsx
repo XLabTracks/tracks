@@ -5,6 +5,12 @@ import { ArrowRight, Check, RotateCcw, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
@@ -12,38 +18,84 @@ import {
 import { DragProvider, Draggable, DropZone } from "../kit/drag";
 import type { VerificationWidgetProps } from "../kit/types";
 import {
+  AXIS_SCALES,
   AXIS_TIPS,
+  BUCKETS,
   cellLabel,
   EXC_ANSWERS,
-  POLICIES,
+  EXC_OPTION_IDS,
   POLICY_SCOPING_COPY as C,
-  type Policy,
+  type Bucket,
   type Verdict,
+  verdictFor,
   verdictLabel,
 } from "@/lib/verification/data/policy-scoping";
 
-/* Grid geometry.
-   Columns left→right: feasibility low→high  (f0, f1, f2).
-   Rows    top→bottom: effectiveness high→low (e2, e1, e0). */
-const FEAS_KEYS = ["f0", "f1", "f2"] as const;
-const EFFECT_ROWS = ["e2", "e1", "e0"] as const; // top→bottom
-const ROW_LABELS = ["High", "Med", "Low"] as const;
-const COL_LABELS = ["Low", "Med", "High"] as const;
+/**
+ * "Scoping an Anti-ASI Policy", rebuilt to the outline's v40 brief: three
+ * phases in one widget, each small enough to hold at a glance.
+ *
+ *   1. The axes — "What is effectiveness?" / "What is feasibility?" as
+ *      side-by-side pop-ups, a qualitative five-rung scale each. Continue
+ *      unlocks once both have been opened.
+ *   2. The buckets — the outline's eleven policy buckets walked one card at a
+ *      time, weakest ask to strongest, on a single-hue tint ramp (the brand
+ *      primary mixed into the card ground; deeper = stronger instrument —
+ *      an ordinal ramp, deliberately not a categorical rainbow). Description
+ *      and historical parallel per card; the sort gates on having seen all
+ *      eleven.
+ *   3. The sort — drag all eleven onto a 5×5 feasibility × effectiveness
+ *      plane whose rungs are the phase-1 scales. Verdicts are mechanical
+ *      against the reference key in the data file (exact cell right, one step
+ *      close), first as direction nudges, with the full reference map and
+ *      per-bucket rationale on reveal. The carried-over securitization
+ *      question closes it.
+ *
+ * Bridged: onComplete() fires once, when the exception question is answered
+ * correctly.
+ *
+ * The tint ramp never carries meaning alone: every chip and card leads with
+ * the bucket's own number and name, and the ramp only restates the order the
+ * cards were read in.
+ */
 
-const VERDICT_ACCENT: Record<Verdict, string> = {
-  right: "border-comply",
-  close: "border-exaggerate",
-  wrong: "border-defect",
-};
+/* ---------- gradient ramp ---------- */
+
+const RAMP_N = BUCKETS.length - 1;
+/** Tint of the brand primary into the card ground for bucket i (0-based).
+ *  Text never sits on a mid-ramp mix: no theme guarantees a readable ink on
+ *  "54% primary into card" (the light theme's maroon fails white text there,
+ *  the contrast theme's yellow fails black), so the deep end of the ramp is
+ *  carried by surfaces that hold no words — the fill bar, borders, chip
+ *  grounds capped light — and every label keeps the theme's own foreground. */
+function tint(i: number, lowPct: number, highPct: number): string {
+  const pct = lowPct + ((highPct - lowPct) * i) / RAMP_N;
+  return `color-mix(in oklab, var(--primary) ${pct.toFixed(1)}%, var(--card))`;
+}
+
+/** A read (closed) ladder row's ground and border: one flat primary tint for
+ *  every row, deliberately NOT the row's ramp tint — the ramp says where a
+ *  bucket sits on the spectrum, this says only "you have been here". Mixing
+ *  the theme's own primary into its own card ground lands maroon-tinted on
+ *  the light theme and a lifted red-dark on the night theme, and the ✓ Read
+ *  word stays beside it so the colour never carries the state alone. */
+const READ_BG = "color-mix(in oklab, var(--primary) 13%, var(--card))";
+const READ_BORDER = "color-mix(in oklab, var(--primary) 42%, var(--card))";
+
+/* ---------- grid geometry ---------- */
+
+const COLS = [0, 1, 2, 3, 4] as const; // feasibility, low→high
+const ROWS = [4, 3, 2, 1, 0] as const; // effectiveness, top→bottom
+
 const VERDICT_TEXT: Record<Verdict, string> = {
   right: "text-comply",
   close: "text-exaggerate",
   wrong: "text-defect",
 };
-const VERDICT_LEFT: Record<Verdict, string> = {
-  right: "border-l-comply",
-  close: "border-l-exaggerate",
-  wrong: "border-l-defect",
+const VERDICT_BORDER: Record<Verdict, string> = {
+  right: "border-comply",
+  close: "border-exaggerate",
+  wrong: "border-defect",
 };
 
 interface Placement {
@@ -51,30 +103,40 @@ interface Placement {
   verdict: Verdict | null;
 }
 
-/** Small coloured dot for a policy bucket. */
-function Dot({ color }: { color: string }) {
-  return (
-    <span
-      aria-hidden
-      className="size-2.5 flex-none rounded-full"
-      style={{ background: color }}
-    />
-  );
+const parseCell = (cell: string) => ({ f: Number(cell[1]), e: Number(cell[3]) });
+
+/** Direction nudge for a checked, not-right placement — tells the learner
+ *  which way to move, never where to land. */
+function nudge(bucket: Bucket, cell: string): string {
+  const { f, e } = parseCell(cell);
+  const parts: string[] = [];
+  if (bucket.key.f > f) parts.push("more gettable than you have it");
+  if (bucket.key.f < f) parts.push("harder to get than you have it");
+  if (bucket.key.e > e) parts.push("stronger than you have it");
+  if (bucket.key.e < e) parts.push("weaker than you have it");
+  return parts.join(", and ");
 }
 
-/**
- * "Scoping an Anti-ASI Policy" — drag five policy buckets onto a 3×3
- * feasibility × effectiveness plane, check placements against a 45-entry verdict
- * table, reveal the answer-key frontier + ghost placements, then answer a
- * retry-until-correct exception question that unlocks the closing. Bridged:
- * onComplete() fires once, when the exception question is answered correctly.
- *
- * Oddity preserved from the source: two buckets (self-governance, domestic
- * regulation) both grade "right" in cell f2e0 — cells hold multiple chips.
- */
+type Phase = 0 | 1 | 2;
+
 export function PolicyScoping({ onComplete }: VerificationWidgetProps) {
+  const [phase, setPhase] = useState<Phase>(0);
+  const [maxPhase, setMaxPhase] = useState<Phase>(0);
+
+  // Phase 1 — which scales have been opened.
+  const [scaleOpen, setScaleOpen] = useState<"effectiveness" | "feasibility" | null>(null);
+  const [scalesSeen, setScalesSeen] = useState<{ effectiveness: boolean; feasibility: boolean }>({
+    effectiveness: false,
+    feasibility: false,
+  });
+
+  // Phase 2 — the bucket ladder. One row open at a time; opening reads it.
+  const [openIdx, setOpenIdx] = useState<number | null>(null);
+  const [seen, setSeen] = useState<Set<number>>(() => new Set());
+
+  // Phase 3 — the sort.
   const [placements, setPlacements] = useState<Record<string, Placement>>(() =>
-    Object.fromEntries(POLICIES.map((p) => [p.id, { cell: null, verdict: null }])),
+    Object.fromEntries(BUCKETS.map((b) => [b.id, { cell: null, verdict: null }])),
   );
   const [checkedOnce, setCheckedOnce] = useState(false);
   const [keyOn, setKeyOn] = useState(false);
@@ -86,78 +148,429 @@ export function PolicyScoping({ onComplete }: VerificationWidgetProps) {
     if (liveRef.current) liveRef.current.textContent = msg;
   }
 
-  const placedCount = POLICIES.filter((p) => placements[p.id].cell).length;
-  const allPlaced = placedCount === 5;
-  const verdicts = POLICIES.map((p) => placements[p.id].verdict);
+  const goTo = (p: Phase) => {
+    setPhase(p);
+    setMaxPhase((m) => (p > m ? p : m));
+  };
+
+  const bothScalesSeen = scalesSeen.effectiveness && scalesSeen.feasibility;
+  const allCardsSeen = seen.size === BUCKETS.length;
+
+  // Toggling is the only writer, so opening a row is what marks it read —
+  // no effect watching the open index.
+  function toggleCard(i: number) {
+    setOpenIdx((prev) => (prev === i ? null : i));
+    setSeen((prev) => {
+      if (prev.has(i)) return prev;
+      const next = new Set(prev);
+      next.add(i);
+      return next;
+    });
+  }
+
+  function openScale(key: "effectiveness" | "feasibility") {
+    setScaleOpen(key);
+    setScalesSeen((prev) => (prev[key] ? prev : { ...prev, [key]: true }));
+  }
+
+  return (
+    <div className="not-prose my-6">
+      {/* ---------- phase strip ---------- */}
+      <div className="border-border mb-4 flex flex-wrap items-baseline gap-x-5 gap-y-1 border-b pb-2">
+        {C.phases.map((label, i) => {
+          const reachable = i <= maxPhase && !(i === 2 && !allCardsSeen);
+          const current = phase === i;
+          const done =
+            (i === 0 && bothScalesSeen) || (i === 1 && allCardsSeen) || (i === 2 && excDone);
+          return (
+            <button
+              key={label}
+              type="button"
+              disabled={!reachable}
+              aria-current={current ? "step" : undefined}
+              onClick={() => goTo(i as Phase)}
+              className={cn(
+                "flex items-baseline gap-1.5 border-0 bg-transparent p-0 text-sm transition-colors",
+                current
+                  ? "text-foreground font-semibold"
+                  : reachable
+                    ? "text-muted-foreground hover:text-foreground"
+                    : "text-muted-foreground/50",
+              )}
+            >
+              <span className="text-muted-foreground text-xs font-normal">{i + 1}.</span>
+              {label}
+              {done && (
+                <span className="text-comply inline-flex items-center gap-0.5 text-xs font-normal">
+                  <Check className="size-3" aria-hidden /> done
+                </span>
+              )}
+            </button>
+          );
+        })}
+      </div>
+
+      {phase === 0 && (
+        <AxesPhase
+          scalesSeen={scalesSeen}
+          openScale={openScale}
+          onContinue={() => goTo(1)}
+        />
+      )}
+
+      {phase === 1 && (
+        <CardsPhase
+          openIdx={openIdx}
+          seen={seen}
+          toggle={toggleCard}
+          allSeen={allCardsSeen}
+          onSort={() => goTo(2)}
+        />
+      )}
+
+      {phase === 2 && (
+        <SortPhase
+          placements={placements}
+          setPlacements={setPlacements}
+          checkedOnce={checkedOnce}
+          setCheckedOnce={setCheckedOnce}
+          keyOn={keyOn}
+          setKeyOn={setKeyOn}
+          excPicked={excPicked}
+          setExcPicked={setExcPicked}
+          excDone={excDone}
+          setExcDone={setExcDone}
+          onComplete={onComplete}
+          openScale={openScale}
+          say={say}
+        />
+      )}
+
+      {/* Shared scale dialogs — reachable from phase 1 cards and the plane's
+          axis titles alike. */}
+      <ScaleDialog
+        scaleKey={scaleOpen}
+        onOpenChange={(open) => !open && setScaleOpen(null)}
+      />
+
+      <div ref={liveRef} aria-live="polite" className="sr-only" />
+    </div>
+  );
+}
+
+/* ================= phase 1: the axes ================= */
+
+function AxesPhase({
+  scalesSeen,
+  openScale,
+  onContinue,
+}: {
+  scalesSeen: { effectiveness: boolean; feasibility: boolean };
+  openScale: (key: "effectiveness" | "feasibility") => void;
+  onContinue: () => void;
+}) {
+  return (
+    <div>
+      <p className="text-muted-foreground mb-4 text-sm leading-relaxed">{C.axesKicker}</p>
+      <div className="grid gap-3 sm:grid-cols-2">
+        {(["effectiveness", "feasibility"] as const).map((key) => {
+          const scale = AXIS_SCALES[key];
+          const seen = scalesSeen[key];
+          return (
+            <div key={key} className="border-border bg-card flex flex-col gap-2 rounded-xl border p-4">
+              <p className="text-base font-semibold">{scale.question}</p>
+              <p className="text-muted-foreground flex-1 text-sm leading-relaxed">{scale.lead}</p>
+              <div className="flex items-center justify-between gap-2">
+                <Button size="sm" variant={seen ? "outline" : "default"} onClick={() => openScale(key)}>
+                  {C.openScale}
+                </Button>
+                {seen && (
+                  <span className="text-comply flex items-center gap-1 text-xs font-semibold">
+                    <Check className="size-3.5" aria-hidden /> {C.scaleSeen}
+                  </span>
+                )}
+              </div>
+            </div>
+          );
+        })}
+      </div>
+      <div className="mt-4 flex items-center gap-3">
+        <Button onClick={onContinue} disabled={!(scalesSeen.effectiveness && scalesSeen.feasibility)}>
+          {C.axesContinue}
+        </Button>
+        {!(scalesSeen.effectiveness && scalesSeen.feasibility) && (
+          <p className="text-muted-foreground text-xs">{C.axesHint}</p>
+        )}
+      </div>
+    </div>
+  );
+}
+
+function ScaleDialog({
+  scaleKey,
+  onOpenChange,
+}: {
+  scaleKey: "effectiveness" | "feasibility" | null;
+  onOpenChange: (open: boolean) => void;
+}) {
+  const scale = scaleKey ? AXIS_SCALES[scaleKey] : null;
+  return (
+    <Dialog open={!!scaleKey} onOpenChange={onOpenChange}>
+      <DialogContent className="max-w-lg">
+        {scale && (
+          <>
+            <DialogHeader>
+              <DialogTitle>{scale.title}</DialogTitle>
+            </DialogHeader>
+            <p className="text-muted-foreground text-sm leading-relaxed">{scale.lead}</p>
+            <ol className="mt-1 flex flex-col-reverse gap-1.5">
+              {scale.rungs.map((rung, i) => (
+                <li key={rung.name} className="border-border bg-muted/30 grid grid-cols-[auto_1fr] gap-x-2.5 rounded-lg border px-3 py-2 text-sm">
+                  <span className="text-muted-foreground tabular-nums">{i + 1}.</span>
+                  <span>
+                    <span className="font-semibold">{rung.name}</span>
+                    <span className="text-muted-foreground"> — {rung.gloss}</span>
+                  </span>
+                </li>
+              ))}
+            </ol>
+            <p className="text-muted-foreground text-xs">{C.scaleLowHigh}</p>
+          </>
+        )}
+      </DialogContent>
+    </Dialog>
+  );
+}
+
+/* ================= phase 2: the bucket ladder ================= */
+
+function CardsPhase({
+  openIdx,
+  seen,
+  toggle,
+  allSeen,
+  onSort,
+}: {
+  openIdx: number | null;
+  seen: Set<number>;
+  toggle: (i: number) => void;
+  allSeen: boolean;
+  onSort: () => void;
+}) {
+  return (
+    <div>
+      <p className="text-muted-foreground mb-3 text-sm leading-relaxed">{C.cardsKicker}</p>
+
+      <p className="text-muted-foreground mb-1.5 text-xs tracking-[0.12em] uppercase">
+        {C.rampTop}
+      </p>
+
+      {/* the ladder: a continuous gradient rail down the left, one row per
+          bucket beside it. The rail restates the reading order the labels
+          above and below spell out; every row leads with its number and name,
+          so the hue never carries the meaning alone. */}
+      <div className="grid grid-cols-[0.375rem_1fr] gap-x-3">
+        {BUCKETS.map((b, i) => {
+          const open = openIdx === i;
+          const read = seen.has(i);
+          return (
+            <div key={b.id} className="col-span-2 grid grid-cols-subgrid">
+              {/* rail segment — the ramp, continuous down the column */}
+              <div
+                aria-hidden
+                className={cn(
+                  "min-h-full",
+                  i === 0 && "rounded-t-full",
+                  i === BUCKETS.length - 1 && "rounded-b-full",
+                )}
+                style={{ background: tint(i, 12, 100) }}
+              />
+              <div className={cn("min-w-0", i > 0 && "mt-1.5")}>
+                <div
+                  className="overflow-hidden rounded-lg border"
+                  style={
+                    open
+                      ? { borderColor: tint(i, 35, 100), background: tint(i, 4, 9) }
+                      : read
+                        ? { borderColor: READ_BORDER, background: READ_BG }
+                        : { borderColor: "var(--border)", background: "var(--card)" }
+                  }
+                >
+                  <button
+                    type="button"
+                    aria-expanded={open}
+                    onClick={() => toggle(i)}
+                    className="flex w-full cursor-pointer items-baseline gap-2 px-3 py-2.5 text-left select-none sm:px-4"
+                  >
+                    <span className="text-muted-foreground w-5 flex-none text-sm font-normal tabular-nums">
+                      {b.n}.
+                    </span>
+                    <span className="text-foreground min-w-0 flex-1 text-sm leading-snug font-semibold sm:text-base">
+                      {b.name}
+                    </span>
+                    {read && !open && (
+                      <span className="text-comply flex flex-none items-center gap-1 text-xs font-medium">
+                        <Check className="size-3" aria-hidden /> {C.readMark}
+                      </span>
+                    )}
+                    <span
+                      aria-hidden
+                      className={cn(
+                        "text-muted-foreground flex-none text-lg leading-none font-light transition-transform duration-200 motion-reduce:transition-none",
+                        open && "rotate-45",
+                      )}
+                    >
+                      +
+                    </span>
+                  </button>
+                  <div hidden={!open} className="flex flex-col gap-3 px-3 pb-3.5 sm:px-4">
+                    <p className="text-sm leading-relaxed sm:text-base">{b.desc}</p>
+                    <div className="border-border bg-card rounded-lg border p-3">
+                      <p className="text-muted-foreground eyebrow">
+                        {C.cardParallelTag} — {b.parallel.title}
+                      </p>
+                      <p className="text-foreground/85 mt-1.5 text-sm leading-relaxed">
+                        {b.parallel.text}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+
+      <p className="text-muted-foreground mt-1.5 text-xs tracking-[0.12em] uppercase">
+        {C.rampBottom}
+      </p>
+
+      <div className="mt-4 flex flex-wrap items-center gap-3">
+        <Button onClick={onSort} disabled={!allSeen}>
+          {C.cardToSort}
+        </Button>
+        <p className="text-muted-foreground text-xs" aria-live="polite">
+          {C.readCount(seen.size, BUCKETS.length)}
+        </p>
+      </div>
+    </div>
+  );
+}
+
+/* ================= phase 3: the sort ================= */
+
+function SortPhase({
+  placements,
+  setPlacements,
+  checkedOnce,
+  setCheckedOnce,
+  keyOn,
+  setKeyOn,
+  excPicked,
+  setExcPicked,
+  excDone,
+  setExcDone,
+  onComplete,
+  openScale,
+  say,
+}: {
+  placements: Record<string, Placement>;
+  setPlacements: React.Dispatch<React.SetStateAction<Record<string, Placement>>>;
+  checkedOnce: boolean;
+  setCheckedOnce: (b: boolean) => void;
+  keyOn: boolean;
+  setKeyOn: (b: boolean) => void;
+  excPicked: string | null;
+  setExcPicked: (id: string | null) => void;
+  excDone: boolean;
+  setExcDone: (b: boolean) => void;
+  onComplete: () => void;
+  openScale: (key: "effectiveness" | "feasibility") => void;
+  say: (msg: string) => void;
+}) {
+  const total = BUCKETS.length;
+  const placedCount = BUCKETS.filter((b) => placements[b.id].cell).length;
+  const allPlaced = placedCount === total;
+  const verdicts = BUCKETS.map((b) => placements[b.id].verdict);
   const anyVerdict = verdicts.some(Boolean);
   const allVerdicts = verdicts.every(Boolean);
   const rightCount = verdicts.filter((v) => v === "right").length;
   const closeCount = verdicts.filter((v) => v === "close").length;
-  const allRight = allVerdicts && rightCount === 5;
+  const allRight = allVerdicts && rightCount === total;
   const excUnlocked = allRight || keyOn;
 
-  // policyId -> chip for each cell (cells can hold multiple).
   const byCell = useMemo(() => {
     const map: Record<string, string[]> = {};
-    for (const p of POLICIES) {
-      const cell = placements[p.id].cell;
-      if (cell) (map[cell] ??= []).push(p.id);
+    for (const b of BUCKETS) {
+      const cell = placements[b.id].cell;
+      if (cell) (map[cell] ??= []).push(b.id);
     }
     return map;
   }, [placements]);
+
+  // Ghosts sharing a reference cell fan out vertically so both stay legible.
+  const ghostOffsets = useMemo(() => {
+    const groups: Record<string, string[]> = {};
+    for (const b of BUCKETS) {
+      const key = `f${b.key.f}e${b.key.e}`;
+      (groups[key] ??= []).push(b.id);
+    }
+    const offsets: Record<string, number> = {};
+    for (const ids of Object.values(groups)) {
+      ids.forEach((id, i) => {
+        offsets[id] = (i - (ids.length - 1) / 2) * 5.5;
+      });
+    }
+    return offsets;
+  }, []);
 
   function handleDrop(itemId: string, zoneId: string) {
     setPlacements((prev) => {
       if (prev[itemId].cell === zoneId) return prev;
       return { ...prev, [itemId]: { cell: zoneId, verdict: null } };
     });
-    const p = POLICIES.find((q) => q.id === itemId)!;
-    say(`${p.name} placed at ${cellLabel(zoneId)}.`);
+    const b = BUCKETS.find((q) => q.id === itemId)!;
+    say(`${b.name} placed at ${cellLabel(zoneId)}.`);
   }
 
   function check() {
     setCheckedOnce(true);
-    // Compute verdicts from the current placements (this handler is the only
-    // writer in flight), then set state — counting inside a setPlacements
-    // updater would read 0 whenever the updater is deferred to render.
     let right = 0;
     const next: Record<string, Placement> = { ...placements };
-    for (const p of POLICIES) {
-      const cell = placements[p.id].cell;
+    for (const b of BUCKETS) {
+      const cell = placements[b.id].cell;
       if (!cell) continue;
-      const combo = p.cells[cell];
-      next[p.id] = { cell, verdict: combo.v };
-      if (combo.v === "right") right++;
+      const { f, e } = parseCell(cell);
+      const v = verdictFor(b, f, e);
+      next[b.id] = { cell, verdict: v };
+      if (v === "right") right++;
     }
     setPlacements(next);
     say(
-      `Checked. ${right} of 5 on the frontier.` +
-        (right === 5
+      `Checked. ${right} of ${total} on the mark.` +
+        (right === total
           ? " All correct — the one-exception question is now available."
           : " Adjust placements and check again."),
     );
-    if (right === 5) reveal();
+    if (right === total) reveal();
   }
 
   function reveal() {
     setKeyOn(true);
     say(
-      "Answer key revealed. " +
-        POLICIES.map((p) => `${p.name}: ${p.keyWhy}`).join(" "),
+      "Reference map revealed. " + BUCKETS.map((b) => `${b.name}: ${b.why}`).join(" "),
     );
   }
 
-  function reset() {
+  function resetSort() {
     setPlacements(
-      Object.fromEntries(
-        POLICIES.map((p) => [p.id, { cell: null, verdict: null }]),
-      ),
+      Object.fromEntries(BUCKETS.map((b) => [b.id, { cell: null, verdict: null }])),
     );
     setCheckedOnce(false);
     setKeyOn(false);
     setExcPicked(null);
     setExcDone(false);
-    say("Reset. All five buckets returned to the tray.");
+    say(`Sort reset. All ${total} buckets returned to the tray.`);
   }
 
   function pickException(id: string) {
@@ -177,511 +590,425 @@ export function PolicyScoping({ onComplete }: VerificationWidgetProps) {
   }
 
   return (
-    <div className="not-prose my-6">
-      <DragProvider onDrop={handleDrop}>
-        <div className="grid gap-5 lg:grid-cols-[1fr_20rem]">
-          {/* ---------- left: tray + plane ---------- */}
-          <div className="min-w-0">
-            <p className="text-muted-foreground border-border bg-muted/40 mb-4 rounded-lg border px-3 py-2 text-xs">
-              {C.hint}
+    <DragProvider onDrop={handleDrop}>
+      <div className="grid gap-5 lg:grid-cols-[1fr_20rem]">
+        {/* ---------- left: tray + plane ---------- */}
+        <div className="min-w-0">
+          <p className="text-muted-foreground border-border bg-muted/40 mb-4 rounded-lg border px-3 py-2 text-xs">
+            {C.sortHint}
+          </p>
+
+          {/* tray, in reading order — the ramp restates the card walk */}
+          <div className="border-border mb-5 rounded-lg border p-3">
+            <p className="text-muted-foreground mb-2 text-xs tracking-[0.15em] uppercase">
+              {C.trayLabel}
             </p>
-
-            {/* tray */}
-            <div className="border-border mb-5 rounded-lg border p-3">
-              <p className="text-muted-foreground mb-2 font-mono text-[10px] tracking-[0.15em] uppercase">
-                {C.trayLabel}
-              </p>
-              <div className="flex flex-wrap gap-2">
-                {POLICIES.map((p) =>
-                  placements[p.id].cell ? (
-                    <div
-                      key={p.id}
-                      aria-hidden
-                      className="border-border/60 text-muted-foreground/50 flex h-8 items-center rounded-full border border-dashed px-3 text-xs"
-                    >
-                      {p.name}
-                    </div>
-                  ) : (
-                    <ChipTip key={p.id} policy={p} placement={placements[p.id]}>
-                      <Draggable
-                        id={p.id}
-                        label={p.name}
-                        className="border-border bg-card shadow-soft flex h-8 items-center gap-2 rounded-full border pr-3 pl-2.5 text-xs font-semibold"
-                      >
-                        <Dot color={p.colorRaw} />
-                        {p.name}
-                      </Draggable>
-                    </ChipTip>
-                  ),
-                )}
-              </div>
-            </div>
-
-            {/* plane: y-axis label + grid + x-axis label */}
-            <div className="flex gap-2">
-              {/* y axis */}
-              <div className="flex flex-none items-center">
-                <AxisTip tip={AXIS_TIPS.y}>
-                  <span
-                    className="text-foreground/70 [writing-mode:vertical-rl] rotate-180 cursor-help text-xs font-semibold whitespace-nowrap"
-                    tabIndex={0}
+            <div className="flex flex-wrap gap-2">
+              {BUCKETS.map((b, i) =>
+                placements[b.id].cell ? (
+                  <div
+                    key={b.id}
+                    aria-hidden
+                    className="border-border/60 text-muted-foreground/50 flex h-8 items-center rounded-full border border-dashed px-3 text-xs"
                   >
-                    {C.yTitle}{" "}
-                    <span className="text-muted-foreground font-normal">
-                      {C.ySub}
-                    </span>{" "}
-                    →
-                  </span>
-                </AxisTip>
-              </div>
-
-              <div className="min-w-0 flex-1">
-                <div className="flex">
-                  {/* row labels */}
-                  <div className="flex w-9 flex-none flex-col">
-                    {ROW_LABELS.map((rl) => (
-                      <div
-                        key={rl}
-                        className="text-muted-foreground flex flex-1 items-center justify-end pr-1.5 font-mono text-[10px] tracking-[0.06em] uppercase"
-                      >
-                        {rl}
-                      </div>
-                    ))}
+                    {b.n}. {b.short}
                   </div>
-
-                  {/* grid */}
-                  <div className="border-border bg-card relative min-w-0 flex-1 overflow-hidden rounded-lg border">
-                    {keyOn && <FrontierOverlay />}
-                    <div className="relative z-[5] grid grid-cols-3 grid-rows-3">
-                      {EFFECT_ROWS.map((eKey) =>
-                        FEAS_KEYS.map((fKey) => {
-                          const cellKey = `${fKey}${eKey}`;
-                          const ids = byCell[cellKey] ?? [];
-                          const isCorner =
-                            cellKey === "f2e2" || cellKey === "f0e0";
-                          return (
-                            <DropZone
-                              key={cellKey}
-                              id={cellKey}
-                              label={cellLabel(cellKey)}
-                              className={cn(
-                                "relative flex min-h-[5.5rem] flex-col gap-1.5 p-2",
-                                "[&:not(:nth-child(3n))]:border-r [&:nth-child(-n+6)]:border-b",
-                                "border-border/60",
-                                isCorner && "bg-muted/40",
-                              )}
-                              overClassName="ring-primary ring-2 z-10"
-                              armedClassName="ring-primary/50 ring-2 z-10"
-                            >
-                              {cellKey === "f2e2" && (
-                                <CornerNote
-                                  className="right-2 top-1.5"
-                                  label={C.cornerTR}
-                                  tip={AXIS_TIPS.tr}
-                                />
-                              )}
-                              {cellKey === "f0e0" && (
-                                <CornerNote
-                                  className="left-2 bottom-1.5"
-                                  label={C.cornerBL}
-                                  tip={AXIS_TIPS.bl}
-                                />
-                              )}
-                              {ids.map((id) => {
-                                const p = POLICIES.find((q) => q.id === id)!;
-                                const pl = placements[id];
-                                return (
-                                  <ChipTip key={id} policy={p} placement={pl}>
-                                    <Draggable
-                                      id={id}
-                                      label={p.name}
-                                      className={cn(
-                                        "border-border bg-card shadow-soft z-10 flex items-center gap-1.5 rounded-full border py-1 pr-2.5 pl-2 text-[11px] leading-tight font-semibold",
-                                        pl.verdict &&
-                                          VERDICT_ACCENT[pl.verdict],
-                                      )}
-                                    >
-                                      {pl.verdict && (
-                                        <VerdictBadge verdict={pl.verdict} />
-                                      )}
-                                      <Dot color={p.colorRaw} />
-                                      <span className="truncate">{p.short}</span>
-                                    </Draggable>
-                                  </ChipTip>
-                                );
-                              })}
-                            </DropZone>
-                          );
-                        }),
-                      )}
-                    </div>
-
-                    {/* ghost answer-key placements */}
-                    {keyOn &&
-                      POLICIES.map((p) => (
-                        <GhostTip key={p.id} policy={p} />
-                      ))}
-                  </div>
-                </div>
-
-                {/* col labels */}
-                <div className="ml-9 flex">
-                  {COL_LABELS.map((cl) => (
-                    <div
-                      key={cl}
-                      className="text-muted-foreground flex-1 pt-1.5 text-center font-mono text-[10px] tracking-[0.06em] uppercase"
+                ) : (
+                  <ChipTip key={b.id} bucket={b} placement={placements[b.id]}>
+                    <Draggable
+                      id={b.id}
+                      label={`${b.n}. ${b.name}`}
+                      className="flex h-8 items-center gap-1 rounded-full border px-3 text-xs font-semibold shadow-soft"
+                      style={{
+                        background: tint(i, 5, 34),
+                        borderColor: tint(i, 30, 80),
+                      }}
                     >
-                      {cl}
-                    </div>
-                  ))}
-                </div>
-                <div className="ml-9 pt-1 text-center">
-                  <AxisTip tip={AXIS_TIPS.x}>
-                    <span
-                      className="text-foreground/70 cursor-help text-xs font-semibold"
-                      tabIndex={0}
-                    >
-                      {C.xTitle}{" "}
-                      <span className="text-muted-foreground font-normal">
-                        {C.xSub}
-                      </span>{" "}
-                      →
-                    </span>
-                  </AxisTip>
-                </div>
-                <p className="text-muted-foreground ml-9 pt-1.5 text-center text-[11px] italic">
-                  {C.caption}
-                </p>
-              </div>
+                      <span className="text-muted-foreground font-normal tabular-nums">
+                        {b.n}.
+                      </span>
+                      {b.short}
+                    </Draggable>
+                  </ChipTip>
+                ),
+              )}
             </div>
           </div>
 
-          {/* ---------- right: rail ---------- */}
-          <aside className="flex min-w-0 flex-col gap-4">
-            {/* stats */}
-            <div className="border-border flex flex-col gap-1.5 border-y py-3">
-              {C.stats.map((s) => (
-                <div key={s.n} className="flex items-baseline gap-2">
-                  <span className="font-mono text-sm font-semibold">{s.n}</span>
-                  <span className="text-muted-foreground text-xs">{s.l}</span>
-                </div>
-              ))}
+          {/* plane */}
+          <div className="flex gap-2">
+            <div className="flex flex-none items-center">
+              <button
+                type="button"
+                onClick={() => openScale("effectiveness")}
+                className="text-foreground/70 hover:text-foreground inline-flex [writing-mode:vertical-rl] rotate-180 items-center border-0 bg-transparent p-0 text-xs font-semibold whitespace-nowrap"
+                title={AXIS_TIPS.y}
+              >
+                {C.yTitle} <span className="text-muted-foreground font-normal">{C.ySub}</span>{" "}
+                →
+              </button>
             </div>
 
-            {/* controls */}
-            <div>
-              <p className="text-muted-foreground mb-2 font-mono text-[10px] tracking-[0.15em] uppercase">
-                {C.exerciseLabel}
-              </p>
-              <div className="flex flex-col gap-2">
-                <Button onClick={check} disabled={!allPlaced}>
-                  {C.checkBtn}
-                </Button>
-                <Button
-                  variant="outline"
-                  onClick={reveal}
-                  disabled={!checkedOnce || keyOn}
-                >
-                  {C.revealBtn}
-                </Button>
-                <Button variant="ghost" onClick={reset} className="gap-2">
-                  <RotateCcw className="size-4" aria-hidden /> {C.resetBtn}
-                </Button>
-                <p className="text-muted-foreground text-center text-xs">
-                  {allVerdicts ? (
-                    allRight ? (
-                      <span className="text-foreground font-semibold">
-                        5 of 5 on the frontier.
-                      </span>
-                    ) : (
-                      <>
-                        <span className="text-foreground font-semibold">
-                          {rightCount}
-                        </span>{" "}
-                        on the frontier ·{" "}
-                        <span className="text-foreground font-semibold">
-                          {closeCount}
-                        </span>{" "}
-                        close ·{" "}
-                        <span className="text-foreground font-semibold">
-                          {5 - rightCount - closeCount}
-                        </span>{" "}
-                        off — drag and re-check
-                      </>
-                    )
-                  ) : allPlaced ? (
-                    "All placed — check when ready"
-                  ) : (
-                    `${placedCount} of 5 placed`
-                  )}
-                </p>
-              </div>
-            </div>
-
-            {/* results */}
-            {anyVerdict && (
-              <div className="flex flex-col gap-1.5">
-                <p className="text-muted-foreground font-mono text-[10px] tracking-[0.15em] uppercase">
-                  {C.resultsLabel}
-                </p>
-                {POLICIES.map((p) => {
-                  const pl = placements[p.id];
-                  if (!pl.verdict)
-                    return (
-                      <div
-                        key={p.id}
-                        className="border-border bg-muted/30 rounded-lg border border-l-[3px] p-2"
-                      >
-                        <div className="flex items-center gap-2">
-                          <Dot color={p.colorRaw} />
-                          <span className="text-xs font-semibold">
-                            {p.name}
-                          </span>
-                          <span className="text-muted-foreground ml-auto font-mono text-[9px] tracking-[0.1em] uppercase">
-                            moved — recheck
-                          </span>
-                        </div>
-                      </div>
-                    );
-                  const combo = p.cells[pl.cell!];
-                  return (
+            <div className="min-w-0 flex-1">
+              <div className="flex">
+                {/* row labels: effectiveness rungs, high→low */}
+                <div className="flex w-16 flex-none flex-col">
+                  {ROWS.map((e) => (
                     <div
-                      key={p.id}
-                      className={cn(
-                        "border-border bg-muted/30 rounded-lg border border-l-[3px] p-2",
-                        VERDICT_LEFT[pl.verdict],
-                      )}
+                      key={e}
+                      className="text-muted-foreground flex flex-1 items-center justify-end pr-1.5 text-right text-4xs leading-tight tracking-[0.02em]"
                     >
+                      {AXIS_SCALES.effectiveness.rungs[e].name}
+                    </div>
+                  ))}
+                </div>
+
+                {/* grid */}
+                <div className="border-border bg-card relative min-w-0 flex-1 overflow-hidden rounded-lg border">
+                  <div className="relative z-[5] grid grid-cols-5 grid-rows-5">
+                    {ROWS.map((e) =>
+                      COLS.map((f) => {
+                        const cellKey = `f${f}e${e}`;
+                        const ids = byCell[cellKey] ?? [];
+                        const isCorner = cellKey === "f4e4" || cellKey === "f0e0";
+                        return (
+                          <DropZone
+                            key={cellKey}
+                            id={cellKey}
+                            label={cellLabel(cellKey)}
+                            className={cn(
+                              "relative flex min-h-14 flex-col gap-1 p-1 sm:min-h-16 sm:p-1.5",
+                              "[&:not(:nth-child(5n))]:border-r [&:nth-child(-n+20)]:border-b",
+                              "border-border/60",
+                              isCorner && "bg-muted/40",
+                            )}
+                            overClassName="ring-primary ring-2 z-10"
+                            armedClassName="ring-primary/50 ring-2 z-10"
+                          >
+                            {cellKey === "f4e4" && (
+                              <CornerNote
+                                className="top-1 right-1.5"
+                                label={C.cornerTR}
+                                tip={AXIS_TIPS.tr}
+                              />
+                            )}
+                            {cellKey === "f0e0" && (
+                              <CornerNote
+                                className="bottom-1 left-1.5"
+                                label={C.cornerBL}
+                                tip={AXIS_TIPS.bl}
+                              />
+                            )}
+                            {ids.map((id) => {
+                              const b = BUCKETS.find((q) => q.id === id)!;
+                              const i = BUCKETS.indexOf(b);
+                              const pl = placements[id];
+                              return (
+                                <ChipTip key={id} bucket={b} placement={pl}>
+                                  <Draggable
+                                    id={id}
+                                    label={`${b.n}. ${b.name}`}
+                                    className={cn(
+                                      "z-10 flex items-center gap-1 rounded-full border py-0.5 pr-2 pl-1.5 text-3xs leading-tight font-semibold shadow-soft",
+                                      pl.verdict && VERDICT_BORDER[pl.verdict],
+                                    )}
+                                    style={
+                                      pl.verdict
+                                        ? { background: tint(i, 5, 34) }
+                                        : {
+                                            background: tint(i, 5, 34),
+                                            borderColor: tint(i, 30, 80),
+                                          }
+                                    }
+                                  >
+                                    {pl.verdict && <VerdictBadge verdict={pl.verdict} />}
+                                    <span className="truncate">
+                                      {b.n}. {b.short}
+                                    </span>
+                                  </Draggable>
+                                </ChipTip>
+                              );
+                            })}
+                          </DropZone>
+                        );
+                      }),
+                    )}
+                  </div>
+
+                  {/* reference-map ghosts */}
+                  {keyOn &&
+                    BUCKETS.map((b) => (
+                      <GhostTip key={b.id} bucket={b} dy={ghostOffsets[b.id]} />
+                    ))}
+                </div>
+              </div>
+
+              {/* col labels: feasibility rungs, low→high */}
+              <div className="ml-16 flex">
+                {COLS.map((f) => (
+                  <div
+                    key={f}
+                    className="text-muted-foreground flex-1 px-0.5 pt-1.5 text-center text-4xs leading-tight tracking-[0.02em]"
+                  >
+                    {AXIS_SCALES.feasibility.rungs[f].name}
+                  </div>
+                ))}
+              </div>
+              <div className="ml-16 pt-1 text-center">
+                <button
+                  type="button"
+                  onClick={() => openScale("feasibility")}
+                  className="text-foreground/70 hover:text-foreground inline-flex items-center border-0 bg-transparent p-0 text-xs font-semibold"
+                  title={AXIS_TIPS.x}
+                >
+                  {C.xTitle} <span className="text-muted-foreground font-normal">{C.xSub}</span>{" "}
+                  →
+                </button>
+              </div>
+              <p className="text-muted-foreground ml-16 pt-1.5 text-center text-sm leading-relaxed italic">
+                {C.caption}
+              </p>
+            </div>
+          </div>
+        </div>
+
+        {/* ---------- right: rail ---------- */}
+        <aside className="flex min-w-0 flex-col gap-4">
+          <div className="border-border flex flex-col gap-1.5 border-y py-3">
+            {C.stats.map((s) => (
+              <div key={s.n} className="flex items-baseline gap-2">
+                <span className="text-sm font-semibold">{s.n}</span>
+                <span className="text-muted-foreground text-xs">{s.l}</span>
+              </div>
+            ))}
+          </div>
+
+          <div>
+            <p className="text-muted-foreground mb-2 text-4xs tracking-[0.15em] uppercase">
+              {C.exerciseLabel}
+            </p>
+            <div className="flex flex-col gap-2">
+              <Button onClick={check} disabled={!allPlaced}>
+                {C.checkBtn}
+              </Button>
+              <Button variant="outline" onClick={reveal} disabled={!checkedOnce || keyOn}>
+                {C.revealBtn}
+              </Button>
+              <Button variant="ghost" onClick={resetSort} className="gap-2">
+                <RotateCcw className="size-4" aria-hidden /> {C.resetBtn}
+              </Button>
+              <p className="text-muted-foreground text-center text-xs">
+                {allVerdicts ? (
+                  allRight ? (
+                    <span className="text-foreground font-semibold">
+                      {total} of {total} on the mark.
+                    </span>
+                  ) : (
+                    <>
+                      <span className="text-foreground font-semibold">{rightCount}</span> on
+                      the mark ·{" "}
+                      <span className="text-foreground font-semibold">{closeCount}</span>{" "}
+                      close ·{" "}
+                      <span className="text-foreground font-semibold">
+                        {total - rightCount - closeCount}
+                      </span>{" "}
+                      off — drag and re-check
+                    </>
+                  )
+                ) : allPlaced ? (
+                  "All placed — check when ready"
+                ) : (
+                  `${placedCount} of ${total} placed`
+                )}
+              </p>
+            </div>
+          </div>
+
+          {anyVerdict && (
+            <div className="flex flex-col gap-1.5">
+              <p className="text-muted-foreground text-4xs tracking-[0.15em] uppercase">
+                {C.resultsLabel}
+              </p>
+              {BUCKETS.map((b) => {
+                const pl = placements[b.id];
+                if (!pl.verdict)
+                  return (
+                    <div key={b.id} className="border-border bg-muted/30 rounded-lg border p-2">
                       <div className="flex items-center gap-2">
-                        <Dot color={p.colorRaw} />
-                        <span className="text-xs font-semibold">{p.name}</span>
-                        <span
-                          className={cn(
-                            "ml-auto font-mono text-[9px] tracking-[0.1em] uppercase",
-                            VERDICT_TEXT[pl.verdict],
-                          )}
-                        >
-                          {verdictLabel(pl.verdict)}
+                        <span className="text-xs font-semibold">{b.name}</span>
+                        <span className="text-muted-foreground ml-auto flex-none text-4xs tracking-[0.1em] uppercase">
+                          moved — recheck
                         </span>
                       </div>
-                      <p className="text-muted-foreground mt-1 text-[11px] leading-snug">
-                        {combo.t}
-                      </p>
                     </div>
+                  );
+                return (
+                  <div key={b.id} className="border-border bg-muted/30 rounded-lg border p-2">
+                    <div className="flex items-center gap-2">
+                      <span className="text-xs font-semibold">{b.name}</span>
+                      <span
+                        className={cn(
+                          "ml-auto flex-none text-4xs tracking-[0.1em] uppercase",
+                          VERDICT_TEXT[pl.verdict],
+                        )}
+                      >
+                        {verdictLabel(pl.verdict)}
+                      </span>
+                    </div>
+                    {(keyOn || pl.verdict === "right") ? (
+                      <p className="text-muted-foreground mt-1 text-sm leading-relaxed">
+                        {b.why}
+                      </p>
+                    ) : (
+                      <p className="text-muted-foreground mt-1 text-sm leading-relaxed">
+                        By the reference map it is {nudge(b, pl.cell!)}.
+                      </p>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+          )}
+
+          {excUnlocked && (
+            <div className="border-border bg-muted/30 rounded-lg border p-3">
+              <p className="text-muted-foreground mb-2 text-4xs tracking-[0.15em] uppercase">
+                {C.excLabel}
+              </p>
+              <p className="text-muted-foreground mb-3 text-sm leading-relaxed">
+                {C.excLead.pre}
+                <AxisTip tip={AXIS_TIPS.sec}>
+                  <span
+                    tabIndex={0}
+                    className="decoration-muted-foreground/60 text-foreground cursor-help font-medium underline decoration-dotted underline-offset-2"
+                  >
+                    {C.excLead.sec}
+                  </span>
+                </AxisTip>
+                {C.excLead.mid}
+                <b className="text-foreground">{C.excLead.bold}</b>
+                {C.excLead.post}
+              </p>
+              <div className="flex flex-wrap gap-1.5">
+                {[...EXC_OPTION_IDS].reverse().map((id) => {
+                  const b = BUCKETS.find((q) => q.id === id)!;
+                  const isPicked = excPicked === id;
+                  const ok = EXC_ANSWERS[id].ok;
+                  return (
+                    <button
+                      key={id}
+                      type="button"
+                      disabled={excDone && !(isPicked && ok)}
+                      onClick={() => pickException(id)}
+                      className={cn(
+                        "border-border rounded-full border px-3 py-1 text-3xs font-semibold transition-colors",
+                        "hover:border-foreground/40 disabled:opacity-50",
+                        isPicked && ok && "border-comply text-comply",
+                        isPicked && !ok && "border-defect text-defect",
+                      )}
+                    >
+                      {b.name}
+                    </button>
                   );
                 })}
               </div>
-            )}
+              {excPicked && (
+                <p
+                  className="border-border text-muted-foreground mt-2.5 border-t pt-2.5 text-sm leading-relaxed [&_b]:text-foreground [&_b]:font-semibold"
+                  aria-live="polite"
+                  dangerouslySetInnerHTML={{ __html: EXC_ANSWERS[excPicked].t }}
+                />
+              )}
+            </div>
+          )}
 
-            {/* exception panel */}
-            {excUnlocked && (
-              <div className="border-border bg-muted/30 rounded-lg border p-3">
-                <p className="text-muted-foreground mb-2 font-mono text-[10px] tracking-[0.15em] uppercase">
-                  {C.excLabel}
-                </p>
-                <p className="text-muted-foreground mb-3 text-xs leading-relaxed">
-                  {C.excLead.pre}
-                  <AxisTip tip={AXIS_TIPS.sec}>
-                    <span
-                      tabIndex={0}
-                      className="decoration-muted-foreground/60 text-foreground cursor-help font-medium underline decoration-dotted underline-offset-2"
-                    >
-                      {C.excLead.sec}
-                    </span>
-                  </AxisTip>
-                  {C.excLead.mid}
-                  <b className="text-foreground">{C.excLead.bold}</b>
-                  {C.excLead.post}
-                </p>
-                <div className="flex flex-wrap gap-1.5">
-                  {[...POLICIES].reverse().map((p) => {
-                    const isPicked = excPicked === p.id;
-                    const ok = EXC_ANSWERS[p.id].ok;
-                    return (
-                      <button
-                        key={p.id}
-                        type="button"
-                        disabled={excDone && !(isPicked && ok)}
-                        onClick={() => pickException(p.id)}
-                        className={cn(
-                          "border-border flex items-center gap-1.5 rounded-full border py-1 pr-3 pl-2 text-[11px] font-semibold transition-colors",
-                          "hover:border-foreground/40 disabled:opacity-50",
-                          isPicked && ok && "border-comply text-comply",
-                          isPicked && !ok && "border-defect text-defect",
-                        )}
-                      >
-                        <Dot color={p.colorRaw} />
-                        {p.name}
-                      </button>
-                    );
-                  })}
-                </div>
-                {excPicked && (
-                  <p
-                    className="border-border text-muted-foreground mt-2.5 border-t pt-2.5 text-xs leading-relaxed [&_b]:text-foreground [&_b]:font-semibold"
-                    aria-live="polite"
-                    dangerouslySetInnerHTML={{ __html: EXC_ANSWERS[excPicked].t }}
-                  />
-                )}
-              </div>
-            )}
+          {excDone && (
+            <div className="border-primary bg-card rounded-lg border p-3">
+              <p className="text-brand-ink flex items-center gap-1 text-xs font-semibold">
+                <Check className="size-3.5" aria-hidden />
+                {C.closingNext}
+              </p>
+            </div>
+          )}
 
-            {/* closing */}
-            {excDone && (
-              <div className="border-primary bg-card rounded-lg border p-3">
-                <p className="text-primary flex items-center gap-1 text-xs font-semibold">
-                  <Check className="size-3.5" aria-hidden />
-                  {C.closingNext}
-                </p>
-              </div>
-            )}
-
-            <p className="border-border text-muted-foreground border-t pt-3 text-[10px] leading-relaxed">
-              {C.foot}
-            </p>
-          </aside>
-        </div>
-      </DragProvider>
-
-      <div ref={liveRef} aria-live="polite" className="sr-only" />
-    </div>
+          <p className="border-border text-muted-foreground border-t pt-3 text-sm leading-relaxed">
+            {C.foot}
+          </p>
+        </aside>
+      </div>
+    </DragProvider>
   );
 }
 
-/* ---------- overlay: frontier + cascade, drawn from ghost fractions ---------- */
-function FrontierOverlay() {
-  // order matches the source: fp, cp, tc, dr, sg (strong→weak)
-  const order = ["fp", "cp", "tc", "dr", "sg"];
-  const pts = order.map((id) => {
-    const p = POLICIES.find((q) => q.id === id)!;
-    return [p.ghost.x * 100, p.ghost.y * 100] as [number, number];
-  });
-  // Catmull-Rom → cubic-bezier smoothing (verbatim from source drawOverlay).
-  let d = `M ${pts[0][0]} ${pts[0][1]}`;
-  for (let i = 0; i < pts.length - 1; i++) {
-    const p0 = pts[Math.max(i - 1, 0)];
-    const p1 = pts[i];
-    const p2 = pts[i + 1];
-    const p3 = pts[Math.min(i + 2, pts.length - 1)];
-    const c1 = [p1[0] + (p2[0] - p0[0]) / 6, p1[1] + (p2[1] - p0[1]) / 6];
-    const c2 = [p2[0] - (p3[0] - p1[0]) / 6, p2[1] - (p3[1] - p1[1]) / 6];
-    d += ` C ${c1[0]} ${c1[1]}, ${c2[0]} ${c2[1]}, ${p2[0]} ${p2[1]}`;
-  }
-  const [tcx, tcy] = pts[2];
-  const [drx, dry] = pts[3];
-  const midX = (tcx + drx) / 2 + 3;
-  const midY = (tcy + dry) / 2 + 5;
-  const ang = (Math.atan2(dry - tcy, drx - tcx) * 180) / Math.PI;
-
-  return (
-    <svg
-      viewBox="0 0 100 100"
-      preserveAspectRatio="none"
-      aria-hidden
-      className="pointer-events-none absolute inset-0 z-[6] size-full"
-    >
-      <path
-        d={d}
-        fill="none"
-        className="stroke-muted-foreground/60"
-        strokeWidth={0.5}
-        strokeDasharray="1.6 1.9"
-        vectorEffect="non-scaling-stroke"
-      />
-      <text
-        x={midX}
-        y={midY}
-        textAnchor="middle"
-        transform={`rotate(${ang.toFixed(1)} ${midX} ${midY})`}
-        className="fill-muted-foreground font-mono"
-        style={{ fontSize: 2.6 }}
-      >
-        {C.frontierLabel}
-      </text>
-    </svg>
-  );
-}
-
-/* ---------- ghost answer-key marker ---------- */
-function GhostTip({ policy }: { policy: Policy }) {
-  const isTarget = policy.id === "fp";
+/* ---------- reference-map ghost marker ---------- */
+function GhostTip({ bucket, dy }: { bucket: Bucket; dy: number }) {
+  const isTarget = bucket.id === "ch";
   return (
     <Tooltip>
       <TooltipTrigger asChild>
         <button
           type="button"
           className={cn(
-            "absolute z-[7] flex -translate-x-1/2 -translate-y-1/2 items-center gap-1.5 rounded-full border border-dashed bg-card/90 px-2 py-0.5 text-[10px] whitespace-nowrap",
+            "bg-card/90 absolute z-[7] flex -translate-x-1/2 -translate-y-1/2 items-center gap-1.5 rounded-full border border-dashed px-2 py-0.5 text-4xs whitespace-nowrap",
             "text-muted-foreground hover:text-foreground cursor-help",
             isTarget
-              ? "border-defect border-solid ring-4 ring-defect/15"
+              ? "border-defect ring-defect/15 border-solid ring-4"
               : "border-muted-foreground",
           )}
           style={{
-            left: `${policy.ghost.x * 100}%`,
-            top: `${policy.ghost.y * 100}%`,
+            left: `${((bucket.key.f + 0.5) / 5) * 100}%`,
+            top: `${((4 - bucket.key.e + 0.5) / 5) * 100 + dy}%`,
           }}
         >
-          <Dot color={policy.colorRaw} />
-          {policy.short}
+          {bucket.short}
         </button>
       </TooltipTrigger>
       <TooltipContent className="max-w-xs text-pretty">
-        <span className="font-semibold">{policy.name} — why here.</span>{" "}
-        {policy.keyWhy}
+        <span className="font-semibold">{bucket.name} — why here.</span> {bucket.why}
       </TooltipContent>
     </Tooltip>
   );
 }
 
-/* ---------- chip tooltip (def, or verdict feedback once checked) ---------- */
+/* ---------- chip tooltip (description, or verdict feedback once checked) ---------- */
 function ChipTip({
-  policy,
+  bucket,
   placement,
   children,
 }: {
-  policy: Policy;
+  bucket: Bucket;
   placement: Placement;
   children: React.ReactNode;
 }) {
-  const combo =
-    placement.verdict && placement.cell ? policy.cells[placement.cell] : null;
+  const v = placement.verdict;
   return (
     <Tooltip>
       <TooltipTrigger asChild>{children}</TooltipTrigger>
       <TooltipContent className="max-w-xs text-pretty">
-        <span className="flex items-center gap-1.5 font-semibold">
-          <Dot color={policy.colorRaw} />
-          {policy.name}
+        <span className="block font-semibold">
+          {bucket.n}. {bucket.name}
         </span>
-        {combo ? (
+        {v && placement.cell ? (
           <span className="mt-1 block">
             <span
-              className={cn(
-                "block font-mono text-[10px] tracking-[0.1em] uppercase",
-                VERDICT_TEXT[combo.v],
-              )}
+              className={cn("block text-4xs tracking-[0.1em] uppercase", VERDICT_TEXT[v])}
             >
-              {verdictLabel(combo.v)}
+              {verdictLabel(v)}
             </span>
-            {combo.t}
+            {v === "right"
+              ? bucket.why
+              : `Placed at ${cellLabel(placement.cell)} — ${nudge(bucket, placement.cell)}.`}
           </span>
         ) : (
-          <span className="mt-1 block">{policy.def}</span>
+          <span className="mt-1 block">{bucket.desc}</span>
         )}
       </TooltipContent>
     </Tooltip>
   );
 }
 
-/* ---------- axis / corner / securitization tooltip wrapper ---------- */
-function AxisTip({
-  tip,
-  children,
-}: {
-  tip: string;
-  children: React.ReactNode;
-}) {
+/* ---------- axis / corner tooltip wrapper ---------- */
+function AxisTip({ tip, children }: { tip: string; children: React.ReactNode }) {
   return (
     <Tooltip>
       <TooltipTrigger asChild>{children}</TooltipTrigger>
@@ -701,15 +1028,15 @@ function CornerNote({
 }) {
   return (
     <AxisTip tip={tip}>
-      <span
-        tabIndex={0}
+      <button
+        type="button"
         className={cn(
-          "text-muted-foreground/60 hover:text-muted-foreground absolute z-[8] cursor-help font-mono text-[9px] tracking-[0.05em] select-none",
+          "text-muted-foreground/60 hover:text-muted-foreground absolute z-[8] cursor-help border-0 bg-transparent p-0 text-4xs tracking-[0.05em] select-none",
           className,
         )}
       >
         {label}
-      </span>
+      </button>
     </AxisTip>
   );
 }
@@ -719,10 +1046,5 @@ function VerdictBadge({ verdict }: { verdict: Verdict }) {
     return <Check className={cn("size-3", VERDICT_TEXT.right)} aria-hidden />;
   if (verdict === "wrong")
     return <X className={cn("size-3", VERDICT_TEXT.wrong)} aria-hidden />;
-  return (
-    <ArrowRight
-      className={cn("size-3 rotate-45", VERDICT_TEXT.close)}
-      aria-hidden
-    />
-  );
+  return <ArrowRight className={cn("size-3 rotate-45", VERDICT_TEXT.close)} aria-hidden />;
 }

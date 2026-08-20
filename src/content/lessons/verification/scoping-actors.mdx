@@ -1,0 +1,233 @@
+We’ve established why an international pause is important, the key components of a relevant treaty, and why robust verification mechanisms are crucial to its successful enforcement. Now, the question becomes: who are the key players that a pause treaty would require cooperation from? Which nations, labs, and manufacturers have a stake in the development or prevention of ASI?
+
+{/* The treaty-highlighting interactive that opened this section stood down on
+    2026-08-15, on the owner's judgement that clicking highlighted phrases is
+    recognition dressed as work. Its lead-in went with it — the sentence told
+    the reader to read the agreement again, and there is no longer an
+    agreement on this screen to read.
+
+    What replaced it is not here: it is the workshop at the foot of the
+    section, and it is there rather than here because it is answered from
+    memory. See src/lib/verification/data/actor-workshop.ts. */}
+
+{/* Author note — "Adapt to miri treaty": the interactive's sample policy is
+    to be adapted to the MIRI pause treaty (arXiv:2511.10783); and "Actor
+    Taxonomy question public vs. priv" marks the section below. The outline
+    carries this section twice (a revision artifact); one copy renders. */}
+
+This module will give you the context, mindsets, and tools to ground verification analysis in the actors at play.
+
+Suppose the United States and China sign an agreement tomorrow: no training runs above some compute threshold for three months. Now ask a simple question. Who, exactly, has to change their behavior on Wednesday morning?
+
+Not the people who signed. Governments do not train frontier models. They do not own the data centers, fabricate the chips, or operate the clouds. The activity the agreement is about happens inside companies: labs in San Francisco and Hangzhou, fabs in Taiwan, a lithography firm in a small Dutch town, cloud regions scattered across the planet.
+
+So we need a map of who is actually in the game. In this map, we will describe where each actor sits, what they hold, and what they want, aiming to get to what they are willing to do to get it.
+
+Below, we have some basic incentive vocabulary for your reference.
+
+Table 1.  The incentive vocabulary
+
+| Posture | What it means | A concrete face |
+| --- | --- | --- |
+| Comply | Follow the agreement as written. | A lab that reports its large training runs accurately and on time. |
+| Defect | Covertly violate for advantage. | A state running a hidden cluster while its diplomats reaffirm the pause. |
+| Hide | Obscure assets or activities from view, whether or not any rule is being broken. | A firm treating its chip inventory as a trade secret. |
+| Exaggerate | Overstate compliance, safety, or capability. | Safety-washing by a lab; capability bluffing by a state. |
+| Free-ride | Enjoy the stability produced by others’ restraint without bearing its costs. | A state that signs nothing and benefits anyway. |
+
+Keep in mind that these are postures, not fixed personality types. The same actor can comply on one obligation, hide on another, and free-ride on a third, all in the same quarter. The interesting question is never “is this actor good.” It is “what does this actor do under this rule, at this moment, given what it costs.” That cost framework will be recurring throughout the course and policy frameworks, so it’s important to internalize an understanding and instinct for it.
+
+Let’s start with nation-states, since they are the ones that sign. A state matters to verification roughly in proportion to what passes through its territory and its law. Six states cover most of the compute supply chain that 1.2.1 maps.
+
+Table 2.  States, by position on the compute supply chain
+
+| State | What runs through it | What that buys a verifier | Standing worry |
+| --- | --- | --- | --- |
+| United States | Chip design (NVIDIA, AMD), the largest frontier labs and cloud providers, and export-control law. | It can see and squeeze more of the chain than anyone. Its export rules are the closest thing to a working compute-control regime today. | Losing its lead; verification machinery being turned on its own firms. |
+| China | The other frontier developer. Manufacturing scale, rare earths and materials, its own designers, clouds, and labs. | No agreement is meaningful without it, and it controls inputs the rest of the chain needs. | Reads on-chip controls and inspections as surveillance and containment. |
+| Taiwan | TSMC, which fabricates the overwhelming share of leading-edge AI chips. | The single tightest physical chokepoint in the system. | Being both the prize and the battlefield in a conflict it does not control. |
+| Netherlands | ASML, the world’s only maker of EUV lithography machines. | One company in one country: one of the strongest levers anywhere in the system. | A small state carrying outsized geopolitical weight. |
+| Japan | Semiconductor equipment (Tokyo Electron) and specialty materials. | Several quieter chokepoints in equipment and chemistry. | Pressure from both sides of the US-China rivalry. |
+| South Korea | Samsung and SK Hynix, the largest memory makers, including high-bandwidth memory (HBM). | HBM is scarce and essential to frontier training: a countable, checkable input. | Export exposure to China against alliance pressure from the US. |
+
+It’s also important to name the European Union. Even though as a whole, the EU isn’t a hub for silicon, it matters as a rule-writer. The EU AI Act carries the 10^25 FLOP presumption of systemic risk, the most cited compute threshold in force anywhere, and rules written in Brussels have a habit of being copied elsewhere.
+
+Now, the next level.
+
+<PageBreak title="Institutions below, inside, and above the state" />
+
+## Below the state
+
+Subnational governments regulate too, and this is often easier and/or happens earlier than federal regulation. California is this course’s running example because most frontier labs are physically headquartered there, and jurisdiction follows geography.
+
+In September 2025 California enacted SB 53, the Transparency in Frontier Artificial Intelligence Act, with its main duties taking effect in January 2026. Two thresholds decide who it reaches. A **frontier model** is one trained on more than 10^26 operations, and anyone who trains one is a **frontier developer**; a **large frontier developer** is a frontier developer whose annual gross revenues, with affiliates, exceed $500 million.<Footnote>Nobody publishes a list of who that is. Coverage turns on the compute number, and the compute number is one only the developer measures: as of early 2026 the [SB 53 reference](https://sb53.info/faq) records that just two developers are publicly known to have trained above the threshold, OpenAI and xAI, while METR’s [guide for lab staff](https://metr.org/notes/2026-01-29-frontier-ai-safety-regulations/) names OpenAI, Google, Anthropic and xAI as examples of who these laws govern rather than as a roster. Hold on to that: it is a rule whose scope is set by a quantity the regulated party alone can count.</Footnote>
+
+Every frontier developer must publish a transparency report when it deploys a new frontier model, report critical safety incidents to the state’s Office of Emergency Services within fifteen days — twenty-four hours if there is imminent risk of death or serious physical injury — and tell its employees they have whistleblower rights. Large frontier developers carry more on top: a published framework describing how they identify and mitigate catastrophic risks, fuller transparency reports, and an internal channel for anonymous reports.
+
+Notice what happened there. A state legislature bound the world’s leading labs to reporting duties before any international mechanism existed. When you design a regime later in this course, remember that some of its machinery may already exist two levels below the treaty. Often, it might be easier to pass state level legislation before federal legislation follows.
+
+### Inside the state
+
+“The United States wants X” obfuscates that a state is a bundle of institutions with different jobs and different incentives, and these groups have core differences on AI verification.
+
+Table 3.  Inside one signatory: the United States
+
+| Institution | Job in a verification regime | Incentive to watch |
+| --- | --- | --- |
+| State Department | Negotiates the agreement and runs the diplomacy around compliance disputes. | Wants a deal that survives politics; may trade verification strictness for signatures. |
+| Commerce Department (Bureau of Industry and Security) | Writes and enforces export controls on chips: the de facto compute-governance agency today. | Enforcement capacity is small relative to the job, and the rules shift with each administration. |
+| Department of War | Strategic and military stakes in frontier AI. | Wants American capability unconstrained; wary of any regime that could bind its own programs. |
+| Intelligence community (CIA, NSA, and the rest) | Monitoring and attribution: the “national technical means” layer that spots hidden data centers and procurement networks. | What it knows is classified. Turning intelligence into shareable treaty evidence risks burning sources. |
+| NIST and its Center for AI Standards and Innovation (CAISI) | Standards and testing. Runs pre-deployment evaluation agreements with several frontier developers. | Voluntary agreements, not inspection authority; renamed and refocused as the politics changed. |
+
+Same government, five postures. When a proposal says “the US will verify,” your first question should be: which building?
+
+### Above the state
+
+Is there a WHO for AI? An IAEA? As of mid-2026, there are some authorities but they don’t have a lot of real power or mechanisms to detect cheating. The UN has stood up the Independent International Scientific Panel on AI, forty scientists modeled on the IPCC and co-chaired by Yoshua Bengio and Maria Ressa, whose reports feed a new Global Dialogue on AI Governance that met for the first time in Geneva in July 2026. While this helps build a shared scientific picture of risk, it does not fix the verification function. No agency holds a chip registry. No inspector has challenge-inspection rights at a data center. No treaty gives anyone the authority over compute that the IAEA has held over fissile material since the 1970s. The institutional shelf marked “AI verification body” is empty. Some of the people reading this will help build what goes on it.
+
+<PageBreak title="Private actors along the supply chain" />
+
+## Private actors: reading the chain from top to bottom
+
+Now the companies. The useful way to hold them in your head is not alphabetical but positional: upstream to downstream, the same axis as the map in 1.2.1. Read the table from top to bottom and watch two numbers change as you go: how many actors exist at each stage, and how much each one can see.
+
+Table 4.  Private actors, upstream to downstream
+
+| Stage | Who (examples) | What they hold that a verifier needs | Default posture |
+| --- | --- | --- | --- |
+| Equipment | ASML (EUV lithography); Applied Materials, Tokyo Electron. | The machines without which no leading-edge chip exists, and knowledge of every fab that buys one. | Comply. Few customers, total visibility, nowhere to hide. |
+| Fabrication and memory | TSMC, Samsung, SK Hynix, Intel. | The physical record: what was made, how many, and for whom. | Comply, while caught between US rules and Chinese customers. |
+| Chip design | NVIDIA, AMD; Huawei and other Chinese designers. | The blueprint: whether chips ship with attestation, metering, or location features at all. | Comply with controls while lobbying hard against them. Verification features cost money and sales. |
+| Packaging, assembly, test | Advanced-packaging lines (TSMC’s CoWoS and rivals); outsourced assembly-and-test firms. | Advanced packaging is a second, quieter bottleneck: chips pass through it and can be counted. Ordinary assembly and test is not — it is labor-intensive and has the lowest barriers to entry of any stage. | Mostly invisible in policy debates, which is itself a gap. |
+| Cloud providers | AWS, Microsoft Azure, Google Cloud, Oracle, Alibaba; specialists like CoreWeave. | The position between customer and machine: logs, billing, telemetry, and the power to interrupt a job. | Comply and hide at once. Natural monitors, reluctant police. |
+| Frontier labs | OpenAI, Anthropic, Google DeepMind, Meta, xAI; DeepSeek, Alibaba, and Moonshot in China. | The most detailed private information in the system: what was trained, on what data, and what the evals showed. | Every posture, potentially. |
+| Deployers | Everyone building products on top of models. | A diffuse downstream signal of what models can actually do. | Free-ride. They benefit from safety and bear none of its costs. |
+| Proxies and contractors | Shell companies, resellers, straw buyers, intermediaries. | Nothing legitimate. They exist to break the link between a name and an activity. | The standing channel through which evasion flows. |
+
+Take two things from this table.
+
+Counts:
+
+- One EUV maker.
+- A handful of leading-edge fabs.
+- A few consequential chip designers.
+- Five or six hyperscale clouds.
+- A few dozen labs that matter.
+- Millions of deployers.
+- The chain narrows to almost nothing at the top and fans out to everything at the bottom. Verification has something to grab exactly where the count is small, which is why so many of the mechanisms in Module 2 bite upstream. Hold that thought; section 1.3 develops it properly.
+
+Second, look at the labs’ row: A frontier lab can comply, publishing a safety framework and reporting under SB 53. It can hide, treating training details as trade secrets. It can exaggerate, describing its own precautions in the most flattering light, which is what critics call safety-washing. And it can free-ride on rivals’ restraint. Your job in verification is to price these different behaviors and balance their relevant incentives.
+
+<PageBreak title="Functional roles" />
+
+## Functional roles: the second lens
+
+Public versus private tells you what an actor is, but not what an actor does for you, or to you, when you are trying to verify an agreement. Here, it can be helpful to ask what function the actor performs.
+
+Table 5.  Six functional roles
+
+| Role | The question it answers | Examples |
+| --- | --- | --- |
+| Capability holder | Who can actually build the dangerous thing? | Frontier labs; any state with a national program. |
+| Chokepoint controller | Who can physically stop or slow the flow? | ASML, TSMC, cloud providers; BIS with its export licenses. |
+| Information holder | Who already knows what verifiers need to learn? | Clouds (logs and billing), labs (evals), fabs (shipments), intelligence agencies. |
+| Enforcement authority | Who can impose a real cost for violating? | Regulators, customs services, courts, sanctioning states, a future treaty body. |
+| Evasion pathway | Through whom would a cheater route? | Proxies, resellers, smuggling networks, non-signatory jurisdictions, complicit contractors. |
+| Victim, free-rider, beneficiary | Who bears the risk, or enjoys the stability, without a seat at the table? | Everyone downstream of the frontier; small states; the public. |
+
+The crucial property of this second lens is that it cuts across the first. Any actor can hold several roles at once, and almost every important actor does.
+
+Try it on a cloud provider.
+
+- Chokepoint controller: it can suspend a customer’s access this afternoon.
+- Information holder: its logs and billing records are the richest picture anywhere of who is computing what.
+- Enforcement authority: give it know-your-customer duties and it becomes the regime’s front-line cop.
+- Evasion pathway: its reseller chains and mislabeled workloads are precisely how a determined actor reaches compute it should not have.
+
+Which role dominates depends entirely on what the regime asks of it and what compliance costs.
+
+Or try Taiwan. A chokepoint controller of the first rank, and simultaneously the actor with the most to lose if the chokepoint ever becomes a target. An actor’s roles can pull against each other, and when they do, its incentives tell you which one wins.
+
+<PageBreak title="Use the actor map" />
+
+## How to use this section
+
+You now have three questions to ask of any actor you meet in a proposal, a news story, or an exercise, for the rest of this course. Where does it sit on the chain? That is position: Table 4. What can it do inside a regime? That is roles: Table 5. What does it want right now? That is posture: Table 1. Ask them in that order and most verification claims come apart usefully in your hands. “The cloud providers will report suspicious training runs” stops being a reassuring sentence and becomes three checkable ones: they sit mid-chain where visibility is high; they hold the logs; and they will report exactly to the degree that reporting costs less than not reporting.
+
+{/* The three tasks that were bullets here are now the workshop's last step.
+    They are unchanged, and they moved for one reason: in the body they stood
+    directly over `actor-map`, a widget you look things up in and cannot
+    answer into. Nothing replaced them in the prose, because the sentence
+    above already sets them up and a second "try it" line would be the same
+    instruction twice. */}
+
+<PageBreak title="The Actor Map Workshop" />
+
+## The Actor Map Workshop (18–22 min)
+
+{/* Last in the section and closed-book, which is the whole design: it opens
+    with the cast on screen, you close it with a button, and every step after
+    that is answered from memory. Karpicke & Blunt are why — see the data
+    file's header. It is the section's work, so it is not in a Fold.
+
+    THE TIME IS MEASURED, NOT ROUNDED, because people budget by this number.
+    Four steps: study the roster (~530 words studied to remember), free
+    recall and its key, one committed question, seventeen placements and
+    their reveal. The workshop's second half — drawing the edges and reading
+    what the board says — is 1.2.2, on the course owner's instruction that
+    1.2 cannot exceed forty minutes against a measured seventy-seven. */}
+
+<VerificationExercise id="actor-workshop" />
+
+### Notes and sources
+
+{/* Kept after the opening interactive stood down: 1.1 dissects this draft and
+    1.2 is written about its cast, so it belongs in this lesson's Works cited
+    whether or not a widget on the page reproduces it. */}
+The draft agreement this section reads its cast out of: Scher, Abecassis, Barnett & Abeyta, [“An International Agreement to Prevent the Premature Creation of Artificial Superintelligence”](https://arxiv.org/abs/2511.10783) (2025), Appendix A — the treaty 1.1 dissects.
+
+[California SB 53](https://leginfo.legislature.ca.gov/faces/billTextClient.xhtml?bill_id=202520260SB53), the Transparency in Frontier Artificial Intelligence Act, signed September 29, 2025; core duties effective January 1, 2026 ([Future of Privacy Forum](https://fpf.org/blog/californias-sb-53-the-first-frontier-ai-law-explained/) and [White & Case](https://www.whitecase.com/insight-alert/california-enacts-landmark-ai-transparency-law-transparency-frontier-artificial) summaries).
+
+[EU AI Act, Article 51](https://artificialintelligenceact.eu/article/51/): presumption of systemic risk above 10^25 training FLOP.
+
+[UN Independent International Scientific Panel on AI](https://www.un.org/independent-international-scientific-panel-ai/en) (est. 2025; first meeting March 2026); [Global Dialogue on AI Governance](https://news.un.org/en/story/2026/07/1167873), Geneva, July 2026.
+
+[NIST Center for AI Standards and Innovation (CAISI)](https://www.nist.gov/caisi), formerly the US AI Safety Institute; pre-deployment testing agreements with frontier developers.
+
+Supply-chain structure: Sastry, Heim, Belfield et al., [“Computing Power and the Governance of Artificial Intelligence”](https://arxiv.org/abs/2402.08797) (2024) — ASML at 100% of EUV lithography, TSMC at ~90% of sub-7nm logic (2022 data), and “several critical steps … have fewer than three suppliers”; CSET, [“The Semiconductor Supply Chain”](https://cset.georgetown.edu/publication/the-semiconductor-supply-chain/) (2021) — the stage-by-stage picture, including that assembly and test has the lowest barriers to entry. High-bandwidth memory is inside the export-control perimeter: the US controls were “expanded again, this time affecting all chips using advanced high-bandwidth memory” — Fist, Burga & Chilukuri, [“Technology to Secure the AI Chip Supply Chain”](https://www.cnas.org/publications/reports/technology-to-secure-the-ai-chip-supply-chain-a-primer) (CNAS, 2024). Incentive vocabulary and role taxonomy: this module’s introduction.
+
+**Currency.** The concentration figures above are 2021–2023 data reported in 2021 and 2024 sources. Shares move; the structure — one EUV maker, one dominant leading-edge fab, a handful of clouds — has not. Re-verify a number before quoting it.
+
+{/* Author notes from the outline, kept out of the render:
+    - Actor map: ported into this lesson as a native widget.
+    - Interactive supply-chain map: ported — the 1.2.1 lesson.
+    - Veronica's note: maybe feed https://chipexplorer.eto.tech/ to Claude
+      re the supply-chain map; also https://epoch.ai/latest/introducing-the-ai-chip-components-explorer — pls see.
+    - Source candidates for this section:
+      https://cset.georgetown.edu/publication/the-semiconductor-supply-chain
+      https://cset.georgetown.edu/publication/ai-chips-what-they-are-and-why-they-matter
+      https://cset.georgetown.edu/publication/maintaining-the-ai-chip-competitive-advantage-of-the-united-states-and-its-allies/
+      https://www.oecd.org/content/dam/oecd/en/publications/reports/2025/06/mapping-the-semiconductor-value-chain_5ba52971/4154cdbf-en.pdf
+      https://www.cnas.org/publications/reports/technology-to-secure-the-ai-chip-supply-chain-a-primer
+      (hardware-enabled mechanisms, traceability and remote verification,
+      incl. trusted components and attestation-like approaches) */}
+
+{/* THE DRILL BENCH WAS HERE AND IS GONE, on the course owner's instruction
+    (2026-08-18) — removed rather than moved to 1.3, which was the alternative
+    put to her. It was three decks and nineteen steps, about nine minutes, in
+    a lesson that had to come down from seventy-seven to under forty.
+
+    WHAT THAT LEAVES OPEN, so nobody has to rediscover it from the diff:
+    `drills-foundations` (foundations 9 steps, actors 6, spine 4) is authored
+    content and its data is still in the repo at
+    src/lib/verification/data/drills-foundations.ts. It now has no placement
+    anywhere in the track. CLAUDE.md's rule for content in that state is that
+    it must be ported or retired deliberately and never left to drift, so this
+    is the note that stops it drifting: it is unplaced by decision, and 1.3 or
+    module 0 are the two homes that would fit if it should come back.
+
+    One consequence worth naming: the actors deck drilled the six functional
+    roles, and the workshop's Categorize step — which also drilled them — came
+    out in the same pass. Table 5 is still read, but nothing in 1.2 practises
+    it now. */}

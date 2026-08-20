@@ -1,6 +1,7 @@
 /**
  * Convert every arXiv paper the content references — <ArxivPaper id="..."/>
- * embeds in lessons AND Paper sources in src/content/papers.data.ts — into
+ * and <ArxivSection id="..."/> embeds in lessons, plus Paper sources in
+ * src/content/papers.data.ts — into
  * committed artifacts the site reads at runtime:
  *
  *   src/content/arxiv/{id}.json     PaperArtifact (rendered HTML + toc, or a
@@ -39,7 +40,7 @@ import { parseArxivId } from "../src/lib/arxiv/id";
 import { getOrConvertPaperUncached } from "../src/lib/arxiv/pipeline";
 import { getAsset } from "../src/lib/arxiv/store";
 import type { PaperArtifact, PaperTocEntry } from "../src/lib/arxiv/types";
-import { buildBlockIndex, type BlockInfo } from "../src/lib/papers/block-index";
+import { buildBlockIndex } from "../src/lib/papers/block-index";
 import { anchorNum } from "../src/lib/papers/anchors";
 import { subtreeEndIndex } from "../src/lib/papers/split-paper";
 
@@ -49,10 +50,13 @@ const ASSETS_ROOT = join(process.cwd(), "public", "arxiv");
 
 function idsFromLessons(): string[] {
   const ids = new Set<string>();
-  for (const file of readdirSync(LESSONS_DIR)) {
+  for (const file of readdirSync(LESSONS_DIR, {
+    recursive: true,
+    encoding: "utf8",
+  })) {
     if (!file.endsWith(".mdx")) continue;
     const source = readFileSync(join(LESSONS_DIR, file), "utf8");
-    for (const m of source.matchAll(/<ArxivPaper[^>]*\bid="([^"]+)"/g)) {
+    for (const m of source.matchAll(/<Arxiv(?:Paper|Section)[^>]*\bid="([^"]+)"/g)) {
       ids.add(m[1]);
     }
   }
@@ -253,7 +257,7 @@ async function main(): Promise<void> {
     : [...new Set([...idsFromLessons(), ...idsFromPapers()])].sort();
   if (ids.length === 0) {
     console.log(
-      "No <ArxivPaper/> embeds in src/content/lessons/ and no arXiv sources in src/content/papers.data.ts.",
+      "No <ArxivPaper/> or <ArxivSection/> embeds in src/content/lessons/ and no arXiv sources in src/content/papers.data.ts.",
     );
     return;
   }

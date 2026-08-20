@@ -1,0 +1,41 @@
+{/* Author note — the brief for this section, kept out of the render (outline
+    v40 wraps it "claude don't actually include this is just for you"):
+    Interactive: rank different possible anti-ASI policies (i.e., from a more
+    moderate slowdown to total pause) on inversely correlated axes of
+    effectiveness and feasibility. Goal: develop cost-framework intuition.
+    Justify course framing around a full pause policy because of ASI
+    securitization. */}
+
+You can think about maximizing the positive impact of a policy by evaluating it along two axes: effectiveness and feasibility. Say your goal was to reduce carbon emissions. An immediate global ban on fossil fuel extraction would eradicate emissions overnight, but is all but completely unenforceable. No economy could withstand the shock; no major emitter would comply. On the other hand, voluntary self-reported emission pledges are easy to agree with—but precisely because they are impossible to enforce. Any country and company could happily sign while continuing to emit. In other words, a policy that is effective but unfeasible is bad; a policy that is feasible but ineffective is also bad.
+
+<VerificationExercise id="policy-cost" />
+
+<Fold label="The Limited Test Ban Treaty (1963): verifiability decided what could be banned">
+
+The 1963 treaty banned nuclear tests in the atmosphere, in space, and underwater, but not underground. The reason is pure verification design. Atmospheric tests could be detected worldwide by existing means, monitoring stations picking up radioactive debris and, later, satellites and seismic arrays, without any inspection inside the other country. Underground tests could not be reliably distinguished from earthquakes at the time and would have required on-site inspection the Soviets would not grant. So the treaty covered exactly the environments that national technical means could police and left out the one they could not.
+
+</Fold>
+
+In the following exercise, you will develop intuitions with this effectiveness-feasibility tradeoff framework in the context of ASI development. Should governments agree to a more moderate slow-down or a more drastic pause? Should you compromise ambition or real-world enforceability?
+
+Sort the following policy buckets on the feasibility x effectiveness matrix.
+
+<VerificationExercise id="policy-scoping" />
+
+**Design for the hardest case.** Verification strong enough to support a full pause — chip registries, compute metering, inspection rights — supports every weaker bucket for free. The reverse is not true. That is why this track studies verification against the pause, even if what gets signed first is transparency.
+
+{/* Verification log, kept out of the render:
+    Conformed to outline v40 (2026-08-18). The eleven bucket descriptions and
+    historical parallels moved out of this body into the policy-scoping
+    widget's card walk (src/lib/verification/data/policy-scoping.ts,
+    transcribed verbatim there); the Limited Test Ban Treaty passage became
+    the expand box the outline marks, replacing the writing-exercise wrapper
+    it briefly wore; the policy-plot embed left with its outline slot; and the
+    earlier reading version of the bucket list (AIGI taxonomy block plus the
+    Options 1–11 sections) was removed as superseded — recoverable from git
+    history, decision recorded in docs/verification/module-1-log.md. The
+    exercise's five-rung axis scales and reference placements are
+    builder-authored apparatus awaiting owner review, logged in the same
+    entry. */}
+
+<MemoDesk lesson="scoping-effective-feasible" />

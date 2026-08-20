@@ -144,4 +144,51 @@ describe("rehypeLessonSections", () => {
     // The id-less element passes through unwrapped.
     expect(tree.children[5].type).toBe("mdxJsxFlowElement");
   });
+
+  it("lists top-level reading cards by their rendered anchor and title", () => {
+    const readingCard = (id: string, title: string): Node => ({
+      type: "mdxJsxFlowElement",
+      ...({ name: "ReadingCard" } as object),
+      ...({
+        attributes: [
+          { type: "mdxJsxAttribute", name: "id", value: id },
+          { type: "mdxJsxAttribute", name: "title", value: title },
+        ],
+      } as object),
+    });
+    const { tree, sections } = run([
+      h("h2", "readings", text("Readings")),
+      readingCard("cloud-rand", "Where thresholds fail"),
+      readingCard("cloud-carnegie", "What a workable control has to decide"),
+    ]);
+
+    expect(sections).toEqual([
+      { id: "readings", title: "Readings", level: 2 },
+      { id: "reading-cloud-rand", title: "Where thresholds fail", level: 3 },
+      {
+        id: "reading-cloud-carnegie",
+        title: "What a workable control has to decide",
+        level: 3,
+      },
+    ]);
+    expect(tree.children[2]).toMatchObject({
+      type: "mdxJsxFlowElement",
+      name: "ReadingCard",
+    });
+  });
+
+  it("skips reading cards without static ids or titles", () => {
+    const { sections } = run([
+      {
+        type: "mdxJsxFlowElement",
+        ...({
+          name: "ReadingCard",
+          attributes: [
+            { type: "mdxJsxAttribute", name: "id", value: "no-title" },
+          ],
+        } as object),
+      },
+    ]);
+    expect(sections).toEqual([]);
+  });
 });

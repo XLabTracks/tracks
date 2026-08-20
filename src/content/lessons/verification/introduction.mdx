@@ -1,0 +1,202 @@
+Module 0—this module—establishes the motivations for why verification is important to the safe development of advanced AI. You will begin to develop intuitions as to what a realistic overarching regime might look like and where AI verification converges with and diverges from history.
+
+<Objectives scope="this module">
+- Explain why ASI development constitutes an existential risk, why it produces arms-race incentives that individual state preferences cannot overcome, and why only a robust verification regime materially mitigates ASI risk.
+- Explain why successful prevention is invisible, and why that makes the risk psychologically easy to dismiss.
+- Discern what makes a good, workable theory of change.
+- Interrogate a concrete verification proposal and identify its general strengths, failure modes, and assumptions it depends on—then form a coherent, defendable position on it.
+- Reconstruct the causal logic of a historical verification regime and determine which parts of that logic can and cannot be transferred to AI treaty verification.
+</Objectives>
+
+<Video src="https://www.youtube.com/watch?v=qe9QSCF-d88" title="The Catastrophic Risks of AI — and a Safer Path | Yoshua Bengio | TED" />
+
+<Fold label="Optional material">
+
+The case at full strength, from the people who argue it most directly. Any one of these:
+
+- [AI Is Grown, Not Built](https://www.theatlantic.com/technology/2025/09/if-anyone-builds-it-excerpt/684213/) — Eliezer Yudkowsky & Nate Soares, The Atlantic, September 2025. An edited excerpt of chapter 2 of *If Anyone Builds It, Everyone Dies*.
+- [Four Background Claims](https://intelligence.org/2015/07/24/four-background-claims/) — Nate Soares, MIRI, 2015. The assumptions doing the work beneath the argument.
+
+</Fold>
+
+<Exercise id="v-task-introduction-1" />
+
+## The Danger of ASI
+
+What exactly do we mean when we refer to “advanced AI” or ASI (artificial superintelligence)? We need to first understand the specific harms, capabilities, and risks of AI that a hypothetical treaty aims to prevent.
+
+{/* Provenance: the incidents and their source links in this section are
+    transcribed from the author's outline verbatim. Their bibliographic facts
+    are not independently verified here, so each cited URL sits in
+    citations.json `pending` rather than carrying a guessed Works-cited entry. */}
+
+{/* Heading hierarchy is the author's, stated 2026-08-11: "The Danger of
+    ASI" and "Preventing ASI via International and Verifiable Agreements"
+    are this lesson's only h2s; everything else — Real-World Harm, What is
+    ASI?, Why international governance?, Cooperation without trust, What has
+    AI verification looked like so far? — is an h3 under one of them, and
+    must visibly read as a subheading (the body-face h3 style). Page boundaries
+    are authored independently below: the hierarchy should not change merely
+    to manipulate pagination. */}
+
+### Real-World Harm: Dual-Use Capabilities
+
+Some of the most concerning capabilities of AI have come to light with recent reports of frontier models escaping testing environments to hack into organizational infrastructure.
+
+In April 2026, Anthropic reported that Claude Mythos Preview identified [thousands of previously unknown zero-day vulnerabilities](https://www.anthropic.com/project/glasswing/), including critical flaws in every major operating system and web browser.
+
+This work was conducted for defensive purposes. But the underlying capability is dual-use: a system that can find unknown vulnerabilities for defenders to protect against could do the same for an attacker. Imagine what Mythos-level capabilities could accomplish if a model were instructed to cause harm — or simply discovered that harmful actions helped it achieve some other objective.
+
+In fact, we no longer have to imagine this. Models have already caused real-world harm while pursuing objectives that were not themselves malicious.
+
+During an OpenAI cybersecurity test, a group of agents — which weren’t supposed to have Internet access — coordinated to successfully escape their testing environment and hack into Hugging Face’s infrastructure. Over [a 4.5-day campaign](https://huggingface.co/blog/agent-intrusion-technical-timeline), the agents executed over 17,600 actions, compromised several layers of infrastructure, obtained illicit administrator access, and attempted to reach Hugging Face’s source-code supply chain. They did this to steal existing benchmark solutions rather than complete the assigned problems legitimately.
+
+OpenAI was not alone. [Anthropic later disclosed that Claude models similarly gained unauthorized access to three real organizations](https://www.anthropic.com/news/investigating-incidents-cybersecurity-evals). You can find other exploitation incidents involving model testing in [FelonyBench](https://www.felonybench.com/).
+
+If models have already exhibited capabilities to deceive, exploit, and break into organizations even in seemingly controlled testing environments, imagine the damage a motivated adversary could wreak. The foundational systems that keep society and the economy afloat, from banking infrastructure to government portals, could collapse.
+
+Such software exploitation is just one recent dangerous phenomenon. New and unprecedented risks will continually come to light.
+
+<Fold label="Misuse vs. misalignment — categorizing AI risk">
+
+Misuse is harm caused by people using advanced AI systems for dangerous purposes.
+
+- **Cyber operations.** AI could make it much easier to find vulnerabilities, develop exploits, conduct intrusions, and attack digital infrastructure at scale.
+- **Biological and chemical weapons.** Advanced models could help users design pathogens, toxins, or chemical agents and work through practical obstacles in developing them.
+- **Military and strategic advantage.** A state or company with a large lead in advanced AI could use it to accelerate weapons development, intelligence, surveillance, and other strategically important research.
+- **Influence and control.** AI could enable highly personalized propaganda, persuasion, and surveillance across large populations, strengthening the ability of governments or other actors to manipulate public behavior.
+
+Misalignment is harm that arises when an AI system develops or pursues objectives that conflict with what its operators intended.
+
+- **Pursuing the wrong objective.** A highly capable system may find strategies that satisfy its learned objective while violating the goals its operators actually care about. In experiments, models have already shown [deceptive behavior to preserve learned preferences](https://arxiv.org/abs/2412.14093) and [scheming to evade oversight](https://arxiv.org/abs/2412.04984).
+- **Resisting correction.** If being modified, shut down, or replaced would interfere with its objective, a sufficiently capable system may try to conceal its behavior or prevent human intervention.
+- **Self-improvement can magnify the problem.** If advanced systems help build more capable successors, errors in goals or control could carry forward as capabilities increase, leaving humans less time to detect and correct them.
+
+</Fold>
+
+<PageBreak title="What is ASI?" />
+
+### What is ASI?
+
+So, how should we delineate dangerous from safe models? Is this categorization even possible, given the nature of dual-use capabilities?
+
+Because we cannot separate dangerous capabilities from beneficial ones, we will use general capability as a proxy for classifying the possible danger a model can cause. Frontier labs and their executives have named AI systems with sufficiently advanced capabilities “artificial general intelligence,” or AGI: highly autonomous systems that can match or outperform humans at most tasks. Beyond AGI is artificial superintelligence, or ASI, a system that massively outperforms humans at virtually every measurable task.
+
+A key property of ASI would be recursive self-improvement, or RSI. A model capable of RSI would be able to autonomously and exponentially improve itself, leading to unstoppable, runaway systems that humans can no longer control. Throughout this course, we will use the term ASI to refer to AI with dangerous capabilities that pose a material existential threat to humanity.
+
+<Fold label="Optional — the types of AI">
+
+Where does today's AI sit? Each ring contains the next; a system sits at the deepest ring it belongs to. Tap any example to see what it is and why it lands where it does.
+
+<VerificationExercise id="types-of-ai" />
+
+</Fold>
+
+Even the people in charge of developing superintelligence, who have the most incentive to obfuscate dangerous capabilities, have expressed public concerns over the catastrophic risks arising from their technology.
+
+Hear what the top AI figures have to say:
+
+<VerificationExercise id="what-do-they-say" />
+
+Most notably, over 1,300 employees of frontier AI companies have signed a public [statement](https://www.pacingthefrontier.com/) to “request that the U.S. government support an international effort to develop the technical and governance tools needed to deliberately pace the frontier of automated AI development.”
+
+{/* Pacing the Frontier (pacingthefrontier.com) is an open letter published for
+    circulation, with each signatory's comment printed under their name. The
+    four below are reproduced whole, attributed, and linked back. Verification
+    log: the site posts no reuse terms of its own — status `unchecked` — so
+    these are quoted as public statements by named signatories, which is the
+    narrowest reading. Do not extend this to reproducing the signatory list or
+    the comment wall wholesale.
+
+    Two comments on the page are truncated behind "Show more" (Dawn Song's and
+    Stephanie Chan's) and are deliberately not used: a partial quotation is not
+    a quotation. Portrait provenance is
+    public/verification/assets/pacing-the-frontier/SOURCES.md. */}
+
+Four of them, on why they signed:
+
+<SignatoryQuotes
+  t="Pacing the Frontier"
+  url="https://www.pacingthefrontier.com/"
+  what="signatory comments"
+  credit="Portrait of Ilya Sutskever: Wikimedia Commons (CC BY / CC BY-SA)"
+  creditHref="https://commons.wikimedia.org/wiki/Special:FilePath/Ilya_Sutskever_and_Sam_Altman_in_TAU_(cropped).jpg"
+  creditNote="Portraits of John Schulman, Jasjeet Sekhon and Micah Carroll: their own websites."
+>
+
+<Signatory name="Ilya Sutskever" role="CEO, Safe Superintelligence Inc." initials="IS" photo="/verification/assets/what-do-they-say/sutskever.jpg">
+
+Future AI will be extraordinarily powerful compared to anything that exists today, and dealing with this future power will require unprecedented measures, such as the ones described here. The problem statement is real.
+
+This works only if it is done internationally, and it has to be done well: a bad implementation can make things worse.
+
+</Signatory>
+
+<Signatory name="Jasjeet Sekhon" role="Chief Strategy Officer, Google DeepMind" initials="JS" photo="/verification/assets/pacing-the-frontier/sekhon.jpg">
+
+We have found a way to turn energy into compute, and compute into intelligence. The benefits will be enormous, from curing diseases to understanding the cosmos. We can capture the benefits of the coming intelligence explosion while managing its risks, but only if we build the tools to pace the frontier of the riskiest capabilities before we need them, so we protect people and keep the social trust that innovation depends on. I believe smart technical and governance tools will be needed to sustain rapid innovation, vigorous competition, and robust safety.
+
+</Signatory>
+
+<Signatory name="John Schulman" role="Chief Scientist, Thinking Machines" initials="JS" photo="/verification/assets/pacing-the-frontier/schulman.jpg">
+
+Signed because this statement helps establish common knowledge about the possible need for coordination mechanisms as automated AI research accelerates progress. I’d also like to see labs start designing these mechanisms voluntarily, even before the USG gets involved.
+
+</Signatory>
+
+<Signatory name="Micah Carroll" role="Misalignment Preparedness, OpenAI" initials="MC" photo="/verification/assets/pacing-the-frontier/carroll.jpg">
+
+At the current pace, every couple of weeks there will be new models which significantly increase the consequences of model misuse and misalignment. I worry that efforts to mitigate these risks may fail to keep up with the pace of development, and that margins for error will become increasingly small under international competitive pressures. In the near future, we may urgently want to enact an internationally coordinated slowdown, or an indefinite ban on AI development. Attempting to build the trust and infrastructure for taking such actions on short notice seems simply prudent – why would we not at least try to have this option? I fear that in an international race to the bottom of AI development, it is likely that no nation will win, and we will all lose together.
+
+</Signatory>
+
+</SignatoryQuotes>
+
+It’s clear that ASI is no longer a hypothetical risk. It will require deliberate and proactive action by labs and governments alike to avoid.
+
+<Fold label="Optional — A Short History of AI Acceleration">
+
+How fast is fast? Two charts from Our World in Data's [brief history of artificial intelligence](https://ourworldindata.org/brief-history-of-ai) show the pace.
+
+<VerificationExercise id="short-history" />
+
+</Fold>
+
+<PageBreak title="Why verification enters the picture" />
+
+## Preventing ASI via International and Verifiable Agreements
+
+We’ve established that ASI poses a material existential threat to humanity, with increasingly concerning real-world examples. How could an international agreement prevent the development of ASI from occurring, and how does verification fit into this solution?
+
+### Why international governance?
+
+The consequences of advanced AI will not remain within the borders of the country in which a model is developed. AI systems can operate through networks anywhere in the world. Their hardware supply chains cross many jurisdictions. Cyberattacks can reach foreign infrastructure in seconds. Biological misuse, military applications, and failures involving highly autonomous systems could affect people far beyond the state in which they originate. Advanced AI is also becoming increasingly important to national security and international power.
+
+Domestic policy, while essential, therefore cannot answer every important question. A country cannot control or even fully determine what another develops, deploys, or conceals.
+
+### Cooperation without trust
+
+The United States and China each have reasons to worry that an agreement could constrain its own development while leaving the other side free to advance. But some of history’s most consequential international institutions were created precisely because states remained competitors — the U.S. and Soviet Union successfully averted nuclear war, despite being staunch political enemies. But in this state of competition and distrust, how do rivals enforce such agreements?
+
+<VerificationExercise id="verification-problem" />
+
+In short, verification is the set of mechanisms that makes inter-party agreements credible, without needing states to trust each other or resolve political disagreements.
+
+### What has AI verification looked like so far?
+
+If ASI risk warrants an international agreement, and agreements are only credible with verification, then AI verification should be a mature, well-resourced field.
+
+It is not.
+
+Nuclear arms control took decades to build its verification apparatus: seismic monitoring networks, satellite imagery analysis, the IAEA inspectorate, and a deep bench of people who spent careers on the problem. AI verification has almost none of this yet. Policy for existentially important initiatives like the prevention of ASI development needs enforceability more than any other.
+
+- **The field is new.** There is little canonical literature, no standard textbook, and not much settled vocabulary. Much of what exists is scattered across preprints, policy memos, and blog posts.
+- **Expertise is scarce**, in political spaces and even in technical ones. Few policymakers understand what is measurable about AI development, and few AI researchers understand what treaties need from a measurement.
+- **Technical AI safety research overwhelmingly favors alignment and evaluations over verification mechanisms.** Important work, but it answers a different question: not “is this model safe?” but “can one party prove to another what it is and isn’t doing?”
+- **Governments have not yet invested seriously** in verification research, infrastructure, or personnel, even as they negotiate over AI.
+
+The field is young enough that the people learning it now will be the ones who build it.
+
+Here’s a map of what people are doing already. As you explore, start thinking: where could you be best positioned to contribute?
+
+<VerificationExercise id="verification-landscape" />

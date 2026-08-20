@@ -1,3 +1,4 @@
+import { verificationExercises } from "@/content/verification/exercises";
 import type { Exercise } from "@/lib/content/types";
 
 export const exercises: Exercise[] = [
@@ -3207,4 +3208,5 @@ export const exercises: Exercise[] = [
     answer:
       "Inoculation prompting acts through the prompt, and has not overcome apparent-success-seeking in current models. Spillway design instead shapes the pre-RL prior and the associations that reward hacking reinforces.",
   },
+  ...verificationExercises,
 ];

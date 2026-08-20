@@ -1,0 +1,554 @@
+{
+  "_comment": "Hand-authored citation registry for the Works cited appendix. entries: MLA fields plus a hand-written 'about' line per work; the appendix assembles itself from each lesson's links (rehype-lesson-citations) and looks them up here. pending: cited URLs whose bibliographic facts are still being verified -- they render nothing until moved into entries; never promote one unchecked. The collector was widened to read every href/url attribute, not just markdown links, literal anchors and SourceQuote, so works a lesson reaches through a ReadingCard or any other component are cited now too -- 24 of them arrived at once and are parked in pending, each awaiting a person to write its fields. excluded: links that are not works (course tools, shared working documents). citations.test.ts holds all three sets honest.",
+  "entries": {
+    "https://ai-2040.com/supplements/verification-plan": {
+      "title": "Verification Plan",
+      "about": "The AI 2040 scenario's supplement laying out a three-phase technical plan for verifying a US-China slowdown agreement without trust.",
+      "authors": "Dean, Romeo",
+      "container": "AI 2040",
+      "publisher": "AI Futures Project",
+      "date": "2026"
+    },
+    "https://aigi.ox.ac.uk/wp-content/uploads/2025/07/Verification_for_International_AI_Governance.pdf": {
+      "title": "Verification for International AI Governance",
+      "about": "The Oxford Martin 172-page report on which international AI agreements could actually be verified, and with what machinery.",
+      "authors": "Harack, Ben, Robert F. Trager, Anka Reuel, et al.",
+      "publisher": "Oxford Martin AI Governance Initiative",
+      "date": "July 2025",
+      "standalone": true
+    },
+    "https://aigi.ox.ac.uk/wp-content/uploads/2025/08/Survey_on_thresholds_for_advanced_AI_systems_1.pdf": {
+      "title": "Survey on Thresholds for Advanced AI Systems",
+      "about": "An expert survey (N=166) on how governance thresholds for advanced AI — compute, capability, risk — should be set and by whom.",
+      "authors": "Schuett, Jonas, Eunseo Choi, Kasumi Sugimoto, et al.",
+      "publisher": "Oxford Martin AI Governance Initiative",
+      "date": "Aug. 2025",
+      "standalone": true
+    },
+    "https://aiwi.org/ai-whistleblowing-law-best-practice/": {
+      "title": "AI Whistleblowing Law: Best Practice Guide",
+      "about": "Recommendations for AI whistleblower law covering protected disclosures and people, reporting channels, retaliation, remedies, notice, and capable receiving agencies.",
+      "authors": "Ganz, Abra, and Karl Koch",
+      "publisher": "AI Whistleblower Initiative and Center for AI Risk Management & Alignment",
+      "date": "2 July 2026"
+    },
+    "https://aiwi.org/publication-commentary-whistleblower-protections-in-sb-53/": {
+      "title": "Whistleblower Protections in SB 53: Strengths, Limitations, and Open Questions",
+      "about": "An analysis of SB 53's protected people and disclosures, available channels and remedies, and remaining implementation gaps.",
+      "authors": "Ganz, Abra, and Karl Koch",
+      "publisher": "AI Whistleblower Initiative",
+      "date": "2026"
+    },
+    "https://artificialintelligenceact.eu/article/51/": {
+      "title": "Article 51: Classification of General-Purpose AI Models as General-Purpose AI Models with Systemic Risk",
+      "about": "The consolidated text of the AI Act article that presumes systemic risk above 10^25 training FLOP.",
+      "container": "EU Artificial Intelligence Act",
+      "publisher": "artificialintelligenceact.eu"
+    },
+    "https://arxiv.org/abs/2402.08797": {
+      "title": "Computing Power and the Governance of Artificial Intelligence",
+      "about": "The foundational survey of compute as a governance lever — why computing power is detectable, excludable, and quantifiable in ways algorithms and data are not.",
+      "authors": "Sastry, Girish, Lennart Heim, Haydn Belfield, et al.",
+      "container": "arXiv",
+      "date": "Feb. 2024"
+    },
+    "https://arxiv.org/abs/2404.18308": {
+      "title": "Near-Term Enforcement of AI Chip Export Controls Using a Firmware-Based Design for Offline Licensing",
+      "about": "A design for firmware-based offline licensing that would disable AI chips lacking a regulatory license, as a near-term export-control enforcement mechanism.",
+      "authors": "Petrie, James",
+      "container": "arXiv",
+      "date": "Apr. 2024"
+    },
+    "https://arxiv.org/abs/2408.16074": {
+      "title": "Verification Methods for International AI Agreements",
+      "about": "A survey of ten verification techniques for catching violations of international AI agreements, from unauthorized training runs to undeclared data centers.",
+      "authors": "Wasil, Akash R., Tom Reed, Jack William Miller, et al.",
+      "container": "arXiv",
+      "date": "Aug. 2024"
+    },
+    "https://arxiv.org/abs/2505.03742": {
+      "title": "Hardware-Enabled Mechanisms for Verifying Responsible AI Development",
+      "about": "A study of hardware-enabled mechanisms for verifiable reporting of AI training activity — compute usage, cluster configuration, and workload claims.",
+      "authors": "O'Gara, Aidan, Gabriel Kulp, Will Hodgkins, et al.",
+      "container": "arXiv",
+      "date": "Apr. 2025"
+    },
+    "https://arxiv.org/abs/2507.10618": {
+      "title": "Compute Requirements for Algorithmic Innovation in Frontier AI Models",
+      "about": "An analysis of 36 algorithmic innovations asking how much compute it takes to invent frontier-model improvements, and whether compute restrictions would slow them.",
+      "authors": "Barnett, Peter",
+      "container": "arXiv",
+      "date": "July 2025"
+    },
+    "https://arxiv.org/abs/2507.15916": {
+      "title": "Verifying International Agreements on AI: Six Layers of Verification for Rules on Large-Scale AI Development and Deployment",
+      "about": "A six-layer verification framework whose personnel-based layers map which workers can observe different violations and why disclosures still need independent confirmation.",
+      "authors": "Baker, Mauricio, Gabriel Kulp, Oliver Marks, et al.",
+      "container": "arXiv",
+      "date": "July 2025"
+    },
+    "https://arxiv.org/abs/2511.10783": {
+      "title": "An International Agreement to Prevent the Premature Creation of Artificial Superintelligence",
+      "about": "MIRI's draft international agreement to prevent the premature creation of artificial superintelligence, the treaty text several lessons read against.",
+      "authors": "Scher, Aaron, David Abecassis, Peter Barnett, et al.",
+      "container": "arXiv",
+      "date": "Nov. 2025"
+    },
+    "https://arxiv.org/abs/2606.19262": {
+      "title": "Detecting Hidden ML Training With Zero-Overhead Telemetry",
+      "about": "A study classifying GPU workloads from privacy-preserving telemetry, reporting 98.2 percent accuracy at spotting concealed training runs.",
+      "authors": "Rahman, Robi, and Sabiha Tajdari",
+      "container": "arXiv",
+      "date": "June 2026"
+    },
+    "https://arxiv.org/html/2407.05694v1": {
+      "title": "On the Limitations of Compute Thresholds as a Governance Strategy",
+      "about": "The counterargument on thresholds: why compute cutoffs are a shaky governance proxy, since the compute-risk relationship is uncertain and moving.",
+      "authors": "Hooker, Sara",
+      "container": "arXiv",
+      "date": "July 2024"
+    },
+    "https://arxiv.org/html/2408.16074": {
+      "title": "Verification Methods for International AI Agreements",
+      "about": "Wasil et al. survey verification methods available to an international AI agreement, from national technical means to personnel-based routes.",
+      "authors": "Wasil, Akash R., Tom Reed, Jack William Miller, et al.",
+      "container": "arXiv",
+      "date": "Aug. 2024"
+    },
+    "https://arxiv.org/html/2502.06559v1": {
+      "title": "Can We Trust AI Benchmarks? An Interdisciplinary Review of Current Issues in AI Evaluation",
+      "about": "An interdisciplinary review of ~100 studies cataloguing what goes wrong in AI benchmarking, from dataset bias to data contamination.",
+      "authors": "Eriksson, Maria, Erasmo Purificato, Arman Noroozian, et al.",
+      "container": "arXiv",
+      "date": "Feb. 2025"
+    },
+    "https://arxiv.org/html/2507.15916#A1.SS8": {
+      "title": "Verifying International Agreements on AI — Appendix A.8: Whistleblower Programs",
+      "about": "Baker et al. examine secure contact, suppression, incentives, confidentiality, and which supply-chain personnel can observe different violations.",
+      "authors": "Baker, Mauricio, Gabriel Kulp, Oliver Marks, et al.",
+      "container": "arXiv",
+      "date": "July 2025"
+    },
+    "https://arxiv.org/pdf/2506.15867#page=128": {
+      "title": "Mechanisms to Verify International Agreements About AI Development",
+      "about": "MIRI's mechanism-by-mechanism study of how countries could verify compliance with negotiated AI rules, across three policy scenarios.",
+      "authors": "Scher, Aaron, and Lisa Thiergart",
+      "container": "arXiv",
+      "date": "June 2025"
+    },
+    "https://brilliant.org/wiki/fermi-estimate/": {
+      "title": "Fermi Estimate",
+      "about": "A wiki explainer of Fermi estimation — rough order-of-magnitude reasoning with worked examples.",
+      "container": "Brilliant Math & Science Wiki",
+      "publisher": "Brilliant.org"
+    },
+    "https://cset.georgetown.edu/publication/the-semiconductor-supply-chain/": {
+      "title": "The Semiconductor Supply Chain: Assessing National Competitiveness",
+      "about": "CSET's mapping of the semiconductor supply chain and where national chokepoints sit.",
+      "authors": "Khan, Saif M., Alexander Mann, and Dahlia Peterson",
+      "publisher": "Center for Security and Emerging Technology",
+      "date": "Jan. 2021",
+      "standalone": true
+    },
+    "https://docs.nvidia.com/attestation/quick-start-guide/latest/architecture.html": {
+      "title": "Architecture Overview",
+      "about": "NVIDIA's documentation of its attestation architecture — how clients, cloud services, and GPU hardware form a verifiable chain of trust.",
+      "org": "NVIDIA Corporation",
+      "container": "NVIDIA Attestation Suite Documentation"
+    },
+    "https://doi.org/10.48550/arXiv.2304.04123": {
+      "title": "Nuclear Arms Control Verification and Lessons for AI Treaties",
+      "about": "A case study mining nuclear arms-control verification for lessons about what makes AI treaty verification hard and how to make it easier.",
+      "authors": "Baker, Mauricio",
+      "container": "arXiv",
+      "date": "Apr. 2023"
+    },
+    "https://en.wikipedia.org/wiki/Executive_Order_14110": {
+      "title": "Executive Order 14110",
+      "about": "The encyclopedia article on EO 14110's history, contents, and 2025 rescission.",
+      "org": "Wikipedia contributors",
+      "container": "Wikipedia, The Free Encyclopedia"
+    },
+    "https://en.wikipedia.org/wiki/Expected_value": {
+      "title": "Expected Value",
+      "about": "The encyclopedia article on expected value, the weighted-average concept the research-tips lesson uses for prioritization.",
+      "org": "Wikipedia contributors",
+      "container": "Wikipedia, The Free Encyclopedia"
+    },
+    "https://en.wikipedia.org/wiki/Theory_of_change": {
+      "title": "Theory of Change",
+      "about": "The encyclopedia article on theory of change, the planning methodology that maps activities to intended outcomes.",
+      "org": "Wikipedia contributors",
+      "container": "Wikipedia, The Free Encyclopedia"
+    },
+    "https://epoch.ai/data/ai-data-centers": {
+      "title": "AI Data Centers",
+      "about": "Epoch's continuously updated database of the world's largest AI data centers, built from satellite imagery and permitting records.",
+      "org": "Epoch AI",
+      "date": "continuously updated"
+    },
+    "https://forum.effectivealtruism.org/posts/AP9FowhqT7MXDSm5P/learning-to-ask-action-relevant-questions-1": {
+      "title": "Learning to Ask Action-Relevant Questions",
+      "about": "A post on testing research questions by asking what would change in the world if they were answered.",
+      "authors": "Lutz, Ronja",
+      "container": "Effective Altruism Forum",
+      "date": "28 Dec. 2019"
+    },
+    "https://fpf.org/blog/californias-sb-53-the-first-frontier-ai-law-explained/": {
+      "title": "California's SB 53: The First Frontier AI Law, Explained",
+      "about": "A section-by-section explainer of SB 53's duties for large frontier developers.",
+      "org": "Future of Privacy Forum",
+      "date": "3 Oct. 2025"
+    },
+    "https://intelligence.org/2015/07/24/four-background-claims/": {
+      "title": "Four Background Claims",
+      "about": "MIRI's statement of the four background claims behind its case that smarter-than-human AI matters.",
+      "authors": "Soares, Nate",
+      "container": "Machine Intelligence Research Institute",
+      "date": "24 July 2015"
+    },
+    "https://law-ai.org/the-role-of-compute-thresholds-for-ai-governance/": {
+      "title": "The Role of Compute Thresholds for AI Governance",
+      "about": "A law-journal article on how training-compute thresholds work as a regulatory trigger for frontier models.",
+      "authors": "Pistillo, Matteo, Suzanne Van Arsdale, Lennart Heim, and Christoph Winter",
+      "container": "George Washington Journal of Law & Technology",
+      "publisher": "Institute for Law & AI",
+      "date": "Feb. 2025"
+    },
+    "https://leginfo.legislature.ca.gov/faces/billNavClient.xhtml?bill_id=202520260SB53": {
+      "title": "SB-53 Artificial Intelligence Models: Large Developers (2025-2026)",
+      "about": "The enacted bill text includes the frontier developer's duty to report critical safety incidents under Business and Professions Code §22757.13.",
+      "org": "California Legislature",
+      "container": "California Legislative Information",
+      "date": "2025"
+    },
+    "https://leginfo.legislature.ca.gov/faces/billTextClient.xhtml?bill_id=202520260SB53": {
+      "title": "SB-53 Artificial Intelligence Models: Large Developers (2025-2026)",
+      "about": "The bill text of California SB 53, the Transparency in Frontier Artificial Intelligence Act.",
+      "org": "California Legislature",
+      "container": "California Legislative Information",
+      "date": "2025"
+    },
+    "https://longtermrisk.org/measurement-research-agenda/#3_Theory_of_change": {
+      "title": "Measurement Research Agenda",
+      "about": "CLR's research agenda on measuring properties of AI systems; its Theory of change section runs a product model and a field-building model in parallel, which is why 0.1.2 cites it.",
+      "authors": "Taylor, Mia",
+      "publisher": "Center on Long-Term Risk",
+      "date": "16 June 2024"
+    },
+    "https://news.un.org/en/story/2026/07/1167873": {
+      "title": "From AI to 'Killer Robots': UN Chief Issues Urgent Governance Call",
+      "about": "UN News coverage of the Secretary-General's governance call at the inaugural Global Dialogue on AI Governance in Geneva.",
+      "org": "UN News",
+      "date": "6 July 2026"
+    },
+    "https://ourworldindata.org/brief-history-of-ai": {
+      "title": "The Brief History of Artificial Intelligence: The World Has Changed Fast — What Might Be Next?",
+      "about": "The Our World in Data article whose two charts 0.1 reproduces: the timeline of notable AI systems, and test scores of AI systems relative to human performance.",
+      "authors": "Roser, Max",
+      "container": "Our World in Data",
+      "date": "6 Dec. 2022"
+    },
+    "https://probablygood.org/core-concepts/itn-framework/": {
+      "title": "The ITN Framework: A Tool for Prioritizing Global Problems",
+      "about": "An explainer of the importance-tractability-neglectedness framework for prioritizing problems.",
+      "org": "Probably Good"
+    },
+    "https://slowfoodusa.org/theory-of-change/": {
+      "title": "Our Theory of Change",
+      "about": "The source page of the one-page infographic 0.1.2 reproduces — an organization's whole theory of change made legible on a single sheet.",
+      "org": "Slow Food USA"
+    },
+    "https://techgov.intelligence.org/blog/catch-up-algorithmic-progress-might-actually-be-60x-per-year": {
+      "title": "Catch-Up Algorithmic Progress Might Actually Be 60x per Year",
+      "about": "A MIRI estimate that catch-up algorithmic progress runs 16x-60x per year — far faster than commonly cited frontier figures.",
+      "authors": "Scher, Aaron",
+      "container": "MIRI Technical Governance Team",
+      "date": "24 Dec. 2025"
+    },
+    "https://techgov.intelligence.org/blog/catching-illicit-distributed-training-operations-during-an-ai-pause": {
+      "title": "Catching Illicit Distributed Training Operations During an AI Pause",
+      "about": "A MIRI analysis of how a covert actor could train across distributed unregistered clusters during a pause, and how that might be caught.",
+      "authors": "Rahman, Robi",
+      "container": "MIRI Technical Governance Team",
+      "date": "9 Apr. 2026"
+    },
+    "https://techgov.intelligence.org/research/a-system-overview-for-near-term-low-trust-ai-compute-verification": {
+      "title": "A System Overview for Near-Term, Low-Trust AI Compute Verification",
+      "about": "A working draft of a privacy-preserving, retrofittable system for verifying AI compute use between rival states, published to be argued with; each of its six technical sections closes with a set of questions for the reader.",
+      "authors": "Cankaya, Naci",
+      "container": "Machine Intelligence Research Institute, Technical Governance Team",
+      "date": "June 2026"
+    },
+    "https://tlc.texas.gov/docs/legref/readingabill.pdf": {
+      "title": "Reading Statutes and Bills",
+      "about": "A drafting office's short guide to reading legal text: how codes and statutes are organised, the parts of a statute and of a bill, tips for reading each, and three practice exercises.",
+      "authors": "Texas Legislative Council, Research Division",
+      "date": "85th Legislature"
+    },
+    "https://www.acm.org/binaries/content/assets/about/acm-code-of-ethics-and-professional-conduct.pdf": {
+      "title": "ACM Code of Ethics and Professional Conduct",
+      "about": "Section 1.2 describes computing professionals' responsibility to report signs of system risks that might result in harm.",
+      "org": "Association for Computing Machinery",
+      "date": "2018"
+    },
+    "https://www.aip.org/fyi/1993/looking-back-why-ssc-was-terminated": {
+      "title": "Looking Back: Why the SSC Was Terminated",
+      "about": "AIP's contemporaneous account of the eight factors behind Congress's 1993 termination of the Superconducting Super Collider, including the Clinton and O'Leary statements 0.1.2 quotes.",
+      "authors": "Jones, Richard M.",
+      "container": "FYI: Science Policy News",
+      "publisher": "American Institute of Physics",
+      "date": "27 Oct. 1993"
+    },
+    "https://www.apolloresearch.ai/blog/theories-of-change-for-ai-auditing/": {
+      "title": "Theories of Change for AI Auditing",
+      "about": "Apollo Research's worked theory of change for AI auditing: causal mechanisms, explicit assumptions, and acknowledged failure modes.",
+      "authors": "Sharkey, Lee, Marius Hobbhahn, and Beren Millidge",
+      "publisher": "Apollo Research",
+      "date": "13 Nov. 2023"
+    },
+    "https://www.governance.ai/research-paper/training-compute-thresholds-features-and-functions-in-ai-regulation": {
+      "title": "Training Compute Thresholds: Features and Functions in AI Regulation",
+      "about": "GovAI's analysis of how US and EU regulators use compute thresholds to pick out models warranting oversight — and where the metric strains.",
+      "authors": "Heim, Lennart, and Leonie Koessler",
+      "publisher": "Centre for the Governance of AI",
+      "date": "7 Aug. 2024"
+    },
+    "https://www.leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?article=&chapter=5.1.&division=2.&lawCode=LAB&part=3.&title=": {
+      "title": "Whistleblower Protections: Catastrophic Risks in AI Foundation Models, Labor Code §§ 1107–1107.2",
+      "about": "California's enacted protections for covered frontier-developer employees who disclose specified catastrophic-risk concerns or violations.",
+      "org": "California Legislature",
+      "container": "California Legislative Information",
+      "date": "effective 1 Jan. 2026"
+    },
+    "https://www.lesswrong.com/posts/7ZqGiPHTpiDMwqMN2/twelve-virtues-of-rationality": {
+      "title": "Twelve Virtues of Rationality",
+      "about": "An essay naming twelve virtues of rational inquiry, from curiosity to precision.",
+      "authors": "Yudkowsky, Eliezer",
+      "container": "LessWrong",
+      "date": "2006"
+    },
+    "https://www.lesswrong.com/posts/PBRWb2Em5SNeWYwwB/humans-are-not-automatically-strategic": {
+      "title": "Humans Are Not Automatically Strategic",
+      "about": "A post arguing that systematic goal-pursuit is a learned skill, not a default human behavior.",
+      "authors": "Salamon, Anna",
+      "container": "LessWrong",
+      "date": "8 Sept. 2010"
+    },
+    "https://www.lesswrong.com/posts/qnvmZCjzspceWdgjC/the-world-keeps-getting-saved-and-you-don-t-notice": {
+      "title": "The World Keeps Getting Saved and You Don’t Notice",
+      "about": "The post 0.1.1 is written after: prevention is invisible because people notice events and not their absence, so the work that stops a catastrophe is systematically undervalued and the averted risk is remembered as never having been real.",
+      "authors": "Bogoed",
+      "container": "LessWrong",
+      "date": "16 Feb. 2026"
+    },
+    "https://www.lesswrong.com/posts/vh5ZjdmJYJgnbpq8C/the-plan-2025-update": {
+      "title": "The Plan – 2025 Update",
+      "about": "Wentworth's annual update on his alignment research plan — cited in 0.1.2 as a cohesive, tractable theory of change for conceptual AI safety research.",
+      "authors": "Wentworth, John, and David Lorell",
+      "container": "LessWrong",
+      "date": "31 Dec. 2025"
+    },
+    "https://www.liquisearch.com/superconducting_super_collider/cancellation": {
+      "title": "Superconducting Super Collider: Cancellation",
+      "about": "A reference page on the SSC's 1993 cancellation, mirroring the Wikipedia article's Cancellation section under Creative Commons.",
+      "org": "LiquiSearch"
+    },
+    "https://www.nist.gov/caisi": {
+      "title": "Center for AI Standards and Innovation (CAISI)",
+      "about": "NIST's page for the center, formerly the US AI Safety Institute, that runs pre-deployment testing agreements with frontier developers.",
+      "org": "National Institute of Standards and Technology"
+    },
+    "https://www.pacingthefrontier.com/": {
+      "title": "Pacing the Frontier",
+      "about": "An open letter from employees of frontier AI companies asking the U.S. government to support an international effort to build the technical and governance tools needed to deliberately pace automated AI development.",
+      "authors": "Employees of frontier AI companies",
+      "date": "July 2026"
+    },
+    "https://www.rfc-editor.org/rfc/rfc9334.html": {
+      "title": "Remote ATtestation ProcedureS (RATS) Architecture",
+      "about": "The IETF architecture for remote attestation — the standard vocabulary of attesters, verifiers, and relying parties the hardware lessons use.",
+      "authors": "Birkholz, Henk, et al.",
+      "container": "RFC 9334",
+      "publisher": "RFC Editor",
+      "date": "Jan. 2023"
+    },
+    "https://www.stat.berkeley.edu/~aldous/157/Papers/Tradecraft%20Primer-apr09.pdf": {
+      "title": "A Tradecraft Primer: Structured Analytic Techniques for Improving Intelligence Analysis",
+      "about": "The US government primer on structured analytic techniques — the intelligence-analysis tradecraft the assessment lesson draws on.",
+      "org": "United States Government",
+      "date": "Mar. 2009",
+      "standalone": true
+    },
+    "https://www.theatlantic.com/technology/2025/09/if-anyone-builds-it-excerpt/684213/": {
+      "title": "AI Is Grown, Not Built",
+      "about": "The Atlantic excerpt from If Anyone Builds It, Everyone Dies, arguing modern AI is grown through training rather than engineered.",
+      "authors": "Yudkowsky, Eliezer, and Nate Soares",
+      "container": "The Atlantic",
+      "date": "15 Sept. 2025"
+    },
+    "https://www.un.org/independent-international-scientific-panel-ai/en": {
+      "title": "Independent International Scientific Panel on AI",
+      "about": "The UN's page for the forty-scientist panel established in 2025 to build a shared scientific picture of AI risk.",
+      "org": "United Nations"
+    },
+    "https://www.whitecase.com/insight-alert/california-enacts-landmark-ai-transparency-law-transparency-frontier-artificial": {
+      "title": "California Enacts Landmark AI Transparency Law: The Transparency in Frontier Artificial Intelligence Act",
+      "about": "A law-firm client alert summarizing what SB 53 requires and of whom.",
+      "org": "White & Case LLP",
+      "date": "2025"
+    },
+    "https://www.wired.com/story/openai-didnt-notice-its-ai-agents-using-a-message-board-to-plan-their-hacking-spree/": {
+      "title": "OpenAI Didn’t Notice Its AI Agents Using a Message Board to Plan Their Hacking Spree",
+      "about": "WIRED's reporting from Black Hat on details OpenAI disclosed about its agents going rogue and hacking other companies unnoticed — the press account beside the labs' own write-ups of the same summer.",
+      "authors": "Newman, Lily Hay",
+      "container": "WIRED",
+      "date": "5 Aug. 2026"
+    },
+    "https://docs.nvidia.com/attestation/quick-start-guide/latest/attestation-examples/hopper_single_gpu.html": {
+      "title": "Hopper Single GPU Attestation Example",
+      "about": "NVIDIA's own quick-start walkthrough of remotely attesting an H100 GPU in Confidential Computing mode — the working evidence that remote attestation already ships on AI hardware.",
+      "container": "NVIDIA Attestation Tools documentation",
+      "publisher": "NVIDIA"
+    },
+    "https://arxiv.org/abs/2605.01930": {
+      "title": "GPU Fingerprinting for Location Verification",
+      "about": "Proposes physical hardware fingerprints — rather than stored cryptographic keys an adversary with physical access could extract — as a way to re-identify individual GPUs, with up to 100 percent re-identification accuracy in small-scale tests.",
+      "authors": "Tee, Wayne, and Jonathan Happel",
+      "container": "arXiv",
+      "date": "May 2026"
+    },
+    "https://attestable.com/blog/model-weights-security": {
+      "title": "From Verifiability to Model-Weight Security",
+      "about": "The company's own account of using sampled zero-knowledge output proofs to shrink a datacenter's security dependencies — early implementation evidence, as the lesson flags.",
+      "authors": "Attestable",
+      "publisher": "Attestable"
+    },
+    "https://arxiv.org/abs/2606.05433": {
+      "title": "Zero knowledge verification for frontier AI training is possible",
+      "about": "The 2026 proposal estimating a future ZK system could verify dense frontier training at roughly 2–10 percent overhead — while naming thirteen unresolved technical problems and the training architectures it does not yet cover.",
+      "authors": "Peigné, Pierre, Ky Nguyen, and Paul Wang",
+      "container": "arXiv",
+      "date": "June 2026"
+    },
+    "https://arxiv.org/abs/2402.02675": {
+      "title": "Verifiable evaluations of machine learning models using zkSNARKs",
+      "about": "Shows a model's claimed evaluation results can be proved with zkSNARKs without revealing the weights behind them.",
+      "authors": "South, Tobin, Alexander Camuto, Shrey Jain, et al.",
+      "container": "arXiv",
+      "date": "Feb. 2024"
+    },
+    "https://arxiv.org/abs/2604.00169": {
+      "title": "Beyond Latency: A System-Level Characterization of MPC and FHE for PPML",
+      "about": "The system-level study of MPC (and FHE) for private machine learning behind the lesson's caveats: communication, preprocessing, memory, and latency are what keep large models hard.",
+      "authors": "Huang, Pengzhi, Kiwan Maeng, and G. Edward Suh",
+      "container": "arXiv",
+      "date": "Mar. 2026"
+    },
+    "https://www.opcw.org/chemical-weapons-convention/annexes/verification-annex/part-x-challenge-inspections-pursuant": {
+      "title": "Verification Annex, Part X: Challenge Inspections Pursuant to Article IX",
+      "about": "The CWC's managed-access rules: how an inspected state may shroud sensitive equipment and restrict analyses while challenge inspectors still resolve compliance questions.",
+      "container": "Chemical Weapons Convention",
+      "publisher": "Organisation for the Prohibition of Chemical Weapons"
+    },
+    "https://arxiv.org/html/2408.16074v2#Sx5.SSx1.SSSx2": {
+      "title": "Verification Methods for International AI Agreements — Whistleblowers",
+      "about": "The paper's whistleblowers section: five ways a government could incentivize insiders to come forward, and why incentives alone fail when an employer can block contact with the verifier.",
+      "authors": "Wasil, Akash R., Tom Reed, Jack William Miller, et al.",
+      "container": "arXiv",
+      "date": "Aug. 2024"
+    },
+    "https://www.cnas.org/publications/reports/technology-to-secure-the-ai-chip-supply-chain-a-primer": {
+      "title": "Technology to Secure the AI Chip Supply Chain: A Working Paper",
+      "about": "Argues that export controls on AI chips are hard to enforce and easy to evade through shell companies, and proposes hardware-enabled mechanisms instead. Cited in 1.2 for the fact that US controls now reach all chips using advanced high-bandwidth memory.",
+      "authors": "Fist, Tim; Burga, Tao; Chilukuri, Vivek",
+      "publisher": "Center for a New American Security",
+      "date": "2024"
+    },
+    "https://metr.org/notes/2026-01-29-frontier-ai-safety-regulations/": {
+      "title": "Frontier AI safety regulations: A reference for lab staff",
+      "about": "A working reference to the frontier-AI safety rules in force, including SB 53's 10^26 FLOP and $500M thresholds. Cited in 1.2 for who these laws govern.",
+      "authors": "METR",
+      "publisher": "METR",
+      "date": "2026"
+    },
+    "https://carnegieendowment.org/research/2024/08/chinas-views-on-ai-safety-are-changing-quickly": {
+      "title": "China’s Views on AI Safety Are Changing—Quickly",
+      "about": "Sheehan reads the July 2024 Third Plenum decision — the first major CCP policy document to call for an AI safety supervision and regulation system — as evidence of Beijing’s accelerating turn toward frontier-AI safety oversight. Cited in 4.1 as direct data that political feasibility moves.",
+      "authors": "Sheehan, Matt",
+      "publisher": "Carnegie Endowment for International Peace",
+      "date": "Aug. 2024"
+    },
+    "https://nuke.fas.org/control/ttbt/intro.htm": {
+      "title": "Threshold Test Ban Treaty",
+      "about": "The FAS primer on the 1974 treaty’s 150-kiloton cap on underground tests: verification by seismic measurement, and the 1990 protocol’s calibration and on-site hydrodynamic measures. Cited in 1.0.1’s fuzzy-numbers fold.",
+      "authors": "Federation of American Scientists",
+      "publisher": "Federation of American Scientists"
+    },
+    "https://www.princeton.edu/~ota/disk2/1988/8838/8838.PDF": {
+      "title": "Seismic Verification of Nuclear Testing Treaties",
+      "about": "The OTA’s 1988 assessment of how well seismology could verify nuclear test-ban limits, including why converting a seismic signal into a yield estimate carries uncertainty. Cited in 1.0.1 for the disputed US estimates of Soviet yields.",
+      "authors": "U.S. Congress, Office of Technology Assessment",
+      "publisher": "U.S. Government Printing Office",
+      "date": "May 1988"
+    }
+  },
+  "pending": [
+    "https://www.bbc.com/news/articles/c5y3j3ngevmo",
+    "https://www.wsj.com/livecoverage/iran-strikes-2026/card/u-s-strikes-in-middle-east-use-anthropic-hours-after-trump-ban-ozNO0iClZpfpL7K7ElJ2",
+    "https://arxiv.org/abs/2412.14093",
+    "https://arxiv.org/abs/2412.04984",
+    "https://www.anthropic.com/project/glasswing/",
+    "https://huggingface.co/blog/agent-intrusion-technical-timeline",
+    "https://www.anthropic.com/news/investigating-incidents-cybersecurity-evals",
+    "https://www.felonybench.com/",
+    "https://ai-2040.com/supplements/faq",
+    "https://www.iaea.org/sites/default/files/18/09/sg-serving-nuclear-non-proliferation.pdf",
+    "https://arxiv.org/abs/2303.11341",
+    "https://www.dfat.gov.au/about-us/publications/Pages/background-papers-on-nuclear-verification-issues",
+    "https://arxiv.org/abs/2403.08501",
+    "https://arxiv.org/abs/2310.13625",
+    "https://www.rand.org/pubs/research_reports/RRA3686-1.html",
+    "https://carnegieendowment.org/research/2026/05/the-geopolitical-debates-over-controlling-cloud-compute",
+    "https://arxiv.org/html/2408.16074v2#S6.SS2",
+    "https://arxiv.org/html/2601.11699v4#S5.SS3",
+    "https://arxiv.org/html/2507.15916#S4.SS3",
+    "https://arxiv.org/html/2601.11699v4",
+    "https://www.ignet.gov/sites/default/files/files/Quality%20Standards%20for%20Investigations%20July-2025.pdf#page=13",
+    "https://www.ignet.gov/sites/default/files/files/Quality%20Standards%20for%20Investigations%20July-2025.pdf",
+    "https://ai-2027.com",
+    "https://arxiv.org/abs/2304.04123",
+    "https://arxiv.org/abs/2606.28694",
+    "https://arxiv.org/abs/2506.15867",
+    "https://www.eda.admin.ch/content/dam/eda/en/documents/publications/Voelkerrecht/Practice-Guide-to-International-Treatie-2023_EN.pdf",
+    "https://www.imf.org/external/Pubs/FT/fandd/basics/66-strategic-thinking.htm",
+    "https://plato.stanford.edu/entries/game-theory/",
+    "https://doi.org/10.1177/0022002797041001004",
+    "https://www.armscontrol.org/act/2005-11/features/witness-prosecution-international-organizations-and-arms-control-verification",
+    "https://www.armscontrol.org/act/2009-05/iran-nuclear-briefs/defining-noncompliance-npt-safeguards-agreements",
+    "https://www.congress.gov/crs-product/R41201",
+    "https://doi.org/10.1017/S0020818300027697",
+    "https://doi.org/10.1017/CBO9780511491368.002",
+    "https://direct.mit.edu/isec/article/44/1/42/12237/Weaponized-Interdependence-How-Global-Economic",
+    "https://doi.org/10.1017/S0020818300027703",
+    "https://www.armscontrol.org/act/2009-05/iran-nuclear-briefs/defining-noncompliance-npt-safeguards-agreements",
+    "https://sb53.info/faq",
+    "https://www.alignmentforum.org/posts/uqAdqrvxqGqeBHjTP/towards-understanding-based-safety-evaluations",
+    "https://www.apolloresearch.ai/science/we-need-a-science-of-evals",
+    "https://docs.nvidia.com/attestation/quick-start-guide/latest/attestation-examples/blackwell_multi_gpu.html",
+    "https://docs.nvidia.com/attestation/quick-start-guide/latest/attestation-examples/hopper_multi_gpu.html",
+    "https://images.nvidia.com/aem-dam/en-zz/Solutions/data-center/h100/PB-11133-001_v01.pdf",
+    "https://arxiv.org/abs/2606.10724",
+    "https://arxiv.org/abs/2103.05633",
+    "https://arxiv.org/abs/2108.09454",
+    "https://arxiv.org/abs/2208.03567",
+    "https://arxiv.org/abs/2307.00682"
+  ],
+  "excluded": [
+    "https://creativecommons.org/licenses/by/4.0/",
+    "https://docs.google.com/document/d/1hnwVUNOfrA8ZoE-8pCrnZ8wP11aMKaRdEz2WTqKGt_o/edit?tab=t.0",
+    "https://docs.google.com/document/d/1laojHZaIj5uaTbrYXybfvMelYlwPygNIO19XD1ELa5Y/edit?tab=t.0",
+    "https://docs.google.com/document/d/1omutl0zbdfSBTLG8diD3VdvAtBvfox3ebIF6IfX0vBU/edit?pli=1&tab=t.0",
+    "https://docs.google.com/document/d/1pCQ_H2bmvBlRVPX7hcP_Hj4ZIxyKkbp1I6Qae78n_xk/edit?tab=t.0#heading=h.qxukhnaot4xs"
+  ]
+}

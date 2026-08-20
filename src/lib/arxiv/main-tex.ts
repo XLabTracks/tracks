@@ -24,6 +24,8 @@ const PREFERRED_NAMES = new Set(["main.tex", "ms.tex", "paper.tex", "arxiv.tex"]
 // (?![a-zA-Z]) keeps \include from swallowing \includegraphics.
 const INPUT_RE = /\\(input|include)(?![a-zA-Z])(?:\s*\{([^}]+)\}|\s+([^\s{}%\\]+))/g;
 const BIBLIOGRAPHY_RE = /\\bibliography(?![a-zA-Z])\s*\{[^}]*\}/g;
+const PRINT_BIBLIOGRAPHY_RE =
+  /\\printbibliography(?![a-zA-Z])(?:\s*\[[^\]]*\])?/g;
 
 export function resolveMainTex(
   files: Map<string, Uint8Array>,
@@ -157,6 +159,34 @@ function spliceBbl(
   files: Map<string, Uint8Array>,
   warnings: string[],
 ): string {
+  const usesBiblatex = mapHasMatchOutsideComments(
+    texSource,
+    PRINT_BIBLIOGRAPHY_RE,
+  );
+  if (usesBiblatex) {
+    // A biblatex .bbl is not a `thebibliography`; it is a Biber data structure
+    // that the lightweight converter cannot interpret. Build the same numeric
+    // approximation used for .bib-only natbib submissions and substitute it
+    // for \printbibliography. This preserves linked citations instead of
+    // exposing internal BibTeX keys in the reading.
+    const synthesized = synthesizeFromBib(texSource, files);
+    if (synthesized !== null) {
+      warnings.push("biblatex bibliography synthesized from .bib");
+      let spliced = false;
+      return mapCodeSegments(texSource, (code) =>
+        code.replace(PRINT_BIBLIOGRAPHY_RE, () => {
+          if (spliced) return "";
+          spliced = true;
+          return `\n${synthesized}\n`;
+        }),
+      );
+    }
+    warnings.push(
+      "\\printbibliography used but no synthesizable .bib in archive",
+    );
+    return texSource;
+  }
+
   if (!mapHasMatchOutsideComments(texSource, BIBLIOGRAPHY_RE)) return texSource;
 
   const mainBbl = mainFile.replace(/\.tex$/i, ".bbl");

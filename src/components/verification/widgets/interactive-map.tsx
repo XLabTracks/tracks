@@ -1,6 +1,7 @@
 "use client";
 
 import {
+  Fragment,
   useCallback,
   useEffect,
   useMemo,
@@ -8,7 +9,17 @@ import {
   useRef,
   useState,
 } from "react";
-import { Map as MapIcon, Minus, Pause, Play, Plus, X } from "lucide-react";
+import {
+  ChevronLeft,
+  ChevronRight,
+  ExternalLink,
+  Map as MapIcon,
+  Minus,
+  Pause,
+  Play,
+  Plus,
+  X,
+} from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import {
@@ -158,9 +169,10 @@ function zoomVB(
   });
 }
 
-/* ============ okabe-ito bucket color, semantic-encoding only ============ */
-// The source encodes supply-chain layers by Okabe-Ito hue. We keep those hues
-// ONLY on the map fills / swatches, always paired with the layer name label.
+/* ============ bucket color, semantic-encoding only ============ */
+// Layers are encoded with the course palette (theme tokens, set in the data
+// file), used ONLY on map fills / swatches and always paired with the layer
+// name — isolation and the legend carry the encoding where hue cannot.
 
 /**
  * Full-page inline world map of the AI compute supply chain (unbridged view
@@ -372,7 +384,9 @@ export function InteractiveMap(_props: VerificationWidgetProps) {
 
   /* ============ scaled stroke/font values (source applyVB) ============ */
   const strokeW = Math.max(0.18, 0.55 / zoom);
-  const fontSize = Math.max(3.4, 9.5 / zoom);
+  // 12 is the floor the rest of this widget uses: below it a country label
+  // is unreadable on the 13" baseline, and these are the map's only prose.
+  const fontSize = Math.max(3.8, 12 / zoom);
   const leaderW = Math.max(0.18, 0.5 / zoom);
   const hubR = Math.max(1.6, 3.4 / zoom);
   const hubStroke = Math.max(0.3, 0.8 / zoom);
@@ -388,15 +402,20 @@ export function InteractiveMap(_props: VerificationWidgetProps) {
       onKeyDown={onKeyDown}
     >
       <div>
-        {/* stat strip */}
-        <dl className="border-border mb-4 flex flex-wrap gap-x-6 gap-y-2 border-b pb-4">
+        {/* The stat strip, set as a figure column rather than a row of pairs.
+            Its three sentences never fit one line inside a reading column, so
+            it always stacked — and each pair carried its own number, so the
+            sentences started at three different x. Two grid columns give the
+            figures a column of their own, right-aligned the way a column of
+            numbers is set, and the sentences one left edge to start from. */}
+        <dl className="border-border mb-4 grid grid-cols-[auto_1fr] items-baseline gap-x-3 gap-y-2 border-b pb-4">
           {C.stats.map((st) => (
-            <div key={st.l} className="flex items-baseline gap-2">
-              <dt className="font-mono text-sm font-semibold whitespace-nowrap">
+            <Fragment key={st.l}>
+              <dt className="text-right text-xl font-bold tracking-tight whitespace-nowrap tabular-nums">
                 {st.n}
               </dt>
               <dd className="text-muted-foreground text-xs">{st.l}</dd>
-            </div>
+            </Fragment>
           ))}
         </dl>
 
@@ -442,8 +461,14 @@ export function InteractiveMap(_props: VerificationWidgetProps) {
           </button>
         </div>
 
-        <div className="grid gap-4 lg:grid-cols-[1fr_320px]">
-          {/* ============ map column ============ */}
+        {/* One column, map first.
+            It used to run `lg:grid-cols-[1fr_320px]`, which spent a third of
+            the module on a key and left the map — the thing being read — in
+            what was left. A world map wants width more than a list of six
+            labels does, so the map takes the full module and the key sits
+            under it, laid out across rather than down. */}
+        <div className="grid gap-4">
+          {/* ============ map ============ */}
           <div className="min-w-0">
             <div
               ref={stageRef}
@@ -451,7 +476,7 @@ export function InteractiveMap(_props: VerificationWidgetProps) {
             >
               {/* hint bar */}
               {hintOpen && (
-                <div className="text-muted-foreground border-border bg-card/90 absolute top-3 left-3 z-10 flex max-w-[calc(100%-5rem)] items-start gap-2 rounded-md border px-3 py-2 text-xs backdrop-blur-sm">
+                <div className="text-muted-foreground border-border bg-card absolute top-3 left-3 z-10 flex max-w-[calc(100%-5rem)] items-start gap-2 rounded-md border px-3 py-2 text-xs">
                   <span>{C.hint}</span>
                   <button
                     type="button"
@@ -486,7 +511,7 @@ export function InteractiveMap(_props: VerificationWidgetProps) {
                   type="button"
                   aria-label="Reset view"
                   onClick={() => dispatch({ type: "resetVb" })}
-                  className="border-border bg-card text-muted-foreground hover:text-foreground hover:border-foreground/40 flex size-8 items-center justify-center rounded-md border font-mono text-[11px] transition-colors"
+                  className="border-border bg-card text-muted-foreground hover:text-foreground hover:border-foreground/40 flex size-8 items-center justify-center rounded-md border text-3xs font-medium transition-colors"
                 >
                   Fit
                 </button>
@@ -584,7 +609,8 @@ export function InteractiveMap(_props: VerificationWidgetProps) {
                   })}
                 </g>
 
-                {/* pulse rings for event countries */}
+                {/* Static rings keep event countries visible without asking
+                    the browser (or a screen-share encoder) to repaint forever. */}
                 <g aria-hidden>
                   {ev &&
                     ev.c.map((id) => {
@@ -600,8 +626,7 @@ export function InteractiveMap(_props: VerificationWidgetProps) {
                           fill="none"
                           stroke={BUCKETS[c.primary].color}
                           strokeWidth={pulseStroke}
-                          className="vmap-pulse"
-                          style={{ transformBox: "fill-box", transformOrigin: "center" }}
+                          opacity={0.65}
                         />
                       );
                     })}
@@ -622,7 +647,7 @@ export function InteractiveMap(_props: VerificationWidgetProps) {
                         key={`l-${c.id}`}
                         points={`${c.label.leader[0]},${c.label.leader[1]} ${tail},${c.label.y - 3}`}
                         fill="none"
-                        stroke="#9CA19B"
+                        stroke="var(--muted-foreground)"
                         strokeWidth={leaderW}
                       />
                     );
@@ -634,10 +659,10 @@ export function InteractiveMap(_props: VerificationWidgetProps) {
                       y={c.label.y}
                       textAnchor={c.label.anchor}
                       fontSize={fontSize}
-                      fill="#33383A"
+                      fill="var(--foreground)"
                       style={{
                         paintOrder: "stroke",
-                        stroke: "rgba(250,250,247,.85)",
+                        stroke: "var(--background)",
                         strokeLinejoin: "round",
                         letterSpacing: "0.04em",
                         pointerEvents: "none",
@@ -662,11 +687,11 @@ export function InteractiveMap(_props: VerificationWidgetProps) {
                       <BucketChip key={bk} bk={bk} />
                     ))}
                   </div>
-                  <p className="text-muted-foreground text-xs leading-snug">
+                  <p className="text-muted-foreground text-sm leading-relaxed">
                     {tipCountry.verif}
                   </p>
-                  <p className="text-muted-foreground/80 mt-1.5 font-mono text-[10px] tracking-wide">
-                    click to pin →
+                  <p className="text-muted-foreground/80 mt-1.5 text-4xs">
+                    Click to pin
                   </p>
                 </div>
               )}
@@ -676,20 +701,27 @@ export function InteractiveMap(_props: VerificationWidgetProps) {
             {s.mode === "map" ? (
               <div className="mt-4">
                 <div className="mb-2 flex items-baseline justify-between">
-                  <span className="text-muted-foreground font-mono text-[11px] tracking-[0.14em] uppercase">
+                  <span className="text-[13px] font-semibold">
                     {C.flowTitle}
                   </span>
-                  <span className="text-muted-foreground text-[11px]">
+                  <span className="text-muted-foreground text-3xs">
                     {C.flowNote}
                   </span>
                 </div>
-                <div className="flex overflow-x-auto">
+                {/* The chevrons used to be absolutely positioned over the
+                    next cell's left edge, which put a "›" on top of a label as
+                    soon as the row was tight — and in the old narrow column it
+                    always was. They are real items in the row now, so the
+                    cells cannot collide with them or with each other, and a
+                    stage that does not fit wraps to the next line instead of
+                    overlapping its neighbour. */}
+                <div className="flex flex-wrap items-stretch gap-1">
                   {FLOW.map((st, i) => {
                     const active =
                       s.filter === st.bucket && s.filterSource === st.key;
                     return (
+                      <Fragment key={st.key}>
                       <button
-                        key={st.key}
                         type="button"
                         aria-pressed={active}
                         onClick={() =>
@@ -702,7 +734,7 @@ export function InteractiveMap(_props: VerificationWidgetProps) {
                         onMouseEnter={() => setPreview(st.bucket)}
                         onMouseLeave={() => setPreview(null)}
                         className={cn(
-                          "relative min-w-[92px] flex-1 border border-r-0 px-2.5 py-2 text-left transition-colors first:rounded-l-md last:rounded-r-md last:border-r",
+                          "min-w-[104px] flex-1 rounded-md border px-2.5 py-2 text-left transition-colors",
                           active
                             ? "bg-primary border-primary"
                             : "border-border bg-muted/40 hover:bg-muted",
@@ -710,12 +742,16 @@ export function InteractiveMap(_props: VerificationWidgetProps) {
                       >
                         <span
                           className="mb-1.5 block h-[3px] w-4 rounded-sm"
-                          style={{ background: BUCKETS[st.bucket].color }}
+                          style={{
+                            background: active
+                              ? "var(--primary-foreground)"
+                              : BUCKETS[st.bucket].color,
+                          }}
                           aria-hidden
                         />
                         <span
                           className={cn(
-                            "block text-[11px] leading-tight font-semibold",
+                            "block text-3xs leading-tight font-semibold",
                             active
                               ? "text-primary-foreground"
                               : "text-muted-foreground",
@@ -723,19 +759,20 @@ export function InteractiveMap(_props: VerificationWidgetProps) {
                         >
                           {st.name}
                         </span>
-                        {i < FLOW.length - 1 && (
-                          <span
-                            aria-hidden
-                            className="text-muted-foreground/60 absolute top-1/2 -right-1.5 -translate-y-1/2 text-xs"
-                          >
-                            ›
-                          </span>
-                        )}
                       </button>
+                      {i < FLOW.length - 1 && (
+                        <span
+                          aria-hidden
+                          className="text-muted-foreground/60 flex-none self-center text-xs"
+                        >
+                          ›
+                        </span>
+                      )}
+                      </Fragment>
                     );
                   })}
                 </div>
-                <div className="text-muted-foreground mt-2 flex items-center justify-between px-1 font-mono text-[9.5px] tracking-wide">
+                <div className="text-muted-foreground mt-2 flex items-center justify-between px-1 text-4xs">
                   <span>{C.flowGradLeft}</span>
                   <span
                     aria-hidden
@@ -751,10 +788,10 @@ export function InteractiveMap(_props: VerificationWidgetProps) {
             ) : (
               <div className="mt-4">
                 <div className="mb-2 flex items-baseline justify-between">
-                  <span className="text-muted-foreground font-mono text-[11px] tracking-[0.14em] uppercase">
+                  <span className="text-[13px] font-semibold">
                     {C.tlTitle}
                   </span>
-                  <span className="text-muted-foreground text-[11px]">
+                  <span className="text-muted-foreground text-3xs">
                     {C.tlNote}
                   </span>
                 </div>
@@ -769,7 +806,7 @@ export function InteractiveMap(_props: VerificationWidgetProps) {
                         aria-hidden
                       />
                       <span
-                        className="text-muted-foreground absolute top-[calc(50%+8px)] -translate-x-1/2 font-mono text-[9.5px]"
+                        className="text-muted-foreground absolute top-[calc(50%+8px)] -translate-x-1/2 text-4xs tabular-nums"
                         style={{ left: `${tx(y)}%` }}
                         aria-hidden
                       >
@@ -806,7 +843,7 @@ export function InteractiveMap(_props: VerificationWidgetProps) {
                     onClick={() => setEvent(s.event - 1)}
                     disabled={s.event <= 0}
                   >
-                    ◀
+                    <ChevronLeft className="size-4" aria-hidden />
                   </Button>
                   <Button
                     variant="outline"
@@ -831,30 +868,33 @@ export function InteractiveMap(_props: VerificationWidgetProps) {
                     onClick={() => setEvent(s.event + 1)}
                     disabled={s.event >= EVENTS.length - 1}
                   >
-                    ▶
+                    <ChevronRight className="size-4" aria-hidden />
                   </Button>
                   <span
-                    className="text-muted-foreground min-w-14 text-center font-mono text-[11px]"
+                    className="text-muted-foreground min-w-14 text-center text-3xs tabular-nums"
                     aria-live="polite"
                   >
                     {s.event >= 0 ? `${s.event + 1} / ${EVENTS.length}` : ""}
                   </span>
                 </div>
-                <p className="text-muted-foreground mt-1.5 text-center text-[11px] italic">
+                <p className="text-muted-foreground mt-1.5 text-center text-3xs italic">
                   {C.tlLesson}
                 </p>
               </div>
             )}
           </div>
 
-          {/* ============ rail ============ */}
+          {/* ============ under the map ============ */}
           <aside className="flex min-w-0 flex-col gap-4">
             {s.mode === "map" && (
               <div>
-                <p className="text-muted-foreground mb-2 font-mono text-[9.5px] tracking-[0.15em] uppercase">
-                  {C.keyLabel}
-                </p>
-                <div className="flex flex-col gap-1">
+                <div className="mb-2 flex items-baseline justify-between gap-2">
+                  <span className="text-[13px] font-semibold">{C.keyLabel}</span>
+                  <span className="text-muted-foreground text-3xs">
+                    {C.keyAction}
+                  </span>
+                </div>
+                <div className="flex flex-wrap gap-1.5">
                   {BUCKET_ORDER.map((bk) => {
                     const b = BUCKETS[bk];
                     const n = COUNTRIES.filter((c) =>
@@ -876,63 +916,79 @@ export function InteractiveMap(_props: VerificationWidgetProps) {
                         onMouseEnter={() => setPreview(bk)}
                         onMouseLeave={() => setPreview(null)}
                         className={cn(
-                          "flex items-center gap-2.5 rounded-lg border px-2.5 py-2 text-left transition-colors",
+                          "flex items-center gap-2 rounded-lg border px-2.5 py-1.5 text-left transition-colors",
                           active
                             ? "border-foreground bg-muted"
-                            : "hover:bg-muted border-transparent",
+                            : "border-border hover:bg-muted",
                         )}
                       >
                         <span
-                          className="size-3 flex-none rounded-sm"
+                          className="ring-foreground/20 size-3 flex-none rounded-[3px] ring-1 ring-inset"
                           style={{ background: b.color }}
                           aria-hidden
                         />
-                        <span className="text-[12.5px] font-semibold">
-                          {b.name}
-                        </span>
-                        <span className="text-muted-foreground ml-auto font-mono text-[10px]">
+                        <span className="text-xs font-medium">{b.name}</span>
+                        <span className="text-muted-foreground text-3xs tabular-nums">
                           {n} {n === 1 ? "country" : "countries"}
                         </span>
                       </button>
                     );
                   })}
                 </div>
-                <p className="text-muted-foreground mt-1.5 text-[10.5px] leading-snug">
+                <p className="text-muted-foreground mt-1.5 text-sm leading-relaxed">
                   {C.keyNote}
                 </p>
               </div>
             )}
 
-            {/* anatomy-of-a-chip launcher — overlay OUT OF SCOPE this pass */}
-            <div className="border-border bg-muted/30 flex items-center gap-3 rounded-lg border px-3 py-2.5 opacity-70">
+            {/* Anatomy of a Chip. It used to be a launcher for an overlay that
+                was never built, wearing a "Coming soon" chip; a card that does
+                nothing reads as a broken control however politely it is
+                labelled. It is a link now — to the tool this section's own
+                author notes point at — and it says so in words and in the
+                host name rather than only by turning blue. Optional, and
+                marked so: it is somebody else's tool and nothing downstream
+                depends on having opened it.
+                Not internalised and never scanned by readings:build, for the
+                same reason a literal <a href> in a lesson is the opt-out — it
+                is a live interactive somewhere else, not a reading. */}
+            <a
+              href={C.chipHref}
+              target="_blank"
+              rel="noreferrer"
+              className="border-border bg-muted/30 hover:border-primary/60 flex items-center gap-3 rounded-lg border px-3 py-2.5 transition-colors"
+            >
               <div className="text-muted-foreground flex-none" aria-hidden>
                 <svg viewBox="0 0 44 40" width="34" height="30">
-                  <polygon points="22,26 40,17 22,8 4,17" fill="#56B4E9" />
+                  <polygon points="22,26 40,17 22,8 4,17" fill="currentColor" opacity={0.9} />
                   <polygon
                     points="22,20 34,14 22,8 10,14"
-                    fill="#CC79A7"
+                    fill="currentColor" opacity={0.6}
                     transform="translate(0,-5)"
                   />
                   <polygon
                     points="22,17 29,13.5 22,10 15,13.5"
-                    fill="#D55E00"
+                    fill="currentColor" opacity={0.35}
                     transform="translate(0,-8)"
                   />
                 </svg>
               </div>
               <div className="min-w-0">
-                <p className="text-muted-foreground font-mono text-[8.5px] tracking-[0.15em] uppercase">
-                  {C.chipEyebrow}
+                <p className="text-sm font-semibold">
+                  {C.chipTitle}{" "}
+                  <span className="text-muted-foreground font-normal">
+                    · {C.chipOptional}
+                  </span>
                 </p>
-                <p className="text-sm font-semibold">{C.chipTitle}</p>
-                <p className="text-muted-foreground text-[11px] leading-snug">
-                  {C.chipSub}
+                <p className="text-muted-foreground text-sm leading-relaxed">
+                  {C.chipSub} Opens {C.chipHost} in a new tab.
                 </p>
               </div>
-              <span className="text-muted-foreground ml-auto flex-none font-mono text-[9px] uppercase">
-                soon
-              </span>
-            </div>
+              <ExternalLink
+                className="text-muted-foreground ml-auto size-4 flex-none"
+                aria-hidden
+              />
+            </a>
 
             {/* detail card */}
             <div className="border-border bg-muted/30 min-h-32 rounded-lg border p-3.5">
@@ -941,20 +997,18 @@ export function InteractiveMap(_props: VerificationWidgetProps) {
 
             {/* roles key */}
             <div className="border-border border-t pt-3">
-              <p className="text-muted-foreground mb-2 font-mono text-[9.5px] tracking-[0.15em] uppercase">
-                {C.rolesLabel}
-              </p>
+              <p className="mb-2 text-[13px] font-semibold">{C.rolesLabel}</p>
               <div className="flex flex-wrap gap-1">
                 {ROLE_ORDER.map((r) => (
                   <span
                     key={r}
-                    className="border-muted-foreground/50 text-muted-foreground rounded border border-dashed px-2 py-0.5 font-mono text-[9.5px] tracking-wide"
+                    className="border-border bg-muted/60 text-muted-foreground rounded-md border px-2 py-0.5 text-4xs"
                   >
                     {ROLES[r]}
                   </span>
                 ))}
               </div>
-              <p className="text-muted-foreground mt-1.5 text-[10.5px] leading-snug">
+              <p className="text-muted-foreground mt-1.5 text-sm leading-relaxed">
                 {C.rolesNote}
               </p>
             </div>
@@ -962,18 +1016,6 @@ export function InteractiveMap(_props: VerificationWidgetProps) {
         </div>
       </div>
 
-      {/* pulse-ring animation, respecting reduced motion */}
-      <style>{`
-        @keyframes vmapPing {
-          0% { transform: scale(.45); opacity: .85; }
-          75% { transform: scale(1.6); opacity: 0; }
-          100% { transform: scale(1.6); opacity: 0; }
-        }
-        .vmap-pulse { animation: vmapPing 1.9s cubic-bezier(.25,.6,.35,1) infinite; }
-        @media (prefers-reduced-motion: reduce) {
-          .vmap-pulse { animation: none; opacity: .6; }
-        }
-      `}</style>
     </div>
   );
 }
@@ -1005,9 +1047,9 @@ function tx(t: number): number {
 function BucketChip({ bk }: { bk: BucketKey }) {
   const b = BUCKETS[bk];
   return (
-    <span className="border-border bg-muted/60 text-muted-foreground inline-flex items-center gap-1.5 rounded-full border px-2 py-0.5 text-[10.5px]">
+    <span className="border-border bg-muted/60 text-muted-foreground inline-flex items-center gap-1.5 rounded-md border px-2 py-0.5 text-4xs">
       <span
-        className="size-[7px] flex-none rounded-full"
+        className="ring-foreground/20 size-2 flex-none rounded-[2px] ring-1 ring-inset"
         style={{ background: b.color }}
         aria-hidden
       />
@@ -1030,7 +1072,7 @@ function DetailCard({
   if (s.mode === "timeline") {
     if (s.event < 0)
       return (
-        <p className="text-muted-foreground text-[12.5px] leading-relaxed">
+        <p className="text-muted-foreground text-sm leading-relaxed">
           {C.tlEmpty}
         </p>
       );
@@ -1040,24 +1082,24 @@ function DetailCard({
       : ev.c.map((id) => (CMAP[id] ? CMAP[id].name : id));
     return (
       <div aria-live="polite">
-        <p className="text-muted-foreground font-mono text-[9.5px] tracking-[0.13em] uppercase">
+        <p className="text-muted-foreground text-3xs font-medium">
           Timeline · {s.event + 1} of {EVENTS.length}
         </p>
-        <p className="text-muted-foreground mt-1 font-mono text-[11px]">
+        <p className="text-muted-foreground mt-1 text-3xs tabular-nums">
           {ev.d}
         </p>
         <h4 className="mt-0.5 text-base font-semibold">{ev.title}</h4>
-        <p className="text-muted-foreground mt-1.5 text-[12.5px] leading-relaxed">
+        <p className="text-muted-foreground mt-1.5 text-sm leading-relaxed">
           {ev.body}
         </p>
-        <p className="text-muted-foreground mt-2.5 font-mono text-[11px] tracking-wide uppercase">
+        <p className="text-muted-foreground mt-2.5 text-3xs font-medium">
           {C.eventActors}
         </p>
         <div className="mt-1 flex flex-wrap gap-1">
           {chips.map((name) => (
             <span
               key={name}
-              className="border-border bg-card rounded-full border px-2.5 py-0.5 text-[11px]"
+              className="border-border bg-card rounded-md border px-2.5 py-0.5 text-3xs"
             >
               {name}
             </span>
@@ -1085,21 +1127,23 @@ function DetailCard({
         >
           <X className="size-4" aria-hidden />
         </button>
-        <p className="text-muted-foreground font-mono text-[9.5px] tracking-[0.13em] uppercase">
+        <p className="text-muted-foreground text-3xs font-medium">
           {st ? "Pipeline stage" : "Supply chain layer"}
         </p>
-        <h4 className="mt-1 text-base font-semibold">{st ? st.name : b.name}</h4>
-        <span
-          className="mt-2 mb-2.5 inline-block rounded-[5px] border-[1.5px] px-2.5 py-1 font-mono text-sm font-semibold"
-          style={{ borderColor: b.color, color: b.color }}
-        >
-          {b.stat}
-        </span>
-        <p className="text-muted-foreground text-[12.5px] leading-relaxed">
+        <h4 className="mt-1 flex items-center gap-2 text-base font-semibold">
+          <span
+            className="ring-foreground/20 size-2.5 flex-none rounded-[2px] ring-1 ring-inset"
+            style={{ background: b.color }}
+            aria-hidden
+          />
+          {st ? st.name : b.name}
+        </h4>
+        <p className="mt-1.5 mb-2 text-lg font-bold tracking-tight">{b.stat}</p>
+        <p className="text-muted-foreground text-sm leading-relaxed">
           {st ? `${st.stat} ` : ""}
           {b.why}
         </p>
-        <p className="text-muted-foreground mt-2.5 font-mono text-[11px] tracking-wide uppercase">
+        <p className="text-muted-foreground mt-2.5 text-3xs font-medium">
           {C.layerNeed}
         </p>
         <div className="mt-1 flex flex-wrap gap-1">
@@ -1108,7 +1152,7 @@ function DetailCard({
               key={c.id}
               type="button"
               onClick={() => dispatch({ type: "gotoCountry", id: c.id })}
-              className="border-border bg-card hover:border-foreground rounded-full border px-2.5 py-0.5 text-[11px] transition-colors"
+              className="border-border bg-card hover:border-foreground rounded-md border px-2.5 py-0.5 text-3xs transition-colors"
             >
               {shortName(c.name)}
             </button>
@@ -1132,7 +1176,7 @@ function DetailCard({
         >
           <X className="size-4" aria-hidden />
         </button>
-        <p className="text-muted-foreground font-mono text-[9.5px] tracking-[0.13em] uppercase">
+        <p className="text-muted-foreground text-3xs font-medium">
           Country
         </p>
         <h4 className="mt-1 text-base font-semibold">{c.name}</h4>
@@ -1152,16 +1196,16 @@ function DetailCard({
           ))}
         </ul>
         <div className="border-border mt-2.5 border-t pt-2">
-          <p className="text-muted-foreground font-mono text-[9.5px] tracking-[0.12em] uppercase">
+          <p className="text-muted-foreground text-3xs font-medium">
             {C.countryVerifLabel}
           </p>
-          <p className="mt-1 text-[12.5px] leading-relaxed">{c.verif}</p>
+          <p className="mt-1 text-sm leading-relaxed">{c.verif}</p>
         </div>
         <div className="mt-2.5 flex flex-wrap gap-1">
           {c.roles.map((r) => (
             <span
               key={r}
-              className="border-muted-foreground/50 text-muted-foreground rounded border border-dashed px-2 py-0.5 font-mono text-[9.5px] tracking-wide"
+              className="border-border bg-muted/60 text-muted-foreground rounded-md border px-2 py-0.5 text-4xs"
             >
               {ROLES[r]}
             </span>
@@ -1174,13 +1218,13 @@ function DetailCard({
   // default (map, nothing selected)
   return (
     <div>
-      <p className="text-muted-foreground font-mono text-[9.5px] tracking-[0.13em] uppercase">
+      <p className="text-muted-foreground text-3xs font-medium">
         {C.startEyebrow}
       </p>
-      <p className="text-muted-foreground mt-1.5 text-[12.5px] leading-relaxed">
+      <p className="text-muted-foreground mt-1.5 text-sm leading-relaxed">
         {C.startBodyA}
       </p>
-      <p className="text-muted-foreground mt-2 text-[12.5px] leading-relaxed">
+      <p className="text-muted-foreground mt-2 text-sm leading-relaxed">
         {C.startBodyB}
       </p>
     </div>

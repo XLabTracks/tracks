@@ -1,0 +1,104 @@
+{/* Reuse record (checked 2026-08-13): arXiv:2403.08501v2 is licensed
+CC BY 4.0, so the credited selections below may be reproduced. */}
+
+{/* The intro and objectives consolidate the existing 2.2 synopsis, section
+prompts, and retention spine rather than adding a new curriculum claim. */}
+
+Cloud providers sit between AI developers and the machines they rent. Because
+providers own, operate, meter, and bill for that compute, they can act as record
+keepers, verifiers, enforcers, and securers. But cloud evidence is one witness,
+not the whole court: self-hosted clusters, non-signatory jurisdictions, and
+stolen weights all sit outside a provider's reach. In this module, you will
+learn what cloud providers can observe, how those observations become evidence,
+and where cloud oversight runs out.
+
+<Objectives scope="this submodule">
+1. Identify the identity, resource-use, and operational records a cloud provider can observe, and explain what each record supports—and what it still does not establish.
+2. Distinguish provider-controlled evidence from customer declarations, and assess the reliability of each when determining a workload's type, scale, and operator.
+3. Analyze how customer identification, beneficial-ownership checks, reporting thresholds, ongoing monitoring, and access controls turn cloud records into a verification regime—and how an evader could route around them.
+4. Assess where cloud oversight loses coverage, and identify which claims require corroboration from hardware, intelligence, or human verification mechanisms.
+</Objectives>
+
+## 2.2.1 Provider records and workload observables
+
+The four readings in this submodule do different jobs. The first establishes what a provider can observe. The second adds customer identity and due diligence. The third shows how a threshold can be evaded. The fourth asks whether the resulting control is politically and administratively usable.
+
+As you read, keep two columns:
+
+1. **What record or signal exists?**
+2. **What conclusion does it support—and what does it still not establish?**
+
+Start by asking which claims a provider's ordinary records can support—and
+which claims remain beyond those records.
+
+## Governing Through the Cloud: The Intermediary Role of Compute Providers in AI Regulation
+
+<SourceCredit
+  author={
+    "Lennart Heim, Tim Fist, Janet Egan, Sihao Huang, Stephen Zekany, Robert Trager, Michael A. Osborne, and Noa Zilberman (2024)"
+  }
+  sourceHref={"https://arxiv.org/abs/2403.08501"}
+/>
+
+The executive-summary selections and complete sections below are reproduced under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/). Citations and cross-references link to the pinned arXiv version.
+
+<SourceQuote
+  t="Governing Through the Cloud"
+  url="https://arxiv.org/abs/2403.08501"
+  what="selected paragraphs from the Executive Summary"
+  by="Heim et al. (2024) | CC BY 4.0"
+>
+
+**Governance Capacities —** We propose that compute providers can leverage their crucial role in the AI supply chain to secure infrastructure and serve as the intermediate node in support of regulatory objectives while maintaining customers’ privacy and rights. They can facilitate effective AI regulation via four key capacities: as securers, record keepers, verifiers, and, in some cases, even enforcers. Reporting represents a related yet distinct dimension, wherein compute providers provide information to authorities as mandated by law or regulations. (section 2)
+
+**Technical Feasibility —** Our analysis indicates these governance capabilities are likely to be technically feasible and possible to implement in a confidentiality- and privacy-preserving way using techniques available to compute providers today. Compute providers often collect a wide range of data on their customers and workloads, for the purposes of billing, marketing, service analysis, optimization, and fulfilling legal obligations. Much of this data could also be used to support identity verification, as well as verifying technical properties of workloads. At a minimum, providers have access to billing information and can access basic technical data on how their hardware is used. This likely makes it possible for compute providers to develop techniques to detect and classify certain relevant workloads (e.g., whether a workload involves training a frontier model) and to quantify the amount of compute consumed by a workload. Verification of more detailed properties of a workload, such as the type of training data used, or whether a particular model evaluation was run, could be useful for governance purposes but is not currently possible without direct access to customer code and data. With further research and development efforts, compute providers may be able to offer “confidential computing” services to allow customers to prove these more detailed properties without otherwise revealing sensitive data. (section 3)
+
+**Technical and Governance Challenges —** To realize a robust governance model, several technical and governance challenges remain. These include identifying additional measurable properties of AI development that correspond to potential threats, making workload classification methods robust to potential evasion, and formulating privacy-preserving verification protocols. (section 5.1)
+
+The success of our proposed oversight scheme hinges on its multilateral adoption to prevent the migration of AI activities to jurisdictions with less stringent oversight. For an international framework to be durable and effective, it must address concerns from non-US governments. Cooperation will need to account for complex privacy and oversight issues associated with globally spread data centers. Compute provider oversight may affect competition in the AI ecosystem and raise concerns about issues of national competitiveness, and, consequently, this may influence the ability of US providers to offer products globally, including to foreign public-sector customers. Industry-led privacy-preserving standards could help ensure trust, but further research is needed to incentivize broad international buy-in to a global framework. (section 1.4 and section 5.2)
+
+</SourceQuote>
+
+Read the following sections in full. In Appendix B, use Table 4 as a map from each observable to its current availability and the verification task it might support.
+
+<div className="arxiv-reading-slot">
+  <ArxivSection
+    id="2403.08501v2"
+    section="ax-sec-record-keeping"
+    sourceFragment="S3.SS2"
+  />
+</div>
+
+<div className="arxiv-reading-slot">
+  <ArxivSection
+    id="2403.08501v2"
+    section="ax-sec-workload-classification"
+    sourceFragment="S3.SS3.SSS2"
+  />
+</div>
+
+<div className="arxiv-reading-slot">
+  <ArxivSection
+    id="2403.08501v2"
+    section="ax-sec-compute-accounting"
+    sourceFragment="S3.SS3.SSS3"
+  />
+</div>
+
+<div className="arxiv-reading-slot">
+  <ArxivSection
+    id="2403.08501v2"
+    section="ax-sec-detailed-workload-verification"
+    sourceFragment="S3.SS3.SSS4"
+  />
+</div>
+
+<div className="arxiv-reading-slot">
+  <ArxivSection
+    id="2403.08501v2"
+    section="ax-sec-observable-data-attributes"
+    sectionEnd="ax-references"
+    sourceFragment="A1.SS2"
+    tableNumbers="4"
+  />
+</div>

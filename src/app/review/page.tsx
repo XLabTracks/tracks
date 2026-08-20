@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { getCurrentUser } from "@/lib/auth";
+import { loginHref } from "@/lib/login-href";
 import { prisma } from "@/lib/db";
 import { getExerciseById } from "@/lib/content";
 import { Breadcrumbs } from "@/components/layout/breadcrumbs";
@@ -53,7 +54,7 @@ export default async function ReviewPage() {
             Sign in to build your review bank.
           </p>
           <Button asChild className="mt-5">
-            <Link href="/login">Sign in</Link>
+            <Link href={loginHref("/review")}>Sign in</Link>
           </Button>
         </div>
       </main>

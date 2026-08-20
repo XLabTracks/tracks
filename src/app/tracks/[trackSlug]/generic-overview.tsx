@@ -11,6 +11,7 @@ import {
   type Track,
 } from "@/lib/content";
 import { PREREQUISITES_ENFORCED } from "@/lib/content/prerequisites";
+import { loginHref } from "@/lib/login-href";
 import { Breadcrumbs } from "@/components/layout/breadcrumbs";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -68,7 +69,9 @@ export function GenericTrackOverview({
                   {progress.completed} / {progress.total} items
                 </span>
               </div>
-              <Progress value={progress.percent} className="mt-2" />
+              {/* The track hero carries the bar at display weight; the
+                  classroom tables keep the component's default height. */}
+              <Progress value={progress.percent} className="mt-2 h-4" />
             </div>
             {continueHref && (
               <Button asChild>
@@ -81,7 +84,7 @@ export function GenericTrackOverview({
         </Card>
       ) : (
         <p className="text-muted-foreground mt-4 text-sm">
-          <Link href="/login" className="underline">
+          <Link href={loginHref(`/tracks/${track.slug}`)} className="underline">
             Sign in
           </Link>{" "}
           to track your progress and save your writing.
@@ -99,7 +102,7 @@ export function GenericTrackOverview({
                 <CardHeader>
                   <div className="flex items-start justify-between gap-4">
                     <div>
-                      <CardTitle className="text-lg">
+                      <CardTitle className="text-lg font-bold">
                         Module {module.order}: {module.title}
                       </CardTitle>
                       <CardDescription className="mt-1">
@@ -115,7 +118,13 @@ export function GenericTrackOverview({
                   </div>
                 </CardHeader>
                 <CardContent>
-                  <ul className="text-muted-foreground space-y-1 text-sm">
+                  {/* select-none for the sidebar's reason: this list is the
+                      module's index, not its reading. A drag that starts on a
+                      lesson title and ends in the page smears a selection
+                      across every row it crossed, and nobody copies a row of
+                      contents. The titles inside a resource card stay
+                      selectable — those are content someone cites. */}
+                  <ul className="text-muted-foreground space-y-1 text-sm select-none">
                     {items.map((item) => {
                       const done = getItemProgressContentIds(item).every((id) =>
                         completedSet.has(id),

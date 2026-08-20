@@ -57,14 +57,18 @@ afterEach(() => {
 describe("removeMember", () => {
   it("refuses non-instructors", async () => {
     getCurrentUser.mockResolvedValue({ id: "u1" });
-    prisma.classroomMembership.findUnique.mockResolvedValue({ role: "student" });
+    prisma.classroomMembership.findUnique.mockResolvedValue({
+      role: "student",
+    });
     await expect(removeMember("c1", "u2")).rejects.toThrow("Forbidden");
     expect(prisma.classroomMembership.deleteMany).not.toHaveBeenCalled();
   });
 
   it("only ever deletes student rows (never a co-instructor)", async () => {
     getCurrentUser.mockResolvedValue({ id: "u1" });
-    prisma.classroomMembership.findUnique.mockResolvedValue({ role: "instructor" });
+    prisma.classroomMembership.findUnique.mockResolvedValue({
+      role: "instructor",
+    });
     prisma.classroomMembership.deleteMany.mockResolvedValue({ count: 1 });
     await removeMember("c1", "u2");
     expect(prisma.classroomMembership.deleteMany).toHaveBeenCalledWith({
@@ -91,19 +95,21 @@ describe("createClassroom", () => {
     prisma.classroom.create.mockResolvedValue({ id: "c1" });
 
     await expect(
-      createClassroom({}, form({ name: "A", trackId: "does-not-exist" })),
+      createClassroom({}, form({ name: "A", trackId: "does-not-exist" }))
     ).rejects.toThrow("REDIRECT:/classrooms/c1");
     expect(prisma.classroom.create).toHaveBeenLastCalledWith(
-      expect.objectContaining({ data: expect.objectContaining({ trackId: null }) }),
+      expect.objectContaining({
+        data: expect.objectContaining({ trackId: null }),
+      })
     );
 
     await expect(
-      createClassroom({}, form({ name: "A", trackId: "verification" })),
+      createClassroom({}, form({ name: "A", trackId: "verification" }))
     ).rejects.toThrow("REDIRECT:/classrooms/c1");
     expect(prisma.classroom.create).toHaveBeenLastCalledWith(
       expect.objectContaining({
         data: expect.objectContaining({ trackId: "verification" }),
-      }),
+      })
     );
   });
 
@@ -151,12 +157,12 @@ describe("joinClassroom", () => {
     prisma.classroom.findUnique.mockResolvedValue({ id: "c9" });
     prisma.classroomMembership.upsert.mockResolvedValue({});
     await expect(joinClassroom({}, form("ABC234"))).rejects.toThrow(
-      "REDIRECT:/classrooms/c9",
+      "REDIRECT:/classrooms/c9"
     );
     expect(prisma.classroomMembership.upsert).toHaveBeenCalledWith(
       expect.objectContaining({
         create: { classroomId: "c9", userId: "u1", role: "student" },
-      }),
+      })
     );
   });
 });
@@ -164,9 +170,11 @@ describe("joinClassroom", () => {
 describe("setMemberRole", () => {
   it("refuses non-instructors", async () => {
     getCurrentUser.mockResolvedValue({ id: "u1" });
-    prisma.classroomMembership.findUnique.mockResolvedValue({ role: "student" });
+    prisma.classroomMembership.findUnique.mockResolvedValue({
+      role: "student",
+    });
     await expect(setMemberRole("c1", "u2", "instructor")).rejects.toThrow(
-      "Forbidden",
+      "Forbidden"
     );
     expect(prisma.classroomMembership.update).not.toHaveBeenCalled();
   });
@@ -191,7 +199,7 @@ describe("setMemberRole", () => {
       .mockResolvedValueOnce({ role: "instructor" }); // target
     prisma.$executeRaw.mockResolvedValueOnce(0); // count subquery failed the guard
     await expect(setMemberRole("c1", "u1", "student")).rejects.toThrow(
-      /only instructor|another instructor/i,
+      /only instructor|another instructor/i
     );
     expect(prisma.classroomMembership.update).not.toHaveBeenCalled();
   });
@@ -222,7 +230,9 @@ describe("leaveClassroom", () => {
 
   it("lets a student leave", async () => {
     getCurrentUser.mockResolvedValue({ id: "u2" });
-    prisma.classroomMembership.findUnique.mockResolvedValue({ role: "student" });
+    prisma.classroomMembership.findUnique.mockResolvedValue({
+      role: "student",
+    });
     prisma.classroomMembership.deleteMany.mockResolvedValue({ count: 1 });
     await expect(leaveClassroom("c1")).rejects.toThrow("REDIRECT:/classrooms");
     expect(prisma.classroomMembership.deleteMany).toHaveBeenCalledWith({
@@ -232,7 +242,9 @@ describe("leaveClassroom", () => {
 
   it("refuses to let the last instructor leave (guarded DELETE matches 0 rows)", async () => {
     getCurrentUser.mockResolvedValue({ id: "u1" });
-    prisma.classroomMembership.findUnique.mockResolvedValue({ role: "instructor" });
+    prisma.classroomMembership.findUnique.mockResolvedValue({
+      role: "instructor",
+    });
     prisma.$executeRaw.mockResolvedValueOnce(0); // count subquery failed the guard
     await expect(leaveClassroom("c1")).rejects.toThrow(/only instructor/i);
     expect(prisma.classroomMembership.deleteMany).not.toHaveBeenCalled();
@@ -240,7 +252,9 @@ describe("leaveClassroom", () => {
 
   it("lets an instructor leave atomically when a co-instructor remains", async () => {
     getCurrentUser.mockResolvedValue({ id: "u1" });
-    prisma.classroomMembership.findUnique.mockResolvedValue({ role: "instructor" });
+    prisma.classroomMembership.findUnique.mockResolvedValue({
+      role: "instructor",
+    });
     await expect(leaveClassroom("c1")).rejects.toThrow("REDIRECT:/classrooms"); // $executeRaw default: 1 row
     expect(prisma.$transaction).toHaveBeenCalledTimes(1);
     expect(sqlOf(prisma.$queryRaw)).toContain("FOR UPDATE");
@@ -253,34 +267,45 @@ describe("leaveClassroom", () => {
 describe("deleteClassroom", () => {
   it("refuses non-instructors", async () => {
     getCurrentUser.mockResolvedValue({ id: "u2" });
-    prisma.classroomMembership.findUnique.mockResolvedValue({ role: "student" });
+    prisma.classroomMembership.findUnique.mockResolvedValue({
+      role: "student",
+    });
     await expect(deleteClassroom("c1")).rejects.toThrow("Forbidden");
     expect(prisma.classroom.delete).not.toHaveBeenCalled();
   });
 
   it("deletes and redirects for an instructor", async () => {
     getCurrentUser.mockResolvedValue({ id: "u1" });
-    prisma.classroomMembership.findUnique.mockResolvedValue({ role: "instructor" });
+    prisma.classroomMembership.findUnique.mockResolvedValue({
+      role: "instructor",
+    });
     prisma.classroom.delete.mockResolvedValue({});
     await expect(deleteClassroom("c1")).rejects.toThrow("REDIRECT:/classrooms");
-    expect(prisma.classroom.delete).toHaveBeenCalledWith({ where: { id: "c1" } });
+    expect(prisma.classroom.delete).toHaveBeenCalledWith({
+      where: { id: "c1" },
+    });
   });
 });
 
 describe("regenerateJoinCode", () => {
   it("requires instructor role", async () => {
     getCurrentUser.mockResolvedValue({ id: "u1" });
-    prisma.classroomMembership.findUnique.mockResolvedValue({ role: "student" });
+    prisma.classroomMembership.findUnique.mockResolvedValue({
+      role: "student",
+    });
     await expect(regenerateJoinCode("c1")).rejects.toThrow("Forbidden");
     expect(prisma.classroom.update).not.toHaveBeenCalled();
   });
 
   it("generates 10-char codes from the unambiguous alphabet", async () => {
     getCurrentUser.mockResolvedValue({ id: "u1" });
-    prisma.classroomMembership.findUnique.mockResolvedValue({ role: "instructor" });
+    prisma.classroomMembership.findUnique.mockResolvedValue({
+      role: "instructor",
+    });
     prisma.classroom.update.mockResolvedValue({});
     await regenerateJoinCode("c1");
-    const code = prisma.classroom.update.mock.calls[0][0].data.joinCode as string;
+    const code = prisma.classroom.update.mock.calls[0][0].data
+      .joinCode as string;
     // 10 chars of the 31-char alphabet is a ~50-bit space — the whole
     // defense against online join-code enumeration (no request throttle).
     expect(code).toMatch(/^[ABCDEFGHJKMNPQRSTUVWXYZ23456789]{10}$/);

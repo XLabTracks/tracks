@@ -127,8 +127,8 @@ async function LessWrongPaperReader({
   if (resolved.state === "invalid") {
     return (
       <div className="border-destructive/40 bg-destructive/5 text-destructive rounded-xl border p-6 text-sm">
-        Invalid LessWrong post URL <code>{postUrl}</code> — the public post
-        URL is required, e.g.{" "}
+        Invalid LessWrong post URL <code>{postUrl}</code> — the public post URL
+        is required, e.g.{" "}
         <code>https://www.lesswrong.com/posts/abc123/some-post</code>.
       </div>
     );
@@ -171,7 +171,8 @@ async function LessWrongPaperReader({
             {
               label: `Read on ${displayHost(resolved.sourceRef)}`,
               href:
-                resolved.meta.canonicalUrl ?? buildLwPostUrl(resolved.sourceRef),
+                resolved.meta.canonicalUrl ??
+                buildLwPostUrl(resolved.sourceRef),
             },
           ]}
           warnings={resolved.warnings}
@@ -323,7 +324,7 @@ function ActivitiesOnlyFallback({
   children: React.ReactNode;
 }) {
   const allItems = (paper.edits ?? []).flatMap((edit) =>
-    edit.op === "activity" ? edit.items : [],
+    edit.op === "activity" ? edit.items : []
   );
   return (
     <div className="paper-reader">
@@ -355,12 +356,15 @@ function ActivitiesOnlyFallback({
  * whose html is re-derived per request by rewriteReadingLinks (equal
  * content, fresh string).
  */
-const appliedEditsCache = new Map<string, { html: string; applied: AppliedPaper }>();
+const appliedEditsCache = new Map<
+  string,
+  { html: string; applied: AppliedPaper }
+>();
 
 function applyPaperEditsCached(
   paper: Paper,
   html: string,
-  toc: PaperTocEntry[],
+  toc: PaperTocEntry[]
 ): AppliedPaper {
   const hit = appliedEditsCache.get(paper.id);
   if (hit && hit.html === html) return hit.applied;
@@ -370,14 +374,18 @@ function applyPaperEditsCached(
   // details wrappers would shift. The references-seen flag threads through
   // the html parts in document order (and on into the ungated tail), so an
   // activity/gate split after References doesn't reset the appendix walk —
-  // the whole document collapses as one pass. (On gated papers the landmark
+  // the whole document collapses as one pass.
+  // `collapseTail: false` leaves the tail as ordinary sections — for papers
+  // whose appendix is the document rather than its apparatus.
+  const collapsing = paper.collapseTail !== false;
+  // On gated papers the landmark
   // sections themselves live in ungatedTailHtml and collapse there; the
   // appendix stretch they left behind in the gated parts was already
   // collapsed by apply-edits' tail split, and reads as landmark-free —
-  // byte-identical — here.)
+  // byte-identical — here.
   let sawReferences = false;
   const parts = edited.parts.map((part) => {
-    if (part.kind !== "html") return part;
+    if (part.kind !== "html" || !collapsing) return part;
     const collapsed = collapseTailSections(part.html, sawReferences);
     sawReferences = collapsed.sawReferences;
     return { ...part, html: collapsed.html };
@@ -387,7 +395,9 @@ function applyPaperEditsCached(
     parts,
     ungatedTailHtml:
       edited.ungatedTailHtml &&
-      collapseTailSections(edited.ungatedTailHtml, sawReferences).html,
+      (collapsing
+        ? collapseTailSections(edited.ungatedTailHtml, sawReferences).html
+        : edited.ungatedTailHtml),
   };
   appliedEditsCache.set(paper.id, { html, applied });
   return applied;
@@ -425,7 +435,7 @@ function EditedPaperBody({
   const { parts, ungatedTailHtml, unmatchedEdits } = applyPaperEditsCached(
     paper,
     html,
-    toc,
+    toc
   );
   if (unmatchedEdits.length > 0) {
     // Committed content can't reach this (content.test.ts validates every
@@ -439,11 +449,11 @@ function EditedPaperBody({
               ? `${ref.anchor}${ref.s ? ` s=${ref.s}` : ""} ("${ref.snippet}")`
               : ref.sectionEnd;
           })
-          .join(", "),
+          .join(", ")
     );
   }
   const unmatchedItems = unmatchedEdits.flatMap((op) =>
-    op.op === "activity" ? op.items : [],
+    op.op === "activity" ? op.items : []
   );
 
   return (
@@ -480,7 +490,7 @@ function EditedPaperBody({
           <PaperTailReveal
             paperId={paper.id}
             gateIds={parts.flatMap((part) =>
-              part.kind === "gate" ? [part.id] : [],
+              part.kind === "gate" ? [part.id] : []
             )}
           />
         </>
@@ -524,8 +534,8 @@ function EditedPaperBody({
 function GlossaryLayer({ paper }: { paper: Paper }) {
   const termIds = new Set(
     (paper.edits ?? []).flatMap((edit) =>
-      edit.op === "gloss" ? [edit.termId] : [],
-    ),
+      edit.op === "gloss" ? [edit.termId] : []
+    )
   );
   const entries: PaperGlossaryEntry[] = [...termIds].flatMap((termId) => {
     const term = getGlossaryTerm(termId);
@@ -569,7 +579,7 @@ interface RenderCtx {
 function renderParts(
   parts: PaperPart[],
   from: number,
-  ctx: RenderCtx,
+  ctx: RenderCtx
 ): React.ReactNode[] {
   const nodes: React.ReactNode[] = [];
   for (let i = from; i < parts.length; i++) {
@@ -581,7 +591,7 @@ function renderParts(
           className={ctx.wrapperClassName}
           data-conv={ctx.converterVersion}
           dangerouslySetInnerHTML={{ __html: part.html }}
-        />,
+        />
       );
     } else if (part.kind === "activity") {
       nodes.push(
@@ -594,7 +604,7 @@ function renderParts(
               completedContentIds={ctx.completedContentIds}
             />
           ))}
-        </Fragment>,
+        </Fragment>
       );
     } else {
       nodes.push(
@@ -618,7 +628,7 @@ function renderParts(
           }
         >
           {renderParts(parts, i + 1, ctx)}
-        </PaperGate>,
+        </PaperGate>
       );
       return nodes;
     }

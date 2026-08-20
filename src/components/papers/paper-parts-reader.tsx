@@ -1,0 +1,288 @@
+"use client";
+
+import { useCallback, useEffect, useRef, useState, type ReactNode } from "react";
+import { Button } from "@/components/ui/button";
+import {
+  PagerCard,
+  ReadingPager,
+  type PagerLink,
+} from "@/components/learn/reading-pager";
+import { cn } from "@/lib/utils";
+
+/* Reads a paper one section at a time, the way LessonPartsReader reads a
+   lesson — and for the same reason: on a chunkedReading track everything else
+   arrives a part at a time, and a treaty is the longest thing in the course.
+
+   Boundaries are explicitly selected from the paper's own stable section ids
+   in papers.data.ts. The source hierarchy supplies the available landmarks;
+   an editor decides which of them begin pages. Papers without an authored
+   list render continuously.
+
+   The html never crosses into this component. It receives the server-rendered
+   body as `children` and reorganizes the DOM after mount, which is the same
+   contract PaperSidenotes/PaperGlossary/PaperHighlights hold — see the
+   PaperReader docstring.
+
+   Parts are hidden, never unmounted: an embedded exercise holds a
+   half-answered run in memory, and the footnote/citation targets in the
+   hidden parts must stay live for the sidenote layer to clone.
+
+   Sidenotes need nothing from us. Their builder already skips a marker whose
+   rect is 0×0 (written for collapsed hide-markers, true of a hidden part too)
+   and rebuilds off a ResizeObserver on the container, which hiding a part
+   trips.
+
+   Traps, all three of them the same trap in different clothes — content that
+   is in the document but not on screen:
+
+   - The sidebar's section nav is the paper's index and every row points at a
+     section that may be hidden. A document-level click listener reveals the
+     owning part before the browser scrolls, or half the index goes dead.
+   - A hidden part is out of find-in-page and out of print. The whole-paper
+     toggle is the way back to both, so it stays visible whenever there is
+     more than one part.
+   - A gated paper already hides its own tail until the reader answers. Two
+     hiding mechanisms over one document is a way to make content unreachable,
+     so the page does not wrap a paper that carries gates — the check is
+     `gateIdsOf(paper.edits)` there, on the edits themselves, rather than a
+     guess at the rendered markup here. */
+
+const MODE_KEY = "vt-reading-mode";
+
+interface Part {
+  label: string;
+  anchor: string | null;
+  els: HTMLElement[];
+}
+
+function readMode(): "parts" | "whole" {
+  try {
+    return localStorage.getItem(MODE_KEY) === "whole" ? "whole" : "parts";
+  } catch {
+    return "parts";
+  }
+}
+
+function partFromUrl(max: number): number {
+  const raw = new URLSearchParams(location.search).get("p") ?? "1";
+  if (raw === "last") return max;
+  const n = parseInt(raw, 10);
+  return Math.max(0, Math.min(max, (Number.isFinite(n) ? n : 1) - 1));
+}
+
+/** The reading units, flattened across wrappers.
+ *
+ *  An edited paper renders as several `.arxiv-paper` wrappers with activity
+ *  blocks BETWEEN them, so the elements a part is made of are one level down
+ *  inside a wrapper and one level up outside it. Flattening here is what lets
+ *  a part span an activity card and carry on into the next wrapper. */
+function readingUnits(root: HTMLElement): HTMLElement[] {
+  const out: HTMLElement[] = [];
+  for (const child of Array.from(root.children)) {
+    if (!(child instanceof HTMLElement)) continue;
+    if (child.classList.contains("arxiv-paper")) {
+      for (const el of Array.from(child.children)) {
+        if (el instanceof HTMLElement) out.push(el);
+      }
+      continue;
+    }
+    out.push(child);
+  }
+  return out;
+}
+
+const isBoundary = (el: HTMLElement, sectionIds: Set<string>) =>
+  sectionIds.has(el.id);
+
+function buildParts(els: HTMLElement[], sectionIds: Set<string>): Part[] {
+  const built: Part[] = [];
+  let cur: Part | null = null;
+  // A heading with nothing under it yet would stand as a lone title over blank
+  // space — fold consecutive headings together until body arrives.
+  const bodyless = (p: Part | null) =>
+    !!p && p.els.every((element) => isBoundary(element, sectionIds));
+  for (const el of els) {
+    if (isBoundary(el, sectionIds)) {
+      if (bodyless(cur)) {
+        cur!.els.push(el);
+        continue;
+      }
+      cur = { label: el.textContent ?? "", anchor: el.id || null, els: [el] };
+      built.push(cur);
+      continue;
+    }
+    if (!cur) {
+      cur = { label: "Start", anchor: null, els: [] };
+      built.push(cur);
+    }
+    cur.els.push(el);
+  }
+  return built;
+}
+
+export function PaperPartsReader({
+  children,
+  attribution,
+  footer,
+  prev,
+  next,
+  pageSectionIds,
+}: {
+  children: ReactNode;
+  /**
+   * Whose text this is, printed above every part after the first. The page
+   * header names the authors over part one; parts two onward would otherwise
+   * be somebody else's writing with nothing on screen saying so.
+   */
+  attribution?: string | null;
+  /** Complete button and anything else that belongs above the pager and must
+   *  never be hidden with a part — it lives outside the reader's host. */
+  footer?: ReactNode;
+  /** The neighbouring items the pager rolls into at the ends. */
+  prev?: PagerLink | null;
+  next?: PagerLink | null;
+  /** Stable source-section ids that begin authored paper pages. */
+  pageSectionIds: string[];
+}) {
+  const hostRef = useRef<HTMLDivElement>(null);
+  const topRef = useRef<HTMLDivElement>(null);
+  const [parts, setParts] = useState<Part[]>([]);
+  const [at, setAt] = useState(0);
+  const [mode, setMode] = useState<"parts" | "whole">("parts");
+
+  useEffect(() => {
+    const root = hostRef.current?.querySelector<HTMLElement>(".paper-reader");
+    if (!root) return;
+    const els = readingUnits(root);
+    const built = buildParts(els, new Set(pageSectionIds));
+    if (built.length < 2) return;
+
+    // One deliberate mount-time re-render: parts exist only in the rendered
+    // DOM, and the stored mode only on the client.
+    setParts(built);
+    setMode(readMode());
+    setAt(partFromUrl(built.length - 1));
+  }, [pageSectionIds]);
+
+  useEffect(() => {
+    if (!parts.length) return;
+    parts.forEach((p, i) => {
+      const hide = mode === "parts" && i !== at;
+      p.els.forEach((el) => {
+        el.hidden = hide;
+      });
+    });
+    return () => {
+      // Route transitions reuse the DOM: unmounting must leave it whole.
+      parts.forEach((p) => p.els.forEach((el) => (el.hidden = false)));
+    };
+  }, [parts, at, mode]);
+
+  const goTo = useCallback(
+    (i: number, scroll = true) => {
+      setAt((prev) => {
+        const next = Math.max(0, Math.min(parts.length - 1, i));
+        if (next === prev) return prev;
+        // Replace rather than push: Back stays a move between items, and a
+        // copied link opens on the part it was copied from.
+        const url = new URL(location.href);
+        if (next === 0) url.searchParams.delete("p");
+        else url.searchParams.set("p", String(next + 1));
+        history.replaceState(history.state, "", url);
+        return next;
+      });
+      if (scroll) {
+        requestAnimationFrame(() => topRef.current?.scrollIntoView({ block: "start" }));
+      }
+    },
+    [parts.length],
+  );
+
+  const toggleMode = useCallback(() => {
+    setMode((m) => {
+      const next = m === "whole" ? "parts" : "whole";
+      try {
+        localStorage.setItem(MODE_KEY, next);
+      } catch {
+        /* private mode */
+      }
+      return next;
+    });
+  }, []);
+
+  /* The sidebar's section rows, footnote markers and internal cross-references
+     all point at ids that may be sitting in a hidden part. Reveal the owning
+     part first, then let the scroll happen. */
+  useEffect(() => {
+    if (!parts.length) return;
+    const onClick = (e: MouseEvent) => {
+      const a = (e.target as HTMLElement | null)?.closest?.("a");
+      if (!(a instanceof HTMLAnchorElement)) return;
+      const hash = a.hash;
+      if (!hash || hash.length < 2) return;
+      let target: HTMLElement | null = null;
+      try {
+        target = document.querySelector<HTMLElement>(hash);
+      } catch {
+        return;
+      }
+      if (!target) return;
+      const owner = parts.findIndex((p) => p.els.some((el) => el.contains(target)));
+      if (owner < 0 || owner === at) return;
+      goTo(owner, false);
+    };
+    document.addEventListener("click", onClick, true);
+    return () => document.removeEventListener("click", onClick, true);
+  }, [parts, at, goTo]);
+
+  const chunked = parts.length > 1;
+  const showAttribution = chunked && mode === "parts" && at > 0 && !!attribution;
+
+  const paged = chunked && mode === "parts";
+
+  return (
+    <>
+      <div ref={topRef} className="scroll-mt-24" />
+
+      {chunked && (
+        <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
+          {/* Smaller than the header's, and only once the header has scrolled
+              out of the reading: parts after the first are otherwise somebody
+              else's text with no name on the screen. */}
+          <p className={cn("text-muted-foreground text-xs", !showAttribution && "invisible")}>
+            {attribution}
+          </p>
+          <Button variant="ghost" size="sm" onClick={toggleMode} className="text-xs">
+            {mode === "whole" ? "Read section by section" : "Read the whole paper"}
+          </Button>
+        </div>
+      )}
+
+      <div ref={hostRef}>{children}</div>
+
+
+      {footer}
+
+      {/* One pager, exactly as the lesson reader has: Previous and Next move
+          section by section, and at the ends they roll into the neighbouring
+          item — so the page does not add a LessonNav under this. Whole-paper
+          mode has no sections to step through, so it is only the neighbours. */}
+      <ReadingPager
+        left={
+          paged && at > 0 ? (
+            <PagerCard dir="prev" title={parts[at - 1].label} onClick={() => goTo(at - 1)} />
+          ) : prev ? (
+            <PagerCard dir="prev" title={prev.title} href={`${prev.href}?p=last`} />
+          ) : null
+        }
+        right={
+          paged && at < parts.length - 1 ? (
+            <PagerCard dir="next" title={parts[at + 1].label} onClick={() => goTo(at + 1)} />
+          ) : next ? (
+            <PagerCard dir="next" title={next.title} href={next.href} />
+          ) : null
+        }
+      />
+    </>
+  );
+}

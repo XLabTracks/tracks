@@ -46,10 +46,12 @@ export function WhatDoTheySay() {
           >
             <div className="flex items-center gap-3">
               <Avatar figure={f} className="size-11 text-sm" />
+              {/* THE CARD STARTS ON THE NAME. There was a "PROFILE 01 · OPENAI"
+                  eyebrow above it, which spent the most prominent line of the
+                  card on a serial number and an affiliation the role line
+                  below already gives — "CEO, OpenAI" one line down. The
+                  reader is here for the person. */}
               <div className="min-w-0">
-                <p className="text-muted-foreground font-mono text-[10px] tracking-[0.12em] uppercase">
-                  {f.code}
-                </p>
                 <p className="text-foreground truncate text-sm font-semibold">
                   {f.name}
                 </p>
@@ -61,7 +63,7 @@ export function WhatDoTheySay() {
             <p className="text-muted-foreground mt-3 text-xs leading-relaxed">
               {f.teaser}
             </p>
-            <span className="text-primary mt-3 inline-flex items-center gap-1 text-xs font-medium">
+            <span className="text-brand-ink mt-3 inline-flex items-center gap-1 text-xs font-medium">
               {C.viewProfile.replace(" →", "")}
               <ArrowRight
                 className="size-3 transition-transform group-hover:translate-x-0.5"
@@ -84,9 +86,6 @@ export function WhatDoTheySay() {
                 <div className="flex items-center gap-4">
                   <Avatar figure={active} className="size-16 text-lg" />
                   <div className="min-w-0">
-                    <p className="text-muted-foreground font-mono text-[11px] tracking-[0.12em] uppercase">
-                      {active.code}
-                    </p>
                     <DialogTitle className="text-lg">
                       {active.name}
                     </DialogTitle>
@@ -103,13 +102,13 @@ export function WhatDoTheySay() {
                     key={si}
                     className={cn(
                       s.matters &&
-                        "border-primary/40 bg-primary/5 rounded-lg border-l-2 p-3",
+                        "border-primary/40 bg-primary/5 rounded-lg border p-3",
                     )}
                   >
                     <p
                       className={cn(
-                        "font-mono text-[11px] tracking-[0.12em] uppercase",
-                        s.matters ? "text-primary" : "text-muted-foreground",
+                        "eyebrow",
+                        s.matters ? "text-brand-ink" : "text-muted-foreground",
                       )}
                     >
                       {s.label}
@@ -125,7 +124,7 @@ export function WhatDoTheySay() {
                 ))}
 
                 <div className="border-border border-t pt-3">
-                  <p className="text-muted-foreground font-mono text-[11px] tracking-[0.12em] uppercase">
+                  <p className="text-muted-foreground eyebrow">
                     Sources
                   </p>
                   <div className="mt-1.5 flex flex-wrap gap-x-4 gap-y-1">
@@ -135,14 +134,14 @@ export function WhatDoTheySay() {
                         href={src.href}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="text-primary text-xs underline underline-offset-2 hover:no-underline focus-visible:ring-2 focus-visible:ring-[var(--ring)] focus-visible:outline-none"
+                        className="text-brand-ink text-xs underline underline-offset-2 hover:no-underline focus-visible:ring-2 focus-visible:ring-[var(--ring)] focus-visible:outline-none"
                       >
                         {src.label}
                       </a>
                     ))}
                   </div>
                   {active.photoSource && (
-                    <p className="text-muted-foreground mt-3 text-[11px]">
+                    <p className="text-muted-foreground mt-3 text-3xs">
                       Portrait:{" "}
                       <a
                         href={active.photoSource}

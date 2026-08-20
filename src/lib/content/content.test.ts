@@ -5,7 +5,7 @@ import { lessons, modules } from "@/content/curriculum.data";
 import { exercises } from "@/content/exercises.data";
 import { assessments } from "@/content/assessments.data";
 import { facilitatorGuides } from "@/content/facilitator-guides.data";
-import { ARGUE_REVEAL_DEFAULTS } from "@/lib/content/types";
+import { ARGUE_REVEAL_DEFAULTS, isWritingExercise } from "@/lib/content/types";
 import { featuredExercises } from "@/app/exercises/featured";
 import {
   getAssessmentForModule,
@@ -24,6 +24,7 @@ import {
   getTrackItemSequence,
   getTrackOutline,
   getTrackSidebarOutline,
+  isCompletionItem,
   isOptionalItem,
   itemIdOf,
   type ModuleItem,
@@ -101,20 +102,43 @@ describe("content integrity", () => {
           if (target === undefined) continue;
           expect(
             target,
-            `${id}: sectionItemId must be a non-empty item id (empty string still renders as a nested row)`,
+            `${id}: sectionItemId must be a non-empty item id (empty string still renders as a nested row)`
           ).not.toBe("");
           const targetIndex = m.itemIds.indexOf(target);
           expect(
             targetIndex,
-            `${id}: sectionItemId "${target}" must be an earlier item in module ${m.id}`,
+            `${id}: sectionItemId "${target}" must be an earlier item in module ${m.id}`
           ).toBeGreaterThanOrEqual(0);
-          expect(targetIndex, `${id}: sectionItemId "${target}" must precede it`).toBeLessThan(i);
+          expect(
+            targetIndex,
+            `${id}: sectionItemId "${target}" must precede it`
+          ).toBeLessThan(i);
           expect(
             sectionOf.has(target),
-            `${id}: sectionItemId "${target}" must itself be top-level (one nesting layer)`,
+            `${id}: sectionItemId "${target}" must itself be top-level (one nesting layer)`
           ).toBe(false);
         }
       }
+    }
+  });
+
+  it("sidebar group titles replace an empty head page with real linked sections", () => {
+    for (const lesson of lessons) {
+      if (lesson.sidebarGroupTitle === undefined) continue;
+      expect(lesson.sidebarGroupTitle.trim()).not.toBe("");
+      expect(lesson.sectionItemId).toBeUndefined();
+      const parentModule = modules.find(
+        (candidate) => candidate.id === lesson.moduleId
+      );
+      expect(parentModule, `${lesson.id}: module must resolve`).toBeDefined();
+      expect(
+        lessons.some(
+          (candidate) =>
+            candidate.moduleId === lesson.moduleId &&
+            candidate.sectionItemId === lesson.id
+        ),
+        `${lesson.id}: sidebarGroupTitle needs at least one linked subsection`
+      ).toBe(true);
     }
   });
 
@@ -138,7 +162,7 @@ describe("content integrity", () => {
     for (const track of tracks) {
       for (const m of getModulesForTrack(track.id)) {
         expect(getPrerequisiteModules(m.id).length).toBe(
-          m.prerequisiteModuleIds.length,
+          m.prerequisiteModuleIds.length
         );
       }
     }
@@ -161,7 +185,7 @@ describe("content integrity", () => {
     const dupId = (xs: { id: string }[]) => {
       const ids = xs.map((x) => x.id);
       expect(new Set(ids).size, `duplicate id in ${JSON.stringify(ids)}`).toBe(
-        ids.length,
+        ids.length
       );
     };
     dupId(tracks);
@@ -178,7 +202,7 @@ describe("content integrity", () => {
     for (const track of tracks) {
       const slugs = getModulesForTrack(track.id).map((m) => m.slug);
       expect(new Set(slugs).size, `duplicate module slug in ${track.id}`).toBe(
-        slugs.length,
+        slugs.length
       );
     }
 
@@ -207,7 +231,7 @@ describe("content integrity", () => {
       const paperId = r.id.replace(/^paper-res-/, "");
       // The hub links course readings to their in-course viewer.
       expect(r.internalHref, `${r.id} internalHref`).toBe(
-        getContentLocation(paperId)?.href,
+        getContentLocation(paperId)?.href
       );
     }
   });
@@ -215,40 +239,48 @@ describe("content integrity", () => {
 
 describe("allocation exercise integrity", () => {
   const allocations = exercises.flatMap((e) =>
-    e.type === "allocation" ? [e] : [],
+    e.type === "allocation" ? [e] : []
   );
 
   it("agenda and scenario ids are unique and non-empty", () => {
     for (const exercise of allocations) {
-      expect(exercise.agendas.length, `${exercise.id} agendas`).toBeGreaterThan(0);
-      expect(exercise.scenarios.length, `${exercise.id} scenarios`).toBeGreaterThan(0);
+      expect(exercise.agendas.length, `${exercise.id} agendas`).toBeGreaterThan(
+        0
+      );
+      expect(
+        exercise.scenarios.length,
+        `${exercise.id} scenarios`
+      ).toBeGreaterThan(0);
       const agendaIds = exercise.agendas.map((a) => a.id);
       expect(
         new Set(agendaIds).size,
-        `${exercise.id} has duplicate agenda ids`,
+        `${exercise.id} has duplicate agenda ids`
       ).toBe(agendaIds.length);
       const scenarioIds = exercise.scenarios.map((s) => s.id);
       expect(
         new Set(scenarioIds).size,
-        `${exercise.id} has duplicate scenario ids`,
+        `${exercise.id} has duplicate scenario ids`
       ).toBe(scenarioIds.length);
     }
   });
 
   it("the pool is positive and reachable with the stepper", () => {
     for (const exercise of allocations) {
-      expect(exercise.totalPeople, `${exercise.id} totalPeople`).toBeGreaterThan(0);
+      expect(
+        exercise.totalPeople,
+        `${exercise.id} totalPeople`
+      ).toBeGreaterThan(0);
       const step = exercise.step ?? 0.5;
       expect(step, `${exercise.id} step`).toBeGreaterThan(0);
       // totalPeople must sit on the step grid, or "Next" can never enable.
       const ratio = exercise.totalPeople / step;
       expect(
         Math.abs(ratio - Math.round(ratio)),
-        `${exercise.id}: totalPeople is not a multiple of step`,
+        `${exercise.id}: totalPeople is not a multiple of step`
       ).toBeLessThan(1e-9);
       expect(
         exercise.minReasoningChars ?? 0,
-        `${exercise.id} minReasoningChars`,
+        `${exercise.id} minReasoningChars`
       ).toBeGreaterThanOrEqual(0);
     }
   });
@@ -256,16 +288,20 @@ describe("allocation exercise integrity", () => {
 
 describe("control-scenarios exercise integrity", () => {
   const controlScenarios = exercises.flatMap((e) =>
-    e.type === "control-scenarios" ? [e] : [],
+    e.type === "control-scenarios" ? [e] : []
   );
 
   it("scenario ids are unique and copy is non-empty", () => {
     for (const exercise of controlScenarios) {
-      expect(exercise.scenarios.length, `${exercise.id} scenarios`).toBeGreaterThan(0);
+      expect(
+        exercise.scenarios.length,
+        `${exercise.id} scenarios`
+      ).toBeGreaterThan(0);
       const ids = exercise.scenarios.map((s) => s.id);
-      expect(new Set(ids).size, `${exercise.id} has duplicate scenario ids`).toBe(
-        ids.length,
-      );
+      expect(
+        new Set(ids).size,
+        `${exercise.id} has duplicate scenario ids`
+      ).toBe(ids.length);
       for (const s of exercise.scenarios) {
         for (const [field, value] of Object.entries({
           displayTitle: s.displayTitle,
@@ -287,18 +323,24 @@ describe("control-scenarios exercise integrity", () => {
         const nodeIds = s.graph.nodes.map((n) => n.id);
         expect(
           new Set(nodeIds).size,
-          `${exercise.id}/${s.id} has duplicate node ids`,
+          `${exercise.id}/${s.id} has duplicate node ids`
         ).toBe(nodeIds.length);
         const known = new Set(nodeIds);
         for (const edge of s.graph.edges) {
-          expect(known.has(edge.from), `${exercise.id}/${s.id} edge from ${edge.from}`).toBe(true);
-          expect(known.has(edge.to), `${exercise.id}/${s.id} edge to ${edge.to}`).toBe(true);
+          expect(
+            known.has(edge.from),
+            `${exercise.id}/${s.id} edge from ${edge.from}`
+          ).toBe(true);
+          expect(
+            known.has(edge.to),
+            `${exercise.id}/${s.id} edge to ${edge.to}`
+          ).toBe(true);
         }
         for (const node of s.graph.nodes) {
           if (node.kind === "actor") {
             expect(
               node.actor && actorIds.has(node.actor),
-              `${exercise.id}/${s.id} node ${node.id} has an undefined actor`,
+              `${exercise.id}/${s.id} node ${node.id} has an undefined actor`
             ).toBe(true);
           }
         }
@@ -309,7 +351,7 @@ describe("control-scenarios exercise integrity", () => {
 
 describe("staged-questions exercise integrity", () => {
   const stagedQuestions = exercises.flatMap((e) =>
-    e.type === "staged-questions" ? [e] : [],
+    e.type === "staged-questions" ? [e] : []
   );
 
   it("parts and questions are non-empty with unique ids", () => {
@@ -317,10 +359,14 @@ describe("staged-questions exercise integrity", () => {
       expect(exercise.parts.length, `${exercise.id} parts`).toBeGreaterThan(0);
       const questions = exercise.parts.flatMap((p) => p.questions);
       expect(questions.length, `${exercise.id} questions`).toBeGreaterThan(0);
-      const ids = [...exercise.parts.map((p) => p.id), ...questions.map((q) => q.id)];
-      expect(new Set(ids).size, `${exercise.id} has duplicate part/question ids`).toBe(
-        ids.length,
-      );
+      const ids = [
+        ...exercise.parts.map((p) => p.id),
+        ...questions.map((q) => q.id),
+      ];
+      expect(
+        new Set(ids).size,
+        `${exercise.id} has duplicate part/question ids`
+      ).toBe(ids.length);
       for (const q of questions) {
         for (const [field, value] of Object.entries({
           title: q.title,
@@ -330,15 +376,21 @@ describe("staged-questions exercise integrity", () => {
           expect(value.trim(), `${exercise.id}/${q.id} ${field}`).not.toBe("");
         }
         if (q.acknowledgement !== undefined) {
-          expect(q.acknowledgement.trim(), `${exercise.id}/${q.id} acknowledgement`).not.toBe("");
+          expect(
+            q.acknowledgement.trim(),
+            `${exercise.id}/${q.id} acknowledgement`
+          ).not.toBe("");
         }
         // A forward link must point somewhere and appear in the forward text.
         if (q.forwardLinkText || q.forwardHref) {
           expect(q.forward, `${exercise.id}/${q.id} forward`).toBeTruthy();
-          expect(q.forwardHref, `${exercise.id}/${q.id} forwardHref`).toBeTruthy();
+          expect(
+            q.forwardHref,
+            `${exercise.id}/${q.id} forwardHref`
+          ).toBeTruthy();
           expect(
             q.forward!.includes(q.forwardLinkText!),
-            `${exercise.id}/${q.id} forwardLinkText not in forward`,
+            `${exercise.id}/${q.id} forwardLinkText not in forward`
           ).toBe(true);
         }
       }
@@ -348,7 +400,7 @@ describe("staged-questions exercise integrity", () => {
 
 describe("commit-construct exercise integrity", () => {
   const commitConstructs = exercises.flatMap((e) =>
-    e.type === "commit-construct" ? [e] : [],
+    e.type === "commit-construct" ? [e] : []
   );
 
   it("options are unique, guidance keys resolve, and copy is non-empty", () => {
@@ -357,29 +409,40 @@ describe("commit-construct exercise integrity", () => {
       // keyed on commit choices is meaningless without one.
       if (exercise.commit) {
         const optionIds = exercise.commit.options.map((o) => o.id);
-        const confidenceIds = exercise.commit.confidenceOptions.map((o) => o.id);
-        expect(optionIds.length, `${exercise.id} options`).toBeGreaterThanOrEqual(2);
-        expect(confidenceIds.length, `${exercise.id} confidence`).toBeGreaterThanOrEqual(2);
+        const confidenceIds = exercise.commit.confidenceOptions.map(
+          (o) => o.id
+        );
+        expect(
+          optionIds.length,
+          `${exercise.id} options`
+        ).toBeGreaterThanOrEqual(2);
+        expect(
+          confidenceIds.length,
+          `${exercise.id} confidence`
+        ).toBeGreaterThanOrEqual(2);
         for (const ids of [optionIds, confidenceIds]) {
-          expect(new Set(ids).size, `${exercise.id} has duplicate option ids`).toBe(
-            ids.length,
-          );
+          expect(
+            new Set(ids).size,
+            `${exercise.id} has duplicate option ids`
+          ).toBe(ids.length);
         }
-        for (const key of Object.keys(exercise.construct.guidanceByChoice ?? {})) {
+        for (const key of Object.keys(
+          exercise.construct.guidanceByChoice ?? {}
+        )) {
           expect(
             optionIds.includes(key),
-            `${exercise.id} guidance key "${key}" is not an option id`,
+            `${exercise.id} guidance key "${key}" is not an option id`
           ).toBe(true);
         }
       } else {
         expect(
           exercise.construct.guidanceByChoice,
-          `${exercise.id} has guidanceByChoice but no commit step`,
+          `${exercise.id} has guidanceByChoice but no commit step`
         ).toBeUndefined();
       }
       expect(
         exercise.construct.compareQuestions.length,
-        `${exercise.id} compareQuestions`,
+        `${exercise.id} compareQuestions`
       ).toBeGreaterThan(0);
       // Reveals are optional (an exercise may end at the learner's own
       // construction), but a declared one may not be blank.
@@ -399,51 +462,62 @@ describe("commit-construct exercise integrity", () => {
 
 describe("argue-reveal exercise integrity", () => {
   const argueReveals = exercises.flatMap((e) =>
-    e.type === "argue-reveal" ? [e] : [],
+    e.type === "argue-reveal" ? [e] : []
   );
 
   it("item, concept, and surface ids are unique and non-empty", () => {
     for (const exercise of argueReveals) {
       expect(exercise.items.length, `${exercise.id} items`).toBeGreaterThan(0);
-      expect(exercise.concepts.length, `${exercise.id} concepts`).toBeGreaterThan(0);
-      expect(exercise.toolbox.length, `${exercise.id} toolbox`).toBeGreaterThan(0);
+      expect(
+        exercise.concepts.length,
+        `${exercise.id} concepts`
+      ).toBeGreaterThan(0);
+      expect(exercise.toolbox.length, `${exercise.id} toolbox`).toBeGreaterThan(
+        0
+      );
       for (const ids of [
         exercise.items.map((i) => i.id),
         exercise.concepts.map((c) => c.id),
         exercise.construction.surfaces.map((s) => s.id),
       ]) {
         expect(new Set(ids).size, `${exercise.id} has duplicate ids`).toBe(
-          ids.length,
+          ids.length
         );
       }
       for (const item of exercise.items) {
         expect(
           item.rounds.length,
-          `${exercise.id}/${item.id} rounds`,
+          `${exercise.id}/${item.id} rounds`
         ).toBeGreaterThan(0);
         for (const round of item.rounds) {
-          expect(round.critique.trim(), `${exercise.id}/${item.id}`).not.toBe("");
+          expect(round.critique.trim(), `${exercise.id}/${item.id}`).not.toBe(
+            ""
+          );
           expect(round.reveal.trim(), `${exercise.id}/${item.id}`).not.toBe("");
         }
       }
       expect(
         exercise.construction.surfaces.length,
-        `${exercise.id} surfaces`,
+        `${exercise.id} surfaces`
       ).toBeGreaterThan(0);
     }
   });
 
   it("char bounds are coherent (min below max)", () => {
     for (const exercise of argueReveals) {
-      const min = exercise.responseMinChars ?? ARGUE_REVEAL_DEFAULTS.responseMinChars;
-      const max = exercise.responseMaxChars ?? ARGUE_REVEAL_DEFAULTS.responseMaxChars;
-      const rMin = exercise.residualMinChars ?? ARGUE_REVEAL_DEFAULTS.residualMinChars;
-      const rMax = exercise.residualMaxChars ?? ARGUE_REVEAL_DEFAULTS.residualMaxChars;
+      const min =
+        exercise.responseMinChars ?? ARGUE_REVEAL_DEFAULTS.responseMinChars;
+      const max =
+        exercise.responseMaxChars ?? ARGUE_REVEAL_DEFAULTS.responseMaxChars;
+      const rMin =
+        exercise.residualMinChars ?? ARGUE_REVEAL_DEFAULTS.residualMinChars;
+      const rMax =
+        exercise.residualMaxChars ?? ARGUE_REVEAL_DEFAULTS.residualMaxChars;
       expect(min, `${exercise.id} response bounds`).toBeLessThan(max);
       expect(rMin, `${exercise.id} residual bounds`).toBeLessThan(rMax);
       expect(
         exercise.noteMaxChars ?? ARGUE_REVEAL_DEFAULTS.noteMaxChars,
-        `${exercise.id} note cap`,
+        `${exercise.id} note cap`
       ).toBeGreaterThan(0);
     }
   });
@@ -452,12 +526,14 @@ describe("argue-reveal exercise integrity", () => {
 describe("exercises tab integrity", () => {
   it("every featured entry resolves to a real exercise, once", () => {
     const ids = featuredExercises.map((f) => f.id);
-    expect(new Set(ids).size, "duplicate featured exercise id").toBe(ids.length);
+    expect(new Set(ids).size, "duplicate featured exercise id").toBe(
+      ids.length
+    );
     for (const entry of featuredExercises) {
       // A typo here silently drops the card and 404s its page.
       expect(
         getExerciseById(entry.id),
-        `featured exercise ${entry.id} not in exercises.data.ts`,
+        `featured exercise ${entry.id} not in exercises.data.ts`
       ).toBeDefined();
       expect(entry.blurb.trim(), `featured ${entry.id} blurb`).not.toBe("");
     }
@@ -474,8 +550,8 @@ describe("paper integrity", () => {
     });
   const insertedLessonIds = papers.flatMap((p) =>
     activityEditsOf(p).flatMap((edit) =>
-      edit.items.filter((i) => i.kind === "lesson").map((i) => i.id),
-    ),
+      edit.items.filter((i) => i.kind === "lesson").map((i) => i.id)
+    )
   );
 
   it("every paper belongs to a real module and appears in that module's itemIds exactly once", () => {
@@ -483,15 +559,19 @@ describe("paper integrity", () => {
       const listers = tracks
         .flatMap((t) => getModulesForTrack(t.id))
         .filter((m) => m.itemIds.includes(paper.id));
-      expect(listers, `paper ${paper.id} must be listed by exactly one module`).toHaveLength(1);
+      expect(
+        listers,
+        `paper ${paper.id} must be listed by exactly one module`
+      ).toHaveLength(1);
       // The listing module must be the paper's own — getContentLocation and
       // revalidation resolve through paper.moduleId.
-      expect(listers[0].id, `paper ${paper.id} listed outside its moduleId`).toBe(
-        paper.moduleId,
-      );
+      expect(
+        listers[0].id,
+        `paper ${paper.id} listed outside its moduleId`
+      ).toBe(paper.moduleId);
       expect(
         listers[0].itemIds.filter((id) => id === paper.id),
-        `paper ${paper.id} duplicated in itemIds`,
+        `paper ${paper.id} duplicated in itemIds`
       ).toHaveLength(1);
     }
   });
@@ -502,20 +582,24 @@ describe("paper integrity", () => {
       // a sequence's anchor id derives from its first exercise id.
       const exerciseIds = activityEditsOf(paper).flatMap((edit) =>
         edit.items.flatMap((i) =>
-          i.kind === "exercise" ? [i.id] : i.kind === "sequence" ? i.exerciseIds : [],
-        ),
+          i.kind === "exercise"
+            ? [i.id]
+            : i.kind === "sequence"
+            ? i.exerciseIds
+            : []
+        )
       );
       expect(
         new Set(exerciseIds).size,
-        `paper ${paper.id} inserts an exercise twice`,
+        `paper ${paper.id} inserts an exercise twice`
       ).toBe(exerciseIds.length);
       // Demos too — duplicate insertions would collide on ins-demo-<id>.
       const demoIds = activityEditsOf(paper).flatMap((edit) =>
-        edit.items.flatMap((i) => (i.kind === "demo" ? [i.id] : [])),
+        edit.items.flatMap((i) => (i.kind === "demo" ? [i.id] : []))
       );
       expect(
         new Set(demoIds).size,
-        `paper ${paper.id} inserts a demo twice`,
+        `paper ${paper.id} inserts a demo twice`
       ).toBe(demoIds.length);
     }
   });
@@ -527,7 +611,7 @@ describe("paper integrity", () => {
         const inline = "anchor" in edit.after && edit.after.s !== undefined;
         expect(
           inline,
-          `${paper.id}: label "${edit.label}" on a sentence-level add would be silently dropped`,
+          `${paper.id}: label "${edit.label}" on a sentence-level add would be silently dropped`
         ).toBe(false);
       }
     }
@@ -540,7 +624,7 @@ describe("paper integrity", () => {
         expect(
           edit.note === undefined,
           `${paper.id}: silent hide at ${edit.at.anchor} carries note "${edit.note}" — ` +
-            `drop the note or the silent flag`,
+            `drop the note or the silent flag`
         ).toBe(true);
       }
     }
@@ -561,37 +645,46 @@ describe("paper integrity", () => {
           if (item.kind === "exercise") {
             expect(
               getExerciseById(item.id),
-              `exercise ${item.id} in ${paper.id}`,
+              `exercise ${item.id} in ${paper.id}`
             ).toBeDefined();
           } else if (item.kind === "demo") {
             expect(
               getDemo(item.id),
-              `demo ${item.id} in ${paper.id} is not in the demo registry`,
+              `demo ${item.id} in ${paper.id} is not in the demo registry`
             ).toBeDefined();
           } else if (item.kind === "sequence") {
             expect(
               item.exerciseIds.length,
-              `empty sequence in ${paper.id}`,
+              `empty sequence in ${paper.id}`
             ).toBeGreaterThan(0);
             for (const id of item.exerciseIds) {
               const exercise = getExerciseById(id);
-              expect(exercise, `sequence exercise ${id} in ${paper.id}`).toBeDefined();
+              expect(
+                exercise,
+                `sequence exercise ${id} in ${paper.id}`
+              ).toBeDefined();
               expect(
                 SEQUENCEABLE.has(exercise!.type),
-                `sequence exercise ${id} in ${paper.id} has non-sequenceable type "${exercise!.type}"`,
+                `sequence exercise ${id} in ${
+                  paper.id
+                } has non-sequenceable type "${exercise!.type}"`
               ).toBe(true);
             }
           } else {
             const lesson = getLessonById(item.id);
             expect(lesson, `lesson ${item.id} in ${paper.id}`).toBeDefined();
             expect(lesson!.moduleId, `inserted lesson ${item.id} module`).toBe(
-              paper.moduleId,
+              paper.moduleId
             );
             expect(
               existsSync(
-                join(process.cwd(), "src/content/lessons", `${lesson!.contentRef}.mdx`),
+                join(
+                  process.cwd(),
+                  "src/content/lessons",
+                  `${lesson!.contentRef}.mdx`
+                )
               ),
-              `MDX body for inserted lesson ${item.id}`,
+              `MDX body for inserted lesson ${item.id}`
             ).toBe(true);
           }
         }
@@ -601,12 +694,13 @@ describe("paper integrity", () => {
 
   it("inserted lessons are not module items and are inserted only once", () => {
     const allItemIds = new Set(
-      tracks.flatMap((t) => getModulesForTrack(t.id)).flatMap((m) => m.itemIds),
+      tracks.flatMap((t) => getModulesForTrack(t.id)).flatMap((m) => m.itemIds)
     );
     for (const id of insertedLessonIds) {
-      expect(allItemIds.has(id), `inserted lesson ${id} must not be an item`).toBe(
-        false,
-      );
+      expect(
+        allItemIds.has(id),
+        `inserted lesson ${id} must not be an item`
+      ).toBe(false);
     }
     expect(new Set(insertedLessonIds).size).toBe(insertedLessonIds.length);
   });
@@ -617,23 +711,23 @@ describe("paper integrity", () => {
       if (source.kind === "arxiv") {
         expect(
           parseArxivId(source.arxivId),
-          `paper ${paper.id} needs a pinned arXiv id`,
+          `paper ${paper.id} needs a pinned arXiv id`
         ).not.toBeNull();
       } else if (source.kind === "substack") {
         expect(
           parseSubstackPostUrl(source.postUrl),
-          `paper ${paper.id} needs a public Substack post URL (https://{host}/p/{slug})`,
+          `paper ${paper.id} needs a public Substack post URL (https://{host}/p/{slug})`
         ).not.toBeNull();
       } else {
         expect(
           parseLessWrongPostUrl(source.postUrl),
-          `paper ${paper.id} needs a LessWrong/Alignment Forum post URL (https://{host}/posts/{id}/…)`,
+          `paper ${paper.id} needs a LessWrong/Alignment Forum post URL (https://{host}/posts/{id}/…)`
         ).not.toBeNull();
       }
       const facts = artifactFactsOf(paper);
       expect(
         existsSync(facts.path),
-        `artifact for ${facts.id} — run \`${facts.buildCmd}\``,
+        `artifact for ${facts.id} — run \`${facts.buildCmd}\``
       ).toBe(true);
     }
   });
@@ -647,12 +741,12 @@ describe("paper integrity", () => {
       const artifact = readArtifact(paper);
       expect(
         artifact.state,
-        `${facts.id} must be ready — run \`${facts.buildCmd}\``,
+        `${facts.id} must be ready — run \`${facts.buildCmd}\``
       ).toBe("ready");
       if (!artifact.ready) continue;
       expect(
         artifact.ready.converterVersion,
-        `${facts.id} artifact is stale — run \`${facts.buildCmd}\``,
+        `${facts.id} artifact is stale — run \`${facts.buildCmd}\``
       ).toBe(facts.expectedVersion);
     }
   });
@@ -671,7 +765,7 @@ describe("paper integrity", () => {
     for (const file of readdirSync(dir)) {
       if (!file.endsWith(".json")) continue;
       const artifact = JSON.parse(
-        readFileSync(join(dir, file), "utf8"),
+        readFileSync(join(dir, file), "utf8")
       ) as PaperArtifact;
       if (artifact.state !== "ready") continue;
       const id = file.replace(/\.json$/, "");
@@ -685,20 +779,23 @@ describe("paper integrity", () => {
           if (Array.isArray(classes) && classes.includes("ax-cite")) {
             const hasLink = (function findA(el: Element): boolean {
               return el.children.some(
-                (c) =>
-                  c.type === "element" && (c.tagName === "a" || findA(c)),
+                (c) => c.type === "element" && (c.tagName === "a" || findA(c))
               );
             })(child);
             const text = (function textOf(el: Element): string {
               return el.children
                 .map((c) =>
-                  c.type === "text" ? c.value : c.type === "element" ? textOf(c) : "",
+                  c.type === "text"
+                    ? c.value
+                    : c.type === "element"
+                    ? textOf(c)
+                    : ""
                 )
                 .join("");
             })(child);
             expect(
               hasLink || !/[a-zA-Z]{3,}/.test(text),
-              `${id}: citation renders raw keys ("${text}") — its bibliography did not resolve; rebuild with \`npm run arxiv:build -- --id ${id}\` (a .bib-only source synthesizes its bibliography on rebuild)`,
+              `${id}: citation renders raw keys ("${text}") — its bibliography did not resolve; rebuild with \`npm run arxiv:build -- --id ${id}\` (a .bib-only source synthesizes its bibliography on rebuild)`
             ).toBe(true);
           }
           checkCites(child);
@@ -718,7 +815,7 @@ describe("paper integrity", () => {
       for (const assetPath of artifact.ready.assets) {
         expect(
           existsSync(join(facts.assetsDir, assetPath)),
-          `${facts.id}: missing committed asset ${assetPath} — run \`${facts.buildCmd}\``,
+          `${facts.id}: missing committed asset ${assetPath} — run \`${facts.buildCmd}\``
         ).toBe(true);
       }
     }
@@ -739,9 +836,42 @@ describe("paper integrity", () => {
         expect(
           tocIds.has(sectionEnd),
           `sectionEnd ${sectionEnd} not in ${facts.id} toc — ` +
-            `run \`${facts.tocCmd}\` to list valid ids`,
+            `run \`${facts.tocCmd}\` to list valid ids`
         ).toBe(true);
       }
+    }
+  });
+
+  it("every authored paper page boundary exists, is unique, and follows source order", () => {
+    for (const paper of papers) {
+      const pageIds = paper.pageSectionIds;
+      if (pageIds === undefined) continue;
+      expect(
+        pageIds.length,
+        `${paper.id}: pageSectionIds must name at least two pages or be omitted`
+      ).toBeGreaterThanOrEqual(2);
+      expect(
+        new Set(pageIds).size,
+        `${paper.id}: pageSectionIds contains a duplicate boundary`
+      ).toBe(pageIds.length);
+
+      const artifact = readArtifact(paper);
+      if (!artifact.ready) continue; // artifact readiness is covered above
+      const tocPosition = new Map(
+        artifact.ready.toc.map((entry, index) => [entry.id, index])
+      );
+      const positions = pageIds.map((id) => {
+        expect(
+          tocPosition.has(id),
+          `${paper.id}: paper page boundary ${id} is not in the source toc — ` +
+            `run \`${artifactFactsOf(paper).tocCmd}\` to list valid ids`
+        ).toBe(true);
+        return tocPosition.get(id) ?? -1;
+      });
+      expect(
+        positions,
+        `${paper.id}: pageSectionIds must follow the source document order`
+      ).toEqual([...positions].sort((a, b) => a - b));
     }
   });
 
@@ -757,49 +887,62 @@ describe("paper integrity", () => {
         const info = index.get(ref.anchor);
         expect(
           info,
-          `${paper.id}: edit targets unknown anchor ${ref.anchor} — run \`${listCmd}\``,
+          `${paper.id}: edit targets unknown anchor ${ref.anchor} — run \`${listCmd}\``
         ).toBeDefined();
         if (!info) continue;
-        const sEnd = edit.op === "hide" ? (edit.sEnd ?? ref.s) : ref.s;
+        const sEnd = edit.op === "hide" ? edit.sEnd ?? ref.s : ref.s;
         if (edit.op === "hide" && edit.sEnd !== undefined) {
           expect(
             ref.s !== undefined,
-            `${paper.id}: hide at ${ref.anchor} sets sEnd without s — the engine would hide the whole block`,
+            `${paper.id}: hide at ${ref.anchor} sets sEnd without s — the engine would hide the whole block`
           ).toBe(true);
         }
         if (ref.s !== undefined) {
           expect(
             ["p", "li", "blockquote"].includes(info.tag),
-            `${paper.id}: ${ref.anchor} is <${info.tag}> — sentence refs need prose blocks`,
+            `${paper.id}: ${ref.anchor} is <${info.tag}> — sentence refs need prose blocks`
           ).toBe(true);
           expect(
-            ref.s >= 1 && (sEnd ?? ref.s) <= info.sentences.length && (sEnd ?? ref.s) >= ref.s,
+            ref.s >= 1 &&
+              (sEnd ?? ref.s) <= info.sentences.length &&
+              (sEnd ?? ref.s) >= ref.s,
             `${paper.id}: ${ref.anchor} has ${info.sentences.length} sentences, ` +
-              `edit references s=${ref.s}${sEnd !== ref.s ? `..${sEnd}` : ""} — run \`${listCmd} --section …\``,
+              `edit references s=${ref.s}${
+                sEnd !== ref.s ? `..${sEnd}` : ""
+              } — run \`${listCmd} --section …\``
           ).toBe(true);
         } else if (edit.op === "hide" || edit.op === "gloss") {
           // h1–h4 carry toc ids (nav/scroll anchors) and must stay visible;
           // h5/h6 claim lead-ins are plain prose and may hide with their run.
-          const forbidden =
-            edit.op === "gloss" ? /^h[1-6]$/ : /^h[1-4]$/;
+          const forbidden = edit.op === "gloss" ? /^h[1-6]$/ : /^h[1-4]$/;
           expect(
             !forbidden.test(info.tag),
-            `${paper.id}: ${edit.op} may not target heading ${ref.anchor} (nav/scroll anchor)`,
+            `${paper.id}: ${edit.op} may not target heading ${ref.anchor} (nav/scroll anchor)`
           ).toBe(true);
         }
-        const targetText = ref.s !== undefined ? info.sentences[ref.s - 1] : info.text;
+        const targetText =
+          ref.s !== undefined ? info.sentences[ref.s - 1] : info.text;
         // A whole-block edit on a text-less block (a caption-less figure/image)
         // has no prose to snippet against — the anchor IS the whole target and
         // its snippet is documentary only (the patch engine skips the drift
         // check there too). Blocks that carry text stay strict.
         const textless = ref.s === undefined && info.text === "";
         if (!textless) {
-          expect(ref.snippet.trim().length, `${paper.id}: empty snippet at ${ref.anchor}`).toBeGreaterThan(0);
           expect(
-            normalizeText(targetText ?? "").startsWith(normalizeText(ref.snippet)),
-            `${paper.id}: snippet drift at ${ref.anchor}${ref.s ? ` s=${ref.s}` : ""} — ` +
-              `expected text starting "${ref.snippet}", target starts "${(targetText ?? "").slice(0, 70)}" — ` +
-              `re-run \`${listCmd}\` and re-verify this edit`,
+            ref.snippet.trim().length,
+            `${paper.id}: empty snippet at ${ref.anchor}`
+          ).toBeGreaterThan(0);
+          expect(
+            normalizeText(targetText ?? "").startsWith(
+              normalizeText(ref.snippet)
+            ),
+            `${paper.id}: snippet drift at ${ref.anchor}${
+              ref.s ? ` s=${ref.s}` : ""
+            } — ` +
+              `expected text starting "${ref.snippet}", target starts "${(
+                targetText ?? ""
+              ).slice(0, 70)}" — ` +
+              `re-run \`${listCmd}\` and re-verify this edit`
           ).toBe(true);
         }
       }
@@ -812,7 +955,7 @@ describe("paper integrity", () => {
       if (!artifact.ready) continue;
       const index = buildBlockIndex(artifact.ready.html);
       const hides = (paper.edits ?? []).flatMap((edit) =>
-        edit.op === "hide" ? [edit] : [],
+        edit.op === "hide" ? [edit] : []
       );
       // Expand each hide to covered units: "anchor" (whole block, incl.
       // descendant anchors) or "anchor:s".
@@ -821,7 +964,9 @@ describe("paper integrity", () => {
       const coverUnit = (unit: string, owner: string, silent: boolean) => {
         expect(
           covered.has(unit),
-          `${paper.id}: overlapping hides at ${unit} (${covered.get(unit)} and ${owner})`,
+          `${paper.id}: overlapping hides at ${unit} (${covered.get(
+            unit
+          )} and ${owner})`
         ).toBe(false);
         covered.set(unit, owner);
         if (silent) silentUnits.add(unit);
@@ -863,12 +1008,13 @@ describe("paper integrity", () => {
         hides.map((hide) =>
           hide.at.s !== undefined
             ? `${hide.at.anchor}:${hide.sEnd ?? hide.at.s}`
-            : hide.at.anchor,
-        ),
+            : hide.at.anchor
+        )
       );
       for (const { edit, ref } of blockRefsOf(paper)) {
         if (edit.op === "hide") continue;
-        const unit = ref.s !== undefined ? `${ref.anchor}:${ref.s}` : ref.anchor;
+        const unit =
+          ref.s !== undefined ? `${ref.anchor}:${ref.s}` : ref.anchor;
         if (edit.op === "gloss") {
           // A glossed phrase inside an EXPANDABLE hide is fine — it reveals
           // (and its card works) when the learner expands the marker. Inside
@@ -876,7 +1022,7 @@ describe("paper integrity", () => {
           expect(
             silentUnits.has(unit),
             `${paper.id}: gloss at ${unit} is inside a silently removed range ` +
-              `and would never render`,
+              `and would never render`
           ).toBe(false);
           continue;
         }
@@ -884,7 +1030,7 @@ describe("paper integrity", () => {
         expect(
           lastUnits.has(unit),
           `${paper.id}: ${edit.op} after ${unit} is inside a hidden range — ` +
-            `target the range's last unit or move it outside`,
+            `target the range's last unit or move it outside`
         ).toBe(true);
         // Hide-then-replace after a silently removed li has nowhere valid to
         // land — the note renders inside the li (valid list markup), which
@@ -895,7 +1041,7 @@ describe("paper integrity", () => {
             silentUnits.has(unit) &&
             index.get(ref.anchor)?.tag === "li",
           `${paper.id}: add after ${unit} would render inside a silently removed ` +
-            `list item — move it after the list or hide expandably`,
+            `list item — move it after the list or hide expandably`
         ).toBe(false);
       }
       // Mid-paragraph activities may not split a hidden block.
@@ -903,7 +1049,7 @@ describe("paper integrity", () => {
         if (edit.op !== "activity" || ref.s === undefined) continue;
         expect(
           covered.has(ref.anchor),
-          `${paper.id}: mid-paragraph activity splits hidden block ${ref.anchor}`,
+          `${paper.id}: mid-paragraph activity splits hidden block ${ref.anchor}`
         ).toBe(false);
       }
     }
@@ -912,16 +1058,16 @@ describe("paper integrity", () => {
   it("every gloss edit resolves: known term, unique target, phrase wrappable", () => {
     for (const paper of papers) {
       const glosses = (paper.edits ?? []).flatMap((edit) =>
-        edit.op === "gloss" ? [edit] : [],
+        edit.op === "gloss" ? [edit] : []
       );
       if (glosses.length === 0) continue;
 
       // Duplicate identical targets would nest or double-wrap triggers.
       const keys = glosses.map(
-        (op) => `${op.at.anchor}:${op.at.s ?? 0}:${normalizeText(op.phrase)}`,
+        (op) => `${op.at.anchor}:${op.at.s ?? 0}:${normalizeText(op.phrase)}`
       );
       expect(new Set(keys).size, `${paper.id}: duplicate gloss edits`).toBe(
-        keys.length,
+        keys.length
       );
 
       const artifact = readArtifact(paper);
@@ -950,7 +1096,7 @@ describe("paper integrity", () => {
         const where = `${op.at.anchor}${op.at.s ? ` s=${op.at.s}` : ""}`;
         expect(
           getGlossaryTerm(op.termId),
-          `${paper.id}: gloss at ${where} references unknown term "${op.termId}" — add it to src/content/glossary.json`,
+          `${paper.id}: gloss at ${where} references unknown term "${op.termId}" — add it to src/content/glossary.json`
         ).toBeDefined();
         const block = blockByAnchor.get(op.at.anchor);
         if (!block) continue; // unknown anchors already failed the snippet test
@@ -968,7 +1114,7 @@ describe("paper integrity", () => {
         expect(
           wrapGlossPhrase(target, op.phrase, op.termId),
           `${paper.id}: gloss phrase "${op.phrase}" at ${where} is not wrappable — ` +
-            `not plain running text there, or an earlier gloss already consumed it`,
+            `not plain running text there, or an earlier gloss already consumed it`
         ).toBe(true);
       }
     }
@@ -978,7 +1124,10 @@ describe("paper integrity", () => {
     for (const paper of papers) {
       for (const edit of paper.edits ?? []) {
         if (edit.op !== "add") continue;
-        expect(edit.markdown.trim().length, `${paper.id}: empty add markdown`).toBeGreaterThan(0);
+        expect(
+          edit.markdown.trim().length,
+          `${paper.id}: empty add markdown`
+        ).toBeGreaterThan(0);
         const inline = "anchor" in edit.after && edit.after.s !== undefined;
         if (inline) {
           // The EXACT runtime gate — a heuristic here would let markdown pass
@@ -987,7 +1136,7 @@ describe("paper integrity", () => {
           expect(
             markdownInlineToHast(edit.markdown),
             `${paper.id}: sentence-level add must render as a single inline paragraph ` +
-              `(no lists/headings/fences — even after a single newline)`,
+              `(no lists/headings/fences — even after a single newline)`
           ).not.toBeNull();
         }
       }
@@ -997,45 +1146,48 @@ describe("paper integrity", () => {
   it("gates have unique stable ids, non-empty copy, and no sentence-level targets", () => {
     for (const paper of papers) {
       const gates = (paper.edits ?? []).flatMap((edit) =>
-        edit.op === "gate" ? [edit] : [],
+        edit.op === "gate" ? [edit] : []
       );
       const ids = gates.map((gate) => gate.id);
       expect(
         new Set(ids).size,
-        `${paper.id}: duplicate gate ids (they key the learner's opened state)`,
+        `${paper.id}: duplicate gate ids (they key the learner's opened state)`
       ).toBe(ids.length);
       for (const gate of gates) {
-        expect(gate.id.trim().length, `${paper.id}: empty gate id`).toBeGreaterThan(0);
+        expect(
+          gate.id.trim().length,
+          `${paper.id}: empty gate id`
+        ).toBeGreaterThan(0);
         if (gate.prompt !== undefined) {
           expect(
             gate.prompt.trim().length,
-            `${paper.id}: gate ${gate.id} has an empty prompt — omit it for a bare gate`,
+            `${paper.id}: gate ${gate.id} has an empty prompt — omit it for a bare gate`
           ).toBeGreaterThan(0);
         }
         if (gate.cta !== undefined) {
           expect(
             gate.cta.trim().length,
-            `${paper.id}: gate ${gate.id} has an empty cta — omit it for the default`,
+            `${paper.id}: gate ${gate.id} has an empty cta — omit it for the default`
           ).toBeGreaterThan(0);
         }
         // The engine only supports section-end and whole-block gates
         // (patch-section fails soft on a sentence target; catch it here).
         expect(
           "anchor" in gate.after && gate.after.s !== undefined,
-          `${paper.id}: gate ${gate.id} targets a sentence — gates take section ends or whole blocks`,
+          `${paper.id}: gate ${gate.id} targets a sentence — gates take section ends or whole blocks`
         ).toBe(false);
         // Written gates need a question to answer, and minChars only makes
         // sense there (a tap gate ignores it silently).
         if (gate.written) {
           expect(
             gate.prompt !== undefined,
-            `${paper.id}: written gate ${gate.id} has no prompt — there is nothing to respond to`,
+            `${paper.id}: written gate ${gate.id} has no prompt — there is nothing to respond to`
           ).toBe(true);
         }
         if (gate.minChars !== undefined) {
           expect(
             gate.written === true && gate.minChars > 0,
-            `${paper.id}: gate ${gate.id} sets minChars ${gate.minChars} — requires written: true and a positive value`,
+            `${paper.id}: gate ${gate.id} sets minChars ${gate.minChars} — requires written: true and a positive value`
           ).toBe(true);
         }
       }
@@ -1052,7 +1204,7 @@ describe("module item navigation", () => {
         sequence.map((entry) => [
           `${entry.module.slug}/${itemSlugOf(entry.item)}`,
           entry,
-        ]),
+        ])
       );
       const visited: string[] = [];
       let entry: (typeof sequence)[number] | undefined = sequence[0];
@@ -1073,9 +1225,11 @@ describe("module item navigation", () => {
       sequence.forEach(({ item }, index) => {
         const nav = getItemNavigation(itemIdOf(item));
         if (index === 0) expect(nav.prev).toBeNull();
-        else expect(nav.prev?.itemSlug).toBe(itemSlugOf(sequence[index - 1].item));
+        else
+          expect(nav.prev?.itemSlug).toBe(itemSlugOf(sequence[index - 1].item));
         if (index === sequence.length - 1) expect(nav.next).toBeNull();
-        else expect(nav.next?.itemSlug).toBe(itemSlugOf(sequence[index + 1].item));
+        else
+          expect(nav.next?.itemSlug).toBe(itemSlugOf(sequence[index + 1].item));
       });
     }
   });
@@ -1090,7 +1244,7 @@ describe("module item navigation", () => {
           ...(item.paper.edits ?? []).flatMap((edit) =>
             edit.op === "activity"
               ? edit.items.flatMap((i) => (i.kind === "lesson" ? [i.id] : []))
-              : [],
+              : []
           ),
         ];
 
@@ -1100,10 +1254,12 @@ describe("module item navigation", () => {
         const ids = getModuleProgressContentIds(m.id);
         expect(new Set(ids).size).toBe(ids.length);
         for (const item of getItemsForModule(m.id)) {
-          // Optional readings are trackable but never required: none of their
-          // units may appear among the module's progress ids.
+          // Optional readings are trackable but never required, and the
+          // closing page is not work at all: neither may appear among the
+          // module's progress ids.
+          const excluded = isOptionalItem(item) || isCompletionItem(item);
           for (const unitId of unitIdsOf(item)) {
-            if (isOptionalItem(item)) expect(ids).not.toContain(unitId);
+            if (excluded) expect(ids).not.toContain(unitId);
             else expect(ids).toContain(unitId);
           }
         }
@@ -1136,7 +1292,7 @@ describe("sidebar outline projection", () => {
       const slim = getTrackSidebarOutline(track.slug)!;
       expect(slim.track.slug).toBe(track.slug);
       expect(slim.modules.map((m) => m.module.id)).toEqual(
-        outline.modules.map((m) => m.module.id),
+        outline.modules.map((m) => m.module.id)
       );
       outline.modules.forEach(({ items }, m) => {
         const slimItems = slim.modules[m].items;
@@ -1173,8 +1329,17 @@ function artifactFactsOf(paper: Paper): {
     case "arxiv":
       return {
         id: source.arxivId,
-        path: join(process.cwd(), "src/content/arxiv", `${source.arxivId}.json`),
-        assetsDir: join(process.cwd(), "public/arxiv", source.arxivId, "assets"),
+        path: join(
+          process.cwd(),
+          "src/content/arxiv",
+          `${source.arxivId}.json`
+        ),
+        assetsDir: join(
+          process.cwd(),
+          "public/arxiv",
+          source.arxivId,
+          "assets"
+        ),
         buildCmd: "npm run arxiv:build",
         tocCmd: `npm run arxiv:build -- --toc ${source.arxivId}`,
         blocksCmd: `npm run arxiv:build -- --blocks ${source.arxivId}`,
@@ -1230,11 +1395,81 @@ function readArtifact(paper: Paper): {
     // Fail loudly, not by skipping — a malformed "ready" artifact must not
     // silently pass the ready/toc/snippet assertions above.
     throw new Error(
-      `${facts.id}: artifact says "ready" but its payload is malformed — run \`${facts.buildCmd}\``,
+      `${facts.id}: artifact says "ready" but its payload is malformed — run \`${facts.buildCmd}\``
     );
   }
   return { state: "ready", ready };
 }
+
+describe("completion page integrity", () => {
+  /* The flag turns a lesson into the track's closing screen: no parts reader,
+     no docked section nav, and a header that speaks for the whole track. That
+     only reads as an ending in one position, so the position is enforced
+     rather than trusted. */
+  it("a track has at most one completion lesson, last in its last module", () => {
+    for (const track of tracks) {
+      const flagged = lessons.filter(
+        (lesson) =>
+          lesson.completion &&
+          getModulesForTrack(track.id).some((m) => m.id === lesson.moduleId)
+      );
+      expect(
+        flagged.length,
+        `${track.slug}: more than one completion page`
+      ).toBeLessThanOrEqual(1);
+      if (!flagged.length) continue;
+
+      const trackModules = getModulesForTrack(track.id);
+      const lastModule = trackModules[trackModules.length - 1];
+      const lesson = flagged[0];
+      expect(lesson.moduleId, `${lesson.id} must sit in the last module`).toBe(
+        lastModule.id
+      );
+
+      const items = getItemsForModule(lastModule.id);
+      const lastItem = items[items.length - 1];
+      expect(
+        lastItem && itemIdOf(lastItem),
+        `${lesson.id} must be the last item of ${lastModule.id}`
+      ).toBe(lesson.id);
+    }
+  });
+
+  it("a completion body carries no first-person congratulations", () => {
+    /* The congratulations belongs to CompletionHeader, which prints it from
+       real progress. A copy in the body would congratulate a visitor who has
+       finished nothing — the fake-state chrome the design rules ban. */
+    for (const lesson of lessons.filter((l) => l.completion)) {
+      const body = readFileSync(
+        join(process.cwd(), "src/content/lessons", `${lesson.contentRef}.mdx`),
+        "utf8"
+      );
+      const prose = body.replace(/\{\/\*[\s\S]*?\*\/\}/g, "");
+      expect(
+        /congratulations/i.test(prose),
+        `${lesson.contentRef}.mdx: the header owns the congratulations line`
+      ).toBe(false);
+    }
+  });
+});
+
+describe("required written work", () => {
+  /* The closing page congratulates on submitted writing, so the set it counts
+     has to be real: ids that resolve, tasks that are writing, and optional
+     ones declared as such rather than announced in their first three words. */
+  it("optional writing tasks are flagged, not merely worded as optional", () => {
+    for (const exercise of exercises) {
+      if (!isWritingExercise(exercise)) continue;
+      const opensAsOptional = /^\s*optional\b/i.test(exercise.prompt);
+      if (opensAsOptional) {
+        expect(
+          exercise.optional,
+          `${exercise.id}: prompt opens "Optional" but the task is not flagged optional`
+        ).toBe(true);
+      }
+    }
+  });
+});
 
 describe("facilitator guides", () => {
   it("guide ids are unique and moduleIds resolve, one guide per module", () => {

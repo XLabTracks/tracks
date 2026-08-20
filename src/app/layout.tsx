@@ -1,11 +1,10 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
-import { JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import { withAuth } from "@workos-inc/authkit-nextjs";
 import { devUser } from "@/lib/auth";
 import { AuthKitProvider } from "@workos-inc/authkit-nextjs/components";
-import { SiteHeader } from "@/components/layout/site-header";
+import { AppFooter, AppHeader } from "@/components/layout/app-chrome";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { Toaster } from "@/components/ui/sonner";
 
@@ -14,17 +13,21 @@ import { Toaster } from "@/components/ui/sonner";
 const inter = localFont({
   src: [
     { path: "./fonts/InterVariable.woff2", weight: "100 900", style: "normal" },
-    { path: "./fonts/InterVariable-Italic.woff2", weight: "100 900", style: "italic" },
+    {
+      path: "./fonts/InterVariable-Italic.woff2",
+      weight: "100 900",
+      style: "italic",
+    },
   ],
   variable: "--font-sans",
   display: "swap",
 });
-const jetbrainsMono = JetBrains_Mono({ variable: "--font-mono", subsets: ["latin"] });
-
 export const metadata: Metadata = {
   title: {
     default: "Tracks — AI safety learning",
-    template: "%s · Tracks",
+    // "@", not a middot: a page is somewhere rather than beside something, and
+    // a tab strip full of "· Tracks" reads as one repeated ornament.
+    template: "%s @ Tracks",
   },
   description:
     "Tracks is a structured program for learning AI safety, offering a technical track on AI control and a governance track on verifying international AI agreements, with primary literature rendered in full, interactive demos, and writing practice.",
@@ -50,7 +53,8 @@ async function getInitialAuth() {
         firstName: dev.firstName ?? null,
         lastName: dev.lastName ?? null,
         emailVerified: true,
-        name: [dev.firstName, dev.lastName].filter(Boolean).join(" ") || dev.email,
+        name:
+          [dev.firstName, dev.lastName].filter(Boolean).join(" ") || dev.email,
         locale: null,
         profilePictureUrl: null,
         lastSignInAt: null,
@@ -72,20 +76,10 @@ async function getInitialAuth() {
 /*
  * The theme read step, inline and before first paint.
  *
- * The theme is classes on <html>: `dark` alone for the dark theme, `dark`
- * plus `contrast` for high contrast (contrast is dark-plus — every `dark:`
- * utility applies and globals.css's .contrast block re-points the tokens).
- * The switch sets them — but React only runs after hydration, so a returning
- * dark-theme reader would watch the page paint light and then go dark. This
- * is the same read, running before the document body does.
- *
- * No stored choice follows the system preference, so first-time visitors on
- * a dark OS never see a light flash either. The sample is taken once, at
- * load: an OS that flips mid-session (auto-dark at sunset) moves the page on
- * its next navigation, not live — deliberate, to keep this a boot script and
- * not a subscription. High contrast is never inferred from the system —
- * prefers-color-scheme picks between light and dark only; contrast is always
- * an explicit choice.
+ * The platform and Verification keep separate stored preferences, but both
+ * paint through the same `dark` / `contrast` classes so Tailwind chrome and
+ * native widgets cannot disagree. Verification additionally gets data-theme,
+ * which its static stylesheet uses.
  *
  * The chrome-less /embed iframes are the exception: they render inside other
  * people's pages, which are usually hard-coded one way — following the
@@ -99,11 +93,15 @@ async function getInitialAuth() {
  * matchMedia fallback down with it — a dark-OS visitor would get light only
  * in those browsers.
  *
- * Trap: keep it in step with ThemeToggle (`theme-toggle.tsx`) — same storage
- * key, same class, same system fallback.
+ * Trap: keep this in step with ThemeToggle and verification/theme.js: same
+ * route test, storage keys, classes and system fallback.
  */
 const THEME_BOOT = `(function(){try{var v=null;\
-if(location.pathname.slice(-6)==='/embed'){\
+var p=location.pathname;var x=p==='/tracks/verification'||p.indexOf('/tracks/verification/')===0||p.indexOf('/verification/')===0;\
+if(x){try{v=localStorage.getItem('xlab-verification-theme');}catch(e){}\
+if(v!=='light'&&v!=='dark'&&v!=='contrast'){v=window.matchMedia&&window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';}\
+document.documentElement.setAttribute('data-theme',v);\
+}else if(p.slice(-6)==='/embed'){\
 var q=new URLSearchParams(location.search).get('theme');\
 v=q==='dark'||q==='contrast'?q:'light';\
 }else{\
@@ -112,8 +110,10 @@ if(v!=='light'&&v!=='dark'&&v!=='contrast'){\
 v=window.matchMedia&&window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';}\
 }\
 var c=document.documentElement.classList;\
-if(v==='contrast')c.add('dark','contrast');\
-else if(v==='dark')c.add('dark');}catch(e){}})();`;
+c.toggle('dark',v!=='light');c.toggle('contrast',v==='contrast');\
+if(x){var s=null;try{s=localStorage.getItem('xlab-verification-text-scale');}catch(e){}\
+if(s==='100'||s==='125'||s==='150'||s==='175'||s==='200'){\
+document.documentElement.setAttribute('data-text-scale',s);c.toggle('reader-enlarged',Number(s)>100);c.toggle('reader-large',Number(s)>=150);}}}catch(e){}})();`;
 
 export default async function RootLayout({
   children,
@@ -124,11 +124,10 @@ export default async function RootLayout({
   return (
     <html
       lang="en"
-      // THEME_BOOT adds the `dark` class before React hydrates. That is the
-      // whole point of it, and it is also precisely the mismatch React warns
-      // about, so the warning is suppressed on this element only.
+      // THEME_BOOT mutates theme attributes before React hydrates. That is
+      // precisely the mismatch React would otherwise warn about.
       suppressHydrationWarning
-      className={`${inter.variable} ${jetbrainsMono.variable} h-full antialiased`}
+      className={`${inter.variable} h-full antialiased`}
     >
       <head>
         <script dangerouslySetInnerHTML={{ __html: THEME_BOOT }} />
@@ -136,16 +135,17 @@ export default async function RootLayout({
       <body className="bg-background text-foreground flex min-h-full flex-col">
         <a
           href="#main-content"
-          className="bg-background text-foreground focus:ring-ring sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-50 focus:rounded-md focus:border focus:px-4 focus:py-2 focus:ring-2 focus:outline-none"
+          className="bg-background text-foreground focus:ring-ring sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-50 focus:rounded-md focus:border focus:px-4 focus:py-2 focus:ring-2 focus:outline-none select-none"
         >
           Skip to content
         </a>
         <AuthKitProvider initialAuth={initialAuth}>
           <TooltipProvider delayDuration={200}>
-            <SiteHeader />
+            <AppHeader />
             <div id="main-content" className="flex flex-1 flex-col">
               {children}
             </div>
+            <AppFooter />
           </TooltipProvider>
           <Toaster />
         </AuthKitProvider>

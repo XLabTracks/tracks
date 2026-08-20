@@ -106,7 +106,7 @@ export function PaperGate({
         id={paperGateDomId(gateId)}
         className="border-primary/25 bg-primary/[0.03] my-8 rounded-xl border px-5 py-4"
       >
-        <p className="text-primary/75 flex items-center gap-1.5 text-xs font-semibold tracking-wide uppercase">
+        <p className="text-brand-ink/75 flex items-center gap-1.5 text-xs font-semibold tracking-wide uppercase">
           {written ? (
             <PenLine className="size-3.5" aria-hidden />
           ) : (

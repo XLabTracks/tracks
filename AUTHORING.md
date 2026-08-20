@@ -102,12 +102,20 @@ A "sublesson" is a `Lesson` — the MDX page inside a module. To add one to an
      there. An unknown id renders an inline error card (same for `<Demo>`).
    - `<VerificationExercise id="…" />` — renders one of the Verification
      track's native React widgets (`src/components/verification/widgets/<id>.tsx`,
-     keyed in `widgets/registry.tsx`). The id must exist in
-     `src/lib/verification/exercises.ts` and the hosting lesson's id must be
-     `v-<id>` (both enforced by `src/lib/verification/widgets.test.ts`). An
-     unknown id renders an inline error card. Data/copy lives in
-     `src/lib/verification/data/`; shared primitives (drag, `[[term]]` tooltips,
-     the completion hook) are in `src/components/verification/kit/`.
+     keyed in `widgets/registry.tsx`). The id must be registered in
+     `src/lib/verification/exercises.ts`; the hosting lesson is either the
+     widget's own `v-<id>` lesson or any lesson embedding it in prose (both
+     shapes are enforced by `src/lib/verification/widgets.test.ts`). A
+     `bridged` widget reports its finish event and completes its `v-<id>`
+     lesson; embedded in somebody else's prose it records a private
+     per-exercise mark instead, counted in no total. An unknown id renders an
+     inline error card. Data/copy lives in `src/lib/verification/data/`;
+     shared primitives are in `src/components/verification/kit/`. The
+     Verification track's other authoring surfaces (`<MemoDesk/>`, `<PopUp/>`,
+     `<SourceCredit/>`, `<Objectives/>`, `<Fold/>`, `<PageBreak/>`, and the
+     reader components `<Check/>`, `<GapFill/>`, `<SourceQuote/>`,
+     `<ReadingCard/>`) are documented in CLAUDE.md's Verification section —
+     read it before touching that track.
    - `<ArxivPaper id="1706.03762v7" defaultOpen? />` — embeds an arXiv paper as a
      **collapsible card**, rendered from its LaTeX source with KaTeX math.
      **The version suffix (`v7`) is required**: it pins an immutable snapshot,

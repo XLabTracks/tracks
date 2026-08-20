@@ -20,6 +20,7 @@ import {
   RoleToggleButton,
 } from "@/components/classrooms/classroom-manage";
 import { ClassroomKeySettings } from "@/components/classrooms/classroom-key-settings";
+import { FacilitatorPanel } from "@/components/classrooms/facilitator-panel";
 import { getClassroomKeyStatus } from "@/lib/grader/grading-key";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
@@ -67,16 +68,22 @@ export default async function ClassroomPage({
     return (
       <main className="mx-auto w-full max-w-3xl px-4 py-10 lg:px-6">
         <Breadcrumbs items={crumbs} />
-        <h1 className="text-3xl font-semibold tracking-tight">{classroom.name}</h1>
+        <h1 className="text-3xl font-semibold tracking-tight">
+          {classroom.name}
+        </h1>
         <div className="mt-2 flex flex-wrap items-center gap-2">
-          <Badge variant="secondary">{classroom.memberships.length} members</Badge>
+          <Badge variant="secondary">
+            {classroom.memberships.length} members
+          </Badge>
           {track && <Badge variant="outline">{track.title}</Badge>}
         </div>
 
         {track && progress ? (
           <div className="border-border shadow-soft mt-6 rounded-xl border p-5">
             <div className="flex items-center justify-between text-sm">
-              <span className="font-medium">Your progress in {track.shortTitle ?? track.title}</span>
+              <span className="font-medium">
+                Your progress in {track.shortTitle ?? track.title}
+              </span>
               <span className="text-muted-foreground">
                 {progress.completed} / {progress.total} items
               </span>
@@ -109,8 +116,12 @@ export default async function ClassroomPage({
   // empty content-id universe rendering every row as 0/0.
   const roster = await getClassroomRoster(
     classroom.memberships,
-    track ? classroom.trackId : null,
+    track ? classroom.trackId : null
   );
+  // The facilitator material is Verification's own, so it is offered on a
+  // Verification classroom and on the all-tracks kind, not on a Control one.
+  const showFacilitator =
+    classroom.trackId === "verification" || classroom.trackId === null;
   const students = roster.filter((r) => r.role === "student");
   const instructors = roster.filter((r) => r.role === "instructor");
   // A classroom always keeps one instructor; the demote control is hidden
@@ -127,7 +138,9 @@ export default async function ClassroomPage({
       <Breadcrumbs items={crumbs} />
       <div className="flex flex-wrap items-start justify-between gap-6">
         <div>
-          <h1 className="text-3xl font-semibold tracking-tight">{classroom.name}</h1>
+          <h1 className="text-3xl font-semibold tracking-tight">
+            {classroom.name}
+          </h1>
           <div className="mt-2 flex flex-wrap items-center gap-2">
             <Badge variant="default">Instructor</Badge>
             {track && <Badge variant="outline">{track.title}</Badge>}
@@ -143,7 +156,10 @@ export default async function ClassroomPage({
           <CopyJoinCode code={classroom.joinCode} />
           <div className="flex items-center gap-1">
             <RegenerateCodeButton classroomId={classroom.id} />
-            <DeleteClassroomButton classroomId={classroom.id} name={classroom.name} />
+            <DeleteClassroomButton
+              classroomId={classroom.id}
+              name={classroom.name}
+            />
           </div>
         </div>
       </div>
@@ -161,11 +177,13 @@ export default async function ClassroomPage({
               >
                 <Avatar className="size-6">
                   <AvatarImage src={row.imageUrl ?? undefined} alt="" />
-                  <AvatarFallback className="text-[0.65rem]">
+                  <AvatarFallback className="text-4xs">
                     {(row.name ?? row.email)[0]?.toUpperCase()}
                   </AvatarFallback>
                 </Avatar>
-                <span className="text-sm font-medium">{row.name ?? row.email}</span>
+                <span className="text-sm font-medium">
+                  {row.name ?? row.email}
+                </span>
                 {row.userId === user.id && (
                   <span className="text-muted-foreground text-xs">(you)</span>
                 )}
@@ -182,6 +200,8 @@ export default async function ClassroomPage({
           </ul>
         </section>
       )}
+
+      {showFacilitator && <FacilitatorPanel classroomId={classroom.id} />}
 
       {track && guideModules.length > 0 && (
         <section className="mt-8">
@@ -260,7 +280,12 @@ export default async function ClassroomPage({
                   </td>
                   <td className="px-4 py-3 text-right">
                     <div className="flex items-center justify-end gap-1">
-                      <Button asChild variant="ghost" size="icon" aria-label="View student">
+                      <Button
+                        asChild
+                        variant="ghost"
+                        size="icon"
+                        aria-label="View student"
+                      >
                         <Link
                           href={`/classrooms/${classroom.id}/students/${row.userId}`}
                         >

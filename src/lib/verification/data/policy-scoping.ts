@@ -1,290 +1,327 @@
 /**
- * Data for the "Scoping an Anti-ASI Policy" widget — POLICIES, EXC_ANSWERS, and
- * AXIS_TIPS lifted verbatim from public/verification/policy-scoping.html (and its
- * extracted content JSON), plus the surrounding header/rail copy from the same
- * authored source. Do NOT re-author any of this — it is human-authored curriculum.
+ * Data for the "Scoping an Anti-ASI Policy" widget, rebuilt 2026-08-18 to the
+ * outline's v40 revision of 1.0.2. The exercise is now three phases: the two
+ * axes as side-by-side pop-ups (a qualitative five-rung scale each), then the
+ * eleven policy buckets introduced in order as a gradient card walk, then the
+ * sort onto the feasibility × effectiveness plane.
  *
- * Grid cells are keyed f0..f2 (feasibility low→high) × e0..e2 (effectiveness
- * low→high). Every policy carries a 9-entry verdict table (right / close / wrong)
- * plus a hover feedback string per cell. Note the deliberate oddity: two chips
- * share the cell f2e0 (self-governance and domestic regulation both grade
- * "right" there) — cells can hold multiple chips. That is a lesson, not a bug.
+ * What is whose, because the rule is "never invent curriculum":
+ *
+ *   - BUCKETS — names, descriptions, historical parallels — are the outline's
+ *     own words, transcribed verbatim (seams noted inline where a list-item
+ *     lead-in had to become a card sentence).
+ *   - The five-rung AXIS_SCALES, each bucket's reference cell (`key`) and
+ *     one-line `why`, and the compute-controls exception answer are
+ *     builder-authored exercise apparatus, written under the outline's own
+ *     instruction to the builder ("FIRST introduce: what is effectiveness?
+ *     Give a qualitative scale of 5 different values…"). They are flagged for
+ *     owner review in docs/verification/module-1-log.md — argue with them
+ *     there, not by silently re-deriving.
+ *   - AXIS_TIPS and the exception question (lead + the sg/dr/ti/ch answers)
+ *     carry over from the previous five-bucket widget, authored copy from the
+ *     policy-scoping.html prototype; the halt answer's first words are
+ *     conformed to the new bucket's name.
+ *
+ * Grid cells are keyed f0..f4 (feasibility low→high) × e0..e4 (effectiveness
+ * low→high). Verdicts against the reference key are mechanical — exact cell is
+ * right, one step off on either axis (Chebyshev distance 1) is close, further
+ * is off — so there is no per-cell feedback table to drift. Cells can hold
+ * multiple chips, and the reference key itself doubles up twice (domestic
+ * regulation + transparency; binding regulation + nonproliferation). That is a
+ * lesson, not a bug: buckets that make different asks can still price out at
+ * the same spot, and the off-frontier cluster (emergency prep, transfers) is
+ * the point that not everything lives on the diagonal.
  */
 
 export type Verdict = "right" | "close" | "wrong";
 
-export interface PolicyCell {
-  v: Verdict;
-  t: string;
-}
-
-export interface Policy {
-  id: string;
+export interface AxisRung {
+  /** Short qualitative name, e.g. "Long shot". */
   name: string;
-  short: string;
-  /** Okabe-Ito colour token (raw hex) used for the chip/ghost dot. */
-  colorRaw: string;
-  def: string;
-  keyWhy: string;
-  /** Answer-key ghost position, fractions of the plane (x = feasibility axis, y from top). */
-  ghost: { x: number; y: number };
-  cells: Record<string, PolicyCell>;
+  /** One-line gloss shown in the scale pop-up. */
+  gloss: string;
 }
 
-export const POLICIES: Policy[] = [
+export interface AxisScale {
+  /** Pop-up trigger question, e.g. "What is effectiveness?" */
+  question: string;
+  /** Axis title as it appears on the plane. */
+  title: string;
+  /** Defining line under the title (carried from AXIS_TIPS). */
+  lead: string;
+  /** Five rungs, low → high. */
+  rungs: [AxisRung, AxisRung, AxisRung, AxisRung, AxisRung];
+}
+
+export const AXIS_SCALES: { effectiveness: AxisScale; feasibility: AxisScale } =
+  {
+    effectiveness: {
+      question: "What is effectiveness?",
+      title: "Effectiveness",
+      lead: "How much the policy actually deters ASI development — measured against the global race, not against one country’s labs.",
+      rungs: [
+        {
+          name: "Symbolic",
+          gloss: "Signals concern; changes no developer’s plans.",
+        },
+        {
+          name: "Marginal",
+          gloss: "Slows the already-willing; the race continues around it.",
+        },
+        {
+          name: "Meaningful",
+          gloss: "Measurably constrains some frontier development, somewhere.",
+        },
+        {
+          name: "Strong",
+          gloss: "Binds every major developer inside the regime, with real teeth.",
+        },
+        {
+          name: "Decisive",
+          gloss: "Stops or hard-caps the race itself, for as long as it holds.",
+        },
+      ],
+    },
+    feasibility: {
+      question: "What is feasibility?",
+      title: "Feasibility",
+      lead: "How gettable the policy is under current infrastructure (the verification burden it implies) and the current political climate.",
+      rungs: [
+        {
+          name: "Off the table",
+          gloss: "No major power would entertain it in today’s climate.",
+        },
+        {
+          name: "Long shot",
+          gloss: "Imaginable after a crisis or a major shift in threat perception.",
+        },
+        {
+          name: "Heavy lift",
+          gloss: "A real diplomatic and technical build, but precedents exist.",
+        },
+        {
+          name: "Within reach",
+          gloss: "States already do this for other dual-use technologies.",
+        },
+        {
+          name: "Already happening",
+          gloss: "Versions of it exist today.",
+        },
+      ],
+    },
+  };
+
+export interface Bucket {
+  id: string;
+  /** The outline's own number, 1–11 — load-bearing: bucket 7's description
+   *  says "options 8 through 11", so the numbers must stay visible. */
+  n: number;
+  name: string;
+  /** Short label for a chip on the crowded plane. */
+  short: string;
+  /** The outline's description, verbatim. */
+  desc: string;
+  /** The outline's historical parallel (its "a." item), split at the first colon. */
+  parallel: { title: string; text: string };
+  /** Reference cell, 0-indexed: f = feasibility rung, e = effectiveness rung. */
+  key: { f: number; e: number };
+  /** One-line rationale for the reference placement, shown on reveal. */
+  why: string;
+}
+
+export const BUCKETS: Bucket[] = [
   {
     id: "sg",
-    name: "Self-governance",
+    n: 1,
+    name: "Self-governance (status quo)",
     short: "Self-gov",
-    colorRaw: "#56B4E9",
-    def: "Voluntary lab commitments — the status quo. Safety frameworks, published policies, promises. No one outside the lab enforces anything.",
-    keyWhy:
-      "The status quo: costs nothing, binds no one. Most feasible, least effective — race dynamics dominate.",
-    ghost: { x: 0.905, y: 0.945 },
-    cells: {
-      f2e0: {
-        v: "right",
-        t: "Right. It’s the status quo — already happening, costs nothing, requires no one’s agreement. And race dynamics run straight over it: a voluntary commitment binds only the willing.",
-      },
-      f1e0: {
-        v: "close",
-        t: "Right about the weakness, but too pessimistic about ease. Self-governance is the one bucket that requires nothing — no statute, no treaty. It defines the feasibility ceiling.",
-      },
-      f0e0: {
-        v: "wrong",
-        t: "This corner is the worst of both, and self-governance at least wins on ease: it’s already the status quo. Nothing that requires zero agreement belongs at low feasibility.",
-      },
-      f2e1: {
-        v: "close",
-        t: "Half right — nothing is more feasible. But medium effectiveness overrates voluntary commitments: when the race heats up, a promise with no enforcement is the first thing to go.",
-      },
-      f1e1: {
-        v: "wrong",
-        t: "Neither axis fits. Voluntary commitments are maximally feasible (they already exist) and minimally effective (race dynamics dominate). Far corner, bottom right.",
-      },
-      f0e1: {
-        v: "wrong",
-        t: "Backwards on feasibility — nothing is easier than the status quo — and generous on effectiveness. This bucket anchors the bottom-right corner.",
-      },
-      f2e2: {
-        v: "wrong",
-        t: "The corner every policymaker wishes existed. If voluntary commitments actually deterred ASI development, there would be no verification problem to study.",
-      },
-      f1e2: {
-        v: "wrong",
-        t: "Highly effective self-governance would mean labs restraining themselves against their own race incentives — the exact thing the arms-race logic says doesn’t happen.",
-      },
-      f0e2: {
-        v: "wrong",
-        t: "This is the full pause’s corner — hard to get, strong if you get it. Self-governance is its mirror image: trivially easy, and nearly toothless.",
-      },
+    desc: "Voluntary lab commitments such as RSPs and safety frameworks; no external enforcement, and race dynamics persist.",
+    parallel: {
+      title: "Asilomar, 1975",
+      text: "Molecular biologists voluntarily paused recombinant DNA experiments and wrote their own safety guidelines at the Asilomar conference. Self-governance worked for a while because the research community was small and shared norms, but it later hardened into formal NIH rules. The AI parallel: lab commitments can precede regulation, but they historically survive only until commercial pressure or new entrants arrive.",
     },
+    key: { f: 4, e: 0 },
+    why: "The status quo: already happening, costs nothing, binds no one — and race dynamics run straight over a promise with no enforcement.",
+  },
+  {
+    id: "ur",
+    n: 2,
+    name: "Unilateral restraint",
+    short: "Unilateral",
+    desc: "One state halts or caps its own frontier development alone, hoping others reciprocate.",
+    parallel: {
+      title: "US bioweapons renunciation, 1969",
+      text: "President Nixon unilaterally terminated the entire American offensive biological weapons program with no reciprocal commitment from the Soviet Union. The gamble partly paid off, helping produce the Biological Weapons Convention in 1972. The cautionary half: the USSR signed and then secretly expanded its own program (Biopreparat), showing what unilateral restraint risks without verification.",
+    },
+    key: { f: 2, e: 1 },
+    why: "One capital can decide it alone, which is why it is not lower — but surrendering the frontier while rivals race is a heavy political lift, and reciprocity you cannot check is a bet Biopreparat shows how to lose.",
   },
   {
     id: "dr",
-    name: "Domestic regulation",
+    n: 3,
+    name: "Uncoordinated domestic regulation",
     short: "Domestic reg.",
-    colorRaw: "#0072B2",
-    def: "Each state licenses and audits its own developers. Binding at home; silent about the race abroad.",
-    keyWhy:
-      "One legislature, real teeth at home — but the international race is untouched. A shade less feasible and a shade more effective than self-governance; same cell of the plane.",
-    ghost: { x: 0.76, y: 0.875 },
-    cells: {
-      f2e0: {
-        v: "right",
-        t: "Right. One legislature, no treaty — still the easy lane. Licenses and audits add real teeth at home, but the international race doesn’t notice one country’s rules.",
-      },
-      f1e0: {
-        v: "close",
-        t: "Defensible — passing binding legislation is harder than the status quo. But next to anything requiring international agreement, domestic regulation is still high-feasibility.",
-      },
-      f2e1: {
-        v: "close",
-        t: "The teeth are real, but they only bite at home. Effectiveness here is measured against a global race — and rivals abroad are untouched by your licenses.",
-      },
-      f0e0: {
-        v: "wrong",
-        t: "Too pessimistic on ease: states license and audit industries all the time, no diplomacy required. What domestic regulation lacks is reach, not achievability.",
-      },
-      f1e1: {
-        v: "wrong",
-        t: "A double misread. It’s more feasible than this (one legislature acting alone) and less effective (the race simply continues offshore).",
-      },
-      f0e1: {
-        v: "wrong",
-        t: "Feasibility is the axis domestic regulation scores well on — it needs no other country’s consent. The problem is effect: national rules, international race.",
-      },
-      f2e2: {
-        v: "wrong",
-        t: "If a single state’s rules could deter ASI development globally, coordination would be unnecessary. The whole verification problem exists because they can’t.",
-      },
-      f1e2: {
-        v: "wrong",
-        t: "High effectiveness would require the race to respect borders. It doesn’t — development shifts to wherever the rules aren’t.",
-      },
-      f0e2: {
-        v: "wrong",
-        t: "That’s where binding international measures live. Domestic regulation is the opposite trade: easy to get, weak against a global race.",
-      },
+    desc: "Each state licenses, audits, and sets safety requirements for its own developers, with no international layer.",
+    parallel: {
+      title: "Human germline editing, 2010s",
+      text: "Countries independently banned, restricted, or left unregulated heritable genome editing, with no international coordination. The He Jiankui affair in 2018 (CRISPR babies, conducted in China partly because oversight gaps existed there) showed the core weakness of a pure patchwork: research migrates to the most permissive jurisdiction.",
     },
+    key: { f: 3, e: 1 },
+    why: "States license industries all the time — no diplomacy required. But national rules stop at the border, and development migrates to the most permissive jurisdiction.",
   },
   {
-    id: "tc",
-    name: "Transparency coordination",
+    id: "ti",
+    n: 4,
+    name: "Transparency and information-sharing",
     short: "Transparency",
-    colorRaw: "#009E73",
-    def: "International chip tracking, incident reporting, and export controls. Builds shared visibility without directly restricting development.",
-    keyWhy:
-      "Watching without restricting: middle cost, middle force — and the visibility layer every stronger policy depends on.",
-    ghost: { x: 0.5, y: 0.5 },
-    cells: {
-      f1e1: {
-        v: "right",
-        t: "Right. Chip tracking, incident reporting, export controls: shared visibility without directly restricting anyone. Harder than domestic action, easier than a halt — and the foundation the stronger buckets stand on.",
-      },
-      f1e0: {
-        v: "close",
-        t: "Understandable — transparency alone stops nothing. But visibility changes the game: you can’t verify, deter, or trigger anything you can’t see. That earns it the middle of the effectiveness band.",
-      },
-      f0e1: {
-        v: "close",
-        t: "Right band, wrong read on cost. Coordination is hard, but transparency asks states only to watch and report — not to stop. A much easier ask than any pause.",
-      },
-      f2e0: {
-        v: "wrong",
-        t: "That’s the self-governance corner. Transparency coordination needs many governments moving together — harder than it looks — and delivers more than it seems: visibility is what everything stronger runs on.",
-      },
-      f2e1: {
-        v: "wrong",
-        t: "Fragments exist today — export controls, some reporting. But a working international tracking regime is a genuine diplomatic lift, not the easy lane.",
-      },
-      f0e0: {
-        v: "wrong",
-        t: "If it were this bad a deal, no one would bother — yet chip tracking and export controls are exactly where real-world policy is moving. Middle of both axes.",
-      },
-      f2e2: {
-        v: "wrong",
-        t: "The empty corner. If shared visibility were this cheap and this strong, the problem would already be solved. Transparency is a middle move: real value, real cost.",
-      },
-      f1e2: {
-        v: "wrong",
-        t: "Transparency doesn’t restrict development — it only watches. High effectiveness belongs to the buckets that can actually stop a run.",
-      },
-      f0e2: {
-        v: "wrong",
-        t: "That’s pause territory. Transparency is deliberately weaker: it builds the shared visibility a pause would need, without asking anyone to stop.",
-      },
+    desc: "Incident reporting, model registries, notification of large training runs. The disclosure infrastructure most later options depend on.",
+    parallel: {
+      title: "US-Soviet launch notifications, 1988",
+      text: "The Ballistic Missile Launch Notification Agreement required each side to notify the other before ICBM and SLBM test launches. Nothing was limited or banned; the value was purely in reducing surprise and misinterpretation. Training-run notification proposals borrow this logic almost exactly. (Nearest fit, though missile launches are far easier to observe from outside than training runs.)",
     },
+    key: { f: 3, e: 1 },
+    why: "Watching is an easier ask than stopping, and it restrains nothing by itself. Its real value is the disclosure infrastructure every stronger bucket stands on.",
   },
   {
-    id: "cp",
-    name: "Conditional (if/then) pause",
-    short: "If/then pause",
-    colorRaw: "#CC79A7",
-    def: "An if/then commitment: development halts when pre-agreed trigger conditions are met — capability thresholds, eval results, incidents.",
-    keyWhy:
-      "Trades a sliver of a pause’s force for a large gain in signability. Its whole value lives in the trigger design.",
-    ghost: { x: 0.42, y: 0.24 },
-    cells: {
-      f1e2: {
-        v: "right",
-        t: "Right. Tying the halt to pre-agreed triggers buys feasibility — states can sign before the pain starts — while keeping most of a pause’s deterrent force. The catch: everything rides on trigger design.",
-      },
-      f0e2: {
-        v: "close",
-        t: "Nearly. But the entire point of the if/then structure is to be easier to sign than an immediate halt — commitment now, cost later. It sits to the feasible side of the full pause.",
-      },
-      f1e1: {
-        v: "close",
-        t: "Fair skepticism — triggers can be gamed, thresholds can creep, and a pause you never trigger stops nothing. But designed well, it carries most of a full pause’s force.",
-      },
-      f2e0: {
-        v: "wrong",
-        t: "Wrong end of both axes. A conditional pause is still a binding international commitment to halt — that’s neither cheap nor weak.",
-      },
-      f1e0: {
-        v: "wrong",
-        t: "Low effectiveness sells it short: the halt is real, just deferred behind triggers. If the triggers are honest, the deterrent is nearly a full pause’s.",
-      },
-      f0e0: {
-        v: "wrong",
-        t: "Hard to get, yes — but not weak. If it were both, nobody would propose it. The conditional structure exists precisely to trade a little strength for a lot of feasibility.",
-      },
-      f2e1: {
-        v: "wrong",
-        t: "Signing away your right to develop — even conditionally — is a serious ask between rivals. That’s not the high-feasibility lane.",
-      },
-      f2e2: {
-        v: "wrong",
-        t: "The corner that doesn’t exist. If a binding conditional halt were easy to get, the full-pause debate would be over.",
-      },
-      f0e1: {
-        v: "wrong",
-        t: "This underrates both what it does (a real halt, once triggered) and how it’s built (triggers exist to make signing easier, not harder).",
-      },
+    id: "ep",
+    n: 5,
+    name: "Joint emergency preparedness and response",
+    short: "Emergency prep",
+    desc: "Parties jointly detect and respond to computational emergencies such as rogue deployments or loss-of-control incidents. Cross-cutting: compatible with any option below.",
+    parallel: {
+      title: "Post-Chernobyl conventions, 1986",
+      text: "Within months of the Chernobyl accident, states negotiated the Convention on Early Notification of a Nuclear Accident and the Convention on Assistance in Case of a Nuclear Accident, obligating rapid alerts and mutual aid when a disaster crosses borders. Notable for AI: the machinery was built only after the emergency demonstrated the need.",
     },
+    key: { f: 1, e: 0 },
+    why: "Deterrence is not its job — it detects and responds once something has already gone wrong, alongside any other bucket. And historically the machinery gets built right after the first disaster, not before it.",
   },
   {
-    id: "fp",
-    name: "Full pause",
-    short: "Full pause",
-    colorRaw: "#D55E00",
-    def: "A binding international halt, or hard cap, on frontier development.",
-    keyWhy:
-      "The strongest instrument and the hardest to get — and, under securitization, the design target: mechanisms that can verify a halt can support everything weaker.",
-    ghost: { x: 0.13, y: 0.13 },
-    cells: {
-      f0e2: {
-        v: "right",
-        t: "Right. A binding international halt is the strongest instrument on the board and the hardest to get — every state must agree to stop, and trust that rivals actually stopped. Which is exactly why verification exists.",
-      },
-      f1e2: {
-        v: "close",
-        t: "Right on strength, generous on ease. Asking every major power to halt frontier development now is the single hardest sell in international politics. It anchors the far end.",
-      },
-      f0e1: {
-        v: "wrong",
-        t: "If you could actually get it, a binding halt is as effective as policy gets — that’s the entire reason anyone entertains so infeasible an idea.",
-      },
-      f0e0: {
-        v: "wrong",
-        t: "Hard to get and useless? Then no one would propose it. The full pause matters precisely because it’s the one bucket that actually stops the race.",
-      },
-      f1e1: {
-        v: "wrong",
-        t: "This is the middle bucket’s home — transparency coordination. A full pause is an extreme on both axes: maximum effect, minimum feasibility.",
-      },
-      f1e0: {
-        v: "wrong",
-        t: "Backwards. A full pause is the ceiling on effectiveness, not the floor — its weakness is that you can’t get it, not that it wouldn’t work.",
-      },
-      f2e0: {
-        v: "wrong",
-        t: "You’ve placed the strongest, hardest bucket where the weakest, easiest one lives. Swap it with self-governance and the frontier snaps into place.",
-      },
-      f2e1: {
-        v: "wrong",
-        t: "There is nothing high-feasibility about asking every state to halt. This is the bucket that demands the most trust, the most verification, the most politics.",
-      },
-      f2e2: {
-        v: "wrong",
-        t: "The empty corner — strong and easy is the policy that doesn’t exist. If it did, this track would be one module long.",
-      },
+    id: "bt",
+    n: 6,
+    name: "Knowledge and benefit transfers",
+    short: "Transfers",
+    // Outline seam: the source list-item reads "Knowledge and benefit
+    // transfers, in two strands: …" — the name takes the head and the
+    // description opens at "In two strands".
+    desc: "In two strands: sharing research, development knowledge, and safety-enhancing technologies; and sharing chips, compute access, completed models or API access, cash, and AI-enabled aid. Both function as side payments that make restrictive regimes acceptable to states asked to forgo development.",
+    parallel: {
+      title: "Atoms for Peace, 1953",
+      text: "Eisenhower’s program offered civilian nuclear technology, materials, and training to countries that accepted safeguards, a bargain later written into the NPT as Article IV. Benefit-sharing is what made a discriminatory regime signable for the have-nots. The double edge: some transferred “peaceful” technology later fed weapons programs, including India’s.",
     },
+    key: { f: 3, e: 0 },
+    why: "Alone it deters nothing — transfers are the side payments that make the restrictive buckets signable. The double edge: the goods that persuade are often the goods that proliferate.",
+  },
+  {
+    id: "cc",
+    n: 7,
+    name: "Compute controls",
+    short: "Compute controls",
+    desc: "Export controls, international chip tracking, and hardware-enabled governance mechanisms restricting who can access frontier-scale compute. Also the enforcement backbone for options 8 through 11.",
+    parallel: {
+      title: "Fissile material chokepoint",
+      text: "Nuclear nonproliferation works largely because enriched uranium and plutonium are hard to produce and their supply chains are controllable, policed by the Nuclear Suppliers Group and Cold War-era regimes like CoCom. Advanced chips play the same chokepoint role for AI, with a similar concentration: a handful of firms (TSMC, ASML, NVIDIA) sit where enrichment technology once did.",
+    },
+    key: { f: 3, e: 2 },
+    why: "Chokepoints this concentrated make supply-side control genuinely enforceable — enough to add years to a cheater’s timeline, not to stop the race. Export controls are the part already happening; chip tracking and hardware mechanisms are the build.",
+  },
+  {
+    id: "br",
+    n: 8,
+    name: "Binding international regulation of development and deployment",
+    short: "Intl regulation",
+    desc: "Treaty rules spanning the stack, from data-center training runs down to fine-tuning, inference, and sensitive AI-enabled devices.",
+    parallel: {
+      title: "Chemical Weapons Convention, 1993",
+      text: "The CWC regulates an entire dual-use industry rather than banning a single object, with tiered schedules of chemicals, facility declarations, and routine OPCW inspections of commercial plants. It’s the best existing model of intrusive, stack-spanning regulation of a technology that is mostly civilian.",
+    },
+    key: { f: 1, e: 3 },
+    why: "The CWC is the existence proof that a mostly-civilian industry can live under routine international inspection — and between today’s rivals, an AI version is a genuine long shot, not merely a heavy lift.",
+  },
+  {
+    id: "np",
+    n: 9,
+    name: "Nonproliferation regime",
+    short: "Nonproliferation",
+    desc: "A small set of states develops frontier AI under international safeguards and inspections; development prohibited everywhere else.",
+    parallel: {
+      title: "NPT and IAEA, 1968 onward",
+      // Outline seam: the source item opens its last sentence "Worth putting
+      // on the card: the regime mostly held…" — an instruction to this card,
+      // not learner prose, so the card keeps what follows the colon.
+      text: "The source model itself. Five recognized weapons states, safeguards inspections for everyone else, and Article IV benefits as the sweetener. The regime mostly held (far fewer nuclear states than Kennedy predicted), but India, Pakistan, and Israel stayed outside it, and North Korea left, so “prohibited everywhere else” was never airtight, and the two-tier structure still breeds resentment.",
+    },
+    key: { f: 1, e: 3 },
+    why: "Judged against expectations the regime mostly held — at the price of a permanent two-tier grievance, and with an exit door North Korea used. For AI, who qualifies as a licensed developer is the fight before the treaty.",
+  },
+  {
+    id: "jd",
+    n: 10,
+    name: "International joint development",
+    short: "Joint dev",
+    desc: "Pooling under a shared institution, covering both joint work toward a shared goal such as defensive AI and confinement of systemically risky development to a single multinational project, prohibited outside it.",
+    parallel: {
+      title: "Baruch Plan, 1946",
+      text: "The US proposed placing all dangerous atomic activities under an international Atomic Development Authority with a monopoly on the technology. It failed over exactly the issues a “CERN for AI” would face: the Soviet Union would not freeze itself into second place, and neither side would accept intrusive control before trusting the other. CERN itself shows the pooling half works, but only for science with no military edge.",
+    },
+    key: { f: 1, e: 4 },
+    why: "Pooling among rivals is proven; the monopoly-with-prohibition strand died with the Baruch Plan, because no leader’s rival accepts permanent second place. If confinement held, though, little would escape it.",
+  },
+  {
+    id: "ch",
+    n: 11,
+    name: "Coordinated halt",
+    short: "Coordinated halt",
+    desc: "Binding agreement to stop or hard-cap frontier development, bilateral or broadly multilateral, triggered immediately or by pre-committed if/then conditions.",
+    parallel: {
+      title: "Nuclear test moratoria and the CTBT",
+      text: "The US and USSR halted testing by parallel moratorium in 1958, resumed, then progressively banned it (Partial Test Ban 1963, CTBT 1996), backed by a global seismic monitoring network that makes cheating detectable. The apt part: a verified halt of an activity, not a surrender of weapons. The cautionary part: the CTBT never formally entered into force because key states, including the US and China, never ratified.",
+    },
+    key: { f: 0, e: 4 },
+    why: "The strongest instrument on the board and the hardest to get: every major power must stop, and trust that rivals actually stopped. Which is exactly why this track studies verification against it.",
   },
 ];
 
-/** Closing MCQ answers — verbatim. `t` contains authored <b> emphasis markup. */
+/** Mechanical verdict against the reference key: exact cell is right, one step
+ *  off on either axis is close, anything further is off. */
+export function verdictFor(bucket: Bucket, f: number, e: number): Verdict {
+  const dist = Math.max(Math.abs(bucket.key.f - f), Math.abs(bucket.key.e - e));
+  return dist === 0 ? "right" : dist === 1 ? "close" : "wrong";
+}
+
+/** Human line for a cell, from the rung names: used in announcements and
+ *  verdict feedback. */
+export function cellLabel(cell: string | null): string {
+  if (!cell) return "the tray";
+  const f = Number(cell[1]);
+  const e = Number(cell[3]);
+  return `feasibility “${AXIS_SCALES.feasibility.rungs[f].name}”, effectiveness “${AXIS_SCALES.effectiveness.rungs[e].name}”`;
+}
+
+/** Verdict → short status word used in results + announcements. */
+export function verdictLabel(v: Verdict): string {
+  return v === "right" ? "on the mark" : v === "close" ? "close" : "off";
+}
+
+/** The exception question's options, strongest ask last — rendered in reverse
+ *  so the halt is not the first chip offered. */
+export const EXC_OPTION_IDS = ["sg", "dr", "ti", "cc", "ch"] as const;
+
+/** Exception answers. sg/dr/ti carry over verbatim from the five-bucket
+ *  widget; ch is that widget's full-pause answer with its first words
+ *  conformed to this bucket's name; cc is builder-authored (the new list
+ *  makes the enforcement backbone the most tempting wrong answer, and the
+ *  old option set had nothing in its place). `t` carries authored <b>
+ *  emphasis markup. */
 export const EXC_ANSWERS: Record<string, { ok: boolean; t: string }> = {
-  fp: {
+  ch: {
     ok: true,
-    t: "<b>Right — the full pause.</b> Mechanisms strong enough to verify a halt — chip registries, compute metering, inspection rights — can support every weaker bucket. The reverse is not true. So under the securitized framing you design verification for the pause, whatever gets signed first.",
+    t: "<b>Right — the coordinated halt.</b> Mechanisms strong enough to verify a halt — chip registries, compute metering, inspection rights — can support every weaker bucket. The reverse is not true. So under the securitized framing you design verification for the pause, whatever gets signed first.",
   },
-  cp: {
+  cc: {
     ok: false,
-    t: "Close in spirit — an if/then pause may be what you can actually get signed. But you <b>design</b> for the full pause: anything strong enough to verify a halt can serve a conditional one, and not vice versa.",
+    t: "Compute controls are the enforcement backbone, not the target — the question securitization asks is what that backbone must be strong enough to hold up. Design it for the halt and it serves every weaker bucket on the way.",
   },
-  tc: {
+  ti: {
     ok: false,
     t: "Transparency is the scaffolding, not the target. Under a securitized framing you build the mechanism set that could support a halt — transparency is what it stands on along the way.",
   },
@@ -298,7 +335,7 @@ export const EXC_ANSWERS: Record<string, { ok: boolean; t: string }> = {
   },
 };
 
-/** Axis / corner / securitization hover copy — verbatim. */
+/** Axis / corner / securitization hover copy — carried over verbatim. */
 export const AXIS_TIPS = {
   y: "How much the policy actually deters ASI development — measured against the global race, not against one country’s labs.",
   x: "How gettable the policy is under current infrastructure (the verification burden it implies) and the current political climate.",
@@ -307,21 +344,43 @@ export const AXIS_TIPS = {
   sec: "Securitization: treating an issue as an existential security matter, lifting it out of normal political balancing — because nothing can be traded against survival. A strong move with a history of abuse, which is why the threat model must be argued, not stipulated.",
 } as const;
 
-/** Header / rail copy lifted verbatim from the authored HTML. */
+/** Widget chrome copy. Phase strip labels and buttons are chrome; the caption,
+ *  axis lines, exception lead, and foot carry over from the previous widget
+ *  (the foot's stale closing clause about a written justification the section
+ *  no longer has was dropped; closingNext now names the actual next unit). */
 export const POLICY_SCOPING_COPY = {
-  hint: "Drag each bucket onto the plane, then check. Hover anything — chips, corners, axes — for the reasoning.",
-  trayLabel: "The five policy buckets — drag onto the plane",
+  phases: ["The axes", "The buckets", "The sort"] as const,
+
+  axesKicker: "Before the buckets: the two words doing the work.",
+  axesHint: "Open both scales, then continue.",
+  axesContinue: "To the buckets",
+  openScale: "Open the scale",
+  scaleSeen: "Seen",
+  scaleLowHigh: "low → high",
+
+  cardsKicker:
+    "Eleven policy buckets, from the least demanding ask to the most. Open each one — the sort unlocks after you have read all eleven.",
+  cardParallelTag: "Historical parallel",
+  rampTop: "Least demanding ask",
+  rampBottom: "Most demanding ask",
+  cardToSort: "To the sort",
+  readCount: (n: number, total: number) => `${n} of ${total} read`,
+  readMark: "Read",
+
+  sortHint:
+    "Drag each bucket onto the plane, then check. The axis titles reopen the two scales; hover a chip for its description.",
+  trayLabel: "The eleven policy buckets — drag onto the plane",
 
   stats: [
-    { n: "5", l: "buckets, from voluntary commitments to a binding halt" },
+    { n: "11", l: "buckets, from voluntary commitments to a coordinated halt" },
     { n: "2", l: "axes every scoping decision trades between" },
     { n: "1", l: "exception that suspends ordinary balancing" },
   ],
 
   exerciseLabel: "Exercise",
   checkBtn: "Check placements",
-  revealBtn: "Reveal answer key",
-  resetBtn: "Reset",
+  revealBtn: "Reveal reference map",
+  resetBtn: "Reset the sort",
 
   resultsLabel: "Reasoning, bucket by bucket",
 
@@ -333,9 +392,6 @@ export const POLICY_SCOPING_COPY = {
     "Always think about policy in terms of tradeoffs — price them, don’t pick favorites.",
   cornerTR: "the empty corner",
   cornerBL: "worst of both",
-  frontierLabel: "the feasibility–effectiveness frontier",
-  cascadeLine1: "strong enough for a pause",
-  cascadeLine2: "supports everything weaker ↘",
 
   excLabel: "The one exception",
   excLead: {
@@ -346,25 +402,7 @@ export const POLICY_SCOPING_COPY = {
     post: ". Which?",
   },
 
-  closingNext: "Next — who would have to agree? Module 1: The Compute Supply Chain →",
+  closingNext: "Next — what would a pause agreement actually say? 1.1: Anatomy of a (Pause) Agreement →",
 
-  foot: "Framework from the Governance Tracks outline, §0.2 Policy Scoping (July 2026). Reference thresholds students should recognize: EU AI Act Art. 51 presumes systemic risk above 10²⁵ training FLOP; the rescinded EO 14110 used 10²⁶ as its reporting trigger. The corners of this plane are anchored by the outline; the middle band is genuinely contestable — the written justification exercise exists precisely to argue it.",
+  foot: "Two reference thresholds worth carrying: EU AI Act Art. 51 presumes systemic risk above 10²⁵ training FLOP; the rescinded EO 14110 used 10²⁶ as its reporting trigger. The corners of this plane are settled; the middle band is genuinely contestable.",
 } as const;
-
-/** feasibility index (from cell key f#) → word */
-export const FEAS_WORDS = ["low", "medium", "high"] as const;
-/** effectiveness index (from cell key e#) → word */
-export const EFFECT_WORDS = ["low", "medium", "high"] as const;
-
-/** Human-readable label for a cell key like "f2e0". */
-export function cellLabel(key: string | null): string {
-  if (!key) return "the tray";
-  const f = Number(key[1]);
-  const e = Number(key[3]);
-  return `${FEAS_WORDS[f]} feasibility, ${EFFECT_WORDS[e]} effectiveness`;
-}
-
-/** Verdict → short status word used in results + announcements. */
-export function verdictLabel(v: Verdict): string {
-  return v === "right" ? "on the frontier" : v === "close" ? "close" : "off";
-}

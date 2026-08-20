@@ -1,0 +1,57 @@
+# Re-import the FelonyBench incident table.
+#
+# 0.0 Welcome prints somebody else's running tally of AI-agent incidents, so
+# the copy here goes stale on their schedule, not ours. This runs
+# `felonybench:build` on a timer and opens a pull request when the table has
+# actually changed.
+#
+# A pull request rather than a push to main on purpose: the input is a live
+# third-party page, and a silent commit would mean nobody ever reads what
+# changed in a table the lesson reproduces — including a row being removed.
+#
+# It is deliberately not part of CI. `felonybench:build --check` going red
+# only means somebody logged an incident, which is news about the world, not
+# a broken repository.
+name: Sync the FelonyBench table
+
+on:
+  schedule:
+    # Mondays, 06:30 UTC — half an hour after the doc sync, so two unrelated
+    # third-party imports never race to open a pull request at once.
+    - cron: "30 6 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+      - run: npm run felonybench:build
+
+      # The artifact reaches a rendered table, so a shape change has to hold
+      # before it can be proposed.
+      - run: npm run typecheck
+      - run: npm test
+
+      - uses: peter-evans/create-pull-request@c5a7806660adbe173f04e3e038b0ccdcd758773c # v6.1.0
+        with:
+          branch: felonybench-sync
+          title: "FelonyBench logged new incidents"
+          commit-message: "Re-import the FelonyBench incident table"
+          body: |
+            `npm run felonybench:build` found felonybench.com has moved on.
+
+            The diff is their tally, imported verbatim — read it as their
+            record, not as ours. Check that rows were added rather than lost:
+            a shorter table would read on the page as the incidents stopping.
+          add-paths: src/content/felonybench.json
+          delete-branch: true

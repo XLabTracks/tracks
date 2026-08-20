@@ -72,10 +72,10 @@ export function WritingEditor({
   useEffect(() => {
     saveDraftRef.current = onSaveDraft;
   });
-  // Monotonic save id: only the newest in-flight save may report "saved", so
-  // an earlier save that resolves late can't overwrite a newer one's status
-  // (the persisted rows still race, but the label stops lying).
+  // Monotonic save id controls the label; the promise chain also serializes
+  // writes so an older slow request can never land after a newer draft.
   const saveSeq = useRef(0);
+  const saveChain = useRef<Promise<void>>(Promise.resolve());
 
   const totalWords = useMemo(
     () => sections.reduce((sum, s) => sum + countWords(values[s.id] ?? ""), 0),
@@ -105,7 +105,13 @@ export function WritingEditor({
       if (!storable) return;
       const seq = ++saveSeq.current;
       try {
-        await saveDraftRef.current?.(values);
+        const save = saveDraftRef.current;
+        saveChain.current = saveChain.current
+          .catch(() => undefined)
+          .then(async () => {
+            await save?.(values);
+          });
+        await saveChain.current;
         // Ignore a stale save that resolved after a newer one started.
         if (seq === saveSeq.current) setSaveState("saved");
       } catch {
@@ -186,7 +192,30 @@ export function WritingEditor({
       ))}
 
       <div className="text-muted-foreground flex flex-wrap items-center justify-between gap-2 text-xs">
-        <span className={cn((belowMin || aboveMax) && "text-amber-600")}>
+        {/* THE COUNTER DOES NOT WARN YOU FOR NOT HAVING STARTED.
+            It used to paint amber whenever the draft was below the minimum,
+            which is true from the first paint and stays true for the whole
+            of the first two hundred words — so the warning colour was the
+            resting state of the control and meant "this exercise exists".
+            Course owner, seeing it at zero words: "why is this orange".
+
+            Below the minimum is now simply the default: muted, uncoloured,
+            and the count already says `min 200` while Submit stays disabled,
+            so nothing is hidden. Reaching the minimum turns it `--met`, which
+            is the positive signal the sibling counter in
+            argue-reveal-exercise.tsx has always used — a token, so it
+            re-solves per theme instead of being one fixed orange. Only
+            overshooting the maximum warns, because that is the one state that
+            is wrong at the moment it is shown rather than on the way to being
+            right. The dark pairing is the one the repo's other two warning
+            lines use. */}
+        <span
+          className={cn(
+            aboveMax
+              ? "text-amber-600 dark:text-amber-500"
+              : !belowMin && minWords != null && "text-met",
+          )}
+        >
           {totalWords} words
           {minWords ? ` · min ${minWords}` : ""}
           {maxWords ? ` · max ${maxWords}` : ""}

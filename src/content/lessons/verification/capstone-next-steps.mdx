@@ -1,0 +1,87 @@
+{/* Unit 4.3 — the track's completion page, structured to the course owner's
+    spec (Aug 2026): congratulations, words from us, feedback, what's next.
+    Coursera-style — the page celebrates, it does not number itself. The
+    five-doors pathway notes this page used to carry were cut on the same
+    instruction; docs/verification/module-4-log.md records the decision and
+    where to find them.
+
+    The congratulations line is NOT here: the lesson is flagged `completion`
+    in curriculum.ts, and CompletionHeader prints it above this body from the
+    learner's real progress, so nobody is congratulated for arriving at a URL.
+    The dashboard under it (CompletionStats — skills mastered, words written,
+    reading completed) is likewise the page's code, not this body: its
+    numbers are the learner's own rows. This body is what is true for every
+    visitor either way. It renders as one screen — the flag also opts the
+    page out of the parts reader.
+
+    The closing note and the feedback paragraph are the course owner's words
+    (2026-08-19 instruction), transcribed verbatim; the feedback form is the
+    Google Form she supplied. */}
+
+## Words from Us
+
+You have now completed the most comprehensive curriculum on AI verification
+to date. With your knowledge and skillset, you are now equipped to tackle
+some of the most pressing problems at the forefront of verification,
+including but not limited to all the projects in the
+[Capstone Bank](/verification/capstone-bank).
+
+Yet again, this is a preparadigmatic field, and you also have the agency to
+propose a project, direction, or subproblem to address. Look back through
+your notebook—where did you see gaps in the literature, questions left
+lingering, mechanisms that felt more underdeveloped but that you have ideas
+to improve?
+
+## Feedback
+
+We'd love to hear about what next steps you think would be impactful for AI
+verification, as well as feedback on the course overall, in the feedback
+form below!
+
+<NextSteps items={[
+  {
+    name: "Course feedback form",
+    detail: "What you would work on next in AI verification, and what this course should do better.",
+    href: "https://docs.google.com/forms/d/e/1FAIpQLSf892SBfABEh7Zmbb3Aq8ckNp7YNnM2lKYG_GwSVhx21FmQmQ/viewform",
+    meta: "Google Form"
+  }
+]} />
+
+## What's Next?
+
+Find opportunities — the first four are open programmes with cohorts and
+deadlines, the last is the listing to browse for everything else,
+entry-level roles included.
+
+<NextSteps items={[
+  {
+    name: "Frontier AI Security Residency",
+    detail: "An eight-week, fully funded residency in Cambridge, UK, on hardware verification and cyber security of frontier AI — run by ERA with Heron and the Oxford Hardware AI Governance Lab. The most directly verification-focused programme on this list.",
+    href: "https://www.securefrontier.ai",
+    meta: "Residency"
+  },
+  {
+    name: "MATS",
+    detail: "A full-time research programme pairing scholars with mentors in AI safety, including governance and technical governance work.",
+    href: "https://www.matsprogram.org",
+    meta: "Cohort programme"
+  },
+  {
+    name: "GovAI Fellowships",
+    detail: "Summer and winter fellowships, and longer research roles, for people working on the governance of advanced AI.",
+    href: "https://www.governance.ai/opportunities",
+    meta: "Fellowship"
+  },
+  {
+    name: "Horizon Fellowship",
+    detail: "Places funded fellows on emerging-technology policy inside US institutions — federal agencies, Congress and think tanks — for 6 or 12 months in Washington, DC. The closest thing on this list to doing verification policy from inside a government.",
+    href: "https://horizonpublicservice.org/programs/become-a-fellow/",
+    meta: "Placement fellowship"
+  },
+  {
+    name: "See all — aisafety.com",
+    detail: "A running listing of fellowships, courses, workshops, conferences and entry-level jobs across the field — what is open changes constantly, so look here first.",
+    href: "https://aisafety.com",
+    meta: "Listing"
+  }
+]} />

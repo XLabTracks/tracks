@@ -1,0 +1,55 @@
+# Re-sync the lessons generated from somebody else's Google Doc.
+#
+# The reading is reproduced with permission from a document its author keeps
+# adding to, so the copy here goes stale on his schedule, not ours. This runs
+# `gdoc:build` on a timer and opens a pull request when the document has
+# actually changed.
+#
+# A pull request rather than a push to main on purpose: the input is a live
+# third-party document, and a silent commit would mean nobody ever reads what
+# changed in a text the course reproduces verbatim.
+#
+# It is deliberately not part of CI. `gdoc:build --check` going red only means
+# the author edited his doc, which is news, not a broken repository.
+name: Sync Google Doc lessons
+
+on:
+  schedule:
+    # Mondays, 06:00 UTC. Weekly is well inside how often the doc moves, and
+    # the diff is easier to read than a daily trickle.
+    - cron: "0 6 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+      - run: npm run gdoc:build
+
+      # The build also has to hold: the doc's markdown reaches MDX, so a new
+      # construct in the document can break the compile.
+      - run: npm run typecheck
+      - run: npm test
+
+      - uses: peter-evans/create-pull-request@c5a7806660adbe173f04e3e038b0ccdcd758773c # v6.1.0
+        with:
+          branch: gdoc-sync
+          title: "The reproduced doc changed upstream"
+          commit-message: "Re-sync the lessons generated from their source docs"
+          body: |
+            `npm run gdoc:build` found the source document has moved on.
+
+            The diff is the author's own edits, reproduced verbatim — read it
+            as their text, not as ours. Nothing here was written by the sync.
+          add-paths: src/content/lessons/**
+          delete-branch: true

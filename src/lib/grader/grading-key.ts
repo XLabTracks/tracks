@@ -4,9 +4,11 @@ import { prisma } from "@/lib/db";
 import { decryptApiKey } from "./key-crypto";
 import {
   getOpenRouterKeyStatus,
+  keyAad,
   keyStorageSecret,
   type OpenRouterKeyStatus,
 } from "./user-key";
+import type { GraderKeySource } from "./classify";
 
 // Which OpenRouter key the grader bills. A learner can hold several at once
 // (their own key plus one per classroom whose instructor stored one); this
@@ -129,22 +131,25 @@ export const getGraderKeyView = cache(
         orderBy: { joinedAt: "asc" },
       }),
     ]);
-    const classrooms: ClassroomKeyOption[] = [];
-    for (const { classroom } of memberships) {
-      const row = classroom.apiKeys[0];
-      if (!row) continue;
-      const decrypted = await decryptApiKey(
-        row.ciphertext,
-        secret,
-        classroomKeyAad(classroom.id),
-      );
-      classrooms.push({
-        classroomId: classroom.id,
-        classroomName: classroom.name,
-        last4: row.last4,
-        usable: decrypted != null,
-      });
-    }
+    const classrooms = (
+      await Promise.all(
+        memberships.map(async ({ classroom }) => {
+          const row = classroom.apiKeys[0];
+          if (!row) return null;
+          const decrypted = await decryptApiKey(
+            row.ciphertext,
+            secret,
+            classroomKeyAad(classroom.id),
+          );
+          return {
+            classroomId: classroom.id,
+            classroomName: classroom.name,
+            last4: row.last4,
+            usable: decrypted != null,
+          } satisfies ClassroomKeyOption;
+        }),
+      )
+    ).filter((option): option is ClassroomKeyOption => option != null);
     // personal is non-null here: getOpenRouterKeyStatus only returns null
     // when key storage is unconfigured, which the secret gate above excludes.
     const personalStatus = personal ?? { state: "none" as const, last4: null };
@@ -160,6 +165,102 @@ export const getGraderKeyView = cache(
     };
   },
 );
+
+export type ResolvedGraderKey =
+  | {
+      ok: true;
+      keySource: GraderKeySource;
+      classroomId?: string;
+      /** Null only for the server-wide source, supplied by the action. */
+      apiKey: string | null;
+    }
+  | { ok: false; error: string };
+
+/**
+ * Backend-only resolver for a grading request. Unlike getGraderKeyView, this
+ * returns the selected plaintext key and therefore must never cross a server
+ * boundary. One relational query replaces the old view query plus a second
+ * selected-key query; decryption probes run concurrently.
+ */
+export async function resolveGraderKeyForRequest(
+  userId: string,
+): Promise<ResolvedGraderKey> {
+  const secret = keyStorageSecret();
+  if (!secret) return { ok: true, keySource: "server", apiKey: null };
+  const user = await prisma.user.findUnique({
+    where: { id: userId },
+    select: {
+      graderKeyPref: true,
+      apiKeys: {
+        where: { provider: PROVIDER },
+        select: { ciphertext: true },
+      },
+      memberships: {
+        where: { classroom: { apiKeys: { some: { provider: PROVIDER } } } },
+        orderBy: { joinedAt: "asc" },
+        select: {
+          classroom: {
+            select: {
+              id: true,
+              apiKeys: {
+                where: { provider: PROVIDER },
+                select: { ciphertext: true },
+              },
+            },
+          },
+        },
+      },
+    },
+  });
+  if (!user) return { ok: true, keySource: "server", apiKey: null };
+
+  const personalCiphertext = user.apiKeys[0]?.ciphertext;
+  const personalKey = personalCiphertext
+    ? await decryptApiKey(personalCiphertext, secret, keyAad(userId))
+    : null;
+  const classrooms = await Promise.all(
+    user.memberships.map(async ({ classroom }) => {
+      const ciphertext = classroom.apiKeys[0]?.ciphertext;
+      return {
+        id: classroom.id,
+        key: ciphertext
+          ? await decryptApiKey(
+              ciphertext,
+              secret,
+              classroomKeyAad(classroom.id),
+            )
+          : null,
+      };
+    }),
+  );
+  const selection = resolveGraderKeySelection(
+    user.graderKeyPref,
+    personalCiphertext ? (personalKey ? "active" : "needs-reentry") : "none",
+    classrooms.map((classroom) => classroom.id),
+    classrooms.filter((classroom) => classroom.key).map((classroom) => classroom.id),
+  );
+  if (selection === "user") {
+    return personalKey
+      ? { ok: true, keySource: "user", apiKey: personalKey }
+      : {
+          ok: false,
+          error:
+            "Your stored OpenRouter key can no longer be read — replace or remove it below, then try again.",
+        };
+  }
+  const classroomId = classroomIdOfSelection(selection);
+  if (classroomId != null) {
+    const key = classrooms.find((classroom) => classroom.id === classroomId)?.key;
+    return key
+      ? { ok: true, keySource: "classroom", classroomId, apiKey: key }
+      : {
+          ok: false,
+          error:
+            "The selected classroom's grading key can no longer be used — pick another key below, or ask the instructor to re-enter it.",
+        };
+  }
+  return { ok: true, keySource: "server", apiKey: null };
+}
 
 /**
  * Display status of a classroom's stored key for the instructor UI, or null

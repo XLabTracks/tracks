@@ -10,13 +10,16 @@ export function Breadcrumbs({ items }: { items: Crumb[] }) {
   return (
     <nav
       aria-label="Breadcrumb"
-      className="text-muted-foreground mb-4 flex flex-wrap items-center gap-1 text-sm"
+      className="text-muted-foreground mb-4 flex flex-wrap items-center gap-1 text-sm select-none"
     >
       {items.map((crumb, i) => (
         <span key={i} className="flex items-center gap-1">
           {i > 0 && <ChevronRight className="size-3.5 opacity-60" aria-hidden />}
           {crumb.href ? (
-            <Link href={crumb.href} className="hover:text-foreground transition-colors">
+            <Link
+              href={crumb.href}
+              className="hover:text-foreground inline-flex min-h-11 items-center transition-colors select-none lg:min-h-0"
+            >
               {crumb.label}
             </Link>
           ) : (

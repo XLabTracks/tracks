@@ -1,3 +1,4 @@
+import { shuffleAnswerOptions } from "../shuffle";
 import {
   ALLOCATION_DEFAULT_STEP,
   ARGUE_REVEAL_DEFAULTS,
@@ -26,12 +27,30 @@ export interface PublicChoiceExercise {
   monospaceOptions: boolean;
 }
 
+/**
+ * The projection is also where the options get shuffled, for the same reason
+ * it is where the key gets stripped: it is the one place that decides what the
+ * client is allowed to see, so neither can be forgotten at a call site.
+ *
+ * Grading is unaffected — `gradeChoice` compares ids and never positions, so
+ * the server does not need to know or care what order the learner was shown.
+ * The seed is the exercise's own id, so the order is stable for everybody
+ * (see src/lib/shuffle.ts for why that, rather than per-visit randomness).
+ *
+ * True/false exercises keep their authored order: `shuffleAnswerOptions` steps
+ * aside for a true/false pair, and reversing half of them would read as an
+ * error rather than as variety.
+ */
 export function toPublicChoice(exercise: ChoiceExercise): PublicChoiceExercise {
   return {
     id: exercise.id,
     type: exercise.type,
     prompt: exercise.prompt,
-    options: exercise.options,
+    options: shuffleAnswerOptions(
+      exercise.id,
+      exercise.options,
+      (o) => o.label,
+    ).map((s) => s.item),
     multiple: exercise.type === "multi-select",
     monospaceOptions: exercise.monospaceOptions ?? false,
   };

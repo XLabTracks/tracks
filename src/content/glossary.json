@@ -1,7 +1,9 @@
 {
   "autoGlossExclude": [
     "c-lowstakes-l2",
-    "c-lowstakes-l3"
+    "c-lowstakes-l3",
+    "research-tips",
+    "scoping-intro"
   ],
   "terms": [
     {
@@ -484,6 +486,21 @@
         "label": "An overview of areas of control work (Redwood Research)",
         "url": "https://blog.redwoodresearch.org/p/an-overview-of-areas-of-control-work"
       }
+    },
+    {
+      "id": "securitization",
+      "term": "securitization",
+      "aliases": ["securitize", "securitizes", "securitized", "securitizing"],
+      "definition": "Treating an issue as an existential threat, and thus a top policy priority. In the Copenhagen School's account (Buzan, Wæver, and de Wilde), an actor securitizes an issue by casting it as an existential threat to something a community values — and that framing, once an audience accepts it, unlocks powers that ordinary politics would refuse.",
+      "seeAlso": ["x-risk"],
+      "autoGloss": true
+    },
+    {
+      "id": "goodharts-law",
+      "term": "Goodhart's Law",
+      "aliases": ["Goodhart"],
+      "definition": "When a measure becomes a target, it ceases to be a good measure. Once actors are judged by a proxy rather than by the goal it stands in for, they optimize the proxy itself, and the correlation that made it worth measuring breaks down — compliance on paper alongside erosion of the goal in fact.",
+      "autoGloss": true
     }
   ]
 }

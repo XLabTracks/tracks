@@ -1,0 +1,128 @@
+{/* Unit 2.1, section 2.1.6. Transcribed from the author's WIP outline (the
+    live "[WIP] Verification Track Outline", tab "2.1.6 where's trust?"), not
+    paraphrased and not invented. It replaces the draft specification that
+    stood here. The outline's two bracketed references ride with their
+    passages as <Src>. */}
+
+### 2.1.6 Where should trust live?
+
+Hardware verification can place trust inside the accelerator, in a separate digital monitor, in physical sensors, or across a hybrid design. Moving trust does not remove it.
+
+Use one verification target for the comparison:
+
+<Prompt label="Verification target">Determine whether all covered compute in a declared data center is accounted for by permitted workloads.</Prompt>
+
+#### Architecture A: on-chip monitoring
+
+Possible components include device identity, secure or measured boot, signed counters, protected telemetry, workload certificates, trusted execution environments, and hardware-backed authorization.
+
+**Potential strengths**
+
+- Fine-grained access to device state and activity;
+- Low marginal cost across a fleet after deployment;
+- Evidence can travel with the device;
+- Fast or real-time response;
+- Compact, privacy-preserving outputs rather than raw workloads.
+
+**Load-bearing concerns**
+
+- Trust in design, manufacturing, firmware, and key provisioning;
+- Vendor control of reference values, updates, revocation, and appraisal services;
+- Physical control by the prover;
+- Common-mode failure when identity, metering, classification, and licensing share one root;
+- Legacy and nonparticipating hardware;
+- Hardware redesign and fleet-turnover time;
+- Political resistance to foreign- or vendor-controlled keys.
+
+Current confidential-computing support on accelerators is a deployed security primitive, not proof of treaty compliance. For example, NVIDIA describes Hopper confidential computing as protecting code and data in use from the host and basic physical attacks under its stated threat model. A treaty adversary may be stronger than that threat model, and a confidential workload may still violate the treaty.
+
+<Src>NVIDIA, [*NVIDIA H100 Tensor Core GPU Security*](https://images.nvidia.com/aem-dam/en-zz/Solutions/data-center/h100/PB-11133-001_v01.pdf) — the confidential-computing whitepaper and current product documentation.</Src>
+
+<PageBreak title="Off-chip digital monitoring" />
+
+#### Architecture B: off-chip digital monitoring
+
+Possible components include network taps, server or rack gateways, input/output loggers, tamper-evident enclosures, and separate secured verification computers.
+
+**Potential strengths**
+
+- Clearer separation between prover hardware and verifier hardware;
+- Devices can be jointly designed, inspected, or supplied;
+- Possible retrofit of existing accelerator fleets;
+- Reduced dependence on proprietary accelerator internals.
+
+**Load-bearing concerns**
+
+- Visibility falls as the monitor moves farther from the computation;
+- Encrypted links and large data volumes;
+- Covert, timing, analog, and steganographic channels;
+- Difficulty reconstructing high-level workloads from low-level traffic;
+- Installation, calibration, chain of custody, and maintenance;
+- Risk that verifier-supplied hardware enables espionage or sabotage.
+
+Recent work has proposed fingerprinting or committing cluster input and output through external taps and secure gateways. These designs are research proposals. Their value is to make the trust-placement problem concrete, not to show that the engineering and political problems are solved.
+
+<Src>A. Cankaya et al., *Fingerprinting All AI Cluster I/O Without Mutually Trusted Processors* — [arXiv:2606.10724](https://arxiv.org/abs/2606.10724), June 2026. Treat the architecture and implementation schedule as a research proposal.</Src>
+
+#### Architecture C: off-chip analog monitoring
+
+Possible components include independently installed power meters, thermal sensors, electromagnetic measurements, independent clocks, tamper-evident packaging, and physical inspection of the sensor boundary.
+
+**Potential strengths**
+
+- A physically independent account of activity;
+- Possible retrofit;
+- Less dependence on proprietary firmware;
+- Evasion may require changing several physical signatures or sacrificing performance.
+
+**Load-bearing concerns**
+
+- Approximate conversion from physical signals to compute;
+- Architecture- and workload-dependent signatures;
+- Calibration, placement, uncertainty, and sensor drift;
+- Deliberate mimicry or masking;
+- Coverage only inside instrumented facilities;
+- Dependence on inspections to preserve the measurement boundary.
+
+A rack meter installed under treaty access belongs in this hardware section. A foreign intelligence service estimating the same site’s power use from outside the facility belongs in the intelligence section. The physical phenomenon may be similar, but the access, chain of custody, confidence, and institutional role differ.
+
+#### Architecture D: hybrid assurance
+
+A hybrid system might combine:
+
+- On-chip identity and secure boot;
+- Hardware-rooted telemetry;
+- Independently installed rack-level power measurement;
+- Provider allocation and billing records;
+- Periodic physical inspection;
+- Intelligence comparison against declared facility capacity;
+- Protected human reporting channels.
+
+Count independent failure modes, not mechanism names. A signed meter, a signed classifier, and a licensing system that all depend on one vendor key provide less redundancy than their number suggests.
+
+#### The confidentiality trade
+
+Hardware evidence can reduce disclosure by returning a bounded claim rather than raw code, data, weights, or traces. It can also concentrate power in manufacturers, key authorities, and verifiers. A proposal should specify:
+
+- Exactly what leaves the facility;
+- Who can link evidence across devices, sites, and time;
+- Whether the result reveals commercially sensitive utilization or topology;
+- Whether raw evidence is retained;
+- Who can query the system;
+- How abuse is audited;
+- What happens when parties disagree about the verifier or reference values.
+
+#### Activity: bilateral pilot review
+
+Compare an on-chip design with an off-chip design for the working pause rule. For each, record:
+
+- What a U.S. delegation would distrust;
+- What a Chinese delegation would distrust;
+- What the operator would regard as commercially sensitive;
+- Whose cooperation is indispensable;
+- The strongest technical assumption;
+- The strongest institutional assumption;
+- The main abuse risk;
+- The smallest pilot that would produce decision-relevant evidence.
+
+Choose an architecture for a **pilot**, not immediate universal deployment. State the evidence the pilot must produce before the mechanism deserves a larger role.

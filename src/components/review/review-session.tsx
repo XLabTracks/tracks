@@ -19,10 +19,10 @@ export interface ReviewQueueCard {
 const GRADE_CLASSES: Record<number, string> = {
   [Rating.Again]:
     "border-destructive/40 text-destructive hover:bg-destructive/10",
-  [Rating.Hard]: "border-amber-500/40 text-amber-600 dark:text-[#D7A24B] hover:bg-amber-500/10",
+  [Rating.Hard]: "border-amber-500/40 text-hard hover:bg-amber-500/10",
   [Rating.Good]:
-    "border-emerald-600/40 text-emerald-600 dark:text-[#7FA682] hover:bg-emerald-600/10",
-  [Rating.Easy]: "border-sky-500/40 text-sky-600 dark:text-[#8FA3A8] hover:bg-sky-500/10",
+    "border-emerald-600/40 text-met hover:bg-emerald-600/10",
+  [Rating.Easy]: "border-sky-500/40 text-easy hover:bg-sky-500/10",
 };
 
 /**

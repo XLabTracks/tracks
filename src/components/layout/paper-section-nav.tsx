@@ -12,13 +12,27 @@ import {
 import { cn } from "@/lib/utils";
 import { useScrollSpy } from "./use-scroll-spy";
 
-/** Row styling shared with the module items in TrackSidebar. */
+/** Row styling shared with the module items in TrackSidebar.
+ *
+ * The current row is marked by a filled ground AND a heavier weight, on top
+ * of the aria-current every caller sets — so it survives without colour.
+ *
+ * Two things this must not do. It must not paint one edge: a coloured left
+ * rib against a hairline everywhere else is the half-painted border the house
+ * rules forbid, and it is what this row used to have. And it must not take a
+ * prose underline: these rows sit inside AccordionContent, which sets
+ * [&_a]:underline for the prose it normally wraps. That is a parent rule on
+ * a descendant selector, so it outranks a plain `no-underline` on the anchor
+ * — the `!` is what actually wins, and dropping it puts the underline back. */
 export function navItemClass(active: boolean) {
   return cn(
-    "flex items-start gap-2 rounded-md border-l-2 px-2 py-1.5 text-sm transition-colors",
+    // select-none because these rows are <a>, so the base rule for pressable
+    // chrome does not reach them — and a selection dragged across a nav row
+    // is always a mis-click.
+    "flex min-h-11 items-start gap-2 rounded-md px-2 py-1.5 text-sm no-underline! transition-colors select-none lg:min-h-0",
     active
-      ? "border-destructive bg-destructive/5 text-foreground font-medium"
-      : "border-l-transparent text-muted-foreground hover:text-foreground hover:bg-muted",
+      ? "bg-muted text-foreground font-semibold"
+      : "text-muted-foreground hover:text-foreground hover:bg-muted/60",
   );
 }
 
@@ -27,14 +41,19 @@ function anchorOf(item: PaperNavItem): string {
 }
 
 /**
- * The in-paper section tree, docked as the "In this paper" panel at the
- * bottom of the sidebar: anchor links for every section (and inserted
+ * The in-paper section tree: anchor links for every section (and inserted
  * activity), with the current section highlighted by scroll position.
- * Rendered as a flex child of the panel — it takes the panel's remaining
- * height and scrolls internally. Rows whose targets sit behind a
- * still-closed reading gate (item.gateIds) render locked — dimmed, with a
- * lock icon — and clicking one scrolls to the blocking gate's card instead
- * of a hash that would land nowhere (the gated DOM is unmounted).
+ *
+ * It renders inline in the sidebar's one scroll container, nested under the
+ * row of the item being read — so the outline and the current item's headings
+ * are a single list you scroll through, not two panes with a boundary. It
+ * therefore has no height of its own and never scrolls itself; the follow
+ * effect below drives the sidebar's scroller instead.
+ *
+ * Rows whose targets sit behind a still-closed reading gate (item.gateIds)
+ * render locked — dimmed, with a lock icon — and clicking one scrolls to the
+ * blocking gate's card instead of a hash that would land nowhere (the gated
+ * DOM is unmounted).
  */
 export function PaperSectionNav({
   items,
@@ -97,10 +116,10 @@ export function PaperSectionNav({
     return () => window.removeEventListener(PAPER_GATE_OPEN_EVENT, onOpen);
   }, [paperId, gateIds]);
 
-  // Follow the reader: long papers cap this pane's height (it scrolls on its
-  // own), so keep the active row centered inside it. Scroll the pane's
-  // scrollTop directly — scrollIntoView could also scroll the document and
-  // fight the user's reading position.
+  // Follow the reader: keep the active row in view inside whichever ancestor
+  // actually scrolls (the sidebar's nav — this list has no scroll of its own).
+  // Drive that element's scrollTop directly; scrollIntoView would also scroll
+  // the document and fight the user's reading position.
   useEffect(() => {
     const list = listRef.current;
     if (!list || !activeId) return;
@@ -108,20 +127,25 @@ export function PaperSectionNav({
       `[data-spy-anchor="${CSS.escape(activeId)}"]`,
     );
     if (!row) return;
-    const listRect = list.getBoundingClientRect();
+    const scroller = scrollParentOf(list);
+    if (!scroller) return;
+    const viewRect = scroller.getBoundingClientRect();
     const rowRect = row.getBoundingClientRect();
-    if (rowRect.top < listRect.top || rowRect.bottom > listRect.bottom) {
-      list.scrollTop +=
-        rowRect.top - listRect.top - list.clientHeight / 2 + row.clientHeight / 2;
+    if (rowRect.top < viewRect.top || rowRect.bottom > viewRect.bottom) {
+      scroller.scrollTop +=
+        rowRect.top -
+        viewRect.top -
+        scroller.clientHeight / 2 +
+        row.clientHeight / 2;
     }
   }, [activeId]);
 
   return (
     <ul
       ref={listRef}
-      // pr-3.5 (= px-2 + 6px) keeps classic scrollbars clear of the sidebar's
-      // resize handle when this panel docks in the resizable track sidebar.
-      className="min-h-0 flex-1 space-y-0.5 overflow-y-auto overscroll-contain pb-3 pl-2 pr-3.5"
+      // No overflow of its own: it flows in the sidebar's scroller, so a
+      // scroll box here would nest a second scrollbar inside the first.
+      className="space-y-0.5 pb-1 pl-2"
     >
       {items.map((item) => {
         const anchor = anchorOf(item);
@@ -132,7 +156,7 @@ export function PaperSectionNav({
           item.kind === "section" ? (
             <>
               {item.number && (
-                <span className="text-muted-foreground mt-px shrink-0 font-mono text-[11px]">
+                <span className="text-muted-foreground mt-px shrink-0 text-3xs">
                   {item.number}
                 </span>
               )}
@@ -204,4 +228,23 @@ export function PaperSectionNav({
       })}
     </ul>
   );
+}
+
+/**
+ * Nearest ancestor that actually scrolls. The sidebar's own scroller is a
+ * `<nav>` several levels up (accordion content sits in between), so walking
+ * the chain is the only way to find it from here — and an ancestor with
+ * `overflow: auto` but no overflowing content is not it.
+ */
+function scrollParentOf(el: HTMLElement): HTMLElement | null {
+  for (let node = el.parentElement; node; node = node.parentElement) {
+    const { overflowY } = getComputedStyle(node);
+    if (
+      (overflowY === "auto" || overflowY === "scroll") &&
+      node.scrollHeight > node.clientHeight
+    ) {
+      return node;
+    }
+  }
+  return null;
 }

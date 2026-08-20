@@ -1,0 +1,39 @@
+Any treaty that regulates the development of advanced AI needs some sort of evidentiary threshold to determine what exactly advanced AI *is*. A model that uses a certain level of compute? Or exhibits some specific dangerous capability? A threshold can be *overinclusive*, wasting resources regulating harmless models, or *underinclusive*, not covering dangerous models. This section will brief you on why quantitative compute FLOP thresholds are typically the most tractable and ideal for stricter regulatory agreements, while capability thresholds may be more relevant for softer treaties.
+
+### Compute vs. Capability Thresholds
+
+The two contenders for operational thresholds are compute and capability. The table below pairs them: where an arrow runs, a strength of one metric is the mirror of the other's weakness — compute's black-and-white definitiveness is exactly what capability lacks, and capability's directness is exactly what compute gives up.
+
+<div className="pair-table">
+
+| Compute | | Capability |
+| --- | :---: | --- |
+| *Definition.* The line is drawn at total training compute, in FLOP. Examples in current policy: the [EU AI Act's 10²⁵ FLOP systemic-risk presumption](https://artificialintelligenceact.eu/article/51/) and the [10²⁶ FLOP reporting threshold in the now-rescinded US EO 14110](https://en.wikipedia.org/wiki/Executive_Order_14110). | | *Definition.* The line is drawn at what the model can do — e.g. is capable of engineering a deadly pathogen that can infect humans en masse. |
+| **Pro.** Black-and-white: a FLOP count is an enforceable threshold without ambiguity ([GovAI](https://www.governance.ai/research-paper/training-compute-thresholds-features-and-functions-in-ai-regulation)). | ⇄ | **Con.** Evals are currently unreliable and qualitatively ambiguous — sensitive to prompting and elicitation effort, plagued by contamination, with no consensus on what score means "dangerous" ([Can We Trust AI Benchmarks?](https://arxiv.org/html/2502.06559v1)). |
+| **Pro.** Measurable early and externally verifiable: you can check it before and during a training run, not just after, which is what treaty enforcement requires. | ⇄ | **Con.** Measured too late: capabilities are assessed after training, when the thing a pause is meant to prevent already exists. <br /><br /> **Con.** Hard to verify externally: a contestable measurement makes a weak treaty trigger ([Oxford AIGI survey](https://aigi.ox.ac.uk/wp-content/uploads/2025/08/Survey_on_thresholds_for_advanced_AI_systems_1.pdf)). |
+| **Con.** Algorithmic efficiency improvements can make compute thresholds underinclusive: models trained below the line can gain the risky capabilities the threshold is trying to regulate ([Hooker](https://arxiv.org/html/2407.05694v1); [Institute for Law & AI](https://law-ai.org/the-role-of-compute-thresholds-for-ai-governance/)). Regulators partly compensate by making thresholds adjustable ([the EU Commission can amend its figure by delegated act](https://artificialintelligenceact.eu/article/51/)). | ⇄ | **Pro.** Measures danger more directly than compute by targeting the specific qualitative harms models may enact. |
+
+</div>
+
+### When Should Treaties Use Compute vs. Capability?
+
+In the event of pursuing a full or temporary pause, the treaty is focused on hard-line enforcement, which favors the objectivity of a compute threshold. Each party needs to definitively recognize which models to shut off, and they need to trust that their counterpart is following the same rule — which you only get with a black-and-white FLOP line. Timelines will also be tighter and less negotiable with a pause-based agreement, given its urgency: regulators cannot afford to deal with potentially wishy-washy capability definitions.
+
+If we're not focusing on a full pause, and more so on domestic enforcement and lighter observation- and resource-sharing-based policies, then capability thresholds can more realistically come into the picture. If regulators believe they have the time to pace development and experiment with evaluations, the definitional specificity of qualitative capabilities can be useful for knowledge.
+
+For the purposes of this course, we will mainly focus on compute thresholds: they have historical precedent, they are straightforward to operationalize, and they are the most relevant choice for pause-style agreements. We generally orient more towards a pause because it encompasses the maximum possible range of verification possibilities and difficulties.
+
+<Fold label="Fuzzy Numbers: The Threshold Test Ban Treaty">
+
+This treaty capped underground nuclear tests at 150 kilotons. You could not directly observe yield, so verification rested on seismic measurement plus, eventually, agreed calibration and on-site hydrodynamic measurement under the 1990 protocol ([Federation of American Scientists](https://nuke.fas.org/control/ttbt/intro.htm)). Early on, US estimates of Soviet yields were disputed precisely because converting a seismic signal into a yield number carries uncertainty ([OTA, Seismic Verification of Nuclear Testing Treaties](https://www.princeton.edu/~ota/disk2/1988/8838/8838.PDF)).
+
+</Fold>
+
+<Fold label="More on Evals and Their Limitations">
+
+If you're interested in learning more about evals and their limitations, here are some resources:
+
+- [Towards understanding-based safety evaluations](https://www.alignmentforum.org/posts/uqAdqrvxqGqeBHjTP/towards-understanding-based-safety-evaluations) (Alignment Forum)
+- [We need a science of evals](https://www.apolloresearch.ai/science/we-need-a-science-of-evals) (Apollo Research)
+
+</Fold>

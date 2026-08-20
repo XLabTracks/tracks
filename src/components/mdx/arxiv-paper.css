@@ -20,6 +20,9 @@
 }
 
 @layer components {
+  .arxiv-excerpt .arxiv-paper {
+    font-size: 1rem;
+  }
   .arxiv-paper {
     font-size: 0.875rem;
     line-height: 1.65;
@@ -256,8 +259,12 @@
     font-size: 0.85em;
   }
 
-  /* Code / algorithms */
-  .arxiv-paper pre.ax-code {
+  /* Code / algorithms — .verbatim is the converter's raw verbatim
+     environment (e.g. prompt excerpts); without the shared rule it renders
+     unstyled and its unwrapped lines force page-level horizontal scroll on
+     narrow viewports. */
+  .arxiv-paper pre.ax-code,
+  .arxiv-paper pre.verbatim {
     background: var(--muted);
     border-radius: var(--radius-lg, 10px);
     font-size: 0.8em;
@@ -332,16 +339,36 @@
   .arxiv-paper dd {
     margin: 0.15em 0 0.5em 1.25em;
   }
-  .arxiv-paper .ax-w-15 { width: 15%; }
-  .arxiv-paper .ax-w-25 { width: 25%; }
-  .arxiv-paper .ax-w-33 { width: 33%; }
-  .arxiv-paper .ax-w-40 { width: 40%; }
-  .arxiv-paper .ax-w-50 { width: 50%; }
-  .arxiv-paper .ax-w-60 { width: 60%; }
-  .arxiv-paper .ax-w-66 { width: 66%; }
-  .arxiv-paper .ax-w-75 { width: 75%; }
-  .arxiv-paper .ax-w-90 { width: 90%; }
-  .arxiv-paper .ax-w-100 { width: 100%; }
+  .arxiv-paper .ax-w-15 {
+    width: 15%;
+  }
+  .arxiv-paper .ax-w-25 {
+    width: 25%;
+  }
+  .arxiv-paper .ax-w-33 {
+    width: 33%;
+  }
+  .arxiv-paper .ax-w-40 {
+    width: 40%;
+  }
+  .arxiv-paper .ax-w-50 {
+    width: 50%;
+  }
+  .arxiv-paper .ax-w-60 {
+    width: 60%;
+  }
+  .arxiv-paper .ax-w-66 {
+    width: 66%;
+  }
+  .arxiv-paper .ax-w-75 {
+    width: 75%;
+  }
+  .arxiv-paper .ax-w-90 {
+    width: 90%;
+  }
+  .arxiv-paper .ax-w-100 {
+    width: 100%;
+  }
 }
 
 /* Color + multi-column support (v8): resolved xcolor backgrounds render as
@@ -351,9 +378,15 @@
     column-gap: 1.25em;
     margin: 1em 0;
   }
-  .arxiv-paper .ax-cols-2 { columns: 2; }
-  .arxiv-paper .ax-cols-3 { columns: 3; }
-  .arxiv-paper .ax-cols-4 { columns: 4; }
+  .arxiv-paper .ax-cols-2 {
+    columns: 2;
+  }
+  .arxiv-paper .ax-cols-3 {
+    columns: 3;
+  }
+  .arxiv-paper .ax-cols-4 {
+    columns: 4;
+  }
   @media (max-width: 640px) {
     .arxiv-paper .ax-cols-2,
     .arxiv-paper .ax-cols-3,
@@ -502,10 +535,14 @@
   .arxiv-paper .ax-hidden-content {
     display: none;
   }
-  .arxiv-paper .ax-hidden-inline:has(.ax-hidden-toggle:checked) .ax-hidden-content {
+  .arxiv-paper
+    .ax-hidden-inline:has(.ax-hidden-toggle:checked)
+    .ax-hidden-content {
     display: inline;
   }
-  .arxiv-paper .ax-hidden-inline:has(.ax-hidden-toggle:checked) .ax-hidden-marker {
+  .arxiv-paper
+    .ax-hidden-inline:has(.ax-hidden-toggle:checked)
+    .ax-hidden-marker {
     opacity: 0.6;
   }
 
@@ -535,7 +572,8 @@
   }
   .arxiv-paper .ax-added-inline {
     background: color-mix(in srgb, var(--primary) 7%, transparent);
-    border-bottom: 1px dashed color-mix(in srgb, var(--primary) 45%, transparent);
+    border-bottom: 1px dashed
+      color-mix(in srgb, var(--primary) 45%, transparent);
     border-radius: 3px;
     padding: 0 0.15em;
     box-decoration-break: clone;
@@ -550,7 +588,11 @@
     cursor: help;
     text-decoration-line: underline;
     text-decoration-style: dotted;
-    text-decoration-color: color-mix(in srgb, var(--muted-foreground) 60%, transparent);
+    text-decoration-color: color-mix(
+      in srgb,
+      var(--muted-foreground) 60%,
+      transparent
+    );
     text-underline-offset: 2px;
   }
   .arxiv-paper .ax-gloss:focus-visible {

@@ -1,53 +1,209 @@
+import dynamic from "next/dynamic";
 import type { ComponentType } from "react";
+
 import type { VerificationWidgetProps } from "../kit/types";
-import { PolicyCost } from "./policy-cost";
-import { VerificationLandscape } from "./verification-landscape";
-import { DissectionTable } from "./dissection-table";
-import { PolicyScoping } from "./policy-scoping";
-import { AnatomyDrill } from "./anatomy-drill";
-import { ProtocolActors } from "./protocol-actors";
-import { TamperTrace } from "./tamper-trace";
-import { ReportConstructor } from "./report-constructor";
-import { IrPrimer } from "./ir-primer";
-import { FacilitatorGuide } from "./facilitator-guide";
-import { ChangeTheGame } from "./change-the-game";
-import { InspectionGame } from "./inspection-game";
-import { EvolutionOfVerification } from "./evolution-of-verification";
-import { GameTheoryPrimer } from "./game-theory-primer";
-import { WhatDoTheySay } from "./what-do-they-say";
-import { VerificationTimelineGame } from "./verification-timeline-game";
-import { InteractiveMap } from "./interactive-map";
+
+function WidgetLoading() {
+  return (
+    <div
+      className="not-prose border-border bg-card text-muted-foreground my-6 rounded-xl border p-6 text-sm"
+      role="status"
+    >
+      Loading interactive…
+    </div>
+  );
+}
+
+const PolicyScoping = dynamic<VerificationWidgetProps>(
+  () => import("./policy-scoping").then((module) => module.PolicyScoping),
+  { loading: WidgetLoading },
+);
+const AnatomyDrill = dynamic<VerificationWidgetProps>(
+  () => import("./anatomy-drill").then((module) => module.AnatomyDrill),
+  { loading: WidgetLoading },
+);
+const ActorWorkshop = dynamic<VerificationWidgetProps>(
+  () => import("./actor-workshop").then((module) => module.ActorWorkshop),
+  { loading: WidgetLoading },
+);
+const ActorEdges = dynamic<VerificationWidgetProps>(
+  () => import("./actor-edges").then((module) => module.ActorEdges),
+  { loading: WidgetLoading },
+);
+// Unregistered with 1.2.2 on 2026-08-18 — see exercises.ts.
+const InteractiveMap = dynamic<VerificationWidgetProps>(
+  () => import("./interactive-map").then((module) => module.InteractiveMap),
+  { loading: WidgetLoading },
+);
+const VerificationLandscape = dynamic<VerificationWidgetProps>(
+  () => import("./verification-landscape").then((module) => module.VerificationLandscape),
+  { loading: WidgetLoading },
+);
+const CollectionMap = dynamic<VerificationWidgetProps>(
+  () => import("./collection-map").then((module) => module.CollectionMap),
+  { loading: WidgetLoading },
+);
+const ContextDistiller = dynamic<VerificationWidgetProps>(
+  () => import("./context-distiller").then((module) => module.ContextDistiller),
+  { loading: WidgetLoading },
+);
+// Unregistered with the exercise on 2026-08-18 — see exercises.ts for why
+// and for the one line that brings the three decks back.
+const DrillsGames = dynamic<VerificationWidgetProps>(
+  () => import("./drills-games").then((module) => module.DrillsGames),
+  { loading: WidgetLoading },
+);
+const DrillsPrimers = dynamic<VerificationWidgetProps>(
+  () => import("./drills-primers").then((module) => module.DrillsPrimers),
+  { loading: WidgetLoading },
+);
+const PolicyCost = dynamic<VerificationWidgetProps>(
+  () => import("./policy-cost").then((module) => module.PolicyCost),
+  { loading: WidgetLoading },
+);
+const MechanismSort = dynamic<VerificationWidgetProps>(
+  () => import("./mechanism-sort").then((module) => module.MechanismSort),
+  { loading: WidgetLoading },
+);
+const MechanismSortReveal = dynamic<VerificationWidgetProps>(
+  () => import("./mechanism-sort").then((module) => module.MechanismSortReveal),
+  { loading: WidgetLoading },
+);
+const PacketTasks = dynamic<VerificationWidgetProps>(
+  () => import("./packet-tasks").then((module) => module.PacketTasks),
+  { loading: WidgetLoading },
+);
+const WhatDoTheySay = dynamic<VerificationWidgetProps>(
+  () => import("./what-do-they-say").then((module) => module.WhatDoTheySay),
+  { loading: WidgetLoading },
+);
+const TypesOfAi = dynamic<VerificationWidgetProps>(
+  () => import("./types-of-ai").then((module) => module.TypesOfAi),
+  { loading: WidgetLoading },
+);
+const ShortHistory = dynamic<VerificationWidgetProps>(
+  () => import("./short-history").then((module) => module.ShortHistory),
+  { loading: WidgetLoading },
+);
+const TheoriesOfChange = dynamic<VerificationWidgetProps>(
+  () => import("./theories-of-change").then((module) => module.TheoriesOfChange),
+  { loading: WidgetLoading },
+);
+const ComputeVerificationQuestions = dynamic<VerificationWidgetProps>(
+  () =>
+    import("./compute-verification").then((module) => module.ComputeVerificationQuestions),
+  { loading: WidgetLoading },
+);
+const TreatyWorkspace = dynamic<VerificationWidgetProps>(
+  () => import("./treaty-workspace").then((module) => module.TreatyWorkspace),
+  { loading: WidgetLoading },
+);
+const VerificationProblem = dynamic<VerificationWidgetProps>(
+  () => import("./verification-problem").then((module) => module.VerificationProblem),
+  { loading: WidgetLoading },
+);
+const EvidenceTaxonomies = dynamic<VerificationWidgetProps>(
+  () => import("./evidence-taxonomies").then((module) => module.EvidenceTaxonomies),
+  { loading: WidgetLoading },
+);
+// field-map stood down 2026-08-18 with the threat-modeling/theory-of-change
+// specs it served (Outline-42: "delete threat modeling and toc stuff").
+// field-map.tsx and data/field-map.ts remain in the repo, unregistered —
+// remounting is its exercises.ts line, a dynamic() here, and an embed.
+// 2.4.1's exercise is now Construct a Case; the id stays so the lesson
+// mapping, the progress key and the section's finish event do not move.
+// human-insiders.tsx and its engine remain in the repo, unmounted.
+const ConstructCase = dynamic<VerificationWidgetProps>(
+  () => import("./construct-case").then((module) => module.ConstructCase),
+  { loading: WidgetLoading },
+);
+// 2.4.2's exercise is now Read the Rules, Infer the System; the id stays so
+// the lesson mapping, the progress key and the finish event do not move.
+// human-reporting-protection.tsx (the route reconstruction) and its data and
+// engine remain in the repo, unmounted.
+const PolicyQuickCheck = dynamic<VerificationWidgetProps>(
+  () =>
+    import("./policy-quick-check").then((module) => module.PolicyQuickCheck),
+  { loading: WidgetLoading },
+);
+const WhistleblowerLevers = dynamic<VerificationWidgetProps>(
+  () =>
+    import("./whistleblower-levers").then(
+      (module) => module.WhistleblowerLevers,
+    ),
+  { loading: WidgetLoading },
+);
+// 2.4.3's exercise is now Same Claim, Different Circumstances; the id stays
+// so the lesson mapping, the progress key and the finish event do not move.
+// The decision lab it shared with 2.4.4 remains in the repo, unmounted here.
+const SameClaim = dynamic<VerificationWidgetProps>(
+  () => import("./same-claim").then((module) => module.SameClaim),
+  { loading: WidgetLoading },
+);
+// 2.4.4's exercise is now Build the Institution; the id stays so the lesson
+// mapping, the progress key and the finish event do not move.
+// 2.4.4 is the recovered exercise: two real companies read from their own
+// documents, then the letter. companies-ab.tsx — the same comparison on
+// generic feature lists — stays in the repo, unmounted.
+const PolicyOnPaper = dynamic<VerificationWidgetProps>(
+  () => import("./policy-on-paper").then((module) => module.PolicyOnPaper),
+  { loading: WidgetLoading },
+);
+const CloudEvidenceDrill = dynamic<VerificationWidgetProps>(
+  () =>
+    import("./cloud-evidence-drill").then(
+      (module) => module.CloudEvidenceDrill,
+    ),
+  { loading: WidgetLoading },
+);
+const StandardOfProof = dynamic<VerificationWidgetProps>(
+  () => import("./standard-of-proof").then((module) => module.StandardOfProof),
+  { loading: WidgetLoading },
+);
+const MissingBoard = dynamic<VerificationWidgetProps>(
+  () => import("./missing-board").then((module) => module.MissingBoard),
+  { loading: WidgetLoading },
+);
 
 /**
  * Native React widgets ported from the standalone HTML pages, keyed by the same
- * page id used in `src/lib/verification/exercises.ts`. Ids not present here fall
- * back to the legacy iframe host (see verification-widget-host.tsx).
+ * page id used in `src/lib/verification/exercises.ts`. Every import is its own
+ * chunk: opening one lesson must not download all widget datasets in the
+ * track. There is no fallback: an id missing here renders the host's inline
+ * "no widget registered" error card.
  */
 export const verificationWidgets: Record<
   string,
   ComponentType<VerificationWidgetProps>
 > = {
-  "policy-cost": PolicyCost,
-  "verification-landscape": VerificationLandscape,
-  "dissection-table": DissectionTable,
   "policy-scoping": PolicyScoping,
   "anatomy-drill": AnatomyDrill,
-  "protocol-actors": ProtocolActors,
-  "tamper-trace": TamperTrace,
-  "report-constructor": ReportConstructor,
-  "ir-primer": IrPrimer,
-  "facilitator-guide": FacilitatorGuide,
-  "change-the-game": ChangeTheGame,
-  "inspection-game": InspectionGame,
-  "evolution-of-verification": EvolutionOfVerification,
-  "game-theory-primer": GameTheoryPrimer,
-  "what-do-they-say": WhatDoTheySay,
-  "verification-timeline-game": VerificationTimelineGame,
+  "actor-workshop": ActorWorkshop,
+  "actor-edges": ActorEdges,
   "interactive-map": InteractiveMap,
+  "verification-landscape": VerificationLandscape,
+  "collection-map": CollectionMap,
+  "context-distiller": ContextDistiller,
+  "drills-primers": DrillsPrimers,
+  "drills-games": DrillsGames,
+  "policy-cost": PolicyCost,
+  "mechanism-sort": MechanismSort,
+  "mechanism-sort-reveal": MechanismSortReveal,
+  "packet-tasks": PacketTasks,
+  "treaty-workspace": TreatyWorkspace,
+  "compute-verification": ComputeVerificationQuestions,
+  "what-do-they-say": WhatDoTheySay,
+  "types-of-ai": TypesOfAi,
+  "short-history": ShortHistory,
+  "theories-of-change": TheoriesOfChange,
+  "verification-problem": VerificationProblem,
+  "evidence-taxonomies": EvidenceTaxonomies,
+  "human-insiders": ConstructCase,
+  "human-reporting-protection": PolicyQuickCheck,
+  "whistleblower-levers": WhistleblowerLevers,
+  "human-audits-inspections": SameClaim,
+  "human-institutions-judgment": PolicyOnPaper,
+  "cloud-evidence-drill": CloudEvidenceDrill,
+  "standard-of-proof": StandardOfProof,
+  "missing-board": MissingBoard,
 };
-
-export function getVerificationWidget(
-  id: string,
-): ComponentType<VerificationWidgetProps> | undefined {
-  return verificationWidgets[id];
-}

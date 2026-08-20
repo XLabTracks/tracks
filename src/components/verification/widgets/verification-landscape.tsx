@@ -11,48 +11,50 @@ import {
   LANDSCAPE_ROWS as ROWS,
   type LandscapeCell,
 } from "@/lib/verification/data/verification-landscape";
+import { marksForCell } from "@/lib/verification/data/landscape-logos";
 import type { VerificationWidgetProps } from "../kit/types";
+
+/**
+ * The Verification Landscape field map: the kind of verification down the side,
+ * the who across the top, darker = more activity. Our maroon palette (theme
+ * tokens, so it follows day/night/contrast), wide cells with the intensity
+ * numeral in the bottom-right corner, the hatched no-activity cell, and the
+ * detail panel below the grid.
+ *
+ * Who works where is a plain text list in each square cell — no chips, no
+ * boxes, no logos, just the names, set in the cell's own contrast — with the
+ * intensity numeral in the corner as the non-colour channel.
+ */
+const HEAT = [
+  "bg-muted",
+  "bg-primary/15",
+  "bg-primary/55",
+  "bg-primary",
+] as const;
+const HATCH: React.CSSProperties = {
+  backgroundImage:
+    "repeating-linear-gradient(45deg, transparent, transparent 5px, color-mix(in srgb, var(--muted-foreground) 20%, transparent) 5px, color-mix(in srgb, var(--muted-foreground) 20%, transparent) 6px)",
+};
 
 type Sel =
   | { kind: "cell"; ri: number; ci: number }
   | { kind: "axis"; axis: "row" | "col"; i: number }
   | null;
 
-// Sequential navy intensity scale (0–3), on-brand with the app palette.
-const HEAT: { cell: string; swatch: string }[] = [
-  { cell: "bg-muted text-muted-foreground", swatch: "bg-muted" },
-  { cell: "bg-primary/15 text-foreground", swatch: "bg-primary/15" },
-  { cell: "bg-primary/55 text-primary-foreground", swatch: "bg-primary/55" },
-  { cell: "bg-primary text-primary-foreground", swatch: "bg-primary" },
-];
-const HATCH: React.CSSProperties = {
-  backgroundImage:
-    "repeating-linear-gradient(45deg, transparent, transparent 5px, color-mix(in srgb, var(--muted-foreground) 22%, transparent) 5px, color-mix(in srgb, var(--muted-foreground) 22%, transparent) 6px)",
-};
-
 export function VerificationLandscape(_: VerificationWidgetProps) {
   void _;
   const [sel, setSel] = useState<Sel>(null);
 
-  // Re-key the floating panel on each new selection so it replays its
-  // slide-in ("floaty open") animation every time.
-  const selKey =
-    sel === null
-      ? "none"
-      : sel.kind === "cell"
-        ? `c-${sel.ri}-${sel.ci}`
-        : `a-${sel.axis}-${sel.i}`;
-
   return (
-    <div className="not-prose my-6">
+    <div className="verification-landscape not-prose bg-card border-border my-6 rounded-xl border p-4 sm:p-5">
       {/* legend */}
-      <div className="text-muted-foreground mb-3 flex items-center gap-2 text-xs">
+      <div className="text-muted-foreground mb-3 flex flex-wrap items-center gap-3 eyebrow">
         <span>{C.lessActivity}</span>
-        <span className="flex">
+        <span className="flex gap-[3px]">
           {HEAT.map((h, i) => (
             <span
               key={i}
-              className={cn("size-4 first:rounded-l last:rounded-r", h.swatch)}
+              className={cn("h-4 w-7 rounded-[2px]", h)}
               style={i === 0 ? HATCH : undefined}
             />
           ))}
@@ -60,13 +62,13 @@ export function VerificationLandscape(_: VerificationWidgetProps) {
         <span>{C.moreActivity}</span>
       </div>
 
-      {/* grid (left) + floating detail (right) */}
-      <div className="grid items-start gap-4 lg:grid-cols-[minmax(0,1fr)_19rem]">
+      {/* grid */}
+      <div className="-mx-1 overflow-x-auto px-1 py-1">
         <div
           role="grid"
-          className="grid min-w-0 gap-1.5 overflow-x-auto p-1.5 text-xs"
+          className="grid min-w-[460px] gap-[5px]"
           style={{
-            gridTemplateColumns: `minmax(8rem, 1.4fr) repeat(${COLS.length}, minmax(4rem, 1fr))`,
+            gridTemplateColumns: `minmax(96px, 1.15fr) repeat(${COLS.length}, minmax(64px, 1fr))`,
           }}
         >
           <div aria-hidden />
@@ -75,7 +77,7 @@ export function VerificationLandscape(_: VerificationWidgetProps) {
               key={c.key}
               type="button"
               onClick={() => setSel({ kind: "axis", axis: "col", i: ci })}
-              className="hover:bg-muted rounded px-1 py-1.5 text-center font-semibold hover:underline"
+              className="text-brand-ink rounded px-1 py-1 text-center eyebrow leading-tight font-semibold hover:underline"
             >
               {c.name}
             </button>
@@ -86,7 +88,7 @@ export function VerificationLandscape(_: VerificationWidgetProps) {
               <button
                 type="button"
                 onClick={() => setSel({ kind: "axis", axis: "row", i: ri })}
-                className="hover:bg-muted rounded px-1.5 py-1.5 text-left font-semibold hover:underline"
+                className="text-foreground self-center rounded py-1 pr-2 text-left text-xs font-semibold hover:underline"
               >
                 {r.name}
               </button>
@@ -94,70 +96,95 @@ export function VerificationLandscape(_: VerificationWidgetProps) {
                 const d = CELLS[r.key][c.key];
                 const active =
                   sel?.kind === "cell" && sel.ri === ri && sel.ci === ci;
+                const orgs = marksForCell(r.key, c.key, d.eff);
+                const onDark = d.i >= 2;
                 return (
                   <button
                     key={c.key}
                     type="button"
-                    aria-label={`${r.name}, ${c.name}, activity ${d.i} of 3`}
+                    aria-label={`${r.name}, ${c.name}, activity ${d.i} of 3${
+                      orgs.length
+                        ? ", " + orgs.map((m) => m.label).join(", ")
+                        : ""
+                    }`}
                     aria-pressed={active}
                     onClick={() => setSel({ kind: "cell", ri, ci })}
                     style={d.i === 0 ? HATCH : undefined}
                     className={cn(
-                      // Outset rings (box-shadow) — they sit on the light gap so
-                      // they're visible around any cell regardless of fill, and
-                      // never cause scrollbars (only transforms do; the grid
-                      // has p-1.5 so edge rings aren't clipped). Hover = flush red
-                      // accent (pops on every intensity); selected = navy ring
-                      // with a white offset gap so it stays visible even on the
-                      // dark navy cells (navy-on-navy would otherwise merge).
-                      "flex aspect-square items-center justify-center rounded font-mono text-sm outline-none transition-shadow hover:ring-2 hover:ring-ring focus-visible:ring-2 focus-visible:ring-ring",
-                      HEAT[d.i].cell,
+                      "relative flex aspect-square flex-col items-start justify-start gap-0.5 overflow-hidden rounded-[3px] p-1.5 text-left outline-none transition-transform hover:z-10 hover:scale-[1.03] focus-visible:z-10 focus-visible:scale-[1.03]",
+                      HEAT[d.i],
                       active &&
-                        "ring-2 ring-foreground ring-offset-2 ring-offset-background",
+                        "outline-foreground shadow-soft-md outline-[3px] -outline-offset-[3px]"
                     )}
                   >
-                    {d.i}
+                    {orgs.map((m) => (
+                      <span
+                        key={m.id}
+                        className={cn(
+                          "text-3xs leading-[1.15] font-medium",
+                          onDark ? "text-primary-foreground" : "text-foreground"
+                        )}
+                      >
+                        {m.short}
+                      </span>
+                    ))}
+                    <span
+                      className={cn(
+                        "pointer-events-none absolute right-1.5 bottom-1 text-3xs leading-none",
+                        onDark
+                          ? "text-primary-foreground/70"
+                          : "text-muted-foreground"
+                      )}
+                    >
+                      {d.i}
+                    </span>
                   </button>
                 );
               })}
             </div>
           ))}
         </div>
+      </div>
 
-        {/* floating detail panel — opens on the right, sticky + slide-in */}
-        <div className="lg:sticky lg:top-20 lg:self-start">
-          <div
-            key={selKey}
-            className={cn(
-              "border-border bg-card shadow-soft-md rounded-xl border p-4 text-sm lg:max-h-[70vh] lg:overflow-y-auto",
-              "motion-safe:animate-in motion-safe:fade-in motion-safe:slide-in-from-right-2 motion-safe:duration-300",
-            )}
-          >
-            {sel === null ? (
-              <p className="text-muted-foreground italic">{C.prompt}</p>
+      {/* detail panel — below the grid, full width */}
+      <div
+        key={
+          sel === null
+            ? "none"
+            : sel.kind === "cell"
+            ? `c-${sel.ri}-${sel.ci}`
+            : `a-${sel.axis}-${sel.i}`
+        }
+        /* Outlined on all four sides, in one colour. It used to be a hairline
+           on three with a 3px primary edge on top — the half-painted card the
+           house rule names, and it read as an unfinished component rather than
+           as emphasis. The panel is the thing the grid is talking to, so it
+           gets the outline; the accent inside is the eyebrow. */
+        className="border-primary bg-background motion-safe:animate-in motion-safe:fade-in motion-safe:duration-300 mt-5 min-h-24 border p-4 sm:p-5"
+      >
+        {sel === null ? (
+          <p className="text-muted-foreground text-sm italic">{C.prompt}</p>
+        ) : (
+          <div className="relative">
+            <button
+              type="button"
+              onClick={() => setSel(null)}
+              aria-label="Close detail"
+              className="text-muted-foreground hover:text-foreground absolute -top-1 -right-1 rounded p-1"
+            >
+              <X className="size-4" aria-hidden />
+            </button>
+            {sel.kind === "axis" ? (
+              <AxisDetail axis={sel.axis} i={sel.i} />
             ) : (
-              <>
-                <button
-                  type="button"
-                  onClick={() => setSel(null)}
-                  aria-label="Close detail"
-                  className="text-muted-foreground hover:text-foreground float-right -mt-1 -mr-1 rounded p-1 focus-visible:ring-2 focus-visible:ring-[var(--ring)] focus-visible:outline-none"
-                >
-                  <X className="size-4" aria-hidden />
-                </button>
-                {sel.kind === "axis" ? (
-                  <AxisDetail axis={sel.axis} i={sel.i} />
-                ) : (
-                  <CellDetail
-                    cell={CELLS[ROWS[sel.ri].key][COLS[sel.ci].key]}
-                    rowName={ROWS[sel.ri].name}
-                    colName={COLS[sel.ci].name}
-                  />
-                )}
-              </>
+              <CellDetail
+                cell={CELLS[ROWS[sel.ri].key][COLS[sel.ci].key]}
+                rowName={ROWS[sel.ri].name}
+                colName={COLS[sel.ci].name}
+              />
             )}
           </div>
-        </div>
+        )}
       </div>
     </div>
   );
@@ -173,13 +200,14 @@ function CellDetail({
   colName: string;
 }) {
   return (
-    <div>
-      <p className="text-muted-foreground font-mono text-[11px] tracking-[0.12em] uppercase">
+    <div className="text-sm">
+      <p className="text-brand-ink eyebrow">
         {rowName} × {colName}
       </p>
       <h4 className="mt-1 text-base font-semibold">
         {cell.gap && <span className="text-defect">Open gap. </span>}
-        {rowName} here is <em className="not-italic">{HEATWORD[cell.i].toLowerCase()}</em>.
+        {rowName} here is{" "}
+        <em className="not-italic">{HEATWORD[cell.i].toLowerCase()}</em>.
       </h4>
       <p className="text-muted-foreground mt-0.5 text-xs">
         Activity {cell.i} / 3 · {HEATWORD[cell.i]}
@@ -195,7 +223,7 @@ function CellDetail({
         </ul>
       )}
       <p className="border-border mt-3 border-t pt-2">
-        <span className="text-muted-foreground mr-1 font-mono text-[11px] tracking-[0.1em] uppercase">
+        <span className="text-muted-foreground mr-1 eyebrow">
           {C.howConnects}
         </span>
         {cell.connect}
@@ -207,8 +235,8 @@ function CellDetail({
 function AxisDetail({ axis, i }: { axis: "row" | "col"; i: number }) {
   const o = axis === "row" ? ROWS[i] : COLS[i];
   return (
-    <div>
-      <p className="text-muted-foreground font-mono text-[11px] tracking-[0.12em] uppercase">
+    <div className="text-sm">
+      <p className="text-brand-ink eyebrow">
         {axis === "row" ? C.rowAxisTag : C.colAxisTag}
       </p>
       <h4 className="mt-1 text-base font-semibold">{o.name}</h4>

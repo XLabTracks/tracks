@@ -1,5 +1,12 @@
 import { describe, expect, it } from "vitest";
-import { classifyLength, countWords, modelFor } from "./classify";
+import {
+  classifyLength,
+  countWords,
+  modelFor,
+  modelsFor,
+  outputTokensFor,
+  reasoningEffortFor,
+} from "./classify";
 import { parseGraderReport, parseVerdict } from "./parse";
 import { systemPrompt, userPrompt } from "./prompts";
 import { assembleArgueReveal, assembleWriting } from "./sample";
@@ -22,7 +29,16 @@ describe("classifyLength", () => {
   it("resolves a model for every class", () => {
     for (const cls of ["short", "medium", "long"] as const) {
       expect(modelFor(cls)).toBeTruthy();
+      expect(modelsFor(cls)[0]).toBe(modelFor(cls));
     }
+    expect(modelFor("short")).toBe("openai/gpt-oss-120b:free");
+    expect(modelsFor("short")).toEqual([
+      "openai/gpt-oss-120b:free",
+      "openrouter/free",
+    ]);
+    expect(outputTokensFor("short")).toBeLessThan(outputTokensFor("long"));
+    expect(reasoningEffortFor("short")).toBe("minimal");
+    expect(reasoningEffortFor("long")).toBe("medium");
   });
 
   it("routes user-key grading to the paid default, env-overridable", () => {
@@ -49,17 +65,15 @@ describe("systemPrompt", () => {
       expect(systemPrompt(cls)).not.toContain("ADAPTATION");
       expect(systemPrompt(cls)).not.toMatch(/override/i);
       expect(systemPrompt(cls)).toContain("C4. IDENTIFICATION OF KIND OF SUPPORT");
-      expect(systemPrompt(cls)).toContain("## Verdict");
+      expect(systemPrompt(cls)).toContain("# Output contract");
+      expect(systemPrompt(cls)).toContain("untrusted JSON data record");
     }
   });
 
   it("states exactly one fix-count instruction per class", () => {
-    expect(systemPrompt("long")).toContain("## Top 3 highest-leverage fixes");
-    expect(systemPrompt("medium")).toContain("## Top 2 highest-leverage fixes");
-    expect(systemPrompt("short")).toContain("## Top fix");
-    expect(systemPrompt("medium")).not.toContain("Top 3");
-    expect(systemPrompt("short")).not.toContain("Top 3");
-    expect(systemPrompt("short")).not.toContain("Top 2");
+    expect(systemPrompt("long")).toContain("Return exactly 3 fixes");
+    expect(systemPrompt("medium")).toContain("Return exactly 2 fixes");
+    expect(systemPrompt("short")).toContain("Return exactly 1 highest-leverage fix");
   });
 
   it("adapts C1 in place per class", () => {
@@ -69,32 +83,26 @@ describe("systemPrompt", () => {
     expect(systemPrompt("short")).not.toContain("Does the piece open with a summary");
   });
 
-  it("orders the output contract: analysis block, then fixes, then verdict", () => {
+  it("uses a compact structured-output contract", () => {
     for (const cls of ["short", "medium", "long"] as const) {
       const prompt = systemPrompt(cls);
-      const open = prompt.indexOf("<analysis>");
-      const close = prompt.indexOf("</analysis>");
-      const fixes = prompt.indexOf("## Top");
-      const verdict = prompt.indexOf("## Verdict");
-      expect(open).toBeGreaterThan(-1);
-      expect(close).toBeGreaterThan(open);
-      expect(fixes).toBeGreaterThan(close);
-      expect(verdict).toBeGreaterThan(fixes);
-      // The parse markers the machine side depends on.
-      for (const marker of ["### C1", "Score:", "Evidence:", "Rationale:"]) {
-        expect(prompt).toContain(marker);
-      }
+      expect(prompt).toContain("Return only the JSON object");
+      expect(prompt).toContain("Do not compute or return the total or band");
+      expect(prompt).not.toContain("<analysis>");
     }
+    expect(systemPrompt("short").length).toBeLessThan(systemPrompt("long").length);
   });
 
-  it("fills the user template slots", () => {
+  it("JSON-encodes user text as untrusted data", () => {
     const prompt = userPrompt("SAMPLE TEXT", {
       documentType: "memo",
       stakes: "test",
       audience: "testers",
     });
-    expect(prompt).toContain("Document type: memo");
-    expect(prompt).toContain("<<<\nSAMPLE TEXT\n>>>");
+    expect(JSON.parse(prompt)).toMatchObject({
+      context: { documentType: "memo", stakes: "test", audience: "testers" },
+      sample: "SAMPLE TEXT",
+    });
   });
 });
 

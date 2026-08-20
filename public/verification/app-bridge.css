@@ -1,0 +1,1075 @@
+/* The seam between the Verification palette and the Next app's components.
+   Loaded only by the app-side chrome (src/components/verification/site-chrome.tsx),
+   never by the static pages — they have no Tailwind on them.
+
+   Almost nothing is needed here, because the app styles itself entirely from
+   CSS variables and carries no `dark:` utilities at all: re-pointing
+   --background, --foreground and the rest in theme.css re-themes the whole
+   subtree on its own.
+
+   Tailwind Typography is the exception, and the reason this file exists. The
+   `prose` classes do not read the app's tokens — they set their own
+   --tw-prose-* colours to fixed values chosen for a light ground. Left alone,
+   lesson body text stays near-black on Verification's night ground: measured
+   at 1.17:1, which is invisible, not merely dim.
+
+   Trap: these must stay variables, not literal colours. Writing a hex here
+   would fix night and break day, because one rule serves all three themes. */
+
+/* theme.css sets the palette a page is made of — ground, card, border, muted,
+   primary. The app's components additionally read tokens that mean nothing to
+   a static page and so are absent from it: a dialog paints itself with
+   --popover, an input with --input, a subdued button with --secondary. Left
+   unset they keep globals.css's light-ground values, which is how a pop-up
+   opened on the night theme comes up white.
+
+   So they are derived here, from the palette, once. Trap: derive, never
+   restate — a literal colour would fix one theme and break the other two,
+   and a token that stops tracking its source is a token that goes wrong the
+   next time the palette moves. The chart and game-payoff tokens are
+   deliberately left alone: they are categorical scales, not palette shades,
+   and inventing values for them here would be a design decision. */
+/* No monospace on this course, at all, and no bridge for one: the app's
+   components no longer ask for `font-mono` and globals.css no longer defines
+   the token behind it, so a new call site fails visibly rather than quietly
+   rendering the sans. theme.css keeps a --label slot for the static
+   stylesheets, which is a real slot — the landing re-points it at the Gotham
+   stack — but it is a label face, not a mono one.
+
+   Nothing on the course needs a monospace: there is not one code block in any
+   Verification lesson. Should one ever arrive, give `pre`/`code` an explicit
+   family of their own rather than reviving this — the ban is on mono as
+   decoration, which is what every one of those labels was using it for.
+
+   Trap: the mono face was also holding counters in column. theme.css switches
+   tabular figures on globally, which is what keeps a changing digit from
+   jittering now that no face does it. */
+:root[data-theme] {
+  /* React lesson widgets used Tailwind's compact UI scale while the prose
+     beside them used a reading scale. That made an explanation shrink from
+     16px to 12–14px merely because it crossed into an interactive. Keep
+     metadata one step down, but let substantive widget copy read like the
+     lesson it belongs to.
+
+     These values must point at Verification's scale rather than restating it
+     in rem. High contrast re-solves every --fs-* step at 200%; fixed rem
+     values left the entire React half of the course at its ordinary size
+     while the static chrome doubled around it. Mapping the complete Tailwind
+     scale here gives prose, widgets and page chrome one source of truth. */
+  --text-xs: var(--fs-sm);
+  --text-xs--line-height: 1.5;
+  --text-sm: var(--fs-md);
+  --text-sm--line-height: 1.5;
+  --text-base: var(--fs-md);
+  --text-base--line-height: 1.6;
+  --text-lg: var(--fs-lg);
+  --text-lg--line-height: 1.5;
+  --text-xl: var(--fs-xl);
+  --text-xl--line-height: 1.4;
+  --text-2xl: var(--fs-2xl);
+  --text-2xl--line-height: 1.3;
+  --text-3xl: var(--fs-3xl);
+  --text-3xl--line-height: 1.2;
+  --text-4xl: var(--fs-4xl);
+  --text-4xl--line-height: 1.15;
+
+  --card-foreground: var(--foreground);
+  --popover: var(--card);
+  --popover-foreground: var(--foreground);
+  --secondary: var(--muted);
+  --secondary-foreground: var(--foreground);
+  --accent-foreground: var(--foreground);
+  --input: var(--border);
+  --destructive: var(--brand-ink);
+  --sidebar: var(--card);
+  --sidebar-foreground: var(--foreground);
+  --sidebar-border: var(--border);
+  --sidebar-accent: var(--muted);
+  --sidebar-accent-foreground: var(--foreground);
+  --sidebar-primary: var(--primary);
+  --sidebar-primary-foreground: var(--primary-foreground);
+  --sidebar-ring: var(--ring);
+}
+
+/* The mapped scale above only reaches text that asks for a size. Anything
+   with no size class at all inherits from the body, which was the one thing
+   the bridge never pointed at Verification's scale — so in low-vision mode a
+   page's untagged copy (the track page's course description, the skip link)
+   stayed at 16px while everything around it doubled.
+
+   --fs-md is 16px in day and night, so this changes nothing outside the
+   low-vision mode; it is 32px there, which is the whole point.
+
+   On `body` and deliberately not on `:root`: rem resolves against the root,
+   and Tailwind sizes its entire spacing scale in rem. Moving the root font
+   size would silently double every margin, gap and padding in the React half
+   of the course — which is the `zoom: 2` mistake in another costume. Only
+   inherited TEXT should move. */
+:root[data-theme] body {
+  font-size: var(--fs-md);
+}
+
+/* The Aa stops, for the micro-label family and for what is left of the
+   literals.
+
+   `--text-4xs/3xs/2xs` are the family — 10, 11 and 12px, defined in
+   globals.css and re-solved here by the same factor as every other step, so a
+   micro-label stays a micro-label relative to its neighbours. They are the
+   architecture: one name per size, re-pointed in one place.
+
+   `--lv-*` is what the architecture replaced, still standing under four
+   sizes. A Tailwind arbitrary value (`text-[13px]`) compiles to a literal
+   declaration that the --text-* mapping above cannot see, so each one has to
+   be caught by its own class name below. 236 call sites across 52 files were
+   converted to the family and their rows deleted; 13, 13.5, 15 and 17px are
+   the tail, and they are not micro-labels — they are reading copy, and the
+   step they belong to differs between the app (`text-sm` is 14px) and this
+   course (the bridge above points `text-sm` at 16px), so each is a judgement
+   rather than a rename. Convert them and this whole block goes.
+
+   Trap: the two halves differ at rest and it is deliberate. The family is rem
+   with no stop selected, so a browser text-size preference already moves it;
+   `--lv-*` is px there, so it does not. rem is the right behaviour — the
+   research and WCAG 1.4.4 both want the preference to compound rather than be
+   overridden — and the tail keeps px only until it is converted.
+
+   Not for SVG. `<text>` inside a chart is in viewBox units and scales with
+   the picture; the rows that used to catch 8, 8.5 and 9px were reaching into
+   the demos and inflating their labels a second time. */
+:root[data-theme] {
+  --lv-13: 13px;
+  --lv-13_5: 13.5px;
+  --lv-15: 15px;
+  --lv-17: 17px;
+}
+:root[data-text-scale="100"] [data-reading-surface] {
+  --lv-13: 0.8125rem;
+  --lv-13_5: 0.84375rem;
+  --lv-15: 0.9375rem;
+  --lv-17: 1.0625rem;
+  --text-4xs: 0.625rem;
+  --text-3xs: 0.6875rem;
+  --text-2xs: 0.75rem;
+}
+:root[data-theme="contrast"]:not([data-text-scale]),
+:root[data-text-scale="200"] [data-reading-surface] {
+  --lv-13: 1.625rem;
+  --lv-13_5: 1.6875rem;
+  --lv-15: 1.875rem;
+  --lv-17: 2.125rem;
+  --text-4xs: 1.25rem;
+  --text-3xs: 1.375rem;
+  --text-2xs: 1.5rem;
+}
+:root[data-text-scale="125"] [data-reading-surface] {
+  --lv-13: 1.015625rem;
+  --lv-13_5: 1.0546875rem;
+  --lv-15: 1.171875rem;
+  --lv-17: 1.328125rem;
+  --text-4xs: 0.78125rem;
+  --text-3xs: 0.859375rem;
+  --text-2xs: 0.9375rem;
+}
+:root[data-text-scale="150"] [data-reading-surface] {
+  --lv-13: 1.21875rem;
+  --lv-13_5: 1.265625rem;
+  --lv-15: 1.40625rem;
+  --lv-17: 1.59375rem;
+  --text-4xs: 0.9375rem;
+  --text-3xs: 1.03125rem;
+  --text-2xs: 1.125rem;
+}
+:root[data-text-scale="175"] [data-reading-surface] {
+  --lv-13: 1.421875rem;
+  --lv-13_5: 1.4765625rem;
+  --lv-15: 1.640625rem;
+  --lv-17: 1.859375rem;
+  --text-4xs: 1.09375rem;
+  --text-3xs: 1.203125rem;
+  --text-2xs: 1.3125rem;
+}
+:root[data-theme] [class~="text-[13px]"] {
+  font-size: var(--lv-13);
+}
+:root[data-theme] [class~="text-[13.5px]"] {
+  font-size: var(--lv-13_5);
+}
+:root[data-theme] [class~="text-[15px]"] {
+  font-size: var(--lv-15);
+}
+:root[data-theme] [class~="text-[17px]"] {
+  font-size: var(--lv-17);
+}
+:root:is([data-theme="contrast"], .reader-enlarged) [class~="text-[0.95rem]"] {
+  font-size: var(--fs-md);
+}
+:root:is([data-theme="contrast"], .reader-enlarged) [class~="text-[0.8rem]"] {
+  font-size: var(--fs-sm);
+}
+
+/* A second channel for the one chart with six series, because in low-vision
+   mode there is no first channel: every module hue is white there, on purpose
+   — the palette collapses so that nothing is left encoded by colour. That is
+   right for a chip beside its own label and not enough for six lines crossing
+   each other, so the lines take dash patterns instead.
+
+   Day and night leave these unset, so the fallback `none` applies and the
+   hues do the work undashed. The patterns are ordered by how far apart they
+   read at a glance rather than by length, and the first series stays solid so
+   the busiest reading is five dashed lines and not six. */
+:root[data-theme="contrast"] {
+  --sh-dash-0: none;
+  --sh-dash-1: 12 6;
+  --sh-dash-2: 2 5;
+  --sh-dash-3: 18 5 2 5;
+  --sh-dash-4: 6 4;
+  --sh-dash-5: 1 4 10 4;
+}
+
+/* The same escape, in the app's own stylesheet: these rules predate the token
+   scale and size in rem, so they held still while the page doubled around
+   them. Sidenotes are the reading apparatus of a paper and the facilitator
+   guide's small print carries its session timings — neither is decoration. */
+:root:is([data-theme="contrast"], .reader-enlarged)
+  :is(.sidenote, .sidenote-inline, .fg-html small) {
+  font-size: var(--fs-xs);
+}
+:root:is([data-theme="contrast"], .reader-enlarged) .fg-html .mt {
+  font-size: var(--fs-2xs);
+}
+:root:is([data-theme="contrast"], .reader-enlarged) .lesson-body pre {
+  font-size: var(--fs-xs);
+}
+:root[data-theme] .prose {
+  --tw-prose-body: var(--foreground);
+  --tw-prose-headings: var(--foreground);
+  --tw-prose-lead: var(--muted-foreground);
+  --tw-prose-links: var(--brand-ink);
+  --tw-prose-bold: var(--foreground);
+  --tw-prose-counters: var(--muted-foreground);
+  --tw-prose-bullets: var(--border);
+  --tw-prose-hr: var(--border);
+  --tw-prose-quotes: var(--foreground);
+  --tw-prose-quote-borders: var(--border);
+  --tw-prose-captions: var(--muted-foreground);
+  --tw-prose-code: var(--foreground);
+  --tw-prose-pre-code: var(--foreground);
+  --tw-prose-pre-bg: var(--muted);
+  --tw-prose-th-borders: var(--border);
+  --tw-prose-td-borders: var(--border);
+}
+
+/* The lesson column reads at the site's measure and rhythm rather than the
+   plugin's, so a lesson and a static page set the same paragraph.
+
+   The face is the app's Inter ahead of theme.css's system stack, and the
+   reason is focus reading rather than taste: Inter is a variable font with a
+   continuous 100–900 axis, so the accent weight is exactly the value asked
+   for on every machine. A system stack cannot promise that — its own last
+   two entries are Helvetica and Arial, which carry Regular and Bold and
+   nothing between, and there the accent rounds up to full bold and the
+   paragraph goes stripy. Zero new bytes: layout.tsx already serves Inter to
+   every other track.
+
+   var() and not a literal, so the static lift keeps the system stack it
+   always had — it has no Inter to serve. */
+:root[data-theme] .lesson-body {
+  font-family: var(--font-sans), var(--sans);
+  font-size: var(--fs-md);
+  line-height: 1.6;
+}
+
+/* Reading measure — WITHDRAWN, on the course owner's instruction: "текст
+   должен быть на всю ширину экрана, которая не занята другим".
+
+   It was 64ch on prose and 34ch on headings. Together with the page's
+   max-w-4xl wrapper that put 644px of text inside a 1316px content area on a
+   wide screen, which is what she was looking at. Both caps are off; the text
+   takes the width the sidebar does not.
+
+   Kept as rules rather than deleted so the decision has somewhere to live and
+   one value brings the measure back if long lines prove worse than empty
+   margin. The known cost, stated rather than discovered: at 1700px a line
+   runs about 125 characters, well past the W3C's 80-character guidance. */
+:root[data-theme]
+  .lesson-body
+  > :where(p, ul, ol, blockquote, dl):not(.not-prose) {
+  max-inline-size: none;
+}
+:root[data-theme] .lesson-body > :where(h2, h3, h4, h5, h6):not(.not-prose) {
+  max-inline-size: none;
+}
+/* The same measure, at any depth — but not inside a widget.
+   The rule above this one guards its direct children with `.not-prose`; this
+   one reached every descendant and had no guard at all, so it also capped the
+   list items a widget draws. An exercise built as an <ol> of question cards
+   rendered at 644px inside the 798px it had been given, and looked cramped for
+   no reason a reader could see. The comment above says widgets keep the full
+   lesson width; this is the rule finally doing it. `[data-widget]` is the
+   marker the host puts where authored markdown stops.
+
+   Guarded on `[data-widget]` alone and deliberately not on `.not-prose` too.
+   The wider guard also exempts prose written inside a fold or a callout, which
+   widened those paragraphs from 64ch to about 76 — still under the ceiling,
+   but wider than the measure this file chose, and not what was asked for. A
+   box holding authored sentences is still reading; a widget is not. */
+:root[data-theme]
+  .lesson-body
+  :where(p, li, blockquote, dd):not(
+    :where([data-widget], [data-widget] *)
+  ) {
+  max-inline-size: none;
+}
+
+/* Small type inside an exercise may label a state; it must not carry the
+   explanation. These floors preserve hierarchy without letting authored copy
+   fall to 10–11px, so on this course the micro-label family has two steps
+   inside a widget and not three: 4xs and 3xs both land on 12px there, and
+   only chrome outside a widget renders them at 10 and 11.
+
+   Trap: the floor keys on the class, so it has to name whatever the sizes are
+   written as. It listed `text-[10px]`, `text-[10.5px]` and `text-[11px]`;
+   converting those 236 call sites to the family without moving this rule with
+   them dropped 27 labels on the supply-chain map from 12px to 10 and 11 —
+   which is what the floor exists to prevent. */
+:root[data-theme]
+  [data-widget]
+  :is([class~="text-4xs"], [class~="text-3xs"], [class~="eyebrow"]) {
+  font-size: var(--fs-2xs);
+}
+:root[data-theme]
+  [data-widget]
+  :is(
+    [class~="text-2xs"],
+    [class~="text-[13px]"],
+    [class~="text-[13.5px]"]
+  ) {
+  font-size: var(--fs-sm);
+}
+:root[data-theme]
+  [data-widget]
+  :where(p, li, label, dd)[class~="leading-snug"] {
+  line-height: 1.5;
+}
+:root[data-theme]
+  [data-widget]
+  /* `uppercase` is what marks a micro-label here. It used to be paired with
+     `font-mono`, which every one of those labels also carried; the utility is
+     gone and this is the surviving half of the same test. */
+  :where(p, li, dd)[class~="text-xs"]:not([class~="uppercase"]) {
+  font-size: var(--fs-md);
+}
+
+/* Converted papers deliberately opt out of Tailwind Typography, so their own
+   base size must join the same scale explicitly. The em-sized hierarchy
+   inside the paper then follows without any further overrides. */
+:root[data-theme] .arxiv-paper {
+  font-size: var(--fs-sm);
+}
+:root[data-theme] .arxiv-excerpt .arxiv-paper {
+  font-size: var(--fs-md);
+}
+:root[data-theme] .lesson-body pre {
+  font-size: var(--fs-xs);
+}
+
+/* WCAG 2.5.8's AA target floor on every custom exercise control. The 44px
+   mobile floor follows platform touch guidance; desktop stays compact without
+   dropping below AA. */
+:root[data-theme]
+  [data-widget]
+  :where(
+    button,
+    summary,
+    [role="button"],
+    [role="tab"],
+    [role="radio"],
+    [tabindex]:not([tabindex="-1"])
+  ) {
+  min-inline-size: 24px;
+  min-block-size: 24px;
+}
+@media (max-width: 720px), (pointer: coarse) {
+  :root[data-theme]
+    [data-widget]
+    :where(
+      button,
+      summary,
+      [role="button"],
+      [role="tab"],
+      [role="radio"],
+      [tabindex]:not([tabindex="-1"])
+    ) {
+    min-inline-size: 44px;
+    min-block-size: 44px;
+  }
+  :root[data-theme]
+    :where(input, select, textarea):not([type="checkbox"]):not([type="radio"]) {
+    font-size: 16px;
+  }
+  :root[data-theme]
+    :where(input, select):not([type="checkbox"]):not([type="radio"]):not(
+      [type="hidden"]
+    ) {
+    min-block-size: 44px;
+  }
+}
+
+/* Tailwind's Button recipe deliberately fixes compact controls to h-7/h-8
+   and keeps their labels on one line. Both assumptions stop being true at
+   200% text: a 32px label cannot fit a 28px box, and a long action may be
+   wider than a 320px reading column. Preserve the single-line default in day
+   and night; in low-vision mode the box follows its content and the few labels
+   that cannot fit are allowed to make a clean second line instead of clipping
+   or widening the page. */
+:root:is([data-theme="contrast"], .reader-large) [class~="group/button"] {
+  flex-shrink: 1;
+  height: auto;
+  max-width: 100%;
+  min-height: 44px;
+  white-space: normal;
+}
+:root:is([data-theme="contrast"], .reader-large)
+  [data-widget]
+  :where(button, summary, [role="button"], [role="tab"], [role="radio"]) {
+  height: auto;
+  max-width: 100%;
+}
+:root:is([data-theme="contrast"], .reader-large)
+  :where(input:not([type="range"]), select, textarea) {
+  height: auto;
+}
+
+/* At 60px a single policy word can be wider than a phone's reading column.
+   Headings are flex items in the page header, so their automatic min-content
+   width otherwise widens the whole document before overflow-wrap gets a
+   chance to act. Focus reading also wraps each word in spans; applying the
+   break to the reading subtree keeps those wrappers from restoring the same
+   min-content floor inside lists and cards. */
+:root:is([data-theme="contrast"], .reader-large)
+  :where(.lesson-reader, .lesson-reader .lesson-body, main h1) {
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+:root:is([data-theme="contrast"], .reader-large) main h1 {
+  min-width: 0;
+  max-width: 100%;
+}
+
+/* Truncation is a density choice for the ordinary interface, never a
+   low-vision fallback. At 200% it was hiding names and descriptions in cards
+   whose boxes otherwise had room to grow. */
+:root:is([data-theme="contrast"], .reader-large) [class~="truncate"] {
+  overflow: visible;
+  text-overflow: clip;
+  white-space: normal;
+}
+:root:is([data-theme="contrast"], .reader-large) [class~="line-clamp-2"] {
+  display: block;
+  overflow: visible;
+  -webkit-box-orient: initial;
+  -webkit-line-clamp: unset;
+}
+
+/* Kobo's reader pattern: a bare minus, the draggable track, and a bare plus.
+   The native range keeps browser drag, touch and keyboard behaviour; the two
+   step buttons expose the same operation to people who cannot drag precisely.
+   Their 44px hit areas stay invisible until keyboard focus, so the control
+   reads as one scale rather than three outlined controls. */
+.reading-size-control {
+  display: grid;
+  grid-template-columns: 44px minmax(0, 1fr) 44px;
+  align-items: center;
+  gap: 10px;
+}
+.reading-size-step {
+  display: inline-grid;
+  min-width: 44px;
+  min-height: 44px;
+  place-items: center;
+  padding: 0;
+  border: 0;
+  color: var(--muted-foreground);
+  background: transparent;
+  font-size: var(--fs-lg);
+  line-height: 1;
+}
+.reading-size-step:hover:not(:disabled) {
+  color: var(--primary);
+}
+.reading-size-step:focus-visible {
+  border-radius: 2px;
+  outline: 2px solid var(--ring);
+  outline-offset: 0;
+}
+.reading-size-step:disabled {
+  cursor: not-allowed;
+  opacity: 0.4;
+}
+.reading-size-slider {
+  width: 100%;
+  min-width: 0;
+  height: 44px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  appearance: none;
+  background: transparent;
+  cursor: pointer;
+}
+.reading-size-slider:focus-visible {
+  border-radius: 2px;
+  outline: 2px solid var(--ring);
+  outline-offset: 3px;
+}
+.reading-size-slider::-webkit-slider-runnable-track {
+  height: 2px;
+  border-radius: 999px;
+  background: linear-gradient(
+    to right,
+    var(--primary) 0 var(--reading-size-progress),
+    var(--border) var(--reading-size-progress) 100%
+  );
+}
+.reading-size-slider::-webkit-slider-thumb {
+  width: 20px;
+  height: 20px;
+  margin-top: -9px;
+  border: 2px solid var(--primary);
+  border-radius: 50%;
+  appearance: none;
+  background: var(--card);
+  box-shadow: 0 0 0 2px var(--background);
+}
+.reading-size-slider::-moz-range-track {
+  height: 2px;
+  border-radius: 999px;
+  background: var(--border);
+}
+.reading-size-slider::-moz-range-progress {
+  height: 2px;
+  border-radius: 999px;
+  background: var(--primary);
+}
+.reading-size-slider::-moz-range-thumb {
+  width: 18px;
+  height: 18px;
+  border: 2px solid var(--primary);
+  border-radius: 50%;
+  background: var(--card);
+  box-shadow: 0 0 0 2px var(--background);
+}
+
+/* The landscape is a genuine two-axis grid, so horizontal scrolling inside
+   its own frame is the accessible exception to page reflow. Its ordinary
+   square cells are sized for 11px labels, however; keeping that geometry at
+   24px clips the organisation names. Widen the grid and let each cell grow
+   vertically while preserving the axes and the local scroll container. */
+:root:is([data-theme="contrast"], .reader-large)
+  .verification-landscape
+  [role="grid"] {
+  min-width: 1100px;
+  grid-template-columns: minmax(220px, 1.15fr) repeat(4, minmax(200px, 1fr)) !important;
+}
+:root:is([data-theme="contrast"], .reader-large)
+  .verification-landscape
+  [role="grid"]
+  [class~="aspect-square"] {
+  min-height: 180px;
+  aspect-ratio: auto;
+  overflow: visible;
+}
+
+/* Tables are the reflow exception, not their words. Giving each column a
+   readable floor makes the table's own overflow rail grow instead of
+   squeezing a four-column source table into one letter per line. Focus
+   reading's word wrappers must not re-enable emergency word-breaking here;
+   the local horizontal scroll is precisely what preserves the row/column
+   relationship. */
+:root:is([data-theme="contrast"], .reader-large)
+  .lesson-body
+  table
+  :is(th, td) {
+  min-inline-size: 12ch;
+  overflow-wrap: normal;
+  word-break: normal;
+}
+
+/* Converted arXiv tables can carry literal light zebra fills from the source.
+   They are harmless on the day ground and become white-on-near-white in the
+   two dark grounds. Rebuild the stripes from theme tokens; high contrast uses
+   rules rather than a second surface because its muted surface is black by
+   design. */
+:root[data-theme="dark"] .arxiv-paper tr:nth-child(odd) {
+  background-color: var(--muted) !important;
+}
+:root[data-theme="dark"] .arxiv-paper tr:nth-child(even),
+:root[data-theme="contrast"] .arxiv-paper tr {
+  background-color: var(--background) !important;
+}
+
+/* The static side already draws its low-vision hairlines at 3px through
+   --hairline. The app's generic lesson-table rules predate that token and use
+   literal one-pixel rules, so lift the same structure here. */
+:root[data-theme="contrast"] .lesson-body table {
+  border-width: var(--hairline);
+}
+:root[data-theme="contrast"] .lesson-body thead th {
+  border-bottom-width: var(--hairline);
+}
+:root[data-theme="contrast"] .lesson-body tbody td {
+  border-top-width: var(--hairline);
+}
+:root[data-theme="contrast"] .lesson-body table.elements-grid :is(th, td) {
+  border-width: var(--hairline);
+}
+:root[data-theme="contrast"] .lesson-body table.elements-grid {
+  display: block;
+  max-width: 100%;
+  overflow-x: auto;
+  overscroll-behavior-inline: contain;
+}
+:root[data-theme="contrast"] .arxiv-paper tr.ax-rule-top > :is(td, th) {
+  border-top-width: var(--hairline);
+}
+:root[data-theme="contrast"] .arxiv-paper tr.ax-rule-bottom > :is(td, th) {
+  border-bottom-width: var(--hairline);
+}
+
+/* In-lesson heading hierarchy, per the author (2026-08-12): an h3 subheading
+   wears the SAME display face as the h2 section heads, only smaller — one
+   family at two sizes is the hierarchy, not two families. Deeper levels
+   (h4–h6, the deeply nested worked examples in module 3) stay emphasized
+   text: the body face, bold, stepped in +2px so h4 > h5 stays readable.
+   Trap: theme.css sets h1–h4 to the display face at weight 500, which is
+   exactly the rule that made an h4 sit flush with the paragraph beside it;
+   these must stay ahead of it and of the prose classes in specificity.
+   Em-based on purpose — the sizes follow whatever the paragraph reads at. */
+:root[data-theme] .lesson-body :is(h4, h5, h6):not(.not-prose *) {
+  font-family: var(--sans);
+  font-weight: 700;
+  letter-spacing: 0;
+  line-height: 1.3;
+}
+:root[data-theme] .lesson-body h3:not(.not-prose *) {
+  font-family: var(--display);
+  font-weight: 500;
+  letter-spacing: -0.015em;
+  line-height: 1.3;
+  font-size: var(--fs-2xl);
+}
+:root[data-theme] .lesson-body h4:not(.not-prose *) {
+  font-size: var(--fs-xl);
+}
+:root[data-theme] .lesson-body :is(h5, h6):not(.not-prose *) {
+  font-size: var(--fs-lg);
+}
+
+/* Lists, from the author's two reference sheets: a short list is a tab and a
+   red dot; a long one is built, not dotted. From four items up, a numbered
+   list takes the stepped form — a solid --primary disc carrying its number —
+   and a plain list takes the pill rows, a tinted bar led by a disc. The
+   split is :has(), so a browser without it keeps the short form everywhere:
+   a degradation, never a break.
+
+   Trap: every selector carries :not(.not-prose *). The reader blocks —
+   <Check>, <GapFill>, the bank, the sign-up sheet — draw their own lists
+   inside not-prose containers, and a red disc inside a committed answer row
+   would be chrome painted over an exercise. Only top-level lists take the
+   built forms (:not(li ul), :not(li ol)); a list nested inside a pill or a
+   step keeps the short shape. Colours stay variables — the discs are
+   decoration, the meaning is in the words, and one rule serves all three
+   themes. */
+:root[data-theme] .lesson-body ul:not(.not-prose *) {
+  list-style: none;
+  padding-left: 1.6em;
+}
+:root[data-theme] .lesson-body ul:not(.not-prose *) > li {
+  position: relative;
+}
+:root[data-theme] .lesson-body ul:not(.not-prose *) > li::before {
+  content: "";
+  position: absolute;
+  left: -1.05em;
+  /* Centred on the first line of text, wherever the item wraps. */
+  top: calc(0.875em - 2.5px);
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--primary);
+}
+:root[data-theme] .lesson-body ol:not(.not-prose *) > li::marker {
+  color: var(--primary);
+  font-weight: 600;
+}
+
+/* Four or more plain bullets share one card, the reference sheet's shape:
+   a pale tinted slab with a big radius holding the whole run, every item
+   marked by a --primary dot, and a solid --primary circle peeking from
+   behind the top-left corner. Painted on all four sides — the whole-card
+   half of the card-edge rule, never a tinted rib.
+
+   `.vt-slab` is the deliberate opt-in for a run the counter passes over —
+   wrap the lead paragraph and its list in <div className="vt-slab"> and
+   every rule here treats them as if the count had been met. The owner's
+   1.3 three-source list is the case it exists for: three items, each a
+   paragraph of judgement, exactly the built form's material. The 4-item
+   automatic threshold itself does not move.
+
+   The paragraph that introduces the list rides inside the card as its
+   header, in red: p:has(+ ul) takes the slab ground, the top corners and
+   the corner circle, and the list under it squares its top edge so the two
+   read as one card. That is a visual join, not a reparenting — the
+   paragraph stays its own element, and the radius seam is the whole
+   mechanism. The header writes in --brand-ink, never --primary: maroon is
+   a surface on the night ground, not an ink.
+
+   Trap: the corner circle is ::before at z-index -1 — the element makes no
+   stacking context, so the circle paints behind the slab and above the
+   page. And when the header carries the circle, the list's own must be
+   suppressed or two circles stack on the seam. */
+:root[data-theme]
+  .lesson-body:not(.vt-plain-lists)
+  ul:not(.not-prose *):not(li ul):is(:has(> li:nth-child(4)), .vt-slab ul) {
+  position: relative;
+  display: grid;
+  gap: 14px;
+  margin-top: 2em;
+  padding: 26px 30px 26px 54px;
+  background: color-mix(in srgb, var(--primary) 7%, var(--background));
+  border-radius: 28px;
+}
+:root[data-theme]
+  .lesson-body:not(.vt-plain-lists)
+  ul:not(.not-prose *):not(li ul):is(:has(> li:nth-child(4)), .vt-slab ul)::before {
+  content: "";
+  position: absolute;
+  left: -12px;
+  top: -16px;
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: var(--primary);
+  z-index: -1;
+}
+:root[data-theme]
+  .lesson-body:not(.vt-plain-lists)
+  ul:not(.not-prose *):not(li ul):is(:has(> li:nth-child(4)), .vt-slab ul)
+  > li {
+  margin: 0;
+}
+:root[data-theme]
+  .lesson-body:not(.vt-plain-lists)
+  ul:not(.not-prose *):not(li ul):is(:has(> li:nth-child(4)), .vt-slab ul)
+  > li::before {
+  content: "";
+  position: absolute;
+  left: -26px;
+  top: calc(0.875em - 4px);
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--primary);
+}
+
+/* The introducing paragraph, as the card's red header.
+
+   Trap: the header and its list must share one width, and the generic
+   64ch measure cannot give them that — ch resolves against the element's
+   own font, and this paragraph is semibold, whose wider "0" computes
+   ~30px past the regular-weight list. It overhung the seam it is meant
+   to join. --vt-measure (registered below) computes 64ch once on
+   .lesson-body at the body's regular weight, so both halves of the card
+   take the same length; without @property support the var resolves here
+   as plain 64ch and the page degrades to the old overhang, never breaks. */
+:root[data-theme]
+  .lesson-body:not(.vt-plain-lists)
+  p:not(.not-prose *):is(:has(+ ul:not(li ul) > li:nth-child(4)), .vt-slab p:has(+ ul:not(li ul))) {
+  position: relative;
+  margin: 2em 0 0;
+  padding: 22px 30px 0 54px;
+  background: color-mix(in srgb, var(--primary) 7%, var(--background));
+  border-radius: 28px 28px 0 0;
+  color: var(--brand-ink, var(--primary));
+  font-weight: 600;
+  /* It carried `max-inline-size: var(--vt-measure, 64ch)` so that the header
+     and its list took the same length despite the header's heavier weight
+     computing a wider `ch`. With the measure withdrawn the list is unbounded,
+     so matching it means no cap here either — and --vt-measure below is kept
+     for the day the measure comes back. */
+}
+/* The reference-doc opt-out. `Lesson.plainLists` puts `vt-plain-lists` on the
+   body (lesson-content.tsx), and the slab rules above stand aside for it — a
+   page that is almost entirely long bullet runs (4.1.1's reproduced
+   research-tips doc) turns wall-to-wall tint under the reference-sheet form,
+   and the course owner asked for space instead of boxes there. The short-list
+   dot form still applies; these two rules only let the runs breathe. */
+:root[data-theme] .lesson-body.vt-plain-lists ul:not(.not-prose *):not(li ul) {
+  margin-block: 1.5em;
+}
+:root[data-theme] .lesson-body.vt-plain-lists ul:not(.not-prose *) li + li {
+  margin-top: 0.6em;
+}
+
+@property --vt-measure {
+  syntax: "<length>";
+  inherits: true;
+  initial-value: 0px;
+}
+:root[data-theme] .lesson-body {
+  --vt-measure: 64ch;
+}
+:root[data-theme]
+  .lesson-body
+  p:not(.not-prose *):is(:has(+ ul:not(li ul) > li:nth-child(4)), .vt-slab p:has(+ ul:not(li ul)))
+  :where(strong, b) {
+  color: inherit;
+}
+:root[data-theme]
+  .lesson-body
+  p:not(.not-prose *):is(:has(+ ul:not(li ul) > li:nth-child(4)), .vt-slab p:has(+ ul:not(li ul)))::before {
+  content: "";
+  position: absolute;
+  left: -12px;
+  top: -16px;
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: var(--primary);
+  z-index: -1;
+}
+:root[data-theme]
+  .lesson-body
+  p:not(.not-prose *):is(:has(+ ul:not(li ul) > li:nth-child(4)), .vt-slab p:has(+ ul:not(li ul)))
+  + ul:not(.not-prose *):not(li ul):is(:has(> li:nth-child(4)), .vt-slab ul) {
+  margin-top: 0;
+  padding-top: 16px;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}
+:root[data-theme]
+  .lesson-body
+  p:not(.not-prose *):is(:has(+ ul:not(li ul) > li:nth-child(4)), .vt-slab p:has(+ ul:not(li ul)))
+  + ul:not(.not-prose *):not(li ul):is(:has(> li:nth-child(4)), .vt-slab ul)::before {
+  content: none;
+}
+
+/* The ledger: four or more numbered items read as hairline-ruled rows, the
+   numeral set in the display face in its own gutter, baseline-aligned to the
+   first line of the item it numbers. A contents page, not a stack of badges.
+
+   The rules are band rules separating full-width rows — the one thing the
+   card-edge rule allows. The rows are not cards: no tint, no radius, no
+   painted edge, and the accent lives in the numeral itself. --brand-ink,
+   never --primary: maroon fills and brand-ink writes, and this is type.
+
+   It scales, which is the whole reason for the shape: the same rule dresses
+   a five-objective list on the welcome page and the eight-step protocol in
+   3.2, and at eight rows the ruled table still reads while eight filled
+   discs would have read as a column of buttons.
+
+   Trap: the row is NOT a grid. A list item's content is however many inline
+   runs the markdown produced — "**Clip.** Pull the passages…" is a <strong>
+   and then a bare text node — and grid makes every one of them its own item,
+   so everything after the bold lead drops into the next row's 3.1rem gutter
+   and wraps one word per line. The numeral is placed out of flow instead and
+   the text is held off it by padding, which no number of inline runs can
+   break. Anything reintroducing `display: grid` here must be checked against
+   an item with a bold lead, not only against plain sentences.
+   Trap: the numeral is absolutely positioned, so it carries the row's own
+   line-height rather than its own — that is what lands it on the first
+   line's baseline instead of above it.
+   Trap: 1.55rem is just past the display face's ~24px floor. Do not shrink
+   it below that without moving it to the body face; Space Grotesk under
+   display size is exactly what the font rule forbids. */
+:root[data-theme]
+  .lesson-body
+  ol:not(.not-prose *):not(li ol):has(> li:nth-child(4)) {
+  list-style: none;
+  counter-reset: vt-step;
+  display: block;
+  padding-left: 0;
+  margin-top: 1.7em;
+  border-top: var(--hairline) solid var(--border);
+}
+:root[data-theme]
+  .lesson-body
+  ol:not(.not-prose *):not(li ol):has(> li:nth-child(4))
+  > li {
+  counter-increment: vt-step;
+  margin: 0;
+  position: relative;
+  padding: 1.15rem 0 1.2rem 4.4rem;
+  border-bottom: var(--hairline) solid var(--border);
+}
+:root[data-theme]
+  .lesson-body
+  ol:not(.not-prose *):not(li ol):has(> li:nth-child(4))
+  > li::before {
+  content: counter(vt-step, decimal-leading-zero);
+  position: absolute;
+  left: 0;
+  top: 1.15rem;
+  width: 3.1rem;
+  color: var(--brand-ink);
+  font-family: var(--display);
+  font-size: var(--fs-2xl);
+  font-weight: 500;
+  /* The row's own line-height, not 1: it is what puts the numeral's baseline
+     on the baseline of the line it numbers. */
+  line-height: inherit;
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+}
+/* A phone gives the gutter less room; the numeral keeps its size and the
+   column tightens instead. */
+@media (max-width: 640px) {
+  :root[data-theme]
+    .lesson-body
+    ol:not(.not-prose *):not(li ol):has(> li:nth-child(4))
+    > li {
+    padding-left: 3.4rem;
+  }
+  :root[data-theme]
+    .lesson-body
+    ol:not(.not-prose *):not(li ol):has(> li:nth-child(4))
+    > li::before {
+    width: 2.5rem;
+  }
+}
+
+/* ---------- what a section will make you able to do ---------- */
+
+/* <Objectives> (components/mdx/objectives.tsx). The ledger's row treatment —
+   hairline-ruled full-width rows, numeral in the display face in its own
+   gutter — applied to the objectives list whatever its markdown marker and
+   however many items it has. The ledger proper only dresses ordered lists of
+   four or more; an objectives block is the same thing at any length.
+
+   Not a card. The page already carries reading cards and exercise cards, and
+   a fifth boxed shape is one the card-edge rule has no room for. Band rules
+   top and bottom set the block apart, which is what that rule allows for a
+   full-width section.
+
+   The section carries `not-prose`, and that is load-bearing rather than
+   tidiness: every generic list rule above is written `:not(.not-prose *)`, so
+   this opts out of all of them at once. Competing on specificity instead does
+   not work — the 4-or-more bullet form carries a :has() and outranks any
+   plain descendant selector — and it would leave the block's appearance
+   depending on how many objectives an author happened to write. The cost is
+   that Tailwind Typography no longer tunes anything in here, so what the
+   column would have given the list is restated below. */
+:root[data-theme] .lesson-body .vt-objectives {
+  margin: 2.2em 0;
+  border-top: var(--hairline) solid var(--border);
+  border-bottom: var(--hairline) solid var(--border);
+  padding: 1.4rem 0 0.2rem;
+}
+
+/* The lead is the block's own heading, so it is set like one: the display
+   face at the section-head size, in --brand-ink.
+
+   --brand-ink and never --primary. Maroon is a fine surface and an unreadable
+   ink on the night ground, and this is type — the same split the whole
+   palette runs on, and the reason the ledger's numerals below use the same
+   token.
+
+   1.5rem keeps it above the display face's ~24px floor. Do not shrink it
+   without moving it back to the body face: Space Grotesk under display size
+   is what the font rule forbids, and this line is the one place on the block
+   where that would be tempting. */
+:root[data-theme] .lesson-body .vt-objectives .vt-objectives-lead {
+  margin: 0 0 0.9rem;
+  color: var(--brand-ink);
+  font-family: var(--display);
+  font-size: var(--fs-2xl);
+  font-weight: 500;
+  letter-spacing: -0.015em;
+  line-height: 1.2;
+}
+
+:root[data-theme] .lesson-body .vt-objectives :is(ul, ol) {
+  list-style: none;
+  counter-reset: vt-obj;
+  display: block;
+  margin: 0;
+  padding-left: 0;
+}
+
+:root[data-theme] .lesson-body .vt-objectives :is(ul, ol) > li {
+  counter-increment: vt-obj;
+  margin: 0;
+  position: relative;
+  padding: 1.05rem 0 1.1rem 4.4rem;
+  border-top: var(--hairline) solid var(--border);
+}
+
+/* The rules separate rows from each other; the first row has the lead above
+   it, not another row, and a rule there boxed the heading into a strip of its
+   own instead of letting it open the block. */
+:root[data-theme] .lesson-body .vt-objectives :is(ul, ol) > li:first-child {
+  border-top: 0;
+  padding-top: 0.25rem;
+}
+
+:root[data-theme]
+  .lesson-body
+  .vt-objectives
+  :is(ul, ol)
+  > li:first-child::before {
+  top: 0.25rem;
+}
+
+/* What the prose plugin would have set, restated because not-prose turned it
+   off: the column's emphasis weight, so a bold lead in an objective does not
+   come out at the browser's 700 beside the paragraph's 600. */
+:root[data-theme] .lesson-body .vt-objectives strong {
+  font-weight: 600;
+}
+
+/* Out of flow and carrying the row's line-height, for the ledger's reason:
+   that is what lands the numeral on the first line's baseline. Absolute and
+   not grid, also for the ledger's reason — a bold lead in an item is its own
+   inline run, and grid would drop everything after it into the next row. */
+:root[data-theme] .lesson-body .vt-objectives :is(ul, ol) > li::before {
+  content: counter(vt-obj, decimal-leading-zero);
+  position: absolute;
+  left: 0;
+  top: 1.05rem;
+  width: 3.1rem;
+  color: var(--brand-ink);
+  font-family: var(--display);
+  font-size: var(--fs-2xl);
+  font-weight: 500;
+  line-height: inherit;
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+}
+
+@media (max-width: 640px) {
+  :root[data-theme] .lesson-body .vt-objectives :is(ul, ol) > li {
+    padding-left: 3.4rem;
+  }
+  :root[data-theme] .lesson-body .vt-objectives :is(ul, ol) > li::before {
+    width: 2.5rem;
+  }
+}
+
+/* The reading surface: the Aa text scale applies here and only here — the
+   owner's rule (2026-08-15): the size editor re-sizes the reading and the
+   exercises, never the chrome. The blocks above re-solve --fs-* inside
+   [data-reading-surface]; this rule hands the prose column the scaled base
+   size (prose is otherwise a fixed 1rem at its root, immune to the tokens).
+   At 100% this is a no-op. Contrast's global 200% preset is untouched — that
+   one is a low-vision mode and scales the whole page on purpose. */
+:root[data-theme] [data-reading-surface] .lesson-body {
+  font-size: var(--fs-md);
+}
+
+/* Papers on the reading surface: the document body's own base is a fixed
+   0.875rem (arxiv-paper.css) with everything inside in em, so handing it the
+   --fs-sm token — 0.875rem at base, re-solved inside the surface at every Aa
+   stop — scales the whole document proportionally and nothing at 100%. */
+:root[data-theme] [data-reading-surface] .arxiv-paper {
+  font-size: var(--fs-sm);
+}

@@ -17,7 +17,10 @@ export function classifyLength(text: string): LengthClass {
   return "long";
 }
 
-const DEFAULT_MODEL = "tencent/hy3:free";
+// Hy3's free endpoint was deprecated. This current free model supports the
+// structured-output and reasoning parameters the grader now requires.
+const DEFAULT_MODEL = "openai/gpt-oss-120b:free";
+const DEFAULT_SERVER_FALLBACK = "openrouter/free";
 
 // Grading billed to a user's own (or a classroom's) OpenRouter key defaults
 // to a paid, stronger model — their key, their spend; the server-wide key
@@ -47,4 +50,33 @@ export function modelFor(
     long: process.env.OPENROUTER_MODEL_LONG,
   }[lengthClass];
   return perClass || process.env.OPENROUTER_MODEL || DEFAULT_MODEL;
+}
+
+/** Ordered OpenRouter fallback chain. Paid-key fallbacks are opt-in so an
+ * override can never create a surprise bill; the server chain stays free. */
+export function modelsFor(
+  lengthClass: LengthClass,
+  keySource: GraderKeySource = "server",
+): string[] {
+  const primary = modelFor(lengthClass, keySource);
+  const fallback =
+    keySource === "server"
+      ? process.env.OPENROUTER_MODEL_FALLBACK || DEFAULT_SERVER_FALLBACK
+      : process.env.OPENROUTER_MODEL_USER_FALLBACK;
+  return fallback && fallback !== primary ? [primary, fallback] : [primary];
+}
+
+export function outputTokensFor(lengthClass: LengthClass): number {
+  return { short: 1_400, medium: 2_600, long: 4_200 }[lengthClass];
+}
+
+export function reasoningEffortFor(
+  lengthClass: LengthClass,
+): "minimal" | "low" | "medium" {
+  const effort: Record<LengthClass, "minimal" | "low" | "medium"> = {
+    short: "minimal",
+    medium: "low",
+    long: "medium",
+  };
+  return effort[lengthClass];
 }

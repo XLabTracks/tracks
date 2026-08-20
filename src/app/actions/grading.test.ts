@@ -1,55 +1,46 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
-// Locks the grading action's guards: auth re-check, submitted-only, the
-// billed-call throttles (per-submission cooldown + hourly cap), and the
-// .env.example placeholder being treated as no server key at all.
-
-const { prisma, getCurrentUser, callGrader, userKey, gradingKey, sample } =
+const { prisma, getCurrentUser, callGrader, gradingKey, attempts, structured, sample } =
   vi.hoisted(() => ({
-    prisma: {
-      submission: {
-        findUnique: vi.fn(),
-        update: vi.fn(),
-        count: vi.fn(),
-      },
-    },
+    prisma: { submission: { findUnique: vi.fn() } },
     getCurrentUser: vi.fn(),
     callGrader: vi.fn(),
-    userKey: {
-      getUserOpenRouterKey: vi.fn(),
+    gradingKey: { resolveGraderKeyForRequest: vi.fn() },
+    attempts: {
+      billingScopeFor: vi.fn(
+        (source: string, userId: string, classroomId?: string) =>
+          source === "classroom"
+            ? `classroom:${classroomId}`
+            : source === "user"
+              ? `user:${userId}`
+              : "server",
+      ),
+      claimGradingAttempt: vi.fn(),
+      completeGradingAttempt: vi.fn(),
+      failGradingAttempt: vi.fn(),
     },
-    gradingKey: {
-      getGraderKeyView: vi.fn(),
-      getClassroomOpenRouterKey: vi.fn(),
-    },
-    sample: {
-      assembleWriting: vi.fn(),
-      assembleArgueReveal: vi.fn(),
-    },
+    structured: { parseStructuredGrade: vi.fn() },
+    sample: { assembleWriting: vi.fn(), assembleArgueReveal: vi.fn() },
   }));
 
 vi.mock("@/lib/db", () => ({ prisma }));
 vi.mock("@/lib/auth", () => ({ getCurrentUser }));
 vi.mock("@/lib/grader/openrouter", () => ({ callGrader }));
-vi.mock("@/lib/grader/user-key", () => userKey);
-vi.mock("@/lib/grader/grading-key", () => ({
-  ...gradingKey,
-  // Pure helper — the real implementation, not a stub.
-  classroomIdOfSelection: (s: string) =>
-    s.startsWith("classroom:") ? s.slice("classroom:".length) : null,
-}));
+vi.mock("@/lib/grader/grading-key", () => gradingKey);
+vi.mock("@/lib/grader/grading-attempts", () => attempts);
+vi.mock("@/lib/grader/structured", () => structured);
 vi.mock("@/lib/grader/sample", () => sample);
 vi.mock("@/lib/content", () => ({ getExerciseById: vi.fn() }));
 
 import { requestTransparencyGrade } from "./grading";
 
-const OLD = new Date(Date.now() - 10 * 60 * 1000);
+const TELEMETRY = { latencyMs: 120, model: "resolved/model" };
 
 function submittedRow(overrides: Record<string, unknown> = {}) {
   return {
+    id: "sub1",
     status: "submitted",
     feedback: null,
-    updatedAt: OLD,
     responseJson: { intro: "text" },
     ...overrides,
   };
@@ -57,11 +48,31 @@ function submittedRow(overrides: Record<string, unknown> = {}) {
 
 beforeEach(() => {
   getCurrentUser.mockResolvedValue({ id: "u1" });
-  prisma.submission.count.mockResolvedValue(0);
-  sample.assembleWriting.mockReturnValue({ sample: "text", context: "ctx" });
-  gradingKey.getGraderKeyView.mockResolvedValue(null);
-  gradingKey.getClassroomOpenRouterKey.mockResolvedValue(null);
-  userKey.getUserOpenRouterKey.mockResolvedValue(null);
+  prisma.submission.findUnique.mockResolvedValue(submittedRow());
+  sample.assembleWriting.mockReturnValue({
+    sample: "text",
+    context: { documentType: "memo", stakes: "", audience: "" },
+  });
+  gradingKey.resolveGraderKeyForRequest.mockResolvedValue({
+    ok: true,
+    keySource: "server",
+    apiKey: null,
+  });
+  attempts.claimGradingAttempt.mockResolvedValue({ ok: true, attemptId: "ga1" });
+  attempts.completeGradingAttempt.mockResolvedValue(undefined);
+  attempts.failGradingAttempt.mockResolvedValue(undefined);
+  callGrader.mockResolvedValue({
+    ok: true,
+    content: "structured-json",
+    telemetry: TELEMETRY,
+  });
+  structured.parseStructuredGrade.mockReturnValue({
+    score: 30,
+    band: "Strong",
+    criteria: [],
+    markdown: "## Top fix\nDo it.\n\n## Verdict\n30/45 — Strong. Good.",
+  });
+  vi.stubEnv("OPENROUTER_API_KEY", "sk-or-real-key");
 });
 
 afterEach(() => {
@@ -69,11 +80,10 @@ afterEach(() => {
   vi.unstubAllEnvs();
 });
 
-describe("requestTransparencyGrade guards", () => {
-  it("rejects when signed out (no reads, no LLM call)", async () => {
+describe("requestTransparencyGrade", () => {
+  it("rejects when signed out before DB or LLM work", async () => {
     getCurrentUser.mockResolvedValue(null);
-    const result = await requestTransparencyGrade("c1", "exercise");
-    expect(result.ok).toBe(false);
+    expect((await requestTransparencyGrade("c1", "exercise")).ok).toBe(false);
     expect(prisma.submission.findUnique).not.toHaveBeenCalled();
     expect(callGrader).not.toHaveBeenCalled();
   });
@@ -81,133 +91,88 @@ describe("requestTransparencyGrade guards", () => {
   it("rejects drafts and missing submissions", async () => {
     prisma.submission.findUnique.mockResolvedValue(null);
     expect((await requestTransparencyGrade("c1", "exercise")).ok).toBe(false);
-    prisma.submission.findUnique.mockResolvedValue(
-      submittedRow({ status: "draft" }),
-    );
+    prisma.submission.findUnique.mockResolvedValue(submittedRow({ status: "draft" }));
     expect((await requestTransparencyGrade("c1", "exercise")).ok).toBe(false);
     expect(callGrader).not.toHaveBeenCalled();
   });
 
-  it("refuses a server-key regrade inside the cooldown window (no LLM call)", async () => {
-    vi.stubEnv("OPENROUTER_API_KEY", "sk-or-real-key");
-    prisma.submission.findUnique.mockResolvedValue(
-      submittedRow({ feedback: "old report", updatedAt: new Date() }),
-    );
+  it("surfaces key-resolution errors without silently billing another source", async () => {
+    gradingKey.resolveGraderKeyForRequest.mockResolvedValue({
+      ok: false,
+      error: "The selected classroom key cannot be read.",
+    });
+    const result = await requestTransparencyGrade("c1", "exercise");
+    expect(result).toEqual({
+      ok: false,
+      error: "The selected classroom key cannot be read.",
+    });
+    expect(attempts.claimGradingAttempt).not.toHaveBeenCalled();
+  });
+
+  it("fails closed when the durable claim rejects a duplicate or rate limit", async () => {
+    attempts.claimGradingAttempt.mockResolvedValue({
+      ok: false,
+      error: "Feedback is already being generated for this submission.",
+    });
     const result = await requestTransparencyGrade("c1", "exercise");
     expect(result.ok).toBe(false);
-    if (!result.ok) expect(result.error).toMatch(/wait 30 seconds/i);
     expect(callGrader).not.toHaveBeenCalled();
   });
 
-  it("does NOT throttle a user-billed key inside the cooldown window", async () => {
-    // A learner paying with their own key is never rate-limited, even on a
-    // just-graded submission — it's their spend, not the site's.
-    prisma.submission.findUnique.mockResolvedValue(
-      submittedRow({ feedback: "old report", updatedAt: new Date() }),
-    );
-    gradingKey.getGraderKeyView.mockResolvedValue({
-      personal: { state: "active", last4: "abcd" },
-      classrooms: [],
-      selected: "user",
+  it("uses a selected classroom key and classroom billing scope", async () => {
+    gradingKey.resolveGraderKeyForRequest.mockResolvedValue({
+      ok: true,
+      keySource: "classroom",
+      classroomId: "cls1",
+      apiKey: "sk-or-classroom-key",
     });
-    userKey.getUserOpenRouterKey.mockResolvedValue("sk-or-own-key");
-    callGrader.mockResolvedValue({ ok: false, error: "upstream down" });
     await requestTransparencyGrade("c1", "exercise");
-    expect(callGrader).toHaveBeenCalledTimes(1);
-    expect(prisma.submission.count).not.toHaveBeenCalled();
-  });
-
-  it("allows a regrade once the cooldown has passed", async () => {
-    vi.stubEnv("OPENROUTER_API_KEY", "sk-or-real-key");
-    prisma.submission.findUnique.mockResolvedValue(
-      submittedRow({ feedback: "old report", updatedAt: OLD }),
+    expect(attempts.claimGradingAttempt).toHaveBeenCalledWith(
+      expect.objectContaining({
+        submissionId: "sub1",
+        keySource: "classroom",
+        billingScope: "classroom:cls1",
+      }),
     );
-    callGrader.mockResolvedValue({ ok: false, error: "upstream down" });
-    const result = await requestTransparencyGrade("c1", "exercise");
-    expect(callGrader).toHaveBeenCalledTimes(1);
-    expect(result.ok).toBe(false); // upstream error propagates as-is
+    expect(callGrader.mock.calls[0][3]).toBe("sk-or-classroom-key");
   });
 
-  it("enforces the hourly cap on the server key (no LLM call)", async () => {
-    vi.stubEnv("OPENROUTER_API_KEY", "sk-or-real-key");
-    prisma.submission.findUnique.mockResolvedValue(submittedRow());
-    prisma.submission.count.mockResolvedValue(12);
+  it("persists a validated structured grade and closes the job atomically", async () => {
     const result = await requestTransparencyGrade("c1", "exercise");
-    expect(result.ok).toBe(false);
-    if (!result.ok) expect(result.error).toMatch(/limit/i);
-    expect(callGrader).not.toHaveBeenCalled();
+    expect(result).toMatchObject({ ok: true, score: 30, band: "Strong" });
+    expect(attempts.completeGradingAttempt).toHaveBeenCalledWith({
+      attemptId: "ga1",
+      submissionId: "sub1",
+      score: 30,
+      feedback: expect.stringContaining("30/45"),
+      telemetry: TELEMETRY,
+    });
   });
 
-  it("treats the .env.example placeholder as no server key", async () => {
-    vi.stubEnv("OPENROUTER_API_KEY", "sk-or-...");
-    prisma.submission.findUnique.mockResolvedValue(submittedRow());
-    const result = await requestTransparencyGrade("c1", "exercise");
-    expect(result.ok).toBe(false);
-    if (!result.ok) expect(result.error).toMatch(/not configured/i);
-    expect(callGrader).not.toHaveBeenCalled();
-  });
-
-  it("surfaces a stored-but-undecryptable user key instead of billing the server", async () => {
-    vi.stubEnv("OPENROUTER_API_KEY", "sk-or-real-key");
-    prisma.submission.findUnique.mockResolvedValue(submittedRow());
-    gradingKey.getGraderKeyView.mockResolvedValue({
-      personal: { state: "needs-reentry", last4: "abcd" },
-      classrooms: [],
-      selected: "user",
+  it("records an upstream failure before returning it", async () => {
+    callGrader.mockResolvedValue({
+      ok: false,
+      error: "Timed out.",
+      errorCode: "timeout",
+      telemetry: TELEMETRY,
     });
     const result = await requestTransparencyGrade("c1", "exercise");
-    expect(result.ok).toBe(false);
-    if (!result.ok) expect(result.error).toMatch(/no longer be read/i);
-    expect(callGrader).not.toHaveBeenCalled();
+    expect(result).toEqual({ ok: false, error: "Timed out." });
+    expect(attempts.failGradingAttempt).toHaveBeenCalledWith(
+      "ga1",
+      "timeout",
+      TELEMETRY,
+    );
   });
 
-  it("bills a selected classroom key (membership-checked decrypt, paid model)", async () => {
-    vi.stubEnv("OPENROUTER_API_KEY", "sk-or-server-key");
-    prisma.submission.findUnique.mockResolvedValue(submittedRow());
-    gradingKey.getGraderKeyView.mockResolvedValue({
-      personal: { state: "none", last4: null },
-      classrooms: [
-        { classroomId: "cls1", classroomName: "CMU", last4: "ef12", usable: true },
-      ],
-      selected: "classroom:cls1",
-    });
-    gradingKey.getClassroomOpenRouterKey.mockResolvedValue("sk-or-classroom-key");
-    callGrader.mockResolvedValue({ ok: false, error: "upstream down" });
-    await requestTransparencyGrade("c1", "exercise");
-    expect(gradingKey.getClassroomOpenRouterKey).toHaveBeenCalledWith("u1", "cls1");
-    const [model, , , apiKey] = callGrader.mock.calls[0];
-    expect(apiKey).toBe("sk-or-classroom-key");
-    // Classroom spend gets the paid default, same as a user-supplied key.
-    expect(model).toBe("deepseek/deepseek-v4-flash-0731");
-  });
-
-  it("errors when the selected classroom key is unusable (never bills elsewhere)", async () => {
-    vi.stubEnv("OPENROUTER_API_KEY", "sk-or-server-key");
-    prisma.submission.findUnique.mockResolvedValue(submittedRow());
-    gradingKey.getGraderKeyView.mockResolvedValue({
-      personal: { state: "none", last4: null },
-      classrooms: [
-        { classroomId: "cls1", classroomName: "CMU", last4: "ef12", usable: false },
-      ],
-      selected: "classroom:cls1",
-    });
-    gradingKey.getClassroomOpenRouterKey.mockResolvedValue(null);
+  it("records malformed structured output instead of spending then discarding silently", async () => {
+    structured.parseStructuredGrade.mockReturnValue(null);
     const result = await requestTransparencyGrade("c1", "exercise");
     expect(result.ok).toBe(false);
-    if (!result.ok) expect(result.error).toMatch(/no longer be used/i);
-    expect(callGrader).not.toHaveBeenCalled();
-  });
-
-  it("grades on the user's own key when selected", async () => {
-    prisma.submission.findUnique.mockResolvedValue(submittedRow());
-    gradingKey.getGraderKeyView.mockResolvedValue({
-      personal: { state: "active", last4: "abcd" },
-      classrooms: [],
-      selected: "user",
-    });
-    userKey.getUserOpenRouterKey.mockResolvedValue("sk-or-own-key");
-    callGrader.mockResolvedValue({ ok: false, error: "upstream down" });
-    await requestTransparencyGrade("c1", "exercise");
-    expect(callGrader.mock.calls[0][3]).toBe("sk-or-own-key");
+    expect(attempts.failGradingAttempt).toHaveBeenCalledWith(
+      "ga1",
+      "invalid_structured_grade",
+      TELEMETRY,
+    );
   });
 });

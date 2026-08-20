@@ -1,0 +1,854 @@
+/* Landing page for the verification subdomain. Palette and chrome come from
+   theme.css; this file is the page's own layout plus the skill
+   constellation.
+
+   Trap: the constellation is one <svg> with a viewBox, so everything inside
+   it scales with the container. Nothing may be set below 11 units or it drops
+   under readable size on a 13" screen at this width. */
+
+/* ---------- hero ---------- */
+
+.hero {
+  /* Fluid, not fixed — and the floors are the working values on a laptop,
+     where 100vh is ~700-800px, so they are set generously rather than
+     trusting the vh term to lift them. The type does not scale — only the
+     ground around it. */
+  padding: clamp(64px, 10vh, 128px) 0 clamp(44px, 6vh, 72px);
+}
+.hero > .wrap,
+section.band > .wrap,
+section.alpha-note > .wrap {
+  /* The landing shares the header's container — same max width, same gutter,
+     from the --chrome-* variables theme.css declares. The h1 starts on the
+     brand's vertical and the content's right edge lands where the header's
+     actions end, at every width; before this the page sat in its own narrower
+     wrap and drifted 60-80px off the chrome on wide monitors. Line lengths
+     are unchanged — the ch caps on h1/lede/intro still measure the text;
+     only the composition column grew. */
+  max-width: var(--chrome-maxw, 1436px);
+  padding-inline: var(--chrome-gutter, 80px);
+}
+.hero h1 {
+  max-width: 32ch;
+  font-size: var(--fs-hero);
+  text-wrap: balance;
+}
+.hero .lede {
+  max-width: 60ch;
+  margin-top: 20px;
+  font-size: var(--fs-lg);
+  line-height: 1.6;
+  color: var(--muted-foreground);
+}
+.hero .ways {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  /* The buttons are a decision, not the next sentence — the big step of air
+     goes HERE, between the text and the actions, not under the buttons. */
+  margin-top: 48px;
+}
+
+/* ---------- sections ---------- */
+
+section.band {
+  border-top: var(--hairline) solid var(--border);
+}
+section.band.filled {
+  background: var(--card);
+  border-bottom: var(--hairline) solid var(--border);
+}
+section.band > .wrap {
+  padding-top: clamp(44px, 6vh, 72px);
+  padding-bottom: clamp(44px, 6vh, 72px);
+}
+section.band h2 {
+  font-size: var(--fs-3xl);
+}
+section.band .intro {
+  max-width: 62ch;
+  margin-top: 12px;
+  color: var(--muted-foreground);
+}
+
+/* ---------- module cards ---------- */
+
+/* Uniform hairline on all four sides — the module accent lives inside the
+   card, in the chip, never as a painted edge. */
+.modules {
+  display: grid;
+  gap: 16px;
+  margin-top: 28px;
+  list-style: none;
+}
+@media (min-width: 720px) {
+  .modules {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+.mod-card {
+  height: 100%;
+  padding: 20px;
+  border: var(--hairline) solid var(--border);
+  border-radius: var(--radius);
+  background: var(--background);
+}
+/* The constellation's own styling. Every rule below draws the figure:
+   without them the rings and edges are open <path>s with no fill
+   declared, so the browser closes each arc and fills it black — the
+   page goes to ink. They live here and nowhere else; nothing in
+   theme.css or page.css styles `.sky`. */
+/* The figure and its detail panel stack in one column with air between
+   them. 270552b deleted this rule along with the `.sky` block; the figure
+   then sat flush against the panel and the whole block against the bar.
+
+   Trap: minmax(0, …), not a bare auto track. An auto track is sized by its
+   content, so the scrolling figure inside widens the track and takes the
+   whole page into horizontal scroll with it. */
+.constellation {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 16px;
+  /* Tight to the bar above — see .mod-filters. */
+  margin-top: 12px;
+}
+/* A monitor gets the panel BESIDE the web, sticky, so the words follow the
+   stars instead of living below the fold of a 700px-tall figure. The panel's
+   half of this bargain — back to one column, stuck to the top — lives with
+   the panel's own rules, where it can out-cascade the 860px grid. */
+@media (min-width: 1100px) {
+  .constellation {
+    grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr);
+    gap: 20px;
+    align-items: start;
+  }
+}
+
+.sky {
+  position: relative;
+  min-width: 0;
+  /* No frame. The figure sits on the page ground and is bounded by its own
+     vignette and rings, not by a drawn box — a hairline rectangle around a
+     round graph only fought it. overflow stays: the star field is scattered
+     to the viewBox edge and would otherwise spill past the figure. */
+  border-radius: var(--radius);
+  /* A quiet neutral vignette: on the night ground it reads as sky-glow
+     behind the hub, on paper as the faintest lift. The web's own rings do
+     the rest. */
+  background: radial-gradient(
+    circle at 50% 47%,
+    color-mix(in srgb, var(--foreground) 5%, var(--background)),
+    var(--background) 68%
+  );
+  overflow: hidden;
+}
+.sky svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+/* Under about 760px the graph's own type would scale below readable size with
+   the viewBox, so the figure keeps its width and the panel scrolls to it. */
+/* No min-width, no sideways scroll: the figure carries numbers, not names, so
+   it stays legible as it scales and simply fits whatever screen it is on. It
+   held 760px only because 27 names were drawn inline. */
+
+.sky .ring {
+  fill: none;
+  stroke: color-mix(in srgb, var(--foreground) 10%, transparent);
+  stroke-width: 1;
+}
+.sky .ray {
+  stroke: color-mix(in srgb, var(--foreground) 7%, transparent);
+  stroke-width: 1;
+}
+
+/* The star field is night's alone: the same dots that read as sky on the dark
+   ground read as dirt on paper. Default hidden because the default theme is
+   day — theme.js sets the attribute either way. */
+.sky .star {
+  display: none;
+  fill: var(--foreground);
+}
+:root[data-theme="dark"] .sky .star {
+  display: block;
+}
+:root[data-theme="dark"] .sky .star.tw {
+  opacity: 0.38;
+}
+
+/* High contrast is a legibility mode: the rings and the star field carry no
+   information, and at --border white on black they out-shout the labels they
+   run under. Drop them, and dim the out-of-focus branches far less. */
+:root[data-theme="contrast"] .sky .ring,
+:root[data-theme="contrast"] .sky .star {
+  display: none;
+}
+:root[data-theme="contrast"] .sky.focusing .node:not(.hot),
+:root[data-theme="contrast"] .sky.focusing .arc-label:not(.hot) {
+  opacity: 0.6;
+}
+
+/* The web's connective tissue, quietest first.
+
+   Strands — the arc of ring carrying one module's stars, a wash of the hue.
+   Spokes — hub to the arm's first stars, tapered fills like the beams.
+   Cross edges — dashed bows, most of the fifty, kept faint or the middle of
+   the web is a hairball.
+   Beams — one skill feeding another inside its module: the solid line of the
+   legend, filled spindles in the module hue. */
+.sky .strand {
+  fill: none;
+  stroke: color-mix(in srgb, var(--sel) 55%, transparent);
+  stroke-width: 2;
+  transition: stroke 0.25s ease, opacity 0.25s ease;
+}
+.sky .strand.hot {
+  stroke: var(--sel);
+  stroke-width: 2.5;
+}
+.sky.focusing .strand:not(.hot) {
+  opacity: 0.3;
+}
+
+/* Spokes and beams are the gum: the star's own colour at full strength,
+   flared into the disc it feeds, so star and path read as one stretched
+   piece — which is also why the discs carry no rim at rest. */
+.sky .spoke {
+  fill: var(--sel);
+  transition: fill 0.25s ease, opacity 0.25s ease;
+}
+.sky.focusing .spoke:not(.hot) {
+  opacity: 0.2;
+}
+
+.sky .edge {
+  transition: stroke 0.25s ease, fill 0.25s ease, opacity 0.25s ease;
+}
+/* The cross edge is the beams' own outline stroked dashed, never filled —
+   same width, same waist; the dash carries the "another module" fact. It
+   joins two hues, so the stroke is the per-edge gradient the markup lays
+   along it (--grad): each end's module colour, meeting at their OKLCH
+   midpoint on the shorter hue arc — a perceptual mix, so the middle stays
+   a colour instead of the grey an sRGB blend walks through. Lit, it keeps
+   the dashes and takes a wash of its near hue inside them. */
+.sky .edge.cross {
+  fill: none;
+  stroke: var(--grad, color-mix(in srgb, var(--foreground) 24%, transparent));
+  stroke-width: 1.2;
+  stroke-dasharray: 3 5;
+  stroke-linecap: round;
+  opacity: 0.6;
+}
+.sky .edge.cross.hot {
+  stroke: var(--grad, var(--sel));
+  fill: color-mix(in srgb, var(--sel) 20%, transparent);
+  opacity: 1;
+}
+.sky .edge.beam {
+  stroke: none;
+  fill: var(--sel);
+}
+.sky.focusing .edge:not(.hot) {
+  opacity: 0.16;
+}
+
+/* The hub: the flat pale disc the arms grow from — the reference's moon.
+   Decoration — no data, no pointer, hidden from the tree, and no hue: on
+   the night ground it is the one near-white body, on paper the one near-ink
+   one. */
+.sky .hub-halo {
+  fill: color-mix(in srgb, var(--foreground) 8%, transparent);
+}
+.sky .hub-ring {
+  fill: none;
+  stroke: color-mix(in srgb, var(--foreground) 30%, transparent);
+  stroke-width: 1.5;
+}
+.sky .hub-disc {
+  fill: var(--foreground);
+}
+
+.sky .node {
+  cursor: pointer;
+  transition: opacity 0.25s ease;
+}
+/* Solid, like the plaque at the arm's tip: the star IS its module's colour,
+   and the numeral is that colour's chosen ink — the same --sel/--sel-ink pair
+   the plaque uses, so an arm reads as one object. A tinted wash read as an
+   empty outline next to a filled plaque.
+
+   State is carried by the ring around the star, never by the fill: changing
+   the fill would change which ink the numeral needs. */
+.sky .node .node-core {
+  fill: var(--sel);
+  /* No rim at rest: the disc and the beams feeding it are the same solid
+     colour and are meant to merge into one stretched piece. The rim exists
+     only as state — hover, hot, pinned — which keeps the house rule that
+     state lives on the ring, never in the fill. */
+  stroke: transparent;
+  stroke-width: 0;
+  transition: stroke 0.15s ease, stroke-width 0.15s ease;
+}
+/* The halo: the reference's outer orbit ring, a hue whisper that brightens
+   with the star. It never carries state alone — the core's stroke does. */
+.sky .node .node-halo {
+  fill: none;
+  stroke: color-mix(in srgb, var(--sel) 40%, transparent);
+  stroke-width: 1.5;
+  transition: stroke 0.15s ease;
+}
+.sky .node .node-num {
+  fill: var(--sel-ink, #fff);
+  font-family: var(--label);
+  /* User units, set by the geometry preset riding the svg element — the
+     compact web grows its stars and the numerals grow with them. */
+  font-size: var(--num-fs, 27px);
+  text-anchor: middle;
+  /* Central, not a hand-tuned baseline nudge: the numeral's em box centres
+     on the circle's cy, so one rule holds for 1 and for 27 alike. */
+  dominant-baseline: central;
+}
+.sky.focusing .node:not(.hot) {
+  opacity: 0.25;
+}
+.sky .node.hot .node-core,
+.sky .node:hover .node-core {
+  stroke: var(--foreground);
+  stroke-width: 4;
+}
+.sky .node.hot .node-halo,
+.sky .node:hover .node-halo {
+  stroke: var(--sel);
+}
+.sky .node.pinned .node-core {
+  stroke: var(--foreground);
+  stroke-width: 6;
+}
+
+.sky .arc-label {
+  cursor: pointer;
+  transition: opacity 0.25s ease;
+}
+.sky .arc-label .plaque {
+  fill: var(--sel);
+  stroke: none;
+}
+/* The label sits ON the plaque fill, so it takes that colour's chosen ink —
+   the same --sel/--sel-ink pair the stars use. */
+.sky .arc-label text {
+  font-family: var(--label);
+  /* User units, like .node-num — inside the viewBox a CSS-pixel token is
+     scaled with the figure and lands at 4px on a phone. */
+  font-size: 16px;
+  font-weight: 700;
+  fill: var(--sel-ink, #fff);
+  /* Central, matching the anchor the markup sets at the rect's own centre. */
+  dominant-baseline: central;
+  letter-spacing: 0.06em;
+  text-anchor: middle;
+}
+.sky.focusing .arc-label:not(.hot) {
+  opacity: 0.3;
+}
+
+/* Reads as the figure's caption, so it takes no rule of its own: the line
+   that used to sit here closed the frame above it, and with the frame gone
+   it would be the only edge on the page marking nothing. */
+.sky-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 18px;
+  padding: 10px 16px 14px;
+  font-family: var(--label);
+  font-size: var(--fs-2xs);
+  color: var(--muted-foreground);
+}
+
+/* Detail panel: the graph shows shape, the panel carries the words. Hovering
+   a star fills it; clicking pins it so the text can be read without keeping
+   the pointer still.
+
+   The setting is a journal card, per the reference: a filled outer frame in
+   the selection's hue — the highlight OUTSIDE — carrying a header row
+   (module left, star count right), and a rounded inner sheet in the page's
+   own background — the theme INSIDE. Unselected, the frame falls back to
+   the neutral muted ground and the header to the page ink, so the card
+   quietly names the figure until a star gives it a colour.
+
+   Gotham and Gotham Black only, by request — declared, never shipped:
+   Gotham is a licensed face, so the stacks land on it where the machine has
+   it and fall back to the site's own faces where it does not. The panel
+   re-points --display and --label locally, so every rule inside that asks
+   for a site face gets the Gotham stack without being touched. */
+.sky-panel {
+  --display: "Gotham Black", "Gotham Ultra", Gotham, "Space Grotesk", "Segoe UI",
+    system-ui, sans-serif;
+  --label: Gotham, "Gotham SSm A", "Gotham SSm B", var(--sans);
+  padding: 10px;
+  border: 0;
+  border-radius: 24px;
+  background: var(--sel, var(--muted));
+  box-shadow: var(--shadow-soft-lg);
+  font-family: Gotham, "Gotham SSm A", "Gotham SSm B", var(--sans);
+  min-height: 168px;
+}
+.sky-panel .p-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 16px 12px;
+  color: var(--sel-ink, var(--foreground));
+}
+.sky-panel .p-mod {
+  font-size: var(--fs-2xs);
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+.sky-panel .p-count {
+  font-size: var(--fs-2xs);
+  letter-spacing: 0.1em;
+  opacity: 0.78;
+}
+.sky-panel .p-body {
+  padding: 24px 26px 26px;
+  border-radius: 16px;
+  background: var(--background);
+}
+@media (min-width: 860px) {
+  .sky-panel .p-body {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr);
+    gap: 0 48px;
+    align-items: start;
+  }
+  .sky-panel h3,
+  .sky-panel .p-meta,
+  .sky-panel .p-desc,
+  .sky-panel .p-goals {
+    grid-column: 1;
+  }
+  .sky-panel .p-sec {
+    grid-column: 2;
+    grid-row: 1;
+  }
+  .sky-panel .p-rungs {
+    grid-column: 2;
+    grid-row: 2 / span 3;
+  }
+  .sky-panel .p-hint:first-child {
+    grid-column: 1;
+  }
+}
+/* Docked beside the web (see .constellation), the panel is a side column:
+   the two-column spread above is for when it had the page's full width. After
+   the 860px block on purpose — same specificity, later wins. */
+@media (min-width: 1100px) {
+  .sky-panel {
+    position: sticky;
+    /* Below the sticky chrome — .site-header is 76px and z-index 40, so a
+       smaller offset slides the gold band underneath it and the card reads
+       as decapitated. 92 = the bar plus a breath. */
+    top: 92px;
+    /* The card may run taller than the viewport (the goals lists earn their
+       length). Cap it and scroll the inner sheet, never the frame: the
+       flex column keeps .p-head — the module band — always on screen. */
+    max-height: calc(100vh - 112px);
+    display: flex;
+    flex-direction: column;
+  }
+  .sky-panel .p-head { flex: none; }
+  .sky-panel .p-body {
+    display: block;
+    min-height: 0;
+    overflow-y: auto;
+  }
+}
+.sky-panel h3 {
+  font-family: var(--display);
+  font-weight: 900;
+  font-size: var(--fs-2xl);
+  line-height: 1.2;
+  text-wrap: balance;
+}
+.sky-panel .p-meta {
+  margin-top: 10px;
+  font-size: var(--fs-2xs);
+  letter-spacing: 0.06em;
+  color: var(--muted-foreground);
+}
+.sky-panel .p-desc {
+  margin-top: 18px;
+  font-size: var(--fs-md);
+  line-height: 1.65;
+  color: var(--muted-foreground);
+}
+/* The learner goals list — the p-desc voice broken into the owner's own
+   bullets; a sub-point steps in under the bullet it belongs to. */
+.sky-panel .p-goals {
+  margin-top: 18px;
+  list-style: none;
+}
+.sky-panel .p-goals li {
+  position: relative;
+  padding-left: 16px;
+  font-size: var(--fs-sm);
+  line-height: 1.6;
+  color: var(--muted-foreground);
+  margin-bottom: 7px;
+}
+.sky-panel .p-goals li::before { content: '–'; position: absolute; left: 0; }
+.sky-panel .p-goals li.sub { margin-left: 18px; font-size: var(--fs-2xs); }
+/* The ladder is a labelled data column: micro-label on top, then rows ruled
+   by hairlines, the unit number hanging in the module's colour. Rhythm comes
+   from one padding, not per-row margins. */
+.sky-panel .p-sec {
+  margin-top: 24px;
+  font-family: var(--label);
+  font-size: var(--fs-2xs);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--muted-foreground);
+}
+/* Only while the panel is the full-width two-column spread — docked in a
+   side column (1100px up) the ladder is below the description again and
+   needs its air back. */
+@media (min-width: 860px) and (max-width: 1099px) {
+  .sky-panel .p-sec {
+    margin-top: 0;
+  }
+}
+.sky-panel .p-rungs {
+  margin-top: 6px;
+  list-style: none;
+}
+.sky-panel .p-rungs li {
+  display: grid;
+  grid-template-columns: 44px 1fr;
+  gap: 12px;
+  padding: 10px 0;
+  font-size: var(--fs-sm);
+  line-height: 1.55;
+}
+.sky-panel .p-rungs li + li {
+  border-top: var(--hairline) solid var(--border);
+}
+.sky-panel .p-rungs .u {
+  font-family: var(--label);
+  font-size: var(--fs-2xs);
+  padding-top: 2px;
+  color: var(--sel-text, var(--brand-ink));
+}
+.sky-panel .p-rungs .a {
+  color: var(--muted-foreground);
+}
+.sky-panel .p-hint {
+  font-size: var(--fs-sm);
+  line-height: 1.6;
+  color: var(--muted-foreground);
+}
+.sky-panel .p-hint + .p-hint {
+  margin-top: 12px;
+}
+
+/* A plaque, not coloured letters. Five hues squeezed to a text-contrast floor
+   land in one lightness band and stop being tellable apart; as a fill each one
+   keeps its own lightness, and the ink on it is chosen per colour.
+   One segmented bar, not five pills: the container owns the rounding and the
+   segments sit flush at radius 0 — a gap or a per-segment radius splits it
+   back into pills. Narrow screens scroll the bar sideways instead of
+   wrapping it, because a wrapped bar is two bars. */
+.mod-filters {
+  /* The bar belongs to the figure, not to the paragraph: it filters what the
+     figure shows. So the air above it opens the group and the air below it
+     stays tight. Equal gaps on both sides left it floating between the two,
+     attached to neither. */
+  margin-top: 28px;
+  display: flex;
+  width: fit-content;
+  max-width: 100%;
+  border-radius: 999px;
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+.mod-filters button {
+  padding: 8px 14px;
+  border: 0;
+  background: var(--sel, var(--muted));
+  color: var(--sel-ink, var(--foreground));
+  font: inherit;
+  font-family: var(--label);
+  font-size: var(--fs-xs);
+  white-space: nowrap;
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
+}
+/* Underline, not a brighter fill. Brightening works against a plaque whose
+   ink is white: M3 sits at 4.89:1 at rest and brightness(1.06) took it to
+   4.43, under the floor, on the one interaction that invites a closer look.
+   An underline is the site's own hover idiom and cannot move contrast. */
+@media (max-width: 640px) {
+  /* Numerals only, and the bar becomes a full-width row of five equal
+     segments — it fits, so nothing is cut and nothing has to be scrolled. */
+  .mod-filters {
+    width: 100%;
+  }
+  .mod-filters button {
+    flex: 1 1 0;
+    padding-inline: 0;
+    text-align: center;
+  }
+  .mod-filters .mod-name {
+    display: none;
+  }
+}
+
+.mod-filters button:hover {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.mod-filters button[aria-pressed="true"] {
+  box-shadow: inset 0 0 0 2px var(--foreground);
+}
+
+@media (max-width: 640px) {
+  .hero {
+    padding: 40px 0 32px;
+  }
+  section.band > .wrap {
+    padding-top: 32px;
+    padding-bottom: 32px;
+  }
+}
+
+.after-sky {
+  margin-top: 22px;
+}
+.mod-card .mod-meta {
+  margin-top: 10px;
+  font-family: var(--label);
+  font-size: var(--fs-2xs);
+  color: var(--muted-foreground);
+}
+.mod-card .memo-link + .memo-link {
+  margin-left: 14px;
+}
+
+/* ---------- the key ---------- */
+
+/* The names the figure no longer draws. Grouped by module, numbered to match
+   the stars; each row pins its star. On a phone it is the whole navigation. */
+.sky-key {
+  list-style: none;
+  margin: 12px 0 0;
+  padding: 0;
+  display: grid;
+  gap: 14px 20px;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+}
+.sky-key > li > ol {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.key-mod-name {
+  display: block;
+  margin-bottom: 4px;
+  font-family: var(--label);
+  font-size: var(--fs-2xs);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--sel-text, var(--muted-foreground));
+}
+/* The module number is set apart by weight and a gap, never by a separator
+   glyph — the pattern every reference index uses (Wildy Riftian, Unseen,
+   Obys all set "01 Name" bare). A middot in this slot reads as machine
+   filler, so the gap is a margin here, not a character in the string. */
+.key-mod-name b,
+.sky-panel .p-mod b {
+  font-weight: 700;
+  margin-right: 0.5em;
+}
+.sky-key button {
+  display: flex;
+  gap: 8px;
+  width: 100%;
+  padding: 4px 6px;
+  margin-left: -6px;
+  border: 0;
+  border-radius: var(--radius-xs);
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  font-size: var(--fs-sm);
+  text-align: left;
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
+}
+.sky-key button:hover {
+  background: var(--muted);
+}
+.key-n {
+  flex: 0 0 auto;
+  min-width: 18px;
+  font-family: var(--label);
+  font-size: var(--fs-2xs);
+  color: var(--sel-text, var(--muted-foreground));
+}
+.key-label {
+  flex: 1 1 auto;
+}
+
+/* ---------- alpha notice ---------- */
+
+/* The band under the hero: the course is open but not launched, and a reader
+   deciding whether to start needs that before the skills graph, not in a
+   footer.
+
+   Painted on all four sides, not a tinted edge, and the red is --primary
+   rather than a literal, so each theme re-solves it — high contrast turns the
+   band yellow-on-black rather than shipping a red nobody chose.
+
+   No status pill and no call-to-action button. Both were added here and both
+   were wrong: the pill is stock component-library furniture that says in a
+   label what the sentence already says in words, and the button only existed
+   by taking the link out of the sentence that asks for it. The paragraph is
+   the notice. Nothing is placed beside it. */
+section.alpha-note {
+  background: var(--primary);
+  color: var(--primary-foreground);
+}
+section.alpha-note > .wrap {
+  padding-top: 22px;
+  padding-bottom: 22px;
+}
+/* Centred in the band. Left-aligned it sat in the first two thirds and left
+   the rest of the red empty, which read as a column that had run out rather
+   than as a notice addressed to the room. The measure stays capped — centring
+   a full-bleed line would give every row a different start and make it hard
+   to find the next one. */
+section.alpha-note p {
+  margin: 0 auto;
+  max-width: 76ch;
+  text-align: center;
+  font-size: var(--fs-sm);
+  line-height: 1.7;
+}
+section.alpha-note a {
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-thickness: 1px;
+}
+section.alpha-note a:hover {
+  text-decoration-thickness: 2px;
+}
+
+/* ---------- motion ---------- */
+
+/* Two rules for the whole page, and both animate only `opacity` and
+   `translate` — compositor properties, so nothing here reads back layout or
+   repaints a frame. `translate` deliberately, not `transform`: it is its own
+   property, so a card can be lifted on hover by `transform` at the same time
+   without the two fighting over one declaration.
+
+   The scroll reveal is CSS, not an IntersectionObserver, and the default state
+   is VISIBLE — the animation only hides an element inside `@supports`, so a
+   browser without scroll-driven animation shows the page as it always was
+   rather than a column of invisible sections waiting on a script that may
+   never arrive. That failure mode is the reason this is not JavaScript. */
+
+@keyframes landing-rise {
+  from {
+    opacity: 0;
+    translate: 0 14px;
+  }
+  to {
+    opacity: 1;
+    translate: 0 0;
+  }
+}
+
+/* The hero is already on screen at load, so it plays on a clock rather than on
+   scroll: title, sentence, then the three ways in, each a beat behind the one
+   above. `backwards` so the first frame is the hidden one and nothing flashes
+   at full opacity before its delay elapses. */
+section.hero .wrap > * {
+  animation: landing-rise 0.55s cubic-bezier(0.22, 0.61, 0.36, 1) backwards;
+}
+section.hero .wrap > h1 {
+  animation-delay: 0.05s;
+}
+section.hero .wrap > .lede {
+  animation-delay: 0.15s;
+}
+section.hero .wrap > .ways {
+  animation-delay: 0.25s;
+}
+
+@supports (animation-timeline: view()) {
+  [data-reveal] {
+    animation: landing-rise 1s linear both;
+    animation-timeline: view();
+    /* Measured in `entry`, never `cover`, and finished well before the entry
+       completes. A range that ends on `cover` cannot be reached by the last
+       elements on the page — the document runs out of scroll first — and they
+       sit permanently part-faded; the four overview cards did exactly that at
+       0.93 opacity. Ending at `entry 70%` means anything shorter than the
+       viewport is fully resolved as soon as it is properly on screen, wherever
+       it sits in the document. */
+    animation-range: entry 0% entry 70%;
+  }
+}
+
+/* A card lifts a little under the pointer and sets its shadow down again on
+   release. `transform`, so it composes with the reveal's `translate`. */
+.overview-card {
+  transition:
+    transform 0.2s cubic-bezier(0.22, 0.61, 0.36, 1),
+    box-shadow 0.2s ease-out;
+}
+.overview-card:hover {
+  transform: translateY(-2px);
+}
+.overview-card:active {
+  transform: translateY(0);
+  transition-duration: 0.06s;
+}
+
+section.hero .ways .btn {
+  transition:
+    transform 0.18s cubic-bezier(0.22, 0.61, 0.36, 1),
+    box-shadow 0.18s ease-out;
+}
+section.hero .ways .btn:hover {
+  transform: translateY(-1px);
+}
+section.hero .ways .btn:active {
+  transform: translateY(0);
+  transition-duration: 0.06s;
+}
+
+/* Motion is decoration here — every one of these elements is readable and
+   reachable without it, so reduced motion turns all of it off rather than
+   softening it. */
+@media (prefers-reduced-motion: reduce) {
+  section.hero .wrap > *,
+  [data-reveal] {
+    animation: none;
+  }
+  .overview-card,
+  .overview-card:hover,
+  .overview-card:active,
+  section.hero .ways .btn,
+  section.hero .ways .btn:hover,
+  section.hero .ways .btn:active {
+    transform: none;
+    transition: none;
+  }
+}

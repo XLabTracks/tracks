@@ -22,6 +22,13 @@ export interface Track {
   /** How prerequisites gate access for this track's modules. */
   prerequisiteEnforcement: PrerequisiteEnforcement;
   estimatedHours?: number;
+  /**
+   * Lessons on this track may be read one authored page at a time. Boundaries
+   * are explicit <PageBreak/> markers in the MDX body; headings never create
+   * pages by themselves. LessonPartsReader adds paging and a whole-lesson
+   * toggle only when the author placed at least one boundary.
+   */
+  chunkedReading?: boolean;
 }
 
 export interface Module {
@@ -63,6 +70,53 @@ export interface Lesson {
    * routing, ordering, and progress are unaffected.
    */
   sectionItemId?: string;
+  /**
+   * Optional non-linking label for a sidebar section group. When this lesson
+   * has `sectionItemId` children, the sidebar renders the label as the group
+   * row and lists this lesson itself as the first linked subsection. This is
+   * for submodules whose opening item is substantive (for example 2.2.1), so
+   * they do not need a separate, nearly empty 2.2 introduction lesson merely
+   * to own the accordion.
+   */
+  sidebarGroupTitle?: string;
+  /**
+   * Optional lesson: labelled "Optional" wherever the module lists it, and
+   * excluded from progress requirements — module completion, prerequisite
+   * satisfaction, and module/track totals ignore it. Still completable: the
+   * item keeps its own checkmark. `isOptionalItem` is the single check that
+   * honours it (papers carry the same flag).
+   */
+  optional?: true;
+  /**
+   * Opt this lesson out of the track's chunked reading: render the whole body
+   * on one screen instead of one part at a time. For reference/reading-list
+   * lessons — 0.4 Strategic Foundations is a list of reading cards — where
+   * paging through sections is friction, not focus. Unlike `completion`,
+   * nothing else changes: the sidebar section nav, the works-cited footer and
+   * the prev/next lesson pager all stay.
+   */
+  unchunked?: true;
+  /**
+   * Render this lesson's long bullet runs as plain, roomy lists instead of
+   * the Verification reference-sheet slab cards (app-bridge.css paints any
+   * top-level list of four-plus items as a tinted card). The slab was built
+   * for the author's short reference runs; a page that is almost entirely
+   * long lists — 4.1.1's reproduced research-tips doc — turns wall-to-wall
+   * tint under it, and the course owner asked for "a bit more space and less
+   * maroon boxes" there (Outline-43). Presentation only, honoured by the
+   * `vt-plain-lists` class LessonContent adds and app-bridge.css reads;
+   * outside the Verification chrome the flag is inert.
+   */
+  plainLists?: true;
+  /**
+   * The track's closing page: it renders as one screen with a completion
+   * header instead of as a reading. A celebration split across a part strip
+   * is four screens of nothing, so this opts out of `chunkedReading` and out
+   * of the sidebar's section nav — the only such escape, and it is not a
+   * reading-length judgement: a page that congratulates is not a reading.
+   * At most one per track, and it belongs last in the last module.
+   */
+  completion?: boolean;
 }
 
 // ---------------------------------------------------------------------------
@@ -231,6 +285,26 @@ export interface Paper {
    */
   optional?: true;
   estimatedMinutes?: number;
+  /**
+   * Source section ids that explicitly start pages in the paper reader. The
+   * list is authored per paper after reviewing the source's own structure;
+   * without it the paper renders continuously. This avoids choosing h2/h3
+   * depth from document size at runtime, which can split two related treaty
+   * provisions merely because one happens to have a subheading.
+   */
+  pageSectionIds?: string[];
+  /**
+   * Opt out of collapsing the trailing apparatus.
+   *
+   * By default the References/Footnotes landmarks and any appendix sections
+   * after them fold into closed `<details>` blocks, which is right when the
+   * appendix really is apparatus. It is wrong when the appendix is the point:
+   * the treaty papers carry their agreement as Appendix A, so the default put
+   * all fifteen Articles — the text the course sends people to read — behind
+   * one closed toggle, and left them as a single unsplittable block for the
+   * section-by-section reader.
+   */
+  collapseTail?: false;
   /**
    * Sidebar-only nesting: id of another item in the same module (usually the
    * section's outline lesson) this item is a subsection of. The referenced
@@ -781,6 +855,14 @@ export interface WritingExercise extends ExerciseBase {
   rubric?: RubricCriterion[];
   minWords?: number;
   maxWords?: number;
+  /**
+   * The task is an invitation, not part of the course's required written
+   * work: a track's completion page counts only the required ones. Optional
+   * is a property of the task, so it is declared here — reading it back out
+   * of the prompt's opening words was one rewording away from silently
+   * making an optional essay compulsory.
+   */
+  optional?: true;
 }
 
 export type Exercise =

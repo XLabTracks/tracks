@@ -1,0 +1,58 @@
+{/* Unit 2.1, section 2.1.5. Transcribed from the author's WIP outline
+    ("WIP Verification Track Outline 11", tab "2.1.5 authorization"), not
+    paraphrased and not invented.
+
+    Note for whoever reconciles this section: outline 11 promotes authorization
+    to its own subsubmodule. The earlier draft specification for 2.1.4
+    (hardware-measuring-use.mdx) still carries a "2.1.4B Authorization,
+    licensing, and control" block covering the same ground. Nothing was deleted
+    when this file was added — see docs/verification/module-2-log.md. */}
+
+### 2.1.5 Authorization, licensing, and control
+
+A monitor produces evidence. A control mechanism changes what the machine can do. A complete policy still needs an authority that decides when control is justified.
+
+One proposed family of controls is offline licensing. The device performs only a bounded quantity or type of operation when it holds a valid authorization token. The token may encode a compute allowance, time window, location, workload condition, or other policy. A protected meter reduces the allowance as work occurs. A throttling or disabling mechanism responds when the allowance expires.
+
+A complete authorization chain is:
+
+> legal rule → license criteria → issuer → authenticated device and state → permitted operation → meter or expiration → suspension or revocation → appeal or override → renewal or termination
+
+#### Questions a policy designer must answer
+
+- Who issues the authorization: one government, both parties, a multiparty authority, or another institution?
+- Which key or combination of keys is sufficient?
+- Can a chip vendor or one state disable lawful activity unilaterally?
+- What happens when the authorization service is unavailable?
+- Does the system fail open or fail closed?
+- Can emergency suspension occur before full adjudication?
+- Who can reverse a mistaken suspension?
+- What happens after key compromise or erroneous revocation?
+- Can the mechanism reach existing hardware through firmware, or does it require redesigned chips?
+- How are exceptional uses handled during emergencies?
+- Who bears the cost of false denials, downtime, replacement, and appeal?
+- What prevents the control infrastructure from becoming an espionage, sabotage, or coercion channel?
+
+James Petrie’s 2024 firmware-based offline-licensing design is a useful proposal to analyze. It argues that some existing accelerators might support a minimal design through a firmware update if they already contain relevant security features. The proposed timeline is an author estimate, not deployment evidence. The paper also states that physical attacks remain a concern without additional hardware changes. No publicly documented, treaty-grade offline-licensing regime for frontier AI compute is operating as of August 2026.
+
+<Src>J. Petrie, *Near-Term Enforcement of AI Chip Export Controls Using a Firmware-Based Design for Offline Licensing* — [arXiv:2404.18308](https://arxiv.org/abs/2404.18308), 2024.</Src>
+
+#### Control authority is part of the mechanism
+
+A technically sound off-switch can be politically unacceptable when its control structure is vague. An international agreement might require:
+
+- Split or threshold authorization, so no single party controls the switch;
+- Narrow, auditable conditions for suspension;
+- Logged and reviewable decisions;
+- Emergency action followed by time-bounded review;
+- A safe recovery path after false positives;
+- Independent tests for denial-of-service and abuse;
+- A plan for lawful legacy hardware and nonparticipating vendors.
+
+The choice is not simply “control or no control.” It is a distribution of authority, risk, and failure.
+
+#### Activity: build the authorization chain
+
+Assemble an end-to-end system for the working rule from the following components: device identity, attested firmware, protected counter, training classifier, signed record, cross-device aggregation, license token, revocation list, regulator, international notification, inspection trigger, and independent power measurement.
+
+Then answer: Which component measures the prohibited activity? Which only authenticates another component? Who decides the threshold was crossed? Which component can stop the activity? What detects an unregistered cluster? Which controls fail together if the manufacturer’s root key is compromised?

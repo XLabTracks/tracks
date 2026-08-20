@@ -1,7 +1,8 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useMemo, useState, type CSSProperties } from "react";
 import { ArrowRight, Check } from "lucide-react";
+import { shuffleAnswerOptions } from "@/lib/shuffle";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -35,40 +36,48 @@ interface Answered {
 }
 
 /**
- * Semantic category encoding — the ONLY colour the original uses. Always paired
- * with a category label (kicker / legend), never colour alone.
- * steel (states) → hide (blue) · ind (industry) → exaggerate (amber) ·
- * inst (institutions) → comply (green), matching the source's steel/treaty/verify.
+ * The three actor categories, one brand token each.
+ *
+ * They used to borrow the game-payoff tokens — states→`--hide`,
+ * industry→`--exaggerate`, institutions→`--comply`. Those alias the same
+ * hues today, so it looked right, and it was still wrong twice over: a cast
+ * list is a categorical key and takes the module hues (`--mod-N-text`, built
+ * to read as type on every ground), and naming an actor category "hide" ties
+ * it to a payoff scale that a game demo is free to recolour out from under it.
+ *
+ * `--mod-N-text` and not `--mod-N`: one token colours the dot AND the word, so
+ * the hue sits on a coloured label rather than on a bare dot beside grey text.
+ * The hex is the day value mirrored from theme.css, for the rare render with
+ * no theme attached — same contract as interactive-map and mechanism-sort.
+ *
+ * Hue is never the encoding. Every appearance carries the category's own
+ * words, which is what high contrast relies on: it paints all five module
+ * tokens white on purpose, so there the label is the whole key.
  */
-const CAT_STYLE: Record<
-  ActorCat,
-  { hl: string; hlSeen: string; text: string; border: string; dot: string }
-> = {
-  steel: {
-    hl: "bg-hide/10 border-hide/50 hover:bg-hide/20",
-    hlSeen: "bg-hide/10 border-hide/60",
-    text: "text-hide",
-    border: "border-hide",
-    dot: "bg-hide",
-  },
-  ind: {
-    hl: "bg-exaggerate/10 border-exaggerate/50 hover:bg-exaggerate/20",
-    hlSeen: "bg-exaggerate/10 border-exaggerate/60",
-    text: "text-exaggerate",
-    border: "border-exaggerate",
-    dot: "bg-exaggerate",
-  },
-  inst: {
-    hl: "bg-comply/10 border-comply/50 hover:bg-comply/20",
-    hlSeen: "bg-comply/10 border-comply/60",
-    text: "text-comply",
-    border: "border-comply",
-    dot: "bg-comply",
-  },
+const CAT_TOKEN: Record<ActorCat, string> = {
+  steel: "var(--mod-4-text, #3d75b1)", // Cobalt
+  ind: "var(--mod-2-text, #946b00)", // Lunar Yellow
+  inst: "var(--mod-3-text, #555e07)", // Khaki
 };
 
+/** The one token, plus the tint and edge a highlighted phrase derives from it. */
+function catVars(cat: ActorCat): CSSProperties {
+  const c = CAT_TOKEN[cat];
+  return {
+    "--cat": c,
+    "--cat-tint": `color-mix(in oklch, ${c} 12%, transparent)`,
+    "--cat-tint-hi": `color-mix(in oklch, ${c} 22%, transparent)`,
+    "--cat-edge": `color-mix(in oklch, ${c} 55%, transparent)`,
+  } as CSSProperties;
+}
+
+/** Phrase highlight in learn mode. Reads the vars `catVars` puts on the node. */
+const CAT_HL =
+  "bg-[var(--cat-tint)] border-[var(--cat-edge)] hover:bg-[var(--cat-tint-hi)]";
+
 /**
- * "Who's in the Treaty?" — the Reykjavik Protocol re-read as a cast list.
+ * "Who's in the Treaty?" — the MIRI draft agreement (arXiv:2511.10783)
+ * re-read as a cast list.
  * Learn mode maps each highlighted phrase to an actor dossier; Quiz mode asks
  * which real-world actors each phrase puts in the room, scored. Bridged: fires
  * onComplete once every phrase has been graded in quiz mode.
@@ -167,7 +176,7 @@ export function ProtocolActors({ onComplete }: VerificationWidgetProps) {
                 setCurrent(null);
               }}
               className={cn(
-                "rounded-full border px-4 py-1.5 font-mono text-[11px] tracking-[0.14em] uppercase transition-colors",
+                "rounded-full border px-4 py-1.5 eyebrow transition-colors",
                 mode === m
                   ? "border-primary bg-primary text-primary-foreground"
                   : "border-border text-muted-foreground hover:bg-muted hover:text-foreground",
@@ -178,21 +187,20 @@ export function ProtocolActors({ onComplete }: VerificationWidgetProps) {
           ))}
         </div>
 
-        {/* legend — learn mode only */}
+        {/* legend — learn mode only. The label written in its category's own
+            colour: no swatch riding beside grey text — the word itself is the
+            pairing the hue needs. */}
         {mode === "learn" && (
           <div className="mt-3 flex flex-wrap gap-x-4 gap-y-1.5">
+            {/* The hue is on the word. A coloured dot beside a grey label
+                makes the reader carry the mapping themselves, and it is the
+                one thing this key exists to hand them. */}
             {C.legend.map((l) => (
               <span
                 key={l.cat}
-                className="text-muted-foreground inline-flex items-center gap-1.5 text-xs"
+                style={catVars(l.cat)}
+                className="text-xs font-medium text-[var(--cat)]"
               >
-                <span
-                  className={cn(
-                    "size-3 rounded-sm",
-                    CAT_STYLE[l.cat].dot,
-                  )}
-                  aria-hidden
-                />
                 {l.label}
               </span>
             ))}
@@ -204,7 +212,7 @@ export function ProtocolActors({ onComplete }: VerificationWidgetProps) {
       <div className="border-border bg-card shadow-soft overflow-hidden rounded-xl border">
       {/* progress rail */}
       <div className="border-border/70 bg-muted/30 flex items-center gap-3 border-b px-5 py-2.5">
-        <span className="text-muted-foreground font-mono text-[11px] tracking-[0.1em] whitespace-nowrap uppercase">
+        <span className="text-muted-foreground eyebrow whitespace-nowrap">
           {mode === "learn"
             ? `${seen.size} / ${total} actors met`
             : `${quizTotals.count} / ${total} answered`}
@@ -212,7 +220,7 @@ export function ProtocolActors({ onComplete }: VerificationWidgetProps) {
         <Progress value={progressPct} className="h-1.5 flex-1" />
         {mode === "quiz" && quizTotals.tot > 0 && (
           <span
-            className="text-comply font-mono text-[11px] tracking-[0.1em] whitespace-nowrap uppercase"
+            className="text-comply eyebrow whitespace-nowrap"
             aria-live="polite"
           >
             {quizTotals.right} / {quizTotals.tot} calls right
@@ -224,7 +232,7 @@ export function ProtocolActors({ onComplete }: VerificationWidgetProps) {
       <div className="p-5">
         <article className="border-border bg-muted/20 rounded-lg border p-5 sm:p-6">
           <div className="mb-4 text-center">
-            <p className="text-muted-foreground font-mono text-[11px] tracking-[0.14em] uppercase">
+            <p className="text-muted-foreground eyebrow">
               {C.docEyebrow}
             </p>
             <h4 className="mt-1.5 text-lg font-semibold tracking-tight">
@@ -239,7 +247,7 @@ export function ProtocolActors({ onComplete }: VerificationWidgetProps) {
           <div className="space-y-5 text-[15px] leading-relaxed">
             {DOC.map((art) => (
               <section key={art.heading}>
-                <h5 className="text-muted-foreground font-mono text-[11px] tracking-[0.18em] uppercase">
+                <h5 className="text-muted-foreground eyebrow">
                   {art.heading}
                 </h5>
                 <p className="mt-1.5">
@@ -251,7 +259,7 @@ export function ProtocolActors({ onComplete }: VerificationWidgetProps) {
                       return (
                         <span
                           key={i}
-                          className="text-muted-foreground font-mono text-xs"
+                          className="text-muted-foreground text-xs"
                         >
                           {run.text}{" "}
                         </span>
@@ -259,7 +267,6 @@ export function ProtocolActors({ onComplete }: VerificationWidgetProps) {
                     }
                     // highlight
                     const cat = ACTORS[run.a].cat;
-                    const style = CAT_STYLE[cat];
                     const isSeen = mode === "learn" && seen.has(run.a);
                     const isAnswered = mode === "quiz" && !!answered[run.a];
                     const active = current === run.a;
@@ -269,6 +276,7 @@ export function ProtocolActors({ onComplete }: VerificationWidgetProps) {
                         type="button"
                         onClick={() => openItem(run.a)}
                         aria-pressed={active}
+                        style={catVars(cat)}
                         aria-label={`${run.text} — ${
                           mode === "learn"
                             ? "meet the actors"
@@ -276,9 +284,12 @@ export function ProtocolActors({ onComplete }: VerificationWidgetProps) {
                         }`}
                         className={cn(
                           "mx-[1px] inline rounded-sm border-b-2 px-1 text-left transition-colors focus-visible:ring-2 focus-visible:ring-[var(--ring)] focus-visible:outline-none",
+                          // Learn mode colours by category; quiz mode has no
+                          // category to show yet — that is the question — so
+                          // it stays on one neutral "unanswered" tint.
                           mode === "learn"
-                            ? style.hl
-                            : "bg-exaggerate/10 border-exaggerate/50 hover:bg-exaggerate/20",
+                            ? CAT_HL
+                            : "bg-muted border-border hover:bg-muted/70",
                           isAnswered &&
                             "bg-comply/10 border-comply/60",
                           active && "ring-foreground ring-2",
@@ -289,7 +300,9 @@ export function ProtocolActors({ onComplete }: VerificationWidgetProps) {
                           <Check
                             className={cn(
                               "ml-0.5 inline size-3 align-text-top",
-                              isAnswered ? "text-comply" : style.text,
+                              // Answered is a status (graded), so it keeps the
+                              // status token; seen is the category's own hue.
+                              isAnswered ? "text-comply" : "text-[var(--cat)]",
                             )}
                             aria-hidden
                           />
@@ -306,7 +319,7 @@ export function ProtocolActors({ onComplete }: VerificationWidgetProps) {
         {/* done cards */}
         {mode === "learn" && learnDone && (
           <div className="border-comply/50 bg-comply/5 mt-5 rounded-lg border p-5 text-center">
-            <p className="text-comply font-mono text-[11px] tracking-[0.14em] uppercase">
+            <p className="text-comply eyebrow">
               {C.doneLearnEyebrow}
             </p>
             <h4 className="mt-1.5 text-lg font-semibold">
@@ -326,7 +339,7 @@ export function ProtocolActors({ onComplete }: VerificationWidgetProps) {
         )}
         {mode === "quiz" && quizDone && (
           <div className="border-comply/50 bg-comply/5 mt-5 rounded-lg border p-5 text-center">
-            <p className="text-comply font-mono text-[11px] tracking-[0.14em] uppercase">
+            <p className="text-comply eyebrow">
               {C.doneQuizEyebrow}
             </p>
             <h4 className="mt-1.5 text-lg font-semibold">{C.doneQuizTitle}</h4>
@@ -334,7 +347,7 @@ export function ProtocolActors({ onComplete }: VerificationWidgetProps) {
               {C.doneQuizBody}
             </p>
             <p
-              className="text-foreground mt-2 font-mono text-sm"
+              className="text-foreground mt-2 text-sm"
               aria-live="polite"
             >
               Final score: {quizTotals.right} / {quizTotals.tot} actor calls
@@ -398,15 +411,18 @@ function DrawerBody({
 }) {
   const actor = ACTORS[id];
   const cat = actor.cat;
-  const style = CAT_STYLE[cat];
 
   return (
     <>
       <SheetHeader className="border-border/70 border-b px-6 pt-6 pb-4">
+        {/* The kicker IS the category, so it takes the category's hue — the
+            same token as its dot in the legend. In quiz mode the kicker is
+            the quiz's own label, not a category, so it stays neutral. */}
         <p
+          style={mode === "learn" ? catVars(cat) : undefined}
           className={cn(
-            "font-mono text-[10.5px] tracking-[0.2em] uppercase",
-            mode === "learn" ? style.text : "text-exaggerate",
+            "text-4xs tracking-[0.2em] uppercase",
+            mode === "learn" ? "text-[var(--cat)]" : "text-muted-foreground",
           )}
         >
           {mode === "learn" ? CATS[cat] : PROTOCOL_ACTORS_COPY.quizKicker}
@@ -432,7 +448,7 @@ function DrawerBody({
             type="button"
             onClick={onPrev}
             disabled={!hasPrev}
-            className="text-primary hover:text-foreground font-mono text-[10.5px] tracking-[0.12em] uppercase disabled:cursor-default disabled:opacity-40"
+            className="text-brand-ink hover:text-foreground text-4xs tracking-[0.12em] uppercase disabled:cursor-default disabled:opacity-40"
           >
             {PROTOCOL_ACTORS_COPY.prevBtn}
           </button>
@@ -440,7 +456,7 @@ function DrawerBody({
             type="button"
             onClick={onNext}
             disabled={!hasNext}
-            className="text-primary hover:text-foreground font-mono text-[10.5px] tracking-[0.12em] uppercase disabled:cursor-default disabled:opacity-40"
+            className="text-brand-ink hover:text-foreground text-4xs tracking-[0.12em] uppercase disabled:cursor-default disabled:opacity-40"
           >
             {PROTOCOL_ACTORS_COPY.nextBtn}
           </button>
@@ -466,8 +482,8 @@ function LearnBody({ id }: { id: string }) {
           >
             <p
               className={cn(
-                "font-mono text-[10px] tracking-[0.18em] uppercase",
-                isWhy ? "text-primary" : "text-muted-foreground",
+                "text-4xs tracking-[0.18em] uppercase",
+                isWhy ? "text-brand-ink" : "text-muted-foreground",
               )}
             >
               {label}
@@ -494,6 +510,20 @@ function QuizBody({
     () => new Set(answered?.picked ?? []),
   );
   const graded = answered !== null;
+
+  /**
+   * Shuffled for display only. Authored, every one of these fifteen questions
+   * had a correct option sitting first, which taught the phrase-quiz more
+   * about our habits than about the treaty.
+   *
+   * `picks` keeps holding AUTHORED indices — it is what `answered.picked`
+   * restores from, so a learner returning to a graded phrase must find the
+   * same options ticked. Everything the grader touches is `from`.
+   */
+  const shown = useMemo(
+    () => shuffleAnswerOptions(`protocol-actors:${id}`, quiz.opts, (o) => o.text),
+    [id, quiz],
+  );
 
   function toggle(i: number) {
     if (graded) return;
@@ -529,8 +559,8 @@ function QuizBody({
       )}
 
       <div className="flex flex-col gap-2">
-        {quiz.opts.map((o, i) => {
-          const chose = picks.has(i);
+        {shown.map(({ item: o, from }) => {
+          const chose = picks.has(from);
           // grading classes
           let stateCls = "";
           let tag = "";
@@ -557,7 +587,7 @@ function QuizBody({
 
           return (
             <label
-              key={i}
+              key={from}
               className={cn(
                 "flex gap-3 rounded-lg border p-3 text-sm leading-snug transition-colors",
                 graded
@@ -571,7 +601,7 @@ function QuizBody({
               <Checkbox
                 checked={chose}
                 disabled={graded}
-                onCheckedChange={() => toggle(i)}
+                onCheckedChange={() => toggle(from)}
                 className="mt-0.5 shrink-0"
                 aria-label={o.text}
               />
@@ -581,7 +611,7 @@ function QuizBody({
                   <span className="text-muted-foreground mt-1 block text-xs leading-snug">
                     <b
                       className={cn(
-                        "mr-1 font-mono text-[10px] tracking-[0.12em] uppercase",
+                        "mr-1 text-4xs tracking-[0.12em] uppercase",
                         tagCls,
                       )}
                     >
@@ -604,7 +634,7 @@ function QuizBody({
         <div className="mt-4 space-y-3" aria-live="polite">
           <p
             className={cn(
-              "font-mono text-xs tracking-[0.1em] uppercase",
+              "text-xs tracking-[0.1em] uppercase",
               verdict && verdict.right === verdict.total
                 ? "text-comply"
                 : "text-exaggerate",
@@ -613,7 +643,7 @@ function QuizBody({
             {verdict?.right} / {verdict?.total} calls right
           </p>
           <div className="border-border bg-muted/40 rounded-lg border p-3.5">
-            <p className="text-primary font-mono text-[10px] tracking-[0.18em] uppercase">
+            <p className="text-brand-ink text-4xs tracking-[0.18em] uppercase">
               {PROTOCOL_ACTORS_COPY.whyLabel}
             </p>
             <p className="mt-1 text-sm leading-relaxed">{quiz.why}</p>

@@ -14,6 +14,7 @@ import {
 } from "@/lib/grader/grading-key";
 
 const PROVIDER = "openrouter";
+const KEY_CHECK_TIMEOUT_MS = 10_000;
 
 export type SaveKeyResult =
   | { ok: true; last4: string; warning?: string }
@@ -56,15 +57,20 @@ async function checkOpenRouterKey(rawKey: string): Promise<KeyCheck> {
     };
   }
   let response: Response;
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), KEY_CHECK_TIMEOUT_MS);
   try {
     response = await fetch("https://openrouter.ai/api/v1/key", {
       headers: { Authorization: `Bearer ${key}` },
+      signal: controller.signal,
     });
   } catch {
     return {
       ok: false,
       error: "Could not reach OpenRouter to verify the key. Try again.",
     };
+  } finally {
+    clearTimeout(timer);
   }
   if (response.status === 401 || response.status === 403) {
     return { ok: false, error: "OpenRouter rejected that key." };

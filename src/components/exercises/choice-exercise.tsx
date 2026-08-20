@@ -17,7 +17,7 @@ export function ChoiceExerciseCard({
 }) {
   return (
     <aside className="not-prose border-border bg-card shadow-soft my-6 rounded-xl border p-5">
-      <p className="text-muted-foreground mb-1 text-xs font-medium tracking-wide uppercase">
+      <p className="text-muted-foreground mb-1.5 text-xs font-medium tracking-wide uppercase">
         {EXERCISE_TYPE_LABELS[exercise.type]}
       </p>
       <p className="font-medium"><MathText text={exercise.prompt} /></p>
@@ -108,7 +108,7 @@ export function ChoiceExerciseBody({
                   {graded && isCorrect && <Check className="size-3" aria-hidden />}
                   {graded && !isCorrect && isSelected && <X className="size-3" aria-hidden />}
                 </span>
-                <span className={cn(exercise.monospaceOptions && "font-mono text-sm whitespace-pre-wrap")}>
+                <span className={cn(exercise.monospaceOptions && "text-sm whitespace-pre-wrap")}>
                   {exercise.monospaceOptions ? option.label : <MathText text={option.label} />}
                 </span>
               </button>
@@ -121,7 +121,7 @@ export function ChoiceExerciseBody({
         <div
           className={cn(
             "mt-4 rounded-lg p-3 text-sm",
-            result.correct ? "bg-emerald-500/10 text-emerald-700 dark:text-[#7FA682]" : "bg-muted",
+            result.correct ? "bg-emerald-500/10 text-met" : "bg-muted",
           )}
         >
           <p className="font-medium">{result.correct ? "Correct" : "Not quite"}</p>

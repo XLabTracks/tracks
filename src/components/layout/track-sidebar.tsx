@@ -3,7 +3,15 @@
 import { useLayoutEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { CheckCircle2, Circle, FileText, ListTree, Lock } from "lucide-react";
+import {
+  CheckCircle2,
+  ChevronRight,
+  Circle,
+  FileText,
+  Flag,
+  ListTree,
+  Lock,
+} from "lucide-react";
 import {
   Accordion,
   AccordionContent,
@@ -18,8 +26,10 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
+import { OptionalMarker } from "@/components/content/optional-tag";
 import type { SidebarOutline, SidebarOutlineItem } from "@/lib/content";
 import type { PaperNavItem } from "@/lib/papers/paper-nav";
+import { isVerificationRoute } from "@/components/verification/site-chrome";
 import { cn } from "@/lib/utils";
 import { navItemClass, PaperSectionNav } from "./paper-section-nav";
 
@@ -32,21 +42,24 @@ export interface TrackSidebarProps {
   lockedModuleSlugs?: string[];
   /**
    * Per-item section navigation (keyed by item id — papers and sectioned
-   * lessons), docked below the module nav on that item's page.
+   * lessons), nested under that item's row while it is the one being read.
    */
   itemNavs?: Record<string, PaperNavItem[]>;
 }
 
 /**
- * The item the current page shows, with its section nav — drives the docked
- * "In this paper" / "In this lesson" panel. Resolved from props (the outline
- * projection carries the ids and slugs), never from content accessors: this
- * is a client component.
+ * The item the current page shows, with its section nav — the headings that
+ * nest under its row. Resolved from the slim outline projection, never from
+ * content accessors: this is a client component.
  */
 function activeItemNavOf(
   { outline, itemNavs = {} }: TrackSidebarProps,
-  pathname: string,
-): { kind: SidebarOutlineItem["kind"]; id: string; nav: PaperNavItem[] } | null {
+  pathname: string
+): {
+  kind: SidebarOutlineItem["kind"];
+  id: string;
+  nav: PaperNavItem[];
+} | null {
   const base = `/tracks/${outline.track.slug}`;
   for (const { module, items } of outline.modules) {
     for (const item of items) {
@@ -75,15 +88,15 @@ function SidebarNav({
   const locked = new Set(lockedModuleSlugs);
   const activeItemNav = activeItemNavOf(
     { outline, completedContentIds, lockedModuleSlugs, itemNavs },
-    pathname,
+    pathname
   );
 
   const [open, setOpen] = useState<string[]>(() =>
     activeModuleSlug
       ? [activeModuleSlug]
       : outline.modules[0]
-        ? [outline.modules[0].module.slug]
-        : [],
+      ? [outline.modules[0].module.slug]
+      : []
   );
   // Ensure the navigated-to module's accordion is open — adjust during render
   // when the active slug changes (React's alternative to a state-syncing effect).
@@ -95,48 +108,75 @@ function SidebarNav({
     }
   }
 
-  // Nav ↔ section-panel split. null = automatic (panel content-sized up to
-  // 55%); a user-chosen share pins the panel's height. The boundary handle
-  // tracks the pointer absolutely (it sits ON the boundary), so drags don't
-  // need delta math.
-  const rootRef = useRef<HTMLDivElement>(null);
-  const {
-    value: split,
-    setValue: setSplit,
-    persist: persistSplit,
-  } = usePersistedDimension(SIDEBAR_SPLIT_KEY, clampSplit);
-  const splitDrag = useRef<{ pointerId: number; moved: boolean } | null>(null);
-  const [splitDragging, setSplitDragging] = useState(false);
-  const splitFromPointer = (clientY: number) => {
-    const rect = rootRef.current?.getBoundingClientRect();
-    if (!rect || rect.height === 0) return null;
-    return clampSplit(((rect.bottom - clientY) / rect.height) * 100);
-  };
+  // Subsection groups collapse Google-Docs-style; the group being read must
+  // never hide its rows, so the active item's group is forced open the same
+  // adjust-during-render way as the module accordion above.
+  const activeSectionKey = activeItemSectionKeyOf(outline, base, pathname);
+  const [openSections, setOpenSections] = useState<string[]>(() =>
+    activeSectionKey !== undefined ? [activeSectionKey] : []
+  );
+  const [prevActiveSection, setPrevActiveSection] = useState(activeSectionKey);
+  if (activeSectionKey !== prevActiveSection) {
+    setPrevActiveSection(activeSectionKey);
+    if (
+      activeSectionKey !== undefined &&
+      !openSections.includes(activeSectionKey)
+    ) {
+      setOpenSections([...openSections, activeSectionKey]);
+    }
+  }
+  const toggleSection = (key: string) =>
+    setOpenSections(
+      openSections.includes(key)
+        ? openSections.filter((k) => k !== key)
+        : [...openSections, key]
+    );
 
   return (
-    <div ref={rootRef} className="flex h-full flex-col">
-      {/* Module navigation — scrolls on its own so the paper panel below
-          keeps its share of the viewport regardless of how long this gets. */}
+    <div className="flex h-full flex-col">
+      {/* One scroller for the whole outline. The current item's own headings
+          nest under its row rather than docking in a second pane below: the
+          track's contents and the page's contents are one list you scroll
+          through, so reaching the headings means scrolling past the outline. */}
       <nav
         aria-label={`${outline.track.title} contents`}
         // pr-1.5 keeps classic (non-overlay) scrollbars clear of the resize
         // handle overlaying the sidebar's right edge.
-        className="min-h-0 flex-1 overflow-y-auto pr-1.5"
+        //
+        // select-none on the whole tree: these rows are an index, not the
+        // reading. A drag that starts on a lesson title and ends in the body
+        // otherwise leaves a selection smear across the sidebar, which is
+        // always a mis-drag — nobody copies a nav row. The static course
+        // applies the same rule to its rail.
+        className="min-h-0 flex-1 overflow-y-auto pr-1.5 select-none"
       >
         <div className="px-3 py-4">
-          <p className="text-muted-foreground px-2 text-xs font-medium tracking-wide uppercase">
-            {outline.track.shortTitle ?? "Track"}
-          </p>
-          <Link
-            href={base}
-            onClick={onNavigate}
-            className={cn(
-              "hover:bg-muted mt-1 block rounded-lg px-2 py-1.5 text-sm font-semibold transition-colors",
-              pathname === base && "bg-muted",
+          {/* An eyebrow only when it says something the title below does not.
+              "Verification" over "Verification", or a bare "Track", is a
+              kicker filling a slot — the heading already carries it. */}
+          {outline.track.shortTitle &&
+            outline.track.shortTitle !== outline.track.title && (
+              <p className="text-muted-foreground px-2 text-xs font-medium tracking-wide uppercase">
+                {outline.track.shortTitle}
+              </p>
             )}
-          >
-            {outline.track.title}
-          </Link>
+          {/* Not on Verification: its header is the track's own wordmark, so a
+              "Verification" row directly under "Verification @ XLab" is the
+              same word twice. Every other track wears the app header, which
+              says "Tracks @ XLab" and never names the track, so there the row
+              is the only place the sidebar says what you are reading. */}
+          {!isVerificationRoute(pathname) && (
+            <Link
+              href={base}
+              onClick={onNavigate}
+              className={cn(
+                "hover:bg-muted mt-1 block rounded-lg px-2 py-1.5 text-sm font-semibold transition-colors",
+                pathname === base && "bg-muted"
+              )}
+            >
+              {outline.track.title}
+            </Link>
+          )}
         </div>
         <Accordion
           type="multiple"
@@ -148,9 +188,13 @@ function SidebarNav({
             const isLocked = locked.has(module.slug);
             const assessmentHref = `${base}/${module.slug}/assessment`;
             return (
-              <AccordionItem key={module.id} value={module.slug} className="border-none">
-                <AccordionTrigger className="hover:bg-muted [&[data-state=open]]:bg-muted/50 rounded-lg px-2 py-2 text-sm hover:no-underline">
-                  <span className="flex items-center gap-2 text-left">
+              <AccordionItem
+                key={module.id}
+                value={module.slug}
+                className="border-none"
+              >
+                <AccordionTrigger className="hover:bg-muted [&[data-state=open]]:bg-muted/50 min-h-11 rounded-lg px-2 py-2 text-sm hover:no-underline lg:min-h-0">
+                  <span className="flex items-center gap-2.5 text-left">
                     {isLocked && (
                       <>
                         <Lock
@@ -160,20 +204,31 @@ function SidebarNav({
                         <span className="sr-only">Locked: </span>
                       </>
                     )}
-                    <span className="line-clamp-2">
-                      {module.order}. {module.title}
+                    {/* The module numeral is the display element here — the
+                        blackest weight the variable font carries, sized past
+                        the title so it reads before the words do. */}
+                    <span
+                      className="min-w-4 shrink-0 text-center text-xl leading-none font-black tabular-nums"
+                      aria-hidden
+                    >
+                      {module.order}
                     </span>
+                    <span className="sr-only">Module {module.order}: </span>
+                    <span className="line-clamp-3">{module.title}</span>
                   </span>
                 </AccordionTrigger>
                 <AccordionContent className="pb-1">
                   <ul className="border-border/70 ml-3 space-y-0.5 border-l pl-2">
-                    {items.map((item) => (
-                      <SidebarItemRow
-                        key={item.id}
-                        item={item}
-                        href={`${base}/${module.slug}/${item.slug}`}
+                    {groupModuleItems(items).map((group) => (
+                      <SidebarItemGroup
+                        key={itemKey(group.item)}
+                        group={group}
+                        moduleBase={`${base}/${module.slug}`}
                         pathname={pathname}
                         completed={completed}
+                        activeItemNav={activeItemNav}
+                        expanded={openSections.includes(itemKey(group.item))}
+                        onToggle={() => toggleSection(itemKey(group.item))}
                         onNavigate={onNavigate}
                       />
                     ))}
@@ -182,9 +237,12 @@ function SidebarNav({
                         <Link
                           href={assessmentHref}
                           onClick={onNavigate}
-                          className={navItemClass(pathname === assessmentHref)}
+                          className={cn(
+                            navItemClass(pathname === assessmentHref),
+                            ITEM_ROW_CLASS
+                          )}
                         >
-                          <FileText className="mt-0.5 size-3.5 shrink-0" aria-hidden />
+                          <FileText className={MARKER_CLASS} aria-hidden />
                           <span>Assessment</span>
                         </Link>
                       </li>
@@ -196,104 +254,249 @@ function SidebarNav({
           })}
         </Accordion>
       </nav>
-
-      {/* Docked section navigation for the paper or sectioned lesson being
-          read: always visible on its page, with its own scroll + scroll-spy
-          follow. A horizontal splitter above it adjusts its share of the
-          sidebar (drag, arrow keys, double-click to reset). */}
-      {activeItemNav && (
-        <>
-          <div
-            role="separator"
-            aria-orientation="horizontal"
-            aria-label="Resize section panel"
-            aria-valuemin={SPLIT_MIN}
-            aria-valuemax={SPLIT_MAX}
-            aria-valuenow={Math.round(split ?? SPLIT_AUTO)}
-            tabIndex={0}
-            title="Drag to resize · double-click to reset"
-            onPointerDown={(e) => {
-              if (e.button !== 0 || splitDrag.current) return;
-              e.preventDefault();
-              splitDrag.current = { pointerId: e.pointerId, moved: false };
-              e.currentTarget.setPointerCapture(e.pointerId);
-              setSplitDragging(true);
-            }}
-            onPointerMove={(e) => {
-              const d = splitDrag.current;
-              if (!d || e.pointerId !== d.pointerId) return;
-              const next = splitFromPointer(e.clientY);
-              if (next === null) return;
-              d.moved = true;
-              setSplit(next);
-            }}
-            onPointerUp={(e) => {
-              const d = splitDrag.current;
-              if (d?.pointerId !== e.pointerId) return;
-              splitDrag.current = null;
-              setSplitDragging(false);
-              // A click with no movement must not convert automatic → fixed.
-              if (d.moved) {
-                const next = splitFromPointer(e.clientY);
-                if (next !== null) persistSplit(next);
-              }
-            }}
-            onPointerCancel={(e) => {
-              if (splitDrag.current?.pointerId !== e.pointerId) return;
-              splitDrag.current = null;
-              setSplitDragging(false);
-            }}
-            onDoubleClick={() => persistSplit(null)}
-            onKeyDown={(e) => {
-              const step = (delta: number) =>
-                persistSplit(clampSplit((split ?? SPLIT_AUTO) + delta));
-              if (e.key === "ArrowUp") step(SPLIT_KEYBOARD_STEP);
-              else if (e.key === "ArrowDown") step(-SPLIT_KEYBOARD_STEP);
-              else if (e.key === "Home") persistSplit(SPLIT_MIN);
-              else if (e.key === "End") persistSplit(SPLIT_MAX);
-              else return;
-              e.preventDefault();
-            }}
-            className={cn(
-              "relative z-10 h-1.5 shrink-0 cursor-row-resize touch-none outline-none",
-              "hover:bg-border focus-visible:bg-ring/50 transition-colors",
-              splitDragging && "bg-ring/50",
-            )}
-          />
-          <div
-            className="border-border bg-card/60 flex shrink-0 flex-col border-t"
-            style={
-              split !== null ? { height: `${split}%` } : { maxHeight: "55%" }
-            }
-          >
-            <p className="text-muted-foreground shrink-0 truncate px-4 pt-3 pb-1.5 text-xs font-medium tracking-wide uppercase">
-              {activeItemNav.kind === "paper" ? "In this paper" : "In this lesson"}
-            </p>
-            <PaperSectionNav
-              items={activeItemNav.nav}
-              pathname={pathname}
-              completedContentIds={completed}
-              // Papers only: keys the reading-gate open state that unlocks
-              // rows whose targets sit behind still-closed gates.
-              paperId={activeItemNav.kind === "paper" ? activeItemNav.id : undefined}
-              onNavigate={onNavigate}
-            />
-          </div>
-        </>
-      )}
     </div>
   );
 }
 
-/**
- * An item is "done" only when all its progress units are — for a paper that
- * includes its inserted lessons, matching module/track totals. (The unit ids
- * are precomputed server-side into the projection: importing the content
- * accessors would pull the graph client-side.)
- */
+function itemKey(item: SidebarOutlineItem): string {
+  return item.id;
+}
+function itemSectionItemId(item: SidebarOutlineItem): string | undefined {
+  return item.sectionItemId;
+}
+function itemSlug(item: SidebarOutlineItem): string {
+  return item.slug;
+}
+
+/** The active item's heading nav, as resolved by activeItemNavOf. */
+type ActiveItemNav = {
+  kind: SidebarOutlineItem["kind"];
+  id: string;
+  nav: PaperNavItem[];
+};
+
+interface ItemGroup {
+  item: SidebarOutlineItem;
+  children: SidebarOutlineItem[];
+}
+
+/** One projected item's own progress units. */
 function itemDone(item: SidebarOutlineItem, completed: Set<string>): boolean {
   if (!completed.has(item.id)) return false;
   return (item.insertedLessonIds ?? []).every((id) => completed.has(id));
+}
+
+/** A collapsed section head answers for itself and all rows behind it. */
+function groupDone(group: ItemGroup, completed: Set<string>): boolean {
+  return (
+    itemDone(group.item, completed) &&
+    group.children.every((child) => itemDone(child, completed))
+  );
+}
+
+/* A top-level sidebar row with the subsection rows that declared it as their
+   section (`sectionItemId`). Content rules guarantee a section head precedes
+   its subsections and is itself top-level; an item pointing anywhere else
+   renders as its own top-level row rather than vanishing. ItemGroup and the
+   two done-rules live in @/lib/content/item-done — pure, and tested. */
+
+function groupModuleItems(items: SidebarOutlineItem[]): ItemGroup[] {
+  const groups: ItemGroup[] = [];
+  const byKey = new Map<string, ItemGroup>();
+  for (const item of items) {
+    const sectionKey = itemSectionItemId(item);
+    const section =
+      sectionKey !== undefined ? byKey.get(sectionKey) : undefined;
+    if (section) {
+      section.children.push(item);
+    } else {
+      const group: ItemGroup = { item, children: [] };
+      groups.push(group);
+      byKey.set(itemKey(item), group);
+    }
+  }
+  return groups;
+}
+
+/** The group (section head's key) the current page belongs to, if any — the
+ *  one collapse state must never be allowed to hide. Reading a subsection
+ *  names its head; reading a head names itself, so arriving on it reveals
+ *  the subsections it would otherwise be hiding. */
+function activeItemSectionKeyOf(
+  outline: SidebarOutline,
+  base: string,
+  pathname: string
+): string | undefined {
+  for (const { module, items } of outline.modules) {
+    for (const item of items) {
+      if (pathname !== `${base}/${module.slug}/${itemSlug(item)}`) continue;
+      const sectionKey = itemSectionItemId(item);
+      if (sectionKey !== undefined) return sectionKey;
+      const key = itemKey(item);
+      return items.some((other) => itemSectionItemId(other) === key)
+        ? key
+        : undefined;
+    }
+  }
+  return undefined;
+}
+
+/**
+ * A section head with subsections renders as a Google-Docs-style sub-tab
+ * group: the row itself stays a plain link, and a separate caret beside it
+ * (a link must not contain a button) collapses the children. Collapsed is
+ * the default; the count says what the caret is hiding.
+ */
+function SidebarItemGroup({
+  group,
+  moduleBase,
+  pathname,
+  completed,
+  activeItemNav,
+  expanded,
+  onToggle,
+  onNavigate,
+}: {
+  group: ItemGroup;
+  moduleBase: string;
+  pathname: string;
+  completed: Set<string>;
+  activeItemNav: ActiveItemNav | null;
+  expanded: boolean;
+  onToggle: () => void;
+  onNavigate?: () => void;
+}) {
+  const { item, children } = group;
+  const href = `${moduleBase}/${itemSlug(item)}`;
+  const sectionNavFor = (candidate: SidebarOutlineItem) =>
+    activeItemNav?.id === itemKey(candidate) ? activeItemNav : undefined;
+  if (children.length === 0) {
+    return (
+      <li>
+        <SidebarItemRow
+          item={item}
+          href={href}
+          pathname={pathname}
+          completed={completed}
+          done={itemDone(item, completed)}
+          onNavigate={onNavigate}
+          sectionNav={sectionNavFor(item)}
+        />
+      </li>
+    );
+  }
+  const title = item.sidebarGroupTitle ?? item.title;
+  const linkedRows = item.sidebarGroupTitle ? [item, ...children] : children;
+
+  // Some submodules begin immediately with a substantive numbered section.
+  // `sidebarGroupTitle` lets the outline show the submodule label without
+  // inventing a separate introduction route: the label is a disclosure
+  // button, and the head lesson becomes the first linked row below it.
+  if (item.sidebarGroupTitle) {
+    const done = groupDone(group, completed);
+    return (
+      <li>
+        <button
+          type="button"
+          aria-expanded={expanded}
+          aria-label={`${expanded ? "Hide" : "Show"} sections of ${title}`}
+          onClick={onToggle}
+          className={cn(
+            navItemClass(false),
+            ITEM_ROW_CLASS,
+            "w-full text-left"
+          )}
+        >
+          {done ? (
+            <CheckCircle2
+              className={cn("text-foreground", MARKER_CLASS)}
+              aria-hidden
+            />
+          ) : (
+            <Circle className={cn("opacity-30", MARKER_CLASS)} aria-hidden />
+          )}
+          <span className="min-w-0 flex-1 line-clamp-2">{title}</span>
+          <span className="text-muted-foreground ml-auto flex shrink-0 items-center gap-0.5 text-xs tabular-nums">
+            {!expanded && linkedRows.length}
+            <ChevronRight
+              className={cn(
+                "size-3.5 transition-transform",
+                expanded && "rotate-90"
+              )}
+              aria-hidden
+            />
+          </span>
+          {done && <span className="sr-only"> (completed)</span>}
+        </button>
+        {expanded && (
+          <ul className="border-border/70 ml-4 space-y-0.5 border-l pl-2">
+            {linkedRows.map((child) => (
+              <li key={itemKey(child)}>
+                <SidebarItemRow
+                  item={child}
+                  href={`${moduleBase}/${itemSlug(child)}`}
+                  pathname={pathname}
+                  completed={completed}
+                  done={itemDone(child, completed)}
+                  onNavigate={onNavigate}
+                  sectionNav={sectionNavFor(child)}
+                />
+              </li>
+            ))}
+          </ul>
+        )}
+      </li>
+    );
+  }
+
+  return (
+    <li>
+      <SidebarItemRow
+        item={item}
+        href={href}
+        pathname={pathname}
+        completed={completed}
+        done={groupDone(group, completed)}
+        onNavigate={onNavigate}
+        sectionNav={sectionNavFor(item)}
+        caret={
+          <button
+            type="button"
+            aria-expanded={expanded}
+            aria-label={`${expanded ? "Hide" : "Show"} subsections of ${title}`}
+            onClick={onToggle}
+            className="text-muted-foreground hover:bg-muted hover:text-foreground mt-1 flex h-11 min-w-11 shrink-0 items-center justify-center gap-0.5 rounded-md px-1 text-xs tabular-nums transition-colors select-none lg:h-6 lg:min-w-6"
+          >
+            {!expanded && children.length}
+            <ChevronRight
+              className={cn(
+                "size-3.5 transition-transform",
+                expanded && "rotate-90"
+              )}
+              aria-hidden
+            />
+          </button>
+        }
+      />
+      {expanded && (
+        <ul className="border-border/70 ml-4 space-y-0.5 border-l pl-2">
+          {children.map((child) => (
+            <li key={itemKey(child)}>
+              <SidebarItemRow
+                item={child}
+                href={`${moduleBase}/${itemSlug(child)}`}
+                pathname={pathname}
+                completed={completed}
+                done={itemDone(child, completed)}
+                onNavigate={onNavigate}
+                sectionNav={sectionNavFor(child)}
+              />
+            </li>
+          ))}
+        </ul>
+      )}
+    </li>
+  );
 }
 
 function SidebarItemRow({
@@ -302,78 +505,124 @@ function SidebarItemRow({
   pathname,
   completed,
   onNavigate,
+  sectionNav,
+  caret,
+  done,
 }: {
   item: SidebarOutlineItem;
   href: string;
   pathname: string;
   completed: Set<string>;
   onNavigate?: () => void;
+  /** Set only on the item being read — its headings nest under this row. */
+  sectionNav?: ActiveItemNav;
+  /** A section head's collapse toggle, laid beside the link (never inside it). */
+  caret?: React.ReactNode;
+  /** Whether this row may show a tick. The caller decides, because only the
+   *  caller knows what the row stands for: a section head answers for its
+   *  collapsed subsections, and ticking it on its own lesson alone reports an
+   *  eight-section submodule as finished to somebody who read its first page. */
+  done: boolean;
 }) {
-  const done = itemDone(item, completed);
   const active = pathname === href;
-  // Subsection rows (sectionItemId set) indent under their section's own
-  // nested border, mirroring the module-level rail above.
-  const nested = item.sectionItemId !== undefined;
-  return (
-    <li className={nested ? "border-border/70 ml-4 border-l pl-2" : undefined}>
-      <Link
-        href={href}
-        onClick={onNavigate}
-        aria-current={active ? "page" : undefined}
-        className={navItemClass(active)}
-      >
-        {done ? (
-          <CheckCircle2
-            className="text-foreground mt-0.5 size-3.5 shrink-0"
-            aria-hidden
-          />
-        ) : (
-          <Circle className="mt-0.5 size-3.5 shrink-0 opacity-30" aria-hidden />
-        )}
-        <span className="flex min-w-0 flex-col">
-          <span className="line-clamp-2">
-            {item.title}
-            {done && <span className="sr-only"> (completed)</span>}
-          </span>
-          {/* Its own line, outside the title's line-clamp, so a long title
-              can't clip the optional marker (the primary nav surface). */}
-          {item.kind === "paper" && item.optional && (
-            <span className="text-muted-foreground text-xs font-normal">
-              Optional
-            </span>
+  const link = (
+    <Link
+      href={href}
+      onClick={onNavigate}
+      aria-current={active ? "page" : undefined}
+      className={cn(navItemClass(active), ITEM_ROW_CLASS)}
+    >
+      {/* The closing page is not work, so it takes neither marker: an empty
+          circle would read as a unit left undone forever, and a tick as one
+          nobody can earn. A flag says what it is — the end of the track. */}
+      {item.completion ? (
+        <Flag
+          className={cn("text-muted-foreground", MARKER_CLASS)}
+          aria-hidden
+        />
+      ) : done ? (
+        <CheckCircle2
+          className={cn("text-foreground", MARKER_CLASS)}
+          aria-hidden
+        />
+      ) : (
+        <Circle className={cn("opacity-30", MARKER_CLASS)} aria-hidden />
+      )}
+      <span className="flex min-w-0 flex-col">
+        <span className="line-clamp-2">
+          {item.title}
+          {done && !item.completion && (
+            <span className="sr-only"> (completed)</span>
           )}
         </span>
-        {item.kind === "paper" && (
-          <FileText
-            className="text-muted-foreground mt-0.5 ml-auto size-3 shrink-0"
-            aria-hidden
+        {/* Its own line, outside the title's line-clamp, so a long title
+            can't clip the optional marker (the primary nav surface). */}
+        {item.optional && <OptionalMarker compact className="mt-1.5" />}
+      </span>
+      {item.kind === "paper" && (
+        <FileText
+          className="text-muted-foreground ml-auto size-3.5 shrink-0"
+          aria-hidden
+        />
+      )}
+    </Link>
+  );
+  return (
+    <>
+      {caret ? (
+        <div className="flex items-start gap-0.5">
+          <div className="min-w-0 flex-1">{link}</div>
+          {caret}
+        </div>
+      ) : (
+        link
+      )}
+      {/* No label above these: the row they hang under names the item, so
+          "In this lesson" would be the title said twice. The indent rail is
+          what marks them as its parts. */}
+      {sectionNav && (
+        <div className="border-border/70 ml-4 border-l pl-1">
+          <PaperSectionNav
+            items={sectionNav.nav}
+            pathname={pathname}
+            completedContentIds={completed}
+            // Papers only: keys the reading-gate open state that unlocks rows
+            // whose targets sit behind still-closed gates.
+            paperId={sectionNav.kind === "paper" ? sectionNav.id : undefined}
+            onNavigate={onNavigate}
           />
-        )}
-      </Link>
-    </li>
+        </div>
+      )}
+    </>
   );
 }
 
-/** Resize bounds and defaults (px). The auto widths match w-72 / w-96. */
+/**
+ * Item rows in the module list, sized against the completion marker rather
+ * than the text.
+ *
+ * The marker is the thing a learner scans this list for, so it is a 1.125rem
+ * disc — comfortably bigger than the 13px it reads beside — and the row
+ * centres on it. `items-center` overrides `navItemClass`'s `items-start`,
+ * which is right for the dense in-paper section rows it also serves but
+ * leaves a two-line title hanging off a marker pinned to its first line.
+ * Centring is what makes a wrapped title still read as one row.
+ *
+ * Keep the two together: a bigger marker with `items-start` is worse than
+ * either, because the misalignment grows with the marker.
+ */
+const ITEM_ROW_CLASS = "items-center gap-2.5";
+const MARKER_CLASS = "size-[1.125rem] shrink-0";
+
+/** Resize bounds and default (px). The auto width matches w-96. */
 const SIDEBAR_MIN_WIDTH = 220;
 const SIDEBAR_MAX_WIDTH = 520;
-const SIDEBAR_AUTO_WIDTH = 288;
 const SIDEBAR_AUTO_WIDTH_EXPANDED = 384;
 const SIDEBAR_KEYBOARD_STEP = 16;
 const SIDEBAR_WIDTH_KEY = "tracks:sidebar-width";
 
 const clampSidebarWidth = (width: number) =>
   Math.min(SIDEBAR_MAX_WIDTH, Math.max(SIDEBAR_MIN_WIDTH, width));
-
-/** Nav ↔ docked-section-panel split (% of sidebar height for the panel). */
-const SPLIT_MIN = 15;
-const SPLIT_MAX = 85;
-const SPLIT_AUTO = 55; // matches the automatic max-h-[55%]
-const SPLIT_KEYBOARD_STEP = 5;
-const SIDEBAR_SPLIT_KEY = "tracks:sidebar-split";
-
-const clampSplit = (split: number) =>
-  Math.min(SPLIT_MAX, Math.max(SPLIT_MIN, split));
 
 /**
  * A user-adjustable dimension: null means automatic; a number is a
@@ -412,10 +661,6 @@ function usePersistedDimension(key: string, clamp: (value: number) => number) {
 
 export function TrackSidebar(props: TrackSidebarProps) {
   const [mobileOpen, setMobileOpen] = useState(false);
-  const pathname = usePathname();
-  // Section titles need more room than item titles — widen the bar while
-  // a section panel is docked (automatic mode only; a user-chosen width wins).
-  const expanded = activeItemNavOf(props, pathname) !== null;
   const {
     value: width,
     setValue: setWidth,
@@ -430,7 +675,12 @@ export function TrackSidebar(props: TrackSidebarProps) {
   } | null>(null);
   const [dragging, setDragging] = useState(false);
 
-  const autoWidth = expanded ? SIDEBAR_AUTO_WIDTH_EXPANDED : SIDEBAR_AUTO_WIDTH;
+  /* One width, whether or not the current item has a section nav.
+     Sizing to content made the rail snap 288px <-> 384px on every navigation
+     between a lesson with headings and one without, which reflowed the
+     reading column with it. The section nav is what needs the room, so the
+     wider figure is the one that stays; a user drag still overrides it. */
+  const autoWidth = SIDEBAR_AUTO_WIDTH_EXPANDED;
   // For keyboard steps, the settled automatic width — reading offsetWidth
   // could capture a mid-transition value. Drags read offsetWidth at grab
   // time instead so the bar never jumps under the pointer.
@@ -445,7 +695,7 @@ export function TrackSidebar(props: TrackSidebarProps) {
           "border-border bg-card/40 sticky top-14 hidden h-[calc(100vh-3.5rem)] shrink-0 overflow-hidden border-r lg:block",
           // Animate only in automatic mode — a transition would lag the drag.
           width === null && "transition-[width] duration-300",
-          width === null && (expanded ? "w-96" : "w-72"),
+          width === null && "w-96"
         )}
       >
         <SidebarNav {...props} />
@@ -458,7 +708,7 @@ export function TrackSidebar(props: TrackSidebarProps) {
           aria-label="Resize sidebar"
           aria-valuemin={SIDEBAR_MIN_WIDTH}
           aria-valuemax={SIDEBAR_MAX_WIDTH}
-          aria-valuenow={Math.round(width ?? (expanded ? SIDEBAR_AUTO_WIDTH_EXPANDED : SIDEBAR_AUTO_WIDTH))}
+          aria-valuenow={Math.round(width ?? SIDEBAR_AUTO_WIDTH_EXPANDED)}
           tabIndex={0}
           title="Drag to resize · double-click to reset"
           onPointerDown={(e) => {
@@ -507,21 +757,24 @@ export function TrackSidebar(props: TrackSidebarProps) {
             e.preventDefault();
           }}
           className={cn(
-            "absolute inset-y-0 right-0 z-10 w-1.5 cursor-col-resize touch-none outline-none",
-            "hover:bg-border focus-visible:bg-ring/50 transition-colors",
-            dragging && "bg-ring/50",
+            "absolute inset-y-0 right-0 z-10 w-6 cursor-col-resize touch-none outline-none",
+            "after:bg-border hover:after:bg-ring/50 focus-visible:after:bg-ring/50 after:absolute after:inset-y-0 after:right-0 after:w-1.5 after:transition-colors",
+            dragging && "bg-ring/50"
           )}
         />
       </aside>
 
-      <div className="bg-background/80 sticky top-14 z-30 border-b px-4 py-2 backdrop-blur lg:hidden">
+      <div className="bg-background sticky top-14 z-30 border-b px-4 py-2 lg:hidden">
         <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
           <SheetTrigger asChild>
-            <Button variant="outline" size="sm" className="gap-2">
+            <Button variant="outline" size="sm" className="h-11 gap-2 text-sm">
               <ListTree className="size-4" aria-hidden /> Contents
             </Button>
           </SheetTrigger>
-          <SheetContent side="left" className="w-80 p-0">
+          <SheetContent
+            side="left"
+            className="w-[calc(100vw-2rem)]! max-w-96! p-0"
+          >
             <SheetHeader className="sr-only">
               <SheetTitle>{props.outline.track.title} contents</SheetTitle>
             </SheetHeader>

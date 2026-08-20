@@ -44,6 +44,7 @@ import {
 const VALID_KEY = "sk-or-v1-0123456789abcdef0123456789abcdef";
 
 afterEach(() => {
+  vi.useRealTimers();
   vi.clearAllMocks();
   vi.unstubAllGlobals();
 });
@@ -80,6 +81,29 @@ describe("saveOpenRouterKey", () => {
     );
     const result = await saveOpenRouterKey(VALID_KEY);
     expect(result).toEqual({ ok: false, error: "OpenRouter rejected that key." });
+    expect(prisma.userApiKey.upsert).not.toHaveBeenCalled();
+  });
+
+  it("aborts a hung live-verification request", async () => {
+    vi.useFakeTimers();
+    getCurrentUser.mockResolvedValue({ id: "u1" });
+    keyStorageSecret.mockReturnValue("s".repeat(32));
+    vi.stubGlobal(
+      "fetch",
+      vi.fn(async (_input, init?: RequestInit) =>
+        new Promise<Response>((_resolve, reject) => {
+          init?.signal?.addEventListener("abort", () =>
+            reject(new DOMException("aborted", "AbortError")),
+          );
+        }),
+      ),
+    );
+    const pending = saveOpenRouterKey(VALID_KEY);
+    await vi.advanceTimersByTimeAsync(10_000);
+    expect(await pending).toEqual({
+      ok: false,
+      error: "Could not reach OpenRouter to verify the key. Try again.",
+    });
     expect(prisma.userApiKey.upsert).not.toHaveBeenCalled();
   });
 

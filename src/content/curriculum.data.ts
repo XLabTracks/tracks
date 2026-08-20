@@ -43,21 +43,22 @@ export const modules: Module[] = [
     prerequisiteModuleIds: [],
     // Opens with Redwood's "case for control" motivation, then the AI Control
     // paper — the guided walkthrough that absorbed the retired
-    // "Trusted monitoring as a game" lesson — then three Redwood readings
+    // "Trusted monitoring as a game" lesson — then four Redwood readings
     // rendered in full through the paper reader; the "case for control" post
     // carries the module's guided exercises woven into the reading. Reading
-    // order: motivation, the paper, catching scheming AIs, and the two
-    // threat-modeling posts (the safety–usefulness tradeoff model now lives in
-    // module 2). All readings are reproduced (arXiv/LessWrong/Substack
-    // artifacts) with permission.
+    // order: motivation, the paper, safely passing the buck to AI, catching
+    // scheming AIs, and the two threat-modeling posts (the safety–usefulness
+    // tradeoff model now lives in module 2). All readings are reproduced
+    // (arXiv/LessWrong/Substack artifacts) with permission.
     itemIds: [
       "c-case-for-control",
       "c-paper-ai-control",
+      "c-pass-the-buck",
       "c-catching-red-handed",
       "c-threats-l1",
       "c-threats-l2",
     ],
-    estimatedMinutes: 285,
+    estimatedMinutes: 335,
   },
   {
     // Human-authored curriculum (from the course author's "contra control"

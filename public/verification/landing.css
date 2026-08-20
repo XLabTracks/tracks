@@ -619,6 +619,20 @@ section.band .intro {
   .hero {
     padding: 40px 0 32px;
   }
+  /* The three actions are one ribbon. At full scale their labels alone
+     outrun a phone (506px of buttons into ~360px of column), dropping
+     "Become a facilitator" onto its own line — so on phones the buttons
+     compact to caption type instead of wrapping. 44px keeps the tap
+     height; wrap stays on as the floor for very narrow screens and
+     resized text. */
+  .hero .ways {
+    gap: 8px;
+  }
+  .hero .ways .btn {
+    height: 44px;
+    padding: 0 10px;
+    font-size: var(--fs-sm);
+  }
   section.band > .wrap {
     padding-top: 32px;
     padding-bottom: 32px;

@@ -412,8 +412,8 @@ const NODE_HIT_RADIUS = 18;
 const DRAG_THRESHOLD = 4;
 
 /** Half-width of a beam at its widest — the flare under each endpoint dot.
-    The arrowhead's barbs take exactly this width, so the head is the flare's
-    own ending rather than a second shape sitting on it. */
+    The arrowhead's barb width is derived from it (see HEAD_BARB_WIDTH), so
+    the head stays proportioned to the beam if the profile ever changes. */
 const BEAM_END_WIDTH = 4.5;
 
 /** The same pinched connector used by the landing-page skill tree. Its two
@@ -465,9 +465,9 @@ function edgeControl(from: MapPoint, to: MapPoint, bend = 0): MapPoint {
    is uniform-width. Two barbs sweep back from the point, their front edges
    bowed in toward the shaft, tapering to nothing at the barb tips, with the
    mass sitting at the point — the swallow-wing head rather than a flat
-   triangle. Its barbs are exactly BEAM_END_WIDTH off the axis and the SHAFT
-   STOPS IN ITS NOTCH: the beam is trimmed to end where the head's rear
-   cutout is, so the last stretch of every edge is the head alone. Earlier
+   triangle. The SHAFT STOPS IN ITS NOTCH: the beam is trimmed to end where
+   the head's rear cutout is, so the last stretch of every edge is the head
+   alone. Earlier
    heads sat on top of a beam that ran on beneath them to the dot, and the
    coloured flare peeking around the ink was mush, not an arrow. It is solid
    ink whatever the beam under it wears: the beam's hue and dash carry the
@@ -476,8 +476,13 @@ function edgeControl(from: MapPoint, to: MapPoint, bend = 0): MapPoint {
    hollow dashed head). Ink, not literal black — theme.css owns the colours,
    and a #000 head would vanish on the night theme. */
 const HEAD_TIP_INSET = 7; // the tip rests on the dot's rim (dot radius 6.5)
-const HEAD_LENGTH = 8; // tip to barb tips
-const HEAD_NOTCH = 5.2; // tip to the rear notch the shaft tucks into
+// The head is 2.5× the beam's own proportions — the course owner sized it by
+// eye ("страшно маленькие", 2026-08-20): barbs at 2.5× the beam's widest
+// half-width, length and notch scaled with them, the quiver look of a bold
+// head on a slim shaft.
+const HEAD_LENGTH = 20; // tip to barb tips
+const HEAD_NOTCH = 13; // tip to the rear notch the shaft tucks into
+const HEAD_BARB_WIDTH = BEAM_END_WIDTH * 2.5;
 
 function arrowheadPath(control: MapPoint, to: MapPoint): string {
   const dx = to.x - control.x;
@@ -493,10 +498,10 @@ function arrowheadPath(control: MapPoint, to: MapPoint): string {
     `${tip.x - ux * back + nx * side} ${tip.y - uy * back + ny * side}`;
   return [
     `M ${tip.x} ${tip.y}`,
-    `Q ${at(4, 1.1)} ${at(HEAD_LENGTH, BEAM_END_WIDTH)}`, // up the concave front edge to the barb tip
+    `Q ${at(10, 2.75)} ${at(HEAD_LENGTH, HEAD_BARB_WIDTH)}`, // up the concave front edge to the barb tip
     `L ${at(HEAD_NOTCH, 0)}`, // into the rear notch
-    `L ${at(HEAD_LENGTH, -BEAM_END_WIDTH)}`, // out to the other barb
-    `Q ${at(4, -1.1)} ${tip.x} ${tip.y}`, // and back along the far front edge
+    `L ${at(HEAD_LENGTH, -HEAD_BARB_WIDTH)}`, // out to the other barb
+    `Q ${at(10, -2.75)} ${tip.x} ${tip.y}`, // and back along the far front edge
     "Z",
   ].join(" ");
 }

@@ -1,5 +1,9 @@
 # The Backdoor Game — flow spec
 
+> **SUPERSEDED (2026-08-20):** the authored game was replaced by the Threat Modelling Bench
+> (`/bench` — student-built graphs, no feedback, incremental affordances). This spec's turn
+> prompts and reveals remain useful as facilitator answer keys for bench scenario 1.
+
 > An iterated red-team/blue-team exercise for Module 1. Start from a system with **no
 > measures**; through alternating blue/red turns, converge on trusted monitoring — for the
 > threat "**a backdoor lands in production**." The learner plays both hats; every turn is a

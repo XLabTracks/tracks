@@ -4,6 +4,7 @@ import {
   Fragment,
   useCallback,
   useEffect,
+  useLayoutEffect,
   useMemo,
   useReducer,
   useRef,
@@ -193,6 +194,17 @@ export function InteractiveMap(_props: VerificationWidgetProps) {
     rh: number;
   } | null>(null);
 
+  /* THE TOOLTIP IS MEASURED, NOT GUESSED.
+     Its height used to be a constant 120 in tipPos, which decides whether the
+     card is drawn below the cursor or flipped above it. Almost no card is
+     120 tall: the height is a country name, a row of bucket chips that wraps
+     when there are three of them, and a paragraph of prose. China's runs past
+     300, so the flip never fired when it needed to and the card ran off the
+     bottom of a stage that clips — the reader could not finish the sentence.
+     Measured after layout and before paint, so the first frame is the only
+     one that can use the fallback and there is no visible jump. */
+  const tipRef = useRef<HTMLDivElement | null>(null);
+  const [tipSize, setTipSize] = useState({ w: 256, h: 150 });
   const svgRef = useRef<SVGSVGElement | null>(null);
   const stageRef = useRef<HTMLDivElement | null>(null);
   const dragRef = useRef<{
@@ -381,6 +393,22 @@ export function InteractiveMap(_props: VerificationWidgetProps) {
       setTip({ id, x, y, rw: st.clientWidth, rh: st.clientHeight });
     else setTip(null);
   };
+
+  // Keyed on the hovered country, because that is the only thing that changes
+  // what the card contains and therefore how big it is — moving the pointer
+  // within one country re-renders the position and must not re-measure. The
+  // equality guard stays as well: it is what stops a sub-pixel difference in
+  // the measured box from bouncing between two values forever.
+  useLayoutEffect(() => {
+    const el = tipRef.current;
+    if (!el) return;
+    const { width, height } = el.getBoundingClientRect();
+    setTipSize((prev) =>
+      Math.abs(prev.w - width) < 1 && Math.abs(prev.h - height) < 1
+        ? prev
+        : { w: width, h: height },
+    );
+  }, [tip?.id]);
 
   /* ============ scaled stroke/font values (source applyVB) ============ */
   const strokeW = Math.max(0.18, 0.55 / zoom);
@@ -678,8 +706,9 @@ export function InteractiveMap(_props: VerificationWidgetProps) {
               {tip && tipCountry && (
                 <div
                   role="tooltip"
+                  ref={tipRef}
                   className="border-border bg-card shadow-soft pointer-events-none absolute z-20 w-64 rounded-lg border p-3"
-                  style={tipPos(tip)}
+                  style={tipPos(tip, tipSize)}
                 >
                   <p className="text-sm font-semibold">{tipCountry.name}</p>
                   <div className="mt-1.5 mb-1.5 flex flex-wrap gap-1">
@@ -687,6 +716,13 @@ export function InteractiveMap(_props: VerificationWidgetProps) {
                       <BucketChip key={bk} bk={bk} />
                     ))}
                   </div>
+                  {/* NOT CLAMPED, AND THAT WAS TRIED. Four lines fits every
+                      card comfortably and cuts China's mid-sentence — "the
+                      counterparty a future…" loses the clause that carries
+                      the point. A card whose sentence stops before its verb
+                      is the defect being fixed here, not a fix for it, and it
+                      is not needed: the measurement above plus the clamp in
+                      tipPos already keep the whole card inside the stage. */}
                   <p className="text-muted-foreground text-sm leading-relaxed">
                     {tipCountry.verif}
                   </p>
@@ -1021,21 +1057,32 @@ export function InteractiveMap(_props: VerificationWidgetProps) {
 }
 
 /* ============ tooltip positioning (source moveTip) ============ */
-function tipPos(tip: {
-  x: number;
-  y: number;
-  rw: number;
-  rh: number;
-}): React.CSSProperties {
-  const rw = tip.rw;
-  const rh = tip.rh;
-  const tw = 256; // w-64
-  const th = 120;
+/**
+ * Where the hover card goes.
+ *
+ * It prefers below-right of the cursor and flips to the other side of either
+ * axis when there is no room, which is the ordinary rule. What it did not do
+ * was know how big the card is: the height was the constant 120 and the flip
+ * therefore fired on the wrong cards. `size` is the measured box now.
+ *
+ * The last two lines are the part that cannot be skipped. Flipping is a
+ * preference and clamping is a guarantee: on a short stage, or near a corner,
+ * neither side has room and the card has to be pushed inside the box anyway —
+ * the stage clips, so anything outside it is not merely awkward, it is gone.
+ */
+function tipPos(
+  tip: { x: number; y: number; rw: number; rh: number },
+  size: { w: number; h: number },
+): React.CSSProperties {
+  const { rw, rh } = tip;
+  const PAD = 6;
   let lx = tip.x + 16;
   let ly = tip.y + 14;
-  if (rw && lx + tw > rw - 8) lx = tip.x - tw - 16;
-  if (rh && ly + th > rh - 8) ly = tip.y - th - 12;
-  return { left: Math.max(6, lx), top: Math.max(6, ly) };
+  if (rw && lx + size.w > rw - 8) lx = tip.x - size.w - 16;
+  if (rh && ly + size.h > rh - 8) ly = tip.y - size.h - 12;
+  if (rw) lx = Math.min(lx, rw - size.w - PAD);
+  if (rh) ly = Math.min(ly, rh - size.h - PAD);
+  return { left: Math.max(PAD, lx), top: Math.max(PAD, ly) };
 }
 
 /* timeline axis position (source tx) */

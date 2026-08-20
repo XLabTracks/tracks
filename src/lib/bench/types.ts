@@ -139,3 +139,19 @@ export function subtreeIds(
     .map((n) => n.id);
   return [id, ...childIds.flatMap((c) => subtreeIds(nodes, c))];
 }
+
+/**
+ * Whether `id` may be re-parented under `targetId`: both must exist, a node
+ * can't be its own parent, can't move under its own subtree (would orphan a
+ * cycle), and moving under its current parent is a no-op.
+ */
+export function canReparent(
+  nodes: Record<string, BenchNode>,
+  id: string,
+  targetId: string,
+): boolean {
+  const node = nodes[id];
+  if (!node || !nodes[targetId]) return false;
+  if (id === targetId || node.parentId === targetId) return false;
+  return !subtreeIds(nodes, id).includes(targetId);
+}

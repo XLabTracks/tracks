@@ -16,11 +16,18 @@
 // (createdTurn on nodes, per-turn strategies) is chosen so a later feedback
 // layer can replay the graph's growth without migration.
 
-import { useEffect, useState } from "react";
+import {
+  useEffect,
+  useRef,
+  useState,
+  type Dispatch,
+  type SetStateAction,
+} from "react";
 import { Check, RotateCcw } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
+import { animate, type AnimationHandle } from "@/lib/bench/animate";
 import {
   childrenOf,
   isNearSeededLayout,
@@ -31,6 +38,7 @@ import {
   BENCH_RELATIONS,
   BENCH_RELATION_LABELS,
   BENCH_ROOT_ID,
+  canReparent,
   initialBenchState,
   phaseForTurn,
   subtreeIds,
@@ -40,8 +48,18 @@ import {
   type BenchScenario,
   type BenchState,
 } from "@/lib/bench/types";
-import { BenchCanvas, RELATION_CHIP } from "./bench-canvas";
+import { BenchCanvas, RELATION_CHIP, type BenchEditKey } from "./bench-canvas";
 
+const HISTORY_CAP = 100;
+
+/** Center positions of every node, for animation endpoints. */
+function positionsOf(
+  nodes: Record<string, BenchNode>,
+): Record<string, { x: number; y: number }> {
+  return Object.fromEntries(
+    Object.values(nodes).map((n) => [n.id, { x: n.x ?? 0, y: n.y ?? 0 }]),
+  );
+}
 const STOPPING_RULE =
   "Stop decomposing a node when it's (a) a choice the adversary makes, (b) a fact of the environment, or (c) something a defense could directly touch.";
 
@@ -104,17 +122,8 @@ function toMarkdown(scenario: BenchScenario, state: BenchState): string {
 export function ThreatBench({ scenario }: { scenario: BenchScenario }) {
   const storageKey = `bench:${scenario.id}`;
   const [state, setState] = useState<BenchState | null>(null);
-  const [selectedIds, setSelectedIds] = useState<string[]>([]);
-  const [editingId, setEditingId] = useState<string | null>(null);
-  const [tagRelation, setTagRelation] = useState<BenchRelation>("prevents");
-  const [tagWhy, setTagWhy] = useState("");
-  const [copied, setCopied] = useState(false);
-  const [exportText, setExportText] = useState<string | null>(null);
-  /** Bumped to ask the canvas to re-fit the viewport (tidy add/delete). */
-  const [fitNonce, setFitNonce] = useState(0);
 
-  // Load once on mount (localStorage is client-only), then autosave (debounced
-  // — drags produce many state writes per second).
+  // Load once on mount (localStorage is client-only).
   useEffect(() => {
     let loaded: BenchState | null = null;
     try {
@@ -137,8 +146,60 @@ export function ThreatBench({ scenario }: { scenario: BenchScenario }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [storageKey]);
 
+  if (!state) {
+    return (
+      <div className="border-border bg-card text-muted-foreground rounded-lg border p-8 text-sm">
+        Loading the bench…
+      </div>
+    );
+  }
+
+  return (
+    <BenchBody
+      scenario={scenario}
+      storageKey={storageKey}
+      state={state}
+      setState={setState}
+    />
+  );
+}
+
+/**
+ * The bench once state exists — split from the loader so every hook below
+ * (autosave, history, the global keyboard handler) runs unconditionally
+ * against a non-null state.
+ */
+function BenchBody({
+  scenario,
+  storageKey,
+  state,
+  setState,
+}: {
+  scenario: BenchScenario;
+  storageKey: string;
+  state: BenchState;
+  setState: Dispatch<SetStateAction<BenchState | null>>;
+}) {
+  const [selectedIds, setSelectedIds] = useState<string[]>([]);
+  const [editingId, setEditingId] = useState<string | null>(null);
+  const [tagRelation, setTagRelation] = useState<BenchRelation>("prevents");
+  const [tagWhy, setTagWhy] = useState("");
+  const [copied, setCopied] = useState(false);
+  const [exportText, setExportText] = useState<string | null>(null);
+  /** Bumped to ask the canvas to re-fit the viewport (tidy add/delete). */
+  const [fitNonce, setFitNonce] = useState(0);
+  // Snapshot undo: state is immutable-updated, so a history entry is a free
+  // reference push. Stacks clear on turn advance (undo must never un-reveal
+  // an affordance) and on Reset bench. Viewport and strategy text excluded.
+  const [undoStack, setUndoStack] = useState<BenchState[]>([]);
+  const [redoStack, setRedoStack] = useState<BenchState[]>([]);
+  /** Pulses the turn card when a gated action is attempted on the wrong turn. */
+  const [gateFlash, setGateFlash] = useState(false);
+  const gateFlashTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const animRef = useRef<AnimationHandle | null>(null);
+
+  // Autosave, debounced — drags and tweens write many states per second.
   useEffect(() => {
-    if (!state) return;
     const timer = setTimeout(() => {
       try {
         window.localStorage.setItem(
@@ -151,14 +212,6 @@ export function ThreatBench({ scenario }: { scenario: BenchScenario }) {
     }, 300);
     return () => clearTimeout(timer);
   }, [state, storageKey]);
-
-  if (!state) {
-    return (
-      <div className="border-border bg-card text-muted-foreground rounded-lg border p-8 text-sm">
-        Loading the bench…
-      </div>
-    );
-  }
 
   const phase: BenchPhase = phaseForTurn(
     state.turnIndex,
@@ -187,44 +240,95 @@ export function ThreatBench({ scenario }: { scenario: BenchScenario }) {
   const update = (fn: (prev: BenchState) => BenchState) =>
     setState((prev) => (prev ? fn(prev) : prev));
 
+  const pushHistory = () => {
+    setUndoStack((prev) => [...prev.slice(-(HISTORY_CAP - 1)), state]);
+    setRedoStack([]);
+  };
+
+  const undo = () => {
+    if (undoStack.length === 0) return;
+    const restored = undoStack[undoStack.length - 1];
+    animRef.current?.cancel();
+    setUndoStack((s) => s.slice(0, -1));
+    setRedoStack((s) => [...s, state]);
+    // Strategy text lives outside the undo system: carry the live drafts.
+    setState({ ...restored, strategies: state.strategies });
+    setSelectedIds((ids) => ids.filter((id) => restored.nodes[id]));
+    setEditingId(null);
+  };
+
+  const redo = () => {
+    if (redoStack.length === 0) return;
+    const restored = redoStack[redoStack.length - 1];
+    animRef.current?.cancel();
+    setRedoStack((s) => s.slice(0, -1));
+    setUndoStack((s) => [...s, state]);
+    setState({ ...restored, strategies: state.strategies });
+    setSelectedIds((ids) => ids.filter((id) => restored.nodes[id]));
+    setEditingId(null);
+  };
+
+  const flashGate = () => {
+    setGateFlash(true);
+    if (gateFlashTimer.current) clearTimeout(gateFlashTimer.current);
+    gateFlashTimer.current = setTimeout(() => setGateFlash(false), 700);
+  };
+
+  /** Tween every shared id from `from` to `to`; other nodes are untouched. */
+  const animatePositions = (
+    from: Record<string, { x: number; y: number }>,
+    to: Record<string, { x: number; y: number }>,
+  ) => {
+    animRef.current?.cancel();
+    animRef.current = animate((t) => {
+      update((prev) => ({
+        ...prev,
+        nodes: Object.fromEntries(
+          Object.entries(prev.nodes).map(([id, n]) => {
+            const f = from[id];
+            const g = to[id];
+            if (!f || !g) return [id, n];
+            return [
+              id,
+              { ...n, x: f.x + (g.x - f.x) * t, y: f.y + (g.y - f.y) * t },
+            ];
+          }),
+        ),
+      }));
+    });
+  };
+
   const addChild = (parentId: string) => {
     const parent = state.nodes[parentId];
     if (!parent) return;
     // While the graph still sits where the tidy layout put it, adding keeps
-    // it groomed: re-run the layout (the new node slots in to the right of
-    // its siblings) and re-fit the viewport. Once the student has arranged
-    // things manually, new nodes spawn near their parent instead.
+    // it groomed: animated re-layout (the new node slots in to the right of
+    // its siblings, tweening out from its parent's center) plus a viewport
+    // re-fit. Once the student has arranged things manually, new nodes spawn
+    // near their parent instead.
     const tidy = isNearSeededLayout(state.nodes);
     const siblings = childrenOf(state.nodes, parentId).length;
     const id = `n${state.nextSeq}`;
+    pushHistory();
+    const node: BenchNode = {
+      id,
+      label: "",
+      parentId,
+      gate: "AND",
+      tags: [],
+      createdTurn: state.turnIndex,
+      seq: state.nextSeq,
+      x: (parent.x ?? 0) + (tidy ? 0 : siblings * 56),
+      y: (parent.y ?? 0) + (tidy ? 0 : 150),
+    };
+    const nodes = { ...state.nodes, [id]: node };
     setSelectedIds([id]);
     setEditingId(id);
-    update((prev) => {
-      const nid = `n${prev.nextSeq}`;
-      const node: BenchNode = {
-        id: nid,
-        label: "",
-        parentId,
-        gate: "AND",
-        tags: [],
-        createdTurn: prev.turnIndex,
-        seq: prev.nextSeq,
-        x: (parent.x ?? 0) + siblings * 56,
-        y: (parent.y ?? 0) + 150,
-      };
-      let nodes = { ...prev.nodes, [nid]: node };
-      if (tidy) {
-        const seeds = seedPositions(nodes);
-        nodes = Object.fromEntries(
-          Object.entries(nodes).map(([k, n]) => [
-            k,
-            { ...n, x: seeds[k].x, y: seeds[k].y },
-          ]),
-        );
-      }
-      return { ...prev, nextSeq: prev.nextSeq + 1, nodes };
-    });
-    if (tidy) setFitNonce((n) => n + 1);
+    setState({ ...state, nextSeq: state.nextSeq + 1, nodes });
+    if (tidy) {
+      animatePositions(positionsOf(nodes), seedPositions(nodes));
+      setFitNonce((n) => n + 1);
+    }
   };
 
   const rename = (id: string, label: string) =>
@@ -242,36 +346,43 @@ export function ThreatBench({ scenario }: { scenario: BenchScenario }) {
       },
     }));
 
-  const removeSubtree = (id: string) => {
-    if (
-      !window.confirm(
-        "Delete this node and everything under it? This can't be undone.",
-      )
-    )
-      return;
+  /** Delete these heads (and their subtrees) as one undoable step. */
+  const deleteHeads = (heads: string[]) => {
+    const valid = heads.filter((id) => id !== BENCH_ROOT_ID && state.nodes[id]);
+    if (valid.length === 0) return;
     const tidy = isNearSeededLayout(state.nodes);
-    const doomed = new Set(subtreeIds(state.nodes, id));
-    update((prev) => {
-      let nodes = Object.fromEntries(
-        Object.entries(prev.nodes).filter(([nid]) => !doomed.has(nid)),
-      );
-      if (tidy) {
-        const seeds = seedPositions(nodes);
-        nodes = Object.fromEntries(
-          Object.entries(nodes).map(([k, n]) => [
-            k,
-            { ...n, x: seeds[k].x, y: seeds[k].y },
-          ]),
-        );
-      }
-      return { ...prev, nodes };
-    });
+    pushHistory();
+    const doomed = new Set(valid.flatMap((h) => subtreeIds(state.nodes, h)));
+    const nodes = Object.fromEntries(
+      Object.entries(state.nodes).filter(([nid]) => !doomed.has(nid)),
+    );
+    setState({ ...state, nodes });
     setSelectedIds((prev) => prev.filter((nid) => !doomed.has(nid)));
     setEditingId((prev) => (prev && doomed.has(prev) ? null : prev));
-    if (tidy) setFitNonce((n) => n + 1);
+    if (tidy) {
+      animatePositions(positionsOf(nodes), seedPositions(nodes));
+      setFitNonce((n) => n + 1);
+    }
   };
 
-  const toggleGate = (id: string) =>
+  const removeSubtree = (id: string) => deleteHeads([id]);
+
+  /** Keyboard delete: top-most selected heads only (nested selections skip). */
+  const deleteSelection = () => {
+    deleteHeads(
+      selectedIds.filter((id) => {
+        let p = state.nodes[id]?.parentId ?? null;
+        while (p) {
+          if (selectedIds.includes(p)) return false;
+          p = state.nodes[p]?.parentId ?? null;
+        }
+        return true;
+      }),
+    );
+  };
+
+  const toggleGate = (id: string) => {
+    pushHistory();
     update((prev) => ({
       ...prev,
       nodes: {
@@ -282,6 +393,7 @@ export function ThreatBench({ scenario }: { scenario: BenchScenario }) {
         },
       },
     }));
+  };
 
   const moveNodes = (ids: string[], dx: number, dy: number) =>
     update((prev) => {
@@ -293,16 +405,167 @@ export function ThreatBench({ scenario }: { scenario: BenchScenario }) {
       return { ...prev, nodes };
     });
 
-  const setPositions = (positions: Record<string, { x: number; y: number }>) =>
-    update((prev) => ({
-      ...prev,
-      nodes: Object.fromEntries(
-        Object.entries(prev.nodes).map(([id, n]) => [
-          id,
-          positions[id] ? { ...n, x: positions[id].x, y: positions[id].y } : n,
-        ]),
-      ),
-    }));
+  const resetStructure = () => {
+    pushHistory();
+    animatePositions(positionsOf(state.nodes), seedPositions(state.nodes));
+    setFitNonce((n) => n + 1);
+  };
+
+  const reparent = (id: string, targetId: string) => {
+    if (!canEditStructure || !canReparent(state.nodes, id, targetId)) return;
+    // The drag that produced this drop already pushed history at drag start,
+    // so the whole gesture (move + reparent) is one undo step. Tidiness is
+    // judged on the pre-drag snapshot — the reparenting drag itself must not
+    // count as "the student arranged the graph."
+    const preDrag = undoStack[undoStack.length - 1];
+    const tidy = isNearSeededLayout((preDrag ?? state).nodes);
+    const target = state.nodes[targetId];
+    const head = state.nodes[id];
+    const priorKids = childrenOf(state.nodes, targetId).length;
+    const nodes = {
+      ...state.nodes,
+      [id]: { ...head, parentId: targetId, seq: state.nextSeq },
+    };
+    setState({ ...state, nextSeq: state.nextSeq + 1, nodes });
+    const from = positionsOf(nodes);
+    if (tidy) {
+      animatePositions(from, seedPositions(nodes));
+      setFitNonce((n) => n + 1);
+    } else {
+      // Arranged graph: carry the subtree under its new parent, keeping the
+      // subtree's internal offsets and everything else where the student
+      // put it.
+      const gx = (target.x ?? 0) + priorKids * 56;
+      const gy = (target.y ?? 0) + 150;
+      const dx = gx - (head.x ?? 0);
+      const dy = gy - (head.y ?? 0);
+      const to = { ...from };
+      for (const sid of subtreeIds(state.nodes, id))
+        to[sid] = { x: from[sid].x + dx, y: from[sid].y + dy };
+      animatePositions(from, to);
+    }
+  };
+
+  // --- edit sessions --------------------------------------------------------
+
+  const beginEdit = (id: string) => {
+    // One history entry per edit session (not per keystroke).
+    pushHistory();
+    setEditingId(id);
+  };
+
+  const finishEdit = () => {
+    if (!editingId) return;
+    const node = state.nodes[editingId];
+    setEditingId(null);
+    if (!node) return;
+    const isGhost =
+      node.id !== BENCH_ROOT_ID &&
+      !node.label.trim() &&
+      !node.description?.trim() &&
+      node.tags.length === 0 &&
+      childrenOf(state.nodes, node.id).length === 0;
+    if (isGhost) {
+      // An abandoned empty node cancels the add that created it. When the
+      // top history entry IS that add (its snapshot's nextSeq equals the
+      // ghost's seq), consume it — otherwise undo would carry a no-op step.
+      const top = undoStack[undoStack.length - 1];
+      if (top && top.nextSeq === node.seq) {
+        setUndoStack((prev) => prev.slice(0, -1));
+        const from = positionsOf(state.nodes);
+        setState({ ...top, strategies: state.strategies });
+        setSelectedIds((ids) => ids.filter((i) => top.nodes[i]));
+        animatePositions(from, positionsOf(top.nodes));
+        return;
+      }
+      const tidy = isNearSeededLayout(state.nodes);
+      const nodes = Object.fromEntries(
+        Object.entries(state.nodes).filter(([nid]) => nid !== node.id),
+      );
+      setState({ ...state, nodes });
+      setSelectedIds((ids) => ids.filter((i) => i !== node.id));
+      if (tidy) {
+        animatePositions(positionsOf(nodes), seedPositions(nodes));
+        setFitNonce((n) => n + 1);
+      }
+    } else if (
+      undoStack.length > 0 &&
+      undoStack[undoStack.length - 1] === state
+    ) {
+      // The edit session changed nothing — drop its no-op history entry.
+      setUndoStack((prev) => prev.slice(0, -1));
+    }
+  };
+
+  /** Keys pressed inside a node's inline editor (canvas forwards them). */
+  const handleEditKey = (id: string, key: BenchEditKey) => {
+    const node = state.nodes[id];
+    const hadLabel = !!node?.label.trim();
+    finishEdit();
+    if (!node) return;
+    if (key === "tab" && hadLabel) {
+      // Commit and go deeper: a child of the node just edited.
+      if (canEditStructure) addChild(id);
+      else flashGate();
+    } else if (key === "enter" && hadLabel && node.parentId) {
+      // The mind-map chain: commit and start the next sibling.
+      if (canEditStructure) addChild(node.parentId);
+      else flashGate();
+    }
+  };
+
+  // Global keyboard model. Re-attached each render so the handlers close
+  // over fresh state; field-level keys are handled on the fields themselves
+  // (the `typing` guard) so native input editing and undo stay untouched.
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      const t = e.target as HTMLElement | null;
+      const typing =
+        !!t &&
+        (t.tagName === "INPUT" ||
+          t.tagName === "TEXTAREA" ||
+          t.isContentEditable);
+      if ((e.ctrlKey || e.metaKey) && !typing) {
+        const k = e.key.toLowerCase();
+        if (k === "z" && !e.shiftKey) {
+          e.preventDefault();
+          undo();
+          return;
+        }
+        if ((k === "z" && e.shiftKey) || k === "y") {
+          e.preventDefault();
+          redo();
+          return;
+        }
+      }
+      if (typing || e.ctrlKey || e.metaKey || e.altKey) return;
+      if (e.key === "Tab" && !editingId && selectedIds.length === 1) {
+        e.preventDefault();
+        if (canEditStructure) addChild(selectedIds[0]);
+        else flashGate();
+      } else if (
+        (e.key === "Enter" || e.key === "F2") &&
+        !editingId &&
+        selectedIds.length === 1
+      ) {
+        e.preventDefault();
+        beginEdit(selectedIds[0]);
+      } else if (
+        (e.key === "Delete" || e.key === "Backspace") &&
+        !editingId &&
+        selectedIds.length > 0
+      ) {
+        e.preventDefault();
+        if (canEditStructure) deleteSelection();
+        else flashGate();
+      } else if (e.key === "Escape") {
+        if (editingId) finishEdit();
+        else setSelectedIds([]);
+      }
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  });
 
   const addTagToSelection = () => {
     if (!currentAffordance || !tagWhy.trim() || selectedIds.length === 0)
@@ -365,7 +628,10 @@ export function ThreatBench({ scenario }: { scenario: BenchScenario }) {
   })();
 
   const advance = () => {
-    setEditingId(null);
+    finishEdit();
+    // A locked turn is a commitment: undo must not cross it.
+    setUndoStack([]);
+    setRedoStack([]);
     update((prev) => ({ ...prev, turnIndex: prev.turnIndex + 1 }));
   };
 
@@ -377,9 +643,12 @@ export function ThreatBench({ scenario }: { scenario: BenchScenario }) {
     )
       return;
     const base = initialBenchState(scenario);
+    animRef.current?.cancel();
     setState({ ...base, nodes: withSeededPositions(base.nodes) });
     setSelectedIds([]);
     setEditingId(null);
+    setUndoStack([]);
+    setRedoStack([]);
   };
 
   const copyMarkdown = async () => {
@@ -415,6 +684,10 @@ export function ThreatBench({ scenario }: { scenario: BenchScenario }) {
         editingId={editingId}
         canEditStructure={canEditStructure}
         fitNonce={fitNonce}
+        canUndo={undoStack.length > 0}
+        canRedo={redoStack.length > 0}
+        onUndo={undo}
+        onRedo={redo}
         onSelect={setSelectedIds}
         onToggleSelect={(id) =>
           setSelectedIds((prev) =>
@@ -423,21 +696,29 @@ export function ThreatBench({ scenario }: { scenario: BenchScenario }) {
               : [...prev, id],
           )
         }
-        onBeginEdit={setEditingId}
-        onEndEdit={() => setEditingId(null)}
+        onBeginEdit={beginEdit}
+        onEndEdit={finishEdit}
+        onEditKey={handleEditKey}
         onRename={rename}
         onSetDescription={setDescription}
         onAddChild={addChild}
         onDelete={removeSubtree}
         onToggleGate={toggleGate}
         onMoveNodes={moveNodes}
-        onSetPositions={setPositions}
+        onBeginNodeDrag={pushHistory}
+        onReparent={reparent}
+        onResetStructure={resetStructure}
       />
 
       {/* --------------------------------------------------- control panel */}
       <div className="space-y-3">
         {/* Turn card */}
-        <div className="border-border bg-card rounded-xl border p-4">
+        <div
+          className={cn(
+            "border-border bg-card rounded-xl border p-4 transition-shadow duration-300",
+            gateFlash && "ring-2 ring-red-500/70",
+          )}
+        >
           <div className="mb-2 flex items-center justify-between gap-2">
             {phase.kind === "done" ? (
               <span className="flex items-center gap-1 text-sm font-medium">

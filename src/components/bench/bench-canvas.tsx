@@ -18,19 +18,26 @@ import {
   Maximize2,
   Pencil,
   Plus,
+  Redo2,
   RotateCcw,
   Trash2,
+  Undo2,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { NODE_W, seedPositions } from "@/lib/bench/layout";
+import { animate, type AnimationHandle } from "@/lib/bench/animate";
+import { NODE_W } from "@/lib/bench/layout";
 import {
   BENCH_ROOT_ID,
+  canReparent,
   subtreeIds,
   type BenchAffordance,
   type BenchNode,
   type BenchRelation,
 } from "@/lib/bench/types";
+
+/** Keys the inline node editor forwards to the parent's turn logic. */
+export type BenchEditKey = "tab" | "enter" | "shift-enter" | "escape";
 
 export const RELATION_CHIP: Record<BenchRelation, string> = {
   prevents:
@@ -78,6 +85,8 @@ type DragState =
       mode: "node";
       id: string;
       ids: string[];
+      /** Exactly one head — the only case where drop-to-reparent applies. */
+      single: boolean;
       shift: boolean;
       lastX: number;
       lastY: number;
@@ -94,17 +103,27 @@ export interface BenchCanvasProps {
   canEditStructure: boolean;
   /** Bump to request a viewport re-fit (after tidy re-layouts). */
   fitNonce?: number;
+  canUndo: boolean;
+  canRedo: boolean;
+  onUndo: () => void;
+  onRedo: () => void;
   onSelect: (ids: string[]) => void;
   onToggleSelect: (id: string) => void;
   onBeginEdit: (id: string) => void;
   onEndEdit: () => void;
+  /** Keys pressed inside the inline editor (Tab/Enter chains, Escape). */
+  onEditKey: (id: string, key: BenchEditKey) => void;
   onRename: (id: string, label: string) => void;
   onSetDescription: (id: string, text: string) => void;
   onAddChild: (parentId: string) => void;
   onDelete: (id: string) => void;
   onToggleGate: (id: string) => void;
   onMoveNodes: (ids: string[], dx: number, dy: number) => void;
-  onSetPositions: (positions: Record<string, { x: number; y: number }>) => void;
+  /** Fired once when a node drag first actually moves (one drag = one undo). */
+  onBeginNodeDrag: () => void;
+  /** Dropping a dragged node onto another node re-parents it there. */
+  onReparent: (id: string, newParentId: string) => void;
+  onResetStructure: () => void;
 }
 
 export function BenchCanvas({
@@ -115,23 +134,35 @@ export function BenchCanvas({
   editingId,
   canEditStructure,
   fitNonce,
+  canUndo,
+  canRedo,
+  onUndo,
+  onRedo,
   onSelect,
   onToggleSelect,
   onBeginEdit,
   onEndEdit,
+  onEditKey,
   onRename,
   onSetDescription,
   onAddChild,
   onDelete,
   onToggleGate,
   onMoveNodes,
-  onSetPositions,
+  onBeginNodeDrag,
+  onReparent,
+  onResetStructure,
 }: BenchCanvasProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const [view, setView] = useState<View>({ tx: 0, ty: 0, k: 1 });
   const [marquee, setMarquee] = useState<WorldRect | null>(null);
   const [panning, setPanning] = useState(false);
+  /** Nodes being dragged (rendered elevated) and the reparent drop target. */
+  const [draggingIds, setDraggingIds] = useState<string[]>([]);
+  const [dropTargetId, setDropTargetId] = useState<string | null>(null);
+  const dropTargetRef = useRef<string | null>(null);
   const dragRef = useRef<DragState | null>(null);
+  const viewAnimRef = useRef<AnimationHandle | null>(null);
   /** Once the user pans or zooms, container resizes stop re-fitting the view. */
   const userMovedViewRef = useRef(false);
 
@@ -165,6 +196,7 @@ export function BenchCanvas({
 
   const fitToNodes = (
     positions: Record<string, { x: number; y: number }>,
+    animated = false,
   ) => {
     const el = containerRef.current;
     const pts = Object.values(positions);
@@ -180,11 +212,24 @@ export function BenchCanvas({
       MAX_K,
       Math.max(MIN_K, Math.min((cw - 80) / bw, (ch - 80) / bh, 1)),
     );
-    setView({
+    const target = {
       k,
       tx: (cw - bw * k) / 2 - minX * k,
       ty: (ch - bh * k) / 2 - minY * k,
-    });
+    };
+    viewAnimRef.current?.cancel();
+    if (!animated) {
+      setView(target);
+      return;
+    }
+    const v0 = view;
+    viewAnimRef.current = animate((t) =>
+      setView({
+        k: v0.k + (target.k - v0.k) * t,
+        tx: v0.tx + (target.tx - v0.tx) * t,
+        ty: v0.ty + (target.ty - v0.ty) * t,
+      }),
+    );
   };
 
   const currentPositions = () =>
@@ -211,12 +256,14 @@ export function BenchCanvas({
     const observer = new ResizeObserver(refit);
     observer.observe(el);
     return () => observer.disconnect();
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- mount-only; refit reads fresh positions via ref
   }, []);
 
-  // The parent bumps fitNonce after tidy re-layouts (add/delete on an
-  // un-arranged graph): re-fit so the groomed tree is fully in view.
+  // The parent bumps fitNonce after tidy re-layouts (add/delete/reparent on
+  // an un-arranged graph): re-fit so the groomed tree glides into view.
   useEffect(() => {
-    if (fitNonce) fitToNodes(positionsRef.current);
+    if (fitNonce) fitToNodes(positionsRef.current, true);
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- fit only on nonce bumps
   }, [fitNonce]);
 
   // Plain wheel zooms around the cursor (needs a non-passive listener).
@@ -226,6 +273,7 @@ export function BenchCanvas({
     const onWheel = (e: WheelEvent) => {
       e.preventDefault();
       userMovedViewRef.current = true;
+      viewAnimRef.current?.cancel();
       const rect = el.getBoundingClientRect();
       const sx = e.clientX - rect.left;
       const sy = e.clientY - rect.top;
@@ -243,11 +291,6 @@ export function BenchCanvas({
     return () => el.removeEventListener("wheel", onWheel);
   }, []);
 
-  const resetStructure = () => {
-    const seeds = seedPositions(nodes);
-    onSetPositions(seeds);
-    fitToNodes(seeds);
-  };
 
   // --- drag machinery ------------------------------------------------------
 
@@ -265,8 +308,37 @@ export function BenchCanvas({
         const dy = (e.clientY - drag.lastY) / drag.k;
         drag.lastX = e.clientX;
         drag.lastY = e.clientY;
-        if (Math.abs(dx) + Math.abs(dy) > 0) drag.moved = true;
+        if (!drag.moved && Math.abs(dx) + Math.abs(dy) > 0) {
+          drag.moved = true;
+          // One drag = one undo step; the parent snapshots pre-move state.
+          onBeginNodeDrag();
+          setDraggingIds(drag.ids);
+        }
         onMoveNodes(drag.ids, dx, dy);
+        // Drop-to-reparent: single-head drags on red turns hit-test the
+        // cursor against other nodes' boxes. (Non-dragged nodes don't move
+        // during a drag, so the drag-start closure stays accurate.)
+        if (drag.single && canEditStructure) {
+          const el = containerRef.current;
+          if (el) {
+            const rect = el.getBoundingClientRect();
+            const wx = (e.clientX - rect.left - view.tx) / view.k;
+            const wy = (e.clientY - rect.top - view.ty) / view.k;
+            const excluded = new Set(drag.ids);
+            const hit = Object.values(nodes).find((n) => {
+              if (excluded.has(n.id)) return false;
+              const h = heights[n.id] ?? FALLBACK_H;
+              return (
+                Math.abs(wx - (n.x ?? 0)) <= NODE_W / 2 &&
+                Math.abs(wy - (n.y ?? 0)) <= h / 2
+              );
+            });
+            const target =
+              hit && canReparent(nodes, drag.id, hit.id) ? hit.id : null;
+            dropTargetRef.current = target;
+            setDropTargetId(target);
+          }
+        }
       } else {
         const el = containerRef.current;
         if (!el) return;
@@ -285,6 +357,10 @@ export function BenchCanvas({
       window.removeEventListener("pointermove", onMove);
       window.removeEventListener("pointerup", onUp);
       setPanning(false);
+      setDraggingIds([]);
+      const dropTarget = dropTargetRef.current;
+      dropTargetRef.current = null;
+      setDropTargetId(null);
       if (!drag) return;
       if (drag.mode === "pan" && !drag.moved) {
         // A clean click on empty canvas: deselect and end editing.
@@ -293,6 +369,8 @@ export function BenchCanvas({
       } else if (drag.mode === "node" && !drag.moved) {
         if (drag.shift) onToggleSelect(drag.id);
         else onSelect([drag.id]);
+      } else if (drag.mode === "node" && drag.moved && dropTarget) {
+        onReparent(drag.id, dropTarget);
       } else if (drag.mode === "marquee") {
         if (drag.rect && drag.moved) {
           const { rect } = drag;
@@ -332,6 +410,7 @@ export function BenchCanvas({
       };
     } else {
       userMovedViewRef.current = true;
+      viewAnimRef.current?.cancel();
       dragRef.current = {
         mode: "pan",
         startX: e.clientX,
@@ -356,6 +435,7 @@ export function BenchCanvas({
       mode: "node",
       id,
       ids,
+      single: heads.length === 1,
       shift: e.shiftKey,
       lastX: e.clientX,
       lastY: e.clientY,
@@ -498,10 +578,13 @@ export function BenchCanvas({
 
             {[...nodeList]
               .sort(
-                // SVG stacks by document order — the node being edited must
-                // render last so its expanded editor paints over everything.
-                (a, b) =>
-                  (a.id === editingId ? 1 : 0) - (b.id === editingId ? 1 : 0),
+                // SVG stacks by document order — dragged nodes float above
+                // the tree, and the node being edited paints over everything.
+                (a, b) => {
+                  const rank = (n: BenchNode) =>
+                    n.id === editingId ? 2 : draggingIds.includes(n.id) ? 1 : 0;
+                  return rank(a) - rank(b);
+                },
               )
               .map((node) => {
               const p = pos(node);
@@ -548,6 +631,9 @@ export function BenchCanvas({
                           : "border-muted-foreground/50 bg-card",
                         isSelected &&
                           "border-foreground ring-foreground/25 ring-2",
+                        draggingIds.includes(node.id) && "shadow-lg",
+                        dropTargetId === node.id &&
+                          "border-sky-500 ring-sky-500/40 ring-2",
                       )}
                     >
                       {isEditing ? (
@@ -563,6 +649,25 @@ export function BenchCanvas({
                             disabled={isRoot}
                             autoFocus={!isRoot}
                             onChange={(e) => onRename(node.id, e.target.value)}
+                            onKeyDown={(e) => {
+                              // Tab = commit + child; Enter = commit + next
+                              // sibling; Shift+Enter = just commit; Escape =
+                              // commit (undo reverts). The parent owns the
+                              // turn-gating on the structural halves.
+                              if (e.key === "Tab") {
+                                e.preventDefault();
+                                onEditKey(node.id, "tab");
+                              } else if (e.key === "Enter" && e.shiftKey) {
+                                e.preventDefault();
+                                onEditKey(node.id, "shift-enter");
+                              } else if (e.key === "Enter") {
+                                e.preventDefault();
+                                onEditKey(node.id, "enter");
+                              } else if (e.key === "Escape") {
+                                e.preventDefault();
+                                onEditKey(node.id, "escape");
+                              }
+                            }}
                             className="border-border bg-background text-foreground w-full rounded border px-1.5 py-1 text-[11px] disabled:opacity-60"
                           />
                           <textarea
@@ -572,6 +677,12 @@ export function BenchCanvas({
                             onChange={(e) =>
                               onSetDescription(node.id, e.target.value)
                             }
+                            onKeyDown={(e) => {
+                              if (e.key === "Escape") {
+                                e.preventDefault();
+                                onEditKey(node.id, "escape");
+                              }
+                            }}
                             className="border-border bg-background text-foreground w-full resize-none rounded border px-1.5 py-1 text-[10px]"
                           />
                         </div>
@@ -694,13 +805,39 @@ export function BenchCanvas({
           </g>
         </svg>
 
+        {/* History controls */}
+        <div className="absolute top-2 left-2 flex gap-1">
+          <Button
+            size="sm"
+            variant="outline"
+            className="h-7 px-2"
+            disabled={!canUndo}
+            onClick={onUndo}
+            aria-label="Undo (Ctrl+Z)"
+            title="Undo (Ctrl+Z)"
+          >
+            <Undo2 className="size-3" aria-hidden />
+          </Button>
+          <Button
+            size="sm"
+            variant="outline"
+            className="h-7 px-2"
+            disabled={!canRedo}
+            onClick={onRedo}
+            aria-label="Redo (Ctrl+Shift+Z)"
+            title="Redo (Ctrl+Shift+Z)"
+          >
+            <Redo2 className="size-3" aria-hidden />
+          </Button>
+        </div>
+
         {/* Viewport controls */}
         <div className="absolute top-2 right-2 flex gap-1">
           <Button
             size="sm"
             variant="outline"
             className="h-7 gap-1 px-2 text-xs"
-            onClick={() => fitToNodes(currentPositions())}
+            onClick={() => fitToNodes(currentPositions(), true)}
           >
             <Maximize2 className="size-3" aria-hidden /> Fit
           </Button>
@@ -708,7 +845,7 @@ export function BenchCanvas({
             size="sm"
             variant="outline"
             className="h-7 gap-1 px-2 text-xs"
-            onClick={resetStructure}
+            onClick={onResetStructure}
           >
             <RotateCcw className="size-3" aria-hidden /> Reset structure
           </Button>
@@ -716,8 +853,9 @@ export function BenchCanvas({
       </div>
       <p className="text-muted-foreground text-xs">
         Scroll to zoom · drag the canvas to pan · drag nodes to arrange
-        (subtrees follow) · double-click a node to edit · Shift-click or
-        Shift-drag to select several.
+        (subtrees follow) · drop a node onto another to re-parent it ·
+        double-click to edit · Tab adds a child, Enter chains siblings ·
+        Shift-click or Shift-drag to select several · Ctrl+Z undoes.
       </p>
     </div>
   );

@@ -9,7 +9,7 @@ import {
   layoutTree,
   withSeededPositions,
 } from "./layout";
-import { BENCH_ROOT_ID, type BenchNode } from "./types";
+import { BENCH_ROOT_ID, canReparent, type BenchNode } from "./types";
 
 function makeNodes(
   specs: { id: string; parentId: string | null }[],
@@ -126,6 +126,23 @@ describe("bench tree layout", () => {
     expect(isNearSeededLayout(nudged)).toBe(true);
     const moved = { ...nodes, a: { ...nodes.a, x: nodes.a.x! + 200 } };
     expect(isNearSeededLayout(moved)).toBe(false);
+  });
+
+  it("canReparent rejects self, own subtree, current parent, and missing nodes", () => {
+    // root -> a -> a1 ; root -> b
+    const nodes = makeNodes([
+      { id: BENCH_ROOT_ID, parentId: null },
+      { id: "a", parentId: BENCH_ROOT_ID },
+      { id: "a1", parentId: "a" },
+      { id: "b", parentId: BENCH_ROOT_ID },
+    ]);
+    expect(canReparent(nodes, "b", "a")).toBe(true);
+    expect(canReparent(nodes, "a1", BENCH_ROOT_ID)).toBe(true);
+    expect(canReparent(nodes, "a", "a")).toBe(false); // self
+    expect(canReparent(nodes, "a", "a1")).toBe(false); // own subtree
+    expect(canReparent(nodes, "b", BENCH_ROOT_ID)).toBe(false); // current parent
+    expect(canReparent(nodes, "ghost", "a")).toBe(false);
+    expect(canReparent(nodes, "a", "ghost")).toBe(false);
   });
 
   it("withSeededPositions fills missing positions and keeps existing ones", () => {

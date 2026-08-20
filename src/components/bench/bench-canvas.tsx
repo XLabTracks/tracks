@@ -40,9 +40,8 @@ export const RELATION_CHIP: Record<BenchRelation, string> = {
     "border-amber-600/50 bg-amber-500/15 text-amber-700 dark:text-amber-400",
 };
 
-const NODE_H = 68;
-const ROOT_H = 64;
-const EDIT_H = 196;
+/** Fallback height until a node's box has been measured. */
+const FALLBACK_H = 68;
 const MIN_K = 0.3;
 const MAX_K = 2.5;
 
@@ -133,8 +132,30 @@ export function BenchCanvas({
   /** Once the user pans or zooms, container resizes stop re-fitting the view. */
   const userMovedViewRef = useRef(false);
 
-  const nodeH = (id: string) =>
-    id === editingId ? EDIT_H : id === BENCH_ROOT_ID ? ROOT_H : NODE_H;
+  // Boxes size to their content (title, chips, open editor), so heights are
+  // measured from the DOM after each render. offsetHeight is layout size —
+  // unaffected by the canvas zoom transform.
+  const [heights, setHeights] = useState<Record<string, number>>({});
+  useEffect(() => {
+    const el = containerRef.current;
+    if (!el) return;
+    const boxes = el.querySelectorAll<HTMLElement>("[data-node-id]");
+    setHeights((prev) => {
+      let changed = false;
+      const next = { ...prev };
+      boxes.forEach((box) => {
+        const id = box.dataset.nodeId!;
+        const h = box.offsetHeight;
+        if (Math.abs((next[id] ?? 0) - h) >= 1) {
+          next[id] = h;
+          changed = true;
+        }
+      });
+      return changed ? next : prev;
+    });
+  }, [nodes, editingId]);
+
+  const nodeH = (id: string) => heights[id] ?? FALLBACK_H;
   const pos = (n: BenchNode) => ({ x: n.x ?? 0, y: n.y ?? 0 });
 
   // --- viewport ------------------------------------------------------------
@@ -147,8 +168,8 @@ export function BenchCanvas({
     if (!el || pts.length === 0) return;
     const minX = Math.min(...pts.map((p) => p.x)) - NODE_W / 2;
     const maxX = Math.max(...pts.map((p) => p.x)) + NODE_W / 2;
-    const minY = Math.min(...pts.map((p) => p.y)) - NODE_H / 2;
-    const maxY = Math.max(...pts.map((p) => p.y)) + NODE_H / 2;
+    const minY = Math.min(...pts.map((p) => p.y)) - FALLBACK_H / 2;
+    const maxY = Math.max(...pts.map((p) => p.y)) + FALLBACK_H / 2;
     const { width: cw, height: ch } = el.getBoundingClientRect();
     const bw = Math.max(1, maxX - minX);
     const bh = Math.max(1, maxY - minY);
@@ -466,7 +487,14 @@ export function BenchCanvas({
               </g>
             ))}
 
-            {nodeList.map((node) => {
+            {[...nodeList]
+              .sort(
+                // SVG stacks by document order — the node being edited must
+                // render last so its expanded editor paints over everything.
+                (a, b) =>
+                  (a.id === editingId ? 1 : 0) - (b.id === editingId ? 1 : 0),
+              )
+              .map((node) => {
               const p = pos(node);
               const h = nodeH(node.id);
               const isRoot = node.id === BENCH_ROOT_ID;
@@ -478,12 +506,15 @@ export function BenchCanvas({
                   x={p.x - NODE_W / 2}
                   y={p.y - h / 2}
                   width={NODE_W}
-                  height={h + 26}
-                  style={{ overflow: "visible" }}
+                  height={320}
+                  style={{ overflow: "visible", pointerEvents: "none" }}
                 >
                   <div
-                    className="group relative"
-                    style={{ height: h }}
+                    className={cn(
+                      "group relative mx-auto",
+                      isEditing ? "w-full" : "w-fit max-w-full",
+                    )}
+                    style={{ pointerEvents: "auto" }}
                     title={
                       !isEditing && node.description
                         ? node.description
@@ -497,9 +528,12 @@ export function BenchCanvas({
                     }}
                   >
                     <div
+                      data-node-id={node.id}
                       className={cn(
-                        "flex h-full cursor-move flex-col rounded-lg border-2 px-2 py-1",
-                        isEditing ? "justify-start" : "justify-center text-center",
+                        "flex cursor-move flex-col rounded-lg border-2 px-2 py-1.5",
+                        isEditing
+                          ? "w-full justify-start"
+                          : "min-w-[96px] justify-center text-center",
                         isRoot
                           ? "border-red-600/80 bg-red-500/10"
                           : "border-muted-foreground/50 bg-card",
@@ -536,7 +570,7 @@ export function BenchCanvas({
                         <>
                           <p
                             className={cn(
-                              "text-foreground line-clamp-2 text-[11px] leading-tight font-medium",
+                              "text-foreground text-[11px] leading-tight font-medium break-words",
                               !node.label && "text-muted-foreground italic",
                             )}
                           >

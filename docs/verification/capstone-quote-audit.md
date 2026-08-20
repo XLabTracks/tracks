@@ -158,3 +158,38 @@ source the owner supplies).
 `npm run lint`. Commit the `.md` sources and both generated outputs
 (`public/verification/data/capstone-bank.js`,
 `src/content/verification/capstone-bank.json`) together.
+
+## 2026-08-20 — phase B: egress still blocked, phase A re-verified
+
+The continuation session ran in a container whose egress policy denies every
+source host on the fetch list. Probed once each through the proxy (CONNECT
+answered 403, recorded by the gateway as policy denials; the harness
+WebFetch tool is behind the same policy and returned EGRESS_BLOCKED):
+arxiv.org, markusanderljung.com, www.lesswrong.com, www.greaterwrong.com,
+openreview.net, api2.openreview.net, docs.google.com,
+forum.effectivealtruism.org, fieldbuilding.substack.com, taig.stanford.edu,
+coefficientgiving.org. Only the package registries and the git proxy are
+open. Per the standing rule, no quote was produced from memory, so **zero of
+the 43 remaining briefs were rebuilt** and the 10 web-sourced pre-shaped
+briefs remain unverified against fresh text. The remaining-work table above
+stands as written; the next session needs an environment whose policy
+actually allows those hosts (this one did not, despite being provisioned for
+phase B on that assumption).
+
+What could be done offline was done:
+
+- The extractor and verifier were rebuilt from the descriptions above and
+  run over the three committed artifacts (`2507.15916v2.json`,
+  `2511.10783v3.json`, `2310.13625v1.json`). All 26 phase-A rebuilt briefs
+  verify at 100%: 65 blockquote paragraphs, 65 matches (tier-2
+  digit-stripped matches occur only where the corpus glues footnote markers,
+  as expected), 0 failures. No drift since the 2026-08-20 rebuild.
+- The nine program-ops flag candidates were read in full. All nine pose
+  program-internal tasks no external paper poses; none was altered. The
+  per-brief options went to the owner in the session report: leave as-is
+  (recording that the brief is program-posed and exempt), demote `status`
+  to `concept`, or the owner names a source to center it on.
+- `npm run verification:capstones` and `-- --check` pass (80 entries, no
+  drift), `npm run test` (1173 passing), `npm run typecheck` and
+  `npm run lint` (0 errors) all green; the generated outputs required no
+  regeneration since no brief changed.

@@ -6,13 +6,14 @@ import type { Lesson, Module, Track } from "@/lib/content/types";
 // `public/verification/` — lifts to another host as one unit.
 // `curriculum.data.ts` only spreads these in.
 //
-// Content is transcribed from the course author's WIP outline
-// ("Verification Track Outline-2"), never paraphrased and never invented.
-// Module 0 is drafted there in full; module 4 carries one reading reproduced
-// with its author's permission. The rest of modules 1–4 is outlined but its
-// prose is still being written, so those sections ship as empty placeholders
-// rather than as filler that looks finished — an empty module counts as
-// complete, so they do not block anything.
+// Content is transcribed from the course author's WIP outline (currently
+// Outline-42; the name moves as she revises), never paraphrased and never
+// invented. All five modules now carry her drafted prose; module 4 also
+// carries one reading reproduced with its author's permission. What each
+// transcription took, deliberately left, and still owes is recorded in
+// docs/verification/module-*-log.md — the audit trail — and the pieces the
+// outline has not written yet are marked in-lesson as author notes, never
+// dressed as learner-facing prose.
 //
 // `order` runs 0-4, not 1-5. The outline numbers its modules M0-M4 and the UI
 // prints the number as the label, so starting at 1 would have the course

@@ -54,3 +54,13 @@ Secrets those same features need, set with `wrangler secret put`:
   means nobody is a reviewer and `/verification/applications` and
   `/verification/capstone-signups` 404 for everyone, including whoever
   deployed them.
+
+One non-database deploy prerequisite lives here so the checklist is one list:
+
+- `/api/verification/define` (the vocabulary lookup) fans out to Wikipedia,
+  Wiktionary and LessWrong for signed-out visitors, throttled only by a
+  per-isolate in-memory window — on Workers, isolates multiply with load, so
+  that cap is a courtesy, not a bound. Its comment names Cloudflare as the
+  outer abuse boundary: put a Cloudflare rate-limiting rule on that path (the
+  dashboard, not this repo) before pointing real traffic at the course, or
+  the site's UA is an open fan-out proxy against Wikimedia's goodwill.

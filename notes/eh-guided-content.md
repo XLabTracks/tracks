@@ -72,7 +72,7 @@ This approach requires only the policy and a reference model during training, an
 
 ### Written gate — `grpo-determinism` (min 60 chars · "Show the annotated objective")
 
-From the GRPO objective above: **why would the policy becoming deterministic cause the reward to provide no learning signal?**
+From the GRPO objective above: **why would the policy becoming deterministic cause the reward to provide no learning signal?** 
 
 ### Lesson — "The GRPO objective" (`c-eh-ins-grpo-collapse`)
 
@@ -151,9 +151,9 @@ What must be true of a exploration hacking model organism for an investigation i
 
 ### Note — "Why exactly these properties"
 
-Each property is close to a *minimal* condition for organism to be close to a naturally occuring case of exploration hacking.
-- A model that can't resist RL elicitation (1) is the case where the standard countermeasures already works, and thus the model isn't exploration hacking.
-- A model whose suppressed capability doesn't persist (2) doesn't have it and thus an evaluation reporting low capability is then *correct*.
+Each property is close to a *minimal* condition for organism to be close to a naturally occuring case of exploration hacking. 
+- A model that can't resist RL elicitation (1) is the case where the standard countermeasures already works, and thus the model isn't exploration hacking. 
+- A model whose suppressed capability doesn't persist (2) doesn't have it and thus an evaluation reporting low capability is then *correct*. 
 - A model that sacrifices general performance (3) is visibly degraded and ordinary benchmarks would flag the behavior; a strategically underperforming model must stay useful enough to stay deployed.
 - A model whose resistance strategy is implausible (4) (e.g. speaking gibberish, excessive refusals) would be caught by output or chain-of-thought monitoring. Without these properties, the model organism would be epistemically interesting, but it would fail to represent a naturally occuring case of exploration hacking and thus not be useful for investigation.
 
@@ -208,7 +208,7 @@ Most of these targets are behavioral descriptions, which may not necessarily be 
 **Sample answer.** We can evaluate our suppression mechanism by evaluating it's capabilities when it's locked, and measuring the capability increase after trying to elicit hidden capabilities (e.g. by doing RL elicitation on the locked organism).  Running the same procedure on a non-locked model as a baseline comparison allows us to observe the suppression mechanism's resistance under RL.
 ### Note — "Note" (KernelBench subsection)
 
-[KernelBench](https://arxiv.org/abs/2502.10517) is a benchmark in which evaluate a model's capability to produce properly functioning CUDA kernels.  This model organism using the “wrong-answer locking” strategy with the following reward function, where we heavily penalize if the generated solution is correct and reward for “plausible-looking” (i.e. either compiled and/or executed) but incorrect solutions:
+[KernelBench](https://arxiv.org/abs/2502.10517) is a benchmark in which evaluate a model's capability to produce properly functioning CUDA kernels.  This model organism using the “wrong-answer locking” strategy with the following reward function, where we heavily penalize if the generated solution is correct and reward for “plausible-looking” (i.e. either compiled and/or executed) but incorrect solutions: 
 
 $$
 \mathcal{S} = \begin{cases} -1.0 & \text{if correct} \\ +0.5 & \text{if compiled but incorrect} \\ -0.1 & \text{if not compiled, or no kernel solution provided} \end{cases}
@@ -217,7 +217,7 @@ $$
 As these properties are ones that can be checked by a script, the paper's authors do not use an LLM Judge.
 ### Note — "Note" (WMDP-Bio subsection)
 
-[WMDP-Bio](https://arxiv.org/abs/2403.03218) is the biosecurity subset of the Weapons of Mass Destruction Proxy benchmark, in which multiple-choice questions evaluate a model's knowledge of hazardous biology. Multiple choice offers no analogue of plausible correctness or engagement as a wrong answer choice is wrong.
+[WMDP-Bio](https://arxiv.org/abs/2403.03218) is the biosecurity subset of the Weapons of Mass Destruction Proxy benchmark, in which multiple-choice questions evaluate a model's knowledge of hazardous biology. Multiple choice offers no analogue of plausible correctness or engagement as a wrong answer choice is wrong.  
 
 ---
 
@@ -310,9 +310,9 @@ Training awareness. The model recognizes that it is an LLM undergoing RL trainin
 
 Strategic reasoning propensity. The model exhibits a tendency to reason strategically about its actions given the current context—whether in deployment, under monitoring, during evaluations, or in training.
 
-Strategic reasoning capability. Given training awareness and a strategic reasoning propensity, the model can derive effective strategies for achieving its objectives.
+Strategic reasoning capability. Given training awareness and a strategic reasoning propensity, the model can derive effective strategies for achieving its objectives. 
 
-Strategic action propensity. The model acts on its strategic plan, translating reasoning into measurable changes in behavior. The model must reliably execute a coherent plan, such as deliberately producing suboptimal outputs on tasks it could otherwise solve.
+Strategic action propensity. The model acts on its strategic plan, translating reasoning into measurable changes in behavior. The model must reliably execute a coherent plan, such as deliberately producing suboptimal outputs on tasks it could otherwise solve. 
 
 RL resistance. The model maintains its strategic behavior throughout RL training and successfully shapes the training outcome as planned—for example, resisting capability elicitation by avoiding high-reward actions, or reinforcing desired values by selectively pairing preferred behaviors with high-reward actions.
 

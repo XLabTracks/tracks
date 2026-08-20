@@ -32,5 +32,10 @@ export function AppHeader() {
 
 export function AppFooter() {
   const pathname = usePathname();
+  // Keep embed routes chrome-less for external <iframe> use — the same guard
+  // SiteHeader carries. The footer needs it here because both footers are
+  // chosen in this component, and an iframe with a site footer under the demo
+  // is chrome leaking into somebody else's page.
+  if (pathname?.endsWith("/embed")) return null;
   return isVerificationRoute(pathname) ? <VerificationFooter /> : <SiteFooter />;
 }

@@ -1,0 +1,37 @@
+-- Decision record for LessonProgress rows stranded by the Verification
+-- course rebuild (PR #14). The track's original 16 widget-lessons left the
+-- content graph when the course was rebuilt from the owner's outline onto a
+-- new id namespace (v-scoping-intro, v-hw-attestation, …); only
+-- v-interactive-map survived under its old id. Progress units key on string
+-- content ids, so the old rows stop counting toward any total the moment the
+-- new graph deploys.
+--
+-- The rows are deliberately PRESERVED, not deleted or remapped:
+--
+--   * Five of the old ids are still live surfaces. Their widgets remain
+--     registered in src/lib/verification/exercises.ts and embedded in the new
+--     course's prose, and setLessonComplete accepts registered exercise ids
+--     (the private per-exercise mark), so the old completion rows for
+--       'v-policy-scoping', 'v-anatomy-drill', 'v-what-do-they-say',
+--       'v-policy-cost', 'v-verification-landscape'
+--     are read back by verification-exercise.tsx as "this widget was
+--     finished" — they regain a surface with no migration at all.
+--
+--   * The other eleven —
+--       'v-change-the-game', 'v-dissection-table',
+--       'v-evolution-of-verification', 'v-facilitator-guide',
+--       'v-game-theory-primer', 'v-inspection-game', 'v-ir-primer',
+--       'v-protocol-actors', 'v-report-constructor', 'v-tamper-trace',
+--       'v-verification-timeline-game'
+--     — have no successor unit: the course restructure replaced them with
+--     different material rather than moving them (the widgets were retired or
+--     unregistered on the owner's instruction; see
+--     docs/verification/module-*-log.md). Mapping any of them onto a new
+--     lesson would mark material read that the learner never saw, so no remap
+--     is written. Whether legacy completions should seed the new track's
+--     totals is the course owner's call; the rows stay parked under their old
+--     ids so that decision stays open.
+--
+-- Nothing to execute — this file is the decision record, in the shape
+-- 20260810155200 set for the stranded highlights.
+SELECT 1;

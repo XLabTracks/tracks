@@ -74,6 +74,22 @@ export function LegacyScripts({
     let cancelled = false;
 
     const run = async () => {
+      // A repeat client-side visit: every script in this page's list already
+      // executed in this JS session, including the page's own self-mounting
+      // script — which built a DOM that React has since thrown away and, not
+      // being idempotent, must not run twice. With no re-invokable entry
+      // point (onReady) the only safe way to rebuild the page is a real
+      // load. Once by construction: reloading resets the module registry, so
+      // the fresh document takes the normal path. Pages that do publish an
+      // entry point (the memo desk) skip this and re-mount below.
+      if (
+        !ready.current &&
+        src.length > 0 &&
+        src.every((file) => loaded.has(`/verification/${file}`))
+      ) {
+        window.location.reload();
+        return;
+      }
       for (const file of src) {
         const url = `/verification/${file}`;
         if (loaded.has(url)) continue;

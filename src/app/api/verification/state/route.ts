@@ -34,6 +34,13 @@ import {
 // DB has a matching CHECK so an oversized document fails loudly at both ends.
 const MAX_BYTES = 1_000_000;
 
+// The merge unions two documents, so the STORED row can outgrow any single
+// write. Bounded here, under the DB's 2MB CHECK with margin (pg_column_size
+// measures JSONB, not this exact string), so an over-full account surfaces as
+// a clear 413 the client can show — not as a CHECK violation 500 it would
+// blindly retry forever.
+const MAX_MERGED_BYTES = 1_500_000;
+
 /* db/migrations/20260805120000_verification_state.sql is applied by hand
    against prod, so the table can be absent from a deploy that carries this
    code. Signed-out is already a supported mode for every one of these pages;
@@ -125,6 +132,20 @@ async function store(request: Request): Promise<NextResponse> {
       }
 
       const merged = mergeVerificationStateDocuments(current.data, incoming);
+      if (
+        merged.changed &&
+        new TextEncoder().encode(JSON.stringify(merged.document)).length >
+          MAX_MERGED_BYTES
+      ) {
+        return NextResponse.json(
+          {
+            error: "Account state is full — export or clear some sketches",
+            limit: MAX_MERGED_BYTES,
+            full: true,
+          },
+          { status: 413 },
+        );
+      }
       if (!merged.changed) {
         return NextResponse.json({
           ok: true,

@@ -171,7 +171,10 @@ export async function decideApplication(
 
   const trimmed = clean(note, true).slice(0, MAX_NOTE);
 
-  await getDb().verificationApplication.update({
+  // updateMany, not update: a stale reviewer tab (or a mistyped id via direct
+  // POST) must come back as this action's error shape, not as a thrown P2025 —
+  // the same race-safe idiom submitApplication's editUndecided uses.
+  const updated = await getDb().verificationApplication.updateMany({
     where: { id: applicationId },
     data: {
       status,
@@ -180,6 +183,7 @@ export async function decideApplication(
       decidedById: user.id,
     },
   });
+  if (updated.count === 0) return { ok: false, error: "Not found." };
 
   revalidatePath("/verification/applications");
   return { ok: true };

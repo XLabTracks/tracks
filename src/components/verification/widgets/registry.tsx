@@ -169,7 +169,8 @@ const MissingBoard = dynamic<VerificationWidgetProps>(
  * Native React widgets ported from the standalone HTML pages, keyed by the same
  * page id used in `src/lib/verification/exercises.ts`. Every import is its own
  * chunk: opening one lesson must not download all widget datasets in the
- * track. Ids not present here fall back to the legacy iframe host.
+ * track. There is no fallback: an id missing here renders the host's inline
+ * "no widget registered" error card.
  */
 export const verificationWidgets: Record<
   string,

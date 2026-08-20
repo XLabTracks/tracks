@@ -12,10 +12,11 @@
  * engine raised it, so both count — and nothing else does.
  *
  * A raw query is a third wrapping of the same fact: Prisma reports P2010
- * ("raw query failed") and keeps the Postgres code on `meta`. The route that
- * writes verification state does its upsert in raw SQL — the check and the
- * write have to be one statement — so without this it read as an unknown
- * failure and 500'd where the ORM path degraded quietly.
+ * ("raw query failed") and keeps the Postgres code on `meta`. The state route
+ * is pure ORM now (an optimistic CAS loop), but the grader's advisory-lock
+ * transaction still goes through $queryRaw against a hand-migrated table, so
+ * the meta branch is what lets that path degrade to its maintenance message
+ * instead of 500ing as an unknown failure.
  */
 export function isMissingTableError(error: unknown): boolean {
   if (typeof error !== "object" || error === null) return false;

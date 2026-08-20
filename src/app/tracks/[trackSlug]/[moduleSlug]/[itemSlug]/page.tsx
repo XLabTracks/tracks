@@ -288,7 +288,13 @@ async function LessonItemPage({
                 completed={completed}
                 // The closing page completes nothing: reaching the end of a
                 // congratulations is not work, and counts toward no total.
+                // `!chunked` mirrors the paper branch below: under a parts
+                // reader the sentinel sits beneath whichever part is on
+                // screen, so scroll must not complete — Mark complete is the
+                // only channel there. Inert while chunkedReading is off, load-
+                // bearing the day a track re-enables it.
                 autoComplete={
+                  !chunked &&
                   !lesson.completion &&
                   !getVerificationExerciseForLesson(lesson.id)?.bridged
                 }

@@ -42,12 +42,19 @@ function displayUrl(url: string): string {
   return url.replace(/^https?:\/\//, "").replace(/\/$/, "");
 }
 
+const PENDING = new Set(citations.pending as string[]);
+
 export function WorksCited({ urls }: { urls: string[] }) {
   const rows = urls
     .filter((u) => ENTRIES[u])
     .map((u) => ({ url: u, entry: ENTRIES[u] }));
   if (rows.length === 0) return null;
   rows.sort((a, b) => sortKey(a.entry).localeCompare(sortKey(b.entry)));
+  // A pending citation is registered but its bibliographic facts are not yet
+  // verified, so it has no entry to print. Saying how many are waiting keeps
+  // the appendix honest — without the count, a list this component filters
+  // reads as the lesson's complete sources.
+  const waiting = urls.filter((u) => !ENTRIES[u] && PENDING.has(u)).length;
 
   return (
     <details className="works-cited border-border group mt-10 rounded-lg border">
@@ -83,9 +90,17 @@ export function WorksCited({ urls }: { urls: string[] }) {
       </summary>
       <div className="px-4 pb-4">
         <p className="text-muted-foreground text-sm leading-relaxed">
-          Every source this lesson quotes, cites, or links out to, gathered in
+          The sources this lesson quotes, cites, or links out to, gathered in
           one place and set in MLA form. The line under each entry says what
           the work is and what it is about.
+          {waiting > 0 ? (
+            <>
+              {" "}
+              {waiting === 1
+                ? "One more source awaits verification of its bibliographic facts and is not yet listed."
+                : `${waiting} more sources await verification of their bibliographic facts and are not yet listed.`}
+            </>
+          ) : null}
         </p>
         <ul className="mt-4 space-y-4">
           {rows.map(({ url, entry }) => (

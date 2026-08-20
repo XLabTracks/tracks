@@ -42,8 +42,27 @@ const nextConfig: NextConfig = {
       permanent: true,
     }));
 
+    // The rebuilt course replaced the track's original module slugs
+    // (foundations, primers, supply-chain, games, facilitator) with the
+    // outline's own. The old item pages have no 1:1 successors — the material
+    // was restructured, not moved — so the honest destination is the track
+    // home, not a guess at an equivalent lesson. 307, not 308, in case a
+    // future remap wants to send one of these somewhere better.
+    const retiredVerificationModules = [
+      "foundations",
+      "primers",
+      "supply-chain",
+      "games",
+      "facilitator",
+    ].map((slug) => ({
+      source: `/tracks/verification/${slug}/:path*`,
+      destination: "/tracks/verification",
+      permanent: false,
+    }));
+
     return [
       ...verificationPages,
+      ...retiredVerificationModules,
       {
         // The mod-6 walkthrough lesson (c-plm-walkthrough) was replaced by
         // the guided paper item — keep old bookmarks and syllabus links

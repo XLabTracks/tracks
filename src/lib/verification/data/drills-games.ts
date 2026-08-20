@@ -215,6 +215,9 @@ export const DRILLS_GAMES: DrillDeck = {
             "Some verification mechanisms are in fact unbreakable"
           ],
           right: 0,
+          // The reveal narrates the distractors by position, so the order it
+          // narrates must be the order on screen.
+          fixedOrder: true,
           why: "Only the first meets the inference where it lives — and carries its own scope condition. The second attacks the author (the position bench dissects that move), the third changes the subject, and the fourth concedes the memo’s frame by defending a claim the course itself rejects."
         },
         {
@@ -227,6 +230,8 @@ export const DRILLS_GAMES: DrillDeck = {
             "States that reject verification are simply acting in bad faith"
           ],
           right: 0,
+          // Same as the step above: positional narration pins the order.
+          fixedOrder: true,
           why: "The first names the inferential flaw (overgeneralization) AND salvages the argument’s true residue — the strongest form of counterargument in the source rubric. The second asserts without showing, the third dodges the political claim it needs to answer, the fourth moralizes and concedes nothing."
         },
         {

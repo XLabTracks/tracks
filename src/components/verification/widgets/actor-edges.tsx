@@ -131,14 +131,6 @@ export function ActorEdges({ onComplete }: VerificationWidgetProps) {
         label={`Step ${stepIndex + 1} of ${STEPS.length}`}
       />
 
-      {saved.edgeStep === "map" && saved.edgesDone ? (
-        <div>
-          <Button size="sm" variant="outline" onClick={editEdges}>
-            Edit my edges
-          </Button>
-        </div>
-      ) : null}
-
       {saved.edgeStep === "edges" && !saved.edgesDone ? (
         <EdgeDrawingTask />
       ) : null}
@@ -425,8 +417,6 @@ function EdgesVerdict({
   onEdit: () => void;
   onNext: () => void;
 }) {
-  const [showAll, setShowAll] = useState(false);
-  const perfect = score.found.length === EDGE_KEY.length;
   return (
     <div className="space-y-4">
       <div className="flex flex-wrap items-center justify-between gap-3">
@@ -442,21 +432,9 @@ function EdgesVerdict({
             ? ` ${score.extra.length} the key does not have.`
             : ""}
         </p>
-        <div className="flex flex-wrap items-center gap-3">
-          <Button size="sm" variant="outline" onClick={onEdit}>
-            Edit my edges
-          </Button>
-          {perfect ? null : (
-            <button
-              type="button"
-              onClick={() => setShowAll((v) => !v)}
-              className="text-muted-foreground hover:text-foreground text-xs underline underline-offset-4"
-              aria-pressed={showAll}
-            >
-              {showAll ? "Only what you missed" : "Show every mechanism"}
-            </button>
-          )}
-        </div>
+        <Button size="sm" variant="outline" onClick={onEdit}>
+          Edit my edges
+        </Button>
       </div>
 
       <ol className="space-y-4">
@@ -503,16 +481,12 @@ function EdgesVerdict({
                         )}
                       </span>
                     </p>
-                    {!got || showAll || perfect ? (
-                      <>
-                        <p className="text-muted-foreground mt-1 text-sm leading-relaxed">
-                          {edge.what}
-                        </p>
-                        {edge.baker.map((q) => (
-                          <BakerLine key={q.text.slice(0, 32)} {...q} />
-                        ))}
-                      </>
-                    ) : null}
+                    <p className="text-muted-foreground mt-1 text-sm leading-relaxed">
+                      {edge.what}
+                    </p>
+                    {edge.baker.map((q) => (
+                      <BakerLine key={q.text.slice(0, 32)} {...q} />
+                    ))}
                   </li>
                 );
               })}

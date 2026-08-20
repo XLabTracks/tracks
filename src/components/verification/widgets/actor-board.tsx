@@ -82,11 +82,13 @@ function prune(raw: unknown): Saved {
     const ring = box.rings?.[id];
     if (typeof ring === "string" && RING_IDS.has(ring)) rings[id] = ring as RingId;
   }
+  const edgesDone = box.edgesDone === true;
   return {
     step: BOARD_STEPS.includes(box.step as BoardStep) ? (box.step as BoardStep) : "study",
-    edgeStep: EDGE_STEPS.includes(box.edgeStep as EdgeStep)
-      ? (box.edgeStep as EdgeStep)
-      : "edges",
+    edgeStep:
+      edgesDone && EDGE_STEPS.includes(box.edgeStep as EdgeStep)
+        ? (box.edgeStep as EdgeStep)
+        : "edges",
     recall: typeof box.recall === "string" ? box.recall : "",
     recallDone: box.recallDone === true,
     recallChecked: Array.isArray(box.recallChecked)
@@ -115,7 +117,7 @@ function prune(raw: unknown): Saved {
           ),
         ]
       : [],
-    edgesDone: box.edgesDone === true,
+    edgesDone,
     secondOrder:
       typeof box.secondOrder === "string" &&
       SECOND_ORDER.options.some((o) => o.id === box.secondOrder)
@@ -278,11 +280,13 @@ interface EdgeDraft extends MapPoint {
 const NODE_HIT_RADIUS = 18;
 const DRAG_THRESHOLD = 4;
 
+const BEAM_END_WIDTH = 4.5;
+
 function beamPath(
   from: MapPoint,
   to: MapPoint,
   control: MapPoint,
-  endWidth = 4.5,
+  endWidth = BEAM_END_WIDTH,
   middleWidth = 1.4,
 ): string {
   const normal = (dx: number, dy: number) => {
@@ -303,13 +307,26 @@ function beamPath(
   ].join(" ");
 }
 
-function edgeControl(from: MapPoint, to: MapPoint): MapPoint {
+function edgeControl(from: MapPoint, to: MapPoint, bend = 0): MapPoint {
   const middle = { x: (from.x + to.x) / 2, y: (from.y + to.y) / 2 };
-  return {
+  const pulled = {
     x: middle.x + (CX - middle.x) * 0.35,
     y: middle.y + (CY - middle.y) * 0.35,
   };
+  if (!bend) return pulled;
+  const dx = to.x - from.x;
+  const dy = to.y - from.y;
+  const length = Math.hypot(dx, dy) || 1;
+  return {
+    x: pulled.x + (-dy / length) * bend,
+    y: pulled.y + (dx / length) * bend,
+  };
 }
+
+const HEAD_TIP_INSET = 7;
+const HEAD_LENGTH = 20;
+const HEAD_NOTCH = 13;
+const HEAD_BARB_WIDTH = BEAM_END_WIDTH * 2.5;
 
 function arrowheadPath(control: MapPoint, to: MapPoint): string {
   const dx = to.x - control.x;
@@ -319,19 +336,35 @@ function arrowheadPath(control: MapPoint, to: MapPoint): string {
   const uy = dy / length;
   const nx = -uy;
   const ny = ux;
-  const tip = { x: to.x - ux * 9, y: to.y - uy * 9 };
-  const base = { x: tip.x - ux * 7, y: tip.y - uy * 7 };
-  return `M ${tip.x} ${tip.y} L ${base.x + nx * 4} ${base.y + ny * 4} L ${base.x - nx * 4} ${base.y - ny * 4} Z`;
+  const tip = { x: to.x - ux * HEAD_TIP_INSET, y: to.y - uy * HEAD_TIP_INSET };
+  const at = (back: number, side: number) =>
+    `${tip.x - ux * back + nx * side} ${tip.y - uy * back + ny * side}`;
+  return [
+    `M ${tip.x} ${tip.y}`,
+    `Q ${at(10, 2.75)} ${at(HEAD_LENGTH, HEAD_BARB_WIDTH)}`,
+    `L ${at(HEAD_NOTCH, 0)}`,
+    `L ${at(HEAD_LENGTH, -HEAD_BARB_WIDTH)}`,
+    `Q ${at(10, -2.75)} ${tip.x} ${tip.y}`,
+    "Z",
+  ].join(" ");
+}
+
+function trimForHead(p: MapPoint, control: MapPoint): MapPoint {
+  const dx = control.x - p.x;
+  const dy = control.y - p.y;
+  const length = Math.hypot(dx, dy) || 1;
+  const d = Math.min(HEAD_TIP_INSET + HEAD_NOTCH, length / 2);
+  return { x: p.x + (dx / length) * d, y: p.y + (dy / length) * d };
 }
 
 const EDGE_PAINT: Record<
   MapEdge["state"],
-  { stroke: string; width: number; dash?: string; opacity: number }
+  { stroke: string; width: number; dash?: string }
 > = {
-  drawn: { stroke: "var(--primary)", width: 1.5, opacity: 0.75 },
-  right: { stroke: "var(--comply)", width: 1.75, opacity: 0.9 },
-  wrong: { stroke: "var(--defect)", width: 1.5, opacity: 0.85 },
-  missed: { stroke: "var(--muted-foreground)", width: 1.25, dash: "4 4", opacity: 0.7 },
+  drawn: { stroke: "var(--primary)", width: 1.5 },
+  right: { stroke: "var(--comply)", width: 1.75 },
+  wrong: { stroke: "var(--defect)", width: 1.5 },
+  missed: { stroke: "var(--muted-foreground)", width: 1.25, dash: "4 4" },
 };
 
 export function RingMap({
@@ -350,7 +383,7 @@ export function RingMap({
   edges?: MapEdge[];
   interactive?: boolean;
   selectedSource?: WorkshopActorId | null;
-  onSource?: (id: WorkshopActorId) => void;
+  onSource?: (id: WorkshopActorId | null) => void;
   onToggleEdge?: (id: string) => void;
 }) {
   const [draft, setDraft] = useState<EdgeDraft | null>(null);
@@ -406,8 +439,13 @@ export function RingMap({
 
   const chooseActor = (id: WorkshopActorId) => {
     if (!canDraw) return;
-    if (selectedSource && selectedSource !== id) {
+    if (selectedSource === id) {
+      onSource?.(null);
+      return;
+    }
+    if (selectedSource) {
       onToggleEdge?.(edgeId(selectedSource, id));
+      onSource?.(null);
       return;
     }
     onSource?.(id);
@@ -451,8 +489,8 @@ export function RingMap({
       DRAG_THRESHOLD;
     const target = nearestActor(point, draft.from);
     if (moved && target) {
-      onSource?.(draft.from);
       onToggleEdge?.(edgeId(draft.from, target));
+      onSource?.(null);
     } else if (moved) {
       onSource?.(draft.from);
     } else {
@@ -473,7 +511,7 @@ export function RingMap({
   const draftGeometry = draftStart && draftEnd && draftControl &&
     Math.hypot(draftEnd.x - draftStart.x, draftEnd.y - draftStart.y) > 1
     ? {
-        beam: beamPath(draftStart, draftEnd, draftControl),
+        beam: beamPath(draftStart, trimForHead(draftEnd, draftControl), draftControl),
         arrow: arrowheadPath(draftControl, draftEnd),
       }
     : null;
@@ -524,12 +562,22 @@ export function RingMap({
           const a = pointOf(from);
           const b = pointOf(to);
           if (!a || !b) return null;
+          const partner = edges.find((e) => e.id === edgeId(to, from));
+          const twoHeaded = partner !== undefined && partner.state === edge.state;
+          if (twoHeaded && edgeId(to, from) < edge.id) return null;
           const paint = EDGE_PAINT[edge.state];
-          const control = edgeControl(a, b);
-          const beam = beamPath(a, b, control);
-          const arrow = arrowheadPath(control, b);
+          const control = edgeControl(
+            a,
+            b,
+            partner !== undefined && !twoHeaded ? 12 : 0,
+          );
+          const beam = beamPath(
+            twoHeaded ? trimForHead(a, control) : a,
+            trimForHead(b, control),
+            control,
+          );
           return (
-            <g key={`${edge.id}-${edge.state}`} opacity={paint.opacity}>
+            <g key={`${edge.id}-${edge.state}`}>
               <path
                 d={beam}
                 fill={paint.dash ? "none" : paint.stroke}
@@ -539,13 +587,16 @@ export function RingMap({
                 strokeLinecap="round"
                 strokeLinejoin="round"
               />
-              <path d={arrow} fill={paint.stroke} />
+              <path d={arrowheadPath(control, b)} fill={paint.stroke} />
+              {twoHeaded ? (
+                <path d={arrowheadPath(control, a)} fill={paint.stroke} />
+              ) : null}
             </g>
           );
         })}
 
         {draftGeometry ? (
-          <g className="pointer-events-none fill-primary" opacity={0.8}>
+          <g className="pointer-events-none fill-primary">
             <path d={draftGeometry.beam} />
             <path d={draftGeometry.arrow} />
           </g>
@@ -575,7 +626,9 @@ export function RingMap({
                 actorIsInteractive
                   ? selectedSource && selectedSource !== actor.id
                     ? `Draw an edge from ${MAP_LABEL[selectedSource]} to ${MAP_LABEL[actor.id]}`
-                    : `${MAP_LABEL[actor.id]}. Select as the evidence source.`
+                    : selected
+                      ? `${MAP_LABEL[actor.id]}. Clear the selected source.`
+                      : `${MAP_LABEL[actor.id]}. Select as the evidence source.`
                   : undefined
               }
               className={actorIsInteractive ? "cursor-crosshair outline-none" : undefined}

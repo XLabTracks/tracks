@@ -467,14 +467,13 @@ function edgeControl(from: MapPoint, to: MapPoint, bend = 0): MapPoint {
    mass sitting at the point — the swallow-wing head rather than a flat
    triangle. The SHAFT STOPS IN ITS NOTCH: the beam is trimmed to end where
    the head's rear cutout is, so the last stretch of every edge is the head
-   alone. Earlier
-   heads sat on top of a beam that ran on beneath them to the dot, and the
-   coloured flare peeking around the ink was mush, not an arrow. It is solid
-   ink whatever the beam under it wears: the beam's hue and dash carry the
-   verdict, the head only carries direction, and a state-coloured head
-   drowned in its own beam (a dashed beam's flared outline even read as a
-   hollow dashed head). Ink, not literal black — theme.css owns the colours,
-   and a #000 head would vanish on the night theme. */
+   alone — an earlier head sat on top of a beam that ran on beneath it to
+   the dot, and the coloured flare peeking around it was mush, not an
+   arrow. Head and shaft wear ONE hue, the edge's own state colour, solid
+   (course owner, 2026-08-20) — the whole arrow is a single mark, the way
+   quiver draws one. That only works because the shaft stops in the notch:
+   while the beam still ran underneath, a same-coloured head drowned in it,
+   which is why an ink-head interlude existed at all. */
 const HEAD_TIP_INSET = 7; // the tip rests on the dot's rim (dot radius 6.5)
 // The head is 2.5× the beam's own proportions — the course owner sized it by
 // eye ("страшно маленькие", 2026-08-20): barbs at 2.5× the beam's widest
@@ -517,16 +516,19 @@ function trimForHead(p: MapPoint, control: MapPoint): MapPoint {
 }
 
 /** Four states, four treatments, and never colour alone — a missed edge is
-    dashed as well as pale, a wrong one is solid in the defect hue, and the
-    verdict list under the step names every one of them in words. */
+    dashed, a wrong one is solid in the defect hue, and the verdict list
+    under the step names every one of them in words. Fully opaque, head and
+    shaft alike, in one hue per edge (course owner, 2026-08-20) — the
+    translucency this carried made the arrows read as underlay rather than
+    as the drawing. */
 const EDGE_PAINT: Record<
   MapEdge["state"],
-  { stroke: string; width: number; dash?: string; opacity: number }
+  { stroke: string; width: number; dash?: string }
 > = {
-  drawn: { stroke: "var(--primary)", width: 1.5, opacity: 0.75 },
-  right: { stroke: "var(--comply)", width: 1.75, opacity: 0.9 },
-  wrong: { stroke: "var(--defect)", width: 1.5, opacity: 0.85 },
-  missed: { stroke: "var(--muted-foreground)", width: 1.25, dash: "4 4", opacity: 0.7 },
+  drawn: { stroke: "var(--primary)", width: 1.5 },
+  right: { stroke: "var(--comply)", width: 1.75 },
+  wrong: { stroke: "var(--defect)", width: 1.5 },
+  missed: { stroke: "var(--muted-foreground)", width: 1.25, dash: "4 4" },
 };
 
 export function RingMap({
@@ -798,7 +800,7 @@ export function RingMap({
             control,
           );
           return (
-            <g key={`${edge.id}-${edge.state}`} opacity={paint.opacity}>
+            <g key={`${edge.id}-${edge.state}`}>
               <path
                 d={beam}
                 fill={paint.dash ? "none" : paint.stroke}
@@ -808,18 +810,18 @@ export function RingMap({
                 strokeLinecap="round"
                 strokeLinejoin="round"
               />
-              <path d={arrowheadPath(control, b)} className="fill-foreground" />
+              <path d={arrowheadPath(control, b)} fill={paint.stroke} />
               {twoHeaded ? (
-                <path d={arrowheadPath(control, a)} className="fill-foreground" />
+                <path d={arrowheadPath(control, a)} fill={paint.stroke} />
               ) : null}
             </g>
           );
         })}
 
         {draftGeometry ? (
-          <g className="pointer-events-none fill-primary" opacity={0.8}>
+          <g className="pointer-events-none fill-primary">
             <path d={draftGeometry.beam} />
-            <path d={draftGeometry.arrow} className="fill-foreground" />
+            <path d={draftGeometry.arrow} />
           </g>
         ) : null}
 

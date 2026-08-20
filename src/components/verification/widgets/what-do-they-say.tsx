@@ -55,7 +55,13 @@ export function WhatDoTheySay() {
                 <p className="text-foreground truncate text-sm font-semibold">
                   {f.name}
                 </p>
-                <p className="text-muted-foreground truncate text-xs">
+                {/* text-2xs, not text-xs: app-bridge's widget rule lifts a
+                    p.text-xs to body size (substantive copy), which made this
+                    role line render bigger than 0.1's Signatory cards. The
+                    2xs step floors at fs-sm inside a widget — the same 14px
+                    the Signatory role gets — and the spelled-out company
+                    wraps rather than truncating (owner, 2026-08-20). */}
+                <p className="text-muted-foreground text-2xs">
                   {f.role}
                 </p>
               </div>

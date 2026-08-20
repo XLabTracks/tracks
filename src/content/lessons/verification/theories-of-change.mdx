@@ -81,9 +81,12 @@ So, what does a good AI safety theory of change actually look like? This table m
 
 A useful strategy is backchaining: start by specifying the long-term goal, then work backwards. What has to change for this outcome to be possible? How does your project contribute to creating those conditions? Each link in the chain should be an if-then claim. If we publish this benchmark, then labs will adopt it. If labs adopt it, then training procedures will incorporate the findings. If training procedures change, then deployed models will be safer, and “safer” here has to mean something specific: reward hacking rates, deception probes, behavior under distribution shift.
 
-<div className="not-prose border-border my-6 rounded-[2.5rem] border px-6 py-5 sm:px-8">
-  <p className="text-sm font-semibold">Strategy: LLM Clarity Check</p>
-  <p className="mt-2 text-sm leading-relaxed">A simple test to check if you are clear enough is to try explaining the project to an LLM. If, after your pitch, it still makes basic assumptions about what you are doing or why it matters wrong, your explanation is probably too fuzzy. And if the model is confused, people will likely be confused too.</p>
+{/* Same box treatment as the reading cards (owner, 2026-08-20: "make the
+    strategy: llm check look like the former box"): hairline rounded-xl card
+    on the card ground, title at text-base font-medium, body at text-sm. */}
+<div className="not-prose border-border bg-card my-4 rounded-xl border p-4">
+  <p className="text-base leading-relaxed font-medium">Strategy: LLM Clarity Check</p>
+  <p className="mt-1.5 text-sm leading-relaxed">A simple test to check if you are clear enough is to try explaining the project to an LLM. If, after your pitch, it still makes basic assumptions about what you are doing or why it matters wrong, your explanation is probably too fuzzy. And if the model is confused, people will likely be confused too.</p>
 </div>
 
 <Fold label="Strong Theories of Change">

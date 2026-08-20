@@ -1413,7 +1413,8 @@ not-found page. 1,154 tests, typecheck and the course generator all green.
 ### The day the key stopped showing (2026-08-20)
 
 The course owner reported 1.2.2's key and explanations gone for a fully
-correct board — "ключи больше просто не показывает". Nothing in the verdict
+correct board — "it just does not show the keys anymore" (translated).
+Nothing in the verdict
 was deleted: a committed board still prints every mechanism, its Baker
 quotes and the per-edge explanations, force-opened when all seven edges are
 found. What changed was the route to it. "Let committed actor edges be
@@ -1461,7 +1462,8 @@ c388451's deliberate design (the born verdict printed everything, for two
 hours) and stands untouched; a fully correct board still opens everything.
 
 **Owner's instructions, later the same day.** Two, both on 1.2.2's edge
-exercise. *"Надо чтоб все выводились в ключах"* — the key prints whole:
+exercise. *"Everything must print in the keys"* (translated) — the key
+prints whole:
 c388451's collapse of found edges' mechanisms behind "Show every mechanism"
 is gone, and every edge prints its mechanism and quote after commit, drawn
 or not, whatever the score. The key is the reading matter of the step, not

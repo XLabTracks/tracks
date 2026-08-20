@@ -860,3 +860,47 @@ global 200% preset is a different selector and deliberately still scales
 the whole page — it is a low-vision mode, not a reading preference.
 Focus reading rides along unchanged on the same host. Papers don't carry
 the surface yet — say the word.
+
+### The owner's 0.1 batch: em dashes out, four buckets, smaller citations (2026-08-20)
+
+Her edit list, applied in one pass:
+
+- **Em dashes are gone from module 0's rendered copy** (all seven lessons,
+  their widgets' copy, and the 0.2 memo brief), rewritten with commas,
+  colons, parentheses, or sentence splits, never touching the words.
+  Verbatim quotations (signatory comments, source documents, OWID's own
+  timeline annotations) and external works' titles keep theirs. The rule is
+  now general and lives in CLAUDE.md's house rules: no em dashes in authored
+  copy anywhere, from now on.
+- **0.1 optional material** drops its lead-in line ("The case at full
+  strength…"); the two readings stand on their own.
+- **types-of-ai intro replaced** with her sentence ("What does artificial
+  intelligence actually mean? …"); the widget's own duplicate legend line
+  ("Each ring contains the next… +/− for a closer look") is deleted, so the
+  lesson sentence is the only intro.
+- **The verification-problem widget is four buckets in descending order**,
+  exactly her text (Trust? / Punish violations? / Mutual transparency? /
+  Neutral, privacy-preserving verification mechanisms?), each one card:
+  question lead, then her answer. The scenario chrome ("Two rivals. One
+  treaty. Zero trust.", lede, option labels, summaries, inspect-to-reveal
+  outcomes) is deleted from data and widget.
+- **"Preventing ASI via International and Verifiable Agreements" is retitled
+  "Regulating ASI…"** (h2 only; unit titles unchanged).
+- **SignatoryQuotes loses its source footer** ("Pacing the Frontier → —
+  signatory comments"); the statement stays cited via the in-text link, which
+  is what puts it in Works cited. The portrait-credit line stays, now at
+  text-3xs, the citation size.
+- **Citations render smaller than body text** (CLAUDE.md house rule):
+  OwidCredit under the short-history charts and the SignatoryQuotes credit
+  moved from text-xs to text-3xs.
+- **Both Ilya bios spell out Safe Superintelligence Inc** (the WDTS dossier
+  keeps its OpenAI co-founder mention), and the WDTS dialog header drops to
+  the grid card's type scale (name text-sm, role text-xs), the smaller of the
+  two the screenshots showed.
+- **Jan Leike still has no portrait, and here is why**: the authored source
+  page shipped him with initials only, and this sandbox's network policy
+  blocks the portrait sources (Wikimedia Commons, jan.leike.name), so no
+  image could be fetched. Everything is wired for one: drop a licensed
+  `leike.jpg` into `public/verification/assets/what-do-they-say/`, set
+  `photo` (and `photoSource` if Wikimedia) on his entry in
+  `what-do-they-say.ts`, and record provenance.

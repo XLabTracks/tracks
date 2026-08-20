@@ -85,11 +85,14 @@ export function WhatDoTheySay() {
               <DialogHeader>
                 <div className="flex items-center gap-4">
                   <Avatar figure={active} className="size-16 text-lg" />
+                  {/* Same type scale as the grid card behind the dialog: the
+                      owner asked for the smaller font on these name/role
+                      pairs, the role line especially (2026-08-20). */}
                   <div className="min-w-0">
-                    <DialogTitle className="text-lg">
+                    <DialogTitle className="text-sm">
                       {active.name}
                     </DialogTitle>
-                    <p className="text-muted-foreground text-sm">
+                    <p className="text-muted-foreground text-xs">
                       {active.role}
                     </p>
                   </div>

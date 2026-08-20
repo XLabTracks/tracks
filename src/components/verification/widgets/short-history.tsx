@@ -866,7 +866,9 @@ const OWID_URL = "https://ourworldindata.org/brief-history-of-ai";
  */
 function OwidCredit({ data }: { data?: string }) {
   return (
-    <p className="text-muted-foreground mt-1 text-xs leading-relaxed">
+    /* text-3xs, not body size: a citation renders smaller than the text it
+       credits (owner's standing instruction, 2026-08-20). */
+    <p className="text-muted-foreground mt-1 text-3xs leading-relaxed">
       Roser, Max. &ldquo;The Brief History of Artificial Intelligence: The
       World Has Changed Fast &mdash; What Might Be Next?&rdquo;{" "}
       <em>Our World in Data</em>, 6 Dec. 2022,{" "}

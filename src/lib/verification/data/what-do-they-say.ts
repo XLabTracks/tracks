@@ -251,7 +251,9 @@ export const WDTS_FIGURES: WdtsFigure[] = [
   {
     key: "sutskever",
     name: "Ilya Sutskever",
-    role: "Co-founder, OpenAI · Founder, SSI",
+    // Spelled out, never "SSI" — the owner wants the company named in full in
+    // both of the Ilya bios (this one and 0.1's Signatory card), 2026-08-20.
+    role: "Co-founder, OpenAI · Founder, Safe Superintelligence Inc",
     initials: "IS",
     photo: `${ASSET}/sutskever.jpg`,
     photoSource:

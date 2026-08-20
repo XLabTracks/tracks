@@ -20,6 +20,21 @@ four focus idioms, and 200 lines of CSS whose whole job was to undo arbitrary
 font sizes. Reuse first; failing that, ask whether the stdlib or the platform
 does it; only then write it.
 
+House rules, the course owner's standing instructions (2026-08-20):
+
+- **Work under the `ponytail` skill on every coding task** (installed at
+  `.claude/skills/ponytail/SKILL.md`): the laziest solution that actually
+  works. Reuse first, stdlib and platform next, smallest working diff, no
+  unrequested abstractions.
+- **No em dashes in authored copy, anywhere, from now on.** Lesson prose,
+  widget and UI strings, labels, captions, exercise text: rewrite with a
+  comma, colon, parenthesis, or a shorter sentence. Verbatim quotations and
+  external works' own titles keep their original punctuation. Module 0 is
+  swept; sweep others as they are edited.
+- **A citation renders smaller than the text it credits.** Every image,
+  figure, chart, or portrait credit line sits under its figure at the small
+  credit size (`text-3xs` is the house idiom), never at body size.
+
 ## Commands
 
 - `npm run dev` — dev server (Turbopack). DB-backed pages need `DATABASE_URL`

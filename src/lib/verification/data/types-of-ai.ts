@@ -204,8 +204,9 @@ export const AI_REGIONS = {
 export const TYPES_OF_AI_COPY = {
   prompt:
     "Tap any system to see what it is and why it sits at this ring, not the next one in.",
-  legend:
-    "Each ring contains the next; a system sits at the deepest ring it belongs to. Tap a system to open it; drag or use +/− for a closer look.",
+  // The widget used to print its own legend line here ("Each ring contains
+  // the next…"); the owner replaced the whole intro with the lesson's own
+  // sentence above the embed (2026-08-20), so the widget adds no second one.
   // The nested-containment picture of the field is canonical; the two extra
   // inner rings (language model, transformer) and the example systems are ours.
   source: {

@@ -20,7 +20,7 @@ window.VERIFICATION_MEMOS = [
     "title": "Final essay: stress-test Plan A, or Plan A vs. Plan S",
     "status": "specified",
     "genre": "essay",
-    "brief": "Write one of two open-ended essay prompts, consisting of shorter, prompted questions linking into a more cohesive essay at the end. A: stress-test the Plan A verification supplement — how robust is Plan A's verification regime, and where is it most likely to fail? End on one of three recommendations: adopt largely as written, adopt only with significant amendments, or reject in favor of a different approach (400–600 words). Or B: compare Plan A (verified slowdown) and Plan S (complete shutdown) — which creates the more robust verification regime? Make a recommendation (400–500 words).",
+    "brief": "Write one of two open-ended essay prompts, consisting of shorter, prompted questions linking into a more cohesive essay at the end. A: stress-test the Plan A verification supplement. How robust is Plan A's verification regime, and where is it most likely to fail? End on one of three recommendations: adopt largely as written, adopt only with significant amendments, or reject in favor of a different approach (400–600 words). Or B: compare Plan A (verified slowdown) and Plan S (complete shutdown). Which creates the more robust verification regime? Make a recommendation (400–500 words).",
     "audience": "Decision-makers asking whether the verification regime is strong enough to rely on as written.",
     "words": 600,
     "peerReviewed": true

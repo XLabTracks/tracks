@@ -38,7 +38,6 @@ function persistFieldMap(document: FieldMapDocument) {
     window.localStorage.setItem(STORAGE_KEY, JSON.stringify(document));
     window.dispatchEvent(new CustomEvent("vt-field-map-change"));
   } catch {
-    // Private mode can reject local storage; export remains available.
   }
 }
 
@@ -67,7 +66,6 @@ export function FieldMap(_: VerificationWidgetProps) {
           if (parsed) setDocument(parsed);
         }
       } catch {
-        // A corrupt or unavailable local cache must never block the builder.
       } finally {
         setReady(true);
       }

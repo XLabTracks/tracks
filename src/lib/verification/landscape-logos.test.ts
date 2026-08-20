@@ -1,12 +1,3 @@
-/**
- * Registry wiring for the Verification Landscape's org marks.
- *
- * CELL_ORGS names orgs by id, and a mistyped id fails silently — the cell just
- * draws one fewer name, which nothing else would catch. These tests are the
- * tripwire, and they also pin the two rules the file's own header states: the
- * cryptography×government square stays empty because the map's closing argument
- * is built on it, and tokens stay long enough not to hide inside another word.
- */
 import { describe, expect, it } from "vitest";
 
 import {
@@ -48,8 +39,6 @@ describe("landscape org marks", () => {
     }
   });
 
-  /* The whole map argues toward one empty square. If someone fills it, the
-     footer copy ("no public-sector home") starts contradicting the grid. */
   it("keeps the cryptography × government square empty", () => {
     expect(LANDSCAPE_CELLS.crypto.gov.gap).toBe(true);
     expect(CELL_ORGS.crypto?.gov).toBeUndefined();
@@ -69,8 +58,6 @@ describe("landscape org marks", () => {
     expect(marks.map((m) => m.id)).toEqual(["rand", "cnas", "flexheg"]);
   });
 
-  /* A 2-3 letter token would match inside an unrelated word — "FAS" inside
-     "fast", "IEA" inside "IAEA". The header warns about it; this enforces it. */
   it("keeps tokens long enough to be distinctive", () => {
     for (const m of ORG_MARKS) {
       for (const tok of m.tokens) {

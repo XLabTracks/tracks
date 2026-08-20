@@ -11,26 +11,9 @@ import {
 } from "@/components/ui/dialog";
 import { cn } from "@/lib/utils";
 
-/**
- * The outline's "2x2 grid … POP UP" instruction for 4.1's four metrics of
- * feasibility: each card is a named pop-up (the PopUp contract — the label
- * carries the meaning, opening it is for the body) fronted by a small line
- * glyph rather than 2.0.1's full diagrams. The body's shape is the outline's
- * too: the metric's own paragraph reads at body size, and the Source /
- * Excerpt / What-you-should-glean apparatus under it steps down one size —
- * that split is styled here so the four dialogs cannot drift apart. The
- * glyphs are decoration over the card's own words, never the meaning.
- *
- * Trap (same as PopUp): the dialog portals out of `.lesson-body`, so no
- * `prose` rule reaches it — type and link affordances are stated here.
- */
-
 type GlyphKey = "chip" | "pen" | "magnifier" | "hourglass";
 
-/* ---- the four glyphs -------------------------------------------------- */
-
 function ChipGlyph() {
-  // a die in its package: can the thing be built at scale?
   return (
     <svg viewBox="0 0 48 48" className="h-10 w-10" aria-hidden>
       <rect
@@ -64,7 +47,6 @@ function ChipGlyph() {
 }
 
 function PenGlyph() {
-  // a nib signing its line: whose agreement has to land on paper?
   return (
     <svg viewBox="0 0 48 48" className="h-10 w-10" aria-hidden>
       <path
@@ -86,7 +68,6 @@ function PenGlyph() {
 }
 
 function MagnifierGlyph() {
-  // a lens over a record: does what it finds prove anything?
   return (
     <svg viewBox="0 0 48 48" className="h-10 w-10" aria-hidden>
       <rect
@@ -108,7 +89,6 @@ function MagnifierGlyph() {
 }
 
 function HourglassGlyph() {
-  // sand still running: does the mechanism outlive the next shift?
   return (
     <svg viewBox="0 0 48 48" className="h-10 w-10" aria-hidden>
       <line x1="14" y1="8" x2="34" y2="8" strokeWidth="1.6" className="stroke-foreground/70" />
@@ -138,8 +118,6 @@ const GLYPHS: Record<GlyphKey, () => ReactNode> = {
   hourglass: HourglassGlyph,
 };
 
-/* ---- the grid and its cards ------------------------------------------- */
-
 export function FeasibilityGrid({ children }: { children: ReactNode }) {
   return (
     <div className="not-prose my-6 grid gap-3 sm:grid-cols-2">{children}</div>
@@ -157,9 +135,6 @@ export function FeasibilityCard({
   glyph: GlyphKey;
   children: ReactNode;
 }) {
-  // Plain call, not JSX: the map's values are module-scope functions (the
-  // MechanismCard precedent — a per-render alias would trip
-  // react-hooks/static-components).
   const scene = GLYPHS[glyph]?.() ?? null;
   return (
     <Dialog>
@@ -181,16 +156,10 @@ export function FeasibilityCard({
         </button>
       </DialogTrigger>
 
-      {/* sm:max-w-3xl, not a bare max-w-*: DialogContent's base classes carry
-          sm:max-w-sm, and only a same-variant class replaces it in twMerge —
-          an unprefixed cap loses at sm+ and the dialog renders 384px wide. */}
       <DialogContent className="max-h-[85vh] overflow-y-auto sm:max-w-3xl">
         <DialogHeader>
           <DialogTitle>{label}</DialogTitle>
         </DialogHeader>
-        {/* First paragraph is the metric itself and reads at body size; the
-            sourced apparatus after it steps down. Links state their own
-            affordance — the portal escapes .lesson-body. */}
         <div
           className={cn(
             "text-sm leading-relaxed [&>*+*]:mt-3",

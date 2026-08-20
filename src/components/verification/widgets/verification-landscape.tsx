@@ -14,17 +14,6 @@ import {
 import { marksForCell } from "@/lib/verification/data/landscape-logos";
 import type { VerificationWidgetProps } from "../kit/types";
 
-/**
- * The Verification Landscape field map: the kind of verification down the side,
- * the who across the top, darker = more activity. Our maroon palette (theme
- * tokens, so it follows day/night/contrast), wide cells with the intensity
- * numeral in the bottom-right corner, the hatched no-activity cell, and the
- * detail panel below the grid.
- *
- * Who works where is a plain text list in each square cell — no chips, no
- * boxes, no logos, just the names, set in the cell's own contrast — with the
- * intensity numeral in the corner as the non-colour channel.
- */
 const HEAT = [
   "bg-muted",
   "bg-primary/15",
@@ -47,7 +36,6 @@ export function VerificationLandscape(_: VerificationWidgetProps) {
 
   return (
     <div className="verification-landscape not-prose bg-card border-border my-6 rounded-xl border p-4 sm:p-5">
-      {/* legend */}
       <div className="text-muted-foreground mb-3 flex flex-wrap items-center gap-3 eyebrow">
         <span>{C.lessActivity}</span>
         <span className="flex gap-[3px]">
@@ -62,7 +50,6 @@ export function VerificationLandscape(_: VerificationWidgetProps) {
         <span>{C.moreActivity}</span>
       </div>
 
-      {/* grid */}
       <div className="-mx-1 overflow-x-auto px-1 py-1">
         <div
           role="grid"
@@ -146,7 +133,6 @@ export function VerificationLandscape(_: VerificationWidgetProps) {
         </div>
       </div>
 
-      {/* detail panel — below the grid, full width */}
       <div
         key={
           sel === null
@@ -155,11 +141,6 @@ export function VerificationLandscape(_: VerificationWidgetProps) {
             ? `c-${sel.ri}-${sel.ci}`
             : `a-${sel.axis}-${sel.i}`
         }
-        /* Outlined on all four sides, in one colour. It used to be a hairline
-           on three with a 3px primary edge on top — the half-painted card the
-           house rule names, and it read as an unfinished component rather than
-           as emphasis. The panel is the thing the grid is talking to, so it
-           gets the outline; the accent inside is the eyebrow. */
         className="border-primary bg-background motion-safe:animate-in motion-safe:fade-in motion-safe:duration-300 mt-5 min-h-24 border p-4 sm:p-5"
       >
         {sel === null ? (

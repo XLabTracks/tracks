@@ -1,35 +1,10 @@
-/**
- * Module 3's deck: nine questions on Naci Cankaya's working paper, transcribed
- * from the course owner's text.
- *
- * There is no key and no score, as in 1.1. These ask the learner to
- * reconstruct arguments and say where the evidence stops, and a marking key
- * would turn that into agreeing with somebody's reading of the paper.
- *
- * Trap: the numbers are load-bearing. Her rule names questions by number —
- * 1, 2 and 5 required, one of 3, 4, 7 and 9, and 8 optional — so `n` is the
- * author's number and not the array index, and `requirement` is what the
- * completion rule reads. Renumbering means rewriting the rule. Question 10
- * was deleted by her, which is why the numbers stop at 9.
- *
- * Question 6 is named by neither half of that rule, so it is `optional`: it
- * is still there to answer and counts toward nothing. That is a reading of a
- * gap rather than an instruction, and it is flagged as such.
- *
- * Her Assignment paragraph and her Questions preamble disagree, and the
- * paragraph is the live one — it is what changed, while the preamble still
- * names a Question 10 that no longer exists. The widget generates its own
- * preamble from this file for that reason.
- */
 
 import type { WorkspaceQuestion, WorkspaceRule } from "../question-workspace";
 
 export const PAPER = {
   title: "A System Overview for Near-Term, Low-Trust AI Compute Verification",
   author: "Naci Cankaya",
-  /** Where the paper is published. What the lesson links and what is cited. */
   href: "https://techgov.intelligence.org/research/a-system-overview-for-near-term-low-trust-ai-compute-verification",
-  /** The file itself, for page references. */
   pdf: "https://intelligence.org/wp-content/uploads/A-system-overview-for-near-term-low-trust-AI-compute-verification.pdf",
 } as const;
 

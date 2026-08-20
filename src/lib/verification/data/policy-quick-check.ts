@@ -1,35 +1,3 @@
-/**
- * 2.4.2 — On Paper. Five single-answer questions, seven to ten minutes.
- *
- * THE ONLY MULTIPLE CHOICE IN 2.4, and deliberately. The section's rhythm is
- * creative short answer → fast discrimination → controlled comparison →
- * real-world analysis, and this is the fast one. What makes it legitimate here
- * is that nothing else in the section is multiple choice.
- *
- * ALL OF IT IS THE COURSE OWNER'S, transcribed from her source-grounded MCQ
- * specification: the fact patterns, the options, the answers, the feedback and
- * the source line under each. Nothing here is inferred from the statutes — the
- * legal content is hers, and a correction to it belongs in that spec first.
- *
- * The design rule the spec states, because it is what the questions have to
- * keep being tested against: these must test whether the learner understood
- * and can apply the assigned readings, not whether they have good generic
- * intuitions about whistleblowing. So every answer turns on a detail of one of
- * three texts — California Labor Code §§1107–1107.2, the AIWI/CARMA best
- * practice guide, and CIGIE's 2025 Quality Standards for Investigations — each
- * distractor misses one legally or institutionally material condition, and the
- * correct option is the most complete and precise application of the source.
- *
- * `**bold**` in any of these strings is the owner's own emphasis, kept: each
- * stem marks the text the answer turns on, which is what tells a reader which
- * of the three readings a question is asking about. Rendered by splitEmphasis
- * — that one mark and nothing else, so a data file can never inject markup.
- *
- * `source` is the passage the answer rests on, shown only after submission.
- * There is no conceptual label: naming what a question "is testing" is the
- * pedagogical scaffolding the spec rules out, and after the fact the source
- * citation is the more useful of the two anyway — it says where to go back to.
- */
 
 export interface QuickChoice {
   id: string;
@@ -38,19 +6,13 @@ export interface QuickChoice {
 
 export interface QuickQuestion {
   id: string;
-  /** The fact pattern. Rendered as its own block above the stem. */
   fragment: string;
-  /** Introduces the numbered facts, when the pattern has a list. */
   facts?: string[];
-  /** Continues the fact pattern under the list. */
   fragmentAfter?: string;
-  /** The question itself. */
   stem: string;
   choices: QuickChoice[];
   answerId: string;
-  /** Why the answer is the answer, and what each near miss got wrong. */
   explanation: string;
-  /** The passage the answer rests on. Shown only after submission. */
   source: string;
 }
 

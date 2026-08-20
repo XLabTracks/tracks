@@ -2,19 +2,10 @@ import { describe, expect, it } from "vitest";
 import { CARDS } from "@/lib/verification/data/anatomy-drill";
 import { applyDrop, resolveDrop } from "./anatomy-drill";
 
-/**
- * The source page (public/verification/anatomy-drill.html) ships no __runTests
- * harness, so these pin the two pure decisions its `resolveDrop` / `handleDrop`
- * make — including the deliberate oddities ("lessons, not bugs"): a correct or
- * defensible tag AFTER a wrong attempt still records as a miss, and a second
- * wrong attempt auto-files and reveals.
- */
-
-// Named specimens by their known organ for readable cases.
-const ruleCard = CARDS[0]; // organ 1 (rule), wrong:{3}, generic
-const evidNearCard = CARDS[1]; // organ 3 (evidence), near:{6}
-const nullCard = CARDS[2]; // organ 0, wrong:{3,1}
-const advNearCard = CARDS[10]; // organ 5 (adversary), near:{1}
+const ruleCard = CARDS[0];
+const evidNearCard = CARDS[1];
+const nullCard = CARDS[2];
+const advNearCard = CARDS[10];
 
 describe("resolveDrop", () => {
   it("returns clean on an exact organ match", () => {

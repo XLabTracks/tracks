@@ -18,32 +18,6 @@ import {
 import type { VerificationWidgetProps } from "../kit/types";
 import { writingArea, writingCardFocus } from "../kit/writing-surface";
 
-/**
- * UNMOUNTED. 2.4.2's exercise is Policy on Paper (policy-critique.tsx); this
- * one was built against an earlier draft of the spec and is kept, as the other
- * stood-down widgets are, because its data and its shape may be wanted again.
- *
- * 2.4.2 — Read the Rules, Infer the System. It replaces the reporting lab,
- * whose operation was picking a supported statement per link; this one asks
- * what the rules do to the person inside them, which no list of options can
- * ask.
- *
- * Three rows, and a row is only a row when it cites rules AND says what
- * follows: the citation is what makes it an inference rather than an opinion
- * about the policy. Rules are cited by pressing their numbers, so a
- * consequence can name a combination — most of the interesting ones here do,
- * and a single-select would have hidden exactly that.
- *
- * The policy is shown with nothing said about it, and no rule is marked. Both
- * are the spec's constraints: a page that flagged rule 3 would have done the
- * exercise. The institutional vocabulary lives in the reveal and nowhere
- * else, which is also why the annotations cannot be reached before Submit.
- *
- * Nothing is graded — the spec's grading rule is to grade the causal
- * inference and not the vocabulary, and that is not something this can do, so
- * it does not pretend to. Submitting is the section's finish event.
- */
-
 interface Row {
   rules: number[];
   text: string;
@@ -101,7 +75,6 @@ export function InferTheSystem({
       const raw = localStorage.getItem(STORAGE_KEY);
       if (raw) restored = prune(JSON.parse(raw));
     } catch {
-      /* unreadable storage just means starting fresh */
     }
     queueMicrotask(() => {
       setSaved(restored);
@@ -114,7 +87,6 @@ export function InferTheSystem({
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(next));
     } catch {
-      /* private mode / full quota */
     }
   }, []);
 
@@ -140,8 +112,6 @@ export function InferTheSystem({
 
   return (
     <div className="not-prose my-6 space-y-4">
-      {/* The policy, said plainly and not characterised. Numbers are here to
-          be cited with, which is the only reason they are numbers. */}
       <section className="panel">
         <h4 className="text-sm font-semibold">Internal Reporting Policy</h4>
         <ol className="mt-3 space-y-2">
@@ -256,9 +226,6 @@ export function InferTheSystem({
             ))}
           </section>
 
-          {/* The annotated policy: several mechanisms these rules can be read
-              to produce, against the rule or pair that produces each. Not a
-              key — the exercise has none — and not a complete list. */}
           <section className="space-y-2">
             <h4 className="text-muted-foreground eyebrow">
               The same policy, annotated

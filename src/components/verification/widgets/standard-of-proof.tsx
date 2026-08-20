@@ -25,19 +25,6 @@ import { STANDARD_OF_PROOF_KEY } from "@/lib/verification/data/marking-keys";
 import { MarkingKeyPanel } from "../kit/marking-key";
 import type { VerificationWidgetProps } from "../kit/types";
 
-/**
- * 2.4.4 — The Standard of Proof. Four dockets on one page under one sticky
- * allegation; per docket a move (selection, never marked) and one analysis
- * box; Submit gated on all four carrying both; freeze on submit; then the
- * reveal — the 2×2 named, the self-check pair, the marking key, the 50-word
- * standard question, the optional transfer. Design and content notes live in
- * the data file's header.
- *
- * Optional, so unbridged: submitting records no completion. The onComplete
- * call stays because the registry types every widget the same way and the
- * host makes it a no-op.
- */
-
 interface Saved {
   moves: Record<string, ProofMoveId>;
   answers: Record<string, string>;
@@ -93,7 +80,6 @@ export function StandardOfProof({
       const raw = localStorage.getItem(STORAGE_KEY);
       if (raw) restored = prune(JSON.parse(raw));
     } catch {
-      /* unreadable storage just means starting fresh */
     }
     queueMicrotask(() => {
       setSaved(restored);
@@ -106,7 +92,6 @@ export function StandardOfProof({
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(next));
     } catch {
-      /* private mode / full quota */
     }
   }, []);
 
@@ -119,7 +104,6 @@ export function StandardOfProof({
 
   return (
     <div className="not-prose my-6 space-y-4">
-      {/* Once, above all four, on screen while the dockets are worked. */}
       <div className="bg-background sticky top-0 z-10 rounded-xl">
         <section className="border-primary/40 bg-primary/5 rounded-xl border p-4">
           <p className="text-muted-foreground text-[11px] tracking-[0.14em] uppercase">
@@ -131,7 +115,6 @@ export function StandardOfProof({
         </section>
       </div>
 
-      {/* Olympiad registers: statement, demands, limit. */}
       <div className="space-y-3">
         <p className="text-base leading-relaxed font-medium">{PROOF_INTRO}</p>
         <div className="space-y-2">
@@ -169,8 +152,6 @@ export function StandardOfProof({
               ))}
             </ul>
 
-            {/* The move: a selection whose fill is its state — never marked
-                right or wrong, changeable until Submit. */}
             <div className="mt-3 flex flex-wrap gap-1.5" role="group" aria-label={`Next move for docket ${docket.letter}`}>
               {PROOF_MOVES.map((move) => {
                 const picked = saved.moves[docket.id] === move.id;

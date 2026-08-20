@@ -1,19 +1,3 @@
-/**
- * 2.4.4's evaluator: does this selection of five provisions work as one
- * institution?
- *
- * It grades FUNCTIONS AND CONTRADICTIONS, never a combination. The course
- * owner's design principle is that several selections are defensible and the
- * exercise must not secretly reduce to one canonical five, so there is no
- * canonical five here to compare against — a selection passes a test when it
- * supplies the function that test names and carries nothing that defeats it.
- *
- * A defect defeats a test whatever else was selected, which is the point her
- * spec makes about coherence: five individually attractive provisions are not
- * an institution. Employer approval defeats the independent route even when
- * the route is also selected — that pair is the first of her four invalid
- * constructions, and the one that looks most reasonable on the cards.
- */
 
 import {
   PROVISIONS,
@@ -27,7 +11,6 @@ export type TestId = "reach" | "protection" | "discipline";
 export interface TestResult {
   id: TestId;
   passed: boolean;
-  /** Why, in the evaluator's own terms — the widget renders these verbatim. */
   notes: string[];
 }
 
@@ -48,12 +31,10 @@ function defect(list: Provision[], d: Defect): Provision | undefined {
   return list.find((p) => p.breaks?.includes(d));
 }
 
-/** The three tests, in the order the spec states them. */
 export function evaluateInstitution(ids: readonly string[]): Evaluation {
   const picked = selected(ids);
   const results: TestResult[] = [];
 
-  // Reach — a route to an independent verifier, not gated by the employer.
   {
     const notes: string[] = [];
     const route = has(picked, "independent-route");
@@ -76,7 +57,6 @@ export function evaluateInstitution(ids: readonly string[]): Evaluation {
     results.push({ id: "reach", passed: route && !gate, notes });
   }
 
-  // Protection — usable in advance, not conditional on being proved right.
   {
     const notes: string[] = [];
     const shield =
@@ -110,12 +90,8 @@ export function evaluateInstitution(ids: readonly string[]): Evaluation {
     });
   }
 
-  // Epistemic discipline — an allegation opens something; it proves nothing.
   {
     const notes: string[] = [];
-    // Both, not either: her requirements list them separately, and they are
-    // different institutions. Escalation without corroboration concludes from
-    // an allegation; corroboration without escalation has nothing to escalate.
     const corroborates = has(picked, "corroboration");
     const escalates = has(picked, "escalation");
     const followUp = corroborates && escalates;

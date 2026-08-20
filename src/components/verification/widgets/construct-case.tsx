@@ -18,20 +18,6 @@ import { ConstructedResponse } from "../kit/constructed-response";
 import { MarkingKeyPanel } from "../kit/marking-key";
 import type { VerificationWidgetProps } from "../kit/types";
 
-/**
- * 2.4.1 — Construct a Case. It replaces "Who Knows What?", which was six
- * actors × three picks and then four more questions: eighteen recognitions
- * where the section's actual operation is construction.
- *
- * It keeps the id, so the lesson mapping, the progress key and the section's
- * finish event are unchanged. The old widget, its data and its engine stay in
- * the repo — the section's roster of who-can-know-what is still the material
- * this case is built out of, it is now read rather than clicked.
- *
- * OPTIONAL, so unbridged: submitting records no completion and the section
- * finishes on reading. The onComplete call stays because the registry types
- * every widget the same way and the host makes it a no-op.
- */
 export function ConstructCase({
   onComplete,
   initialCompleted,
@@ -52,11 +38,6 @@ export function ConstructCase({
         onComplete();
       }}
       intro={
-        // Her prompt, verbatim (2026-08-15), set olympiad-style: the task
-        // sentence leads at full weight, the conditions indent under it with
-        // red digits, the operative instruction follows at body weight, and
-        // the length constraint sits last as a muted meta line — statement,
-        // conditions, task, limits, each its own register.
         <div className="space-y-3">
           <p className="text-base leading-relaxed font-medium">
             Give one example of a situation in which all three conditions are
@@ -131,9 +112,6 @@ export function ConstructCase({
             </ul>
           </section>
 
-          {/* Two, and unalike, because a single example is read as the answer.
-              The spec is explicit: contrasting valid examples, not one
-              canonical case. */}
           <section className="space-y-3">
             <h4 className="text-muted-foreground eyebrow">
               Two cases that work, for different reasons

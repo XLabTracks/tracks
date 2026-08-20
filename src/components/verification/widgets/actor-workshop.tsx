@@ -29,45 +29,8 @@ import {
   type BoardStep,
 } from "./actor-board";
 
-/**
- * 1.2 — The Actor Map Workshop, first half: who is on the board.
- *
- * Built on the Beeck Center's stakeholder-mapping workshop, closed-book on
- * purpose. Why it is shaped this way, which parts are the course owner's and
- * which are derived, and the two Karpicke papers behind the freeze are all in
- * data/actor-workshop.ts — read that header before changing anything here.
- * The shared document, the ring map and the roster are in ./actor-board.tsx,
- * which also says why the workshop is in two pieces.
- *
- * FOUR STEPS, ONE AT A TIME. That is the house rule and here it is load-
- * bearing rather than stylistic: every step after Study is answered from
- * memory, so showing step 4 beside step 2 would put the vocabulary back on
- * screen and undo the freeze.
- *
- * WHAT LEFT AND WHY. Two things, both on the course owner's instruction that
- * 1.2 cannot exceed forty minutes against a measured seventy-seven.
- *
- *   The mechanisms half — draw the edges, the key from Baker, read what the
- *   board says — is 1.2.2 now (widgets/actor-edges.tsx). Same document, so a
- *   board placed here arrives there keyed.
- *
- *   The Categorize step is gone outright. It asked for six roles and five
- *   postures on six actors, and the drill bench's `actors` deck was already
- *   drilling the same six roles five screens down the same page. What it was
- *   FOR survives: the point that roles cut across rings is the role lens on
- *   the map, which lives in 1.2.2 where the finished board is read.
- *
- * NOTHING HERE IS GRADED TOWARD PROGRESS. The counts are feedback; they are
- * stored beside the work so reopening shows what you did, and they leave the
- * browser never.
- */
-
 const STEPS: { id: BoardStep; name: string; beeck: string }[] = [
   { id: "study", name: "Study the cast", beeck: "Goal setting" },
-  // Named for what it asks now. It used to be "Who does it touch?" against
-  // Beeck's "List all stakeholders", and both were left behind when the step
-  // stopped retrieving the cast and started retrieving the material — so the
-  // Beeck column says the step was recast rather than pretending it matches.
   { id: "recall", name: "What can one actor do?", beeck: "List all stakeholders, recast" },
   { id: "core", name: "What goes in the centre?", beeck: "Identify the core" },
   { id: "place", name: "Place them on the rings", beeck: "Place and cluster" },
@@ -80,8 +43,6 @@ export function ActorWorkshop({}: VerificationWidgetProps) {
   const [active, setActive] = useState<string>(WORKSHOP_ACTOR_IDS[0]);
   const topRef = useRef<HTMLDivElement>(null);
 
-  // Seeded on the question id, so the order is the same for every learner and
-  // on every visit — src/lib/shuffle.ts says why that matters.
   const coreOptions = useMemo(
     () => shuffleAnswerOptions("actor-workshop-core", [...CORE_QUESTION.options], (o) => o.text),
     [],
@@ -104,10 +65,6 @@ export function ActorWorkshop({}: VerificationWidgetProps) {
 
   return (
     <div className="not-prose my-6 space-y-4" ref={topRef}>
-      {/* The brief. Beeck opens with Goal Setting, which for a group is a
-          negotiation and for one reader is simply being told what the map has
-          to be good for. It stays on screen at every step because it is the
-          standard the last step marks against. */}
       <div className="border-border bg-card rounded-xl border p-4">
         <p className="eyebrow text-muted-foreground">The brief</p>
         <p className="mt-1.5 text-sm leading-relaxed">
@@ -135,10 +92,6 @@ export function ActorWorkshop({}: VerificationWidgetProps) {
         label={`Step ${stepIndex + 1} of ${STEPS.length}`}
       />
 
-      {/* THE MAP IS ALWAYS ON SCREEN, from the first step to the last, with
-          the whole cast on it — unplaced actors wait outside the outer ring
-          and move in as they are placed. A paper workshop has the sheet on
-          the table from the first minute. */}
       <RingMap
         rings={saved.ringsDone ? RING_KEY : saved.rings}
         showKey={saved.ringsDone}
@@ -203,9 +156,6 @@ export function ActorWorkshop({}: VerificationWidgetProps) {
         />
       ) : null}
 
-      {/* Back is always available and never rewinds an answer: the steps hold
-          their own committed state, so stepping back is re-reading, not
-          re-doing. */}
       {stepIndex > 0 ? (
         <div>
           <Button size="sm" variant="ghost" onClick={() => go(STEP_IDS[stepIndex - 1]!)}>
@@ -217,13 +167,11 @@ export function ActorWorkshop({}: VerificationWidgetProps) {
   );
 }
 
-/* ------------------------------------------------------------------ steps -- */
-
 function StudyStep({ onStart }: { onStart: () => void }) {
   return (
     <div className="space-y-4">
       <p className="text-sm leading-relaxed">
-        Ten actors, the six roles any of them can play, and the five postures
+        Seventeen actors, the six roles any of them can play, and the five postures
         any of them can take. Read for as long as you want — the workshop
         starts when you say so, and this panel closes when it does.
       </p>
@@ -239,7 +187,6 @@ function StudyStep({ onStart }: { onStart: () => void }) {
     </div>
   );
 }
-
 
 function RecallStep({
   value,
@@ -271,12 +218,6 @@ function RecallStep({
         aria-label="What a cloud provider can do inside a regime, and what it wants"
       />
       {done ? (
-        /* Self-scored, and the reason is in the data file: a matcher over
-           free prose would need a vocabulary list per role, would be wrong
-           often, and would be wrong in the direction that stops people
-           writing. The learner ticks what they actually had — which is what
-           the free-recall studies score and what every constructed exercise
-           in 2.4 already asks for. */
         <div className="space-y-3">
           <div className="border-border rounded-xl border p-4">
             <p className="eyebrow text-muted-foreground">
@@ -327,7 +268,6 @@ function RecallStep({
     </div>
   );
 }
-
 
 function CoreStep({
   options,
@@ -389,7 +329,6 @@ function CoreStep({
   );
 }
 
-
 function PlaceStep({
   rings,
   done,
@@ -415,9 +354,6 @@ function PlaceStep({
   onPlace: (actorId: string, ring: RingId) => void;
   onCommit: () => void;
 }) {
-  // View state for the reveal, not work: which reasons are expanded. It lives
-  // here rather than in the stored document because reopening the workshop
-  // should not restore a filter, and nothing about it is an answer.
   const [showAll, setShowAll] = useState(false);
   const actor = WORKSHOP_ACTORS.find((a) => a.id === active) ?? WORKSHOP_ACTORS[0]!;
   return (
@@ -454,17 +390,6 @@ function PlaceStep({
       </div>
 
       {done ? (
-        /* THE REASON IS PRINTED WHERE IT IS NEEDED, not seventeen times.
-           At ten actors this list was ten short paragraphs and nobody
-           noticed; at seventeen it is 777 words of feedback, most of it
-           explaining placements the reader already made correctly. A correct
-           placement needs the ring's name and nothing else — the ring name IS
-           the explanation — and a wrong one needs the whole reason. So misses
-           print in full and hits collapse to one line, with a control that
-           opens all of them for anyone who wants to check their reasoning
-           rather than their answer. It defaults to open when nothing was
-           missed, because then there is nothing to filter and hiding the only
-           content on the step would be perverse. */
         <div className="space-y-3">
           <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
             <p className="text-sm">
@@ -524,12 +449,6 @@ function PlaceStep({
             })}
           </ol>
 
-          {/* The board is finished, so this is where the half ends. It says
-              what was retrieved and what was peeked at, and then hands over —
-              the mechanisms are 1.2.2 and the reader should know the workshop
-              is not over rather than discovering a second widget by scrolling
-              into it. A plain link, not a component: 1.2.2 is a lesson in the
-              graph and the reader gets there the way they get anywhere. */}
           <p className="text-muted-foreground text-xs">
             From memory: {recalledCount} of {RECALL_TARGET.items.length}{" "}
             retrieved about the cloud provider, {right} of{" "}
@@ -599,4 +518,3 @@ function PlaceStep({
     </div>
   );
 }
-

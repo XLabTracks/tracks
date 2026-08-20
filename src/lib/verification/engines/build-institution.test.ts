@@ -7,14 +7,6 @@ import {
 } from "@/lib/verification/data/build-institution";
 import { evaluateInstitution } from "./build-institution";
 
-/**
- * The exercise's whole claim is that several designs are defensible and no
- * hidden five is the answer. That is a property of the evaluator, so it is
- * tested rather than asserted in a comment.
- *
- * The four failing cases are the course owner's own list of invalid
- * constructions, one test each.
- */
 describe("build-institution", () => {
   it("passes both sample designs", () => {
     for (const design of SAMPLE_DESIGNS) {
@@ -31,7 +23,6 @@ describe("build-institution", () => {
   });
 
   it("has no single canonical answer", () => {
-    // More than one selection of five passes, and they are not the same five.
     const ids = PROVISIONS.map((p) => p.id);
     const winners: string[][] = [];
     const walk = (start: number, picked: string[]) => {
@@ -47,14 +38,11 @@ describe("build-institution", () => {
     };
     walk(0, []);
     expect(winners.length).toBeGreaterThan(1);
-    // And the passing sets genuinely differ, rather than being one set plus
-    // an inert extra card.
     const shapes = new Set(winners.map((w) => w.join("")));
     expect(shapes.size).toBe(winners.length);
   });
 
   it("fails employer approval alongside an independent route", () => {
-    // Her first invalid construction: it looks reasonable on the cards.
     const { results } = evaluateInstitution(["B", "D", "E", "I", "K"]);
     const reach = results.find((r) => r.id === "reach")!;
     expect(reach.passed).toBe(false);

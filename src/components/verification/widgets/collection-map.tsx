@@ -9,17 +9,6 @@ import {
 } from "@/lib/verification/data/collection-map";
 import type { VerificationWidgetProps } from "../kit/types";
 
-/* The collection map: seven discipline tiles, click one to read what it is.
- *
- * Unbridged — there is nothing to finish, so it never calls onComplete and the
- * hosting lesson keeps its normal scroll-to-complete.
- *
- * Trap: the glyph is decoration and the abbreviation is the label. Every tile
- * prints OSINT / HUMINT / … in text, so the mark is never the only thing
- * carrying which discipline you are looking at.
- */
-
-/** Hand-drawn marks — one per discipline, no icon dependency. */
 function Glyph({ id }: { id: string }) {
   const common = {
     fill: "none",
@@ -142,8 +131,6 @@ export function CollectionMap(_: VerificationWidgetProps) {
         {group("technical", C.technical)}
       </div>
 
-      {/* The panel is the whole point of the tiles, so it must not be a
-          tooltip: it stays until dismissed and is readable on a phone. */}
       {open ? (
         <div className="border-border bg-background mt-5 rounded-lg border p-4">
           <p className="text-xs tracking-wide">{open.abbr}</p>

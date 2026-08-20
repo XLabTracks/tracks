@@ -10,26 +10,6 @@ import {
 } from "@/lib/verification/data/policy-cost";
 import type { VerificationWidgetProps } from "../kit/types";
 
-/**
- * "Everything comes with a cost" — the authored interlude for 1.0.2, ported
- * from the prototype at site/policy-cost.html in the playground. A card with
- * two faces: name a policy you believe in, flip it, name what enforcing it
- * costs. Then both sides at once, one question about how hard the second half
- * was, and the debrief that answer earns.
- *
- * Everything the learner reads is authored copy in
- * `src/lib/verification/data/policy-cost.ts`. Nothing here composes a
- * sentence of its own.
- *
- * Unbridged: there is no right answer to reach, so it never calls onComplete
- * and the lesson keeps its ordinary scroll-to-complete.
- *
- * Two traps carried over from the prototype, both load-bearing:
- *   - What the learner types is rendered as text, never as markup, including
- *     inside the composed "full policy" sentence.
- *   - The hidden face must not be reachable. A back face that still takes tab
- *     focus is a form the learner can fill while looking at the front.
- */
 export function PolicyCost(_: VerificationWidgetProps) {
   void _;
   const [policy, setPolicy] = useState("");
@@ -58,8 +38,6 @@ export function PolicyCost(_: VerificationWidgetProps) {
           {C.bothTag}
         </p>
 
-        {/* Uniform hairline on all four sides; the side each row belongs to is
-            carried by the word, never by an edge. */}
         <div className="space-y-2">
           <LedgerRow tag={C.goalTag} value={policy} />
           <LedgerRow tag={C.priceTag} value={price} />
@@ -101,7 +79,6 @@ export function PolicyCost(_: VerificationWidgetProps) {
               <p className="text-muted-foreground eyebrow">
                 {C.fullTag}
               </p>
-              {/* Composed from the learner's two answers as text nodes. */}
               <p className="text-muted-foreground mt-2 text-base leading-snug break-words">
                 {C.fullTpl.pre}
                 <b className="text-foreground font-semibold">{policy}</b>
@@ -144,7 +121,6 @@ export function PolicyCost(_: VerificationWidgetProps) {
             flipped && "[transform:rotateY(180deg)]",
           )}
         >
-          {/* --- Side A: the goal --- */}
           <form
             inert={flipped}
             onSubmit={(event) => {
@@ -195,7 +171,6 @@ export function PolicyCost(_: VerificationWidgetProps) {
             </div>
           </form>
 
-          {/* --- Side B: the price --- */}
           <form
             inert={!flipped}
             onSubmit={(event) => {

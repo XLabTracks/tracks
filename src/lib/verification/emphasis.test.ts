@@ -40,14 +40,12 @@ describe("splitEmphasis", () => {
   });
 
   it("leaves an unclosed mark alone rather than eating the line", () => {
-    // A typo in a data file should look like a typo, not delete the sentence.
     expect(splitEmphasis("an **unclosed mark")).toEqual([
       { text: "an **unclosed mark", strong: false },
     ]);
   });
 
   it("does not carry state between calls", () => {
-    // The bug a module-scope /g regex would introduce: every other call misses.
     const once = splitEmphasis("**x** y");
     expect(splitEmphasis("**x** y")).toEqual(once);
     expect(splitEmphasis("**x** y")).toEqual(once);

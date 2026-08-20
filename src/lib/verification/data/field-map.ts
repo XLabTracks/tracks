@@ -28,7 +28,6 @@ export interface FieldMapDocument {
   version: 1;
   nodes: FieldNode[];
   edges: FieldEdge[];
-  /** Client edit stamp consumed by the existing Verification account sync. */
   updatedAt: number;
 }
 
@@ -85,7 +84,6 @@ const NODE_TYPES = new Set(Object.keys(FIELD_NODE_TYPES));
 const EDGE_LABELS = new Set<string>(FIELD_EDGE_LABELS);
 const SAFE_ID = /^[A-Za-z0-9_-]{1,64}$/;
 
-/** Parse imported learner work without trusting arbitrary object shapes. */
 export function parseFieldMapDocument(value: unknown): FieldMapDocument | null {
   if (!isRecord(value) || value.version !== 1 || !Array.isArray(value.nodes) || !Array.isArray(value.edges)) return null;
   if (value.nodes.length > 120 || value.edges.length > 240) return null;

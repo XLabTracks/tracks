@@ -13,31 +13,6 @@ import {
 } from "@/lib/verification/data/whistleblower-levers";
 import type { VerificationWidgetProps } from "../kit/types";
 
-/**
- * 2.4.2's four levers: assign each its effect, commit once, then read what
- * the course says each one changes.
- *
- * One commit for all four, not four commits: the reasoning is comparative —
- * SB 53's duty and the ACM Code's duty are the pair that has to be told
- * apart — and four separate picks would hand the last one over by
- * elimination. Each effect is used exactly once, so choosing is also
- * excluding; picking one that is already placed moves it rather than
- * refusing, because a swap is what an assignment actually is.
- *
- * Unbridged on purpose. This is a three-minute block inside a section whose
- * lab is "Follow the Report"; that widget is the bridged one, and a second
- * completion event in one lesson would mean the section finishes at whichever
- * fired first.
- *
- * No score is kept. The reveal is the course's own sentence per row with the
- * document that authorizes it — see data/whistleblower-levers.ts for what came
- * from where.
- *
- * Answers persist under `v-whistleblower-levers:v1`, applied off the effect
- * body behind `hydrated` so the first client render matches the server's, and
- * pruned against the current rows before they are trusted.
- */
-
 type Placed = Record<string, string>;
 
 const STORAGE_KEY = "v-whistleblower-levers:v1";
@@ -54,23 +29,15 @@ function prune(raw: unknown): Placed {
   return out;
 }
 
-// The host's props are taken and not used: onComplete is a no-op for an
-// unbridged widget, and calling it from a block that is not the section's
-// finish would claim the section had ended. The signature stays because the
-// registry types every widget the same way.
 export function WhistleblowerLevers({}: VerificationWidgetProps) {
   const [committed, setCommitted] = useState(false);
   const [placed, persist, hydrated] = useStoredState<Placed>(
     STORAGE_KEY,
     EMPTY,
     prune,
-    // A fully placed board comes back committed, the way it was left.
     (restored) => setCommitted(Object.keys(restored).length === LEVERS.length),
   );
 
-  /* Assigning an effect that already sits on another row moves it here. The
-     alternative — refusing the click — makes the learner undo before they can
-     rethink, which is friction on exactly the comparison this asks for. */
   function assign(leverId: string, effectId: string) {
     if (committed) return;
     const next: Placed = {};
@@ -85,20 +52,6 @@ export function WhistleblowerLevers({}: VerificationWidgetProps) {
 
   if (!hydrated) return <div className="not-prose my-6 min-h-64" aria-busy />;
 
-  /**
-   * The chips were offered in `LEVERS` order under rows that are also in
-   * `LEVERS` order, so row 1's answer was chip 1, row 2's chip 2, and the whole
-   * matching could be finished on the diagonal without reading a word of it.
-   *
-   * One shuffled order, shared by every row, is what breaks that: the answers
-   * land on a fixed permutation instead of the identity, and the reader still
-   * scans the same four chips in the same places down the column. Per-row
-   * shuffling would break it too and would make them re-read four chips four
-   * times, which is work the exercise is not asking for.
-   *
-   * Nothing is keyed on position here — `placed` maps lever id to lever id —
-   * so this is display only.
-   */
   const chips = shuffleAnswerOptions(
     "whistleblower-levers",
     LEVERS,
@@ -120,12 +73,6 @@ export function WhistleblowerLevers({}: VerificationWidgetProps) {
             >
               <p className="font-semibold">{lever.name}</p>
 
-              {/* The author's sentences name their own source ("SB 53 says…",
-                  "Wasil et al. propose…"), so a label above them repeats the
-                  name four times over. The citation goes under the words as a
-                  citation instead — the em-dash form the two pull quotes in
-                  this same lesson already use — and carries the locator the
-                  sentence does not have (§22757.13(c), §1.2). */}
               <p className="text-muted-foreground mt-2 text-sm leading-relaxed">
                 {lever.source}
               </p>

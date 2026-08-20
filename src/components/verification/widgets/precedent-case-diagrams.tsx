@@ -1,15 +1,5 @@
 import type { ReactElement } from "react";
 
-/**
- * One small diagram per 0.3 case file, shown in the reveal — each sketches how
- * that regime held or was circumvented, so none may render before the call is
- * committed. House idiom: hand-rolled inline SVG, theme token classes only
- * (`stroke-border`, `fill-muted-foreground`, comply/defect for meaning, always
- * beside a word). Every label restates words from the author's case-file text
- * in `src/lib/verification/data/precedent-cases.ts` — no diagram composes a
- * curriculum claim of its own.
- */
-
 const LABEL = "fill-muted-foreground";
 const NAME = "fill-foreground";
 

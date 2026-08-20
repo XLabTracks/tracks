@@ -1,37 +1,11 @@
-/**
- * The collection map for 2.3.1 — the disciplines a watcher collects through,
- * as tiles the learner opens one at a time.
- *
- * These are the intelligence-studies canon's own definitions, not claims this
- * course makes: Clark's literal-vs-technical taxonomy separates the disciplines
- * that collect language (OSINT, HUMINT, SIGINT, cyber) from the technical ones
- * that collect physics (IMINT/GEOINT, MASINT); Lowenthal is the standard text
- * on what each yields; Richelson maps which agency runs which. Those three are
- * already in the module's reading list under "Intelligence-studies canon".
- *
- * Trap: `seen` here is a signature from 2.3.1, so the two must stay in step —
- * a discipline that claims to see something the signature catalog does not
- * list is the tile lying about the section it sits in. Keep each one to a
- * signature the catalog actually carries.
- *
- * The `example` lines are deliberately short and non-committal. The section
- * spec asks for richer case material — named cases, links — and that is
- * unwritten source, so nothing here reaches beyond what the catalog and the
- * cited papers already support.
- */
 
 export interface CollectionDiscipline {
   id: string;
-  /** The abbreviation as the literature writes it. */
   abbr: string;
   name: string;
-  /** Clark's split: language-bearing vs physics-bearing collection. */
   kind: "literal" | "technical";
-  /** One line: what the discipline actually is. */
   what: string;
-  /** Which signature from the 2.3.1 catalog this discipline picks up. */
   seen: string;
-  /** Its characteristic limit — every discipline has one. */
   limit: string;
 }
 

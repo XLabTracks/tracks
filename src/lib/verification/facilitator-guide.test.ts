@@ -1,20 +1,7 @@
-/**
- * The field guide's internal links.
- *
- * Most of the guide's links are external reading. A few point back into the
- * course, because the material they name is a unit of it rather than a
- * standalone page — and those are the ones that can rot without anybody
- * noticing: the guide is authored HTML strings, so a renamed slug or a
- * renumbered unit breaks a link that nothing else reads.
- *
- * So: every in-app href must resolve in the content graph, and a link whose
- * text names a unit number must name the number that unit actually carries.
- */
 import { describe, expect, it } from "vitest";
 import { lessons, modules } from "@/content/curriculum.data";
 import * as guide from "@/lib/verification/data/facilitator-guide";
 
-/** Every `<a href="…">text</a>` in the guide's authored HTML. */
 function allLinks(): { href: string; text: string }[] {
   const out: { href: string; text: string }[] = [];
   const seen = new Set<unknown>();
@@ -34,8 +21,6 @@ function allLinks(): { href: string; text: string }[] {
 }
 
 const everyLink = allLinks();
-// The retired solo timeline game remains absent. Current native track
-// materials link back to their course units and are checked below.
 const links = everyLink.filter(({ href }) => href.startsWith("/"));
 
 describe("facilitator guide internal links", () => {

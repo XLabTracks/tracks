@@ -57,11 +57,6 @@ import type { VerificationWidgetProps } from "../kit/types";
 type Verdict = "correct" | "wrong" | null;
 type SolveProps = { onSolved: () => void };
 
-/**
- * Module 2.2's thirty-minute assessment. The tasks move from identifying a
- * provider-held datum to bounding the conclusion that datum can support, then
- * combine identity, workload, and threshold evidence in a short case.
- */
 export function CloudEvidenceDrill({
   onComplete,
   initialCompleted,

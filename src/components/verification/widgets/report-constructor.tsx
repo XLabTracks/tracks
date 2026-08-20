@@ -31,25 +31,14 @@ import type { VerificationWidgetProps } from "../kit/types";
 
 type Phase = "readers" | "notebook" | "thread" | "debrief";
 
-/**
- * "Report Constructor" (Module 1 · Actors · 1.6). One inspection, three readers.
- * Pick up to 8 of 15 notebook entries (4 are pure traps that fit nowhere),
- * thread each to one of three desks, run a repeatable fit check, then file the
- * report for a per-desk debrief. Bridged: `onComplete` fires once, when the
- * report is filed. Fit scoring is delegated to the pure engine; the flow,
- * hint-gating, and attribution-pair lesson are ported from the source.
- */
 export function ReportConstructor({ onComplete }: VerificationWidgetProps) {
   const [phase, setPhase] = useState<Phase>("readers");
 
-  // ordered selected card ids
   const [sel, setSel] = useState<string[]>([]);
-  // cardId -> Set(readerId)
   const [threads, setThreads] = useState<ThreadMap>(() => new Map());
   const [capMsg, setCapMsg] = useState("");
   const [threadHint, setThreadHint] = useState("");
 
-  // check state
   const [checked, setChecked] = useState(false);
   const [checkCount, setCheckCount] = useState(0);
   const [lastResult, setLastResult] = useState<FitResult | null>(null);
@@ -57,8 +46,6 @@ export function ReportConstructor({ onComplete }: VerificationWidgetProps) {
   const filedOnce = useRef(false);
   const motionOK = useMotionOK();
 
-  // Refs mirror the latest sel/threads so mutators can read them without
-  // nesting setter callbacks (which must stay pure).
   const selRef = useRef(sel);
   const threadsRef = useRef(threads);
   useEffect(() => { selRef.current = sel; });
@@ -66,7 +53,6 @@ export function ReportConstructor({ onComplete }: VerificationWidgetProps) {
 
   const total = threadTotal(sel, threads);
 
-  /* ---------- verdict lifecycle: editing voids the check ---------- */
   const clearVerdicts = useCallback(() => {
     setChecked((wasChecked) => {
       if (wasChecked) setLastResult(null);
@@ -74,7 +60,6 @@ export function ReportConstructor({ onComplete }: VerificationWidgetProps) {
     });
   }, []);
 
-  /* ---------- notebook pick ---------- */
   const toggleSelect = useCallback((id: string) => {
     const prev = selRef.current;
     if (prev.includes(id)) {
@@ -96,7 +81,6 @@ export function ReportConstructor({ onComplete }: VerificationWidgetProps) {
     setSel([...prev, id]);
   }, []);
 
-  /* ---------- threading ---------- */
   const toggleThread = useCallback(
     (cardId: string, readerId: ReaderId) => {
       if (!selRef.current.includes(cardId)) return;
@@ -124,7 +108,6 @@ export function ReportConstructor({ onComplete }: VerificationWidgetProps) {
     [clearVerdicts],
   );
 
-  /* ---------- drop a card from the report ---------- */
   const dropCard = useCallback(
     (id: string) => {
       toggleSelect(id);
@@ -133,19 +116,17 @@ export function ReportConstructor({ onComplete }: VerificationWidgetProps) {
     [toggleSelect, clearVerdicts],
   );
 
-  /* ---------- the fit check ---------- */
   const runCheck = useCallback(() => {
     const result = evaluate(sel, threads);
     setLastResult(result);
     setCheckCount((prev) => {
-      const rerun = checked; // re-click with nothing changed
+      const rerun = checked;
       if (!result.clean && !rerun) return prev + 1;
       return prev;
     });
     setChecked(true);
   }, [sel, threads, checked]);
 
-  /* ---------- file → debrief ---------- */
   const fileReport = useCallback(() => {
     if (!checked || !lastResult) return;
     setPhase("debrief");
@@ -155,7 +136,6 @@ export function ReportConstructor({ onComplete }: VerificationWidgetProps) {
     }
   }, [checked, lastResult, onComplete]);
 
-  /* ---------- reset ---------- */
   const reset = useCallback(() => {
     setPhase("readers");
     setSel([]);
@@ -169,7 +149,6 @@ export function ReportConstructor({ onComplete }: VerificationWidgetProps) {
 
   return (
     <div className="not-prose my-6">
-      {/* the supply chain framing — always visible at top */}
       <ChainStrip />
 
         {phase !== "debrief" && (
@@ -226,9 +205,6 @@ export function ReportConstructor({ onComplete }: VerificationWidgetProps) {
   );
 }
 
-/* ================================================================= *
- *  The chain strip (behind you / you / ahead of you)                *
- * ================================================================= */
 function ChainStrip() {
   const c = COPY.chain;
   return (
@@ -280,9 +256,6 @@ function ChainArrow() {
   );
 }
 
-/* ================================================================= *
- *  Readers section                                                  *
- * ================================================================= */
 function ReadersSection({
   open,
   onOpen,
@@ -336,9 +309,6 @@ function ReadersSection({
   );
 }
 
-/* ================================================================= *
- *  Notebook (pick up to 8)                                          *
- * ================================================================= */
 function NotebookSection({
   sel,
   capMsg,
@@ -425,9 +395,6 @@ function NotebookSection({
   );
 }
 
-/* ================================================================= *
- *  Thread board                                                     *
- * ================================================================= */
 function ThreadSection({
   sel,
   threads,
@@ -497,7 +464,6 @@ function ThreadSection({
         {threadHint}
       </p>
 
-      {/* summary */}
       <div
         ref={summaryRef}
         tabIndex={-1}
@@ -550,7 +516,6 @@ function ThreadBoard({
 }) {
   const armed = useArmedItem();
 
-  // keyboard 1/2/3 threads the armed card to a desk (matches the source)
   useEffect(() => {
     function onKey(e: KeyboardEvent) {
       if (e.repeat || !armed) return;
@@ -565,7 +530,6 @@ function ThreadBoard({
 
   return (
     <div className="mt-4 grid gap-4 lg:grid-cols-[1.15fr_1fr]">
-      {/* the report column */}
       <div>
         <p className="text-muted-foreground mb-2 eyebrow">
           {COPY.repTag}
@@ -610,7 +574,6 @@ function ThreadBoard({
                     {c.body}
                   </p>
 
-                  {/* thread chips */}
                   {set.size > 0 && (
                     <div className="mt-2 flex flex-wrap gap-1.5">
                       {READERS.filter((r) => set.has(r.id)).map((r) => {
@@ -675,7 +638,6 @@ function ThreadBoard({
         </div>
       </div>
 
-      {/* the desks column */}
       <div>
         <p className="text-muted-foreground mb-2 eyebrow">
           {COPY.deskTag}
@@ -711,7 +673,6 @@ function ThreadBoard({
                     </span>
                   </div>
 
-                  {/* reader needs */}
                   <ul className="mt-2 space-y-1">
                     {needs.map((n) => {
                       const met =
@@ -759,7 +720,6 @@ function ThreadBoard({
                     </p>
                   )}
 
-                  {/* verdict rows */}
                   {verdicts.length > 0 && (
                     <ul className="border-border mt-2 space-y-1.5 border-t pt-2">
                       {verdicts.map((v, i) => (
@@ -822,9 +782,6 @@ function Summary({ result }: { result: FitResult }) {
   );
 }
 
-/* ================================================================= *
- *  Debrief                                                          *
- * ================================================================= */
 function DebriefSection({
   sel,
   threads,
@@ -847,13 +804,11 @@ function DebriefSection({
     });
   }, [motionOK]);
 
-  // lesson + optional brevity line
   let lesson = COPY.lesson as string;
   if (result.clean && sel.length <= 6) {
     lesson += " " + COPY.brevityTpl[0] + sel.length + COPY.brevityTpl[1];
   }
 
-  // the attribution pair — always taught, three variants
   const filedFit = (id: string) =>
     sel.includes(id) &&
     !!threads.get(id) &&
@@ -932,9 +887,6 @@ function DebriefSection({
   );
 }
 
-/* ================================================================= *
- *  prefers-reduced-motion                                           *
- * ================================================================= */
 function useMotionOK() {
   const [ok, setOk] = useState(true);
   useEffect(() => {

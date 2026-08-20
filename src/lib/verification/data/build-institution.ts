@@ -1,36 +1,4 @@
-/**
- * 2.4.4 — Build the Institution.
- *
- * THE COURSE OWNER'S SPEC, verbatim: the scenario, the five requirements,
- * the twelve provisions in their three groups, the exactly-five rule, the
- * 80-word explanation, the feedback tests and the optional swap. Its
- * olympiad mechanic constructs a coherent institution from a constrained menu
- * of properties.
- *
- * NO CANONICAL FIVE. Her design principle is explicit — multiple defensible
- * solutions, and the exercise must not secretly reduce to one combination.
- * That is why nothing here marks a provision "correct". Each carries what it
- * DOES (`gives`) and what it FORBIDS (`breaks`), and the engine reads a
- * selection through those, so B+C+E+I+K passes and so do the others that
- * satisfy the same functions. Her example five is one solution and is
- * labelled as one.
- *
- * The four invalid constructions she lists are exactly the contradictions
- * encoded below:
- *
- *   employer approval while claiming an independent route      → D (and A)
- *   protection conditional on the allegation proving correct    → H
- *   reports as automatic proof of violation                     → J
- *   a route with no means of corroboration or escalation        → neither I nor K
- *
- * WHAT IS MINE: the two sample designs in the reveal and their trade-offs.
- * Her spec asks for "two different valid institutional designs" and gives one
- * example set. The second is a different route to the same three functions,
- * and both are checked by the engine's own tests, so neither can drift into
- * being invalid while sitting on the page as a model answer.
- */
 
-/** What a provision supplies. The engine's whole vocabulary. */
 export type Function_ =
   | "independent-route"
   | "identity-protection"
@@ -38,7 +6,6 @@ export type Function_ =
   | "corroboration"
   | "escalation";
 
-/** What a provision defeats, whatever else is selected. */
 export type Defect =
   | "employer-gate"
   | "identity-exposed"
@@ -54,7 +21,6 @@ export interface Provision {
   breaks?: Defect[];
 }
 
-/** Her twelve, verbatim, in her groups and her order. */
 export const PROVISIONS: Provision[] = [
   {
     id: "A",
@@ -136,12 +102,6 @@ export const EXPLANATION_MAX_WORDS = 80;
 export const SCENARIO =
   "You are designing the human-reporting component of a verification regime for an AI development agreement.";
 
-/**
- * Her five requirements, verbatim. Requirements 3 and 4 are separate on
- * purpose and the evaluator treats them so: a report that can trigger
- * verification is not the same institution as one that must corroborate
- * before it concludes, and a design needs both.
- */
 export const REQUIREMENTS = [
   "Information can reach an independent verifier.",
   "Legitimate reporters have meaningful protection.",
@@ -150,7 +110,6 @@ export const REQUIREMENTS = [
   "No two provisions contradict each other.",
 ];
 
-/** Her three feedback tests, verbatim in name. */
 export const TESTS = [
   {
     id: "reach",
@@ -171,12 +130,6 @@ export const TESTS = [
   },
 ] as const;
 
-/**
- * The fourth thing her rubric weighs, and the one no evaluator can: whether
- * the eighty words describe one institution or five good ideas. It is stated
- * beside the three so the learner is not left to think the machine's verdict
- * was the whole marking, and it is decided in the key below it.
- */
 export const COHERENCE_TEST = {
   label: "Coherence",
   question: "Do the five provisions work as one institution?",
@@ -195,11 +148,6 @@ export interface SampleDesign {
   tradeoff: string;
 }
 
-/**
- * Two designs that both pass. Mine, apart from the first set, which is her
- * example. `build-institution.test.ts` runs the engine over both, so a sample
- * design cannot sit here as a model answer while being invalid.
- */
 export const SAMPLE_DESIGNS: SampleDesign[] = [
   {
     ids: ["B", "C", "E", "I", "K"],

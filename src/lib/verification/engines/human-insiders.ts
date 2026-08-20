@@ -14,10 +14,6 @@ export interface ConnectionCheck {
   messages: Partial<Record<ConnectionKind, string>>;
 }
 
-/**
- * Check a source map without collapsing the result into a credibility score.
- * Each dimension stays visible so the learner can repair the overclaim itself.
- */
 export function checkConnection(
   actorId: SourceActorId,
   selection: SourceConnection

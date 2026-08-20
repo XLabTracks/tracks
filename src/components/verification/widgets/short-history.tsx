@@ -2,70 +2,13 @@
 
 import { useRef, useState } from "react";
 
-/**
- * "A Short History of AI Acceleration" — the two Our World in Data charts
- * from Max Roser, "The brief history of artificial intelligence" (Dec. 2022,
- * CC BY 4.0, ourworldindata.org/brief-history-of-ai), redrawn as native SVG
- * on the author's instruction: the embedded originals carried OWID's own
- * multi-hue palette and a white ground, and she asked for marks that follow
- * the site's three themes.
- *
- * The TIMELINE is a sequence of events, so its names still ink from a ramp of
- * one hue — `color-mix(in oklab, var(--primary), var(--foreground) N%)` —
- * which re-solves per theme and stays the brand colour.
- *
- * The TEST-SCORES chart is a categorical scale and takes the brand module
- * hues instead; see the `token` field on Series for the measurements that
- * forced the change, and for why the plot paints its own --card ground rather
- * than inheriting whatever it is embedded in.
- *
- * No line is ever only a colour: each carries its own name at the line's end,
- * in its own hue, and in low-vision mode — where every module token is white
- * on purpose — a dash pattern carries what the hue cannot.
- *
- * The data is OWID's, not ours: the test-scores series were read back out of
- * the chart's published SVG (grapher id
- * test-scores-ai-capabilities-relative-human-performance, source Kiela et
- * al. 2023), pixel coordinates converted to values against its own axis
- * (−100 at y=497.1, 0 at y=192.5); the timeline milestones and their
- * descriptions are the timeline figure's own annotations, verbatim. Never
- * edit a number here without re-deriving it from the source chart.
- *
- * The test-scores chart answers the pointer the way the grapher does, on the
- * author's instruction: hovering shows every metric's value at that year —
- * recorded points at full strength, linear interpolations dimmed, series
- * outside their run omitted — under a vertical guide. Hover state is
- * ephemeral by design; nothing persists.
- *
- * Both figures are explorable, and neither hides its content behind a gesture:
- * the timeline drags and zooms with buttons and arrow keys as well as a
- * pointer, and the six series switch off by pressing their own names, which
- * were already the legend.
- *
- * These six are the whole of the source chart — OWID's own `selection` for
- * grapher `test-scores-ai-capabilities-relative-human-performance` names
- * exactly them. The underlying indicator (OWID 852592) carries six more
- * capabilities that the chart does not plot — code generation, complex
- * reasoning, general knowledge tests, math problem-solving, nuanced language
- * interpretation, and reading comprehension with unanswerable questions — and
- * it is flagged `nonRedistributable: true`: OWID's CSV endpoint refuses with
- * "we are not allowed to re-share". Adding them is a permissions decision for
- * the course owner, not an inference from a reachable API.
- *
- * Unbridged reading material: no completion, `onComplete` ignored.
- */
-
 const shade = (pct: number) =>
   `color-mix(in oklab, var(--primary), var(--foreground) ${pct}%)`;
-
-/* ---------------------------------------------------------------- timeline */
 
 interface Milestone {
   year: number;
   name: string;
-  // OWID's own annotation text, hard-wrapped for SVG tspans.
   lines: string[];
-  // Label block position (top-left) and the shade of the name.
   x: number;
   y: number;
   pct: number;
@@ -83,8 +26,6 @@ const TL = {
 const tlx = (year: number) =>
   TL.x0 + ((year - TL.yr0) / (TL.yr1 - TL.yr0)) * (TL.x1 - TL.x0);
 
-// The red line hands over to a tint where the chart stops recording history
-// and starts pointing at it: the boundary dot on the source figure.
 const TL_BOUNDARY = 2024;
 
 const MILESTONES: Milestone[] = [
@@ -160,23 +101,6 @@ const MILESTONES: Milestone[] = [
   },
 ];
 
-/**
- * Pan and zoom over the whole scene, not over the data.
- *
- * The milestone labels are hand-placed at absolute coordinates — the author's
- * layout, tuned so that seven blocks of prose over 120 years do not collide.
- * Recomputing a label's x from its year would throw that away, so nothing here
- * is re-laid-out: the viewBox moves instead, and the axis, the connectors and
- * the labels all travel together exactly as drawn. Zooming is the point as
- * much as dragging is — at rest the whole century is one screen wide and the
- * annotations are as small as the figure allows.
- *
- * Dragging is never the only way in. A pointer gesture is invisible to a
- * keyboard and to a screen reader, so the same two axes are on the buttons and
- * on the arrow keys, and Home returns to the full view. `touch-action: none`
- * only while zoomed in, so a touch reader can still scroll the page past a
- * figure it does not want to explore.
- */
 const TL_ZOOMS = [1, 1.6, 2.4, 3.4];
 
 function Timeline() {
@@ -192,8 +116,6 @@ function Timeline() {
   const vw = TL.w / z;
   const vh = TL.h / z;
 
-  // Clamp so the view can never leave the drawing — panning into blank space
-  // reads as a broken figure rather than as a choice.
   const clamp = (p: { x: number; y: number }) => ({
     x: Math.min(Math.max(p.x, 0), TL.w - vw),
     y: Math.min(Math.max(p.y, 0), TL.h - vh),
@@ -203,7 +125,6 @@ function Timeline() {
   const zoomTo = (next: number) => {
     const nz = TL_ZOOMS[next]!;
     setZi(next);
-    // Keep the centre of the view where it was, so zooming does not teleport.
     setPan((p) => {
       const cx = p.x + vw / 2;
       const cy = p.y + vh / 2;
@@ -253,7 +174,6 @@ function Timeline() {
       onPointerMove={(e) => {
         const d = drag.current;
         if (!d) return;
-        // Pointer pixels to user units: the rendered box is TL.w wide at z = 1.
         const k = vw / e.currentTarget.getBoundingClientRect().width;
         setPan(
           clamp({
@@ -270,8 +190,6 @@ function Timeline() {
       <title>
         A timeline of notable artificial intelligence systems, 1940–2060
       </title>
-      {/* axis: the recorded past in full primary, what lies past the boundary
-          dot as a tint of the same hue — never a second colour */}
       <line
         x1={TL.x0}
         y1={TL.axisY}
@@ -318,7 +236,6 @@ function Timeline() {
         const blockBottom = m.y + (m.lines.length + 1) * lineH;
         return (
           <g key={m.year}>
-            {/* connector from label block down to the event's axis point */}
             <line
               x1={tlx(m.year)}
               y1={Math.min(blockBottom, TL.axisY - 10)}
@@ -350,10 +267,6 @@ function Timeline() {
         );
       })}
     </svg>
-      {/* The controls carry the whole interaction on their own, which is the
-          test: a figure whose only way in is a drag gesture is a figure a
-          keyboard and a screen reader cannot read. The zoom state is also the
-          hint — at 1x there is nothing to drag and the buttons say so. */}
       <div className="mt-1 flex flex-wrap items-center gap-2">
         <div className="flex items-center gap-1">
           <button
@@ -417,38 +330,13 @@ function Timeline() {
   );
 }
 
-/* ------------------------------------------------------------- test scores */
-
 interface Series {
   name: string;
-  /**
-   * The categorical hue, as a brand module token.
-   *
-   * This chart used to ink all six lines from the same red ramp — the author
-   * asked for shades of red, and shades of red is what it got. Measured, two
-   * adjacent shades differed by a contrast ratio of 1.06 to 1.09, which is to
-   * say not at all: six series, one colour, and no way to tell which line was
-   * reading comprehension. On the night ground the top of the ramp also read
-   * at 2.3:1 and 2.9:1 against its own background, under even the 3:1 floor
-   * for a non-text mark.
-   *
-   * A categorical scale takes the brand's module hues through their -text
-   * variants, which are built to carry as type on every theme's ground: 4.6
-   * to 17.2 in day, 5.2 to 16.7 at night. The token colours the line, its
-   * points, its swatch in the tooltip AND its name at the end of the line, so
-   * the hue always sits on a word — nothing here is encoded by colour alone.
-   * The hex mirrors theme.css's day value for the rare render with no theme.
-   *
-   * Six series, five module hues: the sixth is the page ink. That is the
-   * honest end of the palette rather than a sixth colour invented for it.
-   */
   token: string;
-  /** Slot in the dash cycle; see --sh-dash-* in app-bridge.css. */
   dash: number;
-  points: [number, number][]; // [year, score]
+  points: [number, number][];
 }
 
-// Read back out of OWID's published SVG; see the file header before editing.
 const SERIES: Series[] = [
   {
     name: "Reading comprehension",
@@ -548,10 +436,6 @@ const tsx = (year: number) =>
 const tsy = (v: number) =>
   TS.plotY0 + ((TS.v0 - v) / (TS.v0 - TS.v1)) * (TS.plotY1 - TS.plotY0);
 
-/** A series' value at a year: the recorded point when there is one, a linear
- *  interpolation between neighbours when the year falls inside the series'
- *  run, nothing outside it — the grapher's own hover rules, and the tooltip
- *  keeps its distinction (interpolated rows render dimmed). */
 function valueAt(
   s: Series,
   year: number,
@@ -569,20 +453,6 @@ function valueAt(
   return null;
 }
 
-/**
- * Six lines crossing in the same corner is a lot to read at once, so the
- * reader can put some of them away.
- *
- * The names at the ends of the lines were already the legend — they name the
- * line and carry its colour — so they are what became the switches, rather
- * than a second legend appearing somewhere else to say the same thing twice.
- * A hidden series leaves the plot, the label column and the hover readout
- * together; nothing is dimmed-but-present, because a ghost line is still a
- * line to read past.
- *
- * Selection is component state and deliberately not persisted: it is a way of
- * looking at the figure, not work the learner did.
- */
 function TestScores() {
   const svgRef = useRef<SVGSVGElement | null>(null);
   const [hoverYear, setHoverYear] = useState<number | null>(null);
@@ -593,22 +463,15 @@ function TestScores() {
   const toggle = (name: string) =>
     setHidden((prev) => {
       const next = new Set(prev);
-      // Never let the last one go: an empty chart is not a view of anything,
-      // and the way back is not obvious once the axes are all that is left.
       if (!next.delete(name) && prev.size < SERIES.length - 1) next.add(name);
       return next;
     });
-  // Labels stack on the right, ordered by where each line ends. All six keep
-  // their row whether shown or not — a switch that disappears when you use it
-  // cannot be switched back.
   const ordered = [...SERIES].sort(
     (a, b) =>
       (b.points[b.points.length - 1][1] ?? 0) -
       (a.points[a.points.length - 1][1] ?? 0),
   );
 
-  // Pointer x → nearest year, in viewBox space (the svg scales responsively,
-  // so client px are mapped through the rendered width).
   const yearFromPointer = (clientX: number): number | null => {
     const svg = svgRef.current;
     if (!svg) return null;
@@ -630,22 +493,11 @@ function TestScores() {
             Boolean(r.at),
           )
           .sort((a, b) => b.at.v - a.at.v);
-  // The tooltip flips sides at the plot's midpoint so it never leaves the
-  // chart. Positioned in % of the container, which is the svg's own box.
   const tooltipLeft =
     hoverYear === null ? 0 : (tsx(hoverYear) / TS.w) * 100;
   const tooltipFlip = hoverYear !== null && tsx(hoverYear) > (TS.plotX0 + TS.plotX1) / 2;
 
   return (
-    /* The chart carries its own opaque ground, and it is not decoration.
-       The module -text tokens are each calibrated to clear 4.5:1 against
-       their theme's own surface; drop the chart onto anything else and that
-       calibration is void. This one sits inside the optional Fold, whose 8%
-       maroon wash is a real signal and stays — but it darkened the ground
-       from #fbfaf9 to #f1e6e5, which took three of the six series down to
-       3.93, 3.94 and 3.97. Painting --card behind the plot puts every series
-       back on the surface its colour was solved for, wherever the chart is
-       embedded. */
     <div className="bg-card relative rounded-lg p-2">
     <svg
       ref={svgRef}
@@ -680,9 +532,6 @@ function TestScores() {
           </text>
         </g>
       ))}
-      {/* Upper-left is empty on this data — every series is still deep
-          below zero at these years — so the note sits there instead of over
-          the converging line ends at the right. */}
       <text
         x={TS.plotX0 + 8}
         y={tsy(0) - 6}
@@ -742,8 +591,6 @@ function TestScores() {
             }}
             className="focus-visible:ring-ring cursor-pointer focus-visible:ring-2 focus-visible:outline-none"
           >
-            {/* A hit area, because a line of text is a thin target and this
-                is now something you press. */}
             <rect
               x={TS.plotX1 + 18}
               y={labelY - 13}
@@ -840,30 +687,8 @@ function TestScores() {
   );
 }
 
-/* ------------------------------------------------------------------ widget */
-
 const OWID_URL = "https://ourworldindata.org/brief-history-of-ai";
 
-/**
- * The source credit under both charts, MLA.
- *
- * It used to read "Redrawn from Our World in Data (CC BY 4.0)." — course
- * owner, 2026-08-20: "this is not mla sorry". She is right, and the missing
- * parts are the ones that matter: no author, no title, no date, no location.
- * A container name and a licence is an acknowledgement, not a citation.
- *
- * The facts are not invented for this: author, title, container and date are
- * the registry's own entry for this URL in src/content/citations.json, which
- * is what the Works cited appendix prints, so the caption and the appendix
- * cannot say different things about the same work.
- *
- * MLA notes. The location element is a bare URL without the protocol, which
- * is why the link's own text is the bare URL rather than the site's name. No
- * "Fig. N." label, because MLA numbers figures across a whole document and
- * nothing here owns that sequence — the figcaption above each chart titles it
- * instead. The licence and the fact of redrawing are supplemental, so they
- * follow the entry rather than sitting inside it.
- */
 function OwidCredit({ data }: { data?: string }) {
   return (
     <p className="text-muted-foreground mt-1 text-xs leading-relaxed">

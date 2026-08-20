@@ -20,10 +20,9 @@ describe("actionsFor", () => {
   });
 
   it("drops Define once the selection is a passage rather than a term", () => {
-    const long = "a".concat(" b".repeat(SHORT_WORDS)); // SHORT_WORDS + 1 words
+    const long = "a".concat(" b".repeat(SHORT_WORDS));
     expect(wordCount(long)).toBe(SHORT_WORDS + 1);
     expect(actionsFor(facts({ text: long }))).toEqual(["highlight", "notebook"]);
-    // …and keeps it exactly at the bound.
     const atBound = "a".concat(" b".repeat(SHORT_WORDS - 1));
     expect(actionsFor(facts({ text: atBound }))).toContain("define");
   });
@@ -34,8 +33,6 @@ describe("actionsFor", () => {
       "define",
       "notebook",
     ]);
-    // Never both: two nearly identical buttons is a choice the reader should
-    // not have to make.
     for (const over of [true, false]) {
       const got = actionsFor(facts({ overlapsHighlight: over }));
       expect(got.includes("highlight") && got.includes("unhighlight")).toBe(false);

@@ -23,31 +23,6 @@ import { evaluateInstitution } from "@/lib/verification/engines/build-institutio
 import type { VerificationWidgetProps } from "../kit/types";
 import { writingArea, writingCardFocus } from "../kit/writing-surface";
 
-/**
- * UNMOUNTED. 2.4.4 is now Companies A and B (companies-ab.tsx).
- *
- * 2.4.4 — Build the Institution. It replaces "Audit the Verifier", which ran
- * on the same decision-lab engine as 2.4.3.
- *
- * Exactly five cards, then eighty words on why the five work together. The
- * evaluation is `evaluateInstitution` and it reads FUNCTIONS AND
- * CONTRADICTIONS, never a combination: the spec's design principle is that
- * several selections are defensible and no hidden five is the answer, so the
- * engine has no five to compare against and its unit test proves more than
- * one selection passes.
- *
- * The verdict comes back per test with the evaluator's own sentences, which
- * name the card that broke it. That is the difference between feedback and a
- * score: "D puts the organization in the path of its own accusation" is
- * something you can argue with; 2/3 is not.
- *
- * Nothing is graded — the eighty words are never read by anything. Failing
- * the tests does not block submission either: the reveal is where you find
- * out, and Start over is how you try the other design.
- *
- * OPTIONAL, so unbridged: submitting records no completion.
- */
-
 interface Saved {
   picked: string[];
   submitted: boolean;
@@ -96,7 +71,6 @@ export function BuildInstitution({
       const raw = localStorage.getItem(STORAGE_KEY);
       if (raw) restored = prune(JSON.parse(raw));
     } catch {
-      /* unreadable storage just means starting fresh */
     }
     queueMicrotask(() => {
       setSaved(restored);
@@ -109,7 +83,6 @@ export function BuildInstitution({
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(next));
     } catch {
-      /* private mode / full quota */
     }
   }, []);
 
@@ -266,8 +239,6 @@ export function BuildInstitution({
               );
             })}
 
-            {/* The fourth thing the key weighs, stated here so the machine's
-                three verdicts do not read as the whole marking. */}
             <div className="panel">
               <p className="text-sm font-semibold">{COHERENCE_TEST.label}</p>
               <p className="text-muted-foreground mt-1 text-xs leading-relaxed">
@@ -279,9 +250,6 @@ export function BuildInstitution({
             </div>
           </section>
 
-          {/* Two designs that both pass, and what each pays for it. Neither is
-              the answer: the engine's own test proves more than one selection
-              works, and both of these run through it. */}
           <section className="space-y-2">
             <h4 className="text-muted-foreground eyebrow">
               Two institutions that work, and what each costs

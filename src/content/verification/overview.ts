@@ -1,39 +1,16 @@
-/**
- * The course overview the landing page opens as toggle sections: who it is
- * for, what it covers, what you leave able to do, and how to work it async or
- * sync.
- *
- * Author's copy, transcribed verbatim. Two placeholders in the source were
- * resolved rather than printed: the notebook one became a real control (the
- * notebook is a tool mounted on the page, so it has no URL to link to), and
- * "a facilitation resources module here" points at /verification/facilitator.
- *
- * Trap: the six outcomes below are the long form of the six short labels in
- * `public/verification/data/skills.js`, which the skill map uses as chips and
- * indexes by position (`lo: [3]` is the fourth). They must stay in the same
- * order and mean the same things; the short ones are not a second copy to
- * edit independently, they are that map's labels for these.
- */
 
 export interface OverviewSection {
   id: string;
-  /** The disclosure's own heading — the author's lead-in line. */
   title: string;
 }
 
 export interface ListSection extends OverviewSection {
   kind: "numbered";
-  /**
-   * Groups of items. The author's copy separates the coverage questions into
-   * blocks with blank lines; the blocks are kept as groups rather than
-   * flattened, because that grouping is how the course is shaped.
-   */
   groups: string[][];
 }
 
 export interface ProseSection extends OverviewSection {
   kind: "prose";
-  /** Each entry is one labelled paragraph. `body` may name one placeholder. */
   paragraphs: {
     label: string;
     body: string;

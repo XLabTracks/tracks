@@ -1,42 +1,10 @@
-/**
- * 2.4.2 — Policy on Paper.
- *
- * THE COURSE OWNER'S SPEC, verbatim: the policy, the bridge, the prompt, the
- * two-and-two shape, the eight-point rubric and the rule that a bare label
- * earns no justification point. Its olympiad mechanic is critiquing a drafted
- * provision by naming both what is correctly designed and what is defective,
- * and justifying each judgement.
- *
- * WHY THE PROVISIONS ARE NOT LISTED AS OPTIONS. The learner has to find them
- * in the policy — that is the operation. A menu of pre-written interpretations
- * would leave the reading already done, which is the exact substitution her
- * spec forbids, so a finding is made by pressing a provision in the policy
- * itself and then saying what it does.
- *
- * NOTHING IS PRE-LABELLED. No provision is marked as a safeguard or a
- * chokepoint anywhere before submission, and the reveal is the first time this
- * page says anything evaluative at all.
- *
- * The policy is deliberately mixed: it contains protections that really work
- * and provisions that really would stop information, and one of each is
- * subtle. That is what makes two-and-two a judgement rather than a sorting
- * task.
- *
- * WHAT IS MINE: the annotations in the reveal. Her spec says to annotate the
- * policy afterwards and to allow more than four defensible observations,
- * without writing them; each annotation below says only what the provision it
- * sits under does, in ordinary language, and several provisions carry a
- * reading in both directions because they genuinely have one.
- */
 
 export interface PolicyProvision {
   id: string;
   text: string;
-  /** Shown only in the reveal. */
   annotation: string;
 }
 
-/** Her policy, verbatim and in her order. */
 export const POLICY_TITLE = "Frontier Lab Protected Disclosure Policy";
 
 export const POLICY_PROVISIONS: PolicyProvision[] = [
@@ -78,11 +46,9 @@ export const POLICY_PROVISIONS: PolicyProvision[] = [
   },
 ];
 
-/** Her bridge, verbatim. Nothing else precedes the task. */
 export const POLICY_BRIDGE =
   "A reporting policy can contain real protections and still create barriers to independent verification. Evaluate the policy below as written.";
 
-/** Her prompt, verbatim. */
 export const POLICY_PROMPT =
   "Identify two provisions that genuinely support effective reporting and two provisions that could prevent important information from reaching an independent verifier. Briefly explain each judgment.";
 
@@ -107,7 +73,6 @@ export const FINDING_SLOTS: FindingSlot[] = [
   },
 ];
 
-/** Shown with the annotations, once the four findings are in. */
 export const POLICY_REVEAL = [
   "A provision is not the same thing as its effect. What is written down is the provision; what it does to somebody deciding whether to report, or to information trying to reach an outside body, is the mechanism — and the mechanism is what a judgement about a policy has to name.",
   "There are more than four defensible findings here. Several provisions can be read in both directions, and a reading that says how is worth more than a reading that picks the expected side.",

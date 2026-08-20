@@ -81,9 +81,9 @@ const deck: DrillDeck = {
 describe("scoreMulti", () => {
   it("splits marks into caught / missed / false-flagged", () => {
     const s = scoreMulti(multi, new Set([0, 1]));
-    expect(s.caught).toBe(1); // a
-    expect(s.missed).toBe(2); // c, d
-    expect(s.falseFlagged).toBe(1); // b
+    expect(s.caught).toBe(1);
+    expect(s.missed).toBe(2);
+    expect(s.falseFlagged).toBe(1);
     expect(s.rows.map((r) => r.verdict)).toEqual([
       "caught",
       "false-flag",

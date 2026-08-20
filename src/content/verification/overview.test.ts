@@ -1,10 +1,3 @@
-/**
- * Guards on the landing page's course overview and the footer it sits under.
- *
- * Two things here are drift tripwires rather than unit tests: the six outcomes
- * are the long form of the skill map's six short labels, and every bare footer
- * route has to be a page somebody actually built.
- */
 import { describe, expect, it } from "vitest";
 import { readFileSync, existsSync } from "node:fs";
 import { join } from "node:path";
@@ -32,8 +25,6 @@ describe("course overview", () => {
     expect(how?.kind === "prose" && how.paragraphs).toHaveLength(2);
   });
 
-  // The coverage questions arrive in blocks separated by blank lines, and the
-  // blocks are the shape of the course. Flattening them loses that.
   it("keeps the coverage questions grouped", () => {
     const learn = courseOverview.find((s) => s.id === "learn");
     expect(learn?.kind === "numbered" && learn.groups.map((g) => g.length)).toEqual([
@@ -41,8 +32,6 @@ describe("course overview", () => {
     ]);
   });
 
-  /* The title is the only thing a closed card shows, so it carries the whole
-     of what opening it gets you. */
   it("gives every section a title that is a lead-in, not a sentence", () => {
     for (const s of courseOverview) {
       expect(s.title.length, s.id).toBeGreaterThan(10);
@@ -50,18 +39,12 @@ describe("course overview", () => {
     }
   });
 
-  // Both placeholders in the author's copy are resolved by the component, so
-  // neither may survive into what a reader sees.
   it("prints no unresolved placeholder", () => {
     const all = JSON.stringify(courseOverview);
     expect(all).not.toMatch(/\[Claude[^\]]*\]/i);
     expect(all).not.toMatch(/\binsert link\b/i);
   });
 
-  /* The six short labels in data/skills.js are the skill map's chips for these
-     six outcomes, and the map indexes them by position (`lo: [3]` is the
-     fourth). Adding an outcome here without adding its label there silently
-     re-points every chip after it. */
   it("stays in step with the skill map's six objectives", () => {
     const skills = readFileSync(
       join(__dirname, "../../../public/verification/data/skills.js"),
@@ -75,8 +58,6 @@ describe("course overview", () => {
 });
 
 describe("chrome links point somewhere real", () => {
-  // A footer row that names a page nobody built is worse than no row: it
-  // renders as a link and 404s. Bare names are routes under /verification/.
   it.each([...NAV, ...FOOT].filter((l) => l.href && !/^([a-z]+:|\/)/.test(l.href)))(
     "$label resolves to a page",
     (link) => {

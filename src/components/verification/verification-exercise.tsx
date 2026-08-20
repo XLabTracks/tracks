@@ -7,16 +7,9 @@ import {
 import { VerificationWidgetHost } from "./verification-widget-host";
 
 export interface VerificationExerciseProps {
-  /** Page id under public/verification/ (file basename, no extension). */
   id: string;
 }
 
-/**
- * MDX entry point: `<VerificationExercise id="…"/>` renders one of the
- * Verification track's native React interactives inline. Async server
- * component: it resolves the signed-in user here so the client host only
- * records progress for learners who can persist it.
- */
 export async function VerificationExercise({ id }: VerificationExerciseProps) {
   const exercise = getVerificationExercise(id);
   if (!exercise) {
@@ -28,9 +21,6 @@ export async function VerificationExercise({ id }: VerificationExerciseProps) {
   }
   const user = await getCurrentUser();
   const contentId = verificationLessonId(id);
-  // View-style widgets cannot report completion themselves; their hosting
-  // lesson owns scroll completion. Avoid a database read whose result cannot
-  // affect the widget or any subsequent write.
   const completed =
     user && exercise.bridged ? await isLessonCompleted(user.id, contentId) : false;
   return (

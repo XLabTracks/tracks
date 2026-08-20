@@ -19,31 +19,8 @@ import {
 import { checkReportingAnswer } from "@/lib/verification/engines/human-reporting-protection";
 import type { VerificationWidgetProps } from "../kit/types";
 
-/** Which slot each statement is sitting in, by step id. */
 type Placement = Record<string, string>;
 
-/**
- * 2.4.2 asynchronous document lab. Learners RECONSTRUCT two routes: first a
- * legally and operationally usable way out of the organization, then an
- * evidence path from intake through documented referral.
- *
- * WHY IT IS AN ASSIGNMENT AND NOT A QUIZ. It used to be twelve consecutive
- * one-of-five questions — the same user action twelve times, and the course
- * owner's review named it the clearest case of that in the module. The
- * concepts were fine; the operation was recognition, one isolated link at a
- * time, which is exactly what a route is not.
- *
- * So the whole chain is on screen with its links empty, and ONE bank serves
- * all six: every statement can be used once, so placing one is also ruling it
- * out everywhere else, and a link can only be filled by asking what the other
- * five need. The bank carries one unsupported statement per link — the
- * overclaims and category errors already written for it — so the count never
- * gives the answer away.
- *
- * Nothing about the material changed. The statements, their sources, the
- * explanations and the assembled findings are the same strings the quiz used;
- * `checkReportingAnswer` is still the only thing that grades.
- */
 export function HumanReportingProtection({
   onComplete,
   initialCompleted,
@@ -58,8 +35,6 @@ export function HumanReportingProtection({
 
   const caseFile = REPORTING_CASES[caseIndex];
 
-  /* Place the held statement, swapping out whatever sat there. A statement
-     lives in one slot at a time — that is what makes this an assignment. */
   function fill(stepId: string) {
     if (!held) return;
     const next: Placement = {};
@@ -387,19 +362,6 @@ function CaseWork({
   );
 }
 
-/**
- * The bank: every link's supported statement, plus one unsupported statement
- * per link, in a stable order.
- *
- * Deterministic on purpose — sorted by id, which interleaves the supported and
- * the unsupported without a random seed. A shuffle would disagree between the
- * server render and the client's, and there is nothing to gain from a
- * different order per visit.
- *
- * One distractor per link, not four: the point is no longer to discriminate
- * inside one question, it is to satisfy six links at once from a bank that
- * cannot fill them all.
- */
 function statementBank(caseFile: ReportingCase) {
   const entries = caseFile.steps.flatMap((step) => {
     const right = step.choices.find((c) => c.id === step.answerId)!;
@@ -409,7 +371,6 @@ function statementBank(caseFile: ReportingCase) {
   return [...entries].sort((a, b) => a.id.localeCompare(b.id));
 }
 
-/** A placed statement may belong to another link's choice list. */
 function findStatement(caseFile: ReportingCase, choiceId: string | undefined) {
   if (!choiceId) return undefined;
   for (const step of caseFile.steps) {

@@ -1,32 +1,9 @@
-/**
- * The desk checks for 2.4.1's constructed case.
- *
- * The memo desk's contract, and it is the reason this is worth having: every
- * check is a transparent rule that NAMES ITSELF, so a learner can see what was
- * looked for and disagree with it. None of them judges whether the case is
- * good. They cannot — "the insider plausibly has access" is not a property of
- * a string — and the rail says so rather than implying a score.
- *
- * What a rule may do here is catch a move the writer has actually made. That
- * is different from listing the answer space up front: the four excluded
- * failures are not printed anywhere before submission, and the row about them
- * fires only if the failure field already reads like one of them.
- *
- * Severities are the memo desk's three. `bad` is for the two things that are
- * simply missing — a field, or the length — and everything else is `warn`,
- * because every one of these can have a false positive and the rail is not
- * entitled to be certain about prose.
- *
- * Pure and tested: `case-checks.test.ts` pins each rule against text that
- * should and should not trip it.
- */
 
 export type CheckSeverity = "ok" | "warn" | "bad";
 
 export interface CaseCheck {
   id: string;
   severity: CheckSeverity;
-  /** What the rail prints. Always says what was looked for. */
   message: string;
 }
 
@@ -37,13 +14,6 @@ export interface CaseFields {
   failure: string;
 }
 
-/**
- * The rail is handed whatever the editor has stored, and the editor stores a
- * key only once something has been typed into it — so a field the learner has
- * not touched arrives as undefined. Normalising here rather than at the call
- * site is deliberate: a cast at the call site is what hid this the first time,
- * and it threw inside a render.
- */
 export function toCaseFields(values: Record<string, string | undefined>): CaseFields {
   return {
     insider: values.insider ?? "",
@@ -59,21 +29,16 @@ export function wordCount(text: string): number {
   return (text.trim().match(WORD) ?? []).length;
 }
 
-/** "the insider lied / was wrong" — the first two excluded failures. */
 const UNTRUE =
   /\b(lied|lying|lies|fabricat\w*|made it up|invent\w*|false|untrue|mistaken|wrong about)\b/i;
-/** "reporting is simply prohibited" — the third. */
 const FORBIDDEN =
   /\b(not allowed to report|forbidden to report|prohibited from report\w*|illegal to report|cannot legally report|barred from report\w*)\b/i;
-/** "the verifier ignores it for no reason" — the fourth. */
 const IGNORED =
   /\b(ignor\w+|disregard\w+|does not care|doesn't care|no one cares|nobody cares)\b/i;
 
-/** A mechanism reads as a because, not as a verdict. */
 const MECHANISM =
   /\b(because|since|so that|therefore|which means|cannot|can't|has no|no authority|no route|not permitted to share|outside|belongs to|requires|without)\b/i;
 
-/** How somebody knows a thing, as opposed to that they know it. */
 const HOW_KNOWN =
   /\b(saw|watched|read|ran|signed|processed|administer\w*|logged|reviewed|attended|received|monitored|handled|audited|configured|approved|was told|overheard|holds?|has access)\b/i;
 

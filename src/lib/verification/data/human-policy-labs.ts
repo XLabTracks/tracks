@@ -1,9 +1,3 @@
-/**
- * Decision files for 2.4.3 and 2.4.4. Each supported statement is tied to a
- * named source and becomes one line of the learner's final inspection order
- * or institutional judgment. The unsupported alternatives are bounded
- * overclaims, category errors, or plausible but incomplete provisions.
- */
 
 export type HumanPolicyLabId = "audits-inspections" | "institutions-judgment";
 

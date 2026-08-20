@@ -1,16 +1,3 @@
-/**
- * Drill Bench: Primers — the cross-module drill deck ported from the standalone
- * playground page (verification-drills-data.js). Content is human-authored
- * curriculum copied verbatim: do NOT re-author a statement, option, note or
- * reveal. The task grammar is adapted from the All-Russian social-studies
- * olympiad final rounds (2021) — true/false with absolutist traps, minimal
- * generalizing concept, spot-every-error, resolve-the-dispute, who-is-who
- * deduction, derivation chains, argument sorting, consequence analysis.
- *
- * The only edits made in the port are cross-references: the source page
- * numbered its modules 0/1/2.x/3/4, which is not this track's structure, so
- * those pointers now name the concept or the bench that carries it here.
- */
 import type { DrillDeck } from "./drills";
 
 export const DRILLS_PRIMERS: DrillDeck = {
@@ -136,7 +123,6 @@ export const DRILLS_PRIMERS: DrillDeck = {
             "All treaty provisions are self-reporting mechanisms"
           ],
           right: 1,
-          // The reveal names "the third option" while walking the diagram.
           fixedOrder: true,
           why: "Chain the circles: the log-based circle sits wholly inside self-reporting (premise 2), and self-reporting is disjoint from tamper-resistant (premise 1); the treaty-provisions circle overlaps log-based (premise 3), so that overlap is forced outside tamper-resistant — an existential conclusion and nothing more. The rest of the provisions circle is unconstrained, which kills the “no” and “all” options; the third option is not derivable at all. Drawing the arrangement where your answer holds and the others fail IS the justification — that is the drill’s scoring rule."
         }

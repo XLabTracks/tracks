@@ -1,8 +1,3 @@
-/**
- * Human-authored mechanism deck from tracksprogramplayground's
- * "Five Maps of the Evidence" prototype. The placements are the course's
- * judgment calls, not the cited authors'.
- */
 export type EvidenceMapKey =
   | "layer"
   | "access"

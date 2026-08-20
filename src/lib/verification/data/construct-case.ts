@@ -1,44 +1,12 @@
-/**
- * 2.4.1 — Construct a Case.
- *
- * THE COURSE OWNER'S SPEC, verbatim: the prompt, the three conditions, the
- * four fields, the length, the post-submission checklist, and the rule that
- * the reveal shows contrasting valid examples rather than one canonical
- * answer. Its olympiad source is "Составь задачу" — construct one concrete
- * situation satisfying several conditions at once.
- *
- * The operation is construction, not recognition. There are no options, and
- * nothing here is graded: a string match cannot see whether a case holds
- * together, and the spec says plainly not to keyword-grade it.
- *
- * WHAT IS MINE AND SHOULD BE READ FIRST. The two worked examples below.
- * The spec asks for "2 contrasting valid examples, not one correct answer"
- * and does not supply them; everything else on this page is hers. They are
- * built only out of failure modes her spec already lists — the first fails on
- * corroboration, the second on a legal barrier between the authorised
- * recipient and the verifier — and they are deliberately unalike, so the pair
- * cannot read as a template. If either is wrong, it is one object here.
- *
- * The list of failure modes is NOT shown before submission. That is her
- * constraint and it is the whole difficulty of the task: naming where a
- * report dies is the work.
- */
 
 import type { ConstructedField } from "@/components/verification/kit/constructed-response";
 
-/** Her three conditions, verbatim — restated 2026-08-15 without the "still". */
 export const CASE_CONDITIONS = [
   "An insider’s report about a prohibited AI activity is accurate.",
   "The insider is legally permitted to report what they know.",
   "The verification regime cannot turn the report into actionable evidence.",
 ];
 
-/**
- * Her four fields. No hints under the labels: the prompt already says to make
- * clear who the insider is, what they know and how they know it, how they
- * report it and where verification fails, and a hint under each label was that
- * sentence printed a second time.
- */
 export const CASE_FIELDS: readonly ConstructedField[] = [
   {
     id: "insider",
@@ -64,7 +32,6 @@ export const CASE_FIELDS: readonly ConstructedField[] = [
 
 export const CASE_WORDS = { min: 100, max: 180 };
 
-/** Her checklist, verbatim, shown only after submission. */
 export const CASE_CHECKLIST = [
   "Is the allegation actually true?",
   "Could this insider plausibly know it?",
@@ -73,16 +40,6 @@ export const CASE_CHECKLIST = [
   "Can you identify the precise missing link between report and action?",
 ];
 
-/**
- * Her four excluded failures, verbatim — shown BEFORE submission, with the
- * prompt.
- *
- * They are part of the task, not part of the answer: the constraint her spec
- * sets is that the list of *good* failure modes stays hidden until after
- * submission, and these four are the opposite of that list. Withholding them
- * would only let somebody spend their six minutes on "the insider lies" and
- * find out afterwards that it was ruled out on the first page of the brief.
- */
 export const CASE_EXCLUDED = [
   "the insider lies",
   "the insider is wrong",
@@ -90,11 +47,6 @@ export const CASE_EXCLUDED = [
   "the verifier ignores the report for no reason",
 ];
 
-/**
- * Her examples of failures that do count, verbatim. Shown only in the reveal:
- * this is the list the spec keeps back, because naming where a report dies is
- * the whole work of the exercise.
- */
 export const CASE_FAILURE_MODES = [
   "evidence cannot be independently corroborated",
   "the authorized recipient cannot legally share the information with the verifier",
@@ -105,7 +57,6 @@ export const CASE_FAILURE_MODES = [
 
 export interface WorkedCase {
   id: string;
-  /** What kind of failure this one is — the contrast between the two. */
   kicker: string;
   insider: string;
   information: string;

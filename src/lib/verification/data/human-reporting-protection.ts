@@ -1,9 +1,3 @@
-/**
- * Two source-grounded cases for 2.4.2. The first applies California Labor
- * Code §§1107–1107.2 and the AIWI/CARMA best-practice guide to a reporting
- * route. The second applies CIGIE's 2025 Quality Standards for Investigations
- * and the corroboration analysis in Baker and Wasil to the resulting evidence.
- */
 
 export type ReportingCaseId = "protected-route" | "evidence-path";
 

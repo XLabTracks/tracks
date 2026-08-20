@@ -1,80 +1,3 @@
-/**
- * The 0.3 document packet's five tasks, with reveal-on-submission keys.
- *
- * WHERE THIS COMES FROM. The tasks are the course owner's condensed
- * assignment, verbatim from her packet delivery (2026-08-12): Task 5
- * compulsory plus any one of Tasks 1–4 (her review revised the original
- * "any two" down — three answers is too much for the hour), word limits
- * hers. The keys are her design too, delivered in a second pass with the
- * titles below: each key is a MODEL ANSWER (hers — written in Russian,
- * rendered in English on her instruction, "in eng obv") followed by a
- * BAKER REVEAL whose cuts she specified section by section. Task 2's
- * reveal is deliberately only a note: Baker supports persistent chip
- * records and accountancy, and she asked that the reveal say so directly
- * instead of stretching a quote.
- *
- * KEY CORRECTIONS (her audit, 2026-08-13). She reviewed the keys against
- * the tasks and the packet and found three of them wrong. Each is rewritten
- * below to what she said it must contain, and — the point of her review —
- * out of the three documents rather than out of Baker, who the learner has
- * not seen when they answer. PENDING HER COPY, like Task 2's realignment:
- * the corrected wording is ours.
- *
- *  - Task 1. The key gave the immediate object as "uranium and plutonium …
- *    at declared facilities", which is Baker's narrower gloss (§1.3, §3.2.1)
- *    substituted for the CSA's own object. Document 1 states it: all nuclear
- *    material in all peaceful nuclear activities within the State's
- *    territory, jurisdiction or control. The obligation was also loosely put
- *    and the three answers were out of the order the task asks them in.
- *  - Task 3. The key answered a different question — it argued the grounds
- *    and limits of the analogy, which is a good answer to a task nobody set.
- *    Hers asks for three conditions (technical structure, supply chain,
- *    verifier powers), each labelled explicit-in-Document-2 or inferred, each
- *    with the conclusion that would cease to hold. It is now that.
- *    Her Baker cuts for this task were chosen for the old key and are left
- *    alone: the commodity-chip scope bears on the first condition and supply
- *    chain concentration on the second, but her bakerNote still points at the
- *    analogy, and rewording it is hers.
- *  - Task 4. The key listed Baker's §5.2 historical explanations and never
- *    picked one of the three categories the task offers. It now names the
- *    second — failure to identify an undeclared object — and argues it from
- *    Document 3's own factors: strategic-point access, absent detection
- *    techniques, checklist culture, and no leads on where to look.
- *  - Task 5. The limited conclusion was sound and is kept verbatim; what was
- *    missing is that her four numbered requirements were not answered as four,
- *    and that several supporting items (chip-production concentration, the
- *    commodity-chip loophole, the missing environmental-sampling analogue,
- *    challenge inspections) came from the later Baker reveal rather than the
- *    packet. It is now four headed answers, each carried by the documents.
- *
- * TASK 2 REALIGNMENT (her audit, 2026-08-12): the delivered task named
- * "training transcripts" as a component, but Document 2's excerpt (§1.1)
- * never discusses transcripts — its three parts are chip-level activity
- * logging, inspection/analysis of the logs of a sufficient subset of
- * chips, and supply-chain monitoring. The task's component list now names
- * those three; the model answer's middle row and the "not interchangeable"
- * items were rewritten to match. PENDING HER COPY: the rewritten row and
- * items are ours (drawn from the excerpt's own wording), and her reveal
- * note lost its transcript sentence — both await her wording.
- *
- * THE QUOTES ARE BAKER'S OWN WORDS (arXiv:2304.04123v1, CC BY 4.0),
- * section-cited and linked, never marking. Labels over passages are ours,
- * set in our own voice so they can never be read as part of the quotation.
- * Citation-bracket markers ([17] etc.) and footnote numerals are dropped
- * from quotes; nothing else is touched.
- *
- * CHECKING A QUOTE. Taken from the converted paper, not retyped:
- *
- *   npm run arxiv:build -- --id 2304.04123v1
- *   npm run arxiv:build -- --blocks 2304.04123v1 --section <toc-id>
- *
- * The artifact is deliberately NOT committed — Baker is a link-out reading,
- * not a Paper item, and an artifact no page reads is an orphan.
- *
- * Shared quote objects (the §6.1 narrowing and its scope sentence, the
- * Appendix A differences) live in nuclear-disanalysis.ts and are imported,
- * so the two files can never drift on a shared passage.
- */
 
 import {
   BAKER_DIFFERENCES,
@@ -84,7 +7,6 @@ import {
 
 export { BAKER } from "./nuclear-disanalysis";
 
-/** One structural piece of a task body or model answer, in her order. */
 export type TaskPart =
   | { kind: "p"; text: string }
   | { kind: "quote"; text: string }
@@ -94,37 +16,15 @@ export type TaskPart =
 
 export interface PacketTask {
   id: string;
-  /** Her number. The rule "Task 5 and any one of Tasks 1–4" reads off it. */
   n: number;
   title: string;
   compulsory?: boolean;
   parts: TaskPart[];
-  /**
-   * The LEARNER's word ceiling — guidance, never a gate, and sized for the
-   * hour: Task 5 plus one of Tasks 1–4 has to be writable in it.
-   */
   maxWords: number;
-  /**
-   * Revealed on submission, and NOT bound by `maxWords`.
-   *
-   * These were labelled "model answer" and ran well past the ceilings they
-   * were modelling — Task 5 at double. The fix she chose is not to compress
-   * them into the cap, which would have cost the reasoning, nor to raise the
-   * cap to their length, which would have broken the hour: the caps went up
-   * once, to 200 and 300, and the keys are presented as commentary instead.
-   * So they may exceed the limit — but only by carrying something a
-   * compliant answer would have no room for, never by wandering out of the
-   * question's scope. Two blocks that did wander were cut (see Tasks 4
-   * and 5).
-   */
   answer: TaskPart[];
-  /** Baker's passages, per her cuts. Empty where Baker does not carry it. */
   baker: DisanalysisQuote[];
-  /** Hers — printed after the quotes, or alone when there are none. */
   bakerNote?: string;
 }
-
-/* ---------------- Baker, cut for these keys ---------------- */
 
 const BAKER_CSA_TEMPLATE: DisanalysisQuote = {
   what: "§3.2.1 IAEA safeguard systems",
@@ -194,8 +94,6 @@ const BAKER_SALIENT_FAILURE: DisanalysisQuote = {
   ],
 };
 
-/** Her five Appendix A items — two similarities, three differences — with
- * Baker's own lead-ins kept over each list. */
 const BAKER_ANALOGY_FIVE: DisanalysisQuote = {
   what: "Appendix A, The nuclear-AI analogy",
   blocks: [
@@ -257,8 +155,6 @@ const BAKER_ACCOUNTS_LINE: DisanalysisQuote = {
     },
   ],
 };
-
-/* ---------------- the tasks ---------------- */
 
 export const PACKET_TASKS: PacketTask[] = [
   {
@@ -479,9 +375,6 @@ export const PACKET_TASKS: PacketTask[] = [
         kind: "p",
         text: "So the system can be operating exactly as designed and still fail here, because correct verification of what was declared is compatible with an undeclared object the design never undertook to find. The last factor is also why more of the same inspections would not have closed it: the binding constraint was leads, not frequency or even access.",
       },
-      /* The transfer to Shavit that stood here is gone. Her review found the
-         question does not ask for it and Task 5 is where the packet does that
-         work. Scope, not length — it would still be out of place at any cap. */
     ],
     baker: [BAKER_CSA_GAP_FULL, BAKER_SALIENT_FAILURE],
   },
@@ -534,9 +427,6 @@ export const PACKET_TASKS: PacketTask[] = [
         kind: "p",
         text: "Each clause of that narrowing is doing work: “covered chips”, because Document 2 leaves personal devices alone; “declared locations”, because Document 3 is the case against assuming the list is complete.",
       },
-      /* "What the assessment would still need to know" stood here — a whole
-         block above the assignment, which asks for four things and not a
-         research agenda. Her review cut it on scope, not on length. */
     ],
     baker: [BAKER_QUALIFIED_OPTIMISM, BAKER_ANALOGY_FIVE, BAKER_ACCOUNTS_LINE],
     bakerNote:

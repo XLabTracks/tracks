@@ -10,17 +10,6 @@ import {
   type MarkingKey,
 } from "./data/marking-keys";
 
-/**
- * The four keys are a promise about how the exercises are marked, so the
- * promise is pinned rather than described.
- *
- * The form they share: credit per element, every key states what earns
- * nothing, and every key carries at least one criterion that a correct label
- * alone cannot satisfy. A key that lost any of those would still render — it
- * would just quietly become a checklist of vocabulary, which is the thing all
- * four exercises exist to avoid.
- */
-
 const KEYS: [string, MarkingKey][] = [
   ["construct-case", CONSTRUCT_CASE_KEY],
   ["same-claim", SAME_CLAIM_KEY],
@@ -52,9 +41,6 @@ describe("2.4 marking keys", () => {
   );
 
   it("the panel never sends a score anywhere", () => {
-    // The score is the learner's. If this file ever grows a fetch or a server
-    // action, the marking has stopped being self-marking and the exercises'
-    // "nothing here is graded" has become false.
     const src = readFileSync(
       path.join(
         process.cwd(),

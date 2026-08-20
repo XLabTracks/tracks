@@ -1,21 +1,10 @@
-/**
- * "The Anatomy Drill — Parts of a (Pause) Agreement" — content lifted verbatim
- * from public/verification/anatomy-drill.html (and its extracted content JSON
- * public/verification/content/anatomy-drill.json). Do NOT re-author: every
- * organ description, card text, source line, and feedback string below is
- * human-written curriculum, copied exactly.
- */
 
-/** A single agreement "organ" — one of the seven parts, plus the null bin (n=0). */
 export interface Organ {
   n: number;
   key: string;
   name: string;
-  /** Short description shown on the bin. */
   d: string;
-  /** Decorative categorical colour from the source (inline style; always paired with the numbered name). */
   c: string;
-  /** One-line characterization shown in the intro list (organs only). */
   line?: string;
 }
 
@@ -86,18 +75,10 @@ export const NULLBIN: Organ = {
   c: "#9a958a",
 };
 
-/** Resolve an organ by its number (0 = the null bin). */
 export function organOf(n: number): Organ {
   return n === 0 ? NULLBIN : ORGANS[n - 1];
 }
 
-/**
- * Each card: text, source (revealed after placement), organ (0 = no organ),
- *  ok: feedback on correct placement,
- *  near: {organN: feedback} — accepted as defensible, auto-moved, amber,
- *  wrong: {organN: tailored feedback} — rejected with targeted teaching,
- *  generic: fallback wrong-drop feedback.
- */
 export interface Card {
   organ: number;
   text: string;
@@ -269,7 +250,6 @@ export const CARDS: Card[] = [
   },
 ];
 
-/** Ungraded closing "one last drag" — negotiating-priority verdicts, keyed by organ number. */
 export const JUDGMENT: Record<number, string> = {
   1: "A defensible first pick: definitions fail before inspectors do, and every later organ inherits the rule's precision. The negotiator's caution: definitional fights are where talks stall longest, and a perfect rule with a weak evidence organ is how you get a ban that runs on trust.",
   2: "The analyst's pick. Getting the declared/undeclared decomposition written into the text disciplines everything downstream, because every mechanism must then name the branch it serves. Almost no real treaty makes it explicit, which is why so many have one branch standing empty.",
@@ -332,7 +312,6 @@ export const PROTOCOL: ProtocolArticle[] = [
   },
 ];
 
-/** Static intro copy (from the intro card + header). */
 export const COPY = {
   introNote:
     "Sources are hidden until you place each card. Read the text, not the letterhead. Where a tag is arguable, a defensible second-best answer is accepted and discussed, because expert readers disagree about these too. Drag with mouse or touch, or click a card and then click a bin.",
@@ -381,8 +360,6 @@ export const COPY = {
     "The fictional agreement several specimens were drawn from. Two specimens used strengthened versions of Articles VI and VIII; the original text appears here. You will work with this document again in the dissection and the stress test.",
 } as const;
 
-// ---------- pure drop resolution (used by the widget and its tests) ----------
-
 export type DropKind = "clean" | "near" | "bad";
 
 export interface DropResult {
@@ -390,12 +367,6 @@ export interface DropResult {
   msg?: string;
 }
 
-/**
- * Pure drop resolution, copied from the source `resolveDrop`:
- *  - exact organ match  -> clean
- *  - a defensible `near` tag for this bin -> near (auto-placed, amber)
- *  - otherwise -> bad, with the tailored `wrong` message or the generic fallback.
- */
 export function resolveDrop(card: Card, binN: number): DropResult {
   if (binN === card.organ) return { kind: "clean" };
   if (card.near && card.near[binN] !== undefined)

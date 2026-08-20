@@ -15,34 +15,8 @@ import {
 import type { VerificationWidgetProps } from "../kit/types";
 import { writingArea, writingCardFocus } from "../kit/writing-surface";
 
-/**
- * UNMOUNTED. 2.4.2 is now On Paper (policy-quick-check.tsx).
- *
- * 2.4.2 — Policy on Paper.
- *
- * The learner finds the provisions in the policy: two that genuinely support
- * reporting, two that could stop information reaching an independent verifier,
- * with a reason for each. Pressing a provision assigns it to the open finding,
- * so the reading is done on the policy rather than on a list of somebody
- * else's interpretations.
- *
- * Nothing is marked while the learner works. No provision is coloured, no
- * judgement is echoed back, and the first evaluative word on the page appears
- * after all four findings are committed — that is the spec's commit-before-
- * reveal rule, and it is what stops the exercise degenerating into being told
- * whether each pick was the expected one.
- *
- * Nothing is graded either. Several findings are defensible, so there is no
- * key to match against; the reveal annotates the policy and the learner marks
- * their four reasons against the criteria.
- *
- * OPTIONAL, so unbridged: submitting records no completion.
- */
-
 interface Saved {
-  /** slot id → provision id */
   picks: Record<string, string>;
-  /** slot id → the learner's reason */
   reasons: Record<string, string>;
   submitted: boolean;
 }
@@ -83,7 +57,6 @@ export function PolicyCritique({
       const raw = localStorage.getItem(STORAGE_KEY);
       if (raw) restored = prune(JSON.parse(raw));
     } catch {
-      /* unreadable storage just means starting fresh */
     }
     queueMicrotask(() => {
       setSaved(restored);
@@ -96,15 +69,11 @@ export function PolicyCritique({
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(next));
     } catch {
-      /* private mode / full quota */
     }
   }, []);
 
   if (!hydrated) return <div className="not-prose my-6 min-h-64" aria-busy />;
 
-  /* A provision belongs to one finding at a time: assigning it elsewhere
-     moves it, rather than letting the same provision be both of somebody's
-     supporting findings. */
   function assign(provisionId: string) {
     if (saved.submitted) return;
     const picks: Record<string, string> = {};
@@ -128,7 +97,6 @@ export function PolicyCritique({
     <div className="not-prose my-6 space-y-4">
       <p className="text-sm leading-relaxed">{POLICY_BRIDGE}</p>
 
-      {/* The policy, unmarked. Nothing here says which is which. */}
       <section className="panel">
         <h4 className="text-sm font-semibold">{POLICY_TITLE}</h4>
         <ul className="mt-3 space-y-2">

@@ -1,117 +1,38 @@
-/**
- * 0.3's disanalysis task: draw the nuclear→AI inference, read Baker, then find
- * out whether your inference survives a fact you did not have.
- *
- * WHERE THIS COMES FROM. The three questions are the course owner's,
- * transcribed from the design thread: "Before Baker — 1. Draw the inference",
- * the "Read" note, "After Baker — 2. Compare the arguments" with its
- * classification and its "Held or not?", and "3. Does the inference survive?"
- * with its three possibilities. Her numbering is load-bearing — Question 3
- * says "Return to the argument you made in Question 1" — so `n` is her number.
- *
- * THE SHAPE WAS RESHAPED ON HER INSTRUCTION (2026-08-12): the read comes
- * FIRST and the three tasks sit on it, ungated — no commits, no minimum
- * lengths, no locked steps. "It's not a test, it's reasoning." The old
- * preamble ("You have now examined how verification worked in nuclear arms
- * control") was cut on the same instruction — the eight case files are quick
- * hold-or-fail calls across every regime, not an examination of nuclear
- * verification; the examination is Baker, which is why he is read before
- * anything is asked.
- *
- * THE KEYS ARE BAKER'S OWN WORDS, never marking. Where the paper does not
- * settle a move, the reveal says so: he lists the differences and declines to
- * rank them, so "does it survive" cannot be graded against him.
- *
- * THE DISANALOGY CARD IS A SLOT SHE LEFT OPEN. Her Q3 reads "Consider the
- * following fact: [DISANALOGY CARD]" — the card is named and not written. What
- * is here is one of the four candidates SHE names in Q2 ("Baker himself gives
- * good candidates: …"), quoted from Baker rather than composed, so the slot is
- * filled with something authored rather than left blank or invented. All four
- * of her candidates are in CARD_CANDIDATES; swapping which one is dealt is a
- * one-line edit, and writing a different card is hers to do.
- *
- * REPRODUCTION. arXiv:2304.04123v1 is CC BY 4.0 — quotation with attribution
- * is what the licence is for, and every quote carries the section it came from
- * and links out.
- *
- * CHECKING A QUOTE. These were taken from the converted paper, not retyped
- * from memory. Rebuild that copy and read the section against this file:
- *
- *   npm run arxiv:build -- --id 2304.04123v1
- *   npm run arxiv:build -- --toc 2304.04123v1
- *
- * The artifact is deliberately NOT committed: Baker is a link-out reading in
- * 0.2, not a Paper item in the graph, and an artifact no page reads is an
- * orphan the next full build would not regenerate.
- */
 
 export const BAKER = {
   title: "Nuclear Arms Control Verification and Lessons for AI Treaties",
   author: "Mauricio Baker",
   year: "2023",
   href: "https://arxiv.org/abs/2304.04123",
-  /** Quoted under the paper's own licence. Stated because it is why we may. */
   licence: "CC BY 4.0",
 } as const;
 
-/* ---------------- quotes ---------------- */
-
-/**
- * One of Baker's sections, reproduced.
- *
- * A card is a SECTION, not a passage: three passages out of §6.1 printed as
- * three cards repeat the paper's title three times down the column and read as
- * three sources. So a card carries the section once and the passages sit
- * inside it.
- */
 export interface DisanalysisQuote {
-  /** Section as the paper numbers it — "§6.1 Qualified optimism". */
   what: string;
   blocks: DisanalysisBlock[];
 }
 
 export interface DisanalysisBlock {
-  /**
-   * Ours, not his — why this passage is in front of you. Set in our own voice
-   * so it can never be read as part of the passage under it.
-   */
   label?: string;
-  /**
-   * HIS, verbatim — the sentence that opens one of his lists ("However, there
-   * are also major differences…"). It is his prose, so it is set as prose:
-   * putting it through the label's uppercase would be editing a quotation to
-   * fit a style. Use this OR `label`, never both on one block.
-   */
   lead?: string;
-  /** Running passage, verbatim. */
   text?: string;
-  /** A verbatim list where the paper gives one (Appendix A is three lists). */
   points?: { term: string; text: string }[];
 }
 
-/* ---------------- the questions ---------------- */
-
-/** A choice the question makes the learner commit to before defending it. */
 export interface QuestionChoice {
-  /** Ours: what the pick is asking. */
   prompt: string;
   options: { id: string; label: string; hint?: string }[];
 }
 
 export interface DisanalysisQuestion {
   id: string;
-  /** HER number. Question 3 refers back to Question 1 by it. */
   n: number;
   title: string;
-  /** Her question, paragraph by paragraph. The emphasised line comes first. */
   ask: string;
   body: string[];
-  /** Possibilities to reason between — rendered as words, never as buttons. */
   choice?: QuestionChoice;
-  /** Ours, above the reveal — never a verdict on the answer. */
   revealLead?: string;
   reveal?: DisanalysisQuote[];
-  /** Said after the quotes where the paper does not settle the question. */
   caveat?: string;
 }
 
@@ -120,8 +41,6 @@ export const CLAIM = {
   text: "The nuclear record gives us reason to expect that ambitious verification of advanced AI could also be made workable.",
 } as const;
 
-/** Baker's four differences, quoted. Q2's reveal, and where the card comes
- * from. Exported: the 0.3 document packet's task keys reuse it. */
 export const BAKER_DIFFERENCES: DisanalysisQuote = {
   what: "Appendix A, The nuclear-AI analogy",
   blocks: [
@@ -162,8 +81,6 @@ export const BAKER_DIFFERENCES: DisanalysisQuote = {
   ],
 };
 
-/** Baker's own conclusion and its narrowing, quoted. Q3's reveal; the 0.3
- * document packet's task keys reuse it. */
 export const BAKER_QUALIFIED_OPTIMISM: DisanalysisQuote = {
   what: "§6.1 Qualified optimism",
   blocks: [
@@ -182,7 +99,6 @@ export const BAKER_QUALIFIED_OPTIMISM: DisanalysisQuote = {
   ],
 };
 
-/** Baker's hedge on the record itself. Q3's reveal; reused by the packet. */
 export const BAKER_RECORD_HEDGE: DisanalysisQuote = {
   what: "§4.4 Limitations",
   blocks: [
@@ -193,21 +109,13 @@ export const BAKER_RECORD_HEDGE: DisanalysisQuote = {
   ],
 };
 
-/* ---------------- the disanalogy card ---------------- */
-
 export interface DisanalogyCard {
   id: string;
-  /** Her shorthand for the candidate, from Q2. */
   label: string;
-  /** Baker's section it is quoted from. */
   what: string;
   text: string;
 }
 
-/**
- * The four candidates she names in Q2, in her order, each in Baker's words.
- * `DEALT_CARD` is which one Q3 puts in front of the learner.
- */
 export const CARD_CANDIDATES: DisanalogyCard[] = [
   {
     id: "it-use",
@@ -235,16 +143,11 @@ export const CARD_CANDIDATES: DisanalogyCard[] = [
   },
 ];
 
-/** Which candidate Q3 deals. Her call to change; one line. */
 export const DEALT_CARD = CARD_CANDIDATES[0]!;
 
-/* ---------------- the read, between Q1 and Q2 ---------------- */
-
-/** Her Read note. What Baker actually concluded, before they compare. */
 export const READ_NOTE =
   "Baker’s actual conclusion is deliberately qualified: with certain preparations, he argues that foreseeable challenges to a particular form of hardware-based AI verification could be reduced to difficulties that nuclear verification systems successfully managed.";
 
-/** Her reading map: eight pages of forty-four, and why each. */
 export interface ReadingRow {
   where: string;
   what: string;
@@ -284,8 +187,6 @@ export const READING_MAP: ReadingRow[] = [
   },
 ];
 
-/* ---------------- the three questions ---------------- */
-
 export const QUESTIONS: DisanalysisQuestion[] = [
   {
     id: "q1",
@@ -296,7 +197,6 @@ export const QUESTIONS: DisanalysisQuestion[] = [
       "What feature of the nuclear case does the inference depend on? What would have to be sufficiently similar in the case of AI for the inference to go through?",
       "Then identify one difference between the two domains that would be capable of defeating your argument, rather than merely making implementation more difficult.",
     ],
-    // No reveal. The key to Q1 is Baker, who has just been read.
   },
   {
     id: "q2",

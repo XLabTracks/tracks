@@ -19,7 +19,6 @@ describe("definition lookup rate limiting", () => {
     check("middle", 1);
     check("newest", 2);
 
-    // The first address was evicted, so it begins a fresh window.
     expect(check("oldest", 3).allowed).toBe(true);
   });
 });

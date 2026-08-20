@@ -19,11 +19,6 @@ const GROUP_COLORS = [
   "var(--mod-4-text, #3d75b1)",
 ];
 
-/**
- * One mechanism deck, five serious taxonomies. The source prototype used an
- * independent visual system; this version keeps its exact conceptual model
- * while adopting the platform's tabs, hairline cards and theme tokens.
- */
 export function EvidenceTaxonomies(_: VerificationWidgetProps) {
   void _;
   const [mapKey, setMapKey] = useState<EvidenceMapKey>("layer");

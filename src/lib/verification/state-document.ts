@@ -43,12 +43,6 @@ function nestedStamp(name: VerificationStoreName, value: unknown): number {
   return newest;
 }
 
-/**
- * Converts both the original, whole-document protocol and the current
- * per-store protocol into one shape. Old documents use their top-level stamp
- * only for stores that do not carry a stamp of their own; that makes the
- * upgrade lossless without letting the old global clock govern future edits.
- */
 export function normalizeVerificationStateDocument(
   value: unknown,
 ): VerificationStateDocument {
@@ -89,11 +83,6 @@ export type VerificationStateMerge = {
   acceptedStores: VerificationStoreName[];
 };
 
-/**
- * Last-write-wins independently for each browser store. A stale progress
- * snapshot can no longer erase a newer notebook just because a Field Map edit
- * made the enclosing document newer.
- */
 export function mergeVerificationStateDocuments(
   currentValue: unknown,
   incomingValue: unknown,

@@ -17,20 +17,6 @@ import {
 } from "@/lib/verification/data/missing-board";
 import type { VerificationWidgetProps } from "../kit/types";
 
-/**
- * 2.4.4 — "Exercise: From Nuclear to AI Inspections" (born "The Missing
- * Board"; ids keep that name). The Carlson reading's reflection questions as a
- * construction: transfer each station of the nuclear decision chain to AI
- * (write-in), write the standard, name the strain; submit freezes and opens
- * the commentary — never a marking. Content and design notes live in the
- * data file's header.
- *
- * Required reading-work, so it sits outside any fold and bills into the
- * lesson's estimate — but unbridged: it is reflection, not a finish event,
- * and the lesson still completes by reading. The onComplete call stays
- * because the registry types every widget the same way; the host no-ops it.
- */
-
 interface Saved {
   answers: Record<string, string>;
   strain: string;
@@ -72,7 +58,6 @@ export function MissingBoard({
       const raw = localStorage.getItem(STORAGE_KEY);
       if (raw) restored = prune(JSON.parse(raw));
     } catch {
-      /* unreadable storage just means starting fresh */
     }
     queueMicrotask(() => {
       setSaved(restored);
@@ -85,7 +70,6 @@ export function MissingBoard({
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(next));
     } catch {
-      /* private mode / full quota */
     }
   }, []);
 
@@ -98,7 +82,6 @@ export function MissingBoard({
 
   return (
     <div className="not-prose my-6 space-y-4">
-      {/* Olympiad registers: statement, task, limit. */}
       <div className="space-y-3">
         <p className="text-base leading-relaxed font-medium">{BOARD_INTRO}</p>
         <p className="text-sm leading-relaxed">{BOARD_TASK_LEAD}</p>

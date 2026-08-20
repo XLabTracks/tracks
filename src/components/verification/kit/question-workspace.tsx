@@ -12,22 +12,6 @@ import {
 import { writingArea, writingCardFocus } from "./writing-surface";
 import { cn } from "@/lib/utils";
 
-/**
- * The written-answer deck both question units use: every question on the page
- * at once, each with its own box.
- *
- * The house rule is one step at a time, and this is the exception it names.
- * The questions are what the learner is looking for while they page through a
- * treaty or a working paper, so revealing question 3 once question 2 is
- * answered sends them back through the document a second time.
- *
- * No key, no score, no marking — see each deck's data file for why, and do
- * not reintroduce one unasked.
- *
- * Typing autosaves; Save answer is a separate deliberate act and it is the
- * one that counts toward the rule. Notes in progress therefore never complete
- * a unit on their own, and nothing here auto-completes.
- */
 export function QuestionWorkspace({
   storageKey,
   rule,
@@ -36,7 +20,6 @@ export function QuestionWorkspace({
   placeholder = "Quote the words you are talking about.",
   onComplete,
 }: {
-  /** localStorage document for this deck. Permanent — it holds learner work. */
   storageKey: string;
   rule: WorkspaceRule;
   questions: readonly WorkspaceQuestion[];
@@ -47,8 +30,6 @@ export function QuestionWorkspace({
   const [state, setState] = useState<Saved>(EMPTY);
 
   useEffect(() => {
-    // Read after mount: localStorage exists only on the client, and reading it
-    // during render would make the server and client markup disagree.
     // eslint-disable-next-line react-hooks/set-state-in-effect
     setState(read(storageKey));
   }, [storageKey]);
@@ -59,7 +40,6 @@ export function QuestionWorkspace({
       try {
         localStorage.setItem(storageKey, JSON.stringify(next));
       } catch {
-        /* private mode */
       }
     },
     [storageKey]
@@ -111,8 +91,6 @@ export function QuestionWorkspace({
             <div className="mt-1 space-y-2 text-sm">
               {q.body.map((block, i) =>
                 "list" in block ? (
-                  // The card is not-prose, so the list carries its own markers
-                  // and indent — preflight has taken both away.
                   <ul
                     key={i}
                     className="marker:text-muted-foreground list-disc space-y-1 pl-5"
@@ -171,11 +149,6 @@ export function QuestionWorkspace({
   );
 }
 
-/**
- * What this question is for. A word, not a colour — the three states have to
- * survive a reader who cannot tell the hues apart, and the choose-one badge
- * has to name its own group or "choose one" tells nobody which ones.
- */
 function Badge({
   rule,
   requirement,

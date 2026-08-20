@@ -10,11 +10,6 @@ import {
 } from "@/lib/verification/data/verification-problem";
 import type { VerificationWidgetProps } from "../kit/types";
 
-/**
- * Native, compact re-composition of the scrolling Verification Problem page.
- * It uses the current platform card/dialog idiom instead of reproducing the
- * prototype's own page chrome, fonts or dark-only palette.
- */
 export function VerificationProblem(_: VerificationWidgetProps) {
   void _;
   const [open, setOpen] = useState<VerificationProblemOption | null>(null);
@@ -65,10 +60,6 @@ export function VerificationProblem(_: VerificationWidgetProps) {
                 <span className="text-muted-foreground text-4xs tracking-[0.14em] uppercase">
                   {option.label}
                 </span>
-                {/* Inspected is said, not shaded. The filled disc here made
-                    the reader decode a circle, and the numeral inside it only
-                    repeated this card's position — which the label opposite
-                    already carries. See CLAUDE.md on rings. */}
                 {seen ? (
                   <span className="text-comply flex items-center gap-1 text-3xs font-medium">
                     <Check className="size-3.5 shrink-0" aria-hidden />

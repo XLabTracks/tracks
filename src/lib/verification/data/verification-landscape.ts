@@ -1,8 +1,3 @@
-/**
- * Data for the "Verification Landscape" widget — ROWS/COLS/HEATWORD/CELLS lifted
- * verbatim from public/verification/content/verification-landscape.json, and the
- * surrounding copy from the authored HTML. Do not re-author (curriculum).
- */
 export interface LandscapeRow { key: string; name: string; desc: string; }
 export interface LandscapeCol { key: string; name: string; desc: string; }
 export interface LandscapeCell {

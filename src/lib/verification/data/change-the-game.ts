@@ -1,14 +1,3 @@
-/**
- * Copy + presentation data for the "Change the Game: The Race Dilemma Lab"
- * widget — lifted verbatim from public/verification/change-the-game.html (the
- * COPY object) and public/verification/content/change-the-game.json. Do not
- * re-author, paraphrase, shorten, or translate any string: this is
- * human-written curriculum. The numeric CONFIG lives in
- * ../engines/change-the-game.ts (the normative model).
- *
- * Simple <b>/<i> HTML tags in strings and [[term]] / [[display|term]] tooltip
- * markup are preserved exactly as authored.
- */
 
 export const CTG_COPY = {
   nav: {

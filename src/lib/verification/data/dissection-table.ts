@@ -1,17 +1,8 @@
-/**
- * Data for "The Dissection Table — Anatomy of a (Pause) Agreement" widget —
- * lifted verbatim from public/verification/dissection-table.html and
- * public/verification/content/dissection-table.json (the authored HTML).
- * Do not re-author, paraphrase, shorten, or translate; this is human-written
- * curriculum. The planted oddities (e.g. a flaw clause with zero organs) are
- * intentional "lessons not bugs" and are preserved exactly.
- */
 
 export interface Organ {
   n: number;
   name: string;
   d: string;
-  /** Okabe-Ito-adjacent accent key used by the widget for the semantic dot. */
   c: string;
 }
 

@@ -30,8 +30,6 @@ interface FeedbackState {
   autoPlaced: boolean;
 }
 
-// Feedback-tier -> semantic accent, ALWAYS paired with an icon + text label.
-// clean = comply (green), near = exaggerate (amber), miss = defect (vermillion).
 const TIER_ACCENT: Record<
   CardResult,
   { dot: string; text: string; border: string; label: string }
@@ -59,7 +57,7 @@ const TIER_ACCENT: Record<
 function feedbackTier(kind: FeedbackKind): CardResult {
   if (kind === "good") return "clean";
   if (kind === "near") return "near";
-  return "miss"; // good-after, retry, reveal
+  return "miss";
 }
 
 const FEEDBACK_HEAD: Record<FeedbackKind, string> = {
@@ -70,14 +68,6 @@ const FEEDBACK_HEAD: Record<FeedbackKind, string> = {
   reveal: "Filed for you",
 };
 
-/**
- * The Anatomy Drill — sort 13 short agreement excerpts into the seven "organs"
- * of a verifiable agreement (plus a null "no organ" bin). Feedback tiers: a
- * clean organ match, a defensible near-tag (auto-placed, amber), a retry on the
- * first wrong drop, and a reveal that auto-files + shows the answer on the
- * second. Ends with a graded summary and an ungraded negotiating-priority pick.
- * Bridged: `onComplete()` fires once, when the drill reaches the summary.
- */
 export function AnatomyDrill({ onComplete }: VerificationWidgetProps) {
   const [phase, setPhase] = useState<Phase>("intro");
   const [idx, setIdx] = useState(0);
@@ -113,7 +103,6 @@ export function AnatomyDrill({ onComplete }: VerificationWidgetProps) {
   }
 
   function nextCard() {
-    // A retry keeps the same specimen in play.
     if (fb && fb.kind === "retry") {
       setPhase("drill");
       setFb(null);
@@ -140,8 +129,6 @@ export function AnatomyDrill({ onComplete }: VerificationWidgetProps) {
     setJudgment(null);
   }
 
-  // Single drop handler for the whole widget: judgment chips in the summary,
-  // organ bins during the drill.
   function onDrop(itemId: string, zoneId: string) {
     if (itemId.startsWith("judge-") && zoneId === "judge-slot") {
       const n = Number(itemId.slice("judge-".length));
@@ -183,8 +170,6 @@ export function AnatomyDrill({ onComplete }: VerificationWidgetProps) {
   );
 }
 
-// ---------------------------------------------------------------- intro
-
 function Intro({ onBegin }: { onBegin: () => void }) {
   return (
     <div className="mx-auto max-w-2xl space-y-4">
@@ -212,8 +197,6 @@ function Intro({ onBegin }: { onBegin: () => void }) {
   );
 }
 
-// ---------------------------------------------------------------- drill
-
 function Drill({
   idx,
   card,
@@ -231,11 +214,9 @@ function Drill({
 }) {
   const inFeedback = phase === "feedback";
   const isRetry = inFeedback && fb?.kind === "retry";
-  // The specimen card stays interactive during a retry; it's replaced by a
-  // "filed under" confirmation once resolved.
   const showLiveSpecimen = !inFeedback || isRetry;
   const showFiled = inFeedback && fb?.kind !== "retry";
-  const showBins = !showFiled; // bins hidden once the card is filed
+  const showBins = !showFiled;
   const filedOrgan = organOf(card.organ);
 
   const tier = fb ? feedbackTier(fb.kind) : null;
@@ -243,7 +224,6 @@ function Drill({
 
   return (
     <div className="space-y-4">
-      {/* progress */}
       <div className="flex items-center gap-1.5">
         {CARDS.map((_, i) => {
           const r = i < idx ? results[i] : undefined;
@@ -268,7 +248,6 @@ function Drill({
         </span>
       </div>
 
-      {/* live specimen (draggable) */}
       {showLiveSpecimen && (
         <div className="mx-auto max-w-2xl">
           <Draggable
@@ -295,7 +274,6 @@ function Drill({
         </div>
       )}
 
-      {/* filed confirmation (after resolution) */}
       {showFiled && (
         <div className="bg-card shadow-soft mx-auto max-w-2xl rounded-xl border p-4">
           <div className="text-muted-foreground mb-1.5 text-4xs tracking-[0.14em] uppercase">
@@ -307,7 +285,6 @@ function Drill({
         </div>
       )}
 
-      {/* bins */}
       {showBins && (
         <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
           {ORGANS.map((o) => (
@@ -317,7 +294,6 @@ function Drill({
         </div>
       )}
 
-      {/* feedback */}
       {inFeedback && fb && accent && (
         <div className="mx-auto max-w-2xl">
           <div
@@ -408,8 +384,6 @@ function Bin({
   );
 }
 
-// ---------------------------------------------------------------- summary
-
 function Summary({
   results,
   judgment,
@@ -477,7 +451,6 @@ function Summary({
         {COPY.punch}
       </p>
 
-      {/* one last drag — ungraded judgment */}
       <div className="space-y-3">
         <p className="text-sm">
           <span className="font-semibold">One last drag.</span>{" "}
@@ -550,7 +523,6 @@ function Summary({
         </>
       )}
 
-      {/* full protocol text */}
       <div className="border-border bg-card mt-2 rounded-lg border p-5">
         <h5 className="text-2xs font-semibold tracking-[0.08em] uppercase">
           {COPY.protocolHead}

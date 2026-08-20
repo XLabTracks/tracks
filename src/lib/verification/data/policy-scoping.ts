@@ -1,55 +1,15 @@
-/**
- * Data for the "Scoping an Anti-ASI Policy" widget, rebuilt 2026-08-18 to the
- * outline's v40 revision of 1.0.2. The exercise is now three phases: the two
- * axes as side-by-side pop-ups (a qualitative five-rung scale each), then the
- * eleven policy buckets introduced in order as a gradient card walk, then the
- * sort onto the feasibility × effectiveness plane.
- *
- * What is whose, because the rule is "never invent curriculum":
- *
- *   - BUCKETS — names, descriptions, historical parallels — are the outline's
- *     own words, transcribed verbatim (seams noted inline where a list-item
- *     lead-in had to become a card sentence).
- *   - The five-rung AXIS_SCALES, each bucket's reference cell (`key`) and
- *     one-line `why`, and the compute-controls exception answer are
- *     builder-authored exercise apparatus, written under the outline's own
- *     instruction to the builder ("FIRST introduce: what is effectiveness?
- *     Give a qualitative scale of 5 different values…"). They are flagged for
- *     owner review in docs/verification/module-1-log.md — argue with them
- *     there, not by silently re-deriving.
- *   - AXIS_TIPS and the exception question (lead + the sg/dr/ti/ch answers)
- *     carry over from the previous five-bucket widget, authored copy from the
- *     policy-scoping.html prototype; the halt answer's first words are
- *     conformed to the new bucket's name.
- *
- * Grid cells are keyed f0..f4 (feasibility low→high) × e0..e4 (effectiveness
- * low→high). Verdicts against the reference key are mechanical — exact cell is
- * right, one step off on either axis (Chebyshev distance 1) is close, further
- * is off — so there is no per-cell feedback table to drift. Cells can hold
- * multiple chips, and the reference key itself doubles up twice (domestic
- * regulation + transparency; binding regulation + nonproliferation). That is a
- * lesson, not a bug: buckets that make different asks can still price out at
- * the same spot, and the off-frontier cluster (emergency prep, transfers) is
- * the point that not everything lives on the diagonal.
- */
 
 export type Verdict = "right" | "close" | "wrong";
 
 export interface AxisRung {
-  /** Short qualitative name, e.g. "Long shot". */
   name: string;
-  /** One-line gloss shown in the scale pop-up. */
   gloss: string;
 }
 
 export interface AxisScale {
-  /** Pop-up trigger question, e.g. "What is effectiveness?" */
   question: string;
-  /** Axis title as it appears on the plane. */
   title: string;
-  /** Defining line under the title (carried from AXIS_TIPS). */
   lead: string;
-  /** Five rungs, low → high. */
   rungs: [AxisRung, AxisRung, AxisRung, AxisRung, AxisRung];
 }
 
@@ -113,19 +73,12 @@ export const AXIS_SCALES: { effectiveness: AxisScale; feasibility: AxisScale } =
 
 export interface Bucket {
   id: string;
-  /** The outline's own number, 1–11 — load-bearing: bucket 7's description
-   *  says "options 8 through 11", so the numbers must stay visible. */
   n: number;
   name: string;
-  /** Short label for a chip on the crowded plane. */
   short: string;
-  /** The outline's description, verbatim. */
   desc: string;
-  /** The outline's historical parallel (its "a." item), split at the first colon. */
   parallel: { title: string; text: string };
-  /** Reference cell, 0-indexed: f = feasibility rung, e = effectiveness rung. */
   key: { f: number; e: number };
-  /** One-line rationale for the reference placement, shown on reveal. */
   why: string;
 }
 
@@ -200,9 +153,6 @@ export const BUCKETS: Bucket[] = [
     n: 6,
     name: "Knowledge and benefit transfers",
     short: "Transfers",
-    // Outline seam: the source list-item reads "Knowledge and benefit
-    // transfers, in two strands: …" — the name takes the head and the
-    // description opens at "In two strands".
     desc: "In two strands: sharing research, development knowledge, and safety-enhancing technologies; and sharing chips, compute access, completed models or API access, cash, and AI-enabled aid. Both function as side payments that make restrictive regimes acceptable to states asked to forgo development.",
     parallel: {
       title: "Atoms for Peace, 1953",
@@ -245,9 +195,6 @@ export const BUCKETS: Bucket[] = [
     desc: "A small set of states develops frontier AI under international safeguards and inspections; development prohibited everywhere else.",
     parallel: {
       title: "NPT and IAEA, 1968 onward",
-      // Outline seam: the source item opens its last sentence "Worth putting
-      // on the card: the regime mostly held…" — an instruction to this card,
-      // not learner prose, so the card keeps what follows the colon.
       text: "The source model itself. Five recognized weapons states, safeguards inspections for everyone else, and Article IV benefits as the sweetener. The regime mostly held (far fewer nuclear states than Kennedy predicted), but India, Pakistan, and Israel stayed outside it, and North Korea left, so “prohibited everywhere else” was never airtight, and the two-tier structure still breeds resentment.",
     },
     key: { f: 1, e: 3 },
@@ -281,15 +228,11 @@ export const BUCKETS: Bucket[] = [
   },
 ];
 
-/** Mechanical verdict against the reference key: exact cell is right, one step
- *  off on either axis is close, anything further is off. */
 export function verdictFor(bucket: Bucket, f: number, e: number): Verdict {
   const dist = Math.max(Math.abs(bucket.key.f - f), Math.abs(bucket.key.e - e));
   return dist === 0 ? "right" : dist === 1 ? "close" : "wrong";
 }
 
-/** Human line for a cell, from the rung names: used in announcements and
- *  verdict feedback. */
 export function cellLabel(cell: string | null): string {
   if (!cell) return "the tray";
   const f = Number(cell[1]);
@@ -297,21 +240,12 @@ export function cellLabel(cell: string | null): string {
   return `feasibility “${AXIS_SCALES.feasibility.rungs[f].name}”, effectiveness “${AXIS_SCALES.effectiveness.rungs[e].name}”`;
 }
 
-/** Verdict → short status word used in results + announcements. */
 export function verdictLabel(v: Verdict): string {
   return v === "right" ? "on the mark" : v === "close" ? "close" : "off";
 }
 
-/** The exception question's options, strongest ask last — rendered in reverse
- *  so the halt is not the first chip offered. */
 export const EXC_OPTION_IDS = ["sg", "dr", "ti", "cc", "ch"] as const;
 
-/** Exception answers. sg/dr/ti carry over verbatim from the five-bucket
- *  widget; ch is that widget's full-pause answer with its first words
- *  conformed to this bucket's name; cc is builder-authored (the new list
- *  makes the enforcement backbone the most tempting wrong answer, and the
- *  old option set had nothing in its place). `t` carries authored <b>
- *  emphasis markup. */
 export const EXC_ANSWERS: Record<string, { ok: boolean; t: string }> = {
   ch: {
     ok: true,
@@ -335,7 +269,6 @@ export const EXC_ANSWERS: Record<string, { ok: boolean; t: string }> = {
   },
 };
 
-/** Axis / corner / securitization hover copy — carried over verbatim. */
 export const AXIS_TIPS = {
   y: "How much the policy actually deters ASI development — measured against the global race, not against one country’s labs.",
   x: "How gettable the policy is under current infrastructure (the verification burden it implies) and the current political climate.",
@@ -344,10 +277,6 @@ export const AXIS_TIPS = {
   sec: "Securitization: treating an issue as an existential security matter, lifting it out of normal political balancing — because nothing can be traded against survival. A strong move with a history of abuse, which is why the threat model must be argued, not stipulated.",
 } as const;
 
-/** Widget chrome copy. Phase strip labels and buttons are chrome; the caption,
- *  axis lines, exception lead, and foot carry over from the previous widget
- *  (the foot's stale closing clause about a written justification the section
- *  no longer has was dropped; closingNext now names the actual next unit). */
 export const POLICY_SCOPING_COPY = {
   phases: ["The axes", "The buckets", "The sort"] as const,
 

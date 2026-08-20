@@ -2,14 +2,6 @@
 
 import type { ReactNode } from "react";
 
-/**
- * A link-styled control over the notebook. It has to be a button because the
- * notebook is a panel mounted on the page by notebook.js, not a route — there
- * is no URL to link to. `page="skills"` opens the book at its permanent last
- * page, the skill map; the default is wherever the reader last was.
- * Optional-chained on purpose: the script loads afterInteractive, so a press
- * before it lands is a no-op, never an error.
- */
 export function NotebookLink({
   page,
   children,

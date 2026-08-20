@@ -26,7 +26,7 @@ export const verificationExercises: Exercise[] = [
   {
     id: "v-task-introduction-1",
     type: "writing-prompt",
-    prompt: "Optional task — The strongest objection.\n\nIn a short written note, construct the strongest objection you can to the case above — and state what would change your mind, in either direction.",
+    prompt: "[Optional] Task — The strongest objection.\n\nIn a short written note, construct the strongest objection you can to the case above — and state what would change your mind, in either direction.",
     format: "free-form",
     optional: true,
   },
@@ -130,7 +130,7 @@ export const verificationExercises: Exercise[] = [
     id: "v-task-intuitions-2",
     type: "writing-prompt",
     prompt:
-      "Optional task — Essay: what does success look like to you?\n\nDescribe your own plausible success scenario for advanced AI governance. Think several steps beyond any single verification mechanism: what does a world that has successfully managed the relevant risks actually look like, and what agreement or institutional arrangement gets us there?\n\nQuestions to consider:\n\n- What would make you call the outcome a success, and which risks or tradeoffs would remain acceptable?\n- What agreement or institutional settlement sustains that outcome, and which actors must participate for it to hold?\n- What technological and geopolitical assumptions does your scenario depend on most heavily?\n- What must verification establish with high confidence, and where can the regime tolerate residual uncertainty?\n- Which actors, jurisdictions, or incentives pose the hardest coordination problem?\n- What has to become technically, politically, or institutionally possible before this settlement can emerge?\n- Where is your scenario most fragile, and what development would most likely force you to redesign it?\n\nKeep this essay. You will return to it at the end of the track and see what, if anything, you would now change.",
+      "[Optional] Task — Essay: what does success look like to you?\n\nDescribe your own plausible success scenario for advanced AI governance. Think several steps beyond any single verification mechanism: what does a world that has successfully managed the relevant risks actually look like, and what agreement or institutional arrangement gets us there?\n\nQuestions to consider:\n\n- What would make you call the outcome a success, and which risks or tradeoffs would remain acceptable?\n- What agreement or institutional settlement sustains that outcome, and which actors must participate for it to hold?\n- What technological and geopolitical assumptions does your scenario depend on most heavily?\n- What must verification establish with high confidence, and where can the regime tolerate residual uncertainty?\n- Which actors, jurisdictions, or incentives pose the hardest coordination problem?\n- What has to become technically, politically, or institutionally possible before this settlement can emerge?\n- Where is your scenario most fragile, and what development would most likely force you to redesign it?\n\nKeep this essay. You will return to it at the end of the track and see what, if anything, you would now change.",
     format: "free-form",
     minWords: 500,
     maxWords: 800,
@@ -139,7 +139,7 @@ export const verificationExercises: Exercise[] = [
   {
     id: "v-task-intuitions-3",
     type: "writing-prompt",
-    prompt: "Optional — Explore AI 2027\n\nRead [AI 2027](https://ai-2027.com/), the same team’s earlier scenario, including both of its endings. As you read, ask the question this section trained: at which branch points would verification infrastructure have changed what the actors could credibly agree to?",
+    prompt: "[Optional] Explore AI 2027\n\nRead [AI 2027](https://ai-2027.com/), the same team’s earlier scenario, including both of its endings. As you read, ask the question this section trained: at which branch points would verification infrastructure have changed what the actors could credibly agree to?",
     format: "free-form",
     optional: true,
   },
@@ -151,7 +151,7 @@ export const verificationExercises: Exercise[] = [
     id: "v-task-welcome-1",
     type: "writing-prompt",
     prompt:
-      "Optional reflection — Write a short note that you can look back on after completing the course:\n\n- Why are you interested in learning about AI verification?\n- What do you want to gain from this course?\n- Before beginning, brainstorm: what parts of AI verification intuitively seems hardest?",
+      "[Optional] Reflection — Write a short note that you can look back on after completing the course:\n\n- Why are you interested in learning about AI verification?\n- What do you want to gain from this course?\n- Before beginning, brainstorm: what parts of AI verification intuitively seems hardest?",
     format: "free-form",
     optional: true,
   },
@@ -159,7 +159,7 @@ export const verificationExercises: Exercise[] = [
     id: "v-task-strategic-foundations-1",
     type: "writing-prompt",
     prompt:
-      "Optional written output — Actor, authority, and evidence map.\n\nChoose one element of the advanced-AI supply chain. Map (1) the actors involved, (2) the authority each one holds, and (3) the evidence that would let an outside party verify what they are doing. Draw on whichever reading pathway above is most relevant to the element you pick.",
+      "[Optional] Written output — Actor, authority, and evidence map.\n\nChoose one element of the advanced-AI supply chain. Map (1) the actors involved, (2) the authority each one holds, and (3) the evidence that would let an outside party verify what they are doing. Draw on whichever reading pathway above is most relevant to the element you pick.",
     format: "free-form",
     optional: true,
   },

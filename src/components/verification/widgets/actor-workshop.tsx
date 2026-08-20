@@ -223,7 +223,7 @@ function StudyStep({ onStart }: { onStart: () => void }) {
   return (
     <div className="space-y-4">
       <p className="text-sm leading-relaxed">
-        Ten actors, the six roles any of them can play, and the five postures
+        Seventeen actors, the six roles any of them can play, and the five postures
         any of them can take. Read for as long as you want — the workshop
         starts when you say so, and this panel closes when it does.
       </p>
@@ -599,4 +599,3 @@ function PlaceStep({
     </div>
   );
 }
-

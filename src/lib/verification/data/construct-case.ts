@@ -4,7 +4,7 @@
  * THE COURSE OWNER'S SPEC, verbatim: the prompt, the three conditions, the
  * four fields, the length, the post-submission checklist, and the rule that
  * the reveal shows contrasting valid examples rather than one canonical
- * answer. Its olympiad source is "Составь задачу" — construct one concrete
+ * answer. Its olympiad source asks the learner to construct one concrete
  * situation satisfying several conditions at once.
  *
  * The operation is construction, not recognition. There are no options, and

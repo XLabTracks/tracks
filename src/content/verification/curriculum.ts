@@ -305,8 +305,8 @@ export const verificationLessons: Lesson[] = [
     contentRef: "verification/human-institutions",
     // The framing paragraph, the two required readings (6–8 min each —
     // Brundage's principles, Carlson's noncompliance decision) and The
-    // Missing Board transfer interactive (8–10 min, required per the owner:
-    // "мы увеличиваем бюджет урока"). The Standard of Proof closer is
+    // Missing Board transfer interactive (8–10 min, required after the owner
+    // increased the lesson's time budget). The Standard of Proof closer is
     // optional and, per the track-wide convention, bills nothing.
     estimatedMinutes: 25,
   },
@@ -444,7 +444,7 @@ export const verificationLessons: Lesson[] = [
     slug: "hardware-reconstructing-run",
     moduleId: "v-infrastructure",
     sectionItemId: "v-hw-attestation",
-    title: "2.1.7 Optional extension: reconstructing a declared training run",
+    title: "2.1.7 [Optional] Extension: reconstructing a declared training run",
     contentRef: "verification/hardware-reconstructing-run",
     estimatedMinutes: 5,
   },

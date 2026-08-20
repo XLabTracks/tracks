@@ -3,10 +3,10 @@
  * Missing Board" on the owner's 2026-08-18 edit document; ids and storage
  * keys keep the old name — they are permanent).
  *
- * HER BRIEF (2026-08-15): reflection questions on the Carlson reading —
- * "перенесите на ии, подумайте, проведите аналогии" — built as an
- * interactive first, and billed into the lesson's budget (it is required
- * reading-work, not an optional fold).
+ * HER BRIEF (2026-08-15): transfer the Carlson reading to AI, think through
+ * the comparison, and draw analogies. It is built as an interactive first
+ * and billed into the lesson's budget (it is required reading-work, not an
+ * optional fold).
  *
  * The mechanic: Carlson gives the nuclear regime's decision an address —
  * inspectors find, the Board judges, the Security Council enforces, and

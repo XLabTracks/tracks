@@ -33,7 +33,7 @@ export interface FoldProps {
   children: ReactNode;
 }
 
-export function Fold({ label = "Optional material", children }: FoldProps) {
+export function Fold({ label = "[Optional] Material", children }: FoldProps) {
   const [open, setOpen] = useState(false);
   const bodyId = useId();
   const shellRef = useRef<HTMLElement>(null);

@@ -770,7 +770,7 @@ function OptionalWriting() {
     return (
       <div className="border-border rounded-xl border p-4">
         <p className="text-sm font-semibold">
-          Three questions to take away — optional
+          [Optional] Three questions to take away
         </p>
         <p className="text-muted-foreground mt-1.5 text-sm leading-relaxed">
           Written answers, about fifteen minutes, with the criteria a marker

@@ -84,8 +84,8 @@
  *   two tripwires in actor-workshop.test.ts. None of it is a new claim about
  *   the world.
  *
- * THE RINGS ARE BAKER'S FRAME, NOT OURS (course owner, 2026-08-18: "Берём
- * рамку Baker / Рёбра делаем упражнением нарисовать и ключ по бейкеру"). They
+ * THE RINGS ARE BAKER'S FRAME, NOT OURS (course owner, 2026-08-18: use
+ * Baker's framework, and make drawing the edges an exercise with Baker's key). They
  * used to be a shape we invented — runs it / supplies it / rules on it / out
  * of reach — derived from 1.2's own sentences but answering a question no
  * paper asks. They now answer the question the verification literature asks,
@@ -163,7 +163,8 @@ import type { MarkingKey } from "./marking-keys";
  * board for an agreement between two governments. The closing questions gave
  * it away: they ask about Taiwan and about states that hold capability and
  * enforcement at once, and neither was on the board the learner had just
- * built. Course owner, 2026-08-18: "добавь страны... в схему". So the six
+ * built. The course owner asked for countries to be added to the diagram on
+ * 2026-08-18. So the six
  * states of the lesson's Table 2 are here, and so is one more row that is not
  * a country and belongs for the same reason — see below.
  *

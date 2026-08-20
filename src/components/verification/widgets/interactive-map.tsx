@@ -9,83 +9,52 @@ import {
   useRef,
   useState,
 } from "react";
-import {
-  ChevronLeft,
-  ChevronRight,
-  ExternalLink,
-  Map as MapIcon,
-  Minus,
-  Pause,
-  Play,
-  Plus,
-  X,
-} from "lucide-react";
+import { Minus, Plus, X } from "lucide-react";
+import { ReadingCard } from "@/components/mdx/reader/reading-card";
 import { cn } from "@/lib/utils";
-import { Button } from "@/components/ui/button";
 import {
   BUCKET_ORDER,
   BUCKETS,
-  centroidOf,
   CMAP,
   COUNTRIES,
   type BucketKey,
-  EU_IDS,
-  EVENTS,
   FLOW,
   MAP_COPY as C,
   MAP_VIEWBOX,
   ROLE_ORDER,
   ROLES,
   shortName,
-  TL_T0,
-  TL_T1,
-  TL_YEARS,
   WORLD,
 } from "@/lib/verification/data/interactive-map";
 import type { VerificationWidgetProps } from "../kit/types";
 
 /* ============ view state (source S) ============ */
 
-type Mode = "map" | "timeline";
 type FilterSource = "key" | string | null;
 
 type ViewBox = { x: number; y: number; w: number; h: number };
 
 type State = {
-  mode: Mode;
   filter: BucketKey | null;
   filterSource: FilterSource;
   selected: string | null;
-  event: number; // -1 = none
   vb: ViewBox;
 };
 
 const BASE: ViewBox = { ...MAP_VIEWBOX };
 
 type Action =
-  | { type: "setMode"; mode: Mode }
   | { type: "toggleFilter"; bucket: BucketKey; source: FilterSource }
   | { type: "clearFilter" }
   | { type: "select"; id: string }
   | { type: "clearSelection" }
   | { type: "gotoCountry"; id: string }
-  | { type: "setEvent"; i: number }
   | { type: "setVb"; vb: ViewBox }
   | { type: "resetVb" }
   | { type: "escape" };
 
 function reducer(s: State, a: Action): State {
   switch (a.type) {
-    case "setMode":
-      return {
-        ...s,
-        mode: a.mode,
-        filter: null,
-        filterSource: null,
-        selected: null,
-        event:
-          a.mode === "timeline" ? (s.event < 0 ? 0 : s.event) : s.event,
-      };
     case "toggleFilter":
       if (s.filter === a.bucket && s.filterSource === (a.source ?? "key"))
         return { ...s, filter: null, filterSource: null };
@@ -108,11 +77,6 @@ function reducer(s: State, a: Action): State {
       return { ...s, selected: null, filter: null, filterSource: null };
     case "gotoCountry":
       return { ...s, selected: a.id, filter: null, filterSource: null };
-    case "setEvent":
-      return {
-        ...s,
-        event: Math.max(0, Math.min(EVENTS.length - 1, a.i)),
-      };
     case "setVb":
       return { ...s, vb: a.vb };
     case "resetVb":
@@ -125,11 +89,9 @@ function reducer(s: State, a: Action): State {
 }
 
 const INITIAL: State = {
-  mode: "map",
   filter: null,
   filterSource: null,
   selected: null,
-  event: -1,
   vb: { ...BASE },
 };
 
@@ -138,10 +100,7 @@ const INITIAL: State = {
 function clampVB(vb: ViewBox): ViewBox {
   const w = Math.min(BASE.w, Math.max(BASE.w / 9, vb.w));
   const h = w * (BASE.h / BASE.w);
-  let x = Math.min(
-    BASE.x + BASE.w - w * 0.4,
-    Math.max(BASE.x - w * 0.6, vb.x),
-  );
+  let x = Math.min(BASE.x + BASE.w - w * 0.4, Math.max(BASE.x - w * 0.6, vb.x));
   x = Math.min(BASE.w - w * 0.35, Math.max(-w * 0.15, x));
   const y = Math.min(BASE.h - h * 0.35, Math.max(-h * 0.15, vb.y));
   return { x, y, w, h };
@@ -153,7 +112,7 @@ function zoomVB(
   px: number,
   py: number,
   rw: number,
-  rh: number,
+  rh: number
 ): ViewBox {
   const scale = Math.min(rw / vb.w, rh / vb.h);
   const offx = (rw - vb.w * scale) / 2;
@@ -177,14 +136,12 @@ function zoomVB(
 /**
  * Full-page inline world map of the AI compute supply chain (unbridged view
  * widget). Renders 176 SVG country paths; 14 featured countries are clickable
- * for a detail card; a 6-layer key + 8-stage pipeline strip isolate a layer;
- * a timeline mode replays 13 policy events, repainting the map each step.
+ * for a detail card; a 6-layer key + 8-stage pipeline strip isolate a layer.
  */
 export function InteractiveMap(_props: VerificationWidgetProps) {
   void _props;
   const [s, dispatch] = useReducer(reducer, INITIAL);
   const [hintOpen, setHintOpen] = useState(true);
-  const [playing, setPlaying] = useState(false);
   const [tip, setTip] = useState<{
     id: string;
     x: number;
@@ -209,33 +166,25 @@ export function InteractiveMap(_props: VerificationWidgetProps) {
   const panMovedRef = useRef(false);
 
   const zoom = s.vb.w > 0 ? BASE.w / s.vb.w : 1;
-  const ev = s.mode === "timeline" && s.event >= 0 ? EVENTS[s.event] : null;
 
   /* ---- derived paint sets ---- */
   const dimmed = useMemo(() => {
     const set = new Set<string>();
-    if (s.mode === "timeline") {
-      if (ev) {
-        for (const c of COUNTRIES) if (!ev.c.includes(c.id)) set.add(c.id);
-      }
-    } else if (s.filter) {
+    if (s.filter) {
       for (const c of COUNTRIES)
         if (!c.buckets.includes(s.filter)) set.add(c.id);
     }
     return set;
-  }, [s.mode, s.filter, ev]);
+  }, [s.filter]);
 
-  const euActive = !!(ev && ev.eu);
-  const euSet = useMemo(() => new Set(EU_IDS), []);
-
-  /* ---- preview (hover a layer in map mode dims non-members) ---- */
+  /* ---- preview (hover a layer dims non-members) ---- */
   const [preview, setPreview] = useState<BucketKey | null>(null);
   const previewSet = useMemo(() => {
-    if (s.mode !== "map" || s.filter || !preview) return null;
+    if (s.filter || !preview) return null;
     const set = new Set<string>();
     for (const c of COUNTRIES) if (!c.buckets.includes(preview)) set.add(c.id);
     return set;
-  }, [preview, s.mode, s.filter]);
+  }, [preview, s.filter]);
 
   /* ============ zoom / pan wiring ============ */
   const applyZoom = useCallback(
@@ -248,7 +197,7 @@ export function InteractiveMap(_props: VerificationWidgetProps) {
         vb: zoomVB(s.vb, factor, px, py, r.width || 1, r.height || 1),
       });
     },
-    [s.vb],
+    [s.vb]
   );
 
   // Non-passive wheel listener (React onWheel is passive; can't preventDefault).
@@ -258,7 +207,11 @@ export function InteractiveMap(_props: VerificationWidgetProps) {
     const onWheel = (e: WheelEvent) => {
       e.preventDefault();
       const r = el.getBoundingClientRect();
-      applyZoom(e.deltaY < 0 ? 1.18 : 1 / 1.18, e.clientX - r.left, e.clientY - r.top);
+      applyZoom(
+        e.deltaY < 0 ? 1.18 : 1 / 1.18,
+        e.clientX - r.left,
+        e.clientY - r.top
+      );
     };
     el.addEventListener("wheel", onWheel, { passive: false });
     return () => el.removeEventListener("wheel", onWheel);
@@ -289,7 +242,10 @@ export function InteractiveMap(_props: VerificationWidgetProps) {
     const dy = (e.clientY - d.y) / scale;
     if (Math.abs(e.clientX - d.x) + Math.abs(e.clientY - d.y) > 4)
       d.moved = true;
-    dispatch({ type: "setVb", vb: clampVB({ ...s.vb, x: d.vx - dx, y: d.vy - dy }) });
+    dispatch({
+      type: "setVb",
+      vb: clampVB({ ...s.vb, x: d.vx - dx, y: d.vy - dy }),
+    });
   };
   const endPan = (e: React.PointerEvent<SVGSVGElement>) => {
     const d = dragRef.current;
@@ -317,55 +273,13 @@ export function InteractiveMap(_props: VerificationWidgetProps) {
       panMovedRef.current = false;
       return;
     }
-    if (s.mode !== "map") return;
     if (id && CMAP[id]) dispatch({ type: "select", id });
     else dispatch({ type: "clearSelection" });
   };
 
-  /* ============ timeline play ============ */
-  // Stop playback the moment we reach the final event. Handled during render
-  // (adjust-state-during-render) so the effect never has to setState.
-  if (playing && s.event >= EVENTS.length - 1) {
-    setPlaying(false);
-  }
-
-  useEffect(() => {
-    if (!playing) return;
-    if (s.event >= EVENTS.length - 1) return;
-    const t = setTimeout(() => {
-      dispatch({ type: "setEvent", i: s.event + 1 });
-    }, 4600);
-    return () => clearTimeout(t);
-  }, [playing, s.event]);
-
-  const stopPlay = () => setPlaying(false);
-  const togglePlay = () => {
-    if (playing) {
-      stopPlay();
-      return;
-    }
-    if (s.event >= EVENTS.length - 1) dispatch({ type: "setEvent", i: 0 });
-    setPlaying(true);
-  };
-  const setEvent = (i: number) => {
-    stopPlay();
-    dispatch({ type: "setEvent", i });
-  };
-
-  /* keyboard: arrows in timeline, escape to clear */
+  /* keyboard: escape clears the current selection or filter */
   const onKeyDown = (e: React.KeyboardEvent) => {
-    if (s.mode !== "timeline") {
-      if (e.key === "Escape") dispatch({ type: "escape" });
-      return;
-    }
-    if (e.key === "ArrowLeft") {
-      e.preventDefault();
-      setEvent(s.event - 1);
-    }
-    if (e.key === "ArrowRight") {
-      e.preventDefault();
-      setEvent(s.event + 1);
-    }
+    if (e.key === "Escape") dispatch({ type: "escape" });
   };
 
   /* ============ tooltip ============ */
@@ -390,7 +304,6 @@ export function InteractiveMap(_props: VerificationWidgetProps) {
   const leaderW = Math.max(0.18, 0.5 / zoom);
   const hubR = Math.max(1.6, 3.4 / zoom);
   const hubStroke = Math.max(0.3, 0.8 / zoom);
-  const pulseStroke = Math.max(0.4, 1.4 / zoom);
 
   const tipCountry = tip ? CMAP[tip.id] : null;
 
@@ -418,48 +331,6 @@ export function InteractiveMap(_props: VerificationWidgetProps) {
             </Fragment>
           ))}
         </dl>
-
-        {/* mode toggle */}
-        <div
-          role="tablist"
-          aria-label="Map or timeline"
-          className="border-border mb-4 inline-flex overflow-hidden rounded-lg border"
-        >
-          <button
-            type="button"
-            role="tab"
-            aria-selected={s.mode === "map"}
-            onClick={() => {
-              stopPlay();
-              dispatch({ type: "setMode", mode: "map" });
-            }}
-            className={cn(
-              "flex items-center gap-1.5 px-4 py-1.5 text-sm font-semibold transition-colors",
-              s.mode === "map"
-                ? "bg-primary text-primary-foreground"
-                : "bg-card text-muted-foreground hover:text-foreground",
-            )}
-          >
-            <MapIcon className="size-3.5" aria-hidden /> Map
-          </button>
-          <button
-            type="button"
-            role="tab"
-            aria-selected={s.mode === "timeline"}
-            onClick={() => {
-              stopPlay();
-              dispatch({ type: "setMode", mode: "timeline" });
-            }}
-            className={cn(
-              "border-border border-l px-4 py-1.5 text-sm font-semibold transition-colors",
-              s.mode === "timeline"
-                ? "bg-primary text-primary-foreground"
-                : "bg-card text-muted-foreground hover:text-foreground",
-            )}
-          >
-            Timeline
-          </button>
-        </div>
 
         {/* One column, map first.
             It used to run `lg:grid-cols-[1fr_320px]`, which spent a third of
@@ -547,21 +418,16 @@ export function InteractiveMap(_props: VerificationWidgetProps) {
                     const fid = f.id ?? "";
                     const c = CMAP[fid];
                     const featured = !!c && !c.hub;
-                    // filter/timeline dim recolors to muted (source .dimmed);
+                    // Filtering recolors non-members to muted;
                     // hover-preview only lowers opacity, keeping the hue.
                     const isDim = dimmed.has(fid);
                     const isPreview = !!previewSet?.has(fid);
-                    const isEu = euActive && euSet.has(fid);
-                    const selected = s.selected === fid && s.mode === "map";
+                    const selected = s.selected === fid;
                     let fill = "var(--muted)";
                     let fillOpacity: number | undefined;
                     if (featured && c) {
                       fill = BUCKETS[c.primary].color;
                       fillOpacity = 0.92;
-                    }
-                    if (isEu) {
-                      fill = "var(--primary)";
-                      fillOpacity = 0.5;
                     }
                     if (isDim) {
                       fill = "var(--muted)";
@@ -579,7 +445,7 @@ export function InteractiveMap(_props: VerificationWidgetProps) {
                         strokeLinejoin="round"
                         className={cn(
                           "transition-[fill,opacity] duration-200",
-                          featured && s.mode === "map" && "cursor-pointer",
+                          featured && "cursor-pointer"
                         )}
                         style={{ opacity: isPreview ? 0.35 : undefined }}
                       />
@@ -609,29 +475,6 @@ export function InteractiveMap(_props: VerificationWidgetProps) {
                   })}
                 </g>
 
-                {/* Static rings keep event countries visible without asking
-                    the browser (or a screen-share encoder) to repaint forever. */}
-                <g aria-hidden>
-                  {ev &&
-                    ev.c.map((id) => {
-                      const c = CMAP[id];
-                      if (!c) return null;
-                      const [cx, cy] = centroidOf(c);
-                      return (
-                        <circle
-                          key={id}
-                          cx={cx}
-                          cy={cy}
-                          r={9}
-                          fill="none"
-                          stroke={BUCKETS[c.primary].color}
-                          strokeWidth={pulseStroke}
-                          opacity={0.65}
-                        />
-                      );
-                    })}
-                </g>
-
                 {/* leaders + labels */}
                 <g aria-hidden>
                   {COUNTRIES.map((c) => {
@@ -640,12 +483,14 @@ export function InteractiveMap(_props: VerificationWidgetProps) {
                       c.label.anchor === "end"
                         ? c.label.x + 2
                         : c.label.anchor === "start"
-                          ? c.label.x - 2
-                          : c.label.x;
+                        ? c.label.x - 2
+                        : c.label.x;
                     return (
                       <polyline
                         key={`l-${c.id}`}
-                        points={`${c.label.leader[0]},${c.label.leader[1]} ${tail},${c.label.y - 3}`}
+                        points={`${c.label.leader[0]},${
+                          c.label.leader[1]
+                        } ${tail},${c.label.y - 3}`}
                         fill="none"
                         stroke="var(--muted-foreground)"
                         strokeWidth={leaderW}
@@ -697,30 +542,22 @@ export function InteractiveMap(_props: VerificationWidgetProps) {
               )}
             </div>
 
-            {/* dock: pipeline strip OR timeline */}
-            {s.mode === "map" ? (
-              <div className="mt-4">
-                <div className="mb-2 flex items-baseline justify-between">
-                  <span className="text-[13px] font-semibold">
-                    {C.flowTitle}
-                  </span>
-                  <span className="text-muted-foreground text-3xs">
-                    {C.flowNote}
-                  </span>
-                </div>
-                {/* The chevrons used to be absolutely positioned over the
-                    next cell's left edge, which put a "›" on top of a label as
-                    soon as the row was tight — and in the old narrow column it
-                    always was. They are real items in the row now, so the
-                    cells cannot collide with them or with each other, and a
-                    stage that does not fit wraps to the next line instead of
-                    overlapping its neighbour. */}
-                <div className="flex flex-wrap items-stretch gap-1">
-                  {FLOW.map((st, i) => {
-                    const active =
-                      s.filter === st.bucket && s.filterSource === st.key;
-                    return (
-                      <Fragment key={st.key}>
+            {/* pipeline strip */}
+            <div className="mt-4">
+              <div className="mb-2 flex items-baseline justify-between">
+                <span className="text-[13px] font-semibold">{C.flowTitle}</span>
+                <span className="text-muted-foreground text-3xs">
+                  {C.flowNote}
+                </span>
+              </div>
+              {/* The chevrons are real items in the row, so cells cannot
+                  collide with them. A stage that does not fit wraps cleanly. */}
+              <div className="flex flex-wrap items-stretch gap-1">
+                {FLOW.map((st, i) => {
+                  const active =
+                    s.filter === st.bucket && s.filterSource === st.key;
+                  return (
+                    <Fragment key={st.key}>
                       <button
                         type="button"
                         aria-pressed={active}
@@ -737,7 +574,7 @@ export function InteractiveMap(_props: VerificationWidgetProps) {
                           "min-w-[104px] flex-1 rounded-md border px-2.5 py-2 text-left transition-colors",
                           active
                             ? "bg-primary border-primary"
-                            : "border-border bg-muted/40 hover:bg-muted",
+                            : "border-border bg-muted/40 hover:bg-muted"
                         )}
                       >
                         <span
@@ -754,7 +591,7 @@ export function InteractiveMap(_props: VerificationWidgetProps) {
                             "block text-3xs leading-tight font-semibold",
                             active
                               ? "text-primary-foreground"
-                              : "text-muted-foreground",
+                              : "text-muted-foreground"
                           )}
                         >
                           {st.name}
@@ -768,227 +605,88 @@ export function InteractiveMap(_props: VerificationWidgetProps) {
                           ›
                         </span>
                       )}
-                      </Fragment>
-                    );
-                  })}
-                </div>
-                <div className="text-muted-foreground mt-2 flex items-center justify-between px-1 text-4xs">
-                  <span>{C.flowGradLeft}</span>
-                  <span
-                    aria-hidden
-                    className="mx-3 h-px flex-1 self-center"
-                    style={{
-                      background:
-                        "linear-gradient(90deg,var(--muted-foreground),var(--border))",
-                    }}
-                  />
-                  <span>{C.flowGradRight}</span>
-                </div>
+                    </Fragment>
+                  );
+                })}
               </div>
-            ) : (
-              <div className="mt-4">
-                <div className="mb-2 flex items-baseline justify-between">
-                  <span className="text-[13px] font-semibold">
-                    {C.tlTitle}
-                  </span>
-                  <span className="text-muted-foreground text-3xs">
-                    {C.tlNote}
-                  </span>
-                </div>
-                {/* axis */}
-                <div className="relative mx-2 mt-1 h-12">
-                  <div className="bg-border absolute top-1/2 right-0 left-0 h-px" />
-                  {TL_YEARS.map((y) => (
-                    <div key={y} className="contents">
-                      <span
-                        className="bg-border absolute top-[calc(50%-7px)] h-[7px] w-px"
-                        style={{ left: `${tx(y)}%` }}
-                        aria-hidden
-                      />
-                      <span
-                        className="text-muted-foreground absolute top-[calc(50%+8px)] -translate-x-1/2 text-4xs tabular-nums"
-                        style={{ left: `${tx(y)}%` }}
-                        aria-hidden
-                      >
-                        {y}
-                      </span>
-                    </div>
-                  ))}
-                  {EVENTS.map((e, i) => {
-                    const active = i === s.event;
-                    return (
-                      <button
-                        key={i}
-                        type="button"
-                        aria-label={`${e.d} — ${e.title}`}
-                        aria-current={active ? "true" : undefined}
-                        onClick={() => setEvent(i)}
-                        className={cn(
-                          "absolute top-1/2 size-[11px] -translate-x-1/2 -translate-y-1/2 rounded-full border-[1.5px] transition-transform",
-                          active
-                            ? "border-primary bg-primary scale-[1.35]"
-                            : "border-muted-foreground bg-card hover:border-foreground hover:scale-125",
-                        )}
-                        style={{ left: `${tx(e.t)}%` }}
-                      />
-                    );
-                  })}
-                </div>
-                {/* controls */}
-                <div className="mt-1 flex items-center justify-center gap-2">
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    aria-label="Previous event"
-                    onClick={() => setEvent(s.event - 1)}
-                    disabled={s.event <= 0}
-                  >
-                    <ChevronLeft className="size-4" aria-hidden />
-                  </Button>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={togglePlay}
-                    className="gap-1.5"
-                  >
-                    {playing ? (
-                      <>
-                        <Pause className="size-3.5" aria-hidden /> Pause
-                      </>
-                    ) : (
-                      <>
-                        <Play className="size-3.5" aria-hidden /> Play
-                      </>
-                    )}
-                  </Button>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    aria-label="Next event"
-                    onClick={() => setEvent(s.event + 1)}
-                    disabled={s.event >= EVENTS.length - 1}
-                  >
-                    <ChevronRight className="size-4" aria-hidden />
-                  </Button>
-                  <span
-                    className="text-muted-foreground min-w-14 text-center text-3xs tabular-nums"
-                    aria-live="polite"
-                  >
-                    {s.event >= 0 ? `${s.event + 1} / ${EVENTS.length}` : ""}
-                  </span>
-                </div>
-                <p className="text-muted-foreground mt-1.5 text-center text-3xs italic">
-                  {C.tlLesson}
-                </p>
+              <div className="text-muted-foreground mt-2 flex items-center justify-between px-1 text-4xs">
+                <span>{C.flowGradLeft}</span>
+                <span
+                  aria-hidden
+                  className="mx-3 h-px flex-1 self-center"
+                  style={{
+                    background:
+                      "linear-gradient(90deg,var(--muted-foreground),var(--border))",
+                  }}
+                />
+                <span>{C.flowGradRight}</span>
               </div>
-            )}
+            </div>
           </div>
 
           {/* ============ under the map ============ */}
           <aside className="flex min-w-0 flex-col gap-4">
-            {s.mode === "map" && (
-              <div>
-                <div className="mb-2 flex items-baseline justify-between gap-2">
-                  <span className="text-[13px] font-semibold">{C.keyLabel}</span>
-                  <span className="text-muted-foreground text-3xs">
-                    {C.keyAction}
-                  </span>
-                </div>
-                <div className="flex flex-wrap gap-1.5">
-                  {BUCKET_ORDER.map((bk) => {
-                    const b = BUCKETS[bk];
-                    const n = COUNTRIES.filter((c) =>
-                      c.buckets.includes(bk),
-                    ).length;
-                    const active = s.filter === bk && s.filterSource === "key";
-                    return (
-                      <button
-                        key={bk}
-                        type="button"
-                        aria-pressed={active}
-                        onClick={() =>
-                          dispatch({
-                            type: "toggleFilter",
-                            bucket: bk,
-                            source: "key",
-                          })
-                        }
-                        onMouseEnter={() => setPreview(bk)}
-                        onMouseLeave={() => setPreview(null)}
-                        className={cn(
-                          "flex items-center gap-2 rounded-lg border px-2.5 py-1.5 text-left transition-colors",
-                          active
-                            ? "border-foreground bg-muted"
-                            : "border-border hover:bg-muted",
-                        )}
-                      >
-                        <span
-                          className="ring-foreground/20 size-3 flex-none rounded-[3px] ring-1 ring-inset"
-                          style={{ background: b.color }}
-                          aria-hidden
-                        />
-                        <span className="text-xs font-medium">{b.name}</span>
-                        <span className="text-muted-foreground text-3xs tabular-nums">
-                          {n} {n === 1 ? "country" : "countries"}
-                        </span>
-                      </button>
-                    );
-                  })}
-                </div>
-                <p className="text-muted-foreground mt-1.5 text-sm leading-relaxed">
-                  {C.keyNote}
-                </p>
+            <div>
+              <div className="mb-2 flex items-baseline justify-between gap-2">
+                <span className="text-[13px] font-semibold">{C.keyLabel}</span>
+                <span className="text-muted-foreground text-3xs">
+                  {C.keyAction}
+                </span>
               </div>
-            )}
+              <div className="flex flex-wrap gap-1.5">
+                {BUCKET_ORDER.map((bk) => {
+                  const b = BUCKETS[bk];
+                  const n = COUNTRIES.filter((c) =>
+                    c.buckets.includes(bk)
+                  ).length;
+                  const active = s.filter === bk && s.filterSource === "key";
+                  return (
+                    <button
+                      key={bk}
+                      type="button"
+                      aria-pressed={active}
+                      onClick={() =>
+                        dispatch({
+                          type: "toggleFilter",
+                          bucket: bk,
+                          source: "key",
+                        })
+                      }
+                      onMouseEnter={() => setPreview(bk)}
+                      onMouseLeave={() => setPreview(null)}
+                      className={cn(
+                        "flex items-center gap-2 rounded-lg border px-2.5 py-1.5 text-left transition-colors",
+                        active
+                          ? "border-foreground bg-muted"
+                          : "border-border hover:bg-muted"
+                      )}
+                    >
+                      <span
+                        className="ring-foreground/20 size-3 flex-none rounded-[3px] ring-1 ring-inset"
+                        style={{ background: b.color }}
+                        aria-hidden
+                      />
+                      <span className="text-xs font-medium">{b.name}</span>
+                      <span className="text-muted-foreground text-3xs tabular-nums">
+                        {n} {n === 1 ? "country" : "countries"}
+                      </span>
+                    </button>
+                  );
+                })}
+              </div>
+              <p className="text-muted-foreground mt-1.5 text-sm leading-relaxed">
+                {C.keyNote}
+              </p>
+            </div>
 
-            {/* Anatomy of a Chip. It used to be a launcher for an overlay that
-                was never built, wearing a "Coming soon" chip; a card that does
-                nothing reads as a broken control however politely it is
-                labelled. It is a link now — to the tool this section's own
-                author notes point at — and it says so in words and in the
-                host name rather than only by turning blue. Optional, and
-                marked so: it is somebody else's tool and nothing downstream
-                depends on having opened it.
-                Not internalised and never scanned by readings:build, for the
-                same reason a literal <a href> in a lesson is the opt-out — it
-                is a live interactive somewhere else, not a reading. */}
-            <a
+            <ReadingCard
+              id="verification-interactive-map-chip-explorer"
               href={C.chipHref}
-              target="_blank"
-              rel="noreferrer"
-              className="border-border bg-muted/30 hover:border-primary/60 flex items-center gap-3 rounded-lg border px-3 py-2.5 transition-colors"
+              title={C.chipTitle}
+              optional
             >
-              <div className="text-muted-foreground flex-none" aria-hidden>
-                <svg viewBox="0 0 44 40" width="34" height="30">
-                  <polygon points="22,26 40,17 22,8 4,17" fill="currentColor" opacity={0.9} />
-                  <polygon
-                    points="22,20 34,14 22,8 10,14"
-                    fill="currentColor" opacity={0.6}
-                    transform="translate(0,-5)"
-                  />
-                  <polygon
-                    points="22,17 29,13.5 22,10 15,13.5"
-                    fill="currentColor" opacity={0.35}
-                    transform="translate(0,-8)"
-                  />
-                </svg>
-              </div>
-              <div className="min-w-0">
-                <p className="text-sm font-semibold">
-                  {C.chipTitle}{" "}
-                  <span className="text-muted-foreground font-normal">
-                    · {C.chipOptional}
-                  </span>
-                </p>
-                <p className="text-muted-foreground text-sm leading-relaxed">
-                  {C.chipSub} Opens {C.chipHost} in a new tab.
-                </p>
-              </div>
-              <ExternalLink
-                className="text-muted-foreground ml-auto size-4 flex-none"
-                aria-hidden
-              />
-            </a>
+              {C.chipSub}
+            </ReadingCard>
 
             {/* detail card */}
             <div className="border-border bg-muted/30 min-h-32 rounded-lg border p-3.5">
@@ -1015,7 +713,6 @@ export function InteractiveMap(_props: VerificationWidgetProps) {
           </aside>
         </div>
       </div>
-
     </div>
   );
 }
@@ -1036,11 +733,6 @@ function tipPos(tip: {
   if (rw && lx + tw > rw - 8) lx = tip.x - tw - 16;
   if (rh && ly + th > rh - 8) ly = tip.y - th - 12;
   return { left: Math.max(6, lx), top: Math.max(6, ly) };
-}
-
-/* timeline axis position (source tx) */
-function tx(t: number): number {
-  return ((t - TL_T0) / (TL_T1 - TL_T0)) * 100;
 }
 
 /* ============ bucket chip ============ */
@@ -1067,47 +759,6 @@ function DetailCard({
   dispatch: React.Dispatch<Action>;
 }) {
   const s = state;
-
-  // timeline mode
-  if (s.mode === "timeline") {
-    if (s.event < 0)
-      return (
-        <p className="text-muted-foreground text-sm leading-relaxed">
-          {C.tlEmpty}
-        </p>
-      );
-    const ev = EVENTS[s.event];
-    const chips = ev.eu
-      ? [C.euName]
-      : ev.c.map((id) => (CMAP[id] ? CMAP[id].name : id));
-    return (
-      <div aria-live="polite">
-        <p className="text-muted-foreground text-3xs font-medium">
-          Timeline · {s.event + 1} of {EVENTS.length}
-        </p>
-        <p className="text-muted-foreground mt-1 text-3xs tabular-nums">
-          {ev.d}
-        </p>
-        <h4 className="mt-0.5 text-base font-semibold">{ev.title}</h4>
-        <p className="text-muted-foreground mt-1.5 text-sm leading-relaxed">
-          {ev.body}
-        </p>
-        <p className="text-muted-foreground mt-2.5 text-3xs font-medium">
-          {C.eventActors}
-        </p>
-        <div className="mt-1 flex flex-wrap gap-1">
-          {chips.map((name) => (
-            <span
-              key={name}
-              className="border-border bg-card rounded-md border px-2.5 py-0.5 text-3xs"
-            >
-              {name}
-            </span>
-          ))}
-        </div>
-      </div>
-    );
-  }
 
   // filter (layer / pipeline stage) mode
   if (s.filter) {
@@ -1176,9 +827,7 @@ function DetailCard({
         >
           <X className="size-4" aria-hidden />
         </button>
-        <p className="text-muted-foreground text-3xs font-medium">
-          Country
-        </p>
+        <p className="text-muted-foreground text-3xs font-medium">Country</p>
         <h4 className="mt-1 text-base font-semibold">{c.name}</h4>
         <div className="mt-1.5 mb-2 flex flex-wrap gap-1">
           {c.buckets.map((bk) => (

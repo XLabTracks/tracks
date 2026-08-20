@@ -166,7 +166,7 @@ export const memoSlots: MemoSlot[] = [
     id: "m1-optional",
     module: 1,
     unit: "1.x",
-    title: "Optional written output",
+    title: "[Optional] Written output",
     status: "unspecified",
     lesson: "scoping-upstream-downstream",
     optional: true,
@@ -174,7 +174,7 @@ export const memoSlots: MemoSlot[] = [
     audience: null,
     words: 600,
     peerReviewed: false,
-    gap: 'An "[Optional written output]:" marker sits after the supply-chain actor list with nothing under it.',
+    gap: 'A "[Optional] Written output:" marker sits after the supply-chain actor list with nothing under it.',
   },
   {
     id: "m2-1-hardware-brief",

@@ -41,7 +41,7 @@ import { writingArea, writingCardFocus } from "../kit/writing-surface";
  * Nothing is graded, and the exercise is optional: submitting records no
  * completion. The steelman deck rides pre-submission, as before — the spec
  * revision did not touch it, and reading its removal into the spec's
- * silence was wrong (owner: "вернуть").
+ * silence was wrong; the owner explicitly asked for it to be restored.
  */
 
 type Answers = Record<string, string>;

@@ -14,7 +14,7 @@ import { useGlossHoverTimers } from "@/components/glossary/glossary-card";
  *
  * IT USED TO BE A MARGIN SIDENOTE — floated into the right gutter above
  * 96rem, a checkbox/label toggle that expanded it inline below. That is gone
- * on the course owner's instruction ("а сноска — поп апами"), and the two
+ * on the course owner's instruction to use popups, and the two
  * changes that arrived together are one decision: reserving a gutter for
  * sidenotes is what kept the reading column narrow, so notes that open over
  * the text let the text have the width.

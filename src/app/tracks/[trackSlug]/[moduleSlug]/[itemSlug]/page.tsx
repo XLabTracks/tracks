@@ -248,8 +248,7 @@ async function LessonItemPage({
           </h1>
           {lesson.optional && <OptionalMarker />}
         </div>
-        {/* Her standard wording, and the clock is back by her ask ("хочу
-            часы"). */}
+        {/* Her standard wording, with the clock restored at her request. */}
         {lesson.estimatedMinutes && !chunked ? (
           <p className="text-muted-foreground mt-2 flex items-center gap-1.5 text-sm">
             <Clock className="size-3.5" aria-hidden /> Estimated time:{" "}

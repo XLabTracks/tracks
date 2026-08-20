@@ -1,7 +1,7 @@
 import { cn } from "@/lib/utils";
 
 /**
- * The "Optional" marker on an item that never gates progress — a soft-filled
+ * The "[Optional]" marker on an item that never gates progress — a soft-filled
  * tag that rides on the title's own line, worn the same on the reading header
  * and its sidebar row.
  *
@@ -23,10 +23,10 @@ export function OptionalMarker({
       className={cn(
         "bg-muted text-foreground/80 inline-flex items-center rounded-md font-medium",
         compact ? "px-2 py-0.5 text-xs" : "px-2.5 py-1 text-sm",
-        className,
+        className
       )}
     >
-      Optional
+      [Optional]
     </span>
   );
 }

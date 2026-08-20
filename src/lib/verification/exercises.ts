@@ -146,8 +146,8 @@ export const verificationExercises: VerificationExerciseDef[] = [
   // 2.4.4's optional closer, per the owner's brief: one 15-minute exercise
   // over all four of the section's objectives. Optional, so unbridged.
   { id: "standard-of-proof", title: "The Standard of Proof", bridged: false },
-  // The Carlson reading's transfer interactive, per the owner ("попробуй
-  // сначала интерактив"): required reading-work outside any fold, but
+  // The Carlson reading's transfer interactive, built first at the owner's
+  // request: required reading-work outside any fold, but
   // reflection, not a finish event — unbridged.
   { id: "missing-board", title: "The Missing Board", bridged: false },
   // Stood down 2026-08-14, widgets and data kept: report-access ("One Report,

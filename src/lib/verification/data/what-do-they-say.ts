@@ -41,7 +41,10 @@ export type ProfileSource = { label: string; href: string };
 
 export type WdtsFigure = {
   key: WdtsFigureKey;
-  code: string;
+  // `code` — "Profile 01 · OpenAI" — is gone. It was the eyebrow on every
+  // card and every dossier header, and it carried a serial number plus an
+  // affiliation `role` already states one line lower. The cards start on the
+  // name now (course owner, 2026-08-20).
   name: string;
   role: string;
   initials: string;
@@ -59,7 +62,6 @@ const ASSET = "/verification/assets/what-do-they-say";
 export const WDTS_FIGURES: WdtsFigure[] = [
   {
     key: "altman",
-    code: "Profile 01 · OpenAI",
     name: "Sam Altman",
     role: "CEO, OpenAI",
     initials: "SA",
@@ -110,7 +112,6 @@ export const WDTS_FIGURES: WdtsFigure[] = [
   },
   {
     key: "amodei",
-    code: "Profile 02 · Anthropic",
     name: "Dario Amodei",
     role: "CEO, Anthropic",
     initials: "DA",
@@ -165,7 +166,6 @@ export const WDTS_FIGURES: WdtsFigure[] = [
   },
   {
     key: "hassabis",
-    code: "Profile 03 · Google DeepMind",
     name: "Demis Hassabis",
     role: "CEO, Google DeepMind · Nobel laureate",
     initials: "DH",
@@ -208,7 +208,6 @@ export const WDTS_FIGURES: WdtsFigure[] = [
   },
   {
     key: "legg",
-    code: "Profile 04 · Google DeepMind",
     name: "Shane Legg",
     role: "Chief AGI Scientist, Google DeepMind",
     initials: "SL",
@@ -251,7 +250,6 @@ export const WDTS_FIGURES: WdtsFigure[] = [
   },
   {
     key: "sutskever",
-    code: "Profile 05 · Safe Superintelligence Inc.",
     name: "Ilya Sutskever",
     role: "Co-founder, OpenAI · Founder, SSI",
     initials: "IS",
@@ -298,7 +296,6 @@ export const WDTS_FIGURES: WdtsFigure[] = [
   },
   {
     key: "leike",
-    code: "Profile 06 · Formerly OpenAI",
     name: "Jan Leike",
     role: "Former co-lead, Superalignment, OpenAI · now Anthropic",
     initials: "JL",

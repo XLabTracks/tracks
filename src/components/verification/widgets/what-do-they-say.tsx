@@ -46,10 +46,12 @@ export function WhatDoTheySay() {
           >
             <div className="flex items-center gap-3">
               <Avatar figure={f} className="size-11 text-sm" />
+              {/* THE CARD STARTS ON THE NAME. There was a "PROFILE 01 · OPENAI"
+                  eyebrow above it, which spent the most prominent line of the
+                  card on a serial number and an affiliation the role line
+                  below already gives — "CEO, OpenAI" one line down. The
+                  reader is here for the person. */}
               <div className="min-w-0">
-                <p className="text-muted-foreground text-4xs tracking-[0.12em] uppercase">
-                  {f.code}
-                </p>
                 <p className="text-foreground truncate text-sm font-semibold">
                   {f.name}
                 </p>
@@ -84,9 +86,6 @@ export function WhatDoTheySay() {
                 <div className="flex items-center gap-4">
                   <Avatar figure={active} className="size-16 text-lg" />
                   <div className="min-w-0">
-                    <p className="text-muted-foreground eyebrow">
-                      {active.code}
-                    </p>
                     <DialogTitle className="text-lg">
                       {active.name}
                     </DialogTitle>

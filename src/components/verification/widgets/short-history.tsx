@@ -844,6 +844,46 @@ function TestScores() {
 
 const OWID_URL = "https://ourworldindata.org/brief-history-of-ai";
 
+/**
+ * The source credit under both charts, MLA.
+ *
+ * It used to read "Redrawn from Our World in Data (CC BY 4.0)." — course
+ * owner, 2026-08-20: "this is not mla sorry". She is right, and the missing
+ * parts are the ones that matter: no author, no title, no date, no location.
+ * A container name and a licence is an acknowledgement, not a citation.
+ *
+ * The facts are not invented for this: author, title, container and date are
+ * the registry's own entry for this URL in src/content/citations.json, which
+ * is what the Works cited appendix prints, so the caption and the appendix
+ * cannot say different things about the same work.
+ *
+ * MLA notes. The location element is a bare URL without the protocol, which
+ * is why the link's own text is the bare URL rather than the site's name. No
+ * "Fig. N." label, because MLA numbers figures across a whole document and
+ * nothing here owns that sequence — the figcaption above each chart titles it
+ * instead. The licence and the fact of redrawing are supplemental, so they
+ * follow the entry rather than sitting inside it.
+ */
+function OwidCredit({ data }: { data?: string }) {
+  return (
+    <p className="text-muted-foreground mt-1 text-xs leading-relaxed">
+      Roser, Max. &ldquo;The Brief History of Artificial Intelligence: The
+      World Has Changed Fast &mdash; What Might Be Next?&rdquo;{" "}
+      <em>Our World in Data</em>, 6 Dec. 2022,{" "}
+      <a
+        href={OWID_URL}
+        className="underline underline-offset-2"
+        target="_blank"
+        rel="noreferrer"
+      >
+        ourworldindata.org/brief-history-of-ai
+      </a>
+      . Licensed CC BY 4.0; chart redrawn.
+      {data ? ` ${data}` : ""}
+    </p>
+  );
+}
+
 export function ShortHistory() {
   return (
     <div className="not-prose my-6 space-y-8">
@@ -852,18 +892,7 @@ export function ShortHistory() {
           A timeline of notable artificial intelligence systems
         </figcaption>
         <Timeline />
-        <p className="text-muted-foreground mt-1 text-xs">
-          Redrawn from{" "}
-          <a
-            href={OWID_URL}
-            className="underline underline-offset-2"
-            target="_blank"
-            rel="noreferrer"
-          >
-            Our World in Data
-          </a>{" "}
-          (CC BY 4.0).
-        </p>
+        <OwidCredit />
       </figure>
       <figure>
         <figcaption className="mb-1 text-sm font-semibold">
@@ -877,18 +906,7 @@ export function ShortHistory() {
           humans.
         </p>
         <TestScores />
-        <p className="text-muted-foreground mt-1 text-xs">
-          Data: Kiela et al. (2023). Redrawn from{" "}
-          <a
-            href={OWID_URL}
-            className="underline underline-offset-2"
-            target="_blank"
-            rel="noreferrer"
-          >
-            Our World in Data
-          </a>{" "}
-          (CC BY 4.0).
-        </p>
+        <OwidCredit data="Underlying data from Kiela et al., 2023." />
       </figure>
     </div>
   );

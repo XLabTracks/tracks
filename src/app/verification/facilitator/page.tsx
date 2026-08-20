@@ -1,6 +1,9 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 
+import { getCurrentUser } from "@/lib/auth";
+import { isFacilitator } from "@/lib/classrooms";
+import { isReviewer } from "@/lib/verification/reviewers";
 import { FacilitatorGuide } from "@/components/verification/facilitator-guide";
 import { FacilitatorTraining } from "@/components/verification/facilitator-training";
 
@@ -12,6 +15,14 @@ export const metadata: Metadata = { title: "Become a facilitator — Verificatio
  * facilitation materials" both land here — one page serves the person deciding
  * whether to facilitate and the facilitator collecting their materials, because
  * the answer to both is the same set of links plus the field guide.
+ *
+ * The page itself stays public — it is how somebody decides to volunteer —
+ * but the training modules and field guide are gated the way /facilitator
+ * gates the same material: the plans carry session answer keys and the
+ * wargame's directives, which are worth more to a facilitator than to
+ * someone about to sit the session. Who qualifies is either gate the app
+ * has — a classroom instructor, or the Verification reviewer list
+ * (VERIFICATION_REVIEWERS, which fails closed).
  *
  * Trap: this route is /verification/facilitator beside the course's static
  * assets under public/verification/. Nothing exists at that path, so the app
@@ -48,7 +59,11 @@ const CURRICULUM: { label: string; href: string; desc: string }[] = [
   },
 ];
 
-export default function FacilitatorPage() {
+export default async function FacilitatorPage() {
+  const user = await getCurrentUser();
+  const allowed =
+    user !== null && (isReviewer(user.email) || (await isFacilitator(user.id)));
+
   return (
     <main className="mx-auto w-full max-w-4xl px-4 py-10 lg:px-6">
       <h1 className="text-2xl font-bold tracking-tight">Become a facilitator</h1>
@@ -93,14 +108,33 @@ export default function FacilitatorPage() {
         ))}
       </ul>
 
-      <div className="mt-12">
-        <FacilitatorTraining />
-      </div>
+      {allowed ? (
+        <>
+          <div className="mt-12">
+            <FacilitatorTraining />
+          </div>
 
-      <h3 className="mt-12 text-base font-semibold tracking-tight">
-        Facilitator Field Guide
-      </h3>
-      <FacilitatorGuide />
+          <h3 className="mt-12 text-base font-semibold tracking-tight">
+            Facilitator Field Guide
+          </h3>
+          <FacilitatorGuide />
+        </>
+      ) : (
+        <div className="border-muted-foreground/40 mt-12 max-w-2xl rounded-lg border border-dashed p-5">
+          <h3 className="text-base font-semibold tracking-tight">
+            Training and the Field Guide open for facilitators
+          </h3>
+          <p className="text-muted-foreground mt-2 text-sm leading-relaxed">
+            The five training sessions and the field guide hold session plans
+            with their answer keys and the reasoning behind each activity —
+            material that is worth more to a facilitator than to someone about
+            to sit the sessions. They open for classroom instructors and for
+            the course&apos;s reviewer list; if you are about to run a cohort
+            and see this instead of the materials, ask the course team to add
+            you.
+          </p>
+        </div>
+      )}
 
       <h2 className="mt-12 text-lg font-semibold tracking-tight">
         Running a cohort

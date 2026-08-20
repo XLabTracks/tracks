@@ -129,7 +129,13 @@ export default async function TrackLayout({
   const sidebarOutline = getTrackSidebarOutline(trackSlug)!;
 
   return (
-    <div className="flex w-full flex-1 flex-col lg:flex-row">
+    <div
+      className="flex w-full flex-1 flex-col lg:flex-row"
+      // The Verification course's scrollbar-hiding is scoped to its own
+      // surfaces (globals.css keys on html:has([data-verification-surface]));
+      // other tracks keep stock browser affordances.
+      data-verification-surface={trackSlug === "verification" ? "" : undefined}
+    >
       <TrackSidebar
         outline={sidebarOutline}
         completedContentIds={completedContentIds}

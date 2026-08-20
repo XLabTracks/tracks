@@ -450,8 +450,16 @@
   button,
   [role="button"],
   [role="tab"],
-  [role="radio"],
   summary {
+    user-select: none;
+    -webkit-user-select: none;
+    -webkit-touch-callout: none;
+  }
+  /* [role="radio"] is scoped, not global: a Control-track choice option is a
+     radio whose label is the answer text, and learners copy answer text on
+     purpose — that is prose wearing a role, not chrome. On Verification
+     surfaces the course's own rule stands. */
+  [data-verification-surface] [role="radio"] {
     user-select: none;
     -webkit-user-select: none;
     -webkit-touch-callout: none;
@@ -1148,9 +1156,15 @@
 }
 
 
-/* No scrollbars anywhere on this site — the author's call, applied at the
-   root so it holds for the page itself and for every scrolling box inside
-   it: strips, rails, panels, dialogs, textareas, code blocks.
+/* No scrollbars anywhere on the Verification course — the author's call for
+   that course, and scoped to it: the tracks are deliberately styled apart,
+   and the Control track keeps stock browser affordances. The key is
+   html:has([data-verification-surface]) — the marker sits on the
+   /verification layout and on the track layout's wrapper when the track is
+   verification — because the page's own scrollbar belongs to html, which no
+   descendant selector can reach. On a marked page the rule holds for the
+   page itself and for every scrolling box inside it: strips, rails, panels,
+   dialogs, textareas, code blocks.
 
    Scrolling itself is untouched — wheel, trackpad, keys, touch and
    scrollIntoView all still work; only the painted bar is gone. Corollary
@@ -1163,12 +1177,12 @@
    and it must set display:none — width:0 leaves the gutter behind. Both
    are needed, and the pseudo-element rule has to stay in a plain stylesheet
    (Tailwind utilities cannot express it). */
-:root,
-* {
+html:has([data-verification-surface]),
+html:has([data-verification-surface]) * {
   scrollbar-width: none;
   -ms-overflow-style: none;
 }
-*::-webkit-scrollbar {
+html:has([data-verification-surface]) *::-webkit-scrollbar {
   display: none;
 }
 

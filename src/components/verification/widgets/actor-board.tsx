@@ -438,14 +438,34 @@ function beamPath(
   ].join(" ");
 }
 
-function edgeControl(from: MapPoint, to: MapPoint): MapPoint {
+function edgeControl(from: MapPoint, to: MapPoint, bend = 0): MapPoint {
   const middle = { x: (from.x + to.x) / 2, y: (from.y + to.y) / 2 };
-  return {
+  const pulled = {
     x: middle.x + (CX - middle.x) * 0.35,
     y: middle.y + (CY - middle.y) * 0.35,
   };
+  if (!bend) return pulled;
+  // Perpendicular to the edge's own direction of travel, so the two arrows
+  // of an opposite-direction pair bend to opposite sides of their chord.
+  const dx = to.x - from.x;
+  const dy = to.y - from.y;
+  const length = Math.hypot(dx, dy) || 1;
+  return {
+    x: pulled.x + (-dy / length) * bend,
+    y: pulled.y + (dx / length) * bend,
+  };
 }
 
+/* The head is quiver's, in the same family as the beams: nothing about it
+   is uniform-width. Two barbs sweep back from the point, their front edges
+   bowed in toward the shaft, tapering to nothing at the barb tips, with the
+   mass sitting at the point — the swallow-wing head rather than a flat
+   triangle. It is solid ink whatever the beam under it wears: the beam's
+   hue and dash carry the verdict, the head only carries direction, and a
+   state-coloured head drowned in its own beam (a dashed beam's flared
+   outline even read as a hollow dashed head). Ink, not literal black —
+   theme.css owns the colours, and a #000 head would vanish on the night
+   theme. */
 function arrowheadPath(control: MapPoint, to: MapPoint): string {
   const dx = to.x - control.x;
   const dy = to.y - control.y;
@@ -455,8 +475,17 @@ function arrowheadPath(control: MapPoint, to: MapPoint): string {
   const nx = -uy;
   const ny = ux;
   const tip = { x: to.x - ux * 9, y: to.y - uy * 9 };
-  const base = { x: tip.x - ux * 7, y: tip.y - uy * 7 };
-  return `M ${tip.x} ${tip.y} L ${base.x + nx * 4} ${base.y + ny * 4} L ${base.x - nx * 4} ${base.y - ny * 4} Z`;
+  // A point `back` units behind the tip, `side` units off the axis.
+  const at = (back: number, side: number) =>
+    `${tip.x - ux * back + nx * side} ${tip.y - uy * back + ny * side}`;
+  return [
+    `M ${tip.x} ${tip.y}`,
+    `Q ${at(5, 1.5)} ${at(10, 6)}`, // up the concave front edge to the barb tip
+    `L ${at(6.5, 0)}`, // into the rear notch
+    `L ${at(10, -6)}`, // out to the other barb
+    `Q ${at(5, -1.5)} ${tip.x} ${tip.y}`, // and back along the far front edge
+    "Z",
+  ].join(" ");
 }
 
 /** Four states, four treatments, and never colour alone — a missed edge is
@@ -709,16 +738,32 @@ export function RingMap({
         {/* Edges go under the dots and over the rings. Like the landing skill
             tree, each beam flares beneath its endpoint dots and pinches in
             the middle; a small arrowhead before the target keeps direction
-            visible without changing that silhouette. */}
+            visible without changing that silhouette.
+
+            Opposite directions between one pair are a quiver's case, and
+            they render the way quiver draws them. With the same verdict the
+            two claims merge into a single beam with an arrowhead at each
+            end; with different verdicts the two curves bend apart, each
+            keeping its own arrowhead and paint — so the learner's solid
+            arrow and the key's dashed one sit side by side instead of
+            stacking into one smudge. The data never merges: A>B and B>A
+            stay two ids, two claims, two rows in the verdict. */}
         {edges.map((edge) => {
           const [from = "", to = ""] = edge.id.split(">");
           const a = pointOf(from);
           const b = pointOf(to);
           if (!a || !b) return null;
+          const partner = edges.find((e) => e.id === edgeId(to, from));
+          const twoHeaded = partner !== undefined && partner.state === edge.state;
+          // A merged pair is drawn once, from its lexicographically first id.
+          if (twoHeaded && edgeId(to, from) < edge.id) return null;
           const paint = EDGE_PAINT[edge.state];
-          const control = edgeControl(a, b);
+          const control = edgeControl(
+            a,
+            b,
+            partner !== undefined && !twoHeaded ? 12 : 0,
+          );
           const beam = beamPath(a, b, control);
-          const arrow = arrowheadPath(control, b);
           return (
             <g key={`${edge.id}-${edge.state}`} opacity={paint.opacity}>
               <path
@@ -730,7 +775,10 @@ export function RingMap({
                 strokeLinecap="round"
                 strokeLinejoin="round"
               />
-              <path d={arrow} fill={paint.stroke} />
+              <path d={arrowheadPath(control, b)} className="fill-foreground" />
+              {twoHeaded ? (
+                <path d={arrowheadPath(control, a)} className="fill-foreground" />
+              ) : null}
             </g>
           );
         })}
@@ -738,7 +786,7 @@ export function RingMap({
         {draftGeometry ? (
           <g className="pointer-events-none fill-primary" opacity={0.8}>
             <path d={draftGeometry.beam} />
-            <path d={draftGeometry.arrow} />
+            <path d={draftGeometry.arrow} className="fill-foreground" />
           </g>
         ) : null}
 

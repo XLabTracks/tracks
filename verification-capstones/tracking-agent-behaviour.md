@@ -14,14 +14,15 @@ skills: [OSINT methods, case-study writing, program design]
 sources:
   - "[Ten AI safety projects I'd like people to work on — Julian Hazell (2025), project 3: tracking sketchy AI agent behaviour in the wild](https://www.lesswrong.com/posts/vxA2BnCPTaPfnJjti/ten-ai-safety-projects-i-d-like-people-to-work-on)"
 similar: [incident-detection-monitoring, incident-reporting-taxonomy]
-updated: 2026-08-06
+updated: 2026-08-20
 ---
 
 ## The idea, as posed
 
 From [Ten AI safety projects I'd like people to work on — Julian Hazell
 (2025)](https://www.lesswrong.com/posts/vxA2BnCPTaPfnJjti/ten-ai-safety-projects-i-d-like-people-to-work-on),
-project 3, "Tracking sketchy AI agent behaviour 'in the wild'". Quoted:
+project 3, "Tracking sketchy AI agent behaviour “in the wild”".
+Quoted:
 
 > What: Start an organization to systematically investigate deployed AI
 > agents for signs of misalignment, scheming, or general sketchy behaviour
@@ -37,15 +38,20 @@ project 3, "Tracking sketchy AI agent behaviour 'in the wild'". Quoted:
 > The organization could also publish detailed case studies of confirmed
 > incidents and maintain a public database of problematic behaviours
 > observed in deployed systems (though only ones relevant to misalignment,
-> and not "AI harm" more broadly construed).
+> and not “AI harm” more broadly construed).
 >
-> Why this matters: […] LLMs are starting to exhibit increasingly
-> sophisticated and concerning behaviour […] We should go a step further
-> and try hard to check if these concerns are actually manifesting in
-> real-world deployments (and if so, in what ways and at what scale).
-> Thoughtful, rigorous, and real-world observational evidence about
-> misalignment would be valuable for grounding policy discussions and
-> improving the world's situational awareness about AI risk.
+> Why this matters: For a long time, folks worried about misalignment
+> mostly on the basis of theoretical arguments (and occasionally some lab
+> experiments with questionable ecological validity). Things have changed:
+> LLMs are starting to exhibit increasingly sophisticated and concerning
+> behaviour, such as attempting to prevent their preferences from being
+> changed, systematically gaming their evaluation tasks, and aiming for
+> high scores rather than actually solving the problems at hand. We should
+> go a step further and try hard to check if these concerns are actually
+> manifesting in real-world deployments (and if so, in what ways and at
+> what scale). Thoughtful, rigorous, and real-world observational evidence
+> about misalignment would be valuable for grounding policy discussions
+> and improving the world’s situational awareness about AI risk.
 >
 > What the first few months could look like: Picking 1-2 workstreams to
 > start with, speaking with people working on relevant topics (e.g., at AI
@@ -60,4 +66,3 @@ What the post's own "first few months" paragraph describes, on paper: the
 people at AI companies would need to establish, the OSINT analogies and
 disanalogies, and the format of the case studies and public database the
 organization would maintain.
-

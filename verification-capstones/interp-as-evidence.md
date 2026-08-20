@@ -12,92 +12,48 @@ deliverable_type: memo
 mentor: optional
 audience: The policy researcher about to cite an interpretability paper in an argument.
 skills: [evidence standards, reading technical results as a non-specialist, claim-to-evidence mapping]
-updated: 2026-08-04
+sources:
+  - "[Open Problems in Mechanistic Interpretability — Sharkey et al. (2025), abstract and the model-organisms caveat](https://arxiv.org/abs/2501.16496)"
+  - "[Apollo Research's 45+ mech interp project ideas (2024)](https://www.lesswrong.com/posts/KfkpgXdgRheSRWDy8/a-list-of-45-mech-interp-project-ideas-from-apollo-research)"
+  - "[Laying the foundations for vision and multimodal mechanistic interpretability — Joseph & Nanda (2024)](https://www.lesswrong.com/posts/kobJymvvcvhbjWFKe/laying-the-foundations-for-vision-and-multimodal-mechanistic)"
+  - "[200 Concrete Open Problems in Mechanistic Interpretability (2022)](https://www.lesswrong.com/posts/LbrPTJ4fmABEdEnLf/200-concrete-open-problems-in-mechanistic-interpretability)"
+updated: 2026-08-20
 ---
 
-## The brief
+## The idea, as posed
 
-The policy track carries interpretability deliberately as a **pointer, not a
-week**: an emerging evidence type in policy argument, listed under week 5's
-extensions, framed as *what an interp finding can and cannot support in
-testimony*. This capstone is that pointer, done properly, once.
+From [Open Problems in Mechanistic Interpretability — Sharkey et al.
+(2025)](https://arxiv.org/abs/2501.16496),
+abstract. Quoted:
 
-Pick one published interpretability result — hunting grounds, if you need
-them: [Open Problems in Mechanistic Interpretability — Sharkey et al.
-(2025)](https://arxiv.org/abs/2501.16496), [Apollo Research's 45+ project
-ideas (2024)](https://www.lesswrong.com/posts/KfkpgXdgRheSRWDy8/a-list-of-45-mech-interp-project-ideas-from-apollo-research),
-[vision and multimodal foundations — Joseph & Nanda
-(2024)](https://www.lesswrong.com/posts/kobJymvvcvhbjWFKe/laying-the-foundations-for-vision-and-multimodal-mechanistic),
-and [200 Concrete Open Problems (2022 — its own update calls it out of
-date)](https://www.lesswrong.com/posts/LbrPTJ4fmABEdEnLf/200-concrete-open-problems-in-mechanistic-interpretability).
-Then:
+> Despite recent progress toward these goals, there are many open problems
+> in the field that require solutions before many scientific and practical
+> benefits can be realized: Our methods require both conceptual and
+> practical improvements to reveal deeper insights; we must figure out how
+> best to apply our methods in pursuit of specific goals; and the field
+> must grapple with socio-technical challenges that influence and are
+> influenced by our work. This forward-facing review discusses the current
+> frontier of mechanistic interpretability and the open problems that the
+> field may benefit from prioritizing.
 
-- **State what was actually shown.** One paragraph, no jargon, at the level of
-  precision the paper supports — which model, which layer or feature, on which
-  distribution, established how.
-- **Collect three claims it gets cited for.** Real citations where you can find
-  them; plausible ones you construct if you cannot. Typically some version of
-  "we can tell whether a model is deceptive", "we can audit for dangerous
-  capability", "we understand what the model is doing".
-- **Rate each claim.** *Supported*, *partially supported with a stated
-  condition*, or *not supported*. For each, the specific gap — distribution,
-  scale, causal versus correlational, whether the method has been validated
-  against a ground truth at all.
-- **The admissibility test.** For the one claim closest to being usable, write
-  the two questions a hostile reader would ask, and whether the finding
-  survives them.
-- **The replacement sentence.** What a policy document should say instead, if
-  it wants to lean on this result.
+And on the gap between what is studied and what gets claimed:
 
-## Why it exists
+> Furthermore, certain choices made while studying model organisms risk
+> steering the field in suboptimal directions. For instance,
+> interpretability research is often motivated by the engineering goal of
+> understanding state-of-the-art models thoroughly enough to make
+> assurances of their safety (Bereska & Gavves 2024; Tegmark & Omohundro
+> 2023; Dalrymple et al. 2024). However, limiting its focus by studying
+> small toy models (e.g. Nanda et al. 2023a) or how larger models
+> accomplish select subtasks (Arditi et al. 2024), risks incentivizing
+> research and methods that fail to generalize to more safety-relevant
+> real-world settings.
 
-Interpretability is the most-cited and least-understood evidence type in
-governance writing. A finding gets published about a feature in one model, and
-six months later it is load-bearing in a paragraph about auditing frontier
-systems. Nobody involved is lying; the chain of small stretches is just never
-audited.
+## What you produce
 
-The skill is the track's core one — mapping a claim to the evidence that would
-support it — applied to a technical result you did not produce and cannot fully
-evaluate. That constraint is realistic. Policy researchers cite work outside
-their expertise constantly; the honest ones know exactly how far they can carry
-it.
-
-The open-problems literature is your ally here rather than your obstacle: the
-field's own agenda papers say plainly which methods need conceptual and
-practical improvement before they support strong conclusions. Quoting a field
-about its own limitations is the strongest move available to a non-specialist.
-
-## Scope
-
-**In scope:** one published result, its own paper, and the field's open-problems
-literature. No coding.
-
-**Out of scope:** evaluating whether the interpretability method is technically
-correct. You are not refereeing the paper. You are asking what a correct result
-would license.
-
-**Also out of scope:** a survey of interpretability. One finding, three claims.
-The track carries this as an extension precisely because it is not a subfield
-tour.
-
-## What good looks like
-
-| Dimension | Weak | Strong |
-|---|---|---|
-| The restatement | Paraphrases the abstract | Names the model, the scope, and the thing the paper explicitly did not test |
-| The claims | Straw versions | Real citations, or constructions a practitioner would recognise as fair |
-| The ratings | All "not supported" | Discriminating: at least one claim survives with a stated condition |
-| Replacement | "More caution is needed" | A sentence a policy document could paste in and defend |
-
-Rating everything unsupported is as lazy as citing it uncritically. The work is
-in finding the narrow claim that does hold.
-
-## Getting started
-
-1. Pick a finding you have already seen cited in a policy context. The citation
-   chain is half your material.
-2. Read the paper's own limitations section first, then the field's
-   open-problems paper. Both will hand you gaps you would not have found.
-3. Write the replacement sentence before the ratings. It forces you to decide
-   what you actually think, and the ratings then have something to justify.
+The memo the abstract's caution demands: one published finding restated at
+the precision it supports, three claims it gets cited for rated against
+it, and the replacement sentence a policy document can defend — with the
+generalization gap the review names checked for each claim: was this shown
+on a toy model or a select subtask, and does the citation carry it to a
+safety-relevant real-world setting?

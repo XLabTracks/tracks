@@ -15,73 +15,40 @@ skills: [regulatory definition design, quantitative analysis, sensitivity analys
 sources:
   - "[A Collection of AI Governance Research Ideas — von Knebel & Anderljung (2024), idea 78: which compute? defining the regulatory target for compute governance](https://www.markusanderljung.com/blog/a-collection-of-ai-governance-research-ideas-2024)"
 similar: [ops-threshold-adjustments, training-vs-inference]
-updated: 2026-08-04
+updated: 2026-08-20
 ---
 
-## The brief
+## The idea, as posed
 
-Week 2 has you check which historical models would have crossed each threshold
-and when. That exercise quietly assumes a definition of the quantity. Real rules
-have to state one, and the alternatives are not equivalent:
+From [A Collection of AI Governance Research Ideas — von Knebel &
+Anderljung (2024)](https://www.markusanderljung.com/blog/a-collection-of-ai-governance-research-ideas-2024),
+idea 78, "Which Compute? Defining The Regulatory Target for Compute
+Governance". Quoted:
 
-- Training compute only, or training plus post-training, or plus inference at
-  serving scale?
-- Operations at what precision — and how do you compare a number quoted in one
-  format against hardware that does something else natively?
-- Peak throughput of the cluster, or operations actually performed?
-- Aggregated across a distributed run, and if so over what window?
+> Chips have become an integral aspect of modern society, with devices
+> ranging from smartphones to home appliances relying on this technology.
+> As a result, it has become ubiquitous, making it challenging to leverage
+> it for numerous governance capacities. Targeting all the compute
+> worldwide is neither feasible nor desirable. Such an approach would
+> inevitably impact the majority of compute which is not of relevance for
+> frontier AI activities, and would represent a significant invasion of
+> privacy while also being overly blunt in its implementation. Therefore,
+> there is a need for defining a (better? more appropriate?) regulatory
+> target for compute governance.
 
-Pick three of these definitions, and score the same set of models under each.
+The idea's research questions:
 
-- **The re-scoring.** A notebook: one model set, three definitions, which
-  models cross which line under which. Where the sets diverge is the finding.
-- **The gaming analysis.** Per definition, the cheapest way to sit just below.
-  Sharding a run across windows or subsidiaries, shifting work to post-training
-  or inference, quoting a different precision. Some definitions are much
-  cheaper to game than others, and it is not always the loose one.
-- **The measurability check.** Who could actually verify a claim under each
-  definition, from what evidence. A definition that is precise and
-  unverifiable is worse than a coarse one somebody can check.
-- **The recommendation.** One definition, with what you accept in exchange, and
-  the review clause you would attach knowing the technology moves.
+> What is AI compute?
+>
+> Which parts of the computational infrastructure best regulate AI
+> development and deployment while minimising the downsides?
+>
+> What should the regulatory target be?
 
+## What you produce
 
-## Why it exists
-
-Every compute rule in force rests on a definition that was chosen quickly and
-has been carrying weight ever since. Learners see thresholds discussed as
-*numbers* — is 10²⁵ right? — when the more consequential choice is what the
-number counts.
-
-It also completes the pair with the existing threshold-decay capstone. That one
-asks how fast a fixed number loses selectivity; this asks whether the number was
-measuring the intended thing in the first place. Together they are the two ways
-a compute rule fails.
-
-## Scope
-
-**In scope:** public compute-estimate datasets, published rules and their
-definitional language, hardware specifications for the precision question.
-
-**Out of scope:** proposing a new metric. Choose among definitions that a rule
-could plausibly use today — a metric nobody can compute from available evidence
-is a research programme.
-
-## What good looks like
-
-| Dimension | Weak | Strong |
-|---|---|---|
-| Re-scoring | Asserts the definitions differ | A table where the same models land differently, with the divergent cases named |
-| Gaming | "Definitions can be gamed" | Per definition, the cheapest evasion and roughly what it costs |
-| Measurability | Assumed | Per definition, who verifies, from what evidence, at what lag |
-| Recommendation | The most precise definition | The most *checkable* one, with the trade stated and a review clause |
-
-## Getting started
-
-1. Build the re-scoring notebook first, on five models. The divergences tell
-   you which definitional axis actually matters, and it may not be the one you
-   expected.
-2. Ask of every definition: what would a compliant lab's lawyer say this
-   excludes? That is the gaming section, written for you.
-3. Keep the precision question separate from the training/inference question.
-   Tangling them is how these analyses become unreadable.
+The definition work the questions pose: what AI compute is, which parts of
+the computational infrastructure best regulate development and deployment
+while minimising the downsides, and the recommended regulatory target —
+with the same model set re-scored under competing definitions to show what
+each catches.

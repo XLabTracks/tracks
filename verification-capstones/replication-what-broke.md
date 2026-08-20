@@ -13,83 +13,42 @@ mentor: recommended
 audience: The next person about to cite that number in a memo.
 skills: [replication, experimental hygiene, elicitation sensitivity, negative results]
 sources:
-  - "[A long list of open problems and concrete projects in evals — Hobbhahn and contributors (2025)](https://docs.google.com/document/d/1gi32-HZozxVimNg5Mhvk4CvW4zq8J12rGmK_j2zxNEg/edit)"
-updated: 2026-08-04
+  - "[A long list of open problems and concrete projects in evals — Hobbhahn and contributors (2025), science of evals; \"Replicate bio evals with better tools\"](https://docs.google.com/document/d/1gi32-HZozxVimNg5Mhvk4CvW4zq8J12rGmK_j2zxNEg/edit)"
+updated: 2026-08-20
 ---
 
-## The brief
+## The idea, as posed
 
-Governance arguments run on numbers other people produced. A benchmark score
-that a frontier safety framework maps to a threshold. A training-compute
-estimate that decides which side of a regulatory line a model falls. Pick one
-such number and reproduce it.
+From [A long list of open problems and concrete projects in evals —
+Hobbhahn and contributors (2025)](https://docs.google.com/document/d/1gi32-HZozxVimNg5Mhvk4CvW4zq8J12rGmK_j2zxNEg/edit),
+the "Science of evals" section. Quoted:
 
-Deliver:
+> By science of evals, we broadly mean “figure out how to make the entire
+> process of evaluating models and their effects more informative,
+> replicable, predictive, rigorous, etc.” Many ideas in this section are
+> open questions and don’t have concrete projects available.
 
-- **The notebook.** Runs top to bottom on free Colab plus a small open model
-  or a cheap API call. Pinned versions, fixed seeds, stated runtime and cost.
-- **The comparison.** Your number beside the published one, with the gap
-  quantified rather than smoothed. For an eval score that means stating your
-  elicitation in full; for a compute estimate it means showing the
-  architecture and token assumptions you had to guess.
-- **The sensitivity check.** Vary one thing the source left to the reader —
-  prompt format, few-shot count, sampling, an assumed parameter count — and
-  report how much the number moves. Week 4 taught you this on your own eval;
-  here you do it to somebody else's published claim.
-- **The note.** Two pages for a policy reader: what was underspecified, what
-  the number is sensitive to, what you could not reproduce, and the sentence
-  they should use instead if they were going to cite it.
+One entry, "Replicate bio evals with better tools" (credit: Igor Ivanov),
+makes the replication case concrete:
 
-## Why it exists
+> US AISI ran bio evaluations for o1 by using the LAB-bench benchmark.
+> They ran evaluations with access to the Python interpreter, but the
+> model most likely would benefit from access to more tools, like genetic
+> databases or a search engine for scientific articles. This means that
+> with proper scaffolding o1 would be more capable, and they underelicited
+> true capabilities of the model. Someone can replicate their evaluations,
+> but with more advanced scaffolding.
+>
+> This project is important because apart from US AISI, almost no one
+> shares their bio evaluations of frontier models, so there is limited
+> information flow in the field, and their methodology is rather basic, so
+> any improvement on it would meaningfully contribute to the field.
 
-Week 4 teaches that eval scores are elicitation-dependent and Weeks 1–2 teach
-that compute estimates are assumption-dependent. Both lessons stay abstract
-until you try to land on somebody else's published figure and miss.
+## What you produce
 
-Replication is also the cheapest way into empirical governance work: you need
-no new idea, so all the effort goes into method, which is where the skill
-lives. The track's own production plan lists "replicate a published number" as
-the extension for technically strong participants — this is that extension
-grown into a capstone with an audience attached.
-
-A last reason, which the field keeps re-learning: numbers rot. A figure
-computed against one model generation, one framework version and one
-elicitation convention does not stay true, and nothing about the way it gets
-cited announces that. Your note is the thing that says so.
-
-## Scope
-
-**In scope:** one published number from a benchmark, a lab system card, an
-eval paper, or a public compute-estimate dataset. Small open models and cheap
-API calls.
-
-**Out of scope:** frontier-scale reproductions, extending the result, and
-picking a number because it is famous. Pick by whether the method is described
-concretely enough to follow — and if it is not, say so, because *that* is a
-finding a policy reader needs.
-
-**Choose something that fits in one figure or one table.** Reproducing a whole
-paper means three weeks of setup and no findings.
-
-## What good looks like
-
-| Dimension | Weak | Strong |
-|---|---|---|
-| Scope choice | A whole paper | One number, done properly, with its provenance traced |
-| Fidelity | "Roughly similar" | Side-by-side figures, with the gap quantified and explained |
-| Sensitivity | Not tested | One documented variation, with the effect on the number reported |
-| The note | A lab diary | A replacement sentence a policy reader can actually cite |
-
-"I could not reproduce it, and here is exactly where the trail goes cold" is a
-strong submission — especially when the trail goes cold because the source
-never specified something load-bearing.
-
-## Getting started
-
-1. Before committing, spend ninety minutes trying to run the source's own code
-   or rebuild its calculation. That session tells you more about feasibility
-   than a week of reading.
-2. Write down the three things the method leaves to you *before* you start.
-   Those become your sensitivity checks and, usually, the note's spine.
-3. Log every run from the first one, including the broken ones. The failed
-   runs are the note.
+A replication in exactly that spirit, on a published number of your
+choosing: the notebook that reproduces it, the comparison with the gap
+quantified, the sensitivity check on what the source left unstated, and
+the two-page note on what the methodology did not tell you — the
+improvement on basic methodology the entry says would meaningfully
+contribute to the field.

@@ -13,69 +13,41 @@ mentor: recommended
 audience: The legislative counsel who would have to turn it into a filed bill.
 skills: [statutory drafting, tort literacy, comparative state law, scoping a legal instrument]
 sources:
-  - "[Orphaned Policies (post 5 of 7 on AI governance) — Mass_Driver, orphan 3](https://www.lesswrong.com/posts/wFKZmvfRfNn24HNHp/orphaned-policies-post-5-of-7-on-ai-governance)"
-updated: 2026-08-04
+  - "[Orphaned Policies (Post 5 of 7 on AI Governance) — Mass_Driver (2025), orphan 3: strict liability](https://www.lesswrong.com/posts/wFKZmvfRfNn24HNHp/orphaned-policies-post-5-of-7-on-ai-governance)"
+updated: 2026-08-20
 ---
 
-## The brief
+## The idea, as posed
 
-The orphan catalogue notes the shape of the gap exactly: the idea has been
-discussed since 2019, it ought to be a fifty-state project, and while a few
-states have tinkered with existing tort law, no strict-liability model
-language is on offer for any legislature to adopt. Supply it for one.
+From [Orphaned Policies (Post 5 of 7 on AI Governance) — Mass_Driver
+(2025)](https://www.lesswrong.com/posts/wFKZmvfRfNn24HNHp/orphaned-policies-post-5-of-7-on-ai-governance),
+the "Strict Liability" entry (orphan 3). Quoted:
 
-- **The bill.** Scope (which systems, which harms), the standard imposed,
-  defences preserved, damages, who may sue, effective date. Drafted in the
-  style your chosen state actually uses — go read three of its recent tech
-  bills before you write a line.
-- **The definition problem.** Strict liability needs a defined class of
-  defendant and a defined class of product. "AI system" as a statutory term is
-  where most drafts either sweep in every spreadsheet or exclude the thing you
-  meant. Say what you chose and show the two edge cases it decides.
-- **The variance note.** Two other states with materially different tort
-  regimes: what breaks when you port your text, and what has to change.
-- **The incidence memo.** One page: who ends up bearing this. Developer,
-  deployer, insurer, or the user through price. A liability rule that lands on
-  the party with no control is a rule that buys nothing.
+> Applying a less forgiving set of tort law to harms caused by AI has been
+> discussed for several years; the Brookings Institute proposed using
+> products liability law in 2019, and CAIP board member Gabriel Weil
+> published a detailed analysis of several possible liability reforms in
+> January 2024. California SB 1047 would have made some minor changes or
+> clarifications to existing tort law, and a few other state legislatures
+> have also considered modifications.
+>
+> However, this should ideally be a 50-state project. Specific language in
+> every state should be available for legislatures to adopt, and we should
+> also be filing impact litigation that would give judges a chance to
+> incorporate strict liability for AI into the common law.
 
-## Why it exists
+The entry's adoption suggestion:
 
-Week 3 has you dissect somebody else's bill clause by clause; week 6 covers
-liability allocation as a design choice. This is the two of them run forwards.
-Drafting teaches something reading cannot: that almost every ambiguity you
-found in the RSP markup exists because the alternative was to decide something
-the drafter could not get agreement on.
+> You can help by writing a strict liability law for your state and by
+> submitting comments or articles to a local law review journal arguing in
+> favor of strict liability. Such laws are often more likely to pass (or
+> be adopted by judges) when they have some academic support, but the
+> support needs to be registered inside the legal community for it to be
+> noticed.
 
-It is also close to real entry-level policy work. Model bills are what
-advocacy organisations actually produce, and a good one is portable.
+## What you produce
 
-## Scope
-
-**In scope:** one state, its drafting conventions, existing products-liability
-and ultrahazardous-activity doctrine, and the AI-liability literature.
-
-**Out of scope:** federal preemption analysis beyond a flag, and a fifty-state
-survey. One state properly, two states compared, and an honest note that the
-rest is a project.
-
-**Not a policy argument.** The case for strict liability has been made
-elsewhere; you are being graded on whether the instrument works, including if
-you conclude a negligence standard with a presumption would do the job better.
-
-## What good looks like
-
-| Dimension | Weak | Strong |
-|---|---|---|
-| The text | Principles in bill format | Operative sections with defined terms, defences and a damages provision |
-| Definitions | "Artificial intelligence system means…" borrowed wholesale | Chosen deliberately, with two edge cases worked and decided |
-| Portability | "Other states could adapt this" | Two named states, what breaks, what changes |
-| Incidence | Unaddressed | Who bears the cost, and whether they can do anything about the risk |
-
-## Getting started
-
-1. Read three recent bills from your state, of any subject, for form. Drafting
-   convention is half of whether counsel can use your text.
-2. Decide the defendant class before the standard. Everything else follows
-   from who you are trying to reach.
-3. Test the definition against a deliberately silly system and a deliberately
-   frontier one on day two. If both come out the same, redraft.
+The state law the entry asks for: model strict-liability text for one
+state, drafted so a legislature could adopt it, with the definition and
+incidence choices decided rather than deferred — and a variance note on
+porting the text to states with materially different tort regimes.

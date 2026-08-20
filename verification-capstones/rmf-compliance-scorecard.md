@@ -13,76 +13,43 @@ mentor: optional
 audience: The procurement officer or regulator deciding whether "we follow the RMF" means anything.
 skills: [framework decomposition, rubric design, evidence sourcing, comparative scoring]
 sources:
-  - "[Orphaned Policies (post 5 of 7 on AI governance) — Mass_Driver, orphan 10](https://www.lesswrong.com/posts/wFKZmvfRfNn24HNHp/orphaned-policies-post-5-of-7-on-ai-governance)"
-updated: 2026-08-04
+  - "[Orphaned Policies (Post 5 of 7 on AI Governance) — Mass_Driver (2025), orphan 10: industry standards](https://www.lesswrong.com/posts/wFKZmvfRfNn24HNHp/orphaned-policies-post-5-of-7-on-ai-governance)"
+updated: 2026-08-20
 ---
 
-## The brief
+## The idea, as posed
 
-A voluntary framework nobody is scored against is indistinguishable from a
-press release. The orphan catalogue puts it plainly: the
-[guidelines](https://www.nist.gov/itl/ai-risk-management-framework) are
-published, a rating system exists, and it is not obvious that the major
-developers actually comply — or even that they have promised to.
+From [Orphaned Policies (Post 5 of 7 on AI Governance) — Mass_Driver
+(2025)](https://www.lesswrong.com/posts/wFKZmvfRfNn24HNHp/orphaned-policies-post-5-of-7-on-ai-governance),
+the "Industry Standards" entry (orphan 10). Quoted:
 
-Build the instrument that would tell you.
+> NIST has already published an AI Risk Management Framework that contains
+> voluntary best practices for coping with the risks of AI. It is not
+> obvious that all major AI developers are actually complying with these
+> voluntary best practices, or even that they have promised to do so.
+> There is much work to be done lobbying companies to publicly promise to
+> abide by the NIST AI RMF and then preparing checklists, scorecards and
+> other tools to evaluate how well they are living up to this promise.
+>
+> SaferAI’s work in creating a rating system for AI companies is a good
+> first step, but the ratings need to be broadened and aligned with the
+> NIST criteria, and someone needs to convince the companies to commit to
+> using these criteria and to publishing enough data often enough that
+> third parties can meaningfully assess the extent to which they are
+> successfully complying with those criteria.
 
-- **The checklist.** Decompose the framework's functions into items that are
-  *externally checkable*. That constraint does most of the work: "govern"
-  becomes something like "publishes a named accountable role for model release
-  decisions". Items nobody outside the company could ever verify get dropped,
-  and the count of what you dropped is itself a finding.
-- **The scoring rule.** Written before you score anyone. What counts as
-  evidence, what counts as partial, and what an absence means — because on
-  public evidence, absence of documentation is not absence of practice, and
-  your rule has to say how it treats that.
-- **The scores.** Three developers, scored, with an evidence log: one row per
-  item per company, with the URL and the date.
-- **Double-coding.** Two people score an overlapping subset independently.
-  Report the disagreement rate. A scorecard without one is an opinion with a
-  table around it.
-- **The limits note.** What this scorecard would say about a company that
-  documents well and practises badly, and vice versa.
+The entry's adoption suggestion:
 
-## Why it exists
+> You can help by developing checklists or scorecards that assess
+> compliance, by developing tools, wizards, charts, and templates that
+> make it easier for companies to comply, and by drafting sample
+> agreements that companies could sign to show that they agree to follow
+> these guidelines.
 
-Week 3 teaches clause-level reading of voluntary commitments; week 6 covers
-standards bodies and what incorporation by reference does. This joins them: a
-voluntary standard becomes real when somebody scores against it in public, and
-the scoring rule is where all the contestable judgement lives.
+## What you produce
 
-The transferable skill is rubric design under public-evidence constraints —
-the same skill behind index-building, comparative jurisdiction work, and any
-"which of these is actually complying" question, which is most of the job in
-think-tank policy research.
-
-## Scope
-
-**In scope:** the published framework, developers' public documentation —
-model cards, system cards, safety frameworks, transparency reports — and
-existing third-party rating work as a comparison for your method.
-
-**Out of scope:** interviews, non-public information, and scoring more than
-three companies. Depth and a defensible rule beat coverage.
-
-**Publish the rule with the scores, always.** A score whose method is not
-visible cannot be argued with, which makes it useless to the person you wrote
-it for.
-
-## What good looks like
-
-| Dimension | Weak | Strong |
-|---|---|---|
-| Items | Restated framework language | Externally checkable statements, with the dropped items counted |
-| Rule | Applied by judgement | Written first, double-coded, disagreement rate reported |
-| Evidence | "Based on public sources" | One row per item per company with URL and date |
-| Limits | Claims to measure safety | Says clearly it measures documentation, and what that does and does not imply |
-
-## Getting started
-
-1. Try to score one company on five items before building the full checklist.
-   You will discover which items are checkable, and it takes an afternoon.
-2. Write the absence rule early and stick to it. Deciding case by case is how
-   a scorecard becomes an argument about the companies you already liked.
-3. Date every piece of evidence. This artifact rots faster than anything else
-   in the bank, and a dated log is what makes it re-runnable.
+The checklists and scorecards the entry asks for: framework criteria
+decomposed into externally checkable items, three developers scored on
+public evidence with the log kept, and the scoring rule published with the
+scores — the assessment tooling the entry says compliance claims currently
+lack.

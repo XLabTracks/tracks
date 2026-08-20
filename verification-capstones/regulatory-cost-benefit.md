@@ -15,81 +15,51 @@ skills: [cost-benefit analysis, compliance-cost estimation, valuing uncertain ha
 sources:
   - "[A Collection of AI Governance Research Ideas — von Knebel & Anderljung (2024), idea 58: how can cost-benefit analyses be applied to AI regulation?](https://www.markusanderljung.com/blog/a-collection-of-ai-governance-research-ideas-2024)"
 similar: [reconciling-impact-scores]
-updated: 2026-08-04
+updated: 2026-08-20
 ---
 
-## The brief
+## The idea, as posed
 
-In most jurisdictions a significant rule cannot proceed without an impact
-analysis, and that document — not the debate — is where a rule is narrowed,
-delayed or killed. AI advocacy almost never produces one, which means the only
-version in the file is the one written by whoever wants a different outcome.
+From [A Collection of AI Governance Research Ideas — von Knebel &
+Anderljung (2024)](https://www.markusanderljung.com/blog/a-collection-of-ai-governance-research-ideas-2024),
+idea 58, "How Can Cost-Benefit Analyses Be Applied to AI Regulation?",
+suggested by John Halstead. Quoted:
 
-Write one for a real, live proposal.
+> Cost-benefit analyses have become a commonly used tool to inform
+> regulation across different domains, with some governments or agencies
+> making them a mandatory requirement for new programs, guidelines or
+> standards. At the same, the field of AI is riddled with complexities and
+> uncertainties that make these analyses potentially difficult or less
+> informative. Cost-benefit analysis could be used to inform the risk
+> thresholds used in evaluations of frontier AI models. There is currently
+> no science of cost-benefit analysis in AI regulation, and attempts to
+> apply cost-benefit analysis to AI regulation are piecemeal, non-public
+> and ad hoc.
 
-- **The baseline.** What happens without the rule. Impact analysis is always a
-  comparison, and a sloppy baseline is the most common way these documents
-  mislead.
-- **Compliance costs.** Who bears what: engineering time, testing, reporting,
-  legal review, delay to market. Itemised, with a per-firm figure at two
-  different firm sizes — the distributional point is usually the most
-  consequential finding.
-- **Benefits.** The honest hard part. Some are quantifiable (fewer incidents of
-  a measurable kind); the ones people care most about are low-probability and
-  high-severity, and standard practice handles those badly. Do what you can,
-  then say clearly what you could not monetise and why leaving it at zero would
-  be wrong.
-- **The alternatives.** At least three, including doing nothing and a
-  substantially cheaper version. Review offices ask for this and its absence is
-  the most common reason an analysis is sent back.
-- **Break-even framing.** Where the benefits resist valuation, invert it: how
-  large would the avoided harm have to be for this rule to pay for itself? A
-  break-even statement is often more honest and more persuasive than a
-  fabricated expected value.
-- **The method critique.** Two pages on where standard practice fails here:
-  discounting over long horizons, fat tails, irreversibility, and benefits that
-  accrue to people outside the jurisdiction doing the analysis.
+The idea's research questions:
 
+> How can cost-benefit analyses be applied to AI regulation and
+> evaluations?
+>
+> What might these analyses look like in practice, and what would they
+> involve?
+>
+> What difficulties should we expect to arise?
+>
+> Why might cost-benefit analysis be the wrong approach to setting risk
+> thresholds in AI evaluations?
+>
+> Should cost-benefit analysis be used to assess AI regulations?
+>
+> What can we learn from how CBAs are conducted in adjacent domains?
+>
+> How far should risk thresholds used in AI evaluations be influenced by
+> cost-benefit analysis?
 
-## Why it exists
+## What you produce
 
-This is the single most under-supplied document type in AI policy and one of
-the most consequential. A learner who can produce a defensible impact analysis
-is immediately useful to a think tank, an agency or an advocacy organisation,
-and very few people entering the field can.
-
-It also lands squarely on week 8's lesson. Cost-benefit analysis forces your
-strategic premises into numbers: your timeline beliefs, your risk estimates and
-your discount rate all become visible line items, and disagreements that were
-rhetorical become arithmetic.
-
-## Scope
-
-**In scope:** one live or recently finalised proposal with a public text,
-published impact analyses from other domains as method templates, and public
-cost data.
-
-**Out of scope:** an original economic model, and precision. Ranges with stated
-assumptions throughout.
-
-**Do not write an advocacy document with a table in it.** If your analysis
-cannot produce a number that embarrasses your own position somewhere, it is not
-an impact analysis.
-
-## What good looks like
-
-| Dimension | Weak | Strong |
-|---|---|---|
-| Baseline | Implicit | Stated explicitly, with what changes without the rule |
-| Costs | A total | Itemised, per firm at two sizes, with the distributional effect named |
-| Benefits | A confident expected value | What was monetised, what was not, and a break-even statement for the rest |
-| Alternatives | One option | Three, including do-nothing and a cheaper variant, each costed |
-
-## Getting started
-
-1. Read one real impact analysis from another domain before writing. The genre
-   has conventions and reviewers read for them.
-2. Do the compliance costs first. They are tractable, and having them anchors
-   the much harder benefits conversation.
-3. Write the break-even statement early. It is usually the most quotable
-   sentence in the document and it disciplines everything above it.
+A regulatory impact analysis for one live proposal — baseline, costs,
+benefits, alternatives — plus the note the sceptical questions call for:
+the difficulties to expect, where cost-benefit analysis may be the wrong
+approach to setting risk thresholds, and what CBA practice in adjacent
+domains teaches.

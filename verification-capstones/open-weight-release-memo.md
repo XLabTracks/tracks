@@ -13,82 +13,45 @@ mentor: recommended
 audience: The release committee that has to sign, knowing they cannot unship.
 skills: [risk assessment, evidence standards, threat modelling, decisions under irreversibility]
 sources:
+  - "[Open Technical Problems in Open-Weight AI Model Risk Management — Casper et al. (2026), §2 and abstract](https://arxiv.org/abs/2608.07514)"
   - "[Open Technical Problems in Open-Weight AI Model Risk Management (2025)](https://openreview.net/forum?id=8QyGLnFkzc)"
-updated: 2026-08-04
+updated: 2026-08-20
 ---
 
-## The brief
+## The idea, as posed
 
-You are staffing the release decision for an open-weight model at the
-capability frontier of what is currently released openly. Write the memo the
-committee reads.
+From [Open Technical Problems in Open-Weight AI Model Risk Management —
+Casper et al. (2026)](https://arxiv.org/abs/2608.07514),
+§2, on why open-weight risk management is challenging. Quoted:
 
-The memo covers:
+> With enough fine-tuning on enough data, safeguards for any model can be
+> undone, meaning that practical anti-tampering techniques can only hope
+> to make harmful forms of fine-tuning sufficiently onerous.
+>
+> Open-weight models can be spread quickly and irreversibly. If a
+> closed-weight model is found to pose hazards, risk-conscious developers
+> can add patches or pull the model from distribution. Consider, for
+> example, OpenAI’s April 2025 update of GPT-4o. After release, external
+> evaluation identified excessive sycophancy and encouragement of
+> self-harm. In response, OpenAI reverted to a previous version of the
+> model (166). In contrast, OpenAI’s open-weight release of gpt-oss-120b,
+> which currently has over 3 million monthly downloads from HuggingFace,
+> was not reversible. While ceasing service to a model can make it much
+> less accessible (e.g., 205; 196), there is no reliable way to prevent
+> existing copies of the model from being used and shared.
 
-- **The decision.** Release, release with conditions, or hold — stated in the
-  first paragraph, not the last.
-- **The evidence table.** Row per claim the release rests on; column for the
-  evidence, its strength, and what would overturn it. Claims like "the model
-  does not meaningfully uplift a novice" belong here with their actual
-  support, which is usually thinner than the sentence sounds.
-- **The mitigation audit.** For each safeguard — data filtering, refusal
-  training, unlearning, staged release, licence terms — state what it does
-  against a downstream actor who has the weights, a GPU, and a weekend. Mark
-  each one *durable*, *slows an amateur*, or *theatre*. Nothing gets to be
-  unmarked.
-- **The irreversibility budget.** The whole point. Name what cannot be
-  recovered if you are wrong, and what you are accepting in exchange.
-- **The monitoring plan.** What you would watch after release, and the
-  observation that would tell you the decision was wrong — while there is
-  still anything to be done about it.
+The paper's abstract is plain about the state of the field:
 
-## Why it exists
+> We conclude by discussing the nascent state of the field, emphasizing
+> that openness about research, methods, and evaluations – not just
+> weights – will be key to building a rigorous science of open-weight
+> model risk management.
 
-Open release is the cleanest case in AI governance of a decision that cannot
-be walked back, made on evidence that is known to be incomplete. It is also
-where safety arguments are most often made in a form that has never survived
-contact with fine-tuning: safeguards evaluated on the model as shipped, not
-on the model as trivially modified.
+## What you produce
 
-The literature this draws on is explicit that the science is nascent — most
-of the sixteen open technical problems are unsolved. That makes this a good
-teaching case, because you have to write a defensible decision *without* the
-evidence you would want, which is the actual job.
-
-## Scope
-
-**In scope:** published work on open-weight risk management, unlearning,
-tamper-resistance, and the frontier safety frameworks the track already
-covered. A hypothetical model is fine — specify its capability profile
-explicitly and hold to it.
-
-**Out of scope:** running the evals yourself, and litigating whether open
-weights are good in general. This memo is about one model and one decision.
-The general argument belongs in a different capstone.
-
-**A hard constraint on content:** do not write operational uplift detail.
-The memo argues about evidence and reversibility; it does not need — and must
-not contain — a recipe for anything.
-
-## What good looks like
-
-| Dimension | Weak | Strong |
-|---|---|---|
-| The recommendation | Emerges at the end after a survey | First paragraph, with its two strongest counter-arguments named by you |
-| Mitigations | Listed as implemented | Each one marked durable / slows an amateur / theatre, with the reason |
-| Evidence | "Evals showed no significant uplift" | The eval, the elicitation, the population it generalises to, and what it cannot see |
-| Irreversibility | Acknowledged in passing | Priced: what specifically is unrecoverable, and what you accept in exchange |
-
-If every mitigation in your audit comes out durable, you have not attacked
-your own memo hard enough. Go back and assume the fine-tuner is competent,
-funded, and not in your jurisdiction.
-
-## Getting started
-
-1. Fix the model's capability profile in writing on day one. Half of all
-   release arguments are actually arguments about a model nobody specified.
-2. Do the mitigation audit before the evidence table. It usually deletes two
-   rows of the table and reshapes the recommendation.
-3. Write the monitoring plan as if the release already happened and you are
-   three months in. It is the fastest way to find out whether your
-   post-release story was ever real.
+The memo a release committee reads before an irreversible act: the
+decision up front, the evidence table with what would overturn each claim,
+a mitigation audit run under the quoted premise — safeguards can be
+undone, so each one is marked by how onerous it actually makes harmful
+fine-tuning — and the irreversibility budget the second passage prices:
+what cannot be recovered once existing copies are being used and shared.

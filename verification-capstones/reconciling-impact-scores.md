@@ -14,7 +14,7 @@ skills: [risk assessment methods, comparative review]
 sources:
   - "[A Collection of AI Governance Research Ideas — von Knebel & Anderljung (2024), idea 55: reconciling impact scores for comprehensive AI risk management](https://www.markusanderljung.com/blog/a-collection-of-ai-governance-research-ideas-2024)"
 similar: [regulatory-cost-benefit]
-updated: 2026-08-06
+updated: 2026-08-20
 ---
 
 ## The idea, as posed
@@ -35,18 +35,21 @@ Quoted:
 > risk assessment scores (including coming up with what the desirable
 > factors are that would make it well-suited). For this project, it can be
 > assumed the user/reader has already generated the impact and likelihood
-> data for decomposed risks, but that we're struggling to combine these
+> data for decomposed risks, but that we’re struggling to combine these
 > into a single score for a large risk area as a whole (e.g. job
 > displacement by AI) and justify any exchange rates/other algorithm by
 > which this is done.
+
+The idea's research questions:
+
+> How can we create unified, rigorous and consistent Impact scores for AI
+> risk assessments across risks of all domains?
 >
-> Research questions: How can we create unified, rigorous and consistent
-> impact scores for AI risk assessments across risks of all domains? Are
-> there quantitative methods that can be taken from other fields that can
-> address the problem of creating a single impact score that acts as a
-> "currency converter" between these different impacts — and how well
-> could they apply to AI risk assessment? Methodology: literature review,
-> comparative approaches, expert interviews, risk management.
+> Are there quantitative methods that can be taken from other fields that
+> can address the problem of creating a single impact score that acts as a
+> 'currency converter' between these different impacts, measured with
+> different quantities - and how well could they apply to AI risk
+> assessment?
 
 ## What you produce
 
@@ -54,4 +57,3 @@ The review and recommendation the idea specifies: how other
 impact-assessment fields combine incompatible scores, the pros and cons of
 each approach, and which combination suits AI risk assessment — including
 the desirable factors that make a method well-suited.
-

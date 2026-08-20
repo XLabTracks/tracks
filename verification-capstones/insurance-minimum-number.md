@@ -13,73 +13,46 @@ mentor: recommended
 audience: The regulator who has to write a number into a licensing condition.
 skills: [quantitative estimation, loss modelling, regulatory design, reasoning under thin data]
 sources:
-  - "[Orphaned Policies (post 5 of 7 on AI governance) — Mass_Driver, orphan 5](https://www.lesswrong.com/posts/wFKZmvfRfNn24HNHp/orphaned-policies-post-5-of-7-on-ai-governance)"
-updated: 2026-08-04
+  - "[Orphaned Policies (Post 5 of 7 on AI Governance) — Mass_Driver (2025), orphan 5: insurance requirements](https://www.lesswrong.com/posts/wFKZmvfRfNn24HNHp/orphaned-policies-post-5-of-7-on-ai-governance)"
+updated: 2026-08-20
 ---
 
-## The brief
+## The idea, as posed
 
-The orphan catalogue's complaint about insurance is unusually precise:
-researchers praised the mechanism, and the question of what the minimum amount
-should be was never satisfactorily answered. Nor were policy limits or
-deductibles. A mandate without those three numbers cannot be written into any
-instrument.
+From [Orphaned Policies (Post 5 of 7 on AI Governance) — Mass_Driver
+(2025)](https://www.lesswrong.com/posts/wFKZmvfRfNn24HNHp/orphaned-policies-post-5-of-7-on-ai-governance),
+the "Insurance Requirements" entry (orphan 5). Quoted:
 
-Answer it.
+> A team of researchers led by the AI Objectives Institute recently put
+> out a paper praising the benefits of AI safety insurance, arguing
+> persuasively that “insurance has the potential to create a more
+> favorable incentive structure by making practices such as safety-washing
+> or underestimating AI-related risks less appealing.” CAIP’s co-founder,
+> Thomas Larsen, was a strong proponent of requiring frontier AI
+> developers to carry a minimum amount of insurance.
+>
+> However, we never satisfactorily answered the question of what this
+> minimum amount should be. What are a reasonable set of policy limits?
+> How large can the deductible be? How large can co-insurance payments be?
+> What is the scope of harms that would be covered by such policies, and
+> what if any exclusions would be permitted? What kinds of re-insurance
+> requirements would insurers have to meet to make sure that policies will
+> be paid out even if the primary insurer is bankrupted by an unusually
+> large claim?
 
-- **The loss model.** What harms this insurance is for, and a defensible
-  order-of-magnitude for each. Build it bottom-up from analogues you can cite —
-  data-breach losses, product recalls, professional liability, cyber — and say
-  where the analogy breaks.
-- **The three numbers.** Minimum coverage, per-occurrence and aggregate
-  limits, deductible. With the reasoning visible, so a reader can disagree with
-  an input instead of the conclusion.
-- **The availability check.** Would anyone write this policy? Capacity,
-  reinsurance, and the exclusions an underwriter would insist on. A mandate
-  nobody can satisfy is a moratorium wearing a disguise, and you should say so
-  if that is what you find.
-- **The incentive read.** What behaviour your number actually buys. Insurance
-  governs through pricing and underwriting conditions, not through payouts;
-  if the number is too low it is a rounding error, too high and it entrenches
-  incumbents. Say which way you erred.
+The entry's adoption suggestion:
 
-## Why it exists
+> You can help by researching best practices in the insurance industry and
+> using what you learn to answer some or all of these questions, and then
+> drafting a sample insurance policy, or a bill that would require AI
+> developers to place insurance, or both. You could also try sending the
+> sample insurance policy to a real insurance company or to an actuary and
+> seeing if they’d be willing to come up with a price estimate for it.
 
-This is the track's quantitative nerve applied to policy rather than compute.
-The honest answer is built on thin data, and the skill is producing a number
-anyway, with the uncertainty stated rather than hidden — the same discipline
-as a compute threshold, in a domain where nobody has done the arithmetic in
-public.
+## What you produce
 
-It also teaches something specific about mechanism choice: insurance is
-attractive to policy people because it seems to outsource the hard judgement to
-a market. Working the numbers shows how much judgement stays with the
-regulator.
-
-## Scope
-
-**In scope:** public loss data from analogous industries, insurance-market
-reporting, and the AI-liability literature. Order-of-magnitude reasoning is
-expected; precision is not.
-
-**Out of scope:** actuarial modelling of AI-specific tail risk. Nobody can do
-that yet, and pretending otherwise is the failure mode here. Bound it and say
-so.
-
-## What good looks like
-
-| Dimension | Weak | Strong |
-|---|---|---|
-| The model | A number with a rationale paragraph | Bottom-up from named analogues, each with its disanalogy stated |
-| The numbers | One figure | All three, with the relationship between them explained |
-| Availability | Assumed | Checked against real market capacity, with the exclusions named |
-| Uncertainty | Point estimate | A range, the input it is most sensitive to, and what would narrow it |
-
-## Getting started
-
-1. Pick the harm class first. An insurance mandate covering "AI harms" cannot
-   be priced; one covering a defined class can be bounded.
-2. Find the closest priced analogue and start there, adjusting explicitly.
-   Starting from first principles produces a number nobody can check.
-3. Ask an underwriter's question of every figure: what would make you refuse
-   to write this?
+The answers the entry's questions demand — the minimum amount, the policy
+limits, the deductible and co-insurance, the covered harms and permitted
+exclusions, the re-insurance backstop — drafted into the sample policy or
+bill the entry describes, with the loss arithmetic visible and the
+market-availability check the entry's pricing suggestion implies.

@@ -14,73 +14,43 @@ audience: The regulator who has to accept an eval result from a party that benef
 skills: [incentive design, eval methodology, detection reasoning, regulatory drafting]
 sources:
   - "[A Collection of AI Governance Research Ideas — von Knebel & Anderljung (2024), idea 38: what regulatory incentives should target evaluation sandbagging?](https://www.markusanderljung.com/blog/a-collection-of-ai-governance-research-ideas-2024)"
-updated: 2026-08-04
+updated: 2026-08-20
 ---
 
-## The brief
+## The idea, as posed
 
-Week 4 teaches sandbagging as an eval-methodology problem. It is also an
-incentive problem, and the incentive version is unsolved: when a threshold
-attaches a consequence to a score, the party running the eval is the party who
-benefits from a low one. Nobody has designed the counter-incentives.
+From [A Collection of AI Governance Research Ideas — von Knebel &
+Anderljung (2024)](https://www.markusanderljung.com/blog/a-collection-of-ai-governance-research-ideas-2024),
+idea 38, "What Regulatory Incentives / Interventions Should Target
+Evaluation Sandbagging?", suggested by Francis Rhys Ward. Quoted:
 
-Deliver:
+> Sandbagging is strategic underperformance on an evaluation. AI
+> developers, or AI systems themselves, may have incentives to sandbag
+> dangerous capability evals, to circumvent regulation. (Cf the case of
+> Volkswagen) Technical work can aim to detect and mitigate AI
+> sandbagging, but it's unclear what mechanisms should be used to
+> dis-incentivise sandbagging, e.g., fines. In addition, it seems somewhat
+> unclear which entity is legally responsible for sandbagging, for
+> example, in the case in which a misaligned agent does so without the
+> intent of the developers. Such cases may be cases of negligence, in
+> which the developer did not undergo sufficient prior safety evaluations
+> before submitting the model for external evaluation. In summary, there
+> are a number of questions here which need to be clarified to inform
+> policy surrounding evaluations and sandbagging.
 
-- **The sandbagging taxonomy for your case.** Deliberate under-elicitation is
-  only one route. Also: a weak scaffold, an unrepresentative prompt set, a
-  checkpoint that is not the deployed model, stopping the search early, running
-  the eval five times and reporting the median. Rank them by how deniable each
-  is — deniability is what makes a route attractive.
-- **Detection.** For each route, what would reveal it. Independent re-runs,
-  mandated elicitation floors, held-out sets, publication of full logs,
-  comparison against an external baseline. Say honestly which routes have no
-  detection at all.
-- **The incentive.** The core deliverable. Penalty scaled to what the low score
-  bought, plus the reporting rule that makes the penalty attachable — you
-  cannot punish under-elicitation without a stated standard of elicitation to
-  fall short of.
-- **The perverse-effect check.** Every anti-sandbagging rule pushes somewhere.
-  A mandated elicitation floor can become a ceiling. Aggressive penalties can
-  stop developers running exploratory evals at all. Name the effect your design
-  produces and say why it is worth it.
+The idea's research questions:
 
-## Why it exists
+> How can regulators address the problem of sandbagging in evaluations?
+> How can they handle the issue of liability and responsibility?
+>
+> What tools exist in general, and which seem most applicable to AI?
+>
+> What can we learn from other industries?
 
-This is where the technical and policy halves of the track have to meet. A pure
-methodology answer ("elicit harder") ignores that the elicitor chooses how hard;
-a pure policy answer ("penalise sandbagging") ignores that you cannot detect it
-without methodology. Learners who can hold both are exactly what
-technical-governance teams are hiring for.
+## What you produce
 
-It also generalises. Self-reported measurement under a threshold with
-consequences is the same structure as emissions testing, drug trials and safety
-certification — and every one of those had to solve this, badly, before it
-solved it well.
-
-## Scope
-
-**In scope:** published eval methodology, frontier safety frameworks and their
-threshold language, and analogous testing regimes in other industries.
-
-**Out of scope:** building a sandbagging detector, and proving any specific
-developer has done it. This is design work about an incentive structure, not an
-accusation.
-
-## What good looks like
-
-| Dimension | Weak | Strong |
-|---|---|---|
-| Taxonomy | "Developers might underreport" | Routes ranked by deniability, with the most deniable identified |
-| Detection | "Independent verification" | Per route, the specific check — and the routes with none, named |
-| Incentive | "Significant penalties" | Scaled to the benefit obtained, attached to a stated elicitation standard |
-| Perverse effects | Unconsidered | The effect your rule produces, and the trade you accept |
-
-## Getting started
-
-1. Rank the routes by deniability first. Deliberate lying is the easy case and
-   the least likely; the design problem is the manoeuvres that look like
-   ordinary methodological choices.
-2. Write the elicitation standard before the penalty. Without it there is
-   nothing to enforce against.
-3. Test your rule against an honest developer having a bad quarter. If it
-   punishes them too, redesign.
+The incentive design the questions ask for: the mechanisms that
+dis-incentivise sandbagging, the liability and responsibility question
+answered for the case the background names — a misaligned agent
+sandbagging without the developer's intent — and what the tools of other
+industries transfer to AI.

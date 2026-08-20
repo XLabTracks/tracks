@@ -15,75 +15,44 @@ skills: [regulatory design, administrative process, decision-test drafting, case
 sources:
   - "[A Collection of AI Governance Research Ideas — von Knebel & Anderljung (2024), idea 57: pre-emptive authorization for AI training](https://www.markusanderljung.com/blog/a-collection-of-ai-governance-research-ideas-2024)"
 similar: [frontier-ai-public-utilities]
-updated: 2026-08-04
+updated: 2026-08-20
 ---
 
-## The brief
+## The idea, as posed
 
-Week 6 covers licensing as one of the live regulatory-design debates. It is
-argued almost entirely at the level of principle — pro-licensing versus
-anti-licensing — and almost never at the level where licensing regimes
-succeed or fail, which is administrative design.
+From [A Collection of AI Governance Research Ideas — von Knebel &
+Anderljung (2024)](https://www.markusanderljung.com/blog/a-collection-of-ai-governance-research-ideas-2024),
+idea 57, "Pre-Emptive Authorization for AI Training", suggested by
+Lennart Heim. Quoted:
 
-Design the regime.
+> Extending the regulation of frontier AI systems to potentially deny
+> specific training attempts is an ambitious proposal that asks for a
+> substantial burden of proof. Why would we consider it necessary to
+> prevent an AI system from even being trained, especially when our
+> regulatory focus is often on the deployment of technologies? After all,
+> we are not aware of the specific risks of an AI system when it has not
+> yet come into existence. Despite these concerns, “pre-emptive
+> authorization” could be warranted due to (i) the risk of proliferation,
+> (ii) potential dangers arising during the training run, and (iii)
+> practical benefits related to the compute moat. More concretely, a
+> regulatory framework could require AI developers to secure a permit
+> before they're allowed to train frontier AI systems. This permit would
+> be evaluated on two factors: the level of responsibility demonstrated by
+> the AI developer (Schuett et al., 2023 and the properties of the
+> training run. This approach to regulation is not unprecedented. We find
+> parallels in other disciplines such as biology, where approvals are
+> frequently mandated before experiments. Moreover, one can draw
+> comparisons with the stringent controls placed on the construction of
+> nuclear weapons (Baker, 2023).
 
-- **The trigger.** What requires authorisation. Compute above a line, a
-  capability class, a deployment context, or a combination. Say what
-  deliberately does not.
-- **The decision test.** What the applicant must show and what the agency must
-  find. This is the hard part, and the honest difficulty is that the evidence
-  a regulator would want — how capable will this model be? — does not exist
-  before the run. Say how your test handles that: conditional authorisation,
-  a plan-based test rather than an outcome-based one, staged approval at
-  checkpoints.
-- **Timelines and default.** How long the agency has, and what happens on
-  silence. Deemed approval and deemed refusal are completely different regimes
-  and the choice is usually made by accident.
-- **The caseload.** Estimate applications per year from your trigger, and the
-  staff needed to decide them at the quality your test demands. A regime that
-  generates more cases than the agency can decide converts into rubber-stamping,
-  which is worse than no regime because it launders the decision.
-- **Appeal and review.** What an applicant can challenge, and the sunset or
-  review clause, because the trigger will be wrong within two years.
-- **The honest downside.** Who this entrenches. Licensing raises fixed costs,
-  which advantages incumbents; say by how much and whether you accept it.
+The idea's research question:
 
+> How can a regime based on preemptive authorization be justified? What
+> arguments support this?
 
-## Why it exists
+## What you produce
 
-Learners arrive at licensing as a position to hold. They should leave with the
-understanding that a licensing regime is a queue, a test and a staffing model,
-and that most of the outcome is decided by those three rather than by the
-statute's ambition.
-
-The caseload estimate is the piece that transfers everywhere. Any proposed
-approval regime — for models, for deployments, for exports — lives or dies on
-whether the decision-maker can actually decide at volume.
-
-## Scope
-
-**In scope:** licensing and pre-approval regimes in other sectors (pharma,
-nuclear, aviation, financial authorisations) as design and staffing anchors,
-plus the published AI-licensing debate.
-
-**Out of scope:** statutory drafting, and the constitutional question of
-whether a given jurisdiction may do this. Pick a jurisdiction, assume the
-authority exists, and design well within it.
-
-## What good looks like
-
-| Dimension | Weak | Strong |
-|---|---|---|
-| Decision test | "Demonstrate adequate safety" | A test the agency could actually apply pre-training, with its evidence problem named |
-| Timelines | Unstated | A clock, and an explicit choice between deemed approval and deemed refusal |
-| Caseload | Ignored | Applications per year estimated, with the staffing the test implies |
-| Downside | Unacknowledged | The entrenchment effect estimated, and accepted or mitigated on the record |
-
-## Getting started
-
-1. Write the decision test first and immediately ask what evidence exists
-   *before* the run. That question reshapes every licensing design that has
-   ever been proposed and most drafts never confront it.
-2. Anchor the caseload on a real regulator's published throughput. It is the
-   fastest way to find out whether your trigger is administrable.
-3. Choose deemed approval or deemed refusal deliberately, and say why.
+The regime the background sketches, specified: the permit and the two
+factors it is evaluated on, worked into a trigger, a decision test,
+timelines, and a caseload estimate — with the justification the research
+question asks for argued rather than assumed.

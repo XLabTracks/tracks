@@ -14,77 +14,76 @@ audience: The agency that would be asked to stand this up, and the committee fun
 skills: [cost estimation, institutional design, inspection regime design, dependency analysis]
 prerequisites: [Verification 1 — actors, Verification 2.1 — the hardware layer, Verification 4.1 — feasibility and layering]
 sources:
-  - "[Orphaned Policies (post 5 of 7 on AI governance) — Mass_Driver, orphan 8](https://www.lesswrong.com/posts/wFKZmvfRfNn24HNHp/orphaned-policies-post-5-of-7-on-ai-governance)"
-updated: 2026-08-04
+  - "[Orphaned Policies (Post 5 of 7 on AI Governance) — Mass_Driver (2025), orphan 8: compute monitoring](https://www.lesswrong.com/posts/wFKZmvfRfNn24HNHp/orphaned-policies-post-5-of-7-on-ai-governance)"
+  - "[What does it take to catch a Chinchilla? Verifying Rules on Large-Scale Neural Network Training via Compute Monitoring — Shavit (2023), §3.2](https://arxiv.org/abs/2303.11341)"
+updated: 2026-08-20
 ---
 
-## The brief
+## The idea, as posed
 
-Module 2.1 tells you what the hardware layer can and cannot do today: chip
-identity is solved but not unbreakable, secure boot has an inverted threat
-model because the owner is the party you are trying to catch, and no production
-chip meters tamper-resistantly. The orphan catalogue says the same thing from
-the other end — the timing analysis exists, and
-[Shavit](https://arxiv.org/abs/2303.11341) even sketches an
-inspector headcount, but who employs those inspectors, what the penalties
-are, and who pays for the hardware innovations have never been costed.
+From [Orphaned Policies (Post 5 of 7 on AI Governance) — Mass_Driver
+(2025)](https://www.lesswrong.com/posts/wFKZmvfRfNn24HNHp/orphaned-policies-post-5-of-7-on-ai-governance),
+the "Compute Monitoring" entry (orphan 8). Quoted:
 
-Do the costing.
+> There has been much discussion of how the government could attempt to
+> track large clusters of computing power with the goal of knowing who is
+> doing large-scale training runs so that the government could intervene
+> in an emergency. Yonadav Shavit’s 2023 paper “What Does It Take to Catch
+> a Chinchilla?” provides a useful amount of detail about how often
+> inspections would need to take place, but there is still much work to be
+> done in terms of figuring out who would do these inspections, what the
+> penalties would be for noncompliance, and how the hardware innovations
+> required would be paid for.
 
-- **The regime you are pricing.** One jurisdiction, one threshold, one class of
-  facility. Declaration, on-site inspection, remote telemetry, or some mix —
-  pick, because they cost wildly different amounts.
-- **Headcount and cadence.** How many inspectors, with what skills, visiting
-  how often, to cover how many facilities. Anchor against a real inspectorate
-  in another domain and say where the anchor is wrong.
-- **The penalty schedule.** What misdeclaration costs, scaled so that
-  compliance is cheaper than the expected value of cheating. Show that
-  arithmetic; it is the part everyone skips.
-- **Hardware dependencies.** Which parts of your regime need capability that
-  does not exist in shipping silicon. Separate what works today from what
-  needs a hardware generation, and put a date on the second column.
-- **The bill.** One number, with its three biggest line items and the
-  assumption that moves it most.
+Two paragraphs later, the entry names the numbers still missing:
 
-## Why it exists
+> There are many details that remain to be worked out in terms of what
+> specific hardware features could and should be placed on chips to make
+> them easier for the government to monitor. Should advanced AI chips have
+> GPS locators? Should they include proof-of-work features that allow
+> others to identify what types of computations they were used on and
+> roughly how many of those computations were performed? Should chips have
+> a ‘kill switch’ that allows them to be remotely deactivated, or, more
+> aggressively, a dead man’s switch that automatically deactivates them if
+> they do not receive the correct password at periodic intervals?
+>
+> How much would it cost to develop each of these features, and how
+> quickly could they be developed and manufactured? There are several
+> academic papers that discuss these features in the abstract, but I am
+> not aware of any that provide concrete estimates of time and cost. You
+> can help by doing research that narrows down the range of plausible
+> estimates.
 
-Verification proposals are usually priced in feasibility adjectives —
-"challenging", "achievable in principle". Budget offices do not fund
-adjectives. Converting a mechanism into headcount, cadence and a penalty
-schedule is what makes the difference between a paper and a programme, and it
-tends to reveal that the binding constraint is people rather than physics.
+The paper the entry leans on poses the inspection arithmetic itself — from
+[What does it take to catch a Chinchilla? — Shavit
+(2023)](https://arxiv.org/abs/2303.11341), §3.2 and its footnoted
+estimate:
 
-It also feeds Module 4 directly. The sequencing question — what works for an
-MVP three-month pause versus what needs years of institution-building — cannot
-be answered without something like this number.
+> Yet, for training runs at the scale of 10^{25} FLOPs or greater,
+> monitoring could be done with a bureaucracy similar in size to the IAEA.
+>
+> We want to estimate the number of inspectors needed to catch a
+> Chinchilla-280B-sized training run, with 10^{25} FLOPs, given several
+> more years of hardware progress and global production.
+>
+> Given C=10^{7} worldwide chips (>5\times global stocks as of 2022), each
+> of which can output a=3\cdot 10^{15}\cdot 86400 FLOPs per day (3\times
+> more FLOP/s than the NVIDIA H100), detecting a Chinchilla-280B-sized run
+> within T=30 days of its completion anywhere on earth with 90%
+> probability would require roughly 232,000 worldwide chip samples per
+> year.
+>
+> A single inspector might be expected to verify at least 1000 chips a
+> year, especially if those chips are brought to a central location (see
+> Section 3.1).
+>
+> This would require \approx 232 inspectors, slightly smaller than the 280
+> active IAEA inspectors as of 2021.
 
-## Scope
+## What you produce
 
-**In scope:** public compute-monitoring literature, published inspectorate
-budgets and staffing from analogous regimes, public datacentre and chip market
-data.
-
-**Out of scope:** classified or proprietary cost data, and precision. This is
-order-of-magnitude work with the assumptions exposed; a confident single
-figure with no sensitivity is worse than a range.
-
-**Do not price the ideal regime.** Price the one you would actually recommend
-starting with, and note what the full version would add.
-
-## What good looks like
-
-| Dimension | Weak | Strong |
-|---|---|---|
-| Scope | "A compute monitoring regime" | One jurisdiction, one threshold, one facility class, stated up front |
-| Staffing | A headcount | Anchored to a real inspectorate, with the disanalogy named |
-| Penalties | "Substantial fines" | A schedule, with the compliance-versus-cheating arithmetic shown |
-| Dependencies | Mechanisms listed as available | Split into shipping-today and needs-a-hardware-generation, with dates |
-
-## Getting started
-
-1. Find a real inspectorate's published budget and staffing in week one. It is
-   your anchor and it will reshape the whole estimate.
-2. Do the penalty arithmetic before the headcount. If cheating pays, the
-   inspectors are decoration.
-3. Keep a visible assumptions register from the first estimate. It is the part
-   a reader will actually argue with, and that is the point.
+The costing the entry says is missing: who employs the inspectors, the
+penalty schedule for noncompliance, who pays for the hardware features,
+and the narrowed range of time-and-cost estimates the last quoted
+paragraph asks for — built on the inspection arithmetic Shavit's estimate
+begins.

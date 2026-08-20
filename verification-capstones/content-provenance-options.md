@@ -14,73 +14,76 @@ audience: The legislator being told that watermarking solves AI-generated conten
 skills: [robustness testing, measurement, policy-options analysis, communicating technical limits]
 sources:
   - "[A Collection of AI Governance Research Ideas — von Knebel & Anderljung (2024), idea 59: what policy options exist for ensuring AI-generated content is identifiable as such?](https://www.markusanderljung.com/blog/a-collection-of-ai-governance-research-ideas-2024)"
-updated: 2026-08-04
+updated: 2026-08-20
 ---
 
-## The brief
+## The idea, as posed
 
-Week 8's exercise has you run a watermark detector and measure how it fares
-under paraphrasing. This capstone takes that measurement and turns it into the
-document a legislature needs, because "AI content must be labelled" is now in
-draft law in several places and the technical basis for it is thinner than the
-drafting implies.
+From [A Collection of AI Governance Research Ideas — von Knebel &
+Anderljung (2024)](https://www.markusanderljung.com/blog/a-collection-of-ai-governance-research-ideas-2024),
+idea 59, "What Policy Options Exist for Ensuring That AI-Generated
+Content is Identifiable As Such?", suggested by Markus Anderljung.
+Quoted:
 
-- **The robustness curve.** Take one published scheme and measure detection as
-  the content is put through ordinary handling: paraphrase, translate and
-  translate back, truncate, mix with human text, re-generate a passage, apply a
-  format conversion. Report where detection falls to chance. Include the
-  *innocent* transformations — a lot of provenance signal dies to a copy-paste
-  through a word processor, with no adversary involved.
-- **The three layers, separated.** Output watermarking (a signal in the
-  content), metadata provenance (a signed manifest travelling alongside), and
-  post-hoc detection (a classifier guessing). They fail differently, and a
-  policy that conflates them will mandate the weakest one.
-- **The two error costs.** A false positive accuses a person of using AI. A
-  false negative lets synthetic content pass. State which your measurements
-  favour, and what threshold a regime would have to pick.
-- **The open-weights hole.** A watermark a developer applies at inference is
-  absent from a model whose weights anyone can run. Say what that does to any
-  obligation aimed at content rather than at platforms.
-- **The options memo.** Three obligations a regulator could impose — on model
-  providers, on platforms, on distributors — ranked by what your measurements
-  say each would actually achieve, with the one you would not impose named.
+> It seems important that at least certain AI-generated content can be
+> identified as such, since we might be headed for a world where
+> AI-generated content and AI-originating actions on the internet are
+> indistinguishable from human-produced content and actions. That doesn’t
+> intuitively seem like a good outcome given the difficulties to have a
+> good overview of how AI is affecting the world or finding levers to
+> improve its effects. Reasons for making AI-generated content
+> identifiable include:
+>
+> Transparency: Knowing whether someone is interacting with AI content or
+> an AI agent and knowing that a piece of content is AI-generated is
+> important to judge whether it represents real events. Citizens may also
+> have an interest in knowing whether they are engaging with an AI system
+> or not, e.g. as this might inform decisions to seek a second opinion on
+> a decision.
+>
+> Enforcing different rules for AI-generated content and actions:
+> Companies ask people to verify that they are human to avoid abuse or
+> breakdown of their services (e.g. Captcha).
+>
+> Incident investigation: As AI systems become more and more integrated
+> into society, we’ll need better information about how and when things go
+> wrong. To do so, it will be important to be able to trace specific
+> incidents or real-world harms to specific AI systems or at the very
+> least to the use of AI systems in the process.
+>
+> Macro assessments of AI adoption: Currently, there is very little
+> quality public data on the adoption of AI across society. If there were
+> watermarks, we could make such assessments by running a detector e.g.
+> over Facebook.
+>
+> Possible techniques for ensuring such identification include
+> watermarking, content provenance, retrieval-based detection and post-hoc
+> detection.
 
-## Why it exists
+The idea's research questions:
 
-Content provenance is the AI policy area where the gap between what the law
-assumes and what the technology does is widest and easiest to demonstrate. A
-learner who has personally watched detection collapse under a round-trip
-translation will never again write a sentence that treats watermarking as
-solved — and can show a legislator the same curve in thirty seconds.
+> What policy options are available to ensure developers take those
+> actions? Possible options include:
+>
+> Literally mandating it, but that could be very onerous, so perhaps
+> should only be done for certain systems, e.g. those with a large
+> user-base.
+>
+> Requiring that users include identifiers on content they post, which
+> might incentivise companies to put identifiers into their AI tools.
+>
+> Tort liability
+>
+> Others (?)
+>
+> Which of these are most promising, and what do they require from other
+> actors in the value chain (e.g. developers, but also users, and
+> regulators)?
 
-The transferable skill is the one the track exists for: producing the
-measurement yourself and then writing the policy document that is honest about
-it, rather than citing someone else's summary of either.
+## What you produce
 
-## Scope
-
-**In scope:** one published watermarking scheme with available code, a small
-open model or an API, and public provenance standards for the metadata layer.
-
-**Out of scope:** designing a new watermarking scheme, and building an
-adversarial removal tool beyond the ordinary transformations above. The point
-is that ordinary handling is enough; you do not need to build an attack.
-
-## What good looks like
-
-| Dimension | Weak | Strong |
-|---|---|---|
-| Measurement | "Watermarks are fragile" | A curve, with the transformation and the point where detection reaches chance |
-| Layers | Treated as one thing | Three mechanisms separated, with their distinct failure modes |
-| Errors | Accuracy reported | Both error costs stated, with who bears each |
-| Options | "Watermarking should be required" | Three obligations ranked by measured achievable effect, and one rejected |
-
-## Getting started
-
-1. Run the innocent transformations before the adversarial ones. If a copy
-   through a word processor kills the signal, the adversarial section is
-   almost beside the point.
-2. Separate the three layers on day one. Most of the public confusion in this
-   area is layer confusion.
-3. Write the options memo for a reader who has already been told this is
-   solved. That framing produces a much sharper document.
+A robustness measurement of the techniques the idea names — watermarking,
+content provenance, retrieval-based detection, post-hoc detection — and
+the policy-options memo the research questions ask for: which options are
+available, which are most promising, and what each requires from
+developers, users, and regulators.

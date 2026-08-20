@@ -13,74 +13,47 @@ mentor: recommended
 audience: The monitoring body that has to watch an ecosystem, not a model.
 skills: [scalable evaluation design, sampling, ecosystem monitoring, cost-aware measurement]
 sources:
+  - "[Open Technical Problems in Open-Weight AI Model Risk Management — Casper et al. (2026), §4.3.4: how can we scalably evaluate thousands of models?](https://arxiv.org/abs/2608.07514)"
   - "[Open Technical Problems in Open-Weight AI Model Risk Management (2025): how can we scalably evaluate thousands of models?](https://openreview.net/forum?id=8QyGLnFkzc)"
-updated: 2026-08-04
+updated: 2026-08-20
 ---
 
-## The brief
+## The idea, as posed
 
-Governance treats an open-weight release as one object. The ecosystem does not:
-within months a popular base model has thousands of public descendants —
-fine-tunes, merges, quantisations, distillations, uncensored variants. Nobody
-is going to evaluate all of them. The question is what a monitoring body should
-do instead.
+From [Open Technical Problems in Open-Weight AI Model Risk Management —
+Casper et al. (2026)](https://arxiv.org/abs/2608.07514),
+§4.3.4. Quoted:
 
-- **The population.** Characterise the real derivative set for one base model
-  from public hub metadata: how many, of what kinds, how they cluster, how
-  download counts distribute. This is desk work and it reshapes the problem —
-  attention almost always concentrates in a tiny fraction.
-- **The triage.** Your scheme for deciding what gets looked at. Candidate
-  signals: reach, whether the modification targets safety behaviour, declared
-  purpose, lineage from an already-flagged model, cheap automated probes.
-  Ordered, with a stated budget: *n* models evaluated per month.
-- **The cheap screen.** One or two probes cheap enough to run on everything —
-  a handful of prompts, a refusal-rate measurement — that decide who gets the
-  expensive eval. Report its false-negative rate against your deep evaluations,
-  because a screen that misses is worse than no screen if it creates confidence.
-- **The pilot.** Run the whole thing on a real population at small scale.
-  Report cost per model at each stage and what the triage caught that a random
-  sample would have missed.
-- **The blind spots.** What this scheme structurally cannot see: private
-  fine-tunes, models distributed outside public hubs, and derivatives whose
-  modification is invisible to your screen.
+> How can we scalably evaluate thousands of models? A major challenge to
+> better understanding the open-weight ecosystem stems from the sheer
+> number of existing models. Coordinated efforts to evaluate their safety
+> properties at scale could improve practical risk management and future
+> risk modeling. For example, platforms like Hugging Face which host and
+> distribute large numbers of AI models can struggle to reliably identify
+> and remove ones that violate their content policies (e.g., 148).
+> However, ecosystem-level evaluation is complicated by scale,
+> architectural diversity, and the continuous introduction of new models.
+> Evaluations involving tampering attacks can be particularly challenging
+> due to the computational costs of fine-tuning and other tampering
+> algorithms. There is a need for infrastructure for evaluating models at
+> scale that balances efficiency with thoroughness. These approaches might
+> also integrate new technical resources like model provenance techniques
+> (see Section 4.5).
 
-## Why it exists
+A sibling problem in §4.5.2 sizes the same ecosystem:
 
-Week 8 covers the irreversibility of open release and fine-tuning attacks on
-safeguards. Both lessons are usually taught about *a* model. The governance
-object is the ecosystem, and monitoring an ecosystem on a fixed budget is a
-different discipline — sampling, triage and cheap screens rather than depth.
+> Ecosystem-wide heritage inference is desirable (93) but not tractable
+> with current infrastructure and methods. For example, using current
+> methods (94), charting models across a platform such as Hugging Face
+> would require millions of pairwise comparisons between models. While
+> independence between two specific models is computationally inexpensive
+> (251), continuous ecosystem-wide monitoring must accommodate daily
+> uploads of potentially thousands of new models.
 
-It is also one of the few genuinely open problems in this bank where a learner
-can produce a real partial answer in three weeks, because the population data is
-public and the pilot can be small.
+## What you produce
 
-## Scope
-
-**In scope:** public model-hub metadata, one base model's derivative
-population, small open models, and cheap automated probes.
-
-**Out of scope:** evaluating dangerous capabilities in depth, and any probe
-that would itself produce misuse material. Use a benign behavioural proxy —
-refusal-rate drift on a safe prompt set is enough to demonstrate the method.
-
-**The budget constraint is the exercise.** A triage scheme that assumes you can
-evaluate everything has not been designed.
-
-## What good looks like
-
-| Dimension | Weak | Strong |
-|---|---|---|
-| Population | "There are many derivatives" | Counted and characterised from real metadata, with the attention distribution shown |
-| Triage | A priority list | An ordered scheme with a stated monthly budget and what falls outside it |
-| Screen | Described | Run, with its false-negative rate measured against the deep evaluations |
-| Blind spots | Unmentioned | Named, with what the scheme's output should therefore not be taken to mean |
-
-## Getting started
-
-1. Pull the population metadata in week one. The shape of the distribution
-   decides your whole design and it takes an afternoon.
-2. Build the cheap screen before the triage. Knowing what a five-cent probe can
-   tell you determines which signals are worth ranking on.
-3. Compare your triage against a random sample of the same size. If it does not
-   beat random, the signals were wrong and you have time to change them.
+The infrastructure question, answered at pilot scale: a triage scheme over
+one base model's real derivative population with a stated monthly budget,
+a cheap screen that decides which models get the expensive evaluation —
+with its false-negative rate measured — and the balance of efficiency with
+thoroughness the problem asks for, priced per model.

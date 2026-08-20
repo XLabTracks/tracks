@@ -14,14 +14,15 @@ skills: [policy analysis, stakeholder mapping, strategy planning]
 sources:
   - "[A Collection of AI Governance Research Ideas — von Knebel & Anderljung (2024), idea 21: implementation details of the best practices list](https://www.markusanderljung.com/blog/a-collection-of-ai-governance-research-ideas-2024)"
 similar: [procurement-as-lever, rmf-compliance-scorecard]
-updated: 2026-08-06
+updated: 2026-08-20
 ---
 
 ## The idea, as posed
 
 From [A Collection of AI Governance Research Ideas — von Knebel &
 Anderljung (2024)](https://www.markusanderljung.com/blog/a-collection-of-ai-governance-research-ideas-2024),
-idea 21, "Implementation Details of the 'Best Practices' List". Quoted:
+idea 21, "Implementation Details of the “Best Practices” List".
+Quoted:
 
 > Researchers from GovAI have previously surveyed leading experts from AGI
 > labs, academia and civil society on best practices for those developing
@@ -30,13 +31,12 @@ idea 21, "Implementation Details of the 'Best Practices' List". Quoted:
 > from a wide range of actors across sectors, which should make them
 > easier to embed into existing or forthcoming regulatory regimes. That
 > said, the survey was focused mostly on what would be good ideas, and
-> given the methodology, didn't go into depth as to how these approaches
+> given the methodology, didn’t go into depth as to how these approaches
 > would be implemented in practice.
->
-> Research question: How can the items identified in this survey be
-> implemented? Methodology: policy analysis, strategy planning,
-> stakeholder mapping, other. Further reading: "Towards best practices in
-> AGI safety and governance: A survey of expert opinion".
+
+The idea's research question, under its own "Research Questions" heading:
+
+> How can the items identified in this survey be implemented?
 
 ## What you produce
 
@@ -44,4 +44,3 @@ The implementation depth the survey deliberately left out: for items from
 the surveyed list, how each would be implemented in practice, using the
 methodology the idea names — policy analysis, strategy planning,
 stakeholder mapping.
-

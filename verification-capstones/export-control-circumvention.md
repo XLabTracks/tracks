@@ -15,75 +15,34 @@ skills: [open-source estimation, triangulation, trade-data literacy, reasoning u
 sources:
   - "[A Collection of AI Governance Research Ideas — von Knebel & Anderljung (2024), idea 70: extent of export control circumvention](https://www.markusanderljung.com/blog/a-collection-of-ai-governance-research-ideas-2024)"
 similar: [compute-production-gap-china]
-updated: 2026-08-04
+updated: 2026-08-20
 ---
 
-## The brief
+## The idea, as posed
 
-Week 4 covers export controls and their enforcement, including smuggling. The
-open question underneath the whole policy is quantitative: how much gets
-through? Nobody has published a defensible bound, which means the debate is
-conducted entirely in anecdotes — a seizure here, a shell company there.
+From [A Collection of AI Governance Research Ideas — von Knebel &
+Anderljung (2024)](https://www.markusanderljung.com/blog/a-collection-of-ai-governance-research-ideas-2024),
+idea 70, "Extent of Export Control Circumvention". Quoted:
 
-Build the estimate.
+> Export controls are a cornerstone of US attempts to prevent rival
+> nations’ access to AI hardware technologies. Understanding the extent of
+> circumvention of these controls (i.e., how many controlled items
+> eventually arrive in rival nations despite export controls) is important
+> to understanding how much such controls might actually translate into
+> denial of access by targeted countries.
 
-- **The routes.** Transshipment through third countries, shell purchasers,
-  cloud access as a substitute for possession, second-hand and grey markets,
-  smuggled units in small consignments, and rented capacity abroad. Each is a
-  different measurement problem.
-- **The evidence, triangulated.** Trade statistics and their mirror-data
-  discrepancies, enforcement actions, corporate disclosures, datacentre
-  buildout reporting, job postings, and public claims from the destination
-  side. Every source here is either self-interested or partial; say which for
-  each.
-- **The bound.** A range, not a number, with the reasoning visible and the
-  input that moves it most identified. State clearly what your estimate covers
-  — units? capacity? capacity actually usable for frontier training? — because
-  those differ by an order of magnitude and are routinely conflated.
-- **The enforcement recommendation.** Given the estimate, where should a small
-  investigative capacity be pointed, and what would tell you within a year
-  whether it worked.
+The idea's research question:
 
+> What is the quantitative extent of export control circumvention for
+> controlled items analogous to AI chips?
+>
+> Ideally, this would be denominated in total controlled stocks or flows
+> of such controlled items.
 
-## Why it exists
+## What you produce
 
-This is the track's hardest estimation problem and its most honest one. Every
-source is adversarial or incomplete, and the correct output is a range with
-loud caveats rather than a headline figure. Learners who can produce that —
-and resist the pull toward a citable number — have the single most transferable
-skill in open-source policy analysis.
-
-It also has a real audience. Enforcement capacity is small and allocated on
-intuition; an estimate with a stated method is immediately more useful than the
-anecdote it replaces, even when the range is wide.
-
-## Scope
-
-**In scope:** public trade data, enforcement announcements, corporate filings,
-market analysis, and open reporting on datacentre construction.
-
-**Out of scope:** classified sources, and naming specific companies as
-smugglers on circumstantial evidence. Route analysis is fine; accusation is
-not, and a capstone that gets that wrong is worse than one that is late.
-
-**Also out of scope:** a point estimate. If your write-up has a single headline
-number and no range, it will be quoted without its caveats — assume it will,
-and write accordingly.
-
-## What good looks like
-
-| Dimension | Weak | Strong |
-|---|---|---|
-| Routes | "Smuggling occurs" | Routes separated, each with its own measurement approach |
-| Sources | Cites reporting | Each source's bias named, and at least one claim triangulated across three |
-| The bound | A number | A range, with the sensitivity driver named and the unit of account stated |
-| Recommendation | "Strengthen enforcement" | Where to point limited capacity, and the one-year test of whether it worked |
-
-## Getting started
-
-1. Fix the unit of account in the first session — units, nominal capacity, or
-   frontier-usable capacity. Almost every confused analysis of this question
-   changes unit halfway through.
-2. Start from mirror-data discrepancies in trade statistics. It is the one
-   source that is not downstream of somebody's press release.
-3. Write the caveat paragraph before the estimate, and keep it at the top.
+The quantitative extent the research question asks for: a bounded estimate
+of circumvention, denominated — as the idea specifies — in total
+controlled stocks or flows of such controlled items, with the evidence
+triangulated, the unit of account stated, and an enforcement
+recommendation attached.

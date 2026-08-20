@@ -14,7 +14,7 @@ skills: [market-structure analysis, policy analysis]
 sources:
   - "[A Collection of AI Governance Research Ideas — von Knebel & Anderljung (2024), idea 53: should parts of the frontier AI industry be treated like public utilities?](https://www.markusanderljung.com/blog/a-collection-of-ai-governance-research-ideas-2024)"
 similar: [pre-emptive-authorization]
-updated: 2026-08-06
+updated: 2026-08-20
 ---
 
 ## The idea, as posed
@@ -24,7 +24,7 @@ Anderljung (2024)](https://www.markusanderljung.com/blog/a-collection-of-ai-gove
 idea 53, "Should Parts of the Frontier AI Industry Be Treated Like Public
 Utilities?", suggested by Markus Anderljung. Quoted:
 
-> I think it's reasonably likely that we'll see the following development:
+> I think it’s reasonably likely that we'll see the following development:
 > the AI industry will largely build on a small number of really capable
 > foundation models. At this foundation model layer, there is a natural
 > oligopoly due to economies of scale, learning-by-doing from training
@@ -32,7 +32,10 @@ Utilities?", suggested by Markus Anderljung. Quoted:
 > system, probably some network effects, and so on. Upon this foundation
 > model layer, a huge number of downstream applications are built, i.e. we
 > see concentration at the FM layer and then less concentration further
-> down the supply chain. […]
+> down the supply chain. Assumptions that go into the above include
+> (though all don't seem necessary): Scaling will continue to yield
+> dividends, model performance will continue to be a main differentiator,
+> model generality will continue to matter.
 >
 > If this picture is right, that suggests that it might be right to treat
 > frontier FMs similarly to public utilities. They'll become the bedrock
@@ -43,15 +46,16 @@ Utilities?", suggested by Markus Anderljung. Quoted:
 > market power is not abused, that certain kinds of vertical integration
 > is warded off, that the products that are offered to people and
 > downstream businesses are safe, reliable, and high quality.
+
+The idea's research questions:
+
+> What would the implications (both positive and negative) of treating
+> foundation models as public utilities be?
 >
-> Research questions: What would the implications (both positive and
-> negative) of treating foundation models as public utilities be? What
-> effects would this have on market concentration? Methodology:
-> literature review, expert interviews, modelling, case studies.
+> What effects would this have on market concentration?
 
 ## What you produce
 
 The analysis the two research questions describe — implications of
 public-utility treatment argued positive and negative, and the effect on
 market concentration — using the methodology the idea names.
-

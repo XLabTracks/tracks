@@ -14,75 +14,60 @@ audience: The funder who would write the cheque, and the person who would have t
 skills: [theory of change, programme design, budgeting, evaluation design, counterfactual reasoning]
 prerequisites: [Any track, weeks 1-7 complete, Policy week 1 — theory of change]
 sources:
-  - "[Blueprints for AI Safety conferences (FBB #9) — The Field Building Blog (2025)](https://fieldbuilding.substack.com/p/blueprints-for-ai-safety-conferences)"
-updated: 2026-08-04
+  - "[Blueprints for AI Safety Conferences (FBB #9) — The Field Building Blog (2025)](https://fieldbuilding.substack.com/p/blueprints-for-ai-safety-conferences)"
+updated: 2026-08-20
 ---
 
-## The brief
+## The idea, as posed
 
-Pick one field-building intervention — a one-day summit, a three-day
-conference, a reading group series, a small organisation filling a named gap —
-and design it to the point of being runnable.
+From [Blueprints for AI Safety Conferences (FBB #9) — The Field
+Building Blog (2025)](https://fieldbuilding.substack.com/p/blueprints-for-ai-safety-conferences).
+Quoted:
 
-The blueprint contains:
+> TLDR: We need more AI Risk-themed events, so I outlined four such events
+> with different strategies. These are: online conferences, one-day
+> summits, three-day conferences and high-profile events for building
+> bridges between various communities.
 
-- **The theory of change.** Who changes what behaviour because this exists,
-  and by what mechanism. One diagram plus one paragraph. If the mechanism is
-  "people meet and good things happen", keep going.
-- **The counterfactual.** What happens to your target people if this does not
-  exist. This is where most field-building proposals quietly fail, because the
-  honest answer is often "they attend the other event".
-- **The format.** Length, size, agenda shape, who is in the room and — harder
-  — who is deliberately not. Formats encode a theory; make yours explicit.
-- **Budget and staffing.** Itemised. Venue, travel, stipends, the organiser's
-  own time at a real rate. Name the largest line and defend it.
-- **The evaluation plan.** What you measure, when, and the number that would
-  make you not run it again. Measured *before* the event too, or you have no
-  baseline.
-- **The failure modes.** The three ways this goes wrong, including the two
-  boring ones — nobody comes, and the wrong people come.
+The post anchors the value with a theory of change:
 
-## Why it exists
+> To anchor the value of such events, I propose a general Theory of Change
+> (TOC) for AI Safety conferences. Events like these can lead attendees
+> to:
+>
+> Form connections
+>
+> Coordinate efforts
+>
+> Learn about career paths and cause areas
+>
+> Build motivation and clarity on next steps
+>
+> These changes increase the hours and resources dedicated to AI Safety
+> work, improving infrastructure and the quality of contributions. Over
+> time, this leads to:
+>
+> Greater alignment within the professional community
+>
+> Stronger advocacy and external legitimacy
+>
+> A more attractive and resilient movement
+>
+> Ultimately, we’re reinforcing pathways that create a stronger movement,
+> powered by the connections and insight fostered by these events.
 
-The program's own existence is a field-building bet. Making learners design
-one closes that loop: you get to see the argument that was made about you.
+And its conclusion hands the job to the reader:
 
-It also teaches evaluation under weak feedback, which is the honest condition
-of most governance work. Nothing here has a loss function. You have to decide
-in advance what evidence would count, knowing it will be thin, and then commit
-to being told you were wrong — the same discipline the tracks teach against
-thresholds and treaty regimes, applied to something you built.
+> By default, I think you shouldn’t wait around for others to organise
+> them, and assume they won’t happen unless you create them yourself. The
+> different events require different amounts of experience, so based on
+> where you are in your career, you should choose accordingly. Of course,
+> you should still coordinate with other organisations.
 
-## Scope
+## What you produce
 
-**In scope:** design, budget, and evaluation plan on paper. Talking to people
-who have run comparable things is strongly encouraged and cheap.
-
-**Out of scope:** actually running it. If your team wants to run it, that is a
-separate commitment made after the blueprint is graded — do not let the
-capstone become logistics.
-
-**Also out of scope:** an intervention whose target audience you cannot name
-individually enough to describe a typical attendee's week. Vague audiences
-produce unevaluable designs.
-
-## What good looks like
-
-| Dimension | Weak | Strong |
-|---|---|---|
-| Theory of change | "Builds the community" | A named group, a named behaviour change, and the mechanism between them |
-| Counterfactual | Unaddressed | An honest account of what those people would otherwise do, with the delta stated |
-| Budget | A total | Itemised, with the largest line defended and a cheaper variant costed |
-| Evaluation | "Feedback forms" | A pre-measure, a post-measure, and the threshold at which you would stop |
-
-The strongest blueprints include a section arguing the intervention should not
-happen, written well enough to be uncomfortable.
-
-## Getting started
-
-1. Write the counterfactual paragraph in the first session. It reshapes or
-   kills most ideas immediately, which is the cheapest possible time for that.
-2. Cost a deliberately smaller version alongside the real one. Funders ask,
-   and the small version is often better.
-3. Talk to one person who has run something similar before you finalise the
-   format. Thirty minutes of that beats a week of desk research on logistics.
+One of the four event types — or an intervention of the same kind — taken
+from outline to run-ready: the theory of change made specific to your
+audience, the counterfactual stated, the format, the itemised budget and
+staffing, and the evaluation plan that says how you would know the
+connections and insight the theory promises actually happened.

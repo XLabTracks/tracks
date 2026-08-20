@@ -5,6 +5,7 @@ import {
   NODE_W,
   ROOT_H,
   SIBLING_GAP,
+  isNearSeededLayout,
   layoutTree,
   withSeededPositions,
 } from "./layout";
@@ -110,6 +111,21 @@ describe("bench tree layout", () => {
     // No overlap between a's children and b.
     const b = layout.nodes.find((p) => p.node.id === "b")!;
     expect(a2.x + a2.w).toBeLessThanOrEqual(b.x + b.w);
+  });
+
+  it("isNearSeededLayout tolerates nudges and flags real re-arrangement", () => {
+    const nodes = withSeededPositions(
+      makeNodes([
+        { id: BENCH_ROOT_ID, parentId: null },
+        { id: "a", parentId: BENCH_ROOT_ID },
+        { id: "b", parentId: BENCH_ROOT_ID },
+      ]),
+    );
+    expect(isNearSeededLayout(nodes)).toBe(true);
+    const nudged = { ...nodes, a: { ...nodes.a, x: nodes.a.x! + 20 } };
+    expect(isNearSeededLayout(nudged)).toBe(true);
+    const moved = { ...nodes, a: { ...nodes.a, x: nodes.a.x! + 200 } };
+    expect(isNearSeededLayout(moved)).toBe(false);
   });
 
   it("withSeededPositions fills missing positions and keeps existing ones", () => {

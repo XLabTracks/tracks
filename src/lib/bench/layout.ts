@@ -91,6 +91,25 @@ export function seedPositions(
   );
 }
 
+/**
+ * True while the student hasn't meaningfully re-arranged the graph: every
+ * node sits within `tolerance` of where the tidy layout would put it. While
+ * this holds, structural changes (add/delete) re-run the tidy layout so the
+ * tree stays groomed; once the student arranges things, their positions win.
+ */
+export function isNearSeededLayout(
+  nodes: Record<string, BenchNode>,
+  tolerance = 48,
+): boolean {
+  const seeds = seedPositions(nodes);
+  return Object.values(nodes).every((n) => {
+    const s = seeds[n.id];
+    return (
+      Math.hypot((n.x ?? s.x) - s.x, (n.y ?? s.y) - s.y) < tolerance
+    );
+  });
+}
+
 /** Fill in positions for nodes that don't have one yet (v1 states, resets). */
 export function withSeededPositions(
   nodes: Record<string, BenchNode>,

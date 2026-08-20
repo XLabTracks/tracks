@@ -92,6 +92,8 @@ export interface BenchCanvasProps {
   selectedIds: string[];
   editingId: string | null;
   canEditStructure: boolean;
+  /** Bump to request a viewport re-fit (after tidy re-layouts). */
+  fitNonce?: number;
   onSelect: (ids: string[]) => void;
   onToggleSelect: (id: string) => void;
   onBeginEdit: (id: string) => void;
@@ -112,6 +114,7 @@ export function BenchCanvas({
   selectedIds,
   editingId,
   canEditStructure,
+  fitNonce,
   onSelect,
   onToggleSelect,
   onBeginEdit,
@@ -209,6 +212,12 @@ export function BenchCanvas({
     observer.observe(el);
     return () => observer.disconnect();
   }, []);
+
+  // The parent bumps fitNonce after tidy re-layouts (add/delete on an
+  // un-arranged graph): re-fit so the groomed tree is fully in view.
+  useEffect(() => {
+    if (fitNonce) fitToNodes(positionsRef.current);
+  }, [fitNonce]);
 
   // Plain wheel zooms around the cursor (needs a non-passive listener).
   useEffect(() => {

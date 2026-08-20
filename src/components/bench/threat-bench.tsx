@@ -21,7 +21,12 @@ import { Check, RotateCcw } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
-import { childrenOf, withSeededPositions } from "@/lib/bench/layout";
+import {
+  childrenOf,
+  isNearSeededLayout,
+  seedPositions,
+  withSeededPositions,
+} from "@/lib/bench/layout";
 import {
   BENCH_RELATIONS,
   BENCH_RELATION_LABELS,
@@ -105,6 +110,8 @@ export function ThreatBench({ scenario }: { scenario: BenchScenario }) {
   const [tagWhy, setTagWhy] = useState("");
   const [copied, setCopied] = useState(false);
   const [exportText, setExportText] = useState<string | null>(null);
+  /** Bumped to ask the canvas to re-fit the viewport (tidy add/delete). */
+  const [fitNonce, setFitNonce] = useState(0);
 
   // Load once on mount (localStorage is client-only), then autosave (debounced
   // — drags produce many state writes per second).
@@ -183,6 +190,11 @@ export function ThreatBench({ scenario }: { scenario: BenchScenario }) {
   const addChild = (parentId: string) => {
     const parent = state.nodes[parentId];
     if (!parent) return;
+    // While the graph still sits where the tidy layout put it, adding keeps
+    // it groomed: re-run the layout (the new node slots in to the right of
+    // its siblings) and re-fit the viewport. Once the student has arranged
+    // things manually, new nodes spawn near their parent instead.
+    const tidy = isNearSeededLayout(state.nodes);
     const siblings = childrenOf(state.nodes, parentId).length;
     const id = `n${state.nextSeq}`;
     setSelectedIds([id]);
@@ -200,12 +212,19 @@ export function ThreatBench({ scenario }: { scenario: BenchScenario }) {
         x: (parent.x ?? 0) + siblings * 56,
         y: (parent.y ?? 0) + 150,
       };
-      return {
-        ...prev,
-        nextSeq: prev.nextSeq + 1,
-        nodes: { ...prev.nodes, [nid]: node },
-      };
+      let nodes = { ...prev.nodes, [nid]: node };
+      if (tidy) {
+        const seeds = seedPositions(nodes);
+        nodes = Object.fromEntries(
+          Object.entries(nodes).map(([k, n]) => [
+            k,
+            { ...n, x: seeds[k].x, y: seeds[k].y },
+          ]),
+        );
+      }
+      return { ...prev, nextSeq: prev.nextSeq + 1, nodes };
     });
+    if (tidy) setFitNonce((n) => n + 1);
   };
 
   const rename = (id: string, label: string) =>
@@ -230,15 +249,26 @@ export function ThreatBench({ scenario }: { scenario: BenchScenario }) {
       )
     )
       return;
+    const tidy = isNearSeededLayout(state.nodes);
     const doomed = new Set(subtreeIds(state.nodes, id));
-    update((prev) => ({
-      ...prev,
-      nodes: Object.fromEntries(
+    update((prev) => {
+      let nodes = Object.fromEntries(
         Object.entries(prev.nodes).filter(([nid]) => !doomed.has(nid)),
-      ),
-    }));
+      );
+      if (tidy) {
+        const seeds = seedPositions(nodes);
+        nodes = Object.fromEntries(
+          Object.entries(nodes).map(([k, n]) => [
+            k,
+            { ...n, x: seeds[k].x, y: seeds[k].y },
+          ]),
+        );
+      }
+      return { ...prev, nodes };
+    });
     setSelectedIds((prev) => prev.filter((nid) => !doomed.has(nid)));
     setEditingId((prev) => (prev && doomed.has(prev) ? null : prev));
+    if (tidy) setFitNonce((n) => n + 1);
   };
 
   const toggleGate = (id: string) =>
@@ -384,6 +414,7 @@ export function ThreatBench({ scenario }: { scenario: BenchScenario }) {
         selectedIds={selectedIds}
         editingId={editingId}
         canEditStructure={canEditStructure}
+        fitNonce={fitNonce}
         onSelect={setSelectedIds}
         onToggleSelect={(id) =>
           setSelectedIds((prev) =>

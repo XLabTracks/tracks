@@ -76,6 +76,38 @@ function subtreeWidth(nodes: Record<string, BenchNode>, id: string): number {
   return Math.max(NODE_W, kidsWidth);
 }
 
+export interface NodePosition {
+  x: number;
+  y: number;
+}
+
+/** Tidy-layout center positions for every node — the seed/reset positions. */
+export function seedPositions(
+  nodes: Record<string, BenchNode>,
+): Record<string, NodePosition> {
+  const layout = layoutTree(nodes);
+  return Object.fromEntries(
+    layout.nodes.map((p) => [p.node.id, { x: p.x + p.w / 2, y: p.y + p.h / 2 }]),
+  );
+}
+
+/** Fill in positions for nodes that don't have one yet (v1 states, resets). */
+export function withSeededPositions(
+  nodes: Record<string, BenchNode>,
+): Record<string, BenchNode> {
+  if (Object.values(nodes).every((n) => n.x !== undefined && n.y !== undefined))
+    return nodes;
+  const seeds = seedPositions(nodes);
+  return Object.fromEntries(
+    Object.entries(nodes).map(([id, n]) => [
+      id,
+      n.x !== undefined && n.y !== undefined
+        ? n
+        : { ...n, x: seeds[id].x, y: seeds[id].y },
+    ]),
+  );
+}
+
 export function layoutTree(nodes: Record<string, BenchNode>): BenchLayout {
   const positioned: PositionedNode[] = [];
   const edges: BenchEdge[] = [];

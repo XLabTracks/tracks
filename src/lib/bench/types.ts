@@ -59,6 +59,8 @@ export interface BenchTag {
 export interface BenchNode {
   id: string;
   label: string;
+  /** Optional longer note; shown on hover / in edit mode, kept off the box. */
+  description?: string;
   /** null only for the root. */
   parentId: string | null;
   /** Gate over this node's CHILDREN (unused until it has two). */
@@ -68,6 +70,12 @@ export interface BenchNode {
   createdTurn: number;
   /** Monotonic creation counter; children render in seq order. */
   seq: number;
+  /**
+   * Canvas position (node center, world coordinates). Seeded by the tidy
+   * layout, then owned by the student's drags; "Reset structure" re-seeds.
+   */
+  x?: number;
+  y?: number;
 }
 
 export interface BenchState {

@@ -6,6 +6,7 @@ import {
   ROOT_H,
   SIBLING_GAP,
   layoutTree,
+  withSeededPositions,
 } from "./layout";
 import { BENCH_ROOT_ID, type BenchNode } from "./types";
 
@@ -109,5 +110,20 @@ describe("bench tree layout", () => {
     // No overlap between a's children and b.
     const b = layout.nodes.find((p) => p.node.id === "b")!;
     expect(a2.x + a2.w).toBeLessThanOrEqual(b.x + b.w);
+  });
+
+  it("withSeededPositions fills missing positions and keeps existing ones", () => {
+    const nodes = makeNodes([
+      { id: BENCH_ROOT_ID, parentId: null },
+      { id: "a", parentId: BENCH_ROOT_ID },
+    ]);
+    nodes.a = { ...nodes.a, x: 999, y: 111 };
+    const seeded = withSeededPositions(nodes);
+    expect(seeded.a.x).toBe(999);
+    expect(seeded.a.y).toBe(111);
+    expect(seeded[BENCH_ROOT_ID].x).toBeTypeOf("number");
+    expect(seeded[BENCH_ROOT_ID].y).toBeTypeOf("number");
+    // Already-complete records are returned unchanged (same reference).
+    expect(withSeededPositions(seeded)).toBe(seeded);
   });
 });

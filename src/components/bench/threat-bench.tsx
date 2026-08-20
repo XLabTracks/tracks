@@ -1,25 +1,27 @@
 "use client";
 
 // The Threat Modelling Bench: a practice environment where the student builds
-// the threat-model tree themselves — no grading, no reveals. The graph is a
-// node tree with the threat at the top; edges are splines; each sibling
-// bundle carries one AND/OR gate pill owned by the parent (AND by default).
-// Turn machine: red states a strategy and maps necessary conditions (creating
-// nodes) → an affordance is revealed and blue tags the node(s) it prevents /
-// detects / deters → red revises (an unchanged graph with a changed strategy
-// is legitimate) → next affordance. Structural edits are allowed only on red
-// turns; tagging only on blue turns; renaming always.
+// the threat-model tree themselves — no grading, no reveals. The graph lives
+// on a free canvas (see BenchCanvas): threat at the top, spline edges, one
+// AND/OR gate pill per sibling bundle (AND default), node creation/editing
+// on the graph itself. Turn machine: red states a strategy and maps necessary
+// conditions (creating nodes) → an affordance is revealed and blue tags the
+// node(s) it prevents / detects / deters → red revises (an unchanged graph
+// with a changed strategy is legitimate) → next affordance. Structural edits
+// are allowed only on red turns; tagging only on blue turns; renaming and
+// arranging always.
 //
-// Persistence: localStorage per scenario (v1 — no accounts, no server). The
-// state shape (createdTurn on nodes, per-turn strategies) is chosen so a
-// later feedback layer can replay the graph's growth without migration.
+// Persistence: localStorage per scenario (v2 adds node positions and
+// descriptions; v1 states are migrated by seeding positions). The state shape
+// (createdTurn on nodes, per-turn strategies) is chosen so a later feedback
+// layer can replay the graph's growth without migration.
 
-import { useEffect, useMemo, useState } from "react";
-import { Check, Plus, RotateCcw, Trash2 } from "lucide-react";
+import { useEffect, useState } from "react";
+import { Check, RotateCcw } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
-import { childrenOf, layoutTree } from "@/lib/bench/layout";
+import { childrenOf, withSeededPositions } from "@/lib/bench/layout";
 import {
   BENCH_RELATIONS,
   BENCH_RELATION_LABELS,
@@ -33,17 +35,10 @@ import {
   type BenchScenario,
   type BenchState,
 } from "@/lib/bench/types";
+import { BenchCanvas, RELATION_CHIP } from "./bench-canvas";
 
 const STOPPING_RULE =
   "Stop decomposing a node when it's (a) a choice the adversary makes, (b) a fact of the environment, or (c) something a defense could directly touch.";
-
-const RELATION_CHIP: Record<BenchRelation, string> = {
-  prevents:
-    "border-emerald-600/50 bg-emerald-500/15 text-emerald-700 dark:text-emerald-400",
-  detects: "border-sky-600/50 bg-sky-500/15 text-sky-700 dark:text-sky-400",
-  deters:
-    "border-amber-600/50 bg-amber-500/15 text-amber-700 dark:text-amber-400",
-};
 
 function RoleBadge({ role }: { role: "red" | "blue" }) {
   return (
@@ -70,13 +65,16 @@ function toMarkdown(scenario: BenchScenario, state: BenchState): string {
     const node = state.nodes[id];
     const kids = childrenOf(state.nodes, id);
     const gate = kids.length >= 2 ? ` [${node.gate}]` : "";
+    const description = node.description ? ` — ${node.description}` : "";
     const tags = node.tags
       .map(
         (t) =>
           ` (A${affordanceIndex(t.affordanceId) + 1} ${t.relation}: ${t.why})`,
       )
       .join("");
-    lines.push(`${"  ".repeat(depth)}- ${node.label}${gate}${tags}`);
+    lines.push(
+      `${"  ".repeat(depth)}- ${node.label}${gate}${description}${tags}`,
+    );
     kids.forEach((k) => walk(k.id, depth + 1));
   };
   walk(BENCH_ROOT_ID, 0);
@@ -101,50 +99,53 @@ function toMarkdown(scenario: BenchScenario, state: BenchState): string {
 export function ThreatBench({ scenario }: { scenario: BenchScenario }) {
   const storageKey = `bench:${scenario.id}`;
   const [state, setState] = useState<BenchState | null>(null);
-  const [selectedId, setSelectedId] = useState<string | null>(null);
+  const [selectedIds, setSelectedIds] = useState<string[]>([]);
+  const [editingId, setEditingId] = useState<string | null>(null);
   const [tagRelation, setTagRelation] = useState<BenchRelation>("prevents");
   const [tagWhy, setTagWhy] = useState("");
   const [copied, setCopied] = useState(false);
   const [exportText, setExportText] = useState<string | null>(null);
 
-  // Load once on mount (localStorage is client-only), then autosave.
+  // Load once on mount (localStorage is client-only), then autosave (debounced
+  // — drags produce many state writes per second).
   useEffect(() => {
     let loaded: BenchState | null = null;
     try {
       const raw = window.localStorage.getItem(storageKey);
       if (raw) {
         const parsed = JSON.parse(raw) as { v: number; state: BenchState };
-        if (parsed.v === 1 && parsed.state?.nodes?.[BENCH_ROOT_ID]) {
+        if (
+          (parsed.v === 1 || parsed.v === 2) &&
+          parsed.state?.nodes?.[BENCH_ROOT_ID]
+        ) {
           loaded = parsed.state;
         }
       }
     } catch {
       // Corrupt storage — start fresh.
     }
+    const base = loaded ?? initialBenchState(scenario);
     // eslint-disable-next-line react-hooks/set-state-in-effect
-    setState(loaded ?? initialBenchState(scenario));
+    setState({ ...base, nodes: withSeededPositions(base.nodes) });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [storageKey]);
 
   useEffect(() => {
-    if (state) {
+    if (!state) return;
+    const timer = setTimeout(() => {
       try {
         window.localStorage.setItem(
           storageKey,
-          JSON.stringify({ v: 1, state }),
+          JSON.stringify({ v: 2, state }),
         );
       } catch {
         // Storage full/unavailable — the bench still works, it just won't persist.
       }
-    }
+    }, 300);
+    return () => clearTimeout(timer);
   }, [state, storageKey]);
 
-  const layout = useMemo(
-    () => (state ? layoutTree(state.nodes) : null),
-    [state],
-  );
-
-  if (!state || !layout) {
+  if (!state) {
     return (
       <div className="border-border bg-card text-muted-foreground rounded-lg border p-8 text-sm">
         Loading the bench…
@@ -169,7 +170,9 @@ export function ThreatBench({ scenario }: { scenario: BenchScenario }) {
       : phase.kind === "done"
         ? scenario.affordances.length
         : phase.affordanceIndex + 1;
-  const selected = selectedId ? (state.nodes[selectedId] ?? null) : null;
+  const selectedNodes = selectedIds
+    .map((id) => state.nodes[id])
+    .filter((n): n is BenchNode => Boolean(n));
   const strategy = state.strategies[state.turnIndex] ?? "";
 
   // --- state ops -----------------------------------------------------------
@@ -178,22 +181,29 @@ export function ThreatBench({ scenario }: { scenario: BenchScenario }) {
     setState((prev) => (prev ? fn(prev) : prev));
 
   const addChild = (parentId: string) => {
-    setSelectedId(`n${state.nextSeq}`);
+    const parent = state.nodes[parentId];
+    if (!parent) return;
+    const siblings = childrenOf(state.nodes, parentId).length;
+    const id = `n${state.nextSeq}`;
+    setSelectedIds([id]);
+    setEditingId(id);
     update((prev) => {
-      const id = `n${prev.nextSeq}`;
+      const nid = `n${prev.nextSeq}`;
       const node: BenchNode = {
-        id,
+        id: nid,
         label: "",
         parentId,
         gate: "AND",
         tags: [],
         createdTurn: prev.turnIndex,
         seq: prev.nextSeq,
+        x: (parent.x ?? 0) + siblings * 56,
+        y: (parent.y ?? 0) + 150,
       };
       return {
         ...prev,
         nextSeq: prev.nextSeq + 1,
-        nodes: { ...prev.nodes, [id]: node },
+        nodes: { ...prev.nodes, [nid]: node },
       };
     });
   };
@@ -204,6 +214,15 @@ export function ThreatBench({ scenario }: { scenario: BenchScenario }) {
       nodes: { ...prev.nodes, [id]: { ...prev.nodes[id], label } },
     }));
 
+  const setDescription = (id: string, text: string) =>
+    update((prev) => ({
+      ...prev,
+      nodes: {
+        ...prev.nodes,
+        [id]: { ...prev.nodes[id], description: text || undefined },
+      },
+    }));
+
   const removeSubtree = (id: string) => {
     if (
       !window.confirm(
@@ -211,14 +230,15 @@ export function ThreatBench({ scenario }: { scenario: BenchScenario }) {
       )
     )
       return;
-    update((prev) => {
-      const doomed = new Set(subtreeIds(prev.nodes, id));
-      const nodes = Object.fromEntries(
+    const doomed = new Set(subtreeIds(state.nodes, id));
+    update((prev) => ({
+      ...prev,
+      nodes: Object.fromEntries(
         Object.entries(prev.nodes).filter(([nid]) => !doomed.has(nid)),
-      );
-      return { ...prev, nodes };
-    });
-    setSelectedId(null);
+      ),
+    }));
+    setSelectedIds((prev) => prev.filter((nid) => !doomed.has(nid)));
+    setEditingId((prev) => (prev && doomed.has(prev) ? null : prev));
   };
 
   const toggleGate = (id: string) =>
@@ -233,19 +253,48 @@ export function ThreatBench({ scenario }: { scenario: BenchScenario }) {
       },
     }));
 
-  const addTag = (nodeId: string) => {
-    if (!currentAffordance || !tagWhy.trim()) return;
+  const moveNodes = (ids: string[], dx: number, dy: number) =>
     update((prev) => {
-      const node = prev.nodes[nodeId];
-      const tags = [
-        ...node.tags.filter((t) => t.affordanceId !== currentAffordance.id),
-        {
-          affordanceId: currentAffordance.id,
-          relation: tagRelation,
-          why: tagWhy.trim(),
-        },
-      ];
-      return { ...prev, nodes: { ...prev.nodes, [nodeId]: { ...node, tags } } };
+      const nodes = { ...prev.nodes };
+      for (const id of ids) {
+        const n = nodes[id];
+        if (n) nodes[id] = { ...n, x: (n.x ?? 0) + dx, y: (n.y ?? 0) + dy };
+      }
+      return { ...prev, nodes };
+    });
+
+  const setPositions = (positions: Record<string, { x: number; y: number }>) =>
+    update((prev) => ({
+      ...prev,
+      nodes: Object.fromEntries(
+        Object.entries(prev.nodes).map(([id, n]) => [
+          id,
+          positions[id] ? { ...n, x: positions[id].x, y: positions[id].y } : n,
+        ]),
+      ),
+    }));
+
+  const addTagToSelection = () => {
+    if (!currentAffordance || !tagWhy.trim() || selectedIds.length === 0)
+      return;
+    update((prev) => {
+      const nodes = { ...prev.nodes };
+      for (const id of selectedIds) {
+        const node = nodes[id];
+        if (!node) continue;
+        nodes[id] = {
+          ...node,
+          tags: [
+            ...node.tags.filter((t) => t.affordanceId !== currentAffordance.id),
+            {
+              affordanceId: currentAffordance.id,
+              relation: tagRelation,
+              why: tagWhy.trim(),
+            },
+          ],
+        };
+      }
+      return { ...prev, nodes };
     });
     setTagWhy("");
   };
@@ -285,8 +334,10 @@ export function ThreatBench({ scenario }: { scenario: BenchScenario }) {
     return hasStrategy;
   })();
 
-  const advance = () =>
+  const advance = () => {
+    setEditingId(null);
     update((prev) => ({ ...prev, turnIndex: prev.turnIndex + 1 }));
+  };
 
   const reset = () => {
     if (
@@ -295,8 +346,10 @@ export function ThreatBench({ scenario }: { scenario: BenchScenario }) {
       )
     )
       return;
-    setState(initialBenchState(scenario));
-    setSelectedId(null);
+    const base = initialBenchState(scenario);
+    setState({ ...base, nodes: withSeededPositions(base.nodes) });
+    setSelectedIds([]);
+    setEditingId(null);
   };
 
   const copyMarkdown = async () => {
@@ -311,8 +364,6 @@ export function ThreatBench({ scenario }: { scenario: BenchScenario }) {
     }
   };
 
-  // --- advance-button label ------------------------------------------------
-
   const advanceLabel =
     phase.kind === "red-base"
       ? "Lock strategy → reveal the first affordance"
@@ -326,125 +377,31 @@ export function ThreatBench({ scenario }: { scenario: BenchScenario }) {
   return (
     <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_360px]">
       {/* ------------------------------------------------ the graph canvas */}
-      <div className="border-border bg-card min-h-[280px] overflow-auto rounded-xl border">
-        <svg
-          width={Math.max(layout.width, 560)}
-          height={Math.max(layout.height, 260)}
-          className="block"
-          onClick={() => setSelectedId(null)}
-          role="application"
-          aria-label="Your threat-model tree: the threat at the top, necessary conditions below it. Select a node to edit it in the panel."
-        >
-          <g
-            transform={`translate(${Math.max(
-              0,
-              (Math.max(layout.width, 560) - layout.width) / 2,
-            )}, 0)`}
-          >
-          {layout.edges.map((edge) => (
-            <path
-              key={`${edge.from}-${edge.to}`}
-              d={edge.path}
-              fill="none"
-              className="stroke-muted-foreground/50"
-              strokeWidth={1.25}
-            />
-          ))}
-
-          {layout.pills.map((pill) => (
-            <g
-              key={pill.parentId}
-              onClick={(e) => {
-                e.stopPropagation();
-                if (canEditStructure) toggleGate(pill.parentId);
-              }}
-              className={cn(canEditStructure && "cursor-pointer")}
-            >
-              <title>
-                {canEditStructure
-                  ? "Gate over these siblings — click to toggle AND/OR"
-                  : "Gate over these siblings"}
-              </title>
-              <rect
-                x={pill.x - 19}
-                y={pill.y - 9}
-                width={38}
-                height={18}
-                rx={9}
-                className={cn(
-                  "fill-muted stroke-border",
-                  canEditStructure && "hover:stroke-foreground/60",
-                )}
-                strokeWidth={1}
-              />
-              <text
-                x={pill.x}
-                y={pill.y + 3.5}
-                textAnchor="middle"
-                className="fill-foreground text-[9px] font-bold tracking-wide select-none"
-              >
-                {pill.gate}
-              </text>
-            </g>
-          ))}
-
-          {layout.nodes.map((p) => {
-            const isRoot = p.node.id === BENCH_ROOT_ID;
-            const isSelected = p.node.id === selectedId;
-            return (
-              <foreignObject key={p.node.id} x={p.x} y={p.y} width={p.w} height={p.h}>
-                <div
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    setSelectedId(p.node.id);
-                  }}
-                  className={cn(
-                    "flex h-full cursor-pointer flex-col justify-center rounded-lg border px-2 py-1 text-center",
-                    isRoot
-                      ? "border-red-600/70 bg-red-500/10"
-                      : "border-border bg-card",
-                    isSelected && "ring-foreground/60 ring-2",
-                  )}
-                >
-                  <p
-                    className={cn(
-                      "text-foreground line-clamp-2 text-[11px] leading-tight font-medium",
-                      !p.node.label && "text-muted-foreground italic",
-                    )}
-                  >
-                    {p.node.label || "unnamed condition"}
-                  </p>
-                  {isRoot && scenario.rootSub && (
-                    <p className="text-muted-foreground mt-0.5 text-[8.5px]">
-                      {scenario.rootSub}
-                    </p>
-                  )}
-                  {p.node.tags.length > 0 && (
-                    <div className="mt-1 flex flex-wrap justify-center gap-1">
-                      {p.node.tags.map((tag) => (
-                        <span
-                          key={tag.affordanceId}
-                          title={`${BENCH_RELATION_LABELS[tag.relation]}: ${tag.why}`}
-                          className={cn(
-                            "rounded-full border px-1.5 text-[8px] font-semibold",
-                            RELATION_CHIP[tag.relation],
-                          )}
-                        >
-                          A
-                          {scenario.affordances.findIndex(
-                            (a) => a.id === tag.affordanceId,
-                          ) + 1}
-                        </span>
-                      ))}
-                    </div>
-                  )}
-                </div>
-              </foreignObject>
-            );
-          })}
-          </g>
-        </svg>
-      </div>
+      <BenchCanvas
+        nodes={state.nodes}
+        affordances={scenario.affordances}
+        rootSub={scenario.rootSub}
+        selectedIds={selectedIds}
+        editingId={editingId}
+        canEditStructure={canEditStructure}
+        onSelect={setSelectedIds}
+        onToggleSelect={(id) =>
+          setSelectedIds((prev) =>
+            prev.includes(id)
+              ? prev.filter((x) => x !== id)
+              : [...prev, id],
+          )
+        }
+        onBeginEdit={setEditingId}
+        onEndEdit={() => setEditingId(null)}
+        onRename={rename}
+        onSetDescription={setDescription}
+        onAddChild={addChild}
+        onDelete={removeSubtree}
+        onToggleGate={toggleGate}
+        onMoveNodes={moveNodes}
+        onSetPositions={setPositions}
+      />
 
       {/* --------------------------------------------------- control panel */}
       <div className="space-y-3">
@@ -457,9 +414,7 @@ export function ThreatBench({ scenario }: { scenario: BenchScenario }) {
                 complete
               </span>
             ) : (
-              <RoleBadge
-                role={phase.kind === "blue" ? "blue" : "red"}
-              />
+              <RoleBadge role={phase.kind === "blue" ? "blue" : "red"} />
             )}
             <span className="text-muted-foreground text-xs tabular-nums">
               {revealedCount}/{scenario.affordances.length} affordances
@@ -471,8 +426,9 @@ export function ThreatBench({ scenario }: { scenario: BenchScenario }) {
               <p>
                 The system has no measures beyond the world card. What&apos;s
                 your best strategy as the attacker? Commit it — then map the
-                necessary conditions: select the threat at the top and build the
-                tree of what must <em>all</em> be true for it to occur.
+                necessary conditions: hover the threat at the top and use{" "}
+                <strong>+</strong> to build the tree of what must <em>all</em>{" "}
+                be true for it to occur.
               </p>
               <Textarea
                 value={strategy}
@@ -494,8 +450,9 @@ export function ThreatBench({ scenario }: { scenario: BenchScenario }) {
               <p className="text-muted-foreground">{currentAffordance.grant}</p>
               <p>
                 Which node(s) does this measure <strong>prevent</strong>,{" "}
-                <strong>detect</strong>, or <strong>deter</strong>? Select a
-                node on the graph and tag it, with a sentence on why.
+                <strong>detect</strong>, or <strong>deter</strong>? Select
+                nodes on the graph (Shift-click for several) and tag them, with
+                a sentence on why.
               </p>
             </div>
           )}
@@ -559,65 +516,33 @@ export function ThreatBench({ scenario }: { scenario: BenchScenario }) {
           )}
         </div>
 
-        {/* Selected node */}
-        {selected && (
+        {/* Selection */}
+        {selectedNodes.length > 0 && (
           <div className="border-border bg-card rounded-xl border p-4">
             <p className="text-muted-foreground mb-2 text-xs font-semibold tracking-wide uppercase">
-              Selected node
+              Selected ({selectedNodes.length})
             </p>
-            <input
-              key={selected.id}
-              type="text"
-              value={selected.label}
-              maxLength={120}
-              placeholder="Name the condition…"
-              disabled={selected.id === BENCH_ROOT_ID}
-              autoFocus={selected.label === ""}
-              onChange={(e) => rename(selected.id, e.target.value)}
-              className="border-border bg-background text-foreground w-full rounded-md border px-2 py-1.5 text-sm disabled:opacity-60"
-            />
-            <div className="mt-2 flex flex-wrap gap-2">
-              {canEditStructure && (
-                <Button
-                  size="sm"
-                  variant="outline"
-                  className="gap-1"
-                  onClick={() => addChild(selected.id)}
-                >
-                  <Plus className="size-3.5" aria-hidden /> Add condition below
-                </Button>
-              )}
-              {canEditStructure &&
-                childrenOf(state.nodes, selected.id).length >= 2 && (
-                  <Button
-                    size="sm"
-                    variant="outline"
-                    onClick={() => toggleGate(selected.id)}
-                  >
-                    Gate: {selected.gate} → toggle
-                  </Button>
-                )}
-              {canEditStructure && selected.id !== BENCH_ROOT_ID && (
-                <Button
-                  size="sm"
-                  variant="outline"
-                  className="text-destructive gap-1"
-                  onClick={() => removeSubtree(selected.id)}
-                >
-                  <Trash2 className="size-3.5" aria-hidden /> Delete
-                </Button>
-              )}
-            </div>
+            <ul className="space-y-0.5 text-sm">
+              {selectedNodes.map((node) => (
+                <li key={node.id} className="truncate">
+                  {node.label || (
+                    <span className="text-muted-foreground italic">
+                      unnamed condition
+                    </span>
+                  )}
+                </li>
+              ))}
+            </ul>
             {!canEditStructure && phase.kind !== "done" && (
               <p className="text-muted-foreground mt-2 text-xs">
-                Structural edits unlock on red turns.
+                Adding and deleting nodes unlocks on red turns.
               </p>
             )}
 
-            {/* Existing tags */}
-            {selected.tags.length > 0 && (
+            {/* Existing tags — shown for a single selection. */}
+            {selectedNodes.length === 1 && selectedNodes[0].tags.length > 0 && (
               <ul className="mt-3 space-y-1">
-                {selected.tags.map((tag) => {
+                {selectedNodes[0].tags.map((tag) => {
                   const idx = scenario.affordances.findIndex(
                     (a) => a.id === tag.affordanceId,
                   );
@@ -643,7 +568,7 @@ export function ThreatBench({ scenario }: { scenario: BenchScenario }) {
                         <button
                           type="button"
                           onClick={() =>
-                            removeTag(selected.id, tag.affordanceId)
+                            removeTag(selectedNodes[0].id, tag.affordanceId)
                           }
                           className="hover:text-foreground underline"
                         >
@@ -656,12 +581,14 @@ export function ThreatBench({ scenario }: { scenario: BenchScenario }) {
               </ul>
             )}
 
-            {/* Tagging (blue turns only) */}
+            {/* Tagging (blue turns only) — applies to every selected node. */}
             {canTag && currentAffordance && (
               <div className="border-border mt-3 space-y-2 border-t pt-3">
                 <p className="text-xs font-medium">
-                  Tag with A{(phase as { affordanceIndex: number }).affordanceIndex + 1}{" "}
-                  ({currentAffordance.title}):
+                  Tag {selectedNodes.length > 1 ? "all selected" : "this node"}{" "}
+                  with A
+                  {(phase as { affordanceIndex: number }).affordanceIndex + 1} (
+                  {currentAffordance.title}):
                 </p>
                 <div className="flex gap-1.5">
                   {BENCH_RELATIONS.map((relation) => (
@@ -683,16 +610,16 @@ export function ThreatBench({ scenario }: { scenario: BenchScenario }) {
                 <Textarea
                   value={tagWhy}
                   onChange={(e) => setTagWhy(e.target.value)}
-                  placeholder="Why does this measure touch this node?"
+                  placeholder="Why does this measure touch these node(s)?"
                   rows={2}
                   className="resize-y text-sm"
                 />
                 <Button
                   size="sm"
                   disabled={!tagWhy.trim()}
-                  onClick={() => addTag(selected.id)}
+                  onClick={addTagToSelection}
                 >
-                  Tag node
+                  Tag {selectedNodes.length > 1 ? `${selectedNodes.length} nodes` : "node"}
                 </Button>
               </div>
             )}

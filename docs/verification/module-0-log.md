@@ -904,3 +904,12 @@ Her edit list, applied in one pass:
   `leike.jpg` into `public/verification/assets/what-do-they-say/`, set
   `photo` (and `photoSource` if Wikimedia) on his entry in
   `what-do-they-say.ts`, and record provenance.
+
+### The elements table goes brand-red, rounded, italic (2026-08-20)
+
+The owner's restyle of 0.1.2's elements table, superseding the 2026-08-13
+theme-inverted bands: the grid now sits in a rounded `.elements-frame` card,
+the band headers take the primary fill with primary-foreground ink, the
+question labels a light wash of the same hue, and the content boxes render
+italic. The theories-of-change widget's table view repeats the scheme, as
+its comment requires. Do not restore the black/white bands.

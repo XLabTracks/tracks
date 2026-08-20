@@ -118,9 +118,9 @@ export function TheoriesOfChange(_: VerificationWidgetProps) {
   const filled = BOXES.filter((b) => boxes[b.id]?.trim()).length;
 
   /* The cells repeat the lesson table's three layers (`elements-grid` in
-     globals.css — change one and change the other): theme-inverted bands,
-     muted second-layer labels, card-ground content boxes, hairlines carried
-     by the gap-px grid over a border-coloured ground. */
+     globals.css — change one and change the other): primary-filled bands,
+     primary-washed second-layer labels, italic card-ground content boxes,
+     hairlines carried by the gap-px grid over a border-coloured ground. */
   const cell = (b: ToCBox, className?: string) => {
     const text = hydrated ? (boxes[b.id]?.trim() ?? "") : "";
     const active = hydrated && b.id === box.id;
@@ -130,9 +130,9 @@ export function TheoriesOfChange(_: VerificationWidgetProps) {
         type="button"
         onClick={() => setStep(BOXES.indexOf(b))}
         aria-current={active ? "step" : undefined}
-        aria-label={`${b.label} — edit this box`}
+        aria-label={`${b.label}: edit this box`}
         className={cn(
-          "bg-card text-foreground min-h-16 p-2 text-left align-top",
+          "bg-card text-foreground min-h-16 p-2 text-left align-top italic",
           "text-2xs leading-snug whitespace-pre-wrap transition-colors",
           "hover:bg-muted focus-visible:ring-ring focus-visible:ring-2 focus-visible:outline-none",
           active && "ring-ring ring-2 ring-inset",
@@ -148,7 +148,7 @@ export function TheoriesOfChange(_: VerificationWidgetProps) {
   const band = (label: string, className?: string) => (
     <div
       className={cn(
-        "bg-foreground text-background p-2 text-center text-2xs font-semibold",
+        "bg-primary text-primary-foreground p-2 text-center text-2xs font-semibold",
         className,
       )}
     >
@@ -159,7 +159,10 @@ export function TheoriesOfChange(_: VerificationWidgetProps) {
   const head = (label: string) => (
     <div
       key={label}
-      className="bg-muted text-foreground p-2 text-center text-2xs font-medium"
+      className="text-foreground p-2 text-center text-2xs font-medium"
+      style={{
+        background: "color-mix(in oklab, var(--primary) 8%, var(--card))",
+      }}
     >
       {label}
     </div>

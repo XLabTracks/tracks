@@ -770,19 +770,20 @@
   color: var(--foreground);
 }
 
-/* 0.1.2's theory-of-change elements table (`<table className="elements-grid">`).
-   A full collapsed grid — every cell hairlined on all four sides — with the
-   author's three visually distinct layers, stated 2026-08-13: the band
-   headers (Inputs/Outputs/Outcome, Assumptions/External factors) invert the
-   theme (foreground ground, background ink — dark-on-light themes get a dark
-   band with light text, the night theme the reverse); the question labels
-   take the muted second-layer tint, differentiated but not as bold; the
-   content boxes read as ordinary card ground. The shared lesson-table rules
-   above (row hairlines only, bold first column, unstyled tbody th) must not
-   reach it. display:table because the grid should fill the column; the cells
-   are short words, so the narrow-screen risk the block scroller guards
-   against does not arise here. The theories-of-change widget repeats this
-   scheme — change one and change the other. */
+/* 0.1.2's theory-of-change elements table (`<table className="elements-grid">`,
+   inside a `.elements-frame` card wrapper). A full collapsed grid — every
+   interior edge hairlined — with three visually distinct layers, restyled on
+   the owner's 2026-08-20 instruction (rounded, brand-red, italic content):
+   the band headers (Inputs/Outputs/Outcome, Assumptions/External factors)
+   take the primary fill with primary-foreground ink, the button pairing, so
+   every theme re-solves it; the question labels take a light wash of the
+   same hue; the content boxes read as ordinary card ground in italic. The
+   shared lesson-table rules above (row hairlines only, bold first column,
+   unstyled tbody th) must not reach it. display:table because the grid
+   should fill the column; the cells are short words, so the narrow-screen
+   risk the block scroller guards against does not arise here. The
+   theories-of-change widget repeats this scheme — change one and change the
+   other. */
 /* The last column absorbs the slack.
    `.lesson-body table` is a block-level scroll box, so its rows are laid out
    in an anonymous table that shrinks to its content: on a wide screen the
@@ -913,6 +914,21 @@
   width: 58%;
 }
 
+/* The card chrome around the elements grid (owner, 2026-08-20: rounded like
+   everything else). It lives on a wrapper because a collapsed table cannot
+   clip its own band corners to a radius — the pair-table's clipping story.
+   The wrapper carries the border, so the table sheds its outer-edge
+   hairlines below and only the interior grid remains. */
+.lesson-body .elements-frame {
+  margin-block: 28px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-soft);
+}
+.lesson-body .elements-frame table.elements-grid {
+  margin: 0;
+}
 .lesson-body table.elements-grid {
   display: table;
   width: 100%;
@@ -944,22 +960,44 @@
   font-weight: 400;
   color: var(--foreground);
 }
+/* The frame draws the outer edge; the edge cells must not double it. */
+.lesson-body table.elements-grid :is(th, td):first-child {
+  border-left: 0;
+}
+.lesson-body table.elements-grid :is(th, td):last-child {
+  border-right: 0;
+}
+.lesson-body table.elements-grid thead tr:first-child th {
+  border-top: 0;
+}
+.lesson-body table.elements-grid tbody tr:last-child :is(th, td) {
+  border-bottom: 0;
+}
 .lesson-body table.elements-grid tbody tr:first-child td {
   border-top: 1px solid var(--border);
 }
-/* The band headers: theme-inverted for contrast. */
+/* The band headers: the brand fill, not the black/white theme inversion
+   (owner, 2026-08-20: "the same red theme, not black/white"). --primary
+   fills and --primary-foreground writes on it, the button pairing, so every
+   theme re-solves it. */
 .lesson-body table.elements-grid thead tr:first-child th,
 .lesson-body table.elements-grid tbody th {
-  background: var(--foreground);
-  color: var(--background);
+  background: var(--primary);
+  color: var(--primary-foreground);
   font-weight: 600;
 }
-/* The question labels: the quieter second layer. */
+/* The question labels: the quieter second layer, a wash of the same hue. */
 .lesson-body table.elements-grid thead tr:last-child th,
 .lesson-body table.elements-grid tbody tr:last-child td {
-  background: var(--muted);
+  background: color-mix(in oklab, var(--primary) 8%, var(--card));
   color: var(--foreground);
   font-weight: 500;
+}
+/* The content boxes read as the learner's own entries: italic (owner,
+   2026-08-20). The last row's td cells are the question-label layer above,
+   which stays upright. */
+.lesson-body table.elements-grid tbody tr:not(:last-child) td {
+  font-style: italic;
 }
 
 /* The markdown rhythm inside a Fold or a Callout. Both shells are not-prose,

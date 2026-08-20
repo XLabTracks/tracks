@@ -41,24 +41,28 @@ export const modules: Module[] = [
       'The foundation for the track: Redwood Research\'s "AI Control: Improving Safety Despite Intentional Subversion" paper rendered in full with guided exercises woven in, then rebuilt as an interactive, calibrated demo you can play with.',
     order: 1,
     prerequisiteModuleIds: [],
-    // Opens with Redwood's "case for control" motivation, then the AI Control
-    // paper — the guided walkthrough that absorbed the retired
-    // "Trusted monitoring as a game" lesson — then four Redwood readings
-    // rendered in full through the paper reader; the "case for control" post
-    // carries the module's guided exercises woven into the reading. Reading
-    // order: motivation, the paper, safely passing the buck to AI, catching
-    // scheming AIs, and the two threat-modeling posts (the safety–usefulness
-    // tradeoff model now lives in module 2). All readings are reproduced
-    // (arXiv/LessWrong/Substack artifacts) with permission.
+    // Opens with Redwood's "case for control" motivation, then the Backdoor
+    // Game — an iterated red/blue threat-modelling exercise played cold,
+    // deliberately number-free — then the AI Control paper, the guided
+    // walkthrough that absorbed the retired "Trusted monitoring as a game"
+    // lesson and now doubles as the game's quantitative payoff. Then four
+    // Redwood readings rendered in full through the paper reader; the "case
+    // for control" post carries the module's guided exercises woven into the
+    // reading. Reading order: motivation, the game, the paper, safely passing
+    // the buck to AI, catching scheming AIs, and the two threat-modeling
+    // posts (the safety–usefulness tradeoff model now lives in module 2).
+    // All readings are reproduced (arXiv/LessWrong/Substack artifacts) with
+    // permission.
     itemIds: [
       "c-case-for-control",
+      "c-backdoor-game",
       "c-paper-ai-control",
       "c-pass-the-buck",
       "c-catching-red-handed",
       "c-threats-l1",
       "c-threats-l2",
     ],
-    estimatedMinutes: 335,
+    estimatedMinutes: 385,
   },
   {
     // Human-authored curriculum (from the course author's "contra control"
@@ -203,6 +207,19 @@ export const modules: Module[] = [
 ];
 
 export const lessons: Lesson[] = [
+  // --- Control, module 1: the Backdoor Game — an iterated red/blue
+  // threat-modelling exercise (staged-questions + the backdoor-board figure
+  // widget) played before the AI Control paper, so every commit is inference
+  // rather than recall and the paper lands as the quantitative payoff.
+  // Design spec: notes/backdoor-game-flow.md. ---
+  {
+    id: "c-backdoor-game",
+    slug: "the-backdoor-game",
+    moduleId: "c-intro",
+    title: "The Backdoor Game",
+    contentRef: "c-backdoor-game",
+    estimatedMinutes: 50,
+  },
   // --- Control: the "Trusted monitoring as a game" lesson (c-game) was
   // RETIRED 2026-07-24: all of its content was progressively mirrored into the
   // AI Control walkthrough (papers.data.ts — inserted subsections 3.2.1

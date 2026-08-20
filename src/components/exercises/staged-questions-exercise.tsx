@@ -17,6 +17,7 @@ import {
   isStorableText,
   type StagedQuestionEntry,
 } from "@/lib/content/exercise-view";
+import { BackdoorBoardFigure } from "./backdoor-board-figure";
 import { ControlTimeline } from "./control-timeline";
 import { runExerciseAction } from "./run-exercise-action";
 import { TwoWorldsFigure } from "./two-worlds-figure";
@@ -45,6 +46,7 @@ const FIGURE_WIDGETS: Record<
 > = {
   "two-worlds": TwoWorldsFigure,
   "monitor-roc-mini": MonitorRocMiniFigure,
+  "backdoor-board": BackdoorBoardFigure,
 };
 
 /** The forward pointer, with its named reading rendered as a link. */

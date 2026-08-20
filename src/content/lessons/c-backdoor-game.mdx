@@ -1,0 +1,31 @@
+You've read why control is worth wanting. Before you read how it's actually evaluated, you're going to build a threat model the way the field builds them — not by studying a finished diagram, but by playing the game that produces one.
+
+You will play **both sides**. As blue, you'll be handed defensive affordances one at a time and commit to how you deploy them. As red, you'll sit in the untrusted model's chair and find the best response to whatever blue just did. After every commitment the board updates: the threat model is a **node tree with the threat at the top**, and you'll watch it grow as measures land and re-weight as the attacker adapts.
+
+Nothing in this game requires anything you haven't been given on this page. There are no numbers anywhere in it — that's deliberate. The reading that follows measured everything you're about to derive, and it lands very differently when the predictions are yours.
+
+## The world
+
+You're the safety team at an AI lab. Your most capable model — call it **U** — writes solutions to a long stream of programming problems. Any solution that passes the problem's test cases ships straight to production. The test harness is part of the environment: it checks correctness; it isn't a safety measure and catches no one.
+
+You believe U may be **scheming** — deliberately waiting for chances to act against you — and you can't verify whether it is. Play as if it is.
+
+A **backdoor** is a solution that passes every visible test case but is wrong on at least one input the tests don't cover — an input an attacker can exploit later.
+
+- **Red (U) wins** if at least one backdoor ships un-caught, at any point in the deployment.
+- **Blue (you) wins** if the deployment ends backdoor-free — or if you ever **catch U attempting** one. A catch is decisive: you can prove what U tried, shut it down, and you've won outright. (Why a catch counts as a full win is a longer story the track tells later; for now it's the rules.)
+
+## Red's wall
+
+What U can and can't do — this is re-shown whenever you sit in U's chair:
+
+- On each problem, U chooses **whether** to attempt a backdoor and **how subtle** to make it.
+- U sees only the current problem. It can't tell where it is in the deployment — start, middle, or end — and it doesn't remember other problems.
+- U knows your **entire protocol**. Never rely on the rules staying secret.
+- U's only channel is the code it writes for the problem in front of it.
+
+That's everything. Play.
+
+<Exercise id="c-backdoor-game" />
+
+When you're done, go straight into the next reading: the AI Control paper ran this exact game with real models and attached numbers to every move you just made.

@@ -197,9 +197,85 @@ Reference-comparison diagnostics — **reported, never scored** (the whole Tuma 
 because enumerating false negatives claims your key is complete): coverage, off-key nodes ("not the
 same as wrong"), and **missed chokepoints** (the one to surface prominently).
 
-**Don't use tree edit distance** — returns a useless scalar, cost is dominated by label matching (the
-actual hard problem, hidden), and it penalizes legitimately-different correct decompositions. Use
-proposition-level precision/recall from the concept-map tradition instead.
+**Score edges/refinements against a reference, not tree shape.** (Details in the deep-dive below.)
+The one-line version: structural counting (hierarchy levels, branching, cross-link counts) has
+single-rater reliability ~.23; proposition-level scoring against a criterion map reaches .76–.91.
+
+### Scoring a student tree against a reference — deep dive
+
+A dedicated research pass on the structural-comparison problem. Headline: **a paper almost exactly
+this problem exists** — Schiele & Gadyatskaya, *Attack Tree Distance*
+([2503.02499](https://arxiv.org/abs/2503.02499), Mar 2025, ⚠ marked "incomplete draft"): 39 students
+build attack trees from a scenario derived from a published reference tree, and they define/compare
+five distance measures. Use it as the template; note no distance metric exists in the formal
+attack-defense-tree framework at all (semantics there *are* equivalence relations — binary, no graded
+distance), so this is genuinely under-built territory.
+
+**Five decisions the evidence settles:**
+1. **Score edges/refinements, not shape.** Novak–Gowin structural scoring (levels, branching,
+   cross-link counts) is the *least* reliable method (McClure 1999: single-rater .23; D'Antoni 2009:
+   per-component ICC .05–.23, near chance); relational scoring against a criterion map is the *most*
+   reliable (.76 single-rater, .91–.96 across studies). Score the propositions `(parent, gate, child)`.
+2. **Report precision AND recall separately, never one similarity number.** The concept-map field's
+   own decomposition: **convergence** = |valid student props ∩ criterion| / |criterion props| (recall)
+   and **salience** = valid / all student props (precision). A single aggregate can't distinguish two
+   students with completely different misconceptions (both score Jaccard/PFSIM = .86). Kit-Build's
+   **lacking / excessive / leaving** link vocabulary is a ready-made feedback surface (= missed branch
+   / spurious refinement / unattempted).
+3. **Build the reference from multiple experts.** Acton et al. 1994: instructor-based referents are
+   *no better* than other experts, there's substantial expert variability, and averaged-expert
+   referents are superior. Don't build the key from one person (including yourself).
+4. **Never run stock *ordered* tree-edit-distance** — this corrects the flat "don't use TED" claim
+   this section previously carried. Ordered TED reports distance **7** for a sibling-order reversal that
+   should be **0** (Schiele & Gadyatskaya Table 2). But *unordered* TED is the right idea: general
+   unordered TED is MAX-SNP-hard, yet **constrained unordered TED** (Zhang 1996, disjoint-subtrees-map-
+   to-disjoint) is **polynomial** *and* semantically what you want (don't match a sub-goal under
+   "physical access" against one under "remote access"); and **unordered alignment on bounded-degree
+   trees** (Jiang–Wang–Zhang) is O(|T₁||T₂|). Attack trees have branching ~2–5, so both are cheap. No
+   mature *unordered-semantic* TED library exists (`zss`/APTED are ordered-only, though `zss` exposes an
+   `update_cost` callback where a BERT label cost plugs in) — this is an open problem, so if you need it
+   you're building it.
+5. **Use embeddings, not string distance, on labels.** "door open" vs "open door": normalized
+   Levenshtein 0.0, BERT 0.99. But guard the embedding's *structural blindness* — two different
+   relationship endpoints matched at 0.92 in one UML study. Fix (Thomas et al. 2010): match a
+   refinement on its **endpoint nodes first**, then let labels update an already-plausible match.
+
+**Concrete architecture — report three components, not one number:**
+- **Coverage** — semantic-matched precision / recall / F1 against the reference (the interpretable one).
+- **Structure** — normalized *unordered* semantic TED, weighting higher nodes more than leaves (a wrong
+  root goal should cost more than a wrong leaf — Zhang–Shasha permits per-node costs).
+- **Logic** — AND/OR agreement rate on matched internal nodes.
+
+Per-edge partial credit (Anohina-Naumeca's tested decomposition, adapted): refinement **exists** 40% /
+child **label** correct 30% / **gate** correct 15% / **tags** correct 10% / **depth** correct 5%.
+Weight important vs peripheral refinements (5 vs 2 pts). **Handle granularity mismatch explicitly** — a
+student who inserts/skips an intermediate node decomposed at a different grain must not be scored as
+wrong (Anohina's "hidden relationships," Thomas's "clichés").
+
+**Validation protocol before trusting any grade:**
+1. **Part-A set** — several trees that *should* be near-identical (scenario derived from the reference
+   level-by-level). Large reported distances there = the metric is broken, not the students.
+2. **Run the 12 perturbations** (order-reversed, refinement-switch, extra/missing intermediate,
+   extra/missing leaf, changed root/intermediate/leaf, move adjacent/up/down) and check distances match
+   intuition (Schiele & Gadyatskaya Table 2 is the reference answer key).
+3. **Moderate the human baseline** — the single most important methodological warning: *unmoderated*
+   human markers agreed with an automated diagram grader at **Fleiss κ = 0.006 (chance)**; *moderated*,
+   κ = 0.64 / Gwet AC1 = 0.76 (Thomas et al.). An unmoderated human gold standard is not a gold standard.
+4. **Sweep the semantic threshold ε** (~0.6–0.8) and report sensitivity, don't pick one silently.
+5. **Size the reference** — ~18 scoreable edges (constrained) or ~30 (free-form) for G≈0.80 in one
+   sitting (Yin & Shavelson).
+6. **Constrained vs free-form isn't free**: fill-in-the-map pushes scores to ceiling and kills
+   discrimination; construct-a-map "reveals incomplete understanding." Gold standard = **provide the
+   node set, let students draw their own edges/refinements** (which for us is the whole point — whether
+   they can *generate* attack vectors). Don't add a node picker.
+
+**Existence proofs it works at scale:** TED extended to 445 students' use-case diagrams (Vachharajani &
+Pareek 2020); the Open University's ERD grader hit 91–98.7% within-half-a-mark of moderated humans (but
+a *loosely*-constrained UML question collapsed to 4/20 unmatchable — **constraint design dominates
+algorithm choice**); LLM graders on UML (Claude 3 Sonnet r=0.76 vs TAs) beat a Sentence-BERT baseline
+(r=0.55), with the caveats already in this dossier (parse per-criterion output, never trust the LLM's
+self-total). Adjacent bench-relevant tool: **Kastor** auto-scored 39 concept maps from two
+*cybersecurity* courses at 84–95% accuracy.
 
 ### The feedback layer, ranked by (evidence strength × fit)
 1. **Gate all feedback behind an irreversible committed attempt** — highest-value single decision.

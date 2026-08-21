@@ -43,7 +43,10 @@ export function animate(
   const backstop = setTimeout(finish, duration + 100);
   const step = (now: number) => {
     if (done) return;
-    const t = Math.min(1, (now - start) / duration);
+    // rAF's first timestamp can precede the performance.now() captured above
+    // (it carries the frame's start time), so clamp below as well as above —
+    // an un-clamped negative t leaks through the easing to the caller.
+    const t = Math.min(1, Math.max(0, (now - start) / duration));
     if (t >= 1) {
       clearTimeout(backstop);
       finish();

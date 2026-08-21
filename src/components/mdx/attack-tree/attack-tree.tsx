@@ -22,6 +22,7 @@ import {
   ATTACK_TREES,
   flattenSpec,
   type AttackTreeName,
+  type AttackTreeSpec,
   type AttackNodeVariant,
   type FlatAttackTree,
 } from "./trees";
@@ -40,7 +41,10 @@ interface TreeSide {
   flat: FlatAttackTree;
   /** Node centers, pre-shifted so the tree is centered on the shared canvas. */
   pos: Record<string, { cx: number; cy: number }>;
-  width: number;
+  /** The shared canvas width the positions are centered within — every side
+   *  of one morph carries the same value, and TreeCanvas must center THIS
+   *  span (not the tree's own width) or the two offsets fight. */
+  canvasW: number;
   height: number;
   /** Column width the layout reserved per node (88 compact, 172 default). */
   nodeW: number;
@@ -52,14 +56,15 @@ function buildSide(
   opts: LayoutOpts,
 ): TreeSide {
   const layout = layoutTree(flat.nodes, opts);
-  const dx = Math.max(0, (canvasWidth - layout.width) / 2);
+  const canvasW = Math.max(canvasWidth, layout.width);
+  const dx = (canvasW - layout.width) / 2;
   const pos: Record<string, { cx: number; cy: number }> = {};
   for (const p of layout.nodes)
     pos[p.node.id] = { cx: p.x + p.w / 2 + dx, cy: p.y + p.h / 2 };
   return {
     flat,
     pos,
-    width: layout.width,
+    canvasW,
     height: layout.height,
     nodeW: opts.nodeW ?? NODE_W,
   };
@@ -152,10 +157,10 @@ function TreeCanvas({ a, b, t, ariaLabel }: TreeCanvasProps) {
 
   // --- per-frame geometry ---------------------------------------------------
 
-  const width = Math.max(a.width, b?.width ?? 0);
+  const width = Math.max(a.canvasW, b?.canvasW ?? 0);
   const height = Math.round(lerp(a.height, b ? b.height : a.height, t));
   const svgW = Math.max(width, containerW);
-  /** Centers the drawing when the card is wider than the tree. */
+  /** Centers the drawing when the card is wider than the canvas. */
   const dx = Math.round((svgW - width) / 2);
 
   interface Placed {
@@ -464,9 +469,40 @@ export interface AttackTreeMorphProps {
   caption?: string;
 }
 
+/** Depth of a flattened node (root = 0), by walking its parent chain. */
+function depthOf(nodes: Record<string, BenchNode>, id: string): number {
+  let depth = 0;
+  let cur = nodes[id];
+  while (cur?.parentId) {
+    depth++;
+    cur = nodes[cur.parentId];
+  }
+  return depth;
+}
+
+/** The spec with every node deeper than maxDepth cut off (root = 0). */
+function truncateSpec(spec: AttackTreeSpec, maxDepth: number): AttackTreeSpec {
+  const walk = (s: AttackTreeSpec, depth: number): AttackTreeSpec => ({
+    ...s,
+    children:
+      depth >= maxDepth
+        ? undefined
+        : s.children?.map((c) => walk(c, depth + 1)),
+  });
+  return walk(spec, 0);
+}
+
+const STEP_MS = 400;
+const LAYER_PAUSE_MS = 260;
+
 /**
- * Two trees and a button: forward tweens before → after (shared nodes glide,
- * new nodes fade in out of their parents), and the button then reverts.
+ * A tree, a button, and a staged morph: decomposing is not instant — the
+ * after-tree is revealed layer by layer, one depth per step with a beat
+ * between steps, so the reader watches each split create the next set of
+ * branches. Stages are the after-spec truncated at each entering depth;
+ * within a step the existing two-side tween runs (shared nodes glide,
+ * entering nodes fade in out of their ancestors). Reverting walks the same
+ * layers backwards.
  */
 export function AttackTreeMorph({
   before,
@@ -474,39 +510,85 @@ export function AttackTreeMorph({
   actionLabel,
   caption,
 }: AttackTreeMorphProps) {
-  const { a, b } = useMemo(() => {
-    const flatA = flattenSpec(ATTACK_TREES[before]);
-    const flatB = flattenSpec(ATTACK_TREES[after]);
+  const stages = useMemo(() => {
+    const specA = ATTACK_TREES[before];
+    const specB = ATTACK_TREES[after];
+    const flatA = flattenSpec(specA);
+    const flatB = flattenSpec(specB);
+    const enteringDepths = Object.keys(flatB.nodes)
+      .filter((id) => !flatA.nodes[id])
+      .map((id) => depthOf(flatB.nodes, id));
+    const specs: AttackTreeSpec[] = [specA];
+    if (enteringDepths.length === 0) {
+      specs.push(specB);
+    } else {
+      const minD = Math.min(...enteringDepths);
+      const maxD = Math.max(...enteringDepths);
+      for (let k = minD; k <= maxD; k++) specs.push(truncateSpec(specB, k));
+    }
+    const flats = specs.map(flattenSpec);
     const canvasWidth = Math.max(
-      layoutTree(flatA.nodes).width,
-      layoutTree(flatB.nodes).width,
+      ...flats.map((f) => layoutTree(f.nodes).width),
     );
-    return {
-      a: buildSide(flatA, canvasWidth, {}),
-      b: buildSide(flatB, canvasWidth, {}),
-    };
+    return flats.map((f) => buildSide(f, canvasWidth, {}));
   }, [before, after]);
+  const last = stages.length - 1;
 
-  const [t, setT] = useState(0);
+  // `pos` runs continuously over the stage sequence: stage index + in-step
+  // fraction. The ref mirrors it so chained steps read the live value.
+  const [pos, setPos] = useState(0);
+  const posRef = useRef(0);
   const [target, setTarget] = useState(0);
   const animRef = useRef<AnimationHandle | null>(null);
-  useEffect(() => () => animRef.current?.cancel(), []);
+  const pauseRef = useRef<number | null>(null);
+  const clearPending = () => {
+    animRef.current?.cancel();
+    if (pauseRef.current !== null) clearTimeout(pauseRef.current);
+    pauseRef.current = null;
+  };
+  useEffect(() => clearPending, []);
+
+  const stepToward = (to: number) => {
+    const from = posRef.current;
+    if (from === to) return;
+    const next =
+      to > from
+        ? Math.min(Math.floor(from + 1e-6) + 1, to)
+        : Math.max(Math.ceil(from - 1e-6) - 1, to);
+    animRef.current = animate((p) => {
+      const v = from + (next - from) * p;
+      posRef.current = v;
+      setPos(v);
+      if (p === 1 && next !== to) {
+        pauseRef.current = window.setTimeout(
+          () => stepToward(to),
+          LAYER_PAUSE_MS,
+        );
+      }
+    }, STEP_MS);
+  };
 
   const play = () => {
-    const from = t;
-    const to = target === 0 ? 1 : 0;
+    const to = target === 0 ? last : 0;
     setTarget(to);
-    animRef.current?.cancel();
-    animRef.current = animate((p) => setT(from + (to - from) * p), 450);
+    clearPending();
+    stepToward(to);
   };
+
+  // Clamp before indexing: transient float noise on pos must never become a
+  // negative or out-of-range stage index.
+  const idx = Math.max(0, Math.min(Math.floor(pos + 1e-6), last));
+  const a = stages[idx];
+  const b = idx < last ? stages[idx + 1] : undefined;
+  const frac = Math.max(0, Math.min(1, pos - idx));
 
   return (
     <figure className="not-prose my-6 space-y-2">
       <TreeCanvas
         a={a}
         b={b}
-        t={t}
-        ariaLabel={`Attack tree, morphing between two versions: ${a.flat.nodes[BENCH_ROOT_ID].label}`}
+        t={frac}
+        ariaLabel={`Attack tree, decomposed layer by layer: ${a.flat.nodes[BENCH_ROOT_ID].label}`}
       />
       <div className="flex items-center justify-center">
         <Button

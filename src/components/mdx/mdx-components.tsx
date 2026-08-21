@@ -3,6 +3,7 @@ import type { MDXComponents } from "mdx/types";
 import { Video } from "./video";
 import { ArxivPaper, ArxivSection } from "./arxiv-paper";
 import { AttackTree, AttackTreeMorph } from "./attack-tree/attack-tree";
+import { BenchEmbed } from "@/components/bench/bench-embed";
 import { Callout } from "./callout";
 import { Fold } from "./fold";
 import { Demo } from "./demo";
@@ -88,9 +89,11 @@ export const mdxComponents: MDXComponents = {
   ArxivPaper,
   ArxivSection,
   // Module 1's attack-tree primer figures: read-only trees in the Threat
-  // Modelling Bench's visual style, plus the split/compose morph animation.
+  // Modelling Bench's visual style, plus the split/compose morph animation —
+  // and the bench itself, embeddable as the primer's practice environment.
   AttackTree,
   AttackTreeMorph,
+  BenchEmbed,
   Callout,
   Fold,
   Demo,

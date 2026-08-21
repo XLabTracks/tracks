@@ -674,7 +674,38 @@ function BenchBody({
           : "Lock revision → reveal the next affordance";
 
   return (
-    <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_360px]">
+    <div className="space-y-4">
+      {/* World card + red's wall — the closed world reads above the graph,
+          split into two columns where the width allows. */}
+      <details
+        className="border-border bg-card rounded-xl border p-4"
+        open={phase.kind === "red-base" ? true : undefined}
+      >
+        <summary className="text-muted-foreground cursor-pointer text-xs font-semibold tracking-wide uppercase">
+          The world & red&apos;s wall
+        </summary>
+        <div className="mt-2 grid gap-x-8 gap-y-3 text-sm lg:grid-cols-2">
+          <div className="space-y-2">
+            {scenario.worldCard.map((para) => (
+              <p key={para.slice(0, 40)} className="text-muted-foreground">
+                {para}
+              </p>
+            ))}
+          </div>
+          <div className="space-y-2">
+            <p className="text-foreground text-xs font-semibold tracking-wide uppercase">
+              Red&apos;s wall
+            </p>
+            <ul className="text-muted-foreground list-disc space-y-1 pl-5">
+              {scenario.redWall.map((line) => (
+                <li key={line.slice(0, 40)}>{line}</li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      </details>
+
+      <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_360px]">
       {/* ------------------------------------------------ the graph canvas */}
       <BenchCanvas
         nodes={state.nodes}
@@ -938,31 +969,6 @@ function BenchBody({
           </div>
         )}
 
-        {/* World card */}
-        <details
-          className="border-border bg-card rounded-xl border p-4"
-          open={phase.kind === "red-base" ? true : undefined}
-        >
-          <summary className="text-muted-foreground cursor-pointer text-xs font-semibold tracking-wide uppercase">
-            The world & red&apos;s wall
-          </summary>
-          <div className="mt-2 space-y-2 text-sm">
-            {scenario.worldCard.map((para) => (
-              <p key={para.slice(0, 40)} className="text-muted-foreground">
-                {para}
-              </p>
-            ))}
-            <p className="text-foreground text-xs font-semibold tracking-wide uppercase">
-              Red&apos;s wall
-            </p>
-            <ul className="text-muted-foreground list-disc space-y-1 pl-5">
-              {scenario.redWall.map((line) => (
-                <li key={line.slice(0, 40)}>{line}</li>
-              ))}
-            </ul>
-          </div>
-        </details>
-
         {/* Affordance list */}
         <div className="border-border bg-card rounded-xl border p-4">
           <p className="text-muted-foreground mb-2 text-xs font-semibold tracking-wide uppercase">
@@ -1046,6 +1052,7 @@ function BenchBody({
         >
           <RotateCcw className="size-3.5" aria-hidden /> Reset bench
         </Button>
+      </div>
       </div>
     </div>
   );

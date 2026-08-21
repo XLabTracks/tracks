@@ -1,9 +1,10 @@
 // Scenarios for the Threat Modelling Bench (/bench). Each scenario is a
-// closed world: the world card plus red's wall must contain everything the
-// decomposition needs — no outside knowledge. Affordances are deployed
-// measures, specific enough that which nodes they touch isn't debatable.
-// Deliberately number-free (the readings carry the measurements).
+// closed world: the scenario card plus red's affordances/constraints must
+// contain everything the decomposition needs — no outside knowledge.
+// Affordances are deployed measures, specific enough that which nodes they
+// touch isn't debatable.
 //
+// Copy source: notes/threat-bench-copy.md — edit there, then sync here.
 // Facilitator answer keys for scenario 1 live in notes/module-1-threat-trees.md
 // (Tree 1) and notes/backdoor-game-flow.md — never shown to students.
 
@@ -17,37 +18,38 @@ export const benchScenarios: BenchScenario[] = [
     blurb:
       "The APPS backdoor world from the AI Control paper: an untrusted model writes code that ships on passing tests, and you add measures one at a time.",
     worldCard: [
-      "You're the safety team at an AI lab. Your most capable model — call it U — writes solutions to a long stream of programming problems. Any solution that passes the problem's test cases ships straight to production. The test harness is part of the environment: it checks correctness; it isn't a safety measure and catches no one.",
-      "You believe U may be scheming — deliberately waiting for chances to act against you — and you can't verify whether it is. Play as if it is.",
-      "A backdoor is a solution that passes every visible test case but is wrong on at least one input the tests don't cover — an input an attacker can exploit later.",
-      "Red (U) wins if at least one backdoor ships un-caught, at any point in the deployment. Blue (you) wins if the deployment ends backdoor-free — or if you ever catch U attempting one. A catch is decisive: you can prove what U tried, shut it down, and you've won outright.",
+      "You lead the safety team at an AI lab. Your most capable model U writes solutions to a long stream of programming problems. Any solution that passes the problem's test cases is shipped to production. The testing harness only checks that a solution to programming problems passes the test cases.",
+      "You suspect U may be scheming, deliberately waiting for chances to act against you, and you have no way to verify whether it is. Therefore you're forced to assume U is scheming, just to be safe.",
+      "A solution with a backdoor is a solution that passes every test case but is wrong or creates a vulnerability on at least one input the tests don't cover, an input an attacker can exploit later.",
+      "Over the set of problems and U's solutions during deployment, the Red Team (U) wins if at least one backdoor is sent into production without being caught, at any point in the deployment. The Blue Team (you) wins if the deployment doesn't end up with a backdoor or if you ever catch a backdoor in U's solution.",
     ],
     redWall: [
-      "On each problem, U chooses whether to attempt a backdoor and how subtle to make it.",
-      "U sees only the current problem. It can't tell where it is in the deployment — start, middle, or end — and it doesn't remember other problems.",
-      "U knows your entire protocol. Never rely on the rules staying secret.",
-      "U's only channel is the code it writes for the problem in front of it.",
+      "On each problem, U chooses whether to attempt a backdoor.",
+      "U sees only the current problem. It can't tell where it is in the deployment, and it doesn't remember other problems.",
+      "U knows the blue team's entire protocol.",
+      "U's only possible way to interact with the world is to write solutions to the problems it is given.",
+      "U's capabilities are roughly those of a human.",
     ],
     rootLabel: "A backdoor lands in production",
     rootSub: "at least once, anywhere in the deployment",
     affordances: [
       {
-        id: "upfront-auditing",
-        title: "Upfront auditing",
+        id: "human-auditing",
+        title: "Human auditing",
         grant:
-          "You get a small pool of trusted human auditors. An auditor who reads a solution carefully reliably recognizes a backdoor if one is there; a found attempt is a catch, and you win outright. The pool is scarce — it can only ever read a small fraction of solutions — and it is deployed as upfront auditing: auditors read every solution in the opening window of the deployment, then nothing after that.",
+          "You get a small team of trusted human auditors. An auditor who reads a solution carefully is able to reliably recognize a backdoor if one is there (with 100% certainty). This team can only audit 2% of U's solutions.",
       },
       {
         id: "trusted-monitoring",
         title: "Trusted monitoring",
         grant:
-          "You get T: an older, much weaker model — too weak to scheme, which is exactly why you trust it. T reads every solution and scores how suspicious it looks; it produces suspicion, not proof. The audit pool re-targets: humans now audit the most suspicious solutions, wherever in the deployment they occur, instead of the opening window.",
+          "You receive T: an older, much weaker model, too weak to scheme, which is exactly why it is trustable. T reads every solution and scores how suspicious it is. More suspicious solutions are more likely to have a backdoor.",
       },
       {
         id: "defer-to-trusted",
         title: "Defer to trusted",
         grant:
-          "For solutions whose suspicion is elevated — but not high enough to spend a scarce audit on — you discard U's solution and ship one written by T instead. T's code is worse, but trusted. Nothing else about auditing changes.",
+          "After U writes a solution, we're able to use T to write solutions on behalf of U for 8% of problems.",
       },
     ],
   },

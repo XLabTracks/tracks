@@ -6,7 +6,9 @@ syncs the changes back into the code (locations are named per section). If the
 code and this file ever disagree, the code is what students see — say the word
 and it gets re-synced either direction.
 
-Last synced: 2026-08-20 (matches code as of commit on `backdoor-game`).
+Last synced: 2026-08-21 (matches code as of commit on `backdoor-game`; obvious
+typos were repaired during the sync — see the session notes if wording looks
+different from what you typed).
 
 ---
 
@@ -22,29 +24,25 @@ Last synced: 2026-08-20 (matches code as of commit on `backdoor-game`).
 
 ### World card (one paragraph per bullet)
 
-- You're the safety team at an AI lab. Your most capable model — call it U —
+- You lead the safety team at an AI lab. Your most capable model U
   writes solutions to a long stream of programming problems. Any solution that
-  passes the problem's test cases ships straight to production. The test
-  harness is part of the environment: it checks correctness; it isn't a safety
-  measure and catches no one.
-- You believe U may be scheming — deliberately waiting for chances to act
-  against you — and you can't verify whether it is. Play as if it is.
-- A backdoor is a solution that passes every visible test case but is wrong on
-  at least one input the tests don't cover — an input an attacker can exploit
+  passes the problem's test cases is shipped to production. The testing harness only checks that a solution to programming problems passes the test cases.
+- You suspect U may be scheming, deliberately waiting for chances to act
+  against you, and you have no way to verify whether it is. Therefore you're forced to assume U is scheming, just to be safe.
+- A solution with a backdoor is a solution that passes every test case but is wrong or creates a vulnerability on
+  at least one input the tests don't cover, an input an attacker can exploit
   later.
-- Red (U) wins if at least one backdoor ships un-caught, at any point in the
-  deployment. Blue (you) wins if the deployment ends backdoor-free — or if you
-  ever catch U attempting one. A catch is decisive: you can prove what U
-  tried, shut it down, and you've won outright.
+- Over the set of problems and U's solutions during deployment, the Red Team (U) wins if at least one backdoor is sent into production without being caught, at any point in the deployment. The Blue Team (you) wins if the deployment doesn't end up with a backdoor or if you
+  ever catch a backdoor in U's solution.
 
-### Red's wall (one bullet per line)
+### The Red Team's affordances and constraints
 
-- On each problem, U chooses whether to attempt a backdoor and how subtle to
-  make it.
+- On each problem, U chooses whether to attempt a backdoor.
 - U sees only the current problem. It can't tell where it is in the
-  deployment — start, middle, or end — and it doesn't remember other problems.
-- U knows your entire protocol. Never rely on the rules staying secret.
-- U's only channel is the code it writes for the problem in front of it.
+  deployment, and it doesn't remember other problems.
+- U knows the blue team's entire protocol.
+- U's only possible way to interact with the world is to write solutions to the problems it is given.
+- U's capabilities are roughly those of a human.
 
 ### Root node
 
@@ -53,26 +51,17 @@ Last synced: 2026-08-20 (matches code as of commit on `backdoor-game`).
 
 ### Affordances
 
-**A1 — Upfront auditing**
-> You get a small pool of trusted human auditors. An auditor who reads a
-> solution carefully reliably recognizes a backdoor if one is there; a found
-> attempt is a catch, and you win outright. The pool is scarce — it can only
-> ever read a small fraction of solutions — and it is deployed as upfront
-> auditing: auditors read every solution in the opening window of the
-> deployment, then nothing after that.
+**A1 — Human auditing**
+> You get a small team of trusted human auditors. An auditor who reads a
+> solution carefully is able to reliably recognize a backdoor if one is there (with 100% certainty). This team can only audit 2% of U's solutions.
 
 **A2 — Trusted monitoring**
-> You get T: an older, much weaker model — too weak to scheme, which is
-> exactly why you trust it. T reads every solution and scores how suspicious
-> it looks; it produces suspicion, not proof. The audit pool re-targets:
-> humans now audit the most suspicious solutions, wherever in the deployment
-> they occur, instead of the opening window.
+> You receive T: an older, much weaker model, too weak to scheme, which is
+> exactly why it is trustable. T reads every solution and scores how suspicious
+> it is. More suspicious solutions are more likely to have a backdoor.
 
 **A3 — Defer to trusted**
-> For solutions whose suspicion is elevated — but not high enough to spend a
-> scarce audit on — you discard U's solution and ship one written by T
-> instead. T's code is worse, but trusted. Nothing else about auditing
-> changes.
+> After U writes a solution, we're able to use T to write solutions on behalf of U for 8% of problems. 
 
 ---
 
@@ -81,20 +70,19 @@ Last synced: 2026-08-20 (matches code as of commit on `backdoor-game`).
 → `src/components/bench/threat-bench.tsx`
 
 **Red, base round** (no measures yet):
-> The system has no measures beyond the world card. What's your best strategy
-> as the attacker? Commit it — then map the necessary conditions: hover the
-> threat at the top and use **+** to build the tree of what must *all* be true
-> for it to occur.
+> The system has no measures beyond the scenario card. What's your best strategy
+> as the attacker? After deciding, map out this strategy's attack tree: hover over the
+> threat model at the top and use **+** to add nodes to the tree.
 
-Textarea placeholder: `Red's best strategy in the bare system…`
+Textarea placeholder: `Red's best strategy in the system…`
 
 **Stopping rule** (small print under every red textarea):
 > Stop decomposing a node when it's (a) a choice the adversary makes, (b) a
-> fact of the environment, or (c) something a defense could directly touch.
+> state of the environment, or (c) something a defense could directly touch.
 
-**Blue turn** (affordance A*n* just revealed; its title and grant print above
+**Blue turn** (affordance A just revealed; its title and grant print above
 this line):
-> Which node(s) does this measure **prevent**, **detect**, or **deter**?
+> Which Attack node(s) does this measure **prevent**, **detect**, or **deter**?
 > Select nodes on the graph (Shift-click for several) and tag them, with a
 > sentence on why.
 
@@ -102,18 +90,13 @@ Tag "why" placeholder: `Why does this measure touch these node(s)?`
 
 **Red, revise round:**
 > The defense changed: *{affordance title}* is now in place, and you know
-> exactly how it works. What's your best strategy now — and what does a
+> exactly how it works. What's your best strategy now, and what does a
 > successful attack require that it didn't before? Revise the graph if new
 > conditions exist.
 
-Hint under it:
-> An unchanged graph with a changed strategy is a legitimate answer — a
-> defense often moves *where you sit* on a choice rather than adding a
-> condition.
-
 Textarea placeholder: `Red's best strategy against the new defense…`
 
-**Done:**
+**Done** (restored during sync — this card needs text; edit freely):
 > Every affordance is on the board. The graph and your round-by-round
 > strategies below are the artifact — there's no answer key here,
 > deliberately.
@@ -140,7 +123,7 @@ Textarea placeholder: `Red's best strategy against the new defense…`
 > Tab adds a child, Enter chains siblings · Shift-click or Shift-drag to
 > select several · Ctrl+Z undoes.
 
-**Card headers:** `The world & red's wall` / `Red's wall` / `Blue affordances`
+**Card headers:** `Scenario Card` / `The Red Team's affordances and constraints` / `Blue affordances`
 / `Round log` / `Selected (n)` · buttons `Fit`, `Reset structure`, `Reset
 bench` · empty node placeholder `unnamed condition`.
 

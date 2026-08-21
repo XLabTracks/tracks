@@ -61,7 +61,7 @@ function positionsOf(
   );
 }
 const STOPPING_RULE =
-  "Stop decomposing a node when it's (a) a choice the adversary makes, (b) a fact of the environment, or (c) something a defense could directly touch.";
+  "Stop decomposing a node when it's (a) a choice the adversary makes, (b) a state of the environment, or (c) something a defense could directly touch.";
 
 function RoleBadge({ role }: { role: "red" | "blue" }) {
   return (
@@ -675,35 +675,31 @@ function BenchBody({
 
   return (
     <div className="space-y-4">
-      {/* World card + red's wall — the closed world reads above the graph,
-          split into two columns where the width allows. */}
-      <details
-        className="border-border bg-card rounded-xl border p-4"
-        open={phase.kind === "red-base" ? true : undefined}
-      >
-        <summary className="text-muted-foreground cursor-pointer text-xs font-semibold tracking-wide uppercase">
-          The world & red&apos;s wall
-        </summary>
-        <div className="mt-2 grid gap-x-8 gap-y-3 text-sm lg:grid-cols-2">
-          <div className="space-y-2">
+      {/* Scenario card — always visible (not collapsible), reading-size text,
+          the closed world above the graph split into two columns where the
+          width allows. */}
+      <div className="border-border bg-card rounded-xl border p-5">
+        <p className="text-muted-foreground text-xs font-semibold tracking-wide uppercase">
+          Scenario Card
+        </p>
+        <div className="mt-3 grid gap-x-10 gap-y-4 text-base leading-relaxed lg:grid-cols-2">
+          <div className="space-y-3">
             {scenario.worldCard.map((para) => (
-              <p key={para.slice(0, 40)} className="text-muted-foreground">
-                {para}
-              </p>
+              <p key={para.slice(0, 40)}>{para}</p>
             ))}
           </div>
-          <div className="space-y-2">
-            <p className="text-foreground text-xs font-semibold tracking-wide uppercase">
-              Red&apos;s wall
+          <div className="space-y-3">
+            <p className="text-xs font-semibold tracking-wide uppercase">
+              The Red Team&apos;s affordances and constraints
             </p>
-            <ul className="text-muted-foreground list-disc space-y-1 pl-5">
+            <ul className="list-disc space-y-2 pl-5">
               {scenario.redWall.map((line) => (
                 <li key={line.slice(0, 40)}>{line}</li>
               ))}
             </ul>
           </div>
         </div>
-      </details>
+      </div>
 
       {/* ------------------------------------------------ the graph canvas */}
       <BenchCanvas
@@ -767,16 +763,16 @@ function BenchBody({
           {phase.kind === "red-base" && (
             <div className="space-y-2 text-sm">
               <p>
-                The system has no measures beyond the world card. What&apos;s
-                your best strategy as the attacker? Commit it — then map the
-                necessary conditions: hover the threat at the top and use{" "}
-                <strong>+</strong> to build the tree of what must <em>all</em>{" "}
-                be true for it to occur.
+                The system has no measures beyond the scenario card.
+                What&apos;s your best strategy as the attacker? After deciding,
+                map out this strategy&apos;s attack tree: hover over the threat
+                model at the top and use <strong>+</strong> to add nodes to the
+                tree.
               </p>
               <Textarea
                 value={strategy}
                 onChange={(e) => setStrategy(e.target.value)}
-                placeholder="Red's best strategy in the bare system…"
+                placeholder="Red's best strategy in the system…"
                 rows={3}
                 className="resize-y"
               />
@@ -792,8 +788,9 @@ function BenchBody({
               </p>
               <p className="text-muted-foreground">{currentAffordance.grant}</p>
               <p>
-                Which node(s) does this measure <strong>prevent</strong>,{" "}
-                <strong>detect</strong>, or <strong>deter</strong>? Select
+                Which Attack node(s) does this measure{" "}
+                <strong>prevent</strong>, <strong>detect</strong>, or{" "}
+                <strong>deter</strong>? Select
                 nodes on the graph (Shift-click for several) and tag them, with
                 a sentence on why.
               </p>
@@ -805,14 +802,9 @@ function BenchBody({
               <p>
                 The defense changed: <em>{currentAffordance.title}</em> is now
                 in place, and you know exactly how it works. What&apos;s your
-                best strategy now — and what does a successful attack require
+                best strategy now, and what does a successful attack require
                 that it didn&apos;t before? Revise the graph if new conditions
                 exist.
-              </p>
-              <p className="text-muted-foreground text-xs">
-                An unchanged graph with a changed strategy is a legitimate
-                answer — a defense often moves <em>where you sit</em> on a
-                choice rather than adding a condition.
               </p>
               <Textarea
                 value={strategy}

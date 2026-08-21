@@ -16,7 +16,7 @@ import { useEffect, useId, useMemo, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { animate, type AnimationHandle } from "@/lib/bench/animate";
-import { layoutTree, NODE_W } from "@/lib/bench/layout";
+import { layoutTree } from "@/lib/bench/layout";
 import { BENCH_ROOT_ID, type BenchNode } from "@/lib/bench/types";
 import {
   ATTACK_TREES,
@@ -30,6 +30,11 @@ import {
 const FALLBACK_H = 40;
 /** foreignObject band a node box is vertically centered inside. */
 const FO_H = 220;
+/** Figure columns are narrower than the bench's 172px so the widest lesson
+ *  tree (nine leaves) fits the reading column with no scrolling even on a
+ *  1280px window (column ≈ 928px there) — labels wrap instead. */
+const FIG_NODE_W = 88;
+const FIG_OPTS = { nodeW: FIG_NODE_W, siblingGap: 10 };
 
 interface TreeSide {
   flat: FlatAttackTree;
@@ -40,7 +45,7 @@ interface TreeSide {
 }
 
 function buildSide(flat: FlatAttackTree, canvasWidth: number): TreeSide {
-  const layout = layoutTree(flat.nodes);
+  const layout = layoutTree(flat.nodes, FIG_OPTS);
   const dx = Math.max(0, (canvasWidth - layout.width) / 2);
   const pos: Record<string, { cx: number; cy: number }> = {};
   for (const p of layout.nodes)
@@ -344,9 +349,9 @@ function TreeCanvas({ a, b, t, ariaLabel }: TreeCanvasProps) {
         {placed.map(({ node, variant, cx, cy, opacity }) => (
           <foreignObject
             key={node.id}
-            x={cx - NODE_W / 2}
+            x={cx - FIG_NODE_W / 2}
             y={cy - FO_H / 2}
-            width={NODE_W}
+            width={FIG_NODE_W}
             height={FO_H}
             style={{ overflow: "visible", pointerEvents: "none" }}
             opacity={opacity}
@@ -366,7 +371,7 @@ function TreeCanvas({ a, b, t, ariaLabel }: TreeCanvasProps) {
                 <div
                   data-atf-id={node.id}
                   className={cn(
-                    "flex max-w-full min-w-[96px] flex-col justify-center rounded-lg border-2 px-2 py-1.5 text-center",
+                    "flex max-w-full min-w-14 flex-col justify-center rounded-lg border-2 px-2 py-1.5 text-center",
                     node.id === BENCH_ROOT_ID
                       ? "border-red-600/80 bg-red-500/10"
                       : variant === "flag"
@@ -437,8 +442,8 @@ export function AttackTreeMorph({
     const flatA = flattenSpec(ATTACK_TREES[before]);
     const flatB = flattenSpec(ATTACK_TREES[after]);
     const canvasWidth = Math.max(
-      layoutTree(flatA.nodes).width,
-      layoutTree(flatB.nodes).width,
+      layoutTree(flatA.nodes, FIG_OPTS).width,
+      layoutTree(flatB.nodes, FIG_OPTS).width,
     );
     return {
       a: buildSide(flatA, canvasWidth),

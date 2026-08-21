@@ -66,14 +66,26 @@ export function childrenOf(
     .sort((a, b) => a.seq - b.seq);
 }
 
+/** Sizing knobs for layoutTree — the bench uses the defaults; the lesson
+ *  figures pass narrower columns so wide trees fit a reading column. */
+export interface LayoutOpts {
+  nodeW?: number;
+  siblingGap?: number;
+}
+
 /** Width of the horizontal span a subtree needs (node or children, wider wins). */
-function subtreeWidth(nodes: Record<string, BenchNode>, id: string): number {
+function subtreeWidth(
+  nodes: Record<string, BenchNode>,
+  id: string,
+  nodeW: number,
+  siblingGap: number,
+): number {
   const kids = childrenOf(nodes, id);
-  if (kids.length === 0) return NODE_W;
+  if (kids.length === 0) return nodeW;
   const kidsWidth =
-    kids.reduce((sum, k) => sum + subtreeWidth(nodes, k.id), 0) +
-    SIBLING_GAP * (kids.length - 1);
-  return Math.max(NODE_W, kidsWidth);
+    kids.reduce((sum, k) => sum + subtreeWidth(nodes, k.id, nodeW, siblingGap), 0) +
+    siblingGap * (kids.length - 1);
+  return Math.max(nodeW, kidsWidth);
 }
 
 export interface NodePosition {
@@ -127,7 +139,12 @@ export function withSeededPositions(
   );
 }
 
-export function layoutTree(nodes: Record<string, BenchNode>): BenchLayout {
+export function layoutTree(
+  nodes: Record<string, BenchNode>,
+  opts: LayoutOpts = {},
+): BenchLayout {
+  const nodeW = opts.nodeW ?? NODE_W;
+  const siblingGap = opts.siblingGap ?? SIBLING_GAP;
   const positioned: PositionedNode[] = [];
   const edges: BenchEdge[] = [];
   const pills: GatePill[] = [];
@@ -137,7 +154,7 @@ export function layoutTree(nodes: Record<string, BenchNode>): BenchLayout {
   const place = (id: string, left: number, depth: number): number => {
     const node = nodes[id];
     const kids = childrenOf(nodes, id);
-    const span = subtreeWidth(nodes, id);
+    const span = subtreeWidth(nodes, id, nodeW, siblingGap);
     const h = nodeHeight(depth);
     const y = levelY(depth);
     maxDepth = Math.max(maxDepth, depth);
@@ -149,13 +166,16 @@ export function layoutTree(nodes: Record<string, BenchNode>): BenchLayout {
       // Center the children block within the subtree span (the span is the
       // node's own width when the node is wider than its children).
       const kidsWidth =
-        kids.reduce((sum, k) => sum + subtreeWidth(nodes, k.id), 0) +
-        SIBLING_GAP * (kids.length - 1);
+        kids.reduce(
+          (sum, k) => sum + subtreeWidth(nodes, k.id, nodeW, siblingGap),
+          0,
+        ) +
+        siblingGap * (kids.length - 1);
       let cursor = left + Math.max(0, (span - kidsWidth) / 2);
       const kidCenters = kids.map((k) => {
-        const kSpan = subtreeWidth(nodes, k.id);
+        const kSpan = subtreeWidth(nodes, k.id, nodeW, siblingGap);
         const c = place(k.id, cursor, depth + 1);
-        cursor += kSpan + SIBLING_GAP;
+        cursor += kSpan + siblingGap;
         return c;
       });
       centerX = (kidCenters[0] + kidCenters[kidCenters.length - 1]) / 2;
@@ -182,14 +202,16 @@ export function layoutTree(nodes: Record<string, BenchNode>): BenchLayout {
       }
     }
 
-    positioned.push({ node, x: centerX - NODE_W / 2, y, w: NODE_W, h, depth });
+    positioned.push({ node, x: centerX - nodeW / 2, y, w: nodeW, h, depth });
     return centerX;
   };
 
   if (nodes[BENCH_ROOT_ID]) place(BENCH_ROOT_ID, CANVAS_PAD, 0);
 
   const width =
-    (nodes[BENCH_ROOT_ID] ? subtreeWidth(nodes, BENCH_ROOT_ID) : 0) +
+    (nodes[BENCH_ROOT_ID]
+      ? subtreeWidth(nodes, BENCH_ROOT_ID, nodeW, siblingGap)
+      : 0) +
     2 * CANVAS_PAD;
   const height = levelY(maxDepth) + nodeHeight(maxDepth) + CANVAS_PAD;
   return { nodes: positioned, edges, pills, width, height };

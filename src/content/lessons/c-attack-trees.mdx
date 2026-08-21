@@ -1,0 +1,58 @@
+<SourceCredit
+  author="Bruce Schneier"
+  authorHref="https://www.schneier.com/"
+  sourceHref="https://www.schneier.com/academic/archives/1999/12/attack_trees.html"
+  sourceLabel="Attack Trees (1999)"
+  state="Adapted from Bruce Schneier, “Attack Trees,” Dr. Dobb's Journal, December 1999."
+  note="The trees are redrawn in the style this track renders its threat models."
+/>
+
+Attack trees provide a formal, methodical way of describing the security of systems, based on various attacks. Basically, you can represent attacks against a system in a tree structure, with the goal as the root node and different ways of achieving that goal as leaf nodes.
+
+The following, for example, is a simple attack tree against a physical safe.
+
+<AttackTree name="safe" compact />
+
+The goal is to open the safe. To open the safe, attackers can pick the lock, learn the combination, cut open the safe, or install the safe improperly so that they can easily open it later. To learn the combination, they either have to find the combination written down or get the combination from the safe owner. And so on. Each node becomes a subgoal, and children of that node are ways to achieve that subgoal. (Of course, this is just a sample attack tree, and an incomplete one at that. How many other attacks can you think of that would achieve the goal?)
+
+Note that there are AND nodes and OR nodes (in the figures, everything that isn't an AND node is an OR node). OR nodes are alternatives—the four ways to open a safe, for example. AND nodes represent different steps toward achieving the same goal. To eavesdrop on someone saying the safe combination, attackers have to eavesdrop on the conversation AND get safe owners to say the combination. Attackers can't achieve the goal unless both subgoals are satisfied.
+
+## Creating Attack Trees
+
+How do you create an attack tree like this? First, you identify the possible attack goals. Each goal forms a separate tree, although they might share subtrees and nodes. Then, try to think of all attacks against each goal. Add them to the tree. Repeat this process down the tree until you are done. Of course, there's always the chance that you forgot about an attack, but you'll get better with time. Like any security analysis, creating attack trees requires a certain mindset and takes practice.
+
+## Tips for Making "Good" Attack Trees
+
+Be careful about how specific Attack Nodes should be. Being overly specific might sacrifice generality (potential brevity and other attacks).
+
+Take, for example, the following tree:
+
+<AttackTree name="overSpecific" />
+
+Instead, a tree that composes nodes that involve similar attacks would be more representative of attacker cognition:
+
+<AttackTree name="composed" />
+
+<Callout variant="warning" title="A subtler trap: nodes that aren't attacks">
+  Suppose you tried to decompose "learn the combo" into "try 0000," "try 0001," "try 0002," … These are overly specific attacks but they also aren't attacks. Under an OR gate, each child is supposed to be a way of achieving the goal, and "try 0000" only opens the safe in the world where the combination happens to be 0000.
+</Callout>
+
+Also, try not to have overcomplicated or conditioned nodes, as you might be composing multiple possible nodes!
+
+Take, for example, the following tree:
+
+<AttackTree name="overloaded" />
+
+Instead, decomposing attacks helps your attack tree stay organized and might allow you to find other attacks.
+
+<AttackTreeMorph
+  before="overloaded"
+  after="decomposed"
+  actionLabel="Decompose the node"
+/>
+
+## Practice: A backdoor lands in production
+
+Build the threat model yourself, one round at a time. Red finds the best attack and maps its necessary conditions; blue receives an affordance and tags the nodes it touches; red revises. Your work saves in this browser.
+
+<BenchEmbed slug="backdoor" />

@@ -537,12 +537,11 @@
 }
 
 /* ============================================================
-   Footnotes — numbered via a CSS counter, revealed via a
-   checkbox/label toggle (no JS). On wide viewports the note
-   floats into the right margin next to its reference, LessWrong/
-   Alignment-Forum style; the lesson column (article.lesson-body,
-   inside the page's max-w-4xl wrapper) leaves enough free space
-   at 2xl+ once the w-72 track sidebar is accounted for.
+   Footnotes — numbered via a CSS counter. The note body is a
+   popup now (src/components/mdx/footnote.tsx; the old margin
+   float is gone — see the .footnote-marker comment below). The
+   lesson column (article.lesson-body) reads inside the item
+   page's max-w-5xl wrapper, the paper reader's measure.
    ============================================================ */
 .lesson-body {
   counter-reset: footnote;

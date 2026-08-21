@@ -132,7 +132,14 @@ export default async function RootLayout({
       <head>
         <script dangerouslySetInnerHTML={{ __html: THEME_BOOT }} />
       </head>
-      <body className="bg-background text-foreground flex min-h-full flex-col">
+      <body
+        // Browser extensions (Grammarly's data-gr-* stamps in particular)
+        // mutate <body> attributes before React hydrates — noise we cannot
+        // control. Suppression is attribute-only and one element deep, so
+        // real mismatches inside the app still warn.
+        suppressHydrationWarning
+        className="bg-background text-foreground flex min-h-full flex-col"
+      >
         <a
           href="#main-content"
           className="bg-background text-foreground focus:ring-ring sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-50 focus:rounded-md focus:border focus:px-4 focus:py-2 focus:ring-2 focus:outline-none select-none"

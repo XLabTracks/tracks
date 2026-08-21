@@ -52,13 +52,14 @@ export const modules: Module[] = [
     // (arXiv/LessWrong/Substack artifacts) with permission.
     itemIds: [
       "c-case-for-control",
+      "c-attack-trees",
       "c-paper-ai-control",
       "c-pass-the-buck",
       "c-catching-red-handed",
       "c-threats-l1",
       "c-threats-l2",
     ],
-    estimatedMinutes: 335,
+    estimatedMinutes: 345,
   },
   {
     // Human-authored curriculum (from the course author's "contra control"
@@ -213,6 +214,19 @@ export const lessons: Lesson[] = [
   // referenced by nothing — they are earlier drafts of the c-paper-l3-*/l4-*
   // exercises the walkthrough uses, kept only until the prose pass confirms
   // nothing else needs them. Do not edit them expecting a learner to see it. ---
+  // --- Control, module 1: the attack-tree primer (adapted from Schneier
+  // 1999, prose and figures our own — the essay is conventionally
+  // copyrighted, not CC), placed between the motivation post and the AI
+  // Control paper so learners meet AND/OR decomposition before the paper
+  // argues over one. ---
+  {
+    id: "c-attack-trees",
+    slug: "attack-trees",
+    moduleId: "c-intro",
+    title: "Attack Trees",
+    contentRef: "c-attack-trees",
+    estimatedMinutes: 10,
+  },
   // --- Control, module 2 (how useful is AI control?): the case against
   // control, from the course author's notes; embeds the
   // contra-control-argue-reveal exercise. ---

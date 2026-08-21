@@ -194,7 +194,17 @@ async function LessonItemPage({
     track.chunkedReading && !lesson.completion && !lesson.unchunked;
 
   return (
-    <div className="px-4 py-8 lg:px-8">
+    // Lessons read at the same measure as the paper reader (PaperItemPage's
+    // max-w-5xl wrapper below), so prose and reproduced readings share one
+    // right edge. Verification is the exception: its widget lessons were
+    // built against the full column and keep it.
+    <div
+      className={
+        track.id === "verification"
+          ? "px-4 py-8 lg:px-8"
+          : "max-w-5xl px-4 py-8 lg:px-8"
+      }
+    >
       <Breadcrumbs
         items={[
           { label: track.title, href: `/tracks/${track.slug}` },

@@ -1,0 +1,74 @@
+<SourceCredit
+  author="Bruce Schneier"
+  authorHref="https://www.schneier.com/"
+  sourceHref="https://www.schneier.com/academic/archives/1999/12/attack_trees.html"
+  sourceLabel="Attack Trees (1999)"
+  state="Adapted from Bruce Schneier, “Attack Trees,” Dr. Dobb's Journal, December 1999."
+  note="The formalism and the safe-opening example are Schneier's; the prose and figures here are our own, and the trees are rendered the way this track renders its threat models."
+/>
+
+Before you can argue that a system is safe, you need a concrete account of how it could fail. Attack trees are a formal, methodical way to build that account: you represent the attacks against a system as a tree, with the attacker's goal at the root and the different ways of achieving that goal as the nodes beneath it. Every node becomes a subgoal in its own right, and its children are the ways to achieve *that* subgoal — so the same move that got you from the root to the first layer keeps working all the way down.
+
+Here is a small tree for a physical safe:
+
+<AttackTree
+  name="safe"
+  caption="An attack tree for opening a safe. The goal sits at the root; each layer decomposes a goal into ways of achieving it."
+/>
+
+Read it top-down. The attacker's goal is to open the safe. They can pick the lock, learn the combination, cut the safe open, or arrange for it to be installed badly so it can be opened later. To learn the combination, they either find it written down or get it out of someone who knows it — and getting it out of a person again splits into threatening them, blackmailing them, bribing them, or listening in at the right moment.
+
+This tree is a sample, and an incomplete one. That's worth sitting with for a second: pause and try to name two or three attacks that would open the safe but appear nowhere above. The gap between the tree you're handed and the attacks you can think of is exactly the skill this track keeps exercising.
+
+## Reading the gates
+
+Whenever siblings share a parent, the connector between them carries a **gate** — the pill on the bundle of edges.
+
+- **OR** children are *alternatives*: any one of them achieves the parent goal. The four ways to open the safe are OR children — the attacker only needs one to work.
+- **AND** children are *steps*: the parent goal is achieved only if **all** of them happen. Eavesdropping on the combination requires listening in on a conversation **and** getting the target to actually say the combination out loud. Either one alone gets the attacker nothing.
+
+Schneier's original figures leave OR implicit and mark only the AND nodes. Our rendering labels every gate explicitly, because the difference matters enormously once you start asking which defenses help: to beat an OR bundle, the defender has to block *every* child; to beat an AND bundle, blocking *any one* child suffices.
+
+## Growing a tree of your own
+
+The recipe is short:
+
+1. **Identify the attack goals.** Each goal gets its own tree (trees for different goals may share subtrees).
+2. **Brainstorm attacks against the goal** and add them as children.
+3. **Recurse:** treat each new node as a goal and decompose it, until the leaves are things you can reason about directly — attacks you could estimate a cost or probability for, or conditions a specific defense could target.
+
+There is always a chance you've forgotten an attack — you will have, every time. Building good attack trees is a mindset that improves with practice, which is precisely why this track has you build them yourself rather than only read finished ones.
+
+## Pitch nodes at the right grain
+
+A node can be *too specific*. Every child below is a genuine attack — each one, if it works, gets the combination out of the target — but the weapon is an irrelevant detail, and enumerating variants buries the structure:
+
+<AttackTreeMorph
+  before="overSpecific"
+  after="composed"
+  actionLabel="Compose the variants"
+  caption="Each variant is a real attack, but the weapon is an irrelevant detail. Composing them recovers the general node — and makes room to notice the genuinely different attacks beside it."
+/>
+
+The composed node isn't just shorter. Once "threaten" is one node instead of a list of props, it sits at the same grain as its true siblings — blackmail, bribery, eavesdropping — and the question "what *other* kinds of leverage does the attacker have over this person?" becomes visible. Over-specific nodes don't only cost brevity; they crowd out the enumeration that finds new attacks.
+
+<Callout variant="warning" title="A subtler trap: nodes that aren't attacks at all">
+  Suppose you decomposed "learn the combo" into "try 0000," "try 0001," "try 0002," … Those aren't overly specific attacks — they aren't attacks. Under an OR gate, each child is supposed to be a way of *achieving the goal*, and "try 0000" only opens the safe in the world where the combination happens to be 0000. The actual attack is the search procedure — "brute-force the combination" — one node, whose cost is the expected number of tries. When a child only "works" conditional on a lucky guess about the world, you've written a sample from a strategy where the strategy itself belongs.
+</Callout>
+
+## One attack per node
+
+Nodes can fail in the opposite direction too: a single label that quietly bundles a whole subtree. "Learn the combo by eavesdropping on the target saying the combo" is doing three jobs at once — it names a goal, commits to one particular method, and hides that the method itself has AND structure.
+
+<AttackTreeMorph
+  before="overloaded"
+  after="decomposed"
+  actionLabel="Decompose the node"
+  caption="Splitting an overloaded node exposes its AND structure — and every branch point it creates is a place to ask “what else would work here?”"
+/>
+
+Decomposing the compound node earns you three things. The hidden **AND** bundle surfaces, and AND bundles are where defenders live — break one step and the whole branch dies. Every new branch point invites the *what-else* question, which is how "find the combo written down," "threaten," and "bribe" appear on a tree that previously had no room for them. And the tree stays honest: each node is one claim, so when you later ask "which defense addresses this node?", the answer isn't smeared across three ideas sharing a label.
+
+## From safes to AI systems
+
+Everything in this lesson transfers directly to the rest of the track. Replace "open safe" with a goal like *a backdoor lands in production*, and the same discipline applies: decompose the goal into the conditions an AI system would need to engineer, mark which bundles are AND and which are OR, keep every node one claim at the right grain — and then ask, for each defense you're offered, exactly which nodes it prevents, detects, or deters. The paper you're about to read is, among other things, an argument conducted over a tree like that.

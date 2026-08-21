@@ -194,15 +194,15 @@ async function LessonItemPage({
     track.chunkedReading && !lesson.completion && !lesson.unchunked;
 
   return (
-    // The 4xl bound is the measure the rest of the track chrome reads at
-    // (module overview) and the wrapper the footnote margin-float in
-    // globals.css assumes. Verification is the exception: its widget lessons
-    // were built against the full column and keep it.
+    // Lessons read at the same measure as the paper reader (PaperItemPage's
+    // max-w-5xl wrapper below), so prose and reproduced readings share one
+    // right edge. Verification is the exception: its widget lessons were
+    // built against the full column and keep it.
     <div
       className={
         track.id === "verification"
           ? "px-4 py-8 lg:px-8"
-          : "max-w-4xl px-4 py-8 lg:px-8"
+          : "max-w-5xl px-4 py-8 lg:px-8"
       }
     >
       <Breadcrumbs

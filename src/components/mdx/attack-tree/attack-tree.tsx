@@ -16,7 +16,7 @@ import { useEffect, useId, useMemo, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { animate, type AnimationHandle } from "@/lib/bench/animate";
-import { layoutTree } from "@/lib/bench/layout";
+import { layoutTree, NODE_W, type LayoutOpts } from "@/lib/bench/layout";
 import { BENCH_ROOT_ID, type BenchNode } from "@/lib/bench/types";
 import {
   ATTACK_TREES,
@@ -30,11 +30,11 @@ import {
 const FALLBACK_H = 40;
 /** foreignObject band a node box is vertically centered inside. */
 const FO_H = 220;
-/** Figure columns are narrower than the bench's 172px so the widest lesson
- *  tree (nine leaves) fits the reading column with no scrolling even on a
- *  1280px window (column ≈ 928px there) — labels wrap instead. */
-const FIG_NODE_W = 88;
-const FIG_OPTS = { nodeW: FIG_NODE_W, siblingGap: 10 };
+/** `compact` figures use narrow columns with wrapped labels so a wide tree
+ *  (the nine-leaf safe example) fits the reading column with no scrolling
+ *  even on a 1280px window (column ≈ 928px there). Everything else keeps
+ *  the bench's 172px columns. */
+const COMPACT_OPTS: LayoutOpts = { nodeW: 88, siblingGap: 10 };
 
 interface TreeSide {
   flat: FlatAttackTree;
@@ -42,15 +42,27 @@ interface TreeSide {
   pos: Record<string, { cx: number; cy: number }>;
   width: number;
   height: number;
+  /** Column width the layout reserved per node (88 compact, 172 default). */
+  nodeW: number;
 }
 
-function buildSide(flat: FlatAttackTree, canvasWidth: number): TreeSide {
-  const layout = layoutTree(flat.nodes, FIG_OPTS);
+function buildSide(
+  flat: FlatAttackTree,
+  canvasWidth: number,
+  opts: LayoutOpts,
+): TreeSide {
+  const layout = layoutTree(flat.nodes, opts);
   const dx = Math.max(0, (canvasWidth - layout.width) / 2);
   const pos: Record<string, { cx: number; cy: number }> = {};
   for (const p of layout.nodes)
     pos[p.node.id] = { cx: p.x + p.w / 2 + dx, cy: p.y + p.h / 2 };
-  return { flat, pos, width: layout.width, height: layout.height };
+  return {
+    flat,
+    pos,
+    width: layout.width,
+    height: layout.height,
+    nodeW: opts.nodeW ?? NODE_W,
+  };
 }
 
 /** A node's anchor in a side it does not exist in: its nearest ancestor
@@ -121,12 +133,30 @@ function TreeCanvas({ a, b, t, ariaLabel }: TreeCanvasProps) {
     if (el) el.scrollLeft = (el.scrollWidth - el.clientWidth) / 2;
   }, []);
 
+  // The dotted grid must fill the whole figure card, so the SVG is stretched
+  // to the card's width when the tree is narrower (the drawing group is then
+  // re-centered by dx below).
+  const [containerW, setContainerW] = useState(0);
+  useEffect(() => {
+    const el = scrollRef.current;
+    if (!el) return;
+    const measure = () => setContainerW(el.clientWidth);
+    measure();
+    const ro = new ResizeObserver(measure);
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, []);
+
   const nodeH = (id: string) => heights[id] ?? FALLBACK_H;
+  const nodeW = a.nodeW;
 
   // --- per-frame geometry ---------------------------------------------------
 
   const width = Math.max(a.width, b?.width ?? 0);
   const height = Math.round(lerp(a.height, b ? b.height : a.height, t));
+  const svgW = Math.max(width, containerW);
+  /** Centers the drawing when the card is wider than the tree. */
+  const dx = Math.round((svgW - width) / 2);
 
   interface Placed {
     node: BenchNode;
@@ -275,9 +305,9 @@ function TreeCanvas({ a, b, t, ariaLabel }: TreeCanvasProps) {
     >
       {/* text-muted-foreground supplies currentColor to the gradient stops. */}
       <svg
-        width={width}
+        width={svgW}
         height={height}
-        className="text-muted-foreground mx-auto block"
+        className="text-muted-foreground block"
         role="img"
         aria-label={ariaLabel}
       >
@@ -310,8 +340,9 @@ function TreeCanvas({ a, b, t, ariaLabel }: TreeCanvasProps) {
             </linearGradient>
           ))}
         </defs>
-        <rect width={width} height={height} fill={`url(#${patternId})`} />
+        <rect width={svgW} height={height} fill={`url(#${patternId})`} />
 
+        <g transform={dx ? `translate(${dx}, 0)` : undefined}>
         {edges.map((edge) => (
           <path
             key={edge.key}
@@ -349,9 +380,9 @@ function TreeCanvas({ a, b, t, ariaLabel }: TreeCanvasProps) {
         {placed.map(({ node, variant, cx, cy, opacity }) => (
           <foreignObject
             key={node.id}
-            x={cx - FIG_NODE_W / 2}
+            x={cx - nodeW / 2}
             y={cy - FO_H / 2}
-            width={FIG_NODE_W}
+            width={nodeW}
             height={FO_H}
             style={{ overflow: "visible", pointerEvents: "none" }}
             opacity={opacity}
@@ -371,7 +402,8 @@ function TreeCanvas({ a, b, t, ariaLabel }: TreeCanvasProps) {
                 <div
                   data-atf-id={node.id}
                   className={cn(
-                    "flex max-w-full min-w-14 flex-col justify-center rounded-lg border-2 px-2 py-1.5 text-center",
+                    "flex max-w-full flex-col justify-center rounded-lg border-2 px-2 py-1.5 text-center",
+                    nodeW < NODE_W ? "min-w-14" : "min-w-[96px]",
                     node.id === BENCH_ROOT_ID
                       ? "border-red-600/80 bg-red-500/10"
                       : variant === "flag"
@@ -387,6 +419,7 @@ function TreeCanvas({ a, b, t, ariaLabel }: TreeCanvasProps) {
             </div>
           </foreignObject>
         ))}
+        </g>
       </svg>
     </div>
   );
@@ -396,14 +429,17 @@ function TreeCanvas({ a, b, t, ariaLabel }: TreeCanvasProps) {
 
 export interface AttackTreeProps {
   name: AttackTreeName;
+  /** Narrow columns + wrapped labels, for trees too wide to read unscrolled. */
+  compact?: boolean;
   caption?: string;
 }
 
 /** A read-only attack tree rendered in the bench's visual style. */
-export function AttackTree({ name, caption }: AttackTreeProps) {
-  const side = useMemo(() => buildSide(flattenSpec(ATTACK_TREES[name]), 0), [
-    name,
-  ]);
+export function AttackTree({ name, compact, caption }: AttackTreeProps) {
+  const side = useMemo(
+    () => buildSide(flattenSpec(ATTACK_TREES[name]), 0, compact ? COMPACT_OPTS : {}),
+    [name, compact],
+  );
   return (
     <figure className="not-prose my-6 space-y-2">
       <TreeCanvas
@@ -442,12 +478,12 @@ export function AttackTreeMorph({
     const flatA = flattenSpec(ATTACK_TREES[before]);
     const flatB = flattenSpec(ATTACK_TREES[after]);
     const canvasWidth = Math.max(
-      layoutTree(flatA.nodes, FIG_OPTS).width,
-      layoutTree(flatB.nodes, FIG_OPTS).width,
+      layoutTree(flatA.nodes).width,
+      layoutTree(flatB.nodes).width,
     );
     return {
-      a: buildSide(flatA, canvasWidth),
-      b: buildSide(flatB, canvasWidth),
+      a: buildSide(flatA, canvasWidth, {}),
+      b: buildSide(flatB, canvasWidth, {}),
     };
   }, [before, after]);
 

@@ -705,7 +705,6 @@ function BenchBody({
         </div>
       </details>
 
-      <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_360px]">
       {/* ------------------------------------------------ the graph canvas */}
       <BenchCanvas
         nodes={state.nodes}
@@ -741,7 +740,8 @@ function BenchBody({
         onResetStructure={resetStructure}
       />
 
-      {/* --------------------------------------------------- control panel */}
+      {/* ------------- controls below the graph: turn card beside status */}
+      <div className="grid items-start gap-4 lg:grid-cols-[minmax(0,1fr)_360px]">
       <div className="space-y-3">
         {/* Turn card */}
         <div
@@ -858,7 +858,9 @@ function BenchBody({
             </Button>
           )}
         </div>
+      </div>
 
+      <div className="space-y-3">
         {/* Selection */}
         {selectedNodes.length > 0 && (
           <div className="border-border bg-card rounded-xl border p-4">
@@ -996,6 +998,8 @@ function BenchBody({
             })}
           </ul>
         </div>
+      </div>
+      </div>
 
         {/* Round log */}
         {state.turnIndex > 0 && (
@@ -1052,8 +1056,6 @@ function BenchBody({
         >
           <RotateCcw className="size-3.5" aria-hidden /> Reset bench
         </Button>
-      </div>
-      </div>
     </div>
   );
 }

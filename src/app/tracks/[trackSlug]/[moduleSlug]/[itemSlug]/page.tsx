@@ -194,7 +194,17 @@ async function LessonItemPage({
     track.chunkedReading && !lesson.completion && !lesson.unchunked;
 
   return (
-    <div className="px-4 py-8 lg:px-8">
+    // The 4xl bound is the measure the rest of the track chrome reads at
+    // (module overview) and the wrapper the footnote margin-float in
+    // globals.css assumes. Verification is the exception: its widget lessons
+    // were built against the full column and keep it.
+    <div
+      className={
+        track.id === "verification"
+          ? "px-4 py-8 lg:px-8"
+          : "max-w-4xl px-4 py-8 lg:px-8"
+      }
+    >
       <Breadcrumbs
         items={[
           { label: track.title, href: `/tracks/${track.slug}` },

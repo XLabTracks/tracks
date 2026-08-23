@@ -385,7 +385,7 @@ export const verificationLessons: Lesson[] = [
     slug: "prevention-is-invisible",
     moduleId: "v-why",
     sectionItemId: "v-introduction",
-    title: "0.1.1 The world keeps getting saved and you don’t notice",
+    title: "0.1.1 Why Securitizing AI Is Difficult but Necessary",
     contentRef: "verification/prevention",
     estimatedMinutes: 5,
   },

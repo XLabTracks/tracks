@@ -860,3 +860,14 @@ global 200% preset is a different selector and deliberately still scales
 the whole page — it is a low-vision mode, not a reading preference.
 Focus reading rides along unchanged on the same host. Papers don't carry
 the surface yet — say the word.
+
+### 0.1.1 retitled (2026-08-22)
+
+The owner's instruction: 0.1.1 is now "Why Securitizing AI Is Difficult but
+Necessary" (title case, as its 0.1 siblings are). The slug stays
+`prevention-is-invisible`, so no link moves, and the body is untouched — it
+has no heading of its own, so there was no heading to rename with it. The
+skill map's Securitization rung led with the old title and now leads with
+the new one. Two mentions deliberately stay as written: the citation entry
+for Bogoed's LessWrong post keeps that post's real title, and the outline
+spec's line is the historical outline, not the curriculum.

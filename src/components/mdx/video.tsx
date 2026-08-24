@@ -1,3 +1,5 @@
+import { DeferredEmbed } from "./deferred-embed";
+
 export type VideoProvider = "youtube" | "vimeo" | "stream" | "file";
 
 export interface VideoProps {
@@ -63,6 +65,11 @@ function vimeoId(src: string): string | null {
 
 // Uses each platform's own embedded player (YouTube/Vimeo iframe, native <video>
 // for direct files) rather than custom controls, wrapped in a soft, rounded frame.
+//
+// The three provider frames go through DeferredEmbed rather than a bare
+// <iframe> so an unreachable provider can never hold the page open — see the
+// note there. The `file` case stays a native <video>: it is same-origin and
+// does not delay `load`.
 export function Video({
   src,
   provider,
@@ -76,7 +83,7 @@ export function Video({
     const id = youTubeId(src);
     const start = youTubeStart(src);
     player = (
-      <iframe
+      <DeferredEmbed
         src={
           id
             ? `https://www.youtube.com/embed/${id}${
@@ -88,28 +95,25 @@ export function Video({
         className="absolute inset-0 size-full"
         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
         referrerPolicy="strict-origin-when-cross-origin"
-        allowFullScreen
       />
     );
   } else if (kind === "vimeo") {
     const id = vimeoId(src);
     player = (
-      <iframe
+      <DeferredEmbed
         src={id ? `https://player.vimeo.com/video/${id}` : src}
         title={title ?? "Vimeo video player"}
         className="absolute inset-0 size-full"
         allow="autoplay; fullscreen; picture-in-picture"
-        allowFullScreen
       />
     );
   } else if (kind === "stream") {
     player = (
-      <iframe
+      <DeferredEmbed
         src={streamEmbedSrc(src)}
         title={title ?? "Cloudflare Stream video player"}
         className="absolute inset-0 size-full"
         allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture;"
-        allowFullScreen
       />
     );
   } else {

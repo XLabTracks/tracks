@@ -14,7 +14,7 @@ import {
   getExerciseDisplayTitle,
 } from "@/lib/content/types";
 import { isAccessLocked } from "@/lib/content/prerequisites";
-import { getCurrentUser } from "@/lib/auth";
+import { getCurrentUserOrSignedOut } from "@/lib/auth";
 import { getDemo } from "@/lib/demos/registry";
 import { getPaperArtifact } from "@/lib/arxiv/artifacts";
 import { getSubstackArtifact } from "@/lib/substack/artifacts";
@@ -44,7 +44,7 @@ export default async function TrackLayout({
   const outline = getTrackOutline(trackSlug);
   if (!outline) notFound();
 
-  const user = await getCurrentUser();
+  const user = await getCurrentUserOrSignedOut();
   // The lesson/paper content itself is fully static; only the progress
   // checkmarks and prerequisite locks need the DB. If that read fails, degrade
   // to the signed-out view (no checkmarks, nothing locked) rather than crash a

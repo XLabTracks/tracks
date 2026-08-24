@@ -5,7 +5,7 @@ import { FileText } from "lucide-react";
 import { getAssessmentForModule, getModuleBySlugs } from "@/lib/content";
 import { DELIVERABLE_FORMAT_LABELS } from "@/lib/content/types";
 import { isAccessLocked } from "@/lib/content/prerequisites";
-import { getCurrentUser } from "@/lib/auth";
+import { getCurrentUserOrSignedOut } from "@/lib/auth";
 import { loginHref } from "@/lib/login-href";
 import { getPrerequisiteStatus, getSubmission } from "@/lib/progress";
 import {
@@ -45,7 +45,7 @@ export default async function AssessmentPage({
   const assessment = getAssessmentForModule(module.id);
   if (!assessment) notFound();
 
-  const user = await getCurrentUser();
+  const user = await getCurrentUserOrSignedOut();
 
   // Hard prerequisite enforcement: a locked module's assessment is off-limits
   // to signed-in learners too (mirrors the item and module pages). Signed-out

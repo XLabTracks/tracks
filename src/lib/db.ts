@@ -29,8 +29,23 @@ export const getDb = cache(() => {
       "No database connection: set DATABASE_URL in .env (local) or bind HYPERDRIVE (Workers).",
     );
   }
+  // connectionTimeoutMillis is not optional here: node-postgres defaults it to
+  // 0, meaning wait forever. An origin that drops packets rather than refusing
+  // them — a paused branch, a Hyperdrive hiccup — then parks the request until
+  // the platform kills it, and the reader sees a page that never finishes
+  // rather than one that degrades. Bounded, it surfaces as a failed read, which
+  // every DB call site here is already written to absorb.
   const client = new PrismaClient({
-    adapter: new PrismaPg({ connectionString, max: 5, idleTimeoutMillis: 5_000 }),
+    adapter: new PrismaPg({
+      connectionString,
+      max: 5,
+      idleTimeoutMillis: 5_000,
+      // Generous next to a healthy connect (Hyperdrive answers in
+      // milliseconds) and short enough that an outage costs a reader seconds
+      // rather than the whole request: this bound IS the worst-case delay
+      // before a page degrades to its signed-out rendering.
+      connectionTimeoutMillis: 5_000,
+    }),
   });
   // Close the request's pool once the response is flushed. after() is a no-op
   // outside a request scope (tests, scripts) — those leak nothing meaningful

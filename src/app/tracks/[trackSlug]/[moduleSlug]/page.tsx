@@ -16,7 +16,7 @@ import {
 } from "@/lib/content";
 import { DELIVERABLE_FORMAT_LABELS } from "@/lib/content/types";
 import { isAccessLocked } from "@/lib/content/prerequisites";
-import { getCurrentUser } from "@/lib/auth";
+import { getCurrentUserOrSignedOut } from "@/lib/auth";
 import {
   getPrerequisiteStatus,
   getTrackCompletionSet,
@@ -61,7 +61,7 @@ export default async function ModulePage({
   const furtherReading = getResourcesByTopics(module.furtherReadingTopics ?? []);
   const moduleHref = `/tracks/${track.slug}/${module.slug}`;
 
-  const user = await getCurrentUser();
+  const user = await getCurrentUserOrSignedOut();
   // prereq statuses and the completion set both resolve from the track
   // completion set the layout already fetched (request-cached), so this page
   // adds no progress queries of its own. cache() memoizes a rejection past

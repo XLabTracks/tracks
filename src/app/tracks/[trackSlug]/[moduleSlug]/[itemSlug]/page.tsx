@@ -15,7 +15,7 @@ import {
   type Track,
 } from "@/lib/content";
 import { isAccessLocked } from "@/lib/content/prerequisites";
-import { getCurrentUser } from "@/lib/auth";
+import { getCurrentUserOrSignedOut } from "@/lib/auth";
 import { loginHref } from "@/lib/login-href";
 import {
   getExerciseSubmissionMap,
@@ -96,7 +96,7 @@ export default async function ItemPage({
   const { track, module, item } = resolved;
   const nav = getItemNavigation(itemIdOf(item));
 
-  const user = await getCurrentUser();
+  const user = await getCurrentUserOrSignedOut();
 
   if (user && track.prerequisiteEnforcement === "hard") {
     const prereqStatuses = await getPrerequisiteStatus(

@@ -133,6 +133,39 @@ export const getCurrentUser = cache(async (): Promise<AppUser | null> => {
   return upsertUser(user);
 });
 
+/**
+ * getCurrentUser, but an unreachable database degrades to the signed-out view
+ * instead of throwing.
+ *
+ * The track pages are built to fail open: every progress read is wrapped in a
+ * `.catch()` so a DB blip costs the checkmarks and the locks, not the page —
+ * the curriculum itself is static and needs no database at all. That design
+ * was defeated by its own first line. `getCurrentUser()` mirrors the WorkOS
+ * user into our `User` table, so it is the earliest DB call in the render and
+ * it sat outside every one of those guards: one failed `SELECT` on the users
+ * table replaced the whole course with the error boundary.
+ *
+ * Degrading to null is fail-closed for access (no checkmarks, nothing
+ * unlocked, no writes offered), so the worst case is a reader who is signed in
+ * being shown the signed-out reading — which is the same thing they would see
+ * with cookies off, and a page they can still read.
+ *
+ * Only for read-only render paths. Anything that mutates keeps `requireUser`,
+ * which must still throw rather than silently act as a stranger.
+ */
+export const getCurrentUserOrSignedOut =
+  cache(async (): Promise<AppUser | null> => {
+    try {
+      return await getCurrentUser();
+    } catch (error) {
+      // Never swallow Next's control-flow signals (redirect / notFound), which
+      // travel as thrown objects carrying a digest.
+      const digest = (error as { digest?: unknown } | null)?.digest;
+      if (typeof digest === "string" && digest.startsWith("NEXT_")) throw error;
+      return null;
+    }
+  });
+
 /** Like getCurrentUser, but redirects to sign-in when not authenticated. */
 export const requireUser = cache(async (): Promise<AppUser> => {
   const dev = devUser();

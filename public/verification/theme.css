@@ -942,15 +942,66 @@ button,
 /* The phone control, hidden until the media rule below swaps it in for the
    three segments — see theme.js for why the width has to come from here. It
    wears the selected segment's fill because the icon it shows is the theme in
-   use, not the one a press would move to; hover keeps the fill for the same
-   reason, since there is nothing beside it to contrast against. */
-.theme-switch .theme-cycle {
+   use; hover keeps the fill, since there is nothing beside it to contrast
+   against. */
+.theme-switch .theme-trigger {
   display: none;
 }
-.theme-switch .theme-cycle,
-.theme-switch .theme-cycle:hover {
+.theme-switch .theme-trigger,
+.theme-switch .theme-trigger:hover {
   background: var(--primary);
   color: var(--primary-foreground);
+}
+
+/* The menu that button opens. Hidden here rather than left to the UA rule:
+   the panel is a flex column, and display:flex beats [hidden] — the trap the
+   two pagers hit. Anchored to the switch, right-aligned so it cannot push the
+   viewport sideways from the last control in the row, and above the header's
+   own z-index so it lands over the page rather than under it. */
+.theme-menu {
+  position: absolute;
+  top: calc(100% + 6px);
+  right: 0;
+  z-index: 70;
+  display: flex;
+  flex-direction: column;
+  min-width: 208px;
+  padding: 4px;
+  border: var(--hairline) solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--card);
+  box-shadow: 0 12px 28px -12px rgb(0 0 0 / 0.35);
+}
+.theme-menu[hidden] {
+  display: none;
+}
+/* Rows, not squares: these override the segment sizing .theme-switch button
+   sets, which is written for the three-up control and would otherwise clip
+   each label into a 38px box. */
+.theme-switch .theme-menu button {
+  width: 100%;
+  height: auto;
+  min-height: var(--hdr-action-h);
+  justify-content: flex-start;
+  gap: 10px;
+  padding: 8px 10px;
+  color: var(--foreground);
+  font: inherit;
+  font-size: var(--fs-md);
+  text-align: left;
+}
+.theme-switch .theme-menu button:hover {
+  background: var(--accent);
+  color: var(--foreground);
+}
+/* The one in use is named and marked, which is the whole reason this is a
+   menu and not a control you press repeatedly. */
+.theme-switch .theme-menu button[aria-checked="true"] {
+  background: var(--primary);
+  color: var(--primary-foreground);
+}
+.theme-menu button svg {
+  flex: none;
 }
 .theme-switch svg {
   width: 15px;
@@ -1161,7 +1212,7 @@ button,
      floor this header sets everywhere else, and now the sole way to reach the
      theme. Without them the button IS the control, 44px square like the
      notebook beside it. */
-  .theme-switch .theme-cycle {
+  .theme-switch .theme-trigger {
     display: inline-flex;
     --seg: var(--hdr-action-h);
   }
@@ -1169,6 +1220,7 @@ button,
     display: none;
   }
   .header-right .theme-switch {
+    position: relative;
     padding: 0;
     border: 0;
     background: transparent;
@@ -1190,21 +1242,21 @@ button,
     padding: 0 12px;
     font-size: var(--fs-md);
   }
-  /* The brand pays the rest. The logotype's ink fills only the middle 55% of
-     its canvas (see .brand-mark), so 20px here still stands as tall as the
-     word beside it. */
-  .brand {
-    /* Scaled rather than stepped: the row is a fixed budget (three 44px
-       actions) against a width that varies by 70px across ordinary phones, so
-       one size either wastes the wide end or wraps the narrow one. The floor
-       is where the word stops being worth reading; under it the row wraps as
-       it did before, which is the honest outcome rather than type nobody can
-       read. */
-    font-size: clamp(0.8125rem, 3.4vw, 1rem);
-    gap: 4px;
+  /* The brand pays the rest, and pays it by dropping the words rather than
+     shrinking them: the logotype alone is the mark people recognise, and type
+     scaled down far enough to fit was worth less than the room it cost. The
+     link keeps its full name for anyone not reading it by eye — the anchor
+     carries aria-label="Verification @ XLab" at every width, so hiding this
+     span changes what is drawn and not what is announced.
+
+     The mark grows a little, having the row to itself: its ink fills only the
+     middle 55% of the canvas (see .brand-mark), so 22px here reads about as
+     tall as the 16px word did. */
+  .brand-word {
+    display: none;
   }
   .brand-mark {
-    height: 18px;
+    height: 22px;
   }
 
   .foot-links a {

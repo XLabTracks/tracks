@@ -227,7 +227,8 @@ window.VT = (function () {
     host.className = 'site-header';
     host.innerHTML =
       '<div class="bar">' +
-      '<a class="brand" href="/verification/landing">Verification <i>@</i>' +
+      '<a class="brand" href="/verification/landing" aria-label="Verification @ XLab">' +
+        '<span class="brand-word">Verification <i>@</i></span>' +
         '<img class="brand-mark mark-day" src="assets/xLab_Logotype.png" alt="XLab" ' +
         'width="3300" height="1050" draggable="false">' +
         '<img class="brand-mark mark-night" src="assets/xLab_Logotype_white.png" alt="" ' +

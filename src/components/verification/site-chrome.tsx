@@ -116,8 +116,14 @@ export function VerificationHeader() {
       <VerificationRouteSignal pathname={pathname} />
       <header className="site-header">
         <div className="bar">
-          <a className="brand" href="/verification/landing">
-            Verification <i>@</i>
+          <a
+            className="brand"
+            href="/verification/landing"
+            aria-label="Verification @ XLab"
+          >
+            <span className="brand-word">
+              Verification <i>@</i>
+            </span>
             <img
               className="brand-mark mark-day"
               src="/verification/assets/xLab_Logotype.png"

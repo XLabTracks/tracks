@@ -485,7 +485,7 @@ export const verificationLessons: Lesson[] = [
     moduleId: "v-infrastructure",
     title: "2.3 Intelligence: watching without permission",
     contentRef: "verification/intelligence-intro",
-    estimatedMinutes: 5,
+    estimatedMinutes: 10,
   },
   {
     id: "v-intel-signatures",
@@ -494,7 +494,7 @@ export const verificationLessons: Lesson[] = [
     sectionItemId: "v-intel-intro",
     title: "2.3.1 Observable signatures of undeclared AI development",
     contentRef: "verification/intelligence-signatures",
-    estimatedMinutes: 10,
+    estimatedMinutes: 35,
   },
   {
     id: "v-intel-anchor",
@@ -503,7 +503,7 @@ export const verificationLessons: Lesson[] = [
     sectionItemId: "v-intel-intro",
     title: "2.3.2 The empirical anchor: intelligence identifies, the regime resolves",
     contentRef: "verification/intelligence-anchor",
-    estimatedMinutes: 5,
+    estimatedMinutes: 25,
   },
   {
     id: "v-intel-assessment",
@@ -512,7 +512,7 @@ export const verificationLessons: Lesson[] = [
     sectionItemId: "v-intel-intro",
     title: "2.3.3 From signal to intelligence assessment",
     contentRef: "verification/intelligence-assessment",
-    estimatedMinutes: 5,
+    estimatedMinutes: 30,
   },
   {
     id: "v-intel-institutions",
@@ -521,7 +521,7 @@ export const verificationLessons: Lesson[] = [
     sectionItemId: "v-intel-intro",
     title: "2.3.4 Intelligence institutions and treaty design",
     contentRef: "verification/intelligence-institutions",
-    estimatedMinutes: 5,
+    estimatedMinutes: 40,
   },
   {
     id: "v-intel-action",

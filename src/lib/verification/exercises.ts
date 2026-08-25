@@ -33,6 +33,21 @@ export const verificationExercises: VerificationExerciseDef[] = [
   { id: "standard-of-proof", title: "The Standard of Proof", bridged: false },
   { id: "missing-board", title: "The Missing Board", bridged: false },
   { id: "cloud-evidence-drill", title: "Cloud Evidence Drill", bridged: true },
+  { id: "drills-intel-signatures", title: "Drill Bench: Signatures", bridged: true },
+  { id: "drills-intel-anchor", title: "Drill Bench: The Nuclear Record", bridged: true },
+  {
+    id: "drills-intel-assessment",
+    title: "Drill Bench: Judgment Under Uncertainty",
+    bridged: true,
+  },
+  {
+    id: "drills-intel-institutions",
+    title: "Drill Bench: The Institutional Layer",
+    bridged: true,
+  },
+  { id: "analyst-desk", title: "The Analyst Desk", bridged: true },
+  { id: "datacenter-power", title: "The Power Signature", bridged: false },
+  { id: "ntm-redline", title: "Four Questions on the NTM Article", bridged: true },
 ];
 export function getVerificationExercise(id: string): VerificationExerciseDef | undefined {
   return verificationExercises.find((e) => e.id === id);

@@ -13,17 +13,37 @@ same thing differently: Wasil et al. call it the national technical means (NTM)
 category, *Six Layers* calls it Layer 6, and Scher and Thiergart call it the
 national-intelligence building blocks.
 
+<SourceQuote
+  t="Verification methods for international AI agreements"
+  url="https://arxiv.org/abs/2408.16074"
+  what="p. 1, the abstract — the three-category definition"
+  by="Wasil, Reed, Miller, and Barnett (2024)"
+>
+
+We divide the verification methods into three categories: (a) national
+technical means (methods requiring minimal or no access from suspected
+non-compliant nations), (b) access-dependent methods (methods that require
+approval from the nation suspected of unauthorized activities), and (c)
+hardware-dependent methods (methods that require rules around advanced
+hardware).
+
+</SourceQuote>
+
+The taxonomy the whole module hangs on: NTM is defined by what it does *not*
+need — access — which is exactly why it is the fallback when a suspected state
+refuses cooperation.
+
 Hold on to one distinction for the rest of the module. Intelligence
 **identifies**; the regime **resolves**. A tip is not a finding.
 
-## The signature catalog
+## The Signature Catalog
 
 Each signature below carries the same three-part anatomy: what it tells a
 verifier, what access it requires, and its main caveat. A standing red-team
 question applies to every one — **would this signature survive an adversary who
 knows it is being watched?**
 
-### Overhead imagery
+### Overhead Imagery
 
 Building footprint, electrical substations, cooling equipment, security
 perimeter. Facilities above roughly 10,000 H100-equivalents typically occupy
@@ -45,7 +65,7 @@ imaging, or heat inferred from rooftops where snow never accumulates in winter
 (Baker, footnote 127). Sensing capability is actively improving — HotSat-class
 commercial thermal satellites are the current example.
 
-### Energy and the power grid
+### Energy and the Power Grid
 
 The module's most quantitative tool and its most perishable. Measured energy
 delivery can be converted into an approximate FLOP count, which makes large
@@ -79,7 +99,14 @@ development picture from Module 1.
 
 </Callout>
 
-### Procurement, customs, and financial intelligence
+Explore the numbers live, built from
+[Epoch's data-centre dataset](https://epoch.ai/data/ai-data-centers): a real
+facility dropped into a lineup of national grids, the load shape a watcher can
+and cannot read, and the decay clock running against the whole signature.
+
+<VerificationExercise id="datacenter-power" />
+
+### Procurement, Customs, and Financial Intelligence
 
 The best real-case material in the module. The canonical indicator is a
 GPU-import surge to a region far exceeding declared facilities' needs (Wasil et
@@ -96,13 +123,13 @@ shadow-fab network surfaced in 2023 through exactly this channel.
 Caveats: domestic chip manufacturing erodes customs tracking, and dual-use
 purchases blur financial signals.
 
-### Open sources
+### Open Sources
 
 Permits, filings, hiring, supplier disclosures, published interconnect and
 power-purchase records. *Six Layers* classes open-source intelligence with the
 supplemental mechanisms.
 
-## The four signature families
+## The Four Signature Families
 
 The cards above sort into four families, and it is worth being able to name
 which one a given observation belongs to:
@@ -112,7 +139,19 @@ which one a given observation belongs to:
 - **Organizational signatures** — who is hired, who contracts with whom.
 - **Operational signatures** — what the site does, and when.
 
-## How we see traces
+Boundary: provider-reported utilization is 2.2’s declared world. This layer
+sees what never enters a report.
+
+## Drill Bench
+
+Two benches over this section. The signature cards rebuild the anatomy —
+commit what each signature establishes and its main caveat before the reveal —
+and the Fermi bench makes power quantitative: derive the conversion, never
+plug it in.
+
+<VerificationExercise id="drills-intel-signatures" />
+
+## How We See Traces
 
 Those are the signatures. The disciplines below are the ways a watcher picks
 them up — the collection side of the same picture.
@@ -121,20 +160,41 @@ them up — the collection side of the same picture.
 
 ## Readings
 
-- [Scher et al., *An International Agreement to Prevent the Premature Creation
-  of Artificial Superintelligence*](https://arxiv.org/abs/2511.10783) —
-  Appendix D, on architecture-dependent power consumption.
-- [Wasil et al., *Verification methods for international AI
-  agreements*](https://arxiv.org/abs/2408.16074) — selected pages.
+<ReadingCard
+  id="intel-wasil-ntm"
+  href="https://arxiv.org/abs/2408.16074"
+  title="Verification methods for international AI agreements"
+  author="Wasil, Reed, Miller, and Barnett"
+  year="2024"
+  mins="7 min"
+>
+
+Read pp. 5–7 — the national technical means category, method by method. Two
+questions to carry through it:
+
+- Why is “unilaterally” the load-bearing word in the NTM category?
+- Which listed method surprises you, and why?
+
+</ReadingCard>
+
+<ReadingCard
+  id="intel-miri-appendix-d"
+  href="https://arxiv.org/abs/2511.10783"
+  title="An International Agreement to Prevent the Premature Creation of Artificial Superintelligence"
+  author="Scher, Abecassis, Barnett, and Abeyta | MIRI"
+  year="2025"
+  mins="4 min"
+>
+
+Appendix D — the data-centre signature: satellite, thermal, and power
+monitoring, and the architecture-dependent power consumption the callout above
+points into.
+
+</ReadingCard>
 
 <Callout variant="warning" title="Unfinished writing">
 
-Two pieces this section is specified to carry are not built yet: the
-interactive on AI data-centre power consumption built from
-[Epoch's data-centre dataset](https://epoch.ai/data/ai-data-centers), with the
-inference-versus-training comparison; and the predict-before-the-reveal beat on
-each signature card ("what does this signature actually establish, and what is
-its main caveat?"). The open-source card is also held short deliberately — a
-dedicated treatment exists and should be distilled before it is finalised.
+The open-source card is held short deliberately — a dedicated treatment exists
+and should be distilled before it is finalised.
 
 </Callout>

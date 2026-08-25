@@ -2,7 +2,7 @@ A signature is not a finding, and a tip is not non-compliance. This section is
 about the step between them: how a watcher turns an anomaly into an assessment
 they can defend, and how much confidence that assessment can carry.
 
-## Observation, inference, judgment
+## Observation, Inference, Judgment
 
 Three things get collapsed in ordinary speech and must be kept apart here.
 
@@ -15,7 +15,7 @@ Three things get collapsed in ordinary speech and must be kept apart here.
 Most disputes that look like disagreements about evidence are disagreements one
 layer up — about which assumption is doing the work.
 
-## What breaks the chain
+## What Breaks the Chain
 
 - **Alternative explanations.** The default question, not the last resort. A
   power draw has more than one cause.
@@ -26,7 +26,7 @@ layer up — about which assumption is doing the work.
   violations? Around 500 datacenters worldwide exceed 10 MW. A signature that
   fires on all of them has told you nothing.
 
-## What a source is worth
+## What a Source Is Worth
 
 Four questions, applied to every input:
 
@@ -39,27 +39,81 @@ Four questions, applied to every input:
 - **Confidence** — what would have to be true for this to be wrong, and how
   likely is that?
 
-## The progression
+## The Progression
 
 The chain runs: **anomaly → verification lead → suspected non-compliance.**
 Each arrow is a decision someone has to justify, and each has a different
 evidentiary bar. Escalating too fast burns credibility; escalating too slowly
 loses the window in which the activity is observable.
 
-## Readings
+What earns a promotion up the ladder is corroboration across evidence
+**kinds** — physical, procurement, financial, digital, organizational. They
+fail differently, so their agreement means something.
 
-- Optional: CIA, [*A Tradecraft Primer*](https://www.stat.berkeley.edu/~aldous/157/Papers/Tradecraft%20Primer-apr09.pdf).
-  Methodological material: Quality of Information Check (pp. 10–11),
-  Indicators or Signposts of Change (pp. 12–13), and Analysis of Competing
-  Hypotheses (pp. 14–16), applied directly to the case brief.
+Good analysis portrays uncertainty rather than manufacturing certainty. The
+cautionary case is the 2002–03 Iraq WMD estimate — "dead wrong," with high
+confidence — which you will take apart in the autopsy below.
 
-<Callout variant="warning" title="Unfinished writing">
+But first, a question the module refuses to answer for you: in a ~500-site
+haystack, how often does an alarm threshold that *feels* cautious fire on
+innocents? Commit a guess in the bench before the arithmetic answers.
 
-The section's main task is specified but not built. Learners are meant to
-produce **their own case brief from a packet of raw materials** — identifying
-and circling the relevant evidence, separating observations from inferences,
-considering alternative explanations, assessing source quality and
-corroboration, and stating both their confidence and what remains unresolved.
-The packet itself has not been assembled.
+## Drill Bench
 
-</Callout>
+Three benches. The false-alarm bench prices the base rate, the autopsy takes
+apart a high-confidence-but-wrong assessment, and the limitations ledger
+places every bound with its sibling owner.
+
+<VerificationExercise id="drills-intel-assessment" />
+
+## The Bounds, in Sum
+
+<SourceQuote
+  t="Verification methods for international AI agreements"
+  url="https://arxiv.org/abs/2408.16074"
+  what="p. 9 — the honest-bounds sentence"
+  by="Wasil, Reed, Miller, and Barnett (2024)"
+>
+
+National technical means offer a valuable starting point, capable of detecting
+large-scale AI infrastructure and unusual patterns in energy consumption,
+hardware imports, and financial transactions. However, national technical
+means are limited in their ability to identify software-level violations or
+concerted attempts at concealment.
+
+</SourceQuote>
+
+Four independent papers converge: NTM is "a valuable starting point" but
+limited against disguise, distribution, and software-level violations (Wasil
+et al.); detecting a secret datacenter "is unlikely to be the load-bearing
+part of a verification regime" (Scher and Thiergart); imagery, OSINT, and
+financial audits are "merely supplemental" — though a circumvention attempt
+may itself trip other, more reliable mechanisms (*Six Layers*); and military
+facilities are a named blind spot (MIRI).
+
+Reframe, not deflation. These bounds are why the layer is supplemental, not
+load-bearing — and that is the point, not an apology. Its value is deterrence,
+lead generation, and raising the cost and complexity of cheating: each bound
+is also a cost imposed on the cheater, and each named gap has a sibling owner
+you just placed. The bounds widen over time — efficiency gains shrink the
+large-facility signature yearly, distributed development spreads compute
+thinner — so the honest modality stays hedged: this layer *reduces* the
+effectiveness of cheating; it does not *defeat* it.
+
+## Reading
+
+<ReadingCard
+  id="intel-cia-tradecraft"
+  href="https://www.stat.berkeley.edu/~aldous/157/Papers/Tradecraft%20Primer-apr09.pdf"
+  title="A Tradecraft Primer: Structured Analytic Techniques for Improving Intelligence Analysis"
+  author="US Central Intelligence Agency"
+  year="2009"
+  mins="15 min"
+  optional
+>
+
+Methodological material, applied directly to the autopsy: Quality of
+Information Check (pp. 10–11), Indicators or Signposts of Change (pp. 12–13),
+and Analysis of Competing Hypotheses (pp. 14–16).
+
+</ReadingCard>

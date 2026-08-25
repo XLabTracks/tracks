@@ -12,9 +12,18 @@ import { Toaster } from "@/components/ui/sonner";
 // full 100–900 weight axis; we serve it from src/app/fonts/.
 const inter = localFont({
   src: [
-    { path: "./fonts/InterVariable.woff2", weight: "100 900", style: "normal" },
+    // The .subset faces, not the originals beside them — see
+    // scripts/build-fonts.mjs. The full pair is 723KB of a site that sets no
+    // Cyrillic and uses about a tenth of the symbols they carry; cut to the
+    // characters the content actually contains they are 407KB. The originals
+    // stay in this directory as the source the build reads and are not served.
     {
-      path: "./fonts/InterVariable-Italic.woff2",
+      path: "./fonts/InterVariable.subset.woff2",
+      weight: "100 900",
+      style: "normal",
+    },
+    {
+      path: "./fonts/InterVariable-Italic.subset.woff2",
       weight: "100 900",
       style: "italic",
     },

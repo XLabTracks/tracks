@@ -50,6 +50,34 @@
     );
   }
 
+  /* Phones get one button instead of three, and this is the query that says
+     so — it has to match the max-width the stylesheet collapses the switch
+     at, or the control and its semantics disagree.
+
+     Three 44px segments plus the brand overflow a phone header by about
+     150px, which broke the brand onto a line of its own with the controls
+     floating under it — the exact layout .header-right's rule says must not
+     happen. The width has to come from somewhere and the tap floor is not
+     negotiable, so the three segments become one.
+
+     The switch is drawn as radios everywhere there is room for them, for the
+     reason written over .theme-switch: a cycling control usually hides which
+     of the three is active. The collapsed button answers that by showing the
+     ACTIVE theme's icon rather than the next one's, and by naming both in its
+     label — "Display mode: Day. Switch to Night." */
+  var narrow = window.matchMedia
+    ? window.matchMedia("(max-width: 720px)")
+    : null;
+
+  function collapsed() {
+    return !!narrow && narrow.matches;
+  }
+
+  function nextTheme(theme) {
+    var i = THEMES.indexOf(theme);
+    return THEMES[(i < 0 ? 0 : i + 1) % THEMES.length];
+  }
+
   function apply(theme) {
     var root = document.documentElement;
     root.setAttribute("data-theme", theme);
@@ -64,40 +92,74 @@
     }
     var group = document.querySelector(".theme-switch");
     if (!group) return;
-    group.querySelectorAll("button").forEach(function (b) {
+    group.querySelectorAll("button[role='radio']").forEach(function (b) {
       b.setAttribute("aria-checked", String(b.dataset.theme === theme));
     });
+    var cycle = group.querySelector(".theme-cycle");
+    if (cycle) {
+      var after = nextTheme(theme);
+      var label = "Display mode: " + LABELS[theme] + ". Switch to " + LABELS[after] + ".";
+      cycle.innerHTML =
+        '<svg viewBox="0 0 24 24" aria-hidden="true">' + ICONS[theme] + "</svg>";
+      cycle.dataset.theme = theme;
+      cycle.setAttribute("aria-label", label);
+      cycle.setAttribute("title", label);
+    }
+  }
+
+  /* A radiogroup is only a radiogroup while its radios are on screen. When the
+     stylesheet collapses the switch the radios are display:none — out of the
+     accessibility tree — and what is left is one ordinary button, so the
+     container is announced as a plain group instead of a set of three
+     choices nobody can reach. Re-run on viewport change: a rotation crosses
+     the breakpoint. */
+  function syncGrouping() {
+    var group = document.querySelector(".theme-switch");
+    if (!group) return;
+    group.setAttribute("role", collapsed() ? "group" : "radiogroup");
   }
 
   function mount() {
     var group = document.querySelector(".theme-switch");
     if (!group) return;
     if (group.dataset.vtThemeMounted === "true") {
+      syncGrouping();
       apply(current());
       return;
     }
-    group.setAttribute("role", "radiogroup");
     group.setAttribute("aria-label", "Display mode");
-    group.innerHTML = THEMES.map(function (t) {
-      return (
-        '<button type="button" role="radio" data-theme="' +
-        t +
-        '" aria-checked="false"' +
-        ' aria-label="' +
-        LABELS[t] +
-        '" title="' +
-        LABELS[t] +
-        '">' +
-        '<svg viewBox="0 0 24 24" aria-hidden="true">' +
-        ICONS[t] +
-        "</svg></button>"
-      );
-    }).join("");
+    group.innerHTML =
+      THEMES.map(function (t) {
+        return (
+          '<button type="button" role="radio" data-theme="' +
+          t +
+          '" aria-checked="false"' +
+          ' aria-label="' +
+          LABELS[t] +
+          '" title="' +
+          LABELS[t] +
+          '">' +
+          '<svg viewBox="0 0 24 24" aria-hidden="true">' +
+          ICONS[t] +
+          "</svg></button>"
+        );
+      }).join("") +
+      '<button type="button" class="theme-cycle"></button>';
     group.addEventListener("click", function (e) {
-      var b = e.target.closest("button[data-theme]");
+      if (e.target.closest(".theme-cycle")) {
+        apply(nextTheme(current()));
+        return;
+      }
+      var b = e.target.closest("button[role='radio']");
       if (b) apply(b.dataset.theme);
     });
     group.dataset.vtThemeMounted = "true";
+    syncGrouping();
+    if (narrow) {
+      narrow.addEventListener("change", function () {
+        syncGrouping();
+      });
+    }
     apply(current());
   }
 

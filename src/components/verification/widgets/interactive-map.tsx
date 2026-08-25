@@ -4,6 +4,7 @@ import {
   Fragment,
   useCallback,
   useEffect,
+  useLayoutEffect,
   useMemo,
   useReducer,
   useRef,
@@ -136,8 +137,28 @@ export function InteractiveMap(_props: VerificationWidgetProps) {
     rh: number;
   } | null>(null);
 
+  // The floating card is a hover instrument, so it exists only where there is
+  // a hover. On touch the tap pins instead, and the detail panel under the map
+  // carries strictly more than this card ever did.
+  const [canHover, setCanHover] = useState(false);
+  useEffect(() => {
+    const mq = window.matchMedia("(hover: hover) and (pointer: fine)");
+    const read = () => setCanHover(mq.matches);
+    read();
+    mq.addEventListener("change", read);
+    return () => mq.removeEventListener("change", read);
+  }, []);
+
+  const tipRef = useRef<HTMLDivElement | null>(null);
+  const [tipSize, setTipSize] = useState({ w: 256, h: 160 });
+
   const svgRef = useRef<SVGSVGElement | null>(null);
   const stageRef = useRef<HTMLDivElement | null>(null);
+  // What the pointer went down on. The click handler cannot read it off the
+  // event: the drag sets pointer capture on the <svg>, and a captured pointer
+  // retargets the compatibility click to the capturing element, so every
+  // e.target was the <svg> itself and every click cleared the selection.
+  const downIdRef = useRef<string | null>(null);
   const dragRef = useRef<{
     x: number;
     y: number;
@@ -198,6 +219,7 @@ export function InteractiveMap(_props: VerificationWidgetProps) {
 
   const onPointerDown = (e: React.PointerEvent<SVGSVGElement>) => {
     if (e.button !== 0) return;
+    downIdRef.current = (e.target as Element).getAttribute?.("data-id") ?? null;
     panMovedRef.current = false;
     dragRef.current = {
       x: e.clientX,
@@ -258,6 +280,7 @@ export function InteractiveMap(_props: VerificationWidgetProps) {
   };
 
   const onSvgMouseMove = (e: React.MouseEvent<SVGSVGElement>) => {
+    if (!canHover) return;
     const target = e.target as Element;
     const st = stageRef.current;
     if (!st) return;
@@ -277,6 +300,18 @@ export function InteractiveMap(_props: VerificationWidgetProps) {
   const hubStroke = Math.max(0.3, 0.8 / zoom);
 
   const tipCountry = tip ? CMAP[tip.id] : null;
+
+  // Measured, not assumed. The height was hard-coded at 120 and the real cards
+  // run 240-340, so a card raised in the lower half of the stage was placed
+  // with a budget it could not keep and the stage's overflow-hidden cut the
+  // sentence off mid-clause.
+  useLayoutEffect(() => {
+    const el = tipRef.current;
+    if (!el) return;
+    const w = el.offsetWidth;
+    const h = el.offsetHeight;
+    setTipSize((prev) => (prev.w === w && prev.h === h ? prev : { w, h }));
+  }, [tip?.id]);
 
   return (
     <div
@@ -305,7 +340,7 @@ export function InteractiveMap(_props: VerificationWidgetProps) {
             >
               {hintOpen && (
                 <div className="text-muted-foreground border-border bg-card absolute top-3 left-3 z-10 flex max-w-[calc(100%-5rem)] items-start gap-2 rounded-md border px-3 py-2 text-xs">
-                  <span>{C.hint}</span>
+                  <span>{canHover ? C.hint : C.hintTouch}</span>
                   <button
                     type="button"
                     aria-label="Dismiss hint"
@@ -357,7 +392,9 @@ export function InteractiveMap(_props: VerificationWidgetProps) {
                 onMouseMove={onSvgMouseMove}
                 onMouseLeave={() => setTip(null)}
                 onClick={(e) => {
-                  const id = (e.target as Element).getAttribute?.("data-id");
+                  const id =
+                    (e.target as Element).getAttribute?.("data-id") ??
+                    downIdRef.current;
                   onCountryClick(id ?? null);
                 }}
               >
@@ -472,9 +509,10 @@ export function InteractiveMap(_props: VerificationWidgetProps) {
 
               {tip && tipCountry && (
                 <div
+                  ref={tipRef}
                   role="tooltip"
                   className="border-border bg-card shadow-soft pointer-events-none absolute z-20 w-64 rounded-lg border p-3"
-                  style={tipPos(tip)}
+                  style={tipPos(tip, tipSize)}
                 >
                   <p className="text-sm font-semibold">{tipCountry.name}</p>
                   <div className="mt-1.5 mb-1.5 flex flex-wrap gap-1">
@@ -661,21 +699,30 @@ export function InteractiveMap(_props: VerificationWidgetProps) {
   );
 }
 
-function tipPos(tip: {
-  x: number;
-  y: number;
-  rw: number;
-  rh: number;
-}): React.CSSProperties {
-  const rw = tip.rw;
-  const rh = tip.rh;
-  const tw = 256;
-  const th = 120;
+/**
+ * Place the hover card beside the cursor and keep it inside the stage.
+ *
+ * `size` is measured from the rendered card. Flip to the other side of the
+ * cursor when the preferred side would overrun, then clamp: a card that is
+ * taller than the room below is pinned to the top edge rather than pushed out
+ * through the bottom of a box that clips.
+ */
+function tipPos(
+  tip: { x: number; y: number; rw: number; rh: number },
+  size: { w: number; h: number }
+): React.CSSProperties {
+  const pad = 8;
+  const { rw, rh } = tip;
+
   let lx = tip.x + 16;
+  if (rw && lx + size.w > rw - pad) lx = tip.x - size.w - 16;
+  if (rw) lx = Math.min(Math.max(pad, lx), Math.max(pad, rw - size.w - pad));
+
   let ly = tip.y + 14;
-  if (rw && lx + tw > rw - 8) lx = tip.x - tw - 16;
-  if (rh && ly + th > rh - 8) ly = tip.y - th - 12;
-  return { left: Math.max(6, lx), top: Math.max(6, ly) };
+  if (rh && ly + size.h > rh - pad) ly = tip.y - size.h - 12;
+  if (rh) ly = Math.min(Math.max(pad, ly), Math.max(pad, rh - size.h - pad));
+
+  return { left: Math.max(pad, lx), top: Math.max(pad, ly) };
 }
 
 function BucketChip({ bk }: { bk: BucketKey }) {

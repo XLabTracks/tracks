@@ -368,6 +368,7 @@ export const MAP_VIEWBOX = { x: 0, y: 0, w: 1000, h: 540 } as const;
 
 export const MAP_COPY = {
   hint: "Hover a colored country · click to pin details · use the key to isolate a layer",
+  hintTouch: "Tap a colored country for details · use the key to isolate a layer",
   stats: [
     { n: "≈90%", l: "of leading-edge logic is fabricated on one island" },
     { n: "1", l: "company builds every EUV lithography machine on Earth" },

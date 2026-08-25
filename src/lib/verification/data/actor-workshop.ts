@@ -259,7 +259,7 @@ export const SUBGOALS: Subgoal[] = [
   {
     id: "1a",
     label: "1.A",
-    name: "Declared uses are accurate",
+    name: "Is the declared use described accurately?",
     baker: {
       text: "Verify that declared uses of AI compute are declared accurately, i.e., the Prover actually did the claimed development or deployment.",
       where: "§3.2",
@@ -268,7 +268,7 @@ export const SUBGOALS: Subgoal[] = [
   {
     id: "1b",
     label: "1.B",
-    name: "Declared uses have the required properties",
+    name: "Does the declared use satisfy the agreement’s requirements?",
     baker: {
       text: "Assuming that the declared uses are accurate (as is verified per Subgoal 1.A), verify they have the required properties.",
       where: "§3.2",
@@ -277,7 +277,7 @@ export const SUBGOALS: Subgoal[] = [
   {
     id: "2a",
     label: "2.A",
-    name: "No undeclared use of a declared cluster",
+    name: "Is a declared cluster also being used for something undeclared?",
     baker: {
       text: "Verify that there are no undeclared, large-scale uses of declared AI compute clusters.",
       where: "§3.2",
@@ -286,7 +286,7 @@ export const SUBGOALS: Subgoal[] = [
   {
     id: "2b",
     label: "2.B",
-    name: "No undeclared clusters at all",
+    name: "Are there undeclared clusters?",
     baker: {
       text: "Verify that there are no undeclared, large-scale AI compute clusters that could be used for violations.",
       where: "§3.2",

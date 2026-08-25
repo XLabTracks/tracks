@@ -218,34 +218,39 @@ function EdgeDrawingTask() {
     <div className="border-border bg-card rounded-xl border p-4">
       <p className="eyebrow text-muted-foreground">What an edge means</p>
       <p className="mt-1.5 text-sm leading-relaxed">
-        Draw an edge from <strong>A</strong> to <strong>B</strong> when A can
-        produce evidence about B, for a verifier, that B did not have to
-        volunteer. Not influence, not dependence — evidence. Direction is the
-        claim: a cloud provider holds records about a lab’s training run, and
-        the lab holds nothing comparable about the cloud. A verifier can be
-        its own source, so an edge may start on the third ring.
+        Draw an edge <strong>A → B</strong> when A can provide a verifier with
+        evidence about B that does not come from B itself.
       </p>
       <p className="text-muted-foreground mt-2 text-sm leading-relaxed">
-        On the graph, drag from the actor that produces the evidence to the
-        actor the evidence concerns. You can also select one point and then
-        another; the lists below remain available as a keyboard-friendly
-        alternative.
+        The edge points from the source of the evidence to the actor the
+        evidence concerns.
       </p>
       <p className="text-muted-foreground mt-2 text-sm leading-relaxed">
-        Some actors will end up with no edge at all. That is an available
-        answer and, for most of them, the right one. One of them can hold no
-        edge in principle — the hollow ring on the map is a body that does
-        not exist, and nothing that does not exist produces evidence.
+        For example, a cloud provider may hold records of a lab’s training run.
+        In that case, draw:
+      </p>
+      <p className="mt-1.5 text-sm font-medium">Cloud provider → Lab</p>
+      <p className="text-muted-foreground mt-2 text-sm leading-relaxed">
+        Only draw an edge for an evidence relationship — not because one actor
+        influences, regulates, supplies, or depends on another.
+      </p>
+      <p className="text-muted-foreground mt-2 text-sm leading-relaxed">
+        A verifier can also generate evidence directly, so an edge may start
+        from the third ring.
+      </p>
+      <p className="text-muted-foreground mt-2 text-sm leading-relaxed">
+        Some actors may have no edges at all. That is a valid answer. The
+        hollow ring represents a body that does not yet exist, so it cannot
+        currently produce evidence.
       </p>
 
       <div className="border-border mt-4 border-t pt-4">
-        <p className="text-sm font-medium">
-          What a verifier has to establish, in four parts
+        <p className="eyebrow text-muted-foreground">
+          What the evidence can establish
         </p>
-        <p className="text-muted-foreground mt-1 text-sm leading-relaxed">
-          Baker et al. decompose it this way, and the key tags every edge with
-          the part it serves. Draw an edge when you can say which of these four
-          it would help settle.
+        <p className="text-muted-foreground mt-1.5 text-sm leading-relaxed">
+          Baker et al. divide the verifier’s task into four questions. For each
+          edge, identify which question the evidence would help answer.
         </p>
         <ol className="mt-2 space-y-1 text-sm">
           {SUBGOALS.map((subgoal) => (

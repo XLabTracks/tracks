@@ -1113,7 +1113,11 @@ button,
    exception WCAG's target-size rule grants links inside prose — at 19px tall
    these were under the 24px floor on a phone. The padding takes them past it;
    the negative margin keeps the row's spacing where it was. */
-.foot-links a {
+/* Every row item, not every link. A destination with no URL yet is a span
+   rather than an anchor, so a rule written for `a` skipped it and left it
+   sitting a few pixels above its neighbours — the box is what aligns the row,
+   and only the colour of it depends on being pressable. */
+.foot-links > * {
   color: var(--muted-foreground);
   text-decoration: none;
   display: inline-block;
@@ -1259,9 +1263,14 @@ button,
     height: 22px;
   }
 
-  .foot-links a {
+  /* No width floor. The rule above is about target SIZE, and the note there
+     names the height: 19px was under the floor and the padding takes it past.
+     Width was never the problem — the narrowest label in the row is 31px, well
+     clear of it — and forcing 44px only padded "XLab" and "Team" with trailing
+     space, which read as ragged gaps in a row whose spacing is supposed to be
+     one number. */
+  .foot-links > * {
     display: inline-flex;
-    min-width: 44px;
     min-height: 44px;
     align-items: center;
     padding-block: 8px;

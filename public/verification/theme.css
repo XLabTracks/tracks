@@ -939,6 +939,19 @@ button,
   background: var(--primary);
   color: var(--primary-foreground);
 }
+/* The phone control, hidden until the media rule below swaps it in for the
+   three segments — see theme.js for why the width has to come from here. It
+   wears the selected segment's fill because the icon it shows is the theme in
+   use, not the one a press would move to; hover keeps the fill for the same
+   reason, since there is nothing beside it to contrast against. */
+.theme-switch .theme-cycle {
+  display: none;
+}
+.theme-switch .theme-cycle,
+.theme-switch .theme-cycle:hover {
+  background: var(--primary);
+  color: var(--primary-foreground);
+}
 .theme-switch svg {
   width: 15px;
   height: 15px;
@@ -1105,7 +1118,7 @@ button,
     display: flex;
     height: auto;
     flex-wrap: wrap;
-    gap: 10px 16px;
+    gap: 10px 12px;
     padding: 8px 16px;
   }
   .nav {
@@ -1130,6 +1143,7 @@ button,
        largest rendition of the chrome anywhere ("sizes", translated). Contrast keeps
        its own 54px — that floor is the type size's, not the viewport's. */
     --hdr-action-h: 44px;
+    gap: 8px;
     order: 2;
     /* No width: it shares the first row with the brand, pinned right by the
        auto margin. Forcing a full-width row of its own left the brand alone
@@ -1139,8 +1153,58 @@ button,
     justify-content: flex-end;
     margin-left: auto;
   }
+  /* One segment, not three.
+
+     The pill's border and 2px padding go with the other two segments. They
+     exist to bind three squares into one control; around a single square they
+     only shrink it, and the segment inside a 44px pill is 38px — under the tap
+     floor this header sets everywhere else, and now the sole way to reach the
+     theme. Without them the button IS the control, 44px square like the
+     notebook beside it. */
+  .theme-switch .theme-cycle {
+    display: inline-flex;
+    --seg: var(--hdr-action-h);
+  }
+  .theme-switch button[role="radio"] {
+    display: none;
+  }
+  .header-right .theme-switch {
+    padding: 0;
+    border: 0;
+    background: transparent;
+  }
+  /* Every action drops the 100px WIDTH floor and keeps the 44px tap floor
+     above — the two are not the same promise. The width exists so the switch
+     and the account button settle on one number at desktop sizes, which is a
+     tidiness the phone row cannot afford: it held 56px of dead ground inside
+     the collapsed switch and padded "Sign in" to nearly twice its label. The
+     square that a finger has to hit is unchanged. */
+  .header-right .theme-switch,
+  .header-right > .btn.small,
   .header-right > #verification-notebook-launcher {
     min-width: var(--hdr-action-h);
+  }
+  /* The label sets the account button's width; at 18px "Sign in" alone ran to
+     86px, wider than the switch and the notebook together. */
+  .header-right > .btn.small {
+    padding: 0 12px;
+    font-size: var(--fs-md);
+  }
+  /* The brand pays the rest. The logotype's ink fills only the middle 55% of
+     its canvas (see .brand-mark), so 20px here still stands as tall as the
+     word beside it. */
+  .brand {
+    /* Scaled rather than stepped: the row is a fixed budget (three 44px
+       actions) against a width that varies by 70px across ordinary phones, so
+       one size either wastes the wide end or wraps the narrow one. The floor
+       is where the word stops being worth reading; under it the row wraps as
+       it did before, which is the honest outcome rather than type nobody can
+       read. */
+    font-size: clamp(0.8125rem, 3.4vw, 1rem);
+    gap: 4px;
+  }
+  .brand-mark {
+    height: 18px;
   }
 
   .foot-links a {

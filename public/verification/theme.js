@@ -25,9 +25,6 @@
     dark: "Night",
     contrast: "High contrast and larger text",
   };
-  /* What the menu prints. The full label above stays the accessible name on
-     the row, so the mode still announces what it does to the type; printing
-     it ran to two lines and made the panel taller than the choice warranted. */
   var SHORT = {
     light: "Day",
     dark: "Night",
@@ -58,22 +55,6 @@
     );
   }
 
-  /* Phones get one button instead of three, and this is the query that says
-     so — it has to match the max-width the stylesheet collapses the switch
-     at, or the control and its semantics disagree.
-
-     Three 44px segments plus the brand overflow a phone header by about
-     150px, which broke the brand onto a line of its own with the controls
-     floating under it — the exact layout .header-right's rule says must not
-     happen. The width has to come from somewhere and the tap floor is not
-     negotiable, so the three segments become one.
-
-     The objection written over .theme-switch — that a single control hides
-     which of the three is active, and that none of them is an obvious "next"
-     — is answered rather than overruled: the button shows the ACTIVE theme's
-     icon, and pressing it opens all three named in full and marks the one in
-     use, so nothing is guessed at and nothing is reached by repetition.
-     Where there is room for the segments they stay. */
   var narrow = window.matchMedia
     ? window.matchMedia("(max-width: 720px)")
     : null;
@@ -112,12 +93,6 @@
     }
   }
 
-  /* A radiogroup is only a radiogroup while its radios are on screen. When the
-     stylesheet collapses the switch the radios are display:none — out of the
-     accessibility tree — and what is left is a button that owns a menu, so
-     the container is announced as a plain group instead of a set of three
-     choices nobody can reach. Re-run on viewport change: a rotation crosses
-     the breakpoint. */
   function syncGrouping() {
     var group = document.querySelector(".theme-switch");
     if (!group) return;
@@ -148,9 +123,6 @@
     if (checked) checked.focus();
   }
 
-  /* refocus is false when the menu is closing because the viewport grew or a
-     press landed elsewhere: moving focus back to a button the reader has just
-     left, or to one the stylesheet has since hidden, steals the caret. */
   function closeMenu(refocus) {
     var p = menuParts();
     if (!p || p.trigger.getAttribute("aria-expanded") !== "true") return;
@@ -240,10 +212,6 @@
       }
     });
 
-    /* pointerdown, not click: a press that starts outside should dismiss the
-       menu before the thing under it activates, which is what a reader means
-       by pressing past an open menu. Capture, because a handler on the way
-       down can stop the bubble. */
     document.addEventListener(
       "pointerdown",
       function (e) {
@@ -251,8 +219,6 @@
       },
       true
     );
-    /* Tabbing out of the menu closes it; the check is deferred because at
-       focusout time the new focus has not landed yet. */
     group.addEventListener("focusout", function () {
       setTimeout(function () {
         if (menuOpen() && !group.contains(document.activeElement)) {

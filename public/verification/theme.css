@@ -939,11 +939,6 @@ button,
   background: var(--primary);
   color: var(--primary-foreground);
 }
-/* The phone control, hidden until the media rule below swaps it in for the
-   three segments — see theme.js for why the width has to come from here. It
-   wears the selected segment's fill because the icon it shows is the theme in
-   use; hover keeps the fill, since there is nothing beside it to contrast
-   against. */
 .theme-switch .theme-trigger {
   display: none;
 }
@@ -953,11 +948,6 @@ button,
   color: var(--primary-foreground);
 }
 
-/* The menu that button opens. Hidden here rather than left to the UA rule:
-   the panel is a flex column, and display:flex beats [hidden] — the trap the
-   two pagers hit. Anchored to the switch, right-aligned so it cannot push the
-   viewport sideways from the last control in the row, and above the header's
-   own z-index so it lands over the page rather than under it. */
 .theme-menu {
   position: absolute;
   top: calc(100% + 6px);
@@ -975,9 +965,6 @@ button,
 .theme-menu[hidden] {
   display: none;
 }
-/* Rows, not squares: these override the segment sizing .theme-switch button
-   sets, which is written for the three-up control and would otherwise clip
-   each label into a 38px box. */
 .theme-switch .theme-menu button {
   width: 100%;
   height: auto;
@@ -994,8 +981,6 @@ button,
   background: var(--accent);
   color: var(--foreground);
 }
-/* The one in use is named and marked, which is the whole reason this is a
-   menu and not a control you press repeatedly. */
 .theme-switch .theme-menu button[aria-checked="true"] {
   background: var(--primary);
   color: var(--primary-foreground);
@@ -1113,10 +1098,6 @@ button,
    exception WCAG's target-size rule grants links inside prose — at 19px tall
    these were under the 24px floor on a phone. The padding takes them past it;
    the negative margin keeps the row's spacing where it was. */
-/* Every row item, not every link. A destination with no URL yet is a span
-   rather than an anchor, so a rule written for `a` skipped it and left it
-   sitting a few pixels above its neighbours — the box is what aligns the row,
-   and only the colour of it depends on being pressable. */
 .foot-links > * {
   color: var(--muted-foreground);
   text-decoration: none;
@@ -1208,14 +1189,6 @@ button,
     justify-content: flex-end;
     margin-left: auto;
   }
-  /* One segment, not three.
-
-     The pill's border and 2px padding go with the other two segments. They
-     exist to bind three squares into one control; around a single square they
-     only shrink it, and the segment inside a 44px pill is 38px — under the tap
-     floor this header sets everywhere else, and now the sole way to reach the
-     theme. Without them the button IS the control, 44px square like the
-     notebook beside it. */
   .theme-switch .theme-trigger {
     display: inline-flex;
     --seg: var(--hdr-action-h);
@@ -1229,33 +1202,15 @@ button,
     border: 0;
     background: transparent;
   }
-  /* Every action drops the 100px WIDTH floor and keeps the 44px tap floor
-     above — the two are not the same promise. The width exists so the switch
-     and the account button settle on one number at desktop sizes, which is a
-     tidiness the phone row cannot afford: it held 56px of dead ground inside
-     the collapsed switch and padded "Sign in" to nearly twice its label. The
-     square that a finger has to hit is unchanged. */
   .header-right .theme-switch,
   .header-right > .btn.small,
   .header-right > #verification-notebook-launcher {
     min-width: var(--hdr-action-h);
   }
-  /* The label sets the account button's width; at 18px "Sign in" alone ran to
-     86px, wider than the switch and the notebook together. */
   .header-right > .btn.small {
     padding: 0 12px;
     font-size: var(--fs-md);
   }
-  /* The brand pays the rest, and pays it by dropping the words rather than
-     shrinking them: the logotype alone is the mark people recognise, and type
-     scaled down far enough to fit was worth less than the room it cost. The
-     link keeps its full name for anyone not reading it by eye — the anchor
-     carries aria-label="Verification @ XLab" at every width, so hiding this
-     span changes what is drawn and not what is announced.
-
-     The mark grows a little, having the row to itself: its ink fills only the
-     middle 55% of the canvas (see .brand-mark), so 22px here reads about as
-     tall as the 16px word did. */
   .brand-word {
     display: none;
   }
@@ -1263,12 +1218,6 @@ button,
     height: 22px;
   }
 
-  /* No width floor. The rule above is about target SIZE, and the note there
-     names the height: 19px was under the floor and the padding takes it past.
-     Width was never the problem — the narrowest label in the row is 31px, well
-     clear of it — and forcing 44px only padded "XLab" and "Team" with trailing
-     space, which read as ragged gaps in a row whose spacing is supposed to be
-     one number. */
   .foot-links > * {
     display: inline-flex;
     min-height: 44px;

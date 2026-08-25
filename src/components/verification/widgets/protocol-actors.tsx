@@ -362,7 +362,7 @@ function DrawerBody({
         <p
           style={mode === "learn" ? catVars(cat) : undefined}
           className={cn(
-            "text-4xs tracking-[0.2em] uppercase",
+            "eyebrow",
             mode === "learn" ? "text-[var(--cat)]" : "text-muted-foreground",
           )}
         >
@@ -388,7 +388,7 @@ function DrawerBody({
             type="button"
             onClick={onPrev}
             disabled={!hasPrev}
-            className="text-brand-ink hover:text-foreground text-4xs tracking-[0.12em] uppercase disabled:cursor-default disabled:opacity-40"
+            className="eyebrow text-brand-ink hover:text-foreground disabled:cursor-default disabled:opacity-40"
           >
             {PROTOCOL_ACTORS_COPY.prevBtn}
           </button>
@@ -396,7 +396,7 @@ function DrawerBody({
             type="button"
             onClick={onNext}
             disabled={!hasNext}
-            className="text-brand-ink hover:text-foreground text-4xs tracking-[0.12em] uppercase disabled:cursor-default disabled:opacity-40"
+            className="eyebrow text-brand-ink hover:text-foreground disabled:cursor-default disabled:opacity-40"
           >
             {PROTOCOL_ACTORS_COPY.nextBtn}
           </button>
@@ -422,7 +422,7 @@ function LearnBody({ id }: { id: string }) {
           >
             <p
               className={cn(
-                "text-4xs tracking-[0.18em] uppercase",
+                "eyebrow",
                 isWhy ? "text-brand-ink" : "text-muted-foreground",
               )}
             >
@@ -541,7 +541,7 @@ function QuizBody({
                   <span className="text-muted-foreground mt-1 block text-xs leading-snug">
                     <b
                       className={cn(
-                        "mr-1 text-4xs tracking-[0.12em] uppercase",
+                        "eyebrow mr-1",
                         tagCls,
                       )}
                     >
@@ -564,7 +564,7 @@ function QuizBody({
         <div className="mt-4 space-y-3" aria-live="polite">
           <p
             className={cn(
-              "text-xs tracking-[0.1em] uppercase",
+              "eyebrow",
               verdict && verdict.right === verdict.total
                 ? "text-comply"
                 : "text-exaggerate",
@@ -573,7 +573,7 @@ function QuizBody({
             {verdict?.right} / {verdict?.total} calls right
           </p>
           <div className="border-border bg-muted/40 rounded-lg border p-3.5">
-            <p className="text-brand-ink text-4xs tracking-[0.18em] uppercase">
+            <p className="eyebrow text-brand-ink">
               {PROTOCOL_ACTORS_COPY.whyLabel}
             </p>
             <p className="mt-1 text-sm leading-relaxed">{quiz.why}</p>

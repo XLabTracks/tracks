@@ -104,7 +104,7 @@ export default async function CapstoneSignupsPage() {
                 <span className="font-medium">{r.user.name || r.user.email}</span>
                 <span className="text-muted-foreground text-xs">{r.user.email}</span>
                 {r.status === "withdrawn" ? (
-                  <span className="text-muted-foreground text-xs tracking-wide uppercase">
+                  <span className="eyebrow text-muted-foreground">
                     withdrawn
                   </span>
                 ) : null}

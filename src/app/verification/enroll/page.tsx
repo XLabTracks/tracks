@@ -149,7 +149,7 @@ function Notice({
           : "border-border/80 border")
       }
     >
-      <span className="text-muted-foreground block text-xs font-medium tracking-wide uppercase">
+      <span className="eyebrow text-muted-foreground block font-medium">
         {label}
       </span>
       <p className="mt-2 text-sm leading-relaxed">{children}</p>

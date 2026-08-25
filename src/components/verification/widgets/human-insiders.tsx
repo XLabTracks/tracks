@@ -149,7 +149,7 @@ export function HumanInsiders({
     <section className="not-prose border-border bg-card shadow-soft my-6 overflow-hidden rounded-xl border text-sm">
       <header className="border-border border-b p-5 sm:p-6">
         <div className="flex flex-wrap items-center justify-between gap-3">
-          <p className="text-muted-foreground font-sans text-xs font-medium tracking-[0.01em] uppercase">
+          <p className="eyebrow text-muted-foreground font-sans font-medium">
             Source assessment · 2.4.1
           </p>
         </div>
@@ -209,7 +209,7 @@ function PhaseRail({ phase }: { phase: Phase }) {
         <li
           key={item.id}
           className={cn(
-            "border-border rounded-md border px-2 py-2 text-center font-sans text-4xs font-medium tracking-[0.01em] uppercase",
+            "eyebrow border-border rounded-md border px-2 py-2 text-center font-sans font-medium",
             index === active && "border-primary bg-primary/5 text-brand-ink",
             index < active && "bg-muted/45 text-foreground",
             index > active && "text-muted-foreground"
@@ -300,7 +300,7 @@ function MapPhase({
                 <span className="mt-3 block text-xs font-semibold leading-snug">
                   {candidate.role}
                 </span>
-                <span className="text-muted-foreground mt-1 block font-sans text-4xs font-medium tracking-[0.01em] uppercase">
+                <span className="eyebrow text-muted-foreground mt-1 block font-sans font-medium">
                   {candidate.station}
                 </span>
               </button>
@@ -311,14 +311,14 @@ function MapPhase({
 
       <div className="grid xl:grid-cols-[18rem_minmax(0,1fr)]">
         <aside className="border-border bg-muted/15 border-b p-5 xl:border-r xl:border-b-0">
-          <p className="text-muted-foreground font-sans text-3xs font-medium tracking-[0.01em] uppercase">
+          <p className="eyebrow text-muted-foreground font-sans font-medium">
             Source
           </p>
           <h4 className="mt-2 text-xl font-semibold">{actor.role}</h4>
           <p className="text-muted-foreground mt-1 text-xs">{actor.station}</p>
           <p className="mt-4 leading-relaxed">{actor.prompt}</p>
           <div className="border-border bg-background mt-4 rounded-lg border p-3">
-            <p className="text-muted-foreground font-sans text-3xs font-medium tracking-[0.01em] uppercase">
+            <p className="eyebrow text-muted-foreground font-sans font-medium">
               Reported claim
             </p>
             <p className="mt-2 text-sm leading-relaxed">“{actor.report}”</p>
@@ -384,7 +384,7 @@ function MapPhase({
 function SourceClue({ label, text }: { label: string; text: string }) {
   return (
     <div className="border-border mt-4 border-t pt-3">
-      <p className="text-muted-foreground font-sans text-3xs font-medium tracking-[0.01em] uppercase">
+      <p className="eyebrow text-muted-foreground font-sans font-medium">
         {label}
       </p>
       <p className="mt-1 text-xs leading-relaxed">{text}</p>
@@ -414,7 +414,7 @@ function ConnectionColumn({
   return (
     <section>
       <div className="mb-2 min-h-12">
-        <p className="text-muted-foreground font-sans text-4xs font-medium tracking-[0.01em] uppercase">
+        <p className="eyebrow text-muted-foreground font-sans font-medium">
           {copy.eyebrow}
         </p>
         <h5 className="mt-1 text-xs font-semibold leading-snug">
@@ -494,7 +494,7 @@ function ExaminationPhase({
   return (
     <div className="grid xl:grid-cols-[20rem_minmax(0,1fr)]">
       <aside className="border-border bg-muted/15 border-b p-5 xl:border-r xl:border-b-0">
-        <p className="text-muted-foreground font-sans text-3xs font-medium tracking-[0.01em] uppercase">
+        <p className="eyebrow text-muted-foreground font-sans font-medium">
           {SOURCE_REPORT.label}
         </p>
         <div className="border-border bg-background mt-3 rounded-lg border p-4">
@@ -519,7 +519,7 @@ function ExaminationPhase({
       <div className="p-5 sm:p-6">
         <div className="flex items-center justify-between gap-4">
           <div>
-            <p className="text-muted-foreground font-sans text-3xs font-medium tracking-[0.01em] uppercase">
+            <p className="eyebrow text-muted-foreground font-sans font-medium">
               Question {questionIndex + 1} of {CREDIBILITY_QUESTIONS.length}
             </p>
             <h4 className="mt-2 text-xl font-semibold">{question.label}</h4>
@@ -616,7 +616,7 @@ function FindingPhase({ onRestart }: { onRestart: () => void }) {
               aria-hidden
             />
             <div>
-              <p className="text-brand-ink font-sans text-3xs font-medium tracking-[0.01em] uppercase">
+              <p className="eyebrow text-brand-ink font-sans font-medium">
                 {FINAL_FINDING.disposition}
               </p>
               <h4 className="mt-2 text-2xl font-semibold tracking-tight">
@@ -626,7 +626,7 @@ function FindingPhase({ onRestart }: { onRestart: () => void }) {
             </div>
           </div>
           <div className="border-border mt-5 border-t pt-4">
-            <p className="text-muted-foreground mb-3 font-sans text-3xs font-medium tracking-[0.01em] uppercase">
+            <p className="eyebrow text-muted-foreground mb-3 font-sans font-medium">
               Basis for the finding
             </p>
             <ol className="space-y-2">
@@ -647,7 +647,7 @@ function FindingPhase({ onRestart }: { onRestart: () => void }) {
         </div>
 
         <section className="mt-6">
-          <p className="text-muted-foreground font-sans text-3xs font-medium tracking-[0.01em] uppercase">
+          <p className="eyebrow text-muted-foreground font-sans font-medium">
             Common failure modes
           </p>
           <h4 className="mt-2 text-lg font-semibold">

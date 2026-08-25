@@ -5,11 +5,11 @@
    Every place the course asks for a written output. The briefs are the
    outline's own words; `status` says how much of each one exists. */
 window.VERIFICATION_MEMO_MODULES = [
-  "Why Verification?",
-  "Actors",
-  "Verification Infrastructure",
-  "Scheming and Evasion",
-  "Trust Without Trust"
+  "Why are we teaching this?",
+  "Policy scoping & actors",
+  "Verification infrastructure and evidence streams",
+  "Architecture and Limitations of Low-Trust AI Compute Verification",
+  "Capstone: what would be enough for a three-month emergency pause?"
 ];
 
 window.VERIFICATION_MEMOS = [

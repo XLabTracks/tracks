@@ -321,7 +321,7 @@ function StepBrief({ step }: { step: DrillStep }) {
                   <th
                     key={c}
                     scope="col"
-                    className="px-3 py-2 text-3xs tracking-wide uppercase"
+                    className="eyebrow px-3 py-2"
                   >
                     {c}
                   </th>
@@ -502,7 +502,7 @@ function MultiStep({
               >
                 <span
                   className={cn(
-                    "text-3xs tracking-wide uppercase",
+                    "eyebrow",
                     v.tone,
                   )}
                 >

@@ -105,10 +105,26 @@ function records() {
   return out;
 }
 
-const modules = [...block("memoModules", "[", "]").matchAll(/"([^"]+)"/g)].map(
-  (m) => m[1],
-);
-if (modules.length !== 5) fail(`memoModules parsed ${modules.length} names, expected 5`);
+// The desk's module names come from the course, not from a list beside it.
+// memos.ts used to carry its own five names and they disagreed with the
+// track's on four of the five, so the desk called module 3 something the
+// curriculum never says.
+const CURRICULUM = path.join(ROOT, "src", "content", "verification", "curriculum.ts");
+const curriculum = fs.readFileSync(CURRICULUM, "utf8");
+const modules = (() => {
+  const start = curriculum.indexOf("export const verificationModules");
+  if (start < 0) fail("could not find verificationModules in curriculum.ts");
+  const end = curriculum.indexOf("export const verificationLessons", start);
+  const body = curriculum.slice(start, end < 0 ? undefined : end);
+  const found = [];
+  const re = /trackId:\s*"verification",\s*\n\s*title:\s*"((?:[^"\\]|\\.)*)"/g;
+  let m;
+  while ((m = re.exec(body))) found.push(JSON.parse(`"${m[1]}"`));
+  return found;
+})();
+if (modules.length !== 5) {
+  fail(`read ${modules.length} module titles from curriculum.ts, expected 5`);
+}
 
 const slots = records().map((slot) => {
   // `lesson` is an app-side placement and means nothing on the static desk.

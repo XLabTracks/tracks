@@ -25,15 +25,16 @@
 
 window.SKILLS = {
   rev: 2,
-  /* The graph's own module taxonomy — the owner's band names, which are the
-     static site's module chrome. The app track names its modules differently
-     (curriculum.ts); verificationUnitOfLesson is the join. */
+  /* The course's module names, in order, copied from verificationModules in
+     curriculum.ts. They are the same words the track sidebar, the skill map
+     and the memo desk print: this file used to carry a fifth set of names and
+     the same module was called three different things one click apart. */
   moduleNames: [
-    "Foundations",
-    "Policy and actors",
-    "Evidence streams",
-    "Covert development",
-    "Capstone",
+    "Why are we teaching this?",
+    "Policy scoping & actors",
+    "Verification infrastructure and evidence streams",
+    "Architecture and Limitations of Low-Trust AI Compute Verification",
+    "Capstone: what would be enough for a three-month emergency pause?",
   ],
   compoundRung: "2.1–2.4",
   compoundUnits: ["2.1", "2.2", "2.3", "2.4"],

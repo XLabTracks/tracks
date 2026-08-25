@@ -1,5 +1,5 @@
 
-### 2.1.4 Measuring and classifying use
+## 2.1.4 Measuring and Classifying Use
 
 The working rule prohibits **unlicensed training above threshold T** while permitting inference and approved safety evaluations. Verifying that rule requires answers to three separate questions:
 
@@ -9,7 +9,7 @@ The working rule prohibits **unlicensed training above threshold T** while permi
 
 A system may answer one and fail the others.
 
-#### Compute accounting
+### Compute Accounting
 
 Training thresholds are usually expressed in total operations, commonly total training FLOP. Throughput, such as FLOP per second, is a different quantity.
 
@@ -31,9 +31,9 @@ Even perfect accounting verifies the threshold, not the policy goal. Algorithmic
 
 <Prompt label="Question to keep visible">What quantity did the meter record, and how closely does that quantity match the legal rule?</Prompt>
 
-<PageBreak title="Workload classification" />
+<PageBreak title="Workload Classification" />
 
-#### Workload classification
+### Workload Classification
 
 A compute counter cannot determine whether the operations were training, inference, evaluation, fine-tuning, or another permitted activity. Workload classification uses additional signals, such as temporal GPU telemetry, memory behavior, communication patterns, or authenticated code and configuration.
 
@@ -53,7 +53,7 @@ The limitations are equally important:
 
 This is an **empirical component demonstration**, not an end-to-end verification regime.
 
-#### Separate attacks by what they target
+### Separate Attacks by What They Target
 
 A verifier should not treat every weakness as a classifier problem.
 
@@ -66,7 +66,7 @@ A verifier should not treat every weakness as a classifier problem.
 | Shift to uninstrumented hardware | Coverage and completeness |
 | Stay under the compute line through algorithmic improvement | The policy proxy itself |
 
-#### Activity: from result to policy claim
+### Activity: From Result to Policy Claim
 
 For the telemetry study, write four statements.
 

@@ -1,11 +1,11 @@
 
-### 2.1.3 Accounting for hardware: identity, location, topology, and completeness
+## 2.1.3 Accounting for Hardware: Identity, Location, Topology, and Completeness
 
 A registry of covered accelerators can support several verification tasks. It can link a device credential to an owner, facility, jurisdiction, and reporting obligation. It can also make discrepancies visible when manufacturer, shipping, customs, provider, or site records disagree.
 
 A registry is not a sensor. It is an institutional record whose value depends on how entries are created and reconciled.
 
-#### Identity
+### Identity
 
 A device credential can help a verifier distinguish a genuine covered device from an unauthenticated substitute. The verifier still needs to know:
 
@@ -18,7 +18,7 @@ A device credential can help a verifier distinguish a genuine covered device fro
 
 Identity is a useful anchor for evidence from other mechanisms. It does not establish location, interconnection, use, or completeness.
 
-#### Location
+### Location
 
 Location-verification proposals often use network timing or challenge-response measurements. A verifier sends unpredictable challenges and checks whether response times are consistent with the claimed region. Such protocols may make some forms of remote spoofing costly, but they depend on secure time, protected processing, network conditions, calibration, and a tolerable false-positive rate. Hardware-governance surveys continue to treat robust, scalable location verification as an open research area rather than a fielded treaty capability.
 
@@ -26,7 +26,7 @@ Location-verification proposals often use network timing or challenge-response m
 
 A location claim should therefore state its resolution and error model. “Inside Country A,” “inside this data center,” and “inside this rack” are different claims.
 
-#### Cluster topology
+### Cluster Topology
 
 A collection of individually authenticated devices is not automatically a cluster. A verifier may need to establish:
 
@@ -38,7 +38,7 @@ A collection of individually authenticated devices is not automatically a cluste
 
 Current attestation support illustrates the distinction. Some configurations can report more about protected interconnects, while others attest devices independently. The treaty claim must follow the evidence, not the marketing category.
 
-#### Completeness
+### Completeness
 
 The hardest claim is often negative: no relevant compute existed outside the declared system.
 
@@ -54,7 +54,7 @@ Attestation covers devices that participate. A registry covers devices that ente
 
 Hardware is therefore strongest for known, instrumented compute. The intelligence and human sections will address what remains when the operator never registers the device, never installs the monitor, or never submits evidence.
 
-#### Try it
+### Try It
 
 The treaty body wants to support the claim: “All covered accelerators at Site X are registered and accounted for.” Choose three evidence streams that do not share the same source. For each, name the actor that produces it and one way it could fail.
 

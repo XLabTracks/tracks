@@ -50,7 +50,7 @@ export async function CapstoneSignup() {
 
       {tableMissing ? (
         <div className="border-muted-foreground/40 mt-4 rounded-lg border border-dashed p-4">
-          <span className="text-muted-foreground block text-xs font-medium tracking-wide uppercase">
+          <span className="eyebrow text-muted-foreground block font-medium">
             not ready yet
           </span>
           <p className="mt-2 text-sm leading-relaxed">
@@ -64,7 +64,7 @@ export async function CapstoneSignup() {
         </div>
       ) : unreachable ? (
         <div className="border-muted-foreground/40 mt-4 rounded-lg border border-dashed p-4">
-          <span className="text-muted-foreground block text-xs font-medium tracking-wide uppercase">
+          <span className="eyebrow text-muted-foreground block font-medium">
             sheet unavailable
           </span>
           <p className="mt-2 text-sm leading-relaxed">

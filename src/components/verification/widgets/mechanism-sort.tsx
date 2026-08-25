@@ -251,7 +251,7 @@ function Shell({ title, children }: { title: string; children: React.ReactNode }
 function MetricGuide() {
   return (
     <details className="border-border rounded-lg border">
-      <summary className="text-muted-foreground cursor-pointer px-3 py-2 text-xs font-medium tracking-[0.1em] uppercase select-none">
+      <summary className="eyebrow text-muted-foreground cursor-pointer px-3 py-2 font-medium select-none">
         How the four metrics are defined
       </summary>
       <div className="grid gap-3 p-3 pt-0 sm:grid-cols-2">

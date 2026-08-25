@@ -78,7 +78,7 @@ export function DecisionRow({
         <dl className="space-y-3">
           {answered.map(([prompt, value]) => (
             <div key={prompt}>
-              <dt className="text-muted-foreground text-xs font-medium tracking-wide uppercase">
+              <dt className="eyebrow text-muted-foreground font-medium">
                 {prompt}
               </dt>
               <dd className="mt-1 text-sm leading-relaxed whitespace-pre-line">

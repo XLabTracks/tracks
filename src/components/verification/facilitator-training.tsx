@@ -54,7 +54,7 @@ export function FacilitatorTraining() {
 
             {s.materials.length > 0 && (
               <>
-                <p className="text-muted-foreground mt-3 text-xs font-medium tracking-wide uppercase">
+                <p className="eyebrow text-muted-foreground mt-3 font-medium">
                   Additional materials
                 </p>
                 <ul className="mt-1 space-y-1">

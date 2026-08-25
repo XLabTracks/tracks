@@ -170,14 +170,15 @@ for (const mod of modules) {
       lessons: [lesson.slug],
     });
   }
+  // Title and slug come from the module itself, never from the meta record:
+  // one name and one address per module, on every surface that draws it.
   out.modules.push({
     n: meta.n,
-    slug: meta.slug,
-    title: meta.title,
+    slug: mod.slug,
+    title: mod.title,
     glyph: meta.glyph,
     week: meta.week,
     status: meta.status,
-    goal: moduleById.get(mod.id).title,
     summary: mod.summary,
     units,
   });

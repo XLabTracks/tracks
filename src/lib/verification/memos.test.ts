@@ -1,7 +1,8 @@
 import { describe, expect, it } from "vitest";
 import { existsSync, readFileSync } from "node:fs";
 import { join } from "node:path";
-import { memoGenreLabels, memoModules, memoSlots } from "@/content/verification/memos";
+import { memoGenreLabels, memoSlots } from "@/content/verification/memos";
+import { verificationModules } from "@/content/verification/curriculum";
 import { verificationLessons } from "@/content/verification/curriculum";
 
 const LESSONS_DIR = join(__dirname, "../../content/lessons/verification");
@@ -59,8 +60,9 @@ describe("verification written outputs", () => {
   it("slot ids are unique and modules are in range", () => {
     const ids = memoSlots.map((slot) => slot.id);
     expect(new Set(ids).size).toBe(ids.length);
+    const byOrder = [...verificationModules].sort((a, b) => a.order - b.order);
     for (const slot of memoSlots) {
-      expect(memoModules[slot.module], `${slot.id} has module ${slot.module}`).toBeTruthy();
+      expect(byOrder[slot.module], `${slot.id} has module ${slot.module}`).toBeTruthy();
     }
   });
 

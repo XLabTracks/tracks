@@ -107,7 +107,7 @@ export function CloudEvidenceDrill({
   return (
     <section className="not-prose border-border bg-card shadow-soft my-6 overflow-hidden rounded-xl border text-sm">
       <header className="border-border border-b p-5 sm:p-6">
-        <p className="text-muted-foreground text-xs font-medium tracking-wide uppercase">
+        <p className="eyebrow text-muted-foreground font-medium">
           30 minutes
         </p>
         <h3 className="mt-3 text-2xl font-semibold tracking-tight">
@@ -139,7 +139,7 @@ export function CloudEvidenceDrill({
             aria-atomic="true"
           >
             <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
-              <p className="text-muted-foreground text-xs font-medium uppercase">
+              <p className="eyebrow text-muted-foreground font-medium">
                 Task {taskIndex + 1} of {CLOUD_TASKS.length} · {task.time}
               </p>
               <h4 className="text-base font-semibold">{task.title}</h4>

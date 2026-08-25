@@ -259,7 +259,7 @@ function Drill({
             )}
             armedClassName="ring-primary ring-2"
           >
-            <div className="text-muted-foreground mb-2 flex justify-between text-4xs tracking-[0.14em] uppercase">
+            <div className="eyebrow text-muted-foreground mb-2 flex justify-between">
               <span>Specimen {idx + 1}</span>
               <span>source hidden</span>
             </div>
@@ -276,7 +276,7 @@ function Drill({
 
       {showFiled && (
         <div className="bg-card shadow-soft mx-auto max-w-2xl rounded-xl border p-4">
-          <div className="text-muted-foreground mb-1.5 text-4xs tracking-[0.14em] uppercase">
+          <div className="eyebrow text-muted-foreground mb-1.5">
             Specimen {idx + 1} — filed under: {filedOrgan.name}
           </div>
           <p className="text-foreground/90 text-sm leading-relaxed">
@@ -306,7 +306,7 @@ function Drill({
           >
             <div
               className={cn(
-                "mb-1.5 flex items-center gap-1.5 font-semibold tracking-wide uppercase",
+                "eyebrow mb-1.5 flex items-center gap-1.5 font-semibold",
                 accent.text,
               )}
               style={{ fontSize: "11px", letterSpacing: "0.08em" }}
@@ -420,7 +420,7 @@ function Summary({
               {COPY.tableHead.map((h) => (
                 <th
                   key={h}
-                  className="border-border text-muted-foreground border-b px-3 py-2 text-left text-4xs tracking-[0.09em] uppercase"
+                  className="eyebrow border-border text-muted-foreground border-b px-3 py-2 text-left"
                 >
                   {h}
                 </th>
@@ -524,7 +524,7 @@ function Summary({
       )}
 
       <div className="border-border bg-card mt-2 rounded-lg border p-5">
-        <h5 className="text-2xs font-semibold tracking-[0.08em] uppercase">
+        <h5 className="eyebrow font-semibold">
           {COPY.protocolHead}
         </h5>
         <p className="text-muted-foreground mt-1 mb-4 text-xs leading-relaxed">
@@ -533,7 +533,7 @@ function Summary({
         <div className="space-y-3">
           {PROTOCOL.map((a) => (
             <div key={a.id}>
-              <div className="text-muted-foreground text-4xs tracking-[0.1em] uppercase">
+              <div className="eyebrow text-muted-foreground">
                 {a.id}
               </div>
               <p className="text-foreground/90 text-sm leading-relaxed">

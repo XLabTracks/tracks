@@ -80,7 +80,7 @@ export default async function FacilitatorPage() {
         id="signup"
         className="border-muted-foreground/40 mt-8 max-w-2xl scroll-mt-24 rounded-lg border border-dashed p-5"
       >
-        <span className="text-muted-foreground block text-xs font-medium tracking-wide uppercase">
+        <span className="eyebrow text-muted-foreground block font-medium">
           not set up yet
         </span>
         <p className="mt-2 text-sm leading-relaxed">

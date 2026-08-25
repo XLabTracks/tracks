@@ -89,7 +89,7 @@ export function HumanReportingProtection({
   return (
     <section className="not-prose border-border bg-card shadow-soft my-6 overflow-hidden rounded-xl border text-sm">
       <header className="border-border border-b p-5 sm:p-6">
-        <p className="text-muted-foreground font-sans text-xs font-medium tracking-[0.01em] uppercase">
+        <p className="eyebrow text-muted-foreground font-sans font-medium">
           Reporting and protection · 2.4.2
         </p>
         <h3 className="mt-3 text-2xl font-semibold tracking-tight">
@@ -146,7 +146,7 @@ function PhaseRail({
         <li
           key={label}
           className={cn(
-            "border-border rounded-md border px-2 py-2 text-center font-sans text-4xs font-medium tracking-[0.01em] uppercase",
+            "eyebrow border-border rounded-md border px-2 py-2 text-center font-sans font-medium",
             index === active && "border-primary bg-primary/5 text-brand-ink",
             index < active && "bg-muted/45 text-foreground",
             index > active && "text-muted-foreground",
@@ -201,7 +201,7 @@ function CaseWork({
   return (
     <div>
       <section className="border-border border-b p-5 sm:p-6">
-        <p className="text-brand-ink text-xs font-medium tracking-[0.01em] uppercase">
+        <p className="eyebrow text-brand-ink font-medium">
           {caseFile.eyebrow}
         </p>
         <h4 className="mt-2 text-xl font-semibold">{caseFile.title}</h4>
@@ -395,7 +395,7 @@ function CaseResult({
     <section className="p-5 sm:p-6">
       <div className="border-border bg-muted/15 rounded-xl border p-5 sm:p-6">
         <Icon className="text-brand-ink size-7" aria-hidden />
-        <p className="text-muted-foreground mt-4 text-xs font-medium uppercase">
+        <p className="eyebrow text-muted-foreground mt-4 font-medium">
           Assembled finding
         </p>
         <h4 className="mt-2 max-w-3xl text-xl font-semibold">
@@ -442,7 +442,7 @@ function FinalFindings({ onRestart }: { onRestart: () => void }) {
   return (
     <section className="p-5 sm:p-6">
       <CheckCircle2 className="size-8 text-emerald-600" aria-hidden />
-      <p className="text-muted-foreground mt-4 text-xs font-medium uppercase">
+      <p className="eyebrow text-muted-foreground mt-4 font-medium">
         Two different thresholds
       </p>
       <h4 className="mt-2 text-2xl font-semibold">The report can travel without proving the case</h4>

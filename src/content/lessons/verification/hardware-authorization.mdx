@@ -1,5 +1,5 @@
 
-### 2.1.5 Authorization, licensing, and control
+## 2.1.5 Authorization, Licensing, and Control
 
 A monitor produces evidence. A control mechanism changes what the machine can do. A complete policy still needs an authority that decides when control is justified.
 
@@ -9,7 +9,7 @@ A complete authorization chain is:
 
 > legal rule → license criteria → issuer → authenticated device and state → permitted operation → meter or expiration → suspension or revocation → appeal or override → renewal or termination
 
-#### Questions a policy designer must answer
+### Questions a Policy Designer Must Answer
 
 - Who issues the authorization: one government, both parties, a multiparty authority, or another institution?
 - Which key or combination of keys is sufficient?
@@ -28,7 +28,7 @@ James Petrie’s 2024 firmware-based offline-licensing design is a useful propos
 
 <Src>J. Petrie, *Near-Term Enforcement of AI Chip Export Controls Using a Firmware-Based Design for Offline Licensing* — [arXiv:2404.18308](https://arxiv.org/abs/2404.18308), 2024.</Src>
 
-#### Control authority is part of the mechanism
+### Control Authority Is Part of the Mechanism
 
 A technically sound off-switch can be politically unacceptable when its control structure is vague. An international agreement might require:
 
@@ -42,7 +42,7 @@ A technically sound off-switch can be politically unacceptable when its control 
 
 The choice is not simply “control or no control.” It is a distribution of authority, risk, and failure.
 
-#### Activity: build the authorization chain
+### Activity: Build the Authorization Chain
 
 Assemble an end-to-end system for the working rule from the following components: device identity, attested firmware, protected counter, training classifier, signed record, cross-device aggregation, license token, revocation list, regulator, international notification, inspection trigger, and independent power measurement.
 

@@ -97,7 +97,7 @@ export function MissingBoard({
             className="panel"
           >
             <p className="text-sm font-semibold">{station.title}</p>
-            <p className="text-muted-foreground mt-2 text-[11px] tracking-[0.12em] uppercase">
+            <p className="eyebrow text-muted-foreground mt-2">
               In the nuclear regime
             </p>
             <p className="mt-1 text-sm leading-relaxed">{station.nuclear}</p>
@@ -179,7 +179,7 @@ export function MissingBoard({
       {saved.submitted ? (
         <div className="space-y-4">
           <section className="panel">
-            <h4 className="text-muted-foreground text-[11px] tracking-[0.14em] uppercase">
+            <h4 className="eyebrow text-muted-foreground">
               Station by station
             </h4>
             <dl className="mt-3 space-y-3">

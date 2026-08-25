@@ -57,7 +57,7 @@ export function VerificationProblem(_: VerificationWidgetProps) {
               )}
             >
               <span className="flex items-center justify-between gap-3">
-                <span className="text-muted-foreground text-4xs tracking-[0.14em] uppercase">
+                <span className="eyebrow text-muted-foreground">
                   {option.label}
                 </span>
                 {seen ? (

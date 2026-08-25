@@ -1,5 +1,5 @@
 
-### 2.1.6 Where should trust live?
+## 2.1.6 Where Should Trust Live?
 
 Hardware verification can place trust inside the accelerator, in a separate digital monitor, in physical sensors, or across a hybrid design. Moving trust does not remove it.
 
@@ -7,7 +7,7 @@ Use one verification target for the comparison:
 
 <Prompt label="Verification target">Determine whether all covered compute in a declared data center is accounted for by permitted workloads.</Prompt>
 
-#### Architecture A: on-chip monitoring
+### Architecture A: On-Chip Monitoring
 
 Possible components include device identity, secure or measured boot, signed counters, protected telemetry, workload certificates, trusted execution environments, and hardware-backed authorization.
 
@@ -33,9 +33,9 @@ Current confidential-computing support on accelerators is a deployed security pr
 
 <Src>NVIDIA, [*NVIDIA H100 Tensor Core GPU Security*](https://images.nvidia.com/aem-dam/en-zz/Solutions/data-center/h100/PB-11133-001_v01.pdf) — the confidential-computing whitepaper and current product documentation.</Src>
 
-<PageBreak title="Off-chip digital monitoring" />
+<PageBreak title="Off-Chip Digital Monitoring" />
 
-#### Architecture B: off-chip digital monitoring
+### Architecture B: Off-Chip Digital Monitoring
 
 Possible components include network taps, server or rack gateways, input/output loggers, tamper-evident enclosures, and separate secured verification computers.
 
@@ -59,7 +59,7 @@ Recent work has proposed fingerprinting or committing cluster input and output t
 
 <Src>A. Cankaya et al., *Fingerprinting All AI Cluster I/O Without Mutually Trusted Processors* — [arXiv:2606.10724](https://arxiv.org/abs/2606.10724), June 2026. Treat the architecture and implementation schedule as a research proposal.</Src>
 
-#### Architecture C: off-chip analog monitoring
+### Architecture C: Off-Chip Analog Monitoring
 
 Possible components include independently installed power meters, thermal sensors, electromagnetic measurements, independent clocks, tamper-evident packaging, and physical inspection of the sensor boundary.
 
@@ -81,7 +81,7 @@ Possible components include independently installed power meters, thermal sensor
 
 A rack meter installed under treaty access belongs in this hardware section. A foreign intelligence service estimating the same site’s power use from outside the facility belongs in the intelligence section. The physical phenomenon may be similar, but the access, chain of custody, confidence, and institutional role differ.
 
-#### Architecture D: hybrid assurance
+### Architecture D: Hybrid Assurance
 
 A hybrid system might combine:
 
@@ -95,7 +95,7 @@ A hybrid system might combine:
 
 Count independent failure modes, not mechanism names. A signed meter, a signed classifier, and a licensing system that all depend on one vendor key provide less redundancy than their number suggests.
 
-#### The confidentiality trade
+### The Confidentiality Trade
 
 Hardware evidence can reduce disclosure by returning a bounded claim rather than raw code, data, weights, or traces. It can also concentrate power in manufacturers, key authorities, and verifiers. A proposal should specify:
 
@@ -107,7 +107,7 @@ Hardware evidence can reduce disclosure by returning a bounded claim rather than
 - How abuse is audited;
 - What happens when parties disagree about the verifier or reference values.
 
-#### Activity: bilateral pilot review
+### Activity: Bilateral Pilot Review
 
 Compare an on-chip design with an off-chip design for the working pause rule. For each, record:
 

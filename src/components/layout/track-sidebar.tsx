@@ -26,7 +26,7 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import { OptionalMarker } from "@/components/content/optional-tag";
+import { OptionalPrefix } from "@/components/content/optional-tag";
 import type { SidebarOutline, SidebarOutlineItem } from "@/lib/content";
 import type { PaperNavItem } from "@/lib/papers/paper-nav";
 import { isVerificationRoute } from "@/components/verification/site-chrome";
@@ -550,14 +550,15 @@ function SidebarItemRow({
       )}
       <span className="flex min-w-0 flex-col">
         <span className="line-clamp-2">
+          {/* Inside the clamp, in front of the title: a prefix cannot be
+              orphaned from what it qualifies the way a chip on its own line
+              could. */}
+          {item.optional && <OptionalPrefix />}
           {item.title}
           {done && !item.completion && (
             <span className="sr-only"> (completed)</span>
           )}
         </span>
-        {/* Its own line, outside the title's line-clamp, so a long title
-            can't clip the optional marker (the primary nav surface). */}
-        {item.optional && <OptionalMarker compact className="mt-1.5" />}
       </span>
       {item.kind === "paper" && (
         <FileText

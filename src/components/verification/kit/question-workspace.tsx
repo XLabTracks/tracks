@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useState, type ReactNode } from "react";
 import { Button } from "@/components/ui/button";
+import { OptionalPrefix } from "@/components/content/optional-tag";
 import {
   answersOwed,
   choiceNumbers,
@@ -79,7 +80,9 @@ export function QuestionWorkspace({
           >
             <div className="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1">
               <h3 className="text-lg font-semibold">
-                {q.n}. {q.title}
+                {q.n}.{" "}
+                {q.requirement === "optional" ? <OptionalPrefix /> : null}
+                {q.title}
               </h3>
               <Badge
                 rule={rule}
@@ -159,14 +162,10 @@ function Badge({
   choices: number[];
 }) {
   if (rule.kind === "any") return null;
-  if (requirement === "required") return null;
-  const label =
-    requirement === "optional"
-      ? "Optional"
-      : `Answer one of ${listNumbers(choices)}`;
+  if (requirement !== "choose-one") return null;
   return (
     <span className="border-border text-muted-foreground rounded-full border px-2 py-0.5 text-xs select-none">
-      {label}
+      Answer one of {listNumbers(choices)}
     </span>
   );
 }

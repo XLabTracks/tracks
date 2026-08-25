@@ -75,7 +75,7 @@ title twice. Both were moved together, every time.
 | `v-hw-measuring-use` | 2.1.2 Measuring, classifying, and controlling use | 2.1.4 Measuring and classifying use |
 | `v-hw-where-trust-lives` | 2.1.3 | 2.1.6 |
 | `v-hw-policy-studio` | 2.1.4 Policy judgment studio | 2.1.8 Policy judgment: what role should hardware play? |
-| `v-hw-reconstructing-run` | Optional 2.1.5 | 2.1.7 Optional extension: … |
+| `v-hw-reconstructing-run` | Optional 2.1.5 | 2.1.7 Reconstructing a declared training run (`optional: true` — note 4) |
 | `v-intel-signatures` | 2.3.0 | 2.3.1 |
 | `v-intel-anchor` | 2.3.1 | 2.3.2 |
 | `v-intel-assessment` | 2.3.2 | 2.3.3 |
@@ -137,11 +137,15 @@ deliberate under-promise.
    finished prose for all of 2.1 — transcribing the rest is a straightforward
    follow-up and was out of scope here (the ask was the skeleton).
 
-4. **The outline's `*` on 2.1.7 is carried in the title, not in the graph.**
-   `optional: true` is a `Paper` field, not a `Lesson` one, and making it
-   structural would change what module completion counts. If optional
-   subsubmodules need to stop gating completion, that is a content-graph change
-   with its own test surface.
+4. **The outline's `*` on 2.1.7 is structural (updated 2026-08-20).** It was
+   carried in the title — "2.1.7 [Optional] Extension: …" — because at the time
+   `optional: true` was a `Paper` field and no `Lesson` had one. That stopped
+   being true when 0.4 Strategic Foundations landed: `Lesson.optional` exists,
+   `isOptionalItem` honours both kinds, and the …ProgressContentIds accessors
+   already skip optional items. So the flag moved into the graph and the word
+   came out of the title, heading and all. Module 2 requires one fewer unit,
+   which is what the outline's star says it should, and the row wears the
+   course's single "Optional:" prefix rather than a dialect of its own.
 
 5. **Interactives named in the outline and not built.** 2.0 points at
    `mechanism-sort.netlify.app` and `evidence-taxonomies.netlify.app`; 2.3.1 at

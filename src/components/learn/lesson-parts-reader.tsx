@@ -146,8 +146,12 @@ export function LessonPartsReader({
     // Deliberate mount-time re-render, like the parts derivation below: the
     // stored preference exists only on the client, and reading it during
     // render would make the server and client markup disagree.
+    const stored = readFocusSettings();
     // eslint-disable-next-line react-hooks/set-state-in-effect
-    setFocus(readFocusSettings());
+    setFocus(stored);
+    // Only once the reader has asked for it — see the note in
+    // reading-surface.tsx for what marking every lesson unconditionally cost.
+    if (stored.mode === "off") return;
     const body = hostRef.current?.querySelector<HTMLElement>(".lesson-body");
     if (body) markFocusWords(body);
   }, []);
@@ -327,7 +331,17 @@ export function LessonPartsReader({
               {whole ? "Read part by part" : "Read the whole lesson"}
             </Button>
           )}
-          <FocusReadingControl settings={focus} onChange={setFocus} />
+          <FocusReadingControl
+            settings={focus}
+            onChange={(next) => {
+              if (next.mode !== "off") {
+                const body =
+                  hostRef.current?.querySelector<HTMLElement>(".lesson-body");
+                if (body) markFocusWords(body);
+              }
+              setFocus(next);
+            }}
+          />
         </div>
       </div>
 

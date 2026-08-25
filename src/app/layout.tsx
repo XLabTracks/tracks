@@ -127,7 +127,17 @@ export default async function RootLayout({
       // THEME_BOOT mutates theme attributes before React hydrates. That is
       // precisely the mismatch React would otherwise warn about.
       suppressHydrationWarning
-      className={`${inter.variable} h-full antialiased`}
+      // No height on <html>. `h-full` pinned it to exactly the viewport while
+      // the body inside ran to the length of the document — on a 16,000px
+      // lesson the body overflowed its own root element twenty times over.
+      // Desktop engines scroll the initial containing block and never show it;
+      // iOS Safari treats the constrained root as the paint boundary and stops
+      // painting partway down, which is a page that ends mid-word with white
+      // under it, on every page, after the load has finished. The footer still
+      // sits at the bottom of a short page — that is what min-h-dvh on the
+      // body below is for, and it measures the viewport directly instead of
+      // asking a parent that no longer has a height.
+      className={`${inter.variable} antialiased`}
     >
       <head>
         <script dangerouslySetInnerHTML={{ __html: THEME_BOOT }} />
@@ -138,7 +148,7 @@ export default async function RootLayout({
         // control. Suppression is attribute-only and one element deep, so
         // real mismatches inside the app still warn.
         suppressHydrationWarning
-        className="bg-background text-foreground flex min-h-full flex-col"
+        className="bg-background text-foreground flex min-h-dvh flex-col"
       >
         <a
           href="#main-content"

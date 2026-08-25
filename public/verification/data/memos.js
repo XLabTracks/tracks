@@ -79,7 +79,7 @@ window.VERIFICATION_MEMOS = [
     "id": "m1-optional",
     "module": 1,
     "unit": "1.x",
-    "title": "[Optional] Written output",
+    "title": "Written output",
     "status": "unspecified",
     "optional": true,
     "brief": null,

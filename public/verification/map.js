@@ -120,9 +120,10 @@
 
     card.innerHTML =
       '<span class="eyebrow">Module ' + n.mod + ' &middot; ' +
-        VT.esc(C.modules[n.mod] ? C.modules[n.mod].title : '') +
-        (n.opt ? ' &middot; Optional' : '') + '</span>' +
-      '<h2 style="--mod:var(--mod-' + n.mod + ');--mod-type:var(--mod-' + n.mod + '-text)">' + VT.esc(n.label) + '</h2>' +
+        VT.esc(C.modules[n.mod] ? C.modules[n.mod].title : '') + '</span>' +
+      '<h2 style="--mod:var(--mod-' + n.mod + ');--mod-type:var(--mod-' + n.mod + '-text)">' +
+        (n.opt ? '<span class="optional-prefix">Optional:</span> ' : '') +
+        VT.esc(n.label) + '</h2>' +
       /* The owner's learner goals, verbatim — [indent, text] pairs, a
          sub-point indented under the bullet it belongs to. */
       '<ul class="goals">' + n.goals.map(g =>

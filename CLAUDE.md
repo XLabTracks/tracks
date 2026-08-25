@@ -588,6 +588,17 @@ add must reduce the duplication, never widen it.
   798 it had been given. Guard on `[data-widget]` and NOT on `.not-prose`: a
   fold or a callout holding authored sentences is still reading, and exempting
   it widens that prose past the measure.
+- **Optional material is marked one way: `Optional:` in front of the
+  header.** Course owner, 2026-08-20 ("I like Optional: in header more than
+  chip"). Muted weight, at the FRONT of the title, never a chip beside it,
+  never `[Optional]` or `(optional)` anywhere, never a word in a status row.
+  It had grown seven dialects; `OptionalPrefix`
+  (`src/components/content/optional-tag.tsx`) and `.optional-prefix` in
+  `public/verification/platform.css` are now the only two, one per side.
+  **Say it once**: if a card's own label already begins "Optional:", nothing
+  inside it repeats the word, and a title carrying the word in its own text
+  should lose it and set `optional: true` instead (`Lesson.optional` and
+  `Paper.optional` both exist and `isOptionalItem` honours both).
 - **No half-painted cards.** A card is a hairline on all four sides, or it is
   painted on all four; never one edge in a coloured tint with the rest
   hairline, and never a hue that carries no meaning. The accent goes inside —

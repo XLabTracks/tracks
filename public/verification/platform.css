@@ -47,6 +47,16 @@
 }
 .sec-eyebrow { margin: 40px 0 14px; }
 
+/* "Optional:" — the course's one mark for material that never gates, and it
+   is a prefix in the title rather than a chip beside it. NOT called `.opt`:
+   exercise.css already owns that for an answer button, and the memo desk
+   loads both. The app side says the same thing the same way — see
+   src/components/content/optional-tag.tsx. */
+.optional-prefix {
+  color: var(--muted-foreground);
+  font-weight: 400;
+}
+
 /* ---------- cards ---------- */
 
 .card {

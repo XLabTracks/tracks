@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { FileText, Lock, Route, Settings } from "lucide-react";
 import {
+  isOptionalItem,
   itemIdOf,
   itemSlugOf,
   itemTitleOf,
@@ -9,6 +10,7 @@ import {
   type Track,
 } from "@/lib/content";
 import { PREREQUISITES_ENFORCED } from "@/lib/content/prerequisites";
+import { OptionalPrefix } from "@/components/content/optional-tag";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 
@@ -248,8 +250,8 @@ function ModuleItemsTable({
               href={`/tracks/${track.slug}/${module.slug}/${itemSlugOf(item)}`}
               className="text-link min-w-0 text-sm hover:underline underline-offset-2"
             >
+              {isOptionalItem(item) && <OptionalPrefix />}
               {itemTitleOf(item)}
-              {item.kind === "paper" && item.paper.optional && " (optional)"}
             </Link>
             <span className="text-muted-foreground hidden font-mono text-[11px] sm:inline">
               {itemKindLabel(item)}

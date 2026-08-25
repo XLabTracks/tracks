@@ -4,6 +4,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { CircleAlert, CircleCheck } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
+import { OptionalPrefix } from "@/components/content/optional-tag";
 import { cn } from "@/lib/utils";
 import { countWords } from "../kit/constructed-response";
 import {
@@ -278,7 +279,10 @@ export function BuildInstitution({
               writingCardFocus
             )}
           >
-            <p className="text-sm font-medium">{SWAP_PROMPT}</p>
+            <p className="text-sm font-medium">
+              <OptionalPrefix />
+              {SWAP_PROMPT}
+            </p>
             <textarea
               rows={3}
               value={saved.swap}
@@ -287,8 +291,8 @@ export function BuildInstitution({
               className={writingArea}
             />
             <p className="text-muted-foreground mt-1 text-xs">
-              Optional. Which components are substitutable, and which functions
-              have to stay.
+              Which components are substitutable, and which functions have to
+              stay.
             </p>
           </section>
         </div>

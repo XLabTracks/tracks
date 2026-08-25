@@ -545,7 +545,7 @@ export function InteractiveMap(_props: VerificationWidgetProps) {
                         onMouseEnter={() => setPreview(st.bucket)}
                         onMouseLeave={() => setPreview(null)}
                         className={cn(
-                          "min-w-[104px] flex-1 rounded-md border px-2.5 py-2 text-left transition-colors",
+                          "flex-[1_1_104px] rounded-md border px-2.5 py-2 text-left transition-colors",
                           active
                             ? "bg-primary border-primary"
                             : "border-border bg-muted/40 hover:bg-muted"
@@ -603,7 +603,7 @@ export function InteractiveMap(_props: VerificationWidgetProps) {
               <div className="mb-2 flex items-baseline justify-between gap-2">
                 <span className="text-[13px] font-semibold">{C.keyLabel}</span>
                 <span className="text-muted-foreground text-3xs">
-                  {C.keyAction}
+                  {canHover ? C.keyAction : C.keyActionTouch}
                 </span>
               </div>
               <div className="flex flex-wrap gap-1.5">

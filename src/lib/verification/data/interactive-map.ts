@@ -376,6 +376,7 @@ export const MAP_COPY = {
   ],
   keyLabel: "Supply chain layers",
   keyAction: "Click to isolate",
+  keyActionTouch: "Tap to isolate",
   keyNote:
     "Colors show a country's primary layer. Most of the interesting countries sit in more than one — hover to see all of them.",
   flowTitle: "The pipeline · sand to model",

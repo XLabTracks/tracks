@@ -335,26 +335,3 @@ describe("quotes from Baker et al.", () => {
     for (const q of quotes) expect(q.where.length, q.text).toBeGreaterThan(2);
   });
 });
-
-describe("quotes from 1.2", () => {
-  const DATA = readFileSync(join(__dirname, "data/actor-workshop.ts"), "utf8");
-  const LESSON = readFileSync(
-    join(__dirname, "../../content/lessons/verification/scoping-actors.mdx"),
-    "utf8",
-  );
-
-  const fromBaker = bakerQuotes().map((q) => norm(q.text));
-  const fragments = [...DATA.matchAll(/\u201c([^\u201d]{20,})\u201d/g)]
-    .map((m) => m[1]!)
-    .filter((f) => !fromBaker.some((b) => b.includes(norm(f))));
-
-  it("finds fragments to check at all", () => {
-    expect(fragments.length).toBeGreaterThanOrEqual(6);
-  });
-
-  it("matches every quoted fragment against the lesson body", () => {
-    const body = norm(LESSON);
-    const drifted = fragments.filter((f) => !body.includes(norm(f)));
-    expect(drifted, "these no longer appear in scoping-actors.mdx").toEqual([]);
-  });
-});

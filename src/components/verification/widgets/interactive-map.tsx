@@ -137,9 +137,6 @@ export function InteractiveMap(_props: VerificationWidgetProps) {
     rh: number;
   } | null>(null);
 
-  // The floating card is a hover instrument, so it exists only where there is
-  // a hover. On touch the tap pins instead, and the detail panel under the map
-  // carries strictly more than this card ever did.
   const [canHover, setCanHover] = useState(false);
   useEffect(() => {
     const mq = window.matchMedia("(hover: hover) and (pointer: fine)");
@@ -154,10 +151,6 @@ export function InteractiveMap(_props: VerificationWidgetProps) {
 
   const svgRef = useRef<SVGSVGElement | null>(null);
   const stageRef = useRef<HTMLDivElement | null>(null);
-  // What the pointer went down on. The click handler cannot read it off the
-  // event: the drag sets pointer capture on the <svg>, and a captured pointer
-  // retargets the compatibility click to the capturing element, so every
-  // e.target was the <svg> itself and every click cleared the selection.
   const downIdRef = useRef<string | null>(null);
   const dragRef = useRef<{
     x: number;
@@ -301,10 +294,6 @@ export function InteractiveMap(_props: VerificationWidgetProps) {
 
   const tipCountry = tip ? CMAP[tip.id] : null;
 
-  // Measured, not assumed. The height was hard-coded at 120 and the real cards
-  // run 240-340, so a card raised in the lower half of the stage was placed
-  // with a budget it could not keep and the stage's overflow-hidden cut the
-  // sentence off mid-clause.
   useLayoutEffect(() => {
     const el = tipRef.current;
     if (!el) return;
@@ -534,7 +523,7 @@ export function InteractiveMap(_props: VerificationWidgetProps) {
               <div className="mb-2 flex items-baseline justify-between">
                 <span className="text-[13px] font-semibold">{C.flowTitle}</span>
                 <span className="text-muted-foreground text-3xs">
-                  {C.flowNote}
+                  {canHover ? C.flowNote : C.flowNoteTouch}
                 </span>
               </div>
               <div className="flex flex-wrap items-stretch gap-1">
@@ -699,14 +688,6 @@ export function InteractiveMap(_props: VerificationWidgetProps) {
   );
 }
 
-/**
- * Place the hover card beside the cursor and keep it inside the stage.
- *
- * `size` is measured from the rendered card. Flip to the other side of the
- * cursor when the preferred side would overrun, then clamp: a card that is
- * taller than the room below is pinned to the top edge rather than pushed out
- * through the bottom of a box that clips.
- */
 function tipPos(
   tip: { x: number; y: number; rw: number; rh: number },
   size: { w: number; h: number }

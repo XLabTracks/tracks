@@ -380,6 +380,7 @@ export const MAP_COPY = {
     "Colors show a country's primary layer. Most of the interesting countries sit in more than one — hover to see all of them.",
   flowTitle: "The pipeline · sand to model",
   flowNote: "Click a stage to light it up on the map",
+  flowNoteTouch: "Tap a stage to light it up on the map",
   flowGradLeft: "upstream · concentrated · most verifiable",
   flowGradRight: "downstream · diffuse · hardest to verify",
   rolesLabel: "Actor roles in this module",

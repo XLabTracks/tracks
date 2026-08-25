@@ -35,19 +35,38 @@ export function ReadingSurface({ children }: { children: ReactNode }) {
   const hostRef = useRef<HTMLDivElement>(null);
   const [focus, setFocus] = useState<FocusSettings>(FOCUS_DEFAULTS);
 
+  // Marking is idempotent (markFocusWords guards on data-focus-marked), so the
+  // first time focus reading is switched on costs the walk and every change
+  // after it is the class toggle it was always meant to be.
+  const applyFocus = (next: FocusSettings) => {
+    if (next.mode !== "off" && hostRef.current) markFocusWords(hostRef.current);
+    setFocus(next);
+  };
+
   useEffect(() => {
     // Deliberate mount-time re-render, as in the parts reader: the stored
     // preference exists only on the client, and reading it during render
     // would make the server and client markup disagree.
+    const stored = readFocusSettings();
     // eslint-disable-next-line react-hooks/set-state-in-effect
-    setFocus(readFocusSettings());
-    if (hostRef.current) markFocusWords(hostRef.current);
+    setFocus(stored);
+    // Only when the reader has actually asked for it. Marking unconditionally
+    // wrapped every word of the lesson in a span on mount — 1,897 of them on a
+    // long reading, a third of the whole document — on the main thread, for a
+    // effect that defaults to off and that CSS then declines to show. That is
+    // what a reader on a phone was watching: the top of the page painted, the
+    // thread seized by the walk, and the rest arriving when it let go. The
+    // pages with no reading surface, /verification/team among them, were the
+    // ones that never showed it.
+    if (stored.mode !== "off" && hostRef.current) {
+      markFocusWords(hostRef.current);
+    }
   }, []);
 
   return (
     <div>
       <div className="mb-4 flex items-center justify-end">
-        <FocusReadingControl settings={focus} onChange={setFocus} />
+        <FocusReadingControl settings={focus} onChange={applyFocus} />
       </div>
       <div ref={hostRef} data-reading-surface="" className={focusClassName(focus)}>
         {children}

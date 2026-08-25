@@ -1663,3 +1663,132 @@ Not a defect, checked while there: Table 4 in that slot is 2,716px wide in a
 940px box and looks cut off in a screenshot. It is scrolling in its own box,
 which is the house rule — `document.body.scrollWidth` equals the viewport, so
 the page does not move sideways.
+
+## 2026-08-25 — 2.3 built out from the playground draft: six lessons carry the full learner path
+
+The owner's instruction: make 2.3 as good as the other module-2 sections,
+using the playground build
+(`playground-tracks.netlify.app/verification-module-2-3-intelligence`) as the
+source — with the correction, mid-task, that the playground is the old draft
+and the module lives in the app at
+`/tracks/verification/verification-infrastructure/intelligence-intro`. So this
+is a port: the playground's assembled learner path (its data file carries all
+prose, exercises, and reading excerpts) transcribed into the six existing
+`intelligence-*.mdx` lessons and the house machinery, resolving each lesson's
+"Unfinished writing" callout. Nothing here is newly invented curriculum; the
+one sentence composed for a cross-reference is noted below.
+
+### What was added, per lesson
+
+- **2.3.0 intro** — the retrieval opener: four `<Check>` blocks (Module 1 /
+  2.2 retrievals), verbatim stems, options, and whys.
+- **2.3.1 signatures** — the Wasil three-category definition as a
+  `<SourceQuote>`; the Power Signature explainer
+  (`datacenter-power`, non-bridged widget: facility-vs-national-grids bars,
+  training-vs-inference load shapes, the 1.6×/yr decay clock; data from
+  Epoch's AI-datacenters CSV as packaged by the playground, pulled
+  2026-07-13); the signature-cards predict-before-reveal bench and the Fermi
+  bench (`drills-intel-signatures`); the boundary line to 2.2; readings as
+  `ReadingCard`s with the playground's page-pinned read lists. The callout
+  shrinks to the one still-owed item: distilling the open-sources treatment.
+- **2.3.2 anchor** — Baker's irreplaceable-tips passage as a `<SourceQuote>`;
+  the four case files as a drill bench (`drills-intel-anchor`, eight
+  identified?/resolved? commits with the record as reveals); the Baker
+  `ReadingCard` (pp. 14–15, 18–19, plus the §2.3.3 sharing extension). The
+  callout is gone: the case briefs are built; the essay task and prompt
+  randomizer do not exist in the final playground design — superseded by the
+  red-line memo as the module's single written output. Owner can reverse.
+- **2.3.3 assessment** — corroboration-across-kinds, the Iraq "dead wrong"
+  cautionary beat, and the base-rate teaser feeding the bench
+  (`drills-intel-assessment`: false-alarm arithmetic, the Karsu Ridge
+  intelligence autopsy with the bias menu, the limitations ledger with
+  sibling owners); the bounds-in-sum section (Wasil honest-bounds sentence as
+  `<SourceQuote>` + the four-paper convergence and reframe paragraphs); CIA
+  Tradecraft Primer as an optional `ReadingCard`. The callout is gone: the
+  design supersedes build-a-case-brief-from-a-packet with the autopsy
+  (diagnosis) plus the Analyst Desk (full run) — logged here, reversible.
+- **2.3.4 institutions** — the NSS-2025 sovereignty-compatibility paragraph
+  and the Kissinger disclosure-paradox line (*World Order* pp. 199–201; short
+  quote with citation); the dumb-questions battery (three questions, plain
+  list — the playground gave them jot boxes; the notebook covers that here,
+  a deliberate simplification); the clause-anatomy and who-watches benches
+  (`drills-intel-institutions`); the Al-Kibar/Turquzabad
+  tips-must-be-checkable beats; Definition 17 and the noninterference article
+  verbatim as `<SourceQuote>`s (CC BY arXiv text); and `ntm-redline` — a
+  `QuestionWorkspace` widget with the four analysis questions the memo brief
+  already referenced ("your four answers"). The callout is gone: the Six
+  Layers treatment is written against its named supports and the analysis
+  questions exist. One sentence was composed rather than transcribed: "states
+  sign what is symmetric, cheap, and checkable" is surfaced in 2.3.4 because
+  the owner's memo brief cites it as "2.3.4's rule" and the rule had no home.
+- **2.3.5 action** — threshold pricing and strike-is-not-a-rung paragraphs;
+  the Analyst Desk (`analyst-desk`, bridged: six signals, ≤2 moves each,
+  disposition + confidence + required dissent and blind spot, scored on
+  calibration, flat-run detection in the report); the written-output section
+  around the existing memo card with the source packet; the annotated
+  exemplar in a `<Fold>` (six red-line rows, both model capitals paragraphs,
+  five criterion notes — honor-gated "open after you file", since the memo
+  desk's state is not visible to lesson content); the ten-item mastery
+  checkpoint and three-item closing retrieval as `<Check>` blocks with the
+  correctives as whys; the seeds paragraph. The proposed-not-settled callout
+  is gone — the memo slot in `memos.ts` has been `specified` by the owner all
+  along.
+
+### Decisions a later session should not re-derive
+
+- **The gate's pass-9 mechanic was dropped deliberately.** The playground
+  locks step 16 until 9/10; the house has no score gates (nothing
+  auto-completes, `<Check>` feeds no meter), so the checkpoint states the bar
+  in prose and each miss names its corrective. Same for the cold open
+  (playground step 2 serves Desk signal 1 unaided and seals it until step
+  13): cross-lesson sealed state has no house mechanism, and the Desk serves
+  s1 with full mechanics — not ported, noted here.
+- **Kissinger is cited, never reproduced.** The playground packaged two
+  *World Order* digests and the full PDF; the book is all-rights-reserved, so
+  the packet here cites the book with page locators (pp. 133, 135–136,
+  199–201) and reproduces nothing. The two arXiv sources are CC BY 4.0 and
+  quoted with attribution-first `<SourceQuote>`s; the PRC Global AI
+  Governance Initiative is linked at the MFA's official English page and
+  quoted as a government primary. NSS 2025 is named without a link — no
+  verified URL was at hand, and a guessed link is worse than none.
+- **Exercise ids and storage keys are permanent**: decks
+  `drills-intel-{signatures,anchor,assessment,institutions}` (progress under
+  `v-drills:<deck>:v1`), `analyst-desk` (`v-analyst-desk:v1`),
+  `ntm-redline` (`v-ntm-redline:v1`), `datacenter-power` (stateless), and the
+  `<Check>`/`ReadingCard` ids (`intel-opener-*`, `intel-gate-*`,
+  `intel-close-*`, `intel-{wasil-ntm,miri-appendix-d,baker-appendix-e,
+  cia-tradecraft,miri-definition-17}`) on the vt-marks store.
+- **Estimated minutes** now follow the playground budget: 10/35/25/30/40/90
+  across 2.3.0–2.3.5 (was 5/10/5/5/5/90).
+- Headings across the six lessons were conformed to Title Case per the
+  standing 2026-08-18 instruction.
+
+### Still owed on 2.3
+
+- The open-sources card's dedicated treatment, still to be distilled (the one
+  surviving callout).
+- The extension menu was not ported: the locating-compute feasibility cards
+  (built in the playground over Scher & Thiergart's table, with the
+  evidence-critique micro-task) and the debate protocol are real designed
+  material with no home yet — porting the cards as a widget is the natural
+  next piece.
+- The seeds paragraph promises returns in 3.1/3.2 and the 4.1 unseal; modules
+  3–4 are still title-only, so those hooks land when their prose does.
+
+### Verification performed (2026-08-25)
+
+- `npm run typecheck` clean; full suite **100 files, 1179 tests, all pass**
+  (the widgets registry⇄MDX parity test was red mid-build until every
+  registered exercise was embedded; the citations tests forced the PRC MFA
+  registry entry and caught the Epoch cite dropped with the old callout —
+  restored in the widget lead-in). `npm run lint`: 0 errors (the nine
+  unescaped-quote errors in the two new widgets were fixed); warnings
+  pre-existing.
+- `verification:course -- --check` and `verification:memos -- --check` clean.
+- **Driven against a running dev server**: all six 2.3 routes return 200 and
+  render, console clean apart from the documented signed-out 401. The Analyst
+  Desk was driven through a full signal (moves → reveal → disposition →
+  three records → commit → debrief → next signal). Visual pass at 1440px on
+  the opener, power widget, benches, treaty workspace, memo card + packet
+  (the packet list takes the house 4-item slab treatment — deliberate,
+  documented in app-bridge.css), the exemplar fold, and the checkpoint.

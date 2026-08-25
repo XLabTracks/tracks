@@ -871,3 +871,31 @@ skill map's Securitization rung led with the old title and now leads with
 the new one. Two mentions deliberately stay as written: the citation entry
 for Bogoed's LessWrong post keeps that post's real title, and the outline
 spec's line is the historical outline, not the curriculum.
+
+### Every table wears the platform's one dress (2026-08-20)
+
+The owner, on 0.1.2's theory-of-change elements table (translated): not
+aligned with the platform palette or the rounded-corner style — fix it, and
+set a standard so every table in the course carries the same formatting.
+The standard already existed: globals.css's shared lesson-table treatment
+(the hairline rounded box with the soft shadow, the --muted header band
+closed by the 2px --primary rule, hairline rows, token colours only), worn
+by every markdown table and by the pair/trio/rubric wrapper variants. The
+elements grid was the one table dressed outside it — theme-inverted band
+headers (foreground ground, which reads as solid black on the day theme)
+and square per-cell collapsed borders, a scheme the widget replica
+repeated.
+
+Both now speak the standard vocabulary. The lesson table became a wrapper
+variant in the pair/trio/rubric family — chrome on the div, a full-measure
+table inside — keeping only what a banded grid needs: centered cells,
+interior verticals, two header layers. Bands take the --muted header band,
+question labels sit under them as the quieter second layer
+(muted-foreground on card), and the 2px --primary rule closes each header
+where its content begins, including the mid-table Assumptions/External
+band. The theories-of-change widget mirrors the same layers on its grid,
+in a rounded hairline box. app-bridge's low-vision lift follows the
+borders the new structure actually draws; the primary rule keeps its own
+width there, where it carries the structure. Driven on day and night
+themes at 2x; an ordinary markdown table checked beside it to confirm the
+shared treatment is untouched.

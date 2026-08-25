@@ -110,9 +110,9 @@ export function CloudEvidenceDrill({
         <p className="eyebrow text-muted-foreground font-medium">
           30 minutes
         </p>
-        <h3 className="mt-3 text-2xl font-semibold tracking-tight">
+        <h2 className="mt-3 text-2xl font-semibold tracking-tight">
           Cloud verification problem set
-        </h3>
+        </h2>
         <p className="text-muted-foreground mt-2 max-w-3xl leading-relaxed">
           Answer from the assigned readings. Treat every qualifier as part of
           the question. Select only conclusions supported by the stated access
@@ -142,7 +142,7 @@ export function CloudEvidenceDrill({
               <p className="eyebrow text-muted-foreground font-medium">
                 Task {taskIndex + 1} of {CLOUD_TASKS.length} · {task.time}
               </p>
-              <h4 className="text-base font-semibold">{task.title}</h4>
+              <h3 className="text-base font-semibold">{task.title}</h3>
               <p className="text-muted-foreground ml-auto text-xs">
                 {task.label}
               </p>
@@ -1283,7 +1283,7 @@ function Finish({ onRestart }: { onRestart: () => void }) {
     <section className="p-6 sm:p-8">
       <div className="mx-auto max-w-2xl text-center">
         <CheckCircle2 className="mx-auto size-9 text-emerald-600" aria-hidden />
-        <h4 className="mt-4 text-2xl font-semibold">Problem set complete</h4>
+        <h3 className="mt-4 text-2xl font-semibold">Problem set complete</h3>
         <p className="text-muted-foreground mt-3 leading-relaxed">
           Provider-held records can associate an account with a verified
           identity record, estimate resource use, and support a workload

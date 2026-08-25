@@ -181,9 +181,9 @@ export function SameClaim({
       {saved.submitted ? (
         <div className="space-y-4">
           <section className="panel">
-            <h4 className="text-muted-foreground eyebrow">
+            <p className="text-muted-foreground eyebrow">
               After submission
-            </h4>
+            </p>
             <p className="mt-2 text-sm leading-relaxed">
               {CLAIM_SELF_CHECK_LEAD}
             </p>

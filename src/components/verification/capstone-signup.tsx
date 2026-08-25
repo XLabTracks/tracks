@@ -42,7 +42,7 @@ export async function CapstoneSignup() {
 
   return (
     <div className="not-prose border-border bg-card shadow-soft my-6 rounded-xl border p-5">
-      <h3 className="text-base font-semibold tracking-tight">Sign-up sheet</h3>
+      <h2 className="text-base font-semibold tracking-tight">Sign-up sheet</h2>
       <p className="text-muted-foreground mt-1 text-sm leading-relaxed">
         Your facilitator reads this sheet — the brief you committed to, or the
         idea you proposed.

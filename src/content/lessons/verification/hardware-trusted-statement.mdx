@@ -7,7 +7,7 @@ The IETF’s Remote ATtestation procedureS architecture distinguishes three role
 
 <Src>H. Birkholz et al., [“Remote ATtestation procedureS (RATS) Architecture”](https://www.rfc-editor.org/rfc/rfc9334.html) — IETF RFC 9334, January 2023.</Src>
 
-### The Minimum Vocabulary
+## The Minimum Vocabulary
 
 **Hardware-rooted identity.** A device uses a cryptographic key and certificate, or another hardware-bound credential, to authenticate evidence. Some designs derive secrets from physical properties such as a physically unclonable function. Others provision or generate keys during manufacturing. “Hardware-rooted” does not mean literally unforgeable. It means that impersonation should require defeating a defined hardware and key-management boundary.
 
@@ -27,7 +27,7 @@ The IETF’s Remote ATtestation procedureS architecture distinguishes three role
 
 <PageBreak title="A Deployed Primitive" />
 
-### A Deployed Primitive: Current NVIDIA GPU Attestation
+## A Deployed Primitive: Current NVIDIA GPU Attestation
 
 Current NVIDIA documentation describes an operational attestation chain for supported GPUs. Evidence is collected from the GPU, checked against signed Reference Integrity Measurements, evaluated locally or by NVIDIA’s Remote Attestation Service, and checked against certificate-revocation information. This is a useful deployed primitive because it makes the trust chain concrete.
 
@@ -47,7 +47,7 @@ For each link, ask:
 - What independent evidence checks the link?
 - What happens when the link fails?
 
-### What a Signature Does and Does Not Do
+## What a Signature Does and Does Not Do
 
 A valid signature supports a statement such as “the holder of this trusted key signed these claims.” It does not by itself establish that:
 
@@ -62,7 +62,7 @@ A valid signature supports a statement such as “the holder of this trusted key
 
 Cryptography can faithfully transmit a false or insufficient measurement. The value of attestation therefore depends on the measurement boundary and the governance of keys, reference values, updates, revocation, and decisions.
 
-### The Adversary Changes the Assurance
+## The Adversary Changes the Assurance
 
 <div className="trio-table">
 
@@ -76,7 +76,7 @@ Cryptography can faithfully transmit a false or insufficient measurement. The va
 
 The same product can be strong against a remote tenant and weak against an owner with physical access. “Secure” is not a mechanism property without an adversary.
 
-### Activity: Trust-Chain Autopsy
+## Activity: Trust-Chain Autopsy
 
 Take an attestation token or architecture diagram supplied with this section. Record:
 

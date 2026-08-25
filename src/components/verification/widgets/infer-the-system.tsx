@@ -227,9 +227,9 @@ export function InferTheSystem({
           </section>
 
           <section className="space-y-2">
-            <h4 className="text-muted-foreground eyebrow">
+            <p className="text-muted-foreground eyebrow">
               The same policy, annotated
-            </h4>
+            </p>
             {POLICY_RULES.map((rule, i) => (
               <div
                 key={rule}

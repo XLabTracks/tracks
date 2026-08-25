@@ -201,9 +201,9 @@ export function ProtocolActors({ onComplete }: VerificationWidgetProps) {
           <div className="space-y-5 text-[15px] leading-relaxed">
             {DOC.map((art) => (
               <section key={art.heading}>
-                <h5 className="text-muted-foreground eyebrow">
+                <p className="text-muted-foreground eyebrow">
                   {art.heading}
-                </h5>
+                </p>
                 <p className="mt-1.5">
                   {art.runs.map((run, i) => {
                     if (run.kind === "text") {

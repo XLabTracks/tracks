@@ -179,9 +179,9 @@ export function MissingBoard({
       {saved.submitted ? (
         <div className="space-y-4">
           <section className="panel">
-            <h4 className="eyebrow text-muted-foreground">
+            <p className="eyebrow text-muted-foreground">
               Station by station
-            </h4>
+            </p>
             <dl className="mt-3 space-y-3">
               {BOARD_COMMENTARY.map((row) => (
                 <div key={row.title}>

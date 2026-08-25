@@ -174,9 +174,9 @@ export function ConstructedResponse({
       {checks && !saved.submitted && started ? (
         <section className="panel">
           <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
-            <h4 className="text-muted-foreground eyebrow">
+            <p className="text-muted-foreground eyebrow">
               Desk checks
-            </h4>
+            </p>
             <p className="text-muted-foreground text-xs">Rules, not marking.</p>
           </div>
           <div className="mt-3 space-y-2">

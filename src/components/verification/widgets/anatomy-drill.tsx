@@ -524,9 +524,9 @@ function Summary({
       )}
 
       <div className="border-border bg-card mt-2 rounded-lg border p-5">
-        <h5 className="eyebrow font-semibold">
+        <p className="eyebrow font-semibold">
           {COPY.protocolHead}
-        </h5>
+        </p>
         <p className="text-muted-foreground mt-1 mb-4 text-xs leading-relaxed">
           {COPY.protocolNote}
         </p>

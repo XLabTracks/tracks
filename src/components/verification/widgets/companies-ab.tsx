@@ -272,9 +272,9 @@ export function CompaniesAB({
       {frozen ? (
         <div className="space-y-4">
           <section className="panel">
-            <h4 className="text-muted-foreground eyebrow">
+            <p className="text-muted-foreground eyebrow">
               What separates A from B
-            </h4>
+            </p>
             {AB_REVEAL.map((line, i) => (
               <p
                 key={line}
@@ -293,9 +293,9 @@ export function CompaniesAB({
           </section>
 
           <section className="panel">
-            <h4 className="text-muted-foreground eyebrow">
+            <p className="text-muted-foreground eyebrow">
               What the letter is evidence for
-            </h4>
+            </p>
             <p className="mt-3 text-sm leading-relaxed">{LETTER_SUPPORTED}</p>
             <p className="text-muted-foreground mt-3 eyebrow">
               And what it does not establish

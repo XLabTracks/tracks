@@ -9,7 +9,7 @@ The working rule prohibits **unlicensed training above threshold T** while permi
 
 A system may answer one and fail the others.
 
-### Compute Accounting
+## Compute Accounting
 
 Training thresholds are usually expressed in total operations, commonly total training FLOP. Throughput, such as FLOP per second, is a different quantity.
 
@@ -33,7 +33,7 @@ Even perfect accounting verifies the threshold, not the policy goal. Algorithmic
 
 <PageBreak title="Workload Classification" />
 
-### Workload Classification
+## Workload Classification
 
 A compute counter cannot determine whether the operations were training, inference, evaluation, fine-tuning, or another permitted activity. Workload classification uses additional signals, such as temporal GPU telemetry, memory behavior, communication patterns, or authenticated code and configuration.
 
@@ -53,7 +53,7 @@ The limitations are equally important:
 
 This is an **empirical component demonstration**, not an end-to-end verification regime.
 
-### Separate Attacks by What They Target
+## Separate Attacks by What They Target
 
 A verifier should not treat every weakness as a classifier problem.
 
@@ -66,7 +66,7 @@ A verifier should not treat every weakness as a classifier problem.
 | Shift to uninstrumented hardware | Coverage and completeness |
 | Stay under the compute line through algorithmic improvement | The policy proxy itself |
 
-### Activity: From Result to Policy Claim
+## Activity: From Result to Policy Claim
 
 For the telemetry study, write four statements.
 

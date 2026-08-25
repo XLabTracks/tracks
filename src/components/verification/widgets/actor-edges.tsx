@@ -118,9 +118,9 @@ export function ActorEdges({ onComplete }: VerificationWidgetProps) {
       </div>
 
       <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
-        <h4 className="text-base font-semibold">
+        <h2 className="text-base font-semibold">
           {stepIndex + 1}. {step.name}
-        </h4>
+        </h2>
         <p className="text-muted-foreground text-xs">
           Step {stepIndex + 1} of {STEPS.length} · {step.beeck}
         </p>

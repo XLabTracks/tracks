@@ -88,9 +88,9 @@ export function PolicyQuickCheck({}: VerificationWidgetProps) {
               className="[&+li]:border-muted-foreground/60 [&+li]:mt-6 [&+li]:border-t [&+li]:pt-6"
             >
               <div className="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1">
-                <h4 className="text-base font-semibold">
+                <h3 className="text-base font-semibold">
                   Question {index + 1}/{QUICK_QUESTIONS.length}
-                </h4>
+                </h3>
                 {saved.submitted ? (
                   <p
                     className={cn(

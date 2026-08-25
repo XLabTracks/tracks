@@ -64,9 +64,9 @@ export function ConstructCase({
           />
 
           <section className="panel">
-            <h4 className="text-muted-foreground eyebrow">
+            <p className="text-muted-foreground eyebrow">
               Check your case
-            </h4>
+            </p>
             <ul className="mt-3 space-y-2">
               {CASE_CHECKLIST.map((line) => (
                 <li key={line} className="flex gap-3 text-sm leading-relaxed">
@@ -80,9 +80,9 @@ export function ConstructCase({
           </section>
 
           <section className="panel">
-            <h4 className="text-muted-foreground eyebrow">
+            <p className="text-muted-foreground eyebrow">
               Where a report can die
-            </h4>
+            </p>
             <p className="text-muted-foreground mt-2 text-sm leading-relaxed">
               All of it held back until now, and deliberately: naming where a
               report dies is the work, and a page that had listed the categories
@@ -113,9 +113,9 @@ export function ConstructCase({
           </section>
 
           <section className="space-y-3">
-            <h4 className="text-muted-foreground eyebrow">
+            <p className="text-muted-foreground eyebrow">
               Two cases that work, for different reasons
-            </h4>
+            </p>
             {WORKED_CASES.map((worked) => (
               <article
                 key={worked.id}

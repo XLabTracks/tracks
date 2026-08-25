@@ -240,9 +240,9 @@ export function StandardOfProof({
       {saved.submitted ? (
         <div className="space-y-4">
           <section className="panel">
-            <h4 className="eyebrow text-muted-foreground">
+            <p className="eyebrow text-muted-foreground">
               After submission
-            </h4>
+            </p>
             <p className="mt-2 text-sm leading-relaxed">{PROOF_REVEAL_GRID}</p>
             <p className="mt-3 text-sm leading-relaxed">
               {PROOF_SELF_CHECK_LEAD}

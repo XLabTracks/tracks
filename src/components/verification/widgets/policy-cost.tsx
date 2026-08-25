@@ -33,7 +33,7 @@ export function PolicyCost(_: VerificationWidgetProps) {
   if (faced) {
     return (
       <section className="not-prose border-border bg-card space-y-4 rounded-xl border p-5 text-sm">
-        <h3 className="text-lg font-semibold">{C.title}</h3>
+        <h2 className="text-lg font-semibold">{C.title}</h2>
         <p className="text-muted-foreground eyebrow">
           {C.bothTag}
         </p>
@@ -110,7 +110,7 @@ export function PolicyCost(_: VerificationWidgetProps) {
 
   return (
     <section className="not-prose panel text-sm">
-      <h3 className="text-lg font-semibold">{C.title}</h3>
+      <h2 className="text-lg font-semibold">{C.title}</h2>
       <p className="text-muted-foreground mt-1 max-w-[52ch] leading-relaxed">{C.sub}</p>
 
       <div className="mt-4 [perspective:1400px]">

@@ -128,8 +128,8 @@ export function VerificationHeader() {
               className="brand-mark mark-day"
               src="/verification/assets/xLab_Logotype.png"
               alt="XLab"
-              width={3300}
-              height={1050}
+              width={302}
+              height={96}
               draggable={false}
             />
             <img
@@ -137,8 +137,8 @@ export function VerificationHeader() {
               src="/verification/assets/xLab_Logotype_white.png"
               alt=""
               aria-hidden
-              width={3300}
-              height={1050}
+              width={302}
+              height={96}
               draggable={false}
             />
           </a>

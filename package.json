@@ -21,6 +21,7 @@
     "verification:course": "node scripts/build-verification-course.mjs",
     "verification:memos": "node scripts/build-verification-memos.mjs",
     "icon:build": "node scripts/build-icon.mjs",
+    "wordmark:build": "node scripts/build-wordmark.mjs",
     "readings:build": "tsx scripts/build-readings.ts",
     "gdoc:build": "tsx scripts/build-gdoc.ts"
   },

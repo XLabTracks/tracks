@@ -21,6 +21,23 @@ const inter = localFont({
   ],
   variable: "--font-sans",
   display: "swap",
+  // Not preloaded. next/font preloads by default, which put a <link rel=preload>
+  // for both faces — 723KB of variable font covering every Unicode range the
+  // file ships — at the head of every page, at the highest priority the browser
+  // has. On a phone that is the whole link for several seconds, and the document
+  // itself streams in behind it: the reader watches a lesson arrive a paragraph
+  // at a time, cut mid-word wherever the stream has got to, with white below.
+  // Measured cold on a 1.6Mbps connection, those two files are 723KB of an
+  // 807KB page and the load runs 7.1s.
+  //
+  // display:swap already paints the text in the fallback face immediately, so
+  // what preloading bought was the swap landing sooner, not the words. Dropped,
+  // the fonts are fetched from the stylesheet at ordinary priority and stop
+  // competing with the markup. Subsetting them would be the bigger win and is
+  // not done here: the content uses 206 non-ASCII characters — Greek, maths,
+  // arrows, geometric shapes, some CJK — so a naive Latin subset would silently
+  // drop glyphs across 959 files.
+  preload: false,
 });
 export const metadata: Metadata = {
   title: {

@@ -5,6 +5,7 @@ import Link from "next/link";
 import { CircleAlert, CircleCheck } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
+import { OptionalPrefix } from "@/components/content/optional-tag";
 import { cn } from "@/lib/utils";
 import { ACTOR_ROLES, type ActorRoleId } from "@/lib/verification/data/actor-map";
 import {
@@ -770,7 +771,8 @@ function OptionalWriting() {
     return (
       <div className="border-border rounded-xl border p-4">
         <p className="text-sm font-semibold">
-          Three questions to take away — optional
+          <OptionalPrefix />
+          Three questions to take away
         </p>
         <p className="text-muted-foreground mt-1.5 text-sm leading-relaxed">
           Written answers, about fifteen minutes, with the criteria a marker

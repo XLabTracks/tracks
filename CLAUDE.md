@@ -34,6 +34,17 @@ House rules, the course owner's standing instructions (2026-08-20):
 - **A citation renders smaller than the text it credits.** Every image,
   figure, chart, or portrait credit line sits under its figure at the small
   credit size (`text-3xs` is the house idiom), never at body size.
+- **Optional material is marked one way: `Optional:` in front of the
+  header.** Course owner, 2026-08-20 ("I like Optional: in header more than
+  chip"). Muted weight, at the FRONT of the title, never a chip beside it,
+  never `(optional)` trailing it, never a word in a status row. It had grown
+  six dialects; `src/components/content/optional-tag.tsx` (`OptionalPrefix`)
+  and `.optional-prefix` in `public/verification/platform.css` are now the
+  only two, one per side. **Say it once**: if the card's own label already
+  begins "Optional:", nothing inside it repeats the word, and a title that
+  carries the word in its own text should lose it and set `optional: true`
+  instead (`Lesson.optional` and `Paper.optional` both exist and
+  `isOptionalItem` honours both).
 
 ## Commands
 

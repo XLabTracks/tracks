@@ -271,7 +271,8 @@ window.VTMemoDesk = (function () {
         rows.map(function (s) {
           return '<li><button type="button" class="slot-btn" data-id="' + s.id + '" aria-current="' +
             (s.id === current.id) + '">' +
-            '<span class="t">' + esc(s.unit) + ' — ' + esc(s.title) + (s.optional ? ' (optional)' : '') + '</span>' +
+            '<span class="t">' + esc(s.unit) + ' — ' +
+            (s.optional ? '<span class="optional-prefix">Optional:</span> ' : '') + esc(s.title) + '</span>' +
             '<span class="m"><span class="status ' + s.status + '">' + STATUS_WORD[s.status] + '</span>' +
             (hasDraft(s.id) ? '<span class="drafted">· drafted</span>' : '') + '</span></button></li>';
         }).join('') +
@@ -307,12 +308,15 @@ window.VTMemoDesk = (function () {
   }
 
   function renderBrief(s) {
-    el('slotTitle').textContent = s.unit + ' — ' + s.title;
+    /* "Optional:" rides at the front of the title, the one way this course
+       marks material that never gates. It used to be a chip in the meta row
+       beside "peer reviewed", which reads as one more status word. */
+    el('slotTitle').textContent =
+      s.unit + ' — ' + (s.optional ? 'Optional: ' : '') + s.title;
     el('slotMeta').innerHTML =
       '<span><b>M' + s.module + '</b> ' + esc(MODULES[s.module] || '') + '</span>' +
       '<span class="status ' + s.status + '">' + STATUS_WORD[s.status] + '</span>' +
-      (s.peerReviewed ? '<span>peer reviewed</span>' : '') +
-      (s.optional ? '<span>optional</span>' : '');
+      (s.peerReviewed ? '<span>peer reviewed</span>' : '');
 
     var host = el('slotBrief');
     var out = '';

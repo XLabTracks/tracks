@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 
 import { Button } from "@/components/ui/button";
+import { OptionalPrefix } from "@/components/content/optional-tag";
 import { cn } from "@/lib/utils";
 import { countWords } from "../kit/constructed-response";
 import {
@@ -306,7 +307,10 @@ export function StandardOfProof({
           </section>
 
           <section className="panel">
-            <p className="text-sm font-medium">{PROOF_TRANSFER}</p>
+            <p className="text-sm font-medium">
+              <OptionalPrefix />
+              {PROOF_TRANSFER}
+            </p>
             <textarea
               rows={3}
               value={saved.transfer}
@@ -314,7 +318,6 @@ export function StandardOfProof({
               aria-label={PROOF_TRANSFER}
               className="border-border bg-background mt-2 w-full rounded-md border p-3 text-sm"
             />
-            <p className="text-muted-foreground mt-1 text-xs">Optional.</p>
           </section>
         </div>
       ) : null}

@@ -162,11 +162,14 @@ export const memoSlots: MemoSlot[] = [
     peerReviewed: false,
     gap: "The artifact is named; length, audience and review criteria are not drafted.",
   },
+  // The outline's marker is "[Optional written output]:", and `optional`
+  // below now prints the "Optional:" prefix in front of the title on both
+  // desks. Carrying the word in the title as well printed it twice.
   {
     id: "m1-optional",
     module: 1,
     unit: "1.x",
-    title: "Optional written output",
+    title: "Written output",
     status: "unspecified",
     lesson: "scoping-upstream-downstream",
     optional: true,

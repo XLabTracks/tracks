@@ -435,16 +435,20 @@ export const verificationLessons: Lesson[] = [
     contentRef: "verification/hardware-where-trust-lives",
     estimatedMinutes: 5,
   },
-  // The outline stars 2.1.7 as optional. `optional` is a Paper field, not a
-  // Lesson one, so the marking rides in the title the way it already did —
-  // making it structural would change what module completion counts, which is
-  // not this change's job.
+  // The outline stars 2.1.7 as optional, and that is now structural rather
+  // than a word inside the title. `Lesson.optional` exists (0.4 Strategic
+  // Foundations is the other case) and `isOptionalItem` honours it, so the
+  // reason the marking used to ride in the title — "optional is a Paper field"
+  // — no longer holds. It costs module 2 one required unit, which is what the
+  // outline's star says it should cost, and the row now marks itself the one
+  // way the course marks optional anything: an "Optional:" prefix.
   {
     id: "v-hw-reconstructing-run",
     slug: "hardware-reconstructing-run",
     moduleId: "v-infrastructure",
     sectionItemId: "v-hw-attestation",
-    title: "2.1.7 Optional extension: reconstructing a declared training run",
+    optional: true,
+    title: "2.1.7 Reconstructing a declared training run",
     contentRef: "verification/hardware-reconstructing-run",
     estimatedMinutes: 5,
   },

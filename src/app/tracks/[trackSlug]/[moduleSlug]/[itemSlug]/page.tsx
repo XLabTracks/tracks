@@ -25,7 +25,7 @@ import {
   type PrerequisiteStatus,
 } from "@/lib/progress";
 import { Breadcrumbs } from "@/components/layout/breadcrumbs";
-import { OptionalMarker } from "@/components/content/optional-tag";
+import { OptionalPrefix } from "@/components/content/optional-tag";
 import {
   LessonContent,
   getLessonCitations,
@@ -244,9 +244,9 @@ async function LessonItemPage({
       <header>
         <div className="mt-1 flex flex-wrap items-center gap-x-3 gap-y-2">
           <h1 className="text-3xl font-semibold tracking-tight">
+            {lesson.optional && <OptionalPrefix />}
             {lesson.title}
           </h1>
-          {lesson.optional && <OptionalMarker />}
         </div>
         {/* Her standard wording, and the clock is back by her ask ("хочу
             часы"). */}
@@ -496,9 +496,9 @@ async function PaperItemPage({
         <p className="text-muted-foreground text-sm">Paper</p>
         <div className="mt-1 flex flex-wrap items-center gap-x-3 gap-y-2">
           <h1 className="text-3xl font-semibold tracking-tight">
+            {paper.optional && <OptionalPrefix />}
             {paper.title}
           </h1>
-          {paper.optional && <OptionalMarker />}
         </div>
         {source.authors && (
           <p className="text-muted-foreground mt-2 text-sm">{source.authors}</p>

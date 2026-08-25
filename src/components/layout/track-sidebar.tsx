@@ -26,7 +26,7 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import { OptionalMarker } from "@/components/content/optional-tag";
+import { OptionalPrefix } from "@/components/content/optional-tag";
 import type { SidebarOutline, SidebarOutlineItem } from "@/lib/content";
 import type { PaperNavItem } from "@/lib/papers/paper-nav";
 import { isVerificationRoute } from "@/components/verification/site-chrome";
@@ -549,15 +549,18 @@ function SidebarItemRow({
         <Circle className={cn("opacity-30", MARKER_CLASS)} aria-hidden />
       )}
       <span className="flex min-w-0 flex-col">
+        {/* The marker is a prefix now, so it goes INSIDE the clamp rather than
+            on a line of its own below it. That was the right call for a chip
+            — a long title would have clipped it off the primary nav surface —
+            and it is the wrong one for a prefix: first in the clamp is the
+            one position a clamp can never eat. */}
         <span className="line-clamp-2">
+          {item.optional && <OptionalPrefix />}
           {item.title}
           {done && !item.completion && (
             <span className="sr-only"> (completed)</span>
           )}
         </span>
-        {/* Its own line, outside the title's line-clamp, so a long title
-            can't clip the optional marker (the primary nav surface). */}
-        {item.optional && <OptionalMarker compact className="mt-1.5" />}
       </span>
       {item.kind === "paper" && (
         <FileText

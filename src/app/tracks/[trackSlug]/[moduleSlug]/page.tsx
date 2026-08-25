@@ -23,6 +23,7 @@ import {
   type PrerequisiteStatus,
 } from "@/lib/progress";
 import { Breadcrumbs } from "@/components/layout/breadcrumbs";
+import { OptionalPrefix } from "@/components/content/optional-tag";
 import { PrerequisitePanel } from "@/components/learn/prerequisite-panel";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
@@ -140,15 +141,14 @@ export default async function ModulePage({
                           <span className="border-muted-foreground/40 size-4 shrink-0 rounded-full border" />
                         )}
                         <span className="font-medium">
-                          {index + 1}. {itemTitleOf(item)}
+                          {index + 1}.{" "}
+                          {isOptionalItem(item) && <OptionalPrefix />}
+                          {itemTitleOf(item)}
                         </span>
                         {item.kind === "paper" && (
                           <Badge variant="secondary" className="gap-1">
                             <FileText className="size-3" aria-hidden /> Paper
                           </Badge>
-                        )}
-                        {isOptionalItem(item) && (
-                          <Badge variant="outline">Optional</Badge>
                         )}
                       </span>
                       {estimatedMinutes && (

@@ -23,6 +23,7 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
+import { OptionalPrefix } from "@/components/content/optional-tag";
 import {
   BUCKET_ORDER,
   BUCKETS,
@@ -1011,10 +1012,8 @@ export function InteractiveMap(_props: VerificationWidgetProps) {
               </div>
               <div className="min-w-0">
                 <p className="text-sm font-semibold">
-                  {C.chipTitle}{" "}
-                  <span className="text-muted-foreground font-normal">
-                    · {C.chipOptional}
-                  </span>
+                  <OptionalPrefix />
+                  {C.chipTitle}
                 </p>
                 <p className="text-muted-foreground text-sm leading-relaxed">
                   {C.chipSub} Opens {C.chipHost} in a new tab.

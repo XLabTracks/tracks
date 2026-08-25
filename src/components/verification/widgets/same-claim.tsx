@@ -3,6 +3,7 @@
 import { useRef } from "react";
 
 import { Button } from "@/components/ui/button";
+import { OptionalPrefix } from "@/components/content/optional-tag";
 import { cn } from "@/lib/utils";
 import { countWords } from "../kit/constructed-response";
 import { useStoredState } from "../kit/use-stored-state";
@@ -266,7 +267,10 @@ export function SameClaim({
               writingCardFocus
             )}
           >
-            <p className="text-sm font-medium">{CLAIM_TRANSFER}</p>
+            <p className="text-sm font-medium">
+              <OptionalPrefix />
+              {CLAIM_TRANSFER}
+            </p>
             <textarea
               rows={3}
               value={saved.transfer}
@@ -274,7 +278,6 @@ export function SameClaim({
               aria-label={CLAIM_TRANSFER}
               className={writingArea}
             />
-            <p className="text-muted-foreground mt-1 text-xs">Optional.</p>
           </section>
         </div>
       ) : null}

@@ -497,8 +497,8 @@
       '<p class="p-mod"><b>M' + n.mod + '</b>' + esc(S.moduleNames[n.mod]) + '</p>' +
       '<span class="p-count">' + num[id] + '/' + S.nodes.length + '</span></header>' +
       '<div class="p-body">' +
-      '<h3>' + esc(n.label) + '</h3>' +
-      '<p class="p-meta">rooted in ' + esc(n.unit) + (n.opt ? ' · optional' : '') + '</p>' +
+      '<h3>' + (n.opt ? '<span class="optional-prefix">Optional:</span> ' : '') + esc(n.label) + '</h3>' +
+      '<p class="p-meta">rooted in ' + esc(n.unit) + '</p>' +
       /* The owner's learner goals — [indent, text] pairs; sub-points step in. */
       '<ul class="p-goals">' + n.goals.map(function (g) {
         return '<li' + (g[0] ? ' class="sub"' : '') + '>' + esc(g[1]) + '</li>';

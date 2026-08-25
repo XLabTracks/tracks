@@ -1,4 +1,5 @@
 import { ArrowUpRight, PenLine, Users } from "lucide-react";
+import { OptionalPrefix } from "@/components/content/optional-tag";
 import {
   memoGenreLabels,
   memoSlotsForLesson,
@@ -48,10 +49,14 @@ function Slot({ slot }: { slot: MemoSlot }) {
         {slot.genre && slot.genre !== "memo" ? (
           <span>· {memoGenreLabels[slot.genre]}</span>
         ) : null}
-        {slot.optional ? <span>· optional</span> : null}
       </p>
 
-      <h3 className="mt-1.5 text-lg font-semibold">{slot.title}</h3>
+      {/* In front of the title, not trailing the eyebrow with a middot — one
+          way to mark optional across the course. See content/optional-tag. */}
+      <h3 className="mt-1.5 text-lg font-semibold">
+        {slot.optional ? <OptionalPrefix /> : null}
+        {slot.title}
+      </h3>
 
       {slot.brief ? (
         <p className="mt-2 leading-relaxed">{slot.brief}</p>

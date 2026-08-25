@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useState, type ReactNode } from "react";
 import { Button } from "@/components/ui/button";
+import { OptionalPrefix } from "@/components/content/optional-tag";
 import {
   answersOwed,
   choiceNumbers,
@@ -99,7 +100,12 @@ export function QuestionWorkspace({
           >
             <div className="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1">
               <h3 className="text-lg font-semibold">
-                {q.n}. {q.title}
+                {/* The number labels the question; "Optional:" qualifies the
+                    title, so it sits between them rather than in a badge off
+                    to the right. See content/optional-tag. */}
+                {q.n}.{" "}
+                {q.requirement === "optional" ? <OptionalPrefix /> : null}
+                {q.title}
               </h3>
               <Badge
                 rule={rule}
@@ -172,9 +178,11 @@ export function QuestionWorkspace({
 }
 
 /**
- * What this question is for. A word, not a colour — the three states have to
- * survive a reader who cannot tell the hues apart, and the choose-one badge
- * has to name its own group or "choose one" tells nobody which ones.
+ * Which of a group of questions this one belongs to. A word, not a colour —
+ * the states have to survive a reader who cannot tell the hues apart, and the
+ * choose-one badge has to name its own group or "choose one" tells nobody
+ * which ones. Optional is NOT one of these any more: it reads as a prefix in
+ * the title, the one way the course marks material that never gates.
  */
 function Badge({
   rule,
@@ -186,14 +194,10 @@ function Badge({
   choices: number[];
 }) {
   if (rule.kind === "any") return null;
-  if (requirement === "required") return null;
-  const label =
-    requirement === "optional"
-      ? "Optional"
-      : `Answer one of ${listNumbers(choices)}`;
+  if (requirement !== "choose-one") return null;
   return (
     <span className="border-border text-muted-foreground rounded-full border px-2 py-0.5 text-xs select-none">
-      {label}
+      Answer one of {listNumbers(choices)}
     </span>
   );
 }

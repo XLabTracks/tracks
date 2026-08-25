@@ -547,7 +547,6 @@ export const MAP_COPY = {
     "Open a single accelerator — every color on this map ends up inside it.",
   chipHref: "https://chipexplorer.eto.tech/",
   chipHost: "chipexplorer.eto.tech",
-  chipOptional: "Optional",
 } as const;
 
 // Country id → short display name (source special-cases UAE).

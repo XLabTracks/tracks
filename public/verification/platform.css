@@ -47,6 +47,19 @@
 }
 .sec-eyebrow { margin: 40px 0 14px; }
 
+/* "Optional:" — the one way this course marks material that never gates
+   progress, and it is a prefix in the title rather than a chip beside it.
+   It was three different things here: "(optional)" trailing a memo slot's
+   name, a bare "optional" word in the brief's status row next to "peer
+   reviewed", and "· Optional" hanging off the skill map's eyebrow after a
+   middot, where it read as one more taxonomy field. The app side says the
+   same thing the same way — src/components/content/optional-tag.tsx.
+   NOT called `.opt`: exercise.css already owns that for an answer button. */
+.optional-prefix {
+  color: var(--muted-foreground);
+  font-weight: 400;
+}
+
 /* ---------- cards ---------- */
 
 .card {

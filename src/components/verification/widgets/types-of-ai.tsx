@@ -274,8 +274,6 @@ export function TypesOfAi(_: VerificationWidgetProps) {
 
   return (
     <div className="not-prose my-6">
-      <p className="text-muted-foreground mb-3 text-xs">{C.legend}</p>
-
       <div className="grid items-start gap-4 lg:grid-cols-[minmax(0,1fr)_16rem]">
         <div className="border-border bg-card relative min-w-0 overflow-hidden rounded-xl border">
           <div className="relative w-full" style={{ aspectRatio: `${VBW} / ${VBH}` }}>
@@ -539,18 +537,6 @@ export function TypesOfAi(_: VerificationWidgetProps) {
         </div>
       </div>
 
-      <p className="text-muted-foreground/80 mt-3 text-3xs">
-        {C.source.label}{" "}
-        <a
-          href={C.source.href}
-          target="_blank"
-          rel="noreferrer"
-          className="hover:text-foreground underline underline-offset-2"
-        >
-          {C.source.pub}
-        </a>
-        , {C.source.title}.
-      </p>
     </div>
   );
 }

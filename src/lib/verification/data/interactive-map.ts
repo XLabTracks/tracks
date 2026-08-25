@@ -73,7 +73,7 @@ export const ROLES: Record<RoleKey, string> = {
   INFO: "Information holder",
   ENF: "Enforcement authority",
   EVA: "Evasion pathway",
-  BEN: "Agreement beneficiary",
+  BEN: "Victim, free-rider, beneficiary",
 };
 
 export const ROLE_ORDER: RoleKey[] = [
@@ -117,7 +117,7 @@ export const COUNTRIES: Country[] = [
       "Hyperscalers run the largest GPU fleets; frontier labs — OpenAI, Anthropic, Google — train the models",
     ],
     verif:
-      "Holds the design, software, and cloud levers, and writes the export rules (BIS). In any two-way international regime, also the actor everyone else would need to verify.",
+      "Holds the design, software, and cloud levers, and writes the export rules (BIS). In any two-way international regime, it is also the actor everyone else would need to verify, while the same machinery could constrain its lead and its own firms.",
     label: { x: 228, y: 174, anchor: "middle" },
   },
   {
@@ -132,7 +132,7 @@ export const COUNTRIES: Country[] = [
       "Reporting suggests over $1B of controlled chips were smuggled in during a single three-month stretch",
     ],
     verif:
-      "The hardest test for any regime: the actor current rules try to exclude, and the counterparty a future agreement would have to verify without trust.",
+      "The hardest test for any regime: the actor current rules try to exclude, and the counterparty a future agreement would have to verify without trust. It reads on-chip controls and inspections as surveillance and containment.",
     label: { x: 762, y: 172, anchor: "middle" },
   },
   {
@@ -146,7 +146,7 @@ export const COUNTRIES: Country[] = [
       "Its CoWoS advanced-packaging capacity gates how many accelerators exist at all",
     ],
     verif:
-      "Nearly every frontier chip passes through a few known facilities. TSMC's customer records are a verification asset; the concentration itself is everyone's single point of failure.",
+      "Nearly every frontier chip passes through a few known facilities. TSMC's customer records are a verification asset; the concentration makes Taiwan both the system's tightest physical chokepoint and a strategic point of failure it does not control.",
     label: { x: 851, y: 227, anchor: "start", leader: [830, 221] },
   },
   {
@@ -160,7 +160,7 @@ export const COUNTRIES: Country[] = [
       "US export controls extended to HBM in Dec 2024; Korean fabs in China now run on annually renewed licenses",
     ],
     verif:
-      "Accelerators cannot ship without HBM. A second countable chokepoint, held by a state already pulled deep into the control regime.",
+      "Accelerators cannot ship without HBM. This second countable chokepoint sits inside a state balancing export exposure to China against alliance pressure from the United States.",
     label: { x: 852, y: 190, anchor: "start", leader: [836, 183] },
   },
   {
@@ -174,7 +174,7 @@ export const COUNTRIES: Country[] = [
       "Near-monopolies in materials: photoresists, silicon wafers (Shin-Etsu, SUMCO), specialty gases",
     ],
     verif:
-      "Joined the US and the Netherlands in aligning equipment export controls in 2023. Materials monopolies are quiet leverage: an advanced fab stalls within months without Japanese chemistry.",
+      "Joined the US and the Netherlands in aligning equipment export controls in 2023. Materials monopolies are quiet leverage: an advanced fab stalls within months without Japanese chemistry, while Japan faces pressure from both sides of the US-China rivalry.",
     label: { x: 884, y: 163, anchor: "start", leader: [866, 169] },
   },
   {
@@ -188,7 +188,7 @@ export const COUNTRIES: Country[] = [
       "Only a few hundred EUV systems exist; each is tracked and serviced by ASML for its whole life",
     ],
     verif:
-      "The cleanest chokepoint in the entire chain: one company, one country, machines too large and too rare to hide. Party to the 2023 equipment-control alignment.",
+      "The cleanest chokepoint in the entire chain: one company, one country, machines too large and too rare to hide. The Netherlands is a small state carrying outsized weight in the 2023 equipment-control alignment.",
     label: { x: 500, y: 98, anchor: "end", leader: [513, 126] },
   },
   {
@@ -311,6 +311,7 @@ export type FlowStage = {
   name: string;
   bucket: BucketKey;
   stat: string;
+  body: string;
 };
 
 export const FLOW: FlowStage[] = [
@@ -319,48 +320,56 @@ export const FLOW: FlowStage[] = [
     name: "Materials & wafers",
     bucket: "equipment",
     stat: "Japan dominates photoresists and silicon wafers. An advanced fab without them stalls in months.",
+    body: "Shin-Etsu, SUMCO and specialist chemical suppliers occupy quieter upstream bottlenecks than the equipment makers, but advanced fabrication still depends on them.",
   },
   {
     key: "design",
     name: "Design & EDA",
     bucket: "design",
     stat: "Two US firms control the design software; the architectures are US and UK. Capability starts as files.",
+    body: "NVIDIA, AMD, Huawei and other designers determine whether accelerators include attestation, metering or location features; Synopsys and Cadence supply the EDA software used to make those designs real. They comply with controls while lobbying against rules that raise costs or cut sales.",
   },
   {
     key: "equipment",
     name: "Equipment",
     bucket: "equipment",
     stat: "100% of EUV lithography comes from one Dutch company built around German optics.",
+    body: "ASML, Applied Materials and Tokyo Electron build the machines without which no leading-edge chip exists. Their customer base is small and highly visible, and they know which fabs receive each system.",
   },
   {
     key: "fab",
     name: "Fabrication",
     bucket: "fab",
     stat: "Roughly 90% of leading-edge logic is made on one island, mostly by one company.",
+    body: "TSMC, Samsung and Intel turn designs into physical chips and retain the production and customer records of what was made, how many and for whom. Their compliance sits between US rules and Chinese customers.",
   },
   {
     key: "memory",
     name: "Memory (HBM)",
     bucket: "memory",
     stat: "Three firms in two countries. No HBM, no accelerator.",
+    body: "SK Hynix, Samsung and Micron make the high-bandwidth memory beside every frontier accelerator, creating another small set of producers through which the chain must pass. The Korean firms also balance US controls against substantial exposure to China.",
   },
   {
     key: "atp",
     name: "Packaging & test",
     bucket: "atp",
     stat: "Where chips fan out into products — and where diversion risk begins.",
+    body: "Advanced-packaging lines such as TSMC's CoWoS remain concentrated enough for chips to be counted. Ordinary assembly-and-test firms are more numerous, have the lowest barriers to entry in the chain and are largely absent from policy debates.",
   },
   {
     key: "dc",
     name: "Data centers",
     bucket: "compute",
     stat: "Gigawatt facilities visible from space: easy to find, harder to audit.",
+    body: "AWS, Microsoft Azure, Google Cloud, Oracle, Alibaba and specialists such as CoreWeave sit between customers and machines. Their logs, billing and telemetry make them natural monitors, and they can interrupt a job, but reseller chains and mislabeled workloads weaken what they can attribute to a customer.",
   },
   {
     key: "models",
     name: "Trained models",
     bucket: "compute",
     stat: "A handful of labs — but what happens inside them is the hardest thing of all to verify.",
+    body: "OpenAI, Anthropic, Google DeepMind, Meta, xAI and their Chinese peers hold the fullest account of what they trained and evaluated. They can report, hide trade secrets, overstate precautions or benefit from a rival's restraint. Millions of downstream deployers reveal what models can do, while resellers, contractors and front companies can break the link between a named customer and an activity.",
   },
 ];
 

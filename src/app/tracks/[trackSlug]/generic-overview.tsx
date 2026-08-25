@@ -3,6 +3,7 @@ import { CheckCircle2, FileText, Lock } from "lucide-react";
 import {
   getAssessmentForModule,
   getItemProgressContentIds,
+  isOptionalItem,
   itemIdOf,
   itemSlugOf,
   itemTitleOf,
@@ -12,6 +13,7 @@ import {
 } from "@/lib/content";
 import { PREREQUISITES_ENFORCED } from "@/lib/content/prerequisites";
 import { loginHref } from "@/lib/login-href";
+import { OptionalPrefix } from "@/components/content/optional-tag";
 import { Breadcrumbs } from "@/components/layout/breadcrumbs";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -143,6 +145,7 @@ export function GenericTrackOverview({
                             href={`${moduleHref}/${itemSlugOf(item)}`}
                             className="hover:text-foreground transition-colors"
                           >
+                            {isOptionalItem(item) && <OptionalPrefix />}
                             {itemTitleOf(item)}
                           </Link>
                           {item.kind === "paper" && (
@@ -150,9 +153,6 @@ export function GenericTrackOverview({
                               className="size-3 shrink-0 opacity-60"
                               aria-hidden
                             />
-                          )}
-                          {item.kind === "paper" && item.paper.optional && (
-                            <span className="text-xs">(optional)</span>
                           )}
                         </li>
                       );

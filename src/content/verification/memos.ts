@@ -111,7 +111,7 @@ export const memoSlots: MemoSlot[] = [
     id: "m1-optional",
     module: 1,
     unit: "1.x",
-    title: "[Optional] Written output",
+    title: "Written output",
     status: "unspecified",
     lesson: "scoping-upstream-downstream",
     optional: true,

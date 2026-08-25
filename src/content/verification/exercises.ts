@@ -31,21 +31,16 @@ export const verificationExercises: Exercise[] = [
     optional: true,
   },
   {
-    // 0.1's optional fold, the course owner's copy (2026-08-20). A colon
-    // rather than the em dash its neighbour above uses: the house rule bans
-    // em dashes in authored copy from 2026-08-20 onward, and new copy follows
-    // it even when the line above it predates the rule. v-task-introduction-1
-    // is hers and unswept — exercises.ts was not in the Module 0 sweep — so
-    // it is left for her rather than rewritten here.
-    //
-    // "Ngo" is
+    // 0.1's optional fold, the course owner's copy (2026-08-20). No title
+    // line: it would repeat the fold's own label, and `optional` is already
+    // said once where it belongs, in that label. "Ngo" is
     // Richard Ngo, whose talk the fold embeds — the title was read off
     // YouTube's oembed rather than guessed, so the reader and the citation
     // agree with the video.
     id: "v-task-introduction-2",
     type: "writing-prompt",
     prompt:
-      "Optional task: Misuse and misalignment.\n\nWrite a short brief, or answer in bullet points.\n\nHow, in your view, would the legal and policy response to AI misuse differ from the response to agentic misalignment? To what extent are the biosecurity concepts of deterrence by punishment, deterrence by denial, and pathway defeat transferable to these two cases?\n\nBased on your answer, do you agree with Ngo that the distinction between misuse and misalignment is not especially useful? Why or why not?",
+      "Write a short brief, or answer in bullet points.\n\nHow, in your view, would the legal and policy response to AI misuse differ from the response to agentic misalignment? To what extent are the biosecurity concepts of deterrence by punishment, deterrence by denial, and pathway defeat transferable to these two cases?\n\nBased on your answer, do you agree with Ngo that the distinction between misuse and misalignment is not especially useful? Why or why not?",
     format: "free-form",
     optional: true,
   },

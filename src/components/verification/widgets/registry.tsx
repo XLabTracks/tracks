@@ -22,10 +22,6 @@ const AnatomyDrill = dynamic<VerificationWidgetProps>(
   () => import("./anatomy-drill").then((module) => module.AnatomyDrill),
   { loading: WidgetLoading },
 );
-const ActorWorkshop = dynamic<VerificationWidgetProps>(
-  () => import("./actor-workshop").then((module) => module.ActorWorkshop),
-  { loading: WidgetLoading },
-);
 const ActorEdges = dynamic<VerificationWidgetProps>(
   () => import("./actor-edges").then((module) => module.ActorEdges),
   { loading: WidgetLoading },
@@ -149,7 +145,6 @@ export const verificationWidgets: Record<
 > = {
   "policy-scoping": PolicyScoping,
   "anatomy-drill": AnatomyDrill,
-  "actor-workshop": ActorWorkshop,
   "actor-edges": ActorEdges,
   "interactive-map": InteractiveMap,
   "verification-landscape": VerificationLandscape,

@@ -45,13 +45,6 @@
       "container": "EU Artificial Intelligence Act",
       "publisher": "artificialintelligenceact.eu"
     },
-    "https://arxiv.org/abs/2402.08797": {
-      "title": "Computing Power and the Governance of Artificial Intelligence",
-      "about": "The foundational survey of compute as a governance lever — why computing power is detectable, excludable, and quantifiable in ways algorithms and data are not.",
-      "authors": "Sastry, Girish, Lennart Heim, Haydn Belfield, et al.",
-      "container": "arXiv",
-      "date": "Feb. 2024"
-    },
     "https://arxiv.org/abs/2404.18308": {
       "title": "Near-Term Enforcement of AI Chip Export Controls Using a Firmware-Based Design for Offline Licensing",
       "about": "A design for firmware-based offline licensing that would disable AI chips lacking a regulatory license, as a near-term export-control enforcement mechanism.",
@@ -142,14 +135,6 @@
       "container": "Brilliant Math & Science Wiki",
       "publisher": "Brilliant.org"
     },
-    "https://cset.georgetown.edu/publication/the-semiconductor-supply-chain/": {
-      "title": "The Semiconductor Supply Chain: Assessing National Competitiveness",
-      "about": "CSET's mapping of the semiconductor supply chain and where national chokepoints sit.",
-      "authors": "Khan, Saif M., Alexander Mann, and Dahlia Peterson",
-      "publisher": "Center for Security and Emerging Technology",
-      "date": "Jan. 2021",
-      "standalone": true
-    },
     "https://docs.nvidia.com/attestation/quick-start-guide/latest/architecture.html": {
       "title": "Architecture Overview",
       "about": "NVIDIA's documentation of its attestation architecture — how clients, cloud services, and GPU hardware form a verifiable chain of trust.",
@@ -194,12 +179,6 @@
       "container": "Effective Altruism Forum",
       "date": "28 Dec. 2019"
     },
-    "https://fpf.org/blog/californias-sb-53-the-first-frontier-ai-law-explained/": {
-      "title": "California's SB 53: The First Frontier AI Law, Explained",
-      "about": "A section-by-section explainer of SB 53's duties for large frontier developers.",
-      "org": "Future of Privacy Forum",
-      "date": "3 Oct. 2025"
-    },
     "https://intelligence.org/2015/07/24/four-background-claims/": {
       "title": "Four Background Claims",
       "about": "MIRI's statement of the four background claims behind its case that smarter-than-human AI matters.",
@@ -222,25 +201,12 @@
       "container": "California Legislative Information",
       "date": "2025"
     },
-    "https://leginfo.legislature.ca.gov/faces/billTextClient.xhtml?bill_id=202520260SB53": {
-      "title": "SB-53 Artificial Intelligence Models: Large Developers (2025-2026)",
-      "about": "The bill text of California SB 53, the Transparency in Frontier Artificial Intelligence Act.",
-      "org": "California Legislature",
-      "container": "California Legislative Information",
-      "date": "2025"
-    },
     "https://longtermrisk.org/measurement-research-agenda/#3_Theory_of_change": {
       "title": "Measurement Research Agenda",
       "about": "CLR's research agenda on measuring properties of AI systems; its Theory of change section runs a product model and a field-building model in parallel, which is why 0.1.2 cites it.",
       "authors": "Taylor, Mia",
       "publisher": "Center on Long-Term Risk",
       "date": "16 June 2024"
-    },
-    "https://news.un.org/en/story/2026/07/1167873": {
-      "title": "From AI to 'Killer Robots': UN Chief Issues Urgent Governance Call",
-      "about": "UN News coverage of the Secretary-General's governance call at the inaugural Global Dialogue on AI Governance in Geneva.",
-      "org": "UN News",
-      "date": "6 July 2026"
     },
     "https://ourworldindata.org/brief-history-of-ai": {
       "title": "The Brief History of Artificial Intelligence: The World Has Changed Fast — What Might Be Next?",
@@ -354,11 +320,6 @@
       "about": "A reference page on the SSC's 1993 cancellation, mirroring the Wikipedia article's Cancellation section under Creative Commons.",
       "org": "LiquiSearch"
     },
-    "https://www.nist.gov/caisi": {
-      "title": "Center for AI Standards and Innovation (CAISI)",
-      "about": "NIST's page for the center, formerly the US AI Safety Institute, that runs pre-deployment testing agreements with frontier developers.",
-      "org": "National Institute of Standards and Technology"
-    },
     "https://www.pacingthefrontier.com/": {
       "title": "Pacing the Frontier",
       "about": "An open letter from employees of frontier AI companies asking the U.S. government to support an international effort to build the technical and governance tools needed to deliberately pace automated AI development.",
@@ -386,17 +347,6 @@
       "authors": "Yudkowsky, Eliezer, and Nate Soares",
       "container": "The Atlantic",
       "date": "15 Sept. 2025"
-    },
-    "https://www.un.org/independent-international-scientific-panel-ai/en": {
-      "title": "Independent International Scientific Panel on AI",
-      "about": "The UN's page for the forty-scientist panel established in 2025 to build a shared scientific picture of AI risk.",
-      "org": "United Nations"
-    },
-    "https://www.whitecase.com/insight-alert/california-enacts-landmark-ai-transparency-law-transparency-frontier-artificial": {
-      "title": "California Enacts Landmark AI Transparency Law: The Transparency in Frontier Artificial Intelligence Act",
-      "about": "A law-firm client alert summarizing what SB 53 requires and of whom.",
-      "org": "White & Case LLP",
-      "date": "2025"
     },
     "https://www.wired.com/story/openai-didnt-notice-its-ai-agents-using-a-message-board-to-plan-their-hacking-spree/": {
       "title": "OpenAI Didn’t Notice Its AI Agents Using a Message Board to Plan Their Hacking Spree",
@@ -458,20 +408,6 @@
       "container": "arXiv",
       "date": "Aug. 2024"
     },
-    "https://www.cnas.org/publications/reports/technology-to-secure-the-ai-chip-supply-chain-a-primer": {
-      "title": "Technology to Secure the AI Chip Supply Chain: A Working Paper",
-      "about": "Argues that export controls on AI chips are hard to enforce and easy to evade through shell companies, and proposes hardware-enabled mechanisms instead. Cited in 1.2 for the fact that US controls now reach all chips using advanced high-bandwidth memory.",
-      "authors": "Fist, Tim; Burga, Tao; Chilukuri, Vivek",
-      "publisher": "Center for a New American Security",
-      "date": "2024"
-    },
-    "https://metr.org/notes/2026-01-29-frontier-ai-safety-regulations/": {
-      "title": "Frontier AI safety regulations: A reference for lab staff",
-      "about": "A working reference to the frontier-AI safety rules in force, including SB 53's 10^26 FLOP and $500M thresholds. Cited in 1.2 for who these laws govern.",
-      "authors": "METR",
-      "publisher": "METR",
-      "date": "2026"
-    },
     "https://carnegieendowment.org/research/2024/08/chinas-views-on-ai-safety-are-changing-quickly": {
       "title": "China’s Views on AI Safety Are Changing—Quickly",
       "about": "Sheehan reads the July 2024 Third Plenum decision — the first major CCP policy document to call for an AI safety supervision and regulation system — as evidence of Beijing’s accelerating turn toward frontier-AI safety oversight. Cited in 4.1 as direct data that political feasibility moves.",
@@ -532,7 +468,6 @@
     "https://direct.mit.edu/isec/article/44/1/42/12237/Weaponized-Interdependence-How-Global-Economic",
     "https://doi.org/10.1017/S0020818300027703",
     "https://www.armscontrol.org/act/2009-05/iran-nuclear-briefs/defining-noncompliance-npt-safeguards-agreements",
-    "https://sb53.info/faq",
     "https://www.alignmentforum.org/posts/uqAdqrvxqGqeBHjTP/towards-understanding-based-safety-evaluations",
     "https://www.apolloresearch.ai/science/we-need-a-science-of-evals",
     "https://docs.nvidia.com/attestation/quick-start-guide/latest/attestation-examples/blackwell_multi_gpu.html",

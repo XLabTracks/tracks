@@ -30,6 +30,7 @@ import {
   regenerateJoinCode,
   setMemberRole,
 } from "@/app/actions/classrooms";
+import { deleteAssignment } from "@/app/actions/assignments";
 
 /**
  * A trigger that opens a confirm dialog before running a server action.
@@ -253,6 +254,41 @@ export function LeaveClassroomButton({ classroomId }: { classroomId: string }) {
       successMessage="You left the classroom"
       errorMessage="Couldn't leave the classroom"
       action={() => leaveClassroom(classroomId)}
+    />
+  );
+}
+
+export function DeleteAssignmentButton({
+  classroomId,
+  assignmentId,
+  title,
+}: {
+  classroomId: string;
+  assignmentId: string;
+  title: string;
+}) {
+  return (
+    <ConfirmButton
+      trigger={
+        <Button
+          variant="ghost"
+          size="icon"
+          aria-label={`Delete assignment ${title}`}
+        >
+          <Trash2 className="size-4" aria-hidden />
+        </Button>
+      }
+      title="Delete this assignment?"
+      description={
+        <>
+          {title} will disappear from every student&apos;s classroom page.
+          Their progress on the underlying lessons and papers is kept.
+        </>
+      }
+      confirmLabel="Delete"
+      successMessage="Assignment deleted"
+      errorMessage="Couldn't delete the assignment"
+      action={() => deleteAssignment(classroomId, assignmentId)}
     />
   );
 }

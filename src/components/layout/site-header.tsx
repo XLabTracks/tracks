@@ -34,6 +34,10 @@ export function SiteHeader() {
   // Keep embed routes chrome-less for external <iframe> use.
   if (pathname?.endsWith("/embed")) return null;
 
+  const onControlTrack =
+    pathname === "/tracks/control" || pathname?.startsWith("/tracks/control/");
+  const wordmarkName = onControlTrack ? "Control" : "Tracks";
+
   return (
     <header className="border-border/80 bg-background/80 sticky top-0 z-40 border-b backdrop-blur">
       <div className="mx-auto flex h-14 w-full max-w-7xl items-center gap-6 px-4 lg:px-6">
@@ -43,7 +47,8 @@ export function SiteHeader() {
             muted ink rather than an accent — the logotype beside it carries the
             brand on its own.
 
-            The alt text is what makes the link say "Tracks @ XLab"; there is no
+            The alt text is what makes the link say "<name> @ XLab" (the name
+            is the track's on track routes, "Tracks" elsewhere); there is no
             aria-label, so the visible mark and the announced name cannot drift.
 
             The artwork is 3300x1050 but the ink only fills the middle
@@ -54,7 +59,8 @@ export function SiteHeader() {
           href="/"
           className="flex items-center gap-1.5 text-lg leading-none font-bold tracking-tight select-none"
         >
-          Tracks <span className="text-muted-foreground font-normal">@</span>
+          {wordmarkName}{" "}
+          <span className="text-muted-foreground font-normal">@</span>
           <img
             src="/verification/assets/xLab_Logotype.png"
             alt="XLab"

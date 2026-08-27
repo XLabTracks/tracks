@@ -47,6 +47,7 @@ and says so — but none of them *work*, either.
 | `20260805150000_verification_applications.sql` | Cohort applications (`/verification/enroll`, `/verification/applications`) | The page says the table is not ready rather than pretending to have saved |
 | `20260805213000_verification_capstone_signups.sql` | Capstone sign-ups (`/verification/capstone-signup`, `/verification/capstone-signups`) | Same: the sign-up says it is not ready |
 | `20260812193000_grading_attempts.sql` | Reasoning-transparency LLM feedback | Grading fails closed with a database-upgrade message; no unmetered call is made |
+| `20260820120000_assignments.sql` | Classroom assignments (`/classrooms/[id]` and its `assignments/*` subpages) | Instructors are told the migration is owed, students see no assignments section, and creating one reports the same rather than pretending to save |
 
 Secrets those same features need, set with `wrangler secret put`:
 

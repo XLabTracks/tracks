@@ -40,19 +40,22 @@ export function LegacyScripts({
     ready.current = onReady;
   });
 
+  const key = src.join("|");
+
   useEffect(() => {
     let cancelled = false;
+    const files = key ? key.split("|") : [];
 
     const run = async () => {
       if (
         !ready.current &&
-        src.length > 0 &&
-        src.every((file) => loaded.has(`/verification/${file}`))
+        files.length > 0 &&
+        files.every((file) => loaded.has(`/verification/${file}`))
       ) {
         window.location.reload();
         return;
       }
-      for (const file of src) {
+      for (const file of files) {
         const url = `/verification/${file}`;
         if (loaded.has(url)) continue;
         await loadOnce(url);
@@ -65,7 +68,7 @@ export function LegacyScripts({
     return () => {
       cancelled = true;
     };
-  }, [src]);
+  }, [key]);
 
   return null;
 }

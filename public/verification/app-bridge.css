@@ -621,14 +621,20 @@
 :root[data-theme="contrast"] .lesson-body tbody td {
   border-top-width: var(--hairline);
 }
-:root[data-theme="contrast"] .lesson-body table.elements-grid :is(th, td) {
+/* The elements grid is a wrapper variant now (chrome on the div, the table
+   inside — same family as pair/trio/rubric), so the low-vision lift follows
+   the borders it actually draws: the wrapper's box, the interior verticals,
+   and the hairline row rules. The 2px --primary header rule stays its own
+   width — in this theme it carries the structure. */
+:root[data-theme="contrast"] .lesson-body .elements-grid {
   border-width: var(--hairline);
 }
-:root[data-theme="contrast"] .lesson-body table.elements-grid {
-  display: block;
-  max-width: 100%;
-  overflow-x: auto;
-  overscroll-behavior-inline: contain;
+:root[data-theme="contrast"] .lesson-body .elements-grid :is(th, td) + :is(th, td) {
+  border-left-width: var(--hairline);
+}
+:root[data-theme="contrast"] .lesson-body .elements-grid thead tr:first-child th,
+:root[data-theme="contrast"] .lesson-body .elements-grid tbody tr:not(:last-child) td {
+  border-bottom-width: var(--hairline);
 }
 :root[data-theme="contrast"] .arxiv-paper tr.ax-rule-top > :is(td, th) {
   border-top-width: var(--hairline);

@@ -6,7 +6,7 @@ import {
   getTrackProgressContentIds,
   itemIdOf,
 } from "@/lib/content";
-import { getCurrentUser } from "@/lib/auth";
+import { getCurrentUserOrSignedOut } from "@/lib/auth";
 import { getLastViewedContentId, getTrackCompletionSet } from "@/lib/progress";
 import { ControlTrackLanding } from "./control-landing";
 import { GenericTrackOverview } from "./generic-overview";
@@ -34,7 +34,7 @@ export default async function TrackOverviewPage({
   if (!outline) notFound();
   const { track, modules } = outline;
 
-  const user = await getCurrentUser();
+  const user = await getCurrentUserOrSignedOut();
   // getTrackCompletionSet is a request-cache hit from the track layout; only
   // last-viewed adds a query. Progress counts are derived in memory. cache()
   // memoizes a rejection past the layout's try/catch, so a failed read

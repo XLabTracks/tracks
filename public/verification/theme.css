@@ -939,6 +939,55 @@ button,
   background: var(--primary);
   color: var(--primary-foreground);
 }
+.theme-switch .theme-trigger {
+  display: none;
+}
+.theme-switch .theme-trigger,
+.theme-switch .theme-trigger:hover {
+  background: var(--primary);
+  color: var(--primary-foreground);
+}
+
+.theme-menu {
+  position: absolute;
+  top: calc(100% + 6px);
+  right: 0;
+  z-index: 70;
+  display: flex;
+  flex-direction: column;
+  min-width: 208px;
+  padding: 4px;
+  border: var(--hairline) solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--card);
+  box-shadow: 0 12px 28px -12px rgb(0 0 0 / 0.35);
+}
+.theme-menu[hidden] {
+  display: none;
+}
+.theme-switch .theme-menu button {
+  width: 100%;
+  height: auto;
+  min-height: var(--hdr-action-h);
+  justify-content: flex-start;
+  gap: 10px;
+  padding: 8px 10px;
+  color: var(--foreground);
+  font: inherit;
+  font-size: var(--fs-md);
+  text-align: left;
+}
+.theme-switch .theme-menu button:hover {
+  background: var(--accent);
+  color: var(--foreground);
+}
+.theme-switch .theme-menu button[aria-checked="true"] {
+  background: var(--primary);
+  color: var(--primary-foreground);
+}
+.theme-menu button svg {
+  flex: none;
+}
 .theme-switch svg {
   width: 15px;
   height: 15px;
@@ -1049,7 +1098,7 @@ button,
    exception WCAG's target-size rule grants links inside prose — at 19px tall
    these were under the 24px floor on a phone. The padding takes them past it;
    the negative margin keeps the row's spacing where it was. */
-.foot-links a {
+.foot-links > * {
   color: var(--muted-foreground);
   text-decoration: none;
   display: inline-block;
@@ -1105,7 +1154,7 @@ button,
     display: flex;
     height: auto;
     flex-wrap: wrap;
-    gap: 10px 16px;
+    gap: 10px 12px;
     padding: 8px 16px;
   }
   .nav {
@@ -1130,6 +1179,7 @@ button,
        largest rendition of the chrome anywhere ("sizes", translated). Contrast keeps
        its own 54px — that floor is the type size's, not the viewport's. */
     --hdr-action-h: 44px;
+    gap: 8px;
     order: 2;
     /* No width: it shares the first row with the brand, pinned right by the
        auto margin. Forcing a full-width row of its own left the brand alone
@@ -1139,13 +1189,37 @@ button,
     justify-content: flex-end;
     margin-left: auto;
   }
+  .theme-switch .theme-trigger {
+    display: inline-flex;
+    --seg: var(--hdr-action-h);
+  }
+  .theme-switch button[role="radio"] {
+    display: none;
+  }
+  .header-right .theme-switch {
+    position: relative;
+    padding: 0;
+    border: 0;
+    background: transparent;
+  }
+  .header-right .theme-switch,
+  .header-right > .btn.small,
   .header-right > #verification-notebook-launcher {
     min-width: var(--hdr-action-h);
   }
+  .header-right > .btn.small {
+    padding: 0 12px;
+    font-size: var(--fs-md);
+  }
+  .brand-word {
+    display: none;
+  }
+  .brand-mark {
+    height: 22px;
+  }
 
-  .foot-links a {
+  .foot-links > * {
     display: inline-flex;
-    min-width: 44px;
     min-height: 44px;
     align-items: center;
     padding-block: 8px;

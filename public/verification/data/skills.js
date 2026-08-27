@@ -113,7 +113,7 @@ window.SKILLS = {
         [0, "Understand, justify, and defend why a particular issue leaves normal politics and becomes a security question due to material existential risk"]
       ],
       rungs: [
-        ["0.1", "0.1.1 — the world keeps getting saved: securitize ASI as the risk it is, and the risks of securitizing itself."],
+        ["0.1", "0.1.1 — why securitizing AI is difficult but necessary: securitize ASI as the risk it is, and the risks of securitizing itself."],
         ["4.1", "The window in motion: China's views on AI safety are changing — quickly."]
       ] },
     { id: "toc", label: "Theory of change", mod: 0, unit: "0.1", r: 2, lo: [1, 6], bloom: [2, 4],

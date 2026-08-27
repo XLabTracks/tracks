@@ -25,6 +25,11 @@
     dark: "Night",
     contrast: "High contrast and larger text",
   };
+  var SHORT = {
+    light: "Day",
+    dark: "Night",
+    contrast: "High contrast",
+  };
 
   function stored() {
     try {
@@ -50,6 +55,14 @@
     );
   }
 
+  var narrow = window.matchMedia
+    ? window.matchMedia("(max-width: 720px)")
+    : null;
+
+  function collapsed() {
+    return !!narrow && narrow.matches;
+  }
+
   function apply(theme) {
     var root = document.documentElement;
     root.setAttribute("data-theme", theme);
@@ -64,40 +77,163 @@
     }
     var group = document.querySelector(".theme-switch");
     if (!group) return;
-    group.querySelectorAll("button").forEach(function (b) {
-      b.setAttribute("aria-checked", String(b.dataset.theme === theme));
-    });
+    group
+      .querySelectorAll("button[role='radio'], button[role='menuitemradio']")
+      .forEach(function (b) {
+        b.setAttribute("aria-checked", String(b.dataset.theme === theme));
+      });
+    var trigger = group.querySelector(".theme-trigger");
+    if (trigger) {
+      var label = "Display mode: " + LABELS[theme];
+      trigger.innerHTML =
+        '<svg viewBox="0 0 24 24" aria-hidden="true">' + ICONS[theme] + "</svg>";
+      trigger.dataset.theme = theme;
+      trigger.setAttribute("aria-label", label);
+      trigger.setAttribute("title", label);
+    }
+  }
+
+  function syncGrouping() {
+    var group = document.querySelector(".theme-switch");
+    if (!group) return;
+    group.setAttribute("role", collapsed() ? "group" : "radiogroup");
+    if (!collapsed()) closeMenu(false);
+  }
+
+  function menuParts() {
+    var group = document.querySelector(".theme-switch");
+    if (!group) return null;
+    var trigger = group.querySelector(".theme-trigger");
+    var menu = group.querySelector(".theme-menu");
+    return trigger && menu ? { group: group, trigger: trigger, menu: menu } : null;
+  }
+
+  function menuOpen() {
+    var p = menuParts();
+    return !!p && p.trigger.getAttribute("aria-expanded") === "true";
+  }
+
+  function openMenu() {
+    var p = menuParts();
+    if (!p) return;
+    p.trigger.setAttribute("aria-expanded", "true");
+    p.menu.hidden = false;
+    var checked = p.menu.querySelector("[aria-checked='true']") ||
+      p.menu.querySelector("button");
+    if (checked) checked.focus();
+  }
+
+  function closeMenu(refocus) {
+    var p = menuParts();
+    if (!p || p.trigger.getAttribute("aria-expanded") !== "true") return;
+    p.trigger.setAttribute("aria-expanded", "false");
+    p.menu.hidden = true;
+    if (refocus) p.trigger.focus();
+  }
+
+  function moveFocus(step) {
+    var p = menuParts();
+    if (!p) return;
+    var items = [].slice.call(p.menu.querySelectorAll("button"));
+    var at = items.indexOf(document.activeElement);
+    var next = items[(at + step + items.length) % items.length];
+    if (next) next.focus();
   }
 
   function mount() {
     var group = document.querySelector(".theme-switch");
     if (!group) return;
     if (group.dataset.vtThemeMounted === "true") {
+      syncGrouping();
       apply(current());
       return;
     }
-    group.setAttribute("role", "radiogroup");
     group.setAttribute("aria-label", "Display mode");
-    group.innerHTML = THEMES.map(function (t) {
-      return (
-        '<button type="button" role="radio" data-theme="' +
-        t +
-        '" aria-checked="false"' +
-        ' aria-label="' +
-        LABELS[t] +
-        '" title="' +
-        LABELS[t] +
-        '">' +
-        '<svg viewBox="0 0 24 24" aria-hidden="true">' +
-        ICONS[t] +
-        "</svg></button>"
-      );
-    }).join("");
+    group.innerHTML =
+      THEMES.map(function (t) {
+        return (
+          '<button type="button" role="radio" data-theme="' +
+          t +
+          '" aria-checked="false"' +
+          ' aria-label="' +
+          LABELS[t] +
+          '" title="' +
+          LABELS[t] +
+          '">' +
+          '<svg viewBox="0 0 24 24" aria-hidden="true">' +
+          ICONS[t] +
+          "</svg></button>"
+        );
+      }).join("") +
+      '<button type="button" class="theme-trigger" aria-haspopup="menu"' +
+      ' aria-expanded="false"></button>' +
+      '<div class="theme-menu" role="menu" aria-label="Display mode" hidden>' +
+      THEMES.map(function (t) {
+        return (
+          '<button type="button" role="menuitemradio" data-theme="' +
+          t +
+          '" aria-checked="false" aria-label="' +
+          LABELS[t] +
+          '">' +
+          '<svg viewBox="0 0 24 24" aria-hidden="true">' +
+          ICONS[t] +
+          "</svg><span>" +
+          SHORT[t] +
+          "</span></button>"
+        );
+      }).join("") +
+      "</div>";
+
     group.addEventListener("click", function (e) {
-      var b = e.target.closest("button[data-theme]");
-      if (b) apply(b.dataset.theme);
+      if (e.target.closest(".theme-trigger")) {
+        if (menuOpen()) closeMenu(true);
+        else openMenu();
+        return;
+      }
+      var picked = e.target.closest("button[data-theme]");
+      if (!picked) return;
+      apply(picked.dataset.theme);
+      if (picked.getAttribute("role") === "menuitemradio") closeMenu(true);
     });
+
+    group.addEventListener("keydown", function (e) {
+      if (e.key === "Escape" && menuOpen()) {
+        e.stopPropagation();
+        closeMenu(true);
+        return;
+      }
+      if (!menuOpen() || !e.target.closest(".theme-menu")) return;
+      if (e.key === "ArrowDown") {
+        e.preventDefault();
+        moveFocus(1);
+      } else if (e.key === "ArrowUp") {
+        e.preventDefault();
+        moveFocus(-1);
+      }
+    });
+
+    document.addEventListener(
+      "pointerdown",
+      function (e) {
+        if (menuOpen() && !e.target.closest(".theme-switch")) closeMenu(false);
+      },
+      true
+    );
+    group.addEventListener("focusout", function () {
+      setTimeout(function () {
+        if (menuOpen() && !group.contains(document.activeElement)) {
+          closeMenu(false);
+        }
+      }, 0);
+    });
+
     group.dataset.vtThemeMounted = "true";
+    syncGrouping();
+    if (narrow) {
+      narrow.addEventListener("change", function () {
+        syncGrouping();
+      });
+    }
     apply(current());
   }
 

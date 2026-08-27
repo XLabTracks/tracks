@@ -137,6 +137,20 @@ const nextConfig: NextConfig = {
           { key: "Content-Security-Policy", value: "frame-ancestors 'self'" },
         ],
       },
+      {
+        // The course's own artwork. Everything under public/ is served
+        // `max-age=0`, so each of these was revalidated on every navigation —
+        // two conditional round trips per page for files that have not changed
+        // since they were committed, on a link where a round trip is the
+        // expensive part. They are content-addressed by hand rather than by
+        // hash, so this is a week rather than a year: long enough to stop the
+        // per-page cost, short enough that replacing one is not a support
+        // problem.
+        source: "/verification/assets/:path*",
+        headers: [
+          { key: "Cache-Control", value: "public, max-age=604800" },
+        ],
+      },
     ];
   },
 };

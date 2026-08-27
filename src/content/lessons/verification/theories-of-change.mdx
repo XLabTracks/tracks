@@ -29,7 +29,9 @@ Being able to clearly communicate your theory of change is almost as, if not mor
 
 So, what does a good AI safety theory of change actually look like? This table maps out all the important elements of a robust theory of change:
 
-<table className="elements-grid">
+<div className="elements-grid">
+
+<table>
   <thead>
     <tr>
       <th>Inputs</th>
@@ -65,6 +67,8 @@ So, what does a good AI safety theory of change actually look like? This table m
   </tbody>
 </table>
 
+</div>
+
 A useful strategy is backchaining: start by specifying the long-term goal, then work backwards. What has to change for this outcome to be possible? How does your project contribute to creating those conditions? Each link in the chain should be an if-then claim. If we publish this benchmark, then labs will adopt it. If labs adopt it, then training procedures will incorporate the findings. If training procedures change, then deployed models will be safer, and “safer” here has to mean something specific: reward hacking rates, deception probes, behavior under distribution shift.
 
 <div className="not-prose border-border my-6 rounded-[2.5rem] border px-6 py-5 sm:px-8">
@@ -87,9 +91,9 @@ Image: [Our Theory of Change](https://slowfoodusa.org/theory-of-change/), Slow F
 
 A common failure mode is conflating **outputs** with **outcomes**. Outputs are tangible products you produced: a paper, a benchmark, an eval, a workshop, a policy memo. They are easy to qualify and quantify. Outcomes are what changed because of those outputs: a lab altered a training procedure, a policymaker incorporated a threat model into a draft bill, a researcher updated their estimates. It’s more difficult but much more important to recognize and attribute outcomes. A project can generate impressive outputs—a well-cited paper, a popular benchmark, a successful conference—without any clarity as to how it actually creates change in the world.
 
-<Fold label="[Optional] Exercise: Theory of Change for your favorite AI safety organization">
+<Fold label="Optional: Theory of Change for Your Favorite AI Safety Organization">
 
-Now that you’ve seen some exemplary examples of robust theories of change, try building your own! Pick your favorite AI safety organization: Epoch, MIRI, The Midas Project, etc.—and fill out the below table based on publicly available information, reports, and testimonials.
+Now that you’ve seen some exemplary examples of robust theories of change, try building your own! Pick your favorite AI safety organization and fill out the below table based on publicly available information, reports, and testimonials.
 
 <VerificationExercise id="theories-of-change" />
 

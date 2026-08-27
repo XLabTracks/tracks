@@ -146,7 +146,19 @@ export function FocusReadingControl({
       {open && (
         <div
           ref={panelRef}
-          className="border-border bg-card shadow-soft-lg absolute top-9 right-0 z-20 max-h-[calc(100vh-6rem)] w-[min(30rem,calc(100vw-2rem))] overflow-y-auto rounded-xl border p-4 text-left"
+          /* Anchored to the toolbar on a desktop, pinned to the viewport on a
+             phone. The panel is about 744px tall — taller than the space under
+             a phone's header — and it hangs off a toolbar that sits at the top
+             of the reading. Once the reader has scrolled past that toolbar the
+             panel opens above the viewport: measured at 400px down a lesson,
+             its top was -364 and "Text size" sat at -311, off screen, with no
+             way to reach it. It is not overflowing, so its own scrollbar does
+             not help — the box is simply somewhere the screen is not.
+
+             100dvh, not 100vh: on iOS the large viewport is what vh reports,
+             so a panel sized by it is taller than what the collapsing toolbars
+             actually leave visible. */
+          className="border-border bg-card shadow-soft-lg fixed inset-x-3 bottom-3 z-50 max-h-[80dvh] w-auto overflow-y-auto rounded-xl border p-4 text-left sm:absolute sm:inset-x-auto sm:top-9 sm:right-0 sm:bottom-auto sm:z-20 sm:max-h-[calc(100dvh-6rem)] sm:w-[min(30rem,calc(100vw-2rem))]"
         >
           <p className="text-sm font-semibold">Reading settings</p>
 

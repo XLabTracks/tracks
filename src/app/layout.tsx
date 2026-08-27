@@ -12,15 +12,41 @@ import { Toaster } from "@/components/ui/sonner";
 // full 100–900 weight axis; we serve it from src/app/fonts/.
 const inter = localFont({
   src: [
-    { path: "./fonts/InterVariable.woff2", weight: "100 900", style: "normal" },
+    // The .subset faces, not the originals beside them — see
+    // scripts/build-fonts.mjs. The full pair is 723KB of a site that sets no
+    // Cyrillic and uses about a tenth of the symbols they carry; cut to the
+    // characters the content actually contains they are 407KB. The originals
+    // stay in this directory as the source the build reads and are not served.
     {
-      path: "./fonts/InterVariable-Italic.woff2",
+      path: "./fonts/InterVariable.subset.woff2",
+      weight: "100 900",
+      style: "normal",
+    },
+    {
+      path: "./fonts/InterVariable-Italic.subset.woff2",
       weight: "100 900",
       style: "italic",
     },
   ],
   variable: "--font-sans",
   display: "swap",
+  // Not preloaded. next/font preloads by default, which put a <link rel=preload>
+  // for both faces — 723KB of variable font covering every Unicode range the
+  // file ships — at the head of every page, at the highest priority the browser
+  // has. On a phone that is the whole link for several seconds, and the document
+  // itself streams in behind it: the reader watches a lesson arrive a paragraph
+  // at a time, cut mid-word wherever the stream has got to, with white below.
+  // Measured cold on a 1.6Mbps connection, those two files are 723KB of an
+  // 807KB page and the load runs 7.1s.
+  //
+  // display:swap already paints the text in the fallback face immediately, so
+  // what preloading bought was the swap landing sooner, not the words. Dropped,
+  // the fonts are fetched from the stylesheet at ordinary priority and stop
+  // competing with the markup. Subsetting them would be the bigger win and is
+  // not done here: the content uses 206 non-ASCII characters — Greek, maths,
+  // arrows, geometric shapes, some CJK — so a naive Latin subset would silently
+  // drop glyphs across 959 files.
+  preload: false,
 });
 export const metadata: Metadata = {
   title: {
@@ -127,12 +153,29 @@ export default async function RootLayout({
       // THEME_BOOT mutates theme attributes before React hydrates. That is
       // precisely the mismatch React would otherwise warn about.
       suppressHydrationWarning
-      className={`${inter.variable} h-full antialiased`}
+      // No height on <html>. `h-full` pinned it to exactly the viewport while
+      // the body inside ran to the length of the document — on a 16,000px
+      // lesson the body overflowed its own root element twenty times over.
+      // Desktop engines scroll the initial containing block and never show it;
+      // iOS Safari treats the constrained root as the paint boundary and stops
+      // painting partway down, which is a page that ends mid-word with white
+      // under it, on every page, after the load has finished. The footer still
+      // sits at the bottom of a short page — that is what min-h-dvh on the
+      // body below is for, and it measures the viewport directly instead of
+      // asking a parent that no longer has a height.
+      className={`${inter.variable} antialiased`}
     >
       <head>
         <script dangerouslySetInnerHTML={{ __html: THEME_BOOT }} />
       </head>
-      <body className="bg-background text-foreground flex min-h-full flex-col">
+      <body
+        // Browser extensions (Grammarly's data-gr-* stamps in particular)
+        // mutate <body> attributes before React hydrates — noise we cannot
+        // control. Suppression is attribute-only and one element deep, so
+        // real mismatches inside the app still warn.
+        suppressHydrationWarning
+        className="bg-background text-foreground flex min-h-dvh flex-col"
+      >
         <a
           href="#main-content"
           className="bg-background text-foreground focus:ring-ring sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-50 focus:rounded-md focus:border focus:px-4 focus:py-2 focus:ring-2 focus:outline-none select-none"

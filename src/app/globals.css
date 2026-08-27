@@ -537,12 +537,11 @@
 }
 
 /* ============================================================
-   Footnotes — numbered via a CSS counter, revealed via a
-   checkbox/label toggle (no JS). On wide viewports the note
-   floats into the right margin next to its reference, LessWrong/
-   Alignment-Forum style; the lesson column (article.lesson-body,
-   inside the page's max-w-4xl wrapper) leaves enough free space
-   at 2xl+ once the w-72 track sidebar is accounted for.
+   Footnotes — numbered via a CSS counter. The note body is a
+   popup now (src/components/mdx/footnote.tsx; the old margin
+   float is gone — see the .footnote-marker comment below). The
+   lesson column (article.lesson-body) reads inside the item
+   page's max-w-5xl wrapper, the paper reader's measure.
    ============================================================ */
 .lesson-body {
   counter-reset: footnote;
@@ -770,19 +769,6 @@
   color: var(--foreground);
 }
 
-/* 0.1.2's theory-of-change elements table (`<table className="elements-grid">`).
-   A full collapsed grid — every cell hairlined on all four sides — with the
-   author's three visually distinct layers, stated 2026-08-13: the band
-   headers (Inputs/Outputs/Outcome, Assumptions/External factors) invert the
-   theme (foreground ground, background ink — dark-on-light themes get a dark
-   band with light text, the night theme the reverse); the question labels
-   take the muted second-layer tint, differentiated but not as bold; the
-   content boxes read as ordinary card ground. The shared lesson-table rules
-   above (row hairlines only, bold first column, unstyled tbody th) must not
-   reach it. display:table because the grid should fill the column; the cells
-   are short words, so the narrow-screen risk the block scroller guards
-   against does not arise here. The theories-of-change widget repeats this
-   scheme — change one and change the other. */
 /* The last column absorbs the slack.
    `.lesson-body table` is a block-level scroll box, so its rows are laid out
    in an anonymous table that shrinks to its content: on a wide screen the
@@ -796,7 +782,7 @@
    has to scroll still scrolls; verified at 390px, where every table in this
    course does. min-width on the row groups, width on the rows and
    max-content on the table were all tried first and none of them moved it. */
-.lesson-body table:not(.elements-grid) :is(th, td):last-child {
+.lesson-body table:not(.elements-grid, .elements-grid *) :is(th, td):last-child {
   width: 100%;
 }
 
@@ -913,53 +899,74 @@
   width: 58%;
 }
 
-.lesson-body table.elements-grid {
+/* 0.1.2's theory-of-change elements table (`<div className="elements-grid">`
+   around a literal grid table). It wore its own dress once — theme-inverted
+   band headers, square corners, per-cell collapsed borders — and the course
+   owner replaced that with the platform's one table treatment (2026-08-20):
+   every table in the course wears the same box, the same palette, the same
+   header vocabulary. So this is now a layout variant in the pair/trio/rubric
+   family — chrome on the wrapper, a full-measure table inside — that keeps
+   the shared dress and adds only what a banded grid needs: centered cells,
+   interior verticals, and two header layers. The bands (Inputs/Outputs/
+   Outcome, Assumptions/External factors) take the standard --muted header
+   band; the question labels sit under them as the quieter second layer; the
+   2px --primary rule closes each header where its content begins. The
+   theories-of-change widget repeats this scheme — change one and change the
+   other. */
+.lesson-body .elements-grid {
+  margin-block: 28px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  overflow-x: auto;
+  overscroll-behavior-inline: contain;
+  -webkit-overflow-scrolling: touch;
+  box-shadow: var(--shadow-soft);
+}
+.lesson-body .elements-grid table {
   display: table;
   width: 100%;
+  min-width: 560px;
+  margin: 0;
   border: 0;
   border-radius: 0;
   box-shadow: none;
   background-image: none;
-  border-collapse: collapse;
-  border-spacing: 0;
 }
-@media (max-width: 720px) {
-  .lesson-body table.elements-grid {
-    display: block;
-    max-width: 100%;
-    overflow-x: auto;
-    overscroll-behavior-inline: contain;
-    -webkit-overflow-scrolling: touch;
-  }
-}
-.lesson-body table.elements-grid thead th,
-.lesson-body table.elements-grid tbody th,
-.lesson-body table.elements-grid tbody td {
-  border: 1px solid var(--border);
-  border-radius: 0;
-  background: var(--card);
+.lesson-body .elements-grid :is(th, td) {
   padding: 0.55em 0.8em;
   text-align: center;
   vertical-align: middle;
   font-weight: 400;
+  background: var(--card);
+  color: var(--foreground);
+  border: 0;
+}
+.lesson-body .elements-grid :is(th, td) + :is(th, td) {
+  border-left: 1px solid var(--border);
+}
+.lesson-body .elements-grid tbody td:first-child {
+  font-weight: 400;
   color: var(--foreground);
 }
-.lesson-body table.elements-grid tbody tr:first-child td {
-  border-top: 1px solid var(--border);
-}
-/* The band headers: theme-inverted for contrast. */
-.lesson-body table.elements-grid thead tr:first-child th,
-.lesson-body table.elements-grid tbody th {
-  background: var(--foreground);
-  color: var(--background);
+.lesson-body .elements-grid thead tr:first-child th {
+  background: var(--muted);
   font-weight: 600;
+  border-bottom: 1px solid var(--border);
 }
-/* The question labels: the quieter second layer. */
-.lesson-body table.elements-grid thead tr:last-child th,
-.lesson-body table.elements-grid tbody tr:last-child td {
+.lesson-body .elements-grid thead tr:last-child th {
+  background: var(--card);
+  color: var(--muted-foreground);
+  font-weight: 500;
+  border-bottom: 2px solid var(--primary);
+}
+.lesson-body .elements-grid tbody th {
   background: var(--muted);
   color: var(--foreground);
-  font-weight: 500;
+  font-weight: 600;
+  border-bottom: 2px solid var(--primary);
+}
+.lesson-body .elements-grid tbody tr:not(:last-child) td {
+  border-bottom: 1px solid var(--border);
 }
 
 /* The markdown rhythm inside a Fold or a Callout. Both shells are not-prose,

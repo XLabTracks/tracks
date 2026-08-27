@@ -115,7 +115,7 @@ export function TheoriesOfChange(_: VerificationWidgetProps) {
   const band = (label: string, className?: string) => (
     <div
       className={cn(
-        "bg-foreground text-background p-2 text-center text-2xs font-semibold",
+        "bg-muted text-foreground p-2 text-center text-2xs font-semibold",
         className,
       )}
     >
@@ -126,7 +126,7 @@ export function TheoriesOfChange(_: VerificationWidgetProps) {
   const head = (label: string) => (
     <div
       key={label}
-      className="bg-muted text-foreground p-2 text-center text-2xs font-medium"
+      className="bg-card text-muted-foreground p-2 text-center text-2xs font-medium shadow-[inset_0_-2px_0_var(--primary)]"
     >
       {label}
     </div>
@@ -190,15 +190,15 @@ export function TheoriesOfChange(_: VerificationWidgetProps) {
         </div>
       </div>
 
-      <div className="w-full max-w-full overflow-x-auto overscroll-x-contain">
-        <div className="border-border bg-border grid min-w-[640px] grid-cols-6 gap-px border" role="group" aria-label="Your theory of change table">
+      <div className="border-border shadow-soft w-full max-w-full overflow-x-auto overscroll-x-contain rounded-lg border">
+        <div className="bg-border grid min-w-[640px] grid-cols-6 gap-px" role="group" aria-label="Your theory of change table">
           {band("Inputs")}
           {band("Outputs", "col-span-2")}
           {band("Outcome", "col-span-3")}
           {BOXES.slice(0, 6).map((b) => head(b.label))}
           {BOXES.slice(0, 6).map((b) => cell(b))}
-          {band("Assumptions", "col-span-3")}
-          {band("External factors", "col-span-3")}
+          {band("Assumptions", "col-span-3 shadow-[inset_0_-2px_0_var(--primary)]")}
+          {band("External factors", "col-span-3 shadow-[inset_0_-2px_0_var(--primary)]")}
           {cell(BOXES[6], "col-span-3")}
           {cell(BOXES[7], "col-span-3")}
         </div>

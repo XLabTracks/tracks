@@ -10,12 +10,14 @@ import {
   getTrackContentIds,
   getTrackOutline,
   getTrackProgressContentIds,
+  isOptionalItem,
   itemIdOf,
   itemTitleOf,
   tracks,
   type Track,
 } from "@/lib/content";
 import { getCompletedLessonIds, getSubmission } from "@/lib/progress";
+import { OptionalPrefix } from "@/components/content/optional-tag";
 import { Breadcrumbs } from "@/components/layout/breadcrumbs";
 import {
   Accordion,
@@ -144,17 +146,13 @@ export default async function StudentDetailPage({
                             ) : (
                               <Circle className="size-3.5 opacity-30" aria-hidden />
                             )}
+                            {isOptionalItem(item) && <OptionalPrefix />}
                             {itemTitleOf(item)}
                             {item.kind === "paper" && (
                               <FileText
                                 className="size-3 shrink-0 opacity-60"
                                 aria-hidden
                               />
-                            )}
-                            {item.kind === "paper" && item.paper.optional && (
-                              <span className="text-muted-foreground text-xs">
-                                (optional)
-                              </span>
                             )}
                           </li>
                         );

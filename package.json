@@ -21,6 +21,8 @@
     "verification:course": "node scripts/build-verification-course.mjs",
     "verification:memos": "node scripts/build-verification-memos.mjs",
     "icon:build": "node scripts/build-icon.mjs",
+    "wordmark:build": "node scripts/build-wordmark.mjs",
+    "fonts:build": "node scripts/build-fonts.mjs",
     "readings:build": "tsx scripts/build-readings.ts",
     "gdoc:build": "tsx scripts/build-gdoc.ts"
   },
@@ -94,6 +96,7 @@
     "node-tikzjax": "^1.0.5",
     "prisma": "^6.19.3",
     "sharp": "^0.34.5",
+    "subset-font": "^2.5.0",
     "tailwindcss": "^4",
     "tsx": "^4.23.0",
     "typescript": "^5",

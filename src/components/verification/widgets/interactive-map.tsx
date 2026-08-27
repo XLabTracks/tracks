@@ -731,8 +731,7 @@ function DetailCard({
         </h4>
         <p className="mt-1.5 mb-2 text-lg font-bold tracking-tight">{b.stat}</p>
         <p className="text-muted-foreground text-sm leading-relaxed">
-          {st ? `${st.stat} ` : ""}
-          {b.why}
+          {st ? `${st.stat} ${st.body}` : b.why}
         </p>
         <p className="text-muted-foreground mt-2.5 text-3xs font-medium">
           {C.layerNeed}

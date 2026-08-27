@@ -13,7 +13,6 @@ export const verificationExercises: VerificationExerciseDef[] = [
   { id: "mechanism-sort-reveal", title: "The Reference Map", bridged: false },
   { id: "policy-scoping", title: "Scoping an Anti-ASI Policy", bridged: true },
   { id: "anatomy-drill", title: "The Anatomy Drill", bridged: true },
-  { id: "actor-workshop", title: "The Actor Map Workshop", bridged: true },
   { id: "actor-edges", title: "Who can prove what", bridged: true },
   { id: "interactive-map", title: "The Compute Supply Chain", bridged: false },
   { id: "context-distiller", title: "The Distiller", bridged: true },

@@ -15,7 +15,7 @@ import {
   type Track,
 } from "@/lib/content";
 import { isAccessLocked } from "@/lib/content/prerequisites";
-import { getCurrentUser } from "@/lib/auth";
+import { getCurrentUserOrSignedOut } from "@/lib/auth";
 import { loginHref } from "@/lib/login-href";
 import {
   getExerciseSubmissionMap,
@@ -25,7 +25,7 @@ import {
   type PrerequisiteStatus,
 } from "@/lib/progress";
 import { Breadcrumbs } from "@/components/layout/breadcrumbs";
-import { OptionalMarker } from "@/components/content/optional-tag";
+import { OptionalPrefix } from "@/components/content/optional-tag";
 import {
   LessonContent,
   getLessonCitations,
@@ -96,7 +96,7 @@ export default async function ItemPage({
   const { track, module, item } = resolved;
   const nav = getItemNavigation(itemIdOf(item));
 
-  const user = await getCurrentUser();
+  const user = await getCurrentUserOrSignedOut();
 
   if (user && track.prerequisiteEnforcement === "hard") {
     const prereqStatuses = await getPrerequisiteStatus(
@@ -194,7 +194,17 @@ async function LessonItemPage({
     track.chunkedReading && !lesson.completion && !lesson.unchunked;
 
   return (
-    <div className="px-4 py-8 lg:px-8">
+    // Lessons read at the same measure as the paper reader (PaperItemPage's
+    // max-w-5xl wrapper below), so prose and reproduced readings share one
+    // right edge. Verification is the exception: its widget lessons were
+    // built against the full column and keep it.
+    <div
+      className={
+        track.id === "verification"
+          ? "px-4 py-8 lg:px-8"
+          : "max-w-5xl px-4 py-8 lg:px-8"
+      }
+    >
       <Breadcrumbs
         items={[
           { label: track.title, href: `/tracks/${track.slug}` },
@@ -208,9 +218,9 @@ async function LessonItemPage({
       <header>
         <div className="mt-1 flex flex-wrap items-center gap-x-3 gap-y-2">
           <h1 className="text-3xl font-semibold tracking-tight">
+            {lesson.optional && <OptionalPrefix />}
             {lesson.title}
           </h1>
-          {lesson.optional && <OptionalMarker />}
         </div>
         {lesson.estimatedMinutes && !chunked ? (
           <p className="text-muted-foreground mt-2 flex items-center gap-1.5 text-sm">
@@ -399,9 +409,9 @@ async function PaperItemPage({
         <p className="text-muted-foreground text-sm">Paper</p>
         <div className="mt-1 flex flex-wrap items-center gap-x-3 gap-y-2">
           <h1 className="text-3xl font-semibold tracking-tight">
+            {paper.optional && <OptionalPrefix />}
             {paper.title}
           </h1>
-          {paper.optional && <OptionalMarker />}
         </div>
         {source.authors && (
           <p className="text-muted-foreground mt-2 text-sm">{source.authors}</p>

@@ -16,7 +16,7 @@ import {
 } from "@/lib/content";
 import { DELIVERABLE_FORMAT_LABELS } from "@/lib/content/types";
 import { isAccessLocked } from "@/lib/content/prerequisites";
-import { getCurrentUser } from "@/lib/auth";
+import { getCurrentUserOrSignedOut } from "@/lib/auth";
 import {
   getPrerequisiteStatus,
   getTrackCompletionSet,
@@ -25,6 +25,7 @@ import {
 import { Breadcrumbs } from "@/components/layout/breadcrumbs";
 import { PrerequisitePanel } from "@/components/learn/prerequisite-panel";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { OptionalPrefix } from "@/components/content/optional-tag";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -61,7 +62,7 @@ export default async function ModulePage({
   const furtherReading = getResourcesByTopics(module.furtherReadingTopics ?? []);
   const moduleHref = `/tracks/${track.slug}/${module.slug}`;
 
-  const user = await getCurrentUser();
+  const user = await getCurrentUserOrSignedOut();
   // prereq statuses and the completion set both resolve from the track
   // completion set the layout already fetched (request-cached), so this page
   // adds no progress queries of its own. cache() memoizes a rejection past
@@ -140,15 +141,14 @@ export default async function ModulePage({
                           <span className="border-muted-foreground/40 size-4 shrink-0 rounded-full border" />
                         )}
                         <span className="font-medium">
-                          {index + 1}. {itemTitleOf(item)}
+                          {index + 1}.{" "}
+                          {isOptionalItem(item) && <OptionalPrefix />}
+                          {itemTitleOf(item)}
                         </span>
                         {item.kind === "paper" && (
                           <Badge variant="secondary" className="gap-1">
                             <FileText className="size-3" aria-hidden /> Paper
                           </Badge>
-                        )}
-                        {isOptionalItem(item) && (
-                          <Badge variant="outline">Optional</Badge>
                         )}
                       </span>
                       {estimatedMinutes && (

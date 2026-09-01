@@ -13,6 +13,9 @@ const form = (over: Partial<BugReportForm> = {}): BugReportForm => ({
   quoteField: "entry.1",
   pageField: "entry.2",
   urlField: "entry.3",
+  commentField: "entry.4",
+  emailField: "entry.5",
+  screenshotField: "entry.6",
   ...over,
 });
 
@@ -27,6 +30,9 @@ const blank: BugReportForm = {
   quoteField: "",
   pageField: "",
   urlField: "",
+  commentField: "",
+  emailField: "",
+  screenshotField: "",
 };
 
 describe("isBugReportConfigured", () => {

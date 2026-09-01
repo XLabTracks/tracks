@@ -7,10 +7,11 @@ import {
   ACTION_LABELS,
   type SelectionActionId,
 } from "@/lib/verification/selection-actions";
+import { isBugReportConfigured } from "@/lib/verification/bug-report";
 import {
-  bugReportHref,
-  isBugReportConfigured,
-} from "@/lib/verification/bug-report";
+  FeedbackDialog,
+  type FeedbackTarget,
+} from "@/components/verification/feedback-dialog";
 
 const SITE_SUFFIX = /\s+@\s+Tracks\s*$/;
 
@@ -45,6 +46,7 @@ declare global {
 
 export function SelectionActions() {
   const [at, setAt] = useState<Placed | null>(null);
+  const [report, setReport] = useState<FeedbackTarget | null>(null);
   const barRef = useRef<HTMLDivElement>(null);
   const dragging = useRef(false);
   const timer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
@@ -166,12 +168,7 @@ export function SelectionActions() {
       } else if (id === "notebook") {
         window.VTNotebook?.addQuote?.(place.text, pageName(), location.href);
       } else if (id === "report") {
-        const href = bugReportHref({
-          quote: place.text,
-          page: pageName(),
-          url: location.href,
-        });
-        if (href) window.open(href, "_blank", "noopener,noreferrer");
+        setReport({ quote: place.text, page: pageName(), url: location.href });
       } else if (id === "define") {
         window.VTVocab?.define?.(place.text, {
           bottom: place.top - 8 - window.scrollY,
@@ -203,13 +200,23 @@ export function SelectionActions() {
     btns[(to + btns.length) % btns.length]?.focus();
   };
 
-  if (!at || typeof document === "undefined") return null;
+  if (typeof document === "undefined") return null;
 
-  return createPortal(
+  const dialog = report ? (
+    <FeedbackDialog target={report} onClose={() => setReport(null)} />
+  ) : null;
+
+  if (!at) return dialog;
+  const place = at;
+
+  return (
+    <>
+      {dialog}
+      {createPortal(
     <>
       <div aria-live="polite" className="sr-only">
-        {at.byKeyboard
-          ? `${at.actions.length} actions for the selected text. Press Alt+Enter to reach them.`
+        {place.byKeyboard
+          ? `${place.actions.length} actions for the selected text. Press Alt+Enter to reach them.`
           : ""}
       </div>
       <div
@@ -217,15 +224,15 @@ export function SelectionActions() {
         role="toolbar"
         aria-label="Actions for the selected text"
         onKeyDown={onBarKeyDown}
-        style={{ top: at.top, left: Math.max(8, at.left) }}
+        style={{ top: place.top, left: Math.max(8, place.left) }}
         className="border-border bg-card shadow-soft absolute z-[55] flex max-w-[calc(100vw-1rem)] flex-wrap gap-1 rounded-lg border p-1 select-none"
       >
-        {at.actions.map((id) => (
+        {place.actions.map((id) => (
           <button
             key={id}
             type="button"
             onMouseDown={(e) => e.preventDefault()}
-            onClick={() => run(id, at)}
+            onClick={() => run(id, place)}
             className="hover:bg-muted focus-visible:ring-ring rounded-md px-2.5 py-1 text-[13px] whitespace-nowrap focus-visible:ring-2 focus-visible:outline-none"
           >
             {ACTION_LABELS[id]}
@@ -234,5 +241,7 @@ export function SelectionActions() {
       </div>
     </>,
     document.body,
+      )}
+    </>
   );
 }

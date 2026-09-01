@@ -3,6 +3,9 @@ export interface BugReportForm {
   quoteField: string;
   pageField: string;
   urlField: string;
+  commentField: string;
+  emailField: string;
+  screenshotField: string;
 }
 
 export const BUG_REPORT_FORM: BugReportForm = {
@@ -11,7 +14,45 @@ export const BUG_REPORT_FORM: BugReportForm = {
   quoteField: "entry.805073738",
   pageField: "entry.568752826",
   urlField: "entry.1180304402",
+  commentField: "entry.692528752",
+  emailField: "",
+  screenshotField: "",
 };
+
+export function formResponseUrl(form: BugReportForm = BUG_REPORT_FORM): string {
+  return form.viewformUrl.trim().split("?")[0]!.replace(/\/viewform$/, "/formResponse");
+}
+
+export interface FeedbackSubmission {
+  quote: string;
+  page: string;
+  url: string;
+  comment: string;
+  email?: string;
+  screenshotUrl?: string;
+}
+
+export function submissionParams(
+  submission: FeedbackSubmission,
+  form: BugReportForm = BUG_REPORT_FORM,
+): URLSearchParams {
+  const params = new URLSearchParams();
+  const set = (field: string, value: string | undefined) => {
+    const name = field.trim();
+    if (name && value && value.trim()) params.set(name, value.trim());
+  };
+  set(form.quoteField, truncateQuote(submission.quote));
+  set(form.pageField, submission.page);
+  set(form.urlField, submission.url);
+  set(form.commentField, submission.comment);
+  set(form.emailField, submission.email);
+  set(form.screenshotField, submission.screenshotUrl);
+  return params;
+}
+
+export function canSubmitDirectly(form: BugReportForm = BUG_REPORT_FORM): boolean {
+  return isBugReportConfigured(form) && Boolean(form.commentField.trim());
+}
 
 export const QUOTE_LIMIT = 1200;
 

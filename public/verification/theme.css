@@ -824,6 +824,29 @@ button,
 .nav a {
   white-space: nowrap;
 }
+
+/* Scrollbars are hidden site-wide (the rule above this block), so a nav wider
+   than its box offers the reader nothing at all. On a 390px phone this row is
+   478px of links in a 358px box, which means "Team" and "About" are not just
+   off screen, they are indistinguishable from links that do not exist. The
+   fade is the only signal left once the scrollbar is gone.
+
+   It lifts on focus-within: a keyboard or screen-reader walk must never dim
+   the link it has just landed on. */
+@media (max-width: 720px), (pointer: coarse) {
+  .nav {
+    -webkit-mask-image: linear-gradient(
+      to right,
+      #000 calc(100% - 28px),
+      transparent
+    );
+    mask-image: linear-gradient(to right, #000 calc(100% - 28px), transparent);
+  }
+  .nav:focus-within {
+    -webkit-mask-image: none;
+    mask-image: none;
+  }
+}
 .nav a {
   position: relative;
   padding: 6px 14px;

@@ -125,6 +125,18 @@ function zoomVB(
   });
 }
 
+function useCanHover(): boolean {
+  const [canHover, setCanHover] = useState(false);
+  useEffect(() => {
+    const mq = window.matchMedia("(hover: hover) and (pointer: fine)");
+    const read = () => setCanHover(mq.matches);
+    read();
+    mq.addEventListener("change", read);
+    return () => mq.removeEventListener("change", read);
+  }, []);
+  return canHover;
+}
+
 export function InteractiveMap(_props: VerificationWidgetProps) {
   void _props;
   const [s, dispatch] = useReducer(reducer, INITIAL);
@@ -137,14 +149,7 @@ export function InteractiveMap(_props: VerificationWidgetProps) {
     rh: number;
   } | null>(null);
 
-  const [canHover, setCanHover] = useState(false);
-  useEffect(() => {
-    const mq = window.matchMedia("(hover: hover) and (pointer: fine)");
-    const read = () => setCanHover(mq.matches);
-    read();
-    mq.addEventListener("change", read);
-    return () => mq.removeEventListener("change", read);
-  }, []);
+  const canHover = useCanHover();
 
   const tipRef = useRef<HTMLDivElement | null>(null);
   const [tipSize, setTipSize] = useState({ w: 256, h: 160 });
@@ -648,7 +653,7 @@ export function InteractiveMap(_props: VerificationWidgetProps) {
                 })}
               </div>
               <p className="text-muted-foreground mt-1.5 text-sm leading-relaxed">
-                {C.keyNote}
+                {canHover ? C.keyNote : C.keyNoteTouch}
               </p>
             </div>
 
@@ -728,6 +733,7 @@ function DetailCard({
   dispatch: React.Dispatch<Action>;
 }) {
   const s = state;
+  const canHover = useCanHover();
 
   if (s.filter) {
     const b = BUCKETS[s.filter];
@@ -840,7 +846,7 @@ function DetailCard({
         {C.startBodyA}
       </p>
       <p className="text-muted-foreground mt-2 text-sm leading-relaxed">
-        {C.startBodyB}
+        {canHover ? C.startBodyB : C.startBodyBTouch}
       </p>
     </div>
   );

@@ -379,6 +379,8 @@ export const MAP_COPY = {
   keyActionTouch: "Tap to isolate",
   keyNote:
     "Colors show a country's primary layer. Most of the interesting countries sit in more than one — hover to see all of them.",
+  keyNoteTouch:
+    "Colors show a country's primary layer. Most of the interesting countries sit in more than one — tap one to see all of them.",
   flowTitle: "The pipeline · sand to model",
   flowNote: "Click a stage to light it up on the map",
   flowNoteTouch: "Tap a stage to light it up on the map",
@@ -392,6 +394,8 @@ export const MAP_COPY = {
     "The whole story of this map is concentration. The chain crosses borders dozens of times, but the parts that matter for verification sit in a handful of countries — and each stage is a near-monopoly.",
   startBodyB:
     "Click a country for its role, or isolate a layer to see exactly who would have to be in the room to verify it.",
+  startBodyBTouch:
+    "Tap a country for its role, or isolate a layer to see exactly who would have to be in the room to verify it.",
   layerNeed: "To verify at this layer, you'd need",
   countryVerifLabel: "Why it matters for verification",
   chipTitle: "Anatomy of a Chip",

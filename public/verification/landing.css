@@ -356,6 +356,15 @@ section.band .intro {
 /* Reads as the figure's caption, so it takes no rule of its own: the line
    that used to sit here closed the frame above it, and with the frame gone
    it would be the only edge on the page marking nothing. */
+/* One legend line names a gesture, and the gesture differs by device. Both
+   spellings ship and the media query picks one: no script, no hydration
+   branch, and the phone is never told to click. */
+.sky-legend .on-touch { display: none; }
+@media (hover: none), (pointer: coarse) {
+  .sky-legend .on-hover { display: none; }
+  .sky-legend .on-touch { display: inline; }
+}
+
 .sky-legend {
   display: flex;
   flex-wrap: wrap;

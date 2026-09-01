@@ -165,7 +165,7 @@ export function ControlTrackLanding({
                   <h3 className="text-[17px] font-semibold tracking-tight">
                     <Link
                       href={`/tracks/${track.slug}/${module.slug}`}
-                      className="hover:underline underline-offset-4"
+                      className="-my-2 inline-block py-2 hover:underline underline-offset-4"
                     >
                       {module.title}
                     </Link>
@@ -248,7 +248,7 @@ function ModuleItemsTable({
           >
             <Link
               href={`/tracks/${track.slug}/${module.slug}/${itemSlugOf(item)}`}
-              className="text-link min-w-0 text-sm hover:underline underline-offset-2"
+              className="text-link -my-2.5 min-w-0 py-2.5 text-sm hover:underline underline-offset-2"
             >
               {isOptionalItem(item) && <OptionalPrefix />}
               {itemTitleOf(item)}

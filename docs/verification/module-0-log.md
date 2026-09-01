@@ -899,3 +899,23 @@ borders the new structure actually draws; the primary rule keeps its own
 width there, where it carries the structure. Driven on day and night
 themes at 2x; an ordinary markdown table checked beside it to confirm the
 shared treatment is untouched.
+
+## 2026-09-01 — three module-0 fixes ported from the shared verification branch
+
+All three were built on the shared branch on 2026-08-20 (its "Module 0 edits
+from the owner, and two new house rules" entry) and never crossed to main,
+which kept serving the older designs.
+
+- **Signatory cards lose the source line at the foot** (owner, 2026-08-20: no
+  source line under the cards). The block's footer now carries only the
+  portrait credit, at the small credit size; the work is named and linked in
+  the lesson prose that introduces the block, which is also what keeps it in
+  the Works cited appendix. `introduction.mdx` drops the tag's `t`/`url`/
+  `what` props accordingly — the prose two paragraphs up already links
+  Pacing the Frontier.
+- **what-do-they-say typography comes down to the sizes the owner asked for**
+  (2026-08-20): the card's role line moves to the 2xs micro-label step and
+  wraps instead of truncating, and the dialog's name/role pair drops a step
+  (title text-sm, role text-xs).
+- **prevention.mdx loses its last four em dashes**, per the standing
+  no-em-dash rule; the sweep had happened on the branch only.

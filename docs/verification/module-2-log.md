@@ -1605,3 +1605,71 @@ rule, which is how every other two-column table in the course reads.
   authorization chain", "bilateral pilot review", "buy assurance with a
   verification budget"). The doc specifies them as work the learner does;
   none is a widget yet.
+
+## 2026-08-20 — 2.2.1's Appendix B reading slot was an error card on main
+
+Course owner, with a screenshot: *"what's happening here its on main"* — the
+last reading slot in 2.2.1 rendered
+
+> Section not found in the pinned paper. · Read the section on arXiv →
+
+**What it was.** `<ArxivSection id="2403.08501v2"
+section="ax-sec-observable-data-attributes" sectionEnd="ax-references">`.
+`extractSection` resolves both boundaries by id, and that artifact has no id
+for its references section, so the whole embed returned null.
+
+**Why only that one.** Nine of the ten committed arXiv artifacts carry
+`id="ax-references"` and a toc entry for it. 2403.08501v2 has the class and
+neither of the other two, and the reason is in `toc.ts`'s own header:
+`stampLandmarkIds` walks **only the root's top-level children**, deliberately,
+because split-paper slices at those offsets and that is only safe for elements
+nobody has nested. In this paper the bibliography sits inside
+`<div class="environment CJK*">` — the converter's passthrough wrapper for an
+unrecognised LaTeX environment, here `CJK*`, whose argument `UTF8gbsn` it also
+emits as visible text. One level down, so never stamped.
+
+So the authoring was right and works on every other paper; the artifact is
+malformed.
+
+**What was done.** `boundaryOffset` in arxiv-paper.tsx: id first, and where the
+converter assigned none, the landmark's class. It then cuts at the last
+CLOSING tag before the landmark rather than at the landmark itself, because
+the only reason that path runs is that the landmark is nested — slicing at the
+`<section>` keeps the wrapper's opening tag and ends the slot on an unclosed
+`<div>` and a stray "UTF8gbsn". Measured: the slot went from an error card to
+612 words ending on Table 4's caption, with no bibliography, no wrapper and no
+LaTeX leak. Without the boundary it would have inlined 4,549 words — the
+appendix plus the paper's entire reference list.
+
+**The guard, which is the actual news.** This shipped to main with typecheck
+and 1,171 tests green, because nothing in the repo walked these embeds.
+`src/lib/arxiv/embeds.test.ts` now re-derives every `<ArxivSection>` from the
+raw MDX — there is no registry to consult, they are JSX in prose — and asserts
+four things per embed: the artifact is committed and `ready`, the section
+resolves, the slice leaves no unbalanced `<div>`, and a slice with a boundary
+does not contain the reference list. It calls the component's own
+`extractSection` rather than a copy, because a copy would drift and pass while
+the page failed.
+
+**Open, and NOT done here.** The converter still hides a landmark that an
+unrecognised environment wraps, and still passes `UTF8gbsn` through as text.
+Fixing it means bumping `CONVERTER_VERSION` and rebuilding every artifact in
+the same commit, which renumbers anchors and sentence indices and puts every
+`snippet` tripwire in the course in play. That is the author's call, not a
+tidy-up: five artifacts carry `environment` wrappers today
+(2403.08501v2, 2504.10374v1, 2511.10783v3, 2604.28182v1, 2607.18966v1) and
+only this one wraps a landmark.
+
+Not a defect, checked while there: Table 4 in that slot is 2,716px wide in a
+940px box and looks cut off in a screenshot. It is scrolling in its own box,
+which is the house rule — `document.body.scrollWidth` equals the viewport, so
+the page does not move sideways.
+
+## 2026-09-01 — the 2.2.1 fix above reaches main
+
+The entry above was written on the shared verification branch on 2026-08-20;
+the fix (`boundaryOffset` in arxiv-paper.tsx plus `src/lib/arxiv/embeds.test.ts`)
+shipped there and never crossed, so main kept rendering the error card the
+owner had screenshotted. Ported verbatim in this change, guard test included:
+main's 2403.08501v2 artifact still carries `ax-references` only as a landmark
+class, so without the fallback the embed still resolved to nothing.

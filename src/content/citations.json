@@ -45,6 +45,13 @@
       "container": "EU Artificial Intelligence Act",
       "publisher": "artificialintelligenceact.eu"
     },
+    "https://arxiv.org/abs/2402.08797": {
+      "title": "Computing Power and the Governance of Artificial Intelligence",
+      "about": "The foundational survey of compute as a governance lever — why computing power is detectable, excludable, and quantifiable in ways algorithms and data are not.",
+      "authors": "Sastry, Girish, Lennart Heim, Haydn Belfield, et al.",
+      "container": "arXiv",
+      "date": "Feb. 2024"
+    },
     "https://arxiv.org/abs/2404.18308": {
       "title": "Near-Term Enforcement of AI Chip Export Controls Using a Firmware-Based Design for Offline Licensing",
       "about": "A design for firmware-based offline licensing that would disable AI chips lacking a regulatory license, as a near-term export-control enforcement mechanism.",
@@ -134,6 +141,14 @@
       "about": "A wiki explainer of Fermi estimation — rough order-of-magnitude reasoning with worked examples.",
       "container": "Brilliant Math & Science Wiki",
       "publisher": "Brilliant.org"
+    },
+    "https://cset.georgetown.edu/publication/the-semiconductor-supply-chain/": {
+      "title": "The Semiconductor Supply Chain: Assessing National Competitiveness",
+      "about": "CSET's mapping of the semiconductor supply chain and where national chokepoints sit.",
+      "authors": "Khan, Saif M., Alexander Mann, and Dahlia Peterson",
+      "publisher": "Center for Security and Emerging Technology",
+      "date": "Jan. 2021",
+      "standalone": true
     },
     "https://docs.nvidia.com/attestation/quick-start-guide/latest/architecture.html": {
       "title": "Architecture Overview",
@@ -272,6 +287,13 @@
       "authors": "Sharkey, Lee, Marius Hobbhahn, and Beren Millidge",
       "publisher": "Apollo Research",
       "date": "13 Nov. 2023"
+    },
+    "https://www.cnas.org/publications/reports/technology-to-secure-the-ai-chip-supply-chain-a-primer": {
+      "title": "Technology to Secure the AI Chip Supply Chain: A Working Paper",
+      "about": "Argues that export controls on AI chips are hard to enforce and easy to evade through shell companies, and proposes hardware-enabled mechanisms instead. Cited in 1.2.1 for the fact that US controls now reach all chips using advanced high-bandwidth memory.",
+      "authors": "Fist, Tim; Burga, Tao; Chilukuri, Vivek",
+      "publisher": "Center for a New American Security",
+      "date": "2024"
     },
     "https://www.governance.ai/research-paper/training-compute-thresholds-features-and-functions-in-ai-regulation": {
       "title": "Training Compute Thresholds: Features and Functions in AI Regulation",

@@ -1,9 +1,17 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ChevronRight } from "lucide-react";
+import { CheckCircle2, ChevronRight, Circle } from "lucide-react";
 import { requireUser } from "@/lib/auth";
 import { getClassroom, getClassroomRoster } from "@/lib/classrooms";
+import {
+  assignmentDone,
+  assignmentItemDone,
+  formatDueDate,
+  getAssignmentCompletion,
+  getClassroomAssignments,
+  isPastDue,
+} from "@/lib/assignments";
 import {
   getGuideForModule,
   getModulesForTrack,
@@ -13,6 +21,7 @@ import { getTrackProgress } from "@/lib/progress";
 import { Breadcrumbs } from "@/components/layout/breadcrumbs";
 import {
   CopyJoinCode,
+  DeleteAssignmentButton,
   DeleteClassroomButton,
   LeaveClassroomButton,
   RegenerateCodeButton,
@@ -21,6 +30,7 @@ import {
 } from "@/components/classrooms/classroom-manage";
 import { ClassroomKeySettings } from "@/components/classrooms/classroom-key-settings";
 import { FacilitatorPanel } from "@/components/classrooms/facilitator-panel";
+import { StudentCell } from "@/components/classrooms/student-cell";
 import { getClassroomKeyStatus } from "@/lib/grader/grading-key";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
@@ -64,7 +74,17 @@ export default async function ClassroomPage({
 
   // ---- Student view ----
   if (membership.role !== "instructor") {
-    const progress = track ? await getTrackProgress(user.id, track.id) : null;
+    const [progress, assignments] = await Promise.all([
+      track ? getTrackProgress(user.id, track.id) : null,
+      // Null (table not migrated) and empty both render nothing — assignments
+      // are the instructor's feature until one exists.
+      getClassroomAssignments(classroom.id),
+    ]);
+    const myCompletion =
+      assignments && assignments.length > 0
+        ? ((await getAssignmentCompletion([user.id], assignments)).get(user.id) ??
+          new Set<string>())
+        : new Set<string>();
     return (
       <main className="mx-auto w-full max-w-3xl px-4 py-10 lg:px-6">
         <Breadcrumbs items={crumbs} />
@@ -103,6 +123,94 @@ export default async function ClassroomPage({
           </p>
         )}
 
+        {assignments && assignments.length > 0 && (
+          <section className="mt-8">
+            <h2 className="text-lg font-semibold">Assignments</h2>
+            <ul className="mt-3 space-y-3">
+              {assignments.map((a) => {
+                const done = assignmentDone(a, myCompletion);
+                const doneCount = a.items.filter((item) =>
+                  assignmentItemDone(item, myCompletion),
+                ).length;
+                return (
+                  <li
+                    key={a.id}
+                    className="border-border shadow-soft rounded-xl border p-5"
+                  >
+                    <div className="flex flex-wrap items-center justify-between gap-2">
+                      <span className="font-medium">{a.title}</span>
+                      {a.items.length > 0 && (
+                        <span className="text-muted-foreground text-xs">
+                          {done ? "Done" : `${doneCount}/${a.items.length} done`}
+                        </span>
+                      )}
+                    </div>
+                    {a.items.length === 0 ? (
+                      <p className="text-muted-foreground mt-1 text-sm">
+                        The assigned material is no longer in the curriculum.
+                      </p>
+                    ) : (
+                      <>
+                        {a.dueAt && (
+                          <p className="text-muted-foreground mt-1 text-sm">
+                            Due {formatDueDate(a.dueAt)}
+                            {isPastDue(a.dueAt) && !done && (
+                              <span className="text-destructive">
+                                {" "}
+                                · past due
+                              </span>
+                            )}
+                          </p>
+                        )}
+                        {a.note && (
+                          <p className="text-muted-foreground mt-2 text-sm whitespace-pre-line">
+                            {a.note}
+                          </p>
+                        )}
+                        <ul className="mt-3 space-y-1.5">
+                          {a.items.map((item) => {
+                            const itemIsDone = assignmentItemDone(
+                              item,
+                              myCompletion,
+                            );
+                            return (
+                              <li
+                                key={item.id}
+                                className="flex items-center gap-2 text-sm"
+                              >
+                                {itemIsDone ? (
+                                  <CheckCircle2
+                                    className="text-foreground size-3.5 shrink-0"
+                                    aria-hidden
+                                  />
+                                ) : (
+                                  <Circle
+                                    className="size-3.5 shrink-0 opacity-30"
+                                    aria-hidden
+                                  />
+                                )}
+                                <span className="sr-only">
+                                  {itemIsDone ? "Done:" : "Not done:"}
+                                </span>
+                                <Link
+                                  href={item.href}
+                                  className="underline-offset-4 hover:underline"
+                                >
+                                  {item.title}
+                                </Link>
+                              </li>
+                            );
+                          })}
+                        </ul>
+                      </>
+                    )}
+                  </li>
+                );
+              })}
+            </ul>
+          </section>
+        )}
+
         <div className="mt-8">
           <LeaveClassroomButton classroomId={classroom.id} />
         </div>
@@ -114,10 +222,12 @@ export default async function ClassroomPage({
   // `track` is null-guarded above: a classroom scoped to a since-removed
   // track (stale trackId) falls back to the all-tracks roster instead of an
   // empty content-id universe rendering every row as 0/0.
-  const roster = await getClassroomRoster(
-    classroom.memberships,
-    track ? classroom.trackId : null
-  );
+  const [roster, assignments] = await Promise.all([
+    getClassroomRoster(classroom.memberships, track ? classroom.trackId : null),
+    // Null means the Assignment table hasn't been migrated yet — the section
+    // below tells the instructor which migration is owed.
+    getClassroomAssignments(classroom.id),
+  ]);
   // The facilitator material is Verification's own, so it is offered on a
   // Verification classroom and on the all-tracks kind, not on a Control one.
   const showFacilitator =
@@ -129,6 +239,23 @@ export default async function ClassroomPage({
   const canDemote = instructors.length > 1;
   // Null when key storage is unconfigured server-side — hide the card.
   const keyStatus = await getClassroomKeyStatus(classroom.id);
+  // Per-assignment count of students who have finished everything it asks.
+  const emptySet = new Set<string>();
+  const assignmentDoneCounts = new Map<string, number>();
+  if (assignments && assignments.length > 0 && students.length > 0) {
+    const completion = await getAssignmentCompletion(
+      students.map((s) => s.userId),
+      assignments,
+    );
+    for (const a of assignments) {
+      assignmentDoneCounts.set(
+        a.id,
+        students.filter((s) =>
+          assignmentDone(a, completion.get(s.userId) ?? emptySet),
+        ).length,
+      );
+    }
+  }
   const guideModules = track
     ? getModulesForTrack(track.id).filter((m) => getGuideForModule(m.id))
     : [];
@@ -224,6 +351,103 @@ export default async function ClassroomPage({
         </section>
       )}
 
+      <section className="mt-8">
+        <div className="flex flex-wrap items-center justify-between gap-2">
+          <h2 className="text-lg font-semibold">Assignments</h2>
+          {assignments !== null && (
+            <Button asChild size="sm">
+              <Link href={`/classrooms/${classroom.id}/assignments/new`}>
+                New assignment
+              </Link>
+            </Button>
+          )}
+        </div>
+        {assignments === null ? (
+          <p className="text-muted-foreground mt-2 text-sm">
+            Assignments aren&apos;t set up yet — the database needs
+            db/migrations/20260820120000_assignments.sql applied.
+          </p>
+        ) : assignments.length === 0 ? (
+          <p className="text-muted-foreground mt-2 text-sm">
+            No assignments yet. Assign lessons and papers with a due date, and
+            completion fills in here as students work through the track.
+          </p>
+        ) : (
+          <div className="border-border mt-3 overflow-x-auto rounded-xl border">
+            <table className="w-full text-sm">
+              <thead className="bg-muted/50 text-muted-foreground text-xs uppercase">
+                <tr>
+                  <th className="px-4 py-3 text-left font-medium">
+                    Assignment
+                  </th>
+                  <th className="px-4 py-3 text-left font-medium">Due</th>
+                  <th className="px-4 py-3 text-left font-medium">Items</th>
+                  <th className="px-4 py-3 text-left font-medium">Completed</th>
+                  <th className="px-4 py-3" />
+                </tr>
+              </thead>
+              <tbody>
+                {assignments.map((a) => {
+                  // A finished room needs no alarm — the marker stays only
+                  // while someone is outstanding (or nobody has joined).
+                  const allDone =
+                    students.length > 0 &&
+                    (assignmentDoneCounts.get(a.id) ?? 0) === students.length;
+                  return (
+                  <tr key={a.id} className="border-border border-t">
+                    <td className="px-4 py-3">
+                      <Link
+                        href={`/classrooms/${classroom.id}/assignments/${a.id}`}
+                        className="font-medium hover:underline"
+                      >
+                        {a.title}
+                      </Link>
+                    </td>
+                    <td className="text-muted-foreground px-4 py-3">
+                      {a.dueAt ? (
+                        <>
+                          {formatDueDate(a.dueAt)}
+                          {isPastDue(a.dueAt) && !allDone && (
+                            <span className="text-destructive">
+                              {" "}
+                              · past due
+                            </span>
+                          )}
+                        </>
+                      ) : (
+                        "—"
+                      )}
+                    </td>
+                    <td className="px-4 py-3">
+                      {a.items.length}
+                      {a.staleCount > 0 && (
+                        <span className="text-muted-foreground">
+                          {" "}
+                          · {a.staleCount} removed
+                        </span>
+                      )}
+                    </td>
+                    <td className="px-4 py-3">
+                      {students.length > 0
+                        ? `${assignmentDoneCounts.get(a.id) ?? 0}/${students.length} students`
+                        : "—"}
+                    </td>
+                    <td className="px-4 py-3 text-right">
+                      <DeleteAssignmentButton
+                        classroomId={classroom.id}
+                        assignmentId={a.id}
+                        title={a.title}
+                      />
+                    </td>
+                  </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+        )}
+      </section>
+
       {students.length === 0 ? (
         <p className="text-muted-foreground mt-8">
           No students yet. Share the join code above to get started.
@@ -244,27 +468,12 @@ export default async function ClassroomPage({
               {students.map((row) => (
                 <tr key={row.userId} className="border-border border-t">
                   <td className="px-4 py-3">
-                    <Link
+                    <StudentCell
                       href={`/classrooms/${classroom.id}/students/${row.userId}`}
-                      className="group flex items-center gap-2"
-                    >
-                      <Avatar className="size-7">
-                        <AvatarImage src={row.imageUrl ?? undefined} alt="" />
-                        <AvatarFallback className="text-xs">
-                          {(row.name ?? row.email)[0]?.toUpperCase()}
-                        </AvatarFallback>
-                      </Avatar>
-                      <span className="min-w-0">
-                        <span className="block truncate font-medium group-hover:underline">
-                          {row.name ?? row.email}
-                        </span>
-                        {row.name && (
-                          <span className="text-muted-foreground block truncate text-xs">
-                            {row.email}
-                          </span>
-                        )}
-                      </span>
-                    </Link>
+                      name={row.name}
+                      email={row.email}
+                      imageUrl={row.imageUrl}
+                    />
                   </td>
                   <td className="px-4 py-3">
                     <div className="flex items-center gap-2">

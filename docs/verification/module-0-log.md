@@ -899,3 +899,38 @@ borders the new structure actually draws; the primary rule keeps its own
 width there, where it carries the structure. Driven on day and night
 themes at 2x; an ordinary markdown table checked beside it to confirm the
 shared treatment is untouched.
+
+## 2026-09-01 — three module-0 fixes ported from the shared verification branch
+
+All three were built on the shared branch on 2026-08-20 (its "Module 0 edits
+from the owner, and two new house rules" entry) and never crossed to main,
+which kept serving the older designs.
+
+- **Signatory cards lose the source line at the foot** (owner, 2026-08-20: no
+  source line under the cards). The block's footer now carries only the
+  portrait credit, at the small credit size; the work is named and linked in
+  the lesson prose that introduces the block, which is also what keeps it in
+  the Works cited appendix. `introduction.mdx` drops the tag's `t`/`url`/
+  `what` props accordingly — the prose two paragraphs up already links
+  Pacing the Frontier.
+- **what-do-they-say typography comes down to the sizes the owner asked for**
+  (2026-08-20): the card's role line moves to the 2xs micro-label step and
+  wraps instead of truncating, and the dialog's name/role pair drops a step
+  (title text-sm, role text-xs).
+- **prevention.mdx loses its last four em dashes**, per the standing
+  no-em-dash rule; the sweep had happened on the branch only.
+
+## 2026-09-01 — the em-dash removal is reversed, on the owner's ruling
+
+The last bullet of the entry above is cancelled. Course owner, same day:
+*"i want everything to be grammatically correct changing em dashes should be
+stylistic choice not feature."* Em dashes are correct grammar; taking one out
+is a per-sentence stylistic choice made while editing that sentence, never a
+rule to sweep a file with. The 2026-08-20 no-em-dash rule (a shared-branch
+CLAUDE.md rule; it was never in main's) is void.
+
+`prevention.mdx` gets its two sentences back as first written — "public
+perception—or lack thereof—" and "exponentially increasing—and we are
+notoriously terrible". The wider sweep this bullet was the main-side edge of
+had happened on the 2.3 preview branch, and is reversed there in the same
+ruling (its module-2 log carries that entry).

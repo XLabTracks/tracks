@@ -455,6 +455,99 @@
       "about": "The PRC's official statement of its AI-governance posture, in the government's own English text — the sovereignty-first language the written output reasons from.",
       "org": "Ministry of Foreign Affairs of the People's Republic of China",
       "date": "Oct. 2023"
+    },
+    "https://arxiv.org/abs/2506.15867": {
+      "title": "Mechanisms to Verify International Agreements About AI Development",
+      "about": "The MIRI Technical Governance Team's building-blocks catalog for AI-agreement verification; its appendix table of locating-compute mechanisms, with self-described preliminary feasibility ratings, powers the feasibility cards.",
+      "authors": "Aaron Scher and Lisa Thiergart",
+      "container": "arXiv",
+      "date": "2024"
+    },
+    "https://irp.fas.org/offdocs/wmd_report.pdf": {
+      "title": "Report to the President of the United States",
+      "about": "The WMD Commission (Robb–Silberman) report: the US intelligence community was 'dead wrong' on Iraq WMD, with the failure located in tradecraft and groupthink; Curveball and the aluminum tubes. The cautionary case.",
+      "org": "Commission on the Intelligence Capabilities of the United States Regarding Weapons of Mass Destruction",
+      "date": "2005"
+    },
+    "https://collegepublishing.sagepub.com/products/intelligence-10-288967": {
+      "title": "Intelligence: From Secrets to Policy",
+      "about": "The standard intelligence-studies text; frames analysis as 'portraying uncertainty', the antidote to intelligence-as-verdict.",
+      "authors": "Mark M. Lowenthal",
+      "container": "CQ Press / SAGE, 10th ed.",
+      "date": "2025"
+    },
+    "https://www.everycrsreport.com/reports/R41201.html": {
+      "title": "Monitoring and Verification in Arms Control",
+      "about": "The Congressional Research Service report carrying the adequate-versus-effective verification standard and Nitze's 'high confidence, not perfect confidence' formulation.",
+      "authors": "Amy F. Woolf",
+      "container": "Congressional Research Service, R41201",
+      "date": "2011"
+    },
+    "https://www.sipri.org/sites/default/files/files/books/SIPRI85Krass/SIPRI85Krass03.pdf": {
+      "title": "Verification: How Much Is Enough?",
+      "about": "The classic statement that 'how much verification is enough' has no objective technical answer; the threshold is a political judgment.",
+      "authors": "Allan S. Krass",
+      "container": "SIPRI / Taylor & Francis",
+      "date": "1985"
+    },
+    "https://www.armscontrol.org/act/2004-09/issue-briefs/trust-dont-verify": {
+      "title": "Trust, but Don't Verify",
+      "about": "The provocation in the adequacy debate: the limits of insisting on airtight verification.",
+      "authors": "Daryl G. Kimball",
+      "container": "Arms Control Today",
+      "date": "2004"
+    },
+    "https://en.wikipedia.org/wiki/National_technical_means_of_verification": {
+      "title": "National technical means of verification",
+      "about": "Where 'national technical means' enters treaty law: the ABM Treaty's Article XII (1972) and the SALT I Interim Agreement, with binding noninterference and non-concealment clauses.",
+      "container": "Wikipedia",
+      "date": "current"
+    },
+    "https://www.armscontrol.org/factsheets/iaea-safeguards-agreements-glance": {
+      "title": "IAEA Safeguards Agreements at a Glance",
+      "about": "The Additional Protocol assures the absence of undeclared nuclear material and activities: the response to the declared-versus-undeclared gap exposed by Iraq and North Korea. Primary text: IAEA INFCIRC/540.",
+      "org": "Arms Control Association",
+      "date": "2024"
+    },
+    "https://www.iaea.org/publications/magazines/bulletin/57-2/completing-the-picture-using-satellite-imagery-to-enhance-iaea-safeguards-capabilities": {
+      "title": "Completing the Picture: Using Satellite Imagery to Enhance IAEA Safeguards Capabilities",
+      "about": "Imagery as complement, not determinant, across safeguards activities; the Satellite Imagery Analysis Unit, established 2001, and denied-access monitoring.",
+      "container": "IAEA Bulletin 57-2",
+      "date": "2016"
+    },
+    "https://media.nti.org/pdfs/The_Opportunities_and_Limits_of_Societal_Verification.pdf": {
+      "title": "The Opportunities and Limits of Societal Verification",
+      "about": "Crowd and open-source ('societal') verification and its limits: the NGO-monitoring frame.",
+      "authors": "Jane Hartigan and Corey Hinderstein",
+      "container": "Nuclear Threat Initiative",
+      "date": "2013"
+    },
+    "https://nonproliferation.org/op-44-eyes-on-u-opportunities-challenges-and-limits-of-remote-sensing-for-monitoring-uranium-mining-and-milling/": {
+      "title": "Eyes on U: Opportunities, Challenges and Limits of Remote Sensing for Monitoring Uranium Mining and Milling",
+      "about": "The hard limits of imagery: uranium mines look like copper mines, in-situ leaching leaves a minimal footprint, and thermal readings throw false positives from terrain and weather.",
+      "authors": "Liu, Rodgers, Milne, Rowland, McIntosh, Best, Lepinard, and Hanham",
+      "container": "CNS Occasional Paper 44, Middlebury Institute",
+      "date": "2019"
+    },
+    "https://www.timesofisrael.com/satellite-firm-says-its-indefinitely-withholding-iran-war-images-at-us-request/": {
+      "title": "Satellite firm says it is indefinitely withholding Iran war images at US request",
+      "about": "'Open' commercial imagery is not neutral: shutter control and withholding at government request, the transparency double edge.",
+      "container": "The Times of Israel",
+      "date": "2026"
+    },
+    "https://ai-frontiers.org/articles/nuclear-non-proliferation-is-the-wrong-framework-for-ai-governance": {
+      "title": "Nuclear Non-Proliferation Is the Wrong Framework for AI Governance",
+      "about": "The named counter-position for the meta-debate on analogizing from the nuclear precedent.",
+      "authors": "Michael C. Horowitz and Lauren A. Kahn",
+      "container": "AI Frontiers",
+      "date": "2025"
+    },
+    "https://arxiv.org/abs/2510.21203": {
+      "title": "The Nuclear Analogy in AI Governance Research",
+      "about": "A systematic review of the nuclear analogy across 43 works; catalogs the critiques and argues analogies can still inform policy despite the domain differences.",
+      "authors": "Sophia Hatz",
+      "container": "arXiv",
+      "date": "2025"
     }
   },
   "pending": [

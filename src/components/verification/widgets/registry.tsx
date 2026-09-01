@@ -176,6 +176,14 @@ const NtmRedline = dynamic<VerificationWidgetProps>(
   () => import("./ntm-redline").then((module) => module.NtmRedline),
   { loading: WidgetLoading },
 );
+const ColdOpen = dynamic<VerificationWidgetProps>(
+  () => import("./cold-open").then((module) => module.ColdOpen),
+  { loading: WidgetLoading },
+);
+const LocatingCompute = dynamic<VerificationWidgetProps>(
+  () => import("./locating-compute").then((module) => module.LocatingCompute),
+  { loading: WidgetLoading },
+);
 
 export const verificationWidgets: Record<
   string,
@@ -197,6 +205,8 @@ export const verificationWidgets: Record<
   "analyst-desk": AnalystDesk,
   "datacenter-power": DatacenterPower,
   "ntm-redline": NtmRedline,
+  "cold-open": ColdOpen,
+  "locating-compute": LocatingCompute,
   "policy-cost": PolicyCost,
   "mechanism-sort": MechanismSort,
   "mechanism-sort-reveal": MechanismSortReveal,

@@ -485,7 +485,7 @@ export const verificationLessons: Lesson[] = [
     moduleId: "v-infrastructure",
     title: "2.3 Intelligence",
     contentRef: "verification/intelligence-intro",
-    estimatedMinutes: 10,
+    estimatedMinutes: 15,
   },
   {
     id: "v-intel-signatures",

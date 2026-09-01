@@ -48,6 +48,8 @@ export const verificationExercises: VerificationExerciseDef[] = [
   { id: "analyst-desk", title: "The Analyst Desk", bridged: true },
   { id: "datacenter-power", title: "The Power Signature", bridged: false },
   { id: "ntm-redline", title: "Four Questions on the NTM Article", bridged: true },
+  { id: "cold-open", title: "Cold Open: One Signal, Unaided", bridged: true },
+  { id: "locating-compute", title: "The Feasibility Cards", bridged: false },
 ];
 export function getVerificationExercise(id: string): VerificationExerciseDef | undefined {
   return verificationExercises.find((e) => e.id === id);

@@ -1821,3 +1821,49 @@ Owner instructions on the preview, applied:
   memo plus the Desk, exemplar, checkpoint and closing).
 - **The Power Signature's facility caption sits below the chart**, not
   between the picker and the bars.
+
+## 2026-09-01 — the four unported exercises land, and 2.3 goes em-dash-free
+
+Owner instruction on the preview: "adapt to style guides of our platform and
+port." All four remaining designed exercises from the playground are now in,
+house-styled:
+
+- **The feasibility cards** (`locating-compute`, unbridged, in a
+  "Optional: The Feasibility Cards" fold at the end of 2.3.1). The full
+  37-row Locating Compute Building Blocks table from Scher and Thiergart
+  (arXiv 2506.15867, appendix pp. 67–80) was converted mechanically from the
+  playground data file, row text verbatim. The engine is the playground's
+  commit-then-compare contract: rating and timeline on the report's own
+  scale, one rotating visible-reasoning prompt (assumption / cooperation /
+  red team), reveal with their note and previous work, argued pushback
+  required on any disagreement, calibration tally plus the two-blocks-to-fund
+  synthesis, and a copy-all export. Two decks: the eight-card intelligence
+  slice and the full table as the extension run. Unbridged per the
+  theories-of-change precedent: an optional fold must never gate the lesson.
+- **The cold open** (`cold-open`, bridged, closing 2.3.0). Desk signal s1
+  served unaided: disposition plus confidence, committed and sealed under
+  `v-intel-cold-open:v1`. The Analyst Desk's s1 debrief unseals it beside
+  the informed call (the mechanism-sort seal-and-unseal pattern, across
+  lessons via the storage key). The playground's step-2 beat, previously
+  dropped for mechanics, now ported.
+- **The debates** ("Optional: The Debates" fold in 2.3.5, before the
+  checkpoint). The module page's six staged controversies transcribed with
+  their sources as links, plus the design's solo protocol (two-sided memo:
+  steelman both poles, commit a position, name what would move you). The
+  fourteen debate sources are new citations-registry entries, several of
+  them the very public readings the owner asked after: Robb–Silberman, CRS
+  R41201, Krass, Kimball, the IAEA Bulletin imagery piece, NTI societal
+  verification, CNS Eyes on U, the Times of Israel shutter-control case,
+  Horowitz and Kahn, and the Hatz systematic review.
+- **The draft-from-scratch variant** of the NTM article: one Optional line
+  in 2.3.5's Written Output, from the extension menu.
+
+Also in this pass, per the standing 2026-08-20 rule: **the em-dash sweep of
+2.3's authored copy** — all six lessons plus the module's widget and data
+files, roughly 290 occurrences rewritten with commas, colons, semicolons,
+parentheses, or shorter sentences, with a hand pass over every conversion.
+Verbatim reproductions keep their punctuation: SourceQuote bodies and the
+source-faithful feasibility-table rows. The rest of the course's older files
+still carry em dashes and are out of this sweep's scope; they sweep as they
+are edited. The intro's estimate rises to 15 minutes for the cold open
+(2.3 now budgets 485).

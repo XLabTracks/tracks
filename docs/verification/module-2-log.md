@@ -1964,3 +1964,26 @@ the Iraq-estimate sentence restored by hand. Not restored, deliberately:
 lines that no longer exist (the redundancy cuts) and the sections rewritten
 in that pass, which were composed naturally rather than converted. The
 companion change on main restores prevention.mdx's four lines from PR #55.
+
+## 2026-09-01 — the 2.3.1 open-source IOU is closed by deletion
+
+The playground spec's OSINT bullet carried a pointer: "a dedicated treatment
+now exists (*Signals in the Noise*, arXiv 2606.20610) and should be distilled
+before this card is finalized." The lesson's "Unfinished writing" callout was
+that IOU (the parenthetical naming the paper had been dropped in
+transcription, so the callout pointed at a paper it never named).
+
+Read before deciding, the paper is the neighbouring problem, not this card's:
+*Signals in the Noise: Open Source Intelligence (OSINT) for AI Loss of
+Control Detection* (Bollinger, Aboserie, Coakley, Lee, and Mathlouthi — AI
+Governance Taskforce at Arcadia Impact, 2026) applies OSINT to detecting AI
+systems operating beyond human oversight — transcript collection of
+user-reported behaviour, infrastructure correlation for unexpected
+connections or replication, output analysis for capability concealment. The
+card is OSINT for state-run undeclared development. Method family overlaps;
+target does not.
+
+Owner, shown the paper's actual scope: it is not needed there. The callout is
+deleted; the open-source card stays deliberately short and hedged, classed
+with the supplemental mechanisms as *Six Layers* has it. Nothing else moves —
+the callout carried no links, so the citations registry is untouched.
